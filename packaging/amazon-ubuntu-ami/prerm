@@ -1,0 +1,2 @@
+echo "Stopping agent"
+stop amazon-ssm-agent || true

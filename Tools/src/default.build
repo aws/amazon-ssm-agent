@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<project name="EC2Config" default="full-build" basedir=".">
+  <target name="full-build" >
+    <property name="deployment-dir" value="./Deployment"/>
+    <delete dir="${deployment-dir}" />
+    <mkdir dir="${deployment-dir}" />
+    <zip zipfile="${deployment-dir}\Source.zip">
+      <fileset basedir="../../.">
+        <include name="**/*" />
+      </fileset>
+    </zip>
+  </target>
+</project>

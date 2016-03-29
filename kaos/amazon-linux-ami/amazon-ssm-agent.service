@@ -1,0 +1,13 @@
+[Unit]
+Description=amazon-ssm-agent
+
+[Service]
+Type=simple
+WorkingDirectory=/opt/amazon/ssm/
+ExecStart=/opt/amazon/ssm/amazon-ssm-agent
+KillMode=process
+Restart=on-failure
+RestartSec=15min
+
+[Install]
+WantedBy=network-online.target

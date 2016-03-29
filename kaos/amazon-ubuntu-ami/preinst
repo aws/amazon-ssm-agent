@@ -1,0 +1,2 @@
+echo "Preparing for install"
+stop amazon-ssm-agent || true

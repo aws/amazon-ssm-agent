@@ -1,0 +1,11 @@
+{
+  "Instances": {
+    "i-78710491" : "windows",
+    "i-8c770265" : "windows",
+    "i-9271047b" : "aml",
+    "i-9571047c" : "aml",
+    "i-b477025d" : "ubuntu",
+    "i-b577025c" : "ubuntu"
+  },
+  "sentinel" : ""
+}

@@ -1,0 +1,907 @@
+{
+  "version": "2.0",
+  "operations": {
+    "CancelCommand": null,
+    "CreateAssociation": "<p>Associates the specified configuration document with the specified instance.</p> <p>When you associate a configuration document with an instance, the configuration agent on the instance processes the configuration document and configures the instance as specified.</p> <p>If you associate a configuration document with an instance that already has an associated configuration document, we replace the current configuration document with the new configuration document.</p>",
+    "CreateAssociationBatch": "<p>Associates the specified configuration documents with the specified instances.</p> <p>When you associate a configuration document with an instance, the configuration agent on the instance processes the configuration document and configures the instance as specified.</p> <p>If you associate a configuration document with an instance that already has an associated configuration document, we replace the current configuration document with the new configuration document.</p>",
+    "CreateDocument": "<p>Creates a configuration document.</p> <p>After you create a configuration document, you can use <a>CreateAssociation</a> to associate it with one or more running instances.</p>",
+    "DeleteAssociation": "<p>Disassociates the specified configuration document from the specified instance.</p> <p>When you disassociate a configuration document from an instance, it does not change the configuration of the instance. To change the configuration state of an instance after you disassociate a configuration document, you must create a new configuration document with the desired configuration and associate it with the instance.</p>",
+    "DeleteDocument": "<p>Deletes the specified configuration document.</p> <p>You must use <a>DeleteAssociation</a> to disassociate all instances that are associated with the configuration document before you can delete it.</p>",
+    "DescribeAssociation": "<p>Describes the associations for the specified configuration document or instance.</p>",
+    "DescribeDocument": "<p>Describes the specified configuration document.</p>",
+    "DescribeDocumentParameters": null,
+    "DescribeInstanceInformation": null,
+    "GetDocument": "<p>Gets the contents of the specified configuration document.</p>",
+    "ListAssociations": "<p>Lists the associations for the specified configuration document or instance.</p>",
+    "ListCommandInvocations": null,
+    "ListCommands": null,
+    "ListDocuments": "<p>Describes one or more of your configuration documents.</p>",
+    "SendCommand": null,
+    "UpdateAssociationStatus": "<p>Updates the status of the configuration document associated with the specified instance.</p>",
+    "UpdateInstanceInformation": null
+  },
+  "service": "<p>Simple Systems Manager (SSM) enables you to remotely manage the configuration of your Amazon EC2 instance. Using SSM, you can run scripts or commands using either EC2 Run Command or SSM Config. (SSM Config is currently available only for Windows instances.) </p> <p/> <b>Run Command</b> <p>Run Command provides an on-demand experience for executing commands. You can use pre-defined Amazon SSM documents to perform the actions listed later in this section, or you can create your own documents. With these documents, you can remotely configure your instances by sending commands using the <b>Commands</b> page in the <a href=\"http://console.aws.amazon.com/ec2/\">Amazon EC2 console</a>, <a href=\"http://docs.aws.amazon.com/powershell/latest/reference/items/Amazon_Simple_Systems_Management_cmdlets.html\">AWS Tools for Windows PowerShell</a>, or the <a href=\"http://docs.aws.amazon.com/cli/latest/reference/ssm/index.html\">AWS CLI</a>.</p> <p>Run Command reports the status of the command execution for each instance targeted by a command. You can also audit the command execution to understand who executed commands, when, and what changes were made. By switching between different SSM documents, you can quickly configure your instances with different types of commands. To get started with Run Command, verify that your environment meets the prerequisites for remotely running commands on EC2 instances (<a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/remote-commands-prereq.html\">Linux</a> or <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/remote-commands-prereq.html\">Windows</a>). </p> <p/> <b>SSM Config</b> <p>SSM Config is a lightweight instance configuration solution. SSM Config is currently only available for Windows instances. With SSM Config, you can specify a setup configuration for your instances. SSM Config is similar to EC2 User Data, which is another way of running one-time scripts or applying settings during instance launch. SSM Config is an extension of this capability. Using SSM documents, you can specify which actions the system should perform on your instances, including which applications to install, which AWS Directory Service directory to join, which Microsoft PowerShell modules to install, etc. If an instance is missing one or more of these configurations, the system makes those changes. By default, the system checks every five minutes to see if there is a new configuration to apply as defined in a new SSM document. If so, the system updates the instances accordingly. In this way, you can remotely maintain a consistent configuration baseline on your instances. SSM Config is available using the AWS CLI or the AWS Tools for Windows PowerShell. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/ec2-configuration-manage.html\">Managing Windows Instance Configuration</a>.</p> <p>SSM Config and Run Command include the following pre-defined documents.</p> <table> <title>Amazon Pre-defined SSM Documents</title> <tgroup cols=\"3\"> <colspec colname=\"col1\" colnum=\"1\" colwidth=\"1*\"/> <colspec colname=\"col2\" colnum=\"2\" colwidth=\"1*\"/> <colspec colname=\"col3\" colnum=\"3\" colwidth=\"1*\"/> <thead> <row> <entry>Name</entry> <entry>Description</entry> <entry>Platform</entry> </row> </thead> <tbody> <row> <entry> <p>AWS-RunShellScript</p> </entry> <entry> <p>Run shell scripts</p> </entry> <entry> <p>Linux</p> </entry> </row> <row> <entry> <p>AWS-UpdateSSMAgent</p> </entry> <entry> <p>Update the Amazon SSM agent</p> </entry> <entry> <p>Linux</p> </entry> </row> <row> <entry> <p>AWS-JoinDirectoryServiceDomain </p> </entry> <entry> <p>Join an AWS Directory </p> </entry> <entry> <p>Windows</p> </entry> </row> <row> <entry> <p>AWS-RunPowerShellScript</p> </entry> <entry> <p>Run PowerShell commands or scripts</p> </entry> <entry> <p>Windows</p> </entry> </row> <row> <entry> <p>AWS-UpdateEC2Config</p> </entry> <entry> <p>Update the EC2Config service </p> </entry> <entry> <p>Windows</p> </entry> </row> <row> <entry> <p>AWS-ConfigureWindowsUpdate</p> </entry> <entry> <p>Configure Windows Update settings</p> </entry> <entry> <p>Windows</p> </entry> </row> <row> <entry> <p>AWS-InstallApplication</p> </entry> <entry> <p>Install, repair, or uninstall software using an MSI package</p> </entry> <entry> <p>Windows</p> </entry> </row> <row> <entry> <p>AWS-InstallPowerShellModule</p> </entry> <entry> <p>Install PowerShell modules </p> </entry> <entry> <p>Windows</p> </entry> </row> <row> <entry> <p>AWS-ConfigureCloudWatch</p> </entry> <entry> <p>Configure Amazon CloudWatch Logs to monitor applications and systems</p> </entry> <entry> <p>Windows</p> </entry> </row> </tbody> </tgroup> </table> <important> <simpara>The commands or scripts specified in SSM documents run with administrative privilege on your instances because the Amazon SSM agent runs as root on Linux and the EC2Config service runs in the Local System account on Windows. If a user has permission to execute any of the pre-defined SSM documents (any document that begins with AWS-*) then that user also has administrator access to the instance. Delegate access to SSM and Run Command judiciously. This becomes extremely important if you create your own SSM documents. Amazon Web Services does not provide guidance about how to create secure SSM documents. You create SSM documents and delegate access to Run Command at your own risk. As a security best practice, we recommend that you assign access to \"AWS-*\" documents, especially the AWS-RunShellScript document on Linux and the AWS-RunPowerShellScript document on Windows, to trusted administrators only. You can create SSM documents for specific tasks and delegate access to non-administrators.</simpara> </important>",
+  "shapes": {
+    "AgentStatus": {
+      "base": null,
+      "refs": {
+        "UpdateInstanceInformationRequest$AgentStatus": null
+      }
+    },
+    "AssociatedInstances": {
+      "base": "<p>You must disassociate a configuration document from all instances before you can delete it.</p>",
+      "refs": {
+      }
+    },
+    "Association": {
+      "base": "<p>Describes an association of a configuration document and an instance.</p>",
+      "refs": {
+        "AssociationList$member": null
+      }
+    },
+    "AssociationAlreadyExists": {
+      "base": "<p>The specified association already exists.</p>",
+      "refs": {
+      }
+    },
+    "AssociationDescription": {
+      "base": "<p>Describes an association.</p>",
+      "refs": {
+        "AssociationDescriptionList$member": null,
+        "CreateAssociationResult$AssociationDescription": "<p>Information about the association.</p>",
+        "DescribeAssociationResult$AssociationDescription": "<p>Information about the association.</p>",
+        "UpdateAssociationStatusResult$AssociationDescription": "<p>Information about the association.</p>"
+      }
+    },
+    "AssociationDescriptionList": {
+      "base": null,
+      "refs": {
+        "CreateAssociationBatchResult$Successful": "<p>Information about the associations that succeeded.</p>"
+      }
+    },
+    "AssociationDoesNotExist": {
+      "base": "<p>The specified association does not exist.</p>",
+      "refs": {
+      }
+    },
+    "AssociationFilter": {
+      "base": "<p>Describes a filter.</p>",
+      "refs": {
+        "AssociationFilterList$member": null
+      }
+    },
+    "AssociationFilterKey": {
+      "base": null,
+      "refs": {
+        "AssociationFilter$key": "<p>The name of the filter.</p>"
+      }
+    },
+    "AssociationFilterList": {
+      "base": null,
+      "refs": {
+        "ListAssociationsRequest$AssociationFilterList": "<p>One or more filters. Use a filter to return a more specific list of results.</p>"
+      }
+    },
+    "AssociationFilterValue": {
+      "base": null,
+      "refs": {
+        "AssociationFilter$value": "<p>The filter value.</p>"
+      }
+    },
+    "AssociationLimitExceeded": {
+      "base": "<p>You can have at most 2,000 active associations.</p>",
+      "refs": {
+      }
+    },
+    "AssociationList": {
+      "base": null,
+      "refs": {
+        "ListAssociationsResult$Associations": "<p>The associations.</p>"
+      }
+    },
+    "AssociationStatus": {
+      "base": "<p>Describes an association status.</p>",
+      "refs": {
+        "AssociationDescription$Status": "<p>The association status.</p>",
+        "UpdateAssociationStatusRequest$AssociationStatus": "<p>The association status.</p>"
+      }
+    },
+    "AssociationStatusName": {
+      "base": null,
+      "refs": {
+        "AssociationStatus$Name": "<p>The status.</p>"
+      }
+    },
+    "BatchErrorMessage": {
+      "base": null,
+      "refs": {
+        "FailedCreateAssociation$Message": "<p>A description of the failure.</p>"
+      }
+    },
+    "Boolean": {
+      "base": null,
+      "refs": {
+        "InstanceInformation$IsLatestVersion": null,
+        "ListCommandInvocationsRequest$Details": null
+      }
+    },
+    "CancelCommandRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "CancelCommandResult": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "Command": {
+      "base": null,
+      "refs": {
+        "CommandList$member": null,
+        "SendCommandResult$Command": null
+      }
+    },
+    "CommandFilter": {
+      "base": null,
+      "refs": {
+        "CommandFilterList$member": null
+      }
+    },
+    "CommandFilterKey": {
+      "base": null,
+      "refs": {
+        "CommandFilter$key": null
+      }
+    },
+    "CommandFilterList": {
+      "base": null,
+      "refs": {
+        "ListCommandInvocationsRequest$Filters": null,
+        "ListCommandsRequest$Filters": null
+      }
+    },
+    "CommandFilterValue": {
+      "base": null,
+      "refs": {
+        "CommandFilter$value": null
+      }
+    },
+    "CommandId": {
+      "base": null,
+      "refs": {
+        "CancelCommandRequest$CommandId": null,
+        "Command$CommandId": null,
+        "CommandInvocation$CommandId": null,
+        "ListCommandInvocationsRequest$CommandId": null,
+        "ListCommandsRequest$CommandId": null
+      }
+    },
+    "CommandInvocation": {
+      "base": null,
+      "refs": {
+        "CommandInvocationList$member": null
+      }
+    },
+    "CommandInvocationList": {
+      "base": null,
+      "refs": {
+        "ListCommandInvocationsResult$CommandInvocations": null
+      }
+    },
+    "CommandInvocationStatus": {
+      "base": null,
+      "refs": {
+        "CommandInvocation$Status": null
+      }
+    },
+    "CommandList": {
+      "base": null,
+      "refs": {
+        "ListCommandsResult$Commands": null
+      }
+    },
+    "CommandPlugin": {
+      "base": null,
+      "refs": {
+        "CommandPluginList$member": null
+      }
+    },
+    "CommandPluginList": {
+      "base": null,
+      "refs": {
+        "CommandInvocation$CommandPlugins": null
+      }
+    },
+    "CommandPluginName": {
+      "base": null,
+      "refs": {
+        "CommandPlugin$Name": null
+      }
+    },
+    "CommandPluginOutput": {
+      "base": null,
+      "refs": {
+        "CommandPlugin$Output": null
+      }
+    },
+    "CommandPluginStatus": {
+      "base": null,
+      "refs": {
+        "CommandPlugin$Status": null
+      }
+    },
+    "CommandStatus": {
+      "base": null,
+      "refs": {
+        "Command$Status": null
+      }
+    },
+    "Comment": {
+      "base": null,
+      "refs": {
+        "Command$Comment": null,
+        "CommandInvocation$Comment": null,
+        "SendCommandRequest$Comment": null
+      }
+    },
+    "CreateAssociationBatchRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "CreateAssociationBatchRequestEntries": {
+      "base": null,
+      "refs": {
+        "CreateAssociationBatchRequest$Entries": "<p>One or more associations.</p>"
+      }
+    },
+    "CreateAssociationBatchRequestEntry": {
+      "base": "<p>Describes the association of a configuration document and an instance.</p>",
+      "refs": {
+        "CreateAssociationBatchRequestEntries$member": null,
+        "FailedCreateAssociation$Entry": "<p>The association.</p>"
+      }
+    },
+    "CreateAssociationBatchResult": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "CreateAssociationRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "CreateAssociationResult": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "CreateDocumentRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "CreateDocumentResult": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "DateTime": {
+      "base": null,
+      "refs": {
+        "AssociationDescription$Date": "<p>The date when the association was made.</p>",
+        "AssociationStatus$Date": "<p>The date when the status changed.</p>",
+        "Command$RequestedDateTime": null,
+        "CommandInvocation$RequestedDateTime": null,
+        "CommandPlugin$ResponseStartDateTime": null,
+        "CommandPlugin$ResponseFinishDateTime": null,
+        "DocumentDescription$CreatedDate": "<p>The date when the configuration document was created.</p>",
+        "InstanceInformation$LastPingDateTime": null
+      }
+    },
+    "DeleteAssociationRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "DeleteAssociationResult": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "DeleteDocumentRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "DeleteDocumentResult": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "DescribeAssociationRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "DescribeAssociationResult": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "DescribeDocumentParametersRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "DescribeDocumentParametersResult": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "DescribeDocumentRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "DescribeDocumentResult": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "DescribeInstanceInformationRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "DescribeInstanceInformationResult": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "DescriptionInDocument": {
+      "base": null,
+      "refs": {
+        "DocumentDescription$Description": null
+      }
+    },
+    "DocumentAlreadyExists": {
+      "base": "<p>The specified configuration document already exists.</p>",
+      "refs": {
+      }
+    },
+    "DocumentContent": {
+      "base": null,
+      "refs": {
+        "CreateDocumentRequest$Content": "<p>A valid JSON file. For more information about the contents of this file, see <a href=\"http://docs.aws.amazon.com/ssm/latest/APIReference/aws-ssm-document.html\">Configuration Document</a>.</p>",
+        "GetDocumentResult$Content": "<p>The contents of the configuration document.</p>"
+      }
+    },
+    "DocumentDescription": {
+      "base": "<p>Describes a configuration document.</p>",
+      "refs": {
+        "CreateDocumentResult$DocumentDescription": "<p>Information about the configuration document.</p>",
+        "DescribeDocumentResult$Document": "<p>Information about the configuration document.</p>"
+      }
+    },
+    "DocumentFilter": {
+      "base": "<p>Describes a filter.</p>",
+      "refs": {
+        "DocumentFilterList$member": null
+      }
+    },
+    "DocumentFilterKey": {
+      "base": null,
+      "refs": {
+        "DocumentFilter$key": "<p>The name of the filter.</p>"
+      }
+    },
+    "DocumentFilterList": {
+      "base": null,
+      "refs": {
+        "ListDocumentsRequest$DocumentFilterList": "<p>One or more filters. Use a filter to return a more specific list of results.</p>"
+      }
+    },
+    "DocumentFilterValue": {
+      "base": null,
+      "refs": {
+        "DocumentFilter$value": "<p>The value of the filter.</p>"
+      }
+    },
+    "DocumentIdentifier": {
+      "base": "<p>Describes the name of a configuration document.</p>",
+      "refs": {
+        "DocumentIdentifierList$member": null
+      }
+    },
+    "DocumentIdentifierList": {
+      "base": null,
+      "refs": {
+        "ListDocumentsResult$DocumentIdentifiers": "<p>The names of the configuration documents.</p>"
+      }
+    },
+    "DocumentLimitExceeded": {
+      "base": "<p>You can have at most 100 active configuration documents.</p>",
+      "refs": {
+      }
+    },
+    "DocumentName": {
+      "base": null,
+      "refs": {
+        "Association$Name": "<p>The name of the configuration document.</p>",
+        "AssociationDescription$Name": "<p>The name of the configuration document.</p>",
+        "Command$DocumentName": null,
+        "CommandInvocation$DocumentName": null,
+        "CreateAssociationBatchRequestEntry$Name": "<p>The name of the configuration document.</p>",
+        "CreateAssociationRequest$Name": "<p>The name of the configuration document.</p>",
+        "CreateDocumentRequest$Name": "<p>A name for the configuration document.</p>",
+        "DeleteAssociationRequest$Name": "<p>The name of the configuration document.</p>",
+        "DeleteDocumentRequest$Name": "<p>The name of the configuration document.</p>",
+        "DescribeAssociationRequest$Name": "<p>The name of the configuration document.</p>",
+        "DescribeDocumentParametersRequest$DocumentName": null,
+        "DescribeDocumentRequest$Name": "<p>The name of the configuration document.</p>",
+        "DocumentDescription$Name": "<p>The name of the configuration document.</p>",
+        "DocumentIdentifier$Name": "<p>The name of the configuration document.</p>",
+        "GetDocumentRequest$Name": "<p>The name of the configuration document.</p>",
+        "GetDocumentResult$Name": "<p>The name of the configuration document.</p>",
+        "SendCommandRequest$DocumentName": null,
+        "UpdateAssociationStatusRequest$Name": "<p>The name of the configuration document.</p>"
+      }
+    },
+    "DocumentParameter": {
+      "base": null,
+      "refs": {
+        "DocumentParameterList$member": null
+      }
+    },
+    "DocumentParameterDefaultValue": {
+      "base": null,
+      "refs": {
+        "DocumentParameter$DefaultValue": null
+      }
+    },
+    "DocumentParameterDescrption": {
+      "base": null,
+      "refs": {
+        "DocumentParameter$Description": null
+      }
+    },
+    "DocumentParameterList": {
+      "base": null,
+      "refs": {
+        "DocumentDescription$Parameters": null
+      }
+    },
+    "DocumentParameterName": {
+      "base": null,
+      "refs": {
+        "DocumentParameter$Name": null
+      }
+    },
+    "DocumentParameterType": {
+      "base": null,
+      "refs": {
+        "DocumentParameter$Type": null
+      }
+    },
+    "DocumentSha1": {
+      "base": null,
+      "refs": {
+        "DocumentDescription$Sha1": "<p>The SHA1 hash of the document, which you can use for verification purposes.</p>"
+      }
+    },
+    "DocumentStatus": {
+      "base": null,
+      "refs": {
+        "DocumentDescription$Status": "<p>The status of the configuration document.</p>"
+      }
+    },
+    "DuplicateInstanceId": {
+      "base": "<p>You cannot specify an instance ID in more than one association.</p>",
+      "refs": {
+      }
+    },
+    "DynamicConfigParameters": {
+      "base": null,
+      "refs": {
+        "DescribeDocumentParametersResult$Config": null
+      }
+    },
+    "ExpiresAfter": {
+      "base": null,
+      "refs": {
+        "Command$ExpiresAfter": null
+      }
+    },
+    "FailedCreateAssociation": {
+      "base": "<p>Describes a failed association.</p>",
+      "refs": {
+        "FailedCreateAssociationList$member": null
+      }
+    },
+    "FailedCreateAssociationList": {
+      "base": null,
+      "refs": {
+        "CreateAssociationBatchResult$Failed": "<p>Information about the associations that failed.</p>"
+      }
+    },
+    "Fault": {
+      "base": null,
+      "refs": {
+        "FailedCreateAssociation$Fault": "<p>The source of the failure.</p>"
+      }
+    },
+    "GetDocumentRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "GetDocumentResult": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "InstanceId": {
+      "base": null,
+      "refs": {
+        "Association$InstanceId": "<p>The ID of the instance.</p>",
+        "AssociationDescription$InstanceId": "<p>The ID of the instance.</p>",
+        "CommandInvocation$InstanceId": null,
+        "CreateAssociationBatchRequestEntry$InstanceId": "<p>The ID of the instance.</p>",
+        "CreateAssociationRequest$InstanceId": "<p>The ID of the instance.</p>",
+        "DeleteAssociationRequest$InstanceId": "<p>The ID of the instance.</p>",
+        "DescribeAssociationRequest$InstanceId": "<p>The ID of the instance.</p>",
+        "InstanceIdList$member": null,
+        "InstanceInformation$InstanceId": null,
+        "ListCommandInvocationsRequest$InstanceId": null,
+        "ListCommandsRequest$InstanceId": null,
+        "UpdateAssociationStatusRequest$InstanceId": "<p>The ID of the instance.</p>",
+        "UpdateInstanceInformationRequest$InstanceId": null
+      }
+    },
+    "InstanceIdList": {
+      "base": null,
+      "refs": {
+        "CancelCommandRequest$InstanceIds": null,
+        "Command$InstanceIds": null,
+        "SendCommandRequest$InstanceIds": null
+      }
+    },
+    "InstanceInformation": {
+      "base": null,
+      "refs": {
+        "InstanceInformationList$member": null
+      }
+    },
+    "InstanceInformationFilter": {
+      "base": null,
+      "refs": {
+        "InstanceInformationFilterList$member": null
+      }
+    },
+    "InstanceInformationFilterKey": {
+      "base": null,
+      "refs": {
+        "InstanceInformationFilter$key": null
+      }
+    },
+    "InstanceInformationFilterList": {
+      "base": null,
+      "refs": {
+        "DescribeInstanceInformationRequest$InstanceInformationFilterList": null
+      }
+    },
+    "InstanceInformationFilterValue": {
+      "base": null,
+      "refs": {
+        "InstanceInformationFilterValueSet$member": null
+      }
+    },
+    "InstanceInformationFilterValueSet": {
+      "base": null,
+      "refs": {
+        "InstanceInformationFilter$valueSet": null
+      }
+    },
+    "InstanceInformationList": {
+      "base": null,
+      "refs": {
+        "DescribeInstanceInformationResult$InstanceInformationList": null
+      }
+    },
+    "InternalServerError": {
+      "base": "<p>An error occurred on the server side.</p>",
+      "refs": {
+      }
+    },
+    "InvalidCommandId": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "InvalidDocument": {
+      "base": "<p>The configuration document is not valid.</p>",
+      "refs": {
+      }
+    },
+    "InvalidDocumentContent": {
+      "base": "<p>The content for the configuration document is not valid.</p>",
+      "refs": {
+      }
+    },
+    "InvalidFilterKey": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "InvalidInstanceId": {
+      "base": "<p>You must specify the ID of a running instance.</p>",
+      "refs": {
+      }
+    },
+    "InvalidInstanceInformationFilterValue": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "InvalidInstanceInformationValue": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "InvalidNextToken": {
+      "base": "<p>The specified token is not valid.</p>",
+      "refs": {
+      }
+    },
+    "InvalidOutputFolder": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "InvalidParameters": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "InvocationTraceOutput": {
+      "base": null,
+      "refs": {
+        "CommandInvocation$TraceOutput": null
+      }
+    },
+    "ListAssociationsRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "ListAssociationsResult": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "ListCommandInvocationsRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "ListCommandInvocationsResult": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "ListCommandsRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "ListCommandsResult": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "ListDocumentsRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "ListDocumentsResult": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "MaxDocumentSizeExceeded": {
+      "base": "<p>The size limit of a configuration document is 64 KB.</p>",
+      "refs": {
+      }
+    },
+    "MaxResults": {
+      "base": null,
+      "refs": {
+        "ListAssociationsRequest$MaxResults": "<p>The maximum number of items to return for this call. The call also returns a token that you can specify in a subsequent call to get the next set of results.</p>",
+        "ListCommandInvocationsRequest$MaxResults": null,
+        "ListCommandsRequest$MaxResults": null,
+        "ListDocumentsRequest$MaxResults": "<p>The maximum number of items to return for this call. The call also returns a token that you can specify in a subsequent call to get the next set of results.</p>"
+      }
+    },
+    "MaxResultsEC2Compatible": {
+      "base": null,
+      "refs": {
+        "DescribeInstanceInformationRequest$MaxResults": null
+      }
+    },
+    "NextToken": {
+      "base": null,
+      "refs": {
+        "DescribeInstanceInformationRequest$NextToken": null,
+        "DescribeInstanceInformationResult$NextToken": null,
+        "ListAssociationsRequest$NextToken": "<p>The token for the next set of items to return. (You received this token from a previous call.)</p>",
+        "ListAssociationsResult$NextToken": "<p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>",
+        "ListCommandInvocationsRequest$NextToken": null,
+        "ListCommandInvocationsResult$NextToken": null,
+        "ListCommandsRequest$NextToken": null,
+        "ListCommandsResult$NextToken": null,
+        "ListDocumentsRequest$NextToken": "<p>The token for the next set of items to return. (You received this token from a previous call.)</p>",
+        "ListDocumentsResult$NextToken": "<p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>"
+      }
+    },
+    "ParameterName": {
+      "base": null,
+      "refs": {
+        "Parameters$key": null
+      }
+    },
+    "ParameterValue": {
+      "base": null,
+      "refs": {
+        "ParameterValueList$member": null
+      }
+    },
+    "ParameterValueList": {
+      "base": null,
+      "refs": {
+        "Parameters$value": null
+      }
+    },
+    "Parameters": {
+      "base": null,
+      "refs": {
+        "AssociationDescription$Parameters": null,
+        "Command$Parameters": null,
+        "CreateAssociationBatchRequestEntry$Parameters": null,
+        "CreateAssociationRequest$Parameters": null,
+        "SendCommandRequest$Parameters": null
+      }
+    },
+    "PingStatus": {
+      "base": null,
+      "refs": {
+        "InstanceInformation$PingStatus": null
+      }
+    },
+    "PlatformType": {
+      "base": null,
+      "refs": {
+        "InstanceInformation$PlatformType": null,
+        "PlatformTypeList$member": null,
+        "UpdateInstanceInformationRequest$PlatformType": null
+      }
+    },
+    "PlatformTypeList": {
+      "base": null,
+      "refs": {
+        "DocumentDescription$PlatformTypes": null
+      }
+    },
+    "ResponseCode": {
+      "base": null,
+      "refs": {
+        "CommandPlugin$ResponseCode": null
+      }
+    },
+    "S3BucketName": {
+      "base": null,
+      "refs": {
+        "Command$OutputS3BucketName": null,
+        "CommandPlugin$OutputS3BucketName": null,
+        "SendCommandRequest$OutputS3BucketName": null
+      }
+    },
+    "S3KeyPrefix": {
+      "base": null,
+      "refs": {
+        "Command$OutputS3KeyPrefix": null,
+        "CommandPlugin$OutputS3KeyPrefix": null,
+        "SendCommandRequest$OutputS3KeyPrefix": null
+      }
+    },
+    "SendCommandRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "SendCommandResult": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "StatusAdditionalInfo": {
+      "base": null,
+      "refs": {
+        "AssociationStatus$AdditionalInfo": "<p>A user-defined string.</p>"
+      }
+    },
+    "StatusMessage": {
+      "base": null,
+      "refs": {
+        "AssociationStatus$Message": "<p>The reason for the status.</p>"
+      }
+    },
+    "StatusUnchanged": {
+      "base": "<p>The updated status is the same as the current status.</p>",
+      "refs": {
+      }
+    },
+    "String": {
+      "base": null,
+      "refs": {
+        "InstanceInformation$PlatformName": null,
+        "InstanceInformation$PlatformVersion": null,
+        "InternalServerError$message": null,
+        "InvalidDocument$message": null,
+        "InvalidDocumentContent$message": "<p>A description of the validation error.</p>",
+        "InvalidInstanceInformationFilterValue$message": null,
+        "InvalidInstanceInformationValue$message": null,
+        "InvalidParameters$message": null,
+        "UnsupportedPlatformType$message": null,
+        "UpdateInstanceInformationRequest$PlatformName": null,
+        "UpdateInstanceInformationRequest$PlatformVersion": null
+      }
+    },
+    "TimeoutSeconds": {
+      "base": null,
+      "refs": {
+        "SendCommandRequest$TimeoutSeconds": null
+      }
+    },
+    "TooManyUpdates": {
+      "base": "<p>There are concurrent updates for a resource that supports one update at a time.</p>",
+      "refs": {
+      }
+    },
+    "UnsupportedPlatformType": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "UpdateAssociationStatusRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "UpdateAssociationStatusResult": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "UpdateInstanceInformationRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "UpdateInstanceInformationResult": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "Version": {
+      "base": null,
+      "refs": {
+        "InstanceInformation$AgentVersion": null,
+        "UpdateInstanceInformationRequest$AgentVersion": null
+      }
+    }
+  }
+}

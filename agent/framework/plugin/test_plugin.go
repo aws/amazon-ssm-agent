@@ -1,0 +1,35 @@
+// Copyright 2016 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+//
+// Licensed under the Amazon Software License (the "License"). You may not
+// use this file except in compliance with the License. A copy of the
+// License is located at
+//
+// http://aws.amazon.com/asl/
+//
+// or in the "license" file accompanying this file. This file is distributed
+// on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+// express or implied. See the License for the specific language governing
+// permissions and limitations under the License.
+
+package plugin
+
+import (
+	"github.com/aws/amazon-ssm-agent/agent/context"
+	"github.com/aws/amazon-ssm-agent/agent/contracts"
+	"github.com/aws/amazon-ssm-agent/agent/task"
+	"github.com/stretchr/testify/mock"
+)
+
+// Note: This code is used in the test files. However, this code is not in a _test.go file
+// because then we would have to copy it in every test package that needs the mock.
+
+// Mock stands for a mocked plugin.
+type Mock struct {
+	mock.Mock
+}
+
+// Execute mocks a plugin execution.
+func (m *Mock) Execute(context context.T, config contracts.Configuration, cancelFlag task.CancelFlag) (res contracts.PluginResult) {
+	args := m.Called(context, config, cancelFlag)
+	return args.Get(0).(contracts.PluginResult)
+}

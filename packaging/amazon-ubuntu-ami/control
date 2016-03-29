@@ -1,0 +1,9 @@
+Section: admin
+Depends: libc6
+Priority: optional
+Copyright: Amazon Software License
+Suggests: aws-ssm-agent-doc
+Maintainer: Amazon.com, Inc. <ec2-ssm-feedback@amazon.com>
+Description: Amazon SSM Agent for managing EC2 Instances using the SSM APIs.
+ Please visit the AWS Developer Tools page for additional information.
+

@@ -1,0 +1,52 @@
+{
+  "SchemaVersion": "1.0",
+  "UriFormat": "",
+  "Packages": [
+    {
+      "Name": "aws-ssm-agent-error",
+      "Files": [
+        {
+          "Name": "aws-ssm-agent-linux-amd64.tar.gz",
+          "AvailableVersions": [
+            {
+              "Version": "1.0.2.0",
+              "CheckSum": "3c95870b46ad5e35c35b008a98d169cea73d85c1f6f4b6602e9173905b67db93"
+            }
+          ]
+        },
+        {
+          "Name": "aws-ssm-agent-ubuntu-amd64.tar.gz",
+          "AvailableVersions": [
+            {
+              "Version": "1.0.2.0",
+              "CheckSum": "3c95870b46ad5e35c35b008a98d169cea73d85c1f6f4b6602e9173905b67db93"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Name": "aws-ssm-agent-updater",
+      "Files": [
+        {
+          "Name": "aws-ssm-agent-updater-linux-amd64.tar.gz",
+          "AvailableVersions": [
+            {
+              "Version": "1.0.2.0",
+              "CheckSum": "3c95870b46ad5e35c35b008a98d169cea73d85c1f6f4b6602e9173905b67db93"
+            }
+          ]
+        },
+        {
+          "Name": "aws-ssm-agent-updater-ubuntu-amd64.tar.gz",
+          "AvailableVersions": [
+            {
+              "Version": "1.0.2.0",
+              "CheckSum": "3c95870b46ad5e35c35b008a98d169cea73d85c1f6f4b6602e9173905b67db93"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,62 @@
+{
+  "Destination": "i-1679daff",
+  "Messages": [
+    {
+      "CreatedDate": "2015-08-04T17:07:27.983Z",
+      "Destination": "i-1679daff",
+      "MessageId": "aws.ssm.8027c8aa-d747-45f6-bf16-e2bd36411aa7.i-1679daff",
+      "Payload": "{\"Parameters\":{\"workingDirectory\":\"\",\"runCommand\":[\"echo hello; sleep 10\"]},\"DocumentContent\":{\"schemaVersion\":\"1.1\",\"description\":\"This document defines the PowerShell command to run or path to a script which is to be executed.\",\"runtimeConfig\":{\"aws:runScript\":{\"properties\":[{\"workingDirectory\":\"{{ workingDirectory }}\",\"timeoutSeconds\":\"{{ timeoutSeconds }}\",\"runCommand\":\"{{ runCommand }}\",\"id\":\"0.aws:runScript\"}]}},\"parameters\":{\"workingDirectory\":{\"default\":\"\",\"description\":\"Path to the working directory (Optional)\",\"type\":\"String\"},\"timeoutSeconds\":{\"default\":\"\",\"description\":\"Timeout in seconds (Optional)\",\"type\":\"String\"},\"runCommand\":{\"description\":\"List of commands to run (Required)\",\"type\":\"Array\"}}},\"CommandId\":\"8027c8aa-d747-45f6-bf16-e2bd36411aa7\",\"DocumentName\":\"AWS-RunPowerShellScript\"}",
+      "PayloadDigest": "16a2d390e83123422c81913af619405cfdfdcf19a2eca3f9cedf7aeb86f9a5b4",
+      "Topic": "aws.ssm.sendCommand.us.east.1.1"
+    },
+    {
+      "CreatedDate": "2015-08-04T17:16:54.551Z",
+      "Destination": "i-1679daff",
+      "MessageId": "aws.ssm.55b78ece-7a7f-4198-aaf4-d8c8a3e960e6.i-1679daff",
+      "Payload": "{\"Parameters\":{\"workingDirectory\":\"\",\"runCommand\":[\"echo hello; sleep 10\"]},\"DocumentContent\":{\"schemaVersion\":\"1.1\",\"description\":\"This document defines the PowerShell command to run or path to a script which is to be executed.\",\"runtimeConfig\":{\"aws:runScript\":{\"properties\":[{\"workingDirectory\":\"{{ workingDirectory }}\",\"timeoutSeconds\":\"{{ timeoutSeconds }}\",\"runCommand\":\"{{ runCommand }}\",\"id\":\"0.aws:runScript\"}]}},\"parameters\":{\"workingDirectory\":{\"default\":\"\",\"description\":\"Path to the working directory (Optional)\",\"type\":\"String\"},\"timeoutSeconds\":{\"default\":\"\",\"description\":\"Timeout in seconds (Optional)\",\"type\":\"String\"},\"runCommand\":{\"description\":\"List of commands to run (Required)\",\"type\":\"Array\"}}},\"CommandId\":\"55b78ece-7a7f-4198-aaf4-d8c8a3e960e6\",\"DocumentName\":\"AWS-RunPowerShellScript\"}",
+      "PayloadDigest": "77b3c7f9749ae185294538cc8ef8dc3282f821cdaba16a5e81d71aafa74867b4",
+      "Topic": "aws.ssm.sendCommand.us.east.1.1"
+    },
+    {
+      "CreatedDate": "2015-08-04T17:17:00.481Z",
+      "Destination": "i-1679daff",
+      "MessageId": "aws.ssm.c0eed09f-965b-4424-9ce1-6b30d327efd7.i-1679daff",
+      "Payload": "{\"Parameters\":{\"workingDirectory\":\"\",\"runCommand\":[\"echo hello; sleep 10\"]},\"DocumentContent\":{\"schemaVersion\":\"1.1\",\"description\":\"This document defines the PowerShell command to run or path to a script which is to be executed.\",\"runtimeConfig\":{\"aws:runScript\":{\"properties\":[{\"workingDirectory\":\"{{ workingDirectory }}\",\"timeoutSeconds\":\"{{ timeoutSeconds }}\",\"runCommand\":\"{{ runCommand }}\",\"id\":\"0.aws:runScript\"}]}},\"parameters\":{\"workingDirectory\":{\"default\":\"\",\"description\":\"Path to the working directory (Optional)\",\"type\":\"String\"},\"timeoutSeconds\":{\"default\":\"\",\"description\":\"Timeout in seconds (Optional)\",\"type\":\"String\"},\"runCommand\":{\"description\":\"List of commands to run (Required)\",\"type\":\"Array\"}}},\"CommandId\":\"c0eed09f-965b-4424-9ce1-6b30d327efd7\",\"DocumentName\":\"AWS-RunPowerShellScript\"}",
+      "PayloadDigest": "d2c0c8ace035cdea03723f9a1a97332a7c71de14053127247b4271778f996566",
+      "Topic": "aws.ssm.sendCommand.us.east.1.1"
+    },
+    {
+      "CreatedDate": "2015-08-04T17:17:04.165Z",
+      "Destination": "i-1679daff",
+      "MessageId": "aws.ssm.df311820-c996-4dd0-a99d-a5a4f16f7495.i-1679daff",
+      "Payload": "{\"Parameters\":{\"workingDirectory\":\"\",\"runCommand\":[\"echo hello; sleep 10\"]},\"DocumentContent\":{\"schemaVersion\":\"1.1\",\"description\":\"This document defines the PowerShell command to run or path to a script which is to be executed.\",\"runtimeConfig\":{\"aws:runScript\":{\"properties\":[{\"workingDirectory\":\"{{ workingDirectory }}\",\"timeoutSeconds\":\"{{ timeoutSeconds }}\",\"runCommand\":\"{{ runCommand }}\",\"id\":\"0.aws:runScript\"}]}},\"parameters\":{\"workingDirectory\":{\"default\":\"\",\"description\":\"Path to the working directory (Optional)\",\"type\":\"String\"},\"timeoutSeconds\":{\"default\":\"\",\"description\":\"Timeout in seconds (Optional)\",\"type\":\"String\"},\"runCommand\":{\"description\":\"List of commands to run (Required)\",\"type\":\"Array\"}}},\"CommandId\":\"df311820-c996-4dd0-a99d-a5a4f16f7495\",\"DocumentName\":\"AWS-RunPowerShellScript\"}",
+      "PayloadDigest": "7b1ea4e15532123baf90f493a355db0e0c2012db3148427a88c6799d779154b2",
+      "Topic": "aws.ssm.sendCommand.us.east.1.1"
+    },
+    {
+      "CreatedDate": "2015-08-04T17:17:07.176Z",
+      "Destination": "i-1679daff",
+      "MessageId": "aws.ssm.5c47e084-87ea-4467-8d32-d07c87ea60ae.i-1679daff",
+      "Payload": "{\"Parameters\":{\"workingDirectory\":\"\",\"runCommand\":[\"echo hello; sleep 10\"]},\"DocumentContent\":{\"schemaVersion\":\"1.1\",\"description\":\"This document defines the PowerShell command to run or path to a script which is to be executed.\",\"runtimeConfig\":{\"aws:runScript\":{\"properties\":[{\"workingDirectory\":\"{{ workingDirectory }}\",\"timeoutSeconds\":\"{{ timeoutSeconds }}\",\"runCommand\":\"{{ runCommand }}\",\"id\":\"0.aws:runScript\"}]}},\"parameters\":{\"workingDirectory\":{\"default\":\"\",\"description\":\"Path to the working directory (Optional)\",\"type\":\"String\"},\"timeoutSeconds\":{\"default\":\"\",\"description\":\"Timeout in seconds (Optional)\",\"type\":\"String\"},\"runCommand\":{\"description\":\"List of commands to run (Required)\",\"type\":\"Array\"}}},\"CommandId\":\"5c47e084-87ea-4467-8d32-d07c87ea60ae\",\"DocumentName\":\"AWS-RunPowerShellScript\"}",
+      "PayloadDigest": "cbc46b8bc2d610374983aea8e84082b614787ba607c2e1414aabfc4b0f750280",
+      "Topic": "aws.ssm.sendCommand.us.east.1.1"
+    },
+    {
+      "CreatedDate": "2015-08-04T17:17:10.180Z",
+      "Destination": "i-1679daff",
+      "MessageId": "aws.ssm.48abab53-d14e-4280-9c64-5542fd6c8f84.i-1679daff",
+      "Payload": "{\"Parameters\":{\"workingDirectory\":\"\",\"runCommand\":[\"echo hello; sleep 10\"]},\"DocumentContent\":{\"schemaVersion\":\"1.1\",\"description\":\"This document defines the PowerShell command to run or path to a script which is to be executed.\",\"runtimeConfig\":{\"aws:runScript\":{\"properties\":[{\"workingDirectory\":\"{{ workingDirectory }}\",\"timeoutSeconds\":\"{{ timeoutSeconds }}\",\"runCommand\":\"{{ runCommand }}\",\"id\":\"0.aws:runScript\"}]}},\"parameters\":{\"workingDirectory\":{\"default\":\"\",\"description\":\"Path to the working directory (Optional)\",\"type\":\"String\"},\"timeoutSeconds\":{\"default\":\"\",\"description\":\"Timeout in seconds (Optional)\",\"type\":\"String\"},\"runCommand\":{\"description\":\"List of commands to run (Required)\",\"type\":\"Array\"}}},\"CommandId\":\"48abab53-d14e-4280-9c64-5542fd6c8f84\",\"DocumentName\":\"AWS-RunPowerShellScript\"}",
+      "PayloadDigest": "0c76baf947a6fcc5f4599f07a38efa51b03e6b09a3e2946a904d9aa270fbee9d",
+      "Topic": "aws.ssm.sendCommand.us.east.1.1"
+    },
+    {
+      "CreatedDate": "2015-08-04T17:17:13.722Z",
+      "Destination": "i-1679daff",
+      "MessageId": "aws.ssm.577b768d-5109-4c66-bb5d-260a785f2194.i-1679daff",
+      "Payload": "{\"Parameters\":{\"workingDirectory\":\"\",\"runCommand\":[\"echo hello; sleep 10\"]},\"DocumentContent\":{\"schemaVersion\":\"1.1\",\"description\":\"This document defines the PowerShell command to run or path to a script which is to be executed.\",\"runtimeConfig\":{\"aws:runScript\":{\"properties\":[{\"workingDirectory\":\"{{ workingDirectory }}\",\"timeoutSeconds\":\"{{ timeoutSeconds }}\",\"runCommand\":\"{{ runCommand }}\",\"id\":\"0.aws:runScript\"}]}},\"parameters\":{\"workingDirectory\":{\"default\":\"\",\"description\":\"Path to the working directory (Optional)\",\"type\":\"String\"},\"timeoutSeconds\":{\"default\":\"\",\"description\":\"Timeout in seconds (Optional)\",\"type\":\"String\"},\"runCommand\":{\"description\":\"List of commands to run (Required)\",\"type\":\"Array\"}}},\"CommandId\":\"577b768d-5109-4c66-bb5d-260a785f2194\",\"DocumentName\":\"AWS-RunPowerShellScript\"}",
+      "PayloadDigest": "540ea3754e8c8f0dafcfd30ede08213aad58338e01e4870e1738c3214b22ce3d",
+      "Topic": "aws.ssm.sendCommand.us.east.1.1"
+    }
+  ],
+  "MessagesRequestId": "03f44d19-90fe-44d4-bd4c-298b966a1e1a"
+}
