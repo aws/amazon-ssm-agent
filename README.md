@@ -1,3 +1,5 @@
+[![ReportCard][ReportCard-Image]][ReportCard-URL]
+
 # Amazon SSM Agent
 
 The Amazon EC2 Simple Systems Manager (SSM) Agent is software developed for the [Simple Systems Manager Service](http://docs.aws.amazon.com/ssm/latest/APIReference/Welcome.html). The SSM Agent is the primary component of a feature called Run Command.
@@ -109,3 +111,6 @@ Amazon Web Services does not currently provide support for modified copies of th
 ## License
 
 The Amazon SSM Agent is licensed under the Amazon Software License.
+
+[ReportCard-URL]: http://goreportcard.com/report/aws/amazon-ssm-agent
+[ReportCard-Image]: http://goreportcard.com/badge/aws/amazon-ssm-agent
