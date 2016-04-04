@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env bash
 # Generate test coverage statistics for Go packages.
 #
 

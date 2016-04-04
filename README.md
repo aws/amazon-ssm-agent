@@ -1,4 +1,5 @@
 [![ReportCard][ReportCard-Image]][ReportCard-URL]
+[![Build Status](https://travis-ci.org/aws/amazon-ssm-agent.svg?branch=master)](https://travis-ci.org/aws/amazon-ssm-agent)
 
 # Amazon SSM Agent
 
