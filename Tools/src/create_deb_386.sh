@@ -20,16 +20,16 @@ cp ${BGO_SPACE}/bin/linux_386/amazon-ssm-agent ${BGO_SPACE}/bin/debian_386/debia
 cd ${BGO_SPACE}/bin/debian_386/debian/usr/bin/; strip --strip-unneeded amazon-ssm-agent ;cd ~-
 cp ${BGO_SPACE}/seelog.xml ${BGO_SPACE}/bin/debian_386/debian/etc/amazon/ssm/
 cp ${BGO_SPACE}/amazon-ssm-agent.json ${BGO_SPACE}/bin/debian_386/debian/etc/amazon/ssm/
-cp ${BGO_SPACE}/packaging/amazon-ubuntu-ami/amazon-ssm-agent.conf ${BGO_SPACE}/bin/debian_386/debian/etc/init/
+cp ${BGO_SPACE}/packaging/ubuntu/amazon-ssm-agent.conf ${BGO_SPACE}/bin/debian_386/debian/etc/init/
 
 echo "Copying debian package config files"
 
 cp ${BGO_SPACE}/Tools/src/LICENSE ${BGO_SPACE}/bin/debian_386/debian/usr/share/doc/amazon-ssm-agent/copyright
-cp ${BGO_SPACE}/packaging/amazon-ubuntu-ami/conffiles ${BGO_SPACE}/bin/debian_386/debian/
-cp ${BGO_SPACE}/packaging/amazon-ubuntu-ami/preinst ${BGO_SPACE}/bin/debian_386/debian/
-cp ${BGO_SPACE}/packaging/amazon-ubuntu-ami/postinst ${BGO_SPACE}/bin/debian_386/debian/
-cp ${BGO_SPACE}/packaging/amazon-ubuntu-ami/prerm ${BGO_SPACE}/bin/debian_386/debian/
-cp ${BGO_SPACE}/packaging/amazon-ubuntu-ami/lintian-overrides ${BGO_SPACE}/bin/debian_386/debian/usr/share/lintian/overrides/amazon-ssm-agent
+cp ${BGO_SPACE}/packaging/ubuntu/conffiles ${BGO_SPACE}/bin/debian_386/debian/
+cp ${BGO_SPACE}/packaging/ubuntu/preinst ${BGO_SPACE}/bin/debian_386/debian/
+cp ${BGO_SPACE}/packaging/ubuntu/postinst ${BGO_SPACE}/bin/debian_386/debian/
+cp ${BGO_SPACE}/packaging/ubuntu/prerm ${BGO_SPACE}/bin/debian_386/debian/
+cp ${BGO_SPACE}/packaging/ubuntu/lintian-overrides ${BGO_SPACE}/bin/debian_386/debian/usr/share/lintian/overrides/amazon-ssm-agent
 
 echo "Constructing the control file"
 
@@ -38,17 +38,17 @@ echo 'Architecture: i386' >> ${BGO_SPACE}/bin/debian_386/debian/control
 echo -n 'Version: ' >> ${BGO_SPACE}/bin/debian_386/debian/control
 cat ${BGO_SPACE}/VERSION | tr -d "\n" >> ${BGO_SPACE}/bin/debian_386/debian/control
 echo '-1' >> ${BGO_SPACE}/bin/debian_386/debian/control
-cat ${BGO_SPACE}/packaging/amazon-ubuntu-ami/control >> ${BGO_SPACE}/bin/debian_386/debian/control
+cat ${BGO_SPACE}/packaging/ubuntu/control >> ${BGO_SPACE}/bin/debian_386/debian/control
 
 echo "Constructing the changelog file"
 
 echo -n 'amazon-ssm-agent (' > ${BGO_SPACE}/bin/debian_386/debian/usr/share/doc/amazon-ssm-agent/changelog
 cat VERSION | tr -d "\n"  >> ${BGO_SPACE}/bin/debian_386/debian/usr/share/doc/amazon-ssm-agent/changelog
 echo '-1) unstable; urgency=low' >> ${BGO_SPACE}/bin/debian_386/debian/usr/share/doc/amazon-ssm-agent/changelog
-cat ${BGO_SPACE}/packaging/amazon-ubuntu-ami/changelog >> ${BGO_SPACE}/bin/debian_386/debian/usr/share/doc/amazon-ssm-agent/changelog
+cat ${BGO_SPACE}/packaging/ubuntu/changelog >> ${BGO_SPACE}/bin/debian_386/debian/usr/share/doc/amazon-ssm-agent/changelog
 
-cp ${BGO_SPACE}/packaging/amazon-ubuntu-ami/changelog.Debian ${BGO_SPACE}/bin/debian_386/debian/usr/share/doc/amazon-ssm-agent/
-cp ${BGO_SPACE}/packaging/amazon-ubuntu-ami/debian-binary ${BGO_SPACE}/bin/debian_386/debian/
+cp ${BGO_SPACE}/packaging/ubuntu/changelog.Debian ${BGO_SPACE}/bin/debian_386/debian/usr/share/doc/amazon-ssm-agent/
+cp ${BGO_SPACE}/packaging/ubuntu/debian-binary ${BGO_SPACE}/bin/debian_386/debian/
 
 echo "Setting permissioning as required by debian"
 

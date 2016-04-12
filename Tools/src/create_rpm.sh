@@ -24,14 +24,14 @@ echo "Copying application files"
 cp ${BGO_SPACE}/bin/linux_amd64/amazon-ssm-agent ${BGO_SPACE}/bin/linux_amd64/linux/usr/bin/
 cp ${BGO_SPACE}/seelog.xml ${BGO_SPACE}/bin/linux_amd64/linux/etc/amazon/ssm/
 cp ${BGO_SPACE}/amazon-ssm-agent.json ${BGO_SPACE}/bin/linux_amd64/linux/etc/amazon/ssm/
-cp ${BGO_SPACE}/packaging/amazon-linux-ami/amazon-ssm-agent.conf ${BGO_SPACE}/bin/linux_amd64/linux/etc/init/
-cp ${BGO_SPACE}/packaging/amazon-linux-ami/amazon-ssm-agent.service ${BGO_SPACE}/bin/linux_amd64/linux/etc/systemd/system/
+cp ${BGO_SPACE}/packaging/linux/amazon-ssm-agent.conf ${BGO_SPACE}/bin/linux_amd64/linux/etc/init/
+cp ${BGO_SPACE}/packaging/linux/amazon-ssm-agent.service ${BGO_SPACE}/bin/linux_amd64/linux/etc/systemd/system/
 cd ${BGO_SPACE}/bin/linux_amd64/linux/usr/bin/; strip --strip-unneeded amazon-ssm-agent ;cd ~-
 
 echo "Creating the rpm package"
 
 BUILD_ROOT="--buildroot ${BGO_SPACE}/bin/linux_amd64/linux"
-SPEC_FILE="${BGO_SPACE}/packaging/amazon-linux-ami/amazon-ssm-agent.spec"
+SPEC_FILE="${BGO_SPACE}/packaging/linux/amazon-ssm-agent.spec"
 
 rpmbuild -bb --define "rpmversion `cat ${BGO_SPACE}/VERSION`" --define "buildarch 'x86_64'" --define "_topdir bin/linux_amd64/linux/rpmbuild" ${BUILD_ROOT} ${SPEC_FILE}
 
