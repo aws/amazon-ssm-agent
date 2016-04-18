@@ -30,10 +30,10 @@ cd ${BGO_SPACE}/bin/linux_amd64/linux/usr/bin/; strip --strip-unneeded amazon-ss
 
 echo "Creating the rpm package"
 
-BUILD_ROOT="--buildroot ${BGO_SPACE}/bin/linux_amd64/linux"
 SPEC_FILE="${BGO_SPACE}/packaging/linux/amazon-ssm-agent.spec"
+BUILD_ROOT="${BGO_SPACE}/bin/linux_amd64/linux"
 
-rpmbuild -bb --define "rpmversion `cat ${BGO_SPACE}/VERSION`" --define "buildarch 'x86_64'" --define "_topdir bin/linux_amd64/linux/rpmbuild" ${BUILD_ROOT} ${SPEC_FILE}
+setarch x86_64 rpmbuild -bb --define "rpmversion `cat ${BGO_SPACE}/VERSION`" --define "_topdir bin/linux_amd64/linux/rpmbuild" --buildroot ${BUILD_ROOT} ${SPEC_FILE}
 
 echo "Copying rpm files to bin"
 
