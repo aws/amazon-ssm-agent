@@ -1,12 +1,9 @@
-%define _binaries_in_noarch_packages_terminate_build   0
-
 Name         : amazon-ssm-agent
 Version      : %rpmversion
 Release      : 1
 Summary      : Manage EC2 Instances using SSM APIs
 
 Group        : Amazon/Tools
-BuildArch    : %buildarch
 License      : Amazon Software License
 URL          : http://docs.aws.amazon.com/ssm/latest/APIReference/Welcome.html
 

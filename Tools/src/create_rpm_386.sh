@@ -30,11 +30,12 @@ cd ${BGO_SPACE}/bin/linux_386/linux/usr/bin/; strip --strip-unneeded amazon-ssm-
 
 echo "Creating the rpm package"
 
-BUILD_ROOT="--buildroot ${BGO_SPACE}/bin/linux_386/linux"
 SPEC_FILE="${BGO_SPACE}/packaging/linux/amazon-ssm-agent.spec"
+BUILD_ROOT="${BGO_SPACE}/bin/linux_386/linux"
 
-setarch i686 rpmbuild --target i686 -bb --define "rpmversion `cat ${BGO_SPACE}/VERSION`" --define "buildarch 'noarch'" --define "_topdir bin/linux_386/linux/rpmbuild" ${BUILD_ROOT} ${SPEC_FILE}
+setarch i386 rpmbuild --target i386 -bb --define "rpmversion `cat ${BGO_SPACE}/VERSION`" --define "_topdir bin/linux_386/linux/rpmbuild" --buildroot ${BUILD_ROOT} ${SPEC_FILE}
+
 echo "Copying rpm files to bin"
 
-cp ${BGO_SPACE}/bin/linux_386/linux/rpmbuild/RPMS/noarch/*.rpm ${BGO_SPACE}/bin/
-cp ${BGO_SPACE}/bin/linux_386/linux/rpmbuild/RPMS/noarch/*.rpm ${BGO_SPACE}/bin/linux_386/amazon-ssm-agent.rpm
+cp ${BGO_SPACE}/bin/linux_386/linux/rpmbuild/RPMS/i386/*.rpm ${BGO_SPACE}/bin/
+cp ${BGO_SPACE}/bin/linux_386/linux/rpmbuild/RPMS/i386/*.rpm ${BGO_SPACE}/bin/linux_386/amazon-ssm-agent.rpm
