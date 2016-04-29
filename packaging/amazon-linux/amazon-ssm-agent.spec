@@ -23,6 +23,13 @@ This package provides the Amazon SSM Agent for managing EC2 Instances using SSM 
 %setup -q
 
 %build
+cd ..
+mkdir -p %{name}-%{version}-tmp
+mv %{name}-%{version}/* %{name}-%{version}-tmp/
+mkdir -p %{name}-%{version}/src/github.com/aws/amazon-ssm-agent
+mv %{name}-%{version}-tmp/* %{name}-%{version}/src/github.com/aws/amazon-ssm-agent/
+rm -rf %{name}-%{version}-tmp
+cd %{name}-%{version}
 PKG_ROOT=`pwd`/src/github.com/aws/amazon-ssm-agent
 GOPATH=${PKG_ROOT}/vendor:`pwd`
 export GOPATH
@@ -41,7 +48,7 @@ PKG_ROOT=`pwd`/src/github.com/aws/amazon-ssm-agent
 cp ${PKG_ROOT}/bin/amazon-ssm-agent %{buildroot}/usr/bin/
 cp ${PKG_ROOT}/seelog.xml %{buildroot}/etc/amazon/ssm/
 cp ${PKG_ROOT}/amazon-ssm-agent.json %{buildroot}/etc/amazon/ssm/
-cp ${PKG_ROOT}/packaging/amazon-linux-ami/amazon-ssm-agent.conf %{buildroot}/etc/init/
+cp ${PKG_ROOT}/packaging/linux/amazon-ssm-agent.conf %{buildroot}/etc/init/
 
 %files
 %defattr(-,root,root,-)
