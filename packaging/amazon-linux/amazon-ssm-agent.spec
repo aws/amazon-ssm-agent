@@ -1,5 +1,5 @@
 Name         : amazon-ssm-agent
-Version      : 1.1.145
+Version      : 1.1.146.0
 Release      : 1%{?dist}
 Summary      : Manage EC2 Instances using SSM APIs
 
