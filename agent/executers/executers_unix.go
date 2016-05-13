@@ -39,10 +39,11 @@ func killProcess(process *os.Process) error {
 	//   The consequence is that command.Wait() does not return, for some reason.
 	//   As a workaround we use some (platform specific) magic:
 	//     syscall.Kill(-pid, syscall.SIGKILL)
-	//   Not sure what the minus sign does but it is necessary for this to work.
-	//   Magic taken from:
-	//     http://stackoverflow.com/questions/22470193/why-wont-go-kill-a-child-process-correctly
-	//     https://groups.google.com/forum/#!topic/golang-nuts/XoQ3RhFBJl8
+	//   Here '-pid' means that the KILL signal is sent to all processes
+	//   in the process group whose id is 'pid'. 'prepareProcess' makes
+	//   the shell we spawn the leader of its own process group and so
+	//   the kill here not just kills the shell but all its descendant 
+	//   processes. [See manpage for kill(2)]
 	return syscall.Kill(-process.Pid, syscall.SIGKILL) // note the minus sign
 }
 
