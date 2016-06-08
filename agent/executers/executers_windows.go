@@ -18,20 +18,6 @@ package executers
 import (
 	"os"
 	"os/exec"
-	"path/filepath"
-	"strings"
-)
-
-const (
-	// RunCommandScriptName is the script name where all downloaded or provided commands will be stored
-	RunCommandScriptName = "_script.ps1"
-	// PowershellArgs specifies the default arguments that we pass to powershell
-	PowershellArgs = "-InputFormat None -Noninteractive -NoProfile -ExecutionPolicy unrestricted -f"
-	// Currently we run powershell as powershell.exe [arguments], with this approach we are not able to get the $LASTEXITCODE value
-	// if we want to run multiple commands then we need to run them via shell and not directly the command.
-	// https://groups.google.com/forum/#!topic/golang-nuts/ggd3ww3ZKcI
-	ExitCodeTrap                       = " ; exit $LASTEXITCODE"
-	CommandStoppedPreemptivelyExitCode = -1
 )
 
 func prepareProcess(command *exec.Cmd) {
@@ -40,16 +26,4 @@ func prepareProcess(command *exec.Cmd) {
 
 func killProcess(process *os.Process) error {
 	return process.Kill()
-}
-
-// NewShellCommandExecuter creates a shell executer where the shell command is 'sh'.
-func NewShellCommandExecuter() *ShellCommandExecuter {
-	return &ShellCommandExecuter{
-		ShellCommand:          filepath.Join(os.Getenv("SystemRoot"), "System32", "WindowsPowerShell", "v1.0", "powershell.exe"),
-		ShellDefaultArguments: strings.Split(PowershellArgs, " "),
-		ShellExitCodeTrap:     ExitCodeTrap,
-		ScriptName:            RunCommandScriptName,
-		StdoutFileName:        "stdout",
-		StderrFileName:        "stderr",
-	}
 }

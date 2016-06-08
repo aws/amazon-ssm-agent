@@ -15,80 +15,49 @@
 package main
 
 import (
-	"flag"
-	"fmt"
 	"os"
 	"os/signal"
-	"path"
+	"path/filepath"
 	"runtime"
 	"syscall"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
-	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	"github.com/aws/amazon-ssm-agent/agent/framework/coremanager"
 	logger "github.com/aws/amazon-ssm-agent/agent/log"
-	"github.com/aws/amazon-ssm-agent/agent/platform"
-	"github.com/aws/amazon-ssm-agent/agent/rebooter"
 	"github.com/aws/amazon-ssm-agent/agent/version"
 )
 
-func main() {
-	Start()
-}
+const (
+	activationCodeFlag      = "code"
+	activationIDFlag        = "id"
+	regionFlag              = "region"
+	registerFlag            = "register"
+	fingerprintFlag         = "fingerprint"
+	similarityThresholdFlag = "similarityThreshold"
+)
 
-var log logger.T
-var cpm *coremanager.CoreManager
+var (
+	instanceIDPtr, regionPtr             *string
+	activationCode, activationID, region string
+	register, clear, force, fpFlag       bool
+	similarityThreshold                  int
+	registrationFile                     = filepath.Join(appconfig.DefaultDataStorePath, "registration")
+)
 
-// Start starts the agent.
-func Start() {
-
-	// Setup default parameters.
-	instanceIDPtr := flag.String("i", "", "instance id")
-	regionPtr := flag.String("r", "", "instance region")
-	flag.Parse()
-
-	config, err := appconfig.GetConfig(false)
-	if err != nil {
-		fmt.Println("Could not load config file: ", err)
-		return
-	}
-
-	log = logger.GetLogger()
-	defer log.Flush()
-
+func start(log logger.T, instanceIDPtr *string, regionPtr *string) (cpm *coremanager.CoreManager, err error) {
 	log.Infof("Starting Agent: %v", version.String())
 	log.Infof("OS: %s, Arch: %s", runtime.GOOS, runtime.GOARCH)
 	log.Flush()
 
-	region, err := platform.SetRegion(log, *regionPtr)
-	if err != nil {
-		log.Error("please specify the region to use.")
+	if cpm, err = coremanager.NewCoreManager(instanceIDPtr, regionPtr, log); err != nil {
+		log.Errorf("error occured when starting core manager: %v", err)
 		return
 	}
-	log.Debug("Using region:", region)
-
-	instanceID, err := platform.SetInstanceID(log, *instanceIDPtr)
-	if err != nil {
-		log.Error("please specify at least one instance id.")
-		return
-	}
-
-	//Initialize all folders where interim states of executing commands will be stored.
-	if !initializeBookkeepingLocations(log, instanceID) {
-		log.Error("unable to initialize. Exiting")
-		Stop()
-	}
-
-	// create a reboot channel to handle reboot request from core plugins
-	rebootChan := make(chan int)
-
-	// starting core plugin manager
-	cpm = coremanager.NewCoreManager(instanceID, config, log, rebootChan)
 	cpm.Start()
+	return
+}
 
-	// listen on the channel for reboot requests from the framework/CorePluginManager
-	go reboot(<-rebootChan)
-
+func blockUntilSignaled(log logger.T) {
 	// Below channel will handle all machine initiated shutdown/reboot requests.
 
 	// Set up channel on which to receive signal notifications.
@@ -103,58 +72,24 @@ func Start() {
 
 	s := <-c
 	log.Info("Got signal:", s, " value:", s.Signal)
-	log.Info("Stopping agent")
-	Stop()
 }
 
-//Stop the agent.
-func Stop() {
-	// stop the core plugin manager
-	if cpm != nil {
-		cpm.Stop()
-	}
-
+func stop(log logger.T, cpm *coremanager.CoreManager) {
+	log.Info("Stopping agent")
+	log.Flush()
+	cpm.Stop()
 	log.Info("Bye.")
 	log.Flush()
-	log.Close()
-	os.Exit(130) // Terminated by user
 }
 
-func reboot(code int) {
-	log.Info("Processing reboot request...")
-	if rebooter.RebootRequested() && !rebooter.RebootInitiated() {
-		rebooter.RebootMachine(log)
+// Run as a single process. Used by Unix systems and when running agent from console.
+func run(log logger.T) {
+	// run core manager
+	cpm, err := start(log, instanceIDPtr, regionPtr)
+	if err != nil {
+		log.Errorf("error occured when starting amazon-ssm-agent: %v", err)
+		return
 	}
-}
-
-// initializeBookkeepingLocations - initializes all folder locations required for bookkeeping
-func initializeBookkeepingLocations(log logger.T, instanceID string) bool {
-	//Create folders pending, current, completed, corrupt under the location DefaultDataStorePath/<instanceId>
-
-	log.Info("Initializing bookkeeping folders")
-	initStatus := true
-	//Parent folder in linux => /var/lib/amazon/ssm
-	folders := []string{
-		appconfig.DefaultLocationOfPending,
-		appconfig.DefaultLocationOfCurrent,
-		appconfig.DefaultLocationOfCompleted,
-		appconfig.DefaultLocationOfCorrupt}
-
-	for _, folder := range folders {
-
-		directoryName := path.Join(appconfig.DefaultDataStorePath,
-			instanceID,
-			appconfig.DefaultCommandRootDirName,
-			appconfig.DefaultLocationOfState,
-			folder)
-
-		err := fileutil.MakeDirs(directoryName)
-		if err != nil {
-			log.Error("encountered error while creating folders for internal state management", err)
-			initStatus = false
-			break
-		}
-	}
-
-	return initStatus
+	blockUntilSignaled(log)
+	stop(log, cpm)
 }

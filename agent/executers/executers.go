@@ -19,36 +19,18 @@ import (
 	"io"
 	"os"
 	"os/exec"
-	"path/filepath"
 	"strings"
 	"syscall"
 	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/plugins/pluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 )
 
-// NewDefaultShellExecuter creates a shell executer where the shell command is 'sh'.
-func NewDefaultShellExecuter() *ShellCommandExecuter {
-	return &ShellCommandExecuter{
-		ShellCommand:          "sh",
-		ShellDefaultArguments: []string{},
-		ShellExitCodeTrap:     "", // currently this is not being used, however to capture $LASTEXITCODE from powershell we will probably need to make use of this.
-		ScriptName:            "_script.sh",
-		StdoutFileName:        "stdout",
-		StderrFileName:        "stderr",
-	}
-}
-
-// ShellCommandExecuter executes commands by invoking a shell (e.g. sh, bash, etc.)
+// ShellCommandExecuter is specially added for testing purposes
 type ShellCommandExecuter struct {
-	ShellCommand          string
-	ShellDefaultArguments []string
-	ShellExitCodeTrap     string
-	ScriptName            string
-	StdoutFileName        string
-	StderrFileName        string
 }
 
 // Execute executes a list of shell commands in the given working directory.
@@ -62,27 +44,18 @@ type ShellCommandExecuter struct {
 func (sh ShellCommandExecuter) Execute(
 	log log.T,
 	workingDir string,
-	scriptPath string,
-	orchestrationDir string,
+	stdoutFilePath string,
+	stderrFilePath string,
 	cancelFlag task.CancelFlag,
 	executionTimeout int,
+	commandName string,
+	commandArguments []string,
 ) (stdout io.Reader, stderr io.Reader, exitCode int, errs []error) {
 
-	stdoutFilePath := filepath.Join(orchestrationDir, sh.StdoutFileName)
-	stderrFilePath := filepath.Join(orchestrationDir, sh.StderrFileName)
-	log.Debugf("Command orchestration directory %v stdout file %v, stderr file %v", orchestrationDir, stdoutFilePath, stderrFilePath)
-
 	var err error
-	if sh.ShellCommand == "" {
-		exitCode, err = runCommandOutputToFiles(log, cancelFlag, workingDir, stdoutFilePath, stderrFilePath, scriptPath, sh.ShellDefaultArguments, executionTimeout)
-		if err != nil {
-			errs = append(errs, err)
-		}
-	} else {
-		exitCode, err = runCommandOutputToFiles(log, cancelFlag, workingDir, stdoutFilePath, stderrFilePath, sh.ShellCommand, sh.ShellDefaultArguments, executionTimeout, scriptPath)
-		if err != nil {
-			errs = append(errs, err)
-		}
+	exitCode, err = runCommandOutputToFiles(log, cancelFlag, workingDir, stdoutFilePath, stderrFilePath, executionTimeout, commandName, commandArguments)
+	if err != nil {
+		errs = append(errs, err)
 	}
 
 	emptyReader := bytes.NewReader([]byte{})
@@ -137,10 +110,9 @@ func runCommandOutputToFiles(
 	workingDir string,
 	stdoutFilePath string,
 	stderrFilePath string,
-	commandName string,
-	defaultArgs []string,
 	executionTimeout int,
-	args ...string,
+	commandName string,
+	commandArguments []string,
 ) (exitCode int, err error) {
 
 	// create stdout file
@@ -161,7 +133,7 @@ func runCommandOutputToFiles(
 	}
 	defer stderrWriter.Close()
 
-	return RunCommand(log, cancelFlag, workingDir, stdoutWriter, stderrWriter, commandName, defaultArgs, executionTimeout, args...)
+	return RunCommand(log, cancelFlag, workingDir, stdoutWriter, stderrWriter, executionTimeout, commandName, commandArguments)
 }
 
 // RunCommand runs the given commands using the given working directory.
@@ -171,15 +143,12 @@ func RunCommand(log log.T,
 	workingDir string,
 	stdoutWriter io.Writer,
 	stderrWriter io.Writer,
-	commandName string,
-	defaultArgs []string,
 	executionTimeout int,
-	args ...string,
+	commandName string,
+	commandArguments []string,
 ) (exitCode int, err error) {
 
-	// create command configuration
-	args2 := append(defaultArgs, args...)
-	command := exec.Command(commandName, args2...)
+	command := exec.Command(commandName, commandArguments...)
 	command.Dir = workingDir
 	command.Stdout = stdoutWriter
 	command.Stderr = stderrWriter
@@ -189,7 +158,7 @@ func RunCommand(log log.T,
 	prepareProcess(command)
 
 	log.Debug()
-	log.Debugf("Running in directory %v, command: %v %v.", workingDir, commandName, args2)
+	log.Debugf("Running in directory %v, command: %v %v.", workingDir, commandName, commandArguments)
 	log.Debug()
 	if err = command.Start(); err != nil {
 		log.Error("error occurred starting the command", err)
@@ -216,11 +185,11 @@ func RunCommand(log log.T,
 				if exitCode == -1 {
 					if cancelFlag.Canceled() {
 						// set appropriate exit code based on cancel or timeout
-						exitCode = CommandStoppedPreemptivelyExitCode
+						exitCode = pluginutil.CommandStoppedPreemptivelyExitCode
 						log.Infof("The execution of command was cancelled.")
 					} else if timedOut {
 						// set appropriate exit code based on cancel or timeout
-						exitCode = CommandStoppedPreemptivelyExitCode
+						exitCode = pluginutil.CommandStoppedPreemptivelyExitCode
 						log.Infof("The execution of command was timedout.")
 					}
 				} else {
@@ -280,11 +249,4 @@ func killProcessOnTimeout(log log.T, command *exec.Cmd, timer *time.Timer) {
 	}
 
 	log.Debug("Process stopped successfully")
-}
-
-// DeleteDirectory deletes a directory and all its content.
-func DeleteDirectory(log log.T, dirName string) {
-	if err := os.RemoveAll(dirName); err != nil {
-		log.Error("error deleting directory", err)
-	}
 }

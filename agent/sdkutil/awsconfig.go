@@ -18,34 +18,60 @@ import (
 	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
+	"github.com/aws/amazon-ssm-agent/agent/managedInstances/registration"
+	"github.com/aws/amazon-ssm-agent/agent/managedInstances/rolecreds"
 	"github.com/aws/amazon-ssm-agent/agent/platform"
+	"github.com/aws/amazon-ssm-agent/agent/sdkutil/retryer"
+
 	"github.com/aws/aws-sdk-go/aws"
 )
 
-// GetAwsConfig : Default AWS config populates with default region and credentials.
+var config *aws.Config
+
+func init() {
+	config = getAwsConfig()
+}
+
+// AwsConfig returns the default aws.Config object while the appropriate credentials
+func AwsConfig() *aws.Config {
+	return config
+}
+
+// getAwsConfig : Default AWS config populates with default region and credentials.
 // Callers should override returned config properties with any values they want for service specific overrides.
-func GetAwsConfig() (awsConfig *aws.Config) {
-	config := aws.Config{
-		Retryer:    retryer(),
+func getAwsConfig() (awsConfig *aws.Config) {
+	// create default config
+	awsConfig = &aws.Config{
+		Retryer:    newRetryer(),
 		SleepDelay: sleepDelay,
 	}
-	awsConfig = config.WithLogLevel(aws.LogDebugWithRequestRetries | aws.LogDebugWithRequestErrors)
-	region := platform.Region()
+
+	// update region from platform
+	region, err := platform.Region()
 	if region != "" {
 		awsConfig.Region = &region
 	}
-	appConfig, err := appconfig.GetConfig(false)
+
+	// load managed credentials if applicable
+	if isManaged, err := registration.HasManagedInstancesCredentials(); isManaged && err == nil {
+		awsConfig.Credentials = rolecreds.NewCredentials()
+		return
+	}
+
+	// look for profile credentials
+	appConfig, err := appconfig.Config(false)
 	if err == nil {
 		creds, _ := appConfig.ProfileCredentials()
 		if creds != nil {
 			awsConfig.Credentials = creds
 		}
 	}
+
 	return
 }
 
-var retryer = func() aws.RequestRetryer {
-	r := SsmRetryer{}
+var newRetryer = func() aws.RequestRetryer {
+	r := retryer.SsmRetryer{}
 	r.NumMaxRetries = 3
 	return r
 }

@@ -105,7 +105,8 @@ func TestUploadOrderMulti(t *testing.T) {
 		Bucket:               aws.String("Bucket"),
 		Key:                  aws.String("Key"),
 		Body:                 bytes.NewReader(buf12MB),
-		ServerSideEncryption: aws.String("AES256"),
+		ServerSideEncryption: aws.String("aws:kms"),
+		SSEKMSKeyId:          aws.String("KmsId"),
 		ContentType:          aws.String("content/type"),
 	})
 
@@ -132,7 +133,8 @@ func TestUploadOrderMulti(t *testing.T) {
 	assert.Regexp(t, `^ETAG\d+$`, val((*args)[4], "MultipartUpload.Parts[2].ETag"))
 
 	// Custom headers
-	assert.Equal(t, "AES256", val((*args)[0], "ServerSideEncryption"))
+	assert.Equal(t, "aws:kms", val((*args)[0], "ServerSideEncryption"))
+	assert.Equal(t, "KmsId", val((*args)[0], "SSEKMSKeyId"))
 	assert.Equal(t, "content/type", val((*args)[0], "ContentType"))
 }
 
@@ -202,7 +204,8 @@ func TestUploadOrderSingle(t *testing.T) {
 		Bucket:               aws.String("Bucket"),
 		Key:                  aws.String("Key"),
 		Body:                 bytes.NewReader(buf2MB),
-		ServerSideEncryption: aws.String("AES256"),
+		ServerSideEncryption: aws.String("aws:kms"),
+		SSEKMSKeyId:          aws.String("KmsId"),
 		ContentType:          aws.String("content/type"),
 	})
 
@@ -211,7 +214,8 @@ func TestUploadOrderSingle(t *testing.T) {
 	assert.NotEqual(t, "", resp.Location)
 	assert.Equal(t, aws.String("VERSION-ID"), resp.VersionID)
 	assert.Equal(t, "", resp.UploadID)
-	assert.Equal(t, "AES256", val((*args)[0], "ServerSideEncryption"))
+	assert.Equal(t, "aws:kms", val((*args)[0], "ServerSideEncryption"))
+	assert.Equal(t, "KmsId", val((*args)[0], "SSEKMSKeyId"))
 	assert.Equal(t, "content/type", val((*args)[0], "ContentType"))
 }
 
@@ -378,19 +382,24 @@ func TestUploadOrderReadFail2(t *testing.T) {
 		Body:   &failreader{times: 2},
 	})
 
-	assert.Equal(t, "ReadRequestBody", err.(awserr.Error).Code())
-	assert.EqualError(t, err.(awserr.Error).OrigErr(), "random failure")
+	assert.Equal(t, "MultipartUpload", err.(awserr.Error).Code())
+	assert.Equal(t, "ReadRequestBody", err.(awserr.Error).OrigErr().(awserr.Error).Code())
+	assert.Contains(t, err.(awserr.Error).OrigErr().Error(), "random failure")
 	assert.Equal(t, []string{"CreateMultipartUpload", "AbortMultipartUpload"}, *ops)
 }
 
 type sizedReader struct {
 	size int
 	cur  int
+	err  error
 }
 
 func (s *sizedReader) Read(p []byte) (n int, err error) {
 	if s.cur >= s.size {
-		return 0, io.EOF
+		if s.err == nil {
+			s.err = io.EOF
+		}
+		return 0, s.err
 	}
 
 	n = len(p)
@@ -424,6 +433,52 @@ func TestUploadOrderMultiBufferedReader(t *testing.T) {
 	assert.Equal(t, []int{1024 * 1024 * 2, 1024 * 1024 * 5, 1024 * 1024 * 5}, parts)
 }
 
+func TestUploadOrderMultiBufferedReaderUnexpectedEOF(t *testing.T) {
+	s, ops, args := loggingSvc(emptyList)
+	mgr := s3manager.NewUploaderWithClient(s)
+	_, err := mgr.Upload(&s3manager.UploadInput{
+		Bucket: aws.String("Bucket"),
+		Key:    aws.String("Key"),
+		Body:   &sizedReader{size: 1024 * 1024 * 12, err: io.ErrUnexpectedEOF},
+	})
+
+	assert.NoError(t, err)
+	assert.Equal(t, []string{"CreateMultipartUpload", "UploadPart", "UploadPart", "UploadPart", "CompleteMultipartUpload"}, *ops)
+
+	// Part lengths
+	parts := []int{
+		buflen(val((*args)[1], "Body")),
+		buflen(val((*args)[2], "Body")),
+		buflen(val((*args)[3], "Body")),
+	}
+	sort.Ints(parts)
+	assert.Equal(t, []int{1024 * 1024 * 2, 1024 * 1024 * 5, 1024 * 1024 * 5}, parts)
+}
+
+// TestUploadOrderMultiBufferedReaderEOF tests the edge case where the
+// file size is the same as part size, which means nextReader will
+// return io.EOF rather than io.ErrUnexpectedEOF
+func TestUploadOrderMultiBufferedReaderEOF(t *testing.T) {
+	s, ops, args := loggingSvc(emptyList)
+	mgr := s3manager.NewUploaderWithClient(s)
+	_, err := mgr.Upload(&s3manager.UploadInput{
+		Bucket: aws.String("Bucket"),
+		Key:    aws.String("Key"),
+		Body:   &sizedReader{size: 1024 * 1024 * 10, err: io.EOF},
+	})
+
+	assert.NoError(t, err)
+	assert.Equal(t, []string{"CreateMultipartUpload", "UploadPart", "UploadPart", "CompleteMultipartUpload"}, *ops)
+
+	// Part lengths
+	parts := []int{
+		buflen(val((*args)[1], "Body")),
+		buflen(val((*args)[2], "Body")),
+	}
+	sort.Ints(parts)
+	assert.Equal(t, []int{1024 * 1024 * 5, 1024 * 1024 * 5}, parts)
+}
+
 func TestUploadOrderMultiBufferedReaderExceedTotalParts(t *testing.T) {
 	s, ops, _ := loggingSvc([]string{"UploadPart"})
 	mgr := s3manager.NewUploaderWithClient(s, func(u *s3manager.Uploader) {
@@ -441,8 +496,9 @@ func TestUploadOrderMultiBufferedReaderExceedTotalParts(t *testing.T) {
 	assert.Equal(t, []string{"CreateMultipartUpload", "AbortMultipartUpload"}, *ops)
 
 	aerr := err.(awserr.Error)
-	assert.Equal(t, "TotalPartsExceeded", aerr.Code())
-	assert.Contains(t, aerr.Message(), "configured MaxUploadParts (2)")
+	assert.Equal(t, "MultipartUpload", aerr.Code())
+	assert.Equal(t, "TotalPartsExceeded", aerr.OrigErr().(awserr.Error).Code())
+	assert.Contains(t, aerr.Error(), "configured MaxUploadParts (2)")
 }
 
 func TestUploadOrderSingleBufferedReader(t *testing.T) {
@@ -479,4 +535,61 @@ func TestUploadZeroLenObject(t *testing.T) {
 	assert.True(t, requestMade)
 	assert.NotEqual(t, "", resp.Location)
 	assert.Equal(t, "", resp.UploadID)
+}
+
+func TestUploadInputS3PutObjectInputPairity(t *testing.T) {
+	matchings := compareStructType(reflect.TypeOf(s3.PutObjectInput{}),
+		reflect.TypeOf(s3manager.UploadInput{}))
+	aOnly := []string{}
+	bOnly := []string{}
+
+	for k, c := range matchings {
+		if c == 1 && k != "ContentLength" {
+			aOnly = append(aOnly, k)
+		} else if c == 2 {
+			bOnly = append(bOnly, k)
+		}
+	}
+	assert.Empty(t, aOnly, "s3.PutObjectInput")
+	assert.Empty(t, bOnly, "s3Manager.UploadInput")
+}
+func compareStructType(a, b reflect.Type) map[string]int {
+	if a.Kind() != reflect.Struct || b.Kind() != reflect.Struct {
+		panic(fmt.Sprintf("types must both be structs, got %v and %v", a.Kind(), b.Kind()))
+	}
+
+	aFields := enumFields(a)
+	bFields := enumFields(b)
+
+	matchings := map[string]int{}
+
+	for i := 0; i < len(aFields) || i < len(bFields); i++ {
+		if i < len(aFields) {
+			c := matchings[aFields[i].Name]
+			matchings[aFields[i].Name] = c + 1
+		}
+		if i < len(bFields) {
+			c := matchings[bFields[i].Name]
+			matchings[bFields[i].Name] = c + 2
+		}
+	}
+
+	return matchings
+}
+
+func enumFields(v reflect.Type) []reflect.StructField {
+	fields := []reflect.StructField{}
+
+	for i := 0; i < v.NumField(); i++ {
+		field := v.Field(i)
+		// Ignoreing anon fields
+		if field.PkgPath != "" {
+			// Ignore unexported fields
+			continue
+		}
+
+		fields = append(fields, field)
+	}
+
+	return fields
 }

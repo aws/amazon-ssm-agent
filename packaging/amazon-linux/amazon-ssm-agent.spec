@@ -46,15 +46,15 @@ mkdir -p %{buildroot}/var/lib/amazon/ssm/
 PKG_ROOT=`pwd`/src/github.com/aws/amazon-ssm-agent
 
 cp ${PKG_ROOT}/bin/amazon-ssm-agent %{buildroot}/usr/bin/
-cp ${PKG_ROOT}/seelog.xml %{buildroot}/etc/amazon/ssm/
-cp ${PKG_ROOT}/amazon-ssm-agent.json %{buildroot}/etc/amazon/ssm/
+cp ${PKG_ROOT}/seelog.xml.template %{buildroot}/etc/amazon/ssm/
+cp ${PKG_ROOT}/amazon-ssm-agent.json.template %{buildroot}/etc/amazon/ssm/
 cp ${PKG_ROOT}/packaging/linux/amazon-ssm-agent.conf %{buildroot}/etc/init/
 
 %files
 %defattr(-,root,root,-)
 /etc/init/amazon-ssm-agent.conf
-/etc/amazon/ssm/amazon-ssm-agent.json
-/etc/amazon/ssm/seelog.xml
+/etc/amazon/ssm/amazon-ssm-agent.json.template
+/etc/amazon/ssm/seelog.xml.template
 /usr/bin/amazon-ssm-agent
 /var/lib/amazon/ssm/
 

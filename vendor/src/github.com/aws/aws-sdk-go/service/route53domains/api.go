@@ -4,6 +4,7 @@
 package route53domains
 
 import (
+	"fmt"
 	"time"
 
 	"github.com/aws/aws-sdk-go/aws/awsutil"
@@ -30,10 +31,9 @@ func (c *Route53Domains) CheckDomainAvailabilityRequest(input *CheckDomainAvaila
 	return
 }
 
-// This operation checks the availability of one domain name. You can access
-// this API without authenticating. Note that if the availability status of
-// a domain is pending, you must submit another request to determine the availability
-// of the domain name.
+// This operation checks the availability of one domain name. Note that if the
+// availability status of a domain is pending, you must submit another request
+// to determine the availability of the domain name.
 func (c *Route53Domains) CheckDomainAvailability(input *CheckDomainAvailabilityInput) (*CheckDomainAvailabilityOutput, error) {
 	req, out := c.CheckDomainAvailabilityRequest(input)
 	err := req.Send()
@@ -199,6 +199,38 @@ func (c *Route53Domains) EnableDomainTransferLockRequest(input *EnableDomainTran
 // notified by email.
 func (c *Route53Domains) EnableDomainTransferLock(input *EnableDomainTransferLockInput) (*EnableDomainTransferLockOutput, error) {
 	req, out := c.EnableDomainTransferLockRequest(input)
+	err := req.Send()
+	return out, err
+}
+
+const opGetContactReachabilityStatus = "GetContactReachabilityStatus"
+
+// GetContactReachabilityStatusRequest generates a request for the GetContactReachabilityStatus operation.
+func (c *Route53Domains) GetContactReachabilityStatusRequest(input *GetContactReachabilityStatusInput) (req *request.Request, output *GetContactReachabilityStatusOutput) {
+	op := &request.Operation{
+		Name:       opGetContactReachabilityStatus,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &GetContactReachabilityStatusInput{}
+	}
+
+	req = c.newRequest(op, input, output)
+	output = &GetContactReachabilityStatusOutput{}
+	req.Data = output
+	return
+}
+
+// For operations that require confirmation that the email address for the registrant
+// contact is valid, such as registering a new domain, this operation returns
+// information about whether the registrant contact has responded.
+//
+// If you want us to resend the email, use the ResendContactReachabilityEmail
+// operation.
+func (c *Route53Domains) GetContactReachabilityStatus(input *GetContactReachabilityStatusInput) (*GetContactReachabilityStatusOutput, error) {
+	req, out := c.GetContactReachabilityStatusRequest(input)
 	err := req.Send()
 	return out, err
 }
@@ -413,6 +445,35 @@ func (c *Route53Domains) RegisterDomainRequest(input *RegisterDomainInput) (req 
 // Amazon Route 53 Pricing (http://aws.amazon.com/route53/pricing/).
 func (c *Route53Domains) RegisterDomain(input *RegisterDomainInput) (*RegisterDomainOutput, error) {
 	req, out := c.RegisterDomainRequest(input)
+	err := req.Send()
+	return out, err
+}
+
+const opResendContactReachabilityEmail = "ResendContactReachabilityEmail"
+
+// ResendContactReachabilityEmailRequest generates a request for the ResendContactReachabilityEmail operation.
+func (c *Route53Domains) ResendContactReachabilityEmailRequest(input *ResendContactReachabilityEmailInput) (req *request.Request, output *ResendContactReachabilityEmailOutput) {
+	op := &request.Operation{
+		Name:       opResendContactReachabilityEmail,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &ResendContactReachabilityEmailInput{}
+	}
+
+	req = c.newRequest(op, input, output)
+	output = &ResendContactReachabilityEmailOutput{}
+	req.Data = output
+	return
+}
+
+// For operations that require confirmation that the email address for the registrant
+// contact is valid, such as registering a new domain, this operation resends
+// the confirmation email to the current email address for the registrant contact.
+func (c *Route53Domains) ResendContactReachabilityEmail(input *ResendContactReachabilityEmailInput) (*ResendContactReachabilityEmailOutput, error) {
+	req, out := c.ResendContactReachabilityEmailRequest(input)
 	err := req.Send()
 	return out, err
 }
@@ -661,6 +722,19 @@ func (s CheckDomainAvailabilityInput) GoString() string {
 	return s.String()
 }
 
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CheckDomainAvailabilityInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CheckDomainAvailabilityInput"}
+	if s.DomainName == nil {
+		invalidParams.Add(request.NewErrParamRequired("DomainName"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
 // The CheckDomainAvailability response includes the following elements.
 type CheckDomainAvailabilityOutput struct {
 	_ struct{} `type:"structure"`
@@ -673,16 +747,15 @@ type CheckDomainAvailabilityOutput struct {
 	//
 	// Valid values:
 	//
-	//   AVAILABLE – The domain name is available.  AVAILABLE_RESERVED – The domain
-	// name is reserved under specific conditions.  AVAILABLE_PREORDER – The domain
-	// name is available and can be preordered.  UNAVAILABLE – The domain name is
-	// not available.  UNAVAILABLE_PREMIUM – The domain name is not available.
-	// UNAVAILABLE_RESTRICTED – The domain name is forbidden.  RESERVED – The domain
-	// name has been reserved for another person or organization.  DONT_KNOW – The
-	// TLD registry didn't reply with a definitive answer about whether the domain
-	// name is available. Amazon Route 53 can return this response for a variety
-	// of reasons, for example, the registry is performing maintenance. Try again
-	// later.
+	//  AVAILABLE – The domain name is available. AVAILABLE_RESERVED – The domain
+	// name is reserved under specific conditions. AVAILABLE_PREORDER – The domain
+	// name is available and can be preordered. UNAVAILABLE – The domain name is
+	// not available. UNAVAILABLE_PREMIUM – The domain name is not available. UNAVAILABLE_RESTRICTED
+	// – The domain name is forbidden. RESERVED – The domain name has been reserved
+	// for another person or organization. DONT_KNOW – The TLD registry didn't reply
+	// with a definitive answer about whether the domain name is available. Amazon
+	// Route 53 can return this response for a variety of reasons, for example,
+	// the registry is performing maintenance. Try again later.
 	Availability *string `type:"string" required:"true" enum:"DomainAvailability"`
 }
 
@@ -901,6 +974,26 @@ func (s ContactDetail) GoString() string {
 	return s.String()
 }
 
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ContactDetail) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ContactDetail"}
+	if s.ExtraParams != nil {
+		for i, v := range s.ExtraParams {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "ExtraParams", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
 // The DeleteTagsForDomainRequest includes the following elements.
 type DeleteTagsForDomainInput struct {
 	_ struct{} `type:"structure"`
@@ -914,10 +1007,10 @@ type DeleteTagsForDomainInput struct {
 	// Default: None
 	//
 	// Constraints: The domain name can contain only the letters a through z, the
-	// numbers 0 through 9, and hyphen (-). Hyphens are allowed only when theyaposre
-	// surrounded by letters, numbers, or other hyphens. You canapost specify a
-	// hyphen at the beginning or end of a label. To specify an Internationalized
-	// Domain Name, you must convert the name to Punycode.
+	// numbers 0 through 9, and hyphen (-). Hyphens are allowed only when they're
+	// surrounded by letters, numbers, or other hyphens. You can't specify a hyphen
+	// at the beginning or end of a label. To specify an Internationalized Domain
+	// Name, you must convert the name to Punycode.
 	//
 	// Required: Yes
 	DomainName *string `type:"string" required:"true"`
@@ -942,6 +1035,22 @@ func (s DeleteTagsForDomainInput) String() string {
 // GoString returns the string representation
 func (s DeleteTagsForDomainInput) GoString() string {
 	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DeleteTagsForDomainInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DeleteTagsForDomainInput"}
+	if s.DomainName == nil {
+		invalidParams.Add(request.NewErrParamRequired("DomainName"))
+	}
+	if s.TagsToDelete == nil {
+		invalidParams.Add(request.NewErrParamRequired("TagsToDelete"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
 }
 
 type DeleteTagsForDomainOutput struct {
@@ -972,6 +1081,19 @@ func (s DisableDomainAutoRenewInput) String() string {
 // GoString returns the string representation
 func (s DisableDomainAutoRenewInput) GoString() string {
 	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DisableDomainAutoRenewInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DisableDomainAutoRenewInput"}
+	if s.DomainName == nil {
+		invalidParams.Add(request.NewErrParamRequired("DomainName"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
 }
 
 type DisableDomainAutoRenewOutput struct {
@@ -1014,6 +1136,19 @@ func (s DisableDomainTransferLockInput) String() string {
 // GoString returns the string representation
 func (s DisableDomainTransferLockInput) GoString() string {
 	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DisableDomainTransferLockInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DisableDomainTransferLockInput"}
+	if s.DomainName == nil {
+		invalidParams.Add(request.NewErrParamRequired("DomainName"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
 }
 
 // The DisableDomainTransferLock response includes the following element.
@@ -1096,6 +1231,19 @@ func (s EnableDomainAutoRenewInput) GoString() string {
 	return s.String()
 }
 
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *EnableDomainAutoRenewInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "EnableDomainAutoRenewInput"}
+	if s.DomainName == nil {
+		invalidParams.Add(request.NewErrParamRequired("DomainName"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
 type EnableDomainAutoRenewOutput struct {
 	_ struct{} `type:"structure"`
 }
@@ -1138,6 +1286,19 @@ func (s EnableDomainTransferLockInput) GoString() string {
 	return s.String()
 }
 
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *EnableDomainTransferLockInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "EnableDomainTransferLockInput"}
+	if s.DomainName == nil {
+		invalidParams.Add(request.NewErrParamRequired("DomainName"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
 // The EnableDomainTransferLock response includes the following elements.
 type EnableDomainTransferLockOutput struct {
 	_ struct{} `type:"structure"`
@@ -1175,9 +1336,9 @@ type ExtraParam struct {
 	//
 	// Valid values: DUNS_NUMBER | BRAND_NUMBER | BIRTH_DEPARTMENT | BIRTH_DATE_IN_YYYY_MM_DD
 	// | BIRTH_COUNTRY | BIRTH_CITY | DOCUMENT_NUMBER | AU_ID_NUMBER | AU_ID_TYPE
-	// | CA_LEGAL_TYPE | ES_IDENTIFICATION | ES_IDENTIFICATION_TYPE | ES_LEGAL_FORM
-	// | FI_BUSINESS_NUMBER | FI_ID_NUMBER | IT_PIN | RU_PASSPORT_DATA | SE_ID_NUMBER
-	// | SG_ID_NUMBER | VAT_NUMBER
+	// | CA_LEGAL_TYPE | CA_BUSINESS_ENTITY_TYPE |ES_IDENTIFICATION | ES_IDENTIFICATION_TYPE
+	// | ES_LEGAL_FORM | FI_BUSINESS_NUMBER | FI_ID_NUMBER | IT_PIN | RU_PASSPORT_DATA
+	// | SE_ID_NUMBER | SG_ID_NUMBER | VAT_NUMBER
 	//
 	// Parent: ExtraParams
 	//
@@ -1209,6 +1370,74 @@ func (s ExtraParam) GoString() string {
 	return s.String()
 }
 
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ExtraParam) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ExtraParam"}
+	if s.Name == nil {
+		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+	if s.Value == nil {
+		invalidParams.Add(request.NewErrParamRequired("Value"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+type GetContactReachabilityStatusInput struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the domain for which you want to know whether the registrant
+	// contact has confirmed that the email address is valid.
+	//
+	// Type: String
+	//
+	// Default: None
+	//
+	// Required: Yes
+	DomainName *string `locationName:"domainName" type:"string"`
+}
+
+// String returns the string representation
+func (s GetContactReachabilityStatusInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s GetContactReachabilityStatusInput) GoString() string {
+	return s.String()
+}
+
+type GetContactReachabilityStatusOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The domain name for which you requested the reachability status.
+	DomainName *string `locationName:"domainName" type:"string"`
+
+	// Whether the registrant contact has responded. PENDING indicates that we sent
+	// the confirmation email and haven't received a response yet, DONE indicates
+	// that we sent the email and got confirmation from the registrant contact,
+	// and EXPIRED indicates that the time limit expired before the registrant contact
+	// responded.
+	//
+	// Type: String
+	//
+	// Valid values: PENDING, DONE, EXPIRED
+	Status *string `locationName:"status" type:"string" enum:"ReachabilityStatus"`
+}
+
+// String returns the string representation
+func (s GetContactReachabilityStatusOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s GetContactReachabilityStatusOutput) GoString() string {
+	return s.String()
+}
+
 // The GetDomainDetail request includes the following element.
 type GetDomainDetailInput struct {
 	_ struct{} `type:"structure"`
@@ -1235,6 +1464,19 @@ func (s GetDomainDetailInput) String() string {
 // GoString returns the string representation
 func (s GetDomainDetailInput) GoString() string {
 	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GetDomainDetailInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "GetDomainDetailInput"}
+	if s.DomainName == nil {
+		invalidParams.Add(request.NewErrParamRequired("DomainName"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
 }
 
 // The GetDomainDetail response includes the following elements.
@@ -1412,6 +1654,19 @@ func (s GetOperationDetailInput) String() string {
 // GoString returns the string representation
 func (s GetOperationDetailInput) GoString() string {
 	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GetOperationDetailInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "GetOperationDetailInput"}
+	if s.OperationId == nil {
+		invalidParams.Add(request.NewErrParamRequired("OperationId"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
 }
 
 // The GetOperationDetail response includes the following elements.
@@ -1619,6 +1874,19 @@ func (s ListTagsForDomainInput) GoString() string {
 	return s.String()
 }
 
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListTagsForDomainInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListTagsForDomainInput"}
+	if s.DomainName == nil {
+		invalidParams.Add(request.NewErrParamRequired("DomainName"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
 // The ListTagsForDomain response includes the following elements.
 type ListTagsForDomainOutput struct {
 	_ struct{} `type:"structure"`
@@ -1629,13 +1897,13 @@ type ListTagsForDomainOutput struct {
 	//
 	// Each tag includes the following elements.
 	//
-	//   Key
+	//  Key
 	//
 	// The key (name) of a tag.
 	//
 	// Type: String
 	//
-	//   Value
+	//  Value
 	//
 	// The value of a tag.
 	//
@@ -1687,6 +1955,19 @@ func (s Nameserver) String() string {
 // GoString returns the string representation
 func (s Nameserver) GoString() string {
 	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *Nameserver) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "Nameserver"}
+	if s.Name == nil {
+		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
 }
 
 // OperationSummary includes the following elements.
@@ -1855,6 +2136,49 @@ func (s RegisterDomainInput) GoString() string {
 	return s.String()
 }
 
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *RegisterDomainInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "RegisterDomainInput"}
+	if s.AdminContact == nil {
+		invalidParams.Add(request.NewErrParamRequired("AdminContact"))
+	}
+	if s.DomainName == nil {
+		invalidParams.Add(request.NewErrParamRequired("DomainName"))
+	}
+	if s.DurationInYears == nil {
+		invalidParams.Add(request.NewErrParamRequired("DurationInYears"))
+	}
+	if s.DurationInYears != nil && *s.DurationInYears < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("DurationInYears", 1))
+	}
+	if s.RegistrantContact == nil {
+		invalidParams.Add(request.NewErrParamRequired("RegistrantContact"))
+	}
+	if s.TechContact == nil {
+		invalidParams.Add(request.NewErrParamRequired("TechContact"))
+	}
+	if s.AdminContact != nil {
+		if err := s.AdminContact.Validate(); err != nil {
+			invalidParams.AddNested("AdminContact", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.RegistrantContact != nil {
+		if err := s.RegistrantContact.Validate(); err != nil {
+			invalidParams.AddNested("RegistrantContact", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.TechContact != nil {
+		if err := s.TechContact.Validate(); err != nil {
+			invalidParams.AddNested("TechContact", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
 // The RegisterDomain response includes the following element.
 type RegisterDomainOutput struct {
 	_ struct{} `type:"structure"`
@@ -1877,6 +2201,56 @@ func (s RegisterDomainOutput) String() string {
 
 // GoString returns the string representation
 func (s RegisterDomainOutput) GoString() string {
+	return s.String()
+}
+
+type ResendContactReachabilityEmailInput struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the domain for which you want Amazon Route 53 to resend a confirmation
+	// email to the registrant contact.
+	//
+	// Type: String
+	//
+	// Default: None
+	//
+	// Required: Yes
+	DomainName *string `locationName:"domainName" type:"string"`
+}
+
+// String returns the string representation
+func (s ResendContactReachabilityEmailInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ResendContactReachabilityEmailInput) GoString() string {
+	return s.String()
+}
+
+type ResendContactReachabilityEmailOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The domain name for which you requested a confirmation email.
+	DomainName *string `locationName:"domainName" type:"string"`
+
+	// The email address for the registrant contact at the time that we sent the
+	// verification email.
+	EmailAddress *string `locationName:"emailAddress" type:"string"`
+
+	// True if the email address for the registrant contact has already been verified,
+	// and false otherwise. If the email address has already been verified, we don't
+	// send another confirmation email.
+	IsAlreadyVerified *bool `locationName:"isAlreadyVerified" type:"boolean"`
+}
+
+// String returns the string representation
+func (s ResendContactReachabilityEmailOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ResendContactReachabilityEmailOutput) GoString() string {
 	return s.String()
 }
 
@@ -1906,6 +2280,19 @@ func (s RetrieveDomainAuthCodeInput) String() string {
 // GoString returns the string representation
 func (s RetrieveDomainAuthCodeInput) GoString() string {
 	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *RetrieveDomainAuthCodeInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "RetrieveDomainAuthCodeInput"}
+	if s.DomainName == nil {
+		invalidParams.Add(request.NewErrParamRequired("DomainName"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
 }
 
 // The RetrieveDomainAuthCode response includes the following element.
@@ -2116,6 +2503,59 @@ func (s TransferDomainInput) GoString() string {
 	return s.String()
 }
 
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *TransferDomainInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "TransferDomainInput"}
+	if s.AdminContact == nil {
+		invalidParams.Add(request.NewErrParamRequired("AdminContact"))
+	}
+	if s.DomainName == nil {
+		invalidParams.Add(request.NewErrParamRequired("DomainName"))
+	}
+	if s.DurationInYears == nil {
+		invalidParams.Add(request.NewErrParamRequired("DurationInYears"))
+	}
+	if s.DurationInYears != nil && *s.DurationInYears < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("DurationInYears", 1))
+	}
+	if s.RegistrantContact == nil {
+		invalidParams.Add(request.NewErrParamRequired("RegistrantContact"))
+	}
+	if s.TechContact == nil {
+		invalidParams.Add(request.NewErrParamRequired("TechContact"))
+	}
+	if s.AdminContact != nil {
+		if err := s.AdminContact.Validate(); err != nil {
+			invalidParams.AddNested("AdminContact", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.Nameservers != nil {
+		for i, v := range s.Nameservers {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "Nameservers", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+	if s.RegistrantContact != nil {
+		if err := s.RegistrantContact.Validate(); err != nil {
+			invalidParams.AddNested("RegistrantContact", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.TechContact != nil {
+		if err := s.TechContact.Validate(); err != nil {
+			invalidParams.AddNested("TechContact", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
 // The TranserDomain response includes the following element.
 type TransferDomainOutput struct {
 	_ struct{} `type:"structure"`
@@ -2200,6 +2640,34 @@ func (s UpdateDomainContactInput) String() string {
 // GoString returns the string representation
 func (s UpdateDomainContactInput) GoString() string {
 	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *UpdateDomainContactInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "UpdateDomainContactInput"}
+	if s.DomainName == nil {
+		invalidParams.Add(request.NewErrParamRequired("DomainName"))
+	}
+	if s.AdminContact != nil {
+		if err := s.AdminContact.Validate(); err != nil {
+			invalidParams.AddNested("AdminContact", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.RegistrantContact != nil {
+		if err := s.RegistrantContact.Validate(); err != nil {
+			invalidParams.AddNested("RegistrantContact", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.TechContact != nil {
+		if err := s.TechContact.Validate(); err != nil {
+			invalidParams.AddNested("TechContact", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
 }
 
 // The UpdateDomainContact response includes the following element.
@@ -2297,6 +2765,19 @@ func (s UpdateDomainContactPrivacyInput) GoString() string {
 	return s.String()
 }
 
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *UpdateDomainContactPrivacyInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "UpdateDomainContactPrivacyInput"}
+	if s.DomainName == nil {
+		invalidParams.Add(request.NewErrParamRequired("DomainName"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
 // The UpdateDomainContactPrivacy response includes the following element.
 type UpdateDomainContactPrivacyOutput struct {
 	_ struct{} `type:"structure"`
@@ -2362,6 +2843,32 @@ func (s UpdateDomainNameserversInput) GoString() string {
 	return s.String()
 }
 
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *UpdateDomainNameserversInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "UpdateDomainNameserversInput"}
+	if s.DomainName == nil {
+		invalidParams.Add(request.NewErrParamRequired("DomainName"))
+	}
+	if s.Nameservers == nil {
+		invalidParams.Add(request.NewErrParamRequired("Nameservers"))
+	}
+	if s.Nameservers != nil {
+		for i, v := range s.Nameservers {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "Nameservers", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
 // The UpdateDomainNameservers response includes the following element.
 type UpdateDomainNameserversOutput struct {
 	_ struct{} `type:"structure"`
@@ -2400,10 +2907,10 @@ type UpdateTagsForDomainInput struct {
 	// Default: None
 	//
 	// Constraints: The domain name can contain only the letters a through z, the
-	// numbers 0 through 9, and hyphen (-). Hyphens are allowed only when theyaposre
-	// surrounded by letters, numbers, or other hyphens. You canapost specify a
-	// hyphen at the beginning or end of a label. To specify an Internationalized
-	// Domain Name, you must convert the name to Punycode.
+	// numbers 0 through 9, and hyphen (-). Hyphens are allowed only when they're
+	// surrounded by letters, numbers, or other hyphens. You can't specify a hyphen
+	// at the beginning or end of a label. To specify an Internationalized Domain
+	// Name, you must convert the name to Punycode.
 	//
 	// Required: Yes
 	DomainName *string `type:"string" required:"true"`
@@ -2419,7 +2926,7 @@ type UpdateTagsForDomainInput struct {
 	//
 	// '> Each tag includes the following elements:
 	//
-	//   Key
+	//  Key
 	//
 	// The key (name) of a tag.
 	//
@@ -2433,7 +2940,7 @@ type UpdateTagsForDomainInput struct {
 	//
 	// Required: Yes
 	//
-	//   Value
+	//  Value
 	//
 	// The value of a tag.
 	//
@@ -2457,6 +2964,19 @@ func (s UpdateTagsForDomainInput) String() string {
 // GoString returns the string representation
 func (s UpdateTagsForDomainInput) GoString() string {
 	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *UpdateTagsForDomainInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "UpdateTagsForDomainInput"}
+	if s.DomainName == nil {
+		invalidParams.Add(request.NewErrParamRequired("DomainName"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
 }
 
 type UpdateTagsForDomainOutput struct {
@@ -2988,6 +3508,8 @@ const (
 	// @enum ExtraParamName
 	ExtraParamNameCaLegalType = "CA_LEGAL_TYPE"
 	// @enum ExtraParamName
+	ExtraParamNameCaBusinessEntityType = "CA_BUSINESS_ENTITY_TYPE"
+	// @enum ExtraParamName
 	ExtraParamNameEsIdentification = "ES_IDENTIFICATION"
 	// @enum ExtraParamName
 	ExtraParamNameEsIdentificationType = "ES_IDENTIFICATION_TYPE"
@@ -3037,4 +3559,13 @@ const (
 	OperationTypeChangePrivacyProtection = "CHANGE_PRIVACY_PROTECTION"
 	// @enum OperationType
 	OperationTypeDomainLock = "DOMAIN_LOCK"
+)
+
+const (
+	// @enum ReachabilityStatus
+	ReachabilityStatusPending = "PENDING"
+	// @enum ReachabilityStatus
+	ReachabilityStatusDone = "DONE"
+	// @enum ReachabilityStatus
+	ReachabilityStatusExpired = "EXPIRED"
 )

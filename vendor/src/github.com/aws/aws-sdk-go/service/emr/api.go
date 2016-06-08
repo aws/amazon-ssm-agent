@@ -4,6 +4,7 @@
 package emr
 
 import (
+	"fmt"
 	"time"
 
 	"github.com/aws/aws-sdk-go/aws/awsutil"
@@ -151,6 +152,9 @@ const opDescribeJobFlows = "DescribeJobFlows"
 
 // DescribeJobFlowsRequest generates a request for the DescribeJobFlows operation.
 func (c *EMR) DescribeJobFlowsRequest(input *DescribeJobFlowsInput) (req *request.Request, output *DescribeJobFlowsOutput) {
+	if c.Client.Config.Logger != nil {
+		c.Client.Config.Logger.Log("This operation, DescribeJobFlows, has been deprecated")
+	}
 	op := &request.Operation{
 		Name:       opDescribeJobFlows,
 		HTTPMethod: "POST",
@@ -681,6 +685,32 @@ func (s AddInstanceGroupsInput) GoString() string {
 	return s.String()
 }
 
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *AddInstanceGroupsInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "AddInstanceGroupsInput"}
+	if s.InstanceGroups == nil {
+		invalidParams.Add(request.NewErrParamRequired("InstanceGroups"))
+	}
+	if s.JobFlowId == nil {
+		invalidParams.Add(request.NewErrParamRequired("JobFlowId"))
+	}
+	if s.InstanceGroups != nil {
+		for i, v := range s.InstanceGroups {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "InstanceGroups", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
 // Output from an AddInstanceGroups call.
 type AddInstanceGroupsOutput struct {
 	_ struct{} `type:"structure"`
@@ -724,6 +754,32 @@ func (s AddJobFlowStepsInput) GoString() string {
 	return s.String()
 }
 
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *AddJobFlowStepsInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "AddJobFlowStepsInput"}
+	if s.JobFlowId == nil {
+		invalidParams.Add(request.NewErrParamRequired("JobFlowId"))
+	}
+	if s.Steps == nil {
+		invalidParams.Add(request.NewErrParamRequired("Steps"))
+	}
+	if s.Steps != nil {
+		for i, v := range s.Steps {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "Steps", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
 // The output for the AddJobFlowSteps operation.
 type AddJobFlowStepsOutput struct {
 	_ struct{} `type:"structure"`
@@ -765,6 +821,22 @@ func (s AddTagsInput) String() string {
 // GoString returns the string representation
 func (s AddTagsInput) GoString() string {
 	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *AddTagsInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "AddTagsInput"}
+	if s.ResourceId == nil {
+		invalidParams.Add(request.NewErrParamRequired("ResourceId"))
+	}
+	if s.Tags == nil {
+		invalidParams.Add(request.NewErrParamRequired("Tags"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
 }
 
 // This output indicates the result of adding tags to a resource.
@@ -842,6 +914,27 @@ func (s BootstrapActionConfig) String() string {
 // GoString returns the string representation
 func (s BootstrapActionConfig) GoString() string {
 	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *BootstrapActionConfig) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "BootstrapActionConfig"}
+	if s.Name == nil {
+		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+	if s.ScriptBootstrapAction == nil {
+		invalidParams.Add(request.NewErrParamRequired("ScriptBootstrapAction"))
+	}
+	if s.ScriptBootstrapAction != nil {
+		if err := s.ScriptBootstrapAction.Validate(); err != nil {
+			invalidParams.AddNested("ScriptBootstrapAction", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
 }
 
 // Reports the configuration of a bootstrap action in a job flow.
@@ -1120,6 +1213,19 @@ func (s DescribeClusterInput) GoString() string {
 	return s.String()
 }
 
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DescribeClusterInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DescribeClusterInput"}
+	if s.ClusterId == nil {
+		invalidParams.Add(request.NewErrParamRequired("ClusterId"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
 // This output contains the description of the cluster.
 type DescribeClusterOutput struct {
 	_ struct{} `type:"structure"`
@@ -1204,6 +1310,22 @@ func (s DescribeStepInput) GoString() string {
 	return s.String()
 }
 
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DescribeStepInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DescribeStepInput"}
+	if s.ClusterId == nil {
+		invalidParams.Add(request.NewErrParamRequired("ClusterId"))
+	}
+	if s.StepId == nil {
+		invalidParams.Add(request.NewErrParamRequired("StepId"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
 // This output contains the description of the cluster step.
 type DescribeStepOutput struct {
 	_ struct{} `type:"structure"`
@@ -1219,6 +1341,130 @@ func (s DescribeStepOutput) String() string {
 
 // GoString returns the string representation
 func (s DescribeStepOutput) GoString() string {
+	return s.String()
+}
+
+// Configuration of requested EBS block device associated with the instance
+// group.
+type EbsBlockDevice struct {
+	_ struct{} `type:"structure"`
+
+	// The device name that is exposed to the instance, such as /dev/sdh.
+	Device *string `type:"string"`
+
+	// EBS volume specifications such as volume type, IOPS, and size(GiB) that will
+	// be requested for the EBS volume attached to an EC2 instance in the cluster.
+	VolumeSpecification *VolumeSpecification `type:"structure"`
+}
+
+// String returns the string representation
+func (s EbsBlockDevice) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s EbsBlockDevice) GoString() string {
+	return s.String()
+}
+
+// Configuration of requested EBS block device associated with the instance
+// group with count of volumes that will be associated to every instance.
+type EbsBlockDeviceConfig struct {
+	_ struct{} `type:"structure"`
+
+	// EBS volume specifications such as volume type, IOPS, and size(GiB) that will
+	// be requested for the EBS volume attached to an EC2 instance in the cluster.
+	VolumeSpecification *VolumeSpecification `type:"structure" required:"true"`
+
+	// Number of EBS volumes with specific volume configuration, that will be associated
+	// with every instance in the instance group
+	VolumesPerInstance *int64 `type:"integer"`
+}
+
+// String returns the string representation
+func (s EbsBlockDeviceConfig) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s EbsBlockDeviceConfig) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *EbsBlockDeviceConfig) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "EbsBlockDeviceConfig"}
+	if s.VolumeSpecification == nil {
+		invalidParams.Add(request.NewErrParamRequired("VolumeSpecification"))
+	}
+	if s.VolumeSpecification != nil {
+		if err := s.VolumeSpecification.Validate(); err != nil {
+			invalidParams.AddNested("VolumeSpecification", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+type EbsConfiguration struct {
+	_ struct{} `type:"structure"`
+
+	EbsBlockDeviceConfigs []*EbsBlockDeviceConfig `type:"list"`
+
+	EbsOptimized *bool `type:"boolean"`
+}
+
+// String returns the string representation
+func (s EbsConfiguration) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s EbsConfiguration) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *EbsConfiguration) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "EbsConfiguration"}
+	if s.EbsBlockDeviceConfigs != nil {
+		for i, v := range s.EbsBlockDeviceConfigs {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "EbsBlockDeviceConfigs", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// EBS block device that's attached to an EC2 instance.
+type EbsVolume struct {
+	_ struct{} `type:"structure"`
+
+	// The device name that is exposed to the instance, such as /dev/sdh.
+	Device *string `type:"string"`
+
+	// The volume identifier of the EBS volume.
+	VolumeId *string `type:"string"`
+}
+
+// String returns the string representation
+func (s EbsVolume) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s EbsVolume) GoString() string {
 	return s.String()
 }
 
@@ -1307,6 +1553,19 @@ func (s HadoopJarStepConfig) GoString() string {
 	return s.String()
 }
 
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *HadoopJarStepConfig) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "HadoopJarStepConfig"}
+	if s.Jar == nil {
+		invalidParams.Add(request.NewErrParamRequired("Jar"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
 // A cluster step consisting of a JAR file whose main function will be executed.
 // The main function submits a job for Hadoop to execute and waits for the job
 // to finish or fail.
@@ -1343,11 +1602,17 @@ func (s HadoopStepConfig) GoString() string {
 type Instance struct {
 	_ struct{} `type:"structure"`
 
+	// The list of EBS volumes that are attached to this instance.
+	EbsVolumes []*EbsVolume `type:"list"`
+
 	// The unique identifier of the instance in Amazon EC2.
 	Ec2InstanceId *string `type:"string"`
 
 	// The unique identifier for the instance in Amazon EMR.
 	Id *string `type:"string"`
+
+	// The identifier of the instance group to which this instance belongs.
+	InstanceGroupId *string `type:"string"`
 
 	// The private DNS name of the instance.
 	PrivateDnsName *string `type:"string"`
@@ -1391,6 +1656,14 @@ type InstanceGroup struct {
 	// and task).
 	Configurations []*Configuration `type:"list"`
 
+	// The EBS block devices that are mapped to this instance group.
+	EbsBlockDevices []*EbsBlockDevice `type:"list"`
+
+	// If the instance group is EBS-optimized. An Amazon EBS–optimized instance
+	// uses an optimized configuration stack and provides additional, dedicated
+	// capacity for Amazon EBS I/O.
+	EbsOptimized *bool `type:"boolean"`
+
 	// The identifier of the instance group.
 	Id *string `type:"string"`
 
@@ -1412,6 +1685,9 @@ type InstanceGroup struct {
 
 	// The number of instances currently running in this instance group.
 	RunningInstanceCount *int64 `type:"integer"`
+
+	// Policy for customizing shrink operations.
+	ShrinkPolicy *ShrinkPolicy `type:"structure"`
 
 	// The current status of the instance group.
 	Status *InstanceGroupStatus `type:"structure"`
@@ -1442,6 +1718,10 @@ type InstanceGroupConfig struct {
 	// and task).
 	Configurations []*Configuration `type:"list"`
 
+	// EBS configurations that will be attached to each Amazon EC2 instance in the
+	// instance group.
+	EbsConfiguration *EbsConfiguration `type:"structure"`
+
 	// Target number of instances for the instance group.
 	InstanceCount *int64 `type:"integer" required:"true"`
 
@@ -1466,6 +1746,33 @@ func (s InstanceGroupConfig) String() string {
 // GoString returns the string representation
 func (s InstanceGroupConfig) GoString() string {
 	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *InstanceGroupConfig) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "InstanceGroupConfig"}
+	if s.InstanceCount == nil {
+		invalidParams.Add(request.NewErrParamRequired("InstanceCount"))
+	}
+	if s.InstanceRole == nil {
+		invalidParams.Add(request.NewErrParamRequired("InstanceRole"))
+	}
+	if s.InstanceType == nil {
+		invalidParams.Add(request.NewErrParamRequired("InstanceType"))
+	}
+	if s.InstanceType != nil && len(*s.InstanceType) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("InstanceType", 1))
+	}
+	if s.EbsConfiguration != nil {
+		if err := s.EbsConfiguration.Validate(); err != nil {
+			invalidParams.AddNested("EbsConfiguration", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
 }
 
 // Detailed information about an instance group.
@@ -1531,9 +1838,8 @@ func (s InstanceGroupDetail) GoString() string {
 type InstanceGroupModifyConfig struct {
 	_ struct{} `type:"structure"`
 
-	// The EC2 InstanceIds to terminate. For advanced users only. Once you terminate
-	// the instances, the instance group will not return to its original requested
-	// size.
+	// The EC2 InstanceIds to terminate. Once you terminate the instances, the instance
+	// group will not return to its original requested size.
 	EC2InstanceIdsToTerminate []*string `type:"list"`
 
 	// Target size for the instance group.
@@ -1541,6 +1847,9 @@ type InstanceGroupModifyConfig struct {
 
 	// Unique ID of the instance group to expand or shrink.
 	InstanceGroupId *string `type:"string" required:"true"`
+
+	// Policy for customizing shrink operations.
+	ShrinkPolicy *ShrinkPolicy `type:"structure"`
 }
 
 // String returns the string representation
@@ -1551,6 +1860,19 @@ func (s InstanceGroupModifyConfig) String() string {
 // GoString returns the string representation
 func (s InstanceGroupModifyConfig) GoString() string {
 	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *InstanceGroupModifyConfig) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "InstanceGroupModifyConfig"}
+	if s.InstanceGroupId == nil {
+		invalidParams.Add(request.NewErrParamRequired("InstanceGroupId"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
 }
 
 // The status change reason details for the instance group.
@@ -1619,6 +1941,32 @@ func (s InstanceGroupTimeline) String() string {
 
 // GoString returns the string representation
 func (s InstanceGroupTimeline) GoString() string {
+	return s.String()
+}
+
+// Custom policy for requesting termination protection or termination of specific
+// instances when shrinking an instance group.
+type InstanceResizePolicy struct {
+	_ struct{} `type:"structure"`
+
+	// Decommissioning timeout override for the specific list of instances to be
+	// terminated.
+	InstanceTerminationTimeout *int64 `type:"integer"`
+
+	// Specific list of instances to be protected when shrinking an instance group.
+	InstancesToProtect []*string `type:"list"`
+
+	// Specific list of instances to be terminated when shrinking an instance group.
+	InstancesToTerminate []*string `type:"list"`
+}
+
+// String returns the string representation
+func (s InstanceResizePolicy) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s InstanceResizePolicy) GoString() string {
 	return s.String()
 }
 
@@ -1867,6 +2215,37 @@ func (s JobFlowInstancesConfig) GoString() string {
 	return s.String()
 }
 
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *JobFlowInstancesConfig) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "JobFlowInstancesConfig"}
+	if s.MasterInstanceType != nil && len(*s.MasterInstanceType) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("MasterInstanceType", 1))
+	}
+	if s.SlaveInstanceType != nil && len(*s.SlaveInstanceType) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("SlaveInstanceType", 1))
+	}
+	if s.InstanceGroups != nil {
+		for i, v := range s.InstanceGroups {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "InstanceGroups", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+	if s.Placement != nil {
+		if err := s.Placement.Validate(); err != nil {
+			invalidParams.AddNested("Placement", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
 // Specify the type of Amazon EC2 instances to run the job flow on.
 type JobFlowInstancesDetail struct {
 	_ struct{} `type:"structure"`
@@ -1974,6 +2353,19 @@ func (s ListBootstrapActionsInput) GoString() string {
 	return s.String()
 }
 
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListBootstrapActionsInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListBootstrapActionsInput"}
+	if s.ClusterId == nil {
+		invalidParams.Add(request.NewErrParamRequired("ClusterId"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
 // This output contains the boostrap actions detail .
 type ListBootstrapActionsOutput struct {
 	_ struct{} `type:"structure"`
@@ -2066,6 +2458,19 @@ func (s ListInstanceGroupsInput) GoString() string {
 	return s.String()
 }
 
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListInstanceGroupsInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListInstanceGroupsInput"}
+	if s.ClusterId == nil {
+		invalidParams.Add(request.NewErrParamRequired("ClusterId"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
 // This input determines which instance groups to retrieve.
 type ListInstanceGroupsOutput struct {
 	_ struct{} `type:"structure"`
@@ -2100,6 +2505,10 @@ type ListInstancesInput struct {
 	// The type of instance group for which to list the instances.
 	InstanceGroupTypes []*string `type:"list"`
 
+	// A list of instance states that will filter the instances returned with this
+	// request.
+	InstanceStates []*string `type:"list"`
+
 	// The pagination token that indicates the next set of results to retrieve.
 	Marker *string `type:"string"`
 }
@@ -2112,6 +2521,19 @@ func (s ListInstancesInput) String() string {
 // GoString returns the string representation
 func (s ListInstancesInput) GoString() string {
 	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListInstancesInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListInstancesInput"}
+	if s.ClusterId == nil {
+		invalidParams.Add(request.NewErrParamRequired("ClusterId"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
 }
 
 // This output contains the list of instances.
@@ -2162,7 +2584,21 @@ func (s ListStepsInput) GoString() string {
 	return s.String()
 }
 
-// This output contains the list of steps.
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListStepsInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListStepsInput"}
+	if s.ClusterId == nil {
+		invalidParams.Add(request.NewErrParamRequired("ClusterId"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// This output contains the list of steps returned in reverse order. This means
+// that the last step is the first element in the list.
 type ListStepsOutput struct {
 	_ struct{} `type:"structure"`
 
@@ -2201,6 +2637,26 @@ func (s ModifyInstanceGroupsInput) GoString() string {
 	return s.String()
 }
 
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ModifyInstanceGroupsInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ModifyInstanceGroupsInput"}
+	if s.InstanceGroups != nil {
+		for i, v := range s.InstanceGroups {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "InstanceGroups", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
 type ModifyInstanceGroupsOutput struct {
 	_ struct{} `type:"structure"`
 }
@@ -2233,6 +2689,19 @@ func (s PlacementType) GoString() string {
 	return s.String()
 }
 
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *PlacementType) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "PlacementType"}
+	if s.AvailabilityZone == nil {
+		invalidParams.Add(request.NewErrParamRequired("AvailabilityZone"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
 // This input identifies a cluster and a list of tags to remove.
 type RemoveTagsInput struct {
 	_ struct{} `type:"structure"`
@@ -2253,6 +2722,22 @@ func (s RemoveTagsInput) String() string {
 // GoString returns the string representation
 func (s RemoveTagsInput) GoString() string {
 	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *RemoveTagsInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "RemoveTagsInput"}
+	if s.ResourceId == nil {
+		invalidParams.Add(request.NewErrParamRequired("ResourceId"))
+	}
+	if s.TagKeys == nil {
+		invalidParams.Add(request.NewErrParamRequired("TagKeys"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
 }
 
 // This output indicates the result of removing tags from a resource.
@@ -2391,6 +2876,47 @@ func (s RunJobFlowInput) GoString() string {
 	return s.String()
 }
 
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *RunJobFlowInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "RunJobFlowInput"}
+	if s.Instances == nil {
+		invalidParams.Add(request.NewErrParamRequired("Instances"))
+	}
+	if s.Name == nil {
+		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+	if s.BootstrapActions != nil {
+		for i, v := range s.BootstrapActions {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "BootstrapActions", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+	if s.Instances != nil {
+		if err := s.Instances.Validate(); err != nil {
+			invalidParams.AddNested("Instances", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.Steps != nil {
+		for i, v := range s.Steps {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "Steps", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
 // The result of the RunJobFlow operation.
 type RunJobFlowOutput struct {
 	_ struct{} `type:"structure"`
@@ -2431,6 +2957,19 @@ func (s ScriptBootstrapActionConfig) GoString() string {
 	return s.String()
 }
 
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ScriptBootstrapActionConfig) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ScriptBootstrapActionConfig"}
+	if s.Path == nil {
+		invalidParams.Add(request.NewErrParamRequired("Path"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
 // The input argument to the TerminationProtection operation.
 type SetTerminationProtectionInput struct {
 	_ struct{} `type:"structure"`
@@ -2454,6 +2993,22 @@ func (s SetTerminationProtectionInput) String() string {
 // GoString returns the string representation
 func (s SetTerminationProtectionInput) GoString() string {
 	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *SetTerminationProtectionInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "SetTerminationProtectionInput"}
+	if s.JobFlowIds == nil {
+		invalidParams.Add(request.NewErrParamRequired("JobFlowIds"))
+	}
+	if s.TerminationProtected == nil {
+		invalidParams.Add(request.NewErrParamRequired("TerminationProtected"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
 }
 
 type SetTerminationProtectionOutput struct {
@@ -2495,6 +3050,22 @@ func (s SetVisibleToAllUsersInput) GoString() string {
 	return s.String()
 }
 
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *SetVisibleToAllUsersInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "SetVisibleToAllUsersInput"}
+	if s.JobFlowIds == nil {
+		invalidParams.Add(request.NewErrParamRequired("JobFlowIds"))
+	}
+	if s.VisibleToAllUsers == nil {
+		invalidParams.Add(request.NewErrParamRequired("VisibleToAllUsers"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
 type SetVisibleToAllUsersOutput struct {
 	_ struct{} `type:"structure"`
 }
@@ -2506,6 +3077,30 @@ func (s SetVisibleToAllUsersOutput) String() string {
 
 // GoString returns the string representation
 func (s SetVisibleToAllUsersOutput) GoString() string {
+	return s.String()
+}
+
+// Policy for customizing shrink operations. Allows configuration of decommissioning
+// timeout and targeted instance shrinking.
+type ShrinkPolicy struct {
+	_ struct{} `type:"structure"`
+
+	// The desired timeout for decommissioning an instance. Overrides the default
+	// YARN decommissioning timeout.
+	DecommissionTimeout *int64 `type:"integer"`
+
+	// Custom policy for requesting termination protection or termination of specific
+	// instances when shrinking an instance group.
+	InstanceResizePolicy *InstanceResizePolicy `type:"structure"`
+}
+
+// String returns the string representation
+func (s ShrinkPolicy) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ShrinkPolicy) GoString() string {
 	return s.String()
 }
 
@@ -2562,6 +3157,27 @@ func (s StepConfig) String() string {
 // GoString returns the string representation
 func (s StepConfig) GoString() string {
 	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *StepConfig) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "StepConfig"}
+	if s.HadoopJarStep == nil {
+		invalidParams.Add(request.NewErrParamRequired("HadoopJarStep"))
+	}
+	if s.Name == nil {
+		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+	if s.HadoopJarStep != nil {
+		if err := s.HadoopJarStep.Validate(); err != nil {
+			invalidParams.AddNested("HadoopJarStep", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
 }
 
 // Combines the execution state and configuration of a step.
@@ -2784,6 +3400,19 @@ func (s TerminateJobFlowsInput) GoString() string {
 	return s.String()
 }
 
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *TerminateJobFlowsInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "TerminateJobFlowsInput"}
+	if s.JobFlowIds == nil {
+		invalidParams.Add(request.NewErrParamRequired("JobFlowIds"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
 type TerminateJobFlowsOutput struct {
 	_ struct{} `type:"structure"`
 }
@@ -2796,6 +3425,48 @@ func (s TerminateJobFlowsOutput) String() string {
 // GoString returns the string representation
 func (s TerminateJobFlowsOutput) GoString() string {
 	return s.String()
+}
+
+// EBS volume specifications such as volume type, IOPS, and size(GiB) that will
+// be requested for the EBS volume attached to an EC2 instance in the cluster.
+type VolumeSpecification struct {
+	_ struct{} `type:"structure"`
+
+	// The number of I/O operations per second (IOPS) that the volume supports.
+	Iops *int64 `type:"integer"`
+
+	// The volume size, in gibibytes (GiB). This can be a number from 1 – 1024.
+	// If the volume type is EBS-optimized, the minimum value is 10.
+	SizeInGB *int64 `type:"integer" required:"true"`
+
+	// The volume type. Volume types supported are gp2, io1, standard.
+	VolumeType *string `type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s VolumeSpecification) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s VolumeSpecification) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *VolumeSpecification) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "VolumeSpecification"}
+	if s.SizeInGB == nil {
+		invalidParams.Add(request.NewErrParamRequired("SizeInGB"))
+	}
+	if s.VolumeType == nil {
+		invalidParams.Add(request.NewErrParamRequired("VolumeType"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
 }
 
 const (

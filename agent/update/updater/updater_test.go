@@ -28,11 +28,11 @@ import (
 var updateCommand = []string{"updater", "-update", "-source.version", "1.0.0.0", "-source.location", "http://source",
 	"-target.version", "5.0.0.0", "-target.location", "http://target"}
 
-func setRegionStub(log logger.T, defaultRegion string) (region string, err error) {
+func regionStub() (string, error) {
 	return "us-east-1", nil
 }
 
-func setRegionFailedStub(log logger.T, defaultRegion string) (region string, err error) {
+func regionFailedStub() (string, error) {
 	return "", fmt.Errorf("Cannot set region")
 }
 
@@ -67,7 +67,7 @@ func (u *stubUpdater) Failed(
 func TestUpdater(t *testing.T) {
 	// setup
 	log = logger.NewMockLog()
-	setRegion = setRegionStub
+	region = regionStub
 	updater = &stubUpdater{}
 
 	os.Args = updateCommand
@@ -79,7 +79,7 @@ func TestUpdater(t *testing.T) {
 func TestUpdaterFailedStartOrResume(t *testing.T) {
 	// setup
 	log = logger.NewMockLog()
-	setRegion = setRegionStub
+	region = regionStub
 	updater = &stubUpdater{returnUpdateError: true}
 
 	os.Args = updateCommand
@@ -91,7 +91,7 @@ func TestUpdaterFailedStartOrResume(t *testing.T) {
 func TestUpdaterFailedSetRegion(t *testing.T) {
 	// setup
 	log = logger.NewMockLog()
-	setRegion = setRegionFailedStub
+	region = regionFailedStub
 	updater = &stubUpdater{returnUpdateError: true}
 
 	os.Args = updateCommand
@@ -103,7 +103,7 @@ func TestUpdaterFailedSetRegion(t *testing.T) {
 func TestUpdaterWithDowngrade(t *testing.T) {
 	// setup
 	log = logger.NewMockLog()
-	setRegion = setRegionStub
+	region = regionStub
 	updater = &stubUpdater{returnUpdateError: true}
 
 	os.Args = []string{"updater", "-update", "-source.version", "5.0.0.0", "-source.location", "http://source",
@@ -120,7 +120,7 @@ func TestUpdaterWithDowngrade(t *testing.T) {
 func TestUpdaterFailedWithoutSourceTargetCmd(t *testing.T) {
 	// setup
 	log = logger.NewMockLog()
-	setRegion = setRegionStub
+	region = regionStub
 	updater = &stubUpdater{returnUpdateError: true}
 
 	os.Args = []string{"updater", "-update", "-source.version", "", "-source.location", "http://source",

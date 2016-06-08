@@ -82,7 +82,7 @@ func (m *Mock) DeleteDocument(log log.T, instanceID string) (response *ssm.Delet
 }
 
 // UpdateInstanceInformation mocks the UpdateInstanceInformation function.
-func (m *Mock) UpdateInstanceInformation(log log.T, instanceID string, agentVersion string, agentStatus string) (response *ssm.UpdateInstanceInformationOutput, err error) {
-	args := m.Called(log, instanceID, agentVersion, agentStatus)
+func (m *Mock) UpdateInstanceInformation(log log.T, agentVersion string, agentStatus string) (response *ssm.UpdateInstanceInformationOutput, err error) {
+	args := m.Called(log, agentVersion, agentStatus)
 	return args.Get(0).(*ssm.UpdateInstanceInformationOutput), args.Error(1)
 }

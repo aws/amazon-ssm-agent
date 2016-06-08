@@ -21,7 +21,6 @@ import (
 
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/log"
-	"github.com/aws/amazon-ssm-agent/agent/platform"
 	"github.com/aws/amazon-ssm-agent/agent/ssm"
 )
 
@@ -49,24 +48,14 @@ var ssmSvcOnce sync.Once
 
 var newSsmSvc = ssm.NewService
 
-// Use SetInstanceID to load InstanceID with empty string as defaultID
-var getInstanceID = platform.SetInstanceID
-
 // UpdateHealthCheck sends the health check information back to the service
 func (s *svcManager) UpdateHealthCheck(log log.T, update *UpdateDetail, errorCode string) (err error) {
 	var svc ssm.Service
-	var instanceID string
-
-	if svc, err = getSsmSvc(log); err != nil {
-		return fmt.Errorf("failed to load ssm service %v", err)
+	if svc, err = getSsmSvc(); err != nil {
+		return fmt.Errorf("Failed to load ssm service. %v", err)
 	}
 	status := prepareHealthStatus(update, errorCode)
-
-	if instanceID, err = getInstanceID(log, ""); err != nil {
-		return fmt.Errorf("failed to load instance ID %v", err)
-	}
-
-	if _, err = svc.UpdateInstanceInformation(log, instanceID, update.SourceVersion, status); err != nil {
+	if _, err = svc.UpdateInstanceInformation(log, update.SourceVersion, status); err != nil {
 		return
 	}
 
@@ -74,9 +63,9 @@ func (s *svcManager) UpdateHealthCheck(log log.T, update *UpdateDetail, errorCod
 }
 
 // getSsmSvc loads ssm service
-func getSsmSvc(log log.T) (service ssm.Service, err error) {
+func getSsmSvc() (ssm.Service, error) {
 	ssmSvcOnce.Do(func() {
-		ssmSvc = newSsmSvc(log)
+		ssmSvc = newSsmSvc()
 	})
 
 	if ssmSvc == nil {

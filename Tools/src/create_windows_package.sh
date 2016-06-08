@@ -25,8 +25,3 @@ zip -j ${WINDOWS_AMD64_UPDATER_ZIP} ${BUILD_PATH_AMD64}/updater.exe
 
 WINDOWS_386_UPDATER_ZIP=${BGO_SPACE}/bin/updates/amazon-ssm-agent-updater/`cat ${BGO_SPACE}/VERSION`/amazon-ssm-agent-updater-windows-386.zip
 zip -j ${WINDOWS_386_UPDATER_ZIP} ${BUILD_PATH_386}/updater.exe
-
-rm ${PACKAGE_PATH_AMD64}/install.bat
-rm ${PACKAGE_PATH_AMD64}/uninstall.bat
-rm ${PACKAGE_PATH_386}/install.bat
-rm ${PACKAGE_PATH_386}/uninstall.bat

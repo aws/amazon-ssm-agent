@@ -25,9 +25,10 @@ import (
 	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
-	"github.com/aws/amazon-ssm-agent/agent/executers"
+	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/platform"
+	"github.com/aws/amazon-ssm-agent/agent/plugins/pluginutil"
 )
 
 const (
@@ -36,12 +37,6 @@ const (
 
 	// HashType represents the default hash type
 	HashType = "sha256"
-
-	// Installer represents Install shell script
-	Installer = "install.sh"
-
-	// UnInstaller represents Uninstall shell script
-	UnInstaller = "uninstall.sh"
 
 	// Updater represents Updater name
 	Updater = "updater"
@@ -110,47 +105,6 @@ const (
 	SystemDRedHatVersion = "7"
 )
 
-const (
-	// UpdateCmd represents the command argument for update
-	UpdateCmd = "update"
-
-	// SourceVersionCmd represents the command argument for source version
-	SourceVersionCmd = "source.version"
-
-	// SourceLocationCmd represents the command argument for source location
-	SourceLocationCmd = "source.location"
-
-	// SourceHashCmd represents the command argument for source hash value
-	SourceHashCmd = "source.hash"
-
-	// TargetVersionCmd represents the command argument for target version
-	TargetVersionCmd = "target.version"
-
-	// TargetLocationCmd represents the command argument for target location
-	TargetLocationCmd = "target.location"
-
-	// TargetHashCmd represents the command argument for target hash value
-	TargetHashCmd = "target.hash"
-
-	// PackageNameCmd represents the command argument for package name
-	PackageNameCmd = "package.name"
-
-	// MessageIDCmd represents the command argument for message id
-	MessageIDCmd = "messageid"
-
-	// StdoutFileName represents the command argument for standard output file
-	StdoutFileName = "stdout"
-
-	// StderrFileName represents the command argument for standard error file
-	StderrFileName = "stderr"
-
-	// OutputKeyPrefixCmd represents the command argument for output key prefix
-	OutputKeyPrefixCmd = "output.key"
-
-	// OutputBucketNameCmd represents the command argument for output bucket name
-	OutputBucketNameCmd = "output.bucket"
-)
-
 //ErrorCode is types of Error Codes
 type ErrorCode string
 
@@ -207,6 +161,9 @@ const (
 	ErrorLoadingAgentVersion ErrorCode = "ErrorLoadingAgentVersion"
 )
 
+// MinimumDiskSpaceForUpdate represents 100 Mb in bytes
+const MinimumDiskSpaceForUpdate int64 = 104857600
+
 // InstanceContext holds information for the instance
 type InstanceContext struct {
 	Region          string
@@ -224,14 +181,16 @@ type T interface {
 	ExeCommand(log log.T, cmd string, workingDir string, updaterRoot string, stdOut string, stdErr string, isAsync bool) (err error)
 	IsServiceRunning(log log.T, i *InstanceContext) (result bool, err error)
 	SaveUpdatePluginResult(log log.T, updaterRoot string, updateResult *UpdatePluginResult) (err error)
+	IsDiskSpaceSufficientForUpdate(log log.T) (bool, error)
 }
 
 // Utility implements interface T
 type Utility struct{}
 
+var getDiskSpaceInfo = fileutil.GetDiskSpaceInfo
 var getRegion = platform.Region
-var getPlatformName = platform.GetPlatformName
-var getPlatformVersion = platform.GetPlatformVersion
+var getPlatformName = platform.PlatformName
+var getPlatformVersion = platform.PlatformVersion
 var mkDirAll = os.MkdirAll
 var openFile = os.OpenFile
 var execCommand = exec.Command
@@ -240,8 +199,8 @@ var cmdStart = (*exec.Cmd).Start
 // CreateInstanceContext create instance related information such as region, platform and arch
 func (util *Utility) CreateInstanceContext(log log.T) (context *InstanceContext, err error) {
 	region := ""
-	if region = getRegion(); region == "" {
-		return context, fmt.Errorf("Failed to get region")
+	if region, err = getRegion(); region == "" {
+		return context, fmt.Errorf("Failed to get region, %v", err)
 	}
 	platformName := ""
 	platformVersion := ""
@@ -343,7 +302,7 @@ func (util *Utility) ExeCommand(
 					exitCode := status.ExitStatus()
 					if exitCode == -1 && timedOut {
 						// set appropriate exit code based on cancel or timeout
-						exitCode = executers.CommandStoppedPreemptivelyExitCode
+						exitCode = pluginutil.CommandStoppedPreemptivelyExitCode
 						log.Infof("The execution of command was timedout.")
 					}
 					err = fmt.Errorf("The execution of command returned Exit Status: %d \n %v", exitCode, err.Error())
@@ -361,6 +320,8 @@ func (util *Utility) IsServiceRunning(log log.T, i *InstanceContext) (result boo
 	commandOutput := []byte{}
 	expectedOutput := ""
 	isSystemD := false
+
+	// isSystemD will always be false for Windows
 	if isSystemD, err = i.IsPlatformUsingSystemD(log); err != nil {
 		return false, err
 	}
@@ -371,8 +332,8 @@ func (util *Utility) IsServiceRunning(log log.T, i *InstanceContext) (result boo
 			return false, err
 		}
 	} else {
-		expectedOutput = "amazon-ssm-agent start/running"
-		if commandOutput, err = execCommand("status", "amazon-ssm-agent").Output(); err != nil {
+		expectedOutput = agentExpectedStatus()
+		if commandOutput, err = agentStatusOutput(); err != nil {
 			return false, err
 		}
 	}
@@ -381,7 +342,30 @@ func (util *Utility) IsServiceRunning(log log.T, i *InstanceContext) (result boo
 	if strings.Contains(agentStatus, expectedOutput) {
 		return true, nil
 	}
+
 	return false, nil
+}
+
+// IsDiskSpaceSufficientForUpdate loads disk space info and checks the available bytes
+// Returns true if the system has at least 100 Mb for available disk space or false if it is less than 100 Mb
+func (util *Utility) IsDiskSpaceSufficientForUpdate(log log.T) (bool, error) {
+	var diskSpaceInfo fileutil.DiskSpaceInfo
+	var err error
+
+	// Get the available disk space
+	if diskSpaceInfo, err = getDiskSpaceInfo(); err != nil {
+		log.Infof("Failed to load disk space info - %v", err)
+		return false, err
+	}
+
+	// Return false if available disk space is less than 100 Mb
+	if diskSpaceInfo.AvailBytes < MinimumDiskSpaceForUpdate {
+		log.Infof("Insufficient available disk space - %d Mb", diskSpaceInfo.AvailBytes/int64(1024*1024))
+		return false, nil
+	}
+
+	// Return true otherwise
+	return true, nil
 }
 
 // IsPlatformUsingSystemD returns if SystemD is the default Init for the Linux platform

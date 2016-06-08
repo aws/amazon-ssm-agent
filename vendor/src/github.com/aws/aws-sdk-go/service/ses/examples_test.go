@@ -92,6 +92,7 @@ func ExampleSES_CreateReceiptRule() {
 					},
 					SNSAction: &ses.SNSAction{
 						TopicArn: aws.String("AmazonResourceName"), // Required
+						Encoding: aws.String("SNSActionEncoding"),
 					},
 					StopAction: &ses.StopAction{
 						Scope:    aws.String("StopScope"), // Required
@@ -329,6 +330,28 @@ func ExampleSES_GetIdentityDkimAttributes() {
 		},
 	}
 	resp, err := svc.GetIdentityDkimAttributes(params)
+
+	if err != nil {
+		// Print the error, cast err to awserr.Error to get the Code and
+		// Message from an error.
+		fmt.Println(err.Error())
+		return
+	}
+
+	// Pretty-print the response data.
+	fmt.Println(resp)
+}
+
+func ExampleSES_GetIdentityMailFromDomainAttributes() {
+	svc := ses.New(session.New())
+
+	params := &ses.GetIdentityMailFromDomainAttributesInput{
+		Identities: []*string{ // Required
+			aws.String("Identity"), // Required
+			// More values...
+		},
+	}
+	resp, err := svc.GetIdentityMailFromDomainAttributes(params)
 
 	if err != nil {
 		// Print the error, cast err to awserr.Error to get the Code and
@@ -779,6 +802,27 @@ func ExampleSES_SetIdentityFeedbackForwardingEnabled() {
 	fmt.Println(resp)
 }
 
+func ExampleSES_SetIdentityMailFromDomain() {
+	svc := ses.New(session.New())
+
+	params := &ses.SetIdentityMailFromDomainInput{
+		Identity:            aws.String("Identity"), // Required
+		BehaviorOnMXFailure: aws.String("BehaviorOnMXFailure"),
+		MailFromDomain:      aws.String("MailFromDomainName"),
+	}
+	resp, err := svc.SetIdentityMailFromDomain(params)
+
+	if err != nil {
+		// Print the error, cast err to awserr.Error to get the Code and
+		// Message from an error.
+		fmt.Println(err.Error())
+		return
+	}
+
+	// Pretty-print the response data.
+	fmt.Println(resp)
+}
+
 func ExampleSES_SetIdentityNotificationTopic() {
 	svc := ses.New(session.New())
 
@@ -853,6 +897,7 @@ func ExampleSES_UpdateReceiptRule() {
 					},
 					SNSAction: &ses.SNSAction{
 						TopicArn: aws.String("AmazonResourceName"), // Required
+						Encoding: aws.String("SNSActionEncoding"),
 					},
 					StopAction: &ses.StopAction{
 						Scope:    aws.String("StopScope"), // Required

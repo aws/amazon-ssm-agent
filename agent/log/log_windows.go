@@ -15,8 +15,29 @@
 
 package log
 
-const (
-	// The underlying logger is based of https://github.com/cihub/seelog
-	// See Seelog documentation to customize the logger
-	DefaultSeelogConfigFilePath = "seelog.xml"
+import (
+	"io/ioutil"
+	"path/filepath"
+
+	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 )
+
+// Default log directory
+var DefaultLogDir = filepath.Join(appconfig.SSMDataPath, "Logs")
+
+// The underlying logger is based of https://github.com/cihub/seelog
+// See Seelog documentation to customize the logger
+var DefaultSeelogConfigFilePath = filepath.Join(appconfig.DefaultProgramFolder, appconfig.SeelogConfigFileName)
+
+// InitLogger initializes the logger using the settings specified in the application config file.
+// otherwise initializes the logger based on default settings.
+// Windows uses default log configuration if there is no seelog.xml override provided.
+func initLogger() (logger T) {
+	var logConfigBytes []byte
+	var err error
+	if logConfigBytes, err = ioutil.ReadFile(DefaultSeelogConfigFilePath); err != nil {
+		logConfigBytes = defaultConfig()
+	}
+
+	return initLoggerFromBytes(logConfigBytes)
+}

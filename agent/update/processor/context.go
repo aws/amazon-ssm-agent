@@ -25,8 +25,8 @@ import (
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
-	"github.com/aws/amazon-ssm-agent/agent/executers"
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/plugins/pluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/s3util"
 	"github.com/aws/amazon-ssm-agent/agent/sdkutil"
 	"github.com/aws/amazon-ssm-agent/agent/updateutil"
@@ -209,9 +209,11 @@ func parseContext(log log.T, fileName string) (context *UpdateContext, err error
 
 // uploadOutput uploads the stdout and stderr file to S3
 func (c *contextManager) uploadOutput(log log.T, context *UpdateContext) (err error) {
-	var config appconfig.T
-	awsConfig := sdkutil.GetAwsConfig()
-	config, err = appconfig.GetConfig(false)
+
+	awsConfig := sdkutil.AwsConfig()
+	var config appconfig.SsmagentConfig
+	config, err = appconfig.Config(false)
+
 	if err != nil {
 		return fmt.Errorf("could not load config file: %v", err)
 	}
@@ -227,7 +229,7 @@ func (c *contextManager) uploadOutput(log log.T, context *UpdateContext) (err er
 	uploader := s3util.NewManager(s3)
 	uploadOutputsToS3 := func() {
 		// delete temp outputDir once we're done
-		defer executers.DeleteDirectory(log, updateutil.UpdateOutputDirectory(context.Current.UpdateRoot))
+		defer pluginutil.DeleteDirectory(log, updateutil.UpdateOutputDirectory(context.Current.UpdateRoot))
 
 		// get stdout file path
 		stdoutPath := updateutil.UpdateStandOutPath(context.Current.UpdateRoot, context.Current.StdoutFileName)

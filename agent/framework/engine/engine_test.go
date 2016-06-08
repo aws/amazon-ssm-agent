@@ -20,6 +20,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/framework/plugin"
+	"github.com/aws/amazon-ssm-agent/agent/rebooter"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 	"github.com/stretchr/testify/assert"
 )
@@ -51,6 +52,11 @@ func TestRunPluginsWithRegistry(t *testing.T) {
 			StartDateTime: defaultTime,
 			EndDateTime:   defaultTime,
 		}
+
+		if name == "plugin2" {
+			pluginResults[name].Status = contracts.ResultStatusSuccessAndReboot
+		}
+
 		pluginInstances[name].On("Execute", ctx, *pluginConfigs[name], cancelFlag).Return(*pluginResults[name])
 		pluginRegistry[name] = pluginInstances[name]
 	}
@@ -70,4 +76,6 @@ func TestRunPluginsWithRegistry(t *testing.T) {
 	}
 	ctx.AssertCalled(t, "Log")
 	assert.Equal(t, pluginResults, outputs)
+	time.Sleep(10 * time.Second)
+	assert.Equal(t, true, rebooter.RebootRequested())
 }

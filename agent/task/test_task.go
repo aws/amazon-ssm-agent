@@ -68,3 +68,11 @@ func (flag *MockCancelFlag) ShutDown() bool {
 func (flag *MockCancelFlag) Wait() (state State) {
 	return flag.Called().Get(0).(State)
 }
+
+func (flag *MockCancelFlag) Set(state State) {
+	flag.Called()
+}
+
+func (flag *MockCancelFlag) State() State {
+	return flag.Called().Get(0).(State)
+}

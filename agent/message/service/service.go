@@ -69,7 +69,7 @@ var clientBasedErrorMessages, serverBasedErrorMessages []string
 // NewService creates a new MDS service instance.
 func NewService(region string, endpoint string, creds *credentials.Credentials, connectionTimeout time.Duration) Service {
 
-	config := sdkutil.GetAwsConfig()
+	config := sdkutil.AwsConfig()
 
 	if region != "" {
 		config.Region = &region

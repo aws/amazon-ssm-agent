@@ -17,9 +17,12 @@
 package platform
 
 import (
+	"os"
 	"os/exec"
+	"path/filepath"
 	"strings"
 
+	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 )
 
@@ -27,23 +30,10 @@ const caption = "Caption"
 const version = "Version"
 
 func getPlatformName(log log.T) (value string, err error) {
-	lock.Lock()
-	defer lock.Unlock()
-
-	if cachePlatformName != "" {
-		return cachePlatformName, nil
-	}
-
 	return getPlatformDetails(caption, log)
 }
 
 func getPlatformVersion(log log.T) (value string, err error) {
-	lock.Lock()
-	defer lock.Unlock()
-
-	if cachePlatformVersion != "" {
-		return cachePlatformVersion, nil
-	}
 	return getPlatformDetails(version, log)
 }
 
@@ -62,4 +52,32 @@ func getPlatformDetails(property string, log log.T) (value string, err error) {
 	value = strings.TrimLeft(value, property+"=")
 	log.Debugf(commandOutputMessage, value)
 	return
+}
+
+var wmicCommand = filepath.Join(appconfig.EnvWinDir, "System32", "wbem", "wmic.exe")
+
+// fullyQualifiedDomainName returns the Fully Qualified Domain Name of the instance, otherwise the hostname
+func fullyQualifiedDomainName() string {
+	hostName, _ := os.Hostname()
+
+	dnsHostName := getWMICComputerSystemValue("DNSHostName")
+	domainName := getWMICComputerSystemValue("Domain")
+
+	if dnsHostName == "" || domainName == "" {
+		return hostName
+	}
+
+	return dnsHostName + "." + domainName
+}
+
+// getWMICComputerSystemValue return the value part of the wmic computersystem command for the specified attribute
+func getWMICComputerSystemValue(attribute string) string {
+	if contentBytes, err := exec.Command(wmicCommand, "computersystem", "get", attribute, "/value").Output(); err == nil {
+		contents := string(contentBytes)
+		data := strings.Split(contents, "=")
+		if len(data) > 1 {
+			return strings.TrimSpace(data[1])
+		}
+	}
+	return ""
 }

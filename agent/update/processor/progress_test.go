@@ -65,3 +65,25 @@ func TestUpdateFailed(t *testing.T) {
 	assert.Equal(t, context.Histories[0].State, Completed)
 	assert.Equal(t, context.Histories[0].Result, contracts.ResultStatusFailed)
 }
+
+type ContextTestCase struct {
+	Context      *UpdateContext
+	InfoMessage  string
+	ErrorMessage string
+	HasMessageID bool
+}
+
+func generateTestCase() ContextTestCase {
+	testCase := ContextTestCase{
+		Context:      &UpdateContext{},
+		InfoMessage:  "Test Message",
+		ErrorMessage: "Error Message",
+		HasMessageID: true,
+	}
+
+	testCase.Context.Current = &UpdateDetail{
+		MessageID: "MessageId",
+	}
+	testCase.Context.Histories = []*UpdateDetail{}
+	return testCase
+}

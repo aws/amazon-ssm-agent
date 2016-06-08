@@ -1,12 +1,13 @@
-echo "Running checkstyle script"
+#!/usr/bin/env bash
+echo "Run checkstyle script"
 
 # run gofmt
 echo "Run 'gofmt'"
 unformatted=$(gofmt -l `pwd`/agent/)
 if [[ -n $unformatted ]]; then
 	echo >&2 "Error: Found files not formatted by gofmt"
-	for f in $unformatted; do
-		echo >&2 $f
+	for fi in $unformatted; do
+		echo >&2 $fi
 	done
 	echo "Please run 'gofmt -w' for files listed."
 	exit 1

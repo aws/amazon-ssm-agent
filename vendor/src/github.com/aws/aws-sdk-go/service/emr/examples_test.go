@@ -38,6 +38,20 @@ func ExampleEMR_AddInstanceGroups() {
 					},
 					// More values...
 				},
+				EbsConfiguration: &emr.EbsConfiguration{
+					EbsBlockDeviceConfigs: []*emr.EbsBlockDeviceConfig{
+						{ // Required
+							VolumeSpecification: &emr.VolumeSpecification{ // Required
+								SizeInGB:   aws.Int64(1),         // Required
+								VolumeType: aws.String("String"), // Required
+								Iops:       aws.Int64(1),
+							},
+							VolumesPerInstance: aws.Int64(1),
+						},
+						// More values...
+					},
+					EbsOptimized: aws.Bool(true),
+				},
 				Market: aws.String("MarketType"),
 				Name:   aws.String("XmlStringMaxLen256"),
 			},
@@ -267,6 +281,10 @@ func ExampleEMR_ListInstances() {
 			aws.String("InstanceGroupType"), // Required
 			// More values...
 		},
+		InstanceStates: []*string{
+			aws.String("InstanceState"), // Required
+			// More values...
+		},
 		Marker: aws.String("Marker"),
 	}
 	resp, err := svc.ListInstances(params)
@@ -322,6 +340,20 @@ func ExampleEMR_ModifyInstanceGroups() {
 					// More values...
 				},
 				InstanceCount: aws.Int64(1),
+				ShrinkPolicy: &emr.ShrinkPolicy{
+					DecommissionTimeout: aws.Int64(1),
+					InstanceResizePolicy: &emr.InstanceResizePolicy{
+						InstanceTerminationTimeout: aws.Int64(1),
+						InstancesToProtect: []*string{
+							aws.String("InstanceId"), // Required
+							// More values...
+						},
+						InstancesToTerminate: []*string{
+							aws.String("InstanceId"), // Required
+							// More values...
+						},
+					},
+				},
 			},
 			// More values...
 		},
@@ -399,6 +431,20 @@ func ExampleEMR_RunJobFlow() {
 							},
 						},
 						// More values...
+					},
+					EbsConfiguration: &emr.EbsConfiguration{
+						EbsBlockDeviceConfigs: []*emr.EbsBlockDeviceConfig{
+							{ // Required
+								VolumeSpecification: &emr.VolumeSpecification{ // Required
+									SizeInGB:   aws.Int64(1),         // Required
+									VolumeType: aws.String("String"), // Required
+									Iops:       aws.Int64(1),
+								},
+								VolumesPerInstance: aws.Int64(1),
+							},
+							// More values...
+						},
+						EbsOptimized: aws.Bool(true),
 					},
 					Market: aws.String("MarketType"),
 					Name:   aws.String("XmlStringMaxLen256"),

@@ -23,6 +23,7 @@ import (
 	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
+	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/stretchr/testify/assert"
 )
@@ -101,8 +102,8 @@ func TestCreateInstanceContext(t *testing.T) {
 	}
 
 	getRegion = RegionStub
-	getPlatformName = GetPlatformNameStub
-	getPlatformVersion = GetPlatformVersionStub
+	getPlatformName = PlatformNameStub
+	getPlatformVersion = PlatformVersionStub
 	util := Utility{}
 
 	for _, test := range testCases {
@@ -123,13 +124,19 @@ func TestCreateInstanceContext(t *testing.T) {
 
 var context testInstanceContext
 
-func GetPlatformVersionStub(log log.T) (version string, err error) {
+func PlatformVersionStub(log log.T) (version string, err error) {
 	return context.platformVersion, context.platformVersionErr
 }
-func GetPlatformNameStub(log log.T) (name string, err error) {
+func PlatformNameStub(log log.T) (name string, err error) {
 	return context.platformName, context.platformNameErr
 }
-func RegionStub() string { return context.region }
+func RegionStub() (string, error) {
+	var err error = nil
+	if context.region == "" {
+		err = fmt.Errorf("error")
+	}
+	return context.region, err
+}
 
 func TestFileNameConstruction(t *testing.T) {
 	testCases := []struct {
@@ -514,4 +521,52 @@ func TestExecCommandHelperProcess(*testing.T) {
 			fmt.Println("test update")
 		}
 	}
+}
+
+func TestIsDiskSpaceSufficientForUpdateWithSufficientSpace(t *testing.T) {
+	getDiskSpaceInfo = func() (fileutil.DiskSpaceInfo, error) {
+		return fileutil.DiskSpaceInfo{
+			AvailBytes: MinimumDiskSpaceForUpdate,
+			FreeBytes:  0,
+			TotalBytes: 0,
+		}, nil
+	}
+
+	util := Utility{}
+	isSufficient, err := util.IsDiskSpaceSufficientForUpdate(logger)
+
+	assert.NoError(t, err)
+	assert.True(t, isSufficient)
+}
+
+func TestIsDiskSpaceSufficientForUpdateWithInsufficientSpace(t *testing.T) {
+	getDiskSpaceInfo = func() (fileutil.DiskSpaceInfo, error) {
+		return fileutil.DiskSpaceInfo{
+			AvailBytes: MinimumDiskSpaceForUpdate - 1,
+			FreeBytes:  0,
+			TotalBytes: 0,
+		}, nil
+	}
+
+	util := Utility{}
+	isSufficient, err := util.IsDiskSpaceSufficientForUpdate(logger)
+
+	assert.NoError(t, err)
+	assert.False(t, isSufficient)
+}
+
+func TestIsDiskSpaceSufficientForUpdateWithDiskSpaceLoadFail(t *testing.T) {
+	getDiskSpaceInfo = func() (fileutil.DiskSpaceInfo, error) {
+		return fileutil.DiskSpaceInfo{
+			AvailBytes: 0,
+			FreeBytes:  0,
+			TotalBytes: 0,
+		}, fmt.Errorf("mock error - failed to load the disk space")
+	}
+
+	util := Utility{}
+	isSufficient, err := util.IsDiskSpaceSufficientForUpdate(logger)
+
+	assert.Error(t, err)
+	assert.False(t, isSufficient)
 }

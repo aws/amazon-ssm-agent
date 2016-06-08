@@ -16,18 +16,13 @@ package log
 
 import (
 	"fmt"
-	"io/ioutil"
-	"os"
 	"sync"
 
 	"github.com/cihub/seelog"
 )
 
 const (
-	DefaultLogDir = "log"
-
-	LogFile = "amazon-ssm-agent.log"
-
+	LogFile   = "amazon-ssm-agent.log"
 	ErrorFile = "errors.log"
 )
 
@@ -41,9 +36,9 @@ var pkgMutex = new(sync.Mutex)
 var loadedLogger *T
 var lock sync.RWMutex
 
-// GetLogger loads logger based on the application configuration.
+// Logger loads logger based on the application configuration.
 // it returns the loaded version, if any exists.
-func GetLogger() T {
+func Logger() T {
 	if !isLoaded() {
 		logger := initLogger()
 		cache(logger)
@@ -81,42 +76,9 @@ func getCached() T {
 	return *loadedLogger
 }
 
-// InitLogger initializes the logger using the settings specified in the application config file.
-// otherwise initializes the logger based on default settings
-func initLogger() (logger T) {
-	var logConfigBytes []byte
-	var err error
-	var logConfigFile string
-
-	if logConfigFile, err = getSeelogConfigFilePath(); err == nil && logConfigFile != "" {
-		if logConfigBytes, err = ioutil.ReadFile(logConfigFile); err == nil {
-			return initLoggerFromBytes(logConfigBytes)
-		}
-
-		fmt.Println("Error loading logger config file:", err)
-	} else {
-		fmt.Printf("Error occured fetching the seelog config file path %v", err)
-	}
-
-	fmt.Println("Loading default logger settings.")
-	return initLoggerFromBytes(defaultConfig())
-}
-
 // loadUpdaterLogger loads the logger config from the hardcoded default config
 func loadUpdaterLogger(logRoot string, logFile string) (logger T) {
 	return initLoggerFromBytes(defaultUpdaterConfig(logRoot, logFile))
-}
-
-// initLoggerFromBytes initializes the logger using the specified configuration as bytes.
-func initLoggerFromBytes(seelogConfig []byte) T {
-	seaLogger, err := seelog.LoggerFromConfigAsBytes(seelogConfig)
-	if err != nil {
-		fmt.Println("Error parsing logger config:", err)
-		return nil
-	}
-
-	seelogDefault = seaLogger
-	return withContext(seelogDefault)
 }
 
 // WithContext creates a logger that includes the given context with every log message.
@@ -165,14 +127,14 @@ func (f ContextFormatFilter) Filterf(format string, params ...interface{}) (newF
 	return
 }
 
-// looks for seelog config in working directory first and then the appconfig
-func getSeelogConfigFilePath() (path string, err error) {
-	// looking for seelog config file in working directory
-	if _, err = os.Stat(DefaultSeelogConfigFilePath); err == nil {
-		fmt.Println("Loading seelog config from ", DefaultSeelogConfigFilePath)
-		return DefaultSeelogConfigFilePath, err
+// initLoggerFromBytes initializes the logger using the specified configuration as bytes.
+func initLoggerFromBytes(seelogConfig []byte) (logger T) {
+	var seelogger seelog.LoggerInterface
+	var err error
+	if seelogger, err = seelog.LoggerFromConfigAsBytes(seelogConfig); err != nil {
+		fmt.Println("Error parsing logger config:", err)
+		return nil
 	}
-	fmt.Printf("Unable to find %v in working directory", DefaultSeelogConfigFilePath)
-
-	return "", err
+	seelogDefault = seelogger
+	return withContext(seelogDefault)
 }

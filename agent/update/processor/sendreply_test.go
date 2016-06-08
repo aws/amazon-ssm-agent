@@ -60,8 +60,8 @@ func TestSendReply(t *testing.T) {
 	context := createUpdateContext(Installed)
 	service := svcManager{}
 	// setup
-	getAppConfig = func(bool) (appconfig.T, error) {
-		config := appconfig.T{}
+	getAppConfig = func(bool) (appconfig.SsmagentConfig, error) {
+		config := appconfig.SsmagentConfig{}
 		return config, nil
 	}
 
@@ -78,8 +78,8 @@ func TestSendReplyDeleteMessage(t *testing.T) {
 	context := createUpdateContext(Installed)
 	service := svcManager{}
 	// setup
-	getAppConfig = func(bool) (appconfig.T, error) {
-		config := appconfig.T{}
+	getAppConfig = func(bool) (appconfig.SsmagentConfig, error) {
+		config := appconfig.SsmagentConfig{}
 		return config, nil
 	}
 	newMsgSvc = stubNewMsgSvc

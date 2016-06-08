@@ -18,8 +18,8 @@ echo "Copying application files"
 
 cp ${BGO_SPACE}/bin/linux_386/amazon-ssm-agent ${BGO_SPACE}/bin/debian_386/debian/usr/bin/
 cd ${BGO_SPACE}/bin/debian_386/debian/usr/bin/; strip --strip-unneeded amazon-ssm-agent ;cd ~-
-cp ${BGO_SPACE}/seelog.xml ${BGO_SPACE}/bin/debian_386/debian/etc/amazon/ssm/
-cp ${BGO_SPACE}/amazon-ssm-agent.json ${BGO_SPACE}/bin/debian_386/debian/etc/amazon/ssm/
+cp ${BGO_SPACE}/seelog_unix.xml ${BGO_SPACE}/bin/debian_386/debian/etc/amazon/ssm/seelog.xml.template
+cp ${BGO_SPACE}/amazon-ssm-agent.json.template ${BGO_SPACE}/bin/debian_386/debian/etc/amazon/ssm/
 cp ${BGO_SPACE}/packaging/ubuntu/amazon-ssm-agent.conf ${BGO_SPACE}/bin/debian_386/debian/etc/init/
 
 echo "Copying debian package config files"

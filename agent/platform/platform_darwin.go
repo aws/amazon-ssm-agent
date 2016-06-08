@@ -29,30 +29,14 @@ const (
 )
 
 func getPlatformName(log log.T) (value string, err error) {
-	lock.Lock()
-	defer lock.Unlock()
-
-	if cachePlatformName != "" {
-		return cachePlatformName, nil
-	}
-
 	value, err = getPlatformDetail(log, "-productName")
 	log.Debugf("platform name: %v", value)
-	cachePlatformName = value
 	return
 }
 
 func getPlatformVersion(log log.T) (value string, err error) {
-	lock.Lock()
-	defer lock.Unlock()
-
-	if cachePlatformVersion != "" {
-		return cachePlatformVersion, nil
-	}
-
 	value, err = getPlatformDetail(log, "-productVersion")
 	log.Debugf("platform version: %v", value)
-	cachePlatformVersion = value
 	return
 }
 
@@ -68,4 +52,10 @@ func getPlatformDetail(log log.T, param string) (value string, err error) {
 	value = strings.TrimSpace(string(contentsBytes))
 	log.Debugf(commandOutputMessage, value)
 	return
+}
+
+// fullyQualifiedDomainName returns the Fully Qualified Domain Name of the instance, otherwise the hostname
+func fullyQualifiedDomainName() string {
+	//todo: throw an error / panic here - since darwin is not supported yet.
+	return ""
 }

@@ -26,17 +26,21 @@ import (
 	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/plugins/pluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/task"
-	"github.com/aws/amazon-ssm-agent/agent/taskimpl"
 	"github.com/stretchr/testify/assert"
 )
 
-const stdoutMsg = "hello stdout"
-const stderrMsg = "hello stderr"
-const cancelWaitTimeoutSeconds = 3.0
-const successExitCode = 0
-const processTerminatedByUserExitCode = 137
-const defaultExecutionTimeout = 5000
+const (
+	stdoutMsg                       = "hello stdout"
+	stderrMsg                       = "hello stderr"
+	cancelWaitTimeoutSeconds        = 3.0
+	successExitCode                 = 0
+	processTerminatedByUserExitCode = 137
+	defaultExecutionTimeout         = 5000
+	stdOutFileName                  = "stdout"
+	stdErrFileName                  = "stderr"
+)
 
 type CommandInvoker func(commands []string) (stdout io.Reader, stderr io.Reader, exitCode int, errs []error)
 
@@ -85,8 +89,9 @@ var ShellCommandExecuterTestCases = []TestCase{
 	// test stdout and stderr are captured
 	{
 		Commands: []string{
-			echoToStdout(stdoutMsg),
-			echoToStderr(stderrMsg),
+			"sh",
+			"-c",
+			echoToStdout(stdoutMsg) + ";" + echoToStderr(stderrMsg),
 		},
 		ExpectedStdout:   stdoutMsg + "\n",
 		ExpectedStderr:   stderrMsg + "\n",
@@ -97,11 +102,9 @@ var ShellCommandExecuterTestCases = []TestCase{
 var ShellCommandExecuterCancelTestCases = []TestCase{
 	{
 		Commands: []string{
-			echoToStdout(stdoutMsg),
-			echoToStderr(stderrMsg),
-			"sleep 10",
-			echoToStdout("bye stdout"),
-			echoToStderr("bye stderr"),
+			"sh",
+			"-c",
+			echoToStdout(stdoutMsg) + ";" + echoToStderr(stderrMsg) + ";" + "sleep 10" + ";" + echoToStdout("bye stdout") + ";" + echoToStderr("bye stderr"),
 		},
 		ExpectedStdout:   stdoutMsg + "\n",
 		ExpectedStderr:   stderrMsg + "\n",
@@ -131,7 +134,7 @@ func TestRunCommand_cancel(t *testing.T) {
 func TestShellCommandExecuter(t *testing.T) {
 	runTest := func(testCase TestCase) {
 		orchestrationDir, shCommandExecuterInvoker, _ := prepareTestShellCommandExecuter(t)
-		defer DeleteDirectory(logger, orchestrationDir)
+		defer pluginutil.DeleteDirectory(logger, orchestrationDir)
 		testCommandInvoker(t, shCommandExecuterInvoker, testCase)
 	}
 
@@ -144,7 +147,7 @@ func TestShellCommandExecuter(t *testing.T) {
 func TestShellCommandExecuter_cancel(t *testing.T) {
 	runTest := func(testCase TestCase) {
 		orchestrationDir, shCommandExecuterInvoker, cancelFlag := prepareTestShellCommandExecuter(t)
-		defer DeleteDirectory(logger, orchestrationDir)
+		defer pluginutil.DeleteDirectory(logger, orchestrationDir)
 		testCommandInvokerCancel(t, shCommandExecuterInvoker, cancelFlag, testCase)
 	}
 
@@ -164,7 +167,7 @@ func testCommandInvoker(t *testing.T, invoke CommandInvoker, testCase TestCase) 
 	assert.Equal(t, exitCode, testCase.ExpectedExitCode)
 }
 
-func testCommandInvokerCancel(t *testing.T, invoke CommandInvoker, cancelFlag *taskimpl.CancelFlag, testCase TestCase) {
+func testCommandInvokerCancel(t *testing.T, invoke CommandInvoker, cancelFlag task.CancelFlag, testCase TestCase) {
 	go func() {
 		time.Sleep(100 * time.Millisecond)
 		cancelFlag.Set(task.Canceled)
@@ -203,10 +206,10 @@ func awkPrintToStderr(stderrMsg string) string {
 }
 
 // prepareTestShellCommandExecuter contains boiler plate code for testing shell executer, to avoid duplication.
-func prepareTestShellCommandExecuter(t *testing.T) (orchestrationDir string, commandInvoker CommandInvoker, cancelFlag *taskimpl.CancelFlag) {
+func prepareTestShellCommandExecuter(t *testing.T) (orchestrationDir string, commandInvoker CommandInvoker, cancelFlag task.CancelFlag) {
 	// create shell executer, cancel flag, working dir
-	sh := NewDefaultShellExecuter()
-	cancelFlag = taskimpl.NewCancelFlag()
+	sh := ShellCommandExecuter{}
+	cancelFlag = task.NewChanneledCancelFlag()
 	orchestrationDir, err := ioutil.TempDir("", "TestShellExecute")
 	if err != nil {
 		t.Fatal(err)
@@ -216,17 +219,21 @@ func prepareTestShellCommandExecuter(t *testing.T) (orchestrationDir string, com
 	// commandInvoker calls the shell then sets the state of the flag to completed
 	commandInvoker = func(commands []string) (stdout io.Reader, stderr io.Reader, exitCode int, errs []error) {
 		defer cancelFlag.Set(task.Completed)
-		scriptPath := filepath.Join(orchestrationDir, RunCommandScriptName)
+		scriptPath := filepath.Join(orchestrationDir, pluginutil.RunCommandScriptName)
+		stdoutFilePath := filepath.Join(orchestrationDir, stdOutFileName)
+		stderrFilePath := filepath.Join(orchestrationDir, stdErrFileName)
+
+		// Used to mimic the process
 		CreateScriptFile(scriptPath, commands)
-		return sh.Execute(logger, workDir, scriptPath, orchestrationDir, cancelFlag, defaultExecutionTimeout)
+		return sh.Execute(logger, workDir, stdoutFilePath, stderrFilePath, cancelFlag, defaultExecutionTimeout, commands[0], commands[1:])
 	}
 
 	return
 }
 
 // prepareTestRunCommand contains boiler plate code for testing run command, to avoid duplication.
-func prepareTestRunCommand(t *testing.T) (commandInvoker CommandInvoker, cancelFlag *taskimpl.CancelFlag) {
-	cancelFlag = taskimpl.NewCancelFlag()
+func prepareTestRunCommand(t *testing.T) (commandInvoker CommandInvoker, cancelFlag task.CancelFlag) {
+	cancelFlag = task.NewChanneledCancelFlag()
 	commandInvoker = func(commands []string) (stdout io.Reader, stderr io.Reader, exitCode int, errs []error) {
 		defer cancelFlag.Set(task.Completed)
 
@@ -234,7 +241,7 @@ func prepareTestRunCommand(t *testing.T) (commandInvoker CommandInvoker, cancelF
 		var stdoutBuf bytes.Buffer
 		var stderrBuf bytes.Buffer
 		workDir := "."
-		tempExitCode, err := RunCommand(logger, cancelFlag, workDir, &stdoutBuf, &stderrBuf, commands[0], []string{}, defaultExecutionTimeout, commands[1:]...)
+		tempExitCode, err := RunCommand(logger, cancelFlag, workDir, &stdoutBuf, &stderrBuf, defaultExecutionTimeout, commands[0], commands[1:])
 		exitCode = tempExitCode
 
 		// record error if any

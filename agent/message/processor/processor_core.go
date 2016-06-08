@@ -23,6 +23,8 @@ import (
 	"path/filepath"
 	"strings"
 
+	"sync"
+
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
@@ -39,13 +41,16 @@ import (
 	"github.com/aws/aws-sdk-go/service/ssmmds"
 )
 
+var singletonMapOfUnsupportedSSMDocs map[string]bool
+var once sync.Once
+
 // processOlderMessages processes older messages that have been persisted in various locations (like from pending & current folders)
 func (p *Processor) processOlderMessages() {
 	log := p.context.Log()
 
-	instanceID := platform.InstanceID()
-	if instanceID == "" {
-		log.Error("can't process older messages since no instanceID is specified")
+	instanceID, err := platform.InstanceID()
+	if err != nil {
+		log.Errorf("error fetching instance id, %v", err)
 		return
 	}
 
@@ -175,7 +180,7 @@ func (p *Processor) processMessagesFromCurrent(instanceID string) {
 				// func PersistData(log log.T, commandID, instanceID, locationFolder string, object interface{}) {
 				commandStateHelper.PersistData(log, oldCmdState.DocumentInformation.CommandID, instanceID, appconfig.DefaultLocationOfCurrent, oldCmdState)
 
-				//Submit the work to Task-pool so that we don't block for processing of new messages
+				//Submit the work to Job Pool so that we don't block for processing of new messages
 				err := p.sendCommandPool.Submit(log, oldCmdState.DocumentInformation.MessageID, func(cancelFlag task.CancelFlag) {
 					p.runCmdsUsingCmdState(p.context.With("[messageID="+oldCmdState.DocumentInformation.MessageID+"]"),
 						p.service,
@@ -321,12 +326,16 @@ func (p *Processor) processMessage(msg *ssmmds.Message) {
 		sdkutil.HandleAwsError(log, err, p.processorStopPolicy)
 		return
 	}
-	log.Debugf("Ack done")
-
-	log.Debugf("Received message - messageId - %v, MessageString - %v", *msg.MessageId, msg.GoString())
+	log.Debugf("Ack done. Received message - messageId - %v, MessageString - %v", *msg.MessageId, msg.GoString())
 
 	//persisting received msg in file-system [pending folder]
-	commandStateHelper.PersistData(log, getCommandID(*msg.MessageId), *msg.Destination, appconfig.DefaultLocationOfPending, *msg)
+	p.persistData(msg, appconfig.DefaultLocationOfPending)
+
+	log.Debugf("Processing to send a reply to update the document status to InProgress")
+
+	p.sendDocLevelResponse(*msg.MessageId, contracts.ResultStatusInProgress, "")
+
+	log.Debugf("SendReply done. Received message - messageId - %v, MessageString - %v", *msg.MessageId, msg.GoString())
 
 	switch {
 	case strings.HasPrefix(*msg.Topic, string(SendCommandTopicPrefix)):
@@ -386,12 +395,22 @@ func (p *Processor) processSendCommandMessage(context context.T,
 	}
 
 	parsedMessageContent, _ := jsonutil.Marshal(parsedMessage)
-	log.Trace("ParsedMessage is ", jsonutil.Indent(parsedMessageContent))
+	log.Debug("ParsedMessage is ", jsonutil.Indent(parsedMessageContent))
 
 	// adapt plugin configuration format from MDS to plugin expected format
 	s3KeyPrefix := path.Join(parsedMessage.OutputS3KeyPrefix, parsedMessage.CommandID, *msg.Destination)
 
 	messageOrchestrationDirectory := filepath.Join(messagesOrchestrationRootDir, commandID)
+
+	// Check if it is a managed instance and its executing managed instance incompatible AWS SSM public document.
+	// A few public AWS SSM documents contain code which is not compatible when run on managed instances.
+	// isManagedInstanceIncompatibleAWSSSMDocument makes sure to find such documents at runtime and replace the incompatible code.
+	if isManagedInstance() && isManagedInstanceIncompatibleAWSSSMDocument(parsedMessage.DocumentName) {
+		log.Debugf("Running Incompatible AWS SSM Document %v on managed instance", parsedMessage.DocumentName)
+		if parsedMessage, err = removeDependencyOnInstanceMetadataForManagedInstance(context, parsedMessage); err != nil {
+			return
+		}
+	}
 
 	pluginConfigurations := getPluginConfigurations(
 		parsedMessage.DocumentContent.RuntimeConfig,
@@ -418,6 +437,14 @@ func (p *Processor) processSendCommandMessage(context context.T,
 	log.Debugf("Plugin outputs %v", jsonutil.Indent(pluginOutputContent))
 
 	payloadDoc := buildReply("", outputs)
+
+	//check if document isn't supported by SSM -> update the DocumentLevel status message & send reply accordingly
+	ssmDocName := parsedMessage.DocumentName
+	if IsDocumentNotSupportedBySsmAgent(ssmDocName) {
+		log.Infof("%s is not yet supported by aws-ssm-agent, setting up Document level response accordingly", ssmDocName)
+		payloadDoc.DocumentTraceOutput = fmt.Sprintf("%s document is not yet supported by amazon-ssm-agent.", ssmDocName)
+		p.sendDocLevelResponse(*msg.MessageId, contracts.ResultStatusFailed, payloadDoc.DocumentTraceOutput)
+	}
 
 	//update documentInfo in interim cmd state file
 	documentInfo := commandStateHelper.GetDocumentInfo(log, commandID, *msg.Destination, appconfig.DefaultLocationOfCurrent)
@@ -528,4 +555,16 @@ func (p *Processor) processCancelCommandMessage(context context.T,
 	if err != nil {
 		sdkutil.HandleAwsError(log, err, p.processorStopPolicy)
 	}
+}
+
+// IsDocumentUnsupportedForSsmAgent returns true if the given SSM document is not supported by ssm agent
+func IsDocumentNotSupportedBySsmAgent(docName string) bool {
+	once.Do(func() {
+		singletonMapOfUnsupportedSSMDocs = make(map[string]bool)
+		singletonMapOfUnsupportedSSMDocs["AWS-ConfigureCloudWatch"] = false
+		singletonMapOfUnsupportedSSMDocs["AWS-JoinDirectoryServiceDomain"] = false
+	})
+
+	_, ok := singletonMapOfUnsupportedSSMDocs[docName]
+	return ok
 }

@@ -25,12 +25,12 @@ import (
 // parameter to the methods themselves.
 type T interface {
 	Log() log.T
-	AppConfig() appconfig.T
+	AppConfig() appconfig.SsmagentConfig
 	With(context string) T
 }
 
 // Default returns an empty context that use the default logger and appconfig.
-func Default(logger log.T, appconfig appconfig.T) T {
+func Default(logger log.T, appconfig appconfig.SsmagentConfig) T {
 	ctx := &defaultContext{log: logger, appconfig: appconfig}
 	return ctx
 }
@@ -38,7 +38,7 @@ func Default(logger log.T, appconfig appconfig.T) T {
 type defaultContext struct {
 	context   []string
 	log       log.T
-	appconfig appconfig.T
+	appconfig appconfig.SsmagentConfig
 }
 
 func (c *defaultContext) With(logContext string) T {
@@ -55,6 +55,6 @@ func (c *defaultContext) Log() log.T {
 	return c.log
 }
 
-func (c *defaultContext) AppConfig() appconfig.T {
+func (c *defaultContext) AppConfig() appconfig.SsmagentConfig {
 	return c.appconfig
 }

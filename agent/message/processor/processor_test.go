@@ -16,6 +16,7 @@ package processor
 import (
 	"crypto/sha256"
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"path"
 	"testing"
@@ -23,14 +24,11 @@ import (
 
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
-	"github.com/aws/amazon-ssm-agent/agent/framework/engine"
-	"github.com/aws/amazon-ssm-agent/agent/framework/plugin"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	messageContracts "github.com/aws/amazon-ssm-agent/agent/message/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/message/parser"
 	"github.com/aws/amazon-ssm-agent/agent/task"
-	"github.com/aws/amazon-ssm-agent/agent/taskimpl"
 	"github.com/aws/amazon-ssm-agent/agent/times"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/service/ssmmds"
@@ -50,6 +48,13 @@ var sampleMessageReplacedParamsFiles = []string{
 var sampleMessageReplyFiles = []string{
 	"../testdata/sampleReply.json",
 }
+
+var testMessageId = "03f44d19-90fe-44d4-bd4c-298b966a1e1a"
+var testDestination = "i-1679test"
+var testTopicSend = "aws.ssm.sendCommand.test"
+var testTopicCancel = "aws.ssm.cancelCommand.test"
+var testCreatedDate = "2015-01-01T00:00:00.000Z"
+var testEmptyMessage = ""
 
 var logger = log.NewMockLog()
 
@@ -79,6 +84,236 @@ type TestCaseCancelCommand struct {
 	MsgToCancelID string
 
 	InstanceID string
+}
+
+// TestCaseProcessMessage contains fields to prepare processMessage tests
+type TestCaseProcessMessage struct {
+	ContextMock *context.Mock
+
+	Message ssmmds.Message
+
+	MdsMock *MockedMDS
+
+	SendCommandTaskPoolMock *task.MockedPool
+
+	CancelCommandTaskPoolMock *task.MockedPool
+
+	IsDocLevelResponseSent *bool
+
+	IsDataPersisted *bool
+}
+
+// TestCasePollOnce contains fields to prepare pollOnce tests
+type TestCasePollOnce struct {
+	ContextMock *context.Mock
+
+	MdsMock *MockedMDS
+}
+
+// TestPollOnce tests the pollOnce function with one message
+func TestPollOnce(t *testing.T) {
+	// prepare test case fields
+	proc, tc := prepareTestPollOnce()
+
+	// mock GetMessagesOutput to return one message
+	getMessageOutput := ssmmds.GetMessagesOutput{
+		Destination:       &testDestination,
+		Messages:          make([]*ssmmds.Message, 1),
+		MessagesRequestId: &testMessageId,
+	}
+
+	// mock GetMessages function to return mocked GetMessagesOutput and no error
+	tc.MdsMock.On("GetMessages", mock.AnythingOfType("*log.Mock"), mock.AnythingOfType("string")).Return(&getMessageOutput, nil)
+
+	// set expectations
+	countMessageProcessed := 0
+	processMessage = func(proc *Processor, msg *ssmmds.Message) {
+		countMessageProcessed++
+	}
+
+	// execute pollOnce
+	proc.pollOnce()
+
+	// check expectations
+	tc.MdsMock.AssertExpectations(t)
+	assert.Equal(t, countMessageProcessed, 1)
+}
+
+// TestPollOnceWithZeroMessage tests the pollOnce function with zero message
+func TestPollOnceWithZeroMessage(t *testing.T) {
+	// prepare test case fields
+	proc, tc := prepareTestPollOnce()
+
+	// mock GetMessagesOutput to return zero message
+	getMessageOutput := ssmmds.GetMessagesOutput{
+		Destination:       &testDestination,
+		Messages:          make([]*ssmmds.Message, 0),
+		MessagesRequestId: &testMessageId,
+	}
+
+	// mock GetMessages function to return mocked GetMessagesOutput and no error
+	tc.MdsMock.On("GetMessages", mock.AnythingOfType("*log.Mock"), mock.AnythingOfType("string")).Return(&getMessageOutput, nil)
+	countMessageProcessed := 0
+	processMessage = func(proc *Processor, msg *ssmmds.Message) {
+		countMessageProcessed++
+	}
+
+	// execute pollOnce
+	proc.pollOnce()
+
+	// check expectations
+	tc.MdsMock.AssertExpectations(t)
+	assert.Equal(t, countMessageProcessed, 0)
+}
+
+// TestPollOnceMultipleTimes tests the pollOnce function with five messages
+func TestPollOnceMultipleTimes(t *testing.T) {
+	// prepare test case fields
+	proc, tc := prepareTestPollOnce()
+
+	// mock GetMessagesOutput to return five message
+	getMessageOutput := ssmmds.GetMessagesOutput{
+		Destination:       &testDestination,
+		Messages:          make([]*ssmmds.Message, 5),
+		MessagesRequestId: &testMessageId,
+	}
+
+	// mock GetMessages function to return mocked GetMessagesOutput and no error
+	tc.MdsMock.On("GetMessages", mock.AnythingOfType("*log.Mock"), mock.AnythingOfType("string")).Return(&getMessageOutput, nil)
+	countMessageProcessed := 0
+	processMessage = func(proc *Processor, msg *ssmmds.Message) {
+		countMessageProcessed++
+	}
+
+	// execute pollOnce
+	proc.pollOnce()
+
+	// check expectations
+	tc.MdsMock.AssertExpectations(t)
+	assert.Equal(t, countMessageProcessed, 5)
+}
+
+// TestPollOnceWithGetMessagesReturnError tests the pollOnce function with errors from GetMessages function
+func TestPollOnceWithGetMessagesReturnError(t *testing.T) {
+	// prepare test case fields
+	proc, tc := prepareTestPollOnce()
+
+	// mock GetMessagesOutput to return one message
+	getMessageOutput := ssmmds.GetMessagesOutput{
+		Destination:       &testDestination,
+		Messages:          make([]*ssmmds.Message, 1),
+		MessagesRequestId: &testMessageId,
+	}
+
+	// mock GetMessages function to return an error
+	tc.MdsMock.On("GetMessages", mock.AnythingOfType("*log.Mock"), mock.AnythingOfType("string")).Return(&getMessageOutput, fmt.Errorf("Test"))
+	isMessageProcessed := false
+	processMessage = func(proc *Processor, msg *ssmmds.Message) {
+		isMessageProcessed = true
+	}
+
+	// execute pollOnce
+	proc.pollOnce()
+
+	// check expectations
+	tc.MdsMock.AssertExpectations(t)
+	assert.False(t, isMessageProcessed)
+}
+
+// TestProcessMessageWithSendCommandTopicPrefix tests processMessage with SendCommand topic prefix
+func TestProcessMessageWithSendCommandTopicPrefix(t *testing.T) {
+	// SendCommand topic prefix
+	var topic = testTopicSend
+
+	// prepare processor and test case fields
+	proc, tc := prepareTestProcessMessage(topic)
+
+	// set the expectations
+	tc.MdsMock.On("AcknowledgeMessage", mock.Anything, *tc.Message.MessageId).Return(nil)
+	tc.SendCommandTaskPoolMock.On("Submit", mock.Anything, mock.AnythingOfType("string"), mock.AnythingOfType("task.Job")).Return(nil)
+
+	// execute processMessage
+	proc.processMessage(&tc.Message)
+
+	// check expectations
+	tc.ContextMock.AssertCalled(t, "Log")
+	tc.MdsMock.AssertExpectations(t)
+	tc.SendCommandTaskPoolMock.AssertExpectations(t)
+	tc.CancelCommandTaskPoolMock.AssertNotCalled(t, "Submit")
+	assert.True(t, *tc.IsDocLevelResponseSent)
+	assert.True(t, *tc.IsDataPersisted)
+}
+
+// TestProcessMessageWithCancelCommandTopicPrefix tests processMessage with CancelCommand topic prefix
+func TestProcessMessageWithCancelCommandTopicPrefix(t *testing.T) {
+	// CancelCommand topic prefix
+	var topic = testTopicCancel
+
+	//prepare processor and test case fields
+	proc, tc := prepareTestProcessMessage(topic)
+
+	// set the expectations
+	tc.MdsMock.On("AcknowledgeMessage", mock.Anything, *tc.Message.MessageId).Return(nil)
+	tc.CancelCommandTaskPoolMock.On("Submit", mock.Anything, mock.AnythingOfType("string"), mock.AnythingOfType("task.Job")).Return(nil)
+
+	// execute processMessage
+	proc.processMessage(&tc.Message)
+
+	// check expectations
+	tc.ContextMock.AssertCalled(t, "Log")
+	tc.MdsMock.AssertExpectations(t)
+	tc.CancelCommandTaskPoolMock.AssertExpectations(t)
+	tc.SendCommandTaskPoolMock.AssertNotCalled(t, "Submit")
+	assert.True(t, *tc.IsDocLevelResponseSent)
+	assert.True(t, *tc.IsDataPersisted)
+}
+
+// TestProcessMessageWithInvalidCommandTopicPrefix tests processMessage with invalid topic prefix
+func TestProcessMessageWithInvalidCommandTopicPrefix(t *testing.T) {
+	// CancelCommand topic prefix
+	var topic = "invalid"
+
+	//prepare processor and test case fields
+	proc, tc := prepareTestProcessMessage(topic)
+
+	// set the expectations
+	tc.MdsMock.On("AcknowledgeMessage", mock.Anything, *tc.Message.MessageId).Return(nil)
+
+	// execute processMessage
+	proc.processMessage(&tc.Message)
+
+	// check expectations
+	tc.ContextMock.AssertCalled(t, "Log")
+	tc.MdsMock.AssertExpectations(t)
+	tc.SendCommandTaskPoolMock.AssertNotCalled(t, "Submit")
+	tc.CancelCommandTaskPoolMock.AssertNotCalled(t, "Submit")
+	assert.True(t, *tc.IsDocLevelResponseSent)
+	assert.True(t, *tc.IsDataPersisted)
+}
+
+// TestProcessMessageWithInvalidMessage tests processMessage with invalid message
+func TestProcessMessageWithInvalidMessage(t *testing.T) {
+	// prepare processor and test case fields
+	proc, tc := prepareTestProcessMessage(testTopicSend)
+
+	// exclude some fields from message
+	tc.Message = ssmmds.Message{
+		CreatedDate: &testEmptyMessage,
+		Destination: &testEmptyMessage,
+		MessageId:   &testEmptyMessage,
+		Topic:       &testEmptyMessage,
+	}
+
+	// execute processMessage
+	proc.processMessage(&tc.Message)
+
+	// check expectations
+	tc.ContextMock.AssertCalled(t, "Log")
+	tc.MdsMock.AssertNotCalled(t, "AcknowledgeMessage", mock.AnythingOfType("log.T"))
+	tc.SendCommandTaskPoolMock.AssertNotCalled(t, "Submit")
+	tc.CancelCommandTaskPoolMock.AssertNotCalled(t, "Submit")
+	assert.False(t, *tc.IsDocLevelResponseSent)
+	assert.False(t, *tc.IsDataPersisted)
 }
 
 // TestProcessMessage tests that processSendCommandMessage calls all the expected APIs
@@ -125,7 +360,7 @@ func generateTestCaseFromFiles(t *testing.T, messagePayloadFile string, messageR
 
 func testProcessSendCommandMessage(t *testing.T, testCase TestCaseSendCommand) {
 
-	cancelFlag := taskimpl.NewCancelFlag()
+	cancelFlag := task.NewChanneledCancelFlag()
 
 	// method should call replyBuilder to format the response
 	replyBuilderMock := new(MockedReplyBuilder)
@@ -245,100 +480,111 @@ func testProcessCancelCommandMessage(t *testing.T, testCase TestCaseCancelComman
 	sendCommandPoolMock.AssertExpectations(t)
 }
 
-// TestPollOnce tests the pollOnce method with only service and plugin runner mocked.
-// This checks that all the messages get to be processed, all the service APIs are called,
-// and all the worker pools close properly. This test is not concerned with the correctness
-// of the response sent to the service.
-func TestPollOnce(t *testing.T) {
-	var messages ssmmds.GetMessagesOutput
-	err := jsonutil.UnmarshalFile("../testdata/sampleGetMessagesResp.json", &messages)
-	assert.Nil(t, err)
+func prepareTestPollOnce() (proc Processor, testCase TestCasePollOnce) {
 
-	instanceID := *messages.Destination
-	agentInfo := contracts.AgentInfo{
-		Name:      "EC2Config",
-		Version:   "1",
-		Lang:      "en-US",
-		Os:        "linux",
-		OsVersion: "1",
-	}
-
-	agentConfig := contracts.AgentConfiguration{
-		AgentInfo:  agentInfo,
-		InstanceID: instanceID,
-	}
-
+	// create mock context and log
 	contextMock := context.NewMockDefault()
-	log := contextMock.Log()
 
 	// create mocked service and set expectations
 	mdsMock := new(MockedMDS)
-	mdsMock.On("GetMessages", log, instanceID).Return(&messages, nil)
-	for _, msg := range messages.Messages {
-		mdsMock.On("AcknowledgeMessage", log, *msg.MessageId).Return(nil)
-		mdsMock.On("SendReply", log, *msg.MessageId, mock.AnythingOfType("string")).Return(nil)
-		mdsMock.On("AcknowledgeMessage", log, *msg.MessageId).Return(nil)
-		mdsMock.On("DeleteMessage", log, *msg.MessageId).Return(nil)
+
+	// create a agentConfig with dummy instanceID and agentInfo
+	agentConfig := contracts.AgentConfiguration{
+		AgentInfo: contracts.AgentInfo{
+			Name:      "EC2Config",
+			Version:   "1",
+			Lang:      "en-US",
+			Os:        "linux",
+			OsVersion: "1",
+		},
+		InstanceID: testDestination,
 	}
 
-	var clock = times.DefaultClock
-	replyBuilder := func(pluginID string, results map[string]*contracts.PluginResult) messageContracts.SendReplyPayload {
-		t := clock.Now()
-		runtimeStatuses := parser.PrepareRuntimeStatuses(log, results)
-		return parser.PrepareReplyPayload(pluginID, runtimeStatuses, t, agentConfig.AgentInfo)
+	proc = Processor{
+		context: contextMock,
+		config:  agentConfig,
+		service: mdsMock,
 	}
 
-	// create a mock sendResponse function
-	sendResponse := func(messageID string, pluginID string, results map[string]*contracts.PluginResult) {
-		payloadDoc := replyBuilder(pluginID, results)
-		payloadB, err := json.Marshal(payloadDoc)
-		if err != nil {
-			return
-		}
-		payload := string(payloadB)
-		// call the mock sendreply so that we can assert the reply sent
-		err = mdsMock.SendReply(log, messageID, payload)
+	testCase = TestCasePollOnce{
+		ContextMock: contextMock,
+		MdsMock:     mdsMock,
 	}
 
-	// create mock plugin that returns empty result
-	mockedPlugin := new(plugin.Mock)
-	mockedPlugin.On("Execute", contextMock, mock.Anything, mock.Anything).Return(contracts.PluginResult{})
+	return
+}
 
-	// create plugin runner
-	pluginRegistry := plugin.PluginRegistry{}
-	pluginRegistry["aws:runScript"] = mockedPlugin
-	pluginRunner := func(context context.T, messageID string, plugins map[string]*contracts.Configuration, sendResponse engine.SendResponse, cancelFlag task.CancelFlag) (pluginOutputs map[string]*contracts.PluginResult) {
-		return engine.RunPlugins(context, messageID, plugins, pluginRegistry, sendResponse, cancelFlag)
+func prepareTestProcessMessage(testTopic string) (proc Processor, testCase TestCaseProcessMessage) {
+
+	// create mock context and log
+	contextMock := context.NewMockDefault()
+
+	// create dummy message that would be passed processMessage
+	message := ssmmds.Message{
+		CreatedDate: &testCreatedDate,
+		Destination: &testDestination,
+		MessageId:   &testMessageId,
+		Topic:       &testTopic,
 	}
+
+	// create a agentConfig with dummy instanceID and agentInfo
+	agentConfig := contracts.AgentConfiguration{
+		AgentInfo: contracts.AgentInfo{
+			Name:      "EC2Config",
+			Version:   "1",
+			Lang:      "en-US",
+			Os:        "linux",
+			OsVersion: "1",
+		},
+		InstanceID: *message.Destination,
+	}
+
+	// create mocked service and set expectations
+	mdsMock := new(MockedMDS)
 
 	// sendCommand and cancelCommand will be processed by separate worker pools
 	// so we can define the number of workers per each
-	cancelWaitDuration := 100 * time.Millisecond
-	sendCommandTaskPool := taskimpl.NewPool(log, 1, cancelWaitDuration, clock)
-	cancelCommandTaskPool := taskimpl.NewPool(log, 1, cancelWaitDuration, clock)
+	sendCommandTaskPool := new(task.MockedPool)
+	cancelCommandTaskPool := new(task.MockedPool)
 
-	// run our method under test
 	orchestrationRootDir := ""
 
-	proc := Processor{
+	// create a mock sendDocLevelResponse function
+	isDocLevelResponseSent := false
+	sendDocLevelResponse := func(messageID string, resultStatus contracts.ResultStatus, documentTraceOutput string) {
+		isDocLevelResponseSent = true
+	}
+
+	// create a mock persistData function
+	isDataPersisted := false
+	persistData := func(msg *ssmmds.Message, bookkeeping string) {
+		isDataPersisted = true
+	}
+
+	// create a processor with all above
+	proc = Processor{
 		context:              contextMock,
 		config:               agentConfig,
 		service:              mdsMock,
 		pluginRunner:         pluginRunner,
 		sendCommandPool:      sendCommandTaskPool,
 		cancelCommandPool:    cancelCommandTaskPool,
-		buildReply:           replyBuilder,
-		sendResponse:         sendResponse,
+		sendDocLevelResponse: sendDocLevelResponse,
 		orchestrationRootDir: orchestrationRootDir,
+		persistData:          persistData,
 	}
-	proc.pollOnce()
 
-	sendCommandTaskPool.ShutdownAndWait(time.Second)
-	cancelCommandTaskPool.ShutdownAndWait(time.Second)
+	testCase = TestCaseProcessMessage{
+		ContextMock:               contextMock,
+		Message:                   message,
+		MdsMock:                   mdsMock,
+		IsDocLevelResponseSent:    &isDocLevelResponseSent,
+		IsDataPersisted:           &isDataPersisted,
+		SendCommandTaskPoolMock:   sendCommandTaskPool,
+		CancelCommandTaskPoolMock: cancelCommandTaskPool,
+	}
 
-	mockedPlugin.AssertExpectations(t)
-	mdsMock.AssertExpectations(t)
-	contextMock.AssertCalled(t, "Log")
+	return
 }
 
 func parsePluginResult(t *testing.T, pluginRuntimeStatus contracts.PluginRuntimeStatus) contracts.PluginResult {

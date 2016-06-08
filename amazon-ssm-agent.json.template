@@ -1,0 +1,31 @@
+{
+    "Profile":{
+        "ProfilePath" : "",
+        "ProfileName": ""
+    },
+    "Mds": {
+        "CommandWorkersLimit" : 5,
+        "StopTimeoutMillis" : 20000,
+        "Endpoint": "",
+        "CommandRetryLimit": 15
+    },
+    "Ssm": {
+        "Endpoint": "",
+        "HealthFrequencyMinutes": 5
+    },
+    "Agent": {
+        "Name": "amazon-ssm-agent",
+        "Region": "",
+        "OrchestrationRootDir": ""
+    },
+    "Os": {
+        "Lang": "en-US",
+        "Name": "",
+        "Version": "1"
+    },
+    "S3": {
+        "Region": "",
+        "LogBucket":"",
+        "LogKey":""
+    }
+}

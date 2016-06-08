@@ -16,9 +16,9 @@ package main
 
 import (
 	"flag"
+	"fmt"
 	"time"
 
-	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	logger "github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/platform"
@@ -27,17 +27,14 @@ import (
 )
 
 const (
-	legacyUpdaterArtifactsRoot      = "/var/log/amazon/ssm/update/"
-	firstAgentWithNewUpdaterPath    = "1.1.86.0"
-	defaultLogRootForUpdate         = "/var/log/amazon/ssm/"
-	defaultLogFileName              = "amazon-ssm-agent-update.log"
+	defaultLogFileName              = "AmazonSSMAgent-update.txt"
 	defaultWaitTimeForAgentToFinish = 2
 )
 
 var (
-	log       logger.T
-	updater   processor.T
-	setRegion = platform.SetRegion
+	log     logger.T
+	updater processor.T
+	region  = platform.Region
 )
 
 var (
@@ -57,8 +54,7 @@ var (
 )
 
 func init() {
-	log = logger.GetUpdaterLogger(defaultLogRootForUpdate, defaultLogFileName)
-	defer log.Flush()
+	log = logger.GetUpdaterLogger(logger.DefaultLogDir, defaultLogFileName)
 
 	// Sleep 2 seconds to allow agent to finishing up it's work
 	time.Sleep(defaultWaitTimeForAgentToFinish * time.Second)
@@ -90,11 +86,6 @@ func main() {
 	defer log.Close()
 	defer log.Flush()
 
-	region, err := setRegion(log, "")
-	if err != nil {
-		log.Error("please specify the region to use.")
-		return
-	}
 	log.Debug("Using region:", region)
 
 	flag.Parse()
@@ -150,6 +141,9 @@ func main() {
 		return
 	}
 
+	// Recover updater if panic occurs and fail the updater
+	defer recoverUpdaterFromPanic(context)
+
 	// Start or resume update
 	if err = updater.StartOrResumeUpdate(log, context); err != nil {
 		// Rolled back, but service cannot start, Update failed.
@@ -170,16 +164,18 @@ func resolveUpdateDetail(detail *processor.UpdateDetail) error {
 		detail.RequiresUninstall = true
 	}
 
-	compareResult, err = updateutil.VersionCompare(detail.SourceVersion, firstAgentWithNewUpdaterPath)
-	if err != nil {
+	if err := updateRoot(detail); err != nil {
 		return err
-	}
-	// New versions that with new binary locations
-	if compareResult >= 0 {
-		detail.UpdateRoot = appconfig.UpdaterArtifactsRoot
-	} else {
-		detail.UpdateRoot = legacyUpdaterArtifactsRoot
 	}
 
 	return nil
+}
+
+// recoverUpdaterFromPanic recovers updater if panic occurs and fails the updater
+func recoverUpdaterFromPanic(context *processor.UpdateContext) {
+	// recover in case the updater panics
+	if err := recover(); err != nil {
+		log.Errorf("recovered from panic for updater %v!", err)
+		updater.Failed(context, log, updateutil.ErrorUnexpected, fmt.Sprintf("%v", err), false)
+	}
 }

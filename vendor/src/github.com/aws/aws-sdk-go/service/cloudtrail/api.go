@@ -4,6 +4,7 @@
 package cloudtrail
 
 import (
+	"fmt"
 	"time"
 
 	"github.com/aws/aws-sdk-go/aws/awsutil"
@@ -183,7 +184,7 @@ func (c *CloudTrail) ListPublicKeysRequest(input *ListPublicKeysInput) (req *req
 // within the specified time range. The public key is needed to validate digest
 // files that were signed with its corresponding private key.
 //
-// CloudTrail uses different private/public key pairs per region. Each digest
+//  CloudTrail uses different private/public key pairs per region. Each digest
 // file is signed with a private key unique to its region. Therefore, when you
 // validate a digest file from a particular region, you must look in the same
 // region for its corresponding public key.
@@ -213,8 +214,6 @@ func (c *CloudTrail) ListTagsRequest(input *ListTagsInput) (req *request.Request
 	return
 }
 
-// Lists the tags for the specified trail or trails in the current region.
-//
 // Lists the tags for the trail in the current region.
 func (c *CloudTrail) ListTags(input *ListTagsInput) (*ListTagsOutput, error) {
 	req, out := c.ListTagsRequest(input)
@@ -253,10 +252,11 @@ func (c *CloudTrail) LookupEventsRequest(input *LookupEventsInput) (req *request
 // 50 possible. The response includes a token that you can use to get the next
 // page of results.
 //
-// The rate of lookup requests is limited to one per second per account. If
-// this limit is exceeded, a throttling error occurs.  Events that occurred
-// during the selected time range will not be available for lookup if CloudTrail
-// logging was not enabled when the events occurred.
+//  The rate of lookup requests is limited to one per second per account. If
+// this limit is exceeded, a throttling error occurs.
+//
+//   Events that occurred during the selected time range will not be available
+// for lookup if CloudTrail logging was not enabled when the events occurred.
 func (c *CloudTrail) LookupEvents(input *LookupEventsInput) (*LookupEventsOutput, error) {
 	req, out := c.LookupEventsRequest(input)
 	err := req.Send()
@@ -391,7 +391,9 @@ type AddTagsInput struct {
 	_ struct{} `type:"structure"`
 
 	// Specifies the ARN of the trail to which one or more tags will be added. The
-	// format of a trail ARN is arn:aws:cloudtrail:us-east-1:123456789012:trail/MyTrail.
+	// format of a trail ARN is:
+	//
+	//  arn:aws:cloudtrail:us-east-1:123456789012:trail/MyTrail
 	ResourceId *string `type:"string" required:"true"`
 
 	// Contains a list of CloudTrail tags, up to a limit of 10.
@@ -406,6 +408,29 @@ func (s AddTagsInput) String() string {
 // GoString returns the string representation
 func (s AddTagsInput) GoString() string {
 	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *AddTagsInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "AddTagsInput"}
+	if s.ResourceId == nil {
+		invalidParams.Add(request.NewErrParamRequired("ResourceId"))
+	}
+	if s.TagsList != nil {
+		for i, v := range s.TagsList {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "TagsList", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
 }
 
 // Returns the objects or data listed below if successful. Otherwise, returns
@@ -440,7 +465,7 @@ type CreateTrailInput struct {
 	// Specifies whether log file integrity validation is enabled. The default is
 	// false.
 	//
-	// When you disable log file integrity validation, the chain of digest files
+	//  When you disable log file integrity validation, the chain of digest files
 	// is broken after one hour. CloudTrail will not create digest files for log
 	// files that were delivered during a period in which log file integrity validation
 	// was disabled. For example, if you enable log file integrity validation at
@@ -464,18 +489,28 @@ type CreateTrailInput struct {
 	//
 	// Examples:
 	//
-	//  alias/MyAliasName arn:aws:kms:us-east-1:123456789012:alias/MyAliasName
-	// arn:aws:kms:us-east-1:123456789012:key/12345678-1234-1234-1234-123456789012
-	// 12345678-1234-1234-1234-123456789012
+	//   alias/MyAliasName
+	//
+	//   arn:aws:kms:us-east-1:123456789012:alias/MyAliasName
+	//
+	//   arn:aws:kms:us-east-1:123456789012:key/12345678-1234-1234-1234-123456789012
+	//
+	//   12345678-1234-1234-1234-123456789012
 	KmsKeyId *string `type:"string"`
 
 	// Specifies the name of the trail. The name must meet the following requirements:
 	//
-	//  Contain only ASCII letters (a-z, A-Z), numbers (0-9), periods (.), underscores
-	// (_), or dashes (-) Start with a letter or number, and end with a letter or
-	// number Be between 3 and 128 characters Have no adjacent periods, underscores
-	// or dashes. Names like my-_namespace and my--namespace are invalid. Not be
-	// in IP address format (for example, 192.168.5.4)
+	//   Contain only ASCII letters (a-z, A-Z), numbers (0-9), periods (.), underscores
+	// (_), or dashes (-)
+	//
+	//   Start with a letter or number, and end with a letter or number
+	//
+	//   Be between 3 and 128 characters
+	//
+	//   Have no adjacent periods, underscores or dashes. Names like my-_namespace
+	// and my--namespace are invalid.
+	//
+	//   Not be in IP address format (for example, 192.168.5.4)
 	Name *string `type:"string" required:"true"`
 
 	// Specifies the name of the Amazon S3 bucket designated for publishing log
@@ -503,6 +538,22 @@ func (s CreateTrailInput) GoString() string {
 	return s.String()
 }
 
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CreateTrailInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CreateTrailInput"}
+	if s.Name == nil {
+		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+	if s.S3BucketName == nil {
+		invalidParams.Add(request.NewErrParamRequired("S3BucketName"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
 // Returns the objects or data listed below if successful. Otherwise, returns
 // an error.
 type CreateTrailOutput struct {
@@ -526,7 +577,7 @@ type CreateTrailOutput struct {
 	// Specifies the KMS key ID that encrypts the logs delivered by CloudTrail.
 	// The value is a fully specified ARN to a KMS key in the format:
 	//
-	// arn:aws:kms:us-east-1:123456789012:key/12345678-1234-1234-1234-123456789012
+	//  arn:aws:kms:us-east-1:123456789012:key/12345678-1234-1234-1234-123456789012
 	KmsKeyId *string `type:"string"`
 
 	// Specifies whether log file integrity validation is enabled.
@@ -544,11 +595,20 @@ type CreateTrailOutput struct {
 	// Your CloudTrail Log Files (http://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-find-log-files.html).
 	S3KeyPrefix *string `type:"string"`
 
-	// Specifies the name of the Amazon SNS topic defined for notification of log
-	// file delivery.
-	SnsTopicName *string `type:"string"`
+	// Specifies the ARN of the Amazon SNS topic that CloudTrail uses to send notifications
+	// when log files are delivered. The format of a topic ARN is:
+	//
+	//  arn:aws:sns:us-east-1:123456789012:MyTopic
+	SnsTopicARN *string `type:"string"`
 
-	// Specifies the ARN of the trail that was created.
+	// Specifies the name of the Amazon SNS topic that CloudTrail uses to send notifications
+	// when log files are delivered.
+	SnsTopicName *string `deprecated:"true" type:"string"`
+
+	// Specifies the ARN of the trail that was created. The format of a trail ARN
+	// is:
+	//
+	//  arn:aws:cloudtrail:us-east-1:123456789012:trail/MyTrail
 	TrailARN *string `type:"string"`
 }
 
@@ -567,7 +627,9 @@ type DeleteTrailInput struct {
 	_ struct{} `type:"structure"`
 
 	// Specifies the name or the CloudTrail ARN of the trail to be deleted. The
-	// format of a trail ARN is arn:aws:cloudtrail:us-east-1:123456789012:trail/MyTrail.
+	// format of a trail ARN is:
+	//
+	//  arn:aws:cloudtrail:us-east-1:123456789012:trail/MyTrail
 	Name *string `type:"string" required:"true"`
 }
 
@@ -579,6 +641,19 @@ func (s DeleteTrailInput) String() string {
 // GoString returns the string representation
 func (s DeleteTrailInput) GoString() string {
 	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DeleteTrailInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DeleteTrailInput"}
+	if s.Name == nil {
+		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
 }
 
 // Returns the objects or data listed below if successful. Otherwise, returns
@@ -607,18 +682,24 @@ type DescribeTrailsInput struct {
 	IncludeShadowTrails *bool `locationName:"includeShadowTrails" type:"boolean"`
 
 	// Specifies a list of trail names, trail ARNs, or both, of the trails to describe.
-	// The format of a trail ARN is arn:aws:cloudtrail:us-east-1:123456789012:trail/MyTrail.
-	// If an empty list is specified, information for the trail in the current region
-	// is returned.
+	// The format of a trail ARN is:
 	//
-	//  If an empty list is specified and IncludeShadowTrails is false, then information
-	// for all trails in the current region is returned.  If an empty list is specified
-	// and IncludeShadowTrails is null or true, then information for all trails
-	// in the current region and any associated shadow trails in other regions is
-	// returned.   If one or more trail names are specified, information is returned
-	// only if the names match the names of trails belonging only to the current
-	// region. To return information about a trail in another region, you must specify
-	// its trail ARN.
+	//  arn:aws:cloudtrail:us-east-1:123456789012:trail/MyTrail
+	//
+	// If an empty list is specified, information for the trail in the current
+	// region is returned.
+	//
+	//   If an empty list is specified and IncludeShadowTrails is false, then information
+	// for all trails in the current region is returned.
+	//
+	//   If an empty list is specified and IncludeShadowTrails is null or true,
+	// then information for all trails in the current region and any associated
+	// shadow trails in other regions is returned.
+	//
+	//    If one or more trail names are specified, information is returned only
+	// if the names match the names of trails belonging only to the current region.
+	// To return information about a trail in another region, you must specify its
+	// trail ARN.
 	TrailNameList []*string `locationName:"trailNameList" type:"list"`
 }
 
@@ -692,7 +773,9 @@ type GetTrailStatusInput struct {
 
 	// Specifies the name or the CloudTrail ARN of the trail for which you are requesting
 	// status. To get the status of a shadow trail (a replication of the trail in
-	// another region), you must specify its ARN. The format of a trail ARN is arn:aws:cloudtrail:us-east-1:123456789012:trail/MyTrail.
+	// another region), you must specify its ARN. The format of a trail ARN is:
+	//
+	//  arn:aws:cloudtrail:us-east-1:123456789012:trail/MyTrail
 	Name *string `type:"string" required:"true"`
 }
 
@@ -704,6 +787,19 @@ func (s GetTrailStatusInput) String() string {
 // GoString returns the string representation
 func (s GetTrailStatusInput) GoString() string {
 	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GetTrailStatusInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "GetTrailStatusInput"}
+	if s.Name == nil {
+		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
 }
 
 // Returns the objects or data listed below if successful. Otherwise, returns
@@ -733,10 +829,10 @@ type GetTrailStatusOutput struct {
 	// topic Error Responses (http://docs.aws.amazon.com/AmazonS3/latest/API/ErrorResponses.html)
 	// in the Amazon S3 API Reference.
 	//
-	// This error occurs only when there is a problem with the destination S3 bucket
-	// and will not occur for timeouts. To resolve the issue, create a new bucket
-	// and call UpdateTrail to specify the new bucket, or fix the existing objects
-	// so that CloudTrail can again write to the bucket.
+	//  This error occurs only when there is a problem with the destination S3
+	// bucket and will not occur for timeouts. To resolve the issue, create a new
+	// bucket and call UpdateTrail to specify the new bucket, or fix the existing
+	// objects so that CloudTrail can again write to the bucket.
 	LatestDeliveryError *string `type:"string"`
 
 	// Specifies the date and time that CloudTrail last delivered log files to an
@@ -748,10 +844,10 @@ type GetTrailStatusOutput struct {
 	// the topic Error Responses (http://docs.aws.amazon.com/AmazonS3/latest/API/ErrorResponses.html)
 	// in the Amazon S3 API Reference.
 	//
-	// This error occurs only when there is a problem with the destination S3 bucket
-	// and will not occur for timeouts. To resolve the issue, create a new bucket
-	// and call UpdateTrail to specify the new bucket, or fix the existing objects
-	// so that CloudTrail can again write to the bucket.
+	//  This error occurs only when there is a problem with the destination S3
+	// bucket and will not occur for timeouts. To resolve the issue, create a new
+	// bucket and call UpdateTrail to specify the new bucket, or fix the existing
+	// objects so that CloudTrail can again write to the bucket.
 	LatestDigestDeliveryError *string `type:"string"`
 
 	// Specifies the date and time that CloudTrail last delivered a digest file
@@ -835,7 +931,7 @@ type ListPublicKeysOutput struct {
 
 	// Contains an array of PublicKey objects.
 	//
-	// The returned public keys may have validity time ranges that overlap.
+	//  The returned public keys may have validity time ranges that overlap.
 	PublicKeyList []*PublicKey `type:"list"`
 }
 
@@ -857,7 +953,9 @@ type ListTagsInput struct {
 	NextToken *string `type:"string"`
 
 	// Specifies a list of trail ARNs whose tags will be listed. The list has a
-	// limit of 20 ARNs. The format of a trail ARN is arn:aws:cloudtrail:us-east-1:123456789012:trail/MyTrail.
+	// limit of 20 ARNs. The format of a trail ARN is:
+	//
+	//  arn:aws:cloudtrail:us-east-1:123456789012:trail/MyTrail
 	ResourceIdList []*string `type:"list" required:"true"`
 }
 
@@ -869,6 +967,19 @@ func (s ListTagsInput) String() string {
 // GoString returns the string representation
 func (s ListTagsInput) GoString() string {
 	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListTagsInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListTagsInput"}
+	if s.ResourceIdList == nil {
+		invalidParams.Add(request.NewErrParamRequired("ResourceIdList"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
 }
 
 // Returns the objects or data listed below if successful. Otherwise, returns
@@ -914,6 +1025,22 @@ func (s LookupAttribute) GoString() string {
 	return s.String()
 }
 
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *LookupAttribute) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "LookupAttribute"}
+	if s.AttributeKey == nil {
+		invalidParams.Add(request.NewErrParamRequired("AttributeKey"))
+	}
+	if s.AttributeValue == nil {
+		invalidParams.Add(request.NewErrParamRequired("AttributeValue"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
 // Contains a request for LookupEvents.
 type LookupEventsInput struct {
 	_ struct{} `type:"structure"`
@@ -952,6 +1079,29 @@ func (s LookupEventsInput) String() string {
 // GoString returns the string representation
 func (s LookupEventsInput) GoString() string {
 	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *LookupEventsInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "LookupEventsInput"}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
+	}
+	if s.LookupAttributes != nil {
+		for i, v := range s.LookupAttributes {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "LookupAttributes", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
 }
 
 // Contains a response to a LookupEvents action.
@@ -995,6 +1145,8 @@ type PublicKey struct {
 	ValidityStartTime *time.Time `type:"timestamp" timestampFormat:"unix"`
 
 	// The DER encoded public key value in PKCS#1 format.
+	//
+	// Value is automatically base64 encoded/decoded by the SDK.
 	Value []byte `type:"blob"`
 }
 
@@ -1013,7 +1165,9 @@ type RemoveTagsInput struct {
 	_ struct{} `type:"structure"`
 
 	// Specifies the ARN of the trail from which tags should be removed. The format
-	// of a trail ARN is arn:aws:cloudtrail:us-east-1:123456789012:trail/MyTrail.
+	// of a trail ARN is:
+	//
+	//  arn:aws:cloudtrail:us-east-1:123456789012:trail/MyTrail
 	ResourceId *string `type:"string" required:"true"`
 
 	// Specifies a list of tags to be removed.
@@ -1028,6 +1182,29 @@ func (s RemoveTagsInput) String() string {
 // GoString returns the string representation
 func (s RemoveTagsInput) GoString() string {
 	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *RemoveTagsInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "RemoveTagsInput"}
+	if s.ResourceId == nil {
+		invalidParams.Add(request.NewErrParamRequired("ResourceId"))
+	}
+	if s.TagsList != nil {
+		for i, v := range s.TagsList {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "TagsList", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
 }
 
 // Returns the objects or data listed below if successful. Otherwise, returns
@@ -1100,7 +1277,9 @@ type StartLoggingInput struct {
 	_ struct{} `type:"structure"`
 
 	// Specifies the name or the CloudTrail ARN of the trail for which CloudTrail
-	// logs AWS API calls. The format of a trail ARN is arn:aws:cloudtrail:us-east-1:123456789012:trail/MyTrail.
+	// logs AWS API calls. The format of a trail ARN is:
+	//
+	//  arn:aws:cloudtrail:us-east-1:123456789012:trail/MyTrail
 	Name *string `type:"string" required:"true"`
 }
 
@@ -1112,6 +1291,19 @@ func (s StartLoggingInput) String() string {
 // GoString returns the string representation
 func (s StartLoggingInput) GoString() string {
 	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *StartLoggingInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "StartLoggingInput"}
+	if s.Name == nil {
+		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
 }
 
 // Returns the objects or data listed below if successful. Otherwise, returns
@@ -1136,7 +1328,9 @@ type StopLoggingInput struct {
 	_ struct{} `type:"structure"`
 
 	// Specifies the name or the CloudTrail ARN of the trail for which CloudTrail
-	// will stop logging AWS API calls. The format of a trail ARN is arn:aws:cloudtrail:us-east-1:123456789012:trail/MyTrail.
+	// will stop logging AWS API calls. The format of a trail ARN is:
+	//
+	//  arn:aws:cloudtrail:us-east-1:123456789012:trail/MyTrail
 	Name *string `type:"string" required:"true"`
 }
 
@@ -1148,6 +1342,19 @@ func (s StopLoggingInput) String() string {
 // GoString returns the string representation
 func (s StopLoggingInput) GoString() string {
 	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *StopLoggingInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "StopLoggingInput"}
+	if s.Name == nil {
+		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
 }
 
 // Returns the objects or data listed below if successful. Otherwise, returns
@@ -1189,6 +1396,19 @@ func (s Tag) GoString() string {
 	return s.String()
 }
 
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *Tag) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "Tag"}
+	if s.Key == nil {
+		invalidParams.Add(request.NewErrParamRequired("Key"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
 // The settings for a trail.
 type Trail struct {
 	_ struct{} `type:"structure"`
@@ -1214,7 +1434,7 @@ type Trail struct {
 	// Specifies the KMS key ID that encrypts the logs delivered by CloudTrail.
 	// The value is a fully specified ARN to a KMS key in the format:
 	//
-	// arn:aws:kms:us-east-1:123456789012:key/12345678-1234-1234-1234-123456789012
+	//  arn:aws:kms:us-east-1:123456789012:key/12345678-1234-1234-1234-123456789012
 	KmsKeyId *string `type:"string"`
 
 	// Specifies whether log file validation is enabled.
@@ -1233,12 +1453,19 @@ type Trail struct {
 	// maximum length is 200 characters.
 	S3KeyPrefix *string `type:"string"`
 
-	// Name of the existing Amazon SNS topic that CloudTrail uses to notify the
-	// account owner when new CloudTrail log files have been delivered. The maximum
-	// length is 256 characters.
-	SnsTopicName *string `type:"string"`
+	// Specifies the ARN of the Amazon SNS topic that CloudTrail uses to send notifications
+	// when log files are delivered. The format of a topic ARN is:
+	//
+	//  arn:aws:sns:us-east-1:123456789012:MyTopic
+	SnsTopicARN *string `type:"string"`
 
-	// The Amazon Resource Name of the trail. The TrailARN format is arn:aws:cloudtrail:us-east-1:123456789012:trail/MyTrail.
+	// Specifies the name of the Amazon SNS topic that CloudTrail uses to send notifications
+	// when log files are delivered.
+	SnsTopicName *string `deprecated:"true" type:"string"`
+
+	// Specifies the ARN of the trail. The format of a trail ARN is:
+	//
+	//  arn:aws:cloudtrail:us-east-1:123456789012:trail/MyTrail
 	TrailARN *string `type:"string"`
 }
 
@@ -1267,7 +1494,7 @@ type UpdateTrailInput struct {
 
 	// Specifies whether log file validation is enabled. The default is false.
 	//
-	// When you disable log file integrity validation, the chain of digest files
+	//  When you disable log file integrity validation, the chain of digest files
 	// is broken after one hour. CloudTrail will not create digest files for log
 	// files that were delivered during a period in which log file integrity validation
 	// was disabled. For example, if you enable log file integrity validation at
@@ -1295,20 +1522,33 @@ type UpdateTrailInput struct {
 	//
 	// Examples:
 	//
-	//  alias/MyAliasName arn:aws:kms:us-east-1:123456789012:alias/MyAliasName
-	// arn:aws:kms:us-east-1:123456789012:key/12345678-1234-1234-1234-123456789012
-	// 12345678-1234-1234-1234-123456789012
+	//   alias/MyAliasName
+	//
+	//   arn:aws:kms:us-east-1:123456789012:alias/MyAliasName
+	//
+	//   arn:aws:kms:us-east-1:123456789012:key/12345678-1234-1234-1234-123456789012
+	//
+	//   12345678-1234-1234-1234-123456789012
 	KmsKeyId *string `type:"string"`
 
 	// Specifies the name of the trail or trail ARN. If Name is a trail name, the
 	// string must meet the following requirements:
 	//
-	//  Contain only ASCII letters (a-z, A-Z), numbers (0-9), periods (.), underscores
-	// (_), or dashes (-) Start with a letter or number, and end with a letter or
-	// number Be between 3 and 128 characters Have no adjacent periods, underscores
-	// or dashes. Names like my-_namespace and my--namespace are invalid. Not be
-	// in IP address format (for example, 192.168.5.4)  If Name is a trail ARN,
-	// it must be in the format arn:aws:cloudtrail:us-east-1:123456789012:trail/MyTrail.
+	//   Contain only ASCII letters (a-z, A-Z), numbers (0-9), periods (.), underscores
+	// (_), or dashes (-)
+	//
+	//   Start with a letter or number, and end with a letter or number
+	//
+	//   Be between 3 and 128 characters
+	//
+	//   Have no adjacent periods, underscores or dashes. Names like my-_namespace
+	// and my--namespace are invalid.
+	//
+	//   Not be in IP address format (for example, 192.168.5.4)
+	//
+	//   If Name is a trail ARN, it must be in the format:
+	//
+	//  arn:aws:cloudtrail:us-east-1:123456789012:trail/MyTrail
 	Name *string `type:"string" required:"true"`
 
 	// Specifies the name of the Amazon S3 bucket designated for publishing log
@@ -1336,6 +1576,19 @@ func (s UpdateTrailInput) GoString() string {
 	return s.String()
 }
 
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *UpdateTrailInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "UpdateTrailInput"}
+	if s.Name == nil {
+		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
 // Returns the objects or data listed below if successful. Otherwise, returns
 // an error.
 type UpdateTrailOutput struct {
@@ -1359,7 +1612,7 @@ type UpdateTrailOutput struct {
 	// Specifies the KMS key ID that encrypts the logs delivered by CloudTrail.
 	// The value is a fully specified ARN to a KMS key in the format:
 	//
-	// arn:aws:kms:us-east-1:123456789012:key/12345678-1234-1234-1234-123456789012
+	//  arn:aws:kms:us-east-1:123456789012:key/12345678-1234-1234-1234-123456789012
 	KmsKeyId *string `type:"string"`
 
 	// Specifies whether log file integrity validation is enabled.
@@ -1377,11 +1630,20 @@ type UpdateTrailOutput struct {
 	// Your CloudTrail Log Files (http://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-find-log-files.html).
 	S3KeyPrefix *string `type:"string"`
 
-	// Specifies the name of the Amazon SNS topic defined for notification of log
-	// file delivery.
-	SnsTopicName *string `type:"string"`
+	// Specifies the ARN of the Amazon SNS topic that CloudTrail uses to send notifications
+	// when log files are delivered. The format of a topic ARN is:
+	//
+	//  arn:aws:sns:us-east-1:123456789012:MyTopic
+	SnsTopicARN *string `type:"string"`
 
-	// Specifies the ARN of the trail that was updated.
+	// Specifies the name of the Amazon SNS topic that CloudTrail uses to send notifications
+	// when log files are delivered.
+	SnsTopicName *string `deprecated:"true" type:"string"`
+
+	// Specifies the ARN of the trail that was updated. The format of a trail ARN
+	// is:
+	//
+	//  arn:aws:cloudtrail:us-east-1:123456789012:trail/MyTrail
 	TrailARN *string `type:"string"`
 }
 

@@ -33,7 +33,7 @@ import (
 var log logger.T
 
 func init() {
-	log = logger.GetLogger()
+	log = logger.Logger()
 	defer log.Flush()
 }
 
@@ -56,7 +56,7 @@ func main() {
 	var timeout int64 = 10000
 	timeoutPtr := &timeout
 	var err error
-	_, err = platform.SetRegion(log, *regionPtr)
+	err = platform.SetRegion(*regionPtr)
 	if err != nil {
 		log.Error("please specify the region to use.")
 		return
@@ -108,7 +108,7 @@ func main() {
 		}
 	}
 
-	ssmSvc := ssm.NewService(log)
+	ssmSvc := ssm.NewService()
 	if ssmSvc == nil {
 		log.Error("couldn't create ssm service.")
 		return

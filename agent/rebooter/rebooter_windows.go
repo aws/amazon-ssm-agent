@@ -38,6 +38,9 @@ func reboot(log log.T) (err error) {
 	command.Stdout = &stdout
 	err = command.Start()
 	log.Infof("shutdown output: %v\n", stdout.String())
-	log.Errorf("shutdown error: %v\n", stderr.String())
+
+	if stderr.Len() != 0 {
+		log.Errorf("shutdown error: %v\n", stderr.String())
+	}
 	return
 }

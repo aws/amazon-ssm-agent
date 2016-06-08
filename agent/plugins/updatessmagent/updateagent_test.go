@@ -19,7 +19,6 @@ import (
 	"testing"
 	"time"
 
-	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil/artifact"
@@ -66,55 +65,6 @@ func TestAppendInfo(t *testing.T) {
 	output.AppendInfo(logger, "Info message")
 
 	assert.Contains(t, output.Stdout, "Info message")
-}
-
-func TestNewPlugin_ReturnError(t *testing.T) {
-	getAppConfig = func(reload bool) (appconfig.T, error) {
-		return appconfig.T{}, fmt.Errorf("Error Message")
-	}
-
-	_, err := NewPlugin()
-
-	assert.Error(t, err)
-}
-
-func TestNewPlugin_MissingPluginConfig(t *testing.T) {
-	getAppConfig = func(reload bool) (appconfig.T, error) {
-		config := appconfig.T{}
-		config.Plugins = make(map[string]interface{})
-		config.Plugins["aws:notexist"] = ""
-		return config, nil
-	}
-
-	_, err := NewPlugin()
-
-	assert.Contains(t, err.Error(), "Missing configuration for plugin")
-}
-
-func TestNewPlugin_CannotUnmarshal(t *testing.T) {
-	getAppConfig = func(reload bool) (appconfig.T, error) {
-		config := appconfig.T{}
-		config.Plugins = make(map[string]interface{})
-		config.Plugins[Name()] = "not a plugin"
-		return config, nil
-	}
-
-	_, err := NewPlugin()
-
-	assert.Contains(t, err.Error(), "cannot unmarshal string into Go value of type updatessmagent.Plugin")
-}
-
-func TestNewPlugin(t *testing.T) {
-	getAppConfig = func(reload bool) (appconfig.T, error) {
-		config := appconfig.T{}
-		config.Plugins = make(map[string]interface{})
-		config.Plugins[Name()] = Plugin{}
-		return config, nil
-	}
-
-	_, err := NewPlugin()
-
-	assert.NoError(t, err)
 }
 
 func TestGenerateUpdateCmd(t *testing.T) {
@@ -423,8 +373,9 @@ func TestExecute(t *testing.T) {
 	pluginInput := createStubPluginInput()
 	pluginInput.TargetVersion = ""
 	config := contracts.Configuration{}
-	config.Properties = make([]interface{}, 1)
-	config.Properties[0] = pluginInput
+	p := make([]interface{}, 1)
+	p[0] = pluginInput
+	config.Properties = p
 	plugin := &Plugin{}
 
 	pluginInput.TargetVersion = ""
@@ -537,6 +488,10 @@ func (u *fakeUtility) SaveUpdatePluginResult(
 	updateRoot string,
 	updateResult *updateutil.UpdatePluginResult) (err error) {
 	return nil
+}
+
+func (u *fakeUtility) IsDiskSpaceSufficientForUpdate(log log.T) (bool, error) {
+	return true, nil
 }
 
 type fakeUpdateManager struct {

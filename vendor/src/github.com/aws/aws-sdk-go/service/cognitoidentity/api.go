@@ -4,6 +4,7 @@
 package cognitoidentity
 
 import (
+	"fmt"
 	"time"
 
 	"github.com/aws/aws-sdk-go/aws/awsutil"
@@ -34,7 +35,10 @@ func (c *CognitoIdentity) CreateIdentityPoolRequest(input *CreateIdentityPoolInp
 
 // Creates a new identity pool. The identity pool is a store of user identity
 // information that is specific to your AWS account. The limit on identity pools
-// is 60 per account. You must use AWS Developer credentials to call this API.
+// is 60 per account. The keys for SupportedLoginProviders are as follows:
+// Facebook: graph.facebook.com Google: accounts.google.com Amazon: www.amazon.com
+// Twitter: api.twitter.com Digits: www.digits.com  You must use AWS Developer
+// credentials to call this API.
 func (c *CognitoIdentity) CreateIdentityPool(input *CreateIdentityPoolInput) (*IdentityPool, error) {
 	req, out := c.CreateIdentityPoolRequest(input)
 	err := req.Send()
@@ -183,10 +187,10 @@ func (c *CognitoIdentity) GetCredentialsForIdentityRequest(input *GetCredentials
 	return
 }
 
-// Returns credentials for the the provided identity ID. Any provided logins
-// will be validated against supported login providers. If the token is for
-// cognito-identity.amazonaws.com, it will be passed through to AWS Security
-// Token Service with the appropriate role for the token.
+// Returns credentials for the provided identity ID. Any provided logins will
+// be validated against supported login providers. If the token is for cognito-identity.amazonaws.com,
+// it will be passed through to AWS Security Token Service with the appropriate
+// role for the token.
 //
 // This is a public API. You do not need any credentials to call this API.
 func (c *CognitoIdentity) GetCredentialsForIdentity(input *GetCredentialsForIdentityInput) (*GetCredentialsForIdentityOutput, error) {
@@ -217,8 +221,6 @@ func (c *CognitoIdentity) GetIdRequest(input *GetIdInput) (req *request.Request,
 
 // Generates (or retrieves) a Cognito ID. Supplying multiple logins will create
 // an implicit linked account.
-//
-// token+";"+tokenSecret.
 //
 // This is a public API. You do not need any credentials to call this API.
 func (c *CognitoIdentity) GetId(input *GetIdInput) (*GetIdOutput, error) {
@@ -382,7 +384,7 @@ func (c *CognitoIdentity) ListIdentityPoolsRequest(input *ListIdentityPoolsInput
 
 // Lists all of the Cognito identity pools registered for your account.
 //
-// This is a public API. You do not need any credentials to call this API.
+// You must use AWS Developer credentials to call this API.
 func (c *CognitoIdentity) ListIdentityPools(input *ListIdentityPoolsInput) (*ListIdentityPoolsOutput, error) {
 	req, out := c.ListIdentityPoolsRequest(input)
 	err := req.Send()
@@ -519,7 +521,7 @@ func (c *CognitoIdentity) UnlinkDeveloperIdentityRequest(input *UnlinkDeveloperI
 // a given Cognito identity, you remove all federated identities as well as
 // the developer user identifier, the Cognito identity becomes inaccessible.
 //
-// This is a public API. You do not need any credentials to call this API.
+// You must use AWS Developer credentials to call this API.
 func (c *CognitoIdentity) UnlinkDeveloperIdentity(input *UnlinkDeveloperIdentityInput) (*UnlinkDeveloperIdentityOutput, error) {
 	req, out := c.UnlinkDeveloperIdentityRequest(input)
 	err := req.Send()
@@ -595,6 +597,9 @@ type CreateIdentityPoolInput struct {
 	// TRUE if the identity pool supports unauthenticated logins.
 	AllowUnauthenticatedIdentities *bool `type:"boolean" required:"true"`
 
+	// A list representing a Cognito User Identity Pool and its client ID.
+	CognitoIdentityProviders []*Provider `type:"list"`
+
 	// The "domain" by which Cognito will refer to your users. This name acts as
 	// a placeholder that allows your backend and the Cognito service to communicate
 	// about the developer provider. For the DeveloperProviderName, you can use
@@ -624,7 +629,39 @@ func (s CreateIdentityPoolInput) GoString() string {
 	return s.String()
 }
 
-// Credentials for the the provided identity ID.
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CreateIdentityPoolInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CreateIdentityPoolInput"}
+	if s.AllowUnauthenticatedIdentities == nil {
+		invalidParams.Add(request.NewErrParamRequired("AllowUnauthenticatedIdentities"))
+	}
+	if s.DeveloperProviderName != nil && len(*s.DeveloperProviderName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("DeveloperProviderName", 1))
+	}
+	if s.IdentityPoolName == nil {
+		invalidParams.Add(request.NewErrParamRequired("IdentityPoolName"))
+	}
+	if s.IdentityPoolName != nil && len(*s.IdentityPoolName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("IdentityPoolName", 1))
+	}
+	if s.CognitoIdentityProviders != nil {
+		for i, v := range s.CognitoIdentityProviders {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "CognitoIdentityProviders", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// Credentials for the provided identity ID.
 type Credentials struct {
 	_ struct{} `type:"structure"`
 
@@ -669,6 +706,22 @@ func (s DeleteIdentitiesInput) GoString() string {
 	return s.String()
 }
 
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DeleteIdentitiesInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DeleteIdentitiesInput"}
+	if s.IdentityIdsToDelete == nil {
+		invalidParams.Add(request.NewErrParamRequired("IdentityIdsToDelete"))
+	}
+	if s.IdentityIdsToDelete != nil && len(s.IdentityIdsToDelete) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("IdentityIdsToDelete", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
 // Returned in response to a successful DeleteIdentities operation.
 type DeleteIdentitiesOutput struct {
 	_ struct{} `type:"structure"`
@@ -706,6 +759,22 @@ func (s DeleteIdentityPoolInput) GoString() string {
 	return s.String()
 }
 
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DeleteIdentityPoolInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DeleteIdentityPoolInput"}
+	if s.IdentityPoolId == nil {
+		invalidParams.Add(request.NewErrParamRequired("IdentityPoolId"))
+	}
+	if s.IdentityPoolId != nil && len(*s.IdentityPoolId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("IdentityPoolId", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
 type DeleteIdentityPoolOutput struct {
 	_ struct{} `type:"structure"`
 }
@@ -738,6 +807,22 @@ func (s DescribeIdentityInput) GoString() string {
 	return s.String()
 }
 
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DescribeIdentityInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DescribeIdentityInput"}
+	if s.IdentityId == nil {
+		invalidParams.Add(request.NewErrParamRequired("IdentityId"))
+	}
+	if s.IdentityId != nil && len(*s.IdentityId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("IdentityId", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
 // Input to the DescribeIdentityPool action.
 type DescribeIdentityPoolInput struct {
 	_ struct{} `type:"structure"`
@@ -754,6 +839,22 @@ func (s DescribeIdentityPoolInput) String() string {
 // GoString returns the string representation
 func (s DescribeIdentityPoolInput) GoString() string {
 	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DescribeIdentityPoolInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DescribeIdentityPoolInput"}
+	if s.IdentityPoolId == nil {
+		invalidParams.Add(request.NewErrParamRequired("IdentityPoolId"))
+	}
+	if s.IdentityPoolId != nil && len(*s.IdentityPoolId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("IdentityPoolId", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
 }
 
 // Input to the GetCredentialsForIdentity action.
@@ -777,11 +878,27 @@ func (s GetCredentialsForIdentityInput) GoString() string {
 	return s.String()
 }
 
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GetCredentialsForIdentityInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "GetCredentialsForIdentityInput"}
+	if s.IdentityId == nil {
+		invalidParams.Add(request.NewErrParamRequired("IdentityId"))
+	}
+	if s.IdentityId != nil && len(*s.IdentityId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("IdentityId", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
 // Returned in response to a successful GetCredentialsForIdentity operation.
 type GetCredentialsForIdentityOutput struct {
 	_ struct{} `type:"structure"`
 
-	// Credentials for the the provided identity ID.
+	// Credentials for the provided identity ID.
 	Credentials *Credentials `type:"structure"`
 
 	// A unique identifier in the format REGION:GUID.
@@ -811,8 +928,9 @@ type GetIdInput struct {
 	// A set of optional name-value pairs that map provider names to provider tokens.
 	//
 	// The available provider names for Logins are as follows:  Facebook: graph.facebook.com
-	//  Google: accounts.google.com  Amazon: www.amazon.com  Twitter: www.twitter.com
-	//  Digits: www.digits.com
+	// Amazon Cognito Identity Provider: cognito-idp.us-east-1.amazonaws.com/us-east-1_123456789
+	// Google: accounts.google.com Amazon: www.amazon.com Twitter: api.twitter.com
+	// Digits: www.digits.com
 	Logins map[string]*string `type:"map"`
 }
 
@@ -824,6 +942,25 @@ func (s GetIdInput) String() string {
 // GoString returns the string representation
 func (s GetIdInput) GoString() string {
 	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GetIdInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "GetIdInput"}
+	if s.AccountId != nil && len(*s.AccountId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("AccountId", 1))
+	}
+	if s.IdentityPoolId == nil {
+		invalidParams.Add(request.NewErrParamRequired("IdentityPoolId"))
+	}
+	if s.IdentityPoolId != nil && len(*s.IdentityPoolId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("IdentityPoolId", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
 }
 
 // Returned in response to a GetId request.
@@ -860,6 +997,22 @@ func (s GetIdentityPoolRolesInput) String() string {
 // GoString returns the string representation
 func (s GetIdentityPoolRolesInput) GoString() string {
 	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GetIdentityPoolRolesInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "GetIdentityPoolRolesInput"}
+	if s.IdentityPoolId == nil {
+		invalidParams.Add(request.NewErrParamRequired("IdentityPoolId"))
+	}
+	if s.IdentityPoolId != nil && len(*s.IdentityPoolId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("IdentityPoolId", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
 }
 
 // Returned in response to a successful GetIdentityPoolRoles operation.
@@ -926,6 +1079,31 @@ func (s GetOpenIdTokenForDeveloperIdentityInput) GoString() string {
 	return s.String()
 }
 
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GetOpenIdTokenForDeveloperIdentityInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "GetOpenIdTokenForDeveloperIdentityInput"}
+	if s.IdentityId != nil && len(*s.IdentityId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("IdentityId", 1))
+	}
+	if s.IdentityPoolId == nil {
+		invalidParams.Add(request.NewErrParamRequired("IdentityPoolId"))
+	}
+	if s.IdentityPoolId != nil && len(*s.IdentityPoolId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("IdentityPoolId", 1))
+	}
+	if s.Logins == nil {
+		invalidParams.Add(request.NewErrParamRequired("Logins"))
+	}
+	if s.TokenDuration != nil && *s.TokenDuration < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("TokenDuration", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
 // Returned in response to a successful GetOpenIdTokenForDeveloperIdentity request.
 type GetOpenIdTokenForDeveloperIdentityOutput struct {
 	_ struct{} `type:"structure"`
@@ -956,8 +1134,9 @@ type GetOpenIdTokenInput struct {
 
 	// A set of optional name-value pairs that map provider names to provider tokens.
 	// When using graph.facebook.com and www.amazon.com, supply the access_token
-	// returned from the provider's authflow. For accounts.google.com or any other
-	// OpenId Connect provider, always include the id_token.
+	// returned from the provider's authflow. For accounts.google.com, an Amazon
+	// Cognito Identity Provider, or any other OpenId Connect provider, always include
+	// the id_token.
 	Logins map[string]*string `type:"map"`
 }
 
@@ -969,6 +1148,22 @@ func (s GetOpenIdTokenInput) String() string {
 // GoString returns the string representation
 func (s GetOpenIdTokenInput) GoString() string {
 	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GetOpenIdTokenInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "GetOpenIdTokenInput"}
+	if s.IdentityId == nil {
+		invalidParams.Add(request.NewErrParamRequired("IdentityId"))
+	}
+	if s.IdentityId != nil && len(*s.IdentityId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("IdentityId", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
 }
 
 // Returned in response to a successful GetOpenIdToken request.
@@ -1027,6 +1222,9 @@ type IdentityPool struct {
 	// TRUE if the identity pool supports unauthenticated logins.
 	AllowUnauthenticatedIdentities *bool `type:"boolean" required:"true"`
 
+	// A list representing a Cognito User Identity Pool and its client ID.
+	CognitoIdentityProviders []*Provider `type:"list"`
+
 	// The "domain" by which Cognito will refer to your users.
 	DeveloperProviderName *string `min:"1" type:"string"`
 
@@ -1051,6 +1249,44 @@ func (s IdentityPool) String() string {
 // GoString returns the string representation
 func (s IdentityPool) GoString() string {
 	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *IdentityPool) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "IdentityPool"}
+	if s.AllowUnauthenticatedIdentities == nil {
+		invalidParams.Add(request.NewErrParamRequired("AllowUnauthenticatedIdentities"))
+	}
+	if s.DeveloperProviderName != nil && len(*s.DeveloperProviderName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("DeveloperProviderName", 1))
+	}
+	if s.IdentityPoolId == nil {
+		invalidParams.Add(request.NewErrParamRequired("IdentityPoolId"))
+	}
+	if s.IdentityPoolId != nil && len(*s.IdentityPoolId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("IdentityPoolId", 1))
+	}
+	if s.IdentityPoolName == nil {
+		invalidParams.Add(request.NewErrParamRequired("IdentityPoolName"))
+	}
+	if s.IdentityPoolName != nil && len(*s.IdentityPoolName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("IdentityPoolName", 1))
+	}
+	if s.CognitoIdentityProviders != nil {
+		for i, v := range s.CognitoIdentityProviders {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "CognitoIdentityProviders", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
 }
 
 // A description of the identity pool.
@@ -1103,6 +1339,31 @@ func (s ListIdentitiesInput) GoString() string {
 	return s.String()
 }
 
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListIdentitiesInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListIdentitiesInput"}
+	if s.IdentityPoolId == nil {
+		invalidParams.Add(request.NewErrParamRequired("IdentityPoolId"))
+	}
+	if s.IdentityPoolId != nil && len(*s.IdentityPoolId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("IdentityPoolId", 1))
+	}
+	if s.MaxResults == nil {
+		invalidParams.Add(request.NewErrParamRequired("MaxResults"))
+	}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
+	}
+	if s.NextToken != nil && len(*s.NextToken) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("NextToken", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
 // The response to a ListIdentities request.
 type ListIdentitiesOutput struct {
 	_ struct{} `type:"structure"`
@@ -1146,6 +1407,25 @@ func (s ListIdentityPoolsInput) String() string {
 // GoString returns the string representation
 func (s ListIdentityPoolsInput) GoString() string {
 	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListIdentityPoolsInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListIdentityPoolsInput"}
+	if s.MaxResults == nil {
+		invalidParams.Add(request.NewErrParamRequired("MaxResults"))
+	}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
+	}
+	if s.NextToken != nil && len(*s.NextToken) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("NextToken", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
 }
 
 // The result of a successful ListIdentityPools action.
@@ -1204,6 +1484,34 @@ func (s LookupDeveloperIdentityInput) String() string {
 // GoString returns the string representation
 func (s LookupDeveloperIdentityInput) GoString() string {
 	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *LookupDeveloperIdentityInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "LookupDeveloperIdentityInput"}
+	if s.DeveloperUserIdentifier != nil && len(*s.DeveloperUserIdentifier) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("DeveloperUserIdentifier", 1))
+	}
+	if s.IdentityId != nil && len(*s.IdentityId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("IdentityId", 1))
+	}
+	if s.IdentityPoolId == nil {
+		invalidParams.Add(request.NewErrParamRequired("IdentityPoolId"))
+	}
+	if s.IdentityPoolId != nil && len(*s.IdentityPoolId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("IdentityPoolId", 1))
+	}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
+	}
+	if s.NextToken != nil && len(*s.NextToken) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("NextToken", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
 }
 
 // Returned in response to a successful LookupDeveloperIdentity action.
@@ -1268,6 +1576,40 @@ func (s MergeDeveloperIdentitiesInput) GoString() string {
 	return s.String()
 }
 
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *MergeDeveloperIdentitiesInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "MergeDeveloperIdentitiesInput"}
+	if s.DestinationUserIdentifier == nil {
+		invalidParams.Add(request.NewErrParamRequired("DestinationUserIdentifier"))
+	}
+	if s.DestinationUserIdentifier != nil && len(*s.DestinationUserIdentifier) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("DestinationUserIdentifier", 1))
+	}
+	if s.DeveloperProviderName == nil {
+		invalidParams.Add(request.NewErrParamRequired("DeveloperProviderName"))
+	}
+	if s.DeveloperProviderName != nil && len(*s.DeveloperProviderName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("DeveloperProviderName", 1))
+	}
+	if s.IdentityPoolId == nil {
+		invalidParams.Add(request.NewErrParamRequired("IdentityPoolId"))
+	}
+	if s.IdentityPoolId != nil && len(*s.IdentityPoolId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("IdentityPoolId", 1))
+	}
+	if s.SourceUserIdentifier == nil {
+		invalidParams.Add(request.NewErrParamRequired("SourceUserIdentifier"))
+	}
+	if s.SourceUserIdentifier != nil && len(*s.SourceUserIdentifier) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("SourceUserIdentifier", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
 // Returned in response to a successful MergeDeveloperIdentities action.
 type MergeDeveloperIdentitiesOutput struct {
 	_ struct{} `type:"structure"`
@@ -1284,6 +1626,43 @@ func (s MergeDeveloperIdentitiesOutput) String() string {
 // GoString returns the string representation
 func (s MergeDeveloperIdentitiesOutput) GoString() string {
 	return s.String()
+}
+
+// A provider representing a Cognito User Identity Pool and its client ID.
+type Provider struct {
+	_ struct{} `type:"structure"`
+
+	// The client ID for the Cognito User Identity Pool.
+	ClientId *string `min:"1" type:"string"`
+
+	// The provider name for a Cognito User Identity Pool. For example, cognito-idp.us-east-1.amazonaws.com/us-east-1_123456789.
+	ProviderName *string `min:"1" type:"string"`
+}
+
+// String returns the string representation
+func (s Provider) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s Provider) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *Provider) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "Provider"}
+	if s.ClientId != nil && len(*s.ClientId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ClientId", 1))
+	}
+	if s.ProviderName != nil && len(*s.ProviderName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ProviderName", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
 }
 
 // Input to the SetIdentityPoolRoles action.
@@ -1307,6 +1686,25 @@ func (s SetIdentityPoolRolesInput) String() string {
 // GoString returns the string representation
 func (s SetIdentityPoolRolesInput) GoString() string {
 	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *SetIdentityPoolRolesInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "SetIdentityPoolRolesInput"}
+	if s.IdentityPoolId == nil {
+		invalidParams.Add(request.NewErrParamRequired("IdentityPoolId"))
+	}
+	if s.IdentityPoolId != nil && len(*s.IdentityPoolId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("IdentityPoolId", 1))
+	}
+	if s.Roles == nil {
+		invalidParams.Add(request.NewErrParamRequired("Roles"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
 }
 
 type SetIdentityPoolRolesOutput struct {
@@ -1350,6 +1748,40 @@ func (s UnlinkDeveloperIdentityInput) GoString() string {
 	return s.String()
 }
 
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *UnlinkDeveloperIdentityInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "UnlinkDeveloperIdentityInput"}
+	if s.DeveloperProviderName == nil {
+		invalidParams.Add(request.NewErrParamRequired("DeveloperProviderName"))
+	}
+	if s.DeveloperProviderName != nil && len(*s.DeveloperProviderName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("DeveloperProviderName", 1))
+	}
+	if s.DeveloperUserIdentifier == nil {
+		invalidParams.Add(request.NewErrParamRequired("DeveloperUserIdentifier"))
+	}
+	if s.DeveloperUserIdentifier != nil && len(*s.DeveloperUserIdentifier) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("DeveloperUserIdentifier", 1))
+	}
+	if s.IdentityId == nil {
+		invalidParams.Add(request.NewErrParamRequired("IdentityId"))
+	}
+	if s.IdentityId != nil && len(*s.IdentityId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("IdentityId", 1))
+	}
+	if s.IdentityPoolId == nil {
+		invalidParams.Add(request.NewErrParamRequired("IdentityPoolId"))
+	}
+	if s.IdentityPoolId != nil && len(*s.IdentityPoolId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("IdentityPoolId", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
 type UnlinkDeveloperIdentityOutput struct {
 	_ struct{} `type:"structure"`
 }
@@ -1386,6 +1818,28 @@ func (s UnlinkIdentityInput) String() string {
 // GoString returns the string representation
 func (s UnlinkIdentityInput) GoString() string {
 	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *UnlinkIdentityInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "UnlinkIdentityInput"}
+	if s.IdentityId == nil {
+		invalidParams.Add(request.NewErrParamRequired("IdentityId"))
+	}
+	if s.IdentityId != nil && len(*s.IdentityId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("IdentityId", 1))
+	}
+	if s.Logins == nil {
+		invalidParams.Add(request.NewErrParamRequired("Logins"))
+	}
+	if s.LoginsToRemove == nil {
+		invalidParams.Add(request.NewErrParamRequired("LoginsToRemove"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
 }
 
 type UnlinkIdentityOutput struct {

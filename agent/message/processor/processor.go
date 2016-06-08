@@ -25,14 +25,16 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/framework/engine"
 	"github.com/aws/amazon-ssm-agent/agent/framework/plugin"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
+	"github.com/aws/amazon-ssm-agent/agent/log"
 	messageContracts "github.com/aws/amazon-ssm-agent/agent/message/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/message/parser"
 	"github.com/aws/amazon-ssm-agent/agent/message/service"
+	commandStateHelper "github.com/aws/amazon-ssm-agent/agent/message/statemanager"
 	"github.com/aws/amazon-ssm-agent/agent/platform"
 	"github.com/aws/amazon-ssm-agent/agent/sdkutil"
 	"github.com/aws/amazon-ssm-agent/agent/task"
-	"github.com/aws/amazon-ssm-agent/agent/taskimpl"
 	"github.com/aws/amazon-ssm-agent/agent/times"
+	"github.com/aws/aws-sdk-go/service/ssmmds"
 	"github.com/carlescere/scheduler"
 )
 
@@ -65,6 +67,10 @@ const (
 
 type replyBuilder func(pluginID string, results map[string]*contracts.PluginResult) messageContracts.SendReplyPayload
 
+type statusReplyBuilder func(agentInfo contracts.AgentInfo, resultStatus contracts.ResultStatus)
+
+type persistData func(msg *ssmmds.Message, bookkeeping string)
+
 // Processor is an object that can process MDS messages.
 type Processor struct {
 	context              context.T
@@ -76,6 +82,8 @@ type Processor struct {
 	cancelCommandPool    task.Pool
 	buildReply           replyBuilder
 	sendResponse         engine.SendResponse
+	sendDocLevelResponse engine.SendDocumentLevelResponse
+	persistData          persistData
 	orchestrationRootDir string
 	messagePollJob       *scheduler.Job
 	processorStopPolicy  *sdkutil.StopPolicy
@@ -94,9 +102,9 @@ func NewProcessor(context context.T) *Processor {
 	log := messageContext.Log()
 	config := messageContext.AppConfig()
 
-	instanceID := platform.InstanceID()
+	instanceID, err := platform.InstanceID()
 	if instanceID == "" {
-		log.Error("no instanceID provided")
+		log.Errorf("no instanceID provided, %v", err)
 		return nil
 	}
 
@@ -119,8 +127,8 @@ func NewProcessor(context context.T) *Processor {
 	// so we can define the number of workers per each
 	cancelWaitDuration := 10000 * time.Millisecond
 	clock := times.DefaultClock
-	sendCommandTaskPool := taskimpl.NewPool(log, config.Mds.CommandWorkersLimit, cancelWaitDuration, clock)
-	cancelCommandTaskPool := taskimpl.NewPool(log, CancelWorkersLimit, cancelWaitDuration, clock)
+	sendCommandTaskPool := task.NewPool(log, config.Mds.CommandWorkersLimit, cancelWaitDuration, clock)
+	cancelCommandTaskPool := task.NewPool(log, CancelWorkersLimit, cancelWaitDuration, clock)
 
 	// create new message processor
 	orchestrationRootDir := path.Join(appconfig.DefaultDataStorePath, instanceID, appconfig.DefaultCommandRootDirName, config.Agent.OrchestrationRootDir)
@@ -130,6 +138,10 @@ func NewProcessor(context context.T) *Processor {
 		return parser.PrepareReplyPayload(pluginID, runtimeStatuses, clock.Now(), agentConfig.AgentInfo)
 	}
 
+	statusReplyBuilder := func(agentInfo contracts.AgentInfo, resultStatus contracts.ResultStatus, documentTraceOutput string) messageContracts.SendReplyPayload {
+		return parser.PrepareReplyPayloadToUpdateDocumentStatus(agentInfo, resultStatus, documentTraceOutput)
+
+	}
 	// create a stop policy where we will stop after 10 consecutive errors and if time period expires.
 	processorStopPolicy := newStopPolicy()
 
@@ -138,16 +150,19 @@ func NewProcessor(context context.T) *Processor {
 	// If pluginID is specified, response will be sent of that particular plugin.
 	sendResponse := func(messageID string, pluginID string, results map[string]*contracts.PluginResult) {
 		payloadDoc := replyBuilder(pluginID, results)
-		payloadB, err := json.Marshal(payloadDoc)
-		if err != nil {
-			log.Error("could not marshal reply payload!", err)
-		}
-		payload := string(payloadB)
-		log.Info("Sending reply ", jsonutil.Indent(payload))
-		err = mdsService.SendReply(log, messageID, payload)
-		if err != nil {
-			sdkutil.HandleAwsError(log, err, processorStopPolicy)
-		}
+		processSendReply(log, messageID, mdsService, payloadDoc, processorStopPolicy)
+	}
+
+	// SendDocLevelResponse is used to send document level update
+	// Specify a new status of the document
+	sendDocLevelResponse := func(messageID string, resultStatus contracts.ResultStatus, documentTraceOutput string) {
+		payloadDoc := statusReplyBuilder(agentInfo, resultStatus, documentTraceOutput)
+		processSendReply(log, messageID, mdsService, payloadDoc, processorStopPolicy)
+	}
+
+	// PersistData is used to persist the data into a bookkeeping folder
+	persistData := func(msg *ssmmds.Message, bookkeeping string) {
+		commandStateHelper.PersistData(log, getCommandID(*msg.MessageId), *msg.Destination, bookkeeping, *msg)
 	}
 
 	return &Processor{
@@ -160,12 +175,27 @@ func NewProcessor(context context.T) *Processor {
 		cancelCommandPool:    cancelCommandTaskPool,
 		buildReply:           replyBuilder,
 		sendResponse:         sendResponse,
+		sendDocLevelResponse: sendDocLevelResponse,
 		orchestrationRootDir: orchestrationRootDir,
+		persistData:          persistData,
 		processorStopPolicy:  processorStopPolicy,
 	}
 }
 
-var newMdsService = func(config appconfig.T) service.Service {
+func processSendReply(log log.T, messageID string, mdsService service.Service, payloadDoc messageContracts.SendReplyPayload, processorStopPolicy *sdkutil.StopPolicy) {
+	payloadB, err := json.Marshal(payloadDoc)
+	if err != nil {
+		log.Error("could not marshal reply payload!", err)
+	}
+	payload := string(payloadB)
+	log.Info("Sending reply ", jsonutil.Indent(payload))
+	err = mdsService.SendReply(log, messageID, payload)
+	if err != nil {
+		sdkutil.HandleAwsError(log, err, processorStopPolicy)
+	}
+}
+
+var newMdsService = func(config appconfig.SsmagentConfig) service.Service {
 	connectionTimeout := time.Duration(config.Mds.StopTimeoutMillis) * time.Millisecond
 
 	return service.NewService(

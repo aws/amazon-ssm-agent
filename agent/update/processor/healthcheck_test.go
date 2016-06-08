@@ -19,7 +19,6 @@ import (
 	"testing"
 
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
-	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/ssm"
 	ssmService "github.com/aws/aws-sdk-go/service/ssm"
 	"github.com/stretchr/testify/assert"
@@ -57,7 +56,6 @@ func TestHealthCheck(t *testing.T) {
 }
 
 func TestUpdateHealthCheck(t *testing.T) {
-	instanceID := "i-30394588"
 	context := createUpdateContext(Installed)
 	service := &svcManager{}
 
@@ -65,15 +63,11 @@ func TestUpdateHealthCheck(t *testing.T) {
 	mockObj.On(
 		"UpdateInstanceInformation",
 		logger,
-		instanceID,
 		context.Current.SourceVersion,
 		updateInProgress).Return(&ssmService.UpdateInstanceInformationOutput{}, nil)
 
 	// setup
-	getInstanceID = func(log log.T, defaultID string) (string, error) {
-		return instanceID, nil
-	}
-	newSsmSvc = func(log log.T) ssm.Service {
+	newSsmSvc = func() ssm.Service {
 		return mockObj
 	}
 

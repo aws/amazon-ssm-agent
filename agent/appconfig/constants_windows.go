@@ -17,31 +17,63 @@
 
 package appconfig
 
+import (
+	"os"
+	"path/filepath"
+)
+
 const (
-	// AppConfig Path
-	AppConfigPath = "amazon-ssm-agent.json"
+	// SSM folder path under local app data.
+	SSMFolder = "Amazon\\SSM"
 
-	// DownloadRoot specifies the directory under which files will be downloaded
-	DownloadRoot = "download"
-
-	// DefaultDataStorePath represents the directory for storing system data
-	DefaultDataStorePath = "C:\\temp"
-
-	// UpdaterArtifactsRoot represents the directory for storing update related information
-	UpdaterArtifactsRoot = "C:\\temp\\ssm\\update"
+	// Exit Code that would trigger a Soft Reboot
+	RebootExitCode = 3010
 
 	// List all plugin names, unfortunately golang doesn't support const arrays of strings
 
 	// PluginNameAwsRunScript is the name of the run script plugin
 	PluginNameAwsRunScript = "aws:runPowerShellScript"
 
-	// PluginNameAwsRunScriptAlias1 specifies another alias that we want to provide.
-	// Remove this if we dont want to support legacy documents.
-	PluginNameAwsRunScriptAlias1 = "aws:runScript"
+	// PluginNameAwsPowerShellModule is the name of the PowerShell Module
+	PluginNameAwsPowerShellModule = "aws:psModule"
 
-	// PluginNameAwsAgentUpdate is the name for agent update plugin
-	PluginNameAwsAgentUpdate = "aws:updateSsmAgent"
-
-	// Exit Code that would trigger a Soft Reboot
-	RebootExitCode = 3010
+	// PluginNameAwsApplications is the name of the Applications plugin
+	PluginNameAwsApplications = "aws:applications"
 )
+
+// Program Folder
+var DefaultProgramFolder string
+
+// AppConfig Path
+var AppConfigPath string
+
+// DefaultDataStorePath represents the directory for storing system data
+var DefaultDataStorePath string
+
+// DownloadRoot specifies the directory under which files will be downloaded
+var DownloadRoot string
+
+// UpdaterArtifactsRoot represents the directory for storing update related information
+var UpdaterArtifactsRoot string
+
+// SSMData specifies the directory we used to store SSM data.
+var SSMDataPath string
+
+// Windows environment variable %ProgramFiles%
+var EnvProgramFiles string
+
+// Windows environment variable %WINDIR%
+var EnvWinDir string
+
+func init() {
+	SSMDataPath = filepath.Join(os.Getenv("ProgramData"), SSMFolder)
+	EnvProgramFiles = os.Getenv("ProgramFiles")
+	EnvWinDir = os.Getenv("WINDIR")
+	temp := os.Getenv("TEMP")
+
+	DefaultProgramFolder = filepath.Join(EnvProgramFiles, SSMFolder)
+	AppConfigPath = filepath.Join(DefaultProgramFolder, AppConfigFileName)
+	DefaultDataStorePath = filepath.Join(SSMDataPath, "InstanceData")
+	DownloadRoot = filepath.Join(temp, SSMFolder, "Download")
+	UpdaterArtifactsRoot = filepath.Join(temp, SSMFolder, "Update")
+}

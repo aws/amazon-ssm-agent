@@ -30,8 +30,8 @@ type MockCommandExecuter struct {
 }
 
 // Execute is a mocked method that just returns what mock tells it to.
-func (m *MockCommandExecuter) Execute(log log.T, workingDir string, scriptPath string, orchestrationDir string, cancelFlag task.CancelFlag, executionTimeout int) (stdout io.Reader, stderr io.Reader, exitCode int, errs []error) {
-	args := m.Called(log, workingDir, scriptPath, orchestrationDir, cancelFlag, executionTimeout)
+func (m *MockCommandExecuter) Execute(log log.T, workingDir string, stdoutFilePath string, stderrFilePath string, cancelFlag task.CancelFlag, executionTimeout int, commandName string, commandArguments []string) (stdout io.Reader, stderr io.Reader, exitCode int, errs []error) {
+	args := m.Called(log, workingDir, stdoutFilePath, stderrFilePath, cancelFlag, executionTimeout, commandName, commandArguments)
 	log.Infof("args are %v", args)
 	return args.Get(0).(io.Reader), args.Get(1).(io.Reader), args.Get(2).(int), args.Get(3).([]error)
 }

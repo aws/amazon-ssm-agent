@@ -17,7 +17,9 @@
 package platform
 
 import (
+	"os"
 	"os/exec"
+	"path/filepath"
 	"strings"
 
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
@@ -33,26 +35,12 @@ const (
 )
 
 func getPlatformName(log log.T) (value string, err error) {
-	lock.Lock()
-	defer lock.Unlock()
-
-	if cachePlatformName != "" {
-		return cachePlatformName, nil
-	}
-	cachePlatformName, cachePlatformVersion, err = getPlatformDetails(log)
-	value = cachePlatformName
+	value, _, err = getPlatformDetails(log)
 	return
 }
 
 func getPlatformVersion(log log.T) (value string, err error) {
-	lock.Lock()
-	defer lock.Unlock()
-
-	if cachePlatformVersion != "" {
-		return cachePlatformVersion, nil
-	}
-	cachePlatformName, cachePlatformVersion, err = getPlatformDetails(log)
-	value = cachePlatformVersion
+	_, value, err = getPlatformDetails(log)
 	return
 }
 
@@ -129,4 +117,27 @@ func getPlatformDetails(log log.T) (name string, version string, err error) {
 		log.Debugf("platform version %v", version)
 	}
 	return
+}
+
+var hostNameCommand = filepath.Join("bin", "hostname")
+
+// fullyQualifiedDomainName returns the Fully Qualified Domain Name of the instance, otherwise the hostname
+func fullyQualifiedDomainName() string {
+	var hostName, fqdn string
+	var err error
+
+	if hostName, err = os.Hostname(); err != nil {
+		return ""
+	}
+
+	var contentBytes []byte
+	if contentBytes, err = exec.Command(hostNameCommand, "fqdn").Output(); err == nil {
+		fqdn = string(contentBytes)
+	}
+
+	if fqdn != "" {
+		return fqdn
+	}
+
+	return hostName
 }

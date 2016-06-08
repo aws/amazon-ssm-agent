@@ -4,13 +4,27 @@
     "apiVersion":"2014-11-06",
     "endpointPrefix":"ssm",
     "jsonVersion":"1.1",
+    "protocol":"json",
     "serviceAbbreviation":"Amazon SSM",
     "serviceFullName":"Amazon Simple Systems Management Service",
     "signatureVersion":"v4",
-    "targetPrefix":"AmazonSSM",
-    "protocol":"json"
+    "targetPrefix":"AmazonSSM"
   },
   "operations":{
+    "AddTagsToResource":{
+      "name":"AddTagsToResource",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"AddTagsToResourceRequest"},
+      "output":{"shape":"AddTagsToResourceResult"},
+      "errors":[
+        {"shape":"InvalidResourceType"},
+        {"shape":"InvalidResourceId"},
+        {"shape":"InternalServerError"}
+      ]
+    },
     "CancelCommand":{
       "name":"CancelCommand",
       "http":{
@@ -20,33 +34,22 @@
       "input":{"shape":"CancelCommandRequest"},
       "output":{"shape":"CancelCommandResult"},
       "errors":[
-        {
-          "shape":"InvalidCommandId",
-          "error":{
-            "code":"InvalidCommandId",
-            "httpStatusCode":404,
-            "senderFault":true
-          },
-          "exception":true
-        },
-        {
-          "shape":"InvalidInstanceId",
-          "error":{
-            "code":"InvalidInstanceId",
-            "httpStatusCode":404,
-            "senderFault":true
-          },
-          "exception":true
-        },
-        {
-          "shape":"DuplicateInstanceId",
-          "error":{
-            "code":"DuplicateInstanceId",
-            "httpStatusCode":404,
-            "senderFault":true
-          },
-          "exception":true
-        }
+        {"shape":"InternalServerError"},
+        {"shape":"InvalidCommandId"},
+        {"shape":"InvalidInstanceId"},
+        {"shape":"DuplicateInstanceId"}
+      ]
+    },
+    "CreateActivation":{
+      "name":"CreateActivation",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"CreateActivationRequest"},
+      "output":{"shape":"CreateActivationResult"},
+      "errors":[
+        {"shape":"InternalServerError"}
       ]
     },
     "CreateAssociation":{
@@ -58,68 +61,13 @@
       "input":{"shape":"CreateAssociationRequest"},
       "output":{"shape":"CreateAssociationResult"},
       "errors":[
-        {
-          "shape":"AssociationAlreadyExists",
-          "error":{
-            "code":"AssociationAlreadyExists",
-            "httpStatusCode":400,
-            "senderFault":true
-          },
-          "exception":true
-        },
-        {
-          "shape":"AssociationLimitExceeded",
-          "error":{
-            "code":"AssociationLimitExceeded",
-            "httpStatusCode":400,
-            "senderFault":true
-          },
-          "exception":true
-        },
-        {
-          "shape":"InternalServerError",
-          "error":{
-            "code":"InternalServerError",
-            "httpStatusCode":500
-          },
-          "exception":true
-        },
-        {
-          "shape":"InvalidDocument",
-          "error":{
-            "code":"InvalidDocument",
-            "httpStatusCode":404,
-            "senderFault":true
-          },
-          "exception":true
-        },
-        {
-          "shape":"InvalidInstanceId",
-          "error":{
-            "code":"InvalidInstanceId",
-            "httpStatusCode":404,
-            "senderFault":true
-          },
-          "exception":true
-        },
-        {
-          "shape":"UnsupportedPlatformType",
-          "error":{
-            "code":"UnsupportedPlatformType",
-            "httpStatusCode":400,
-            "senderFault":true
-          },
-          "exception":true
-        },
-        {
-          "shape":"InvalidParameters",
-          "error":{
-            "code":"InvalidParameters",
-            "httpStatusCode":400,
-            "senderFault":true
-          },
-          "exception":true
-        }
+        {"shape":"AssociationAlreadyExists"},
+        {"shape":"AssociationLimitExceeded"},
+        {"shape":"InternalServerError"},
+        {"shape":"InvalidDocument"},
+        {"shape":"InvalidInstanceId"},
+        {"shape":"UnsupportedPlatformType"},
+        {"shape":"InvalidParameters"}
       ]
     },
     "CreateAssociationBatch":{
@@ -131,68 +79,13 @@
       "input":{"shape":"CreateAssociationBatchRequest"},
       "output":{"shape":"CreateAssociationBatchResult"},
       "errors":[
-        {
-          "shape":"InternalServerError",
-          "error":{
-            "code":"InternalServerError",
-            "httpStatusCode":500
-          },
-          "exception":true
-        },
-        {
-          "shape":"InvalidDocument",
-          "error":{
-            "code":"InvalidDocument",
-            "httpStatusCode":404,
-            "senderFault":true
-          },
-          "exception":true
-        },
-        {
-          "shape":"InvalidInstanceId",
-          "error":{
-            "code":"InvalidInstanceId",
-            "httpStatusCode":404,
-            "senderFault":true
-          },
-          "exception":true
-        },
-        {
-          "shape":"InvalidParameters",
-          "error":{
-            "code":"InvalidParameters",
-            "httpStatusCode":400,
-            "senderFault":true
-          },
-          "exception":true
-        },
-        {
-          "shape":"DuplicateInstanceId",
-          "error":{
-            "code":"DuplicateInstanceId",
-            "httpStatusCode":404,
-            "senderFault":true
-          },
-          "exception":true
-        },
-        {
-          "shape":"AssociationLimitExceeded",
-          "error":{
-            "code":"AssociationLimitExceeded",
-            "httpStatusCode":400,
-            "senderFault":true
-          },
-          "exception":true
-        },
-        {
-          "shape":"UnsupportedPlatformType",
-          "error":{
-            "code":"UnsupportedPlatformType",
-            "httpStatusCode":400,
-            "senderFault":true
-          },
-          "exception":true
-        }
+        {"shape":"InternalServerError"},
+        {"shape":"InvalidDocument"},
+        {"shape":"InvalidInstanceId"},
+        {"shape":"InvalidParameters"},
+        {"shape":"DuplicateInstanceId"},
+        {"shape":"AssociationLimitExceeded"},
+        {"shape":"UnsupportedPlatformType"}
       ]
     },
     "CreateDocument":{
@@ -204,50 +97,25 @@
       "input":{"shape":"CreateDocumentRequest"},
       "output":{"shape":"CreateDocumentResult"},
       "errors":[
-        {
-          "shape":"DocumentAlreadyExists",
-          "error":{
-            "code":"DocumentAlreadyExists",
-            "httpStatusCode":400,
-            "senderFault":true
-          },
-          "exception":true
-        },
-        {
-          "shape":"MaxDocumentSizeExceeded",
-          "error":{
-            "code":"MaxDocumentSizeExceeded",
-            "httpStatusCode":400,
-            "senderFault":true
-          },
-          "exception":true
-        },
-        {
-          "shape":"InternalServerError",
-          "error":{
-            "code":"InternalServerError",
-            "httpStatusCode":500
-          },
-          "exception":true
-        },
-        {
-          "shape":"InvalidDocumentContent",
-          "error":{
-            "code":"InvalidDocumentContent",
-            "httpStatusCode":400,
-            "senderFault":true
-          },
-          "exception":true
-        },
-        {
-          "shape":"DocumentLimitExceeded",
-          "error":{
-            "code":"DocumentLimitExceeded",
-            "httpStatusCode":400,
-            "senderFault":true
-          },
-          "exception":true
-        }
+        {"shape":"DocumentAlreadyExists"},
+        {"shape":"MaxDocumentSizeExceeded"},
+        {"shape":"InternalServerError"},
+        {"shape":"InvalidDocumentContent"},
+        {"shape":"DocumentLimitExceeded"}
+      ]
+    },
+    "DeleteActivation":{
+      "name":"DeleteActivation",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"DeleteActivationRequest"},
+      "output":{"shape":"DeleteActivationResult"},
+      "errors":[
+        {"shape":"InvalidActivationId"},
+        {"shape":"InvalidActivation"},
+        {"shape":"InternalServerError"}
       ]
     },
     "DeleteAssociation":{
@@ -259,50 +127,11 @@
       "input":{"shape":"DeleteAssociationRequest"},
       "output":{"shape":"DeleteAssociationResult"},
       "errors":[
-        {
-          "shape":"AssociationDoesNotExist",
-          "error":{
-            "code":"AssociationDoesNotExist",
-            "httpStatusCode":404,
-            "senderFault":true
-          },
-          "exception":true
-        },
-        {
-          "shape":"InternalServerError",
-          "error":{
-            "code":"InternalServerError",
-            "httpStatusCode":500
-          },
-          "exception":true
-        },
-        {
-          "shape":"InvalidDocument",
-          "error":{
-            "code":"InvalidDocument",
-            "httpStatusCode":404,
-            "senderFault":true
-          },
-          "exception":true
-        },
-        {
-          "shape":"InvalidInstanceId",
-          "error":{
-            "code":"InvalidInstanceId",
-            "httpStatusCode":404,
-            "senderFault":true
-          },
-          "exception":true
-        },
-        {
-          "shape":"TooManyUpdates",
-          "error":{
-            "code":"TooManyUpdates",
-            "httpStatusCode":429,
-            "senderFault":true
-          },
-          "exception":true
-        }
+        {"shape":"AssociationDoesNotExist"},
+        {"shape":"InternalServerError"},
+        {"shape":"InvalidDocument"},
+        {"shape":"InvalidInstanceId"},
+        {"shape":"TooManyUpdates"}
       ]
     },
     "DeleteDocument":{
@@ -314,32 +143,37 @@
       "input":{"shape":"DeleteDocumentRequest"},
       "output":{"shape":"DeleteDocumentResult"},
       "errors":[
-        {
-          "shape":"InternalServerError",
-          "error":{
-            "code":"InternalServerError",
-            "httpStatusCode":500
-          },
-          "exception":true
-        },
-        {
-          "shape":"InvalidDocument",
-          "error":{
-            "code":"InvalidDocument",
-            "httpStatusCode":404,
-            "senderFault":true
-          },
-          "exception":true
-        },
-        {
-          "shape":"AssociatedInstances",
-          "error":{
-            "code":"AssociatedInstances",
-            "httpStatusCode":400,
-            "senderFault":true
-          },
-          "exception":true
-        }
+        {"shape":"InternalServerError"},
+        {"shape":"InvalidDocument"},
+        {"shape":"InvalidDocumentOperation"},
+        {"shape":"AssociatedInstances"}
+      ]
+    },
+    "DeregisterManagedInstance":{
+      "name":"DeregisterManagedInstance",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"DeregisterManagedInstanceRequest"},
+      "output":{"shape":"DeregisterManagedInstanceResult"},
+      "errors":[
+        {"shape":"InvalidInstanceId"},
+        {"shape":"InternalServerError"}
+      ]
+    },
+    "DescribeActivations":{
+      "name":"DescribeActivations",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"DescribeActivationsRequest"},
+      "output":{"shape":"DescribeActivationsResult"},
+      "errors":[
+        {"shape":"InvalidFilter"},
+        {"shape":"InvalidNextToken"},
+        {"shape":"InternalServerError"}
       ]
     },
     "DescribeAssociation":{
@@ -351,41 +185,10 @@
       "input":{"shape":"DescribeAssociationRequest"},
       "output":{"shape":"DescribeAssociationResult"},
       "errors":[
-        {
-          "shape":"AssociationDoesNotExist",
-          "error":{
-            "code":"AssociationDoesNotExist",
-            "httpStatusCode":404,
-            "senderFault":true
-          },
-          "exception":true
-        },
-        {
-          "shape":"InternalServerError",
-          "error":{
-            "code":"InternalServerError",
-            "httpStatusCode":500
-          },
-          "exception":true
-        },
-        {
-          "shape":"InvalidDocument",
-          "error":{
-            "code":"InvalidDocument",
-            "httpStatusCode":404,
-            "senderFault":true
-          },
-          "exception":true
-        },
-        {
-          "shape":"InvalidInstanceId",
-          "error":{
-            "code":"InvalidInstanceId",
-            "httpStatusCode":404,
-            "senderFault":true
-          },
-          "exception":true
-        }
+        {"shape":"AssociationDoesNotExist"},
+        {"shape":"InternalServerError"},
+        {"shape":"InvalidDocument"},
+        {"shape":"InvalidInstanceId"}
       ]
     },
     "DescribeDocument":{
@@ -397,23 +200,8 @@
       "input":{"shape":"DescribeDocumentRequest"},
       "output":{"shape":"DescribeDocumentResult"},
       "errors":[
-        {
-          "shape":"InternalServerError",
-          "error":{
-            "code":"InternalServerError",
-            "httpStatusCode":500
-          },
-          "exception":true
-        },
-        {
-          "shape":"InvalidDocument",
-          "error":{
-            "code":"InvalidDocument",
-            "httpStatusCode":404,
-            "senderFault":true
-          },
-          "exception":true
-        }
+        {"shape":"InternalServerError"},
+        {"shape":"InvalidDocument"}
       ]
     },
     "DescribeDocumentParameters":{
@@ -425,23 +213,22 @@
       "input":{"shape":"DescribeDocumentParametersRequest"},
       "output":{"shape":"DescribeDocumentParametersResult"},
       "errors":[
-        {
-          "shape":"InternalServerError",
-          "error":{
-            "code":"InternalServerError",
-            "httpStatusCode":500
-          },
-          "exception":true
-        },
-        {
-          "shape":"InvalidDocument",
-          "error":{
-            "code":"InvalidDocument",
-            "httpStatusCode":404,
-            "senderFault":true
-          },
-          "exception":true
-        }
+        {"shape":"InternalServerError"},
+        {"shape":"InvalidDocument"}
+      ]
+    },
+    "DescribeDocumentPermission":{
+      "name":"DescribeDocumentPermission",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"DescribeDocumentPermissionRequest"},
+      "output":{"shape":"DescribeDocumentPermissionResponse"},
+      "errors":[
+        {"shape":"InternalServerError"},
+        {"shape":"InvalidDocument"},
+        {"shape":"InvalidPermissionType"}
       ]
     },
     "DescribeInstanceInformation":{
@@ -453,50 +240,28 @@
       "input":{"shape":"DescribeInstanceInformationRequest"},
       "output":{"shape":"DescribeInstanceInformationResult"},
       "errors":[
-        {
-          "shape":"InternalServerError",
-          "error":{
-            "code":"InternalServerError",
-            "httpStatusCode":500
-          },
-          "exception":true
-        },
-        {
-          "shape":"InvalidInstanceId",
-          "error":{
-            "code":"InvalidInstanceId",
-            "httpStatusCode":404,
-            "senderFault":true
-          },
-          "exception":true
-        },
-        {
-          "shape":"InvalidNextToken",
-          "error":{
-            "code":"InvalidNextToken",
-            "httpStatusCode":400,
-            "senderFault":true
-          },
-          "exception":true
-        },
-        {
-          "shape":"InvalidInstanceInformationFilterValue",
-          "error":{
-            "code":"InvalidInstanceInformationFilterValue",
-            "httpStatusCode":400,
-            "senderFault":true
-          },
-          "exception":true
-        },
-        {
-          "shape":"InvalidFilterKey",
-          "error":{
-            "code":"InvalidFilterKey",
-            "httpStatusCode":400,
-            "senderFault":true
-          },
-          "exception":true
-        }
+        {"shape":"InternalServerError"},
+        {"shape":"InvalidInstanceId"},
+        {"shape":"InvalidDocument"},
+        {"shape":"InvalidNextToken"},
+        {"shape":"InvalidInstanceInformationFilterValue"},
+        {"shape":"InvalidFilterKey"}
+      ]
+    },
+    "DescribeInstanceProperties":{
+      "name":"DescribeInstanceProperties",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"DescribeInstancePropertiesRequest"},
+      "output":{"shape":"DescribeInstancePropertiesResult"},
+      "errors":[
+        {"shape":"InvalidNextToken"},
+        {"shape":"InvalidFilterKey"},
+        {"shape":"InvalidInstanceId"},
+        {"shape":"InvalidInstancePropertyFilterValue"},
+        {"shape":"InternalServerError"}
       ]
     },
     "GetDocument":{
@@ -508,23 +273,8 @@
       "input":{"shape":"GetDocumentRequest"},
       "output":{"shape":"GetDocumentResult"},
       "errors":[
-        {
-          "shape":"InternalServerError",
-          "error":{
-            "code":"InternalServerError",
-            "httpStatusCode":500
-          },
-          "exception":true
-        },
-        {
-          "shape":"InvalidDocument",
-          "error":{
-            "code":"InvalidDocument",
-            "httpStatusCode":404,
-            "senderFault":true
-          },
-          "exception":true
-        }
+        {"shape":"InternalServerError"},
+        {"shape":"InvalidDocument"}
       ]
     },
     "ListAssociations":{
@@ -536,23 +286,8 @@
       "input":{"shape":"ListAssociationsRequest"},
       "output":{"shape":"ListAssociationsResult"},
       "errors":[
-        {
-          "shape":"InternalServerError",
-          "error":{
-            "code":"InternalServerError",
-            "httpStatusCode":500
-          },
-          "exception":true
-        },
-        {
-          "shape":"InvalidNextToken",
-          "error":{
-            "code":"InvalidNextToken",
-            "httpStatusCode":400,
-            "senderFault":true
-          },
-          "exception":true
-        }
+        {"shape":"InternalServerError"},
+        {"shape":"InvalidNextToken"}
       ]
     },
     "ListCommandInvocations":{
@@ -564,42 +299,11 @@
       "input":{"shape":"ListCommandInvocationsRequest"},
       "output":{"shape":"ListCommandInvocationsResult"},
       "errors":[
-        {
-          "shape":"InvalidCommandId",
-          "error":{
-            "code":"InvalidCommandId",
-            "httpStatusCode":404,
-            "senderFault":true
-          },
-          "exception":true
-        },
-        {
-          "shape":"InvalidInstanceId",
-          "error":{
-            "code":"InvalidInstanceId",
-            "httpStatusCode":404,
-            "senderFault":true
-          },
-          "exception":true
-        },
-        {
-          "shape":"InvalidFilterKey",
-          "error":{
-            "code":"InvalidFilterKey",
-            "httpStatusCode":400,
-            "senderFault":true
-          },
-          "exception":true
-        },
-        {
-          "shape":"InvalidNextToken",
-          "error":{
-            "code":"InvalidNextToken",
-            "httpStatusCode":400,
-            "senderFault":true
-          },
-          "exception":true
-        }
+        {"shape":"InternalServerError"},
+        {"shape":"InvalidCommandId"},
+        {"shape":"InvalidInstanceId"},
+        {"shape":"InvalidFilterKey"},
+        {"shape":"InvalidNextToken"}
       ]
     },
     "ListCommands":{
@@ -611,42 +315,11 @@
       "input":{"shape":"ListCommandsRequest"},
       "output":{"shape":"ListCommandsResult"},
       "errors":[
-        {
-          "shape":"InvalidCommandId",
-          "error":{
-            "code":"InvalidCommandId",
-            "httpStatusCode":404,
-            "senderFault":true
-          },
-          "exception":true
-        },
-        {
-          "shape":"InvalidInstanceId",
-          "error":{
-            "code":"InvalidInstanceId",
-            "httpStatusCode":404,
-            "senderFault":true
-          },
-          "exception":true
-        },
-        {
-          "shape":"InvalidFilterKey",
-          "error":{
-            "code":"InvalidFilterKey",
-            "httpStatusCode":400,
-            "senderFault":true
-          },
-          "exception":true
-        },
-        {
-          "shape":"InvalidNextToken",
-          "error":{
-            "code":"InvalidNextToken",
-            "httpStatusCode":400,
-            "senderFault":true
-          },
-          "exception":true
-        }
+        {"shape":"InternalServerError"},
+        {"shape":"InvalidCommandId"},
+        {"shape":"InvalidInstanceId"},
+        {"shape":"InvalidFilterKey"},
+        {"shape":"InvalidNextToken"}
       ]
     },
     "ListDocuments":{
@@ -658,32 +331,82 @@
       "input":{"shape":"ListDocumentsRequest"},
       "output":{"shape":"ListDocumentsResult"},
       "errors":[
-        {
-          "shape":"InternalServerError",
-          "error":{
-            "code":"InternalServerError",
-            "httpStatusCode":500
-          },
-          "exception":true
-        },
-        {
-          "shape":"InvalidNextToken",
-          "error":{
-            "code":"InvalidNextToken",
-            "httpStatusCode":400,
-            "senderFault":true
-          },
-          "exception":true
-        },
-        {
-          "shape":"InvalidFilterKey",
-          "error":{
-            "code":"InvalidFilterKey",
-            "httpStatusCode":400,
-            "senderFault":true
-          },
-          "exception":true
-        }
+        {"shape":"InternalServerError"},
+        {"shape":"InvalidNextToken"},
+        {"shape":"InvalidFilterKey"}
+      ]
+    },
+    "ListTagsForResource":{
+      "name":"ListTagsForResource",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"ListTagsForResourceRequest"},
+      "output":{"shape":"ListTagsForResourceResult"},
+      "errors":[
+        {"shape":"InvalidResourceType"},
+        {"shape":"InvalidResourceId"},
+        {"shape":"InternalServerError"}
+      ]
+    },
+    "ModifyDocumentPermission":{
+      "name":"ModifyDocumentPermission",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"ModifyDocumentPermissionRequest"},
+      "output":{"shape":"ModifyDocumentPermissionResponse"},
+      "errors":[
+        {"shape":"InternalServerError"},
+        {"shape":"InvalidDocument"},
+        {"shape":"InvalidPermissionType"},
+        {"shape":"DocumentPermissionLimit"},
+        {"shape":"DocumentLimitExceeded"}
+      ]
+    },
+    "RegisterManagedInstance":{
+      "name":"RegisterManagedInstance",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"RegisterManagedInstanceRequest"},
+      "output":{"shape":"RegisterManagedInstanceResult"},
+      "errors":[
+        {"shape":"InvalidActivation"},
+        {"shape":"ActivationExpired"},
+        {"shape":"RegistrationLimitExceeded"},
+        {"shape":"InternalServerError"}
+      ]
+    },
+    "RemoveTagsFromResource":{
+      "name":"RemoveTagsFromResource",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"RemoveTagsFromResourceRequest"},
+      "output":{"shape":"RemoveTagsFromResourceResult"},
+      "errors":[
+        {"shape":"InvalidResourceType"},
+        {"shape":"InvalidResourceId"},
+        {"shape":"InternalServerError"}
+      ]
+    },
+    "RequestManagedInstanceRoleToken":{
+      "name":"RequestManagedInstanceRoleToken",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"RequestManagedInstanceRoleTokenRequest"},
+      "output":{"shape":"RequestManagedInstanceRoleTokenResult"},
+      "errors":[
+        {"shape":"MachineFingerprintDoesNotMatch"},
+        {"shape":"InvalidInstanceId"},
+        {"shape":"InternalServerError"}
       ]
     },
     "SendCommand":{
@@ -695,60 +418,16 @@
       "input":{"shape":"SendCommandRequest"},
       "output":{"shape":"SendCommandResult"},
       "errors":[
-        {
-          "shape":"DuplicateInstanceId",
-          "error":{
-            "code":"DuplicateInstanceId",
-            "httpStatusCode":404,
-            "senderFault":true
-          },
-          "exception":true
-        },
-        {
-          "shape":"InvalidInstanceId",
-          "error":{
-            "code":"InvalidInstanceId",
-            "httpStatusCode":404,
-            "senderFault":true
-          },
-          "exception":true
-        },
-        {
-          "shape":"InvalidDocument",
-          "error":{
-            "code":"InvalidDocument",
-            "httpStatusCode":404,
-            "senderFault":true
-          },
-          "exception":true
-        },
-        {
-          "shape":"InvalidOutputFolder",
-          "error":{
-            "code":"InvalidOutputFolder",
-            "httpStatusCode":400,
-            "senderFault":true
-          },
-          "exception":true
-        },
-        {
-          "shape":"InvalidParameters",
-          "error":{
-            "code":"InvalidParameters",
-            "httpStatusCode":400,
-            "senderFault":true
-          },
-          "exception":true
-        },
-        {
-          "shape":"UnsupportedPlatformType",
-          "error":{
-            "code":"UnsupportedPlatformType",
-            "httpStatusCode":400,
-            "senderFault":true
-          },
-          "exception":true
-        }
+        {"shape":"DuplicateInstanceId"},
+        {"shape":"InternalServerError"},
+        {"shape":"InvalidInstanceId"},
+        {"shape":"InvalidDocument"},
+        {"shape":"InvalidOutputFolder"},
+        {"shape":"InvalidParameters"},
+        {"shape":"UnsupportedPlatformType"},
+        {"shape":"MaxDocumentSizeExceeded"},
+        {"shape":"InvalidRole"},
+        {"shape":"InvalidNotificationConfig"}
       ]
     },
     "UpdateAssociationStatus":{
@@ -760,59 +439,12 @@
       "input":{"shape":"UpdateAssociationStatusRequest"},
       "output":{"shape":"UpdateAssociationStatusResult"},
       "errors":[
-        {
-          "shape":"InternalServerError",
-          "error":{
-            "code":"InternalServerError",
-            "httpStatusCode":500
-          },
-          "exception":true
-        },
-        {
-          "shape":"InvalidInstanceId",
-          "error":{
-            "code":"InvalidInstanceId",
-            "httpStatusCode":404,
-            "senderFault":true
-          },
-          "exception":true
-        },
-        {
-          "shape":"InvalidDocument",
-          "error":{
-            "code":"InvalidDocument",
-            "httpStatusCode":404,
-            "senderFault":true
-          },
-          "exception":true
-        },
-        {
-          "shape":"AssociationDoesNotExist",
-          "error":{
-            "code":"AssociationDoesNotExist",
-            "httpStatusCode":404,
-            "senderFault":true
-          },
-          "exception":true
-        },
-        {
-          "shape":"StatusUnchanged",
-          "error":{
-            "code":"StatusUnchanged",
-            "httpStatusCode":400,
-            "senderFault":true
-          },
-          "exception":true
-        },
-        {
-          "shape":"TooManyUpdates",
-          "error":{
-            "code":"TooManyUpdates",
-            "httpStatusCode":429,
-            "senderFault":true
-          },
-          "exception":true
-        }
+        {"shape":"InternalServerError"},
+        {"shape":"InvalidInstanceId"},
+        {"shape":"InvalidDocument"},
+        {"shape":"AssociationDoesNotExist"},
+        {"shape":"StatusUnchanged"},
+        {"shape":"TooManyUpdates"}
       ]
     },
     "UpdateInstanceInformation":{
@@ -824,49 +456,118 @@
       "input":{"shape":"UpdateInstanceInformationRequest"},
       "output":{"shape":"UpdateInstanceInformationResult"},
       "errors":[
-        {
-          "shape":"InvalidInstanceId",
-          "error":{
-            "code":"InvalidInstanceId",
-            "httpStatusCode":404,
-            "senderFault":true
-          },
-          "exception":true
-        },
-        {
-          "shape":"InternalServerError",
-          "error":{
-            "code":"InternalServerError",
-            "httpStatusCode":500
-          },
-          "exception":true
-        },
-        {
-          "shape":"InvalidInstanceInformationValue",
-          "error":{
-            "code":"InvalidInstanceInformationValue",
-            "httpStatusCode":400,
-            "senderFault":true
-          },
-          "exception":true
-        }
+        {"shape":"InvalidInstanceId"},
+        {"shape":"InternalServerError"},
+        {"shape":"InvalidInstanceInformationValue"}
+      ]
+    },
+    "UpdateManagedInstancePublicKey":{
+      "name":"UpdateManagedInstancePublicKey",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"UpdateManagedInstancePublicKeyRequest"},
+      "output":{"shape":"UpdateManagedInstancePublicKeyResult"},
+      "errors":[
+        {"shape":"InvalidInstanceId"},
+        {"shape":"InternalServerError"}
+      ]
+    },
+    "UpdateManagedInstanceRole":{
+      "name":"UpdateManagedInstanceRole",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"UpdateManagedInstanceRoleRequest"},
+      "output":{"shape":"UpdateManagedInstanceRoleResult"},
+      "errors":[
+        {"shape":"InvalidInstanceId"},
+        {"shape":"InternalServerError"}
       ]
     }
   },
   "shapes":{
+    "AccessKeyId":{"type":"string"},
+    "AccountId":{
+      "type":"string",
+      "pattern":"(?i)all|[0-9]{12}"
+    },
+    "AccountIdList":{
+      "type":"list",
+      "member":{
+        "shape":"AccountId",
+        "locationName":"AccountId"
+      },
+      "max":20
+    },
+    "Activation":{
+      "type":"structure",
+      "members":{
+        "ActivationId":{"shape":"ActivationId"},
+        "Description":{"shape":"ActivationDescription"},
+        "DefaultInstanceName":{"shape":"DefaultInstanceName"},
+        "IamRole":{"shape":"IamRole"},
+        "RegistrationLimit":{"shape":"RegistrationLimit"},
+        "RegistrationsCount":{"shape":"RegistrationsCount"},
+        "ExpirationDate":{"shape":"ExpirationDate"},
+        "Expired":{"shape":"Boolean"},
+        "CreatedDate":{"shape":"CreatedDate"}
+      }
+    },
+    "ActivationCode":{
+      "type":"string",
+      "max":250,
+      "min":20
+    },
+    "ActivationDescription":{
+      "type":"string",
+      "max":256,
+      "min":0
+    },
+    "ActivationExpired":{
+      "type":"structure",
+      "members":{
+        "message":{"shape":"String"}
+      },
+      "exception":true
+    },
+    "ActivationId":{
+      "type":"string",
+      "pattern":"^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+    },
+    "ActivationList":{
+      "type":"list",
+      "member":{"shape":"Activation"}
+    },
+    "AddTagsToResourceRequest":{
+      "type":"structure",
+      "required":[
+        "ResourceType",
+        "ResourceId",
+        "Tags"
+      ],
+      "members":{
+        "ResourceType":{"shape":"ResourceTypeForTagging"},
+        "ResourceId":{"shape":"ResourceId"},
+        "Tags":{"shape":"TagList"}
+      }
+    },
+    "AddTagsToResourceResult":{
+      "type":"structure",
+      "members":{
+      }
+    },
     "AgentStatus":{
       "type":"string",
-      "min":1,
-      "max":100
+      "max":100,
+      "min":1
     },
+    "Architecture":{"type":"string"},
     "AssociatedInstances":{
       "type":"structure",
       "members":{
-      },
-      "error":{
-        "code":"AssociatedInstances",
-        "httpStatusCode":400,
-        "senderFault":true
       },
       "exception":true
     },
@@ -880,11 +581,6 @@
     "AssociationAlreadyExists":{
       "type":"structure",
       "members":{
-      },
-      "error":{
-        "code":"AssociationAlreadyExists",
-        "httpStatusCode":400,
-        "senderFault":true
       },
       "exception":true
     },
@@ -908,11 +604,6 @@
     "AssociationDoesNotExist":{
       "type":"structure",
       "members":{
-      },
-      "error":{
-        "code":"AssociationDoesNotExist",
-        "httpStatusCode":404,
-        "senderFault":true
       },
       "exception":true
     },
@@ -950,11 +641,6 @@
       "type":"structure",
       "members":{
       },
-      "error":{
-        "code":"AssociationLimitExceeded",
-        "httpStatusCode":400,
-        "senderFault":true
-      },
       "exception":true
     },
     "AssociationList":{
@@ -986,6 +672,7 @@
         "Failed"
       ]
     },
+    "AvailabilityZone":{"type":"string"},
     "BatchErrorMessage":{"type":"string"},
     "Boolean":{"type":"boolean"},
     "CancelCommandRequest":{
@@ -1005,15 +692,17 @@
       "type":"structure",
       "members":{
         "CommandId":{"shape":"CommandId"},
-        "DocumentName":{"shape":"DocumentName"},
+        "DocumentName":{"shape":"DocumentARN"},
         "Comment":{"shape":"Comment"},
-        "ExpiresAfter":{"shape":"ExpiresAfter"},
+        "ExpiresAfter":{"shape":"DateTime"},
         "Parameters":{"shape":"Parameters"},
         "InstanceIds":{"shape":"InstanceIdList"},
         "RequestedDateTime":{"shape":"DateTime"},
         "Status":{"shape":"CommandStatus"},
         "OutputS3BucketName":{"shape":"S3BucketName"},
-        "OutputS3KeyPrefix":{"shape":"S3KeyPrefix"}
+        "OutputS3KeyPrefix":{"shape":"S3KeyPrefix"},
+        "ServiceRole":{"shape":"ServiceRole"},
+        "NotificationConfig":{"shape":"NotificationConfig"}
       }
     },
     "CommandFilter":{
@@ -1032,23 +721,26 @@
       "enum":[
         "InvokedAfter",
         "InvokedBefore",
-        "Status"
+        "Status",
+        "CommandId",
+        "InstanceId"
       ]
     },
     "CommandFilterList":{
       "type":"list",
       "member":{"shape":"CommandFilter"},
-      "min":1,
-      "max":3
+      "max":5,
+      "min":1
     },
     "CommandFilterValue":{
       "type":"string",
+      "max":37,
       "min":1
     },
     "CommandId":{
       "type":"string",
-      "min":36,
-      "max":36
+      "max":36,
+      "min":36
     },
     "CommandInvocation":{
       "type":"structure",
@@ -1056,11 +748,13 @@
         "CommandId":{"shape":"CommandId"},
         "InstanceId":{"shape":"InstanceId"},
         "Comment":{"shape":"Comment"},
-        "DocumentName":{"shape":"DocumentName"},
+        "DocumentName":{"shape":"DocumentARN"},
         "RequestedDateTime":{"shape":"DateTime"},
         "Status":{"shape":"CommandInvocationStatus"},
         "TraceOutput":{"shape":"InvocationTraceOutput"},
-        "CommandPlugins":{"shape":"CommandPluginList"}
+        "CommandPlugins":{"shape":"CommandPluginList"},
+        "ServiceRole":{"shape":"ServiceRole"},
+        "NotificationConfig":{"shape":"NotificationConfig"}
       }
     },
     "CommandInvocationList":{
@@ -1082,6 +776,11 @@
     "CommandList":{
       "type":"list",
       "member":{"shape":"Command"}
+    },
+    "CommandMaxResults":{
+      "type":"integer",
+      "max":50,
+      "min":1
     },
     "CommandPlugin":{
       "type":"structure",
@@ -1106,7 +805,7 @@
     },
     "CommandPluginOutput":{
       "type":"string",
-      "max":2500
+      "max":65536
     },
     "CommandPluginStatus":{
       "type":"string",
@@ -1135,6 +834,27 @@
       "type":"string",
       "max":100
     },
+    "CreateActivationRequest":{
+      "type":"structure",
+      "required":["IamRole"],
+      "members":{
+        "Description":{"shape":"ActivationDescription"},
+        "DefaultInstanceName":{"shape":"DefaultInstanceName"},
+        "IamRole":{"shape":"IamRole"},
+        "RegistrationLimit":{
+          "shape":"RegistrationLimit",
+          "box":true
+        },
+        "ExpirationDate":{"shape":"ExpirationDate"}
+      }
+    },
+    "CreateActivationResult":{
+      "type":"structure",
+      "members":{
+        "ActivationId":{"shape":"ActivationId"},
+        "ActivationCode":{"shape":"ActivationCode"}
+      }
+    },
     "CreateAssociationBatchRequest":{
       "type":"structure",
       "required":["Entries"],
@@ -1152,6 +872,10 @@
     },
     "CreateAssociationBatchRequestEntry":{
       "type":"structure",
+      "required":[
+        "Name",
+        "InstanceId"
+      ],
       "members":{
         "Name":{"shape":"DocumentName"},
         "InstanceId":{"shape":"InstanceId"},
@@ -1200,7 +924,26 @@
         "DocumentDescription":{"shape":"DocumentDescription"}
       }
     },
+    "CreatedDate":{"type":"timestamp"},
     "DateTime":{"type":"timestamp"},
+    "DefaultInstanceName":{
+      "type":"string",
+      "max":256,
+      "min":0,
+      "pattern":"^([\\p{L}\\p{Z}\\p{N}_.:/=+\\-@]*)$"
+    },
+    "DeleteActivationRequest":{
+      "type":"structure",
+      "required":["ActivationId"],
+      "members":{
+        "ActivationId":{"shape":"ActivationId"}
+      }
+    },
+    "DeleteActivationResult":{
+      "type":"structure",
+      "members":{
+      }
+    },
     "DeleteAssociationRequest":{
       "type":"structure",
       "required":[
@@ -1229,6 +972,55 @@
       "members":{
       }
     },
+    "DeregisterManagedInstanceRequest":{
+      "type":"structure",
+      "required":["InstanceId"],
+      "members":{
+        "InstanceId":{"shape":"ManagedInstanceId"}
+      }
+    },
+    "DeregisterManagedInstanceResult":{
+      "type":"structure",
+      "members":{
+      }
+    },
+    "DescribeActivationsFilter":{
+      "type":"structure",
+      "members":{
+        "FilterKey":{"shape":"DescribeActivationsFilterKeys"},
+        "FilterValues":{"shape":"StringList"}
+      }
+    },
+    "DescribeActivationsFilterKeys":{
+      "type":"string",
+      "enum":[
+        "ActivationIds",
+        "DefaultInstanceName",
+        "IamRole"
+      ]
+    },
+    "DescribeActivationsFilterList":{
+      "type":"list",
+      "member":{"shape":"DescribeActivationsFilter"}
+    },
+    "DescribeActivationsRequest":{
+      "type":"structure",
+      "members":{
+        "Filters":{"shape":"DescribeActivationsFilterList"},
+        "MaxResults":{
+          "shape":"MaxResults",
+          "box":true
+        },
+        "NextToken":{"shape":"NextToken"}
+      }
+    },
+    "DescribeActivationsResult":{
+      "type":"structure",
+      "members":{
+        "ActivationList":{"shape":"ActivationList"},
+        "NextToken":{"shape":"NextToken"}
+      }
+    },
     "DescribeAssociationRequest":{
       "type":"structure",
       "required":[
@@ -1250,7 +1042,7 @@
       "type":"structure",
       "required":["DocumentName"],
       "members":{
-        "DocumentName":{"shape":"DocumentName"}
+        "DocumentName":{"shape":"DocumentARN"}
       }
     },
     "DescribeDocumentParametersResult":{
@@ -1259,11 +1051,28 @@
         "Config":{"shape":"DynamicConfigParameters"}
       }
     },
+    "DescribeDocumentPermissionRequest":{
+      "type":"structure",
+      "required":[
+        "Name",
+        "PermissionType"
+      ],
+      "members":{
+        "Name":{"shape":"DocumentName"},
+        "PermissionType":{"shape":"DocumentPermissionType"}
+      }
+    },
+    "DescribeDocumentPermissionResponse":{
+      "type":"structure",
+      "members":{
+        "AccountIds":{"shape":"AccountIdList"}
+      }
+    },
     "DescribeDocumentRequest":{
       "type":"structure",
       "required":["Name"],
       "members":{
-        "Name":{"shape":"DocumentName"}
+        "Name":{"shape":"DocumentARN"}
       }
     },
     "DescribeDocumentResult":{
@@ -1290,15 +1099,38 @@
         "NextToken":{"shape":"NextToken"}
       }
     },
+    "DescribeInstancePropertiesMaxResults":{
+      "type":"integer",
+      "max":1000,
+      "min":5
+    },
+    "DescribeInstancePropertiesRequest":{
+      "type":"structure",
+      "members":{
+        "InstancePropertyFilterList":{"shape":"InstancePropertyFilterList"},
+        "MaxResults":{
+          "shape":"DescribeInstancePropertiesMaxResults",
+          "box":true
+        },
+        "NextToken":{"shape":"NextToken"}
+      }
+    },
+    "DescribeInstancePropertiesResult":{
+      "type":"structure",
+      "members":{
+        "InstanceProperties":{"shape":"InstanceProperties"},
+        "NextToken":{"shape":"NextToken"}
+      }
+    },
     "DescriptionInDocument":{"type":"string"},
+    "DocumentARN":{
+      "type":"string",
+      "pattern":"^[a-zA-Z0-9_\\-.:/]{3,128}$"
+    },
     "DocumentAlreadyExists":{
       "type":"structure",
       "members":{
-      },
-      "error":{
-        "code":"DocumentAlreadyExists",
-        "httpStatusCode":400,
-        "senderFault":true
+        "Message":{"shape":"String"}
       },
       "exception":true
     },
@@ -1310,7 +1142,10 @@
       "type":"structure",
       "members":{
         "Sha1":{"shape":"DocumentSha1"},
-        "Name":{"shape":"DocumentName"},
+        "Hash":{"shape":"DocumentHash"},
+        "HashType":{"shape":"DocumentHashType"},
+        "Name":{"shape":"DocumentARN"},
+        "Owner":{"shape":"DocumentOwner"},
         "CreatedDate":{"shape":"DateTime"},
         "Status":{"shape":"DocumentStatus"},
         "Description":{"shape":"DescriptionInDocument"},
@@ -1349,10 +1184,23 @@
       "type":"string",
       "min":1
     },
+    "DocumentHash":{
+      "type":"string",
+      "max":256
+    },
+    "DocumentHashType":{
+      "type":"string",
+      "enum":[
+        "Sha256",
+        "Sha1"
+      ]
+    },
     "DocumentIdentifier":{
       "type":"structure",
       "members":{
-        "Name":{"shape":"DocumentName"}
+        "Name":{"shape":"DocumentARN"},
+        "Owner":{"shape":"DocumentOwner"},
+        "PlatformTypes":{"shape":"PlatformTypeList"}
       }
     },
     "DocumentIdentifierList":{
@@ -1365,20 +1213,15 @@
     "DocumentLimitExceeded":{
       "type":"structure",
       "members":{
-      },
-      "error":{
-        "code":"DocumentLimitExceeded",
-        "httpStatusCode":400,
-        "senderFault":true
+        "Message":{"shape":"String"}
       },
       "exception":true
     },
     "DocumentName":{
       "type":"string",
-      "min":3,
-      "max":64,
       "pattern":"^[a-zA-Z0-9_\\-.]{3,128}$"
     },
+    "DocumentOwner":{"type":"string"},
     "DocumentParameter":{
       "type":"structure",
       "members":{
@@ -1405,6 +1248,17 @@
         "StringList"
       ]
     },
+    "DocumentPermissionLimit":{
+      "type":"structure",
+      "members":{
+        "Message":{"shape":"String"}
+      },
+      "exception":true
+    },
+    "DocumentPermissionType":{
+      "type":"string",
+      "enum":["Share"]
+    },
     "DocumentSha1":{"type":"string"},
     "DocumentStatus":{
       "type":"string",
@@ -1418,15 +1272,10 @@
       "type":"structure",
       "members":{
       },
-      "error":{
-        "code":"DuplicateInstanceId",
-        "httpStatusCode":404,
-        "senderFault":true
-      },
       "exception":true
     },
     "DynamicConfigParameters":{"type":"string"},
-    "ExpiresAfter":{"type":"string"},
+    "ExpirationDate":{"type":"timestamp"},
     "FailedCreateAssociation":{
       "type":"structure",
       "members":{
@@ -1450,31 +1299,43 @@
         "Unknown"
       ]
     },
+    "Fingerprint":{
+      "type":"string",
+      "max":100,
+      "min":0
+    },
     "GetDocumentRequest":{
       "type":"structure",
       "required":["Name"],
       "members":{
-        "Name":{"shape":"DocumentName"}
+        "Name":{"shape":"DocumentARN"}
       }
     },
     "GetDocumentResult":{
       "type":"structure",
       "members":{
-        "Name":{"shape":"DocumentName"},
+        "Name":{"shape":"DocumentARN"},
         "Content":{"shape":"DocumentContent"}
       }
     },
+    "IPAddress":{
+      "type":"string",
+      "max":46,
+      "min":1
+    },
+    "IamRole":{
+      "type":"string",
+      "max":64
+    },
     "InstanceId":{
       "type":"string",
-      "min":10,
-      "max":10,
-      "pattern":"^(?=.{10}$)(i-(\\w){8})"
+      "pattern":"(^i-(\\w{8}|\\w{17})$)|(^mi-\\w{17}$)"
     },
     "InstanceIdList":{
       "type":"list",
       "member":{"shape":"InstanceId"},
-      "min":1,
-      "max":50
+      "max":50,
+      "min":1
     },
     "InstanceInformation":{
       "type":"structure",
@@ -1492,7 +1353,17 @@
         },
         "PlatformType":{"shape":"PlatformType"},
         "PlatformName":{"shape":"String"},
-        "PlatformVersion":{"shape":"String"}
+        "PlatformVersion":{"shape":"String"},
+        "ActivationId":{"shape":"ActivationId"},
+        "IamRole":{"shape":"IamRole"},
+        "RegistrationDate":{
+          "shape":"DateTime",
+          "box":true
+        },
+        "ResourceType":{"shape":"ResourceType"},
+        "Name":{"shape":"String"},
+        "IPAddress":{"shape":"IPAddress"},
+        "ComputerName":{"shape":"String"}
       }
     },
     "InstanceInformationFilter":{
@@ -1512,7 +1383,10 @@
         "InstanceIds",
         "AgentVersion",
         "PingStatus",
-        "PlatformTypes"
+        "PlatformTypes",
+        "ActivationIds",
+        "IamRole",
+        "ResourceType"
       ]
     },
     "InstanceInformationFilterList":{
@@ -1533,8 +1407,8 @@
         "shape":"InstanceInformationFilterValue",
         "locationName":"InstanceInformationFilterValue"
       },
-      "min":1,
-      "max":100
+      "max":100,
+      "min":1
     },
     "InstanceInformationList":{
       "type":"list",
@@ -1543,14 +1417,108 @@
         "locationName":"InstanceInformation"
       }
     },
+    "InstanceName":{
+      "type":"string",
+      "max":255
+    },
+    "InstanceProperties":{
+      "type":"list",
+      "member":{
+        "shape":"InstanceProperty",
+        "locationName":"InstanceProperty"
+      }
+    },
+    "InstanceProperty":{
+      "type":"structure",
+      "members":{
+        "Name":{"shape":"InstanceName"},
+        "InstanceId":{"shape":"InstanceId"},
+        "InstanceType":{"shape":"InstanceType"},
+        "InstanceRole":{"shape":"InstanceRole"},
+        "KeyName":{"shape":"KeyName"},
+        "InstanceState":{"shape":"InstanceState"},
+        "Architecture":{"shape":"Architecture"},
+        "AvailabilityZone":{"shape":"AvailabilityZone"},
+        "IPAddress":{"shape":"IPAddress"},
+        "LaunchTime":{"shape":"DateTime"},
+        "PingStatus":{"shape":"PingStatus"},
+        "LastPingDateTime":{"shape":"DateTime"},
+        "AgentVersion":{"shape":"Version"},
+        "PlatformType":{"shape":"PlatformType"},
+        "PlatformName":{"shape":"PlatformName"},
+        "PlatformVersion":{"shape":"PlatformVersion"},
+        "ActivationId":{"shape":"ActivationId"},
+        "IamRole":{"shape":"IamRole"},
+        "RegistrationDate":{"shape":"DateTime"},
+        "ResourceType":{"shape":"String"},
+        "ComputerName":{"shape":"String"}
+      }
+    },
+    "InstancePropertyFilter":{
+      "type":"structure",
+      "required":[
+        "key",
+        "valueSet"
+      ],
+      "members":{
+        "key":{"shape":"InstancePropertyFilterKey"},
+        "valueSet":{"shape":"InstancePropertyFilterValueSet"}
+      }
+    },
+    "InstancePropertyFilterKey":{
+      "type":"string",
+      "enum":[
+        "InstanceIds",
+        "AgentVersion",
+        "PingStatus",
+        "PlatformTypes",
+        "DocumentName",
+        "ActivationIds",
+        "IamRole",
+        "ResourceType"
+      ]
+    },
+    "InstancePropertyFilterList":{
+      "type":"list",
+      "member":{
+        "shape":"InstancePropertyFilter",
+        "locationName":"InstancePropertyFilter"
+      }
+    },
+    "InstancePropertyFilterValue":{
+      "type":"string",
+      "min":1
+    },
+    "InstancePropertyFilterValueSet":{
+      "type":"list",
+      "member":{
+        "shape":"InstancePropertyFilterValue",
+        "locationName":"InstancePropertyFilterValue"
+      },
+      "max":100,
+      "min":1
+    },
+    "InstanceRole":{"type":"string"},
+    "InstanceState":{"type":"string"},
+    "InstanceType":{"type":"string"},
     "InternalServerError":{
       "type":"structure",
       "members":{
-        "message":{"shape":"String"}
+        "Message":{"shape":"String"}
       },
-      "error":{
-        "code":"InternalServerError",
-        "httpStatusCode":500
+      "exception":true
+    },
+    "InvalidActivation":{
+      "type":"structure",
+      "members":{
+        "Message":{"shape":"String"}
+      },
+      "exception":true
+    },
+    "InvalidActivationId":{
+      "type":"structure",
+      "members":{
+        "Message":{"shape":"String"}
       },
       "exception":true
     },
@@ -1558,34 +1526,33 @@
       "type":"structure",
       "members":{
       },
-      "error":{
-        "code":"InvalidCommandId",
-        "httpStatusCode":404,
-        "senderFault":true
-      },
       "exception":true
     },
     "InvalidDocument":{
       "type":"structure",
       "members":{
-        "message":{"shape":"String"}
-      },
-      "error":{
-        "code":"InvalidDocument",
-        "httpStatusCode":404,
-        "senderFault":true
+        "Message":{"shape":"String"}
       },
       "exception":true
     },
     "InvalidDocumentContent":{
       "type":"structure",
       "members":{
-        "message":{"shape":"String"}
+        "Message":{"shape":"String"}
       },
-      "error":{
-        "code":"InvalidDocumentContent",
-        "httpStatusCode":400,
-        "senderFault":true
+      "exception":true
+    },
+    "InvalidDocumentOperation":{
+      "type":"structure",
+      "members":{
+        "Message":{"shape":"String"}
+      },
+      "exception":true
+    },
+    "InvalidFilter":{
+      "type":"structure",
+      "members":{
+        "Message":{"shape":"String"}
       },
       "exception":true
     },
@@ -1593,21 +1560,12 @@
       "type":"structure",
       "members":{
       },
-      "error":{
-        "code":"InvalidFilterKey",
-        "httpStatusCode":400,
-        "senderFault":true
-      },
       "exception":true
     },
     "InvalidInstanceId":{
       "type":"structure",
       "members":{
-      },
-      "error":{
-        "code":"InvalidInstanceId",
-        "httpStatusCode":404,
-        "senderFault":true
+        "Message":{"shape":"String"}
       },
       "exception":true
     },
@@ -1616,11 +1574,6 @@
       "members":{
         "message":{"shape":"String"}
       },
-      "error":{
-        "code":"InvalidInstanceInformationFilterValue",
-        "httpStatusCode":400,
-        "senderFault":true
-      },
       "exception":true
     },
     "InvalidInstanceInformationValue":{
@@ -1628,10 +1581,12 @@
       "members":{
         "message":{"shape":"String"}
       },
-      "error":{
-        "code":"InvalidInstanceInformationValue",
-        "httpStatusCode":400,
-        "senderFault":true
+      "exception":true
+    },
+    "InvalidInstancePropertyFilterValue":{
+      "type":"structure",
+      "members":{
+        "message":{"shape":"String"}
       },
       "exception":true
     },
@@ -1639,10 +1594,12 @@
       "type":"structure",
       "members":{
       },
-      "error":{
-        "code":"InvalidNextToken",
-        "httpStatusCode":400,
-        "senderFault":true
+      "exception":true
+    },
+    "InvalidNotificationConfig":{
+      "type":"structure",
+      "members":{
+        "Message":{"shape":"String"}
       },
       "exception":true
     },
@@ -1650,29 +1607,50 @@
       "type":"structure",
       "members":{
       },
-      "error":{
-        "code":"InvalidOutputFolder",
-        "httpStatusCode":400,
-        "senderFault":true
-      },
       "exception":true
     },
     "InvalidParameters":{
       "type":"structure",
       "members":{
-        "message":{"shape":"String"}
+        "Message":{"shape":"String"}
       },
-      "error":{
-        "code":"InvalidParameters",
-        "httpStatusCode":400,
-        "senderFault":true
+      "exception":true
+    },
+    "InvalidPermissionType":{
+      "type":"structure",
+      "members":{
+        "Message":{"shape":"String"}
+      },
+      "exception":true
+    },
+    "InvalidResourceId":{
+      "type":"structure",
+      "members":{
+      },
+      "exception":true
+    },
+    "InvalidResourceType":{
+      "type":"structure",
+      "members":{
+      },
+      "exception":true
+    },
+    "InvalidRole":{
+      "type":"structure",
+      "members":{
+        "Message":{"shape":"String"}
       },
       "exception":true
     },
     "InvocationTraceOutput":{
       "type":"string",
-      "max":2500
+      "max":65536
     },
+    "KeyList":{
+      "type":"list",
+      "member":{"shape":"TagKey"}
+    },
+    "KeyName":{"type":"string"},
     "ListAssociationsRequest":{
       "type":"structure",
       "required":["AssociationFilterList"],
@@ -1698,7 +1676,7 @@
         "CommandId":{"shape":"CommandId"},
         "InstanceId":{"shape":"InstanceId"},
         "MaxResults":{
-          "shape":"MaxResults",
+          "shape":"CommandMaxResults",
           "box":true
         },
         "NextToken":{"shape":"NextToken"},
@@ -1719,7 +1697,7 @@
         "CommandId":{"shape":"CommandId"},
         "InstanceId":{"shape":"InstanceId"},
         "MaxResults":{
-          "shape":"MaxResults",
+          "shape":"CommandMaxResults",
           "box":true
         },
         "NextToken":{"shape":"NextToken"},
@@ -1733,12 +1711,17 @@
         "NextToken":{"shape":"NextToken"}
       }
     },
+    "ListDocumentsMaxResults":{
+      "type":"integer",
+      "max":50,
+      "min":1
+    },
     "ListDocumentsRequest":{
       "type":"structure",
       "members":{
         "DocumentFilterList":{"shape":"DocumentFilterList"},
         "MaxResults":{
-          "shape":"MaxResults",
+          "shape":"ListDocumentsMaxResults",
           "box":true
         },
         "NextToken":{"shape":"NextToken"}
@@ -1751,30 +1734,111 @@
         "NextToken":{"shape":"NextToken"}
       }
     },
+    "ListTagsForResourceRequest":{
+      "type":"structure",
+      "required":[
+        "ResourceType",
+        "ResourceId"
+      ],
+      "members":{
+        "ResourceType":{"shape":"ResourceTypeForTagging"},
+        "ResourceId":{"shape":"ResourceId"}
+      }
+    },
+    "ListTagsForResourceResult":{
+      "type":"structure",
+      "members":{
+        "TagList":{"shape":"TagList"}
+      }
+    },
+    "MachineFingerprintDoesNotMatch":{
+      "type":"structure",
+      "members":{
+        "message":{"shape":"String"}
+      },
+      "exception":true
+    },
+    "ManagedInstanceId":{
+      "type":"string",
+      "pattern":"^mi-[0-9a-f]{17}$"
+    },
     "MaxDocumentSizeExceeded":{
       "type":"structure",
       "members":{
-      },
-      "error":{
-        "code":"MaxDocumentSizeExceeded",
-        "httpStatusCode":400,
-        "senderFault":true
+        "Message":{"shape":"String"}
       },
       "exception":true
     },
     "MaxResults":{
       "type":"integer",
-      "min":1,
-      "max":25
+      "max":25,
+      "min":1
     },
     "MaxResultsEC2Compatible":{
       "type":"integer",
-      "min":5,
-      "max":50
+      "max":50,
+      "min":5
+    },
+    "ModifyDocumentPermissionRequest":{
+      "type":"structure",
+      "required":[
+        "Name",
+        "PermissionType"
+      ],
+      "members":{
+        "Name":{"shape":"DocumentName"},
+        "PermissionType":{"shape":"DocumentPermissionType"},
+        "AccountIdsToAdd":{"shape":"AccountIdList"},
+        "AccountIdsToRemove":{"shape":"AccountIdList"}
+      }
+    },
+    "ModifyDocumentPermissionResponse":{
+      "type":"structure",
+      "members":{
+      }
     },
     "NextToken":{"type":"string"},
-    "ParameterName":{"type":"string"},
-    "ParameterValue":{"type":"string"},
+    "NotificationArn":{"type":"string"},
+    "NotificationConfig":{
+      "type":"structure",
+      "members":{
+        "NotificationArn":{"shape":"NotificationArn"},
+        "NotificationEvents":{"shape":"NotificationEventList"},
+        "NotificationType":{"shape":"NotificationType"}
+      }
+    },
+    "NotificationEvent":{
+      "type":"string",
+      "enum":[
+        "All",
+        "InProgress",
+        "Success",
+        "TimedOut",
+        "Cancelled",
+        "Failed"
+      ]
+    },
+    "NotificationEventList":{
+      "type":"list",
+      "member":{"shape":"NotificationEvent"}
+    },
+    "NotificationType":{
+      "type":"string",
+      "enum":[
+        "Command",
+        "Invocation"
+      ]
+    },
+    "ParameterName":{
+      "type":"string",
+      "max":255,
+      "min":1
+    },
+    "ParameterValue":{
+      "type":"string",
+      "max":65535,
+      "min":1
+    },
     "ParameterValueList":{
       "type":"list",
       "member":{"shape":"ParameterValue"}
@@ -1792,6 +1856,7 @@
         "Inactive"
       ]
     },
+    "PlatformName":{"type":"string"},
     "PlatformType":{
       "type":"string",
       "enum":[
@@ -1806,16 +1871,117 @@
         "locationName":"PlatformType"
       }
     },
+    "PlatformVersion":{"type":"string"},
+    "PublicKey":{
+      "type":"string",
+      "max":392,
+      "min":392
+    },
+    "PublicKeyType":{
+      "type":"string",
+      "enum":["Rsa"]
+    },
+    "RegisterManagedInstanceRequest":{
+      "type":"structure",
+      "required":[
+        "ActivationId",
+        "ActivationCode",
+        "PublicKey",
+        "Fingerprint"
+      ],
+      "members":{
+        "ActivationId":{"shape":"ActivationId"},
+        "ActivationCode":{"shape":"ActivationCode"},
+        "PublicKey":{"shape":"PublicKey"},
+        "PublicKeyType":{"shape":"PublicKeyType"},
+        "Fingerprint":{"shape":"Fingerprint"}
+      }
+    },
+    "RegisterManagedInstanceResult":{
+      "type":"structure",
+      "members":{
+        "InstanceId":{"shape":"InstanceId"}
+      }
+    },
+    "RegistrationLimit":{
+      "type":"integer",
+      "max":1000,
+      "min":1
+    },
+    "RegistrationLimitExceeded":{
+      "type":"structure",
+      "members":{
+        "message":{"shape":"String"}
+      },
+      "exception":true
+    },
+    "RegistrationsCount":{
+      "type":"integer",
+      "max":1000,
+      "min":1
+    },
+    "RemoveTagsFromResourceRequest":{
+      "type":"structure",
+      "required":[
+        "ResourceType",
+        "ResourceId",
+        "TagKeys"
+      ],
+      "members":{
+        "ResourceType":{"shape":"ResourceTypeForTagging"},
+        "ResourceId":{"shape":"ResourceId"},
+        "TagKeys":{"shape":"KeyList"}
+      }
+    },
+    "RemoveTagsFromResourceResult":{
+      "type":"structure",
+      "members":{
+      }
+    },
+    "RequestManagedInstanceRoleTokenRequest":{
+      "type":"structure",
+      "required":["Fingerprint"],
+      "members":{
+        "Fingerprint":{"shape":"Fingerprint"}
+      }
+    },
+    "RequestManagedInstanceRoleTokenResult":{
+      "type":"structure",
+      "members":{
+        "AccessKeyId":{"shape":"AccessKeyId"},
+        "SecretAccessKey":{"shape":"SecretAccessKey"},
+        "SessionToken":{"shape":"SessionToken"},
+        "TokenExpirationDate":{"shape":"TokenExpirationDate"},
+        "UpdateKeyPair":{"shape":"UpdateKeyPair"}
+      }
+    },
+    "ResourceId":{
+      "type":"string",
+      "pattern":"^mi-[0-9a-f]{17}$"
+    },
+    "ResourceType":{
+      "type":"string",
+      "enum":[
+        "ManagedInstance",
+        "Document",
+        "EC2Instance"
+      ]
+    },
+    "ResourceTypeForTagging":{
+      "type":"string",
+      "enum":["ManagedInstance"]
+    },
     "ResponseCode":{"type":"integer"},
     "S3BucketName":{
       "type":"string",
-      "min":3,
-      "max":255
+      "max":63,
+      "min":3
     },
     "S3KeyPrefix":{
       "type":"string",
-      "max":1524
+      "max":1024
     },
+    "SecretAccessKey":{"type":"string"},
     "SendCommandRequest":{
       "type":"structure",
       "required":[
@@ -1824,7 +1990,9 @@
       ],
       "members":{
         "InstanceIds":{"shape":"InstanceIdList"},
-        "DocumentName":{"shape":"DocumentName"},
+        "DocumentName":{"shape":"DocumentARN"},
+        "DocumentHash":{"shape":"DocumentHash"},
+        "DocumentHashType":{"shape":"DocumentHashType"},
         "TimeoutSeconds":{
           "shape":"TimeoutSeconds",
           "box":true
@@ -1832,7 +2000,9 @@
         "Comment":{"shape":"Comment"},
         "Parameters":{"shape":"Parameters"},
         "OutputS3BucketName":{"shape":"S3BucketName"},
-        "OutputS3KeyPrefix":{"shape":"S3KeyPrefix"}
+        "OutputS3KeyPrefix":{"shape":"S3KeyPrefix"},
+        "ServiceRoleArn":{"shape":"ServiceRole"},
+        "NotificationConfig":{"shape":"NotificationConfig"}
       }
     },
     "SendCommandResult":{
@@ -1841,51 +2011,71 @@
         "Command":{"shape":"Command"}
       }
     },
+    "ServiceRole":{"type":"string"},
+    "SessionToken":{"type":"string"},
     "StatusAdditionalInfo":{
       "type":"string",
       "max":1024
     },
     "StatusMessage":{
       "type":"string",
-      "max":1024
+      "max":1024,
+      "min":1
     },
     "StatusUnchanged":{
       "type":"structure",
       "members":{
       },
-      "error":{
-        "code":"StatusUnchanged",
-        "httpStatusCode":400,
-        "senderFault":true
-      },
       "exception":true
     },
     "String":{"type":"string"},
+    "StringList":{
+      "type":"list",
+      "member":{"shape":"String"}
+    },
+    "Tag":{
+      "type":"structure",
+      "required":[
+        "Key",
+        "Value"
+      ],
+      "members":{
+        "Key":{"shape":"TagKey"},
+        "Value":{"shape":"TagValue"}
+      }
+    },
+    "TagKey":{
+      "type":"string",
+      "max":128,
+      "min":1,
+      "pattern":"^(?!^(?i)aws:)(?=^[\\p{L}\\p{Z}\\p{N}_.:/=+\\-@]*$).*$"
+    },
+    "TagList":{
+      "type":"list",
+      "member":{"shape":"Tag"}
+    },
+    "TagValue":{
+      "type":"string",
+      "max":256,
+      "min":1,
+      "pattern":"^([\\p{L}\\p{Z}\\p{N}_.:/=+\\-@]*)$"
+    },
     "TimeoutSeconds":{
       "type":"integer",
-      "min":30,
-      "max":2592000
+      "max":2592000,
+      "min":30
     },
+    "TokenExpirationDate":{"type":"timestamp"},
     "TooManyUpdates":{
       "type":"structure",
       "members":{
-      },
-      "error":{
-        "code":"TooManyUpdates",
-        "httpStatusCode":429,
-        "senderFault":true
       },
       "exception":true
     },
     "UnsupportedPlatformType":{
       "type":"structure",
       "members":{
-        "message":{"shape":"String"}
-      },
-      "error":{
-        "code":"UnsupportedPlatformType",
-        "httpStatusCode":400,
-        "senderFault":true
+        "Message":{"shape":"String"}
       },
       "exception":true
     },
@@ -1917,10 +2107,45 @@
         "AgentStatus":{"shape":"AgentStatus"},
         "PlatformType":{"shape":"PlatformType"},
         "PlatformName":{"shape":"String"},
-        "PlatformVersion":{"shape":"String"}
+        "PlatformVersion":{"shape":"String"},
+        "IPAddress":{"shape":"IPAddress"},
+        "ComputerName":{"shape":"String"}
       }
     },
     "UpdateInstanceInformationResult":{
+      "type":"structure",
+      "members":{
+      }
+    },
+    "UpdateKeyPair":{"type":"boolean"},
+    "UpdateManagedInstancePublicKeyRequest":{
+      "type":"structure",
+      "required":[
+        "NewPublicKey",
+        "NewPublicKeyType"
+      ],
+      "members":{
+        "NewPublicKey":{"shape":"PublicKey"},
+        "NewPublicKeyType":{"shape":"PublicKeyType"}
+      }
+    },
+    "UpdateManagedInstancePublicKeyResult":{
+      "type":"structure",
+      "members":{
+      }
+    },
+    "UpdateManagedInstanceRoleRequest":{
+      "type":"structure",
+      "required":[
+        "InstanceId",
+        "IamRole"
+      ],
+      "members":{
+        "InstanceId":{"shape":"ManagedInstanceId"},
+        "IamRole":{"shape":"IamRole"}
+      }
+    },
+    "UpdateManagedInstanceRoleResult":{
       "type":"structure",
       "members":{
       }

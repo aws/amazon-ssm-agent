@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"encoding/xml"
+	"fmt"
 	"io"
 	"io/ioutil"
 	"net/http"
@@ -36,6 +37,7 @@ var _ = util.Trim("")
 var _ = url.Values{}
 var _ = io.EOF
 var _ = aws.String
+var _ = fmt.Println
 
 func init() {
 	protocol.RandReader = &awstesting.ZeroReader{}
@@ -320,6 +322,7 @@ type OutputService3TestShapeOutputService3TestCaseOperation1Input struct {
 type OutputService3TestShapeOutputService3TestCaseOperation1Output struct {
 	_ struct{} `type:"structure"`
 
+	// Blob is automatically base64 encoded/decoded by the SDK.
 	Blob []byte `type:"blob"`
 }
 

@@ -20,6 +20,7 @@ import (
 
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
+	"github.com/aws/amazon-ssm-agent/agent/plugins/pluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/runcommand"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/updatessmagent"
 	"github.com/aws/amazon-ssm-agent/agent/task"
@@ -44,30 +45,6 @@ func RegisteredWorkerPlugins(context context.T) PluginRegistry {
 	return getCached()
 }
 
-// register worker plugins here
-func loadWorkerPlugins(context context.T) PluginRegistry {
-	log := context.Log()
-	var workerPlugins = PluginRegistry{}
-
-	// registering runcommand plugin
-	runcommandPluginName := runcommand.Name()
-	runcommandPlugin, err := runcommand.NewPlugin()
-	if err != nil {
-		log.Errorf("failed to create plugin %s %v", runcommandPluginName, err)
-	}
-	workerPlugins[runcommandPluginName] = runcommandPlugin
-
-	// registering updateagent plugin
-	updateAgentPluginName := updatessmagent.Name()
-	updateAgentPlugin, err := updatessmagent.NewPlugin()
-	if err != nil {
-		log.Errorf("failed to create plugin %s %v", updateAgentPluginName, err)
-	}
-	workerPlugins[updateAgentPluginName] = updateAgentPlugin
-
-	return workerPlugins
-}
-
 var lock sync.RWMutex
 
 func isLoaded() bool {
@@ -86,4 +63,45 @@ func getCached() PluginRegistry {
 	lock.RLock()
 	defer lock.RUnlock()
 	return *registeredExecuters
+}
+
+// loadWorkerPlugins loads all plugins
+func loadWorkerPlugins(context context.T) PluginRegistry {
+	var workerPlugins = PluginRegistry{}
+
+	for key, value := range loadPlatformIndependentPlugins(context) {
+		workerPlugins[key] = value
+	}
+
+	for key, value := range loadPlatformDependentPlugins(context) {
+		workerPlugins[key] = value
+	}
+
+	return workerPlugins
+}
+
+// loadPlatformIndependentPlugins registers plugins common to all platforms
+func loadPlatformIndependentPlugins(context context.T) PluginRegistry {
+	log := context.Log()
+	var workerPlugins = PluginRegistry{}
+
+	// registering aws:runPowerShellScript & aws:runShellScript plugin
+	runcommandPluginName := runcommand.Name()
+	runcommandPlugin, err := runcommand.NewPlugin(pluginutil.DefaultPluginConfig())
+	if err != nil {
+		log.Errorf("failed to create plugin %s %v", runcommandPluginName, err)
+	} else {
+		workerPlugins[runcommandPluginName] = runcommandPlugin
+	}
+
+	// registering aws:updateSsmAgent plugin
+	updateAgentPluginName := updatessmagent.Name()
+	updateAgentPlugin, err := updatessmagent.NewPlugin(updatessmagent.GetUpdatePluginConfig())
+	if err != nil {
+		log.Errorf("failed to create plugin %s %v", updateAgentPluginName, err)
+	} else {
+		workerPlugins[updateAgentPluginName] = updateAgentPlugin
+	}
+
+	return workerPlugins
 }

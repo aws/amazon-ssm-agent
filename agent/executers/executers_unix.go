@@ -21,13 +21,6 @@ import (
 	"syscall"
 )
 
-const (
-	// RunCommandScriptName is the script name where all downloaded or provided commands will be stored
-	RunCommandScriptName               = "_script.sh"
-	ExitCodeTrap                       = ""
-	CommandStoppedPreemptivelyExitCode = 137 // Fatal error (128) + signal for SIGKILL (9) = 137
-)
-
 func prepareProcess(command *exec.Cmd) {
 	// make the process the leader of its process group
 	// (otherwise we cannot kill it properly)
@@ -45,16 +38,4 @@ func killProcess(process *os.Process) error {
 	//   the kill here not just kills the shell but all its descendant
 	//   processes. [See manpage for kill(2)]
 	return syscall.Kill(-process.Pid, syscall.SIGKILL) // note the minus sign
-}
-
-// NewShellCommandExecuter creates a shell executer where the shell command is 'sh'.
-func NewShellCommandExecuter() *ShellCommandExecuter {
-	return &ShellCommandExecuter{
-		ShellCommand:          "sh",
-		ShellDefaultArguments: []string{"-c"},
-		ShellExitCodeTrap:     ExitCodeTrap,
-		ScriptName:            RunCommandScriptName,
-		StdoutFileName:        "stdout",
-		StderrFileName:        "stderr",
-	}
 }

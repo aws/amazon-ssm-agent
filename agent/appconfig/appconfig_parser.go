@@ -15,13 +15,20 @@
 
 package appconfig
 
-func parser(config *T) {
-	// Agent
+import (
+	"log"
+)
+
+//func parser(config *T) {
+func parser(config *SsmagentConfig) {
+	log.Printf("processing appconfig overrides")
+
+	// Agent config
 	config.Agent.Name = getStringValue(config.Agent.Name, DefaultAgentName)
 	config.Agent.OrchestrationRootDir = getStringValue(config.Agent.OrchestrationRootDir, defaultOrchestrationRootDirName)
 	config.Agent.Region = getStringValue(config.Agent.Region, "")
 
-	// MDS
+	// MDS config
 	config.Mds.CommandWorkersLimit = getNumericValue(
 		config.Mds.CommandWorkersLimit,
 		DefaultCommandWorkersLimitMin,
@@ -39,7 +46,7 @@ func parser(config *T) {
 		DefaultStopTimeoutMillis)
 	config.Mds.Endpoint = getStringValue(config.Mds.Endpoint, "")
 
-	// SSM
+	// SSM config
 	config.Ssm.Endpoint = getStringValue(config.Ssm.Endpoint, "")
 	config.Ssm.HealthFrequencyMinutes = getNumericValue(
 		config.Ssm.HealthFrequencyMinutes,

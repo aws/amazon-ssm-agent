@@ -175,7 +175,7 @@ func loadMessageReplyFromFile(t *testing.T, fileName string) (message messageCon
 }
 
 func Marshalling(t *testing.T) {
-	logger := log.GetLogger()
+	logger := log.Logger()
 	defer logger.Flush()
 	result := contracts.PluginResult{}
 

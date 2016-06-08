@@ -26,6 +26,34 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+var logger = log.NewMockLog()
+
+type serviceStub struct {
+	Service
+}
+
+func (s *serviceStub) SendReply(log log.T, update *UpdateDetail) error {
+	return nil
+}
+
+func (s *serviceStub) DeleteMessage(log log.T, update *UpdateDetail) error {
+	return nil
+}
+
+func (s *serviceStub) UpdateHealthCheck(log log.T, update *UpdateDetail, errorCode string) error {
+	return nil
+}
+
+type contextMgrStub struct{}
+
+func (c *contextMgrStub) saveUpdateContext(log log.T, context *UpdateContext, contextLocation string) (err error) {
+	return nil
+}
+
+func (c *contextMgrStub) uploadOutput(log log.T, context *UpdateContext) error {
+	return nil
+}
+
 func TestStartOrResumeUpdateFromInstalledState(t *testing.T) {
 	// setup
 	updater := createDefaultUpdaterStub()

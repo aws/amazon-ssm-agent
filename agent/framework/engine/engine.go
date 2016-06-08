@@ -30,6 +30,9 @@ import (
 // If pluginID is specified, response will be sent of that particular plugin.
 type SendResponse func(messageID string, pluginID string, results map[string]*contracts.PluginResult)
 
+// SendDocumentLevelResponse is used to send status response before plugin begins
+type SendDocumentLevelResponse func(messageID string, resultStatus contracts.ResultStatus, documentTraceOutput string)
+
 // RunPlugins executes a set of plugins. The plugin configurations are given in a map with pluginId as key.
 // Outputs the results of running the plugins, indexed by pluginId.
 func RunPlugins(

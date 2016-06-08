@@ -15,6 +15,10 @@
 package platform
 
 import (
+	"fmt"
+	"net"
+	"sort"
+
 	"github.com/aws/amazon-ssm-agent/agent/log"
 )
 
@@ -24,15 +28,90 @@ const (
 	commandOutputMessage          = "Command output %v"
 )
 
-var cachePlatformName string
-var cachePlatformVersion string
-
-// GetPlatformName gets the OS specific platform name
-func GetPlatformName(log log.T) (name string, err error) {
+// PlatformName gets the OS specific platform name.
+func PlatformName(log log.T) (name string, err error) {
 	return getPlatformName(log)
 }
 
-// GetPlatformVersion gets the OS specific platform version
-func GetPlatformVersion(log log.T) (version string, err error) {
+// PlatformVersion gets the OS specific platform version.
+func PlatformVersion(log log.T) (version string, err error) {
 	return getPlatformVersion(log)
 }
+
+// Hostname of the computer.
+func Hostname() (name string, err error) {
+	return fullyQualifiedDomainName(), nil
+}
+
+// IP of the network interface
+func IP() (ip string, err error) {
+
+	var interfaces []net.Interface
+	if interfaces, err = net.Interfaces(); err != nil {
+		return "", fmt.Errorf("Failed to load network interfaces. %v", err)
+	}
+
+	interfaces = filterInterface(interfaces)
+	sort.Sort(byIndex(interfaces))
+
+	var foundIP net.IP
+
+	// search for IPv4
+	for _, i := range interfaces {
+		var addrs []net.Addr
+		if addrs, err = i.Addrs(); err != nil {
+			continue
+		}
+		for _, addr := range addrs {
+			switch v := addr.(type) {
+			case *net.IPAddr:
+				foundIP = v.IP.To4()
+			case *net.IPNet:
+				foundIP = v.IP.To4()
+			}
+
+			if foundIP != nil {
+				return foundIP.String(), nil
+			}
+		}
+	}
+
+	// search for IPv6
+	for _, i := range interfaces {
+		var addrs []net.Addr
+		if addrs, err = i.Addrs(); err != nil {
+			continue
+		}
+		for _, addr := range addrs {
+			switch v := addr.(type) {
+			case *net.IPAddr:
+				foundIP = v.IP.To16()
+			case *net.IPNet:
+				foundIP = v.IP.To16()
+			}
+
+			if foundIP != nil {
+				return foundIP.String(), nil
+			}
+		}
+	}
+
+	return "", fmt.Errorf("No IP addresses found.")
+}
+
+// filterInterface removes interface that's not up or is a loopback
+func filterInterface(interfaces []net.Interface) (i []net.Interface) {
+	for _, v := range interfaces {
+		if !(v.Flags&net.FlagUp == 0) && v.Flags&net.FlagLoopback == 0 {
+			i = append(i, v)
+		}
+	}
+	return
+}
+
+// byIndex implements sorting for net.Interface.
+type byIndex []net.Interface
+
+func (b byIndex) Len() int           { return len(b) }
+func (b byIndex) Less(i, j int) bool { return b[i].Index < b[j].Index }
+func (b byIndex) Swap(i, j int)      { b[i], b[j] = b[j], b[i] }

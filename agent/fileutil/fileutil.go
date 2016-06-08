@@ -25,6 +25,13 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 )
 
+// DiskSpaceInfo stores the available, free, and total bytes
+type DiskSpaceInfo struct {
+	AvailBytes int64
+	FreeBytes  int64
+	TotalBytes int64
+}
+
 // DeleteFile deletes the specified file
 func DeleteFile(filepath string) (err error) {
 	return fs.Remove(filepath)
@@ -88,6 +95,15 @@ func MakeDirs(destinationDir string) (err error) {
 	// create directory
 	err = fs.MkdirAll(destinationDir, appconfig.ReadWriteAccess)
 	if err != nil {
+		err = fmt.Errorf("failed to create directory %v. %v", destinationDir, err)
+	}
+	return
+}
+
+// MakeDirsWithExecuteAccess create the directories along the path if missing.
+func MakeDirsWithExecuteAccess(destinationDir string) (err error) {
+	// create directory
+	if err = fs.MkdirAll(destinationDir, appconfig.ReadWriteExecuteAccess); err != nil {
 		err = fmt.Errorf("failed to create directory %v. %v", destinationDir, err)
 	}
 	return

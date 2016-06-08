@@ -15,9 +15,30 @@
 
 package log
 
+import (
+	"fmt"
+	"io/ioutil"
+)
+
 const (
 	// DefaultSeelogConfigFilePath specifies the default seelog location
 	// The underlying logger is based of https://github.com/cihub/seelog
 	// See Seelog documentation to customize the logger
 	DefaultSeelogConfigFilePath = "/etc/amazon/ssm/seelog.xml"
+
+	DefaultLogDir = "log"
 )
+
+// InitLogger initializes the logger using the settings specified in the application config file.
+// otherwise initializes the logger based on default settings
+// Linux uses seelog.xml file as configuration by default.
+func initLogger() (logger T) {
+	var logConfigBytes []byte
+	var err error
+	if logConfigBytes, err = ioutil.ReadFile(DefaultSeelogConfigFilePath); err != nil {
+		fmt.Println("Error occured fetching the seelog config file path: ", err)
+		logConfigBytes = defaultConfig()
+	}
+
+	return initLoggerFromBytes(logConfigBytes)
+}

@@ -21,6 +21,7 @@ import (
 	"compress/gzip"
 	"io"
 	"os"
+	"syscall"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 )
@@ -64,4 +65,34 @@ func Uncompress(src, dest string) error {
 		}
 	}
 	return nil
+}
+
+// GetDiskSpaceInfo returns DiskSpaceInfo with available, free, and total bytes from system disk space
+func GetDiskSpaceInfo() (diskSpaceInfo DiskSpaceInfo, err error) {
+	var stat syscall.Statfs_t
+	var wd string
+
+	// get a rooted path name
+	if wd, err = os.Getwd(); err != nil {
+		return
+	}
+
+	// get filesystem statistics
+	syscall.Statfs(wd, &stat)
+
+	// get block size
+	bSize := uint64(stat.Bsize)
+
+	// return DiskSpaceInfo with calculated bytes
+	return DiskSpaceInfo{
+		AvailBytes: (int64)(stat.Bavail * bSize), // available space = # of available blocks * block size
+		FreeBytes:  (int64)(stat.Bfree * bSize),  // free space = # of free blocks * block size
+		TotalBytes: (int64)(stat.Blocks * bSize), // total space = # of total blocks * block size
+	}, nil
+}
+
+// HardenDataFolder sets permission of %PROGRAM_DATA% folder for Windows. In
+// Linux, each components handles the permission of its data.
+func HardenDataFolder() error {
+	return nil // do nothing
 }

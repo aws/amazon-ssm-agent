@@ -120,8 +120,8 @@ func s3Download(log log.T, amazonS3URL s3util.AmazonS3URL, destFile string) (out
 	eTagFile := destFile + ".etag"
 
 	config := &aws.Config{}
-	var appConfig appconfig.T
-	appConfig, err = appconfig.GetConfig(false)
+	var appConfig appconfig.SsmagentConfig
+	appConfig, err = appconfig.Config(false)
 	if err != nil {
 		log.Error("failed to read appconfig.")
 	} else {

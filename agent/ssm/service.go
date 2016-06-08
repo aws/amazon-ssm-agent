@@ -14,6 +14,9 @@
 package ssm
 
 import (
+	"crypto/tls"
+	"fmt"
+	"net/http"
 	"runtime"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
@@ -40,7 +43,7 @@ type Service interface {
 	CancelCommand(log log.T, commandID string, instanceIDs []string) (response *ssm.CancelCommandOutput, err error)
 	CreateDocument(log log.T, docName string, docContent string) (response *ssm.CreateDocumentOutput, err error)
 	DeleteDocument(log log.T, instanceID string) (response *ssm.DeleteDocumentOutput, err error)
-	UpdateInstanceInformation(log log.T, instanceID string, agentVersion string, agentStatus string) (response *ssm.UpdateInstanceInformationOutput, err error)
+	UpdateInstanceInformation(log log.T, agentVersion string, agentStatus string) (response *ssm.UpdateInstanceInformationOutput, err error)
 }
 
 var ssmStopPolicy *sdkutil.StopPolicy
@@ -51,26 +54,30 @@ type sdkService struct {
 }
 
 // NewService creates a new SSM service instance.
-func NewService(log log.T) Service {
-	appConfig, err := appconfig.GetConfig(false)
-	if err != nil {
-		log.Error("failed to read appconfig.")
-	}
-
+func NewService() Service {
 	if ssmStopPolicy == nil {
 		// create a stop policy where we will stop after 10 consecutive errors and if time period expires.
 		ssmStopPolicy = sdkutil.NewStopPolicy("ssmService", 10)
 	}
 
-	awsConfig := sdkutil.GetAwsConfig()
+	awsConfig := sdkutil.AwsConfig()
 
-	if appConfig.Agent.Region != "" {
-		awsConfig.Region = &appConfig.Agent.Region
+	// parse appConfig overrides
+	appConfig, err := appconfig.Config(false)
+	if err == nil {
+		if appConfig.Ssm.Endpoint != "" {
+			awsConfig.Endpoint = &appConfig.Ssm.Endpoint
+		}
+		// TODO: test hook, can be removed before release
+		// this is to skip ssl verification for the beta self signed certs
+		if appConfig.Ssm.InsecureSkipVerify {
+			tr := &http.Transport{
+				TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
+			}
+			awsConfig.HTTPClient = &http.Client{Transport: tr}
+		}
 	}
 
-	if appConfig.Ssm.Endpoint != "" {
-		awsConfig.Endpoint = &appConfig.Ssm.Endpoint
-	}
 	ssmService := ssm.New(session.New(awsConfig))
 	return &sdkService{sdk: ssmService}
 }
@@ -104,38 +111,54 @@ func (svc *sdkService) ListAssociations(log log.T, instanceID string) (response 
 }
 
 //UpdateInstanceInformation calls the UpdateInstanceInformation SSM API.
-func (svc *sdkService) UpdateInstanceInformation(log log.T,
-	instanceID string,
+func (svc *sdkService) UpdateInstanceInformation(
+	log log.T,
 	agentVersion string,
-	agentStatus string) (response *ssm.UpdateInstanceInformationOutput, err error) {
-
-	platformType := ssm.PlatformTypeLinux
-	platformName := ""
-	platformVersion := ""
-	switch runtime.GOOS {
-	case "windows":
-		platformType = ssm.PlatformTypeWindows
-	default:
-	}
-
-	platformName, err = platform.GetPlatformName(log)
-	if err != nil {
-		sdkutil.HandleAwsError(log, err, ssmStopPolicy)
-		return
-	}
-	platformVersion, err = platform.GetPlatformVersion(log)
-	if err != nil {
-		sdkutil.HandleAwsError(log, err, ssmStopPolicy)
-		return
-	}
+	agentStatus string,
+) (response *ssm.UpdateInstanceInformationOutput, err error) {
 
 	params := ssm.UpdateInstanceInformationInput{
-		InstanceId:      aws.String(instanceID),
-		AgentVersion:    aws.String(agentVersion),
-		AgentStatus:     aws.String(agentStatus),
-		PlatformType:    aws.String(platformType),
-		PlatformName:    aws.String(platformName),
-		PlatformVersion: aws.String(platformVersion),
+		AgentStatus:  aws.String(agentStatus),
+		AgentVersion: aws.String(agentVersion),
+	}
+
+	goOS := runtime.GOOS
+	switch goOS {
+	case "windows":
+		params.PlatformType = aws.String(ssm.PlatformTypeWindows)
+	case "linux":
+		params.PlatformType = aws.String(ssm.PlatformTypeLinux)
+	default:
+		return nil, fmt.Errorf("Cannot report platform type of unrecognized OS. %v", goOS)
+	}
+
+	if ip, err := platform.IP(); err == nil {
+		params.IPAddress = aws.String(ip)
+	} else {
+		log.Warn(err)
+	}
+
+	if h, err := platform.Hostname(); err == nil {
+		params.ComputerName = aws.String(h)
+	} else {
+		log.Warn(err)
+	}
+	if instID, err := platform.InstanceID(); err == nil {
+		params.InstanceId = aws.String(instID)
+	} else {
+		log.Warn(err)
+	}
+
+	if n, err := platform.PlatformName(log); err == nil {
+		params.PlatformName = aws.String(n)
+	} else {
+		log.Warn(err)
+	}
+
+	if v, err := platform.PlatformVersion(log); err == nil {
+		params.PlatformVersion = aws.String(v)
+	} else {
+		log.Warn(err)
 	}
 
 	log.Debug("Calling UpdateInstanceInformation with params", params)

@@ -15,14 +15,17 @@
 package coremanager
 
 import (
+	"path"
 	"sync"
 	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
+	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	"github.com/aws/amazon-ssm-agent/agent/framework/coreplugins"
-	"github.com/aws/amazon-ssm-agent/agent/log"
+	logger "github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/platform"
 	"github.com/aws/amazon-ssm-agent/agent/rebooter"
 )
 
@@ -35,19 +38,97 @@ const (
 type CoreManager struct {
 	context     context.T
 	corePlugins coreplugins.PluginRegistry
-	rebootChan  chan int
 }
 
 // NewCoreManager creates a new core plugin manager.
-func NewCoreManager(instanceID string, config appconfig.T, log log.T, rebootChan chan int) *CoreManager {
-	context := context.Default(log, config).With("[instanceID=" + instanceID + "]")
+func NewCoreManager(instanceIdPtr *string, regionPtr *string, log logger.T) (cm *CoreManager, err error) {
+
+	// initialize appconfig
+	var config appconfig.SsmagentConfig
+	if config, err = appconfig.Config(false); err != nil {
+		log.Errorf("Could not load config file: %v", err)
+		return
+	}
+
+	// initialize region
+	if *regionPtr != "" {
+		if err = platform.SetRegion(*regionPtr); err != nil {
+			log.Errorf("error occured setting the region, %v", err)
+			return
+		}
+	}
+
+	var region string
+	if region, err = platform.Region(); err != nil {
+		log.Errorf("error fetching the region, %v", err)
+		return
+	}
+	log.Debug("Using region:", region)
+
+	// initialize instance ID
+	if *instanceIdPtr != "" {
+		if err = platform.SetInstanceID(*instanceIdPtr); err != nil {
+			log.Errorf("error occured setting the instance ID, %v", err)
+			return
+		}
+	}
+
+	var instanceId string
+	if instanceId, err = platform.InstanceID(); err != nil {
+		log.Errorf("error fetching the instanceID, %v", err)
+		return
+	}
+	log.Debug("Using instanceID:", instanceId)
+
+	if err = fileutil.HardenDataFolder(); err != nil {
+		log.Errorf("error initializing SSM data folder with hardened ACL, %v", err)
+		return
+	}
+
+	//Initialize all folders where interim states of executing commands will be stored.
+	if !initializeBookkeepingLocations(log, instanceId) {
+		log.Error("unable to initialize. Exiting")
+		return
+	}
+
+	context := context.Default(log, config).With("[instanceID=" + instanceId + "]")
 	corePlugins := coreplugins.RegisteredCorePlugins(context)
 
 	return &CoreManager{
 		context:     context,
 		corePlugins: *corePlugins,
-		rebootChan:  rebootChan,
+	}, nil
+}
+
+// initializeBookkeepingLocations - initializes all folder locations required for bookkeeping
+func initializeBookkeepingLocations(log logger.T, instanceID string) bool {
+
+	//Create folders pending, current, completed, corrupt under the location DefaultLogDirPath/<instanceId>
+	log.Info("Initializing bookkeeping folders")
+	initStatus := true
+	folders := []string{
+		appconfig.DefaultLocationOfPending,
+		appconfig.DefaultLocationOfCurrent,
+		appconfig.DefaultLocationOfCompleted,
+		appconfig.DefaultLocationOfCorrupt}
+
+	for _, folder := range folders {
+
+		directoryName := path.Join(appconfig.DefaultDataStorePath,
+			instanceID,
+			appconfig.DefaultCommandRootDirName,
+			appconfig.DefaultLocationOfState,
+			folder)
+
+		err := fileutil.MakeDirs(directoryName)
+		if err != nil {
+			log.Errorf("Encountered error while creating folders for internal state management. %v", err)
+			initStatus = false
+			break
+		}
 	}
+
+	return initStatus
 }
 
 // Start executes the registered core plugins while watching for reboot request
@@ -119,17 +200,22 @@ func (c *CoreManager) stopCorePlugins(stopType contracts.StopType) {
 
 // watchForReboot watches for reboot events and request core plugins to stop when necessary
 func (c *CoreManager) watchForReboot() {
+	log := c.context.Log()
 	for {
 		// check if there is any pending reboot request
 		if rebooter.RebootRequested() {
 			// on reboot request, stop core plugins and request agent to initiate reboot.
 			c.context.Log().Info("A plugin has requested a reboot.")
 			c.stopCorePlugins(contracts.StopTypeSoftStop)
-			c.rebootChan <- 0
 			break
 		}
 
 		// wait for a second before checking again
 		time.Sleep(rebootPollingInterval)
+	}
+
+	log.Info("Processing reboot request...")
+	if rebooter.RebootRequested() && !rebooter.RebootInitiated() {
+		rebooter.RebootMachine(log)
 	}
 }

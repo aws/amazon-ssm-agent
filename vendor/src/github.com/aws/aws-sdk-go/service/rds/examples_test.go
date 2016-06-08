@@ -167,6 +167,7 @@ func ExampleRDS_CopyDBSnapshot() {
 		SourceDBSnapshotIdentifier: aws.String("String"), // Required
 		TargetDBSnapshotIdentifier: aws.String("String"), // Required
 		CopyTags:                   aws.Bool(true),
+		KmsKeyId:                   aws.String("String"),
 		Tags: []*rds.Tag{
 			{ // Required
 				Key:   aws.String("String"),
@@ -341,6 +342,8 @@ func ExampleRDS_CreateDBInstance() {
 			// More values...
 		},
 		DBSubnetGroupName:  aws.String("String"),
+		Domain:             aws.String("String"),
+		DomainIAMRoleName:  aws.String("String"),
 		EngineVersion:      aws.String("String"),
 		Iops:               aws.Int64(1),
 		KmsKeyId:           aws.String("String"),
@@ -354,6 +357,7 @@ func ExampleRDS_CreateDBInstance() {
 		Port:               aws.Int64(1),
 		PreferredBackupWindow:      aws.String("String"),
 		PreferredMaintenanceWindow: aws.String("String"),
+		PromotionTier:              aws.Int64(1),
 		PubliclyAccessible:         aws.Bool(true),
 		StorageEncrypted:           aws.Bool(true),
 		StorageType:                aws.String("String"),
@@ -1770,6 +1774,8 @@ func ExampleRDS_ModifyDBInstance() {
 			aws.String("String"), // Required
 			// More values...
 		},
+		Domain:                     aws.String("String"),
+		DomainIAMRoleName:          aws.String("String"),
 		EngineVersion:              aws.String("String"),
 		Iops:                       aws.Int64(1),
 		MasterUserPassword:         aws.String("String"),
@@ -1780,6 +1786,7 @@ func ExampleRDS_ModifyDBInstance() {
 		OptionGroupName:            aws.String("String"),
 		PreferredBackupWindow:      aws.String("String"),
 		PreferredMaintenanceWindow: aws.String("String"),
+		PromotionTier:              aws.Int64(1),
 		PubliclyAccessible:         aws.Bool(true),
 		StorageType:                aws.String("String"),
 		TdeCredentialArn:           aws.String("String"),
@@ -2240,6 +2247,8 @@ func ExampleRDS_RestoreDBInstanceFromDBSnapshot() {
 		DBInstanceClass:         aws.String("String"),
 		DBName:                  aws.String("String"),
 		DBSubnetGroupName:       aws.String("String"),
+		Domain:                  aws.String("String"),
+		DomainIAMRoleName:       aws.String("String"),
 		Engine:                  aws.String("String"),
 		Iops:                    aws.Int64(1),
 		LicenseModel:            aws.String("String"),
@@ -2283,6 +2292,8 @@ func ExampleRDS_RestoreDBInstanceToPointInTime() {
 		DBInstanceClass:            aws.String("String"),
 		DBName:                     aws.String("String"),
 		DBSubnetGroupName:          aws.String("String"),
+		Domain:                     aws.String("String"),
+		DomainIAMRoleName:          aws.String("String"),
 		Engine:                     aws.String("String"),
 		Iops:                       aws.Int64(1),
 		LicenseModel:               aws.String("String"),

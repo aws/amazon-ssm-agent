@@ -20,10 +20,67 @@ import (
 	"os/exec"
 )
 
-func prepareProcess(command *exec.Cmd) {
-}
+const (
+	// UpdateCmd represents the command argument for update
+	UpdateCmd = "update"
+
+	// SourceVersionCmd represents the command argument for source version
+	SourceVersionCmd = "source-version"
+
+	// SourceLocationCmd represents the command argument for source location
+	SourceLocationCmd = "source-location"
+
+	// SourceHashCmd represents the command argument for source hash value
+	SourceHashCmd = "source-hash"
+
+	// TargetVersionCmd represents the command argument for target version
+	TargetVersionCmd = "target-version"
+
+	// TargetLocationCmd represents the command argument for target location
+	TargetLocationCmd = "target-location"
+
+	// TargetHashCmd represents the command argument for target hash value
+	TargetHashCmd = "target-hash"
+
+	// PackageNameCmd represents the command argument for package name
+	PackageNameCmd = "package-name"
+
+	// MessageIDCmd represents the command argument for message id
+	MessageIDCmd = "messageid"
+
+	// StdoutFileName represents the command argument for standard output file
+	StdoutFileName = "stdout"
+
+	// StderrFileName represents the command argument for standard error file
+	StderrFileName = "stderr"
+
+	// OutputKeyPrefixCmd represents the command argument for output key prefix
+	OutputKeyPrefixCmd = "output-key"
+
+	// OutputBucketNameCmd represents the command argument for output bucket name
+	OutputBucketNameCmd = "output-bucket"
+)
 
 const (
 	// CompressFormat represents the compress format for windows platform
 	CompressFormat = "zip"
 )
+
+const (
+	// Installer represents Install shell script
+	Installer = "install.bat"
+
+	// UnInstaller represents Uninstall shell script
+	UnInstaller = "uninstall.bat"
+)
+
+func prepareProcess(command *exec.Cmd) {
+}
+
+func agentStatusOutput() ([]byte, error) {
+	return execCommand("sc", "query", "AmazonSSMAgent").Output()
+}
+
+func agentExpectedStatus() string {
+	return "RUNNING"
+}

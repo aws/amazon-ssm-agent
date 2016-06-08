@@ -39,15 +39,15 @@ const (
 
 // A Parameter in the DocumentContent of an MDS message.
 type Parameter struct {
-	DefaultVal  string `json:"default"`
-	Description string `json:"description"`
-	ParamType   string `json:"type"`
+	DefaultVal  interface{} `json:"default"`
+	Description string      `json:"description"`
+	ParamType   string      `json:"type"`
 }
 
 // PluginConfig stores plugin configuration
 type PluginConfig struct {
-	Properties  []interface{} `json:"properties"`
-	Description string        `json:"description"`
+	Properties  interface{} `json:"properties"`
+	Description string      `json:"description"`
 }
 
 // DocumentContent object which represents ssm document content.

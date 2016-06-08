@@ -16,9 +16,7 @@
 
 package log
 
-import (
-	"path/filepath"
-)
+import "path/filepath"
 
 func defaultConfig() []byte {
 	return loadLog(DefaultLogDir, LogFile)
@@ -35,24 +33,26 @@ func loadLog(defaultLogDir string, logFile string) []byte {
 	errorFilePath = filepath.Join(defaultLogDir, ErrorFile)
 
 	logConfig := `
-<seelog type="adaptive" mininterval="2000000" maxinterval="100000000" critmsgcount="500" minlevel="debug">
+<seelog type="adaptive" mininterval="2000000" maxinterval="100000000" critmsgcount="500" minlevel="info">
     <exceptions>
         <exception filepattern="test*" minlevel="error"/>
     </exceptions>
-    <outputs formatid="all">
-        <console formatid="all"/>
+    <outputs formatid="fmtinfo">
+        <console formatid="fmtinfo"/>
+
         `
-	logConfig += `<file path="` + logFilePath + `"/>`
+	logConfig += `<rollingfile type="size" filename="` + logFilePath + `" maxsize="30000000" maxrolls="5"/>`
 	logConfig += `
 		<filter levels="error,critical" formatid="fmterror">
 		`
-	logConfig += `<file path="` + errorFilePath + `"/>`
+	logConfig += `<rollingfile type="size" filename="` + errorFilePath + `" maxsize="10000000" maxrolls="5"/>`
 	logConfig += `
         </filter>
     </outputs>
     <formats>
         <format id="fmterror" format="%Date %Time %LEVEL [%FuncShort @ %File.%Line] %Msg%n"/>
-        <format id="all" format="%Date %Time %LEVEL [%FuncShort @ %File.%Line] %Msg%n"/>
+        <format id="fmtdebug" format="%Date %Time %LEVEL [%FuncShort @ %File.%Line] %Msg%n"/>
+        <format id="fmtinfo" format="%Date %Time %LEVEL %Msg%n"/>
     </formats>
 </seelog>
 `

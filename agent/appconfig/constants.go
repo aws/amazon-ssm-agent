@@ -18,9 +18,6 @@ const (
 	// Agent defaults
 	DefaultAgentName = "amazon-ssm-agent"
 
-	// AppConfig Working Directory Path
-	AppConfigWorkingDirectoryPath = "amazon-ssm-agent.json"
-
 	DefaultCommandWorkersLimit    = 1
 	DefaultCommandWorkersLimitMin = 1
 	DefaultCommandWorkersLimitMax = 10
@@ -51,7 +48,20 @@ const (
 	defaultOrchestrationRootDirName = "orchestration"
 
 	// Permissions defaults
-	//NOTE: Other users in the system should not have any READ, WRITE or EXECUTE access.
-	ReadWriteAccess        = 0640
-	ReadWriteExecuteAccess = 0750
+	//NOTE: Limit READ, WRITE and EXECUTE access to administrators/root.
+	ReadWriteAccess        = 0600
+	ReadWriteExecuteAccess = 0700
+
+	// ExitCodes
+	SuccessExitCode = 0
+	ErrorExitCode   = 1
+
+	// DefaultPluginConfig is a default config with which the plugins are initialized
+	DefaultPluginConfig = "aws:defaultPluginConfig"
+
+	// PluginNameAwsAgentUpdate is the name for agent update plugin
+	PluginNameAwsAgentUpdate = "aws:updateSsmAgent"
+
+	AppConfigFileName    = "amazon-ssm-agent.json"
+	SeelogConfigFileName = "seelog.xml"
 )

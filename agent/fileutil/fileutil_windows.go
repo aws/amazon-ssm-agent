@@ -21,6 +21,8 @@ import (
 	"io"
 	"os"
 	"path/filepath"
+	"syscall"
+	"unsafe"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 )
@@ -80,4 +82,37 @@ func Uncompress(src, dest string) error {
 	}
 
 	return nil
+}
+
+// GetDiskSpaceInfo returns available, free, and total bytes respectively from system disk space
+func GetDiskSpaceInfo() (diskSpaceInfo DiskSpaceInfo, err error) {
+	var wd string
+	var availBytes, totalBytes, freeBytes int64
+
+	// Get a rooted path name
+	if wd, err = os.Getwd(); err != nil {
+		return
+	}
+
+	// Load kernel32.dll and find GetDiskFreeSpaceEX function
+	getDiskFreeSpace := syscall.MustLoadDLL("kernel32.dll").MustFindProc("GetDiskFreeSpaceExW")
+
+	// Get the available bytes (for arguments, GetDiskFreeSpace function takes dir name, avail, total, and free respectively)
+	_, _, err = getDiskFreeSpace.Call(
+		uintptr(unsafe.Pointer(syscall.StringToUTF16Ptr(wd))),
+		uintptr(unsafe.Pointer(&availBytes)),
+		uintptr(unsafe.Pointer(&totalBytes)),
+		uintptr(unsafe.Pointer(&freeBytes)))
+
+	return DiskSpaceInfo{
+		AvailBytes: availBytes,
+		FreeBytes:  freeBytes,
+		TotalBytes: totalBytes,
+	}, nil
+}
+
+// HardenDataFolder sets permission of %PROGRAM_DATA% folder for Windows. In
+// Linux, each components handles the permission of its data.
+func HardenDataFolder() error {
+	return Harden(appconfig.SSMDataPath)
 }

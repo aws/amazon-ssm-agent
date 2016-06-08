@@ -17,8 +17,8 @@ mkdir -p ${PACKAGE_FOLDER}
 echo "Copying application files"
 
 cp ${BUILD_FOLDER}/amazon-ssm-agent.exe ${PACKAGE_FOLDER}/amazon-ssm-agent.exe
-cp ${BGO_SPACE}/seelog.xml ${PACKAGE_FOLDER}/seelog.xml
-cp ${BGO_SPACE}/amazon-ssm-agent.json ${PACKAGE_FOLDER}/amazon-ssm-agent.json
+cp ${BGO_SPACE}/seelog_windows.xml.template ${PACKAGE_FOLDER}/seelog.xml.template
+cp ${BGO_SPACE}/amazon-ssm-agent.json.template ${PACKAGE_FOLDER}/amazon-ssm-agent.json.template
 
 echo "Copying windows package config files"
 

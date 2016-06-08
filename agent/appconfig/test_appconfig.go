@@ -31,7 +31,7 @@ func NewMockAppConfig() *Mock {
 }
 
 // GetConfig is a mocked method that just returns what mock tells it to.
-func (m *Mock) GetConfig(reload bool) (appconfig T, errs []error) {
+func (m *Mock) GetConfig(reload bool) (appconfig SsmagentConfig, errs []error) {
 	args := m.Called(reload)
-	return args.Get(0).(T), args.Get(1).([]error)
+	return args.Get(0).(SsmagentConfig), args.Get(1).([]error)
 }

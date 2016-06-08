@@ -26,64 +26,32 @@ import (
 	"github.com/aws/aws-sdk-go/aws/credentials"
 )
 
-// T stores agent configuration values.
-type T struct {
-	Profile struct {
-		ProfilePath string
-		ProfileName string
-	}
-	Mds struct {
-		Endpoint            string
-		CommandWorkersLimit int
-		StopTimeoutMillis   int64
-		CommandRetryLimit   int
-	}
-	Ssm struct {
-		Endpoint               string
-		HealthFrequencyMinutes int
-	}
-	Agent struct {
-		Name                 string
-		Version              string
-		Region               string
-		OrchestrationRootDir string
-		DownloadRootDir      string
-	}
-	Os struct {
-		Lang    string
-		Name    string
-		Version string
-	}
-	S3 struct {
-		Region    string
-		LogBucket string
-		LogKey    string
-	}
-	Plugins map[string]interface{}
-}
-
-var loadedConfig *T
+var loadedConfig *SsmagentConfig
 var lock sync.RWMutex
 
-// GetConfig loads the app configuration.
+// Config loads the app configuration for amazon-ssm-agent.
 // If reload is true, it loads the config afresh,
 // otherwise it returns a previous loaded version, if any.
-func GetConfig(reload bool) (T, error) {
+func Config(reload bool) (SsmagentConfig, error) {
 	if reload || !isLoaded() {
-		var config T
+		var agentConfig SsmagentConfig
+		agentConfig = DefaultConfig()
 		path, pathErr := getAppConfigPath()
 		if pathErr != nil {
-			return config, pathErr
+			return agentConfig, nil
 		}
-		err := jsonutil.UnmarshalFile(path, &config)
-		if err != nil {
-			return config, err
-		}
-		config.Os.Name = runtime.GOOS
-		config.Agent.Version = version.Version
-		parser(&config)
-		cache(config)
 
+		// Process config override
+		fmt.Printf("Applying config override from %s.\n", path)
+
+		if err := jsonutil.UnmarshalFile(path, &agentConfig); err != nil {
+			fmt.Println("Failed to unmarshal config override. Fall back to default.")
+			return agentConfig, err
+		}
+		agentConfig.Os.Name = runtime.GOOS
+		agentConfig.Agent.Version = version.Version
+		parser(&agentConfig)
+		cache(agentConfig)
 	}
 	return getCached(), nil
 }
@@ -94,45 +62,70 @@ func isLoaded() bool {
 	return loadedConfig != nil
 }
 
-func cache(config T) {
+func cache(config SsmagentConfig) {
 	lock.Lock()
 	defer lock.Unlock()
 	loadedConfig = &config
 }
 
-func getCached() T {
+func getCached() SsmagentConfig {
 	lock.RLock()
 	defer lock.RUnlock()
 	return *loadedConfig
 }
 
 // ProfileCredentials checks to see if specific profile is being asked to use
-func (config T) ProfileCredentials() (credsInConfig *credentials.Credentials, err error) {
+func (config SsmagentConfig) ProfileCredentials() (credsInConfig *credentials.Credentials, err error) {
 	// the credentials file location and profile to load
-	credsInConfig = credentials.NewSharedCredentials(config.Profile.ProfilePath, config.Profile.ProfileName)
+	credsInConfig = credentials.NewSharedCredentials(config.Profile.Path, config.Profile.Name)
 	_, err = credsInConfig.Get()
 	if err != nil {
-		fmt.Println("AWS credentials under user profile has not been configured, ignoring...", err)
-		credsInConfig = nil
+		return nil, err
 	}
+	fmt.Printf("Using AWS credentials configured under %v user profile \n", config.Profile.Name)
 	return
 }
 
 // looks for appconfig in working directory first and then the platform specific folder
 func getAppConfigPath() (path string, err error) {
-	if _, err = os.Stat(AppConfigWorkingDirectoryPath); err == nil {
-		log.Println("Loading appconfig from working directory - ", AppConfigWorkingDirectoryPath)
-		return AppConfigWorkingDirectoryPath, err
-	}
-
-	log.Println("Unable to find appconfig at ", AppConfigWorkingDirectoryPath)
-
 	// looking for appconfig in the platform specific folder
-	if _, err = os.Stat(AppConfigPath); err == nil {
-		log.Println("Loading appconfig from ", AppConfigPath)
-		return AppConfigPath, err
+	if _, err = os.Stat(AppConfigPath); err != nil {
+		return "", err
 	}
 
-	log.Println("Unable to find appconfig at ", AppConfigPath)
-	return "", err
+	log.Printf("Found config file at %s.\n", AppConfigPath)
+	return AppConfigPath, err
+}
+
+// DefaultConfig returns default ssm agent configuration
+func DefaultConfig() SsmagentConfig {
+
+	var credsProfile CredentialProfile
+	var s3 S3Cfg
+	var mds = MdsCfg{
+		CommandWorkersLimit: 5,
+		StopTimeoutMillis:   20000,
+		CommandRetryLimit:   15,
+	}
+	var ssm = SsmCfg{
+		HealthFrequencyMinutes: 5,
+	}
+	var agent = AgentInfo{
+		Name: "amazon-ssm-agent-default",
+	}
+	var os = OsInfo{
+		Lang:    "en-US",
+		Version: "1",
+	}
+
+	var ssmagentCfg = SsmagentConfig{
+		Profile: credsProfile,
+		Mds:     mds,
+		Ssm:     ssm,
+		Agent:   agent,
+		Os:      os,
+		S3:      s3,
+	}
+
+	return ssmagentCfg
 }

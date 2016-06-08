@@ -27,6 +27,8 @@ import (
 var lastPollTime time.Time
 var lock sync.RWMutex
 
+var processMessage = (*Processor).processMessage
+
 func updateLastPollTime(currentTime time.Time) {
 	lock.Lock()
 	defer lock.Unlock()
@@ -130,7 +132,7 @@ func (p *Processor) pollOnce() {
 	log.Debugf("Got %v messages", len(messages.Messages))
 
 	for _, msg := range messages.Messages {
-		p.processMessage(msg)
+		processMessage(p, msg)
 	}
 	log.Debugf("Done poll once")
 }

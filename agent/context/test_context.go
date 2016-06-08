@@ -39,9 +39,9 @@ func NewMockDefault() *Mock {
 }
 
 // AppConfig mocks the Config function.
-func (m *Mock) AppConfig() appconfig.T {
+func (m *Mock) AppConfig() appconfig.SsmagentConfig {
 	args := m.Called()
-	return args.Get(0).(appconfig.T)
+	return args.Get(0).(appconfig.SsmagentConfig)
 }
 
 // Log mocks the Log function.

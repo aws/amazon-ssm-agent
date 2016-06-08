@@ -108,6 +108,19 @@ func PrepareReplyPayload(pluginID string, runtimeStatuses map[string]*contracts.
 	return
 }
 
+// PrepareReplyPayloadToUpdateDocumentStatus creates the payload object for SendReply based on document status change.
+func PrepareReplyPayloadToUpdateDocumentStatus(agentInfo contracts.AgentInfo, documentStatus contracts.ResultStatus, documentTraceOutput string) (payload messageContracts.SendReplyPayload) {
+	payload = messageContracts.SendReplyPayload{
+		AdditionalInfo: contracts.AdditionalInfo{
+			Agent: agentInfo,
+		},
+		DocumentStatus:      documentStatus,
+		DocumentTraceOutput: documentTraceOutput,
+		RuntimeStatus:       nil,
+	}
+	return
+}
+
 // PrepareRuntimeStatuses creates runtime statuses from plugin outputs.
 // contracts.PluginResult and contracts.PluginRuntimeStatus are mostly same.
 // however they are decoupled on purpose so that we can do any special handling / serializing when sending response to server side.
@@ -125,7 +138,7 @@ func ReplacePluginParameters(input map[string]*contracts.PluginConfig, params ma
 	result = make(map[string]*contracts.PluginConfig)
 	for pluginName, pluginConfig := range input {
 		result[pluginName] = &contracts.PluginConfig{
-			Properties: parameters.ReplaceParameters(pluginConfig.Properties, params, logger).([]interface{}),
+			Properties: parameters.ReplaceParameters(pluginConfig.Properties, params, logger),
 		}
 	}
 	return
@@ -139,8 +152,7 @@ func prepareRuntimeStatus(log log.T, pluginResult contracts.PluginResult) contra
 	if err := pluginResult.Error; err == nil {
 		resultAsString = fmt.Sprintf("%v", pluginResult.Output)
 	} else {
-		resultbytes, _ := json.Marshal(struct{ Error string }{err.Error()})
-		resultAsString = string(resultbytes)
+		resultAsString = err.Error()
 	}
 
 	runtimeStatus := contracts.PluginRuntimeStatus{

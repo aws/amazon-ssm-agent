@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"encoding/xml"
+	"fmt"
 	"io"
 	"io/ioutil"
 	"net/http"
@@ -36,6 +37,7 @@ var _ = util.Trim("")
 var _ = url.Values{}
 var _ = io.EOF
 var _ = aws.String
+var _ = fmt.Println
 
 func init() {
 	protocol.RandReader = &awstesting.ZeroReader{}
@@ -345,6 +347,7 @@ type InputService3TestShapeInputService3TestCaseOperation2Output struct {
 type InputService3TestShapeInputShape struct {
 	_ struct{} `type:"structure"`
 
+	// BlobArg is automatically base64 encoded/decoded by the SDK.
 	BlobArg []byte `type:"blob"`
 
 	BlobMap map[string][]byte `type:"map"`

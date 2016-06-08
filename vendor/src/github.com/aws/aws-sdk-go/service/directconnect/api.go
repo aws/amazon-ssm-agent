@@ -32,6 +32,8 @@ func (c *DirectConnect) AllocateConnectionOnInterconnectRequest(input *AllocateC
 //
 // Allocates a VLAN number and a specified amount of bandwidth for use by a
 // hosted connection on the given interconnect.
+//
+//  This is intended for use by AWS Direct Connect partners only.
 func (c *DirectConnect) AllocateConnectionOnInterconnect(input *AllocateConnectionOnInterconnectInput) (*Connection, error) {
 	req, out := c.AllocateConnectionOnInterconnectRequest(input)
 	err := req.Send()
@@ -272,6 +274,8 @@ func (c *DirectConnect) CreateInterconnectRequest(input *CreateInterconnectInput
 // customer can then connect to AWS resources by creating a virtual interface
 // on their connection, using the VLAN assigned to them by the AWS Direct Connect
 // partner.
+//
+//  This is intended for use by AWS Direct Connect partners only.
 func (c *DirectConnect) CreateInterconnect(input *CreateInterconnectInput) (*Interconnect, error) {
 	req, out := c.CreateInterconnectRequest(input)
 	err := req.Send()
@@ -390,6 +394,8 @@ func (c *DirectConnect) DeleteInterconnectRequest(input *DeleteInterconnectInput
 }
 
 // Deletes the specified interconnect.
+//
+//  This is intended for use by AWS Direct Connect partners only.
 func (c *DirectConnect) DeleteInterconnect(input *DeleteInterconnectInput) (*DeleteInterconnectOutput, error) {
 	req, out := c.DeleteInterconnectRequest(input)
 	err := req.Send()
@@ -473,6 +479,8 @@ func (c *DirectConnect) DescribeConnectionsOnInterconnectRequest(input *Describe
 }
 
 // Return a list of connections that have been provisioned on the given interconnect.
+//
+//  This is intended for use by AWS Direct Connect partners only.
 func (c *DirectConnect) DescribeConnectionsOnInterconnect(input *DescribeConnectionsOnInterconnectInput) (*Connections, error) {
 	req, out := c.DescribeConnectionsOnInterconnectRequest(input)
 	err := req.Send()
@@ -617,6 +625,8 @@ type AllocateConnectionOnInterconnectInput struct {
 	// Example: "500Mbps"
 	//
 	// Default: None
+	//
+	// Values: 50M, 100M, 200M, 300M, 400M, or 500M
 	Bandwidth *string `locationName:"bandwidth" type:"string" required:"true"`
 
 	// Name of the provisioned connection.
@@ -658,6 +668,31 @@ func (s AllocateConnectionOnInterconnectInput) GoString() string {
 	return s.String()
 }
 
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *AllocateConnectionOnInterconnectInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "AllocateConnectionOnInterconnectInput"}
+	if s.Bandwidth == nil {
+		invalidParams.Add(request.NewErrParamRequired("Bandwidth"))
+	}
+	if s.ConnectionName == nil {
+		invalidParams.Add(request.NewErrParamRequired("ConnectionName"))
+	}
+	if s.InterconnectId == nil {
+		invalidParams.Add(request.NewErrParamRequired("InterconnectId"))
+	}
+	if s.OwnerAccount == nil {
+		invalidParams.Add(request.NewErrParamRequired("OwnerAccount"))
+	}
+	if s.Vlan == nil {
+		invalidParams.Add(request.NewErrParamRequired("Vlan"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
 // Container for the parameters to the AllocatePrivateVirtualInterface operation.
 type AllocatePrivateVirtualInterfaceInput struct {
 	_ struct{} `type:"structure"`
@@ -686,6 +721,30 @@ func (s AllocatePrivateVirtualInterfaceInput) String() string {
 // GoString returns the string representation
 func (s AllocatePrivateVirtualInterfaceInput) GoString() string {
 	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *AllocatePrivateVirtualInterfaceInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "AllocatePrivateVirtualInterfaceInput"}
+	if s.ConnectionId == nil {
+		invalidParams.Add(request.NewErrParamRequired("ConnectionId"))
+	}
+	if s.NewPrivateVirtualInterfaceAllocation == nil {
+		invalidParams.Add(request.NewErrParamRequired("NewPrivateVirtualInterfaceAllocation"))
+	}
+	if s.OwnerAccount == nil {
+		invalidParams.Add(request.NewErrParamRequired("OwnerAccount"))
+	}
+	if s.NewPrivateVirtualInterfaceAllocation != nil {
+		if err := s.NewPrivateVirtualInterfaceAllocation.Validate(); err != nil {
+			invalidParams.AddNested("NewPrivateVirtualInterfaceAllocation", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
 }
 
 // Container for the parameters to the AllocatePublicVirtualInterface operation.
@@ -718,6 +777,30 @@ func (s AllocatePublicVirtualInterfaceInput) GoString() string {
 	return s.String()
 }
 
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *AllocatePublicVirtualInterfaceInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "AllocatePublicVirtualInterfaceInput"}
+	if s.ConnectionId == nil {
+		invalidParams.Add(request.NewErrParamRequired("ConnectionId"))
+	}
+	if s.NewPublicVirtualInterfaceAllocation == nil {
+		invalidParams.Add(request.NewErrParamRequired("NewPublicVirtualInterfaceAllocation"))
+	}
+	if s.OwnerAccount == nil {
+		invalidParams.Add(request.NewErrParamRequired("OwnerAccount"))
+	}
+	if s.NewPublicVirtualInterfaceAllocation != nil {
+		if err := s.NewPublicVirtualInterfaceAllocation.Validate(); err != nil {
+			invalidParams.AddNested("NewPublicVirtualInterfaceAllocation", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
 // Container for the parameters to the ConfirmConnection operation.
 type ConfirmConnectionInput struct {
 	_ struct{} `type:"structure"`
@@ -740,21 +823,45 @@ func (s ConfirmConnectionInput) GoString() string {
 	return s.String()
 }
 
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ConfirmConnectionInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ConfirmConnectionInput"}
+	if s.ConnectionId == nil {
+		invalidParams.Add(request.NewErrParamRequired("ConnectionId"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
 // The response received when ConfirmConnection is called.
 type ConfirmConnectionOutput struct {
 	_ struct{} `type:"structure"`
 
-	// State of the connection.  Ordering: The initial state of a hosted connection
-	// provisioned on an interconnect. The connection stays in the ordering state
-	// until the owner of the hosted connection confirms or declines the connection
-	// order. Requested: The initial state of a standard connection. The connection
+	// State of the connection.
+	//
+	//    Ordering: The initial state of a hosted connection provisioned on an
+	// interconnect. The connection stays in the ordering state until the owner
+	// of the hosted connection confirms or declines the connection order.
+	//
+	//    Requested: The initial state of a standard connection. The connection
 	// stays in the requested state until the Letter of Authorization (LOA) is sent
-	// to the customer. Pending: The connection has been approved, and is being
-	// initialized. Available: The network link is up, and the connection is ready
-	// for use. Down: The network link is down. Deleting: The connection is in the
-	// process of being deleted. Deleted: The connection has been deleted. Rejected:
-	// A hosted connection in the 'Ordering' state will enter the 'Rejected' state
-	// if it is deleted by the end customer.
+	// to the customer.
+	//
+	//    Pending: The connection has been approved, and is being initialized.
+	//
+	//    Available: The network link is up, and the connection is ready for use.
+	//
+	//    Down: The network link is down.
+	//
+	//    Deleting: The connection is in the process of being deleted.
+	//
+	//    Deleted: The connection has been deleted.
+	//
+	//    Rejected: A hosted connection in the 'Ordering' state will enter the
+	// 'Rejected' state if it is deleted by the end customer.
 	ConnectionState *string `locationName:"connectionState" type:"string" enum:"ConnectionState"`
 }
 
@@ -799,26 +906,54 @@ func (s ConfirmPrivateVirtualInterfaceInput) GoString() string {
 	return s.String()
 }
 
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ConfirmPrivateVirtualInterfaceInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ConfirmPrivateVirtualInterfaceInput"}
+	if s.VirtualGatewayId == nil {
+		invalidParams.Add(request.NewErrParamRequired("VirtualGatewayId"))
+	}
+	if s.VirtualInterfaceId == nil {
+		invalidParams.Add(request.NewErrParamRequired("VirtualInterfaceId"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
 // The response received when ConfirmPrivateVirtualInterface is called.
 type ConfirmPrivateVirtualInterfaceOutput struct {
 	_ struct{} `type:"structure"`
 
-	// State of the virtual interface.  Confirming: The creation of the virtual
-	// interface is pending confirmation from the virtual interface owner. If the
-	// owner of the virtual interface is different from the owner of the connection
-	// on which it is provisioned, then the virtual interface will remain in this
-	// state until it is confirmed by the virtual interface owner. Verifying: This
-	// state only applies to public virtual interfaces. Each public virtual interface
-	// needs validation before the virtual interface can be created. Pending: A
-	// virtual interface is in this state from the time that it is created until
-	// the virtual interface is ready to forward traffic. Available: A virtual interface
-	// that is able to forward traffic. Down: A virtual interface that is BGP down.
-	// Deleting: A virtual interface is in this state immediately after calling
-	// DeleteVirtualInterface until it can no longer forward traffic. Deleted: A
-	// virtual interface that cannot forward traffic. Rejected: The virtual interface
-	// owner has declined creation of the virtual interface. If a virtual interface
-	// in the 'Confirming' state is deleted by the virtual interface owner, the
-	// virtual interface will enter the 'Rejected' state.
+	// State of the virtual interface.
+	//
+	//    Confirming: The creation of the virtual interface is pending confirmation
+	// from the virtual interface owner. If the owner of the virtual interface is
+	// different from the owner of the connection on which it is provisioned, then
+	// the virtual interface will remain in this state until it is confirmed by
+	// the virtual interface owner.
+	//
+	//    Verifying: This state only applies to public virtual interfaces. Each
+	// public virtual interface needs validation before the virtual interface can
+	// be created.
+	//
+	//    Pending: A virtual interface is in this state from the time that it is
+	// created until the virtual interface is ready to forward traffic.
+	//
+	//    Available: A virtual interface that is able to forward traffic.
+	//
+	//    Down: A virtual interface that is BGP down.
+	//
+	//    Deleting: A virtual interface is in this state immediately after calling
+	// DeleteVirtualInterface until it can no longer forward traffic.
+	//
+	//    Deleted: A virtual interface that cannot forward traffic.
+	//
+	//    Rejected: The virtual interface owner has declined creation of the virtual
+	// interface. If a virtual interface in the 'Confirming' state is deleted by
+	// the virtual interface owner, the virtual interface will enter the 'Rejected'
+	// state.
 	VirtualInterfaceState *string `locationName:"virtualInterfaceState" type:"string" enum:"VirtualInterfaceState"`
 }
 
@@ -854,26 +989,51 @@ func (s ConfirmPublicVirtualInterfaceInput) GoString() string {
 	return s.String()
 }
 
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ConfirmPublicVirtualInterfaceInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ConfirmPublicVirtualInterfaceInput"}
+	if s.VirtualInterfaceId == nil {
+		invalidParams.Add(request.NewErrParamRequired("VirtualInterfaceId"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
 // The response received when ConfirmPublicVirtualInterface is called.
 type ConfirmPublicVirtualInterfaceOutput struct {
 	_ struct{} `type:"structure"`
 
-	// State of the virtual interface.  Confirming: The creation of the virtual
-	// interface is pending confirmation from the virtual interface owner. If the
-	// owner of the virtual interface is different from the owner of the connection
-	// on which it is provisioned, then the virtual interface will remain in this
-	// state until it is confirmed by the virtual interface owner. Verifying: This
-	// state only applies to public virtual interfaces. Each public virtual interface
-	// needs validation before the virtual interface can be created. Pending: A
-	// virtual interface is in this state from the time that it is created until
-	// the virtual interface is ready to forward traffic. Available: A virtual interface
-	// that is able to forward traffic. Down: A virtual interface that is BGP down.
-	// Deleting: A virtual interface is in this state immediately after calling
-	// DeleteVirtualInterface until it can no longer forward traffic. Deleted: A
-	// virtual interface that cannot forward traffic. Rejected: The virtual interface
-	// owner has declined creation of the virtual interface. If a virtual interface
-	// in the 'Confirming' state is deleted by the virtual interface owner, the
-	// virtual interface will enter the 'Rejected' state.
+	// State of the virtual interface.
+	//
+	//    Confirming: The creation of the virtual interface is pending confirmation
+	// from the virtual interface owner. If the owner of the virtual interface is
+	// different from the owner of the connection on which it is provisioned, then
+	// the virtual interface will remain in this state until it is confirmed by
+	// the virtual interface owner.
+	//
+	//    Verifying: This state only applies to public virtual interfaces. Each
+	// public virtual interface needs validation before the virtual interface can
+	// be created.
+	//
+	//    Pending: A virtual interface is in this state from the time that it is
+	// created until the virtual interface is ready to forward traffic.
+	//
+	//    Available: A virtual interface that is able to forward traffic.
+	//
+	//    Down: A virtual interface that is BGP down.
+	//
+	//    Deleting: A virtual interface is in this state immediately after calling
+	// DeleteVirtualInterface until it can no longer forward traffic.
+	//
+	//    Deleted: A virtual interface that cannot forward traffic.
+	//
+	//    Rejected: The virtual interface owner has declined creation of the virtual
+	// interface. If a virtual interface in the 'Confirming' state is deleted by
+	// the virtual interface owner, the virtual interface will enter the 'Rejected'
+	// state.
 	VirtualInterfaceState *string `locationName:"virtualInterfaceState" type:"string" enum:"VirtualInterfaceState"`
 }
 
@@ -913,17 +1073,28 @@ type Connection struct {
 	// Default: None
 	ConnectionName *string `locationName:"connectionName" type:"string"`
 
-	// State of the connection.  Ordering: The initial state of a hosted connection
-	// provisioned on an interconnect. The connection stays in the ordering state
-	// until the owner of the hosted connection confirms or declines the connection
-	// order. Requested: The initial state of a standard connection. The connection
+	// State of the connection.
+	//
+	//    Ordering: The initial state of a hosted connection provisioned on an
+	// interconnect. The connection stays in the ordering state until the owner
+	// of the hosted connection confirms or declines the connection order.
+	//
+	//    Requested: The initial state of a standard connection. The connection
 	// stays in the requested state until the Letter of Authorization (LOA) is sent
-	// to the customer. Pending: The connection has been approved, and is being
-	// initialized. Available: The network link is up, and the connection is ready
-	// for use. Down: The network link is down. Deleting: The connection is in the
-	// process of being deleted. Deleted: The connection has been deleted. Rejected:
-	// A hosted connection in the 'Ordering' state will enter the 'Rejected' state
-	// if it is deleted by the end customer.
+	// to the customer.
+	//
+	//    Pending: The connection has been approved, and is being initialized.
+	//
+	//    Available: The network link is up, and the connection is ready for use.
+	//
+	//    Down: The network link is down.
+	//
+	//    Deleting: The connection is in the process of being deleted.
+	//
+	//    Deleted: The connection has been deleted.
+	//
+	//    Rejected: A hosted connection in the 'Ordering' state will enter the
+	// 'Rejected' state if it is deleted by the end customer.
 	ConnectionState *string `locationName:"connectionState" type:"string" enum:"ConnectionState"`
 
 	// Where the connection is located.
@@ -933,8 +1104,10 @@ type Connection struct {
 	// Default: None
 	Location *string `locationName:"location" type:"string"`
 
+	// The AWS account that will own the new connection.
 	OwnerAccount *string `locationName:"ownerAccount" type:"string"`
 
+	// The name of the AWS Direct Connect service provider associated with the connection.
 	PartnerName *string `locationName:"partnerName" type:"string"`
 
 	// The AWS region where the connection is located.
@@ -1014,6 +1187,25 @@ func (s CreateConnectionInput) GoString() string {
 	return s.String()
 }
 
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CreateConnectionInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CreateConnectionInput"}
+	if s.Bandwidth == nil {
+		invalidParams.Add(request.NewErrParamRequired("Bandwidth"))
+	}
+	if s.ConnectionName == nil {
+		invalidParams.Add(request.NewErrParamRequired("ConnectionName"))
+	}
+	if s.Location == nil {
+		invalidParams.Add(request.NewErrParamRequired("Location"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
 // Container for the parameters to the CreateInterconnect operation.
 type CreateInterconnectInput struct {
 	_ struct{} `type:"structure"`
@@ -1052,6 +1244,25 @@ func (s CreateInterconnectInput) GoString() string {
 	return s.String()
 }
 
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CreateInterconnectInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CreateInterconnectInput"}
+	if s.Bandwidth == nil {
+		invalidParams.Add(request.NewErrParamRequired("Bandwidth"))
+	}
+	if s.InterconnectName == nil {
+		invalidParams.Add(request.NewErrParamRequired("InterconnectName"))
+	}
+	if s.Location == nil {
+		invalidParams.Add(request.NewErrParamRequired("Location"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
 // Container for the parameters to the CreatePrivateVirtualInterface operation.
 type CreatePrivateVirtualInterfaceInput struct {
 	_ struct{} `type:"structure"`
@@ -1077,6 +1288,27 @@ func (s CreatePrivateVirtualInterfaceInput) String() string {
 // GoString returns the string representation
 func (s CreatePrivateVirtualInterfaceInput) GoString() string {
 	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CreatePrivateVirtualInterfaceInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CreatePrivateVirtualInterfaceInput"}
+	if s.ConnectionId == nil {
+		invalidParams.Add(request.NewErrParamRequired("ConnectionId"))
+	}
+	if s.NewPrivateVirtualInterface == nil {
+		invalidParams.Add(request.NewErrParamRequired("NewPrivateVirtualInterface"))
+	}
+	if s.NewPrivateVirtualInterface != nil {
+		if err := s.NewPrivateVirtualInterface.Validate(); err != nil {
+			invalidParams.AddNested("NewPrivateVirtualInterface", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
 }
 
 // Container for the parameters to the CreatePublicVirtualInterface operation.
@@ -1106,6 +1338,27 @@ func (s CreatePublicVirtualInterfaceInput) GoString() string {
 	return s.String()
 }
 
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CreatePublicVirtualInterfaceInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CreatePublicVirtualInterfaceInput"}
+	if s.ConnectionId == nil {
+		invalidParams.Add(request.NewErrParamRequired("ConnectionId"))
+	}
+	if s.NewPublicVirtualInterface == nil {
+		invalidParams.Add(request.NewErrParamRequired("NewPublicVirtualInterface"))
+	}
+	if s.NewPublicVirtualInterface != nil {
+		if err := s.NewPublicVirtualInterface.Validate(); err != nil {
+			invalidParams.AddNested("NewPublicVirtualInterface", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
 // Container for the parameters to the DeleteConnection operation.
 type DeleteConnectionInput struct {
 	_ struct{} `type:"structure"`
@@ -1128,6 +1381,19 @@ func (s DeleteConnectionInput) GoString() string {
 	return s.String()
 }
 
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DeleteConnectionInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DeleteConnectionInput"}
+	if s.ConnectionId == nil {
+		invalidParams.Add(request.NewErrParamRequired("ConnectionId"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
 // Container for the parameters to the DeleteInterconnect operation.
 type DeleteInterconnectInput struct {
 	_ struct{} `type:"structure"`
@@ -1148,16 +1414,39 @@ func (s DeleteInterconnectInput) GoString() string {
 	return s.String()
 }
 
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DeleteInterconnectInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DeleteInterconnectInput"}
+	if s.InterconnectId == nil {
+		invalidParams.Add(request.NewErrParamRequired("InterconnectId"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
 // The response received when DeleteInterconnect is called.
 type DeleteInterconnectOutput struct {
 	_ struct{} `type:"structure"`
 
-	// State of the interconnect.  Requested: The initial state of an interconnect.
-	// The interconnect stays in the requested state until the Letter of Authorization
-	// (LOA) is sent to the customer. Pending: The interconnect has been approved,
-	// and is being initialized. Available: The network link is up, and the interconnect
-	// is ready for use. Down: The network link is down. Deleting: The interconnect
-	// is in the process of being deleted. Deleted: The interconnect has been deleted.
+	// State of the interconnect.
+	//
+	//    Requested: The initial state of an interconnect. The interconnect stays
+	// in the requested state until the Letter of Authorization (LOA) is sent to
+	// the customer.
+	//
+	//    Pending>: The interconnect has been approved, and is being initialized.
+	//
+	//    Available: The network link is up, and the interconnect is ready for
+	// use.
+	//
+	//    Down: The network link is down.
+	//
+	//    Deleting: The interconnect is in the process of being deleted.
+	//
+	//    Deleted: The interconnect has been deleted.
 	InterconnectState *string `locationName:"interconnectState" type:"string" enum:"InterconnectState"`
 }
 
@@ -1193,26 +1482,51 @@ func (s DeleteVirtualInterfaceInput) GoString() string {
 	return s.String()
 }
 
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DeleteVirtualInterfaceInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DeleteVirtualInterfaceInput"}
+	if s.VirtualInterfaceId == nil {
+		invalidParams.Add(request.NewErrParamRequired("VirtualInterfaceId"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
 // The response received when DeleteVirtualInterface is called.
 type DeleteVirtualInterfaceOutput struct {
 	_ struct{} `type:"structure"`
 
-	// State of the virtual interface.  Confirming: The creation of the virtual
-	// interface is pending confirmation from the virtual interface owner. If the
-	// owner of the virtual interface is different from the owner of the connection
-	// on which it is provisioned, then the virtual interface will remain in this
-	// state until it is confirmed by the virtual interface owner. Verifying: This
-	// state only applies to public virtual interfaces. Each public virtual interface
-	// needs validation before the virtual interface can be created. Pending: A
-	// virtual interface is in this state from the time that it is created until
-	// the virtual interface is ready to forward traffic. Available: A virtual interface
-	// that is able to forward traffic. Down: A virtual interface that is BGP down.
-	// Deleting: A virtual interface is in this state immediately after calling
-	// DeleteVirtualInterface until it can no longer forward traffic. Deleted: A
-	// virtual interface that cannot forward traffic. Rejected: The virtual interface
-	// owner has declined creation of the virtual interface. If a virtual interface
-	// in the 'Confirming' state is deleted by the virtual interface owner, the
-	// virtual interface will enter the 'Rejected' state.
+	// State of the virtual interface.
+	//
+	//    Confirming: The creation of the virtual interface is pending confirmation
+	// from the virtual interface owner. If the owner of the virtual interface is
+	// different from the owner of the connection on which it is provisioned, then
+	// the virtual interface will remain in this state until it is confirmed by
+	// the virtual interface owner.
+	//
+	//    Verifying: This state only applies to public virtual interfaces. Each
+	// public virtual interface needs validation before the virtual interface can
+	// be created.
+	//
+	//    Pending: A virtual interface is in this state from the time that it is
+	// created until the virtual interface is ready to forward traffic.
+	//
+	//    Available: A virtual interface that is able to forward traffic.
+	//
+	//    Down: A virtual interface that is BGP down.
+	//
+	//    Deleting: A virtual interface is in this state immediately after calling
+	// DeleteVirtualInterface until it can no longer forward traffic.
+	//
+	//    Deleted: A virtual interface that cannot forward traffic.
+	//
+	//    Rejected: The virtual interface owner has declined creation of the virtual
+	// interface. If a virtual interface in the 'Confirming' state is deleted by
+	// the virtual interface owner, the virtual interface will enter the 'Rejected'
+	// state.
 	VirtualInterfaceState *string `locationName:"virtualInterfaceState" type:"string" enum:"VirtualInterfaceState"`
 }
 
@@ -1268,6 +1582,19 @@ func (s DescribeConnectionsOnInterconnectInput) String() string {
 // GoString returns the string representation
 func (s DescribeConnectionsOnInterconnectInput) GoString() string {
 	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DescribeConnectionsOnInterconnectInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DescribeConnectionsOnInterconnectInput"}
+	if s.InterconnectId == nil {
+		invalidParams.Add(request.NewErrParamRequired("InterconnectId"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
 }
 
 // Container for the parameters to the DescribeInterconnects operation.
@@ -1455,12 +1782,22 @@ type Interconnect struct {
 	// Example: "1G Interconnect to AWS"
 	InterconnectName *string `locationName:"interconnectName" type:"string"`
 
-	// State of the interconnect.  Requested: The initial state of an interconnect.
-	// The interconnect stays in the requested state until the Letter of Authorization
-	// (LOA) is sent to the customer. Pending: The interconnect has been approved,
-	// and is being initialized. Available: The network link is up, and the interconnect
-	// is ready for use. Down: The network link is down. Deleting: The interconnect
-	// is in the process of being deleted. Deleted: The interconnect has been deleted.
+	// State of the interconnect.
+	//
+	//    Requested: The initial state of an interconnect. The interconnect stays
+	// in the requested state until the Letter of Authorization (LOA) is sent to
+	// the customer.
+	//
+	//    Pending>: The interconnect has been approved, and is being initialized.
+	//
+	//    Available: The network link is up, and the interconnect is ready for
+	// use.
+	//
+	//    Down: The network link is down.
+	//
+	//    Deleting: The interconnect is in the process of being deleted.
+	//
+	//    Deleted: The interconnect has been deleted.
 	InterconnectState *string `locationName:"interconnectState" type:"string" enum:"InterconnectState"`
 
 	// Where the connection is located.
@@ -1562,6 +1899,28 @@ func (s NewPrivateVirtualInterface) GoString() string {
 	return s.String()
 }
 
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *NewPrivateVirtualInterface) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "NewPrivateVirtualInterface"}
+	if s.Asn == nil {
+		invalidParams.Add(request.NewErrParamRequired("Asn"))
+	}
+	if s.VirtualGatewayId == nil {
+		invalidParams.Add(request.NewErrParamRequired("VirtualGatewayId"))
+	}
+	if s.VirtualInterfaceName == nil {
+		invalidParams.Add(request.NewErrParamRequired("VirtualInterfaceName"))
+	}
+	if s.Vlan == nil {
+		invalidParams.Add(request.NewErrParamRequired("Vlan"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
 // A structure containing information about a private virtual interface that
 // will be provisioned on a connection.
 type NewPrivateVirtualInterfaceAllocation struct {
@@ -1606,6 +1965,25 @@ func (s NewPrivateVirtualInterfaceAllocation) String() string {
 // GoString returns the string representation
 func (s NewPrivateVirtualInterfaceAllocation) GoString() string {
 	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *NewPrivateVirtualInterfaceAllocation) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "NewPrivateVirtualInterfaceAllocation"}
+	if s.Asn == nil {
+		invalidParams.Add(request.NewErrParamRequired("Asn"))
+	}
+	if s.VirtualInterfaceName == nil {
+		invalidParams.Add(request.NewErrParamRequired("VirtualInterfaceName"))
+	}
+	if s.Vlan == nil {
+		invalidParams.Add(request.NewErrParamRequired("Vlan"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
 }
 
 // A structure containing information about a new public virtual interface.
@@ -1655,6 +2033,34 @@ func (s NewPublicVirtualInterface) String() string {
 // GoString returns the string representation
 func (s NewPublicVirtualInterface) GoString() string {
 	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *NewPublicVirtualInterface) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "NewPublicVirtualInterface"}
+	if s.AmazonAddress == nil {
+		invalidParams.Add(request.NewErrParamRequired("AmazonAddress"))
+	}
+	if s.Asn == nil {
+		invalidParams.Add(request.NewErrParamRequired("Asn"))
+	}
+	if s.CustomerAddress == nil {
+		invalidParams.Add(request.NewErrParamRequired("CustomerAddress"))
+	}
+	if s.RouteFilterPrefixes == nil {
+		invalidParams.Add(request.NewErrParamRequired("RouteFilterPrefixes"))
+	}
+	if s.VirtualInterfaceName == nil {
+		invalidParams.Add(request.NewErrParamRequired("VirtualInterfaceName"))
+	}
+	if s.Vlan == nil {
+		invalidParams.Add(request.NewErrParamRequired("Vlan"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
 }
 
 // A structure containing information about a public virtual interface that
@@ -1707,6 +2113,34 @@ func (s NewPublicVirtualInterfaceAllocation) GoString() string {
 	return s.String()
 }
 
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *NewPublicVirtualInterfaceAllocation) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "NewPublicVirtualInterfaceAllocation"}
+	if s.AmazonAddress == nil {
+		invalidParams.Add(request.NewErrParamRequired("AmazonAddress"))
+	}
+	if s.Asn == nil {
+		invalidParams.Add(request.NewErrParamRequired("Asn"))
+	}
+	if s.CustomerAddress == nil {
+		invalidParams.Add(request.NewErrParamRequired("CustomerAddress"))
+	}
+	if s.RouteFilterPrefixes == nil {
+		invalidParams.Add(request.NewErrParamRequired("RouteFilterPrefixes"))
+	}
+	if s.VirtualInterfaceName == nil {
+		invalidParams.Add(request.NewErrParamRequired("VirtualInterfaceName"))
+	}
+	if s.Vlan == nil {
+		invalidParams.Add(request.NewErrParamRequired("Vlan"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
 // A route filter prefix that the customer can advertise through Border Gateway
 // Protocol (BGP) over a public virtual interface.
 type RouteFilterPrefix struct {
@@ -1743,11 +2177,16 @@ type VirtualGateway struct {
 	// Example: vgw-123er56
 	VirtualGatewayId *string `locationName:"virtualGatewayId" type:"string"`
 
-	// State of the virtual private gateway.  Pending: This is the initial state
-	// after calling CreateVpnGateway. Available: Ready for use by a private virtual
-	// interface. Deleting: This is the initial state after calling DeleteVpnGateway.
-	// Deleted: In this state, a private virtual interface is unable to send traffic
-	// over this gateway.
+	// State of the virtual private gateway.
+	//
+	//    Pending: This is the initial state after calling CreateVpnGateway.
+	//
+	//    Available: Ready for use by a private virtual interface.
+	//
+	//    Deleting: This is the initial state after calling DeleteVpnGateway.
+	//
+	//    Deleted: In this state, a private virtual interface is unable to send
+	// traffic over this gateway.
 	VirtualGatewayState *string `locationName:"virtualGatewayState" type:"string"`
 }
 
@@ -1803,6 +2242,7 @@ type VirtualInterface struct {
 	// Default: None
 	Location *string `locationName:"location" type:"string"`
 
+	// The AWS account that will own the new virtual interface.
 	OwnerAccount *string `locationName:"ownerAccount" type:"string"`
 
 	// A list of routes to be advertised to the AWS network in this region (public
@@ -1827,22 +2267,34 @@ type VirtualInterface struct {
 	// Example: "My VPC"
 	VirtualInterfaceName *string `locationName:"virtualInterfaceName" type:"string"`
 
-	// State of the virtual interface.  Confirming: The creation of the virtual
-	// interface is pending confirmation from the virtual interface owner. If the
-	// owner of the virtual interface is different from the owner of the connection
-	// on which it is provisioned, then the virtual interface will remain in this
-	// state until it is confirmed by the virtual interface owner. Verifying: This
-	// state only applies to public virtual interfaces. Each public virtual interface
-	// needs validation before the virtual interface can be created. Pending: A
-	// virtual interface is in this state from the time that it is created until
-	// the virtual interface is ready to forward traffic. Available: A virtual interface
-	// that is able to forward traffic. Down: A virtual interface that is BGP down.
-	// Deleting: A virtual interface is in this state immediately after calling
-	// DeleteVirtualInterface until it can no longer forward traffic. Deleted: A
-	// virtual interface that cannot forward traffic. Rejected: The virtual interface
-	// owner has declined creation of the virtual interface. If a virtual interface
-	// in the 'Confirming' state is deleted by the virtual interface owner, the
-	// virtual interface will enter the 'Rejected' state.
+	// State of the virtual interface.
+	//
+	//    Confirming: The creation of the virtual interface is pending confirmation
+	// from the virtual interface owner. If the owner of the virtual interface is
+	// different from the owner of the connection on which it is provisioned, then
+	// the virtual interface will remain in this state until it is confirmed by
+	// the virtual interface owner.
+	//
+	//    Verifying: This state only applies to public virtual interfaces. Each
+	// public virtual interface needs validation before the virtual interface can
+	// be created.
+	//
+	//    Pending: A virtual interface is in this state from the time that it is
+	// created until the virtual interface is ready to forward traffic.
+	//
+	//    Available: A virtual interface that is able to forward traffic.
+	//
+	//    Down: A virtual interface that is BGP down.
+	//
+	//    Deleting: A virtual interface is in this state immediately after calling
+	// DeleteVirtualInterface until it can no longer forward traffic.
+	//
+	//    Deleted: A virtual interface that cannot forward traffic.
+	//
+	//    Rejected: The virtual interface owner has declined creation of the virtual
+	// interface. If a virtual interface in the 'Confirming' state is deleted by
+	// the virtual interface owner, the virtual interface will enter the 'Rejected'
+	// state.
 	VirtualInterfaceState *string `locationName:"virtualInterfaceState" type:"string" enum:"VirtualInterfaceState"`
 
 	// The type of virtual interface.
@@ -1867,17 +2319,28 @@ func (s VirtualInterface) GoString() string {
 	return s.String()
 }
 
-// State of the connection.  Ordering: The initial state of a hosted connection
-// provisioned on an interconnect. The connection stays in the ordering state
-// until the owner of the hosted connection confirms or declines the connection
-// order. Requested: The initial state of a standard connection. The connection
+// State of the connection.
+//
+//    Ordering: The initial state of a hosted connection provisioned on an
+// interconnect. The connection stays in the ordering state until the owner
+// of the hosted connection confirms or declines the connection order.
+//
+//    Requested: The initial state of a standard connection. The connection
 // stays in the requested state until the Letter of Authorization (LOA) is sent
-// to the customer. Pending: The connection has been approved, and is being
-// initialized. Available: The network link is up, and the connection is ready
-// for use. Down: The network link is down. Deleting: The connection is in the
-// process of being deleted. Deleted: The connection has been deleted. Rejected:
-// A hosted connection in the 'Ordering' state will enter the 'Rejected' state
-// if it is deleted by the end customer.
+// to the customer.
+//
+//    Pending: The connection has been approved, and is being initialized.
+//
+//    Available: The network link is up, and the connection is ready for use.
+//
+//    Down: The network link is down.
+//
+//    Deleting: The connection is in the process of being deleted.
+//
+//    Deleted: The connection has been deleted.
+//
+//    Rejected: A hosted connection in the 'Ordering' state will enter the
+// 'Rejected' state if it is deleted by the end customer.
 const (
 	// @enum ConnectionState
 	ConnectionStateOrdering = "ordering"
@@ -1897,12 +2360,22 @@ const (
 	ConnectionStateRejected = "rejected"
 )
 
-// State of the interconnect.  Requested: The initial state of an interconnect.
-// The interconnect stays in the requested state until the Letter of Authorization
-// (LOA) is sent to the customer. Pending: The interconnect has been approved,
-// and is being initialized. Available: The network link is up, and the interconnect
-// is ready for use. Down: The network link is down. Deleting: The interconnect
-// is in the process of being deleted. Deleted: The interconnect has been deleted.
+// State of the interconnect.
+//
+//    Requested: The initial state of an interconnect. The interconnect stays
+// in the requested state until the Letter of Authorization (LOA) is sent to
+// the customer.
+//
+//    Pending>: The interconnect has been approved, and is being initialized.
+//
+//    Available: The network link is up, and the interconnect is ready for
+// use.
+//
+//    Down: The network link is down.
+//
+//    Deleting: The interconnect is in the process of being deleted.
+//
+//    Deleted: The interconnect has been deleted.
 const (
 	// @enum InterconnectState
 	InterconnectStateRequested = "requested"
@@ -1918,22 +2391,34 @@ const (
 	InterconnectStateDeleted = "deleted"
 )
 
-// State of the virtual interface.  Confirming: The creation of the virtual
-// interface is pending confirmation from the virtual interface owner. If the
-// owner of the virtual interface is different from the owner of the connection
-// on which it is provisioned, then the virtual interface will remain in this
-// state until it is confirmed by the virtual interface owner. Verifying: This
-// state only applies to public virtual interfaces. Each public virtual interface
-// needs validation before the virtual interface can be created. Pending: A
-// virtual interface is in this state from the time that it is created until
-// the virtual interface is ready to forward traffic. Available: A virtual interface
-// that is able to forward traffic. Down: A virtual interface that is BGP down.
-// Deleting: A virtual interface is in this state immediately after calling
-// DeleteVirtualInterface until it can no longer forward traffic. Deleted: A
-// virtual interface that cannot forward traffic. Rejected: The virtual interface
-// owner has declined creation of the virtual interface. If a virtual interface
-// in the 'Confirming' state is deleted by the virtual interface owner, the
-// virtual interface will enter the 'Rejected' state.
+// State of the virtual interface.
+//
+//    Confirming: The creation of the virtual interface is pending confirmation
+// from the virtual interface owner. If the owner of the virtual interface is
+// different from the owner of the connection on which it is provisioned, then
+// the virtual interface will remain in this state until it is confirmed by
+// the virtual interface owner.
+//
+//    Verifying: This state only applies to public virtual interfaces. Each
+// public virtual interface needs validation before the virtual interface can
+// be created.
+//
+//    Pending: A virtual interface is in this state from the time that it is
+// created until the virtual interface is ready to forward traffic.
+//
+//    Available: A virtual interface that is able to forward traffic.
+//
+//    Down: A virtual interface that is BGP down.
+//
+//    Deleting: A virtual interface is in this state immediately after calling
+// DeleteVirtualInterface until it can no longer forward traffic.
+//
+//    Deleted: A virtual interface that cannot forward traffic.
+//
+//    Rejected: The virtual interface owner has declined creation of the virtual
+// interface. If a virtual interface in the 'Confirming' state is deleted by
+// the virtual interface owner, the virtual interface will enter the 'Rejected'
+// state.
 const (
 	// @enum VirtualInterfaceState
 	VirtualInterfaceStateConfirming = "confirming"

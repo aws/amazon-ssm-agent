@@ -20,6 +20,8 @@ import (
 	"strings"
 	"time"
 
+	"errors"
+
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
@@ -27,6 +29,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/fileutil/artifact"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/plugins/pluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/rebooter"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 	"github.com/aws/amazon-ssm-agent/agent/updateutil"
@@ -68,12 +71,23 @@ type UpdatePluginInput struct {
 	UpdaterName    string `json:"-"`
 }
 
+// UpdatePluginConfig is used for initializing update agent plugin with default values
+type UpdatePluginConfig struct {
+	ManifestLocation      string
+	StdoutFileName        string
+	StderrFileName        string
+	MaxStdoutLength       int
+	MaxStderrLength       int
+	OutputTruncatedSuffix string
+}
+
 // UpdatePluginOutput represents the output of the plugin
 type UpdatePluginOutput struct {
 	contracts.PluginOutput
 }
 
 type updateManager struct{}
+
 type pluginHelper interface {
 	generateUpdateCmd(log log.T,
 		manifest *Manifest,
@@ -107,7 +121,7 @@ type pluginHelper interface {
 }
 
 // Assign method to global variables to allow unittest to override
-var getAppConfig = appconfig.GetConfig
+var getAppConfig = appconfig.Config
 var fileDownload = artifact.Download
 var fileUncompress = fileutil.Uncompress
 var updateAgent = runUpdateAgent
@@ -145,23 +159,14 @@ func (out *UpdatePluginOutput) AppendInfo(log log.T, format string, params ...in
 }
 
 // NewPlugin returns a new instance of the plugin.
-func NewPlugin() (*Plugin, error) {
-	config, err := getAppConfig(false)
-
-	if err != nil {
-		return nil, err
-	}
-	pluginConf, ok := config.Plugins[Name()]
-	if !ok {
-		return nil, fmt.Errorf("Missing configuration for plugin %v", Name())
-	}
-
+func NewPlugin(updatePluginConfig UpdatePluginConfig) (*Plugin, error) {
 	var plugin Plugin
-	err = jsonutil.Remarshal(pluginConf, &plugin)
-	if err != nil {
-		return nil, err
-	}
-
+	plugin.ManifestLocation = updatePluginConfig.ManifestLocation
+	plugin.MaxStdoutLength = updatePluginConfig.MaxStdoutLength
+	plugin.MaxStderrLength = updatePluginConfig.MaxStderrLength
+	plugin.StdoutFileName = updatePluginConfig.StdoutFileName
+	plugin.StderrFileName = updatePluginConfig.StderrFileName
+	plugin.OutputTruncatedSuffix = updatePluginConfig.OutputTruncatedSuffix
 	return &plugin, nil
 }
 
@@ -261,11 +266,20 @@ func runUpdateAgent(
 		return
 	}
 
+	// If disk space is not sufficient, fail the update to prevent installation and notify user in output
+	// If loading disk space fails, continue to update (agent update is backed by rollback handler)
+	log.Infof("Checking available disk space ...")
+	if isDiskSpaceSufficient, err := util.IsDiskSpaceSufficientForUpdate(log); err == nil && !isDiskSpaceSufficient {
+		out.Failed(log, errors.New("Insufficient available disk space"))
+		return
+	}
+
 	log.Infof("Start Installation")
 	log.Infof("Hand over update process to %v", pluginInput.UpdaterName)
 	//Execute updater, hand over the update process
 	workDir := updateutil.UpdateArtifactFolder(
 		appconfig.UpdaterArtifactsRoot, pluginInput.UpdaterName, updaterVersion)
+
 	if err = util.ExeCommand(
 		log,
 		cmd,
@@ -391,7 +405,7 @@ func (m *updateManager) downloadUpdater(log log.T,
 		if downloadErr != nil {
 			errMessage = fmt.Sprintf("%v, %v", errMessage, downloadErr.Error())
 		}
-		return version, fmt.Errorf(errMessage)
+		return version, errors.New(errMessage)
 	}
 	out.AppendInfo(log, "Successfully downloaded %v", downloadInput.SourceURL)
 	if uncompressErr := fileUncompress(
@@ -466,8 +480,14 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 	res.StartDateTime = time.Now()
 	defer func() { res.EndDateTime = time.Now() }()
 
-	out := make([]UpdatePluginOutput, len(config.Properties))
-	for i, prop := range config.Properties {
+	//loading Properties as list since aws:updateSsmAgent uses properties as list
+	var properties []interface{}
+	if properties, res = pluginutil.LoadParametersAsList(log, config.Properties); res.Code != 0 {
+		return res
+	}
+
+	out := make([]UpdatePluginOutput, len(properties))
+	for i, prop := range properties {
 		// check if a reboot has been requested
 		if rebooter.RebootRequested() {
 			log.Info("A plugin has requested a reboot.")
@@ -476,11 +496,11 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 
 		if cancelFlag.ShutDown() {
 			out[i] = UpdatePluginOutput{}
-			out[i].Errors = []string{"Task canceled due to ShutDown"}
+			out[i].Errors = []string{"Execution canceled due to ShutDown"}
 			break
 		} else if cancelFlag.Canceled() {
 			out[i] = UpdatePluginOutput{}
-			out[i].Errors = []string{"Task canceled"}
+			out[i].Errors = []string{"Execution canceled"}
 			break
 		}
 
@@ -506,4 +526,16 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 // Name returns the plugin name
 func Name() string {
 	return appconfig.PluginNameAwsAgentUpdate
+}
+
+// GetUpdatePluginConfig returns the default values for the update plugin
+func GetUpdatePluginConfig() UpdatePluginConfig {
+	return UpdatePluginConfig{
+		ManifestLocation:      "https://amazon-ssm-{Region}.s3.amazonaws.com/ssm-agent-manifest.json",
+		StdoutFileName:        "stdout",
+		StderrFileName:        "stderr",
+		MaxStdoutLength:       2500,
+		MaxStderrLength:       2500,
+		OutputTruncatedSuffix: "--output truncated--",
+	}
 }

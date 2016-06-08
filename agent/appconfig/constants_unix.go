@@ -17,8 +17,11 @@
 package appconfig
 
 const (
-	// AppConfigPath specifies the location of amazon-ssm-agent config file
-	AppConfigPath = "/etc/amazon/ssm/amazon-ssm-agent.json"
+	// Program Folder
+	DefaultProgramFolder = "/etc/amazon/ssm/"
+
+	// AppConfig Path
+	AppConfigPath = DefaultProgramFolder + AppConfigFileName
 
 	// DownloadRoot specifies the directory under which files will be downloaded
 	DownloadRoot = "/var/log/amazon/ssm/download/"
@@ -33,9 +36,6 @@ const (
 
 	// PluginNameAwsRunScript is the name for run script plugin
 	PluginNameAwsRunScript = "aws:runShellScript"
-
-	// PluginNameAwsAgentUpdate is the name for agent update plugin
-	PluginNameAwsAgentUpdate = "aws:updateSsmAgent"
 
 	// RebootExitCode that would trigger a Soft Reboot
 	RebootExitCode = 194

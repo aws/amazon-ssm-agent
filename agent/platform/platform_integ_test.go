@@ -26,10 +26,15 @@ import (
 func TestGetPlatformName(t *testing.T) {
 	var log = logger.NewMockLog()
 	t.Log("get platform name and version")
-	data, err := GetPlatformName(log)
+	data, err := PlatformName(log)
 	t.Logf("platform name is %v ", data)
 	assert.NoError(t, err, "get platform name should not result in err")
-	data, err = GetPlatformVersion(log)
+	data, err = PlatformVersion(log)
 	t.Logf("platform version is %v ", data)
 	assert.NoError(t, err, "get platform version should not result in err")
+}
+
+func TestFullyQualifiedDomainName(t *testing.T) {
+	t.Logf("fqdn/hostname is %v", fullyQualifiedDomainName())
+	assert.True(t, true, "expected no error trying to retireve the fqdn/hostname value")
 }

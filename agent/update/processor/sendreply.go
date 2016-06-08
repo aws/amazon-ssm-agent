@@ -33,7 +33,7 @@ var msgSvc messageService.Service
 var msgSvcOnce sync.Once
 
 var newMsgSvc = messageService.NewService
-var getAppConfig = appconfig.GetConfig
+var getAppConfig = appconfig.Config
 
 // Service is an interface represents for SendReply, UpdateInstanceInfo
 type Service interface {
@@ -47,7 +47,7 @@ type svcManager struct{}
 // SendReply sends message back to the service
 func (s *svcManager) SendReply(log log.T, update *UpdateDetail) (err error) {
 	var svc messageService.Service
-	var config appconfig.T
+	var config appconfig.SsmagentConfig
 	payloadB := []byte{}
 
 	if config, err = getAppConfig(false); err != nil {
@@ -69,7 +69,7 @@ func (s *svcManager) SendReply(log log.T, update *UpdateDetail) (err error) {
 // DeleteMessage calls the DeleteMessage MDS API.
 func (s *svcManager) DeleteMessage(log log.T, update *UpdateDetail) (err error) {
 	var svc messageService.Service
-	var config appconfig.T
+	var config appconfig.SsmagentConfig
 
 	if config, err = getAppConfig(false); err != nil {
 		return fmt.Errorf("could not load config file %v", err.Error())
@@ -82,7 +82,7 @@ func (s *svcManager) DeleteMessage(log log.T, update *UpdateDetail) (err error) 
 }
 
 // getMsgSvc gets cached message service
-func getMsgSvc(config appconfig.T) (svc messageService.Service, err error) {
+func getMsgSvc(config appconfig.SsmagentConfig) (svc messageService.Service, err error) {
 	msgSvcOnce.Do(func() {
 		connectionTimeout := time.Duration(config.Mds.StopTimeoutMillis) * time.Millisecond
 		msgSvc = newMsgSvc(
@@ -99,7 +99,7 @@ func getMsgSvc(config appconfig.T) (svc messageService.Service, err error) {
 }
 
 // prepareReplyPayload setups the reply payload
-func prepareReplyPayload(config appconfig.T, update *UpdateDetail) (payload *messageContracts.SendReplyPayload) {
+func prepareReplyPayload(config appconfig.SsmagentConfig, update *UpdateDetail) (payload *messageContracts.SendReplyPayload) {
 	runtimeStatuses := make(map[string]*contracts.PluginRuntimeStatus)
 	rs := prepareRuntimeStatus(update)
 	runtimeStatuses[appconfig.PluginNameAwsAgentUpdate] = &rs
