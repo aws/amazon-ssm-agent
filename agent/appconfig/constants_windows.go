@@ -66,7 +66,14 @@ var EnvProgramFiles string
 var EnvWinDir string
 
 func init() {
-	SSMDataPath = filepath.Join(os.Getenv("ProgramData"), SSMFolder)
+	/*
+		System environment variable "AllUsersProfile" maps to following locations in different locations:
+
+		WindowsServer 2003  -> C:\Documents and Settings\All Users
+		WindowsServer 2008+ -> C:\Program Files
+	*/
+
+	SSMDataPath = filepath.Join(os.Getenv("AllUsersProfile"), SSMFolder)
 	EnvProgramFiles = os.Getenv("ProgramFiles")
 	EnvWinDir = os.Getenv("WINDIR")
 	temp := os.Getenv("TEMP")
