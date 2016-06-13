@@ -199,6 +199,7 @@ package-linux: package-rpm-386 package-deb-386 package-rpm package-deb
 .PHONY: package-windows
 package-windows: package-win-386 package-win
 	$(BGO_SPACE)/Tools/src/create_windows_package.sh
+	$(BGO_SPACE)/Tools/src/create_windows_nano_package.sh
 
 .PHONY: package-rpm
 package-rpm: create-package-folder

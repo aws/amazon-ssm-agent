@@ -72,14 +72,6 @@ const (
 	CompressFormat = "zip"
 )
 
-const (
-	// Installer represents Install PowerShell script
-	Installer = "install.ps1"
-
-	// UnInstaller represents Uninstall PowerShell script
-	UnInstaller = "uninstall.ps1"
-)
-
 // Win32_OperatingSystems https://msdn.microsoft.com/en-us/library/aa394239%28v=vs.85%29.aspx
 const (
 	// PRODUCT_DATA_CENTER_NANO_SERVER = 143
@@ -87,6 +79,14 @@ const (
 
 	// PRODUCT_STANDARD_NANO_SERVER = 144
 	ProductStandardNanoServer = "144"
+)
+
+const (
+	// Installer represents Install PowerShell script
+	Installer = "install.ps1"
+
+	// UnInstaller represents Uninstall PowerShell script
+	UnInstaller = "uninstall.ps1"
 )
 
 var getPlatformSku = platform.PlatformSku
