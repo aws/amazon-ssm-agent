@@ -131,7 +131,7 @@ func fullyQualifiedDomainName() string {
 	}
 
 	var contentBytes []byte
-	if contentBytes, err = exec.Command(hostNameCommand, "fqdn").Output(); err == nil {
+	if contentBytes, err = exec.Command(hostNameCommand, "--fqdn").Output(); err == nil {
 		fqdn = string(contentBytes)
 	}
 
