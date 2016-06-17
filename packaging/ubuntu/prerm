@@ -1,2 +1,9 @@
 echo "Stopping agent"
-stop amazon-ssm-agent || true
+if [ '/sbin/init --version' = upstart ]
+then
+    stop amazon-ssm-agent
+elif [ 'cat /proc/1/comm' = systemd ]
+then
+    systemctl stop amazon-ssm-agent
+    systemctl daemon-reload
+fi

@@ -29,6 +29,8 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/platform"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/pluginutil"
+	"github.com/aws/amazon-ssm-agent/agent/updateutil"
+	"sync"
 )
 
 const (
@@ -100,9 +102,6 @@ const (
 
 	// PipelineTestVersion represents fake version for pipeline tests
 	PipelineTestVersion = "255.0.0.0"
-
-	// SystemDRedHatVersion represents the beginning version for RHEL uses systemD
-	SystemDRedHatVersion = "7"
 )
 
 //ErrorCode is types of Error Codes
@@ -196,6 +195,8 @@ var mkDirAll = os.MkdirAll
 var openFile = os.OpenFile
 var execCommand = exec.Command
 var cmdStart = (*exec.Cmd).Start
+var isUsingSystemD map[string]string
+var once sync.Once
 
 // CreateInstanceContext create instance related information such as region, platform and arch
 func (util *Utility) CreateInstanceContext(log log.T) (context *InstanceContext, err error) {
@@ -379,8 +380,12 @@ func (util *Utility) IsPlatformSupportedForUpdate(log log.T) (result bool, err e
 // IsPlatformUsingSystemD returns if SystemD is the default Init for the Linux platform
 func (i *InstanceContext) IsPlatformUsingSystemD(log log.T) (result bool, err error) {
 	compareResult := 0
-	if i.Platform == PlatformRedHat || i.Platform == PlatformCentOS {
-		if compareResult, err = VersionCompare(i.PlatformVersion, SystemDRedHatVersion); err != nil {
+	systemDVersions := getMinimumVersionForSystemD()
+
+	// check if current platform has systemd
+	if val, ok := (*systemDVersions)[i.Platform]; ok {
+		// compare current agent version with minimum supported version
+		if compareResult, err = VersionCompare(i.PlatformVersion, val); err != nil {
 			return false, err
 		}
 		if compareResult >= 0 {
@@ -389,6 +394,16 @@ func (i *InstanceContext) IsPlatformUsingSystemD(log log.T) (result bool, err er
 	}
 
 	return false, nil
+}
+
+func getMinimumVersionForSystemD() (systemDMap *map[string]string) {
+	once.Do(func() {
+		isUsingSystemD = make(map[string]string)
+		isUsingSystemD[PlatformCentOS] = "7"
+		isUsingSystemD[PlatformRedHat] = "7"
+		isUsingSystemD[PlatformUbuntu] = "15"
+	})
+	return &isUsingSystemD
 }
 
 // FileName generates downloadable file name base on agreed convension
