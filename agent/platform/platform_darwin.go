@@ -40,6 +40,10 @@ func getPlatformVersion(log log.T) (value string, err error) {
 	return
 }
 
+func getPlatformSku(log log.T) (value string, err error) {
+	return
+}
+
 func getPlatformDetail(log log.T, param string) (value string, err error) {
 	var contentsBytes []byte
 	value = notAvailableMessage

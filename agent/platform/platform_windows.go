@@ -17,9 +17,11 @@
 package platform
 
 import (
+	"fmt"
 	"os"
 	"os/exec"
 	"path/filepath"
+	"regexp"
 	"strings"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
@@ -28,6 +30,7 @@ import (
 
 const caption = "Caption"
 const version = "Version"
+const sku = "OperatingSystemSKU"
 
 func getPlatformName(log log.T) (value string, err error) {
 	return getPlatformDetails(caption, log)
@@ -35,6 +38,10 @@ func getPlatformName(log log.T) (value string, err error) {
 
 func getPlatformVersion(log log.T) (value string, err error) {
 	return getPlatformDetails(version, log)
+}
+
+func getPlatformSku(log log.T) (value string, err error) {
+	return getPlatformDetails(sku, log)
 }
 
 func getPlatformDetails(property string, log log.T) (value string, err error) {
@@ -48,8 +55,17 @@ func getPlatformDetails(property string, log log.T) (value string, err error) {
 		log.Debugf("There was an error running %v %v, err:%v", cmdName, cmdArgs, err)
 		return
 	}
+
+	// Stringnize cmd output and trim spaces 
 	value = strings.TrimSpace(string(cmdOut))
-	value = strings.TrimLeft(value, property+"=")
+
+	// Match whitespaces between property and = sign and remove whitespaces
+	rp := regexp.MustCompile(fmt.Sprintf("%v(\\s*)%v", property, "="))
+	value = rp.ReplaceAllString(value, "")
+
+	// Trim spaces again
+	value = strings.TrimSpace(value)
+
 	log.Debugf(commandOutputMessage, value)
 	return
 }

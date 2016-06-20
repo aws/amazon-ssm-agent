@@ -38,6 +38,12 @@ func PlatformVersion(log log.T) (version string, err error) {
 	return getPlatformVersion(log)
 }
 
+
+// PlatformSku gets the OS specific platform SKU number
+func PlatformSku(log log.T) (sku string, err error) {
+	return getPlatformSku(log)
+}
+
 // Hostname of the computer.
 func Hostname() (name string, err error) {
 	return fullyQualifiedDomainName(), nil

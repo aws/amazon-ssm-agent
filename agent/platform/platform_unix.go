@@ -44,6 +44,10 @@ func getPlatformVersion(log log.T) (value string, err error) {
 	return
 }
 
+func getPlatformSku(log log.T) (value string, err error) {
+	return
+}
+
 func getPlatformDetails(log log.T) (name string, version string, err error) {
 	log.Debugf(gettingPlatformDetailsMessage)
 	contents := ""

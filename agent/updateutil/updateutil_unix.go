@@ -19,6 +19,8 @@ package updateutil
 import (
 	"os/exec"
 	"syscall"
+	
+	"github.com/aws/amazon-ssm-agent/agent/log"
 )
 
 const (
@@ -87,4 +89,8 @@ func agentStatusOutput() ([]byte, error) {
 
 func agentExpectedStatus() string {
 	return "amazon-ssm-agent start/running"
+}
+
+func isUpdateSupported(log log.T) (bool, error) {
+	return true, nil
 }
