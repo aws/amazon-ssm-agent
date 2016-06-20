@@ -67,11 +67,11 @@ const (
 )
 
 const (
-	// Installer represents Install shell script
-	Installer = "install.bat"
+	// Installer represents Install PowerShell script
+	Installer = "install.ps1"
 
-	// UnInstaller represents Uninstall shell script
-	UnInstaller = "uninstall.bat"
+	// UnInstaller represents Uninstall PowerShell script
+	UnInstaller = "uninstall.ps1"
 )
 
 func prepareProcess(command *exec.Cmd) {

@@ -1,5 +1,6 @@
-Amazon-ssm-agent.iml
+*.iml
 .project
+.DS_Store
 /bin/
 /pkg/
 /.settings/
