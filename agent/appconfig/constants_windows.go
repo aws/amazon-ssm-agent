@@ -69,11 +69,16 @@ func init() {
 	/*
 		System environment variable "AllUsersProfile" maps to following locations in different locations:
 
-		WindowsServer 2003  -> C:\Documents and Settings\All Users
-		WindowsServer 2008+ -> C:\Program Files
+		WindowsServer 2003  -> C:\Documents and Settings\All Users\Application Data
+		WindowsServer 2008+ -> C:\ProgramData
 	*/
 
-	SSMDataPath = filepath.Join(os.Getenv("AllUsersProfile"), SSMFolder)
+	SSMDataPath = os.Getenv("ProgramData")
+	if SSMDataPath == "" {
+		SSMDataPath = filepath.Join(os.Getenv("AllUsersProfile"), "Application Data")
+	}
+	SSMDataPath = filepath.Join(SSMDataPath, SSMFolder)
+
 	EnvProgramFiles = os.Getenv("ProgramFiles")
 	EnvWinDir = os.Getenv("WINDIR")
 	temp := os.Getenv("TEMP")
