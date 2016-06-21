@@ -56,7 +56,7 @@ func getPlatformDetails(property string, log log.T) (value string, err error) {
 		return
 	}
 
-	// Stringnize cmd output and trim spaces 
+	// Stringnize cmd output and trim spaces
 	value = strings.TrimSpace(string(cmdOut))
 
 	// Match whitespaces between property and = sign and remove whitespaces

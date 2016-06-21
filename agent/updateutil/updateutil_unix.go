@@ -19,7 +19,7 @@ package updateutil
 import (
 	"os/exec"
 	"syscall"
-	
+
 	"github.com/aws/amazon-ssm-agent/agent/log"
 )
 
