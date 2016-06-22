@@ -26,7 +26,7 @@ const (
 	// See Seelog documentation to customize the logger
 	DefaultSeelogConfigFilePath = "/etc/amazon/ssm/seelog.xml"
 
-	DefaultLogDir = "log"
+	DefaultLogDir = "/var/log/amazon/ssm"
 )
 
 // InitLogger initializes the logger using the settings specified in the application config file.
