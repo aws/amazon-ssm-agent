@@ -96,7 +96,7 @@ func loadPlatformIndependentPlugins(context context.T) PluginRegistry {
 
 	// registering aws:updateSsmAgent plugin
 	updateAgentPluginName := updatessmagent.Name()
-	updateAgentPlugin, err := updatessmagent.NewPlugin(updatessmagent.GetUpdatePluginConfig())
+	updateAgentPlugin, err := updatessmagent.NewPlugin(updatessmagent.GetUpdatePluginConfig(context))
 	if err != nil {
 		log.Errorf("failed to create plugin %s %v", updateAgentPluginName, err)
 	} else {

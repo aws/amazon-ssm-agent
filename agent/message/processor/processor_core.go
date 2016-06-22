@@ -405,7 +405,13 @@ func (p *Processor) processSendCommandMessage(context context.T,
 	// Check if it is a managed instance and its executing managed instance incompatible AWS SSM public document.
 	// A few public AWS SSM documents contain code which is not compatible when run on managed instances.
 	// isManagedInstanceIncompatibleAWSSSMDocument makes sure to find such documents at runtime and replace the incompatible code.
-	if isManagedInstance() && isManagedInstanceIncompatibleAWSSSMDocument(parsedMessage.DocumentName) {
+	isMI, err := isManagedInstance()
+	if err != nil {
+		log.Errorf("Error determining managed instance. error: %v", err)
+		return
+	}
+
+	if isMI && isManagedInstanceIncompatibleAWSSSMDocument(parsedMessage.DocumentName) {
 		log.Debugf("Running Incompatible AWS SSM Document %v on managed instance", parsedMessage.DocumentName)
 		if parsedMessage, err = removeDependencyOnInstanceMetadataForManagedInstance(context, parsedMessage); err != nil {
 			return

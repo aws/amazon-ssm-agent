@@ -21,8 +21,8 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
-	"github.com/aws/amazon-ssm-agent/agent/managedInstances/registration"
 	messageContracts "github.com/aws/amazon-ssm-agent/agent/message/contracts"
+	"github.com/aws/amazon-ssm-agent/agent/platform"
 )
 
 type ManagedInstanceDocumentProperties struct {
@@ -64,6 +64,12 @@ func removeDependencyOnInstanceMetadataForManagedInstance(context context.T, par
 		return parsedMessage, err
 	}
 
+	region, err := platform.Region()
+	if err != nil {
+		log.Errorf("Error retrieving agent region. error: %v", err)
+		return parsedMessage, err
+	}
+
 	// Comment or replace the incompatible code from this document.
 	log.Info("Replacing managed instance incompatible code for AWS SSM Document.")
 	for i, command := range parsedDocumentProperties.RunCommand {
@@ -76,7 +82,7 @@ func removeDependencyOnInstanceMetadataForManagedInstance(context context.T, par
 		}
 
 		if strings.Contains(command, "$region = (ConvertFrom-JSON $metadata).region") {
-			parsedDocumentProperties.RunCommand[i] = strings.Replace(command, "$region = (ConvertFrom-JSON $metadata).region", "$region = '"+registration.Region()+"'", 1)
+			parsedDocumentProperties.RunCommand[i] = strings.Replace(command, "$region = (ConvertFrom-JSON $metadata).region", "$region = '"+region+"'", 1)
 		}
 	}
 
@@ -99,9 +105,14 @@ func isManagedInstanceIncompatibleAWSSSMDocument(documentName string) bool {
 	return managedInstanceIncompatibleAWSSSMDocuments[documentName]
 }
 
-func isManagedInstance() bool {
-	if strings.Contains(registration.InstanceID(), "mi-") {
-		return true
+func isManagedInstance() (bool, error) {
+	instanceId, err := platform.InstanceID()
+	if err != nil {
+		return false, err
 	}
-	return false
+
+	if strings.Contains(instanceId, "mi-") {
+		return true, nil
+	}
+	return false, nil
 }

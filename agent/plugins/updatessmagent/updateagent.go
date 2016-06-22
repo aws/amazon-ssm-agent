@@ -29,6 +29,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/fileutil/artifact"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/platform"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/pluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/rebooter"
 	"github.com/aws/amazon-ssm-agent/agent/task"
@@ -534,9 +535,22 @@ func Name() string {
 }
 
 // GetUpdatePluginConfig returns the default values for the update plugin
-func GetUpdatePluginConfig() UpdatePluginConfig {
+func GetUpdatePluginConfig(context context.T) UpdatePluginConfig {
+	log := context.Log()
+	region, err := platform.Region()
+	if err != nil {
+		log.Errorf("Error retrieving agent region in update plugin config. error: %v", err)
+	}
+
+	var manifestUrl string
+	if region == "cn-north-1" {
+		manifestUrl = "https://s3.cn-north-1.amazonaws.com.cn/amazon-ssm-cn-north-1/ssm-agent-manifest.json"
+	} else {
+		manifestUrl = "https://amazon-ssm-{Region}.s3.amazonaws.com/ssm-agent-manifest.json"
+	}
+
 	return UpdatePluginConfig{
-		ManifestLocation:      "https://amazon-ssm-{Region}.s3.amazonaws.com/ssm-agent-manifest.json",
+		ManifestLocation:      manifestUrl,
 		StdoutFileName:        "stdout",
 		StderrFileName:        "stderr",
 		MaxStdoutLength:       2500,
