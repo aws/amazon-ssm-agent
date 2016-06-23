@@ -408,7 +408,6 @@ func (p *Processor) processSendCommandMessage(context context.T,
 	isMI, err := isManagedInstance()
 	if err != nil {
 		log.Errorf("Error determining managed instance. error: %v", err)
-		return
 	}
 
 	if isMI && isManagedInstanceIncompatibleAWSSSMDocument(parsedMessage.DocumentName) {
