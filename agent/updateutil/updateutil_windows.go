@@ -17,7 +17,10 @@
 package updateutil
 
 import (
+	"os"
 	"os/exec"
+	"path/filepath"
+	"strings"
 
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/platform"
@@ -117,4 +120,9 @@ func isUpdateSupported(log log.T) (bool, error) {
 	}
 
 	return true, nil
+}
+
+func setPlatformSpecificCommand(parts []string) []string {
+	cmd := filepath.Join(os.Getenv("SystemRoot"), "System32", "WindowsPowerShell", "v1.0", "powershell.exe") + " -ExecutionPolicy unrestricted"
+	return append(strings.Split(cmd, " "), parts...)
 }

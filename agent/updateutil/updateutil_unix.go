@@ -94,3 +94,7 @@ func agentExpectedStatus() string {
 func isUpdateSupported(log log.T) (bool, error) {
 	return true, nil
 }
+
+func setPlatformSpecificCommand(parts []string) []string {
+	return parts
+}

@@ -99,7 +99,7 @@ const (
 	DefaultUpdateExecutionTimeoutInSeconds = 30
 
 	// PipelineTestVersion represents fake version for pipeline tests
-	PipelineTestVersion = "9999.0.0.0"
+	PipelineTestVersion = "255.0.0.0"
 
 	// SystemDRedHatVersion represents the beginning version for RHEL uses systemD
 	SystemDRedHatVersion = "7"
@@ -263,12 +263,10 @@ func (util *Utility) ExeCommand(
 	isAsync bool) (err error) {
 
 	parts := strings.Fields(cmd)
-	head := parts[0]
-	parts = parts[1:]
 
-	command := execCommand(head, parts...)
-	command.Dir = workingDir
 	if isAsync {
+		command := execCommand(parts[0], parts[1:]...)
+		command.Dir = workingDir
 		prepareProcess(command)
 		// Start command asynchronously
 		err = cmdStart(command)
@@ -276,6 +274,9 @@ func (util *Utility) ExeCommand(
 			return
 		}
 	} else {
+		tempCmd := setPlatformSpecificCommand(parts)
+		command := execCommand(tempCmd[0], tempCmd[1:]...)
+		command.Dir = workingDir
 		stdoutWriter, stderrWriter, exeErr := setExeOutErr(updaterRoot, stdOut, stdErr)
 		if exeErr != nil {
 			return exeErr
