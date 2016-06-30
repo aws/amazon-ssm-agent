@@ -15,8 +15,6 @@
 package health
 
 import (
-	"fmt"
-
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/sdkutil"
@@ -31,6 +29,7 @@ type HealthCheck struct {
 	context               context.T
 	healthCheckStopPolicy *sdkutil.StopPolicy
 	healthJob             *scheduler.Job
+	service               ssm.Service
 }
 
 const (
@@ -41,10 +40,12 @@ const (
 func NewHealthCheck(context context.T) *HealthCheck {
 	healthContext := context.With("[" + name + "]")
 	healthCheckStopPolicy := sdkutil.NewStopPolicy(name, 10)
+	svc := ssm.NewService()
 
 	return &HealthCheck{
 		context:               healthContext,
 		healthCheckStopPolicy: healthCheckStopPolicy,
+		service:               svc,
 	}
 }
 
@@ -52,25 +53,11 @@ func NewHealthCheck(context context.T) *HealthCheck {
 func (h *HealthCheck) updateHealth() {
 	log := h.context.Log()
 	log.Infof("%s reporting agent health.", name)
-	if h.healthCheckStopPolicy != nil {
-		if h.healthCheckStopPolicy.IsHealthy() == false {
-			if err := h.RequestStop(contracts.StopTypeSoftStop); err != nil {
-				log.Errorf("failed to stop %v plugin. %v", name, err)
-			}
-		}
-	}
 
 	var err error
-	var svc ssm.Service
-	if svc = ssm.NewService(); svc == nil {
-		err = fmt.Errorf("unable to create ssm service")
-		sdkutil.HandleAwsError(log, err, h.healthCheckStopPolicy)
-		return
-	}
-
 	//TODO when will status become inactive?
 	// If both ssm config and command is inactive => agent is inactive.
-	if _, err = svc.UpdateInstanceInformation(log, version.Version, "Active"); err != nil {
+	if _, err = h.service.UpdateInstanceInformation(log, version.Version, "Active"); err != nil {
 		sdkutil.HandleAwsError(log, err, h.healthCheckStopPolicy)
 	}
 	return
