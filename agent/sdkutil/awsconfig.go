@@ -26,20 +26,10 @@ import (
 	"github.com/aws/aws-sdk-go/aws"
 )
 
-var config *aws.Config
-
-func init() {
-	config = getAwsConfig()
-}
-
-// AwsConfig returns the default aws.Config object while the appropriate credentials
-func AwsConfig() *aws.Config {
-	return config
-}
-
-// getAwsConfig : Default AWS config populates with default region and credentials.
-// Callers should override returned config properties with any values they want for service specific overrides.
-func getAwsConfig() (awsConfig *aws.Config) {
+// AwsConfig returns the default aws.Config object while the appropriate
+// credentials. Callers should override returned config properties with any
+// values they want for service specific overrides.
+func AwsConfig() (awsConfig *aws.Config) {
 	// create default config
 	awsConfig = &aws.Config{
 		Retryer:    newRetryer(),
@@ -54,7 +44,8 @@ func getAwsConfig() (awsConfig *aws.Config) {
 
 	// load managed credentials if applicable
 	if isManaged, err := registration.HasManagedInstancesCredentials(); isManaged && err == nil {
-		awsConfig.Credentials = rolecreds.NewCredentials()
+		awsConfig.Credentials =
+			rolecreds.ManagedInstanceCredentialsInstance()
 		return
 	}
 
