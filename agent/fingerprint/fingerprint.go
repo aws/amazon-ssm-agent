@@ -91,13 +91,13 @@ func generateFingerprint() (string, error) {
 	}
 
 	threshold := minimumMatchPercent
-	if savedHwInfo.SimilarityThreshold >= 0 {
+	if savedHwInfo.SimilarityThreshold != 0 {
 		threshold = savedHwInfo.SimilarityThreshold
 	}
 
 	// check if this is the first time we are generating the fingerprint
 	// or if there is no match
-	if savedHwInfo.Fingerprint == "" || !isSimilarHardwareHash(savedHwInfo.HardwareHash, hardwareHash, threshold) {
+	if savedHwInfo.Fingerprint == "" || !compareHardwareHash(savedHwInfo.HardwareHash, hardwareHash, threshold) {
 		// generate new fingerprint
 		result = uuid.NewV4().String()
 	} else {
@@ -153,11 +153,11 @@ func save(info hwInfo) error {
 	return nil
 }
 
-// isSimilarHardwareHash compares two maps of hashes, and returns true if the
-// percentage of match is greater than or equals to the threshold provided.
-// It returns false if any of the map is empty or the percentage of match is
-// less than threshold.
-func isSimilarHardwareHash(savedHwHash map[string]string, currentHwHash map[string]string, threshold int) bool {
+// compareHardwareHash compares two maps
+// returns true if there is at least a 70% match
+// returns false if, any of he map is empty
+// or, if there is less than 70% match
+func compareHardwareHash(savedHwHash map[string]string, currentHwHash map[string]string, threshold int) bool {
 	var totalCount, successCount int
 	// check input
 	if len(savedHwHash) == 0 || len(currentHwHash) == 0 {
@@ -185,7 +185,7 @@ func isSimilarHardwareHash(savedHwHash map[string]string, currentHwHash map[stri
 
 	// check if the match exceeds the minimum match percent
 	totalCount = len(currentHwHash)
-	if float32(successCount)/float32(totalCount)*100 < float32(threshold) {
+	if successCount/totalCount*100 < threshold {
 		return false
 	}
 
