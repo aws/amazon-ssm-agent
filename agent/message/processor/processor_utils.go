@@ -87,7 +87,7 @@ func getPluginConfigurations(runtimeConfig map[string]*contracts.PluginConfig, o
 			Properties:             pluginConfig.Properties,
 			OutputS3BucketName:     s3BucketName,
 			OutputS3KeyPrefix:      path.Join(s3KeyPrefix, fileutil.RemoveInvalidChars(pluginName)),
-			OrchestrationDirectory: fileutil.RemoveInvalidChars(filepath.Join(orchestrationDir, pluginName)),
+			OrchestrationDirectory: filepath.Join(orchestrationDir, fileutil.RemoveInvalidChars(pluginName)),
 			MessageId:              messageID,
 			BookKeepingFileName:    getCommandID(messageID),
 		}
