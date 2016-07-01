@@ -11,7 +11,6 @@ package rolecreds
 
 import (
 	"fmt"
-	"sync"
 	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/ssm/rsaauth"
@@ -50,31 +49,23 @@ type managedInstancesRoleProvider struct {
 }
 
 var (
-	emptyCredential      = credentials.Value{ProviderName: ProviderName}
-	credentialsSingleton *credentials.Credentials
-	lock                 sync.RWMutex
+	emptyCredential = credentials.Value{ProviderName: ProviderName}
 )
 
-// ManagedInstanceCredentialsInstance returns a singleton instance of
-// Crednetials which provides credentials of a managed instance.
-func ManagedInstanceCredentialsInstance() *credentials.Credentials {
-	lock.Lock()
-	defer lock.Unlock()
-	if credentialsSingleton == nil {
-		credentialsSingleton = newManagedInstanceCredentials()
-	}
-	return credentialsSingleton
-}
-
-// newManagedInstanceCredentials returns a pointer to a new Credentials object wrapping
-// the managedInstancesRoleProvider.
-func newManagedInstanceCredentials() *credentials.Credentials {
+// NewCredentials returns a pointer to a new Credentials object wrapping
+// the managedInstancesRoleProvider. Takes a ConfigProvider to create a EC2Metadata client.
+// The ConfigProvider is satisfied by the session.Session type.
+func NewCredentials(options ...func(*managedInstancesRoleProvider)) *credentials.Credentials {
 	instanceID := managedInstance.InstanceID()
 	region := managedInstance.Region()
 	privateKey := managedInstance.PrivateKey()
 	p := &managedInstancesRoleProvider{
 		Client:       rsaauth.NewRsaService(instanceID, region, privateKey),
 		ExpiryWindow: EarlyExpiryTimeWindow,
+	}
+
+	for _, option := range options {
+		option(p)
 	}
 
 	return credentials.NewCredentials(p)
