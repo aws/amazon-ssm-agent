@@ -23,7 +23,6 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/executers"
-	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/pluginutil"
@@ -238,7 +237,7 @@ func testExecution(t *testing.T, commandtester CommandTester) {
 }
 
 func setExecuterExpectations(mockExecuter *executers.MockCommandExecuter, t TestCase, cancelFlag task.CancelFlag, p *Plugin) {
-	orchestrationDir := fileutil.RemoveInvalidChars(filepath.Join(orchestrationDirectory, t.Input.ID))
+	orchestrationDir := filepath.Join(orchestrationDirectory, t.Input.ID)
 	stdoutFilePath := filepath.Join(orchestrationDir, p.StdoutFileName)
 	stderrFilePath := filepath.Join(orchestrationDir, p.StderrFileName)
 	mockExecuter.On("Execute", mock.Anything, t.Input.WorkingDirectory, stdoutFilePath, stderrFilePath, cancelFlag, mock.Anything, mock.Anything, mock.Anything).Return(
@@ -247,7 +246,7 @@ func setExecuterExpectations(mockExecuter *executers.MockCommandExecuter, t Test
 
 func setS3UploaderExpectations(mockS3Uploader *pluginutil.MockDefaultPlugin, t TestCase, p *Plugin) {
 	var emptyArray []string
-	orchestrationDir := fileutil.RemoveInvalidChars(filepath.Join(orchestrationDirectory, t.Input.ID))
+	orchestrationDir := filepath.Join(orchestrationDirectory, t.Input.ID)
 	mockS3Uploader.On("UploadOutputToS3Bucket", mock.Anything, t.Input.ID, orchestrationDir, s3BucketName, s3KeyPrefix, false, "", t.Output.Stdout, t.Output.Stderr).Return(emptyArray)
 }
 
