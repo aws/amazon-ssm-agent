@@ -49,67 +49,63 @@ func ExampleInstanceFingerprint() {
 	// 979b554b-0d67-42c6-9730-48443b3016dd
 }
 
-func TestCompareHardwareHash_FailOnEmpty(t *testing.T) {
-	var actual bool
-	savedHwHash := make(map[string]string)
-	currentHwHash := make(map[string]string)
-
-	actual = compareHardwareHash(savedHwHash, currentHwHash, minimumMatchPercent)
-	assert.False(t, actual, "should return false when both map are empty")
-
-	// add one item to saved
-	savedHwHash["first"] = "first"
-	actual = compareHardwareHash(savedHwHash, currentHwHash, minimumMatchPercent)
-	assert.False(t, actual, "should return false when curr map is empty")
-
-	// add one item to current
-	delete(savedHwHash, "first")
-	currentHwHash["first"] = "first"
-	actual = compareHardwareHash(savedHwHash, currentHwHash, minimumMatchPercent)
-	assert.False(t, actual, "should return false when saved map is empty")
+type isSimilarHashTestData struct {
+	saved     map[string]string
+	current   map[string]string
+	threshold int
+	expected  bool
 }
 
-func TestCompareHardwareHash_FailWhenNoMatch(t *testing.T) {
-	var actual bool
-	savedHwHash := make(map[string]string)
-	currentHwHash := make(map[string]string)
+func TestIsSimilarHardwareHash(t *testing.T) {
+	empty := make(map[string]string)
 
-	// fail when items don't match
-	savedHwHash[hardwareID] = "second"
-	currentHwHash[hardwareID] = "first"
-	actual = compareHardwareHash(savedHwHash, currentHwHash, minimumMatchPercent)
-	assert.False(t, actual, "should return false when items don't match")
+	origin := map[string]string{
+		hardwareID:      "hardwareValue",
+		ipAddressID:     "ipAddressValue",
+		"somethingElse": "somethingElseValue",
+	}
 
-	// fail when items don't exist
-	savedHwHash["second"] = "second"
-	actual = compareHardwareHash(savedHwHash, currentHwHash, minimumMatchPercent)
-	assert.False(t, actual, "should return false when items don't match")
+	hwChanged := deepCopy(origin)
+	hwChanged[hardwareID] = "hardwareValueChanged"
 
-	// fail when items don't exist
-	currentHwHash["third"] = "third"
-	actual = compareHardwareHash(savedHwHash, currentHwHash, minimumMatchPercent)
-	assert.False(t, actual, "should return false when items don't match")
+	ipChanged := deepCopy(origin)
+	ipChanged[ipAddressID] = "ipAddressValueChanged"
+
+	ipAndElseChanged := deepCopy(origin)
+	ipAndElseChanged[ipAddressID] = "ipAddressValueChanged"
+	ipAndElseChanged["somethingElse"] = "somethingElseValueChanged"
+
+	somethingElseChanged := deepCopy(origin)
+	somethingElseChanged["somethingElse"] = "somethingElseValueChanged"
+
+	testData := []isSimilarHashTestData{
+		{origin, empty, 0, false},
+		{empty, origin, 0, false},
+		{origin, origin, 100, true},
+		{origin, hwChanged, 0, false},
+		{origin, ipChanged, 66, true},         // 2 out of 3 items matched > 66%
+		{origin, ipChanged, 67, false},        // 2 out of 3 items matched < 67%
+		{origin, ipAndElseChanged, 33, true},  // 1 out of 3 items matched > 33%
+		{origin, ipAndElseChanged, 34, false}, // 1 out of 3 items matched < 34%
+		{origin, somethingElseChanged, 100, true},
+	}
+
+	for _, test := range testData {
+		assert.Equal(
+			t,
+			test.expected,
+			isSimilarHardwareHash(test.saved, test.current, test.threshold),
+			fmt.Sprintf("Test case %v did not return %t.", test, test.expected),
+		)
+	}
 }
 
-func TestCompareHardwareHash_SucceedWhenMatch(t *testing.T) {
-	var actual bool
-	savedHwHash := make(map[string]string)
-	currentHwHash := make(map[string]string)
-
-	// succeed when items match
-	savedHwHash["first"] = "first"
-	currentHwHash["first"] = "first"
-	actual = compareHardwareHash(savedHwHash, currentHwHash, minimumMatchPercent)
-	assert.True(t, actual, "should return true when items match")
-
-	// succeed when items match
-	savedHwHash["second"] = "second"
-	currentHwHash["second"] = "second"
-	savedHwHash["third"] = "third"
-	currentHwHash["third"] = "third"
-	savedHwHash["fourth"] = "fourth"
-	actual = compareHardwareHash(savedHwHash, currentHwHash, minimumMatchPercent)
-	assert.True(t, actual, "should return true when items match at least 70%")
+func deepCopy(original map[string]string) (copied map[string]string) {
+	copied = make(map[string]string)
+	for k, v := range original {
+		copied[k] = v
+	}
+	return
 }
 
 func TestGenerateFingerprint_GenerateNewWhenNoneSaved(t *testing.T) {
