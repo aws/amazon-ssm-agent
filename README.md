@@ -12,8 +12,6 @@ Currently, the SSM Agent and Run Command enable you to quickly run Shell scripts
 
 ## Usage
 
-**Please note, running the Amazon SSM Agent outside of Amazon EC2 is not supported.**
-
 ### Verify Requirements
 
 [SSM Run Command Prerequisites](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/remote-commands-prereq.html)
