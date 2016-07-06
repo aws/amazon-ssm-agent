@@ -10,10 +10,6 @@ The Amazon EC2 Simple Systems Manager (SSM) Agent is software developed for the 
 The SSM Agent runs on EC2 instances and enables you to quickly and easily execute remote commands or scripts against one or more instances. The agent uses SSM [documents](http://docs.aws.amazon.com/ssm/latest/APIReference/aws-ssm-document.html). When you execute a command, the agent on the instance processes the document and configures the instance as specified.
 Currently, the SSM Agent and Run Command enable you to quickly run Shell scripts on an instance using the AWS-RunShellScript SSM document.
 
-## Usage
-
-**Please note, running the Amazon SSM Agent outside of Amazon EC2 is not supported.**
-
 ### Verify Requirements
 
 [SSM Run Command Prerequisites](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/remote-commands-prereq.html)
