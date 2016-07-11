@@ -1,7 +1,9 @@
 {
     "Profile":{
         "ProfilePath" : "",
-        "ProfileName": ""
+        "ProfileName" : "",
+        "ShareCreds" : true,
+        "ShareProfile" : ""
     },
     "Mds": {
         "CommandWorkersLimit" : 5,

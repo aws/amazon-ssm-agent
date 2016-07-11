@@ -14,6 +14,9 @@ import (
 	"sync"
 	"time"
 
+	"github.com/aws/amazon-ssm-agent/agent/appconfig"
+	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/managedInstances/sharedCredentials"
 	"github.com/aws/amazon-ssm-agent/agent/ssm/rsaauth"
 	"github.com/aws/aws-sdk-go/aws/credentials"
 )
@@ -53,6 +56,9 @@ var (
 	emptyCredential      = credentials.Value{ProviderName: ProviderName}
 	credentialsSingleton *credentials.Credentials
 	lock                 sync.RWMutex
+	logger               log.T
+	shareCreds           bool
+	shareProfile         string
 )
 
 // ManagedInstanceCredentialsInstance returns a singleton instance of
@@ -60,6 +66,13 @@ var (
 func ManagedInstanceCredentialsInstance() *credentials.Credentials {
 	lock.Lock()
 	defer lock.Unlock()
+	logger = log.Logger()
+	shareCreds = true
+	if config, err := appconfig.Config(false); err == nil {
+		shareCreds = config.Profile.ShareCreds
+		shareProfile = config.Profile.ShareProfile
+	}
+
 	if credentialsSingleton == nil {
 		credentialsSingleton = newManagedInstanceCredentials()
 	}
@@ -118,6 +131,14 @@ func (m *managedInstancesRoleProvider) Retrieve() (credentials.Value, error) {
 	}
 
 	m.SetExpiration(*roleCreds.TokenExpirationDate, m.ExpiryWindow)
+
+	// check to see if the agent should publish the credentials to the account aws credentials
+	if shareCreds {
+		err = sharedCredentials.Store(*roleCreds.AccessKeyId, *roleCreds.SecretAccessKey, *roleCreds.SessionToken, shareProfile)
+		if err != nil {
+			logger.Error(ProviderName, "Error occured sharing credentials. ", err) // error does not stop execution
+		}
+	}
 
 	return credentials.Value{
 		AccessKeyID:     *roleCreds.AccessKeyId,

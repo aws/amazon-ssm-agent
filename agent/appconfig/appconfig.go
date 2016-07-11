@@ -100,7 +100,9 @@ func getAppConfigPath() (path string, err error) {
 // DefaultConfig returns default ssm agent configuration
 func DefaultConfig() SsmagentConfig {
 
-	var credsProfile CredentialProfile
+	var credsProfile = CredentialProfile{
+		ShareCreds: true,
+	}
 	var s3 S3Cfg
 	var mds = MdsCfg{
 		CommandWorkersLimit: 5,

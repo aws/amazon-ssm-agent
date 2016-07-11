@@ -25,3 +25,4 @@ agent/taskimpl/logs/
 agent/platform/logs/
 Tools/src/github.com/
 Tools/src/golang.org/
+agent/managedInstances/sharedCredentials/example.ini
