@@ -19,4 +19,4 @@
 package version
 
 // Version is the version of the Agent
-const Version = "1.2.252.0"
+const Version = "1.2.253.0"
