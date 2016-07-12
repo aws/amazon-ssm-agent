@@ -6,7 +6,7 @@
 //
 // http://aws.amazon.com/agreement/
 
-//// +build integration
+// +build integration
 
 // package sharedCredentials tests
 package sharedCredentials
