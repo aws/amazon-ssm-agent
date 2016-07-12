@@ -15,6 +15,7 @@
 package sharedCredentials
 
 import (
+	"fmt"
 	"os"
 	"path/filepath"
 
@@ -52,15 +53,17 @@ func filename() (string, error) {
 	return filepath.Join(homeDir, ".aws", "credentials"), nil
 }
 
-func createFile(filePath string) (err error) {
+func createFile(filePath string) error {
 	dir, _ := filepath.Split(filePath)
 
-	if err = fileutil.MakeDirs(dir); err != nil {
-		return
+	if err := fileutil.MakeDirs(dir); err != nil {
+		return fmt.Errorf("error creating directories, %s. %v", dir, err)
 	}
 
-	err = fileutil.HardenedWriteFile(filePath, []byte(""))
-	return
+	if err := fileutil.HardenedWriteFile(filePath, []byte("")); err != nil {
+		return fmt.Errorf("error creating file, %s. %v", filePath, err)
+	}
+	return nil
 }
 
 // Store function updates the shared credentials with the specified values:

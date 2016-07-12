@@ -13,8 +13,10 @@ package sharedCredentials
 
 import (
 	"os"
+	"path/filepath"
 	"testing"
 
+	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	"github.com/aws/aws-sdk-go/vendor/github.com/go-ini/ini"
 	"github.com/stretchr/testify/assert"
 )
@@ -24,17 +26,35 @@ const (
 	accessSecretKey = "DummyAccessSecretKey"
 	token           = "DummyToken"
 	profile         = "DummyProfile"
+	testFilePath    = "example.ini"
 )
 
-func TestSharedCredentialsStore(t *testing.T) {
-	os.Clearenv()
+func setupTest(credPath string) {
+	// check if file exists, if not create it
+	if !fileutil.Exists(credPath) {
+		fileutil.WriteAllText(credPath, "")
+	}
+}
 
-	os.Setenv("AWS_SHARED_CREDENTIALS_FILE", "./example.ini")
+func exampleCredFilePath() string {
+	pwd, _ := os.Getwd()
+	credFilePath := filepath.Join(pwd, testFilePath)
+	return credFilePath
+}
+
+func TestSharedCredentialsStore(t *testing.T) {
+	// Test setup
+	os.Clearenv()
+	credFilePath := exampleCredFilePath()
+	setupTest(credFilePath)
+
+	// Test
+	os.Setenv("AWS_SHARED_CREDENTIALS_FILE", credFilePath)
 
 	err1 := Store(accessKey, accessSecretKey, token, profile)
 	assert.Nil(t, err1, "Expect no error saving profile")
 
-	config, err2 := ini.Load("./example.ini")
+	config, err2 := ini.Load(credFilePath)
 	assert.Nil(t, err2, "Expect no error loading file")
 
 	iniProfile := config.Section(profile)
@@ -45,14 +65,18 @@ func TestSharedCredentialsStore(t *testing.T) {
 }
 
 func TestSharedCredentialsStoreDefaultProfile(t *testing.T) {
+	// Test setup
 	os.Clearenv()
+	credFilePath := exampleCredFilePath()
+	setupTest(credFilePath)
 
-	os.Setenv("AWS_SHARED_CREDENTIALS_FILE", "./example.ini")
+	// Test
+	os.Setenv("AWS_SHARED_CREDENTIALS_FILE", credFilePath)
 
 	err1 := Store(accessKey, accessSecretKey, token, "")
-	assert.Nil(t, err1, "Expect no error ssaving profile")
+	assert.Nil(t, err1, "Expect no error saving profile")
 
-	config, err2 := ini.Load("./example.ini")
+	config, err2 := ini.Load(credFilePath)
 	assert.Nil(t, err2, "Expect no error loading file")
 
 	iniProfile := config.Section(defaultProfile)
@@ -63,8 +87,10 @@ func TestSharedCredentialsStoreDefaultProfile(t *testing.T) {
 }
 
 func TestSharedCredentialsFilenameFromUserProfile(t *testing.T) {
+	// Test setup
 	os.Clearenv()
 
+	// Test
 	os.Setenv("HOME", "")
 	os.Setenv("USERPROFILE", "")
 
