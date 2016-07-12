@@ -23,14 +23,13 @@ import (
 	"strings"
 	"syscall"
 	"time"
+	"sync"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/platform"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/pluginutil"
-	"github.com/aws/amazon-ssm-agent/agent/updateutil"
-	"sync"
 )
 
 const (
