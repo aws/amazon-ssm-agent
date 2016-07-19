@@ -24,6 +24,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	command_state_helper "github.com/aws/amazon-ssm-agent/agent/message/statemanager"
+	"github.com/aws/amazon-ssm-agent/agent/platform"
 	"github.com/aws/amazon-ssm-agent/agent/s3util"
 	"github.com/aws/amazon-ssm-agent/agent/sdkutil"
 	"github.com/aws/amazon-ssm-agent/agent/task"
@@ -39,6 +40,12 @@ const (
 
 // S3RegionUSStandard is a standard S3 Region used to upload output related documents.
 var S3RegionUSStandard = "us-east-1"
+
+var s3Bjs = "cn-north-1"
+
+var s3BjsEndpoint = "s3.cn-north-1.amazonaws.com.cn"
+
+var s3StandardEndpoint = "s3.amazonaws.com"
 
 // CommandExecuter is a function that can execute a set of commands.
 type CommandExecuter func(log log.T, workingDir string, stdoutFilePath string, stderrFilePath string, cancelFlag task.CancelFlag, executionTimeout int, commandName string, commandArguments []string) (stdout io.Reader, stderr io.Reader, exitCode int, errs []error)
@@ -148,7 +155,14 @@ func GetS3Config() *s3util.Manager {
 	//we can then pick the endpoint from meta-data instead.
 
 	awsConfig := sdkutil.AwsConfig()
-	awsConfig.Region = &S3RegionUSStandard
+
+	if region, err := platform.Region(); err == nil && region == s3Bjs {
+		awsConfig.Endpoint = &s3BjsEndpoint
+		awsConfig.Region = &s3Bjs
+	} else {
+		awsConfig.Endpoint = &s3StandardEndpoint
+		awsConfig.Region = &S3RegionUSStandard
+	}
 	s3 := s3.New(session.New(awsConfig))
 	return s3util.NewManager(s3)
 }
@@ -161,8 +175,9 @@ func (p *DefaultPlugin) UploadOutputToS3Bucket(log log.T, pluginID string, orche
 			uploadToS3 := true
 			var testUploadError error
 
-			//set region to us-east-1
-			p.Uploader.SetS3ClientRegion(S3RegionUSStandard)
+			if region, err := platform.Region(); err == nil && region != s3Bjs {
+				p.Uploader.SetS3ClientRegion(S3RegionUSStandard)
+			}
 
 			log.Infof("uploading a test file to s3 bucket - %v , s3 key - %v with S3Client using region endpoint - %v",
 				outputS3BucketName,
