@@ -64,8 +64,8 @@ pre-build:
 	cp $(BGO_SPACE)/VERSION $(BGO_SPACE)/bin/
 	cp $(BGO_SPACE)/agent/integration-cli/integration-cli.json $(BGO_SPACE)/bin/
 	# Copying the version files that were generated in pre-build
-	cp $(BGO_SPACE)/VERSION $(GOTEMPCOPYPATH)
-	cp $(BGO_SPACE)/agent/version/version.go $(GOTEMPCOPYPATH)/agent/version/
+	mkdir -p $(BGO_SPACE)/bin/agent/version/
+	cp $(BGO_SPACE)/agent/version/version.go $(BGO_SPACE)/bin/agent/version/
 	exit 0
 
 .PHONY: build-linux
@@ -232,6 +232,12 @@ quick-integtest:
 	# if you want to restrict to some specific package, sample below
 	# go test -v -gcflags "-N -l" -tags=integration github.com/aws/amazon-ssm-agent/agent/fileutil/...
 	go test -gcflags "-N -l" -tags=integration github.com/aws/amazon-ssm-agent/agent/...
+
+.PHONY: quick-test
+	# if you want to test a specific package, you can add the package name instead of the dots. Sample below
+	# go test -gcflags "-N -l" github.com/aws/amazon-ssm-agent/agent/task
+	go test -gcflags "-N -l" github.com/aws/amazon-ssm-agent/agent/...
+
 
 .PHONY: gen-report
 gen-report:

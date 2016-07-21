@@ -78,9 +78,9 @@ The following targets are available. Each may be run with `make <target>`.
 | `release`                | `release` checks code style and coverage, builds the agent and also packages it into a RPM, DEB and ZIP package |
 | `package`                | `package` packages build result into a RPM, DEB and ZIP package |
 | `pre-build`              | `pre-build` goes through Tools/src folder to make sure all the script files are executable |
-| `update-version`         | `update-version` update the version of the go agent based on the version number present in the VERSION file |
 | `checkstyle`             | `checkstyle` runs the checkstyle script |
 | `quick-integtest`        | `quick-integtest` runs all tests tagged with integration using `go test` |
+| `quick-test`             | `quick-test runs all the tests including integration and unit tests using `go test` |
 | `coverage`               | `coverage` runs all tests and calculate code coverage |
 | `build-linux`            | `build-linux` builds the agent for execution in the Linux amd64 environment |
 | `build-windows`          | `build-windows` builds the agent for execution in the Windows amd64 environment |

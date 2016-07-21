@@ -21,7 +21,7 @@ import (
 
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	"github.com/aws/aws-sdk-go/aws/awserr"
-	"github.com/aws/aws-sdk-go/vendor/github.com/go-ini/ini"
+	"github.com/go-ini/ini"
 )
 
 const (
