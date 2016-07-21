@@ -234,6 +234,7 @@ quick-integtest:
 	go test -gcflags "-N -l" -tags=integration github.com/aws/amazon-ssm-agent/agent/...
 
 .PHONY: quick-test
+quick-test:
 	# if you want to test a specific package, you can add the package name instead of the dots. Sample below
 	# go test -gcflags "-N -l" github.com/aws/amazon-ssm-agent/agent/task
 	go test -gcflags "-N -l" github.com/aws/amazon-ssm-agent/agent/...
