@@ -6,6 +6,7 @@ ifneq ("$(wildcard $(BUILDFILE_PATH))","")
 	GOTEMPPATH := $(BGO_SPACE)/build/private
 	GOTEMPCOPYPATH := $(GOTEMPPATH)/src/github.com/aws/amazon-ssm-agent
 	GOPATH := $(GOTEMPPATH):$(BGO_SPACE)/vendor:$(GOPATH)
+	TEMPVERSIONPATH := $(GOTEMPCOPYPATH)/agent/version
 	FINALIZE := $(shell command -v bgo-final 2>/dev/null)
 
 else
@@ -63,9 +64,12 @@ pre-build:
 	cp $(BGO_SPACE)/seelog_windows.xml.template $(BGO_SPACE)/bin/
 	cp $(BGO_SPACE)/VERSION $(BGO_SPACE)/bin/
 	cp $(BGO_SPACE)/agent/integration-cli/integration-cli.json $(BGO_SPACE)/bin/
-	# Copying the version files that were generated in pre-build
-	mkdir -p $(BGO_SPACE)/bin/agent/version/
-	cp $(BGO_SPACE)/agent/version/version.go $(BGO_SPACE)/bin/agent/version/
+ifneq ("$(wildcard $(BUILDFILE_PATH))","")
+	@echo "Copying version files generated in pre-build "
+	mkdir -p $(TEMPVERSIONPATH)
+	cp $(BGO_SPACE)/VERSION $(GOTEMPCOPYPATH)
+	cp $(BGO_SPACE)/agent/version/version.go $(TEMPVERSIONPATH)
+endif
 	exit 0
 
 .PHONY: build-linux
