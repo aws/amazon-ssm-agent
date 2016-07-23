@@ -180,11 +180,14 @@ func (p *pool) Cancel(jobID string) (canceled bool) {
 		return false
 	}
 
+	// delete job to avoid multiple cancelations
+	p.jobStore.DeleteJob(jobID)
+
 	jobToken.cancelFlag.Set(Canceled)
 	return true
 }
 
-// Cancel cancels and deletes all the jobs of this task.
+// CancelAll cancels all the running jobs.
 func (p *pool) CancelAll() {
 	// remove jobs from task and save them to a local variable
 	jobs := p.jobStore.DeleteAllJobs()
@@ -195,7 +198,7 @@ func (p *pool) CancelAll() {
 	}
 }
 
-// Cancel cancels and deletes all the jobs of this task.
+// ShutdownAll cancels all the running jobs.
 func (p *pool) ShutDownAll() {
 	// remove jobs from task and save them to a local variable
 	jobs := p.jobStore.DeleteAllJobs()

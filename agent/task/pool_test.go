@@ -46,17 +46,15 @@ func TestPool(t *testing.T) {
 			testPool(t, testCase.Workers, testCase.Jobs, shouldCancel)
 		}
 	}
-
 }
 
 func testPool(t *testing.T, nWorkers int, nJobs int, shouldCancel bool) {
-
 	clock := times.NewMockedClock()
 	waitTimeout := 100 * time.Millisecond
 
-	if shouldCancel {
-		clock.On("After", waitTimeout).Return(clock.AfterChannel)
-	}
+	// the "After" method may be called even if shouldCancel is false
+	// because we call pool shutdown at the end of the test.
+	clock.On("After", waitTimeout).Return(clock.AfterChannel)
 
 	shutdownTimeout := 10000 * time.Millisecond
 	clock.On("After", shutdownTimeout).Return(clock.AfterChannel)
@@ -73,6 +71,11 @@ func testPool(t *testing.T, nWorkers int, nJobs int, shouldCancel bool) {
 		}()
 	}
 	wg.Wait()
+
+	// give time for (some of) the jobs to complete normally
+	time.Sleep(10 * time.Millisecond)
+
+	// send cancel signal to all running jobs and wait to finish
 	assert.True(t, pool.ShutdownAndWait(shutdownTimeout))
 
 	// Not verifying clock.After(waitTimeout) here. Refer to proc.go. We can't guarantee that 'doneChan' is not set the
@@ -106,13 +109,11 @@ func exercisePool(t *testing.T, pool Pool, jobID string, shouldCancel bool) {
 		// cancel job
 		assert.True(t, pool.Cancel(jobID))
 		assert.True(t, flag.Canceled())
+
+		// check that thejob was imediately removed
+		assert.False(t, pool.Cancel(jobID))
 	}
 
 	// see that job completes
 	assert.True(t, <-jobState)
-
-	time.Sleep(10 * time.Millisecond)
-
-	// see that job gets removed
-	assert.False(t, pool.Cancel(jobID))
 }
