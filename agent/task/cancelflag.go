@@ -60,7 +60,7 @@ type CancelFlag interface {
 	Wait() (state State)
 }
 
-// CancelFlag is a default implementation of the task.CancelFlag interface.
+// ChanneledCancelFlag is a default implementation of the task.CancelFlag interface.
 type ChanneledCancelFlag struct {
 	state  State
 	ch     chan struct{}

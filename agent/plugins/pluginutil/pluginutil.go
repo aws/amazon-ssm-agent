@@ -95,7 +95,7 @@ type DefaultPlugin struct {
 	OutputTruncatedSuffix string
 }
 
-// DefaultConfig is used for initializing plugins with default values
+// PluginConfig is used for initializing plugins with default values
 type PluginConfig struct {
 	StdoutFileName        string
 	StderrFileName        string
@@ -324,7 +324,7 @@ func DownloadFileFromSource(log log.T, source string, sourceHash string, sourceH
 	return artifact.Download(log, downloadInput)
 }
 
-// GetDefaultPluginConfig returns the default values for the plugin
+// DefaultPluginConfig returns the default values for the plugin
 func DefaultPluginConfig() PluginConfig {
 	return PluginConfig{
 		StdoutFileName:        "stdout",
@@ -362,7 +362,7 @@ func PersistPluginInformationToCurrent(log log.T, pluginName string, config cont
 		appconfig.DefaultLocationOfCurrent)
 }
 
-// LoadParameterAsList returns properties as a list and appropriate PluginResult if error is encountered
+// LoadParametersAsList returns properties as a list and appropriate PluginResult if error is encountered
 func LoadParametersAsList(log log.T, prop interface{}) ([]interface{}, contracts.PluginResult) {
 
 	var properties []interface{}

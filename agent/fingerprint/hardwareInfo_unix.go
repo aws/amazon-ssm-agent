@@ -8,7 +8,7 @@
 
 // +build freebsd linux netbsd openbsd darwin
 
-// package fingerprint contains functions that helps identify an instance
+// Package fingerprint contains functions that helps identify an instance
 // hardwareInfo contains platform specific way of fetching the hardware hash
 package fingerprint
 

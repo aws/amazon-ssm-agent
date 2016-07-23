@@ -30,7 +30,7 @@ type sdkService struct {
 	sdk *ssm.SSM
 }
 
-// NewService creates a new SSM service instance.
+// NewAnonymousService creates a new SSM service instance.
 func NewAnonymousService(region string) AnonymousService {
 	log.SetFlags(0)
 	awsConfig := util.AwsConfig().WithLogLevel(aws.LogOff)

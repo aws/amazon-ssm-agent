@@ -562,7 +562,7 @@ func (p *Processor) processCancelCommandMessage(context context.T,
 	}
 }
 
-// IsDocumentUnsupportedForSsmAgent returns true if the given SSM document is not supported by ssm agent
+// IsDocumentNotSupportedBySsmAgent returns true if the given SSM document is not supported by ssm agent
 func IsDocumentNotSupportedBySsmAgent(docName string) bool {
 	once.Do(func() {
 		singletonMapOfUnsupportedSSMDocs = make(map[string]bool)

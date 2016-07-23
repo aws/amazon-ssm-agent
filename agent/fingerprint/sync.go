@@ -5,8 +5,8 @@
 // License is located at
 //
 // http://aws.amazon.com/agreement/
-//
-// package fingerprint contains functions that helps identify an instance
+
+// Package fingerprint contains functions that helps identify an instance
 // sync contains funcs required to perform sync
 package fingerprint
 

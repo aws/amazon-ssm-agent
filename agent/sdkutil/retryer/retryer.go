@@ -11,7 +11,7 @@
 // express or implied. See the License for the specific language governing
 // permissions and limitations under the License.
 
-// retryer overrides the default aws sdk retryer delay logic to better suit the mds needs
+// Package retryer overrides the default aws sdk retryer delay logic to better suit the mds needs
 package retryer
 
 import (

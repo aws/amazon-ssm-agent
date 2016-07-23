@@ -5,8 +5,8 @@
 // License is located at
 //
 // http://aws.amazon.com/agreement/
-//
-// package fingerprint contains functions that helps identify an instance
+
+// Package fingerprint contains functions that helps identify an instance
 // this is done to protect customers from launching two instances with the same instance identifier
 // and thus running commands intended for one on the other
 package fingerprint

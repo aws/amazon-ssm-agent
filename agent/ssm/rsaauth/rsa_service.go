@@ -29,7 +29,7 @@ type sdkService struct {
 	sdk *ssm.SSM
 }
 
-// NewService creates a new SSM service instance.
+// NewRsaService creates a new SSM service instance.
 func NewRsaService(serverId string, region string, encodedPrivateKey string) RsaSignedService {
 	awsConfig := util.AwsConfig()
 

@@ -33,11 +33,7 @@ echo "Try update 'golint'"
 GOPATH=`pwd`/Tools go get -u github.com/golang/lint/golint
 
 echo "Run 'golint'"
-Tools/bin/golint `pwd`/agent
-
-# run govet
-echo "Try update 'go vet'"
-GOPATH=`pwd`/Tools go get -u golang.org/x/tools/cmd/vet
+Tools/bin/golint `pwd`/agent/...
 
 echo "Run 'go vet'"
 go tool vet `pwd`/agent

@@ -24,7 +24,7 @@ type JobStore struct {
 	m    sync.RWMutex
 }
 
-// NewTask creates a new task with no jobs.
+// NewJobStore creates a new task with no jobs.
 func NewJobStore() *JobStore {
 	return &JobStore{
 		jobs: make(map[string]*JobToken),
