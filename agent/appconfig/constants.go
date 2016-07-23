@@ -41,7 +41,7 @@ const (
 	DefaultLocationOfCompleted = "completed"
 	DefaultLocationOfCorrupt   = "corrupt"
 	DefaultLocationOfState     = "state"
-	// Root directory for storing command states
+	// DefaultCommandRootDirName is the root directory for storing command states
 	DefaultCommandRootDirName = "command"
 
 	// Orchestration Root Dir

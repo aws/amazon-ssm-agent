@@ -110,7 +110,7 @@ func exercisePool(t *testing.T, pool Pool, jobID string, shouldCancel bool) {
 		assert.True(t, pool.Cancel(jobID))
 		assert.True(t, flag.Canceled())
 
-		// check that thejob was imediately removed
+		// check that thejob was immediately removed
 		assert.False(t, pool.Cancel(jobID))
 	}
 

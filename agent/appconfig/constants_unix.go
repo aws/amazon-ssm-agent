@@ -17,10 +17,10 @@
 package appconfig
 
 const (
-	// Program Folder
+	// DefaultProgramFolder is the default folder for SSM
 	DefaultProgramFolder = "/etc/amazon/ssm/"
 
-	// AppConfig Path
+	// AppConfigPath is the path of the AppConfig
 	AppConfigPath = DefaultProgramFolder + AppConfigFileName
 
 	// DownloadRoot specifies the directory under which files will be downloaded
