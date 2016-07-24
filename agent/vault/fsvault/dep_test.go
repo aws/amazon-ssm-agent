@@ -22,32 +22,32 @@ type fsvFileSystemMock struct {
 	mock.Mock
 }
 
-func (m fsvFileSystemMock) Exists(path string) bool {
+func (m *fsvFileSystemMock) Exists(path string) bool {
 	args := m.Called(path)
 	return args.Bool(0)
 }
 
-func (m fsvFileSystemMock) MakeDirs(path string) error {
+func (m *fsvFileSystemMock) MakeDirs(path string) error {
 	args := m.Called(path)
 	return args.Error(0)
 }
 
-func (m fsvFileSystemMock) RecursivelyHarden(path string) error {
+func (m *fsvFileSystemMock) RecursivelyHarden(path string) error {
 	args := m.Called(path)
 	return args.Error(0)
 }
 
-func (m fsvFileSystemMock) ReadFile(path string) ([]byte, error) {
+func (m *fsvFileSystemMock) ReadFile(path string) ([]byte, error) {
 	args := m.Called(path)
 	return test.ByteArrayArg(args, 0), args.Error(1)
 }
 
-func (m fsvFileSystemMock) Remove(path string) error {
+func (m *fsvFileSystemMock) Remove(path string) error {
 	args := m.Called(path)
 	return args.Error(0)
 }
 
-func (m fsvFileSystemMock) HardenedWriteFile(path string, data []byte) error {
+func (m *fsvFileSystemMock) HardenedWriteFile(path string, data []byte) error {
 	args := m.Called(path, data)
 	return args.Error(0)
 }
@@ -56,12 +56,12 @@ type fsvJsonHandlerMock struct {
 	mock.Mock
 }
 
-func (m fsvJsonHandlerMock) Marshal(v interface{}) ([]byte, error) {
+func (m *fsvJsonHandlerMock) Marshal(v interface{}) ([]byte, error) {
 	args := m.Called(v)
 	return test.ByteArrayArg(args, 0), args.Error(1)
 }
 
-func (m fsvJsonHandlerMock) Unmarshal(data []byte, v interface{}) error {
+func (m *fsvJsonHandlerMock) Unmarshal(data []byte, v interface{}) error {
 	args := m.Called(data, v)
 	return args.Error(0)
 }
