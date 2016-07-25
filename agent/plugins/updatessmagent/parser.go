@@ -81,7 +81,6 @@ func (m *Manifest) HasVersion(context *updateutil.InstanceContext, packageName s
 							return true
 						}
 					}
-
 				}
 			}
 		}
@@ -144,7 +143,6 @@ func (m *Manifest) DownloadURLAndHash(
 							return result, v.Checksum, nil
 						}
 					}
-
 				}
 			}
 		}

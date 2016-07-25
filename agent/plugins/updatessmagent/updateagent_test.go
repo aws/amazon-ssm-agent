@@ -268,9 +268,11 @@ func TestValidateUpdate_UnsupportedCurrentVersion(t *testing.T) {
 	out := UpdatePluginOutput{}
 	result, err := manager.validateUpdate(logger, plugin, context, manifest, &out)
 
-	assert.True(t, result)
-	assert.Error(t, err)
-	assert.Contains(t, err.Error(), "is unsupported on current platform")
+	if version.Version != updateutil.PipelineTestVersion {
+		assert.True(t, result)
+		assert.Error(t, err)
+		assert.Contains(t, err.Error(), "is unsupported on current platform")
+	}
 }
 
 func TestUpdateAgent_InvalidPluginRaw(t *testing.T) {
