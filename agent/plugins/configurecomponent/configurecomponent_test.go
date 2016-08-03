@@ -1,3 +1,16 @@
+// Copyright 2016 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+//
+// Licensed under the Amazon Software License (the "License"). You may not
+// use this file except in compliance with the License. A copy of the
+// License is located at
+//
+// http://aws.amazon.com/asl/
+//
+// or in the "license" file accompanying this file. This file is distributed
+// on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+// express or implied. See the License for the specific language governing
+// permissions and limitations under the License.
+
 // Package configurecomponents implements the ConfigureComponent plugin.
 package configurecomponent
 
@@ -40,7 +53,7 @@ func TestAppendInfo(t *testing.T) {
 	assert.Contains(t, output.Stdout, "Info message")
 }
 
-func TestDownloadPackage(t *testing.T) {
+func TestDownload(t *testing.T) {
 	pluginInformation := createStubPluginInput()
 	context := createStubInstanceContext()
 
@@ -54,7 +67,29 @@ func TestDownloadPackage(t *testing.T) {
 		return result, nil
 	}
 
-	err := manager.DownloadPackage(logger, &util, pluginInformation, &output, context)
+	err := manager.Download(logger, &util, pluginInformation, &output, context)
 
 	assert.NoError(t, err)
+}
+
+func TestDownload_Failed(t *testing.T) {
+	pluginInformation := createStubPluginInput()
+	context := createStubInstanceContext()
+
+	output := ConfigureComponentPluginOutput{}
+	manager := configureManager{}
+	util := mockUtility{}
+
+	// file download failed
+	fileDownload = func(log log.T, input artifact.DownloadInput) (output artifact.DownloadOutput, err error) {
+		result := artifact.DownloadOutput{}
+		result.LocalFilePath = ""
+		return result, fmt.Errorf("404")
+	}
+
+	err := manager.Download(logger, &util, pluginInformation, &output, context)
+
+	assert.Error(t, err)
+	assert.Contains(t, err.Error(), "failed to download file reliably")
+	assert.Contains(t, err.Error(), "404")
 }

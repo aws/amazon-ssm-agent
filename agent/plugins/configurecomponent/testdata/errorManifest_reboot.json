@@ -1,0 +1,7 @@
+{
+  "name": "PVDriver",
+  "version": "1.0.0",
+  "install": "AWSPVDriverSetup.msi /quiet /update",
+  "unInstall": "AWSPVDriverSetup.msi /quiet /uninstall",
+  "reboot": "invalidRebootFlag"
+}

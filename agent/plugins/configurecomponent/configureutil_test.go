@@ -1,9 +1,21 @@
+// Copyright 2016 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+//
+// Licensed under the Amazon Software License (the "License"). You may not
+// use this file except in compliance with the License. A copy of the
+// License is located at
+//
+// http://aws.amazon.com/asl/
+//
+// or in the "license" file accompanying this file. This file is distributed
+// on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+// express or implied. See the License for the specific language governing
+// permissions and limitations under the License.
+
 // Package configurecomponent implements the ConfigureComponent plugin.
 package configurecomponent
 
 import (
 	"fmt"
-	"os"
 	"testing"
 
 	"github.com/aws/amazon-ssm-agent/agent/updateutil"
@@ -12,9 +24,10 @@ import (
 
 func TestCreatePackageName(t *testing.T) {
 	pluginInformation := createStubPluginInput()
+	context := createStubInstanceContext()
 
 	packageName := "PVDriver-amd64.zip"
-	result := CreatePackageName(pluginInformation)
+	result := createPackageName(pluginInformation.Name, context)
 
 	assert.Equal(t, packageName, result)
 }
@@ -25,7 +38,7 @@ func TestCreatePackageLocation(t *testing.T) {
 	packageName := "PVDriver-amd64.zip"
 
 	packageLocation := "https://amazon-ssm-us-west-2.s3.amazonaws.com/PVDriver/Windows/9000.0.0/PVDriver-amd64.zip"
-	result := CreatePackageLocation(pluginInformation, context, packageName)
+	result := createPackageLocation(pluginInformation.Name, pluginInformation.Version, context, packageName)
 
 	assert.Equal(t, packageLocation, result)
 }
@@ -34,11 +47,11 @@ func TestCreateComponentFolderSucceeded(t *testing.T) {
 	pluginInformation := createStubPluginInput()
 	util := Utility{}
 
-	mkDirAll = func(path string, perm os.FileMode) error {
+	mkDirAll = func(path string) error {
 		return nil
 	}
 
-	result, _ := util.CreateComponentFolder(pluginInformation)
+	result, _ := util.CreateComponentFolder(pluginInformation.Name, pluginInformation.Version)
 
 	assert.Contains(t, result, "components")
 	assert.Contains(t, result, pluginInformation.Name)
@@ -49,11 +62,11 @@ func TestCreateComponentFolderFailed(t *testing.T) {
 	pluginInformation := createStubPluginInput()
 	util := Utility{}
 
-	mkDirAll = func(path string, perm os.FileMode) error {
+	mkDirAll = func(path string) error {
 		return fmt.Errorf("Folder cannot be created")
 	}
 
-	_, err := util.CreateComponentFolder(pluginInformation)
+	_, err := util.CreateComponentFolder(pluginInformation.Name, pluginInformation.Version)
 	assert.Error(t, err)
 }
 
@@ -63,8 +76,6 @@ func createStubPluginInput() *ConfigureComponentPluginInput {
 	// Set version to a large number to avoid conflict of the actual component release version
 	input.Version = "9000.0.0"
 	input.Name = "PVDriver"
-	input.Platform = "Windows"
-	input.Architecture = "amd64"
 	input.Action = "Install"
 
 	return &input
@@ -76,8 +87,6 @@ func createStubInvalidPluginInput() *ConfigureComponentPluginInput {
 	// Set version to a large number to avoid conflict of the actual component release version
 	input.Version = "9000.0.0"
 	input.Name = "PVDriver"
-	input.Platform = "InvalidPlatform"
-	input.Architecture = "InvalidArchitecture"
 	input.Action = "InvalidAction"
 
 	return &input
@@ -98,6 +107,6 @@ func createStubInstanceContext() *updateutil.InstanceContext {
 
 type mockUtility struct{}
 
-func (u *mockUtility) CreateComponentFolder(input *ConfigureComponentPluginInput) (folder string, err error) {
+func (u *mockUtility) CreateComponentFolder(name string, version string) (folder string, err error) {
 	return "", nil
 }
