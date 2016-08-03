@@ -59,6 +59,11 @@ const (
 	// DefaultPluginConfig is a default config with which the plugins are initialized
 	DefaultPluginConfig = "aws:defaultPluginConfig"
 
+	// List all plugin names, unfortunately golang doesn't support const arrays of strings
+
+	// PluginNameAWSConfigureComponent is the name for configure component plugin
+	PluginNameAwsConfigureComponent = "aws:configureComponent"
+
 	// PluginNameAwsAgentUpdate is the name for agent update plugin
 	PluginNameAwsAgentUpdate = "aws:updateSsmAgent"
 
