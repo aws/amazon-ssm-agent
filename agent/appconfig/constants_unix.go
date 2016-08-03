@@ -23,6 +23,9 @@ const (
 	// AppConfigPath is the path of the AppConfig
 	AppConfigPath = DefaultProgramFolder + AppConfigFileName
 
+	// ComponentRoot specifies the directory under which components will be downloaded and installed
+	ComponentRoot = "/var/log/amazon/ssm/components"
+
 	// DownloadRoot specifies the directory under which files will be downloaded
 	DownloadRoot = "/var/log/amazon/ssm/download/"
 

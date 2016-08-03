@@ -83,7 +83,7 @@ var mkDirAll = os.MkdirAll
 
 // CreateComponentFolder constructs the local directory to place component
 func (util *Utility) CreateComponentFolder(input *ConfigureComponentPluginInput) (folder string, err error) {
-	folder = filepath.Join(appconfig.DownloadRoot, "components", input.Name, input.Version)
+	folder = filepath.Join(appconfig.ComponentRoot, input.Name, input.Version)
 	if err = mkDirAll(folder, os.ModePerm|os.ModeDir); err != nil {
 		return "", err
 	}

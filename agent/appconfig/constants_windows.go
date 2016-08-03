@@ -50,6 +50,9 @@ var AppConfigPath string
 // DefaultDataStorePath represents the directory for storing system data
 var DefaultDataStorePath string
 
+// ComponentRoot specifies the directory under which components will be downloaded and installed
+var ComponentRoot string
+
 // DownloadRoot specifies the directory under which files will be downloaded
 var DownloadRoot string
 
@@ -86,6 +89,7 @@ func init() {
 	DefaultProgramFolder = filepath.Join(EnvProgramFiles, SSMFolder)
 	AppConfigPath = filepath.Join(DefaultProgramFolder, AppConfigFileName)
 	DefaultDataStorePath = filepath.Join(SSMDataPath, "InstanceData")
+	ComponentRoot = filepath.Join(SSMDataPath, SSMFolder, "Components")
 	DownloadRoot = filepath.Join(temp, SSMFolder, "Download")
 	UpdaterArtifactsRoot = filepath.Join(temp, SSMFolder, "Update")
 }
