@@ -4,7 +4,7 @@ Release      : 1
 Summary      : Manage EC2 Instances using SSM APIs
 
 Group        : Amazon/Tools
-License      : Amazon Software License
+License      : Apache License, Version 2.0
 URL          : http://docs.aws.amazon.com/ssm/latest/APIReference/Welcome.html
 
 Packager     : Amazon.com, Inc. <http://aws.amazon.com>
