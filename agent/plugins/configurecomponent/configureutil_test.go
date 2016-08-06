@@ -22,6 +22,15 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+func TestCreateManifestName(t *testing.T) {
+	pluginInformation := createStubPluginInput()
+
+	manifestName := "PVDriver.json"
+	result := createManifestName(pluginInformation.Name)
+
+	assert.Equal(t, manifestName, result)
+}
+
 func TestCreatePackageName(t *testing.T) {
 	pluginInformation := createStubPluginInput()
 	context := createStubInstanceContext()
@@ -32,13 +41,13 @@ func TestCreatePackageName(t *testing.T) {
 	assert.Equal(t, packageName, result)
 }
 
-func TestCreatePackageLocation(t *testing.T) {
+func TestCreateS3Location(t *testing.T) {
 	pluginInformation := createStubPluginInput()
 	context := createStubInstanceContext()
-	packageName := "PVDriver-amd64.zip"
+	fileName := "PVDriver-amd64.zip"
 
 	packageLocation := "https://amazon-ssm-us-west-2.s3.amazonaws.com/PVDriver/Windows/9000.0.0/PVDriver-amd64.zip"
-	result := createPackageLocation(pluginInformation.Name, pluginInformation.Version, context, packageName)
+	result := createS3Location(pluginInformation.Name, pluginInformation.Version, context, fileName)
 
 	assert.Equal(t, packageLocation, result)
 }
@@ -77,6 +86,7 @@ func createStubPluginInput() *ConfigureComponentPluginInput {
 	input.Version = "9000.0.0"
 	input.Name = "PVDriver"
 	input.Action = "Install"
+	input.Source = ""
 
 	return &input
 }
@@ -88,6 +98,7 @@ func createStubInvalidPluginInput() *ConfigureComponentPluginInput {
 	input.Version = "9000.0.0"
 	input.Name = "PVDriver"
 	input.Action = "InvalidAction"
+	input.Source = "https://amazon-ssm-us-west-2.s3.amazonaws.com/PVDriver/Windows/9000.0.0/PVDriver-amd64.zip"
 
 	return &input
 }

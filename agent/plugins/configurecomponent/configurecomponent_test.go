@@ -53,7 +53,27 @@ func TestAppendInfo(t *testing.T) {
 	assert.Contains(t, output.Stdout, "Info message")
 }
 
-func TestDownload(t *testing.T) {
+func TestDownloadManifest(t *testing.T) {
+	pluginInformation := createStubPluginInput()
+	context := createStubInstanceContext()
+
+	output := ConfigureComponentPluginOutput{}
+	manager := configureManager{}
+	util := mockUtility{}
+
+	fileDownload = func(log log.T, input artifact.DownloadInput) (output artifact.DownloadOutput, err error) {
+		result := artifact.DownloadOutput{}
+		result.LocalFilePath = "testdata/sampleManifest.json"
+		return result, nil
+	}
+
+	manifest, err := manager.downloadManifest(logger, &util, pluginInformation, &output, context)
+
+	assert.NoError(t, err)
+	assert.NotNil(t, manifest)
+}
+
+func TestDownloadPackage(t *testing.T) {
 	pluginInformation := createStubPluginInput()
 	context := createStubInstanceContext()
 
@@ -67,12 +87,12 @@ func TestDownload(t *testing.T) {
 		return result, nil
 	}
 
-	err := manager.Download(logger, &util, pluginInformation, &output, context)
+	err := manager.downloadPackage(logger, &util, pluginInformation, &output, context)
 
 	assert.NoError(t, err)
 }
 
-func TestDownload_Failed(t *testing.T) {
+func TestDownloadPackage_Failed(t *testing.T) {
 	pluginInformation := createStubPluginInput()
 	context := createStubInstanceContext()
 
@@ -87,9 +107,9 @@ func TestDownload_Failed(t *testing.T) {
 		return result, fmt.Errorf("404")
 	}
 
-	err := manager.Download(logger, &util, pluginInformation, &output, context)
+	err := manager.downloadPackage(logger, &util, pluginInformation, &output, context)
 
 	assert.Error(t, err)
-	assert.Contains(t, err.Error(), "failed to download file reliably")
+	assert.Contains(t, err.Error(), "failed to download component installation package reliably")
 	assert.Contains(t, err.Error(), "404")
 }

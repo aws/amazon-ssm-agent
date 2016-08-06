@@ -18,6 +18,8 @@ import (
 	"errors"
 	"fmt"
 
+	"strings"
+
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/executers"
@@ -26,14 +28,15 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/pluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/updateutil"
+	"os"
 )
 
-// Plugin is the type for the configurecomponent plugin
+// Plugin is the type for the configurecomponent plugin.
 type Plugin struct {
 	pluginutil.DefaultPlugin
 }
 
-// ConfigureComponentPluginInput represents one set of commands executed by the ConfigureComponent plugin
+// ConfigureComponentPluginInput represents one set of commands executed by the ConfigureComponent plugin.
 type ConfigureComponentPluginInput struct {
 	contracts.PluginInput
 	Name    string
@@ -42,18 +45,18 @@ type ConfigureComponentPluginInput struct {
 	Source  string
 }
 
-// ConfigureComponentsPluginOutput represents the output of the plugin
+// ConfigureComponentsPluginOutput represents the output of the plugin.
 type ConfigureComponentPluginOutput struct {
 	contracts.PluginOutput
 }
 
-// MarkAsSucceeded marks plugin as Successful
+// MarkAsSucceeded marks plugin as Successful.
 func (result *ConfigureComponentPluginOutput) MarkAsSucceeded() {
 	result.ExitCode = 0
 	result.Status = contracts.ResultStatusSuccess
 }
 
-// MarkAsFailed marks plugin as Failed
+// MarkAsFailed marks plugin as Failed.
 func (result *ConfigureComponentPluginOutput) MarkAsFailed(log log.T, err error) {
 	result.ExitCode = 1
 	result.Status = contracts.ResultStatusFailed
@@ -66,7 +69,7 @@ func (result *ConfigureComponentPluginOutput) MarkAsFailed(log log.T, err error)
 	result.Errors = append(result.Errors, err.Error())
 }
 
-// AppendInfo adds info to ConfigureComponentPluginOutput StandardOut
+// AppendInfo adds info to ConfigureComponentPluginOutput StandardOut.
 func (result *ConfigureComponentPluginOutput) AppendInfo(log log.T, format string, params ...interface{}) {
 	message := fmt.Sprintf(format, params...)
 	log.Info(message)
@@ -93,22 +96,79 @@ func NewPlugin(pluginConfig pluginutil.PluginConfig) (*Plugin, error) {
 type configureManager struct{}
 
 type pluginHelper interface {
-	Download(log log.T, input *ConfigureComponentPluginInput, output *ConfigureComponentPluginOutput, context *updateutil.InstanceContext) (err error)
-	Extract(directory string) (err error)
+	downloadManifest(log log.T,
+		util Util,
+		input *ConfigureComponentPluginInput,
+		output *ConfigureComponentPluginOutput,
+		context *updateutil.InstanceContext) (manifest *ComponentManifest, err error)
+
+	downloadPackage(log log.T,
+		input *ConfigureComponentPluginInput,
+		output *ConfigureComponentPluginOutput,
+		context *updateutil.InstanceContext) (err error)
+
+	extractPackage(directory string) (err error)
 }
 
 var fileDownload = artifact.Download
 var fileUncompress = fileutil.Uncompress
 
-// Download downloads the installation package from s3 bucket
-func (m *configureManager) Download(log log.T, util Util, input *ConfigureComponentPluginInput, output *ConfigureComponentPluginOutput, context *updateutil.InstanceContext) (err error) {
+// downloadManifest downloads component configuration file from s3 bucket.
+func (m *configureManager) downloadManifest(log log.T,
+	util Util,
+	input *ConfigureComponentPluginInput,
+	output *ConfigureComponentPluginOutput,
+	context *updateutil.InstanceContext) (manifest *ComponentManifest, err error) {
+	// manifest to download
+	manifestName := createManifestName(input.Name)
+
+	// path to manifest
+	manifestLocation := input.Source
+	if manifestLocation == "" {
+		manifestLocation = createS3Location(input.Name, input.Version, context, manifestName)
+	} else {
+		manifestLocation = strings.Replace(input.Source, updateutil.FileNameHolder, input.Name, -1)
+	}
+
+	// path to download destination
+	manifestDestination, err := util.CreateComponentFolder(input.Name, input.Version)
+	if err != nil {
+		errMessage := fmt.Sprintf("failed to create local component repository, %v", err.Error())
+		return nil, errors.New(errMessage)
+	}
+
+	downloadInput := artifact.DownloadInput{
+		SourceURL:            manifestLocation,
+		DestinationDirectory: manifestDestination}
+
+	// download package
+	downloadOutput, downloadErr := fileDownload(log, downloadInput)
+	if downloadErr != nil || downloadOutput.LocalFilePath == "" {
+		errMessage := fmt.Sprintf("failed to download component manifest reliably, %v", downloadInput.SourceURL)
+		if downloadErr != nil {
+			errMessage = fmt.Sprintf("%v, %v", errMessage, downloadErr.Error())
+		}
+		return nil, errors.New(errMessage)
+	}
+
+	output.AppendInfo(log, "Successfully downloaded %v", downloadInput.SourceURL)
+
+	return ParseComponentManifest(log, downloadOutput.LocalFilePath)
+}
+
+// downloadPackage downloads the installation package from s3 bucket.
+func (m *configureManager) downloadPackage(log log.T,
+	util Util,
+	input *ConfigureComponentPluginInput,
+	output *ConfigureComponentPluginOutput,
+	context *updateutil.InstanceContext) (err error) {
 	// package to download
 	packageName := createPackageName(input.Name, context)
 
 	// path to package
 	packageLocation := input.Source
 	if packageLocation == "" {
-		packageLocation = createPackageLocation(input.Name, input.Version, context, packageName)
+		packageLocation = createS3Location(input.Name, input.Version, context, packageName)
 	}
 
 	// path to download destination
@@ -125,7 +185,7 @@ func (m *configureManager) Download(log log.T, util Util, input *ConfigureCompon
 	// download package
 	downloadOutput, downloadErr := fileDownload(log, downloadInput)
 	if downloadErr != nil || downloadOutput.LocalFilePath == "" {
-		errMessage := fmt.Sprintf("failed to download file reliably, %v", downloadInput.SourceURL)
+		errMessage := fmt.Sprintf("failed to download component installation package reliably, %v", downloadInput.SourceURL)
 		if downloadErr != nil {
 			errMessage = fmt.Sprintf("%v, %v", errMessage, downloadErr.Error())
 		}
@@ -137,15 +197,15 @@ func (m *configureManager) Download(log log.T, util Util, input *ConfigureCompon
 	return nil
 }
 
-// Extract extracts the contents of the compressed installation package
-func (m *configureManager) Extract(directory string) (err error) {
+// extractPackage extracts the contents of the compressed installation package.
+func (m *configureManager) extractPackage(directory string) (err error) {
 	if err = fileUncompress(directory, directory); err != nil {
 		return fmt.Errorf("failed to uncompress component installer package, %v, %v", directory, err.Error())
 	}
 	return nil
 }
 
-// Name returns the name of the plugin
+// Name returns the name of the plugin.
 func Name() string {
 	return appconfig.PluginNameAwsConfigureComponent
 }

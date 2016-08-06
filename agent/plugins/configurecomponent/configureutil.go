@@ -27,11 +27,14 @@ const (
 	// ComponentNameHolder represents Place holder for component name
 	ComponentNameHolder = "{ComponentName}"
 
-	// PackageNameFormat represents the package name format based on agreed convention
+	// ManifestNameFormat represents the manifest name format
+	ManifestNameFormat = "{ComponentName}.json"
+
+	// PackageNameFormat represents the package name format based
 	PackageNameFormat = "{ComponentName}-{Arch}.{Compressed}"
 
 	// PackageLocationFormat represents the package's s3 location
-	PackageLocationFormat = "https://amazon-ssm-{Region}.s3.amazonaws.com/{ComponentName}/{Platform}/{PackageVersion}/{PackageName}"
+	SourceFormat = "https://amazon-ssm-{Region}.s3.amazonaws.com/{ComponentName}/{Platform}/{PackageVersion}/{FileName}"
 
 	// PlatformNano represents Nano Server
 	PlatformNano = "nano"
@@ -42,6 +45,13 @@ type Util interface {
 }
 
 type Utility struct{}
+
+func createManifestName(componentName string) (manifestName string) {
+	manifestName = ManifestNameFormat
+	manifestName = strings.Replace(manifestName, ComponentNameHolder, componentName, -1)
+
+	return manifestName
+}
 
 // createPackageName constructs the package name to locate in the s3 bucket
 func createPackageName(componentName string, context *updateutil.InstanceContext) (packageName string) {
@@ -55,17 +65,17 @@ func createPackageName(componentName string, context *updateutil.InstanceContext
 }
 
 // createPackageLocation constructs the s3 url to locate the package for downloading
-func createPackageLocation(componentName string, version string, context *updateutil.InstanceContext, packageName string) (packageLocation string) {
+func createS3Location(componentName string, version string, context *updateutil.InstanceContext, fileName string) (s3Location string) {
 	// s3 uri format based on agreed convention
-	packageLocation = PackageLocationFormat
+	s3Location = SourceFormat
 
-	packageLocation = strings.Replace(packageLocation, updateutil.RegionHolder, context.Region, -1)
-	packageLocation = strings.Replace(packageLocation, ComponentNameHolder, componentName, -1)
-	packageLocation = strings.Replace(packageLocation, updateutil.PlatformHolder, context.Platform, -1)
-	packageLocation = strings.Replace(packageLocation, updateutil.PackageVersionHolder, version, -1)
-	packageLocation = strings.Replace(packageLocation, updateutil.PackageNameHolder, packageName, -1)
+	s3Location = strings.Replace(s3Location, updateutil.RegionHolder, context.Region, -1)
+	s3Location = strings.Replace(s3Location, ComponentNameHolder, componentName, -1)
+	s3Location = strings.Replace(s3Location, updateutil.PlatformHolder, context.Platform, -1)
+	s3Location = strings.Replace(s3Location, updateutil.PackageVersionHolder, version, -1)
+	s3Location = strings.Replace(s3Location, updateutil.FileNameHolder, fileName, -1)
 
-	return packageLocation
+	return s3Location
 }
 
 var mkDirAll = fileutil.MakeDirsWithExecuteAccess
