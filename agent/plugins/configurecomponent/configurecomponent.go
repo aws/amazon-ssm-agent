@@ -1,14 +1,15 @@
 // Copyright 2016 Amazon.com, Inc. or its affiliates. All Rights Reserved.
 //
-// Licensed under the Amazon Software License (the "License"). You may not
+// Licensed under the Apache License, Version 2.0 (the "License"). You may not
 // use this file except in compliance with the License. A copy of the
 // License is located at
 //
-// http://aws.amazon.com/asl/
+// http://aws.amazon.com/apache2.0/
 //
-// or in the "license" file accompanying this file. This file is distributed
-// on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
-// express or implied. See the License for the specific language governing
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+// implied. See the License for the specific language governing
 // permissions and limitations under the License.
 
 // Package configurecomponent implements the ConfigureComponent plugin.
@@ -20,15 +21,23 @@ import (
 
 	"strings"
 
+	"os"
+	"path/filepath"
+
+	"time"
+
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
+	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/executers"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil/artifact"
+	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/pluginutil"
+	"github.com/aws/amazon-ssm-agent/agent/rebooter"
+	"github.com/aws/amazon-ssm-agent/agent/task"
 	"github.com/aws/amazon-ssm-agent/agent/updateutil"
-	"os"
 )
 
 // Plugin is the type for the configurecomponent plugin.
@@ -103,6 +112,7 @@ type pluginHelper interface {
 		context *updateutil.InstanceContext) (manifest *ComponentManifest, err error)
 
 	downloadPackage(log log.T,
+		util Util,
 		input *ConfigureComponentPluginInput,
 		output *ConfigureComponentPluginOutput,
 		context *updateutil.InstanceContext) (err error)
@@ -110,8 +120,77 @@ type pluginHelper interface {
 	extractPackage(directory string) (err error)
 }
 
+// Assign method to global variables to allow unit tests to override
 var fileDownload = artifact.Download
 var fileUncompress = fileutil.Uncompress
+var fileRemove = os.RemoveAll
+var configureComponent = runConfigureComponent
+var installComponent = runInstallComponent
+var uninstallComponent = runUninstallComponent
+
+// runConfigureComponent downloads the component manifest and performs specified action
+func runConfigureComponent(
+	p *Plugin,
+	log log.T,
+	manager pluginHelper,
+	configureUtil Util,
+	updateUtil updateutil.T,
+	rawPluginInput interface{}) (output ConfigureComponentPluginOutput) {
+	var input ConfigureComponentPluginInput
+	var err error
+	var context *updateutil.InstanceContext
+
+	if err = jsonutil.Remarshal(rawPluginInput, &input); err != nil {
+		output.MarkAsFailed(log,
+			fmt.Errorf("invalid format in plugin properties %v; \nerror %v", rawPluginInput, err))
+		return
+	}
+
+	if context, err = updateUtil.CreateInstanceContext(log); err != nil {
+		output.MarkAsFailed(log, err)
+		return
+	}
+
+	// download manifest file
+	manifest, downloadErr := manager.downloadManifest(log, configureUtil, &input, &output, context)
+	if downloadErr != nil {
+		output.MarkAsFailed(log, downloadErr)
+		return
+	}
+
+	switch input.Action {
+	case InstallAction:
+		if err = installComponent(p,
+			&input,
+			&output,
+			manager,
+			log,
+			manifest.Install,
+			configureUtil,
+			updateUtil,
+			context); err != nil {
+			output.MarkAsFailed(log,
+				fmt.Errorf("failed to install component: %v", err))
+			return
+		}
+
+		// TO DO: Reboot if requested
+	case UninstallAction:
+		if err = uninstallComponent(p,
+			&input,
+			&output,
+			log,
+			manifest.Uninstall,
+			updateUtil,
+			context); err != nil {
+			output.MarkAsFailed(log,
+				fmt.Errorf("failed to uninstall component: %v", err))
+			return
+		}
+	}
+
+	return
+}
 
 // downloadManifest downloads component configuration file from s3 bucket.
 func (m *configureManager) downloadManifest(log log.T,
@@ -203,6 +282,130 @@ func (m *configureManager) extractPackage(directory string) (err error) {
 		return fmt.Errorf("failed to uncompress component installer package, %v, %v", directory, err.Error())
 	}
 	return nil
+}
+
+// runInstallComponent executes the install script for the specific version of component.
+// TO DO: Update (check if existing version of component exists; if so, uninstall before installing)
+func runInstallComponent(p *Plugin,
+	input *ConfigureComponentPluginInput,
+	output *ConfigureComponentPluginOutput,
+	manager pluginHelper,
+	log log.T,
+	installCmd string,
+	configureUtil Util,
+	updateUtil updateutil.T,
+	context *updateutil.InstanceContext) (err error) {
+	log.Infof("Initiating %v %v installation", input.Name, input.Version)
+
+	directory := filepath.Join(appconfig.ComponentRoot, input.Name, input.Version)
+
+	// download package
+	if err = manager.downloadPackage(log, configureUtil, input, output, context); err != nil {
+		return err
+	}
+
+	// extract package
+	if err = manager.extractPackage(directory); err != nil {
+		return err
+	}
+
+	// execute installation command
+	if err = updateUtil.ExeCommand(
+		log,
+		installCmd,
+		directory, directory,
+		p.StdoutFileName, p.StderrFileName,
+		false); err != nil {
+
+		return err
+	}
+
+	log.Infof("%v %v installed successfully", input.Name, input.Version)
+	return nil
+}
+
+// runUninstallComponent executes the install script for the specific version of component.
+func runUninstallComponent(p *Plugin,
+	input *ConfigureComponentPluginInput,
+	output *ConfigureComponentPluginOutput,
+	log log.T,
+	uninstallCmd string,
+	util updateutil.T,
+	context *updateutil.InstanceContext) (err error) {
+	log.Infof("Initiating %v %v uninstallation", input.Name, input.Version)
+
+	directory := filepath.Join(appconfig.ComponentRoot, input.Name, input.Version)
+
+	// execute installation command
+	if err = util.ExeCommand(
+		log,
+		uninstallCmd,
+		directory, directory,
+		p.StdoutFileName, p.StderrFileName,
+		false); err != nil {
+
+		return err
+	}
+
+	// delete local component folder
+	if err = fileRemove(directory); err != nil {
+		return fmt.Errorf(
+			"failed to delete directory %v due to %v", directory, err)
+	}
+
+	log.Infof("%v %v uninstalled successfully", input.Name, input.Version)
+	return nil
+}
+
+// Execute runs multiple sets of commands and returns their outputs.
+// res.Output will contain a slice of RunCommandPluginOutput.
+func (p *Plugin) Execute(context context.T, config contracts.Configuration, cancelFlag task.CancelFlag) (res contracts.PluginResult) {
+	log := context.Log()
+	log.Info("RunCommand started with configuration ", config)
+	configureUtil := new(Utility)
+	updateUtil := new(updateutil.Utility)
+	manager := new(configureManager)
+
+	res.StartDateTime = time.Now()
+	defer func() { res.EndDateTime = time.Now() }()
+
+	//loading Properties as list since aws:configureComponent uses properties as list
+	var properties []interface{}
+	if properties, res = pluginutil.LoadParametersAsList(log, config.Properties); res.Code != 0 {
+		return res
+	}
+
+	out := make([]ConfigureComponentPluginOutput, len(properties))
+	for i, prop := range properties {
+		// check if a reboot has been requested
+		if rebooter.RebootRequested() {
+			log.Info("A plugin has requested a reboot.")
+			break
+		}
+
+		if cancelFlag.ShutDown() {
+			out[i] = ConfigureComponentPluginOutput{}
+			out[i].Errors = []string{"Execution canceled due to ShutDown"}
+			break
+		} else if cancelFlag.Canceled() {
+			out[i] = ConfigureComponentPluginOutput{}
+			out[i].Errors = []string{"Execution canceled"}
+			break
+		}
+
+		out[i] = configureComponent(p,
+			log,
+			manager,
+			configureUtil,
+			updateUtil,
+			prop)
+
+		res.Code = out[i].ExitCode
+		res.Status = out[i].Status
+		res.Output = fmt.Sprintf("%v", out[i].String())
+	}
+
+	return
 }
 
 // Name returns the name of the plugin.

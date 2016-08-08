@@ -1,14 +1,15 @@
 // Copyright 2016 Amazon.com, Inc. or its affiliates. All Rights Reserved.
 //
-// Licensed under the Amazon Software License (the "License"). You may not
+// Licensed under the Apache License, Version 2.0 (the "License"). You may not
 // use this file except in compliance with the License. A copy of the
 // License is located at
 //
-// http://aws.amazon.com/asl/
+// http://aws.amazon.com/apache2.0/
 //
-// or in the "license" file accompanying this file. This file is distributed
-// on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
-// express or implied. See the License for the specific language governing
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+// implied. See the License for the specific language governing
 // permissions and limitations under the License.
 
 // Package configurecomponent implements the ConfigureComponent plugin.
@@ -36,6 +37,18 @@ const (
 	// PackageLocationFormat represents the package's s3 location
 	SourceFormat = "https://amazon-ssm-{Region}.s3.amazonaws.com/{ComponentName}/{Platform}/{PackageVersion}/{FileName}"
 
+	// SourceFormatBjs represents the package's s3 location for BJS region
+	SourceFormatBjs = "https://s3.{Region}.amazonaws.com.cn/amazon-ssm-{Region}/{ComponentName}/{Platform}/{PackageVersion}/{FileName}"
+
+	// RegionBjs represents the BJS region
+	RegionBjs = "cn-north-1"
+
+	// InstallAction represents the json command to install component
+	InstallAction = "Install"
+
+	// UninstallAction represents the json command to uninstall component
+	UninstallAction = "Uninstall"
+
 	// PlatformNano represents Nano Server
 	PlatformNano = "nano"
 )
@@ -46,6 +59,7 @@ type Util interface {
 
 type Utility struct{}
 
+// createManifestName constructs the manifest name to locate in the s3 bucket
 func createManifestName(componentName string) (manifestName string) {
 	manifestName = ManifestNameFormat
 	manifestName = strings.Replace(manifestName, ComponentNameHolder, componentName, -1)
@@ -67,7 +81,12 @@ func createPackageName(componentName string, context *updateutil.InstanceContext
 // createPackageLocation constructs the s3 url to locate the package for downloading
 func createS3Location(componentName string, version string, context *updateutil.InstanceContext, fileName string) (s3Location string) {
 	// s3 uri format based on agreed convention
-	s3Location = SourceFormat
+	// TO DO: Implement region/endpoint map (or integrate with aws sdk endpoints package) to handle cases better
+	if context.Region == RegionBjs {
+		s3Location = SourceFormatBjs
+	} else {
+		s3Location = SourceFormat
+	}
 
 	s3Location = strings.Replace(s3Location, updateutil.RegionHolder, context.Region, -1)
 	s3Location = strings.Replace(s3Location, ComponentNameHolder, componentName, -1)

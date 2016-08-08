@@ -1,14 +1,15 @@
 // Copyright 2016 Amazon.com, Inc. or its affiliates. All Rights Reserved.
 //
-// Licensed under the Amazon Software License (the "License"). You may not
+// Licensed under the Apache License, Version 2.0 (the "License"). You may not
 // use this file except in compliance with the License. A copy of the
 // License is located at
 //
-// http://aws.amazon.com/asl/
+// http://aws.amazon.com/apache2.0/
 //
-// or in the "license" file accompanying this file. This file is distributed
-// on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
-// express or implied. See the License for the specific language governing
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+// implied. See the License for the specific language governing
 // permissions and limitations under the License.
 
 // Package configurecomponent implements the ConfigureComponent plugin.
@@ -46,7 +47,18 @@ func TestCreateS3Location(t *testing.T) {
 	context := createStubInstanceContext()
 	fileName := "PVDriver-amd64.zip"
 
-	packageLocation := "https://amazon-ssm-us-west-2.s3.amazonaws.com/PVDriver/Windows/9000.0.0/PVDriver-amd64.zip"
+	packageLocation := "https://amazon-ssm-us-west-2.s3.amazonaws.com/PVDriver/Windows/9000.0.0.0/PVDriver-amd64.zip"
+	result := createS3Location(pluginInformation.Name, pluginInformation.Version, context, fileName)
+
+	assert.Equal(t, packageLocation, result)
+}
+
+func TestCreateS3Location_Bjs(t *testing.T) {
+	pluginInformation := createStubPluginInput()
+	context := createStubInstanceContextBjs()
+	fileName := "PVDriver-amd64.zip"
+
+	packageLocation := "https://s3.cn-north-1.amazonaws.com.cn/amazon-ssm-cn-north-1/PVDriver/Windows/9000.0.0.0/PVDriver-amd64.zip"
 	result := createS3Location(pluginInformation.Name, pluginInformation.Version, context, fileName)
 
 	assert.Equal(t, packageLocation, result)
@@ -83,7 +95,7 @@ func createStubPluginInput() *ConfigureComponentPluginInput {
 	input := ConfigureComponentPluginInput{}
 
 	// Set version to a large number to avoid conflict of the actual component release version
-	input.Version = "9000.0.0"
+	input.Version = "9000.0.0.0"
 	input.Name = "PVDriver"
 	input.Action = "Install"
 	input.Source = ""
@@ -95,7 +107,7 @@ func createStubInvalidPluginInput() *ConfigureComponentPluginInput {
 	input := ConfigureComponentPluginInput{}
 
 	// Set version to a large number to avoid conflict of the actual component release version
-	input.Version = "9000.0.0"
+	input.Version = "9000.0.0.0"
 	input.Name = "PVDriver"
 	input.Action = "InvalidAction"
 	input.Source = "https://amazon-ssm-us-west-2.s3.amazonaws.com/PVDriver/Windows/9000.0.0/PVDriver-amd64.zip"
@@ -116,8 +128,21 @@ func createStubInstanceContext() *updateutil.InstanceContext {
 	return &context
 }
 
-type mockUtility struct{}
+func createStubInstanceContextBjs() *updateutil.InstanceContext {
+	context := updateutil.InstanceContext{}
 
-func (u *mockUtility) CreateComponentFolder(name string, version string) (folder string, err error) {
+	context.Region = "cn-north-1"
+	context.Platform = "Windows"
+	context.PlatformVersion = "2015.9"
+	context.InstallerName = "Windows"
+	context.Arch = "amd64"
+	context.CompressFormat = "zip"
+
+	return &context
+}
+
+type mockConfigureUtility struct{}
+
+func (u *mockConfigureUtility) CreateComponentFolder(name string, version string) (folder string, err error) {
 	return "", nil
 }

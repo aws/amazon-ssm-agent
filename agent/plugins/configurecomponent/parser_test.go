@@ -1,14 +1,15 @@
 // Copyright 2016 Amazon.com, Inc. or its affiliates. All Rights Reserved.
 //
-// Licensed under the Amazon Software License (the "License"). You may not
+// Licensed under the Apache License, Version 2.0 (the "License"). You may not
 // use this file except in compliance with the License. A copy of the
 // License is located at
 //
-// http://aws.amazon.com/asl/
+// http://aws.amazon.com/apache2.0/
 //
-// or in the "license" file accompanying this file. This file is distributed
-// on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
-// express or implied. See the License for the specific language governing
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+// implied. See the License for the specific language governing
 // permissions and limitations under the License.
 
 // Package configurecomponent implements the ConfigureComponent plugin.
@@ -32,6 +33,7 @@ var sampleManifests = []string{
 var errorManifests = []string{
 	"testdata/errorManifest_empty.json",
 	"testdata/errorManifest_reboot.json",
+	"testdata/errorManifest_version.json",
 }
 
 type testCase struct {
@@ -61,7 +63,7 @@ func TestParseManifest(t *testing.T) {
 		assert.Nil(t, err)
 		assert.Equal(t, test.Output, result)
 		assert.Equal(t, result.Name, "PVDriver")
-		assert.Equal(t, result.Version, "1.0.0")
+		assert.Equal(t, result.Version, "1.0.0.0")
 		assert.Equal(t, result.Install, "AWSPVDriverSetup.msi /quiet /update")
 		assert.Equal(t, result.Uninstall, "AWSPVDriverSetup.msi /quiet /uninstall")
 		assert.Equal(t, result.Reboot, "true")
