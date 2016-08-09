@@ -91,6 +91,43 @@ func TestCreateComponentFolderFailed(t *testing.T) {
 	assert.Error(t, err)
 }
 
+func TestNeedUpdate(t *testing.T) {
+	pluginInformation := createStubPluginInput()
+
+	componentExists = func(filepath string) bool {
+		return true
+	}
+
+	versionExists = func(filepath string) bool {
+		return false
+	}
+
+	result := needUpdate(pluginInformation.Name, pluginInformation.Version)
+	assert.Equal(t, true, result)
+}
+
+func TestNeedUpdate_NoComponentExists(t *testing.T) {
+	pluginInformation := createStubPluginInput()
+
+	componentExists = func(filepath string) bool {
+		return false
+	}
+
+	result := needUpdate(pluginInformation.Name, pluginInformation.Version)
+	assert.Equal(t, false, result)
+}
+
+func TestNeedUpdate_VersionExists(t *testing.T) {
+	pluginInformation := createStubPluginInput()
+
+	versionExists = func(filepath string) bool {
+		return true
+	}
+
+	result := needUpdate(pluginInformation.Name, pluginInformation.Version)
+	assert.Equal(t, false, result)
+}
+
 func createStubPluginInput() *ConfigureComponentPluginInput {
 	input := ConfigureComponentPluginInput{}
 

@@ -98,6 +98,8 @@ func createS3Location(componentName string, version string, context *updateutil.
 }
 
 var mkDirAll = fileutil.MakeDirsWithExecuteAccess
+var componentExists = fileutil.Exists
+var versionExists = fileutil.Exists
 
 // CreateComponentFolder constructs the local directory to place component
 func (util *Utility) CreateComponentFolder(name string, version string) (folder string, err error) {
@@ -107,4 +109,27 @@ func (util *Utility) CreateComponentFolder(name string, version string) (folder 
 	}
 
 	return folder, nil
+}
+
+// needUpdate determines if installation needs to update an existing version of a component
+func needUpdate(name string, requestedVersion string) (update bool) {
+	// check that any version is already installed
+	componentFolder := filepath.Join(appconfig.ComponentRoot, name)
+	exist := componentExists(componentFolder)
+
+	// install as normal when component is not yet installed
+	if !exist {
+		return false
+	}
+
+	// check that specific version is already installed
+	versionFolder := filepath.Join(componentFolder, requestedVersion)
+	exist = versionExists(versionFolder)
+
+	// install as normal when component version is already installed
+	if exist {
+		return false
+	}
+
+	return true
 }

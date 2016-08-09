@@ -124,9 +124,8 @@ type pluginHelper interface {
 var fileDownload = artifact.Download
 var fileUncompress = fileutil.Uncompress
 var fileRemove = os.RemoveAll
+var reboot = rebooter.RequestPendingReboot
 var configureComponent = runConfigureComponent
-var installComponent = runInstallComponent
-var uninstallComponent = runUninstallComponent
 
 // runConfigureComponent downloads the component manifest and performs specified action
 func runConfigureComponent(
@@ -160,7 +159,9 @@ func runConfigureComponent(
 
 	switch input.Action {
 	case InstallAction:
-		if err = installComponent(p,
+		// TO DO: Update (check if existing version of component exists; if so, uninstall before installing)
+
+		if err = runInstallComponent(p,
 			&input,
 			&output,
 			manager,
@@ -174,9 +175,14 @@ func runConfigureComponent(
 			return
 		}
 
-		// TO DO: Reboot if requested
+		// TO DO: How to mock reboot?
+		// reboot according to manifest
+		//if manifest.Reboot == RebootTrue {
+		//	reboot()
+		//}
+
 	case UninstallAction:
-		if err = uninstallComponent(p,
+		if err = runUninstallComponent(p,
 			&input,
 			&output,
 			log,
@@ -285,7 +291,6 @@ func (m *configureManager) extractPackage(directory string) (err error) {
 }
 
 // runInstallComponent executes the install script for the specific version of component.
-// TO DO: Update (check if existing version of component exists; if so, uninstall before installing)
 func runInstallComponent(p *Plugin,
 	input *ConfigureComponentPluginInput,
 	output *ConfigureComponentPluginOutput,

@@ -142,6 +142,8 @@ func TestExecute(t *testing.T) {
 	mockCancelFlag := new(task.MockCancelFlag)
 	mockContext := context.NewMockDefault()
 
+	reboot = func() { return }
+
 	// Create stub
 	configureComponent = func(
 		p *Plugin,
@@ -185,7 +187,7 @@ func TestInstallComponent(t *testing.T) {
 
 	installCommand := "AWSPVDriverSetup.msi /quiet /install"
 
-	err := installComponent(plugin,
+	err := runInstallComponent(plugin,
 		pluginInformation,
 		output,
 		manager,
@@ -215,7 +217,7 @@ func TestInstallComponent_DownloadFailed(t *testing.T) {
 
 	installCommand := "AWSPVDriverSetup.msi /quiet /install"
 
-	err := installComponent(plugin,
+	err := runInstallComponent(plugin,
 		pluginInformation,
 		output,
 		manager,
@@ -246,7 +248,7 @@ func TestInstallComponent_ExtractFailed(t *testing.T) {
 
 	installCommand := "AWSPVDriverSetup.msi /quiet /install"
 
-	err := installComponent(plugin,
+	err := runInstallComponent(plugin,
 		pluginInformation,
 		output,
 		manager,
@@ -276,7 +278,7 @@ func TestUninstallComponent(t *testing.T) {
 		return nil
 	}
 
-	err := uninstallComponent(plugin,
+	err := runUninstallComponent(plugin,
 		pluginInformation,
 		output,
 		logger,
@@ -301,7 +303,7 @@ func TestUninstallComponent_RemovalFailed(t *testing.T) {
 		return fmt.Errorf("404")
 	}
 
-	err := uninstallComponent(plugin,
+	err := runUninstallComponent(plugin,
 		pluginInformation,
 		output,
 		logger,
