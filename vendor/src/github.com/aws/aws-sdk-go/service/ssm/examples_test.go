@@ -15,6 +15,34 @@ import (
 var _ time.Duration
 var _ bytes.Buffer
 
+func ExampleSSM_AddInventory() {
+	svc := ssm.New(session.New())
+
+	params := &ssm.AddInventoryInput{
+		InventoryItemList: []*ssm.InventoryItem{ // Required
+			{ // Required
+				CaptureDate: aws.Time(time.Now()),
+				Content:     aws.String("InventoryItemContent"),
+				InstanceId:  aws.String("InstanceId"),
+				Name:        aws.String("InventoryItemName"),
+				Version:     aws.String("Version"),
+			},
+			// More values...
+		},
+	}
+	resp, err := svc.AddInventory(params)
+
+	if err != nil {
+		// Print the error, cast err to awserr.Error to get the Code and
+		// Message from an error.
+		fmt.Println(err.Error())
+		return
+	}
+
+	// Pretty-print the response data.
+	fmt.Println(resp)
+}
+
 func ExampleSSM_AddTagsToResource() {
 	svc := ssm.New(session.New())
 
@@ -736,7 +764,7 @@ func ExampleSSM_UpdateInstanceInformation() {
 		InstanceId:      aws.String("InstanceId"), // Required
 		AgentStatus:     aws.String("AgentStatus"),
 		AgentVersion:    aws.String("Version"),
-		ComputerName:    aws.String("String"),
+		ComputerName:    aws.String("ComputerName"),
 		IPAddress:       aws.String("IPAddress"),
 		PlatformName:    aws.String("String"),
 		PlatformType:    aws.String("PlatformType"),

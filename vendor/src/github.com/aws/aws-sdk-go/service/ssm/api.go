@@ -11,6 +11,32 @@ import (
 	"github.com/aws/aws-sdk-go/aws/request"
 )
 
+const opAddInventory = "AddInventory"
+
+// AddInventoryRequest generates a request for the AddInventory operation.
+func (c *SSM) AddInventoryRequest(input *AddInventoryInput) (req *request.Request, output *AddInventoryOutput) {
+	op := &request.Operation{
+		Name:       opAddInventory,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &AddInventoryInput{}
+	}
+
+	req = c.newRequest(op, input, output)
+	output = &AddInventoryOutput{}
+	req.Data = output
+	return
+}
+
+func (c *SSM) AddInventory(input *AddInventoryInput) (*AddInventoryOutput, error) {
+	req, out := c.AddInventoryRequest(input)
+	err := req.Send()
+	return out, err
+}
+
 const opAddTagsToResource = "AddTagsToResource"
 
 // AddTagsToResourceRequest generates a request for the AddTagsToResource operation.
@@ -984,6 +1010,62 @@ func (s Activation) String() string {
 
 // GoString returns the string representation
 func (s Activation) GoString() string {
+	return s.String()
+}
+
+type AddInventoryInput struct {
+	_ struct{} `type:"structure"`
+
+	InventoryItemList []*InventoryItem `locationNameList:"InventoryItem" min:"1" type:"list" required:"true"`
+}
+
+// String returns the string representation
+func (s AddInventoryInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s AddInventoryInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *AddInventoryInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "AddInventoryInput"}
+	if s.InventoryItemList == nil {
+		invalidParams.Add(request.NewErrParamRequired("InventoryItemList"))
+	}
+	if s.InventoryItemList != nil && len(s.InventoryItemList) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("InventoryItemList", 1))
+	}
+	if s.InventoryItemList != nil {
+		for i, v := range s.InventoryItemList {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "InventoryItemList", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+type AddInventoryOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation
+func (s AddInventoryOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s AddInventoryOutput) GoString() string {
 	return s.String()
 }
 
@@ -2514,7 +2596,7 @@ type InstanceInformation struct {
 	// The version of the SSM agent running on your instance.
 	AgentVersion *string `type:"string"`
 
-	ComputerName *string `type:"string"`
+	ComputerName *string `min:"1" type:"string"`
 
 	IPAddress *string `min:"1" type:"string"`
 
@@ -2609,7 +2691,7 @@ type InstanceProperty struct {
 
 	AvailabilityZone *string `type:"string"`
 
-	ComputerName *string `type:"string"`
+	ComputerName *string `min:"1" type:"string"`
 
 	IPAddress *string `min:"1" type:"string"`
 
@@ -2683,6 +2765,46 @@ func (s *InstancePropertyFilter) Validate() error {
 	}
 	if s.ValueSet != nil && len(s.ValueSet) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("ValueSet", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+type InventoryItem struct {
+	_ struct{} `type:"structure"`
+
+	CaptureDate *time.Time `type:"timestamp" timestampFormat:"unix"`
+
+	Content *string `min:"1" type:"string"`
+
+	InstanceId *string `type:"string"`
+
+	Name *string `min:"1" type:"string"`
+
+	Version *string `type:"string"`
+}
+
+// String returns the string representation
+func (s InventoryItem) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s InventoryItem) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *InventoryItem) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "InventoryItem"}
+	if s.Content != nil && len(*s.Content) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Content", 1))
+	}
+	if s.Name != nil && len(*s.Name) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Name", 1))
 	}
 
 	if invalidParams.Len() > 0 {
@@ -3522,7 +3644,7 @@ type UpdateInstanceInformationInput struct {
 
 	AgentVersion *string `type:"string"`
 
-	ComputerName *string `type:"string"`
+	ComputerName *string `min:"1" type:"string"`
 
 	IPAddress *string `min:"1" type:"string"`
 
@@ -3550,6 +3672,9 @@ func (s *UpdateInstanceInformationInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "UpdateInstanceInformationInput"}
 	if s.AgentStatus != nil && len(*s.AgentStatus) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("AgentStatus", 1))
+	}
+	if s.ComputerName != nil && len(*s.ComputerName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ComputerName", 1))
 	}
 	if s.IPAddress != nil && len(*s.IPAddress) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("IPAddress", 1))
@@ -3678,227 +3803,227 @@ func (s UpdateManagedInstanceRoleOutput) GoString() string {
 }
 
 const (
-	// @enum AssociationFilterKey
+// @enum AssociationFilterKey
 	AssociationFilterKeyInstanceId = "InstanceId"
-	// @enum AssociationFilterKey
+// @enum AssociationFilterKey
 	AssociationFilterKeyName = "Name"
 )
 
 const (
-	// @enum AssociationStatusName
+// @enum AssociationStatusName
 	AssociationStatusNamePending = "Pending"
-	// @enum AssociationStatusName
+// @enum AssociationStatusName
 	AssociationStatusNameSuccess = "Success"
-	// @enum AssociationStatusName
+// @enum AssociationStatusName
 	AssociationStatusNameFailed = "Failed"
 )
 
 const (
-	// @enum CommandFilterKey
+// @enum CommandFilterKey
 	CommandFilterKeyInvokedAfter = "InvokedAfter"
-	// @enum CommandFilterKey
+// @enum CommandFilterKey
 	CommandFilterKeyInvokedBefore = "InvokedBefore"
-	// @enum CommandFilterKey
+// @enum CommandFilterKey
 	CommandFilterKeyStatus = "Status"
-	// @enum CommandFilterKey
+// @enum CommandFilterKey
 	CommandFilterKeyCommandId = "CommandId"
-	// @enum CommandFilterKey
+// @enum CommandFilterKey
 	CommandFilterKeyInstanceId = "InstanceId"
 )
 
 const (
-	// @enum CommandInvocationStatus
+// @enum CommandInvocationStatus
 	CommandInvocationStatusPending = "Pending"
-	// @enum CommandInvocationStatus
+// @enum CommandInvocationStatus
 	CommandInvocationStatusInProgress = "InProgress"
-	// @enum CommandInvocationStatus
+// @enum CommandInvocationStatus
 	CommandInvocationStatusCancelling = "Cancelling"
-	// @enum CommandInvocationStatus
+// @enum CommandInvocationStatus
 	CommandInvocationStatusSuccess = "Success"
-	// @enum CommandInvocationStatus
+// @enum CommandInvocationStatus
 	CommandInvocationStatusTimedOut = "TimedOut"
-	// @enum CommandInvocationStatus
+// @enum CommandInvocationStatus
 	CommandInvocationStatusCancelled = "Cancelled"
-	// @enum CommandInvocationStatus
+// @enum CommandInvocationStatus
 	CommandInvocationStatusFailed = "Failed"
 )
 
 const (
-	// @enum CommandPluginStatus
+// @enum CommandPluginStatus
 	CommandPluginStatusPending = "Pending"
-	// @enum CommandPluginStatus
+// @enum CommandPluginStatus
 	CommandPluginStatusInProgress = "InProgress"
-	// @enum CommandPluginStatus
+// @enum CommandPluginStatus
 	CommandPluginStatusSuccess = "Success"
-	// @enum CommandPluginStatus
+// @enum CommandPluginStatus
 	CommandPluginStatusTimedOut = "TimedOut"
-	// @enum CommandPluginStatus
+// @enum CommandPluginStatus
 	CommandPluginStatusCancelled = "Cancelled"
-	// @enum CommandPluginStatus
+// @enum CommandPluginStatus
 	CommandPluginStatusFailed = "Failed"
 )
 
 const (
-	// @enum CommandStatus
+// @enum CommandStatus
 	CommandStatusPending = "Pending"
-	// @enum CommandStatus
+// @enum CommandStatus
 	CommandStatusInProgress = "InProgress"
-	// @enum CommandStatus
+// @enum CommandStatus
 	CommandStatusCancelling = "Cancelling"
-	// @enum CommandStatus
+// @enum CommandStatus
 	CommandStatusSuccess = "Success"
-	// @enum CommandStatus
+// @enum CommandStatus
 	CommandStatusTimedOut = "TimedOut"
-	// @enum CommandStatus
+// @enum CommandStatus
 	CommandStatusCancelled = "Cancelled"
-	// @enum CommandStatus
+// @enum CommandStatus
 	CommandStatusFailed = "Failed"
 )
 
 const (
-	// @enum DescribeActivationsFilterKeys
+// @enum DescribeActivationsFilterKeys
 	DescribeActivationsFilterKeysActivationIds = "ActivationIds"
-	// @enum DescribeActivationsFilterKeys
+// @enum DescribeActivationsFilterKeys
 	DescribeActivationsFilterKeysDefaultInstanceName = "DefaultInstanceName"
-	// @enum DescribeActivationsFilterKeys
+// @enum DescribeActivationsFilterKeys
 	DescribeActivationsFilterKeysIamRole = "IamRole"
 )
 
 const (
-	// @enum DocumentFilterKey
+// @enum DocumentFilterKey
 	DocumentFilterKeyName = "Name"
-	// @enum DocumentFilterKey
+// @enum DocumentFilterKey
 	DocumentFilterKeyOwner = "Owner"
-	// @enum DocumentFilterKey
+// @enum DocumentFilterKey
 	DocumentFilterKeyPlatformTypes = "PlatformTypes"
 )
 
 const (
-	// @enum DocumentHashType
+// @enum DocumentHashType
 	DocumentHashTypeSha256 = "Sha256"
-	// @enum DocumentHashType
+// @enum DocumentHashType
 	DocumentHashTypeSha1 = "Sha1"
 )
 
 const (
-	// @enum DocumentParameterType
+// @enum DocumentParameterType
 	DocumentParameterTypeString = "String"
-	// @enum DocumentParameterType
+// @enum DocumentParameterType
 	DocumentParameterTypeStringList = "StringList"
 )
 
 const (
-	// @enum DocumentPermissionType
+// @enum DocumentPermissionType
 	DocumentPermissionTypeShare = "Share"
 )
 
 const (
-	// @enum DocumentStatus
+// @enum DocumentStatus
 	DocumentStatusCreating = "Creating"
-	// @enum DocumentStatus
+// @enum DocumentStatus
 	DocumentStatusActive = "Active"
-	// @enum DocumentStatus
+// @enum DocumentStatus
 	DocumentStatusDeleting = "Deleting"
 )
 
 const (
-	// @enum Fault
+// @enum Fault
 	FaultClient = "Client"
-	// @enum Fault
+// @enum Fault
 	FaultServer = "Server"
-	// @enum Fault
+// @enum Fault
 	FaultUnknown = "Unknown"
 )
 
 const (
-	// @enum InstanceInformationFilterKey
+// @enum InstanceInformationFilterKey
 	InstanceInformationFilterKeyInstanceIds = "InstanceIds"
-	// @enum InstanceInformationFilterKey
+// @enum InstanceInformationFilterKey
 	InstanceInformationFilterKeyAgentVersion = "AgentVersion"
-	// @enum InstanceInformationFilterKey
+// @enum InstanceInformationFilterKey
 	InstanceInformationFilterKeyPingStatus = "PingStatus"
-	// @enum InstanceInformationFilterKey
+// @enum InstanceInformationFilterKey
 	InstanceInformationFilterKeyPlatformTypes = "PlatformTypes"
-	// @enum InstanceInformationFilterKey
+// @enum InstanceInformationFilterKey
 	InstanceInformationFilterKeyActivationIds = "ActivationIds"
-	// @enum InstanceInformationFilterKey
+// @enum InstanceInformationFilterKey
 	InstanceInformationFilterKeyIamRole = "IamRole"
-	// @enum InstanceInformationFilterKey
+// @enum InstanceInformationFilterKey
 	InstanceInformationFilterKeyResourceType = "ResourceType"
 )
 
 const (
-	// @enum InstancePropertyFilterKey
+// @enum InstancePropertyFilterKey
 	InstancePropertyFilterKeyInstanceIds = "InstanceIds"
-	// @enum InstancePropertyFilterKey
+// @enum InstancePropertyFilterKey
 	InstancePropertyFilterKeyAgentVersion = "AgentVersion"
-	// @enum InstancePropertyFilterKey
+// @enum InstancePropertyFilterKey
 	InstancePropertyFilterKeyPingStatus = "PingStatus"
-	// @enum InstancePropertyFilterKey
+// @enum InstancePropertyFilterKey
 	InstancePropertyFilterKeyPlatformTypes = "PlatformTypes"
-	// @enum InstancePropertyFilterKey
+// @enum InstancePropertyFilterKey
 	InstancePropertyFilterKeyDocumentName = "DocumentName"
-	// @enum InstancePropertyFilterKey
+// @enum InstancePropertyFilterKey
 	InstancePropertyFilterKeyActivationIds = "ActivationIds"
-	// @enum InstancePropertyFilterKey
+// @enum InstancePropertyFilterKey
 	InstancePropertyFilterKeyIamRole = "IamRole"
-	// @enum InstancePropertyFilterKey
+// @enum InstancePropertyFilterKey
 	InstancePropertyFilterKeyResourceType = "ResourceType"
 )
 
 const (
-	// @enum NotificationEvent
+// @enum NotificationEvent
 	NotificationEventAll = "All"
-	// @enum NotificationEvent
+// @enum NotificationEvent
 	NotificationEventInProgress = "InProgress"
-	// @enum NotificationEvent
+// @enum NotificationEvent
 	NotificationEventSuccess = "Success"
-	// @enum NotificationEvent
+// @enum NotificationEvent
 	NotificationEventTimedOut = "TimedOut"
-	// @enum NotificationEvent
+// @enum NotificationEvent
 	NotificationEventCancelled = "Cancelled"
-	// @enum NotificationEvent
+// @enum NotificationEvent
 	NotificationEventFailed = "Failed"
 )
 
 const (
-	// @enum NotificationType
+// @enum NotificationType
 	NotificationTypeCommand = "Command"
-	// @enum NotificationType
+// @enum NotificationType
 	NotificationTypeInvocation = "Invocation"
 )
 
 const (
-	// @enum PingStatus
+// @enum PingStatus
 	PingStatusOnline = "Online"
-	// @enum PingStatus
+// @enum PingStatus
 	PingStatusConnectionLost = "ConnectionLost"
-	// @enum PingStatus
+// @enum PingStatus
 	PingStatusInactive = "Inactive"
 )
 
 const (
-	// @enum PlatformType
+// @enum PlatformType
 	PlatformTypeWindows = "Windows"
-	// @enum PlatformType
+// @enum PlatformType
 	PlatformTypeLinux = "Linux"
 )
 
 const (
-	// @enum PublicKeyType
+// @enum PublicKeyType
 	PublicKeyTypeRsa = "Rsa"
 )
 
 const (
-	// @enum ResourceType
+// @enum ResourceType
 	ResourceTypeManagedInstance = "ManagedInstance"
-	// @enum ResourceType
+// @enum ResourceType
 	ResourceTypeDocument = "Document"
-	// @enum ResourceType
+// @enum ResourceType
 	ResourceTypeEc2instance = "EC2Instance"
 )
 
 const (
-	// @enum ResourceTypeForTagging
+// @enum ResourceTypeForTagging
 	ResourceTypeForTaggingManagedInstance = "ManagedInstance"
 )

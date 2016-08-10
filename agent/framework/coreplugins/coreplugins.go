@@ -18,6 +18,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/health"
+	"github.com/aws/amazon-ssm-agent/agent/inventory"
 	message "github.com/aws/amazon-ssm-agent/agent/message/processor"
 )
 
@@ -37,13 +38,7 @@ func RegisteredCorePlugins(context context.T) *PluginRegistry {
 
 // register core plugins here
 func loadCorePlugins(context context.T) {
-	registeredCorePlugins = make([]contracts.ICorePlugin, 2)
-
-	// registering the health core plugin
-	registeredCorePlugins[0] = health.NewHealthCheck(context)
-
-	// registering the messages core plugin
-	registeredCorePlugins[1] = message.NewProcessor(context)
-
-	//registeredCorePlugins[2] = config
+	registeredCorePlugins = append(registeredCorePlugins, health.NewHealthCheck(context))
+	registeredCorePlugins = append(registeredCorePlugins, message.NewProcessor(context))
+	registeredCorePlugins = append(registeredCorePlugins, inventory.NewBasicInventoryProvider(context))
 }

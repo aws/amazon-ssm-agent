@@ -10,6 +10,10 @@ import (
 
 // SSMAPI is the interface type for ssm.SSM.
 type SSMAPI interface {
+	AddInventoryRequest(*ssm.AddInventoryInput) (*request.Request, *ssm.AddInventoryOutput)
+
+	AddInventory(*ssm.AddInventoryInput) (*ssm.AddInventoryOutput, error)
+
 	AddTagsToResourceRequest(*ssm.AddTagsToResourceInput) (*request.Request, *ssm.AddTagsToResourceOutput)
 
 	AddTagsToResource(*ssm.AddTagsToResourceInput) (*ssm.AddTagsToResourceOutput, error)
