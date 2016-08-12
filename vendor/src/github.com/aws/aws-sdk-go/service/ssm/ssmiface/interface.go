@@ -10,13 +10,13 @@ import (
 
 // SSMAPI is the interface type for ssm.SSM.
 type SSMAPI interface {
-	AddInventoryRequest(*ssm.AddInventoryInput) (*request.Request, *ssm.AddInventoryOutput)
-
-	AddInventory(*ssm.AddInventoryInput) (*ssm.AddInventoryOutput, error)
-
 	AddTagsToResourceRequest(*ssm.AddTagsToResourceInput) (*request.Request, *ssm.AddTagsToResourceOutput)
 
 	AddTagsToResource(*ssm.AddTagsToResourceInput) (*ssm.AddTagsToResourceOutput, error)
+
+	ApplyAssociationsRequest(*ssm.ApplyAssociationsInput) (*request.Request, *ssm.ApplyAssociationsOutput)
+
+	ApplyAssociations(*ssm.ApplyAssociationsInput) (*ssm.ApplyAssociationsOutput, error)
 
 	CancelCommandRequest(*ssm.CancelCommandInput) (*request.Request, *ssm.CancelCommandOutput)
 
@@ -34,6 +34,14 @@ type SSMAPI interface {
 
 	CreateAssociationBatch(*ssm.CreateAssociationBatchInput) (*ssm.CreateAssociationBatchOutput, error)
 
+	CreateAutomationDefinitionVersionRequest(*ssm.CreateAutomationDefinitionVersionInput) (*request.Request, *ssm.CreateAutomationDefinitionVersionResult)
+
+	CreateAutomationDefinitionVersion(*ssm.CreateAutomationDefinitionVersionInput) (*ssm.CreateAutomationDefinitionVersionResult, error)
+
+	CreateAutomationDefinitionVersionStrictRequest(*ssm.CreateAutomationDefinitionVersionStrictInput) (*request.Request, *ssm.CreateAutomationDefinitionVersionResult)
+
+	CreateAutomationDefinitionVersionStrict(*ssm.CreateAutomationDefinitionVersionStrictInput) (*ssm.CreateAutomationDefinitionVersionResult, error)
+
 	CreateDocumentRequest(*ssm.CreateDocumentInput) (*request.Request, *ssm.CreateDocumentOutput)
 
 	CreateDocument(*ssm.CreateDocumentInput) (*ssm.CreateDocumentOutput, error)
@@ -45,6 +53,10 @@ type SSMAPI interface {
 	DeleteAssociationRequest(*ssm.DeleteAssociationInput) (*request.Request, *ssm.DeleteAssociationOutput)
 
 	DeleteAssociation(*ssm.DeleteAssociationInput) (*ssm.DeleteAssociationOutput, error)
+
+	DeleteAutomationDefinitionRequest(*ssm.DeleteAutomationDefinitionInput) (*request.Request, *ssm.DeleteAutomationDefinitionOutput)
+
+	DeleteAutomationDefinition(*ssm.DeleteAutomationDefinitionInput) (*ssm.DeleteAutomationDefinitionOutput, error)
 
 	DeleteDocumentRequest(*ssm.DeleteDocumentInput) (*request.Request, *ssm.DeleteDocumentOutput)
 
@@ -62,6 +74,22 @@ type SSMAPI interface {
 
 	DescribeAssociation(*ssm.DescribeAssociationInput) (*ssm.DescribeAssociationOutput, error)
 
+	DescribeAutomationActivityTypesRequest(*ssm.DescribeAutomationActivityTypesInput) (*request.Request, *ssm.DescribeAutomationActivityTypesOutput)
+
+	DescribeAutomationActivityTypes(*ssm.DescribeAutomationActivityTypesInput) (*ssm.DescribeAutomationActivityTypesOutput, error)
+
+	DescribeAutomationDefinitionVersionsRequest(*ssm.DescribeAutomationDefinitionVersionsInput) (*request.Request, *ssm.DescribeAutomationDefinitionVersionsOutput)
+
+	DescribeAutomationDefinitionVersions(*ssm.DescribeAutomationDefinitionVersionsInput) (*ssm.DescribeAutomationDefinitionVersionsOutput, error)
+
+	DescribeAutomationDefinitionsRequest(*ssm.DescribeAutomationDefinitionsInput) (*request.Request, *ssm.DescribeAutomationDefinitionsOutput)
+
+	DescribeAutomationDefinitions(*ssm.DescribeAutomationDefinitionsInput) (*ssm.DescribeAutomationDefinitionsOutput, error)
+
+	DescribeAutomationExecutionsRequest(*ssm.DescribeAutomationExecutionsInput) (*request.Request, *ssm.DescribeAutomationExecutionsOutput)
+
+	DescribeAutomationExecutions(*ssm.DescribeAutomationExecutionsInput) (*ssm.DescribeAutomationExecutionsOutput, error)
+
 	DescribeDocumentRequest(*ssm.DescribeDocumentInput) (*request.Request, *ssm.DescribeDocumentOutput)
 
 	DescribeDocument(*ssm.DescribeDocumentInput) (*ssm.DescribeDocumentOutput, error)
@@ -74,6 +102,14 @@ type SSMAPI interface {
 
 	DescribeDocumentPermission(*ssm.DescribeDocumentPermissionInput) (*ssm.DescribeDocumentPermissionOutput, error)
 
+	DescribeInstanceAssociationsRequest(*ssm.DescribeInstanceAssociationsInput) (*request.Request, *ssm.DescribeInstanceAssociationsOutput)
+
+	DescribeInstanceAssociations(*ssm.DescribeInstanceAssociationsInput) (*ssm.DescribeInstanceAssociationsOutput, error)
+
+	DescribeInstanceAssociationsStatusRequest(*ssm.DescribeInstanceAssociationsStatusInput) (*request.Request, *ssm.DescribeInstanceAssociationsStatusOutput)
+
+	DescribeInstanceAssociationsStatus(*ssm.DescribeInstanceAssociationsStatusInput) (*ssm.DescribeInstanceAssociationsStatusOutput, error)
+
 	DescribeInstanceInformationRequest(*ssm.DescribeInstanceInformationInput) (*request.Request, *ssm.DescribeInstanceInformationOutput)
 
 	DescribeInstanceInformation(*ssm.DescribeInstanceInformationInput) (*ssm.DescribeInstanceInformationOutput, error)
@@ -82,9 +118,33 @@ type SSMAPI interface {
 
 	DescribeInstanceProperties(*ssm.DescribeInstancePropertiesInput) (*ssm.DescribeInstancePropertiesOutput, error)
 
+	GetAutomationActivityTypeRequest(*ssm.GetAutomationActivityTypeInput) (*request.Request, *ssm.GetAutomationActivityTypeOutput)
+
+	GetAutomationActivityType(*ssm.GetAutomationActivityTypeInput) (*ssm.GetAutomationActivityTypeOutput, error)
+
+	GetAutomationDefinitionRequest(*ssm.GetAutomationDefinitionRequest) (*request.Request, *ssm.GetAutomationDefinitionOutput)
+
+	GetAutomationDefinition(*ssm.GetAutomationDefinitionRequest) (*ssm.GetAutomationDefinitionOutput, error)
+
+	GetAutomationDefinitionStrictRequest(*ssm.GetAutomationDefinitionRequest) (*request.Request, *ssm.GetAutomationDefinitionStrictOutput)
+
+	GetAutomationDefinitionStrict(*ssm.GetAutomationDefinitionRequest) (*ssm.GetAutomationDefinitionStrictOutput, error)
+
+	GetAutomationExecutionRequest(*ssm.GetAutomationExecutionInput) (*request.Request, *ssm.GetAutomationExecutionOutput)
+
+	GetAutomationExecution(*ssm.GetAutomationExecutionInput) (*ssm.GetAutomationExecutionOutput, error)
+
 	GetDocumentRequest(*ssm.GetDocumentInput) (*request.Request, *ssm.GetDocumentOutput)
 
 	GetDocument(*ssm.GetDocumentInput) (*ssm.GetDocumentOutput, error)
+
+	GetInventoryRequest(*ssm.GetInventoryInput) (*request.Request, *ssm.GetInventoryOutput)
+
+	GetInventory(*ssm.GetInventoryInput) (*ssm.GetInventoryOutput, error)
+
+	GetInventorySchemaRequest(*ssm.GetInventorySchemaInput) (*request.Request, *ssm.GetInventorySchemaOutput)
+
+	GetInventorySchema(*ssm.GetInventorySchemaInput) (*ssm.GetInventorySchemaOutput, error)
 
 	ListAssociationsRequest(*ssm.ListAssociationsInput) (*request.Request, *ssm.ListAssociationsOutput)
 
@@ -104,11 +164,19 @@ type SSMAPI interface {
 
 	ListCommandsPages(*ssm.ListCommandsInput, func(*ssm.ListCommandsOutput, bool) bool) error
 
+	ListDocumentVersionsRequest(*ssm.ListDocumentVersionsInput) (*request.Request, *ssm.ListDocumentVersionsOutput)
+
+	ListDocumentVersions(*ssm.ListDocumentVersionsInput) (*ssm.ListDocumentVersionsOutput, error)
+
 	ListDocumentsRequest(*ssm.ListDocumentsInput) (*request.Request, *ssm.ListDocumentsOutput)
 
 	ListDocuments(*ssm.ListDocumentsInput) (*ssm.ListDocumentsOutput, error)
 
 	ListDocumentsPages(*ssm.ListDocumentsInput, func(*ssm.ListDocumentsOutput, bool) bool) error
+
+	ListInstanceAssociationsRequest(*ssm.ListInstanceAssociationsInput) (*request.Request, *ssm.ListInstanceAssociationsOutput)
+
+	ListInstanceAssociations(*ssm.ListInstanceAssociationsInput) (*ssm.ListInstanceAssociationsOutput, error)
 
 	ListTagsForResourceRequest(*ssm.ListTagsForResourceInput) (*request.Request, *ssm.ListTagsForResourceOutput)
 
@@ -117,6 +185,10 @@ type SSMAPI interface {
 	ModifyDocumentPermissionRequest(*ssm.ModifyDocumentPermissionInput) (*request.Request, *ssm.ModifyDocumentPermissionOutput)
 
 	ModifyDocumentPermission(*ssm.ModifyDocumentPermissionInput) (*ssm.ModifyDocumentPermissionOutput, error)
+
+	PutInventoryRequest(*ssm.PutInventoryInput) (*request.Request, *ssm.PutInventoryOutput)
+
+	PutInventory(*ssm.PutInventoryInput) (*ssm.PutInventoryOutput, error)
 
 	RegisterManagedInstanceRequest(*ssm.RegisterManagedInstanceInput) (*request.Request, *ssm.RegisterManagedInstanceOutput)
 
@@ -134,9 +206,33 @@ type SSMAPI interface {
 
 	SendCommand(*ssm.SendCommandInput) (*ssm.SendCommandOutput, error)
 
+	StartAutomationExecutionRequest(*ssm.StartAutomationExecutionInput) (*request.Request, *ssm.StartAutomationExecutionOutput)
+
+	StartAutomationExecution(*ssm.StartAutomationExecutionInput) (*ssm.StartAutomationExecutionOutput, error)
+
+	StopAutomationExecutionRequest(*ssm.StopAutomationExecutionInput) (*request.Request, *ssm.StopAutomationExecutionOutput)
+
+	StopAutomationExecution(*ssm.StopAutomationExecutionInput) (*ssm.StopAutomationExecutionOutput, error)
+
+	UpdateAssociationRequest(*ssm.UpdateAssociationInput) (*request.Request, *ssm.UpdateAssociationOutput)
+
+	UpdateAssociation(*ssm.UpdateAssociationInput) (*ssm.UpdateAssociationOutput, error)
+
 	UpdateAssociationStatusRequest(*ssm.UpdateAssociationStatusInput) (*request.Request, *ssm.UpdateAssociationStatusOutput)
 
 	UpdateAssociationStatus(*ssm.UpdateAssociationStatusInput) (*ssm.UpdateAssociationStatusOutput, error)
+
+	UpdateAutomationDefinitionDefaultVersionRequest(*ssm.UpdateAutomationDefinitionDefaultVersionInput) (*request.Request, *ssm.UpdateAutomationDefinitionDefaultVersionOutput)
+
+	UpdateAutomationDefinitionDefaultVersion(*ssm.UpdateAutomationDefinitionDefaultVersionInput) (*ssm.UpdateAutomationDefinitionDefaultVersionOutput, error)
+
+	UpdateDocumentRequest(*ssm.UpdateDocumentInput) (*request.Request, *ssm.UpdateDocumentOutput)
+
+	UpdateDocument(*ssm.UpdateDocumentInput) (*ssm.UpdateDocumentOutput, error)
+
+	UpdateDocumentDefaultVersionRequest(*ssm.UpdateDocumentDefaultVersionInput) (*request.Request, *ssm.UpdateDocumentDefaultVersionOutput)
+
+	UpdateDocumentDefaultVersion(*ssm.UpdateDocumentDefaultVersionInput) (*ssm.UpdateDocumentDefaultVersionOutput, error)
 
 	UpdateInstanceInformationRequest(*ssm.UpdateInstanceInformationInput) (*request.Request, *ssm.UpdateInstanceInformationOutput)
 

@@ -40,5 +40,10 @@ func RegisteredCorePlugins(context context.T) *PluginRegistry {
 func loadCorePlugins(context context.T) {
 	registeredCorePlugins = append(registeredCorePlugins, health.NewHealthCheck(context))
 	registeredCorePlugins = append(registeredCorePlugins, message.NewProcessor(context))
-	registeredCorePlugins = append(registeredCorePlugins, inventory.NewBasicInventoryProvider(context))
+
+	if basicInventoryPlugin, err := inventory.NewBasicInventoryProvider(context); err != nil {
+		context.Log().Errorf("Basic inventory plugin isn't configured - %v", err.Error())
+	} else {
+		registeredCorePlugins = append(registeredCorePlugins, basicInventoryPlugin)
+	}
 }

@@ -36,7 +36,9 @@ type SsmCfg struct {
 	HealthFrequencyMinutes int
 	// TODO: test hook, can be removed before release
 	// this is to skip ssl verification for the beta self signed certs
-	InsecureSkipVerify bool
+	InsecureSkipVerify     bool
+	BasicInventoryGatherer string
+	InventoryOptimizer     string
 }
 
 // AgentInfo represents metadata for amazon-ssm-agent

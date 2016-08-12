@@ -15,34 +15,6 @@ import (
 var _ time.Duration
 var _ bytes.Buffer
 
-func ExampleSSM_AddInventory() {
-	svc := ssm.New(session.New())
-
-	params := &ssm.AddInventoryInput{
-		InventoryItemList: []*ssm.InventoryItem{ // Required
-			{ // Required
-				CaptureDate: aws.Time(time.Now()),
-				Content:     aws.String("InventoryItemContent"),
-				InstanceId:  aws.String("InstanceId"),
-				Name:        aws.String("InventoryItemName"),
-				Version:     aws.String("Version"),
-			},
-			// More values...
-		},
-	}
-	resp, err := svc.AddInventory(params)
-
-	if err != nil {
-		// Print the error, cast err to awserr.Error to get the Code and
-		// Message from an error.
-		fmt.Println(err.Error())
-		return
-	}
-
-	// Pretty-print the response data.
-	fmt.Println(resp)
-}
-
 func ExampleSSM_AddTagsToResource() {
 	svc := ssm.New(session.New())
 
@@ -58,6 +30,28 @@ func ExampleSSM_AddTagsToResource() {
 		},
 	}
 	resp, err := svc.AddTagsToResource(params)
+
+	if err != nil {
+		// Print the error, cast err to awserr.Error to get the Code and
+		// Message from an error.
+		fmt.Println(err.Error())
+		return
+	}
+
+	// Pretty-print the response data.
+	fmt.Println(resp)
+}
+
+func ExampleSSM_ApplyAssociations() {
+	svc := ssm.New(session.New())
+
+	params := &ssm.ApplyAssociationsInput{
+		AssociationIds: []*string{ // Required
+			aws.String("AssociationId"), // Required
+			// More values...
+		},
+	}
+	resp, err := svc.ApplyAssociations(params)
 
 	if err != nil {
 		// Print the error, cast err to awserr.Error to get the Code and
@@ -120,12 +114,24 @@ func ExampleSSM_CreateAssociation() {
 	svc := ssm.New(session.New())
 
 	params := &ssm.CreateAssociationInput{
-		InstanceId: aws.String("InstanceId"),   // Required
-		Name:       aws.String("DocumentName"), // Required
+		InstanceId:      aws.String("InstanceId"),   // Required
+		Name:            aws.String("DocumentName"), // Required
+		DocumentVersion: aws.Int64(1),
 		Parameters: map[string][]*string{
 			"Key": { // Required
 				aws.String("ParameterValue"), // Required
 				// More values...
+			},
+			// More values...
+		},
+		ScheduleExpression: aws.String("ScheduleExpression"),
+		Targets: []*ssm.TargetEntry{
+			{ // Required
+				Key: aws.String("TargetKey"),
+				Values: []*string{
+					aws.String("TargetValue"), // Required
+					// More values...
+				},
 			},
 			// More values...
 		},
@@ -149,12 +155,24 @@ func ExampleSSM_CreateAssociationBatch() {
 	params := &ssm.CreateAssociationBatchInput{
 		Entries: []*ssm.CreateAssociationBatchRequestEntry{ // Required
 			{ // Required
-				InstanceId: aws.String("InstanceId"),   // Required
-				Name:       aws.String("DocumentName"), // Required
+				InstanceId:      aws.String("InstanceId"),   // Required
+				Name:            aws.String("DocumentName"), // Required
+				DocumentVersion: aws.Int64(1),
 				Parameters: map[string][]*string{
 					"Key": { // Required
 						aws.String("ParameterValue"), // Required
 						// More values...
+					},
+					// More values...
+				},
+				ScheduleExpression: aws.String("ScheduleExpression"),
+				Targets: []*ssm.TargetEntry{
+					{ // Required
+						Key: aws.String("TargetKey"),
+						Values: []*string{
+							aws.String("TargetValue"), // Required
+							// More values...
+						},
 					},
 					// More values...
 				},
@@ -163,6 +181,84 @@ func ExampleSSM_CreateAssociationBatch() {
 		},
 	}
 	resp, err := svc.CreateAssociationBatch(params)
+
+	if err != nil {
+		// Print the error, cast err to awserr.Error to get the Code and
+		// Message from an error.
+		fmt.Println(err.Error())
+		return
+	}
+
+	// Pretty-print the response data.
+	fmt.Println(resp)
+}
+
+func ExampleSSM_CreateAutomationDefinitionVersion() {
+	svc := ssm.New(session.New())
+
+	params := &ssm.CreateAutomationDefinitionVersionInput{
+		Content:        aws.String("DefinitionContent"),      // Required
+		Name:           aws.String("CustomerDefinitionName"), // Required
+		Comment:        aws.String("DefinitionComment"),
+		CurrentVersion: aws.Int64(1),
+	}
+	resp, err := svc.CreateAutomationDefinitionVersion(params)
+
+	if err != nil {
+		// Print the error, cast err to awserr.Error to get the Code and
+		// Message from an error.
+		fmt.Println(err.Error())
+		return
+	}
+
+	// Pretty-print the response data.
+	fmt.Println(resp)
+}
+
+func ExampleSSM_CreateAutomationDefinitionVersionStrict() {
+	svc := ssm.New(session.New())
+
+	params := &ssm.CreateAutomationDefinitionVersionStrictInput{
+		Content: &ssm.AutomationDefinitionDocument{ // Required
+			Activities: []*ssm.AutomationStepActivity{
+				{ // Required
+					ActivityType: aws.String("AutomationActivityName"),
+					Id:           aws.String("AutomationStepActivityName"),
+					Inputs: []*ssm.AutomationStepInput{
+						{ // Required
+							Key:   aws.String("AutomationStepParameterName"),
+							Value: aws.String("AutomationStepParameterValue"),
+						},
+						// More values...
+					},
+					MaxAttempts:    aws.Int64(1),
+					OnFailure:      aws.String("AutomationStepFailureResolution"),
+					TimeoutSeconds: aws.Int64(1),
+				},
+				// More values...
+			},
+			AssumeRole:         aws.String("AutomationDefinitionAssumeRole"),
+			CloudWatchLogGroup: aws.String("AutomationDefinitionCloudWatchLogGroupValue"),
+			Description:        aws.String("AutomationDefinitionDocumentDescription"),
+			Outputs: []*string{
+				aws.String("String"), // Required
+				// More values...
+			},
+			Parameters: []*ssm.AutomationStepParameter{
+				{ // Required
+					Description: aws.String("AutomationStepParameterDescription"),
+					Name:        aws.String("AutomationStepParameterName"),
+					Type:        aws.String("AutomationStepParameterValue"),
+				},
+				// More values...
+			},
+			Version: aws.String("AutomationDefinitionVersionId"),
+		},
+		Name:           aws.String("CustomerDefinitionName"), // Required
+		Comment:        aws.String("DefinitionComment"),
+		CurrentVersion: aws.Int64(1),
+	}
+	resp, err := svc.CreateAutomationDefinitionVersionStrict(params)
 
 	if err != nil {
 		// Print the error, cast err to awserr.Error to get the Code and
@@ -218,10 +314,31 @@ func ExampleSSM_DeleteAssociation() {
 	svc := ssm.New(session.New())
 
 	params := &ssm.DeleteAssociationInput{
-		InstanceId: aws.String("InstanceId"),   // Required
-		Name:       aws.String("DocumentName"), // Required
+		InstanceId:    aws.String("InstanceId"),   // Required
+		Name:          aws.String("DocumentName"), // Required
+		AssociationId: aws.String("AssociationId"),
 	}
 	resp, err := svc.DeleteAssociation(params)
+
+	if err != nil {
+		// Print the error, cast err to awserr.Error to get the Code and
+		// Message from an error.
+		fmt.Println(err.Error())
+		return
+	}
+
+	// Pretty-print the response data.
+	fmt.Println(resp)
+}
+
+func ExampleSSM_DeleteAutomationDefinition() {
+	svc := ssm.New(session.New())
+
+	params := &ssm.DeleteAutomationDefinitionInput{
+		Name:    aws.String("DefinitionName"), // Required
+		Version: aws.Int64(1),
+	}
+	resp, err := svc.DeleteAutomationDefinition(params)
 
 	if err != nil {
 		// Print the error, cast err to awserr.Error to get the Code and
@@ -306,10 +423,109 @@ func ExampleSSM_DescribeAssociation() {
 	svc := ssm.New(session.New())
 
 	params := &ssm.DescribeAssociationInput{
-		InstanceId: aws.String("InstanceId"),   // Required
-		Name:       aws.String("DocumentName"), // Required
+		InstanceId:    aws.String("InstanceId"),   // Required
+		Name:          aws.String("DocumentName"), // Required
+		AssociationId: aws.String("AssociationId"),
 	}
 	resp, err := svc.DescribeAssociation(params)
+
+	if err != nil {
+		// Print the error, cast err to awserr.Error to get the Code and
+		// Message from an error.
+		fmt.Println(err.Error())
+		return
+	}
+
+	// Pretty-print the response data.
+	fmt.Println(resp)
+}
+
+func ExampleSSM_DescribeAutomationActivityTypes() {
+	svc := ssm.New(session.New())
+
+	var params *ssm.DescribeAutomationActivityTypesInput
+	resp, err := svc.DescribeAutomationActivityTypes(params)
+
+	if err != nil {
+		// Print the error, cast err to awserr.Error to get the Code and
+		// Message from an error.
+		fmt.Println(err.Error())
+		return
+	}
+
+	// Pretty-print the response data.
+	fmt.Println(resp)
+}
+
+func ExampleSSM_DescribeAutomationDefinitionVersions() {
+	svc := ssm.New(session.New())
+
+	params := &ssm.DescribeAutomationDefinitionVersionsInput{
+		Name:       aws.String("DefinitionName"), // Required
+		MaxResults: aws.Int64(1),
+		NextToken:  aws.String("NextToken"),
+	}
+	resp, err := svc.DescribeAutomationDefinitionVersions(params)
+
+	if err != nil {
+		// Print the error, cast err to awserr.Error to get the Code and
+		// Message from an error.
+		fmt.Println(err.Error())
+		return
+	}
+
+	// Pretty-print the response data.
+	fmt.Println(resp)
+}
+
+func ExampleSSM_DescribeAutomationDefinitions() {
+	svc := ssm.New(session.New())
+
+	params := &ssm.DescribeAutomationDefinitionsInput{
+		Filters: []*ssm.DefinitionFilter{
+			{ // Required
+				Key: aws.String("DefinitionFilterKey"), // Required
+				Values: []*string{ // Required
+					aws.String("DefinitionFilterValue"), // Required
+					// More values...
+				},
+			},
+			// More values...
+		},
+		MaxResults: aws.Int64(1),
+		NextToken:  aws.String("NextToken"),
+	}
+	resp, err := svc.DescribeAutomationDefinitions(params)
+
+	if err != nil {
+		// Print the error, cast err to awserr.Error to get the Code and
+		// Message from an error.
+		fmt.Println(err.Error())
+		return
+	}
+
+	// Pretty-print the response data.
+	fmt.Println(resp)
+}
+
+func ExampleSSM_DescribeAutomationExecutions() {
+	svc := ssm.New(session.New())
+
+	params := &ssm.DescribeAutomationExecutionsInput{
+		Filters: []*ssm.AutomationExecutionFilter{
+			{ // Required
+				Key: aws.String("AutomationExecutionFilterKey"), // Required
+				Values: []*string{ // Required
+					aws.String("AutomationExecutionFilterValue"), // Required
+					// More values...
+				},
+			},
+			// More values...
+		},
+		MaxResults: aws.Int64(1),
+		NextToken:  aws.String("NextToken"),
+	}
+	resp, err := svc.DescribeAutomationExecutions(params)
 
 	if err != nil {
 		// Print the error, cast err to awserr.Error to get the Code and
@@ -326,7 +542,8 @@ func ExampleSSM_DescribeDocument() {
 	svc := ssm.New(session.New())
 
 	params := &ssm.DescribeDocumentInput{
-		Name: aws.String("DocumentARN"), // Required
+		Name:            aws.String("DocumentARN"), // Required
+		DocumentVersion: aws.Int64(1),
 	}
 	resp, err := svc.DescribeDocument(params)
 
@@ -345,7 +562,8 @@ func ExampleSSM_DescribeDocumentParameters() {
 	svc := ssm.New(session.New())
 
 	params := &ssm.DescribeDocumentParametersInput{
-		DocumentName: aws.String("DocumentARN"), // Required
+		DocumentName:    aws.String("DocumentARN"), // Required
+		DocumentVersion: aws.Int64(1),
 	}
 	resp, err := svc.DescribeDocumentParameters(params)
 
@@ -368,6 +586,58 @@ func ExampleSSM_DescribeDocumentPermission() {
 		PermissionType: aws.String("DocumentPermissionType"), // Required
 	}
 	resp, err := svc.DescribeDocumentPermission(params)
+
+	if err != nil {
+		// Print the error, cast err to awserr.Error to get the Code and
+		// Message from an error.
+		fmt.Println(err.Error())
+		return
+	}
+
+	// Pretty-print the response data.
+	fmt.Println(resp)
+}
+
+func ExampleSSM_DescribeInstanceAssociations() {
+	svc := ssm.New(session.New())
+
+	params := &ssm.DescribeInstanceAssociationsInput{
+		InstanceId: aws.String("InstanceId"), // Required
+		Filters: []*ssm.InstanceAssociationFilter{
+			{ // Required
+				Key: aws.String("InstanceAssociationFilterKey"),
+				Values: []*string{
+					aws.String("InstanceAssociationFilterValue"), // Required
+					// More values...
+				},
+			},
+			// More values...
+		},
+		MaxResults: aws.Int64(1),
+		NextToken:  aws.String("NextToken"),
+	}
+	resp, err := svc.DescribeInstanceAssociations(params)
+
+	if err != nil {
+		// Print the error, cast err to awserr.Error to get the Code and
+		// Message from an error.
+		fmt.Println(err.Error())
+		return
+	}
+
+	// Pretty-print the response data.
+	fmt.Println(resp)
+}
+
+func ExampleSSM_DescribeInstanceAssociationsStatus() {
+	svc := ssm.New(session.New())
+
+	params := &ssm.DescribeInstanceAssociationsStatusInput{
+		InstanceId: aws.String("InstanceId"), // Required
+		MaxResults: aws.Int64(1),
+		NextToken:  aws.String("NextToken"),
+	}
+	resp, err := svc.DescribeInstanceAssociationsStatus(params)
 
 	if err != nil {
 		// Print the error, cast err to awserr.Error to get the Code and
@@ -440,13 +710,157 @@ func ExampleSSM_DescribeInstanceProperties() {
 	fmt.Println(resp)
 }
 
+func ExampleSSM_GetAutomationActivityType() {
+	svc := ssm.New(session.New())
+
+	params := &ssm.GetAutomationActivityTypeInput{
+		Name: aws.String("AutomationActivityName"), // Required
+	}
+	resp, err := svc.GetAutomationActivityType(params)
+
+	if err != nil {
+		// Print the error, cast err to awserr.Error to get the Code and
+		// Message from an error.
+		fmt.Println(err.Error())
+		return
+	}
+
+	// Pretty-print the response data.
+	fmt.Println(resp)
+}
+
+func ExampleSSM_GetAutomationDefinition() {
+	svc := ssm.New(session.New())
+
+	params := &ssm.GetAutomationDefinitionRequest{
+		Name:    aws.String("DefinitionName"), // Required
+		Version: aws.Int64(1),
+	}
+	resp, err := svc.GetAutomationDefinition(params)
+
+	if err != nil {
+		// Print the error, cast err to awserr.Error to get the Code and
+		// Message from an error.
+		fmt.Println(err.Error())
+		return
+	}
+
+	// Pretty-print the response data.
+	fmt.Println(resp)
+}
+
+func ExampleSSM_GetAutomationDefinitionStrict() {
+	svc := ssm.New(session.New())
+
+	params := &ssm.GetAutomationDefinitionRequest{
+		Name:    aws.String("DefinitionName"), // Required
+		Version: aws.Int64(1),
+	}
+	resp, err := svc.GetAutomationDefinitionStrict(params)
+
+	if err != nil {
+		// Print the error, cast err to awserr.Error to get the Code and
+		// Message from an error.
+		fmt.Println(err.Error())
+		return
+	}
+
+	// Pretty-print the response data.
+	fmt.Println(resp)
+}
+
+func ExampleSSM_GetAutomationExecution() {
+	svc := ssm.New(session.New())
+
+	params := &ssm.GetAutomationExecutionInput{
+		AutomationExecutionId: aws.String("AutomationExecutionId"), // Required
+	}
+	resp, err := svc.GetAutomationExecution(params)
+
+	if err != nil {
+		// Print the error, cast err to awserr.Error to get the Code and
+		// Message from an error.
+		fmt.Println(err.Error())
+		return
+	}
+
+	// Pretty-print the response data.
+	fmt.Println(resp)
+}
+
 func ExampleSSM_GetDocument() {
 	svc := ssm.New(session.New())
 
 	params := &ssm.GetDocumentInput{
-		Name: aws.String("DocumentARN"), // Required
+		Name:            aws.String("DocumentARN"), // Required
+		DocumentVersion: aws.Int64(1),
 	}
 	resp, err := svc.GetDocument(params)
+
+	if err != nil {
+		// Print the error, cast err to awserr.Error to get the Code and
+		// Message from an error.
+		fmt.Println(err.Error())
+		return
+	}
+
+	// Pretty-print the response data.
+	fmt.Println(resp)
+}
+
+func ExampleSSM_GetInventory() {
+	svc := ssm.New(session.New())
+
+	params := &ssm.GetInventoryInput{
+		Filters: []*ssm.InventoryFilter{
+			{ // Required
+				Key: aws.String("InventoryFilterKey"), // Required
+				Values: []*string{ // Required
+					aws.String("InventoryFilterValue"), // Required
+					// More values...
+				},
+				Type: aws.String("InventoryQueryOperatorType"),
+			},
+			// More values...
+		},
+		MaxResults: aws.Int64(1),
+		NextToken:  aws.String("NextToken"),
+		ResultAttributes: []*string{
+			aws.String("InventoryItemAttributeName"), // Required
+			// More values...
+		},
+	}
+	resp, err := svc.GetInventory(params)
+
+	if err != nil {
+		// Print the error, cast err to awserr.Error to get the Code and
+		// Message from an error.
+		fmt.Println(err.Error())
+		return
+	}
+
+	// Pretty-print the response data.
+	fmt.Println(resp)
+}
+
+func ExampleSSM_GetInventorySchema() {
+	svc := ssm.New(session.New())
+
+	params := &ssm.GetInventorySchemaInput{
+		Filters: []*ssm.InventorySchemaFilter{
+			{ // Required
+				Key: aws.String("InventoryFilterKey"), // Required
+				Values: []*string{ // Required
+					aws.String("InventoryFilterValue"), // Required
+					// More values...
+				},
+			},
+			// More values...
+		},
+		MaxResults: aws.Int64(1),
+		NextToken:  aws.String("NextToken"),
+	}
+	resp, err := svc.GetInventorySchema(params)
 
 	if err != nil {
 		// Print the error, cast err to awserr.Error to get the Code and
@@ -545,6 +959,27 @@ func ExampleSSM_ListCommands() {
 	fmt.Println(resp)
 }
 
+func ExampleSSM_ListDocumentVersions() {
+	svc := ssm.New(session.New())
+
+	params := &ssm.ListDocumentVersionsInput{
+		Name:       aws.String("DocumentName"), // Required
+		MaxResults: aws.Int64(1),
+		NextToken:  aws.String("NextToken"),
+	}
+	resp, err := svc.ListDocumentVersions(params)
+
+	if err != nil {
+		// Print the error, cast err to awserr.Error to get the Code and
+		// Message from an error.
+		fmt.Println(err.Error())
+		return
+	}
+
+	// Pretty-print the response data.
+	fmt.Println(resp)
+}
+
 func ExampleSSM_ListDocuments() {
 	svc := ssm.New(session.New())
 
@@ -560,6 +995,27 @@ func ExampleSSM_ListDocuments() {
 		NextToken:  aws.String("NextToken"),
 	}
 	resp, err := svc.ListDocuments(params)
+
+	if err != nil {
+		// Print the error, cast err to awserr.Error to get the Code and
+		// Message from an error.
+		fmt.Println(err.Error())
+		return
+	}
+
+	// Pretty-print the response data.
+	fmt.Println(resp)
+}
+
+func ExampleSSM_ListInstanceAssociations() {
+	svc := ssm.New(session.New())
+
+	params := &ssm.ListInstanceAssociationsInput{
+		InstanceId: aws.String("InstanceId"), // Required
+		MaxResults: aws.Int64(1),
+		NextToken:  aws.String("NextToken"),
+	}
+	resp, err := svc.ListInstanceAssociations(params)
 
 	if err != nil {
 		// Print the error, cast err to awserr.Error to get the Code and
@@ -608,6 +1064,41 @@ func ExampleSSM_ModifyDocumentPermission() {
 		},
 	}
 	resp, err := svc.ModifyDocumentPermission(params)
+
+	if err != nil {
+		// Print the error, cast err to awserr.Error to get the Code and
+		// Message from an error.
+		fmt.Println(err.Error())
+		return
+	}
+
+	// Pretty-print the response data.
+	fmt.Println(resp)
+}
+
+func ExampleSSM_PutInventory() {
+	svc := ssm.New(session.New())
+
+	params := &ssm.PutInventoryInput{
+		InstanceId: aws.String("InstanceId"), // Required
+		Items: []*ssm.InventoryItem{ // Required
+			{ // Required
+				CaptureTime:   aws.String("InventoryItemCaptureTime"),   // Required
+				SchemaVersion: aws.String("InventoryItemSchemaVersion"), // Required
+				TypeName:      aws.String("InventoryItemTypeName"),      // Required
+				Content: []map[string]*string{
+					{ // Required
+						"Key": aws.String("AttributeValue"), // Required
+						// More values...
+					},
+					// More values...
+				},
+				ContentHash: aws.String("InventoryItemContentHash"),
+			},
+			// More values...
+		},
+	}
+	resp, err := svc.PutInventory(params)
 
 	if err != nil {
 		// Print the error, cast err to awserr.Error to get the Code and
@@ -731,6 +1222,79 @@ func ExampleSSM_SendCommand() {
 	fmt.Println(resp)
 }
 
+func ExampleSSM_StartAutomationExecution() {
+	svc := ssm.New(session.New())
+
+	params := &ssm.StartAutomationExecutionInput{
+		DefinitionName:    aws.String("DefinitionName"), // Required
+		DefinitionVersion: aws.Int64(1),
+		Inputs: map[string][]*string{
+			"Key": { // Required
+				aws.String("AutomationParameterValue"), // Required
+				// More values...
+			},
+			// More values...
+		},
+	}
+	resp, err := svc.StartAutomationExecution(params)
+
+	if err != nil {
+		// Print the error, cast err to awserr.Error to get the Code and
+		// Message from an error.
+		fmt.Println(err.Error())
+		return
+	}
+
+	// Pretty-print the response data.
+	fmt.Println(resp)
+}
+
+func ExampleSSM_StopAutomationExecution() {
+	svc := ssm.New(session.New())
+
+	params := &ssm.StopAutomationExecutionInput{
+		AutomationExecutionId: aws.String("AutomationExecutionId"), // Required
+	}
+	resp, err := svc.StopAutomationExecution(params)
+
+	if err != nil {
+		// Print the error, cast err to awserr.Error to get the Code and
+		// Message from an error.
+		fmt.Println(err.Error())
+		return
+	}
+
+	// Pretty-print the response data.
+	fmt.Println(resp)
+}
+
+func ExampleSSM_UpdateAssociation() {
+	svc := ssm.New(session.New())
+
+	params := &ssm.UpdateAssociationInput{
+		AssociationId: aws.String("AssociationId"), // Required
+		Parameters: map[string][]*string{
+			"Key": { // Required
+				aws.String("ParameterValue"), // Required
+				// More values...
+			},
+			// More values...
+		},
+		ScheduleExpression: aws.String("ScheduleExpression"),
+	}
+	resp, err := svc.UpdateAssociation(params)
+
+	if err != nil {
+		// Print the error, cast err to awserr.Error to get the Code and
+		// Message from an error.
+		fmt.Println(err.Error())
+		return
+	}
+
+	// Pretty-print the response data.
+	fmt.Println(resp)
+}
+
 func ExampleSSM_UpdateAssociationStatus() {
 	svc := ssm.New(session.New())
 
@@ -741,10 +1305,73 @@ func ExampleSSM_UpdateAssociationStatus() {
 			Name:           aws.String("AssociationStatusName"), // Required
 			AdditionalInfo: aws.String("StatusAdditionalInfo"),
 		},
-		InstanceId: aws.String("InstanceId"),   // Required
-		Name:       aws.String("DocumentName"), // Required
+		InstanceId:      aws.String("InstanceId"),   // Required
+		Name:            aws.String("DocumentName"), // Required
+		AssociationId:   aws.String("AssociationId"),
+		DocumentVersion: aws.Int64(1),
 	}
 	resp, err := svc.UpdateAssociationStatus(params)
+
+	if err != nil {
+		// Print the error, cast err to awserr.Error to get the Code and
+		// Message from an error.
+		fmt.Println(err.Error())
+		return
+	}
+
+	// Pretty-print the response data.
+	fmt.Println(resp)
+}
+
+func ExampleSSM_UpdateAutomationDefinitionDefaultVersion() {
+	svc := ssm.New(session.New())
+
+	params := &ssm.UpdateAutomationDefinitionDefaultVersionInput{
+		Name:    aws.String("DefinitionName"), // Required
+		Version: aws.Int64(1),                 // Required
+	}
+	resp, err := svc.UpdateAutomationDefinitionDefaultVersion(params)
+
+	if err != nil {
+		// Print the error, cast err to awserr.Error to get the Code and
+		// Message from an error.
+		fmt.Println(err.Error())
+		return
+	}
+
+	// Pretty-print the response data.
+	fmt.Println(resp)
+}
+
+func ExampleSSM_UpdateDocument() {
+	svc := ssm.New(session.New())
+
+	params := &ssm.UpdateDocumentInput{
+		Content:         aws.String("DocumentContent"), // Required
+		Name:            aws.String("DocumentName"),    // Required
+		DocumentVersion: aws.Int64(1),
+	}
+	resp, err := svc.UpdateDocument(params)
+
+	if err != nil {
+		// Print the error, cast err to awserr.Error to get the Code and
+		// Message from an error.
+		fmt.Println(err.Error())
+		return
+	}
+
+	// Pretty-print the response data.
+	fmt.Println(resp)
+}
+
+func ExampleSSM_UpdateDocumentDefaultVersion() {
+	svc := ssm.New(session.New())
+
+	params := &ssm.UpdateDocumentDefaultVersionInput{
+		DocumentVersion: aws.Int64(1),               // Required
+		Name:            aws.String("DocumentName"), // Required
+	}
+	resp, err := svc.UpdateDocumentDefaultVersion(params)
 
 	if err != nil {
 		// Print the error, cast err to awserr.Error to get the Code and

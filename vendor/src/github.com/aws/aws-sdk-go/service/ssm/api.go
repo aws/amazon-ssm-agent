@@ -4,38 +4,11 @@
 package ssm
 
 import (
-	"fmt"
 	"time"
 
 	"github.com/aws/aws-sdk-go/aws/awsutil"
 	"github.com/aws/aws-sdk-go/aws/request"
 )
-
-const opAddInventory = "AddInventory"
-
-// AddInventoryRequest generates a request for the AddInventory operation.
-func (c *SSM) AddInventoryRequest(input *AddInventoryInput) (req *request.Request, output *AddInventoryOutput) {
-	op := &request.Operation{
-		Name:       opAddInventory,
-		HTTPMethod: "POST",
-		HTTPPath:   "/",
-	}
-
-	if input == nil {
-		input = &AddInventoryInput{}
-	}
-
-	req = c.newRequest(op, input, output)
-	output = &AddInventoryOutput{}
-	req.Data = output
-	return
-}
-
-func (c *SSM) AddInventory(input *AddInventoryInput) (*AddInventoryOutput, error) {
-	req, out := c.AddInventoryRequest(input)
-	err := req.Send()
-	return out, err
-}
 
 const opAddTagsToResource = "AddTagsToResource"
 
@@ -59,6 +32,32 @@ func (c *SSM) AddTagsToResourceRequest(input *AddTagsToResourceInput) (req *requ
 
 func (c *SSM) AddTagsToResource(input *AddTagsToResourceInput) (*AddTagsToResourceOutput, error) {
 	req, out := c.AddTagsToResourceRequest(input)
+	err := req.Send()
+	return out, err
+}
+
+const opApplyAssociations = "ApplyAssociations"
+
+// ApplyAssociationsRequest generates a request for the ApplyAssociations operation.
+func (c *SSM) ApplyAssociationsRequest(input *ApplyAssociationsInput) (req *request.Request, output *ApplyAssociationsOutput) {
+	op := &request.Operation{
+		Name:       opApplyAssociations,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &ApplyAssociationsInput{}
+	}
+
+	req = c.newRequest(op, input, output)
+	output = &ApplyAssociationsOutput{}
+	req.Data = output
+	return
+}
+
+func (c *SSM) ApplyAssociations(input *ApplyAssociationsInput) (*ApplyAssociationsOutput, error) {
+	req, out := c.ApplyAssociationsRequest(input)
 	err := req.Send()
 	return out, err
 }
@@ -183,6 +182,58 @@ func (c *SSM) CreateAssociationBatch(input *CreateAssociationBatchInput) (*Creat
 	return out, err
 }
 
+const opCreateAutomationDefinitionVersion = "CreateAutomationDefinitionVersion"
+
+// CreateAutomationDefinitionVersionRequest generates a request for the CreateAutomationDefinitionVersion operation.
+func (c *SSM) CreateAutomationDefinitionVersionRequest(input *CreateAutomationDefinitionVersionInput) (req *request.Request, output *CreateAutomationDefinitionVersionResult) {
+	op := &request.Operation{
+		Name:       opCreateAutomationDefinitionVersion,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &CreateAutomationDefinitionVersionInput{}
+	}
+
+	req = c.newRequest(op, input, output)
+	output = &CreateAutomationDefinitionVersionResult{}
+	req.Data = output
+	return
+}
+
+func (c *SSM) CreateAutomationDefinitionVersion(input *CreateAutomationDefinitionVersionInput) (*CreateAutomationDefinitionVersionResult, error) {
+	req, out := c.CreateAutomationDefinitionVersionRequest(input)
+	err := req.Send()
+	return out, err
+}
+
+const opCreateAutomationDefinitionVersionStrict = "CreateAutomationDefinitionVersionStrict"
+
+// CreateAutomationDefinitionVersionStrictRequest generates a request for the CreateAutomationDefinitionVersionStrict operation.
+func (c *SSM) CreateAutomationDefinitionVersionStrictRequest(input *CreateAutomationDefinitionVersionStrictInput) (req *request.Request, output *CreateAutomationDefinitionVersionResult) {
+	op := &request.Operation{
+		Name:       opCreateAutomationDefinitionVersionStrict,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &CreateAutomationDefinitionVersionStrictInput{}
+	}
+
+	req = c.newRequest(op, input, output)
+	output = &CreateAutomationDefinitionVersionResult{}
+	req.Data = output
+	return
+}
+
+func (c *SSM) CreateAutomationDefinitionVersionStrict(input *CreateAutomationDefinitionVersionStrictInput) (*CreateAutomationDefinitionVersionResult, error) {
+	req, out := c.CreateAutomationDefinitionVersionStrictRequest(input)
+	err := req.Send()
+	return out, err
+}
+
 const opCreateDocument = "CreateDocument"
 
 // CreateDocumentRequest generates a request for the CreateDocument operation.
@@ -267,6 +318,32 @@ func (c *SSM) DeleteAssociationRequest(input *DeleteAssociationInput) (req *requ
 // with the desired configuration and associate it with the instance.
 func (c *SSM) DeleteAssociation(input *DeleteAssociationInput) (*DeleteAssociationOutput, error) {
 	req, out := c.DeleteAssociationRequest(input)
+	err := req.Send()
+	return out, err
+}
+
+const opDeleteAutomationDefinition = "DeleteAutomationDefinition"
+
+// DeleteAutomationDefinitionRequest generates a request for the DeleteAutomationDefinition operation.
+func (c *SSM) DeleteAutomationDefinitionRequest(input *DeleteAutomationDefinitionInput) (req *request.Request, output *DeleteAutomationDefinitionOutput) {
+	op := &request.Operation{
+		Name:       opDeleteAutomationDefinition,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &DeleteAutomationDefinitionInput{}
+	}
+
+	req = c.newRequest(op, input, output)
+	output = &DeleteAutomationDefinitionOutput{}
+	req.Data = output
+	return
+}
+
+func (c *SSM) DeleteAutomationDefinition(input *DeleteAutomationDefinitionInput) (*DeleteAutomationDefinitionOutput, error) {
+	req, out := c.DeleteAutomationDefinitionRequest(input)
 	err := req.Send()
 	return out, err
 }
@@ -380,6 +457,110 @@ func (c *SSM) DescribeAssociation(input *DescribeAssociationInput) (*DescribeAss
 	return out, err
 }
 
+const opDescribeAutomationActivityTypes = "DescribeAutomationActivityTypes"
+
+// DescribeAutomationActivityTypesRequest generates a request for the DescribeAutomationActivityTypes operation.
+func (c *SSM) DescribeAutomationActivityTypesRequest(input *DescribeAutomationActivityTypesInput) (req *request.Request, output *DescribeAutomationActivityTypesOutput) {
+	op := &request.Operation{
+		Name:       opDescribeAutomationActivityTypes,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &DescribeAutomationActivityTypesInput{}
+	}
+
+	req = c.newRequest(op, input, output)
+	output = &DescribeAutomationActivityTypesOutput{}
+	req.Data = output
+	return
+}
+
+func (c *SSM) DescribeAutomationActivityTypes(input *DescribeAutomationActivityTypesInput) (*DescribeAutomationActivityTypesOutput, error) {
+	req, out := c.DescribeAutomationActivityTypesRequest(input)
+	err := req.Send()
+	return out, err
+}
+
+const opDescribeAutomationDefinitionVersions = "DescribeAutomationDefinitionVersions"
+
+// DescribeAutomationDefinitionVersionsRequest generates a request for the DescribeAutomationDefinitionVersions operation.
+func (c *SSM) DescribeAutomationDefinitionVersionsRequest(input *DescribeAutomationDefinitionVersionsInput) (req *request.Request, output *DescribeAutomationDefinitionVersionsOutput) {
+	op := &request.Operation{
+		Name:       opDescribeAutomationDefinitionVersions,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &DescribeAutomationDefinitionVersionsInput{}
+	}
+
+	req = c.newRequest(op, input, output)
+	output = &DescribeAutomationDefinitionVersionsOutput{}
+	req.Data = output
+	return
+}
+
+func (c *SSM) DescribeAutomationDefinitionVersions(input *DescribeAutomationDefinitionVersionsInput) (*DescribeAutomationDefinitionVersionsOutput, error) {
+	req, out := c.DescribeAutomationDefinitionVersionsRequest(input)
+	err := req.Send()
+	return out, err
+}
+
+const opDescribeAutomationDefinitions = "DescribeAutomationDefinitions"
+
+// DescribeAutomationDefinitionsRequest generates a request for the DescribeAutomationDefinitions operation.
+func (c *SSM) DescribeAutomationDefinitionsRequest(input *DescribeAutomationDefinitionsInput) (req *request.Request, output *DescribeAutomationDefinitionsOutput) {
+	op := &request.Operation{
+		Name:       opDescribeAutomationDefinitions,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &DescribeAutomationDefinitionsInput{}
+	}
+
+	req = c.newRequest(op, input, output)
+	output = &DescribeAutomationDefinitionsOutput{}
+	req.Data = output
+	return
+}
+
+func (c *SSM) DescribeAutomationDefinitions(input *DescribeAutomationDefinitionsInput) (*DescribeAutomationDefinitionsOutput, error) {
+	req, out := c.DescribeAutomationDefinitionsRequest(input)
+	err := req.Send()
+	return out, err
+}
+
+const opDescribeAutomationExecutions = "DescribeAutomationExecutions"
+
+// DescribeAutomationExecutionsRequest generates a request for the DescribeAutomationExecutions operation.
+func (c *SSM) DescribeAutomationExecutionsRequest(input *DescribeAutomationExecutionsInput) (req *request.Request, output *DescribeAutomationExecutionsOutput) {
+	op := &request.Operation{
+		Name:       opDescribeAutomationExecutions,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &DescribeAutomationExecutionsInput{}
+	}
+
+	req = c.newRequest(op, input, output)
+	output = &DescribeAutomationExecutionsOutput{}
+	req.Data = output
+	return
+}
+
+func (c *SSM) DescribeAutomationExecutions(input *DescribeAutomationExecutionsInput) (*DescribeAutomationExecutionsOutput, error) {
+	req, out := c.DescribeAutomationExecutionsRequest(input)
+	err := req.Send()
+	return out, err
+}
+
 const opDescribeDocument = "DescribeDocument"
 
 // DescribeDocumentRequest generates a request for the DescribeDocument operation.
@@ -453,11 +634,60 @@ func (c *SSM) DescribeDocumentPermissionRequest(input *DescribeDocumentPermissio
 	return
 }
 
-// Describes the permissions for an SSM document. If you created the document,
-// you are the owner. If a document is shared, it can either be shared privately
-// (by specifying a user’s AWS account ID) or publicly (All).
 func (c *SSM) DescribeDocumentPermission(input *DescribeDocumentPermissionInput) (*DescribeDocumentPermissionOutput, error) {
 	req, out := c.DescribeDocumentPermissionRequest(input)
+	err := req.Send()
+	return out, err
+}
+
+const opDescribeInstanceAssociations = "DescribeInstanceAssociations"
+
+// DescribeInstanceAssociationsRequest generates a request for the DescribeInstanceAssociations operation.
+func (c *SSM) DescribeInstanceAssociationsRequest(input *DescribeInstanceAssociationsInput) (req *request.Request, output *DescribeInstanceAssociationsOutput) {
+	op := &request.Operation{
+		Name:       opDescribeInstanceAssociations,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &DescribeInstanceAssociationsInput{}
+	}
+
+	req = c.newRequest(op, input, output)
+	output = &DescribeInstanceAssociationsOutput{}
+	req.Data = output
+	return
+}
+
+func (c *SSM) DescribeInstanceAssociations(input *DescribeInstanceAssociationsInput) (*DescribeInstanceAssociationsOutput, error) {
+	req, out := c.DescribeInstanceAssociationsRequest(input)
+	err := req.Send()
+	return out, err
+}
+
+const opDescribeInstanceAssociationsStatus = "DescribeInstanceAssociationsStatus"
+
+// DescribeInstanceAssociationsStatusRequest generates a request for the DescribeInstanceAssociationsStatus operation.
+func (c *SSM) DescribeInstanceAssociationsStatusRequest(input *DescribeInstanceAssociationsStatusInput) (req *request.Request, output *DescribeInstanceAssociationsStatusOutput) {
+	op := &request.Operation{
+		Name:       opDescribeInstanceAssociationsStatus,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &DescribeInstanceAssociationsStatusInput{}
+	}
+
+	req = c.newRequest(op, input, output)
+	output = &DescribeInstanceAssociationsStatusOutput{}
+	req.Data = output
+	return
+}
+
+func (c *SSM) DescribeInstanceAssociationsStatus(input *DescribeInstanceAssociationsStatusInput) (*DescribeInstanceAssociationsStatusOutput, error) {
+	req, out := c.DescribeInstanceAssociationsStatusRequest(input)
 	err := req.Send()
 	return out, err
 }
@@ -520,6 +750,110 @@ func (c *SSM) DescribeInstanceProperties(input *DescribeInstancePropertiesInput)
 	return out, err
 }
 
+const opGetAutomationActivityType = "GetAutomationActivityType"
+
+// GetAutomationActivityTypeRequest generates a request for the GetAutomationActivityType operation.
+func (c *SSM) GetAutomationActivityTypeRequest(input *GetAutomationActivityTypeInput) (req *request.Request, output *GetAutomationActivityTypeOutput) {
+	op := &request.Operation{
+		Name:       opGetAutomationActivityType,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &GetAutomationActivityTypeInput{}
+	}
+
+	req = c.newRequest(op, input, output)
+	output = &GetAutomationActivityTypeOutput{}
+	req.Data = output
+	return
+}
+
+func (c *SSM) GetAutomationActivityType(input *GetAutomationActivityTypeInput) (*GetAutomationActivityTypeOutput, error) {
+	req, out := c.GetAutomationActivityTypeRequest(input)
+	err := req.Send()
+	return out, err
+}
+
+const opGetAutomationDefinition = "GetAutomationDefinition"
+
+// GetAutomationDefinitionRequest generates a request for the GetAutomationDefinition operation.
+func (c *SSM) GetAutomationDefinitionRequest(input *GetAutomationDefinitionRequest) (req *request.Request, output *GetAutomationDefinitionOutput) {
+	op := &request.Operation{
+		Name:       opGetAutomationDefinition,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &GetAutomationDefinitionRequest{}
+	}
+
+	req = c.newRequest(op, input, output)
+	output = &GetAutomationDefinitionOutput{}
+	req.Data = output
+	return
+}
+
+func (c *SSM) GetAutomationDefinition(input *GetAutomationDefinitionRequest) (*GetAutomationDefinitionOutput, error) {
+	req, out := c.GetAutomationDefinitionRequest(input)
+	err := req.Send()
+	return out, err
+}
+
+const opGetAutomationDefinitionStrict = "GetAutomationDefinitionStrict"
+
+// GetAutomationDefinitionStrictRequest generates a request for the GetAutomationDefinitionStrict operation.
+func (c *SSM) GetAutomationDefinitionStrictRequest(input *GetAutomationDefinitionRequest) (req *request.Request, output *GetAutomationDefinitionStrictOutput) {
+	op := &request.Operation{
+		Name:       opGetAutomationDefinitionStrict,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &GetAutomationDefinitionRequest{}
+	}
+
+	req = c.newRequest(op, input, output)
+	output = &GetAutomationDefinitionStrictOutput{}
+	req.Data = output
+	return
+}
+
+func (c *SSM) GetAutomationDefinitionStrict(input *GetAutomationDefinitionRequest) (*GetAutomationDefinitionStrictOutput, error) {
+	req, out := c.GetAutomationDefinitionStrictRequest(input)
+	err := req.Send()
+	return out, err
+}
+
+const opGetAutomationExecution = "GetAutomationExecution"
+
+// GetAutomationExecutionRequest generates a request for the GetAutomationExecution operation.
+func (c *SSM) GetAutomationExecutionRequest(input *GetAutomationExecutionInput) (req *request.Request, output *GetAutomationExecutionOutput) {
+	op := &request.Operation{
+		Name:       opGetAutomationExecution,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &GetAutomationExecutionInput{}
+	}
+
+	req = c.newRequest(op, input, output)
+	output = &GetAutomationExecutionOutput{}
+	req.Data = output
+	return
+}
+
+func (c *SSM) GetAutomationExecution(input *GetAutomationExecutionInput) (*GetAutomationExecutionOutput, error) {
+	req, out := c.GetAutomationExecutionRequest(input)
+	err := req.Send()
+	return out, err
+}
+
 const opGetDocument = "GetDocument"
 
 // GetDocumentRequest generates a request for the GetDocument operation.
@@ -543,6 +877,58 @@ func (c *SSM) GetDocumentRequest(input *GetDocumentInput) (req *request.Request,
 // Gets the contents of the specified SSM document.
 func (c *SSM) GetDocument(input *GetDocumentInput) (*GetDocumentOutput, error) {
 	req, out := c.GetDocumentRequest(input)
+	err := req.Send()
+	return out, err
+}
+
+const opGetInventory = "GetInventory"
+
+// GetInventoryRequest generates a request for the GetInventory operation.
+func (c *SSM) GetInventoryRequest(input *GetInventoryInput) (req *request.Request, output *GetInventoryOutput) {
+	op := &request.Operation{
+		Name:       opGetInventory,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &GetInventoryInput{}
+	}
+
+	req = c.newRequest(op, input, output)
+	output = &GetInventoryOutput{}
+	req.Data = output
+	return
+}
+
+func (c *SSM) GetInventory(input *GetInventoryInput) (*GetInventoryOutput, error) {
+	req, out := c.GetInventoryRequest(input)
+	err := req.Send()
+	return out, err
+}
+
+const opGetInventorySchema = "GetInventorySchema"
+
+// GetInventorySchemaRequest generates a request for the GetInventorySchema operation.
+func (c *SSM) GetInventorySchemaRequest(input *GetInventorySchemaInput) (req *request.Request, output *GetInventorySchemaOutput) {
+	op := &request.Operation{
+		Name:       opGetInventorySchema,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &GetInventorySchemaInput{}
+	}
+
+	req = c.newRequest(op, input, output)
+	output = &GetInventorySchemaOutput{}
+	req.Data = output
+	return
+}
+
+func (c *SSM) GetInventorySchema(input *GetInventorySchemaInput) (*GetInventorySchemaOutput, error) {
+	req, out := c.GetInventorySchemaRequest(input)
 	err := req.Send()
 	return out, err
 }
@@ -674,6 +1060,32 @@ func (c *SSM) ListCommandsPages(input *ListCommandsInput, fn func(p *ListCommand
 	})
 }
 
+const opListDocumentVersions = "ListDocumentVersions"
+
+// ListDocumentVersionsRequest generates a request for the ListDocumentVersions operation.
+func (c *SSM) ListDocumentVersionsRequest(input *ListDocumentVersionsInput) (req *request.Request, output *ListDocumentVersionsOutput) {
+	op := &request.Operation{
+		Name:       opListDocumentVersions,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &ListDocumentVersionsInput{}
+	}
+
+	req = c.newRequest(op, input, output)
+	output = &ListDocumentVersionsOutput{}
+	req.Data = output
+	return
+}
+
+func (c *SSM) ListDocumentVersions(input *ListDocumentVersionsInput) (*ListDocumentVersionsOutput, error) {
+	req, out := c.ListDocumentVersionsRequest(input)
+	err := req.Send()
+	return out, err
+}
+
 const opListDocuments = "ListDocuments"
 
 // ListDocumentsRequest generates a request for the ListDocuments operation.
@@ -713,6 +1125,32 @@ func (c *SSM) ListDocumentsPages(input *ListDocumentsInput, fn func(p *ListDocum
 	return page.EachPage(func(p interface{}, lastPage bool) bool {
 		return fn(p.(*ListDocumentsOutput), lastPage)
 	})
+}
+
+const opListInstanceAssociations = "ListInstanceAssociations"
+
+// ListInstanceAssociationsRequest generates a request for the ListInstanceAssociations operation.
+func (c *SSM) ListInstanceAssociationsRequest(input *ListInstanceAssociationsInput) (req *request.Request, output *ListInstanceAssociationsOutput) {
+	op := &request.Operation{
+		Name:       opListInstanceAssociations,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &ListInstanceAssociationsInput{}
+	}
+
+	req = c.newRequest(op, input, output)
+	output = &ListInstanceAssociationsOutput{}
+	req.Data = output
+	return
+}
+
+func (c *SSM) ListInstanceAssociations(input *ListInstanceAssociationsInput) (*ListInstanceAssociationsOutput, error) {
+	req, out := c.ListInstanceAssociationsRequest(input)
+	err := req.Send()
+	return out, err
 }
 
 const opListTagsForResource = "ListTagsForResource"
@@ -761,12 +1199,34 @@ func (c *SSM) ModifyDocumentPermissionRequest(input *ModifyDocumentPermissionInp
 	return
 }
 
-// Share a document publicly or privately. If you share a document privately,
-// you must specify the AWS user account IDs for those people who can use the
-// document. If you share a document publicly, you must specify All as the account
-// ID.
 func (c *SSM) ModifyDocumentPermission(input *ModifyDocumentPermissionInput) (*ModifyDocumentPermissionOutput, error) {
 	req, out := c.ModifyDocumentPermissionRequest(input)
+	err := req.Send()
+	return out, err
+}
+
+const opPutInventory = "PutInventory"
+
+// PutInventoryRequest generates a request for the PutInventory operation.
+func (c *SSM) PutInventoryRequest(input *PutInventoryInput) (req *request.Request, output *PutInventoryOutput) {
+	op := &request.Operation{
+		Name:       opPutInventory,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &PutInventoryInput{}
+	}
+
+	req = c.newRequest(op, input, output)
+	output = &PutInventoryOutput{}
+	req.Data = output
+	return
+}
+
+func (c *SSM) PutInventory(input *PutInventoryInput) (*PutInventoryOutput, error) {
+	req, out := c.PutInventoryRequest(input)
 	err := req.Send()
 	return out, err
 }
@@ -876,6 +1336,84 @@ func (c *SSM) SendCommand(input *SendCommandInput) (*SendCommandOutput, error) {
 	return out, err
 }
 
+const opStartAutomationExecution = "StartAutomationExecution"
+
+// StartAutomationExecutionRequest generates a request for the StartAutomationExecution operation.
+func (c *SSM) StartAutomationExecutionRequest(input *StartAutomationExecutionInput) (req *request.Request, output *StartAutomationExecutionOutput) {
+	op := &request.Operation{
+		Name:       opStartAutomationExecution,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &StartAutomationExecutionInput{}
+	}
+
+	req = c.newRequest(op, input, output)
+	output = &StartAutomationExecutionOutput{}
+	req.Data = output
+	return
+}
+
+func (c *SSM) StartAutomationExecution(input *StartAutomationExecutionInput) (*StartAutomationExecutionOutput, error) {
+	req, out := c.StartAutomationExecutionRequest(input)
+	err := req.Send()
+	return out, err
+}
+
+const opStopAutomationExecution = "StopAutomationExecution"
+
+// StopAutomationExecutionRequest generates a request for the StopAutomationExecution operation.
+func (c *SSM) StopAutomationExecutionRequest(input *StopAutomationExecutionInput) (req *request.Request, output *StopAutomationExecutionOutput) {
+	op := &request.Operation{
+		Name:       opStopAutomationExecution,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &StopAutomationExecutionInput{}
+	}
+
+	req = c.newRequest(op, input, output)
+	output = &StopAutomationExecutionOutput{}
+	req.Data = output
+	return
+}
+
+func (c *SSM) StopAutomationExecution(input *StopAutomationExecutionInput) (*StopAutomationExecutionOutput, error) {
+	req, out := c.StopAutomationExecutionRequest(input)
+	err := req.Send()
+	return out, err
+}
+
+const opUpdateAssociation = "UpdateAssociation"
+
+// UpdateAssociationRequest generates a request for the UpdateAssociation operation.
+func (c *SSM) UpdateAssociationRequest(input *UpdateAssociationInput) (req *request.Request, output *UpdateAssociationOutput) {
+	op := &request.Operation{
+		Name:       opUpdateAssociation,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &UpdateAssociationInput{}
+	}
+
+	req = c.newRequest(op, input, output)
+	output = &UpdateAssociationOutput{}
+	req.Data = output
+	return
+}
+
+func (c *SSM) UpdateAssociation(input *UpdateAssociationInput) (*UpdateAssociationOutput, error) {
+	req, out := c.UpdateAssociationRequest(input)
+	err := req.Send()
+	return out, err
+}
+
 const opUpdateAssociationStatus = "UpdateAssociationStatus"
 
 // UpdateAssociationStatusRequest generates a request for the UpdateAssociationStatus operation.
@@ -899,6 +1437,84 @@ func (c *SSM) UpdateAssociationStatusRequest(input *UpdateAssociationStatusInput
 // Updates the status of the SSM document associated with the specified instance.
 func (c *SSM) UpdateAssociationStatus(input *UpdateAssociationStatusInput) (*UpdateAssociationStatusOutput, error) {
 	req, out := c.UpdateAssociationStatusRequest(input)
+	err := req.Send()
+	return out, err
+}
+
+const opUpdateAutomationDefinitionDefaultVersion = "UpdateAutomationDefinitionDefaultVersion"
+
+// UpdateAutomationDefinitionDefaultVersionRequest generates a request for the UpdateAutomationDefinitionDefaultVersion operation.
+func (c *SSM) UpdateAutomationDefinitionDefaultVersionRequest(input *UpdateAutomationDefinitionDefaultVersionInput) (req *request.Request, output *UpdateAutomationDefinitionDefaultVersionOutput) {
+	op := &request.Operation{
+		Name:       opUpdateAutomationDefinitionDefaultVersion,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &UpdateAutomationDefinitionDefaultVersionInput{}
+	}
+
+	req = c.newRequest(op, input, output)
+	output = &UpdateAutomationDefinitionDefaultVersionOutput{}
+	req.Data = output
+	return
+}
+
+func (c *SSM) UpdateAutomationDefinitionDefaultVersion(input *UpdateAutomationDefinitionDefaultVersionInput) (*UpdateAutomationDefinitionDefaultVersionOutput, error) {
+	req, out := c.UpdateAutomationDefinitionDefaultVersionRequest(input)
+	err := req.Send()
+	return out, err
+}
+
+const opUpdateDocument = "UpdateDocument"
+
+// UpdateDocumentRequest generates a request for the UpdateDocument operation.
+func (c *SSM) UpdateDocumentRequest(input *UpdateDocumentInput) (req *request.Request, output *UpdateDocumentOutput) {
+	op := &request.Operation{
+		Name:       opUpdateDocument,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &UpdateDocumentInput{}
+	}
+
+	req = c.newRequest(op, input, output)
+	output = &UpdateDocumentOutput{}
+	req.Data = output
+	return
+}
+
+func (c *SSM) UpdateDocument(input *UpdateDocumentInput) (*UpdateDocumentOutput, error) {
+	req, out := c.UpdateDocumentRequest(input)
+	err := req.Send()
+	return out, err
+}
+
+const opUpdateDocumentDefaultVersion = "UpdateDocumentDefaultVersion"
+
+// UpdateDocumentDefaultVersionRequest generates a request for the UpdateDocumentDefaultVersion operation.
+func (c *SSM) UpdateDocumentDefaultVersionRequest(input *UpdateDocumentDefaultVersionInput) (req *request.Request, output *UpdateDocumentDefaultVersionOutput) {
+	op := &request.Operation{
+		Name:       opUpdateDocumentDefaultVersion,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &UpdateDocumentDefaultVersionInput{}
+	}
+
+	req = c.newRequest(op, input, output)
+	output = &UpdateDocumentDefaultVersionOutput{}
+	req.Data = output
+	return
+}
+
+func (c *SSM) UpdateDocumentDefaultVersion(input *UpdateDocumentDefaultVersionInput) (*UpdateDocumentDefaultVersionOutput, error) {
+	req, out := c.UpdateDocumentDefaultVersionRequest(input)
 	err := req.Send()
 	return out, err
 }
@@ -1013,59 +1629,29 @@ func (s Activation) GoString() string {
 	return s.String()
 }
 
-type AddInventoryInput struct {
+type ActivityExecution struct {
 	_ struct{} `type:"structure"`
 
-	InventoryItemList []*InventoryItem `locationNameList:"InventoryItem" min:"1" type:"list" required:"true"`
+	ActivityId *string `type:"string"`
+
+	ActivityStatus *string `type:"string" enum:"AutomationExecutionStatus"`
+
+	Inputs map[string]*string `type:"map"`
+
+	Outputs map[string][]*string `min:"1" type:"map"`
+
+	Response *string `type:"string"`
+
+	ResponseCode *string `type:"string"`
 }
 
 // String returns the string representation
-func (s AddInventoryInput) String() string {
+func (s ActivityExecution) String() string {
 	return awsutil.Prettify(s)
 }
 
 // GoString returns the string representation
-func (s AddInventoryInput) GoString() string {
-	return s.String()
-}
-
-// Validate inspects the fields of the type to determine if they are valid.
-func (s *AddInventoryInput) Validate() error {
-	invalidParams := request.ErrInvalidParams{Context: "AddInventoryInput"}
-	if s.InventoryItemList == nil {
-		invalidParams.Add(request.NewErrParamRequired("InventoryItemList"))
-	}
-	if s.InventoryItemList != nil && len(s.InventoryItemList) < 1 {
-		invalidParams.Add(request.NewErrParamMinLen("InventoryItemList", 1))
-	}
-	if s.InventoryItemList != nil {
-		for i, v := range s.InventoryItemList {
-			if v == nil {
-				continue
-			}
-			if err := v.Validate(); err != nil {
-				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "InventoryItemList", i), err.(request.ErrInvalidParams))
-			}
-		}
-	}
-
-	if invalidParams.Len() > 0 {
-		return invalidParams
-	}
-	return nil
-}
-
-type AddInventoryOutput struct {
-	_ struct{} `type:"structure"`
-}
-
-// String returns the string representation
-func (s AddInventoryOutput) String() string {
-	return awsutil.Prettify(s)
-}
-
-// GoString returns the string representation
-func (s AddInventoryOutput) GoString() string {
+func (s ActivityExecution) GoString() string {
 	return s.String()
 }
 
@@ -1089,35 +1675,6 @@ func (s AddTagsToResourceInput) GoString() string {
 	return s.String()
 }
 
-// Validate inspects the fields of the type to determine if they are valid.
-func (s *AddTagsToResourceInput) Validate() error {
-	invalidParams := request.ErrInvalidParams{Context: "AddTagsToResourceInput"}
-	if s.ResourceId == nil {
-		invalidParams.Add(request.NewErrParamRequired("ResourceId"))
-	}
-	if s.ResourceType == nil {
-		invalidParams.Add(request.NewErrParamRequired("ResourceType"))
-	}
-	if s.Tags == nil {
-		invalidParams.Add(request.NewErrParamRequired("Tags"))
-	}
-	if s.Tags != nil {
-		for i, v := range s.Tags {
-			if v == nil {
-				continue
-			}
-			if err := v.Validate(); err != nil {
-				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "Tags", i), err.(request.ErrInvalidParams))
-			}
-		}
-	}
-
-	if invalidParams.Len() > 0 {
-		return invalidParams
-	}
-	return nil
-}
-
 type AddTagsToResourceOutput struct {
 	_ struct{} `type:"structure"`
 }
@@ -1132,15 +1689,57 @@ func (s AddTagsToResourceOutput) GoString() string {
 	return s.String()
 }
 
+type ApplyAssociationsInput struct {
+	_ struct{} `type:"structure"`
+
+	AssociationIds []*string `min:"1" type:"list" required:"true"`
+}
+
+// String returns the string representation
+func (s ApplyAssociationsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ApplyAssociationsInput) GoString() string {
+	return s.String()
+}
+
+type ApplyAssociationsOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation
+func (s ApplyAssociationsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ApplyAssociationsOutput) GoString() string {
+	return s.String()
+}
+
 // Describes an association of an SSM document and an instance.
 type Association struct {
 	_ struct{} `type:"structure"`
 
+	AssociationId *string `type:"string"`
+
+	DocumentVersion *int64 `min:"1" type:"integer"`
+
 	// The ID of the instance.
 	InstanceId *string `type:"string"`
 
+	LastExecutionDate *time.Time `type:"timestamp" timestampFormat:"unix"`
+
 	// The name of the SSM document.
 	Name *string `type:"string"`
+
+	Overview *AssociationOverview `type:"structure"`
+
+	Status *string `type:"string" enum:"AssociationStatusName"`
+
+	Targets []*TargetEntry `min:"1" type:"list"`
 }
 
 // String returns the string representation
@@ -1157,20 +1756,34 @@ func (s Association) GoString() string {
 type AssociationDescription struct {
 	_ struct{} `type:"structure"`
 
+	AssociationId *string `type:"string"`
+
 	// The date when the association was made.
 	Date *time.Time `type:"timestamp" timestampFormat:"unix"`
+
+	DocumentVersion *int64 `min:"1" type:"integer"`
+
+	ExecutionDate *time.Time `type:"timestamp" timestampFormat:"unix"`
 
 	// The ID of the instance.
 	InstanceId *string `type:"string"`
 
+	LastUpdateAssociationDate *time.Time `type:"timestamp" timestampFormat:"unix"`
+
 	// The name of the SSM document.
 	Name *string `type:"string"`
+
+	Overview *AssociationOverview `type:"structure"`
 
 	// A description of the parameters for a document.
 	Parameters map[string][]*string `type:"map"`
 
+	ScheduleExpression *string `min:"1" type:"string"`
+
 	// The association status.
 	Status *AssociationStatus `type:"structure"`
+
+	Targets []*TargetEntry `min:"1" type:"list"`
 }
 
 // String returns the string representation
@@ -1204,23 +1817,24 @@ func (s AssociationFilter) GoString() string {
 	return s.String()
 }
 
-// Validate inspects the fields of the type to determine if they are valid.
-func (s *AssociationFilter) Validate() error {
-	invalidParams := request.ErrInvalidParams{Context: "AssociationFilter"}
-	if s.Key == nil {
-		invalidParams.Add(request.NewErrParamRequired("Key"))
-	}
-	if s.Value == nil {
-		invalidParams.Add(request.NewErrParamRequired("Value"))
-	}
-	if s.Value != nil && len(*s.Value) < 1 {
-		invalidParams.Add(request.NewErrParamMinLen("Value", 1))
-	}
+type AssociationOverview struct {
+	_ struct{} `type:"structure"`
 
-	if invalidParams.Len() > 0 {
-		return invalidParams
-	}
-	return nil
+	Failed *int64 `type:"integer"`
+
+	Pending *int64 `type:"integer"`
+
+	Success *int64 `type:"integer"`
+}
+
+// String returns the string representation
+func (s AssociationOverview) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s AssociationOverview) GoString() string {
+	return s.String()
 }
 
 // Describes an association status.
@@ -1250,26 +1864,302 @@ func (s AssociationStatus) GoString() string {
 	return s.String()
 }
 
-// Validate inspects the fields of the type to determine if they are valid.
-func (s *AssociationStatus) Validate() error {
-	invalidParams := request.ErrInvalidParams{Context: "AssociationStatus"}
-	if s.Date == nil {
-		invalidParams.Add(request.NewErrParamRequired("Date"))
-	}
-	if s.Message == nil {
-		invalidParams.Add(request.NewErrParamRequired("Message"))
-	}
-	if s.Message != nil && len(*s.Message) < 1 {
-		invalidParams.Add(request.NewErrParamMinLen("Message", 1))
-	}
-	if s.Name == nil {
-		invalidParams.Add(request.NewErrParamRequired("Name"))
-	}
+type AutomationActivity struct {
+	_ struct{} `type:"structure"`
 
-	if invalidParams.Len() > 0 {
-		return invalidParams
-	}
-	return nil
+	Description *string `type:"string"`
+
+	Inputs []*AutomationArgument `type:"list"`
+
+	Name *string `type:"string"`
+
+	Outputs []*AutomationArgument `type:"list"`
+}
+
+// String returns the string representation
+func (s AutomationActivity) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s AutomationActivity) GoString() string {
+	return s.String()
+}
+
+type AutomationArgument struct {
+	_ struct{} `type:"structure"`
+
+	Name *string `type:"string"`
+
+	Regex *string `type:"string"`
+
+	Required *bool `type:"boolean"`
+
+	Type *string `type:"string" enum:"AutomationArgumentType"`
+}
+
+// String returns the string representation
+func (s AutomationArgument) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s AutomationArgument) GoString() string {
+	return s.String()
+}
+
+type AutomationDefinition struct {
+	_ struct{} `type:"structure"`
+
+	Comment *string `type:"string"`
+
+	CreateTime *time.Time `type:"timestamp" timestampFormat:"unix"`
+
+	CreatedBy *string `type:"string"`
+
+	DefinitionContent *string `min:"1" type:"string"`
+
+	IsDefault *bool `type:"boolean"`
+
+	LastExecuteTime *time.Time `type:"timestamp" timestampFormat:"unix"`
+
+	Version *int64 `min:"1" type:"integer"`
+}
+
+// String returns the string representation
+func (s AutomationDefinition) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s AutomationDefinition) GoString() string {
+	return s.String()
+}
+
+type AutomationDefinitionDocument struct {
+	_ struct{} `type:"structure"`
+
+	Activities []*AutomationStepActivity `type:"list"`
+
+	AssumeRole *string `min:"20" type:"string"`
+
+	CloudWatchLogGroup *string `type:"string"`
+
+	Description *string `type:"string"`
+
+	Outputs []*string `type:"list"`
+
+	Parameters []*AutomationStepParameter `type:"list"`
+
+	Version *string `min:"3" type:"string"`
+}
+
+// String returns the string representation
+func (s AutomationDefinitionDocument) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s AutomationDefinitionDocument) GoString() string {
+	return s.String()
+}
+
+type AutomationDefinitionMetadata struct {
+	_ struct{} `type:"structure"`
+
+	DefaultVersion *int64 `min:"1" type:"integer"`
+
+	DefaultVersionComment *string `type:"string"`
+
+	DefaultVersionCreateTime *time.Time `type:"timestamp" timestampFormat:"unix"`
+
+	DefaultVersionCreatedBy *string `type:"string"`
+
+	DefaultVersionLastExecuteTime *time.Time `type:"timestamp" timestampFormat:"unix"`
+
+	Name *string `type:"string"`
+}
+
+// String returns the string representation
+func (s AutomationDefinitionMetadata) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s AutomationDefinitionMetadata) GoString() string {
+	return s.String()
+}
+
+type AutomationDefinitionVersionMetadata struct {
+	_ struct{} `type:"structure"`
+
+	Comment *string `type:"string"`
+
+	CreateTime *time.Time `type:"timestamp" timestampFormat:"unix"`
+
+	CreatedBy *string `type:"string"`
+
+	IsDefault *bool `type:"boolean"`
+
+	LastExecuteTime *time.Time `type:"timestamp" timestampFormat:"unix"`
+
+	Version *int64 `min:"1" type:"integer"`
+}
+
+// String returns the string representation
+func (s AutomationDefinitionVersionMetadata) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s AutomationDefinitionVersionMetadata) GoString() string {
+	return s.String()
+}
+
+type AutomationExecution struct {
+	_ struct{} `type:"structure"`
+
+	ActivityExecutions []*ActivityExecution `type:"list"`
+
+	AutomationExecutionId *string `min:"36" type:"string"`
+
+	AutomationExecutionStatus *string `type:"string" enum:"AutomationExecutionStatus"`
+
+	DefinitionName *string `type:"string"`
+
+	DefinitionVersion *int64 `min:"1" type:"integer"`
+
+	ExecutionEndTime *time.Time `type:"timestamp" timestampFormat:"unix"`
+
+	ExecutionStartTime *time.Time `type:"timestamp" timestampFormat:"unix"`
+
+	Inputs map[string][]*string `min:"1" type:"map"`
+
+	Outputs map[string][]*string `min:"1" type:"map"`
+}
+
+// String returns the string representation
+func (s AutomationExecution) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s AutomationExecution) GoString() string {
+	return s.String()
+}
+
+type AutomationExecutionFilter struct {
+	_ struct{} `type:"structure"`
+
+	Key *string `type:"string" required:"true" enum:"AutomationExecutionFilterKey"`
+
+	Values []*string `min:"1" type:"list" required:"true"`
+}
+
+// String returns the string representation
+func (s AutomationExecutionFilter) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s AutomationExecutionFilter) GoString() string {
+	return s.String()
+}
+
+type AutomationExecutionMetadata struct {
+	_ struct{} `type:"structure"`
+
+	AutomationExecutionId *string `min:"36" type:"string"`
+
+	AutomationExecutionStatus *string `type:"string" enum:"AutomationExecutionStatus"`
+
+	DefinitionName *string `type:"string"`
+
+	DefinitionVersion *int64 `min:"1" type:"integer"`
+
+	ExecutedBy *string `type:"string"`
+
+	ExecutionEndTime *time.Time `type:"timestamp" timestampFormat:"unix"`
+
+	ExecutionStartTime *time.Time `type:"timestamp" timestampFormat:"unix"`
+
+	LogFile *string `type:"string"`
+
+	Outputs map[string][]*string `min:"1" type:"map"`
+}
+
+// String returns the string representation
+func (s AutomationExecutionMetadata) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s AutomationExecutionMetadata) GoString() string {
+	return s.String()
+}
+
+type AutomationStepActivity struct {
+	_ struct{} `type:"structure"`
+
+	ActivityType *string `type:"string"`
+
+	Id *string `type:"string"`
+
+	Inputs []*AutomationStepInput `type:"list"`
+
+	MaxAttempts *int64 `min:"1" type:"integer"`
+
+	OnFailure *string `type:"string" enum:"AutomationStepFailureResolution"`
+
+	TimeoutSeconds *int64 `min:"1" type:"integer"`
+}
+
+// String returns the string representation
+func (s AutomationStepActivity) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s AutomationStepActivity) GoString() string {
+	return s.String()
+}
+
+type AutomationStepInput struct {
+	_ struct{} `type:"structure"`
+
+	Key *string `type:"string"`
+
+	Value *string `type:"string"`
+}
+
+// String returns the string representation
+func (s AutomationStepInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s AutomationStepInput) GoString() string {
+	return s.String()
+}
+
+type AutomationStepParameter struct {
+	_ struct{} `type:"structure"`
+
+	Description *string `type:"string"`
+
+	Name *string `type:"string"`
+
+	Type *string `type:"string"`
+}
+
+// String returns the string representation
+func (s AutomationStepParameter) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s AutomationStepParameter) GoString() string {
+	return s.String()
 }
 
 type CancelCommandInput struct {
@@ -1292,25 +2182,6 @@ func (s CancelCommandInput) String() string {
 // GoString returns the string representation
 func (s CancelCommandInput) GoString() string {
 	return s.String()
-}
-
-// Validate inspects the fields of the type to determine if they are valid.
-func (s *CancelCommandInput) Validate() error {
-	invalidParams := request.ErrInvalidParams{Context: "CancelCommandInput"}
-	if s.CommandId == nil {
-		invalidParams.Add(request.NewErrParamRequired("CommandId"))
-	}
-	if s.CommandId != nil && len(*s.CommandId) < 36 {
-		invalidParams.Add(request.NewErrParamMinLen("CommandId", 36))
-	}
-	if s.InstanceIds != nil && len(s.InstanceIds) < 1 {
-		invalidParams.Add(request.NewErrParamMinLen("InstanceIds", 1))
-	}
-
-	if invalidParams.Len() > 0 {
-		return invalidParams
-	}
-	return nil
 }
 
 // Whether or not the command was successfully canceled. There is no guarantee
@@ -1403,25 +2274,6 @@ func (s CommandFilter) String() string {
 // GoString returns the string representation
 func (s CommandFilter) GoString() string {
 	return s.String()
-}
-
-// Validate inspects the fields of the type to determine if they are valid.
-func (s *CommandFilter) Validate() error {
-	invalidParams := request.ErrInvalidParams{Context: "CommandFilter"}
-	if s.Key == nil {
-		invalidParams.Add(request.NewErrParamRequired("Key"))
-	}
-	if s.Value == nil {
-		invalidParams.Add(request.NewErrParamRequired("Value"))
-	}
-	if s.Value != nil && len(*s.Value) < 1 {
-		invalidParams.Add(request.NewErrParamMinLen("Value", 1))
-	}
-
-	if invalidParams.Len() > 0 {
-		return invalidParams
-	}
-	return nil
 }
 
 // An invocation is copy of a command sent to a specific instance. A command
@@ -1539,22 +2391,6 @@ func (s CreateActivationInput) GoString() string {
 	return s.String()
 }
 
-// Validate inspects the fields of the type to determine if they are valid.
-func (s *CreateActivationInput) Validate() error {
-	invalidParams := request.ErrInvalidParams{Context: "CreateActivationInput"}
-	if s.IamRole == nil {
-		invalidParams.Add(request.NewErrParamRequired("IamRole"))
-	}
-	if s.RegistrationLimit != nil && *s.RegistrationLimit < 1 {
-		invalidParams.Add(request.NewErrParamMinValue("RegistrationLimit", 1))
-	}
-
-	if invalidParams.Len() > 0 {
-		return invalidParams
-	}
-	return nil
-}
-
 type CreateActivationOutput struct {
 	_ struct{} `type:"structure"`
 
@@ -1590,32 +2426,6 @@ func (s CreateAssociationBatchInput) GoString() string {
 	return s.String()
 }
 
-// Validate inspects the fields of the type to determine if they are valid.
-func (s *CreateAssociationBatchInput) Validate() error {
-	invalidParams := request.ErrInvalidParams{Context: "CreateAssociationBatchInput"}
-	if s.Entries == nil {
-		invalidParams.Add(request.NewErrParamRequired("Entries"))
-	}
-	if s.Entries != nil && len(s.Entries) < 1 {
-		invalidParams.Add(request.NewErrParamMinLen("Entries", 1))
-	}
-	if s.Entries != nil {
-		for i, v := range s.Entries {
-			if v == nil {
-				continue
-			}
-			if err := v.Validate(); err != nil {
-				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "Entries", i), err.(request.ErrInvalidParams))
-			}
-		}
-	}
-
-	if invalidParams.Len() > 0 {
-		return invalidParams
-	}
-	return nil
-}
-
 type CreateAssociationBatchOutput struct {
 	_ struct{} `type:"structure"`
 
@@ -1640,6 +2450,8 @@ func (s CreateAssociationBatchOutput) GoString() string {
 type CreateAssociationBatchRequestEntry struct {
 	_ struct{} `type:"structure"`
 
+	DocumentVersion *int64 `min:"1" type:"integer"`
+
 	// The ID of the instance.
 	InstanceId *string `type:"string" required:"true"`
 
@@ -1648,6 +2460,10 @@ type CreateAssociationBatchRequestEntry struct {
 
 	// A description of the parameters for a document.
 	Parameters map[string][]*string `type:"map"`
+
+	ScheduleExpression *string `min:"1" type:"string"`
+
+	Targets []*TargetEntry `min:"1" type:"list"`
 }
 
 // String returns the string representation
@@ -1660,26 +2476,12 @@ func (s CreateAssociationBatchRequestEntry) GoString() string {
 	return s.String()
 }
 
-// Validate inspects the fields of the type to determine if they are valid.
-func (s *CreateAssociationBatchRequestEntry) Validate() error {
-	invalidParams := request.ErrInvalidParams{Context: "CreateAssociationBatchRequestEntry"}
-	if s.InstanceId == nil {
-		invalidParams.Add(request.NewErrParamRequired("InstanceId"))
-	}
-	if s.Name == nil {
-		invalidParams.Add(request.NewErrParamRequired("Name"))
-	}
-
-	if invalidParams.Len() > 0 {
-		return invalidParams
-	}
-	return nil
-}
-
 type CreateAssociationInput struct {
 	_ struct{} `type:"structure"`
 
-	// The instance ID.
+	DocumentVersion *int64 `min:"1" type:"integer"`
+
+	// The Windows Server instance ID.
 	InstanceId *string `type:"string" required:"true"`
 
 	// The name of the SSM document.
@@ -1687,6 +2489,10 @@ type CreateAssociationInput struct {
 
 	// The parameters for the documents runtime configuration.
 	Parameters map[string][]*string `type:"map"`
+
+	ScheduleExpression *string `min:"1" type:"string"`
+
+	Targets []*TargetEntry `min:"1" type:"list"`
 }
 
 // String returns the string representation
@@ -1697,22 +2503,6 @@ func (s CreateAssociationInput) String() string {
 // GoString returns the string representation
 func (s CreateAssociationInput) GoString() string {
 	return s.String()
-}
-
-// Validate inspects the fields of the type to determine if they are valid.
-func (s *CreateAssociationInput) Validate() error {
-	invalidParams := request.ErrInvalidParams{Context: "CreateAssociationInput"}
-	if s.InstanceId == nil {
-		invalidParams.Add(request.NewErrParamRequired("InstanceId"))
-	}
-	if s.Name == nil {
-		invalidParams.Add(request.NewErrParamRequired("Name"))
-	}
-
-	if invalidParams.Len() > 0 {
-		return invalidParams
-	}
-	return nil
 }
 
 type CreateAssociationOutput struct {
@@ -1732,10 +2522,69 @@ func (s CreateAssociationOutput) GoString() string {
 	return s.String()
 }
 
+type CreateAutomationDefinitionVersionInput struct {
+	_ struct{} `type:"structure"`
+
+	Comment *string `type:"string"`
+
+	Content *string `min:"1" type:"string" required:"true"`
+
+	CurrentVersion *int64 `min:"1" type:"integer"`
+
+	Name *string `type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s CreateAutomationDefinitionVersionInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s CreateAutomationDefinitionVersionInput) GoString() string {
+	return s.String()
+}
+
+type CreateAutomationDefinitionVersionResult struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation
+func (s CreateAutomationDefinitionVersionResult) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s CreateAutomationDefinitionVersionResult) GoString() string {
+	return s.String()
+}
+
+type CreateAutomationDefinitionVersionStrictInput struct {
+	_ struct{} `type:"structure"`
+
+	Comment *string `type:"string"`
+
+	Content *AutomationDefinitionDocument `type:"structure" required:"true"`
+
+	CurrentVersion *int64 `min:"1" type:"integer"`
+
+	Name *string `type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s CreateAutomationDefinitionVersionStrictInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s CreateAutomationDefinitionVersionStrictInput) GoString() string {
+	return s.String()
+}
+
 type CreateDocumentInput struct {
 	_ struct{} `type:"structure"`
 
-	// A valid JSON string.
+	// A valid JSON string. For more information about the contents of this string,
+	// see SSM Document (http://docs.aws.amazon.com/ssm/latest/APIReference/aws-ssm-document.html).
 	Content *string `min:"1" type:"string" required:"true"`
 
 	// A name for the SSM document.
@@ -1750,25 +2599,6 @@ func (s CreateDocumentInput) String() string {
 // GoString returns the string representation
 func (s CreateDocumentInput) GoString() string {
 	return s.String()
-}
-
-// Validate inspects the fields of the type to determine if they are valid.
-func (s *CreateDocumentInput) Validate() error {
-	invalidParams := request.ErrInvalidParams{Context: "CreateDocumentInput"}
-	if s.Content == nil {
-		invalidParams.Add(request.NewErrParamRequired("Content"))
-	}
-	if s.Content != nil && len(*s.Content) < 1 {
-		invalidParams.Add(request.NewErrParamMinLen("Content", 1))
-	}
-	if s.Name == nil {
-		invalidParams.Add(request.NewErrParamRequired("Name"))
-	}
-
-	if invalidParams.Len() > 0 {
-		return invalidParams
-	}
-	return nil
 }
 
 type CreateDocumentOutput struct {
@@ -1788,6 +2618,24 @@ func (s CreateDocumentOutput) GoString() string {
 	return s.String()
 }
 
+type DefinitionFilter struct {
+	_ struct{} `type:"structure"`
+
+	Key *string `type:"string" required:"true" enum:"DefinitionFilterKey"`
+
+	Values []*string `min:"1" type:"list" required:"true"`
+}
+
+// String returns the string representation
+func (s DefinitionFilter) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DefinitionFilter) GoString() string {
+	return s.String()
+}
+
 type DeleteActivationInput struct {
 	_ struct{} `type:"structure"`
 
@@ -1802,19 +2650,6 @@ func (s DeleteActivationInput) String() string {
 // GoString returns the string representation
 func (s DeleteActivationInput) GoString() string {
 	return s.String()
-}
-
-// Validate inspects the fields of the type to determine if they are valid.
-func (s *DeleteActivationInput) Validate() error {
-	invalidParams := request.ErrInvalidParams{Context: "DeleteActivationInput"}
-	if s.ActivationId == nil {
-		invalidParams.Add(request.NewErrParamRequired("ActivationId"))
-	}
-
-	if invalidParams.Len() > 0 {
-		return invalidParams
-	}
-	return nil
 }
 
 type DeleteActivationOutput struct {
@@ -1834,6 +2669,8 @@ func (s DeleteActivationOutput) GoString() string {
 type DeleteAssociationInput struct {
 	_ struct{} `type:"structure"`
 
+	AssociationId *string `type:"string"`
+
 	// The ID of the instance.
 	InstanceId *string `type:"string" required:"true"`
 
@@ -1851,22 +2688,6 @@ func (s DeleteAssociationInput) GoString() string {
 	return s.String()
 }
 
-// Validate inspects the fields of the type to determine if they are valid.
-func (s *DeleteAssociationInput) Validate() error {
-	invalidParams := request.ErrInvalidParams{Context: "DeleteAssociationInput"}
-	if s.InstanceId == nil {
-		invalidParams.Add(request.NewErrParamRequired("InstanceId"))
-	}
-	if s.Name == nil {
-		invalidParams.Add(request.NewErrParamRequired("Name"))
-	}
-
-	if invalidParams.Len() > 0 {
-		return invalidParams
-	}
-	return nil
-}
-
 type DeleteAssociationOutput struct {
 	_ struct{} `type:"structure"`
 }
@@ -1878,6 +2699,38 @@ func (s DeleteAssociationOutput) String() string {
 
 // GoString returns the string representation
 func (s DeleteAssociationOutput) GoString() string {
+	return s.String()
+}
+
+type DeleteAutomationDefinitionInput struct {
+	_ struct{} `type:"structure"`
+
+	Name *string `type:"string" required:"true"`
+
+	Version *int64 `min:"1" type:"integer"`
+}
+
+// String returns the string representation
+func (s DeleteAutomationDefinitionInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DeleteAutomationDefinitionInput) GoString() string {
+	return s.String()
+}
+
+type DeleteAutomationDefinitionOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation
+func (s DeleteAutomationDefinitionOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DeleteAutomationDefinitionOutput) GoString() string {
 	return s.String()
 }
 
@@ -1896,19 +2749,6 @@ func (s DeleteDocumentInput) String() string {
 // GoString returns the string representation
 func (s DeleteDocumentInput) GoString() string {
 	return s.String()
-}
-
-// Validate inspects the fields of the type to determine if they are valid.
-func (s *DeleteDocumentInput) Validate() error {
-	invalidParams := request.ErrInvalidParams{Context: "DeleteDocumentInput"}
-	if s.Name == nil {
-		invalidParams.Add(request.NewErrParamRequired("Name"))
-	}
-
-	if invalidParams.Len() > 0 {
-		return invalidParams
-	}
-	return nil
 }
 
 type DeleteDocumentOutput struct {
@@ -1939,19 +2779,6 @@ func (s DeregisterManagedInstanceInput) String() string {
 // GoString returns the string representation
 func (s DeregisterManagedInstanceInput) GoString() string {
 	return s.String()
-}
-
-// Validate inspects the fields of the type to determine if they are valid.
-func (s *DeregisterManagedInstanceInput) Validate() error {
-	invalidParams := request.ErrInvalidParams{Context: "DeregisterManagedInstanceInput"}
-	if s.InstanceId == nil {
-		invalidParams.Add(request.NewErrParamRequired("InstanceId"))
-	}
-
-	if invalidParams.Len() > 0 {
-		return invalidParams
-	}
-	return nil
 }
 
 type DeregisterManagedInstanceOutput struct {
@@ -2006,19 +2833,6 @@ func (s DescribeActivationsInput) GoString() string {
 	return s.String()
 }
 
-// Validate inspects the fields of the type to determine if they are valid.
-func (s *DescribeActivationsInput) Validate() error {
-	invalidParams := request.ErrInvalidParams{Context: "DescribeActivationsInput"}
-	if s.MaxResults != nil && *s.MaxResults < 1 {
-		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
-	}
-
-	if invalidParams.Len() > 0 {
-		return invalidParams
-	}
-	return nil
-}
-
 type DescribeActivationsOutput struct {
 	_ struct{} `type:"structure"`
 
@@ -2040,7 +2854,9 @@ func (s DescribeActivationsOutput) GoString() string {
 type DescribeAssociationInput struct {
 	_ struct{} `type:"structure"`
 
-	// The instance ID.
+	AssociationId *string `type:"string"`
+
+	// The Windows Server instance ID.
 	InstanceId *string `type:"string" required:"true"`
 
 	// The name of the SSM document.
@@ -2055,22 +2871,6 @@ func (s DescribeAssociationInput) String() string {
 // GoString returns the string representation
 func (s DescribeAssociationInput) GoString() string {
 	return s.String()
-}
-
-// Validate inspects the fields of the type to determine if they are valid.
-func (s *DescribeAssociationInput) Validate() error {
-	invalidParams := request.ErrInvalidParams{Context: "DescribeAssociationInput"}
-	if s.InstanceId == nil {
-		invalidParams.Add(request.NewErrParamRequired("InstanceId"))
-	}
-	if s.Name == nil {
-		invalidParams.Add(request.NewErrParamRequired("Name"))
-	}
-
-	if invalidParams.Len() > 0 {
-		return invalidParams
-	}
-	return nil
 }
 
 type DescribeAssociationOutput struct {
@@ -2090,8 +2890,154 @@ func (s DescribeAssociationOutput) GoString() string {
 	return s.String()
 }
 
+type DescribeAutomationActivityTypesInput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation
+func (s DescribeAutomationActivityTypesInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DescribeAutomationActivityTypesInput) GoString() string {
+	return s.String()
+}
+
+type DescribeAutomationActivityTypesOutput struct {
+	_ struct{} `type:"structure"`
+
+	ActivityList []*string `type:"list"`
+}
+
+// String returns the string representation
+func (s DescribeAutomationActivityTypesOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DescribeAutomationActivityTypesOutput) GoString() string {
+	return s.String()
+}
+
+type DescribeAutomationDefinitionVersionsInput struct {
+	_ struct{} `type:"structure"`
+
+	MaxResults *int64 `min:"1" type:"integer"`
+
+	Name *string `type:"string" required:"true"`
+
+	NextToken *string `type:"string"`
+}
+
+// String returns the string representation
+func (s DescribeAutomationDefinitionVersionsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DescribeAutomationDefinitionVersionsInput) GoString() string {
+	return s.String()
+}
+
+type DescribeAutomationDefinitionVersionsOutput struct {
+	_ struct{} `type:"structure"`
+
+	AutomationDefinitionVersionsList []*AutomationDefinitionVersionMetadata `type:"list"`
+
+	NextToken *string `type:"string"`
+}
+
+// String returns the string representation
+func (s DescribeAutomationDefinitionVersionsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DescribeAutomationDefinitionVersionsOutput) GoString() string {
+	return s.String()
+}
+
+type DescribeAutomationDefinitionsInput struct {
+	_ struct{} `type:"structure"`
+
+	Filters []*DefinitionFilter `min:"1" type:"list"`
+
+	MaxResults *int64 `min:"1" type:"integer"`
+
+	NextToken *string `type:"string"`
+}
+
+// String returns the string representation
+func (s DescribeAutomationDefinitionsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DescribeAutomationDefinitionsInput) GoString() string {
+	return s.String()
+}
+
+type DescribeAutomationDefinitionsOutput struct {
+	_ struct{} `type:"structure"`
+
+	AutomationDefinitionMetadataList []*AutomationDefinitionMetadata `type:"list"`
+
+	NextToken *string `type:"string"`
+}
+
+// String returns the string representation
+func (s DescribeAutomationDefinitionsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DescribeAutomationDefinitionsOutput) GoString() string {
+	return s.String()
+}
+
+type DescribeAutomationExecutionsInput struct {
+	_ struct{} `type:"structure"`
+
+	Filters []*AutomationExecutionFilter `min:"1" type:"list"`
+
+	MaxResults *int64 `min:"1" type:"integer"`
+
+	NextToken *string `type:"string"`
+}
+
+// String returns the string representation
+func (s DescribeAutomationExecutionsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DescribeAutomationExecutionsInput) GoString() string {
+	return s.String()
+}
+
+type DescribeAutomationExecutionsOutput struct {
+	_ struct{} `type:"structure"`
+
+	AutomationExecutionMetadataList []*AutomationExecutionMetadata `type:"list"`
+
+	NextToken *string `type:"string"`
+}
+
+// String returns the string representation
+func (s DescribeAutomationExecutionsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DescribeAutomationExecutionsOutput) GoString() string {
+	return s.String()
+}
+
 type DescribeDocumentInput struct {
 	_ struct{} `type:"structure"`
+
+	DocumentVersion *int64 `min:"1" type:"integer"`
 
 	// The name of the SSM document.
 	Name *string `type:"string" required:"true"`
@@ -2105,19 +3051,6 @@ func (s DescribeDocumentInput) String() string {
 // GoString returns the string representation
 func (s DescribeDocumentInput) GoString() string {
 	return s.String()
-}
-
-// Validate inspects the fields of the type to determine if they are valid.
-func (s *DescribeDocumentInput) Validate() error {
-	invalidParams := request.ErrInvalidParams{Context: "DescribeDocumentInput"}
-	if s.Name == nil {
-		invalidParams.Add(request.NewErrParamRequired("Name"))
-	}
-
-	if invalidParams.Len() > 0 {
-		return invalidParams
-	}
-	return nil
 }
 
 type DescribeDocumentOutput struct {
@@ -2141,6 +3074,8 @@ type DescribeDocumentParametersInput struct {
 	_ struct{} `type:"structure"`
 
 	DocumentName *string `type:"string" required:"true"`
+
+	DocumentVersion *int64 `min:"1" type:"integer"`
 }
 
 // String returns the string representation
@@ -2151,19 +3086,6 @@ func (s DescribeDocumentParametersInput) String() string {
 // GoString returns the string representation
 func (s DescribeDocumentParametersInput) GoString() string {
 	return s.String()
-}
-
-// Validate inspects the fields of the type to determine if they are valid.
-func (s *DescribeDocumentParametersInput) Validate() error {
-	invalidParams := request.ErrInvalidParams{Context: "DescribeDocumentParametersInput"}
-	if s.DocumentName == nil {
-		invalidParams.Add(request.NewErrParamRequired("DocumentName"))
-	}
-
-	if invalidParams.Len() > 0 {
-		return invalidParams
-	}
-	return nil
 }
 
 type DescribeDocumentParametersOutput struct {
@@ -2185,10 +3107,8 @@ func (s DescribeDocumentParametersOutput) GoString() string {
 type DescribeDocumentPermissionInput struct {
 	_ struct{} `type:"structure"`
 
-	// The name of the document for which you are the owner.
 	Name *string `type:"string" required:"true"`
 
-	// The permission type for the document. The permission type can be Share.
 	PermissionType *string `type:"string" required:"true" enum:"DocumentPermissionType"`
 }
 
@@ -2202,27 +3122,9 @@ func (s DescribeDocumentPermissionInput) GoString() string {
 	return s.String()
 }
 
-// Validate inspects the fields of the type to determine if they are valid.
-func (s *DescribeDocumentPermissionInput) Validate() error {
-	invalidParams := request.ErrInvalidParams{Context: "DescribeDocumentPermissionInput"}
-	if s.Name == nil {
-		invalidParams.Add(request.NewErrParamRequired("Name"))
-	}
-	if s.PermissionType == nil {
-		invalidParams.Add(request.NewErrParamRequired("PermissionType"))
-	}
-
-	if invalidParams.Len() > 0 {
-		return invalidParams
-	}
-	return nil
-}
-
 type DescribeDocumentPermissionOutput struct {
 	_ struct{} `type:"structure"`
 
-	// The account IDs that have permission to use this document. The ID can be
-	// either an AWS account or All.
 	AccountIds []*string `locationNameList:"AccountId" type:"list"`
 }
 
@@ -2233,6 +3135,84 @@ func (s DescribeDocumentPermissionOutput) String() string {
 
 // GoString returns the string representation
 func (s DescribeDocumentPermissionOutput) GoString() string {
+	return s.String()
+}
+
+type DescribeInstanceAssociationsInput struct {
+	_ struct{} `type:"structure"`
+
+	Filters []*InstanceAssociationFilter `type:"list"`
+
+	InstanceId *string `type:"string" required:"true"`
+
+	MaxResults *int64 `min:"1" type:"integer"`
+
+	NextToken *string `type:"string"`
+}
+
+// String returns the string representation
+func (s DescribeInstanceAssociationsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DescribeInstanceAssociationsInput) GoString() string {
+	return s.String()
+}
+
+type DescribeInstanceAssociationsOutput struct {
+	_ struct{} `type:"structure"`
+
+	Associations []*InstanceAssociation `type:"list"`
+
+	NextToken *string `type:"string"`
+}
+
+// String returns the string representation
+func (s DescribeInstanceAssociationsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DescribeInstanceAssociationsOutput) GoString() string {
+	return s.String()
+}
+
+type DescribeInstanceAssociationsStatusInput struct {
+	_ struct{} `type:"structure"`
+
+	InstanceId *string `type:"string" required:"true"`
+
+	MaxResults *int64 `min:"1" type:"integer"`
+
+	NextToken *string `type:"string"`
+}
+
+// String returns the string representation
+func (s DescribeInstanceAssociationsStatusInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DescribeInstanceAssociationsStatusInput) GoString() string {
+	return s.String()
+}
+
+type DescribeInstanceAssociationsStatusOutput struct {
+	_ struct{} `type:"structure"`
+
+	InstanceAssociationStatusInfoList []*InstanceAssociationStatusInfo `type:"list"`
+
+	NextToken *string `type:"string"`
+}
+
+// String returns the string representation
+func (s DescribeInstanceAssociationsStatusOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DescribeInstanceAssociationsStatusOutput) GoString() string {
 	return s.String()
 }
 
@@ -2260,32 +3240,6 @@ func (s DescribeInstanceInformationInput) String() string {
 // GoString returns the string representation
 func (s DescribeInstanceInformationInput) GoString() string {
 	return s.String()
-}
-
-// Validate inspects the fields of the type to determine if they are valid.
-func (s *DescribeInstanceInformationInput) Validate() error {
-	invalidParams := request.ErrInvalidParams{Context: "DescribeInstanceInformationInput"}
-	if s.InstanceInformationFilterList != nil && len(s.InstanceInformationFilterList) < 1 {
-		invalidParams.Add(request.NewErrParamMinLen("InstanceInformationFilterList", 1))
-	}
-	if s.MaxResults != nil && *s.MaxResults < 5 {
-		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 5))
-	}
-	if s.InstanceInformationFilterList != nil {
-		for i, v := range s.InstanceInformationFilterList {
-			if v == nil {
-				continue
-			}
-			if err := v.Validate(); err != nil {
-				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "InstanceInformationFilterList", i), err.(request.ErrInvalidParams))
-			}
-		}
-	}
-
-	if invalidParams.Len() > 0 {
-		return invalidParams
-	}
-	return nil
 }
 
 type DescribeInstanceInformationOutput struct {
@@ -2329,29 +3283,6 @@ func (s DescribeInstancePropertiesInput) GoString() string {
 	return s.String()
 }
 
-// Validate inspects the fields of the type to determine if they are valid.
-func (s *DescribeInstancePropertiesInput) Validate() error {
-	invalidParams := request.ErrInvalidParams{Context: "DescribeInstancePropertiesInput"}
-	if s.MaxResults != nil && *s.MaxResults < 5 {
-		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 5))
-	}
-	if s.InstancePropertyFilterList != nil {
-		for i, v := range s.InstancePropertyFilterList {
-			if v == nil {
-				continue
-			}
-			if err := v.Validate(); err != nil {
-				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "InstancePropertyFilterList", i), err.(request.ErrInvalidParams))
-			}
-		}
-	}
-
-	if invalidParams.Len() > 0 {
-		return invalidParams
-	}
-	return nil
-}
-
 type DescribeInstancePropertiesOutput struct {
 	_ struct{} `type:"structure"`
 
@@ -2380,20 +3311,15 @@ type DocumentDescription struct {
 	// A description of the document.
 	Description *string `type:"string"`
 
-	// The Sha256 or Sha1 hash created by the system when the document was created.
-	//
-	//  Sha1 hashes have been deprecated.
+	DocumentVersion *int64 `min:"1" type:"integer"`
+
 	Hash *string `type:"string"`
 
-	// Sha256 or Sha1.
-	//
-	//  Sha1 hashes have been deprecated.
 	HashType *string `type:"string" enum:"DocumentHashType"`
 
 	// The name of the SSM document.
 	Name *string `type:"string"`
 
-	// The AWS user account of the person who created the document.
 	Owner *string `type:"string"`
 
 	// A description of the parameters for a document.
@@ -2440,25 +3366,6 @@ func (s DocumentFilter) GoString() string {
 	return s.String()
 }
 
-// Validate inspects the fields of the type to determine if they are valid.
-func (s *DocumentFilter) Validate() error {
-	invalidParams := request.ErrInvalidParams{Context: "DocumentFilter"}
-	if s.Key == nil {
-		invalidParams.Add(request.NewErrParamRequired("Key"))
-	}
-	if s.Value == nil {
-		invalidParams.Add(request.NewErrParamRequired("Value"))
-	}
-	if s.Value != nil && len(*s.Value) < 1 {
-		invalidParams.Add(request.NewErrParamMinLen("Value", 1))
-	}
-
-	if invalidParams.Len() > 0 {
-		return invalidParams
-	}
-	return nil
-}
-
 // Describes the name of an SSM document.
 type DocumentIdentifier struct {
 	_ struct{} `type:"structure"`
@@ -2466,7 +3373,6 @@ type DocumentIdentifier struct {
 	// The name of the SSM document.
 	Name *string `type:"string"`
 
-	// The AWS user account of the person who created the document.
 	Owner *string `type:"string"`
 
 	// The operating system platform.
@@ -2483,8 +3389,6 @@ func (s DocumentIdentifier) GoString() string {
 	return s.String()
 }
 
-// Parameters specified in the SSM document that execute on the server when
-// the command is run.
 type DocumentParameter struct {
 	_ struct{} `type:"structure"`
 
@@ -2513,6 +3417,46 @@ func (s DocumentParameter) GoString() string {
 	return s.String()
 }
 
+type DocumentVersionDescription struct {
+	_ struct{} `type:"structure"`
+
+	DocumentVersion *int64 `min:"1" type:"integer"`
+
+	Name *string `type:"string"`
+}
+
+// String returns the string representation
+func (s DocumentVersionDescription) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DocumentVersionDescription) GoString() string {
+	return s.String()
+}
+
+type DocumentVersionInfo struct {
+	_ struct{} `type:"structure"`
+
+	CreatedDate *time.Time `type:"timestamp" timestampFormat:"unix"`
+
+	DocumentVersion *int64 `min:"1" type:"integer"`
+
+	IsDefaultVersion *bool `type:"boolean"`
+
+	Name *string `type:"string"`
+}
+
+// String returns the string representation
+func (s DocumentVersionInfo) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DocumentVersionInfo) GoString() string {
+	return s.String()
+}
+
 // Describes a failed association.
 type FailedCreateAssociation struct {
 	_ struct{} `type:"structure"`
@@ -2537,8 +3481,124 @@ func (s FailedCreateAssociation) GoString() string {
 	return s.String()
 }
 
+type GetAutomationActivityTypeInput struct {
+	_ struct{} `type:"structure"`
+
+	Name *string `type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s GetAutomationActivityTypeInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s GetAutomationActivityTypeInput) GoString() string {
+	return s.String()
+}
+
+type GetAutomationActivityTypeOutput struct {
+	_ struct{} `type:"structure"`
+
+	ActivityDetail *AutomationActivity `type:"structure"`
+}
+
+// String returns the string representation
+func (s GetAutomationActivityTypeOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s GetAutomationActivityTypeOutput) GoString() string {
+	return s.String()
+}
+
+type GetAutomationDefinitionOutput struct {
+	_ struct{} `type:"structure"`
+
+	AutomationDefinition *AutomationDefinition `type:"structure"`
+}
+
+// String returns the string representation
+func (s GetAutomationDefinitionOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s GetAutomationDefinitionOutput) GoString() string {
+	return s.String()
+}
+
+type GetAutomationDefinitionRequest struct {
+	_ struct{} `type:"structure"`
+
+	Name *string `type:"string" required:"true"`
+
+	Version *int64 `min:"1" type:"integer"`
+}
+
+// String returns the string representation
+func (s GetAutomationDefinitionRequest) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s GetAutomationDefinitionRequest) GoString() string {
+	return s.String()
+}
+
+type GetAutomationDefinitionStrictOutput struct {
+	_ struct{} `type:"structure"`
+
+	AutomationDefinition *StrictAutomationDefinition `type:"structure"`
+}
+
+// String returns the string representation
+func (s GetAutomationDefinitionStrictOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s GetAutomationDefinitionStrictOutput) GoString() string {
+	return s.String()
+}
+
+type GetAutomationExecutionInput struct {
+	_ struct{} `type:"structure"`
+
+	AutomationExecutionId *string `min:"36" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s GetAutomationExecutionInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s GetAutomationExecutionInput) GoString() string {
+	return s.String()
+}
+
+type GetAutomationExecutionOutput struct {
+	_ struct{} `type:"structure"`
+
+	AutomationExecution *AutomationExecution `type:"structure"`
+}
+
+// String returns the string representation
+func (s GetAutomationExecutionOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s GetAutomationExecutionOutput) GoString() string {
+	return s.String()
+}
+
 type GetDocumentInput struct {
 	_ struct{} `type:"structure"`
+
+	DocumentVersion *int64 `min:"1" type:"integer"`
 
 	// The name of the SSM document.
 	Name *string `type:"string" required:"true"`
@@ -2554,24 +3614,13 @@ func (s GetDocumentInput) GoString() string {
 	return s.String()
 }
 
-// Validate inspects the fields of the type to determine if they are valid.
-func (s *GetDocumentInput) Validate() error {
-	invalidParams := request.ErrInvalidParams{Context: "GetDocumentInput"}
-	if s.Name == nil {
-		invalidParams.Add(request.NewErrParamRequired("Name"))
-	}
-
-	if invalidParams.Len() > 0 {
-		return invalidParams
-	}
-	return nil
-}
-
 type GetDocumentOutput struct {
 	_ struct{} `type:"structure"`
 
 	// The contents of the SSM document.
 	Content *string `min:"1" type:"string"`
+
+	DocumentVersion *int64 `min:"1" type:"integer"`
 
 	// The name of the SSM document.
 	Name *string `type:"string"`
@@ -2587,6 +3636,175 @@ func (s GetDocumentOutput) GoString() string {
 	return s.String()
 }
 
+type GetInventoryInput struct {
+	_ struct{} `type:"structure"`
+
+	Filters []*InventoryFilter `locationNameList:"InventoryFilter" min:"1" type:"list"`
+
+	MaxResults *int64 `min:"1" type:"integer"`
+
+	NextToken *string `type:"string"`
+
+	ResultAttributes []*string `locationNameList:"Attribute" min:"1" type:"list"`
+}
+
+// String returns the string representation
+func (s GetInventoryInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s GetInventoryInput) GoString() string {
+	return s.String()
+}
+
+type GetInventoryOutput struct {
+	_ struct{} `type:"structure"`
+
+	Items []*InventoryItem `locationNameList:"Item" type:"list"`
+
+	NextToken *string `type:"string"`
+}
+
+// String returns the string representation
+func (s GetInventoryOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s GetInventoryOutput) GoString() string {
+	return s.String()
+}
+
+type GetInventorySchemaInput struct {
+	_ struct{} `type:"structure"`
+
+	Filters []*InventorySchemaFilter `locationNameList:"InventorySchemaFilter" min:"1" type:"list"`
+
+	MaxResults *int64 `min:"1" type:"integer"`
+
+	NextToken *string `type:"string"`
+}
+
+// String returns the string representation
+func (s GetInventorySchemaInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s GetInventorySchemaInput) GoString() string {
+	return s.String()
+}
+
+type GetInventorySchemaOutput struct {
+	_ struct{} `type:"structure"`
+
+	NextToken *string `type:"string"`
+
+	Schemas []*InventoryItemSchema `type:"list"`
+}
+
+// String returns the string representation
+func (s GetInventorySchemaOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s GetInventorySchemaOutput) GoString() string {
+	return s.String()
+}
+
+type InstanceAssociation struct {
+	_ struct{} `type:"structure"`
+
+	AssociationId *string `type:"string"`
+
+	Content *string `min:"1" type:"string"`
+
+	InstanceId *string `type:"string"`
+}
+
+// String returns the string representation
+func (s InstanceAssociation) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s InstanceAssociation) GoString() string {
+	return s.String()
+}
+
+type InstanceAssociationFilter struct {
+	_ struct{} `type:"structure"`
+
+	Key *string `type:"string" enum:"InstanceAssociationFilterKey"`
+
+	Values []*string `min:"1" type:"list"`
+}
+
+// String returns the string representation
+func (s InstanceAssociationFilter) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s InstanceAssociationFilter) GoString() string {
+	return s.String()
+}
+
+type InstanceAssociationStatusInfo struct {
+	_ struct{} `type:"structure"`
+
+	AssociationId *string `type:"string"`
+
+	DocumentVersion *int64 `min:"1" type:"integer"`
+
+	ExecutionDate *time.Time `type:"timestamp" timestampFormat:"unix"`
+
+	InstanceId *string `type:"string"`
+
+	Name *string `type:"string"`
+
+	// Describes an association status.
+	Status *AssociationStatus `type:"structure"`
+}
+
+// String returns the string representation
+func (s InstanceAssociationStatusInfo) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s InstanceAssociationStatusInfo) GoString() string {
+	return s.String()
+}
+
+type InstanceAssociationSummary struct {
+	_ struct{} `type:"structure"`
+
+	AssociationId *string `type:"string"`
+
+	DocumentVersion *int64 `min:"1" type:"integer"`
+
+	InstanceId *string `type:"string"`
+
+	Name *string `type:"string"`
+
+	ScheduleExpression *string `min:"1" type:"string"`
+
+	Targets []*TargetEntry `min:"1" type:"list"`
+}
+
+// String returns the string representation
+func (s InstanceAssociationSummary) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s InstanceAssociationSummary) GoString() string {
+	return s.String()
+}
+
 // Describes a filter for a specific list of instances.
 type InstanceInformation struct {
 	_ struct{} `type:"structure"`
@@ -2595,6 +3813,12 @@ type InstanceInformation struct {
 
 	// The version of the SSM agent running on your instance.
 	AgentVersion *string `type:"string"`
+
+	AssociationLastExecutedOn *time.Time `type:"timestamp" timestampFormat:"unix"`
+
+	AssociationOverview *AssociationOverview `type:"structure"`
+
+	AssociationStatus *string `type:"string" enum:"AssociationStatusName"`
 
 	ComputerName *string `min:"1" type:"string"`
 
@@ -2661,25 +3885,6 @@ func (s InstanceInformationFilter) GoString() string {
 	return s.String()
 }
 
-// Validate inspects the fields of the type to determine if they are valid.
-func (s *InstanceInformationFilter) Validate() error {
-	invalidParams := request.ErrInvalidParams{Context: "InstanceInformationFilter"}
-	if s.Key == nil {
-		invalidParams.Add(request.NewErrParamRequired("Key"))
-	}
-	if s.ValueSet == nil {
-		invalidParams.Add(request.NewErrParamRequired("ValueSet"))
-	}
-	if s.ValueSet != nil && len(s.ValueSet) < 1 {
-		invalidParams.Add(request.NewErrParamMinLen("ValueSet", 1))
-	}
-
-	if invalidParams.Len() > 0 {
-		return invalidParams
-	}
-	return nil
-}
-
 type InstanceProperty struct {
 	_ struct{} `type:"structure"`
 
@@ -2688,6 +3893,10 @@ type InstanceProperty struct {
 	AgentVersion *string `type:"string"`
 
 	Architecture *string `type:"string"`
+
+	AssociationOverview *AssociationOverview `type:"structure"`
+
+	AssociationStatus *string `type:"string" enum:"AssociationStatusName"`
 
 	AvailabilityZone *string `type:"string"`
 
@@ -2754,37 +3963,38 @@ func (s InstancePropertyFilter) GoString() string {
 	return s.String()
 }
 
-// Validate inspects the fields of the type to determine if they are valid.
-func (s *InstancePropertyFilter) Validate() error {
-	invalidParams := request.ErrInvalidParams{Context: "InstancePropertyFilter"}
-	if s.Key == nil {
-		invalidParams.Add(request.NewErrParamRequired("Key"))
-	}
-	if s.ValueSet == nil {
-		invalidParams.Add(request.NewErrParamRequired("ValueSet"))
-	}
-	if s.ValueSet != nil && len(s.ValueSet) < 1 {
-		invalidParams.Add(request.NewErrParamMinLen("ValueSet", 1))
-	}
+type InventoryFilter struct {
+	_ struct{} `type:"structure"`
 
-	if invalidParams.Len() > 0 {
-		return invalidParams
-	}
-	return nil
+	Key *string `min:"1" type:"string" required:"true"`
+
+	Type *string `type:"string" enum:"InventoryQueryOperatorType"`
+
+	Values []*string `locationNameList:"FilterValue" min:"1" type:"list" required:"true"`
+}
+
+// String returns the string representation
+func (s InventoryFilter) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s InventoryFilter) GoString() string {
+	return s.String()
 }
 
 type InventoryItem struct {
 	_ struct{} `type:"structure"`
 
-	CaptureDate *time.Time `type:"timestamp" timestampFormat:"unix"`
+	CaptureTime *string `type:"string" required:"true"`
 
-	Content *string `min:"1" type:"string"`
+	Content []map[string]*string `min:"1" type:"list"`
 
-	InstanceId *string `type:"string"`
+	ContentHash *string `type:"string"`
 
-	Name *string `min:"1" type:"string"`
+	SchemaVersion *string `type:"string" required:"true"`
 
-	Version *string `type:"string"`
+	TypeName *string `min:"1" type:"string" required:"true"`
 }
 
 // String returns the string representation
@@ -2797,20 +4007,40 @@ func (s InventoryItem) GoString() string {
 	return s.String()
 }
 
-// Validate inspects the fields of the type to determine if they are valid.
-func (s *InventoryItem) Validate() error {
-	invalidParams := request.ErrInvalidParams{Context: "InventoryItem"}
-	if s.Content != nil && len(*s.Content) < 1 {
-		invalidParams.Add(request.NewErrParamMinLen("Content", 1))
-	}
-	if s.Name != nil && len(*s.Name) < 1 {
-		invalidParams.Add(request.NewErrParamMinLen("Name", 1))
-	}
+type InventoryItemSchema struct {
+	_ struct{} `type:"structure"`
 
-	if invalidParams.Len() > 0 {
-		return invalidParams
-	}
-	return nil
+	Attributes []*string `locationNameList:"Attribute" min:"1" type:"list" required:"true"`
+
+	TypeName *string `min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s InventoryItemSchema) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s InventoryItemSchema) GoString() string {
+	return s.String()
+}
+
+type InventorySchemaFilter struct {
+	_ struct{} `type:"structure"`
+
+	Key *string `min:"1" type:"string" required:"true"`
+
+	Values []*string `locationNameList:"FilterValue" min:"1" type:"list" required:"true"`
+}
+
+// String returns the string representation
+func (s InventorySchemaFilter) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s InventorySchemaFilter) GoString() string {
+	return s.String()
 }
 
 type ListAssociationsInput struct {
@@ -2837,35 +4067,6 @@ func (s ListAssociationsInput) String() string {
 // GoString returns the string representation
 func (s ListAssociationsInput) GoString() string {
 	return s.String()
-}
-
-// Validate inspects the fields of the type to determine if they are valid.
-func (s *ListAssociationsInput) Validate() error {
-	invalidParams := request.ErrInvalidParams{Context: "ListAssociationsInput"}
-	if s.AssociationFilterList == nil {
-		invalidParams.Add(request.NewErrParamRequired("AssociationFilterList"))
-	}
-	if s.AssociationFilterList != nil && len(s.AssociationFilterList) < 1 {
-		invalidParams.Add(request.NewErrParamMinLen("AssociationFilterList", 1))
-	}
-	if s.MaxResults != nil && *s.MaxResults < 1 {
-		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
-	}
-	if s.AssociationFilterList != nil {
-		for i, v := range s.AssociationFilterList {
-			if v == nil {
-				continue
-			}
-			if err := v.Validate(); err != nil {
-				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "AssociationFilterList", i), err.(request.ErrInvalidParams))
-			}
-		}
-	}
-
-	if invalidParams.Len() > 0 {
-		return invalidParams
-	}
-	return nil
 }
 
 type ListAssociationsOutput struct {
@@ -2926,35 +4127,6 @@ func (s ListCommandInvocationsInput) GoString() string {
 	return s.String()
 }
 
-// Validate inspects the fields of the type to determine if they are valid.
-func (s *ListCommandInvocationsInput) Validate() error {
-	invalidParams := request.ErrInvalidParams{Context: "ListCommandInvocationsInput"}
-	if s.CommandId != nil && len(*s.CommandId) < 36 {
-		invalidParams.Add(request.NewErrParamMinLen("CommandId", 36))
-	}
-	if s.Filters != nil && len(s.Filters) < 1 {
-		invalidParams.Add(request.NewErrParamMinLen("Filters", 1))
-	}
-	if s.MaxResults != nil && *s.MaxResults < 1 {
-		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
-	}
-	if s.Filters != nil {
-		for i, v := range s.Filters {
-			if v == nil {
-				continue
-			}
-			if err := v.Validate(); err != nil {
-				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "Filters", i), err.(request.ErrInvalidParams))
-			}
-		}
-	}
-
-	if invalidParams.Len() > 0 {
-		return invalidParams
-	}
-	return nil
-}
-
 type ListCommandInvocationsOutput struct {
 	_ struct{} `type:"structure"`
 
@@ -3009,35 +4181,6 @@ func (s ListCommandsInput) GoString() string {
 	return s.String()
 }
 
-// Validate inspects the fields of the type to determine if they are valid.
-func (s *ListCommandsInput) Validate() error {
-	invalidParams := request.ErrInvalidParams{Context: "ListCommandsInput"}
-	if s.CommandId != nil && len(*s.CommandId) < 36 {
-		invalidParams.Add(request.NewErrParamMinLen("CommandId", 36))
-	}
-	if s.Filters != nil && len(s.Filters) < 1 {
-		invalidParams.Add(request.NewErrParamMinLen("Filters", 1))
-	}
-	if s.MaxResults != nil && *s.MaxResults < 1 {
-		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
-	}
-	if s.Filters != nil {
-		for i, v := range s.Filters {
-			if v == nil {
-				continue
-			}
-			if err := v.Validate(); err != nil {
-				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "Filters", i), err.(request.ErrInvalidParams))
-			}
-		}
-	}
-
-	if invalidParams.Len() > 0 {
-		return invalidParams
-	}
-	return nil
-}
-
 type ListCommandsOutput struct {
 	_ struct{} `type:"structure"`
 
@@ -3056,6 +4199,44 @@ func (s ListCommandsOutput) String() string {
 
 // GoString returns the string representation
 func (s ListCommandsOutput) GoString() string {
+	return s.String()
+}
+
+type ListDocumentVersionsInput struct {
+	_ struct{} `type:"structure"`
+
+	MaxResults *int64 `min:"1" type:"integer"`
+
+	Name *string `type:"string" required:"true"`
+
+	NextToken *string `type:"string"`
+}
+
+// String returns the string representation
+func (s ListDocumentVersionsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListDocumentVersionsInput) GoString() string {
+	return s.String()
+}
+
+type ListDocumentVersionsOutput struct {
+	_ struct{} `type:"structure"`
+
+	DocumentVersions []*DocumentVersionInfo `min:"1" type:"list"`
+
+	NextToken *string `type:"string"`
+}
+
+// String returns the string representation
+func (s ListDocumentVersionsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListDocumentVersionsOutput) GoString() string {
 	return s.String()
 }
 
@@ -3085,32 +4266,6 @@ func (s ListDocumentsInput) GoString() string {
 	return s.String()
 }
 
-// Validate inspects the fields of the type to determine if they are valid.
-func (s *ListDocumentsInput) Validate() error {
-	invalidParams := request.ErrInvalidParams{Context: "ListDocumentsInput"}
-	if s.DocumentFilterList != nil && len(s.DocumentFilterList) < 1 {
-		invalidParams.Add(request.NewErrParamMinLen("DocumentFilterList", 1))
-	}
-	if s.MaxResults != nil && *s.MaxResults < 1 {
-		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
-	}
-	if s.DocumentFilterList != nil {
-		for i, v := range s.DocumentFilterList {
-			if v == nil {
-				continue
-			}
-			if err := v.Validate(); err != nil {
-				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "DocumentFilterList", i), err.(request.ErrInvalidParams))
-			}
-		}
-	}
-
-	if invalidParams.Len() > 0 {
-		return invalidParams
-	}
-	return nil
-}
-
 type ListDocumentsOutput struct {
 	_ struct{} `type:"structure"`
 
@@ -3132,6 +4287,44 @@ func (s ListDocumentsOutput) GoString() string {
 	return s.String()
 }
 
+type ListInstanceAssociationsInput struct {
+	_ struct{} `type:"structure"`
+
+	InstanceId *string `type:"string" required:"true"`
+
+	MaxResults *int64 `min:"1" type:"integer"`
+
+	NextToken *string `type:"string"`
+}
+
+// String returns the string representation
+func (s ListInstanceAssociationsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListInstanceAssociationsInput) GoString() string {
+	return s.String()
+}
+
+type ListInstanceAssociationsOutput struct {
+	_ struct{} `type:"structure"`
+
+	Associations []*InstanceAssociationSummary `type:"list"`
+
+	NextToken *string `type:"string"`
+}
+
+// String returns the string representation
+func (s ListInstanceAssociationsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListInstanceAssociationsOutput) GoString() string {
+	return s.String()
+}
+
 type ListTagsForResourceInput struct {
 	_ struct{} `type:"structure"`
 
@@ -3148,22 +4341,6 @@ func (s ListTagsForResourceInput) String() string {
 // GoString returns the string representation
 func (s ListTagsForResourceInput) GoString() string {
 	return s.String()
-}
-
-// Validate inspects the fields of the type to determine if they are valid.
-func (s *ListTagsForResourceInput) Validate() error {
-	invalidParams := request.ErrInvalidParams{Context: "ListTagsForResourceInput"}
-	if s.ResourceId == nil {
-		invalidParams.Add(request.NewErrParamRequired("ResourceId"))
-	}
-	if s.ResourceType == nil {
-		invalidParams.Add(request.NewErrParamRequired("ResourceType"))
-	}
-
-	if invalidParams.Len() > 0 {
-		return invalidParams
-	}
-	return nil
 }
 
 type ListTagsForResourceOutput struct {
@@ -3185,20 +4362,12 @@ func (s ListTagsForResourceOutput) GoString() string {
 type ModifyDocumentPermissionInput struct {
 	_ struct{} `type:"structure"`
 
-	// The AWS user accounts that should have access to the document. The account
-	// IDs can either be a group of account IDs or All.
 	AccountIdsToAdd []*string `locationNameList:"AccountId" type:"list"`
 
-	// The AWS user accounts that should no longer have access to the document.
-	// The AWS user account can either be a group of account IDs or All. This action
-	// has a higher priority than AccountIdsToAdd. If you specify an account ID
-	// to add and the same ID to remove, the system removes access to the document.
 	AccountIdsToRemove []*string `locationNameList:"AccountId" type:"list"`
 
-	// The name of the document that you want to share.
 	Name *string `type:"string" required:"true"`
 
-	// The permission type for the document. The permission type can be Share.
 	PermissionType *string `type:"string" required:"true" enum:"DocumentPermissionType"`
 }
 
@@ -3210,22 +4379,6 @@ func (s ModifyDocumentPermissionInput) String() string {
 // GoString returns the string representation
 func (s ModifyDocumentPermissionInput) GoString() string {
 	return s.String()
-}
-
-// Validate inspects the fields of the type to determine if they are valid.
-func (s *ModifyDocumentPermissionInput) Validate() error {
-	invalidParams := request.ErrInvalidParams{Context: "ModifyDocumentPermissionInput"}
-	if s.Name == nil {
-		invalidParams.Add(request.NewErrParamRequired("Name"))
-	}
-	if s.PermissionType == nil {
-		invalidParams.Add(request.NewErrParamRequired("PermissionType"))
-	}
-
-	if invalidParams.Len() > 0 {
-		return invalidParams
-	}
-	return nil
 }
 
 type ModifyDocumentPermissionOutput struct {
@@ -3262,6 +4415,38 @@ func (s NotificationConfig) GoString() string {
 	return s.String()
 }
 
+type PutInventoryInput struct {
+	_ struct{} `type:"structure"`
+
+	InstanceId *string `type:"string" required:"true"`
+
+	Items []*InventoryItem `locationNameList:"Item" min:"1" type:"list" required:"true"`
+}
+
+// String returns the string representation
+func (s PutInventoryInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s PutInventoryInput) GoString() string {
+	return s.String()
+}
+
+type PutInventoryOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation
+func (s PutInventoryOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s PutInventoryOutput) GoString() string {
+	return s.String()
+}
+
 type RegisterManagedInstanceInput struct {
 	_ struct{} `type:"structure"`
 
@@ -3284,34 +4469,6 @@ func (s RegisterManagedInstanceInput) String() string {
 // GoString returns the string representation
 func (s RegisterManagedInstanceInput) GoString() string {
 	return s.String()
-}
-
-// Validate inspects the fields of the type to determine if they are valid.
-func (s *RegisterManagedInstanceInput) Validate() error {
-	invalidParams := request.ErrInvalidParams{Context: "RegisterManagedInstanceInput"}
-	if s.ActivationCode == nil {
-		invalidParams.Add(request.NewErrParamRequired("ActivationCode"))
-	}
-	if s.ActivationCode != nil && len(*s.ActivationCode) < 20 {
-		invalidParams.Add(request.NewErrParamMinLen("ActivationCode", 20))
-	}
-	if s.ActivationId == nil {
-		invalidParams.Add(request.NewErrParamRequired("ActivationId"))
-	}
-	if s.Fingerprint == nil {
-		invalidParams.Add(request.NewErrParamRequired("Fingerprint"))
-	}
-	if s.PublicKey == nil {
-		invalidParams.Add(request.NewErrParamRequired("PublicKey"))
-	}
-	if s.PublicKey != nil && len(*s.PublicKey) < 392 {
-		invalidParams.Add(request.NewErrParamMinLen("PublicKey", 392))
-	}
-
-	if invalidParams.Len() > 0 {
-		return invalidParams
-	}
-	return nil
 }
 
 type RegisterManagedInstanceOutput struct {
@@ -3350,25 +4507,6 @@ func (s RemoveTagsFromResourceInput) GoString() string {
 	return s.String()
 }
 
-// Validate inspects the fields of the type to determine if they are valid.
-func (s *RemoveTagsFromResourceInput) Validate() error {
-	invalidParams := request.ErrInvalidParams{Context: "RemoveTagsFromResourceInput"}
-	if s.ResourceId == nil {
-		invalidParams.Add(request.NewErrParamRequired("ResourceId"))
-	}
-	if s.ResourceType == nil {
-		invalidParams.Add(request.NewErrParamRequired("ResourceType"))
-	}
-	if s.TagKeys == nil {
-		invalidParams.Add(request.NewErrParamRequired("TagKeys"))
-	}
-
-	if invalidParams.Len() > 0 {
-		return invalidParams
-	}
-	return nil
-}
-
 type RemoveTagsFromResourceOutput struct {
 	_ struct{} `type:"structure"`
 }
@@ -3397,19 +4535,6 @@ func (s RequestManagedInstanceRoleTokenInput) String() string {
 // GoString returns the string representation
 func (s RequestManagedInstanceRoleTokenInput) GoString() string {
 	return s.String()
-}
-
-// Validate inspects the fields of the type to determine if they are valid.
-func (s *RequestManagedInstanceRoleTokenInput) Validate() error {
-	invalidParams := request.ErrInvalidParams{Context: "RequestManagedInstanceRoleTokenInput"}
-	if s.Fingerprint == nil {
-		invalidParams.Add(request.NewErrParamRequired("Fingerprint"))
-	}
-
-	if invalidParams.Len() > 0 {
-		return invalidParams
-	}
-	return nil
 }
 
 type RequestManagedInstanceRoleTokenOutput struct {
@@ -3443,14 +4568,8 @@ type SendCommandInput struct {
 	// of what the command should do.
 	Comment *string `type:"string"`
 
-	// The Sha256 or Sha1 hash created by the system when the document was created.
-	//
-	//  Sha1 hashes have been deprecated.
 	DocumentHash *string `type:"string"`
 
-	// Sha256 or Sha1.
-	//
-	//  Sha1 hashes have been deprecated.
 	DocumentHashType *string `type:"string" enum:"DocumentHashType"`
 
 	// Required. The name of the SSM document to execute. This can be an SSM public
@@ -3490,31 +4609,6 @@ func (s SendCommandInput) GoString() string {
 	return s.String()
 }
 
-// Validate inspects the fields of the type to determine if they are valid.
-func (s *SendCommandInput) Validate() error {
-	invalidParams := request.ErrInvalidParams{Context: "SendCommandInput"}
-	if s.DocumentName == nil {
-		invalidParams.Add(request.NewErrParamRequired("DocumentName"))
-	}
-	if s.InstanceIds == nil {
-		invalidParams.Add(request.NewErrParamRequired("InstanceIds"))
-	}
-	if s.InstanceIds != nil && len(s.InstanceIds) < 1 {
-		invalidParams.Add(request.NewErrParamMinLen("InstanceIds", 1))
-	}
-	if s.OutputS3BucketName != nil && len(*s.OutputS3BucketName) < 3 {
-		invalidParams.Add(request.NewErrParamMinLen("OutputS3BucketName", 3))
-	}
-	if s.TimeoutSeconds != nil && *s.TimeoutSeconds < 30 {
-		invalidParams.Add(request.NewErrParamMinValue("TimeoutSeconds", 30))
-	}
-
-	if invalidParams.Len() > 0 {
-		return invalidParams
-	}
-	return nil
-}
-
 type SendCommandOutput struct {
 	_ struct{} `type:"structure"`
 
@@ -3530,6 +4624,100 @@ func (s SendCommandOutput) String() string {
 
 // GoString returns the string representation
 func (s SendCommandOutput) GoString() string {
+	return s.String()
+}
+
+type StartAutomationExecutionInput struct {
+	_ struct{} `type:"structure"`
+
+	DefinitionName *string `type:"string" required:"true"`
+
+	DefinitionVersion *int64 `min:"1" type:"integer"`
+
+	Inputs map[string][]*string `min:"1" type:"map"`
+}
+
+// String returns the string representation
+func (s StartAutomationExecutionInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s StartAutomationExecutionInput) GoString() string {
+	return s.String()
+}
+
+type StartAutomationExecutionOutput struct {
+	_ struct{} `type:"structure"`
+
+	AutomationExecutionId *string `min:"36" type:"string"`
+}
+
+// String returns the string representation
+func (s StartAutomationExecutionOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s StartAutomationExecutionOutput) GoString() string {
+	return s.String()
+}
+
+type StopAutomationExecutionInput struct {
+	_ struct{} `type:"structure"`
+
+	AutomationExecutionId *string `min:"36" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s StopAutomationExecutionInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s StopAutomationExecutionInput) GoString() string {
+	return s.String()
+}
+
+type StopAutomationExecutionOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation
+func (s StopAutomationExecutionOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s StopAutomationExecutionOutput) GoString() string {
+	return s.String()
+}
+
+type StrictAutomationDefinition struct {
+	_ struct{} `type:"structure"`
+
+	Comment *string `type:"string"`
+
+	CreateTime *time.Time `type:"timestamp" timestampFormat:"unix"`
+
+	CreatedBy *string `type:"string"`
+
+	DefinitionContent *AutomationDefinitionDocument `type:"structure"`
+
+	IsDefault *bool `type:"boolean"`
+
+	LastExecuteTime *time.Time `type:"timestamp" timestampFormat:"unix"`
+
+	Version *int64 `min:"1" type:"integer"`
+}
+
+// String returns the string representation
+func (s StrictAutomationDefinition) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s StrictAutomationDefinition) GoString() string {
 	return s.String()
 }
 
@@ -3551,33 +4739,70 @@ func (s Tag) GoString() string {
 	return s.String()
 }
 
-// Validate inspects the fields of the type to determine if they are valid.
-func (s *Tag) Validate() error {
-	invalidParams := request.ErrInvalidParams{Context: "Tag"}
-	if s.Key == nil {
-		invalidParams.Add(request.NewErrParamRequired("Key"))
-	}
-	if s.Key != nil && len(*s.Key) < 1 {
-		invalidParams.Add(request.NewErrParamMinLen("Key", 1))
-	}
-	if s.Value == nil {
-		invalidParams.Add(request.NewErrParamRequired("Value"))
-	}
-	if s.Value != nil && len(*s.Value) < 1 {
-		invalidParams.Add(request.NewErrParamMinLen("Value", 1))
-	}
+type TargetEntry struct {
+	_ struct{} `type:"structure"`
 
-	if invalidParams.Len() > 0 {
-		return invalidParams
-	}
-	return nil
+	Key *string `min:"1" type:"string"`
+
+	Values []*string `type:"list"`
+}
+
+// String returns the string representation
+func (s TargetEntry) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s TargetEntry) GoString() string {
+	return s.String()
+}
+
+type UpdateAssociationInput struct {
+	_ struct{} `type:"structure"`
+
+	AssociationId *string `type:"string" required:"true"`
+
+	Parameters map[string][]*string `type:"map"`
+
+	ScheduleExpression *string `min:"1" type:"string"`
+}
+
+// String returns the string representation
+func (s UpdateAssociationInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s UpdateAssociationInput) GoString() string {
+	return s.String()
+}
+
+type UpdateAssociationOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Describes the parameters for a document.
+	AssociationDescription *AssociationDescription `type:"structure"`
+}
+
+// String returns the string representation
+func (s UpdateAssociationOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s UpdateAssociationOutput) GoString() string {
+	return s.String()
 }
 
 type UpdateAssociationStatusInput struct {
 	_ struct{} `type:"structure"`
 
+	AssociationId *string `type:"string"`
+
 	// The association status.
 	AssociationStatus *AssociationStatus `type:"structure" required:"true"`
+
+	DocumentVersion *int64 `min:"1" type:"integer"`
 
 	// The ID of the instance.
 	InstanceId *string `type:"string" required:"true"`
@@ -3596,30 +4821,6 @@ func (s UpdateAssociationStatusInput) GoString() string {
 	return s.String()
 }
 
-// Validate inspects the fields of the type to determine if they are valid.
-func (s *UpdateAssociationStatusInput) Validate() error {
-	invalidParams := request.ErrInvalidParams{Context: "UpdateAssociationStatusInput"}
-	if s.AssociationStatus == nil {
-		invalidParams.Add(request.NewErrParamRequired("AssociationStatus"))
-	}
-	if s.InstanceId == nil {
-		invalidParams.Add(request.NewErrParamRequired("InstanceId"))
-	}
-	if s.Name == nil {
-		invalidParams.Add(request.NewErrParamRequired("Name"))
-	}
-	if s.AssociationStatus != nil {
-		if err := s.AssociationStatus.Validate(); err != nil {
-			invalidParams.AddNested("AssociationStatus", err.(request.ErrInvalidParams))
-		}
-	}
-
-	if invalidParams.Len() > 0 {
-		return invalidParams
-	}
-	return nil
-}
-
 type UpdateAssociationStatusOutput struct {
 	_ struct{} `type:"structure"`
 
@@ -3634,6 +4835,109 @@ func (s UpdateAssociationStatusOutput) String() string {
 
 // GoString returns the string representation
 func (s UpdateAssociationStatusOutput) GoString() string {
+	return s.String()
+}
+
+type UpdateAutomationDefinitionDefaultVersionInput struct {
+	_ struct{} `type:"structure"`
+
+	Name *string `type:"string" required:"true"`
+
+	Version *int64 `min:"1" type:"integer" required:"true"`
+}
+
+// String returns the string representation
+func (s UpdateAutomationDefinitionDefaultVersionInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s UpdateAutomationDefinitionDefaultVersionInput) GoString() string {
+	return s.String()
+}
+
+type UpdateAutomationDefinitionDefaultVersionOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation
+func (s UpdateAutomationDefinitionDefaultVersionOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s UpdateAutomationDefinitionDefaultVersionOutput) GoString() string {
+	return s.String()
+}
+
+type UpdateDocumentDefaultVersionInput struct {
+	_ struct{} `type:"structure"`
+
+	DocumentVersion *int64 `min:"1" type:"integer" required:"true"`
+
+	Name *string `type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s UpdateDocumentDefaultVersionInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s UpdateDocumentDefaultVersionInput) GoString() string {
+	return s.String()
+}
+
+type UpdateDocumentDefaultVersionOutput struct {
+	_ struct{} `type:"structure"`
+
+	Description *DocumentVersionDescription `type:"structure"`
+}
+
+// String returns the string representation
+func (s UpdateDocumentDefaultVersionOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s UpdateDocumentDefaultVersionOutput) GoString() string {
+	return s.String()
+}
+
+type UpdateDocumentInput struct {
+	_ struct{} `type:"structure"`
+
+	Content *string `min:"1" type:"string" required:"true"`
+
+	DocumentVersion *int64 `min:"1" type:"integer"`
+
+	Name *string `type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s UpdateDocumentInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s UpdateDocumentInput) GoString() string {
+	return s.String()
+}
+
+type UpdateDocumentOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Describes an SSM document.
+	DocumentDescription *DocumentDescription `type:"structure"`
+}
+
+// String returns the string representation
+func (s UpdateDocumentOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s UpdateDocumentOutput) GoString() string {
 	return s.String()
 }
 
@@ -3665,28 +4969,6 @@ func (s UpdateInstanceInformationInput) String() string {
 // GoString returns the string representation
 func (s UpdateInstanceInformationInput) GoString() string {
 	return s.String()
-}
-
-// Validate inspects the fields of the type to determine if they are valid.
-func (s *UpdateInstanceInformationInput) Validate() error {
-	invalidParams := request.ErrInvalidParams{Context: "UpdateInstanceInformationInput"}
-	if s.AgentStatus != nil && len(*s.AgentStatus) < 1 {
-		invalidParams.Add(request.NewErrParamMinLen("AgentStatus", 1))
-	}
-	if s.ComputerName != nil && len(*s.ComputerName) < 1 {
-		invalidParams.Add(request.NewErrParamMinLen("ComputerName", 1))
-	}
-	if s.IPAddress != nil && len(*s.IPAddress) < 1 {
-		invalidParams.Add(request.NewErrParamMinLen("IPAddress", 1))
-	}
-	if s.InstanceId == nil {
-		invalidParams.Add(request.NewErrParamRequired("InstanceId"))
-	}
-
-	if invalidParams.Len() > 0 {
-		return invalidParams
-	}
-	return nil
 }
 
 type UpdateInstanceInformationOutput struct {
@@ -3721,25 +5003,6 @@ func (s UpdateManagedInstancePublicKeyInput) GoString() string {
 	return s.String()
 }
 
-// Validate inspects the fields of the type to determine if they are valid.
-func (s *UpdateManagedInstancePublicKeyInput) Validate() error {
-	invalidParams := request.ErrInvalidParams{Context: "UpdateManagedInstancePublicKeyInput"}
-	if s.NewPublicKey == nil {
-		invalidParams.Add(request.NewErrParamRequired("NewPublicKey"))
-	}
-	if s.NewPublicKey != nil && len(*s.NewPublicKey) < 392 {
-		invalidParams.Add(request.NewErrParamMinLen("NewPublicKey", 392))
-	}
-	if s.NewPublicKeyType == nil {
-		invalidParams.Add(request.NewErrParamRequired("NewPublicKeyType"))
-	}
-
-	if invalidParams.Len() > 0 {
-		return invalidParams
-	}
-	return nil
-}
-
 type UpdateManagedInstancePublicKeyOutput struct {
 	_ struct{} `type:"structure"`
 }
@@ -3772,22 +5035,6 @@ func (s UpdateManagedInstanceRoleInput) GoString() string {
 	return s.String()
 }
 
-// Validate inspects the fields of the type to determine if they are valid.
-func (s *UpdateManagedInstanceRoleInput) Validate() error {
-	invalidParams := request.ErrInvalidParams{Context: "UpdateManagedInstanceRoleInput"}
-	if s.IamRole == nil {
-		invalidParams.Add(request.NewErrParamRequired("IamRole"))
-	}
-	if s.InstanceId == nil {
-		invalidParams.Add(request.NewErrParamRequired("InstanceId"))
-	}
-
-	if invalidParams.Len() > 0 {
-		return invalidParams
-	}
-	return nil
-}
-
 type UpdateManagedInstanceRoleOutput struct {
 	_ struct{} `type:"structure"`
 }
@@ -3803,227 +5050,310 @@ func (s UpdateManagedInstanceRoleOutput) GoString() string {
 }
 
 const (
-// @enum AssociationFilterKey
+	// @enum AssociationFilterKey
 	AssociationFilterKeyInstanceId = "InstanceId"
-// @enum AssociationFilterKey
+	// @enum AssociationFilterKey
 	AssociationFilterKeyName = "Name"
+	// @enum AssociationFilterKey
+	AssociationFilterKeyAssociationId = "AssociationId"
+	// @enum AssociationFilterKey
+	AssociationFilterKeyTargets = "Targets"
+	// @enum AssociationFilterKey
+	AssociationFilterKeyAssociationStatusName = "AssociationStatusName"
+	// @enum AssociationFilterKey
+	AssociationFilterKeyLastExecutedBefore = "LastExecutedBefore"
+	// @enum AssociationFilterKey
+	AssociationFilterKeyLastExecutedAfter = "LastExecutedAfter"
 )
 
 const (
-// @enum AssociationStatusName
+	// @enum AssociationStatusName
 	AssociationStatusNamePending = "Pending"
-// @enum AssociationStatusName
+	// @enum AssociationStatusName
 	AssociationStatusNameSuccess = "Success"
-// @enum AssociationStatusName
+	// @enum AssociationStatusName
 	AssociationStatusNameFailed = "Failed"
 )
 
 const (
-// @enum CommandFilterKey
+	// @enum AutomationArgumentType
+	AutomationArgumentTypeString = "STRING"
+	// @enum AutomationArgumentType
+	AutomationArgumentTypeStringList = "STRING_LIST"
+	// @enum AutomationArgumentType
+	AutomationArgumentTypeInteger = "INTEGER"
+	// @enum AutomationArgumentType
+	AutomationArgumentTypeBoolean = "BOOLEAN"
+	// @enum AutomationArgumentType
+	AutomationArgumentTypeStringMap = "STRING_MAP"
+)
+
+const (
+	// @enum AutomationExecutionFilterKey
+	AutomationExecutionFilterKeyDefinitionNamePrefix = "DefinitionNamePrefix"
+	// @enum AutomationExecutionFilterKey
+	AutomationExecutionFilterKeyExecutionStatus = "ExecutionStatus"
+)
+
+const (
+	// @enum AutomationExecutionStatus
+	AutomationExecutionStatusPending = "Pending"
+	// @enum AutomationExecutionStatus
+	AutomationExecutionStatusRunning = "Running"
+	// @enum AutomationExecutionStatus
+	AutomationExecutionStatusCompleted = "Completed"
+	// @enum AutomationExecutionStatus
+	AutomationExecutionStatusCancelled = "Cancelled"
+	// @enum AutomationExecutionStatus
+	AutomationExecutionStatusFailed = "Failed"
+)
+
+const (
+	// @enum AutomationStepFailureResolution
+	AutomationStepFailureResolutionAbort = "Abort"
+	// @enum AutomationStepFailureResolution
+	AutomationStepFailureResolutionContinue = "Continue"
+)
+
+const (
+	// @enum CommandFilterKey
 	CommandFilterKeyInvokedAfter = "InvokedAfter"
-// @enum CommandFilterKey
+	// @enum CommandFilterKey
 	CommandFilterKeyInvokedBefore = "InvokedBefore"
-// @enum CommandFilterKey
+	// @enum CommandFilterKey
 	CommandFilterKeyStatus = "Status"
-// @enum CommandFilterKey
+	// @enum CommandFilterKey
 	CommandFilterKeyCommandId = "CommandId"
-// @enum CommandFilterKey
+	// @enum CommandFilterKey
 	CommandFilterKeyInstanceId = "InstanceId"
 )
 
 const (
-// @enum CommandInvocationStatus
+	// @enum CommandInvocationStatus
 	CommandInvocationStatusPending = "Pending"
-// @enum CommandInvocationStatus
+	// @enum CommandInvocationStatus
 	CommandInvocationStatusInProgress = "InProgress"
-// @enum CommandInvocationStatus
+	// @enum CommandInvocationStatus
 	CommandInvocationStatusCancelling = "Cancelling"
-// @enum CommandInvocationStatus
+	// @enum CommandInvocationStatus
 	CommandInvocationStatusSuccess = "Success"
-// @enum CommandInvocationStatus
+	// @enum CommandInvocationStatus
 	CommandInvocationStatusTimedOut = "TimedOut"
-// @enum CommandInvocationStatus
+	// @enum CommandInvocationStatus
 	CommandInvocationStatusCancelled = "Cancelled"
-// @enum CommandInvocationStatus
+	// @enum CommandInvocationStatus
 	CommandInvocationStatusFailed = "Failed"
 )
 
 const (
-// @enum CommandPluginStatus
+	// @enum CommandPluginStatus
 	CommandPluginStatusPending = "Pending"
-// @enum CommandPluginStatus
+	// @enum CommandPluginStatus
 	CommandPluginStatusInProgress = "InProgress"
-// @enum CommandPluginStatus
+	// @enum CommandPluginStatus
 	CommandPluginStatusSuccess = "Success"
-// @enum CommandPluginStatus
+	// @enum CommandPluginStatus
 	CommandPluginStatusTimedOut = "TimedOut"
-// @enum CommandPluginStatus
+	// @enum CommandPluginStatus
 	CommandPluginStatusCancelled = "Cancelled"
-// @enum CommandPluginStatus
+	// @enum CommandPluginStatus
 	CommandPluginStatusFailed = "Failed"
 )
 
 const (
-// @enum CommandStatus
+	// @enum CommandStatus
 	CommandStatusPending = "Pending"
-// @enum CommandStatus
+	// @enum CommandStatus
 	CommandStatusInProgress = "InProgress"
-// @enum CommandStatus
+	// @enum CommandStatus
 	CommandStatusCancelling = "Cancelling"
-// @enum CommandStatus
+	// @enum CommandStatus
 	CommandStatusSuccess = "Success"
-// @enum CommandStatus
+	// @enum CommandStatus
 	CommandStatusTimedOut = "TimedOut"
-// @enum CommandStatus
+	// @enum CommandStatus
 	CommandStatusCancelled = "Cancelled"
-// @enum CommandStatus
+	// @enum CommandStatus
 	CommandStatusFailed = "Failed"
 )
 
 const (
-// @enum DescribeActivationsFilterKeys
+	// @enum DefinitionFilterKey
+	DefinitionFilterKeyPrefix = "Prefix"
+)
+
+const (
+	// @enum DescribeActivationsFilterKeys
 	DescribeActivationsFilterKeysActivationIds = "ActivationIds"
-// @enum DescribeActivationsFilterKeys
+	// @enum DescribeActivationsFilterKeys
 	DescribeActivationsFilterKeysDefaultInstanceName = "DefaultInstanceName"
-// @enum DescribeActivationsFilterKeys
+	// @enum DescribeActivationsFilterKeys
 	DescribeActivationsFilterKeysIamRole = "IamRole"
 )
 
 const (
-// @enum DocumentFilterKey
+	// @enum DocumentFilterKey
 	DocumentFilterKeyName = "Name"
-// @enum DocumentFilterKey
+	// @enum DocumentFilterKey
 	DocumentFilterKeyOwner = "Owner"
-// @enum DocumentFilterKey
+	// @enum DocumentFilterKey
 	DocumentFilterKeyPlatformTypes = "PlatformTypes"
 )
 
 const (
-// @enum DocumentHashType
+	// @enum DocumentHashType
 	DocumentHashTypeSha256 = "Sha256"
-// @enum DocumentHashType
+	// @enum DocumentHashType
 	DocumentHashTypeSha1 = "Sha1"
 )
 
 const (
-// @enum DocumentParameterType
+	// @enum DocumentParameterType
 	DocumentParameterTypeString = "String"
-// @enum DocumentParameterType
+	// @enum DocumentParameterType
 	DocumentParameterTypeStringList = "StringList"
 )
 
 const (
-// @enum DocumentPermissionType
+	// @enum DocumentPermissionType
 	DocumentPermissionTypeShare = "Share"
 )
 
 const (
-// @enum DocumentStatus
+	// @enum DocumentStatus
 	DocumentStatusCreating = "Creating"
-// @enum DocumentStatus
+	// @enum DocumentStatus
 	DocumentStatusActive = "Active"
-// @enum DocumentStatus
+	// @enum DocumentStatus
 	DocumentStatusDeleting = "Deleting"
 )
 
 const (
-// @enum Fault
+	// @enum Fault
 	FaultClient = "Client"
-// @enum Fault
+	// @enum Fault
 	FaultServer = "Server"
-// @enum Fault
+	// @enum Fault
 	FaultUnknown = "Unknown"
 )
 
 const (
-// @enum InstanceInformationFilterKey
+	// @enum InstanceAssociationFilterKey
+	InstanceAssociationFilterKeyAssociationId = "AssociationId"
+)
+
+const (
+	// @enum InstanceInformationFilterKey
 	InstanceInformationFilterKeyInstanceIds = "InstanceIds"
-// @enum InstanceInformationFilterKey
+	// @enum InstanceInformationFilterKey
 	InstanceInformationFilterKeyAgentVersion = "AgentVersion"
-// @enum InstanceInformationFilterKey
+	// @enum InstanceInformationFilterKey
 	InstanceInformationFilterKeyPingStatus = "PingStatus"
-// @enum InstanceInformationFilterKey
+	// @enum InstanceInformationFilterKey
 	InstanceInformationFilterKeyPlatformTypes = "PlatformTypes"
-// @enum InstanceInformationFilterKey
+	// @enum InstanceInformationFilterKey
 	InstanceInformationFilterKeyActivationIds = "ActivationIds"
-// @enum InstanceInformationFilterKey
+	// @enum InstanceInformationFilterKey
 	InstanceInformationFilterKeyIamRole = "IamRole"
-// @enum InstanceInformationFilterKey
+	// @enum InstanceInformationFilterKey
 	InstanceInformationFilterKeyResourceType = "ResourceType"
+	// @enum InstanceInformationFilterKey
+	InstanceInformationFilterKeyAssociationStatus = "AssociationStatus"
 )
 
 const (
-// @enum InstancePropertyFilterKey
+	// @enum InstancePropertyFilterKey
 	InstancePropertyFilterKeyInstanceIds = "InstanceIds"
-// @enum InstancePropertyFilterKey
+	// @enum InstancePropertyFilterKey
 	InstancePropertyFilterKeyAgentVersion = "AgentVersion"
-// @enum InstancePropertyFilterKey
+	// @enum InstancePropertyFilterKey
 	InstancePropertyFilterKeyPingStatus = "PingStatus"
-// @enum InstancePropertyFilterKey
+	// @enum InstancePropertyFilterKey
 	InstancePropertyFilterKeyPlatformTypes = "PlatformTypes"
-// @enum InstancePropertyFilterKey
+	// @enum InstancePropertyFilterKey
 	InstancePropertyFilterKeyDocumentName = "DocumentName"
-// @enum InstancePropertyFilterKey
+	// @enum InstancePropertyFilterKey
 	InstancePropertyFilterKeyActivationIds = "ActivationIds"
-// @enum InstancePropertyFilterKey
+	// @enum InstancePropertyFilterKey
 	InstancePropertyFilterKeyIamRole = "IamRole"
-// @enum InstancePropertyFilterKey
+	// @enum InstancePropertyFilterKey
 	InstancePropertyFilterKeyResourceType = "ResourceType"
+	// @enum InstancePropertyFilterKey
+	InstancePropertyFilterKeyAssociationStatus = "AssociationStatus"
 )
 
 const (
-// @enum NotificationEvent
+	// @enum InventoryQueryOperatorType
+	InventoryQueryOperatorTypeEqual = "Equal"
+	// @enum InventoryQueryOperatorType
+	InventoryQueryOperatorTypeNotEqual = "NotEqual"
+	// @enum InventoryQueryOperatorType
+	InventoryQueryOperatorTypeBeginWith = "BeginWith"
+	// @enum InventoryQueryOperatorType
+	InventoryQueryOperatorTypeNotBeginWith = "NotBeginWith"
+	// @enum InventoryQueryOperatorType
+	InventoryQueryOperatorTypeContains = "Contains"
+	// @enum InventoryQueryOperatorType
+	InventoryQueryOperatorTypeLessThan = "LessThan"
+	// @enum InventoryQueryOperatorType
+	InventoryQueryOperatorTypeGreaterThan = "GreaterThan"
+)
+
+const (
+	// @enum NotificationEvent
 	NotificationEventAll = "All"
-// @enum NotificationEvent
+	// @enum NotificationEvent
 	NotificationEventInProgress = "InProgress"
-// @enum NotificationEvent
+	// @enum NotificationEvent
 	NotificationEventSuccess = "Success"
-// @enum NotificationEvent
+	// @enum NotificationEvent
 	NotificationEventTimedOut = "TimedOut"
-// @enum NotificationEvent
+	// @enum NotificationEvent
 	NotificationEventCancelled = "Cancelled"
-// @enum NotificationEvent
+	// @enum NotificationEvent
 	NotificationEventFailed = "Failed"
 )
 
 const (
-// @enum NotificationType
+	// @enum NotificationType
 	NotificationTypeCommand = "Command"
-// @enum NotificationType
+	// @enum NotificationType
 	NotificationTypeInvocation = "Invocation"
 )
 
 const (
-// @enum PingStatus
+	// @enum PingStatus
 	PingStatusOnline = "Online"
-// @enum PingStatus
+	// @enum PingStatus
 	PingStatusConnectionLost = "ConnectionLost"
-// @enum PingStatus
+	// @enum PingStatus
 	PingStatusInactive = "Inactive"
 )
 
 const (
-// @enum PlatformType
+	// @enum PlatformType
 	PlatformTypeWindows = "Windows"
-// @enum PlatformType
+	// @enum PlatformType
 	PlatformTypeLinux = "Linux"
 )
 
 const (
-// @enum PublicKeyType
+	// @enum PublicKeyType
 	PublicKeyTypeRsa = "Rsa"
 )
 
 const (
-// @enum ResourceType
+	// @enum ResourceType
 	ResourceTypeManagedInstance = "ManagedInstance"
-// @enum ResourceType
+	// @enum ResourceType
 	ResourceTypeDocument = "Document"
-// @enum ResourceType
+	// @enum ResourceType
 	ResourceTypeEc2instance = "EC2Instance"
 )
 
 const (
-// @enum ResourceTypeForTagging
+	// @enum ResourceTypeForTagging
 	ResourceTypeForTaggingManagedInstance = "ManagedInstance"
+	// @enum ResourceTypeForTagging
+	ResourceTypeForTaggingDocument = "Document"
 )
