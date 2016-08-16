@@ -47,7 +47,7 @@ func TestCreateS3Location(t *testing.T) {
 	context := createStubInstanceContext()
 	fileName := "PVDriver-amd64.zip"
 
-	packageLocation := "https://amazon-ssm-us-west-2.s3.amazonaws.com/PVDriver/Windows/9000.0.0.0/PVDriver-amd64.zip"
+	packageLocation := "https://amazon-ssm-us-west-2.s3.amazonaws.com/Components/PVDriver/Windows/9000.0.0.0/PVDriver-amd64.zip"
 	result := createS3Location(pluginInformation.Name, pluginInformation.Version, context, fileName)
 
 	assert.Equal(t, packageLocation, result)
@@ -58,7 +58,7 @@ func TestCreateS3Location_Bjs(t *testing.T) {
 	context := createStubInstanceContextBjs()
 	fileName := "PVDriver-amd64.zip"
 
-	packageLocation := "https://s3.cn-north-1.amazonaws.com.cn/amazon-ssm-cn-north-1/PVDriver/Windows/9000.0.0.0/PVDriver-amd64.zip"
+	packageLocation := "https://s3.cn-north-1.amazonaws.com.cn/amazon-ssm-cn-north-1/Components/PVDriver/Windows/9000.0.0.0/PVDriver-amd64.zip"
 	result := createS3Location(pluginInformation.Name, pluginInformation.Version, context, fileName)
 
 	assert.Equal(t, packageLocation, result)
@@ -147,7 +147,7 @@ func createStubInvalidPluginInput() *ConfigureComponentPluginInput {
 	input.Version = "9000.0.0.0"
 	input.Name = "PVDriver"
 	input.Action = "InvalidAction"
-	input.Source = "https://amazon-ssm-us-west-2.s3.amazonaws.com/PVDriver/Windows/9000.0.0/PVDriver-amd64.zip"
+	input.Source = "https://amazon-ssm-us-west-2.s3.amazonaws.com/Components/PVDriver/Windows/9000.0.0/PVDriver-amd64.zip"
 
 	return &input
 }

@@ -35,10 +35,10 @@ const (
 	PackageNameFormat = "{ComponentName}-{Arch}.{Compressed}"
 
 	// PackageLocationFormat represents the package's s3 location
-	SourceFormat = "https://amazon-ssm-{Region}.s3.amazonaws.com/{ComponentName}/{Platform}/{PackageVersion}/{FileName}"
+	SourceFormat = "https://amazon-ssm-{Region}.s3.amazonaws.com/Components/{ComponentName}/{Platform}/{PackageVersion}/{FileName}"
 
 	// SourceFormatBjs represents the package's s3 location for BJS region
-	SourceFormatBjs = "https://s3.{Region}.amazonaws.com.cn/amazon-ssm-{Region}/{ComponentName}/{Platform}/{PackageVersion}/{FileName}"
+	SourceFormatBjs = "https://s3.{Region}.amazonaws.com.cn/amazon-ssm-{Region}/Components/{ComponentName}/{Platform}/{PackageVersion}/{FileName}"
 
 	// RegionBjs represents the BJS region
 	RegionBjs = "cn-north-1"
@@ -104,6 +104,7 @@ var versionExists = fileutil.Exists
 // CreateComponentFolder constructs the local directory to place component
 func (util *Utility) CreateComponentFolder(name string, version string) (folder string, err error) {
 	folder = filepath.Join(appconfig.ComponentRoot, name, version)
+
 	if err = mkDirAll(folder); err != nil {
 		return "", err
 	}

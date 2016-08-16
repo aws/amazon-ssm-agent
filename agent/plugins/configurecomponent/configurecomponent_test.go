@@ -63,16 +63,24 @@ func TestConfigureComponent(t *testing.T) {
 	plugin := &Plugin{}
 	pluginInformation := createStubPluginInput()
 
-	manifest, _ := ParseComponentManifest(logger, "testdata/sampleManifest.json")
+	manifest, _ := parseComponentManifest(logger, "testdata/sampleManifest.json")
 
 	manager := &mockConfigureManager{
 		downloadManifestResult: manifest,
 		downloadManifestError:  nil,
+		downloadPackageResult:  "testdata/sampleManifest.json",
 		downloadPackageError:   nil,
-		extractPackageError:    nil,
 	}
 	configureUtil := &mockConfigureUtility{}
 	updateUtil := &mockUpdateUtility{}
+
+	fileUncompress = func(src, dest string) error {
+		return nil
+	}
+
+	fileRename = func(oldpath, newpath string) error {
+		return nil
+	}
 
 	output := configureComponent(
 		plugin,
@@ -113,11 +121,15 @@ func TestConfigureComponent_FailedDownloadManifest(t *testing.T) {
 	manager := &mockConfigureManager{
 		downloadManifestResult: nil,
 		downloadManifestError:  fmt.Errorf("Cannot download manifest"),
+		downloadPackageResult:  "",
 		downloadPackageError:   nil,
-		extractPackageError:    nil,
 	}
 	configureUtil := &mockConfigureUtility{}
 	updateUtil := &mockUpdateUtility{}
+
+	fileRename = func(oldpath, newpath string) error {
+		return nil
+	}
 
 	output := configureComponent(
 		plugin,
@@ -142,7 +154,8 @@ func TestExecute(t *testing.T) {
 	mockCancelFlag := new(task.MockCancelFlag)
 	mockContext := context.NewMockDefault()
 
-	reboot = func() { return }
+	// TO DO: How to mock reboot?
+	// reboot = func() { return }
 
 	// Create stub
 	configureComponent = func(
@@ -176,14 +189,19 @@ func TestInstallComponent(t *testing.T) {
 	context := createStubInstanceContext()
 
 	output := &ConfigureComponentPluginOutput{}
-	manifest, _ := ParseComponentManifest(logger, "testdata/sampleManifest.json")
+	manifest, _ := parseComponentManifest(logger, "testdata/sampleManifest.json")
 	manager := &mockConfigureManager{
 		downloadManifestResult: manifest,
 		downloadManifestError:  nil,
+		downloadPackageResult:  "testdata/sampleManifest.json",
 		downloadPackageError:   nil,
-		extractPackageError:    nil}
+	}
 	configureUtil := &mockConfigureUtility{}
 	updateUtil := &mockUpdateUtility{}
+
+	fileUncompress = func(src, dest string) error {
+		return nil
+	}
 
 	installCommand := "AWSPVDriverSetup.msi /quiet /install"
 
@@ -206,12 +224,13 @@ func TestInstallComponent_DownloadFailed(t *testing.T) {
 	context := createStubInstanceContext()
 
 	output := &ConfigureComponentPluginOutput{}
-	manifest, _ := ParseComponentManifest(logger, "testdata/sampleManifest.json")
+	manifest, _ := parseComponentManifest(logger, "testdata/sampleManifest.json")
 	manager := &mockConfigureManager{
 		downloadManifestResult: manifest,
 		downloadManifestError:  nil,
+		downloadPackageResult:  "",
 		downloadPackageError:   fmt.Errorf("Cannot download package"),
-		extractPackageError:    nil}
+	}
 	configureUtil := &mockConfigureUtility{}
 	updateUtil := &mockUpdateUtility{}
 
@@ -237,14 +256,19 @@ func TestInstallComponent_ExtractFailed(t *testing.T) {
 	context := createStubInstanceContext()
 
 	output := &ConfigureComponentPluginOutput{}
-	manifest, _ := ParseComponentManifest(logger, "testdata/sampleManifest.json")
+	manifest, _ := parseComponentManifest(logger, "testdata/sampleManifest.json")
 	manager := &mockConfigureManager{
 		downloadManifestResult: manifest,
 		downloadManifestError:  nil,
+		downloadPackageResult:  "testdata/sampleManifest.json",
 		downloadPackageError:   nil,
-		extractPackageError:    fmt.Errorf("Cannot extract package")}
+	}
 	configureUtil := &mockConfigureUtility{}
 	updateUtil := &mockUpdateUtility{}
+
+	fileUncompress = func(src, dest string) error {
+		return fmt.Errorf("Cannot extract package")
+	}
 
 	installCommand := "AWSPVDriverSetup.msi /quiet /install"
 
@@ -260,6 +284,46 @@ func TestInstallComponent_ExtractFailed(t *testing.T) {
 
 	assert.Error(t, err)
 	assert.Contains(t, err.Error(), "Cannot extract package")
+}
+
+func TestInstallComponent_DeleteFailed(t *testing.T) {
+	plugin := &Plugin{}
+	pluginInformation := createStubPluginInput()
+	context := createStubInstanceContext()
+
+	output := &ConfigureComponentPluginOutput{}
+	manifest, _ := parseComponentManifest(logger, "testdata/sampleManifest.json")
+	manager := &mockConfigureManager{
+		downloadManifestResult: manifest,
+		downloadManifestError:  nil,
+		downloadPackageResult:  "testdata/sampleManifest.json",
+		downloadPackageError:   nil,
+	}
+	configureUtil := &mockConfigureUtility{}
+	updateUtil := &mockUpdateUtility{}
+
+	fileUncompress = func(src, dest string) error {
+		return nil
+	}
+
+	fileRemove = func(path string) error {
+		return fmt.Errorf("failed to delete compressed package")
+	}
+
+	installCommand := "AWSPVDriverSetup.msi /quiet /install"
+
+	err := runInstallComponent(plugin,
+		pluginInformation,
+		output,
+		manager,
+		logger,
+		installCommand,
+		configureUtil,
+		updateUtil,
+		context)
+
+	assert.Error(t, err)
+	assert.Contains(t, err.Error(), "failed to delete compressed package")
 }
 
 // TO DO: Install test for exe command
@@ -318,26 +382,6 @@ func TestUninstallComponent_RemovalFailed(t *testing.T) {
 
 // TO DO: Uninstall test for exe command
 
-func TestDownloadManifest(t *testing.T) {
-	pluginInformation := createStubPluginInput()
-	context := createStubInstanceContext()
-
-	output := ConfigureComponentPluginOutput{}
-	manager := configureManager{}
-	util := mockConfigureUtility{}
-
-	fileDownload = func(log log.T, input artifact.DownloadInput) (output artifact.DownloadOutput, err error) {
-		result := artifact.DownloadOutput{}
-		result.LocalFilePath = "testdata/sampleManifest.json"
-		return result, nil
-	}
-
-	manifest, err := manager.downloadManifest(logger, &util, pluginInformation, &output, context)
-
-	assert.NoError(t, err)
-	assert.NotNil(t, manifest)
-}
-
 func TestDownloadPackage(t *testing.T) {
 	pluginInformation := createStubPluginInput()
 	context := createStubInstanceContext()
@@ -348,12 +392,13 @@ func TestDownloadPackage(t *testing.T) {
 
 	fileDownload = func(log log.T, input artifact.DownloadInput) (output artifact.DownloadOutput, err error) {
 		result := artifact.DownloadOutput{}
-		result.LocalFilePath = "components/PVDriver/9000.0.0.0"
+		result.LocalFilePath = "components/PVDriver/9000.0.0.0/PVDriver-amd64.zip"
 		return result, nil
 	}
 
-	err := manager.downloadPackage(logger, &util, pluginInformation, &output, context)
+	fileName, err := manager.downloadPackage(logger, &util, pluginInformation, &output, context)
 
+	assert.Equal(t, "components/PVDriver/9000.0.0.0/PVDriver-amd64.zip", fileName)
 	assert.NoError(t, err)
 }
 
@@ -372,8 +417,9 @@ func TestDownloadPackage_Failed(t *testing.T) {
 		return result, fmt.Errorf("404")
 	}
 
-	err := manager.downloadPackage(logger, &util, pluginInformation, &output, context)
+	fileName, err := manager.downloadPackage(logger, &util, pluginInformation, &output, context)
 
+	assert.Empty(t, fileName)
 	assert.Error(t, err)
 	assert.Contains(t, err.Error(), "failed to download component installation package reliably")
 	assert.Contains(t, err.Error(), "404")
@@ -382,8 +428,8 @@ func TestDownloadPackage_Failed(t *testing.T) {
 type mockConfigureManager struct {
 	downloadManifestResult *ComponentManifest
 	downloadManifestError  error
+	downloadPackageResult  string
 	downloadPackageError   error
-	extractPackageError    error
 }
 
 func (m *mockConfigureManager) downloadManifest(log log.T,
@@ -399,13 +445,9 @@ func (m *mockConfigureManager) downloadPackage(log log.T,
 	util Util,
 	input *ConfigureComponentPluginInput,
 	output *ConfigureComponentPluginOutput,
-	context *updateutil.InstanceContext) (err error) {
+	context *updateutil.InstanceContext) (fileName string, err error) {
 
-	return m.downloadPackageError
-}
-
-func (m *mockConfigureManager) extractPackage(directory string) (err error) {
-	return m.extractPackageError
+	return "", m.downloadPackageError
 }
 
 type mockUpdateUtility struct {

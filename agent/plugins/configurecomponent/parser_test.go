@@ -57,7 +57,7 @@ func TestParseManifest(t *testing.T) {
 	// run tests
 	for _, test := range testCases {
 		// call method
-		result, err := ParseComponentManifest(log, test.Input)
+		result, err := parseComponentManifest(log, test.Input)
 
 		// check results
 		assert.Nil(t, err)
@@ -86,7 +86,7 @@ func TestParseManifestWithError(t *testing.T) {
 	// run tests
 	for _, test := range testCases {
 		// call method
-		result, err := ParseComponentManifest(log, test.Input)
+		result, err := parseComponentManifest(log, test.Input)
 
 		// check results
 		assert.NotNil(t, err)

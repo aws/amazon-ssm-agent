@@ -89,7 +89,7 @@ func init() {
 	DefaultProgramFolder = filepath.Join(EnvProgramFiles, SSMFolder)
 	AppConfigPath = filepath.Join(DefaultProgramFolder, AppConfigFileName)
 	DefaultDataStorePath = filepath.Join(SSMDataPath, "InstanceData")
-	ComponentRoot = filepath.Join(SSMDataPath, SSMFolder, "Components")
+	ComponentRoot = filepath.Join(SSMDataPath, "Components")
 	DownloadRoot = filepath.Join(temp, SSMFolder, "Download")
 	UpdaterArtifactsRoot = filepath.Join(temp, SSMFolder, "Update")
 }

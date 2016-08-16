@@ -19,15 +19,10 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
-
 	"regexp"
+	"strconv"
 
 	"github.com/aws/amazon-ssm-agent/agent/log"
-)
-
-const (
-	RebootTrue  = "true"
-	RebootFalse = "false"
 )
 
 // ComponentManifest represents json structure of component's online configuration file.
@@ -39,8 +34,8 @@ type ComponentManifest struct {
 	Reboot    string `json:"Reboot"`
 }
 
-// ParseComponentManifest parses the manifest to provide install/uninstall information.
-func ParseComponentManifest(log log.T, fileName string) (parsedManifest *ComponentManifest, err error) {
+// parseComponentManifest parses the manifest to provide install/uninstall information.
+func parseComponentManifest(log log.T, fileName string) (parsedManifest *ComponentManifest, err error) {
 	// load specified file from file system
 	var result = []byte{}
 	if result, err = ioutil.ReadFile(fileName); err != nil {
@@ -54,7 +49,7 @@ func ParseComponentManifest(log log.T, fileName string) (parsedManifest *Compone
 		return
 	}
 
-	// ensure manifest confirms to defined schema
+	// ensure manifest conforms to defined schema
 	if err = validateComponentManifest(log, parsedManifest); err != nil {
 		log.Errorf("Invalid JSON configuration file due to %v", err)
 	}
@@ -83,15 +78,13 @@ func validateComponentManifest(log log.T, parsedManifest *ComponentManifest) err
 	}
 
 	// ensure version follows format <major>.<minor>.<build>.<release>
-	// validate if string is a valid version string
 	version := parsedManifest.Version
 	if matched, err := regexp.MatchString("\\d+(\\.\\d+)?", version); matched == false || err != nil {
 		return fmt.Errorf("invalid version string %v", version)
 	}
 
 	// ensure reboot is true or false
-	rebootFlag := parsedManifest.Reboot
-	if (rebootFlag != RebootTrue) && (rebootFlag != RebootFalse) {
+	if _, err := strconv.ParseBool(parsedManifest.Reboot); err != nil {
 		return fmt.Errorf("invalid reboot flag")
 	}
 

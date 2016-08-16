@@ -20,6 +20,7 @@ import (
 
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
+	"github.com/aws/amazon-ssm-agent/agent/plugins/configurecomponent"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/pluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/runcommand"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/updatessmagent"
@@ -101,6 +102,15 @@ func loadPlatformIndependentPlugins(context context.T) PluginRegistry {
 		log.Errorf("failed to create plugin %s %v", updateAgentPluginName, err)
 	} else {
 		workerPlugins[updateAgentPluginName] = updateAgentPlugin
+	}
+
+	// registering aws:configureComponent
+	configureComponentPluginName := configurecomponent.Name()
+	configureComponentPlugin, err := configurecomponent.NewPlugin(pluginutil.DefaultPluginConfig())
+	if err != nil {
+		log.Errorf("failed to create plugin %s %v", configureComponentPluginName, err)
+	} else {
+		workerPlugins[configureComponentPluginName] = configureComponentPlugin
 	}
 
 	return workerPlugins

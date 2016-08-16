@@ -18,7 +18,6 @@ package configurecomponent
 import (
 	"errors"
 	"fmt"
-
 	"strings"
 
 	"os"
@@ -48,10 +47,10 @@ type Plugin struct {
 // ConfigureComponentPluginInput represents one set of commands executed by the ConfigureComponent plugin.
 type ConfigureComponentPluginInput struct {
 	contracts.PluginInput
-	Name    string
-	Version string
-	Action  string
-	Source  string
+	Name    string `json:"name"`
+	Version string `json:"version"`
+	Action  string `json:"action"`
+	Source  string `json:"source"`
 }
 
 // ConfigureComponentsPluginOutput represents the output of the plugin.
@@ -115,16 +114,18 @@ type pluginHelper interface {
 		util Util,
 		input *ConfigureComponentPluginInput,
 		output *ConfigureComponentPluginOutput,
-		context *updateutil.InstanceContext) (err error)
-
-	extractPackage(directory string) (err error)
+		context *updateutil.InstanceContext) (fileName string, err error)
 }
 
 // Assign method to global variables to allow unit tests to override
 var fileDownload = artifact.Download
 var fileUncompress = fileutil.Uncompress
 var fileRemove = os.RemoveAll
-var reboot = rebooter.RequestPendingReboot
+var fileRename = os.Rename
+
+// TO DO: How to mock reboot?
+// var reboot = rebooter.RequestPendingReboot
+
 var configureComponent = runConfigureComponent
 
 // runConfigureComponent downloads the component manifest and performs specified action
@@ -146,21 +147,21 @@ func runConfigureComponent(
 	}
 
 	if context, err = updateUtil.CreateInstanceContext(log); err != nil {
-		output.MarkAsFailed(log, err)
+		output.MarkAsFailed(log,
+			fmt.Errorf("unable to create instance context: %v", err))
 		return
 	}
 
 	// download manifest file
 	manifest, downloadErr := manager.downloadManifest(log, configureUtil, &input, &output, context)
 	if downloadErr != nil {
-		output.MarkAsFailed(log, downloadErr)
+		output.MarkAsFailed(log,
+			fmt.Errorf("unable to download manifest: %v", downloadErr))
 		return
 	}
 
 	switch input.Action {
 	case InstallAction:
-		// TO DO: Update (check if existing version of component exists; if so, uninstall before installing)
-
 		if err = runInstallComponent(p,
 			&input,
 			&output,
@@ -212,7 +213,7 @@ func (m *configureManager) downloadManifest(log log.T,
 	if manifestLocation == "" {
 		manifestLocation = createS3Location(input.Name, input.Version, context, manifestName)
 	} else {
-		manifestLocation = strings.Replace(input.Source, updateutil.FileNameHolder, input.Name, -1)
+		manifestLocation = strings.Replace(manifestLocation, updateutil.FileNameHolder, manifestName, -1)
 	}
 
 	// path to download destination
@@ -226,7 +227,7 @@ func (m *configureManager) downloadManifest(log log.T,
 		SourceURL:            manifestLocation,
 		DestinationDirectory: manifestDestination}
 
-	// download package
+	// download manifest
 	downloadOutput, downloadErr := fileDownload(log, downloadInput)
 	if downloadErr != nil || downloadOutput.LocalFilePath == "" {
 		errMessage := fmt.Sprintf("failed to download component manifest reliably, %v", downloadInput.SourceURL)
@@ -236,9 +237,16 @@ func (m *configureManager) downloadManifest(log log.T,
 		return nil, errors.New(errMessage)
 	}
 
+	// rename manifest
+	localManifestName := filepath.Join(appconfig.ComponentRoot, input.Name, input.Version, manifestName)
+	if err = fileRename(downloadOutput.LocalFilePath, localManifestName); err != nil {
+		errMessage := fmt.Sprintf("failed to rename %v to %v", downloadOutput.LocalFilePath, err.Error())
+		return nil, errors.New(errMessage)
+	}
+
 	output.AppendInfo(log, "Successfully downloaded %v", downloadInput.SourceURL)
 
-	return ParseComponentManifest(log, downloadOutput.LocalFilePath)
+	return parseComponentManifest(log, localManifestName)
 }
 
 // downloadPackage downloads the installation package from s3 bucket.
@@ -246,7 +254,7 @@ func (m *configureManager) downloadPackage(log log.T,
 	util Util,
 	input *ConfigureComponentPluginInput,
 	output *ConfigureComponentPluginOutput,
-	context *updateutil.InstanceContext) (err error) {
+	context *updateutil.InstanceContext) (fileName string, err error) {
 	// package to download
 	packageName := createPackageName(input.Name, context)
 
@@ -254,13 +262,15 @@ func (m *configureManager) downloadPackage(log log.T,
 	packageLocation := input.Source
 	if packageLocation == "" {
 		packageLocation = createS3Location(input.Name, input.Version, context, packageName)
+	} else {
+		packageLocation = strings.Replace(packageLocation, updateutil.FileNameHolder, packageName, -1)
 	}
 
 	// path to download destination
 	packageDestination, err := util.CreateComponentFolder(input.Name, input.Version)
 	if err != nil {
 		errMessage := fmt.Sprintf("failed to create local component repository, %v", err.Error())
-		return errors.New(errMessage)
+		return "", errors.New(errMessage)
 	}
 
 	downloadInput := artifact.DownloadInput{
@@ -274,20 +284,12 @@ func (m *configureManager) downloadPackage(log log.T,
 		if downloadErr != nil {
 			errMessage = fmt.Sprintf("%v, %v", errMessage, downloadErr.Error())
 		}
-		return errors.New(errMessage)
+		return "", errors.New(errMessage)
 	}
 
 	output.AppendInfo(log, "Successfully downloaded %v", downloadInput.SourceURL)
 
-	return nil
-}
-
-// extractPackage extracts the contents of the compressed installation package.
-func (m *configureManager) extractPackage(directory string) (err error) {
-	if err = fileUncompress(directory, directory); err != nil {
-		return fmt.Errorf("failed to uncompress component installer package, %v, %v", directory, err.Error())
-	}
-	return nil
+	return downloadOutput.LocalFilePath, nil
 }
 
 // runInstallComponent executes the install script for the specific version of component.
@@ -305,13 +307,18 @@ func runInstallComponent(p *Plugin,
 	directory := filepath.Join(appconfig.ComponentRoot, input.Name, input.Version)
 
 	// download package
-	if err = manager.downloadPackage(log, configureUtil, input, output, context); err != nil {
+	fileName, err := manager.downloadPackage(log, configureUtil, input, output, context)
+	if err != nil {
 		return err
 	}
 
-	// extract package
-	if err = manager.extractPackage(directory); err != nil {
-		return err
+	if err = fileUncompress(fileName, directory); err != nil {
+		return fmt.Errorf("failed to extract component installer package %v, %v", fileName, err.Error())
+	}
+
+	// delete compressed package after using
+	if err = fileRemove(fileName); err != nil {
+		return fmt.Errorf("failed to delete compressed package %v", fileName)
 	}
 
 	// execute installation command
