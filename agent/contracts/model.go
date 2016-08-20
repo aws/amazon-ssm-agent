@@ -25,6 +25,7 @@ const (
 	ResultStatusInProgress       ResultStatus = "InProgress"
 	ResultStatusSuccess          ResultStatus = "Success"
 	ResultStatusSuccessAndReboot ResultStatus = "SuccessAndReboot"
+	ResultStatusPassedAndReboot  ResultStatus = "PassAndReboot"
 	ResultStatusFailed           ResultStatus = "Failed"
 	ResultStatusCancelled        ResultStatus = "Cancelled"
 	ResultStatusTimedOut         ResultStatus = "TimedOut"

@@ -17,7 +17,6 @@ package processor
 
 import (
 	"errors"
-	"path"
 	"path/filepath"
 	"strings"
 
@@ -86,7 +85,7 @@ func getPluginConfigurations(runtimeConfig map[string]*contracts.PluginConfig, o
 		res[pluginName] = &contracts.Configuration{
 			Properties:             pluginConfig.Properties,
 			OutputS3BucketName:     s3BucketName,
-			OutputS3KeyPrefix:      path.Join(s3KeyPrefix, fileutil.RemoveInvalidChars(pluginName)),
+			OutputS3KeyPrefix:      filepath.Join(s3KeyPrefix, fileutil.RemoveInvalidChars(pluginName)),
 			OrchestrationDirectory: filepath.Join(orchestrationDir, fileutil.RemoveInvalidChars(pluginName)),
 			MessageId:              messageID,
 			BookKeepingFileName:    getCommandID(messageID),

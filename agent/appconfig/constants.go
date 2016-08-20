@@ -64,4 +64,7 @@ const (
 
 	AppConfigFileName    = "amazon-ssm-agent.json"
 	SeelogConfigFileName = "seelog.xml"
+
+	// PluginNameDomainJoin is the name of domain join plugin
+	PluginNameDomainJoin = "aws:domainJoin"
 )

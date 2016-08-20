@@ -378,6 +378,21 @@ func LoadParametersAsList(log log.T, prop interface{}) ([]interface{}, contracts
 	return properties, res
 }
 
+// LoadParametersAsMap returns properties as a map and appropriate PluginResult if error is encountered
+func LoadParametersAsMap(log log.T, prop interface{}) (map[string]interface{}, contracts.PluginResult) {
+	var properties map[string]interface{}
+	var res contracts.PluginResult
+
+	if err := jsonutil.Remarshal(prop, &properties); err != nil {
+		log.Errorf("unable to parse plugin configuration")
+		res.Output = "Execution failed because agent is unable to parse plugin configuration"
+		res.Code = 1
+		res.Status = contracts.ResultStatusFailed
+	}
+
+	return properties, res
+}
+
 // ValidateExecutionTimeout validates the supplied input interface and converts it into a valid int value.
 func ValidateExecutionTimeout(log log.T, input interface{}) int {
 	var num int

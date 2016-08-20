@@ -567,7 +567,6 @@ func IsDocumentNotSupportedBySsmAgent(docName string) bool {
 	once.Do(func() {
 		singletonMapOfUnsupportedSSMDocs = make(map[string]bool)
 		singletonMapOfUnsupportedSSMDocs["AWS-ConfigureCloudWatch"] = false
-		singletonMapOfUnsupportedSSMDocs["AWS-JoinDirectoryServiceDomain"] = false
 	})
 
 	_, ok := singletonMapOfUnsupportedSSMDocs[docName]

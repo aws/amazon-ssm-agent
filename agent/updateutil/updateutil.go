@@ -184,7 +184,9 @@ type T interface {
 }
 
 // Utility implements interface T
-type Utility struct{}
+type Utility struct {
+	CustomUpdateExecutionTimeoutInSeconds int
+}
 
 var getDiskSpaceInfo = fileutil.GetDiskSpaceInfo
 var getRegion = platform.Region
@@ -257,7 +259,7 @@ func (util *Utility) ExeCommand(
 	log log.T,
 	cmd string,
 	workingDir string,
-	updaterRoot string,
+	outputRoot string,
 	stdOut string,
 	stdErr string,
 	isAsync bool) (err error) {
@@ -277,7 +279,7 @@ func (util *Utility) ExeCommand(
 		tempCmd := setPlatformSpecificCommand(parts)
 		command := execCommand(tempCmd[0], tempCmd[1:]...)
 		command.Dir = workingDir
-		stdoutWriter, stderrWriter, exeErr := setExeOutErr(updaterRoot, stdOut, stdErr)
+		stdoutWriter, stderrWriter, exeErr := setExeOutErr(outputRoot, stdOut, stdErr)
 		if exeErr != nil {
 			return exeErr
 		}
@@ -291,7 +293,11 @@ func (util *Utility) ExeCommand(
 			return
 		}
 
-		timer := time.NewTimer(time.Duration(DefaultUpdateExecutionTimeoutInSeconds) * time.Second)
+		var timeout = DefaultUpdateExecutionTimeoutInSeconds
+		if util.CustomUpdateExecutionTimeoutInSeconds != 0 {
+			timeout = util.CustomUpdateExecutionTimeoutInSeconds
+		}
+		timer := time.NewTimer(time.Duration(timeout) * time.Second)
 		go killProcessOnTimeout(log, command, timer)
 
 		err = command.Wait()

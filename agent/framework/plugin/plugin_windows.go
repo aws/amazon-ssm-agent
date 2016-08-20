@@ -16,6 +16,7 @@ package plugin
 import (
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/application"
+	"github.com/aws/amazon-ssm-agent/agent/plugins/domainjoin"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/pluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/psmodule"
 )
@@ -41,6 +42,15 @@ func loadPlatformDependentPlugins(context context.T) PluginRegistry {
 		log.Errorf("failed to create plugin %s %v", applicationPluginName, err)
 	} else {
 		workerPlugins[applicationPluginName] = applicationPlugin
+	}
+
+	// registering aws:domainJoin plugin
+	domainJoinPluginName := domainjoin.Name()
+	domainJoinPlugin, err := domainjoin.NewPlugin(pluginutil.DefaultPluginConfig())
+	if err != nil {
+		log.Errorf("failed to create plugin %s %v", domainJoinPluginName, err)
+	} else {
+		workerPlugins[domainJoinPluginName] = domainJoinPlugin
 	}
 
 	return workerPlugins
