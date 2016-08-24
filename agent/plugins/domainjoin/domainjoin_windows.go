@@ -55,6 +55,7 @@ const (
 // Makes command as variables, so that we can mock this for unit tests
 var makeDir = fileutil.MakeDirs
 var makeArgs = makeArguments
+var getRegion = platform.Region
 var utilExe convert
 
 // Plugin is the type for the domain join plugin.
@@ -294,7 +295,7 @@ func makeArguments(log log.T, pluginInput DomainJoinPluginInput) (commandArgumen
 	buffer.WriteString(pluginInput.DirectoryName)
 
 	buffer.WriteString(InstanceRegionArg)
-	region, err := platform.Region()
+	region, err := getRegion()
 	if err != nil {
 		log.Debug("Cannot get the instance region information")
 		return
