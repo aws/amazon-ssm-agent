@@ -60,14 +60,31 @@ func RunPlugins(
 
 			}
 		}
-		p, ok := pluginRegistry[pluginID]
-		if !ok {
+		var r contracts.PluginResult
+		pluginHandlerFound := false
+
+		//check if the said plugin is a long running plugin
+		handler, isLongRunningPlugin := plugin.RegisteredLongRunningPlugins(context)[pluginID]
+		//check if the said plugin is a worker plugin
+		p, isWorkerPlugin := pluginRegistry[pluginID]
+
+		switch {
+		case isLongRunningPlugin:
+			pluginHandlerFound = true
+			context.Log().Infof("%s is a long running plugin", pluginID)
+			r = runPlugin(context, handler, pluginID, *pluginConfig, cancelFlag)
+		case isWorkerPlugin:
+			pluginHandlerFound = true
+			context.Log().Infof("%s is a worker plugin", pluginID)
+			r = runPlugin(context, p, pluginID, *pluginConfig, cancelFlag)
+		default:
 			err := fmt.Errorf("Plugin with id %s not found!", pluginID)
 			pluginOutputs[pluginID].Status = contracts.ResultStatusFailed
 			pluginOutputs[pluginID].Error = err
 			context.Log().Error(err)
-		} else {
-			r := runPlugin(context, p, pluginID, *pluginConfig, cancelFlag)
+		}
+
+		if pluginHandlerFound {
 			pluginOutputs[pluginID].Code = r.Code
 			pluginOutputs[pluginID].Status = r.Status
 			pluginOutputs[pluginID].Error = r.Error
@@ -115,6 +132,6 @@ func runPlugin(
 			log.Error(res.Error)
 		}
 	}()
-	log.Debug("Running plugin")
+	log.Debugf("Running %s", pluginID)
 	return p.Execute(context, config, cancelFlag)
 }

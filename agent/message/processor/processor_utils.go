@@ -83,6 +83,7 @@ func getPluginConfigurations(runtimeConfig map[string]*contracts.PluginConfig, o
 	res = make(map[string]*contracts.Configuration)
 	for pluginName, pluginConfig := range runtimeConfig {
 		res[pluginName] = &contracts.Configuration{
+			Settings:               pluginConfig.Settings,
 			Properties:             pluginConfig.Properties,
 			OutputS3BucketName:     s3BucketName,
 			OutputS3KeyPrefix:      filepath.Join(s3KeyPrefix, fileutil.RemoveInvalidChars(pluginName)),

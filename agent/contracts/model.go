@@ -47,6 +47,7 @@ type Parameter struct {
 
 // PluginConfig stores plugin configuration
 type PluginConfig struct {
+	Settings    interface{} `json:"settings"`
 	Properties  interface{} `json:"properties"`
 	Description string      `json:"description"`
 }

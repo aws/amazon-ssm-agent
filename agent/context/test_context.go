@@ -35,6 +35,7 @@ func NewMockDefault() *Mock {
 	ctx.On("Log").Return(log)
 	ctx.On("AppConfig").Return(config)
 	ctx.On("With", mock.AnythingOfType("string")).Return(ctx)
+	ctx.On("CurrentContext").Return([]string{})
 	return ctx
 }
 
@@ -54,4 +55,10 @@ func (m *Mock) Log() log.T {
 func (m *Mock) With(ctx string) T {
 	args := m.Called(ctx)
 	return args.Get(0).(T)
+}
+
+// With mocks the With function.
+func (m *Mock) CurrentContext() []string {
+	args := m.Called()
+	return args.Get(0).([]string)
 }

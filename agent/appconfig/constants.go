@@ -41,6 +41,14 @@ const (
 	DefaultLocationOfCompleted = "completed"
 	DefaultLocationOfCorrupt   = "corrupt"
 	DefaultLocationOfState     = "state"
+
+	//aws-ssm-agent bookkeeping constants for long running plugins
+	LongRunningPluginsLocation         = "longrunningplugins"
+	LongRunningPluginsHealthCheck      = "healthcheck"
+	LongRunningPluginDataStoreLocation = "datastore"
+	LongRunningPluginDataStoreFileName = "store"
+	PluginNameLongRunningPluginInvoker = "lrpminvoker"
+
 	// DefaultCommandRootDirName is the root directory for storing command states
 	DefaultCommandRootDirName = "command"
 

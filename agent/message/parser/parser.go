@@ -31,6 +31,7 @@ func ParseMessageWithParams(log log.T, payload string) (parsedMessage messageCon
 	// parse message to retrieve parameters
 	err = json.Unmarshal([]byte(payload), &parsedMessage)
 	if err != nil {
+		log.Errorf("Encountered error while parsing SendCommandPayload")
 		return
 	}
 
@@ -138,6 +139,7 @@ func ReplacePluginParameters(input map[string]*contracts.PluginConfig, params ma
 	result = make(map[string]*contracts.PluginConfig)
 	for pluginName, pluginConfig := range input {
 		result[pluginName] = &contracts.PluginConfig{
+			Settings:   parameters.ReplaceParameters(pluginConfig.Settings, params, logger),
 			Properties: parameters.ReplaceParameters(pluginConfig.Properties, params, logger),
 		}
 	}

@@ -443,14 +443,6 @@ func (p *Processor) processSendCommandMessage(context context.T,
 
 	payloadDoc := buildReply("", outputs)
 
-	//check if document isn't supported by SSM -> update the DocumentLevel status message & send reply accordingly
-	ssmDocName := parsedMessage.DocumentName
-	if IsDocumentNotSupportedBySsmAgent(ssmDocName) {
-		log.Infof("%s is not yet supported by aws-ssm-agent, setting up Document level response accordingly", ssmDocName)
-		payloadDoc.DocumentTraceOutput = fmt.Sprintf("%s document is not yet supported by amazon-ssm-agent.", ssmDocName)
-		p.sendDocLevelResponse(*msg.MessageId, contracts.ResultStatusFailed, payloadDoc.DocumentTraceOutput)
-	}
-
 	//update documentInfo in interim cmd state file
 	documentInfo := commandStateHelper.GetDocumentInfo(log, commandID, *msg.Destination, appconfig.DefaultLocationOfCurrent)
 
@@ -560,15 +552,4 @@ func (p *Processor) processCancelCommandMessage(context context.T,
 	if err != nil {
 		sdkutil.HandleAwsError(log, err, p.processorStopPolicy)
 	}
-}
-
-// IsDocumentNotSupportedBySsmAgent returns true if the given SSM document is not supported by ssm agent
-func IsDocumentNotSupportedBySsmAgent(docName string) bool {
-	once.Do(func() {
-		singletonMapOfUnsupportedSSMDocs = make(map[string]bool)
-		singletonMapOfUnsupportedSSMDocs["AWS-ConfigureCloudWatch"] = false
-	})
-
-	_, ok := singletonMapOfUnsupportedSSMDocs[docName]
-	return ok
 }

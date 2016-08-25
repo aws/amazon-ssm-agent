@@ -18,6 +18,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/health"
+	manager "github.com/aws/amazon-ssm-agent/agent/longrunning/manager"
 	message "github.com/aws/amazon-ssm-agent/agent/message/processor"
 )
 
@@ -37,7 +38,7 @@ func RegisteredCorePlugins(context context.T) *PluginRegistry {
 
 // register core plugins here
 func loadCorePlugins(context context.T) {
-	registeredCorePlugins = make([]contracts.ICorePlugin, 2)
+	registeredCorePlugins = make([]contracts.ICorePlugin, 3)
 
 	// registering the health core plugin
 	registeredCorePlugins[0] = health.NewHealthCheck(context)
@@ -45,5 +46,11 @@ func loadCorePlugins(context context.T) {
 	// registering the messages core plugin
 	registeredCorePlugins[1] = message.NewProcessor(context)
 
-	//registeredCorePlugins[2] = config
+	// registering the long running plugin manager as a core plugin
+	manager.EnsureInitialization(context)
+	if lrpm, err := manager.GetInstance(); err == nil {
+		registeredCorePlugins[2] = lrpm
+	} else {
+		context.Log().Errorf("Something went wrong during initialization of long running plugin manager")
+	}
 }
