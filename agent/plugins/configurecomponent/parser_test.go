@@ -63,7 +63,7 @@ func TestParseManifest(t *testing.T) {
 		assert.Nil(t, err)
 		assert.Equal(t, test.Output, result)
 		assert.Equal(t, result.Name, "PVDriver")
-		assert.Equal(t, result.Version, "1.0.0.0")
+		assert.Equal(t, result.Version, "1.0.0")
 		assert.Equal(t, result.Install, "AWSPVDriverSetup.msi /quiet /update")
 		assert.Equal(t, result.Uninstall, "AWSPVDriverSetup.msi /quiet /uninstall")
 		assert.Equal(t, result.Reboot, "true")

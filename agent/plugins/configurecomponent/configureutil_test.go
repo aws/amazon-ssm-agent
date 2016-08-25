@@ -47,7 +47,7 @@ func TestCreateS3Location(t *testing.T) {
 	context := createStubInstanceContext()
 	fileName := "PVDriver-amd64.zip"
 
-	packageLocation := "https://amazon-ssm-us-west-2.s3.amazonaws.com/Components/PVDriver/Windows/9000.0.0.0/PVDriver-amd64.zip"
+	packageLocation := "https://amazon-ssm-us-west-2.s3.amazonaws.com/Components/PVDriver/Windows/9000.0.0/PVDriver-amd64.zip"
 	result := createS3Location(pluginInformation.Name, pluginInformation.Version, context, fileName)
 
 	assert.Equal(t, packageLocation, result)
@@ -58,7 +58,7 @@ func TestCreateS3Location_Bjs(t *testing.T) {
 	context := createStubInstanceContextBjs()
 	fileName := "PVDriver-amd64.zip"
 
-	packageLocation := "https://s3.cn-north-1.amazonaws.com.cn/amazon-ssm-cn-north-1/Components/PVDriver/Windows/9000.0.0.0/PVDriver-amd64.zip"
+	packageLocation := "https://s3.cn-north-1.amazonaws.com.cn/amazon-ssm-cn-north-1/Components/PVDriver/Windows/9000.0.0/PVDriver-amd64.zip"
 	result := createS3Location(pluginInformation.Name, pluginInformation.Version, context, fileName)
 
 	assert.Equal(t, packageLocation, result)
@@ -93,6 +93,7 @@ func TestCreateComponentFolderFailed(t *testing.T) {
 
 func TestNeedUpdate(t *testing.T) {
 	pluginInformation := createStubPluginInput()
+	util := Utility{}
 
 	componentExists = func(filepath string) bool {
 		return true
@@ -102,29 +103,31 @@ func TestNeedUpdate(t *testing.T) {
 		return false
 	}
 
-	result := needUpdate(pluginInformation.Name, pluginInformation.Version)
+	result := util.NeedUpdate(pluginInformation.Name, pluginInformation.Version)
 	assert.Equal(t, true, result)
 }
 
 func TestNeedUpdate_NoComponentExists(t *testing.T) {
 	pluginInformation := createStubPluginInput()
+	util := Utility{}
 
 	componentExists = func(filepath string) bool {
 		return false
 	}
 
-	result := needUpdate(pluginInformation.Name, pluginInformation.Version)
+	result := util.NeedUpdate(pluginInformation.Name, pluginInformation.Version)
 	assert.Equal(t, false, result)
 }
 
 func TestNeedUpdate_VersionExists(t *testing.T) {
 	pluginInformation := createStubPluginInput()
+	util := Utility{}
 
 	versionExists = func(filepath string) bool {
 		return true
 	}
 
-	result := needUpdate(pluginInformation.Name, pluginInformation.Version)
+	result := util.NeedUpdate(pluginInformation.Name, pluginInformation.Version)
 	assert.Equal(t, false, result)
 }
 
@@ -132,7 +135,7 @@ func createStubPluginInput() *ConfigureComponentPluginInput {
 	input := ConfigureComponentPluginInput{}
 
 	// Set version to a large number to avoid conflict of the actual component release version
-	input.Version = "9000.0.0.0"
+	input.Version = "9000.0.0"
 	input.Name = "PVDriver"
 	input.Action = "Install"
 	input.Source = ""
@@ -144,8 +147,8 @@ func createStubInvalidPluginInput() *ConfigureComponentPluginInput {
 	input := ConfigureComponentPluginInput{}
 
 	// Set version to a large number to avoid conflict of the actual component release version
-	input.Version = "9000.0.0.0"
-	input.Name = "PVDriver"
+	input.Version = "7.2"
+	input.Name = ""
 	input.Action = "InvalidAction"
 	input.Source = "https://amazon-ssm-us-west-2.s3.amazonaws.com/Components/PVDriver/Windows/9000.0.0/PVDriver-amd64.zip"
 
@@ -181,5 +184,13 @@ func createStubInstanceContextBjs() *updateutil.InstanceContext {
 type mockConfigureUtility struct{}
 
 func (u *mockConfigureUtility) CreateComponentFolder(name string, version string) (folder string, err error) {
+	return "", nil
+}
+
+func (u *mockConfigureUtility) NeedUpdate(name string, requestedVersion string) (update bool) {
+	return false
+}
+
+func (u *mockConfigureUtility) HasVersion(name string) (version string, err error) {
 	return "", nil
 }

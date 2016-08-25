@@ -79,7 +79,7 @@ func validateComponentManifest(log log.T, parsedManifest *ComponentManifest) err
 
 	// ensure version follows format <major>.<minor>.<build>.<release>
 	version := parsedManifest.Version
-	if matched, err := regexp.MatchString("\\d+(\\.\\d+)?", version); matched == false || err != nil {
+	if matched, err := regexp.MatchString("^(?:(\\d+)\\.)(?:(\\d+)\\.)(\\*|\\d+)$", version); matched == false || err != nil {
 		return fmt.Errorf("invalid version string %v", version)
 	}
 

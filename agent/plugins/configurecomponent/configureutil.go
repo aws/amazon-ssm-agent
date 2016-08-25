@@ -18,6 +18,7 @@ package configurecomponent
 import (
 	"path/filepath"
 	"strings"
+	"io/ioutil"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
@@ -48,13 +49,12 @@ const (
 
 	// UninstallAction represents the json command to uninstall component
 	UninstallAction = "Uninstall"
-
-	// PlatformNano represents Nano Server
-	PlatformNano = "nano"
 )
 
 type Util interface {
 	CreateComponentFolder(name string, version string) (folder string, err error)
+	NeedUpdate(name string, requestedVersion string) (update bool)
+	HasVersion(name string) (version string, err error)
 }
 
 type Utility struct{}
@@ -113,7 +113,7 @@ func (util *Utility) CreateComponentFolder(name string, version string) (folder 
 }
 
 // needUpdate determines if installation needs to update an existing version of a component
-func needUpdate(name string, requestedVersion string) (update bool) {
+func (util *Utility) NeedUpdate(name string, requestedVersion string) (update bool) {
 	// check that any version is already installed
 	componentFolder := filepath.Join(appconfig.ComponentRoot, name)
 	exist := componentExists(componentFolder)
@@ -133,4 +133,14 @@ func needUpdate(name string, requestedVersion string) (update bool) {
 	}
 
 	return true
+}
+
+// HasVersion returns the currently installed version of the component
+func (util *Utility) HasVersion(name string) (version string, err error) {
+	componentDirectory := filepath.Join(appconfig.ComponentRoot, name)
+	file, err := ioutil.ReadDir(componentDirectory)
+	if err != nil {
+		return "", err
+	}
+	return file[0].Name(), nil
 }
