@@ -20,6 +20,7 @@ import (
 	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
+	"github.com/aws/amazon-ssm-agent/agent/association/processor"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/framework/engine"
@@ -57,6 +58,9 @@ const (
 	// note: the connection timeout for MDSPoll should be less than this.
 	pollMessageFrequencyMinutes = 15
 
+	// pollAssociationFrequencyMinutes is the frequency at which to resume poll for Association if the current thread dies due to stop policy
+	pollAssociationFrequencyMinutes = 30
+
 	// hardstopTimeout is the time before the processor will be shutdown during a hardstop
 	// TODO:  load this value from config
 	hardStopTimeout = time.Second * 4
@@ -86,6 +90,7 @@ type Processor struct {
 	persistData          persistData
 	orchestrationRootDir string
 	messagePollJob       *scheduler.Job
+	assocProcessor       *processor.Processor
 	processorStopPolicy  *sdkutil.StopPolicy
 }
 

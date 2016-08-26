@@ -19,6 +19,8 @@ import (
 	"sync"
 	"time"
 
+	"github.com/aws/amazon-ssm-agent/agent/association/processor"
+	asocitscheduler "github.com/aws/amazon-ssm-agent/agent/association/scheduler"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/carlescere/scheduler"
@@ -39,6 +41,14 @@ func (p *Processor) Execute(context context.T) (err error) {
 
 	if p.messagePollJob, err = scheduler.Every(pollMessageFrequencyMinutes).Minutes().Run(p.loop); err != nil {
 		context.Log().Errorf("unable to schedule message processor. %v", err)
+	}
+
+	p.assocProcessor = processor.NewAssociationProcessor(context)
+	if p.assocProcessor.PollJob, err = asocitscheduler.CreateScheduler(
+		log,
+		p.assocProcessor.ProcessAssociation,
+		pollAssociationFrequencyMinutes); err != nil {
+		context.Log().Errorf("unable to schedule association processor. %v", err)
 	}
 	return
 }

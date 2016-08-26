@@ -75,6 +75,12 @@ func (m *Mock) CreateDocument(log log.T, docName string, docContent string) (res
 	return args.Get(0).(*ssm.CreateDocumentOutput), args.Error(1)
 }
 
+// CreateDocument mocks the CreateDocument function.
+func (m *Mock) GetDocument(log log.T, docName string) (response *ssm.GetDocumentOutput, err error) {
+	args := m.Called(log, docName)
+	return args.Get(0).(*ssm.GetDocumentOutput), args.Error(1)
+}
+
 // DeleteDocument mocks the DeleteDocument function.
 func (m *Mock) DeleteDocument(log log.T, instanceID string) (response *ssm.DeleteDocumentOutput, err error) {
 	args := m.Called(log, instanceID)

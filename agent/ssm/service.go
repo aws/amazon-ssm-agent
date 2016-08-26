@@ -42,6 +42,7 @@ type Service interface {
 	ListCommandInvocations(log log.T, instanceID string, commandID string) (response *ssm.ListCommandInvocationsOutput, err error)
 	CancelCommand(log log.T, commandID string, instanceIDs []string) (response *ssm.CancelCommandOutput, err error)
 	CreateDocument(log log.T, docName string, docContent string) (response *ssm.CreateDocumentOutput, err error)
+	GetDocument(log log.T, docName string) (response *ssm.GetDocumentOutput, err error)
 	DeleteDocument(log log.T, instanceID string) (response *ssm.DeleteDocumentOutput, err error)
 	UpdateInstanceInformation(log log.T, agentVersion string, agentStatus string) (response *ssm.UpdateInstanceInformationOutput, err error)
 }
@@ -61,13 +62,16 @@ func NewService() Service {
 	}
 
 	awsConfig := sdkutil.AwsConfig()
-
 	// parse appConfig overrides
 	appConfig, err := appconfig.Config(false)
 	if err == nil {
 		if appConfig.Ssm.Endpoint != "" {
 			awsConfig.Endpoint = &appConfig.Ssm.Endpoint
 		}
+		if appConfig.Agent.Region != "" {
+			awsConfig.Region = &appConfig.Agent.Region
+		}
+
 		// TODO: test hook, can be removed before release
 		// this is to skip ssl verification for the beta self signed certs
 		if appConfig.Ssm.InsecureSkipVerify {
@@ -182,6 +186,19 @@ func (svc *sdkService) CreateDocument(log log.T, docName string, docContent stri
 		return
 	}
 	log.Debug("CreateDocument Response", response)
+	return
+}
+
+func (svc *sdkService) GetDocument(log log.T, docName string) (response *ssm.GetDocumentOutput, err error) {
+	params := ssm.GetDocumentInput{
+		Name: aws.String(docName),
+	}
+	response, err = svc.sdk.GetDocument(&params)
+	if err != nil {
+		sdkutil.HandleAwsError(log, err, ssmStopPolicy)
+		return
+	}
+	log.Debug("GetDocument Response", response)
 	return
 }
 
