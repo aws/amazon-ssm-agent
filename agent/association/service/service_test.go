@@ -18,7 +18,9 @@ import (
 	"testing"
 
 	"github.com/aws/amazon-ssm-agent/agent/association/model"
+	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/sdkutil"
 	ssmSvc "github.com/aws/amazon-ssm-agent/agent/ssm"
 	"github.com/aws/aws-sdk-go/service/ssm"
 	"github.com/stretchr/testify/assert"
@@ -78,4 +80,37 @@ func TestLoadAssociationDetails(t *testing.T) {
 
 	assert.NoError(t, err)
 	assert.NotNil(t, assocRawData.Parameter)
+}
+
+func TestUpdateAssociationStatus(t *testing.T) {
+	associationName := "test"
+	status := ssm.AssociationStatusNamePending
+	output := ssm.UpdateAssociationStatusOutput{
+		AssociationDescription: &ssm.AssociationDescription{
+			Status: &ssm.AssociationStatus{
+				Name: &status,
+			},
+		},
+	}
+	info := contracts.AgentInfo{}
+	stopPolicy := sdkutil.StopPolicy{}
+
+	ssmMock.On("UpdateAssociationStatus",
+		mock.AnythingOfType("*log.Mock"),
+		mock.AnythingOfType("string"),
+		mock.AnythingOfType("string"),
+		mock.AnythingOfType("*ssm.AssociationStatus")).Return(&output, nil)
+
+	result, err := UpdateAssociationStatus(logMock,
+		ssmMock,
+		instanceID,
+		associationName,
+		status,
+		"TestMessage",
+		&info,
+		&stopPolicy)
+
+	assert.NotNil(t, result)
+	assert.NoError(t, err)
+	assert.Equal(t, *result.AssociationDescription.Status.Name, status)
 }

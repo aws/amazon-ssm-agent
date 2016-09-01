@@ -25,8 +25,10 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	message "github.com/aws/amazon-ssm-agent/agent/message/contracts"
 	bookkeeping "github.com/aws/amazon-ssm-agent/agent/message/statemanager"
-	"github.com/aws/amazon-ssm-agent/agent/ssm"
+	"github.com/aws/amazon-ssm-agent/agent/sdkutil"
+	ssmsvc "github.com/aws/amazon-ssm-agent/agent/ssm"
 	"github.com/aws/amazon-ssm-agent/agent/task"
+	"github.com/aws/aws-sdk-go/service/ssm"
 )
 
 var assocSvc assocService = assocSvcImp{}
@@ -35,18 +37,37 @@ var pulginExecution = pluginExecutionImp{}
 var assocParser = parserImp{}
 
 type assocService interface {
-	ListAssociations(log log.T, ssmSvc ssm.Service, instanceID string) (*model.AssociationRawData, error)
-	LoadAssociationDetail(log log.T, ssmSvc ssm.Service, assoc *model.AssociationRawData) error
+	ListAssociations(log log.T, ssmSvc ssmsvc.Service, instanceID string) (*model.AssociationRawData, error)
+	LoadAssociationDetail(log log.T, ssmSvc ssmsvc.Service, assoc *model.AssociationRawData) error
+	UpdateAssociationStatus(log log.T,
+		ssmSvc ssmsvc.Service,
+		instanceID string,
+		name string,
+		status string,
+		message string,
+		agentInfo *contracts.AgentInfo,
+		processorStopPolicy *sdkutil.StopPolicy) (*ssm.UpdateAssociationStatusOutput, error)
 }
 
 type assocSvcImp struct{}
 
-func (assocSvcImp) ListAssociations(log log.T, ssmSvc ssm.Service, instanceID string) (*model.AssociationRawData, error) {
+func (assocSvcImp) ListAssociations(log log.T, ssmSvc ssmsvc.Service, instanceID string) (*model.AssociationRawData, error) {
 	return service.ListAssociations(log, ssmSvc, instanceID)
 }
 
-func (assocSvcImp) LoadAssociationDetail(log log.T, ssmSvc ssm.Service, assoc *model.AssociationRawData) error {
+func (assocSvcImp) LoadAssociationDetail(log log.T, ssmSvc ssmsvc.Service, assoc *model.AssociationRawData) error {
 	return service.LoadAssociationDetail(log, ssmSvc, assoc)
+}
+
+func (assocSvcImp) UpdateAssociationStatus(log log.T,
+	ssmSvc ssmsvc.Service,
+	instanceID string,
+	name string,
+	status string,
+	message string,
+	agentInfo *contracts.AgentInfo,
+	processorStopPolicy *sdkutil.StopPolicy) (*ssm.UpdateAssociationStatusOutput, error) {
+	return service.UpdateAssociationStatus(log, ssmSvc, instanceID, name, status, message, agentInfo, processorStopPolicy)
 }
 
 type bookkeepingService interface {

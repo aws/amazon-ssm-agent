@@ -18,8 +18,12 @@ import (
 	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/association/model"
+	"github.com/aws/amazon-ssm-agent/agent/contracts"
+	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/sdkutil"
 	ssmsvc "github.com/aws/amazon-ssm-agent/agent/ssm"
+	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/service/ssm"
 	"github.com/twinj/uuid"
 )
@@ -70,6 +74,46 @@ func LoadAssociationDetail(log log.T, ssmSvc ssmsvc.Service, assoc *model.Associ
 	assoc.Document = documentResponse.Content
 	assoc.Parameter = parameterResponse.AssociationDescription
 	return nil
+}
+
+// UpdateAssociationStatus update association status
+func UpdateAssociationStatus(log log.T,
+	ssmSvc ssmsvc.Service,
+	instanceID string,
+	name string,
+	status string,
+	message string,
+	agentInfo *contracts.AgentInfo,
+	processorStopPolicy *sdkutil.StopPolicy) (*ssm.UpdateAssociationStatusOutput, error) {
+	var result *ssm.UpdateAssociationStatusOutput
+
+	agentInfoContent, err := jsonutil.Marshal(agentInfo)
+	if err != nil {
+		log.Error("could not marshal agentInfo! ", err)
+		return nil, err
+	}
+	log.Debug("Update association status")
+	log.Debug("AgentInfo content ", jsonutil.Indent(agentInfoContent))
+	currentTime := time.Now().UTC()
+	associationStatus := ssm.AssociationStatus{
+		Name:           aws.String(status),
+		Message:        aws.String(message),
+		Date:           &currentTime,
+		AdditionalInfo: &agentInfoContent,
+	}
+
+	// Call getDocument and retrieve the document json string
+	if result, err = ssmSvc.UpdateAssociationStatus(log,
+		instanceID,
+		name,
+		&associationStatus); err != nil {
+
+		log.Errorf("unable to update association status, %v", err)
+		sdkutil.HandleAwsError(log, err, processorStopPolicy)
+		return nil, err
+	}
+
+	return result, nil
 }
 
 func parseListAssociationsResponse(

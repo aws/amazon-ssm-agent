@@ -31,6 +31,11 @@ import (
 // Service is an interface to the SSM service.
 type Service interface {
 	ListAssociations(log log.T, instanceID string) (response *ssm.ListAssociationsOutput, err error)
+	UpdateAssociationStatus(
+		log log.T,
+		instanceID string,
+		name string,
+		associationStatus *ssm.AssociationStatus) (response *ssm.UpdateAssociationStatusOutput, err error)
 	SendCommand(log log.T,
 		documentName string,
 		instanceIDs []string,
@@ -112,6 +117,27 @@ func (svc *sdkService) ListAssociations(log log.T, instanceID string) (response 
 		return
 	}
 	log.Debug("ListAssociations Response", response)
+	return
+}
+
+//UpdateAssociationStatus calls the UpdateAssociationStatus SSM API.
+func (svc *sdkService) UpdateAssociationStatus(
+	log log.T,
+	instanceID string,
+	name string,
+	associationStatus *ssm.AssociationStatus) (response *ssm.UpdateAssociationStatusOutput, err error) {
+
+	input := ssm.UpdateAssociationStatusInput{
+		InstanceId:        aws.String(instanceID),
+		Name:              aws.String(name),
+		AssociationStatus: associationStatus,
+	}
+	response, err = svc.sdk.UpdateAssociationStatus(&input)
+	if err != nil {
+		sdkutil.HandleAwsError(log, err, ssmStopPolicy)
+		return
+	}
+	log.Debug("UpdateAssociationStatus Response", response)
 	return
 }
 

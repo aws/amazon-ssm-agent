@@ -38,6 +38,16 @@ func (m *Mock) ListAssociations(log log.T, instanceID string) (response *ssm.Lis
 	return args.Get(0).(*ssm.ListAssociationsOutput), args.Error(1)
 }
 
+// UpdateAssociationStatus mocks the UpdateAssociationStatus function.
+func (m *Mock) UpdateAssociationStatus(
+	log log.T,
+	instanceID string,
+	name string,
+	associationStatus *ssm.AssociationStatus) (response *ssm.UpdateAssociationStatusOutput, err error) {
+	args := m.Called(log, instanceID, name, associationStatus)
+	return args.Get(0).(*ssm.UpdateAssociationStatusOutput), args.Error(1)
+}
+
 // SendCommand mocks the SendCommand function.
 func (m *Mock) SendCommand(log log.T,
 	documentName string,
