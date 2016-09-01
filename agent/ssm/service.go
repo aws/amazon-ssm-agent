@@ -44,6 +44,7 @@ type Service interface {
 	CreateDocument(log log.T, docName string, docContent string) (response *ssm.CreateDocumentOutput, err error)
 	GetDocument(log log.T, docName string) (response *ssm.GetDocumentOutput, err error)
 	DeleteDocument(log log.T, instanceID string) (response *ssm.DeleteDocumentOutput, err error)
+	DescribeAssociation(log log.T, instanceID string, docName string) (response *ssm.DescribeAssociationOutput, err error)
 	UpdateInstanceInformation(log log.T, agentVersion string, agentStatus string) (response *ssm.UpdateInstanceInformationOutput, err error)
 }
 
@@ -189,6 +190,7 @@ func (svc *sdkService) CreateDocument(log log.T, docName string, docContent stri
 	return
 }
 
+//GetDocument calls the GetDocument SSM API to retrieve document with given document name
 func (svc *sdkService) GetDocument(log log.T, docName string) (response *ssm.GetDocumentOutput, err error) {
 	params := ssm.GetDocumentInput{
 		Name: aws.String(docName),
@@ -199,6 +201,21 @@ func (svc *sdkService) GetDocument(log log.T, docName string) (response *ssm.Get
 		return
 	}
 	log.Debug("GetDocument Response", response)
+	return
+}
+
+//DescribeAssociation calls the DescribeAssociation SSM API to retrieve parameters information
+func (svc *sdkService) DescribeAssociation(log log.T, instanceID string, docName string) (response *ssm.DescribeAssociationOutput, err error) {
+	params := ssm.DescribeAssociationInput{
+		InstanceId: aws.String(instanceID),
+		Name:       aws.String(docName),
+	}
+	response, err = svc.sdk.DescribeAssociation(&params)
+	if err != nil {
+		sdkutil.HandleAwsError(log, err, ssmStopPolicy)
+		return
+	}
+	log.Debug("DescribeAssociation Response", response)
 	return
 }
 

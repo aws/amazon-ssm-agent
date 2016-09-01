@@ -75,7 +75,7 @@ func (m *Mock) CreateDocument(log log.T, docName string, docContent string) (res
 	return args.Get(0).(*ssm.CreateDocumentOutput), args.Error(1)
 }
 
-// CreateDocument mocks the CreateDocument function.
+// GetDocument mocks the GetDocument function.
 func (m *Mock) GetDocument(log log.T, docName string) (response *ssm.GetDocumentOutput, err error) {
 	args := m.Called(log, docName)
 	return args.Get(0).(*ssm.GetDocumentOutput), args.Error(1)
@@ -85,6 +85,12 @@ func (m *Mock) GetDocument(log log.T, docName string) (response *ssm.GetDocument
 func (m *Mock) DeleteDocument(log log.T, instanceID string) (response *ssm.DeleteDocumentOutput, err error) {
 	args := m.Called(log, instanceID)
 	return args.Get(0).(*ssm.DeleteDocumentOutput), args.Error(1)
+}
+
+// DescribeAssociation mocks the DescribeAssociation function.
+func (m *Mock) DescribeAssociation(log log.T, instanceID string, docName string) (response *ssm.DescribeAssociationOutput, err error) {
+	args := m.Called(log, instanceID, docName)
+	return args.Get(0).(*ssm.DescribeAssociationOutput), args.Error(1)
 }
 
 // UpdateInstanceInformation mocks the UpdateInstanceInformation function.

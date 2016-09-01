@@ -11,16 +11,20 @@
 // either express or implied. See the License for the specific language governing
 // permissions and limitations under the License.
 
-// Package model provides model definition for association
-package model
+// Package service wraps SSM service
+package taskpool
 
-import "github.com/aws/aws-sdk-go/service/ssm"
+import (
+	"testing"
 
-// AssociationRawData represents detail information of association
-type AssociationRawData struct {
-	ID          string
-	CreateDate  string
-	Association *ssm.Association
-	Parameter   *ssm.AssociationDescription
-	Document    *string
+	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/stretchr/testify/assert"
+)
+
+var logMock = log.NewMockLog()
+
+func TestCreateNewTaskPool(t *testing.T) {
+	mgr := NewTaskPool(logMock, 2, 10000)
+
+	assert.NotNil(t, mgr)
 }

@@ -17,6 +17,7 @@ package service
 import (
 	"testing"
 
+	"github.com/aws/amazon-ssm-agent/agent/association/model"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	ssmSvc "github.com/aws/amazon-ssm-agent/agent/ssm"
 	"github.com/aws/aws-sdk-go/service/ssm"
@@ -24,7 +25,7 @@ import (
 	"github.com/stretchr/testify/mock"
 )
 
-const (
+var (
 	instanceID = "i-test"
 )
 
@@ -52,4 +53,29 @@ func TestListAssociations(t *testing.T) {
 
 	assert.NoError(t, err)
 	assert.Equal(t, *response.Association.Name, "test")
+}
+
+func TestLoadAssociationDetails(t *testing.T) {
+	associationName := "test"
+	documentContent := "document content"
+	assocRawData := model.AssociationRawData{}
+	assocRawData.Association = &ssm.Association{}
+	assocRawData.Association.Name = &associationName
+	assocRawData.Association.InstanceId = &instanceID
+
+	getDocumentOutput := ssm.GetDocumentOutput{
+		Content: &documentContent,
+	}
+
+	associationOutput := ssm.DescribeAssociationOutput{
+		AssociationDescription: &ssm.AssociationDescription{},
+	}
+
+	ssmMock.On("GetDocument", mock.AnythingOfType("*log.Mock"), mock.AnythingOfType("string")).Return(&getDocumentOutput, nil)
+	ssmMock.On("DescribeAssociation", mock.AnythingOfType("*log.Mock"), mock.AnythingOfType("string"), mock.AnythingOfType("string")).Return(&associationOutput, nil)
+
+	err := LoadAssociationDetail(logMock, ssmMock, &assocRawData)
+
+	assert.NoError(t, err)
+	assert.NotNil(t, assocRawData.Parameter)
 }

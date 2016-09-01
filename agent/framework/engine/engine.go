@@ -97,8 +97,10 @@ func RunPlugins(
 		// set end time.
 		pluginOutputs[pluginID].EndDateTime = time.Now()
 
-		context.Log().Infof("Sending response on plugin completion: %v", pluginID)
-		sendReply(documentID, pluginID, pluginOutputs)
+		if sendReply != nil {
+			context.Log().Infof("Sending response on plugin completion: %v", pluginID)
+			sendReply(documentID, pluginID, pluginOutputs)
+		}
 
 	}
 
