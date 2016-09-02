@@ -36,6 +36,7 @@ var bookkeepingSvc = bookkeepingImp{}
 var pulginExecution = pluginExecutionImp{}
 var assocParser = parserImp{}
 
+// assocService represents the dependency for association service
 type assocService interface {
 	ListAssociations(log log.T, ssmSvc ssmsvc.Service, instanceID string) (*model.AssociationRawData, error)
 	LoadAssociationDetail(log log.T, ssmSvc ssmsvc.Service, assoc *model.AssociationRawData) error
@@ -51,14 +52,17 @@ type assocService interface {
 
 type assocSvcImp struct{}
 
+// ListAssociations wraps service ListAssociations
 func (assocSvcImp) ListAssociations(log log.T, ssmSvc ssmsvc.Service, instanceID string) (*model.AssociationRawData, error) {
 	return service.ListAssociations(log, ssmSvc, instanceID)
 }
 
+// LoadAssociationDetail wraps service LoadAssociationDetail
 func (assocSvcImp) LoadAssociationDetail(log log.T, ssmSvc ssmsvc.Service, assoc *model.AssociationRawData) error {
 	return service.LoadAssociationDetail(log, ssmSvc, assoc)
 }
 
+// UpdateAssociationStatus wraps service UpdateAssociationStatus
 func (assocSvcImp) UpdateAssociationStatus(log log.T,
 	ssmSvc ssmsvc.Service,
 	instanceID string,
@@ -70,6 +74,7 @@ func (assocSvcImp) UpdateAssociationStatus(log log.T,
 	return service.UpdateAssociationStatus(log, ssmSvc, instanceID, name, status, message, agentInfo, processorStopPolicy)
 }
 
+// bookkeepingService represents the dependency for statemanager
 type bookkeepingService interface {
 	PersistData(log log.T, commandID, instanceID, locationFolder string, object interface{})
 	RemoveData(log log.T, commandID, instanceID, locationFolder string)
@@ -80,26 +85,32 @@ type bookkeepingService interface {
 
 type bookkeepingImp struct{}
 
+// PersistData wraps statemanager PersistData
 func (bookkeepingImp) PersistData(log log.T, commandID, instanceID, locationFolder string, object interface{}) {
 	bookkeeping.PersistData(log, commandID, instanceID, locationFolder, object)
 }
 
+// RemoveData wraps statemanager RemoveData
 func (bookkeepingImp) RemoveData(log log.T, commandID, instanceID, locationFolder string) {
 	bookkeeping.RemoveData(log, commandID, instanceID, locationFolder)
 }
 
+// GetDocumentInfo wraps statemanager GetDocumentInfo
 func (bookkeepingImp) GetDocumentInfo(log log.T, commandID, instanceID, locationFolder string) message.DocumentInfo {
 	return bookkeeping.GetDocumentInfo(log, commandID, instanceID, locationFolder)
 }
 
+// PersistDocumentInfo wraps statemanager PersistDocumentInfo
 func (bookkeepingImp) PersistDocumentInfo(log log.T, docInfo message.DocumentInfo, commandID, instanceID, locationFolder string) {
 	bookkeeping.PersistDocumentInfo(log, docInfo, commandID, instanceID, locationFolder)
 }
 
+// MoveCommandState wraps statemanager MoveCommandState
 func (bookkeepingImp) MoveCommandState(log log.T, commandID, instanceID, srcLocationFolder, dstLocationFolder string) {
 	bookkeeping.MoveCommandState(log, commandID, instanceID, srcLocationFolder, dstLocationFolder)
 }
 
+// pluginExecutionService represents the dependency for engine
 type pluginExecutionService interface {
 	RunPlugins(
 		context context.T,
@@ -113,6 +124,7 @@ type pluginExecutionService interface {
 
 type pluginExecutionImp struct{}
 
+// RunPlugins wraps engine RunPlugins
 func (pluginExecutionImp) RunPlugins(
 	context context.T,
 	documentID string,
@@ -124,6 +136,7 @@ func (pluginExecutionImp) RunPlugins(
 	return engine.RunPlugins(context, documentID, plugins, pluginRegistry, sendReply, cancelFlag)
 }
 
+// parserService represents the dependency for association parser
 type parserService interface {
 	ParseDocumentWithParams(log log.T, rawData *model.AssociationRawData) (*message.SendCommandPayload, error)
 	InitializeCommandState(context context.T,
@@ -133,6 +146,7 @@ type parserService interface {
 
 type parserImp struct{}
 
+// ParseDocumentWithParams wraps parser ParseDocumentWithParams
 func (parserImp) ParseDocumentWithParams(
 	log log.T,
 	rawData *model.AssociationRawData) (*message.SendCommandPayload, error) {
@@ -140,6 +154,7 @@ func (parserImp) ParseDocumentWithParams(
 	return parser.ParseDocumentWithParams(log, rawData)
 }
 
+// InitializeCommandState wraps engine InitializeCommandState
 func (parserImp) InitializeCommandState(context context.T,
 	payload *message.SendCommandPayload,
 	rawData *model.AssociationRawData) (map[string]*contracts.Configuration, message.CommandState) {
