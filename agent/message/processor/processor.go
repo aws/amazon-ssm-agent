@@ -16,7 +16,7 @@ package processor
 
 import (
 	"encoding/json"
-	"path"
+	"path/filepath"
 	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
@@ -136,7 +136,7 @@ func NewProcessor(context context.T) *Processor {
 	cancelCommandTaskPool := task.NewPool(log, CancelWorkersLimit, cancelWaitDuration, clock)
 
 	// create new message processor
-	orchestrationRootDir := path.Join(appconfig.DefaultDataStorePath, instanceID, appconfig.DefaultCommandRootDirName, config.Agent.OrchestrationRootDir)
+	orchestrationRootDir := filepath.Join(appconfig.DefaultDataStorePath, instanceID, appconfig.DefaultCommandRootDirName, config.Agent.OrchestrationRootDir)
 
 	replyBuilder := func(pluginID string, results map[string]*contracts.PluginResult) messageContracts.SendReplyPayload {
 		runtimeStatuses := parser.PrepareRuntimeStatuses(log, results)

@@ -37,13 +37,17 @@ import (
 func ParseDocumentWithParams(log log.T,
 	rawData *model.AssociationRawData) (*messageContracts.SendCommandPayload, error) {
 
-	rawDataContent, _ := jsonutil.Marshal(rawData)
-	log.Info("Processing assocation ", rawData.Association.Name)
-	log.Info("Processing assocation ", jsonutil.Indent(rawDataContent))
+	rawDataContent, err := jsonutil.Marshal(rawData)
+	if err != nil {
+		log.Error("could not marshal association! ", err)
+		return nil, err
+	}
+	log.Debug("Processing assocation ", rawData.Association.Name)
+	log.Debug("Processing assocation ", jsonutil.Indent(rawDataContent))
 
 	payload := &messageContracts.SendCommandPayload{}
 	payload.Parameters = parseParameters(rawData.Parameter.Parameters)
-	if err := json.Unmarshal([]byte(*rawData.Document), &payload.DocumentContent); err != nil {
+	if err = json.Unmarshal([]byte(*rawData.Document), &payload.DocumentContent); err != nil {
 		return nil, err
 	}
 	payload.DocumentName = *rawData.Association.Name

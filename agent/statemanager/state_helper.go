@@ -16,7 +16,7 @@ package bookkeeping
 
 import (
 	"os"
-	"path"
+	"path/filepath"
 	"sync"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
@@ -89,13 +89,13 @@ func MoveCommandState(log log.T, commandID, instanceID, srcLocationFolder, dstLo
 	//get a lock for documentID specific lock
 	lockDocument(commandID)
 
-	absoluteSource := path.Join(appconfig.DefaultDataStorePath,
+	absoluteSource := filepath.Join(appconfig.DefaultDataStorePath,
 		instanceID,
 		appconfig.DefaultCommandRootDirName,
 		appconfig.DefaultLocationOfState,
 		srcLocationFolder)
 
-	absoluteDestination := path.Join(appconfig.DefaultDataStorePath,
+	absoluteDestination := filepath.Join(appconfig.DefaultDataStorePath,
 		instanceID,
 		appconfig.DefaultCommandRootDirName,
 		appconfig.DefaultLocationOfState,
@@ -282,7 +282,7 @@ func deleteLock(id string) {
 
 //getCmdStateFileName returns absolute filename where command states are persisted
 func getCmdStateFileName(commandID, instanceID, locationFolder string) string {
-	return path.Join(appconfig.DefaultDataStorePath,
+	return filepath.Join(appconfig.DefaultDataStorePath,
 		instanceID,
 		appconfig.DefaultCommandRootDirName,
 		appconfig.DefaultLocationOfState,

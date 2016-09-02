@@ -22,7 +22,6 @@ import (
 	"path"
 	"path/filepath"
 	"strings"
-
 	"sync"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
@@ -55,7 +54,7 @@ func (p *Processor) processOlderMessages() {
 	}
 
 	//process older messages from PENDING folder
-	unprocessedMsgsLocation := path.Join(appconfig.DefaultDataStorePath,
+	unprocessedMsgsLocation := filepath.Join(appconfig.DefaultDataStorePath,
 		instanceID,
 		appconfig.DefaultCommandRootDirName,
 		appconfig.DefaultLocationOfState,
@@ -81,7 +80,7 @@ func (p *Processor) processOlderMessages() {
 			log.Debugf("Processing an older message with messageID - %v", f.Name())
 
 			//construct the absolute path - safely assuming that interim state for older messages are already present in Pending folder
-			file := path.Join(appconfig.DefaultDataStorePath,
+			file := filepath.Join(appconfig.DefaultDataStorePath,
 				instanceID,
 				appconfig.DefaultCommandRootDirName,
 				appconfig.DefaultLocationOfState,
@@ -115,7 +114,7 @@ func (p *Processor) processMessagesFromCurrent(instanceID string) {
 	log := p.context.Log()
 	config := p.context.AppConfig()
 
-	unprocessedMsgsLocation := path.Join(appconfig.DefaultDataStorePath,
+	unprocessedMsgsLocation := filepath.Join(appconfig.DefaultDataStorePath,
 		instanceID,
 		appconfig.DefaultCommandRootDirName,
 		appconfig.DefaultLocationOfState,
@@ -141,7 +140,7 @@ func (p *Processor) processMessagesFromCurrent(instanceID string) {
 			log.Debugf("processing previously unexecuted message - %v", f.Name())
 
 			//construct the absolute path - safely assuming that interim state for older messages are already present in Current folder
-			file := path.Join(appconfig.DefaultDataStorePath,
+			file := filepath.Join(appconfig.DefaultDataStorePath,
 				instanceID,
 				appconfig.DefaultCommandRootDirName,
 				appconfig.DefaultLocationOfState,
