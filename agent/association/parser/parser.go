@@ -28,8 +28,8 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	messageContracts "github.com/aws/amazon-ssm-agent/agent/message/contracts"
-	"github.com/aws/amazon-ssm-agent/agent/message/parameters"
 	messageParser "github.com/aws/amazon-ssm-agent/agent/message/parser"
+	"github.com/aws/amazon-ssm-agent/agent/parameters"
 	"github.com/aws/amazon-ssm-agent/agent/times"
 )
 

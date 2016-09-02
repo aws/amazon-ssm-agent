@@ -22,7 +22,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	messageContracts "github.com/aws/amazon-ssm-agent/agent/message/contracts"
-	"github.com/aws/amazon-ssm-agent/agent/message/parameters"
+	"github.com/aws/amazon-ssm-agent/agent/parameters"
 	"github.com/aws/amazon-ssm-agent/agent/times"
 )
 
