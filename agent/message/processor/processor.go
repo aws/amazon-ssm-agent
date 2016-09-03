@@ -35,6 +35,7 @@ import (
 	commandStateHelper "github.com/aws/amazon-ssm-agent/agent/statemanager"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 	"github.com/aws/amazon-ssm-agent/agent/times"
+	"github.com/aws/amazon-ssm-agent/reply"
 	"github.com/aws/aws-sdk-go/service/ssmmds"
 	"github.com/carlescere/scheduler"
 )
@@ -139,8 +140,8 @@ func NewProcessor(context context.T) *Processor {
 	orchestrationRootDir := filepath.Join(appconfig.DefaultDataStorePath, instanceID, appconfig.DefaultCommandRootDirName, config.Agent.OrchestrationRootDir)
 
 	replyBuilder := func(pluginID string, results map[string]*contracts.PluginResult) messageContracts.SendReplyPayload {
-		runtimeStatuses := parser.PrepareRuntimeStatuses(log, results)
-		return parser.PrepareReplyPayload(pluginID, runtimeStatuses, clock.Now(), agentConfig.AgentInfo)
+		runtimeStatuses := reply.PrepareRuntimeStatuses(log, results)
+		return reply.PrepareReplyPayload(pluginID, runtimeStatuses, clock.Now(), agentConfig.AgentInfo)
 	}
 
 	statusReplyBuilder := func(agentInfo contracts.AgentInfo, resultStatus contracts.ResultStatus, documentTraceOutput string) messageContracts.SendReplyPayload {

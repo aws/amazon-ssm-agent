@@ -74,6 +74,11 @@ type CommandState struct {
 	PluginsInformation  map[string]PluginState
 }
 
+// IsRebootRequired returns if reboot is needed
+func (c *CommandState) IsRebootRequired() bool {
+	return c.DocumentInformation.DocumentStatus == contracts.ResultStatusSuccessAndReboot
+}
+
 // CancelCommandState represents information relevant to a cancel-command that agent receives
 // TODO  This might be revisited when Agent-cli is written to list previously executed commands
 type CancelCommandState struct {

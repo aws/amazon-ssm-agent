@@ -154,8 +154,8 @@ func (parserImp) ParseDocumentWithParams(
 	return parser.ParseDocumentWithParams(log, rawData)
 }
 
-// InitializeCommandState wraps engine InitializeCommandState
-func (parserImp) InitializeCommandState(context context.T,
+// InitializeDocumentState wraps engine InitializeCommandState
+func (parserImp) InitializeDocumentState(context context.T,
 	payload *message.SendCommandPayload,
 	rawData *model.AssociationRawData) (map[string]*contracts.Configuration, message.CommandState) {
 
