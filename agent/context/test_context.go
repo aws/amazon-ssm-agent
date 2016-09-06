@@ -39,6 +39,18 @@ func NewMockDefault() *Mock {
 	return ctx
 }
 
+// NewMockDefaultWithContext returns an instance of Mock with specified context.
+func NewMockDefaultWithContext(context []string) *Mock {
+	ctx := new(Mock)
+	log := log.NewMockLog()
+	config := appconfig.NewMockAppConfig()
+	ctx.On("Log").Return(log)
+	ctx.On("AppConfig").Return(config)
+	ctx.On("With", mock.AnythingOfType("string")).Return(ctx)
+	ctx.On("CurrentContext").Return(context)
+	return ctx
+}
+
 // AppConfig mocks the Config function.
 func (m *Mock) AppConfig() appconfig.SsmagentConfig {
 	args := m.Called()

@@ -45,8 +45,8 @@ type Plugin struct {
 //LongRunningPlugin is the interface that must be implemented by all long running plugins
 type LongRunningPlugin interface {
 	IsRunning(context context.T) bool
-	Start(context context.T, configuration string, orchestrationDir string, cancelFlag task.CancelFlag)
-	Stop(context context.T, cancelFlag task.CancelFlag)
+	Start(context context.T, configuration string, orchestrationDir string, cancelFlag task.CancelFlag) error
+	Stop(context context.T, cancelFlag task.CancelFlag) error
 }
 
 //PluginSettings reflects settings that can be applied to long running plugins like aws:cloudWatch

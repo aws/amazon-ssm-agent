@@ -48,6 +48,16 @@ const (
 	SoftStopTimeout = 20 * time.Second
 )
 
+// T manages long running plugins - get information of long running plugins and starts, stops & configures long running plugins
+type T interface {
+	GetRegisteredPlugins() map[string]managerContracts.Plugin
+	Name() string
+	Execute(context context.T) (err error)
+	RequestStop(stopType contracts.StopType) (err error)
+	StopPlugin(name string, cancelFlag task.CancelFlag) (err error)
+	StartPlugin(name, configuration string, orchestrationDir string, cancelFlag task.CancelFlag) (err error)
+}
+
 // Manager is the core plugin - that manages long running plugins
 type Manager struct {
 	context context.T

@@ -109,7 +109,6 @@ func (sh ShellCommandExecuter) StartExe(
 	commandName string,
 	commandArguments []string,
 ) (stdout io.Reader, stderr io.Reader, exitCode int, errs []error) {
-
 	var err error
 	exitCode, err = runCommandOutputToFiles2(log, cancelFlag, workingDir, stdoutFilePath, stderrFilePath, executionTimeout, commandName, commandArguments)
 	if err != nil {

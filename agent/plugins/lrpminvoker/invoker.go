@@ -20,6 +20,8 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"io/ioutil"
+	"path/filepath"
 	"regexp"
 	"strings"
 
@@ -27,8 +29,11 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/executers"
+	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
+	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/longrunning/manager"
+	managerContracts "github.com/aws/amazon-ssm-agent/agent/longrunning/plugin"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/pluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 )
@@ -36,7 +41,7 @@ import (
 // Plugin is the type for the lrpm invoker plugin.
 type Plugin struct {
 	pluginutil.DefaultPlugin
-	lrpm *manager.Manager
+	lrpm manager.T
 }
 
 // LongRunningPluginSettings represents startType configuration of long running plugin
@@ -49,6 +54,9 @@ type InvokerInput struct {
 	Settings   LongRunningPluginSettings
 	Properties string
 }
+
+var readFile = ioutil.ReadFile
+var getRegisteredPlugins func() map[string]managerContracts.Plugin
 
 //todo: add interfaces & dependencies to simplify testing for all calls from lrpminvoker calls to lrpm
 
@@ -70,7 +78,6 @@ func NewPlugin(pluginConfig pluginutil.PluginConfig) (*Plugin, error) {
 
 	//getting the reference of LRPM - long running plugin manager - which manages all long running plugins
 	plugin.lrpm, err = manager.GetInstance()
-
 	return &plugin, err
 }
 
@@ -95,7 +102,8 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 		return
 	}
 
-	if _, ok := p.lrpm.GetRegisteredPlugins()[pluginID]; !ok {
+	var pluginsMap = p.lrpm.GetRegisteredPlugins()
+	if _, ok := pluginsMap[pluginID]; !ok {
 		log.Errorf("Given plugin - %s is not registered", pluginID)
 		res = p.CreateResult(fmt.Sprintf("Plugin %s is not registered by agent", pluginID),
 			contracts.ResultStatusFailed)
@@ -121,35 +129,8 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 
 	switch setting.StartType {
 	case "Enabled":
-		log.Infof("Enabling %s", pluginID)
-
-		//loading properties as string since aws:cloudWatch uses properties as string. Properties has new configuration for cloudwatch plugin.
-		//For more details refer to AWS-ConfigureCloudWatch
-		var property string
-		if err := jsonutil.Remarshal(config.Properties, &property); err != nil {
-			log.Errorf(fmt.Sprintf("Invalid format in plugin configuration - %v;\nError %v", config.Properties, err))
-
-			res = p.CreateResult(fmt.Sprintf("Invalid format in plugin configuration - expecting property as string - %s", config.Properties),
-				contracts.ResultStatusFailed)
-			return
-		}
-
-		//stop the plugin before reconfiguring it
-		log.Debugf("Stopping %s - before applying new configuration", pluginID)
-		if err = p.lrpm.StopPlugin(pluginID, cancelFlag); err != nil {
-			log.Errorf("Unable to stop the plugin - %s: %s", pluginID, err.Error())
-			res = p.CreateResult(fmt.Sprintf("Encountered error while stopping the plugin: %s", err.Error()),
-				contracts.ResultStatusFailed)
-			return
-		}
-
-		//start the plugin with the new configuration
-		if err = p.lrpm.StartPlugin(pluginID, property, config.OrchestrationDirectory, cancelFlag); err != nil {
-			log.Errorf("Unable to start the plugin - %s: %s", pluginID, err.Error())
-			res = p.CreateResult(fmt.Sprintf("Encountered error while starting the plugin: %s", err.Error()),
-				contracts.ResultStatusFailed)
-			return
-		}
+		res = p.enablePlugin(log, config, pluginID, cancelFlag)
+		return
 
 	case "Disabled":
 
@@ -172,8 +153,6 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 			contracts.ResultStatusFailed)
 		return res
 	}
-
-	return
 }
 
 // GetPluginIdFromContext gets pluginId from context
@@ -207,5 +186,85 @@ func (p *Plugin) CreateResult(msg string, status contracts.ResultStatus) (res co
 	}
 
 	res.Status = status
+	return
+}
+
+func (p *Plugin) enablePlugin(log log.T, config contracts.Configuration, pluginID string, cancelFlag task.CancelFlag) (res contracts.PluginResult) {
+	log.Infof("Enabling %s", pluginID)
+
+	//loading properties as string since aws:cloudWatch uses properties as string. Properties has new configuration for cloudwatch plugin.
+	//For more details refer to AWS-ConfigureCloudWatch
+	// TODO cannot check if string is a valid json for cloudwatch
+	var property string
+	var failed bool
+	outputPath := filepath.Join(config.OrchestrationDirectory, fileutil.RemoveInvalidChars(appconfig.PluginNameCloudWatch))
+	stdoutFilePath := filepath.Join(outputPath, p.StdoutFileName)
+	stderrFilePath := filepath.Join(outputPath, p.StderrFileName)
+
+	res, failed, property = p.prepareForStart(log, config, pluginID, cancelFlag)
+	if failed {
+		return
+	}
+
+	//start the plugin with the new configuration
+	if err := p.lrpm.StartPlugin(pluginID, property, config.OrchestrationDirectory, cancelFlag); err != nil {
+		log.Errorf("Unable to start the plugin - %s: %s", pluginID, err.Error())
+		res = p.CreateResult(fmt.Sprintf("Encountered error while starting the plugin: %s", err.Error()),
+			contracts.ResultStatusFailed)
+	} else {
+		var errData []byte
+		var errorReadingFile error
+		if errData, errorReadingFile = readFile(stderrFilePath); errorReadingFile != nil {
+			log.Errorf("Unable to read the stderr file - %s: %s", stderrFilePath, errorReadingFile.Error())
+		}
+		serr := string(errData)
+
+		if len(serr) > 0 {
+			log.Errorf("Unable to start the plugin - %s: %s", pluginID, serr)
+
+			// Stop the plugin if configuration failed.
+			if err := p.lrpm.StopPlugin(pluginID, cancelFlag); err != nil {
+				log.Errorf("Unable to start the plugin - %s: %s", pluginID, err.Error())
+			}
+
+			res = p.CreateResult(fmt.Sprintf("Encountered error while starting the plugin: %s", serr),
+				contracts.ResultStatusFailed)
+
+		} else {
+			log.Info("Start Clound Watch successfully.")
+			res = p.CreateResult("success", contracts.ResultStatusSuccess)
+		}
+	}
+
+	// Upload output to S3
+	uploadOutputToS3BucketErrors := p.ExecuteUploadOutputToS3Bucket(log, Name(), outputPath, config.OutputS3BucketName, config.OutputS3KeyPrefix, false, "", stdoutFilePath, stderrFilePath)
+	if len(uploadOutputToS3BucketErrors) > 0 {
+		log.Errorf("Unable to upload the logs - %s: %s", pluginID, uploadOutputToS3BucketErrors)
+	}
+	return
+}
+
+// prepareForStart remalshal the Property and stop the plug if it was running before.
+func (p *Plugin) prepareForStart(log log.T, config contracts.Configuration, pluginID string, cancelFlag task.CancelFlag) (res contracts.PluginResult, failed bool, property string) {
+	// track if the preparation process succeed.
+	failed = false
+
+	if err := jsonutil.Remarshal(config.Properties, &property); err != nil {
+		failed = true
+		log.Errorf(fmt.Sprintf("Invalid format in plugin configuration - %v;\nError %v", config.Properties, err))
+		res = p.CreateResult(fmt.Sprintf("Invalid format in plugin configuration - expecting property as string - %s", config.Properties),
+			contracts.ResultStatusFailed)
+		return
+	}
+
+	//stop the plugin before reconfiguring it
+	log.Debugf("Stopping %s - before applying new configuration", pluginID)
+	if err := p.lrpm.StopPlugin(pluginID, cancelFlag); err != nil {
+		failed = true
+		log.Errorf("Unable to stop the plugin - %s: %s", pluginID, err.Error())
+		res = p.CreateResult(fmt.Sprintf("Encountered error while stopping the plugin: %s", err.Error()),
+			contracts.ResultStatusFailed)
+		return
+	}
 	return
 }

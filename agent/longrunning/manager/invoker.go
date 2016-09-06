@@ -16,7 +16,6 @@ package manager
 
 import (
 	"fmt"
-
 	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/longrunning/plugin"
@@ -42,18 +41,18 @@ func (m *Manager) StopPlugin(name string, cancelFlag task.CancelFlag) (err error
 
 	if isRegisteredPlugin && isRunningPlugin {
 		//stop the plugin
-		p.Handler.Stop(m.context, cancelFlag)
-
+		if err = p.Handler.Stop(m.context, cancelFlag); err != nil {
+			log.Errorf("Failed to stop long running plugin - %s because of %s", name, err)
+			return
+		}
 		//remove the entry from the map of running plugins
 		delete(m.runningPlugins, name)
-
 		err = dataStore.Write(m.runningPlugins)
-	} else {
-		log.Debugf("Can't stop %s - since its not even running", name)
 		return
 	}
 
-	return
+	log.Debugf("Can't stop %s - since its not even running", name)
+	return nil
 }
 
 //StartPlugin starts the given plugin with the given configuration
@@ -65,31 +64,32 @@ func (m *Manager) StartPlugin(name, configuration string, orchestrationDir strin
 	log.Infof("Starting long running plugin - %s", name)
 
 	//check if the plugin is registered - this is an extra check since ideally we expect invoker to be aware of registered plugins.
-	if p, isRegisteredPlugin := m.registeredPlugins[name]; !isRegisteredPlugin {
+	var p plugin.Plugin
+	var isRegisteredPlugin bool
+	if p, isRegisteredPlugin = m.registeredPlugins[name]; !isRegisteredPlugin {
 		err = fmt.Errorf("unable to run %s since it's not even registered", name)
 		return
-	} else {
-		//set the config path of the long running plugin
-		p.Info.Configuration = configuration
-		p.Handler.Start(m.context, p.Info.Configuration, orchestrationDir, cancelFlag)
-
-		if err == nil {
-			//edit the plugin info
-			p.Info.State = plugin.PluginState{
-				LastConfigurationModifiedTime: time.Now(),
-				IsEnabled:                     true,
-			}
-
-			m.runningPlugins[name] = p.Info
-			log.Debugf("Persisting info about %s in datastore", p.Info.Name)
-			if err = dataStore.Write(m.runningPlugins); err != nil {
-				err = fmt.Errorf("Failed to persist info about %s in datastore because : %s", p.Info.Name, err.Error())
-				log.Errorf(err.Error())
-			}
-		} else {
-			log.Errorf("Failed to start long running plugin - %s because of %s", name, err)
-		}
 	}
 
+	//set the config path of the long running plugin
+	p.Info.Configuration = configuration
+	if err = p.Handler.Start(m.context, p.Info.Configuration, orchestrationDir, cancelFlag); err != nil {
+		log.Errorf("Failed to start long running plugin - %s because of %s", name, err)
+		return
+	}
+
+	//edit the plugin info
+	p.Info.State = plugin.PluginState{
+		LastConfigurationModifiedTime: time.Now(),
+		IsEnabled:                     true,
+	}
+
+	// TODO move persisting out of executing logic
+	m.runningPlugins[name] = p.Info
+	log.Debugf("Persisting info about %s in datastore", p.Info.Name)
+	if err = dataStore.Write(m.runningPlugins); err != nil {
+		err = fmt.Errorf("Failed to persist info about %s in datastore because : %s", p.Info.Name, err.Error())
+		log.Errorf(err.Error())
+	}
 	return
 }

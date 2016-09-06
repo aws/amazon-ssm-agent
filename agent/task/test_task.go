@@ -54,6 +54,12 @@ type MockCancelFlag struct {
 	mock.Mock
 }
 
+// NewMockDefault returns a mocked cancel flag.
+func NewMockDefault() *MockCancelFlag {
+	cancelFlag := new(MockCancelFlag)
+	return cancelFlag
+}
+
 // Canceled mocks the method with the same name.
 func (flag *MockCancelFlag) Canceled() bool {
 	return flag.Called().Bool(0)

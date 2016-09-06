@@ -10,10 +10,10 @@
 // on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
 // either express or implied. See the License for the specific language governing
 // permissions and limitations under the License.
-
-// Package domainjoin implements the domainjoin plugin.
 //
-//// +build windows
+// +build windows
+//
+// Package domainjoin implements the domainjoin plugin.
 package domainjoin
 
 import (
@@ -50,6 +50,8 @@ const (
 	DnsAddressesArgs = " --dns-addresses "
 	// DomainJoinPluginName is the name of the executable file of domain join plugin
 	DomainJoinPluginExecutableName = "Ec2Config.DomainJoin.exe"
+	// Default folder name for logs
+	OutputFolder = "output"
 )
 
 // Makes command as variables, so that we can mock this for unit tests
@@ -157,7 +159,6 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 
 	if out.Status == contracts.ResultStatusFailed {
 		msiFailureCount++
-
 		if out.Stdout != "" {
 			finalStdOut = fmt.Sprintf("%v\n%v", finalStdOut, out.Stdout)
 		}
@@ -180,7 +181,7 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 	}
 
 	if msiFailureCount > 0 {
-		finalStdOut = fmt.Sprintf("Number of Failures: %v\n%v", msiFailureCount, finalStdOut)
+		finalStdOut = fmt.Sprintf("Domain join failed. Number of Failures: %v\n%v", msiFailureCount, finalStdOut)
 		res.Status = contracts.ResultStatusFailed
 		res.Code = 1
 	} else {
@@ -229,7 +230,6 @@ func (p *Plugin) runCommands(log log.T, pluginInput DomainJoinPluginInput, orche
 		}
 		orchestrationDirectory = tempDir
 	}
-
 	// create orchestration dir if needed
 	if err = makeDir(orchestrationDirectory); err != nil {
 		log.Debug("failed to create orchestration directory", orchestrationDirectory, err)
@@ -238,24 +238,33 @@ func (p *Plugin) runCommands(log log.T, pluginInput DomainJoinPluginInput, orche
 	}
 
 	// Create output file paths
-	stdoutFilePath := filepath.Join(orchestrationDirectory, p.StdoutFileName)
-	stderrFilePath := filepath.Join(orchestrationDirectory, p.StderrFileName)
+	stdoutFilePath := filepath.Join(orchestrationDirectory, OutputFolder, p.StdoutFileName)
+	stderrFilePath := filepath.Join(orchestrationDirectory, OutputFolder, p.StderrFileName)
 	log.Debugf("stdout file %v, stderr file %v", stdoutFilePath, stderrFilePath)
+	log.Debugf("stdoutFilePath file %v, stderrFilePath file %v", stdoutFilePath, stderrFilePath) //check if this is log path
 
 	// Construct Command line with executable file name and parameters
 	command := makeArgs(log, pluginInput)
 	log.Debugf("command line is : %v", command)
 	workingDir := filepath.Join(appconfig.DefaultPluginPath, fileutil.RemoveInvalidChars(Name()))
-	log.Infof("working dir is: %v", workingDir)
 
+	out.Status = contracts.ResultStatusInProgress
 	err = utilExe(log,
 		command,
 		workingDir,
-		appconfig.DefaultProgramFolder,
+		orchestrationDirectory,
 		out.Stdout,
 		out.Stderr,
 		false)
-	out.Status = contracts.ResultStatusInProgress
+
+	log.Debugf("stdout is: %v", out.Stdout)
+	log.Debugf("stderr is: %v", out.Stderr)
+	log.Debugf("stdoutFilePath is: %v", stdoutFilePath)
+
+	// Upload output to S3
+	outputPath := filepath.Join(orchestrationDirectory, OutputFolder)
+	uploadOutputToS3BucketErrors := p.ExecuteUploadOutputToS3Bucket(log, Name(), outputPath, outputS3BucketName, outputS3KeyPrefix, useTempDirectory, tempDir, stdoutFilePath, stderrFilePath) // should use out.Stdout and out.Stderr
+	out.Errors = append(out.Errors, uploadOutputToS3BucketErrors...)
 
 	if err != nil {
 		out.ExitCode = 1
@@ -263,13 +272,10 @@ func (p *Plugin) runCommands(log log.T, pluginInput DomainJoinPluginInput, orche
 		return
 	}
 
-	if len(out.Stderr) == 0 {
-		out.Status = contracts.ResultStatusSuccess
-	}
-
+	out.Status = contracts.ResultStatusSuccess
 	out.ExitCode = 0
-	return
 
+	return
 }
 
 // makeArguments Build the arguments for domain join plugin

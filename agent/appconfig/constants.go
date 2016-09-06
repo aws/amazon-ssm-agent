@@ -75,4 +75,7 @@ const (
 
 	// PluginNameDomainJoin is the name of domain join plugin
 	PluginNameDomainJoin = "aws:domainJoin"
+
+	// PluginNameCloudWatch is the name of cloud watch plugin
+	PluginNameCloudWatch = "aws:cloudWatch"
 )

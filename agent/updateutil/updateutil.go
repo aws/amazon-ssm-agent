@@ -299,7 +299,6 @@ func (util *Utility) ExeCommand(
 		}
 		timer := time.NewTimer(time.Duration(timeout) * time.Second)
 		go killProcessOnTimeout(log, command, timer)
-
 		err = command.Wait()
 		timedOut := !timer.Stop()
 		if err != nil {
@@ -319,7 +318,6 @@ func (util *Utility) ExeCommand(
 			return err
 		}
 	}
-
 	return nil
 }
 
@@ -532,7 +530,7 @@ func setExeOutErr(
 	}
 
 	stdOut = UpdateStandOutPath(updaterRoot, stdOut)
-	stdErr = UpdateStandOutPath(updaterRoot, stdErr)
+	stdErr = UpdateStandErrPath(updaterRoot, stdErr)
 
 	// create stdout file
 	// Allow append so that if arrays of run command write to the same file, we keep appending to the file.
