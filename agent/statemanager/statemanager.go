@@ -189,7 +189,7 @@ func PersistPluginState(log log.T, pluginState message.PluginState, pluginID, co
 	setCmdState(log, commandState, absoluteFileName, locationFolder)
 }
 
-//CmdStateDir returns absolute filename where command states are persisted
+// DocumentStateDir returns absolute filename where command states are persisted
 func DocumentStateDir(instanceID, locationFolder string) string {
 	return path.Join(appconfig.DefaultDataStorePath,
 		instanceID,

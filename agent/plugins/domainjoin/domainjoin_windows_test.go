@@ -10,10 +10,10 @@
 // on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
 // either express or implied. See the License for the specific language governing
 // permissions and limitations under the License.
-
-// Package domainjoin implements the domain join plugin.
 //
 // +build windows
+//
+// Package domainjoin implements the domain join plugin.
 package domainjoin
 
 import (
@@ -23,7 +23,6 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
-	"github.com/aws/amazon-ssm-agent/agent/plugins/pluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
@@ -125,7 +124,6 @@ func testRunCommands(t *testing.T, testCase TestCase, rawInput bool) {
 
 	var res DomainJoinPluginOutput
 	mockCancelFlag := new(task.MockCancelFlag)
-	mockS3Uploader := new(pluginutil.MockDefaultPlugin)
 	p := new(Plugin)
 	p.StdoutFileName = "stdout"
 	p.StderrFileName = "stderr"
@@ -133,7 +131,9 @@ func testRunCommands(t *testing.T, testCase TestCase, rawInput bool) {
 	p.MaxStderrLength = 1000
 	p.OutputTruncatedSuffix = "-more-"
 	p.UploadToS3Sync = true
-	p.ExecuteUploadOutputToS3Bucket = pluginutil.UploadOutputToS3BucketExecuter(mockS3Uploader.UploadOutputToS3Bucket)
+	p.ExecuteUploadOutputToS3Bucket = func(log log.T, pluginID string, orchestrationDir string, outputS3BucketName string, outputS3KeyPrefix string, useTempDirectory bool, tempDir string, Stdout string, Stderr string) []string {
+		return []string{}
+	}
 
 	if rawInput {
 		// prepare plugin input

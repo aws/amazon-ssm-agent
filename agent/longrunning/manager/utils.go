@@ -18,13 +18,7 @@ import (
 	"sync"
 
 	"github.com/aws/amazon-ssm-agent/agent/longrunning/plugin"
-	"github.com/aws/amazon-ssm-agent/agent/longrunning/plugin/cloudwatch"
-	"github.com/aws/amazon-ssm-agent/agent/plugins/pluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/task"
-)
-
-const (
-	PluginNameAwsCloudwatch = "aws:cloudWatch"
 )
 
 var (
@@ -65,25 +59,5 @@ func (m *Manager) stopLifeCycleManagementJob() {
 
 // RegisteredPlugins loads all registered long running plugins in memory
 func RegisteredPlugins() map[string]plugin.Plugin {
-	//long running plugins that can be started/stopped/configured by long running plugin manager
-	longrunningplugins := make(map[string]plugin.Plugin)
-
-	//registering cloudwatch plugin
-	var cw plugin.Plugin
-	var cwInfo plugin.PluginInfo
-
-	//initializing cloudwatch info
-	cwInfo.Name = PluginNameAwsCloudwatch
-	cwInfo.Configuration = ""
-	cwInfo.State = plugin.PluginState{}
-
-	if handler, err := cloudwatch.NewPlugin(pluginutil.DefaultPluginConfig()); err == nil {
-		cw.Info = cwInfo
-		cw.Handler = handler
-
-		//add the registered plugin in the map
-		longrunningplugins[PluginNameAwsCloudwatch] = cw
-	}
-
-	return longrunningplugins
+	return plugin.RegisteredPlugins()
 }

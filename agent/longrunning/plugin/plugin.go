@@ -12,7 +12,6 @@
 // permissions and limitations under the License.
 
 // Package plugin contains all essential structs/interfaces for long running plugins
-
 package plugin
 
 import (

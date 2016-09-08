@@ -13,7 +13,6 @@
 
 // Package lrpminvoker contains implementation of lrpm-invoker plugin. (lrpm - long running plugin manager)
 // lrpminvoker is an ondemand worker plugin - which can be called by SSM config or SSM Command.
-
 package lrpminvoker
 
 import (
@@ -28,7 +27,6 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
-	"github.com/aws/amazon-ssm-agent/agent/executers"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
@@ -71,10 +69,6 @@ func NewPlugin(pluginConfig pluginutil.PluginConfig) (*Plugin, error) {
 	plugin.OutputTruncatedSuffix = pluginConfig.OutputTruncatedSuffix
 	plugin.Uploader = pluginutil.GetS3Config()
 	plugin.ExecuteUploadOutputToS3Bucket = pluginutil.UploadOutputToS3BucketExecuter(plugin.UploadOutputToS3Bucket)
-
-	//todo: lrpminvoker wont need an executer - this can be removed later
-	exec := executers.ShellCommandExecuter{}
-	plugin.ExecuteCommand = pluginutil.CommandExecuter(exec.Execute)
 
 	//getting the reference of LRPM - long running plugin manager - which manages all long running plugins
 	plugin.lrpm, err = manager.GetInstance()

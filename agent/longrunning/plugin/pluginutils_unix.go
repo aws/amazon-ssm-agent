@@ -15,11 +15,7 @@
 
 package plugin
 
-import (
-	"github.com/aws/amazon-ssm-agent/agent/context"
-)
-
-// loadPlatformDependentPlugins registers platform dependent plugins
-func loadPlatformDependentPlugins(context context.T) PluginRegistry {
-	return PluginRegistry{}
+// RegisteredPlugins loads all registered long running plugins in memory
+func RegisteredPlugins() map[string]Plugin {
+	return make(map[string]Plugin)
 }
