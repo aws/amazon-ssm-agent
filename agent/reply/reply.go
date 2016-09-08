@@ -19,11 +19,10 @@ import (
 	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
-	"github.com/aws/amazon-ssm-agent/agent/times"
-	messageContracts "github.com/aws/amazon-ssm-agent/agent/message/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	messageContracts "github.com/aws/amazon-ssm-agent/agent/message/contracts"
+	"github.com/aws/amazon-ssm-agent/agent/times"
 )
-
 
 // PrepareReplyPayload creates the payload object for SendReply based on plugin outputs.
 func PrepareReplyPayload(pluginID string, runtimeStatuses map[string]*contracts.PluginRuntimeStatus, dateTime time.Time, agentInfo contracts.AgentInfo) (payload messageContracts.SendReplyPayload) {
@@ -130,4 +129,3 @@ func prepareRuntimeStatus(log log.T, pluginResult contracts.PluginResult) contra
 
 	return runtimeStatus
 }
-

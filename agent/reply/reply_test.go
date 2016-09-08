@@ -29,7 +29,7 @@ import (
 )
 
 var sampleMessageReplyFiles = []string{
-	"../testdata/sampleReply.json",
+	"./testdata/sampleReply.json",
 }
 
 var logger = log.NewMockLog()

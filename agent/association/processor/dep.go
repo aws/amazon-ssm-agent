@@ -81,7 +81,7 @@ type bookkeepingService interface {
 	GetDocumentInfo(log log.T, commandID, instanceID, locationFolder string) message.DocumentInfo
 	PersistDocumentInfo(log log.T, docInfo message.DocumentInfo, commandID, instanceID, locationFolder string)
 	MoveCommandState(log log.T, commandID, instanceID, srcLocationFolder, dstLocationFolder string)
-	CmdStateDir(instanceID, locationFolder string) string
+	DocumentStateDir(instanceID, locationFolder string) string
 }
 
 type bookkeepingImp struct{}

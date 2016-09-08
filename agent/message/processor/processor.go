@@ -31,11 +31,11 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/message/parser"
 	"github.com/aws/amazon-ssm-agent/agent/message/service"
 	"github.com/aws/amazon-ssm-agent/agent/platform"
+	"github.com/aws/amazon-ssm-agent/agent/reply"
 	"github.com/aws/amazon-ssm-agent/agent/sdkutil"
 	commandStateHelper "github.com/aws/amazon-ssm-agent/agent/statemanager"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 	"github.com/aws/amazon-ssm-agent/agent/times"
-	"github.com/aws/amazon-ssm-agent/reply"
 	"github.com/aws/aws-sdk-go/service/ssmmds"
 	"github.com/carlescere/scheduler"
 )

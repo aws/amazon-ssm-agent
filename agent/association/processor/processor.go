@@ -33,10 +33,10 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	messageContracts "github.com/aws/amazon-ssm-agent/agent/message/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/platform"
+	"github.com/aws/amazon-ssm-agent/agent/reply"
 	"github.com/aws/amazon-ssm-agent/agent/sdkutil"
 	ssmsvc "github.com/aws/amazon-ssm-agent/agent/ssm"
 	"github.com/aws/amazon-ssm-agent/agent/task"
-	"github.com/aws/amazon-ssm-agent/reply"
 	"github.com/aws/aws-sdk-go/service/ssm"
 	"github.com/carlescere/scheduler"
 )
@@ -130,9 +130,6 @@ func (p *Processor) processPendingDocuments() {
 			break
 		}
 
-		//we will end up sending acks again for this message - but that's ok because
-		//unless a message has been deleted - multiple acks are allowed by MDS.
-		//If this becomes an issue - we can stub out ack part from processMessage
 		p.initializeProcess(log, &interimDocState)
 	}
 }
@@ -190,7 +187,6 @@ func (p *Processor) processInProgressDocuments(instanceID string) {
 				}
 			}
 
-			// func PersistData(log log.T, commandID, instanceID, locationFolder string, object interface{}) {
 			bookkeepingSvc.PersistData(log, oldCmdState.DocumentInformation.CommandID, instanceID, appconfig.DefaultLocationOfCurrent, oldCmdState)
 
 			//Submit the work to Job Pool so that we don't block for processing of new messages
