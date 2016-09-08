@@ -18,6 +18,7 @@ import (
 	"bytes"
 	"fmt"
 	"io"
+	"io/ioutil"
 	"os"
 	"path/filepath"
 	"strings"
@@ -179,4 +180,13 @@ func IsDirEmpty(location string) (bool, error) {
 		return true, nil
 	}
 	return false, err
+}
+
+// ReadDir returns files within the given location
+func ReadDir(location string) ([]os.FileInfo, error) {
+	files := []os.FileInfo{}
+	if location == "" {
+		return files, fmt.Errorf("location cannot be empty")
+	}
+	return ioutil.ReadDir(location)
 }

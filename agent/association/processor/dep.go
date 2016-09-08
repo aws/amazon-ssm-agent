@@ -26,15 +26,15 @@ import (
 	message "github.com/aws/amazon-ssm-agent/agent/message/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/sdkutil"
 	ssmsvc "github.com/aws/amazon-ssm-agent/agent/ssm"
-	bookkeeping "github.com/aws/amazon-ssm-agent/agent/statemanager"
+	"github.com/aws/amazon-ssm-agent/agent/statemanager"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 	"github.com/aws/aws-sdk-go/service/ssm"
 )
 
 var assocSvc assocService = assocSvcImp{}
-var bookkeepingSvc = bookkeepingImp{}
-var pulginExecution = pluginExecutionImp{}
+var pluginExecution = pluginExecutionImp{}
 var assocParser = parserImp{}
+var bookkeepingSvc = bookkeepingImp{}
 
 // assocService represents the dependency for association service
 type assocService interface {
@@ -81,33 +81,39 @@ type bookkeepingService interface {
 	GetDocumentInfo(log log.T, commandID, instanceID, locationFolder string) message.DocumentInfo
 	PersistDocumentInfo(log log.T, docInfo message.DocumentInfo, commandID, instanceID, locationFolder string)
 	MoveCommandState(log log.T, commandID, instanceID, srcLocationFolder, dstLocationFolder string)
+	CmdStateDir(instanceID, locationFolder string) string
 }
 
 type bookkeepingImp struct{}
 
 // PersistData wraps statemanager PersistData
 func (bookkeepingImp) PersistData(log log.T, commandID, instanceID, locationFolder string, object interface{}) {
-	bookkeeping.PersistData(log, commandID, instanceID, locationFolder, object)
+	statemanager.PersistData(log, commandID, instanceID, locationFolder, object)
 }
 
 // RemoveData wraps statemanager RemoveData
 func (bookkeepingImp) RemoveData(log log.T, commandID, instanceID, locationFolder string) {
-	bookkeeping.RemoveData(log, commandID, instanceID, locationFolder)
+	statemanager.RemoveData(log, commandID, instanceID, locationFolder)
 }
 
 // GetDocumentInfo wraps statemanager GetDocumentInfo
 func (bookkeepingImp) GetDocumentInfo(log log.T, commandID, instanceID, locationFolder string) message.DocumentInfo {
-	return bookkeeping.GetDocumentInfo(log, commandID, instanceID, locationFolder)
+	return statemanager.GetDocumentInfo(log, commandID, instanceID, locationFolder)
 }
 
 // PersistDocumentInfo wraps statemanager PersistDocumentInfo
 func (bookkeepingImp) PersistDocumentInfo(log log.T, docInfo message.DocumentInfo, commandID, instanceID, locationFolder string) {
-	bookkeeping.PersistDocumentInfo(log, docInfo, commandID, instanceID, locationFolder)
+	statemanager.PersistDocumentInfo(log, docInfo, commandID, instanceID, locationFolder)
 }
 
 // MoveCommandState wraps statemanager MoveCommandState
 func (bookkeepingImp) MoveCommandState(log log.T, commandID, instanceID, srcLocationFolder, dstLocationFolder string) {
-	bookkeeping.MoveCommandState(log, commandID, instanceID, srcLocationFolder, dstLocationFolder)
+	statemanager.MoveCommandState(log, commandID, instanceID, srcLocationFolder, dstLocationFolder)
+}
+
+// DocumentStateDir wraps statemanager DocumentStateDir
+func (bookkeepingImp) DocumentStateDir(instanceID, locationFolder string) string {
+	return statemanager.DocumentStateDir(instanceID, locationFolder)
 }
 
 // pluginExecutionService represents the dependency for engine
@@ -115,7 +121,7 @@ type pluginExecutionService interface {
 	RunPlugins(
 		context context.T,
 		documentID string,
-		plugins map[string]*contracts.Configuration,
+		plugins *map[string]message.PluginState,
 		pluginRegistry plugin.PluginRegistry,
 		sendReply engine.SendResponse,
 		cancelFlag task.CancelFlag,
@@ -128,12 +134,21 @@ type pluginExecutionImp struct{}
 func (pluginExecutionImp) RunPlugins(
 	context context.T,
 	documentID string,
-	plugins map[string]*contracts.Configuration,
+	plugins *map[string]message.PluginState,
 	pluginRegistry plugin.PluginRegistry,
 	sendReply engine.SendResponse,
 	cancelFlag task.CancelFlag,
 ) (pluginOutputs map[string]*contracts.PluginResult) {
-	return engine.RunPlugins(context, documentID, plugins, pluginRegistry, sendReply, cancelFlag)
+	configs := make(map[string]*contracts.Configuration)
+
+	for pluginName, pluginConfig := range *plugins {
+		if pluginConfig.HasExecuted {
+			break
+		}
+		configs[pluginName] = &pluginConfig.Configuration
+	}
+
+	return engine.RunPlugins(context, documentID, configs, pluginRegistry, sendReply, cancelFlag)
 }
 
 // parserService represents the dependency for association parser
@@ -141,7 +156,7 @@ type parserService interface {
 	ParseDocumentWithParams(log log.T, rawData *model.AssociationRawData) (*message.SendCommandPayload, error)
 	InitializeCommandState(context context.T,
 		payload *message.SendCommandPayload,
-		rawData *model.AssociationRawData) (map[string]*contracts.Configuration, message.CommandState)
+		rawData *model.AssociationRawData) message.CommandState
 }
 
 type parserImp struct{}
@@ -157,7 +172,7 @@ func (parserImp) ParseDocumentWithParams(
 // InitializeDocumentState wraps engine InitializeCommandState
 func (parserImp) InitializeDocumentState(context context.T,
 	payload *message.SendCommandPayload,
-	rawData *model.AssociationRawData) (map[string]*contracts.Configuration, message.CommandState) {
+	rawData *model.AssociationRawData) message.CommandState {
 
 	return parser.InitializeCommandState(context, payload, rawData)
 }

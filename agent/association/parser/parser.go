@@ -70,7 +70,7 @@ func ParseDocumentWithParams(log log.T,
 // InitializeCommandState - an interim state that is used around during an execution of a command
 func InitializeCommandState(context context.T,
 	payload *messageContracts.SendCommandPayload,
-	rawData *model.AssociationRawData) (map[string]*contracts.Configuration, messageContracts.CommandState) {
+	rawData *model.AssociationRawData) messageContracts.CommandState {
 
 	//initialize document information with relevant values extracted from msg
 	documentInfo := newDocumentInfo(rawData, payload)
@@ -107,7 +107,7 @@ func InitializeCommandState(context context.T,
 	}
 
 	//initialize command State
-	return pluginConfigurations, messageContracts.CommandState{
+	return messageContracts.CommandState{
 		DocumentInformation: documentInfo,
 		PluginsInformation:  pluginsInfo,
 	}

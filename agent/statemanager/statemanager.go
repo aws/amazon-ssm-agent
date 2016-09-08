@@ -11,12 +11,12 @@
 // either express or implied. See the License for the specific language governing
 // permissions and limitations under the License.
 
-// Package bookkeeping helps persist documents state to disk
-package bookkeeping
+// Package statemanager helps persist documents state to disk
+package statemanager
 
 import (
 	"os"
-	"path/filepath"
+	"path"
 	"sync"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
@@ -38,7 +38,7 @@ func GetCommandInterimState(log log.T, commandID, instanceID, locationFolder str
 	rLockDocument(commandID)
 	defer rUnlockDocument(commandID)
 
-	absoluteFileName := getCmdStateFileName(commandID, instanceID, locationFolder)
+	absoluteFileName := cmdStateFileName(commandID, instanceID, locationFolder)
 
 	commandState := getCmdState(log, absoluteFileName)
 
@@ -52,7 +52,7 @@ func PersistData(log log.T, commandID, instanceID, locationFolder string, object
 	lockDocument(commandID)
 	defer unlockDocument(commandID)
 
-	absoluteFileName := getCmdStateFileName(commandID, instanceID, locationFolder)
+	absoluteFileName := cmdStateFileName(commandID, instanceID, locationFolder)
 
 	content, err := jsonutil.Marshal(object)
 	if err != nil {
@@ -73,7 +73,7 @@ func PersistData(log log.T, commandID, instanceID, locationFolder string, object
 // RemoveData deletes the fileName from locationFolder under defaultLogDir/instanceID
 func RemoveData(log log.T, commandID, instanceID, locationFolder string) {
 
-	absoluteFileName := getCmdStateFileName(commandID, instanceID, locationFolder)
+	absoluteFileName := cmdStateFileName(commandID, instanceID, locationFolder)
 
 	err := fileutil.DeleteFile(absoluteFileName)
 	if err != nil {
@@ -89,13 +89,13 @@ func MoveCommandState(log log.T, commandID, instanceID, srcLocationFolder, dstLo
 	//get a lock for documentID specific lock
 	lockDocument(commandID)
 
-	absoluteSource := filepath.Join(appconfig.DefaultDataStorePath,
+	absoluteSource := path.Join(appconfig.DefaultDataStorePath,
 		instanceID,
 		appconfig.DefaultCommandRootDirName,
 		appconfig.DefaultLocationOfState,
 		srcLocationFolder)
 
-	absoluteDestination := filepath.Join(appconfig.DefaultDataStorePath,
+	absoluteDestination := path.Join(appconfig.DefaultDataStorePath,
 		instanceID,
 		appconfig.DefaultCommandRootDirName,
 		appconfig.DefaultLocationOfState,
@@ -123,7 +123,7 @@ func GetDocumentInfo(log log.T, commandID, instanceID, locationFolder string) me
 	rLockDocument(commandID)
 	defer rUnlockDocument(commandID)
 
-	absoluteFileName := getCmdStateFileName(commandID, instanceID, locationFolder)
+	absoluteFileName := cmdStateFileName(commandID, instanceID, locationFolder)
 
 	commandState := getCmdState(log, absoluteFileName)
 
@@ -134,7 +134,7 @@ func GetDocumentInfo(log log.T, commandID, instanceID, locationFolder string) me
 // This will override the contents of an already existing file
 func PersistDocumentInfo(log log.T, docInfo message.DocumentInfo, commandID, instanceID, locationFolder string) {
 
-	absoluteFileName := getCmdStateFileName(commandID, instanceID, locationFolder)
+	absoluteFileName := cmdStateFileName(commandID, instanceID, locationFolder)
 
 	//get documentID specific write lock
 	lockDocument(commandID)
@@ -157,7 +157,7 @@ func GetPluginState(log log.T, pluginID, commandID, instanceID, locationFolder s
 	rLockDocument(commandID)
 	defer rUnlockDocument(commandID)
 
-	absoluteFileName := getCmdStateFileName(commandID, instanceID, locationFolder)
+	absoluteFileName := cmdStateFileName(commandID, instanceID, locationFolder)
 
 	commandState := getCmdState(log, absoluteFileName)
 
@@ -171,7 +171,7 @@ func PersistPluginState(log log.T, pluginState message.PluginState, pluginID, co
 	lockDocument(commandID)
 	defer unlockDocument(commandID)
 
-	absoluteFileName := getCmdStateFileName(commandID, instanceID, locationFolder)
+	absoluteFileName := cmdStateFileName(commandID, instanceID, locationFolder)
 
 	//Plugins should safely assume that there already
 	//exists a persisted interim state file - if not then it should throw error
@@ -187,6 +187,15 @@ func PersistPluginState(log log.T, pluginState message.PluginState, pluginID, co
 	}
 
 	setCmdState(log, commandState, absoluteFileName, locationFolder)
+}
+
+//CmdStateDir returns absolute filename where command states are persisted
+func DocumentStateDir(instanceID, locationFolder string) string {
+	return path.Join(appconfig.DefaultDataStorePath,
+		instanceID,
+		appconfig.DefaultCommandRootDirName,
+		appconfig.DefaultLocationOfState,
+		locationFolder)
 }
 
 // getCmdState reads commandState from given file
@@ -280,12 +289,7 @@ func deleteLock(id string) {
 	delete(docLock, id)
 }
 
-//getCmdStateFileName returns absolute filename where command states are persisted
-func getCmdStateFileName(commandID, instanceID, locationFolder string) string {
-	return filepath.Join(appconfig.DefaultDataStorePath,
-		instanceID,
-		appconfig.DefaultCommandRootDirName,
-		appconfig.DefaultLocationOfState,
-		locationFolder,
-		commandID)
+//cmdStateFileName returns absolute filename where command states are persisted
+func cmdStateFileName(commandID, instanceID, locationFolder string) string {
+	return path.Join(DocumentStateDir(commandID, instanceID), commandID)
 }

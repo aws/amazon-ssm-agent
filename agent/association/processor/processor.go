@@ -16,6 +16,9 @@ package processor
 
 import (
 	"fmt"
+	"io/ioutil"
+	"os"
+	"path/filepath"
 	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
@@ -24,6 +27,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/association/taskpool"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
+	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	"github.com/aws/amazon-ssm-agent/agent/framework/plugin"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
@@ -87,6 +91,118 @@ func NewAssociationProcessor(context context.T) *Processor {
 	}
 }
 
+// processPendingDocuments processes pending documents that have been persisted in pending folder
+func (p *Processor) processPendingDocuments() {
+	log := p.Context.Log()
+
+	instanceID, err := platform.InstanceID()
+	if err != nil {
+		log.Errorf("no instanceID provided, %v", err)
+		return
+	}
+
+	//process older documents from PENDING folder
+	pendingDocsLocation := bookkeepingSvc.DocumentStateDir(instanceID, appconfig.DefaultLocationOfPending)
+
+	if isDirectoryEmpty, _ := fileutil.IsDirEmpty(pendingDocsLocation); isDirectoryEmpty {
+		log.Debugf("No documents to process from %v", pendingDocsLocation)
+		return
+	}
+
+	files := []os.FileInfo{}
+	//get all pending messages
+	if files, err = fileutil.ReadDir(pendingDocsLocation); err != nil {
+		log.Errorf("skipping reading pending documents from %v. unexpected error encountered - %v", pendingDocsLocation, err)
+		return
+	}
+
+	//iterate through all pending messages
+	for _, f := range files {
+		log.Debugf("Processing an older message with messageID - %v", f.Name())
+
+		//construct the absolute path - safely assuming that interim state for older messages are already present in Pending folder
+		filePath := filepath.Join(pendingDocsLocation, f.Name())
+
+		interimDocState := messageContracts.CommandState{}
+		//parse the message
+		if err := jsonutil.UnmarshalFile(filePath, &interimDocState); err != nil {
+			log.Errorf("skipping processsing of pending messages. encountered error %v while reading pending message from file - %v", err, f)
+			break
+		}
+
+		//we will end up sending acks again for this message - but that's ok because
+		//unless a message has been deleted - multiple acks are allowed by MDS.
+		//If this becomes an issue - we can stub out ack part from processMessage
+		p.initializeProcess(log, &interimDocState)
+	}
+}
+
+// processInProgressDocuments processes InProgress documents that have been persisted in current folder
+func (p *Processor) processInProgressDocuments(instanceID string) {
+	log := p.Context.Log()
+	config := p.Context.AppConfig()
+	var err error
+
+	pendingDocsLocation := bookkeepingSvc.DocumentStateDir(instanceID, appconfig.DefaultLocationOfCurrent)
+
+	if isDirectoryEmpty, _ := fileutil.IsDirEmpty(pendingDocsLocation); isDirectoryEmpty {
+		log.Debugf("no older messages to process from %v", pendingDocsLocation)
+		return
+
+	}
+
+	files := []os.FileInfo{}
+	if files, err = ioutil.ReadDir(pendingDocsLocation); err != nil {
+		log.Errorf("skipping reading inprogress messages from %v. unexpected error encountered - %v", pendingDocsLocation, err)
+		return
+	}
+
+	//iterate through all InProgress docs
+	for _, f := range files {
+		log.Debugf("processing previously unexecuted message - %v", f.Name())
+
+		//construct the absolute path - safely assuming that interim state for older messages are already present in Current folder
+		file := filepath.Join(pendingDocsLocation, f.Name())
+		var oldCmdState messageContracts.CommandState
+
+		//parse the message
+		if err := jsonutil.UnmarshalFile(file, &oldCmdState); err != nil {
+			log.Errorf("skipping processsing of previously unexecuted messages. encountered error %v while reading unprocessed message from file - %v", err, f)
+		} else {
+			if oldCmdState.DocumentInformation.RunCount >= config.Mds.CommandRetryLimit {
+				//TODO:  Move command to corrupt/failed
+				// do not process as the command has failed too many times
+				break
+			}
+
+			pluginOutputs := make(map[string]*contracts.PluginResult)
+
+			// increment the command run count
+			oldCmdState.DocumentInformation.RunCount++
+			// Update reboot status
+			for v := range oldCmdState.PluginsInformation {
+				plugin := oldCmdState.PluginsInformation[v]
+				if plugin.HasExecuted && plugin.Result.Status == contracts.ResultStatusSuccessAndReboot {
+					log.Debugf("plugin %v has completed a reboot. Setting status to Success.", v)
+					plugin.Result.Status = contracts.ResultStatusSuccess
+					oldCmdState.PluginsInformation[v] = plugin
+					pluginOutputs[v] = &plugin.Result
+				}
+			}
+
+			// func PersistData(log log.T, commandID, instanceID, locationFolder string, object interface{}) {
+			bookkeepingSvc.PersistData(log, oldCmdState.DocumentInformation.CommandID, instanceID, appconfig.DefaultLocationOfCurrent, oldCmdState)
+
+			//Submit the work to Job Pool so that we don't block for processing of new messages
+			if err = p.TaskPool.Submit(log, oldCmdState.DocumentInformation.CommandID, func(cancelFlag task.CancelFlag) {
+				p.processAssociationDocument(p.Context, &oldCmdState, cancelFlag)
+			}); err != nil {
+				log.Errorf("Failed to resume previously unexecuted association, %v", err)
+			}
+		}
+	}
+}
+
 // ProcessAssociation poll and process all the associations
 func (p *Processor) ProcessAssociation() {
 	log := p.Context.Log()
@@ -110,36 +226,42 @@ func (p *Processor) ProcessAssociation() {
 		return
 	}
 
-	if err = submitAssociation(p, assocRawData); err != nil {
-		message := fmt.Sprintf("failed to process association, %v", err)
-		log.Error(message)
-		p.updateAssocStatus(assocRawData.Association, ssm.AssociationStatusNameFailed, message)
+	if err = parseAssociation(p, assocRawData); err != nil {
+		log.Error(err)
+		p.updateAssocStatus(assocRawData.Association, ssm.AssociationStatusNameFailed, err.Error())
 		return
 	}
 }
 
-// submitAssociation submits the association to the task pool for execution
-func submitAssociation(p *Processor, rawData *model.AssociationRawData) (err error) {
+// parseAssociation submits the association to the task pool for execution
+func parseAssociation(p *Processor, rawData *model.AssociationRawData) error {
 	// create separate logger that includes messageID with every log message
 	context := p.Context.With("[associationName=" + *rawData.Association.Name + "]")
 	log := context.Log()
+	var interimDocState messageContracts.CommandState
 
 	log.Debug("Processing association")
 
 	document, err := assocParser.ParseDocumentWithParams(log, rawData)
 	if err != nil {
-		message := fmt.Sprintf("failed to parse association, %v", err)
-		log.Error(message)
-		p.updateAssocStatus(rawData.Association, ssm.AssociationStatusNameFailed, message)
-		return
+		return fmt.Errorf("failed to parse association, %v", err)
 	}
 
 	parsedMessageContent, _ := jsonutil.Marshal(document)
 	log.Debug("ParsedAssociation is ", jsonutil.Indent(parsedMessageContent))
 
 	//Data format persisted in Current Folder is defined by the struct - CommandState
-	pluginConfigurations, interimDocState := assocParser.InitializeDocumentState(context, document, rawData)
+	interimDocState = assocParser.InitializeDocumentState(context, document, rawData)
 
+	if err = p.initializeProcess(log, &interimDocState); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+// initializeProcess represents the first state of the association processing
+func (p *Processor) initializeProcess(log log.T, interimDocState *messageContracts.CommandState) (err error) {
 	log.Debug("Persisting interim state in current execution folder")
 	bookkeepingSvc.PersistData(log,
 		interimDocState.DocumentInformation.CommandID,
@@ -147,29 +269,9 @@ func submitAssociation(p *Processor, rawData *model.AssociationRawData) (err err
 		appconfig.DefaultLocationOfPending,
 		interimDocState)
 
+	//TODO: check if p.sendDocLevelResponse is needed here
 	log.Debugf("Persist document and update association status to pending")
-	p.updateAssocStatus(rawData.Association, ssm.AssociationStatusNamePending, "processing document")
-
-	if err = p.TaskPool.Submit(log, rawData.ID, func(cancelFlag task.CancelFlag) {
-		p.processAssociationDocument(context, pluginConfigurations, &interimDocState, cancelFlag)
-	}); err != nil {
-		message := fmt.Sprintf("process association failed, %v", err)
-		log.Error(message)
-		p.updateAssocStatus(rawData.Association, ssm.AssociationStatusNameFailed, message)
-		return
-	}
-
-	return nil
-}
-
-// processAssociationDocument parses and processes the document
-func (p *Processor) processAssociationDocument(context context.T,
-	pluginConfigurations map[string]*contracts.Configuration,
-	interimDocState *messageContracts.CommandState,
-	cancelFlag task.CancelFlag) {
-
-	log := context.Log()
-	//TODO: check isManagedInstance
+	p.updateAssocStatusWithDocInfo(&interimDocState.DocumentInformation, ssm.AssociationStatusNamePending, "processing document")
 
 	bookkeepingSvc.MoveCommandState(log,
 		interimDocState.DocumentInformation.CommandID,
@@ -177,11 +279,27 @@ func (p *Processor) processAssociationDocument(context context.T,
 		appconfig.DefaultLocationOfPending,
 		appconfig.DefaultLocationOfCurrent)
 
+	if err = p.TaskPool.Submit(log, interimDocState.DocumentInformation.CommandID, func(cancelFlag task.CancelFlag) {
+		p.processAssociationDocument(p.Context, interimDocState, cancelFlag)
+	}); err != nil {
+		return fmt.Errorf("failed to process association, %v", err)
+	}
+
+	return nil
+}
+
+// processAssociationDocument parses and processes the document
+func (p *Processor) processAssociationDocument(context context.T,
+	interimDocState *messageContracts.CommandState,
+	cancelFlag task.CancelFlag) {
+	log := context.Log()
+	//TODO: check isManagedInstance
 	log.Debug("Running plugins...")
 
-	outputs := pulginExecution.RunPlugins(context,
+	//TODO: add sendReply engine.SendResponse
+	outputs := pluginExecution.RunPlugins(context,
 		interimDocState.DocumentInformation.CommandID,
-		pluginConfigurations,
+		&interimDocState.PluginsInformation,
 		plugin.RegisteredWorkerPlugins(context),
 		nil,
 		cancelFlag)
