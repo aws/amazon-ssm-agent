@@ -25,7 +25,7 @@ import (
 )
 
 // initializes CommandState - an interim state that is used around during an execution of a command
-func initializeCommandState(pluginConfigurations map[string]*contracts.Configuration, msg ssmmds.Message, parsedMsg messageContracts.SendCommandPayload) messageContracts.CommandState {
+func initializeSendCommandState(pluginConfigurations map[string]*contracts.Configuration, msg ssmmds.Message, parsedMsg messageContracts.SendCommandPayload) messageContracts.DocumentState {
 
 	//initialize document information with relevant values extracted from msg
 	documentInfo := newDocumentInfo(msg, parsedMsg)
@@ -41,26 +41,34 @@ func initializeCommandState(pluginConfigurations map[string]*contracts.Configura
 	}
 
 	//initialize command State
-	return messageContracts.CommandState{
+	return messageContracts.DocumentState{
 		DocumentInformation: documentInfo,
 		PluginsInformation:  pluginsInfo,
+		DocumentType:        messageContracts.SendCommand,
 	}
 }
 
 // initializes CancelCommandState
-func initializeCancelCommandState(msg ssmmds.Message, parsedMsg messageContracts.CancelPayload) messageContracts.CancelCommandState {
-	cancelCommand := new(messageContracts.CancelCommandState)
+func initializeCancelCommandState(msg ssmmds.Message, parsedMsg messageContracts.CancelPayload) messageContracts.DocumentState {
+	documentInfo := messageContracts.DocumentInfo{}
+	documentInfo.Destination = *msg.Destination
+	documentInfo.CreatedDate = *msg.CreatedDate
+	documentInfo.MessageID = *msg.MessageId
+	documentInfo.CommandID = getCommandID(*msg.MessageId)
+	documentInfo.RunID = times.ToIsoDashUTC(times.DefaultClock.Now())
+	documentInfo.DocumentStatus = contracts.ResultStatusInProgress
 
-	cancelCommand.Destination = *msg.Destination
-	cancelCommand.CreatedDate = *msg.CreatedDate
-	cancelCommand.MessageID = *msg.MessageId
-	cancelCommand.RunID = times.ToIsoDashUTC(times.DefaultClock.Now())
+	cancelCommand := new(messageContracts.CancelCommandInfo)
 	cancelCommand.Payload = *msg.Payload
-	cancelCommand.Status = contracts.ResultStatusInProgress
 	cancelCommand.CancelMessageID = parsedMsg.CancelMessageID
 	commandID := getCommandID(parsedMsg.CancelMessageID)
 
 	cancelCommand.CancelCommandID = commandID
 	cancelCommand.DebugInfo = fmt.Sprintf("Command %v is yet to be cancelled", commandID)
-	return *cancelCommand
+
+	return messageContracts.DocumentState{
+		DocumentInformation: documentInfo,
+		CancelInformation:   *cancelCommand,
+		DocumentType:        messageContracts.SendCommand,
+	}
 }

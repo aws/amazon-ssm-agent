@@ -62,6 +62,9 @@ type TestCaseSendCommand struct {
 	// Msg stores a parsed MDS message as received from GetMessages.
 	Msg ssmmds.Message
 
+	// DocState stores parsed Document State
+	DocState messageContracts.DocumentState
+
 	// MsgPayload stores the (parsed) payload of an MDS message.
 	MsgPayload messageContracts.SendCommandPayload
 
@@ -231,6 +234,7 @@ func TestProcessMessageWithSendCommandTopicPrefix(t *testing.T) {
 	// set the expectations
 	tc.MdsMock.On("AcknowledgeMessage", mock.Anything, *tc.Message.MessageId).Return(nil)
 	tc.SendCommandTaskPoolMock.On("Submit", mock.Anything, mock.AnythingOfType("string"), mock.AnythingOfType("task.Job")).Return(nil)
+	loadDocStateFromSendCommand = mockParseSendCommand
 
 	// execute processMessage
 	proc.processMessage(&tc.Message)
@@ -255,6 +259,7 @@ func TestProcessMessageWithCancelCommandTopicPrefix(t *testing.T) {
 	// set the expectations
 	tc.MdsMock.On("AcknowledgeMessage", mock.Anything, *tc.Message.MessageId).Return(nil)
 	tc.CancelCommandTaskPoolMock.On("Submit", mock.Anything, mock.AnythingOfType("string"), mock.AnythingOfType("task.Job")).Return(nil)
+	loadDocStateFromCancelCommand = mockParseCancelCommand
 
 	// execute processMessage
 	proc.processMessage(&tc.Message)
@@ -277,7 +282,7 @@ func TestProcessMessageWithInvalidCommandTopicPrefix(t *testing.T) {
 	proc, tc := prepareTestProcessMessage(topic)
 
 	// set the expectations
-	tc.MdsMock.On("AcknowledgeMessage", mock.Anything, *tc.Message.MessageId).Return(nil)
+	tc.MdsMock.On("FailMessage", mock.Anything, *tc.Message.MessageId, mock.Anything).Return(nil)
 
 	// execute processMessage
 	proc.processMessage(&tc.Message)
@@ -287,8 +292,8 @@ func TestProcessMessageWithInvalidCommandTopicPrefix(t *testing.T) {
 	tc.MdsMock.AssertExpectations(t)
 	tc.SendCommandTaskPoolMock.AssertNotCalled(t, "Submit")
 	tc.CancelCommandTaskPoolMock.AssertNotCalled(t, "Submit")
-	assert.True(t, *tc.IsDocLevelResponseSent)
-	assert.True(t, *tc.IsDataPersisted)
+	assert.False(t, *tc.IsDocLevelResponseSent)
+	assert.False(t, *tc.IsDataPersisted)
 }
 
 // TestProcessMessageWithInvalidMessage tests processMessage with invalid message
@@ -355,6 +360,8 @@ func generateTestCaseFromFiles(t *testing.T, messagePayloadFile string, messageR
 		pluginResult := parsePluginResult(t, *pluginRuntimeStatus)
 		testCase.PluginResults[pluginName] = &pluginResult
 	}
+
+	testCase.DocState = initializeSendCommandState(testCase.PluginConfigs, testCase.Msg, testCase.MsgPayload)
 	return
 }
 
@@ -397,7 +404,7 @@ func testProcessSendCommandMessage(t *testing.T, testCase TestCaseSendCommand) {
 	//orchestrationRootDir is set to empty such that it can meet the test expectation.
 	orchestrationRootDir := ""
 	p := Processor{}
-	p.processSendCommandMessage(context.NewMockDefault(), mdsMock, orchestrationRootDir, pluginRunnerMock.RunPlugins, cancelFlag, replyBuilderMock.BuildReply, sendResponse, testCase.Msg)
+	p.processSendCommandMessage(context.NewMockDefault(), mdsMock, orchestrationRootDir, pluginRunnerMock.RunPlugins, cancelFlag, replyBuilderMock.BuildReply, sendResponse, &testCase.DocState)
 
 	// assert that the expectations were met
 	pluginRunnerMock.AssertExpectations(t)
@@ -471,9 +478,11 @@ func testProcessCancelCommandMessage(t *testing.T, testCase TestCaseCancelComman
 	sendCommandPoolMock := new(task.MockedPool)
 	sendCommandPoolMock.On("Cancel", cancelMessagePayload.CancelMessageID).Return(true)
 
+	docState := initializeCancelCommandState(mdsCancelMessage, cancelMessagePayload)
+
 	p := Processor{}
 	// call the code we are testing
-	p.processCancelCommandMessage(context, mdsMock, sendCommandPoolMock, mdsCancelMessage)
+	p.processCancelCommandMessage(context, mdsMock, sendCommandPoolMock, &docState)
 
 	// assert that the expectations were met
 	mdsMock.AssertExpectations(t)
@@ -557,7 +566,7 @@ func prepareTestProcessMessage(testTopic string) (proc Processor, testCase TestC
 
 	// create a mock persistData function
 	isDataPersisted := false
-	persistData := func(msg *ssmmds.Message, bookkeeping string) {
+	persistData := func(docState *messageContracts.DocumentState, bookkeeping string) {
 		isDataPersisted = true
 	}
 
@@ -621,4 +630,16 @@ func loadMessageReplyFromFile(t *testing.T, fileName string) (message messageCon
 		t.Fatal(err)
 	}
 	return message
+}
+
+func mockParseSendCommand(context context.T, msg *ssmmds.Message, messagesOrchestrationRootDir string) (*messageContracts.DocumentState, error) {
+	return &messageContracts.DocumentState{
+		DocumentType: messageContracts.SendCommand,
+	}, nil
+}
+
+func mockParseCancelCommand(context context.T, msg *ssmmds.Message, messagesOrchestrationRootDir string) (*messageContracts.DocumentState, error) {
+	return &messageContracts.DocumentState{
+		DocumentType: messageContracts.CancelCommand,
+	}, nil
 }

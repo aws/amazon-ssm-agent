@@ -14,8 +14,18 @@
 // Package model contains message struct for MDS/SSM messages.
 package model
 
-import (
-	"github.com/aws/amazon-ssm-agent/agent/contracts"
+import "github.com/aws/amazon-ssm-agent/agent/contracts"
+
+// DocumentType defines the type of document persists locally.
+type DocumentType string
+
+const (
+	// SendCommand represents document type for send command
+	SendCommand DocumentType = "SendCommand"
+	// CancelCommand represents document type for cancel command
+	CancelCommand DocumentType = "CancelComamnd"
+	// Association represents document type for association
+	Association DocumentType = "Association"
 )
 
 // CancelPayload represents the json structure of a cancel command MDS message payload.
@@ -68,25 +78,27 @@ type DocumentInfo struct {
 	//RuntimeStatus
 }
 
-// CommandState represents information relevant to a command that gets executed by agent
-type CommandState struct {
+// DocumentState represents information relevant to a command that gets executed by agent
+type DocumentState struct {
 	DocumentInformation DocumentInfo
+	DocumentType        DocumentType
 	PluginsInformation  map[string]PluginState
+	CancelInformation   CancelCommandInfo
 }
 
 // IsRebootRequired returns if reboot is needed
-func (c *CommandState) IsRebootRequired() bool {
+func (c *DocumentState) IsRebootRequired() bool {
 	return c.DocumentInformation.DocumentStatus == contracts.ResultStatusSuccessAndReboot
 }
 
-// CancelCommandState represents information relevant to a cancel-command that agent receives
+// IsAssociation returns if reboot is needed
+func (c *DocumentState) IsAssociation() bool {
+	return c.DocumentType == Association
+}
+
+// CancelCommandInfo represents information relevant to a cancel-command that agent receives
 // TODO  This might be revisited when Agent-cli is written to list previously executed commands
-type CancelCommandState struct {
-	Destination     string
-	MessageID       string
-	RunID           string
-	CreatedDate     string
-	Status          contracts.ResultStatus
+type CancelCommandInfo struct {
 	CancelMessageID string
 	CancelCommandID string
 	Payload         string

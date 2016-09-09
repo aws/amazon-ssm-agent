@@ -33,7 +33,7 @@ var docLock = make(map[string]*sync.RWMutex)
 
 // GetCommandInterimState returns CommandState object after reading file <commandID> from locationFolder
 // under defaultLogDir/instanceID
-func GetCommandInterimState(log log.T, commandID, instanceID, locationFolder string) message.CommandState {
+func GetCommandInterimState(log log.T, commandID, instanceID, locationFolder string) message.DocumentState {
 
 	rLockDocument(commandID)
 	defer rUnlockDocument(commandID)
@@ -199,9 +199,9 @@ func DocumentStateDir(instanceID, locationFolder string) string {
 }
 
 // getCmdState reads commandState from given file
-func getCmdState(log log.T, fileName string) message.CommandState {
+func getCmdState(log log.T, fileName string) message.DocumentState {
 
-	var commandState message.CommandState
+	var commandState message.DocumentState
 	err := jsonutil.UnmarshalFile(fileName, &commandState)
 	if err != nil {
 		log.Errorf("encountered error with message %v while reading Interim state of command from file - %v", err, fileName)
@@ -219,7 +219,7 @@ func getCmdState(log log.T, fileName string) message.CommandState {
 }
 
 // setCmdState persists given commandState
-func setCmdState(log log.T, commandState message.CommandState, absoluteFileName, locationFolder string) {
+func setCmdState(log log.T, commandState message.DocumentState, absoluteFileName, locationFolder string) {
 
 	content, err := jsonutil.Marshal(commandState)
 	if err != nil {
@@ -291,5 +291,5 @@ func deleteLock(id string) {
 
 //cmdStateFileName returns absolute filename where command states are persisted
 func cmdStateFileName(commandID, instanceID, locationFolder string) string {
-	return path.Join(DocumentStateDir(commandID, instanceID), commandID)
+	return path.Join(DocumentStateDir(instanceID, locationFolder), commandID)
 }

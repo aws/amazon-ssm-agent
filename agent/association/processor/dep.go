@@ -156,7 +156,7 @@ type parserService interface {
 	ParseDocumentWithParams(log log.T, rawData *model.AssociationRawData) (*message.SendCommandPayload, error)
 	InitializeCommandState(context context.T,
 		payload *message.SendCommandPayload,
-		rawData *model.AssociationRawData) message.CommandState
+		rawData *model.AssociationRawData) message.DocumentState
 }
 
 type parserImp struct{}
@@ -172,7 +172,7 @@ func (parserImp) ParseDocumentWithParams(
 // InitializeDocumentState wraps engine InitializeCommandState
 func (parserImp) InitializeDocumentState(context context.T,
 	payload *message.SendCommandPayload,
-	rawData *model.AssociationRawData) message.CommandState {
+	rawData *model.AssociationRawData) message.DocumentState {
 
 	return parser.InitializeCommandState(context, payload, rawData)
 }

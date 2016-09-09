@@ -45,16 +45,17 @@ const (
 	name                          = "Association"
 	documentWorkersLimit          = 1
 	cancelWaitDurationMillisecond = 10000
+	associationRetryLimit         = 3
 	stopPolicyErrorThreshold      = 10
 )
 
 // Processor contains the logic for processing association
 type Processor struct {
-	PollJob             *scheduler.Job
-	SsmSvc              ssmsvc.Service
-	Context             context.T
-	TaskPool            taskpool.T
-	AgentInfo           *contracts.AgentInfo
+	pollJob             *scheduler.Job
+	ssmSvc              ssmsvc.Service
+	context             context.T
+	taskPool            taskpool.T
+	agentInfo           *contracts.AgentInfo
 	processorStopPolicy *sdkutil.StopPolicy
 }
 
@@ -83,17 +84,22 @@ func NewAssociationProcessor(context context.T) *Processor {
 
 	ssmService := ssmsvc.NewService()
 	return &Processor{
-		Context:             assocContext,
-		SsmSvc:              ssmService,
-		TaskPool:            taskPool,
-		AgentInfo:           &agentInfo,
+		context:             assocContext,
+		ssmSvc:              ssmService,
+		taskPool:            taskPool,
+		agentInfo:           &agentInfo,
 		processorStopPolicy: sdkutil.NewStopPolicy(name, stopPolicyErrorThreshold),
 	}
 }
 
-// processPendingDocuments processes pending documents that have been persisted in pending folder
-func (p *Processor) processPendingDocuments() {
-	log := p.Context.Log()
+// SetPollJob represents setter for PollJob
+func (p *Processor) SetPollJob(job *scheduler.Job) {
+	p.pollJob = job
+}
+
+// ProcessPendingDocuments processes pending documents that have been persisted in pending folder
+func (p *Processor) ProcessPendingDocuments() {
+	log := p.context.Log()
 
 	instanceID, err := platform.InstanceID()
 	if err != nil {
@@ -123,21 +129,20 @@ func (p *Processor) processPendingDocuments() {
 		//construct the absolute path - safely assuming that interim state for older messages are already present in Pending folder
 		filePath := filepath.Join(pendingDocsLocation, f.Name())
 
-		interimDocState := messageContracts.CommandState{}
+		interimDocState := messageContracts.DocumentState{}
 		//parse the message
 		if err := jsonutil.UnmarshalFile(filePath, &interimDocState); err != nil {
 			log.Errorf("skipping processsing of pending messages. encountered error %v while reading pending message from file - %v", err, f)
 			break
 		}
 
-		p.initializeProcess(log, &interimDocState)
+		p.submitDocForExecution(log, &interimDocState)
 	}
 }
 
-// processInProgressDocuments processes InProgress documents that have been persisted in current folder
-func (p *Processor) processInProgressDocuments(instanceID string) {
-	log := p.Context.Log()
-	config := p.Context.AppConfig()
+// ProcessInProgressDocuments processes InProgress documents that have been persisted in current folder
+func (p *Processor) ProcessInProgressDocuments(instanceID string) {
+	log := p.context.Log()
 	var err error
 
 	pendingDocsLocation := bookkeepingSvc.DocumentStateDir(instanceID, appconfig.DefaultLocationOfCurrent)
@@ -160,48 +165,54 @@ func (p *Processor) processInProgressDocuments(instanceID string) {
 
 		//construct the absolute path - safely assuming that interim state for older messages are already present in Current folder
 		file := filepath.Join(pendingDocsLocation, f.Name())
-		var oldCmdState messageContracts.CommandState
+		var docState messageContracts.DocumentState
 
 		//parse the message
-		if err := jsonutil.UnmarshalFile(file, &oldCmdState); err != nil {
+		if err := jsonutil.UnmarshalFile(file, &docState); err != nil {
 			log.Errorf("skipping processsing of previously unexecuted messages. encountered error %v while reading unprocessed message from file - %v", err, f)
-		} else {
-			if oldCmdState.DocumentInformation.RunCount >= config.Mds.CommandRetryLimit {
-				//TODO:  Move command to corrupt/failed
-				// do not process as the command has failed too many times
-				break
+			//TODO: Move doc to corrupt/failed
+			break
+		}
+
+		if !docState.IsAssociation() {
+			break
+		}
+
+		if docState.DocumentInformation.RunCount >= associationRetryLimit {
+			//TODO:  Move doc to corrupt/failed
+			// do not process as the command has failed too many times
+			break
+		}
+
+		pluginOutputs := make(map[string]*contracts.PluginResult)
+
+		// increment the command run count
+		docState.DocumentInformation.RunCount++
+		// Update reboot status
+		for v := range docState.PluginsInformation {
+			plugin := docState.PluginsInformation[v]
+			if plugin.HasExecuted && plugin.Result.Status == contracts.ResultStatusSuccessAndReboot {
+				log.Debugf("plugin %v has completed a reboot. Setting status to Success.", v)
+				plugin.Result.Status = contracts.ResultStatusSuccess
+				docState.PluginsInformation[v] = plugin
+				pluginOutputs[v] = &plugin.Result
 			}
+		}
 
-			pluginOutputs := make(map[string]*contracts.PluginResult)
+		bookkeepingSvc.PersistData(log, docState.DocumentInformation.CommandID, instanceID, appconfig.DefaultLocationOfCurrent, docState)
 
-			// increment the command run count
-			oldCmdState.DocumentInformation.RunCount++
-			// Update reboot status
-			for v := range oldCmdState.PluginsInformation {
-				plugin := oldCmdState.PluginsInformation[v]
-				if plugin.HasExecuted && plugin.Result.Status == contracts.ResultStatusSuccessAndReboot {
-					log.Debugf("plugin %v has completed a reboot. Setting status to Success.", v)
-					plugin.Result.Status = contracts.ResultStatusSuccess
-					oldCmdState.PluginsInformation[v] = plugin
-					pluginOutputs[v] = &plugin.Result
-				}
-			}
-
-			bookkeepingSvc.PersistData(log, oldCmdState.DocumentInformation.CommandID, instanceID, appconfig.DefaultLocationOfCurrent, oldCmdState)
-
-			//Submit the work to Job Pool so that we don't block for processing of new messages
-			if err = p.TaskPool.Submit(log, oldCmdState.DocumentInformation.CommandID, func(cancelFlag task.CancelFlag) {
-				p.processAssociationDocument(p.Context, &oldCmdState, cancelFlag)
-			}); err != nil {
-				log.Errorf("Failed to resume previously unexecuted association, %v", err)
-			}
+		//Submit the work to Job Pool so that we don't block for processing of new association
+		if err = p.taskPool.Submit(log, docState.DocumentInformation.CommandID, func(cancelFlag task.CancelFlag) {
+			p.processAssociationDocument(p.context, &docState, cancelFlag)
+		}); err != nil {
+			log.Errorf("Failed to resume previously unexecuted association, %v", err)
 		}
 	}
 }
 
 // ProcessAssociation poll and process all the associations
 func (p *Processor) ProcessAssociation() {
-	log := p.Context.Log()
+	log := p.context.Log()
 	var assocRawData *model.AssociationRawData
 
 	instanceID, err := platform.InstanceID()
@@ -210,12 +221,12 @@ func (p *Processor) ProcessAssociation() {
 		return
 	}
 
-	if assocRawData, err = assocSvc.ListAssociations(log, p.SsmSvc, instanceID); err != nil {
+	if assocRawData, err = assocSvc.ListAssociations(log, p.ssmSvc, instanceID); err != nil {
 		log.Error("unable to retrieve associations", err)
 		return
 	}
 
-	if err = assocSvc.LoadAssociationDetail(log, p.SsmSvc, assocRawData); err != nil {
+	if err = assocSvc.LoadAssociationDetail(log, p.ssmSvc, assocRawData); err != nil {
 		message := fmt.Sprintf("unable to load association details, %v", err)
 		log.Error(message)
 		p.updateAssocStatus(assocRawData.Association, ssm.AssociationStatusNameFailed, message)
@@ -232,9 +243,9 @@ func (p *Processor) ProcessAssociation() {
 // parseAssociation submits the association to the task pool for execution
 func parseAssociation(p *Processor, rawData *model.AssociationRawData) error {
 	// create separate logger that includes messageID with every log message
-	context := p.Context.With("[associationName=" + *rawData.Association.Name + "]")
+	context := p.context.With("[associationName=" + *rawData.Association.Name + "]")
 	log := context.Log()
-	var interimDocState messageContracts.CommandState
+	var interimDocState messageContracts.DocumentState
 
 	log.Debug("Processing association")
 
@@ -249,15 +260,6 @@ func parseAssociation(p *Processor, rawData *model.AssociationRawData) error {
 	//Data format persisted in Current Folder is defined by the struct - CommandState
 	interimDocState = assocParser.InitializeDocumentState(context, document, rawData)
 
-	if err = p.initializeProcess(log, &interimDocState); err != nil {
-		return err
-	}
-
-	return nil
-}
-
-// initializeProcess represents the first state of the association processing
-func (p *Processor) initializeProcess(log log.T, interimDocState *messageContracts.CommandState) (err error) {
 	log.Debug("Persisting interim state in current execution folder")
 	bookkeepingSvc.PersistData(log,
 		interimDocState.DocumentInformation.CommandID,
@@ -265,6 +267,15 @@ func (p *Processor) initializeProcess(log log.T, interimDocState *messageContrac
 		appconfig.DefaultLocationOfPending,
 		interimDocState)
 
+	if err = p.submitDocForExecution(log, &interimDocState); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+// submitDocForExecution moves doc to current folder and submit it for execution
+func (p *Processor) submitDocForExecution(log log.T, interimDocState *messageContracts.DocumentState) (err error) {
 	//TODO: check if p.sendDocLevelResponse is needed here
 	log.Debugf("Persist document and update association status to pending")
 	p.updateAssocStatusWithDocInfo(&interimDocState.DocumentInformation, ssm.AssociationStatusNamePending, "processing document")
@@ -275,8 +286,8 @@ func (p *Processor) initializeProcess(log log.T, interimDocState *messageContrac
 		appconfig.DefaultLocationOfPending,
 		appconfig.DefaultLocationOfCurrent)
 
-	if err = p.TaskPool.Submit(log, interimDocState.DocumentInformation.CommandID, func(cancelFlag task.CancelFlag) {
-		p.processAssociationDocument(p.Context, interimDocState, cancelFlag)
+	if err = p.taskPool.Submit(log, interimDocState.DocumentInformation.CommandID, func(cancelFlag task.CancelFlag) {
+		p.processAssociationDocument(p.context, interimDocState, cancelFlag)
 	}); err != nil {
 		return fmt.Errorf("failed to process association, %v", err)
 	}
@@ -286,7 +297,7 @@ func (p *Processor) initializeProcess(log log.T, interimDocState *messageContrac
 
 // processAssociationDocument parses and processes the document
 func (p *Processor) processAssociationDocument(context context.T,
-	interimDocState *messageContracts.CommandState,
+	interimDocState *messageContracts.DocumentState,
 	cancelFlag task.CancelFlag) {
 	log := context.Log()
 	//TODO: check isManagedInstance
@@ -333,7 +344,7 @@ func (p *Processor) processAssociationDocument(context context.T,
 
 // parseAndPersistReplyContents reloads interimDocState, updates it with replyPayload and persist it on disk.
 func (p *Processor) parseAndPersistReplyContents(log log.T,
-	interimDocState *messageContracts.CommandState,
+	interimDocState *messageContracts.DocumentState,
 	pluginOutputs map[string]*contracts.PluginResult) {
 
 	//update interim cmd state file
@@ -343,7 +354,7 @@ func (p *Processor) parseAndPersistReplyContents(log log.T,
 		appconfig.DefaultLocationOfCurrent)
 
 	runtimeStatuses := reply.PrepareRuntimeStatuses(log, pluginOutputs)
-	replyPayload := reply.PrepareReplyPayload("", runtimeStatuses, time.Now(), *p.AgentInfo)
+	replyPayload := reply.PrepareReplyPayload("", runtimeStatuses, time.Now(), *p.agentInfo)
 
 	// set document level information which wasn't set previously
 	documentInfo.AdditionalInfo = replyPayload.AdditionalInfo
@@ -364,15 +375,15 @@ func (p *Processor) updateAssocStatus(
 	assoc *ssm.Association,
 	status string,
 	message string) {
-	log := p.Context.Log()
+	log := p.context.Log()
 
 	service.UpdateAssociationStatus(log,
-		p.SsmSvc,
+		p.ssmSvc,
 		*assoc.InstanceId,
 		*assoc.Name,
 		status,
 		message,
-		p.AgentInfo,
+		p.agentInfo,
 		p.processorStopPolicy)
 }
 
@@ -381,14 +392,14 @@ func (p *Processor) updateAssocStatusWithDocInfo(
 	assoc *messageContracts.DocumentInfo,
 	status string,
 	message string) {
-	log := p.Context.Log()
+	log := p.context.Log()
 
 	service.UpdateAssociationStatus(log,
-		p.SsmSvc,
-		assoc.CommandID,
+		p.ssmSvc,
+		assoc.Destination,
 		assoc.DocumentName,
 		status,
 		message,
-		p.AgentInfo,
+		p.agentInfo,
 		p.processorStopPolicy)
 }

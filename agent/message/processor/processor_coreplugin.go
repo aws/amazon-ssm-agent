@@ -44,12 +44,14 @@ func (p *Processor) Execute(context context.T) (err error) {
 	}
 
 	p.assocProcessor = processor.NewAssociationProcessor(context)
-	if p.assocProcessor.PollJob, err = asocitscheduler.CreateScheduler(
+	var job *scheduler.Job
+	if job, err = asocitscheduler.CreateScheduler(
 		log,
 		p.assocProcessor.ProcessAssociation,
 		pollAssociationFrequencyMinutes); err != nil {
 		context.Log().Errorf("unable to schedule association processor. %v", err)
 	}
+	p.assocProcessor.SetPollJob(job)
 	return
 }
 

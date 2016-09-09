@@ -43,6 +43,9 @@ import (
 var singletonMapOfUnsupportedSSMDocs map[string]bool
 var once sync.Once
 
+var loadDocStateFromSendCommand = parseSendCommandMessage
+var loadDocStateFromCancelCommand = parseCancelCommandMessage
+
 // processOlderMessages processes older messages that have been persisted in various locations (like from pending & current folders)
 func (p *Processor) processOlderMessages() {
 	log := p.context.Log()
@@ -87,19 +90,19 @@ func (p *Processor) processOlderMessages() {
 				appconfig.DefaultLocationOfPending,
 				f.Name())
 
-			var msg ssmmds.Message
+			var docState messageContracts.DocumentState
 
 			//parse the message
-			if err := jsonutil.UnmarshalFile(file, &msg); err != nil {
+			if err := jsonutil.UnmarshalFile(file, &docState); err != nil {
 				log.Errorf("skipping processsing of pending messages. encountered error %v while reading pending message from file - %v", err, f)
-			} else {
-				//call processMessage for every message read from the pending folder
-
-				//we will end up sending acks again for this message - but that's ok because
-				//unless a message has been deleted - multiple acks are allowed by MDS.
-				//If this becomes an issue - we can stub out ack part from processMessage
-				p.processMessage(&msg)
+				break
 			}
+
+			if docState.IsAssociation() {
+				break
+			}
+
+			p.submitDocForExecution(&docState)
 		}
 	}
 
@@ -128,7 +131,6 @@ func (p *Processor) processMessagesFromCurrent(instanceID string) {
 
 		//get all older messages from previous run of agent
 		files, err := ioutil.ReadDir(unprocessedMsgsLocation)
-
 		//TODO:  revisit this when bookkeeping is made invasive
 		if err != nil {
 			log.Errorf("skipping reading inprogress messages from %v. unexpected error encountered - %v", unprocessedMsgsLocation, err)
@@ -147,52 +149,57 @@ func (p *Processor) processMessagesFromCurrent(instanceID string) {
 				appconfig.DefaultLocationOfCurrent,
 				f.Name())
 
-			var oldCmdState messageContracts.CommandState
+			var docState messageContracts.DocumentState
 
 			//parse the message
-			//TODO:  Not all messages in Current folder correspond to SendCommand.
-			if err := jsonutil.UnmarshalFile(file, &oldCmdState); err != nil {
+			if err := jsonutil.UnmarshalFile(file, &docState); err != nil {
 				log.Errorf("skipping processsing of previously unexecuted messages. encountered error %v while reading unprocessed message from file - %v", err, f)
-			} else {
-				if oldCmdState.DocumentInformation.RunCount >= config.Mds.CommandRetryLimit {
-					//TODO:  Move command to corrupt/failed
-					// do not process as the command has failed too many times
-					break
+				break
+			}
+
+			if docState.IsAssociation() {
+				break
+			}
+
+			if docState.DocumentInformation.RunCount >= config.Mds.CommandRetryLimit {
+				//TODO:  Move command to corrupt/failed
+				// do not process as the command has failed too many times
+				break
+			}
+
+			//TODO: fix resume cancel command
+			pluginOutputs := make(map[string]*contracts.PluginResult)
+
+			// increment the command run count
+			docState.DocumentInformation.RunCount++
+			// Update reboot status
+			for v := range docState.PluginsInformation {
+				plugin := docState.PluginsInformation[v]
+				if plugin.HasExecuted && plugin.Result.Status == contracts.ResultStatusSuccessAndReboot {
+					log.Debugf("plugin %v has completed a reboot. Setting status to Success.", v)
+					plugin.Result.Status = contracts.ResultStatusSuccess
+					docState.PluginsInformation[v] = plugin
+					pluginOutputs[v] = &plugin.Result
+					p.sendResponse(docState.DocumentInformation.MessageID, v, pluginOutputs)
 				}
+			}
 
-				pluginOutputs := make(map[string]*contracts.PluginResult)
+			// func PersistData(log log.T, commandID, instanceID, locationFolder string, object interface{}) {
+			commandStateHelper.PersistData(log, docState.DocumentInformation.CommandID, instanceID, appconfig.DefaultLocationOfCurrent, docState)
 
-				// increment the command run count
-				oldCmdState.DocumentInformation.RunCount++
-				// Update reboot status
-				for v := range oldCmdState.PluginsInformation {
-					plugin := oldCmdState.PluginsInformation[v]
-					if plugin.HasExecuted && plugin.Result.Status == contracts.ResultStatusSuccessAndReboot {
-						log.Debugf("plugin %v has completed a reboot. Setting status to Success.", v)
-						plugin.Result.Status = contracts.ResultStatusSuccess
-						oldCmdState.PluginsInformation[v] = plugin
-						pluginOutputs[v] = &plugin.Result
-						p.sendResponse(oldCmdState.DocumentInformation.MessageID, v, pluginOutputs)
-					}
-				}
-
-				// func PersistData(log log.T, commandID, instanceID, locationFolder string, object interface{}) {
-				commandStateHelper.PersistData(log, oldCmdState.DocumentInformation.CommandID, instanceID, appconfig.DefaultLocationOfCurrent, oldCmdState)
-
-				//Submit the work to Job Pool so that we don't block for processing of new messages
-				err := p.sendCommandPool.Submit(log, oldCmdState.DocumentInformation.MessageID, func(cancelFlag task.CancelFlag) {
-					p.runCmdsUsingCmdState(p.context.With("[messageID="+oldCmdState.DocumentInformation.MessageID+"]"),
-						p.service,
-						p.pluginRunner,
-						cancelFlag,
-						p.buildReply,
-						p.sendResponse,
-						oldCmdState)
-				})
-				if err != nil {
-					log.Error("SendCommand failed for previously unexecuted commands", err)
-					return
-				}
+			//Submit the work to Job Pool so that we don't block for processing of new messages
+			err := p.sendCommandPool.Submit(log, docState.DocumentInformation.MessageID, func(cancelFlag task.CancelFlag) {
+				p.runCmdsUsingCmdState(p.context.With("[messageID="+docState.DocumentInformation.MessageID+"]"),
+					p.service,
+					p.pluginRunner,
+					cancelFlag,
+					p.buildReply,
+					p.sendResponse,
+					docState)
+			})
+			if err != nil {
+				log.Error("SendCommand failed for previously unexecuted commands", err)
+				break
 			}
 		}
 	}
@@ -206,7 +213,7 @@ func (p *Processor) runCmdsUsingCmdState(context context.T,
 	cancelFlag task.CancelFlag,
 	buildReply replyBuilder,
 	sendResponse engine.SendResponse,
-	command messageContracts.CommandState) {
+	command messageContracts.DocumentState) {
 
 	log := context.Log()
 	var pluginConfigurations map[string]*contracts.Configuration
@@ -309,53 +316,85 @@ func (p *Processor) runCmdsUsingCmdState(context context.T,
 }
 
 func (p *Processor) processMessage(msg *ssmmds.Message) {
+	var (
+		docState *messageContracts.DocumentState
+		err      error
+	)
+
 	// create separate logger that includes messageID with every log message
 	context := p.context.With("[messageID=" + *msg.MessageId + "]")
 	log := context.Log()
-
 	log.Debug("Processing message")
 
-	if err := validate(msg); err != nil {
+	if err = validate(msg); err != nil {
 		log.Error("message not valid, ignoring: ", err)
 		return
 	}
 
-	err := p.service.AcknowledgeMessage(log, *msg.MessageId)
+	if strings.HasPrefix(*msg.Topic, string(SendCommandTopicPrefix)) {
+		docState, err = loadDocStateFromSendCommand(context, msg, p.orchestrationRootDir)
+	} else if strings.HasPrefix(*msg.Topic, string(CancelCommandTopicPrefix)) {
+		docState, err = loadDocStateFromCancelCommand(context, msg, p.orchestrationRootDir)
+	} else {
+		err = fmt.Errorf("unexpected topic name %v", *msg.Topic)
+	}
+
 	if err != nil {
+		log.Error("format of received message is invalid ", err)
+		if err = p.service.FailMessage(log, *msg.MessageId, service.InternalHandlerException); err != nil {
+			sdkutil.HandleAwsError(log, err, p.processorStopPolicy)
+		}
+		return
+	}
+
+	//persisting received msg in file-system [pending folder]
+	p.persistData(docState, appconfig.DefaultLocationOfPending)
+	if err = p.service.AcknowledgeMessage(log, *msg.MessageId); err != nil {
 		sdkutil.HandleAwsError(log, err, p.processorStopPolicy)
 		return
 	}
+
 	log.Debugf("Ack done. Received message - messageId - %v, MessageString - %v", *msg.MessageId, msg.GoString())
-
-	//persisting received msg in file-system [pending folder]
-	p.persistData(msg, appconfig.DefaultLocationOfPending)
-
 	log.Debugf("Processing to send a reply to update the document status to InProgress")
 
 	p.sendDocLevelResponse(*msg.MessageId, contracts.ResultStatusInProgress, "")
 
 	log.Debugf("SendReply done. Received message - messageId - %v, MessageString - %v", *msg.MessageId, msg.GoString())
 
-	switch {
-	case strings.HasPrefix(*msg.Topic, string(SendCommandTopicPrefix)):
-		err := p.sendCommandPool.Submit(log, *msg.MessageId, func(cancelFlag task.CancelFlag) {
-			p.processSendCommandMessage(context,
+	p.submitDocForExecution(docState)
+}
+
+// submitDocForExecution moves doc to current folder and submit it for execution
+func (p *Processor) submitDocForExecution(docState *messageContracts.DocumentState) {
+	log := p.context.Log()
+
+	commandStateHelper.MoveCommandState(log,
+		docState.DocumentInformation.CommandID,
+		docState.DocumentInformation.Destination,
+		appconfig.DefaultLocationOfPending,
+		appconfig.DefaultLocationOfCurrent)
+
+	switch docState.DocumentType {
+	case messageContracts.SendCommand:
+		err := p.sendCommandPool.Submit(log, docState.DocumentInformation.MessageID, func(cancelFlag task.CancelFlag) {
+			p.processSendCommandMessage(
+				p.context,
 				p.service,
 				p.orchestrationRootDir,
 				p.pluginRunner,
 				cancelFlag,
 				p.buildReply,
 				p.sendResponse,
-				*msg)
+				docState)
 		})
 		if err != nil {
 			log.Error("SendCommand failed", err)
 			return
 		}
 
-	case strings.HasPrefix(*msg.Topic, string(CancelCommandTopicPrefix)):
-		err := p.cancelCommandPool.Submit(log, *msg.MessageId, func(cancelFlag task.CancelFlag) {
-			p.processCancelCommandMessage(context, p.service, p.sendCommandPool, *msg)
+	case messageContracts.CancelCommand:
+		err := p.cancelCommandPool.Submit(log, docState.DocumentInformation.MessageID, func(cancelFlag task.CancelFlag) {
+			p.processCancelCommandMessage(p.context, p.service, p.sendCommandPool, docState)
 		})
 		if err != nil {
 			log.Error("CancelCommand failed", err)
@@ -363,8 +402,22 @@ func (p *Processor) processMessage(msg *ssmmds.Message) {
 		}
 
 	default:
-		log.Error("unexpected topic name ", *msg.Topic)
+		log.Error("unexpected document type ", docState.DocumentType)
 	}
+}
+
+// loadPluginConfigurations returns plugin configurations that hasn't been executed
+func loadPluginConfigurations(plugins map[string]messageContracts.PluginState) map[string]*contracts.Configuration {
+	configs := make(map[string]*contracts.Configuration)
+
+	for pluginName, pluginConfig := range plugins {
+		if pluginConfig.HasExecuted {
+			break
+		}
+		configs[pluginName] = &pluginConfig.Configuration
+	}
+
+	return configs
 }
 
 // processSendCommandMessage processes a single send command message received from MDS.
@@ -375,22 +428,78 @@ func (p *Processor) processSendCommandMessage(context context.T,
 	cancelFlag task.CancelFlag,
 	buildReply replyBuilder,
 	sendResponse engine.SendResponse,
-	msg ssmmds.Message) {
-
-	commandID := getCommandID(*msg.MessageId)
+	docState *messageContracts.DocumentState) {
 
 	log := context.Log()
+
+	pluginConfigurations := loadPluginConfigurations(docState.PluginsInformation)
+	log.Debug("Running plugins...")
+	outputs := runPlugins(context, docState.DocumentInformation.MessageID, pluginConfigurations, sendResponse, cancelFlag)
+	pluginOutputContent, _ := jsonutil.Marshal(outputs)
+	log.Debugf("Plugin outputs %v", jsonutil.Indent(pluginOutputContent))
+
+	payloadDoc := buildReply("", outputs)
+
+	//update documentInfo in interim cmd state file
+	documentInfo := commandStateHelper.GetDocumentInfo(log, docState.DocumentInformation.CommandID, docState.DocumentInformation.Destination, appconfig.DefaultLocationOfCurrent)
+
+	// set document level information which wasn't set previously
+	documentInfo.AdditionalInfo = payloadDoc.AdditionalInfo
+	documentInfo.DocumentStatus = payloadDoc.DocumentStatus
+	documentInfo.DocumentTraceOutput = payloadDoc.DocumentTraceOutput
+	documentInfo.RuntimeStatus = payloadDoc.RuntimeStatus
+
+	//persist final documentInfo.
+	commandStateHelper.PersistDocumentInfo(log,
+		documentInfo,
+		docState.DocumentInformation.CommandID,
+		docState.DocumentInformation.Destination,
+		appconfig.DefaultLocationOfCurrent)
+
+	// Skip sending response when the document requires a reboot
+	if documentInfo.DocumentStatus == contracts.ResultStatusSuccessAndReboot {
+		log.Debug("skipping sending response of %v since the document requires a reboot", docState.DocumentInformation.MessageID)
+		return
+	}
+
+	log.Debug("Sending reply on message completion ", outputs)
+	sendResponse(docState.DocumentInformation.MessageID, "", outputs)
+
+	//persist : commands execution in completed folder (terminal state folder)
+	log.Debugf("execution of %v is over. Moving interimState file from Current to Completed folder", docState.DocumentInformation.MessageID)
+
+	commandStateHelper.MoveCommandState(log,
+		docState.DocumentInformation.CommandID,
+		docState.DocumentInformation.Destination,
+		appconfig.DefaultLocationOfCurrent,
+		appconfig.DefaultLocationOfCompleted)
+
+	log.Debugf("Deleting message")
+	isUpdate := false
+	for pluginName := range pluginConfigurations {
+		if pluginName == appconfig.PluginNameAwsAgentUpdate {
+			isUpdate = true
+		}
+	}
+	if !isUpdate {
+		if err := mdsService.DeleteMessage(log, docState.DocumentInformation.MessageID); err != nil {
+			sdkutil.HandleAwsError(log, err, p.processorStopPolicy)
+		}
+	} else {
+		log.Debug("MessageDeletion skipped as it will be handled by external process")
+	}
+}
+
+func parseSendCommandMessage(context context.T, msg *ssmmds.Message, messagesOrchestrationRootDir string) (*messageContracts.DocumentState, error) {
+	log := context.Log()
+	commandID := getCommandID(*msg.MessageId)
+
 	log.Debug("Processing send command message ", *msg.MessageId)
 	log.Trace("Processing send command message ", jsonutil.Indent(*msg.Payload))
 
 	parsedMessage, err := parser.ParseMessageWithParams(log, *msg.Payload)
 	if err != nil {
-		log.Error("format of received message is invalid ", err)
-		err = mdsService.FailMessage(log, *msg.MessageId, service.InternalHandlerException)
-		if err != nil {
-			sdkutil.HandleAwsError(log, err, p.processorStopPolicy)
-		}
-		return
+		return nil, err
 	}
 
 	parsedMessageContent, _ := jsonutil.Marshal(parsedMessage)
@@ -412,7 +521,7 @@ func (p *Processor) processSendCommandMessage(context context.T,
 	if isMI && isManagedInstanceIncompatibleAWSSSMDocument(parsedMessage.DocumentName) {
 		log.Debugf("Running Incompatible AWS SSM Document %v on managed instance", parsedMessage.DocumentName)
 		if parsedMessage, err = removeDependencyOnInstanceMetadataForManagedInstance(context, parsedMessage); err != nil {
-			return
+			return nil, err
 		}
 	}
 
@@ -427,128 +536,63 @@ func (p *Processor) processSendCommandMessage(context context.T,
 	log.Info("Persisting message in current execution folder")
 
 	//Data format persisted in Current Folder is defined by the struct - CommandState
-	interimCmdState := initializeCommandState(pluginConfigurations, msg, parsedMessage)
-
-	// persist new interim command state in current folder
-	commandStateHelper.PersistData(log, commandID, *msg.Destination, appconfig.DefaultLocationOfCurrent, interimCmdState)
-
-	//Deleting from pending folder since the command is getting executed
-	commandStateHelper.RemoveData(log, commandID, *msg.Destination, appconfig.DefaultLocationOfPending)
-
-	log.Debug("Running plugins...")
-	outputs := runPlugins(context, *msg.MessageId, pluginConfigurations, sendResponse, cancelFlag)
-	pluginOutputContent, _ := jsonutil.Marshal(outputs)
-	log.Debugf("Plugin outputs %v", jsonutil.Indent(pluginOutputContent))
-
-	payloadDoc := buildReply("", outputs)
-
-	//update documentInfo in interim cmd state file
-	documentInfo := commandStateHelper.GetDocumentInfo(log, commandID, *msg.Destination, appconfig.DefaultLocationOfCurrent)
-
-	// set document level information which wasn't set previously
-	documentInfo.AdditionalInfo = payloadDoc.AdditionalInfo
-	documentInfo.DocumentStatus = payloadDoc.DocumentStatus
-	documentInfo.DocumentTraceOutput = payloadDoc.DocumentTraceOutput
-	documentInfo.RuntimeStatus = payloadDoc.RuntimeStatus
-
-	//persist final documentInfo.
-	commandStateHelper.PersistDocumentInfo(log,
-		documentInfo,
-		commandID,
-		*msg.Destination,
-		appconfig.DefaultLocationOfCurrent)
-
-	// Skip sending response when the document requires a reboot
-	if documentInfo.DocumentStatus == contracts.ResultStatusSuccessAndReboot {
-		log.Debug("skipping sending response of %v since the document requires a reboot", *msg.MessageId)
-		return
-	}
-
-	log.Debug("Sending reply on message completion ", outputs)
-	sendResponse(*msg.MessageId, "", outputs)
-
-	//persist : commands execution in completed folder (terminal state folder)
-	log.Debugf("execution of %v is over. Moving interimState file from Current to Completed folder", *msg.MessageId)
-
-	commandStateHelper.MoveCommandState(log,
-		commandID,
-		*msg.Destination,
-		appconfig.DefaultLocationOfCurrent,
-		appconfig.DefaultLocationOfCompleted)
-
-	log.Debugf("Deleting message")
-	isUpdate := false
-	for pluginName := range pluginConfigurations {
-		if pluginName == appconfig.PluginNameAwsAgentUpdate {
-			isUpdate = true
-		}
-	}
-	if !isUpdate {
-		err = mdsService.DeleteMessage(log, *msg.MessageId)
-		if err != nil {
-			sdkutil.HandleAwsError(log, err, p.processorStopPolicy)
-		}
-	} else {
-		log.Debug("MessageDeletion skipped as it will be handled by external process")
-	}
+	docState := initializeSendCommandState(pluginConfigurations, *msg, parsedMessage)
+	return &docState, nil
 }
 
 // processCancelCommandMessage processes a single send command message received from MDS.
 func (p *Processor) processCancelCommandMessage(context context.T,
 	mdsService service.Service,
 	sendCommandPool task.Pool,
-	msg ssmmds.Message) {
+	docState *messageContracts.DocumentState) {
 
 	log := context.Log()
+
+	log.Debugf("Canceling job with id %v...", docState.CancelInformation.CancelMessageID)
+
+	if found := sendCommandPool.Cancel(docState.CancelInformation.CancelMessageID); !found {
+		log.Debugf("Job with id %v not found (possibly completed)", docState.CancelInformation.CancelMessageID)
+		docState.CancelInformation.DebugInfo = fmt.Sprintf("Command %v couldn't be cancelled", docState.CancelInformation.CancelCommandID)
+		docState.DocumentInformation.DocumentStatus = contracts.ResultStatusFailed
+	} else {
+		docState.CancelInformation.DebugInfo = fmt.Sprintf("Command %v cancelled", docState.CancelInformation.CancelCommandID)
+		docState.DocumentInformation.DocumentStatus = contracts.ResultStatusSuccess
+	}
+
+	//persist the final status of cancel-message in current folder
+	commandStateHelper.PersistData(log,
+		docState.DocumentInformation.CommandID,
+		docState.DocumentInformation.Destination,
+		appconfig.DefaultLocationOfCurrent, docState)
+
+	//persist : commands execution in completed folder (terminal state folder)
+	log.Debugf("Execution of %v is over. Moving interimState file from Current to Completed folder", docState.DocumentInformation.MessageID)
+
+	commandStateHelper.MoveCommandState(log,
+		docState.DocumentInformation.CommandID,
+		docState.DocumentInformation.Destination,
+		appconfig.DefaultLocationOfCurrent,
+		appconfig.DefaultLocationOfCompleted)
+
+	log.Debugf("Deleting message")
+	if err := mdsService.DeleteMessage(log, docState.DocumentInformation.MessageID); err != nil {
+		sdkutil.HandleAwsError(log, err, p.processorStopPolicy)
+	}
+}
+
+func parseCancelCommandMessage(context context.T, msg *ssmmds.Message, messagesOrchestrationRootDir string) (*messageContracts.DocumentState, error) {
+	log := context.Log()
+
 	log.Debug("Processing cancel command message ", jsonutil.Indent(*msg.Payload))
 
 	var parsedMessage messageContracts.CancelPayload
 	err := json.Unmarshal([]byte(*msg.Payload), &parsedMessage)
 	if err != nil {
-		log.Error("format of received cancel message is invalid ", err)
-		err = mdsService.FailMessage(log, *msg.MessageId, service.InternalHandlerException)
-		if err != nil {
-			sdkutil.HandleAwsError(log, err, p.processorStopPolicy)
-		}
-		return
+		return nil, err
 	}
 	log.Debugf("ParsedMessage is %v", parsedMessage)
 
 	//persist in current folder here
-	cancelCmd := initializeCancelCommandState(msg, parsedMessage)
-	commandID := getCommandID(*msg.MessageId)
-	// persist new interim command state in current folder
-	commandStateHelper.PersistData(log, commandID, *msg.Destination, appconfig.DefaultLocationOfCurrent, cancelCmd)
-
-	//remove from pending folder
-	commandStateHelper.RemoveData(log, commandID, *msg.Destination, appconfig.DefaultLocationOfPending)
-
-	log.Debugf("Canceling job with id %v...", parsedMessage.CancelMessageID)
-
-	if found := sendCommandPool.Cancel(parsedMessage.CancelMessageID); !found {
-		log.Debugf("Job with id %v not found (possibly completed)", parsedMessage.CancelMessageID)
-		cancelCmd.DebugInfo = fmt.Sprintf("Command %v couldn't be cancelled", cancelCmd.CancelCommandID)
-		cancelCmd.Status = contracts.ResultStatusFailed
-	} else {
-		cancelCmd.DebugInfo = fmt.Sprintf("Command %v cancelled", cancelCmd.CancelCommandID)
-		cancelCmd.Status = contracts.ResultStatusSuccess
-	}
-
-	//persist the final status of cancel-message in current folder
-	commandStateHelper.PersistData(log, commandID, *msg.Destination, appconfig.DefaultLocationOfCurrent, cancelCmd)
-
-	//persist : commands execution in completed folder (terminal state folder)
-	log.Debugf("Execution of %v is over. Moving interimState file from Current to Completed folder", *msg.MessageId)
-
-	commandStateHelper.MoveCommandState(log,
-		commandID,
-		*msg.Destination,
-		appconfig.DefaultLocationOfCurrent,
-		appconfig.DefaultLocationOfCompleted)
-
-	log.Debugf("Deleting message")
-	err = mdsService.DeleteMessage(log, *msg.MessageId)
-	if err != nil {
-		sdkutil.HandleAwsError(log, err, p.processorStopPolicy)
-	}
+	docState := initializeCancelCommandState(*msg, parsedMessage)
+	return &docState, nil
 }
