@@ -214,7 +214,7 @@ func (p *Plugin) runCommands(log log.T, pluginInput ApplicationPluginInput, orch
 		orchestrationDirectory = tempDir
 	}
 
-	orchestrationDir := fileutil.RemoveInvalidChars(filepath.Join(orchestrationDirectory, pluginInput.ID))
+	orchestrationDir := fileutil.BuildPath(orchestrationDirectory, pluginInput.ID)
 	log.Debugf("OrchestrationDir %v ", orchestrationDir)
 
 	// create orchestration dir if needed

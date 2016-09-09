@@ -56,14 +56,15 @@ const (
 
 	// CloudWatch Exe Name
 	CloudWatchExeName = "EC2Config.CloudWatch.exe"
-	// TODO use constants and filepath.join after add build windows @zimo
-	// SSM plugins folder path under local app data.
-	SSMPluginFolder = "Amazon\\SSM\\Plugins\\"
 )
+
+var fileExist = fileutil.Exists
+var getInstanceId = platform.InstanceID
+var getRegion = platform.Region
+var readPrefix = pluginutil.ReadPrefix
 
 //todo: honor cancel flag for Start
 //todo: honor cancel flag for Stop
-//todo: this should only run for windows platform -> make sure +build windows is added just after the package description
 //todo: Start,Stop -> should return plugin.result or error as well -> so that caller can report the results/errors accordingly.
 
 // NewPlugin returns a new instance of Cloudwatch plugin
@@ -79,7 +80,7 @@ func NewPlugin(pluginConfig pluginutil.PluginConfig) (*Plugin, error) {
 	plugin.OutputTruncatedSuffix = pluginConfig.OutputTruncatedSuffix
 	plugin.Uploader = pluginutil.GetS3Config()
 	plugin.ExecuteUploadOutputToS3Bucket = pluginutil.UploadOutputToS3BucketExecuter(plugin.UploadOutputToS3Bucket)
-	plugin.WorkingDir = filepath.Join(os.Getenv("ProgramFiles"), SSMPluginFolder, fileutil.RemoveInvalidChars(Name()))
+	plugin.WorkingDir = fileutil.BuildPath(appconfig.DefaultPluginPath, Name())
 	plugin.ExeLocation = filepath.Join(plugin.WorkingDir, CloudWatchExeName)
 
 	//Process details of cloudwatch.exe will be stored here accordingly
@@ -88,11 +89,11 @@ func NewPlugin(pluginConfig pluginutil.PluginConfig) (*Plugin, error) {
 
 	//health check specific stuff will be done here
 	instanceId, _ := platform.InstanceID()
-	plugin.DefaultHealthCheckOrchestrationDir = filepath.Join(appconfig.DefaultDataStorePath,
+	plugin.DefaultHealthCheckOrchestrationDir = fileutil.BuildPath(appconfig.DefaultDataStorePath,
 		instanceId,
 		appconfig.LongRunningPluginsLocation,
 		appconfig.LongRunningPluginsHealthCheck,
-		fileutil.RemoveInvalidChars(plugin.Name))
+		plugin.Name)
 	_ = fileutil.MakeDirsWithExecuteAccess(plugin.DefaultHealthCheckOrchestrationDir)
 
 	exec := executers.ShellCommandExecuter{}
@@ -106,12 +107,11 @@ func Name() string {
 	return appconfig.PluginNameCloudWatch
 }
 
-// TODO refactor @zimo
 // IsRunning returns if the said plugin is running or not
 func (p *Plugin) IsRunning(context context.T) bool {
 	log := context.Log()
 	//working directory here doesn't really matter much since we run a powershell script to determine if exe is running
-	return p.IsCloudWatchExeRunning(log, p.DefaultHealthCheckOrchestrationDir, p.DefaultHealthCheckOrchestrationDir, task.NewChanneledCancelFlag()) == nil
+	return p.IsCloudWatchExeRunning(log, p.DefaultHealthCheckOrchestrationDir, p.DefaultHealthCheckOrchestrationDir, task.NewChanneledCancelFlag())
 }
 
 // Start starts the executable file and returns encountered errors
@@ -120,7 +120,7 @@ func (p *Plugin) Start(context context.T, configuration string, orchestrationDir
 	log.Infof("CloudWatch Configuration to be applied - %s", configuration)
 
 	//check if the exe is located
-	if !fileutil.Exists(p.ExeLocation) {
+	if !fileExist(p.ExeLocation) {
 		log.Errorf("Unable to locate cloudwatch.exe")
 		return
 	}
@@ -139,11 +139,10 @@ func (p *Plugin) Start(context context.T, configuration string, orchestrationDir
 	}
 
 	//workingDirectory -> is the location where the exe runs from -> for cloudwatch this is where all configurations are present
-	// TODO: Separate RemoveInvalidChars method to windows and unix in fileutil
-	orchestrationDir = filepath.Join(orchestrationDir, fileutil.RemoveInvalidChars(p.Name))
+	orchestrationDir = fileutil.BuildPath(orchestrationDir, p.Name)
 	log.Debugf("Cloudwatch specific commands will be run in workingDirectory %v; orchestrationDir %v ", p.WorkingDir, orchestrationDir)
 	// create orchestration dir if needed
-	if !fileutil.Exists(orchestrationDir) {
+	if !fileExist(orchestrationDir) {
 		if err = fileutil.MakeDirsWithExecuteAccess(orchestrationDir); err != nil {
 			log.Errorf("Encountered error while creating orchestrationDir directory %s:%s", orchestrationDir, err.Error())
 			return
@@ -151,8 +150,7 @@ func (p *Plugin) Start(context context.T, configuration string, orchestrationDir
 	}
 
 	//check if cloudwatch.exe is already running or not
-	// err != nil -> false, not running
-	if err = p.IsCloudWatchExeRunning(log, p.WorkingDir, orchestrationDir, cancelFlag); err == nil {
+	if p.IsCloudWatchExeRunning(log, p.WorkingDir, orchestrationDir, cancelFlag) {
 		if err = p.Stop(context, cancelFlag); err != nil {
 			// not stop successfully
 			log.Errorf("Unable to disable current running cloudwatch. error: %s", err.Error())
@@ -174,12 +172,12 @@ func (p *Plugin) Start(context context.T, configuration string, orchestrationDir
 	commandName := p.ExeLocation
 	var commandArguments []string
 	var instanceId, instanceRegion string
-	if instanceId, err = platform.InstanceID(); err != nil {
+	if instanceId, err = getInstanceId(); err != nil {
 		log.Error("Cannot get the current instance ID")
 		return
 	}
 
-	if instanceRegion, err = platform.Region(); err != nil {
+	if instanceRegion, err = getRegion(); err != nil {
 		log.Error("Cannot get the current instance region information")
 		return
 	}
@@ -227,7 +225,7 @@ func (p *Plugin) Start(context context.T, configuration string, orchestrationDir
 	return nil
 }
 
-// StopCloudWatchExe returns true if it successfully killed the cloudwatch exe or else it returns false
+// Stop returns true if it successfully killed the cloudwatch exe or else it returns false
 func (p *Plugin) Stop(context context.T, cancelFlag task.CancelFlag) (err error) {
 	log := context.Log()
 
@@ -259,10 +257,8 @@ func (p *Plugin) Stop(context context.T, cancelFlag task.CancelFlag) (err error)
 	return
 }
 
-// TODO refactor @zimo
 // IsCloudWatchExeRunning runs a powershell script to determine if the given process is running
-func (p *Plugin) IsCloudWatchExeRunning(log log.T, workingDirectory, orchestrationDir string, cancelFlag task.CancelFlag) (err error) {
-	//todo: this should return error instead
+func (p *Plugin) IsCloudWatchExeRunning(log log.T, workingDirectory, orchestrationDir string, cancelFlag task.CancelFlag) bool {
 	/*
 		Since most functions in "os" package in GoLang isn't implemented for Windows platform, we run a powershell
 		script (using Get-Process) to get process details in Windows.
@@ -274,6 +270,7 @@ func (p *Plugin) IsCloudWatchExeRunning(log log.T, workingDirectory, orchestrati
 	//we need to wait for the command to finish so change this to Execute
 	exec := executers.ShellCommandExecuter{}
 	p.ExecuteCommand = pluginutil.CommandExecuter(exec.Execute)
+	var err error
 
 	//constructing the powershell command to execute
 	var cmds []string
@@ -289,7 +286,7 @@ func (p *Plugin) IsCloudWatchExeRunning(log log.T, workingDirectory, orchestrati
 	if !fileutil.Exists(orchestrationDir) {
 		if err = fileutil.MakeDirsWithExecuteAccess(orchestrationDir); err != nil {
 			log.Errorf("Encountered error while creating orchestrationDir directory %s:%s", orchestrationDir, err.Error())
-			return
+			return false
 		}
 	}
 
@@ -299,7 +296,7 @@ func (p *Plugin) IsCloudWatchExeRunning(log log.T, workingDirectory, orchestrati
 	// Create script file
 	if err = pluginutil.CreateScriptFile(log, scriptPath, cmds); err != nil {
 		log.Errorf("Failed to create script file : %v. Returning False because of this.", err)
-		return
+		return false
 	}
 
 	//construct command name and arguments
@@ -309,7 +306,6 @@ func (p *Plugin) IsCloudWatchExeRunning(log log.T, workingDirectory, orchestrati
 	log.Infof("arguments passed: %s", commandArguments)
 
 	//start the new process
-
 	stdoutFilePath := filepath.Join(orchestrationDir, p.StdoutFileName)
 	stderrFilePath := filepath.Join(orchestrationDir, p.StderrFileName)
 	//executionTimeout -> determining if a process is running or not shouldn't take more than 600 seconds
@@ -332,19 +328,19 @@ func (p *Plugin) IsCloudWatchExeRunning(log log.T, workingDirectory, orchestrati
 		log.Error(err)
 	}
 
-	log.Infof("stdout - %s", sout)
-	log.Infof("stderr - %s", serr)
-	log.Infof("exitCode - %v", exitCode)
-	log.Infof("errs - %v", errs)
+	log.Debugf("stdout - %s", sout)
+	log.Debugf("stderr - %s", serr)
+	log.Debugf("exitCode - %v", exitCode)
+	log.Debugf("errs - %v", errs)
 	//TODO not sure if this contains is correct, maybe need to read the last bool
 	//Get-Process returned the Pid -> means it was not null
 	if strings.Contains(sout, "True") {
 		log.Info("Process %s is running", cloudwatchProcessName)
-		return nil
-	} else {
-		log.Info("Process %s is not running", cloudwatchProcessName)
-		return errors.New(fmt.Sprintf("Process is not running"))
+		return true
 	}
+
+	log.Info("Process %s is not running", cloudwatchProcessName)
+	return false
 }
 
 // IsCloudWatchExeRunning runs a powershell script to determine if the given process is running

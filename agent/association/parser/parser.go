@@ -89,8 +89,8 @@ func InitializeCommandState(context context.T,
 		pluginConfigurations[pluginName] = &contracts.Configuration{
 			Properties:             pluginConfig.Properties,
 			OutputS3BucketName:     payload.OutputS3BucketName,
-			OutputS3KeyPrefix:      filepath.Join(s3KeyPrefix, fileutil.RemoveInvalidChars(pluginName)),
-			OrchestrationDirectory: filepath.Join(orchestrationRootDir, fileutil.RemoveInvalidChars(pluginName)),
+			OutputS3KeyPrefix:      fileutil.BuildPath(s3KeyPrefix, pluginName),
+			OrchestrationDirectory: fileutil.BuildPath(orchestrationRootDir, pluginName),
 			MessageId:              documentInfo.MessageID,
 			BookKeepingFileName:    payload.CommandID,
 		}

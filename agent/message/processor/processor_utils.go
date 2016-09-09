@@ -17,7 +17,6 @@ package processor
 
 import (
 	"errors"
-	"path/filepath"
 	"strings"
 
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
@@ -86,8 +85,8 @@ func getPluginConfigurations(runtimeConfig map[string]*contracts.PluginConfig, o
 			Settings:               pluginConfig.Settings,
 			Properties:             pluginConfig.Properties,
 			OutputS3BucketName:     s3BucketName,
-			OutputS3KeyPrefix:      filepath.Join(s3KeyPrefix, fileutil.RemoveInvalidChars(pluginName)),
-			OrchestrationDirectory: filepath.Join(orchestrationDir, fileutil.RemoveInvalidChars(pluginName)),
+			OutputS3KeyPrefix:      fileutil.BuildPath(s3KeyPrefix, pluginName),
+			OrchestrationDirectory: fileutil.BuildPath(orchestrationDir, pluginName),
 			MessageId:              messageID,
 			BookKeepingFileName:    getCommandID(messageID),
 		}

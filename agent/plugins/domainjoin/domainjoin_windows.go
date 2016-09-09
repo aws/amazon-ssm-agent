@@ -246,7 +246,7 @@ func (p *Plugin) runCommands(log log.T, pluginInput DomainJoinPluginInput, orche
 	// Construct Command line with executable file name and parameters
 	command := makeArgs(log, pluginInput)
 	log.Debugf("command line is : %v", command)
-	workingDir := filepath.Join(appconfig.DefaultPluginPath, fileutil.RemoveInvalidChars(Name()))
+	workingDir := fileutil.BuildPath(appconfig.DefaultPluginPath, Name())
 
 	out.Status = contracts.ResultStatusInProgress
 	err = utilExe(log,

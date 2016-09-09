@@ -191,7 +191,7 @@ func (p *Plugin) enablePlugin(log log.T, config contracts.Configuration, pluginI
 	// TODO cannot check if string is a valid json for cloudwatch
 	var property string
 	var failed bool
-	outputPath := filepath.Join(config.OrchestrationDirectory, fileutil.RemoveInvalidChars(appconfig.PluginNameCloudWatch))
+	outputPath := fileutil.BuildPath(config.OrchestrationDirectory, appconfig.PluginNameCloudWatch)
 	stdoutFilePath := filepath.Join(outputPath, p.StdoutFileName)
 	stderrFilePath := filepath.Join(outputPath, p.StderrFileName)
 

@@ -173,7 +173,7 @@ func (p *Plugin) runCommands(log log.T, pluginInput PSModulePluginInput, orchest
 		orchestrationDirectory = tempDir
 	}
 
-	orchestrationDir := fileutil.RemoveInvalidChars(filepath.Join(orchestrationDirectory, pluginInput.ID))
+	orchestrationDir := fileutil.BuildPath(orchestrationDirectory, pluginInput.ID)
 	log.Debugf("Running commands %v in workingDirectory %v; orchestrationDir %v ", pluginInput.RunCommand, pluginInput.WorkingDirectory, orchestrationDir)
 
 	// create orchestration dir if needed
