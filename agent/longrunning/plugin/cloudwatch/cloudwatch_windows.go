@@ -58,15 +58,20 @@ const (
 	CloudWatchExeName = "EC2Config.CloudWatch.exe"
 )
 
+// Assign method to global variables to allow unittest to override
+// TODO change these to deps.go later
 var fileExist = fileutil.Exists
 var getInstanceId = platform.InstanceID
 var getRegion = platform.Region
-var readPrefix = pluginutil.ReadPrefix
+var exec = executers.ShellCommandExecuter{}
+var startExe = exec.StartExe
+var waitExe = exec.Execute
+var getProcess = exec.GetProcess
+var createScript = pluginutil.CreateScriptFile
 
 //todo: honor cancel flag for Start
 //todo: honor cancel flag for Stop
 //todo: Start,Stop -> should return plugin.result or error as well -> so that caller can report the results/errors accordingly.
-
 // NewPlugin returns a new instance of Cloudwatch plugin
 func NewPlugin(pluginConfig pluginutil.PluginConfig) (*Plugin, error) {
 
@@ -95,9 +100,7 @@ func NewPlugin(pluginConfig pluginutil.PluginConfig) (*Plugin, error) {
 		appconfig.LongRunningPluginsHealthCheck,
 		plugin.Name)
 	_ = fileutil.MakeDirsWithExecuteAccess(plugin.DefaultHealthCheckOrchestrationDir)
-
-	exec := executers.ShellCommandExecuter{}
-	plugin.ExecuteCommand = pluginutil.CommandExecuter(exec.StartExe)
+	plugin.ExecuteCommand = pluginutil.CommandExecuter(startExe)
 
 	return &plugin, nil
 }
@@ -121,8 +124,9 @@ func (p *Plugin) Start(context context.T, configuration string, orchestrationDir
 
 	//check if the exe is located
 	if !fileExist(p.ExeLocation) {
-		log.Errorf("Unable to locate cloudwatch.exe")
-		return
+		errorMessage := "Unable to locate cloudwatch.exe"
+		log.Errorf(errorMessage)
+		return errors.New(errorMessage)
 	}
 
 	//if no orchestration directory specified, create temp directory
@@ -219,7 +223,7 @@ func (p *Plugin) Start(context context.T, configuration string, orchestrationDir
 	log.Debugf("errs - %v", errs)
 
 	//Storing Cloudwatch process details
-	p.Process = *executers.Process
+	p.Process = *getProcess()
 	log.Infof("Process id of cloudwatch.exe -> %v", p.Process.Pid)
 
 	return nil
@@ -268,8 +272,7 @@ func (p *Plugin) IsCloudWatchExeRunning(log log.T, workingDirectory, orchestrati
 		future commands to enable/disable cloudwatch.
 	*/
 	//we need to wait for the command to finish so change this to Execute
-	exec := executers.ShellCommandExecuter{}
-	p.ExecuteCommand = pluginutil.CommandExecuter(exec.Execute)
+	p.ExecuteCommand = pluginutil.CommandExecuter(waitExe)
 	var err error
 
 	//constructing the powershell command to execute
@@ -283,7 +286,7 @@ func (p *Plugin) IsCloudWatchExeRunning(log log.T, workingDirectory, orchestrati
 	orchestrationDir = filepath.Join(orchestrationDir, "IsExeRunning")
 
 	// create orchestration dir if needed
-	if !fileutil.Exists(orchestrationDir) {
+	if !fileExist(orchestrationDir) {
 		if err = fileutil.MakeDirsWithExecuteAccess(orchestrationDir); err != nil {
 			log.Errorf("Encountered error while creating orchestrationDir directory %s:%s", orchestrationDir, err.Error())
 			return false
@@ -294,7 +297,7 @@ func (p *Plugin) IsCloudWatchExeRunning(log log.T, workingDirectory, orchestrati
 	scriptPath := filepath.Join(orchestrationDir, pluginutil.RunCommandScriptName)
 
 	// Create script file
-	if err = pluginutil.CreateScriptFile(log, scriptPath, cmds); err != nil {
+	if err = createScript(log, scriptPath, cmds); err != nil {
 		log.Errorf("Failed to create script file : %v. Returning False because of this.", err)
 		return false
 	}
@@ -314,7 +317,7 @@ func (p *Plugin) IsCloudWatchExeRunning(log log.T, workingDirectory, orchestrati
 	stdout, stderr, exitCode, errs := p.ExecuteCommand(log, workingDirectory, stdoutFilePath, stderrFilePath, cancelFlag, executionTimeout, commandName, commandArguments)
 
 	//Reverting back to exec.StartExe (that doesn't wait for the command to finish)
-	p.ExecuteCommand = pluginutil.CommandExecuter(exec.StartExe)
+	p.ExecuteCommand = pluginutil.CommandExecuter(startExe)
 
 	// read (a prefix of) the standard output/error
 	var sout, serr string
@@ -352,8 +355,7 @@ func (p *Plugin) GetPidOfCloudWatchExe(log log.T, orchestrationDir, workingDirec
 
 	var err error
 	//we need to wait for the command to finish so change this to Execute
-	exec := executers.ShellCommandExecuter{}
-	p.ExecuteCommand = pluginutil.CommandExecuter(exec.Execute)
+	p.ExecuteCommand = pluginutil.CommandExecuter(waitExe)
 	//constructing the powershell command to execute
 	var cmds []string
 	cloudwatchProcessName := CloudWatchProcessName
@@ -365,7 +367,7 @@ func (p *Plugin) GetPidOfCloudWatchExe(log log.T, orchestrationDir, workingDirec
 	orchestrationDir = filepath.Join(orchestrationDir, "GetPidOfExe")
 
 	// create orchestration dir if needed
-	if !fileutil.Exists(orchestrationDir) {
+	if !fileExist(orchestrationDir) {
 		if err = fileutil.MakeDirsWithExecuteAccess(orchestrationDir); err != nil {
 			log.Errorf("Encountered error while creating orchestrationDir directory %s:%s", orchestrationDir, err.Error())
 			return 0, errors.New(fmt.Sprintf("Couldn't create orchestrationDirectory to find Pid of cloudwatch"))
@@ -376,7 +378,7 @@ func (p *Plugin) GetPidOfCloudWatchExe(log log.T, orchestrationDir, workingDirec
 	scriptPath := filepath.Join(orchestrationDir, pluginutil.RunCommandScriptName)
 
 	// Create script file
-	if err = pluginutil.CreateScriptFile(log, scriptPath, cmds); err != nil {
+	if err = createScript(log, scriptPath, cmds); err != nil {
 		log.Errorf("Failed to create script file : %v. Returning False because of this.", err)
 		return 0, errors.New(fmt.Sprintf("Couldn't create script file to find Pid of cloudwatch"))
 	}
@@ -397,7 +399,7 @@ func (p *Plugin) GetPidOfCloudWatchExe(log log.T, orchestrationDir, workingDirec
 	stdout, stderr, exitCode, errs := p.ExecuteCommand(log, workingDirectory, stdoutFilePath, stderrFilePath, cancelFlag, executionTimeout, commandName, commandArguments)
 
 	//Reverting back to exec.StartExe (that doesn't wait for the command to finish)
-	p.ExecuteCommand = pluginutil.CommandExecuter(exec.StartExe)
+	p.ExecuteCommand = pluginutil.CommandExecuter(startExe)
 
 	// read (a prefix of) the standard output/error
 	var sout, serr string

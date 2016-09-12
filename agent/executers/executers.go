@@ -29,6 +29,13 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/task"
 )
 
+// T is the interface type for ShellCommandExecuter.
+type T interface {
+	GetProcess() *os.Process
+	Execute(log.T, string, string, string, task.CancelFlag, int, string, []string) (io.Reader, io.Reader, int, []error)
+	StartExe(log.T, string, string, string, task.CancelFlag, int, string, []string) (io.Reader, io.Reader, int, []error)
+}
+
 // ShellCommandExecuter is specially added for testing purposes
 type ShellCommandExecuter struct {
 }
