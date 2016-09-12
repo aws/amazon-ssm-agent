@@ -18,7 +18,6 @@ package processor
 import (
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"path"
 	"path/filepath"
 	"strings"
@@ -27,13 +26,11 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
-	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	"github.com/aws/amazon-ssm-agent/agent/framework/engine"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	messageContracts "github.com/aws/amazon-ssm-agent/agent/message/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/message/parser"
 	"github.com/aws/amazon-ssm-agent/agent/message/service"
-	"github.com/aws/amazon-ssm-agent/agent/platform"
 	"github.com/aws/amazon-ssm-agent/agent/sdkutil"
 	commandStateHelper "github.com/aws/amazon-ssm-agent/agent/statemanager"
 	"github.com/aws/amazon-ssm-agent/agent/task"
@@ -45,165 +42,6 @@ var once sync.Once
 
 var loadDocStateFromSendCommand = parseSendCommandMessage
 var loadDocStateFromCancelCommand = parseCancelCommandMessage
-
-// processOlderMessages processes older messages that have been persisted in various locations (like from pending & current folders)
-func (p *Processor) processOlderMessages() {
-	log := p.context.Log()
-
-	instanceID, err := platform.InstanceID()
-	if err != nil {
-		log.Errorf("error fetching instance id, %v", err)
-		return
-	}
-
-	//process older messages from PENDING folder
-	unprocessedMsgsLocation := filepath.Join(appconfig.DefaultDataStorePath,
-		instanceID,
-		appconfig.DefaultCommandRootDirName,
-		appconfig.DefaultLocationOfState,
-		appconfig.DefaultLocationOfPending)
-
-	if isDirectoryEmpty, _ := fileutil.IsDirEmpty(unprocessedMsgsLocation); isDirectoryEmpty {
-
-		log.Debugf("No messages to process from %v", unprocessedMsgsLocation)
-
-	} else {
-
-		//get all pending messages
-		files, err := ioutil.ReadDir(unprocessedMsgsLocation)
-
-		//TODO:  revisit this when bookkeeping is made invasive
-		if err != nil {
-			log.Errorf("skipping reading pending messages from %v. unexpected error encountered - %v", unprocessedMsgsLocation, err)
-			return
-		}
-
-		//iterate through all pending messages
-		for _, f := range files {
-			log.Debugf("Processing an older message with messageID - %v", f.Name())
-
-			//construct the absolute path - safely assuming that interim state for older messages are already present in Pending folder
-			file := filepath.Join(appconfig.DefaultDataStorePath,
-				instanceID,
-				appconfig.DefaultCommandRootDirName,
-				appconfig.DefaultLocationOfState,
-				appconfig.DefaultLocationOfPending,
-				f.Name())
-
-			var docState messageContracts.DocumentState
-
-			//parse the message
-			if err := jsonutil.UnmarshalFile(file, &docState); err != nil {
-				log.Errorf("skipping processsing of pending messages. encountered error %v while reading pending message from file - %v", err, f)
-				break
-			}
-
-			if docState.IsAssociation() {
-				break
-			}
-
-			p.submitDocForExecution(&docState)
-		}
-	}
-
-	//process older messages from CURRENT folder
-	p.processMessagesFromCurrent(instanceID)
-
-	return
-}
-
-// processOlderMessagesFromCurrent processes older messages that were persisted in CURRENT folder
-func (p *Processor) processMessagesFromCurrent(instanceID string) {
-	log := p.context.Log()
-	config := p.context.AppConfig()
-
-	unprocessedMsgsLocation := filepath.Join(appconfig.DefaultDataStorePath,
-		instanceID,
-		appconfig.DefaultCommandRootDirName,
-		appconfig.DefaultLocationOfState,
-		appconfig.DefaultLocationOfCurrent)
-
-	if isDirectoryEmpty, _ := fileutil.IsDirEmpty(unprocessedMsgsLocation); isDirectoryEmpty {
-
-		log.Debugf("no older messages to process from %v", unprocessedMsgsLocation)
-
-	} else {
-
-		//get all older messages from previous run of agent
-		files, err := ioutil.ReadDir(unprocessedMsgsLocation)
-		//TODO:  revisit this when bookkeeping is made invasive
-		if err != nil {
-			log.Errorf("skipping reading inprogress messages from %v. unexpected error encountered - %v", unprocessedMsgsLocation, err)
-			return
-		}
-
-		//iterate through all old executing messages
-		for _, f := range files {
-			log.Debugf("processing previously unexecuted message - %v", f.Name())
-
-			//construct the absolute path - safely assuming that interim state for older messages are already present in Current folder
-			file := filepath.Join(appconfig.DefaultDataStorePath,
-				instanceID,
-				appconfig.DefaultCommandRootDirName,
-				appconfig.DefaultLocationOfState,
-				appconfig.DefaultLocationOfCurrent,
-				f.Name())
-
-			var docState messageContracts.DocumentState
-
-			//parse the message
-			if err := jsonutil.UnmarshalFile(file, &docState); err != nil {
-				log.Errorf("skipping processsing of previously unexecuted messages. encountered error %v while reading unprocessed message from file - %v", err, f)
-				break
-			}
-
-			if docState.IsAssociation() {
-				break
-			}
-
-			if docState.DocumentInformation.RunCount >= config.Mds.CommandRetryLimit {
-				//TODO:  Move command to corrupt/failed
-				// do not process as the command has failed too many times
-				break
-			}
-
-			//TODO: fix resume cancel command
-			pluginOutputs := make(map[string]*contracts.PluginResult)
-
-			// increment the command run count
-			docState.DocumentInformation.RunCount++
-			// Update reboot status
-			for v := range docState.PluginsInformation {
-				plugin := docState.PluginsInformation[v]
-				if plugin.HasExecuted && plugin.Result.Status == contracts.ResultStatusSuccessAndReboot {
-					log.Debugf("plugin %v has completed a reboot. Setting status to Success.", v)
-					plugin.Result.Status = contracts.ResultStatusSuccess
-					docState.PluginsInformation[v] = plugin
-					pluginOutputs[v] = &plugin.Result
-					p.sendResponse(docState.DocumentInformation.MessageID, v, pluginOutputs)
-				}
-			}
-
-			// func PersistData(log log.T, commandID, instanceID, locationFolder string, object interface{}) {
-			commandStateHelper.PersistData(log, docState.DocumentInformation.CommandID, instanceID, appconfig.DefaultLocationOfCurrent, docState)
-
-			//Submit the work to Job Pool so that we don't block for processing of new messages
-			err := p.sendCommandPool.Submit(log, docState.DocumentInformation.MessageID, func(cancelFlag task.CancelFlag) {
-				p.runCmdsUsingCmdState(p.context.With("[messageID="+docState.DocumentInformation.MessageID+"]"),
-					p.service,
-					p.pluginRunner,
-					cancelFlag,
-					p.buildReply,
-					p.sendResponse,
-					docState)
-			})
-			if err != nil {
-				log.Error("SendCommand failed for previously unexecuted commands", err)
-				break
-			}
-		}
-	}
-}
 
 // runCmdsUsingCmdState takes commandState as an input and executes only those plugins which haven't yet executed. This is functionally
 // very similar to processSendCommandMessage because everything to do with cmd execution is part of that function right now.
@@ -361,11 +199,11 @@ func (p *Processor) processMessage(msg *ssmmds.Message) {
 
 	log.Debugf("SendReply done. Received message - messageId - %v, MessageString - %v", *msg.MessageId, msg.GoString())
 
-	p.submitDocForExecution(docState)
+	p.ExecutePendingDocument(docState)
 }
 
 // submitDocForExecution moves doc to current folder and submit it for execution
-func (p *Processor) submitDocForExecution(docState *messageContracts.DocumentState) {
+func (p *Processor) ExecutePendingDocument(docState *messageContracts.DocumentState) {
 	log := p.context.Log()
 
 	commandStateHelper.MoveCommandState(log,

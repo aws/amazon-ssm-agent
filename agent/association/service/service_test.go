@@ -35,6 +35,11 @@ var ssmMock = ssmSvc.NewMockDefault()
 var logMock = log.NewMockLog()
 
 func TestListAssociations(t *testing.T) {
+	service := AssociationService{
+		ssmSvc:     ssmMock,
+		stopPolicy: &sdkutil.StopPolicy{},
+	}
+
 	associationName := "test"
 	associationList := []*ssm.Association{
 		&ssm.Association{
@@ -51,13 +56,18 @@ func TestListAssociations(t *testing.T) {
 	ssmMock.On("ListAssociations", mock.AnythingOfType("*log.Mock"), mock.AnythingOfType("string")).Return(&listAssociationsOutput, nil)
 	ssmMock.On("GetDocument", mock.AnythingOfType("*log.Mock"), mock.AnythingOfType("string")).Return(&getDocumentOutput, nil)
 
-	response, err := ListAssociations(logMock, ssmMock, instanceID)
+	response, err := service.ListAssociations(logMock, instanceID)
 
 	assert.NoError(t, err)
 	assert.Equal(t, *response.Association.Name, "test")
 }
 
 func TestLoadAssociationDetails(t *testing.T) {
+	service := AssociationService{
+		ssmSvc:     ssmMock,
+		stopPolicy: &sdkutil.StopPolicy{},
+	}
+
 	associationName := "test"
 	documentContent := "document content"
 	assocRawData := model.AssociationRawData{}
@@ -76,13 +86,18 @@ func TestLoadAssociationDetails(t *testing.T) {
 	ssmMock.On("GetDocument", mock.AnythingOfType("*log.Mock"), mock.AnythingOfType("string")).Return(&getDocumentOutput, nil)
 	ssmMock.On("DescribeAssociation", mock.AnythingOfType("*log.Mock"), mock.AnythingOfType("string"), mock.AnythingOfType("string")).Return(&associationOutput, nil)
 
-	err := LoadAssociationDetail(logMock, ssmMock, &assocRawData)
+	err := service.LoadAssociationDetail(logMock, &assocRawData)
 
 	assert.NoError(t, err)
 	assert.NotNil(t, assocRawData.Parameter)
 }
 
 func TestUpdateAssociationStatus(t *testing.T) {
+	service := AssociationService{
+		ssmSvc:     ssmMock,
+		stopPolicy: &sdkutil.StopPolicy{},
+	}
+
 	associationName := "test"
 	status := ssm.AssociationStatusNamePending
 	output := ssm.UpdateAssociationStatusOutput{
@@ -93,7 +108,6 @@ func TestUpdateAssociationStatus(t *testing.T) {
 		},
 	}
 	info := contracts.AgentInfo{}
-	stopPolicy := sdkutil.StopPolicy{}
 
 	ssmMock.On("UpdateAssociationStatus",
 		mock.AnythingOfType("*log.Mock"),
@@ -101,14 +115,13 @@ func TestUpdateAssociationStatus(t *testing.T) {
 		mock.AnythingOfType("string"),
 		mock.AnythingOfType("*ssm.AssociationStatus")).Return(&output, nil)
 
-	result, err := UpdateAssociationStatus(logMock,
-		ssmMock,
+	result, err := service.UpdateAssociationStatus(
+		logMock,
 		instanceID,
 		associationName,
 		status,
 		"TestMessage",
-		&info,
-		&stopPolicy)
+		&info)
 
 	assert.NotNil(t, result)
 	assert.NoError(t, err)

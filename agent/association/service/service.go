@@ -28,12 +28,41 @@ import (
 	"github.com/twinj/uuid"
 )
 
+// T represents interface for association
+type T interface {
+	ListAssociations(log log.T, instanceID string) (*model.AssociationRawData, error)
+	LoadAssociationDetail(log log.T, assoc *model.AssociationRawData) error
+	UpdateAssociationStatus(
+		log log.T,
+		instanceID string,
+		name string,
+		status string,
+		message string,
+		agentInfo *contracts.AgentInfo) (*ssm.UpdateAssociationStatusOutput, error)
+}
+
+// AssociationService wraps the Ssm Service
+type AssociationService struct {
+	ssmSvc     ssmsvc.Service
+	stopPolicy *sdkutil.StopPolicy
+}
+
+// NewAssociationService returns a new association service
+func NewAssociationService(ssmSvc ssmsvc.Service, policy *sdkutil.StopPolicy) *AssociationService {
+	svc := AssociationService{
+		ssmSvc:     ssmSvc,
+		stopPolicy: policy,
+	}
+
+	return &svc
+}
+
 // ListAssociations will get the Association and related document string
-func ListAssociations(log log.T, ssmSvc ssmsvc.Service, instanceID string) (*model.AssociationRawData, error) {
+func (s *AssociationService) ListAssociations(log log.T, instanceID string) (*model.AssociationRawData, error) {
 	uuid.SwitchFormat(uuid.CleanHyphen)
 	assoc := &model.AssociationRawData{}
 
-	response, err := ssmSvc.ListAssociations(log, instanceID)
+	response, err := s.ssmSvc.ListAssociations(log, instanceID)
 	if err != nil {
 		log.Errorf("unable to retrieve associations %v", err)
 		return assoc, err
@@ -52,7 +81,7 @@ func ListAssociations(log log.T, ssmSvc ssmsvc.Service, instanceID string) (*mod
 }
 
 // LoadAssociationDetail loads document contents and parameters for the given association
-func LoadAssociationDetail(log log.T, ssmSvc ssmsvc.Service, assoc *model.AssociationRawData) error {
+func (s *AssociationService) LoadAssociationDetail(log log.T, assoc *model.AssociationRawData) error {
 	var (
 		documentResponse  *ssm.GetDocumentOutput
 		parameterResponse *ssm.DescribeAssociationOutput
@@ -60,13 +89,13 @@ func LoadAssociationDetail(log log.T, ssmSvc ssmsvc.Service, assoc *model.Associ
 	)
 
 	// Call getDocument and retrieve the document json string
-	if documentResponse, err = ssmSvc.GetDocument(log, *assoc.Association.Name); err != nil {
+	if documentResponse, err = s.ssmSvc.GetDocument(log, *assoc.Association.Name); err != nil {
 		log.Errorf("unable to retrieve document, %v", err)
 		return err
 	}
 
 	// Call descriptionAssociation and retrieve the parameter json string
-	if parameterResponse, err = ssmSvc.DescribeAssociation(log, *assoc.Association.InstanceId, *assoc.Association.Name); err != nil {
+	if parameterResponse, err = s.ssmSvc.DescribeAssociation(log, *assoc.Association.InstanceId, *assoc.Association.Name); err != nil {
 		log.Errorf("unable to retrieve association, %v", err)
 		return err
 	}
@@ -77,14 +106,13 @@ func LoadAssociationDetail(log log.T, ssmSvc ssmsvc.Service, assoc *model.Associ
 }
 
 // UpdateAssociationStatus update association status
-func UpdateAssociationStatus(log log.T,
-	ssmSvc ssmsvc.Service,
+func (s *AssociationService) UpdateAssociationStatus(
+	log log.T,
 	instanceID string,
 	name string,
 	status string,
 	message string,
-	agentInfo *contracts.AgentInfo,
-	processorStopPolicy *sdkutil.StopPolicy) (*ssm.UpdateAssociationStatusOutput, error) {
+	agentInfo *contracts.AgentInfo) (*ssm.UpdateAssociationStatusOutput, error) {
 	var result *ssm.UpdateAssociationStatusOutput
 
 	agentInfoContent, err := jsonutil.Marshal(agentInfo)
@@ -103,13 +131,13 @@ func UpdateAssociationStatus(log log.T,
 	}
 
 	// Call getDocument and retrieve the document json string
-	if result, err = ssmSvc.UpdateAssociationStatus(log,
+	if result, err = s.ssmSvc.UpdateAssociationStatus(log,
 		instanceID,
 		name,
 		&associationStatus); err != nil {
 
 		log.Errorf("unable to update association status, %v", err)
-		sdkutil.HandleAwsError(log, err, processorStopPolicy)
+		sdkutil.HandleAwsError(log, err, s.stopPolicy)
 		return nil, err
 	}
 
