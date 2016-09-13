@@ -70,7 +70,7 @@ func (pluginExecutionImp) RunPlugins(
 	documentID string,
 	plugins *map[string]message.PluginState,
 	pluginRegistry plugin.PluginRegistry,
-	sendReply engine.SendResponse,
+	assocUpdate engine.UpdateAssociation,
 	cancelFlag task.CancelFlag,
 ) (pluginOutputs map[string]*contracts.PluginResult) {
 	configs := make(map[string]*contracts.Configuration)
@@ -82,5 +82,5 @@ func (pluginExecutionImp) RunPlugins(
 		configs[pluginName] = &pluginConfig.Configuration
 	}
 
-	return engine.RunPlugins(context, documentID, configs, pluginRegistry, sendReply, cancelFlag)
+	return engine.RunPlugins(context, documentID, configs, pluginRegistry, nil, assocUpdate, cancelFlag)
 }

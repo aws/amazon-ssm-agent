@@ -62,7 +62,7 @@ func TestRunPluginsWithRegistry(t *testing.T) {
 	}
 
 	// call the code we are testing
-	outputs := RunPlugins(ctx, documentID, pluginConfigs, pluginRegistry, sendResponse, cancelFlag)
+	outputs := RunPlugins(ctx, documentID, pluginConfigs, pluginRegistry, sendResponse, nil, cancelFlag)
 
 	// fix the times expectation.
 	for _, result := range outputs {

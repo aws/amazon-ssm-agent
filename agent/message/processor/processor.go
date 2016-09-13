@@ -98,7 +98,7 @@ type Processor struct {
 type PluginRunner func(context context.T, documentID string, plugins map[string]*contracts.Configuration, sendResponse engine.SendResponse, cancelFlag task.CancelFlag) (pluginOutputs map[string]*contracts.PluginResult)
 
 var pluginRunner = func(context context.T, documentID string, plugins map[string]*contracts.Configuration, sendResponse engine.SendResponse, cancelFlag task.CancelFlag) (pluginOutputs map[string]*contracts.PluginResult) {
-	return engine.RunPlugins(context, documentID, plugins, plugin.RegisteredWorkerPlugins(context), sendResponse, cancelFlag)
+	return engine.RunPlugins(context, documentID, plugins, plugin.RegisteredWorkerPlugins(context), sendResponse, nil, cancelFlag)
 }
 
 // NewProcessor initializes a new mds processor with the given parameters.

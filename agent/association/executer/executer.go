@@ -27,9 +27,15 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	messageContracts "github.com/aws/amazon-ssm-agent/agent/message/contracts"
+	"github.com/aws/amazon-ssm-agent/agent/platform"
 	"github.com/aws/amazon-ssm-agent/agent/reply"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 	"github.com/aws/aws-sdk-go/service/ssm"
+)
+
+const (
+	outputMessageTemplate  string = "%v out of %v plugin%v processed, %v success, %v failed, %v timedout"
+	documentPendingMessage string = "Association is pending"
 )
 
 // DocumentExecuter represents the interface for running a document
@@ -57,13 +63,15 @@ func NewAssociationExecuter(assocSvc service.T, agentInfo *contracts.AgentInfo) 
 // ExecutePendingDocument moves doc to current folder and submit it for execution
 func (r *AssociationExecuter) ExecutePendingDocument(context context.T, pool taskpool.T, docState *messageContracts.DocumentState) error {
 	log := context.Log()
-	//TODO: check if p.sendDocLevelResponse is needed here
 	log.Debugf("Persist document and update association status to pending")
-	r.updateAssocStatusWithDocInfo(
+
+	r.assocSvc.UpdateAssociationStatus(
 		log,
-		&docState.DocumentInformation,
+		docState.DocumentInformation.DocumentName,
+		docState.DocumentInformation.Destination,
 		ssm.AssociationStatusNamePending,
-		"processing document")
+		documentPendingMessage,
+		r.agentInfo)
 
 	bookkeepingSvc.MoveCommandState(log,
 		docState.DocumentInformation.CommandID,
@@ -85,13 +93,13 @@ func (r *AssociationExecuter) ExecuteInProgressDocument(context context.T, docSt
 	log := context.Log()
 	//TODO: check isManagedInstance
 	log.Debug("Running plugins...")
-
-	//TODO: add plugin report for update association state
-	outputs := pluginExecution.RunPlugins(context,
+	totalNumberOfPlugins := len(docState.PluginsInformation)
+	outputs := pluginExecution.RunPlugins(
+		context,
 		docState.DocumentInformation.CommandID,
 		&docState.PluginsInformation,
 		plugin.RegisteredWorkerPlugins(context),
-		nil,
+		r.pluginExecutionReport,
 		cancelFlag)
 
 	pluginOutputContent, err := jsonutil.Marshal(outputs)
@@ -110,22 +118,24 @@ func (r *AssociationExecuter) ExecuteInProgressDocument(context context.T, docSt
 
 	log.Debug("Association execution completion ", outputs)
 	if docState.DocumentInformation.DocumentStatus == contracts.ResultStatusFailed {
-		r.updateAssocStatusWithDocInfo(
+		r.associationExecutionReport(
 			log,
 			&docState.DocumentInformation,
-			ssm.AssociationStatusNameFailed,
-			"Execution failed")
+			outputs,
+			totalNumberOfPlugins,
+			ssm.AssociationStatusNameFailed)
 
 	} else if docState.DocumentInformation.DocumentStatus == contracts.ResultStatusSuccess {
-		r.updateAssocStatusWithDocInfo(
+		r.associationExecutionReport(
 			log,
 			&docState.DocumentInformation,
-			ssm.AssociationStatusNameSuccess,
-			"Execution succeeded")
+			outputs,
+			totalNumberOfPlugins,
+			ssm.AssociationStatusNameSuccess)
 	}
 
 	//persist : commands execution in completed folder (terminal state folder)
-	log.Debugf("execution of %v is over. Moving interimState file from Current to Completed folder", docState.DocumentInformation.CommandID)
+	log.Debugf("execution of %v is over. Moving docState file from Current to Completed folder", docState.DocumentInformation.CommandID)
 	bookkeepingSvc.MoveCommandState(log,
 		docState.DocumentInformation.CommandID,
 		docState.DocumentInformation.Destination,
@@ -161,18 +171,78 @@ func (r *AssociationExecuter) parseAndPersistReplyContents(log log.T,
 		appconfig.DefaultLocationOfCurrent)
 }
 
-// updateAssocStatusWithDocInfo provides wrapper for calling update association service
-func (r *AssociationExecuter) updateAssocStatusWithDocInfo(
+// pluginExecutionReport allow engine to update progress after every plugin execution
+func (r *AssociationExecuter) pluginExecutionReport(
 	log log.T,
-	assoc *messageContracts.DocumentInfo,
-	status string,
-	message string) {
+	messageID string,
+	results map[string]*contracts.PluginResult,
+	totalNumberOfPlugins int) {
 
+	instanceID, err := platform.InstanceID()
+	if err != nil {
+		log.Error("failed to load instance id ", err)
+		return
+	}
+
+	// TODO: change the status to inProgress when new api is ready
+	message := buildOutput(results, totalNumberOfPlugins)
 	r.assocSvc.UpdateAssociationStatus(
 		log,
-		assoc.Destination,
-		assoc.DocumentName,
-		status,
+		messageID,
+		instanceID,
+		ssm.AssociationStatusNamePending,
 		message,
 		r.agentInfo)
+}
+
+// associationExecutionReport update the status for association
+func (r *AssociationExecuter) associationExecutionReport(
+	log log.T,
+	docInfo *messageContracts.DocumentInfo,
+	results map[string]*contracts.PluginResult,
+	totalNumberOfPlugins int,
+	associationStatus string) {
+
+	message := buildOutput(results, totalNumberOfPlugins)
+	r.assocSvc.UpdateAssociationStatus(
+		log,
+		docInfo.DocumentName,
+		docInfo.Destination,
+		associationStatus,
+		message,
+		r.agentInfo)
+}
+
+// buildOutput build the output message for association update
+func buildOutput(results map[string]*contracts.PluginResult, totalNumberOfPlugins int) string {
+	completed := len(results)
+	plural := ""
+
+	if totalNumberOfPlugins > 1 {
+		plural = "s"
+	}
+	success := len(filterByStatus(results, func(status contracts.ResultStatus) bool {
+		return status == contracts.ResultStatusPassedAndReboot ||
+			status == contracts.ResultStatusSuccessAndReboot ||
+			status == contracts.ResultStatusSuccess
+	}))
+	failed := len(filterByStatus(results, func(status contracts.ResultStatus) bool {
+		return status == contracts.ResultStatusFailed
+	}))
+	timedOut := len(filterByStatus(results, func(status contracts.ResultStatus) bool {
+		return status == contracts.ResultStatusTimedOut
+	}))
+
+	return fmt.Sprintf(outputMessageTemplate, completed, totalNumberOfPlugins, plural, success, failed, timedOut)
+}
+
+// filterByStatus represents the helper method that filter pluginResults base on ResultStatus
+func filterByStatus(plugins map[string]*contracts.PluginResult, predicate func(contracts.ResultStatus) bool) map[string]*contracts.PluginResult {
+	result := make(map[string]*contracts.PluginResult)
+	for name, value := range plugins {
+		if predicate(value.Status) {
+			result[name] = value
+		}
+	}
+	return result
 }

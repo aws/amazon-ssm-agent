@@ -21,6 +21,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/framework/plugin"
+	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/rebooter"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 )
@@ -33,6 +34,8 @@ type SendResponse func(messageID string, pluginID string, results map[string]*co
 // SendDocumentLevelResponse is used to send status response before plugin begins
 type SendDocumentLevelResponse func(messageID string, resultStatus contracts.ResultStatus, documentTraceOutput string)
 
+type UpdateAssociation func(log log.T, documentID string, results map[string]*contracts.PluginResult, totalNumberOfPlugins int)
+
 // RunPlugins executes a set of plugins. The plugin configurations are given in a map with pluginId as key.
 // Outputs the results of running the plugins, indexed by pluginId.
 func RunPlugins(
@@ -41,10 +44,12 @@ func RunPlugins(
 	plugins map[string]*contracts.Configuration,
 	pluginRegistry plugin.PluginRegistry,
 	sendReply SendResponse,
+	updateAssoc UpdateAssociation,
 	cancelFlag task.CancelFlag,
 ) (pluginOutputs map[string]*contracts.PluginResult) {
 
 	requestReboot := false
+	totalNumberOfPlugins := len(plugins)
 
 	pluginOutputs = make(map[string]*contracts.PluginResult)
 	for pluginID, pluginConfig := range plugins {
@@ -96,10 +101,14 @@ func RunPlugins(
 		}
 		// set end time.
 		pluginOutputs[pluginID].EndDateTime = time.Now()
-
+		log := context.Log()
 		if sendReply != nil {
-			context.Log().Infof("Sending response on plugin completion: %v", pluginID)
+			log.Infof("Sending response on plugin completion: %v", pluginID)
 			sendReply(documentID, pluginID, pluginOutputs)
+		}
+		if updateAssoc != nil {
+			log.Infof("Update assocition on plugin completion: %v", pluginID)
+			updateAssoc(log, documentID, pluginOutputs, totalNumberOfPlugins)
 		}
 
 	}
