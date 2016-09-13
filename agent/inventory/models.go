@@ -14,12 +14,6 @@
 // Package inventory contains routines that periodically updates basic instance inventory to Inventory service
 package inventory
 
-import (
-	"time"
-
-	"src/github.com/aws/aws-sdk-go/service/ssm"
-)
-
 //TODO: add all inventory types here
 //TODO: if all attributes of inventory types become strong typed then we can directly refer to aws-sdk rather
 //than defining everything here
@@ -31,21 +25,22 @@ const (
 
 // Item encapsulates an inventory item
 type Item struct {
-	name          string
-	content       string
-	contentHash   string
-	schemaVersion string
-	captureTime   time.Time
-}
-
-// BaseInventoryFields captures all basic attributes present in all inventory types
-type BaseInventoryFields struct {
+	Name string
+	//content depends on inventory type - hence set as interface{} here.
+	Content       interface{}
+	ContentHash   string
 	SchemaVersion string
 	CaptureTime   string
 }
 
 // InstanceInformation captures all attributes present in AWS:InstanceInformation inventory type
 type InstanceInformation struct {
-	BaseInventoryFields
-	ssm.UpdateInstanceInformationInput
+	AgentStatus     *string
+	AgentVersion    *string
+	ComputerName    *string
+	IPAddress       *string
+	InstanceId      *string
+	PlatformName    *string
+	PlatformType    *string
+	PlatformVersion *string
 }

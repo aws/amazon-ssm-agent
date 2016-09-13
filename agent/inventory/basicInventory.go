@@ -17,6 +17,7 @@ package inventory
 import (
 	"encoding/json"
 	"fmt"
+	"reflect"
 	"runtime"
 	"time"
 
@@ -90,6 +91,53 @@ func NewBasicInventoryProvider(context context.T) (*BasicInventoryProvider, erro
 	return &provider, nil
 }
 
+//TODO: add this as a utility so that other gatherers will also be able to use this.
+func (b *BasicInventoryProvider) ConvertToMap(input interface{}) map[string]*string {
+	log := b.context.Log()
+
+	ip := reflect.ValueOf(input)
+
+	if ip.Kind() == reflect.Ptr {
+		ip = ip.Elem()
+	}
+
+	var key string
+	m := make(map[string]*string)
+
+	//iterating over all fields
+	for i := 0; i < ip.NumField(); i++ {
+
+		// gets struct's i'th field type
+		structField := ip.Type().Field(i)
+
+		// gets struct's i'th field
+		v := ip.Field(i)
+
+		key = structField.Name
+
+		//gets the value of the field
+		itr := v.Interface()
+
+		value := reflect.ValueOf(itr)
+		if value.Kind() == reflect.Ptr {
+			// get the value instead
+			value = value.Elem()
+		}
+
+		switch value.Kind() {
+		case reflect.String, reflect.Bool, reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64, reflect.Float32, reflect.Float64:
+			random := fmt.Sprintf("%v", value.Interface())
+			m[key] = &random
+		default:
+			//TODO: for this to be generic - we need to support string conversion of
+			//complex data types as well - e.g struct, map etc.
+			log.Debugf("String conversion for complex types not yet supported - hence skipping.")
+		}
+	}
+
+	return m
+}
+
 // GetInstanceInformation returns the latest set of instance information
 func GetInstanceInformation(context context.T) (InstanceInformation, error) {
 
@@ -147,20 +195,19 @@ func GetInstanceInformation(context context.T) (InstanceInformation, error) {
 func (b *BasicInventoryProvider) instanceInformationInventoryItem() (Item, error) {
 	var err error
 	var data InstanceInformation
-	var dataB []byte
 	var item Item
 
 	if data, err = GetInstanceInformation(b.context); err == nil {
-		if dataB, err = json.Marshal(data); err == nil {
-			item = Item{
-				name:          AWSInstanceInformation,
-				content:       string(dataB),
-				schemaVersion: schemaVersionOfInventoryItem,
-				//capture time must be in UTC so that formatting to RFC3339 complies with regex at SSM
-				captureTime: time.Now().UTC(),
-			}
-		} else {
-			err = fmt.Errorf("Unable to marshall instance information - %v", err.Error())
+		//CaptureTime must comply with format: 2016-07-30T18:15:37Z or else it will throw error
+		t := time.Now().UTC()
+		time := t.Format(time.RFC3339)
+
+		item = Item{
+			Name:          AWSInstanceInformation,
+			Content:       data,
+			SchemaVersion: schemaVersionOfInventoryItem,
+			//capture time must be in UTC so that formatting to RFC3339 complies with regex at SSM
+			CaptureTime: time,
 		}
 	} else {
 		err = fmt.Errorf("Unable to fetch instance information - %v", err.Error())
@@ -181,10 +228,12 @@ func (b *BasicInventoryProvider) updateBasicInventory() {
 		return
 	}
 
-	//Note - behavior of not sending same data again is customizable. This is only relevant
+	dataB, _ := json.Marshal(i)
+
+	//Note - behavior of not sending same data again, is customizable. This is only relevant
 	//for integrating with awsconfig for now - later this policy will be changed.
 
-	if b.isOptimizerEnabled && !ShouldUpdate(i.name, i.content) {
+	if b.isOptimizerEnabled && !ShouldUpdate(i.Name, string(dataB)) {
 
 		//TODO: there is no checksum field in ssm coral model - so don't send the data now. As soon as checksum
 		//is introduced in our coral model - ensure agent sends just the checksum with updated timestamp
@@ -203,12 +252,7 @@ func (b *BasicInventoryProvider) updateBasicInventory() {
 
 		//set instanceInfo as inventory item
 		var content []map[string]*string
-		instanceInfoItem := make(map[string]*string)
-		instanceInfoItem[AWSInstanceInformation] = &i.content
-		content = append(content, instanceInfoItem)
-
-		//CaptureTime must comply with format: 2016-07-30T18:15:37Z or else it will throw error
-		captureTime := i.captureTime.Format(time.RFC3339)
+		content = append(content, b.ConvertToMap(i.Content))
 
 		//TODO: add the contentHash functionality
 
@@ -218,10 +262,10 @@ func (b *BasicInventoryProvider) updateBasicInventory() {
 			InstanceId: &instanceID,
 			Items: []*ssm.InventoryItem{
 				{
-					CaptureTime:   &captureTime,
+					CaptureTime:   &i.CaptureTime,
 					Content:       content,
-					TypeName:      &i.name,
-					SchemaVersion: &i.schemaVersion,
+					TypeName:      &i.Name,
+					SchemaVersion: &i.SchemaVersion,
 				},
 			},
 		}
