@@ -94,7 +94,11 @@ func (r *AssociationExecuter) ExecuteInProgressDocument(context context.T, docSt
 		nil,
 		cancelFlag)
 
-	pluginOutputContent, _ := jsonutil.Marshal(outputs)
+	pluginOutputContent, err := jsonutil.Marshal(outputs)
+	if err != nil {
+		log.Error("failed to parse to json string ", err)
+		return
+	}
 	log.Debugf("Plugin outputs %v", jsonutil.Indent(pluginOutputContent))
 
 	r.parseAndPersistReplyContents(log, docState, outputs)

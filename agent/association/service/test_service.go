@@ -11,6 +11,7 @@
 // either express or implied. See the License for the specific language governing
 // permissions and limitations under the License.
 
+// Package service wraps SSM service
 package service
 
 import (
@@ -21,6 +22,7 @@ import (
 	"github.com/stretchr/testify/mock"
 )
 
+// AssociationServiceMock stands for a mocked association service.
 type AssociationServiceMock struct {
 	mock.Mock
 }

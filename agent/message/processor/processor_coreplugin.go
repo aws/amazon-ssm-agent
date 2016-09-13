@@ -62,8 +62,7 @@ func (p *Processor) Execute(context context.T) (err error) {
 		context.Log().Errorf("unable to schedule message processor. %v", err)
 	}
 
-	p.assocProcessor, err = processor.NewAssociationProcessor(context)
-	if err != nil {
+	if p.assocProcessor, err = processor.NewAssociationProcessor(context); err != nil {
 		log.Errorf("failed to create association processor, %v", err)
 		return
 	}

@@ -125,22 +125,7 @@ func TestProcessAssociationUnableToParseAssociation(t *testing.T) {
 	assocParser = &parserMock
 
 	// Mock service
-	svcMock.On(
-		"ListAssociations",
-		mock.AnythingOfType("*log.Mock"),
-		mock.AnythingOfType("string")).Return(assocRawData, nil)
-	svcMock.On(
-		"LoadAssociationDetail",
-		mock.AnythingOfType("*log.Mock"),
-		mock.AnythingOfType("*model.AssociationRawData")).Return(nil)
-	svcMock.On(
-		"UpdateAssociationStatus",
-		mock.AnythingOfType("*log.Mock"),
-		mock.AnythingOfType("string"),
-		mock.AnythingOfType("string"),
-		mock.AnythingOfType("string"),
-		mock.AnythingOfType("string"),
-		mock.AnythingOfType("*contracts.AgentInfo")).Return(&output, nil)
+	mockService(svcMock, assocRawData, &output)
 
 	// Mock parser
 	parserMock.On(
@@ -156,6 +141,25 @@ func TestProcessAssociationUnableToParseAssociation(t *testing.T) {
 	assert.True(t, svcMock.AssertNumberOfCalls(t, "LoadAssociationDetail", 1))
 	assert.True(t, parserMock.AssertNumberOfCalls(t, "ParseDocumentWithParams", 1))
 	assert.True(t, svcMock.AssertNumberOfCalls(t, "UpdateAssociationStatus", 1))
+}
+
+func mockService(svcMock *service.AssociationServiceMock, assocRawData *model.AssociationRawData, output *ssm.UpdateAssociationStatusOutput) {
+	svcMock.On(
+		"ListAssociations",
+		mock.AnythingOfType("*log.Mock"),
+		mock.AnythingOfType("string")).Return(assocRawData, nil)
+	svcMock.On(
+		"LoadAssociationDetail",
+		mock.AnythingOfType("*log.Mock"),
+		mock.AnythingOfType("*model.AssociationRawData")).Return(nil)
+	svcMock.On(
+		"UpdateAssociationStatus",
+		mock.AnythingOfType("*log.Mock"),
+		mock.AnythingOfType("string"),
+		mock.AnythingOfType("string"),
+		mock.AnythingOfType("string"),
+		mock.AnythingOfType("string"),
+		mock.AnythingOfType("*contracts.AgentInfo")).Return(output, nil)
 }
 
 func TestProcessAssociationUnableToExecutePendingDocument(t *testing.T) {
@@ -175,33 +179,10 @@ func TestProcessAssociationUnableToExecutePendingDocument(t *testing.T) {
 	assocParser = &parserMock
 
 	// Mock service
-	svcMock.On(
-		"ListAssociations",
-		mock.AnythingOfType("*log.Mock"),
-		mock.AnythingOfType("string")).Return(assocRawData, nil)
-	svcMock.On(
-		"LoadAssociationDetail",
-		mock.AnythingOfType("*log.Mock"),
-		mock.AnythingOfType("*model.AssociationRawData")).Return(nil)
-	svcMock.On(
-		"UpdateAssociationStatus",
-		mock.AnythingOfType("*log.Mock"),
-		mock.AnythingOfType("string"),
-		mock.AnythingOfType("string"),
-		mock.AnythingOfType("string"),
-		mock.AnythingOfType("string"),
-		mock.AnythingOfType("*contracts.AgentInfo")).Return(&output, nil)
+	mockService(svcMock, assocRawData, &output)
 
 	// Mock parser
-	parserMock.On(
-		"ParseDocumentWithParams",
-		mock.AnythingOfType("*log.Mock"),
-		mock.AnythingOfType("*model.AssociationRawData")).Return(&payload, nil)
-	parserMock.On(
-		"InitializeDocumentState",
-		mock.AnythingOfType("*context.Mock"),
-		mock.AnythingOfType("*model.SendCommandPayload"),
-		mock.AnythingOfType("*model.AssociationRawData")).Return(docState)
+	mockParser(&parserMock, &payload, docState)
 
 	// Mock executer
 	executerMock.On(
@@ -222,6 +203,18 @@ func TestProcessAssociationUnableToExecutePendingDocument(t *testing.T) {
 	assert.True(t, executerMock.AssertNumberOfCalls(t, "ExecutePendingDocument", 1))
 }
 
+func mockParser(parserMock *parserMock, payload *messageContracts.SendCommandPayload, docState messageContracts.DocumentState) {
+	parserMock.On(
+		"ParseDocumentWithParams",
+		mock.AnythingOfType("*log.Mock"),
+		mock.AnythingOfType("*model.AssociationRawData")).Return(payload, nil)
+	parserMock.On(
+		"InitializeDocumentState",
+		mock.AnythingOfType("*context.Mock"),
+		mock.AnythingOfType("*model.SendCommandPayload"),
+		mock.AnythingOfType("*model.AssociationRawData")).Return(docState)
+}
+
 func TestProcessAssociationSuccessful(t *testing.T) {
 	processor := createProcessor()
 	svcMock := service.NewMockDefault()
@@ -239,33 +232,10 @@ func TestProcessAssociationSuccessful(t *testing.T) {
 	assocParser = &parserMock
 
 	// Mock service
-	svcMock.On(
-		"ListAssociations",
-		mock.AnythingOfType("*log.Mock"),
-		mock.AnythingOfType("string")).Return(assocRawData, nil)
-	svcMock.On(
-		"LoadAssociationDetail",
-		mock.AnythingOfType("*log.Mock"),
-		mock.AnythingOfType("*model.AssociationRawData")).Return(nil)
-	svcMock.On(
-		"UpdateAssociationStatus",
-		mock.AnythingOfType("*log.Mock"),
-		mock.AnythingOfType("string"),
-		mock.AnythingOfType("string"),
-		mock.AnythingOfType("string"),
-		mock.AnythingOfType("string"),
-		mock.AnythingOfType("*contracts.AgentInfo")).Return(&output, nil)
+	mockService(svcMock, assocRawData, &output)
 
 	// Mock parser
-	parserMock.On(
-		"ParseDocumentWithParams",
-		mock.AnythingOfType("*log.Mock"),
-		mock.AnythingOfType("*model.AssociationRawData")).Return(&payload, nil)
-	parserMock.On(
-		"InitializeDocumentState",
-		mock.AnythingOfType("*context.Mock"),
-		mock.AnythingOfType("*model.SendCommandPayload"),
-		mock.AnythingOfType("*model.AssociationRawData")).Return(docState)
+	mockParser(&parserMock, &payload, docState)
 
 	// Mock executer
 	executerMock.On(

@@ -22,14 +22,17 @@ import (
 	"github.com/stretchr/testify/mock"
 )
 
+// DocumentExecuterMock stands for a mocked document executer.
 type DocumentExecuterMock struct {
 	mock.Mock
 }
 
+// ExecuteInProgressDocument mocks implementation for ExecuteInProgressDocument
 func (m *DocumentExecuterMock) ExecutePendingDocument(context context.T, pool taskpool.T, interimDocState *messageContracts.DocumentState) error {
 	args := m.Called(context, pool, interimDocState)
 	return args.Error(0)
 }
 
+// ExecuteInProgressDocument mocks implementation for ExecuteInProgressDocument
 func (m *DocumentExecuterMock) ExecuteInProgressDocument(context context.T, interimDocState *messageContracts.DocumentState, cancelFlag task.CancelFlag) {
 }
