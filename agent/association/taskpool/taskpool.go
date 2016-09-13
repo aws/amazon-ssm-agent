@@ -15,6 +15,7 @@
 package taskpool
 
 import (
+	"sync"
 	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/log"
@@ -31,6 +32,7 @@ type Manager struct {
 // T represents the interface for taskpool
 type T interface {
 	Submit(log log.T, jobID string, job task.Job) error
+	ShutdownAndWait(timeout time.Duration)
 }
 
 // NewTaskPool creates a new instance of Manager
@@ -49,4 +51,24 @@ func NewTaskPool(log log.T, documentWorkersLimit int, cancelWaitDurationMillisec
 // Submit submits the task to the execution pool
 func (m Manager) Submit(log log.T, jobID string, job task.Job) error {
 	return m.executionPool.Submit(log, jobID, job)
+}
+
+// ShutdownAndWait wait and shutdown the task pool
+func (m Manager) ShutdownAndWait(timeout time.Duration) {
+	var wg sync.WaitGroup
+
+	wg.Add(1)
+	go func() {
+		defer wg.Done()
+		m.executionPool.ShutdownAndWait(timeout)
+	}()
+
+	wg.Add(1)
+	go func() {
+		defer wg.Done()
+		m.cancelPool.ShutdownAndWait(timeout)
+	}()
+
+	// wait for everything to shutdown
+	wg.Wait()
 }

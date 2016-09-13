@@ -27,7 +27,7 @@ type DocumentExecuterMock struct {
 	mock.Mock
 }
 
-// ExecuteInProgressDocument mocks implementation for ExecuteInProgressDocument
+// ExecutePendingDocument mocks implementation for ExecuteInProgressDocument
 func (m *DocumentExecuterMock) ExecutePendingDocument(context context.T, pool taskpool.T, interimDocState *messageContracts.DocumentState) error {
 	args := m.Called(context, pool, interimDocState)
 	return args.Error(0)

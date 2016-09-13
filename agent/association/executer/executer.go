@@ -34,8 +34,8 @@ import (
 
 // DocumentExecuter represents the interface for running a document
 type DocumentExecuter interface {
-	ExecutePendingDocument(context context.T, pool taskpool.T, interimDocState *messageContracts.DocumentState) error
-	ExecuteInProgressDocument(context context.T, interimDocState *messageContracts.DocumentState, cancelFlag task.CancelFlag)
+	ExecutePendingDocument(context context.T, pool taskpool.T, docState *messageContracts.DocumentState) error
+	ExecuteInProgressDocument(context context.T, docState *messageContracts.DocumentState, cancelFlag task.CancelFlag)
 }
 
 // AssociationExecuter represents the implementation of document executer

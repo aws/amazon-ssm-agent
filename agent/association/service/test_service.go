@@ -38,6 +38,10 @@ func (m *AssociationServiceMock) ListAssociations(log log.T, instanceID string) 
 	return args.Get(0).(*model.AssociationRawData), args.Error(1)
 }
 
+// CreateNewServiceIfUnHealthy mocks implementation for CreateNewServiceIfUnHealthy
+func (m *AssociationServiceMock) CreateNewServiceIfUnHealthy(log log.T) {
+}
+
 // LoadAssociationDetail mocks implementation for LoadAssociationDetail
 func (m *AssociationServiceMock) LoadAssociationDetail(log log.T, assoc *model.AssociationRawData) error {
 	args := m.Called(log, assoc)

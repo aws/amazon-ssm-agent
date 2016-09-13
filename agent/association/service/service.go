@@ -28,8 +28,11 @@ import (
 	"github.com/twinj/uuid"
 )
 
+const stopPolicyErrorThreshold = 10
+
 // T represents interface for association
 type T interface {
+	CreateNewServiceIfUnHealthy(log log.T)
 	ListAssociations(log log.T, instanceID string) (*model.AssociationRawData, error)
 	LoadAssociationDetail(log log.T, assoc *model.AssociationRawData) error
 	UpdateAssociationStatus(
@@ -43,18 +46,42 @@ type T interface {
 
 // AssociationService wraps the Ssm Service
 type AssociationService struct {
-	ssmSvc     ssmsvc.Service
-	stopPolicy *sdkutil.StopPolicy
+	ssmSvc                   ssmsvc.Service
+	stopPolicy               *sdkutil.StopPolicy
+	name                     string
+	stopPolicyErrorThreshold int
 }
 
 // NewAssociationService returns a new association service
-func NewAssociationService(ssmSvc ssmsvc.Service, policy *sdkutil.StopPolicy) *AssociationService {
+func NewAssociationService(name string) *AssociationService {
+	ssmService := ssmsvc.NewService()
+	policy := sdkutil.NewStopPolicy(name, stopPolicyErrorThreshold)
 	svc := AssociationService{
-		ssmSvc:     ssmSvc,
+		ssmSvc:     ssmService,
 		stopPolicy: policy,
+		name:       name,
+		stopPolicyErrorThreshold: stopPolicyErrorThreshold,
 	}
 
 	return &svc
+}
+
+// CreateNewServiceIfUnHealthy checks service healthy and create new service if original is unhealthy
+func (s *AssociationService) CreateNewServiceIfUnHealthy(log log.T) {
+	if s.stopPolicy == nil {
+		log.Debugf("creating new stop-policy.")
+		s.stopPolicy = sdkutil.NewStopPolicy(s.name, s.stopPolicyErrorThreshold)
+	}
+
+	log.Debugf("assocProcessor's stoppolicy before polling is %v", s.stopPolicy)
+	if s.stopPolicy.IsHealthy() == false {
+		log.Errorf("assocProcessor stopped temporarily due to internal failure. We will retry automatically")
+
+		// reset stop policy and let the scheduler start the polling after pollMessageFrequencyMinutes timeout
+		s.stopPolicy.ResetErrorCount()
+		s.ssmSvc = ssmsvc.NewService()
+		return
+	}
 }
 
 // ListAssociations will get the Association and related document string

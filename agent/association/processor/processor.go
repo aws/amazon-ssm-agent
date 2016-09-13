@@ -16,10 +16,12 @@ package processor
 
 import (
 	"fmt"
+	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/association/executer"
 	"github.com/aws/amazon-ssm-agent/agent/association/model"
+	assocScheduler "github.com/aws/amazon-ssm-agent/agent/association/scheduler"
 	"github.com/aws/amazon-ssm-agent/agent/association/service"
 	"github.com/aws/amazon-ssm-agent/agent/association/taskpool"
 	"github.com/aws/amazon-ssm-agent/agent/context"
@@ -28,8 +30,6 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	messageContracts "github.com/aws/amazon-ssm-agent/agent/message/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/platform"
-	"github.com/aws/amazon-ssm-agent/agent/sdkutil"
-	ssmsvc "github.com/aws/amazon-ssm-agent/agent/ssm"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 	"github.com/aws/aws-sdk-go/service/ssm"
 	"github.com/carlescere/scheduler"
@@ -39,17 +39,17 @@ const (
 	name                          = "Association"
 	documentWorkersLimit          = 1
 	cancelWaitDurationMillisecond = 10000
-	stopPolicyErrorThreshold      = 10
 )
 
 // Processor contains the logic for processing association
 type Processor struct {
-	pollJob   *scheduler.Job
-	assocSvc  service.T
-	executer  executer.DocumentExecuter
-	context   context.T
-	taskPool  taskpool.T
-	agentInfo *contracts.AgentInfo
+	pollJob    *scheduler.Job
+	assocSvc   service.T
+	executer   executer.DocumentExecuter
+	context    context.T
+	taskPool   taskpool.T
+	agentInfo  *contracts.AgentInfo
+	stopSignal chan bool
 }
 
 // NewAssociationProcessor returns a new Processor with the given context.
@@ -75,8 +75,7 @@ func NewAssociationProcessor(context context.T) (*Processor, error) {
 		OsVersion: config.Os.Version,
 	}
 
-	ssmService := ssmsvc.NewService()
-	assocSvc := service.NewAssociationService(ssmService, sdkutil.NewStopPolicy(name, stopPolicyErrorThreshold))
+	assocSvc := service.NewAssociationService(name)
 	executer := executer.NewAssociationExecuter(assocSvc, &agentInfo)
 
 	return &Processor{
@@ -98,11 +97,18 @@ func (p *Processor) ProcessAssociation() {
 	log := p.context.Log()
 	var assocRawData *model.AssociationRawData
 
+	if p.isStopped() {
+		log.Debug("Stopping association processor...")
+		return
+	}
+
 	instanceID, err := platform.InstanceID()
 	if err != nil {
 		log.Error("unable to retrieve instance id", err)
 		return
 	}
+
+	p.assocSvc.CreateNewServiceIfUnHealthy(log)
 
 	if assocRawData, err = p.assocSvc.ListAssociations(log, instanceID); err != nil {
 		log.Error("unable to retrieve associations", err)
@@ -133,7 +139,10 @@ func (p *Processor) ProcessAssociation() {
 
 // ExecutePendingDocument wraps ExecutePendingDocument from document executer
 func (p *Processor) ExecutePendingDocument(docState *messageContracts.DocumentState) {
-	p.executer.ExecutePendingDocument(p.context, p.taskPool, docState)
+	log := p.context.Log()
+	if err := p.executer.ExecutePendingDocument(p.context, p.taskPool, docState); err != nil {
+		log.Error("failed to execute pending documents ", err)
+	}
 }
 
 // ExecuteInProgressDocument wraps ExecuteInProgressDocument from document executer
@@ -144,6 +153,32 @@ func (p *Processor) ExecuteInProgressDocument(docState *messageContracts.Documen
 // SubmitTask wraps SubmitTask for taskpool
 func (p *Processor) SubmitTask(log log.T, jobID string, job task.Job) error {
 	return p.taskPool.Submit(log, jobID, job)
+}
+
+// ShutdownAndWait wraps the ShutdownAndWait for task pool
+func (p *Processor) ShutdownAndWait(timeout time.Duration) {
+	p.taskPool.ShutdownAndWait(timeout)
+}
+
+// Stop stops the association processor and stops the poll job
+func (p *Processor) Stop() {
+	// close channel; subsequent calls to isDone will return true
+	if !p.isStopped() {
+		close(p.stopSignal)
+	}
+
+	assocScheduler.Stop(p.pollJob)
+}
+
+// isStopped returns if the association processor has been stopped
+func (p *Processor) isStopped() bool {
+	select {
+	case <-p.stopSignal:
+		// received signal or channel already closed
+		return true
+	default:
+		return false
+	}
 }
 
 // parseAssociation parses the association to the document state

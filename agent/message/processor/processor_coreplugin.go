@@ -240,6 +240,13 @@ func (p *Processor) RequestStop(stopType contracts.StopType) (err error) {
 		p.cancelCommandPool.ShutdownAndWait(waitTimeout)
 	}()
 
+	// shutdown the association task pool in a separate go routine
+	wg.Add(1)
+	go func() {
+		defer wg.Done()
+		p.assocProcessor.ShutdownAndWait(waitTimeout)
+	}()
+
 	// wait for everything to shutdown
 	wg.Wait()
 	return nil

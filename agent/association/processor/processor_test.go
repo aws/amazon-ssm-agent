@@ -26,6 +26,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	messageContracts "github.com/aws/amazon-ssm-agent/agent/message/contracts"
+	"github.com/aws/amazon-ssm-agent/agent/task"
 	"github.com/aws/aws-sdk-go/service/ssm"
 	"github.com/carlescere/scheduler"
 	"github.com/stretchr/testify/assert"
@@ -71,6 +72,41 @@ func TestProcessAssociationUnableToGetAssociation(t *testing.T) {
 
 	assert.True(t, svcMock.AssertNumberOfCalls(t, "ListAssociations", 1))
 	assert.True(t, svcMock.AssertNumberOfCalls(t, "LoadAssociationDetail", 0))
+}
+
+func TestProcessAssociationExecutePendingDocument(t *testing.T) {
+	processor := createProcessor()
+	docState := messageContracts.DocumentState{}
+	executerMock := executer.DocumentExecuterMock{}
+
+	processor.executer = &executerMock
+
+	executerMock.On(
+		"ExecutePendingDocument",
+		mock.AnythingOfType("*context.Mock"),
+		mock.AnythingOfType("taskpool.Manager"),
+		mock.AnythingOfType("*model.DocumentState")).Return(nil)
+
+	processor.ExecutePendingDocument(&docState)
+
+	assert.True(t, executerMock.AssertNumberOfCalls(t, "ExecutePendingDocument", 1))
+}
+
+func TestProcessAssociationExecuteInProgressDocument(t *testing.T) {
+	processor := createProcessor()
+	docState := messageContracts.DocumentState{}
+	cancelFlag := task.ChanneledCancelFlag{}
+	executerMock := executer.DocumentExecuterMock{}
+
+	processor.executer = &executerMock
+
+	executerMock.On(
+		"ExecuteInProgressDocument",
+		mock.AnythingOfType("*context.Mock"),
+		mock.AnythingOfType("*model.DocumentState"),
+		mock.AnythingOfType("task.ChanneledCancelFlag"))
+
+	processor.ExecuteInProgressDocument(&docState, &cancelFlag)
 }
 
 func TestProcessAssociationUnableToLoadAssociationDetail(t *testing.T) {

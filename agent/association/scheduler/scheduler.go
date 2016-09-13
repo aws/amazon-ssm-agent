@@ -50,9 +50,8 @@ func loop(task func(), log log.T, job *scheduler.Job) {
 	taskStartTime := time.Now()
 
 	sleepMilli(taskStartTime, defaultSleepDurationInMilliSeconds)
-	//TODO: add support for stop policy and stop signal
-	task()
 
+	task()
 }
 
 // ScheduleNextRun skips waiting and schedule next run immediately
