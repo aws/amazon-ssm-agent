@@ -35,12 +35,12 @@ type Item struct {
 
 // InstanceInformation captures all attributes present in AWS:InstanceInformation inventory type
 type InstanceInformation struct {
-	AgentStatus     *string
-	AgentVersion    *string
-	ComputerName    *string
-	IPAddress       *string
-	InstanceId      *string
-	PlatformName    *string
-	PlatformType    *string
-	PlatformVersion *string
+	AgentStatus     string
+	AgentVersion    string
+	ComputerName    string
+	IPAddress       string
+	InstanceId      string
+	PlatformName    string
+	PlatformType    string
+	PlatformVersion string
 }

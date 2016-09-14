@@ -145,45 +145,45 @@ func GetInstanceInformation(context context.T) (InstanceInformation, error) {
 
 	log := context.Log()
 
-	instanceInfo.AgentStatus = aws.String(AgentStatus)
-	instanceInfo.AgentVersion = aws.String(version.Version)
+	instanceInfo.AgentStatus = *aws.String(AgentStatus)
+	instanceInfo.AgentVersion = *aws.String(version.Version)
 
 	//TODO: detecting OS can be added as an utility.
 	goOS := runtime.GOOS
 	switch goOS {
 	case updateutil.PlatformWindows:
-		instanceInfo.PlatformType = aws.String(ssm.PlatformTypeWindows)
+		instanceInfo.PlatformType = *aws.String(ssm.PlatformTypeWindows)
 	case updateutil.PlatformLinux:
-		instanceInfo.PlatformType = aws.String(ssm.PlatformTypeLinux)
+		instanceInfo.PlatformType = *aws.String(ssm.PlatformTypeLinux)
 	default:
 		return instanceInfo, fmt.Errorf("Cannot report platform type of unrecognized OS. %v", goOS)
 	}
 
 	if ip, err := platform.IP(); err == nil {
-		instanceInfo.IPAddress = aws.String(ip)
+		instanceInfo.IPAddress = *aws.String(ip)
 	} else {
 		log.Warn(err)
 	}
 
 	if h, err := platform.Hostname(); err == nil {
-		instanceInfo.ComputerName = aws.String(h)
+		instanceInfo.ComputerName = *aws.String(h)
 	} else {
 		log.Warn(err)
 	}
 	if instID, err := platform.InstanceID(); err == nil {
-		instanceInfo.InstanceId = aws.String(instID)
+		instanceInfo.InstanceId = *aws.String(instID)
 	} else {
 		log.Warn(err)
 	}
 
 	if n, err := platform.PlatformName(log); err == nil {
-		instanceInfo.PlatformName = aws.String(n)
+		instanceInfo.PlatformName = *aws.String(n)
 	} else {
 		log.Warn(err)
 	}
 
 	if v, err := platform.PlatformVersion(log); err == nil {
-		instanceInfo.PlatformVersion = aws.String(v)
+		instanceInfo.PlatformVersion = *aws.String(v)
 	} else {
 		log.Warn(err)
 	}
