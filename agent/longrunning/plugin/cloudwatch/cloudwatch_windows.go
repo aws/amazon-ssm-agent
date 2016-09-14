@@ -13,7 +13,7 @@
 //
 // +build windows
 //
-// Package cloudwatch implements cloudwatch plugin
+// Package cloudwatch implements cloudwatch plugin and its configuration
 package cloudwatch
 
 import (
@@ -252,7 +252,7 @@ func (p *Plugin) Stop(context context.T, cancelFlag task.CancelFlag) (err error)
 		p.Process.Pid = pid
 	}
 
-	if err := p.Process.Kill(); err != nil {
+	if err = p.Process.Kill(); err != nil {
 		log.Errorf("Encountered error while trying to kill the process %v : %s", p.Process.Pid, err.Error())
 	} else {
 		log.Infof("Successfully killed the process %v", p.Process.Pid)

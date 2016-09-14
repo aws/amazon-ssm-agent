@@ -13,7 +13,7 @@
 //
 // +build windows
 //
-// Package cloudwatch implements cloudwatch plugin
+// Package cloudwatch implements cloudwatch plugin and its configuration
 package cloudwatch
 
 import (

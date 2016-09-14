@@ -19,6 +19,7 @@ import (
 	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/longrunning/plugin"
+	"github.com/aws/amazon-ssm-agent/agent/longrunning/plugin/cloudwatch"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 )
 
@@ -47,7 +48,16 @@ func (m *Manager) StopPlugin(name string, cancelFlag task.CancelFlag) (err error
 		}
 		//remove the entry from the map of running plugins
 		delete(m.runningPlugins, name)
-		err = dataStore.Write(m.runningPlugins)
+
+		if err = dataStore.Write(m.runningPlugins); err != nil {
+			log.Errorf("Failed to update datastore - because of %s", err)
+		}
+
+		// Update the config file to "IsEnabled": "false"
+		if err = cloudwatch.Disable(); err != nil {
+			log.Errorf("Failed to update config file - because of %s", err)
+		}
+
 		return
 	}
 
@@ -87,9 +97,19 @@ func (m *Manager) StartPlugin(name, configuration string, orchestrationDir strin
 	// TODO move persisting out of executing logic
 	m.runningPlugins[name] = p.Info
 	log.Debugf("Persisting info about %s in datastore", p.Info.Name)
+
+	// TODO separate persist part and actual running part
 	if err = dataStore.Write(m.runningPlugins); err != nil {
 		err = fmt.Errorf("Failed to persist info about %s in datastore because : %s", p.Info.Name, err.Error())
 		log.Errorf(err.Error())
 	}
+
+	// Update the config file with new configuration
+	cloudWatchConfig := cloudwatch.Instance()
+	cloudWatchConfig.EngineConfiguration = p.Info.Configuration
+	if err = cloudwatch.Enable(cloudWatchConfig); err != nil {
+		log.Errorf("Failed to update config file - because of %s", err)
+	}
+
 	return
 }

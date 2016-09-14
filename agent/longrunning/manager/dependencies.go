@@ -15,8 +15,12 @@
 package manager
 
 import (
+	"path/filepath"
+
+	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/longrunning/datastore"
 	"github.com/aws/amazon-ssm-agent/agent/longrunning/plugin"
+	"github.com/aws/amazon-ssm-agent/agent/platform"
 )
 
 // dataStoreT defines the operations that manager uses to interact with its data-store
@@ -32,14 +36,41 @@ type ds struct {
 
 // Write writes new data in the data-store
 func (d ds) Write(data map[string]plugin.PluginInfo) error {
-	return d.dsImpl.Write(data)
+	location, fileName, err := getDataStoreLocation()
+	if err != nil {
+		return err
+	}
+	return d.dsImpl.Write(data, location, fileName)
 }
 
 // Read reads data from the data-store
 func (d ds) Read() (map[string]plugin.PluginInfo, error) {
-	return d.dsImpl.Read()
+	_, fileName, err := getDataStoreLocation()
+	if err != nil {
+		return nil, err
+	}
+	return d.dsImpl.Read(fileName)
 }
 
 var dataStore dataStoreT = ds{
 	dsImpl: datastore.FsStore{},
+}
+
+// getDataStoreLocation returns the absolute path where long running plugins data-store is saved.
+func getDataStoreLocation() (location, fileName string, err error) {
+	var instanceId string
+
+	if instanceId, err = platform.InstanceID(); err != nil {
+		return
+	}
+	location = filepath.Join(appconfig.DefaultDataStorePath,
+		instanceId,
+		appconfig.LongRunningPluginsLocation,
+		appconfig.LongRunningPluginDataStoreLocation)
+	fileName = filepath.Join(appconfig.DefaultDataStorePath,
+		instanceId,
+		appconfig.LongRunningPluginsLocation,
+		appconfig.LongRunningPluginDataStoreLocation,
+		appconfig.LongRunningPluginDataStoreFileName)
+	return
 }

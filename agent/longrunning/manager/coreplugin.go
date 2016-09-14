@@ -20,9 +20,13 @@ import (
 	"sync"
 	"time"
 
+	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
+	"github.com/aws/amazon-ssm-agent/agent/fileutil"
+	"github.com/aws/amazon-ssm-agent/agent/log"
 	managerContracts "github.com/aws/amazon-ssm-agent/agent/longrunning/plugin"
+	"github.com/aws/amazon-ssm-agent/agent/longrunning/plugin/cloudwatch"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 	"github.com/aws/amazon-ssm-agent/agent/times"
 	"github.com/carlescere/scheduler"
@@ -154,11 +158,11 @@ func (m *Manager) Execute(context context.T) (err error) {
 	//revive older long running plugins if they were running before
 	if len(m.runningPlugins) > 0 {
 		var p managerContracts.Plugin
-		for pluginName, _ := range m.runningPlugins {
+		for pluginName, pluginInfo := range m.runningPlugins {
 			//get the corresponding registered plugin
 			p = m.registeredPlugins[pluginName]
+			p.Info = pluginInfo
 			log.Infof("Detected %s as a previously executing long running plugin. Starting that plugin again", p.Info.Name)
-
 			//submit the work of long running plugin to the task pool
 			/*
 				Note: All long running plugins are singleton in nature - hence jobId = plugin name.
@@ -167,10 +171,13 @@ func (m *Manager) Execute(context context.T) (err error) {
 			//todo: implement the singleton thing - ensure that there are no more than 1 cloudwatch plugin running at a time
 			//todo: orchestrationDir should be set accordingly - 3rd parameter for Start
 			p.Handler.Start(m.context, p.Info.Configuration, "", task.NewChanneledCancelFlag())
+			m.registeredPlugins[pluginName] = p
 		}
 	} else {
 		log.Infof("there aren't any long running plugin to execute")
 	}
+
+	m.configCloudWatch(log)
 
 	//schedule periodic health check of all long running plugins
 	if m.managingLifeCycleJob, err = scheduler.Every(PollFrequencyMinutes).Minutes().Run(m.ensurePluginsAreRunning); err != nil {
@@ -215,4 +222,33 @@ func (m *Manager) RequestStop(stopType contracts.StopType) (err error) {
 	// wait for everything to shutdown
 	wg.Wait()
 	return nil
+}
+
+// configCloudWatch checks the local configuration file for cloud watch plugin to see if any updates to config
+func (m *Manager) configCloudWatch(log log.T) {
+
+	var err error
+	// Read from cloudwatch config file to check if any configuration need to make for cloud watch
+	if err = cloudwatch.Update(); err != nil {
+		log.Infof("Cannot read configuration from config file. %v", err)
+	} else {
+		cloudWatchConfig := cloudwatch.Instance()
+		if cloudWatchConfig.IsEnabled {
+			log.Infof("Detected cloud watch has updated configuration. Configuring that plugin again")
+			// TODO need to check the folder
+			orchestrationDir := fileutil.BuildPath(appconfig.DefaultPluginPath, appconfig.PluginNameCloudWatch)
+			if err = m.StartPlugin(
+				appconfig.PluginNameCloudWatch,
+				cloudWatchConfig.EngineConfiguration,
+				orchestrationDir,
+				task.NewChanneledCancelFlag()); err != nil {
+				log.Errorf("Failed to start the cloud watch plugin bacause: %s", err)
+			}
+		} else {
+			log.Infof("Detected cloud watch has been requested to stop. Stoping the plugin")
+			if err = m.StopPlugin(appconfig.PluginNameCloudWatch, task.NewChanneledCancelFlag()); err != nil {
+				log.Errorf("Failed to stop the cloud watch plugin bacause: %s", err)
+			}
+		}
+	}
 }

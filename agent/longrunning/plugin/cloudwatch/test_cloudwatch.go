@@ -11,7 +11,7 @@
 // either express or implied. See the License for the specific language governing
 // permissions and limitations under the License.
 
-// Package cloudwatch implements cloudwatch plugin
+// Package cloudwatch implements cloudwatch plugin and its configuration
 package cloudwatch
 
 import (
