@@ -19,8 +19,9 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/association/parser"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/log"
-	message "github.com/aws/amazon-ssm-agent/agent/message/contracts"
+	messageContract "github.com/aws/amazon-ssm-agent/agent/message/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/statemanager"
+	stateModel "github.com/aws/amazon-ssm-agent/agent/statemanager/model"
 )
 
 var assocParser parserService = &assocParserService{}
@@ -40,10 +41,10 @@ func (assocBookkeepingService) PersistData(log log.T, commandID, instanceID, loc
 
 // parserService represents the dependency for association parser
 type parserService interface {
-	ParseDocumentWithParams(log log.T, rawData *model.AssociationRawData) (*message.SendCommandPayload, error)
+	ParseDocumentWithParams(log log.T, rawData *model.AssociationRawData) (*messageContract.SendCommandPayload, error)
 	InitializeDocumentState(context context.T,
-		payload *message.SendCommandPayload,
-		rawData *model.AssociationRawData) message.DocumentState
+		payload *messageContract.SendCommandPayload,
+		rawData *model.AssociationRawData) stateModel.DocumentState
 }
 
 type assocParserService struct{}
@@ -51,15 +52,15 @@ type assocParserService struct{}
 // ParseDocumentWithParams wraps parser ParseDocumentWithParams
 func (assocParserService) ParseDocumentWithParams(
 	log log.T,
-	rawData *model.AssociationRawData) (*message.SendCommandPayload, error) {
+	rawData *model.AssociationRawData) (*messageContract.SendCommandPayload, error) {
 
 	return parser.ParseDocumentWithParams(log, rawData)
 }
 
 // InitializeDocumentState wraps engine InitializeCommandState
 func (assocParserService) InitializeDocumentState(context context.T,
-	payload *message.SendCommandPayload,
-	rawData *model.AssociationRawData) message.DocumentState {
+	payload *messageContract.SendCommandPayload,
+	rawData *model.AssociationRawData) stateModel.DocumentState {
 
 	return parser.InitializeCommandState(context, payload, rawData)
 }

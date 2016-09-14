@@ -30,6 +30,7 @@ import (
 	messageContracts "github.com/aws/amazon-ssm-agent/agent/message/contracts"
 	messageParser "github.com/aws/amazon-ssm-agent/agent/message/parser"
 	"github.com/aws/amazon-ssm-agent/agent/parameters"
+	stateModel "github.com/aws/amazon-ssm-agent/agent/statemanager/model"
 	"github.com/aws/amazon-ssm-agent/agent/times"
 )
 
@@ -70,7 +71,7 @@ func ParseDocumentWithParams(log log.T,
 // InitializeCommandState - an interim state that is used around during an execution of a command
 func InitializeCommandState(context context.T,
 	payload *messageContracts.SendCommandPayload,
-	rawData *model.AssociationRawData) messageContracts.DocumentState {
+	rawData *model.AssociationRawData) stateModel.DocumentState {
 
 	//initialize document information with relevant values extracted from msg
 	documentInfo := newDocumentInfo(rawData, payload)
@@ -97,26 +98,26 @@ func InitializeCommandState(context context.T,
 	}
 
 	//initialize plugin states
-	pluginsInfo := make(map[string]messageContracts.PluginState)
+	pluginsInfo := make(map[string]stateModel.PluginState)
 
 	for key, value := range pluginConfigurations {
-		var plugin messageContracts.PluginState
+		var plugin stateModel.PluginState
 		plugin.Configuration = *value
 		plugin.HasExecuted = false
 		pluginsInfo[key] = plugin
 	}
 
 	//initialize command State
-	return messageContracts.DocumentState{
+	return stateModel.DocumentState{
 		DocumentInformation: documentInfo,
 		PluginsInformation:  pluginsInfo,
 	}
 }
 
 // newDocumentInfo initializes new DocumentInfo object
-func newDocumentInfo(rawData *model.AssociationRawData, payload *messageContracts.SendCommandPayload) messageContracts.DocumentInfo {
+func newDocumentInfo(rawData *model.AssociationRawData, payload *messageContracts.SendCommandPayload) stateModel.DocumentInfo {
 
-	documentInfo := new(messageContracts.DocumentInfo)
+	documentInfo := new(stateModel.DocumentInfo)
 
 	documentInfo.CommandID = rawData.ID
 	documentInfo.Destination = *rawData.Association.InstanceId

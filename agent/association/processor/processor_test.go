@@ -26,6 +26,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	messageContracts "github.com/aws/amazon-ssm-agent/agent/message/contracts"
+	stateModel "github.com/aws/amazon-ssm-agent/agent/statemanager/model"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 	"github.com/aws/aws-sdk-go/service/ssm"
 	"github.com/carlescere/scheduler"
@@ -76,7 +77,7 @@ func TestProcessAssociationUnableToGetAssociation(t *testing.T) {
 
 func TestProcessAssociationExecutePendingDocument(t *testing.T) {
 	processor := createProcessor()
-	docState := messageContracts.DocumentState{}
+	docState := stateModel.DocumentState{}
 	executerMock := executer.DocumentExecuterMock{}
 
 	processor.executer = &executerMock
@@ -94,7 +95,7 @@ func TestProcessAssociationExecutePendingDocument(t *testing.T) {
 
 func TestProcessAssociationExecuteInProgressDocument(t *testing.T) {
 	processor := createProcessor()
-	docState := messageContracts.DocumentState{}
+	docState := stateModel.DocumentState{}
 	cancelFlag := task.ChanneledCancelFlag{}
 	executerMock := executer.DocumentExecuterMock{}
 
@@ -205,7 +206,7 @@ func TestProcessAssociationUnableToExecutePendingDocument(t *testing.T) {
 	output := ssm.UpdateAssociationStatusOutput{}
 
 	payload := messageContracts.SendCommandPayload{}
-	docState := messageContracts.DocumentState{}
+	docState := stateModel.DocumentState{}
 	parserMock := parserMock{}
 	executerMock := executer.DocumentExecuterMock{}
 
@@ -239,7 +240,7 @@ func TestProcessAssociationUnableToExecutePendingDocument(t *testing.T) {
 	assert.True(t, executerMock.AssertNumberOfCalls(t, "ExecutePendingDocument", 1))
 }
 
-func mockParser(parserMock *parserMock, payload *messageContracts.SendCommandPayload, docState messageContracts.DocumentState) {
+func mockParser(parserMock *parserMock, payload *messageContracts.SendCommandPayload, docState stateModel.DocumentState) {
 	parserMock.On(
 		"ParseDocumentWithParams",
 		mock.AnythingOfType("*log.Mock"),
@@ -258,7 +259,7 @@ func TestProcessAssociationSuccessful(t *testing.T) {
 	output := ssm.UpdateAssociationStatusOutput{}
 
 	payload := messageContracts.SendCommandPayload{}
-	docState := messageContracts.DocumentState{}
+	docState := stateModel.DocumentState{}
 	parserMock := parserMock{}
 	executerMock := executer.DocumentExecuterMock{}
 

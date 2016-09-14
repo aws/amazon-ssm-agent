@@ -33,7 +33,8 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/platform"
 	"github.com/aws/amazon-ssm-agent/agent/reply"
 	"github.com/aws/amazon-ssm-agent/agent/sdkutil"
-	commandStateHelper "github.com/aws/amazon-ssm-agent/agent/statemanager"
+	"github.com/aws/amazon-ssm-agent/agent/statemanager"
+	"github.com/aws/amazon-ssm-agent/agent/statemanager/model"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 	"github.com/aws/amazon-ssm-agent/agent/times"
 	"github.com/carlescere/scheduler"
@@ -73,7 +74,7 @@ type replyBuilder func(pluginID string, results map[string]*contracts.PluginResu
 
 type statusReplyBuilder func(agentInfo contracts.AgentInfo, resultStatus contracts.ResultStatus)
 
-type persistData func(state *messageContracts.DocumentState, bookkeeping string)
+type persistData func(state *model.DocumentState, bookkeeping string)
 
 // Processor is an object that can process MDS messages.
 type Processor struct {
@@ -166,8 +167,8 @@ func NewProcessor(context context.T) *Processor {
 	}
 
 	// PersistData is used to persist the data into a bookkeeping folder
-	persistData := func(state *messageContracts.DocumentState, bookkeeping string) {
-		commandStateHelper.PersistData(log, state.DocumentInformation.CommandID, state.DocumentInformation.Destination, bookkeeping, *state)
+	persistData := func(state *model.DocumentState, bookkeeping string) {
+		statemanager.PersistData(log, state.DocumentInformation.CommandID, state.DocumentInformation.Destination, bookkeeping, *state)
 	}
 
 	return &Processor{

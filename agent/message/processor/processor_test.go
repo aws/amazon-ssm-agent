@@ -28,6 +28,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	messageContracts "github.com/aws/amazon-ssm-agent/agent/message/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/message/parser"
+	"github.com/aws/amazon-ssm-agent/agent/statemanager/model"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 	"github.com/aws/amazon-ssm-agent/agent/times"
 	"github.com/aws/aws-sdk-go/aws"
@@ -63,7 +64,7 @@ type TestCaseSendCommand struct {
 	Msg ssmmds.Message
 
 	// DocState stores parsed Document State
-	DocState messageContracts.DocumentState
+	DocState model.DocumentState
 
 	// MsgPayload stores the (parsed) payload of an MDS message.
 	MsgPayload messageContracts.SendCommandPayload
@@ -566,7 +567,7 @@ func prepareTestProcessMessage(testTopic string) (proc Processor, testCase TestC
 
 	// create a mock persistData function
 	isDataPersisted := false
-	persistData := func(docState *messageContracts.DocumentState, bookkeeping string) {
+	persistData := func(docState *model.DocumentState, bookkeeping string) {
 		isDataPersisted = true
 	}
 
@@ -632,14 +633,14 @@ func loadMessageReplyFromFile(t *testing.T, fileName string) (message messageCon
 	return message
 }
 
-func mockParseSendCommand(context context.T, msg *ssmmds.Message, messagesOrchestrationRootDir string) (*messageContracts.DocumentState, error) {
-	return &messageContracts.DocumentState{
-		DocumentType: messageContracts.SendCommand,
+func mockParseSendCommand(context context.T, msg *ssmmds.Message, messagesOrchestrationRootDir string) (*model.DocumentState, error) {
+	return &model.DocumentState{
+		DocumentType: model.SendCommand,
 	}, nil
 }
 
-func mockParseCancelCommand(context context.T, msg *ssmmds.Message, messagesOrchestrationRootDir string) (*messageContracts.DocumentState, error) {
-	return &messageContracts.DocumentState{
-		DocumentType: messageContracts.CancelCommand,
+func mockParseCancelCommand(context context.T, msg *ssmmds.Message, messagesOrchestrationRootDir string) (*model.DocumentState, error) {
+	return &model.DocumentState{
+		DocumentType: model.CancelCommand,
 	}, nil
 }

@@ -23,7 +23,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
-	message "github.com/aws/amazon-ssm-agent/agent/message/contracts"
+	"github.com/aws/amazon-ssm-agent/agent/statemanager/model"
 )
 
 //TODO:  Revisit this when making Persistence invasive - i.e failure in file-systems should resort to Agent crash instead of swallowing errors
@@ -33,7 +33,7 @@ var docLock = make(map[string]*sync.RWMutex)
 
 // GetCommandInterimState returns CommandState object after reading file <commandID> from locationFolder
 // under defaultLogDir/instanceID
-func GetCommandInterimState(log log.T, commandID, instanceID, locationFolder string) message.DocumentState {
+func GetCommandInterimState(log log.T, commandID, instanceID, locationFolder string) model.DocumentState {
 
 	rLockDocument(commandID)
 	defer rUnlockDocument(commandID)
@@ -119,7 +119,7 @@ func MoveCommandState(log log.T, commandID, instanceID, srcLocationFolder, dstLo
 }
 
 // GetDocumentInfo returns the document info for the specified commandID
-func GetDocumentInfo(log log.T, commandID, instanceID, locationFolder string) message.DocumentInfo {
+func GetDocumentInfo(log log.T, commandID, instanceID, locationFolder string) model.DocumentInfo {
 	rLockDocument(commandID)
 	defer rUnlockDocument(commandID)
 
@@ -132,7 +132,7 @@ func GetDocumentInfo(log log.T, commandID, instanceID, locationFolder string) me
 
 // PersistDocumentInfo stores the given PluginState in file-system in pretty Json indented format
 // This will override the contents of an already existing file
-func PersistDocumentInfo(log log.T, docInfo message.DocumentInfo, commandID, instanceID, locationFolder string) {
+func PersistDocumentInfo(log log.T, docInfo model.DocumentInfo, commandID, instanceID, locationFolder string) {
 
 	absoluteFileName := cmdStateFileName(commandID, instanceID, locationFolder)
 
@@ -152,7 +152,7 @@ func PersistDocumentInfo(log log.T, docInfo message.DocumentInfo, commandID, ins
 }
 
 // GetPluginState returns PluginState after reading fileName from given locationFolder under defaultLogDir/instanceID
-func GetPluginState(log log.T, pluginID, commandID, instanceID, locationFolder string) message.PluginState {
+func GetPluginState(log log.T, pluginID, commandID, instanceID, locationFolder string) model.PluginState {
 
 	rLockDocument(commandID)
 	defer rUnlockDocument(commandID)
@@ -166,7 +166,7 @@ func GetPluginState(log log.T, pluginID, commandID, instanceID, locationFolder s
 
 // PersistPluginState stores the given PluginState in file-system in pretty Json indented format
 // This will override the contents of an already existing file
-func PersistPluginState(log log.T, pluginState message.PluginState, pluginID, commandID, instanceID, locationFolder string) {
+func PersistPluginState(log log.T, pluginState model.PluginState, pluginID, commandID, instanceID, locationFolder string) {
 
 	lockDocument(commandID)
 	defer unlockDocument(commandID)
@@ -179,7 +179,7 @@ func PersistPluginState(log log.T, pluginState message.PluginState, pluginID, co
 
 	//TODO:  after adding unit-tests for persist data - this can be removed
 	if commandState.PluginsInformation == nil {
-		pluginsInfo := make(map[string]message.PluginState)
+		pluginsInfo := make(map[string]model.PluginState)
 		pluginsInfo[pluginID] = pluginState
 		commandState.PluginsInformation = pluginsInfo
 	} else {
@@ -199,9 +199,9 @@ func DocumentStateDir(instanceID, locationFolder string) string {
 }
 
 // getCmdState reads commandState from given file
-func getCmdState(log log.T, fileName string) message.DocumentState {
+func getCmdState(log log.T, fileName string) model.DocumentState {
 
-	var commandState message.DocumentState
+	var commandState model.DocumentState
 	err := jsonutil.UnmarshalFile(fileName, &commandState)
 	if err != nil {
 		log.Errorf("encountered error with message %v while reading Interim state of command from file - %v", err, fileName)
@@ -219,7 +219,7 @@ func getCmdState(log log.T, fileName string) message.DocumentState {
 }
 
 // setCmdState persists given commandState
-func setCmdState(log log.T, commandState message.DocumentState, absoluteFileName, locationFolder string) {
+func setCmdState(log log.T, commandState model.DocumentState, absoluteFileName, locationFolder string) {
 
 	content, err := jsonutil.Marshal(commandState)
 	if err != nil {

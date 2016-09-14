@@ -18,7 +18,8 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/association/model"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/log"
-	message "github.com/aws/amazon-ssm-agent/agent/message/contracts"
+	messageContract "github.com/aws/amazon-ssm-agent/agent/message/contracts"
+	stateModel "github.com/aws/amazon-ssm-agent/agent/statemanager/model"
 	"github.com/stretchr/testify/mock"
 )
 
@@ -37,19 +38,19 @@ type parserMock struct {
 // ParseDocumentWithParams mocks implementation for ParseDocumentWithParams
 func (m *parserMock) ParseDocumentWithParams(
 	log log.T,
-	rawData *model.AssociationRawData) (*message.SendCommandPayload, error) {
+	rawData *model.AssociationRawData) (*messageContract.SendCommandPayload, error) {
 
 	args := m.Called(log, rawData)
-	return args.Get(0).(*message.SendCommandPayload), args.Error(1)
+	return args.Get(0).(*messageContract.SendCommandPayload), args.Error(1)
 }
 
 // InitializeDocumentState mocks implementation for InitializeDocumentState
 func (m *parserMock) InitializeDocumentState(
 	context context.T,
-	payload *message.SendCommandPayload,
-	rawData *model.AssociationRawData) message.DocumentState {
+	payload *messageContract.SendCommandPayload,
+	rawData *model.AssociationRawData) stateModel.DocumentState {
 
 	args := m.Called(context, payload, rawData)
 
-	return args.Get(0).(message.DocumentState)
+	return args.Get(0).(stateModel.DocumentState)
 }

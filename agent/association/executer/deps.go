@@ -18,8 +18,8 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/framework/engine"
 	"github.com/aws/amazon-ssm-agent/agent/framework/plugin"
 	"github.com/aws/amazon-ssm-agent/agent/log"
-	message "github.com/aws/amazon-ssm-agent/agent/message/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/statemanager"
+	stateModel "github.com/aws/amazon-ssm-agent/agent/statemanager/model"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 )
 
@@ -28,20 +28,20 @@ var pluginExecution = pluginExecutionImp{}
 
 // bookkeepingService represents the dependency for statemanager
 type bookkeepingService interface {
-	GetDocumentInfo(log log.T, commandID, instanceID, locationFolder string) message.DocumentInfo
-	PersistDocumentInfo(log log.T, docInfo message.DocumentInfo, commandID, instanceID, locationFolder string)
+	GetDocumentInfo(log log.T, commandID, instanceID, locationFolder string) stateModel.DocumentInfo
+	PersistDocumentInfo(log log.T, docInfo stateModel.DocumentInfo, commandID, instanceID, locationFolder string)
 	MoveCommandState(log log.T, commandID, instanceID, srcLocationFolder, dstLocationFolder string)
 }
 
 type bookkeepingImp struct{}
 
 // GetDocumentInfo wraps statemanager GetDocumentInfo
-func (bookkeepingImp) GetDocumentInfo(log log.T, commandID, instanceID, locationFolder string) message.DocumentInfo {
+func (bookkeepingImp) GetDocumentInfo(log log.T, commandID, instanceID, locationFolder string) stateModel.DocumentInfo {
 	return statemanager.GetDocumentInfo(log, commandID, instanceID, locationFolder)
 }
 
 // PersistDocumentInfo wraps statemanager PersistDocumentInfo
-func (bookkeepingImp) PersistDocumentInfo(log log.T, docInfo message.DocumentInfo, commandID, instanceID, locationFolder string) {
+func (bookkeepingImp) PersistDocumentInfo(log log.T, docInfo stateModel.DocumentInfo, commandID, instanceID, locationFolder string) {
 	statemanager.PersistDocumentInfo(log, docInfo, commandID, instanceID, locationFolder)
 }
 
@@ -55,7 +55,7 @@ type pluginExecutionService interface {
 	RunPlugins(
 		context context.T,
 		documentID string,
-		plugins *map[string]message.PluginState,
+		plugins *map[string]stateModel.PluginState,
 		pluginRegistry plugin.PluginRegistry,
 		sendReply engine.SendResponse,
 		cancelFlag task.CancelFlag,
@@ -68,7 +68,7 @@ type pluginExecutionImp struct{}
 func (pluginExecutionImp) RunPlugins(
 	context context.T,
 	documentID string,
-	plugins *map[string]message.PluginState,
+	plugins *map[string]stateModel.PluginState,
 	pluginRegistry plugin.PluginRegistry,
 	assocUpdate engine.UpdateAssociation,
 	cancelFlag task.CancelFlag,

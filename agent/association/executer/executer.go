@@ -26,9 +26,9 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/framework/plugin"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
-	messageContracts "github.com/aws/amazon-ssm-agent/agent/message/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/platform"
 	"github.com/aws/amazon-ssm-agent/agent/reply"
+	stateModel "github.com/aws/amazon-ssm-agent/agent/statemanager/model"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 	"github.com/aws/aws-sdk-go/service/ssm"
 )
@@ -40,8 +40,8 @@ const (
 
 // DocumentExecuter represents the interface for running a document
 type DocumentExecuter interface {
-	ExecutePendingDocument(context context.T, pool taskpool.T, docState *messageContracts.DocumentState) error
-	ExecuteInProgressDocument(context context.T, docState *messageContracts.DocumentState, cancelFlag task.CancelFlag)
+	ExecutePendingDocument(context context.T, pool taskpool.T, docState *stateModel.DocumentState) error
+	ExecuteInProgressDocument(context context.T, docState *stateModel.DocumentState, cancelFlag task.CancelFlag)
 }
 
 // AssociationExecuter represents the implementation of document executer
@@ -61,7 +61,7 @@ func NewAssociationExecuter(assocSvc service.T, agentInfo *contracts.AgentInfo) 
 }
 
 // ExecutePendingDocument moves doc to current folder and submit it for execution
-func (r *AssociationExecuter) ExecutePendingDocument(context context.T, pool taskpool.T, docState *messageContracts.DocumentState) error {
+func (r *AssociationExecuter) ExecutePendingDocument(context context.T, pool taskpool.T, docState *stateModel.DocumentState) error {
 	log := context.Log()
 	log.Debugf("Persist document and update association status to pending")
 
@@ -89,9 +89,8 @@ func (r *AssociationExecuter) ExecutePendingDocument(context context.T, pool tas
 }
 
 // ExecuteInProgressDocument parses and processes the document
-func (r *AssociationExecuter) ExecuteInProgressDocument(context context.T, docState *messageContracts.DocumentState, cancelFlag task.CancelFlag) {
+func (r *AssociationExecuter) ExecuteInProgressDocument(context context.T, docState *stateModel.DocumentState, cancelFlag task.CancelFlag) {
 	log := context.Log()
-	//TODO: check isManagedInstance
 	log.Debug("Running plugins...")
 	totalNumberOfPlugins := len(docState.PluginsInformation)
 	outputs := pluginExecution.RunPlugins(
@@ -145,7 +144,7 @@ func (r *AssociationExecuter) ExecuteInProgressDocument(context context.T, docSt
 
 // parseAndPersistReplyContents reloads interimDocState, updates it with replyPayload and persist it on disk.
 func (r *AssociationExecuter) parseAndPersistReplyContents(log log.T,
-	docState *messageContracts.DocumentState,
+	docState *stateModel.DocumentState,
 	pluginOutputs map[string]*contracts.PluginResult) {
 
 	//update interim cmd state file
@@ -198,7 +197,7 @@ func (r *AssociationExecuter) pluginExecutionReport(
 // associationExecutionReport update the status for association
 func (r *AssociationExecuter) associationExecutionReport(
 	log log.T,
-	docInfo *messageContracts.DocumentInfo,
+	docInfo *stateModel.DocumentInfo,
 	results map[string]*contracts.PluginResult,
 	totalNumberOfPlugins int,
 	associationStatus string) {

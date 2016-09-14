@@ -22,6 +22,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	messageContracts "github.com/aws/amazon-ssm-agent/agent/message/contracts"
+	"github.com/aws/amazon-ssm-agent/agent/statemanager/model"
 	"github.com/aws/amazon-ssm-agent/agent/times"
 	"github.com/aws/aws-sdk-go/service/ssmmds"
 )
@@ -60,9 +61,9 @@ func validate(msg *ssmmds.Message) error {
 }
 
 // newDocumentInfo initializes new DocumentInfo object
-func newDocumentInfo(msg ssmmds.Message, parsedMsg messageContracts.SendCommandPayload) messageContracts.DocumentInfo {
+func newDocumentInfo(msg ssmmds.Message, parsedMsg messageContracts.SendCommandPayload) model.DocumentInfo {
 
-	documentInfo := new(messageContracts.DocumentInfo)
+	documentInfo := new(model.DocumentInfo)
 
 	documentInfo.CommandID = getCommandID(*msg.MessageId)
 	documentInfo.Destination = *msg.Destination

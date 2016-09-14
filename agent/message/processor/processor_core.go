@@ -31,8 +31,10 @@ import (
 	messageContracts "github.com/aws/amazon-ssm-agent/agent/message/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/message/parser"
 	"github.com/aws/amazon-ssm-agent/agent/message/service"
+	"github.com/aws/amazon-ssm-agent/agent/platform"
 	"github.com/aws/amazon-ssm-agent/agent/sdkutil"
 	commandStateHelper "github.com/aws/amazon-ssm-agent/agent/statemanager"
+	"github.com/aws/amazon-ssm-agent/agent/statemanager/model"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 	"github.com/aws/aws-sdk-go/service/ssmmds"
 )
@@ -51,7 +53,7 @@ func (p *Processor) runCmdsUsingCmdState(context context.T,
 	cancelFlag task.CancelFlag,
 	buildReply replyBuilder,
 	sendResponse engine.SendResponse,
-	command messageContracts.DocumentState) {
+	command model.DocumentState) {
 
 	log := context.Log()
 	var pluginConfigurations map[string]*contracts.Configuration
@@ -102,7 +104,7 @@ func (p *Processor) runCmdsUsingCmdState(context context.T,
 	payloadDoc := buildReply("", outputs)
 
 	//update interim cmd state file with document level information
-	var documentInfo messageContracts.DocumentInfo
+	var documentInfo model.DocumentInfo
 
 	// set document level information which wasn't set previously
 	documentInfo.AdditionalInfo = payloadDoc.AdditionalInfo
@@ -155,7 +157,7 @@ func (p *Processor) runCmdsUsingCmdState(context context.T,
 
 func (p *Processor) processMessage(msg *ssmmds.Message) {
 	var (
-		docState *messageContracts.DocumentState
+		docState *model.DocumentState
 		err      error
 	)
 
@@ -203,7 +205,7 @@ func (p *Processor) processMessage(msg *ssmmds.Message) {
 }
 
 // submitDocForExecution moves doc to current folder and submit it for execution
-func (p *Processor) ExecutePendingDocument(docState *messageContracts.DocumentState) {
+func (p *Processor) ExecutePendingDocument(docState *model.DocumentState) {
 	log := p.context.Log()
 
 	commandStateHelper.MoveCommandState(log,
@@ -213,7 +215,7 @@ func (p *Processor) ExecutePendingDocument(docState *messageContracts.DocumentSt
 		appconfig.DefaultLocationOfCurrent)
 
 	switch docState.DocumentType {
-	case messageContracts.SendCommand:
+	case model.SendCommand:
 		err := p.sendCommandPool.Submit(log, docState.DocumentInformation.MessageID, func(cancelFlag task.CancelFlag) {
 			p.processSendCommandMessage(
 				p.context,
@@ -230,7 +232,7 @@ func (p *Processor) ExecutePendingDocument(docState *messageContracts.DocumentSt
 			return
 		}
 
-	case messageContracts.CancelCommand:
+	case model.CancelCommand:
 		err := p.cancelCommandPool.Submit(log, docState.DocumentInformation.MessageID, func(cancelFlag task.CancelFlag) {
 			p.processCancelCommandMessage(p.context, p.service, p.sendCommandPool, docState)
 		})
@@ -245,7 +247,7 @@ func (p *Processor) ExecutePendingDocument(docState *messageContracts.DocumentSt
 }
 
 // loadPluginConfigurations returns plugin configurations that hasn't been executed
-func loadPluginConfigurations(plugins map[string]messageContracts.PluginState) map[string]*contracts.Configuration {
+func loadPluginConfigurations(plugins map[string]model.PluginState) map[string]*contracts.Configuration {
 	configs := make(map[string]*contracts.Configuration)
 
 	for pluginName, pluginConfig := range plugins {
@@ -266,7 +268,7 @@ func (p *Processor) processSendCommandMessage(context context.T,
 	cancelFlag task.CancelFlag,
 	buildReply replyBuilder,
 	sendResponse engine.SendResponse,
-	docState *messageContracts.DocumentState) {
+	docState *model.DocumentState) {
 
 	log := context.Log()
 
@@ -328,7 +330,7 @@ func (p *Processor) processSendCommandMessage(context context.T,
 	}
 }
 
-func parseSendCommandMessage(context context.T, msg *ssmmds.Message, messagesOrchestrationRootDir string) (*messageContracts.DocumentState, error) {
+func parseSendCommandMessage(context context.T, msg *ssmmds.Message, messagesOrchestrationRootDir string) (*model.DocumentState, error) {
 	log := context.Log()
 	commandID := getCommandID(*msg.MessageId)
 
@@ -348,21 +350,6 @@ func parseSendCommandMessage(context context.T, msg *ssmmds.Message, messagesOrc
 
 	messageOrchestrationDirectory := filepath.Join(messagesOrchestrationRootDir, commandID)
 
-	// Check if it is a managed instance and its executing managed instance incompatible AWS SSM public document.
-	// A few public AWS SSM documents contain code which is not compatible when run on managed instances.
-	// isManagedInstanceIncompatibleAWSSSMDocument makes sure to find such documents at runtime and replace the incompatible code.
-	isMI, err := isManagedInstance()
-	if err != nil {
-		log.Errorf("Error determining managed instance. error: %v", err)
-	}
-
-	if isMI && isManagedInstanceIncompatibleAWSSSMDocument(parsedMessage.DocumentName) {
-		log.Debugf("Running Incompatible AWS SSM Document %v on managed instance", parsedMessage.DocumentName)
-		if parsedMessage, err = removeDependencyOnInstanceMetadataForManagedInstance(context, parsedMessage); err != nil {
-			return nil, err
-		}
-	}
-
 	pluginConfigurations := getPluginConfigurations(
 		parsedMessage.DocumentContent.RuntimeConfig,
 		messageOrchestrationDirectory,
@@ -375,6 +362,22 @@ func parseSendCommandMessage(context context.T, msg *ssmmds.Message, messagesOrc
 
 	//Data format persisted in Current Folder is defined by the struct - CommandState
 	docState := initializeSendCommandState(pluginConfigurations, *msg, parsedMessage)
+
+	// Check if it is a managed instance and its executing managed instance incompatible AWS SSM public document.
+	// A few public AWS SSM documents contain code which is not compatible when run on managed instances.
+	// isManagedInstanceIncompatibleAWSSSMDocument makes sure to find such documents at runtime and replace the incompatible code.
+	isMI, err := platform.IsManagedInstance()
+	if err != nil {
+		log.Errorf("Error determining managed instance. error: %v", err)
+	}
+
+	if isMI && model.IsManagedInstanceIncompatibleAWSSSMDocument(docState.DocumentInformation.DocumentName) {
+		log.Debugf("Running Incompatible AWS SSM Document %v on managed instance", docState.DocumentInformation.DocumentName)
+		if err = model.RemoveDependencyOnInstanceMetadata(context, &docState); err != nil {
+			return nil, err
+		}
+	}
+
 	return &docState, nil
 }
 
@@ -382,7 +385,7 @@ func parseSendCommandMessage(context context.T, msg *ssmmds.Message, messagesOrc
 func (p *Processor) processCancelCommandMessage(context context.T,
 	mdsService service.Service,
 	sendCommandPool task.Pool,
-	docState *messageContracts.DocumentState) {
+	docState *model.DocumentState) {
 
 	log := context.Log()
 
@@ -418,7 +421,7 @@ func (p *Processor) processCancelCommandMessage(context context.T,
 	}
 }
 
-func parseCancelCommandMessage(context context.T, msg *ssmmds.Message, messagesOrchestrationRootDir string) (*messageContracts.DocumentState, error) {
+func parseCancelCommandMessage(context context.T, msg *ssmmds.Message, messagesOrchestrationRootDir string) (*model.DocumentState, error) {
 	log := context.Log()
 
 	log.Debug("Processing cancel command message ", jsonutil.Indent(*msg.Payload))

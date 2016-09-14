@@ -17,7 +17,7 @@ package executer
 import (
 	"github.com/aws/amazon-ssm-agent/agent/association/taskpool"
 	"github.com/aws/amazon-ssm-agent/agent/context"
-	messageContracts "github.com/aws/amazon-ssm-agent/agent/message/contracts"
+	stateModel "github.com/aws/amazon-ssm-agent/agent/statemanager/model"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 	"github.com/stretchr/testify/mock"
 )
@@ -28,11 +28,11 @@ type DocumentExecuterMock struct {
 }
 
 // ExecutePendingDocument mocks implementation for ExecuteInProgressDocument
-func (m *DocumentExecuterMock) ExecutePendingDocument(context context.T, pool taskpool.T, interimDocState *messageContracts.DocumentState) error {
+func (m *DocumentExecuterMock) ExecutePendingDocument(context context.T, pool taskpool.T, interimDocState *stateModel.DocumentState) error {
 	args := m.Called(context, pool, interimDocState)
 	return args.Error(0)
 }
 
 // ExecuteInProgressDocument mocks implementation for ExecuteInProgressDocument
-func (m *DocumentExecuterMock) ExecuteInProgressDocument(context context.T, interimDocState *messageContracts.DocumentState, cancelFlag task.CancelFlag) {
+func (m *DocumentExecuterMock) ExecuteInProgressDocument(context context.T, interimDocState *stateModel.DocumentState, cancelFlag task.CancelFlag) {
 }

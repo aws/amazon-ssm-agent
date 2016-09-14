@@ -29,9 +29,9 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
-	messageContracts "github.com/aws/amazon-ssm-agent/agent/message/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/platform"
 	"github.com/aws/amazon-ssm-agent/agent/statemanager"
+	"github.com/aws/amazon-ssm-agent/agent/statemanager/model"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 	"github.com/carlescere/scheduler"
 )
@@ -105,7 +105,7 @@ func (p *Processor) processPendingDocuments(instanceID string) {
 		//construct the absolute path - safely assuming that interim state for older messages are already present in Pending folder
 		filePath := filepath.Join(pendingDocsLocation, f.Name())
 
-		docState := messageContracts.DocumentState{}
+		docState := model.DocumentState{}
 		//parse the message
 		if err := jsonutil.UnmarshalFile(filePath, &docState); err != nil {
 			log.Errorf("skipping processsing of pending messages. encountered error %v while reading pending message from file - %v", err, f)
@@ -147,7 +147,7 @@ func (p *Processor) processInProgressDocuments(instanceID string) {
 
 		//construct the absolute path - safely assuming that interim state for older messages are already present in Current folder
 		file := filepath.Join(pendingDocsLocation, f.Name())
-		var docState messageContracts.DocumentState
+		var docState model.DocumentState
 
 		//parse the message
 		if err := jsonutil.UnmarshalFile(file, &docState); err != nil {
