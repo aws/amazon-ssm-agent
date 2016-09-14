@@ -91,13 +91,13 @@ func MoveCommandState(log log.T, commandID, instanceID, srcLocationFolder, dstLo
 
 	absoluteSource := path.Join(appconfig.DefaultDataStorePath,
 		instanceID,
-		appconfig.DefaultCommandRootDirName,
+		appconfig.DefaultDocumentRootDirName,
 		appconfig.DefaultLocationOfState,
 		srcLocationFolder)
 
 	absoluteDestination := path.Join(appconfig.DefaultDataStorePath,
 		instanceID,
-		appconfig.DefaultCommandRootDirName,
+		appconfig.DefaultDocumentRootDirName,
 		appconfig.DefaultLocationOfState,
 		dstLocationFolder)
 
@@ -193,7 +193,7 @@ func PersistPluginState(log log.T, pluginState message.PluginState, pluginID, co
 func DocumentStateDir(instanceID, locationFolder string) string {
 	return path.Join(appconfig.DefaultDataStorePath,
 		instanceID,
-		appconfig.DefaultCommandRootDirName,
+		appconfig.DefaultDocumentRootDirName,
 		appconfig.DefaultLocationOfState,
 		locationFolder)
 }

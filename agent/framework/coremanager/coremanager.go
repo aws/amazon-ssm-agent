@@ -118,7 +118,7 @@ func initializeBookkeepingLocations(log logger.T, instanceID string) bool {
 
 		directoryName := filepath.Join(appconfig.DefaultDataStorePath,
 			instanceID,
-			appconfig.DefaultCommandRootDirName,
+			appconfig.DefaultDocumentRootDirName,
 			appconfig.DefaultLocationOfState,
 			folder)
 

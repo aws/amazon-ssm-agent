@@ -80,7 +80,7 @@ func InitializeCommandState(context context.T,
 
 	orchestrationRootDir := filepath.Join(appconfig.DefaultDataStorePath,
 		documentInfo.Destination,
-		appconfig.DefaultCommandRootDirName,
+		appconfig.DefaultDocumentRootDirName,
 		context.AppConfig().Agent.OrchestrationRootDir)
 
 	// getPluginConfigurations converts from PluginConfig (structure from the MDS message) to plugin.Configuration (structure expected by the plugin)

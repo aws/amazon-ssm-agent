@@ -136,7 +136,7 @@ func NewProcessor(context context.T) *Processor {
 	cancelCommandTaskPool := task.NewPool(log, CancelWorkersLimit, cancelWaitDuration, clock)
 
 	// create new message processor
-	orchestrationRootDir := filepath.Join(appconfig.DefaultDataStorePath, instanceID, appconfig.DefaultCommandRootDirName, config.Agent.OrchestrationRootDir)
+	orchestrationRootDir := filepath.Join(appconfig.DefaultDataStorePath, instanceID, appconfig.DefaultDocumentRootDirName, config.Agent.OrchestrationRootDir)
 
 	replyBuilder := func(pluginID string, results map[string]*contracts.PluginResult) messageContracts.SendReplyPayload {
 		runtimeStatuses := reply.PrepareRuntimeStatuses(log, results)

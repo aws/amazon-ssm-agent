@@ -49,8 +49,8 @@ const (
 	LongRunningPluginDataStoreFileName = "store"
 	PluginNameLongRunningPluginInvoker = "lrpminvoker"
 
-	// DefaultCommandRootDirName is the root directory for storing command states
-	DefaultCommandRootDirName = "command"
+	// DefaultDocumentRootDirName is the root directory for storing command states
+	DefaultDocumentRootDirName = "document"
 
 	// Orchestration Root Dir
 	defaultOrchestrationRootDirName = "orchestration"
