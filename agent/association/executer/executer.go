@@ -67,8 +67,8 @@ func (r *AssociationExecuter) ExecutePendingDocument(context context.T, pool tas
 
 	r.assocSvc.UpdateAssociationStatus(
 		log,
-		docState.DocumentInformation.DocumentName,
 		docState.DocumentInformation.Destination,
+		docState.DocumentInformation.DocumentName,
 		ssm.AssociationStatusNamePending,
 		documentPendingMessage,
 		r.agentInfo)
@@ -95,10 +95,10 @@ func (r *AssociationExecuter) ExecuteInProgressDocument(context context.T, docSt
 	totalNumberOfPlugins := len(docState.PluginsInformation)
 	outputs := pluginExecution.RunPlugins(
 		context,
-		docState.DocumentInformation.CommandID,
+		docState.DocumentInformation.DocumentName,
 		&docState.PluginsInformation,
 		plugin.RegisteredWorkerPlugins(context),
-		r.pluginExecutionReport,
+		nil,
 		cancelFlag)
 
 	pluginOutputContent, err := jsonutil.Marshal(outputs)
@@ -115,7 +115,13 @@ func (r *AssociationExecuter) ExecuteInProgressDocument(context context.T, docSt
 		return
 	}
 
-	log.Debug("Association execution completion ", outputs)
+	if pluginOutputContent, err = jsonutil.Marshal(outputs); err != nil {
+		log.Error("failed to parse to json string ", err)
+		return
+	}
+
+	log.Debug("Association execution completion ", pluginOutputContent)
+	log.Debug("Association execution status is ", docState.DocumentInformation.DocumentStatus)
 	if docState.DocumentInformation.DocumentStatus == contracts.ResultStatusFailed {
 		r.associationExecutionReport(
 			log,
@@ -148,7 +154,7 @@ func (r *AssociationExecuter) parseAndPersistReplyContents(log log.T,
 	pluginOutputs map[string]*contracts.PluginResult) {
 
 	//update interim cmd state file
-	documentInfo := bookkeepingSvc.GetDocumentInfo(log,
+	docState.DocumentInformation = bookkeepingSvc.GetDocumentInfo(log,
 		docState.DocumentInformation.CommandID,
 		docState.DocumentInformation.Destination,
 		appconfig.DefaultLocationOfCurrent)
@@ -157,14 +163,14 @@ func (r *AssociationExecuter) parseAndPersistReplyContents(log log.T,
 	replyPayload := reply.PrepareReplyPayload("", runtimeStatuses, time.Now(), *r.agentInfo)
 
 	// set document level information which wasn't set previously
-	documentInfo.AdditionalInfo = replyPayload.AdditionalInfo
-	documentInfo.DocumentStatus = replyPayload.DocumentStatus
-	documentInfo.DocumentTraceOutput = replyPayload.DocumentTraceOutput
-	documentInfo.RuntimeStatus = replyPayload.RuntimeStatus
+	docState.DocumentInformation.AdditionalInfo = replyPayload.AdditionalInfo
+	docState.DocumentInformation.DocumentStatus = replyPayload.DocumentStatus
+	docState.DocumentInformation.DocumentTraceOutput = replyPayload.DocumentTraceOutput
+	docState.DocumentInformation.RuntimeStatus = replyPayload.RuntimeStatus
 
 	//persist final documentInfo.
 	bookkeepingSvc.PersistDocumentInfo(log,
-		documentInfo,
+		docState.DocumentInformation,
 		docState.DocumentInformation.CommandID,
 		docState.DocumentInformation.Destination,
 		appconfig.DefaultLocationOfCurrent)
@@ -173,7 +179,7 @@ func (r *AssociationExecuter) parseAndPersistReplyContents(log log.T,
 // pluginExecutionReport allow engine to update progress after every plugin execution
 func (r *AssociationExecuter) pluginExecutionReport(
 	log log.T,
-	messageID string,
+	documentID string,
 	results map[string]*contracts.PluginResult,
 	totalNumberOfPlugins int) {
 
@@ -187,8 +193,8 @@ func (r *AssociationExecuter) pluginExecutionReport(
 	message := buildOutput(results, totalNumberOfPlugins)
 	r.assocSvc.UpdateAssociationStatus(
 		log,
-		messageID,
 		instanceID,
+		documentID,
 		ssm.AssociationStatusNamePending,
 		message,
 		r.agentInfo)
@@ -205,8 +211,8 @@ func (r *AssociationExecuter) associationExecutionReport(
 	message := buildOutput(results, totalNumberOfPlugins)
 	r.assocSvc.UpdateAssociationStatus(
 		log,
-		docInfo.DocumentName,
 		docInfo.Destination,
+		docInfo.DocumentName,
 		associationStatus,
 		message,
 		r.agentInfo)

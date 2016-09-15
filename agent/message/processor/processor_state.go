@@ -70,6 +70,6 @@ func initializeCancelCommandState(msg ssmmds.Message, parsedMsg messageContracts
 	return model.DocumentState{
 		DocumentInformation: documentInfo,
 		CancelInformation:   *cancelCommand,
-		DocumentType:        model.SendCommand,
+		DocumentType:        model.CancelCommand,
 	}
 }

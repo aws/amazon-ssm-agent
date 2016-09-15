@@ -46,10 +46,9 @@ type T interface {
 
 // AssociationService wraps the Ssm Service
 type AssociationService struct {
-	ssmSvc                   ssmsvc.Service
-	stopPolicy               *sdkutil.StopPolicy
-	name                     string
-	stopPolicyErrorThreshold int
+	ssmSvc     ssmsvc.Service
+	stopPolicy *sdkutil.StopPolicy
+	name       string
 }
 
 // NewAssociationService returns a new association service
@@ -60,7 +59,6 @@ func NewAssociationService(name string) *AssociationService {
 		ssmSvc:     ssmService,
 		stopPolicy: policy,
 		name:       name,
-		stopPolicyErrorThreshold: stopPolicyErrorThreshold,
 	}
 
 	return &svc
@@ -70,11 +68,11 @@ func NewAssociationService(name string) *AssociationService {
 func (s *AssociationService) CreateNewServiceIfUnHealthy(log log.T) {
 	if s.stopPolicy == nil {
 		log.Debugf("creating new stop-policy.")
-		s.stopPolicy = sdkutil.NewStopPolicy(s.name, s.stopPolicyErrorThreshold)
+		s.stopPolicy = sdkutil.NewStopPolicy(s.name, stopPolicyErrorThreshold)
 	}
 
 	log.Debugf("assocProcessor's stoppolicy before polling is %v", s.stopPolicy)
-	if s.stopPolicy.IsHealthy() == false {
+	if !s.stopPolicy.IsHealthy() {
 		log.Errorf("assocProcessor stopped temporarily due to internal failure. We will retry automatically")
 
 		// reset stop policy and let the scheduler start the polling after pollMessageFrequencyMinutes timeout
@@ -158,12 +156,15 @@ func (s *AssociationService) UpdateAssociationStatus(
 	}
 
 	// Call getDocument and retrieve the document json string
-	if result, err = s.ssmSvc.UpdateAssociationStatus(log,
+	if result, err = s.ssmSvc.UpdateAssociationStatus(
+		log,
 		instanceID,
 		name,
 		&associationStatus); err != nil {
 
-		log.Errorf("unable to update association status, %v", err)
+		// TODO: similar to sendReply, we should log useful info here
+
+		log.Errorf("Unable to update association status, %v", err)
 		sdkutil.HandleAwsError(log, err, s.stopPolicy)
 		return nil, err
 	}

@@ -171,6 +171,8 @@ func NewProcessor(context context.T) *Processor {
 		statemanager.PersistData(log, state.DocumentInformation.CommandID, state.DocumentInformation.Destination, bookkeeping, *state)
 	}
 
+	assocProcessor := processor.NewAssociationProcessor(context, instanceID)
+
 	return &Processor{
 		context:              messageContext,
 		stopSignal:           make(chan bool),
@@ -185,6 +187,7 @@ func NewProcessor(context context.T) *Processor {
 		orchestrationRootDir: orchestrationRootDir,
 		persistData:          persistData,
 		processorStopPolicy:  processorStopPolicy,
+		assocProcessor:       assocProcessor,
 	}
 }
 

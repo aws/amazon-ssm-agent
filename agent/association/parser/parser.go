@@ -79,7 +79,8 @@ func InitializeCommandState(context context.T,
 	// adapt plugin configuration format from MDS to plugin expected format
 	s3KeyPrefix := path.Join(payload.OutputS3KeyPrefix, payload.CommandID, documentInfo.Destination)
 
-	orchestrationRootDir := filepath.Join(appconfig.DefaultDataStorePath,
+	orchestrationRootDir := filepath.Join(
+		appconfig.DefaultDataStorePath,
 		documentInfo.Destination,
 		appconfig.DefaultDocumentRootDirName,
 		context.AppConfig().Agent.OrchestrationRootDir)
@@ -111,6 +112,7 @@ func InitializeCommandState(context context.T,
 	return stateModel.DocumentState{
 		DocumentInformation: documentInfo,
 		PluginsInformation:  pluginsInfo,
+		DocumentType:        stateModel.Association,
 	}
 }
 

@@ -53,17 +53,11 @@ type Processor struct {
 }
 
 // NewAssociationProcessor returns a new Processor with the given context.
-func NewAssociationProcessor(context context.T) (*Processor, error) {
+func NewAssociationProcessor(context context.T, instanceID string) *Processor {
 	assocContext := context.With("[" + name + "]")
 
 	log := assocContext.Log()
 	config := assocContext.AppConfig()
-
-	instanceID, err := platform.InstanceID()
-	if instanceID == "" {
-		log.Errorf("no instanceID provided, %v", err)
-		return nil, err
-	}
 
 	taskPool := taskpool.NewTaskPool(log, documentWorkersLimit, cancelWaitDurationMillisecond)
 
@@ -79,12 +73,13 @@ func NewAssociationProcessor(context context.T) (*Processor, error) {
 	executer := executer.NewAssociationExecuter(assocSvc, &agentInfo)
 
 	return &Processor{
-		context:   assocContext,
-		assocSvc:  assocSvc,
-		taskPool:  taskPool,
-		executer:  executer,
-		agentInfo: &agentInfo,
-	}, nil
+		context:    assocContext,
+		assocSvc:   assocSvc,
+		taskPool:   taskPool,
+		executer:   executer,
+		agentInfo:  &agentInfo,
+		stopSignal: make(chan bool),
+	}
 }
 
 // SetPollJob represents setter for PollJob
@@ -104,33 +99,33 @@ func (p *Processor) ProcessAssociation() {
 
 	instanceID, err := platform.InstanceID()
 	if err != nil {
-		log.Error("unable to retrieve instance id", err)
+		log.Error("Unable to retrieve instance id", err)
 		return
 	}
 
 	p.assocSvc.CreateNewServiceIfUnHealthy(log)
 
 	if assocRawData, err = p.assocSvc.ListAssociations(log, instanceID); err != nil {
-		log.Error("unable to retrieve associations", err)
+		log.Info("Unable to retrieve associations, ", err)
 		return
 	}
 
 	if err = p.assocSvc.LoadAssociationDetail(log, assocRawData); err != nil {
-		message := fmt.Sprintf("unable to load association details, %v", err)
+		message := fmt.Sprintf("Unable to load association details, %v", err)
 		log.Error(message)
 		p.updateAssocStatus(assocRawData.Association, ssm.AssociationStatusNameFailed, message)
 		return
 	}
 	var docState *stateModel.DocumentState
 	if docState, err = p.parseAssociation(assocRawData); err != nil {
-		message := fmt.Sprintf("unable to parse association, %v", err)
+		message := fmt.Sprintf("Unable to parse association, %v", err)
 		log.Error(message)
 		p.updateAssocStatus(assocRawData.Association, ssm.AssociationStatusNameFailed, message)
 		return
 	}
 
 	if err = p.persistAssociationForExecution(log, docState); err != nil {
-		message := fmt.Sprintf("unable to submit association for exectution, %v", err)
+		message := fmt.Sprintf("Unable to submit association for exectution, %v", err)
 		log.Error(message)
 		p.updateAssocStatus(assocRawData.Association, ssm.AssociationStatusNameFailed, message)
 		return
@@ -141,7 +136,7 @@ func (p *Processor) ProcessAssociation() {
 func (p *Processor) ExecutePendingDocument(docState *stateModel.DocumentState) {
 	log := p.context.Log()
 	if err := p.executer.ExecutePendingDocument(p.context, p.taskPool, docState); err != nil {
-		log.Error("failed to execute pending documents ", err)
+		log.Error("Failed to execute pending documents ", err)
 	}
 }
 
@@ -203,7 +198,7 @@ func (p *Processor) parseAssociation(rawData *model.AssociationRawData) (*stateM
 
 	isMI, err := platform.IsManagedInstance()
 	if err != nil {
-		return &docState, fmt.Errorf("Error determining managed instance, %v", err)
+		return &docState, fmt.Errorf("error determining managed instance, %v", err)
 	}
 
 	if isMI {
@@ -224,7 +219,6 @@ func (p *Processor) persistAssociationForExecution(log log.T, docState *stateMod
 		docState.DocumentInformation.Destination,
 		appconfig.DefaultLocationOfPending,
 		docState)
-
 	return p.executer.ExecutePendingDocument(p.context, p.taskPool, docState)
 }
 

@@ -37,9 +37,8 @@ import (
 func TestNewAssociationProcessor(t *testing.T) {
 	log := log.Logger()
 	context := context.Default(log, appconfig.SsmagentConfig{})
-	process, err := NewAssociationProcessor(context)
+	process := NewAssociationProcessor(context, "i-test")
 
-	assert.NoError(t, err)
 	assert.NotNil(t, process)
 }
 
