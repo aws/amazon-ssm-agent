@@ -96,7 +96,7 @@ func (r *AssociationExecuter) ExecuteInProgressDocument(context context.T, docSt
 	outputs := pluginExecution.RunPlugins(
 		context,
 		docState.DocumentInformation.DocumentName,
-		&docState.PluginsInformation,
+		docState.PluginsInformation,
 		plugin.RegisteredWorkerPlugins(context),
 		nil,
 		cancelFlag)

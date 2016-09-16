@@ -146,7 +146,7 @@ func (s *AssociationService) UpdateAssociationStatus(
 		return nil, err
 	}
 	log.Debug("Update association status")
-	log.Debug("AgentInfo content ", jsonutil.Indent(agentInfoContent))
+
 	currentTime := time.Now().UTC()
 	associationStatus := ssm.AssociationStatus{
 		Name:           aws.String(status),
@@ -155,16 +155,20 @@ func (s *AssociationService) UpdateAssociationStatus(
 		AdditionalInfo: &agentInfoContent,
 	}
 
+	associationStatusContent, err := jsonutil.Marshal(associationStatus)
+	if err != nil {
+		log.Error("could not marshal associationStatus! ", err)
+		return nil, err
+	}
+	log.Debug("Update association status content is ", jsonutil.Indent(associationStatusContent))
+
 	// Call getDocument and retrieve the document json string
 	if result, err = s.ssmSvc.UpdateAssociationStatus(
 		log,
 		instanceID,
 		name,
 		&associationStatus); err != nil {
-
-		// TODO: similar to sendReply, we should log useful info here
-
-		log.Errorf("Unable to update association status, %v", err)
+		log.Errorf("unable to update association status, %v", err)
 		sdkutil.HandleAwsError(log, err, s.stopPolicy)
 		return nil, err
 	}

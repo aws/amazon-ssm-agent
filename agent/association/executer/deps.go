@@ -55,7 +55,7 @@ type pluginExecutionService interface {
 	RunPlugins(
 		context context.T,
 		documentID string,
-		plugins *map[string]stateModel.PluginState,
+		plugins map[string]stateModel.PluginState,
 		pluginRegistry plugin.PluginRegistry,
 		sendReply engine.SendResponse,
 		cancelFlag task.CancelFlag,
@@ -68,18 +68,22 @@ type pluginExecutionImp struct{}
 func (pluginExecutionImp) RunPlugins(
 	context context.T,
 	documentID string,
-	plugins *map[string]stateModel.PluginState,
+	plugins map[string]stateModel.PluginState,
 	pluginRegistry plugin.PluginRegistry,
 	assocUpdate engine.UpdateAssociation,
 	cancelFlag task.CancelFlag,
 ) (pluginOutputs map[string]*contracts.PluginResult) {
+	log := context.Log()
 	configs := make(map[string]*contracts.Configuration)
 
-	for pluginName, pluginConfig := range *plugins {
+	for pluginName, pluginConfig := range plugins {
 		if pluginConfig.HasExecuted {
-			break
+			log.Debugf("skipping execution of Plugin - %v of command - %v since it has already executed.", pluginName, documentID)
+			continue
 		}
-		configs[pluginName] = &pluginConfig.Configuration
+		config := pluginConfig.Configuration
+		configs[pluginName] = &config
+		log.Debugf("Plugin - %v of command - %v will be executed", pluginName, documentID)
 	}
 
 	return engine.RunPlugins(context, documentID, configs, pluginRegistry, nil, assocUpdate, cancelFlag)

@@ -40,19 +40,28 @@ func ParseDocumentWithParams(log log.T,
 
 	rawDataContent, err := jsonutil.Marshal(rawData)
 	if err != nil {
-		log.Error("could not marshal association! ", err)
+		log.Error("Could not marshal association! ", err)
 		return nil, err
 	}
 	log.Debug("Processing assocation ", rawData.Association.Name)
 	log.Debug("Processing assocation ", jsonutil.Indent(rawDataContent))
 
 	payload := &messageContracts.SendCommandPayload{}
-	payload.Parameters = parseParameters(rawData.Parameter.Parameters)
+
 	if err = json.Unmarshal([]byte(*rawData.Document), &payload.DocumentContent); err != nil {
 		return nil, err
 	}
 	payload.DocumentName = *rawData.Association.Name
 	payload.CommandID = rawData.ID
+
+	payload.Parameters = parseParameters(log, rawData.Parameter.Parameters, payload.DocumentContent.Parameters)
+
+	var parametersContent string
+	if parametersContent, err = jsonutil.Marshal(payload.Parameters); err != nil {
+		log.Error("Could not marshal parameters ", err)
+		return nil, err
+	}
+	log.Debug("After marshal parameters ", jsonutil.Indent(parametersContent))
 
 	validParams := parameters.ValidParameters(log, payload.Parameters)
 	// add default values for missing parameters
@@ -85,17 +94,20 @@ func InitializeCommandState(context context.T,
 		appconfig.DefaultDocumentRootDirName,
 		context.AppConfig().Agent.OrchestrationRootDir)
 
+	orchestrationDir := filepath.Join(orchestrationRootDir, documentInfo.CommandID)
+
 	// getPluginConfigurations converts from PluginConfig (structure from the MDS message) to plugin.Configuration (structure expected by the plugin)
 	pluginConfigurations := make(map[string]*contracts.Configuration)
 	for pluginName, pluginConfig := range payload.DocumentContent.RuntimeConfig {
-		pluginConfigurations[pluginName] = &contracts.Configuration{
+		config := contracts.Configuration{
 			Properties:             pluginConfig.Properties,
 			OutputS3BucketName:     payload.OutputS3BucketName,
 			OutputS3KeyPrefix:      fileutil.BuildPath(s3KeyPrefix, pluginName),
-			OrchestrationDirectory: fileutil.BuildPath(orchestrationRootDir, pluginName),
+			OrchestrationDirectory: fileutil.BuildPath(orchestrationDir, pluginName),
 			MessageId:              documentInfo.MessageID,
 			BookKeepingFileName:    payload.CommandID,
 		}
+		pluginConfigurations[pluginName] = &config
 	}
 
 	//initialize plugin states
@@ -134,14 +146,20 @@ func newDocumentInfo(rawData *model.AssociationRawData, payload *messageContract
 	return *documentInfo
 }
 
-func parseParameters(params map[string][]*string) map[string]interface{} {
+func parseParameters(log log.T, params map[string][]*string, paramsDef map[string]*contracts.Parameter) map[string]interface{} {
 	result := make(map[string]interface{})
 
 	for name, param := range params {
-		if len(param) > 1 {
-			result[name] = param
-		} else if len(param) == 1 {
-			result[name] = param[0]
+
+		if definition, ok := paramsDef[name]; ok {
+			switch definition.ParamType {
+			case contracts.ParamTypeString:
+				result[name] = param[0]
+			case contracts.ParamTypeStringList:
+				result[name] = param
+			default:
+				log.Debug("unknown parameter type ", definition.ParamType)
+			}
 		}
 	}
 	return result

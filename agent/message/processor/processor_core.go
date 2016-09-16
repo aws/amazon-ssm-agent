@@ -28,6 +28,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/framework/engine"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
+	"github.com/aws/amazon-ssm-agent/agent/log"
 	messageContracts "github.com/aws/amazon-ssm-agent/agent/message/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/message/parser"
 	"github.com/aws/amazon-ssm-agent/agent/message/service"
@@ -247,14 +248,17 @@ func (p *Processor) ExecutePendingDocument(docState *model.DocumentState) {
 }
 
 // loadPluginConfigurations returns plugin configurations that hasn't been executed
-func loadPluginConfigurations(plugins map[string]model.PluginState) map[string]*contracts.Configuration {
+func loadPluginConfigurations(log log.T, plugins map[string]model.PluginState, commandID string) map[string]*contracts.Configuration {
 	configs := make(map[string]*contracts.Configuration)
 
 	for pluginName, pluginConfig := range plugins {
 		if pluginConfig.HasExecuted {
-			break
+			log.Debugf("skipping execution of Plugin - %v of command - %v since it has already executed.", pluginName, commandID)
+			continue
 		}
-		configs[pluginName] = &pluginConfig.Configuration
+		log.Debugf("Plugin - %v of command - %v will be executed", pluginName, commandID)
+		config := pluginConfig.Configuration
+		configs[pluginName] = &config
 	}
 
 	return configs
@@ -272,7 +276,8 @@ func (p *Processor) processSendCommandMessage(context context.T,
 
 	log := context.Log()
 
-	pluginConfigurations := loadPluginConfigurations(docState.PluginsInformation)
+	pluginConfigurations := loadPluginConfigurations(log, docState.PluginsInformation, docState.DocumentInformation.CommandID)
+
 	log.Debug("Running plugins...")
 	outputs := runPlugins(context, docState.DocumentInformation.MessageID, pluginConfigurations, sendResponse, cancelFlag)
 	pluginOutputContent, _ := jsonutil.Marshal(outputs)
@@ -362,6 +367,12 @@ func parseSendCommandMessage(context context.T, msg *ssmmds.Message, messagesOrc
 
 	//Data format persisted in Current Folder is defined by the struct - CommandState
 	docState := initializeSendCommandState(pluginConfigurations, *msg, parsedMessage)
+
+	var docStateContent string
+	if docStateContent, err = jsonutil.Marshal(docState); err != nil {
+		return nil, err
+	}
+	log.Debug("Document state is ", jsonutil.Indent(docStateContent))
 
 	// Check if it is a managed instance and its executing managed instance incompatible AWS SSM public document.
 	// A few public AWS SSM documents contain code which is not compatible when run on managed instances.

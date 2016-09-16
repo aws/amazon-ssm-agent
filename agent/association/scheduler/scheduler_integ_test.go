@@ -32,7 +32,7 @@ func TestCreatingScheduler(t *testing.T) {
 	sleepMilli = func(pollStartTime time.Time, sleepDurationInMilliseconds int) {}
 	var testPollFrequencyInMinutes = 10
 
-	job, err := CreateScheduler(incrementPollCalls, testPollFrequencyInMinutes, context.Log())
+	job, err := CreateScheduler(context.Log(), incrementPollCalls, testPollFrequencyInMinutes)
 	if err != nil {
 		time.Sleep(100 * time.Millisecond)
 		assert.True(t, pollCalls == 1)

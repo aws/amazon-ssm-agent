@@ -190,7 +190,10 @@ func (p *Processor) parseAssociation(rawData *model.AssociationRawData) (*stateM
 		return &docState, fmt.Errorf("failed to parse association, %v", err)
 	}
 
-	parsedMessageContent, _ := jsonutil.Marshal(document)
+	var parsedMessageContent string
+	if parsedMessageContent, err = jsonutil.Marshal(document); err != nil {
+		return &docState, fmt.Errorf("failed to parse document, %v", err)
+	}
 	log.Debug("ParsedAssociation is ", jsonutil.Indent(parsedMessageContent))
 
 	//Data format persisted in Current Folder is defined by the struct - DocumentState

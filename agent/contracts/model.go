@@ -31,6 +31,13 @@ const (
 	ResultStatusTimedOut         ResultStatus = "TimedOut"
 )
 
+const (
+	// ParamTypeString represents the Param Type is String
+	ParamTypeString = "String"
+	// ParamTypeStringList represents the Param Type is StringList
+	ParamTypeStringList = "StringList"
+)
+
 type StopType string
 
 const (
