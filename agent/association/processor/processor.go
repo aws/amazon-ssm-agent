@@ -28,7 +28,6 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
-	"github.com/aws/amazon-ssm-agent/agent/platform"
 	stateModel "github.com/aws/amazon-ssm-agent/agent/statemanager/model"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 	"github.com/aws/aws-sdk-go/service/ssm"
@@ -97,7 +96,7 @@ func (p *Processor) ProcessAssociation() {
 		return
 	}
 
-	instanceID, err := platform.InstanceID()
+	instanceID, err := sys.InstanceID()
 	if err != nil {
 		log.Error("Unable to retrieve instance id", err)
 		return
@@ -199,7 +198,7 @@ func (p *Processor) parseAssociation(rawData *model.AssociationRawData) (*stateM
 	//Data format persisted in Current Folder is defined by the struct - DocumentState
 	docState = assocParser.InitializeDocumentState(context, document, rawData)
 
-	isMI, err := platform.IsManagedInstance()
+	isMI, err := sys.IsManagedInstance()
 	if err != nil {
 		return &docState, fmt.Errorf("error determining managed instance, %v", err)
 	}

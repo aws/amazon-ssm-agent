@@ -40,6 +40,7 @@ func (m *AssociationServiceMock) ListAssociations(log log.T, instanceID string) 
 
 // CreateNewServiceIfUnHealthy mocks implementation for CreateNewServiceIfUnHealthy
 func (m *AssociationServiceMock) CreateNewServiceIfUnHealthy(log log.T) {
+	m.Called(log)
 }
 
 // LoadAssociationDetail mocks implementation for LoadAssociationDetail

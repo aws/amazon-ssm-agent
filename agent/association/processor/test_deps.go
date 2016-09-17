@@ -23,12 +23,25 @@ import (
 	"github.com/stretchr/testify/mock"
 )
 
+type systemStub struct{}
+
+// InstanceID mocks implementation for InstanceID
+func (m *systemStub) InstanceID() (string, error) {
+	return "", nil
+}
+
+// IsManagedInstance mocks implementation for IsManagedInstance
+func (m *systemStub) IsManagedInstance() (bool, error) {
+	return false, nil
+}
+
 type bookkeepingMock struct {
 	mock.Mock
 }
 
 // PersistData mocks implementation for PersistData
 func (m *bookkeepingMock) PersistData(log log.T, commandID, instanceID, locationFolder string, object interface{}) {
+	m.Called(log, commandID, instanceID, locationFolder, object)
 }
 
 type parserMock struct {

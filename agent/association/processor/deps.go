@@ -20,12 +20,32 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	messageContract "github.com/aws/amazon-ssm-agent/agent/message/contracts"
+	"github.com/aws/amazon-ssm-agent/agent/platform"
 	"github.com/aws/amazon-ssm-agent/agent/statemanager"
 	stateModel "github.com/aws/amazon-ssm-agent/agent/statemanager/model"
 )
 
 var assocParser parserService = &assocParserService{}
 var assocBookkeeping bookkeepingService = &assocBookkeepingService{}
+var sys system = &systemImp{}
+
+// system represents the dependency for platform
+type system interface {
+	InstanceID() (string, error)
+	IsManagedInstance() (bool, error)
+}
+
+type systemImp struct{}
+
+// InstanceID wraps platform InstanceID
+func (systemImp) InstanceID() (string, error) {
+	return platform.InstanceID()
+}
+
+// IsManagedInstance wraps platform IsManagedInstance
+func (systemImp) IsManagedInstance() (bool, error) {
+	return platform.IsManagedInstance()
+}
 
 // bookkeepingService represents the dependency for statemanager
 type bookkeepingService interface {
