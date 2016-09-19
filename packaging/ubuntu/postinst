@@ -1,9 +1,8 @@
 echo "Starting agent"
-initSystem=$(cat /proc/1/comm)
-if [ $initSystem = init ]
+if [ '/sbin/init --version' = upstart ]
 then
-    start amazon-ssm-agent || true
-elif [ $initSystem = systemd ]
+    start amazon-ssm-agent
+elif [ 'cat /proc/1/comm' = systemd ]
 then
     systemctl start amazon-ssm-agent
     systemctl daemon-reload
