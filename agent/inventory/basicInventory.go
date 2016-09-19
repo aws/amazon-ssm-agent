@@ -28,10 +28,10 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/sdkutil"
 	"github.com/aws/amazon-ssm-agent/agent/updateutil"
 	"github.com/aws/amazon-ssm-agent/agent/version"
-	"src/github.com/aws/aws-sdk-go/aws"
-	"src/github.com/aws/aws-sdk-go/aws/session"
-	"src/github.com/aws/aws-sdk-go/service/ssm"
-	"src/github.com/carlescere/scheduler"
+	"github.com/aws/aws-sdk-go/aws"
+	"github.com/aws/aws-sdk-go/aws/session"
+	"github.com/aws/aws-sdk-go/service/ssm"
+	"github.com/carlescere/scheduler"
 )
 
 const (
