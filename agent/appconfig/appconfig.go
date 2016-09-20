@@ -113,6 +113,7 @@ func DefaultConfig() SsmagentConfig {
 		HealthFrequencyMinutes: 5,
 		BasicInventoryGatherer: "Enabled",
 		InventoryOptimizer:     "Enabled",
+		InventoryPlugin:        "Enabled",
 	}
 	var agent = AgentInfo{
 		Name: "amazon-ssm-agent-default",

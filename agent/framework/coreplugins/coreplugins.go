@@ -46,4 +46,10 @@ func loadCorePlugins(context context.T) {
 	} else {
 		registeredCorePlugins = append(registeredCorePlugins, basicInventoryPlugin)
 	}
+
+	if inventoryPlugin, err := inventory.NewPlugin(context); err != nil {
+		context.Log().Errorf("Inventory plugin isn't configured - %v", err.Error())
+	} else {
+		registeredCorePlugins = append(registeredCorePlugins, inventoryPlugin)
+	}
 }

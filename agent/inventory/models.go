@@ -21,6 +21,12 @@ package inventory
 const (
 	// AWSInstanceInformation is inventory type of instance information
 	AWSInstanceInformation = "AWS:InstanceInformation"
+
+	InventoryPluginName      = "Inventory"
+	BasicInventoryPluginName = "BasicInventory"
+	Enabled                  = "Enabled"
+	ErrorThreshold           = 10
+	InventoryPolicyDocName   = "policy.json"
 )
 
 // Item encapsulates an inventory item

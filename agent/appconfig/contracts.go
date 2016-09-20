@@ -39,6 +39,7 @@ type SsmCfg struct {
 	InsecureSkipVerify     bool
 	BasicInventoryGatherer string
 	InventoryOptimizer     string
+	InventoryPlugin        string
 }
 
 // AgentInfo represents metadata for amazon-ssm-agent

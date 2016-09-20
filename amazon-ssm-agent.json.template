@@ -14,6 +14,7 @@
     "Ssm": {
         "Endpoint": "",
         "HealthFrequencyMinutes": 5,
+        "InventoryPlugin" : "Enabled",
         "BasicInventoryGatherer": "Enabled",
         "InventoryOptimizer": "Enabled"
     },
