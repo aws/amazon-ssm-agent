@@ -199,6 +199,10 @@ func testExecute(t *testing.T, testCase TestCase) {
 		assert.NotNil(t, res.StartDateTime)
 		assert.NotNil(t, res.EndDateTime)
 		assert.Equal(t, correctOutputs, res.Output)
+		assert.NotNil(t, res.StandardError)
+		assert.Equal(t, testCase.Output.Stderr, res.StandardError)
+		assert.NotNil(t, res.StandardOutput)
+		assert.Equal(t, testCase.Output.Stdout, res.StandardOutput)
 
 		// assert that the flag is checked after every set of commands
 		mockCancelFlag.AssertNumberOfCalls(t, "Canceled", 1)
