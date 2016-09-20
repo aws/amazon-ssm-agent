@@ -115,6 +115,8 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 		res.Code = out[0].ExitCode
 		res.Status = out[0].Status
 		res.Output = out[0].String()
+		res.StandardOutput = contracts.TruncateOutput(out[0].Stdout, "", 24000)
+		res.StandardError = contracts.TruncateOutput(out[0].Stderr, "", 8000)
 	}
 
 	pluginutil.PersistPluginInformationToCurrent(log, Name(), config, res)

@@ -44,6 +44,8 @@ type PluginResult struct {
 	OutputS3BucketName string       `json:"outputS3BucketName"`
 	OutputS3KeyPrefix  string       `json:"outputS3KeyPrefix"`
 	Error              error        `json:"-"`
+	StandardOutput     string       `json:"standardOutput"`
+	StandardError      string       `json:"standardError"`
 }
 
 // IPlugin is interface for authoring a functionality of work.
