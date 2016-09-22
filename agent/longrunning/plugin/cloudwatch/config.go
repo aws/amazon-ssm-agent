@@ -30,15 +30,15 @@ const ConfigFileName = "AWS.EC2.Windows.CloudWatch.json"
 // which contains the essential information to configure cloudwatch plugin
 type CloudWatchConfig struct {
 	IsEnabled           bool
-	EngineConfiguration string
+	EngineConfiguration interface{}
 }
 
 var instance *CloudWatchConfig
 var once sync.Once
 var lock sync.RWMutex
 
-// init ensures the instance has been initialized
-func init() {
+// Initialze ensures the instance has been initialized
+func Initialze() {
 	once.Do(func() {
 		instance = &CloudWatchConfig{}
 	})
@@ -49,17 +49,22 @@ func Instance() *CloudWatchConfig {
 	return instance
 }
 
+// ParseEngineConfiguration marshals the EngineConfiguration from interface{} to string
+func ParseEngineConfiguration() (config string, err error) {
+	return jsonutil.Marshal(instance.EngineConfiguration)
+}
+
 // Update updates configuration from file system
 func Update() error {
-
-	var config CloudWatchConfig
+	var cwConfig CloudWatchConfig
+	//var config CloudWatchConfig
 	var err error
-	if config, err = load(); err != nil {
+	if cwConfig, err = load(); err != nil {
 		return err
 	}
 
-	instance.IsEnabled = config.IsEnabled
-	instance.EngineConfiguration = config.EngineConfiguration
+	instance.IsEnabled = cwConfig.IsEnabled
+	instance.EngineConfiguration = cwConfig.EngineConfiguration
 
 	return err
 }
@@ -68,7 +73,6 @@ func Update() error {
 func Write() error {
 	lock.Lock()
 	defer lock.Unlock()
-
 	fileName := getFileName()
 	location := getLocation()
 	var err error
@@ -114,7 +118,6 @@ func Disable() error {
 func load() (CloudWatchConfig, error) {
 	lock.RLock()
 	defer lock.RUnlock()
-
 	fileName := getFileName()
 	var err error
 	var cwConfig CloudWatchConfig

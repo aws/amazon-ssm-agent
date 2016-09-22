@@ -130,6 +130,17 @@ func ReadPrefix(input io.Reader, maxLength int, truncatedSuffix string) (out str
 	return
 }
 
+// ReadAll returns all data from a given Reader.
+func ReadAll(input io.Reader, maxLength int, truncatedSuffix string) (out string, err error) {
+	// read up to maxLength bytes from input
+	data, err := ioutil.ReadAll(io.LimitReader(input, int64(maxLength)))
+	if err != nil {
+		return "", err
+	}
+
+	return string(data), nil
+}
+
 // GetS3Config returns the S3 config used for uploading output files to S3
 func GetS3Config() *s3util.Manager {
 	//There are multiple ways of supporting the cross-region upload to S3 bucket:

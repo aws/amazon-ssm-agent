@@ -246,7 +246,7 @@ func (p *Plugin) Stop(context context.T, cancelFlag task.CancelFlag) (err error)
 			task.NewChanneledCancelFlag())
 		if err != nil {
 			log.Infof("Can't stop cloudwatch because unable to find Pid of cloudwatch.exe. It might not be even running.")
-			return
+			return nil
 		}
 
 		p.Process.Pid = pid
@@ -314,6 +314,7 @@ func (p *Plugin) IsCloudWatchExeRunning(log log.T, workingDirectory, orchestrati
 	//executionTimeout -> determining if a process is running or not shouldn't take more than 600 seconds
 	executionTimeout := pluginutil.ValidateExecutionTimeout(log, 600)
 
+	// TODO no need to write to file, should return the result directly
 	stdout, stderr, exitCode, errs := p.ExecuteCommand(log, workingDirectory, stdoutFilePath, stderrFilePath, cancelFlag, executionTimeout, commandName, commandArguments)
 
 	//Reverting back to exec.StartExe (that doesn't wait for the command to finish)
@@ -321,7 +322,7 @@ func (p *Plugin) IsCloudWatchExeRunning(log log.T, workingDirectory, orchestrati
 
 	// read (a prefix of) the standard output/error
 	var sout, serr string
-	sout, err = pluginutil.ReadPrefix(stdout, p.MaxStdoutLength, p.OutputTruncatedSuffix)
+	sout, err = pluginutil.ReadAll(stdout, p.MaxStdoutLength, p.OutputTruncatedSuffix)
 	if err != nil {
 		log.Error(err)
 	}
@@ -335,14 +336,15 @@ func (p *Plugin) IsCloudWatchExeRunning(log log.T, workingDirectory, orchestrati
 	log.Debugf("stderr - %s", serr)
 	log.Debugf("exitCode - %v", exitCode)
 	log.Debugf("errs - %v", errs)
-	//TODO not sure if this contains is correct, maybe need to read the last bool
+	end := readLastLine(log, stdoutFilePath)
+	log.Debugf("The last line of the stdout file is %s", end)
 	//Get-Process returned the Pid -> means it was not null
-	if strings.Contains(sout, "True") {
-		log.Info("Process %s is running", cloudwatchProcessName)
+	if strings.Contains(end, "True") {
+		log.Infof("Process %s is running", cloudwatchProcessName)
 		return true
 	}
 
-	log.Info("Process %s is not running", cloudwatchProcessName)
+	log.Infof("Process %s is not running", cloudwatchProcessName)
 	return false
 }
 
@@ -352,7 +354,6 @@ func (p *Plugin) GetPidOfCloudWatchExe(log log.T, orchestrationDir, workingDirec
 		We will execute a powershell script by using exec.StartExe as pluginutil.CommandExecuter. After we are
 		done, we will revert back to using exec.Execute for future commands to enable/disable cloudwatch.
 	*/
-
 	var err error
 	//we need to wait for the command to finish so change this to Execute
 	p.ExecuteCommand = pluginutil.CommandExecuter(waitExe)
@@ -403,7 +404,7 @@ func (p *Plugin) GetPidOfCloudWatchExe(log log.T, orchestrationDir, workingDirec
 
 	// read (a prefix of) the standard output/error
 	var sout, serr string
-	sout, err = pluginutil.ReadPrefix(stdout, p.MaxStdoutLength, p.OutputTruncatedSuffix)
+	sout, err = pluginutil.ReadAll(stdout, p.MaxStdoutLength, p.OutputTruncatedSuffix)
 	if err != nil {
 		log.Error(err)
 	}
@@ -420,11 +421,13 @@ func (p *Plugin) GetPidOfCloudWatchExe(log log.T, orchestrationDir, workingDirec
 
 	//We don't expect any errors because the powershell script that we run has error action set as SilentlyContinue
 	//Parse pid from the output
-	if strings.Contains(sout, ProcessNotFound) {
+	end := readLastLine(log, stdoutFilePath)
+	log.Debugf("The last line of the stdout file is %s", end)
+	if strings.Contains(end, ProcessNotFound) {
 		log.Infof("Process %s is not running", cloudwatchProcessName)
 		return 0, errors.New(fmt.Sprintf("%s is not running", cloudwatchProcessName))
 	} else {
-		if pid, err := strconv.Atoi(strings.TrimSpace(sout)); err != nil {
+		if pid, err := strconv.Atoi(strings.TrimSpace(end)); err != nil {
 			log.Infof("Unable to get parse pid from command output: %s", sout)
 			return 0, err
 		} else {

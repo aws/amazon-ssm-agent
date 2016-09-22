@@ -241,19 +241,31 @@ func (p *Plugin) enablePlugin(log log.T, config contracts.Configuration, pluginI
 // prepareForStart remalshal the Property and stop the plug if it was running before.
 func (p *Plugin) prepareForStart(log log.T, config contracts.Configuration, pluginID string, cancelFlag task.CancelFlag) (res contracts.PluginResult, failed bool, property string) {
 	// track if the preparation process succeed.
-	failed = false
 
-	if err := jsonutil.Remarshal(config.Properties, &property); err != nil {
+	failed = false
+	var err error
+	prop := config.Properties
+
+	switch prop.(type) {
+	case string:
+		break
+	default:
+		if prop, err = jsonutil.Marshal(config.Properties); err != nil {
+			log.Error("Cannot marshal properties, ", err)
+		}
+	}
+
+	// config.Properties
+	if err = jsonutil.Remarshal(prop, &property); err != nil {
 		failed = true
 		log.Errorf(fmt.Sprintf("Invalid format in plugin configuration - %v;\nError %v", config.Properties, err))
 		res = p.CreateResult(fmt.Sprintf("Invalid format in plugin configuration - expecting property as string - %s", config.Properties),
 			contracts.ResultStatusFailed)
 		return
 	}
-
 	//stop the plugin before reconfiguring it
 	log.Debugf("Stopping %s - before applying new configuration", pluginID)
-	if err := p.lrpm.StopPlugin(pluginID, cancelFlag); err != nil {
+	if err = p.lrpm.StopPlugin(pluginID, cancelFlag); err != nil {
 		failed = true
 		log.Errorf("Unable to stop the plugin - %s: %s", pluginID, err.Error())
 		res = p.CreateResult(fmt.Sprintf("Encountered error while stopping the plugin: %s", err.Error()),

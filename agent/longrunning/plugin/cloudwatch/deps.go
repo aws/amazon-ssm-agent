@@ -15,9 +15,12 @@
 package cloudwatch
 
 import (
+	"bufio"
+	"io"
 	"os"
 
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
+	"github.com/aws/amazon-ssm-agent/agent/log"
 )
 
 // fileUtil defines the operations that fileutil uses to interact with file system
@@ -45,3 +48,52 @@ func (f fileUtilImpl) WriteIntoFileWithPermissions(absolutePath, content string,
 }
 
 var fileUtilWrapper fileUtil = fileUtilImpl{}
+
+// readLastLine reads the last line of the file
+func readLastLine(log log.T, filename string) string {
+	file, err := os.Open(filename)
+	if err != nil {
+		panic(err)
+	}
+
+	defer file.Close()
+
+	reader := bufio.NewReader(file)
+
+	// we need to calculate the size of the last line for file.ReadAt(offset) to work
+	// NOTE : not a very effective solution as we need to read the entire file at least for 1 pass :(
+	// will change later
+	lastLineSize := 0
+	lastTwoLineSize := 0
+	size := 0
+
+	for {
+		line, _, err := reader.ReadLine()
+
+		if err == io.EOF {
+			break
+		}
+		lastTwoLineSize = lastLineSize
+		lastLineSize = len(line)
+	}
+
+	fileInfo, err := os.Stat(filename)
+
+	size = lastTwoLineSize
+	if lastLineSize > 1 {
+		size = lastLineSize
+	}
+
+	// make a buffer size according to the lastLineSize
+	buffer := make([]byte, size)
+
+	// +1 to compensate for the initial 0 byte of the line
+	// otherwise, the initial character of the line will be missing
+
+	// instead of reading the whole file into memory, we just read from certain offset
+
+	offset := fileInfo.Size() - int64(size+2)
+	numRead, err := file.ReadAt(buffer, offset)
+	buffer = buffer[:numRead]
+	return string(buffer)
+}

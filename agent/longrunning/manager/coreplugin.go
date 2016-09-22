@@ -228,6 +228,7 @@ func (m *Manager) RequestStop(stopType contracts.StopType) (err error) {
 func (m *Manager) configCloudWatch(log log.T) {
 
 	var err error
+	cloudwatch.Initialze()
 	// Read from cloudwatch config file to check if any configuration need to make for cloud watch
 	if err = cloudwatch.Update(); err != nil {
 		log.Infof("Cannot read configuration from config file. %v", err)
@@ -237,9 +238,14 @@ func (m *Manager) configCloudWatch(log log.T) {
 			log.Infof("Detected cloud watch has updated configuration. Configuring that plugin again")
 			// TODO need to check the folder
 			orchestrationDir := fileutil.BuildPath(appconfig.DefaultPluginPath, appconfig.PluginNameCloudWatch)
+			var config string
+			if config, err = cloudwatch.ParseEngineConfiguration(); err != nil {
+				log.Debug("Cannot parse EngineConfiguration to string format")
+			}
+
 			if err = m.StartPlugin(
 				appconfig.PluginNameCloudWatch,
-				cloudWatchConfig.EngineConfiguration,
+				config,
 				orchestrationDir,
 				task.NewChanneledCancelFlag()); err != nil {
 				log.Errorf("Failed to start the cloud watch plugin bacause: %s", err)
