@@ -24,6 +24,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
+	"github.com/aws/amazon-ssm-agent/agent/inventory/model"
 	"github.com/aws/amazon-ssm-agent/agent/platform"
 	"github.com/aws/amazon-ssm-agent/agent/sdkutil"
 	"github.com/aws/amazon-ssm-agent/agent/updateutil"
@@ -60,7 +61,7 @@ func NewBasicInventoryProvider(context context.T) (*BasicInventoryProvider, erro
 	var err error
 	var provider = BasicInventoryProvider{}
 
-	c := context.With("[" + BasicInventoryPluginName + "]")
+	c := context.With("[" + inventory.BasicInventoryPluginName + "]")
 	log := c.Log()
 
 	// reading agent appconfig
@@ -75,11 +76,11 @@ func NewBasicInventoryProvider(context context.T) (*BasicInventoryProvider, erro
 	cfg.Endpoint = &appCfg.Ssm.Endpoint
 
 	//setting basic inventory config
-	provider.isEnabled = appCfg.Ssm.BasicInventoryGatherer == Enabled
-	provider.isOptimizerEnabled = appCfg.Ssm.InventoryOptimizer == Enabled
+	provider.isEnabled = appCfg.Ssm.BasicInventoryGatherer == inventory.Enabled
+	provider.isOptimizerEnabled = appCfg.Ssm.InventoryOptimizer == inventory.Enabled
 
 	provider.context = c
-	provider.stopPolicy = sdkutil.NewStopPolicy(BasicInventoryPluginName, ErrorThreshold)
+	provider.stopPolicy = sdkutil.NewStopPolicy(inventory.BasicInventoryPluginName, inventory.ErrorThreshold)
 	provider.ssm = ssm.New(session.New(cfg))
 	//for now we are using the same frequency as that of health plugin to send inventory data
 	provider.frequencyInMinutes = appCfg.Ssm.HealthFrequencyMinutes
@@ -135,9 +136,9 @@ func (b *BasicInventoryProvider) ConvertToMap(input interface{}) map[string]*str
 }
 
 // GetInstanceInformation returns the latest set of instance information
-func GetInstanceInformation(context context.T) (InstanceInformation, error) {
+func GetInstanceInformation(context context.T) (inventory.InstanceInformation, error) {
 
-	var instanceInfo InstanceInformation
+	var instanceInfo inventory.InstanceInformation
 
 	log := context.Log()
 
@@ -188,18 +189,18 @@ func GetInstanceInformation(context context.T) (InstanceInformation, error) {
 }
 
 // instanceInformationInventoryItem returns latest instance information inventory item
-func (b *BasicInventoryProvider) instanceInformationInventoryItem() (Item, error) {
+func (b *BasicInventoryProvider) instanceInformationInventoryItem() (inventory.Item, error) {
 	var err error
-	var data InstanceInformation
-	var item Item
+	var data inventory.InstanceInformation
+	var item inventory.Item
 
 	if data, err = GetInstanceInformation(b.context); err == nil {
 		//CaptureTime must comply with format: 2016-07-30T18:15:37Z or else it will throw error
 		t := time.Now().UTC()
 		time := t.Format(time.RFC3339)
 
-		item = Item{
-			Name:          AWSInstanceInformation,
+		item = inventory.Item{
+			Name:          inventory.AWSInstanceInformation,
 			Content:       data,
 			SchemaVersion: schemaVersionOfInventoryItem,
 			//capture time must be in UTC so that formatting to RFC3339 complies with regex at SSM
@@ -286,19 +287,20 @@ func (b *BasicInventoryProvider) updateBasicInventory() {
 
 // Name returns the Plugin Name
 func (b *BasicInventoryProvider) Name() string {
-	return BasicInventoryPluginName
+	return inventory.BasicInventoryPluginName
 }
 
 // Execute starts the scheduling of the basic inventory plugin
 func (b *BasicInventoryProvider) Execute(context context.T) (err error) {
 
 	if b.isEnabled {
-		b.context.Log().Debugf("Starting %s plugin", BasicInventoryPluginName)
+		b.context.Log().Debugf("Starting %s plugin", inventory.BasicInventoryPluginName)
 		if b.updateJob, err = scheduler.Every(b.frequencyInMinutes).Minutes().Run(b.updateBasicInventory); err != nil {
 			context.Log().Errorf("Unable to schedule basic inventory plugin. %v", err)
 		}
 	} else {
-		b.context.Log().Debugf("Skipping execution of %s plugin since its disabled", BasicInventoryPluginName)
+		b.context.Log().Debugf("Skipping execution of %s plugin since its disabled",
+			inventory.BasicInventoryPluginName)
 	}
 	return
 }

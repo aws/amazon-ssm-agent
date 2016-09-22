@@ -1,0 +1,7 @@
+{
+  "InventoryPolicy": {
+    "AWS:Application": {
+      "Collection": "Enabled"
+    }
+  }
+}

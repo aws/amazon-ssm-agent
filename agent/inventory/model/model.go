@@ -20,8 +20,7 @@ package inventory
 
 const (
 	// AWSInstanceInformation is inventory type of instance information
-	AWSInstanceInformation = "AWS:InstanceInformation"
-
+	AWSInstanceInformation   = "AWS:InstanceInformation"
 	InventoryPluginName      = "Inventory"
 	BasicInventoryPluginName = "BasicInventory"
 	Enabled                  = "Enabled"
@@ -49,4 +48,20 @@ type InstanceInformation struct {
 	PlatformName    string
 	PlatformType    string
 	PlatformVersion string
+}
+
+// Config captures all various properties (including optional) that can be supplied to a gatherer.
+// NOTE: Not all properties will be applicable to all gatherers.
+// E.g: Applications gatherer uses Collection, Files use Filters, Custom uses Collection & Location.
+type Config struct {
+	Collection string
+	Filters    []string
+	Location   string
+}
+
+//TODO: this struct might change depending on the type of data associate plugin provides to inventory plugin
+//For e.g: this will incorporate association & runId after integrating with associate plugin.
+// Policy defines how an inventory policy document looks like
+type Policy struct {
+	InventoryPolicy map[string]Config
 }
