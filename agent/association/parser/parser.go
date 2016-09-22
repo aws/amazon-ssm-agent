@@ -100,6 +100,7 @@ func InitializeCommandState(context context.T,
 	pluginConfigurations := make(map[string]*contracts.Configuration)
 	for pluginName, pluginConfig := range payload.DocumentContent.RuntimeConfig {
 		config := contracts.Configuration{
+			Settings:               pluginConfig.Settings,
 			Properties:             pluginConfig.Properties,
 			OutputS3BucketName:     payload.OutputS3BucketName,
 			OutputS3KeyPrefix:      fileutil.BuildPath(s3KeyPrefix, pluginName),
