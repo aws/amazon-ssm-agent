@@ -428,6 +428,19 @@ func ValidateExecutionTimeout(log log.T, input interface{}) int {
 	return num
 }
 
+// ParseRunCommand checks the command type and convert it to the string array
+func ParseRunCommand(input interface{}, output []string) []string {
+	switch value := input.(type) {
+	case string:
+		output = append(output, value)
+	case []interface{}:
+		for _, element := range value {
+			output = ParseRunCommand(element, output)
+		}
+	}
+	return output
+}
+
 // extractIntFromString extracts a valid int value from a string.
 func extractIntFromString(log log.T, input string) int {
 	var iNum int
