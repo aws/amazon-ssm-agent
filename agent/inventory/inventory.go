@@ -52,6 +52,7 @@ type Plugin struct {
 	isEnabled bool
 	//registeredGatherers is a map of all supported inventory gatherers.
 	registeredGatherers gatherers.Registry
+
 	//uploader handles uploading inventory data to SSM.
 	uploader datauploader.T
 }
