@@ -35,8 +35,8 @@ type T interface {
 // Registry stores all supported types of inventory gatherers
 type Registry map[string]T
 
-// loadGatherers loads supported inventory gatherers in memory
-func LoadGatherers(context context.T) *Registry {
+// LoadGatherers loads supported inventory gatherers in memory
+func LoadGatherers(context context.T) Registry {
 	var m Registry
 	var names []string
 	m = make(map[string]T)
@@ -52,5 +52,5 @@ func LoadGatherers(context context.T) *Registry {
 
 	context.Log().Infof("Supported inventory gatherers : %v", names)
 
-	return &m
+	return m
 }

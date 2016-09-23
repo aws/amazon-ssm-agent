@@ -49,7 +49,7 @@ type Plugin struct {
 	//isEnabled enables inventory plugin, if this is false - then inventory plugin will not run.
 	isEnabled bool
 	//registeredGatherers is a map of all supported inventory gatherers.
-	registeredGatherers *gatherers.Registry
+	registeredGatherers gatherers.Registry
 }
 
 // NewPlugin creates a new inventory core plugin.
@@ -101,12 +101,19 @@ func (p *Plugin) ApplyInventoryPolicy() {
 	doc := path.Join(p.location, inventory.InventoryPolicyDocName)
 	//get latest instanceInfo inventory item
 	if fileutil.Exists(doc) {
-		log.Infof("Applying Inventory policy ")
+		log.Infof("Applying Inventory policy")
 
-		var policy inventory.Config
+		var policy inventory.Policy
 		//read file
 		if content, err := fileutil.ReadAllText(doc); err == nil {
-			json.Unmarshal([]byte(content), &policy)
+
+			if err = json.Unmarshal([]byte(content), &policy); err != nil {
+				log.Infof("Encountered error while reading Inventory policy at %v. Error - %v",
+					doc,
+					err.Error())
+				log.Infof("Skipping execution of inventory policy doc.")
+				return
+			}
 
 			if p.IsInventoryPolicyValid(policy) {
 
@@ -117,7 +124,7 @@ func (p *Plugin) ApplyInventoryPolicy() {
 				p.SendDataToSSM(items)
 
 			} else {
-				log.Infof("Invalid format of Inventory policy - %v. Skipping execution", policy)
+				log.Infof("Skipping execution of inventory policy since it has unsupported gatherers")
 				return
 			}
 
@@ -132,13 +139,17 @@ func (p *Plugin) ApplyInventoryPolicy() {
 	return
 }
 
-func (p *Plugin) IsInventoryPolicyValid(policy inventory.Config) bool {
+func (p *Plugin) IsInventoryPolicyValid(policy inventory.Policy) bool {
+
 	log := p.context.Log()
-	log.Infof("Policy validation is not yet implemented - stay tuned.")
-	//TODO: implement policy validation
-	//Check against following things:
-	//1) verify policy format
-	//2) verify gatherers from registry
+
+	for name, _ := range policy.InventoryPolicy {
+		if _, isGathererRegistered := p.registeredGatherers[name]; !isGathererRegistered {
+			log.Infof("Unrecognized inventory gatherer - %v ", name)
+			return false
+		}
+	}
+
 	return true
 }
 

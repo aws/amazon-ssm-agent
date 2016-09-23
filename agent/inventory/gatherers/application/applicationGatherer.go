@@ -27,12 +27,10 @@ const (
 	Name = "AWS:Application"
 )
 
-type T struct {
-	context context.T
-}
+type T struct{}
 
 func Gatherer(context context.T) (*T, error) {
-	return &T{context: context}, nil
+	return new(T), nil
 }
 
 func (t *T) Name() string {
