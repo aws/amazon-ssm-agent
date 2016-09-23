@@ -12,7 +12,6 @@
 // permissions and limitations under the License.
 
 // Package inventory contains routines that periodically updates basic instance inventory to Inventory service
-
 package inventory
 
 import (
@@ -24,6 +23,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
+	"github.com/aws/amazon-ssm-agent/agent/inventory/datauploader"
 	"github.com/aws/amazon-ssm-agent/agent/inventory/gatherers"
 	"github.com/aws/amazon-ssm-agent/agent/inventory/model"
 	"github.com/aws/amazon-ssm-agent/agent/sdkutil"
@@ -52,6 +52,8 @@ type Plugin struct {
 	isEnabled bool
 	//registeredGatherers is a map of all supported inventory gatherers.
 	registeredGatherers gatherers.Registry
+	//uploader handles uploading inventory data to SSM.
+	uploader datauploader.T
 }
 
 // NewPlugin creates a new inventory core plugin.
@@ -88,10 +90,15 @@ func NewPlugin(context context.T) (*Plugin, error) {
 	//for now we are using the same frequency as that of health plugin to look & apply new inventory policy
 	p.frequencyInMinutes = appCfg.Ssm.HealthFrequencyMinutes
 
-	//loads all registered gatherers (for now only a dummy gatherer is loaded in memory)
+	//loads all registered gatherers (for now only a dummy application gatherer is loaded in memory)
 	p.registeredGatherers = gatherers.LoadGatherers(context)
 
-	return &p, nil
+	//initializes SSM Inventory uploader
+	if p.uploader, err = datauploader.NewInventoryUploader(context); err != nil {
+		err = log.Errorf("Unable to configure SSM Inventory uploader - %v", err.Error())
+	}
+
+	return &p, err
 }
 
 // ApplyInventoryPolicy applies basic instance information inventory data in SSM
@@ -106,6 +113,8 @@ func (p *Plugin) ApplyInventoryPolicy() {
 		log.Infof("Applying Inventory policy")
 
 		var policy inventory.Policy
+		var inventoryItems []*ssm.InventoryItem
+
 		//read file
 		if content, err := fileutil.ReadAllText(doc); err == nil {
 
@@ -125,7 +134,11 @@ func (p *Plugin) ApplyInventoryPolicy() {
 				d, _ := json.Marshal(items)
 				log.Infof("Collected Inventory data: %v", string(d))
 
-				p.SendDataToSSM(items)
+				if inventoryItems, err = p.uploader.ConvertToSsmInventoryItems(p.context, items); err != nil {
+					log.Infof("Encountered error in converting data to SSM InventoryItems - %v. Skipping upload to SSM", err.Error())
+				}
+
+				p.uploader.SendDataToSSM(p.context, inventoryItems)
 			}
 
 		} else {
@@ -196,16 +209,6 @@ func (p *Plugin) VerifyInventoryDataSize(item inventory.Item, items []inventory.
 	} else {
 		return true
 	}
-}
-
-func (p *Plugin) SendDataToSSM(items []inventory.Item) {
-	log := p.context.Log()
-	log.Infof("Sending data to SSM Inventory is not yet implemented - stay tuned.")
-	//TODO: implementation is pending
-	//It will do following things:
-	//1) create PutInventory input - by iterating over Items & convertToMap functionality already written.
-	//2) call PutInventory API
-	//3) return
 }
 
 // ICorePlugin implementation

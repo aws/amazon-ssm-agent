@@ -88,8 +88,9 @@ func NewBasicInventoryProvider(context context.T) (*BasicInventoryProvider, erro
 	return &provider, nil
 }
 
-//TODO: add this as a utility so that other gatherers will also be able to use this.
+// ConvertToMap converts data into expected format for PutInventory API
 func (b *BasicInventoryProvider) ConvertToMap(input interface{}) map[string]*string {
+	//TODO: remove this and use the one in inventory.uploader utility
 	log := b.context.Log()
 
 	ip := reflect.ValueOf(input)

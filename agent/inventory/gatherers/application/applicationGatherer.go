@@ -54,7 +54,7 @@ func (t *T) Run(context context.T, configuration inventory.Config) (inventory.It
 	result = inventory.Item{
 		Name:          t.Name(),
 		SchemaVersion: SchemaVersionOfApplication,
-		Content:       CreateFakeApplicationData(),
+		Content:       CreateMultipleApplicationEntries(),
 		//capture time must be in UTC so that formatting to RFC3339 complies with regex at SSM
 		CaptureTime: captureTime,
 	}
@@ -67,7 +67,8 @@ func (t *T) RequestStop(stopType contracts.StopType) error {
 	return err
 }
 
-func CreateFakeApplicationData() []inventory.ApplicationData {
+// CreateMultipleApplicationEntries generates fake data with 2 entries for aws:application data
+func CreateMultipleApplicationEntries() []inventory.ApplicationData {
 	var data []inventory.ApplicationData
 
 	//visual studio
@@ -90,4 +91,17 @@ func CreateFakeApplicationData() []inventory.ApplicationData {
 	data = append(data, adobeReader)
 
 	return data
+}
+
+// CreateSingleApplicationEntry generates fake data with 1 entry for aws:application data
+func CreateSingleApplicationEntry() inventory.ApplicationData {
+	//visual studio
+	visualStudio := inventory.ApplicationData{
+		Name:          "Visual Studio 10",
+		Publisher:     "Microsoft Corporation",
+		Version:       "14.1.0.1985",
+		InstalledTime: "2016-01-01T09:10:10Z",
+	}
+
+	return visualStudio
 }
