@@ -33,6 +33,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/longrunning/manager"
 	managerContracts "github.com/aws/amazon-ssm-agent/agent/longrunning/plugin"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/pluginutil"
+	"github.com/aws/amazon-ssm-agent/agent/rebooter"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 )
 
@@ -55,6 +56,7 @@ type InvokerInput struct {
 
 var readFile = ioutil.ReadFile
 var getRegisteredPlugins func() map[string]managerContracts.Plugin
+var pluginPersiste = pluginutil.PersistPluginInformationToCurrent
 
 //todo: add interfaces & dependencies to simplify testing for all calls from lrpminvoker calls to lrpm
 
@@ -93,6 +95,8 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 		log.Errorf("Unable to get plugin name from context - %s", context.CurrentContext())
 		res = p.CreateResult("Unable to get plugin name because of unsupported plugin name format",
 			contracts.ResultStatusFailed)
+
+		pluginPersiste(log, Name(), config, res)
 		return
 	}
 
@@ -101,6 +105,8 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 		log.Errorf("Given plugin - %s is not registered", pluginID)
 		res = p.CreateResult(fmt.Sprintf("Plugin %s is not registered by agent", pluginID),
 			contracts.ResultStatusFailed)
+
+		pluginPersiste(log, Name(), config, res)
 		return
 	}
 
@@ -118,12 +124,33 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 		res = p.CreateResult(fmt.Sprintf("Unable to parse Settings for %s", pluginID),
 			contracts.ResultStatusFailed)
 
+		pluginPersiste(log, Name(), config, res)
+		return
+	}
+
+	if rebooter.RebootRequested() {
+		log.Infof("Stopping execution of %v plugin due to an external reboot request.", Name())
+		return
+	}
+
+	if cancelFlag.ShutDown() {
+		res.Code = 1
+		res.Status = contracts.ResultStatusFailed
+		pluginPersiste(log, Name(), config, res)
+		return
+	}
+
+	if cancelFlag.Canceled() {
+		res.Code = 1
+		res.Status = contracts.ResultStatusCancelled
+		pluginPersiste(log, Name(), config, res)
 		return
 	}
 
 	switch setting.StartType {
 	case "Enabled":
 		res = p.enablePlugin(log, config, pluginID, cancelFlag)
+		pluginPersiste(log, Name(), config, res)
 		return
 
 	case "Disabled":
@@ -133,11 +160,13 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 			log.Errorf("Unable to stop the plugin - %s: %s", pluginID, err.Error())
 			res = p.CreateResult(fmt.Sprintf("Encountered error while stopping the plugin: %s", err.Error()),
 				contracts.ResultStatusFailed)
+			pluginPersiste(log, Name(), config, res)
 			return
 		} else {
 			res = p.CreateResult(fmt.Sprintf("Disabled the plugin - %s successfully", pluginID),
 				contracts.ResultStatusSuccess)
 			res.Status = contracts.ResultStatusSuccess
+			pluginPersiste(log, Name(), config, res)
 			return
 		}
 
@@ -145,6 +174,7 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 		log.Errorf("Allowed Values of StartType: Enabled | Disabled")
 		res = p.CreateResult("Allowed Values of StartType: Enabled | Disabled",
 			contracts.ResultStatusFailed)
+		pluginPersiste(log, Name(), config, res)
 		return res
 	}
 }

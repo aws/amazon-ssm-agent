@@ -46,6 +46,7 @@ var TestCases = []TestCase{
 }
 
 var config = contracts.Configuration{}
+
 var p = new(Plugin)
 
 func generateTestCaseSuccess(msg, id string) TestCase {
@@ -97,6 +98,8 @@ func generateTestCaseFail(msg, id string) TestCase {
 // TestExecuteSuccess tests the cloud watch invoker plugin's Execute method with correct input.
 func TestExecuteSuccess(t *testing.T) {
 	testCase := TestCases[0]
+	pluginPersiste = func(log log.T, pluginName string, config contracts.Configuration, res contracts.PluginResult) {}
+
 	//mockS3Uploader := pluginutil.NewMockDefault()
 	p.lrpm = manager.NewMockDefault()
 
@@ -105,6 +108,9 @@ func TestExecuteSuccess(t *testing.T) {
 	}
 
 	var cancelFlag = task.NewMockDefault()
+	cancelFlag.On("Canceled").Return(false)
+	cancelFlag.On("ShutDown").Return(false)
+
 	//var context = context.NewMockDefault()
 	var enabledConfig = contracts.Configuration{
 		Settings: LongRunningPluginSettings{
@@ -124,7 +130,12 @@ func TestExecuteSuccess(t *testing.T) {
 // TestExecuteFailWithContext tests the cloud watch invoker plugin's Execute method with incorrect context.
 func TestExecuteFailWithContext(t *testing.T) {
 	testCase := TestCases[2]
+	pluginPersiste = func(log log.T, pluginName string, config contracts.Configuration, res contracts.PluginResult) {}
+
 	var cancelFlag = task.NewMockDefault()
+	cancelFlag.On("Canceled").Return(false)
+	cancelFlag.On("ShutDown").Return(false)
+
 	res := p.Execute(testCase.Context, config, cancelFlag)
 	expectRes := p.CreateResult("Unable to get plugin name because of unsupported plugin name format",
 		contracts.ResultStatusFailed)
@@ -134,7 +145,12 @@ func TestExecuteFailWithContext(t *testing.T) {
 // TestExecuteFailWithStartType tests the cloud watch invoker plugin's Execute method with incorrect start type.
 func TestExecuteFailWithStartType(t *testing.T) {
 	testCase := TestCases[0]
+	pluginPersiste = func(log log.T, pluginName string, config contracts.Configuration, res contracts.PluginResult) {}
+
 	var cancelFlag = task.NewMockDefault()
+	cancelFlag.On("Canceled").Return(false)
+	cancelFlag.On("ShutDown").Return(false)
+
 	res := p.Execute(testCase.Context, config, cancelFlag)
 	expectRes := p.CreateResult(fmt.Sprintf("Allowed Values of StartType: Enabled | Disabled"),
 		contracts.ResultStatusFailed)
@@ -144,7 +160,12 @@ func TestExecuteFailWithStartType(t *testing.T) {
 // TestExecuteFailWithConfig tests the cloud watch invoker plugin's Execute method with incorrect config.
 func TestExecuteFailWithConfig(t *testing.T) {
 	testCase := TestCases[0]
+	pluginPersiste = func(log log.T, pluginName string, config contracts.Configuration, res contracts.PluginResult) {}
+
 	var cancelFlag = task.NewMockDefault()
+	cancelFlag.On("Canceled").Return(false)
+	cancelFlag.On("ShutDown").Return(false)
+
 	var enabledConfig = contracts.Configuration{
 		Settings: "Enabled",
 	}
