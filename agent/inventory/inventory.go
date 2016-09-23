@@ -17,6 +17,7 @@ package inventory
 
 import (
 	"encoding/json"
+	"fmt"
 	"path"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
@@ -32,6 +33,7 @@ import (
 )
 
 //TODO: integration with on-demand plugin - so that associate plugin can invoke this plugin
+//TODO: add unit tests.
 
 // Plugin encapsulates the logic of configuring, starting and stopping inventory plugin
 type Plugin struct {
@@ -115,17 +117,15 @@ func (p *Plugin) ApplyInventoryPolicy() {
 				return
 			}
 
-			if p.IsInventoryPolicyValid(policy) {
-
-				//runs all gatherers and collects their responses.
-				items := p.RunGatherers()
-
-				//upload data to SSM using PutInventory call.
-				p.SendDataToSSM(items)
-
-			} else {
-				log.Infof("Skipping execution of inventory policy since it has unsupported gatherers")
+			if items, err := p.VerifyAndRunGatherers(policy); err != nil {
+				log.Infof("Encountered error while executing inventory policy: %v", err.Error())
 				return
+			} else {
+				//log collected data before sending
+				d, _ := json.Marshal(items)
+				log.Infof("Collected Inventory data: %v", string(d))
+
+				p.SendDataToSSM(items)
 			}
 
 		} else {
@@ -139,35 +139,63 @@ func (p *Plugin) ApplyInventoryPolicy() {
 	return
 }
 
-func (p *Plugin) IsInventoryPolicyValid(policy inventory.Policy) bool {
-
+// VerifyAndRunGatherers verifies if gatherers is registered and then invokes it to return the result (containing
+// inventory data). It returns error if gatherer is not registered or if at any stage the data returned breaches size
+// limit
+func (p *Plugin) VerifyAndRunGatherers(policy inventory.Policy) (items []inventory.Item, err error) {
 	log := p.context.Log()
+	log.Infof("Verifying if gatherers are registered and then running them")
+
+	//NOTE:
+	//1) Even if there is 1 unregistered gatherer - we error out & don't send the data collected from other
+	//registered gatherers - this is because we don't send partial inventory data as part of 1 inventory policy.
+	//Either we send full set of inventory data as defined in policy - or we send nothing.
+
+	//2) Currently all gatherers will be invoked in synchronous & sequential fashion.
+	//Parallel execution of gatherers hinges upon inventory plugin becoming a long running plugin - which will be
+	//mainly for custom inventory gatherer to send data independently of associate.
 
 	for name, _ := range policy.InventoryPolicy {
-		if _, isGathererRegistered := p.registeredGatherers[name]; !isGathererRegistered {
-			log.Infof("Unrecognized inventory gatherer - %v ", name)
-			return false
+		//find out if the gatherer is indeed registered.
+		if gatherer, isGathererRegistered := p.registeredGatherers[name]; !isGathererRegistered {
+			err = log.Errorf("Unrecognized inventory gatherer - %v ", name)
+			break
+		} else {
+			var item inventory.Item
+			log.Infof("Invoking gatherer - %v", name)
+
+			if item, err = gatherer.Run(p.context, policy.InventoryPolicy[name]); err != nil {
+				err = log.Errorf("Encountered error while executing %v. Error - %v", name, err.Error())
+				break
+			} else {
+				items = append(items, item)
+
+				//return error if collected data breaches size limit
+				if !p.VerifyInventoryDataSize(item, items) {
+					err = log.Errorf("Size limit exceeded for collected data.")
+					break
+				}
+			}
 		}
 	}
 
-	return true
+	return items, err
 }
 
-func (p *Plugin) RunGatherers() (result []inventory.Item) {
-	log := p.context.Log()
-	log.Infof("Running gatherers is not yet implemented - stay tuned.")
-	//TODO: implementation is pending
-	//It will do following things:
-	//1) iterate over policy doc to invoke all eligible gatherers.
-	//2) add to the result set.
-	//3) Check for inventory item size - if the size exceeds limit - don't invoke other gatherers - return error.
-	//3) return the result set.
+// VerifyInventoryDataSize returns true if size of collected inventory data is within size restrictions placed by SSM,
+// else false.
+func (p *Plugin) VerifyInventoryDataSize(item inventory.Item, items []inventory.Item) bool {
+	var itemSize, itemsSize float32
 
-	//NOTE: for V1 - all gatherers will be invoked in synchronous & sequential fashion.
-	//Parallel execution of gatherers hinges upon inventory plugin becoming a long running plugin (V2 feature)
-	//mainly for custom inventory gatherer to send data independently of associate.
+	//calculating sizes
+	itemSize = float32(len([]byte(fmt.Sprintf("%s", item))))
+	itemsSize = float32(len([]byte(fmt.Sprintf("%s", items))))
 
-	return result
+	if (itemSize/1000) > inventory.SizeLimitKBPerInventoryType || (itemsSize/1000) > inventory.TotalSizeLimitKB {
+		return false
+	} else {
+		return true
+	}
 }
 
 func (p *Plugin) SendDataToSSM(items []inventory.Item) {

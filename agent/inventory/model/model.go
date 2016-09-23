@@ -26,12 +26,20 @@ const (
 	Enabled                  = "Enabled"
 	ErrorThreshold           = 10
 	InventoryPolicyDocName   = "policy.json"
+
+	// size limit in KB for 1 inventory data type
+	SizeLimitKBPerInventoryType = 200
+
+	// size limit in KB for 1 PutInventory API call
+	TotalSizeLimitKB = 1024
 )
 
 // Item encapsulates an inventory item
 type Item struct {
 	Name string
 	//content depends on inventory type - hence set as interface{} here.
+	//e.g: for application - it will contain ApplicationData,
+	//for instanceInformation - it will contain InstanceInformation.
 	Content       interface{}
 	ContentHash   string
 	SchemaVersion string
@@ -48,6 +56,14 @@ type InstanceInformation struct {
 	PlatformName    string
 	PlatformType    string
 	PlatformVersion string
+}
+
+// ApplicationData captures all attributes present in AWS:Application inventory type
+type ApplicationData struct {
+	Name          string
+	Publisher     string
+	Version       string
+	InstalledTime string
 }
 
 // Config captures all various properties (including optional) that can be supplied to a gatherer.
