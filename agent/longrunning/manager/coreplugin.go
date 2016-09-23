@@ -96,7 +96,7 @@ func EnsureInitialization(context context.T) {
 		managerContext := context.With("[" + Name + "]")
 		log := managerContext.Log()
 		//initialize pluginsInfo (which will store all information about long running plugins)
-		plugins := make(map[string]managerContracts.PluginInfo)
+		plugins := map[string]managerContracts.PluginInfo{}
 		//load all registered plugins
 		regPlugins := RegisteredPlugins()
 		jsonB, _ := json.Marshal(&regPlugins)
@@ -147,9 +147,13 @@ func (m *Manager) Execute(context context.T) (err error) {
 
 	log := m.context.Log()
 	log.Infof("starting long running plugin manager")
-
 	//read from data store to determine if there were any previously long running plugins which need to be started again
-	m.runningPlugins, err = dataStore.Read()
+	var dataStoreMap map[string]managerContracts.PluginInfo
+	dataStoreMap, err = dataStore.Read()
+	if len(dataStoreMap) != 0 {
+		m.runningPlugins = dataStoreMap
+	}
+
 	if err != nil {
 		log.Errorf("%s is exiting - unable to read from data store", m.Name())
 		return
