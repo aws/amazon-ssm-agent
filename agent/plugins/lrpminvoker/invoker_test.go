@@ -98,7 +98,7 @@ func generateTestCaseFail(msg, id string) TestCase {
 // TestExecuteSuccess tests the cloud watch invoker plugin's Execute method with correct input.
 func TestExecuteSuccess(t *testing.T) {
 	testCase := TestCases[0]
-	pluginPersiste = func(log log.T, pluginName string, config contracts.Configuration, res contracts.PluginResult) {}
+	pluginPersister = func(log log.T, pluginName string, config contracts.Configuration, res contracts.PluginResult) {}
 
 	//mockS3Uploader := pluginutil.NewMockDefault()
 	p.lrpm = manager.NewMockDefault()
@@ -130,7 +130,7 @@ func TestExecuteSuccess(t *testing.T) {
 // TestExecuteFailWithContext tests the cloud watch invoker plugin's Execute method with incorrect context.
 func TestExecuteFailWithContext(t *testing.T) {
 	testCase := TestCases[2]
-	pluginPersiste = func(log log.T, pluginName string, config contracts.Configuration, res contracts.PluginResult) {}
+	pluginPersister = func(log log.T, pluginName string, config contracts.Configuration, res contracts.PluginResult) {}
 
 	var cancelFlag = task.NewMockDefault()
 	cancelFlag.On("Canceled").Return(false)
@@ -145,7 +145,7 @@ func TestExecuteFailWithContext(t *testing.T) {
 // TestExecuteFailWithStartType tests the cloud watch invoker plugin's Execute method with incorrect start type.
 func TestExecuteFailWithStartType(t *testing.T) {
 	testCase := TestCases[0]
-	pluginPersiste = func(log log.T, pluginName string, config contracts.Configuration, res contracts.PluginResult) {}
+	pluginPersister = func(log log.T, pluginName string, config contracts.Configuration, res contracts.PluginResult) {}
 
 	var cancelFlag = task.NewMockDefault()
 	cancelFlag.On("Canceled").Return(false)
@@ -160,7 +160,7 @@ func TestExecuteFailWithStartType(t *testing.T) {
 // TestExecuteFailWithConfig tests the cloud watch invoker plugin's Execute method with incorrect config.
 func TestExecuteFailWithConfig(t *testing.T) {
 	testCase := TestCases[0]
-	pluginPersiste = func(log log.T, pluginName string, config contracts.Configuration, res contracts.PluginResult) {}
+	pluginPersister = func(log log.T, pluginName string, config contracts.Configuration, res contracts.PluginResult) {}
 
 	var cancelFlag = task.NewMockDefault()
 	cancelFlag.On("Canceled").Return(false)
