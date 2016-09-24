@@ -23,7 +23,7 @@ import (
 )
 
 const (
-	defaultSleepDurationInMilliSeconds int = 4000
+	defaultSleepDurationInMilliSeconds int = 120000
 )
 
 // CreateScheduler runs a given poll job every pollFrequencyMinutes
@@ -60,7 +60,7 @@ func ScheduleNextRun(j *scheduler.Job) {
 }
 
 var sleepMilli = func(pollStartTime time.Time, sleepDurationInMilliseconds int) {
-	sleepDurationInMilliseconds = sleepDurationInMilliseconds + rand.Intn(sleepDurationInMilliseconds/10)
+	sleepDurationInMilliseconds = rand.Intn(sleepDurationInMilliseconds)
 	if time.Since(pollStartTime) < 1*time.Second {
 		time.Sleep(time.Duration(sleepDurationInMilliseconds) * time.Millisecond)
 	}

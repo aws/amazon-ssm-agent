@@ -36,11 +36,12 @@ const (
 	DefaultSsmHealthFrequencyMinutesMax = 60
 
 	//aws-ssm-agent bookkeeping constants
-	DefaultLocationOfPending   = "pending"
-	DefaultLocationOfCurrent   = "current"
-	DefaultLocationOfCompleted = "completed"
-	DefaultLocationOfCorrupt   = "corrupt"
-	DefaultLocationOfState     = "state"
+	DefaultLocationOfPending     = "pending"
+	DefaultLocationOfCurrent     = "current"
+	DefaultLocationOfCompleted   = "completed"
+	DefaultLocationOfCorrupt     = "corrupt"
+	DefaultLocationOfState       = "state"
+	DefaultLocationOfAssociation = "association"
 
 	//aws-ssm-agent bookkeeping constants for long running plugins
 	LongRunningPluginsLocation         = "longrunningplugins"

@@ -21,6 +21,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/association/executer"
 	"github.com/aws/amazon-ssm-agent/agent/association/model"
+	"github.com/aws/amazon-ssm-agent/agent/association/recorder"
 	assocScheduler "github.com/aws/amazon-ssm-agent/agent/association/scheduler"
 	"github.com/aws/amazon-ssm-agent/agent/association/service"
 	"github.com/aws/amazon-ssm-agent/agent/association/taskpool"
@@ -109,6 +110,14 @@ func (p *Processor) ProcessAssociation() {
 		return
 	}
 
+	// check if the association has been executed
+	assoName := assocRawData.Association.Name
+	lastExecutedDoc := recorder.Instance()
+	if lastExecutedDoc.DocumentID == *assoName {
+		log.Infof("DocumentId %v hasn't changed. Skipping as it has been processed already.", *assoName)
+		return
+	}
+
 	if err = p.assocSvc.LoadAssociationDetail(log, assocRawData); err != nil {
 		message := fmt.Sprintf("Unable to load association details, %v", err)
 		log.Error(message)
@@ -121,6 +130,12 @@ func (p *Processor) ProcessAssociation() {
 		log.Error(message)
 		p.updateAssocStatus(assocRawData.Association, ssm.AssociationStatusNameFailed, message)
 		return
+	}
+
+	// record the last executed association file
+	if err = recorder.Write(*assoName); err != nil {
+		message := fmt.Sprintf("Failed to persist last executed association document, %v", err)
+		log.Error(message)
 	}
 
 	if err = p.persistAssociationForExecution(log, docState); err != nil {
