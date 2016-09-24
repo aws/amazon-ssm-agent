@@ -20,6 +20,7 @@ import (
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
+	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil/artifact"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
@@ -232,7 +233,7 @@ func (p *DefaultPlugin) UploadOutputToS3Bucket(log log.T, pluginID string, orche
 
 				if Stdout != "" {
 					localPath := filepath.Join(orchestrationDir, p.StdoutFileName)
-					s3Key := path.Join(outputS3KeyPrefix, pluginID, p.StdoutFileName)
+					s3Key := path.Join(outputS3KeyPrefix, fileutil.RemoveInvalidChars(pluginID), p.StdoutFileName)
 					log.Debugf("Uploading %v to s3://%v/%v", localPath, outputS3BucketName, s3Key)
 					err := p.Uploader.S3Upload(outputS3BucketName, s3Key, localPath)
 					if err != nil {
@@ -247,7 +248,7 @@ func (p *DefaultPlugin) UploadOutputToS3Bucket(log log.T, pluginID string, orche
 
 				if Stderr != "" {
 					localPath := filepath.Join(orchestrationDir, p.StderrFileName)
-					s3Key := path.Join(outputS3KeyPrefix, pluginID, p.StderrFileName)
+					s3Key := path.Join(outputS3KeyPrefix, fileutil.RemoveInvalidChars(pluginID), p.StderrFileName)
 					log.Debugf("Uploading %v to s3://%v/%v", localPath, outputS3BucketName, s3Key)
 					err := p.Uploader.S3Upload(outputS3BucketName, s3Key, localPath)
 					if err != nil {
