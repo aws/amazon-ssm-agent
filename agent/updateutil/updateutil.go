@@ -196,6 +196,7 @@ var mkDirAll = os.MkdirAll
 var openFile = os.OpenFile
 var execCommand = exec.Command
 var cmdStart = (*exec.Cmd).Start
+var cmdOutput = (*exec.Cmd).Output
 var isUsingSystemD map[string]string
 var once sync.Once
 
@@ -319,6 +320,38 @@ func (util *Utility) ExeCommand(
 		}
 	}
 	return nil
+}
+
+// TODO move to commandUtil
+// ExeCommandOutput executes shell command and returns the stdout
+func (util *Utility) ExeCommandOutput(
+	log log.T,
+	cmd string,
+	workingDir string,
+	outputRoot string,
+	stdOut string,
+	stdErr string) (output string, err error) {
+
+	parts := strings.Fields(cmd)
+	tempCmd := setPlatformSpecificCommand(parts)
+	command := execCommand(tempCmd[0], tempCmd[1:]...)
+	command.Dir = workingDir
+	stdoutWriter, stderrWriter, exeErr := setExeOutErr(outputRoot, stdOut, stdErr)
+	if exeErr != nil {
+		return output, exeErr
+	}
+	defer stdoutWriter.Close()
+	defer stderrWriter.Close()
+
+	command.Stderr = stderrWriter
+
+	var out []byte
+	out, err = cmdOutput(command)
+	if err != nil {
+		return
+	}
+
+	return string(out), err
 }
 
 // IsServiceRunning returns is service running

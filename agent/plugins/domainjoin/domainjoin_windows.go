@@ -21,6 +21,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"path/filepath"
+	"strings"
 	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
@@ -111,7 +112,7 @@ func Name() string {
 	return appconfig.PluginNameDomainJoin
 }
 
-type convert func(log.T, string, string, string, string, string, bool) error
+type convert func(log.T, string, string, string, string, string) (string, error)
 
 // Execute runs multiple sets of commands and returns their outputs.
 // res.Output will contain a slice of RunCommandPluginOutput.
@@ -154,7 +155,7 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 	}
 
 	util := updateutil.Utility{CustomUpdateExecutionTimeoutInSeconds: UpdateExecutionTimeoutInSeconds}
-	utilExe = util.ExeCommand
+	utilExe = util.ExeCommandOutput
 	out = p.runCommandsRawInput(log, properties, config.OrchestrationDirectory, cancelFlag, config.OutputS3BucketName, config.OutputS3KeyPrefix, utilExe)
 
 	if out.Status == contracts.ResultStatusFailed {
@@ -168,7 +169,7 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 		}
 	}
 
-	if out.Status == contracts.ResultStatusSuccessAndReboot || out.Status == contracts.ResultStatusPassedAndReboot {
+	if out.Status == contracts.ResultStatusPassedAndReboot {
 		atleastOneRequestedReboot = true
 		res.Code = out.ExitCode
 	}
@@ -249,17 +250,19 @@ func (p *Plugin) runCommands(log log.T, pluginInput DomainJoinPluginInput, orche
 	workingDir := fileutil.BuildPath(appconfig.DefaultPluginPath, Name())
 
 	out.Status = contracts.ResultStatusInProgress
-	err = utilExe(log,
+	var output string
+	output, err = utilExe(log,
 		command,
 		workingDir,
 		orchestrationDirectory,
 		out.Stdout,
-		out.Stderr,
-		false)
+		out.Stderr)
 
 	log.Debugf("stdout is: %v", out.Stdout)
 	log.Debugf("stderr is: %v", out.Stderr)
 	log.Debugf("stdoutFilePath is: %v", stdoutFilePath)
+	log.Debugf("code is: %v", output)
+	log.Debugf("err is: %v", err)
 
 	// Upload output to S3
 	outputPath := filepath.Join(orchestrationDirectory, OutputFolder)
@@ -272,9 +275,16 @@ func (p *Plugin) runCommands(log log.T, pluginInput DomainJoinPluginInput, orche
 		return
 	}
 
+	// check output to see if the machine needs reboot
+	if strings.Contains(output, string(contracts.ResultStatusPassedAndReboot)) ||
+		strings.Contains(output, string(contracts.ResultStatusSuccessAndReboot)) {
+		out.ExitCode = 0
+		out.Status = contracts.ResultStatusPassedAndReboot
+		return
+	}
+
 	out.Status = contracts.ResultStatusSuccess
 	out.ExitCode = 0
-
 	return
 }
 
