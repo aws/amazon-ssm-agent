@@ -48,7 +48,6 @@ func RunPlugins(
 	cancelFlag task.CancelFlag,
 ) (pluginOutputs map[string]*contracts.PluginResult) {
 
-	requestReboot := false
 	totalNumberOfPlugins := len(plugins)
 
 	pluginOutputs = make(map[string]*contracts.PluginResult)
@@ -96,7 +95,8 @@ func RunPlugins(
 			pluginOutputs[pluginID].Output = r.Output
 
 			if r.Status == contracts.ResultStatusSuccessAndReboot {
-				requestReboot = true
+				context.Log().Debug("Requesting reboot...")
+				rebooter.RequestPendingReboot()
 			}
 		}
 		// set end time.
@@ -111,12 +111,6 @@ func RunPlugins(
 			updateAssoc(log, documentID, pluginOutputs, totalNumberOfPlugins)
 		}
 
-	}
-
-	// request reboot if any of the plugins have requested a reboot
-	if requestReboot {
-		context.Log().Debug("Requesting reboot...")
-		go rebooter.RequestPendingReboot()
 	}
 
 	return

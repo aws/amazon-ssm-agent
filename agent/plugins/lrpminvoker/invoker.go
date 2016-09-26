@@ -129,13 +129,14 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 	}
 
 	if rebooter.RebootRequested() {
-		log.Infof("Stopping execution of %v plugin due to an external reboot request.", Name())
+		log.Infof("Stopping execution of %v plugin due to an external reboot request.", pluginID)
 		return
 	}
 
 	if cancelFlag.ShutDown() {
 		res.Code = 1
 		res.Status = contracts.ResultStatusFailed
+
 		pluginPersister(log, Name(), config, res)
 		return
 	}
@@ -143,6 +144,7 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 	if cancelFlag.Canceled() {
 		res.Code = 1
 		res.Status = contracts.ResultStatusCancelled
+
 		pluginPersister(log, Name(), config, res)
 		return
 	}
@@ -150,6 +152,7 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 	switch setting.StartType {
 	case "Enabled":
 		res = p.enablePlugin(log, config, pluginID, cancelFlag)
+
 		pluginPersister(log, Name(), config, res)
 		return
 
@@ -160,13 +163,15 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 			log.Errorf("Unable to stop the plugin - %s: %s", pluginID, err.Error())
 			res = p.CreateResult(fmt.Sprintf("Encountered error while stopping the plugin: %s", err.Error()),
 				contracts.ResultStatusFailed)
-			pluginPersister(log, Name(), config, res)
+
+			pluginPersister(log, pluginID, config, res)
 			return
 		} else {
 			res = p.CreateResult(fmt.Sprintf("Disabled the plugin - %s successfully", pluginID),
 				contracts.ResultStatusSuccess)
 			res.Status = contracts.ResultStatusSuccess
-			pluginPersister(log, Name(), config, res)
+
+			pluginPersister(log, pluginID, config, res)
 			return
 		}
 
@@ -174,6 +179,7 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 		log.Errorf("Allowed Values of StartType: Enabled | Disabled")
 		res = p.CreateResult("Allowed Values of StartType: Enabled | Disabled",
 			contracts.ResultStatusFailed)
+
 		pluginPersister(log, Name(), config, res)
 		return res
 	}
@@ -261,7 +267,7 @@ func (p *Plugin) enablePlugin(log log.T, config contracts.Configuration, pluginI
 	}
 
 	// Upload output to S3
-	uploadOutputToS3BucketErrors := p.ExecuteUploadOutputToS3Bucket(log, Name(), outputPath, config.OutputS3BucketName, config.OutputS3KeyPrefix, false, "", stdoutFilePath, stderrFilePath)
+	uploadOutputToS3BucketErrors := p.ExecuteUploadOutputToS3Bucket(log, pluginID, outputPath, config.OutputS3BucketName, config.OutputS3KeyPrefix, false, "", stdoutFilePath, stderrFilePath)
 	if len(uploadOutputToS3BucketErrors) > 0 {
 		log.Errorf("Unable to upload the logs - %s: %s", pluginID, uploadOutputToS3BucketErrors)
 	}
