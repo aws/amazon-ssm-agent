@@ -27,6 +27,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	managerContracts "github.com/aws/amazon-ssm-agent/agent/longrunning/plugin"
 	"github.com/aws/amazon-ssm-agent/agent/longrunning/plugin/cloudwatch"
+	"github.com/aws/amazon-ssm-agent/agent/platform"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 	"github.com/aws/amazon-ssm-agent/agent/times"
 	"github.com/carlescere/scheduler"
@@ -241,7 +242,17 @@ func (m *Manager) configCloudWatch(log log.T) {
 		if cloudWatchConfig.IsEnabled {
 			log.Infof("Detected cloud watch has updated configuration. Configuring that plugin again")
 			// TODO need to check the folder
-			orchestrationDir := fileutil.BuildPath(appconfig.DefaultPluginPath, appconfig.PluginNameCloudWatch)
+			var instanceId string
+			if instanceId, err = platform.InstanceID(); err != nil {
+				log.Errorf("Cannot get instance id.")
+				return
+			}
+
+			orchestrationDir := fileutil.BuildPath(
+				appconfig.DefaultDataStorePath,
+				instanceId,
+				appconfig.DefaultDocumentRootDirName,
+				appconfig.PluginNameCloudWatch)
 			var config string
 			if config, err = cloudwatch.ParseEngineConfiguration(); err != nil {
 				log.Debug("Cannot parse EngineConfiguration to string format")

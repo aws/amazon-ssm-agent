@@ -50,12 +50,12 @@ const (
 	IsProcessRunning = "$ProcessActive = Get-Process -Name %v -ErrorAction SilentlyContinue ; $ProcessActive -ne $null"
 	GetPidOfExe      = "$ProcessActive = Get-Process -Name %v -ErrorAction SilentlyContinue ; if ($ProcessActive -ne $null) {$ProcessActive.Id} else {'Process not found'}"
 	ProcessNotFound  = "Process not found"
-
-	// CloudWatch Exe Absolute Path
-	CloudWatchProcessName = "EC2Config.CloudWatch"
-
-	// CloudWatch Exe Name
-	CloudWatchExeName = "EC2Config.CloudWatch.exe"
+	// CloudWatchProcessName represents CloudWatch Exe Absolute Path
+	CloudWatchProcessName = "AWS.CloudWatch"
+	// CloudWatchExeName represents the name of the executable file of cloud watch
+	CloudWatchExeName = "AWS.CloudWatch.exe"
+	// CloudWatchFolderName represents the default folder name for cloud watch plugin
+	CloudWatchFolderName = "awsCloudWatch"
 )
 
 // Assign method to global variables to allow unittest to override
@@ -85,7 +85,7 @@ func NewPlugin(pluginConfig pluginutil.PluginConfig) (*Plugin, error) {
 	plugin.OutputTruncatedSuffix = pluginConfig.OutputTruncatedSuffix
 	plugin.Uploader = pluginutil.GetS3Config()
 	plugin.ExecuteUploadOutputToS3Bucket = pluginutil.UploadOutputToS3BucketExecuter(plugin.UploadOutputToS3Bucket)
-	plugin.WorkingDir = fileutil.BuildPath(appconfig.DefaultPluginPath, Name())
+	plugin.WorkingDir = fileutil.BuildPath(appconfig.DefaultPluginPath, CloudWatchFolderName)
 	plugin.ExeLocation = filepath.Join(plugin.WorkingDir, CloudWatchExeName)
 
 	//Process details of cloudwatch.exe will be stored here accordingly
@@ -154,7 +154,7 @@ func (p *Plugin) Start(context context.T, configuration string, orchestrationDir
 	}
 
 	//check if cloudwatch.exe is already running or not
-	if p.IsCloudWatchExeRunning(log, p.WorkingDir, orchestrationDir, cancelFlag) {
+	if p.IsCloudWatchExeRunning(log, p.DefaultHealthCheckOrchestrationDir, p.DefaultHealthCheckOrchestrationDir, cancelFlag) {
 		if err = p.Stop(context, cancelFlag); err != nil {
 			// not stop successfully
 			log.Errorf("Unable to disable current running cloudwatch. error: %s", err.Error())

@@ -50,9 +50,11 @@ const (
 	// DirectoryNameArg represents the dns ip addresses of directory for domain join
 	DnsAddressesArgs = " --dns-addresses "
 	// DomainJoinPluginName is the name of the executable file of domain join plugin
-	DomainJoinPluginExecutableName = "Ec2Config.DomainJoin.exe"
+	DomainJoinPluginExecutableName = "AWS.DomainJoin.exe"
 	// Default folder name for logs
 	OutputFolder = "output"
+	// Default folder name for domain join plugin
+	DomainJoinFolderName = "awsDomainJoin"
 )
 
 // Makes command as variables, so that we can mock this for unit tests
@@ -247,7 +249,7 @@ func (p *Plugin) runCommands(log log.T, pluginInput DomainJoinPluginInput, orche
 	// Construct Command line with executable file name and parameters
 	command := makeArgs(log, pluginInput)
 	log.Debugf("command line is : %v", command)
-	workingDir := fileutil.BuildPath(appconfig.DefaultPluginPath, Name())
+	workingDir := fileutil.BuildPath(appconfig.DefaultPluginPath, DomainJoinFolderName)
 
 	out.Status = contracts.ResultStatusInProgress
 	var output string

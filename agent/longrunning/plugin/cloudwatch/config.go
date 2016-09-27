@@ -24,7 +24,10 @@ import (
 )
 
 // ConfigFileName represents the name of the configuration file for cloud watch plugin
-const ConfigFileName = "AWS.EC2.Windows.CloudWatch.json"
+const (
+	ConfigFileName       = "AWS.EC2.Windows.CloudWatch.json"
+	ConfigFileFolderName = "awsCloudWatch"
+)
 
 // cloudWatchConfig represents the data structure of cloudwatch configuration singleton,
 // which contains the essential information to configure cloudwatch plugin
@@ -129,10 +132,10 @@ func load() (CloudWatchConfig, error) {
 
 // getFileName returns the full name of the cloud watch config file.
 func getFileName() string {
-	return fileutil.BuildPath(appconfig.DefaultPluginPath, appconfig.PluginNameCloudWatch, ConfigFileName)
+	return fileutil.BuildPath(appconfig.DefaultPluginPath, ConfigFileFolderName, ConfigFileName)
 }
 
 // getLocation returns the absolute path of the cloud watch config file folder.
 func getLocation() string {
-	return fileutil.BuildPath(appconfig.DefaultPluginPath, appconfig.PluginNameCloudWatch)
+	return fileutil.BuildPath(appconfig.DefaultPluginPath, ConfigFileFolderName)
 }
