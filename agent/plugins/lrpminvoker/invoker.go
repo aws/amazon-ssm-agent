@@ -96,7 +96,7 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 		res = p.CreateResult("Unable to get plugin name because of unsupported plugin name format",
 			contracts.ResultStatusFailed)
 
-		pluginPersister(log, Name(), config, res)
+		pluginPersister(log, pluginID, config, res)
 		return
 	}
 
@@ -106,7 +106,7 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 		res = p.CreateResult(fmt.Sprintf("Plugin %s is not registered by agent", pluginID),
 			contracts.ResultStatusFailed)
 
-		pluginPersister(log, Name(), config, res)
+		pluginPersister(log, pluginID, config, res)
 		return
 	}
 
@@ -124,7 +124,7 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 		res = p.CreateResult(fmt.Sprintf("Unable to parse Settings for %s", pluginID),
 			contracts.ResultStatusFailed)
 
-		pluginPersister(log, Name(), config, res)
+		pluginPersister(log, pluginID, config, res)
 		return
 	}
 
@@ -137,7 +137,7 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 		res.Code = 1
 		res.Status = contracts.ResultStatusFailed
 
-		pluginPersister(log, Name(), config, res)
+		pluginPersister(log, pluginID, config, res)
 		return
 	}
 
@@ -145,7 +145,7 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 		res.Code = 1
 		res.Status = contracts.ResultStatusCancelled
 
-		pluginPersister(log, Name(), config, res)
+		pluginPersister(log, pluginID, config, res)
 		return
 	}
 
@@ -153,7 +153,7 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 	case "Enabled":
 		res = p.enablePlugin(log, config, pluginID, cancelFlag)
 
-		pluginPersister(log, Name(), config, res)
+		pluginPersister(log, pluginID, config, res)
 		return
 
 	case "Disabled":
@@ -180,7 +180,7 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 		res = p.CreateResult("Allowed Values of StartType: Enabled | Disabled",
 			contracts.ResultStatusFailed)
 
-		pluginPersister(log, Name(), config, res)
+		pluginPersister(log, pluginID, config, res)
 		return res
 	}
 }

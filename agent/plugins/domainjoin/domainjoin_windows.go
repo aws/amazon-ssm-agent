@@ -169,7 +169,7 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 		}
 	}
 
-	if out.Status == contracts.ResultStatusPassedAndReboot {
+	if out.Status == contracts.ResultStatusSuccessAndReboot || out.Status == contracts.ResultStatusPassedAndReboot {
 		atleastOneRequestedReboot = true
 		res.Code = out.ExitCode
 	}
@@ -262,7 +262,6 @@ func (p *Plugin) runCommands(log log.T, pluginInput DomainJoinPluginInput, orche
 	log.Debugf("stderr is: %v", out.Stderr)
 	log.Debugf("stdoutFilePath is: %v", stdoutFilePath)
 	log.Debugf("code is: %v", output)
-	log.Debugf("err is: %v", err)
 
 	// Upload output to S3
 	outputPath := filepath.Join(orchestrationDirectory, OutputFolder)
@@ -279,7 +278,7 @@ func (p *Plugin) runCommands(log log.T, pluginInput DomainJoinPluginInput, orche
 	if strings.Contains(output, string(contracts.ResultStatusPassedAndReboot)) ||
 		strings.Contains(output, string(contracts.ResultStatusSuccessAndReboot)) {
 		out.ExitCode = 0
-		out.Status = contracts.ResultStatusPassedAndReboot
+		out.Status = contracts.ResultStatusSuccessAndReboot
 		return
 	}
 

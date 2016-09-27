@@ -54,42 +54,18 @@ func (p *Processor) runCmdsUsingCmdState(context context.T,
 	cancelFlag task.CancelFlag,
 	buildReply replyBuilder,
 	sendResponse engine.SendResponse,
-	command model.DocumentState) {
+	docState model.DocumentState) {
 
 	log := context.Log()
-	var pluginConfigurations map[string]*contracts.Configuration
-	pendingPlugins := false
-	pluginConfigurations = make(map[string]*contracts.Configuration)
 
-	//iterate through all plugins to find all plugins that haven't executed yet.
-	for k, v := range command.PluginsInformation {
-		if v.HasExecuted {
-			log.Debugf("skipping execution of Plugin - %v of command - %v since it has already executed.", k, command.DocumentInformation.CommandID)
-		} else {
-			log.Debugf("Plugin - %v of command - %v will be executed", k, command.DocumentInformation.CommandID)
-			pluginConfigurations[k] = &v.Configuration
-			pendingPlugins = true
-		}
-	}
-
-	//execute plugins that haven't been executed yet
-	//individual plugins after execution will update interim cmd state file accordingly
-	if pendingPlugins {
-
-		log.Debugf("executing following plugins of command - %v", command.DocumentInformation.CommandID)
-		for k := range pluginConfigurations {
-			log.Debugf("Plugin: %v", k)
-		}
-
-		//Since only some plugins of a cmd gets executed here - there is no need to get output from engine & construct the sendReply output.
-		//Instead after all plugins of a command get executed, use persisted data to construct sendReply payload
-		runPlugins(context, command.DocumentInformation.MessageID, pluginConfigurations, sendResponse, cancelFlag)
-	}
+	//Since only some plugins of a cmd gets executed here - there is no need to get output from engine & construct the sendReply output.
+	//Instead after all plugins of a command get executed, use persisted data to construct sendReply payload
+	runPlugins(context, docState.DocumentInformation.MessageID, docState.PluginsInformation, sendResponse, cancelFlag)
 
 	//read from persisted file
 	newCmdState := commandStateHelper.GetCommandInterimState(log,
-		command.DocumentInformation.CommandID,
-		command.DocumentInformation.Destination,
+		docState.DocumentInformation.CommandID,
+		docState.DocumentInformation.Destination,
 		appconfig.DefaultLocationOfCurrent)
 
 	//construct sendReply payload
@@ -116,8 +92,8 @@ func (p *Processor) runCmdsUsingCmdState(context context.T,
 	//persist final documentInfo.
 	commandStateHelper.PersistDocumentInfo(log,
 		documentInfo,
-		command.DocumentInformation.CommandID,
-		command.DocumentInformation.Destination,
+		newCmdState.DocumentInformation.CommandID,
+		newCmdState.DocumentInformation.Destination,
 		appconfig.DefaultLocationOfCurrent)
 
 	// Skip sending response when the document requires a reboot
@@ -128,7 +104,7 @@ func (p *Processor) runCmdsUsingCmdState(context context.T,
 
 	//send document level reply
 	log.Debug("sending reply on message completion ", outputs)
-	sendResponse(command.DocumentInformation.MessageID, "", outputs)
+	sendResponse(newCmdState.DocumentInformation.MessageID, "", outputs)
 
 	//persist : commands execution in completed folder (terminal state folder)
 	log.Debugf("execution of %v is over. Moving interimState file from Current to Completed folder", newCmdState.DocumentInformation.MessageID)
@@ -141,7 +117,7 @@ func (p *Processor) runCmdsUsingCmdState(context context.T,
 
 	log.Debugf("deleting message")
 	isUpdate := false
-	for pluginName := range pluginConfigurations {
+	for pluginName := range newCmdState.PluginsInformation {
 		if pluginName == appconfig.PluginNameAwsAgentUpdate {
 			isUpdate = true
 		}
@@ -276,19 +252,21 @@ func (p *Processor) processSendCommandMessage(context context.T,
 
 	log := context.Log()
 
-	pluginConfigurations := loadPluginConfigurations(log, docState.PluginsInformation, docState.DocumentInformation.CommandID)
-
 	log.Debug("Running plugins...")
-	outputs := runPlugins(context, docState.DocumentInformation.MessageID, pluginConfigurations, sendResponse, cancelFlag)
+	outputs := runPlugins(context, docState.DocumentInformation.MessageID, docState.PluginsInformation, sendResponse, cancelFlag)
 	pluginOutputContent, _ := jsonutil.Marshal(outputs)
 	log.Debugf("Plugin outputs %v", jsonutil.Indent(pluginOutputContent))
 
 	payloadDoc := buildReply("", outputs)
 
 	//update documentInfo in interim cmd state file
-	documentInfo := commandStateHelper.GetDocumentInfo(log, docState.DocumentInformation.CommandID, docState.DocumentInformation.Destination, appconfig.DefaultLocationOfCurrent)
+	newCmdState := commandStateHelper.GetCommandInterimState(log,
+		docState.DocumentInformation.CommandID,
+		docState.DocumentInformation.Destination,
+		appconfig.DefaultLocationOfCurrent)
 
 	// set document level information which wasn't set previously
+	var documentInfo model.DocumentInfo
 	documentInfo.AdditionalInfo = payloadDoc.AdditionalInfo
 	documentInfo.DocumentStatus = payloadDoc.DocumentStatus
 	documentInfo.DocumentTraceOutput = payloadDoc.DocumentTraceOutput
@@ -297,37 +275,37 @@ func (p *Processor) processSendCommandMessage(context context.T,
 	//persist final documentInfo.
 	commandStateHelper.PersistDocumentInfo(log,
 		documentInfo,
-		docState.DocumentInformation.CommandID,
-		docState.DocumentInformation.Destination,
+		newCmdState.DocumentInformation.CommandID,
+		newCmdState.DocumentInformation.Destination,
 		appconfig.DefaultLocationOfCurrent)
 
 	// Skip sending response when the document requires a reboot
 	if documentInfo.DocumentStatus == contracts.ResultStatusSuccessAndReboot {
-		log.Debug("skipping sending response of %v since the document requires a reboot", docState.DocumentInformation.MessageID)
+		log.Debug("skipping sending response of %v since the document requires a reboot", newCmdState.DocumentInformation.MessageID)
 		return
 	}
 
 	log.Debug("Sending reply on message completion ", outputs)
-	sendResponse(docState.DocumentInformation.MessageID, "", outputs)
+	sendResponse(newCmdState.DocumentInformation.MessageID, "", outputs)
 
 	//persist : commands execution in completed folder (terminal state folder)
-	log.Debugf("execution of %v is over. Moving interimState file from Current to Completed folder", docState.DocumentInformation.MessageID)
+	log.Debugf("execution of %v is over. Moving interimState file from Current to Completed folder", newCmdState.DocumentInformation.MessageID)
 
 	commandStateHelper.MoveCommandState(log,
-		docState.DocumentInformation.CommandID,
-		docState.DocumentInformation.Destination,
+		newCmdState.DocumentInformation.CommandID,
+		newCmdState.DocumentInformation.Destination,
 		appconfig.DefaultLocationOfCurrent,
 		appconfig.DefaultLocationOfCompleted)
 
 	log.Debugf("Deleting message")
 	isUpdate := false
-	for pluginName := range pluginConfigurations {
+	for pluginName := range newCmdState.PluginsInformation {
 		if pluginName == appconfig.PluginNameAwsAgentUpdate {
 			isUpdate = true
 		}
 	}
 	if !isUpdate {
-		if err := mdsService.DeleteMessage(log, docState.DocumentInformation.MessageID); err != nil {
+		if err := mdsService.DeleteMessage(log, newCmdState.DocumentInformation.MessageID); err != nil {
 			sdkutil.HandleAwsError(log, err, p.processorStopPolicy)
 		}
 	} else {

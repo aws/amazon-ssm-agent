@@ -23,15 +23,15 @@ import (
 )
 
 func TestOutputBuilderWithMultiplePlugins(t *testing.T) {
-	results := make(map[string]*contracts.PluginResult)
+	results := make(map[string]*contracts.PluginRuntimeStatus)
 
-	results["pluginA"] = &contracts.PluginResult{
+	results["pluginA"] = &contracts.PluginRuntimeStatus{
 		Status: contracts.ResultStatusPassedAndReboot,
 	}
-	results["pluginB"] = &contracts.PluginResult{
+	results["pluginB"] = &contracts.PluginRuntimeStatus{
 		Status: contracts.ResultStatusSuccess,
 	}
-	results["pluginC"] = &contracts.PluginResult{
+	results["pluginC"] = &contracts.PluginRuntimeStatus{
 		Status: contracts.ResultStatusFailed,
 	}
 
@@ -43,9 +43,9 @@ func TestOutputBuilderWithMultiplePlugins(t *testing.T) {
 }
 
 func TestOutputBuilderWithSinglePlugin(t *testing.T) {
-	results := make(map[string]*contracts.PluginResult)
+	results := make(map[string]*contracts.PluginRuntimeStatus)
 
-	results["pluginA"] = &contracts.PluginResult{
+	results["pluginA"] = &contracts.PluginRuntimeStatus{
 		Status: contracts.ResultStatusFailed,
 	}
 

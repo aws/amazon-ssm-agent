@@ -112,10 +112,12 @@ func (p *Processor) ProcessAssociation() {
 
 	// check if the association has been executed
 	assoName := assocRawData.Association.Name
-	lastExecutedDoc := recorder.Instance()
-	if lastExecutedDoc.DocumentID == *assoName {
-		log.Infof("DocumentId %v hasn't changed. Skipping as it has been processed already.", *assoName)
+
+	if recorder.HasExecuted(instanceID, *assoName) {
+		log.Debugf("DocumentId %v hasn't changed. Skipping as it has been processed already.", *assoName)
 		return
+	} else {
+		log.Debugf("New document associated %v.", *assoName)
 	}
 
 	if err = p.assocSvc.LoadAssociationDetail(log, assocRawData); err != nil {
@@ -130,12 +132,6 @@ func (p *Processor) ProcessAssociation() {
 		log.Error(message)
 		p.updateAssocStatus(assocRawData.Association, ssm.AssociationStatusNameFailed, message)
 		return
-	}
-
-	// record the last executed association file
-	if err = recorder.Write(*assoName); err != nil {
-		message := fmt.Sprintf("Failed to persist last executed association document, %v", err)
-		log.Error(message)
 	}
 
 	if err = p.persistAssociationForExecution(log, docState); err != nil {
@@ -236,6 +232,12 @@ func (p *Processor) persistAssociationForExecution(log log.T, docState *stateMod
 		docState.DocumentInformation.Destination,
 		appconfig.DefaultLocationOfPending,
 		docState)
+
+	// record the last executed association file
+	if err := recorder.UpdateAssociatedDocument(docState.DocumentInformation.Destination, docState.DocumentInformation.DocumentName); err != nil {
+		log.Errorf("Failed to persist last executed association document, %v", err)
+	}
+
 	return p.executer.ExecutePendingDocument(p.context, p.taskPool, docState)
 }
 

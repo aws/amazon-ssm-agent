@@ -23,7 +23,6 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
-	"github.com/aws/amazon-ssm-agent/agent/platform"
 )
 
 // AssociatedDocumentName represents file recording the name of the last associated document
@@ -34,56 +33,35 @@ type AssociatedDocument struct {
 	DocumentID string
 }
 
-var instance *AssociatedDocument
-var once sync.Once
 var lock sync.RWMutex
 
-func init() {
-	once.Do(func() {
-		instance = &AssociatedDocument{}
-		fileContent, err := load()
-		if err != nil {
-			instance = &fileContent
-		}
-	})
-}
-
-// Instance returns a singleton of CloudWatchConfig instance
-func Instance() *AssociatedDocument {
-	return instance
-}
-
-// load reads the file recording the name of the last associated document from file system
-func load() (AssociatedDocument, error) {
+// HasExecuted returns if given document has been executed
+func HasExecuted(instanceID string, associationName string) bool {
 	lock.Lock()
 	defer lock.Unlock()
-	var err error
-	var instanceId string
-	var assoDoc AssociatedDocument
 
-	if instanceId, err = platform.InstanceID(); err != nil {
-		return assoDoc, fmt.Errorf("cannot get instance id because: %v", err)
+	fileName := getFileName(instanceID)
+	if !fileutil.Exists(fileName) {
+		return false
 	}
-	fileName := getFileName(instanceId)
-	err = jsonutil.UnmarshalFile(fileName, &assoDoc)
 
-	return assoDoc, err
+	var assoDoc AssociatedDocument
+	if err := jsonutil.UnmarshalFile(fileName, &assoDoc); err != nil {
+		return false
+	}
+
+	return assoDoc.DocumentID == associationName
 }
 
-// Write writes the name of the last associated document to the file system and update the singleton in memory
-func Write(associationName string) error {
+// UpdateAssociatedDocument persist last executed association name
+func UpdateAssociatedDocument(InstanceID string, associationName string) error {
 	lock.Lock()
 	defer lock.Unlock()
 	var err error
 	var content string
-	var instanceId string
 
-	if instanceId, err = platform.InstanceID(); err != nil {
-		return fmt.Errorf("cannot get instance id because: %v", err)
-	}
-
-	fileName := getFileName(instanceId)
-	location := getLocation(instanceId)
+	fileName := getFileName(InstanceID)
+	location := getLocation(InstanceID)
 
 	//verify if parent folder exist
 	if !fileutil.Exists(location) {
@@ -91,10 +69,10 @@ func Write(associationName string) error {
 			return fmt.Errorf("cannot make directory of %v because: %v", location, err)
 		}
 	}
-	// update singleton
-	instance.DocumentID = associationName
-	content, err = jsonutil.Marshal(instance)
-	if err != nil {
+
+	associatedDoc := AssociatedDocument{}
+	associatedDoc.DocumentID = associationName
+	if content, err = jsonutil.Marshal(associatedDoc); err != nil {
 		return err
 	}
 

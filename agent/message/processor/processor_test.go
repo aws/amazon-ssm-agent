@@ -69,9 +69,9 @@ type TestCaseSendCommand struct {
 	// MsgPayload stores the (parsed) payload of an MDS message.
 	MsgPayload messageContracts.SendCommandPayload
 
-	// PluginConfigs stores the configurations that the plugins require to run.
+	// PluginStates stores the configurations that the plugins require to run.
 	// These configurations hav a slightly different structure from what we receive in the MDS message payload.
-	PluginConfigs map[string]*contracts.Configuration
+	PluginStates map[string]model.PluginState
 
 	// PluginResults stores the (unmarshalled) results that the plugins are expected to produce.
 	PluginResults map[string]*contracts.PluginResult
@@ -349,11 +349,18 @@ func generateTestCaseFromFiles(t *testing.T, messagePayloadFile string, messageR
 	//orchestrationRootDir is set to CommandID considering that orchestration root directory name will be empty in the test case.
 	orchestrationRootDir := getCommandID(*testCase.Msg.MessageId)
 
-	testCase.PluginConfigs = getPluginConfigurations(payload.DocumentContent.RuntimeConfig,
+	configs := getPluginConfigurations(payload.DocumentContent.RuntimeConfig,
 		orchestrationRootDir,
 		payload.OutputS3BucketName,
 		s3KeyPrefix,
 		*testCase.Msg.MessageId)
+
+	testCase.PluginStates = make(map[string]model.PluginState)
+	for pluginName, config := range configs {
+		state := model.PluginState{}
+		state.Configuration = *config
+		testCase.PluginStates[pluginName] = state
+	}
 
 	testCase.PluginResults = make(map[string]*contracts.PluginResult)
 	testCase.ReplyPayload = loadMessageReplyFromFile(t, messageReplyPayloadFile)
@@ -362,7 +369,7 @@ func generateTestCaseFromFiles(t *testing.T, messagePayloadFile string, messageR
 		testCase.PluginResults[pluginName] = &pluginResult
 	}
 
-	testCase.DocState = initializeSendCommandState(testCase.PluginConfigs, testCase.Msg, testCase.MsgPayload)
+	testCase.DocState = initializeSendCommandState(configs, testCase.Msg, testCase.MsgPayload)
 	return
 }
 
@@ -377,10 +384,10 @@ func testProcessSendCommandMessage(t *testing.T, testCase TestCaseSendCommand) {
 	// method should call the proper APIs on the MDS service
 	mdsMock := new(MockedMDS)
 	var replyPayload string
-	mdsMock.On("SendReply", mock.Anything, *testCase.Msg.MessageId, mock.AnythingOfType("string")).Return(nil).Run(func(args mock.Arguments) {
+	mdsMock.On("SendReply", mock.Anything, mock.AnythingOfType("string"), mock.AnythingOfType("string")).Return(nil).Run(func(args mock.Arguments) {
 		replyPayload = args.Get(2).(string)
 	})
-	mdsMock.On("DeleteMessage", mock.Anything, *testCase.Msg.MessageId).Return(nil)
+	mdsMock.On("DeleteMessage", mock.Anything, mock.AnythingOfType("string")).Return(nil)
 
 	// create a mock sendResponse function
 	sendResponse := func(messageID string, pluginID string, results map[string]*contracts.PluginResult) {
@@ -399,7 +406,7 @@ func testProcessSendCommandMessage(t *testing.T, testCase TestCaseSendCommand) {
 	// method should call plugin runner with the given configuration
 	pluginRunnerMock := new(MockedPluginRunner)
 	// mock.AnythingOfType("func(string, string, map[string]*plugin.Result)")
-	pluginRunnerMock.On("RunPlugins", mock.Anything, *testCase.Msg.MessageId, testCase.PluginConfigs, mock.Anything, cancelFlag).Return(testCase.PluginResults)
+	pluginRunnerMock.On("RunPlugins", mock.Anything, *testCase.Msg.MessageId, testCase.PluginStates, mock.Anything, cancelFlag).Return(testCase.PluginResults)
 
 	// call method under test
 	//orchestrationRootDir is set to empty such that it can meet the test expectation.

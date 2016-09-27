@@ -137,7 +137,7 @@ func (p *Processor) processInProgressDocuments(instanceID string) {
 
 	//iterate through all InProgress docs
 	for _, f := range files {
-		log.Debugf("processing previously unexecuted message - %v", f.Name())
+		log.Debugf("processing previously unexecuted document - %v", f.Name())
 
 		//construct the absolute path - safely assuming that interim state for older messages are already present in Current folder
 		file := filepath.Join(pendingDocsLocation, f.Name())

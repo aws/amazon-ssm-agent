@@ -111,7 +111,7 @@ func (r *AssociationExecuter) ExecuteInProgressDocument(context context.T, docSt
 	r.parseAndPersistReplyContents(log, docState, outputs)
 	// Skip sending response when the document requires a reboot
 	if docState.IsRebootRequired() {
-		log.Debug("skipping sending response of %v since the document requires a reboot", docState.DocumentInformation.CommandID)
+		log.Debugf("skipping sending response of %v since the document requires a reboot", docState.DocumentInformation.CommandID)
 		return
 	}
 
@@ -126,7 +126,7 @@ func (r *AssociationExecuter) ExecuteInProgressDocument(context context.T, docSt
 		r.associationExecutionReport(
 			log,
 			&docState.DocumentInformation,
-			outputs,
+			docState.DocumentInformation.RuntimeStatus,
 			totalNumberOfPlugins,
 			ssm.AssociationStatusNameFailed)
 
@@ -134,7 +134,7 @@ func (r *AssociationExecuter) ExecuteInProgressDocument(context context.T, docSt
 		r.associationExecutionReport(
 			log,
 			&docState.DocumentInformation,
-			outputs,
+			docState.DocumentInformation.RuntimeStatus,
 			totalNumberOfPlugins,
 			ssm.AssociationStatusNameSuccess)
 	}
@@ -166,7 +166,14 @@ func (r *AssociationExecuter) parseAndPersistReplyContents(log log.T,
 	docState.DocumentInformation.AdditionalInfo = replyPayload.AdditionalInfo
 	docState.DocumentInformation.DocumentStatus = replyPayload.DocumentStatus
 	docState.DocumentInformation.DocumentTraceOutput = replyPayload.DocumentTraceOutput
-	docState.DocumentInformation.RuntimeStatus = replyPayload.RuntimeStatus
+
+	if docState.DocumentInformation.RuntimeStatus == nil {
+		docState.DocumentInformation.RuntimeStatus = map[string]*contracts.PluginRuntimeStatus{}
+	}
+
+	for key, status := range replyPayload.RuntimeStatus {
+		docState.DocumentInformation.RuntimeStatus[key] = status
+	}
 
 	//persist final documentInfo.
 	bookkeepingSvc.PersistDocumentInfo(log,
@@ -180,7 +187,7 @@ func (r *AssociationExecuter) parseAndPersistReplyContents(log log.T,
 func (r *AssociationExecuter) pluginExecutionReport(
 	log log.T,
 	documentID string,
-	results map[string]*contracts.PluginResult,
+	pluginOutputs map[string]*contracts.PluginResult,
 	totalNumberOfPlugins int) {
 
 	instanceID, err := platform.InstanceID()
@@ -189,8 +196,9 @@ func (r *AssociationExecuter) pluginExecutionReport(
 		return
 	}
 
+	runtimeStatuses := reply.PrepareRuntimeStatuses(log, pluginOutputs)
 	// TODO: change the status to inProgress when new api is ready
-	message := buildOutput(results, totalNumberOfPlugins)
+	message := buildOutput(runtimeStatuses, totalNumberOfPlugins)
 	r.assocSvc.UpdateAssociationStatus(
 		log,
 		instanceID,
@@ -204,11 +212,11 @@ func (r *AssociationExecuter) pluginExecutionReport(
 func (r *AssociationExecuter) associationExecutionReport(
 	log log.T,
 	docInfo *stateModel.DocumentInfo,
-	results map[string]*contracts.PluginResult,
+	runtimeStatuses map[string]*contracts.PluginRuntimeStatus,
 	totalNumberOfPlugins int,
 	associationStatus string) {
 
-	message := buildOutput(results, totalNumberOfPlugins)
+	message := buildOutput(runtimeStatuses, totalNumberOfPlugins)
 	r.assocSvc.UpdateAssociationStatus(
 		log,
 		docInfo.Destination,
@@ -219,22 +227,22 @@ func (r *AssociationExecuter) associationExecutionReport(
 }
 
 // buildOutput build the output message for association update
-func buildOutput(results map[string]*contracts.PluginResult, totalNumberOfPlugins int) string {
-	completed := len(results)
+func buildOutput(runtimeStatuses map[string]*contracts.PluginRuntimeStatus, totalNumberOfPlugins int) string {
+	completed := len(runtimeStatuses)
 	plural := ""
 
 	if totalNumberOfPlugins > 1 {
 		plural = "s"
 	}
-	success := len(filterByStatus(results, func(status contracts.ResultStatus) bool {
+	success := len(filterByStatus(runtimeStatuses, func(status contracts.ResultStatus) bool {
 		return status == contracts.ResultStatusPassedAndReboot ||
 			status == contracts.ResultStatusSuccessAndReboot ||
 			status == contracts.ResultStatusSuccess
 	}))
-	failed := len(filterByStatus(results, func(status contracts.ResultStatus) bool {
+	failed := len(filterByStatus(runtimeStatuses, func(status contracts.ResultStatus) bool {
 		return status == contracts.ResultStatusFailed
 	}))
-	timedOut := len(filterByStatus(results, func(status contracts.ResultStatus) bool {
+	timedOut := len(filterByStatus(runtimeStatuses, func(status contracts.ResultStatus) bool {
 		return status == contracts.ResultStatusTimedOut
 	}))
 
@@ -242,9 +250,9 @@ func buildOutput(results map[string]*contracts.PluginResult, totalNumberOfPlugin
 }
 
 // filterByStatus represents the helper method that filter pluginResults base on ResultStatus
-func filterByStatus(plugins map[string]*contracts.PluginResult, predicate func(contracts.ResultStatus) bool) map[string]*contracts.PluginResult {
-	result := make(map[string]*contracts.PluginResult)
-	for name, value := range plugins {
+func filterByStatus(runtimeStatuses map[string]*contracts.PluginRuntimeStatus, predicate func(contracts.ResultStatus) bool) map[string]*contracts.PluginRuntimeStatus {
+	result := make(map[string]*contracts.PluginRuntimeStatus)
+	for name, value := range runtimeStatuses {
 		if predicate(value.Status) {
 			result[name] = value
 		}
