@@ -16,7 +16,6 @@ package inventory
 
 import (
 	"encoding/json"
-	"fmt"
 	"path"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
@@ -200,12 +199,22 @@ func (p *Plugin) VerifyAndRunGatherers(policy inventory.Policy) (items []invento
 // else false.
 func (p *Plugin) VerifyInventoryDataSize(item inventory.Item, items []inventory.Item) bool {
 	var itemSize, itemsSize float32
+	log := p.context.Log()
 
 	//calculating sizes
-	itemSize = float32(len([]byte(fmt.Sprintf("%s", item))))
-	itemsSize = float32(len([]byte(fmt.Sprintf("%s", items))))
+	itemB, _ := json.Marshal(item)
+	itemSize = float32(len(itemB))
 
-	if (itemSize/1000) > inventory.SizeLimitKBPerInventoryType || (itemsSize/1000) > inventory.TotalSizeLimitKB {
+	log.Debugf("Size (Bytes) of %v - %v", item.Name, itemSize)
+
+	itemsSizeB, _ := json.Marshal(items)
+	itemsSize = float32(len(itemsSizeB))
+	log.Debugf("Total size (Bytes) of inventory items after including %v - %v", item.Name, itemsSize)
+
+	//Refer to https://wiki.ubuntu.com/UnitsPolicy regarding KiB to bytes conversion.
+	//TODO: 200 KB limit might be too less for certain inventory types like Patch - we might have to revise that and
+	//use different limits for different category.
+	if (itemSize/1024) > inventory.SizeLimitKBPerInventoryType || (itemsSize/1024) > inventory.TotalSizeLimitKB {
 		return false
 	} else {
 		return true

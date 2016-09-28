@@ -38,8 +38,8 @@ const (
 type Item struct {
 	Name string
 	//content depends on inventory type - hence set as interface{} here.
-	//e.g: for application - it will contain ApplicationData,
-	//for instanceInformation - it will contain InstanceInformation.
+	//e.g: for application - it will contain []ApplicationData,
+	//for instanceInformation - it will contain []InstanceInformation.
 	Content       interface{}
 	ContentHash   string
 	SchemaVersion string
@@ -60,10 +60,13 @@ type InstanceInformation struct {
 
 // ApplicationData captures all attributes present in AWS:Application inventory type
 type ApplicationData struct {
-	Name          string
-	Publisher     string
-	Version       string
-	InstalledTime string
+	Name            string
+	Publisher       string
+	Version         string
+	InstalledTime   string
+	ApplicationType string
+	Architecture    string
+	Url             string
 }
 
 type WindowsUpdateData struct {

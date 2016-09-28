@@ -14,7 +14,6 @@
 // +build windows
 
 // Package appconfig manages the configuration of the agent.
-
 package appconfig
 
 import (

@@ -11,8 +11,7 @@
 // either express or implied. See the License for the specific language governing
 // permissions and limitations under the License.
 
-// Package application contains a dummy gatherer.
-
+// Package application contains a application gatherer.
 package application
 
 import (
@@ -26,7 +25,7 @@ import (
 //TODO: add unit tests.
 
 const (
-	Name                       = "AWS:Application"
+	GathererName               = "AWS:Application"
 	SchemaVersionOfApplication = "1.0"
 )
 
@@ -37,26 +36,23 @@ func Gatherer(context context.T) (*T, error) {
 }
 
 func (t *T) Name() string {
-	return Name
+	return GathererName
 }
 
 func (t *T) Run(context context.T, configuration inventory.Config) (inventory.Item, error) {
 
-	//NOTE: Since this is a fake application gatherer, it is generating fake data
-
 	var result inventory.Item
 	var err error
 
-	//CaptureTime must comply with format: 2016-07-30T18:15:37Z or else it will throw error
+	//CaptureTime must comply with format: 2016-07-30T18:15:37Z to comply with regex at SSM.
 	currentTime := time.Now().UTC()
 	captureTime := currentTime.Format(time.RFC3339)
 
 	result = inventory.Item{
 		Name:          t.Name(),
 		SchemaVersion: SchemaVersionOfApplication,
-		Content:       CreateMultipleApplicationEntries(),
-		//capture time must be in UTC so that formatting to RFC3339 complies with regex at SSM
-		CaptureTime: captureTime,
+		Content:       CollectApplicationData(context),
+		CaptureTime:   captureTime,
 	}
 
 	return result, err
@@ -65,43 +61,4 @@ func (t *T) Run(context context.T, configuration inventory.Config) (inventory.It
 func (t *T) RequestStop(stopType contracts.StopType) error {
 	var err error
 	return err
-}
-
-// CreateMultipleApplicationEntries generates fake data with 2 entries for aws:application data
-func CreateMultipleApplicationEntries() []inventory.ApplicationData {
-	var data []inventory.ApplicationData
-
-	//visual studio
-	visualStudio := inventory.ApplicationData{
-		Name:          "Visual Studio 10",
-		Publisher:     "Microsoft Corporation",
-		Version:       "14.1.0.1985",
-		InstalledTime: "2016-01-01T09:10:10Z",
-	}
-
-	//adobe reader 10
-	adobeReader := inventory.ApplicationData{
-		Name:          "Adobe Reader 10",
-		Publisher:     "Adobe",
-		Version:       "10.10.1.3",
-		InstalledTime: "2016-01-01T09:10:10Z",
-	}
-
-	data = append(data, visualStudio)
-	data = append(data, adobeReader)
-
-	return data
-}
-
-// CreateSingleApplicationEntry generates fake data with 1 entry for aws:application data
-func CreateSingleApplicationEntry() inventory.ApplicationData {
-	//visual studio
-	visualStudio := inventory.ApplicationData{
-		Name:          "Visual Studio 10",
-		Publisher:     "Microsoft Corporation",
-		Version:       "14.1.0.1985",
-		InstalledTime: "2016-01-01T09:10:10Z",
-	}
-
-	return visualStudio
 }
