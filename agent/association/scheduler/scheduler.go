@@ -23,7 +23,7 @@ import (
 )
 
 const (
-	defaultSleepDurationInMilliSeconds int = 120000
+	defaultSleepDurationInMilliSeconds int = 30000
 )
 
 // CreateScheduler runs a given poll job every pollFrequencyMinutes
