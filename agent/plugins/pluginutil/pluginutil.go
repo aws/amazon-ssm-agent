@@ -232,7 +232,7 @@ func (p *DefaultPlugin) UploadOutputToS3Bucket(log log.T, pluginID string, orche
 
 				if Stdout != "" {
 					localPath := filepath.Join(orchestrationDir, p.StdoutFileName)
-					s3Key := fileutil.BuildPath(outputS3KeyPrefix, pluginID, p.StdoutFileName)
+					s3Key := fileutil.BuildS3Path(outputS3KeyPrefix, pluginID, p.StdoutFileName)
 					log.Debugf("Uploading %v to s3://%v/%v", localPath, outputS3BucketName, s3Key)
 					err := p.Uploader.S3Upload(outputS3BucketName, s3Key, localPath)
 					if err != nil {
@@ -247,7 +247,7 @@ func (p *DefaultPlugin) UploadOutputToS3Bucket(log log.T, pluginID string, orche
 
 				if Stderr != "" {
 					localPath := filepath.Join(orchestrationDir, p.StderrFileName)
-					s3Key := fileutil.BuildPath(outputS3KeyPrefix, pluginID, p.StderrFileName)
+					s3Key := fileutil.BuildS3Path(outputS3KeyPrefix, pluginID, p.StderrFileName)
 					log.Debugf("Uploading %v to s3://%v/%v", localPath, outputS3BucketName, s3Key)
 					err := p.Uploader.S3Upload(outputS3BucketName, s3Key, localPath)
 					if err != nil {

@@ -23,6 +23,8 @@ import (
 	"path/filepath"
 	"strings"
 
+	"path"
+
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 )
 
@@ -88,6 +90,15 @@ func BuildPath(root string, elements ...string) string {
 	fullPath := root
 	for _, element := range elements {
 		fullPath = filepath.Join(fullPath, removeInvalidColon(element))
+	}
+	return fullPath
+}
+
+// BuildS3Path joins the root directory path with valid components.
+func BuildS3Path(root string, elements ...string) string {
+	fullPath := root
+	for _, element := range elements {
+		fullPath = path.Join(fullPath, removeInvalidColon(element))
 	}
 	return fullPath
 }
