@@ -166,14 +166,7 @@ func (r *AssociationExecuter) parseAndPersistReplyContents(log log.T,
 	docState.DocumentInformation.AdditionalInfo = replyPayload.AdditionalInfo
 	docState.DocumentInformation.DocumentStatus = replyPayload.DocumentStatus
 	docState.DocumentInformation.DocumentTraceOutput = replyPayload.DocumentTraceOutput
-
-	if docState.DocumentInformation.RuntimeStatus == nil {
-		docState.DocumentInformation.RuntimeStatus = map[string]*contracts.PluginRuntimeStatus{}
-	}
-
-	for key, status := range replyPayload.RuntimeStatus {
-		docState.DocumentInformation.RuntimeStatus[key] = status
-	}
+	docState.DocumentInformation.RuntimeStatus = replyPayload.RuntimeStatus
 
 	//persist final documentInfo.
 	bookkeepingSvc.PersistDocumentInfo(log,

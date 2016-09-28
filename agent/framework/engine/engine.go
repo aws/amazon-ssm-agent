@@ -59,6 +59,8 @@ func RunPlugins(
 				"Skipping execution of Plugin - %v of command - %v since it has already executed.",
 				pluginID,
 				documentID)
+			pluginOutput := pluginState.Result
+			pluginOutputs[pluginID] = &pluginOutput
 			continue
 		}
 		context.Log().Debugf("Executing plugin - %v of command - %v", pluginID, documentID)
