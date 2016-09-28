@@ -15,6 +15,7 @@
 package service
 
 import (
+	"fmt"
 	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/association/model"
@@ -89,16 +90,16 @@ func (s *AssociationService) ListAssociations(log log.T, instanceID string) (*mo
 
 	response, err := s.ssmSvc.ListAssociations(log, instanceID)
 	if err != nil {
-		log.Errorf("unable to retrieve associations %v", err)
-		return assoc, err
+		return assoc, fmt.Errorf("unable to retrieve associations %v", err)
 	}
 
-	// Parse the association from the response of the ListAssociations call
-	if assoc.Association, err = parseListAssociationsResponse(response, log); err != nil {
-		log.Errorf("unable to parse association %v", err)
-		return assoc, err
+	// check if ListAssociationsResponse is empty
+	if response == nil || len(response.Associations) < 1 {
+		return assoc, nil
 	}
 
+	// Get the association from the response of the ListAssociations call
+	assoc.Association = response.Associations[0]
 	assoc.ID = uuid.NewV4().String()
 	assoc.CreateDate = time.Now().String()
 
@@ -174,15 +175,4 @@ func (s *AssociationService) UpdateAssociationStatus(
 	}
 
 	return result, nil
-}
-
-func parseListAssociationsResponse(
-	response *ssm.ListAssociationsOutput,
-	log log.T) (association *ssm.Association, err error) {
-
-	if response == nil || len(response.Associations) < 1 {
-		return nil, log.Error("ListAssociationsResponse is empty")
-	}
-
-	return response.Associations[0], nil
 }

@@ -106,7 +106,13 @@ func (p *Processor) ProcessAssociation() {
 	p.assocSvc.CreateNewServiceIfUnHealthy(log)
 
 	if assocRawData, err = p.assocSvc.ListAssociations(log, instanceID); err != nil {
-		log.Info("Unable to retrieve associations, ", err)
+		log.Errorf("Failed to retrieve associations, %v", err)
+		return
+	}
+
+	// check if association response is empty
+	if len(*assocRawData.Association.Name) == 0 {
+		log.Infof("No documents are associated with instance %v", instanceID)
 		return
 	}
 
