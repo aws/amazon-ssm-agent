@@ -63,3 +63,7 @@ func fullyQualifiedDomainName() string {
 	//todo: throw an error / panic here - since darwin is not supported yet.
 	return ""
 }
+
+func isPlatformNanoServer(log log.T) (bool, error) {
+	return false, nil
+}

@@ -42,7 +42,7 @@ const (
 )
 
 // IsPlatformNanoServer returns true if SKU is 143 or 144
-func IsPlatformNanoServer(log log.T) (bool, error) {
+func isPlatformNanoServer(log log.T) (bool, error) {
 	var sku string
 	var err error
 

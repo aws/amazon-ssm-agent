@@ -96,6 +96,9 @@ const (
 	// PlatformWindows represents windows
 	PlatformWindows = "windows"
 
+	//PlatformWindowsNano represents windows nano
+	PlatformWindowsNano = "windows-nano"
+
 	// DefaultUpdateExecutionTimeoutInSeconds represents default timeout time for execution update related scripts in seconds
 	DefaultUpdateExecutionTimeoutInSeconds = 30
 
@@ -224,6 +227,10 @@ func (util *Utility) CreateInstanceContext(log log.T) (context *InstanceContext,
 	} else if strings.Contains(platformName, PlatformCentOS) {
 		platformName = PlatformCentOS
 		installerName = PlatformLinux
+	} else if isNano, _ := platform.IsPlatformNanoServer(log); isNano {
+		//TODO move this logic to instance context
+		platformName = PlatformWindowsNano
+		installerName = PlatformWindowsNano
 	} else {
 		platformName = PlatformWindows
 		installerName = PlatformWindows
