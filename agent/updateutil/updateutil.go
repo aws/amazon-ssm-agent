@@ -180,7 +180,6 @@ type T interface {
 	IsServiceRunning(log log.T, i *InstanceContext) (result bool, err error)
 	SaveUpdatePluginResult(log log.T, updaterRoot string, updateResult *UpdatePluginResult) (err error)
 	IsDiskSpaceSufficientForUpdate(log log.T) (bool, error)
-	IsPlatformSupportedForUpdate(log log.T) (bool, error)
 }
 
 // Utility implements interface T
@@ -405,12 +404,6 @@ func (util *Utility) IsDiskSpaceSufficientForUpdate(log log.T) (bool, error) {
 
 	// Return true otherwise
 	return true, nil
-}
-
-// IsPlatformSupportedForUpdate checks for each platform type and make sure current platform has no restrictio on agent update
-// Returns true if the update is allowed, otherwise return false
-func (util *Utility) IsPlatformSupportedForUpdate(log log.T) (result bool, err error) {
-	return isUpdateSupported(log)
 }
 
 // IsPlatformUsingSystemD returns if SystemD is the default Init for the Linux platform

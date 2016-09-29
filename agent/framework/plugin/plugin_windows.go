@@ -19,12 +19,32 @@
 package plugin
 
 import (
+	"fmt"
+	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
+	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/platform"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/application"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/domainjoin"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/pluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/psmodule"
 )
+
+// IsPluginSupportedForCurrentPlatform returns true if current platform supports the plugin with given name.
+func IsPluginSupportedForCurrentPlatform(log log.T, pluginID string) (bool, string) {
+	platformName, _ := platform.PlatformName(log)
+	platformVersion, _ := platform.PlatformVersion(log)
+
+	if isPlatformNanoServer, err := platform.IsPlatformNanoServer(log); err == nil && isPlatformNanoServer {
+		//if the current OS is Nano server, SSM Agent doesn't support the following plugins.
+		if pluginID == appconfig.PluginNameDomainJoin ||
+			pluginID == appconfig.PluginNameCloudWatch ||
+			pluginID == appconfig.PluginNameAwsAgentUpdate {
+			return false, fmt.Sprintf("%s (Nano Server) v%s", platformName, platformVersion)
+		}
+	}
+	return true, fmt.Sprintf("%s v%s", platformName, platformVersion)
+}
 
 // loadPlatformDependentPlugins registers platform dependent plugins
 func loadPlatformDependentPlugins(context context.T) PluginRegistry {

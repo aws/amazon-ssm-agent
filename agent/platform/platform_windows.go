@@ -32,6 +32,34 @@ const caption = "Caption"
 const version = "Version"
 const sku = "OperatingSystemSKU"
 
+// Win32_OperatingSystems https://msdn.microsoft.com/en-us/library/aa394239%28v=vs.85%29.aspx
+const (
+	// PRODUCT_DATA_CENTER_NANO_SERVER = 143
+	ProductDataCenterNanoServer = "143"
+
+	// PRODUCT_STANDARD_NANO_SERVER = 144
+	ProductStandardNanoServer = "144"
+)
+
+// IsPlatformNanoServer returns true if SKU is 143 or 144
+func IsPlatformNanoServer(log log.T) (bool, error) {
+	var sku string
+	var err error
+
+	// Get platform sku information
+	if sku, err = getPlatformSku(log); err != nil {
+		log.Infof("Failed to fetch sku - %v", err)
+		return false, err
+	}
+
+	// If sku represents nano server, return true
+	if sku == ProductDataCenterNanoServer || sku == ProductStandardNanoServer {
+		return true, nil
+	}
+
+	return false, nil
+}
+
 func getPlatformName(log log.T) (value string, err error) {
 	return getPlatformDetails(caption, log)
 }

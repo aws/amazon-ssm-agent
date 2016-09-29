@@ -87,17 +87,25 @@ func RunPlugins(
 		//check if the said plugin is a worker plugin
 		p, isWorkerPlugin := pluginRegistry[pluginID]
 
-		switch {
-		case isLongRunningPlugin:
-			pluginHandlerFound = true
-			context.Log().Infof("%s is a long running plugin", pluginID)
-			r = runPlugin(context, handler, pluginID, configuration, cancelFlag)
-		case isWorkerPlugin:
-			pluginHandlerFound = true
-			context.Log().Infof("%s is a worker plugin", pluginID)
-			r = runPlugin(context, p, pluginID, configuration, cancelFlag)
-		default:
-			err := fmt.Errorf("Plugin with id %s not found!", pluginID)
+		isSupported, platformDetail := plugin.IsPluginSupportedForCurrentPlatform(context.Log(), pluginID)
+		if isSupported {
+			switch {
+			case isLongRunningPlugin:
+				pluginHandlerFound = true
+				context.Log().Infof("%s is a long running plugin", pluginID)
+				r = runPlugin(context, handler, pluginID, configuration, cancelFlag)
+			case isWorkerPlugin:
+				pluginHandlerFound = true
+				context.Log().Infof("%s is a worker plugin", pluginID)
+				r = runPlugin(context, p, pluginID, configuration, cancelFlag)
+			default:
+				err := fmt.Errorf("Plugin with id %s not found!", pluginID)
+				pluginOutputs[pluginID].Status = contracts.ResultStatusFailed
+				pluginOutputs[pluginID].Error = err
+				context.Log().Error(err)
+			}
+		} else {
+			err := fmt.Errorf("Plugin with id %s is not supported in current platform!\n%s", pluginID, platformDetail)
 			pluginOutputs[pluginID].Status = contracts.ResultStatusFailed
 			pluginOutputs[pluginID].Error = err
 			context.Log().Error(err)
