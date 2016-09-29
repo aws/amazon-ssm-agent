@@ -7,10 +7,12 @@
 /output/
 /.classpath
 /.metadata/
+/.idea/
 /RemoteSystemsTempFiles/
 /logs/
 /vendor/bin/
 /vendor/pkg/
+/vendor/src/golang.org/x/tools/
 /Tools/bin/
 /Tools/pkg/
 build/

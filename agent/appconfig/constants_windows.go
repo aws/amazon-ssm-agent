@@ -64,6 +64,9 @@ var EnvProgramFiles string
 // Windows environment variable %WINDIR%
 var EnvWinDir string
 
+// Default Custom Inventory Data Folder
+var DefaultCustomInventoryFolder string
+
 func init() {
 	/*
 		System environment variable "AllUsersProfile" maps to following locations in different locations:
@@ -87,4 +90,5 @@ func init() {
 	DefaultDataStorePath = filepath.Join(SSMDataPath, "InstanceData")
 	DownloadRoot = filepath.Join(temp, SSMFolder, "Download")
 	UpdaterArtifactsRoot = filepath.Join(temp, SSMFolder, "Update")
+	DefaultCustomInventoryFolder = filepath.Join(SSMDataPath, "Inventory", "Custom")
 }

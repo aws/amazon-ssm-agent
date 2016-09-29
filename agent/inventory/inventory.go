@@ -174,19 +174,24 @@ func (p *Plugin) VerifyAndRunGatherers(policy inventory.Policy) (items []invento
 			err = log.Errorf("Unrecognized inventory gatherer - %v ", name)
 			break
 		} else {
-			var item inventory.Item
+			var gItems []inventory.Item
 			log.Infof("Invoking gatherer - %v", name)
 
-			if item, err = gatherer.Run(p.context, policy.InventoryPolicy[name]); err != nil {
+			if gItems, err = gatherer.Run(p.context, policy.InventoryPolicy[name]); err != nil {
 				err = log.Errorf("Encountered error while executing %v. Error - %v", name, err.Error())
 				break
 			} else {
-				items = append(items, item)
+				items = append(items, gItems...)
 
+				//TODO: Each gather shall check each item's size and stop collecting if size exceed immediately
+				//TODO: only check the total item size at this function, whenever total size exceed, stop
+				//TODO: immediately and raise association error
 				//return error if collected data breaches size limit
-				if !p.VerifyInventoryDataSize(item, items) {
-					err = log.Errorf("Size limit exceeded for collected data.")
-					break
+				for _, v := range gItems {
+					if !p.VerifyInventoryDataSize(v, items) {
+						err = log.Errorf("Size limit exceeded for collected data.")
+						break
+					}
 				}
 			}
 		}

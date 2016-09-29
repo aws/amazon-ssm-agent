@@ -91,3 +91,10 @@ type Config struct {
 type Policy struct {
 	InventoryPolicy map[string]Config
 }
+
+// CustomInventoryItem represents the schema of custom inventory item
+type CustomInventoryItem struct {
+	TypeName      string
+	SchemaVersion string
+	Content       interface{}
+}

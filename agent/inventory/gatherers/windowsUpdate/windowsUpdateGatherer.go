@@ -42,7 +42,7 @@ func (t *T) Name() string {
 	return Name
 }
 
-func (t *T) Run(context context.T, configuration inventory.Config) (inventory.Item, error) {
+func (t *T) Run(context context.T, configuration inventory.Config) (items []inventory.Item, err error) {
 	var result inventory.Item
 	log := context.Log()
 	content, err := getWindowsUpdateData()
@@ -62,7 +62,8 @@ func (t *T) Run(context context.T, configuration inventory.Config) (inventory.It
 	} else {
 		log.Errorf("Unable to fetch windows update - %v", err.Error())
 	}
-	return result, err
+	items = append(items, result)
+	return
 }
 
 func (t *T) RequestStop(stopType contracts.StopType) error {

@@ -39,10 +39,9 @@ func (t *T) Name() string {
 	return GathererName
 }
 
-func (t *T) Run(context context.T, configuration inventory.Config) (inventory.Item, error) {
+func (t *T) Run(context context.T, configuration inventory.Config) (items []inventory.Item, err error) {
 
 	var result inventory.Item
-	var err error
 
 	//CaptureTime must comply with format: 2016-07-30T18:15:37Z to comply with regex at SSM.
 	currentTime := time.Now().UTC()
@@ -55,7 +54,8 @@ func (t *T) Run(context context.T, configuration inventory.Config) (inventory.It
 		CaptureTime:   captureTime,
 	}
 
-	return result, err
+	items = append(items, result)
+	return
 }
 
 func (t *T) RequestStop(stopType contracts.StopType) error {

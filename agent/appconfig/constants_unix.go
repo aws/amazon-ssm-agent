@@ -39,4 +39,7 @@ const (
 
 	// RebootExitCode that would trigger a Soft Reboot
 	RebootExitCode = 194
+
+	// Default Custom Inventory Inventory Folder
+	DefaultCustomInventoryFolder = DefaultDataStorePath + "inventory/custom"
 )

@@ -5,6 +5,9 @@
     },
     "AWS:WindowsUpdate": {
       "Collection": "Enabled"
+    },
+    "CustomInventory": {
+      "Collection": "Enabled"
     }
   }
 }

@@ -75,7 +75,7 @@ func ConvertToSSMInventoryItem(context context.T, item inventory.Item) (inventor
 
 	var a []interface{}
 	var c map[string]*string
-	var content []map[string]*string
+	var content = []map[string]*string{}
 	var dataB []byte
 
 	dataType := reflect.ValueOf(item.Content)
