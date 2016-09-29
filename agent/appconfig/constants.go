@@ -36,13 +36,22 @@ const (
 	DefaultSsmHealthFrequencyMinutesMax = 60
 
 	//aws-ssm-agent bookkeeping constants
-	DefaultLocationOfPending   = "pending"
-	DefaultLocationOfCurrent   = "current"
-	DefaultLocationOfCompleted = "completed"
-	DefaultLocationOfCorrupt   = "corrupt"
-	DefaultLocationOfState     = "state"
-	// DefaultCommandRootDirName is the root directory for storing command states
-	DefaultCommandRootDirName = "command"
+	DefaultLocationOfPending     = "pending"
+	DefaultLocationOfCurrent     = "current"
+	DefaultLocationOfCompleted   = "completed"
+	DefaultLocationOfCorrupt     = "corrupt"
+	DefaultLocationOfState       = "state"
+	DefaultLocationOfAssociation = "association"
+
+	//aws-ssm-agent bookkeeping constants for long running plugins
+	LongRunningPluginsLocation         = "longrunningplugins"
+	LongRunningPluginsHealthCheck      = "healthcheck"
+	LongRunningPluginDataStoreLocation = "datastore"
+	LongRunningPluginDataStoreFileName = "store"
+	PluginNameLongRunningPluginInvoker = "lrpminvoker"
+
+	// DefaultDocumentRootDirName is the root directory for storing command states
+	DefaultDocumentRootDirName = "document"
 
 	// Orchestration Root Dir
 	defaultOrchestrationRootDirName = "orchestration"
@@ -64,4 +73,10 @@ const (
 
 	AppConfigFileName    = "amazon-ssm-agent.json"
 	SeelogConfigFileName = "seelog.xml"
+
+	// PluginNameDomainJoin is the name of domain join plugin
+	PluginNameDomainJoin = "aws:domainJoin"
+
+	// PluginNameCloudWatch is the name of cloud watch plugin
+	PluginNameCloudWatch = "aws:cloudWatch"
 )

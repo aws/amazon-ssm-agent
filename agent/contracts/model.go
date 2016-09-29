@@ -25,9 +25,17 @@ const (
 	ResultStatusInProgress       ResultStatus = "InProgress"
 	ResultStatusSuccess          ResultStatus = "Success"
 	ResultStatusSuccessAndReboot ResultStatus = "SuccessAndReboot"
+	ResultStatusPassedAndReboot  ResultStatus = "PassedAndReboot"
 	ResultStatusFailed           ResultStatus = "Failed"
 	ResultStatusCancelled        ResultStatus = "Cancelled"
 	ResultStatusTimedOut         ResultStatus = "TimedOut"
+)
+
+const (
+	// ParamTypeString represents the Param Type is String
+	ParamTypeString = "String"
+	// ParamTypeStringList represents the Param Type is StringList
+	ParamTypeStringList = "StringList"
 )
 
 type StopType string
@@ -46,6 +54,7 @@ type Parameter struct {
 
 // PluginConfig stores plugin configuration
 type PluginConfig struct {
+	Settings    interface{} `json:"settings"`
 	Properties  interface{} `json:"properties"`
 	Description string      `json:"description"`
 }

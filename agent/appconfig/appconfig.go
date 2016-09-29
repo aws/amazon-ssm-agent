@@ -111,6 +111,7 @@ func DefaultConfig() SsmagentConfig {
 	}
 	var ssm = SsmCfg{
 		HealthFrequencyMinutes: 5,
+		AssociationRetryLimit:  5,
 	}
 	var agent = AgentInfo{
 		Name: "amazon-ssm-agent-default",

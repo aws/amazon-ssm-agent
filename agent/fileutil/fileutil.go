@@ -18,9 +18,12 @@ import (
 	"bytes"
 	"fmt"
 	"io"
+	"io/ioutil"
 	"os"
 	"path/filepath"
 	"strings"
+
+	"path"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 )
@@ -82,12 +85,30 @@ func LocalFileExist(path string) (bool, error) {
 	return false, err
 }
 
-//RemoveInvalidChars strips any invalid characters from filepath
-func RemoveInvalidChars(filePath string) string {
-	if filePath != "" {
-		return strings.Replace(filePath, ":", "", -1)
+// BuildPath joins the orchestration directory path with valid components.
+func BuildPath(root string, elements ...string) string {
+	fullPath := root
+	for _, element := range elements {
+		fullPath = filepath.Join(fullPath, removeInvalidColon(element))
 	}
-	return filePath
+	return fullPath
+}
+
+// BuildS3Path joins the root directory path with valid components.
+func BuildS3Path(root string, elements ...string) string {
+	fullPath := root
+	for _, element := range elements {
+		fullPath = path.Join(fullPath, removeInvalidColon(element))
+	}
+	return fullPath
+}
+
+// removeInvalidColon strips any invalid colon from plugin name.
+func removeInvalidColon(pluginName string) string {
+	if pluginName != "" {
+		return strings.Replace(pluginName, ":", "", -1)
+	}
+	return pluginName
 }
 
 // MakeDirs create the directories along the path if missing.
@@ -179,4 +200,13 @@ func IsDirEmpty(location string) (bool, error) {
 		return true, nil
 	}
 	return false, err
+}
+
+// ReadDir returns files within the given location
+func ReadDir(location string) ([]os.FileInfo, error) {
+	files := []os.FileInfo{}
+	if location == "" {
+		return files, fmt.Errorf("location cannot be empty")
+	}
+	return ioutil.ReadDir(location)
 }

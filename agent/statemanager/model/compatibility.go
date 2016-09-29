@@ -11,9 +11,8 @@
 // either express or implied. See the License for the specific language governing
 // permissions and limitations under the License.
 
-// Package processor implements MDS plugin processor
-// processor_managedinstance removes dependency on instance meta data for managed instances.
-package processor
+// Package model provides model definitions for document state
+package model
 
 import (
 	"strings"
@@ -21,11 +20,10 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
-	messageContracts "github.com/aws/amazon-ssm-agent/agent/message/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/platform"
 )
 
-type ManagedInstanceDocumentProperties struct {
+type managedInstanceDocumentProperties struct {
 	RunCommand []string
 	ID         string
 }
@@ -45,34 +43,35 @@ func init() {
 	managedInstanceIncompatibleAWSSSMDocuments = documentList
 }
 
-// Our intent here is to look for array of commands which will be executed as a part of this document and replace the incompatible code.
-func removeDependencyOnInstanceMetadataForManagedInstance(context context.T, parsedMessage messageContracts.SendCommandPayload) (messageContracts.SendCommandPayload, error) {
+// RemoveDependencyOnInstanceMetadata looks for array of commands which will be executed as a part of this document and replace the incompatible code.
+func RemoveDependencyOnInstanceMetadata(context context.T, docState *DocumentState) error {
 	log := context.Log()
 	var properties []interface{}
-	var parsedDocumentProperties ManagedInstanceDocumentProperties
+	var parsedDocumentProperties managedInstanceDocumentProperties
 
-	err := jsonutil.Remarshal(parsedMessage.DocumentContent.RuntimeConfig[appconfig.PluginNameAwsRunScript].Properties, &properties)
+	err := jsonutil.Remarshal(docState.PluginsInformation[appconfig.PluginNameAwsRunScript].Configuration.Properties, &properties)
 	if err != nil {
-		log.Errorf("Invalid format of properties in %v document. error: %v", parsedMessage.DocumentName, err)
-		return parsedMessage, err
+		log.Errorf("Invalid format of properties in %v document. error: %v", docState.DocumentInformation.DocumentName, err)
+		return err
 	}
 
 	// Since 'Properties' is an array and we use only one property block for the above documents, array location '0' of 'Properties' is used.
 	err = jsonutil.Remarshal(properties[0], &parsedDocumentProperties)
 	if err != nil {
-		log.Errorf("Invalid format of properties in %v document. error: %v", parsedMessage.DocumentName, err)
-		return parsedMessage, err
+		log.Errorf("Invalid format of properties in %v document. error: %v", docState.DocumentInformation.DocumentName, err)
+		return err
 	}
 
 	region, err := platform.Region()
 	if err != nil {
 		log.Errorf("Error retrieving agent region. error: %v", err)
-		return parsedMessage, err
+		return err
 	}
 
 	// Comment or replace the incompatible code from this document.
 	log.Info("Replacing managed instance incompatible code for AWS SSM Document.")
 	for i, command := range parsedDocumentProperties.RunCommand {
+		// remove the call to metadata service to retrieve the region for onprem instances
 		if strings.Contains(command, "$metadataLocation = 'http://169.254.169.254/latest/dynamic/instance-identity/document/region'") {
 			parsedDocumentProperties.RunCommand[i] = strings.Replace(command, "$metadataLocation = 'http://169.254.169.254/latest/dynamic/instance-identity/document/region'", "# $metadataLocation = 'http://169.254.169.254/latest/dynamic/instance-identity/document/region' (This is done to make it managed instance compatible)", 1)
 		}
@@ -89,30 +88,15 @@ func removeDependencyOnInstanceMetadataForManagedInstance(context context.T, par
 	// Plug-in the compatible 'Properties' block back to the document.
 	properties[0] = parsedDocumentProperties
 	var documentProperties interface{} = properties
-	parsedMessage.DocumentContent.RuntimeConfig[appconfig.PluginNameAwsRunScript].Properties = documentProperties
+	plugin := docState.PluginsInformation[appconfig.PluginNameAwsRunScript]
+	plugin.Configuration.Properties = documentProperties
 
-	// For debug purposes.
-	parsedMessageContent, err := jsonutil.Marshal(parsedMessage)
-	if err != nil {
-		log.Errorf("Error marshalling %v document. error: %v", parsedMessage.DocumentName, err)
-		return parsedMessage, err
-	}
-	log.Debug("ParsedMessage after removing dependency on instance metadata for managed instance is ", jsonutil.Indent(parsedMessageContent))
-	return parsedMessage, nil
+	docState.PluginsInformation[appconfig.PluginNameAwsRunScript] = plugin
+
+	return nil
 }
 
-func isManagedInstanceIncompatibleAWSSSMDocument(documentName string) bool {
+// IsManagedInstanceIncompatibleAWSSSMDocument checks if doc could contain incompatible code for managed instance
+func IsManagedInstanceIncompatibleAWSSSMDocument(documentName string) bool {
 	return managedInstanceIncompatibleAWSSSMDocuments[documentName]
-}
-
-func isManagedInstance() (bool, error) {
-	instanceId, err := platform.InstanceID()
-	if err != nil {
-		return false, err
-	}
-
-	if strings.Contains(instanceId, "mi-") {
-		return true, nil
-	}
-	return false, nil
 }

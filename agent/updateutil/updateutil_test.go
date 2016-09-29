@@ -451,7 +451,6 @@ func TestSetExeOutErrCannotCreateFolder(t *testing.T) {
 	mkDirAll = func(path string, perm os.FileMode) error {
 		return fmt.Errorf("create folder error")
 	}
-
 	_, _, err := setExeOutErr(appconfig.UpdaterArtifactsRoot, "std", "err")
 	assert.Error(t, err, "create folder error")
 }
@@ -464,7 +463,6 @@ func TestSetExeOutErrCannotOpenFile(t *testing.T) {
 	openFile = func(name string, flag int, perm os.FileMode) (*os.File, error) {
 		return &os.File{}, fmt.Errorf("create file error")
 	}
-
 	_, _, err := setExeOutErr(appconfig.UpdaterArtifactsRoot, "std", "err")
 	assert.Error(t, err, "create file error")
 }
