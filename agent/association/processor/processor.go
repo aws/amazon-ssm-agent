@@ -111,7 +111,7 @@ func (p *Processor) ProcessAssociation() {
 	}
 
 	// check if association response is empty
-	if len(*assocRawData.Association.Name) == 0 {
+	if assocRawData == nil {
 		log.Infof("No documents are associated with instance %v", instanceID)
 		return
 	}
