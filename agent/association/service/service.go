@@ -90,12 +90,12 @@ func (s *AssociationService) ListAssociations(log log.T, instanceID string) (*mo
 
 	response, err := s.ssmSvc.ListAssociations(log, instanceID)
 	if err != nil {
-		return assoc, fmt.Errorf("unable to retrieve associations %v", err)
+		return nil, fmt.Errorf("unable to retrieve associations %v", err)
 	}
 
 	// check if ListAssociationsResponse is empty
 	if response == nil || len(response.Associations) < 1 {
-		return assoc, nil
+		return nil, nil
 	}
 
 	// Get the association from the response of the ListAssociations call
