@@ -19,6 +19,8 @@ import (
 	"path"
 	"sync"
 
+	"path/filepath"
+
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
@@ -191,7 +193,7 @@ func PersistPluginState(log log.T, pluginState model.PluginState, pluginID, comm
 
 // DocumentStateDir returns absolute filename where command states are persisted
 func DocumentStateDir(instanceID, locationFolder string) string {
-	return path.Join(appconfig.DefaultDataStorePath,
+	return filepath.Join(appconfig.DefaultDataStorePath,
 		instanceID,
 		appconfig.DefaultDocumentRootDirName,
 		appconfig.DefaultLocationOfState,

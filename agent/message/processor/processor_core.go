@@ -266,21 +266,20 @@ func (p *Processor) processSendCommandMessage(context context.T,
 		appconfig.DefaultLocationOfCurrent)
 
 	// set document level information which wasn't set previously
-	var documentInfo model.DocumentInfo
-	documentInfo.AdditionalInfo = payloadDoc.AdditionalInfo
-	documentInfo.DocumentStatus = payloadDoc.DocumentStatus
-	documentInfo.DocumentTraceOutput = payloadDoc.DocumentTraceOutput
-	documentInfo.RuntimeStatus = payloadDoc.RuntimeStatus
+	newCmdState.DocumentInformation.AdditionalInfo = payloadDoc.AdditionalInfo
+	newCmdState.DocumentInformation.DocumentStatus = payloadDoc.DocumentStatus
+	newCmdState.DocumentInformation.DocumentTraceOutput = payloadDoc.DocumentTraceOutput
+	newCmdState.DocumentInformation.RuntimeStatus = payloadDoc.RuntimeStatus
 
 	//persist final documentInfo.
 	commandStateHelper.PersistDocumentInfo(log,
-		documentInfo,
+		newCmdState.DocumentInformation,
 		newCmdState.DocumentInformation.CommandID,
 		newCmdState.DocumentInformation.Destination,
 		appconfig.DefaultLocationOfCurrent)
 
 	// Skip sending response when the document requires a reboot
-	if documentInfo.DocumentStatus == contracts.ResultStatusSuccessAndReboot {
+	if newCmdState.DocumentInformation.DocumentStatus == contracts.ResultStatusSuccessAndReboot {
 		log.Debug("skipping sending response of %v since the document requires a reboot", newCmdState.DocumentInformation.MessageID)
 		return
 	}
