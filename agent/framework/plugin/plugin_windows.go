@@ -39,8 +39,7 @@ func IsPluginSupportedForCurrentPlatform(log log.T, pluginID string) (bool, stri
 	if isPlatformNanoServer, err := platform.IsPlatformNanoServer(log); err == nil && isPlatformNanoServer {
 		//if the current OS is Nano server, SSM Agent doesn't support the following plugins.
 		if pluginID == appconfig.PluginNameDomainJoin ||
-			pluginID == appconfig.PluginNameCloudWatch ||
-			pluginID == appconfig.PluginNameAwsAgentUpdate {
+			pluginID == appconfig.PluginNameCloudWatch {
 			return false, fmt.Sprintf("%s (Nano Server) v%s", platformName, platformVersion)
 		}
 	}
