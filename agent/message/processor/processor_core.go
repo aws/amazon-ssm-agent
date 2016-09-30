@@ -80,24 +80,21 @@ func (p *Processor) runCmdsUsingCmdState(context context.T,
 
 	payloadDoc := buildReply("", outputs)
 
-	//update interim cmd state file with document level information
-	var documentInfo model.DocumentInfo
-
 	// set document level information which wasn't set previously
-	documentInfo.AdditionalInfo = payloadDoc.AdditionalInfo
-	documentInfo.DocumentStatus = payloadDoc.DocumentStatus
-	documentInfo.DocumentTraceOutput = payloadDoc.DocumentTraceOutput
-	documentInfo.RuntimeStatus = payloadDoc.RuntimeStatus
+	newCmdState.DocumentInformation.AdditionalInfo = payloadDoc.AdditionalInfo
+	newCmdState.DocumentInformation.DocumentStatus = payloadDoc.DocumentStatus
+	newCmdState.DocumentInformation.DocumentTraceOutput = payloadDoc.DocumentTraceOutput
+	newCmdState.DocumentInformation.RuntimeStatus = payloadDoc.RuntimeStatus
 
 	//persist final documentInfo.
 	commandStateHelper.PersistDocumentInfo(log,
-		documentInfo,
+		newCmdState.DocumentInformation,
 		newCmdState.DocumentInformation.CommandID,
 		newCmdState.DocumentInformation.Destination,
 		appconfig.DefaultLocationOfCurrent)
 
 	// Skip sending response when the document requires a reboot
-	if documentInfo.DocumentStatus == contracts.ResultStatusSuccessAndReboot {
+	if newCmdState.DocumentInformation.DocumentStatus == contracts.ResultStatusSuccessAndReboot {
 		log.Debug("skipping sending response of %v since the document requires a reboot", newCmdState.DocumentInformation.MessageID)
 		return
 	}
