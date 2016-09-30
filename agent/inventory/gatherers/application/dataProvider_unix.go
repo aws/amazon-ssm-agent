@@ -47,8 +47,9 @@ const (
 	RPMQueryFormatArgs            = `\{\"Name\":\"%{NAME}\",\"Publisher\":\"%{VENDOR}\",\"Version\":\"%{VERSION}\",\"InstalledTime\":\"%{INSTALLTIME}\",\"ApplicationType\":\"%{GROUP}\",\"Architecture\":\"%{ARCH}\",\"Url\":\"%{URL}\"\},`
 
 	//command for listing all applications using dpkg
-	DPKGCmd  = ""
-	DPKGArgs = ""
+	DPKGCmd                      = "dpkg-query"
+	DPKGArgsToGetAllApplications = "-W"
+	DPKGQueryFormat              = `-f={"Name":"${Package}","Version":"${Version}","Publisher":"${Maintainer}","ApplicationType":"${Section}","Architecture":"${Architecture}","Url":"${Homepage}"},`
 )
 
 func init() {
@@ -79,24 +80,35 @@ func CollectApplicationData(context context.T) (appData []inventory.ApplicationD
 
 	log.Infof("Platform name: %v, small case converstion: %v", plName, strings.ToLower(plName))
 
-	//get package manager
+	var args []string
+	var cmd string
+
+	//detect package manager and then get application data accordingly.
 	if mgr, ok := pkgMgr[strings.ToLower(plName)]; ok {
 
 		switch mgr {
 		case RPMPackageManager:
 			log.Infof("Detected '%v' as package management system", RPMPackageManager)
-			if appData, err = GetApplicationDataUsingRPMQuery(context); err != nil {
-				log.Errorf("No inventory data because of unexpected errors - %v", err.Error())
-			}
+
+			//setting up rpm query command:
+			cmd = RPMCmd
+			args = append(args, RPMCmdArgToGetAllApplications, RPMQueryFormat, RPMQueryFormatArgs)
 
 		case DPKGPackageManager:
-			log.Infof("Detected '%v' as package management system", DPKGPackageManager)
-			if appData, err = GetApplicationDataUsingDPKGQuery(context); err != nil {
-				log.Errorf("No inventory data because of unexpected errors - %v", err.Error())
-			}
+			log.Errorf("Detected '%v' as package management system", DPKGPackageManager)
+
+			//setting up dpkg query command:
+			cmd = DPKGCmd
+			args = append(args, DPKGArgsToGetAllApplications, DPKGQueryFormat)
+
 		default:
 			log.Errorf("Unsupported package management system - %v, hence no inventory data for %v",
 				mgr, GathererName)
+			return
+		}
+
+		if appData, err = GetApplicationData(context, cmd, args); err != nil {
+			log.Infof("No inventory data because of unexpected errors - %v", err.Error())
 		}
 
 	} else {
@@ -108,19 +120,13 @@ func CollectApplicationData(context context.T) (appData []inventory.ApplicationD
 	return
 }
 
-// GetApplicationDataUsingDPKGQuery uses dpkg query to get list of all installed applications/packages
-func GetApplicationDataUsingDPKGQuery(context context.T) (data []inventory.ApplicationData, err error) {
-	log := context.Log()
-	log.Infof("Implementation of DPKG is missing - stay tuned")
-	return
-}
-
-// GetApplicationDataUsingRPMQuery uses rpm query to get list of all installed applications/packages
-func GetApplicationDataUsingRPMQuery(context context.T) (data []inventory.ApplicationData, err error) {
+// GetApplicationData runs a shell command and gets information about all packages/applications
+func GetApplicationData(context context.T, command string, args []string) (data []inventory.ApplicationData, err error) {
 
 	/*
-		Note: Following is a sample of how rpm stores package information.
+		Note: Following are samples of how rpm & dpkg stores package information.
 
+		RPM:
 		Name        : python27
 		Version     : 2.7.10
 		Release     : 4.120.amzn1
@@ -152,36 +158,61 @@ func GetApplicationDataUsingRPMQuery(context context.T) (data []inventory.Applic
 
 		Note that documentation for Python is provided in the python-docs
 		package.
-
 		This package provides the "python" executable; most of the actual
 		implementation is within the "python-libs" package.
+
+		DPKG:
+
+		Package: netcat
+		Priority: optional
+		Section: universe/net
+		Installed-Size: 30
+		Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+		Original-Maintainer: Ruben Molina <rmolina@udea.edu.co>
+		Architecture: all
+		Version: 1.10-40
+		Depends: netcat-traditional (>= 1.10-39)
+		Filename: pool/universe/n/netcat/netcat_1.10-40_all.deb
+		Size: 3340
+		MD5sum: 37c303f02b260481fa4fc9fb8b2c1004
+		SHA1: 0371a3950d6967480985aa014fbb6fb898bcea3a
+		SHA256: eeecb4c93f03f455d2c3f57b0a1e83b54dbeced0918ae563784e86a37bcc16c9
+		Description-en: TCP/IP swiss army knife -- transitional package
+		 This is a "dummy" package that depends on lenny's default version of
+		 netcat, to ease upgrades. It may be safely removed.
+		Description-md5: 1353f8c1d079348417c2180319bdde09
+		Bugs: https://bugs.launchpad.net/ubuntu/+filebug
+		Origin: Ubuntu
+
 
 		Following fields are relevant for inventory type AWS:Application
 		- Name
 		- Version
-		- Vendor (mapped to Publisher)
+		- Publisher
 		- Architecture
-		- URL
-		- InstallTime
-		- Group
+		- Url
+		- InstalledTime
+		- ApplicationType
 
-		We use rpm query to get above fields and then tranform the data to convert into json
+		We use rpm query & dpkg-query to get above fields and then tranform the data to convert into json
 		to simplify its processing.
 
-		Our rpm query is of following format:
+		Sample rpm query is of following format:
 		rpm -qa --queryformat "\{\"Name\":\"%{NAME}\"\},"
 
 		For more details on rpm queryformat, refer http://www.rpm.org/wiki/Docs/QueryFormat
 
+		Sample dpkg-query is of following format:
+		dpkg-query -W -f='{"Name":${binary:Package}},'
+
+		For more details on dpkg format, refer to http://manpages.ubuntu.com/manpages/trusty/man1/dpkg-query.1.html
 	*/
 
 	log := context.Log()
-	var args []string
-	args = append(args, RPMCmdArgToGetAllApplications, RPMQueryFormat, RPMQueryFormatArgs)
 
 	var out bytes.Buffer
 	var e bytes.Buffer
-	cmd := exec.Command(RPMCmd, args...)
+	cmd := exec.Command(command, args...)
 	cmd.Stdout = &out
 	cmd.Stderr = &e
 
@@ -207,14 +238,16 @@ func GetApplicationDataUsingRPMQuery(context context.T) (data []inventory.Applic
 
 // ConvertToApplicationData converts query output into json string so that it can be deserialized easily
 func ConvertToApplicationData(input string) (data []inventory.ApplicationData, err error) {
+
 	//This implementation is closely tied to the kind of rpm query. A change in rpm query MUST be accompanied
 	//with a change in transform logic or else json formatting will be impacted.
 
 	/*
-		Sample format of our rpm queryformat
+		Sample format of our rpm queryformat & dpkg format:
 		rpm -qa --queryformat "\{\"Name\":\"%{NAME}\"\},"
+		dpkg-query -W -f='{"Name":${binary:Package}},'
 
-		Data will be generated in following format:
+		Above queries will generate data in following format:
 		{"Name":"nss-softokn"},{"Name":"basesystem"},{"Name":"pcre"},
 
 		Keeping above sample in mind - we do following operations:
