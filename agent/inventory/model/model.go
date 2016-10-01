@@ -66,6 +66,13 @@ type ApplicationData struct {
 	InstalledTime string
 }
 
+type WindowsUpdateData struct {
+	HotFixId      string
+	Description   string
+	InstalledTime string
+	InstalledBy   string
+}
+
 // Config captures all various properties (including optional) that can be supplied to a gatherer.
 // NOTE: Not all properties will be applicable to all gatherers.
 // E.g: Applications gatherer uses Collection, Files use Filters, Custom uses Collection & Location.

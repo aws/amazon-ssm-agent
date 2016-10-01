@@ -19,6 +19,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/inventory/gatherers/application"
+	"github.com/aws/amazon-ssm-agent/agent/inventory/gatherers/windowsUpdate"
 	"github.com/aws/amazon-ssm-agent/agent/inventory/model"
 )
 
@@ -45,6 +46,13 @@ func LoadGatherers(context context.T) Registry {
 
 	if a, err := application.Gatherer(context); err != nil {
 		context.Log().Errorf("Fake application gatherer isn't properly configured - %v", err.Error())
+	} else {
+		m[a.Name()] = a
+		names = append(names, a.Name())
+	}
+
+	if a, err := windowsUpdate.Gatherer(context); err != nil {
+		context.Log().Errorf("Windows update gatherer isn't properly configured - %v", err.Error())
 	} else {
 		m[a.Name()] = a
 		names = append(names, a.Name())

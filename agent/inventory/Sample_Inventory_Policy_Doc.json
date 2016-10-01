@@ -2,6 +2,9 @@
   "InventoryPolicy": {
     "AWS:Application": {
       "Collection": "Enabled"
+    },
+    "AWS:WindowsUpdate": {
+      "Collection": "Enabled"
     }
   }
 }
