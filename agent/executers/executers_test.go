@@ -14,62 +14,73 @@
 package executers
 
 import (
+	"errors"
+	"fmt"
 	"os/exec"
+	"strings"
 	"testing"
 
-	"fmt"
-	"strings"
-
-	"Amazon-ssm-agent/vendor/src/github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/assert"
 )
 
 const (
-	testValInstanceId = "Foo"
-	testValRegionName = "Bar"
+	// Environment variables set for processes executed by ssm agent should have names that start with AWS_SSM_
+	testInstanceId = "i-f00f00f00f00f00ba"
+	testRegionName = "foo-bar-3"
+	testError      = "FooBar"
 )
+
+type instanceInfoStub struct {
+	instanceID      string
+	instanceIDError string
+	regionName      string
+	regionNameError string
+}
+
+func (m *instanceInfoStub) InstanceID() (string, error) {
+	return instanceInfoStub.instanceID, errors.New(instanceInfoStub.instanceIDError)
+}
+
+func (m *instanceInfoStub) Region() (string, error) {
+	return instanceInfoStub.regionName, errors.New(instanceInfoStub.regionNameError)
+}
 
 // Return the value of a named environment variable from a list of environment variable
 // where the format of each entry is name=value
 // Return nil if no variable with the given envVarName is found in the collection env
 func getEnvVariableValue(env []string, envVarName string) string {
-	for envVariable := range env {
+	for _, envVariable := range env {
 		if strings.HasPrefix(envVariable, envVarName+"=") {
 			return strings.TrimPrefix(envVariable, envVarName+"=")
 		}
 	}
-	return nil
+	return ""
 }
 
-func getTestCommand() exec.Cmd {
-	command := exec.Cmd("test")
-	assert.Nil(getEnvVariableValue(command.Env, envVarInstanceId), fmt.Sprintf("%s is already defined", envVarInstanceId))
-	assert.Nil(getEnvVariableValue(command.Env, envVarRegionName), fmt.Sprintf("%s is already defined", envVarRegionName))
+func getTestCommand(t *testing.T) *exec.Cmd {
+	command := exec.Command("test")
+	assert.Empty(t, getEnvVariableValue(command.Env, envVarInstanceId), fmt.Sprintf("%s is already defined", envVarInstanceId))
+	assert.Empty(t, getEnvVariableValue(command.Env, envVarRegionName), fmt.Sprintf("%s is already defined", envVarRegionName))
 
 	return command
 }
 
 func TestEnvironmentVariables_All(t *testing.T) {
-	// TODO:MF: Set mock values for instanceId and region
+	instance = &instanceInfoStub{instanceID: testInstanceId, regionName: testRegionName}
 
-	command := getTestCommand()
+	command := getTestCommand(t)
 	prepareEnvVariables(command)
 
-	actualValInstanceId := getEnvVariableValue(command.Env, envVarInstanceId)
-	assert.Equal(actualValInstanceId, testValInstanceId, fmt.Sprintf("expected %s but actually %s", testValInstanceId, actualValInstanceId))
-
-	actualValRegionName := getEnvVariableValue(command.Env, envVarRegionName)
-	assert.Equal(actualValRegionName, testValRegionName, fmt.Sprintf("expected %s but actually %s", testValRegionName, actualValRegionName))
+	assert.Equal(t, getEnvVariableValue(command.Env, envVarInstanceId), testInstanceId)
+	assert.Equal(t, getEnvVariableValue(command.Env, envVarRegionName), testRegionName)
 }
 
 func TestEnvironmentVariables_None(t *testing.T) {
-	// TODO:MF: Set mock values for instanceId and region (such that they are empty strings that will return errors from platform.InstanceId and platform.Region)
+	instance = &instanceInfoStub{"", testError, "", testError}
 
-	command := getTestCommand()
+	command := getTestCommand(t)
 	prepareEnvVariables(command)
 
-	actualValInstanceId := getEnvVariableValue(command.Env, envVarInstanceId)
-	assert.Nil(actualValInstanceId, fmt.Sprintf("%s should be nil", envVarInstanceId))
-
-	actualValRegionName := getEnvVariableValue(command.Env, envVarRegionName)
-	assert.Nil(actualValRegionName, fmt.Sprintf("%s should be nil", envVarRegionName))
+	assert.Empty(t, getEnvVariableValue(command.Env, envVarInstanceId))
+	assert.Empty(t, getEnvVariableValue(command.Env, envVarRegionName))
 }
