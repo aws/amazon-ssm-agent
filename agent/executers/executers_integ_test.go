@@ -25,6 +25,8 @@ import (
 	"testing"
 	"time"
 
+	"regexp"
+
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/pluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/task"
@@ -48,6 +50,13 @@ type TestCase struct {
 	Commands         []string
 	ExpectedStdout   string
 	ExpectedStderr   string
+	ExpectedExitCode int
+}
+
+type TestCaseRegexp struct {
+	Commands         []string
+	PatternStdout    string
+	PatternStderr    string
 	ExpectedExitCode int
 }
 
@@ -112,6 +121,23 @@ var ShellCommandExecuterCancelTestCases = []TestCase{
 	},
 }
 
+var EnvVariableTestCases = []TestCaseRegexp{
+	// instance id environment variable is set
+	{
+		Commands:         []string{"echo", fmt.Sprintf("$%v", envVarInstanceId)},
+		PatternStdout:    ".+", // not an empty string
+		PatternStderr:    "",
+		ExpectedExitCode: successExitCode,
+	},
+	// region name environment variable is set
+	{
+		Commands:         []string{"echo", fmt.Sprintf("$%v", envVarRegionName)},
+		PatternStdout:    ".+", // not an empty string
+		PatternStderr:    "",
+		ExpectedExitCode: successExitCode,
+	},
+}
+
 var logger = log.NewMockLog()
 
 // TestRunCommand tests that RunCommand (in memory call, no local script or output files) works correctly.
@@ -156,6 +182,14 @@ func TestShellCommandExecuter_cancel(t *testing.T) {
 	}
 }
 
+// TestRunCommand tests that RunCommand (in memory call, no local script or output files) works correctly.
+func TestEnvVariable(t *testing.T) {
+	for _, testCase := range EnvVariableTestCases {
+		runCommandInvoker, _ := prepareTestRunCommand(t)
+		testCommandInvokerRegexp(t, runCommandInvoker, testCase)
+	}
+}
+
 func testCommandInvoker(t *testing.T, invoke CommandInvoker, testCase TestCase) {
 	logger.Infof("testCommandInvoker")
 	stdout, stderr, exitCode, errs := invoke(testCase.Commands)
@@ -164,6 +198,17 @@ func testCommandInvoker(t *testing.T, invoke CommandInvoker, testCase TestCase) 
 	assert.Equal(t, 0, len(errs))
 	assertReaderEquals(t, testCase.ExpectedStdout, stdout)
 	assertReaderEquals(t, testCase.ExpectedStderr, stderr)
+	assert.Equal(t, exitCode, testCase.ExpectedExitCode)
+}
+
+func testCommandInvokerRegexp(t *testing.T, invoke CommandInvoker, testCase TestCaseRegexp) {
+	logger.Infof("testCommandInvokerRegexp")
+	stdout, stderr, exitCode, errs := invoke(testCase.Commands)
+	logger.Infof("errors %v", errs)
+
+	assert.Equal(t, 0, len(errs))
+	assertReaderEquals(t, testCase.PatternStdout, stdout)
+	assertReaderEquals(t, testCase.PatternStderr, stderr)
 	assert.Equal(t, exitCode, testCase.ExpectedExitCode)
 }
 
@@ -264,6 +309,15 @@ func assertReaderEquals(t *testing.T, expected string, reader io.Reader) {
 	actual, err := ioutil.ReadAll(reader)
 	assert.Nil(t, err)
 	assert.Equal(t, expected, string(actual))
+}
+
+// assertReaderRegexpMatch is a convenience method that reads everything from a Reader and matches against a regexp pattern.
+func assertReaderRegexpMatch(t *testing.T, pattern string, reader io.Reader) {
+	actual, err := ioutil.ReadAll(reader)
+	assert.Nil(t, err)
+	isMatch, err := regexp.MatchString(pattern, string(actual))
+	assert.Nil(t, err)
+	assert.True(t, isMatch)
 }
 
 // TestCreateScriptFile tests that CreateScriptFile correctly returns error (to avoid shadowing bug).
