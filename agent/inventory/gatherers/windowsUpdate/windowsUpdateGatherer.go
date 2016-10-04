@@ -23,8 +23,6 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/inventory/model"
 )
 
-//TODO: add unit tests.
-
 const (
 	Name                         = "AWS:WindowsUpdate"
 	SchemaVersionOfWindowsUpdate = "1.0"
@@ -42,11 +40,16 @@ func (t *T) Name() string {
 	return Name
 }
 
+// decouple exec.Command for unit test
+var cmdExecutor = executeCommand
+
 func (t *T) Run(context context.T, configuration inventory.Config) (items []inventory.Item, err error) {
 	var result inventory.Item
 	log := context.Log()
-	content, err := getWindowsUpdateData()
+	var data []inventory.WindowsUpdateData
+	out, err := cmdExecutor(Cmd, WindowsUpdateQueryCmd)
 	if err == nil {
+		err = json.Unmarshal(out, &data)
 		//CaptureTime must comply with format: 2016-07-30T18:15:37Z or else it will throw error
 		currentTime := time.Now().UTC()
 		captureTime := currentTime.Format(time.RFC3339)
@@ -54,13 +57,13 @@ func (t *T) Run(context context.T, configuration inventory.Config) (items []inve
 		result = inventory.Item{
 			Name:          t.Name(),
 			SchemaVersion: SchemaVersionOfWindowsUpdate,
-			Content:       content,
+			Content:       data,
 			CaptureTime:   captureTime,
 		}
-		log.Infof("%v windows update found", len(content))
+		log.Infof("%v windows update found", len(data))
 		log.Debugf("update info = %+v", result)
 	} else {
-		log.Errorf("Unable to fetch windows update - %v", err.Error())
+		log.Errorf("Unable to fetch windows update - %v %v", err.Error(), out)
 	}
 	items = append(items, result)
 	return
@@ -71,11 +74,6 @@ func (t *T) RequestStop(stopType contracts.StopType) error {
 	return err
 }
 
-func getWindowsUpdateData() ([]inventory.WindowsUpdateData, error) {
-	var data []inventory.WindowsUpdateData
-	out, err := exec.Command(Cmd, WindowsUpdateQueryCmd).Output()
-	if err == nil {
-		err = json.Unmarshal(out, &data)
-	}
-	return data, err
+func executeCommand(command string, args ...string) ([]byte, error) {
+	return exec.Command(command, args...).CombinedOutput()
 }
