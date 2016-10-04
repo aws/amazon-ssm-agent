@@ -27,7 +27,6 @@ import (
 
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
-	"github.com/aws/amazon-ssm-agent/agent/platform"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/pluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 )
@@ -414,10 +413,10 @@ func StartCommand(log log.T,
 // and still run scripts that require them.
 func prepareEnvVariables(command *exec.Cmd) {
 	env := os.Environ()
-	if instanceID, err := platform.InstanceID(); err == nil {
+	if instanceID, err := instance.InstanceID(); err == nil {
 		env = append(env, fmtEnvVariable(envVarInstanceId, instanceID))
 	}
-	if regionName, err := platform.Region(); err == nil {
+	if regionName, err := instance.Region(); err == nil {
 		env = append(env, fmtEnvVariable(envVarRegionName, regionName))
 	}
 	command.Env = env
