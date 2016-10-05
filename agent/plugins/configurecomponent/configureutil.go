@@ -16,9 +16,9 @@
 package configurecomponent
 
 import (
+	"io/ioutil"
 	"path/filepath"
 	"strings"
-	"io/ioutil"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"

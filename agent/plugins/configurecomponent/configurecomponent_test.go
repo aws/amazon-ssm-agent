@@ -17,9 +17,9 @@ package configurecomponent
 
 import (
 	"fmt"
+	"os"
 	"testing"
 	"time"
-	"os"
 
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"

@@ -19,10 +19,10 @@ import (
 	"errors"
 	"fmt"
 	"io/ioutil"
-	"regexp"
-	"strings"
 	"os"
 	"path/filepath"
+	"regexp"
+	"strings"
 	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
