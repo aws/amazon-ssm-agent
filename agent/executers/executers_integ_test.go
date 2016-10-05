@@ -124,14 +124,22 @@ var ShellCommandExecuterCancelTestCases = []TestCase{
 var EnvVariableTestCases = []TestCaseRegexp{
 	// instance id environment variable is set
 	{
-		Commands:         []string{"echo", fmt.Sprintf("$%v", envVarInstanceId)},
+		Commands: []string{
+			"sh",
+			"-c",
+			echoToStdout(fmt.Sprintf("$%v", envVarInstanceId)),
+		},
 		PatternStdout:    ".+", // not an empty string
 		PatternStderr:    "",
 		ExpectedExitCode: successExitCode,
 	},
 	// region name environment variable is set
 	{
-		Commands:         []string{"echo", fmt.Sprintf("$%v", envVarRegionName)},
+		Commands: []string{
+			"sh",
+			"-c",
+			echoToStdout(fmt.Sprintf("$%v", envVarRegionName)),
+		},
 		PatternStdout:    ".+", // not an empty string
 		PatternStderr:    "",
 		ExpectedExitCode: successExitCode,
@@ -207,8 +215,8 @@ func testCommandInvokerRegexp(t *testing.T, invoke CommandInvoker, testCase Test
 	logger.Infof("errors %v", errs)
 
 	assert.Equal(t, 0, len(errs))
-	assertReaderEquals(t, testCase.PatternStdout, stdout)
-	assertReaderEquals(t, testCase.PatternStderr, stderr)
+	assertReaderRegexpMatch(t, testCase.PatternStdout, stdout)
+	assertReaderRegexpMatch(t, testCase.PatternStderr, stderr)
 	assert.Equal(t, exitCode, testCase.ExpectedExitCode)
 }
 
@@ -317,7 +325,7 @@ func assertReaderRegexpMatch(t *testing.T, pattern string, reader io.Reader) {
 	assert.Nil(t, err)
 	isMatch, err := regexp.MatchString(pattern, string(actual))
 	assert.Nil(t, err)
-	assert.True(t, isMatch)
+	assert.True(t, isMatch, fmt.Sprintf("actual {%v}", string(actual)))
 }
 
 // TestCreateScriptFile tests that CreateScriptFile correctly returns error (to avoid shadowing bug).

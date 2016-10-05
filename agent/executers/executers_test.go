@@ -38,11 +38,23 @@ type instanceInfoStub struct {
 }
 
 func (m *instanceInfoStub) InstanceID() (string, error) {
-	return instanceInfoStub.instanceID, errors.New(instanceInfoStub.instanceIDError)
+	var err error
+	if m.instanceIDError == "" {
+		err = nil
+	} else {
+		err = errors.New(m.instanceIDError)
+	}
+	return m.instanceID, err
 }
 
 func (m *instanceInfoStub) Region() (string, error) {
-	return instanceInfoStub.regionName, errors.New(instanceInfoStub.regionNameError)
+	var err error
+	if m.regionNameError == "" {
+		err = nil
+	} else {
+		err = errors.New(m.regionNameError)
+	}
+	return m.regionName, err
 }
 
 // Return the value of a named environment variable from a list of environment variable
