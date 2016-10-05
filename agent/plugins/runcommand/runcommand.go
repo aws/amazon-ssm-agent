@@ -1,14 +1,14 @@
 // Copyright 2016 Amazon.com, Inc. or its affiliates. All Rights Reserved.
 //
-// Licensed under the Amazon Software License (the "License"). You may not
+// Licensed under the Apache License, Version 2.0 (the "License"). You may not
 // use this file except in compliance with the License. A copy of the
 // License is located at
 //
-// http://aws.amazon.com/asl/
+// http://aws.amazon.com/apache2.0/
 //
 // or in the "license" file accompanying this file. This file is distributed
 // on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
-// express or implied. See the License for the specific language governing
+// either express or implied. See the License for the specific language governing
 // permissions and limitations under the License.
 
 // Package runcommand implements the RunCommand plugin.
@@ -115,6 +115,8 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 		res.Code = out[0].ExitCode
 		res.Status = out[0].Status
 		res.Output = out[0].String()
+		res.StandardOutput = contracts.TruncateOutput(out[0].Stdout, "", 24000)
+		res.StandardError = contracts.TruncateOutput(out[0].Stderr, "", 8000)
 	}
 
 	pluginutil.PersistPluginInformationToCurrent(log, Name(), config, res)

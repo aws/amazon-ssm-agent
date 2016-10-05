@@ -32,4 +32,4 @@ Alternatively you can run specific tests by specifying a package, sample below
 
 ### Licensing
 
-The Amazon SSM Agent is licensed under the Amazon Software License.
+The Amazon SSM Agent is licensed under the Apache 2.0 License.

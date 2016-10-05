@@ -1,8 +1,8 @@
 echo "Preparing for install"
-if [ '/sbin/init --version' = upstart ]
+if [ $(cat /proc/1/comm) = init ]
 then
-    stop amazon-ssm-agent
-elif [ 'cat /proc/1/comm' = systemd ]
+    stop amazon-ssm-agent || true
+elif [ $(cat /proc/1/comm) = systemd ]
 then
     systemctl stop amazon-ssm-agent
     systemctl daemon-reload

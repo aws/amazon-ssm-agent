@@ -4,7 +4,7 @@ Release      : 1%{?dist}
 Summary      : Manage EC2 Instances using SSM APIs
 
 Group        : Amazon/Tools
-License      : Amazon Software License
+License      : Apache License, Version 2.0
 BuildArch    : x86_64
 BuildRoot    : %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 URL          : http://docs.aws.amazon.com/ssm/latest/APIReference/Welcome.html
