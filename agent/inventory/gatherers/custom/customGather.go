@@ -284,7 +284,8 @@ func getFilePaths(log log.T, folder string, fileSuffix string) (fileFullPathList
 	files, readDirError := ioutil.ReadDir(folder)
 	if readDirError != nil {
 		log.Errorf("Read directory %v failed, error: %v", folder, readDirError)
-		return nil, readDirError
+		// In case of directory not found error, ignore
+		return []string{}, nil
 	}
 
 	for _, f := range files {
