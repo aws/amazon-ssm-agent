@@ -16,14 +16,13 @@ package executers
 
 import (
 	"bytes"
+	"fmt"
 	"io"
 	"os"
 	"os/exec"
 	"strings"
 	"syscall"
 	"time"
-
-	"fmt"
 
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
@@ -32,7 +31,7 @@ import (
 )
 
 const (
-	// Environment variables set for processes executed by ssm agent should have names that start with AWS_SSM_
+	// envVar* constants are names of environment variables set for processes executed by ssm agent and should start with AWS_SSM_
 	envVarInstanceId = "AWS_SSM_INSTANCE_ID"
 	envVarRegionName = "AWS_SSM_REGION_NAME"
 )
@@ -422,6 +421,7 @@ func prepareEnvVariables(command *exec.Cmd) {
 	command.Env = env
 }
 
+// fmtEnvVariable creates the string to append to the current set of environment variables.
 func fmtEnvVariable(name string, val string) string {
 	return fmt.Sprintf("%s=%s", name, val)
 }

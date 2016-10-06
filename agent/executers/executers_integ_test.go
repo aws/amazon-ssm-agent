@@ -13,6 +13,7 @@
 
 // +build integration
 
+// Package executers contains general purpose (shell) command executing objects.
 package executers
 
 import (
@@ -22,10 +23,9 @@ import (
 	"io/ioutil"
 	"os/exec"
 	"path/filepath"
+	"regexp"
 	"testing"
 	"time"
-
-	"regexp"
 
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/pluginutil"
