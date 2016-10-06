@@ -20,7 +20,6 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/inventory/gatherers/application"
 	"github.com/aws/amazon-ssm-agent/agent/inventory/gatherers/custom"
-	"github.com/aws/amazon-ssm-agent/agent/inventory/gatherers/windowsUpdate"
 	"github.com/aws/amazon-ssm-agent/agent/inventory/model"
 )
 
@@ -41,38 +40,38 @@ type Registry map[string]T
 
 // LoadGatherers loads supported inventory gatherers in memory
 func LoadGatherers(context context.T) Registry {
-	var m Registry
-	var names []string
-	m = make(map[string]T)
+
+	var gathererRegistry = Registry{}
+
+	for key, value := range LoadPlatformInDependentGatherers(context) {
+		gathererRegistry[key] = value
+	}
+	for key, value := range LoadPlatformDependentGatherers(context) {
+		gathererRegistry[key] = value
+	}
+
+	return gathererRegistry
+}
+
+func LoadPlatformInDependentGatherers(context context.T) Registry {
 	log := context.Log()
-
-	log.Infof("Loading available inventory gatherers")
-
+	var registry = Registry{}
+	var names []string
 	// Load application inventory item gather
 	if a, err := application.Gatherer(context); err != nil {
-		log.Errorf("Fake application gatherer isn't properly configured - %v", err.Error())
+		log.Errorf("Application gatherer isn't properly configured - %v", err.Error())
 	} else {
-		m[a.Name()] = a
+		registry[a.Name()] = a
 		names = append(names, a.Name())
 	}
-
-	// Load windowsUpdate inventory item gather
-	if a, err := windowsUpdate.Gatherer(context); err != nil {
-		log.Errorf("Windows update gatherer isn't properly configured - %v", err.Error())
-	} else {
-		m[a.Name()] = a
-		names = append(names, a.Name())
-	}
-
 	// Load custom inventory items gather
 	if cg, err := custom.Gatherer(context); err != nil {
 		log.Errorf("Custom inventory gatherer isn't properly configured - %v", err.Error())
 	} else {
-		m[cg.Name()] = cg
+		registry[cg.Name()] = cg
 		names = append(names, cg.Name())
 	}
+	log.Infof("Supported general inventory gatherers : %v", names)
 
-	log.Infof("Supported inventory gatherers : %v", names)
-
-	return m
+	return registry
 }
