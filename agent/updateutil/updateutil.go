@@ -100,7 +100,7 @@ const (
 	PlatformWindowsNano = "windows-nano"
 
 	// DefaultUpdateExecutionTimeoutInSeconds represents default timeout time for execution update related scripts in seconds
-	DefaultUpdateExecutionTimeoutInSeconds = 30
+	DefaultUpdateExecutionTimeoutInSeconds = 150
 
 	// PipelineTestVersion represents fake version for pipeline tests
 	PipelineTestVersion = "255.0.0.0"
