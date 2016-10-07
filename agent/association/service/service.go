@@ -102,6 +102,7 @@ func (s *AssociationService) ListAssociations(log log.T, instanceID string) (*mo
 	assoc.Association = response.Associations[0]
 	assoc.ID = uuid.NewV4().String()
 	assoc.CreateDate = time.Now().String()
+	assoc.Association.InstanceId = &instanceID
 
 	return assoc, nil
 }
