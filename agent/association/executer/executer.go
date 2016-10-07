@@ -19,6 +19,7 @@ import (
 	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
+	"github.com/aws/amazon-ssm-agent/agent/association/converter"
 	"github.com/aws/amazon-ssm-agent/agent/association/service"
 	"github.com/aws/amazon-ssm-agent/agent/association/taskpool"
 	"github.com/aws/amazon-ssm-agent/agent/context"
@@ -92,11 +93,17 @@ func (r *AssociationExecuter) ExecutePendingDocument(context context.T, pool tas
 func (r *AssociationExecuter) ExecuteInProgressDocument(context context.T, docState *stateModel.DocumentState, cancelFlag task.CancelFlag) {
 	log := context.Log()
 	log.Debug("Running plugins...")
-	totalNumberOfPlugins := len(docState.PluginsInformation)
+
+	if docState.InstancePluginsInformation == nil {
+		log.Debug("Converting plugin information to fit v2 schema.")
+		docState.InstancePluginsInformation = converter.ConvertPluginsInformation(docState.PluginsInformation)
+	}
+
+	totalNumberOfActions := len(docState.InstancePluginsInformation)
 	outputs := pluginExecution.RunPlugins(
 		context,
 		docState.DocumentInformation.DocumentName,
-		docState.PluginsInformation,
+		docState.InstancePluginsInformation,
 		plugin.RegisteredWorkerPlugins(context),
 		nil,
 		cancelFlag)
@@ -127,7 +134,7 @@ func (r *AssociationExecuter) ExecuteInProgressDocument(context context.T, docSt
 			log,
 			&docState.DocumentInformation,
 			docState.DocumentInformation.RuntimeStatus,
-			totalNumberOfPlugins,
+			totalNumberOfActions,
 			ssm.AssociationStatusNameFailed)
 
 	} else if docState.DocumentInformation.DocumentStatus == contracts.ResultStatusSuccess {
@@ -135,7 +142,7 @@ func (r *AssociationExecuter) ExecuteInProgressDocument(context context.T, docSt
 			log,
 			&docState.DocumentInformation,
 			docState.DocumentInformation.RuntimeStatus,
-			totalNumberOfPlugins,
+			totalNumberOfActions,
 			ssm.AssociationStatusNameSuccess)
 	}
 

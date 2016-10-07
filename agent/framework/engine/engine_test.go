@@ -20,6 +20,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/framework/plugin"
+	"github.com/aws/amazon-ssm-agent/agent/message/converter"
 	"github.com/aws/amazon-ssm-agent/agent/rebooter"
 	"github.com/aws/amazon-ssm-agent/agent/statemanager/model"
 	"github.com/aws/amazon-ssm-agent/agent/task"
@@ -47,9 +48,13 @@ func TestRunPluginsWithRegistry(t *testing.T) {
 		pluginInstances[name] = new(plugin.Mock)
 
 		// setup expectations
-		pluginConfigs[name] = model.PluginState{}
+		pluginConfigs[name] = model.PluginState{
+			Name: name,
+		}
+
 		pluginResults[name] = &contracts.PluginResult{
 			Output:        name,
+			PluginName:    name,
 			StartDateTime: defaultTime,
 			EndDateTime:   defaultTime,
 		}
@@ -62,8 +67,10 @@ func TestRunPluginsWithRegistry(t *testing.T) {
 		pluginRegistry[name] = pluginInstances[name]
 	}
 
+	pluginConfigs2 := converter.ConvertPluginState(pluginConfigs)
+
 	// call the code we are testing
-	outputs := RunPlugins(ctx, documentID, pluginConfigs, pluginRegistry, sendResponse, nil, cancelFlag)
+	outputs := RunPlugins(ctx, documentID, pluginConfigs2, pluginRegistry, sendResponse, nil, cancelFlag)
 
 	// fix the times expectation.
 	for _, result := range outputs {
@@ -76,6 +83,9 @@ func TestRunPluginsWithRegistry(t *testing.T) {
 		mockPlugin.AssertExpectations(t)
 	}
 	ctx.AssertCalled(t, "Log")
+	assert.Equal(t, pluginResults["plugin1"], outputs["plugin1"])
+	assert.Equal(t, pluginResults["plugin2"], outputs["plugin2"])
+
 	assert.Equal(t, pluginResults, outputs)
 	time.Sleep(10 * time.Second)
 	assert.Equal(t, true, rebooter.RebootRequested())

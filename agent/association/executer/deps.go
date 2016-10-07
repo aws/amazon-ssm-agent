@@ -55,7 +55,7 @@ type pluginExecutionService interface {
 	RunPlugins(
 		context context.T,
 		documentID string,
-		plugins map[string]stateModel.PluginState,
+		plugins []stateModel.PluginState,
 		pluginRegistry plugin.PluginRegistry,
 		sendReply engine.SendResponse,
 		cancelFlag task.CancelFlag,
@@ -68,7 +68,7 @@ type pluginExecutionImp struct{}
 func (pluginExecutionImp) RunPlugins(
 	context context.T,
 	documentID string,
-	plugins map[string]stateModel.PluginState,
+	plugins []stateModel.PluginState,
 	pluginRegistry plugin.PluginRegistry,
 	assocUpdate engine.UpdateAssociation,
 	cancelFlag task.CancelFlag,

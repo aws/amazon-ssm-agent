@@ -71,9 +71,7 @@ func ParseDocumentWithParams(log log.T,
 		}
 	}
 
-	payload.DocumentContent.RuntimeConfig =
-		messageParser.ReplacePluginParameters(payload.DocumentContent.RuntimeConfig, validParams, log)
-
+	messageParser.ReplacePluginParameters(payload, validParams, log)
 	return payload, nil
 }
 
@@ -95,38 +93,15 @@ func InitializeCommandState(context context.T,
 		context.AppConfig().Agent.OrchestrationRootDir)
 
 	orchestrationDir := filepath.Join(orchestrationRootDir, documentInfo.CommandID)
-
-	// getPluginConfigurations converts from PluginConfig (structure from the MDS message) to plugin.Configuration (structure expected by the plugin)
-	pluginConfigurations := make(map[string]*contracts.Configuration)
-	for pluginName, pluginConfig := range payload.DocumentContent.RuntimeConfig {
-		config := contracts.Configuration{
-			Settings:               pluginConfig.Settings,
-			Properties:             pluginConfig.Properties,
-			OutputS3BucketName:     payload.OutputS3BucketName,
-			OutputS3KeyPrefix:      fileutil.BuildS3Path(s3KeyPrefix, pluginName),
-			OrchestrationDirectory: fileutil.BuildPath(orchestrationDir, pluginName),
-			MessageId:              documentInfo.MessageID,
-			BookKeepingFileName:    payload.CommandID,
-		}
-		pluginConfigurations[pluginName] = &config
-	}
-
-	//initialize plugin states
-	pluginsInfo := make(map[string]stateModel.PluginState)
-
-	for key, value := range pluginConfigurations {
-		var plugin stateModel.PluginState
-		plugin.Configuration = *value
-		plugin.HasExecuted = false
-		pluginsInfo[key] = plugin
-	}
-
-	//initialize command State
-	return stateModel.DocumentState{
+	docState := stateModel.DocumentState{
 		DocumentInformation: documentInfo,
-		PluginsInformation:  pluginsInfo,
 		DocumentType:        stateModel.Association,
+		SchemaVersion:       payload.DocumentContent.SchemaVersion,
 	}
+
+	buildPluginsInfo(payload, documentInfo, s3KeyPrefix, orchestrationDir, &docState)
+
+	return docState
 }
 
 // newDocumentInfo initializes new DocumentInfo object
@@ -164,4 +139,77 @@ func parseParameters(log log.T, params map[string][]*string, paramsDef map[strin
 		}
 	}
 	return result
+}
+
+// buildPluginsInfo builds the PluginsInfo for document state
+func buildPluginsInfo(
+	payload *messageContracts.SendCommandPayload,
+	documentInfo stateModel.DocumentInfo,
+	s3KeyPrefix string,
+	orchestrationDir string,
+	docState *stateModel.DocumentState) {
+
+	if payload.DocumentContent.RuntimeConfig != nil && len(payload.DocumentContent.RuntimeConfig) != 0 {
+		//initialize plugin states as map
+		pluginsInfo := make(map[string]stateModel.PluginState)
+
+		// getPluginConfigurations converts from PluginConfig (structure from the MDS message) to plugin.Configuration (structure expected by the plugin)
+		pluginConfigurations := make(map[string]*contracts.Configuration)
+		for pluginName, pluginConfig := range payload.DocumentContent.RuntimeConfig {
+			config := contracts.Configuration{
+				Settings:               pluginConfig.Settings,
+				Properties:             pluginConfig.Properties,
+				OutputS3BucketName:     payload.OutputS3BucketName,
+				OutputS3KeyPrefix:      fileutil.BuildS3Path(s3KeyPrefix, pluginName),
+				OrchestrationDirectory: fileutil.BuildPath(orchestrationDir, pluginName),
+				MessageId:              documentInfo.MessageID,
+				BookKeepingFileName:    payload.CommandID,
+			}
+			pluginConfigurations[pluginName] = &config
+		}
+
+		for key, value := range pluginConfigurations {
+			var plugin stateModel.PluginState
+			plugin.Configuration = *value
+			plugin.HasExecuted = false
+			plugin.Id = key
+			plugin.Name = key
+			pluginsInfo[key] = plugin
+		}
+
+		docState.PluginsInformation = pluginsInfo
+		return
+	}
+
+	if payload.DocumentContent.MainSteps != nil && len(payload.DocumentContent.MainSteps) != 0 {
+		//initialize plugin states as array
+		instancePluginsInfo := make([]stateModel.PluginState, len(payload.DocumentContent.MainSteps))
+
+		// getPluginConfigurations converts from PluginConfig (structure from the MDS message) to plugin.Configuration (structure expected by the plugin)
+
+		for index, instancePluginConfig := range payload.DocumentContent.MainSteps {
+
+			pluginName := instancePluginConfig.Action
+			config := contracts.Configuration{
+				Settings:               instancePluginConfig.Settings,
+				Properties:             instancePluginConfig.Inputs,
+				OutputS3BucketName:     payload.OutputS3BucketName,
+				OutputS3KeyPrefix:      fileutil.BuildS3Path(s3KeyPrefix, pluginName),
+				OrchestrationDirectory: fileutil.BuildPath(orchestrationDir, pluginName),
+				MessageId:              documentInfo.MessageID,
+				BookKeepingFileName:    payload.CommandID,
+			}
+
+			var plugin stateModel.PluginState
+			plugin.Configuration = config
+			plugin.HasExecuted = false
+			plugin.Id = instancePluginConfig.Name
+			plugin.Name = pluginName
+			instancePluginsInfo[index] = plugin
+		}
+		docState.InstancePluginsInformation = instancePluginsInfo
+		return
+	}
+
+	return
 }
