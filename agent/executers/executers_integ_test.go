@@ -13,7 +13,6 @@
 
 // +build integration
 
-// Package executers contains general purpose (shell) command executing objects.
 package executers
 
 import (
@@ -23,9 +22,10 @@ import (
 	"io/ioutil"
 	"os/exec"
 	"path/filepath"
-	"regexp"
 	"testing"
 	"time"
+
+	"regexp"
 
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/pluginutil"
@@ -124,22 +124,14 @@ var ShellCommandExecuterCancelTestCases = []TestCase{
 var EnvVariableTestCases = []TestCaseRegexp{
 	// instance id environment variable is set
 	{
-		Commands: []string{
-			"sh",
-			"-c",
-			echoToStdout(fmt.Sprintf("$%v", envVarInstanceId)),
-		},
+		Commands:         []string{"echo", fmt.Sprintf("$%v", envVarInstanceId)},
 		PatternStdout:    ".+", // not an empty string
 		PatternStderr:    "",
 		ExpectedExitCode: successExitCode,
 	},
 	// region name environment variable is set
 	{
-		Commands: []string{
-			"sh",
-			"-c",
-			echoToStdout(fmt.Sprintf("$%v", envVarRegionName)),
-		},
+		Commands:         []string{"echo", fmt.Sprintf("$%v", envVarRegionName)},
 		PatternStdout:    ".+", // not an empty string
 		PatternStderr:    "",
 		ExpectedExitCode: successExitCode,
