@@ -105,6 +105,12 @@ func NewPlugin(context context.T) (*Plugin, error) {
 func (p *Plugin) ApplyInventoryPolicy() {
 	//NOTE: this will only be used until we integrate with associate plugin
 	log := p.context.Log()
+	var policy inventory.Policy
+	var inventoryItems []*ssm.InventoryItem
+	var items []inventory.Item
+	var err error
+	var content string
+
 	log.Infof("Looking for SSM Inventory policy in %v", p.location)
 
 	doc := path.Join(p.location, inventory.InventoryPolicyDocName)
@@ -112,11 +118,8 @@ func (p *Plugin) ApplyInventoryPolicy() {
 	if fileutil.Exists(doc) {
 		log.Infof("Applying Inventory policy")
 
-		var policy inventory.Policy
-		var inventoryItems []*ssm.InventoryItem
-
 		//read file
-		if content, err := fileutil.ReadAllText(doc); err == nil {
+		if content, err = fileutil.ReadAllText(doc); err == nil {
 
 			if err = json.Unmarshal([]byte(content), &policy); err != nil {
 				log.Infof("Encountered error while reading Inventory policy at %v. Error - %v",
@@ -126,24 +129,21 @@ func (p *Plugin) ApplyInventoryPolicy() {
 				return
 			}
 
-			if items, err := p.VerifyAndRunGatherers(policy); err != nil {
+			if items, err = p.VerifyAndRunGatherers(policy); err != nil {
 				log.Infof("Encountered error while executing inventory policy: %v", err.Error())
 				return
-			} else {
-				//log collected data before sending
-				d, _ := json.Marshal(items)
-				log.Infof("Collected Inventory data: %v", string(d))
-
-				if inventoryItems, err = p.uploader.ConvertToSsmInventoryItems(p.context, items); err != nil {
-					log.Infof("Encountered error in converting data to SSM InventoryItems - %v. Skipping upload to SSM", err.Error())
-				}
-
-				p.uploader.SendDataToSSM(p.context, inventoryItems)
 			}
+
+			//log collected data before sending
+			d, _ := json.Marshal(items)
+			log.Infof("Collected Inventory data: %v", string(d))
+			if inventoryItems, err = p.uploader.ConvertToSsmInventoryItems(p.context, items); err != nil {
+				log.Infof("Encountered error in converting data to SSM InventoryItems - %v. Skipping upload to SSM", err.Error())
+			}
+			p.uploader.SendDataToSSM(p.context, inventoryItems)
 
 		} else {
 			log.Infof("Unable to read inventory policy from : %v because of error - %v", doc, err.Error())
-			return
 		}
 	} else {
 		log.Infof("No inventory policy to apply")
@@ -168,7 +168,7 @@ func (p *Plugin) VerifyAndRunGatherers(policy inventory.Policy) (items []invento
 	//Parallel execution of gatherers hinges upon inventory plugin becoming a long running plugin - which will be
 	//mainly for custom inventory gatherer to send data independently of associate.
 
-	for name, _ := range policy.InventoryPolicy {
+	for name := range policy.InventoryPolicy {
 		//find out if the gatherer is indeed registered.
 		if gatherer, isGathererRegistered := p.registeredGatherers[name]; !isGathererRegistered {
 			err = log.Errorf("Unrecognized inventory gatherer - %v ", name)
@@ -221,9 +221,9 @@ func (p *Plugin) VerifyInventoryDataSize(item inventory.Item, items []inventory.
 	//use different limits for different category.
 	if (itemSize/1024) > inventory.SizeLimitKBPerInventoryType || (itemsSize/1024) > inventory.TotalSizeLimitKB {
 		return false
-	} else {
-		return true
 	}
+
+	return true
 }
 
 // ICorePlugin implementation

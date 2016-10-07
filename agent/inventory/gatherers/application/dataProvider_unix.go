@@ -20,7 +20,6 @@ package application
 import (
 	"bytes"
 	"encoding/json"
-	"errors"
 	"fmt"
 	"os/exec"
 	"strings"
@@ -37,19 +36,21 @@ var (
 )
 
 const (
-	RPMPackageManager  = "rpm"
+	// RPMPackageManager represents rpm package management
+	RPMPackageManager = "rpm"
+	// DPKGPackageManager represents dpkg package management
 	DPKGPackageManager = "dpkg"
 
-	//command for listing all applications using rpm
-	RPMCmd                        = "rpm"
-	RPMCmdArgToGetAllApplications = "-qa"
-	RPMQueryFormat                = "--queryformat"
-	RPMQueryFormatArgs            = `\{\"Name\":\"%{NAME}\",\"Publisher\":\"%{VENDOR}\",\"Version\":\"%{VERSION}\",\"InstalledTime\":\"%{INSTALLTIME}\",\"ApplicationType\":\"%{GROUP}\",\"Architecture\":\"%{ARCH}\",\"Url\":\"%{URL}\"\},`
+	// rpm commands related constants
+	rpmCmd                        = "rpm"
+	rpmCmdArgToGetAllApplications = "-qa"
+	rpmQueryFormat                = "--queryformat"
+	rpmQueryFormatArgs            = `\{\"Name\":\"%{NAME}\",\"Publisher\":\"%{VENDOR}\",\"Version\":\"%{VERSION}\",\"InstalledTime\":\"%{INSTALLTIME}\",\"ApplicationType\":\"%{GROUP}\",\"Architecture\":\"%{ARCH}\",\"Url\":\"%{URL}\"\},`
 
-	//command for listing all applications using dpkg
-	DPKGCmd                      = "dpkg-query"
-	DPKGArgsToGetAllApplications = "-W"
-	DPKGQueryFormat              = `-f={"Name":"${Package}","Version":"${Version}","Publisher":"${Maintainer}","ApplicationType":"${Section}","Architecture":"${Architecture}","Url":"${Homepage}"},`
+	// dpkg query commands related constants
+	dpkgCmd                      = "dpkg-query"
+	dpkgArgsToGetAllApplications = "-W"
+	dpkgQueryFormat              = `-f={"Name":"${Package}","Version":"${Version}","Publisher":"${Maintainer}","ApplicationType":"${Section}","Architecture":"${Architecture}","Url":"${Homepage}"},`
 )
 
 func init() {
@@ -64,6 +65,7 @@ func init() {
 	pkgMgr["debian"] = DPKGPackageManager
 }
 
+// CollectApplicationData collects all application data from the system using rpm or dpkg query.
 func CollectApplicationData(context context.T) (appData []inventory.ApplicationData) {
 
 	var plName string
@@ -91,15 +93,15 @@ func CollectApplicationData(context context.T) (appData []inventory.ApplicationD
 			log.Infof("Detected '%v' as package management system", RPMPackageManager)
 
 			//setting up rpm query command:
-			cmd = RPMCmd
-			args = append(args, RPMCmdArgToGetAllApplications, RPMQueryFormat, RPMQueryFormatArgs)
+			cmd = rpmCmd
+			args = append(args, rpmCmdArgToGetAllApplications, rpmQueryFormat, rpmQueryFormatArgs)
 
 		case DPKGPackageManager:
 			log.Errorf("Detected '%v' as package management system", DPKGPackageManager)
 
 			//setting up dpkg query command:
-			cmd = DPKGCmd
-			args = append(args, DPKGArgsToGetAllApplications, DPKGQueryFormat)
+			cmd = dpkgCmd
+			args = append(args, dpkgArgsToGetAllApplications, dpkgQueryFormat)
 
 		default:
 			log.Errorf("Unsupported package management system - %v, hence no inventory data for %v",
@@ -221,7 +223,7 @@ func GetApplicationData(context context.T, command string, args []string) (data 
 	if err = cmd.Run(); err != nil {
 		log.Debugf("Failed to execute command : %v with error - %v", cmd.Args, err.Error())
 		log.Debugf("Command Stderr: %v", e.String())
-		err = errors.New(fmt.Sprintf("Command failed with error: %v", e.String()))
+		err = fmt.Errorf("Command failed with error: %v", e.String())
 	} else {
 		cmdOutput := out.String()
 		log.Debugf("Command output: %v", cmdOutput)

@@ -25,20 +25,26 @@ import (
 //TODO: add unit tests.
 
 const (
-	GathererName               = "AWS:Application"
+	// GathererName captures name of application gatherer
+	GathererName = "AWS:Application"
+	// SchemaVersionOfApplication represents schema version of application gatherer
 	SchemaVersionOfApplication = "1.0"
 )
 
+// T represents application gatherer which implements all contracts for gatherers.
 type T struct{}
 
+// Gatherer returns new application gatherer
 func Gatherer(context context.T) (*T, error) {
 	return new(T), nil
 }
 
+// Name returns name of application gatherer
 func (t *T) Name() string {
 	return GathererName
 }
 
+// Run executes application gatherer and returns list of inventory.Item comprising of application data
 func (t *T) Run(context context.T, configuration inventory.Config) (items []inventory.Item, err error) {
 
 	var result inventory.Item
@@ -58,6 +64,7 @@ func (t *T) Run(context context.T, configuration inventory.Config) (items []inve
 	return
 }
 
+// RequestStop stops the execution of application gatherer.
 func (t *T) RequestStop(stopType contracts.StopType) error {
 	var err error
 	return err

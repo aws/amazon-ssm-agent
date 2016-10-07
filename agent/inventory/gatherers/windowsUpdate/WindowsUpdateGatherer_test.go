@@ -33,6 +33,6 @@ func TestGatherer(t *testing.T) {
 	assert.Nil(t, err)
 	assert.Equal(t, 1, len(item))
 	assert.Equal(t, Name, item[0].Name)
-	assert.Equal(t, SchemaVersionOfWindowsUpdate, item[0].SchemaVersion)
+	assert.Equal(t, schemaVersionOfWindowsUpdate, item[0].SchemaVersion)
 	assert.Equal(t, testUpdate, item[0].Content)
 }

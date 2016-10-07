@@ -39,6 +39,7 @@ const (
 	// TODO: we might have schemaVersion per inventory type - e.g schemaVersion of AWS:Applications might be
 	// different than AWS:File
 	schemaVersionOfInventoryItem = "1.0"
+	pluginName                   = "BasicInventory"
 )
 
 // BasicInventoryProvider encapsulates the logic of configuring, starting and stopping basic inventory plugin
@@ -61,7 +62,7 @@ func NewBasicInventoryProvider(context context.T) (*BasicInventoryProvider, erro
 	var err error
 	var provider = BasicInventoryProvider{}
 
-	c := context.With("[" + inventory.BasicInventoryPluginName + "]")
+	c := context.With("[" + pluginName + "]")
 	log := c.Log()
 
 	// reading agent appconfig
@@ -80,7 +81,7 @@ func NewBasicInventoryProvider(context context.T) (*BasicInventoryProvider, erro
 	provider.isOptimizerEnabled = appCfg.Ssm.InventoryOptimizer == inventory.Enabled
 
 	provider.context = c
-	provider.stopPolicy = sdkutil.NewStopPolicy(inventory.BasicInventoryPluginName, inventory.ErrorThreshold)
+	provider.stopPolicy = sdkutil.NewStopPolicy(pluginName, inventory.ErrorThreshold)
 	provider.ssm = ssm.New(session.New(cfg))
 	//for now we are using the same frequency as that of health plugin to send inventory data
 	provider.frequencyInMinutes = appCfg.Ssm.HealthFrequencyMinutes
@@ -169,7 +170,7 @@ func GetInstanceInformation(context context.T) (inventory.InstanceInformation, e
 		log.Warn(err)
 	}
 	if instID, err := platform.InstanceID(); err == nil {
-		instanceInfo.InstanceId = *aws.String(instID)
+		instanceInfo.InstanceID = *aws.String(instID)
 	} else {
 		log.Warn(err)
 	}
@@ -288,20 +289,20 @@ func (b *BasicInventoryProvider) updateBasicInventory() {
 
 // Name returns the Plugin Name
 func (b *BasicInventoryProvider) Name() string {
-	return inventory.BasicInventoryPluginName
+	return pluginName
 }
 
 // Execute starts the scheduling of the basic inventory plugin
 func (b *BasicInventoryProvider) Execute(context context.T) (err error) {
 
 	if b.isEnabled {
-		b.context.Log().Debugf("Starting %s plugin", inventory.BasicInventoryPluginName)
+		b.context.Log().Debugf("Starting %s plugin", pluginName)
 		if b.updateJob, err = scheduler.Every(b.frequencyInMinutes).Minutes().Run(b.updateBasicInventory); err != nil {
 			context.Log().Errorf("Unable to schedule basic inventory plugin. %v", err)
 		}
 	} else {
 		b.context.Log().Debugf("Skipping execution of %s plugin since its disabled",
-			inventory.BasicInventoryPluginName)
+			pluginName)
 	}
 	return
 }

@@ -20,17 +20,18 @@ package inventory
 
 const (
 	// AWSInstanceInformation is inventory type of instance information
-	AWSInstanceInformation   = "AWS:InstanceInformation"
-	InventoryPluginName      = "Inventory"
-	BasicInventoryPluginName = "BasicInventory"
-	Enabled                  = "Enabled"
-	ErrorThreshold           = 10
-	InventoryPolicyDocName   = "policy.json"
-
-	// size limit in KB for 1 inventory data type
+	AWSInstanceInformation = "AWS:InstanceInformation"
+	// InventoryPluginName is name of inventory plugin
+	InventoryPluginName = "Inventory"
+	// Enabled represents constant string used to enable various components of inventory plugin
+	Enabled = "Enabled"
+	// ErrorThreshold represents error threshold for inventory plugin
+	ErrorThreshold = 10
+	// InventoryPolicyDocName represents name of inventory policy doc
+	InventoryPolicyDocName = "policy.json"
+	// SizeLimitKBPerInventoryType represents size limit in KB for 1 inventory data type
 	SizeLimitKBPerInventoryType = 200
-
-	// size limit in KB for 1 PutInventory API call
+	// TotalSizeLimitKB represents size limit in KB for 1 PutInventory API call
 	TotalSizeLimitKB = 1024
 )
 
@@ -52,7 +53,7 @@ type InstanceInformation struct {
 	AgentVersion    string
 	ComputerName    string
 	IPAddress       string
-	InstanceId      string
+	InstanceID      string
 	PlatformName    string
 	PlatformType    string
 	PlatformVersion string
@@ -66,11 +67,12 @@ type ApplicationData struct {
 	InstalledTime   string
 	ApplicationType string
 	Architecture    string
-	Url             string
+	URL             string
 }
 
+// WindowsUpdateData captures all attributes present in AWS:WindowsUpdate inventory type
 type WindowsUpdateData struct {
-	HotFixId      string
+	HotFixID      string
 	Description   string
 	InstalledTime string
 	InstalledBy   string
@@ -85,9 +87,9 @@ type Config struct {
 	Location   string
 }
 
-//TODO: this struct might change depending on the type of data associate plugin provides to inventory plugin
-//For e.g: this will incorporate association & runId after integrating with associate plugin.
 // Policy defines how an inventory policy document looks like
+// TODO: this struct might change depending on the type of data associate plugin provides to inventory plugin
+// For e.g: this will incorporate association & runId after integrating with associate plugin.
 type Policy struct {
 	InventoryPolicy map[string]Config
 }

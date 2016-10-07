@@ -27,14 +27,17 @@ import (
 )
 
 const (
+	// Name represents name of this component that uploads data to SSM
 	Name = "InventoryUploader"
 )
 
+// T represents contracts for SSM Inventory data uploader
 type T interface {
 	SendDataToSSM(context context.T, items []*ssm.InventoryItem)
 	ConvertToSsmInventoryItems(context context.T, items []inventory.Item) (inventoryItems []*ssm.InventoryItem, err error)
 }
 
+// InventoryUploader implements functionality to upload data to SSM Inventory.
 type InventoryUploader struct {
 	ssm *ssm.SSM
 	//isOptimizerEnabled ensures PutInventory API is not called if same data is sent, if this is false - then even
@@ -42,6 +45,7 @@ type InventoryUploader struct {
 	isOptimizerEnabled bool
 }
 
+// NewInventoryUploader creates a new InventoryUploader (which sends data to SSM Inventory)
 func NewInventoryUploader(context context.T) (*InventoryUploader, error) {
 	var uploader = InventoryUploader{}
 	var appCfg appconfig.SsmagentConfig
@@ -67,7 +71,7 @@ func NewInventoryUploader(context context.T) (*InventoryUploader, error) {
 	return &uploader, nil
 }
 
-//SendDataToSSM uploads given inventory items to SSM
+// SendDataToSSM uploads given inventory items to SSM
 func (u *InventoryUploader) SendDataToSSM(context context.T, items []*ssm.InventoryItem) {
 	log := context.Log()
 	log.Infof("Uploading following inventory data to SSM - %v", items)
@@ -136,9 +140,9 @@ func (u *InventoryUploader) ConvertToSsmInventoryItems(context context.T, items 
 			if i, err = ConvertToSSMInventoryItem(context, item); err != nil {
 				log.Infof("Error encountered while formatting data - %v. Error: %v", err.Error())
 				return
-			} else {
-				inventoryItems = append(inventoryItems, i)
 			}
+
+			inventoryItems = append(inventoryItems, i)
 		}
 	}
 

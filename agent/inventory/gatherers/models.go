@@ -12,7 +12,6 @@
 // permissions and limitations under the License.
 
 // Package gatherers contains routines for different types of inventory gatherers
-
 package gatherers
 
 import (

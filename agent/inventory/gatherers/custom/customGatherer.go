@@ -12,7 +12,6 @@
 // permissions and limitations under the License.
 
 // Package custom contains a gatherer for collection custom inventory items.
-
 package custom
 
 import (
@@ -36,36 +35,40 @@ import (
 //TODO: add unit tests.
 
 const (
-	// Gatherer Name
+	// GathererName captures name of custom gatherer
 	GathererName = "CustomInventory"
-	// Custom inventory file extension
+	// FileSuffix represents custom inventory file extension
 	FileSuffix = ".json"
-	// Custom inventory typename prefix
+	// CustomInventoryTypeNamePrefix represents custom inventory typename prefix
 	CustomInventoryTypeNamePrefix = "CUSTOM:"
-	// Custom inventory typename length limit
+	// TypeNameLengthLimit represents custom inventory typename length limit
 	TypeNameLengthLimit = 32
-	// Custom inventory item size limit
+	// CustomInventorySizeLimitBytes represents custom inventory item size limit
 	CustomInventorySizeLimitBytes = 16 * 1024 // 16 KB
-	// Custom inventory type count limit
+	// CustomInventoryCountLimit represents custom inventory type count limit
 	CustomInventoryCountLimit = 20
-	// Custom inventory entry's attribute count limit
+	// AttributeCountLimit represents custom inventory entry's attribute count limit
 	AttributeCountLimit = 50
-	// Custom inventory entry's attribute name length limit
+	// AttributeNameLengthLimit represents custom inventory entry's attribute name length limit
 	AttributeNameLengthLimit = 64
-	// Custom inventory entry's attribute value length limit
+	// AttributeValueLengthLimit represents custom inventory entry's attribute value length limit
 	AttributeValueLengthLimit = 1024
 )
 
+// T represents custom gatherer
 type T struct{}
 
+// Gatherer returns a new custom gatherer
 func Gatherer(_ context.T) (*T, error) {
 	return new(T), nil
 }
 
+// Name returns name of custom gatherer
 func (t *T) Name() string {
 	return GathererName
 }
 
+// Run executes custom gatherer and returns list of inventory.Item
 func (t *T) Run(context context.T, configuration inventory.Config) (items []inventory.Item, err error) {
 
 	var log = context.Log()
@@ -115,6 +118,7 @@ func (t *T) Run(context context.T, configuration inventory.Config) (items []inve
 	return
 }
 
+// RequestStop stops the execution of custom gatherer
 func (t *T) RequestStop(stopType contracts.StopType) error {
 	//TODO: set a stop flag so Run thread would stop when flag is set to true
 	var err error

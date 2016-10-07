@@ -12,7 +12,6 @@
 // permissions and limitations under the License.
 
 // Package datauploader contains routines upload inventory data to SSM - Inventory service
-
 package datauploader
 
 import (

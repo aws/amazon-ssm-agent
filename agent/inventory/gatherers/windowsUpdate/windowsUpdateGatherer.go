@@ -24,18 +24,23 @@ import (
 )
 
 const (
-	Name                         = "AWS:WindowsUpdate"
-	SchemaVersionOfWindowsUpdate = "1.0"
-	Cmd                          = "powershell"
-	WindowsUpdateQueryCmd        = "Get-WmiObject -Class win32_quickfixengineering | Select-Object HotFixID,Description,@{N=\"InstalledTime\";E={$_.InstalledOn.DateTime}},InstalledBy | ConvertTo-Json"
+	// Name represents name of windows update gatherer
+	Name = "AWS:WindowsUpdate"
+
+	schemaVersionOfWindowsUpdate = "1.0"
+	cmd                          = "powershell"
+	windowsUpdateQueryCmd        = "Get-WmiObject -Class win32_quickfixengineering | Select-Object HotFixID,Description,@{N=\"InstalledTime\";E={$_.InstalledOn.DateTime}},InstalledBy | ConvertTo-Json"
 )
 
+// T represents windows update gatherer
 type T struct{}
 
+// Gatherer returns new windows update gatherer
 func Gatherer(context context.T) (*T, error) {
 	return new(T), nil
 }
 
+// Name returns name of windows update gatherer
 func (t *T) Name() string {
 	return Name
 }
@@ -43,11 +48,12 @@ func (t *T) Name() string {
 // decouple exec.Command for unit test
 var cmdExecutor = executeCommand
 
+// Run executes windows update gatherer and returns list of inventory.Item
 func (t *T) Run(context context.T, configuration inventory.Config) (items []inventory.Item, err error) {
 	var result inventory.Item
 	log := context.Log()
 	var data []inventory.WindowsUpdateData
-	out, err := cmdExecutor(Cmd, WindowsUpdateQueryCmd)
+	out, err := cmdExecutor(cmd, windowsUpdateQueryCmd)
 	if err == nil {
 		err = json.Unmarshal(out, &data)
 		//CaptureTime must comply with format: 2016-07-30T18:15:37Z or else it will throw error
@@ -56,7 +62,7 @@ func (t *T) Run(context context.T, configuration inventory.Config) (items []inve
 
 		result = inventory.Item{
 			Name:          t.Name(),
-			SchemaVersion: SchemaVersionOfWindowsUpdate,
+			SchemaVersion: schemaVersionOfWindowsUpdate,
 			Content:       data,
 			CaptureTime:   captureTime,
 		}
@@ -69,6 +75,7 @@ func (t *T) Run(context context.T, configuration inventory.Config) (items []inve
 	return
 }
 
+// RequestStop stops the execution of windows update gatherer
 func (t *T) RequestStop(stopType contracts.StopType) error {
 	var err error
 	return err
