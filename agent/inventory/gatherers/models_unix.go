@@ -6,23 +6,17 @@
 //
 // http://aws.amazon.com/agreement/
 
-// Package gatherers contains routines for different types of inventory gatherers
-//
 // +build darwin freebsd linux netbsd openbsd
 
+// Package gatherers contains routines for different types of inventory gatherers
 package gatherers
 
 import (
-	"github.com/aws/amazon-ssm-agent/agent/context"
+	"github.com/aws/amazon-ssm-agent/agent/inventory/gatherers/application"
+	"github.com/aws/amazon-ssm-agent/agent/inventory/gatherers/custom"
 )
 
-// LoadGatherers loads supported Unix inventory gatherers in memory
-func LoadPlatformDependentGatherers(context context.T) Registry {
-	log := context.Log()
-	var registry = Registry{}
-	var names []string
-
-	log.Infof("Supported Unix inventory gatherers : %v", names)
-
-	return registry
+var supportedGathererNames = []string{
+	application.GathererName,
+	custom.GathererName,
 }

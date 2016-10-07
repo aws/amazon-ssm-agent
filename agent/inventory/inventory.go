@@ -49,8 +49,12 @@ type Plugin struct {
 	location string
 	//isEnabled enables inventory plugin, if this is false - then inventory plugin will not run.
 	isEnabled bool
-	//registeredGatherers is a map of all supported inventory gatherers.
-	registeredGatherers gatherers.Registry
+	//supportedGatherers is a map of all inventory gatherers supported by current OS
+	// (e.g. WindowsUpdateGatherer is not included when running on Unix)
+	supportedGatherers gatherers.SupportedGatherer
+
+	//installedGatherers is a map of gatherers of all platforms
+	installedGathereres gatherers.InstalledGatherer
 
 	//uploader handles uploading inventory data to SSM.
 	uploader datauploader.T
@@ -91,8 +95,7 @@ func NewPlugin(context context.T) (*Plugin, error) {
 	p.frequencyInMinutes = appCfg.Ssm.HealthFrequencyMinutes
 
 	//loads all registered gatherers (for now only a dummy application gatherer is loaded in memory)
-	p.registeredGatherers = gatherers.LoadGatherers(context)
-
+	p.supportedGatherers, p.installedGathereres = gatherers.InitializeGatherers(p.context)
 	//initializes SSM Inventory uploader
 	if p.uploader, err = datauploader.NewInventoryUploader(context); err != nil {
 		err = log.Errorf("Unable to configure SSM Inventory uploader - %v", err.Error())
@@ -129,7 +132,8 @@ func (p *Plugin) ApplyInventoryPolicy() {
 				return
 			}
 
-			if items, err = p.VerifyAndRunGatherers(policy); err != nil {
+			items, err := p.VerifyAndRunGatherers(policy)
+			if err != nil {
 				log.Infof("Encountered error while executing inventory policy: %v", err.Error())
 				return
 			}
@@ -137,6 +141,7 @@ func (p *Plugin) ApplyInventoryPolicy() {
 			//log collected data before sending
 			d, _ := json.Marshal(items)
 			log.Infof("Collected Inventory data: %v", string(d))
+
 			if inventoryItems, err = p.uploader.ConvertToSsmInventoryItems(p.context, items); err != nil {
 				log.Infof("Encountered error in converting data to SSM InventoryItems - %v. Skipping upload to SSM", err.Error())
 			}
@@ -152,16 +157,17 @@ func (p *Plugin) ApplyInventoryPolicy() {
 	return
 }
 
-// VerifyAndRunGatherers verifies if gatherers is registered and then invokes it to return the result (containing
-// inventory data). It returns error if gatherer is not registered or if at any stage the data returned breaches size
-// limit
+// VerifyAndRunGatherers verifies if gatherers is installed and supported, and then invokes it to return the result
+// (containing inventory data). It returns error if gatherer is not installed or if at any stage the data returned
+// breaches size limit
 func (p *Plugin) VerifyAndRunGatherers(policy inventory.Policy) (items []inventory.Item, err error) {
 	log := p.context.Log()
 	log.Infof("Verifying if gatherers are registered and then running them")
 
 	//NOTE:
-	//1) Even if there is 1 unregistered gatherer - we error out & don't send the data collected from other
-	//registered gatherers - this is because we don't send partial inventory data as part of 1 inventory policy.
+	//1) if the gatherer is installed but not supported by current platform, we will skip that gatherer. If the
+	// gatherer is not installed,  we error out & don't send the data collected from other supported gatherers
+	// - this is because we don't send partial inventory data as part of 1 inventory policy.
 	//Either we send full set of inventory data as defined in policy - or we send nothing.
 
 	//2) Currently all gatherers will be invoked in synchronous & sequential fashion.
@@ -170,9 +176,13 @@ func (p *Plugin) VerifyAndRunGatherers(policy inventory.Policy) (items []invento
 
 	for name := range policy.InventoryPolicy {
 		//find out if the gatherer is indeed registered.
-		if gatherer, isGathererRegistered := p.registeredGatherers[name]; !isGathererRegistered {
-			err = log.Errorf("Unrecognized inventory gatherer - %v ", name)
-			break
+		if gatherer, isGathererSupported := p.supportedGatherers[name]; !isGathererSupported {
+			if _, isGathererInstalled := p.installedGathereres[name]; isGathererInstalled {
+				log.Infof("Installed but unsupported gatherer - %v", name)
+			} else {
+				err = log.Errorf("Unrecognized inventory gatherer - %v ", name)
+				break
+			}
 		} else {
 			var gItems []inventory.Item
 			log.Infof("Invoking gatherer - %v", name)

@@ -59,8 +59,8 @@ const (
 type T struct{}
 
 // Gatherer returns a new custom gatherer
-func Gatherer(_ context.T) (*T, error) {
-	return new(T), nil
+func Gatherer(context context.T) *T {
+	return new(T)
 }
 
 // Name returns name of custom gatherer

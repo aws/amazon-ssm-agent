@@ -19,11 +19,13 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/inventory/gatherers/application"
 	"github.com/aws/amazon-ssm-agent/agent/inventory/gatherers/custom"
+	"github.com/aws/amazon-ssm-agent/agent/inventory/gatherers/windowsUpdate"
 	"github.com/aws/amazon-ssm-agent/agent/inventory/model"
 )
 
 // T defines operations that all inventory gatherers support
 type T interface {
+
 	//returns the Name of the gatherer
 	Name() string
 	//runs the gatherer with a given configuration
@@ -34,43 +36,30 @@ type T interface {
 	RequestStop(stopType contracts.StopType) error
 }
 
-// Registry stores all supported types of inventory gatherers
-type Registry map[string]T
+// SupportedGatherer is a map of supported gatherer on current platform
+type SupportedGatherer map[string]T
 
-// LoadGatherers loads supported inventory gatherers in memory
-func LoadGatherers(context context.T) Registry {
+// InstalledGatherer is a map of gatherers of all platforms
+type InstalledGatherer map[string]T
 
-	var gathererRegistry = Registry{}
-
-	for key, value := range LoadPlatformInDependentGatherers(context) {
-		gathererRegistry[key] = value
-	}
-	for key, value := range LoadPlatformDependentGatherers(context) {
-		gathererRegistry[key] = value
-	}
-
-	return gathererRegistry
-}
-
-func LoadPlatformInDependentGatherers(context context.T) Registry {
+// InitializeGatherers collects supported and installed gatherers
+func InitializeGatherers(context context.T) (SupportedGatherer, InstalledGatherer) {
 	log := context.Log()
-	var registry = Registry{}
-	var names []string
-	// Load application inventory item gather
-	if a, err := application.Gatherer(context); err != nil {
-		log.Errorf("Application gatherer isn't properly configured - %v", err.Error())
-	} else {
-		registry[a.Name()] = a
-		names = append(names, a.Name())
+	var installedGathererNames []string
+	installedGatherer := InstalledGatherer{
+		application.GathererName:   application.Gatherer(context),
+		custom.GathererName:        custom.Gatherer(context),
+		windowsUpdate.GathererName: windowsUpdate.Gatherer(context),
 	}
-	// Load custom inventory items gather
-	if cg, err := custom.Gatherer(context); err != nil {
-		log.Errorf("Custom inventory gatherer isn't properly configured - %v", err.Error())
-	} else {
-		registry[cg.Name()] = cg
-		names = append(names, cg.Name())
+	for key := range installedGatherer {
+		installedGathererNames = append(installedGathererNames, key)
 	}
-	log.Infof("Supported general inventory gatherers : %v", names)
+	log.Infof("Installed Gatherer: %v", installedGathererNames)
+	supportedGatherer := SupportedGatherer{}
+	for _, name := range supportedGathererNames {
+		supportedGatherer[name] = installedGatherer[name]
+	}
+	log.Infof("Supported Gatherer: %v", supportedGathererNames)
 
-	return registry
+	return supportedGatherer, installedGatherer
 }

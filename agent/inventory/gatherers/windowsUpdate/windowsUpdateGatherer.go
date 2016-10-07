@@ -25,7 +25,7 @@ import (
 
 const (
 	// Name represents name of windows update gatherer
-	Name = "AWS:WindowsUpdate"
+	GathererName                 = "AWS:WindowsUpdate"
 
 	schemaVersionOfWindowsUpdate = "1.0"
 	cmd                          = "powershell"
@@ -36,13 +36,13 @@ const (
 type T struct{}
 
 // Gatherer returns new windows update gatherer
-func Gatherer(context context.T) (*T, error) {
-	return new(T), nil
+func Gatherer(context context.T) *T {
+	return new(T)
 }
 
 // Name returns name of windows update gatherer
 func (t *T) Name() string {
-	return Name
+	return GathererName
 }
 
 // decouple exec.Command for unit test

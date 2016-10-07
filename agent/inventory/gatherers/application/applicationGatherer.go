@@ -35,8 +35,8 @@ const (
 type T struct{}
 
 // Gatherer returns new application gatherer
-func Gatherer(context context.T) (*T, error) {
-	return new(T), nil
+func Gatherer(context context.T) *T {
+	return new(T)
 }
 
 // Name returns name of application gatherer

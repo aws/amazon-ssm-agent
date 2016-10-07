@@ -27,12 +27,12 @@ func testExecuteCommand(command string, args ...string) ([]byte, error) {
 
 func TestGatherer(t *testing.T) {
 	contextMock := context.NewMockDefault()
-	gatherer, _ := Gatherer(contextMock)
+	gatherer := Gatherer(contextMock)
 	cmdExecutor = testExecuteCommand
 	item, err := gatherer.Run(contextMock, inventory.Config{})
 	assert.Nil(t, err)
 	assert.Equal(t, 1, len(item))
-	assert.Equal(t, Name, item[0].Name)
+	assert.Equal(t, GathererName, item[0].Name)
 	assert.Equal(t, schemaVersionOfWindowsUpdate, item[0].SchemaVersion)
 	assert.Equal(t, testUpdate, item[0].Content)
 }
