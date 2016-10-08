@@ -154,7 +154,7 @@ func PersistDocumentInfo(log log.T, docInfo model.DocumentInfo, commandID, insta
 }
 
 // GetPluginState returns PluginState after reading fileName from given locationFolder under defaultLogDir/instanceID
-func GetPluginState(log log.T, pluginID, commandID, instanceID, locationFolder string) model.PluginState {
+func GetPluginState(log log.T, pluginID, commandID, instanceID, locationFolder string) *model.PluginState {
 
 	rLockDocument(commandID)
 	defer rUnlockDocument(commandID)
@@ -163,7 +163,13 @@ func GetPluginState(log log.T, pluginID, commandID, instanceID, locationFolder s
 
 	commandState := getCmdState(log, absoluteFileName)
 
-	return commandState.PluginsInformation[pluginID]
+	for _, pluginState := range commandState.InstancePluginsInformation {
+		if pluginState.Id == pluginID {
+			return &pluginState
+		}
+	}
+
+	return nil
 }
 
 // PersistPluginState stores the given PluginState in file-system in pretty Json indented format
@@ -180,12 +186,18 @@ func PersistPluginState(log log.T, pluginState model.PluginState, pluginID, comm
 	commandState := getCmdState(log, absoluteFileName)
 
 	//TODO:  after adding unit-tests for persist data - this can be removed
-	if commandState.PluginsInformation == nil {
-		pluginsInfo := make(map[string]model.PluginState)
-		pluginsInfo[pluginID] = pluginState
-		commandState.PluginsInformation = pluginsInfo
+	if commandState.InstancePluginsInformation == nil {
+		pluginsInfo := []model.PluginState{}
+		pluginsInfo = append(pluginsInfo, pluginState)
+		commandState.InstancePluginsInformation = pluginsInfo
 	} else {
 		commandState.PluginsInformation[pluginID] = pluginState
+
+		for index, plugin := range commandState.InstancePluginsInformation {
+			if plugin.Id == pluginID {
+				commandState.InstancePluginsInformation[index] = pluginState
+			}
+		}
 	}
 
 	setCmdState(log, commandState, absoluteFileName, locationFolder)

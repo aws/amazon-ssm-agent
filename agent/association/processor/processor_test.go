@@ -62,7 +62,7 @@ func TestProcessAssociationUnableToGetAssociation(t *testing.T) {
 
 	svcMock.On("CreateNewServiceIfUnHealthy", mock.AnythingOfType("*log.Mock"))
 	svcMock.On(
-		"ListAssociations",
+		"ListInstanceAssociations",
 		mock.AnythingOfType("*log.Mock"),
 		mock.AnythingOfType("string")).Return(assocRawData, errors.New("unable to load association"))
 	svcMock.On(
@@ -73,7 +73,7 @@ func TestProcessAssociationUnableToGetAssociation(t *testing.T) {
 	processor.ProcessAssociation()
 
 	assert.True(t, svcMock.AssertNumberOfCalls(t, "CreateNewServiceIfUnHealthy", 1))
-	assert.True(t, svcMock.AssertNumberOfCalls(t, "ListAssociations", 1))
+	assert.True(t, svcMock.AssertNumberOfCalls(t, "ListInstanceAssociations", 1))
 	assert.True(t, svcMock.AssertNumberOfCalls(t, "LoadAssociationDetail", 0))
 }
 
@@ -129,7 +129,7 @@ func TestProcessAssociationUnableToLoadAssociationDetail(t *testing.T) {
 	// Mock service
 	svcMock.On("CreateNewServiceIfUnHealthy", mock.AnythingOfType("*log.Mock"))
 	svcMock.On(
-		"ListAssociations",
+		"ListInstanceAssociations",
 		mock.AnythingOfType("*log.Mock"),
 		mock.AnythingOfType("string")).Return(assocRawData, nil)
 	svcMock.On(
@@ -150,7 +150,7 @@ func TestProcessAssociationUnableToLoadAssociationDetail(t *testing.T) {
 
 	// Assert
 	assert.True(t, svcMock.AssertNumberOfCalls(t, "CreateNewServiceIfUnHealthy", 1))
-	assert.True(t, svcMock.AssertNumberOfCalls(t, "ListAssociations", 1))
+	assert.True(t, svcMock.AssertNumberOfCalls(t, "ListInstanceAssociations", 1))
 	assert.True(t, svcMock.AssertNumberOfCalls(t, "LoadAssociationDetail", 1))
 	assert.True(t, svcMock.AssertNumberOfCalls(t, "UpdateAssociationStatus", 1))
 }
@@ -183,16 +183,16 @@ func TestProcessAssociationUnableToParseAssociation(t *testing.T) {
 
 	// Assert
 	assert.True(t, svcMock.AssertNumberOfCalls(t, "CreateNewServiceIfUnHealthy", 1))
-	assert.True(t, svcMock.AssertNumberOfCalls(t, "ListAssociations", 1))
+	assert.True(t, svcMock.AssertNumberOfCalls(t, "ListInstanceAssociations", 1))
 	assert.True(t, svcMock.AssertNumberOfCalls(t, "LoadAssociationDetail", 1))
 	assert.True(t, parserMock.AssertNumberOfCalls(t, "ParseDocumentWithParams", 1))
 	assert.True(t, svcMock.AssertNumberOfCalls(t, "UpdateAssociationStatus", 1))
 }
 
-func mockService(svcMock *service.AssociationServiceMock, assocRawData *model.AssociationRawData, output *ssm.UpdateAssociationStatusOutput) {
+func mockService(svcMock *service.AssociationServiceMock, assocRawData []*model.AssociationRawData, output *ssm.UpdateAssociationStatusOutput) {
 	svcMock.On("CreateNewServiceIfUnHealthy", mock.AnythingOfType("*log.Mock"))
 	svcMock.On(
-		"ListAssociations",
+		"ListInstanceAssociations",
 		mock.AnythingOfType("*log.Mock"),
 		mock.AnythingOfType("string")).Return(assocRawData, nil)
 	svcMock.On(
@@ -244,7 +244,7 @@ func TestProcessAssociationUnableToExecutePendingDocument(t *testing.T) {
 
 	// Assert
 	assert.True(t, svcMock.AssertNumberOfCalls(t, "CreateNewServiceIfUnHealthy", 1))
-	assert.True(t, svcMock.AssertNumberOfCalls(t, "ListAssociations", 1))
+	assert.True(t, svcMock.AssertNumberOfCalls(t, "ListInstanceAssociations", 1))
 	assert.True(t, svcMock.AssertNumberOfCalls(t, "LoadAssociationDetail", 1))
 	assert.True(t, parserMock.AssertNumberOfCalls(t, "ParseDocumentWithParams", 1))
 	assert.True(t, parserMock.AssertNumberOfCalls(t, "InitializeDocumentState", 1))
@@ -299,7 +299,7 @@ func TestProcessAssociationSuccessful(t *testing.T) {
 
 	// Assert
 	assert.True(t, svcMock.AssertNumberOfCalls(t, "CreateNewServiceIfUnHealthy", 1))
-	assert.True(t, svcMock.AssertNumberOfCalls(t, "ListAssociations", 1))
+	assert.True(t, svcMock.AssertNumberOfCalls(t, "ListInstanceAssociations", 1))
 	assert.True(t, svcMock.AssertNumberOfCalls(t, "LoadAssociationDetail", 1))
 	assert.True(t, parserMock.AssertNumberOfCalls(t, "ParseDocumentWithParams", 1))
 	assert.True(t, parserMock.AssertNumberOfCalls(t, "InitializeDocumentState", 1))
@@ -316,10 +316,10 @@ func createProcessor() *Processor {
 	return &processor
 }
 
-func createAssociationRawData() *model.AssociationRawData {
+func createAssociationRawData() []*model.AssociationRawData {
 	name := "Test-Association"
 	istanceID := "Id-Test"
-	association := ssm.Association{
+	association := ssm.InstanceAssociationSummary{
 		Name:       &name,
 		InstanceId: &istanceID,
 	}
@@ -327,5 +327,5 @@ func createAssociationRawData() *model.AssociationRawData {
 		Association: &association,
 	}
 
-	return &assocRawData
+	return []*model.AssociationRawData{&assocRawData}
 }

@@ -14,13 +14,16 @@
 // Package model provides model definition for association
 package model
 
-import "github.com/aws/aws-sdk-go/service/ssm"
+import (
+	"time"
+
+	"github.com/aws/aws-sdk-go/service/ssm"
+)
 
 // AssociationRawData represents detail information of association
 type AssociationRawData struct {
-	ID          string
-	CreateDate  string
-	Association *ssm.Association
-	Parameter   *ssm.AssociationDescription
-	Document    *string
+	CreateDate        time.Time
+	NextScheduledDate time.Time
+	Association       *ssm.InstanceAssociationSummary
+	Document          *string
 }

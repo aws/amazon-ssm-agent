@@ -80,7 +80,7 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 	var properties []interface{}
 	if properties, res = pluginutil.LoadParametersAsList(log, config.Properties); res.Code != 0 {
 
-		pluginutil.PersistPluginInformationToCurrent(log, Name(), config, res)
+		pluginutil.PersistPluginInformationToCurrent(log, config.PluginID, config, res)
 		return res
 	}
 
@@ -119,7 +119,7 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 		res.StandardError = contracts.TruncateOutput(out[0].Stderr, "", 8000)
 	}
 
-	pluginutil.PersistPluginInformationToCurrent(log, Name(), config, res)
+	pluginutil.PersistPluginInformationToCurrent(log, config.PluginID, config, res)
 
 	return res
 }

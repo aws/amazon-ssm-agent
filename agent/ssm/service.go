@@ -31,11 +31,17 @@ import (
 // Service is an interface to the SSM service.
 type Service interface {
 	ListAssociations(log log.T, instanceID string) (response *ssm.ListAssociationsOutput, err error)
+	ListInstanceAssociations(log log.T, instanceID string, nextToken *string) (response *ssm.ListInstanceAssociationsOutput, err error)
 	UpdateAssociationStatus(
 		log log.T,
 		instanceID string,
 		name string,
 		associationStatus *ssm.AssociationStatus) (response *ssm.UpdateAssociationStatusOutput, err error)
+	UpdateInstanceAssociationStatus(
+		log log.T,
+		associationID string,
+		instanceID string,
+		executionResult *ssm.InstanceAssociationExecutionStatus) (response *ssm.UpdateInstanceAssociationStatusOutput, err error)
 	SendCommand(log log.T,
 		documentName string,
 		instanceIDs []string,
@@ -117,6 +123,40 @@ func (svc *sdkService) ListAssociations(log log.T, instanceID string) (response 
 		return
 	}
 	log.Debug("ListAssociations Response", response)
+	return
+}
+
+//ListInstanceAssociations calls the ListAssociations SSM API.
+func (svc *sdkService) ListInstanceAssociations(log log.T, instanceID string, nextToken *string) (response *ssm.ListInstanceAssociationsOutput, err error) {
+	params := ssm.ListInstanceAssociationsInput{
+		InstanceId: &instanceID,
+		MaxResults: aws.Int64(20),
+		NextToken:  nextToken,
+	}
+
+	response, err = svc.sdk.ListInstanceAssociations(&params)
+	if err != nil {
+		sdkutil.HandleAwsError(log, err, ssmStopPolicy)
+		return
+	}
+	log.Debug("ListInstanceAssociations Response", response)
+	return
+}
+
+//UpdateInstanceAssociationStatus calls the ListAssociations SSM API.
+func (svc *sdkService) UpdateInstanceAssociationStatus(log log.T, associationID string, instanceID string, executionResult *ssm.InstanceAssociationExecutionStatus) (response *ssm.UpdateInstanceAssociationStatusOutput, err error) {
+	params := ssm.UpdateInstanceAssociationStatusInput{
+		InstanceId:      &instanceID,
+		AssociationId:   &associationID,
+		ExecutionResult: executionResult,
+	}
+
+	response, err = svc.sdk.UpdateInstanceAssociationStatus(&params)
+	if err != nil {
+		sdkutil.HandleAwsError(log, err, ssmStopPolicy)
+		return
+	}
+	log.Debug("ListInstanceAssociations Response", response)
 	return
 }
 

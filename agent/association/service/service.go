@@ -34,7 +34,7 @@ const stopPolicyErrorThreshold = 10
 // T represents interface for association
 type T interface {
 	CreateNewServiceIfUnHealthy(log log.T)
-	ListAssociations(log log.T, instanceID string) (*model.AssociationRawData, error)
+	ListInstanceAssociations(log log.T, instanceID string) ([]*model.AssociationRawData, error)
 	LoadAssociationDetail(log log.T, assoc *model.AssociationRawData) error
 	UpdateAssociationStatus(
 		log log.T,
@@ -43,6 +43,11 @@ type T interface {
 		status string,
 		message string,
 		agentInfo *contracts.AgentInfo) (*ssm.UpdateAssociationStatusOutput, error)
+	UpdateInstanceAssociationStatus(
+		log log.T,
+		associationID string,
+		instanceID string,
+		executionResult *ssm.InstanceAssociationExecutionStatus) (*ssm.UpdateInstanceAssociationStatusOutput, error)
 }
 
 // AssociationService wraps the Ssm Service
@@ -83,35 +88,49 @@ func (s *AssociationService) CreateNewServiceIfUnHealthy(log log.T) {
 	}
 }
 
-// ListAssociations will get the Association and related document string
-func (s *AssociationService) ListAssociations(log log.T, instanceID string) (*model.AssociationRawData, error) {
+// ListInstanceAssociations will get the Association and related document string
+func (s *AssociationService) ListInstanceAssociations(log log.T, instanceID string) ([]*model.AssociationRawData, error) {
 	uuid.SwitchFormat(uuid.CleanHyphen)
-	assoc := &model.AssociationRawData{}
+	results := []*model.AssociationRawData{}
 
-	response, err := s.ssmSvc.ListAssociations(log, instanceID)
+	response, err := s.ssmSvc.ListInstanceAssociations(log, instanceID, nil)
 	if err != nil {
 		return nil, fmt.Errorf("unable to retrieve associations %v", err)
 	}
 
-	// check if ListAssociationsResponse is empty
-	if response == nil || len(response.Associations) < 1 {
-		return nil, nil
+	log.Debug("Number of association is ", len(response.Associations))
+	//TODO: check token and return all the associations
+	// Get the association from the response of the ListAssociations call
+
+	for _, assoc := range response.Associations {
+		rawData := &model.AssociationRawData{}
+		rawData.Association = assoc
+		results = append(results, rawData)
 	}
 
-	// Get the association from the response of the ListAssociations call
-	assoc.Association = response.Associations[0]
-	assoc.ID = uuid.NewV4().String()
-	assoc.CreateDate = time.Now().String()
+	return results, nil
+}
 
-	return assoc, nil
+// UpdateInstanceAssociationStatus will get the Association and related document string
+func (s *AssociationService) UpdateInstanceAssociationStatus(
+	log log.T,
+	associationID string,
+	instanceID string,
+	executionResult *ssm.InstanceAssociationExecutionStatus) (*ssm.UpdateInstanceAssociationStatusOutput, error) {
+
+	response, err := s.ssmSvc.UpdateInstanceAssociationStatus(log, associationID, instanceID, executionResult)
+	if err != nil {
+		return nil, fmt.Errorf("unable to update association status %v", err)
+	}
+
+	return response, nil
 }
 
 // LoadAssociationDetail loads document contents and parameters for the given association
 func (s *AssociationService) LoadAssociationDetail(log log.T, assoc *model.AssociationRawData) error {
 	var (
-		documentResponse  *ssm.GetDocumentOutput
-		parameterResponse *ssm.DescribeAssociationOutput
-		err               error
+		documentResponse *ssm.GetDocumentOutput
+		err              error
 	)
 
 	// Call getDocument and retrieve the document json string
@@ -120,14 +139,11 @@ func (s *AssociationService) LoadAssociationDetail(log log.T, assoc *model.Assoc
 		return err
 	}
 
-	// Call descriptionAssociation and retrieve the parameter json string
-	if parameterResponse, err = s.ssmSvc.DescribeAssociation(log, *assoc.Association.InstanceId, *assoc.Association.Name); err != nil {
-		log.Errorf("unable to retrieve association, %v", err)
-		return err
-	}
-
 	assoc.Document = documentResponse.Content
-	assoc.Parameter = parameterResponse.AssociationDescription
+
+	//TODO: test hoock, remove when service is ready
+	//doc := "{\n  \"schemaVersion\": \"2.0\",\n  \"$schema\": \"http://amazonaws.com/schemas/ec2/v3-0/runcommand#\",\n  \"description\": \"Sample version 2.0 document\",\n  \"parameters\": {\n    \"runCommand0\": {\n      \"type\": \"StringList\",\n      \"default\": \"date\",\n      \"description\": \"Put any PowerShell Command here\"\n    },\n\t\"runCommand1\": {\n      \"type\": \"StringList\",\n      \"default\": \"date\",\n      \"description\": \"Put any PowerShell Command here\"\n    }\n  },\n  \"mainSteps\": [\n      {\n        \"action\":\"aws:runPowerShellScript\",\n        \"name\":\"runPowerShellScript1\",\n        \"inputs\": \n            {\n              \"id\": \"0.aws:runPowerShellScript\",\n              \"runCommand\": \"{{ runCommand0 }}\"\n            }\n        \n      },\n      {\n      \"action\":\"aws:runPowerShellScript\",\n        \"name\":\"runPowerShellScript2\",\n        \"inputs\": \n          {\n            \"id\": \"1.aws:runPowerShellScript\",\n            \"runCommand\": \"{{ runCommand1 }}\"\n          }\n        \n      }\n    ]\n}"
+	//assoc.Document = &doc
 	return nil
 }
 

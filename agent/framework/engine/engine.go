@@ -54,32 +54,33 @@ func RunPlugins(
 
 	pluginOutputs = make(map[string]*contracts.PluginResult)
 	for _, pluginState := range plugins {
-		key := pluginState.Id        // the identifier of the plugin
-		pluginID := pluginState.Name // the name of the plugin
+		pluginID := pluginState.Id     // the identifier of the plugin
+		pluginName := pluginState.Name // the name of the plugin
 		if pluginState.HasExecuted {
 			context.Log().Debugf(
 				"Skipping execution of Plugin - %v of command - %v since it has already executed.",
-				pluginID,
+				pluginName,
 				documentID)
 			pluginOutput := pluginState.Result
-			pluginOutput.PluginName = pluginID //TODO change this into plugin result
-			pluginOutputs[key] = &pluginOutput
+			pluginOutput.PluginName = pluginName //TODO change this into plugin result
+			pluginOutputs[pluginID] = &pluginOutput
 			continue
 		}
-		context.Log().Debugf("Executing plugin - %v of command - %v", pluginID, documentID)
+		context.Log().Debugf("Executing plugin - %v of command - %v", pluginName, documentID)
 
 		// populate plugin start time and status
 		configuration := pluginState.Configuration
+		configuration.PluginID = pluginID
 
-		pluginOutputs[key] = &contracts.PluginResult{
-			PluginName:    pluginID,
+		pluginOutputs[pluginID] = &contracts.PluginResult{
+			PluginName:    pluginName,
 			Status:        contracts.ResultStatusInProgress,
 			StartDateTime: time.Now(),
 		}
 		if configuration.OutputS3BucketName != "" {
-			pluginOutputs[key].OutputS3BucketName = configuration.OutputS3BucketName
+			pluginOutputs[pluginID].OutputS3BucketName = configuration.OutputS3BucketName
 			if configuration.OutputS3KeyPrefix != "" {
-				pluginOutputs[key].OutputS3KeyPrefix = configuration.OutputS3KeyPrefix
+				pluginOutputs[pluginID].OutputS3KeyPrefix = configuration.OutputS3KeyPrefix
 
 			}
 		}
@@ -87,39 +88,39 @@ func RunPlugins(
 		pluginHandlerFound := false
 
 		//check if the said plugin is a long running plugin
-		handler, isLongRunningPlugin := plugin.RegisteredLongRunningPlugins(context)[pluginID]
+		handler, isLongRunningPlugin := plugin.RegisteredLongRunningPlugins(context)[pluginName]
 		//check if the said plugin is a worker plugin
-		p, isWorkerPlugin := pluginRegistry[pluginID]
+		p, isWorkerPlugin := pluginRegistry[pluginName]
 
-		isSupported, platformDetail := plugin.IsPluginSupportedForCurrentPlatform(context.Log(), pluginID)
+		isSupported, platformDetail := plugin.IsPluginSupportedForCurrentPlatform(context.Log(), pluginName)
 		if isSupported {
 			switch {
 			case isLongRunningPlugin:
 				pluginHandlerFound = true
-				context.Log().Infof("%s is a long running plugin", pluginID)
-				r = runPlugin(context, handler, pluginID, configuration, cancelFlag)
+				context.Log().Infof("%s is a long running plugin", pluginName)
+				r = runPlugin(context, handler, pluginName, configuration, cancelFlag)
 			case isWorkerPlugin:
 				pluginHandlerFound = true
-				context.Log().Infof("%s is a worker plugin", pluginID)
-				r = runPlugin(context, p, pluginID, configuration, cancelFlag)
+				context.Log().Infof("%s is a worker plugin", pluginName)
+				r = runPlugin(context, p, pluginName, configuration, cancelFlag)
 			default:
-				err := fmt.Errorf("Plugin with id %s not found!", pluginID)
-				pluginOutputs[key].Status = contracts.ResultStatusFailed
-				pluginOutputs[key].Error = err
+				err := fmt.Errorf("Plugin with id %s not found!", pluginName)
+				pluginOutputs[pluginID].Status = contracts.ResultStatusFailed
+				pluginOutputs[pluginID].Error = err
 				context.Log().Error(err)
 			}
 		} else {
-			err := fmt.Errorf("Plugin with id %s is not supported in current platform!\n%s", pluginID, platformDetail)
-			pluginOutputs[key].Status = contracts.ResultStatusFailed
-			pluginOutputs[key].Error = err
+			err := fmt.Errorf("Plugin with id %s is not supported in current platform!\n%s", pluginName, platformDetail)
+			pluginOutputs[pluginID].Status = contracts.ResultStatusFailed
+			pluginOutputs[pluginID].Error = err
 			context.Log().Error(err)
 		}
 
 		if pluginHandlerFound {
-			pluginOutputs[key].Code = r.Code
-			pluginOutputs[key].Status = r.Status
-			pluginOutputs[key].Error = r.Error
-			pluginOutputs[key].Output = r.Output
+			pluginOutputs[pluginID].Code = r.Code
+			pluginOutputs[pluginID].Status = r.Status
+			pluginOutputs[pluginID].Error = r.Error
+			pluginOutputs[pluginID].Output = r.Output
 
 			if r.Status == contracts.ResultStatusSuccessAndReboot {
 				context.Log().Debug("Requesting reboot...")
@@ -127,14 +128,14 @@ func RunPlugins(
 			}
 		}
 		// set end time.
-		pluginOutputs[key].EndDateTime = time.Now()
+		pluginOutputs[pluginID].EndDateTime = time.Now()
 		log := context.Log()
 		if sendReply != nil {
-			log.Infof("Sending response on plugin completion: %v", pluginID)
-			sendReply(documentID, pluginID, pluginOutputs)
+			log.Infof("Sending response on plugin completion: %v", pluginName)
+			sendReply(documentID, pluginName, pluginOutputs)
 		}
 		if updateAssoc != nil {
-			log.Infof("Update assocition on plugin completion: %v", pluginID)
+			log.Infof("Update assocition on plugin completion: %v", pluginName)
 			updateAssoc(log, documentID, pluginOutputs, totalNumberOfActions)
 		}
 

@@ -51,10 +51,10 @@ func ParseDocumentWithParams(log log.T,
 	if err = json.Unmarshal([]byte(*rawData.Document), &payload.DocumentContent); err != nil {
 		return nil, err
 	}
-	payload.DocumentName = *rawData.Association.Name
-	payload.CommandID = rawData.ID
+	payload.DocumentName = *(rawData.Association.Name)
+	payload.CommandID = *(rawData.Association.AssociationId)
 
-	payload.Parameters = parseParameters(log, rawData.Parameter.Parameters, payload.DocumentContent.Parameters)
+	payload.Parameters = parseParameters(log, rawData.Association.Parameters, payload.DocumentContent.Parameters)
 
 	var parametersContent string
 	if parametersContent, err = jsonutil.Marshal(payload.Parameters); err != nil {
@@ -109,11 +109,11 @@ func newDocumentInfo(rawData *model.AssociationRawData, payload *messageContract
 
 	documentInfo := new(stateModel.DocumentInfo)
 
-	documentInfo.CommandID = rawData.ID
-	documentInfo.Destination = *rawData.Association.InstanceId
+	documentInfo.CommandID = *(rawData.Association.AssociationId)
+	documentInfo.Destination = *(rawData.Association.InstanceId)
 	documentInfo.MessageID = fmt.Sprintf("aws.ssm.%v.%v", documentInfo.CommandID, documentInfo.Destination)
 	documentInfo.RunID = times.ToIsoDashUTC(times.DefaultClock.Now())
-	documentInfo.CreatedDate = rawData.CreateDate
+	documentInfo.CreatedDate = rawData.CreateDate.String()
 	documentInfo.DocumentName = payload.DocumentName
 	documentInfo.IsCommand = false
 	documentInfo.DocumentStatus = contracts.ResultStatusInProgress

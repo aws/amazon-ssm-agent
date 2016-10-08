@@ -193,6 +193,7 @@ func testExecute(t *testing.T, testCase TestCase) {
 				OutputS3KeyPrefix:      s3KeyPrefix,
 				OrchestrationDirectory: orchestrationDirectory,
 				BookKeepingFileName:    commandID,
+				PluginID:               "aws:runCommand1",
 			}, mockCancelFlag)
 
 		// assert output is correct (mocked object expectations are tested automatically by testExecution)

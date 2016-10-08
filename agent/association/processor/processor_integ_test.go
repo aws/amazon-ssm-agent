@@ -20,6 +20,7 @@ import (
 	"io/ioutil"
 	"os"
 	"testing"
+	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/association/model"
@@ -47,25 +48,23 @@ func TestParseAssociationWithAssociationVersion1_2(t *testing.T) {
 	sampleFile := readFile(FILE_VERSION_1_2)
 
 	instanceID := "i-test"
-	commandId := "commandV1.2"
+	commandId := "b2f71a28-cbe1-4429-b848-26c7e1f5ad0d"
 	associationName := "testV1.2"
 	assocRawData := model.AssociationRawData{
-		ID:         "test-id",
-		CreateDate: "2016-10-10",
+		CreateDate: time.Now(),
 		Document:   &sampleFile,
 	}
-	assocRawData.ID = commandId
-	assocRawData.Association = &ssm.Association{}
+	assocRawData.Association = &ssm.InstanceAssociationSummary{}
 	assocRawData.Association.Name = &associationName
+	assocRawData.Association.AssociationId = &commandId
 	assocRawData.Association.InstanceId = &instanceID
-	assocRawData.Parameter = &ssm.AssociationDescription{}
 
 	params := make(map[string][]*string)
 	address := "http://7-zip.org/a/7z1602-x64.msi"
 	source := []*string{&address}
 	params["source"] = source
 
-	assocRawData.Parameter.Parameters = params
+	assocRawData.Association.Parameters = params
 
 	docState, err := processor.parseAssociation(&assocRawData)
 
@@ -120,18 +119,16 @@ func TestParseAssociationWithAssociationVersion2_0(t *testing.T) {
 	sampleFile := readFile(FILE_VERSION_2_0)
 
 	instanceID := "i-test"
-	commandId := "commandV2.0"
+	commandId := "b2f71a28-cbe1-4429-b848-26c7e1f5ad0d"
 	associationName := "testV2.0"
 	assocRawData := model.AssociationRawData{
-		ID:         "test-id",
-		CreateDate: "2016-10-10",
+		CreateDate: time.Now(),
 		Document:   &sampleFile,
 	}
-	assocRawData.ID = commandId
-	assocRawData.Association = &ssm.Association{}
+	assocRawData.Association = &ssm.InstanceAssociationSummary{}
 	assocRawData.Association.Name = &associationName
+	assocRawData.Association.AssociationId = &commandId
 	assocRawData.Association.InstanceId = &instanceID
-	assocRawData.Parameter = &ssm.AssociationDescription{}
 
 	params := make(map[string][]*string)
 	cmd0 := "ls"
@@ -141,7 +138,7 @@ func TestParseAssociationWithAssociationVersion2_0(t *testing.T) {
 	params["runCommand0"] = source0
 	params["runCommand1"] = source1
 
-	assocRawData.Parameter.Parameters = params
+	assocRawData.Association.Parameters = params
 
 	// test the method
 	docState, err := processor.parseAssociation(&assocRawData)

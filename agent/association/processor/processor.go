@@ -22,6 +22,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/association/executer"
 	"github.com/aws/amazon-ssm-agent/agent/association/model"
 	"github.com/aws/amazon-ssm-agent/agent/association/recorder"
+	"github.com/aws/amazon-ssm-agent/agent/association/schedulemanager"
 	assocScheduler "github.com/aws/amazon-ssm-agent/agent/association/scheduler"
 	"github.com/aws/amazon-ssm-agent/agent/association/service"
 	"github.com/aws/amazon-ssm-agent/agent/association/taskpool"
@@ -31,8 +32,10 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	stateModel "github.com/aws/amazon-ssm-agent/agent/statemanager/model"
 	"github.com/aws/amazon-ssm-agent/agent/task"
+	"github.com/aws/amazon-ssm-agent/agent/times"
 	"github.com/aws/aws-sdk-go/service/ssm"
 	"github.com/carlescere/scheduler"
+	"github.com/gorhill/cronexpr"
 )
 
 const (
@@ -90,7 +93,7 @@ func (p *Processor) SetPollJob(job *scheduler.Job) {
 // ProcessAssociation poll and process all the associations
 func (p *Processor) ProcessAssociation() {
 	log := p.context.Log()
-	var assocRawData *model.AssociationRawData
+	var associations []*model.AssociationRawData
 
 	if p.isStopped() {
 		log.Debug("Stopping association processor...")
@@ -104,48 +107,74 @@ func (p *Processor) ProcessAssociation() {
 	}
 
 	p.assocSvc.CreateNewServiceIfUnHealthy(log)
+	log.Infof("Update instance association status %v", instanceID)
 
-	if assocRawData, err = p.assocSvc.ListAssociations(log, instanceID); err != nil {
-		log.Errorf("Failed to retrieve associations, %v", err)
+	if associations, err = p.assocSvc.ListInstanceAssociations(log, instanceID); err != nil {
+		log.Errorf("Unable to load association summaries, %v", err)
 		return
 	}
 
-	// check if association response is empty
-	if assocRawData == nil {
-		log.Infof("No documents are associated with instance %v", instanceID)
+	for _, assoc := range associations {
+		var assocContent string
+		if assocContent, err = jsonutil.Marshal(assoc); err != nil {
+			return
+		}
+		log.Debug("New association is ", jsonutil.Indent(assocContent))
+
+		//if recorder.HasExecuted(instanceID, *assocName) {
+		//	log.Debugf("DocumentId %v hasn't changed. Skipping as it has been processed already.", *assocName)
+		//	return
+		//} else {
+		//	log.Debugf("New document associated %v.", *assocName)
+		//}
+
+		//TODO: add association in memory cache to improve the performance
+		if err = p.assocSvc.LoadAssociationDetail(log, assoc); err != nil {
+			message := fmt.Sprintf("Unable to load association details, %v", err)
+			log.Error(message)
+			p.updateAssocStatus(assoc.Association, ssm.AssociationStatusNameFailed, message)
+			return
+		}
+	}
+
+	schedulemanager.Refresh(log, associations)
+
+	p.RunScheduledAssociation(log)
+}
+
+func (p *Processor) RunScheduledAssociation(log log.T) {
+	var (
+		scheduledAssociation *model.AssociationRawData
+		err                  error
+	)
+
+	if scheduledAssociation, err = schedulemanager.LoadNextScheduledAssociation(log); err != nil {
+		log.Errorf("Unable to apply association, %v, system will retry after 5 minutes", err)
 		return
 	}
 
-	// check if the association has been executed
-	assoName := assocRawData.Association.Name
-
-	if recorder.HasExecuted(instanceID, *assoName) {
-		log.Debugf("DocumentId %v hasn't changed. Skipping as it has been processed already.", *assoName)
-		return
-	} else {
-		log.Debugf("New document associated %v.", *assoName)
-	}
-
-	if err = p.assocSvc.LoadAssociationDetail(log, assocRawData); err != nil {
-		message := fmt.Sprintf("Unable to load association details, %v", err)
-		log.Error(message)
-		p.updateAssocStatus(assocRawData.Association, ssm.AssociationStatusNameFailed, message)
+	if scheduledAssociation == nil {
+		log.Debugf("No association scheduled at this time, system will retry later")
 		return
 	}
+
 	var docState *stateModel.DocumentState
-	if docState, err = p.parseAssociation(assocRawData); err != nil {
+	if docState, err = p.parseAssociation(scheduledAssociation); err != nil {
 		message := fmt.Sprintf("Unable to parse association, %v", err)
 		log.Error(message)
-		p.updateAssocStatus(assocRawData.Association, ssm.AssociationStatusNameFailed, message)
+		p.updateAssocStatus(scheduledAssociation.Association, ssm.AssociationStatusNameFailed, message)
 		return
 	}
 
 	if err = p.persistAssociationForExecution(log, docState); err != nil {
 		message := fmt.Sprintf("Unable to submit association for exectution, %v", err)
 		log.Error(message)
-		p.updateAssocStatus(assocRawData.Association, ssm.AssociationStatusNameFailed, message)
+		p.updateAssocStatus(scheduledAssociation.Association, ssm.AssociationStatusNameFailed, message)
 		return
 	}
+
+	currentTime := times.DefaultClock.Now()
+	scheduledAssociation.NextScheduledDate = cronexpr.MustParse(*scheduledAssociation.Association.ScheduleExpression).Next(currentTime)
 }
 
 // ExecutePendingDocument wraps ExecutePendingDocument from document executer
@@ -249,7 +278,7 @@ func (p *Processor) persistAssociationForExecution(log log.T, docState *stateMod
 
 // updateAssociationStatus provides wrapper for calling update association service
 func (p *Processor) updateAssocStatus(
-	assoc *ssm.Association,
+	assoc *ssm.InstanceAssociationSummary,
 	status string,
 	message string) {
 	log := p.context.Log()

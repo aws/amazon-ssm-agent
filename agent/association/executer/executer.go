@@ -97,6 +97,7 @@ func (r *AssociationExecuter) ExecuteInProgressDocument(context context.T, docSt
 	if docState.InstancePluginsInformation == nil {
 		log.Debug("Converting plugin information to fit v2 schema.")
 		docState.InstancePluginsInformation = converter.ConvertPluginsInformation(docState.PluginsInformation)
+		docState.PluginsInformation = map[string]stateModel.PluginState{}
 	}
 
 	totalNumberOfActions := len(docState.InstancePluginsInformation)

@@ -79,6 +79,7 @@ type Configuration struct {
 	OrchestrationDirectory string
 	MessageId              string
 	BookKeepingFileName    string
+	PluginID               string
 }
 
 // Plugin wraps the plugin configuration and plugin result.
