@@ -191,11 +191,10 @@ func PersistPluginState(log log.T, pluginState model.PluginState, pluginID, comm
 		pluginsInfo = append(pluginsInfo, pluginState)
 		commandState.InstancePluginsInformation = pluginsInfo
 	} else {
-		commandState.PluginsInformation[pluginID] = pluginState
-
 		for index, plugin := range commandState.InstancePluginsInformation {
 			if plugin.Id == pluginID {
 				commandState.InstancePluginsInformation[index] = pluginState
+				break
 			}
 		}
 	}

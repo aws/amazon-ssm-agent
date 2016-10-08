@@ -88,7 +88,7 @@ func (s *AssociationService) CreateNewServiceIfUnHealthy(log log.T) {
 	}
 }
 
-// ListInstanceAssociations will get the Association and related document string
+// ListAssociations will get the Association and related document string
 func (s *AssociationService) ListInstanceAssociations(log log.T, instanceID string) ([]*model.AssociationRawData, error) {
 	uuid.SwitchFormat(uuid.CleanHyphen)
 	results := []*model.AssociationRawData{}
@@ -103,9 +103,11 @@ func (s *AssociationService) ListInstanceAssociations(log log.T, instanceID stri
 	// Get the association from the response of the ListAssociations call
 
 	for _, assoc := range response.Associations {
+		//if *assoc.Name == "my_v22" {
 		rawData := &model.AssociationRawData{}
 		rawData.Association = assoc
 		results = append(results, rawData)
+		//}
 	}
 
 	return results, nil
@@ -140,9 +142,7 @@ func (s *AssociationService) LoadAssociationDetail(log log.T, assoc *model.Assoc
 	}
 
 	assoc.Document = documentResponse.Content
-
-	//TODO: test hoock, remove when service is ready
-	//doc := "{\n  \"schemaVersion\": \"2.0\",\n  \"$schema\": \"http://amazonaws.com/schemas/ec2/v3-0/runcommand#\",\n  \"description\": \"Sample version 2.0 document\",\n  \"parameters\": {\n    \"runCommand0\": {\n      \"type\": \"StringList\",\n      \"default\": \"date\",\n      \"description\": \"Put any PowerShell Command here\"\n    },\n\t\"runCommand1\": {\n      \"type\": \"StringList\",\n      \"default\": \"date\",\n      \"description\": \"Put any PowerShell Command here\"\n    }\n  },\n  \"mainSteps\": [\n      {\n        \"action\":\"aws:runPowerShellScript\",\n        \"name\":\"runPowerShellScript1\",\n        \"inputs\": \n            {\n              \"id\": \"0.aws:runPowerShellScript\",\n              \"runCommand\": \"{{ runCommand0 }}\"\n            }\n        \n      },\n      {\n      \"action\":\"aws:runPowerShellScript\",\n        \"name\":\"runPowerShellScript2\",\n        \"inputs\": \n          {\n            \"id\": \"1.aws:runPowerShellScript\",\n            \"runCommand\": \"{{ runCommand1 }}\"\n          }\n        \n      }\n    ]\n}"
+	//doc := "{\n  \"schemaVersion\": \"2.0\",\n  \"$schema\": \"http://amazonaws.com/schemas/ec2/v3-0/runcommand#\",\n  \"description\": \"Sample version 2.0 document\",\n  \"parameters\": {\n    \"runCommand0\": {\n      \"type\": \"StringList\",\n      \"default\": \"date\",\n      \"description\": \"Put any PowerShell Command here\"\n    },\n\t\"runCommand1\": {\n      \"type\": \"StringList\",\n      \"default\": \"ls\",\n      \"description\": \"Put any PowerShell Command here\"\n    }\n  },\n  \"mainSteps\": [\n      {\n        \"action\":\"aws:runPowerShellScript\",\n        \"name\":\"runPowerShellScript1\",\n        \"inputs\": \n            {\n              \"id\": \"0.aws:runPowerShellScript\",\n              \"runCommand\": \"{{ runCommand0 }}\"\n            }\n        \n      },\n      {\n      \"action\":\"aws:runPowerShellScript\",\n        \"name\":\"runPowerShellScript2\",\n        \"inputs\": \n          {\n            \"id\": \"1.aws:runPowerShellScript\",\n            \"runCommand\": \"{{ runCommand1 }}\"\n          }\n        \n      }\n    ]\n}"
 	//assoc.Document = &doc
 	return nil
 }
