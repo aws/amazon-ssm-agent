@@ -24,8 +24,8 @@ import (
 )
 
 const (
-	// Name represents name of windows update gatherer
-	GathererName                 = "AWS:WindowsUpdate"
+	// GathererName represents name of windows update gatherer
+	GathererName = "AWS:WindowsUpdate"
 
 	schemaVersionOfWindowsUpdate = "1.0"
 	cmd                          = "powershell"

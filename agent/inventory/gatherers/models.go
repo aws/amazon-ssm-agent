@@ -46,19 +46,24 @@ type InstalledGatherer map[string]T
 func InitializeGatherers(context context.T) (SupportedGatherer, InstalledGatherer) {
 	log := context.Log()
 	var installedGathererNames []string
+
 	installedGatherer := InstalledGatherer{
 		application.GathererName:   application.Gatherer(context),
 		custom.GathererName:        custom.Gatherer(context),
 		windowsUpdate.GathererName: windowsUpdate.Gatherer(context),
 	}
+
 	for key := range installedGatherer {
 		installedGathererNames = append(installedGathererNames, key)
 	}
+
 	log.Infof("Installed Gatherer: %v", installedGathererNames)
 	supportedGatherer := SupportedGatherer{}
+
 	for _, name := range supportedGathererNames {
 		supportedGatherer[name] = installedGatherer[name]
 	}
+
 	log.Infof("Supported Gatherer: %v", supportedGathererNames)
 
 	return supportedGatherer, installedGatherer

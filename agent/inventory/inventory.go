@@ -16,6 +16,7 @@ package inventory
 
 import (
 	"encoding/json"
+	"fmt"
 	"path"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
@@ -132,9 +133,18 @@ func (p *Plugin) ApplyInventoryPolicy() {
 				return
 			}
 
-			items, err := p.VerifyAndRunGatherers(policy)
-			if err != nil {
-				log.Infof("Encountered error while executing inventory policy: %v", err.Error())
+			//map of all valid gatherers & respective configs to run
+			var gatherers map[gatherers.T]inventory.Config
+
+			//validate all gatherers
+			if gatherers, err = p.ValidateGatherers(policy); err != nil {
+				log.Info(err.Error())
+				return
+			}
+
+			//execute all eligible gatherers with their respective config
+			if items, err = p.RunGatherers(gatherers); err != nil {
+				log.Info(err.Error())
 				return
 			}
 
@@ -157,57 +167,77 @@ func (p *Plugin) ApplyInventoryPolicy() {
 	return
 }
 
-// VerifyAndRunGatherers verifies if gatherers is installed and supported, and then invokes it to return the result
-// (containing inventory data). It returns error if gatherer is not installed or if at any stage the data returned
-// breaches size limit
-func (p *Plugin) VerifyAndRunGatherers(policy inventory.Policy) (items []inventory.Item, err error) {
+// ValidateGatherers verifies all gatherers of inventory policy and returns a map of eligible gatherers to run along
+// their config to run. It throws an error if gatherer is not installed.
+func (p *Plugin) ValidateGatherers(policy inventory.Policy) (executors map[gatherers.T]inventory.Config, err error) {
+	var gatherer gatherers.T
+	var isGathererSupported, isGathererInstalled bool
+	executors = make(map[gatherers.T]inventory.Config)
 	log := p.context.Log()
-	log.Infof("Verifying if gatherers are registered and then running them")
 
 	//NOTE:
-	//1) if the gatherer is installed but not supported by current platform, we will skip that gatherer. If the
+	// If the gatherer is installed but not supported by current platform, we will skip that gatherer. If the
 	// gatherer is not installed,  we error out & don't send the data collected from other supported gatherers
 	// - this is because we don't send partial inventory data as part of 1 inventory policy.
-	//Either we send full set of inventory data as defined in policy - or we send nothing.
 
-	//2) Currently all gatherers will be invoked in synchronous & sequential fashion.
-	//Parallel execution of gatherers hinges upon inventory plugin becoming a long running plugin - which will be
-	//mainly for custom inventory gatherer to send data independently of associate.
+	for name, config := range policy.InventoryPolicy {
 
-	for name := range policy.InventoryPolicy {
 		//find out if the gatherer is indeed registered.
-		if gatherer, isGathererSupported := p.supportedGatherers[name]; !isGathererSupported {
-			if _, isGathererInstalled := p.installedGathereres[name]; isGathererInstalled {
-				log.Infof("Installed but unsupported gatherer - %v", name)
+		if gatherer, isGathererSupported = p.supportedGatherers[name]; !isGathererSupported {
+			if _, isGathererInstalled = p.installedGathereres[name]; isGathererInstalled {
+				//since this is a case of wrongly configured gatherer - for different OS, we are not
+				//going to error out.
+				log.Infof("Installed but unsupported gatherer on this platform - %v", name)
 			} else {
-				err = log.Errorf("Unrecognized inventory gatherer - %v ", name)
+				err = fmt.Errorf("Unrecognized inventory gatherer - %v ", name)
 				break
 			}
 		} else {
-			var gItems []inventory.Item
-			log.Infof("Invoking gatherer - %v", name)
+			//add the supported gatherer in the map of executors.
+			executors[gatherer] = config
+		}
+	}
 
-			if gItems, err = gatherer.Run(p.context, policy.InventoryPolicy[name]); err != nil {
-				err = log.Errorf("Encountered error while executing %v. Error - %v", name, err.Error())
-				break
-			} else {
-				items = append(items, gItems...)
+	return
+}
 
-				//TODO: Each gather shall check each item's size and stop collecting if size exceed immediately
-				//TODO: only check the total item size at this function, whenever total size exceed, stop
-				//TODO: immediately and raise association error
-				//return error if collected data breaches size limit
-				for _, v := range gItems {
-					if !p.VerifyInventoryDataSize(v, items) {
-						err = log.Errorf("Size limit exceeded for collected data.")
-						break
-					}
+// RunGatherers execute given array of gatherers and accordingly returns. It returns error if gatherer is not
+// registered or if at any stage the data returned breaches size limit
+func (p *Plugin) RunGatherers(gatherers map[gatherers.T]inventory.Config) (items []inventory.Item, err error) {
+
+	//NOTE: Currently all gatherers will be invoked in synchronous & sequential fashion.
+	//Parallel execution of gatherers hinges upon inventory plugin becoming a long running plugin - which will be
+	//mainly for custom inventory gatherer to send data independently of associate.
+
+	var gItems []inventory.Item
+
+	log := p.context.Log()
+
+	for gatherer, config := range gatherers {
+		name := gatherer.Name()
+		log.Infof("Invoking gatherer - %v", name)
+
+		if gItems, err = gatherer.Run(p.context, config); err != nil {
+			err = fmt.Errorf("Encountered error while executing %v. Error - %v", name, err.Error())
+			break
+
+		} else {
+			items = append(items, gItems...)
+
+			//TODO: Each gather shall check each item's size and stop collecting if size exceed immediately
+			//TODO: only check the total item size at this function, whenever total size exceed, stop
+			//TODO: immediately and raise association error
+			//return error if collected data breaches size limit
+			for _, v := range gItems {
+				if !p.VerifyInventoryDataSize(v, items) {
+					err = log.Errorf("Size limit exceeded for collected data.")
+					break
 				}
 			}
 		}
 	}
 
-	return items, err
+	return
 }
 
 // VerifyInventoryDataSize returns true if size of collected inventory data is within size restrictions placed by SSM,
