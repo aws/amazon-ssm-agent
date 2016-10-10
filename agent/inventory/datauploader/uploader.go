@@ -16,6 +16,7 @@ package datauploader
 
 import (
 	"encoding/json"
+	"fmt"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
@@ -137,13 +138,14 @@ func (u *InventoryUploader) ConvertToSsmInventoryItems(context context.T, items 
 
 			//convert to ssm.InventoryItem
 
-			if i, err = ConvertToSSMInventoryItem(context, item); err != nil {
-				log.Infof("Error encountered while formatting data - %v. Error: %v", err.Error())
+			if i, err = ConvertToSSMInventoryItem(item); err != nil {
+				err = fmt.Errorf("Error encountered while formatting data - %v", err.Error())
 				return
 			}
 
 			inventoryItems = append(inventoryItems, i)
 		}
+
 	}
 
 	return

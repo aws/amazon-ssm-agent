@@ -18,10 +18,10 @@ import (
 	"crypto/md5"
 	"encoding/base64"
 	"encoding/json"
+	"fmt"
 	"reflect"
 	"sync"
 
-	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/inventory/model"
 	"github.com/aws/aws-sdk-go/service/ssm"
 )
@@ -68,9 +68,7 @@ func ShouldUpdate(inventoryItemName, data string) bool {
 }
 
 // ConvertToSSMInventoryItem converts given InventoryItem to []map[string]*string
-func ConvertToSSMInventoryItem(context context.T, item inventory.Item) (inventoryItem *ssm.InventoryItem, err error) {
-
-	log := context.Log()
+func ConvertToSSMInventoryItem(item inventory.Item) (inventoryItem *ssm.InventoryItem, err error) {
 
 	var a []interface{}
 	var c map[string]*string
@@ -99,7 +97,7 @@ func ConvertToSSMInventoryItem(context context.T, item inventory.Item) (inventor
 
 	default:
 		//NOTE: collected inventory data is expected to be either a struct or an array
-		err = log.Errorf("Unsupported data format - %v.", dataType.Kind())
+		err = fmt.Errorf("Unsupported data format - %v.", dataType.Kind())
 		return
 	}
 
