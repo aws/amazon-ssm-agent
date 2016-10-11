@@ -34,6 +34,9 @@ const (
 // T represents application gatherer which implements all contracts for gatherers.
 type T struct{}
 
+// decoupling for easy testability
+var collectData = CollectApplicationData
+
 // Gatherer returns new application gatherer
 func Gatherer(context context.T) *T {
 	return new(T)
@@ -56,7 +59,7 @@ func (t *T) Run(context context.T, configuration inventory.Config) (items []inve
 	result = inventory.Item{
 		Name:          t.Name(),
 		SchemaVersion: SchemaVersionOfApplication,
-		Content:       CollectApplicationData(context),
+		Content:       collectData(context),
 		CaptureTime:   captureTime,
 	}
 

@@ -18,9 +18,7 @@
 package application
 
 import (
-	"bytes"
 	"encoding/json"
-	"errors"
 	"fmt"
 	"os/exec"
 	"strings"
@@ -39,6 +37,13 @@ const (
 	Arch64Bit = "64-Bit"
 	Arch32Bit = "32-Bit"
 )
+
+// decoupling exec.Command for easy testability
+var cmdExecutor = executeCommand
+
+func executeCommand(command string, args ...string) ([]byte, error) {
+	return exec.Command(command, args...).CombinedOutput()
+}
 
 // CollectApplicationData collects application data for windows platform
 func CollectApplicationData(context context.T) []inventory.ApplicationData {
@@ -79,30 +84,32 @@ func CollectApplicationData(context context.T) []inventory.ApplicationData {
 // ExecutePowershellCommands executes commands in powershell to get all windows applications installed.
 func ExecutePowershellCommands(context context.T, command, args, arch string) (data []inventory.ApplicationData) {
 
-	log := context.Log()
-	var out bytes.Buffer
-	var e bytes.Buffer
+	var output []byte
 	var err error
-
-	cmd := exec.Command(command, args)
-	cmd.Stdout = &out
-	cmd.Stderr = &e
+	log := context.Log()
 
 	log.Infof("Getting all %v windows applications", arch)
-	log.Infof("Executing command: %v", cmd.Args)
+	log.Infof("Executing command: %v %v", command, args)
 
-	if err = cmd.Run(); err != nil {
-		log.Debugf("Failed to execute command : %v with error - %v", cmd.Args, err.Error())
-		log.Debugf("Command Stderr: %v", e.String())
-		err = errors.New(fmt.Sprintf("Command failed with error: %v", e.String()))
+	if output, err = cmdExecutor(command, args); err != nil {
+		log.Debugf("Failed to execute command : %v %v with error - %v",
+			command,
+			args,
+			err.Error())
+		log.Debugf("Command Stderr: %v", string(output))
+		err = fmt.Errorf("Command failed with error: %v", string(output))
+		log.Error(err.Error())
+		log.Infof("No application data to return")
 	} else {
-		cmdOutput := out.String()
+		cmdOutput := string(output)
 		log.Debugf("Command output: %v", cmdOutput)
 
 		if data, err = ConvertToApplicationData(cmdOutput, arch); err != nil {
-			log.Errorf("Unable to convert query output to ApplicationData - %v", err.Error())
+			err = fmt.Errorf("Unable to convert query output to ApplicationData - %v", err.Error())
+			log.Error(err.Error())
+			log.Infof("No application data to return")
 		} else {
-			log.Infof("Number of %v applications detected by %v - %v", arch, GathererName, len(data))
+			log.Infof("Number of applications detected by %v - %v", GathererName, len(data))
 
 			str, _ := json.Marshal(data)
 			log.Debugf("Gathered applications: %v", string(str))

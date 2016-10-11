@@ -18,7 +18,6 @@
 package application
 
 import (
-	"bytes"
 	"encoding/json"
 	"fmt"
 	"os/exec"
@@ -26,6 +25,7 @@ import (
 
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/inventory/model"
+	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/platform"
 )
 
@@ -65,6 +65,20 @@ func init() {
 	pkgMgr["debian"] = DPKGPackageManager
 }
 
+// decoupling exec.Command for easy testability
+var cmdExecutor = executeCommand
+
+func executeCommand(command string, args ...string) ([]byte, error) {
+	return exec.Command(command, args...).CombinedOutput()
+}
+
+// decoupling platform.PlatformName for easy testability
+var osInfoProvider = platformInfoProvider
+
+func platformInfoProvider(log log.T) (name string, err error) {
+	return platform.PlatformName(log)
+}
+
 // CollectApplicationData collects all application data from the system using rpm or dpkg query.
 func CollectApplicationData(context context.T) (appData []inventory.ApplicationData) {
 
@@ -73,7 +87,7 @@ func CollectApplicationData(context context.T) (appData []inventory.ApplicationD
 	log := context.Log()
 
 	//get platform name
-	if plName, err = platform.PlatformName(log); err != nil {
+	if plName, err = osInfoProvider(log); err != nil {
 		log.Infof("Unable to detect platform because of %v - hence no inventory data for %v",
 			err.Error(),
 			GathererName)
@@ -210,26 +224,24 @@ func GetApplicationData(context context.T, command string, args []string) (data 
 		For more details on dpkg format, refer to http://manpages.ubuntu.com/manpages/trusty/man1/dpkg-query.1.html
 	*/
 
+	var output []byte
 	log := context.Log()
 
-	var out bytes.Buffer
-	var e bytes.Buffer
-	cmd := exec.Command(command, args...)
-	cmd.Stdout = &out
-	cmd.Stderr = &e
+	log.Infof("Executing command: %v %v", command, args)
 
-	log.Infof("Executing command: %v", cmd.Args)
-
-	if err = cmd.Run(); err != nil {
-		log.Debugf("Failed to execute command : %v with error - %v", cmd.Args, err.Error())
-		log.Debugf("Command Stderr: %v", e.String())
-		err = fmt.Errorf("Command failed with error: %v", e.String())
+	if output, err = cmdExecutor(command, args...); err != nil {
+		log.Debugf("Failed to execute command : %v %v with error - %v",
+			command,
+			args,
+			err.Error())
+		log.Debugf("Command Stderr: %v", string(output))
+		err = fmt.Errorf("Command failed with error: %v", string(output))
 	} else {
-		cmdOutput := out.String()
+		cmdOutput := string(output)
 		log.Debugf("Command output: %v", cmdOutput)
 
 		if data, err = ConvertToApplicationData(cmdOutput); err != nil {
-			err = log.Errorf("Unable to convert query output to ApplicationData - %v", err.Error())
+			err = fmt.Errorf("Unable to convert query output to ApplicationData - %v", err.Error())
 		} else {
 			log.Infof("Number of applications detected by %v - %v", GathererName, len(data))
 		}

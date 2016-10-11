@@ -69,7 +69,7 @@ func (t *T) Run(context context.T, configuration inventory.Config) (items []inve
 		log.Infof("%v windows update found", len(data))
 		log.Debugf("update info = %+v", result)
 	} else {
-		log.Errorf("Unable to fetch windows update - %v %v", err.Error(), out)
+		log.Errorf("Unable to fetch windows update - %v %v", err.Error(), string(out))
 	}
 	items = append(items, result)
 	return
