@@ -17,6 +17,7 @@ package service
 import (
 	"testing"
 
+	"github.com/aws/amazon-ssm-agent/agent/association/model"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/sdkutil"
@@ -59,35 +60,34 @@ func TestListAssociations(t *testing.T) {
 	assert.NoError(t, err)
 }
 
-//func TestLoadAssociationDetails(t *testing.T) {
-//	service := AssociationService{
-//		ssmSvc:     ssmMock,
-//		stopPolicy: &sdkutil.StopPolicy{},
-//	}
-//
-//	associationName := "test"
-//	documentContent := "document content"
-//	assocRawData := model.AssociationRawData{}
-//	assocRawData.Association = &ssm.Association{}
-//	assocRawData.Association.Name = &associationName
-//	assocRawData.Association.InstanceId = &instanceID
-//
-//	getDocumentOutput := ssm.GetDocumentOutput{
-//		Content: &documentContent,
-//	}
-//
-//	associationOutput := ssm.DescribeAssociationOutput{
-//		AssociationDescription: &ssm.AssociationDescription{},
-//	}
-//
-//	ssmMock.On("GetDocument", mock.AnythingOfType("*log.Mock"), mock.AnythingOfType("string")).Return(&getDocumentOutput, nil)
-//	ssmMock.On("DescribeAssociation", mock.AnythingOfType("*log.Mock"), mock.AnythingOfType("string"), mock.AnythingOfType("string")).Return(&associationOutput, nil)
-//
-//	err := service.LoadAssociationDetail(logMock, &assocRawData)
-//
-//	assert.NoError(t, err)
-//	assert.NotNil(t, assocRawData.Parameter)
-//}
+func TestLoadAssociationDetails(t *testing.T) {
+	service := AssociationService{
+		ssmSvc:     ssmMock,
+		stopPolicy: &sdkutil.StopPolicy{},
+	}
+
+	associationName := "test"
+	documentContent := "document content"
+	assocRawData := model.AssociationRawData{}
+	assocRawData.Association = &ssm.InstanceAssociationSummary{}
+	assocRawData.Association.Name = &associationName
+	assocRawData.Association.InstanceId = &instanceID
+
+	getDocumentOutput := ssm.GetDocumentOutput{
+		Content: &documentContent,
+	}
+
+	associationOutput := ssm.DescribeAssociationOutput{
+		AssociationDescription: &ssm.AssociationDescription{},
+	}
+
+	ssmMock.On("GetDocument", mock.AnythingOfType("*log.Mock"), mock.AnythingOfType("string")).Return(&getDocumentOutput, nil)
+	ssmMock.On("DescribeAssociation", mock.AnythingOfType("*log.Mock"), mock.AnythingOfType("string"), mock.AnythingOfType("string")).Return(&associationOutput, nil)
+
+	err := service.LoadAssociationDetail(logMock, &assocRawData)
+
+	assert.NoError(t, err)
+}
 
 func TestUpdateAssociationStatus(t *testing.T) {
 	service := AssociationService{

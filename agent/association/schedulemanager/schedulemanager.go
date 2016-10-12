@@ -15,9 +15,8 @@
 package schedulemanager
 
 import (
-	"sync"
-
 	"fmt"
+	"sync"
 
 	"github.com/aws/amazon-ssm-agent/agent/association/model"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"

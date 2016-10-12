@@ -142,6 +142,7 @@ func (p *Processor) ProcessAssociation() {
 	p.RunScheduledAssociation(log)
 }
 
+// RunScheduledAssociation runs the next scheduled association
 func (p *Processor) RunScheduledAssociation(log log.T) {
 	var (
 		scheduledAssociation *model.AssociationRawData

@@ -88,7 +88,7 @@ func (s *AssociationService) CreateNewServiceIfUnHealthy(log log.T) {
 	}
 }
 
-// ListAssociations will get the Association and related document string
+// ListInstanceAssociations will get the Association and related document string
 func (s *AssociationService) ListInstanceAssociations(log log.T, instanceID string) ([]*model.AssociationRawData, error) {
 	uuid.SwitchFormat(uuid.CleanHyphen)
 	results := []*model.AssociationRawData{}
@@ -103,11 +103,9 @@ func (s *AssociationService) ListInstanceAssociations(log log.T, instanceID stri
 	// Get the association from the response of the ListAssociations call
 
 	for _, assoc := range response.Associations {
-		//if *assoc.Name == "my_v22" {
 		rawData := &model.AssociationRawData{}
 		rawData.Association = assoc
 		results = append(results, rawData)
-		//}
 	}
 
 	return results, nil
