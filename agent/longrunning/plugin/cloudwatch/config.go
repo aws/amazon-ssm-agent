@@ -18,6 +18,7 @@ import (
 	"os"
 	"sync"
 
+	"encoding/json"
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
@@ -54,7 +55,17 @@ func Instance() *CloudWatchConfig {
 
 // ParseEngineConfiguration marshals the EngineConfiguration from interface{} to string
 func ParseEngineConfiguration() (config string, err error) {
-	return jsonutil.Marshal(instance.EngineConfiguration)
+	switch instance.EngineConfiguration.(type) {
+	case string:
+		var bytes []byte
+		rawIn := json.RawMessage(instance.EngineConfiguration.(string))
+		bytes, err = rawIn.MarshalJSON()
+		config = string(bytes[:])
+	default:
+		config, err = jsonutil.Marshal(instance.EngineConfiguration)
+	}
+
+	return
 }
 
 // Update updates configuration from file system
