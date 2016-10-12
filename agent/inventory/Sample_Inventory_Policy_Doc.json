@@ -3,6 +3,9 @@
     "AWS:Application": {
       "Collection": "Enabled"
     },
+    "AWS:AWSComponent": {
+      "Collection": "Enabled"
+    },
     "AWS:WindowsUpdate": {
       "Collection": "Enabled"
     },

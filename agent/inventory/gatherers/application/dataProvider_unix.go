@@ -29,8 +29,6 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/platform"
 )
 
-// TODO: add unit tests
-
 var (
 	pkgMgr map[string]string
 )
@@ -243,7 +241,7 @@ func GetApplicationData(context context.T, command string, args []string) (data 
 		if data, err = ConvertToApplicationData(cmdOutput); err != nil {
 			err = fmt.Errorf("Unable to convert query output to ApplicationData - %v", err.Error())
 		} else {
-			log.Infof("Number of applications detected by %v - %v", GathererName, len(data))
+			log.Infof("Number of applications detected - %v", len(data))
 		}
 	}
 

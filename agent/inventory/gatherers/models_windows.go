@@ -13,12 +13,14 @@ package gatherers
 
 import (
 	"github.com/aws/amazon-ssm-agent/agent/inventory/gatherers/application"
+	"github.com/aws/amazon-ssm-agent/agent/inventory/gatherers/awscomponent"
 	"github.com/aws/amazon-ssm-agent/agent/inventory/gatherers/custom"
 	"github.com/aws/amazon-ssm-agent/agent/inventory/gatherers/windowsUpdate"
 )
 
 var supportedGathererNames = []string{
 	application.GathererName,
+	awscomponent.GathererName,
 	custom.GathererName,
 	windowsUpdate.GathererName,
 }

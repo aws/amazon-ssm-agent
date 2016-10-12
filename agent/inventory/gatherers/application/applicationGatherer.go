@@ -22,8 +22,6 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/inventory/model"
 )
 
-//TODO: add unit tests.
-
 const (
 	// GathererName captures name of application gatherer
 	GathererName = "AWS:Application"

@@ -27,8 +27,6 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/inventory/model"
 )
 
-// TODO: add unit tests
-
 const (
 	PowershellCmd            = "powershell"
 	ArgsFor32BitApplications = `Get-ItemProperty HKLM:\Software\Microsoft\Windows\CurrentVersion\Uninstall\* | Where-Object {$_.DisplayName -ne $null} | Select-Object @{Name="Name";Expression={$_."DisplayName"}}, @{Name="Version";Expression={$_."DisplayVersion"}}, Publisher, @{Name="InstalledTime";Expression={$_."InstallDate"}} | ConvertTo-Json`
