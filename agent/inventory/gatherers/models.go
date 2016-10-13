@@ -20,6 +20,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/inventory/gatherers/application"
 	"github.com/aws/amazon-ssm-agent/agent/inventory/gatherers/awscomponent"
 	"github.com/aws/amazon-ssm-agent/agent/inventory/gatherers/custom"
+	"github.com/aws/amazon-ssm-agent/agent/inventory/gatherers/network"
 	"github.com/aws/amazon-ssm-agent/agent/inventory/gatherers/windowsUpdate"
 	"github.com/aws/amazon-ssm-agent/agent/inventory/model"
 )
@@ -52,6 +53,7 @@ func InitializeGatherers(context context.T) (SupportedGatherer, InstalledGathere
 		application.GathererName:   application.Gatherer(context),
 		awscomponent.GathererName:  awscomponent.Gatherer(context),
 		custom.GathererName:        custom.Gatherer(context),
+		network.GathererName:       network.Gatherer(context),
 		windowsUpdate.GathererName: windowsUpdate.Gatherer(context),
 	}
 

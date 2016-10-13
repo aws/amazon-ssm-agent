@@ -70,6 +70,18 @@ type ApplicationData struct {
 	URL             string
 }
 
+// NetworkData captures all attributes present in AWS:Network inventory type
+type NetworkData struct {
+	Name       string
+	SubnetMask string `json:",omitempty"`
+	Gateway    string `json:",omitempty"`
+	DHCPServer string `json:",omitempty"`
+	DNSServer  string `json:",omitempty"`
+	MacAddress string
+	IPV4       string
+	IPV6       string
+}
+
 // WindowsUpdateData captures all attributes present in AWS:WindowsUpdate inventory type
 type WindowsUpdateData struct {
 	HotFixID      string
