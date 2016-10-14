@@ -89,6 +89,10 @@ func ConvertToSSMInventoryItem(item inventory.Item) (inventoryItem *ssm.Inventor
 		dataB, _ = json.Marshal(item.Content)
 		json.Unmarshal(dataB, &a)
 
+		// If a is empty array, then content has to be empty array
+		// instead of nil, as InventoryItem.Content has
+		// to be empty array [] after serializing to Json,
+		// based on the contract with ssm:PutInventory API.
 		for _, v := range a {
 			// convert each item to map[string]*string
 			c = ConvertToMap(v)

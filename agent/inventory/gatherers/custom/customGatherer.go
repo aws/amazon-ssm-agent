@@ -11,7 +11,7 @@
 // either express or implied. See the License for the specific language governing
 // permissions and limitations under the License.
 
-// Package custom contains a gatherer for collection custom inventory items.
+// Package custom contains a gatherer for collecting custom inventory items
 package custom
 
 import (
@@ -25,14 +25,16 @@ import (
 	"reflect"
 	"strings"
 
+	"errors"
+	"fmt"
+	"os"
+
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/inventory/model"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 )
-
-//TODO: add unit tests.
 
 const (
 	// GathererName captures name of custom gatherer
@@ -42,9 +44,7 @@ const (
 	// CustomInventoryTypeNamePrefix represents custom inventory typename prefix
 	CustomInventoryTypeNamePrefix = "CUSTOM:"
 	// TypeNameLengthLimit represents custom inventory typename length limit
-	TypeNameLengthLimit = 32
-	// CustomInventorySizeLimitBytes represents custom inventory item size limit
-	CustomInventorySizeLimitBytes = 16 * 1024 // 16 KB
+	TypeNameLengthLimit = 100
 	// CustomInventoryCountLimit represents custom inventory type count limit
 	CustomInventoryCountLimit = 20
 	// AttributeCountLimit represents custom inventory entry's attribute count limit
@@ -68,10 +68,28 @@ func (t *T) Name() string {
 	return GathererName
 }
 
+// decoupling for easy testability
+var readDirFunc = ReadDir
+var readFileFunc = ReadFile
+
+func ReadDir(dirname string) ([]os.FileInfo, error) {
+	return ioutil.ReadDir(dirname)
+}
+
+func ReadFile(filename string) ([]byte, error) {
+	return ioutil.ReadFile(filename)
+}
+
+func LogError(log log.T, err error) {
+	// To debug unit test, please uncomment following line
+	// fmt.Println(err)
+	log.Error(err)
+}
+
 // Run executes custom gatherer and returns list of inventory.Item
 func (t *T) Run(context context.T, configuration inventory.Config) (items []inventory.Item, err error) {
 
-	var log = context.Log()
+	log := context.Log()
 
 	// Get custom inventory folder, fall back if not specified
 	customFolder := configuration.Location
@@ -82,7 +100,9 @@ func (t *T) Run(context context.T, configuration inventory.Config) (items []inve
 	// Get custom inventory files' path
 	fileList, err := getFilePaths(log, customFolder, FileSuffix)
 	if err != nil {
-		log.Errorf("Failed to get inventory files from folder %v, error %v", customFolder, err)
+		LogError(
+			log,
+			fmt.Errorf("Failed to get inventory files from folder %v, error %v", customFolder, err))
 		return
 	}
 
@@ -93,20 +113,20 @@ func (t *T) Run(context context.T, configuration inventory.Config) (items []inve
 		if customItem, err := getItemFromFile(log, filePath); err == nil {
 
 			if _, ok := setTypeName[customItem.Name]; ok {
-				err = log.Errorf("Custom inventory typeName (%v) from file (%v) already exists,"+
+				err = fmt.Errorf("Custom inventory typeName (%v) from file (%v) already exists,"+
 					" i.e., other file under the same folder contains the same typeName,"+
 					" please remove duplicate custom inventory file.",
 					customItem.Name, filePath)
-				return items, err
+				LogError(log, err)
+			} else {
+				// Only append if current TypeName is not duplicate
+				setTypeName[customItem.Name] = true
+				items = append(items, customItem)
 			}
-			setTypeName[customItem.Name] = true
-			items = append(items, customItem)
-
 		} else {
-
-			log.Errorf("Failed to get item from file %v, error %v. continue...", filePath, err)
+			LogError(log,
+				fmt.Errorf("Failed to get item from file %v, error %v. continue...", filePath, err))
 			continue
-
 		}
 	}
 
@@ -129,28 +149,28 @@ func (t *T) RequestStop(stopType contracts.StopType) error {
 func getItemFromFile(log log.T, file string) (result inventory.Item, err error) {
 
 	var content []byte
-	content, err = ioutil.ReadFile(file)
+	content, err = readFileFunc(file)
 	if err != nil {
-		log.Errorf("Failed to read file: %v, error: %v", file, err)
+		LogError(log, fmt.Errorf("Failed to read file: %v, error: %v", file, err))
 		return
 	}
 
-	result, err = validateSchema(log, content)
+	result, err = convertToItem(log, content)
 	if err != nil {
-		log.Errorf("Failed to validate the schema of file (%v), error: %v",
-			file, err)
+		LogError(log, fmt.Errorf("Failed to convert file (%v) to inventory item, error: %v",
+			file, err))
 	}
 	return
 }
 
-// validateSchema Validates custom inventory content's schema
-func validateSchema(log log.T, content []byte) (item inventory.Item, err error) {
+// convertToItem Validates custom inventory content's schema and convert to inventory.Item
+func convertToItem(log log.T, content []byte) (item inventory.Item, err error) {
 
 	var customInventoryItem inventory.CustomInventoryItem
 
 	// Deserialize custom inventory item content
 	if err = json.Unmarshal(content, &customInventoryItem); err != nil {
-		log.Error(err)
+		LogError(log, err)
 		return
 	}
 
@@ -172,11 +192,10 @@ func validateSchema(log log.T, content []byte) (item inventory.Item, err error) 
 	currentTime := time.Now().UTC()
 	captureTime := currentTime.Format(time.RFC3339)
 
-	// Convert content into array
+	// Convert content to array
 	var entryArray = []map[string]interface{}{}
 	if len(attributes) > 0 {
 		entryArray = append(entryArray, attributes)
-		entryArray[0] = attributes
 	}
 	item = inventory.Item{
 		Name:          customInventoryItem.TypeName,
@@ -192,18 +211,23 @@ func validateTypeName(log log.T, customInventoryItem inventory.CustomInventoryIt
 	typeName := customInventoryItem.TypeName
 	typeNameLength := len(typeName)
 	if typeNameLength == 0 {
-		err = log.Error("Custom inventory item has missed TypeName")
+		err = errors.New("Custom inventory item has missed or empty TypeName")
+		LogError(log, err)
+		return
+	} else if typeNameLength > TypeNameLengthLimit {
+		err = fmt.Errorf("Custom inventory item TypeName (%v)'s length %v exceeded the limit: %v",
+			typeName,
+			typeNameLength,
+			TypeNameLengthLimit)
+		LogError(log, err)
 		return
 	}
-	if typeNameLength > TypeNameLengthLimit {
-		err = log.Errorf("Custom inventory item TypeName (%v) exceeded length limit (%v)",
-			typeName, typeNameLength)
-		return
-	}
+
 	// validate TypeName prefix
 	if !strings.HasPrefix(customInventoryItem.TypeName, CustomInventoryTypeNamePrefix) {
-		err = log.Errorf("Custom inventory item's TypeName (%v) has to start with %v",
+		err = fmt.Errorf("Custom inventory item's TypeName (%v) has to start with %v",
 			customInventoryItem.TypeName, CustomInventoryTypeNamePrefix)
+		LogError(log, err)
 	}
 	return
 }
@@ -212,16 +236,18 @@ func validateTypeName(log log.T, customInventoryItem inventory.CustomInventoryIt
 func validateSchemaVersion(log log.T, customInventoryItem inventory.CustomInventoryItem) (err error) {
 	schemaVersion := customInventoryItem.SchemaVersion
 	if len(schemaVersion) == 0 {
-		err = log.Error("Custom inventory item has missed SchemaVersion")
+		err = errors.New("Custom inventory item has missed SchemaVersion")
+		LogError(log, err)
 		return
 	}
 
 	//validate schema version format
 	var validSchemaVersion = regexp.MustCompile(`^([0-9]{1,6})(\.[0-9]{1,6})$`)
 	if !validSchemaVersion.MatchString(schemaVersion) {
-		err = log.Errorf("Custom inventory item (%v) has invalid SchemaVersion (%v),"+
+		err = fmt.Errorf("Custom inventory item (%v) has invalid SchemaVersion (%v),"+
 			" the valid schema version has to be like 1.0, 1.1, 2.0, 3.9, etc.",
 			customInventoryItem.TypeName, schemaVersion)
+		LogError(log, err)
 	}
 	return
 }
@@ -232,7 +258,8 @@ func validateContentEntrySchema(log log.T, customInventoryItem inventory.CustomI
 	err error) {
 
 	if customInventoryItem.Content == nil {
-		err = log.Error("Custom inventory item missed Content property.")
+		err = errors.New("Custom inventory item missed Content property.")
+		LogError(log, err)
 		return
 	}
 
@@ -240,38 +267,62 @@ func validateContentEntrySchema(log log.T, customInventoryItem inventory.CustomI
 	log.Debugf("Content type of %v: %v", customInventoryItem.TypeName, reflect.TypeOf(contentValue))
 	var ok bool
 	if attributes, ok = contentValue.(map[string]interface{}); !ok {
-		err = log.Errorf("Custom inventory item %v's Content is not a valid json",
+		err = fmt.Errorf("Custom inventory item %v's Content is not a valid json",
 			customInventoryItem.TypeName)
+		LogError(log, err)
 		return
 	}
 	if attributes == nil {
-		err = log.Errorf("Custom inventory item %v's Content is not a valid json",
+		err = fmt.Errorf("Custom inventory item %v's Content is not a valid json",
 			customInventoryItem.TypeName)
+		LogError(log, err)
 		return
 	}
 	if len(attributes) > AttributeCountLimit {
-		err = log.Errorf("Custom inventory item content cannot have more than %v attributes",
+		err = fmt.Errorf("Custom inventory item (%v)'s content has %v attributes, exceed the limit %v",
+			customInventoryItem.TypeName,
+			len(attributes),
 			AttributeCountLimit)
+		LogError(log, err)
 		return
 	}
 	for a, v := range attributes {
 		aLen := len(a)
 		if aLen > AttributeNameLengthLimit {
-			err = log.Errorf("Custom inventory item key length (%v) exceeded limit (%v)",
-				aLen, AttributeNameLengthLimit)
+			err = fmt.Errorf("Custom inventory (%v)'s attribute name (%v) length: %v, exceeded the limit: %v",
+				customInventoryItem.TypeName,
+				a,
+				aLen,
+				AttributeNameLengthLimit)
+			LogError(log, err)
+			return
+		} else if aLen == 0 {
+			err = fmt.Errorf("Custom inventory (%v)'s contains empty attribute name, which is illegal",
+				customInventoryItem.TypeName)
+			LogError(log, err)
 			return
 		}
 
 		if vStr, ok := v.(string); ok {
 			vLen := len(vStr)
 			if vLen > AttributeValueLengthLimit {
-				err = log.Errorf("custom inventory item value length (%v) exceeded limit (%v)",
-					vLen, AttributeValueLengthLimit)
+				err = fmt.Errorf("Attribute (%v) of custom inventory (%v) has value's length: %v, "+
+					"which exceeded the limit: %v",
+					customInventoryItem.TypeName,
+					a,
+					vLen,
+					AttributeValueLengthLimit)
+				LogError(log, err)
 				return
 			}
 		} else {
-			err = log.Errorf("Attribute (%v)'s value (%v) is not a string type. It's type is (%v)",
-				a, v, reflect.TypeOf(v))
+			err = fmt.Errorf("Custom inventory (%v)'s attribute (%v)'s value (%v) has type : %v, "+
+				"which is not supported, only string type is supported.",
+				customInventoryItem.TypeName,
+				a,
+				v,
+				reflect.TypeOf(v))
+			LogError(log, err)
 			return
 		}
 	}
@@ -282,12 +333,13 @@ func validateContentEntrySchema(log log.T, customInventoryItem inventory.CustomI
 func getFilePaths(log log.T, folder string, fileSuffix string) (fileFullPathList []string, err error) {
 
 	var totalSize int64
-	var totalSizeLimit int64 = CustomInventorySizeLimitBytes
 
 	// Read all files that ended with json
-	files, readDirError := ioutil.ReadDir(folder)
+	files, readDirError := readDirFunc(folder)
 	if readDirError != nil {
-		log.Errorf("Read directory %v failed, error: %v", folder, readDirError)
+		LogError(
+			log,
+			fmt.Errorf("Read directory %v failed, error: %v", folder, readDirError))
 		// In case of directory not found error, ignore
 		return []string{}, nil
 	}
@@ -300,20 +352,18 @@ func getFilePaths(log log.T, folder string, fileSuffix string) (fileFullPathList
 			fileFullPath = filepath.Clean(fileFullPath)
 			fileFullPathList = append(fileFullPathList, fileFullPath)
 			totalSize += f.Size()
-			if totalSize > totalSizeLimit {
-				err = log.Errorf("Total size (%v) exceed limit (%v)", totalSize, totalSizeLimit)
-				return nil, err
-			}
 		}
 	}
 
 	// Check custom inventory file count
 	if len(fileFullPathList) > CustomInventoryCountLimit {
-		err = log.Errorf("Total custom inventory file count (%v) exceed limit (%v)",
+		err = fmt.Errorf("Total custom inventory file count (%v) exceed limit (%v)",
 			len(fileFullPathList), CustomInventoryCountLimit)
+		LogError(log, err)
 		return nil, err
 	}
 
-	log.Debugf("Total custom inventory file count %v", len(fileFullPathList))
+	log.Debugf("Total custom (%v) inventory file, total bytes: %v",
+		len(fileFullPathList), totalSize)
 	return
 }
