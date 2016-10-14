@@ -17,6 +17,7 @@ package configurecomponent
 
 import (
 	"fmt"
+	"strings"
 	"testing"
 
 	"github.com/aws/amazon-ssm-agent/agent/updateutil"
@@ -24,48 +25,48 @@ import (
 )
 
 func TestCreateManifestName(t *testing.T) {
-	pluginInformation := createStubPluginInput()
+	pluginInformation := createStubPluginInputInstall()
 
 	manifestName := "PVDriver.json"
-	result := createManifestName(pluginInformation.Name)
+	result := getManifestName(pluginInformation.Name)
 
 	assert.Equal(t, manifestName, result)
 }
 
 func TestCreatePackageName(t *testing.T) {
-	pluginInformation := createStubPluginInput()
+	pluginInformation := createStubPluginInputInstall()
 	context := createStubInstanceContext()
 
-	packageName := "PVDriver-amd64.zip"
-	result := createPackageName(pluginInformation.Name, context)
+	packageName := "PVDriver.zip"
+	result := getPackageName(pluginInformation.Name, context)
 
 	assert.Equal(t, packageName, result)
 }
 
 func TestCreateS3Location(t *testing.T) {
-	pluginInformation := createStubPluginInput()
+	pluginInformation := createStubPluginInputInstall()
 	context := createStubInstanceContext()
-	fileName := "PVDriver-amd64.zip"
+	fileName := "PVDriver.zip"
 
-	packageLocation := "https://amazon-ssm-us-west-2.s3.amazonaws.com/Components/PVDriver/Windows/9000.0.0/PVDriver-amd64.zip"
-	result := createS3Location(pluginInformation.Name, pluginInformation.Version, context, fileName)
+	packageLocation := fmt.Sprintf("%v/PVDriver/Windows/amd64/9000.0.0/PVDriver.zip", strings.Replace(ComponentUrl, updateutil.RegionHolder, "us-west-2", -1))
+	result := getS3Location(pluginInformation.Name, pluginInformation.Version, context, fileName)
 
 	assert.Equal(t, packageLocation, result)
 }
 
 func TestCreateS3Location_Bjs(t *testing.T) {
-	pluginInformation := createStubPluginInput()
+	pluginInformation := createStubPluginInputInstall()
 	context := createStubInstanceContextBjs()
-	fileName := "PVDriver-amd64.zip"
+	fileName := "PVDriver.zip"
 
-	packageLocation := "https://s3.cn-north-1.amazonaws.com.cn/amazon-ssm-cn-north-1/Components/PVDriver/Windows/9000.0.0/PVDriver-amd64.zip"
-	result := createS3Location(pluginInformation.Name, pluginInformation.Version, context, fileName)
+	packageLocation := "https://s3.cn-north-1.amazonaws.com.cn/amazon-ssm-cn-north-1/Components/PVDriver/Windows/amd64/9000.0.0/PVDriver.zip"
+	result := getS3Location(pluginInformation.Name, pluginInformation.Version, context, fileName)
 
 	assert.Equal(t, packageLocation, result)
 }
 
 func TestCreateComponentFolderSucceeded(t *testing.T) {
-	pluginInformation := createStubPluginInput()
+	pluginInformation := createStubPluginInputInstall()
 	util := Utility{}
 
 	mkDirAll = func(path string) error {
@@ -80,7 +81,7 @@ func TestCreateComponentFolderSucceeded(t *testing.T) {
 }
 
 func TestCreateComponentFolderFailed(t *testing.T) {
-	pluginInformation := createStubPluginInput()
+	pluginInformation := createStubPluginInputInstall()
 	util := Utility{}
 
 	mkDirAll = func(path string) error {
@@ -92,7 +93,7 @@ func TestCreateComponentFolderFailed(t *testing.T) {
 }
 
 func TestNeedUpdate(t *testing.T) {
-	pluginInformation := createStubPluginInput()
+	pluginInformation := createStubPluginInputInstall()
 	util := Utility{}
 
 	componentExists = func(filepath string) bool {
@@ -108,7 +109,7 @@ func TestNeedUpdate(t *testing.T) {
 }
 
 func TestNeedUpdate_NoComponentExists(t *testing.T) {
-	pluginInformation := createStubPluginInput()
+	pluginInformation := createStubPluginInputInstall()
 	util := Utility{}
 
 	componentExists = func(filepath string) bool {
@@ -120,7 +121,7 @@ func TestNeedUpdate_NoComponentExists(t *testing.T) {
 }
 
 func TestNeedUpdate_VersionExists(t *testing.T) {
-	pluginInformation := createStubPluginInput()
+	pluginInformation := createStubPluginInputInstall()
 	util := Utility{}
 
 	versionExists = func(filepath string) bool {
@@ -131,13 +132,71 @@ func TestNeedUpdate_VersionExists(t *testing.T) {
 	assert.Equal(t, false, result)
 }
 
-func createStubPluginInput() *ConfigureComponentPluginInput {
+func TestGetLatestVersion_NumericSort(t *testing.T) {
+	versions := [3]string{"1.0.0", "2.0.0", "10.0.0"}
+	latest := getLatestVersion(versions[:], "")
+	assert.Equal(t, "10.0.0", latest)
+}
+
+func TestGetLatestVersion_OnlyOneValid(t *testing.T) {
+	versions := [3]string{"0.0.0", "1.0", "1.0.0.0"}
+	latest := getLatestVersion(versions[:], "")
+	assert.Equal(t, "0.0.0", latest)
+}
+
+func TestGetLatestVersion_NoneValid(t *testing.T) {
+	versions := [3]string{"Foo", "1.0", "1.0.0.0"}
+	latest := getLatestVersion(versions[:], "")
+	assert.Equal(t, "", latest)
+}
+
+func TestGetLatestVersion_None(t *testing.T) {
+	versions := make([]string, 0)
+	latest := getLatestVersion(versions[:], "")
+	assert.Equal(t, "", latest)
+}
+
+func createStubPluginInputInstall() *ConfigureComponentPluginInput {
 	input := ConfigureComponentPluginInput{}
 
 	// Set version to a large number to avoid conflict of the actual component release version
 	input.Version = "9000.0.0"
 	input.Name = "PVDriver"
 	input.Action = "Install"
+	input.Source = ""
+
+	return &input
+}
+
+func createStubPluginInputInstallLatest() *ConfigureComponentPluginInput {
+	input := ConfigureComponentPluginInput{}
+
+	// Set version to a large number to avoid conflict of the actual component release version
+	input.Name = "PVDriver"
+	input.Action = "Install"
+	input.Source = ""
+
+	return &input
+}
+
+func createStubPluginInputUninstall() *ConfigureComponentPluginInput {
+	input := ConfigureComponentPluginInput{}
+
+	// Set version to a large number to avoid conflict of the actual component release version
+	input.Version = "9000.0.0"
+	input.Name = "PVDriver"
+	input.Action = "Uninstall"
+	input.Source = ""
+
+	return &input
+}
+
+func createStubPluginInputUninstallLatest() *ConfigureComponentPluginInput {
+	input := ConfigureComponentPluginInput{}
+
+	// Set version to a large number to avoid conflict of the actual component release version
+	input.Name = "PVDriver"
+	input.Action = "Uninstall"
 	input.Source = ""
 
 	return &input
@@ -150,7 +209,7 @@ func createStubInvalidPluginInput() *ConfigureComponentPluginInput {
 	input.Version = "7.2"
 	input.Name = ""
 	input.Action = "InvalidAction"
-	input.Source = "https://amazon-ssm-us-west-2.s3.amazonaws.com/Components/PVDriver/Windows/9000.0.0/PVDriver-amd64.zip"
+	input.Source = "https://amazon-ssm-us-west-2.s3.amazonaws.com/Components/PVDriver/Windows/amd64/9000.0.0/PVDriver.zip"
 
 	return &input
 }
@@ -181,16 +240,30 @@ func createStubInstanceContextBjs() *updateutil.InstanceContext {
 	return &context
 }
 
-type mockConfigureUtility struct{}
+type mockConfigureUtility struct {
+	componentFolder            string
+	createComponentFolderError error
+	currentVersion             string
+	latestVersion              string
+	getLatestVersionError      error
+}
 
 func (u *mockConfigureUtility) CreateComponentFolder(name string, version string) (folder string, err error) {
-	return "", nil
+	return u.componentFolder, u.createComponentFolderError
 }
 
 func (u *mockConfigureUtility) NeedUpdate(name string, requestedVersion string) (update bool) {
 	return false
 }
 
-func (u *mockConfigureUtility) HasVersion(name string) (version string, err error) {
-	return "", nil
+func (u *mockConfigureUtility) HasValidPackage(name string, version string) bool {
+	return true
+}
+
+func (u *mockConfigureUtility) GetCurrentVersion(name string) (installedVersion string) {
+	return u.currentVersion
+}
+
+func (u *mockConfigureUtility) GetLatestVersion(name string, source string, context *updateutil.InstanceContext) (latestVersion string, err error) {
+	return u.latestVersion, u.getLatestVersionError
 }

@@ -27,6 +27,8 @@ import (
 // Valid manifest files
 var sampleManifests = []string{
 	"testdata/sampleManifest.json",
+	"testdata/daemonManifest.json",
+	"testdata/simpleManifest.json",
 }
 
 // Invalid manifest files
@@ -34,6 +36,13 @@ var errorManifests = []string{
 	"testdata/errorManifest_empty.json",
 	"testdata/errorManifest_reboot.json",
 	"testdata/errorManifest_version.json",
+	"testdata/errorManifest_versionempty.json",
+}
+
+// Malformed manifest files
+var malformedManifests = []string{
+	"testdata/errorManifest_nonexistent.json",
+	"testdata/errorManifest_malformed.json",
 }
 
 type testCase struct {
@@ -61,12 +70,14 @@ func TestParseManifest(t *testing.T) {
 
 		// check results
 		assert.Nil(t, err)
-		assert.Equal(t, test.Output, result)
-		assert.Equal(t, result.Name, "PVDriver")
-		assert.Equal(t, result.Version, "1.0.0")
-		assert.Equal(t, result.Install, "AWSPVDriverSetup.msi /quiet /update")
-		assert.Equal(t, result.Uninstall, "AWSPVDriverSetup.msi /quiet /uninstall")
-		assert.Equal(t, result.Reboot, "true")
+		assert.Equal(t, test.Output.Name, result.Name)
+		assert.Equal(t, test.Output.Version, result.Version)
+		assert.Equal(t, test.Output.Install, result.Install)
+		assert.Equal(t, test.Output.Uninstall, result.Uninstall)
+		assert.Equal(t, test.Output.Launch, result.Launch)
+		assert.Equal(t, test.Output.Platform, result.Platform)
+		assert.Equal(t, test.Output.Architecture, result.Architecture)
+		assert.True(t, test.Output.Reboot == result.Reboot || (test.Output.Reboot == "" && result.Reboot == "false"))
 	}
 }
 
@@ -91,6 +102,21 @@ func TestParseManifestWithError(t *testing.T) {
 		// check results
 		assert.NotNil(t, err)
 		assert.Equal(t, test.Output, result)
+	}
+}
+
+//Test ParseManifest with manifest files that cannot be loaded or parsed
+func TestParseMalformedManifest(t *testing.T) {
+	log := log.NewMockLog()
+
+	// run tests
+	for _, manifestFile := range malformedManifests {
+		// call method
+		result, err := parseComponentManifest(log, string(manifestFile))
+
+		// check results
+		assert.NotNil(t, err)
+		assert.Nil(t, result)
 	}
 }
 

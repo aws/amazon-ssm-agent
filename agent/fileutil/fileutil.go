@@ -22,6 +22,8 @@ import (
 	"path/filepath"
 	"strings"
 
+	"io/ioutil"
+
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 )
 
@@ -179,4 +181,17 @@ func IsDirEmpty(location string) (bool, error) {
 		return true, nil
 	}
 	return false, err
+}
+
+// GetDirectories returns all directories under a give srcPath
+func GetDirectoryNames(srcPath string) (directories []string, err error) {
+	if files, err := ioutil.ReadDir(srcPath); err == nil {
+		directories = make([]string, 0)
+		for _, file := range files {
+			if file.Mode().IsDir() {
+				directories = append(directories, file.Name())
+			}
+		}
+	}
+	return
 }

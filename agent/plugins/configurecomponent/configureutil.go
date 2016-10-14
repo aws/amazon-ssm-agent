@@ -16,13 +16,21 @@
 package configurecomponent
 
 import (
+	"fmt"
 	"io/ioutil"
+	"net/url"
+	"path"
 	"path/filepath"
+	"regexp"
+	"strconv"
 	"strings"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	"github.com/aws/amazon-ssm-agent/agent/updateutil"
+	"github.com/aws/aws-sdk-go/aws"
+	"github.com/aws/aws-sdk-go/aws/session"
+	"github.com/aws/aws-sdk-go/service/s3"
 )
 
 const (
@@ -33,13 +41,15 @@ const (
 	ManifestNameFormat = "{ComponentName}.json"
 
 	// PackageNameFormat represents the package name format based
-	PackageNameFormat = "{ComponentName}-{Arch}.{Compressed}"
+	PackageNameFormat = "{ComponentName}.{Compressed}"
 
-	// PackageLocationFormat represents the package's s3 location
-	SourceFormat = "https://amazon-ssm-{Region}.s3.amazonaws.com/Components/{ComponentName}/{Platform}/{PackageVersion}/{FileName}"
+	// ComponentUrl represents the s3 location where all components live
+	// the url to a specific package is this plus /{ComponentName}/{Platform}/{Arch}/{PackageVersion}/{FileName}
+	//ComponentUrl = "https://amazon-ssm-{Region}.s3.amazonaws.com/Components"
+	ComponentUrl = "https://s3-us-west-2.amazonaws.com/amazon.mattfo" // TODO:MF:testing
 
-	// SourceFormatBjs represents the package's s3 location for BJS region
-	SourceFormatBjs = "https://s3.{Region}.amazonaws.com.cn/amazon-ssm-{Region}/Components/{ComponentName}/{Platform}/{PackageVersion}/{FileName}"
+	// ComponentUrlBjs is the s3 location for BJS region where all components live
+	ComponentUrlBjs = "https://s3.{Region}.amazonaws.com.cn/amazon-ssm-{Region}/Components"
 
 	// RegionBjs represents the BJS region
 	RegionBjs = "cn-north-1"
@@ -49,52 +59,76 @@ const (
 
 	// UninstallAction represents the json command to uninstall component
 	UninstallAction = "Uninstall"
+
+	// PatternVersion represents the regular expression for validating version
+	PatternVersion = "^(?:(\\d+)\\.)(?:(\\d+)\\.)(\\d+)$"
 )
 
 type Util interface {
 	CreateComponentFolder(name string, version string) (folder string, err error)
 	NeedUpdate(name string, requestedVersion string) (update bool)
-	HasVersion(name string) (version string, err error)
+	HasValidPackage(name string, version string) bool
+	GetCurrentVersion(name string) (installedVersion string)
+	GetLatestVersion(name string, source string, context *updateutil.InstanceContext) (latestVersion string, err error)
 }
 
 type Utility struct{}
 
-// createManifestName constructs the manifest name to locate in the s3 bucket
-func createManifestName(componentName string) (manifestName string) {
+// getManifestName constructs the manifest name to locate in the s3 bucket
+func getManifestName(componentName string) (manifestName string) {
 	manifestName = ManifestNameFormat
 	manifestName = strings.Replace(manifestName, ComponentNameHolder, componentName, -1)
 
 	return manifestName
 }
 
-// createPackageName constructs the package name to locate in the s3 bucket
-func createPackageName(componentName string, context *updateutil.InstanceContext) (packageName string) {
+// getPackageName constructs the package name to locate in the s3 bucket
+func getPackageName(componentName string, context *updateutil.InstanceContext) (packageName string) {
 	packageName = PackageNameFormat
 
 	packageName = strings.Replace(packageName, ComponentNameHolder, componentName, -1)
-	packageName = strings.Replace(packageName, updateutil.ArchHolder, context.Arch, -1)
 	packageName = strings.Replace(packageName, updateutil.CompressedHolder, context.CompressFormat, -1)
 
 	return packageName
 }
 
-// createPackageLocation constructs the s3 url to locate the package for downloading
-func createS3Location(componentName string, version string, context *updateutil.InstanceContext, fileName string) (s3Location string) {
+// TODO:MF: Should we change this to URL instead of string?  Can we use URI instead of URL?
+// getS3ComponentLocation returns the s3 location containing all versions of a component
+func getS3ComponentLocation(componentName string, context *updateutil.InstanceContext) (s3Location string) {
+	s3Url := getS3Url(componentName, context)
+	s3Location = s3Url.String()
+	return s3Location
+}
+
+// TODO:MF: Should we change this to URL instead of string?
+// getS3Location constructs the s3 url to locate the package for downloading
+func getS3Location(componentName string, version string, context *updateutil.InstanceContext, fileName string) (s3Location string) {
+	s3Url := getS3Url(componentName, context)
+	s3Url.Path = path.Join(s3Url.Path, version, fileName)
+
+	s3Location = s3Url.String()
+	return s3Location
+}
+
+// getS3Url returns the s3 location containing all versions of a component
+func getS3Url(componentName string, context *updateutil.InstanceContext) (s3Url *url.URL) {
 	// s3 uri format based on agreed convention
 	// TO DO: Implement region/endpoint map (or integrate with aws sdk endpoints package) to handle cases better
+	var s3Location string
 	if context.Region == RegionBjs {
-		s3Location = SourceFormatBjs
+		s3Location = ComponentUrlBjs
 	} else {
-		s3Location = SourceFormat
+		s3Location = ComponentUrl
 	}
 
-	s3Location = strings.Replace(s3Location, updateutil.RegionHolder, context.Region, -1)
-	s3Location = strings.Replace(s3Location, ComponentNameHolder, componentName, -1)
-	s3Location = strings.Replace(s3Location, updateutil.PlatformHolder, context.Platform, -1)
-	s3Location = strings.Replace(s3Location, updateutil.PackageVersionHolder, version, -1)
-	s3Location = strings.Replace(s3Location, updateutil.FileNameHolder, fileName, -1)
+	s3Url, _ = url.Parse(strings.Replace(s3Location, updateutil.RegionHolder, context.Region, -1))
+	s3Url.Path = path.Join(s3Url.Path, componentName, context.Platform, context.Arch)
+	return
+}
 
-	return s3Location
+// componentFolder returns the name of the component folder for a given version
+func getComponentFolder(name string, version string) (folder string) {
+	return filepath.Join(appconfig.ComponentRoot, name, version)
 }
 
 var mkDirAll = fileutil.MakeDirsWithExecuteAccess
@@ -103,7 +137,7 @@ var versionExists = fileutil.Exists
 
 // CreateComponentFolder constructs the local directory to place component
 func (util *Utility) CreateComponentFolder(name string, version string) (folder string, err error) {
-	folder = filepath.Join(appconfig.ComponentRoot, name, version)
+	folder = getComponentFolder(name, version)
 
 	if err = mkDirAll(folder); err != nil {
 		return "", err
@@ -135,12 +169,103 @@ func (util *Utility) NeedUpdate(name string, requestedVersion string) (update bo
 	return true
 }
 
-// HasVersion returns the currently installed version of the component
-func (util *Utility) HasVersion(name string) (version string, err error) {
-	componentDirectory := filepath.Join(appconfig.ComponentRoot, name)
-	file, err := ioutil.ReadDir(componentDirectory)
-	if err != nil {
-		return "", err
+// HasValidPackage determines if a given version of a component has a folder on disk that contains a valid package
+func (util *Utility) HasValidPackage(name string, version string) bool {
+	// folder exists, contains manifest, manifest is valid, and folder contains at least 1 other directory or file (assumed to be the unpacked package)
+	componentFolder := getComponentFolder(name, version)
+	manifestPath := filepath.Join(componentFolder, getManifestName(name))
+	if !fileutil.Exists(manifestPath) {
+		return false
 	}
-	return file[0].Name(), nil
+	if _, err := parseManifest(nil, manifestPath); err != nil {
+		return false
+	}
+	if files, _ := ioutil.ReadDir(componentFolder); len(files) <= 1 {
+		return false
+	}
+	return true
+}
+
+// getLatestVersion returns the latest version given a list of version strings (that match PatternVersion)
+func getLatestVersion(versions []string, except string) (version string) {
+	var latestVersion string = ""
+	var latestMajor, latestMinor, latestBuild = -1, -1, -1
+	for _, version := range versions {
+		if version == except {
+			continue
+		}
+		if major, minor, build, err := parseVersion(version); err == nil {
+			// TODO:MF: can we clean this logic up just a bit?
+			if major < latestMajor {
+				continue
+			} else if major == latestMajor && minor < latestMinor {
+				continue
+			} else if major == latestMajor && minor == latestMinor && build <= latestBuild {
+				continue
+			}
+			latestMajor = major
+			latestMinor = minor
+			latestBuild = build
+			latestVersion = version
+		}
+	}
+	return latestVersion
+}
+
+// getLatestS3Version finds the most recent version of a component in S3
+func getLatestS3Version(name string, context *updateutil.InstanceContext) (latestVersion string, err error) {
+	awsS3 := s3.New(session.New(), &aws.Config{Region: aws.String(context.Region)})
+	params := &s3.ListObjectsInput{
+		Bucket:    aws.String("amazon.mattfo"), //TODO:MF: what is the bucket name for our S3?
+		Prefix:    aws.String(filepath.Join(name, context.Platform, context.Arch)),
+		Delimiter: aws.String("/"),
+	}
+	response, errS3 := awsS3.ListObjects(params)
+	if errS3 != nil {
+		return "", fmt.Errorf("no versions available for %v for platform/architecture %v %v (%v)", name, context.Platform, context.Arch, errS3.Error())
+	}
+	folders := make([]string, 0)
+	for _, key := range response.Contents {
+		folders = append(folders, key.String())
+	}
+	return getLatestVersion(folders[:], ""), nil
+}
+
+// GetCurrentVersion finds the most recent installed version of a component
+func (util *Utility) GetCurrentVersion(name string) (installedVersion string) {
+	directories, err := fileutil.GetDirectoryNames(filepath.Join(appconfig.ComponentRoot, name))
+	if err != nil {
+		return ""
+	}
+	// TODO:MF determine the installing version (if there is one) and pass as second parameter
+	return getLatestVersion(directories[:], "")
+}
+
+// parseVersion returns the major, minor, and build parts of a valid version string and an error if the string is not valid
+func parseVersion(version string) (major int, minor int, build int, err error) {
+	if matched, err := regexp.MatchString(PatternVersion, version); matched == false || err != nil {
+		return 0, 0, 0, fmt.Errorf("invalid version string %v", version)
+	}
+	versionParts := strings.Split(version, ".")
+	if major, err = strconv.Atoi(versionParts[0]); err != nil {
+		return
+	}
+	if minor, err = strconv.Atoi(versionParts[1]); err != nil {
+		return
+	}
+	if build, err = strconv.Atoi(versionParts[2]); err != nil {
+		return
+	}
+	return
+}
+
+// TODO:MF: This is the first utility function that calls out to S3 or some URI - perhaps this is part of a different set of utilities
+// GetLatestVersion looks up the latest version of a given component for this platform/arch in S3 or manifest at source location
+func (util *Utility) GetLatestVersion(name string, source string, context *updateutil.InstanceContext) (latestVersion string, err error) {
+	if source != "" {
+		// TODO:MF: Copy manifest from source location, parse, and return version
+		return "1.0.0", nil
+	} else {
+		return getLatestS3Version(name, context)
+	}
 }

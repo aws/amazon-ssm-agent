@@ -1,0 +1,7 @@
+{
+  "name": "DaemonTest",
+  "platform": "Windows",
+  "architecture": "amd64",
+  "version": "1.0.0",
+  "launch": "bin/daemontest.exe -foo"
+}

@@ -1,7 +1,10 @@
 {
   "name": "",
+  "platform": "",
+  "architecture": "",
   "version": "",
   "install": "",
   "uninstall": "",
-  "reboot": ""
+  "reboot": "",
+  "launch": ""
 }
