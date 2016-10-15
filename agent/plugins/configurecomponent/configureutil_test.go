@@ -20,6 +20,7 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/updateutil"
 	"github.com/stretchr/testify/assert"
 )
@@ -48,7 +49,7 @@ func TestCreateS3Location(t *testing.T) {
 	context := createStubInstanceContext()
 	fileName := "PVDriver.zip"
 
-	packageLocation := fmt.Sprintf("%v/PVDriver/Windows/amd64/9000.0.0/PVDriver.zip", strings.Replace(ComponentUrl, updateutil.RegionHolder, "us-west-2", -1))
+	packageLocation := fmt.Sprintf("%v/PVDriver/windows/amd64/9000.0.0/PVDriver.zip", strings.Replace(ComponentUrl, updateutil.RegionHolder, "us-west-2", -1))
 	result := getS3Location(pluginInformation.Name, pluginInformation.Version, context, fileName)
 
 	assert.Equal(t, packageLocation, result)
@@ -59,7 +60,7 @@ func TestCreateS3Location_Bjs(t *testing.T) {
 	context := createStubInstanceContextBjs()
 	fileName := "PVDriver.zip"
 
-	packageLocation := "https://s3.cn-north-1.amazonaws.com.cn/amazon-ssm-cn-north-1/Components/PVDriver/Windows/amd64/9000.0.0/PVDriver.zip"
+	packageLocation := "https://s3.cn-north-1.amazonaws.com.cn/amazon-ssm-cn-north-1/Components/PVDriver/windows/amd64/9000.0.0/PVDriver.zip"
 	result := getS3Location(pluginInformation.Name, pluginInformation.Version, context, fileName)
 
 	assert.Equal(t, packageLocation, result)
@@ -209,7 +210,7 @@ func createStubInvalidPluginInput() *ConfigureComponentPluginInput {
 	input.Version = "7.2"
 	input.Name = ""
 	input.Action = "InvalidAction"
-	input.Source = "https://amazon-ssm-us-west-2.s3.amazonaws.com/Components/PVDriver/Windows/amd64/9000.0.0/PVDriver.zip"
+	input.Source = "https://amazon-ssm-us-west-2.s3.amazonaws.com/Components/PVDriver/windows/amd64/9000.0.0/PVDriver.zip"
 
 	return &input
 }
@@ -218,7 +219,7 @@ func createStubInstanceContext() *updateutil.InstanceContext {
 	context := updateutil.InstanceContext{}
 
 	context.Region = "us-west-2"
-	context.Platform = "Windows"
+	context.Platform = "windows"
 	context.PlatformVersion = "2015.9"
 	context.InstallerName = "Windows"
 	context.Arch = "amd64"
@@ -231,7 +232,7 @@ func createStubInstanceContextBjs() *updateutil.InstanceContext {
 	context := updateutil.InstanceContext{}
 
 	context.Region = "cn-north-1"
-	context.Platform = "Windows"
+	context.Platform = "windows"
 	context.PlatformVersion = "2015.9"
 	context.InstallerName = "Windows"
 	context.Arch = "amd64"
@@ -264,6 +265,6 @@ func (u *mockConfigureUtility) GetCurrentVersion(name string) (installedVersion 
 	return u.currentVersion
 }
 
-func (u *mockConfigureUtility) GetLatestVersion(name string, source string, context *updateutil.InstanceContext) (latestVersion string, err error) {
+func (u *mockConfigureUtility) GetLatestVersion(log log.T, name string, source string, context *updateutil.InstanceContext) (latestVersion string, err error) {
 	return u.latestVersion, u.getLatestVersionError
 }

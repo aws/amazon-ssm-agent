@@ -474,7 +474,7 @@ func TestValidateInput(t *testing.T) {
 	input.Version = "1.0.0"
 	input.Name = "PVDriver"
 	input.Action = "InvalidAction"
-	input.Source = "https://amazon-ssm-us-west-2.s3.amazonaws.com/Components/PVDriver/Windows/amd64/9000.0.0/PVDriver-amd64.zip"
+	input.Source = "https://amazon-ssm-us-west-2.s3.amazonaws.com/Components/PVDriver/windows/amd64/9000.0.0/PVDriver-amd64.zip"
 
 	manager := configureManager{}
 
@@ -491,7 +491,7 @@ func TestValidateInput_Name(t *testing.T) {
 	input.Version = "9000.0.0.0"
 	input.Name = ""
 	input.Action = "InvalidAction"
-	input.Source = "https://amazon-ssm-us-west-2.s3.amazonaws.com/Components/PVDriver/Windows/amd64/9000.0.0/PVDriver-amd64.zip"
+	input.Source = "https://amazon-ssm-us-west-2.s3.amazonaws.com/Components/PVDriver/windows/amd64/9000.0.0/PVDriver-amd64.zip"
 
 	manager := configureManager{}
 	result, err := manager.validateInput(&input)
@@ -508,7 +508,7 @@ func TestValidateInput_EmptyVersionWithInstall(t *testing.T) {
 	input.Version = ""
 	input.Name = "PVDriver"
 	input.Action = "Install"
-	input.Source = "https://amazon-ssm-us-west-2.s3.amazonaws.com/Components/PVDriver/Windows/amd64/9000.0.0/PVDriver-amd64.zip"
+	input.Source = "https://amazon-ssm-us-west-2.s3.amazonaws.com/Components/PVDriver/windows/amd64/9000.0.0/PVDriver-amd64.zip"
 
 	manager := configureManager{}
 	result, err := manager.validateInput(&input)
@@ -524,7 +524,7 @@ func TestValidateInput_EmptyVersionWithUninstall(t *testing.T) {
 	input.Version = ""
 	input.Name = "PVDriver"
 	input.Action = "Uninstall"
-	input.Source = "https://amazon-ssm-us-west-2.s3.amazonaws.com/Components/PVDriver/Windows/amd64/9000.0.0/PVDriver-amd64.zip"
+	input.Source = "https://amazon-ssm-us-west-2.s3.amazonaws.com/Components/PVDriver/windows/amd64/9000.0.0/PVDriver-amd64.zip"
 
 	manager := configureManager{}
 	result, err := manager.validateInput(&input)
@@ -665,7 +665,8 @@ func (m *mockConfigureManager) validateInput(input *ConfigureComponentPluginInpu
 }
 
 // TODO:MF: mock the dependencies this method has instead, maybe pull this out to a different "class"
-func (m *mockConfigureManager) getVersionToInstall(input *ConfigureComponentPluginInput,
+func (m *mockConfigureManager) getVersionToInstall(log log.T,
+	input *ConfigureComponentPluginInput,
 	util Util,
 	context *updateutil.InstanceContext) (version string, installedVersion string, err error) {
 
@@ -677,7 +678,8 @@ func (m *mockConfigureManager) getVersionToInstall(input *ConfigureComponentPlug
 	return version, m.installedVersion, m.downloadManifestError
 }
 
-func (m *mockConfigureManager) getVersionToUninstall(input *ConfigureComponentPluginInput,
+func (m *mockConfigureManager) getVersionToUninstall(log log.T,
+	input *ConfigureComponentPluginInput,
 	util Util,
 	context *updateutil.InstanceContext) (version string, err error) {
 

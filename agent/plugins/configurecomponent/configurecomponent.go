@@ -124,11 +124,13 @@ type pluginHelper interface {
 
 	validateInput(input *ConfigureComponentPluginInput) (valid bool, err error)
 
-	getVersionToInstall(input *ConfigureComponentPluginInput,
+	getVersionToInstall(log log.T,
+		input *ConfigureComponentPluginInput,
 		util Util,
 		context *updateutil.InstanceContext) (version string, installedVersion string, err error)
 
-	getVersionToUninstall(input *ConfigureComponentPluginInput,
+	getVersionToUninstall(log log.T,
+		input *ConfigureComponentPluginInput,
 		util Util,
 		context *updateutil.InstanceContext) (version string, err error)
 }
@@ -185,7 +187,7 @@ func runConfigureComponent(
 	switch input.Action {
 	case InstallAction:
 		// get version information
-		version, installedVersion, versionErr := manager.getVersionToInstall(&input, configureUtil, context)
+		version, installedVersion, versionErr := manager.getVersionToInstall(log, &input, configureUtil, context)
 		if versionErr != nil {
 			output.MarkAsFailed(log,
 				fmt.Errorf("unable to determine version to install: %v", versionErr))
@@ -195,7 +197,8 @@ func runConfigureComponent(
 		// if already installed, exit
 		if version == installedVersion {
 			// TODO:MF: validate that installed version is basically valid - has manifest and at least one other file/folder?
-			// TODO:MF: log info
+			log.Infof("Component: %v; Version: %v is already installed", input.Name, version)
+			output.MarkAsSucceeded(false)
 			return
 		}
 
@@ -272,7 +275,7 @@ func runConfigureComponent(
 
 	case UninstallAction:
 		// get version information
-		version, versionErr := manager.getVersionToUninstall(&input, configureUtil, context)
+		version, versionErr := manager.getVersionToUninstall(log, &input, configureUtil, context)
 		if versionErr != nil {
 			output.MarkAsFailed(log,
 				fmt.Errorf("unable to determine version to uninstall: %v", versionErr))
@@ -387,7 +390,8 @@ func (m *configureManager) validateInput(input *ConfigureComponentPluginInput) (
 }
 
 // getVersionToInstall decides which version to install and whether there is an existing version (that is not in the process of installing)
-func (m *configureManager) getVersionToInstall(input *ConfigureComponentPluginInput,
+func (m *configureManager) getVersionToInstall(log log.T,
+	input *ConfigureComponentPluginInput,
 	util Util,
 	context *updateutil.InstanceContext) (version string, installedVersion string, err error) {
 	installedVersion = util.GetCurrentVersion(input.Name)
@@ -395,7 +399,7 @@ func (m *configureManager) getVersionToInstall(input *ConfigureComponentPluginIn
 	if input.Version != "" {
 		version = input.Version
 	} else {
-		if version, err = util.GetLatestVersion(input.Name, input.Source, context); err != nil {
+		if version, err = util.GetLatestVersion(log, input.Name, input.Source, context); err != nil {
 			return
 		}
 	}
@@ -403,7 +407,8 @@ func (m *configureManager) getVersionToInstall(input *ConfigureComponentPluginIn
 }
 
 // getVersionToUninstall decides which version to uninstall
-func (m *configureManager) getVersionToUninstall(input *ConfigureComponentPluginInput,
+func (m *configureManager) getVersionToUninstall(log log.T,
+	input *ConfigureComponentPluginInput,
 	util Util,
 	context *updateutil.InstanceContext) (version string, err error) {
 	if input.Version != "" {
@@ -411,7 +416,7 @@ func (m *configureManager) getVersionToUninstall(input *ConfigureComponentPlugin
 	} else if installedVersion := util.GetCurrentVersion(input.Name); installedVersion != "" {
 		version = installedVersion
 	} else {
-		version, err = util.GetLatestVersion(input.Name, input.Source, context)
+		version, err = util.GetLatestVersion(log, input.Name, input.Source, context)
 	}
 	return
 }

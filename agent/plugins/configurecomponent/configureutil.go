@@ -18,6 +18,7 @@ package configurecomponent
 import (
 	"fmt"
 	"io/ioutil"
+	"net/http"
 	"net/url"
 	"path"
 	"path/filepath"
@@ -27,6 +28,8 @@ import (
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
+	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/s3util"
 	"github.com/aws/amazon-ssm-agent/agent/updateutil"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
@@ -69,7 +72,7 @@ type Util interface {
 	NeedUpdate(name string, requestedVersion string) (update bool)
 	HasValidPackage(name string, version string) bool
 	GetCurrentVersion(name string) (installedVersion string)
-	GetLatestVersion(name string, source string, context *updateutil.InstanceContext) (latestVersion string, err error)
+	GetLatestVersion(log log.T, name string, source string, context *updateutil.InstanceContext) (latestVersion string, err error)
 }
 
 type Utility struct{}
@@ -213,20 +216,42 @@ func getLatestVersion(versions []string, except string) (version string) {
 }
 
 // getLatestS3Version finds the most recent version of a component in S3
-func getLatestS3Version(name string, context *updateutil.InstanceContext) (latestVersion string, err error) {
-	awsS3 := s3.New(session.New(), &aws.Config{Region: aws.String(context.Region)})
+func getLatestS3Version(log log.T, name string, context *updateutil.InstanceContext) (latestVersion string, err error) {
+	//TODO:MF: factor out common elements between this and artifact.go into a shared library
+	amazonS3URL := s3util.ParseAmazonS3URL(log, getS3Url(name, context))
+
+	config := &aws.Config{}
+	var appConfig appconfig.SsmagentConfig
+	appConfig, errConfig := appconfig.Config(false)
+	if errConfig != nil {
+		// TODO:MF: is this a failure?  Or can this happen, particularly with onprem instances?
+	} else {
+		creds, err1 := appConfig.ProfileCredentials()
+		if err1 != nil {
+			config.Credentials = creds
+		}
+	}
+	config.S3ForcePathStyle = aws.Bool(amazonS3URL.IsPathStyle)
+	config.Region = aws.String(amazonS3URL.Region)
+	prefix := amazonS3URL.Key + "/"
 	params := &s3.ListObjectsInput{
-		Bucket:    aws.String("amazon.mattfo"), //TODO:MF: what is the bucket name for our S3?
-		Prefix:    aws.String(filepath.Join(name, context.Platform, context.Arch)),
+		Bucket:    aws.String(amazonS3URL.Bucket),
+		Prefix:    &prefix,
 		Delimiter: aws.String("/"),
 	}
-	response, errS3 := awsS3.ListObjects(params)
-	if errS3 != nil {
-		return "", fmt.Errorf("no versions available for %v for platform/architecture %v %v (%v)", name, context.Platform, context.Arch, errS3.Error())
+	s3client := s3.New(session.New(config))
+	req, resp := s3client.ListObjectsRequest(params)
+	err = req.Send()
+	if err != nil {
+		if req.HTTPResponse == nil || req.HTTPResponse.StatusCode != http.StatusNotModified {
+			return
+		}
+		return "", err
 	}
+	//TODO:MF: This works, but the string trimming required implies there should be some easier way to get this information
 	folders := make([]string, 0)
-	for _, key := range response.Contents {
-		folders = append(folders, key.String())
+	for _, key := range resp.CommonPrefixes {
+		folders = append(folders, strings.TrimRight(strings.Replace(*key.Prefix, prefix, "", -1), "/"))
 	}
 	return getLatestVersion(folders[:], ""), nil
 }
@@ -261,11 +286,11 @@ func parseVersion(version string) (major int, minor int, build int, err error) {
 
 // TODO:MF: This is the first utility function that calls out to S3 or some URI - perhaps this is part of a different set of utilities
 // GetLatestVersion looks up the latest version of a given component for this platform/arch in S3 or manifest at source location
-func (util *Utility) GetLatestVersion(name string, source string, context *updateutil.InstanceContext) (latestVersion string, err error) {
+func (util *Utility) GetLatestVersion(log log.T, name string, source string, context *updateutil.InstanceContext) (latestVersion string, err error) {
 	if source != "" {
 		// TODO:MF: Copy manifest from source location, parse, and return version
 		return "1.0.0", nil
 	} else {
-		return getLatestS3Version(name, context)
+		return getLatestS3Version(log, name, context)
 	}
 }
