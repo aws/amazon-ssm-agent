@@ -24,6 +24,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/sdkutil"
 	ssmsvc "github.com/aws/amazon-ssm-agent/agent/ssm"
+	"github.com/aws/amazon-ssm-agent/agent/times"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/service/ssm"
 	"github.com/twinj/uuid"
@@ -47,7 +48,10 @@ type T interface {
 		log log.T,
 		associationID string,
 		instanceID string,
-		executionResult *ssm.InstanceAssociationExecutionResult) (*ssm.UpdateInstanceAssociationStatusOutput, error)
+		status string,
+		errorCode string,
+		executionDate string,
+		executionSummary string) (*ssm.UpdateInstanceAssociationStatusOutput, error)
 }
 
 // AssociationService wraps the Ssm Service
@@ -116,9 +120,20 @@ func (s *AssociationService) UpdateInstanceAssociationStatus(
 	log log.T,
 	associationID string,
 	instanceID string,
-	executionResult *ssm.InstanceAssociationExecutionResult) (*ssm.UpdateInstanceAssociationStatusOutput, error) {
+	status string,
+	errorCode string,
+	executionDate string,
+	executionSummary string) (*ssm.UpdateInstanceAssociationStatusOutput, error) {
 
-	response, err := s.ssmSvc.UpdateInstanceAssociationStatus(log, associationID, instanceID, executionResult)
+	date := times.ParseIso8601UTC(executionDate)
+	executionResult := ssm.InstanceAssociationExecutionResult{
+		Status:           aws.String(status),
+		ErrorCode:        aws.String(errorCode),
+		ExecutionDate:    aws.Time(date),
+		ExecutionSummary: aws.String(executionSummary),
+	}
+
+	response, err := s.ssmSvc.UpdateInstanceAssociationStatus(log, associationID, instanceID, &executionResult)
 	if err != nil {
 		return nil, fmt.Errorf("unable to update association status %v", err)
 	}

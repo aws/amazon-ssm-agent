@@ -31,6 +31,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/reply"
 	stateModel "github.com/aws/amazon-ssm-agent/agent/statemanager/model"
 	"github.com/aws/amazon-ssm-agent/agent/task"
+	"github.com/aws/amazon-ssm-agent/agent/times"
 	"github.com/aws/aws-sdk-go/service/ssm"
 )
 
@@ -66,13 +67,14 @@ func (r *AssociationExecuter) ExecutePendingDocument(context context.T, pool tas
 	log := context.Log()
 	log.Debugf("Persist document and update association status to pending")
 
-	r.assocSvc.UpdateAssociationStatus(
+	r.assocSvc.UpdateInstanceAssociationStatus(
 		log,
 		docState.DocumentInformation.Destination,
 		docState.DocumentInformation.DocumentName,
 		ssm.AssociationStatusNamePending,
-		documentPendingMessage,
-		r.agentInfo)
+		"",
+		docState.DocumentInformation.CreatedDate,
+		documentPendingMessage)
 
 	bookkeepingSvc.MoveCommandState(log,
 		docState.DocumentInformation.CommandID,
@@ -136,6 +138,7 @@ func (r *AssociationExecuter) ExecuteInProgressDocument(context context.T, docSt
 			&docState.DocumentInformation,
 			docState.DocumentInformation.RuntimeStatus,
 			totalNumberOfActions,
+			"",
 			ssm.AssociationStatusNameFailed)
 
 	} else if docState.DocumentInformation.DocumentStatus == contracts.ResultStatusSuccess {
@@ -144,6 +147,7 @@ func (r *AssociationExecuter) ExecuteInProgressDocument(context context.T, docSt
 			&docState.DocumentInformation,
 			docState.DocumentInformation.RuntimeStatus,
 			totalNumberOfActions,
+			"",
 			ssm.AssociationStatusNameSuccess)
 	}
 
@@ -198,15 +202,16 @@ func (r *AssociationExecuter) pluginExecutionReport(
 	}
 
 	runtimeStatuses := reply.PrepareRuntimeStatuses(log, pluginOutputs)
-	// TODO: change the status to inProgress when new api is ready
-	message := buildOutput(runtimeStatuses, totalNumberOfPlugins)
-	r.assocSvc.UpdateAssociationStatus(
+	// TODO: change the time.now to the document create date
+	executionSummary := buildOutput(runtimeStatuses, totalNumberOfPlugins)
+	r.assocSvc.UpdateInstanceAssociationStatus(
 		log,
 		instanceID,
 		documentID,
-		ssm.AssociationStatusNamePending,
-		message,
-		r.agentInfo)
+		"InProgress",
+		"",
+		times.ToIso8601UTC(times.DefaultClock.Now()),
+		executionSummary)
 }
 
 // associationExecutionReport update the status for association
@@ -215,16 +220,18 @@ func (r *AssociationExecuter) associationExecutionReport(
 	docInfo *stateModel.DocumentInfo,
 	runtimeStatuses map[string]*contracts.PluginRuntimeStatus,
 	totalNumberOfPlugins int,
+	errorCode string,
 	associationStatus string) {
 
-	message := buildOutput(runtimeStatuses, totalNumberOfPlugins)
-	r.assocSvc.UpdateAssociationStatus(
+	executionSummary := buildOutput(runtimeStatuses, totalNumberOfPlugins)
+	r.assocSvc.UpdateInstanceAssociationStatus(
 		log,
 		docInfo.Destination,
 		docInfo.DocumentName,
 		associationStatus,
-		message,
-		r.agentInfo)
+		errorCode,
+		docInfo.CreatedDate,
+		executionSummary)
 }
 
 // buildOutput build the output message for association update

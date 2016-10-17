@@ -113,7 +113,7 @@ func newDocumentInfo(rawData *model.AssociationRawData, payload *messageContract
 	documentInfo.Destination = *(rawData.Association.InstanceId)
 	documentInfo.MessageID = fmt.Sprintf("aws.ssm.%v.%v", documentInfo.CommandID, documentInfo.Destination)
 	documentInfo.RunID = times.ToIsoDashUTC(times.DefaultClock.Now())
-	documentInfo.CreatedDate = rawData.CreateDate.String()
+	documentInfo.CreatedDate = times.ToIso8601UTC(rawData.CreateDate)
 	documentInfo.DocumentName = payload.DocumentName
 	documentInfo.IsCommand = false
 	documentInfo.DocumentStatus = contracts.ResultStatusInProgress

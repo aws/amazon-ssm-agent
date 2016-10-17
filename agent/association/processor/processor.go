@@ -121,6 +121,7 @@ func (p *Processor) ProcessAssociation() {
 		}
 		log.Debug("New association is ", jsonutil.Indent(assocContent))
 
+		//TODO: handle has executed for 1.0 and 1.2 documents
 		//if recorder.HasExecuted(instanceID, *assocName) {
 		//	log.Debugf("DocumentId %v hasn't changed. Skipping as it has been processed already.", *assocName)
 		//	return
@@ -132,7 +133,7 @@ func (p *Processor) ProcessAssociation() {
 		if err = p.assocSvc.LoadAssociationDetail(log, assoc); err != nil {
 			message := fmt.Sprintf("Unable to load association details, %v", err)
 			log.Error(message)
-			p.updateAssocStatus(assoc.Association, ssm.AssociationStatusNameFailed, message)
+			p.updateInstanceAssocStatus(assoc.Association, ssm.AssociationStatusNameFailed, "", times.ToIso8601UTC(time.Now()), message)
 			return
 		}
 	}
@@ -163,14 +164,14 @@ func (p *Processor) RunScheduledAssociation(log log.T) {
 	if docState, err = p.parseAssociation(scheduledAssociation); err != nil {
 		message := fmt.Sprintf("Unable to parse association, %v", err)
 		log.Error(message)
-		p.updateAssocStatus(scheduledAssociation.Association, ssm.AssociationStatusNameFailed, message)
+		p.updateInstanceAssocStatus(scheduledAssociation.Association, ssm.AssociationStatusNameFailed, "", times.ToIso8601UTC(time.Now()), message)
 		return
 	}
 
 	if err = p.persistAssociationForExecution(log, docState); err != nil {
 		message := fmt.Sprintf("Unable to submit association for exectution, %v", err)
 		log.Error(message)
-		p.updateAssocStatus(scheduledAssociation.Association, ssm.AssociationStatusNameFailed, message)
+		p.updateInstanceAssocStatus(scheduledAssociation.Association, ssm.AssociationStatusNameFailed, "", times.ToIso8601UTC(time.Now()), message)
 		return
 	}
 
@@ -278,17 +279,20 @@ func (p *Processor) persistAssociationForExecution(log log.T, docState *stateMod
 }
 
 // updateAssociationStatus provides wrapper for calling update association service
-func (p *Processor) updateAssocStatus(
+func (p *Processor) updateInstanceAssocStatus(
 	assoc *ssm.InstanceAssociationSummary,
 	status string,
+	errorCode string,
+	executionDate string,
 	message string) {
 	log := p.context.Log()
 
-	p.assocSvc.UpdateAssociationStatus(
+	p.assocSvc.UpdateInstanceAssociationStatus(
 		log,
 		*assoc.InstanceId,
 		*assoc.Name,
 		status,
-		message,
-		p.agentInfo)
+		errorCode,
+		executionDate,
+		message)
 }

@@ -156,7 +156,7 @@ func (svc *sdkService) UpdateInstanceAssociationStatus(log log.T, associationID 
 		sdkutil.HandleAwsError(log, err, ssmStopPolicy)
 		return
 	}
-	log.Debug("ListInstanceAssociations Response", response)
+	log.Debug("ListInstanceAssociations Response ", response)
 	return
 }
 

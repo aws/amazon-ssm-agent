@@ -118,7 +118,7 @@ func TestProcessAssociationUnableToLoadAssociationDetail(t *testing.T) {
 	processor := createProcessor()
 	svcMock := service.NewMockDefault()
 	assocRawData := createAssociationRawData()
-	output := ssm.UpdateAssociationStatusOutput{}
+	output := ssm.UpdateInstanceAssociationStatusOutput{}
 	parserMock := parserMock{}
 	sys = &systemStub{}
 
@@ -137,13 +137,11 @@ func TestProcessAssociationUnableToLoadAssociationDetail(t *testing.T) {
 		mock.AnythingOfType("*log.Mock"),
 		mock.AnythingOfType("*model.AssociationRawData")).Return(errors.New("unable to load detail"))
 	svcMock.On(
-		"UpdateAssociationStatus",
+		"UpdateInstanceAssociationStatus",
 		mock.AnythingOfType("*log.Mock"),
 		mock.AnythingOfType("string"),
 		mock.AnythingOfType("string"),
-		mock.AnythingOfType("string"),
-		mock.AnythingOfType("string"),
-		mock.AnythingOfType("*contracts.AgentInfo")).Return(&output, nil)
+		mock.AnythingOfType("*ssm.InstanceAssociationExecutionStatus")).Return(&output, nil)
 
 	// Act
 	processor.ProcessAssociation()
@@ -152,14 +150,14 @@ func TestProcessAssociationUnableToLoadAssociationDetail(t *testing.T) {
 	assert.True(t, svcMock.AssertNumberOfCalls(t, "CreateNewServiceIfUnHealthy", 1))
 	assert.True(t, svcMock.AssertNumberOfCalls(t, "ListInstanceAssociations", 1))
 	assert.True(t, svcMock.AssertNumberOfCalls(t, "LoadAssociationDetail", 1))
-	assert.True(t, svcMock.AssertNumberOfCalls(t, "UpdateAssociationStatus", 1))
+	assert.True(t, svcMock.AssertNumberOfCalls(t, "UpdateInstanceAssociationStatus", 1))
 }
 
 func TestProcessAssociationUnableToParseAssociation(t *testing.T) {
 	processor := createProcessor()
 	svcMock := service.NewMockDefault()
 	assocRawData := createAssociationRawData()
-	output := ssm.UpdateAssociationStatusOutput{}
+	output := ssm.UpdateInstanceAssociationStatusOutput{}
 	sys = &systemStub{}
 
 	payload := messageContracts.SendCommandPayload{}
@@ -186,10 +184,10 @@ func TestProcessAssociationUnableToParseAssociation(t *testing.T) {
 	assert.True(t, svcMock.AssertNumberOfCalls(t, "ListInstanceAssociations", 1))
 	assert.True(t, svcMock.AssertNumberOfCalls(t, "LoadAssociationDetail", 1))
 	assert.True(t, parserMock.AssertNumberOfCalls(t, "ParseDocumentWithParams", 1))
-	assert.True(t, svcMock.AssertNumberOfCalls(t, "UpdateAssociationStatus", 1))
+	assert.True(t, svcMock.AssertNumberOfCalls(t, "UpdateInstanceAssociationStatus", 1))
 }
 
-func mockService(svcMock *service.AssociationServiceMock, assocRawData []*model.AssociationRawData, output *ssm.UpdateAssociationStatusOutput) {
+func mockService(svcMock *service.AssociationServiceMock, assocRawData []*model.AssociationRawData, output *ssm.UpdateInstanceAssociationStatusOutput) {
 	svcMock.On("CreateNewServiceIfUnHealthy", mock.AnythingOfType("*log.Mock"))
 	svcMock.On(
 		"ListInstanceAssociations",
@@ -200,20 +198,18 @@ func mockService(svcMock *service.AssociationServiceMock, assocRawData []*model.
 		mock.AnythingOfType("*log.Mock"),
 		mock.AnythingOfType("*model.AssociationRawData")).Return(nil)
 	svcMock.On(
-		"UpdateAssociationStatus",
+		"UpdateInstanceAssociationStatus",
 		mock.AnythingOfType("*log.Mock"),
 		mock.AnythingOfType("string"),
 		mock.AnythingOfType("string"),
-		mock.AnythingOfType("string"),
-		mock.AnythingOfType("string"),
-		mock.AnythingOfType("*contracts.AgentInfo")).Return(output, nil)
+		mock.AnythingOfType("*ssm.InstanceAssociationExecutionStatus")).Return(output, nil)
 }
 
 func TestProcessAssociationUnableToExecutePendingDocument(t *testing.T) {
 	processor := createProcessor()
 	svcMock := service.NewMockDefault()
 	assocRawData := createAssociationRawData()
-	output := ssm.UpdateAssociationStatusOutput{}
+	output := ssm.UpdateInstanceAssociationStatusOutput{}
 	sys = &systemStub{}
 
 	payload := messageContracts.SendCommandPayload{}
@@ -248,7 +244,7 @@ func TestProcessAssociationUnableToExecutePendingDocument(t *testing.T) {
 	assert.True(t, svcMock.AssertNumberOfCalls(t, "LoadAssociationDetail", 1))
 	assert.True(t, parserMock.AssertNumberOfCalls(t, "ParseDocumentWithParams", 1))
 	assert.True(t, parserMock.AssertNumberOfCalls(t, "InitializeDocumentState", 1))
-	assert.True(t, svcMock.AssertNumberOfCalls(t, "UpdateAssociationStatus", 1))
+	assert.True(t, svcMock.AssertNumberOfCalls(t, "UpdateInstanceAssociationStatus", 1))
 	assert.True(t, executerMock.AssertNumberOfCalls(t, "ExecutePendingDocument", 1))
 }
 
@@ -268,7 +264,7 @@ func TestProcessAssociationSuccessful(t *testing.T) {
 	processor := createProcessor()
 	svcMock := service.NewMockDefault()
 	assocRawData := createAssociationRawData()
-	output := ssm.UpdateAssociationStatusOutput{}
+	output := ssm.UpdateInstanceAssociationStatusOutput{}
 	sys = &systemStub{}
 
 	payload := messageContracts.SendCommandPayload{}
@@ -303,7 +299,7 @@ func TestProcessAssociationSuccessful(t *testing.T) {
 	assert.True(t, svcMock.AssertNumberOfCalls(t, "LoadAssociationDetail", 1))
 	assert.True(t, parserMock.AssertNumberOfCalls(t, "ParseDocumentWithParams", 1))
 	assert.True(t, parserMock.AssertNumberOfCalls(t, "InitializeDocumentState", 1))
-	assert.True(t, svcMock.AssertNumberOfCalls(t, "UpdateAssociationStatus", 0))
+	assert.True(t, svcMock.AssertNumberOfCalls(t, "UpdateInstanceAssociationStatus", 0))
 	assert.True(t, executerMock.AssertNumberOfCalls(t, "ExecutePendingDocument", 1))
 }
 
