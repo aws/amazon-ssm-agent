@@ -13,6 +13,7 @@
 
 // +build integration
 
+// Package executers contains general purpose (shell) command executing objects.
 package executers
 
 import (
@@ -22,6 +23,7 @@ import (
 	"io/ioutil"
 	"os/exec"
 	"path/filepath"
+	"regexp"
 	"testing"
 	"time"
 
@@ -48,6 +50,13 @@ type TestCase struct {
 	Commands         []string
 	ExpectedStdout   string
 	ExpectedStderr   string
+	ExpectedExitCode int
+}
+
+type TestCaseRegexp struct {
+	Commands         []string
+	PatternStdout    string
+	PatternStderr    string
 	ExpectedExitCode int
 }
 
@@ -112,6 +121,23 @@ var ShellCommandExecuterCancelTestCases = []TestCase{
 	},
 }
 
+var EnvVariableTestCases = []TestCaseRegexp{
+	// instance id environment variable is set
+	{
+		Commands:         []string{"sh", "-c", fmt.Sprintf("echo $%v", envVarInstanceId)},
+		PatternStdout:    ".+", // not an empty string
+		PatternStderr:    "",
+		ExpectedExitCode: successExitCode,
+	},
+	// region name environment variable is set
+	{
+		Commands:         []string{"sh", "-c", fmt.Sprintf("echo $%v", envVarRegionName)},
+		PatternStdout:    ".+", // not an empty string
+		PatternStderr:    "",
+		ExpectedExitCode: successExitCode,
+	},
+}
+
 var logger = log.NewMockLog()
 
 // TestRunCommand tests that RunCommand (in memory call, no local script or output files) works correctly.
@@ -124,6 +150,10 @@ func TestRunCommand(t *testing.T) {
 
 // TestRunCommand_cancel tests that RunCommand (in memory call, no local script or output files) is canceled correctly.
 func TestRunCommand_cancel(t *testing.T) {
+	instanceTemp := instance
+	instance = &instanceInfoStub{instanceID: testInstanceId, regionName: testRegionName}
+	defer func() { instance = instanceTemp }()
+
 	for _, testCase := range RunCommandCancelTestCases {
 		runCommandInvoker, cancelFlag := prepareTestRunCommand(t)
 		testCommandInvokerCancel(t, runCommandInvoker, cancelFlag, testCase)
@@ -145,6 +175,10 @@ func TestShellCommandExecuter(t *testing.T) {
 
 // TestShellCommandExecuter_cancel tests that ShellCommandExecuter (creates local script, redirects outputs to files) is canceled correctly
 func TestShellCommandExecuter_cancel(t *testing.T) {
+	instanceTemp := instance
+	instance = &instanceInfoStub{instanceID: testInstanceId, regionName: testRegionName}
+	defer func() { instance = instanceTemp }()
+
 	runTest := func(testCase TestCase) {
 		orchestrationDir, shCommandExecuterInvoker, cancelFlag := prepareTestShellCommandExecuter(t)
 		defer pluginutil.DeleteDirectory(logger, orchestrationDir)
@@ -156,6 +190,18 @@ func TestShellCommandExecuter_cancel(t *testing.T) {
 	}
 }
 
+// TestEnvVariable tests that RunCommand (in memory call, no local script or output files) has access to environment variables we set.
+func TestEnvVariable(t *testing.T) {
+	instanceTemp := instance
+	instance = &instanceInfoStub{instanceID: testInstanceId, regionName: testRegionName}
+	defer func() { instance = instanceTemp }()
+
+	for _, testCase := range EnvVariableTestCases {
+		runCommandInvoker, _ := prepareTestRunCommand(t)
+		testCommandInvokerRegexp(t, runCommandInvoker, testCase)
+	}
+}
+
 func testCommandInvoker(t *testing.T, invoke CommandInvoker, testCase TestCase) {
 	logger.Infof("testCommandInvoker")
 	stdout, stderr, exitCode, errs := invoke(testCase.Commands)
@@ -164,6 +210,17 @@ func testCommandInvoker(t *testing.T, invoke CommandInvoker, testCase TestCase) 
 	assert.Equal(t, 0, len(errs))
 	assertReaderEquals(t, testCase.ExpectedStdout, stdout)
 	assertReaderEquals(t, testCase.ExpectedStderr, stderr)
+	assert.Equal(t, exitCode, testCase.ExpectedExitCode)
+}
+
+func testCommandInvokerRegexp(t *testing.T, invoke CommandInvoker, testCase TestCaseRegexp) {
+	logger.Infof("testCommandInvokerRegexp")
+	stdout, stderr, exitCode, errs := invoke(testCase.Commands)
+	logger.Infof("errors %v", errs)
+
+	assert.Equal(t, 0, len(errs))
+	assertReaderRegexpMatch(t, testCase.PatternStdout, stdout)
+	assertReaderRegexpMatch(t, testCase.PatternStderr, stderr)
 	assert.Equal(t, exitCode, testCase.ExpectedExitCode)
 }
 
@@ -264,6 +321,15 @@ func assertReaderEquals(t *testing.T, expected string, reader io.Reader) {
 	actual, err := ioutil.ReadAll(reader)
 	assert.Nil(t, err)
 	assert.Equal(t, expected, string(actual))
+}
+
+// assertReaderRegexpMatch is a convenience method that reads everything from a Reader and matches against a regexp pattern.
+func assertReaderRegexpMatch(t *testing.T, pattern string, reader io.Reader) {
+	actual, err := ioutil.ReadAll(reader)
+	assert.Nil(t, err)
+	isMatch, err := regexp.MatchString(pattern, string(actual))
+	assert.Nil(t, err)
+	assert.True(t, isMatch, fmt.Sprintf("actual {%v}", string(actual)))
 }
 
 // TestCreateScriptFile tests that CreateScriptFile correctly returns error (to avoid shadowing bug).
