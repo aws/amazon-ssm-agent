@@ -41,6 +41,7 @@ func TestListAssociations(t *testing.T) {
 	}
 
 	associationName := "test"
+	documentContent := "document content"
 	association := ssm.InstanceAssociationSummary{
 		Name: &associationName,
 	}
@@ -49,7 +50,8 @@ func TestListAssociations(t *testing.T) {
 		Associations: []*ssm.InstanceAssociationSummary{&association},
 	}
 	getDocumentOutput := ssm.GetDocumentOutput{
-		Name: &associationName,
+		Name:    &associationName,
+		Content: &documentContent,
 	}
 
 	ssmMock.On("ListInstanceAssociations", mock.AnythingOfType("*log.Mock"), mock.AnythingOfType("string")).Return(&output, nil)
@@ -68,12 +70,15 @@ func TestLoadAssociationDetails(t *testing.T) {
 
 	associationName := "test"
 	documentContent := "document content"
+	associationId := "asso-Id-test"
 	assocRawData := model.AssociationRawData{}
 	assocRawData.Association = &ssm.InstanceAssociationSummary{}
 	assocRawData.Association.Name = &associationName
+	assocRawData.Association.AssociationId = &associationId
 	assocRawData.Association.InstanceId = &instanceID
 
 	getDocumentOutput := ssm.GetDocumentOutput{
+		Name:    &associationName,
 		Content: &documentContent,
 	}
 

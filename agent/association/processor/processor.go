@@ -19,6 +19,7 @@ import (
 	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
+	"github.com/aws/amazon-ssm-agent/agent/association/cache"
 	"github.com/aws/amazon-ssm-agent/agent/association/executer"
 	"github.com/aws/amazon-ssm-agent/agent/association/model"
 	"github.com/aws/amazon-ssm-agent/agent/association/recorder"
@@ -114,6 +115,12 @@ func (p *Processor) ProcessAssociation() {
 		return
 	}
 
+	// update the cache first
+	for _, assoc := range associations {
+		cache.ValidateCache(assoc)
+	}
+
+	// read from cache or load association details from service
 	for _, assoc := range associations {
 		var assocContent string
 		if assocContent, err = jsonutil.Marshal(assoc); err != nil {

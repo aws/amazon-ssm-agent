@@ -18,6 +18,7 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/aws/amazon-ssm-agent/agent/association/cache"
 	"github.com/aws/amazon-ssm-agent/agent/association/model"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
@@ -150,6 +151,17 @@ func (s *AssociationService) UpdateInstanceAssociationStatus(
 
 // LoadAssociationDetail loads document contents and parameters for the given association
 func (s *AssociationService) LoadAssociationDetail(log log.T, assoc *model.AssociationRawData) error {
+	associationCache := cache.GetCache()
+	associationID := assoc.Association.AssociationId
+
+	// check if the association details have been cached
+	if associationCache.IsCached(*associationID) {
+		rawData := associationCache.Get(*associationID)
+		assoc.Document = rawData.Document
+		return nil
+	}
+
+	// if not cached before
 	var (
 		documentResponse *ssm.GetDocumentOutput
 		err              error
@@ -162,6 +174,11 @@ func (s *AssociationService) LoadAssociationDetail(log log.T, assoc *model.Assoc
 	}
 
 	assoc.Document = documentResponse.Content
+
+	if err = associationCache.Add(*associationID, assoc); err != nil {
+		return err
+	}
+
 	return nil
 }
 
