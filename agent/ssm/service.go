@@ -41,7 +41,7 @@ type Service interface {
 		log log.T,
 		associationID string,
 		instanceID string,
-		executionResult *ssm.InstanceAssociationExecutionStatus) (response *ssm.UpdateInstanceAssociationStatusOutput, err error)
+		executionResult *ssm.InstanceAssociationExecutionResult) (response *ssm.UpdateInstanceAssociationStatusOutput, err error)
 	SendCommand(log log.T,
 		documentName string,
 		instanceIDs []string,
@@ -144,7 +144,7 @@ func (svc *sdkService) ListInstanceAssociations(log log.T, instanceID string, ne
 }
 
 //UpdateInstanceAssociationStatus calls the ListAssociations SSM API.
-func (svc *sdkService) UpdateInstanceAssociationStatus(log log.T, associationID string, instanceID string, executionResult *ssm.InstanceAssociationExecutionStatus) (response *ssm.UpdateInstanceAssociationStatusOutput, err error) {
+func (svc *sdkService) UpdateInstanceAssociationStatus(log log.T, associationID string, instanceID string, executionResult *ssm.InstanceAssociationExecutionResult) (response *ssm.UpdateInstanceAssociationStatusOutput, err error) {
 	params := ssm.UpdateInstanceAssociationStatusInput{
 		InstanceId:      &instanceID,
 		AssociationId:   &associationID,

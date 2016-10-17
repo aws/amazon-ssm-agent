@@ -54,7 +54,7 @@ func (m *AssociationServiceMock) UpdateInstanceAssociationStatus(
 	log log.T,
 	associationID string,
 	instanceID string,
-	executionResult *ssm.InstanceAssociationExecutionStatus) (*ssm.UpdateInstanceAssociationStatusOutput, error) {
+	executionResult *ssm.InstanceAssociationExecutionResult) (*ssm.UpdateInstanceAssociationStatusOutput, error) {
 	args := m.Called(log, associationID, instanceID, executionResult)
 	return args.Get(0).(*ssm.UpdateInstanceAssociationStatusOutput), args.Error(1)
 }

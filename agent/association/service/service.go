@@ -47,7 +47,7 @@ type T interface {
 		log log.T,
 		associationID string,
 		instanceID string,
-		executionResult *ssm.InstanceAssociationExecutionStatus) (*ssm.UpdateInstanceAssociationStatusOutput, error)
+		executionResult *ssm.InstanceAssociationExecutionResult) (*ssm.UpdateInstanceAssociationStatusOutput, error)
 }
 
 // AssociationService wraps the Ssm Service
@@ -116,7 +116,7 @@ func (s *AssociationService) UpdateInstanceAssociationStatus(
 	log log.T,
 	associationID string,
 	instanceID string,
-	executionResult *ssm.InstanceAssociationExecutionStatus) (*ssm.UpdateInstanceAssociationStatusOutput, error) {
+	executionResult *ssm.InstanceAssociationExecutionResult) (*ssm.UpdateInstanceAssociationStatusOutput, error) {
 
 	response, err := s.ssmSvc.UpdateInstanceAssociationStatus(log, associationID, instanceID, executionResult)
 	if err != nil {
