@@ -197,7 +197,7 @@ func runConfigureComponent(
 		// if already installed, exit
 		if version == installedVersion {
 			// TODO:MF: validate that installed version is basically valid - has manifest and at least one other file/folder?
-			log.Infof("Component: %v; Version: %v is already installed", input.Name, version)
+			output.AppendInfo(log, "%v %v is already installed", input.Name, version)
 			output.MarkAsSucceeded(false)
 			return
 		}
