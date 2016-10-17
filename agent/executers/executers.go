@@ -23,10 +23,18 @@ import (
 	"syscall"
 	"time"
 
+	"fmt"
+
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/pluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/task"
+)
+
+const (
+	// envVar* constants are names of environment variables set for processes executed by ssm agent and should start with AWS_SSM_
+	envVarInstanceId = "AWS_SSM_INSTANCE_ID"
+	envVarRegionName = "AWS_SSM_REGION_NAME"
 )
 
 // T is the interface type for ShellCommandExecuter.
@@ -255,6 +263,9 @@ func RunCommand(log log.T,
 	// configure OS-specific process settings
 	prepareProcess(command)
 
+	// configure environment variables
+	prepareEnvironment(command)
+
 	log.Debug()
 	log.Debugf("Running in directory %v, command: %v %v.", workingDir, commandName, commandArguments)
 	log.Debug()
@@ -333,6 +344,9 @@ func StartCommand(log log.T,
 
 	// configure OS-specific process settings
 	prepareProcess(command)
+
+	// configure environment variables
+	//prepareEnvironment(command)
 
 	log.Debug()
 	log.Debugf("Running in directory %v, command: %v %v.", workingDir, commandName, commandArguments)
@@ -430,4 +444,21 @@ func killProcessOnTimeout(log log.T, command *exec.Cmd, timer *time.Timer) {
 	}
 
 	log.Debug("Process stopped successfully")
+}
+
+// prepareEnvironment adds ssm agent standard environment variables to the command
+func prepareEnvironment(command *exec.Cmd) {
+	env := os.Environ()
+	if instance, err := instance.InstanceID(); err == nil {
+		env = append(env, fmtEnvVariable(envVarInstanceId, instance))
+	}
+	if region, err := instance.Region(); err == nil {
+		env = append(env, fmtEnvVariable(envVarRegionName, region))
+	}
+	command.Env = env
+}
+
+// fmtEnvVariable creates the string to append to the current set of environment variables.
+func fmtEnvVariable(name string, val string) string {
+	return fmt.Sprintf("%s=%s", name, val)
 }
