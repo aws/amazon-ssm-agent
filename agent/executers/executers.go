@@ -346,7 +346,7 @@ func StartCommand(log log.T,
 	prepareProcess(command)
 
 	// configure environment variables
-	//prepareEnvironment(command)
+	prepareEnvironment(command)
 
 	log.Debug()
 	log.Debugf("Running in directory %v, command: %v %v.", workingDir, commandName, commandArguments)
