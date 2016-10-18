@@ -33,29 +33,17 @@ const (
 
 type instanceInfoStub struct {
 	instanceID      string
-	instanceIDError string
+	instanceIDError error
 	regionName      string
-	regionNameError string
+	regionNameError error
 }
 
 func (m *instanceInfoStub) InstanceID() (string, error) {
-	var err error
-	if m.instanceIDError == "" {
-		err = nil
-	} else {
-		err = errors.New(m.instanceIDError)
-	}
-	return m.instanceID, err
+	return m.instanceID, m.instanceIDError
 }
 
 func (m *instanceInfoStub) Region() (string, error) {
-	var err error
-	if m.regionNameError == "" {
-		err = nil
-	} else {
-		err = errors.New(m.regionNameError)
-	}
-	return m.regionName, err
+	return m.regionName, m.regionNameError
 }
 
 // Return the value of a named environment variable from a list of environment variable
@@ -92,7 +80,7 @@ func TestEnvironmentVariables_All(t *testing.T) {
 
 func TestEnvironmentVariables_None(t *testing.T) {
 	instanceTemp := instance
-	instance = &instanceInfoStub{"", testError, "", testError}
+	instance = &instanceInfoStub{"", errors.New(testError), "", errors.New(testError)}
 	defer func() { instance = instanceTemp }()
 
 	command := getTestCommand(t)
