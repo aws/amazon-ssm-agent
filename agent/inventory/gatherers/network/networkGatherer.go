@@ -15,8 +15,6 @@
 package network
 
 import (
-	"encoding/json"
-	"net"
 	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/context"
@@ -30,106 +28,6 @@ const (
 	// SchemaVersionOfApplication represents schema version of network gatherer
 	SchemaVersionOfApplication = "1.0"
 )
-
-// setNetworkData sets network data using the given interface
-func setNetworkData(context context.T, networkInterface net.Interface) model.NetworkData {
-	var addresses []net.Addr
-	var err error
-
-	log := context.Log()
-	var networkData = model.NetworkData{}
-
-	networkData.Name = networkInterface.Name
-	networkData.MacAddress = networkInterface.HardwareAddr.String()
-
-	//getting addresses associated with network interface
-	if addresses, err = networkInterface.Addrs(); err != nil {
-		log.Infof("Can't find address associated with %v", networkInterface.Name)
-	} else {
-		//TODO: current implementation is tied to inventory model where IPaddress is a string
-		//if there are multiple ip addresses attached to an interface - we would overwrite the
-		//ipaddresses. This behavior might be changed.
-		for _, addr := range addresses {
-			var ip net.IP
-
-			switch v := addr.(type) {
-			case *net.IPAddr:
-				ip = v.IP
-			case *net.IPNet:
-				ip = v.IP
-			}
-
-			//To4 - return nil if address is not IPV4 address
-			//we leverage this to determine if address is IPV4 or IPV6
-			v4 := ip.To4()
-
-			if len(v4) == 0 {
-				networkData.IPV6 = ip.To16().String()
-			} else {
-				networkData.IPV4 = v4.String()
-			}
-		}
-	}
-
-	return networkData
-}
-
-// GetBasicNetworkData gathers basic network data using go libraries - https://golang.org/pkg/net/
-func GetBasicNetworkData(context context.T) (data []model.NetworkData) {
-	var interfaces []net.Interface
-	var err error
-
-	log := context.Log()
-
-	log.Info("Detecting all network interfaces")
-
-	interfaces, err = net.Interfaces()
-
-	if err != nil {
-		log.Infof("Unable to get network interface information")
-		return
-	}
-
-	for _, i := range interfaces {
-		var networkData model.NetworkData
-
-		if i.Flags&net.FlagLoopback != 0 {
-			log.Infof("Ignoring loopback interface")
-			continue
-		}
-
-		networkData = setNetworkData(context, i)
-
-		dataB, _ := json.Marshal(networkData)
-
-		log.Debugf("Detected interface %v - %v", networkData.Name, string(dataB))
-		data = append(data, networkData)
-	}
-
-	return
-}
-
-// CollectNetworkData collects network information
-func CollectNetworkData(context context.T) (data []model.NetworkData) {
-
-	var dataB []byte
-	log := context.Log()
-
-	data = GetBasicNetworkData(context)
-
-	dataB, _ = json.Marshal(data)
-	log.Debugf("Basic set of network Data collected - %v", string(dataB))
-
-	// get advanced network info only if we have some basic info
-	if len(data) > 0 {
-		data = GetAdvancedNetworkData(context, data)
-	}
-
-	dataB, _ = json.Marshal(data)
-	log.Debugf("Network Data collected- %v", string(dataB))
-
-	return
-}
 
 // T represents network gatherer which implements all contracts for gatherers.
 type T struct{}
