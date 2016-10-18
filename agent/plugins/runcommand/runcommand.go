@@ -80,7 +80,7 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 	var properties []interface{}
 	if properties, res = pluginutil.LoadParametersAsList(log, config.Properties); res.Code != 0 {
 
-		pluginutil.PersistPluginInformationToCurrent(log, Name(), config, res)
+		pluginutil.PersistPluginInformationToCurrent(log, config.PluginID, config, res)
 		return res
 	}
 
@@ -115,9 +115,11 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 		res.Code = out[0].ExitCode
 		res.Status = out[0].Status
 		res.Output = out[0].String()
+		res.StandardOutput = contracts.TruncateOutput(out[0].Stdout, "", 24000)
+		res.StandardError = contracts.TruncateOutput(out[0].Stderr, "", 8000)
 	}
 
-	pluginutil.PersistPluginInformationToCurrent(log, Name(), config, res)
+	pluginutil.PersistPluginInformationToCurrent(log, config.PluginID, config, res)
 
 	return res
 }
@@ -153,7 +155,7 @@ func (p *Plugin) runCommands(log log.T, pluginInput RunCommandPluginInput, orche
 		orchestrationDirectory = tempDir
 	}
 
-	orchestrationDir := filepath.Join(orchestrationDirectory, fileutil.RemoveInvalidChars(pluginInput.ID))
+	orchestrationDir := fileutil.BuildPath(orchestrationDirectory, pluginInput.ID)
 	log.Debugf("Running commands %v in workingDirectory %v; orchestrationDir %v ", pluginInput.RunCommand, pluginInput.WorkingDirectory, orchestrationDir)
 
 	// create orchestration dir if needed

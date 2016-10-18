@@ -110,7 +110,7 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 	var properties []interface{}
 	if properties, res = pluginutil.LoadParametersAsList(log, config.Properties); res.Code != 0 {
 
-		pluginutil.PersistPluginInformationToCurrent(log, Name(), config, res)
+		pluginutil.PersistPluginInformationToCurrent(log, config.PluginID, config, res)
 		return res
 	}
 
@@ -129,14 +129,14 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 		if cancelFlag.ShutDown() {
 			res.Code = 1
 			res.Status = contracts.ResultStatusFailed
-			pluginutil.PersistPluginInformationToCurrent(log, Name(), config, res)
+			pluginutil.PersistPluginInformationToCurrent(log, config.PluginID, config, res)
 			return
 		}
 
 		if cancelFlag.Canceled() {
 			res.Code = 1
 			res.Status = contracts.ResultStatusCancelled
-			pluginutil.PersistPluginInformationToCurrent(log, Name(), config, res)
+			pluginutil.PersistPluginInformationToCurrent(log, config.PluginID, config, res)
 			return
 		}
 
@@ -179,7 +179,7 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 	}
 
 	res.Output = finalOut.String()
-	pluginutil.PersistPluginInformationToCurrent(log, Name(), config, res)
+	pluginutil.PersistPluginInformationToCurrent(log, config.PluginID, config, res)
 
 	return res
 }
@@ -214,7 +214,7 @@ func (p *Plugin) runCommands(log log.T, pluginInput ApplicationPluginInput, orch
 		orchestrationDirectory = tempDir
 	}
 
-	orchestrationDir := fileutil.RemoveInvalidChars(filepath.Join(orchestrationDirectory, pluginInput.ID))
+	orchestrationDir := fileutil.BuildPath(orchestrationDirectory, pluginInput.ID)
 	log.Debugf("OrchestrationDir %v ", orchestrationDir)
 
 	// create orchestration dir if needed

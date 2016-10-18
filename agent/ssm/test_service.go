@@ -38,6 +38,32 @@ func (m *Mock) ListAssociations(log log.T, instanceID string) (response *ssm.Lis
 	return args.Get(0).(*ssm.ListAssociationsOutput), args.Error(1)
 }
 
+// ListInstanceAssociations mocks the ListInstanceAssociations function.
+func (m *Mock) ListInstanceAssociations(log log.T, instanceID string, nextToken *string) (response *ssm.ListInstanceAssociationsOutput, err error) {
+	args := m.Called(log, instanceID)
+	return args.Get(0).(*ssm.ListInstanceAssociationsOutput), args.Error(1)
+}
+
+// UpdateAssociationStatus mocks the UpdateAssociationStatus function.
+func (m *Mock) UpdateAssociationStatus(
+	log log.T,
+	instanceID string,
+	name string,
+	associationStatus *ssm.AssociationStatus) (response *ssm.UpdateAssociationStatusOutput, err error) {
+	args := m.Called(log, instanceID, name, associationStatus)
+	return args.Get(0).(*ssm.UpdateAssociationStatusOutput), args.Error(1)
+}
+
+// UpdateInstanceAssociationStatus mocks the UpdateAssociationStatus function.
+func (m *Mock) UpdateInstanceAssociationStatus(
+	log log.T,
+	associationID string,
+	instanceID string,
+	executionResult *ssm.InstanceAssociationExecutionResult) (response *ssm.UpdateInstanceAssociationStatusOutput, err error) {
+	args := m.Called(log, associationID, instanceID, executionResult)
+	return args.Get(0).(*ssm.UpdateInstanceAssociationStatusOutput), args.Error(1)
+}
+
 // SendCommand mocks the SendCommand function.
 func (m *Mock) SendCommand(log log.T,
 	documentName string,
@@ -75,10 +101,22 @@ func (m *Mock) CreateDocument(log log.T, docName string, docContent string) (res
 	return args.Get(0).(*ssm.CreateDocumentOutput), args.Error(1)
 }
 
+// GetDocument mocks the GetDocument function.
+func (m *Mock) GetDocument(log log.T, docName string) (response *ssm.GetDocumentOutput, err error) {
+	args := m.Called(log, docName)
+	return args.Get(0).(*ssm.GetDocumentOutput), args.Error(1)
+}
+
 // DeleteDocument mocks the DeleteDocument function.
 func (m *Mock) DeleteDocument(log log.T, instanceID string) (response *ssm.DeleteDocumentOutput, err error) {
 	args := m.Called(log, instanceID)
 	return args.Get(0).(*ssm.DeleteDocumentOutput), args.Error(1)
+}
+
+// DescribeAssociation mocks the DescribeAssociation function.
+func (m *Mock) DescribeAssociation(log log.T, instanceID string, docName string) (response *ssm.DescribeAssociationOutput, err error) {
+	args := m.Called(log, instanceID, docName)
+	return args.Get(0).(*ssm.DescribeAssociationOutput), args.Error(1)
 }
 
 // UpdateInstanceInformation mocks the UpdateInstanceInformation function.

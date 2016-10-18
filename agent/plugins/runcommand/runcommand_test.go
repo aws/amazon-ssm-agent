@@ -193,12 +193,17 @@ func testExecute(t *testing.T, testCase TestCase) {
 				OutputS3KeyPrefix:      s3KeyPrefix,
 				OrchestrationDirectory: orchestrationDirectory,
 				BookKeepingFileName:    commandID,
+				PluginID:               "aws:runCommand1",
 			}, mockCancelFlag)
 
 		// assert output is correct (mocked object expectations are tested automatically by testExecution)
 		assert.NotNil(t, res.StartDateTime)
 		assert.NotNil(t, res.EndDateTime)
 		assert.Equal(t, correctOutputs, res.Output)
+		assert.NotNil(t, res.StandardError)
+		assert.Equal(t, testCase.Output.Stderr, res.StandardError)
+		assert.NotNil(t, res.StandardOutput)
+		assert.Equal(t, testCase.Output.Stdout, res.StandardOutput)
 
 		// assert that the flag is checked after every set of commands
 		mockCancelFlag.AssertNumberOfCalls(t, "Canceled", 1)
@@ -238,7 +243,7 @@ func testExecution(t *testing.T, commandtester CommandTester) {
 }
 
 func setExecuterExpectations(mockExecuter *executers.MockCommandExecuter, t TestCase, cancelFlag task.CancelFlag, p *Plugin) {
-	orchestrationDir := filepath.Join(orchestrationDirectory, fileutil.RemoveInvalidChars(t.Input.ID))
+	orchestrationDir := fileutil.BuildPath(orchestrationDirectory, t.Input.ID)
 	stdoutFilePath := filepath.Join(orchestrationDir, p.StdoutFileName)
 	stderrFilePath := filepath.Join(orchestrationDir, p.StderrFileName)
 	mockExecuter.On("Execute", mock.Anything, t.Input.WorkingDirectory, stdoutFilePath, stderrFilePath, cancelFlag, mock.Anything, mock.Anything, mock.Anything).Return(
@@ -247,7 +252,7 @@ func setExecuterExpectations(mockExecuter *executers.MockCommandExecuter, t Test
 
 func setS3UploaderExpectations(mockS3Uploader *pluginutil.MockDefaultPlugin, t TestCase, p *Plugin) {
 	var emptyArray []string
-	orchestrationDir := filepath.Join(orchestrationDirectory, fileutil.RemoveInvalidChars(t.Input.ID))
+	orchestrationDir := fileutil.BuildPath(orchestrationDirectory, t.Input.ID)
 	mockS3Uploader.On("UploadOutputToS3Bucket", mock.Anything, t.Input.ID, orchestrationDir, s3BucketName, s3KeyPrefix, false, "", t.Output.Stdout, t.Output.Stderr).Return(emptyArray)
 }
 

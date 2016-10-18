@@ -27,6 +27,7 @@ type T interface {
 	Log() log.T
 	AppConfig() appconfig.SsmagentConfig
 	With(context string) T
+	CurrentContext() []string
 }
 
 // Default returns an empty context that use the default logger and appconfig.
@@ -57,4 +58,8 @@ func (c *defaultContext) Log() log.T {
 
 func (c *defaultContext) AppConfig() appconfig.SsmagentConfig {
 	return c.appconfig
+}
+
+func (c *defaultContext) CurrentContext() []string {
+	return c.context
 }

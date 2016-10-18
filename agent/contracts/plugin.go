@@ -36,6 +36,7 @@ var (
 
 // PluginResult represents a plugin execution result.
 type PluginResult struct {
+	PluginName         string       `json:"pluginName"`
 	Status             ResultStatus `json:"status"`
 	Code               int          `json:"code"`
 	Output             interface{}  `json:"output"`
@@ -44,6 +45,8 @@ type PluginResult struct {
 	OutputS3BucketName string       `json:"outputS3BucketName"`
 	OutputS3KeyPrefix  string       `json:"outputS3KeyPrefix"`
 	Error              error        `json:"-"`
+	StandardOutput     string       `json:"standardOutput"`
+	StandardError      string       `json:"standardError"`
 }
 
 // IPlugin is interface for authoring a functionality of work.
@@ -69,12 +72,14 @@ type IWorkerPlugin IPlugin
 
 // Configuration represents a plugin configuration as in the json format.
 type Configuration struct {
+	Settings               interface{}
 	Properties             interface{}
 	OutputS3KeyPrefix      string
 	OutputS3BucketName     string
 	OrchestrationDirectory string
 	MessageId              string
 	BookKeepingFileName    string
+	PluginID               string
 }
 
 // Plugin wraps the plugin configuration and plugin result.

@@ -13,20 +13,20 @@ import (
 	"io"
 	"io/ioutil"
 	"os"
-	"path"
 	"path/filepath"
 	"strconv"
 	"strings"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
+	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil/artifact"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
-	command_state_helper "github.com/aws/amazon-ssm-agent/agent/message/statemanager"
 	"github.com/aws/amazon-ssm-agent/agent/platform"
 	"github.com/aws/amazon-ssm-agent/agent/s3util"
 	"github.com/aws/amazon-ssm-agent/agent/sdkutil"
+	command_state_helper "github.com/aws/amazon-ssm-agent/agent/statemanager"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/s3"
@@ -130,6 +130,17 @@ func ReadPrefix(input io.Reader, maxLength int, truncatedSuffix string) (out str
 	return
 }
 
+// ReadAll returns all data from a given Reader.
+func ReadAll(input io.Reader, maxLength int, truncatedSuffix string) (out string, err error) {
+	// read up to maxLength bytes from input
+	data, err := ioutil.ReadAll(io.LimitReader(input, int64(maxLength)))
+	if err != nil {
+		return "", err
+	}
+
+	return string(data), nil
+}
+
 // GetS3Config returns the S3 config used for uploading output files to S3
 func GetS3Config() *s3util.Manager {
 	//There are multiple ways of supporting the cross-region upload to S3 bucket:
@@ -221,7 +232,8 @@ func (p *DefaultPlugin) UploadOutputToS3Bucket(log log.T, pluginID string, orche
 
 				if Stdout != "" {
 					localPath := filepath.Join(orchestrationDir, p.StdoutFileName)
-					s3Key := path.Join(outputS3KeyPrefix, pluginID, p.StdoutFileName)
+
+					s3Key := fileutil.BuildS3Path(outputS3KeyPrefix, pluginID, p.StdoutFileName)
 					log.Debugf("Uploading %v to s3://%v/%v", localPath, outputS3BucketName, s3Key)
 					err := p.Uploader.S3Upload(outputS3BucketName, s3Key, localPath)
 					if err != nil {
@@ -236,7 +248,8 @@ func (p *DefaultPlugin) UploadOutputToS3Bucket(log log.T, pluginID string, orche
 
 				if Stderr != "" {
 					localPath := filepath.Join(orchestrationDir, p.StderrFileName)
-					s3Key := path.Join(outputS3KeyPrefix, pluginID, p.StderrFileName)
+
+					s3Key := fileutil.BuildS3Path(outputS3KeyPrefix, pluginID, p.StderrFileName)
 					log.Debugf("Uploading %v to s3://%v/%v", localPath, outputS3BucketName, s3Key)
 					err := p.Uploader.S3Upload(outputS3BucketName, s3Key, localPath)
 					if err != nil {
@@ -336,7 +349,7 @@ func DefaultPluginConfig() PluginConfig {
 }
 
 // PersistPluginInformationToCurrent persists the plugin execution results
-func PersistPluginInformationToCurrent(log log.T, pluginName string, config contracts.Configuration, res contracts.PluginResult) {
+func PersistPluginInformationToCurrent(log log.T, pluginID string, config contracts.Configuration, res contracts.PluginResult) {
 	//Every plugin should persist information inside the execute method.
 	//At this point a plugin knows that an interim state is already stored in Current folder.
 	//Plugin will continue to add data to the same file in Current folder
@@ -344,10 +357,15 @@ func PersistPluginInformationToCurrent(log log.T, pluginName string, config cont
 	instanceID := messageIDSplit[len(messageIDSplit)-1]
 
 	pluginState := command_state_helper.GetPluginState(log,
-		pluginName,
+		pluginID,
 		config.BookKeepingFileName,
 		instanceID,
 		appconfig.DefaultLocationOfCurrent)
+
+	if pluginState == nil {
+		log.Errorf("failed to find plugin state with id %v", pluginID)
+		return
+	}
 
 	//set plugin state's execution details
 	pluginState.Configuration = config
@@ -355,8 +373,8 @@ func PersistPluginInformationToCurrent(log log.T, pluginName string, config cont
 	pluginState.HasExecuted = true
 
 	command_state_helper.PersistPluginState(log,
-		pluginState,
-		pluginName,
+		*pluginState,
+		pluginID,
 		config.BookKeepingFileName,
 		instanceID,
 		appconfig.DefaultLocationOfCurrent)
@@ -366,6 +384,26 @@ func PersistPluginInformationToCurrent(log log.T, pluginName string, config cont
 func LoadParametersAsList(log log.T, prop interface{}) ([]interface{}, contracts.PluginResult) {
 
 	var properties []interface{}
+	var res contracts.PluginResult
+
+	switch prop := prop.(type) {
+	case []interface{}:
+		if err := jsonutil.Remarshal(prop, &properties); err != nil {
+			log.Errorf("unable to parse plugin configuration")
+			res.Output = "Execution failed because agent is unable to parse plugin configuration"
+			res.Code = 1
+			res.Status = contracts.ResultStatusFailed
+		}
+	default:
+		properties = append(properties, prop)
+	}
+
+	return properties, res
+}
+
+// LoadParametersAsMap returns properties as a map and appropriate PluginResult if error is encountered
+func LoadParametersAsMap(log log.T, prop interface{}) (map[string]interface{}, contracts.PluginResult) {
+	var properties map[string]interface{}
 	var res contracts.PluginResult
 
 	if err := jsonutil.Remarshal(prop, &properties); err != nil {
@@ -400,6 +438,19 @@ func ValidateExecutionTimeout(log log.T, input interface{}) int {
 		num = defaultExecutionTimeoutInSeconds
 	}
 	return num
+}
+
+// ParseRunCommand checks the command type and convert it to the string array
+func ParseRunCommand(input interface{}, output []string) []string {
+	switch value := input.(type) {
+	case string:
+		output = append(output, value)
+	case []interface{}:
+		for _, element := range value {
+			output = ParseRunCommand(element, output)
+		}
+	}
+	return output
 }
 
 // extractIntFromString extracts a valid int value from a string.

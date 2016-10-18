@@ -14,9 +14,7 @@
 // Package model contains message struct for MDS/SSM messages.
 package model
 
-import (
-	"github.com/aws/amazon-ssm-agent/agent/contracts"
-)
+import "github.com/aws/amazon-ssm-agent/agent/contracts"
 
 // CancelPayload represents the json structure of a cancel command MDS message payload.
 type CancelPayload struct {
@@ -39,51 +37,4 @@ type SendReplyPayload struct {
 	DocumentStatus      contracts.ResultStatus                    `json:"documentStatus"`
 	DocumentTraceOutput string                                    `json:"documentTraceOutput"`
 	RuntimeStatus       map[string]*contracts.PluginRuntimeStatus `json:"runtimeStatus"`
-}
-
-// PluginState represents information stored as interim state for any plugin
-// This has both the configuration with which a plugin gets executed and a
-// corresponding plugin result.
-type PluginState struct {
-	Configuration contracts.Configuration
-	Result        contracts.PluginResult
-	HasExecuted   bool
-}
-
-// DocumentInfo represents information stored as interim state for a document
-type DocumentInfo struct {
-	AdditionalInfo      contracts.AdditionalInfo
-	CommandID           string
-	Destination         string
-	MessageID           string
-	RunID               string
-	CreatedDate         string
-	DocumentName        string
-	IsCommand           bool
-	DocumentStatus      contracts.ResultStatus
-	DocumentTraceOutput string
-	RuntimeStatus       map[string]*contracts.PluginRuntimeStatus
-	RunCount            int
-	//ParsedDocumentContent string
-	//RuntimeStatus
-}
-
-// CommandState represents information relevant to a command that gets executed by agent
-type CommandState struct {
-	DocumentInformation DocumentInfo
-	PluginsInformation  map[string]PluginState
-}
-
-// CancelCommandState represents information relevant to a cancel-command that agent receives
-// TODO  This might be revisited when Agent-cli is written to list previously executed commands
-type CancelCommandState struct {
-	Destination     string
-	MessageID       string
-	RunID           string
-	CreatedDate     string
-	Status          contracts.ResultStatus
-	CancelMessageID string
-	CancelCommandID string
-	Payload         string
-	DebugInfo       string
 }

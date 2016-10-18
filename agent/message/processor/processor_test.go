@@ -28,6 +28,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	messageContracts "github.com/aws/amazon-ssm-agent/agent/message/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/message/parser"
+	"github.com/aws/amazon-ssm-agent/agent/statemanager/model"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 	"github.com/aws/amazon-ssm-agent/agent/times"
 	"github.com/aws/aws-sdk-go/aws"
@@ -62,12 +63,15 @@ type TestCaseSendCommand struct {
 	// Msg stores a parsed MDS message as received from GetMessages.
 	Msg ssmmds.Message
 
+	// DocState stores parsed Document State
+	DocState model.DocumentState
+
 	// MsgPayload stores the (parsed) payload of an MDS message.
 	MsgPayload messageContracts.SendCommandPayload
 
-	// PluginConfigs stores the configurations that the plugins require to run.
+	// PluginStates stores the configurations that the plugins require to run.
 	// These configurations hav a slightly different structure from what we receive in the MDS message payload.
-	PluginConfigs map[string]*contracts.Configuration
+	PluginStates map[string]model.PluginState
 
 	// PluginResults stores the (unmarshalled) results that the plugins are expected to produce.
 	PluginResults map[string]*contracts.PluginResult
@@ -231,6 +235,7 @@ func TestProcessMessageWithSendCommandTopicPrefix(t *testing.T) {
 	// set the expectations
 	tc.MdsMock.On("AcknowledgeMessage", mock.Anything, *tc.Message.MessageId).Return(nil)
 	tc.SendCommandTaskPoolMock.On("Submit", mock.Anything, mock.AnythingOfType("string"), mock.AnythingOfType("task.Job")).Return(nil)
+	loadDocStateFromSendCommand = mockParseSendCommand
 
 	// execute processMessage
 	proc.processMessage(&tc.Message)
@@ -255,6 +260,7 @@ func TestProcessMessageWithCancelCommandTopicPrefix(t *testing.T) {
 	// set the expectations
 	tc.MdsMock.On("AcknowledgeMessage", mock.Anything, *tc.Message.MessageId).Return(nil)
 	tc.CancelCommandTaskPoolMock.On("Submit", mock.Anything, mock.AnythingOfType("string"), mock.AnythingOfType("task.Job")).Return(nil)
+	loadDocStateFromCancelCommand = mockParseCancelCommand
 
 	// execute processMessage
 	proc.processMessage(&tc.Message)
@@ -277,7 +283,7 @@ func TestProcessMessageWithInvalidCommandTopicPrefix(t *testing.T) {
 	proc, tc := prepareTestProcessMessage(topic)
 
 	// set the expectations
-	tc.MdsMock.On("AcknowledgeMessage", mock.Anything, *tc.Message.MessageId).Return(nil)
+	tc.MdsMock.On("FailMessage", mock.Anything, *tc.Message.MessageId, mock.Anything).Return(nil)
 
 	// execute processMessage
 	proc.processMessage(&tc.Message)
@@ -287,8 +293,8 @@ func TestProcessMessageWithInvalidCommandTopicPrefix(t *testing.T) {
 	tc.MdsMock.AssertExpectations(t)
 	tc.SendCommandTaskPoolMock.AssertNotCalled(t, "Submit")
 	tc.CancelCommandTaskPoolMock.AssertNotCalled(t, "Submit")
-	assert.True(t, *tc.IsDocLevelResponseSent)
-	assert.True(t, *tc.IsDataPersisted)
+	assert.False(t, *tc.IsDocLevelResponseSent)
+	assert.False(t, *tc.IsDataPersisted)
 }
 
 // TestProcessMessageWithInvalidMessage tests processMessage with invalid message
@@ -343,11 +349,18 @@ func generateTestCaseFromFiles(t *testing.T, messagePayloadFile string, messageR
 	//orchestrationRootDir is set to CommandID considering that orchestration root directory name will be empty in the test case.
 	orchestrationRootDir := getCommandID(*testCase.Msg.MessageId)
 
-	testCase.PluginConfigs = getPluginConfigurations(payload.DocumentContent.RuntimeConfig,
+	configs := getPluginConfigurations(payload.DocumentContent.RuntimeConfig,
 		orchestrationRootDir,
 		payload.OutputS3BucketName,
 		s3KeyPrefix,
 		*testCase.Msg.MessageId)
+
+	testCase.PluginStates = make(map[string]model.PluginState)
+	for pluginName, config := range configs {
+		state := model.PluginState{}
+		state.Configuration = *config
+		testCase.PluginStates[pluginName] = state
+	}
 
 	testCase.PluginResults = make(map[string]*contracts.PluginResult)
 	testCase.ReplyPayload = loadMessageReplyFromFile(t, messageReplyPayloadFile)
@@ -355,6 +368,8 @@ func generateTestCaseFromFiles(t *testing.T, messagePayloadFile string, messageR
 		pluginResult := parsePluginResult(t, *pluginRuntimeStatus)
 		testCase.PluginResults[pluginName] = &pluginResult
 	}
+
+	testCase.DocState = initializeSendCommandState(configs, testCase.Msg, testCase.MsgPayload)
 	return
 }
 
@@ -369,10 +384,10 @@ func testProcessSendCommandMessage(t *testing.T, testCase TestCaseSendCommand) {
 	// method should call the proper APIs on the MDS service
 	mdsMock := new(MockedMDS)
 	var replyPayload string
-	mdsMock.On("SendReply", mock.Anything, *testCase.Msg.MessageId, mock.AnythingOfType("string")).Return(nil).Run(func(args mock.Arguments) {
+	mdsMock.On("SendReply", mock.Anything, mock.AnythingOfType("string"), mock.AnythingOfType("string")).Return(nil).Run(func(args mock.Arguments) {
 		replyPayload = args.Get(2).(string)
 	})
-	mdsMock.On("DeleteMessage", mock.Anything, *testCase.Msg.MessageId).Return(nil)
+	mdsMock.On("DeleteMessage", mock.Anything, mock.AnythingOfType("string")).Return(nil)
 
 	// create a mock sendResponse function
 	sendResponse := func(messageID string, pluginID string, results map[string]*contracts.PluginResult) {
@@ -391,13 +406,13 @@ func testProcessSendCommandMessage(t *testing.T, testCase TestCaseSendCommand) {
 	// method should call plugin runner with the given configuration
 	pluginRunnerMock := new(MockedPluginRunner)
 	// mock.AnythingOfType("func(string, string, map[string]*plugin.Result)")
-	pluginRunnerMock.On("RunPlugins", mock.Anything, *testCase.Msg.MessageId, testCase.PluginConfigs, mock.Anything, cancelFlag).Return(testCase.PluginResults)
+	pluginRunnerMock.On("RunPlugins", mock.Anything, *testCase.Msg.MessageId, testCase.PluginStates, mock.Anything, cancelFlag).Return(testCase.PluginResults)
 
 	// call method under test
 	//orchestrationRootDir is set to empty such that it can meet the test expectation.
 	orchestrationRootDir := ""
 	p := Processor{}
-	p.processSendCommandMessage(context.NewMockDefault(), mdsMock, orchestrationRootDir, pluginRunnerMock.RunPlugins, cancelFlag, replyBuilderMock.BuildReply, sendResponse, testCase.Msg)
+	p.processSendCommandMessage(context.NewMockDefault(), mdsMock, orchestrationRootDir, pluginRunnerMock.RunPlugins, cancelFlag, replyBuilderMock.BuildReply, sendResponse, &testCase.DocState)
 
 	// assert that the expectations were met
 	pluginRunnerMock.AssertExpectations(t)
@@ -471,9 +486,11 @@ func testProcessCancelCommandMessage(t *testing.T, testCase TestCaseCancelComman
 	sendCommandPoolMock := new(task.MockedPool)
 	sendCommandPoolMock.On("Cancel", cancelMessagePayload.CancelMessageID).Return(true)
 
+	docState := initializeCancelCommandState(mdsCancelMessage, cancelMessagePayload)
+
 	p := Processor{}
 	// call the code we are testing
-	p.processCancelCommandMessage(context, mdsMock, sendCommandPoolMock, mdsCancelMessage)
+	p.processCancelCommandMessage(context, mdsMock, sendCommandPoolMock, &docState)
 
 	// assert that the expectations were met
 	mdsMock.AssertExpectations(t)
@@ -557,7 +574,7 @@ func prepareTestProcessMessage(testTopic string) (proc Processor, testCase TestC
 
 	// create a mock persistData function
 	isDataPersisted := false
-	persistData := func(msg *ssmmds.Message, bookkeeping string) {
+	persistData := func(docState *model.DocumentState, bookkeeping string) {
 		isDataPersisted = true
 	}
 
@@ -621,4 +638,16 @@ func loadMessageReplyFromFile(t *testing.T, fileName string) (message messageCon
 		t.Fatal(err)
 	}
 	return message
+}
+
+func mockParseSendCommand(context context.T, msg *ssmmds.Message, messagesOrchestrationRootDir string) (*model.DocumentState, error) {
+	return &model.DocumentState{
+		DocumentType: model.SendCommand,
+	}, nil
+}
+
+func mockParseCancelCommand(context context.T, msg *ssmmds.Message, messagesOrchestrationRootDir string) (*model.DocumentState, error) {
+	return &model.DocumentState{
+		DocumentType: model.CancelCommand,
+	}, nil
 }

@@ -25,6 +25,9 @@ const (
 	// SSM folder path under local app data.
 	SSMFolder = "Amazon\\SSM"
 
+	// SSM plugins folder path under local app data.
+	SSMPluginFolder = "Amazon\\SSM\\Plugins\\"
+
 	// Exit Code that would trigger a Soft Reboot
 	RebootExitCode = 3010
 
@@ -49,6 +52,9 @@ var AppConfigPath string
 // DefaultDataStorePath represents the directory for storing system data
 var DefaultDataStorePath string
 
+// DefaultPluginPath represents the directory for storing plugins in SSM
+var DefaultPluginPath string
+
 // DownloadRoot specifies the directory under which files will be downloaded
 var DownloadRoot string
 
@@ -66,6 +72,9 @@ var EnvWinDir string
 
 // Default Custom Inventory Data Folder
 var DefaultCustomInventoryFolder string
+
+// Plugin folder path
+var PluginFolder string
 
 func init() {
 	/*
@@ -86,6 +95,7 @@ func init() {
 	temp := os.Getenv("TEMP")
 
 	DefaultProgramFolder = filepath.Join(EnvProgramFiles, SSMFolder)
+	DefaultPluginPath = filepath.Join(EnvProgramFiles, SSMPluginFolder)
 	AppConfigPath = filepath.Join(DefaultProgramFolder, AppConfigFileName)
 	DefaultDataStorePath = filepath.Join(SSMDataPath, "InstanceData")
 	DownloadRoot = filepath.Join(temp, SSMFolder, "Download")

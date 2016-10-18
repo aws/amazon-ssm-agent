@@ -21,6 +21,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/framework/plugin"
 	"github.com/aws/amazon-ssm-agent/agent/rebooter"
+	"github.com/aws/amazon-ssm-agent/agent/statemanager/model"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 	"github.com/stretchr/testify/assert"
 )
@@ -28,7 +29,7 @@ import (
 // TestRunPlugins tests that RunPluginsWithRegistry calls all the expected plugins.
 func TestRunPluginsWithRegistry(t *testing.T) {
 	pluginNames := []string{"plugin1", "plugin2"}
-	pluginConfigs := make(map[string]*contracts.Configuration)
+	pluginConfigs := make(map[string]model.PluginState)
 	pluginResults := make(map[string]*contracts.PluginResult)
 	pluginInstances := make(map[string]*plugin.Mock)
 	pluginRegistry := plugin.PluginRegistry{}
@@ -40,15 +41,27 @@ func TestRunPluginsWithRegistry(t *testing.T) {
 	var cancelFlag task.CancelFlag
 	ctx := context.NewMockDefault()
 	defaultTime := time.Now()
-	for _, name := range pluginNames {
+	pluginConfigs2 := make([]model.PluginState, len(pluginNames))
+	for index, name := range pluginNames {
 
 		// create an instance of our test object
 		pluginInstances[name] = new(plugin.Mock)
 
+		// create configuration for execution
+		config := contracts.Configuration{
+			PluginID: name,
+		}
+
 		// setup expectations
-		pluginConfigs[name] = &contracts.Configuration{}
+		pluginConfigs[name] = model.PluginState{
+			Name:          name,
+			Id:            name,
+			Configuration: config,
+		}
+
 		pluginResults[name] = &contracts.PluginResult{
 			Output:        name,
+			PluginName:    name,
 			StartDateTime: defaultTime,
 			EndDateTime:   defaultTime,
 		}
@@ -57,12 +70,14 @@ func TestRunPluginsWithRegistry(t *testing.T) {
 			pluginResults[name].Status = contracts.ResultStatusSuccessAndReboot
 		}
 
-		pluginInstances[name].On("Execute", ctx, *pluginConfigs[name], cancelFlag).Return(*pluginResults[name])
+		pluginInstances[name].On("Execute", ctx, pluginConfigs[name].Configuration, cancelFlag).Return(*pluginResults[name])
 		pluginRegistry[name] = pluginInstances[name]
+
+		pluginConfigs2[index] = pluginConfigs[name]
 	}
 
 	// call the code we are testing
-	outputs := RunPlugins(ctx, documentID, pluginConfigs, pluginRegistry, sendResponse, cancelFlag)
+	outputs := RunPlugins(ctx, documentID, pluginConfigs2, pluginRegistry, sendResponse, nil, cancelFlag)
 
 	// fix the times expectation.
 	for _, result := range outputs {
@@ -75,6 +90,9 @@ func TestRunPluginsWithRegistry(t *testing.T) {
 		mockPlugin.AssertExpectations(t)
 	}
 	ctx.AssertCalled(t, "Log")
+	assert.Equal(t, pluginResults["plugin1"], outputs["plugin1"])
+	assert.Equal(t, pluginResults["plugin2"], outputs["plugin2"])
+
 	assert.Equal(t, pluginResults, outputs)
 	time.Sleep(10 * time.Second)
 	assert.Equal(t, true, rebooter.RebootRequested())

@@ -120,3 +120,7 @@ type byIndex []net.Interface
 func (b byIndex) Len() int           { return len(b) }
 func (b byIndex) Less(i, j int) bool { return b[i].Index < b[j].Index }
 func (b byIndex) Swap(i, j int)      { b[i], b[j] = b[j], b[i] }
+
+func IsPlatformNanoServer(log log.T) (bool, error) {
+	return isPlatformNanoServer(log)
+}

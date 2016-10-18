@@ -25,9 +25,17 @@ const (
 	ResultStatusInProgress       ResultStatus = "InProgress"
 	ResultStatusSuccess          ResultStatus = "Success"
 	ResultStatusSuccessAndReboot ResultStatus = "SuccessAndReboot"
+	ResultStatusPassedAndReboot  ResultStatus = "PassedAndReboot"
 	ResultStatusFailed           ResultStatus = "Failed"
 	ResultStatusCancelled        ResultStatus = "Cancelled"
 	ResultStatusTimedOut         ResultStatus = "TimedOut"
+)
+
+const (
+	// ParamTypeString represents the Param Type is String
+	ParamTypeString = "String"
+	// ParamTypeStringList represents the Param Type is StringList
+	ParamTypeStringList = "StringList"
 )
 
 type StopType string
@@ -42,12 +50,25 @@ type Parameter struct {
 	DefaultVal  interface{} `json:"default"`
 	Description string      `json:"description"`
 	ParamType   string      `json:"type"`
+	AllowedVal  []string    `json:"allowedValues"`
 }
 
 // PluginConfig stores plugin configuration
 type PluginConfig struct {
+	Settings    interface{} `json:"settings"`
 	Properties  interface{} `json:"properties"`
 	Description string      `json:"description"`
+}
+
+// InstancePluginConfig stores plugin configuration
+type InstancePluginConfig struct {
+	Action      string      `json:"action"` // plugin name
+	Inputs      interface{} `json:"inputs"` // Properties
+	MaxAttempts int         `json:"maxAttempts"`
+	Name        string      `json:"name"` // unique identifier
+	OnFailure   string      `json:"onFailure"`
+	Settings    interface{} `json:"settings"`
+	Timeout     int         `json:"timeoutSeconds"`
 }
 
 // DocumentContent object which represents ssm document content.
@@ -55,6 +76,7 @@ type DocumentContent struct {
 	SchemaVersion string                   `json:"schemaVersion"`
 	Description   string                   `json:"description"`
 	RuntimeConfig map[string]*PluginConfig `json:"runtimeConfig"`
+	MainSteps     []*InstancePluginConfig  `json:"mainSteps"`
 	Parameters    map[string]*Parameter    `json:"parameters"`
 }
 
@@ -79,6 +101,7 @@ type AgentInfo struct {
 type PluginRuntimeStatus struct {
 	Status             ResultStatus `json:"status"`
 	Code               int          `json:"code"`
+	Name               string       `json:"name"`
 	Output             string       `json:"output"`
 	StartDateTime      string       `json:"startDateTime"`
 	EndDateTime        string       `json:"endDateTime"`

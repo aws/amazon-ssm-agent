@@ -45,7 +45,7 @@ elif [[ "$(cat /proc/1/comm)" == "systemd" ]]; then
 	fi
 
 	# echo "Uninstalling agent"
-	$(dpkg -r amazon-ssm-agent)
+	dpkg -r amazon-ssm-agent
 
 else
     echo "The amazon-ssm-agent is not supported on this platform. Please visit the documentation for the list of supported platforms"

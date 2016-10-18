@@ -54,26 +54,26 @@ if [[ "$(cat /proc/1/comm)" == "init" ]]; then
 elif [[ "$(cat /proc/1/comm)" == "systemd" ]]; then
 	if [[ "$(systemctl is-active amazon-ssm-agent)" == "active" ]]; then
 		# echo "-> Agent is running in the instance"
-		$(systemctl stop amazon-ssm-agent)
+		systemctl stop amazon-ssm-agent
 		# echo "Agent stopped"
-		$(systemctl daemon-reload)
+		systemctl daemon-reload
 		# echo "Reload daemon"
 	else
 		echo "-> Agent is not running in the instance"
 	fi
 
 	# echo "Installing agent"
-	$(dpkg -i amazon-ssm-agent.deb)
+	dpkg -i amazon-ssm-agent.deb
 
 	if [ "$DO_REGISTER" = true ]; then
-		$(systemctl stop amazon-ssm-agent)
+		systemctl stop amazon-ssm-agent
 		amazon-ssm-agent -register -code "$RMI_CODE" -id "$RMI_ID" -region "$RMI_REGION"
 	fi
 
 	# echo "Starting agent"
-	$(systemctl daemon-reload)
-	$(systemctl start amazon-ssm-agent)
-	$(systemctl status amazon-ssm-agent)
+	systemctl daemon-reload
+	systemctl start amazon-ssm-agent
+	systemctl status amazon-ssm-agent
 else
 
     echo "The amazon-ssm-agent is not supported on this platform. Please visit the documentation for the list of supported platforms"

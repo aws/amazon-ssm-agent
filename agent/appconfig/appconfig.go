@@ -114,6 +114,7 @@ func DefaultConfig() SsmagentConfig {
 		BasicInventoryGatherer: "Enabled",
 		InventoryOptimizer:     "Enabled",
 		InventoryPlugin:        "Enabled",
+		AssociationRetryLimit:  5,
 	}
 	var agent = AgentInfo{
 		Name: "amazon-ssm-agent-default",

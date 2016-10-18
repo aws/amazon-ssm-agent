@@ -16,10 +16,11 @@ package processor
 
 import (
 	"encoding/json"
-	"path"
+	"path/filepath"
 	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
+	"github.com/aws/amazon-ssm-agent/agent/association/processor"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/framework/engine"
@@ -27,14 +28,16 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	messageContracts "github.com/aws/amazon-ssm-agent/agent/message/contracts"
+	"github.com/aws/amazon-ssm-agent/agent/message/converter"
 	"github.com/aws/amazon-ssm-agent/agent/message/parser"
 	"github.com/aws/amazon-ssm-agent/agent/message/service"
-	commandStateHelper "github.com/aws/amazon-ssm-agent/agent/message/statemanager"
 	"github.com/aws/amazon-ssm-agent/agent/platform"
+	"github.com/aws/amazon-ssm-agent/agent/reply"
 	"github.com/aws/amazon-ssm-agent/agent/sdkutil"
+	"github.com/aws/amazon-ssm-agent/agent/statemanager"
+	"github.com/aws/amazon-ssm-agent/agent/statemanager/model"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 	"github.com/aws/amazon-ssm-agent/agent/times"
-	"github.com/aws/aws-sdk-go/service/ssmmds"
 	"github.com/carlescere/scheduler"
 )
 
@@ -57,6 +60,9 @@ const (
 	// note: the connection timeout for MDSPoll should be less than this.
 	pollMessageFrequencyMinutes = 15
 
+	// pollAssociationFrequencyMinutes is the frequency at which to resume poll for Association if the current thread dies due to stop policy
+	pollAssociationFrequencyMinutes = 5
+
 	// hardstopTimeout is the time before the processor will be shutdown during a hardstop
 	// TODO:  load this value from config
 	hardStopTimeout = time.Second * 4
@@ -69,7 +75,7 @@ type replyBuilder func(pluginID string, results map[string]*contracts.PluginResu
 
 type statusReplyBuilder func(agentInfo contracts.AgentInfo, resultStatus contracts.ResultStatus)
 
-type persistData func(msg *ssmmds.Message, bookkeeping string)
+type persistData func(state *model.DocumentState, bookkeeping string)
 
 // Processor is an object that can process MDS messages.
 type Processor struct {
@@ -86,14 +92,16 @@ type Processor struct {
 	persistData          persistData
 	orchestrationRootDir string
 	messagePollJob       *scheduler.Job
+	assocProcessor       *processor.Processor
 	processorStopPolicy  *sdkutil.StopPolicy
 }
 
 // PluginRunner is a function that can run a set of plugins and return their outputs.
-type PluginRunner func(context context.T, documentID string, plugins map[string]*contracts.Configuration, sendResponse engine.SendResponse, cancelFlag task.CancelFlag) (pluginOutputs map[string]*contracts.PluginResult)
+type PluginRunner func(context context.T, documentID string, plugins map[string]model.PluginState, sendResponse engine.SendResponse, cancelFlag task.CancelFlag) (pluginOutputs map[string]*contracts.PluginResult)
 
-var pluginRunner = func(context context.T, documentID string, plugins map[string]*contracts.Configuration, sendResponse engine.SendResponse, cancelFlag task.CancelFlag) (pluginOutputs map[string]*contracts.PluginResult) {
-	return engine.RunPlugins(context, documentID, plugins, plugin.RegisteredWorkerPlugins(context), sendResponse, cancelFlag)
+var pluginRunner = func(context context.T, documentID string, plugins map[string]model.PluginState, sendResponse engine.SendResponse, cancelFlag task.CancelFlag) (pluginOutputs map[string]*contracts.PluginResult) {
+	pluginStates := converter.ConvertPluginState(plugins)
+	return engine.RunPlugins(context, documentID, pluginStates, plugin.RegisteredWorkerPlugins(context), sendResponse, nil, cancelFlag)
 }
 
 // NewProcessor initializes a new mds processor with the given parameters.
@@ -131,11 +139,11 @@ func NewProcessor(context context.T) *Processor {
 	cancelCommandTaskPool := task.NewPool(log, CancelWorkersLimit, cancelWaitDuration, clock)
 
 	// create new message processor
-	orchestrationRootDir := path.Join(appconfig.DefaultDataStorePath, instanceID, appconfig.DefaultCommandRootDirName, config.Agent.OrchestrationRootDir)
+	orchestrationRootDir := filepath.Join(appconfig.DefaultDataStorePath, instanceID, appconfig.DefaultDocumentRootDirName, config.Agent.OrchestrationRootDir)
 
 	replyBuilder := func(pluginID string, results map[string]*contracts.PluginResult) messageContracts.SendReplyPayload {
-		runtimeStatuses := parser.PrepareRuntimeStatuses(log, results)
-		return parser.PrepareReplyPayload(pluginID, runtimeStatuses, clock.Now(), agentConfig.AgentInfo)
+		runtimeStatuses := reply.PrepareRuntimeStatuses(log, results)
+		return reply.PrepareReplyPayload(pluginID, runtimeStatuses, clock.Now(), agentConfig.AgentInfo)
 	}
 
 	statusReplyBuilder := func(agentInfo contracts.AgentInfo, resultStatus contracts.ResultStatus, documentTraceOutput string) messageContracts.SendReplyPayload {
@@ -161,9 +169,11 @@ func NewProcessor(context context.T) *Processor {
 	}
 
 	// PersistData is used to persist the data into a bookkeeping folder
-	persistData := func(msg *ssmmds.Message, bookkeeping string) {
-		commandStateHelper.PersistData(log, getCommandID(*msg.MessageId), *msg.Destination, bookkeeping, *msg)
+	persistData := func(state *model.DocumentState, bookkeeping string) {
+		statemanager.PersistData(log, state.DocumentInformation.CommandID, state.DocumentInformation.Destination, bookkeeping, *state)
 	}
+
+	assocProcessor := processor.NewAssociationProcessor(context, instanceID)
 
 	return &Processor{
 		context:              messageContext,
@@ -179,6 +189,7 @@ func NewProcessor(context context.T) *Processor {
 		orchestrationRootDir: orchestrationRootDir,
 		persistData:          persistData,
 		processorStopPolicy:  processorStopPolicy,
+		assocProcessor:       assocProcessor,
 	}
 }
 

@@ -34,6 +34,7 @@ type MdsCfg struct {
 type SsmCfg struct {
 	Endpoint               string
 	HealthFrequencyMinutes int
+	AssociationRetryLimit  int
 	// TODO: test hook, can be removed before release
 	// this is to skip ssl verification for the beta self signed certs
 	InsecureSkipVerify     bool

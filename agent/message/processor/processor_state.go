@@ -20,47 +20,56 @@ import (
 
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	messageContracts "github.com/aws/amazon-ssm-agent/agent/message/contracts"
+	"github.com/aws/amazon-ssm-agent/agent/statemanager/model"
 	"github.com/aws/amazon-ssm-agent/agent/times"
 	"github.com/aws/aws-sdk-go/service/ssmmds"
 )
 
 // initializes CommandState - an interim state that is used around during an execution of a command
-func initializeCommandState(pluginConfigurations map[string]*contracts.Configuration, msg ssmmds.Message, parsedMsg messageContracts.SendCommandPayload) messageContracts.CommandState {
+func initializeSendCommandState(pluginConfigurations map[string]*contracts.Configuration, msg ssmmds.Message, parsedMsg messageContracts.SendCommandPayload) model.DocumentState {
 
 	//initialize document information with relevant values extracted from msg
 	documentInfo := newDocumentInfo(msg, parsedMsg)
 
 	//initialize plugin states
-	pluginsInfo := make(map[string]messageContracts.PluginState)
+	pluginsInfo := make(map[string]model.PluginState)
 
 	for key, value := range pluginConfigurations {
-		var plugin messageContracts.PluginState
+		var plugin model.PluginState
 		plugin.Configuration = *value
 		plugin.HasExecuted = false
 		pluginsInfo[key] = plugin
 	}
 
 	//initialize command State
-	return messageContracts.CommandState{
+	return model.DocumentState{
 		DocumentInformation: documentInfo,
 		PluginsInformation:  pluginsInfo,
+		DocumentType:        model.SendCommand,
 	}
 }
 
 // initializes CancelCommandState
-func initializeCancelCommandState(msg ssmmds.Message, parsedMsg messageContracts.CancelPayload) messageContracts.CancelCommandState {
-	cancelCommand := new(messageContracts.CancelCommandState)
+func initializeCancelCommandState(msg ssmmds.Message, parsedMsg messageContracts.CancelPayload) model.DocumentState {
+	documentInfo := model.DocumentInfo{}
+	documentInfo.Destination = *msg.Destination
+	documentInfo.CreatedDate = *msg.CreatedDate
+	documentInfo.MessageID = *msg.MessageId
+	documentInfo.CommandID = getCommandID(*msg.MessageId)
+	documentInfo.RunID = times.ToIsoDashUTC(times.DefaultClock.Now())
+	documentInfo.DocumentStatus = contracts.ResultStatusInProgress
 
-	cancelCommand.Destination = *msg.Destination
-	cancelCommand.CreatedDate = *msg.CreatedDate
-	cancelCommand.MessageID = *msg.MessageId
-	cancelCommand.RunID = times.ToIsoDashUTC(times.DefaultClock.Now())
+	cancelCommand := new(model.CancelCommandInfo)
 	cancelCommand.Payload = *msg.Payload
-	cancelCommand.Status = contracts.ResultStatusInProgress
 	cancelCommand.CancelMessageID = parsedMsg.CancelMessageID
 	commandID := getCommandID(parsedMsg.CancelMessageID)
 
 	cancelCommand.CancelCommandID = commandID
 	cancelCommand.DebugInfo = fmt.Sprintf("Command %v is yet to be cancelled", commandID)
-	return *cancelCommand
+
+	return model.DocumentState{
+		DocumentInformation: documentInfo,
+		CancelInformation:   *cancelCommand,
+		DocumentType:        model.CancelCommand,
+	}
 }
