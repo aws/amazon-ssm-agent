@@ -31,7 +31,6 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/reply"
 	stateModel "github.com/aws/amazon-ssm-agent/agent/statemanager/model"
 	"github.com/aws/amazon-ssm-agent/agent/task"
-	"github.com/aws/amazon-ssm-agent/agent/times"
 	"github.com/aws/aws-sdk-go/service/ssm"
 )
 
@@ -69,20 +68,20 @@ func (r *AssociationExecuter) ExecutePendingDocument(context context.T, pool tas
 
 	r.assocSvc.UpdateInstanceAssociationStatus(
 		log,
-		docState.DocumentInformation.CommandID,
-		docState.DocumentInformation.Destination,
-		ssm.AssociationStatusNamePending,
-		"",
+		docState.DocumentInformation.DocumentID,
+		docState.DocumentInformation.InstanceID,
+		contracts.AssociationStatusPending,
+		contracts.AssociationErrorCodeNoError,
 		docState.DocumentInformation.CreatedDate,
 		documentPendingMessage)
 
 	bookkeepingSvc.MoveCommandState(log,
-		docState.DocumentInformation.CommandID,
-		docState.DocumentInformation.Destination,
+		docState.DocumentInformation.DocumentID,
+		docState.DocumentInformation.InstanceID,
 		appconfig.DefaultLocationOfPending,
 		appconfig.DefaultLocationOfCurrent)
 
-	if err := pool.Submit(log, docState.DocumentInformation.CommandID, func(cancelFlag task.CancelFlag) {
+	if err := pool.Submit(log, docState.DocumentInformation.DocumentID, func(cancelFlag task.CancelFlag) {
 		r.ExecuteInProgressDocument(context, docState, cancelFlag)
 	}); err != nil {
 		return fmt.Errorf("failed to process association, %v", err)
@@ -105,10 +104,11 @@ func (r *AssociationExecuter) ExecuteInProgressDocument(context context.T, docSt
 	totalNumberOfActions := len(docState.InstancePluginsInformation)
 	outputs := pluginExecution.RunPlugins(
 		context,
-		docState.DocumentInformation.DocumentName,
+		docState.DocumentInformation.DocumentID,
+		docState.DocumentInformation.CreatedDate,
 		docState.InstancePluginsInformation,
 		plugin.RegisteredWorkerPlugins(context),
-		nil,
+		r.pluginExecutionReport,
 		cancelFlag)
 
 	pluginOutputContent, err := jsonutil.Marshal(outputs)
@@ -121,7 +121,7 @@ func (r *AssociationExecuter) ExecuteInProgressDocument(context context.T, docSt
 	r.parseAndPersistReplyContents(log, docState, outputs)
 	// Skip sending response when the document requires a reboot
 	if docState.IsRebootRequired() {
-		log.Debugf("skipping sending response of %v since the document requires a reboot", docState.DocumentInformation.CommandID)
+		log.Debugf("skipping sending response of %v since the document requires a reboot", docState.DocumentInformation.DocumentID)
 		return
 	}
 
@@ -138,7 +138,7 @@ func (r *AssociationExecuter) ExecuteInProgressDocument(context context.T, docSt
 			&docState.DocumentInformation,
 			docState.DocumentInformation.RuntimeStatus,
 			totalNumberOfActions,
-			"",
+			contracts.AssociationErrorCodeExecutionError,
 			ssm.AssociationStatusNameFailed)
 
 	} else if docState.DocumentInformation.DocumentStatus == contracts.ResultStatusSuccess {
@@ -147,15 +147,15 @@ func (r *AssociationExecuter) ExecuteInProgressDocument(context context.T, docSt
 			&docState.DocumentInformation,
 			docState.DocumentInformation.RuntimeStatus,
 			totalNumberOfActions,
-			"",
-			ssm.AssociationStatusNameSuccess)
+			contracts.AssociationErrorCodeNoError,
+			contracts.AssociationStatusSuccess)
 	}
 
 	//persist : commands execution in completed folder (terminal state folder)
-	log.Debugf("execution of %v is over. Moving docState file from Current to Completed folder", docState.DocumentInformation.CommandID)
+	log.Debugf("execution of %v is over. Moving docState file from Current to Completed folder", docState.DocumentInformation.DocumentID)
 	bookkeepingSvc.MoveCommandState(log,
-		docState.DocumentInformation.CommandID,
-		docState.DocumentInformation.Destination,
+		docState.DocumentInformation.DocumentID,
+		docState.DocumentInformation.InstanceID,
 		appconfig.DefaultLocationOfCurrent,
 		appconfig.DefaultLocationOfCompleted)
 }
@@ -167,8 +167,8 @@ func (r *AssociationExecuter) parseAndPersistReplyContents(log log.T,
 
 	//update interim cmd state file
 	docState.DocumentInformation = bookkeepingSvc.GetDocumentInfo(log,
-		docState.DocumentInformation.CommandID,
-		docState.DocumentInformation.Destination,
+		docState.DocumentInformation.DocumentID,
+		docState.DocumentInformation.InstanceID,
 		appconfig.DefaultLocationOfCurrent)
 
 	runtimeStatuses := reply.PrepareRuntimeStatuses(log, pluginOutputs)
@@ -183,8 +183,8 @@ func (r *AssociationExecuter) parseAndPersistReplyContents(log log.T,
 	//persist final documentInfo.
 	bookkeepingSvc.PersistDocumentInfo(log,
 		docState.DocumentInformation,
-		docState.DocumentInformation.CommandID,
-		docState.DocumentInformation.Destination,
+		docState.DocumentInformation.DocumentID,
+		docState.DocumentInformation.InstanceID,
 		appconfig.DefaultLocationOfCurrent)
 }
 
@@ -192,6 +192,7 @@ func (r *AssociationExecuter) parseAndPersistReplyContents(log log.T,
 func (r *AssociationExecuter) pluginExecutionReport(
 	log log.T,
 	documentID string,
+	documentCreatedDate string,
 	pluginOutputs map[string]*contracts.PluginResult,
 	totalNumberOfPlugins int) {
 
@@ -202,15 +203,15 @@ func (r *AssociationExecuter) pluginExecutionReport(
 	}
 
 	runtimeStatuses := reply.PrepareRuntimeStatuses(log, pluginOutputs)
-	// TODO: change the time.now to the document create date
 	executionSummary := buildOutput(runtimeStatuses, totalNumberOfPlugins)
+
 	r.assocSvc.UpdateInstanceAssociationStatus(
 		log,
 		documentID,
 		instanceID,
-		"InProgress",
-		"",
-		times.ToIso8601UTC(times.DefaultClock.Now()),
+		contracts.AssociationStatusInProgress,
+		contracts.AssociationErrorCodeNoError,
+		documentCreatedDate,
 		executionSummary)
 }
 
@@ -226,8 +227,8 @@ func (r *AssociationExecuter) associationExecutionReport(
 	executionSummary := buildOutput(runtimeStatuses, totalNumberOfPlugins)
 	r.assocSvc.UpdateInstanceAssociationStatus(
 		log,
-		docInfo.CommandID,
-		docInfo.Destination,
+		docInfo.DocumentID,
+		docInfo.InstanceID,
 		associationStatus,
 		errorCode,
 		docInfo.CreatedDate,

@@ -64,8 +64,8 @@ func (p *Processor) runCmdsUsingCmdState(context context.T,
 
 	//read from persisted file
 	newCmdState := commandStateHelper.GetCommandInterimState(log,
-		docState.DocumentInformation.CommandID,
-		docState.DocumentInformation.Destination,
+		docState.DocumentInformation.DocumentID,
+		docState.DocumentInformation.InstanceID,
 		appconfig.DefaultLocationOfCurrent)
 
 	//construct sendReply payload
@@ -89,8 +89,8 @@ func (p *Processor) runCmdsUsingCmdState(context context.T,
 	//persist final documentInfo.
 	commandStateHelper.PersistDocumentInfo(log,
 		newCmdState.DocumentInformation,
-		newCmdState.DocumentInformation.CommandID,
-		newCmdState.DocumentInformation.Destination,
+		newCmdState.DocumentInformation.DocumentID,
+		newCmdState.DocumentInformation.InstanceID,
 		appconfig.DefaultLocationOfCurrent)
 
 	// Skip sending response when the document requires a reboot
@@ -107,8 +107,8 @@ func (p *Processor) runCmdsUsingCmdState(context context.T,
 	log.Debugf("execution of %v is over. Moving interimState file from Current to Completed folder", newCmdState.DocumentInformation.MessageID)
 
 	commandStateHelper.MoveCommandState(log,
-		newCmdState.DocumentInformation.CommandID,
-		newCmdState.DocumentInformation.Destination,
+		newCmdState.DocumentInformation.DocumentID,
+		newCmdState.DocumentInformation.InstanceID,
 		appconfig.DefaultLocationOfCurrent,
 		appconfig.DefaultLocationOfCompleted)
 
@@ -183,8 +183,8 @@ func (p *Processor) ExecutePendingDocument(docState *model.DocumentState) {
 	log := p.context.Log()
 
 	commandStateHelper.MoveCommandState(log,
-		docState.DocumentInformation.CommandID,
-		docState.DocumentInformation.Destination,
+		docState.DocumentInformation.DocumentID,
+		docState.DocumentInformation.InstanceID,
 		appconfig.DefaultLocationOfPending,
 		appconfig.DefaultLocationOfCurrent)
 
@@ -258,8 +258,8 @@ func (p *Processor) processSendCommandMessage(context context.T,
 
 	//update documentInfo in interim cmd state file
 	newCmdState := commandStateHelper.GetCommandInterimState(log,
-		docState.DocumentInformation.CommandID,
-		docState.DocumentInformation.Destination,
+		docState.DocumentInformation.DocumentID,
+		docState.DocumentInformation.InstanceID,
 		appconfig.DefaultLocationOfCurrent)
 
 	// set document level information which wasn't set previously
@@ -271,8 +271,8 @@ func (p *Processor) processSendCommandMessage(context context.T,
 	//persist final documentInfo.
 	commandStateHelper.PersistDocumentInfo(log,
 		newCmdState.DocumentInformation,
-		newCmdState.DocumentInformation.CommandID,
-		newCmdState.DocumentInformation.Destination,
+		newCmdState.DocumentInformation.DocumentID,
+		newCmdState.DocumentInformation.InstanceID,
 		appconfig.DefaultLocationOfCurrent)
 
 	// Skip sending response when the document requires a reboot
@@ -288,8 +288,8 @@ func (p *Processor) processSendCommandMessage(context context.T,
 	log.Debugf("execution of %v is over. Moving interimState file from Current to Completed folder", newCmdState.DocumentInformation.MessageID)
 
 	commandStateHelper.MoveCommandState(log,
-		newCmdState.DocumentInformation.CommandID,
-		newCmdState.DocumentInformation.Destination,
+		newCmdState.DocumentInformation.DocumentID,
+		newCmdState.DocumentInformation.InstanceID,
 		appconfig.DefaultLocationOfCurrent,
 		appconfig.DefaultLocationOfCompleted)
 
@@ -387,16 +387,16 @@ func (p *Processor) processCancelCommandMessage(context context.T,
 
 	//persist the final status of cancel-message in current folder
 	commandStateHelper.PersistData(log,
-		docState.DocumentInformation.CommandID,
-		docState.DocumentInformation.Destination,
+		docState.DocumentInformation.DocumentID,
+		docState.DocumentInformation.InstanceID,
 		appconfig.DefaultLocationOfCurrent, docState)
 
 	//persist : commands execution in completed folder (terminal state folder)
 	log.Debugf("Execution of %v is over. Moving interimState file from Current to Completed folder", docState.DocumentInformation.MessageID)
 
 	commandStateHelper.MoveCommandState(log,
-		docState.DocumentInformation.CommandID,
-		docState.DocumentInformation.Destination,
+		docState.DocumentInformation.DocumentID,
+		docState.DocumentInformation.InstanceID,
 		appconfig.DefaultLocationOfCurrent,
 		appconfig.DefaultLocationOfCompleted)
 

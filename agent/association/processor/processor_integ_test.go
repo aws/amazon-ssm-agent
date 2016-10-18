@@ -69,8 +69,8 @@ func TestParseAssociationWithAssociationVersion1_2(t *testing.T) {
 	docState, err := processor.parseAssociation(&assocRawData)
 
 	documentInfo := new(stateModel.DocumentInfo)
-	documentInfo.CommandID = commandId
-	documentInfo.Destination = instanceID
+	documentInfo.DocumentID = commandId
+	documentInfo.InstanceID = instanceID
 	documentInfo.MessageID = fmt.Sprintf("aws.ssm.%v.%v", commandId, instanceID)
 	documentInfo.DocumentName = associationName
 
@@ -144,8 +144,8 @@ func TestParseAssociationWithAssociationVersion2_0(t *testing.T) {
 	docState, err := processor.parseAssociation(&assocRawData)
 
 	documentInfo := new(stateModel.DocumentInfo)
-	documentInfo.CommandID = commandId
-	documentInfo.Destination = instanceID
+	documentInfo.DocumentID = commandId
+	documentInfo.InstanceID = instanceID
 	documentInfo.MessageID = fmt.Sprintf("aws.ssm.%v.%v", commandId, instanceID)
 	documentInfo.DocumentName = associationName
 

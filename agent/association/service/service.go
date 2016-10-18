@@ -133,6 +133,13 @@ func (s *AssociationService) UpdateInstanceAssociationStatus(
 		ExecutionSummary: aws.String(executionSummary),
 	}
 
+	executionResultContent, err := jsonutil.Marshal(executionResult)
+	if err != nil {
+		log.Error("could not marshal associationStatus! ", err)
+		return nil, err
+	}
+	log.Debug("Update association status content is ", jsonutil.Indent(executionResultContent))
+
 	response, err := s.ssmSvc.UpdateInstanceAssociationStatus(log, associationID, instanceID, &executionResult)
 	if err != nil {
 		return nil, fmt.Errorf("unable to update association status %v", err)

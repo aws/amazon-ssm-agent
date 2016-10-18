@@ -133,7 +133,12 @@ func (p *Processor) ProcessAssociation() {
 		if err = p.assocSvc.LoadAssociationDetail(log, assoc); err != nil {
 			message := fmt.Sprintf("Unable to load association details, %v", err)
 			log.Error(message)
-			p.updateInstanceAssocStatus(assoc.Association, ssm.AssociationStatusNameFailed, "", times.ToIso8601UTC(time.Now()), message)
+			p.updateInstanceAssocStatus(
+				assoc.Association,
+				contracts.AssociationStatusFailed,
+				contracts.AssociationErrorCodeListAssociationError,
+				times.ToIso8601UTC(time.Now()),
+				message)
 			return
 		}
 	}
@@ -164,14 +169,24 @@ func (p *Processor) RunScheduledAssociation(log log.T) {
 	if docState, err = p.parseAssociation(scheduledAssociation); err != nil {
 		message := fmt.Sprintf("Unable to parse association, %v", err)
 		log.Error(message)
-		p.updateInstanceAssocStatus(scheduledAssociation.Association, ssm.AssociationStatusNameFailed, "", times.ToIso8601UTC(time.Now()), message)
+		p.updateInstanceAssocStatus(
+			scheduledAssociation.Association,
+			contracts.AssociationStatusFailed,
+			contracts.AssociationErrorCodeInvalidAssociation,
+			times.ToIso8601UTC(time.Now()),
+			message)
 		return
 	}
 
 	if err = p.persistAssociationForExecution(log, docState); err != nil {
 		message := fmt.Sprintf("Unable to submit association for exectution, %v", err)
 		log.Error(message)
-		p.updateInstanceAssocStatus(scheduledAssociation.Association, ssm.AssociationStatusNameFailed, "", times.ToIso8601UTC(time.Now()), message)
+		p.updateInstanceAssocStatus(
+			scheduledAssociation.Association,
+			contracts.AssociationStatusFailed,
+			contracts.AssociationErrorCodeSubmitAssociationError,
+			times.ToIso8601UTC(time.Now()),
+			message)
 		return
 	}
 
@@ -265,20 +280,20 @@ func (p *Processor) parseAssociation(rawData *model.AssociationRawData) (*stateM
 func (p *Processor) persistAssociationForExecution(log log.T, docState *stateModel.DocumentState) error {
 	log.Debug("Persisting interim state in current execution folder")
 	assocBookkeeping.PersistData(log,
-		docState.DocumentInformation.CommandID,
-		docState.DocumentInformation.Destination,
+		docState.DocumentInformation.DocumentID,
+		docState.DocumentInformation.InstanceID,
 		appconfig.DefaultLocationOfPending,
 		docState)
 
 	// record the last executed association file
-	if err := recorder.UpdateAssociatedDocument(docState.DocumentInformation.Destination, docState.DocumentInformation.DocumentName); err != nil {
+	if err := recorder.UpdateAssociatedDocument(docState.DocumentInformation.InstanceID, docState.DocumentInformation.DocumentName); err != nil {
 		log.Errorf("Failed to persist last executed association document, %v", err)
 	}
 
 	return p.executer.ExecutePendingDocument(p.context, p.taskPool, docState)
 }
 
-// updateAssociationStatus provides wrapper for calling update association service
+// updateInstanceAssocStatus provides wrapper for calling update association service
 func (p *Processor) updateInstanceAssocStatus(
 	assoc *ssm.InstanceAssociationSummary,
 	status string,

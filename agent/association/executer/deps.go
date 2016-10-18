@@ -68,10 +68,11 @@ type pluginExecutionImp struct{}
 func (pluginExecutionImp) RunPlugins(
 	context context.T,
 	documentID string,
+	documentCreatedDate string,
 	plugins []stateModel.PluginState,
 	pluginRegistry plugin.PluginRegistry,
 	assocUpdate engine.UpdateAssociation,
 	cancelFlag task.CancelFlag,
 ) (pluginOutputs map[string]*contracts.PluginResult) {
-	return engine.RunPlugins(context, documentID, plugins, pluginRegistry, nil, assocUpdate, cancelFlag)
+	return engine.RunPlugins(context, documentID, documentCreatedDate, plugins, pluginRegistry, nil, assocUpdate, cancelFlag)
 }

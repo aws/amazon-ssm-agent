@@ -36,13 +36,14 @@ type SendResponse func(messageID string, pluginID string, results map[string]*co
 type SendDocumentLevelResponse func(messageID string, resultStatus contracts.ResultStatus, documentTraceOutput string)
 
 // UpdateAssociation updates association status
-type UpdateAssociation func(log log.T, documentID string, pluginOutputs map[string]*contracts.PluginResult, totalNumberOfPlugins int)
+type UpdateAssociation func(log log.T, documentID string, documentCreatedDate string, pluginOutputs map[string]*contracts.PluginResult, totalNumberOfPlugins int)
 
 // RunPlugins executes a set of plugins. The plugin configurations are given in a map with pluginId as key.
 // Outputs the results of running the plugins, indexed by pluginId.
 func RunPlugins(
 	context context.T,
 	documentID string,
+	documentCreatedDate string,
 	plugins []stateModel.PluginState,
 	pluginRegistry plugin.PluginRegistry,
 	sendReply SendResponse,
@@ -136,7 +137,7 @@ func RunPlugins(
 		}
 		if updateAssoc != nil {
 			log.Infof("Update assocition on plugin completion: %v", pluginName)
-			updateAssoc(log, documentID, pluginOutputs, totalNumberOfActions)
+			updateAssoc(log, documentID, documentCreatedDate, pluginOutputs, totalNumberOfActions)
 		}
 
 	}

@@ -101,7 +101,7 @@ type PluginRunner func(context context.T, documentID string, plugins map[string]
 
 var pluginRunner = func(context context.T, documentID string, plugins map[string]model.PluginState, sendResponse engine.SendResponse, cancelFlag task.CancelFlag) (pluginOutputs map[string]*contracts.PluginResult) {
 	pluginStates := converter.ConvertPluginState(plugins)
-	return engine.RunPlugins(context, documentID, pluginStates, plugin.RegisteredWorkerPlugins(context), sendResponse, nil, cancelFlag)
+	return engine.RunPlugins(context, documentID, "", pluginStates, plugin.RegisteredWorkerPlugins(context), sendResponse, nil, cancelFlag)
 }
 
 // NewProcessor initializes a new mds processor with the given parameters.
@@ -170,7 +170,7 @@ func NewProcessor(context context.T) *Processor {
 
 	// PersistData is used to persist the data into a bookkeeping folder
 	persistData := func(state *model.DocumentState, bookkeeping string) {
-		statemanager.PersistData(log, state.DocumentInformation.CommandID, state.DocumentInformation.Destination, bookkeeping, *state)
+		statemanager.PersistData(log, state.DocumentInformation.DocumentID, state.DocumentInformation.InstanceID, bookkeeping, *state)
 	}
 
 	assocProcessor := processor.NewAssociationProcessor(context, instanceID)

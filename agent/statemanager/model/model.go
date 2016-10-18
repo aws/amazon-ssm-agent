@@ -42,8 +42,8 @@ type PluginState struct {
 // DocumentInfo represents information stored as interim state for a document
 type DocumentInfo struct {
 	AdditionalInfo      contracts.AdditionalInfo
-	CommandID           string
-	Destination         string
+	DocumentID          string
+	InstanceID          string
 	MessageID           string
 	RunID               string
 	CreatedDate         string
