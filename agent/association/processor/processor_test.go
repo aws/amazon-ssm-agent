@@ -28,6 +28,7 @@ import (
 	messageContracts "github.com/aws/amazon-ssm-agent/agent/message/contracts"
 	stateModel "github.com/aws/amazon-ssm-agent/agent/statemanager/model"
 	"github.com/aws/amazon-ssm-agent/agent/task"
+	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/service/ssm"
 	"github.com/carlescere/scheduler"
 	"github.com/stretchr/testify/assert"
@@ -141,7 +142,7 @@ func TestProcessAssociationUnableToLoadAssociationDetail(t *testing.T) {
 		mock.AnythingOfType("*log.Mock"),
 		mock.AnythingOfType("string"),
 		mock.AnythingOfType("string"),
-		mock.AnythingOfType("*ssm.InstanceAssociationExecutionStatus")).Return(&output, nil)
+		mock.AnythingOfType("*ssm.InstanceAssociationExecutionResult")).Return(&output, nil)
 
 	// Act
 	processor.ProcessAssociation()
@@ -202,7 +203,7 @@ func mockService(svcMock *service.AssociationServiceMock, assocRawData []*model.
 		mock.AnythingOfType("*log.Mock"),
 		mock.AnythingOfType("string"),
 		mock.AnythingOfType("string"),
-		mock.AnythingOfType("*ssm.InstanceAssociationExecutionStatus")).Return(output, nil)
+		mock.AnythingOfType("*ssm.InstanceAssociationExecutionResult")).Return(output, nil)
 }
 
 func TestProcessAssociationUnableToExecutePendingDocument(t *testing.T) {
@@ -316,8 +317,9 @@ func createAssociationRawData() []*model.AssociationRawData {
 	name := "Test-Association"
 	istanceID := "Id-Test"
 	association := ssm.InstanceAssociationSummary{
-		Name:       &name,
-		InstanceId: &istanceID,
+		Name:          &name,
+		InstanceId:    &istanceID,
+		AssociationId: aws.String("test-association-id"),
 	}
 	assocRawData := model.AssociationRawData{
 		Association: &association,

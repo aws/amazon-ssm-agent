@@ -289,8 +289,8 @@ func (p *Processor) updateInstanceAssocStatus(
 
 	p.assocSvc.UpdateInstanceAssociationStatus(
 		log,
+		*assoc.AssociationId,
 		*assoc.InstanceId,
-		*assoc.Name,
 		status,
 		errorCode,
 		executionDate,

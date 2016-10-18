@@ -69,8 +69,8 @@ func (r *AssociationExecuter) ExecutePendingDocument(context context.T, pool tas
 
 	r.assocSvc.UpdateInstanceAssociationStatus(
 		log,
+		docState.DocumentInformation.CommandID,
 		docState.DocumentInformation.Destination,
-		docState.DocumentInformation.DocumentName,
 		ssm.AssociationStatusNamePending,
 		"",
 		docState.DocumentInformation.CreatedDate,
@@ -206,8 +206,8 @@ func (r *AssociationExecuter) pluginExecutionReport(
 	executionSummary := buildOutput(runtimeStatuses, totalNumberOfPlugins)
 	r.assocSvc.UpdateInstanceAssociationStatus(
 		log,
-		instanceID,
 		documentID,
+		instanceID,
 		"InProgress",
 		"",
 		times.ToIso8601UTC(times.DefaultClock.Now()),
@@ -226,8 +226,8 @@ func (r *AssociationExecuter) associationExecutionReport(
 	executionSummary := buildOutput(runtimeStatuses, totalNumberOfPlugins)
 	r.assocSvc.UpdateInstanceAssociationStatus(
 		log,
+		docInfo.CommandID,
 		docInfo.Destination,
-		docInfo.DocumentName,
 		associationStatus,
 		errorCode,
 		docInfo.CreatedDate,
