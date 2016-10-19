@@ -224,9 +224,40 @@ func (m *Manager) RequestStop(stopType contracts.StopType) (err error) {
 		m.stopPlugin.ShutdownAndWait(waitTimeout)
 	}()
 
+	if len(m.runningPlugins) > 0 {
+		m.stopLongRunningPlugins(stopType)
+	}
+
 	// wait for everything to shutdown
 	wg.Wait()
 	return nil
+}
+
+// stopLongRunningPlugins requests the long running plugins to stop
+func (m *Manager) stopLongRunningPlugins(stopType contracts.StopType) {
+	log := m.context.Log()
+	log.Infof("long running manager stop requested. Stop type: %v", stopType)
+
+	var wg sync.WaitGroup
+	i := 0
+	for pluginName, _ := range m.runningPlugins {
+		go func(wgc *sync.WaitGroup, i int) {
+			if stopType == contracts.StopTypeSoftStop {
+				wgc.Add(1)
+				defer wgc.Done()
+			}
+
+			plugin := m.registeredPlugins[pluginName]
+			if err := plugin.Handler.Stop(m.context, task.NewChanneledCancelFlag()); err != nil {
+				log.Errorf("Plugin (%v) failed to stop with error: %v",
+					pluginName,
+					err)
+			}
+
+		}(&wg, i)
+		i++
+	}
+
 }
 
 // configCloudWatch checks the local configuration file for cloud watch plugin to see if any updates to config

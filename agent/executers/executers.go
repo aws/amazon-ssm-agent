@@ -225,7 +225,7 @@ func runCommandOutputToFiles2(
 	// create stderr file
 	// fix the permissions appropriately
 	// Allow append so that if arrays of run command write to the same file, we keep appending to the file.
-	stderrWriter, err := os.OpenFile(stderrFilePath, os.O_APPEND|os.O_WRONLY|os.O_CREATE, 0600)
+	stderrWriter, err := os.OpenFile(stderrFilePath, os.O_CREATE|os.O_WRONLY|os.O_TRUNC, 0600)
 	if err != nil {
 		return
 	}
