@@ -45,9 +45,9 @@ func (bookkeepingImp) PersistDocumentInfo(log log.T, docInfo stateModel.Document
 	statemanager.PersistDocumentInfo(log, docInfo, commandID, instanceID, locationFolder)
 }
 
-// MoveCommandState wraps statemanager MoveCommandState
-func (bookkeepingImp) MoveCommandState(log log.T, commandID, instanceID, srcLocationFolder, dstLocationFolder string) {
-	statemanager.MoveCommandState(log, commandID, instanceID, srcLocationFolder, dstLocationFolder)
+// MoveDocumentState wraps statemanager MoveDocumentState
+func (bookkeepingImp) MoveDocumentState(log log.T, commandID, instanceID, srcLocationFolder, dstLocationFolder string) {
+	statemanager.MoveDocumentState(log, commandID, instanceID, srcLocationFolder, dstLocationFolder)
 }
 
 // pluginExecutionService represents the dependency for engine

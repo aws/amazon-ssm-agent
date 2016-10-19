@@ -63,7 +63,7 @@ func (p *Processor) runCmdsUsingCmdState(context context.T,
 	runPlugins(context, docState.DocumentInformation.MessageID, docState.PluginsInformation, sendResponse, cancelFlag)
 
 	//read from persisted file
-	newCmdState := commandStateHelper.GetCommandInterimState(log,
+	newCmdState := commandStateHelper.GetDocumentInterimState(log,
 		docState.DocumentInformation.DocumentID,
 		docState.DocumentInformation.InstanceID,
 		appconfig.DefaultLocationOfCurrent)
@@ -106,7 +106,7 @@ func (p *Processor) runCmdsUsingCmdState(context context.T,
 	//persist : commands execution in completed folder (terminal state folder)
 	log.Debugf("execution of %v is over. Moving interimState file from Current to Completed folder", newCmdState.DocumentInformation.MessageID)
 
-	commandStateHelper.MoveCommandState(log,
+	commandStateHelper.MoveDocumentState(log,
 		newCmdState.DocumentInformation.DocumentID,
 		newCmdState.DocumentInformation.InstanceID,
 		appconfig.DefaultLocationOfCurrent,
@@ -182,7 +182,7 @@ func (p *Processor) processMessage(msg *ssmmds.Message) {
 func (p *Processor) ExecutePendingDocument(docState *model.DocumentState) {
 	log := p.context.Log()
 
-	commandStateHelper.MoveCommandState(log,
+	commandStateHelper.MoveDocumentState(log,
 		docState.DocumentInformation.DocumentID,
 		docState.DocumentInformation.InstanceID,
 		appconfig.DefaultLocationOfPending,
@@ -257,7 +257,7 @@ func (p *Processor) processSendCommandMessage(context context.T,
 	payloadDoc := buildReply("", outputs)
 
 	//update documentInfo in interim cmd state file
-	newCmdState := commandStateHelper.GetCommandInterimState(log,
+	newCmdState := commandStateHelper.GetDocumentInterimState(log,
 		docState.DocumentInformation.DocumentID,
 		docState.DocumentInformation.InstanceID,
 		appconfig.DefaultLocationOfCurrent)
@@ -287,7 +287,7 @@ func (p *Processor) processSendCommandMessage(context context.T,
 	//persist : commands execution in completed folder (terminal state folder)
 	log.Debugf("execution of %v is over. Moving interimState file from Current to Completed folder", newCmdState.DocumentInformation.MessageID)
 
-	commandStateHelper.MoveCommandState(log,
+	commandStateHelper.MoveDocumentState(log,
 		newCmdState.DocumentInformation.DocumentID,
 		newCmdState.DocumentInformation.InstanceID,
 		appconfig.DefaultLocationOfCurrent,
@@ -394,7 +394,7 @@ func (p *Processor) processCancelCommandMessage(context context.T,
 	//persist : commands execution in completed folder (terminal state folder)
 	log.Debugf("Execution of %v is over. Moving interimState file from Current to Completed folder", docState.DocumentInformation.MessageID)
 
-	commandStateHelper.MoveCommandState(log,
+	commandStateHelper.MoveDocumentState(log,
 		docState.DocumentInformation.DocumentID,
 		docState.DocumentInformation.InstanceID,
 		appconfig.DefaultLocationOfCurrent,

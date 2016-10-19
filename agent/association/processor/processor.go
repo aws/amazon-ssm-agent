@@ -43,19 +43,20 @@ const (
 	documentWorkersLimit               = 1
 	cancelWaitDurationMillisecond      = 10000
 	scheduleHealthTimerDurationSeconds = 30
+	defaultScheduledJobQueueSize       = 100
 )
 
 // Processor contains the logic for processing association
 type Processor struct {
-	pollJob             *scheduler.Job
-	assocSvc            service.T
-	executer            executer.DocumentExecuter
-	context             context.T
-	taskPool            taskpool.T
-	agentInfo           *contracts.AgentInfo
-	stopSignal          chan bool
-	scheduledJobQueue   chan struct{}
-	scheduleHealthTimer *time.Ticker
+	pollJob              *scheduler.Job
+	assocSvc             service.T
+	executer             executer.DocumentExecuter
+	context              context.T
+	taskPool             taskpool.T
+	agentInfo            *contracts.AgentInfo
+	stopSignal           chan bool
+	runAssociationSignal chan struct{}
+	scheduleHealthTimer  *time.Ticker
 }
 
 // NewAssociationProcessor returns a new Processor with the given context.
@@ -75,20 +76,21 @@ func NewAssociationProcessor(context context.T, instanceID string) *Processor {
 		OsVersion: config.Os.Version,
 	}
 
-	scheduledJobQueue := make(chan struct{})
+	// Create scheduledJobQueue as a buffered channel
+	runAssociationSignal := make(chan struct{}, 100)
 
 	assocSvc := service.NewAssociationService(name)
-	executer := executer.NewAssociationExecuter(assocSvc, &agentInfo, scheduledJobQueue)
+	executer := executer.NewAssociationExecuter(assocSvc, &agentInfo, runAssociationSignal)
 
 	return &Processor{
-		context:             assocContext,
-		assocSvc:            assocSvc,
-		taskPool:            taskPool,
-		executer:            executer,
-		agentInfo:           &agentInfo,
-		stopSignal:          make(chan bool),
-		scheduledJobQueue:   scheduledJobQueue,
-		scheduleHealthTimer: time.NewTicker(scheduleHealthTimerDurationSeconds * time.Second),
+		context:              assocContext,
+		assocSvc:             assocSvc,
+		taskPool:             taskPool,
+		executer:             executer,
+		agentInfo:            &agentInfo,
+		stopSignal:           make(chan bool),
+		runAssociationSignal: runAssociationSignal,
+		scheduleHealthTimer:  time.NewTicker(scheduleHealthTimerDurationSeconds * time.Second),
 	}
 }
 
@@ -100,14 +102,13 @@ func (p *Processor) StartAssociationWorker() {
 	go func() {
 		log.Infof("Association worker started")
 		for {
-			select {
-			case <-p.scheduledJobQueue:
+			_, more := <-p.runAssociationSignal
+			if more {
 				log.Debug("Receieved signal for executing scheduled association")
 				p.runScheduledAssociation(log)
-			}
-
-			if p.isStopped() {
-				break
+			} else {
+				log.Debug("Receieved all signal for executing scheduled association")
+				return
 			}
 		}
 	}()
@@ -116,7 +117,7 @@ func (p *Processor) StartAssociationWorker() {
 		for {
 			select {
 			case <-p.scheduleHealthTimer.C:
-				p.TryExecuteNextScheduledAssociation(log)
+				p.SendRunAssociationSignal(log)
 			}
 		}
 	}()
@@ -172,7 +173,6 @@ func (p *Processor) ProcessAssociation() {
 		//	log.Debugf("New document associated %v.", *assocName)
 		//}
 
-		//TODO: add association in memory cache to improve the performance
 		if err = p.assocSvc.LoadAssociationDetail(log, assoc); err != nil {
 			message := fmt.Sprintf("Unable to load association details, %v", err)
 			log.Error(message)
@@ -187,13 +187,13 @@ func (p *Processor) ProcessAssociation() {
 	}
 
 	schedulemanager.Refresh(log, associations)
-	p.TryExecuteNextScheduledAssociation(log)
+	p.SendRunAssociationSignal(log)
 }
 
 // TryExecuteNextScheduledAssociation sends out signal to the worker to process next scheduled association
-func (p *Processor) TryExecuteNextScheduledAssociation(log log.T) {
+func (p *Processor) SendRunAssociationSignal(log log.T) {
 	log.Debug("Sending signal for executing scheduled association")
-	p.scheduledJobQueue <- struct{}{}
+	p.runAssociationSignal <- struct{}{}
 }
 
 // runScheduledAssociation runs the next scheduled association
@@ -220,7 +220,7 @@ func (p *Processor) runScheduledAssociation(log log.T) {
 		return
 	}
 
-	if assocBookkeeping.IsDocumentExist(
+	if assocBookkeeping.IsDocumentCurrentlyExecuting(
 		*scheduledAssociation.Association.AssociationId,
 		*scheduledAssociation.Association.InstanceId) {
 

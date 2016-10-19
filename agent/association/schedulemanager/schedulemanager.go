@@ -12,6 +12,7 @@
 // permissions and limitations under the License.
 
 // Package schedulemanager schedules association and submits the association to the task pool
+// schedulemanager is a singleton so it can be access at the plugin level
 package schedulemanager
 
 import (
@@ -22,14 +23,11 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/times"
-	"github.com/aws/aws-sdk-go/aws"
 	"github.com/gorhill/cronexpr"
 )
 
 var associations = []*model.AssociationRawData{}
 var lock sync.RWMutex
-
-var cronExpressionEveryFiveMinutes = "*/5 * * * *"
 
 // Refresh refreshes cached associationRawData
 func Refresh(log log.T, assocs []*model.AssociationRawData) {
@@ -37,47 +35,37 @@ func Refresh(log log.T, assocs []*model.AssociationRawData) {
 	defer lock.Unlock()
 
 	log.Debugf("Refresh cached association data with %v associations", len(assocs))
-
 	currentTime := times.DefaultClock.Now()
-	for _, assoc := range assocs {
-		assoc.CreateDate = currentTime
-		if assoc.Association.ScheduleExpression == nil {
-			assoc.Association.ScheduleExpression = aws.String("")
+	unchangedAssociation := 0
+
+	for _, newAssoc := range assocs {
+		foundMatch := false
+		for _, oldAssoc := range associations {
+			if *newAssoc.Association.AssociationId == *oldAssoc.Association.AssociationId {
+				if *newAssoc.Association.Checksum == *oldAssoc.Association.Checksum {
+					unchangedAssociation++
+					newAssoc.Update(oldAssoc)
+					foundMatch = true
+				}
+				break
+			}
 		}
 
-		if _, err := cronexpr.Parse(*assoc.Association.ScheduleExpression); err != nil {
-			log.Infof("Failed to parse schedule expression %v, %v", *(assoc.Association.ScheduleExpression), err)
-			log.Infof("Set schedule expression to default %v", cronExpressionEveryFiveMinutes)
-			assoc.Association.ScheduleExpression = aws.String(cronExpressionEveryFiveMinutes)
-		}
+		if !foundMatch {
+			newAssoc.Initialize(log, currentTime)
+			log.Debugf("Association %v next ScheduledDate to %v", *newAssoc.Association.AssociationId, newAssoc.NextScheduledDate.String())
 
-		log.Debugf("Loaded association %v with schedule expression %v", *(assoc.Association.AssociationId), *(assoc.Association.ScheduleExpression))
-	}
-
-	for _, assoc := range assocs {
-		var assocContent string
-		var err error
-		if assocContent, err = jsonutil.Marshal(assoc); err != nil {
-			log.Errorf("failed to parse scheduled association, %v", err)
-		}
-		log.Debugf("Parsed Scheduled Association is %v", jsonutil.Indent(assocContent))
-	}
-
-	//TODO: check how we going to handle the association re-run for 1.2, 1.0
-	for _, assoc := range assocs {
-		if assoc.NextScheduledDate.IsZero() {
-			if *assoc.Association.ScheduleExpression == cronExpressionEveryFiveMinutes {
-				// run association immediately
-				assoc.NextScheduledDate = currentTime
+			if assocContent, err := jsonutil.Marshal(newAssoc); err != nil {
+				log.Errorf("Failed to parse scheduled association, %v", err)
 			} else {
-				assoc.NextScheduledDate = cronexpr.MustParse(*assoc.Association.ScheduleExpression).Next(currentTime)
+				log.Debugf("Parsed Scheduled Association is %v", jsonutil.Indent(assocContent))
 			}
 
-			log.Debugf("Update Association %v next ScheduledDate to %v", *assoc.Association.AssociationId, assoc.NextScheduledDate.String())
 		}
 	}
 
 	associations = assocs
+	log.Debugf("Refresh cached association data completed, %v new assocations associated", len(assocs)-unchangedAssociation)
 }
 
 // LoadNextScheduledAssociation returns next scheduled association
@@ -119,6 +107,8 @@ func MarkScheduledAssociationAsCompleted(log log.T, associationID string) {
 			break
 		}
 	}
+
+	log.Debugf("Association %v no longer associated", associationID)
 }
 
 // Schedules returns all the cached schedules

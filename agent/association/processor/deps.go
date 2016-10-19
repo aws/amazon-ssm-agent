@@ -50,7 +50,7 @@ func (systemImp) IsManagedInstance() (bool, error) {
 // bookkeepingService represents the dependency for statemanager
 type bookkeepingService interface {
 	PersistData(log log.T, commandID, instanceID, locationFolder string, object interface{})
-	IsDocumentExist(documentID, instanceID string) bool
+	IsDocumentCurrentlyExecuting(documentID, instanceID string) bool
 }
 
 type assocBookkeepingService struct{}
@@ -61,8 +61,8 @@ func (assocBookkeepingService) PersistData(log log.T, commandID, instanceID, loc
 }
 
 // IsDocumentExist wraps statemanager IsDocumentExist
-func (assocBookkeepingService) IsDocumentExist(documentID, instanceID string) bool {
-	return statemanager.IsDocumentExist(documentID, instanceID)
+func (assocBookkeepingService) IsDocumentCurrentlyExecuting(documentID, instanceID string) bool {
+	return statemanager.IsDocumentCurrentlyExecuting(documentID, instanceID)
 }
 
 // parserService represents the dependency for association parser

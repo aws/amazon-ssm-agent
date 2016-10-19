@@ -17,8 +17,13 @@ package model
 import (
 	"time"
 
+	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/service/ssm"
+	"github.com/gorhill/cronexpr"
 )
+
+var cronExpressionEveryFiveMinutes = "*/5 * * * *"
 
 // AssociationRawData represents detail information of association
 type AssociationRawData struct {
@@ -26,4 +31,34 @@ type AssociationRawData struct {
 	NextScheduledDate time.Time
 	Association       *ssm.InstanceAssociationSummary
 	Document          *string
+}
+
+// Update updates new association with old association details
+func (newAssoc *AssociationRawData) Update(oldAssoc *AssociationRawData) {
+	newAssoc.CreateDate = oldAssoc.CreateDate
+	newAssoc.NextScheduledDate = oldAssoc.NextScheduledDate
+	newAssoc.Association.ScheduleExpression = oldAssoc.Association.ScheduleExpression
+}
+
+// Initialize initializes default values for the given new association
+func (newAssoc *AssociationRawData) Initialize(log log.T, currentTime time.Time) {
+	newAssoc.CreateDate = currentTime
+
+	//this line is need due to a service bug, we can remove it once it's addressed
+	if newAssoc.Association.ScheduleExpression == nil {
+		newAssoc.Association.ScheduleExpression = aws.String("")
+	}
+
+	if _, err := cronexpr.Parse(*newAssoc.Association.ScheduleExpression); err != nil {
+		log.Infof("Failed to parse schedule expression %v, %v", *(newAssoc.Association.ScheduleExpression), err)
+		log.Infof("Set schedule expression to default %v", cronExpressionEveryFiveMinutes)
+		newAssoc.Association.ScheduleExpression = aws.String(cronExpressionEveryFiveMinutes)
+	}
+
+	if *newAssoc.Association.ScheduleExpression == cronExpressionEveryFiveMinutes {
+		// run association immediately
+		newAssoc.NextScheduledDate = currentTime
+	} else {
+		newAssoc.NextScheduledDate = cronexpr.MustParse(*newAssoc.Association.ScheduleExpression).Next(currentTime)
+	}
 }

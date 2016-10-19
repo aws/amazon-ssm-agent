@@ -78,7 +78,7 @@ func (r *AssociationExecuter) ExecutePendingDocument(context context.T, pool tas
 		docState.DocumentInformation.CreatedDate,
 		documentPendingMessage)
 
-	bookkeepingSvc.MoveCommandState(log,
+	bookkeepingSvc.MoveDocumentState(log,
 		docState.DocumentInformation.DocumentID,
 		docState.DocumentInformation.InstanceID,
 		appconfig.DefaultLocationOfPending,
@@ -163,7 +163,7 @@ func (r *AssociationExecuter) ExecuteInProgressDocument(context context.T, docSt
 
 	//persist : commands execution in completed folder (terminal state folder)
 	log.Debugf("execution of %v is over. Moving docState file from Current to Completed folder", docState.DocumentInformation.DocumentID)
-	bookkeepingSvc.MoveCommandState(log,
+	bookkeepingSvc.MoveDocumentState(log,
 		docState.DocumentInformation.DocumentID,
 		docState.DocumentInformation.InstanceID,
 		appconfig.DefaultLocationOfCurrent,
