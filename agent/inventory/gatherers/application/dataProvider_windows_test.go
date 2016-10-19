@@ -22,6 +22,7 @@ import (
 	"testing"
 
 	"github.com/aws/amazon-ssm-agent/agent/context"
+	"github.com/aws/amazon-ssm-agent/agent/inventory/model"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -46,7 +47,7 @@ func MockTestExecutorWithConvertToApplicationDataReturningRandomString(command s
 
 func TestConvertToApplicationData(t *testing.T) {
 
-	var data []inventory.ApplicationData
+	var data []model.ApplicationData
 	var err error
 
 	data, err = ConvertToApplicationData(sampleData, mockArch)
@@ -58,7 +59,7 @@ func TestConvertToApplicationData(t *testing.T) {
 
 func TestExecutePowershellCommands(t *testing.T) {
 
-	var data []inventory.ApplicationData
+	var data []model.ApplicationData
 	c := context.NewMockDefault()
 	mockCmd := "RandomCommand"
 	mockArgs := "RandomCommandArgs"
@@ -84,7 +85,7 @@ func TestExecutePowershellCommands(t *testing.T) {
 
 func TestCollectApplicationData(t *testing.T) {
 
-	var data []inventory.ApplicationData
+	var data []model.ApplicationData
 	c := context.NewMockDefault()
 
 	//testing command executor without errors
