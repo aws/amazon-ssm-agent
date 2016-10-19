@@ -17,6 +17,7 @@ package processor
 import (
 	"errors"
 	"testing"
+	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/association/executer"
@@ -177,14 +178,13 @@ func TestProcessAssociationUnableToParseAssociation(t *testing.T) {
 		mock.AnythingOfType("*model.AssociationRawData")).Return(&payload, errors.New("failed to parse data"))
 
 	// Act
+	processor.StartAssociationWorker()
 	processor.ProcessAssociation()
 
 	// Assert
 	assert.True(t, svcMock.AssertNumberOfCalls(t, "CreateNewServiceIfUnHealthy", 1))
 	assert.True(t, svcMock.AssertNumberOfCalls(t, "ListInstanceAssociations", 1))
 	assert.True(t, svcMock.AssertNumberOfCalls(t, "LoadAssociationDetail", 1))
-	assert.True(t, parserMock.AssertNumberOfCalls(t, "ParseDocumentWithParams", 1))
-	assert.True(t, svcMock.AssertNumberOfCalls(t, "UpdateInstanceAssociationStatus", 1))
 }
 
 func mockService(svcMock *service.AssociationServiceMock, assocRawData []*model.AssociationRawData, output *ssm.UpdateInstanceAssociationStatusOutput) {
@@ -236,16 +236,15 @@ func TestProcessAssociationUnableToExecutePendingDocument(t *testing.T) {
 		mock.AnythingOfType("*model.DocumentState")).Return(errors.New("failed to execute document"))
 
 	// Act
+	processor.StartAssociationWorker()
 	processor.ProcessAssociation()
 
 	// Assert
 	assert.True(t, svcMock.AssertNumberOfCalls(t, "CreateNewServiceIfUnHealthy", 1))
 	assert.True(t, svcMock.AssertNumberOfCalls(t, "ListInstanceAssociations", 1))
 	assert.True(t, svcMock.AssertNumberOfCalls(t, "LoadAssociationDetail", 1))
-	assert.True(t, parserMock.AssertNumberOfCalls(t, "ParseDocumentWithParams", 1))
-	assert.True(t, parserMock.AssertNumberOfCalls(t, "InitializeDocumentState", 1))
-	assert.True(t, svcMock.AssertNumberOfCalls(t, "UpdateInstanceAssociationStatus", 1))
-	assert.True(t, executerMock.AssertNumberOfCalls(t, "ExecutePendingDocument", 1))
+	assert.True(t, parserMock.AssertNumberOfCalls(t, "ParseDocumentWithParams", 0))
+	assert.True(t, parserMock.AssertNumberOfCalls(t, "InitializeDocumentState", 0))
 }
 
 func mockParser(parserMock *parserMock, payload *messageContracts.SendCommandPayload, docState stateModel.DocumentState) {
@@ -291,16 +290,14 @@ func TestProcessAssociationSuccessful(t *testing.T) {
 		mock.AnythingOfType("*model.DocumentState")).Return(nil)
 
 	// Act
+	processor.StartAssociationWorker()
 	processor.ProcessAssociation()
 
 	// Assert
 	assert.True(t, svcMock.AssertNumberOfCalls(t, "CreateNewServiceIfUnHealthy", 1))
 	assert.True(t, svcMock.AssertNumberOfCalls(t, "ListInstanceAssociations", 1))
 	assert.True(t, svcMock.AssertNumberOfCalls(t, "LoadAssociationDetail", 1))
-	assert.True(t, parserMock.AssertNumberOfCalls(t, "ParseDocumentWithParams", 1))
-	assert.True(t, parserMock.AssertNumberOfCalls(t, "InitializeDocumentState", 1))
 	assert.True(t, svcMock.AssertNumberOfCalls(t, "UpdateInstanceAssociationStatus", 0))
-	assert.True(t, executerMock.AssertNumberOfCalls(t, "ExecutePendingDocument", 1))
 }
 
 func createProcessor() *Processor {
@@ -308,6 +305,8 @@ func createProcessor() *Processor {
 	processor.context = context.NewMockDefault()
 	processor.taskPool = taskpool.Manager{}
 	processor.stopSignal = make(chan bool)
+	processor.scheduledJobQueue = make(chan struct{})
+	processor.scheduleHealthTimer = time.NewTicker(30 * time.Second)
 
 	return &processor
 }

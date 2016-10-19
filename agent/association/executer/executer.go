@@ -20,6 +20,7 @@ import (
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/association/converter"
+	"github.com/aws/amazon-ssm-agent/agent/association/schedulemanager"
 	"github.com/aws/amazon-ssm-agent/agent/association/service"
 	"github.com/aws/amazon-ssm-agent/agent/association/taskpool"
 	"github.com/aws/amazon-ssm-agent/agent/context"
@@ -47,15 +48,17 @@ type DocumentExecuter interface {
 
 // AssociationExecuter represents the implementation of document executer
 type AssociationExecuter struct {
-	assocSvc  service.T
-	agentInfo *contracts.AgentInfo
+	assocSvc          service.T
+	agentInfo         *contracts.AgentInfo
+	scheduledJobQueue chan struct{}
 }
 
 // NewAssociationExecuter returns a new document executer
-func NewAssociationExecuter(assocSvc service.T, agentInfo *contracts.AgentInfo) *AssociationExecuter {
+func NewAssociationExecuter(assocSvc service.T, agentInfo *contracts.AgentInfo, scheduledJobQueue chan struct{}) *AssociationExecuter {
 	runner := AssociationExecuter{
-		assocSvc:  assocSvc,
-		agentInfo: agentInfo,
+		assocSvc:          assocSvc,
+		agentInfo:         agentInfo,
+		scheduledJobQueue: scheduledJobQueue,
 	}
 
 	return &runner
@@ -93,7 +96,14 @@ func (r *AssociationExecuter) ExecutePendingDocument(context context.T, pool tas
 // ExecuteInProgressDocument parses and processes the document
 func (r *AssociationExecuter) ExecuteInProgressDocument(context context.T, docState *stateModel.DocumentState, cancelFlag task.CancelFlag) {
 	log := context.Log()
-	log.Debug("Running plugins...")
+
+	defer func() {
+		schedulemanager.MarkScheduledAssociationAsCompleted(log, docState.DocumentInformation.DocumentID)
+		if r.scheduledJobQueue != nil {
+			log.Debugf("Sending signal for executing scheduled association")
+			r.scheduledJobQueue <- struct{}{}
+		}
+	}()
 
 	if docState.InstancePluginsInformation == nil {
 		log.Debug("Converting plugin information to fit v2 schema.")

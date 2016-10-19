@@ -68,6 +68,7 @@ func (p *Processor) Execute(context context.T) (err error) {
 		pollAssociationFrequencyMinutes); err != nil {
 		context.Log().Errorf("unable to schedule association processor. %v", err)
 	}
+	p.assocProcessor.StartAssociationWorker()
 	p.assocProcessor.SetPollJob(job)
 	return
 }

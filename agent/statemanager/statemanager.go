@@ -72,6 +72,19 @@ func PersistData(log log.T, commandID, instanceID, locationFolder string, object
 	}
 }
 
+// IsDocumentExist checks if document already present in Pending or Current folder
+func IsDocumentExist(documentID, instanceID string) bool {
+	lockDocument(documentID)
+	defer unlockDocument(documentID)
+
+	absoluteFileName := cmdStateFileName(documentID, instanceID, appconfig.DefaultLocationOfPending)
+	if fileutil.Exists(absoluteFileName) {
+		return true
+	}
+	absoluteFileName = cmdStateFileName(documentID, instanceID, appconfig.DefaultLocationOfCurrent)
+	return fileutil.Exists(absoluteFileName)
+}
+
 // RemoveData deletes the fileName from locationFolder under defaultLogDir/instanceID
 func RemoveData(log log.T, commandID, instanceID, locationFolder string) {
 

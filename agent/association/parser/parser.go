@@ -43,7 +43,6 @@ func ParseDocumentWithParams(log log.T,
 		log.Error("Could not marshal association! ", err)
 		return nil, err
 	}
-	log.Debug("Processing assocation ", rawData.Association.Name)
 	log.Debug("Processing assocation ", jsonutil.Indent(rawDataContent))
 
 	payload := &messageContracts.SendCommandPayload{}
