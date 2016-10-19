@@ -46,15 +46,15 @@ func (t *T) Name() string {
 }
 
 // Run executes application gatherer and returns list of inventory.Item comprising of application data
-func (t *T) Run(context context.T, configuration inventory.Config) (items []inventory.Item, err error) {
+func (t *T) Run(context context.T, configuration model.Config) (items []model.Item, err error) {
 
-	var result inventory.Item
+	var result model.Item
 
 	//CaptureTime must comply with format: 2016-07-30T18:15:37Z to comply with regex at SSM.
 	currentTime := time.Now().UTC()
 	captureTime := currentTime.Format(time.RFC3339)
 
-	result = inventory.Item{
+	result = model.Item{
 		Name:          t.Name(),
 		SchemaVersion: SchemaVersionOfApplication,
 		Content:       collectData(context),

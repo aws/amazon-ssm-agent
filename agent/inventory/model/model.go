@@ -12,7 +12,7 @@
 // permissions and limitations under the License.
 
 // Package inventory contains routines that periodically updates basic instance inventory to Inventory service
-package inventory
+package model
 
 //TODO: add all inventory types here
 //TODO: if all attributes of inventory types become strong typed then we can directly refer to aws-sdk rather

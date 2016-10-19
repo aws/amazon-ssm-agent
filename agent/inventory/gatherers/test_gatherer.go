@@ -41,9 +41,9 @@ func (m *Mock) Name() string {
 }
 
 // Run mock implementation of namesake
-func (m *Mock) Run(context context.T, configuration inventory.Config) ([]inventory.Item, error) {
+func (m *Mock) Run(context context.T, configuration model.Config) ([]model.Item, error) {
 	args := m.Called(context, configuration)
-	return args.Get(0).([]inventory.Item), args.Error(1)
+	return args.Get(0).([]model.Item), args.Error(1)
 }
 
 // RequestStop mock implementation of namesake

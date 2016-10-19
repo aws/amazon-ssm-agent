@@ -77,11 +77,11 @@ func NewBasicInventoryProvider(context context.T) (*BasicInventoryProvider, erro
 	cfg.Endpoint = &appCfg.Ssm.Endpoint
 
 	//setting basic inventory config
-	provider.isEnabled = appCfg.Ssm.BasicInventoryGatherer == inventory.Enabled
-	provider.isOptimizerEnabled = appCfg.Ssm.InventoryOptimizer == inventory.Enabled
+	provider.isEnabled = appCfg.Ssm.BasicInventoryGatherer == model.Enabled
+	provider.isOptimizerEnabled = appCfg.Ssm.InventoryOptimizer == model.Enabled
 
 	provider.context = c
-	provider.stopPolicy = sdkutil.NewStopPolicy(pluginName, inventory.ErrorThreshold)
+	provider.stopPolicy = sdkutil.NewStopPolicy(pluginName, model.ErrorThreshold)
 	provider.ssm = ssm.New(session.New(cfg))
 	//for now we are using the same frequency as that of health plugin to send inventory data
 	provider.frequencyInMinutes = appCfg.Ssm.HealthFrequencyMinutes
@@ -138,9 +138,9 @@ func (b *BasicInventoryProvider) ConvertToMap(input interface{}) map[string]*str
 }
 
 // GetInstanceInformation returns the latest set of instance information
-func GetInstanceInformation(context context.T) (inventory.InstanceInformation, error) {
+func GetInstanceInformation(context context.T) (model.InstanceInformation, error) {
 
-	var instanceInfo inventory.InstanceInformation
+	var instanceInfo model.InstanceInformation
 
 	log := context.Log()
 
@@ -191,18 +191,18 @@ func GetInstanceInformation(context context.T) (inventory.InstanceInformation, e
 }
 
 // instanceInformationInventoryItem returns latest instance information inventory item
-func (b *BasicInventoryProvider) instanceInformationInventoryItem() (inventory.Item, error) {
+func (b *BasicInventoryProvider) instanceInformationInventoryItem() (model.Item, error) {
 	var err error
-	var data inventory.InstanceInformation
-	var item inventory.Item
+	var data model.InstanceInformation
+	var item model.Item
 
 	if data, err = GetInstanceInformation(b.context); err == nil {
 		//CaptureTime must comply with format: 2016-07-30T18:15:37Z or else it will throw error
 		t := time.Now().UTC()
 		time := t.Format(time.RFC3339)
 
-		item = inventory.Item{
-			Name:          inventory.AWSInstanceInformation,
+		item = model.Item{
+			Name:          model.AWSInstanceInformation,
 			Content:       data,
 			SchemaVersion: schemaVersionOfInventoryItem,
 			//capture time must be in UTC so that formatting to RFC3339 complies with regex at SSM

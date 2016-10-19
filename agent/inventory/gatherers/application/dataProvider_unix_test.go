@@ -65,7 +65,7 @@ func TestConvertToApplicationData(t *testing.T) {
 
 func TestGetApplicationData(t *testing.T) {
 
-	var data []inventory.ApplicationData
+	var data []model.ApplicationData
 	var err error
 
 	//setup
@@ -95,7 +95,7 @@ func TestGetApplicationData(t *testing.T) {
 
 func TestCollectApplicationData(t *testing.T) {
 
-	var data []inventory.ApplicationData
+	var data []model.ApplicationData
 
 	//setup
 	c := context.NewMockDefault()

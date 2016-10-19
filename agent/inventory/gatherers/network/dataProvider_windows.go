@@ -80,9 +80,9 @@ func executeCommand(command string, args ...string) ([]byte, error) {
 }
 
 // GetAdvancedNetworkData returns advanced network information in windows platform using powershell commands
-func GetAdvancedNetworkData(context context.T, data []inventory.NetworkData) []inventory.NetworkData {
+func GetAdvancedNetworkData(context context.T, data []model.NetworkData) []model.NetworkData {
 	var dataB []byte
-	var modifiedData []inventory.NetworkData
+	var modifiedData []model.NetworkData
 	log := context.Log()
 
 	dataB, _ = json.Marshal(data)
@@ -105,7 +105,7 @@ func GetAdvancedNetworkData(context context.T, data []inventory.NetworkData) []i
 }
 
 // GetNetworkDataUsingPowershell gets network data by executing powershell command
-func GetNetworkDataUsingPowershell(context context.T, networkData inventory.NetworkData) inventory.NetworkData {
+func GetNetworkDataUsingPowershell(context context.T, networkData model.NetworkData) model.NetworkData {
 
 	var dataB, output []byte
 	var err error
@@ -142,7 +142,7 @@ func GetNetworkDataUsingPowershell(context context.T, networkData inventory.Netw
 
 // EditNetworkData returns the modified set of data after parsing the command output. In case it fails to parse the data,
 // it returns the unmodified data.
-func EditNetworkData(log log.T, data inventory.NetworkData, cmdOutput string) (inventory.NetworkData, error) {
+func EditNetworkData(log log.T, data model.NetworkData, cmdOutput string) (model.NetworkData, error) {
 	var dataB []byte
 	var err error
 	var config NetworkInterfaceConfiguration

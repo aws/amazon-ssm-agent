@@ -67,12 +67,12 @@ func TestConvertToMap(t *testing.T) {
 
 func TestConvertToSSMInventoryItem(t *testing.T) {
 
-	var item inventory.Item
+	var item model.Item
 	var err error
 	var dataAfterConversion *ssm.InventoryItem
 
 	//testing with Item.Content being a struct
-	item = inventory.Item{
+	item = model.Item{
 		Name:          "RandomInventoryItem",
 		Content:       FakeStructForTesting(),
 		SchemaVersion: "1.0",
@@ -88,7 +88,7 @@ func TestConvertToSSMInventoryItem(t *testing.T) {
 	var multipleEntries []StructForTesting
 	multipleEntries = append(multipleEntries, FakeStructForTesting(), FakeStructForTesting())
 
-	item = inventory.Item{
+	item = model.Item{
 		Name:          "RandomInventoryItem",
 		Content:       multipleEntries,
 		SchemaVersion: "1.0",
@@ -99,7 +99,7 @@ func TestConvertToSSMInventoryItem(t *testing.T) {
 	assert.Equal(t, len(multipleEntries), len(dataAfterConversion.Content), "ssm.InventoryItem.Content should have only 1 entry")
 
 	//testing with Item.Content with being a non-struct and non-slice data type
-	item = inventory.Item{
+	item = model.Item{
 		Name:          "RandomInventoryItem",
 		Content:       "NotSupportedContent",
 		SchemaVersion: "1.0",

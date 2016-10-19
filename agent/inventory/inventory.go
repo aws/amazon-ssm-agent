@@ -67,7 +67,7 @@ func NewPlugin(context context.T) (*Plugin, error) {
 	var err error
 	var p = Plugin{}
 
-	c := context.With("[" + inventory.InventoryPluginName + "]")
+	c := context.With("[" + model.InventoryPluginName + "]")
 	log := c.Log()
 
 	// reading agent appconfig
@@ -82,10 +82,10 @@ func NewPlugin(context context.T) (*Plugin, error) {
 	cfg.Endpoint = &appCfg.Ssm.Endpoint
 
 	//setting inventory config
-	p.isEnabled = appCfg.Ssm.InventoryPlugin == inventory.Enabled
+	p.isEnabled = appCfg.Ssm.InventoryPlugin == model.Enabled
 
 	p.context = c
-	p.stopPolicy = sdkutil.NewStopPolicy(inventory.InventoryPluginName, inventory.ErrorThreshold)
+	p.stopPolicy = sdkutil.NewStopPolicy(model.InventoryPluginName, model.ErrorThreshold)
 	p.ssm = ssm.New(session.New(cfg))
 
 	//location - path where inventory policy doc is stored. (Note: this is temporary till we integrate with
@@ -109,15 +109,15 @@ func NewPlugin(context context.T) (*Plugin, error) {
 func (p *Plugin) ApplyInventoryPolicy() {
 	//NOTE: this will only be used until we integrate with associate plugin
 	log := p.context.Log()
-	var policy inventory.Policy
+	var policy model.Policy
 	var inventoryItems []*ssm.InventoryItem
-	var items []inventory.Item
+	var items []model.Item
 	var err error
 	var content string
 
 	log.Infof("Looking for SSM Inventory policy in %v", p.location)
 
-	doc := path.Join(p.location, inventory.InventoryPolicyDocName)
+	doc := path.Join(p.location, model.InventoryPolicyDocName)
 	//get latest instanceInfo inventory item
 	if fileutil.Exists(doc) {
 		log.Infof("Applying Inventory policy")
@@ -134,7 +134,7 @@ func (p *Plugin) ApplyInventoryPolicy() {
 			}
 
 			//map of all valid gatherers & respective configs to run
-			var gatherers map[gatherers.T]inventory.Config
+			var gatherers map[gatherers.T]model.Config
 
 			//validate all gatherers
 			if gatherers, err = p.ValidateGatherers(policy); err != nil {
@@ -169,10 +169,10 @@ func (p *Plugin) ApplyInventoryPolicy() {
 
 // ValidateGatherers verifies all gatherers of inventory policy and returns a map of eligible gatherers to run along
 // their config to run. It throws an error if gatherer is not installed.
-func (p *Plugin) ValidateGatherers(policy inventory.Policy) (executors map[gatherers.T]inventory.Config, err error) {
+func (p *Plugin) ValidateGatherers(policy model.Policy) (executors map[gatherers.T]model.Config, err error) {
 	var gatherer gatherers.T
 	var isGathererSupported, isGathererInstalled bool
-	executors = make(map[gatherers.T]inventory.Config)
+	executors = make(map[gatherers.T]model.Config)
 	log := p.context.Log()
 
 	//NOTE:
@@ -203,13 +203,13 @@ func (p *Plugin) ValidateGatherers(policy inventory.Policy) (executors map[gathe
 
 // RunGatherers execute given array of gatherers and accordingly returns. It returns error if gatherer is not
 // registered or if at any stage the data returned breaches size limit
-func (p *Plugin) RunGatherers(gatherers map[gatherers.T]inventory.Config) (items []inventory.Item, err error) {
+func (p *Plugin) RunGatherers(gatherers map[gatherers.T]model.Config) (items []model.Item, err error) {
 
 	//NOTE: Currently all gatherers will be invoked in synchronous & sequential fashion.
 	//Parallel execution of gatherers hinges upon inventory plugin becoming a long running plugin - which will be
 	//mainly for custom inventory gatherer to send data independently of associate.
 
-	var gItems []inventory.Item
+	var gItems []model.Item
 
 	log := p.context.Log()
 
@@ -242,7 +242,7 @@ func (p *Plugin) RunGatherers(gatherers map[gatherers.T]inventory.Config) (items
 
 // VerifyInventoryDataSize returns true if size of collected inventory data is within size restrictions placed by SSM,
 // else false.
-func (p *Plugin) VerifyInventoryDataSize(item inventory.Item, items []inventory.Item) bool {
+func (p *Plugin) VerifyInventoryDataSize(item model.Item, items []model.Item) bool {
 	var itemSize, itemsSize float32
 	log := p.context.Log()
 
@@ -259,7 +259,7 @@ func (p *Plugin) VerifyInventoryDataSize(item inventory.Item, items []inventory.
 	//Refer to https://wiki.ubuntu.com/UnitsPolicy regarding KiB to bytes conversion.
 	//TODO: 200 KB limit might be too less for certain inventory types like Patch - we might have to revise that and
 	//use different limits for different category.
-	if (itemSize/1024) > inventory.SizeLimitKBPerInventoryType || (itemsSize/1024) > inventory.TotalSizeLimitKB {
+	if (itemSize/1024) > model.SizeLimitKBPerInventoryType || (itemsSize/1024) > model.TotalSizeLimitKB {
 		return false
 	}
 
@@ -270,24 +270,24 @@ func (p *Plugin) VerifyInventoryDataSize(item inventory.Item, items []inventory.
 
 // Name returns Plugin Name
 func (p *Plugin) Name() string {
-	return inventory.InventoryPluginName
+	return model.InventoryPluginName
 }
 
 // Execute starts the scheduling of inventory plugin
 func (p *Plugin) Execute(context context.T) (err error) {
 
 	log := context.Log()
-	log.Infof("Starting %v plugin", inventory.InventoryPluginName)
+	log.Infof("Starting %v plugin", model.InventoryPluginName)
 
 	//Note: Currently this plugin is not integrated with associate plugin so in turn
 	//it schedules a job - that periodically reads inventory policy doc from a file and applies it.
 	//TODO: remove this scheduled job - after integrating with associate plugin
 	if p.isEnabled {
 		if p.job, err = scheduler.Every(p.frequencyInMinutes).Minutes().Run(p.ApplyInventoryPolicy); err != nil {
-			err = log.Errorf("Unable to schedule %v plugin. %v", inventory.InventoryPluginName, err)
+			err = log.Errorf("Unable to schedule %v plugin. %v", model.InventoryPluginName, err)
 		}
 	} else {
-		log.Debugf("Skipping execution of %s plugin since its disabled", inventory.InventoryPluginName)
+		log.Debugf("Skipping execution of %s plugin since its disabled", model.InventoryPluginName)
 	}
 	return
 }

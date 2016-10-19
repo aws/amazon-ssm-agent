@@ -30,11 +30,11 @@ func MockInventoryUploader() *InventoryUploader {
 	return &uploader
 }
 
-func FakeInventoryItems(count int) (items []inventory.Item) {
+func FakeInventoryItems(count int) (items []model.Item) {
 	i := 0
 
 	for i < count {
-		items = append(items, inventory.Item{
+		items = append(items, model.Item{
 			Name:          "RandomInventoryItem",
 			Content:       FakeStructForTesting(),
 			SchemaVersion: "1.0",
@@ -49,7 +49,7 @@ func FakeInventoryItems(count int) (items []inventory.Item) {
 
 func TestConvertToSsmInventoryItems(t *testing.T) {
 
-	var items []inventory.Item
+	var items []model.Item
 	var inventoryItems []*ssm.InventoryItem
 	var err error
 
@@ -66,7 +66,7 @@ func TestConvertToSsmInventoryItems(t *testing.T) {
 	assert.Equal(t, len(items), len(inventoryItems), "Count of inventory items should be equal to input")
 
 	//testing negative scenario
-	item := inventory.Item{
+	item := model.Item{
 		Name:    "RandomInvalidInventoryType",
 		Content: "RandomStringIsNotSupported",
 	}

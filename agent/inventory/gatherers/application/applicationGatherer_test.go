@@ -22,9 +22,9 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func DataGenerator(context context.T) (appData []inventory.ApplicationData) {
-	return []inventory.ApplicationData{
-		inventory.ApplicationData{
+func DataGenerator(context context.T) (appData []model.ApplicationData) {
+	return []model.ApplicationData{
+		model.ApplicationData{
 			ApplicationType: "System Environment/Libraries",
 			InstalledTime:   "1461974300",
 			Architecture:    "x86_64",
@@ -33,7 +33,7 @@ func DataGenerator(context context.T) (appData []inventory.ApplicationData) {
 			URL:             "http://www.mozilla.org/projects/security/pki/nss/",
 			Name:            "nss-softokn",
 		},
-		inventory.ApplicationData{
+		model.ApplicationData{
 			ApplicationType: "System Environment/Base",
 			InstalledTime:   "1461974291",
 			Architecture:    "noarch",
@@ -49,7 +49,7 @@ func TestGatherer(t *testing.T) {
 	c := context.NewMockDefault()
 	g := Gatherer(c)
 	collectData = DataGenerator
-	items, err := g.Run(c, inventory.Config{})
+	items, err := g.Run(c, model.Config{})
 	assert.Nil(t, err, "Unexpected error thrown")
 	assert.Equal(t, 1, len(items), "ApplicationGatherer always returns 1 inventory type data - which is why number of entries must be 1.")
 }

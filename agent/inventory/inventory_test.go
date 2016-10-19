@@ -49,13 +49,13 @@ func MockInventoryPlugin(supportedGatherers, installedGatherers []string) (*Plug
 }
 
 // NewInventoryPolicy returns inventory policy for given list of named gatherers
-func NewInventoryPolicy(nameArr ...string) inventory.Policy {
-	var p inventory.Policy
+func NewInventoryPolicy(nameArr ...string) model.Policy {
+	var p model.Policy
 	//setup policy
-	m := make(map[string]inventory.Config)
+	m := make(map[string]model.Config)
 
 	for i := range nameArr {
-		m[nameArr[i]] = inventory.Config{
+		m[nameArr[i]] = model.Config{
 			Collection: "Enabled",
 		}
 	}
@@ -65,8 +65,8 @@ func NewInventoryPolicy(nameArr ...string) inventory.Policy {
 	return p
 }
 
-func MockInventoryItems() (items []inventory.Item) {
-	items = append(items, inventory.Item{
+func MockInventoryItems() (items []model.Item) {
+	items = append(items, model.Item{
 		Name:    "Fake:Name",
 		Content: "Fake:Content",
 	})
@@ -86,8 +86,8 @@ func LargeString(sizeInBytes int) string {
 }
 
 // LargeInventoryItem returns a fairly large inventory Item
-func LargeInventoryItem(sizeInBytes int) inventory.Item {
-	return inventory.Item{
+func LargeInventoryItem(sizeInBytes int) model.Item {
+	return model.Item{
 		Name:          "Fake:InventoryType",
 		Content:       LargeString(sizeInBytes),
 		SchemaVersion: "1.0",
@@ -96,9 +96,9 @@ func LargeInventoryItem(sizeInBytes int) inventory.Item {
 
 func TestValidateGatherers(t *testing.T) {
 
-	var gatherersConfig map[gatherers.T]inventory.Config
+	var gatherersConfig map[gatherers.T]model.Config
 	var err error
-	var policy inventory.Policy
+	var policy model.Policy
 	var sGatherers, iGatherers []string
 
 	//setup
@@ -174,7 +174,7 @@ func TestRunGatherers(t *testing.T) {
 
 	var err error
 	var sGatherers, iGatherers []string
-	var items []inventory.Item
+	var items []model.Item
 	errorFreeGathererName := "ErrorFree-1"
 	errorProneGathererName := "ErrorProne-1"
 
@@ -192,7 +192,7 @@ func TestRunGatherers(t *testing.T) {
 	errorProneGatherer := gatherers.NewMockDefault()
 
 	//mock Config for gatherers
-	config := inventory.Config{
+	config := model.Config{
 		Collection: "Enabled",
 	}
 
@@ -200,7 +200,7 @@ func TestRunGatherers(t *testing.T) {
 	data := MockInventoryItems()
 
 	//setting up configs of gatherers
-	testGathererConfig := make(map[gatherers.T]inventory.Config)
+	testGathererConfig := make(map[gatherers.T]model.Config)
 	testGathererConfig[errorFreeGatherer] = config
 
 	//TESTING
@@ -229,8 +229,8 @@ func TestRunGatherers(t *testing.T) {
 }
 
 func TestVerifyInventoryDataSize(t *testing.T) {
-	var smallItem, largeItem inventory.Item
-	var items []inventory.Item
+	var smallItem, largeItem model.Item
+	var items []model.Item
 	var result bool
 	var gatherers []string
 

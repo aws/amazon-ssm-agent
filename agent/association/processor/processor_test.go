@@ -243,8 +243,6 @@ func TestProcessAssociationUnableToExecutePendingDocument(t *testing.T) {
 	assert.True(t, svcMock.AssertNumberOfCalls(t, "CreateNewServiceIfUnHealthy", 1))
 	assert.True(t, svcMock.AssertNumberOfCalls(t, "ListInstanceAssociations", 1))
 	assert.True(t, svcMock.AssertNumberOfCalls(t, "LoadAssociationDetail", 1))
-	assert.True(t, parserMock.AssertNumberOfCalls(t, "ParseDocumentWithParams", 0))
-	assert.True(t, parserMock.AssertNumberOfCalls(t, "InitializeDocumentState", 0))
 }
 
 func mockParser(parserMock *parserMock, payload *messageContracts.SendCommandPayload, docState stateModel.DocumentState) {

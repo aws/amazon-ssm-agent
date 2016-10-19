@@ -81,15 +81,15 @@ func (t *T) Name() string {
 }
 
 // Run executes aws component gatherer and returns list of inventory.Item containing aws component data
-func (t *T) Run(context context.T, configuration inventory.Config) (items []inventory.Item, err error) {
+func (t *T) Run(context context.T, configuration model.Config) (items []model.Item, err error) {
 
-	var result inventory.Item
+	var result model.Item
 
 	//CaptureTime must comply with format: 2016-07-30T18:15:37Z to comply with regex at SSM.
 	currentTime := time.Now().UTC()
 	captureTime := currentTime.Format(time.RFC3339)
 
-	result = inventory.Item{
+	result = model.Item{
 		Name:          t.Name(),
 		SchemaVersion: SchemaVersionOfApplication,
 		Content:       CollectAWSComponentData(context),
@@ -107,7 +107,7 @@ func (t *T) RequestStop(stopType contracts.StopType) error {
 }
 
 // CollectAWSComponentData collects aws component specific inventory data
-func CollectAWSComponentData(context context.T) (data []inventory.ApplicationData) {
+func CollectAWSComponentData(context context.T) (data []model.ApplicationData) {
 
 	var err error
 	var plName string
@@ -143,7 +143,7 @@ func CollectAWSComponentData(context context.T) (data []inventory.ApplicationDat
 }
 
 // FilterAWSComponent filters aws components data from generic applications data.
-func FilterAWSComponent(appData []inventory.ApplicationData) (awsComponent []inventory.ApplicationData) {
+func FilterAWSComponent(appData []model.ApplicationData) (awsComponent []model.ApplicationData) {
 	//iterate over entire list and select application if it's name is present in our pre-approved list of amazon
 	//published applications
 	for _, application := range appData {

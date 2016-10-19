@@ -62,7 +62,7 @@ func (m MockFileInfo) Sys() interface{} {
 	return nil
 }
 
-func MockCustomInventoryItem() inventory.CustomInventoryItem {
+func MockCustomInventoryItem() model.CustomInventoryItem {
 
 	var attributes = map[string]interface{}{
 		"Name": "filename",
@@ -70,86 +70,86 @@ func MockCustomInventoryItem() inventory.CustomInventoryItem {
 		"Time": "2016-10-10T01:01:01Z",
 	}
 
-	return inventory.CustomInventoryItem{
+	return model.CustomInventoryItem{
 		TypeName:      "CUSTOM:MyFile",
 		SchemaVersion: "1.0",
 		Content:       attributes,
 	}
 }
 
-func MockItemNoTypeName() inventory.CustomInventoryItem {
+func MockItemNoTypeName() model.CustomInventoryItem {
 
 	var attributes = map[string]interface{}{
 		"WebServer":  "corp.amazing.com",
 		"PortNumber": "8081",
 		"Version":    "1.2.3.4",
 	}
-	return inventory.CustomInventoryItem{
+	return model.CustomInventoryItem{
 		SchemaVersion: "1.0",
 		Content:       attributes,
 	}
 }
 
-func MockItemLongTypeName() inventory.CustomInventoryItem {
+func MockItemLongTypeName() model.CustomInventoryItem {
 
 	var attributes = map[string]interface{}{
 		"WebServer":  "corp.amazing.com",
 		"PortNumber": "8081",
 		"Version":    "1.2.3.4",
 	}
-	return inventory.CustomInventoryItem{
+	return model.CustomInventoryItem{
 		TypeName:      strings.Repeat("a", TypeNameLengthLimit+1),
 		SchemaVersion: "1.0",
 		Content:       attributes,
 	}
 }
 
-func MockItemTypeNameInvalidPrefix() inventory.CustomInventoryItem {
+func MockItemTypeNameInvalidPrefix() model.CustomInventoryItem {
 	var attributes = map[string]interface{}{
 		"WebServer":  "corp.amazing.com",
 		"PortNumber": "8081",
 		"Version":    "1.2.3.4",
 	}
-	return inventory.CustomInventoryItem{
+	return model.CustomInventoryItem{
 		TypeName:      "Test:123",
 		SchemaVersion: "1.0",
 		Content:       attributes,
 	}
 }
 
-func MockItemMissedSchemaVersion() inventory.CustomInventoryItem {
+func MockItemMissedSchemaVersion() model.CustomInventoryItem {
 	var attributes = map[string]interface{}{
 		"WebServer":  "corp.amazing.com",
 		"PortNumber": "8081",
 		"Version":    "1.2.3.4",
 	}
-	return inventory.CustomInventoryItem{
+	return model.CustomInventoryItem{
 		TypeName: "CUSTOM:123",
 		Content:  attributes,
 	}
 }
 
-func MockItemInvalidSchemaVersion() inventory.CustomInventoryItem {
+func MockItemInvalidSchemaVersion() model.CustomInventoryItem {
 	var attributes = map[string]interface{}{
 		"WebServer":  "corp.amazing.com",
 		"PortNumber": "8081",
 		"Version":    "1.2.3.4",
 	}
-	return inventory.CustomInventoryItem{
+	return model.CustomInventoryItem{
 		TypeName:      "CUSTOM:123",
 		SchemaVersion: "123",
 		Content:       attributes,
 	}
 }
 
-func MockItemNoContent() inventory.CustomInventoryItem {
-	return inventory.CustomInventoryItem{
+func MockItemNoContent() model.CustomInventoryItem {
+	return model.CustomInventoryItem{
 		TypeName:      "CUSTOM:123",
 		SchemaVersion: "1.1",
 	}
 }
 
-func MockItemContentIsArray() inventory.CustomInventoryItem {
+func MockItemContentIsArray() model.CustomInventoryItem {
 	var attributes = map[string]interface{}{
 		"WebServer":  "corp.amazing.com",
 		"PortNumber": "8081",
@@ -158,14 +158,14 @@ func MockItemContentIsArray() inventory.CustomInventoryItem {
 	var entries = []map[string]interface{}{
 		attributes,
 	}
-	return inventory.CustomInventoryItem{
+	return model.CustomInventoryItem{
 		TypeName:      "CUSTOM:123",
 		SchemaVersion: "1.0",
 		Content:       entries,
 	}
 }
 
-func MockItemContentAttributeCountExceedLimit() inventory.CustomInventoryItem {
+func MockItemContentAttributeCountExceedLimit() model.CustomInventoryItem {
 	var attributes = map[string]interface{}{
 		"WebServer":  "corp.amazing.com",
 		"PortNumber": "8081",
@@ -175,61 +175,61 @@ func MockItemContentAttributeCountExceedLimit() inventory.CustomInventoryItem {
 		attributeName := fmt.Sprintf("attr%d", i)
 		attributes[attributeName] = "1"
 	}
-	return inventory.CustomInventoryItem{
+	return model.CustomInventoryItem{
 		TypeName:      "CUSTOM:123",
 		SchemaVersion: "1.0",
 		Content:       attributes,
 	}
 }
 
-func MockItemEmptyAttributeName() inventory.CustomInventoryItem {
+func MockItemEmptyAttributeName() model.CustomInventoryItem {
 	var attributes = map[string]interface{}{
 		"":           "corp.amazing.com",
 		"PortNumber": "8081",
 		"Version":    "1.2.3.4",
 	}
-	return inventory.CustomInventoryItem{
+	return model.CustomInventoryItem{
 		TypeName:      "CUSTOM:123",
 		SchemaVersion: "1.0",
 		Content:       attributes,
 	}
 }
 
-func MockItemLongAttributeName() inventory.CustomInventoryItem {
+func MockItemLongAttributeName() model.CustomInventoryItem {
 	longAttrName := strings.Repeat("a", AttributeNameLengthLimit+1)
 	var attributes = map[string]interface{}{
 		longAttrName: "corp.amazing.com",
 		"PortNumber": "8081",
 		"Version":    "1.2.3.4",
 	}
-	return inventory.CustomInventoryItem{
+	return model.CustomInventoryItem{
 		TypeName:      "CUSTOM:123",
 		SchemaVersion: "1.0",
 		Content:       attributes,
 	}
 }
 
-func MockItemIntTypeAttributeValue() inventory.CustomInventoryItem {
+func MockItemIntTypeAttributeValue() model.CustomInventoryItem {
 	var attributes = map[string]interface{}{
 		"PortNumber": "8081",
 		"Version":    "1.2.3.4",
 		"MyName":     1234,
 	}
-	return inventory.CustomInventoryItem{
+	return model.CustomInventoryItem{
 		TypeName:      "CUSTOM:123",
 		SchemaVersion: "1.0",
 		Content:       attributes,
 	}
 }
 
-func MockItemLongAttributeValue() inventory.CustomInventoryItem {
+func MockItemLongAttributeValue() model.CustomInventoryItem {
 	longAttrValue := strings.Repeat("a", AttributeValueLengthLimit+1)
 	var attributes = map[string]interface{}{
 		"PortNumber": "",
 		"Version":    "1.2.3.4",
 		"MyName":     longAttrValue,
 	}
-	return inventory.CustomInventoryItem{
+	return model.CustomInventoryItem{
 		TypeName:      "CUSTOM:123",
 		SchemaVersion: "1.0",
 		Content:       attributes,
@@ -347,7 +347,7 @@ func TestGatherer(t *testing.T) {
 	readFileFunc = MockReadFile
 	readDirFunc = MockReadDir
 
-	items, err := g.Run(c, inventory.Config{})
+	items, err := g.Run(c, model.Config{})
 	assert.Nil(t, err, "Unexpected error thrown")
 	assert.Equal(t, 1, len(items), "Custom Gather should return 1 inventory type data.")
 }
@@ -358,7 +358,7 @@ func TestReadFileAccessDenied(t *testing.T) {
 	readFileFunc = MockReadFileAccessDenied
 	readDirFunc = MockReadDir
 
-	items, err := g.Run(c, inventory.Config{})
+	items, err := g.Run(c, model.Config{})
 	assert.Nil(t, err, "err shoud be nil as gather continues to load other custom inventory files")
 	assert.Nil(t, items, "Items should be nil")
 }
@@ -369,7 +369,7 @@ func TestCustomInventoryDirNotExist(t *testing.T) {
 	readFileFunc = MockReadFile
 	readDirFunc = MockReadDirNotExist
 
-	items, err := g.Run(c, inventory.Config{})
+	items, err := g.Run(c, model.Config{})
 	assert.Nil(t, err, "err shoud be nil as we should ignore if folder does not exist")
 	assert.Nil(t, items, "Items should be nil")
 }
@@ -380,7 +380,7 @@ func TestCustomInventoryCountExceed(t *testing.T) {
 	readFileFunc = MockReadFile
 	readDirFunc = MockReadDirCustomInventoryFileCountExceed
 
-	items, err := g.Run(c, inventory.Config{})
+	items, err := g.Run(c, model.Config{})
 	assert.NotNil(t, err, "err shoud be nil as we should ignore if folder does not exist")
 	assert.Contains(t, err.Error(), "Total custom inventory file count")
 	assert.Nil(t, items, "Items should be nil")
@@ -392,7 +392,7 @@ func TestDuplicateTypeName(t *testing.T) {
 	readFileFunc = MockReadFile
 	readDirFunc = MockReadDirDuplicateType
 
-	items, err := g.Run(c, inventory.Config{})
+	items, err := g.Run(c, model.Config{})
 	assert.Nil(t, err, "err shoud be nil")
 	assert.NotNil(t, items, "Items should not be nil")
 }
@@ -403,7 +403,7 @@ func TestInvalidJson(t *testing.T) {
 	readFileFunc = MockReadFileInvalidJson
 	readDirFunc = MockReadDir
 
-	items, err := g.Run(c, inventory.Config{})
+	items, err := g.Run(c, model.Config{})
 	assert.Nil(t, err, "err shoud be nil as gather continues to load other custom inventory files")
 	assert.Nil(t, items, "Items should be nil")
 }
@@ -414,7 +414,7 @@ func TestMissingTypeName(t *testing.T) {
 	readFileFunc = MockReadFileNoTypeName
 	readDirFunc = MockReadDir
 
-	items, err := g.Run(c, inventory.Config{})
+	items, err := g.Run(c, model.Config{})
 	assert.Nil(t, err, "err shoud be nil as gather continues to load other custom inventory files")
 	assert.Nil(t, items, "Items should be nil")
 }
@@ -425,7 +425,7 @@ func TestLongTypeName(t *testing.T) {
 	readFileFunc = MockReadFileLongTypeName
 	readDirFunc = MockReadDir
 
-	items, err := g.Run(c, inventory.Config{})
+	items, err := g.Run(c, model.Config{})
 	assert.Nil(t, err, "err shoud be nil as gather continues to load other custom inventory files")
 	assert.Nil(t, items, "Items should be nil")
 }
@@ -436,7 +436,7 @@ func TestTypeNameInvalidPrefix(t *testing.T) {
 	readFileFunc = MockReadFileTypeNameInvalidPrefix
 	readDirFunc = MockReadDir
 
-	items, err := g.Run(c, inventory.Config{})
+	items, err := g.Run(c, model.Config{})
 	assert.Nil(t, err, "err shoud be nil as gather continues to load other custom inventory files")
 	assert.Nil(t, items, "Items should be nil")
 }
@@ -447,7 +447,7 @@ func TestMissingSchemaVersion(t *testing.T) {
 	readFileFunc = MockReadFileNoSchemaVersion
 	readDirFunc = MockReadDir
 
-	items, err := g.Run(c, inventory.Config{})
+	items, err := g.Run(c, model.Config{})
 	assert.Nil(t, err, "err shoud be nil as gather continues to load other custom inventory files")
 	assert.Nil(t, items, "Items should be nil")
 }
@@ -458,7 +458,7 @@ func TestInvalidSchemaVersion(t *testing.T) {
 	readFileFunc = MockReadFileInvalidSchemaVersion
 	readDirFunc = MockReadDir
 
-	items, err := g.Run(c, inventory.Config{})
+	items, err := g.Run(c, model.Config{})
 	assert.Nil(t, err, "err shoud be nil as gather continues to load other custom inventory files")
 	assert.Nil(t, items, "Items should be nil")
 }
@@ -469,7 +469,7 @@ func TestMissingContent(t *testing.T) {
 	readFileFunc = MockReadFileNoContentProperty
 	readDirFunc = MockReadDir
 
-	items, err := g.Run(c, inventory.Config{})
+	items, err := g.Run(c, model.Config{})
 	assert.Nil(t, err, "err shoud be nil as gather continues to load other custom inventory files")
 	assert.Nil(t, items, "Items should be nil")
 }
@@ -480,7 +480,7 @@ func TestContentIsArray(t *testing.T) {
 	readFileFunc = MockReadFileContentIsArray
 	readDirFunc = MockReadDir
 
-	items, err := g.Run(c, inventory.Config{})
+	items, err := g.Run(c, model.Config{})
 	assert.Nil(t, err, "err shoud be nil as gather continues to load other custom inventory files")
 	assert.Nil(t, items, "Items should be nil")
 }
@@ -491,7 +491,7 @@ func TestContentAttributeCountExceedLimit(t *testing.T) {
 	readFileFunc = MockReadFileContentAttributeCountExceedLimit
 	readDirFunc = MockReadDir
 
-	items, err := g.Run(c, inventory.Config{})
+	items, err := g.Run(c, model.Config{})
 	assert.Nil(t, err, "err shoud be nil as gather continues to load other custom inventory files")
 	assert.Nil(t, items, "Items should be nil")
 }
@@ -502,7 +502,7 @@ func TestContentEmptyAttributeName(t *testing.T) {
 	readFileFunc = MockReadFileContentEmptyAttributeName
 	readDirFunc = MockReadDir
 
-	items, err := g.Run(c, inventory.Config{})
+	items, err := g.Run(c, model.Config{})
 	assert.Nil(t, err, "err shoud be nil as gather continues to load other custom inventory files")
 	assert.Nil(t, items, "Items should be nil")
 }
@@ -513,7 +513,7 @@ func TestContentLongAttributeName(t *testing.T) {
 	readFileFunc = MockReadFileContentLongAttributeName
 	readDirFunc = MockReadDir
 
-	items, err := g.Run(c, inventory.Config{})
+	items, err := g.Run(c, model.Config{})
 	assert.Nil(t, err, "err shoud be nil as gather continues to load other custom inventory files")
 	assert.Nil(t, items, "Items should be nil")
 }
@@ -524,7 +524,7 @@ func TestContentNonStringTypeAttributeValue(t *testing.T) {
 	readFileFunc = MockReadFileContentNonStringTypeAttributeValue
 	readDirFunc = MockReadDir
 
-	items, err := g.Run(c, inventory.Config{})
+	items, err := g.Run(c, model.Config{})
 	assert.Nil(t, err, "err shoud be nil as gather continues to load other custom inventory files")
 	assert.Nil(t, items, "Items should be nil")
 }
@@ -535,7 +535,7 @@ func TestContentLongAttributeValue(t *testing.T) {
 	readFileFunc = MockReadFileContentLongAttributeValue
 	readDirFunc = MockReadDir
 
-	items, err := g.Run(c, inventory.Config{})
+	items, err := g.Run(c, model.Config{})
 	assert.Nil(t, err, "err shoud be nil as gather continues to load other custom inventory files")
 	assert.Nil(t, items, "Items should be nil")
 }

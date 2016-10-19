@@ -68,7 +68,7 @@ func ShouldUpdate(inventoryItemName, data string) bool {
 }
 
 // ConvertToSSMInventoryItem converts given InventoryItem to []map[string]*string
-func ConvertToSSMInventoryItem(item inventory.Item) (inventoryItem *ssm.InventoryItem, err error) {
+func ConvertToSSMInventoryItem(item model.Item) (inventoryItem *ssm.InventoryItem, err error) {
 
 	var a []interface{}
 	var c map[string]*string

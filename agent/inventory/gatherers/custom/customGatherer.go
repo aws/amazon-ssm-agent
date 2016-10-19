@@ -87,7 +87,7 @@ func LogError(log log.T, err error) {
 }
 
 // Run executes custom gatherer and returns list of inventory.Item
-func (t *T) Run(context context.T, configuration inventory.Config) (items []inventory.Item, err error) {
+func (t *T) Run(context context.T, configuration model.Config) (items []model.Item, err error) {
 
 	log := context.Log()
 
@@ -146,7 +146,7 @@ func (t *T) RequestStop(stopType contracts.StopType) error {
 }
 
 // getItemFromFile Reads one custom inventory file
-func getItemFromFile(log log.T, file string) (result inventory.Item, err error) {
+func getItemFromFile(log log.T, file string) (result model.Item, err error) {
 
 	var content []byte
 	content, err = readFileFunc(file)
@@ -164,9 +164,9 @@ func getItemFromFile(log log.T, file string) (result inventory.Item, err error) 
 }
 
 // convertToItem Validates custom inventory content's schema and convert to inventory.Item
-func convertToItem(log log.T, content []byte) (item inventory.Item, err error) {
+func convertToItem(log log.T, content []byte) (item model.Item, err error) {
 
-	var customInventoryItem inventory.CustomInventoryItem
+	var customInventoryItem model.CustomInventoryItem
 
 	// Deserialize custom inventory item content
 	if err = json.Unmarshal(content, &customInventoryItem); err != nil {
@@ -197,7 +197,7 @@ func convertToItem(log log.T, content []byte) (item inventory.Item, err error) {
 	if len(attributes) > 0 {
 		entryArray = append(entryArray, attributes)
 	}
-	item = inventory.Item{
+	item = model.Item{
 		Name:          customInventoryItem.TypeName,
 		SchemaVersion: customInventoryItem.SchemaVersion,
 		Content:       entryArray,
@@ -207,7 +207,7 @@ func convertToItem(log log.T, content []byte) (item inventory.Item, err error) {
 }
 
 // validateTypeName validates custom inventory item TypeName
-func validateTypeName(log log.T, customInventoryItem inventory.CustomInventoryItem) (err error) {
+func validateTypeName(log log.T, customInventoryItem model.CustomInventoryItem) (err error) {
 	typeName := customInventoryItem.TypeName
 	typeNameLength := len(typeName)
 	if typeNameLength == 0 {
@@ -233,7 +233,7 @@ func validateTypeName(log log.T, customInventoryItem inventory.CustomInventoryIt
 }
 
 // validateContentEntrySchema validates custom inventory item SchemaVersion
-func validateSchemaVersion(log log.T, customInventoryItem inventory.CustomInventoryItem) (err error) {
+func validateSchemaVersion(log log.T, customInventoryItem model.CustomInventoryItem) (err error) {
 	schemaVersion := customInventoryItem.SchemaVersion
 	if len(schemaVersion) == 0 {
 		err = errors.New("Custom inventory item has missed SchemaVersion")
@@ -253,7 +253,7 @@ func validateSchemaVersion(log log.T, customInventoryItem inventory.CustomInvent
 }
 
 // validateContentEntrySchema validates attribute name and value
-func validateContentEntrySchema(log log.T, customInventoryItem inventory.CustomInventoryItem) (
+func validateContentEntrySchema(log log.T, customInventoryItem model.CustomInventoryItem) (
 	attributes map[string]interface{},
 	err error) {
 

@@ -35,7 +35,7 @@ const (
 // T represents contracts for SSM Inventory data uploader
 type T interface {
 	SendDataToSSM(context context.T, items []*ssm.InventoryItem)
-	ConvertToSsmInventoryItems(context context.T, items []inventory.Item) (inventoryItems []*ssm.InventoryItem, err error)
+	ConvertToSsmInventoryItems(context context.T, items []model.Item) (inventoryItems []*ssm.InventoryItem, err error)
 }
 
 // InventoryUploader implements functionality to upload data to SSM Inventory.
@@ -67,7 +67,7 @@ func NewInventoryUploader(context context.T) (*InventoryUploader, error) {
 	cfg.Endpoint = &appCfg.Ssm.Endpoint
 
 	uploader.ssm = ssm.New(session.New(cfg))
-	uploader.isOptimizerEnabled = appCfg.Ssm.InventoryOptimizer == inventory.Enabled
+	uploader.isOptimizerEnabled = appCfg.Ssm.InventoryOptimizer == model.Enabled
 
 	return &uploader, nil
 }
@@ -112,7 +112,7 @@ func (u *InventoryUploader) SendDataToSSM(context context.T, items []*ssm.Invent
 }
 
 // ConvertToSsmInventoryItems converts given array of inventory.Item into an array of *ssm.InventoryItem
-func (u *InventoryUploader) ConvertToSsmInventoryItems(context context.T, items []inventory.Item) (inventoryItems []*ssm.InventoryItem, err error) {
+func (u *InventoryUploader) ConvertToSsmInventoryItems(context context.T, items []model.Item) (inventoryItems []*ssm.InventoryItem, err error) {
 
 	log := context.Log()
 	var dataB []byte

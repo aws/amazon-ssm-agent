@@ -33,7 +33,7 @@ type T interface {
 	//runs the gatherer with a given configuration
 	//returns array of inventory.Item as custom gatherer collects multiple
 	//inventory items at a time
-	Run(context context.T, configuration inventory.Config) ([]inventory.Item, error)
+	Run(context context.T, configuration model.Config) ([]model.Item, error)
 	//stops the execution of a gatherer
 	RequestStop(stopType contracts.StopType) error
 }

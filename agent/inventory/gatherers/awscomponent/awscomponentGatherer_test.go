@@ -32,8 +32,8 @@ const (
 
 // sample data used for testing
 
-var sampleAppDataForAmazonLinux = []inventory.ApplicationData{
-	inventory.ApplicationData{
+var sampleAppDataForAmazonLinux = []model.ApplicationData{
+	model.ApplicationData{
 		Name:            "pcre",
 		URL:             "http://www.pcre.org/",
 		Publisher:       "Amazon.com",
@@ -42,7 +42,7 @@ var sampleAppDataForAmazonLinux = []inventory.ApplicationData{
 		InstalledTime:   "1461974300",
 		ApplicationType: "System Environment/libraries",
 	},
-	inventory.ApplicationData{
+	model.ApplicationData{
 		Name:            "kbd-misc",
 		URL:             "http://ftp.altlinux.org/pub/people/legion/kbd",
 		Publisher:       "Amazon.com",
@@ -51,7 +51,7 @@ var sampleAppDataForAmazonLinux = []inventory.ApplicationData{
 		InstalledTime:   "1461974292",
 		ApplicationType: "System Environment Base",
 	},
-	inventory.ApplicationData{
+	model.ApplicationData{
 		Name:            "amazon-ssm-agent",
 		URL:             "http://docs.aws.amazon.com/ssm/latest/APIReference/Welcome.html",
 		Publisher:       "Amazon.com",
@@ -60,7 +60,7 @@ var sampleAppDataForAmazonLinux = []inventory.ApplicationData{
 		InstalledTime:   "1475774764",
 		ApplicationType: "Amazon/Tools",
 	},
-	inventory.ApplicationData{
+	model.ApplicationData{
 		Name:            "aws-apitools-mon",
 		URL:             "http://aws.amazon.com/cloudwatch",
 		Publisher:       "Amazon.com",
@@ -69,7 +69,7 @@ var sampleAppDataForAmazonLinux = []inventory.ApplicationData{
 		InstalledTime:   "1475774764",
 		ApplicationType: "Amazon/Tools",
 	},
-	inventory.ApplicationData{
+	model.ApplicationData{
 		Name:            "aws-amitools-ec2",
 		URL:             "http://aws.amazon.com/ec2",
 		Publisher:       "Amazon AWS",
@@ -80,8 +80,8 @@ var sampleAppDataForAmazonLinux = []inventory.ApplicationData{
 	},
 }
 
-var sampleAWSComponentDataForAmazonLinux = []inventory.ApplicationData{
-	inventory.ApplicationData{
+var sampleAWSComponentDataForAmazonLinux = []model.ApplicationData{
+	model.ApplicationData{
 		Name:            "amazon-ssm-agent",
 		URL:             "http://docs.aws.amazon.com/ssm/latest/APIReference/Welcome.html",
 		Publisher:       "Amazon.com",
@@ -90,7 +90,7 @@ var sampleAWSComponentDataForAmazonLinux = []inventory.ApplicationData{
 		InstalledTime:   "1475774764",
 		ApplicationType: "Amazon/Tools",
 	},
-	inventory.ApplicationData{
+	model.ApplicationData{
 		Name:            "aws-apitools-mon",
 		URL:             "http://aws.amazon.com/cloudwatch",
 		Publisher:       "Amazon.com",
@@ -99,7 +99,7 @@ var sampleAWSComponentDataForAmazonLinux = []inventory.ApplicationData{
 		InstalledTime:   "1475774764",
 		ApplicationType: "Amazon/Tools",
 	},
-	inventory.ApplicationData{
+	model.ApplicationData{
 		Name:            "aws-amitools-ec2",
 		URL:             "http://aws.amazon.com/ec2",
 		Publisher:       "Amazon AWS",
@@ -110,8 +110,8 @@ var sampleAWSComponentDataForAmazonLinux = []inventory.ApplicationData{
 	},
 }
 
-var sampleAppDataForLinuxOtherThanAmazonLinux = []inventory.ApplicationData{
-	inventory.ApplicationData{
+var sampleAppDataForLinuxOtherThanAmazonLinux = []model.ApplicationData{
+	model.ApplicationData{
 		Name:            "accountsservice",
 		URL:             "http://cgit.freedesktop.org/accountsservice/",
 		Publisher:       "Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>",
@@ -120,7 +120,7 @@ var sampleAppDataForLinuxOtherThanAmazonLinux = []inventory.ApplicationData{
 		InstalledTime:   "",
 		ApplicationType: "admin",
 	},
-	inventory.ApplicationData{
+	model.ApplicationData{
 		Name:            "amazon-ssm-agent",
 		URL:             "",
 		Publisher:       "Amazon.com, Inc. <ec2-ssm-feedback@amazon.com>",
@@ -131,8 +131,8 @@ var sampleAppDataForLinuxOtherThanAmazonLinux = []inventory.ApplicationData{
 	},
 }
 
-var sampleAWSComponentDataForLinuxOtherThanAmazonLinux = []inventory.ApplicationData{
-	inventory.ApplicationData{
+var sampleAWSComponentDataForLinuxOtherThanAmazonLinux = []model.ApplicationData{
+	model.ApplicationData{
 		Name:            "amazon-ssm-agent",
 		URL:             "",
 		Publisher:       "Amazon.com, Inc. <ec2-ssm-feedback@amazon.com>",
@@ -143,8 +143,8 @@ var sampleAWSComponentDataForLinuxOtherThanAmazonLinux = []inventory.Application
 	},
 }
 
-var sampleAppDataForWindows = []inventory.ApplicationData{
-	inventory.ApplicationData{
+var sampleAppDataForWindows = []model.ApplicationData{
+	model.ApplicationData{
 		Name:            "Notepad++",
 		URL:             "",
 		Publisher:       "Notepad++ Team",
@@ -153,7 +153,7 @@ var sampleAppDataForWindows = []inventory.ApplicationData{
 		InstalledTime:   "",
 		ApplicationType: "",
 	},
-	inventory.ApplicationData{
+	model.ApplicationData{
 		Name:            "Google Update Helper",
 		URL:             "",
 		Publisher:       "Google Inc.",
@@ -162,7 +162,7 @@ var sampleAppDataForWindows = []inventory.ApplicationData{
 		InstalledTime:   "20161012",
 		ApplicationType: "",
 	},
-	inventory.ApplicationData{
+	model.ApplicationData{
 		Name:            "AWS Tools for Windows",
 		URL:             "",
 		Publisher:       "Amazon Web Services Developer Relations",
@@ -171,7 +171,7 @@ var sampleAppDataForWindows = []inventory.ApplicationData{
 		InstalledTime:   "20160512",
 		ApplicationType: "",
 	},
-	inventory.ApplicationData{
+	model.ApplicationData{
 		Name:            "AWS PV Drivers",
 		URL:             "",
 		Publisher:       "Amazon Web Services",
@@ -182,8 +182,8 @@ var sampleAppDataForWindows = []inventory.ApplicationData{
 	},
 }
 
-var sampleAWSComponentDataForWindows = []inventory.ApplicationData{
-	inventory.ApplicationData{
+var sampleAWSComponentDataForWindows = []model.ApplicationData{
+	model.ApplicationData{
 		Name:            "AWS Tools for Windows",
 		URL:             "",
 		Publisher:       "Amazon Web Services Developer Relations",
@@ -192,7 +192,7 @@ var sampleAWSComponentDataForWindows = []inventory.ApplicationData{
 		InstalledTime:   "20160512",
 		ApplicationType: "",
 	},
-	inventory.ApplicationData{
+	model.ApplicationData{
 		Name:            "AWS PV Drivers",
 		URL:             "",
 		Publisher:       "Amazon Web Services",
@@ -205,15 +205,15 @@ var sampleAWSComponentDataForWindows = []inventory.ApplicationData{
 
 // Mock implementation to provide sample data used for testing
 
-func MockGetApplicationDataForAmazonLinux(context context.T) []inventory.ApplicationData {
+func MockGetApplicationDataForAmazonLinux(context context.T) []model.ApplicationData {
 	return sampleAppDataForAmazonLinux
 }
 
-func MockGetApplicationDataForLinuxOSOtherThanAmazonLinux(context context.T) []inventory.ApplicationData {
+func MockGetApplicationDataForLinuxOSOtherThanAmazonLinux(context context.T) []model.ApplicationData {
 	return sampleAppDataForLinuxOtherThanAmazonLinux
 }
 
-func MockGetApplicationDataForWindows(context context.T) []inventory.ApplicationData {
+func MockGetApplicationDataForWindows(context context.T) []model.ApplicationData {
 	return sampleAppDataForWindows
 }
 
@@ -237,21 +237,21 @@ func MockPlatformInfoProviderReturningError(log log.T) (name string, err error) 
 
 func TestRun(t *testing.T) {
 
-	var data []inventory.Item
+	var data []model.Item
 
 	//setup
 	c := context.NewMockDefault()
 	g := Gatherer(c)
 	getApplicationData = MockGetApplicationDataForAmazonLinux
 
-	data, err := g.Run(c, inventory.Config{})
+	data, err := g.Run(c, model.Config{})
 	assert.Nil(t, err, "Unexpected error thrown")
 	assert.Equal(t, 1, len(data), "AWSComponent gatherer always returns 1 inventory type data - which is why number of entries must be 1.")
 }
 
 func TestCollectApplicationData(t *testing.T) {
 
-	var data []inventory.ApplicationData
+	var data []model.ApplicationData
 
 	//setup
 	c := context.NewMockDefault()

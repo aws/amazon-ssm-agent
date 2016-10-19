@@ -22,7 +22,6 @@ import (
 	"testing"
 
 	"github.com/aws/amazon-ssm-agent/agent/context"
-	"github.com/aws/amazon-ssm-agent/agent/inventory/model"
 	"github.com/stretchr/testify/assert"
 )
 

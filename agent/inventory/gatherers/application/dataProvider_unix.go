@@ -78,7 +78,7 @@ func platformInfoProvider(log log.T) (name string, err error) {
 }
 
 // CollectApplicationData collects all application data from the system using rpm or dpkg query.
-func CollectApplicationData(context context.T) (appData []inventory.ApplicationData) {
+func CollectApplicationData(context context.T) (appData []model.ApplicationData) {
 
 	var plName string
 	var err error
@@ -135,7 +135,7 @@ func CollectApplicationData(context context.T) (appData []inventory.ApplicationD
 }
 
 // GetApplicationData runs a shell command and gets information about all packages/applications
-func GetApplicationData(context context.T, command string, args []string) (data []inventory.ApplicationData, err error) {
+func GetApplicationData(context context.T, command string, args []string) (data []model.ApplicationData, err error) {
 
 	/*
 		Note: Following are samples of how rpm & dpkg stores package information.
@@ -249,7 +249,7 @@ func GetApplicationData(context context.T, command string, args []string) (data 
 }
 
 // ConvertToApplicationData converts query output into json string so that it can be deserialized easily
-func ConvertToApplicationData(input string) (data []inventory.ApplicationData, err error) {
+func ConvertToApplicationData(input string) (data []model.ApplicationData, err error) {
 
 	//This implementation is closely tied to the kind of rpm query. A change in rpm query MUST be accompanied
 	//with a change in transform logic or else json formatting will be impacted.

@@ -32,12 +32,12 @@ const (
 )
 
 // setNetworkData sets network data using the given interface
-func setNetworkData(context context.T, networkInterface net.Interface) inventory.NetworkData {
+func setNetworkData(context context.T, networkInterface net.Interface) model.NetworkData {
 	var addresses []net.Addr
 	var err error
 
 	log := context.Log()
-	var networkData = inventory.NetworkData{}
+	var networkData = model.NetworkData{}
 
 	networkData.Name = networkInterface.Name
 	networkData.MacAddress = networkInterface.HardwareAddr.String()
@@ -75,7 +75,7 @@ func setNetworkData(context context.T, networkInterface net.Interface) inventory
 }
 
 // GetBasicNetworkData gathers basic network data using go libraries - https://golang.org/pkg/net/
-func GetBasicNetworkData(context context.T) (data []inventory.NetworkData) {
+func GetBasicNetworkData(context context.T) (data []model.NetworkData) {
 	var interfaces []net.Interface
 	var err error
 
@@ -91,7 +91,7 @@ func GetBasicNetworkData(context context.T) (data []inventory.NetworkData) {
 	}
 
 	for _, i := range interfaces {
-		var networkData inventory.NetworkData
+		var networkData model.NetworkData
 
 		if i.Flags&net.FlagLoopback != 0 {
 			log.Infof("Ignoring loopback interface")
@@ -110,7 +110,7 @@ func GetBasicNetworkData(context context.T) (data []inventory.NetworkData) {
 }
 
 // CollectNetworkData collects network information
-func CollectNetworkData(context context.T) (data []inventory.NetworkData) {
+func CollectNetworkData(context context.T) (data []model.NetworkData) {
 
 	var dataB []byte
 	log := context.Log()
@@ -145,15 +145,15 @@ func (t *T) Name() string {
 }
 
 // Run executes network gatherer and returns list of inventory.Item comprising of network data
-func (t *T) Run(context context.T, configuration inventory.Config) (items []inventory.Item, err error) {
+func (t *T) Run(context context.T, configuration model.Config) (items []model.Item, err error) {
 
-	var result inventory.Item
+	var result model.Item
 
 	//CaptureTime must comply with format: 2016-07-30T18:15:37Z to comply with regex at SSM.
 	currentTime := time.Now().UTC()
 	captureTime := currentTime.Format(time.RFC3339)
 
-	result = inventory.Item{
+	result = model.Item{
 		Name:          t.Name(),
 		SchemaVersion: SchemaVersionOfApplication,
 		Content:       CollectNetworkData(context),

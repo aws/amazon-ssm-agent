@@ -44,8 +44,7 @@ func executeCommand(command string, args ...string) ([]byte, error) {
 }
 
 // CollectApplicationData collects application data for windows platform
-func CollectApplicationData(context context.T) []inventory.ApplicationData {
-
+func CollectApplicationData(context context.T) []model.ApplicationData {
 	/*
 		Note:
 
@@ -66,7 +65,7 @@ func CollectApplicationData(context context.T) []inventory.ApplicationData {
 	//TODO: powershell commands can be put in a script to generate that data - and then we can simply execute the script to get the data.
 	//it will enable us to run other complicated queries too.
 
-	var data, apps []inventory.ApplicationData
+	var data, apps []model.ApplicationData
 
 	//getting all 64 bit applications
 	apps = ExecutePowershellCommands(context, PowershellCmd, ArgsFor64BitApplications, Arch64Bit)
@@ -80,7 +79,7 @@ func CollectApplicationData(context context.T) []inventory.ApplicationData {
 }
 
 // ExecutePowershellCommands executes commands in powershell to get all windows applications installed.
-func ExecutePowershellCommands(context context.T, command, args, arch string) (data []inventory.ApplicationData) {
+func ExecutePowershellCommands(context context.T, command, args, arch string) (data []model.ApplicationData) {
 
 	var output []byte
 	var err error
@@ -117,8 +116,8 @@ func ExecutePowershellCommands(context context.T, command, args, arch string) (d
 	return
 }
 
-// ConvertToApplicationData converts powershell command output to an array of inventory.ApplicationData
-func ConvertToApplicationData(cmdOutput, architecture string) (data []inventory.ApplicationData, err error) {
+// ConvertToApplicationData converts powershell command output to an array of model.ApplicationData
+func ConvertToApplicationData(cmdOutput, architecture string) (data []model.ApplicationData, err error) {
 	//This implementation is closely tied to the kind of powershell command we run in windows. A change in command
 	//MUST be accompanied with a change in json conversion logic as well.
 

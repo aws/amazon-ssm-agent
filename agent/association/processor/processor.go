@@ -102,7 +102,7 @@ func (p *Processor) StartAssociationWorker() {
 		for {
 			select {
 			case <-p.scheduledJobQueue:
-				log.Debugf("Receieved signal for executing scheduled association")
+				log.Debug("Receieved signal for executing scheduled association")
 				p.runScheduledAssociation(log)
 			}
 
@@ -192,7 +192,7 @@ func (p *Processor) ProcessAssociation() {
 
 // TryExecuteNextScheduledAssociation sends out signal to the worker to process next scheduled association
 func (p *Processor) TryExecuteNextScheduledAssociation(log log.T) {
-	log.Debugf("Sending signal for executing scheduled association")
+	log.Debug("Sending signal for executing scheduled association")
 	p.scheduledJobQueue <- struct{}{}
 }
 
@@ -211,12 +211,12 @@ func (p *Processor) runScheduledAssociation(log log.T) {
 	)
 
 	if scheduledAssociation, err = schedulemanager.LoadNextScheduledAssociation(log); err != nil {
-		log.Errorf("Unable to apply association, %v, system will retry after later", err)
+		log.Errorf("Unable to apply association, %v, system will retry later", err)
 		return
 	}
 
 	if scheduledAssociation == nil {
-		log.Infof("No association scheduled at this time, system will retry later")
+		log.Info("No association scheduled at this time, system will retry later")
 		return
 	}
 

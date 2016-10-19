@@ -49,10 +49,10 @@ func (t *T) Name() string {
 var cmdExecutor = executeCommand
 
 // Run executes windows update gatherer and returns list of inventory.Item
-func (t *T) Run(context context.T, configuration inventory.Config) (items []inventory.Item, err error) {
-	var result inventory.Item
+func (t *T) Run(context context.T, configuration model.Config) (items []model.Item, err error) {
+	var result model.Item
 	log := context.Log()
-	var data []inventory.WindowsUpdateData
+	var data []model.WindowsUpdateData
 	out, err := cmdExecutor(cmd, windowsUpdateQueryCmd)
 	if err == nil {
 		err = json.Unmarshal(out, &data)
@@ -60,7 +60,7 @@ func (t *T) Run(context context.T, configuration inventory.Config) (items []inve
 		currentTime := time.Now().UTC()
 		captureTime := currentTime.Format(time.RFC3339)
 
-		result = inventory.Item{
+		result = model.Item{
 			Name:          t.Name(),
 			SchemaVersion: schemaVersionOfWindowsUpdate,
 			Content:       data,

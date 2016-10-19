@@ -22,7 +22,7 @@ import (
 )
 
 // GetAdvancedNetworkData gets advanced network information in linux platform
-func GetAdvancedNetworkData(context context.T, data []inventory.NetworkData) []inventory.NetworkData {
+func GetAdvancedNetworkData(context context.T, data []model.NetworkData) []model.NetworkData {
 	log := context.Log()
 	log.Infof("Unable to get further information about network interfaces in linux platform")
 	return data

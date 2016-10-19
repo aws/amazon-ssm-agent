@@ -24,7 +24,6 @@ import (
 type AssociationRawData struct {
 	CreateDate        time.Time
 	NextScheduledDate time.Time
-	IsExecuting       bool
 	Association       *ssm.InstanceAssociationSummary
 	Document          *string
 }
