@@ -17,8 +17,6 @@ package configurecomponent
 
 import (
 	"fmt"
-	"io/ioutil"
-	"net/http"
 	"net/url"
 	"path"
 	"path/filepath"
@@ -27,13 +25,9 @@ import (
 	"strings"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
-	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/s3util"
 	"github.com/aws/amazon-ssm-agent/agent/updateutil"
-	"github.com/aws/aws-sdk-go/aws"
-	"github.com/aws/aws-sdk-go/aws/session"
-	"github.com/aws/aws-sdk-go/service/s3"
 )
 
 const (
@@ -69,7 +63,6 @@ const (
 
 type Util interface {
 	CreateComponentFolder(name string, version string) (folder string, err error)
-	NeedUpdate(name string, requestedVersion string) (update bool)
 	HasValidPackage(name string, version string) bool
 	GetCurrentVersion(name string) (installedVersion string)
 	GetLatestVersion(log log.T, name string, source string, context *updateutil.InstanceContext) (latestVersion string, err error)
@@ -134,42 +127,15 @@ func getComponentFolder(name string, version string) (folder string) {
 	return filepath.Join(appconfig.ComponentRoot, name, version)
 }
 
-var mkDirAll = fileutil.MakeDirsWithExecuteAccess
-var componentExists = fileutil.Exists
-var versionExists = fileutil.Exists
-
 // CreateComponentFolder constructs the local directory to place component
 func (util *Utility) CreateComponentFolder(name string, version string) (folder string, err error) {
 	folder = getComponentFolder(name, version)
 
-	if err = mkDirAll(folder); err != nil {
+	if err = filesysdep.MakeDirExecute(folder); err != nil {
 		return "", err
 	}
 
 	return folder, nil
-}
-
-// needUpdate determines if installation needs to update an existing version of a component
-func (util *Utility) NeedUpdate(name string, requestedVersion string) (update bool) {
-	// check that any version is already installed
-	componentFolder := filepath.Join(appconfig.ComponentRoot, name)
-	exist := componentExists(componentFolder)
-
-	// install as normal when component is not yet installed
-	if !exist {
-		return false
-	}
-
-	// check that specific version is already installed
-	versionFolder := filepath.Join(componentFolder, requestedVersion)
-	exist = versionExists(versionFolder)
-
-	// install as normal when component version is already installed
-	if exist {
-		return false
-	}
-
-	return true
 }
 
 // HasValidPackage determines if a given version of a component has a folder on disk that contains a valid package
@@ -177,13 +143,15 @@ func (util *Utility) HasValidPackage(name string, version string) bool {
 	// folder exists, contains manifest, manifest is valid, and folder contains at least 1 other directory or file (assumed to be the unpacked package)
 	componentFolder := getComponentFolder(name, version)
 	manifestPath := filepath.Join(componentFolder, getManifestName(name))
-	if !fileutil.Exists(manifestPath) {
+	if !filesysdep.Exists(manifestPath) {
 		return false
 	}
-	if _, err := parseManifest(nil, manifestPath); err != nil {
+	if _, err := parseComponentManifest(nil, manifestPath); err != nil {
 		return false
 	}
-	if files, _ := ioutil.ReadDir(componentFolder); len(files) <= 1 {
+	files, _ := filesysdep.GetFileNames(componentFolder)
+	directories, _ := filesysdep.GetDirectoryNames(componentFolder)
+	if len(files) <= 1 && len(directories) == 0 {
 		return false
 	}
 	return true
@@ -217,48 +185,17 @@ func getLatestVersion(versions []string, except string) (version string) {
 
 // getLatestS3Version finds the most recent version of a component in S3
 func getLatestS3Version(log log.T, name string, context *updateutil.InstanceContext) (latestVersion string, err error) {
-	//TODO:MF: factor out common elements between this and artifact.go into a shared library
 	amazonS3URL := s3util.ParseAmazonS3URL(log, getS3Url(name, context))
-
-	config := &aws.Config{}
-	var appConfig appconfig.SsmagentConfig
-	appConfig, errConfig := appconfig.Config(false)
-	if errConfig != nil {
-		// TODO:MF: is this a failure?  Or can this happen, particularly with onprem instances?
-	} else {
-		creds, err1 := appConfig.ProfileCredentials()
-		if err1 != nil {
-			config.Credentials = creds
-		}
-	}
-	config.S3ForcePathStyle = aws.Bool(amazonS3URL.IsPathStyle)
-	config.Region = aws.String(amazonS3URL.Region)
-	prefix := amazonS3URL.Key + "/"
-	params := &s3.ListObjectsInput{
-		Bucket:    aws.String(amazonS3URL.Bucket),
-		Prefix:    &prefix,
-		Delimiter: aws.String("/"),
-	}
-	s3client := s3.New(session.New(config))
-	req, resp := s3client.ListObjectsRequest(params)
-	err = req.Send()
+	folders, err := networkdep.ListS3Folders(log, amazonS3URL)
 	if err != nil {
-		if req.HTTPResponse == nil || req.HTTPResponse.StatusCode != http.StatusNotModified {
-			return
-		}
-		return "", err
-	}
-	//TODO:MF: This works, but the string trimming required implies there should be some easier way to get this information
-	folders := make([]string, 0)
-	for _, key := range resp.CommonPrefixes {
-		folders = append(folders, strings.TrimRight(strings.Replace(*key.Prefix, prefix, "", -1), "/"))
+		return
 	}
 	return getLatestVersion(folders[:], ""), nil
 }
 
 // GetCurrentVersion finds the most recent installed version of a component
 func (util *Utility) GetCurrentVersion(name string) (installedVersion string) {
-	directories, err := fileutil.GetDirectoryNames(filepath.Join(appconfig.ComponentRoot, name))
+	directories, err := filesysdep.GetDirectoryNames(filepath.Join(appconfig.ComponentRoot, name))
 	if err != nil {
 		return ""
 	}

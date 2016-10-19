@@ -18,7 +18,6 @@ package configurecomponent
 import (
 	"errors"
 	"fmt"
-	"os"
 	"path/filepath"
 	"regexp"
 	"strings"
@@ -28,7 +27,6 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/executers"
-	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil/artifact"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
@@ -135,18 +133,8 @@ type pluginHelper interface {
 		context *updateutil.InstanceContext) (version string, err error)
 }
 
-// Assign method to global variables to allow unit tests to override
-var fileDownload = artifact.Download
-var fileUncompress = fileutil.Uncompress
-var fileExist = fileutil.Exists
-var fileRemove = os.RemoveAll
-var fileRename = os.Rename
-var parseManifest = parseComponentManifest
-
 // TO DO: How to mock reboot?
 // var reboot = rebooter.RequestPendingReboot
-
-var configureComponent = runConfigureComponent
 
 // runConfigureComponent downloads the component manifest and performs specified action
 func runConfigureComponent(
@@ -329,8 +317,8 @@ func ensurePackage(log log.T,
 	localManifestName := filepath.Join(appconfig.ComponentRoot, componentName, version, manifestName)
 
 	// if we already have a valid manifest, return it
-	if exist := fileExist(localManifestName); exist {
-		if manifest, err = parseManifest(log, localManifestName); err == nil {
+	if exist := filesysdep.Exists(localManifestName); exist {
+		if manifest, err = parseComponentManifest(log, localManifestName); err == nil {
 			// TODO:MF: consider verifying name and version in parsed manifest
 			// TODO:MF: ensure the local package is valid before we return
 			return
@@ -351,14 +339,14 @@ func ensurePackage(log log.T,
 	}
 
 	packageDestination := filepath.Join(appconfig.ComponentRoot, componentName, version)
-	if uncompressErr := fileUncompress(filePath, packageDestination); uncompressErr != nil {
+	if uncompressErr := filesysdep.Uncompress(filePath, packageDestination); uncompressErr != nil {
 		err = fmt.Errorf("failed to extract component installer package %v from %v, %v", filePath, packageDestination, uncompressErr.Error())
 		return
 	}
 
 	// TODO:MF: this could be considered a warning - it likely points to a real problem, but if uncompress succeeded, we could continue
 	// delete compressed package after using
-	if cleanupErr := fileRemove(filePath); cleanupErr != nil {
+	if cleanupErr := filesysdep.RemoveAll(filePath); cleanupErr != nil {
 		err = fmt.Errorf("failed to delete compressed package %v, %v", filePath, cleanupErr.Error())
 		return
 	}
@@ -456,7 +444,7 @@ func (m *configureManager) downloadManifest(log log.T,
 		DestinationDirectory: manifestDestination}
 
 	// download manifest
-	downloadOutput, downloadErr := fileDownload(log, downloadInput)
+	downloadOutput, downloadErr := networkdep.Download(log, downloadInput)
 	if downloadErr != nil || downloadOutput.LocalFilePath == "" {
 		errMessage := fmt.Sprintf("failed to download component manifest reliably, %v", downloadInput.SourceURL)
 		if downloadErr != nil {
@@ -466,14 +454,14 @@ func (m *configureManager) downloadManifest(log log.T,
 	}
 
 	// rename manifest
-	if err = fileRename(downloadOutput.LocalFilePath, localManifestName); err != nil {
+	if err = filesysdep.Rename(downloadOutput.LocalFilePath, localManifestName); err != nil {
 		errMessage := fmt.Sprintf("failed to rename %v to %v: %v", downloadOutput.LocalFilePath, localManifestName, err.Error())
 		return nil, errors.New(errMessage)
 	}
 
 	output.AppendInfo(log, "Successfully downloaded %v", downloadInput.SourceURL)
 
-	return parseManifest(log, localManifestName)
+	return parseComponentManifest(log, localManifestName)
 }
 
 // downloadPackage downloads the installation package from s3 bucket or source URI and uncompresses it
@@ -508,7 +496,7 @@ func (m *configureManager) downloadPackage(log log.T,
 		DestinationDirectory: packageDestination}
 
 	// download package
-	downloadOutput, downloadErr := fileDownload(log, downloadInput)
+	downloadOutput, downloadErr := networkdep.Download(log, downloadInput)
 	if downloadErr != nil || downloadOutput.LocalFilePath == "" {
 		errMessage := fmt.Sprintf("failed to download component installation package reliably, %v", downloadInput.SourceURL)
 		if downloadErr != nil {
@@ -580,7 +568,7 @@ func runUninstallComponent(p *Plugin,
 	}
 
 	// delete local component folder for this version
-	if err = fileRemove(directory); err != nil {
+	if err = filesysdep.RemoveAll(directory); err != nil {
 		return fmt.Errorf(
 			"failed to delete directory %v due to %v", directory, err)
 	}
@@ -588,6 +576,8 @@ func runUninstallComponent(p *Plugin,
 	output.AppendInfo(log, "Successfully uninstalled %v %v", componentName, version)
 	return nil
 }
+
+var runConfig = runConfigureComponent
 
 // Execute runs multiple sets of commands and returns their outputs.
 // res.Output will contain a slice of RunCommandPluginOutput.
@@ -625,7 +615,7 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 			break
 		}
 
-		out[i] = configureComponent(p,
+		out[i] = runConfig(p,
 			log,
 			manager,
 			configureUtil,

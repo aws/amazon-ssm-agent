@@ -16,6 +16,7 @@
 package configurecomponent
 
 import (
+	"errors"
 	"fmt"
 	"strings"
 	"testing"
@@ -25,7 +26,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestCreateManifestName(t *testing.T) {
+func TestGetManifestName(t *testing.T) {
 	pluginInformation := createStubPluginInputInstall()
 
 	manifestName := "PVDriver.json"
@@ -34,7 +35,7 @@ func TestCreateManifestName(t *testing.T) {
 	assert.Equal(t, manifestName, result)
 }
 
-func TestCreatePackageName(t *testing.T) {
+func TestGetPackageName(t *testing.T) {
 	pluginInformation := createStubPluginInputInstall()
 	context := createStubInstanceContext()
 
@@ -44,7 +45,7 @@ func TestCreatePackageName(t *testing.T) {
 	assert.Equal(t, packageName, result)
 }
 
-func TestCreateS3Location(t *testing.T) {
+func TestGetS3Location(t *testing.T) {
 	pluginInformation := createStubPluginInputInstall()
 	context := createStubInstanceContext()
 	fileName := "PVDriver.zip"
@@ -55,7 +56,7 @@ func TestCreateS3Location(t *testing.T) {
 	assert.Equal(t, packageLocation, result)
 }
 
-func TestCreateS3Location_Bjs(t *testing.T) {
+func TestGetS3Location_Bjs(t *testing.T) {
 	pluginInformation := createStubPluginInputInstall()
 	context := createStubInstanceContextBjs()
 	fileName := "PVDriver.zip"
@@ -69,10 +70,9 @@ func TestCreateS3Location_Bjs(t *testing.T) {
 func TestCreateComponentFolderSucceeded(t *testing.T) {
 	pluginInformation := createStubPluginInputInstall()
 	util := Utility{}
-
-	mkDirAll = func(path string) error {
-		return nil
-	}
+	stubs := &ConfigureComponentStubs{fileSysDepStub: &FileSysDepStub{}}
+	stubs.Set()
+	defer stubs.Clear()
 
 	result, _ := util.CreateComponentFolder(pluginInformation.Name, pluginInformation.Version)
 
@@ -84,53 +84,12 @@ func TestCreateComponentFolderSucceeded(t *testing.T) {
 func TestCreateComponentFolderFailed(t *testing.T) {
 	pluginInformation := createStubPluginInputInstall()
 	util := Utility{}
-
-	mkDirAll = func(path string) error {
-		return fmt.Errorf("Folder cannot be created")
-	}
+	stubs := &ConfigureComponentStubs{fileSysDepStub: &FileSysDepStub{makeFileError: errors.New("Folder cannot be created")}}
+	stubs.Set()
+	defer stubs.Clear()
 
 	_, err := util.CreateComponentFolder(pluginInformation.Name, pluginInformation.Version)
 	assert.Error(t, err)
-}
-
-func TestNeedUpdate(t *testing.T) {
-	pluginInformation := createStubPluginInputInstall()
-	util := Utility{}
-
-	componentExists = func(filepath string) bool {
-		return true
-	}
-
-	versionExists = func(filepath string) bool {
-		return false
-	}
-
-	result := util.NeedUpdate(pluginInformation.Name, pluginInformation.Version)
-	assert.Equal(t, true, result)
-}
-
-func TestNeedUpdate_NoComponentExists(t *testing.T) {
-	pluginInformation := createStubPluginInputInstall()
-	util := Utility{}
-
-	componentExists = func(filepath string) bool {
-		return false
-	}
-
-	result := util.NeedUpdate(pluginInformation.Name, pluginInformation.Version)
-	assert.Equal(t, false, result)
-}
-
-func TestNeedUpdate_VersionExists(t *testing.T) {
-	pluginInformation := createStubPluginInputInstall()
-	util := Utility{}
-
-	versionExists = func(filepath string) bool {
-		return true
-	}
-
-	result := util.NeedUpdate(pluginInformation.Name, pluginInformation.Version)
-	assert.Equal(t, false, result)
 }
 
 func TestGetLatestVersion_NumericSort(t *testing.T) {
@@ -251,10 +210,6 @@ type mockConfigureUtility struct {
 
 func (u *mockConfigureUtility) CreateComponentFolder(name string, version string) (folder string, err error) {
 	return u.componentFolder, u.createComponentFolderError
-}
-
-func (u *mockConfigureUtility) NeedUpdate(name string, requestedVersion string) (update bool) {
-	return false
 }
 
 func (u *mockConfigureUtility) HasValidPackage(name string, version string) bool {

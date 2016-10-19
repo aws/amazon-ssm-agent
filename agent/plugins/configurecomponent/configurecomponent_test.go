@@ -18,6 +18,7 @@ package configurecomponent
 import (
 	"errors"
 	"fmt"
+	"io/ioutil"
 	"testing"
 	"time"
 
@@ -78,15 +79,12 @@ func TestConfigureComponent(t *testing.T) {
 	configureUtil := &mockConfigureUtility{}
 	updateUtil := &mockUpdateUtility{}
 
-	fileUncompress = func(src, dest string) error {
-		return nil
-	}
+	result, _ := ioutil.ReadFile("testdata/sampleManifest.json")
+	stubs := &ConfigureComponentStubs{fileSysDepStub: &FileSysDepStub{readResult: result}, networkDepStub: &NetworkDepStub{}}
+	stubs.Set()
+	defer stubs.Clear()
 
-	fileRename = func(oldpath, newpath string) error {
-		return nil
-	}
-
-	output := configureComponent(
+	output := runConfigureComponent(
 		plugin,
 		logger,
 		manager,
@@ -108,7 +106,7 @@ func TestConfigureComponent_InvalidRawInput(t *testing.T) {
 	// string value will fail the Remarshal as it's not ConfigureComponentPluginInput
 	rawPluginInput := "invalid value"
 
-	result := configureComponent(plugin,
+	result := runConfigureComponent(plugin,
 		logger,
 		manager,
 		configureUtil,
@@ -126,7 +124,7 @@ func TestConfigureComponent_InvalidInput(t *testing.T) {
 	configureUtil := &mockConfigureUtility{}
 	updateUtil := &mockUpdateUtility{}
 
-	result := configureComponent(
+	result := runConfigureComponent(
 		plugin,
 		logger,
 		manager,
@@ -153,11 +151,11 @@ func TestConfigureComponent_FailedDownloadManifest(t *testing.T) {
 	configureUtil := &mockConfigureUtility{}
 	updateUtil := &mockUpdateUtility{}
 
-	fileRename = func(oldPath, newPath string) error {
-		return nil
-	}
+	stubs := &ConfigureComponentStubs{fileSysDepStub: &FileSysDepStub{}, networkDepStub: &NetworkDepStub{}}
+	stubs.Set()
+	defer stubs.Clear()
 
-	output := configureComponent(
+	output := runConfigureComponent(
 		plugin,
 		logger,
 		manager,
@@ -185,7 +183,7 @@ func TestInstallComponent_DownloadFailed(t *testing.T) {
 	configureUtil := &mockConfigureUtility{}
 	updateUtil := &mockUpdateUtility{}
 
-	output := configureComponent(
+	output := runConfigureComponent(
 		plugin,
 		logger,
 		manager,
@@ -213,11 +211,12 @@ func TestInstallComponent_ExtractFailed(t *testing.T) {
 	configureUtil := &mockConfigureUtility{}
 	updateUtil := &mockUpdateUtility{}
 
-	fileUncompress = func(src, dest string) error {
-		return fmt.Errorf("Cannot extract package")
-	}
+	result, _ := ioutil.ReadFile("testdata/sampleManifest.json")
+	stubs := &ConfigureComponentStubs{fileSysDepStub: &FileSysDepStub{readResult: result, uncompressError: errors.New("Cannot extract package")}, networkDepStub: &NetworkDepStub{}}
+	stubs.Set()
+	defer stubs.Clear()
 
-	output := configureComponent(
+	output := runConfigureComponent(
 		plugin,
 		logger,
 		manager,
@@ -246,19 +245,12 @@ func TestInstallComponent_DeleteFailed(t *testing.T) {
 	configureUtil := &mockConfigureUtility{}
 	updateUtil := &mockUpdateUtility{}
 
-	fileExist = func(path string) bool {
-		return true
-	}
+	result, _ := ioutil.ReadFile("testdata/sampleManifest.json")
+	stubs := &ConfigureComponentStubs{fileSysDepStub: &FileSysDepStub{readResult: result, existsResultChain: []bool{false, true}, removeError: errors.New("failed to delete compressed package")}, networkDepStub: &NetworkDepStub{}}
+	stubs.Set()
+	defer stubs.Clear()
 
-	fileUncompress = func(src, dest string) error {
-		return nil
-	}
-
-	fileRemove = func(path string) error {
-		return fmt.Errorf("failed to delete compressed package")
-	}
-
-	output := configureComponent(
+	output := runConfigureComponent(
 		plugin,
 		logger,
 		manager,
@@ -282,12 +274,8 @@ func TestExecute(t *testing.T) {
 	mockCancelFlag := new(task.MockCancelFlag)
 	mockContext := context.NewMockDefault()
 
-	// TO DO: How to mock reboot?
-	// reboot = func() { return }
-
-	// Create stub
-	configureComponentTemp := configureComponent
-	configureComponent = func(
+	runConfigOrig := runConfig
+	runConfig = func(
 		p *Plugin,
 		log log.T,
 		manager pluginHelper,
@@ -300,6 +288,9 @@ func TestExecute(t *testing.T) {
 
 		return out
 	}
+	defer func() { runConfig = runConfigOrig }()
+
+	// TODO:MF Test result code for reboot in cases where that is expected?
 
 	// Setup mocks
 	mockCancelFlag.On("Canceled").Return(false)
@@ -307,7 +298,6 @@ func TestExecute(t *testing.T) {
 	mockCancelFlag.On("Wait").Return(false).After(100 * time.Millisecond)
 
 	result := plugin.Execute(mockContext, config, mockCancelFlag)
-	configureComponent = configureComponentTemp // TODO:MF: this should be a proper mock that's reset in a defer
 
 	assert.Equal(t, result.Code, 1)
 	assert.Contains(t, result.Output, "error")
@@ -331,9 +321,10 @@ func TestInstallComponent(t *testing.T) {
 	configureUtil := &mockConfigureUtility{}
 	updateUtil := &mockUpdateUtility{}
 
-	fileUncompress = func(src, dest string) error {
-		return nil
-	}
+	result, _ := ioutil.ReadFile("testdata/sampleManifest.json")
+	stubs := &ConfigureComponentStubs{fileSysDepStub: &FileSysDepStub{readResult: result}, networkDepStub: &NetworkDepStub{}}
+	stubs.Set()
+	defer stubs.Clear()
 
 	installCommand := "AWSPVDriverSetup.msi /quiet /install"
 
@@ -364,15 +355,11 @@ func TestUninstallComponent_DoesNotExist(t *testing.T) {
 	}
 	updateUtil := &mockUpdateUtility{}
 
-	fileExist = func(path string) bool {
-		return false
-	}
+	stubs := &ConfigureComponentStubs{fileSysDepStub: &FileSysDepStub{existsResult: false}, networkDepStub: &NetworkDepStub{}}
+	stubs.Set()
+	defer stubs.Clear()
 
-	fileRemove = func(path string) error {
-		return nil
-	}
-
-	output := configureComponent(
+	output := runConfigureComponent(
 		plugin,
 		logger,
 		manager,
@@ -401,23 +388,12 @@ func TestUninstallComponent_RemovalFailed(t *testing.T) {
 	configureUtil := &mockConfigureUtility{}
 	updateUtil := &mockUpdateUtility{}
 
-	parseManifest = func(log log.T, fileName string) (parsedManifest *ComponentManifest, err error) {
-		return manifest, nil
-	}
+	result, _ := ioutil.ReadFile("testdata/sampleManifest.json")
+	stubs := &ConfigureComponentStubs{fileSysDepStub: &FileSysDepStub{readResult: result, existsResult: true, removeError: errors.New("404")}, networkDepStub: &NetworkDepStub{}}
+	stubs.Set()
+	defer stubs.Clear()
 
-	fileExist = func(path string) bool {
-		return true
-	}
-
-	fileUncompress = func(src, dest string) error {
-		return nil
-	}
-
-	fileRemove = func(path string) error {
-		return fmt.Errorf("404")
-	}
-
-	output := configureComponent(
+	output := runConfigureComponent(
 		plugin,
 		logger,
 		manager,
@@ -440,13 +416,9 @@ func TestUninstallComponent(t *testing.T) {
 	configureUtil := &mockConfigureUtility{}
 	util := &mockUpdateUtility{}
 
-	fileExist = func(path string) bool {
-		return true
-	}
-
-	fileRemove = func(path string) error {
-		return nil
-	}
+	stubs := &ConfigureComponentStubs{fileSysDepStub: &FileSysDepStub{existsResult: true}, networkDepStub: &NetworkDepStub{}}
+	stubs.Set()
+	defer stubs.Clear()
 
 	uninstallCommand := "AWSPVDriverSetup.msi /quiet /uninstall"
 
@@ -541,11 +513,12 @@ func TestDownloadPackage(t *testing.T) {
 	manager := configureManager{}
 	util := mockConfigureUtility{}
 
-	fileDownload = func(log log.T, input artifact.DownloadInput) (output artifact.DownloadOutput, err error) {
-		result := artifact.DownloadOutput{}
-		result.LocalFilePath = "components/PVDriver/9000.0.0.0/PVDriver.zip"
-		return result, nil
-	}
+	result := artifact.DownloadOutput{}
+	result.LocalFilePath = "components/PVDriver/9000.0.0.0/PVDriver.zip"
+
+	stubs := &ConfigureComponentStubs{fileSysDepStub: &FileSysDepStub{}, networkDepStub: &NetworkDepStub{downloadResult: result}}
+	stubs.Set()
+	defer stubs.Clear()
 
 	fileName, err := manager.downloadPackage(logger, &util, pluginInformation.Name, pluginInformation.Version, pluginInformation.Source, &output, context)
 
@@ -562,11 +535,12 @@ func TestDownloadPackage_Failed(t *testing.T) {
 	util := mockConfigureUtility{}
 
 	// file download failed
-	fileDownload = func(log log.T, input artifact.DownloadInput) (output artifact.DownloadOutput, err error) {
-		result := artifact.DownloadOutput{}
-		result.LocalFilePath = ""
-		return result, fmt.Errorf("404")
-	}
+	result := artifact.DownloadOutput{}
+	result.LocalFilePath = ""
+
+	stubs := &ConfigureComponentStubs{fileSysDepStub: &FileSysDepStub{}, networkDepStub: &NetworkDepStub{downloadResult: result, downloadError: errors.New("404")}}
+	stubs.Set()
+	defer stubs.Clear()
 
 	fileName, err := manager.downloadPackage(logger, &util, pluginInformation.Name, pluginInformation.Version, pluginInformation.Source, &output, context)
 

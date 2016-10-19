@@ -18,7 +18,6 @@ package configurecomponent
 import (
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"regexp"
 	"strconv"
 
@@ -41,7 +40,7 @@ type ComponentManifest struct {
 func parseComponentManifest(log log.T, fileName string) (parsedManifest *ComponentManifest, err error) {
 	// load specified file from file system
 	var result = []byte{}
-	if result, err = ioutil.ReadFile(fileName); err != nil {
+	if result, err = filesysdep.ReadFile(fileName); err != nil {
 		if log != nil {
 			log.Errorf("Failed to read component's JSON configuration file: %v", err)
 		}
