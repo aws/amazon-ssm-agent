@@ -32,6 +32,32 @@ const (
 )
 
 const (
+	// AssociationStatusPending represents Pending status
+	AssociationStatusPending = "Pending"
+	// AssociationStatusInProgress represents InProgress status
+	AssociationStatusInProgress = "InProgress"
+	// AssociationStatusSuccess represents Success status
+	AssociationStatusSuccess = "Success"
+	// AssociationStatusFailed represents Failed status
+	AssociationStatusFailed = "Failed"
+	// AssociationStatusTimedOut represents TimedOut status
+	AssociationStatusTimedOut = "TimedOut"
+)
+
+const (
+	// AssociationErrorCodeInvalidAssociation represents InvalidAssociation Error
+	AssociationErrorCodeInvalidAssociation = "InvalidAssoc"
+	// AssociationErrorCodeExecutionError represents Execution Error
+	AssociationErrorCodeExecutionError = "ExecutionError"
+	// AssociationErrorCodeListAssociationError represents ListAssociation Error
+	AssociationErrorCodeListAssociationError = "ListAssocError"
+	// AssociationErrorCodeSubmitAssociationError represents SubmitAssociation Error
+	AssociationErrorCodeSubmitAssociationError = "SubmitAssocError"
+	// AssociationErrorCodeNoError represents no error
+	AssociationErrorCodeNoError = ""
+)
+
+const (
 	// ParamTypeString represents the Param Type is String
 	ParamTypeString = "String"
 	// ParamTypeStringList represents the Param Type is StringList

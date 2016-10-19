@@ -84,15 +84,15 @@ func InitializeCommandState(context context.T,
 	documentInfo := newDocumentInfo(rawData, payload)
 
 	// adapt plugin configuration format from MDS to plugin expected format
-	s3KeyPrefix := path.Join(payload.OutputS3KeyPrefix, payload.CommandID, documentInfo.Destination)
+	s3KeyPrefix := path.Join(payload.OutputS3KeyPrefix, payload.CommandID, documentInfo.InstanceID)
 
 	orchestrationRootDir := filepath.Join(
 		appconfig.DefaultDataStorePath,
-		documentInfo.Destination,
+		documentInfo.InstanceID,
 		appconfig.DefaultDocumentRootDirName,
 		context.AppConfig().Agent.OrchestrationRootDir)
 
-	orchestrationDir := filepath.Join(orchestrationRootDir, documentInfo.CommandID)
+	orchestrationDir := filepath.Join(orchestrationRootDir, documentInfo.DocumentID)
 	docState := stateModel.DocumentState{
 		DocumentInformation: documentInfo,
 		DocumentType:        stateModel.Association,
@@ -109,9 +109,9 @@ func newDocumentInfo(rawData *model.AssociationRawData, payload *messageContract
 
 	documentInfo := new(stateModel.DocumentInfo)
 
-	documentInfo.CommandID = *(rawData.Association.AssociationId)
-	documentInfo.Destination = *(rawData.Association.InstanceId)
-	documentInfo.MessageID = fmt.Sprintf("aws.ssm.%v.%v", documentInfo.CommandID, documentInfo.Destination)
+	documentInfo.DocumentID = *(rawData.Association.AssociationId)
+	documentInfo.InstanceID = *(rawData.Association.InstanceId)
+	documentInfo.MessageID = fmt.Sprintf("aws.ssm.%v.%v", documentInfo.DocumentID, documentInfo.InstanceID)
 	documentInfo.RunID = times.ToIsoDashUTC(times.DefaultClock.Now())
 	documentInfo.CreatedDate = times.ToIso8601UTC(rawData.CreateDate)
 	documentInfo.DocumentName = payload.DocumentName

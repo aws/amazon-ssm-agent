@@ -18,6 +18,7 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/aws/amazon-ssm-agent/agent/association/cache"
 	"github.com/aws/amazon-ssm-agent/agent/association/model"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
@@ -133,6 +134,13 @@ func (s *AssociationService) UpdateInstanceAssociationStatus(
 		ExecutionSummary: aws.String(executionSummary),
 	}
 
+	executionResultContent, err := jsonutil.Marshal(executionResult)
+	if err != nil {
+		log.Error("could not marshal associationStatus! ", err)
+		return nil, err
+	}
+	log.Debug("Update association status content is ", jsonutil.Indent(executionResultContent))
+
 	response, err := s.ssmSvc.UpdateInstanceAssociationStatus(log, associationID, instanceID, &executionResult)
 	if err != nil {
 		return nil, fmt.Errorf("unable to update association status %v", err)
@@ -143,6 +151,17 @@ func (s *AssociationService) UpdateInstanceAssociationStatus(
 
 // LoadAssociationDetail loads document contents and parameters for the given association
 func (s *AssociationService) LoadAssociationDetail(log log.T, assoc *model.AssociationRawData) error {
+	associationCache := cache.GetCache()
+	associationID := assoc.Association.AssociationId
+
+	// check if the association details have been cached
+	if associationCache.IsCached(*associationID) {
+		rawData := associationCache.Get(*associationID)
+		assoc.Document = rawData.Document
+		return nil
+	}
+
+	// if not cached before
 	var (
 		documentResponse *ssm.GetDocumentOutput
 		err              error
@@ -155,6 +174,11 @@ func (s *AssociationService) LoadAssociationDetail(log log.T, assoc *model.Assoc
 	}
 
 	assoc.Document = documentResponse.Content
+
+	if err = associationCache.Add(*associationID, assoc); err != nil {
+		return err
+	}
+
 	return nil
 }
 

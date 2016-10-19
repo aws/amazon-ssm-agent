@@ -65,8 +65,8 @@ func newDocumentInfo(msg ssmmds.Message, parsedMsg messageContracts.SendCommandP
 
 	documentInfo := new(model.DocumentInfo)
 
-	documentInfo.CommandID = getCommandID(*msg.MessageId)
-	documentInfo.Destination = *msg.Destination
+	documentInfo.DocumentID = getCommandID(*msg.MessageId)
+	documentInfo.InstanceID = *msg.Destination
 	documentInfo.MessageID = *msg.MessageId
 	documentInfo.RunID = times.ToIsoDashUTC(times.DefaultClock.Now())
 	documentInfo.CreatedDate = *msg.CreatedDate

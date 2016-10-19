@@ -38,11 +38,12 @@ func Refresh(log log.T, assocs []*model.AssociationRawData) {
 
 	log.Debugf("Refresh cached association data with %v associations", len(assocs))
 
-	//TODO: find out if create date can retrieve from service
 	currentTime := times.DefaultClock.Now()
 	for _, assoc := range assocs {
 		assoc.CreateDate = currentTime
-		assoc.Association.ScheduleExpression = aws.String(cronExpressionEveryFiveMinutes)
+		if assoc.Association.ScheduleExpression == nil || *(assoc.Association.ScheduleExpression) == "" {
+			assoc.Association.ScheduleExpression = aws.String(cronExpressionEveryFiveMinutes)
+		}
 	}
 
 	associations = assocs
@@ -67,6 +68,7 @@ func LoadNextScheduledAssociation(log log.T) (*model.AssociationRawData, error) 
 	for _, assoc := range associations {
 		if assoc.NextScheduledDate.IsZero() {
 			if *assoc.Association.ScheduleExpression == cronExpressionEveryFiveMinutes {
+				// run association immediately
 				assoc.NextScheduledDate = currentTime
 			} else {
 				assoc.NextScheduledDate = cronexpr.MustParse(*assoc.Association.ScheduleExpression).Next(currentTime)
