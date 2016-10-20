@@ -29,7 +29,7 @@ import (
 	messageContracts "github.com/aws/amazon-ssm-agent/agent/message/contracts"
 	stateModel "github.com/aws/amazon-ssm-agent/agent/statemanager/model"
 	"github.com/aws/amazon-ssm-agent/agent/task"
-	"github.com/aws/amazon-ssm-agent/vendor/src/github.com/aws/aws-sdk-go/aws"
+	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/service/ssm"
 	"github.com/carlescere/scheduler"
 	"github.com/stretchr/testify/assert"
