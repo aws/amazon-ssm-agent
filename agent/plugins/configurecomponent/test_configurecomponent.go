@@ -119,10 +119,12 @@ func (m *FileSysDepStub) ReadFile(filename string) ([]byte, error) {
 }
 
 type NetworkDepStub struct {
-	foldersResult  []string
-	foldersError   error
-	downloadResult artifact.DownloadOutput
-	downloadError  error
+	foldersResult          []string
+	foldersError           error
+	downloadResultDefault  artifact.DownloadOutput
+	downloadErrorDefault   error
+	downloadResultSequence []artifact.DownloadOutput
+	downloadErrorSequence  []error
 }
 
 func (m *NetworkDepStub) ListS3Folders(log log.T, amazonS3URL s3util.AmazonS3URL) (folderNames []string, err error) {
@@ -130,7 +132,19 @@ func (m *NetworkDepStub) ListS3Folders(log log.T, amazonS3URL s3util.AmazonS3URL
 }
 
 func (m *NetworkDepStub) Download(log log.T, input artifact.DownloadInput) (output artifact.DownloadOutput, err error) {
-	return m.downloadResult, m.downloadError
+	if len(m.downloadResultSequence) > 0 {
+		result := m.downloadResultSequence[0]
+		error := m.downloadErrorSequence[0]
+		if len(m.downloadResultSequence) > 1 {
+			m.downloadResultSequence = append(m.downloadResultSequence[:0], m.downloadResultSequence[1:]...)
+			m.downloadErrorSequence = append(m.downloadErrorSequence[:0], m.downloadErrorSequence[1:]...)
+		} else {
+			m.downloadResultSequence = nil
+			m.downloadErrorSequence = nil
+		}
+		return result, error
+	}
+	return m.downloadResultDefault, m.downloadErrorDefault
 }
 
 type ExecDepStub struct {

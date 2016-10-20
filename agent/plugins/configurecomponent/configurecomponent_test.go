@@ -60,35 +60,6 @@ func TestAppendInfo(t *testing.T) {
 	assert.Contains(t, output.Stdout, "Info message")
 }
 
-//TODO:MF: Needs a second download result... or mock the configuration manager and make this a unit test
-func TestInstallComponent_DownloadFailed(t *testing.T) {
-	plugin := &Plugin{}
-	pluginInformation := createStubPluginInputInstall()
-
-	manifest, _ := parseComponentManifest(logger, "testdata/sampleManifest.json")
-	manager := &mockConfigureManager{
-		downloadManifestResult: manifest,
-		downloadManifestError:  nil,
-		downloadPackageResult:  "",
-		downloadPackageError:   fmt.Errorf("Cannot download package"),
-		validateInputResult:    true,
-		validateInputError:     nil,
-	}
-	configureUtil := &mockConfigureUtility{}
-	instanceContext := createStubInstanceContext()
-
-	output := runConfigureComponent(
-		plugin,
-		logger,
-		manager,
-		configureUtil,
-		instanceContext,
-		pluginInformation)
-
-	assert.NotEmpty(t, output.Stderr)
-	assert.NotEmpty(t, output.Errors)
-}
-
 func TestExecute(t *testing.T) {
 	pluginInformation := createStubPluginInputInstall()
 	config := contracts.Configuration{}
@@ -277,7 +248,7 @@ func TestDownloadPackage(t *testing.T) {
 	result := artifact.DownloadOutput{}
 	result.LocalFilePath = "components/PVDriver/9000.0.0.0/PVDriver.zip"
 
-	stubs := &ConfigureComponentStubs{fileSysDepStub: &FileSysDepStub{}, networkDepStub: &NetworkDepStub{downloadResult: result}}
+	stubs := &ConfigureComponentStubs{fileSysDepStub: &FileSysDepStub{}, networkDepStub: &NetworkDepStub{downloadResultDefault: result}}
 	stubs.Set()
 	defer stubs.Clear()
 
@@ -299,7 +270,7 @@ func TestDownloadPackage_Failed(t *testing.T) {
 	result := artifact.DownloadOutput{}
 	result.LocalFilePath = ""
 
-	stubs := &ConfigureComponentStubs{fileSysDepStub: &FileSysDepStub{}, networkDepStub: &NetworkDepStub{downloadResult: result, downloadError: errors.New("404")}}
+	stubs := &ConfigureComponentStubs{fileSysDepStub: &FileSysDepStub{}, networkDepStub: &NetworkDepStub{downloadResultDefault: result, downloadErrorDefault: errors.New("404")}}
 	stubs.Set()
 	defer stubs.Clear()
 

@@ -31,7 +31,7 @@ func fileSysStubSuccess() fileSysDep {
 }
 
 func networkStubSuccess() networkDep {
-	return &NetworkDepStub{downloadResult: artifact.DownloadOutput{LocalFilePath: "Stub"}}
+	return &NetworkDepStub{downloadResultDefault: artifact.DownloadOutput{LocalFilePath: "Stub"}}
 }
 
 func execStubSuccess() execDep {
@@ -115,7 +115,7 @@ func TestConfigureComponent_InvalidInput(t *testing.T) {
 func TestConfigureComponent_FailedDownloadManifest(t *testing.T) {
 	stubs := &ConfigureComponentStubs{
 		fileSysDepStub: &FileSysDepStub{existsResultDefault: false},
-		networkDepStub: &NetworkDepStub{downloadError: errors.New("Cannot download manifest")},
+		networkDepStub: &NetworkDepStub{downloadErrorDefault: errors.New("Cannot download manifest")},
 		execDepStub:    execStubSuccess(),
 	}
 	stubs.Set()
@@ -202,6 +202,38 @@ func TestInstallComponent_DeleteFailed(t *testing.T) {
 	assert.NotEmpty(t, output.Stderr)
 	assert.NotEmpty(t, output.Errors)
 	assert.Contains(t, output.Stderr, "failed to delete compressed package")
+}
+
+func TestInstallComponent_DownloadFailed(t *testing.T) {
+	result, _ := ioutil.ReadFile("testdata/sampleManifest.json")
+	stubs := &ConfigureComponentStubs{
+		fileSysDepStub: &FileSysDepStub{readResult: result, existsResultDefault: false},
+		networkDepStub: &NetworkDepStub{
+			downloadResultSequence: []artifact.DownloadOutput{artifact.DownloadOutput{LocalFilePath: "Stub"}, artifact.DownloadOutput{}},
+			downloadErrorSequence:  []error{nil, errors.New("Cannot download package")},
+		},
+		execDepStub: execStubSuccess(),
+	}
+	stubs.Set()
+	defer stubs.Clear()
+
+	plugin := &Plugin{}
+	pluginInformation := createStubPluginInputInstall()
+
+	manager := &configureManager{}
+	configureUtil := &Utility{}
+	instanceContext := createStubInstanceContext()
+
+	output := runConfigureComponent(
+		plugin,
+		logger,
+		manager,
+		configureUtil,
+		instanceContext,
+		pluginInformation)
+
+	assert.NotEmpty(t, output.Stderr)
+	assert.NotEmpty(t, output.Errors)
 }
 
 func TestUninstallComponent_DoesNotExist(t *testing.T) {
