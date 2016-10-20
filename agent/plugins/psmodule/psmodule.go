@@ -42,7 +42,8 @@ type Plugin struct {
 // RunCommandPluginInput represents one set of commands executed by the RunCommand plugin.
 type PSModulePluginInput struct {
 	contracts.PluginInput
-	RunCommand       []string
+	RunCommand       interface{}
+	ParsedCommands   []string
 	ID               string
 	WorkingDirectory string
 	TimeoutSeconds   interface{}
@@ -154,6 +155,8 @@ func (p *Plugin) runCommandsRawInput(log log.T, rawPluginInput interface{}, orch
 		out.MarkAsFailed(log, errorString)
 		return
 	}
+
+	pluginInput.ParsedCommands = pluginutil.ParseRunCommand(pluginInput.RunCommand, pluginInput.ParsedCommands)
 	return p.runCommands(log, pluginInput, orchestrationDirectory, cancelFlag, outputS3BucketName, outputS3KeyPrefix)
 }
 
@@ -173,8 +176,8 @@ func (p *Plugin) runCommands(log log.T, pluginInput PSModulePluginInput, orchest
 		orchestrationDirectory = tempDir
 	}
 
-	orchestrationDir := fileutil.RemoveInvalidChars(filepath.Join(orchestrationDirectory, pluginInput.ID))
-	log.Debugf("Running commands %v in workingDirectory %v; orchestrationDir %v ", pluginInput.RunCommand, pluginInput.WorkingDirectory, orchestrationDir)
+	orchestrationDir := fileutil.BuildPath(orchestrationDirectory, pluginInput.ID)
+	log.Debugf("Running commands %v in workingDirectory %v; orchestrationDir %v ", pluginInput.ParsedCommands, pluginInput.WorkingDirectory, orchestrationDir)
 
 	// create orchestration dir if needed
 	if err = fileutil.MakeDirsWithExecuteAccess(orchestrationDir); err != nil {
@@ -188,21 +191,23 @@ func (p *Plugin) runCommands(log log.T, pluginInput PSModulePluginInput, orchest
 	log.Debugf("Writing commands %v to file %v", pluginInput, scriptPath)
 
 	// Create script file
-	if err = pluginutil.CreateScriptFile(log, scriptPath, pluginInput.RunCommand); err != nil {
+	if err = pluginutil.CreateScriptFile(log, scriptPath, pluginInput.ParsedCommands); err != nil {
 		out.Errors = append(out.Errors, err.Error())
 		log.Errorf("failed to create script file. %v", err)
 		return
 	}
 
-	// Download file from source if available
-	downloadOutput, err := pluginutil.DownloadFileFromSource(log, pluginInput.Source, pluginInput.SourceHash, pluginInput.SourceHashType)
-	if err != nil || downloadOutput.IsHashMatched == false || downloadOutput.LocalFilePath == "" {
-		errorString := fmt.Errorf("failed to download file reliably %v", pluginInput.Source)
-		out.MarkAsFailed(log, errorString)
-		return
-	} else {
-		// Uncompress the zip file received
-		fileutil.Uncompress(downloadOutput.LocalFilePath, PowerShellModulesDirectory)
+	if pluginInput.Source != "" {
+		// Download file from source if available
+		downloadOutput, err := pluginutil.DownloadFileFromSource(log, pluginInput.Source, pluginInput.SourceHash, pluginInput.SourceHashType)
+		if err != nil || downloadOutput.IsHashMatched == false || downloadOutput.LocalFilePath == "" {
+			errorString := fmt.Errorf("failed to download file reliably %v", pluginInput.Source)
+			out.MarkAsFailed(log, errorString)
+			return
+		} else {
+			// Uncompress the zip file received
+			fileutil.Uncompress(downloadOutput.LocalFilePath, PowerShellModulesDirectory)
+		}
 	}
 
 	// Set execution time

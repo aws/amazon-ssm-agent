@@ -187,11 +187,6 @@ func runUpdateAgent(
 	var err error
 	var context *updateutil.InstanceContext
 
-	if isUpdateSupported, err := util.IsPlatformSupportedForUpdate(log); err == nil && !isUpdateSupported {
-		out.Failed(log, fmt.Errorf("Unsupported platform for update"))
-		return
-	}
-
 	if err = jsonutil.Remarshal(rawPluginInput, &pluginInput); err != nil {
 		out.Failed(log,
 			fmt.Errorf("invalid format in plugin properties %v;\nerror %v", rawPluginInput, err))

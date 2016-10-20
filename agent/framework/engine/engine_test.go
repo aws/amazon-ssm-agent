@@ -21,6 +21,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/framework/plugin"
 	"github.com/aws/amazon-ssm-agent/agent/rebooter"
+	"github.com/aws/amazon-ssm-agent/agent/statemanager/model"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 	"github.com/stretchr/testify/assert"
 )
@@ -28,7 +29,7 @@ import (
 // TestRunPlugins tests that RunPluginsWithRegistry calls all the expected plugins.
 func TestRunPluginsWithRegistry(t *testing.T) {
 	pluginNames := []string{"plugin1", "plugin2"}
-	pluginConfigs := make(map[string]*contracts.Configuration)
+	pluginConfigs := make(map[string]model.PluginState)
 	pluginResults := make(map[string]*contracts.PluginResult)
 	pluginInstances := make(map[string]*plugin.Mock)
 	pluginRegistry := plugin.PluginRegistry{}
@@ -46,7 +47,7 @@ func TestRunPluginsWithRegistry(t *testing.T) {
 		pluginInstances[name] = new(plugin.Mock)
 
 		// setup expectations
-		pluginConfigs[name] = &contracts.Configuration{}
+		pluginConfigs[name] = model.PluginState{}
 		pluginResults[name] = &contracts.PluginResult{
 			Output:        name,
 			StartDateTime: defaultTime,
@@ -57,12 +58,12 @@ func TestRunPluginsWithRegistry(t *testing.T) {
 			pluginResults[name].Status = contracts.ResultStatusSuccessAndReboot
 		}
 
-		pluginInstances[name].On("Execute", ctx, *pluginConfigs[name], cancelFlag).Return(*pluginResults[name])
+		pluginInstances[name].On("Execute", ctx, pluginConfigs[name].Configuration, cancelFlag).Return(*pluginResults[name])
 		pluginRegistry[name] = pluginInstances[name]
 	}
 
 	// call the code we are testing
-	outputs := RunPlugins(ctx, documentID, pluginConfigs, pluginRegistry, sendResponse, cancelFlag)
+	outputs := RunPlugins(ctx, documentID, pluginConfigs, pluginRegistry, sendResponse, nil, cancelFlag)
 
 	// fix the times expectation.
 	for _, result := range outputs {

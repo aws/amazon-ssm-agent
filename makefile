@@ -64,6 +64,7 @@ pre-build:
 	cp $(BGO_SPACE)/seelog_windows.xml.template $(BGO_SPACE)/bin/
 	cp $(BGO_SPACE)/VERSION $(BGO_SPACE)/bin/
 	cp $(BGO_SPACE)/agent/integration-cli/integration-cli.json $(BGO_SPACE)/bin/
+	cp $(BGO_SPACE)/packaging/plugin-binaries/* $(BGO_SPACE)/bin/
 ifneq ("$(wildcard $(BUILDFILE_PATH))","")
 	@echo "Copying version files generated in pre-build "
 	mkdir -p $(TEMPVERSIONPATH)

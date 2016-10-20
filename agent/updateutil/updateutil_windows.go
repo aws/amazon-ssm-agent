@@ -22,7 +22,6 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/platform"
 )
 
@@ -72,15 +71,6 @@ const (
 	CompressFormat = "zip"
 )
 
-// Win32_OperatingSystems https://msdn.microsoft.com/en-us/library/aa394239%28v=vs.85%29.aspx
-const (
-	// PRODUCT_DATA_CENTER_NANO_SERVER = 143
-	ProductDataCenterNanoServer = "143"
-
-	// PRODUCT_STANDARD_NANO_SERVER = 144
-	ProductStandardNanoServer = "144"
-)
-
 const (
 	// Installer represents Install PowerShell script
 	Installer = "install.ps1"
@@ -100,26 +90,6 @@ func agentStatusOutput() ([]byte, error) {
 
 func agentExpectedStatus() string {
 	return "RUNNING"
-}
-
-func isUpdateSupported(log log.T) (bool, error) {
-	var sku string
-	var err error
-
-	// Get platform sku information
-	if sku, err = getPlatformSku(log); err != nil {
-		log.Infof("Failed to fetch sku - %v", err)
-		return false, err
-	}
-
-	log.Infof("sku: %v", sku)
-
-	// If sku represents nano server, return false
-	if sku == ProductDataCenterNanoServer || sku == ProductStandardNanoServer {
-		return false, nil
-	}
-
-	return true, nil
 }
 
 func setPlatformSpecificCommand(parts []string) []string {

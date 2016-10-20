@@ -145,3 +145,7 @@ func fullyQualifiedDomainName() string {
 
 	return hostName
 }
+
+func isPlatformNanoServer(log log.T) (bool, error) {
+	return false, nil
+}

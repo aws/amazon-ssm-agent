@@ -31,6 +31,11 @@ import (
 // Service is an interface to the SSM service.
 type Service interface {
 	ListAssociations(log log.T, instanceID string) (response *ssm.ListAssociationsOutput, err error)
+	UpdateAssociationStatus(
+		log log.T,
+		instanceID string,
+		name string,
+		associationStatus *ssm.AssociationStatus) (response *ssm.UpdateAssociationStatusOutput, err error)
 	SendCommand(log log.T,
 		documentName string,
 		instanceIDs []string,
@@ -42,7 +47,9 @@ type Service interface {
 	ListCommandInvocations(log log.T, instanceID string, commandID string) (response *ssm.ListCommandInvocationsOutput, err error)
 	CancelCommand(log log.T, commandID string, instanceIDs []string) (response *ssm.CancelCommandOutput, err error)
 	CreateDocument(log log.T, docName string, docContent string) (response *ssm.CreateDocumentOutput, err error)
+	GetDocument(log log.T, docName string) (response *ssm.GetDocumentOutput, err error)
 	DeleteDocument(log log.T, instanceID string) (response *ssm.DeleteDocumentOutput, err error)
+	DescribeAssociation(log log.T, instanceID string, docName string) (response *ssm.DescribeAssociationOutput, err error)
 	UpdateInstanceInformation(log log.T, agentVersion string, agentStatus string) (response *ssm.UpdateInstanceInformationOutput, err error)
 }
 
@@ -61,13 +68,16 @@ func NewService() Service {
 	}
 
 	awsConfig := sdkutil.AwsConfig()
-
 	// parse appConfig overrides
 	appConfig, err := appconfig.Config(false)
 	if err == nil {
 		if appConfig.Ssm.Endpoint != "" {
 			awsConfig.Endpoint = &appConfig.Ssm.Endpoint
 		}
+		if appConfig.Agent.Region != "" {
+			awsConfig.Region = &appConfig.Agent.Region
+		}
+
 		// TODO: test hook, can be removed before release
 		// this is to skip ssl verification for the beta self signed certs
 		if appConfig.Ssm.InsecureSkipVerify {
@@ -107,6 +117,27 @@ func (svc *sdkService) ListAssociations(log log.T, instanceID string) (response 
 		return
 	}
 	log.Debug("ListAssociations Response", response)
+	return
+}
+
+//UpdateAssociationStatus calls the UpdateAssociationStatus SSM API.
+func (svc *sdkService) UpdateAssociationStatus(
+	log log.T,
+	instanceID string,
+	name string,
+	associationStatus *ssm.AssociationStatus) (response *ssm.UpdateAssociationStatusOutput, err error) {
+
+	input := ssm.UpdateAssociationStatusInput{
+		InstanceId:        aws.String(instanceID),
+		Name:              aws.String(name),
+		AssociationStatus: associationStatus,
+	}
+	response, err = svc.sdk.UpdateAssociationStatus(&input)
+	if err != nil {
+		sdkutil.HandleAwsError(log, err, ssmStopPolicy)
+		return
+	}
+	log.Debug("UpdateAssociationStatus Response", response)
 	return
 }
 
@@ -182,6 +213,35 @@ func (svc *sdkService) CreateDocument(log log.T, docName string, docContent stri
 		return
 	}
 	log.Debug("CreateDocument Response", response)
+	return
+}
+
+//GetDocument calls the GetDocument SSM API to retrieve document with given document name
+func (svc *sdkService) GetDocument(log log.T, docName string) (response *ssm.GetDocumentOutput, err error) {
+	params := ssm.GetDocumentInput{
+		Name: aws.String(docName),
+	}
+	response, err = svc.sdk.GetDocument(&params)
+	if err != nil {
+		sdkutil.HandleAwsError(log, err, ssmStopPolicy)
+		return
+	}
+	log.Debug("GetDocument Response", response)
+	return
+}
+
+//DescribeAssociation calls the DescribeAssociation SSM API to retrieve parameters information
+func (svc *sdkService) DescribeAssociation(log log.T, instanceID string, docName string) (response *ssm.DescribeAssociationOutput, err error) {
+	params := ssm.DescribeAssociationInput{
+		InstanceId: aws.String(instanceID),
+		Name:       aws.String(docName),
+	}
+	response, err = svc.sdk.DescribeAssociation(&params)
+	if err != nil {
+		sdkutil.HandleAwsError(log, err, ssmStopPolicy)
+		return
+	}
+	log.Debug("DescribeAssociation Response", response)
 	return
 }
 

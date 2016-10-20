@@ -96,8 +96,11 @@ const (
 	// PlatformWindows represents windows
 	PlatformWindows = "windows"
 
+	//PlatformWindowsNano represents windows nano
+	PlatformWindowsNano = "windows-nano"
+
 	// DefaultUpdateExecutionTimeoutInSeconds represents default timeout time for execution update related scripts in seconds
-	DefaultUpdateExecutionTimeoutInSeconds = 30
+	DefaultUpdateExecutionTimeoutInSeconds = 150
 
 	// PipelineTestVersion represents fake version for pipeline tests
 	PipelineTestVersion = "255.0.0.0"
@@ -180,11 +183,12 @@ type T interface {
 	IsServiceRunning(log log.T, i *InstanceContext) (result bool, err error)
 	SaveUpdatePluginResult(log log.T, updaterRoot string, updateResult *UpdatePluginResult) (err error)
 	IsDiskSpaceSufficientForUpdate(log log.T) (bool, error)
-	IsPlatformSupportedForUpdate(log log.T) (bool, error)
 }
 
 // Utility implements interface T
-type Utility struct{}
+type Utility struct {
+	CustomUpdateExecutionTimeoutInSeconds int
+}
 
 var getDiskSpaceInfo = fileutil.GetDiskSpaceInfo
 var getRegion = platform.Region
@@ -194,6 +198,7 @@ var mkDirAll = os.MkdirAll
 var openFile = os.OpenFile
 var execCommand = exec.Command
 var cmdStart = (*exec.Cmd).Start
+var cmdOutput = (*exec.Cmd).Output
 var isUsingSystemD map[string]string
 var once sync.Once
 
@@ -222,6 +227,10 @@ func (util *Utility) CreateInstanceContext(log log.T) (context *InstanceContext,
 	} else if strings.Contains(platformName, PlatformCentOS) {
 		platformName = PlatformCentOS
 		installerName = PlatformLinux
+	} else if isNano, _ := platform.IsPlatformNanoServer(log); isNano {
+		//TODO move this logic to instance context
+		platformName = PlatformWindowsNano
+		installerName = PlatformWindowsNano
 	} else {
 		platformName = PlatformWindows
 		installerName = PlatformWindows
@@ -257,7 +266,7 @@ func (util *Utility) ExeCommand(
 	log log.T,
 	cmd string,
 	workingDir string,
-	updaterRoot string,
+	outputRoot string,
 	stdOut string,
 	stdErr string,
 	isAsync bool) (err error) {
@@ -277,7 +286,7 @@ func (util *Utility) ExeCommand(
 		tempCmd := setPlatformSpecificCommand(parts)
 		command := execCommand(tempCmd[0], tempCmd[1:]...)
 		command.Dir = workingDir
-		stdoutWriter, stderrWriter, exeErr := setExeOutErr(updaterRoot, stdOut, stdErr)
+		stdoutWriter, stderrWriter, exeErr := setExeOutErr(outputRoot, stdOut, stdErr)
 		if exeErr != nil {
 			return exeErr
 		}
@@ -291,9 +300,12 @@ func (util *Utility) ExeCommand(
 			return
 		}
 
-		timer := time.NewTimer(time.Duration(DefaultUpdateExecutionTimeoutInSeconds) * time.Second)
+		var timeout = DefaultUpdateExecutionTimeoutInSeconds
+		if util.CustomUpdateExecutionTimeoutInSeconds != 0 {
+			timeout = util.CustomUpdateExecutionTimeoutInSeconds
+		}
+		timer := time.NewTimer(time.Duration(timeout) * time.Second)
 		go killProcessOnTimeout(log, command, timer)
-
 		err = command.Wait()
 		timedOut := !timer.Stop()
 		if err != nil {
@@ -313,8 +325,39 @@ func (util *Utility) ExeCommand(
 			return err
 		}
 	}
-
 	return nil
+}
+
+// TODO move to commandUtil
+// ExeCommandOutput executes shell command and returns the stdout
+func (util *Utility) ExeCommandOutput(
+	log log.T,
+	cmd string,
+	workingDir string,
+	outputRoot string,
+	stdOut string,
+	stdErr string) (output string, err error) {
+
+	parts := strings.Fields(cmd)
+	tempCmd := setPlatformSpecificCommand(parts)
+	command := execCommand(tempCmd[0], tempCmd[1:]...)
+	command.Dir = workingDir
+	stdoutWriter, stderrWriter, exeErr := setExeOutErr(outputRoot, stdOut, stdErr)
+	if exeErr != nil {
+		return output, exeErr
+	}
+	defer stdoutWriter.Close()
+	defer stderrWriter.Close()
+
+	command.Stderr = stderrWriter
+
+	var out []byte
+	out, err = cmdOutput(command)
+	if err != nil {
+		return
+	}
+
+	return string(out), err
 }
 
 // IsServiceRunning returns is service running
@@ -368,12 +411,6 @@ func (util *Utility) IsDiskSpaceSufficientForUpdate(log log.T) (bool, error) {
 
 	// Return true otherwise
 	return true, nil
-}
-
-// IsPlatformSupportedForUpdate checks for each platform type and make sure current platform has no restrictio on agent update
-// Returns true if the update is allowed, otherwise return false
-func (util *Utility) IsPlatformSupportedForUpdate(log log.T) (result bool, err error) {
-	return isUpdateSupported(log)
 }
 
 // IsPlatformUsingSystemD returns if SystemD is the default Init for the Linux platform
@@ -526,7 +563,7 @@ func setExeOutErr(
 	}
 
 	stdOut = UpdateStandOutPath(updaterRoot, stdOut)
-	stdErr = UpdateStandOutPath(updaterRoot, stdErr)
+	stdErr = UpdateStandErrPath(updaterRoot, stdErr)
 
 	// create stdout file
 	// Allow append so that if arrays of run command write to the same file, we keep appending to the file.

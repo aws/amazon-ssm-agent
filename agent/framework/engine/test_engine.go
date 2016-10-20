@@ -16,6 +16,7 @@ package engine
 import (
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
+	"github.com/aws/amazon-ssm-agent/agent/statemanager/model"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 	"github.com/stretchr/testify/mock"
 )
@@ -29,7 +30,7 @@ type MockedPluginRunner struct {
 }
 
 // RunPlugins mocks the RunPlugins method.
-func (runnerMock *MockedPluginRunner) RunPlugins(context context.T, plugins map[string]*contracts.Configuration, cancelFlag task.CancelFlag) (pluginOutputs map[string]*contracts.PluginResult) {
+func (runnerMock *MockedPluginRunner) RunPlugins(context context.T, plugins map[string]model.PluginState, cancelFlag task.CancelFlag) (pluginOutputs map[string]*contracts.PluginResult) {
 	args := runnerMock.Called(plugins, cancelFlag)
 	return args.Get(0).(map[string]*contracts.PluginResult)
 }

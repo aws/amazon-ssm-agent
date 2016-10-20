@@ -15,7 +15,7 @@
 package coremanager
 
 import (
-	"path"
+	"path/filepath"
 	"sync"
 	"time"
 
@@ -103,6 +103,8 @@ func NewCoreManager(instanceIdPtr *string, regionPtr *string, log logger.T) (cm 
 // initializeBookkeepingLocations - initializes all folder locations required for bookkeeping
 func initializeBookkeepingLocations(log logger.T, instanceID string) bool {
 
+	//TODO: initializations for all state tracking folders of core plugins should be moved inside the corresponding core plugins.
+
 	//Create folders pending, current, completed, corrupt under the location DefaultLogDirPath/<instanceId>
 	log.Info("Initializing bookkeeping folders")
 	initStatus := true
@@ -114,9 +116,9 @@ func initializeBookkeepingLocations(log logger.T, instanceID string) bool {
 
 	for _, folder := range folders {
 
-		directoryName := path.Join(appconfig.DefaultDataStorePath,
+		directoryName := filepath.Join(appconfig.DefaultDataStorePath,
 			instanceID,
-			appconfig.DefaultCommandRootDirName,
+			appconfig.DefaultDocumentRootDirName,
 			appconfig.DefaultLocationOfState,
 			folder)
 
@@ -126,6 +128,29 @@ func initializeBookkeepingLocations(log logger.T, instanceID string) bool {
 			initStatus = false
 			break
 		}
+	}
+
+	//Create folders for long running plugins
+	log.Infof("Initializing bookkeeping folders for long running plugins")
+	longRunningPluginsFolderName := filepath.Join(appconfig.DefaultDataStorePath,
+		instanceID,
+		appconfig.LongRunningPluginsLocation,
+		appconfig.LongRunningPluginDataStoreLocation)
+
+	if err := fileutil.MakeDirs(longRunningPluginsFolderName); err != nil {
+		log.Error("encountered error while creating folders for internal state management for long running plugins", err)
+		initStatus = false
+	}
+
+	log.Infof("Initializing healthcheck folders for long running plugins")
+	f := filepath.Join(appconfig.DefaultDataStorePath,
+		instanceID,
+		appconfig.LongRunningPluginsLocation,
+		appconfig.LongRunningPluginsHealthCheck)
+
+	if err := fileutil.MakeDirs(f); err != nil {
+		log.Error("encountered error while creating folders for health check for long running plugins", err)
+		initStatus = false
 	}
 
 	return initStatus

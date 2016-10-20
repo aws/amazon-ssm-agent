@@ -496,10 +496,6 @@ func (u *fakeUtility) IsDiskSpaceSufficientForUpdate(log log.T) (bool, error) {
 	return true, nil
 }
 
-func (u *fakeUtility) IsPlatformSupportedForUpdate(log log.T) (bool, error) {
-	return true, nil
-}
-
 type fakeUpdateManager struct {
 	generateUpdateCmdResult string
 	generateUpdateCmdError  error

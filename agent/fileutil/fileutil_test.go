@@ -74,25 +74,33 @@ func ExampleReadAllText() {
 	// Will you please check my hash?
 }
 
-func ExampleRemoveInvalidChars() {
+func ExampleBuildPath() {
+	orchestrationDirectory := "/Users/"
 	// Path with invalid char
-	path1 := "Fix:ThisPath"
-	content1 := RemoveInvalidChars(path1)
+	name1 := "Fix:ThisPath"
+	content1 := BuildPath(orchestrationDirectory, name1)
 	fmt.Println(content1)
 
 	// path with no invalid char
-	path2 := "DoNotFixThisPath"
-	content2 := RemoveInvalidChars(path2)
+	name2 := "DoNotFixThisPath"
+	content2 := BuildPath(orchestrationDirectory, name2)
 	fmt.Println(content2)
 
 	// empty path should not return error
-	path3 := ""
-	content3 := RemoveInvalidChars(path3)
+	name3 := ""
+	content3 := BuildPath("", name3)
 	fmt.Println(content3)
+
+	// Path with several invalid chars
+	name4 := "Fix:ThisPath1"
+	name5 := "Fix:ThisPath2"
+	content4 := BuildPath(orchestrationDirectory, name4, name5)
+	fmt.Println(content4)
 	// Output:
-	// FixThisPath
-	// DoNotFixThisPath
+	// /Users/FixThisPath
+	// /Users/DoNotFixThisPath
 	//
+	// /Users/FixThisPath1/FixThisPath2
 }
 
 func ExampleIsDirectory() {
@@ -120,6 +128,20 @@ func ExampleIsDirEmpty() {
 	fmt.Println(content)
 	// Output:
 	// false
+}
+
+func TestBuildPath(t *testing.T) {
+	orchestrationDirectory := "/C:Users/"
+	name1 := "Fix:ThisPath1"
+	name2 := "DoNotFixThisPath"
+	name3 := "Fix:ThisPath2"
+	name4 := "Fix:ThisPath3"
+	name1_removed := "FixThisPath1"
+	name3_removed := "FixThisPath2"
+	name4_removed := "FixThisPath3"
+	res := BuildPath(orchestrationDirectory, name1, name2, name3, name4)
+	exp := filepath.Join(orchestrationDirectory, name1_removed, name2, name3_removed, name4_removed)
+	assert.Equal(t, exp, res)
 }
 
 func TestMakeDirs(t *testing.T) {

@@ -15,3 +15,5 @@ zip -j ${WINDOWS_NANO_ZIP} ${PACKAGE_PATH_NANO}/package.zip
 zip -j ${WINDOWS_NANO_ZIP} ${PACKAGE_PATH_NANO}/install.ps1
 zip -j ${WINDOWS_NANO_ZIP} ${PACKAGE_PATH_NANO}/uninstall.ps1
 
+WINDOWS_NANO_UPDATE_ZIP=${BGO_SPACE}/bin/updates/amazon-ssm-agent-updater/`cat ${BGO_SPACE}/VERSION`/amazon-ssm-agent-updater-windows-nano-amd64.zip
+zip -j ${WINDOWS_NANO_UPDATE_ZIP} ${BUILD_PATH_AMD64}/updater.exe

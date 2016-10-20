@@ -17,13 +17,12 @@ package processor
 
 import (
 	"errors"
-	"path"
-	"path/filepath"
 	"strings"
 
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	messageContracts "github.com/aws/amazon-ssm-agent/agent/message/contracts"
+	"github.com/aws/amazon-ssm-agent/agent/statemanager/model"
 	"github.com/aws/amazon-ssm-agent/agent/times"
 	"github.com/aws/aws-sdk-go/service/ssmmds"
 )
@@ -62,9 +61,9 @@ func validate(msg *ssmmds.Message) error {
 }
 
 // newDocumentInfo initializes new DocumentInfo object
-func newDocumentInfo(msg ssmmds.Message, parsedMsg messageContracts.SendCommandPayload) messageContracts.DocumentInfo {
+func newDocumentInfo(msg ssmmds.Message, parsedMsg messageContracts.SendCommandPayload) model.DocumentInfo {
 
-	documentInfo := new(messageContracts.DocumentInfo)
+	documentInfo := new(model.DocumentInfo)
 
 	documentInfo.CommandID = getCommandID(*msg.MessageId)
 	documentInfo.Destination = *msg.Destination
@@ -84,10 +83,11 @@ func getPluginConfigurations(runtimeConfig map[string]*contracts.PluginConfig, o
 	res = make(map[string]*contracts.Configuration)
 	for pluginName, pluginConfig := range runtimeConfig {
 		res[pluginName] = &contracts.Configuration{
+			Settings:               pluginConfig.Settings,
 			Properties:             pluginConfig.Properties,
 			OutputS3BucketName:     s3BucketName,
-			OutputS3KeyPrefix:      path.Join(s3KeyPrefix, fileutil.RemoveInvalidChars(pluginName)),
-			OrchestrationDirectory: filepath.Join(orchestrationDir, fileutil.RemoveInvalidChars(pluginName)),
+			OutputS3KeyPrefix:      fileutil.BuildS3Path(s3KeyPrefix, pluginName),
+			OrchestrationDirectory: fileutil.BuildPath(orchestrationDir, pluginName),
 			MessageId:              messageID,
 			BookKeepingFileName:    getCommandID(messageID),
 		}

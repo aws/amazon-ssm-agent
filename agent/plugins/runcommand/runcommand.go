@@ -155,7 +155,7 @@ func (p *Plugin) runCommands(log log.T, pluginInput RunCommandPluginInput, orche
 		orchestrationDirectory = tempDir
 	}
 
-	orchestrationDir := filepath.Join(orchestrationDirectory, fileutil.RemoveInvalidChars(pluginInput.ID))
+	orchestrationDir := fileutil.BuildPath(orchestrationDirectory, pluginInput.ID)
 	log.Debugf("Running commands %v in workingDirectory %v; orchestrationDir %v ", pluginInput.RunCommand, pluginInput.WorkingDirectory, orchestrationDir)
 
 	// create orchestration dir if needed

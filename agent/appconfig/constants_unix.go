@@ -35,6 +35,9 @@ const (
 	// UpdaterArtifactsRoot represents the directory for storing update related information
 	UpdaterArtifactsRoot = "/var/lib/amazon/ssm/update/"
 
+	// DefaultPluginPath represents the directory for storing plugins in SSM
+	DefaultPluginPath = "/var/lib/amazon/ssm/plugins"
+
 	// List all plugin names, unfortunately golang doesn't support const arrays of strings
 
 	// PluginNameAwsRunScript is the name for run script plugin

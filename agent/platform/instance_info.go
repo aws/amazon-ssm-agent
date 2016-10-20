@@ -11,6 +11,7 @@ package platform
 
 import (
 	"fmt"
+	"strings"
 	"sync"
 )
 
@@ -60,6 +61,19 @@ func SetRegion(region string) error {
 	}
 	cachedRegion = region
 	return nil
+}
+
+// IsManagedInstance returns if the current instance is managed instance
+func IsManagedInstance() (bool, error) {
+	instanceId, err := InstanceID()
+	if err != nil {
+		return false, err
+	}
+
+	if strings.Contains(instanceId, "mi-") {
+		return true, nil
+	}
+	return false, nil
 }
 
 // fetchInstanceID fetches the instance id with the following preference order.

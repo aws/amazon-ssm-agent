@@ -13,7 +13,6 @@ import (
 	"io"
 	"io/ioutil"
 	"os"
-	"path"
 	"path/filepath"
 	"strconv"
 	"strings"
@@ -24,10 +23,10 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/fileutil/artifact"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
-	command_state_helper "github.com/aws/amazon-ssm-agent/agent/message/statemanager"
 	"github.com/aws/amazon-ssm-agent/agent/platform"
 	"github.com/aws/amazon-ssm-agent/agent/s3util"
 	"github.com/aws/amazon-ssm-agent/agent/sdkutil"
+	command_state_helper "github.com/aws/amazon-ssm-agent/agent/statemanager"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/s3"
@@ -131,6 +130,17 @@ func ReadPrefix(input io.Reader, maxLength int, truncatedSuffix string) (out str
 	return
 }
 
+// ReadAll returns all data from a given Reader.
+func ReadAll(input io.Reader, maxLength int, truncatedSuffix string) (out string, err error) {
+	// read up to maxLength bytes from input
+	data, err := ioutil.ReadAll(io.LimitReader(input, int64(maxLength)))
+	if err != nil {
+		return "", err
+	}
+
+	return string(data), nil
+}
+
 // GetS3Config returns the S3 config used for uploading output files to S3
 func GetS3Config() *s3util.Manager {
 	//There are multiple ways of supporting the cross-region upload to S3 bucket:
@@ -222,7 +232,8 @@ func (p *DefaultPlugin) UploadOutputToS3Bucket(log log.T, pluginID string, orche
 
 				if Stdout != "" {
 					localPath := filepath.Join(orchestrationDir, p.StdoutFileName)
-					s3Key := path.Join(outputS3KeyPrefix, fileutil.RemoveInvalidChars(pluginID), p.StdoutFileName)
+
+					s3Key := fileutil.BuildS3Path(outputS3KeyPrefix, pluginID, p.StdoutFileName)
 					log.Debugf("Uploading %v to s3://%v/%v", localPath, outputS3BucketName, s3Key)
 					err := p.Uploader.S3Upload(outputS3BucketName, s3Key, localPath)
 					if err != nil {
@@ -237,7 +248,8 @@ func (p *DefaultPlugin) UploadOutputToS3Bucket(log log.T, pluginID string, orche
 
 				if Stderr != "" {
 					localPath := filepath.Join(orchestrationDir, p.StderrFileName)
-					s3Key := path.Join(outputS3KeyPrefix, fileutil.RemoveInvalidChars(pluginID), p.StderrFileName)
+
+					s3Key := fileutil.BuildS3Path(outputS3KeyPrefix, pluginID, p.StderrFileName)
 					log.Debugf("Uploading %v to s3://%v/%v", localPath, outputS3BucketName, s3Key)
 					err := p.Uploader.S3Upload(outputS3BucketName, s3Key, localPath)
 					if err != nil {
@@ -379,6 +391,21 @@ func LoadParametersAsList(log log.T, prop interface{}) ([]interface{}, contracts
 	return properties, res
 }
 
+// LoadParametersAsMap returns properties as a map and appropriate PluginResult if error is encountered
+func LoadParametersAsMap(log log.T, prop interface{}) (map[string]interface{}, contracts.PluginResult) {
+	var properties map[string]interface{}
+	var res contracts.PluginResult
+
+	if err := jsonutil.Remarshal(prop, &properties); err != nil {
+		log.Errorf("unable to parse plugin configuration")
+		res.Output = "Execution failed because agent is unable to parse plugin configuration"
+		res.Code = 1
+		res.Status = contracts.ResultStatusFailed
+	}
+
+	return properties, res
+}
+
 // ValidateExecutionTimeout validates the supplied input interface and converts it into a valid int value.
 func ValidateExecutionTimeout(log log.T, input interface{}) int {
 	var num int
@@ -401,6 +428,19 @@ func ValidateExecutionTimeout(log log.T, input interface{}) int {
 		num = defaultExecutionTimeoutInSeconds
 	}
 	return num
+}
+
+// ParseRunCommand checks the command type and convert it to the string array
+func ParseRunCommand(input interface{}, output []string) []string {
+	switch value := input.(type) {
+	case string:
+		output = append(output, value)
+	case []interface{}:
+		for _, element := range value {
+			output = ParseRunCommand(element, output)
+		}
+	}
+	return output
 }
 
 // extractIntFromString extracts a valid int value from a string.

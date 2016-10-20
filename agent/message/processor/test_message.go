@@ -20,6 +20,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	model "github.com/aws/amazon-ssm-agent/agent/message/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/message/service"
+	stateModel "github.com/aws/amazon-ssm-agent/agent/statemanager/model"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 	"github.com/aws/aws-sdk-go/service/ssmmds"
 	"github.com/stretchr/testify/mock"
@@ -44,7 +45,7 @@ type MockedPluginRunner struct {
 }
 
 // RunPlugins mocks a PluginRunner (which is a func).
-func (runnerMock *MockedPluginRunner) RunPlugins(context context.T, documentID string, plugins map[string]*contracts.Configuration, sendResponse engine.SendResponse, cancelFlag task.CancelFlag) (pluginOutputs map[string]*contracts.PluginResult) {
+func (runnerMock *MockedPluginRunner) RunPlugins(context context.T, documentID string, plugins map[string]stateModel.PluginState, sendResponse engine.SendResponse, cancelFlag task.CancelFlag) (pluginOutputs map[string]*contracts.PluginResult) {
 	args := runnerMock.Called(context, documentID, plugins, sendResponse, cancelFlag)
 	return args.Get(0).(map[string]*contracts.PluginResult)
 }
