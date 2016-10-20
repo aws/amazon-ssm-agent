@@ -33,8 +33,6 @@ import (
 
 var logger = log.NewMockLog()
 
-//TODO:MF: These tests are order-dependent when they set mocks - that is terrifying and is probably the case in other tests
-
 func TestMarkAsSucceeded(t *testing.T) {
 	output := ConfigureComponentPluginOutput{}
 
@@ -62,111 +60,7 @@ func TestAppendInfo(t *testing.T) {
 	assert.Contains(t, output.Stdout, "Info message")
 }
 
-func TestConfigureComponent(t *testing.T) {
-	plugin := &Plugin{}
-	pluginInformation := createStubPluginInputInstall()
-
-	manifest, _ := parseComponentManifest(logger, "testdata/sampleManifest.json")
-
-	manager := &mockConfigureManager{
-		downloadManifestResult: manifest,
-		downloadManifestError:  nil,
-		downloadPackageResult:  "testdata/sampleManifest.json",
-		downloadPackageError:   nil,
-		validateInputResult:    true,
-		validateInputError:     nil,
-	}
-	configureUtil := &mockConfigureUtility{}
-	updateUtil := &mockUpdateUtility{}
-
-	result, _ := ioutil.ReadFile("testdata/sampleManifest.json")
-	stubs := &ConfigureComponentStubs{fileSysDepStub: &FileSysDepStub{readResult: result}, networkDepStub: &NetworkDepStub{}}
-	stubs.Set()
-	defer stubs.Clear()
-
-	output := runConfigureComponent(
-		plugin,
-		logger,
-		manager,
-		configureUtil,
-		updateUtil,
-		pluginInformation)
-
-	assert.Empty(t, output.Stderr)
-	assert.Empty(t, output.Errors)
-}
-
-func TestConfigureComponent_InvalidRawInput(t *testing.T) {
-	plugin := &Plugin{}
-
-	manager := &configureManager{}
-	configureUtil := &mockConfigureUtility{}
-	updateUtil := &mockUpdateUtility{}
-
-	// string value will fail the Remarshal as it's not ConfigureComponentPluginInput
-	rawPluginInput := "invalid value"
-
-	result := runConfigureComponent(plugin,
-		logger,
-		manager,
-		configureUtil,
-		updateUtil,
-		rawPluginInput)
-
-	assert.Contains(t, result.Stderr, "invalid format in plugin properties")
-}
-
-func TestConfigureComponent_InvalidInput(t *testing.T) {
-	plugin := &Plugin{}
-	pluginInformation := createStubInvalidPluginInput()
-
-	manager := &configureManager{}
-	configureUtil := &mockConfigureUtility{}
-	updateUtil := &mockUpdateUtility{}
-
-	result := runConfigureComponent(
-		plugin,
-		logger,
-		manager,
-		configureUtil,
-		updateUtil,
-		pluginInformation)
-
-	assert.Contains(t, result.Stderr, "invalid input")
-}
-
-func TestConfigureComponent_FailedDownloadManifest(t *testing.T) {
-	plugin := &Plugin{}
-	pluginInformation := createStubPluginInputInstall()
-
-	manager := &mockConfigureManager{
-		downloadManifestResult: nil,
-		downloadManifestError:  fmt.Errorf("Cannot download manifest"),
-		downloadPackageResult:  "",
-		downloadPackageError:   nil,
-		validateInputResult:    true,
-		validateInputError:     nil,
-	}
-
-	configureUtil := &mockConfigureUtility{}
-	updateUtil := &mockUpdateUtility{}
-
-	stubs := &ConfigureComponentStubs{fileSysDepStub: &FileSysDepStub{}, networkDepStub: &NetworkDepStub{}}
-	stubs.Set()
-	defer stubs.Clear()
-
-	output := runConfigureComponent(
-		plugin,
-		logger,
-		manager,
-		configureUtil,
-		updateUtil,
-		pluginInformation)
-
-	assert.NotEmpty(t, output.Stderr, output.Stdout)
-	assert.NotEmpty(t, output.Errors)
-}
-
+//TODO:MF: Needs a second download result... or mock the configuration manager and make this a unit test
 func TestInstallComponent_DownloadFailed(t *testing.T) {
 	plugin := &Plugin{}
 	pluginInformation := createStubPluginInputInstall()
@@ -181,86 +75,18 @@ func TestInstallComponent_DownloadFailed(t *testing.T) {
 		validateInputError:     nil,
 	}
 	configureUtil := &mockConfigureUtility{}
-	updateUtil := &mockUpdateUtility{}
+	instanceContext := createStubInstanceContext()
 
 	output := runConfigureComponent(
 		plugin,
 		logger,
 		manager,
 		configureUtil,
-		updateUtil,
+		instanceContext,
 		pluginInformation)
 
 	assert.NotEmpty(t, output.Stderr)
 	assert.NotEmpty(t, output.Errors)
-}
-
-func TestInstallComponent_ExtractFailed(t *testing.T) {
-	plugin := &Plugin{}
-	pluginInformation := createStubPluginInputInstall()
-
-	manifest, _ := parseComponentManifest(logger, "testdata/sampleManifest.json")
-	manager := &mockConfigureManager{
-		downloadManifestResult: manifest,
-		downloadManifestError:  nil,
-		downloadPackageResult:  "testdata/sampleManifest.json",
-		downloadPackageError:   nil,
-		validateInputResult:    true,
-		validateInputError:     nil,
-	}
-	configureUtil := &mockConfigureUtility{}
-	updateUtil := &mockUpdateUtility{}
-
-	result, _ := ioutil.ReadFile("testdata/sampleManifest.json")
-	stubs := &ConfigureComponentStubs{fileSysDepStub: &FileSysDepStub{readResult: result, uncompressError: errors.New("Cannot extract package")}, networkDepStub: &NetworkDepStub{}}
-	stubs.Set()
-	defer stubs.Clear()
-
-	output := runConfigureComponent(
-		plugin,
-		logger,
-		manager,
-		configureUtil,
-		updateUtil,
-		pluginInformation)
-
-	assert.NotEmpty(t, output.Stderr)
-	assert.NotEmpty(t, output.Errors)
-	assert.Contains(t, output.Stderr, "Cannot extract package")
-}
-
-func TestInstallComponent_DeleteFailed(t *testing.T) {
-	plugin := &Plugin{}
-	pluginInformation := createStubPluginInputInstall()
-
-	manifest, _ := parseComponentManifest(logger, "testdata/sampleManifest.json")
-	manager := &mockConfigureManager{
-		downloadManifestResult: manifest,
-		downloadManifestError:  nil,
-		downloadPackageResult:  "testdata/sampleManifest.json",
-		downloadPackageError:   nil,
-		validateInputResult:    true,
-		validateInputError:     nil,
-	}
-	configureUtil := &mockConfigureUtility{}
-	updateUtil := &mockUpdateUtility{}
-
-	result, _ := ioutil.ReadFile("testdata/sampleManifest.json")
-	stubs := &ConfigureComponentStubs{fileSysDepStub: &FileSysDepStub{readResult: result, existsResultChain: []bool{false, true}, removeError: errors.New("failed to delete compressed package")}, networkDepStub: &NetworkDepStub{}}
-	stubs.Set()
-	defer stubs.Clear()
-
-	output := runConfigureComponent(
-		plugin,
-		logger,
-		manager,
-		configureUtil,
-		updateUtil,
-		pluginInformation)
-
-	assert.NotEmpty(t, output.Stderr)
-	assert.NotEmpty(t, output.Errors)
-	assert.Contains(t, output.Stderr, "failed to delete compressed package")
 }
 
 func TestExecute(t *testing.T) {
@@ -274,13 +100,17 @@ func TestExecute(t *testing.T) {
 	mockCancelFlag := new(task.MockCancelFlag)
 	mockContext := context.NewMockDefault()
 
+	getContextOrig := getContext
 	runConfigOrig := runConfig
+	getContext = func(log log.T) (context *updateutil.InstanceContext, err error) {
+		return createStubInstanceContext(), nil
+	}
 	runConfig = func(
 		p *Plugin,
 		log log.T,
 		manager pluginHelper,
 		configureUtil Util,
-		updateUtil updateutil.T,
+		context *updateutil.InstanceContext,
 		rawPluginInput interface{}) (out ConfigureComponentPluginOutput) {
 		out = ConfigureComponentPluginOutput{}
 		out.ExitCode = 1
@@ -288,7 +118,10 @@ func TestExecute(t *testing.T) {
 
 		return out
 	}
-	defer func() { runConfig = runConfigOrig }()
+	defer func() {
+		runConfig = runConfigOrig
+		getContext = getContextOrig
+	}()
 
 	// TODO:MF Test result code for reboot in cases where that is expected?
 
@@ -318,11 +151,9 @@ func TestInstallComponent(t *testing.T) {
 		validateInputResult:    true,
 		validateInputError:     nil,
 	}
-	configureUtil := &mockConfigureUtility{}
-	updateUtil := &mockUpdateUtility{}
 
 	result, _ := ioutil.ReadFile("testdata/sampleManifest.json")
-	stubs := &ConfigureComponentStubs{fileSysDepStub: &FileSysDepStub{readResult: result}, networkDepStub: &NetworkDepStub{}}
+	stubs := &ConfigureComponentStubs{fileSysDepStub: &FileSysDepStub{readResult: result}, networkDepStub: &NetworkDepStub{}, execDepStub: &ExecDepStub{}}
 	stubs.Set()
 	defer stubs.Clear()
 
@@ -336,87 +167,19 @@ func TestInstallComponent(t *testing.T) {
 		manager,
 		logger,
 		installCommand,
-		configureUtil,
-		updateUtil,
 		context)
 
 	assert.NoError(t, err)
 }
 
-// TO DO: Install test for exe command
-
-func TestUninstallComponent_DoesNotExist(t *testing.T) {
-	plugin := &Plugin{}
-	pluginInformation := createStubPluginInputUninstallLatest()
-
-	manager := new(configureManager)
-	configureUtil := &mockConfigureUtility{
-		getLatestVersionError: errors.New("component does not exist"),
-	}
-	updateUtil := &mockUpdateUtility{}
-
-	stubs := &ConfigureComponentStubs{fileSysDepStub: &FileSysDepStub{existsResult: false}, networkDepStub: &NetworkDepStub{}}
-	stubs.Set()
-	defer stubs.Clear()
-
-	output := runConfigureComponent(
-		plugin,
-		logger,
-		manager,
-		configureUtil,
-		updateUtil,
-		pluginInformation)
-
-	assert.NotEmpty(t, output.Stderr)
-	assert.NotEmpty(t, output.Errors)
-	assert.Contains(t, output.Stderr, "does not exist")
-}
-
-func TestUninstallComponent_RemovalFailed(t *testing.T) {
-	plugin := &Plugin{}
-	pluginInformation := createStubPluginInputUninstall()
-
-	manifest, _ := parseComponentManifest(logger, "testdata/sampleManifest.json")
-	manager := &mockConfigureManager{
-		downloadManifestResult: manifest,
-		downloadManifestError:  nil,
-		downloadPackageResult:  "testdata/sampleManifest.json",
-		downloadPackageError:   nil,
-		validateInputResult:    true,
-		validateInputError:     nil,
-	}
-	configureUtil := &mockConfigureUtility{}
-	updateUtil := &mockUpdateUtility{}
-
-	result, _ := ioutil.ReadFile("testdata/sampleManifest.json")
-	stubs := &ConfigureComponentStubs{fileSysDepStub: &FileSysDepStub{readResult: result, existsResult: true, removeError: errors.New("404")}, networkDepStub: &NetworkDepStub{}}
-	stubs.Set()
-	defer stubs.Clear()
-
-	output := runConfigureComponent(
-		plugin,
-		logger,
-		manager,
-		configureUtil,
-		updateUtil,
-		pluginInformation)
-
-	assert.NotEmpty(t, output.Stderr)
-	assert.NotEmpty(t, output.Errors)
-	assert.Contains(t, output.Stderr, "failed to delete directory")
-	assert.Contains(t, output.Stderr, "404")
-}
-
 func TestUninstallComponent(t *testing.T) {
 	plugin := &Plugin{}
 	pluginInformation := createStubPluginInputUninstall()
-	context := createStubInstanceContext()
+	instanceContext := createStubInstanceContext()
 
 	output := &ConfigureComponentPluginOutput{}
-	configureUtil := &mockConfigureUtility{}
-	util := &mockUpdateUtility{}
 
-	stubs := &ConfigureComponentStubs{fileSysDepStub: &FileSysDepStub{existsResult: true}, networkDepStub: &NetworkDepStub{}}
+	stubs := &ConfigureComponentStubs{fileSysDepStub: &FileSysDepStub{existsResultDefault: true}, networkDepStub: &NetworkDepStub{}, execDepStub: &ExecDepStub{}}
 	stubs.Set()
 	defer stubs.Clear()
 
@@ -429,9 +192,7 @@ func TestUninstallComponent(t *testing.T) {
 		output,
 		logger,
 		uninstallCommand,
-		configureUtil,
-		util,
-		context)
+		instanceContext)
 
 	assert.NoError(t, err)
 }

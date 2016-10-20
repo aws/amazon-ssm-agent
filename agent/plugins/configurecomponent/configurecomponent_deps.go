@@ -24,6 +24,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/fileutil/artifact"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/s3util"
+	"github.com/aws/amazon-ssm-agent/agent/updateutil"
 )
 
 var filesysdep fileSysDep = &fileSysDepImp{}
@@ -90,4 +91,19 @@ func (networkDepImp) ListS3Folders(log log.T, amazonS3URL s3util.AmazonS3URL) (f
 
 func (networkDepImp) Download(log log.T, input artifact.DownloadInput) (output artifact.DownloadOutput, err error) {
 	return artifact.Download(log, input)
+}
+
+var execdep execDep = &execDepImp{util: new(updateutil.Utility)}
+
+// dependency on action execution
+type execDep interface {
+	ExeCommand(log log.T, cmd string, workingDir string, updaterRoot string, stdOut string, stdErr string, isAsync bool) (err error)
+}
+
+type execDepImp struct {
+	util *updateutil.Utility
+}
+
+func (m *execDepImp) ExeCommand(log log.T, cmd string, workingDir string, updaterRoot string, stdOut string, stdErr string, isAsync bool) (err error) {
+	return m.util.ExeCommand(log, cmd, workingDir, updaterRoot, stdOut, stdErr, isAsync)
 }

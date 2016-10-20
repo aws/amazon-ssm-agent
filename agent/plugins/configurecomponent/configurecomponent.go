@@ -142,11 +142,10 @@ func runConfigureComponent(
 	log log.T,
 	manager pluginHelper,
 	configureUtil Util,
-	updateUtil updateutil.T,
+	context *updateutil.InstanceContext,
 	rawPluginInput interface{}) (output ConfigureComponentPluginOutput) {
 	var input ConfigureComponentPluginInput
 	var err error
-	var context *updateutil.InstanceContext
 	if err = jsonutil.Remarshal(rawPluginInput, &input); err != nil {
 		output.MarkAsFailed(log,
 			fmt.Errorf("invalid format in plugin properties %v; \nerror %v", rawPluginInput, err))
@@ -159,11 +158,6 @@ func runConfigureComponent(
 		return
 	}
 
-	if context, err = updateUtil.CreateInstanceContext(log); err != nil {
-		output.MarkAsFailed(log,
-			fmt.Errorf("unable to create instance context: %v", err))
-		return
-	}
 	// do not allow multiple actions to be performed at the same time for the same component
 	// this is possible with multiple concurrent runcommand documents
 	if err := lockComponent(input.Name, input.Action); err != nil {
@@ -218,8 +212,6 @@ func runConfigureComponent(
 					&output,
 					log,
 					uninstallManifest.Uninstall,
-					configureUtil,
-					updateUtil,
 					context); err != nil {
 					output.MarkAsFailed(log,
 						fmt.Errorf("failed to uninstall currently installed version of component: %v", err))
@@ -247,8 +239,6 @@ func runConfigureComponent(
 			manager,
 			log,
 			manifest.Install,
-			configureUtil,
-			updateUtil,
 			context); err != nil {
 			output.MarkAsFailed(log,
 				fmt.Errorf("failed to install component: %v", err))
@@ -264,7 +254,7 @@ func runConfigureComponent(
 	case UninstallAction:
 		// get version information
 		version, versionErr := manager.getVersionToUninstall(log, &input, configureUtil, context)
-		if versionErr != nil {
+		if versionErr != nil || version == "" {
 			output.MarkAsFailed(log,
 				fmt.Errorf("unable to determine version to uninstall: %v", versionErr))
 			return
@@ -284,8 +274,6 @@ func runConfigureComponent(
 			&output,
 			log,
 			manifest.Uninstall,
-			configureUtil,
-			updateUtil,
 			context); err != nil {
 			output.MarkAsFailed(log,
 				fmt.Errorf("failed to uninstall component: %v", err))
@@ -519,15 +507,13 @@ func runInstallComponent(p *Plugin,
 	manager pluginHelper,
 	log log.T,
 	installCmd string,
-	configureUtil Util,
-	updateUtil updateutil.T,
 	context *updateutil.InstanceContext) (err error) {
 	log.Infof("Initiating %v %v installation", componentName, version)
 
 	directory := filepath.Join(appconfig.ComponentRoot, componentName, version)
 
 	// execute installation command
-	if err = updateUtil.ExeCommand(
+	if err = execdep.ExeCommand(
 		log,
 		installCmd,
 		directory, directory,
@@ -549,15 +535,13 @@ func runUninstallComponent(p *Plugin,
 	output *ConfigureComponentPluginOutput,
 	log log.T,
 	uninstallCmd string,
-	configureUtil Util,
-	util updateutil.T,
 	context *updateutil.InstanceContext) (err error) {
 	log.Infof("Initiating %v %v uninstallation", componentName, version)
 
 	directory := filepath.Join(appconfig.ComponentRoot, componentName, version)
 
 	// execute installation command
-	if err = util.ExeCommand(
+	if err = execdep.ExeCommand(
 		log,
 		uninstallCmd,
 		directory, directory,
@@ -577,6 +561,12 @@ func runUninstallComponent(p *Plugin,
 	return nil
 }
 
+func getInstanceContext(log log.T) (context *updateutil.InstanceContext, err error) {
+	updateUtil := new(updateutil.Utility)
+	return updateUtil.CreateInstanceContext(log)
+}
+
+var getContext = getInstanceContext
 var runConfig = runConfigureComponent
 
 // Execute runs multiple sets of commands and returns their outputs.
@@ -585,7 +575,6 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 	log := context.Log()
 	log.Info("RunCommand started with configuration ", config)
 	configureUtil := new(Utility)
-	updateUtil := new(updateutil.Utility)
 	manager := new(configureManager)
 
 	res.StartDateTime = time.Now()
@@ -615,11 +604,18 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 			break
 		}
 
+		context, err := getContext(log)
+		if err != nil {
+			out[i].MarkAsFailed(log,
+				fmt.Errorf("unable to create instance context: %v", err))
+			return
+		}
+
 		out[i] = runConfig(p,
 			log,
 			manager,
 			configureUtil,
-			updateUtil,
+			context,
 			prop)
 
 		res.Code = out[i].ExitCode

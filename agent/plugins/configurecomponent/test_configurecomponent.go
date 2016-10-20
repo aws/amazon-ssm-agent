@@ -28,6 +28,8 @@ type ConfigureComponentStubs struct {
 	fileSysDepOrig fileSysDep
 	networkDepStub networkDep
 	networkDepOrig networkDep
+	execDepStub    execDep
+	execDepOrig    execDep
 }
 
 // Set replaces dependencies with stub versions and saves the original version.
@@ -41,6 +43,10 @@ func (m *ConfigureComponentStubs) Set() {
 		m.networkDepOrig = networkdep
 		networkdep = m.networkDepStub
 	}
+	if m.execDepStub != nil {
+		m.execDepOrig = execdep
+		execdep = m.execDepStub
+	}
 }
 
 // Clear resets dependencies to their original values.
@@ -51,21 +57,24 @@ func (m *ConfigureComponentStubs) Clear() {
 	if m.networkDepStub != nil {
 		networkdep = m.networkDepOrig
 	}
+	if m.execDepStub != nil {
+		execdep = m.execDepOrig
+	}
 }
 
 type FileSysDepStub struct {
-	makeFileError     error
-	directoriesResult []string
-	directoriesError  error
-	filesResult       []string
-	filesError        error
-	existsResult      bool
-	existsResultChain []bool
-	uncompressError   error
-	removeError       error
-	renameError       error
-	readResult        []byte
-	readError         error
+	makeFileError        error
+	directoriesResult    []string
+	directoriesError     error
+	filesResult          []string
+	filesError           error
+	existsResultDefault  bool
+	existsResultSequence []bool
+	uncompressError      error
+	removeError          error
+	renameError          error
+	readResult           []byte
+	readError            error
 }
 
 func (m *FileSysDepStub) MakeDirExecute(destinationDir string) (err error) {
@@ -81,16 +90,16 @@ func (m *FileSysDepStub) GetFileNames(srcPath string) (files []string, err error
 }
 
 func (m *FileSysDepStub) Exists(filePath string) bool {
-	if len(m.existsResultChain) > 0 {
-		result := m.existsResultChain[0]
-		if len(m.existsResultChain) > 1 {
-			m.existsResultChain = append(m.existsResultChain[:0], m.existsResultChain[1:]...)
+	if len(m.existsResultSequence) > 0 {
+		result := m.existsResultSequence[0]
+		if len(m.existsResultSequence) > 1 {
+			m.existsResultSequence = append(m.existsResultSequence[:0], m.existsResultSequence[1:]...)
 		} else {
-			m.existsResultChain = nil
+			m.existsResultSequence = nil
 		}
 		return result
 	}
-	return m.existsResult
+	return m.existsResultDefault
 }
 
 func (m *FileSysDepStub) Uncompress(src, dest string) error {
@@ -122,4 +131,12 @@ func (m *NetworkDepStub) ListS3Folders(log log.T, amazonS3URL s3util.AmazonS3URL
 
 func (m *NetworkDepStub) Download(log log.T, input artifact.DownloadInput) (output artifact.DownloadOutput, err error) {
 	return m.downloadResult, m.downloadError
+}
+
+type ExecDepStub struct {
+	execError error
+}
+
+func (m *ExecDepStub) ExeCommand(log log.T, cmd string, workingDir string, updaterRoot string, stdOut string, stdErr string, isAsync bool) (err error) {
+	return m.execError
 }
