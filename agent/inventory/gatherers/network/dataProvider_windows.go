@@ -36,8 +36,8 @@ const (
 	cmdArgsToGetFullDetailsForGivenMacAddress = `Get-wmiobject -class Win32_NetworkAdapterConfiguration | where-object {$_.MACAddress -eq "%s"} | Select-object @{Name="IPAddresses";Expression={$_.IPAddress}}, @{Name="DefaultIPGateway";Expression={$_.DefaultIPGateway}}, @{Name="MacAddress";Expression={$_.MACAddress}}, @{Name="DHCPServer";Expression={$_.DHCPServer}}, @{Name="DNSServers";Expression={$_.DNSServerSearchOrder}} ,@{Name="IPSubnet";Expression={$_.IPSubnet}} | ConvertTo-Json`
 
 	//We list only ethernet & wireless type of network interfaces. For more details refer to https://msdn.microsoft.com/en-us/library/aa394217%28v=vs.85%29.aspx
-	cmdArgsToGetListAllInterfaces             = `Get-wmiobject -class Win32_NetworkAdapter | where-object {$_.AdapterTypeID -eq 0 -or $_.AdapterTypeID -eq 9} | Select-object @{Name="MACAddress";Expression={$_.MACAddress}}, @{Name="Description";Expression={$_.Description}}, @{Name="ProductName";Expression={$_.ProductName}}| ConvertTo-Json`
-	regexForIpV4Addresses                     = `^(?:[0-9]{1,3}\.){3}[0-9]{1,3}$`
+	cmdArgsToGetListAllInterfaces = `Get-wmiobject -class Win32_NetworkAdapter | where-object {$_.AdapterTypeID -eq 0 -or $_.AdapterTypeID -eq 9} | Select-object @{Name="MACAddress";Expression={$_.MACAddress}}, @{Name="Description";Expression={$_.Description}}, @{Name="ProductName";Expression={$_.ProductName}}| ConvertTo-Json`
+	regexForIpV4Addresses         = `^(?:[0-9]{1,3}\.){3}[0-9]{1,3}$`
 )
 
 func init() {
