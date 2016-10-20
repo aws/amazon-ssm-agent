@@ -13,6 +13,7 @@
 
 // +build integration
 
+// Package executers contains general purpose (shell) command executing objects.
 package executers
 
 import (
@@ -73,6 +74,20 @@ var RunCommandTestCases = []TestCase{
 		ExpectedStderr:   stderrMsg + "\n",
 		ExpectedExitCode: successExitCode,
 	},
+	// instance id environment variable is set
+	{
+		Commands:         []string{"sh", "-c", fmt.Sprintf("echo $%v", envVarInstanceId)},
+		ExpectedStdout:   testInstanceId + "\n",
+		ExpectedStderr:   "",
+		ExpectedExitCode: successExitCode,
+	},
+	// region name environment variable is set
+	{
+		Commands:         []string{"sh", "-c", fmt.Sprintf("echo $%v", envVarRegionName)},
+		ExpectedStdout:   testRegionName + "\n",
+		ExpectedStderr:   "",
+		ExpectedExitCode: successExitCode,
+	},
 }
 
 var RunCommandCancelTestCases = []TestCase{
@@ -116,6 +131,10 @@ var logger = log.NewMockLog()
 
 // TestRunCommand tests that RunCommand (in memory call, no local script or output files) works correctly.
 func TestRunCommand(t *testing.T) {
+	instanceTemp := instance
+	instance = &instanceInfoStub{instanceID: testInstanceId, regionName: testRegionName}
+	defer func() { instance = instanceTemp }()
+
 	for _, testCase := range RunCommandTestCases {
 		runCommandInvoker, _ := prepareTestRunCommand(t)
 		testCommandInvoker(t, runCommandInvoker, testCase)
@@ -124,6 +143,10 @@ func TestRunCommand(t *testing.T) {
 
 // TestRunCommand_cancel tests that RunCommand (in memory call, no local script or output files) is canceled correctly.
 func TestRunCommand_cancel(t *testing.T) {
+	instanceTemp := instance
+	instance = &instanceInfoStub{instanceID: testInstanceId, regionName: testRegionName}
+	defer func() { instance = instanceTemp }()
+
 	for _, testCase := range RunCommandCancelTestCases {
 		runCommandInvoker, cancelFlag := prepareTestRunCommand(t)
 		testCommandInvokerCancel(t, runCommandInvoker, cancelFlag, testCase)
@@ -145,6 +168,10 @@ func TestShellCommandExecuter(t *testing.T) {
 
 // TestShellCommandExecuter_cancel tests that ShellCommandExecuter (creates local script, redirects outputs to files) is canceled correctly
 func TestShellCommandExecuter_cancel(t *testing.T) {
+	instanceTemp := instance
+	instance = &instanceInfoStub{instanceID: testInstanceId, regionName: testRegionName}
+	defer func() { instance = instanceTemp }()
+
 	runTest := func(testCase TestCase) {
 		orchestrationDir, shCommandExecuterInvoker, cancelFlag := prepareTestShellCommandExecuter(t)
 		defer pluginutil.DeleteDirectory(logger, orchestrationDir)
