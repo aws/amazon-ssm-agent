@@ -1,0 +1,42 @@
+{
+  "SchemaVersion":  "1.0",
+  "UriFormat":  "",
+  "Packages":  [
+    {
+      "Name":  "aws-ec2windows-ec2config",
+      "FileName":  "EC2ConfigSetup.zip",
+      "AvailableVersions":  [
+        {
+          "Version":  "3.18.1118",
+          "CheckSum":  "5c8b9feb016e8e9cb12236ae7554a0f1b8273e67c6f9d429ff38b91c7bd52cf5"
+        },
+        {
+          "Version":  "3.19.1153",
+          "CheckSum":  "da26f168fb88c8ce4c34441a10331975cf9bd375b09550d741c313c7a83be81c"
+        },
+        {
+          "Version":  "3.19.1186",
+          "CheckSum":  "ecc3a2119709c3aa304915f8c4f894e51b8f9e3c3fb87364a3e70ea5f3bf41a3"
+        }
+      ]
+    },
+    {
+      "Name":  "aws-ec2windows-ec2configupdater",
+      "FileName":  "EC2ConfigUpdater.zip",
+      "AvailableVersions":  [
+        {
+          "Version":  "3.18.1118",
+          "CheckSum":  "0bbb06ccfbd1ba7683d4f2f4fa1753611c3e5be82027bc81c3cf0d60d5028e02"
+        },
+        {
+          "Version":  "3.19.1153",
+          "CheckSum":  "09a0b4b7262fd2bb814eb501000d5a7e77db627543b14e500829f07394fd077e"
+        },
+        {
+          "Version":  "3.19.1186",
+          "CheckSum":  "4bcb0df17f9f5175d3ae7779a2dd07e108f82df3e64a8d272860e76ff57bf3ae"
+        }
+      ]
+    }
+  ]
+}

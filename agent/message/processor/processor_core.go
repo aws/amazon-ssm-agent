@@ -112,14 +112,8 @@ func (p *Processor) runCmdsUsingCmdState(context context.T,
 		appconfig.DefaultLocationOfCompleted)
 
 	log.Debugf("deleting message")
-	isUpdate := false
 
-	for _, pluginState := range newCmdState.InstancePluginsInformation {
-		if pluginState.Name == appconfig.PluginNameAwsAgentUpdate {
-			isUpdate = true
-		}
-	}
-	if !isUpdate {
+	if !isUpdatePlugin(newCmdState) {
 		err := mdsService.DeleteMessage(log, newCmdState.DocumentInformation.MessageID)
 		if err != nil {
 			sdkutil.HandleAwsError(log, err, p.processorStopPolicy)
@@ -294,14 +288,8 @@ func (p *Processor) processSendCommandMessage(context context.T,
 		appconfig.DefaultLocationOfCompleted)
 
 	log.Debugf("Deleting message")
-	isUpdate := false
-	for _, pluginState := range newCmdState.InstancePluginsInformation {
-		if pluginState.Name == appconfig.PluginNameAwsAgentUpdate {
-			isUpdate = true
-		}
-	}
 
-	if !isUpdate {
+	if !isUpdatePlugin(newCmdState) {
 		if err := mdsService.DeleteMessage(log, newCmdState.DocumentInformation.MessageID); err != nil {
 			sdkutil.HandleAwsError(log, err, p.processorStopPolicy)
 		}
@@ -415,4 +403,13 @@ func parseCancelCommandMessage(context context.T, msg *ssmmds.Message, messagesO
 	//persist in current folder here
 	docState := initializeCancelCommandState(*msg, parsedMessage)
 	return &docState, nil
+}
+
+func isUpdatePlugin(pluginConfig model.DocumentState) bool {
+	for pluginName := range pluginConfig.PluginsInformation {
+		if pluginName == appconfig.PluginEC2ConfigUpdate || pluginName == appconfig.PluginNameAwsAgentUpdate {
+			return true
+		}
+	}
+	return false
 }

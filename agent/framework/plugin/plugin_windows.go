@@ -29,6 +29,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/plugins/domainjoin"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/pluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/psmodule"
+	"github.com/aws/amazon-ssm-agent/agent/plugins/updateec2config"
 )
 
 // IsPluginSupportedForCurrentPlatform returns true if current platform supports the plugin with given name.
@@ -76,6 +77,16 @@ func loadPlatformDependentPlugins(context context.T) PluginRegistry {
 		log.Errorf("failed to create plugin %s %v", domainJoinPluginName, err)
 	} else {
 		workerPlugins[domainJoinPluginName] = domainJoinPlugin
+	}
+
+	// registering aws:updateAgent plugin.
+	updateEC2AgentPluginName := updateec2config.Name()
+	log.Debugf("Registering EC2 updateAgent plugin, %s", updateEC2AgentPluginName)
+	updateEC2Agent, err := updateec2config.NewPlugin(updateec2config.GetUpdatePluginConfig(context))
+	if err != nil {
+		log.Errorf("failed to create plugin %s %v", updateEC2AgentPluginName, err)
+	} else {
+		workerPlugins[updateEC2AgentPluginName] = updateEC2Agent
 	}
 
 	return workerPlugins
