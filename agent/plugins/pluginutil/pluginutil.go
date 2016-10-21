@@ -370,7 +370,13 @@ func PersistPluginInformationToCurrent(log log.T, pluginID string, config contra
 	//set plugin state's execution details
 	pluginState.Configuration = config
 	pluginState.Result = res
-	pluginState.HasExecuted = true
+
+	//set HasExecuted based on result status.
+	if pluginState.Result.Status == contracts.ResultStatusSuccessAndReboot {
+		pluginState.HasExecuted = false
+	} else {
+		pluginState.HasExecuted = true
+	}
 
 	command_state_helper.PersistPluginState(log,
 		*pluginState,
