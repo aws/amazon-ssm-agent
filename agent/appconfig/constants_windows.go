@@ -23,11 +23,17 @@ import (
 )
 
 const (
-	// SSM folder path under local app data.
+	// SSMFolder is the path under local app data.
 	SSMFolder = "Amazon\\SSM"
 
 	// SSM plugins folder path under local app data.
 	SSMPluginFolder = "Amazon\\SSM\\Plugins\\"
+
+	// EC2ConfigAppDataFolder path under local app data required by updater
+	EC2ConfigAppDataFolder = "Amazon\\Ec2Config"
+
+	//Ec2configServiceFolder is the folder required by SSM agent
+	EC2ConfigServiceFolder = "Amazon\\Ec2ConfigService"
 
 	// Exit Code that would trigger a Soft Reboot
 	RebootExitCode = 3010
@@ -62,6 +68,15 @@ var DownloadRoot string
 // UpdaterArtifactsRoot represents the directory for storing update related information
 var UpdaterArtifactsRoot string
 
+// EC2UpdaterArtifactsRoot represents the directory for storing ec2 config update related information
+var EC2UpdateArtifactsRoot string
+
+// EC2UpdaterDownloadRoot is the directory for downloading ec2 update related files
+var EC2UpdaterDownloadRoot string
+
+// UpdateContextFilePath is the path where the updatecontext.json file exists for Ec2 updater to find
+var UpdateContextFilePath string
+
 // SSMData specifies the directory we used to store SSM data.
 var SSMDataPath string
 
@@ -82,11 +97,11 @@ func init() {
 		WindowsServer 2008+ -> C:\ProgramData
 	*/
 
-	SSMDataPath = os.Getenv("ProgramData")
-	if SSMDataPath == "" {
-		SSMDataPath = filepath.Join(os.Getenv("AllUsersProfile"), "Application Data")
+	programData := os.Getenv("ProgramData")
+	if programData == "" {
+		programData = filepath.Join(os.Getenv("AllUsersProfile"), "Application Data")
 	}
-	SSMDataPath = filepath.Join(SSMDataPath, SSMFolder)
+	SSMDataPath = filepath.Join(programData, SSMFolder)
 
 	EnvProgramFiles = os.Getenv("ProgramFiles")
 	EnvWinDir = os.Getenv("WINDIR")
@@ -98,4 +113,8 @@ func init() {
 	DefaultDataStorePath = filepath.Join(SSMDataPath, "InstanceData")
 	DownloadRoot = filepath.Join(temp, SSMFolder, "Download")
 	UpdaterArtifactsRoot = filepath.Join(temp, SSMFolder, "Update")
+	EC2UpdateArtifactsRoot = filepath.Join(EnvWinDir, EC2ConfigServiceFolder, "Update")
+	EC2UpdaterDownloadRoot = filepath.Join(temp, EC2ConfigAppDataFolder, "Download")
+
+	UpdateContextFilePath = filepath.Join(programData, EC2ConfigAppDataFolder, "Update\\UpdateContext.json")
 }
