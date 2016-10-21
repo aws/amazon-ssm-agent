@@ -27,6 +27,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/parameterstore"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/pluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/rebooter"
 	"github.com/aws/amazon-ssm-agent/agent/task"
@@ -187,6 +188,13 @@ func (p *Plugin) runCommands(log log.T, pluginInput RunCommandPluginInput, orche
 	// Construct Command Name and Arguments
 	commandName := pluginutil.GetShellCommand()
 	commandArguments := append(pluginutil.GetShellArguments(), scriptPath, pluginutil.ExitCodeTrap)
+
+	// Resolve ssm parameters
+	if pluginInput.WorkingDirectory, err = parameterstore.ResolveString(log, pluginInput.WorkingDirectory); err != nil {
+		out.Errors = append(out.Errors, err.Error())
+		log.Errorf("Failed to resolve ssm parameters. Error: - %v", err)
+		return
+	}
 
 	// Execute Command
 	stdout, stderr, exitCode, errs := p.ExecuteCommand(log, pluginInput.WorkingDirectory, stdoutFilePath, stderrFilePath, cancelFlag, executionTimeout, commandName, commandArguments)
