@@ -171,6 +171,14 @@ func (p *Plugin) runCommands(log log.T, pluginInput RunCommandPluginInput, orche
 	log.Debugf("Writing commands %v to file %v", pluginInput, scriptPath)
 
 	// Create script file
+	// Resolve ssm parameters
+	// This may contain sensitive information, do not log this data after resolving.
+	if pluginInput.RunCommand, err = parameterstore.ResolveStringList(log, pluginInput.RunCommand); err != nil {
+		out.Errors = append(out.Errors, err.Error())
+		log.Errorf("Failed to resolve ssm parameters. Error: - %v", err)
+		return
+	}
+
 	if err = pluginutil.CreateScriptFile(log, scriptPath, pluginInput.RunCommand); err != nil {
 		out.Errors = append(out.Errors, err.Error())
 		log.Errorf("failed to create script file. %v", err)
@@ -190,6 +198,7 @@ func (p *Plugin) runCommands(log log.T, pluginInput RunCommandPluginInput, orche
 	commandArguments := append(pluginutil.GetShellArguments(), scriptPath, pluginutil.ExitCodeTrap)
 
 	// Resolve ssm parameters
+	// This may contain sensitive information, do not log this data after resolving.
 	if pluginInput.WorkingDirectory, err = parameterstore.ResolveString(log, pluginInput.WorkingDirectory); err != nil {
 		out.Errors = append(out.Errors, err.Error())
 		log.Errorf("Failed to resolve ssm parameters. Error: - %v", err)

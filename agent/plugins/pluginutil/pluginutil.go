@@ -333,7 +333,7 @@ func DownloadFileFromSource(log log.T, source string, sourceHash string, sourceH
 		SourceHashValue: sourceHash,
 		SourceHashType:  sourceHashType,
 	}
-	log.Debugf("Downloading file %v", downloadInput)
+	log.Debug("Downloading file")
 	return artifact.Download(log, downloadInput)
 }
 
