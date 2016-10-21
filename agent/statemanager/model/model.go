@@ -53,6 +53,7 @@ type DocumentInfo struct {
 	DocumentTraceOutput string
 	RuntimeStatus       map[string]*contracts.PluginRuntimeStatus
 	RunCount            int
+	RunOnce             bool
 	//ParsedDocumentContent string
 	//RuntimeStatus
 }

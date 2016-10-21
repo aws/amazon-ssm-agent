@@ -88,5 +88,5 @@ func (assocParserService) InitializeDocumentState(context context.T,
 	payload *messageContract.SendCommandPayload,
 	rawData *model.AssociationRawData) stateModel.DocumentState {
 
-	return parser.InitializeCommandState(context, payload, rawData)
+	return parser.InitializeDocumentState(context, payload, rawData)
 }

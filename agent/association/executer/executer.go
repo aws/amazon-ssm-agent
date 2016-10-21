@@ -98,7 +98,7 @@ func (r *AssociationExecuter) ExecuteInProgressDocument(context context.T, docSt
 	log := context.Log()
 
 	defer func() {
-		schedulemanager.MarkScheduledAssociationAsCompleted(log, docState.DocumentInformation.DocumentID)
+		schedulemanager.UpdateNextScheduledDate(log, docState.DocumentInformation.DocumentID)
 		if r.scheduledJobQueue != nil {
 			log.Debugf("Sending signal for executing scheduled association")
 			r.scheduledJobQueue <- struct{}{}

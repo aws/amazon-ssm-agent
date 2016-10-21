@@ -78,14 +78,16 @@ func LoadNextScheduledAssociation(log log.T) (*model.AssociationRawData, error) 
 	}
 
 	for _, assoc := range associations {
-		if assoc.NextScheduledDate.Before(times.DefaultClock.Now()) || assoc.NextScheduledDate.Equal(times.DefaultClock.Now()) {
+		if assoc.ExcludeFromFutureScheduling {
+			continue
+		}
 
-			var assocContent string
-			var err error
-			if assocContent, err = jsonutil.Marshal(assoc); err != nil {
+		if assoc.NextScheduledDate.Before(times.DefaultClock.Now()) || assoc.NextScheduledDate.Equal(times.DefaultClock.Now()) {
+			if assocContent, err := jsonutil.Marshal(assoc); err != nil {
 				return nil, fmt.Errorf("failed to parse scheduled association, %v", err)
+			} else {
+				log.Debugf("Next scheduled association is %v", jsonutil.Indent(assocContent))
 			}
-			log.Debugf("Next scheduled association is %v", jsonutil.Indent(assocContent))
 
 			return assoc, nil
 		}
@@ -94,8 +96,8 @@ func LoadNextScheduledAssociation(log log.T) (*model.AssociationRawData, error) 
 	return nil, nil
 }
 
-// MarkScheduledAssociationAsCompleted sets next scheduled date for the given association id
-func MarkScheduledAssociationAsCompleted(log log.T, associationID string) {
+// UpdateNextScheduledDate sets next scheduled date for the given association
+func UpdateNextScheduledDate(log log.T, associationID string) {
 	lock.Lock()
 	defer lock.Unlock()
 
@@ -104,6 +106,22 @@ func MarkScheduledAssociationAsCompleted(log log.T, associationID string) {
 		if *assoc.Association.AssociationId == associationID {
 			assoc.NextScheduledDate = cronexpr.MustParse(*assoc.Association.ScheduleExpression).Next(currentTime)
 			log.Debugf("Update Association %v next ScheduledDate to %v", *assoc.Association.AssociationId, assoc.NextScheduledDate.String())
+			break
+		}
+	}
+
+	log.Debugf("Association %v no longer associated", associationID)
+}
+
+// MarkAssociationAsCompleted sets exclude from future scheduling to false
+func MarkAssociationAsCompleted(log log.T, associationID string) {
+	lock.Lock()
+	defer lock.Unlock()
+
+	for _, assoc := range associations {
+		if *assoc.Association.AssociationId == associationID {
+			assoc.ExcludeFromFutureScheduling = true
+			log.Debugf("Exclude Association %v from future scheduling", *assoc.Association.AssociationId)
 			break
 		}
 	}

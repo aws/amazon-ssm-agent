@@ -33,7 +33,7 @@ import (
 var lock sync.RWMutex
 var docLock = make(map[string]*sync.RWMutex)
 
-// GetCommandInterimState returns CommandState object after reading file <commandID> from locationFolder
+// GetDocumentInterimState returns CommandState object after reading file <commandID> from locationFolder
 // under defaultLogDir/instanceID
 func GetDocumentInterimState(log log.T, commandID, instanceID, locationFolder string) model.DocumentState {
 
@@ -224,7 +224,7 @@ func DocumentStateDir(instanceID, locationFolder string) string {
 		locationFolder)
 }
 
-// getCmdState reads commandState from given file
+// getDocState reads commandState from given file
 func getDocState(log log.T, fileName string) model.DocumentState {
 
 	var commandState model.DocumentState
@@ -244,7 +244,7 @@ func getDocState(log log.T, fileName string) model.DocumentState {
 	return commandState
 }
 
-// setCmdState persists given commandState
+// setDocState persists given commandState
 func setDocState(log log.T, commandState model.DocumentState, absoluteFileName, locationFolder string) {
 
 	content, err := jsonutil.Marshal(commandState)
@@ -315,7 +315,7 @@ func deleteLock(id string) {
 	delete(docLock, id)
 }
 
-//cmdStateFileName returns absolute filename where command states are persisted
+// docStateFileName returns absolute filename where command states are persisted
 func docStateFileName(commandID, instanceID, locationFolder string) string {
 	return path.Join(DocumentStateDir(instanceID, locationFolder), commandID)
 }

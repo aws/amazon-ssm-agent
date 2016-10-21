@@ -165,14 +165,6 @@ func (p *Processor) ProcessAssociation() {
 		}
 		log.Debug("New association is ", jsonutil.Indent(assocContent))
 
-		//TODO: handle has executed for 1.0 and 1.2 documents
-		//if recorder.HasExecuted(instanceID, *assocName) {
-		//	log.Debugf("DocumentId %v hasn't changed. Skipping as it has been processed already.", *assocName)
-		//	return
-		//} else {
-		//	log.Debugf("New document associated %v.", *assocName)
-		//}
-
 		if err = p.assocSvc.LoadAssociationDetail(log, assoc); err != nil {
 			message := fmt.Sprintf("Unable to load association details, %v", err)
 			log.Error(message)
@@ -220,6 +212,12 @@ func (p *Processor) runScheduledAssociation(log log.T) {
 		return
 	}
 
+	if scheduledAssociation.RunOnce && recorder.HasExecuted(*scheduledAssociation.Association.InstanceId, *scheduledAssociation.Association.AssociationId) {
+		log.Debugf("DocumentId %v hasn't changed. Skipping as it has been processed already.", *scheduledAssociation.Association.AssociationId)
+		schedulemanager.MarkAssociationAsCompleted(log, *scheduledAssociation.Association.AssociationId)
+		return
+	}
+
 	if assocBookkeeping.IsDocumentCurrentlyExecuting(
 		*scheduledAssociation.Association.AssociationId,
 		*scheduledAssociation.Association.InstanceId) {
@@ -238,7 +236,7 @@ func (p *Processor) runScheduledAssociation(log log.T) {
 			contracts.AssociationErrorCodeInvalidAssociation,
 			times.ToIso8601UTC(time.Now()),
 			message)
-		schedulemanager.MarkScheduledAssociationAsCompleted(log, *scheduledAssociation.Association.AssociationId)
+		schedulemanager.UpdateNextScheduledDate(log, *scheduledAssociation.Association.AssociationId)
 		return
 	}
 
@@ -251,6 +249,7 @@ func (p *Processor) runScheduledAssociation(log log.T) {
 			contracts.AssociationErrorCodeSubmitAssociationError,
 			times.ToIso8601UTC(time.Now()),
 			message)
+		schedulemanager.UpdateNextScheduledDate(log, *scheduledAssociation.Association.AssociationId)
 		return
 	}
 }
@@ -347,9 +346,11 @@ func (p *Processor) persistAssociationForExecution(log log.T, docState *stateMod
 		appconfig.DefaultLocationOfPending,
 		docState)
 
-	// record the last executed association file
-	if err := recorder.UpdateAssociatedDocument(docState.DocumentInformation.InstanceID, docState.DocumentInformation.DocumentName); err != nil {
-		log.Errorf("Failed to persist last executed association document, %v", err)
+	if docState.DocumentInformation.RunOnce {
+		// record the last executed association file
+		if err := recorder.UpdateAssociatedDocument(docState.DocumentInformation.InstanceID, docState.DocumentInformation.DocumentName); err != nil {
+			log.Errorf("Failed to persist last executed association document, %v", err)
+		}
 	}
 
 	return p.executer.ExecutePendingDocument(p.context, p.taskPool, docState)

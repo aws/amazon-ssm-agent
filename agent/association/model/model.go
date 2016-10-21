@@ -27,10 +27,12 @@ var cronExpressionEveryFiveMinutes = "*/5 * * * *"
 
 // AssociationRawData represents detail information of association
 type AssociationRawData struct {
-	CreateDate        time.Time
-	NextScheduledDate time.Time
-	Association       *ssm.InstanceAssociationSummary
-	Document          *string
+	CreateDate                  time.Time
+	NextScheduledDate           time.Time
+	Association                 *ssm.InstanceAssociationSummary
+	Document                    *string
+	RunOnce                     bool
+	ExcludeFromFutureScheduling bool
 }
 
 // Update updates new association with old association details
@@ -44,21 +46,19 @@ func (newAssoc *AssociationRawData) Update(oldAssoc *AssociationRawData) {
 func (newAssoc *AssociationRawData) Initialize(log log.T, currentTime time.Time) {
 	newAssoc.CreateDate = currentTime
 
-	//this line is need due to a service bug, we can remove it once it's addressed
-	if newAssoc.Association.ScheduleExpression == nil {
-		newAssoc.Association.ScheduleExpression = aws.String("")
+	if newAssoc.Association.ScheduleExpression == nil || *newAssoc.Association.ScheduleExpression == "" {
+		newAssoc.Association.ScheduleExpression = aws.String(cronExpressionEveryFiveMinutes)
+		// legacy association, run only once
+		newAssoc.RunOnce = true
 	}
 
 	if _, err := cronexpr.Parse(*newAssoc.Association.ScheduleExpression); err != nil {
-		log.Infof("Failed to parse schedule expression %v, %v", *(newAssoc.Association.ScheduleExpression), err)
-		log.Infof("Set schedule expression to default %v", cronExpressionEveryFiveMinutes)
+		log.Errorf("Failed to parse schedule expression %v, %v", *(newAssoc.Association.ScheduleExpression), err)
+
+		//this line is needed due to a service bug, we can remove it once it's addressed
 		newAssoc.Association.ScheduleExpression = aws.String(cronExpressionEveryFiveMinutes)
+		//newAssoc.ExcludeFromFutureScheduling = true
 	}
 
-	if *newAssoc.Association.ScheduleExpression == cronExpressionEveryFiveMinutes {
-		// run association immediately
-		newAssoc.NextScheduledDate = currentTime
-	} else {
-		newAssoc.NextScheduledDate = cronexpr.MustParse(*newAssoc.Association.ScheduleExpression).Next(currentTime)
-	}
+	newAssoc.NextScheduledDate = cronexpr.MustParse(*newAssoc.Association.ScheduleExpression).Next(currentTime)
 }
