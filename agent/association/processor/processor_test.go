@@ -17,7 +17,6 @@ package processor
 import (
 	"errors"
 	"testing"
-	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/association/executer"
@@ -179,7 +178,7 @@ func TestProcessAssociationUnableToParseAssociation(t *testing.T) {
 		mock.AnythingOfType("*model.AssociationRawData")).Return(&payload, errors.New("failed to parse data"))
 
 	// Act
-	processor.StartAssociationWorker()
+	processor.InitializeAssociationProcessor()
 	processor.ProcessAssociation()
 
 	// Assert
@@ -237,7 +236,7 @@ func TestProcessAssociationUnableToExecutePendingDocument(t *testing.T) {
 		mock.AnythingOfType("*model.DocumentState")).Return(errors.New("failed to execute document"))
 
 	// Act
-	processor.StartAssociationWorker()
+	processor.InitializeAssociationProcessor()
 	processor.ProcessAssociation()
 
 	// Assert
@@ -289,7 +288,7 @@ func TestProcessAssociationSuccessful(t *testing.T) {
 		mock.AnythingOfType("*model.DocumentState")).Return(nil)
 
 	// Act
-	processor.StartAssociationWorker()
+	processor.InitializeAssociationProcessor()
 	processor.ProcessAssociation()
 
 	// Assert
@@ -304,8 +303,6 @@ func createProcessor() *Processor {
 	processor.context = context.NewMockDefault()
 	processor.taskPool = taskpool.Manager{}
 	processor.stopSignal = make(chan bool)
-	processor.runAssociationSignal = make(chan struct{})
-	processor.scheduleHealthTimer = time.NewTicker(30 * time.Second)
 
 	return &processor
 }

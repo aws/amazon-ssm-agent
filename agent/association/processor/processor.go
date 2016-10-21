@@ -24,6 +24,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/association/model"
 	"github.com/aws/amazon-ssm-agent/agent/association/recorder"
 	"github.com/aws/amazon-ssm-agent/agent/association/schedulemanager"
+	"github.com/aws/amazon-ssm-agent/agent/association/schedulemanager/signal"
 	assocScheduler "github.com/aws/amazon-ssm-agent/agent/association/scheduler"
 	"github.com/aws/amazon-ssm-agent/agent/association/service"
 	"github.com/aws/amazon-ssm-agent/agent/association/taskpool"
@@ -39,24 +40,20 @@ import (
 )
 
 const (
-	name                               = "Association"
-	documentWorkersLimit               = 1
-	cancelWaitDurationMillisecond      = 10000
-	scheduleHealthTimerDurationSeconds = 30
-	defaultScheduledJobQueueSize       = 100
+	name                          = "Association"
+	documentWorkersLimit          = 1
+	cancelWaitDurationMillisecond = 10000
 )
 
 // Processor contains the logic for processing association
 type Processor struct {
-	pollJob              *scheduler.Job
-	assocSvc             service.T
-	executer             executer.DocumentExecuter
-	context              context.T
-	taskPool             taskpool.T
-	agentInfo            *contracts.AgentInfo
-	stopSignal           chan bool
-	runAssociationSignal chan struct{}
-	scheduleHealthTimer  *time.Ticker
+	pollJob    *scheduler.Job
+	assocSvc   service.T
+	executer   executer.DocumentExecuter
+	context    context.T
+	taskPool   taskpool.T
+	agentInfo  *contracts.AgentInfo
+	stopSignal chan bool
 }
 
 // NewAssociationProcessor returns a new Processor with the given context.
@@ -76,51 +73,25 @@ func NewAssociationProcessor(context context.T, instanceID string) *Processor {
 		OsVersion: config.Os.Version,
 	}
 
-	// Create scheduledJobQueue as a buffered channel
-	runAssociationSignal := make(chan struct{}, 100)
-
 	assocSvc := service.NewAssociationService(name)
-	executer := executer.NewAssociationExecuter(assocSvc, &agentInfo, runAssociationSignal)
+	executer := executer.NewAssociationExecuter(assocSvc, &agentInfo)
 
 	return &Processor{
-		context:              assocContext,
-		assocSvc:             assocSvc,
-		taskPool:             taskPool,
-		executer:             executer,
-		agentInfo:            &agentInfo,
-		stopSignal:           make(chan bool),
-		runAssociationSignal: runAssociationSignal,
-		scheduleHealthTimer:  time.NewTicker(scheduleHealthTimerDurationSeconds * time.Second),
+		context:    assocContext,
+		assocSvc:   assocSvc,
+		taskPool:   taskPool,
+		executer:   executer,
+		agentInfo:  &agentInfo,
+		stopSignal: make(chan bool),
 	}
 }
 
 // StartAssociationWorker starts worker to process scheduled association
-func (p *Processor) StartAssociationWorker() {
+func (p *Processor) InitializeAssociationProcessor() {
 	log := p.context.Log()
 
-	log.Info("Starting association worker")
-	go func() {
-		log.Infof("Association worker started")
-		for {
-			_, more := <-p.runAssociationSignal
-			if more {
-				log.Debug("Receieved signal for executing scheduled association")
-				p.runScheduledAssociation(log)
-			} else {
-				log.Debug("Receieved all signal for executing scheduled association")
-				return
-			}
-		}
-	}()
-
-	go func() {
-		for {
-			select {
-			case <-p.scheduleHealthTimer.C:
-				p.SendRunAssociationSignal(log)
-			}
-		}
-	}()
+	log.Info("Initialize association signal service")
+	signal.InitializeAssociationSignalService(log, p.runScheduledAssociation)
 }
 
 // SetPollJob represents setter for PollJob
@@ -179,13 +150,7 @@ func (p *Processor) ProcessAssociation() {
 	}
 
 	schedulemanager.Refresh(log, associations)
-	p.SendRunAssociationSignal(log)
-}
-
-// TryExecuteNextScheduledAssociation sends out signal to the worker to process next scheduled association
-func (p *Processor) SendRunAssociationSignal(log log.T) {
-	log.Debug("Sending signal for executing scheduled association")
-	p.runAssociationSignal <- struct{}{}
+	signal.ExecuteAssociation(log)
 }
 
 // runScheduledAssociation runs the next scheduled association
@@ -208,7 +173,12 @@ func (p *Processor) runScheduledAssociation(log log.T) {
 	}
 
 	if scheduledAssociation == nil {
-		log.Info("No association scheduled at this time, system will retry later")
+		nextScheduledDate := schedulemanager.LoadNextScheduledDate(log)
+		if !nextScheduledDate.IsZero() {
+			signal.ResetWaitTimerForNextScheduledAssociation(log, nextScheduledDate)
+		} else {
+			log.Debug("No association scheduled at this time, system will retry later")
+		}
 		return
 	}
 
@@ -217,6 +187,8 @@ func (p *Processor) runScheduledAssociation(log log.T) {
 		schedulemanager.MarkAssociationAsCompleted(log, *scheduledAssociation.Association.AssociationId)
 		return
 	}
+
+	signal.StopWaitTimerForNextScheduledAssociation()
 
 	if assocBookkeeping.IsDocumentCurrentlyExecuting(
 		*scheduledAssociation.Association.AssociationId,
@@ -285,7 +257,7 @@ func (p *Processor) Stop() {
 	}
 
 	assocScheduler.Stop(p.pollJob)
-	p.scheduleHealthTimer.Stop()
+	signal.Stop()
 }
 
 // isStopped returns if the association processor has been stopped

@@ -19,6 +19,8 @@ import (
 	"fmt"
 	"sync"
 
+	"time"
+
 	"github.com/aws/amazon-ssm-agent/agent/association/model"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
@@ -96,6 +98,33 @@ func LoadNextScheduledAssociation(log log.T) (*model.AssociationRawData, error) 
 	return nil, nil
 }
 
+// LoadNextScheduledDate returns next scheduled date
+func LoadNextScheduledDate(log log.T) time.Time {
+	lock.RLock()
+	defer lock.RUnlock()
+
+	nextScheduleDate := time.Time{}
+	for _, assoc := range associations {
+		if assoc.ExcludeFromFutureScheduling {
+			continue
+		}
+
+		if assoc.NextScheduledDate.IsZero() {
+			continue
+		}
+
+		if nextScheduleDate.IsZero() {
+			nextScheduleDate = assoc.NextScheduledDate
+		}
+
+		if nextScheduleDate.After(assoc.NextScheduledDate) {
+			nextScheduleDate = assoc.NextScheduledDate
+		}
+	}
+
+	return nextScheduleDate
+}
+
 // UpdateNextScheduledDate sets next scheduled date for the given association
 func UpdateNextScheduledDate(log log.T, associationID string) {
 	lock.Lock()
@@ -131,7 +160,7 @@ func MarkAssociationAsCompleted(log log.T, associationID string) {
 
 // Schedules returns all the cached schedules
 func Schedules() []*model.AssociationRawData {
-	lock.Lock()
-	defer lock.Unlock()
+	lock.RLock()
+	defer lock.RUnlock()
 	return associations
 }

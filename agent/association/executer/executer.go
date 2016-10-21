@@ -21,6 +21,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/association/converter"
 	"github.com/aws/amazon-ssm-agent/agent/association/schedulemanager"
+	"github.com/aws/amazon-ssm-agent/agent/association/schedulemanager/signal"
 	"github.com/aws/amazon-ssm-agent/agent/association/service"
 	"github.com/aws/amazon-ssm-agent/agent/association/taskpool"
 	"github.com/aws/amazon-ssm-agent/agent/context"
@@ -48,17 +49,15 @@ type DocumentExecuter interface {
 
 // AssociationExecuter represents the implementation of document executer
 type AssociationExecuter struct {
-	assocSvc          service.T
-	agentInfo         *contracts.AgentInfo
-	scheduledJobQueue chan struct{}
+	assocSvc  service.T
+	agentInfo *contracts.AgentInfo
 }
 
 // NewAssociationExecuter returns a new document executer
-func NewAssociationExecuter(assocSvc service.T, agentInfo *contracts.AgentInfo, scheduledJobQueue chan struct{}) *AssociationExecuter {
+func NewAssociationExecuter(assocSvc service.T, agentInfo *contracts.AgentInfo) *AssociationExecuter {
 	runner := AssociationExecuter{
-		assocSvc:          assocSvc,
-		agentInfo:         agentInfo,
-		scheduledJobQueue: scheduledJobQueue,
+		assocSvc:  assocSvc,
+		agentInfo: agentInfo,
 	}
 
 	return &runner
@@ -99,10 +98,7 @@ func (r *AssociationExecuter) ExecuteInProgressDocument(context context.T, docSt
 
 	defer func() {
 		schedulemanager.UpdateNextScheduledDate(log, docState.DocumentInformation.DocumentID)
-		if r.scheduledJobQueue != nil {
-			log.Debugf("Sending signal for executing scheduled association")
-			r.scheduledJobQueue <- struct{}{}
-		}
+		signal.ExecuteAssociation(log)
 	}()
 
 	if docState.InstancePluginsInformation == nil {
