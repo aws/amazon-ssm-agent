@@ -44,7 +44,6 @@ func (newAssoc *AssociationRawData) Update(oldAssoc *AssociationRawData) {
 
 // Initialize initializes default values for the given new association
 func (newAssoc *AssociationRawData) Initialize(log log.T, currentTime time.Time) {
-	newAssoc.CreateDate = currentTime
 
 	if newAssoc.Association.ScheduleExpression == nil || *newAssoc.Association.ScheduleExpression == "" {
 		newAssoc.Association.ScheduleExpression = aws.String(cronExpressionEveryFiveMinutes)

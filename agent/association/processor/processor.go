@@ -145,7 +145,7 @@ func (p *Processor) ProcessAssociation() {
 	}
 
 	p.assocSvc.CreateNewServiceIfUnHealthy(log)
-	log.Infof("Update instance association status %v", instanceID)
+	log.Infof("Process associations on instance %v", instanceID)
 
 	if associations, err = p.assocSvc.ListInstanceAssociations(log, instanceID); err != nil {
 		log.Errorf("Unable to load association summaries, %v", err)

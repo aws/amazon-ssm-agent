@@ -102,8 +102,8 @@ func (m *Mock) CreateDocument(log log.T, docName string, docContent string) (res
 }
 
 // GetDocument mocks the GetDocument function.
-func (m *Mock) GetDocument(log log.T, docName string) (response *ssm.GetDocumentOutput, err error) {
-	args := m.Called(log, docName)
+func (m *Mock) GetDocument(log log.T, docName string, docVersion string) (response *ssm.GetDocumentOutput, err error) {
+	args := m.Called(log, docName, docVersion)
 	return args.Get(0).(*ssm.GetDocumentOutput), args.Error(1)
 }
 

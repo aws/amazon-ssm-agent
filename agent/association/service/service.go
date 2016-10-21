@@ -103,16 +103,25 @@ func (s *AssociationService) ListInstanceAssociations(log log.T, instanceID stri
 		return nil, fmt.Errorf("unable to retrieve associations %v", err)
 	}
 
-	log.Debug("Number of association is ", len(response.Associations))
-	//TODO: check token and return all the associations
-	// Get the association from the response of the ListAssociations call
+	for {
+		// Get the association from the response of the ListAssociations call
+		for _, assoc := range response.Associations {
+			rawData := &model.AssociationRawData{}
+			rawData.Association = assoc
+			rawData.CreateDate = time.Now()
+			results = append(results, rawData)
+		}
 
-	for _, assoc := range response.Associations {
-		rawData := &model.AssociationRawData{}
-		rawData.Association = assoc
-		results = append(results, rawData)
+		if response.NextToken == nil || *response.NextToken == "" {
+			break
+		}
+
+		if response, err = s.ssmSvc.ListInstanceAssociations(log, instanceID, response.NextToken); err != nil {
+			return results, fmt.Errorf("unable to retrieve associations %v", err)
+		}
 	}
 
+	log.Debug("Number of associations is ", len(results))
 	return results, nil
 }
 
@@ -168,7 +177,7 @@ func (s *AssociationService) LoadAssociationDetail(log log.T, assoc *model.Assoc
 	)
 
 	// Call getDocument and retrieve the document json string
-	if documentResponse, err = s.ssmSvc.GetDocument(log, *assoc.Association.Name); err != nil {
+	if documentResponse, err = s.ssmSvc.GetDocument(log, *assoc.Association.Name, *assoc.Association.DocumentVersion); err != nil {
 		log.Errorf("unable to retrieve document, %v", err)
 		return err
 	}

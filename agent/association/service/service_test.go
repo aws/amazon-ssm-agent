@@ -22,6 +22,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/sdkutil"
 	ssmSvc "github.com/aws/amazon-ssm-agent/agent/ssm"
+	"github.com/aws/amazon-ssm-agent/vendor/src/github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/service/ssm"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
@@ -76,6 +77,7 @@ func TestLoadAssociationDetails(t *testing.T) {
 	assocRawData.Association.Name = &associationName
 	assocRawData.Association.AssociationId = &associationId
 	assocRawData.Association.InstanceId = &instanceID
+	assocRawData.Association.DocumentVersion = aws.String("version 1")
 
 	getDocumentOutput := ssm.GetDocumentOutput{
 		Name:    &associationName,
@@ -86,7 +88,7 @@ func TestLoadAssociationDetails(t *testing.T) {
 		AssociationDescription: &ssm.AssociationDescription{},
 	}
 
-	ssmMock.On("GetDocument", mock.AnythingOfType("*log.Mock"), mock.AnythingOfType("string")).Return(&getDocumentOutput, nil)
+	ssmMock.On("GetDocument", mock.AnythingOfType("*log.Mock"), mock.AnythingOfType("string"), mock.AnythingOfType("string")).Return(&getDocumentOutput, nil)
 	ssmMock.On("DescribeAssociation", mock.AnythingOfType("*log.Mock"), mock.AnythingOfType("string"), mock.AnythingOfType("string")).Return(&associationOutput, nil)
 
 	err := service.LoadAssociationDetail(logMock, &assocRawData)

@@ -53,7 +53,7 @@ type Service interface {
 	ListCommandInvocations(log log.T, instanceID string, commandID string) (response *ssm.ListCommandInvocationsOutput, err error)
 	CancelCommand(log log.T, commandID string, instanceIDs []string) (response *ssm.CancelCommandOutput, err error)
 	CreateDocument(log log.T, docName string, docContent string) (response *ssm.CreateDocumentOutput, err error)
-	GetDocument(log log.T, docName string) (response *ssm.GetDocumentOutput, err error)
+	GetDocument(log log.T, docName string, docVersion string) (response *ssm.GetDocumentOutput, err error)
 	DeleteDocument(log log.T, instanceID string) (response *ssm.DeleteDocumentOutput, err error)
 	DescribeAssociation(log log.T, instanceID string, docName string) (response *ssm.DescribeAssociationOutput, err error)
 	UpdateInstanceInformation(log log.T, agentVersion string, agentStatus string) (response *ssm.UpdateInstanceInformationOutput, err error)
@@ -257,9 +257,10 @@ func (svc *sdkService) CreateDocument(log log.T, docName string, docContent stri
 }
 
 //GetDocument calls the GetDocument SSM API to retrieve document with given document name
-func (svc *sdkService) GetDocument(log log.T, docName string) (response *ssm.GetDocumentOutput, err error) {
+func (svc *sdkService) GetDocument(log log.T, docName string, docVersion string) (response *ssm.GetDocumentOutput, err error) {
 	params := ssm.GetDocumentInput{
-		Name: aws.String(docName),
+		Name:            aws.String(docName),
+		DocumentVersion: aws.String(docVersion),
 	}
 	response, err = svc.sdk.GetDocument(&params)
 	if err != nil {
