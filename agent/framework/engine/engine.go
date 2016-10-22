@@ -21,22 +21,14 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/framework/plugin"
-	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/framework/runutil"
 	"github.com/aws/amazon-ssm-agent/agent/rebooter"
 	stateModel "github.com/aws/amazon-ssm-agent/agent/statemanager/model"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 )
 
-// SendResponse is used to send response on plugin completion.
-// If pluginID is empty it will send responses of all plugins.
-// If pluginID is specified, response will be sent of that particular plugin.
-type SendResponse func(messageID string, pluginID string, results map[string]*contracts.PluginResult)
-
 // SendDocumentLevelResponse is used to send status response before plugin begins
 type SendDocumentLevelResponse func(messageID string, resultStatus contracts.ResultStatus, documentTraceOutput string)
-
-// UpdateAssociation updates association status
-type UpdateAssociation func(log log.T, documentID string, pluginOutputs map[string]*contracts.PluginResult, totalNumberOfPlugins int)
 
 // RunPlugins executes a set of plugins. The plugin configurations are given in a map with pluginId as key.
 // Outputs the results of running the plugins, indexed by pluginId.
@@ -44,9 +36,9 @@ func RunPlugins(
 	context context.T,
 	documentID string,
 	plugins map[string]stateModel.PluginState,
-	pluginRegistry plugin.PluginRegistry,
-	sendReply SendResponse,
-	updateAssoc UpdateAssociation,
+	pluginRegistry runutil.PluginRegistry,
+	sendReply runutil.SendResponse,
+	updateAssoc runutil.UpdateAssociation,
 	cancelFlag task.CancelFlag,
 ) (pluginOutputs map[string]*contracts.PluginResult) {
 
@@ -87,17 +79,25 @@ func RunPlugins(
 		//check if the said plugin is a worker plugin
 		p, isWorkerPlugin := pluginRegistry[pluginID]
 
+		runner := runutil.Runner{
+			PluginRunner: RunPlugins,
+			Plugins:      pluginRegistry,
+			SendReply:    runutil.NoReply,
+			UpdateAssoc:  runutil.NoUpdate,
+			CancelFlag:   cancelFlag,
+		}
+
 		isSupported, platformDetail := plugin.IsPluginSupportedForCurrentPlatform(context.Log(), pluginID)
 		if isSupported {
 			switch {
 			case isLongRunningPlugin:
 				pluginHandlerFound = true
 				context.Log().Infof("%s is a long running plugin", pluginID)
-				r = runPlugin(context, handler, pluginID, configuration, cancelFlag)
+				r = runPlugin(context, handler, pluginID, configuration, cancelFlag, runner)
 			case isWorkerPlugin:
 				pluginHandlerFound = true
 				context.Log().Infof("%s is a worker plugin", pluginID)
-				r = runPlugin(context, p, pluginID, configuration, cancelFlag)
+				r = runPlugin(context, p, pluginID, configuration, cancelFlag, runner)
 			default:
 				err := fmt.Errorf("Plugin with id %s not found!", pluginID)
 				pluginOutputs[pluginID].Status = contracts.ResultStatusFailed
@@ -141,10 +141,11 @@ func RunPlugins(
 
 func runPlugin(
 	context context.T,
-	p plugin.T,
+	p runutil.T,
 	pluginID string,
 	config contracts.Configuration,
 	cancelFlag task.CancelFlag,
+	runner runutil.Runner,
 ) (res contracts.PluginResult) {
 	// create a new context that includes plugin ID
 	context = context.With("[pluginID=" + pluginID + "]")
@@ -161,5 +162,5 @@ func runPlugin(
 		}
 	}()
 	log.Debugf("Running %s", pluginID)
-	return p.Execute(context, config, cancelFlag)
+	return p.Execute(context, config, cancelFlag, runner)
 }

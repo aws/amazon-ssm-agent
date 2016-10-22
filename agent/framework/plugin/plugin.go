@@ -19,27 +19,18 @@ import (
 	"sync"
 
 	"github.com/aws/amazon-ssm-agent/agent/context"
-	"github.com/aws/amazon-ssm-agent/agent/contracts"
+	"github.com/aws/amazon-ssm-agent/agent/framework/runutil"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/lrpminvoker"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/pluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/runcommand"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/updatessmagent"
-	"github.com/aws/amazon-ssm-agent/agent/task"
 )
 
-// T is the interface type for plugins.
-type T interface {
-	Execute(context context.T, config contracts.Configuration, cancelFlag task.CancelFlag) contracts.PluginResult
-}
-
-// PluginRegistry stores a set of plugins (both worker and long running plugins), indexed by ID.
-type PluginRegistry map[string]T
-
 // registeredExecuters stores the registered plugins.
-var registeredExecuters, registeredLongRunningPlugins *PluginRegistry
+var registeredExecuters, registeredLongRunningPlugins *runutil.PluginRegistry
 
 // RegisteredWorkerPlugins returns all registered core plugins.
-func RegisteredWorkerPlugins(context context.T) PluginRegistry {
+func RegisteredWorkerPlugins(context context.T) runutil.PluginRegistry {
 	if !isLoaded() {
 		cache(loadWorkerPlugins(context), loadLongRunningPlugins(context))
 	}
@@ -47,7 +38,7 @@ func RegisteredWorkerPlugins(context context.T) PluginRegistry {
 }
 
 // LongRunningPlugins returns a map of long running plugins and their respective handlers
-func RegisteredLongRunningPlugins(context context.T) PluginRegistry {
+func RegisteredLongRunningPlugins(context context.T) runutil.PluginRegistry {
 	if !isLoaded() {
 		cache(loadWorkerPlugins(context), loadLongRunningPlugins(context))
 	}
@@ -62,29 +53,29 @@ func isLoaded() bool {
 	return registeredExecuters != nil
 }
 
-func cache(workerPlugins, longRunningPlugins PluginRegistry) {
+func cache(workerPlugins, longRunningPlugins runutil.PluginRegistry) {
 	lock.Lock()
 	defer lock.Unlock()
 	registeredExecuters = &workerPlugins
 	registeredLongRunningPlugins = &longRunningPlugins
 }
 
-func getCachedWorkerPlugins() PluginRegistry {
+func getCachedWorkerPlugins() runutil.PluginRegistry {
 	lock.RLock()
 	defer lock.RUnlock()
 	return *registeredExecuters
 }
 
-func getCachedLongRunningPlugins() PluginRegistry {
+func getCachedLongRunningPlugins() runutil.PluginRegistry {
 	lock.RLock()
 	defer lock.RUnlock()
 	return *registeredLongRunningPlugins
 }
 
 // loadLongRunningPlugins loads all long running plugins
-func loadLongRunningPlugins(context context.T) PluginRegistry {
+func loadLongRunningPlugins(context context.T) runutil.PluginRegistry {
 	log := context.Log()
-	var longRunningPlugins = PluginRegistry{}
+	var longRunningPlugins = runutil.PluginRegistry{}
 
 	//Long running plugins are handled by lrpm. lrpminvoker is a worker plugin that can communicate with lrpm.
 	//that's why all long running plugins are first handled by lrpminvoker - which then hands off the work to lrpm.
@@ -103,8 +94,8 @@ func loadLongRunningPlugins(context context.T) PluginRegistry {
 }
 
 // loadWorkerPlugins loads all plugins
-func loadWorkerPlugins(context context.T) PluginRegistry {
-	var workerPlugins = PluginRegistry{}
+func loadWorkerPlugins(context context.T) runutil.PluginRegistry {
+	var workerPlugins = runutil.PluginRegistry{}
 
 	for key, value := range loadPlatformIndependentPlugins(context) {
 		workerPlugins[key] = value
@@ -118,9 +109,9 @@ func loadWorkerPlugins(context context.T) PluginRegistry {
 }
 
 // loadPlatformIndependentPlugins registers plugins common to all platforms
-func loadPlatformIndependentPlugins(context context.T) PluginRegistry {
+func loadPlatformIndependentPlugins(context context.T) runutil.PluginRegistry {
 	log := context.Log()
-	var workerPlugins = PluginRegistry{}
+	var workerPlugins = runutil.PluginRegistry{}
 
 	// registering aws:runPowerShellScript & aws:runShellScript plugin
 	runcommandPluginName := runcommand.Name()

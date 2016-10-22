@@ -23,6 +23,7 @@ import (
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
+	"github.com/aws/amazon-ssm-agent/agent/framework/runutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/platform"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/application"
@@ -48,9 +49,9 @@ func IsPluginSupportedForCurrentPlatform(log log.T, pluginID string) (bool, stri
 }
 
 // loadPlatformDependentPlugins registers platform dependent plugins
-func loadPlatformDependentPlugins(context context.T) PluginRegistry {
+func loadPlatformDependentPlugins(context context.T) runutil.PluginRegistry {
 	log := context.Log()
-	var workerPlugins = PluginRegistry{}
+	var workerPlugins = runutil.PluginRegistry{}
 
 	// registering aws:psModule plugin
 	psModulePluginName := psmodule.Name()

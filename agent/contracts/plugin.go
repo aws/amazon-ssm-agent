@@ -71,13 +71,14 @@ type IWorkerPlugin IPlugin
 
 // Configuration represents a plugin configuration as in the json format.
 type Configuration struct {
-	Settings               interface{}
-	Properties             interface{}
-	OutputS3KeyPrefix      string
-	OutputS3BucketName     string
-	OrchestrationDirectory string
-	MessageId              string
-	BookKeepingFileName    string
+	Settings                interface{}
+	Properties              interface{}
+	OutputS3KeyPrefix       string
+	OutputS3BucketName      string
+	OrchestrationDirectory  string
+	MessageId               string
+	BookKeepingFileName     string
+	DefaultWorkingDirectory string
 }
 
 // Plugin wraps the plugin configuration and plugin result.

@@ -16,6 +16,7 @@ package plugin
 import (
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
+	"github.com/aws/amazon-ssm-agent/agent/framework/runutil"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 	"github.com/stretchr/testify/mock"
 )
@@ -29,7 +30,7 @@ type Mock struct {
 }
 
 // Execute mocks a plugin execution.
-func (m *Mock) Execute(context context.T, config contracts.Configuration, cancelFlag task.CancelFlag) (res contracts.PluginResult) {
+func (m *Mock) Execute(context context.T, config contracts.Configuration, cancelFlag task.CancelFlag, subDocumentRunner runutil.Runner) (res contracts.PluginResult) {
 	args := m.Called(context, config, cancelFlag)
 	return args.Get(0).(contracts.PluginResult)
 }
