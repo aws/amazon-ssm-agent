@@ -21,7 +21,9 @@ import (
 	"io/ioutil"
 	"testing"
 
+	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil/artifact"
+	"github.com/aws/amazon-ssm-agent/agent/statemanager/model"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -35,7 +37,7 @@ func networkStubSuccess() networkDep {
 }
 
 func execStubSuccess() execDep {
-	return &ExecDepStub{}
+	return &ExecDepStub{pluginInput: &model.PluginState{}, pluginOutput: &contracts.PluginResult{}}
 }
 
 func setSuccessStubs() *ConfigureComponentStubs {

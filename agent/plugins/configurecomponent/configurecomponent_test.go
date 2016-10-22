@@ -25,6 +25,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil/artifact"
+	"github.com/aws/amazon-ssm-agent/agent/framework/runutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 	"github.com/aws/amazon-ssm-agent/agent/updateutil"
@@ -101,7 +102,7 @@ func TestExecute(t *testing.T) {
 	mockCancelFlag.On("ShutDown").Return(false)
 	mockCancelFlag.On("Wait").Return(false).After(100 * time.Millisecond)
 
-	result := plugin.Execute(mockContext, config, mockCancelFlag)
+	result := plugin.Execute(mockContext, config, mockCancelFlag, runutil.Runner{})
 
 	assert.Equal(t, result.Code, 1)
 	assert.Contains(t, result.Output, "error")
@@ -124,13 +125,13 @@ func TestInstallComponent(t *testing.T) {
 	}
 
 	result, _ := ioutil.ReadFile("testdata/sampleManifest.json")
-	stubs := &ConfigureComponentStubs{fileSysDepStub: &FileSysDepStub{readResult: result}, networkDepStub: &NetworkDepStub{}, execDepStub: &ExecDepStub{}}
+	stubs := &ConfigureComponentStubs{fileSysDepStub: &FileSysDepStub{readResult: result}, networkDepStub: &NetworkDepStub{}, execDepStub: execStubSuccess()}
 	stubs.Set()
 	defer stubs.Clear()
 
 	installCommand := "AWSPVDriverSetup.msi /quiet /install"
 
-	err := runInstallComponent(plugin,
+	_, err := runInstallComponent(plugin,
 		pluginInformation.Name,
 		pluginInformation.Version,
 		pluginInformation.Source,
@@ -150,13 +151,13 @@ func TestUninstallComponent(t *testing.T) {
 
 	output := &ConfigureComponentPluginOutput{}
 
-	stubs := &ConfigureComponentStubs{fileSysDepStub: &FileSysDepStub{existsResultDefault: true}, networkDepStub: &NetworkDepStub{}, execDepStub: &ExecDepStub{}}
+	stubs := &ConfigureComponentStubs{fileSysDepStub: &FileSysDepStub{existsResultDefault: true}, networkDepStub: &NetworkDepStub{}, execDepStub: execStubSuccess()}
 	stubs.Set()
 	defer stubs.Clear()
 
 	uninstallCommand := "AWSPVDriverSetup.msi /quiet /uninstall"
 
-	err := runUninstallComponent(plugin,
+	_, err := runUninstallComponent(plugin,
 		pluginInformation.Name,
 		pluginInformation.Version,
 		pluginInformation.Source,

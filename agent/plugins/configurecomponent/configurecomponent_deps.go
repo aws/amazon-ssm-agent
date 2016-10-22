@@ -20,10 +20,13 @@ import (
 	"io/ioutil"
 	"os"
 
+	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil/artifact"
+	"github.com/aws/amazon-ssm-agent/agent/framework/runutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/s3util"
+	"github.com/aws/amazon-ssm-agent/agent/statemanager/model"
 	"github.com/aws/amazon-ssm-agent/agent/updateutil"
 )
 
@@ -98,12 +101,25 @@ var execdep execDep = &execDepImp{util: new(updateutil.Utility)}
 // dependency on action execution
 type execDep interface {
 	ExeCommand(log log.T, cmd string, workingDir string, updaterRoot string, stdOut string, stdErr string, isAsync bool) (err error)
+	ParseDocument(plugin *Plugin, documentRaw []byte, orchestrationDir string, s3Bucket string, s3KeyPrefix string, messageID string, documentID string, defaultWorkingDirectory string) (pluginsInfo map[string]model.PluginState, err error)
+	ExecuteDocument(plugin *Plugin, pluginInput map[string]model.PluginState, documentID string) (pluginOutputs map[string]*contracts.PluginResult)
 }
 
 type execDepImp struct {
-	util *updateutil.Utility
+	util   *updateutil.Utility
+	runner runutil.Runner
 }
 
 func (m *execDepImp) ExeCommand(log log.T, cmd string, workingDir string, updaterRoot string, stdOut string, stdErr string, isAsync bool) (err error) {
 	return m.util.ExeCommand(log, cmd, workingDir, updaterRoot, stdOut, stdErr, isAsync)
+}
+
+func (m *execDepImp) ParseDocument(plugin *Plugin, documentRaw []byte, orchestrationDir string, s3Bucket string, s3KeyPrefix string, messageID string, documentID string, defaultWorkingDirectory string) (pluginsInfo map[string]model.PluginState, err error) {
+	return plugin.runner.ParseDocument(plugin.context, documentRaw, orchestrationDir, s3Bucket, s3KeyPrefix, messageID, documentID, defaultWorkingDirectory)
+}
+
+func (m *execDepImp) ExecuteDocument(plugin *Plugin, pluginInput map[string]model.PluginState, documentID string) (pluginOutputs map[string]*contracts.PluginResult) {
+	log := plugin.context.Log()
+	log.Debugf("Running subcommand")
+	return plugin.runner.ExecuteDocument(plugin.context, pluginInput, documentID)
 }

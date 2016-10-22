@@ -23,11 +23,14 @@ import (
 	"strings"
 	"time"
 
+	"path"
+
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/executers"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil/artifact"
+	"github.com/aws/amazon-ssm-agent/agent/framework/runutil"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/pluginutil"
@@ -39,6 +42,13 @@ import (
 // Plugin is the type for the configurecomponent plugin.
 type Plugin struct {
 	pluginutil.DefaultPlugin
+	context          context.T
+	runner           runutil.Runner
+	orchestrationDir string
+	s3Bucket         string
+	s3Prefix         string
+	messageID        string
+	documentID       string
 }
 
 // ConfigureComponentPluginInput represents one set of commands executed by the ConfigureComponent plugin.
@@ -94,7 +104,6 @@ func NewPlugin(pluginConfig pluginutil.PluginConfig) (*Plugin, error) {
 	plugin.OutputTruncatedSuffix = pluginConfig.OutputTruncatedSuffix
 	plugin.Uploader = pluginutil.GetS3Config()
 	plugin.ExecuteUploadOutputToS3Bucket = pluginutil.UploadOutputToS3BucketExecuter(plugin.UploadOutputToS3Bucket)
-
 	exec := executers.ShellCommandExecuter{}
 	plugin.ExecuteCommand = pluginutil.CommandExecuter(exec.Execute)
 
@@ -142,7 +151,7 @@ func runConfigureComponent(
 	log log.T,
 	manager pluginHelper,
 	configureUtil Util,
-	context *updateutil.InstanceContext,
+	instanceContext *updateutil.InstanceContext,
 	rawPluginInput interface{}) (output ConfigureComponentPluginOutput) {
 	var input ConfigureComponentPluginInput
 	var err error
@@ -165,11 +174,11 @@ func runConfigureComponent(
 		return
 	}
 	defer unlockComponent(input.Name)
-
+	//TODO:MF: no longer need manifest separate from package
 	switch input.Action {
 	case InstallAction:
 		// get version information
-		version, installedVersion, versionErr := manager.getVersionToInstall(log, &input, configureUtil, context)
+		version, installedVersion, versionErr := manager.getVersionToInstall(log, &input, configureUtil, instanceContext)
 		if versionErr != nil {
 			output.MarkAsFailed(log,
 				fmt.Errorf("unable to determine version to install: %v", versionErr))
@@ -185,7 +194,7 @@ func runConfigureComponent(
 		}
 
 		// ensure manifest file and package
-		manifest, ensureErr := ensurePackage(log, manager, configureUtil, input.Name, version, input.Source, &output, context)
+		manifest, ensureErr := ensurePackage(log, manager, configureUtil, input.Name, version, input.Source, &output, instanceContext)
 		if ensureErr != nil {
 			output.MarkAsFailed(log,
 				fmt.Errorf("unable to obtain package: %v", ensureErr))
@@ -200,23 +209,24 @@ func runConfigureComponent(
 			// NOTE: if source is specified on an install and we need to redownload the package for the
 			// currently installed version because it isn't valid on disk, we will pull from the source URI
 			// even though that may or may not be the package that installed it - it is our only decent option
-			uninstallManifest, ensureErr := ensurePackage(log, manager, configureUtil, input.Name, installedVersion, input.Source, &output, context)
+			uninstallManifest, ensureErr := ensurePackage(log, manager, configureUtil, input.Name, installedVersion, input.Source, &output, instanceContext)
 			if ensureErr != nil {
 				output.MarkAsFailed(log,
 					fmt.Errorf("unable to obtain package: %v", ensureErr))
 			} else {
-				if err = runUninstallComponent(p,
+				result, err := runUninstallComponent(p,
 					input.Name,
 					installedVersion,
 					input.Source,
 					&output,
 					log,
 					uninstallManifest.Uninstall,
-					context); err != nil {
+					instanceContext)
+				if err != nil {
 					output.MarkAsFailed(log,
 						fmt.Errorf("failed to uninstall currently installed version of component: %v", err))
 				} else {
-					if uninstallManifest.Reboot == "true" {
+					if uninstallManifest.Reboot == "true" || result == contracts.ResultStatusSuccessAndReboot { // TODO:MF: no longer in manifest, entirely from result status
 						// TODO:MF: set reboot flag and return without success or failure
 					}
 				}
@@ -231,7 +241,7 @@ func runConfigureComponent(
 		}
 
 		// install version
-		if err = runInstallComponent(p,
+		result, err := runInstallComponent(p,
 			input.Name,
 			version,
 			input.Source,
@@ -239,21 +249,18 @@ func runConfigureComponent(
 			manager,
 			log,
 			manifest.Install,
-			context); err != nil {
+			instanceContext)
+		if err != nil {
 			output.MarkAsFailed(log,
 				fmt.Errorf("failed to install component: %v", err))
 			return
 		}
-		output.MarkAsSucceeded(manifest.Reboot == "true")
-		// TO DO: How to mock reboot?
-		// reboot according to manifest
-		//if manifest.Reboot == RebootTrue {
-		//	reboot()
-		//}
+		output.MarkAsSucceeded(manifest.Reboot == "true") // TODO:MF: no longer in manifest, entirely from result status
+		output.Status = result
 
 	case UninstallAction:
 		// get version information
-		version, versionErr := manager.getVersionToUninstall(log, &input, configureUtil, context)
+		version, versionErr := manager.getVersionToUninstall(log, &input, configureUtil, instanceContext)
 		if versionErr != nil || version == "" {
 			output.MarkAsFailed(log,
 				fmt.Errorf("unable to determine version to uninstall: %v", versionErr))
@@ -261,25 +268,27 @@ func runConfigureComponent(
 		}
 
 		// ensure manifest file and package
-		manifest, ensureErr := ensurePackage(log, manager, configureUtil, input.Name, version, input.Source, &output, context)
+		manifest, ensureErr := ensurePackage(log, manager, configureUtil, input.Name, version, input.Source, &output, instanceContext)
 		if ensureErr != nil {
 			output.MarkAsFailed(log,
 				fmt.Errorf("unable to obtain package: %v", ensureErr))
 			return
 		}
-		if err = runUninstallComponent(p,
+		result, err := runUninstallComponent(p,
 			input.Name,
 			version,
 			input.Source,
 			&output,
 			log,
 			manifest.Uninstall,
-			context); err != nil {
+			instanceContext)
+		if err != nil {
 			output.MarkAsFailed(log,
 				fmt.Errorf("failed to uninstall component: %v", err))
 			return
 		}
-		output.MarkAsSucceeded(manifest.Reboot == "true")
+		output.MarkAsSucceeded(manifest.Reboot == "true") // TODO:MF: no longer in manifest, entirely from result status
+		output.Status = result
 	default:
 		output.MarkAsFailed(log,
 			fmt.Errorf("unsupported action: %v", input.Action))
@@ -468,7 +477,9 @@ func (m *configureManager) downloadPackage(log log.T,
 	if packageLocation == "" {
 		packageLocation = getS3Location(componentName, version, context, packageName)
 	} else {
-		//TODO:MF: I don't think source will contain a replaceable placeholder - I think it is a URI to a "folder" that gets a filename tacked onto the end
+		//TODO:MF: I don't think source will contain a replaceable placeholder -
+		//   I think it is a URI to a "folder" that gets a filename tacked onto the end
+		//   or a full path to a compressed package file
 		packageLocation = strings.Replace(packageLocation, updateutil.FileNameHolder, packageName, -1)
 	}
 
@@ -498,6 +509,11 @@ func (m *configureManager) downloadPackage(log log.T,
 	return downloadOutput.LocalFilePath, nil
 }
 
+// mergeResultStatus combines the status from multiple sub documents
+func mergeResultStatus(currentStatus contracts.ResultStatus, newStatus contracts.ResultStatus) contracts.ResultStatus {
+	return newStatus // TODO:MF: actually merge them...
+}
+
 // runInstallComponent executes the install script for the specific version of component.
 func runInstallComponent(p *Plugin,
 	componentName string,
@@ -507,24 +523,17 @@ func runInstallComponent(p *Plugin,
 	manager pluginHelper,
 	log log.T,
 	installCmd string,
-	context *updateutil.InstanceContext) (err error) {
-	log.Infof("Initiating %v %v installation", componentName, version)
+	instanceContext *updateutil.InstanceContext,
+) (status contracts.ResultStatus, err error) {
+	status = contracts.ResultStatusSuccess
 
 	directory := filepath.Join(appconfig.ComponentRoot, componentName, version)
-
-	// execute installation command
-	if err = execdep.ExeCommand(
-		log,
-		installCmd,
-		directory, directory,
-		p.StdoutFileName, p.StderrFileName,
-		false); err != nil {
-
-		return err
+	_, status, err = executeAction(p, "install", componentName, version, log, output, directory)
+	if err == nil {
+		output.AppendInfo(log, "Successfully installed %v %v", componentName, version)
+		_, status, err = executeAction(p, "start", componentName, version, log, output, directory)
 	}
-
-	output.AppendInfo(log, "Successfully installed %v %v", componentName, version)
-	return nil
+	return
 }
 
 // runUninstallComponent executes the install script for the specific version of component.
@@ -535,30 +544,66 @@ func runUninstallComponent(p *Plugin,
 	output *ConfigureComponentPluginOutput,
 	log log.T,
 	uninstallCmd string,
-	context *updateutil.InstanceContext) (err error) {
-	log.Infof("Initiating %v %v uninstallation", componentName, version)
+	context *updateutil.InstanceContext,
+) (status contracts.ResultStatus, err error) {
+	status = contracts.ResultStatusSuccess
 
 	directory := filepath.Join(appconfig.ComponentRoot, componentName, version)
-
-	// execute installation command
-	if err = execdep.ExeCommand(
-		log,
-		uninstallCmd,
-		directory, directory,
-		p.StdoutFileName, p.StderrFileName,
-		false); err != nil {
-
-		return err
+	_, status, err = executeAction(p, "stop", componentName, version, log, output, directory)
+	if err == nil {
+		_, status, err = executeAction(p, "uninstall", componentName, version, log, output, directory)
+		if err == nil {
+			if err = filesysdep.RemoveAll(directory); err != nil {
+				return contracts.ResultStatusFailed, fmt.Errorf("failed to delete directory %v due to %v", directory, err)
+			}
+			output.AppendInfo(log, "Successfully uninstalled %v %v", componentName, version)
+		}
 	}
+	return
+}
 
-	// delete local component folder for this version
-	if err = filesysdep.RemoveAll(directory); err != nil {
-		return fmt.Errorf(
-			"failed to delete directory %v due to %v", directory, err)
+func executeAction(p *Plugin,
+	actionName string,
+	componentName string,
+	version string,
+	log log.T,
+	output *ConfigureComponentPluginOutput,
+	executeDirectory string,
+) (actionExists bool, status contracts.ResultStatus, err error) {
+	status = contracts.ResultStatusSuccess
+	err = nil
+	fileName := fmt.Sprintf("%v.json", actionName)
+	fileLocation := path.Join(executeDirectory, fileName)
+	actionExists = filesysdep.Exists(fileLocation)
+
+	if actionExists {
+		log.Infof("Initiating %v %v %v", componentName, version, actionName)
+		file, err := filesysdep.ReadFile(fileLocation)
+		if err != nil {
+			return true, contracts.ResultStatusFailed, err
+		}
+		pluginsInfo, err := execdep.ParseDocument(p, file, p.orchestrationDir, p.s3Bucket, p.s3Prefix, p.messageID, p.documentID, executeDirectory)
+		if err != nil {
+			return true, contracts.ResultStatusFailed, err
+		}
+		if len(pluginsInfo) == 0 {
+			return true, contracts.ResultStatusFailed, fmt.Errorf("%v contained no work and may be malformed", fileName)
+		}
+		pluginOutputs := execdep.ExecuteDocument(p, pluginsInfo, p.documentID)
+		if pluginOutputs == nil {
+			return true, contracts.ResultStatusFailed, errors.New("No output from executing install document (install.json)")
+		}
+		for _, pluginOut := range pluginOutputs {
+			if pluginOut.StandardOutput != "" {
+				output.AppendInfo(log, "%v output: %v", actionName, pluginOut.StandardOutput)
+			}
+			if pluginOut.StandardError != "" {
+				output.AppendInfo(log, "%v errors: %v", actionName, pluginOut.StandardError)
+			}
+			status = mergeResultStatus(status, pluginOut.Status)
+		}
 	}
-
-	output.AppendInfo(log, "Successfully uninstalled %v %v", componentName, version)
-	return nil
+	return
 }
 
 func getInstanceContext(log log.T) (context *updateutil.InstanceContext, err error) {
@@ -571,7 +616,14 @@ var runConfig = runConfigureComponent
 
 // Execute runs multiple sets of commands and returns their outputs.
 // res.Output will contain a slice of RunCommandPluginOutput.
-func (p *Plugin) Execute(context context.T, config contracts.Configuration, cancelFlag task.CancelFlag) (res contracts.PluginResult) {
+func (p *Plugin) Execute(context context.T, config contracts.Configuration, cancelFlag task.CancelFlag, subDocumentRunner runutil.Runner) (res contracts.PluginResult) {
+	p.context = context
+	p.orchestrationDir = config.OrchestrationDirectory
+	p.s3Bucket = config.OutputS3BucketName
+	p.s3Prefix = config.OutputS3KeyPrefix
+	p.messageID = config.MessageId
+	p.documentID = config.BookKeepingFileName
+	p.runner = subDocumentRunner
 	log := context.Log()
 	log.Info("RunCommand started with configuration ", config)
 	configureUtil := new(Utility)
@@ -604,7 +656,7 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 			break
 		}
 
-		context, err := getContext(log)
+		instanceContext, err := getContext(log)
 		if err != nil {
 			out[i].MarkAsFailed(log,
 				fmt.Errorf("unable to create instance context: %v", err))
@@ -615,7 +667,7 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 			log,
 			manager,
 			configureUtil,
-			context,
+			instanceContext,
 			prop)
 
 		res.Code = out[i].ExitCode

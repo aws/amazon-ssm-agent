@@ -17,9 +17,11 @@
 package configurecomponent
 
 import (
+	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil/artifact"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/s3util"
+	"github.com/aws/amazon-ssm-agent/agent/statemanager/model"
 )
 
 type ConfigureComponentStubs struct {
@@ -148,9 +150,28 @@ func (m *NetworkDepStub) Download(log log.T, input artifact.DownloadInput) (outp
 }
 
 type ExecDepStub struct {
-	execError error
+	execError    error
+	pluginInput  *model.PluginState
+	parseError   error
+	pluginOutput *contracts.PluginResult
 }
 
 func (m *ExecDepStub) ExeCommand(log log.T, cmd string, workingDir string, updaterRoot string, stdOut string, stdErr string, isAsync bool) (err error) {
 	return m.execError
+}
+
+func (m *ExecDepStub) ParseDocument(plugin *Plugin, documentRaw []byte, orchestrationDir string, s3Bucket string, s3KeyPrefix string, messageID string, documentID string, defaultWorkingDirectory string) (pluginsInfo map[string]model.PluginState, err error) {
+	pluginsInfo = make(map[string]model.PluginState)
+	if m.pluginInput != nil {
+		pluginsInfo["test"] = *m.pluginInput
+	}
+	return pluginsInfo, m.parseError
+}
+
+func (m *ExecDepStub) ExecuteDocument(plugin *Plugin, pluginInput map[string]model.PluginState, documentID string) (pluginOutputs map[string]*contracts.PluginResult) {
+	pluginOutputs = make(map[string]*contracts.PluginResult)
+	if m.pluginOutput != nil {
+		pluginOutputs["test"] = m.pluginOutput
+	}
+	return
 }
