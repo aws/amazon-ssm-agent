@@ -26,6 +26,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/parameterstore"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/pluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/rebooter"
 	"github.com/aws/amazon-ssm-agent/agent/task"
@@ -232,6 +233,30 @@ func (p *Plugin) runCommands(log log.T, pluginInput ApplicationPluginInput, orch
 	}
 	log.Debugf("mode is %v", mode)
 
+	// Resolve ssm parameters
+	// This may contain sensitive information, do not log this data after resolving.
+	if pluginInput.Source, err = parameterstore.ResolveString(log, pluginInput.Source); err != nil {
+		out.Errors = append(out.Errors, err.Error())
+		log.Errorf("Failed to resolve ssm parameters. Error: - %v", err)
+		return
+	}
+
+	// Resolve ssm parameters
+	// This may contain sensitive information, do not log this data after resolving.
+	if pluginInput.SourceHash, err = parameterstore.ResolveString(log, pluginInput.SourceHash); err != nil {
+		out.Errors = append(out.Errors, err.Error())
+		log.Errorf("Failed to resolve ssm parameters. Error: - %v", err)
+		return
+	}
+
+	// Resolve ssm parameters
+	// This may contain sensitive information, do not log this data after resolving.
+	if pluginInput.SourceHashType, err = parameterstore.ResolveString(log, pluginInput.SourceHashType); err != nil {
+		out.Errors = append(out.Errors, err.Error())
+		log.Errorf("Failed to resolve ssm parameters. Error: - %v", err)
+		return
+	}
+
 	// Download file from source if available
 	downloadOutput, err := pluginutil.DownloadFileFromSource(log, pluginInput.Source, pluginInput.SourceHash, pluginInput.SourceHashType)
 	if err != nil || downloadOutput.IsHashMatched == false || downloadOutput.LocalFilePath == "" {
@@ -250,6 +275,14 @@ func (p *Plugin) runCommands(log log.T, pluginInput ApplicationPluginInput, orch
 	stdoutFilePath := filepath.Join(orchestrationDir, p.StdoutFileName)
 	stderrFilePath := filepath.Join(orchestrationDir, p.StderrFileName)
 	log.Debugf("stdout file %v, stderr file %v", stdoutFilePath, stderrFilePath)
+
+	// Resolve ssm parameters
+	// This may contain sensitive information, do not log this data after resolving.
+	if pluginInput.Parameters, err = parameterstore.ResolveString(log, pluginInput.Parameters); err != nil {
+		out.Errors = append(out.Errors, err.Error())
+		log.Errorf("Failed to resolve ssm parameters. Error: - %v", err)
+		return
+	}
 
 	// Construct Command Name and Arguments
 	commandName := msiExecCommand
