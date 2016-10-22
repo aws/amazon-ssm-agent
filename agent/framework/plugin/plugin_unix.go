@@ -17,6 +17,7 @@ package plugin
 
 import (
 	"github.com/aws/amazon-ssm-agent/agent/context"
+	"github.com/aws/amazon-ssm-agent/agent/framework/runutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 )
 
@@ -27,6 +28,6 @@ func IsPluginSupportedForCurrentPlatform(log log.T, pluginID string) (bool, stri
 }
 
 // loadPlatformDependentPlugins registers platform dependent plugins
-func loadPlatformDependentPlugins(context context.T) PluginRegistry {
-	return PluginRegistry{}
+func loadPlatformDependentPlugins(context context.T) runutil.PluginRegistry {
+	return runutil.PluginRegistry{}
 }

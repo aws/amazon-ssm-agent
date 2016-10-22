@@ -20,6 +20,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/framework/plugin"
+	"github.com/aws/amazon-ssm-agent/agent/framework/runutil"
 	"github.com/aws/amazon-ssm-agent/agent/rebooter"
 	"github.com/aws/amazon-ssm-agent/agent/statemanager/model"
 	"github.com/aws/amazon-ssm-agent/agent/task"
@@ -32,7 +33,7 @@ func TestRunPluginsWithRegistry(t *testing.T) {
 	pluginConfigs := make(map[string]model.PluginState)
 	pluginResults := make(map[string]*contracts.PluginResult)
 	pluginInstances := make(map[string]*plugin.Mock)
-	pluginRegistry := plugin.PluginRegistry{}
+	pluginRegistry := runutil.PluginRegistry{}
 	documentID := "TestDocument"
 
 	sendResponse := func(messageID string, pluginID string, results map[string]*contracts.PluginResult) {
