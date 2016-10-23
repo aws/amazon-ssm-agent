@@ -12,8 +12,8 @@
 // implied. See the License for the specific language governing
 // permissions and limitations under the License.
 
-// Package configurecomponents implements the ConfigureComponent plugin.
-package configurecomponent
+// Package configurepackages implements the ConfigurePackage plugin.
+package configurepackage
 
 import (
 	"errors"
@@ -35,7 +35,7 @@ import (
 var logger = log.NewMockLog()
 
 func TestMarkAsSucceeded(t *testing.T) {
-	output := ConfigureComponentPluginOutput{}
+	output := ConfigurePackagePluginOutput{}
 
 	output.MarkAsSucceeded(false)
 
@@ -44,7 +44,7 @@ func TestMarkAsSucceeded(t *testing.T) {
 }
 
 func TestMarkAsFailed(t *testing.T) {
-	output := ConfigureComponentPluginOutput{}
+	output := ConfigurePackagePluginOutput{}
 
 	output.MarkAsFailed(logger, fmt.Errorf("Error message"))
 
@@ -54,7 +54,7 @@ func TestMarkAsFailed(t *testing.T) {
 }
 
 func TestAppendInfo(t *testing.T) {
-	output := ConfigureComponentPluginOutput{}
+	output := ConfigurePackagePluginOutput{}
 
 	output.AppendInfo(logger, "Info message")
 
@@ -83,8 +83,8 @@ func TestExecute(t *testing.T) {
 		manager pluginHelper,
 		configureUtil Util,
 		context *updateutil.InstanceContext,
-		rawPluginInput interface{}) (out ConfigureComponentPluginOutput) {
-		out = ConfigureComponentPluginOutput{}
+		rawPluginInput interface{}) (out ConfigurePackagePluginOutput) {
+		out = ConfigurePackagePluginOutput{}
 		out.ExitCode = 1
 		out.Stderr = "error"
 
@@ -108,13 +108,13 @@ func TestExecute(t *testing.T) {
 	assert.Contains(t, result.Output, "error")
 }
 
-func TestInstallComponent(t *testing.T) {
+func TestInstallPackage(t *testing.T) {
 	plugin := &Plugin{}
 	pluginInformation := createStubPluginInputInstall()
 	context := createStubInstanceContext()
 
-	output := &ConfigureComponentPluginOutput{}
-	manifest, _ := parseComponentManifest(logger, "testdata/sampleManifest.json")
+	output := &ConfigurePackagePluginOutput{}
+	manifest, _ := parsePackageManifest(logger, "testdata/sampleManifest.json")
 	manager := &mockConfigureManager{
 		downloadManifestResult: manifest,
 		downloadManifestError:  nil,
@@ -125,13 +125,13 @@ func TestInstallComponent(t *testing.T) {
 	}
 
 	result, _ := ioutil.ReadFile("testdata/sampleManifest.json")
-	stubs := &ConfigureComponentStubs{fileSysDepStub: &FileSysDepStub{readResult: result}, networkDepStub: &NetworkDepStub{}, execDepStub: execStubSuccess()}
+	stubs := &ConfigurePackageStubs{fileSysDepStub: &FileSysDepStub{readResult: result}, networkDepStub: &NetworkDepStub{}, execDepStub: execStubSuccess()}
 	stubs.Set()
 	defer stubs.Clear()
 
 	installCommand := "AWSPVDriverSetup.msi /quiet /install"
 
-	_, err := runInstallComponent(plugin,
+	_, err := runInstallPackage(plugin,
 		pluginInformation.Name,
 		pluginInformation.Version,
 		pluginInformation.Source,
@@ -144,20 +144,20 @@ func TestInstallComponent(t *testing.T) {
 	assert.NoError(t, err)
 }
 
-func TestUninstallComponent(t *testing.T) {
+func TestUninstallPackage(t *testing.T) {
 	plugin := &Plugin{}
 	pluginInformation := createStubPluginInputUninstall()
 	instanceContext := createStubInstanceContext()
 
-	output := &ConfigureComponentPluginOutput{}
+	output := &ConfigurePackagePluginOutput{}
 
-	stubs := &ConfigureComponentStubs{fileSysDepStub: &FileSysDepStub{existsResultDefault: true}, networkDepStub: &NetworkDepStub{}, execDepStub: execStubSuccess()}
+	stubs := &ConfigurePackageStubs{fileSysDepStub: &FileSysDepStub{existsResultDefault: true}, networkDepStub: &NetworkDepStub{}, execDepStub: execStubSuccess()}
 	stubs.Set()
 	defer stubs.Clear()
 
 	uninstallCommand := "AWSPVDriverSetup.msi /quiet /uninstall"
 
-	_, err := runUninstallComponent(plugin,
+	_, err := runUninstallPackage(plugin,
 		pluginInformation.Name,
 		pluginInformation.Version,
 		pluginInformation.Source,
@@ -174,12 +174,12 @@ func TestUninstallComponent(t *testing.T) {
 func TestValidateInput(t *testing.T) {
 	//pluginInformation := createStubPluginInput()
 
-	input := ConfigureComponentPluginInput{}
+	input := ConfigurePackagePluginInput{}
 
 	input.Version = "1.0.0"
 	input.Name = "PVDriver"
 	input.Action = "InvalidAction"
-	input.Source = "https://amazon-ssm-us-west-2.s3.amazonaws.com/Components/PVDriver/windows/amd64/9000.0.0/PVDriver-amd64.zip"
+	input.Source = "https://amazon-ssm-us-west-2.s3.amazonaws.com/Packages/PVDriver/windows/amd64/9000.0.0/PVDriver-amd64.zip"
 
 	manager := configureManager{}
 
@@ -190,13 +190,13 @@ func TestValidateInput(t *testing.T) {
 }
 
 func TestValidateInput_Name(t *testing.T) {
-	input := ConfigureComponentPluginInput{}
+	input := ConfigurePackagePluginInput{}
 
-	// Set version to a large number to avoid conflict of the actual component release version
+	// Set version to a large number to avoid conflict of the actual package release version
 	input.Version = "9000.0.0.0"
 	input.Name = ""
 	input.Action = "InvalidAction"
-	input.Source = "https://amazon-ssm-us-west-2.s3.amazonaws.com/Components/PVDriver/windows/amd64/9000.0.0/PVDriver-amd64.zip"
+	input.Source = "https://amazon-ssm-us-west-2.s3.amazonaws.com/Packages/PVDriver/windows/amd64/9000.0.0/PVDriver-amd64.zip"
 
 	manager := configureManager{}
 	result, err := manager.validateInput(&input)
@@ -207,13 +207,13 @@ func TestValidateInput_Name(t *testing.T) {
 }
 
 func TestValidateInput_EmptyVersionWithInstall(t *testing.T) {
-	input := ConfigureComponentPluginInput{}
+	input := ConfigurePackagePluginInput{}
 
-	// Set version to a large number to avoid conflict of the actual component release version
+	// Set version to a large number to avoid conflict of the actual package release version
 	input.Version = ""
 	input.Name = "PVDriver"
 	input.Action = "Install"
-	input.Source = "https://amazon-ssm-us-west-2.s3.amazonaws.com/Components/PVDriver/windows/amd64/9000.0.0/PVDriver-amd64.zip"
+	input.Source = "https://amazon-ssm-us-west-2.s3.amazonaws.com/Packages/PVDriver/windows/amd64/9000.0.0/PVDriver-amd64.zip"
 
 	manager := configureManager{}
 	result, err := manager.validateInput(&input)
@@ -223,13 +223,13 @@ func TestValidateInput_EmptyVersionWithInstall(t *testing.T) {
 }
 
 func TestValidateInput_EmptyVersionWithUninstall(t *testing.T) {
-	input := ConfigureComponentPluginInput{}
+	input := ConfigurePackagePluginInput{}
 
-	// Set version to a large number to avoid conflict of the actual component release version
+	// Set version to a large number to avoid conflict of the actual package release version
 	input.Version = ""
 	input.Name = "PVDriver"
 	input.Action = "Uninstall"
-	input.Source = "https://amazon-ssm-us-west-2.s3.amazonaws.com/Components/PVDriver/windows/amd64/9000.0.0/PVDriver-amd64.zip"
+	input.Source = "https://amazon-ssm-us-west-2.s3.amazonaws.com/Packages/PVDriver/windows/amd64/9000.0.0/PVDriver-amd64.zip"
 
 	manager := configureManager{}
 	result, err := manager.validateInput(&input)
@@ -242,20 +242,20 @@ func TestDownloadPackage(t *testing.T) {
 	pluginInformation := createStubPluginInputInstall()
 	context := createStubInstanceContext()
 
-	output := ConfigureComponentPluginOutput{}
+	output := ConfigurePackagePluginOutput{}
 	manager := configureManager{}
 	util := mockConfigureUtility{}
 
 	result := artifact.DownloadOutput{}
-	result.LocalFilePath = "components/PVDriver/9000.0.0.0/PVDriver.zip"
+	result.LocalFilePath = "packages/PVDriver/9000.0.0.0/PVDriver.zip"
 
-	stubs := &ConfigureComponentStubs{fileSysDepStub: &FileSysDepStub{}, networkDepStub: &NetworkDepStub{downloadResultDefault: result}}
+	stubs := &ConfigurePackageStubs{fileSysDepStub: &FileSysDepStub{}, networkDepStub: &NetworkDepStub{downloadResultDefault: result}}
 	stubs.Set()
 	defer stubs.Clear()
 
 	fileName, err := manager.downloadPackage(logger, &util, pluginInformation.Name, pluginInformation.Version, pluginInformation.Source, &output, context)
 
-	assert.Equal(t, "components/PVDriver/9000.0.0.0/PVDriver.zip", fileName)
+	assert.Equal(t, "packages/PVDriver/9000.0.0.0/PVDriver.zip", fileName)
 	assert.NoError(t, err)
 }
 
@@ -263,7 +263,7 @@ func TestDownloadPackage_Failed(t *testing.T) {
 	pluginInformation := createStubPluginInputInstall()
 	context := createStubInstanceContext()
 
-	output := ConfigureComponentPluginOutput{}
+	output := ConfigurePackagePluginOutput{}
 	manager := configureManager{}
 	util := mockConfigureUtility{}
 
@@ -271,7 +271,7 @@ func TestDownloadPackage_Failed(t *testing.T) {
 	result := artifact.DownloadOutput{}
 	result.LocalFilePath = ""
 
-	stubs := &ConfigureComponentStubs{fileSysDepStub: &FileSysDepStub{}, networkDepStub: &NetworkDepStub{downloadResultDefault: result, downloadErrorDefault: errors.New("404")}}
+	stubs := &ConfigurePackageStubs{fileSysDepStub: &FileSysDepStub{}, networkDepStub: &NetworkDepStub{downloadResultDefault: result, downloadErrorDefault: errors.New("404")}}
 	stubs.Set()
 	defer stubs.Clear()
 
@@ -279,18 +279,18 @@ func TestDownloadPackage_Failed(t *testing.T) {
 
 	assert.Empty(t, fileName)
 	assert.Error(t, err)
-	assert.Contains(t, err.Error(), "failed to download component installation package reliably")
+	assert.Contains(t, err.Error(), "failed to download installation package reliably")
 	assert.Contains(t, err.Error(), "404")
 }
 
-func TestComponentLock(t *testing.T) {
+func TestPackageLock(t *testing.T) {
 	// lock Foo for Install
-	err := lockComponent("Foo", "Install")
+	err := lockPackage("Foo", "Install")
 	assert.Nil(t, err)
-	defer unlockComponent("Foo")
+	defer unlockPackage("Foo")
 
 	// shouldn't be able to lock Foo, even for a different action
-	err = lockComponent("Foo", "Uninstall")
+	err = lockPackage("Foo", "Uninstall")
 	assert.NotNil(t, err)
 
 	// lock and unlock Bar (with defer)
@@ -298,45 +298,45 @@ func TestComponentLock(t *testing.T) {
 	assert.Nil(t, err)
 
 	// should be able to lock and then unlock Bar
-	err = lockComponent("Bar", "Uninstall")
+	err = lockPackage("Bar", "Uninstall")
 	assert.Nil(t, err)
-	unlockComponent("Bar")
+	unlockPackage("Bar")
 
 	// should be able to lock Bar
-	err = lockComponent("Bar", "Uninstall")
+	err = lockPackage("Bar", "Uninstall")
 	assert.Nil(t, err)
-	defer unlockComponent("Bar")
+	defer unlockPackage("Bar")
 
 	// lock in a goroutine with a 10ms sleep
 	errorChan := make(chan error)
 	go lockAndUnlockGo("Foobar", errorChan)
 	err = <-errorChan // wait until the goroutine has acquired the lock
 	assert.Nil(t, err)
-	err = lockComponent("Foobar", "Install")
+	err = lockPackage("Foobar", "Install")
 	errorChan <- err // signal the goroutine to exit
 	assert.NotNil(t, err)
 }
 
-func lockAndUnlockGo(component string, channel chan error) {
-	err := lockComponent(component, "Install")
+func lockAndUnlockGo(packageName string, channel chan error) {
+	err := lockPackage(packageName, "Install")
 	channel <- err
 	_ = <-channel
 	if err == nil {
-		defer unlockComponent(component)
+		defer unlockPackage(packageName)
 	}
 	return
 }
 
-func lockAndUnlock(component string) (err error) {
-	if err = lockComponent(component, "Install"); err != nil {
+func lockAndUnlock(packageName string) (err error) {
+	if err = lockPackage(packageName, "Install"); err != nil {
 		return
 	}
-	defer unlockComponent(component)
+	defer unlockPackage(packageName)
 	return
 }
 
 type mockConfigureManager struct {
-	downloadManifestResult *ComponentManifest
+	downloadManifestResult *PackageManifest
 	downloadManifestError  error
 	downloadPackageResult  string
 	downloadPackageError   error
@@ -347,22 +347,22 @@ type mockConfigureManager struct {
 
 func (m *mockConfigureManager) downloadPackage(log log.T,
 	util Util,
-	componentName string,
+	packageName string,
 	version string,
 	source string,
-	output *ConfigureComponentPluginOutput,
+	output *ConfigurePackagePluginOutput,
 	context *updateutil.InstanceContext) (filePath string, err error) {
 
 	return "", m.downloadPackageError
 }
 
-func (m *mockConfigureManager) validateInput(input *ConfigureComponentPluginInput) (valid bool, err error) {
+func (m *mockConfigureManager) validateInput(input *ConfigurePackagePluginInput) (valid bool, err error) {
 	return m.validateInputResult, m.validateInputError
 }
 
 // TODO:MF: mock the dependencies this method has instead, maybe pull this out to a different "class"
 func (m *mockConfigureManager) getVersionToInstall(log log.T,
-	input *ConfigureComponentPluginInput,
+	input *ConfigurePackagePluginInput,
 	util Util,
 	context *updateutil.InstanceContext) (version string, installedVersion string, err error) {
 
@@ -375,7 +375,7 @@ func (m *mockConfigureManager) getVersionToInstall(log log.T,
 }
 
 func (m *mockConfigureManager) getVersionToUninstall(log log.T,
-	input *ConfigureComponentPluginInput,
+	input *ConfigurePackagePluginInput,
 	util Util,
 	context *updateutil.InstanceContext) (version string, err error) {
 

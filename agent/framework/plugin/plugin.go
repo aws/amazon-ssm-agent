@@ -20,7 +20,7 @@ import (
 
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/framework/runutil"
-	"github.com/aws/amazon-ssm-agent/agent/plugins/configurecomponent"
+	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/lrpminvoker"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/pluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/runcommand"
@@ -132,13 +132,13 @@ func loadPlatformIndependentPlugins(context context.T) runutil.PluginRegistry {
 		workerPlugins[updateAgentPluginName] = updateAgentPlugin
 	}
 
-	// registering aws:configureComponent
-	configureComponentPluginName := configurecomponent.Name()
-	configureComponentPlugin, err := configurecomponent.NewPlugin(pluginutil.DefaultPluginConfig())
+	// registering aws:configurePackage
+	configurePackagePluginName := configurepackage.Name()
+	configurePackagePlugin, err := configurepackage.NewPlugin(pluginutil.DefaultPluginConfig())
 	if err != nil {
-		log.Errorf("failed to create plugin %s %v", configureComponentPluginName, err)
+		log.Errorf("failed to create plugin %s %v", configurePackagePluginName, err)
 	} else {
-		workerPlugins[configureComponentPluginName] = configureComponentPlugin
+		workerPlugins[configurePackagePluginName] = configurePackagePlugin
 	}
 
 	return workerPlugins

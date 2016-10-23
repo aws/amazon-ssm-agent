@@ -12,9 +12,9 @@
 // implied. See the License for the specific language governing
 // permissions and limitations under the License.
 
-// Package configurecomponent implements the ConfigureComponent plugin.
-// configurecomponent_deps contains platform dependencies that should be able to be stubbed out in tests
-package configurecomponent
+// Package configurepackage implements the ConfigurePackage plugin.
+// configurepackage_deps contains platform dependencies that should be able to be stubbed out in tests
+package configurepackage
 
 import (
 	"io/ioutil"

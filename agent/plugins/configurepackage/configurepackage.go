@@ -12,18 +12,17 @@
 // implied. See the License for the specific language governing
 // permissions and limitations under the License.
 
-// Package configurecomponent implements the ConfigureComponent plugin.
-package configurecomponent
+// Package configurepackage implements the ConfigurePackage plugin.
+package configurepackage
 
 import (
 	"errors"
 	"fmt"
+	"path"
 	"path/filepath"
 	"regexp"
 	"strings"
 	"time"
-
-	"path"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
@@ -39,7 +38,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/updateutil"
 )
 
-// Plugin is the type for the configurecomponent plugin.
+// Plugin is the type for the configurepackage plugin.
 type Plugin struct {
 	pluginutil.DefaultPlugin
 	context          context.T
@@ -51,8 +50,8 @@ type Plugin struct {
 	documentID       string
 }
 
-// ConfigureComponentPluginInput represents one set of commands executed by the ConfigureComponent plugin.
-type ConfigureComponentPluginInput struct {
+// ConfigurePackagePluginInput represents one set of commands executed by the ConfigurePackage plugin.
+type ConfigurePackagePluginInput struct {
 	contracts.PluginInput
 	Name    string `json:"name"`
 	Version string `json:"version"`
@@ -60,13 +59,13 @@ type ConfigureComponentPluginInput struct {
 	Source  string `json:"source"`
 }
 
-// ConfigureComponentsPluginOutput represents the output of the plugin.
-type ConfigureComponentPluginOutput struct {
+// ConfigurePackagesPluginOutput represents the output of the plugin.
+type ConfigurePackagePluginOutput struct {
 	contracts.PluginOutput
 }
 
 // MarkAsSucceeded marks plugin as Successful.
-func (result *ConfigureComponentPluginOutput) MarkAsSucceeded(reboot bool) {
+func (result *ConfigurePackagePluginOutput) MarkAsSucceeded(reboot bool) {
 	result.ExitCode = 0
 	if reboot {
 		result.Status = contracts.ResultStatusSuccessAndReboot
@@ -75,7 +74,7 @@ func (result *ConfigureComponentPluginOutput) MarkAsSucceeded(reboot bool) {
 }
 
 // MarkAsFailed marks plugin as Failed.
-func (result *ConfigureComponentPluginOutput) MarkAsFailed(log log.T, err error) {
+func (result *ConfigurePackagePluginOutput) MarkAsFailed(log log.T, err error) {
 	result.ExitCode = 1
 	result.Status = contracts.ResultStatusFailed
 	if result.Stderr != "" {
@@ -83,12 +82,12 @@ func (result *ConfigureComponentPluginOutput) MarkAsFailed(log log.T, err error)
 	} else {
 		result.Stderr = fmt.Sprintf("\n%v", err.Error())
 	}
-	log.Error("failed to configure component", err.Error())
+	log.Error("failed to configure package", err.Error())
 	result.Errors = append(result.Errors, err.Error())
 }
 
-// AppendInfo adds info to ConfigureComponentPluginOutput StandardOut.
-func (result *ConfigureComponentPluginOutput) AppendInfo(log log.T, format string, params ...interface{}) {
+// AppendInfo adds info to ConfigurePackagePluginOutput StandardOut.
+func (result *ConfigurePackagePluginOutput) AppendInfo(log log.T, format string, params ...interface{}) {
 	message := fmt.Sprintf(format, params...)
 	log.Info(message)
 	result.Stdout = fmt.Sprintf("%v\n%v", result.Stdout, message)
@@ -115,34 +114,34 @@ type configureManager struct{}
 type pluginHelper interface {
 	downloadPackage(log log.T,
 		util Util,
-		componentName string,
+		packageName string,
 		version string,
 		source string,
-		output *ConfigureComponentPluginOutput,
+		output *ConfigurePackagePluginOutput,
 		context *updateutil.InstanceContext) (filePath string, err error)
 
-	validateInput(input *ConfigureComponentPluginInput) (valid bool, err error)
+	validateInput(input *ConfigurePackagePluginInput) (valid bool, err error)
 
 	getVersionToInstall(log log.T,
-		input *ConfigureComponentPluginInput,
+		input *ConfigurePackagePluginInput,
 		util Util,
 		context *updateutil.InstanceContext) (version string, installedVersion string, err error)
 
 	getVersionToUninstall(log log.T,
-		input *ConfigureComponentPluginInput,
+		input *ConfigurePackagePluginInput,
 		util Util,
 		context *updateutil.InstanceContext) (version string, err error)
 }
 
-// runConfigureComponent downloads the component manifest and performs specified action
-func runConfigureComponent(
+// runConfigurePackage downloads the package and performs specified action
+func runConfigurePackage(
 	p *Plugin,
 	log log.T,
 	manager pluginHelper,
 	configureUtil Util,
 	instanceContext *updateutil.InstanceContext,
-	rawPluginInput interface{}) (output ConfigureComponentPluginOutput) {
-	var input ConfigureComponentPluginInput
+	rawPluginInput interface{}) (output ConfigurePackagePluginOutput) {
+	var input ConfigurePackagePluginInput
 	var err error
 	if err = jsonutil.Remarshal(rawPluginInput, &input); err != nil {
 		output.MarkAsFailed(log,
@@ -156,13 +155,13 @@ func runConfigureComponent(
 		return
 	}
 
-	// do not allow multiple actions to be performed at the same time for the same component
+	// do not allow multiple actions to be performed at the same time for the same package
 	// this is possible with multiple concurrent runcommand documents
-	if err := lockComponent(input.Name, input.Action); err != nil {
+	if err := lockPackage(input.Name, input.Action); err != nil {
 		output.MarkAsFailed(log, err)
 		return
 	}
-	defer unlockComponent(input.Name)
+	defer unlockPackage(input.Name)
 
 	switch input.Action {
 	case InstallAction:
@@ -203,7 +202,7 @@ func runConfigureComponent(
 				output.MarkAsFailed(log,
 					fmt.Errorf("unable to obtain package: %v", ensureErr))
 			} else {
-				result, err := runUninstallComponent(p,
+				result, err := runUninstallPackage(p,
 					input.Name,
 					installedVersion,
 					input.Source,
@@ -213,7 +212,7 @@ func runConfigureComponent(
 					instanceContext)
 				if err != nil {
 					output.MarkAsFailed(log,
-						fmt.Errorf("failed to uninstall currently installed version of component: %v", err))
+						fmt.Errorf("failed to uninstall currently installed version of package: %v", err))
 				} else {
 					// TODO:MF: no longer in manifest, entirely from result status
 					if uninstallManifest.Reboot == "true" || result == contracts.ResultStatusSuccessAndReboot {
@@ -231,7 +230,7 @@ func runConfigureComponent(
 		}
 
 		// install version
-		result, err := runInstallComponent(p,
+		result, err := runInstallPackage(p,
 			input.Name,
 			version,
 			input.Source,
@@ -242,7 +241,7 @@ func runConfigureComponent(
 			instanceContext)
 		if err != nil {
 			output.MarkAsFailed(log,
-				fmt.Errorf("failed to install component: %v", err))
+				fmt.Errorf("failed to install package: %v", err))
 			return
 		}
 		// TODO:MF: no longer in manifest, entirely from result status
@@ -265,7 +264,7 @@ func runConfigureComponent(
 				fmt.Errorf("unable to obtain package: %v", ensureErr))
 			return
 		}
-		result, err := runUninstallComponent(p,
+		result, err := runUninstallPackage(p,
 			input.Name,
 			version,
 			input.Source,
@@ -275,7 +274,7 @@ func runConfigureComponent(
 			instanceContext)
 		if err != nil {
 			output.MarkAsFailed(log,
-				fmt.Errorf("failed to uninstall component: %v", err))
+				fmt.Errorf("failed to uninstall package: %v", err))
 			return
 		}
 		// TODO:MF: no longer in manifest, entirely from result status
@@ -293,21 +292,21 @@ func runConfigureComponent(
 func ensurePackage(log log.T,
 	manager pluginHelper,
 	util Util,
-	componentName string,
+	packageName string,
 	version string,
 	source string,
-	output *ConfigureComponentPluginOutput,
-	context *updateutil.InstanceContext) (manifest *ComponentManifest, err error) {
+	output *ConfigurePackagePluginOutput,
+	context *updateutil.InstanceContext) (manifest *PackageManifest, err error) {
 
 	// manifest to download
-	manifestName := getManifestName(componentName)
+	manifestName := getManifestName(packageName)
 
 	// path to local manifest
-	localManifestName := filepath.Join(appconfig.ComponentRoot, componentName, version, manifestName)
+	localManifestName := filepath.Join(appconfig.PackageRoot, packageName, version, manifestName)
 
 	// if we already have a valid manifest, return it
 	if exist := filesysdep.Exists(localManifestName); exist {
-		if manifest, err = parseComponentManifest(log, localManifestName); err == nil {
+		if manifest, err = parsePackageManifest(log, localManifestName); err == nil {
 			// TODO:MF: consider verifying name and version in parsed manifest
 			// TODO:MF: ensure the local package is valid before we return
 			return
@@ -320,13 +319,13 @@ func ensurePackage(log log.T,
 
 	// download package
 	var filePath string
-	if filePath, err = manager.downloadPackage(log, util, componentName, version, source, output, context); err != nil {
+	if filePath, err = manager.downloadPackage(log, util, packageName, version, source, output, context); err != nil {
 		return
 	}
 
-	packageDestination := filepath.Join(appconfig.ComponentRoot, componentName, version)
+	packageDestination := filepath.Join(appconfig.PackageRoot, packageName, version)
 	if uncompressErr := filesysdep.Uncompress(filePath, packageDestination); uncompressErr != nil {
-		err = fmt.Errorf("failed to extract component installer package %v from %v, %v", filePath, packageDestination, uncompressErr.Error())
+		err = fmt.Errorf("failed to extract package installer package %v from %v, %v", filePath, packageDestination, uncompressErr.Error())
 		return
 	}
 
@@ -337,7 +336,7 @@ func ensurePackage(log log.T,
 		return
 	}
 
-	manifest, manifestErr := parseComponentManifest(log, localManifestName)
+	manifest, manifestErr := parsePackageManifest(log, localManifestName)
 	if manifestErr != nil {
 		err = fmt.Errorf("manifest is not valid for package %v, %v", filePath, manifestErr.Error())
 		return
@@ -347,7 +346,7 @@ func ensurePackage(log log.T,
 }
 
 // validateInput ensures the plugin input matches the defined schema
-func (m *configureManager) validateInput(input *ConfigureComponentPluginInput) (valid bool, err error) {
+func (m *configureManager) validateInput(input *ConfigurePackagePluginInput) (valid bool, err error) {
 	// ensure non-empty name
 	if input.Name == "" {
 		return false, errors.New("empty name field")
@@ -371,7 +370,7 @@ func (m *configureManager) validateInput(input *ConfigureComponentPluginInput) (
 
 // getVersionToInstall decides which version to install and whether there is an existing version (that is not in the process of installing)
 func (m *configureManager) getVersionToInstall(log log.T,
-	input *ConfigureComponentPluginInput,
+	input *ConfigurePackagePluginInput,
 	util Util,
 	context *updateutil.InstanceContext) (version string, installedVersion string, err error) {
 	installedVersion = util.GetCurrentVersion(input.Name)
@@ -388,7 +387,7 @@ func (m *configureManager) getVersionToInstall(log log.T,
 
 // getVersionToUninstall decides which version to uninstall
 func (m *configureManager) getVersionToUninstall(log log.T,
-	input *ConfigureComponentPluginInput,
+	input *ConfigurePackagePluginInput,
 	util Util,
 	context *updateutil.InstanceContext) (version string, err error) {
 	if input.Version != "" {
@@ -404,29 +403,29 @@ func (m *configureManager) getVersionToUninstall(log log.T,
 // downloadPackage downloads the installation package from s3 bucket or source URI and uncompresses it
 func (m *configureManager) downloadPackage(log log.T,
 	util Util,
-	componentName string,
+	packageName string,
 	version string,
 	source string,
-	output *ConfigureComponentPluginOutput,
+	output *ConfigurePackagePluginOutput,
 	context *updateutil.InstanceContext) (filePath string, err error) {
 	// package to download
-	packageName := getPackageName(componentName, context)
+	packageFilename := getPackageFilename(packageName, context)
 
 	// path to package
 	packageLocation := source
 	if packageLocation == "" {
-		packageLocation = getS3Location(componentName, version, context, packageName)
+		packageLocation = getS3Location(packageName, version, context, packageFilename)
 	} else {
 		//TODO:MF: I don't think source will contain a replaceable placeholder -
 		//   I think it is a URI to a "folder" that gets a filename tacked onto the end
 		//   or a full path to a compressed package file
-		packageLocation = strings.Replace(packageLocation, updateutil.FileNameHolder, packageName, -1)
+		packageLocation = strings.Replace(packageLocation, updateutil.FileNameHolder, packageFilename, -1)
 	}
 
 	// path to download destination
-	packageDestination, err := util.CreateComponentFolder(componentName, version)
+	packageDestination, err := util.CreatePackageFolder(packageName, version)
 	if err != nil {
-		errMessage := fmt.Sprintf("failed to create local component repository, %v", err.Error())
+		errMessage := fmt.Sprintf("failed to create local package repository, %v", err.Error())
 		return "", errors.New(errMessage)
 	}
 
@@ -437,7 +436,7 @@ func (m *configureManager) downloadPackage(log log.T,
 	// download package
 	downloadOutput, downloadErr := networkdep.Download(log, downloadInput)
 	if downloadErr != nil || downloadOutput.LocalFilePath == "" {
-		errMessage := fmt.Sprintf("failed to download component installation package reliably, %v", downloadInput.SourceURL)
+		errMessage := fmt.Sprintf("failed to download installation package reliably, %v", downloadInput.SourceURL)
 		if downloadErr != nil {
 			errMessage = fmt.Sprintf("%v, %v", errMessage, downloadErr.Error())
 		}
@@ -454,12 +453,12 @@ func mergeResultStatus(currentStatus contracts.ResultStatus, newStatus contracts
 	return newStatus // TODO:MF: actually merge them...
 }
 
-// runInstallComponent executes the install script for the specific version of component.
-func runInstallComponent(p *Plugin,
-	componentName string,
+// runInstallPackage executes the install script for the specific version of a package.
+func runInstallPackage(p *Plugin,
+	packageName string,
 	version string,
 	source string,
-	output *ConfigureComponentPluginOutput,
+	output *ConfigurePackagePluginOutput,
 	manager pluginHelper,
 	log log.T,
 	installCmd string,
@@ -467,36 +466,36 @@ func runInstallComponent(p *Plugin,
 ) (status contracts.ResultStatus, err error) {
 	status = contracts.ResultStatusSuccess
 
-	directory := filepath.Join(appconfig.ComponentRoot, componentName, version)
-	_, status, err = executeAction(p, "install", componentName, version, log, output, directory)
+	directory := filepath.Join(appconfig.PackageRoot, packageName, version)
+	_, status, err = executeAction(p, "install", packageName, version, log, output, directory)
 	if err == nil {
-		output.AppendInfo(log, "Successfully installed %v %v", componentName, version)
-		_, status, err = executeAction(p, "start", componentName, version, log, output, directory)
+		output.AppendInfo(log, "Successfully installed %v %v", packageName, version)
+		_, status, err = executeAction(p, "start", packageName, version, log, output, directory)
 	}
 	return
 }
 
-// runUninstallComponent executes the install script for the specific version of component.
-func runUninstallComponent(p *Plugin,
-	componentName string,
+// runUninstallPackage executes the install script for the specific version of a package.
+func runUninstallPackage(p *Plugin,
+	packageName string,
 	version string,
 	source string,
-	output *ConfigureComponentPluginOutput,
+	output *ConfigurePackagePluginOutput,
 	log log.T,
 	uninstallCmd string,
 	context *updateutil.InstanceContext,
 ) (status contracts.ResultStatus, err error) {
 	status = contracts.ResultStatusSuccess
 
-	directory := filepath.Join(appconfig.ComponentRoot, componentName, version)
-	_, status, err = executeAction(p, "stop", componentName, version, log, output, directory)
+	directory := filepath.Join(appconfig.PackageRoot, packageName, version)
+	_, status, err = executeAction(p, "stop", packageName, version, log, output, directory)
 	if err == nil {
-		_, status, err = executeAction(p, "uninstall", componentName, version, log, output, directory)
+		_, status, err = executeAction(p, "uninstall", packageName, version, log, output, directory)
 		if err == nil {
 			if err = filesysdep.RemoveAll(directory); err != nil {
 				return contracts.ResultStatusFailed, fmt.Errorf("failed to delete directory %v due to %v", directory, err)
 			}
-			output.AppendInfo(log, "Successfully uninstalled %v %v", componentName, version)
+			output.AppendInfo(log, "Successfully uninstalled %v %v", packageName, version)
 		}
 	}
 	return
@@ -504,10 +503,10 @@ func runUninstallComponent(p *Plugin,
 
 func executeAction(p *Plugin,
 	actionName string,
-	componentName string,
+	packageName string,
 	version string,
 	log log.T,
-	output *ConfigureComponentPluginOutput,
+	output *ConfigurePackagePluginOutput,
 	executeDirectory string,
 ) (actionExists bool, status contracts.ResultStatus, err error) {
 	status = contracts.ResultStatusSuccess
@@ -517,7 +516,7 @@ func executeAction(p *Plugin,
 	actionExists = filesysdep.Exists(fileLocation)
 
 	if actionExists {
-		log.Infof("Initiating %v %v %v", componentName, version, actionName)
+		log.Infof("Initiating %v %v %v", packageName, version, actionName)
 		file, err := filesysdep.ReadFile(fileLocation)
 		if err != nil {
 			return true, contracts.ResultStatusFailed, err
@@ -552,7 +551,7 @@ func getInstanceContext(log log.T) (context *updateutil.InstanceContext, err err
 }
 
 var getContext = getInstanceContext
-var runConfig = runConfigureComponent
+var runConfig = runConfigurePackage
 
 // Execute runs multiple sets of commands and returns their outputs.
 // res.Output will contain a slice of RunCommandPluginOutput.
@@ -572,13 +571,13 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 	res.StartDateTime = time.Now()
 	defer func() { res.EndDateTime = time.Now() }()
 
-	//loading Properties as list since aws:configureComponent uses properties as list
+	//loading Properties as list since aws:configurePackage uses properties as list
 	var properties []interface{}
 	if properties, res = pluginutil.LoadParametersAsList(log, config.Properties); res.Code != 0 {
 		return res
 	}
 
-	out := make([]ConfigureComponentPluginOutput, len(properties))
+	out := make([]ConfigurePackagePluginOutput, len(properties))
 	for i, prop := range properties {
 		// check if a reboot has been requested
 		if rebooter.RebootRequested() {
@@ -587,11 +586,11 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 		}
 
 		if cancelFlag.ShutDown() {
-			out[i] = ConfigureComponentPluginOutput{}
+			out[i] = ConfigurePackagePluginOutput{}
 			out[i].Errors = []string{"Execution canceled due to ShutDown"}
 			break
 		} else if cancelFlag.Canceled() {
-			out[i] = ConfigureComponentPluginOutput{}
+			out[i] = ConfigurePackagePluginOutput{}
 			out[i].Errors = []string{"Execution canceled"}
 			break
 		}
@@ -620,5 +619,5 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 
 // Name returns the name of the plugin.
 func Name() string {
-	return appconfig.PluginNameAwsConfigureComponent
+	return appconfig.PluginNameAwsConfigurePackage
 }

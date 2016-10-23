@@ -12,8 +12,8 @@
 // implied. See the License for the specific language governing
 // permissions and limitations under the License.
 
-// Package configurecomponent implements the ConfigureComponent plugin.
-package configurecomponent
+// Package configurepackage implements the ConfigurePackage plugin.
+package configurepackage
 
 import (
 	"encoding/json"
@@ -24,8 +24,8 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/log"
 )
 
-// ComponentManifest represents json structure of component's online configuration file.
-type ComponentManifest struct {
+// PackageManifest represents json structure of package's online configuration file.
+type PackageManifest struct {
 	Name         string `json:"name"`
 	Platform     string `json:"platform"`
 	Architecture string `json:"architecture"`
@@ -36,27 +36,27 @@ type ComponentManifest struct {
 	Launch       string `json:"launch"`
 }
 
-// parseComponentManifest parses the manifest to provide install/uninstall information.
-func parseComponentManifest(log log.T, fileName string) (parsedManifest *ComponentManifest, err error) {
+// parsePackageManifest parses the manifest to provide install/uninstall information.
+func parsePackageManifest(log log.T, fileName string) (parsedManifest *PackageManifest, err error) {
 	// load specified file from file system
 	var result = []byte{}
 	if result, err = filesysdep.ReadFile(fileName); err != nil {
 		if log != nil {
-			log.Errorf("Failed to read component's JSON configuration file: %v", err)
+			log.Errorf("Failed to read package's JSON configuration file: %v", err)
 		}
 		return
 	}
 
-	// parse component's JSON configuration file
+	// parse package's JSON configuration file
 	if err = json.Unmarshal([]byte(result), &parsedManifest); err != nil {
 		if log != nil {
-			log.Errorf("Failed to parse component's JSON configuration file: %v", err)
+			log.Errorf("Failed to parse package's JSON configuration file: %v", err)
 		}
 		return
 	}
 
 	// ensure manifest conforms to defined schema
-	if err = validateComponentManifest(log, parsedManifest); err != nil {
+	if err = validatePackageManifest(log, parsedManifest); err != nil {
 		if log != nil {
 			log.Errorf("Invalid JSON configuration file due to %v", err)
 		}
@@ -67,23 +67,23 @@ func parseComponentManifest(log log.T, fileName string) (parsedManifest *Compone
 
 // TODO:MF: better descriptions of validity requirements when validation fails
 // validateManifest ensures all the fields are provided.
-func validateComponentManifest(log log.T, parsedManifest *ComponentManifest) error {
+func validatePackageManifest(log log.T, parsedManifest *PackageManifest) error {
 	// ensure non-empty struct
-	if parsedManifest == (&ComponentManifest{}) {
-		return fmt.Errorf("empty component manifest file") //TODO:MF: This isn't triggering when the manifest is empty per coverage.html - but it will get caught in the next validation case - is this necessary?
+	if parsedManifest == (&PackageManifest{}) {
+		return fmt.Errorf("empty package manifest file") //TODO:MF: This isn't triggering when the manifest is empty per coverage.html - but it will get caught in the next validation case - is this necessary?
 	}
 
 	// ensure non-empty and properly formatted required fields
 	if parsedManifest.Name == "" {
-		return fmt.Errorf("empty component name")
+		return fmt.Errorf("empty package name")
 	} else {
 		name := parsedManifest.Name
-		if err := validatePathComponent(log, name); err != nil {
-			return fmt.Errorf("invalid component name %v", name)
+		if err := validatePathPackage(log, name); err != nil {
+			return fmt.Errorf("invalid package name %v", name)
 		}
 	}
 	if parsedManifest.Version == "" {
-		return fmt.Errorf("empty component version")
+		return fmt.Errorf("empty package version")
 	} else {
 		// ensure version follows format <major>.<minor>.<build>
 		version := parsedManifest.Version
@@ -125,8 +125,8 @@ func validateComponentManifest(log log.T, parsedManifest *ComponentManifest) err
 	return nil
 }
 
-// validatePathComponent ensures that a given name is a valid part of a folder path or S3 bucket URI
-func validatePathComponent(log log.T, name string) error {
+// validatePathPackage ensures that a given name is a valid part of a folder path or S3 bucket URI
+func validatePathPackage(log log.T, name string) error {
 	// TODO:MF: Validate
 	return nil
 }

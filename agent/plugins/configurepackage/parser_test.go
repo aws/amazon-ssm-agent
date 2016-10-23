@@ -12,8 +12,8 @@
 // implied. See the License for the specific language governing
 // permissions and limitations under the License.
 
-// Package configurecomponent implements the ConfigureComponent plugin.
-package configurecomponent
+// Package configurepackage implements the ConfigurePackage plugin.
+package configurepackage
 
 import (
 	"encoding/json"
@@ -47,7 +47,7 @@ var malformedManifests = []string{
 
 type testCase struct {
 	Input  string
-	Output *ComponentManifest
+	Output *PackageManifest
 }
 
 // TestParseManifest testing parses valid manifest files
@@ -66,7 +66,7 @@ func TestParseManifest(t *testing.T) {
 	// run tests
 	for _, test := range testCases {
 		// call method
-		result, err := parseComponentManifest(log, test.Input)
+		result, err := parsePackageManifest(log, test.Input)
 
 		// check results
 		assert.Nil(t, err)
@@ -97,7 +97,7 @@ func TestParseManifestWithError(t *testing.T) {
 	// run tests
 	for _, test := range testCases {
 		// call method
-		result, err := parseComponentManifest(log, test.Input)
+		result, err := parsePackageManifest(log, test.Input)
 
 		// check results
 		assert.NotNil(t, err)
@@ -112,7 +112,7 @@ func TestParseMalformedManifest(t *testing.T) {
 	// run tests
 	for _, manifestFile := range malformedManifests {
 		// call method
-		result, err := parseComponentManifest(log, string(manifestFile))
+		result, err := parsePackageManifest(log, string(manifestFile))
 
 		// check results
 		assert.NotNil(t, err)
@@ -130,7 +130,7 @@ func loadFile(t *testing.T, fileName string) (result []byte) {
 }
 
 // Parse manifest file
-func loadManifestFromFile(t *testing.T, fileName string) (manifest *ComponentManifest) {
+func loadManifestFromFile(t *testing.T, fileName string) (manifest *PackageManifest) {
 	b := loadFile(t, fileName)
 	if err := json.Unmarshal(b, &manifest); err != nil {
 		t.Fatal(err)

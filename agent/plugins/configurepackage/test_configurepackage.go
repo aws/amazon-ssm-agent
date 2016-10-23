@@ -12,9 +12,9 @@
 // implied. See the License for the specific language governing
 // permissions and limitations under the License.
 
-// Package configurecomponent implements the ConfigureComponent plugin.
-// test_configurecomponent contains stub implementations
-package configurecomponent
+// Package configurepackage implements the ConfigurePackage plugin.
+// test_configurepackage contains stub implementations
+package configurepackage
 
 import (
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
@@ -24,7 +24,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/statemanager/model"
 )
 
-type ConfigureComponentStubs struct {
+type ConfigurePackageStubs struct {
 	// individual stub functions or interfaces go here with a temp variable for the original version
 	fileSysDepStub fileSysDep
 	fileSysDepOrig fileSysDep
@@ -36,7 +36,7 @@ type ConfigureComponentStubs struct {
 
 // Set replaces dependencies with stub versions and saves the original version.
 // it should always be followed by defer Clear()
-func (m *ConfigureComponentStubs) Set() {
+func (m *ConfigurePackageStubs) Set() {
 	if m.fileSysDepStub != nil {
 		m.fileSysDepOrig = filesysdep
 		filesysdep = m.fileSysDepStub
@@ -52,7 +52,7 @@ func (m *ConfigureComponentStubs) Set() {
 }
 
 // Clear resets dependencies to their original values.
-func (m *ConfigureComponentStubs) Clear() {
+func (m *ConfigurePackageStubs) Clear() {
 	if m.fileSysDepStub != nil {
 		filesysdep = m.fileSysDepOrig
 	}

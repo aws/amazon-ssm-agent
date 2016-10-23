@@ -12,8 +12,8 @@
 // implied. See the License for the specific language governing
 // permissions and limitations under the License.
 
-// Package configurecomponent implements the ConfigureComponent plugin.
-package configurecomponent
+// Package configurepackage implements the ConfigurePackage plugin.
+package configurepackage
 
 import (
 	"fmt"
@@ -31,30 +31,30 @@ import (
 )
 
 const (
-	// ComponentNameHolder represents Place holder for component name
-	ComponentNameHolder = "{ComponentName}"
+	// PackageNameHolder represents Place holder for package name
+	PackageNameHolder = "{PackageName}"
 
 	// ManifestNameFormat represents the manifest name format
-	ManifestNameFormat = "{ComponentName}.json"
+	ManifestNameFormat = "{PackageName}.json"
 
 	// PackageNameFormat represents the package name format based
-	PackageNameFormat = "{ComponentName}.{Compressed}"
+	PackageNameFormat = "{PackageName}.{Compressed}"
 
-	// ComponentUrl represents the s3 location where all components live
-	// the url to a specific package is this plus /{ComponentName}/{Platform}/{Arch}/{PackageVersion}/{FileName}
-	//ComponentUrl = "https://amazon-ssm-{Region}.s3.amazonaws.com/Components"
-	ComponentUrl = "https://s3-us-west-2.amazonaws.com/amazon.mattfo" // TODO:MF:testing
+	// PackageUrl represents the s3 location where all packages live
+	// the url to a specific package is this plus /{PackageName}/{Platform}/{Arch}/{PackageVersion}/{FileName}
+	//PackageUrl = "https://amazon-ssm-{Region}.s3.amazonaws.com/Packages"
+	PackageUrl = "https://s3-us-west-2.amazonaws.com/amazon.mattfo" // TODO:MF:testing
 
-	// ComponentUrlBjs is the s3 location for BJS region where all components live
-	ComponentUrlBjs = "https://s3.{Region}.amazonaws.com.cn/amazon-ssm-{Region}/Components"
+	// PackageUrlBjs is the s3 location for BJS region where all packages live
+	PackageUrlBjs = "https://s3.{Region}.amazonaws.com.cn/amazon-ssm-{Region}/Packages"
 
 	// RegionBjs represents the BJS region
 	RegionBjs = "cn-north-1"
 
-	// InstallAction represents the json command to install component
+	// InstallAction represents the json command to install package
 	InstallAction = "Install"
 
-	// UninstallAction represents the json command to uninstall component
+	// UninstallAction represents the json command to uninstall package
 	UninstallAction = "Uninstall"
 
 	// PatternVersion represents the regular expression for validating version
@@ -62,7 +62,7 @@ const (
 )
 
 type Util interface {
-	CreateComponentFolder(name string, version string) (folder string, err error)
+	CreatePackageFolder(name string, version string) (folder string, err error)
 	HasValidPackage(name string, version string) bool
 	GetCurrentVersion(name string) (installedVersion string)
 	GetLatestVersion(log log.T, name string, source string, context *updateutil.InstanceContext) (latestVersion string, err error)
@@ -71,65 +71,65 @@ type Util interface {
 type Utility struct{}
 
 // getManifestName constructs the manifest name to locate in the s3 bucket
-func getManifestName(componentName string) (manifestName string) {
+func getManifestName(packageName string) (manifestName string) {
 	manifestName = ManifestNameFormat
-	manifestName = strings.Replace(manifestName, ComponentNameHolder, componentName, -1)
+	manifestName = strings.Replace(manifestName, PackageNameHolder, packageName, -1)
 
 	return manifestName
 }
 
-// getPackageName constructs the package name to locate in the s3 bucket
-func getPackageName(componentName string, context *updateutil.InstanceContext) (packageName string) {
-	packageName = PackageNameFormat
+// getPackageFilename constructs the package name to locate in the s3 bucket
+func getPackageFilename(packageName string, context *updateutil.InstanceContext) (packageFilename string) {
+	packageFilename = PackageNameFormat
 
-	packageName = strings.Replace(packageName, ComponentNameHolder, componentName, -1)
-	packageName = strings.Replace(packageName, updateutil.CompressedHolder, context.CompressFormat, -1)
+	packageFilename = strings.Replace(packageFilename, PackageNameHolder, packageName, -1)
+	packageFilename = strings.Replace(packageFilename, updateutil.CompressedHolder, context.CompressFormat, -1)
 
-	return packageName
+	return packageFilename
 }
 
 // TODO:MF: Should we change this to URL instead of string?  Can we use URI instead of URL?
-// getS3ComponentLocation returns the s3 location containing all versions of a component
-func getS3ComponentLocation(componentName string, context *updateutil.InstanceContext) (s3Location string) {
-	s3Url := getS3Url(componentName, context)
+// getS3PackageLocation returns the s3 location containing all versions of a package
+func getS3PackageLocation(packageName string, context *updateutil.InstanceContext) (s3Location string) {
+	s3Url := getS3Url(packageName, context)
 	s3Location = s3Url.String()
 	return s3Location
 }
 
 // TODO:MF: Should we change this to URL instead of string?
 // getS3Location constructs the s3 url to locate the package for downloading
-func getS3Location(componentName string, version string, context *updateutil.InstanceContext, fileName string) (s3Location string) {
-	s3Url := getS3Url(componentName, context)
+func getS3Location(packageName string, version string, context *updateutil.InstanceContext, fileName string) (s3Location string) {
+	s3Url := getS3Url(packageName, context)
 	s3Url.Path = path.Join(s3Url.Path, version, fileName)
 
 	s3Location = s3Url.String()
 	return s3Location
 }
 
-// getS3Url returns the s3 location containing all versions of a component
-func getS3Url(componentName string, context *updateutil.InstanceContext) (s3Url *url.URL) {
+// getS3Url returns the s3 location containing all versions of a package
+func getS3Url(packageName string, context *updateutil.InstanceContext) (s3Url *url.URL) {
 	// s3 uri format based on agreed convention
 	// TO DO: Implement region/endpoint map (or integrate with aws sdk endpoints package) to handle cases better
 	var s3Location string
 	if context.Region == RegionBjs {
-		s3Location = ComponentUrlBjs
+		s3Location = PackageUrlBjs
 	} else {
-		s3Location = ComponentUrl
+		s3Location = PackageUrl
 	}
 
 	s3Url, _ = url.Parse(strings.Replace(s3Location, updateutil.RegionHolder, context.Region, -1))
-	s3Url.Path = path.Join(s3Url.Path, componentName, context.Platform, context.Arch)
+	s3Url.Path = path.Join(s3Url.Path, packageName, context.Platform, context.Arch)
 	return
 }
 
-// componentFolder returns the name of the component folder for a given version
-func getComponentFolder(name string, version string) (folder string) {
-	return filepath.Join(appconfig.ComponentRoot, name, version)
+// packageFolder returns the name of the package folder for a given version
+func getPackageFolder(name string, version string) (folder string) {
+	return filepath.Join(appconfig.PackageRoot, name, version)
 }
 
-// CreateComponentFolder constructs the local directory to place component
-func (util *Utility) CreateComponentFolder(name string, version string) (folder string, err error) {
-	folder = getComponentFolder(name, version)
+// CreatePackageFolder constructs the local directory to place package
+func (util *Utility) CreatePackageFolder(name string, version string) (folder string, err error) {
+	folder = getPackageFolder(name, version)
 
 	if err = filesysdep.MakeDirExecute(folder); err != nil {
 		return "", err
@@ -138,19 +138,19 @@ func (util *Utility) CreateComponentFolder(name string, version string) (folder 
 	return folder, nil
 }
 
-// HasValidPackage determines if a given version of a component has a folder on disk that contains a valid package
+// HasValidPackage determines if a given version of a package has a folder on disk that contains a valid package
 func (util *Utility) HasValidPackage(name string, version string) bool {
 	// folder exists, contains manifest, manifest is valid, and folder contains at least 1 other directory or file (assumed to be the unpacked package)
-	componentFolder := getComponentFolder(name, version)
-	manifestPath := filepath.Join(componentFolder, getManifestName(name))
+	packageFolder := getPackageFolder(name, version)
+	manifestPath := filepath.Join(packageFolder, getManifestName(name))
 	if !filesysdep.Exists(manifestPath) {
 		return false
 	}
-	if _, err := parseComponentManifest(nil, manifestPath); err != nil {
+	if _, err := parsePackageManifest(nil, manifestPath); err != nil {
 		return false
 	}
-	files, _ := filesysdep.GetFileNames(componentFolder)
-	directories, _ := filesysdep.GetDirectoryNames(componentFolder)
+	files, _ := filesysdep.GetFileNames(packageFolder)
+	directories, _ := filesysdep.GetDirectoryNames(packageFolder)
 	if len(files) <= 1 && len(directories) == 0 {
 		return false
 	}
@@ -183,7 +183,7 @@ func getLatestVersion(versions []string, except string) (version string) {
 	return latestVersion
 }
 
-// getLatestS3Version finds the most recent version of a component in S3
+// getLatestS3Version finds the most recent version of a package in S3
 func getLatestS3Version(log log.T, name string, context *updateutil.InstanceContext) (latestVersion string, err error) {
 	amazonS3URL := s3util.ParseAmazonS3URL(log, getS3Url(name, context))
 	folders, err := networkdep.ListS3Folders(log, amazonS3URL)
@@ -193,9 +193,9 @@ func getLatestS3Version(log log.T, name string, context *updateutil.InstanceCont
 	return getLatestVersion(folders[:], ""), nil
 }
 
-// GetCurrentVersion finds the most recent installed version of a component
+// GetCurrentVersion finds the most recent installed version of a package
 func (util *Utility) GetCurrentVersion(name string) (installedVersion string) {
-	directories, err := filesysdep.GetDirectoryNames(filepath.Join(appconfig.ComponentRoot, name))
+	directories, err := filesysdep.GetDirectoryNames(filepath.Join(appconfig.PackageRoot, name))
 	if err != nil {
 		return ""
 	}
@@ -222,7 +222,7 @@ func parseVersion(version string) (major int, minor int, build int, err error) {
 }
 
 // TODO:MF: This is the first utility function that calls out to S3 or some URI - perhaps this is part of a different set of utilities
-// GetLatestVersion looks up the latest version of a given component for this platform/arch in S3 or manifest at source location
+// GetLatestVersion looks up the latest version of a given package for this platform/arch in S3 or manifest at source location
 func (util *Utility) GetLatestVersion(log log.T, name string, source string, context *updateutil.InstanceContext) (latestVersion string, err error) {
 	if source != "" {
 		// TODO:MF: Copy manifest from source location, parse, and return version

@@ -13,8 +13,8 @@
 
 // TODO:MF: flag these as integration tests
 
-// Package configurecomponent implements the ConfigureComponent plugin.
-package configurecomponent
+// Package configurepackage implements the ConfigurePackage plugin.
+package configurepackage
 
 import (
 	"errors"
@@ -40,13 +40,13 @@ func execStubSuccess() execDep {
 	return &ExecDepStub{pluginInput: &model.PluginState{}, pluginOutput: &contracts.PluginResult{}}
 }
 
-func setSuccessStubs() *ConfigureComponentStubs {
-	stubs := &ConfigureComponentStubs{fileSysDepStub: fileSysStubSuccess(), networkDepStub: networkStubSuccess(), execDepStub: execStubSuccess()}
+func setSuccessStubs() *ConfigurePackageStubs {
+	stubs := &ConfigurePackageStubs{fileSysDepStub: fileSysStubSuccess(), networkDepStub: networkStubSuccess(), execDepStub: execStubSuccess()}
 	stubs.Set()
 	return stubs
 }
 
-func TestConfigureComponent(t *testing.T) {
+func TestConfigurePackage(t *testing.T) {
 	stubs := setSuccessStubs()
 	defer stubs.Clear()
 
@@ -57,7 +57,7 @@ func TestConfigureComponent(t *testing.T) {
 	configureUtil := &Utility{}
 	instanceContext := createStubInstanceContext()
 
-	output := runConfigureComponent(
+	output := runConfigurePackage(
 		plugin,
 		logger,
 		manager,
@@ -69,19 +69,19 @@ func TestConfigureComponent(t *testing.T) {
 	assert.Empty(t, output.Errors)
 }
 
-func TestConfigureComponent_InvalidRawInput(t *testing.T) {
+func TestConfigurePackage_InvalidRawInput(t *testing.T) {
 	stubs := setSuccessStubs()
 	defer stubs.Clear()
 
 	plugin := &Plugin{}
-	// string value will fail the Remarshal as it's not ConfigureComponentPluginInput
+	// string value will fail the Remarshal as it's not ConfigurePackagePluginInput
 	pluginInformation := "invalid value"
 
 	manager := &configureManager{}
 	configureUtil := &Utility{}
 	instanceContext := createStubInstanceContext()
 
-	result := runConfigureComponent(
+	result := runConfigurePackage(
 		plugin,
 		logger,
 		manager,
@@ -92,7 +92,7 @@ func TestConfigureComponent_InvalidRawInput(t *testing.T) {
 	assert.Contains(t, result.Stderr, "invalid format in plugin properties")
 }
 
-func TestConfigureComponent_InvalidInput(t *testing.T) {
+func TestConfigurePackage_InvalidInput(t *testing.T) {
 	stubs := setSuccessStubs()
 	defer stubs.Clear()
 
@@ -103,7 +103,7 @@ func TestConfigureComponent_InvalidInput(t *testing.T) {
 	configureUtil := &Utility{}
 	instanceContext := createStubInstanceContext()
 
-	result := runConfigureComponent(
+	result := runConfigurePackage(
 		plugin,
 		logger,
 		manager,
@@ -114,8 +114,8 @@ func TestConfigureComponent_InvalidInput(t *testing.T) {
 	assert.Contains(t, result.Stderr, "invalid input")
 }
 
-func TestConfigureComponent_DownloadFailed(t *testing.T) {
-	stubs := &ConfigureComponentStubs{
+func TestConfigurePackage_DownloadFailed(t *testing.T) {
+	stubs := &ConfigurePackageStubs{
 		fileSysDepStub: &FileSysDepStub{existsResultDefault: false},
 		networkDepStub: &NetworkDepStub{downloadErrorDefault: errors.New("Cannot download package")},
 		execDepStub:    execStubSuccess(),
@@ -130,7 +130,7 @@ func TestConfigureComponent_DownloadFailed(t *testing.T) {
 	configureUtil := &Utility{}
 	instanceContext := createStubInstanceContext()
 
-	output := runConfigureComponent(
+	output := runConfigurePackage(
 		plugin,
 		logger,
 		manager,
@@ -142,9 +142,9 @@ func TestConfigureComponent_DownloadFailed(t *testing.T) {
 	assert.NotEmpty(t, output.Errors)
 }
 
-func TestInstallComponent_ExtractFailed(t *testing.T) {
+func TestInstallPackage_ExtractFailed(t *testing.T) {
 	result, _ := ioutil.ReadFile("testdata/sampleManifest.json")
-	stubs := &ConfigureComponentStubs{
+	stubs := &ConfigurePackageStubs{
 		fileSysDepStub: &FileSysDepStub{readResult: result, uncompressError: errors.New("Cannot extract package")},
 		networkDepStub: networkStubSuccess(),
 		execDepStub:    execStubSuccess(),
@@ -159,7 +159,7 @@ func TestInstallComponent_ExtractFailed(t *testing.T) {
 	configureUtil := &Utility{}
 	instanceContext := createStubInstanceContext()
 
-	output := runConfigureComponent(
+	output := runConfigurePackage(
 		plugin,
 		logger,
 		manager,
@@ -172,9 +172,9 @@ func TestInstallComponent_ExtractFailed(t *testing.T) {
 	assert.Contains(t, output.Stderr, "Cannot extract package")
 }
 
-func TestInstallComponent_DeleteFailed(t *testing.T) {
+func TestInstallPackage_DeleteFailed(t *testing.T) {
 	result, _ := ioutil.ReadFile("testdata/sampleManifest.json")
-	stubs := &ConfigureComponentStubs{
+	stubs := &ConfigurePackageStubs{
 		fileSysDepStub: &FileSysDepStub{
 			readResult:           result,
 			existsResultSequence: []bool{false, true},
@@ -193,7 +193,7 @@ func TestInstallComponent_DeleteFailed(t *testing.T) {
 	configureUtil := &Utility{}
 	instanceContext := createStubInstanceContext()
 
-	output := runConfigureComponent(
+	output := runConfigurePackage(
 		plugin,
 		logger,
 		manager,
@@ -206,8 +206,8 @@ func TestInstallComponent_DeleteFailed(t *testing.T) {
 	assert.Contains(t, output.Stderr, "failed to delete compressed package")
 }
 
-func TestUninstallComponent_DoesNotExist(t *testing.T) {
-	stubs := &ConfigureComponentStubs{fileSysDepStub: &FileSysDepStub{existsResultDefault: false}, networkDepStub: networkStubSuccess(), execDepStub: execStubSuccess()}
+func TestUninstallPackage_DoesNotExist(t *testing.T) {
+	stubs := &ConfigurePackageStubs{fileSysDepStub: &FileSysDepStub{existsResultDefault: false}, networkDepStub: networkStubSuccess(), execDepStub: execStubSuccess()}
 	stubs.Set()
 	defer stubs.Clear()
 
@@ -218,7 +218,7 @@ func TestUninstallComponent_DoesNotExist(t *testing.T) {
 	configureUtil := &Utility{}
 	instanceContext := createStubInstanceContext()
 
-	output := runConfigureComponent(
+	output := runConfigurePackage(
 		plugin,
 		logger,
 		manager,
@@ -231,9 +231,9 @@ func TestUninstallComponent_DoesNotExist(t *testing.T) {
 	assert.Contains(t, output.Stderr, "unable to determine version")
 }
 
-func TestUninstallComponent_RemovalFailed(t *testing.T) {
+func TestUninstallPackage_RemovalFailed(t *testing.T) {
 	result, _ := ioutil.ReadFile("testdata/sampleManifest.json")
-	stubs := &ConfigureComponentStubs{
+	stubs := &ConfigurePackageStubs{
 		fileSysDepStub: &FileSysDepStub{readResult: result, existsResultDefault: true, removeError: errors.New("404")},
 		networkDepStub: networkStubSuccess(),
 		execDepStub:    execStubSuccess(),
@@ -248,7 +248,7 @@ func TestUninstallComponent_RemovalFailed(t *testing.T) {
 	configureUtil := &Utility{}
 	instanceContext := createStubInstanceContext()
 
-	output := runConfigureComponent(
+	output := runConfigurePackage(
 		plugin,
 		logger,
 		manager,

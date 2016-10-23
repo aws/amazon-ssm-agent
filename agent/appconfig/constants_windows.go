@@ -53,8 +53,8 @@ var AppConfigPath string
 // DefaultDataStorePath represents the directory for storing system data
 var DefaultDataStorePath string
 
-// ComponentRoot specifies the directory under which components will be downloaded and installed
-var ComponentRoot string
+// PackageRoot specifies the directory under which packages will be downloaded and installed
+var PackageRoot string
 
 // DefaultPluginPath represents the directory for storing plugins in SSM
 var DefaultPluginPath string
@@ -99,7 +99,7 @@ func init() {
 	DefaultPluginPath = filepath.Join(EnvProgramFiles, SSMPluginFolder)
 	AppConfigPath = filepath.Join(DefaultProgramFolder, AppConfigFileName)
 	DefaultDataStorePath = filepath.Join(SSMDataPath, "InstanceData")
-	ComponentRoot = filepath.Join(SSMDataPath, "Components")
+	PackageRoot = filepath.Join(SSMDataPath, "Packages")
 	DownloadRoot = filepath.Join(temp, SSMFolder, "Download")
 	UpdaterArtifactsRoot = filepath.Join(temp, SSMFolder, "Update")
 }
