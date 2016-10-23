@@ -345,17 +345,6 @@ type mockConfigureManager struct {
 	installedVersion       string
 }
 
-func (m *mockConfigureManager) downloadManifest(log log.T,
-	util Util,
-	componentName string,
-	version string,
-	source string,
-	output *ConfigureComponentPluginOutput,
-	context *updateutil.InstanceContext) (manifest *ComponentManifest, err error) {
-
-	return m.downloadManifestResult, m.downloadManifestError
-}
-
 func (m *mockConfigureManager) downloadPackage(log log.T,
 	util Util,
 	componentName string,

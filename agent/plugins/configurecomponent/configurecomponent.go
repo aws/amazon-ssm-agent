@@ -113,14 +113,6 @@ func NewPlugin(pluginConfig pluginutil.PluginConfig) (*Plugin, error) {
 type configureManager struct{}
 
 type pluginHelper interface {
-	downloadManifest(log log.T,
-		util Util,
-		componentName string,
-		version string,
-		source string,
-		output *ConfigureComponentPluginOutput,
-		context *updateutil.InstanceContext) (manifest *ComponentManifest, err error)
-
 	downloadPackage(log log.T,
 		util Util,
 		componentName string,
@@ -141,9 +133,6 @@ type pluginHelper interface {
 		util Util,
 		context *updateutil.InstanceContext) (version string, err error)
 }
-
-// TO DO: How to mock reboot?
-// var reboot = rebooter.RequestPendingReboot
 
 // runConfigureComponent downloads the component manifest and performs specified action
 func runConfigureComponent(
@@ -174,7 +163,7 @@ func runConfigureComponent(
 		return
 	}
 	defer unlockComponent(input.Name)
-	//TODO:MF: no longer need manifest separate from package
+
 	switch input.Action {
 	case InstallAction:
 		// get version information
@@ -226,7 +215,8 @@ func runConfigureComponent(
 					output.MarkAsFailed(log,
 						fmt.Errorf("failed to uninstall currently installed version of component: %v", err))
 				} else {
-					if uninstallManifest.Reboot == "true" || result == contracts.ResultStatusSuccessAndReboot { // TODO:MF: no longer in manifest, entirely from result status
+					// TODO:MF: no longer in manifest, entirely from result status
+					if uninstallManifest.Reboot == "true" || result == contracts.ResultStatusSuccessAndReboot {
 						// TODO:MF: set reboot flag and return without success or failure
 					}
 				}
@@ -255,7 +245,8 @@ func runConfigureComponent(
 				fmt.Errorf("failed to install component: %v", err))
 			return
 		}
-		output.MarkAsSucceeded(manifest.Reboot == "true") // TODO:MF: no longer in manifest, entirely from result status
+		// TODO:MF: no longer in manifest, entirely from result status
+		output.MarkAsSucceeded(manifest.Reboot == "true")
 		output.Status = result
 
 	case UninstallAction:
@@ -287,7 +278,8 @@ func runConfigureComponent(
 				fmt.Errorf("failed to uninstall component: %v", err))
 			return
 		}
-		output.MarkAsSucceeded(manifest.Reboot == "true") // TODO:MF: no longer in manifest, entirely from result status
+		// TODO:MF: no longer in manifest, entirely from result status
+		output.MarkAsSucceeded(manifest.Reboot == "true")
 		output.Status = result
 	default:
 		output.MarkAsFailed(log,
@@ -323,12 +315,9 @@ func ensurePackage(log log.T,
 			// TODO:MF: delete or rename invalid manifest
 		}
 	}
-	// otherwise download it
-	if manifest == nil {
-		if manifest, err = manager.downloadManifest(log, util, componentName, version, source, output, context); err != nil {
-			return
-		}
-	}
+
+	// TODO:MF: if source but no version, download to temp, determine version from manifest and copy to correct location
+
 	// download package
 	var filePath string
 	if filePath, err = manager.downloadPackage(log, util, componentName, version, source, output, context); err != nil {
@@ -345,6 +334,12 @@ func ensurePackage(log log.T,
 	// delete compressed package after using
 	if cleanupErr := filesysdep.RemoveAll(filePath); cleanupErr != nil {
 		err = fmt.Errorf("failed to delete compressed package %v, %v", filePath, cleanupErr.Error())
+		return
+	}
+
+	manifest, manifestErr := parseComponentManifest(log, localManifestName)
+	if manifestErr != nil {
+		err = fmt.Errorf("manifest is not valid for package %v, %v", filePath, manifestErr.Error())
 		return
 	}
 
@@ -404,61 +399,6 @@ func (m *configureManager) getVersionToUninstall(log log.T,
 		version, err = util.GetLatestVersion(log, input.Name, input.Source, context)
 	}
 	return
-}
-
-// downloadManifest downloads component configuration file from s3 bucket.
-func (m *configureManager) downloadManifest(log log.T,
-	util Util,
-	componentName string,
-	version string,
-	source string,
-	output *ConfigureComponentPluginOutput,
-	context *updateutil.InstanceContext) (manifest *ComponentManifest, err error) {
-	// manifest to download
-	manifestName := getManifestName(componentName)
-
-	// path to local manifest
-	localManifestName := filepath.Join(appconfig.ComponentRoot, componentName, version, manifestName)
-
-	// path to manifest
-	manifestLocation := source
-	if manifestLocation == "" {
-		manifestLocation = getS3Location(componentName, version, context, manifestName)
-	} else {
-		//TODO:MF: I don't think source will contain a replaceable placeholder - I think it is a URI to a "folder" that gets a filename tacked onto the end
-		manifestLocation = strings.Replace(manifestLocation, updateutil.FileNameHolder, manifestName, -1)
-	}
-
-	// path to download destination
-	manifestDestination, err := util.CreateComponentFolder(componentName, version)
-	if err != nil {
-		errMessage := fmt.Sprintf("failed to create local component repository, %v", err.Error())
-		return nil, errors.New(errMessage)
-	}
-
-	downloadInput := artifact.DownloadInput{
-		SourceURL:            manifestLocation,
-		DestinationDirectory: manifestDestination}
-
-	// download manifest
-	downloadOutput, downloadErr := networkdep.Download(log, downloadInput)
-	if downloadErr != nil || downloadOutput.LocalFilePath == "" {
-		errMessage := fmt.Sprintf("failed to download component manifest reliably, %v", downloadInput.SourceURL)
-		if downloadErr != nil {
-			errMessage = fmt.Sprintf("%v, %v", errMessage, downloadErr.Error())
-		}
-		return nil, errors.New(errMessage)
-	}
-
-	// rename manifest
-	if err = filesysdep.Rename(downloadOutput.LocalFilePath, localManifestName); err != nil {
-		errMessage := fmt.Sprintf("failed to rename %v to %v: %v", downloadOutput.LocalFilePath, localManifestName, err.Error())
-		return nil, errors.New(errMessage)
-	}
-
-	output.AppendInfo(log, "Successfully downloaded %v", downloadInput.SourceURL)
-
-	return parseComponentManifest(log, localManifestName)
 }
 
 // downloadPackage downloads the installation package from s3 bucket or source URI and uncompresses it
