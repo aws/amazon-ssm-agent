@@ -55,12 +55,18 @@ func Refresh(log log.T, assocs []*model.AssociationRawData) {
 
 		if !foundMatch {
 			newAssoc.Initialize(log, currentTime)
-			log.Debugf("Association %v next ScheduledDate to %v", *newAssoc.Association.AssociationId, newAssoc.NextScheduledDate.String())
+
+			//todo: call service to update association status
+			if newAssoc.ExcludeFromFutureScheduling {
+				log.Debugf("Exclude Association %v from future scheduling", *newAssoc.Association.AssociationId)
+			} else {
+				log.Debugf("Set next ScheduledDate to %v for Association %v", newAssoc.NextScheduledDate.String(), *newAssoc.Association.AssociationId)
+			}
 
 			if assocContent, err := jsonutil.Marshal(newAssoc); err != nil {
 				log.Errorf("Failed to parse scheduled association, %v", err)
 			} else {
-				log.Debugf("Parsed Scheduled Association is %v", jsonutil.Indent(assocContent))
+				log.Debugf("Scheduled Association content is %v", jsonutil.Indent(assocContent))
 			}
 
 		}
@@ -133,7 +139,7 @@ func UpdateNextScheduledDate(log log.T, associationID string) {
 	currentTime := times.DefaultClock.Now()
 	for _, assoc := range associations {
 		if *assoc.Association.AssociationId == associationID {
-			assoc.NextScheduledDate = cronexpr.MustParse(*assoc.Association.ScheduleExpression).Next(currentTime)
+			assoc.NextScheduledDate = cronexpr.MustParse(assoc.Expression).Next(currentTime)
 			log.Debugf("Update Association %v next ScheduledDate to %v", *assoc.Association.AssociationId, assoc.NextScheduledDate.String())
 			break
 		}

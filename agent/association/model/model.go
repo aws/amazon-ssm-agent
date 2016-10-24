@@ -15,6 +15,8 @@
 package model
 
 import (
+	"fmt"
+	"strings"
 	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/log"
@@ -23,13 +25,18 @@ import (
 	"github.com/gorhill/cronexpr"
 )
 
-var cronExpressionEveryFiveMinutes = "*/5 * * * *"
+const (
+	cronExpressionEveryFiveMinutes = "cron(0 0/5 * 1/1 * ? *)"
+	expressionTypeCron             = "cron"
+)
 
 // AssociationRawData represents detail information of association
 type AssociationRawData struct {
 	CreateDate                  time.Time
 	NextScheduledDate           time.Time
 	Association                 *ssm.InstanceAssociationSummary
+	Expression                  string
+	ExpressionType              string
 	Document                    *string
 	RunOnce                     bool
 	ExcludeFromFutureScheduling bool
@@ -39,7 +46,10 @@ type AssociationRawData struct {
 func (newAssoc *AssociationRawData) Update(oldAssoc *AssociationRawData) {
 	newAssoc.CreateDate = oldAssoc.CreateDate
 	newAssoc.NextScheduledDate = oldAssoc.NextScheduledDate
-	newAssoc.Association.ScheduleExpression = oldAssoc.Association.ScheduleExpression
+	newAssoc.Expression = oldAssoc.Expression
+	newAssoc.ExpressionType = oldAssoc.ExpressionType
+	newAssoc.ExcludeFromFutureScheduling = oldAssoc.ExcludeFromFutureScheduling
+	newAssoc.RunOnce = oldAssoc.RunOnce
 }
 
 // Initialize initializes default values for the given new association
@@ -51,13 +61,29 @@ func (newAssoc *AssociationRawData) Initialize(log log.T, currentTime time.Time)
 		newAssoc.RunOnce = true
 	}
 
-	if _, err := cronexpr.Parse(*newAssoc.Association.ScheduleExpression); err != nil {
-		log.Errorf("Failed to parse schedule expression %v, %v", *(newAssoc.Association.ScheduleExpression), err)
-
-		//this line is needed due to a service bug, we can remove it once it's addressed
-		newAssoc.Association.ScheduleExpression = aws.String(cronExpressionEveryFiveMinutes)
-		//newAssoc.ExcludeFromFutureScheduling = true
+	if err := parseExpression(log, newAssoc); err != nil {
+		log.Errorf("Failed to parse schedule expression %v, %v", *newAssoc.Association.ScheduleExpression, err)
+		newAssoc.ExcludeFromFutureScheduling = true
+		return
 	}
 
-	newAssoc.NextScheduledDate = cronexpr.MustParse(*newAssoc.Association.ScheduleExpression).Next(currentTime)
+	if _, err := cronexpr.Parse(newAssoc.Expression); err != nil {
+		log.Errorf("Failed to parse schedule expression %v, %v", newAssoc.Expression, err)
+		newAssoc.ExcludeFromFutureScheduling = true
+		return
+	}
+
+	newAssoc.NextScheduledDate = cronexpr.MustParse(newAssoc.Expression).Next(currentTime)
+}
+
+func parseExpression(log log.T, assoc *AssociationRawData) error {
+	expression := *assoc.Association.ScheduleExpression
+
+	if strings.HasPrefix(expression, expressionTypeCron) {
+		assoc.ExpressionType = expressionTypeCron
+		assoc.Expression = expression[len(expressionTypeCron)+1 : len(expression)-1]
+		return nil
+	}
+
+	return fmt.Errorf("unkonw expression type")
 }
