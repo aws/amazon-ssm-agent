@@ -189,7 +189,12 @@ func runConfigurePackage(
 			return
 		}
 
-		// TODO:MF: set installing flag for version
+		// set installing flag for version
+		if markErr := markInstallingPackage(input.Name, version); markErr != nil {
+			output.MarkAsFailed(log,
+				fmt.Errorf("unable to mark package installing: %v", markErr))
+			return
+		}
 
 		// NOTE: do not return before clearing installing flag after this point unless you want it to remain set
 		// if different version is installed, uninstall
@@ -208,7 +213,6 @@ func runConfigurePackage(
 					input.Source,
 					&output,
 					log,
-					uninstallManifest.Uninstall,
 					instanceContext)
 				if err != nil {
 					output.MarkAsFailed(log,
@@ -222,7 +226,8 @@ func runConfigurePackage(
 			}
 		}
 
-		// TODO:MF: defer clearing installing
+		// defer clearing installing
+		defer unmarkInstallingPackage(input.Name)
 
 		// exit if we're in an error state
 		if output.ExitCode != 0 {
@@ -237,7 +242,6 @@ func runConfigurePackage(
 			&output,
 			manager,
 			log,
-			manifest.Install,
 			instanceContext)
 		if err != nil {
 			output.MarkAsFailed(log,
@@ -270,7 +274,6 @@ func runConfigurePackage(
 			input.Source,
 			&output,
 			log,
-			manifest.Uninstall,
 			instanceContext)
 		if err != nil {
 			output.MarkAsFailed(log,
@@ -461,7 +464,6 @@ func runInstallPackage(p *Plugin,
 	output *ConfigurePackagePluginOutput,
 	manager pluginHelper,
 	log log.T,
-	installCmd string,
 	instanceContext *updateutil.InstanceContext,
 ) (status contracts.ResultStatus, err error) {
 	status = contracts.ResultStatusSuccess
@@ -482,7 +484,6 @@ func runUninstallPackage(p *Plugin,
 	source string,
 	output *ConfigurePackagePluginOutput,
 	log log.T,
-	uninstallCmd string,
 	context *updateutil.InstanceContext,
 ) (status contracts.ResultStatus, err error) {
 	status = contracts.ResultStatusSuccess

@@ -77,6 +77,7 @@ type FileSysDepStub struct {
 	renameError          error
 	readResult           []byte
 	readError            error
+	writeError           error
 }
 
 func (m *FileSysDepStub) MakeDirExecute(destinationDir string) (err error) {
@@ -118,6 +119,10 @@ func (m *FileSysDepStub) Rename(oldpath, newpath string) error {
 
 func (m *FileSysDepStub) ReadFile(filename string) ([]byte, error) {
 	return m.readResult, m.readError
+}
+
+func (m *FileSysDepStub) WriteFile(filename string, content string) error {
+	return m.writeError
 }
 
 type NetworkDepStub struct {

@@ -122,9 +122,14 @@ func getS3Url(packageName string, context *updateutil.InstanceContext) (s3Url *u
 	return
 }
 
-// packageFolder returns the name of the package folder for a given version
+// getPackageRoot returns the name of the folder containing all versions of a package
+func getPackageRoot(name string) (folder string) {
+	return filepath.Join(appconfig.PackageRoot, name)
+}
+
+// getPackageFolder returns the name of the package folder for a given version
 func getPackageFolder(name string, version string) (folder string) {
-	return filepath.Join(appconfig.PackageRoot, name, version)
+	return filepath.Join(getPackageRoot(name), version)
 }
 
 // CreatePackageFolder constructs the local directory to place package
@@ -200,7 +205,7 @@ func (util *Utility) GetCurrentVersion(name string) (installedVersion string) {
 		return ""
 	}
 	// TODO:MF determine the installing version (if there is one) and pass as second parameter
-	return getLatestVersion(directories[:], "")
+	return getLatestVersion(directories[:], getInstallingPackageVersion(name))
 }
 
 // parseVersion returns the major, minor, and build parts of a valid version string and an error if the string is not valid

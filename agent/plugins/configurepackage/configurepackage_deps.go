@@ -42,6 +42,7 @@ type fileSysDep interface {
 	RemoveAll(path string) error
 	Rename(oldpath, newpath string) error
 	ReadFile(filename string) ([]byte, error)
+	WriteFile(filename string, content string) error
 }
 
 type fileSysDepImp struct{}
@@ -76,6 +77,10 @@ func (fileSysDepImp) Rename(oldpath, newpath string) error {
 
 func (fileSysDepImp) ReadFile(filename string) ([]byte, error) {
 	return ioutil.ReadFile(filename)
+}
+
+func (fileSysDepImp) WriteFile(filename string, content string) error {
+	return fileutil.WriteAllText(filename, content)
 }
 
 var networkdep networkDep = &networkDepImp{}

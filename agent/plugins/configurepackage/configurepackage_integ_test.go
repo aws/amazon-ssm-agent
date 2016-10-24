@@ -177,7 +177,8 @@ func TestInstallPackage_DeleteFailed(t *testing.T) {
 	stubs := &ConfigurePackageStubs{
 		fileSysDepStub: &FileSysDepStub{
 			readResult:           result,
-			existsResultSequence: []bool{false, true},
+			existsResultSequence: []bool{false, false},
+			existsResultDefault:  true,
 			removeError:          errors.New("failed to delete compressed package"),
 		},
 		networkDepStub: networkStubSuccess(),

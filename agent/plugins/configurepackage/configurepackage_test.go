@@ -129,8 +129,6 @@ func TestInstallPackage(t *testing.T) {
 	stubs.Set()
 	defer stubs.Clear()
 
-	installCommand := "AWSPVDriverSetup.msi /quiet /install"
-
 	_, err := runInstallPackage(plugin,
 		pluginInformation.Name,
 		pluginInformation.Version,
@@ -138,7 +136,6 @@ func TestInstallPackage(t *testing.T) {
 		output,
 		manager,
 		logger,
-		installCommand,
 		context)
 
 	assert.NoError(t, err)
@@ -155,15 +152,12 @@ func TestUninstallPackage(t *testing.T) {
 	stubs.Set()
 	defer stubs.Clear()
 
-	uninstallCommand := "AWSPVDriverSetup.msi /quiet /uninstall"
-
 	_, err := runUninstallPackage(plugin,
 		pluginInformation.Name,
 		pluginInformation.Version,
 		pluginInformation.Source,
 		output,
 		logger,
-		uninstallCommand,
 		instanceContext)
 
 	assert.NoError(t, err)
@@ -315,6 +309,47 @@ func TestPackageLock(t *testing.T) {
 	err = lockPackage("Foobar", "Install")
 	errorChan <- err // signal the goroutine to exit
 	assert.NotNil(t, err)
+}
+
+func TestPackageMark(t *testing.T) {
+	stubs := &ConfigurePackageStubs{fileSysDepStub: &FileSysDepStub{existsResultDefault: false}}
+	stubs.Set()
+	defer stubs.Clear()
+
+	err := markInstallingPackage("Foo", "999.999.999")
+	assert.Nil(t, err)
+}
+
+func TestPackageInstalling(t *testing.T) {
+	stubs := &ConfigurePackageStubs{fileSysDepStub: &FileSysDepStub{existsResultDefault: true, readResult: []byte("999.999.999")}}
+	stubs.Set()
+	defer stubs.Clear()
+
+	assert.Equal(t, "999.999.999", getInstallingPackageVersion("Foo"))
+}
+
+func TestPackageNotInstalling(t *testing.T) {
+	stubs := &ConfigurePackageStubs{fileSysDepStub: &FileSysDepStub{existsResultDefault: false}}
+	stubs.Set()
+	defer stubs.Clear()
+
+	assert.Equal(t, "", getInstallingPackageVersion("Foo"))
+}
+
+func TestPackageUnreadableInstalling(t *testing.T) {
+	stubs := &ConfigurePackageStubs{fileSysDepStub: &FileSysDepStub{existsResultDefault: false, readResult: []byte(""), readError: errors.New("Foo")}}
+	stubs.Set()
+	defer stubs.Clear()
+
+	assert.Equal(t, "", getInstallingPackageVersion("Foo"))
+}
+
+func TestUnmarkPackage(t *testing.T) {
+	stubs := &ConfigurePackageStubs{fileSysDepStub: &FileSysDepStub{existsResultDefault: true}}
+	stubs.Set()
+	defer stubs.Clear()
+
+	assert.Nil(t, unmarkInstallingPackage("Foo"))
 }
 
 func lockAndUnlockGo(packageName string, channel chan error) {
