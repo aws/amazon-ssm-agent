@@ -30,6 +30,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/plugins/domainjoin"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/pluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/psmodule"
+	"github.com/aws/amazon-ssm-agent/agent/plugins/runcommand"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/updateec2config"
 )
 
@@ -52,6 +53,16 @@ func IsPluginSupportedForCurrentPlatform(log log.T, pluginID string) (bool, stri
 func loadPlatformDependentPlugins(context context.T) runpluginutil.PluginRegistry {
 	log := context.Log()
 	var workerPlugins = runpluginutil.PluginRegistry{}
+
+	// todo: move this to loadPlatformIndependentPlugins when adding support for powershell on linux
+	// registering aws:runPowerShellScript plugin
+	powershellPlugin, err := runcommand.NewRunPowerShellPlugin(pluginutil.DefaultPluginConfig())
+	powershellPluginName := powershellPlugin.Name
+	if err != nil {
+		log.Errorf("failed to create plugin %s %v", powershellPluginName, err)
+	} else {
+		workerPlugins[powershellPluginName] = powershellPlugin
+	}
 
 	// registering aws:psModule plugin
 	psModulePluginName := psmodule.Name()

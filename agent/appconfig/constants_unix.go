@@ -40,9 +40,6 @@ const (
 
 	// List all plugin names, unfortunately golang doesn't support const arrays of strings
 
-	// PluginNameAwsRunScript is the name for run script plugin
-	PluginNameAwsRunScript = "aws:runShellScript"
-
 	// RebootExitCode that would trigger a Soft Reboot
 	RebootExitCode = 194
 

@@ -233,6 +233,10 @@ func testExecution(t *testing.T, commandtester CommandTester) {
 	p.UploadToS3Sync = true
 	p.ExecuteCommand = pluginutil.CommandExecuter(mockExecuter.Execute)
 	p.ExecuteUploadOutputToS3Bucket = pluginutil.UploadOutputToS3BucketExecuter(mockS3Uploader.UploadOutputToS3Bucket)
+	p.Name = "aws:runShellScript"
+	p.RunCommandScriptName = "_script.sh"
+	p.ShellCommand = "sh"
+	p.ShellArguments = []string{"-c"}
 
 	// run inner command tester
 	commandtester(p, mockCancelFlag, mockExecuter, mockS3Uploader)

@@ -1,0 +1,56 @@
+// Copyright 2016 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+//
+// Licensed under the Apache License, Version 2.0 (the "License"). You may not
+// use this file except in compliance with the License. A copy of the
+// License is located at
+//
+// http://aws.amazon.com/apache2.0/
+//
+// or in the "license" file accompanying this file. This file is distributed
+// on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+// either express or implied. See the License for the specific language governing
+// permissions and limitations under the License.
+
+// Package runcommand implements the RunCommand plugin.
+// RunPowerShellScript contains implementation of the plugin that runs powershell scripts on linux or windows
+package runcommand
+
+import (
+	"os"
+	"path/filepath"
+	"strings"
+
+	"github.com/aws/amazon-ssm-agent/agent/appconfig"
+	"github.com/aws/amazon-ssm-agent/agent/plugins/pluginutil"
+)
+
+// powerShellScriptName is the script name where all downloaded or provided commands will be stored
+var powerShellScriptName = "_script.ps1"
+
+// powerShellArgs specifies the default arguments that we pass to powershell
+// Use Unrestricted as Execution Policy for running the script.
+// https://technet.microsoft.com/en-us/library/hh847748.aspx
+var powerShellArgs = "-InputFormat None -Noninteractive -NoProfile -ExecutionPolicy unrestricted -f"
+
+var powerShellCommand = filepath.Join(os.Getenv("SystemRoot"), "System32", "WindowsPowerShell", "v1.0", "powershell.exe")
+
+// PSPlugin is the type for the RunPowerShellScript plugin and embeds Plugin struct.
+type runPowerShellPlugin struct {
+	Plugin
+}
+
+// NewRunPowerShellPlugin returns a new instance of the PSPlugin.
+func NewRunPowerShellPlugin(pluginConfig pluginutil.PluginConfig) (*runPowerShellPlugin, error) {
+	psplugin := runPowerShellPlugin{
+		Plugin{
+			Name:                 appconfig.PluginNameAwsRunPowerShellScript,
+			RunCommandScriptName: powerShellScriptName,
+			ShellCommand:         powerShellCommand,
+			ShellArguments:       strings.Split(powerShellArgs, " "),
+		},
+	}
+
+	psplugin.AssignPluginConfigs(pluginConfig)
+
+	return &psplugin, nil
+}

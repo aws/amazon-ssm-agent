@@ -39,9 +39,6 @@ const (
 
 	// List all plugin names, unfortunately golang doesn't support const arrays of strings
 
-	// PluginNameAwsRunScript is the name of the run script plugin
-	PluginNameAwsRunScript = "aws:runPowerShellScript"
-
 	// PluginNameAwsPowerShellModule is the name of the PowerShell Module
 	PluginNameAwsPowerShellModule = "aws:psModule"
 

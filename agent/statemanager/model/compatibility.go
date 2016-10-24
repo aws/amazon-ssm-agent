@@ -49,7 +49,7 @@ func RemoveDependencyOnInstanceMetadata(context context.T, docState *DocumentSta
 	var properties []interface{}
 	var parsedDocumentProperties managedInstanceDocumentProperties
 
-	err := jsonutil.Remarshal(docState.PluginsInformation[appconfig.PluginNameAwsRunScript].Configuration.Properties, &properties)
+	err := jsonutil.Remarshal(docState.PluginsInformation[appconfig.PluginNameAwsRunPowerShellScript].Configuration.Properties, &properties)
 	if err != nil {
 		log.Errorf("Invalid format of properties in %v document. error: %v", docState.DocumentInformation.DocumentName, err)
 		return err
@@ -88,10 +88,10 @@ func RemoveDependencyOnInstanceMetadata(context context.T, docState *DocumentSta
 	// Plug-in the compatible 'Properties' block back to the document.
 	properties[0] = parsedDocumentProperties
 	var documentProperties interface{} = properties
-	plugin := docState.PluginsInformation[appconfig.PluginNameAwsRunScript]
+	plugin := docState.PluginsInformation[appconfig.PluginNameAwsRunPowerShellScript]
 	plugin.Configuration.Properties = documentProperties
 
-	docState.PluginsInformation[appconfig.PluginNameAwsRunScript] = plugin
+	docState.PluginsInformation[appconfig.PluginNameAwsRunPowerShellScript] = plugin
 
 	return nil
 }

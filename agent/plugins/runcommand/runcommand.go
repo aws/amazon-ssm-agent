@@ -20,7 +20,6 @@ import (
 	"path/filepath"
 	"time"
 
-	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/executers"
@@ -38,6 +37,12 @@ import (
 type Plugin struct {
 	pluginutil.DefaultPlugin
 	defaultWorkingDirectory string
+
+	// Name is the plugin name (PowerShellScript or ShellScript)
+	Name                 string
+	RunCommandScriptName string
+	ShellCommand         string
+	ShellArguments       []string
 }
 
 // RunCommandPluginInput represents one set of commands executed by the RunCommand plugin.
@@ -49,33 +54,24 @@ type RunCommandPluginInput struct {
 	TimeoutSeconds   interface{}
 }
 
-// NewPlugin returns a new instance of the plugin.
-func NewPlugin(pluginConfig pluginutil.PluginConfig) (*Plugin, error) {
-	var plugin Plugin
-	plugin.MaxStdoutLength = pluginConfig.MaxStdoutLength
-	plugin.MaxStderrLength = pluginConfig.MaxStderrLength
-	plugin.StdoutFileName = pluginConfig.StdoutFileName
-	plugin.StderrFileName = pluginConfig.StderrFileName
-	plugin.OutputTruncatedSuffix = pluginConfig.OutputTruncatedSuffix
-	plugin.Uploader = pluginutil.GetS3Config()
-	plugin.ExecuteUploadOutputToS3Bucket = pluginutil.UploadOutputToS3BucketExecuter(plugin.UploadOutputToS3Bucket)
+func (p *Plugin) AssignPluginConfigs(pluginConfig pluginutil.PluginConfig) {
+	p.MaxStdoutLength = pluginConfig.MaxStdoutLength
+	p.MaxStderrLength = pluginConfig.MaxStderrLength
+	p.StdoutFileName = pluginConfig.StdoutFileName
+	p.StderrFileName = pluginConfig.StderrFileName
+	p.OutputTruncatedSuffix = pluginConfig.OutputTruncatedSuffix
+	p.Uploader = pluginutil.GetS3Config()
+	p.ExecuteUploadOutputToS3Bucket = pluginutil.UploadOutputToS3BucketExecuter(p.UploadOutputToS3Bucket)
 
 	exec := executers.ShellCommandExecuter{}
-	plugin.ExecuteCommand = pluginutil.CommandExecuter(exec.Execute)
-
-	return &plugin, nil
-}
-
-// Name returns the plugin name
-func Name() string {
-	return appconfig.PluginNameAwsRunScript
+	p.ExecuteCommand = pluginutil.CommandExecuter(exec.Execute)
 }
 
 // Execute runs multiple sets of commands and returns their outputs.
 // res.Output will contain a slice of RunCommandPluginOutput.
 func (p *Plugin) Execute(context context.T, config contracts.Configuration, cancelFlag task.CancelFlag, subDocumentRunner runpluginutil.PluginRunner) (res contracts.PluginResult) {
 	log := context.Log()
-	log.Infof("%v started with configuration %v", Name(), config)
+	log.Infof("%v started with configuration %v", p.Name, config)
 	res.StartDateTime = time.Now()
 	defer func() { res.EndDateTime = time.Now() }()
 	log.Debugf("DefaultWorkingDirectory %v", config.DefaultWorkingDirectory)
@@ -175,7 +171,7 @@ func (p *Plugin) runCommands(log log.T, pluginInput RunCommandPluginInput, orche
 	}
 
 	// Create script file path
-	scriptPath := filepath.Join(orchestrationDir, pluginutil.RunCommandScriptName)
+	scriptPath := filepath.Join(orchestrationDir, p.RunCommandScriptName)
 	log.Debugf("Writing commands %v to file %v", pluginInput, scriptPath)
 
 	// Create script file
@@ -202,8 +198,8 @@ func (p *Plugin) runCommands(log log.T, pluginInput RunCommandPluginInput, orche
 	log.Debugf("stdout file %v, stderr file %v", stdoutFilePath, stderrFilePath)
 
 	// Construct Command Name and Arguments
-	commandName := pluginutil.GetShellCommand()
-	commandArguments := append(pluginutil.GetShellArguments(), scriptPath, pluginutil.ExitCodeTrap)
+	commandName := p.ShellCommand
+	commandArguments := append(p.ShellArguments, scriptPath, pluginutil.ExitCodeTrap)
 
 	// Resolve ssm parameters
 	// This may contain sensitive information, do not log this data after resolving.

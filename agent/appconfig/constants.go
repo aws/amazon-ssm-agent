@@ -85,6 +85,12 @@ const (
 	// PluginNameAwsConfigurePackage is the name for configure package plugin
 	PluginNameAwsConfigurePackage = "aws:configurePackage"
 
+	// PluginNameAwsRunShellScript is the name for run shell script plugin
+	PluginNameAwsRunShellScript = "aws:runShellScript"
+
+	// PluginNameAwsRunPowerShellScript is the name of the run powershell script plugin
+	PluginNameAwsRunPowerShellScript = "aws:runPowerShellScript"
+
 	// PluginNameAwsAgentUpdate is the name for agent update plugin
 	PluginNameAwsAgentUpdate = "aws:updateSsmAgent"
 

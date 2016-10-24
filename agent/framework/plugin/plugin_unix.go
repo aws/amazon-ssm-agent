@@ -19,6 +19,8 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/framework/runpluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/plugins/pluginutil"
+	"github.com/aws/amazon-ssm-agent/agent/plugins/runcommand"
 )
 
 // IsPluginSupportedForCurrentPlatform always returns true because currently, there is no plugin that particular
@@ -29,5 +31,17 @@ func IsPluginSupportedForCurrentPlatform(log log.T, pluginID string) (bool, stri
 
 // loadPlatformDependentPlugins registers platform dependent plugins
 func loadPlatformDependentPlugins(context context.T) runpluginutil.PluginRegistry {
-	return runpluginutil.PluginRegistry{}
+	log := context.Log()
+	var workerPlugins = runpluginutil.PluginRegistry{}
+
+	// registering aws:runShellScript plugin
+	shellPlugin, err := runcommand.NewRunShellPlugin(log, pluginutil.DefaultPluginConfig())
+	shellPluginName := shellPlugin.Name
+	if err != nil {
+		log.Errorf("failed to create plugin %s %v", shellPluginName, err)
+	} else {
+		workerPlugins[shellPluginName] = shellPlugin
+	}
+
+	return workerPlugins
 }
