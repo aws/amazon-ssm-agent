@@ -17,7 +17,10 @@ package inventory
 import (
 	"encoding/json"
 	"fmt"
+<<<<<<< 6cb9189dc984d14ab7497b36d90de8a0d1df14a4
 	"strings"
+=======
+>>>>>>> 1) converting inventory plugin from core plugin to worker plugin, 2) integrating with associate functionality, 3) detecting multiple associations for inventory, 4) minor go lint fixes
 	"sync"
 	"time"
 
@@ -217,6 +220,8 @@ func (p *Plugin) CanGathererRun(context context.T, name string) (status bool, ga
 	} else {
 		log.Infof("%v inventory gatherer is supported to run on this platform", name)
 		status = true
+<<<<<<< 6cb9189dc984d14ab7497b36d90de8a0d1df14a4
+=======
 	}
 
 	return
@@ -249,11 +254,47 @@ func (p *Plugin) validateCustomGatherer(context context.T, collectionPolicy, loc
 		if status {
 			policy = model.Config{Collection: collectionPolicy, Location: location}
 		}
+>>>>>>> 1) converting inventory plugin from core plugin to worker plugin, 2) integrating with associate functionality, 3) detecting multiple associations for inventory, 4) minor go lint fixes
 	}
 
 	return
 }
 
+<<<<<<< 6cb9189dc984d14ab7497b36d90de8a0d1df14a4
+func (p *Plugin) validatePredefinedGatherer(context context.T, collectionPolicy, gathererName string) (status bool, gatherer gatherers.T, policy model.Config, err error) {
+
+	if collectionPolicy == model.Enabled {
+		if status, gatherer, err = p.CanGathererRun(context, gathererName); err != nil {
+			return
+		}
+
+		// check if gatherer can run - if not then no need to set policy
+		if status {
+			policy = model.Config{Collection: collectionPolicy}
+		}
+	}
+
+	return
+}
+
+func (p *Plugin) validateCustomGatherer(context context.T, collectionPolicy, location string) (status bool, gatherer gatherers.T, policy model.Config, err error) {
+
+	if collectionPolicy == model.Enabled {
+		if status, gatherer, err = p.CanGathererRun(context, custom.GathererName); err != nil {
+			return
+		}
+
+		// check if gatherer can run - if not then no need to set policy
+		if status {
+			policy = model.Config{Collection: collectionPolicy, Location: location}
+		}
+	}
+
+	return
+}
+
+=======
+>>>>>>> 1) converting inventory plugin from core plugin to worker plugin, 2) integrating with associate functionality, 3) detecting multiple associations for inventory, 4) minor go lint fixes
 // ValidateInventoryInput validates inventory input and returns a map of eligible gatherers & their corresponding config.
 // It throws an error if gatherer is not recongnized/installed.
 func (p *Plugin) ValidateInventoryInput(context context.T, input PluginInput) (configuredGatherers map[gatherers.T]model.Config, err error) {
@@ -278,6 +319,7 @@ func (p *Plugin) ValidateInventoryInput(context context.T, input PluginInput) (c
 	} else if canGathererRun {
 		configuredGatherers[gatherer] = cfg
 	}
+<<<<<<< 6cb9189dc984d14ab7497b36d90de8a0d1df14a4
 
 	//checking awscomponents gatherer
 	if canGathererRun, gatherer, cfg, err = p.validatePredefinedGatherer(context, input.AWSComponents, awscomponent.GathererName); err != nil {
@@ -286,6 +328,16 @@ func (p *Plugin) ValidateInventoryInput(context context.T, input PluginInput) (c
 		configuredGatherers[gatherer] = cfg
 	}
 
+=======
+
+	//checking awscomponents gatherer
+	if canGathererRun, gatherer, cfg, err = p.validatePredefinedGatherer(context, input.AWSComponents, awscomponent.GathererName); err != nil {
+		return
+	} else if canGathererRun {
+		configuredGatherers[gatherer] = cfg
+	}
+
+>>>>>>> 1) converting inventory plugin from core plugin to worker plugin, 2) integrating with associate functionality, 3) detecting multiple associations for inventory, 4) minor go lint fixes
 	//checking network gatherer
 	if canGathererRun, gatherer, cfg, err = p.validatePredefinedGatherer(context, input.NetworkConfig, network.GathererName); err != nil {
 		return
@@ -378,11 +430,19 @@ func (p *Plugin) VerifyInventoryDataSize(item model.Item, items []model.Item) bo
 // ConvertToCurrentAssociationsMap converts a list of current association to a map of association.
 func ConvertToCurrentAssociationsMap(input []*associateModel.InstanceAssociation) (currentAssociations map[string]string) {
 	currentAssociations = make(map[string]string)
+<<<<<<< 6cb9189dc984d14ab7497b36d90de8a0d1df14a4
 
 	for _, v := range input {
 		currentAssociations[*v.Association.AssociationId] = v.CreateDate.String()
 	}
 
+=======
+
+	for _, v := range input {
+		currentAssociations[*v.Association.AssociationId] = v.CreateDate.String()
+	}
+
+>>>>>>> 1) converting inventory plugin from core plugin to worker plugin, 2) integrating with associate functionality, 3) detecting multiple associations for inventory, 4) minor go lint fixes
 	return
 }
 
@@ -393,7 +453,11 @@ func RefreshLastTrackedAssociationExecutions(oldTrackedExecutions, currentAssoci
 	//iterate over oldExecutions and see if any doc is not associated anymore - if so don't include that doc in the
 	//new map of tracked association execution
 
+<<<<<<< 6cb9189dc984d14ab7497b36d90de8a0d1df14a4
 	for doc := range oldTrackedExecutions {
+=======
+	for doc, _ := range oldTrackedExecutions {
+>>>>>>> 1) converting inventory plugin from core plugin to worker plugin, 2) integrating with associate functionality, 3) detecting multiple associations for inventory, 4) minor go lint fixes
 		if _, associationFound := currentAssociations[doc]; associationFound {
 			//the execution time of inventory remains the same so copy over that data
 			newTrackedExecutions[doc] = oldTrackedExecutions[doc]
