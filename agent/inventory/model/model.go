@@ -11,7 +11,7 @@
 // either express or implied. See the License for the specific language governing
 // permissions and limitations under the License.
 
-// Package inventory contains routines that periodically updates basic instance inventory to Inventory service
+// Package model contains contracts for inventory
 package model
 
 //TODO: add all inventory types here
@@ -21,8 +21,6 @@ package model
 const (
 	// AWSInstanceInformation is inventory type of instance information
 	AWSInstanceInformation = "AWS:InstanceInformation"
-	// InventoryPluginName is name of inventory plugin
-	InventoryPluginName = "Inventory"
 	// Enabled represents constant string used to enable various components of inventory plugin
 	Enabled = "Enabled"
 	// ErrorThreshold represents error threshold for inventory plugin

@@ -11,68 +11,129 @@
 // either express or implied. See the License for the specific language governing
 // permissions and limitations under the License.
 
-// Package inventory contains routines that periodically updates basic instance inventory to Inventory service
+// Package inventory contains implementation of aws:softwareInventory plugin
 package inventory
 
 import (
 	"encoding/json"
 	"fmt"
-	"path"
+	"strings"
+	"sync"
+	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
+	associateModel "github.com/aws/amazon-ssm-agent/agent/association/model"
+	"github.com/aws/amazon-ssm-agent/agent/association/schedulemanager"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
-	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	"github.com/aws/amazon-ssm-agent/agent/inventory/datauploader"
 	"github.com/aws/amazon-ssm-agent/agent/inventory/gatherers"
+	"github.com/aws/amazon-ssm-agent/agent/inventory/gatherers/application"
+	"github.com/aws/amazon-ssm-agent/agent/inventory/gatherers/awscomponent"
+	"github.com/aws/amazon-ssm-agent/agent/inventory/gatherers/custom"
+	"github.com/aws/amazon-ssm-agent/agent/inventory/gatherers/network"
+	"github.com/aws/amazon-ssm-agent/agent/inventory/gatherers/windowsUpdate"
 	"github.com/aws/amazon-ssm-agent/agent/inventory/model"
+	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
+	"github.com/aws/amazon-ssm-agent/agent/plugins/pluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/sdkutil"
+	"github.com/aws/amazon-ssm-agent/agent/task"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/ssm"
-	"github.com/carlescere/scheduler"
 )
 
-//TODO: integration with on-demand plugin - so that associate plugin can invoke this plugin
-//TODO: add unit tests.
+//TODO: add more unit tests.
+
+const (
+	errorMsgForMultipleAssociations             = "%v doesn't support multiple associations"
+	errorMsgForInvalidInventoryInput            = "Unrecongnized input for %v plugin"
+	errorMsgForExecutingInventoryThroughCommand = "Run command is not supported for %v plugin"
+	successfulMsgForInventoryPlugin             = "Inventory policy has been successfully applied and collected inventory data has been uploaded to SSM"
+)
+
+var (
+	//associationLock ensures that all read & write for lastExecutedAssociations & currentAssociations is thread-safe
+	associationLock sync.RWMutex
+)
+
+// PluginInput represents configuration which is applied to inventory plugin during execution.
+type PluginInput struct {
+	contracts.PluginInput
+	Applications             string
+	AWSComponents            string
+	NetworkConfig            string
+	WindowsUpdates           string
+	CustomInventory          string
+	CustomInventoryDirectory string
+}
+
+// decoupling schedulemanager.Schedules() for easy testability
+var associationsProvider = getCurrentAssociations
+
+func getCurrentAssociations() []*associateModel.InstanceAssociation {
+	return schedulemanager.Schedules()
+}
+
+// PluginOutput represents the output of inventory plugin
+type PluginOutput struct {
+	contracts.PluginOutput
+}
 
 // Plugin encapsulates the logic of configuring, starting and stopping inventory plugin
 type Plugin struct {
-	//NOTE: Unless we integrate inventory plugin with associate/mds plugin, the only way to ingest inventory policy
-	//document would be through files - where this plugin will periodically monitor for any changes to policy doc.
+	pluginutil.DefaultPlugin
+
 	context    context.T
 	stopPolicy *sdkutil.StopPolicy
 	ssm        *ssm.SSM
-	//job is a scheduled job, which looks for updated inventory policy at a given location (this will be removed
-	//when Plugin will be integrated with associate plugin)
-	job                *scheduler.Job
-	frequencyInMinutes int
-	//location stores inventory policy doc
-	location string
-	//isEnabled enables inventory plugin, if this is false - then inventory plugin will not run.
-	isEnabled bool
+
 	//supportedGatherers is a map of all inventory gatherers supported by current OS
-	// (e.g. WindowsUpdateGatherer is not included when running on Unix)
+	// (e.g. WindowsUpdateGatherer is not included when running on Unix based systems)
 	supportedGatherers gatherers.SupportedGatherer
 
-	//installedGatherers is a map of gatherers of all platforms
-	installedGathereres gatherers.InstalledGatherer
+	//installedGatherers is a map of gatherers that can run on all platforms
+	installedGatherers gatherers.InstalledGatherer
 
 	//uploader handles uploading inventory data to SSM.
 	uploader datauploader.T
+
+	//lastExecutedAssociations stores a map of associations & its execution time for inventory
+	lastExecutedAssociations map[string]string
+
+	// currentAssociations stores a copy of all current associations to instance. It's refreshed everytime inventory
+	// is invoked via association
+	currentAssociations map[string]string
 }
 
-// NewPlugin creates a new inventory core plugin.
-func NewPlugin(context context.T) (*Plugin, error) {
+// Name returns the plugin name
+func Name() string {
+	return appconfig.PluginNameAwsSoftwareInventory
+}
+
+// NewPlugin creates a new inventory worker plugin.
+func NewPlugin(context context.T, pluginConfig pluginutil.PluginConfig) (*Plugin, error) {
 	var appCfg appconfig.SsmagentConfig
 	var err error
 	var p = Plugin{}
 
-	c := context.With("[" + model.InventoryPluginName + "]")
+	//setting up default worker plugin config
+	p.MaxStdoutLength = pluginConfig.MaxStdoutLength
+	p.MaxStderrLength = pluginConfig.MaxStderrLength
+	p.StdoutFileName = pluginConfig.StdoutFileName
+	p.StderrFileName = pluginConfig.StderrFileName
+	p.OutputTruncatedSuffix = pluginConfig.OutputTruncatedSuffix
+	p.Uploader = pluginutil.GetS3Config()
+	p.ExecuteUploadOutputToS3Bucket = pluginutil.UploadOutputToS3BucketExecuter(p.UploadOutputToS3Bucket)
+
+	// since this is initialization - lastExecutedAssociations should be empty.
+	// NOTE: this will get populated when inventory plugin gets invoked via association later.
+	p.lastExecutedAssociations = make(map[string]string)
+
+	c := context.With("[" + Name() + "]")
 	log := c.Log()
 
 	// reading agent appconfig
 	if appCfg, err = appconfig.Config(false); err != nil {
-		log.Errorf("Could not load config file %v", err.Error())
 		return &p, err
 	}
 
@@ -81,121 +142,169 @@ func NewPlugin(context context.T) (*Plugin, error) {
 	cfg.Region = &appCfg.Agent.Region
 	cfg.Endpoint = &appCfg.Ssm.Endpoint
 
-	//setting inventory config
-	p.isEnabled = appCfg.Ssm.InventoryPlugin == model.Enabled
-
 	p.context = c
-	p.stopPolicy = sdkutil.NewStopPolicy(model.InventoryPluginName, model.ErrorThreshold)
+	p.stopPolicy = sdkutil.NewStopPolicy(Name(), model.ErrorThreshold)
 	p.ssm = ssm.New(session.New(cfg))
 
-	//location - path where inventory policy doc is stored. (Note: this is temporary till we integrate with
-	//associate plugin)
-	p.location = appconfig.DefaultProgramFolder
-
-	//for now we are using the same frequency as that of health plugin to look & apply new inventory policy
-	p.frequencyInMinutes = appCfg.Ssm.HealthFrequencyMinutes
-
 	//loads all registered gatherers (for now only a dummy application gatherer is loaded in memory)
-	p.supportedGatherers, p.installedGathereres = gatherers.InitializeGatherers(p.context)
+	p.supportedGatherers, p.installedGatherers = gatherers.InitializeGatherers(p.context)
 	//initializes SSM Inventory uploader
-	if p.uploader, err = datauploader.NewInventoryUploader(context); err != nil {
+	if p.uploader, err = datauploader.NewInventoryUploader(c); err != nil {
 		err = log.Errorf("Unable to configure SSM Inventory uploader - %v", err.Error())
 	}
 
 	return &p, err
 }
 
-// ApplyInventoryPolicy applies basic instance information inventory data in SSM
-func (p *Plugin) ApplyInventoryPolicy() {
-	//NOTE: this will only be used until we integrate with associate plugin
+// ApplyInventoryPolicy applies given inventory policy regarding which gatherers to run
+func (p *Plugin) ApplyInventoryPolicy(context context.T, inventoryInput PluginInput) (inventoryOutput PluginOutput) {
 	log := p.context.Log()
-	var policy model.Policy
 	var inventoryItems []*ssm.InventoryItem
 	var items []model.Item
 	var err error
-	var content string
 
-	log.Infof("Looking for SSM Inventory policy in %v", p.location)
+	//map of all valid gatherers & respective configs to run
+	var gatherers map[gatherers.T]model.Config
 
-	doc := path.Join(p.location, model.InventoryPolicyDocName)
-	//get latest instanceInfo inventory item
-	if fileutil.Exists(doc) {
-		log.Infof("Applying Inventory policy")
+	//validate all gatherers
+	if gatherers, err = p.ValidateInventoryInput(context, inventoryInput); err != nil {
+		log.Info(err.Error())
+		inventoryOutput.ExitCode = 1
+		inventoryOutput.Stderr = err.Error()
+		return
+	}
 
-		//read file
-		if content, err = fileutil.ReadAllText(doc); err == nil {
+	//execute all eligible gatherers with their respective config
+	if items, err = p.RunGatherers(gatherers); err != nil {
+		log.Info(err.Error())
+		inventoryOutput.ExitCode = 1
+		inventoryOutput.Stderr = err.Error()
+		return
+	}
 
-			if err = json.Unmarshal([]byte(content), &policy); err != nil {
-				log.Infof("Encountered error while reading Inventory policy at %v. Error - %v",
-					doc,
-					err.Error())
-				log.Infof("Skipping execution of inventory policy doc.")
-				return
-			}
+	//log collected data before sending
+	d, _ := json.Marshal(items)
+	log.Infof("Collected Inventory data: %v", string(d))
 
-			//map of all valid gatherers & respective configs to run
-			var gatherers map[gatherers.T]model.Config
+	if inventoryItems, err = p.uploader.ConvertToSsmInventoryItems(p.context, items); err != nil {
+		log.Infof("Encountered error in converting data to SSM InventoryItems - %v. Skipping upload to SSM", err.Error())
+		inventoryOutput.ExitCode = 1
+		inventoryOutput.Stderr = err.Error()
+		return
+	}
 
-			//validate all gatherers
-			if gatherers, err = p.ValidateGatherers(policy); err != nil {
-				log.Info(err.Error())
-				return
-			}
+	p.uploader.SendDataToSSM(p.context, inventoryItems)
+	inventoryOutput.ExitCode = 0
+	inventoryOutput.Stdout = successfulMsgForInventoryPlugin
 
-			//execute all eligible gatherers with their respective config
-			if items, err = p.RunGatherers(gatherers); err != nil {
-				log.Info(err.Error())
-				return
-			}
+	return
+}
 
-			//log collected data before sending
-			d, _ := json.Marshal(items)
-			log.Infof("Collected Inventory data: %v", string(d))
+// CanGathererRun returns true if the gatherer can run on given OS, else it returns false. It throws error if the
+// gatherer is not recognized.
+func (p *Plugin) CanGathererRun(context context.T, name string) (status bool, gatherer gatherers.T, err error) {
 
-			if inventoryItems, err = p.uploader.ConvertToSsmInventoryItems(p.context, items); err != nil {
-				log.Infof("Encountered error in converting data to SSM InventoryItems - %v. Skipping upload to SSM", err.Error())
-			}
-			p.uploader.SendDataToSSM(p.context, inventoryItems)
+	log := context.Log()
+	var isGathererSupported, isGathererInstalled bool
 
+	if gatherer, isGathererSupported = p.supportedGatherers[name]; !isGathererSupported {
+		if _, isGathererInstalled = p.installedGatherers[name]; isGathererInstalled {
+			log.Infof("%v inventory gatherer is installed but not supported to run on this platform", name)
+			status = false
 		} else {
-			log.Infof("Unable to read inventory policy from : %v because of error - %v", doc, err.Error())
+			err = fmt.Errorf("Unrecognized inventory gatherer - %v ", name)
 		}
 	} else {
-		log.Infof("No inventory policy to apply")
+		log.Infof("%v inventory gatherer is supported to run on this platform", name)
+		status = true
 	}
 
 	return
 }
 
-// ValidateGatherers verifies all gatherers of inventory policy and returns a map of eligible gatherers to run along
-// their config to run. It throws an error if gatherer is not installed.
-func (p *Plugin) ValidateGatherers(policy model.Policy) (executors map[gatherers.T]model.Config, err error) {
+func (p *Plugin) validatePredefinedGatherer(context context.T, collectionPolicy, gathererName string) (status bool, gatherer gatherers.T, policy model.Config, err error) {
+
+	if collectionPolicy == model.Enabled {
+		if status, gatherer, err = p.CanGathererRun(context, gathererName); err != nil {
+			return
+		}
+
+		// check if gatherer can run - if not then no need to set policy
+		if status {
+			policy = model.Config{Collection: collectionPolicy}
+		}
+	}
+
+	return
+}
+
+func (p *Plugin) validateCustomGatherer(context context.T, collectionPolicy, location string) (status bool, gatherer gatherers.T, policy model.Config, err error) {
+
+	if collectionPolicy == model.Enabled {
+		if status, gatherer, err = p.CanGathererRun(context, custom.GathererName); err != nil {
+			return
+		}
+
+		// check if gatherer can run - if not then no need to set policy
+		if status {
+			policy = model.Config{Collection: collectionPolicy, Location: location}
+		}
+	}
+
+	return
+}
+
+// ValidateInventoryInput validates inventory input and returns a map of eligible gatherers & their corresponding config.
+// It throws an error if gatherer is not recongnized/installed.
+func (p *Plugin) ValidateInventoryInput(context context.T, input PluginInput) (configuredGatherers map[gatherers.T]model.Config, err error) {
+	var dataB []byte
+	var canGathererRun bool
 	var gatherer gatherers.T
-	var isGathererSupported, isGathererInstalled bool
-	executors = make(map[gatherers.T]model.Config)
-	log := p.context.Log()
+	var cfg model.Config
+	configuredGatherers = make(map[gatherers.T]model.Config)
+
+	log := context.Log()
+	dataB, _ = json.Marshal(input)
+	log.Debugf("Validating gatherers from inventory input - \n%v", jsonutil.Indent(string(dataB)))
 
 	//NOTE:
 	// If the gatherer is installed but not supported by current platform, we will skip that gatherer. If the
 	// gatherer is not installed,  we error out & don't send the data collected from other supported gatherers
 	// - this is because we don't send partial inventory data as part of 1 inventory policy.
 
-	for name, config := range policy.InventoryPolicy {
+	//checking application gatherer
+	if canGathererRun, gatherer, cfg, err = p.validatePredefinedGatherer(context, input.Applications, application.GathererName); err != nil {
+		return
+	} else if canGathererRun {
+		configuredGatherers[gatherer] = cfg
+	}
 
-		//find out if the gatherer is indeed registered.
-		if gatherer, isGathererSupported = p.supportedGatherers[name]; !isGathererSupported {
-			if _, isGathererInstalled = p.installedGathereres[name]; isGathererInstalled {
-				//since this is a case of wrongly configured gatherer - for different OS, we are not
-				//going to error out.
-				log.Infof("Installed but unsupported gatherer on this platform - %v", name)
-			} else {
-				err = fmt.Errorf("Unrecognized inventory gatherer - %v ", name)
-				break
-			}
-		} else {
-			//add the supported gatherer in the map of executors.
-			executors[gatherer] = config
-		}
+	//checking awscomponents gatherer
+	if canGathererRun, gatherer, cfg, err = p.validatePredefinedGatherer(context, input.AWSComponents, awscomponent.GathererName); err != nil {
+		return
+	} else if canGathererRun {
+		configuredGatherers[gatherer] = cfg
+	}
+
+	//checking network gatherer
+	if canGathererRun, gatherer, cfg, err = p.validatePredefinedGatherer(context, input.NetworkConfig, network.GathererName); err != nil {
+		return
+	} else if canGathererRun {
+		configuredGatherers[gatherer] = cfg
+	}
+
+	//checking windows updates gatherer
+	if canGathererRun, gatherer, cfg, err = p.validatePredefinedGatherer(context, input.WindowsUpdates, windowsUpdate.GathererName); err != nil {
+		return
+	} else if canGathererRun {
+		configuredGatherers[gatherer] = cfg
+	}
+
+	//checking custom gatherer
+	if canGathererRun, gatherer, cfg, err = p.validateCustomGatherer(context, input.CustomInventory, input.CustomInventoryDirectory); err != nil {
+		return
+	} else if canGathererRun {
+		configuredGatherers[gatherer] = cfg
 	}
 
 	return
@@ -266,37 +375,224 @@ func (p *Plugin) VerifyInventoryDataSize(item model.Item, items []model.Item) bo
 	return true
 }
 
-// ICorePlugin implementation
+// ConvertToCurrentAssociationsMap converts a list of current association to a map of association.
+func ConvertToCurrentAssociationsMap(input []*associateModel.InstanceAssociation) (currentAssociations map[string]string) {
+	currentAssociations = make(map[string]string)
 
-// Name returns Plugin Name
-func (p *Plugin) Name() string {
-	return model.InventoryPluginName
-}
-
-// Execute starts the scheduling of inventory plugin
-func (p *Plugin) Execute(context context.T) (err error) {
-
-	log := context.Log()
-	log.Infof("Starting %v plugin", model.InventoryPluginName)
-
-	//Note: Currently this plugin is not integrated with associate plugin so in turn
-	//it schedules a job - that periodically reads inventory policy doc from a file and applies it.
-	//TODO: remove this scheduled job - after integrating with associate plugin
-	if p.isEnabled {
-		if p.job, err = scheduler.Every(p.frequencyInMinutes).Minutes().Run(p.ApplyInventoryPolicy); err != nil {
-			err = log.Errorf("Unable to schedule %v plugin. %v", model.InventoryPluginName, err)
-		}
-	} else {
-		log.Debugf("Skipping execution of %s plugin since its disabled", model.InventoryPluginName)
+	for _, v := range input {
+		currentAssociations[*v.Association.AssociationId] = v.CreateDate.String()
 	}
+
 	return
 }
 
-// RequestStop handles the termination of inventory plugin job
-func (p *Plugin) RequestStop(stopType contracts.StopType) (err error) {
-	if p.job != nil {
-		p.context.Log().Info("Stopping inventory job.")
-		p.job.Quit <- true
+// RefreshLastTrackedAssociationExecutions refreshes map of tracked association executions.
+func RefreshLastTrackedAssociationExecutions(oldTrackedExecutions, currentAssociations map[string]string) (newTrackedExecutions map[string]string) {
+	newTrackedExecutions = make(map[string]string)
+
+	//iterate over oldExecutions and see if any doc is not associated anymore - if so don't include that doc in the
+	//new map of tracked association execution
+
+	for doc := range oldTrackedExecutions {
+		if _, associationFound := currentAssociations[doc]; associationFound {
+			//the execution time of inventory remains the same so copy over that data
+			newTrackedExecutions[doc] = oldTrackedExecutions[doc]
+		}
 	}
-	return nil
+
+	return
+}
+
+// IsMulitpleAssociationPresent returns true if there are multiple associations for inventory plugin else it returns false.
+// It also refreshes map of tracked association executions accordingly.
+func (p *Plugin) IsMulitpleAssociationPresent(currentAssociationID string) (status bool) {
+	var otherAssociationFound bool
+
+	// we might end up changing value of p.lastAssociationId
+	associationLock.Lock()
+	defer associationLock.Unlock()
+
+	log := p.context.Log()
+	executionTime := time.Now().String()
+
+	log.Debugf("Detecting multiple association - when executing - %v at time - %v",
+		currentAssociationID, executionTime)
+
+	if len(p.lastExecutedAssociations) == 0 {
+		//lastExecutedAssociations is empty - which means this must be the first association run - return false
+		//but before returning - add the current association to the map with execution time.
+		p.lastExecutedAssociations[currentAssociationID] = executionTime
+		status = false
+
+		log.Debugf("There are 0 older association executions tracked - this is the first run - no multiple associations for inventory")
+	} else {
+		//There have been earlier associations so need to compare with current associations
+
+		//Get all current associations
+		p.currentAssociations = ConvertToCurrentAssociationsMap(associationsProvider())
+
+		log.Debugf("Map of all current associations - %v", p.currentAssociations)
+
+		for associationID := range p.currentAssociations {
+			if associationID == currentAssociationID {
+				//we are not interested in current association under whose context inventory plugin
+				//is currently executing
+				continue
+			}
+
+			if _, otherAssociationFound = p.lastExecutedAssociations[associationID]; otherAssociationFound {
+				//There exists a document which:
+				// - is not the current association
+				// - is currently associated with instance
+				// - has been previously executed by inventory plugin
+				//This is a multiple association scenario which is not supported by inventory plugin
+				status = true
+
+				//even though this execution run would fail we should still add this execution in the map
+				//of lastAssociationExecutions to fail executions of other associations
+				p.lastExecutedAssociations[currentAssociationID] = executionTime
+
+				//no need to check for any other associations from current associations - since we
+				//already found a multiple association
+				log.Debugf("Found another association - %v that executed inventory plugin at - %v",
+					associationID, p.lastExecutedAssociations[associationID])
+				break
+			}
+		}
+
+		if !otherAssociationFound {
+			//there wasn't any multiple association that was found -> return false
+			status = false
+
+			//we should add the current execution as well to the list of earlier tracked associations
+			p.lastExecutedAssociations[currentAssociationID] = executionTime
+
+			log.Debugf("Found no multiple associations for inventory plugin")
+		}
+
+		//refresh last tracked executions to ensure we delete old entries of association executions that aren't
+		//associated anymore.
+		p.lastExecutedAssociations = RefreshLastTrackedAssociationExecutions(p.lastExecutedAssociations, p.currentAssociations)
+	}
+
+	return
+}
+
+// IsInventoryBeingInvokedAsSSMCommand returns true if there are multiple associations for inventory plugin else it returns false.
+func (p *Plugin) IsInventoryBeingInvokedAsSSMCommand() (status bool) {
+	//TODO: implement following algo:
+	// NOTE: 2 approaches - both of which would require configuration.bookkeepingfilename or configuration.MessageId (messageId is not really future proof since later implementations might only include doc state management)
+	// 1) we know the path where internalCmdState file is stored - check if the file is present there -> if so - simply return true else false
+	// 2) we know the path - read the document and then read the property -> isCommand and accordingly return
+	return false
+}
+
+// ParseAssociationIdFromFileName parses associationID from the given input
+// NOTE: Input will be of format - AssociationID.RunID -> as per the format of bookkeepingfilename for associate documents
+func (p *Plugin) ParseAssociationIdFromFileName(input string) string {
+	return strings.Split(input, ".")[0]
+}
+
+// Worker plugin implementation
+
+// Execute runs the inventory plugin
+func (p *Plugin) Execute(context context.T, config contracts.Configuration, cancelFlag task.CancelFlag) (res contracts.PluginResult) {
+	log := context.Log()
+	res.StartDateTime = time.Now()
+	defer func() { res.EndDateTime = time.Now() }()
+
+	var errorMsg, associationID string
+	var dataB []byte
+	var err error
+	var inventoryInput PluginInput
+	var inventoryOutput PluginOutput
+
+	pluginName := Name()
+	dataB, _ = json.Marshal(config)
+	log.Debugf("Starting %v with configuration \n%v", pluginName, jsonutil.Indent(string(dataB)))
+
+	//TODO: take care of cancel flag
+
+	// Check if there exists multiple associations for software inventory plugin, if so - then fail association - because
+	// inventory plugin supports single association only.
+
+	// NOTE: as per contract with associate functionality - bookkeepingfilename will always contain associationId.
+	// bookkeepingfilename will be of format - associationID.RunID for associations, for command it will simply be commandID
+
+	associationID = p.ParseAssociationIdFromFileName(config.BookKeepingFileName)
+
+	if p.IsMulitpleAssociationPresent(associationID) {
+		errorMsg = fmt.Sprintf(errorMsgForMultipleAssociations, pluginName)
+		log.Error(errorMsg)
+		res.Code = 1
+		res.Output = errorMsg
+		res.StandardError = errorMsg
+		res.Status = contracts.AssociationErrorCodeInvalidAssociation
+
+		pluginutil.PersistPluginInformationToCurrent(log, config.PluginID, config, res)
+
+		return
+	}
+
+	// Check if the inventory plugin is being invoked via run command, if so - then fail association - because
+	// inventory plugin currently supports invocation via ssm associate only.
+	if p.IsInventoryBeingInvokedAsSSMCommand() {
+		errorMsg = fmt.Sprintf(errorMsgForExecutingInventoryThroughCommand, pluginName)
+		log.Error(errorMsg)
+		res.Code = 1
+		res.Output = errorMsg
+		res.StandardError = errorMsg
+		res.Status = contracts.AssociationErrorCodeInvalidAssociation
+
+		pluginutil.PersistPluginInformationToCurrent(log, config.PluginID, config, res)
+
+		return
+	}
+
+	//loading Properties as map since aws:softwareInventory gets configuration in form of map
+	if dataB, err = json.Marshal(config.Properties); err != nil {
+		errorMsg = fmt.Sprintf("Unable to marshal plugin input to %v due to %v", pluginName, err.Error())
+		log.Error(errorMsg)
+		res.Code = 1
+		res.Output = errorMsg
+		res.StandardError = errorMsg
+		res.Status = contracts.ResultStatusFailed
+
+		pluginutil.PersistPluginInformationToCurrent(log, config.PluginID, config, res)
+
+		return
+	}
+
+	if err = json.Unmarshal(dataB, &inventoryInput); err != nil {
+		errorMsg = fmt.Sprintf(errorMsgForInvalidInventoryInput, pluginName)
+		log.Error(errorMsg)
+		res.Code = 1
+		res.Output = errorMsg
+		res.StandardError = errorMsg
+		res.Status = contracts.ResultStatusFailed
+
+		pluginutil.PersistPluginInformationToCurrent(log, config.PluginID, config, res)
+
+		return
+	}
+
+	dataB, _ = json.Marshal(inventoryInput)
+	log.Debugf("Inventory configuration after parsing - %v", string(dataB))
+
+	inventoryOutput = p.ApplyInventoryPolicy(context, inventoryInput)
+	res.Code = inventoryOutput.ExitCode
+	res.StandardError = inventoryOutput.Stderr
+	res.StandardOutput = inventoryOutput.Stdout
+	res.Output = inventoryOutput.String()
+
+	//check inventory plugin output
+	if inventoryOutput.ExitCode != 0 {
+		log.Debugf("Execution of %v failed with configuration - %v because of - %v", pluginName, config, res.Output)
+		res.Status = contracts.ResultStatusFailed
+	} else {
+		log.Debugf("Execution of %v was successful with configuration - %v with output - %v", pluginName, config, res.Output)
+		res.Status = contracts.ResultStatusSuccess
+	}
+
+	return
 }

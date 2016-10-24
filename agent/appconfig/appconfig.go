@@ -110,11 +110,11 @@ func DefaultConfig() SsmagentConfig {
 		CommandRetryLimit:   15,
 	}
 	var ssm = SsmCfg{
-		HealthFrequencyMinutes: 5,
-		BasicInventoryGatherer: "Enabled",
-		InventoryOptimizer:     "Enabled",
-		InventoryPlugin:        "Enabled",
-		AssociationRetryLimit:  5,
+		HealthFrequencyMinutes:         5,
+		BasicInventoryGatherer:         "Enabled",
+		InventoryOptimizer:             "Enabled",
+		AssociationRetryLimit:          5,
+		CustomInventoryDefaultLocation: DefaultCustomInventoryFolder,
 	}
 	var agent = AgentInfo{
 		Name: "amazon-ssm-agent-default",

@@ -71,11 +71,11 @@ func TestLoadAssociationDetails(t *testing.T) {
 
 	associationName := "test"
 	documentContent := "document content"
-	associationId := "asso-Id-test"
+	associationID := "asso-Id-test"
 	assocRawData := model.InstanceAssociation{}
 	assocRawData.Association = &ssm.InstanceAssociationSummary{}
 	assocRawData.Association.Name = &associationName
-	assocRawData.Association.AssociationId = &associationId
+	assocRawData.Association.AssociationId = &associationID
 	assocRawData.Association.InstanceId = &instanceID
 	assocRawData.Association.DocumentVersion = aws.String("version 1")
 

@@ -15,21 +15,17 @@
 package custom
 
 import (
-	"regexp"
-	"time"
-
 	"encoding/json"
-	"io/ioutil"
-	"path/filepath"
-
-	"reflect"
-	"strings"
-
 	"errors"
 	"fmt"
+	"io/ioutil"
 	"os"
+	"path/filepath"
+	"reflect"
+	"regexp"
+	"strings"
+	"time"
 
-	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/inventory/model"
@@ -72,14 +68,17 @@ func (t *T) Name() string {
 var readDirFunc = ReadDir
 var readFileFunc = ReadFile
 
+// ReadDir is a wrapper on ioutil.ReadDir for easy testability
 func ReadDir(dirname string) ([]os.FileInfo, error) {
 	return ioutil.ReadDir(dirname)
 }
 
+// ReadFile is a wrapper on ioutil.ReadFile for easy testability
 func ReadFile(filename string) ([]byte, error) {
 	return ioutil.ReadFile(filename)
 }
 
+// LogError is a wrapper on log.Error for easy testability
 func LogError(log log.T, err error) {
 	// To debug unit test, please uncomment following line
 	// fmt.Println(err)
@@ -94,7 +93,7 @@ func (t *T) Run(context context.T, configuration model.Config) (items []model.It
 	// Get custom inventory folder, fall back if not specified
 	customFolder := configuration.Location
 	if customFolder == "" {
-		customFolder = appconfig.DefaultCustomInventoryFolder
+		customFolder = context.AppConfig().Ssm.CustomInventoryDefaultLocation
 	}
 
 	// Get custom inventory files' path

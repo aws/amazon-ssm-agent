@@ -48,12 +48,6 @@ func loadCorePlugins(context context.T) {
 		registeredCorePlugins = append(registeredCorePlugins, basicInventoryPlugin)
 	}
 
-	if inventoryPlugin, err := inventory.NewPlugin(context); err != nil {
-		context.Log().Errorf("Inventory plugin isn't configured - %v", err.Error())
-	} else {
-		registeredCorePlugins = append(registeredCorePlugins, inventoryPlugin)
-	}
-
 	// registering the long running plugin manager as a core plugin
 	manager.EnsureInitialization(context)
 	if lrpm, err := manager.GetInstance(); err == nil {

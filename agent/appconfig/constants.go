@@ -74,6 +74,9 @@ const (
 	// PluginEC2ConfigUpdate is the name for ec2 config update plugin
 	PluginEC2ConfigUpdate = "aws:updateAgent"
 
+	// PluginNameAwsSoftwareInventory is the name for inventory plugin
+	PluginNameAwsSoftwareInventory = "aws:softwareInventory"
+
 	AppConfigFileName    = "amazon-ssm-agent.json"
 	SeelogConfigFileName = "seelog.xml"
 

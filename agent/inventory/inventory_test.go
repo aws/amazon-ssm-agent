@@ -33,7 +33,7 @@ func MockInventoryPlugin(supportedGatherers, installedGatherers []string) (*Plug
 	//setting up mock context
 	p.context = context.NewMockDefault()
 	p.supportedGatherers = gatherers.SupportedGatherer{}
-	p.installedGathereres = gatherers.InstalledGatherer{}
+	p.installedGatherers = gatherers.InstalledGatherer{}
 
 	//Creating supported gatherers
 	for _, name := range supportedGatherers {
@@ -42,7 +42,7 @@ func MockInventoryPlugin(supportedGatherers, installedGatherers []string) (*Plug
 
 	//Creating installed gatherers
 	for _, name := range installedGatherers {
-		p.installedGathereres[name] = gatherers.NewMockDefault()
+		p.installedGatherers[name] = gatherers.NewMockDefault()
 	}
 
 	return &p, nil
@@ -92,82 +92,6 @@ func LargeInventoryItem(sizeInBytes int) model.Item {
 		Content:       LargeString(sizeInBytes),
 		SchemaVersion: "1.0",
 	}
-}
-
-func TestValidateGatherers(t *testing.T) {
-
-	var gatherersConfig map[gatherers.T]model.Config
-	var err error
-	var policy model.Policy
-	var sGatherers, iGatherers []string
-
-	//setup
-	supportedGathererA := "supportedGatherer-1"
-	supportedGathererB := "supportedGatherer-2"
-	installedGatherer := "installedGatherer-1"
-	unsupportedGatherer := "unsupportedGatherer-1"
-	uninstalledGatherer := "uninstalledGatherer-1"
-
-	//diff types of gatherers
-	iGatherers = append(iGatherers, supportedGathererA, supportedGathererB, unsupportedGatherer, installedGatherer)
-	sGatherers = append(sGatherers, supportedGathererA, supportedGathererB)
-
-	//get mock inventory plugin
-	p, _ := MockInventoryPlugin(sGatherers, iGatherers)
-
-	//TESTING
-	//testing with a supported gatherers
-
-	//set policy to test with 1 supported gatherer
-	policy = NewInventoryPolicy(supportedGathererA)
-	gatherersConfig, err = p.ValidateGatherers(policy)
-
-	//asserting over gathererConfig
-	assert.Nil(t, err, "No error should be thrown for a supported Gatherer")
-	assert.Equal(t, 1, len(gatherersConfig))
-
-	//set policy to test with multiple supported gatherers
-	policy = NewInventoryPolicy(supportedGathererA, supportedGathererB)
-	gatherersConfig, err = p.ValidateGatherers(policy)
-
-	//asserting over gathererConfig
-	assert.Nil(t, err, "No error should be thrown for a supported Gatherer")
-	assert.Equal(t, 2, len(gatherersConfig))
-
-	//testing with unsupported gatherers
-
-	//set policy to test with 1 unsupported gatherers
-	policy = NewInventoryPolicy(unsupportedGatherer)
-	gatherersConfig, err = p.ValidateGatherers(policy)
-
-	//asserting over gathererConfig
-	assert.Nil(t, err, "No error should be thrown for unsupported Gatherer")
-	assert.Equal(t, 0, len(gatherersConfig))
-
-	//set policy to test with 1 supported gatherer and 1 unsupported gatherer
-	policy = NewInventoryPolicy(supportedGathererA, unsupportedGatherer)
-	gatherersConfig, err = p.ValidateGatherers(policy)
-
-	//asserting over gathererConfig
-	assert.Nil(t, err, "No error should be thrown for unsupported Gatherer")
-	assert.Equal(t, 1, len(gatherersConfig))
-
-	//testing with uninstalled gatherers
-
-	//set policy to test with 1 uninstalled gatherers
-	policy = NewInventoryPolicy(uninstalledGatherer)
-	gatherersConfig, err = p.ValidateGatherers(policy)
-
-	//asserting over gathererConfig
-	assert.NotNil(t, err, "No error should be thrown for unsupported Gatherer")
-	assert.Equal(t, 0, len(gatherersConfig))
-
-	//set policy to test with 1 uninstalled gatherers & some supported & unsupported gatherers
-	policy = NewInventoryPolicy(supportedGathererA, supportedGathererB, unsupportedGatherer, uninstalledGatherer)
-	gatherersConfig, err = p.ValidateGatherers(policy)
-
-	//asserting over gathererConfig
-	assert.NotNil(t, err, "No error should be thrown for unsupported Gatherer")
 }
 
 func TestRunGatherers(t *testing.T) {
