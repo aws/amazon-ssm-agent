@@ -25,6 +25,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/plugins/runcommand"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/updatessmagent"
 	"github.com/aws/amazon-ssm-agent/agent/task"
+	"github.com/aws/amazon-ssm-agent/agent/plugins/dockercontainer"
 )
 
 // T is the interface type for plugins.
@@ -139,6 +140,16 @@ func loadPlatformIndependentPlugins(context context.T) PluginRegistry {
 	} else {
 		workerPlugins[updateAgentPluginName] = updateAgentPlugin
 	}
+
+	// registering aws:runDockerAction plugin
+	runDockerPluginName := dockercontainer.Name()
+	runDockerPlugin, err := dockercontainer.NewPlugin(pluginutil.DefaultPluginConfig())
+	if err != nil {
+		log.Errorf("failed to create plugin %s %v", runDockerPluginName, err)
+	} else {
+		workerPlugins[runDockerPluginName] = runDockerPlugin
+	}
+
 
 	return workerPlugins
 }

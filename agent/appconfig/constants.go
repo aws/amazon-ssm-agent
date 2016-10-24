@@ -79,4 +79,10 @@ const (
 
 	// PluginNameCloudWatch is the name of cloud watch plugin
 	PluginNameCloudWatch = "aws:cloudWatch"
+
+	// PluginNameRunDockerAction is the name of the docker container plugin
+	PluginNameDockerContainer = "aws:runDockerAction"
+
+	// PluginNameConfigureContainers is the name of the configure containers plugin
+	PluginNameConfigureContainers = "aws:ConfigureContainers"
 )
