@@ -4940,8 +4940,6 @@ type Association struct {
 
 	ScheduleExpression *string `min:"1" type:"string"`
 
-	Status *string `type:"string" enum:"AssociationStatusName"`
-
 	Targets []*Target `type:"list"`
 }
 
@@ -4965,8 +4963,6 @@ type AssociationDescription struct {
 	Date *time.Time `type:"timestamp" timestampFormat:"unix"`
 
 	DocumentVersion *string `type:"string"`
-
-	ExecutionDate *time.Time `type:"timestamp" timestampFormat:"unix"`
 
 	// The ID of the instance.
 	InstanceId *string `type:"string"`
@@ -5262,9 +5258,13 @@ func (s AutomationExecutionMetadata) GoString() string {
 type BaselineIdentity struct {
 	_ struct{} `type:"structure"`
 
+	BaselineDescription *string `min:"1" type:"string"`
+
 	BaselineId *string `min:"20" type:"string"`
 
 	BaselineName *string `min:"3" type:"string"`
+
+	DefaultBaseline *bool `type:"boolean"`
 }
 
 // String returns the string representation
@@ -7348,7 +7348,7 @@ func (s *DescribeInstanceAssociationsStatusInput) Validate() error {
 type DescribeInstanceAssociationsStatusOutput struct {
 	_ struct{} `type:"structure"`
 
-	InstanceAssociationStatusInfosList []*InstanceAssociationStatusInfo `type:"list"`
+	InstanceAssociationStatusInfos []*InstanceAssociationStatusInfo `type:"list"`
 
 	NextToken *string `type:"string"`
 }
@@ -8172,7 +8172,7 @@ type DescribeParametersOutput struct {
 
 	NextToken *string `type:"string"`
 
-	Parameters []*Parameter `type:"list"`
+	Parameters []*ParameterMetadata `type:"list"`
 }
 
 // String returns the string representation
@@ -9592,8 +9592,6 @@ func (s InstanceAssociation) GoString() string {
 type InstanceAssociationExecutionResult struct {
 	_ struct{} `type:"structure"`
 
-	DebugInfo *string `type:"string"`
-
 	ErrorCode *string `type:"string"`
 
 	ExecutionDate *time.Time `type:"timestamp" timestampFormat:"unix" required:"true"`
@@ -9689,7 +9687,7 @@ type InstanceAssociationStatusInfo struct {
 
 	AssociationId *string `type:"string"`
 
-	DebugInfo *string `type:"string"`
+	DetailedStatus *string `type:"string"`
 
 	DocumentVersion *string `type:"string"`
 
@@ -10951,11 +10949,15 @@ type MaintenanceWindowExecutionTaskInvocationIdentity struct {
 
 	InvocationId *string `min:"36" type:"string"`
 
+	OwnerInformation *string `min:"1" type:"string"`
+
 	Parameters *string `type:"string"`
 
 	StartTime *time.Time `type:"timestamp" timestampFormat:"unix"`
 
 	Status *string `type:"string" enum:"MaintenanceWindowExecutionStatus"`
+
+	WindowTargetId *string `type:"string"`
 }
 
 // String returns the string representation
@@ -11023,7 +11025,7 @@ type MaintenanceWindowTask struct {
 
 	Priority *int64 `type:"integer"`
 
-	ServiceRole *string `type:"string"`
+	ServiceRoleArn *string `type:"string"`
 
 	Targets []*MaintenanceWindowTaskTarget `type:"list"`
 
@@ -11173,12 +11175,6 @@ func (s NotificationConfig) GoString() string {
 type Parameter struct {
 	_ struct{} `type:"structure"`
 
-	Description *string `min:"1" type:"string"`
-
-	LastModifyDate *time.Time `type:"timestamp" timestampFormat:"unix"`
-
-	LastModifyUser *string `type:"string"`
-
 	Name *string `min:"1" type:"string"`
 
 	Type *string `type:"string" enum:"ParameterType"`
@@ -11193,6 +11189,30 @@ func (s Parameter) String() string {
 
 // GoString returns the string representation
 func (s Parameter) GoString() string {
+	return s.String()
+}
+
+type ParameterMetadata struct {
+	_ struct{} `type:"structure"`
+
+	Description *string `min:"1" type:"string"`
+
+	LastModifyDate *time.Time `type:"timestamp" timestampFormat:"unix"`
+
+	LastModifyUser *string `type:"string"`
+
+	Name *string `min:"1" type:"string"`
+
+	Type *string `type:"string" enum:"ParameterType"`
+}
+
+// String returns the string representation
+func (s ParameterMetadata) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ParameterMetadata) GoString() string {
 	return s.String()
 }
 
@@ -11790,7 +11810,7 @@ type RegisterTaskWithMaintenanceWindowInput struct {
 
 	Priority *int64 `type:"integer"`
 
-	ServiceRole *string `type:"string" required:"true"`
+	ServiceRoleArn *string `type:"string" required:"true"`
 
 	Targets []*MaintenanceWindowTaskTarget `type:"list"`
 
@@ -11825,8 +11845,8 @@ func (s *RegisterTaskWithMaintenanceWindowInput) Validate() error {
 	if s.MaxErrors != nil && len(*s.MaxErrors) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("MaxErrors", 1))
 	}
-	if s.ServiceRole == nil {
-		invalidParams.Add(request.NewErrParamRequired("ServiceRole"))
+	if s.ServiceRoleArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("ServiceRoleArn"))
 	}
 	if s.TaskArn == nil {
 		invalidParams.Add(request.NewErrParamRequired("TaskArn"))
@@ -12837,6 +12857,8 @@ func (s UpdateInstanceAssociationStatusOutput) GoString() string {
 type UpdateInstanceInformationInput struct {
 	_ struct{} `type:"structure"`
 
+	AgentName *string `min:"1" type:"string"`
+
 	AgentStatus *string `min:"1" type:"string"`
 
 	AgentVersion *string `type:"string"`
@@ -12867,6 +12889,9 @@ func (s UpdateInstanceInformationInput) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *UpdateInstanceInformationInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "UpdateInstanceInformationInput"}
+	if s.AgentName != nil && len(*s.AgentName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("AgentName", 1))
+	}
 	if s.AgentStatus != nil && len(*s.AgentStatus) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("AgentStatus", 1))
 	}
@@ -13175,435 +13200,435 @@ func (s UpdatePatchBaselineOutput) GoString() string {
 }
 
 const (
-// @enum AssociationFilterKey
+	// @enum AssociationFilterKey
 	AssociationFilterKeyInstanceId = "InstanceId"
-// @enum AssociationFilterKey
+	// @enum AssociationFilterKey
 	AssociationFilterKeyName = "Name"
-// @enum AssociationFilterKey
+	// @enum AssociationFilterKey
 	AssociationFilterKeyAssociationId = "AssociationId"
-// @enum AssociationFilterKey
+	// @enum AssociationFilterKey
 	AssociationFilterKeyTargets = "Targets"
-// @enum AssociationFilterKey
+	// @enum AssociationFilterKey
 	AssociationFilterKeyAssociationStatusName = "AssociationStatusName"
-// @enum AssociationFilterKey
+	// @enum AssociationFilterKey
 	AssociationFilterKeyLastExecutedBefore = "LastExecutedBefore"
-// @enum AssociationFilterKey
+	// @enum AssociationFilterKey
 	AssociationFilterKeyLastExecutedAfter = "LastExecutedAfter"
 )
 
 const (
-// @enum AssociationStatusName
+	// @enum AssociationStatusName
 	AssociationStatusNamePending = "Pending"
-// @enum AssociationStatusName
+	// @enum AssociationStatusName
 	AssociationStatusNameSuccess = "Success"
-// @enum AssociationStatusName
+	// @enum AssociationStatusName
 	AssociationStatusNameFailed = "Failed"
 )
 
 const (
-// @enum AutomationArgumentType
+	// @enum AutomationArgumentType
 	AutomationArgumentTypeString = "STRING"
-// @enum AutomationArgumentType
+	// @enum AutomationArgumentType
 	AutomationArgumentTypeStringList = "STRING_LIST"
-// @enum AutomationArgumentType
+	// @enum AutomationArgumentType
 	AutomationArgumentTypeInteger = "INTEGER"
-// @enum AutomationArgumentType
+	// @enum AutomationArgumentType
 	AutomationArgumentTypeBoolean = "BOOLEAN"
-// @enum AutomationArgumentType
+	// @enum AutomationArgumentType
 	AutomationArgumentTypeStringMap = "STRING_MAP"
 )
 
 const (
-// @enum AutomationExecutionFilterKey
+	// @enum AutomationExecutionFilterKey
 	AutomationExecutionFilterKeyDocumentNamePrefix = "DocumentNamePrefix"
-// @enum AutomationExecutionFilterKey
+	// @enum AutomationExecutionFilterKey
 	AutomationExecutionFilterKeyExecutionStatus = "ExecutionStatus"
 )
 
 const (
-// @enum AutomationExecutionStatus
+	// @enum AutomationExecutionStatus
 	AutomationExecutionStatusPending = "Pending"
-// @enum AutomationExecutionStatus
+	// @enum AutomationExecutionStatus
 	AutomationExecutionStatusRunning = "Running"
-// @enum AutomationExecutionStatus
+	// @enum AutomationExecutionStatus
 	AutomationExecutionStatusCompleted = "Completed"
-// @enum AutomationExecutionStatus
+	// @enum AutomationExecutionStatus
 	AutomationExecutionStatusCancelled = "Cancelled"
-// @enum AutomationExecutionStatus
+	// @enum AutomationExecutionStatus
 	AutomationExecutionStatusFailed = "Failed"
 )
 
 const (
-// @enum CommandFilterKey
+	// @enum CommandFilterKey
 	CommandFilterKeyInvokedAfter = "InvokedAfter"
-// @enum CommandFilterKey
+	// @enum CommandFilterKey
 	CommandFilterKeyInvokedBefore = "InvokedBefore"
-// @enum CommandFilterKey
+	// @enum CommandFilterKey
 	CommandFilterKeyStatus = "Status"
-// @enum CommandFilterKey
+	// @enum CommandFilterKey
 	CommandFilterKeyCommandId = "CommandId"
-// @enum CommandFilterKey
+	// @enum CommandFilterKey
 	CommandFilterKeyInstanceId = "InstanceId"
 )
 
 const (
-// @enum CommandInvocationStatus
+	// @enum CommandInvocationStatus
 	CommandInvocationStatusPending = "Pending"
-// @enum CommandInvocationStatus
+	// @enum CommandInvocationStatus
 	CommandInvocationStatusInProgress = "InProgress"
-// @enum CommandInvocationStatus
+	// @enum CommandInvocationStatus
 	CommandInvocationStatusDelayed = "Delayed"
-// @enum CommandInvocationStatus
+	// @enum CommandInvocationStatus
 	CommandInvocationStatusSuccess = "Success"
-// @enum CommandInvocationStatus
+	// @enum CommandInvocationStatus
 	CommandInvocationStatusCancelled = "Cancelled"
-// @enum CommandInvocationStatus
+	// @enum CommandInvocationStatus
 	CommandInvocationStatusFailed = "Failed"
-// @enum CommandInvocationStatus
+	// @enum CommandInvocationStatus
 	CommandInvocationStatusTimedOut = "TimedOut"
-// @enum CommandInvocationStatus
+	// @enum CommandInvocationStatus
 	CommandInvocationStatusCancelling = "Cancelling"
 )
 
 const (
-// @enum CommandPluginStatus
+	// @enum CommandPluginStatus
 	CommandPluginStatusPending = "Pending"
-// @enum CommandPluginStatus
+	// @enum CommandPluginStatus
 	CommandPluginStatusInProgress = "InProgress"
-// @enum CommandPluginStatus
+	// @enum CommandPluginStatus
 	CommandPluginStatusSuccess = "Success"
-// @enum CommandPluginStatus
+	// @enum CommandPluginStatus
 	CommandPluginStatusTimedOut = "TimedOut"
-// @enum CommandPluginStatus
+	// @enum CommandPluginStatus
 	CommandPluginStatusCancelled = "Cancelled"
-// @enum CommandPluginStatus
+	// @enum CommandPluginStatus
 	CommandPluginStatusFailed = "Failed"
 )
 
 const (
-// @enum CommandStatus
+	// @enum CommandStatus
 	CommandStatusPending = "Pending"
-// @enum CommandStatus
+	// @enum CommandStatus
 	CommandStatusInProgress = "InProgress"
-// @enum CommandStatus
+	// @enum CommandStatus
 	CommandStatusSuccess = "Success"
-// @enum CommandStatus
+	// @enum CommandStatus
 	CommandStatusCancelled = "Cancelled"
-// @enum CommandStatus
+	// @enum CommandStatus
 	CommandStatusFailed = "Failed"
-// @enum CommandStatus
+	// @enum CommandStatus
 	CommandStatusTimedOut = "TimedOut"
-// @enum CommandStatus
+	// @enum CommandStatus
 	CommandStatusCancelling = "Cancelling"
 )
 
 const (
-// @enum DescribeActivationsFilterKeys
+	// @enum DescribeActivationsFilterKeys
 	DescribeActivationsFilterKeysActivationIds = "ActivationIds"
-// @enum DescribeActivationsFilterKeys
+	// @enum DescribeActivationsFilterKeys
 	DescribeActivationsFilterKeysDefaultInstanceName = "DefaultInstanceName"
-// @enum DescribeActivationsFilterKeys
+	// @enum DescribeActivationsFilterKeys
 	DescribeActivationsFilterKeysIamRole = "IamRole"
 )
 
 const (
-// @enum DocumentFilterKey
+	// @enum DocumentFilterKey
 	DocumentFilterKeyName = "Name"
-// @enum DocumentFilterKey
+	// @enum DocumentFilterKey
 	DocumentFilterKeyOwner = "Owner"
-// @enum DocumentFilterKey
+	// @enum DocumentFilterKey
 	DocumentFilterKeyPlatformTypes = "PlatformTypes"
-// @enum DocumentFilterKey
+	// @enum DocumentFilterKey
 	DocumentFilterKeyDocumentType = "DocumentType"
 )
 
 const (
-// @enum DocumentHashType
+	// @enum DocumentHashType
 	DocumentHashTypeSha256 = "Sha256"
-// @enum DocumentHashType
+	// @enum DocumentHashType
 	DocumentHashTypeSha1 = "Sha1"
 )
 
 const (
-// @enum DocumentParameterType
+	// @enum DocumentParameterType
 	DocumentParameterTypeString = "String"
-// @enum DocumentParameterType
+	// @enum DocumentParameterType
 	DocumentParameterTypeStringList = "StringList"
 )
 
 const (
-// @enum DocumentPermissionType
+	// @enum DocumentPermissionType
 	DocumentPermissionTypeShare = "Share"
 )
 
 const (
-// @enum DocumentStatus
+	// @enum DocumentStatus
 	DocumentStatusCreating = "Creating"
-// @enum DocumentStatus
+	// @enum DocumentStatus
 	DocumentStatusActive = "Active"
-// @enum DocumentStatus
+	// @enum DocumentStatus
 	DocumentStatusUpdating = "Updating"
-// @enum DocumentStatus
+	// @enum DocumentStatus
 	DocumentStatusDeleting = "Deleting"
 )
 
 const (
-// @enum DocumentType
+	// @enum DocumentType
 	DocumentTypeCommand = "Command"
-// @enum DocumentType
+	// @enum DocumentType
 	DocumentTypeAssociation = "Association"
-// @enum DocumentType
+	// @enum DocumentType
 	DocumentTypeEc2automation = "Ec2Automation"
 )
 
 const (
-// @enum Fault
+	// @enum Fault
 	FaultClient = "Client"
-// @enum Fault
+	// @enum Fault
 	FaultServer = "Server"
-// @enum Fault
+	// @enum Fault
 	FaultUnknown = "Unknown"
 )
 
 const (
-// @enum InstanceInformationFilterKey
+	// @enum InstanceInformationFilterKey
 	InstanceInformationFilterKeyInstanceIds = "InstanceIds"
-// @enum InstanceInformationFilterKey
+	// @enum InstanceInformationFilterKey
 	InstanceInformationFilterKeyAgentVersion = "AgentVersion"
-// @enum InstanceInformationFilterKey
+	// @enum InstanceInformationFilterKey
 	InstanceInformationFilterKeyPingStatus = "PingStatus"
-// @enum InstanceInformationFilterKey
+	// @enum InstanceInformationFilterKey
 	InstanceInformationFilterKeyPlatformTypes = "PlatformTypes"
-// @enum InstanceInformationFilterKey
+	// @enum InstanceInformationFilterKey
 	InstanceInformationFilterKeyActivationIds = "ActivationIds"
-// @enum InstanceInformationFilterKey
+	// @enum InstanceInformationFilterKey
 	InstanceInformationFilterKeyIamRole = "IamRole"
-// @enum InstanceInformationFilterKey
+	// @enum InstanceInformationFilterKey
 	InstanceInformationFilterKeyResourceType = "ResourceType"
-// @enum InstanceInformationFilterKey
+	// @enum InstanceInformationFilterKey
 	InstanceInformationFilterKeyAssociationStatus = "AssociationStatus"
 )
 
 const (
-// @enum InstancePatchStateOperatorType
+	// @enum InstancePatchStateOperatorType
 	InstancePatchStateOperatorTypeEqual = "Equal"
-// @enum InstancePatchStateOperatorType
+	// @enum InstancePatchStateOperatorType
 	InstancePatchStateOperatorTypeNotEqual = "NotEqual"
-// @enum InstancePatchStateOperatorType
+	// @enum InstancePatchStateOperatorType
 	InstancePatchStateOperatorTypeLessThan = "LessThan"
-// @enum InstancePatchStateOperatorType
+	// @enum InstancePatchStateOperatorType
 	InstancePatchStateOperatorTypeGreaterThan = "GreaterThan"
 )
 
 const (
-// @enum InstancePropertyFilterKey
+	// @enum InstancePropertyFilterKey
 	InstancePropertyFilterKeyInstanceIds = "InstanceIds"
-// @enum InstancePropertyFilterKey
+	// @enum InstancePropertyFilterKey
 	InstancePropertyFilterKeyAgentVersion = "AgentVersion"
-// @enum InstancePropertyFilterKey
+	// @enum InstancePropertyFilterKey
 	InstancePropertyFilterKeyPingStatus = "PingStatus"
-// @enum InstancePropertyFilterKey
+	// @enum InstancePropertyFilterKey
 	InstancePropertyFilterKeyPlatformTypes = "PlatformTypes"
-// @enum InstancePropertyFilterKey
+	// @enum InstancePropertyFilterKey
 	InstancePropertyFilterKeyDocumentName = "DocumentName"
-// @enum InstancePropertyFilterKey
+	// @enum InstancePropertyFilterKey
 	InstancePropertyFilterKeyActivationIds = "ActivationIds"
-// @enum InstancePropertyFilterKey
+	// @enum InstancePropertyFilterKey
 	InstancePropertyFilterKeyIamRole = "IamRole"
-// @enum InstancePropertyFilterKey
+	// @enum InstancePropertyFilterKey
 	InstancePropertyFilterKeyResourceType = "ResourceType"
-// @enum InstancePropertyFilterKey
+	// @enum InstancePropertyFilterKey
 	InstancePropertyFilterKeyAssociationStatus = "AssociationStatus"
 )
 
 const (
-// @enum InstancePropertyFilterOperator
+	// @enum InstancePropertyFilterOperator
 	InstancePropertyFilterOperatorEqual = "Equal"
-// @enum InstancePropertyFilterOperator
+	// @enum InstancePropertyFilterOperator
 	InstancePropertyFilterOperatorNotEqual = "NotEqual"
-// @enum InstancePropertyFilterOperator
+	// @enum InstancePropertyFilterOperator
 	InstancePropertyFilterOperatorBeginWith = "BeginWith"
-// @enum InstancePropertyFilterOperator
+	// @enum InstancePropertyFilterOperator
 	InstancePropertyFilterOperatorLessThan = "LessThan"
-// @enum InstancePropertyFilterOperator
+	// @enum InstancePropertyFilterOperator
 	InstancePropertyFilterOperatorGreaterThan = "GreaterThan"
 )
 
 const (
-// @enum InventoryAttributeDataType
+	// @enum InventoryAttributeDataType
 	InventoryAttributeDataTypeString = "string"
-// @enum InventoryAttributeDataType
+	// @enum InventoryAttributeDataType
 	InventoryAttributeDataTypeNumber = "number"
 )
 
 const (
-// @enum InventoryQueryOperatorType
+	// @enum InventoryQueryOperatorType
 	InventoryQueryOperatorTypeEqual = "Equal"
-// @enum InventoryQueryOperatorType
+	// @enum InventoryQueryOperatorType
 	InventoryQueryOperatorTypeNotEqual = "NotEqual"
-// @enum InventoryQueryOperatorType
+	// @enum InventoryQueryOperatorType
 	InventoryQueryOperatorTypeBeginWith = "BeginWith"
-// @enum InventoryQueryOperatorType
+	// @enum InventoryQueryOperatorType
 	InventoryQueryOperatorTypeLessThan = "LessThan"
-// @enum InventoryQueryOperatorType
+	// @enum InventoryQueryOperatorType
 	InventoryQueryOperatorTypeGreaterThan = "GreaterThan"
 )
 
 const (
-// @enum MaintenanceWindowExecutionStatus
+	// @enum MaintenanceWindowExecutionStatus
 	MaintenanceWindowExecutionStatusPending = "PENDING"
-// @enum MaintenanceWindowExecutionStatus
+	// @enum MaintenanceWindowExecutionStatus
 	MaintenanceWindowExecutionStatusInProgress = "IN_PROGRESS"
-// @enum MaintenanceWindowExecutionStatus
+	// @enum MaintenanceWindowExecutionStatus
 	MaintenanceWindowExecutionStatusSuccess = "SUCCESS"
-// @enum MaintenanceWindowExecutionStatus
+	// @enum MaintenanceWindowExecutionStatus
 	MaintenanceWindowExecutionStatusFailed = "FAILED"
-// @enum MaintenanceWindowExecutionStatus
+	// @enum MaintenanceWindowExecutionStatus
 	MaintenanceWindowExecutionStatusTimedOut = "TIMED_OUT"
-// @enum MaintenanceWindowExecutionStatus
+	// @enum MaintenanceWindowExecutionStatus
 	MaintenanceWindowExecutionStatusCancelling = "CANCELLING"
-// @enum MaintenanceWindowExecutionStatus
+	// @enum MaintenanceWindowExecutionStatus
 	MaintenanceWindowExecutionStatusCancelled = "CANCELLED"
-// @enum MaintenanceWindowExecutionStatus
+	// @enum MaintenanceWindowExecutionStatus
 	MaintenanceWindowExecutionStatusSkippedOverlapping = "SKIPPED_OVERLAPPING"
 )
 
 const (
-// @enum MaintenanceWindowTargetType
+	// @enum MaintenanceWindowTargetType
 	MaintenanceWindowTargetTypeInstance = "INSTANCE"
 )
 
 const (
-// @enum MaintenanceWindowTaskTargetType
+	// @enum MaintenanceWindowTaskTargetType
 	MaintenanceWindowTaskTargetTypeInstance = "INSTANCE"
-// @enum MaintenanceWindowTaskTargetType
+	// @enum MaintenanceWindowTaskTargetType
 	MaintenanceWindowTaskTargetTypeWindowTarget = "WINDOW_TARGET"
 )
 
 const (
-// @enum MaintenanceWindowTaskType
+	// @enum MaintenanceWindowTaskType
 	MaintenanceWindowTaskTypeRunCommand = "RUN_COMMAND"
 )
 
 const (
-// @enum NotificationEvent
+	// @enum NotificationEvent
 	NotificationEventAll = "All"
-// @enum NotificationEvent
+	// @enum NotificationEvent
 	NotificationEventInProgress = "InProgress"
-// @enum NotificationEvent
+	// @enum NotificationEvent
 	NotificationEventSuccess = "Success"
-// @enum NotificationEvent
+	// @enum NotificationEvent
 	NotificationEventTimedOut = "TimedOut"
-// @enum NotificationEvent
+	// @enum NotificationEvent
 	NotificationEventCancelled = "Cancelled"
-// @enum NotificationEvent
+	// @enum NotificationEvent
 	NotificationEventFailed = "Failed"
 )
 
 const (
-// @enum NotificationType
+	// @enum NotificationType
 	NotificationTypeCommand = "Command"
-// @enum NotificationType
+	// @enum NotificationType
 	NotificationTypeInvocation = "Invocation"
 )
 
 const (
-// @enum ParameterType
+	// @enum ParameterType
 	ParameterTypeString = "String"
-// @enum ParameterType
+	// @enum ParameterType
 	ParameterTypeStringList = "StringList"
-// @enum ParameterType
+	// @enum ParameterType
 	ParameterTypeSecureString = "SecureString"
 )
 
 const (
-// @enum ParametersFilterKey
+	// @enum ParametersFilterKey
 	ParametersFilterKeyName = "Name"
-// @enum ParametersFilterKey
+	// @enum ParametersFilterKey
 	ParametersFilterKeyType = "Type"
-// @enum ParametersFilterKey
+	// @enum ParametersFilterKey
 	ParametersFilterKeyKeyId = "KeyId"
 )
 
 const (
-// @enum PatchComplianceDataState
+	// @enum PatchComplianceDataState
 	PatchComplianceDataStateInstalled = "INSTALLED"
-// @enum PatchComplianceDataState
+	// @enum PatchComplianceDataState
 	PatchComplianceDataStateInstalledOther = "INSTALLED_OTHER"
-// @enum PatchComplianceDataState
+	// @enum PatchComplianceDataState
 	PatchComplianceDataStateMissing = "MISSING"
-// @enum PatchComplianceDataState
+	// @enum PatchComplianceDataState
 	PatchComplianceDataStateNotApplicable = "NOT_APPLICABLE"
-// @enum PatchComplianceDataState
+	// @enum PatchComplianceDataState
 	PatchComplianceDataStateFailed = "FAILED"
 )
 
 const (
-// @enum PatchDeploymentStatus
+	// @enum PatchDeploymentStatus
 	PatchDeploymentStatusApproved = "APPROVED"
-// @enum PatchDeploymentStatus
+	// @enum PatchDeploymentStatus
 	PatchDeploymentStatusPendingApproval = "PENDING_APPROVAL"
-// @enum PatchDeploymentStatus
+	// @enum PatchDeploymentStatus
 	PatchDeploymentStatusExplicitApproved = "EXPLICIT_APPROVED"
-// @enum PatchDeploymentStatus
+	// @enum PatchDeploymentStatus
 	PatchDeploymentStatusExplicitRejected = "EXPLICIT_REJECTED"
 )
 
 const (
-// @enum PatchFilterKey
+	// @enum PatchFilterKey
 	PatchFilterKeyProduct = "PRODUCT"
-// @enum PatchFilterKey
+	// @enum PatchFilterKey
 	PatchFilterKeyClassification = "CLASSIFICATION"
-// @enum PatchFilterKey
+	// @enum PatchFilterKey
 	PatchFilterKeyMsrcClassification = "MSRC_CLASSIFICATION"
-// @enum PatchFilterKey
+	// @enum PatchFilterKey
 	PatchFilterKeyPatchId = "PATCH_ID"
 )
 
 const (
-// @enum PatchOperationType
+	// @enum PatchOperationType
 	PatchOperationTypeScan = "Scan"
-// @enum PatchOperationType
+	// @enum PatchOperationType
 	PatchOperationTypeInstall = "Install"
 )
 
 const (
-// @enum PingStatus
+	// @enum PingStatus
 	PingStatusOnline = "Online"
-// @enum PingStatus
+	// @enum PingStatus
 	PingStatusConnectionLost = "ConnectionLost"
-// @enum PingStatus
+	// @enum PingStatus
 	PingStatusInactive = "Inactive"
 )
 
 const (
-// @enum PlatformType
+	// @enum PlatformType
 	PlatformTypeWindows = "Windows"
-// @enum PlatformType
+	// @enum PlatformType
 	PlatformTypeLinux = "Linux"
 )
 
 const (
-// @enum PublicKeyType
+	// @enum PublicKeyType
 	PublicKeyTypeRsa = "Rsa"
 )
 
 const (
-// @enum ResourceType
+	// @enum ResourceType
 	ResourceTypeManagedInstance = "ManagedInstance"
-// @enum ResourceType
+	// @enum ResourceType
 	ResourceTypeDocument = "Document"
-// @enum ResourceType
+	// @enum ResourceType
 	ResourceTypeEc2instance = "EC2Instance"
 )
 
 const (
-// @enum ResourceTypeForTagging
+	// @enum ResourceTypeForTagging
 	ResourceTypeForTaggingManagedInstance = "ManagedInstance"
-// @enum ResourceTypeForTagging
+	// @enum ResourceTypeForTagging
 	ResourceTypeForTaggingDocument = "Document"
-// @enum ResourceTypeForTagging
+	// @enum ResourceTypeForTagging
 	ResourceTypeForTaggingMaintenanceWindow = "MaintenanceWindow"
-// @enum ResourceTypeForTagging
+	// @enum ResourceTypeForTagging
 	ResourceTypeForTaggingPatchBaseline = "PatchBaseline"
 )

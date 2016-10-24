@@ -2479,11 +2479,11 @@ func ExampleSSM_RegisterTaskWithMaintenanceWindow() {
 	svc := ssm.New(sess)
 
 	params := &ssm.RegisterTaskWithMaintenanceWindowInput{
-		ServiceRole: aws.String("ServiceRole"),               // Required
-		TaskArn:     aws.String("MaintenanceWindowTaskArn"),  // Required
-		Type:        aws.String("MaintenanceWindowTaskType"), // Required
-		WindowId:    aws.String("MaintenanceWindowId"),       // Required
-		ClientToken: aws.String("ClientToken"),
+		ServiceRoleArn: aws.String("ServiceRole"),               // Required
+		TaskArn:        aws.String("MaintenanceWindowTaskArn"),  // Required
+		Type:           aws.String("MaintenanceWindowTaskType"), // Required
+		WindowId:       aws.String("MaintenanceWindowId"),       // Required
+		ClientToken:    aws.String("ClientToken"),
 		LoggingInfo: &ssm.LoggingInfo{
 			S3BucketName: aws.String("S3BucketName"), // Required
 			S3Region:     aws.String("S3Region"),     // Required
@@ -2868,7 +2868,6 @@ func ExampleSSM_UpdateInstanceAssociationStatus() {
 			ExecutionDate:    aws.Time(time.Now()),                                 // Required
 			ExecutionSummary: aws.String("InstanceAssociationExecutionSummary"),    // Required
 			Status:           aws.String("InstanceAssociationExecutionStatusName"), // Required
-			DebugInfo:        aws.String("DebugInfo"),
 			ErrorCode:        aws.String("AgentErrorCode"),
 			OutputUrl: &ssm.InstanceAssociationOutputUrl{
 				S3OutputUrl: &ssm.S3OutputUrl{
@@ -2903,6 +2902,7 @@ func ExampleSSM_UpdateInstanceInformation() {
 
 	params := &ssm.UpdateInstanceInformationInput{
 		InstanceId:      aws.String("InstanceId"), // Required
+		AgentName:       aws.String("AgentName"),
 		AgentStatus:     aws.String("AgentStatus"),
 		AgentVersion:    aws.String("Version"),
 		ComputerName:    aws.String("ComputerName"),
