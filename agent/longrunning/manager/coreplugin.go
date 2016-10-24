@@ -44,7 +44,7 @@ const (
 	NumberOfCancelWorkers = 5
 
 	//poll frequency for managing lifecycle of long running plugins
-	PollFrequencyMinutes = 15
+	PollFrequencyMinutes = 1 //TODO:DAEMON: change from 1 to 15 for debugging
 
 	//hardStopTimeout is the time before the manager will be shutdown during a hardstop = 4 seconds
 	HardStopTimeout = 4 * time.Second
@@ -61,6 +61,7 @@ type T interface {
 	RequestStop(stopType contracts.StopType) (err error)
 	StopPlugin(name string, cancelFlag task.CancelFlag) (err error)
 	StartPlugin(name, configuration string, orchestrationDir string, cancelFlag task.CancelFlag) (err error)
+	EnsurePluginRegistered(name string, plugin managerContracts.Plugin) (err error)
 }
 
 // Manager is the core plugin - that manages long running plugins
@@ -162,10 +163,14 @@ func (m *Manager) Execute(context context.T) (err error) {
 
 	//revive older long running plugins if they were running before
 	if len(m.runningPlugins) > 0 {
-		var p managerContracts.Plugin
 		for pluginName, pluginInfo := range m.runningPlugins {
 			//get the corresponding registered plugin
-			p = m.registeredPlugins[pluginName]
+			p, exists := m.registeredPlugins[pluginName]
+			if !exists {
+				//remove previously running plugins with no registered handlers
+				delete(m.runningPlugins, pluginName)
+				continue
+			}
 			p.Info = pluginInfo
 			log.Infof("Detected %s as a previously executing long running plugin. Starting that plugin again", p.Info.Name)
 			//submit the work of long running plugin to the task pool
@@ -226,6 +231,14 @@ func (m *Manager) RequestStop(stopType contracts.StopType) (err error) {
 
 	// wait for everything to shutdown
 	wg.Wait()
+	return nil
+}
+
+// EnsurePluginRegistered adds a long-running plugin if it is not already in the registry
+func (m *Manager) EnsurePluginRegistered(name string, plugin managerContracts.Plugin) (err error) {
+	if _, exists := m.registeredPlugins[name]; !exists {
+		m.registeredPlugins[name] = plugin
+	}
 	return nil
 }
 

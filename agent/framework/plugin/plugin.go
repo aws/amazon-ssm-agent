@@ -20,6 +20,7 @@ import (
 
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/framework/runutil"
+	"github.com/aws/amazon-ssm-agent/agent/plugins/configuredaemon"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/lrpminvoker"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/pluginutil"
@@ -139,6 +140,15 @@ func loadPlatformIndependentPlugins(context context.T) runutil.PluginRegistry {
 		log.Errorf("failed to create plugin %s %v", configurePackagePluginName, err)
 	} else {
 		workerPlugins[configurePackagePluginName] = configurePackagePlugin
+	}
+
+	// registering aws:configureDaemon
+	configureDaemonPluginName := configuredaemon.Name()
+	configureDaemonPlugin, err := configuredaemon.NewPlugin(pluginutil.DefaultPluginConfig())
+	if err != nil {
+		log.Errorf("failed to create plugin %s %v", configureDaemonPluginName, err)
+	} else {
+		workerPlugins[configureDaemonPluginName] = configureDaemonPlugin
 	}
 
 	return workerPlugins
