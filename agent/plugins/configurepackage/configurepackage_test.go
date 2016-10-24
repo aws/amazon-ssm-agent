@@ -360,7 +360,6 @@ func (m *mockConfigureManager) validateInput(input *ConfigurePackagePluginInput)
 	return m.validateInputResult, m.validateInputError
 }
 
-// TODO:MF: mock the dependencies this method has instead, maybe pull this out to a different "class"
 func (m *mockConfigureManager) getVersionToInstall(log log.T,
 	input *ConfigurePackagePluginInput,
 	util Util,

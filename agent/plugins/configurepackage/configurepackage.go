@@ -59,7 +59,7 @@ type ConfigurePackagePluginInput struct {
 	Source  string `json:"source"`
 }
 
-// ConfigurePackagesPluginOutput represents the output of the plugin.
+// ConfigurePackagePluginOutput represents the output of the plugin.
 type ConfigurePackagePluginOutput struct {
 	contracts.PluginOutput
 }
@@ -572,6 +572,7 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 	defer func() { res.EndDateTime = time.Now() }()
 
 	//loading Properties as list since aws:configurePackage uses properties as list
+	// TODO:MF: Really?  What would it look like to have more than one block of parameters for this, is that multiple package actions in one document?
 	var properties []interface{}
 	if properties, res = pluginutil.LoadParametersAsList(log, config.Properties); res.Code != 0 {
 		return res

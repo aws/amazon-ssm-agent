@@ -102,24 +102,6 @@ func validatePackageManifest(log log.T, parsedManifest *PackageManifest) error {
 	} else {
 		parsedManifest.Reboot = "false" //TODO:MF: Can we make this a bool in parsedManifest?
 	}
-	if parsedManifest.Install != "" {
-		install := parsedManifest.Install
-		if err := validateCommand(log, install); err != nil {
-			return fmt.Errorf("invalid install command string %v", install)
-		}
-	}
-	if parsedManifest.Uninstall != "" {
-		uninstall := parsedManifest.Uninstall
-		if err := validateCommand(log, uninstall); err != nil {
-			return fmt.Errorf("invalid uninstall command string %v", uninstall)
-		}
-	}
-	if parsedManifest.Launch != "" {
-		launch := parsedManifest.Launch
-		if err := validateCommand(log, launch); err != nil {
-			return fmt.Errorf("invalid launch command string %v", launch)
-		}
-	}
 	// TODO:MF: validate platform and arch against this instance's platform and arch?  We don't really use them...
 
 	return nil
@@ -127,12 +109,6 @@ func validatePackageManifest(log log.T, parsedManifest *PackageManifest) error {
 
 // validatePathPackage ensures that a given name is a valid part of a folder path or S3 bucket URI
 func validatePathPackage(log log.T, name string) error {
-	// TODO:MF: Validate
-	return nil
-}
-
-// validateCommand ensures that a command string is not fundamentally invalid for execution
-func validateCommand(log log.T, command string) error {
 	// TODO:MF: Validate
 	return nil
 }
