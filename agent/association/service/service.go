@@ -148,7 +148,7 @@ func (s *AssociationService) UpdateInstanceAssociationStatus(
 		log.Error("could not marshal associationStatus! ", err)
 		return nil, err
 	}
-	log.Debug("Update association status content is ", jsonutil.Indent(executionResultContent))
+	log.Info("Updating association status ", jsonutil.Indent(executionResultContent))
 
 	response, err := s.ssmSvc.UpdateInstanceAssociationStatus(log, associationID, instanceID, &executionResult)
 	if err != nil {

@@ -90,7 +90,7 @@ func NewAssociationProcessor(context context.T, instanceID string) *Processor {
 func (p *Processor) InitializeAssociationProcessor() {
 	log := p.context.Log()
 
-	log.Info("Initialize association signal service")
+	log.Info("Initialize association scheduling service")
 	signal.InitializeAssociationSignalService(log, p.runScheduledAssociation)
 }
 
@@ -116,7 +116,6 @@ func (p *Processor) ProcessAssociation() {
 	}
 
 	p.assocSvc.CreateNewServiceIfUnHealthy(log)
-	log.Infof("Process associations on instance %v", instanceID)
 
 	if associations, err = p.assocSvc.ListInstanceAssociations(log, instanceID); err != nil {
 		log.Errorf("Unable to load association summaries, %v", err)
@@ -134,7 +133,7 @@ func (p *Processor) ProcessAssociation() {
 		if assocContent, err = jsonutil.Marshal(assoc); err != nil {
 			return
 		}
-		log.Debug("New association is ", jsonutil.Indent(assocContent))
+		log.Debug("Association content is ", jsonutil.Indent(assocContent))
 
 		if err = p.assocSvc.LoadAssociationDetail(log, assoc); err != nil {
 			message := fmt.Sprintf("Unable to load association details, %v", err)
@@ -278,7 +277,7 @@ func (p *Processor) parseAssociation(rawData *model.AssociationRawData) (*stateM
 	log := context.Log()
 	docState := stateModel.DocumentState{}
 
-	log.Debug("Processing association")
+	log.Infof("Executing association %v", rawData.Association.AssociationId)
 
 	document, err := assocParser.ParseDocumentWithParams(log, rawData)
 	if err != nil {
@@ -289,7 +288,7 @@ func (p *Processor) parseAssociation(rawData *model.AssociationRawData) (*stateM
 	if parsedMessageContent, err = jsonutil.Marshal(document); err != nil {
 		return &docState, fmt.Errorf("failed to parse document, %v", err)
 	}
-	log.Debug("ParsedAssociation is ", jsonutil.Indent(parsedMessageContent))
+	log.Debug("ParsedAssociation content is ", jsonutil.Indent(parsedMessageContent))
 
 	//Data format persisted in Current Folder is defined by the struct - DocumentState
 	docState = assocParser.InitializeDocumentState(context, document, rawData)
@@ -311,7 +310,7 @@ func (p *Processor) parseAssociation(rawData *model.AssociationRawData) (*stateM
 
 // persistAssociationForExecution saves the document to pending folder and submit it to the task pool
 func (p *Processor) persistAssociationForExecution(log log.T, docState *stateModel.DocumentState) error {
-	log.Debug("Persisting interim state in current execution folder")
+	log.Info("Persisting interim state in current execution folder")
 	assocBookkeeping.PersistData(log,
 		docState.DocumentInformation.DocumentID,
 		docState.DocumentInformation.InstanceID,

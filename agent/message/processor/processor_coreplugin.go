@@ -44,7 +44,6 @@ func (p *Processor) Name() string {
 func (p *Processor) Execute(context context.T) (err error) {
 
 	log := p.context.Log()
-	log.Infof("starting mdsprocessor polling")
 	//process the older messages from Current & Pending folder
 	instanceID, err := platform.InstanceID()
 	if err != nil {
@@ -57,10 +56,12 @@ func (p *Processor) Execute(context context.T) (err error) {
 	p.processInProgressDocuments(instanceID)
 	p.processPendingDocuments(instanceID)
 
+	log.Info("Starting mdsprocessor polling")
 	if p.messagePollJob, err = scheduler.Every(pollMessageFrequencyMinutes).Minutes().Run(p.loop); err != nil {
 		context.Log().Errorf("unable to schedule message processor. %v", err)
 	}
 
+	log.Info("Starting association polling")
 	var job *scheduler.Job
 	if job, err = asocitscheduler.CreateScheduler(
 		log,
