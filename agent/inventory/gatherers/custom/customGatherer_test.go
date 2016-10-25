@@ -71,7 +71,7 @@ func MockCustomInventoryItem() model.CustomInventoryItem {
 	}
 
 	return model.CustomInventoryItem{
-		TypeName:      "CUSTOM:MyFile",
+		TypeName:      "Custom:MyFile",
 		SchemaVersion: "1.0",
 		Content:       attributes,
 	}
@@ -124,7 +124,7 @@ func MockItemMissedSchemaVersion() model.CustomInventoryItem {
 		"Version":    "1.2.3.4",
 	}
 	return model.CustomInventoryItem{
-		TypeName: "CUSTOM:123",
+		TypeName: "Custom:123",
 		Content:  attributes,
 	}
 }
@@ -136,7 +136,7 @@ func MockItemInvalidSchemaVersion() model.CustomInventoryItem {
 		"Version":    "1.2.3.4",
 	}
 	return model.CustomInventoryItem{
-		TypeName:      "CUSTOM:123",
+		TypeName:      "Custom:123",
 		SchemaVersion: "123",
 		Content:       attributes,
 	}
@@ -144,7 +144,7 @@ func MockItemInvalidSchemaVersion() model.CustomInventoryItem {
 
 func MockItemNoContent() model.CustomInventoryItem {
 	return model.CustomInventoryItem{
-		TypeName:      "CUSTOM:123",
+		TypeName:      "Custom:123",
 		SchemaVersion: "1.1",
 	}
 }
@@ -159,7 +159,7 @@ func MockItemContentIsArray() model.CustomInventoryItem {
 		attributes,
 	}
 	return model.CustomInventoryItem{
-		TypeName:      "CUSTOM:123",
+		TypeName:      "Custom:123",
 		SchemaVersion: "1.0",
 		Content:       entries,
 	}
@@ -176,7 +176,7 @@ func MockItemContentAttributeCountExceedLimit() model.CustomInventoryItem {
 		attributes[attributeName] = "1"
 	}
 	return model.CustomInventoryItem{
-		TypeName:      "CUSTOM:123",
+		TypeName:      "Custom:123",
 		SchemaVersion: "1.0",
 		Content:       attributes,
 	}
@@ -189,7 +189,7 @@ func MockItemEmptyAttributeName() model.CustomInventoryItem {
 		"Version":    "1.2.3.4",
 	}
 	return model.CustomInventoryItem{
-		TypeName:      "CUSTOM:123",
+		TypeName:      "Custom:123",
 		SchemaVersion: "1.0",
 		Content:       attributes,
 	}
@@ -203,7 +203,7 @@ func MockItemLongAttributeName() model.CustomInventoryItem {
 		"Version":    "1.2.3.4",
 	}
 	return model.CustomInventoryItem{
-		TypeName:      "CUSTOM:123",
+		TypeName:      "Custom:123",
 		SchemaVersion: "1.0",
 		Content:       attributes,
 	}
@@ -216,7 +216,7 @@ func MockItemIntTypeAttributeValue() model.CustomInventoryItem {
 		"MyName":     1234,
 	}
 	return model.CustomInventoryItem{
-		TypeName:      "CUSTOM:123",
+		TypeName:      "Custom:123",
 		SchemaVersion: "1.0",
 		Content:       attributes,
 	}
@@ -230,7 +230,7 @@ func MockItemLongAttributeValue() model.CustomInventoryItem {
 		"MyName":     longAttrValue,
 	}
 	return model.CustomInventoryItem{
-		TypeName:      "CUSTOM:123",
+		TypeName:      "Custom:123",
 		SchemaVersion: "1.0",
 		Content:       attributes,
 	}

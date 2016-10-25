@@ -42,7 +42,7 @@ const (
 	// FileSuffix represents custom inventory file extension
 	FileSuffix = ".json"
 	// CustomInventoryTypeNamePrefix represents custom inventory typename prefix
-	CustomInventoryTypeNamePrefix = "CUSTOM:"
+	CustomInventoryTypeNamePrefix = "Custom:"
 	// TypeNameLengthLimit represents custom inventory typename length limit
 	TypeNameLengthLimit = 100
 	// CustomInventoryCountLimit represents custom inventory type count limit
