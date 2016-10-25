@@ -144,16 +144,21 @@ func resolveSSMParameters(log log.T, ssmParams []string) (map[string]string, err
 	}
 
 	paramNames := []string{}
+	seen := map[string]bool{}
 	for _, value := range ssmParams {
 		temp := validParam.FindString(value)
-		paramNames = append(paramNames, temp[1:])
+		temp = temp[1:]
+		if !seen[temp] {
+			seen[temp] = true
+			paramNames = append(paramNames, temp)
+		}
 	}
 
 	if result, err = callParameterService(log, paramNames); err != nil {
 		return nil, err
 	}
 
-	if len(ssmParams) != len(result.Parameters) {
+	if len(paramNames) != len(result.Parameters) {
 		errorString := fmt.Errorf("Input contains invalid ssm parameters %v", result.InvalidParameters)
 		log.Debug(errorString)
 		return nil, errorString
