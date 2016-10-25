@@ -37,7 +37,7 @@ func networkStubSuccess() networkDep {
 }
 
 func execStubSuccess() execDep {
-	return &ExecDepStub{pluginInput: &model.PluginState{}, pluginOutput: &contracts.PluginResult{}}
+	return &ExecDepStub{pluginInput: &model.PluginState{}, pluginOutput: &contracts.PluginResult{Status: contracts.ResultStatusSuccess}}
 }
 
 func setSuccessStubs() *ConfigurePackageStubs {

@@ -182,30 +182,27 @@ func runConfigurePackage(
 		}
 
 		// ensure manifest file and package
-		manifest, ensureErr := ensurePackage(log, manager, configureUtil, input.Name, version, input.Source, &output, instanceContext)
+		_, ensureErr := ensurePackage(log, manager, configureUtil, input.Name, version, input.Source, &output, instanceContext)
 		if ensureErr != nil {
-			output.MarkAsFailed(log,
-				fmt.Errorf("unable to obtain package: %v", ensureErr))
+			output.MarkAsFailed(log, fmt.Errorf("unable to obtain package: %v", ensureErr))
 			return
 		}
 
 		// set installing flag for version
 		if markErr := markInstallingPackage(input.Name, version); markErr != nil {
-			output.MarkAsFailed(log,
-				fmt.Errorf("unable to mark package installing: %v", markErr))
+			output.MarkAsFailed(log, fmt.Errorf("unable to mark package installing: %v", markErr))
 			return
 		}
 
-		// NOTE: do not return before clearing installing flag after this point unless you want it to remain set
+		// NOTE: do not return before clearing installing mark after this point unless you want it to remain set - once we defer the unmark it is OK to return again
 		// if different version is installed, uninstall
 		if installedVersion != "" {
 			// NOTE: if source is specified on an install and we need to redownload the package for the
 			// currently installed version because it isn't valid on disk, we will pull from the source URI
 			// even though that may or may not be the package that installed it - it is our only decent option
-			uninstallManifest, ensureErr := ensurePackage(log, manager, configureUtil, input.Name, installedVersion, input.Source, &output, instanceContext)
+			_, ensureErr := ensurePackage(log, manager, configureUtil, input.Name, installedVersion, input.Source, &output, instanceContext)
 			if ensureErr != nil {
-				output.MarkAsFailed(log,
-					fmt.Errorf("unable to obtain package: %v", ensureErr))
+				output.MarkAsFailed(log, fmt.Errorf("unable to obtain package: %v", ensureErr))
 			} else {
 				result, err := runUninstallPackage(p,
 					input.Name,
@@ -215,12 +212,12 @@ func runConfigurePackage(
 					log,
 					instanceContext)
 				if err != nil {
-					output.MarkAsFailed(log,
-						fmt.Errorf("failed to uninstall currently installed version of package: %v", err))
+					output.MarkAsFailed(log, fmt.Errorf("failed to uninstall currently installed version of package: %v", err))
 				} else {
-					// TODO:MF: no longer in manifest, entirely from result status
-					if uninstallManifest.Reboot == "true" || result == contracts.ResultStatusSuccessAndReboot {
-						// TODO:MF: set reboot flag and return without success or failure
+					if result == contracts.ResultStatusSuccessAndReboot || result == contracts.ResultStatusPassedAndReboot {
+						// Reboot before continuing
+						output.MarkAsSucceeded(true)
+						return
 					}
 				}
 			}
@@ -244,28 +241,27 @@ func runConfigurePackage(
 			log,
 			instanceContext)
 		if err != nil {
-			output.MarkAsFailed(log,
-				fmt.Errorf("failed to install package: %v", err))
-			return
+			output.MarkAsFailed(log, fmt.Errorf("failed to install package: %v", err))
+		} else if result == contracts.ResultStatusSuccessAndReboot || result == contracts.ResultStatusPassedAndReboot {
+			output.MarkAsSucceeded(true)
+		} else if result != contracts.ResultStatusSuccess {
+			output.MarkAsFailed(log, fmt.Errorf("install action state was %v and not %v", result, contracts.ResultStatusSuccess))
+		} else {
+			output.MarkAsSucceeded(false)
 		}
-		// TODO:MF: no longer in manifest, entirely from result status
-		output.MarkAsSucceeded(manifest.Reboot == "true")
-		output.Status = result
 
 	case UninstallAction:
 		// get version information
 		version, versionErr := manager.getVersionToUninstall(log, &input, configureUtil, instanceContext)
 		if versionErr != nil || version == "" {
-			output.MarkAsFailed(log,
-				fmt.Errorf("unable to determine version to uninstall: %v", versionErr))
+			output.MarkAsFailed(log, fmt.Errorf("unable to determine version to uninstall: %v", versionErr))
 			return
 		}
 
 		// ensure manifest file and package
-		manifest, ensureErr := ensurePackage(log, manager, configureUtil, input.Name, version, input.Source, &output, instanceContext)
+		_, ensureErr := ensurePackage(log, manager, configureUtil, input.Name, version, input.Source, &output, instanceContext)
 		if ensureErr != nil {
-			output.MarkAsFailed(log,
-				fmt.Errorf("unable to obtain package: %v", ensureErr))
+			output.MarkAsFailed(log, fmt.Errorf("unable to obtain package: %v", ensureErr))
 			return
 		}
 		result, err := runUninstallPackage(p,
@@ -276,16 +272,14 @@ func runConfigurePackage(
 			log,
 			instanceContext)
 		if err != nil {
-			output.MarkAsFailed(log,
-				fmt.Errorf("failed to uninstall package: %v", err))
-			return
+			output.MarkAsFailed(log, fmt.Errorf("failed to uninstall package: %v", err))
+		} else if result == contracts.ResultStatusSuccessAndReboot || result == contracts.ResultStatusPassedAndReboot {
+			output.MarkAsSucceeded(true)
+		} else if result != contracts.ResultStatusSuccess {
+			output.MarkAsFailed(log, fmt.Errorf("uninstall action state was %v and not %v", result, contracts.ResultStatusSuccess))
 		}
-		// TODO:MF: no longer in manifest, entirely from result status
-		output.MarkAsSucceeded(manifest.Reboot == "true")
-		output.Status = result
 	default:
-		output.MarkAsFailed(log,
-			fmt.Errorf("unsupported action: %v", input.Action))
+		output.MarkAsFailed(log, fmt.Errorf("unsupported action: %v", input.Action))
 	}
 
 	return
@@ -363,8 +357,7 @@ func (m *configureManager) validateInput(input *ConfigurePackagePluginInput) (va
 	if version := input.Version; version != "" {
 		// ensure version follows format <major>.<minor>.<build>
 		if matched, err := regexp.MatchString(PatternVersion, version); matched == false || err != nil {
-			return false,
-				errors.New("invalid version - should be in format major.minor.build")
+			return false, errors.New("invalid version - should be in format major.minor.build")
 		}
 	}
 
@@ -522,7 +515,8 @@ func executeAction(p *Plugin,
 		if err != nil {
 			return true, contracts.ResultStatusFailed, err
 		}
-		pluginsInfo, err := execdep.ParseDocument(p, file, p.orchestrationDir, p.s3Bucket, p.s3Prefix, p.messageID, p.documentID, executeDirectory)
+		actionOrchDir := filepath.Join(filepath.Base(p.orchestrationDir), fmt.Sprintf("%v-%v", filepath.Dir(p.orchestrationDir), actionName))
+		pluginsInfo, err := execdep.ParseDocument(p, file, actionOrchDir, p.s3Bucket, p.s3Prefix, p.messageID, p.documentID, executeDirectory)
 		if err != nil {
 			return true, contracts.ResultStatusFailed, err
 		}
@@ -576,6 +570,7 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 	// TODO:MF: Really?  What would it look like to have more than one block of parameters for this, is that multiple package actions in one document?
 	var properties []interface{}
 	if properties, res = pluginutil.LoadParametersAsList(log, config.Properties); res.Code != 0 {
+		pluginutil.PersistPluginInformationToCurrent(log, Name(), config, res)
 		return res
 	}
 
@@ -610,13 +605,21 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 			configureUtil,
 			instanceContext,
 			prop)
-
-		res.Code = out[i].ExitCode
-		res.Status = out[i].Status
-		res.Output = fmt.Sprintf("%v", out[i].String())
 	}
 
-	return
+	// TODO: instance here we have to do more result processing, where individual sub properties results are merged smartly into plugin response.
+	// Currently assuming we have only one work.
+	if len(properties) > 0 {
+		res.Code = out[0].ExitCode
+		res.Status = out[0].Status
+		res.Output = out[0].String()
+		res.StandardOutput = contracts.TruncateOutput(out[0].Stdout, "", 24000)
+		res.StandardError = contracts.TruncateOutput(out[0].Stderr, "", 8000)
+	}
+
+	pluginutil.PersistPluginInformationToCurrent(log, Name(), config, res)
+
+	return res
 }
 
 // Name returns the name of the plugin.

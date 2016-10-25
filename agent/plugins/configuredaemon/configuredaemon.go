@@ -61,6 +61,7 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 
 	var properties []interface{}
 	if properties, res = pluginutil.LoadParametersAsList(log, config.Properties); res.Code != 0 {
+		pluginutil.PersistPluginInformationToCurrent(log, Name(), config, res)
 		return res
 	}
 
@@ -83,7 +84,20 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 		}
 		out[i] = runConfigureDaemon(p, context, prop, config.OrchestrationDirectory, config.DefaultWorkingDirectory, cancelFlag)
 	}
-	return
+
+	// TODO: instance here we have to do more result processing, where individual sub properties results are merged smartly into plugin response.
+	// Currently assuming we have only one work.
+	if len(properties) > 0 {
+		res.Code = out[0].ExitCode
+		res.Status = out[0].Status
+		res.Output = out[0].String()
+		res.StandardOutput = contracts.TruncateOutput(out[0].Stdout, "", 24000)
+		res.StandardError = contracts.TruncateOutput(out[0].Stderr, "", 8000)
+	}
+
+	pluginutil.PersistPluginInformationToCurrent(log, Name(), config, res)
+
+	return res
 }
 
 func runConfigureDaemon(
