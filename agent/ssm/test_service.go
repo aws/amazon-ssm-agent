@@ -120,7 +120,7 @@ func (m *Mock) DescribeAssociation(log log.T, instanceID string, docName string)
 }
 
 // UpdateInstanceInformation mocks the UpdateInstanceInformation function.
-func (m *Mock) UpdateInstanceInformation(log log.T, agentVersion string, agentStatus string) (response *ssm.UpdateInstanceInformationOutput, err error) {
+func (m *Mock) UpdateInstanceInformation(log log.T, agentVersion, agentStatus, agentName string) (response *ssm.UpdateInstanceInformationOutput, err error) {
 	args := m.Called(log, agentVersion, agentStatus)
 	return args.Get(0).(*ssm.UpdateInstanceInformationOutput), args.Error(1)
 }

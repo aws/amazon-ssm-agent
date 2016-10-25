@@ -56,7 +56,7 @@ type Service interface {
 	GetDocument(log log.T, docName string, docVersion string) (response *ssm.GetDocumentOutput, err error)
 	DeleteDocument(log log.T, instanceID string) (response *ssm.DeleteDocumentOutput, err error)
 	DescribeAssociation(log log.T, instanceID string, docName string) (response *ssm.DescribeAssociationOutput, err error)
-	UpdateInstanceInformation(log log.T, agentVersion string, agentStatus string) (response *ssm.UpdateInstanceInformationOutput, err error)
+	UpdateInstanceInformation(log log.T, agentVersion, agentStatus, agentName string) (response *ssm.UpdateInstanceInformationOutput, err error)
 }
 
 var ssmStopPolicy *sdkutil.StopPolicy
@@ -184,11 +184,13 @@ func (svc *sdkService) UpdateAssociationStatus(
 //UpdateInstanceInformation calls the UpdateInstanceInformation SSM API.
 func (svc *sdkService) UpdateInstanceInformation(
 	log log.T,
-	agentVersion string,
-	agentStatus string,
+	agentVersion,
+	agentStatus,
+	agentName string,
 ) (response *ssm.UpdateInstanceInformationOutput, err error) {
 
 	params := ssm.UpdateInstanceInformationInput{
+		AgentName:    aws.String(agentName),
 		AgentStatus:  aws.String(agentStatus),
 		AgentVersion: aws.String(agentVersion),
 	}

@@ -19,6 +19,7 @@ import (
 	"fmt"
 	"sync"
 
+	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/ssm"
@@ -51,11 +52,16 @@ var newSsmSvc = ssm.NewService
 // UpdateHealthCheck sends the health check information back to the service
 func (s *svcManager) UpdateHealthCheck(log log.T, update *UpdateDetail, errorCode string) (err error) {
 	var svc ssm.Service
+	var config appconfig.SsmagentConfig
 	if svc, err = getSsmSvc(); err != nil {
-		return fmt.Errorf("Failed to load ssm service. %v", err)
+		return fmt.Errorf("Failed to load ssm service, %v", err)
 	}
 	status := prepareHealthStatus(update, errorCode)
-	if _, err = svc.UpdateInstanceInformation(log, update.SourceVersion, status); err != nil {
+	if config, err = appconfig.Config(false); err != nil {
+		return fmt.Errorf("Failed to load ssm config, %v", err)
+	}
+
+	if _, err = svc.UpdateInstanceInformation(log, update.SourceVersion, status, config.Agent.Name); err != nil {
 		return
 	}
 

@@ -53,11 +53,12 @@ func NewHealthCheck(context context.T) *HealthCheck {
 func (h *HealthCheck) updateHealth() {
 	log := h.context.Log()
 	log.Infof("%s reporting agent health.", name)
+	agentName := h.context.AppConfig().Agent.Name
 
 	var err error
 	//TODO when will status become inactive?
 	// If both ssm config and command is inactive => agent is inactive.
-	if _, err = h.service.UpdateInstanceInformation(log, version.Version, "Active"); err != nil {
+	if _, err = h.service.UpdateInstanceInformation(log, version.Version, "Active", agentName); err != nil {
 		sdkutil.HandleAwsError(log, err, h.healthCheckStopPolicy)
 	}
 	return
