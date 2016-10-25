@@ -33,9 +33,9 @@ func NewMockDefault() *AssociationServiceMock {
 }
 
 // ListAssociations mocks implementation for ListAssociations
-func (m *AssociationServiceMock) ListInstanceAssociations(log log.T, instanceID string) ([]*model.AssociationRawData, error) {
+func (m *AssociationServiceMock) ListInstanceAssociations(log log.T, instanceID string) ([]*model.InstanceAssociation, error) {
 	args := m.Called(log, instanceID)
-	return args.Get(0).([]*model.AssociationRawData), args.Error(1)
+	return args.Get(0).([]*model.InstanceAssociation), args.Error(1)
 }
 
 // CreateNewServiceIfUnHealthy mocks implementation for CreateNewServiceIfUnHealthy
@@ -44,7 +44,7 @@ func (m *AssociationServiceMock) CreateNewServiceIfUnHealthy(log log.T) {
 }
 
 // LoadAssociationDetail mocks implementation for LoadAssociationDetail
-func (m *AssociationServiceMock) LoadAssociationDetail(log log.T, assoc *model.AssociationRawData) error {
+func (m *AssociationServiceMock) LoadAssociationDetail(log log.T, assoc *model.InstanceAssociation) error {
 	args := m.Called(log, assoc)
 	return args.Error(0)
 }

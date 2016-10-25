@@ -50,7 +50,7 @@ func TestParseAssociationWithAssociationVersion1_2(t *testing.T) {
 	instanceID := "i-test"
 	commandId := "b2f71a28-cbe1-4429-b848-26c7e1f5ad0d"
 	associationName := "testV1.2"
-	assocRawData := model.AssociationRawData{
+	assocRawData := model.InstanceAssociation{
 		CreateDate: time.Now(),
 		Document:   &sampleFile,
 	}
@@ -120,7 +120,7 @@ func TestParseAssociationWithAssociationVersion2_0(t *testing.T) {
 	instanceID := "i-test"
 	commandId := "b2f71a28-cbe1-4429-b848-26c7e1f5ad0d"
 	associationName := "testV2.0"
-	assocRawData := model.AssociationRawData{
+	assocRawData := model.InstanceAssociation{
 		CreateDate: time.Now(),
 		Document:   &sampleFile,
 	}

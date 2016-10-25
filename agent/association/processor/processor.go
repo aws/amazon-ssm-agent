@@ -103,7 +103,7 @@ func (p *Processor) SetPollJob(job *scheduler.Job) {
 // ProcessAssociation poll and process all the associations
 func (p *Processor) ProcessAssociation() {
 	log := p.context.Log()
-	var associations []*model.AssociationRawData
+	var associations []*model.InstanceAssociation
 
 	if p.isStopped() {
 		log.Debug("Stopping association processor...")
@@ -163,7 +163,7 @@ func (p *Processor) runScheduledAssociation(log log.T) {
 	}()
 
 	var (
-		scheduledAssociation *model.AssociationRawData
+		scheduledAssociation *model.InstanceAssociation
 		err                  error
 	)
 
@@ -272,13 +272,13 @@ func (p *Processor) isStopped() bool {
 }
 
 // parseAssociation parses the association to the document state
-func (p *Processor) parseAssociation(rawData *model.AssociationRawData) (*stateModel.DocumentState, error) {
+func (p *Processor) parseAssociation(rawData *model.InstanceAssociation) (*stateModel.DocumentState, error) {
 	// create separate logger that includes messageID with every log message
 	context := p.context.With("[associationName=" + *rawData.Association.Name + "]")
 	log := context.Log()
 	docState := stateModel.DocumentState{}
 
-	log.Infof("Executing association %v", rawData.Association.AssociationId)
+	log.Infof("Executing association %v", *rawData.Association.AssociationId)
 
 	document, err := assocParser.ParseDocumentWithParams(log, rawData)
 	if err != nil {

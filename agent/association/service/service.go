@@ -36,8 +36,8 @@ const stopPolicyErrorThreshold = 10
 // T represents interface for association
 type T interface {
 	CreateNewServiceIfUnHealthy(log log.T)
-	ListInstanceAssociations(log log.T, instanceID string) ([]*model.AssociationRawData, error)
-	LoadAssociationDetail(log log.T, assoc *model.AssociationRawData) error
+	ListInstanceAssociations(log log.T, instanceID string) ([]*model.InstanceAssociation, error)
+	LoadAssociationDetail(log log.T, assoc *model.InstanceAssociation) error
 	UpdateAssociationStatus(
 		log log.T,
 		instanceID string,
@@ -94,9 +94,9 @@ func (s *AssociationService) CreateNewServiceIfUnHealthy(log log.T) {
 }
 
 // ListInstanceAssociations will get the Association and related document string
-func (s *AssociationService) ListInstanceAssociations(log log.T, instanceID string) ([]*model.AssociationRawData, error) {
+func (s *AssociationService) ListInstanceAssociations(log log.T, instanceID string) ([]*model.InstanceAssociation, error) {
 	uuid.SwitchFormat(uuid.CleanHyphen)
-	results := []*model.AssociationRawData{}
+	results := []*model.InstanceAssociation{}
 
 	response, err := s.ssmSvc.ListInstanceAssociations(log, instanceID, nil)
 	if err != nil {
@@ -106,7 +106,7 @@ func (s *AssociationService) ListInstanceAssociations(log log.T, instanceID stri
 	for {
 		// Get the association from the response of the ListAssociations call
 		for _, assoc := range response.Associations {
-			rawData := &model.AssociationRawData{}
+			rawData := &model.InstanceAssociation{}
 			rawData.Association = assoc
 			rawData.CreateDate = time.Now()
 			results = append(results, rawData)
@@ -159,7 +159,7 @@ func (s *AssociationService) UpdateInstanceAssociationStatus(
 }
 
 // LoadAssociationDetail loads document contents and parameters for the given association
-func (s *AssociationService) LoadAssociationDetail(log log.T, assoc *model.AssociationRawData) error {
+func (s *AssociationService) LoadAssociationDetail(log log.T, assoc *model.InstanceAssociation) error {
 	associationCache := cache.GetCache()
 	associationID := assoc.Association.AssociationId
 

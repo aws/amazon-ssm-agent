@@ -59,7 +59,7 @@ func RunPlugins(
 		pluginName := pluginState.Name // the name of the plugin
 		if pluginState.HasExecuted {
 			context.Log().Debugf(
-				"Skipping execution of Plugin - %v of command - %v since it has already executed.",
+				"Skipping execution of Plugin - %v of document - %v since it has already executed.",
 				pluginName,
 				documentID)
 			pluginOutput := pluginState.Result
@@ -67,7 +67,7 @@ func RunPlugins(
 			pluginOutputs[pluginID] = &pluginOutput
 			continue
 		}
-		context.Log().Debugf("Executing plugin - %v of command - %v", pluginName, documentID)
+		context.Log().Debugf("Executing plugin - %v of document - %v", pluginName, documentID)
 
 		// populate plugin start time and status
 		configuration := pluginState.Configuration
@@ -136,7 +136,7 @@ func RunPlugins(
 			sendReply(documentID, pluginName, pluginOutputs)
 		}
 		if updateAssoc != nil {
-			log.Infof("Update assocition on plugin completion: %v", pluginName)
+			log.Infof("Update association on plugin completion: %v", pluginName)
 			updateAssoc(log, documentID, documentCreatedDate, pluginOutputs, totalNumberOfActions)
 		}
 

@@ -28,11 +28,11 @@ import (
 	"github.com/gorhill/cronexpr"
 )
 
-var associations = []*model.AssociationRawData{}
+var associations = []*model.InstanceAssociation{}
 var lock sync.RWMutex
 
 // Refresh refreshes cached associationRawData
-func Refresh(log log.T, assocs []*model.AssociationRawData) {
+func Refresh(log log.T, assocs []*model.InstanceAssociation) {
 	lock.Lock()
 	defer lock.Unlock()
 
@@ -53,7 +53,7 @@ func Refresh(log log.T, assocs []*model.AssociationRawData) {
 			}
 		}
 
-		if !foundMatch {
+		if !foundMatch || newAssoc.RunNow {
 			newAssoc.Initialize(log, currentTime)
 
 			//todo: call service to update association status
@@ -73,11 +73,11 @@ func Refresh(log log.T, assocs []*model.AssociationRawData) {
 	}
 
 	associations = assocs
-	log.Debugf("Refresh cached association data completed, %v new assocations associated", len(assocs)-unchangedAssociation)
+	log.Infof("Schedule manager refreshed, %v new assocations associated", len(assocs)-unchangedAssociation)
 }
 
 // LoadNextScheduledAssociation returns next scheduled association
-func LoadNextScheduledAssociation(log log.T) (*model.AssociationRawData, error) {
+func LoadNextScheduledAssociation(log log.T) (*model.InstanceAssociation, error) {
 	lock.Lock()
 	defer lock.Unlock()
 
@@ -165,7 +165,7 @@ func MarkAssociationAsCompleted(log log.T, associationID string) {
 }
 
 // Schedules returns all the cached schedules
-func Schedules() []*model.AssociationRawData {
+func Schedules() []*model.InstanceAssociation {
 	lock.RLock()
 	defer lock.RUnlock()
 	return associations

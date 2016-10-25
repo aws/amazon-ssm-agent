@@ -69,7 +69,7 @@ func TestProcessAssociationUnableToGetAssociation(t *testing.T) {
 	svcMock.On(
 		"LoadAssociationDetail",
 		mock.AnythingOfType("*log.Mock"),
-		mock.AnythingOfType("*model.AssociationRawData")).Return(nil)
+		mock.AnythingOfType("*model.InstanceAssociation")).Return(nil)
 
 	processor.ProcessAssociation()
 
@@ -136,7 +136,7 @@ func TestProcessAssociationUnableToLoadAssociationDetail(t *testing.T) {
 	svcMock.On(
 		"LoadAssociationDetail",
 		mock.AnythingOfType("*log.Mock"),
-		mock.AnythingOfType("*model.AssociationRawData")).Return(errors.New("unable to load detail"))
+		mock.AnythingOfType("*model.InstanceAssociation")).Return(errors.New("unable to load detail"))
 	svcMock.On(
 		"UpdateInstanceAssociationStatus",
 		mock.AnythingOfType("*log.Mock"),
@@ -175,7 +175,7 @@ func TestProcessAssociationUnableToParseAssociation(t *testing.T) {
 	parserMock.On(
 		"ParseDocumentWithParams",
 		mock.AnythingOfType("*log.Mock"),
-		mock.AnythingOfType("*model.AssociationRawData")).Return(&payload, errors.New("failed to parse data"))
+		mock.AnythingOfType("*model.InstanceAssociation")).Return(&payload, errors.New("failed to parse data"))
 
 	// Act
 	processor.InitializeAssociationProcessor()
@@ -187,7 +187,7 @@ func TestProcessAssociationUnableToParseAssociation(t *testing.T) {
 	assert.True(t, svcMock.AssertNumberOfCalls(t, "LoadAssociationDetail", 1))
 }
 
-func mockService(svcMock *service.AssociationServiceMock, assocRawData []*model.AssociationRawData, output *ssm.UpdateInstanceAssociationStatusOutput) {
+func mockService(svcMock *service.AssociationServiceMock, assocRawData []*model.InstanceAssociation, output *ssm.UpdateInstanceAssociationStatusOutput) {
 	svcMock.On("CreateNewServiceIfUnHealthy", mock.AnythingOfType("*log.Mock"))
 	svcMock.On(
 		"ListInstanceAssociations",
@@ -196,7 +196,7 @@ func mockService(svcMock *service.AssociationServiceMock, assocRawData []*model.
 	svcMock.On(
 		"LoadAssociationDetail",
 		mock.AnythingOfType("*log.Mock"),
-		mock.AnythingOfType("*model.AssociationRawData")).Return(nil)
+		mock.AnythingOfType("*model.InstanceAssociation")).Return(nil)
 	svcMock.On(
 		"UpdateInstanceAssociationStatus",
 		mock.AnythingOfType("*log.Mock"),
@@ -249,12 +249,12 @@ func mockParser(parserMock *parserMock, payload *messageContracts.SendCommandPay
 	parserMock.On(
 		"ParseDocumentWithParams",
 		mock.AnythingOfType("*log.Mock"),
-		mock.AnythingOfType("*model.AssociationRawData")).Return(payload, nil)
+		mock.AnythingOfType("*model.InstanceAssociation")).Return(payload, nil)
 	parserMock.On(
 		"InitializeDocumentState",
 		mock.AnythingOfType("*context.Mock"),
 		mock.AnythingOfType("*model.SendCommandPayload"),
-		mock.AnythingOfType("*model.AssociationRawData")).Return(docState)
+		mock.AnythingOfType("*model.InstanceAssociation")).Return(docState)
 }
 
 func TestProcessAssociationSuccessful(t *testing.T) {
@@ -307,16 +307,16 @@ func createProcessor() *Processor {
 	return &processor
 }
 
-func createAssociationRawData() []*model.AssociationRawData {
+func createAssociationRawData() []*model.InstanceAssociation {
 	association := ssm.InstanceAssociationSummary{
 		Name:          aws.String("Test-Association"),
 		AssociationId: aws.String("Id-Test"),
 		InstanceId:    aws.String("test-association-id"),
 		Checksum:      aws.String("checksum"),
 	}
-	assocRawData := model.AssociationRawData{
+	assocRawData := model.InstanceAssociation{
 		Association: &association,
 	}
 
-	return []*model.AssociationRawData{&assocRawData}
+	return []*model.InstanceAssociation{&assocRawData}
 }

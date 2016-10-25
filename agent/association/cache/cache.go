@@ -8,7 +8,7 @@ import (
 )
 
 type Cache struct {
-	associaions map[string]*model.AssociationRawData
+	associaions map[string]*model.InstanceAssociation
 	mutex       sync.RWMutex
 }
 
@@ -17,7 +17,7 @@ var once sync.Once
 
 func init() {
 	once.Do(func() {
-		assoDetailsMap := make(map[string]*model.AssociationRawData)
+		assoDetailsMap := make(map[string]*model.InstanceAssociation)
 		cache = &Cache{
 			associaions: assoDetailsMap,
 		}
@@ -32,13 +32,13 @@ func GetCache() *Cache {
 }
 
 // set sets the value to the target key in map
-func (c *Cache) set(associationID string, associationRawData *model.AssociationRawData) {
+func (c *Cache) set(associationID string, associationRawData *model.InstanceAssociation) {
 	c.associaions[associationID] = associationRawData
 }
 
 // Add an item to the cache only if an item doesn't already exist for the given
 // key, or if the existing item has expired. Returns an error otherwise.
-func (c *Cache) Add(associationID string, associationRawData *model.AssociationRawData) error {
+func (c *Cache) Add(associationID string, associationRawData *model.InstanceAssociation) error {
 	c.mutex.Lock()
 	defer c.mutex.Unlock()
 
@@ -52,7 +52,7 @@ func (c *Cache) Add(associationID string, associationRawData *model.AssociationR
 
 // Get an item from the cache. Returns the item or nil, and a bool indicating
 // whether the key was found.
-func (c *Cache) Get(associationID string) *model.AssociationRawData {
+func (c *Cache) Get(associationID string) *model.InstanceAssociation {
 	c.mutex.RLock()
 	defer c.mutex.RUnlock()
 
@@ -64,7 +64,7 @@ func (c *Cache) Get(associationID string) *model.AssociationRawData {
 }
 
 // get gets an item from cache
-func (c *Cache) get(associationId string) *model.AssociationRawData {
+func (c *Cache) get(associationId string) *model.InstanceAssociation {
 	rawData, found := c.associaions[associationId]
 	if !found {
 		return nil
@@ -78,7 +78,7 @@ func (c *Cache) evict(associationID string) {
 }
 
 // ValidateCache validates the current cache is not expired
-func ValidateCache(rawData *model.AssociationRawData) {
+func ValidateCache(rawData *model.InstanceAssociation) {
 
 	cache.mutex.Lock()
 	defer cache.mutex.Unlock()

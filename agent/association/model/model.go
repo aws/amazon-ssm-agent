@@ -30,8 +30,8 @@ const (
 	expressionTypeCron             = "cron"
 )
 
-// AssociationRawData represents detail information of association
-type AssociationRawData struct {
+// InstanceAssociation represents detail information of an association
+type InstanceAssociation struct {
 	CreateDate                  time.Time
 	NextScheduledDate           time.Time
 	Association                 *ssm.InstanceAssociationSummary
@@ -39,11 +39,12 @@ type AssociationRawData struct {
 	ExpressionType              string
 	Document                    *string
 	RunOnce                     bool
+	RunNow                      bool
 	ExcludeFromFutureScheduling bool
 }
 
 // Update updates new association with old association details
-func (newAssoc *AssociationRawData) Update(oldAssoc *AssociationRawData) {
+func (newAssoc *InstanceAssociation) Update(oldAssoc *InstanceAssociation) {
 	newAssoc.CreateDate = oldAssoc.CreateDate
 	newAssoc.NextScheduledDate = oldAssoc.NextScheduledDate
 	newAssoc.Expression = oldAssoc.Expression
@@ -53,12 +54,17 @@ func (newAssoc *AssociationRawData) Update(oldAssoc *AssociationRawData) {
 }
 
 // Initialize initializes default values for the given new association
-func (newAssoc *AssociationRawData) Initialize(log log.T, currentTime time.Time) {
+func (newAssoc *InstanceAssociation) Initialize(log log.T, currentTime time.Time) {
 
 	if newAssoc.Association.ScheduleExpression == nil || *newAssoc.Association.ScheduleExpression == "" {
 		newAssoc.Association.ScheduleExpression = aws.String(cronExpressionEveryFiveMinutes)
 		// legacy association, run only once
 		newAssoc.RunOnce = true
+	}
+
+	if newAssoc.RunNow {
+		newAssoc.NextScheduledDate = currentTime
+		return
 	}
 
 	if err := parseExpression(log, newAssoc); err != nil {
@@ -76,7 +82,7 @@ func (newAssoc *AssociationRawData) Initialize(log log.T, currentTime time.Time)
 	newAssoc.NextScheduledDate = cronexpr.MustParse(newAssoc.Expression).Next(currentTime)
 }
 
-func parseExpression(log log.T, assoc *AssociationRawData) error {
+func parseExpression(log log.T, assoc *InstanceAssociation) error {
 	expression := *assoc.Association.ScheduleExpression
 
 	if strings.HasPrefix(expression, expressionTypeCron) {

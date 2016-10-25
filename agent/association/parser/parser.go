@@ -36,7 +36,7 @@ import (
 
 // ParseDocumentWithParams parses an document and replaces the parameters where needed.
 func ParseDocumentWithParams(log log.T,
-	rawData *model.AssociationRawData) (*messageContracts.SendCommandPayload, error) {
+	rawData *model.InstanceAssociation) (*messageContracts.SendCommandPayload, error) {
 
 	rawDataContent, err := jsonutil.Marshal(rawData)
 	if err != nil {
@@ -77,7 +77,7 @@ func ParseDocumentWithParams(log log.T,
 // InitializeDocumentState - an interim state that is used around during an execution of a command
 func InitializeDocumentState(context context.T,
 	payload *messageContracts.SendCommandPayload,
-	rawData *model.AssociationRawData) stateModel.DocumentState {
+	rawData *model.InstanceAssociation) stateModel.DocumentState {
 
 	//initialize document information with relevant values extracted from msg
 	documentInfo := newDocumentInfo(rawData, payload)
@@ -104,7 +104,7 @@ func InitializeDocumentState(context context.T,
 }
 
 // newDocumentInfo initializes new DocumentInfo object
-func newDocumentInfo(rawData *model.AssociationRawData, payload *messageContracts.SendCommandPayload) stateModel.DocumentInfo {
+func newDocumentInfo(rawData *model.InstanceAssociation, payload *messageContracts.SendCommandPayload) stateModel.DocumentInfo {
 
 	documentInfo := new(stateModel.DocumentInfo)
 
