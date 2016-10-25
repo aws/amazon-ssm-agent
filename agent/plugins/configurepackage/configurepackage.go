@@ -515,8 +515,8 @@ func executeAction(p *Plugin,
 		if err != nil {
 			return true, contracts.ResultStatusFailed, err
 		}
-		actionOrchDir := filepath.Join(filepath.Base(p.orchestrationDir), fmt.Sprintf("%v-%v", filepath.Dir(p.orchestrationDir), actionName))
-		pluginsInfo, err := execdep.ParseDocument(p, file, actionOrchDir, p.s3Bucket, p.s3Prefix, p.messageID, p.documentID, executeDirectory)
+		//actionOrchDir := filepath.Join(filepath.Base(p.orchestrationDir), fmt.Sprintf("%v-%v", filepath.Dir(p.orchestrationDir), actionName))
+		pluginsInfo, err := execdep.ParseDocument(p, file, p.orchestrationDir, p.s3Bucket, p.s3Prefix, p.messageID, p.documentID, executeDirectory)
 		if err != nil {
 			return true, contracts.ResultStatusFailed, err
 		}

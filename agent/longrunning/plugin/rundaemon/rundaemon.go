@@ -4,9 +4,18 @@ import (
 	"os"
 
 	"github.com/aws/amazon-ssm-agent/agent/context"
+	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/pluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 )
+
+// DaemonPluginInput represents an action to run a package as a daemon.
+type DaemonPluginInput struct {
+	contracts.PluginInput
+	Name    string `json:"name"`
+	Action  string `json:"action"`
+	Command string `json:"command"`
+}
 
 // Plugin is the type for the configureDaemon plugin.
 type Plugin struct {

@@ -100,7 +100,7 @@ func EnsureInitialization(context context.T) {
 		//initialize pluginsInfo (which will store all information about long running plugins)
 		plugins := map[string]managerContracts.PluginInfo{}
 		//load all registered plugins
-		regPlugins := RegisteredPlugins()
+		regPlugins := RegisteredPlugins(context)
 		jsonB, _ := json.Marshal(&regPlugins)
 		log.Infof("registered plugins: %s", string(jsonB))
 

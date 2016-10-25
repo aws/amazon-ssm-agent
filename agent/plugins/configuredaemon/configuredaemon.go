@@ -19,14 +19,6 @@ type Plugin struct {
 	lrpm manager.T
 }
 
-// ConfigurePackagePluginInput represents one set of commands executed by the ConfigurePackage plugin.
-type ConfigureDaemonPluginInput struct {
-	contracts.PluginInput
-	Name    string `json:"name"`
-	Action  string `json:"action"`
-	Command string `json:"command"`
-}
-
 // ConfigureDaemonPluginOutput represents the output of the plugin.
 type ConfigureDaemonPluginOutput struct {
 	contracts.PluginOutput
@@ -109,7 +101,7 @@ func runConfigureDaemon(
 	cancelFlag task.CancelFlag) (output ConfigureDaemonPluginOutput) {
 	//log := context.Log()
 
-	var input ConfigureDaemonPluginInput
+	var input rundaemon.DaemonPluginInput
 	var err error
 	if err = jsonutil.Remarshal(rawPluginInput, &input); err != nil {
 		output.Status = contracts.ResultStatusFailed

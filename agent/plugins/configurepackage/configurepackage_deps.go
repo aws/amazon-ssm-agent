@@ -120,7 +120,7 @@ func (m *execDepImp) ExeCommand(log log.T, cmd string, workingDir string, update
 }
 
 func (m *execDepImp) ParseDocument(plugin *Plugin, documentRaw []byte, orchestrationDir string, s3Bucket string, s3KeyPrefix string, messageID string, documentID string, defaultWorkingDirectory string) (pluginsInfo map[string]model.PluginState, err error) {
-	return plugin.runner.ParseDocument(plugin.context, documentRaw, orchestrationDir, s3Bucket, s3KeyPrefix, messageID, documentID, defaultWorkingDirectory)
+	return runutil.ParseDocument(plugin.context, documentRaw, orchestrationDir, s3Bucket, s3KeyPrefix, messageID, documentID, defaultWorkingDirectory)
 }
 
 func (m *execDepImp) ExecuteDocument(plugin *Plugin, pluginInput map[string]model.PluginState, documentID string) (pluginOutputs map[string]*contracts.PluginResult) {

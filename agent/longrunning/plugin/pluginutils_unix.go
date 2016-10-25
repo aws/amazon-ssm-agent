@@ -15,7 +15,11 @@
 
 package plugin
 
-// RegisteredPlugins loads all registered long running plugins in memory
-func RegisteredPlugins() map[string]Plugin {
+import (
+	"github.com/aws/amazon-ssm-agent/agent/context"
+)
+
+// loadPlatformDepedentPlugins loads all registered long running plugins in memory
+func loadPlatformDependentPlugins(context context.T) map[string]Plugin {
 	return make(map[string]Plugin)
 }
