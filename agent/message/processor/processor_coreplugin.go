@@ -169,8 +169,8 @@ func (p *Processor) processInProgressDocuments(instanceID string) {
 		for v := range docState.PluginsInformation {
 			plugin := docState.PluginsInformation[v]
 			if plugin.HasExecuted && plugin.Result.Status == contracts.ResultStatusSuccessAndReboot {
-				log.Debugf("plugin %v has completed a reboot. Setting status to Success.", v)
-				plugin.Result.Status = contracts.ResultStatusSuccess
+				log.Debugf("plugin %v has completed a reboot. Setting status to InProgress to resume the work.", v)
+				plugin.Result.Status = contracts.ResultStatusInProgress
 				docState.PluginsInformation[v] = plugin
 				pluginOutputs[v] = &plugin.Result
 			}
