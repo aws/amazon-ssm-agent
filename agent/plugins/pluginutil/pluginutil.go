@@ -382,7 +382,7 @@ func LoadParametersAsList(log log.T, prop interface{}) ([]interface{}, contracts
 	var res contracts.PluginResult
 
 	if err := jsonutil.Remarshal(prop, &properties); err != nil {
-		log.Errorf("unable to parse plugin configuration")
+		log.Errorf("unable to parse plugin configuration, %v", err)
 		res.Output = "Execution failed because agent is unable to parse plugin configuration"
 		res.Code = 1
 		res.Status = contracts.ResultStatusFailed

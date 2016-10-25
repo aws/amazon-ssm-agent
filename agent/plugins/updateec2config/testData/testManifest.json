@@ -1,0 +1,66 @@
+{
+    "SchemaVersion":  "1.0",
+    "UriFormat":  "https://s3.amazonaws.com/aws-ssm-{Region}/{PackageName}/{PacakgeVersion}/{FileName}",
+    "Packages":  [
+                     {
+                         "Name":  "aws-ec2windows-ec2config",
+                         "FileName":  "EC2ConfigSetup.zip",
+                         "AvailableVersions":  [
+                                                   {
+                                                       "Version":  "1.0.0",
+                                                       "CheckSum":  "f03a4d3393c91cdff03a465232508952ae9bd3d94b78a8ee198402fe828c3830"
+                                                   },
+                                                   {
+                                                       "Version":  "3.16.930",
+                                                       "CheckSum":  "ebf2ed33b164cde86dfcba06ace3b5904432eebb8bfd94d9e40331a0a472f3a8"
+                                                   },
+                                                   {
+                                                       "Version":  "3.17.1032",
+                                                       "CheckSum":  "d5a550a185c8b76a1f881399c60018d78b6e00f3d203b3a26e028eb9221c840e"
+                                                   },
+                                                   {
+                                                       "Version":  "3.18.1118",
+                                                       "CheckSum":  "5c8b9feb016e8e9cb12236ae7554a0f1b8273e67c6f9d429ff38b91c7bd52cf5"
+                                                   },
+                                                   {
+                                                       "Version":  "100.1.2",
+                                                       "CheckSum":  "da26f168fb88c8ce4c34441a10331975cf9bd375b09550d741c313c7a83be81c"
+                                                   },
+                                                   {
+                                                       "Version":  "999.0.0",
+                                                       "CheckSum":  "ecc3a2119709c3aa304915f8c4f894e51b8f9e3c3fb87364a3e70ea5f3bf41a3"
+                                                   }
+                                               ]
+                     },
+                     {
+                         "Name":  "aws-ec2windows-ec2configupdater",
+                         "FileName":  "EC2ConfigUpdater.zip",
+                         "AvailableVersions":  [
+                                                   {
+                                                       "Version":  "1.0.0",
+                                                       "CheckSum":  "1ced0bd9b6ec7f82c9e3f3c5a2d9c66e1d9384c64ae5d46881da7d403e1902de"
+                                                   },
+                                                   {
+                                                       "Version":  "3.16.930",
+                                                       "CheckSum":  "694717184c81c697e59d3ff1b6189374854a2595ad407d9ae470fdbdb5f45c7f"
+                                                   },
+                                                   {
+                                                       "Version":  "3.17.1032",
+                                                       "CheckSum":  "6c8faa668a000bbb466285b64050bf738a39b8da2c8dec469fa5c7242ba0d32f"
+                                                   },
+                                                   {
+                                                       "Version":  "3.18.1118",
+                                                       "CheckSum":  "0bbb06ccfbd1ba7683d4f2f4fa1753611c3e5be82027bc81c3cf0d60d5028e02"
+                                                   },
+                                                   {
+                                                       "Version":  "100.1.2",
+                                                       "CheckSum":  "09a0b4b7262fd2bb814eb501000d5a7e77db627543b14e500829f07394fd077e"
+                                                   },
+                                                   {
+                                                       "Version":  "999.0.0",
+                                                       "CheckSum":  "4bcb0df17f9f5175d3ae7779a2dd07e108f82df3e64a8d272860e76ff57bf3ae"
+                                                   }
+                                               ]
+                     }
+                 ]
+}
