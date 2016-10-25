@@ -43,7 +43,7 @@ const (
 	// PackageUrl represents the s3 location where all packages live
 	// the url to a specific package is this plus /{PackageName}/{Platform}/{Arch}/{PackageVersion}/{FileName}
 	//PackageUrl = "https://amazon-ssm-{Region}.s3.amazonaws.com/Packages"
-	PackageUrl = "https://s3-us-west-2.amazonaws.com/amazon.mattfo" // TODO:MF:testing
+	PackageUrl = "https://configpentest-amazon-ssm-{Region}/Packages" // TODO:MF: For testing, only works in IAD (us-east-1)
 
 	// PackageUrlBjs is the s3 location for BJS region where all packages live
 	PackageUrlBjs = "https://s3.{Region}.amazonaws.com.cn/amazon-ssm-{Region}/Packages"
@@ -171,7 +171,6 @@ func getLatestVersion(versions []string, except string) (version string) {
 			continue
 		}
 		if major, minor, build, err := parseVersion(version); err == nil {
-			// TODO:MF: can we clean this logic up just a bit?
 			if major < latestMajor {
 				continue
 			} else if major == latestMajor && minor < latestMinor {
@@ -204,7 +203,6 @@ func (util *Utility) GetCurrentVersion(name string) (installedVersion string) {
 	if err != nil {
 		return ""
 	}
-	// TODO:MF determine the installing version (if there is one) and pass as second parameter
 	return getLatestVersion(directories[:], getInstallingPackageVersion(name))
 }
 
@@ -231,7 +229,7 @@ func parseVersion(version string) (major int, minor int, build int, err error) {
 func (util *Utility) GetLatestVersion(log log.T, name string, source string, context *updateutil.InstanceContext) (latestVersion string, err error) {
 	if source != "" {
 		// TODO:MF: Copy manifest from source location, parse, and return version
-		return "1.0.0", nil
+		return "", nil
 	} else {
 		return getLatestS3Version(log, name, context)
 	}

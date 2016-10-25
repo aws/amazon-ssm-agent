@@ -21,7 +21,6 @@ import (
 	"path"
 	"path/filepath"
 	"regexp"
-	"strings"
 	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
@@ -175,7 +174,7 @@ func runConfigurePackage(
 
 		// if already installed, exit
 		if version == installedVersion {
-			// TODO:MF: validate that installed version is basically valid - has manifest and at least one other file/folder?
+			// TODO:MF: validate that installed version is basically valid - has manifest and at least one other non-etag file or folder?
 			output.AppendInfo(log, "%v %v is already installed", input.Name, version)
 			output.MarkAsSucceeded(false)
 			return
@@ -307,8 +306,6 @@ func ensurePackage(log log.T,
 			// TODO:MF: consider verifying name and version in parsed manifest
 			// TODO:MF: ensure the local package is valid before we return
 			return
-		} else {
-			// TODO:MF: delete or rename invalid manifest
 		}
 	}
 
@@ -326,7 +323,7 @@ func ensurePackage(log log.T,
 		return
 	}
 
-	// TODO:MF: this could be considered a warning - it likely points to a real problem, but if uncompress succeeded, we could continue
+	// NOTE: this could be considered a warning - it likely points to a real problem, but if uncompress succeeded, we could continue
 	// delete compressed package after using
 	if cleanupErr := filesysdep.RemoveAll(filePath); cleanupErr != nil {
 		err = fmt.Errorf("failed to delete compressed package %v, %v", filePath, cleanupErr.Error())
@@ -412,10 +409,9 @@ func (m *configureManager) downloadPackage(log log.T,
 	if packageLocation == "" {
 		packageLocation = getS3Location(packageName, version, context, packageFilename)
 	} else {
-		//TODO:MF: I don't think source will contain a replaceable placeholder -
-		//   I think it is a URI to a "folder" that gets a filename tacked onto the end
-		//   or a full path to a compressed package file
-		packageLocation = strings.Replace(packageLocation, updateutil.FileNameHolder, packageFilename, -1)
+		//TODO:MF: build packageLocation from source URI
+		//   We should probably support both a URI to a "folder" that gets a filename tacked onto the end
+		//   and a full path to a compressed package file
 	}
 
 	// path to download destination
@@ -607,7 +603,7 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 			prop)
 	}
 
-	// TODO: instance here we have to do more result processing, where individual sub properties results are merged smartly into plugin response.
+	// TODO:MF: handle merging multiple results for cases where we had more than one operation
 	// Currently assuming we have only one work.
 	if len(properties) > 0 {
 		res.Code = out[0].ExitCode
