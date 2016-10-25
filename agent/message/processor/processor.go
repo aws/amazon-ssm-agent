@@ -28,7 +28,6 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	messageContracts "github.com/aws/amazon-ssm-agent/agent/message/contracts"
-	"github.com/aws/amazon-ssm-agent/agent/message/converter"
 	"github.com/aws/amazon-ssm-agent/agent/message/parser"
 	"github.com/aws/amazon-ssm-agent/agent/message/service"
 	"github.com/aws/amazon-ssm-agent/agent/platform"
@@ -97,11 +96,10 @@ type Processor struct {
 }
 
 // PluginRunner is a function that can run a set of plugins and return their outputs.
-type PluginRunner func(context context.T, documentID string, plugins map[string]model.PluginState, sendResponse engine.SendResponse, cancelFlag task.CancelFlag) (pluginOutputs map[string]*contracts.PluginResult)
+type PluginRunner func(context context.T, documentID string, plugins []model.PluginState, sendResponse engine.SendResponse, cancelFlag task.CancelFlag) (pluginOutputs map[string]*contracts.PluginResult)
 
-var pluginRunner = func(context context.T, documentID string, plugins map[string]model.PluginState, sendResponse engine.SendResponse, cancelFlag task.CancelFlag) (pluginOutputs map[string]*contracts.PluginResult) {
-	pluginStates := converter.ConvertPluginState(plugins)
-	return engine.RunPlugins(context, documentID, "", pluginStates, plugin.RegisteredWorkerPlugins(context), sendResponse, nil, cancelFlag)
+var pluginRunner = func(context context.T, documentID string, plugins []model.PluginState, sendResponse engine.SendResponse, cancelFlag task.CancelFlag) (pluginOutputs map[string]*contracts.PluginResult) {
+	return engine.RunPlugins(context, documentID, "", plugins, plugin.RegisteredWorkerPlugins(context), sendResponse, nil, cancelFlag)
 }
 
 // NewProcessor initializes a new mds processor with the given parameters.

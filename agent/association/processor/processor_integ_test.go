@@ -84,7 +84,6 @@ func TestParseAssociationWithAssociationVersion1_2(t *testing.T) {
 	pluginsInfo[pluginName] = plugin
 
 	expectedDocState := stateModel.DocumentState{
-		//DocumentInformation: documentInfo,
 		PluginsInformation: pluginsInfo,
 		DocumentType:       stateModel.Association,
 		SchemaVersion:      "1.2",

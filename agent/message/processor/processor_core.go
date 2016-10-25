@@ -60,7 +60,7 @@ func (p *Processor) runCmdsUsingCmdState(context context.T,
 
 	//Since only some plugins of a cmd gets executed here - there is no need to get output from engine & construct the sendReply output.
 	//Instead after all plugins of a command get executed, use persisted data to construct sendReply payload
-	runPlugins(context, docState.DocumentInformation.MessageID, docState.PluginsInformation, sendResponse, cancelFlag)
+	runPlugins(context, docState.DocumentInformation.MessageID, docState.InstancePluginsInformation, sendResponse, cancelFlag)
 
 	//read from persisted file
 	newCmdState := commandStateHelper.GetDocumentInterimState(log,
@@ -70,9 +70,8 @@ func (p *Processor) runCmdsUsingCmdState(context context.T,
 
 	//construct sendReply payload
 	outputs := make(map[string]*contracts.PluginResult)
-
-	for k, v := range newCmdState.PluginsInformation {
-		outputs[k] = &v.Result
+	for _, pluginState := range newCmdState.InstancePluginsInformation {
+		outputs[pluginState.Name] = &pluginState.Result
 	}
 
 	pluginOutputContent, _ := jsonutil.Marshal(outputs)
@@ -114,8 +113,9 @@ func (p *Processor) runCmdsUsingCmdState(context context.T,
 
 	log.Debugf("deleting message")
 	isUpdate := false
-	for pluginName := range newCmdState.PluginsInformation {
-		if pluginName == appconfig.PluginNameAwsAgentUpdate {
+
+	for _, pluginState := range newCmdState.InstancePluginsInformation {
+		if pluginState.Name == appconfig.PluginNameAwsAgentUpdate {
 			isUpdate = true
 		}
 	}
@@ -250,7 +250,7 @@ func (p *Processor) processSendCommandMessage(context context.T,
 	log := context.Log()
 
 	log.Debug("Running plugins...")
-	outputs := runPlugins(context, docState.DocumentInformation.MessageID, docState.PluginsInformation, sendResponse, cancelFlag)
+	outputs := runPlugins(context, docState.DocumentInformation.MessageID, docState.InstancePluginsInformation, sendResponse, cancelFlag)
 	pluginOutputContent, _ := jsonutil.Marshal(outputs)
 	log.Debugf("Plugin outputs %v", jsonutil.Indent(pluginOutputContent))
 
@@ -295,11 +295,12 @@ func (p *Processor) processSendCommandMessage(context context.T,
 
 	log.Debugf("Deleting message")
 	isUpdate := false
-	for pluginName := range newCmdState.PluginsInformation {
-		if pluginName == appconfig.PluginNameAwsAgentUpdate {
+	for _, pluginState := range newCmdState.InstancePluginsInformation {
+		if pluginState.Name == appconfig.PluginNameAwsAgentUpdate {
 			isUpdate = true
 		}
 	}
+
 	if !isUpdate {
 		if err := mdsService.DeleteMessage(log, newCmdState.DocumentInformation.MessageID); err != nil {
 			sdkutil.HandleAwsError(log, err, p.processorStopPolicy)
@@ -329,18 +330,11 @@ func parseSendCommandMessage(context context.T, msg *ssmmds.Message, messagesOrc
 
 	messageOrchestrationDirectory := filepath.Join(messagesOrchestrationRootDir, commandID)
 
-	pluginConfigurations := getPluginConfigurations(
-		parsedMessage.DocumentContent.RuntimeConfig,
-		messageOrchestrationDirectory,
-		parsedMessage.OutputS3BucketName,
-		s3KeyPrefix,
-		*msg.MessageId)
-
 	//persist : all information in current folder
 	log.Info("Persisting message in current execution folder")
 
 	//Data format persisted in Current Folder is defined by the struct - CommandState
-	docState := initializeSendCommandState(pluginConfigurations, *msg, parsedMessage)
+	docState := initializeSendCommandState(parsedMessage, messageOrchestrationDirectory, s3KeyPrefix, *msg)
 
 	var docStateContent string
 	if docStateContent, err = jsonutil.Marshal(docState); err != nil {

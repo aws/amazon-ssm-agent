@@ -168,13 +168,13 @@ func (p *Processor) processInProgressDocuments(instanceID string) {
 		// increment the command run count
 		docState.DocumentInformation.RunCount++
 		// Update reboot status
-		for v := range docState.PluginsInformation {
-			plugin := docState.PluginsInformation[v]
-			if plugin.HasExecuted && plugin.Result.Status == contracts.ResultStatusSuccessAndReboot {
-				log.Debugf("plugin %v has completed a reboot. Setting status to Success.", v)
-				plugin.Result.Status = contracts.ResultStatusSuccess
-				docState.PluginsInformation[v] = plugin
-				pluginOutputs[v] = &plugin.Result
+		for index, pluginState := range docState.InstancePluginsInformation {
+			pluginName := pluginState.Name
+			if pluginState.HasExecuted && pluginState.Result.Status == contracts.ResultStatusSuccessAndReboot {
+				log.Debugf("plugin %v has completed a reboot. Setting status to Success.", pluginName)
+				pluginState.Result.Status = contracts.ResultStatusSuccess
+				docState.InstancePluginsInformation[index] = pluginState
+				pluginOutputs[pluginName] = &pluginState.Result
 			}
 		}
 
