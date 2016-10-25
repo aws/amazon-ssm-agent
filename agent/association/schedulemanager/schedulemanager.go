@@ -58,7 +58,7 @@ func Refresh(log log.T, assocs []*model.AssociationRawData) {
 
 			//todo: call service to update association status
 			if newAssoc.ExcludeFromFutureScheduling {
-				log.Infof("Exclude Association %v from future scheduling", *newAssoc.Association.AssociationId)
+				log.Infof("Exclude association %v from future scheduling", *newAssoc.Association.AssociationId)
 			} else {
 				log.Infof("Scheduling association %v, set next ScheduledDate to %v", *newAssoc.Association.AssociationId, newAssoc.NextScheduledDate.String())
 			}

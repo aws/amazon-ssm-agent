@@ -56,7 +56,7 @@ func (p *Processor) Execute(context context.T) (err error) {
 	p.processInProgressDocuments(instanceID)
 	p.processPendingDocuments(instanceID)
 
-	log.Info("Starting mdsprocessor polling")
+	log.Info("Starting message processor polling")
 	if p.messagePollJob, err = scheduler.Every(pollMessageFrequencyMinutes).Minutes().Run(p.loop); err != nil {
 		context.Log().Errorf("unable to schedule message processor. %v", err)
 	}

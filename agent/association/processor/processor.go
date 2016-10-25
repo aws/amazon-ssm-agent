@@ -90,8 +90,9 @@ func NewAssociationProcessor(context context.T, instanceID string) *Processor {
 func (p *Processor) InitializeAssociationProcessor() {
 	log := p.context.Log()
 
-	log.Info("Initialize association scheduling service")
+	log.Info("Initializing association scheduling service")
 	signal.InitializeAssociationSignalService(log, p.runScheduledAssociation)
+	log.Info("Association scheduling service initialized")
 }
 
 // SetPollJob represents setter for PollJob
@@ -133,7 +134,7 @@ func (p *Processor) ProcessAssociation() {
 		if assocContent, err = jsonutil.Marshal(assoc); err != nil {
 			return
 		}
-		log.Debug("Association content is ", jsonutil.Indent(assocContent))
+		log.Debug("Association content is \n", jsonutil.Indent(assocContent))
 
 		if err = p.assocSvc.LoadAssociationDetail(log, assoc); err != nil {
 			message := fmt.Sprintf("Unable to load association details, %v", err)
@@ -288,7 +289,7 @@ func (p *Processor) parseAssociation(rawData *model.AssociationRawData) (*stateM
 	if parsedMessageContent, err = jsonutil.Marshal(document); err != nil {
 		return &docState, fmt.Errorf("failed to parse document, %v", err)
 	}
-	log.Debug("ParsedAssociation content is ", jsonutil.Indent(parsedMessageContent))
+	log.Debug("Parsed association content is \n", jsonutil.Indent(parsedMessageContent))
 
 	//Data format persisted in Current Folder is defined by the struct - DocumentState
 	docState = assocParser.InitializeDocumentState(context, document, rawData)
@@ -299,7 +300,7 @@ func (p *Processor) parseAssociation(rawData *model.AssociationRawData) (*stateM
 	}
 
 	if isMI {
-		log.Debugf("Running Incompatible AWS SSM Document %v on managed instance", docState.DocumentInformation.DocumentName)
+		log.Debugf("Running incompatible AWS SSM Document %v on managed instance", docState.DocumentInformation.DocumentName)
 		if err = stateModel.RemoveDependencyOnInstanceMetadata(context, &docState); err != nil {
 			return &docState, err
 		}

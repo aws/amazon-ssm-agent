@@ -357,7 +357,7 @@ func parseSendCommandMessage(context context.T, msg *ssmmds.Message, messagesOrc
 	}
 
 	if isMI && model.IsManagedInstanceIncompatibleAWSSSMDocument(docState.DocumentInformation.DocumentName) {
-		log.Debugf("Running Incompatible AWS SSM Document %v on managed instance", docState.DocumentInformation.DocumentName)
+		log.Debugf("Running incompatible AWS SSM Document %v on managed instance", docState.DocumentInformation.DocumentName)
 		if err = model.RemoveDependencyOnInstanceMetadata(context, &docState); err != nil {
 			return nil, err
 		}
