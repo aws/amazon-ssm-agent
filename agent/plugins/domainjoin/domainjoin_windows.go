@@ -30,6 +30,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/parameterstore"
 	"github.com/aws/amazon-ssm-agent/agent/platform"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/pluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/rebooter"
@@ -305,12 +306,26 @@ func makeArguments(log log.T, pluginInput DomainJoinPluginInput) (commandArgumen
 	buffer.WriteString("./")
 	buffer.WriteString(DomainJoinPluginExecutableName)
 
+	// Resolve ssm parameters
+	// This may contain sensitive information, do not log this data after resolving.
+	if pluginInput.DirectoryId, err = parameterstore.ResolveString(log, pluginInput.DirectoryId); err != nil {
+		log.Errorf("Failed to resolve ssm parameters. Error: - %v", err)
+		return
+	}
+
 	// required parameters for the domain join plugin
 	if len(pluginInput.DirectoryId) == 0 {
 		return "", fmt.Errorf("directoryId is required")
 	}
 	buffer.WriteString(DirectoryIdArg)
 	buffer.WriteString(pluginInput.DirectoryId)
+
+	// Resolve ssm parameters
+	// This may contain sensitive information, do not log this data after resolving.
+	if pluginInput.DirectoryName, err = parameterstore.ResolveString(log, pluginInput.DirectoryName); err != nil {
+		log.Errorf("Failed to resolve ssm parameters. Error: - %v", err)
+		return
+	}
 
 	if len(pluginInput.DirectoryName) == 0 {
 		return "", fmt.Errorf("directoryName is required")
@@ -324,6 +339,13 @@ func makeArguments(log log.T, pluginInput DomainJoinPluginInput) (commandArgumen
 		return "", fmt.Errorf("cannot get the instance region information")
 	}
 	buffer.WriteString(region)
+
+	// Resolve ssm parameters
+	// This may contain sensitive information, do not log this data after resolving.
+	if pluginInput.DnsIpAddresses, err = parameterstore.ResolveStringList(log, pluginInput.DnsIpAddresses); err != nil {
+		log.Errorf("Failed to resolve ssm parameters. Error: - %v", err)
+		return
+	}
 
 	if len(pluginInput.DnsIpAddresses) == 0 {
 		log.Debug("Do not provide dns addresses.")
