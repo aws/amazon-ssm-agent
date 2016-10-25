@@ -1,3 +1,5 @@
+// +build darwin freebsd linux netbsd openbsd
+
 // Copyright 2016 Amazon.com, Inc. or its affiliates. All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License"). You may not
@@ -12,14 +14,10 @@
 // permissions and limitations under the License.
 //
 // Package rundaemon implements rundaemon plugin and its configuration
-//
-// +build darwin freebsd linux netbsd openbsd
 
 package rundaemon
 
 import (
-	"os"
-
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/pluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/task"
@@ -28,10 +26,12 @@ import (
 // Plugin is the type for the configureDaemon plugin.
 type Plugin struct {
 	pluginutil.DefaultPlugin
-	Process     os.Process
-	ExeLocation string // this is the version directory for a particular daemon
-	Name        string // name of the daemon
-	CommandLine string // command line to launch the daemon (with the exelocation as working directory)
+	// ExeLocation is the location directory for a particular daemon
+	ExeLocation string
+	// Name is the name of the daemon
+	Name string
+	// CommandLine is the command line to launch the daemon (On Windows, ame of executable or a powershell script)
+	CommandLine string
 }
 
 func (p *Plugin) IsRunning(context context.T) bool {
@@ -42,12 +42,12 @@ func (p *Plugin) IsRunning(context context.T) bool {
 
 func (p *Plugin) Start(context context.T, configuration string, orchestrationDir string, cancelFlag task.CancelFlag) error {
 	log := context.Log()
-	log.Infof("Starting %v /nCommand: %v /nConfig: %v", p.Name, p.CommandLine, configuration)
-	return nil // TODO:DAEMON spawn process
+	log.Infof("Starting %v Command: %v Config: %v", p.Name, p.CommandLine, configuration)
+	return nil
 }
 
 func (p *Plugin) Stop(context context.T, cancelFlag task.CancelFlag) error {
 	log := context.Log()
 	log.Infof("Stopping %v", p.Name)
-	return nil // TODO:DAEMON end process
+	return nil
 }

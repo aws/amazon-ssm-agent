@@ -40,6 +40,15 @@ type Plugin struct {
 	lrpm manager.T
 }
 
+// ConfigurePackagePluginInput represents one set of commands executed by the ConfigurePackage plugin.
+type ConfigureDaemonPluginInput struct {
+	contracts.PluginInput
+	Name            string `json:"name"`
+	Action          string `json:"action"`
+	PackageLocation string `json:"packagelocation"`
+	Command         string `json:"command"`
+}
+
 // ConfigureDaemonPluginOutput represents the output of the plugin.
 type ConfigureDaemonPluginOutput struct {
 	contracts.PluginOutput
@@ -117,7 +126,7 @@ func runConfigureDaemon(
 	cancelFlag task.CancelFlag) (output ConfigureDaemonPluginOutput) {
 	//log := context.Log()
 
-	var input rundaemon.DaemonPluginInput
+	var input rundaemon.ConfigureDaemonPluginInput
 	var WorkingDir string
 	var err error
 	if err = jsonutil.Remarshal(rawPluginInput, &input); err != nil {
@@ -154,7 +163,8 @@ func runConfigureDaemon(
 		if strings.HasPrefix(daemonWorkingDir, appconfig.PackageRoot) {
 			// TODO:MF: make deps file to support mocking filesystem depedency
 			var errDaemonDoc error
-			if ssmDaemonDoc, errDaemonDoc := jsonutil.Marshal(input); errDaemonDoc == nil {
+			var ssmDaemonDoc string
+			if ssmDaemonDoc, errDaemonDoc = jsonutil.Marshal(input); errDaemonDoc == nil {
 				daemonFileName := filepath.Join(daemonWorkingDir, "ssm-daemon.json")
 				if fileutil.Exists(daemonFileName) {
 					errDaemonDoc = fileutil.DeleteFile(daemonFileName)

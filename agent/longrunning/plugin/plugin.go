@@ -89,14 +89,14 @@ func loadPlatformIndependentPlugins(context context.T) map[string]Plugin {
 	// find all packages that should run as daemons and register a rundaemon plugin for each
 	if pkgdirs, err := fileutil.GetDirectoryNames(appconfig.PackageRoot); err == nil {
 		for _, pkgdir := range pkgdirs {
-			if verdirs, err := fileutil.GetDirectoryNames(filepath.Join(appconfig.PackageRoot, pkgdir)); err == nil {
+			var verdirs []string
+			if verdirs, err = fileutil.GetDirectoryNames(filepath.Join(appconfig.PackageRoot, pkgdir)); err == nil {
 				for _, verdir := range verdirs {
 					daemonWorkingDir := filepath.Join(appconfig.PackageRoot, pkgdir, verdir)
 					daemonStartFile := filepath.Join(daemonWorkingDir, "ssm-daemon.json")
 					if fileutil.Exists(daemonStartFile) {
 						// load file
-						var input rundaemon.DaemonPluginInput
-						var err error
+						var input rundaemon.ConfigureDaemonPluginInput
 						if err = jsonutil.UnmarshalFile(daemonStartFile, &input); err == nil {
 							log.Infof("Registering long-running plugin for daemon %v", input.Name)
 							plugin := Plugin{
