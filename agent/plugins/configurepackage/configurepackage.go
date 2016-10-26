@@ -68,8 +68,9 @@ func (result *ConfigurePackagePluginOutput) MarkAsSucceeded(reboot bool) {
 	result.ExitCode = 0
 	if reboot {
 		result.Status = contracts.ResultStatusSuccessAndReboot
+	} else {
+		result.Status = contracts.ResultStatusSuccess
 	}
-	result.Status = contracts.ResultStatusSuccess
 }
 
 // MarkAsFailed marks plugin as Failed.
