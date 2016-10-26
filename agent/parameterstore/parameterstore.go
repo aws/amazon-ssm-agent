@@ -43,6 +43,7 @@ type Parameter struct {
 
 // defaultParamName is used for creating default regex for parameter name
 const defaultParamName = ""
+const ParamTypeStringList = "StringList"
 
 var callParameterService = callGetParameters
 
@@ -68,8 +69,8 @@ func ResolveString(log log.T, input string) (string, error) {
 	}
 
 	// replace param names with actual values
-	for paramName, paramValue := range resolvedParamMap {
-		input = strings.Replace(input, paramName, paramValue, -1)
+	for paramName, paramObj := range resolvedParamMap {
+		input = strings.Replace(input, paramName, paramObj.Value, -1)
 	}
 
 	return input, nil
@@ -100,14 +101,25 @@ func ResolveStringList(log log.T, input []string) ([]string, error) {
 		return input, err
 	}
 
-	// replace param names with actual values
-	for paramName, paramValue := range resolvedParamMap {
-		for index, value := range input {
-			input[index] = strings.Replace(value, paramName, paramValue, -1)
+	output := []string{}
+	for _, value := range input {
+		temp := value
+		for paramName, paramObj := range resolvedParamMap {
+			if strings.Compare(paramObj.Type, ParamTypeStringList) == 0 &&
+				strings.Compare(paramName, strings.TrimSpace(temp)) == 0 {
+				output = append(output, strings.Split(paramObj.Value, ",")...)
+				break
+			}
+			temp = strings.Replace(temp, paramName, paramObj.Value, -1)
+		}
+
+		// If original value changed then add it to output
+		if strings.Compare(temp, value) != 0 {
+			output = append(output, temp)
 		}
 	}
 
-	return input, nil
+	return output, nil
 }
 
 func getValidSSMParamRegexCompiler(log log.T, paramName string) (*regexp.Regexp, error) {
@@ -129,7 +141,7 @@ func getValidSSMParamRegexCompiler(log log.T, paramName string) (*regexp.Regexp,
 }
 
 // resolveSSMParameters takes a list of strings and resolves them by calling the GetParameters API
-func resolveSSMParameters(log log.T, ssmParams []string) (map[string]string, error) {
+func resolveSSMParameters(log log.T, ssmParams []string) (map[string]Parameter, error) {
 	var result *GetParametersResponse
 	var err error
 
@@ -164,7 +176,7 @@ func resolveSSMParameters(log log.T, ssmParams []string) (map[string]string, err
 		return nil, errorString
 	}
 
-	resolvedParamMap := map[string]string{}
+	resolvedParamMap := map[string]Parameter{}
 
 	for _, paramObj := range result.Parameters {
 		// get regex compiler
@@ -174,7 +186,7 @@ func resolveSSMParameters(log log.T, ssmParams []string) (map[string]string, err
 		}
 		for _, value := range ssmParams {
 			if validSSMParam.MatchString(value) {
-				resolvedParamMap[value] = paramObj.Value
+				resolvedParamMap[value] = paramObj
 			}
 		}
 	}
