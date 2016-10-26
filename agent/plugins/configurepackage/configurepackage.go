@@ -113,7 +113,7 @@ type configureManager struct{}
 
 type pluginHelper interface {
 	downloadPackage(log log.T,
-		util Util,
+		util configureUtil,
 		packageName string,
 		version string,
 		source string,
@@ -124,12 +124,12 @@ type pluginHelper interface {
 
 	getVersionToInstall(log log.T,
 		input *ConfigurePackagePluginInput,
-		util Util,
+		util configureUtil,
 		context *updateutil.InstanceContext) (version string, installedVersion string, err error)
 
 	getVersionToUninstall(log log.T,
 		input *ConfigurePackagePluginInput,
-		util Util,
+		util configureUtil,
 		context *updateutil.InstanceContext) (version string, err error)
 }
 
@@ -138,7 +138,7 @@ func runConfigurePackage(
 	p *Plugin,
 	log log.T,
 	manager pluginHelper,
-	configureUtil Util,
+	util configureUtil,
 	instanceContext *updateutil.InstanceContext,
 	rawPluginInput interface{}) (output ConfigurePackagePluginOutput) {
 	var input ConfigurePackagePluginInput
@@ -166,7 +166,7 @@ func runConfigurePackage(
 	switch input.Action {
 	case InstallAction:
 		// get version information
-		version, installedVersion, versionErr := manager.getVersionToInstall(log, &input, configureUtil, instanceContext)
+		version, installedVersion, versionErr := manager.getVersionToInstall(log, &input, util, instanceContext)
 		if versionErr != nil {
 			output.MarkAsFailed(log,
 				fmt.Errorf("unable to determine version to install: %v", versionErr))
@@ -182,7 +182,7 @@ func runConfigurePackage(
 		}
 
 		// ensure manifest file and package
-		_, ensureErr := ensurePackage(log, manager, configureUtil, input.Name, version, input.Source, &output, instanceContext)
+		_, ensureErr := ensurePackage(log, manager, util, input.Name, version, input.Source, &output, instanceContext)
 		if ensureErr != nil {
 			output.MarkAsFailed(log, fmt.Errorf("unable to obtain package: %v", ensureErr))
 			return
@@ -200,7 +200,7 @@ func runConfigurePackage(
 			// NOTE: if source is specified on an install and we need to redownload the package for the
 			// currently installed version because it isn't valid on disk, we will pull from the source URI
 			// even though that may or may not be the package that installed it - it is our only decent option
-			_, ensureErr := ensurePackage(log, manager, configureUtil, input.Name, installedVersion, input.Source, &output, instanceContext)
+			_, ensureErr := ensurePackage(log, manager, util, input.Name, installedVersion, input.Source, &output, instanceContext)
 			if ensureErr != nil {
 				output.MarkAsFailed(log, fmt.Errorf("unable to obtain package: %v", ensureErr))
 			} else {
@@ -252,14 +252,14 @@ func runConfigurePackage(
 
 	case UninstallAction:
 		// get version information
-		version, versionErr := manager.getVersionToUninstall(log, &input, configureUtil, instanceContext)
+		version, versionErr := manager.getVersionToUninstall(log, &input, util, instanceContext)
 		if versionErr != nil || version == "" {
 			output.MarkAsFailed(log, fmt.Errorf("unable to determine version to uninstall: %v", versionErr))
 			return
 		}
 
 		// ensure manifest file and package
-		_, ensureErr := ensurePackage(log, manager, configureUtil, input.Name, version, input.Source, &output, instanceContext)
+		_, ensureErr := ensurePackage(log, manager, util, input.Name, version, input.Source, &output, instanceContext)
 		if ensureErr != nil {
 			output.MarkAsFailed(log, fmt.Errorf("unable to obtain package: %v", ensureErr))
 			return
@@ -288,7 +288,7 @@ func runConfigurePackage(
 // ensurePackage validates local copy of the manifest and package and downloads if needed
 func ensurePackage(log log.T,
 	manager pluginHelper,
-	util Util,
+	util configureUtil,
 	packageName string,
 	version string,
 	source string,
@@ -304,13 +304,13 @@ func ensurePackage(log log.T,
 	// if we already have a valid manifest, return it
 	if exist := filesysdep.Exists(localManifestName); exist {
 		if manifest, err = parsePackageManifest(log, localManifestName); err == nil {
-			// TODO:MF: consider verifying name and version in parsed manifest
+			// TODO:MF: consider verifying name, version, platform, arch in parsed manifest
 			// TODO:MF: ensure the local package is valid before we return
 			return
 		}
 	}
 
-	// TODO:MF: if source but no version, download to temp, determine version from manifest and copy to correct location
+	// TODO:OFFLINE: if source but no version, download to temp, determine version from manifest and copy to correct location
 
 	// download package
 	var filePath string
@@ -365,7 +365,7 @@ func (m *configureManager) validateInput(input *ConfigurePackagePluginInput) (va
 // getVersionToInstall decides which version to install and whether there is an existing version (that is not in the process of installing)
 func (m *configureManager) getVersionToInstall(log log.T,
 	input *ConfigurePackagePluginInput,
-	util Util,
+	util configureUtil,
 	context *updateutil.InstanceContext) (version string, installedVersion string, err error) {
 	installedVersion = util.GetCurrentVersion(input.Name)
 
@@ -382,7 +382,7 @@ func (m *configureManager) getVersionToInstall(log log.T,
 // getVersionToUninstall decides which version to uninstall
 func (m *configureManager) getVersionToUninstall(log log.T,
 	input *ConfigurePackagePluginInput,
-	util Util,
+	util configureUtil,
 	context *updateutil.InstanceContext) (version string, err error) {
 	if input.Version != "" {
 		version = input.Version
@@ -396,7 +396,7 @@ func (m *configureManager) getVersionToUninstall(log log.T,
 
 // downloadPackage downloads the installation package from s3 bucket or source URI and uncompresses it
 func (m *configureManager) downloadPackage(log log.T,
-	util Util,
+	util configureUtil,
 	packageName string,
 	version string,
 	source string,
@@ -410,7 +410,7 @@ func (m *configureManager) downloadPackage(log log.T,
 	if packageLocation == "" {
 		packageLocation = getS3Location(packageName, version, context, packageFilename)
 	} else {
-		//TODO:MF: build packageLocation from source URI
+		//TODO:OFFLINE: build packageLocation from source URI
 		//   We should probably support both a URI to a "folder" that gets a filename tacked onto the end
 		//   and a full path to a compressed package file
 	}
@@ -439,11 +439,6 @@ func (m *configureManager) downloadPackage(log log.T,
 	output.AppendInfo(log, "Successfully downloaded %v", downloadInput.SourceURL)
 
 	return downloadOutput.LocalFilePath, nil
-}
-
-// mergeResultStatus combines the status from multiple sub documents
-func mergeResultStatus(currentStatus contracts.ResultStatus, newStatus contracts.ResultStatus) contracts.ResultStatus {
-	return newStatus // TODO:MF: actually merge them...
 }
 
 // runInstallPackage executes the install script for the specific version of a package.
@@ -531,7 +526,7 @@ func executeAction(p *Plugin,
 			if pluginOut.StandardError != "" {
 				output.AppendInfo(log, "%v errors: %v", actionName, pluginOut.StandardError)
 			}
-			status = mergeResultStatus(status, pluginOut.Status)
+			status = contracts.MergeResultStatus(status, pluginOut.Status)
 		}
 	}
 	return
@@ -557,7 +552,7 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 	p.runner = subDocumentRunner
 	log := context.Log()
 	log.Info("RunCommand started with configuration ", config)
-	configureUtil := new(Utility)
+	util := new(configureUtilImp)
 	manager := new(configureManager)
 
 	res.StartDateTime = time.Now()
@@ -599,7 +594,7 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 		out[i] = runConfig(p,
 			log,
 			manager,
-			configureUtil,
+			util,
 			instanceContext,
 			prop)
 	}

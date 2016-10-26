@@ -101,7 +101,7 @@ func TestExecute(t *testing.T) {
 		p *Plugin,
 		log log.T,
 		manager pluginHelper,
-		configureUtil Util,
+		util configureUtil,
 		context *updateutil.InstanceContext,
 		rawPluginInput interface{}) (out ConfigurePackagePluginOutput) {
 		out = ConfigurePackagePluginOutput{}
@@ -401,7 +401,7 @@ type mockConfigureManager struct {
 }
 
 func (m *mockConfigureManager) downloadPackage(log log.T,
-	util Util,
+	util configureUtil,
 	packageName string,
 	version string,
 	source string,
@@ -417,7 +417,7 @@ func (m *mockConfigureManager) validateInput(input *ConfigurePackagePluginInput)
 
 func (m *mockConfigureManager) getVersionToInstall(log log.T,
 	input *ConfigurePackagePluginInput,
-	util Util,
+	util configureUtil,
 	context *updateutil.InstanceContext) (version string, installedVersion string, err error) {
 
 	if m.downloadManifestResult != nil {
@@ -430,7 +430,7 @@ func (m *mockConfigureManager) getVersionToInstall(log log.T,
 
 func (m *mockConfigureManager) getVersionToUninstall(log log.T,
 	input *ConfigurePackagePluginInput,
-	util Util,
+	util configureUtil,
 	context *updateutil.InstanceContext) (version string, err error) {
 
 	if m.downloadManifestResult != nil {
@@ -439,42 +439,4 @@ func (m *mockConfigureManager) getVersionToUninstall(log log.T,
 		version = ""
 	}
 	return version, m.downloadManifestError
-}
-
-type mockUpdateUtility struct {
-	updateutil.Utility
-}
-
-func (u *mockUpdateUtility) CreateInstanceContext(log log.T) (context *updateutil.InstanceContext, err error) {
-	return createStubInstanceContext(), nil
-}
-
-func (u *mockUpdateUtility) IsServiceRunning(log log.T, i *updateutil.InstanceContext) (result bool, err error) {
-	return true, nil
-}
-
-func (u *mockUpdateUtility) CreateUpdateDownloadFolder() (folder string, err error) {
-	return "", nil
-}
-
-func (u *mockUpdateUtility) ExeCommand(
-	log log.T,
-	cmd string,
-	updateRoot string,
-	workingDir string,
-	stdOut string,
-	stdErr string,
-	isAsync bool) (err error) {
-	return nil
-}
-
-func (u *mockUpdateUtility) SaveUpdatePluginResult(
-	log log.T,
-	updateRoot string,
-	updateResult *updateutil.UpdatePluginResult) (err error) {
-	return nil
-}
-
-func (u *mockUpdateUtility) IsDiskSpaceSufficientForUpdate(log log.T) (bool, error) {
-	return true, nil
 }

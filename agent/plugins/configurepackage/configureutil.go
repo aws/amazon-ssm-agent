@@ -61,14 +61,14 @@ const (
 	PatternVersion = "^(?:(\\d+)\\.)(?:(\\d+)\\.)(\\d+)$"
 )
 
-type Util interface {
+type configureUtil interface {
 	CreatePackageFolder(name string, version string) (folder string, err error)
 	HasValidPackage(name string, version string) bool
 	GetCurrentVersion(name string) (installedVersion string)
 	GetLatestVersion(log log.T, name string, source string, context *updateutil.InstanceContext) (latestVersion string, err error)
 }
 
-type Utility struct{}
+type configureUtilImp struct{}
 
 // getManifestName constructs the manifest name to locate in the s3 bucket
 func getManifestName(packageName string) (manifestName string) {
@@ -133,7 +133,7 @@ func getPackageFolder(name string, version string) (folder string) {
 }
 
 // CreatePackageFolder constructs the local directory to place package
-func (util *Utility) CreatePackageFolder(name string, version string) (folder string, err error) {
+func (util *configureUtilImp) CreatePackageFolder(name string, version string) (folder string, err error) {
 	folder = getPackageFolder(name, version)
 
 	if err = filesysdep.MakeDirExecute(folder); err != nil {
@@ -144,7 +144,7 @@ func (util *Utility) CreatePackageFolder(name string, version string) (folder st
 }
 
 // HasValidPackage determines if a given version of a package has a folder on disk that contains a valid package
-func (util *Utility) HasValidPackage(name string, version string) bool {
+func (util *configureUtilImp) HasValidPackage(name string, version string) bool {
 	// folder exists, contains manifest, manifest is valid, and folder contains at least 1 other directory or file (assumed to be the unpacked package)
 	packageFolder := getPackageFolder(name, version)
 	manifestPath := filepath.Join(packageFolder, getManifestName(name))
@@ -198,7 +198,7 @@ func getLatestS3Version(log log.T, name string, context *updateutil.InstanceCont
 }
 
 // GetCurrentVersion finds the most recent installed version of a package
-func (util *Utility) GetCurrentVersion(name string) (installedVersion string) {
+func (util *configureUtilImp) GetCurrentVersion(name string) (installedVersion string) {
 	directories, err := filesysdep.GetDirectoryNames(filepath.Join(appconfig.PackageRoot, name))
 	if err != nil {
 		return ""
@@ -226,7 +226,7 @@ func parseVersion(version string) (major int, minor int, build int, err error) {
 
 // TODO:MF: This is the first utility function that calls out to S3 or some URI - perhaps this is part of a different set of utilities
 // GetLatestVersion looks up the latest version of a given package for this platform/arch in S3 or manifest at source location
-func (util *Utility) GetLatestVersion(log log.T, name string, source string, context *updateutil.InstanceContext) (latestVersion string, err error) {
+func (util *configureUtilImp) GetLatestVersion(log log.T, name string, source string, context *updateutil.InstanceContext) (latestVersion string, err error) {
 	if source != "" {
 		// TODO:MF: Copy manifest from source location, parse, and return version
 		return "", nil

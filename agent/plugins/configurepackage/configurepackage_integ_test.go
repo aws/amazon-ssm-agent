@@ -11,8 +11,6 @@
 // either express or implied. See the License for the specific language governing
 // permissions and limitations under the License.
 
-// +build integration
-
 // Package configurepackage implements the ConfigurePackage plugin.
 package configurepackage
 
@@ -32,14 +30,14 @@ func TestConfigurePackage(t *testing.T) {
 	pluginInformation := createStubPluginInputInstall()
 
 	manager := &configureManager{}
-	configureUtil := &Utility{}
+	util := &configureUtilImp{}
 	instanceContext := createStubInstanceContext()
 
 	output := runConfigurePackage(
 		plugin,
 		logger,
 		manager,
-		configureUtil,
+		util,
 		instanceContext,
 		pluginInformation)
 
@@ -56,14 +54,14 @@ func TestConfigurePackage_InvalidRawInput(t *testing.T) {
 	pluginInformation := "invalid value"
 
 	manager := &configureManager{}
-	configureUtil := &Utility{}
+	util := &configureUtilImp{}
 	instanceContext := createStubInstanceContext()
 
 	result := runConfigurePackage(
 		plugin,
 		logger,
 		manager,
-		configureUtil,
+		util,
 		instanceContext,
 		pluginInformation)
 
@@ -78,14 +76,14 @@ func TestConfigurePackage_InvalidInput(t *testing.T) {
 	pluginInformation := createStubInvalidPluginInput()
 
 	manager := &configureManager{}
-	configureUtil := &Utility{}
+	util := &configureUtilImp{}
 	instanceContext := createStubInstanceContext()
 
 	result := runConfigurePackage(
 		plugin,
 		logger,
 		manager,
-		configureUtil,
+		util,
 		instanceContext,
 		pluginInformation)
 
@@ -105,14 +103,14 @@ func TestConfigurePackage_DownloadFailed(t *testing.T) {
 	pluginInformation := createStubPluginInputInstall()
 
 	manager := &configureManager{}
-	configureUtil := &Utility{}
+	util := &configureUtilImp{}
 	instanceContext := createStubInstanceContext()
 
 	output := runConfigurePackage(
 		plugin,
 		logger,
 		manager,
-		configureUtil,
+		util,
 		instanceContext,
 		pluginInformation)
 
@@ -134,14 +132,14 @@ func TestInstallPackage_ExtractFailed(t *testing.T) {
 	pluginInformation := createStubPluginInputInstall()
 
 	manager := &configureManager{}
-	configureUtil := &Utility{}
+	util := &configureUtilImp{}
 	instanceContext := createStubInstanceContext()
 
 	output := runConfigurePackage(
 		plugin,
 		logger,
 		manager,
-		configureUtil,
+		util,
 		instanceContext,
 		pluginInformation)
 
@@ -169,14 +167,14 @@ func TestInstallPackage_DeleteFailed(t *testing.T) {
 	pluginInformation := createStubPluginInputInstall()
 
 	manager := &configureManager{}
-	configureUtil := &Utility{}
+	util := &configureUtilImp{}
 	instanceContext := createStubInstanceContext()
 
 	output := runConfigurePackage(
 		plugin,
 		logger,
 		manager,
-		configureUtil,
+		util,
 		instanceContext,
 		pluginInformation)
 
@@ -194,14 +192,14 @@ func TestUninstallPackage_DoesNotExist(t *testing.T) {
 	pluginInformation := createStubPluginInputUninstallLatest()
 
 	manager := &configureManager{}
-	configureUtil := &Utility{}
+	util := &configureUtilImp{}
 	instanceContext := createStubInstanceContext()
 
 	output := runConfigurePackage(
 		plugin,
 		logger,
 		manager,
-		configureUtil,
+		util,
 		instanceContext,
 		pluginInformation)
 
@@ -224,14 +222,14 @@ func TestUninstallPackage_RemovalFailed(t *testing.T) {
 	pluginInformation := createStubPluginInputUninstall()
 
 	manager := &configureManager{}
-	configureUtil := &Utility{}
+	util := &configureUtilImp{}
 	instanceContext := createStubInstanceContext()
 
 	output := runConfigurePackage(
 		plugin,
 		logger,
 		manager,
-		configureUtil,
+		util,
 		instanceContext,
 		pluginInformation)
 

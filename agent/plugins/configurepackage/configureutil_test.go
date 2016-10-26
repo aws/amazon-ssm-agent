@@ -69,7 +69,7 @@ func TestGetS3Location_Bjs(t *testing.T) {
 
 func TestCreatePackageFolderSucceeded(t *testing.T) {
 	pluginInformation := createStubPluginInputInstall()
-	util := Utility{}
+	util := configureUtilImp{}
 	stubs := &ConfigurePackageStubs{fileSysDepStub: &FileSysDepStub{}}
 	stubs.Set()
 	defer stubs.Clear()
@@ -83,7 +83,7 @@ func TestCreatePackageFolderSucceeded(t *testing.T) {
 
 func TestCreatePackageFolderFailed(t *testing.T) {
 	pluginInformation := createStubPluginInputInstall()
-	util := Utility{}
+	util := configureUtilImp{}
 	stubs := &ConfigurePackageStubs{fileSysDepStub: &FileSysDepStub{makeFileError: errors.New("Folder cannot be created")}}
 	stubs.Set()
 	defer stubs.Clear()

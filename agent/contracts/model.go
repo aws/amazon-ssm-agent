@@ -31,6 +31,32 @@ const (
 	ResultStatusTimedOut         ResultStatus = "TimedOut"
 )
 
+// MergeResultStatus takes two ResultStatuses (presumably from sub-tasks) and decides what the overall task status should be
+func MergeResultStatus(current ResultStatus, new ResultStatus) (merged ResultStatus) {
+	orderedResultStatus := [...]ResultStatus{
+		ResultStatusUnknown,
+		ResultStatusNotStarted,
+		ResultStatusInProgress,
+		ResultStatusSuccess,
+		ResultStatusSuccessAndReboot,
+		ResultStatusPassedAndReboot,
+		ResultStatusFailed,
+		ResultStatusCancelled,
+		ResultStatusTimedOut,
+	}
+	// Return the "greater" ResultStatus - the one with a higher index in OrderedResultStatus
+	// We assume both exist in the array and therefore the first one found is at the lower index (so return the other one)
+	for _, ResultStatus := range orderedResultStatus {
+		if ResultStatus == current {
+			return new
+		}
+		if ResultStatus == new {
+			return current
+		}
+	}
+	return new // Default to new ResultStatus if neither is found in the array
+}
+
 const (
 	// ParamTypeString represents the Param Type is String
 	ParamTypeString = "String"
