@@ -50,8 +50,17 @@ func ParseDocumentWithParams(log log.T,
 	if err = json.Unmarshal([]byte(*rawData.Document), &payload.DocumentContent); err != nil {
 		return nil, err
 	}
-	payload.DocumentName = *(rawData.Association.Name)
-	payload.CommandID = *(rawData.Association.AssociationId)
+	payload.DocumentName = *rawData.Association.Name
+	payload.CommandID = *rawData.Association.AssociationId
+
+	if rawData.Association.OutputLocation != nil && rawData.Association.OutputLocation.S3Location != nil {
+		if rawData.Association.OutputLocation.S3Location.OutputS3KeyPrefix != nil {
+			payload.OutputS3KeyPrefix = *rawData.Association.OutputLocation.S3Location.OutputS3KeyPrefix
+		}
+		if rawData.Association.OutputLocation.S3Location.OutputS3BucketName != nil {
+			payload.OutputS3BucketName = *rawData.Association.OutputLocation.S3Location.OutputS3BucketName
+		}
+	}
 
 	payload.Parameters = parseParameters(log, rawData.Association.Parameters, payload.DocumentContent.Parameters)
 

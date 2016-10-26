@@ -19,8 +19,6 @@ import (
 	"os"
 	"sync"
 
-	"encoding/json"
-
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
