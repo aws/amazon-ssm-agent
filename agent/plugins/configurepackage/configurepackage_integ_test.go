@@ -11,7 +11,7 @@
 // either express or implied. See the License for the specific language governing
 // permissions and limitations under the License.
 
-// TODO:MF: flag these as integration tests
+// +build integration
 
 // Package configurepackage implements the ConfigurePackage plugin.
 package configurepackage
@@ -21,30 +21,8 @@ import (
 	"io/ioutil"
 	"testing"
 
-	"github.com/aws/amazon-ssm-agent/agent/contracts"
-	"github.com/aws/amazon-ssm-agent/agent/fileutil/artifact"
-	"github.com/aws/amazon-ssm-agent/agent/statemanager/model"
 	"github.com/stretchr/testify/assert"
 )
-
-func fileSysStubSuccess() fileSysDep {
-	result, _ := ioutil.ReadFile("testdata/sampleManifest.json")
-	return &FileSysDepStub{readResult: result, existsResultDefault: true}
-}
-
-func networkStubSuccess() networkDep {
-	return &NetworkDepStub{downloadResultDefault: artifact.DownloadOutput{LocalFilePath: "Stub"}}
-}
-
-func execStubSuccess() execDep {
-	return &ExecDepStub{pluginInput: &model.PluginState{}, pluginOutput: &contracts.PluginResult{Status: contracts.ResultStatusSuccess}}
-}
-
-func setSuccessStubs() *ConfigurePackageStubs {
-	stubs := &ConfigurePackageStubs{fileSysDepStub: fileSysStubSuccess(), networkDepStub: networkStubSuccess(), execDepStub: execStubSuccess()}
-	stubs.Set()
-	return stubs
-}
 
 func TestConfigurePackage(t *testing.T) {
 	stubs := setSuccessStubs()
