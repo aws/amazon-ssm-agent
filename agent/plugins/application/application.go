@@ -46,6 +46,7 @@ var msiExecCommand = filepath.Join(os.Getenv("SystemRoot"), "System32", "msiexec
 // Plugin is the type for the applications plugin.
 type Plugin struct {
 	pluginutil.DefaultPlugin
+	DefaultWorkingDirectory string
 }
 
 // ApplicationPluginInput represents one set of commands executed by the Applications plugin.
@@ -105,6 +106,7 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 	log := context.Log()
 	log.Infof("%v started with configuration %v", Name(), config)
 	res.StartDateTime = time.Now()
+	p.DefaultWorkingDirectory = config.DefaultWorkingDirectory
 	defer func() { res.EndDateTime = time.Now() }()
 
 	//loading Properties as list since aws:applications uses properties as list
@@ -233,17 +235,27 @@ func (p *Plugin) runCommands(log log.T, pluginInput ApplicationPluginInput, orch
 	}
 	log.Debugf("mode is %v", mode)
 
-	// Download file from source if available
-	downloadOutput, err := pluginutil.DownloadFileFromSource(log, pluginInput.Source, pluginInput.SourceHash, pluginInput.SourceHashType)
-	if err != nil || downloadOutput.IsHashMatched == false || downloadOutput.LocalFilePath == "" {
-		errorString := fmt.Errorf("failed to download file reliably %v", pluginInput.Source)
-		out.MarkAsFailed(log, errorString)
-		return
+	var localFilePath string
+	absoluteTestPath := filepath.Join(p.DefaultWorkingDirectory, pluginInput.Source)
+	// If Source is a local file with an absolute path or relative to the DefaultWorkingDirectory use that, otherwise download
+	if exists, _ := fileutil.LocalFileExist(pluginInput.Source); exists {
+		localFilePath = pluginInput.Source
+	} else if exists, _ := fileutil.LocalFileExist(absoluteTestPath); exists {
+		localFilePath = absoluteTestPath
+	} else {
+		// Download file from source if available
+		downloadOutput, err := pluginutil.DownloadFileFromSource(log, pluginInput.Source, pluginInput.SourceHash, pluginInput.SourceHashType)
+		if err != nil || downloadOutput.IsHashMatched == false || downloadOutput.LocalFilePath == "" {
+			errorString := fmt.Errorf("failed to download file reliably %v", pluginInput.Source)
+			out.MarkAsFailed(log, errorString)
+			return
+		}
+		localFilePath = downloadOutput.LocalFilePath
 	}
-	log.Debugf("local path to file is %v", downloadOutput.LocalFilePath)
+	log.Debugf("local path to file is %v", localFilePath)
 
 	// Create msi related log file
-	localSourceLogFilePath := downloadOutput.LocalFilePath + ".msiexec.log.txt"
+	localSourceLogFilePath := localFilePath + ".msiexec.log.txt"
 	log.Debugf("log path is %v", localSourceLogFilePath)
 
 	// TODO: This needs to be pulled out of this function as it runs multiple times getting initialized with the same values
@@ -254,7 +266,7 @@ func (p *Plugin) runCommands(log log.T, pluginInput ApplicationPluginInput, orch
 
 	// Construct Command Name and Arguments
 	commandName := msiExecCommand
-	commandArguments := []string{mode, downloadOutput.LocalFilePath, "/quiet", "/norestart", "/log", localSourceLogFilePath}
+	commandArguments := []string{mode, localFilePath, "/quiet", "/norestart", "/log", localSourceLogFilePath}
 	if pluginInput.Parameters != "" {
 		log.Debugf("Got Parameters \"%v\"", pluginInput.Parameters)
 		params := processParams(log, pluginInput.Parameters)
