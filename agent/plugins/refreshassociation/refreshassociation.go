@@ -31,6 +31,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/parameterstore"
 	"github.com/aws/amazon-ssm-agent/agent/platform"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/pluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/rebooter"
@@ -200,6 +201,14 @@ func (p *Plugin) runCommands(log log.T, pluginInput RefreshAssociationPluginInpu
 	// update the cache first
 	for _, assoc := range associations {
 		cache.ValidateCache(assoc)
+	}
+
+	// Resolve ssm parameters
+	// This may contain sensitive information, do not log this data after resolving.
+	if pluginInput.AssociationIds, err = parameterstore.ResolveStringList(log, pluginInput.AssociationIds); err != nil {
+		out.Errors = append(out.Errors, err.Error())
+		log.Errorf("Failed to resolve ssm parameters. Error: - %v", err)
+		return
 	}
 
 	// read from cache or load association details from service
