@@ -82,4 +82,7 @@ const (
 
 	// PluginNameCloudWatch is the name of cloud watch plugin
 	PluginNameCloudWatch = "aws:cloudWatch"
+
+	// PluginNameRefreshAssociation is the name of refresh association plugin
+	PluginNameRefreshAssociation = "aws:refreshAssociation"
 )

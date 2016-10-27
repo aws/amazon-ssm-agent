@@ -44,7 +44,6 @@ func (p *Processor) Name() string {
 func (p *Processor) Execute(context context.T) (err error) {
 
 	log := p.context.Log()
-	log.Infof("starting mdsprocessor polling")
 	//process the older messages from Current & Pending folder
 	instanceID, err := platform.InstanceID()
 	if err != nil {
@@ -57,10 +56,12 @@ func (p *Processor) Execute(context context.T) (err error) {
 	p.processInProgressDocuments(instanceID)
 	p.processPendingDocuments(instanceID)
 
+	log.Info("Starting message processor polling")
 	if p.messagePollJob, err = scheduler.Every(pollMessageFrequencyMinutes).Minutes().Run(p.loop); err != nil {
 		context.Log().Errorf("unable to schedule message processor. %v", err)
 	}
 
+	log.Info("Starting association polling")
 	var job *scheduler.Job
 	if job, err = asocitscheduler.CreateScheduler(
 		log,
@@ -68,6 +69,7 @@ func (p *Processor) Execute(context context.T) (err error) {
 		pollAssociationFrequencyMinutes); err != nil {
 		context.Log().Errorf("unable to schedule association processor. %v", err)
 	}
+	p.assocProcessor.InitializeAssociationProcessor()
 	p.assocProcessor.SetPollJob(job)
 	return
 }
@@ -176,11 +178,11 @@ func (p *Processor) processInProgressDocuments(instanceID string) {
 			}
 		}
 
-		statemanager.PersistData(log, docState.DocumentInformation.CommandID, instanceID, appconfig.DefaultLocationOfCurrent, docState)
+		statemanager.PersistData(log, docState.DocumentInformation.DocumentID, instanceID, appconfig.DefaultLocationOfCurrent, docState)
 
 		if docState.IsAssociation() {
 			//Submit the work to Job Pool so that we don't block for processing of new association
-			if err = p.assocProcessor.SubmitTask(log, docState.DocumentInformation.CommandID, func(cancelFlag task.CancelFlag) {
+			if err = p.assocProcessor.SubmitTask(log, docState.DocumentInformation.DocumentID, func(cancelFlag task.CancelFlag) {
 				p.assocProcessor.ExecuteInProgressDocument(&docState, cancelFlag)
 			}); err != nil {
 				log.Errorf("Association failed to resume previously unexecuted documents, %v", err)

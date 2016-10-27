@@ -20,7 +20,6 @@ import (
 	"strings"
 
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
-	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	messageContracts "github.com/aws/amazon-ssm-agent/agent/message/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/statemanager/model"
 	"github.com/aws/amazon-ssm-agent/agent/times"
@@ -65,8 +64,8 @@ func newDocumentInfo(msg ssmmds.Message, parsedMsg messageContracts.SendCommandP
 
 	documentInfo := new(model.DocumentInfo)
 
-	documentInfo.CommandID = getCommandID(*msg.MessageId)
-	documentInfo.Destination = *msg.Destination
+	documentInfo.DocumentID = getCommandID(*msg.MessageId)
+	documentInfo.InstanceID = *msg.Destination
 	documentInfo.MessageID = *msg.MessageId
 	documentInfo.RunID = times.ToIsoDashUTC(times.DefaultClock.Now())
 	documentInfo.CreatedDate = *msg.CreatedDate
@@ -76,21 +75,4 @@ func newDocumentInfo(msg ssmmds.Message, parsedMsg messageContracts.SendCommandP
 	documentInfo.DocumentTraceOutput = ""
 
 	return *documentInfo
-}
-
-// getPluginConfigurations converts from PluginConfig (structure from the MDS message) to plugin.Configuration (structure expected by the plugin)
-func getPluginConfigurations(runtimeConfig map[string]*contracts.PluginConfig, orchestrationDir, s3BucketName, s3KeyPrefix, messageID string) (res map[string]*contracts.Configuration) {
-	res = make(map[string]*contracts.Configuration)
-	for pluginName, pluginConfig := range runtimeConfig {
-		res[pluginName] = &contracts.Configuration{
-			Settings:               pluginConfig.Settings,
-			Properties:             pluginConfig.Properties,
-			OutputS3BucketName:     s3BucketName,
-			OutputS3KeyPrefix:      fileutil.BuildS3Path(s3KeyPrefix, pluginName),
-			OrchestrationDirectory: fileutil.BuildPath(orchestrationDir, pluginName),
-			MessageId:              messageID,
-			BookKeepingFileName:    getCommandID(messageID),
-		}
-	}
-	return
 }

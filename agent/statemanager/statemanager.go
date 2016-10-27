@@ -33,18 +33,18 @@ import (
 var lock sync.RWMutex
 var docLock = make(map[string]*sync.RWMutex)
 
-// GetCommandInterimState returns CommandState object after reading file <commandID> from locationFolder
+// GetDocumentInterimState returns CommandState object after reading file <commandID> from locationFolder
 // under defaultLogDir/instanceID
-func GetCommandInterimState(log log.T, commandID, instanceID, locationFolder string) model.DocumentState {
+func GetDocumentInterimState(log log.T, commandID, instanceID, locationFolder string) model.DocumentState {
 
 	rLockDocument(commandID)
 	defer rUnlockDocument(commandID)
 
-	absoluteFileName := cmdStateFileName(commandID, instanceID, locationFolder)
+	absoluteFileName := docStateFileName(commandID, instanceID, locationFolder)
 
-	commandState := getCmdState(log, absoluteFileName)
+	docState := getDocState(log, absoluteFileName)
 
-	return commandState
+	return docState
 }
 
 // PersistData stores the given object in the file-system in pretty Json indented format
@@ -54,7 +54,7 @@ func PersistData(log log.T, commandID, instanceID, locationFolder string, object
 	lockDocument(commandID)
 	defer unlockDocument(commandID)
 
-	absoluteFileName := cmdStateFileName(commandID, instanceID, locationFolder)
+	absoluteFileName := docStateFileName(commandID, instanceID, locationFolder)
 
 	content, err := jsonutil.Marshal(object)
 	if err != nil {
@@ -72,10 +72,23 @@ func PersistData(log log.T, commandID, instanceID, locationFolder string, object
 	}
 }
 
+// IsDocumentCurrentlyExecuting checks if document already present in Pending or Current folder
+func IsDocumentCurrentlyExecuting(documentID, instanceID string) bool {
+	lockDocument(documentID)
+	defer unlockDocument(documentID)
+
+	absoluteFileName := docStateFileName(documentID, instanceID, appconfig.DefaultLocationOfPending)
+	if fileutil.Exists(absoluteFileName) {
+		return true
+	}
+	absoluteFileName = docStateFileName(documentID, instanceID, appconfig.DefaultLocationOfCurrent)
+	return fileutil.Exists(absoluteFileName)
+}
+
 // RemoveData deletes the fileName from locationFolder under defaultLogDir/instanceID
 func RemoveData(log log.T, commandID, instanceID, locationFolder string) {
 
-	absoluteFileName := cmdStateFileName(commandID, instanceID, locationFolder)
+	absoluteFileName := docStateFileName(commandID, instanceID, locationFolder)
 
 	err := fileutil.DeleteFile(absoluteFileName)
 	if err != nil {
@@ -86,7 +99,7 @@ func RemoveData(log log.T, commandID, instanceID, locationFolder string) {
 }
 
 // MoveCommandState moves the CommandState object
-func MoveCommandState(log log.T, commandID, instanceID, srcLocationFolder, dstLocationFolder string) {
+func MoveDocumentState(log log.T, commandID, instanceID, srcLocationFolder, dstLocationFolder string) {
 
 	//get a lock for documentID specific lock
 	lockDocument(commandID)
@@ -125,9 +138,9 @@ func GetDocumentInfo(log log.T, commandID, instanceID, locationFolder string) mo
 	rLockDocument(commandID)
 	defer rUnlockDocument(commandID)
 
-	absoluteFileName := cmdStateFileName(commandID, instanceID, locationFolder)
+	absoluteFileName := docStateFileName(commandID, instanceID, locationFolder)
 
-	commandState := getCmdState(log, absoluteFileName)
+	commandState := getDocState(log, absoluteFileName)
 
 	return commandState.DocumentInformation
 }
@@ -136,7 +149,7 @@ func GetDocumentInfo(log log.T, commandID, instanceID, locationFolder string) mo
 // This will override the contents of an already existing file
 func PersistDocumentInfo(log log.T, docInfo model.DocumentInfo, commandID, instanceID, locationFolder string) {
 
-	absoluteFileName := cmdStateFileName(commandID, instanceID, locationFolder)
+	absoluteFileName := docStateFileName(commandID, instanceID, locationFolder)
 
 	//get documentID specific write lock
 	lockDocument(commandID)
@@ -146,24 +159,30 @@ func PersistDocumentInfo(log log.T, docInfo model.DocumentInfo, commandID, insta
 	//exists a persisted interim state file - if not then it should throw error
 
 	//read command state from file-system first
-	commandState := getCmdState(log, absoluteFileName)
+	commandState := getDocState(log, absoluteFileName)
 
 	commandState.DocumentInformation = docInfo
 
-	setCmdState(log, commandState, absoluteFileName, locationFolder)
+	setDocState(log, commandState, absoluteFileName, locationFolder)
 }
 
 // GetPluginState returns PluginState after reading fileName from given locationFolder under defaultLogDir/instanceID
-func GetPluginState(log log.T, pluginID, commandID, instanceID, locationFolder string) model.PluginState {
+func GetPluginState(log log.T, pluginID, commandID, instanceID, locationFolder string) *model.PluginState {
 
 	rLockDocument(commandID)
 	defer rUnlockDocument(commandID)
 
-	absoluteFileName := cmdStateFileName(commandID, instanceID, locationFolder)
+	absoluteFileName := docStateFileName(commandID, instanceID, locationFolder)
 
-	commandState := getCmdState(log, absoluteFileName)
+	commandState := getDocState(log, absoluteFileName)
 
-	return commandState.PluginsInformation[pluginID]
+	for _, pluginState := range commandState.InstancePluginsInformation {
+		if pluginState.Id == pluginID {
+			return &pluginState
+		}
+	}
+
+	return nil
 }
 
 // PersistPluginState stores the given PluginState in file-system in pretty Json indented format
@@ -173,22 +192,27 @@ func PersistPluginState(log log.T, pluginState model.PluginState, pluginID, comm
 	lockDocument(commandID)
 	defer unlockDocument(commandID)
 
-	absoluteFileName := cmdStateFileName(commandID, instanceID, locationFolder)
+	absoluteFileName := docStateFileName(commandID, instanceID, locationFolder)
 
 	//Plugins should safely assume that there already
 	//exists a persisted interim state file - if not then it should throw error
-	commandState := getCmdState(log, absoluteFileName)
+	commandState := getDocState(log, absoluteFileName)
 
 	//TODO:  after adding unit-tests for persist data - this can be removed
-	if commandState.PluginsInformation == nil {
-		pluginsInfo := make(map[string]model.PluginState)
-		pluginsInfo[pluginID] = pluginState
-		commandState.PluginsInformation = pluginsInfo
+	if commandState.InstancePluginsInformation == nil {
+		pluginsInfo := []model.PluginState{}
+		pluginsInfo = append(pluginsInfo, pluginState)
+		commandState.InstancePluginsInformation = pluginsInfo
 	} else {
-		commandState.PluginsInformation[pluginID] = pluginState
+		for index, plugin := range commandState.InstancePluginsInformation {
+			if plugin.Id == pluginID {
+				commandState.InstancePluginsInformation[index] = pluginState
+				break
+			}
+		}
 	}
 
-	setCmdState(log, commandState, absoluteFileName, locationFolder)
+	setDocState(log, commandState, absoluteFileName, locationFolder)
 }
 
 // DocumentStateDir returns absolute filename where command states are persisted
@@ -200,8 +224,8 @@ func DocumentStateDir(instanceID, locationFolder string) string {
 		locationFolder)
 }
 
-// getCmdState reads commandState from given file
-func getCmdState(log log.T, fileName string) model.DocumentState {
+// getDocState reads commandState from given file
+func getDocState(log log.T, fileName string) model.DocumentState {
 
 	var commandState model.DocumentState
 	err := jsonutil.UnmarshalFile(fileName, &commandState)
@@ -220,8 +244,8 @@ func getCmdState(log log.T, fileName string) model.DocumentState {
 	return commandState
 }
 
-// setCmdState persists given commandState
-func setCmdState(log log.T, commandState model.DocumentState, absoluteFileName, locationFolder string) {
+// setDocState persists given commandState
+func setDocState(log log.T, commandState model.DocumentState, absoluteFileName, locationFolder string) {
 
 	content, err := jsonutil.Marshal(commandState)
 	if err != nil {
@@ -291,7 +315,7 @@ func deleteLock(id string) {
 	delete(docLock, id)
 }
 
-//cmdStateFileName returns absolute filename where command states are persisted
-func cmdStateFileName(commandID, instanceID, locationFolder string) string {
+// docStateFileName returns absolute filename where command states are persisted
+func docStateFileName(commandID, instanceID, locationFolder string) string {
 	return path.Join(DocumentStateDir(instanceID, locationFolder), commandID)
 }

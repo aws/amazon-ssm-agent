@@ -38,6 +38,12 @@ func (m *Mock) ListAssociations(log log.T, instanceID string) (response *ssm.Lis
 	return args.Get(0).(*ssm.ListAssociationsOutput), args.Error(1)
 }
 
+// ListInstanceAssociations mocks the ListInstanceAssociations function.
+func (m *Mock) ListInstanceAssociations(log log.T, instanceID string, nextToken *string) (response *ssm.ListInstanceAssociationsOutput, err error) {
+	args := m.Called(log, instanceID)
+	return args.Get(0).(*ssm.ListInstanceAssociationsOutput), args.Error(1)
+}
+
 // UpdateAssociationStatus mocks the UpdateAssociationStatus function.
 func (m *Mock) UpdateAssociationStatus(
 	log log.T,
@@ -46,6 +52,16 @@ func (m *Mock) UpdateAssociationStatus(
 	associationStatus *ssm.AssociationStatus) (response *ssm.UpdateAssociationStatusOutput, err error) {
 	args := m.Called(log, instanceID, name, associationStatus)
 	return args.Get(0).(*ssm.UpdateAssociationStatusOutput), args.Error(1)
+}
+
+// UpdateInstanceAssociationStatus mocks the UpdateAssociationStatus function.
+func (m *Mock) UpdateInstanceAssociationStatus(
+	log log.T,
+	associationID string,
+	instanceID string,
+	executionResult *ssm.InstanceAssociationExecutionResult) (response *ssm.UpdateInstanceAssociationStatusOutput, err error) {
+	args := m.Called(log, associationID, instanceID, executionResult)
+	return args.Get(0).(*ssm.UpdateInstanceAssociationStatusOutput), args.Error(1)
 }
 
 // SendCommand mocks the SendCommand function.
@@ -86,8 +102,8 @@ func (m *Mock) CreateDocument(log log.T, docName string, docContent string) (res
 }
 
 // GetDocument mocks the GetDocument function.
-func (m *Mock) GetDocument(log log.T, docName string) (response *ssm.GetDocumentOutput, err error) {
-	args := m.Called(log, docName)
+func (m *Mock) GetDocument(log log.T, docName string, docVersion string) (response *ssm.GetDocumentOutput, err error) {
+	args := m.Called(log, docName, docVersion)
 	return args.Get(0).(*ssm.GetDocumentOutput), args.Error(1)
 }
 
@@ -104,7 +120,7 @@ func (m *Mock) DescribeAssociation(log log.T, instanceID string, docName string)
 }
 
 // UpdateInstanceInformation mocks the UpdateInstanceInformation function.
-func (m *Mock) UpdateInstanceInformation(log log.T, agentVersion string, agentStatus string) (response *ssm.UpdateInstanceInformationOutput, err error) {
+func (m *Mock) UpdateInstanceInformation(log log.T, agentVersion, agentStatus, agentName string) (response *ssm.UpdateInstanceInformationOutput, err error) {
 	args := m.Called(log, agentVersion, agentStatus)
 	return args.Get(0).(*ssm.UpdateInstanceInformationOutput), args.Error(1)
 }

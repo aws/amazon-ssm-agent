@@ -60,19 +60,18 @@ func (p *Processor) runCmdsUsingCmdState(context context.T,
 
 	//Since only some plugins of a cmd gets executed here - there is no need to get output from engine & construct the sendReply output.
 	//Instead after all plugins of a command get executed, use persisted data to construct sendReply payload
-	runPlugins(context, docState.DocumentInformation.MessageID, docState.PluginsInformation, sendResponse, cancelFlag)
+	runPlugins(context, docState.DocumentInformation.MessageID, docState.InstancePluginsInformation, sendResponse, cancelFlag)
 
 	//read from persisted file
-	newCmdState := commandStateHelper.GetCommandInterimState(log,
-		docState.DocumentInformation.CommandID,
-		docState.DocumentInformation.Destination,
+	newCmdState := commandStateHelper.GetDocumentInterimState(log,
+		docState.DocumentInformation.DocumentID,
+		docState.DocumentInformation.InstanceID,
 		appconfig.DefaultLocationOfCurrent)
 
 	//construct sendReply payload
 	outputs := make(map[string]*contracts.PluginResult)
-
-	for k, v := range newCmdState.PluginsInformation {
-		outputs[k] = &v.Result
+	for _, pluginState := range newCmdState.InstancePluginsInformation {
+		outputs[pluginState.Name] = &pluginState.Result
 	}
 
 	pluginOutputContent, _ := jsonutil.Marshal(outputs)
@@ -89,8 +88,8 @@ func (p *Processor) runCmdsUsingCmdState(context context.T,
 	//persist final documentInfo.
 	commandStateHelper.PersistDocumentInfo(log,
 		newCmdState.DocumentInformation,
-		newCmdState.DocumentInformation.CommandID,
-		newCmdState.DocumentInformation.Destination,
+		newCmdState.DocumentInformation.DocumentID,
+		newCmdState.DocumentInformation.InstanceID,
 		appconfig.DefaultLocationOfCurrent)
 
 	// Skip sending response when the document requires a reboot
@@ -106,9 +105,9 @@ func (p *Processor) runCmdsUsingCmdState(context context.T,
 	//persist : commands execution in completed folder (terminal state folder)
 	log.Debugf("execution of %v is over. Moving interimState file from Current to Completed folder", newCmdState.DocumentInformation.MessageID)
 
-	commandStateHelper.MoveCommandState(log,
-		newCmdState.DocumentInformation.CommandID,
-		newCmdState.DocumentInformation.Destination,
+	commandStateHelper.MoveDocumentState(log,
+		newCmdState.DocumentInformation.DocumentID,
+		newCmdState.DocumentInformation.InstanceID,
 		appconfig.DefaultLocationOfCurrent,
 		appconfig.DefaultLocationOfCompleted)
 
@@ -177,9 +176,9 @@ func (p *Processor) processMessage(msg *ssmmds.Message) {
 func (p *Processor) ExecutePendingDocument(docState *model.DocumentState) {
 	log := p.context.Log()
 
-	commandStateHelper.MoveCommandState(log,
-		docState.DocumentInformation.CommandID,
-		docState.DocumentInformation.Destination,
+	commandStateHelper.MoveDocumentState(log,
+		docState.DocumentInformation.DocumentID,
+		docState.DocumentInformation.InstanceID,
 		appconfig.DefaultLocationOfPending,
 		appconfig.DefaultLocationOfCurrent)
 
@@ -245,16 +244,16 @@ func (p *Processor) processSendCommandMessage(context context.T,
 	log := context.Log()
 
 	log.Debug("Running plugins...")
-	outputs := runPlugins(context, docState.DocumentInformation.MessageID, docState.PluginsInformation, sendResponse, cancelFlag)
+	outputs := runPlugins(context, docState.DocumentInformation.MessageID, docState.InstancePluginsInformation, sendResponse, cancelFlag)
 	pluginOutputContent, _ := jsonutil.Marshal(outputs)
 	log.Debugf("Plugin outputs %v", jsonutil.Indent(pluginOutputContent))
 
 	payloadDoc := buildReply("", outputs)
 
 	//update documentInfo in interim cmd state file
-	newCmdState := commandStateHelper.GetCommandInterimState(log,
-		docState.DocumentInformation.CommandID,
-		docState.DocumentInformation.Destination,
+	newCmdState := commandStateHelper.GetDocumentInterimState(log,
+		docState.DocumentInformation.DocumentID,
+		docState.DocumentInformation.InstanceID,
 		appconfig.DefaultLocationOfCurrent)
 
 	// set document level information which wasn't set previously
@@ -266,8 +265,8 @@ func (p *Processor) processSendCommandMessage(context context.T,
 	//persist final documentInfo.
 	commandStateHelper.PersistDocumentInfo(log,
 		newCmdState.DocumentInformation,
-		newCmdState.DocumentInformation.CommandID,
-		newCmdState.DocumentInformation.Destination,
+		newCmdState.DocumentInformation.DocumentID,
+		newCmdState.DocumentInformation.InstanceID,
 		appconfig.DefaultLocationOfCurrent)
 
 	// Skip sending response when the document requires a reboot
@@ -282,9 +281,9 @@ func (p *Processor) processSendCommandMessage(context context.T,
 	//persist : commands execution in completed folder (terminal state folder)
 	log.Debugf("execution of %v is over. Moving interimState file from Current to Completed folder", newCmdState.DocumentInformation.MessageID)
 
-	commandStateHelper.MoveCommandState(log,
-		newCmdState.DocumentInformation.CommandID,
-		newCmdState.DocumentInformation.Destination,
+	commandStateHelper.MoveDocumentState(log,
+		newCmdState.DocumentInformation.DocumentID,
+		newCmdState.DocumentInformation.InstanceID,
 		appconfig.DefaultLocationOfCurrent,
 		appconfig.DefaultLocationOfCompleted)
 
@@ -319,18 +318,11 @@ func parseSendCommandMessage(context context.T, msg *ssmmds.Message, messagesOrc
 
 	messageOrchestrationDirectory := filepath.Join(messagesOrchestrationRootDir, commandID)
 
-	pluginConfigurations := getPluginConfigurations(
-		parsedMessage.DocumentContent.RuntimeConfig,
-		messageOrchestrationDirectory,
-		parsedMessage.OutputS3BucketName,
-		s3KeyPrefix,
-		*msg.MessageId)
-
 	//persist : all information in current folder
 	log.Info("Persisting message in current execution folder")
 
 	//Data format persisted in Current Folder is defined by the struct - CommandState
-	docState := initializeSendCommandState(pluginConfigurations, *msg, parsedMessage)
+	docState := initializeSendCommandState(parsedMessage, messageOrchestrationDirectory, s3KeyPrefix, *msg)
 
 	var docStateContent string
 	if docStateContent, err = jsonutil.Marshal(docState); err != nil {
@@ -347,7 +339,7 @@ func parseSendCommandMessage(context context.T, msg *ssmmds.Message, messagesOrc
 	}
 
 	if isMI && model.IsManagedInstanceIncompatibleAWSSSMDocument(docState.DocumentInformation.DocumentName) {
-		log.Debugf("Running Incompatible AWS SSM Document %v on managed instance", docState.DocumentInformation.DocumentName)
+		log.Debugf("Running incompatible AWS SSM Document %v on managed instance", docState.DocumentInformation.DocumentName)
 		if err = model.RemoveDependencyOnInstanceMetadata(context, &docState); err != nil {
 			return nil, err
 		}
@@ -377,16 +369,16 @@ func (p *Processor) processCancelCommandMessage(context context.T,
 
 	//persist the final status of cancel-message in current folder
 	commandStateHelper.PersistData(log,
-		docState.DocumentInformation.CommandID,
-		docState.DocumentInformation.Destination,
+		docState.DocumentInformation.DocumentID,
+		docState.DocumentInformation.InstanceID,
 		appconfig.DefaultLocationOfCurrent, docState)
 
 	//persist : commands execution in completed folder (terminal state folder)
 	log.Debugf("Execution of %v is over. Moving interimState file from Current to Completed folder", docState.DocumentInformation.MessageID)
 
-	commandStateHelper.MoveCommandState(log,
-		docState.DocumentInformation.CommandID,
-		docState.DocumentInformation.Destination,
+	commandStateHelper.MoveDocumentState(log,
+		docState.DocumentInformation.DocumentID,
+		docState.DocumentInformation.InstanceID,
 		appconfig.DefaultLocationOfCurrent,
 		appconfig.DefaultLocationOfCompleted)
 

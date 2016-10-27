@@ -18,12 +18,14 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/aws/amazon-ssm-agent/agent/association/cache"
 	"github.com/aws/amazon-ssm-agent/agent/association/model"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/sdkutil"
 	ssmsvc "github.com/aws/amazon-ssm-agent/agent/ssm"
+	"github.com/aws/amazon-ssm-agent/agent/times"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/service/ssm"
 	"github.com/twinj/uuid"
@@ -34,8 +36,8 @@ const stopPolicyErrorThreshold = 10
 // T represents interface for association
 type T interface {
 	CreateNewServiceIfUnHealthy(log log.T)
-	ListAssociations(log log.T, instanceID string) (*model.AssociationRawData, error)
-	LoadAssociationDetail(log log.T, assoc *model.AssociationRawData) error
+	ListInstanceAssociations(log log.T, instanceID string) ([]*model.InstanceAssociation, error)
+	LoadAssociationDetail(log log.T, assoc *model.InstanceAssociation) error
 	UpdateAssociationStatus(
 		log log.T,
 		instanceID string,
@@ -43,6 +45,14 @@ type T interface {
 		status string,
 		message string,
 		agentInfo *contracts.AgentInfo) (*ssm.UpdateAssociationStatusOutput, error)
+	UpdateInstanceAssociationStatus(
+		log log.T,
+		associationID string,
+		instanceID string,
+		status string,
+		errorCode string,
+		executionDate string,
+		executionSummary string) (*ssm.UpdateInstanceAssociationStatusOutput, error)
 }
 
 // AssociationService wraps the Ssm Service
@@ -83,52 +93,101 @@ func (s *AssociationService) CreateNewServiceIfUnHealthy(log log.T) {
 	}
 }
 
-// ListAssociations will get the Association and related document string
-func (s *AssociationService) ListAssociations(log log.T, instanceID string) (*model.AssociationRawData, error) {
+// ListInstanceAssociations will get the Association and related document string
+func (s *AssociationService) ListInstanceAssociations(log log.T, instanceID string) ([]*model.InstanceAssociation, error) {
 	uuid.SwitchFormat(uuid.CleanHyphen)
-	assoc := &model.AssociationRawData{}
+	results := []*model.InstanceAssociation{}
 
-	response, err := s.ssmSvc.ListAssociations(log, instanceID)
+	response, err := s.ssmSvc.ListInstanceAssociations(log, instanceID, nil)
 	if err != nil {
 		return nil, fmt.Errorf("unable to retrieve associations %v", err)
 	}
 
-	// check if ListAssociationsResponse is empty
-	if response == nil || len(response.Associations) < 1 {
-		return nil, nil
+	for {
+		// Get the association from the response of the ListAssociations call
+		for _, assoc := range response.Associations {
+			rawData := &model.InstanceAssociation{}
+			rawData.Association = assoc
+			rawData.CreateDate = time.Now()
+			results = append(results, rawData)
+		}
+
+		if response.NextToken == nil || *response.NextToken == "" {
+			break
+		}
+
+		if response, err = s.ssmSvc.ListInstanceAssociations(log, instanceID, response.NextToken); err != nil {
+			return results, fmt.Errorf("unable to retrieve associations %v", err)
+		}
 	}
 
-	// Get the association from the response of the ListAssociations call
-	assoc.Association = response.Associations[0]
-	assoc.ID = uuid.NewV4().String()
-	assoc.CreateDate = time.Now().String()
-	assoc.Association.InstanceId = &instanceID
+	log.Debug("Number of associations is ", len(results))
+	return results, nil
+}
 
-	return assoc, nil
+// UpdateInstanceAssociationStatus will get the Association and related document string
+func (s *AssociationService) UpdateInstanceAssociationStatus(
+	log log.T,
+	associationID string,
+	instanceID string,
+	status string,
+	errorCode string,
+	executionDate string,
+	executionSummary string) (*ssm.UpdateInstanceAssociationStatusOutput, error) {
+
+	date := times.ParseIso8601UTC(executionDate)
+	executionResult := ssm.InstanceAssociationExecutionResult{
+		Status:           aws.String(status),
+		ErrorCode:        aws.String(errorCode),
+		ExecutionDate:    aws.Time(date),
+		ExecutionSummary: aws.String(executionSummary),
+	}
+
+	executionResultContent, err := jsonutil.Marshal(executionResult)
+	if err != nil {
+		log.Error("could not marshal associationStatus! ", err)
+		return nil, err
+	}
+	log.Info("Updating association status ", jsonutil.Indent(executionResultContent))
+
+	response, err := s.ssmSvc.UpdateInstanceAssociationStatus(log, associationID, instanceID, &executionResult)
+	if err != nil {
+		return nil, fmt.Errorf("unable to update association status %v", err)
+	}
+
+	return response, nil
 }
 
 // LoadAssociationDetail loads document contents and parameters for the given association
-func (s *AssociationService) LoadAssociationDetail(log log.T, assoc *model.AssociationRawData) error {
+func (s *AssociationService) LoadAssociationDetail(log log.T, assoc *model.InstanceAssociation) error {
+	associationCache := cache.GetCache()
+	associationID := assoc.Association.AssociationId
+
+	// check if the association details have been cached
+	if associationCache.IsCached(*associationID) {
+		rawData := associationCache.Get(*associationID)
+		assoc.Document = rawData.Document
+		return nil
+	}
+
+	// if not cached before
 	var (
-		documentResponse  *ssm.GetDocumentOutput
-		parameterResponse *ssm.DescribeAssociationOutput
-		err               error
+		documentResponse *ssm.GetDocumentOutput
+		err              error
 	)
 
 	// Call getDocument and retrieve the document json string
-	if documentResponse, err = s.ssmSvc.GetDocument(log, *assoc.Association.Name); err != nil {
+	if documentResponse, err = s.ssmSvc.GetDocument(log, *assoc.Association.Name, *assoc.Association.DocumentVersion); err != nil {
 		log.Errorf("unable to retrieve document, %v", err)
 		return err
 	}
 
-	// Call descriptionAssociation and retrieve the parameter json string
-	if parameterResponse, err = s.ssmSvc.DescribeAssociation(log, *assoc.Association.InstanceId, *assoc.Association.Name); err != nil {
-		log.Errorf("unable to retrieve association, %v", err)
+	assoc.Document = documentResponse.Content
+
+	if err = associationCache.Add(*associationID, assoc); err != nil {
 		return err
 	}
 
-	assoc.Document = documentResponse.Content
-	assoc.Parameter = parameterResponse.AssociationDescription
 	return nil
 }
 

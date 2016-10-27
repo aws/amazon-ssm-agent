@@ -45,7 +45,7 @@ type MockedPluginRunner struct {
 }
 
 // RunPlugins mocks a PluginRunner (which is a func).
-func (runnerMock *MockedPluginRunner) RunPlugins(context context.T, documentID string, plugins map[string]stateModel.PluginState, sendResponse engine.SendResponse, cancelFlag task.CancelFlag) (pluginOutputs map[string]*contracts.PluginResult) {
+func (runnerMock *MockedPluginRunner) RunPlugins(context context.T, documentID string, plugins []stateModel.PluginState, sendResponse engine.SendResponse, cancelFlag task.CancelFlag) (pluginOutputs map[string]*contracts.PluginResult) {
 	args := runnerMock.Called(context, documentID, plugins, sendResponse, cancelFlag)
 	return args.Get(0).(map[string]*contracts.PluginResult)
 }

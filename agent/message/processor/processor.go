@@ -60,7 +60,7 @@ const (
 	pollMessageFrequencyMinutes = 15
 
 	// pollAssociationFrequencyMinutes is the frequency at which to resume poll for Association if the current thread dies due to stop policy
-	pollAssociationFrequencyMinutes = 5
+	pollAssociationFrequencyMinutes = 30
 
 	// hardstopTimeout is the time before the processor will be shutdown during a hardstop
 	// TODO:  load this value from config
@@ -96,10 +96,10 @@ type Processor struct {
 }
 
 // PluginRunner is a function that can run a set of plugins and return their outputs.
-type PluginRunner func(context context.T, documentID string, plugins map[string]model.PluginState, sendResponse engine.SendResponse, cancelFlag task.CancelFlag) (pluginOutputs map[string]*contracts.PluginResult)
+type PluginRunner func(context context.T, documentID string, plugins []model.PluginState, sendResponse engine.SendResponse, cancelFlag task.CancelFlag) (pluginOutputs map[string]*contracts.PluginResult)
 
-var pluginRunner = func(context context.T, documentID string, plugins map[string]model.PluginState, sendResponse engine.SendResponse, cancelFlag task.CancelFlag) (pluginOutputs map[string]*contracts.PluginResult) {
-	return engine.RunPlugins(context, documentID, plugins, plugin.RegisteredWorkerPlugins(context), sendResponse, nil, cancelFlag)
+var pluginRunner = func(context context.T, documentID string, plugins []model.PluginState, sendResponse engine.SendResponse, cancelFlag task.CancelFlag) (pluginOutputs map[string]*contracts.PluginResult) {
+	return engine.RunPlugins(context, documentID, "", plugins, plugin.RegisteredWorkerPlugins(context), sendResponse, nil, cancelFlag)
 }
 
 // NewProcessor initializes a new mds processor with the given parameters.
@@ -168,7 +168,7 @@ func NewProcessor(context context.T) *Processor {
 
 	// PersistData is used to persist the data into a bookkeeping folder
 	persistData := func(state *model.DocumentState, bookkeeping string) {
-		statemanager.PersistData(log, state.DocumentInformation.CommandID, state.DocumentInformation.Destination, bookkeeping, *state)
+		statemanager.PersistData(log, state.DocumentInformation.DocumentID, state.DocumentInformation.InstanceID, bookkeeping, *state)
 	}
 
 	assocProcessor := processor.NewAssociationProcessor(context, instanceID)

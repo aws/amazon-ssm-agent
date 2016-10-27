@@ -1,0 +1,43 @@
+{
+  "schemaVersion":"1.2",
+  "description":"Install, repair, or uninstall an application using an .msi file.",
+  "parameters":{
+    "action":{
+      "type":"String",
+      "default":"Install",
+      "description":"(Optional) The type of action to perform. Valid values: Install | Repair | Uninstall",
+      "allowedValues":[
+        "Install",
+        "Repair",
+        "Uninstall"
+      ]
+    },
+    "parameters":{
+      "type":"String",
+      "default":"",
+      "description":"(Optional) The parameters for the installer."
+    },
+    "source":{
+      "type":"String",
+      "description":"(Required) The URL or local path on the instance to the application .msi file."
+    },
+    "sourceHash":{
+      "type":"String",
+      "default":"",
+      "description":"(Optional) The SHA256 hash of the .msi file."
+    }
+  },
+  "runtimeConfig":{
+    "aws:applications":{
+      "properties":[
+        {
+          "id":"0.aws:applications",
+          "action":"{{ action }}",
+          "parameters":"{{ parameters }}",
+          "source":"{{ source }}",
+          "sourceHash":"{{ sourceHash }}"
+        }
+      ]
+    }
+  }
+}

@@ -45,9 +45,9 @@ func (bookkeepingImp) PersistDocumentInfo(log log.T, docInfo stateModel.Document
 	statemanager.PersistDocumentInfo(log, docInfo, commandID, instanceID, locationFolder)
 }
 
-// MoveCommandState wraps statemanager MoveCommandState
-func (bookkeepingImp) MoveCommandState(log log.T, commandID, instanceID, srcLocationFolder, dstLocationFolder string) {
-	statemanager.MoveCommandState(log, commandID, instanceID, srcLocationFolder, dstLocationFolder)
+// MoveDocumentState wraps statemanager MoveDocumentState
+func (bookkeepingImp) MoveDocumentState(log log.T, commandID, instanceID, srcLocationFolder, dstLocationFolder string) {
+	statemanager.MoveDocumentState(log, commandID, instanceID, srcLocationFolder, dstLocationFolder)
 }
 
 // pluginExecutionService represents the dependency for engine
@@ -55,7 +55,7 @@ type pluginExecutionService interface {
 	RunPlugins(
 		context context.T,
 		documentID string,
-		plugins map[string]stateModel.PluginState,
+		plugins []stateModel.PluginState,
 		pluginRegistry plugin.PluginRegistry,
 		sendReply engine.SendResponse,
 		cancelFlag task.CancelFlag,
@@ -68,10 +68,11 @@ type pluginExecutionImp struct{}
 func (pluginExecutionImp) RunPlugins(
 	context context.T,
 	documentID string,
-	plugins map[string]stateModel.PluginState,
+	documentCreatedDate string,
+	plugins []stateModel.PluginState,
 	pluginRegistry plugin.PluginRegistry,
 	assocUpdate engine.UpdateAssociation,
 	cancelFlag task.CancelFlag,
 ) (pluginOutputs map[string]*contracts.PluginResult) {
-	return engine.RunPlugins(context, documentID, plugins, pluginRegistry, nil, assocUpdate, cancelFlag)
+	return engine.RunPlugins(context, documentID, documentCreatedDate, plugins, pluginRegistry, nil, assocUpdate, cancelFlag)
 }
