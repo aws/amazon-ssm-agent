@@ -76,7 +76,7 @@ func (c *DocumentState) IsRebootRequired() bool {
 	return c.DocumentInformation.DocumentStatus == contracts.ResultStatusSuccessAndReboot
 }
 
-// IsAssociation returns if reboot is needed
+// IsAssociation returns if documentType is association
 func (c *DocumentState) IsAssociation() bool {
 	return c.DocumentType == Association
 }

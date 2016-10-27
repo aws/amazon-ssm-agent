@@ -152,7 +152,6 @@ func TestRunGatherers(t *testing.T) {
 	assert.NotNil(t, err, "%v should throw errors", errorProneGatherer)
 }
 
-
 func TestVerifyInventoryDataSize(t *testing.T) {
 	var smallItem, largeItem model.Item
 	var items []model.Item

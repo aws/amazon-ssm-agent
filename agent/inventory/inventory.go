@@ -17,10 +17,8 @@ package inventory
 import (
 	"encoding/json"
 	"fmt"
-<<<<<<< 6cb9189dc984d14ab7497b36d90de8a0d1df14a4
+	"path/filepath"
 	"strings"
-=======
->>>>>>> 1) converting inventory plugin from core plugin to worker plugin, 2) integrating with associate functionality, 3) detecting multiple associations for inventory, 4) minor go lint fixes
 	"sync"
 	"time"
 
@@ -29,6 +27,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/association/schedulemanager"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
+	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	"github.com/aws/amazon-ssm-agent/agent/inventory/datauploader"
 	"github.com/aws/amazon-ssm-agent/agent/inventory/gatherers"
 	"github.com/aws/amazon-ssm-agent/agent/inventory/gatherers/application"
@@ -38,8 +37,10 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/inventory/gatherers/windowsUpdate"
 	"github.com/aws/amazon-ssm-agent/agent/inventory/model"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
+	"github.com/aws/amazon-ssm-agent/agent/platform"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/pluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/sdkutil"
+	stateManagerModel "github.com/aws/amazon-ssm-agent/agent/statemanager/model"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/ssm"
@@ -48,10 +49,11 @@ import (
 //TODO: add more unit tests.
 
 const (
-	errorMsgForMultipleAssociations             = "%v doesn't support multiple associations"
-	errorMsgForInvalidInventoryInput            = "Unrecongnized input for %v plugin"
-	errorMsgForExecutingInventoryThroughCommand = "Run command is not supported for %v plugin"
-	successfulMsgForInventoryPlugin             = "Inventory policy has been successfully applied and collected inventory data has been uploaded to SSM"
+	errorMsgForMultipleAssociations           = "%v doesn't support multiple associations"
+	errorMsgForInvalidInventoryInput          = "Unrecongnized input for %v plugin"
+	errorMsgForExecutingInventoryViaAssociate = "%v Plugin can only be invoked via ssm-associate"
+	errorMsgForUnableToDetectInvocationType   = "Unable to detect if %v plugin was invoked via ssm-associate because - %v"
+	successfulMsgForInventoryPlugin           = "Inventory policy has been successfully applied and collected inventory data has been uploaded to SSM"
 )
 
 var (
@@ -75,6 +77,13 @@ var associationsProvider = getCurrentAssociations
 
 func getCurrentAssociations() []*associateModel.InstanceAssociation {
 	return schedulemanager.Schedules()
+}
+
+// decoupling platform.InstanceID for easy testability
+var machineIDProvider = machineInfoProvider
+
+func machineInfoProvider() (name string, err error) {
+	return platform.InstanceID()
 }
 
 // PluginOutput represents the output of inventory plugin
@@ -106,6 +115,9 @@ type Plugin struct {
 	// currentAssociations stores a copy of all current associations to instance. It's refreshed everytime inventory
 	// is invoked via association
 	currentAssociations map[string]string
+
+	// machineID of the machine where agent is running - useful during command detection
+	machineID string
 }
 
 // Name returns the plugin name
@@ -134,6 +146,13 @@ func NewPlugin(context context.T, pluginConfig pluginutil.PluginConfig) (*Plugin
 
 	c := context.With("[" + Name() + "]")
 	log := c.Log()
+
+	//get machineID - return if not able to detect machineID
+	if p.machineID, err = machineIDProvider(); err != nil {
+		err = fmt.Errorf("Unable to detect machineID because of %v - this will hamper execution of inventory plugin",
+			err.Error())
+		return &p, err
+	}
 
 	// reading agent appconfig
 	if appCfg, err = appconfig.Config(false); err != nil {
@@ -220,8 +239,6 @@ func (p *Plugin) CanGathererRun(context context.T, name string) (status bool, ga
 	} else {
 		log.Infof("%v inventory gatherer is supported to run on this platform", name)
 		status = true
-<<<<<<< 6cb9189dc984d14ab7497b36d90de8a0d1df14a4
-=======
 	}
 
 	return
@@ -254,47 +271,11 @@ func (p *Plugin) validateCustomGatherer(context context.T, collectionPolicy, loc
 		if status {
 			policy = model.Config{Collection: collectionPolicy, Location: location}
 		}
->>>>>>> 1) converting inventory plugin from core plugin to worker plugin, 2) integrating with associate functionality, 3) detecting multiple associations for inventory, 4) minor go lint fixes
 	}
 
 	return
 }
 
-<<<<<<< 6cb9189dc984d14ab7497b36d90de8a0d1df14a4
-func (p *Plugin) validatePredefinedGatherer(context context.T, collectionPolicy, gathererName string) (status bool, gatherer gatherers.T, policy model.Config, err error) {
-
-	if collectionPolicy == model.Enabled {
-		if status, gatherer, err = p.CanGathererRun(context, gathererName); err != nil {
-			return
-		}
-
-		// check if gatherer can run - if not then no need to set policy
-		if status {
-			policy = model.Config{Collection: collectionPolicy}
-		}
-	}
-
-	return
-}
-
-func (p *Plugin) validateCustomGatherer(context context.T, collectionPolicy, location string) (status bool, gatherer gatherers.T, policy model.Config, err error) {
-
-	if collectionPolicy == model.Enabled {
-		if status, gatherer, err = p.CanGathererRun(context, custom.GathererName); err != nil {
-			return
-		}
-
-		// check if gatherer can run - if not then no need to set policy
-		if status {
-			policy = model.Config{Collection: collectionPolicy, Location: location}
-		}
-	}
-
-	return
-}
-
-=======
->>>>>>> 1) converting inventory plugin from core plugin to worker plugin, 2) integrating with associate functionality, 3) detecting multiple associations for inventory, 4) minor go lint fixes
 // ValidateInventoryInput validates inventory input and returns a map of eligible gatherers & their corresponding config.
 // It throws an error if gatherer is not recongnized/installed.
 func (p *Plugin) ValidateInventoryInput(context context.T, input PluginInput) (configuredGatherers map[gatherers.T]model.Config, err error) {
@@ -319,7 +300,6 @@ func (p *Plugin) ValidateInventoryInput(context context.T, input PluginInput) (c
 	} else if canGathererRun {
 		configuredGatherers[gatherer] = cfg
 	}
-<<<<<<< 6cb9189dc984d14ab7497b36d90de8a0d1df14a4
 
 	//checking awscomponents gatherer
 	if canGathererRun, gatherer, cfg, err = p.validatePredefinedGatherer(context, input.AWSComponents, awscomponent.GathererName); err != nil {
@@ -328,16 +308,6 @@ func (p *Plugin) ValidateInventoryInput(context context.T, input PluginInput) (c
 		configuredGatherers[gatherer] = cfg
 	}
 
-=======
-
-	//checking awscomponents gatherer
-	if canGathererRun, gatherer, cfg, err = p.validatePredefinedGatherer(context, input.AWSComponents, awscomponent.GathererName); err != nil {
-		return
-	} else if canGathererRun {
-		configuredGatherers[gatherer] = cfg
-	}
-
->>>>>>> 1) converting inventory plugin from core plugin to worker plugin, 2) integrating with associate functionality, 3) detecting multiple associations for inventory, 4) minor go lint fixes
 	//checking network gatherer
 	if canGathererRun, gatherer, cfg, err = p.validatePredefinedGatherer(context, input.NetworkConfig, network.GathererName); err != nil {
 		return
@@ -430,19 +400,11 @@ func (p *Plugin) VerifyInventoryDataSize(item model.Item, items []model.Item) bo
 // ConvertToCurrentAssociationsMap converts a list of current association to a map of association.
 func ConvertToCurrentAssociationsMap(input []*associateModel.InstanceAssociation) (currentAssociations map[string]string) {
 	currentAssociations = make(map[string]string)
-<<<<<<< 6cb9189dc984d14ab7497b36d90de8a0d1df14a4
 
 	for _, v := range input {
 		currentAssociations[*v.Association.AssociationId] = v.CreateDate.String()
 	}
 
-=======
-
-	for _, v := range input {
-		currentAssociations[*v.Association.AssociationId] = v.CreateDate.String()
-	}
-
->>>>>>> 1) converting inventory plugin from core plugin to worker plugin, 2) integrating with associate functionality, 3) detecting multiple associations for inventory, 4) minor go lint fixes
 	return
 }
 
@@ -453,11 +415,7 @@ func RefreshLastTrackedAssociationExecutions(oldTrackedExecutions, currentAssoci
 	//iterate over oldExecutions and see if any doc is not associated anymore - if so don't include that doc in the
 	//new map of tracked association execution
 
-<<<<<<< 6cb9189dc984d14ab7497b36d90de8a0d1df14a4
 	for doc := range oldTrackedExecutions {
-=======
-	for doc, _ := range oldTrackedExecutions {
->>>>>>> 1) converting inventory plugin from core plugin to worker plugin, 2) integrating with associate functionality, 3) detecting multiple associations for inventory, 4) minor go lint fixes
 		if _, associationFound := currentAssociations[doc]; associationFound {
 			//the execution time of inventory remains the same so copy over that data
 			newTrackedExecutions[doc] = oldTrackedExecutions[doc]
@@ -542,13 +500,38 @@ func (p *Plugin) IsMulitpleAssociationPresent(currentAssociationID string) (stat
 	return
 }
 
-// IsInventoryBeingInvokedAsSSMCommand returns true if there are multiple associations for inventory plugin else it returns false.
-func (p *Plugin) IsInventoryBeingInvokedAsSSMCommand() (status bool) {
-	//TODO: implement following algo:
-	// NOTE: 2 approaches - both of which would require configuration.bookkeepingfilename or configuration.MessageId (messageId is not really future proof since later implementations might only include doc state management)
-	// 1) we know the path where internalCmdState file is stored - check if the file is present there -> if so - simply return true else false
-	// 2) we know the path - read the document and then read the property -> isCommand and accordingly return
-	return false
+// IsInventoryBeingInvokedAsAssociation returns true if inventory plugin is invoked via ssm-associate or else it returns false.
+// It throws error if the detection itself fails
+func (p *Plugin) IsInventoryBeingInvokedAsAssociation(fileName string) (status bool, err error) {
+	var content string
+	var docState stateManagerModel.DocumentState
+	log := p.context.Log()
+
+	//since the document is still getting executed - it must be in Current folder
+	path := filepath.Join(appconfig.DefaultDataStorePath,
+		p.machineID,
+		appconfig.DefaultDocumentRootDirName,
+		appconfig.DefaultLocationOfState,
+		appconfig.DefaultLocationOfCurrent)
+
+	absPathOfDoc := filepath.Join(path, fileName)
+
+	//read file & then determine if document is of association type
+	if fileutil.Exists(absPathOfDoc) {
+		log.Debugf("Found the document that's executing inventory plugin - %v", absPathOfDoc)
+
+		//read file
+		if content, err = fileutil.ReadAllText(absPathOfDoc); err == nil {
+			if err = json.Unmarshal([]byte(content), &docState); err == nil {
+				status = docState.IsAssociation()
+			}
+		}
+
+	} else {
+		err = fmt.Errorf("Inventory plugin can't locate the execution document which invoked it. The doc should have been in the location - %v", absPathOfDoc)
+	}
+
+	return
 }
 
 // ParseAssociationIdFromFileName parses associationID from the given input
@@ -568,6 +551,7 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 	var errorMsg, associationID string
 	var dataB []byte
 	var err error
+	var isAssociation bool
 	var inventoryInput PluginInput
 	var inventoryOutput PluginOutput
 
@@ -577,16 +561,17 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 
 	//TODO: take care of cancel flag
 
-	// Check if there exists multiple associations for software inventory plugin, if so - then fail association - because
-	// inventory plugin supports single association only.
-
-	// NOTE: as per contract with associate functionality - bookkeepingfilename will always contain associationId.
-	// bookkeepingfilename will be of format - associationID.RunID for associations, for command it will simply be commandID
-
 	associationID = p.ParseAssociationIdFromFileName(config.BookKeepingFileName)
 
-	if p.IsMulitpleAssociationPresent(associationID) {
-		errorMsg = fmt.Sprintf(errorMsgForMultipleAssociations, pluginName)
+	// Check if the inventory plugin is being invoked as association, if not or if detection fails for some reason,
+	// then fail association - because inventory plugin currently supports invocation via ssm associate only.
+	if isAssociation, err = p.IsInventoryBeingInvokedAsAssociation(config.BookKeepingFileName); err != nil || !isAssociation {
+		if err != nil {
+			errorMsg = fmt.Sprintf(errorMsgForUnableToDetectInvocationType, pluginName, err.Error())
+		} else {
+			errorMsg = fmt.Sprintf(errorMsgForExecutingInventoryViaAssociate, pluginName)
+		}
+
 		log.Error(errorMsg)
 		res.Code = 1
 		res.Output = errorMsg
@@ -598,10 +583,16 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 		return
 	}
 
-	// Check if the inventory plugin is being invoked via run command, if so - then fail association - because
-	// inventory plugin currently supports invocation via ssm associate only.
-	if p.IsInventoryBeingInvokedAsSSMCommand() {
-		errorMsg = fmt.Sprintf(errorMsgForExecutingInventoryThroughCommand, pluginName)
+	log.Debugf("%v plugin is being invoked via ssm-associate - proceeding ahead with execution", pluginName)
+
+	// Check if there exists multiple associations for software inventory plugin, if so - then fail association - because
+	// inventory plugin supports single association only.
+
+	// NOTE: as per contract with associate functionality - bookkeepingfilename will always contain associationId.
+	// bookkeepingfilename will be of format - associationID.RunID for associations, for command it will simply be commandID
+
+	if p.IsMulitpleAssociationPresent(associationID) {
+		errorMsg = fmt.Sprintf(errorMsgForMultipleAssociations, pluginName)
 		log.Error(errorMsg)
 		res.Code = 1
 		res.Output = errorMsg
