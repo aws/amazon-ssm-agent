@@ -21,7 +21,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/framework/plugin"
-	"github.com/aws/amazon-ssm-agent/agent/framework/runutil"
+	"github.com/aws/amazon-ssm-agent/agent/framework/runpluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/rebooter"
 	stateModel "github.com/aws/amazon-ssm-agent/agent/statemanager/model"
 	"github.com/aws/amazon-ssm-agent/agent/task"
@@ -36,9 +36,9 @@ func RunPlugins(
 	context context.T,
 	documentID string,
 	plugins map[string]stateModel.PluginState,
-	pluginRegistry runutil.PluginRegistry,
-	sendReply runutil.SendResponse,
-	updateAssoc runutil.UpdateAssociation,
+	pluginRegistry runpluginutil.PluginRegistry,
+	sendReply runpluginutil.SendResponse,
+	updateAssoc runpluginutil.UpdateAssociation,
 	cancelFlag task.CancelFlag,
 ) (pluginOutputs map[string]*contracts.PluginResult) {
 
@@ -79,12 +79,12 @@ func RunPlugins(
 		//check if the said plugin is a worker plugin
 		p, isWorkerPlugin := pluginRegistry[pluginID]
 
-		runner := runutil.Runner{
-			PluginRunner: RunPlugins,
-			Plugins:      pluginRegistry,
-			SendReply:    runutil.NoReply,
-			UpdateAssoc:  runutil.NoUpdate,
-			CancelFlag:   cancelFlag,
+		runner := runpluginutil.PluginRunner{
+			RunPlugins:  RunPlugins,
+			Plugins:     pluginRegistry,
+			SendReply:   runpluginutil.NoReply,
+			UpdateAssoc: runpluginutil.NoUpdate,
+			CancelFlag:  cancelFlag,
 		}
 
 		isSupported, platformDetail := plugin.IsPluginSupportedForCurrentPlatform(context.Log(), pluginID)
@@ -141,11 +141,11 @@ func RunPlugins(
 
 func runPlugin(
 	context context.T,
-	p runutil.T,
+	p runpluginutil.T,
 	pluginID string,
 	config contracts.Configuration,
 	cancelFlag task.CancelFlag,
-	runner runutil.Runner,
+	runner runpluginutil.PluginRunner,
 ) (res contracts.PluginResult) {
 	// create a new context that includes plugin ID
 	context = context.With("[pluginID=" + pluginID + "]")

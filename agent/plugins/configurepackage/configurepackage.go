@@ -28,7 +28,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/executers"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil/artifact"
-	"github.com/aws/amazon-ssm-agent/agent/framework/runutil"
+	"github.com/aws/amazon-ssm-agent/agent/framework/runpluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/pluginutil"
@@ -41,7 +41,7 @@ import (
 type Plugin struct {
 	pluginutil.DefaultPlugin
 	context          context.T
-	runner           runutil.Runner
+	runner           runpluginutil.PluginRunner
 	orchestrationDir string
 	s3Bucket         string
 	s3Prefix         string
@@ -544,7 +544,7 @@ var runConfig = runConfigurePackage
 
 // Execute runs multiple sets of commands and returns their outputs.
 // res.Output will contain a slice of RunCommandPluginOutput.
-func (p *Plugin) Execute(context context.T, config contracts.Configuration, cancelFlag task.CancelFlag, subDocumentRunner runutil.Runner) (res contracts.PluginResult) {
+func (p *Plugin) Execute(context context.T, config contracts.Configuration, cancelFlag task.CancelFlag, subDocumentRunner runpluginutil.PluginRunner) (res contracts.PluginResult) {
 	p.context = context
 	p.orchestrationDir = config.OrchestrationDirectory
 	p.s3Bucket = config.OutputS3BucketName
@@ -599,6 +599,7 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 			util,
 			instanceContext,
 			prop)
+		//TODO:MF: make sure this subdocument's HasExecuted == true even if it returned SuccessAndReboot - the parent document status will control whether it runs again after reboot
 	}
 
 	// TODO:MF: handle merging multiple results for cases where we had more than one operation

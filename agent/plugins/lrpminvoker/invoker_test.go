@@ -22,7 +22,7 @@ import (
 
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
-	"github.com/aws/amazon-ssm-agent/agent/framework/runutil"
+	"github.com/aws/amazon-ssm-agent/agent/framework/runpluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/longrunning/manager"
 	"github.com/aws/amazon-ssm-agent/agent/task"
@@ -123,7 +123,7 @@ func TestExecuteSuccess(t *testing.T) {
 		return []byte{}, nil
 	}
 
-	res := p.Execute(testCase.Context, enabledConfig, cancelFlag, runutil.Runner{})
+	res := p.Execute(testCase.Context, enabledConfig, cancelFlag, runpluginutil.PluginRunner{})
 	expectRes := p.CreateResult("success", contracts.ResultStatusSuccess)
 	assert.Equal(t, expectRes, res)
 }
@@ -137,7 +137,7 @@ func TestExecuteFailWithContext(t *testing.T) {
 	cancelFlag.On("Canceled").Return(false)
 	cancelFlag.On("ShutDown").Return(false)
 
-	res := p.Execute(testCase.Context, config, cancelFlag, runutil.Runner{})
+	res := p.Execute(testCase.Context, config, cancelFlag, runpluginutil.PluginRunner{})
 	expectRes := p.CreateResult("Unable to get plugin name because of unsupported plugin name format",
 		contracts.ResultStatusFailed)
 	assert.Equal(t, expectRes, res)
@@ -152,7 +152,7 @@ func TestExecuteFailWithStartType(t *testing.T) {
 	cancelFlag.On("Canceled").Return(false)
 	cancelFlag.On("ShutDown").Return(false)
 
-	res := p.Execute(testCase.Context, config, cancelFlag, runutil.Runner{})
+	res := p.Execute(testCase.Context, config, cancelFlag, runpluginutil.PluginRunner{})
 	expectRes := p.CreateResult(fmt.Sprintf("Allowed Values of StartType: Enabled | Disabled"),
 		contracts.ResultStatusFailed)
 	assert.Equal(t, expectRes, res)
@@ -170,7 +170,7 @@ func TestExecuteFailWithConfig(t *testing.T) {
 	var enabledConfig = contracts.Configuration{
 		Settings: "Enabled",
 	}
-	res := p.Execute(testCase.Context, enabledConfig, cancelFlag, runutil.Runner{})
+	res := p.Execute(testCase.Context, enabledConfig, cancelFlag, runpluginutil.PluginRunner{})
 	expectRes := p.CreateResult(fmt.Sprintf("Unable to parse Settings for %s", testCase.ContextResult),
 		contracts.ResultStatusFailed)
 	assert.Equal(t, expectRes, res)

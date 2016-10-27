@@ -23,7 +23,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil/artifact"
-	"github.com/aws/amazon-ssm-agent/agent/framework/runutil"
+	"github.com/aws/amazon-ssm-agent/agent/framework/runpluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/s3util"
 	"github.com/aws/amazon-ssm-agent/agent/statemanager/model"
@@ -112,7 +112,7 @@ type execDep interface {
 
 type execDepImp struct {
 	util   *updateutil.Utility
-	runner runutil.Runner
+	runner runpluginutil.PluginRunner
 }
 
 func (m *execDepImp) ExeCommand(log log.T, cmd string, workingDir string, updaterRoot string, stdOut string, stdErr string, isAsync bool) (err error) {
@@ -120,7 +120,7 @@ func (m *execDepImp) ExeCommand(log log.T, cmd string, workingDir string, update
 }
 
 func (m *execDepImp) ParseDocument(plugin *Plugin, documentRaw []byte, orchestrationDir string, s3Bucket string, s3KeyPrefix string, messageID string, documentID string, defaultWorkingDirectory string) (pluginsInfo map[string]model.PluginState, err error) {
-	return runutil.ParseDocument(plugin.context, documentRaw, orchestrationDir, s3Bucket, s3KeyPrefix, messageID, documentID, defaultWorkingDirectory)
+	return runpluginutil.ParseDocument(plugin.context, documentRaw, orchestrationDir, s3Bucket, s3KeyPrefix, messageID, documentID, defaultWorkingDirectory)
 }
 
 func (m *execDepImp) ExecuteDocument(plugin *Plugin, pluginInput map[string]model.PluginState, documentID string) (pluginOutputs map[string]*contracts.PluginResult) {

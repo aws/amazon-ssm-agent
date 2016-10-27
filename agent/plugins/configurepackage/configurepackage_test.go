@@ -25,7 +25,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil/artifact"
-	"github.com/aws/amazon-ssm-agent/agent/framework/runutil"
+	"github.com/aws/amazon-ssm-agent/agent/framework/runpluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/statemanager/model"
 	"github.com/aws/amazon-ssm-agent/agent/task"
@@ -122,7 +122,7 @@ func TestExecute(t *testing.T) {
 	mockCancelFlag.On("ShutDown").Return(false)
 	mockCancelFlag.On("Wait").Return(false).After(100 * time.Millisecond)
 
-	result := plugin.Execute(mockContext, config, mockCancelFlag, runutil.Runner{})
+	result := plugin.Execute(mockContext, config, mockCancelFlag, runpluginutil.PluginRunner{})
 
 	assert.Equal(t, result.Code, 1)
 	assert.Contains(t, result.Output, "error")

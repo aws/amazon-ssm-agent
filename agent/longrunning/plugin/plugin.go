@@ -23,7 +23,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
-	"github.com/aws/amazon-ssm-agent/agent/framework/runutil"
+	"github.com/aws/amazon-ssm-agent/agent/framework/runpluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/longrunning/plugin/rundaemon"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/pluginutil"
@@ -102,7 +102,7 @@ func loadPlatformIndependentPlugins(context context.T) map[string]Plugin {
 						var input rundaemon.DaemonPluginInput
 						var err error
 						filedata, _ := ioutil.ReadFile(daemonStartFile)
-						pluginsInfo, parseErr := runutil.ParseDocument(
+						pluginsInfo, parseErr := runpluginutil.ParseDocument(
 							context,
 							filedata,
 							"", "", "", "", "", daemonWorkingDir)

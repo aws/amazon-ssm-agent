@@ -26,7 +26,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
-	"github.com/aws/amazon-ssm-agent/agent/framework/runutil"
+	"github.com/aws/amazon-ssm-agent/agent/framework/runpluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	messageContracts "github.com/aws/amazon-ssm-agent/agent/message/contracts"
@@ -53,7 +53,7 @@ func (p *Processor) runCmdsUsingCmdState(context context.T,
 	runPlugins PluginRunner,
 	cancelFlag task.CancelFlag,
 	buildReply replyBuilder,
-	sendResponse runutil.SendResponse,
+	sendResponse runpluginutil.SendResponse,
 	docState model.DocumentState) {
 
 	log := context.Log()
@@ -239,7 +239,7 @@ func (p *Processor) processSendCommandMessage(context context.T,
 	runPlugins PluginRunner,
 	cancelFlag task.CancelFlag,
 	buildReply replyBuilder,
-	sendResponse runutil.SendResponse,
+	sendResponse runpluginutil.SendResponse,
 	docState *model.DocumentState) {
 
 	log := context.Log()

@@ -11,8 +11,8 @@
 // either express or implied. See the License for the specific language governing
 // permissions and limitations under the License.
 
-// Package runutil provides interfaces for running plugins that can be referenced by other plugins and a utility method for parsing documents
-package runutil
+// Package runpluginutil provides interfaces for running plugins that can be referenced by other plugins and a utility method for parsing documents
+package runpluginutil
 
 import (
 	"encoding/json"
@@ -43,14 +43,14 @@ func NoUpdate(log log.T, documentID string, pluginOutputs map[string]*contracts.
 
 // T is the interface type for plugins.
 type T interface {
-	Execute(context context.T, config contracts.Configuration, cancelFlag task.CancelFlag, subDocumentRunner Runner) contracts.PluginResult
+	Execute(context context.T, config contracts.Configuration, cancelFlag task.CancelFlag, subDocumentRunner PluginRunner) contracts.PluginResult
 }
 
 // PluginRegistry stores a set of plugins (both worker and long running plugins), indexed by ID.
 type PluginRegistry map[string]T
 
-type Runner struct {
-	PluginRunner func(
+type PluginRunner struct {
+	RunPlugins func(
 		context context.T,
 		documentID string,
 		plugins map[string]model.PluginState,
@@ -96,11 +96,11 @@ func ParseDocument(context context.T, documentRaw []byte, orchestrationDir strin
 	return
 }
 
-func (r *Runner) ExecuteDocument(context context.T, pluginInput map[string]model.PluginState, documentID string) (pluginOutputs map[string]*contracts.PluginResult) {
+func (r *PluginRunner) ExecuteDocument(context context.T, pluginInput map[string]model.PluginState, documentID string) (pluginOutputs map[string]*contracts.PluginResult) {
 	log := context.Log()
 	for name, _ := range pluginInput {
-		log.Debugf("SubDocument type %v", name)
+		log.Debugf("Document type %v", name)
 	}
 
-	return r.PluginRunner(context, documentID, pluginInput, r.Plugins, r.SendReply, r.UpdateAssoc, r.CancelFlag)
+	return r.RunPlugins(context, documentID, pluginInput, r.Plugins, r.SendReply, r.UpdateAssoc, r.CancelFlag)
 }
