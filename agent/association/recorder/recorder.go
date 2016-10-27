@@ -30,7 +30,7 @@ const AssociatedDocumentName = "InstanceDocument.json"
 
 // AssociatedDocument contains the association name
 type AssociatedDocument struct {
-	DocumentID string
+	AssociationID string
 }
 
 var lock sync.RWMutex
@@ -50,7 +50,7 @@ func HasExecuted(instanceID string, associationName string) bool {
 		return false
 	}
 
-	return assoDoc.DocumentID == associationName
+	return assoDoc.AssociationID == associationName
 }
 
 // UpdateAssociatedDocument persist last executed association name
@@ -71,7 +71,7 @@ func UpdateAssociatedDocument(InstanceID string, associationName string) error {
 	}
 
 	associatedDoc := AssociatedDocument{}
-	associatedDoc.DocumentID = associationName
+	associatedDoc.AssociationID = associationName
 	if content, err = jsonutil.Marshal(associatedDoc); err != nil {
 		return err
 	}

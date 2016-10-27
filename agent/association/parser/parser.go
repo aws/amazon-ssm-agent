@@ -83,14 +83,13 @@ func ParseDocumentWithParams(log log.T,
 	return payload, nil
 }
 
-// InitializeDocumentState - an interim state that is used around during an execution of a command
+// InitializeDocumentState - an interim state that is used around during an execution of a document
 func InitializeDocumentState(context context.T,
 	payload *messageContracts.SendCommandPayload,
 	rawData *model.InstanceAssociation) stateModel.DocumentState {
 
 	//initialize document information with relevant values extracted from msg
 	documentInfo := newDocumentInfo(rawData, payload)
-
 	// adapt plugin configuration format from MDS to plugin expected format
 	s3KeyPrefix := path.Join(payload.OutputS3KeyPrefix, payload.CommandID, documentInfo.InstanceID)
 
@@ -117,10 +116,12 @@ func newDocumentInfo(rawData *model.InstanceAssociation, payload *messageContrac
 
 	documentInfo := new(stateModel.DocumentInfo)
 
-	documentInfo.DocumentID = *(rawData.Association.AssociationId)
+	documentInfo.AssociationID = *(rawData.Association.AssociationId)
 	documentInfo.InstanceID = *(rawData.Association.InstanceId)
-	documentInfo.MessageID = fmt.Sprintf("aws.ssm.%v.%v", documentInfo.DocumentID, documentInfo.InstanceID)
+	documentInfo.MessageID = fmt.Sprintf("aws.ssm.%v.%v", documentInfo.AssociationID, documentInfo.InstanceID)
 	documentInfo.RunID = times.ToIsoDashUTC(times.DefaultClock.Now())
+	documentInfo.DocumentID = *(rawData.Association.AssociationId) + "." + documentInfo.RunID
+	rawData.DocumentID = documentInfo.DocumentID
 	documentInfo.CreatedDate = times.ToIso8601UTC(rawData.CreateDate)
 	documentInfo.DocumentName = payload.DocumentName
 	documentInfo.IsCommand = false
@@ -172,7 +173,7 @@ func buildPluginsInfo(
 				OutputS3KeyPrefix:      fileutil.BuildS3Path(s3KeyPrefix, pluginName),
 				OrchestrationDirectory: fileutil.BuildPath(orchestrationDir, pluginName),
 				MessageId:              documentInfo.MessageID,
-				BookKeepingFileName:    payload.CommandID,
+				BookKeepingFileName:    documentInfo.DocumentID,
 			}
 			pluginConfigurations[pluginName] = &config
 		}
@@ -206,7 +207,8 @@ func buildPluginsInfo(
 				OutputS3KeyPrefix:      fileutil.BuildS3Path(s3KeyPrefix, pluginName),
 				OrchestrationDirectory: fileutil.BuildPath(orchestrationDir, pluginName),
 				MessageId:              documentInfo.MessageID,
-				BookKeepingFileName:    payload.CommandID,
+				//BookKeepingFileName:    payload.CommandID,
+				BookKeepingFileName: documentInfo.DocumentID,
 			}
 
 			var plugin stateModel.PluginState

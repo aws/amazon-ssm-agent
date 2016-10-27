@@ -28,33 +28,33 @@ var pluginExecution = pluginExecutionImp{}
 
 // bookkeepingService represents the dependency for statemanager
 type bookkeepingService interface {
-	GetDocumentInfo(log log.T, commandID, instanceID, locationFolder string) stateModel.DocumentInfo
-	PersistDocumentInfo(log log.T, docInfo stateModel.DocumentInfo, commandID, instanceID, locationFolder string)
-	MoveCommandState(log log.T, commandID, instanceID, srcLocationFolder, dstLocationFolder string)
+	GetDocumentInfo(log log.T, documentID, instanceID, locationFolder string) stateModel.DocumentInfo
+	PersistDocumentInfo(log log.T, docInfo stateModel.DocumentInfo, documentID, instanceID, locationFolder string)
+	MoveCommandState(log log.T, documentID, instanceID, srcLocationFolder, dstLocationFolder string)
 }
 
 type bookkeepingImp struct{}
 
 // GetDocumentInfo wraps statemanager GetDocumentInfo
-func (bookkeepingImp) GetDocumentInfo(log log.T, commandID, instanceID, locationFolder string) stateModel.DocumentInfo {
-	return statemanager.GetDocumentInfo(log, commandID, instanceID, locationFolder)
+func (bookkeepingImp) GetDocumentInfo(log log.T, documentID, instanceID, locationFolder string) stateModel.DocumentInfo {
+	return statemanager.GetDocumentInfo(log, documentID, instanceID, locationFolder)
 }
 
 // PersistDocumentInfo wraps statemanager PersistDocumentInfo
-func (bookkeepingImp) PersistDocumentInfo(log log.T, docInfo stateModel.DocumentInfo, commandID, instanceID, locationFolder string) {
-	statemanager.PersistDocumentInfo(log, docInfo, commandID, instanceID, locationFolder)
+func (bookkeepingImp) PersistDocumentInfo(log log.T, docInfo stateModel.DocumentInfo, documentID, instanceID, locationFolder string) {
+	statemanager.PersistDocumentInfo(log, docInfo, documentID, instanceID, locationFolder)
 }
 
 // MoveDocumentState wraps statemanager MoveDocumentState
-func (bookkeepingImp) MoveDocumentState(log log.T, commandID, instanceID, srcLocationFolder, dstLocationFolder string) {
-	statemanager.MoveDocumentState(log, commandID, instanceID, srcLocationFolder, dstLocationFolder)
+func (bookkeepingImp) MoveDocumentState(log log.T, documentID, instanceID, srcLocationFolder, dstLocationFolder string) {
+	statemanager.MoveDocumentState(log, documentID, instanceID, srcLocationFolder, dstLocationFolder)
 }
 
 // pluginExecutionService represents the dependency for engine
 type pluginExecutionService interface {
 	RunPlugins(
 		context context.T,
-		documentID string,
+		associationID string,
 		plugins []stateModel.PluginState,
 		pluginRegistry plugin.PluginRegistry,
 		sendReply engine.SendResponse,
@@ -67,12 +67,12 @@ type pluginExecutionImp struct{}
 // RunPlugins wraps engine RunPlugins
 func (pluginExecutionImp) RunPlugins(
 	context context.T,
-	documentID string,
+	associationID string,
 	documentCreatedDate string,
 	plugins []stateModel.PluginState,
 	pluginRegistry plugin.PluginRegistry,
 	assocUpdate engine.UpdateAssociation,
 	cancelFlag task.CancelFlag,
 ) (pluginOutputs map[string]*contracts.PluginResult) {
-	return engine.RunPlugins(context, documentID, documentCreatedDate, plugins, pluginRegistry, nil, assocUpdate, cancelFlag)
+	return engine.RunPlugins(context, associationID, documentCreatedDate, plugins, pluginRegistry, nil, assocUpdate, cancelFlag)
 }

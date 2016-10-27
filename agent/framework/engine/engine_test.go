@@ -33,7 +33,7 @@ func TestRunPluginsWithRegistry(t *testing.T) {
 	pluginResults := make(map[string]*contracts.PluginResult)
 	pluginInstances := make(map[string]*plugin.Mock)
 	pluginRegistry := plugin.PluginRegistry{}
-	documentID := "TestDocument"
+	executionID := "TestDocument"
 
 	sendResponse := func(messageID string, pluginID string, results map[string]*contracts.PluginResult) {
 	}
@@ -77,7 +77,7 @@ func TestRunPluginsWithRegistry(t *testing.T) {
 	}
 
 	// call the code we are testing
-	outputs := RunPlugins(ctx, documentID, "", pluginConfigs2, pluginRegistry, sendResponse, nil, cancelFlag)
+	outputs := RunPlugins(ctx, executionID, "", pluginConfigs2, pluginRegistry, sendResponse, nil, cancelFlag)
 
 	// fix the times expectation.
 	for _, result := range outputs {

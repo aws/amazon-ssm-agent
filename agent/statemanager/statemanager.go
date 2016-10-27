@@ -33,14 +33,14 @@ import (
 var lock sync.RWMutex
 var docLock = make(map[string]*sync.RWMutex)
 
-// GetDocumentInterimState returns CommandState object after reading file <commandID> from locationFolder
+// GetDocumentInterimState returns CommandState object after reading file <fileName> from locationFolder
 // under defaultLogDir/instanceID
-func GetDocumentInterimState(log log.T, commandID, instanceID, locationFolder string) model.DocumentState {
+func GetDocumentInterimState(log log.T, fileName, instanceID, locationFolder string) model.DocumentState {
 
-	rLockDocument(commandID)
-	defer rUnlockDocument(commandID)
+	rLockDocument(fileName)
+	defer rUnlockDocument(fileName)
 
-	absoluteFileName := docStateFileName(commandID, instanceID, locationFolder)
+	absoluteFileName := docStateFileName(fileName, instanceID, locationFolder)
 
 	docState := getDocState(log, absoluteFileName)
 
@@ -49,12 +49,12 @@ func GetDocumentInterimState(log log.T, commandID, instanceID, locationFolder st
 
 // PersistData stores the given object in the file-system in pretty Json indented format
 // This will override the contents of an already existing file
-func PersistData(log log.T, commandID, instanceID, locationFolder string, object interface{}) {
+func PersistData(log log.T, fileName, instanceID, locationFolder string, object interface{}) {
 
-	lockDocument(commandID)
-	defer unlockDocument(commandID)
+	lockDocument(fileName)
+	defer unlockDocument(fileName)
 
-	absoluteFileName := docStateFileName(commandID, instanceID, locationFolder)
+	absoluteFileName := docStateFileName(fileName, instanceID, locationFolder)
 
 	content, err := jsonutil.Marshal(object)
 	if err != nil {
@@ -73,15 +73,20 @@ func PersistData(log log.T, commandID, instanceID, locationFolder string, object
 }
 
 // IsDocumentCurrentlyExecuting checks if document already present in Pending or Current folder
-func IsDocumentCurrentlyExecuting(documentID, instanceID string) bool {
-	lockDocument(documentID)
-	defer unlockDocument(documentID)
+func IsDocumentCurrentlyExecuting(fileName, instanceID string) bool {
 
-	absoluteFileName := docStateFileName(documentID, instanceID, appconfig.DefaultLocationOfPending)
+	if len(fileName) == 0 {
+		return false
+	}
+
+	lockDocument(fileName)
+	defer unlockDocument(fileName)
+
+	absoluteFileName := docStateFileName(fileName, instanceID, appconfig.DefaultLocationOfPending)
 	if fileutil.Exists(absoluteFileName) {
 		return true
 	}
-	absoluteFileName = docStateFileName(documentID, instanceID, appconfig.DefaultLocationOfCurrent)
+	absoluteFileName = docStateFileName(fileName, instanceID, appconfig.DefaultLocationOfCurrent)
 	return fileutil.Exists(absoluteFileName)
 }
 
@@ -98,11 +103,11 @@ func RemoveData(log log.T, commandID, instanceID, locationFolder string) {
 	}
 }
 
-// MoveCommandState moves the CommandState object
-func MoveDocumentState(log log.T, commandID, instanceID, srcLocationFolder, dstLocationFolder string) {
+// MoveDocumentState moves the document file to target location
+func MoveDocumentState(log log.T, fileName, instanceID, srcLocationFolder, dstLocationFolder string) {
 
 	//get a lock for documentID specific lock
-	lockDocument(commandID)
+	lockDocument(fileName)
 
 	absoluteSource := path.Join(appconfig.DefaultDataStorePath,
 		instanceID,
@@ -116,29 +121,29 @@ func MoveDocumentState(log log.T, commandID, instanceID, srcLocationFolder, dstL
 		appconfig.DefaultLocationOfState,
 		dstLocationFolder)
 
-	if s, err := fileutil.MoveFile(commandID, absoluteSource, absoluteDestination); s && err == nil {
-		log.Debugf("moved file %v from %v to %v successfully", commandID, srcLocationFolder, dstLocationFolder)
+	if s, err := fileutil.MoveFile(fileName, absoluteSource, absoluteDestination); s && err == nil {
+		log.Debugf("moved file %v from %v to %v successfully", fileName, srcLocationFolder, dstLocationFolder)
 	} else {
-		log.Debugf("moving file %v from %v to %v failed with error %v", commandID, srcLocationFolder, dstLocationFolder, err)
+		log.Debugf("moving file %v from %v to %v failed with error %v", fileName, srcLocationFolder, dstLocationFolder, err)
 	}
 
 	//release documentID specific lock - before deleting the entry from the map
-	unlockDocument(commandID)
+	unlockDocument(fileName)
 
 	//delete documentID specific lock if document has finished executing. This is to avoid documentLock growing too much in memory.
 	//This is done by ensuring that as soon as document finishes executing it is removed from documentLock
 	//Its safe to assume that document has finished executing if it is being moved to appconfig.DefaultLocationOfCompleted
 	if dstLocationFolder == appconfig.DefaultLocationOfCompleted {
-		deleteLock(commandID)
+		deleteLock(fileName)
 	}
 }
 
-// GetDocumentInfo returns the document info for the specified commandID
-func GetDocumentInfo(log log.T, commandID, instanceID, locationFolder string) model.DocumentInfo {
-	rLockDocument(commandID)
-	defer rUnlockDocument(commandID)
+// GetDocumentInfo returns the document info for the specified fileName
+func GetDocumentInfo(log log.T, fileName, instanceID, locationFolder string) model.DocumentInfo {
+	rLockDocument(fileName)
+	defer rUnlockDocument(fileName)
 
-	absoluteFileName := docStateFileName(commandID, instanceID, locationFolder)
+	absoluteFileName := docStateFileName(fileName, instanceID, locationFolder)
 
 	commandState := getDocState(log, absoluteFileName)
 
@@ -147,13 +152,13 @@ func GetDocumentInfo(log log.T, commandID, instanceID, locationFolder string) mo
 
 // PersistDocumentInfo stores the given PluginState in file-system in pretty Json indented format
 // This will override the contents of an already existing file
-func PersistDocumentInfo(log log.T, docInfo model.DocumentInfo, commandID, instanceID, locationFolder string) {
+func PersistDocumentInfo(log log.T, docInfo model.DocumentInfo, fileName, instanceID, locationFolder string) {
 
-	absoluteFileName := docStateFileName(commandID, instanceID, locationFolder)
+	absoluteFileName := docStateFileName(fileName, instanceID, locationFolder)
 
 	//get documentID specific write lock
-	lockDocument(commandID)
-	defer unlockDocument(commandID)
+	lockDocument(fileName)
+	defer unlockDocument(fileName)
 
 	//Plugins should safely assume that there already
 	//exists a persisted interim state file - if not then it should throw error
@@ -316,6 +321,6 @@ func deleteLock(id string) {
 }
 
 // docStateFileName returns absolute filename where command states are persisted
-func docStateFileName(commandID, instanceID, locationFolder string) string {
-	return path.Join(DocumentStateDir(instanceID, locationFolder), commandID)
+func docStateFileName(fileName, instanceID, locationFolder string) string {
+	return path.Join(DocumentStateDir(instanceID, locationFolder), fileName)
 }

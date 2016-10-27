@@ -182,7 +182,7 @@ func (p *Processor) processInProgressDocuments(instanceID string) {
 
 		if docState.IsAssociation() {
 			//Submit the work to Job Pool so that we don't block for processing of new association
-			if err = p.assocProcessor.SubmitTask(log, docState.DocumentInformation.DocumentID, func(cancelFlag task.CancelFlag) {
+			if err = p.assocProcessor.SubmitTask(log, docState.DocumentInformation.CommandID, func(cancelFlag task.CancelFlag) {
 				p.assocProcessor.ExecuteInProgressDocument(&docState, cancelFlag)
 			}); err != nil {
 				log.Errorf("Association failed to resume previously unexecuted documents, %v", err)

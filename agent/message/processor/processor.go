@@ -96,10 +96,10 @@ type Processor struct {
 }
 
 // PluginRunner is a function that can run a set of plugins and return their outputs.
-type PluginRunner func(context context.T, documentID string, plugins []model.PluginState, sendResponse engine.SendResponse, cancelFlag task.CancelFlag) (pluginOutputs map[string]*contracts.PluginResult)
+type PluginRunner func(context context.T, commandID string, plugins []model.PluginState, sendResponse engine.SendResponse, cancelFlag task.CancelFlag) (pluginOutputs map[string]*contracts.PluginResult)
 
-var pluginRunner = func(context context.T, documentID string, plugins []model.PluginState, sendResponse engine.SendResponse, cancelFlag task.CancelFlag) (pluginOutputs map[string]*contracts.PluginResult) {
-	return engine.RunPlugins(context, documentID, "", plugins, plugin.RegisteredWorkerPlugins(context), sendResponse, nil, cancelFlag)
+var pluginRunner = func(context context.T, commandID string, plugins []model.PluginState, sendResponse engine.SendResponse, cancelFlag task.CancelFlag) (pluginOutputs map[string]*contracts.PluginResult) {
+	return engine.RunPlugins(context, commandID, "", plugins, plugin.RegisteredWorkerPlugins(context), sendResponse, nil, cancelFlag)
 }
 
 // NewProcessor initializes a new mds processor with the given parameters.
