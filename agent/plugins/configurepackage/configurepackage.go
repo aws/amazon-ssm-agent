@@ -277,6 +277,8 @@ func runConfigurePackage(
 			output.MarkAsSucceeded(true)
 		} else if result != contracts.ResultStatusSuccess {
 			output.MarkAsFailed(log, fmt.Errorf("uninstall action state was %v and not %v", result, contracts.ResultStatusSuccess))
+		} else {
+			output.MarkAsSucceeded(false)
 		}
 	default:
 		output.MarkAsFailed(log, fmt.Errorf("unsupported action: %v", input.Action))
