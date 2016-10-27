@@ -25,6 +25,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/framework/engine"
 	"github.com/aws/amazon-ssm-agent/agent/framework/plugin"
+	"github.com/aws/amazon-ssm-agent/agent/framework/runpluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	messageContracts "github.com/aws/amazon-ssm-agent/agent/message/contracts"
@@ -86,7 +87,7 @@ type Processor struct {
 	sendCommandPool      task.Pool
 	cancelCommandPool    task.Pool
 	buildReply           replyBuilder
-	sendResponse         engine.SendResponse
+	sendResponse         runpluginutil.SendResponse
 	sendDocLevelResponse engine.SendDocumentLevelResponse
 	persistData          persistData
 	orchestrationRootDir string
@@ -96,9 +97,9 @@ type Processor struct {
 }
 
 // PluginRunner is a function that can run a set of plugins and return their outputs.
-type PluginRunner func(context context.T, documentID string, plugins map[string]model.PluginState, sendResponse engine.SendResponse, cancelFlag task.CancelFlag) (pluginOutputs map[string]*contracts.PluginResult)
+type PluginRunner func(context context.T, documentID string, plugins map[string]model.PluginState, sendResponse runpluginutil.SendResponse, cancelFlag task.CancelFlag) (pluginOutputs map[string]*contracts.PluginResult)
 
-var pluginRunner = func(context context.T, documentID string, plugins map[string]model.PluginState, sendResponse engine.SendResponse, cancelFlag task.CancelFlag) (pluginOutputs map[string]*contracts.PluginResult) {
+var pluginRunner = func(context context.T, documentID string, plugins map[string]model.PluginState, sendResponse runpluginutil.SendResponse, cancelFlag task.CancelFlag) (pluginOutputs map[string]*contracts.PluginResult) {
 	return engine.RunPlugins(context, documentID, plugins, plugin.RegisteredWorkerPlugins(context), sendResponse, nil, cancelFlag)
 }
 
