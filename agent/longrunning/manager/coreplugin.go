@@ -45,7 +45,7 @@ const (
 	NumberOfCancelWorkers = 5
 
 	//poll frequency for managing lifecycle of long running plugins
-	PollFrequencyMinutes = 1 //TODO:DAEMON: change from 1 to 15 for debugging
+	PollFrequencyMinutes = 15
 
 	//hardStopTimeout is the time before the manager will be shutdown during a hardstop = 4 seconds
 	HardStopTimeout = 4 * time.Second
@@ -62,7 +62,6 @@ type T interface {
 	RequestStop(stopType contracts.StopType) (err error)
 	StopPlugin(name string, cancelFlag task.CancelFlag) (err error)
 	StartPlugin(name, configuration string, orchestrationDir string, cancelFlag task.CancelFlag) (err error)
-	EnsurePluginRegistered(name string, plugin managerContracts.Plugin) (err error)
 }
 
 // Manager is the core plugin - that manages long running plugins
@@ -263,14 +262,6 @@ func (m *Manager) stopLongRunningPlugins(stopType contracts.StopType) {
 		}(&wg, i)
 		i++
 	}
-}
-
-// EnsurePluginRegistered adds a long-running plugin if it is not already in the registry
-func (m *Manager) EnsurePluginRegistered(name string, plugin managerContracts.Plugin) (err error) {
-	if _, exists := m.registeredPlugins[name]; !exists {
-		m.registeredPlugins[name] = plugin
-	}
-	return nil
 }
 
 // configCloudWatch checks the local configuration file for cloud watch plugin to see if any updates to config

@@ -27,14 +27,11 @@ import (
 // Valid manifest files
 var sampleManifests = []string{
 	"testdata/sampleManifest.json",
-	"testdata/daemonManifest.json",
-	"testdata/simpleManifest.json",
 }
 
 // Invalid manifest files
 var errorManifests = []string{
 	"testdata/errorManifest_empty.json",
-	"testdata/errorManifest_reboot.json",
 	"testdata/errorManifest_version.json",
 	"testdata/errorManifest_versionempty.json",
 }

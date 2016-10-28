@@ -2,8 +2,5 @@
   "name": "PVDriver",
   "platform": "Windows",
   "architecture": "amd64",
-  "version": "1.0.0.0",
-  "install": "AWSPVDriverSetup.msi /quiet /update",
-  "uninstall": "AWSPVDriverSetup.msi /quiet /uninstall",
-  "reboot": "invalidRebootFlag"
+  "version": "1.0.0.0"
 }
