@@ -69,12 +69,8 @@ func TestParseManifest(t *testing.T) {
 		assert.Nil(t, err)
 		assert.Equal(t, test.Output.Name, result.Name)
 		assert.Equal(t, test.Output.Version, result.Version)
-		assert.Equal(t, test.Output.Install, result.Install)
-		assert.Equal(t, test.Output.Uninstall, result.Uninstall)
-		assert.Equal(t, test.Output.Launch, result.Launch)
 		assert.Equal(t, test.Output.Platform, result.Platform)
 		assert.Equal(t, test.Output.Architecture, result.Architecture)
-		assert.True(t, test.Output.Reboot == result.Reboot || (test.Output.Reboot == "" && result.Reboot == "false"))
 	}
 }
 

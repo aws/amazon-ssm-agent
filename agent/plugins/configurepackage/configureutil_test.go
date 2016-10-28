@@ -123,7 +123,6 @@ func createStubPluginInputInstall() *ConfigurePackagePluginInput {
 	input.Version = "9000.0.0"
 	input.Name = "PVDriver"
 	input.Action = "Install"
-	input.Source = ""
 
 	return &input
 }
@@ -134,7 +133,6 @@ func createStubPluginInputInstallLatest() *ConfigurePackagePluginInput {
 	// Set version to a large number to avoid conflict of the actual package release version
 	input.Name = "PVDriver"
 	input.Action = "Install"
-	input.Source = ""
 
 	return &input
 }
@@ -146,7 +144,6 @@ func createStubPluginInputUninstall() *ConfigurePackagePluginInput {
 	input.Version = "9000.0.0"
 	input.Name = "PVDriver"
 	input.Action = "Uninstall"
-	input.Source = ""
 
 	return &input
 }
@@ -157,7 +154,6 @@ func createStubPluginInputUninstallLatest() *ConfigurePackagePluginInput {
 	// Set version to a large number to avoid conflict of the actual package release version
 	input.Name = "PVDriver"
 	input.Action = "Uninstall"
-	input.Source = ""
 
 	return &input
 }
@@ -169,7 +165,6 @@ func createStubInvalidPluginInput() *ConfigurePackagePluginInput {
 	input.Version = "7.2"
 	input.Name = ""
 	input.Action = "InvalidAction"
-	input.Source = "https://amazon-ssm-us-west-2.s3.amazonaws.com/Packages/PVDriver/windows/amd64/9000.0.0/PVDriver.zip"
 
 	return &input
 }
@@ -220,6 +215,6 @@ func (u *mockConfigureUtility) GetCurrentVersion(name string) (installedVersion 
 	return u.currentVersion
 }
 
-func (u *mockConfigureUtility) GetLatestVersion(log log.T, name string, source string, context *updateutil.InstanceContext) (latestVersion string, err error) {
+func (u *mockConfigureUtility) GetLatestVersion(log log.T, name string, context *updateutil.InstanceContext) (latestVersion string, err error) {
 	return u.latestVersion, u.getLatestVersionError
 }

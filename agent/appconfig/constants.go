@@ -71,7 +71,7 @@ const (
 	// List all plugin names, unfortunately golang doesn't support const arrays of strings
 
 	// PluginNameAwsConfigurePackage is the name for configure package plugin
-	PluginNameAwsConfigurePackage = "aws:configureComponent" // TODO:MF: rename this to aws:configurePackage when that is supported in test environments
+	PluginNameAwsConfigurePackage = "aws:configurePackage"
 
 	// PluginNameAwsAgentUpdate is the name for agent update plugin
 	PluginNameAwsAgentUpdate = "aws:updateSsmAgent"

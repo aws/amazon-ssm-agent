@@ -56,7 +56,6 @@ type ConfigurePackagePluginInput struct {
 	Name    string `json:"name"`
 	Version string `json:"version"`
 	Action  string `json:"action"`
-	Source  string `json:"source"`
 }
 
 // ConfigurePackagePluginOutput represents the output of the plugin.
@@ -117,7 +116,6 @@ type pluginHelper interface {
 		util configureUtil,
 		packageName string,
 		version string,
-		source string,
 		output *ConfigurePackagePluginOutput,
 		context *updateutil.InstanceContext) (filePath string, err error)
 
@@ -183,7 +181,7 @@ func runConfigurePackage(
 		}
 
 		// ensure manifest file and package
-		_, ensureErr := ensurePackage(log, manager, util, input.Name, version, input.Source, &output, instanceContext)
+		_, ensureErr := ensurePackage(log, manager, util, input.Name, version, &output, instanceContext)
 		if ensureErr != nil {
 			output.MarkAsFailed(log, fmt.Errorf("unable to obtain package: %v", ensureErr))
 			return
@@ -201,14 +199,13 @@ func runConfigurePackage(
 			// NOTE: if source is specified on an install and we need to redownload the package for the
 			// currently installed version because it isn't valid on disk, we will pull from the source URI
 			// even though that may or may not be the package that installed it - it is our only decent option
-			_, ensureErr := ensurePackage(log, manager, util, input.Name, installedVersion, input.Source, &output, instanceContext)
+			_, ensureErr := ensurePackage(log, manager, util, input.Name, installedVersion, &output, instanceContext)
 			if ensureErr != nil {
 				output.MarkAsFailed(log, fmt.Errorf("unable to obtain package: %v", ensureErr))
 			} else {
 				result, err := runUninstallPackage(p,
 					input.Name,
 					installedVersion,
-					input.Source,
 					&output,
 					log,
 					instanceContext)
@@ -236,7 +233,6 @@ func runConfigurePackage(
 		result, err := runInstallPackage(p,
 			input.Name,
 			version,
-			input.Source,
 			&output,
 			manager,
 			log,
@@ -260,7 +256,7 @@ func runConfigurePackage(
 		}
 
 		// ensure manifest file and package
-		_, ensureErr := ensurePackage(log, manager, util, input.Name, version, input.Source, &output, instanceContext)
+		_, ensureErr := ensurePackage(log, manager, util, input.Name, version, &output, instanceContext)
 		if ensureErr != nil {
 			output.MarkAsFailed(log, fmt.Errorf("unable to obtain package: %v", ensureErr))
 			return
@@ -268,7 +264,6 @@ func runConfigurePackage(
 		result, err := runUninstallPackage(p,
 			input.Name,
 			version,
-			input.Source,
 			&output,
 			log,
 			instanceContext)
@@ -294,7 +289,6 @@ func ensurePackage(log log.T,
 	util configureUtil,
 	packageName string,
 	version string,
-	source string,
 	output *ConfigurePackagePluginOutput,
 	context *updateutil.InstanceContext) (manifest *PackageManifest, err error) {
 
@@ -317,7 +311,7 @@ func ensurePackage(log log.T,
 
 	// download package
 	var filePath string
-	if filePath, err = manager.downloadPackage(log, util, packageName, version, source, output, context); err != nil {
+	if filePath, err = manager.downloadPackage(log, util, packageName, version, output, context); err != nil {
 		return
 	}
 
@@ -375,7 +369,7 @@ func (m *configureManager) getVersionToInstall(log log.T,
 	if input.Version != "" {
 		version = input.Version
 	} else {
-		if version, err = util.GetLatestVersion(log, input.Name, input.Source, context); err != nil {
+		if version, err = util.GetLatestVersion(log, input.Name, context); err != nil {
 			return
 		}
 	}
@@ -392,7 +386,7 @@ func (m *configureManager) getVersionToUninstall(log log.T,
 	} else if installedVersion := util.GetCurrentVersion(input.Name); installedVersion != "" {
 		version = installedVersion
 	} else {
-		version, err = util.GetLatestVersion(log, input.Name, input.Source, context)
+		version, err = util.GetLatestVersion(log, input.Name, context)
 	}
 	return
 }
@@ -402,21 +396,17 @@ func (m *configureManager) downloadPackage(log log.T,
 	util configureUtil,
 	packageName string,
 	version string,
-	source string,
 	output *ConfigurePackagePluginOutput,
 	context *updateutil.InstanceContext) (filePath string, err error) {
 	// package to download
 	packageFilename := getPackageFilename(packageName, context)
 
+	//TODO:OFFLINE: build packageLocation from source URI
+	//   We should probably support both a URI to a "folder" that gets a filename tacked onto the end
+	//   and a full path to a compressed package file
+
 	// path to package
-	packageLocation := source
-	if packageLocation == "" {
-		packageLocation = getS3Location(packageName, version, context, packageFilename)
-	} else {
-		//TODO:OFFLINE: build packageLocation from source URI
-		//   We should probably support both a URI to a "folder" that gets a filename tacked onto the end
-		//   and a full path to a compressed package file
-	}
+	packageLocation := getS3Location(packageName, version, context, packageFilename)
 
 	// path to download destination
 	packageDestination, err := util.CreatePackageFolder(packageName, version)
@@ -448,7 +438,6 @@ func (m *configureManager) downloadPackage(log log.T,
 func runInstallPackage(p *Plugin,
 	packageName string,
 	version string,
-	source string,
 	output *ConfigurePackagePluginOutput,
 	manager pluginHelper,
 	log log.T,
@@ -468,7 +457,6 @@ func runInstallPackage(p *Plugin,
 func runUninstallPackage(p *Plugin,
 	packageName string,
 	version string,
-	source string,
 	output *ConfigurePackagePluginOutput,
 	log log.T,
 	context *updateutil.InstanceContext,
@@ -558,7 +546,6 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 	defer func() { res.EndDateTime = time.Now() }()
 
 	//loading Properties as list since aws:configurePackage uses properties as list
-	// TODO:MF: Really?  What would it look like to have more than one block of parameters for this, is that multiple package actions in one document?
 	var properties []interface{}
 	if properties, res = pluginutil.LoadParametersAsList(log, config.Properties); res.Code != 0 {
 		pluginutil.PersistPluginInformationToCurrent(log, Name(), config, res)

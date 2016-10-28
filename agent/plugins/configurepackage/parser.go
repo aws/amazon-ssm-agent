@@ -19,7 +19,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"regexp"
-	"strconv"
 
 	"github.com/aws/amazon-ssm-agent/agent/log"
 )
@@ -30,10 +29,6 @@ type PackageManifest struct {
 	Platform     string `json:"platform"`
 	Architecture string `json:"architecture"`
 	Version      string `json:"version"`
-	Install      string `json:"install"`
-	Uninstall    string `json:"uninstall"`
-	Reboot       string `json:"reboot"`
-	Launch       string `json:"launch"`
 }
 
 // parsePackageManifest parses the manifest to provide install/uninstall information.
@@ -90,17 +85,6 @@ func validatePackageManifest(log log.T, parsedManifest *PackageManifest) error {
 		if matched, err := regexp.MatchString(PatternVersion, version); matched == false || err != nil {
 			return fmt.Errorf("invalid version string %v", version)
 		}
-	}
-	// TODO:MF: Should we require at least install+uninstall or launch?  Otherwise we just unzip or delete which would work, but seems likely pointless
-
-	// ensure properly formatted optional fields and set defaults
-	if parsedManifest.Reboot != "" {
-		// ensure reboot is true or false
-		if _, err := strconv.ParseBool(parsedManifest.Reboot); err != nil {
-			return fmt.Errorf("invalid reboot flag")
-		}
-	} else {
-		parsedManifest.Reboot = "false" //TODO:MF: Can we make this a bool in parsedManifest?
 	}
 	// TODO:MF: validate platform and arch against this instance's platform and arch?  We don't really use them...
 

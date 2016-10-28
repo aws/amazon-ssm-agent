@@ -65,7 +65,7 @@ type configureUtil interface {
 	CreatePackageFolder(name string, version string) (folder string, err error)
 	HasValidPackage(name string, version string) bool
 	GetCurrentVersion(name string) (installedVersion string)
-	GetLatestVersion(log log.T, name string, source string, context *updateutil.InstanceContext) (latestVersion string, err error)
+	GetLatestVersion(log log.T, name string, context *updateutil.InstanceContext) (latestVersion string, err error)
 }
 
 type configureUtilImp struct{}
@@ -226,11 +226,7 @@ func parseVersion(version string) (major int, minor int, build int, err error) {
 
 // TODO:MF: This is the first utility function that calls out to S3 or some URI - perhaps this is part of a different set of utilities
 // GetLatestVersion looks up the latest version of a given package for this platform/arch in S3 or manifest at source location
-func (util *configureUtilImp) GetLatestVersion(log log.T, name string, source string, context *updateutil.InstanceContext) (latestVersion string, err error) {
-	if source != "" {
-		// TODO:MF: Copy manifest from source location, parse, and return version
-		return "", nil
-	} else {
-		return getLatestS3Version(log, name, context)
-	}
+func (util *configureUtilImp) GetLatestVersion(log log.T, name string, context *updateutil.InstanceContext) (latestVersion string, err error) {
+	// TODO:OFFLINE: Copy manifest from source location, parse, and return version
+	return getLatestS3Version(log, name, context)
 }

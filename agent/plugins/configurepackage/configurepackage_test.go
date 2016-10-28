@@ -152,7 +152,6 @@ func TestInstallPackage(t *testing.T) {
 	_, err := runInstallPackage(plugin,
 		pluginInformation.Name,
 		pluginInformation.Version,
-		pluginInformation.Source,
 		output,
 		manager,
 		logger,
@@ -175,7 +174,6 @@ func TestUninstallPackage(t *testing.T) {
 	_, err := runUninstallPackage(plugin,
 		pluginInformation.Name,
 		pluginInformation.Version,
-		pluginInformation.Source,
 		output,
 		logger,
 		instanceContext)
@@ -193,7 +191,6 @@ func TestValidateInput(t *testing.T) {
 	input.Version = "1.0.0"
 	input.Name = "PVDriver"
 	input.Action = "InvalidAction"
-	input.Source = "https://amazon-ssm-us-west-2.s3.amazonaws.com/Packages/PVDriver/windows/amd64/9000.0.0/PVDriver-amd64.zip"
 
 	manager := configureManager{}
 
@@ -210,7 +207,6 @@ func TestValidateInput_Name(t *testing.T) {
 	input.Version = "9000.0.0.0"
 	input.Name = ""
 	input.Action = "InvalidAction"
-	input.Source = "https://amazon-ssm-us-west-2.s3.amazonaws.com/Packages/PVDriver/windows/amd64/9000.0.0/PVDriver-amd64.zip"
 
 	manager := configureManager{}
 	result, err := manager.validateInput(&input)
@@ -227,7 +223,6 @@ func TestValidateInput_EmptyVersionWithInstall(t *testing.T) {
 	input.Version = ""
 	input.Name = "PVDriver"
 	input.Action = "Install"
-	input.Source = "https://amazon-ssm-us-west-2.s3.amazonaws.com/Packages/PVDriver/windows/amd64/9000.0.0/PVDriver-amd64.zip"
 
 	manager := configureManager{}
 	result, err := manager.validateInput(&input)
@@ -243,7 +238,6 @@ func TestValidateInput_EmptyVersionWithUninstall(t *testing.T) {
 	input.Version = ""
 	input.Name = "PVDriver"
 	input.Action = "Uninstall"
-	input.Source = "https://amazon-ssm-us-west-2.s3.amazonaws.com/Packages/PVDriver/windows/amd64/9000.0.0/PVDriver-amd64.zip"
 
 	manager := configureManager{}
 	result, err := manager.validateInput(&input)
@@ -267,7 +261,7 @@ func TestDownloadPackage(t *testing.T) {
 	stubs.Set()
 	defer stubs.Clear()
 
-	fileName, err := manager.downloadPackage(logger, &util, pluginInformation.Name, pluginInformation.Version, pluginInformation.Source, &output, context)
+	fileName, err := manager.downloadPackage(logger, &util, pluginInformation.Name, pluginInformation.Version, &output, context)
 
 	assert.Equal(t, "packages/PVDriver/9000.0.0.0/PVDriver.zip", fileName)
 	assert.NoError(t, err)
@@ -289,7 +283,7 @@ func TestDownloadPackage_Failed(t *testing.T) {
 	stubs.Set()
 	defer stubs.Clear()
 
-	fileName, err := manager.downloadPackage(logger, &util, pluginInformation.Name, pluginInformation.Version, pluginInformation.Source, &output, context)
+	fileName, err := manager.downloadPackage(logger, &util, pluginInformation.Name, pluginInformation.Version, &output, context)
 
 	assert.Empty(t, fileName)
 	assert.Error(t, err)
@@ -404,7 +398,6 @@ func (m *mockConfigureManager) downloadPackage(log log.T,
 	util configureUtil,
 	packageName string,
 	version string,
-	source string,
 	output *ConfigurePackagePluginOutput,
 	context *updateutil.InstanceContext) (filePath string, err error) {
 
