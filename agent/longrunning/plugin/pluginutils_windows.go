@@ -17,6 +17,7 @@
 package plugin
 
 import (
+	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/longrunning/plugin/cloudwatch"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/pluginutil"
 )
@@ -25,8 +26,9 @@ const (
 	PluginNameAwsCloudwatch = "aws:cloudWatch"
 )
 
-// RegisteredPlugins loads all registered long running plugins in memory
-func RegisteredPlugins() map[string]Plugin {
+// loadPlatformDepedentPlugins loads all registered long running plugins in memory
+func loadPlatformDependentPlugins(context context.T) map[string]Plugin {
+	log := context.Log()
 	//long running plugins that can be started/stopped/configured by long running plugin manager
 	longrunningplugins := make(map[string]Plugin)
 
@@ -45,6 +47,8 @@ func RegisteredPlugins() map[string]Plugin {
 
 		//add the registered plugin in the map
 		longrunningplugins[PluginNameAwsCloudwatch] = cw
+	} else {
+		log.Errorf("failed to create long-running plugin %s %v", PluginNameAwsCloudwatch, err)
 	}
 
 	return longrunningplugins

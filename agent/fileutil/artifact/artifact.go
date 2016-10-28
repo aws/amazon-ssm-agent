@@ -114,15 +114,12 @@ func httpDownload(log log.T, fileURL string, destFile string) (output DownloadOu
 	return
 }
 
-// s3Download attempts to download a file via the aws sdk.
-func s3Download(log log.T, amazonS3URL s3util.AmazonS3URL, destFile string) (output DownloadOutput, err error) {
-	log.Debugf("attempting to download as s3 download %v", destFile)
-	eTagFile := destFile + ".etag"
-
-	config := &aws.Config{}
+// awsConfig creates a config and sets region and credential information given an S3 URL
+func awsConfig(log log.T, amazonS3URL s3util.AmazonS3URL) (config *aws.Config, err error) {
+	config = &aws.Config{}
 	var appConfig appconfig.SsmagentConfig
-	appConfig, err = appconfig.Config(false)
-	if err != nil {
+	appConfig, errConfig := appconfig.Config(false)
+	if errConfig != nil {
 		log.Error("failed to read appconfig.")
 	} else {
 		creds, err1 := appConfig.ProfileCredentials()
@@ -132,7 +129,39 @@ func s3Download(log log.T, amazonS3URL s3util.AmazonS3URL, destFile string) (out
 	}
 	config.S3ForcePathStyle = aws.Bool(amazonS3URL.IsPathStyle)
 	config.Region = aws.String(amazonS3URL.Region)
+	return config, nil
+}
 
+// ListS3Folders returns the folders under a given S3 URL where folders are keys whose prefix is the URL key
+// and contain a / after the prefix.  The folder name is the part between the prefix and the /.
+func ListS3Folders(log log.T, amazonS3URL s3util.AmazonS3URL) (folderNames []string, err error) {
+	config, _ := awsConfig(log, amazonS3URL)
+	prefix := amazonS3URL.Key + "/"
+	params := &s3.ListObjectsInput{
+		Bucket:    aws.String(amazonS3URL.Bucket),
+		Prefix:    &prefix,
+		Delimiter: aws.String("/"),
+	}
+	s3client := s3.New(session.New(config))
+	req, resp := s3client.ListObjectsRequest(params)
+	err = req.Send()
+	if err != nil {
+		return
+	}
+	//TODO:MF: This works, but the string trimming required makes me think there should be some easier way to get this information
+	folders := make([]string, 0)
+	for _, key := range resp.CommonPrefixes {
+		folders = append(folders, strings.TrimRight(strings.Replace(*key.Prefix, prefix, "", -1), "/"))
+	}
+	return folders, nil
+}
+
+// s3Download attempts to download a file via the aws sdk.
+func s3Download(log log.T, amazonS3URL s3util.AmazonS3URL, destFile string) (output DownloadOutput, err error) {
+	log.Debugf("attempting to download as s3 download %v", destFile)
+	eTagFile := destFile + ".etag"
+
+	config, _ := awsConfig(log, amazonS3URL)
 	params := &s3.GetObjectInput{
 		Bucket: aws.String(amazonS3URL.Bucket),
 		Key:    aws.String(amazonS3URL.Key),

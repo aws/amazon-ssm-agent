@@ -58,3 +58,27 @@ type LongRunningPluginInput struct {
 	Settings   PluginSettings
 	Properties string
 }
+
+func RegisteredPlugins(context context.T) map[string]Plugin {
+	longrunningplugins := make(map[string]Plugin)
+	context.Log().Debug("Registering long-running plugins")
+
+	for key, value := range loadPlatformIndependentPlugins(context) {
+		longrunningplugins[key] = value
+	}
+
+	for key, value := range loadPlatformDependentPlugins(context) {
+		longrunningplugins[key] = value
+	}
+
+	context.Log().Debugf("Registered %v long-running plugins", len(longrunningplugins))
+	return longrunningplugins
+}
+
+// loadPlatformIndependentPlugins loads all long running plugins in memory
+func loadPlatformIndependentPlugins(context context.T) map[string]Plugin {
+	//long running plugins that can be started/stopped/configured by long running plugin manager
+	longrunningplugins := make(map[string]Plugin)
+
+	return longrunningplugins
+}

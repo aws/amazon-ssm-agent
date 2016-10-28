@@ -84,3 +84,8 @@ func (m *Mock) StopPlugin(name string, cancelFlag task.CancelFlag) (err error) {
 func (m *Mock) StartPlugin(name, configuration, orchestrationDir string, cancelFlag task.CancelFlag) (err error) {
 	return nil
 }
+
+// EnsurePluginRegistered adds a long-running plugin if it is not already in the registry
+func (m *Mock) EnsurePluginRegistered(name string, plugin managerContracts.Plugin) (err error) {
+	return nil
+}
