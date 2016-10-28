@@ -26,6 +26,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/inventory/model"
@@ -93,7 +94,7 @@ func (t *T) Run(context context.T, configuration model.Config) (items []model.It
 	// Get custom inventory folder, fall back if not specified
 	customFolder := configuration.Location
 	if customFolder == "" {
-		customFolder = context.AppConfig().Ssm.CustomInventoryDefaultLocation
+		customFolder = appconfig.DefaultCustomInventoryFolder
 	}
 
 	// Get custom inventory files' path
