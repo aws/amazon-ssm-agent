@@ -69,7 +69,8 @@ type PluginRunner struct {
 func ParseDocument(context context.T, documentRaw []byte, orchestrationDir string, s3Bucket string, s3KeyPrefix string, messageID string, documentID string, defaultWorkingDirectory string) (pluginsInfo []model.PluginState, err error) {
 	var docContent contracts.DocumentContent
 	err = json.Unmarshal(documentRaw, &docContent)
-	pluginConfigurations := make([]*contracts.Configuration, len(docContent.RuntimeConfig))
+	pluginConfigurations := make([]*contracts.Configuration, 0, len(docContent.RuntimeConfig))
+
 	for pluginName, pluginConfig := range docContent.RuntimeConfig {
 		config := contracts.Configuration{
 			Settings:                pluginConfig.Settings,
@@ -79,16 +80,19 @@ func ParseDocument(context context.T, documentRaw []byte, orchestrationDir strin
 			OrchestrationDirectory:  fileutil.BuildPath(orchestrationDir, pluginName),
 			MessageId:               messageID,
 			BookKeepingFileName:     documentID,
+			PluginID:                pluginName,
 			DefaultWorkingDirectory: defaultWorkingDirectory,
 		}
 		pluginConfigurations = append(pluginConfigurations, &config)
 	}
 
 	//initialize plugin states
-	pluginsInfo = make([]model.PluginState, len(pluginConfigurations))
+	pluginsInfo = make([]model.PluginState, 0, len(pluginConfigurations))
 
 	for _, value := range pluginConfigurations {
 		var plugin model.PluginState
+		plugin.Id = value.PluginID
+		plugin.Name = value.PluginID
 		plugin.Configuration = *value
 		plugin.HasExecuted = false
 		pluginsInfo = append(pluginsInfo, plugin)
@@ -99,8 +103,8 @@ func ParseDocument(context context.T, documentRaw []byte, orchestrationDir strin
 
 func (r *PluginRunner) ExecuteDocument(context context.T, pluginInput []model.PluginState, documentID string, documentCreatedDate string) (pluginOutputs map[string]*contracts.PluginResult) {
 	log := context.Log()
-	for name, _ := range pluginInput {
-		log.Debugf("Document type %v", name)
+	for _, state := range pluginInput {
+		log.Debugf("Document type %v", state.Name)
 	}
 
 	return r.RunPlugins(context, documentID, documentCreatedDate, pluginInput, r.Plugins, r.SendReply, r.UpdateAssoc, r.CancelFlag)
