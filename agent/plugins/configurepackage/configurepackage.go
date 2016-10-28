@@ -459,7 +459,6 @@ func runInstallPackage(p *Plugin,
 	_, status, err = executeAction(p, "install", packageName, version, log, output, directory)
 	if err == nil {
 		output.AppendInfo(log, "Successfully installed %v %v", packageName, version)
-		_, status, err = executeAction(p, "start", packageName, version, log, output, directory)
 	}
 	return
 }
@@ -476,15 +475,12 @@ func runUninstallPackage(p *Plugin,
 	status = contracts.ResultStatusSuccess
 
 	directory := filepath.Join(appconfig.PackageRoot, packageName, version)
-	_, status, err = executeAction(p, "stop", packageName, version, log, output, directory)
+	_, status, err = executeAction(p, "uninstall", packageName, version, log, output, directory)
 	if err == nil {
-		_, status, err = executeAction(p, "uninstall", packageName, version, log, output, directory)
-		if err == nil {
-			if err = filesysdep.RemoveAll(directory); err != nil {
-				return contracts.ResultStatusFailed, fmt.Errorf("failed to delete directory %v due to %v", directory, err)
-			}
-			output.AppendInfo(log, "Successfully uninstalled %v %v", packageName, version)
+		if err = filesysdep.RemoveAll(directory); err != nil {
+			return contracts.ResultStatusFailed, fmt.Errorf("failed to delete directory %v due to %v", directory, err)
 		}
+		output.AppendInfo(log, "Successfully uninstalled %v %v", packageName, version)
 	}
 	return
 }

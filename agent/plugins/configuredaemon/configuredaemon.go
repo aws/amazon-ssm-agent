@@ -1,9 +1,30 @@
+// Copyright 2016 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+//
+// Licensed under the Apache License, Version 2.0 (the "License"). You may not
+// use this file except in compliance with the License. A copy of the
+// License is located at
+//
+// http://aws.amazon.com/apache2.0/
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+// implied. See the License for the specific language governing
+// permissions and limitations under the License.
+
+// Package configuredaemon implements the ConfigureDaemon plugin.
 package configuredaemon
 
 import (
+	"fmt"
+	"path/filepath"
+	"strings"
+
+	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
-	"github.com/aws/amazon-ssm-agent/agent/framework/runutil"
+	"github.com/aws/amazon-ssm-agent/agent/fileutil"
+	"github.com/aws/amazon-ssm-agent/agent/framework/runpluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/longrunning/manager"
 	managerContracts "github.com/aws/amazon-ssm-agent/agent/longrunning/plugin"
@@ -41,14 +62,9 @@ func NewPlugin(pluginConfig pluginutil.PluginConfig) (*Plugin, error) {
 	return &plugin, err
 }
 
-// Name returns the plugin name
-func Name() string {
-	return "aws:configureDaemon"
-}
-
 // Execute runs multiple sets of commands and returns their outputs.
 // res.Output will contain a slice of RunCommandPluginOutput.
-func (p *Plugin) Execute(context context.T, config contracts.Configuration, cancelFlag task.CancelFlag, subDocumentRunner runutil.Runner) (res contracts.PluginResult) {
+func (p *Plugin) Execute(context context.T, config contracts.Configuration, cancelFlag task.CancelFlag, subDocumentRunner runpluginutil.PluginRunner) (res contracts.PluginResult) {
 	log := context.Log()
 
 	var properties []interface{}
@@ -102,10 +118,17 @@ func runConfigureDaemon(
 	//log := context.Log()
 
 	var input rundaemon.DaemonPluginInput
+	var WorkingDir string
 	var err error
 	if err = jsonutil.Remarshal(rawPluginInput, &input); err != nil {
 		output.Status = contracts.ResultStatusFailed
 		return
+	}
+
+	if input.PackageLocation != "" {
+		WorkingDir = input.PackageLocation
+	} else {
+		WorkingDir = daemonWorkingDir
 	}
 
 	// TODO:DAEMON: we're using the command line in a lot of places, we probably only need it in the rundaemon plugin or in the call to startplugin
@@ -123,16 +146,40 @@ func runConfigureDaemon(
 				State:         managerContracts.PluginState{IsEnabled: true},
 			},
 			Handler: &rundaemon.Plugin{
-				ExeLocation: daemonWorkingDir,
+				ExeLocation: WorkingDir,
 				Name:        input.Name,
 				CommandLine: input.Command,
 			},
 		}
+		if strings.HasPrefix(daemonWorkingDir, appconfig.PackageRoot) {
+			// TODO:MF: make deps file to support mocking filesystem depedency
+			var errDaemonDoc error
+			if ssmDaemonDoc, errDaemonDoc := jsonutil.Marshal(input); errDaemonDoc == nil {
+				daemonFileName := filepath.Join(daemonWorkingDir, "ssm-daemon.json")
+				if fileutil.Exists(daemonFileName) {
+					errDaemonDoc = fileutil.DeleteFile(daemonFileName)
+				}
+				if errDaemonDoc == nil {
+					errDaemonDoc = fileutil.WriteAllText(daemonFileName, ssmDaemonDoc)
+				}
+			}
+			if errDaemonDoc != nil {
+				output.Stderr = fmt.Sprintf("%v\n%v", output.Stderr, fmt.Sprintf("Failed to register ssm daemon: %v", errDaemonDoc.Error()))
+			}
+		}
 		p.lrpm.EnsurePluginRegistered(input.Name, plugin)
+		// TODO need to test this
+		//p.lrpm.StopPlugin(input.Name, cancelFlag)
 		p.lrpm.StartPlugin(input.Name, input.Command, orchestrationDir, cancelFlag)
 	case "Stop":
 		p.lrpm.StopPlugin(input.Name, cancelFlag)
 	}
 	output.Status = contracts.ResultStatusSuccess
 	return output
+
+}
+
+// Name returns the plugin name
+func Name() string {
+	return appconfig.PluginNameAwsConfigureDaemon
 }

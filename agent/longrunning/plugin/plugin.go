@@ -18,15 +18,11 @@ import (
 	"path/filepath"
 	"time"
 
-	"io/ioutil"
-
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
-	"github.com/aws/amazon-ssm-agent/agent/framework/runpluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/longrunning/plugin/rundaemon"
-	"github.com/aws/amazon-ssm-agent/agent/plugins/pluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 )
 
@@ -96,28 +92,12 @@ func loadPlatformIndependentPlugins(context context.T) map[string]Plugin {
 			if verdirs, err := fileutil.GetDirectoryNames(filepath.Join(appconfig.PackageRoot, pkgdir)); err == nil {
 				for _, verdir := range verdirs {
 					daemonWorkingDir := filepath.Join(appconfig.PackageRoot, pkgdir, verdir)
-					daemonStartFile := filepath.Join(daemonWorkingDir, "start.json")
+					daemonStartFile := filepath.Join(daemonWorkingDir, "ssm-daemon.json")
 					if fileutil.Exists(daemonStartFile) {
 						// load file
 						var input rundaemon.DaemonPluginInput
 						var err error
-						filedata, _ := ioutil.ReadFile(daemonStartFile)
-						pluginsInfo, parseErr := runpluginutil.ParseDocument(
-							context,
-							filedata,
-							"", "", "", "", "", daemonWorkingDir)
-						pluginInfo, exists := pluginsInfo["aws:configureDaemon"]
-						if !exists {
-							log.Debugf("Daemon configuration file %v did not unmarshal as expected.  Contains %v entries, parse error: %v", daemonStartFile, len(pluginsInfo), parseErr)
-							continue
-						}
-						properties, res := pluginutil.LoadParametersAsList(log, pluginInfo.Configuration.Properties)
-						if res.Code != 0 || len(properties) == 0 {
-							log.Debugf("Daemon properties did not load as expected, %v", res.Error.Error())
-							continue
-						}
-						// TODO:MF: We assume in a lot of places that documents can contain a list of actions and then we only deal with the first
-						if err = jsonutil.Remarshal(properties[0], &input); err == nil {
+						if err = jsonutil.UnmarshalFile(daemonStartFile, &input); err == nil {
 							log.Infof("Registering long-running plugin for daemon %v", input.Name)
 							plugin := Plugin{
 								Info: PluginInfo{
