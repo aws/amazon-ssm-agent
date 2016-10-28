@@ -22,6 +22,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/framework/runpluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/lrpminvoker"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/pluginutil"
+	"github.com/aws/amazon-ssm-agent/agent/plugins/refreshassociation"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/runcommand"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/updatessmagent"
 )
@@ -129,6 +130,15 @@ func loadPlatformIndependentPlugins(context context.T) runpluginutil.PluginRegis
 		log.Errorf("failed to create plugin %s %v", updateAgentPluginName, err)
 	} else {
 		workerPlugins[updateAgentPluginName] = updateAgentPlugin
+	}
+
+	// registering aws:refreshAssociation plugin
+	refreshAssociationPluginName := refreshassociation.Name()
+	refreshAssociationPlugin, err := refreshassociation.NewPlugin(pluginutil.DefaultPluginConfig())
+	if err != nil {
+		log.Errorf("failed to create plugin %s %v", refreshAssociationPluginName, err)
+	} else {
+		workerPlugins[refreshAssociationPluginName] = refreshAssociationPlugin
 	}
 
 	return workerPlugins

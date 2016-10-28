@@ -79,7 +79,7 @@ func TestExecuteDocument(t *testing.T) {
 		UpdateAssoc: NoUpdate,
 		CancelFlag:  &task.MockCancelFlag{},
 	}
-	result := runner.ExecuteDocument(mockContext, pluginsInfo, testDocumentID)
+	result := runner.ExecuteDocument(mockContext, pluginsInfo, testDocumentID, "1/1/2000")
 	assert.Equal(t, 1, len(result))
 	_, exists := result["foo"]
 	assert.True(t, exists)

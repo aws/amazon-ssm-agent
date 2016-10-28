@@ -111,6 +111,9 @@ func DefaultConfig() SsmagentConfig {
 	}
 	var ssm = SsmCfg{
 		HealthFrequencyMinutes: 5,
+		BasicInventoryGatherer: "Enabled",
+		InventoryOptimizer:     "Enabled",
+		InventoryPlugin:        "Enabled",
 		AssociationRetryLimit:  5,
 	}
 	var agent = AgentInfo{

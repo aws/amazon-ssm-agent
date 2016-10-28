@@ -36,6 +36,7 @@ var (
 
 // PluginResult represents a plugin execution result.
 type PluginResult struct {
+	PluginName         string       `json:"pluginName"`
 	Status             ResultStatus `json:"status"`
 	Code               int          `json:"code"`
 	Output             interface{}  `json:"output"`
@@ -78,6 +79,7 @@ type Configuration struct {
 	OrchestrationDirectory  string
 	MessageId               string
 	BookKeepingFileName     string
+	PluginID                string
 	DefaultWorkingDirectory string
 }
 

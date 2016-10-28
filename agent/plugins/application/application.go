@@ -27,6 +27,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/framework/runpluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/parameterstore"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/pluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/rebooter"
 	"github.com/aws/amazon-ssm-agent/agent/task"
@@ -113,7 +114,7 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 	var properties []interface{}
 	if properties, res = pluginutil.LoadParametersAsList(log, config.Properties); res.Code != 0 {
 
-		pluginutil.PersistPluginInformationToCurrent(log, Name(), config, res)
+		pluginutil.PersistPluginInformationToCurrent(log, config.PluginID, config, res)
 		return res
 	}
 
@@ -132,14 +133,14 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 		if cancelFlag.ShutDown() {
 			res.Code = 1
 			res.Status = contracts.ResultStatusFailed
-			pluginutil.PersistPluginInformationToCurrent(log, Name(), config, res)
+			pluginutil.PersistPluginInformationToCurrent(log, config.PluginID, config, res)
 			return
 		}
 
 		if cancelFlag.Canceled() {
 			res.Code = 1
 			res.Status = contracts.ResultStatusCancelled
-			pluginutil.PersistPluginInformationToCurrent(log, Name(), config, res)
+			pluginutil.PersistPluginInformationToCurrent(log, config.PluginID, config, res)
 			return
 		}
 
@@ -182,7 +183,7 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 	}
 
 	res.Output = finalOut.String()
-	pluginutil.PersistPluginInformationToCurrent(log, Name(), config, res)
+	pluginutil.PersistPluginInformationToCurrent(log, config.PluginID, config, res)
 
 	return res
 }
@@ -235,6 +236,30 @@ func (p *Plugin) runCommands(log log.T, pluginInput ApplicationPluginInput, orch
 	}
 	log.Debugf("mode is %v", mode)
 
+	// Resolve ssm parameters
+	// This may contain sensitive information, do not log this data after resolving.
+	if pluginInput.Source, err = parameterstore.ResolveString(log, pluginInput.Source); err != nil {
+		out.Errors = append(out.Errors, err.Error())
+		log.Errorf("Failed to resolve ssm parameters. Error: - %v", err)
+		return
+	}
+
+	// Resolve ssm parameters
+	// This may contain sensitive information, do not log this data after resolving.
+	if pluginInput.SourceHash, err = parameterstore.ResolveString(log, pluginInput.SourceHash); err != nil {
+		out.Errors = append(out.Errors, err.Error())
+		log.Errorf("Failed to resolve ssm parameters. Error: - %v", err)
+		return
+	}
+
+	// Resolve ssm parameters
+	// This may contain sensitive information, do not log this data after resolving.
+	if pluginInput.SourceHashType, err = parameterstore.ResolveString(log, pluginInput.SourceHashType); err != nil {
+		out.Errors = append(out.Errors, err.Error())
+		log.Errorf("Failed to resolve ssm parameters. Error: - %v", err)
+		return
+	}
+
 	var localFilePath string
 	absoluteTestPath := filepath.Join(p.DefaultWorkingDirectory, pluginInput.Source)
 	// If Source is a local file with an absolute path or relative to the DefaultWorkingDirectory use that, otherwise download
@@ -263,6 +288,14 @@ func (p *Plugin) runCommands(log log.T, pluginInput ApplicationPluginInput, orch
 	stdoutFilePath := filepath.Join(orchestrationDir, p.StdoutFileName)
 	stderrFilePath := filepath.Join(orchestrationDir, p.StderrFileName)
 	log.Debugf("stdout file %v, stderr file %v", stdoutFilePath, stderrFilePath)
+
+	// Resolve ssm parameters
+	// This may contain sensitive information, do not log this data after resolving.
+	if pluginInput.Parameters, err = parameterstore.ResolveString(log, pluginInput.Parameters); err != nil {
+		out.Errors = append(out.Errors, err.Error())
+		log.Errorf("Failed to resolve ssm parameters. Error: - %v", err)
+		return
+	}
 
 	// Construct Command Name and Arguments
 	commandName := msiExecCommand

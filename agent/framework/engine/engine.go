@@ -35,32 +35,38 @@ type SendDocumentLevelResponse func(messageID string, resultStatus contracts.Res
 func RunPlugins(
 	context context.T,
 	documentID string,
-	plugins map[string]stateModel.PluginState,
+	documentCreatedDate string,
+	plugins []stateModel.PluginState,
 	pluginRegistry runpluginutil.PluginRegistry,
 	sendReply runpluginutil.SendResponse,
 	updateAssoc runpluginutil.UpdateAssociation,
 	cancelFlag task.CancelFlag,
 ) (pluginOutputs map[string]*contracts.PluginResult) {
 
-	totalNumberOfPlugins := len(plugins)
+	totalNumberOfActions := len(plugins)
 
 	pluginOutputs = make(map[string]*contracts.PluginResult)
-	for pluginID, pluginState := range plugins {
+	for _, pluginState := range plugins {
+		pluginID := pluginState.Id     // the identifier of the plugin
+		pluginName := pluginState.Name // the name of the plugin
 		if pluginState.HasExecuted {
 			context.Log().Debugf(
-				"Skipping execution of Plugin - %v of command - %v since it has already executed.",
-				pluginID,
+				"Skipping execution of Plugin - %v of document - %v since it has already executed.",
+				pluginName,
 				documentID)
 			pluginOutput := pluginState.Result
+			pluginOutput.PluginName = pluginName //TODO change this into plugin result
 			pluginOutputs[pluginID] = &pluginOutput
 			continue
 		}
-		context.Log().Debugf("Executing plugin - %v of command - %v", pluginID, documentID)
+		context.Log().Debugf("Executing plugin - %v of document - %v", pluginName, documentID)
 
 		// populate plugin start time and status
 		configuration := pluginState.Configuration
+		configuration.PluginID = pluginID
 
 		pluginOutputs[pluginID] = &contracts.PluginResult{
+			PluginName:    pluginName,
 			Status:        contracts.ResultStatusInProgress,
 			StartDateTime: time.Now(),
 		}
@@ -75,9 +81,9 @@ func RunPlugins(
 		pluginHandlerFound := false
 
 		//check if the said plugin is a long running plugin
-		handler, isLongRunningPlugin := plugin.RegisteredLongRunningPlugins(context)[pluginID]
+		handler, isLongRunningPlugin := plugin.RegisteredLongRunningPlugins(context)[pluginName]
 		//check if the said plugin is a worker plugin
-		p, isWorkerPlugin := pluginRegistry[pluginID]
+		p, isWorkerPlugin := pluginRegistry[pluginName]
 
 		runner := runpluginutil.PluginRunner{
 			RunPlugins:  RunPlugins,
@@ -87,25 +93,25 @@ func RunPlugins(
 			CancelFlag:  cancelFlag,
 		}
 
-		isSupported, platformDetail := plugin.IsPluginSupportedForCurrentPlatform(context.Log(), pluginID)
+		isSupported, platformDetail := plugin.IsPluginSupportedForCurrentPlatform(context.Log(), pluginName)
 		if isSupported {
 			switch {
 			case isLongRunningPlugin:
 				pluginHandlerFound = true
 				context.Log().Infof("%s is a long running plugin", pluginID)
-				r = runPlugin(context, handler, pluginID, configuration, cancelFlag, runner)
+				r = runPlugin(context, handler, pluginName, configuration, cancelFlag, runner)
 			case isWorkerPlugin:
 				pluginHandlerFound = true
 				context.Log().Infof("%s is a worker plugin", pluginID)
-				r = runPlugin(context, p, pluginID, configuration, cancelFlag, runner)
+				r = runPlugin(context, p, pluginName, configuration, cancelFlag, runner)
 			default:
-				err := fmt.Errorf("Plugin with id %s not found!", pluginID)
+				err := fmt.Errorf("Plugin with id %s not found!", pluginName)
 				pluginOutputs[pluginID].Status = contracts.ResultStatusFailed
 				pluginOutputs[pluginID].Error = err
 				context.Log().Error(err)
 			}
 		} else {
-			err := fmt.Errorf("Plugin with id %s is not supported in current platform!\n%s", pluginID, platformDetail)
+			err := fmt.Errorf("Plugin with id %s is not supported in current platform!\n%s", pluginName, platformDetail)
 			pluginOutputs[pluginID].Status = contracts.ResultStatusFailed
 			pluginOutputs[pluginID].Error = err
 			context.Log().Error(err)
@@ -126,12 +132,12 @@ func RunPlugins(
 		pluginOutputs[pluginID].EndDateTime = time.Now()
 		log := context.Log()
 		if sendReply != nil {
-			log.Infof("Sending response on plugin completion: %v", pluginID)
-			sendReply(documentID, pluginID, pluginOutputs)
+			log.Infof("Sending response on plugin completion: %v", pluginName)
+			sendReply(documentID, pluginName, pluginOutputs)
 		}
 		if updateAssoc != nil {
-			log.Infof("Update assocition on plugin completion: %v", pluginID)
-			updateAssoc(log, documentID, pluginOutputs, totalNumberOfPlugins)
+			log.Infof("Update association on plugin completion: %v", pluginName)
+			updateAssoc(log, documentID, documentCreatedDate, pluginOutputs, totalNumberOfActions)
 		}
 
 	}

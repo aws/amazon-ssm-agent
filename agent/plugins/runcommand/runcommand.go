@@ -28,6 +28,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/framework/runpluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/parameterstore"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/pluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/rebooter"
 	"github.com/aws/amazon-ssm-agent/agent/task"
@@ -84,7 +85,7 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 	var properties []interface{}
 	if properties, res = pluginutil.LoadParametersAsList(log, config.Properties); res.Code != 0 {
 
-		pluginutil.PersistPluginInformationToCurrent(log, Name(), config, res)
+		pluginutil.PersistPluginInformationToCurrent(log, config.PluginID, config, res)
 		return res
 	}
 
@@ -123,7 +124,7 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 		res.StandardError = contracts.TruncateOutput(out[0].Stderr, "", 8000)
 	}
 
-	pluginutil.PersistPluginInformationToCurrent(log, Name(), config, res)
+	pluginutil.PersistPluginInformationToCurrent(log, config.PluginID, config, res)
 
 	return res
 }
@@ -178,6 +179,14 @@ func (p *Plugin) runCommands(log log.T, pluginInput RunCommandPluginInput, orche
 	log.Debugf("Writing commands %v to file %v", pluginInput, scriptPath)
 
 	// Create script file
+	// Resolve ssm parameters
+	// This may contain sensitive information, do not log this data after resolving.
+	if pluginInput.RunCommand, err = parameterstore.ResolveStringList(log, pluginInput.RunCommand); err != nil {
+		out.Errors = append(out.Errors, err.Error())
+		log.Errorf("Failed to resolve ssm parameters. Error: - %v", err)
+		return
+	}
+
 	if err = pluginutil.CreateScriptFile(log, scriptPath, pluginInput.RunCommand); err != nil {
 		out.Errors = append(out.Errors, err.Error())
 		log.Errorf("failed to create script file. %v", err)
@@ -195,6 +204,14 @@ func (p *Plugin) runCommands(log log.T, pluginInput RunCommandPluginInput, orche
 	// Construct Command Name and Arguments
 	commandName := pluginutil.GetShellCommand()
 	commandArguments := append(pluginutil.GetShellArguments(), scriptPath, pluginutil.ExitCodeTrap)
+
+	// Resolve ssm parameters
+	// This may contain sensitive information, do not log this data after resolving.
+	if pluginInput.WorkingDirectory, err = parameterstore.ResolveString(log, pluginInput.WorkingDirectory); err != nil {
+		out.Errors = append(out.Errors, err.Error())
+		log.Errorf("Failed to resolve ssm parameters. Error: - %v", err)
+		return
+	}
 
 	// Execute Command
 	stdout, stderr, exitCode, errs := p.ExecuteCommand(log, workingDir, stdoutFilePath, stderrFilePath, cancelFlag, executionTimeout, commandName, commandArguments)

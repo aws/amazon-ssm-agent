@@ -36,9 +36,9 @@ func NoReply(messageID string, pluginID string, results map[string]*contracts.Pl
 type SendDocumentLevelResponse func(messageID string, resultStatus contracts.ResultStatus, documentTraceOutput string)
 
 // UpdateAssociation updates association status
-type UpdateAssociation func(log log.T, documentID string, pluginOutputs map[string]*contracts.PluginResult, totalNumberOfPlugins int)
+type UpdateAssociation func(log log.T, documentID string, documentCreatedDate string, pluginOutputs map[string]*contracts.PluginResult, totalNumberOfPlugins int)
 
-func NoUpdate(log log.T, documentID string, pluginOutputs map[string]*contracts.PluginResult, totalNumberOfPlugins int) {
+func NoUpdate(log log.T, documentID string, documentCreatedDate string, pluginOutputs map[string]*contracts.PluginResult, totalNumberOfPlugins int) {
 }
 
 // T is the interface type for plugins.
@@ -53,7 +53,8 @@ type PluginRunner struct {
 	RunPlugins func(
 		context context.T,
 		documentID string,
-		plugins map[string]model.PluginState,
+		documentCreatedDate string,
+		plugins []model.PluginState,
 		pluginRegistry PluginRegistry,
 		sendReply SendResponse,
 		updateAssoc UpdateAssociation,
@@ -65,10 +66,10 @@ type PluginRunner struct {
 	CancelFlag  task.CancelFlag
 }
 
-func ParseDocument(context context.T, documentRaw []byte, orchestrationDir string, s3Bucket string, s3KeyPrefix string, messageID string, documentID string, defaultWorkingDirectory string) (pluginsInfo map[string]model.PluginState, err error) {
+func ParseDocument(context context.T, documentRaw []byte, orchestrationDir string, s3Bucket string, s3KeyPrefix string, messageID string, documentID string, defaultWorkingDirectory string) (pluginsInfo []model.PluginState, err error) {
 	var docContent contracts.DocumentContent
 	err = json.Unmarshal(documentRaw, &docContent)
-	pluginConfigurations := make(map[string]*contracts.Configuration)
+	pluginConfigurations := make([]*contracts.Configuration, len(docContent.RuntimeConfig))
 	for pluginName, pluginConfig := range docContent.RuntimeConfig {
 		config := contracts.Configuration{
 			Settings:                pluginConfig.Settings,
@@ -80,27 +81,27 @@ func ParseDocument(context context.T, documentRaw []byte, orchestrationDir strin
 			BookKeepingFileName:     documentID,
 			DefaultWorkingDirectory: defaultWorkingDirectory,
 		}
-		pluginConfigurations[pluginName] = &config
+		pluginConfigurations = append(pluginConfigurations, &config)
 	}
 
 	//initialize plugin states
-	pluginsInfo = make(map[string]model.PluginState)
+	pluginsInfo = make([]model.PluginState, len(pluginConfigurations))
 
-	for key, value := range pluginConfigurations {
+	for _, value := range pluginConfigurations {
 		var plugin model.PluginState
 		plugin.Configuration = *value
 		plugin.HasExecuted = false
-		pluginsInfo[key] = plugin
+		pluginsInfo = append(pluginsInfo, plugin)
 	}
 
 	return
 }
 
-func (r *PluginRunner) ExecuteDocument(context context.T, pluginInput map[string]model.PluginState, documentID string) (pluginOutputs map[string]*contracts.PluginResult) {
+func (r *PluginRunner) ExecuteDocument(context context.T, pluginInput []model.PluginState, documentID string, documentCreatedDate string) (pluginOutputs map[string]*contracts.PluginResult) {
 	log := context.Log()
 	for name, _ := range pluginInput {
 		log.Debugf("Document type %v", name)
 	}
 
-	return r.RunPlugins(context, documentID, pluginInput, r.Plugins, r.SendReply, r.UpdateAssoc, r.CancelFlag)
+	return r.RunPlugins(context, documentID, documentCreatedDate, pluginInput, r.Plugins, r.SendReply, r.UpdateAssoc, r.CancelFlag)
 }

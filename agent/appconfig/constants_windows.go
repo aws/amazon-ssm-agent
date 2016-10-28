@@ -14,7 +14,6 @@
 // +build windows
 
 // Package appconfig manages the configuration of the agent.
-
 package appconfig
 
 import (
@@ -86,6 +85,9 @@ var EnvProgramFiles string
 // Windows environment variable %WINDIR%
 var EnvWinDir string
 
+// Default Custom Inventory Data Folder
+var DefaultCustomInventoryFolder string
+
 // Plugin folder path
 var PluginFolder string
 
@@ -116,5 +118,8 @@ func init() {
 	EC2UpdateArtifactsRoot = filepath.Join(EnvWinDir, EC2ConfigServiceFolder, "Update")
 	EC2UpdaterDownloadRoot = filepath.Join(temp, EC2ConfigAppDataFolder, "Download")
 
+	DefaultCustomInventoryFolder = filepath.Join(SSMDataPath, "Inventory", "Custom")
+	EC2UpdateArtifactsRoot = filepath.Join(EnvWinDir, EC2ConfigServiceFolder, "Update")
+	EC2UpdaterDownloadRoot = filepath.Join(temp, EC2ConfigAppDataFolder, "Download")
 	UpdateContextFilePath = filepath.Join(programData, EC2ConfigAppDataFolder, "Update\\UpdateContext.json")
 }

@@ -36,14 +36,13 @@ import (
 
 // ParseDocumentWithParams parses an document and replaces the parameters where needed.
 func ParseDocumentWithParams(log log.T,
-	rawData *model.AssociationRawData) (*messageContracts.SendCommandPayload, error) {
+	rawData *model.InstanceAssociation) (*messageContracts.SendCommandPayload, error) {
 
 	rawDataContent, err := jsonutil.Marshal(rawData)
 	if err != nil {
 		log.Error("Could not marshal association! ", err)
 		return nil, err
 	}
-	log.Debug("Processing assocation ", rawData.Association.Name)
 	log.Debug("Processing assocation ", jsonutil.Indent(rawDataContent))
 
 	payload := &messageContracts.SendCommandPayload{}
@@ -52,9 +51,18 @@ func ParseDocumentWithParams(log log.T,
 		return nil, err
 	}
 	payload.DocumentName = *rawData.Association.Name
-	payload.CommandID = rawData.ID
+	payload.CommandID = *rawData.Association.AssociationId
 
-	payload.Parameters = parseParameters(log, rawData.Parameter.Parameters, payload.DocumentContent.Parameters)
+	if rawData.Association.OutputLocation != nil && rawData.Association.OutputLocation.S3Location != nil {
+		if rawData.Association.OutputLocation.S3Location.OutputS3KeyPrefix != nil {
+			payload.OutputS3KeyPrefix = *rawData.Association.OutputLocation.S3Location.OutputS3KeyPrefix
+		}
+		if rawData.Association.OutputLocation.S3Location.OutputS3BucketName != nil {
+			payload.OutputS3BucketName = *rawData.Association.OutputLocation.S3Location.OutputS3BucketName
+		}
+	}
+
+	payload.Parameters = parseParameters(log, rawData.Association.Parameters, payload.DocumentContent.Parameters)
 
 	var parametersContent string
 	if parametersContent, err = jsonutil.Marshal(payload.Parameters); err != nil {
@@ -71,77 +79,53 @@ func ParseDocumentWithParams(log log.T,
 		}
 	}
 
-	payload.DocumentContent.RuntimeConfig =
-		messageParser.ReplacePluginParameters(payload.DocumentContent.RuntimeConfig, validParams, log)
-
+	messageParser.ReplacePluginParameters(payload, validParams, log)
 	return payload, nil
 }
 
-// InitializeCommandState - an interim state that is used around during an execution of a command
-func InitializeCommandState(context context.T,
+// InitializeDocumentState - an interim state that is used around during an execution of a command
+func InitializeDocumentState(context context.T,
 	payload *messageContracts.SendCommandPayload,
-	rawData *model.AssociationRawData) stateModel.DocumentState {
+	rawData *model.InstanceAssociation) stateModel.DocumentState {
 
 	//initialize document information with relevant values extracted from msg
 	documentInfo := newDocumentInfo(rawData, payload)
 
 	// adapt plugin configuration format from MDS to plugin expected format
-	s3KeyPrefix := path.Join(payload.OutputS3KeyPrefix, payload.CommandID, documentInfo.Destination)
+	s3KeyPrefix := path.Join(payload.OutputS3KeyPrefix, payload.CommandID, documentInfo.InstanceID)
 
 	orchestrationRootDir := filepath.Join(
 		appconfig.DefaultDataStorePath,
-		documentInfo.Destination,
+		documentInfo.InstanceID,
 		appconfig.DefaultDocumentRootDirName,
 		context.AppConfig().Agent.OrchestrationRootDir)
 
-	orchestrationDir := filepath.Join(orchestrationRootDir, documentInfo.CommandID)
-
-	// getPluginConfigurations converts from PluginConfig (structure from the MDS message) to plugin.Configuration (structure expected by the plugin)
-	pluginConfigurations := make(map[string]*contracts.Configuration)
-	for pluginName, pluginConfig := range payload.DocumentContent.RuntimeConfig {
-		config := contracts.Configuration{
-			Settings:               pluginConfig.Settings,
-			Properties:             pluginConfig.Properties,
-			OutputS3BucketName:     payload.OutputS3BucketName,
-			OutputS3KeyPrefix:      fileutil.BuildS3Path(s3KeyPrefix, pluginName),
-			OrchestrationDirectory: fileutil.BuildPath(orchestrationDir, pluginName),
-			MessageId:              documentInfo.MessageID,
-			BookKeepingFileName:    payload.CommandID,
-		}
-		pluginConfigurations[pluginName] = &config
-	}
-
-	//initialize plugin states
-	pluginsInfo := make(map[string]stateModel.PluginState)
-
-	for key, value := range pluginConfigurations {
-		var plugin stateModel.PluginState
-		plugin.Configuration = *value
-		plugin.HasExecuted = false
-		pluginsInfo[key] = plugin
-	}
-
-	//initialize command State
-	return stateModel.DocumentState{
+	orchestrationDir := filepath.Join(orchestrationRootDir, documentInfo.DocumentID)
+	docState := stateModel.DocumentState{
 		DocumentInformation: documentInfo,
-		PluginsInformation:  pluginsInfo,
 		DocumentType:        stateModel.Association,
+		SchemaVersion:       payload.DocumentContent.SchemaVersion,
 	}
+
+	buildPluginsInfo(payload, documentInfo, s3KeyPrefix, orchestrationDir, &docState)
+
+	return docState
 }
 
 // newDocumentInfo initializes new DocumentInfo object
-func newDocumentInfo(rawData *model.AssociationRawData, payload *messageContracts.SendCommandPayload) stateModel.DocumentInfo {
+func newDocumentInfo(rawData *model.InstanceAssociation, payload *messageContracts.SendCommandPayload) stateModel.DocumentInfo {
 
 	documentInfo := new(stateModel.DocumentInfo)
 
-	documentInfo.CommandID = rawData.ID
-	documentInfo.Destination = *rawData.Association.InstanceId
-	documentInfo.MessageID = fmt.Sprintf("aws.ssm.%v.%v", documentInfo.CommandID, documentInfo.Destination)
+	documentInfo.DocumentID = *(rawData.Association.AssociationId)
+	documentInfo.InstanceID = *(rawData.Association.InstanceId)
+	documentInfo.MessageID = fmt.Sprintf("aws.ssm.%v.%v", documentInfo.DocumentID, documentInfo.InstanceID)
 	documentInfo.RunID = times.ToIsoDashUTC(times.DefaultClock.Now())
-	documentInfo.CreatedDate = rawData.CreateDate
+	documentInfo.CreatedDate = times.ToIso8601UTC(rawData.CreateDate)
 	documentInfo.DocumentName = payload.DocumentName
 	documentInfo.IsCommand = false
 	documentInfo.DocumentStatus = contracts.ResultStatusInProgress
+	documentInfo.RunOnce = rawData.RunOnce
 	documentInfo.DocumentTraceOutput = ""
 
 	return *documentInfo
@@ -164,4 +148,77 @@ func parseParameters(log log.T, params map[string][]*string, paramsDef map[strin
 		}
 	}
 	return result
+}
+
+// buildPluginsInfo builds the PluginsInfo for document state
+func buildPluginsInfo(
+	payload *messageContracts.SendCommandPayload,
+	documentInfo stateModel.DocumentInfo,
+	s3KeyPrefix string,
+	orchestrationDir string,
+	docState *stateModel.DocumentState) {
+
+	if payload.DocumentContent.RuntimeConfig != nil && len(payload.DocumentContent.RuntimeConfig) != 0 {
+		//initialize plugin states as map
+		pluginsInfo := make(map[string]stateModel.PluginState)
+
+		// getPluginConfigurations converts from PluginConfig (structure from the MDS message) to plugin.Configuration (structure expected by the plugin)
+		pluginConfigurations := make(map[string]*contracts.Configuration)
+		for pluginName, pluginConfig := range payload.DocumentContent.RuntimeConfig {
+			config := contracts.Configuration{
+				Settings:               pluginConfig.Settings,
+				Properties:             pluginConfig.Properties,
+				OutputS3BucketName:     payload.OutputS3BucketName,
+				OutputS3KeyPrefix:      fileutil.BuildS3Path(s3KeyPrefix, pluginName),
+				OrchestrationDirectory: fileutil.BuildPath(orchestrationDir, pluginName),
+				MessageId:              documentInfo.MessageID,
+				BookKeepingFileName:    payload.CommandID,
+			}
+			pluginConfigurations[pluginName] = &config
+		}
+
+		for key, value := range pluginConfigurations {
+			var plugin stateModel.PluginState
+			plugin.Configuration = *value
+			plugin.HasExecuted = false
+			plugin.Id = key
+			plugin.Name = key
+			pluginsInfo[key] = plugin
+		}
+
+		docState.PluginsInformation = pluginsInfo
+		return
+	}
+
+	if payload.DocumentContent.MainSteps != nil && len(payload.DocumentContent.MainSteps) != 0 {
+		//initialize plugin states as array
+		instancePluginsInfo := make([]stateModel.PluginState, len(payload.DocumentContent.MainSteps))
+
+		// getPluginConfigurations converts from PluginConfig (structure from the MDS message) to plugin.Configuration (structure expected by the plugin)
+
+		for index, instancePluginConfig := range payload.DocumentContent.MainSteps {
+
+			pluginName := instancePluginConfig.Action
+			config := contracts.Configuration{
+				Settings:               instancePluginConfig.Settings,
+				Properties:             instancePluginConfig.Inputs,
+				OutputS3BucketName:     payload.OutputS3BucketName,
+				OutputS3KeyPrefix:      fileutil.BuildS3Path(s3KeyPrefix, pluginName),
+				OrchestrationDirectory: fileutil.BuildPath(orchestrationDir, pluginName),
+				MessageId:              documentInfo.MessageID,
+				BookKeepingFileName:    payload.CommandID,
+			}
+
+			var plugin stateModel.PluginState
+			plugin.Configuration = config
+			plugin.HasExecuted = false
+			plugin.Id = instancePluginConfig.Name
+			plugin.Name = pluginName
+			instancePluginsInfo[index] = plugin
+		}
+		docState.InstancePluginsInformation = instancePluginsInfo
+		return
+	}
+
+	return
 }
