@@ -261,22 +261,14 @@ func (p *Plugin) runCommands(log log.T, pluginInput ApplicationPluginInput, orch
 	}
 
 	var localFilePath string
-	absoluteTestPath := filepath.Join(p.DefaultWorkingDirectory, pluginInput.Source)
-	// If Source is a local file with an absolute path or relative to the DefaultWorkingDirectory use that, otherwise download
-	if exists, _ := fileutil.LocalFileExist(pluginInput.Source); exists {
-		localFilePath = pluginInput.Source
-	} else if exists, _ := fileutil.LocalFileExist(absoluteTestPath); exists {
-		localFilePath = absoluteTestPath
-	} else {
-		// Download file from source if available
-		downloadOutput, err := pluginutil.DownloadFileFromSource(log, pluginInput.Source, pluginInput.SourceHash, pluginInput.SourceHashType)
-		if err != nil || downloadOutput.IsHashMatched == false || downloadOutput.LocalFilePath == "" {
-			errorString := fmt.Errorf("failed to download file reliably %v", pluginInput.Source)
-			out.MarkAsFailed(log, errorString)
-			return
-		}
-		localFilePath = downloadOutput.LocalFilePath
+	// Download file from source if available
+	downloadOutput, err := pluginutil.DownloadFileFromSource(log, pluginInput.Source, pluginInput.SourceHash, pluginInput.SourceHashType)
+	if err != nil || downloadOutput.IsHashMatched == false || downloadOutput.LocalFilePath == "" {
+		errorString := fmt.Errorf("failed to download file reliably %v", pluginInput.Source)
+		out.MarkAsFailed(log, errorString)
+		return
 	}
+	localFilePath = downloadOutput.LocalFilePath
 	log.Debugf("local path to file is %v", localFilePath)
 
 	// Create msi related log file

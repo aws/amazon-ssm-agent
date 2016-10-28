@@ -98,11 +98,11 @@ func RunPlugins(
 			switch {
 			case isLongRunningPlugin:
 				pluginHandlerFound = true
-				context.Log().Infof("%s is a long running plugin", pluginID)
+				context.Log().Infof("%s is a long running plugin", pluginName)
 				r = runPlugin(context, handler, pluginName, configuration, cancelFlag, runner)
 			case isWorkerPlugin:
 				pluginHandlerFound = true
-				context.Log().Infof("%s is a worker plugin", pluginID)
+				context.Log().Infof("%s is a worker plugin", pluginName)
 				r = runPlugin(context, p, pluginName, configuration, cancelFlag, runner)
 			default:
 				err := fmt.Errorf("Plugin with id %s not found!", pluginName)
