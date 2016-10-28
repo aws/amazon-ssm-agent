@@ -228,6 +228,10 @@ func (p *Plugin) ApplyInventoryPolicy(context context.T, inventoryInput PluginIn
 		return
 	}
 
+	log.Debugf("Optimized data - \n%v \n Non-optimized data - \n%v",
+		optimizedInventoryItems,
+		nonOptimizedInventoryItems)
+
 	//first send data in optimized fashion
 	if status, retryWithNonOptimized = p.SendDataToInventory(context, optimizedInventoryItems); !status {
 
@@ -263,8 +267,9 @@ func (p *Plugin) SendDataToInventory(context context.T, items []*ssm.InventoryIt
 	if err = p.uploader.SendDataToSSM(context, items); err != nil {
 		status = false
 		if aerr, ok := err.(awserr.Error); ok {
-			if aerr.Code() == "ItemContentMismatch" {
-				log.Debugf("ItemContentMismatch exception encountered - inventory plugin will try sending data again")
+			//NOTE: awserr.Code -> is not the error code but the exception name itself!!!!
+			if aerr.Code() == "ItemContentMismatchException" {
+				log.Debugf("ItemContentMismatchException encountered - inventory plugin will try sending data again")
 				retryWithFullData = true
 			} else {
 				log.Debugf("Unexpected error encountered - %v. No point trying to send data again", aerr.Code())

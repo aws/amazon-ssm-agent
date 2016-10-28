@@ -125,57 +125,75 @@ func calculateCheckSum(data []byte) (checkSum string) {
 func (u *InventoryUploader) ConvertToSsmInventoryItems(context context.T, items []model.Item) (optimizedInventoryItems, nonOptimizedInventoryItems []*ssm.InventoryItem, err error) {
 
 	log := context.Log()
-	var dataB []byte
-	var oldHash, newHash string
-	var optimizedItem, nonOptimizedItem *ssm.InventoryItem
 
 	//NOTE: There can be multiple inventory type data.
 	//Each inventory type data => 1 inventory Item. Each inventory type, can contain multiple items
 
+	log.Debugf("Transforming collected inventory data to expected format")
+
 	//iterating over multiple inventory data types.
 	for _, item := range items {
+
+		var dataB []byte
+		var optimizedItem, nonOptimizedItem *ssm.InventoryItem
+
+		newHash := ""
+		oldHash := ""
+		itemName := item.Name
 
 		//we should only calculate checksum using content & not include capture time - because that field will always change causing
 		//the checksum to change again & again even if content remains same.
 
-		dataB, _ = json.Marshal(item.Content)
+		if dataB, err = json.Marshal(item.Content); err != nil {
+			return
+		}
+
 		newHash = calculateCheckSum(dataB)
+		log.Debugf("Item being converted - %v with data - %v with checksum - %v", itemName, string(dataB), newHash)
 
 		//construct non-optimized inventory item
 		if nonOptimizedItem, err = ConvertToSSMInventoryItem(item); err != nil {
-			err = fmt.Errorf("formatting inventory data of %v failed due to %v", item.Name, err.Error())
+			err = fmt.Errorf("formatting inventory data of %v failed due to %v", itemName, err.Error())
 			return
 		}
 
 		//add contentHash too
 		nonOptimizedItem.ContentHash = &newHash
 
+		log.Debugf("NonOptimized item - %+v", nonOptimizedItem)
+
 		nonOptimizedInventoryItems = append(nonOptimizedInventoryItems, nonOptimizedItem)
 
 		//populate optimized item - if content hash matches with earlier collected data.
-		oldHash = u.optimizer.GetContentHash(item.Name)
+		oldHash = u.optimizer.GetContentHash(itemName)
+
+		log.Debugf("old hash - %v, new hash - %v for the inventory type - %v", oldHash, newHash, itemName)
+
 		if newHash == oldHash {
 
-			log.Debugf("Inventory data for %v is same as before - we can just send content hash", item.Name)
+			log.Debugf("Inventory data for %v is same as before - we can just send content hash", itemName)
 
 			//set the inventory item accordingly
 			optimizedItem = &ssm.InventoryItem{
 				CaptureTime:   &item.CaptureTime,
-				TypeName:      &item.Name,
+				TypeName:      &itemName,
 				SchemaVersion: &item.SchemaVersion,
 				ContentHash:   &oldHash,
 			}
 
+			log.Debugf("Optimized item - %v", optimizedItem)
+
 			optimizedInventoryItems = append(optimizedInventoryItems, optimizedItem)
 
 		} else {
-			log.Debugf("New inventory data for %v has been detected - can't optimize here", item.Name)
+			log.Debugf("New inventory data for %v has been detected - can't optimize here", itemName)
+			log.Debugf("Adding item - %v to the optimizedItems (since its new data)", nonOptimizedItem)
 
 			optimizedInventoryItems = append(optimizedInventoryItems, nonOptimizedItem)
 
 			log.Debugf("Updating cache")
 
-			if err = u.optimizer.UpdateContentHash(item.Name, newHash); err != nil {
+			if err = u.optimizer.UpdateContentHash(itemName, newHash); err != nil {
 				err = fmt.Errorf("failed to update content hash cache because of - %v", err.Error())
 				log.Error(err.Error())
 				return

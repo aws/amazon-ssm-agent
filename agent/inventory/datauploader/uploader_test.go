@@ -32,7 +32,6 @@ func MockInventoryUploader() *InventoryUploader {
 	optimizer.On("UpdateContentHash", mock.AnythingOfType("string"), mock.AnythingOfType("string")).Return(nil)
 
 	uploader.optimizer = optimizer
-
 	return &uploader
 }
 
