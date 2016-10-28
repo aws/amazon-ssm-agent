@@ -50,6 +50,7 @@ func (systemImp) IsManagedInstance() (bool, error) {
 // bookkeepingService represents the dependency for statemanager
 type bookkeepingService interface {
 	PersistData(log log.T, commandID, instanceID, locationFolder string, object interface{})
+	IsDocumentCurrentlyExecuting(documentID, instanceID string) bool
 }
 
 type assocBookkeepingService struct{}
@@ -59,12 +60,17 @@ func (assocBookkeepingService) PersistData(log log.T, commandID, instanceID, loc
 	statemanager.PersistData(log, commandID, instanceID, locationFolder, object)
 }
 
+// IsDocumentExist wraps statemanager IsDocumentExist
+func (assocBookkeepingService) IsDocumentCurrentlyExecuting(documentID, instanceID string) bool {
+	return statemanager.IsDocumentCurrentlyExecuting(documentID, instanceID)
+}
+
 // parserService represents the dependency for association parser
 type parserService interface {
-	ParseDocumentWithParams(log log.T, rawData *model.AssociationRawData) (*messageContract.SendCommandPayload, error)
+	ParseDocumentWithParams(log log.T, rawData *model.InstanceAssociation) (*messageContract.SendCommandPayload, error)
 	InitializeDocumentState(context context.T,
 		payload *messageContract.SendCommandPayload,
-		rawData *model.AssociationRawData) stateModel.DocumentState
+		rawData *model.InstanceAssociation) stateModel.DocumentState
 }
 
 type assocParserService struct{}
@@ -72,7 +78,7 @@ type assocParserService struct{}
 // ParseDocumentWithParams wraps parser ParseDocumentWithParams
 func (assocParserService) ParseDocumentWithParams(
 	log log.T,
-	rawData *model.AssociationRawData) (*messageContract.SendCommandPayload, error) {
+	rawData *model.InstanceAssociation) (*messageContract.SendCommandPayload, error) {
 
 	return parser.ParseDocumentWithParams(log, rawData)
 }
@@ -80,7 +86,7 @@ func (assocParserService) ParseDocumentWithParams(
 // InitializeDocumentState wraps engine InitializeCommandState
 func (assocParserService) InitializeDocumentState(context context.T,
 	payload *messageContract.SendCommandPayload,
-	rawData *model.AssociationRawData) stateModel.DocumentState {
+	rawData *model.InstanceAssociation) stateModel.DocumentState {
 
-	return parser.InitializeCommandState(context, payload, rawData)
+	return parser.InitializeDocumentState(context, payload, rawData)
 }

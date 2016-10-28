@@ -17,6 +17,7 @@ package manager
 import (
 	"encoding/json"
 	"errors"
+	"io/ioutil"
 	"sync"
 	"time"
 
@@ -224,9 +225,40 @@ func (m *Manager) RequestStop(stopType contracts.StopType) (err error) {
 		m.stopPlugin.ShutdownAndWait(waitTimeout)
 	}()
 
+	if len(m.runningPlugins) > 0 {
+		m.stopLongRunningPlugins(stopType)
+	}
+
 	// wait for everything to shutdown
 	wg.Wait()
 	return nil
+}
+
+// stopLongRunningPlugins requests the long running plugins to stop
+func (m *Manager) stopLongRunningPlugins(stopType contracts.StopType) {
+	log := m.context.Log()
+	log.Infof("long running manager stop requested. Stop type: %v", stopType)
+
+	var wg sync.WaitGroup
+	i := 0
+	for pluginName, _ := range m.runningPlugins {
+		go func(wgc *sync.WaitGroup, i int) {
+			if stopType == contracts.StopTypeSoftStop {
+				wgc.Add(1)
+				defer wgc.Done()
+			}
+
+			plugin := m.registeredPlugins[pluginName]
+			if err := plugin.Handler.Stop(m.context, task.NewChanneledCancelFlag()); err != nil {
+				log.Errorf("Plugin (%v) failed to stop with error: %v",
+					pluginName,
+					err)
+			}
+
+		}(&wg, i)
+		i++
+	}
+
 }
 
 // configCloudWatch checks the local configuration file for cloud watch plugin to see if any updates to config
@@ -265,6 +297,24 @@ func (m *Manager) configCloudWatch(log log.T) {
 				task.NewChanneledCancelFlag()); err != nil {
 				log.Errorf("Failed to start the cloud watch plugin bacause: %s", err)
 			}
+
+			// check if configue the cloudwatch successfully
+			stderrFilePath := fileutil.BuildPath(orchestrationDir, appconfig.PluginNameCloudWatch, "stderr")
+			var errData []byte
+			var errorReadingFile error
+			if errData, errorReadingFile = ioutil.ReadFile(stderrFilePath); errorReadingFile != nil {
+				log.Errorf("Unable to read the stderr file - %s: %s", stderrFilePath, errorReadingFile.Error())
+			}
+			serr := string(errData)
+
+			if len(serr) > 0 {
+				log.Errorf("Unable to start the plugin - %s: %s", appconfig.PluginNameCloudWatch, serr)
+				// Stop the plugin if configuration failed.
+				if err := m.StopPlugin(appconfig.PluginNameCloudWatch, task.NewChanneledCancelFlag()); err != nil {
+					log.Errorf("Unable to start the plugin - %s: %s", appconfig.PluginNameCloudWatch, err.Error())
+				}
+			}
+
 		} else {
 			log.Infof("Detected cloud watch has been requested to stop. Stoping the plugin")
 			if err = m.StopPlugin(appconfig.PluginNameCloudWatch, task.NewChanneledCancelFlag()); err != nil {

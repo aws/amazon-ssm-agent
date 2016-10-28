@@ -49,6 +49,14 @@ func start(log logger.T, instanceIDPtr *string, regionPtr *string) (cpm *coreman
 	log.Infof("OS: %s, Arch: %s", runtime.GOOS, runtime.GOARCH)
 	log.Flush()
 
+	defer func() {
+		// recover in case the agent panics
+		// this should handle some kind of seg fault errors.
+		if msg := recover(); msg != nil {
+			log.Errorf("Agent crashed with message %v!", msg)
+		}
+	}()
+
 	if cpm, err = coremanager.NewCoreManager(instanceIDPtr, regionPtr, log); err != nil {
 		log.Errorf("error occured when starting core manager: %v", err)
 		return

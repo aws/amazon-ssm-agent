@@ -333,7 +333,7 @@ func DownloadFileFromSource(log log.T, source string, sourceHash string, sourceH
 		SourceHashValue: sourceHash,
 		SourceHashType:  sourceHashType,
 	}
-	log.Debugf("Downloading file %v", downloadInput)
+	log.Debug("Downloading file")
 	return artifact.Download(log, downloadInput)
 }
 
@@ -349,7 +349,7 @@ func DefaultPluginConfig() PluginConfig {
 }
 
 // PersistPluginInformationToCurrent persists the plugin execution results
-func PersistPluginInformationToCurrent(log log.T, pluginName string, config contracts.Configuration, res contracts.PluginResult) {
+func PersistPluginInformationToCurrent(log log.T, pluginID string, config contracts.Configuration, res contracts.PluginResult) {
 	//Every plugin should persist information inside the execute method.
 	//At this point a plugin knows that an interim state is already stored in Current folder.
 	//Plugin will continue to add data to the same file in Current folder
@@ -357,19 +357,30 @@ func PersistPluginInformationToCurrent(log log.T, pluginName string, config cont
 	instanceID := messageIDSplit[len(messageIDSplit)-1]
 
 	pluginState := command_state_helper.GetPluginState(log,
-		pluginName,
+		pluginID,
 		config.BookKeepingFileName,
 		instanceID,
 		appconfig.DefaultLocationOfCurrent)
 
+	if pluginState == nil {
+		log.Errorf("failed to find plugin state with id %v", pluginID)
+		return
+	}
+
 	//set plugin state's execution details
 	pluginState.Configuration = config
 	pluginState.Result = res
-	pluginState.HasExecuted = true
+
+	//set HasExecuted based on result status.
+	if pluginState.Result.Status == contracts.ResultStatusSuccessAndReboot {
+		pluginState.HasExecuted = false
+	} else {
+		pluginState.HasExecuted = true
+	}
 
 	command_state_helper.PersistPluginState(log,
-		pluginState,
-		pluginName,
+		*pluginState,
+		pluginID,
 		config.BookKeepingFileName,
 		instanceID,
 		appconfig.DefaultLocationOfCurrent)
@@ -381,11 +392,16 @@ func LoadParametersAsList(log log.T, prop interface{}) ([]interface{}, contracts
 	var properties []interface{}
 	var res contracts.PluginResult
 
-	if err := jsonutil.Remarshal(prop, &properties); err != nil {
-		log.Errorf("unable to parse plugin configuration")
-		res.Output = "Execution failed because agent is unable to parse plugin configuration"
-		res.Code = 1
-		res.Status = contracts.ResultStatusFailed
+	switch prop := prop.(type) {
+	case []interface{}:
+		if err := jsonutil.Remarshal(prop, &properties); err != nil {
+			log.Errorf("unable to parse plugin configuration")
+			res.Output = "Execution failed because agent is unable to parse plugin configuration"
+			res.Code = 1
+			res.Status = contracts.ResultStatusFailed
+		}
+	default:
+		properties = append(properties, prop)
 	}
 
 	return properties, res

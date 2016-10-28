@@ -31,11 +31,17 @@ import (
 // Service is an interface to the SSM service.
 type Service interface {
 	ListAssociations(log log.T, instanceID string) (response *ssm.ListAssociationsOutput, err error)
+	ListInstanceAssociations(log log.T, instanceID string, nextToken *string) (response *ssm.ListInstanceAssociationsOutput, err error)
 	UpdateAssociationStatus(
 		log log.T,
 		instanceID string,
 		name string,
 		associationStatus *ssm.AssociationStatus) (response *ssm.UpdateAssociationStatusOutput, err error)
+	UpdateInstanceAssociationStatus(
+		log log.T,
+		associationID string,
+		instanceID string,
+		executionResult *ssm.InstanceAssociationExecutionResult) (response *ssm.UpdateInstanceAssociationStatusOutput, err error)
 	SendCommand(log log.T,
 		documentName string,
 		instanceIDs []string,
@@ -47,10 +53,10 @@ type Service interface {
 	ListCommandInvocations(log log.T, instanceID string, commandID string) (response *ssm.ListCommandInvocationsOutput, err error)
 	CancelCommand(log log.T, commandID string, instanceIDs []string) (response *ssm.CancelCommandOutput, err error)
 	CreateDocument(log log.T, docName string, docContent string) (response *ssm.CreateDocumentOutput, err error)
-	GetDocument(log log.T, docName string) (response *ssm.GetDocumentOutput, err error)
+	GetDocument(log log.T, docName string, docVersion string) (response *ssm.GetDocumentOutput, err error)
 	DeleteDocument(log log.T, instanceID string) (response *ssm.DeleteDocumentOutput, err error)
 	DescribeAssociation(log log.T, instanceID string, docName string) (response *ssm.DescribeAssociationOutput, err error)
-	UpdateInstanceInformation(log log.T, agentVersion string, agentStatus string) (response *ssm.UpdateInstanceInformationOutput, err error)
+	UpdateInstanceInformation(log log.T, agentVersion, agentStatus, agentName string) (response *ssm.UpdateInstanceInformationOutput, err error)
 }
 
 var ssmStopPolicy *sdkutil.StopPolicy
@@ -120,6 +126,40 @@ func (svc *sdkService) ListAssociations(log log.T, instanceID string) (response 
 	return
 }
 
+//ListInstanceAssociations calls the ListAssociations SSM API.
+func (svc *sdkService) ListInstanceAssociations(log log.T, instanceID string, nextToken *string) (response *ssm.ListInstanceAssociationsOutput, err error) {
+	params := ssm.ListInstanceAssociationsInput{
+		InstanceId: &instanceID,
+		MaxResults: aws.Int64(20),
+		NextToken:  nextToken,
+	}
+
+	response, err = svc.sdk.ListInstanceAssociations(&params)
+	if err != nil {
+		sdkutil.HandleAwsError(log, err, ssmStopPolicy)
+		return
+	}
+	log.Debug("ListInstanceAssociations Response", response)
+	return
+}
+
+//UpdateInstanceAssociationStatus calls the ListAssociations SSM API.
+func (svc *sdkService) UpdateInstanceAssociationStatus(log log.T, associationID string, instanceID string, executionResult *ssm.InstanceAssociationExecutionResult) (response *ssm.UpdateInstanceAssociationStatusOutput, err error) {
+	params := ssm.UpdateInstanceAssociationStatusInput{
+		InstanceId:      &instanceID,
+		AssociationId:   &associationID,
+		ExecutionResult: executionResult,
+	}
+
+	response, err = svc.sdk.UpdateInstanceAssociationStatus(&params)
+	if err != nil {
+		sdkutil.HandleAwsError(log, err, ssmStopPolicy)
+		return
+	}
+	log.Debug("UpdateInstanceAssociationStatus Response ", response)
+	return
+}
+
 //UpdateAssociationStatus calls the UpdateAssociationStatus SSM API.
 func (svc *sdkService) UpdateAssociationStatus(
 	log log.T,
@@ -144,11 +184,13 @@ func (svc *sdkService) UpdateAssociationStatus(
 //UpdateInstanceInformation calls the UpdateInstanceInformation SSM API.
 func (svc *sdkService) UpdateInstanceInformation(
 	log log.T,
-	agentVersion string,
-	agentStatus string,
+	agentVersion,
+	agentStatus,
+	agentName string,
 ) (response *ssm.UpdateInstanceInformationOutput, err error) {
 
 	params := ssm.UpdateInstanceInformationInput{
+		AgentName:    aws.String(agentName),
 		AgentStatus:  aws.String(agentStatus),
 		AgentVersion: aws.String(agentVersion),
 	}
@@ -217,9 +259,10 @@ func (svc *sdkService) CreateDocument(log log.T, docName string, docContent stri
 }
 
 //GetDocument calls the GetDocument SSM API to retrieve document with given document name
-func (svc *sdkService) GetDocument(log log.T, docName string) (response *ssm.GetDocumentOutput, err error) {
+func (svc *sdkService) GetDocument(log log.T, docName string, docVersion string) (response *ssm.GetDocumentOutput, err error) {
 	params := ssm.GetDocumentInput{
-		Name: aws.String(docName),
+		Name:            aws.String(docName),
+		DocumentVersion: aws.String(docVersion),
 	}
 	response, err = svc.sdk.GetDocument(&params)
 	if err != nil {

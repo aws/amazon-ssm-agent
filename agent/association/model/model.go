@@ -14,13 +14,82 @@
 // Package model provides model definition for association
 package model
 
-import "github.com/aws/aws-sdk-go/service/ssm"
+import (
+	"fmt"
+	"strings"
+	"time"
 
-// AssociationRawData represents detail information of association
-type AssociationRawData struct {
-	ID          string
-	CreateDate  string
-	Association *ssm.Association
-	Parameter   *ssm.AssociationDescription
-	Document    *string
+	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/aws-sdk-go/aws"
+	"github.com/aws/aws-sdk-go/service/ssm"
+	"github.com/gorhill/cronexpr"
+)
+
+const (
+	cronExpressionEveryFiveMinutes = "cron(0 0/5 * 1/1 * ? *)"
+	expressionTypeCron             = "cron"
+)
+
+// InstanceAssociation represents detail information of an association
+type InstanceAssociation struct {
+	CreateDate                  time.Time
+	NextScheduledDate           time.Time
+	Association                 *ssm.InstanceAssociationSummary
+	Expression                  string
+	ExpressionType              string
+	Document                    *string
+	RunOnce                     bool
+	RunNow                      bool
+	ExcludeFromFutureScheduling bool
+}
+
+// Update updates new association with old association details
+func (newAssoc *InstanceAssociation) Update(oldAssoc *InstanceAssociation) {
+	newAssoc.CreateDate = oldAssoc.CreateDate
+	newAssoc.NextScheduledDate = oldAssoc.NextScheduledDate
+	newAssoc.Expression = oldAssoc.Expression
+	newAssoc.ExpressionType = oldAssoc.ExpressionType
+	newAssoc.ExcludeFromFutureScheduling = oldAssoc.ExcludeFromFutureScheduling
+	newAssoc.RunOnce = oldAssoc.RunOnce
+}
+
+// Initialize initializes default values for the given new association
+func (newAssoc *InstanceAssociation) Initialize(log log.T, currentTime time.Time) {
+
+	if newAssoc.Association.ScheduleExpression == nil || *newAssoc.Association.ScheduleExpression == "" {
+		newAssoc.Association.ScheduleExpression = aws.String(cronExpressionEveryFiveMinutes)
+		// legacy association, run only once
+		newAssoc.RunOnce = true
+	}
+
+	if newAssoc.RunNow {
+		newAssoc.NextScheduledDate = currentTime
+		return
+	}
+
+	if err := parseExpression(log, newAssoc); err != nil {
+		log.Errorf("Failed to parse schedule expression %v, %v", *newAssoc.Association.ScheduleExpression, err)
+		newAssoc.ExcludeFromFutureScheduling = true
+		return
+	}
+
+	if _, err := cronexpr.Parse(newAssoc.Expression); err != nil {
+		log.Errorf("Failed to parse schedule expression %v, %v", newAssoc.Expression, err)
+		newAssoc.ExcludeFromFutureScheduling = true
+		return
+	}
+
+	newAssoc.NextScheduledDate = cronexpr.MustParse(newAssoc.Expression).Next(currentTime)
+}
+
+func parseExpression(log log.T, assoc *InstanceAssociation) error {
+	expression := *assoc.Association.ScheduleExpression
+
+	if strings.HasPrefix(expression, expressionTypeCron) {
+		assoc.ExpressionType = expressionTypeCron
+		assoc.Expression = expression[len(expressionTypeCron)+1 : len(expression)-1]
+		return nil
+	}
+
+	return fmt.Errorf("unkonw expression type")
 }

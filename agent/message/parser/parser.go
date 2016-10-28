@@ -41,7 +41,7 @@ func ParseMessageWithParams(log log.T, payload string) (parsedMessage messageCon
 		}
 	}
 
-	parsedMessage.DocumentContent.RuntimeConfig = ReplacePluginParameters(parsedMessage.DocumentContent.RuntimeConfig, parameters, log)
+	ReplacePluginParameters(&parsedMessage, parameters, log)
 	return
 }
 
@@ -59,13 +59,41 @@ func PrepareReplyPayloadToUpdateDocumentStatus(agentInfo contracts.AgentInfo, do
 }
 
 // ReplacePluginParameters replaces parameters with their values, within the plugin Properties.
-func ReplacePluginParameters(input map[string]*contracts.PluginConfig, params map[string]interface{}, logger log.T) (result map[string]*contracts.PluginConfig) {
-	result = make(map[string]*contracts.PluginConfig)
-	for pluginName, pluginConfig := range input {
-		result[pluginName] = &contracts.PluginConfig{
-			Settings:   parameters.ReplaceParameters(pluginConfig.Settings, params, logger),
-			Properties: parameters.ReplaceParameters(pluginConfig.Properties, params, logger),
+func ReplacePluginParameters(
+	payload *messageContracts.SendCommandPayload,
+	params map[string]interface{},
+	logger log.T) {
+
+	runtimeConfig := payload.DocumentContent.RuntimeConfig
+	// we assume that one of the runtimeConfig and mainSteps should be nil
+	if runtimeConfig != nil && len(runtimeConfig) != 0 {
+		updatedRuntimeConfig := make(map[string]*contracts.PluginConfig)
+		for pluginName, pluginConfig := range runtimeConfig {
+			updatedRuntimeConfig[pluginName] = &contracts.PluginConfig{
+				Settings:   parameters.ReplaceParameters(pluginConfig.Settings, params, logger),
+				Properties: parameters.ReplaceParameters(pluginConfig.Properties, params, logger),
+			}
 		}
+		payload.DocumentContent.RuntimeConfig = updatedRuntimeConfig
+		return
+	}
+
+	mainSteps := payload.DocumentContent.MainSteps
+	if mainSteps != nil || len(mainSteps) != 0 {
+		updatedMainSteps := make([]*contracts.InstancePluginConfig, len(mainSteps))
+		for index, instancePluginConfig := range mainSteps {
+			updatedMainSteps[index] = &contracts.InstancePluginConfig{
+				Action:      instancePluginConfig.Action,
+				Name:        instancePluginConfig.Name,
+				MaxAttempts: instancePluginConfig.MaxAttempts,
+				OnFailure:   instancePluginConfig.OnFailure,
+				Timeout:     instancePluginConfig.Timeout,
+				Settings:    instancePluginConfig.Settings,
+				Inputs:      parameters.ReplaceParameters(instancePluginConfig.Inputs, params, logger),
+			}
+		}
+		payload.DocumentContent.MainSteps = updatedMainSteps
+		return
 	}
 	return
 }

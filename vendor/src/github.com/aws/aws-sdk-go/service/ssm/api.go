@@ -13,7 +13,28 @@ import (
 
 const opAddTagsToResource = "AddTagsToResource"
 
-// AddTagsToResourceRequest generates a request for the AddTagsToResource operation.
+// AddTagsToResourceRequest generates a "aws/request.Request" representing the
+// client's request for the AddTagsToResource operation. The "output" return
+// value can be used to capture response data after the request's "Send" method
+// is called.
+//
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the AddTagsToResource method directly
+// instead.
+//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
+//
+//    // Example sending a request using the AddTagsToResourceRequest method.
+//    req, resp := client.AddTagsToResourceRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
 func (c *SSM) AddTagsToResourceRequest(input *AddTagsToResourceInput) (req *request.Request, output *AddTagsToResourceOutput) {
 	op := &request.Operation{
 		Name:       opAddTagsToResource,
@@ -31,6 +52,24 @@ func (c *SSM) AddTagsToResourceRequest(input *AddTagsToResourceInput) (req *requ
 	return
 }
 
+// Adds or overwrites one or more tags for the specified resource. Tags are
+// metadata that you assign to your managed instances. Tags enable you to categorize
+// your managed instances in different ways, for example, by purpose, owner,
+// or environment. Each tag consists of a key and an optional value, both of
+// which you define. For example, you could define a set of tags for your account's
+// managed instances that helps you track each instance's owner and stack level.
+// For example: Key=Owner and Value=DbAdmin, SysAdmin, or Dev. Or Key=Stack
+// and Value=Production, Pre-Production, or Test. Each resource can have a maximum
+// of 10 tags.
+//
+//  We recommend that you devise a set of tag keys that meets your needs for
+// each resource type. Using a consistent set of tag keys makes it easier for
+// you to manage your resources. You can search and filter the resources based
+// on the tags you add. Tags don't have any semantic meaning to Amazon EC2 and
+// are interpreted strictly as a string of characters.
+//
+// For more information about tags, see Tagging Your Amazon EC2 Resources (http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Using_Tags.html)
+// in the Amazon EC2 User Guide.
 func (c *SSM) AddTagsToResource(input *AddTagsToResourceInput) (*AddTagsToResourceOutput, error) {
 	req, out := c.AddTagsToResourceRequest(input)
 	err := req.Send()
@@ -39,7 +78,28 @@ func (c *SSM) AddTagsToResource(input *AddTagsToResourceInput) (*AddTagsToResour
 
 const opCancelCommand = "CancelCommand"
 
-// CancelCommandRequest generates a request for the CancelCommand operation.
+// CancelCommandRequest generates a "aws/request.Request" representing the
+// client's request for the CancelCommand operation. The "output" return
+// value can be used to capture response data after the request's "Send" method
+// is called.
+//
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the CancelCommand method directly
+// instead.
+//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
+//
+//    // Example sending a request using the CancelCommandRequest method.
+//    req, resp := client.CancelCommandRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
 func (c *SSM) CancelCommandRequest(input *CancelCommandInput) (req *request.Request, output *CancelCommandOutput) {
 	op := &request.Operation{
 		Name:       opCancelCommand,
@@ -67,7 +127,28 @@ func (c *SSM) CancelCommand(input *CancelCommandInput) (*CancelCommandOutput, er
 
 const opCreateActivation = "CreateActivation"
 
-// CreateActivationRequest generates a request for the CreateActivation operation.
+// CreateActivationRequest generates a "aws/request.Request" representing the
+// client's request for the CreateActivation operation. The "output" return
+// value can be used to capture response data after the request's "Send" method
+// is called.
+//
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the CreateActivation method directly
+// instead.
+//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
+//
+//    // Example sending a request using the CreateActivationRequest method.
+//    req, resp := client.CreateActivationRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
 func (c *SSM) CreateActivationRequest(input *CreateActivationInput) (req *request.Request, output *CreateActivationOutput) {
 	op := &request.Operation{
 		Name:       opCreateActivation,
@@ -85,6 +166,13 @@ func (c *SSM) CreateActivationRequest(input *CreateActivationInput) (req *reques
 	return
 }
 
+// Registers your on-premises server or virtual machine with Amazon EC2 so that
+// you can manage these resources using Run Command. An on-premises server or
+// virtual machine that has been registered with EC2 is called a managed instance.
+// For more information about activations, see Setting Up Managed Instances
+// (Linux) (http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/managed-instances.html)
+// or Setting Up Managed Instances (Windows) (http://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/managed-instances.html)
+// in the Amazon EC2 User Guide.
 func (c *SSM) CreateActivation(input *CreateActivationInput) (*CreateActivationOutput, error) {
 	req, out := c.CreateActivationRequest(input)
 	err := req.Send()
@@ -93,7 +181,28 @@ func (c *SSM) CreateActivation(input *CreateActivationInput) (*CreateActivationO
 
 const opCreateAssociation = "CreateAssociation"
 
-// CreateAssociationRequest generates a request for the CreateAssociation operation.
+// CreateAssociationRequest generates a "aws/request.Request" representing the
+// client's request for the CreateAssociation operation. The "output" return
+// value can be used to capture response data after the request's "Send" method
+// is called.
+//
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the CreateAssociation method directly
+// instead.
+//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
+//
+//    // Example sending a request using the CreateAssociationRequest method.
+//    req, resp := client.CreateAssociationRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
 func (c *SSM) CreateAssociationRequest(input *CreateAssociationInput) (req *request.Request, output *CreateAssociationOutput) {
 	op := &request.Operation{
 		Name:       opCreateAssociation,
@@ -114,7 +223,8 @@ func (c *SSM) CreateAssociationRequest(input *CreateAssociationInput) (req *requ
 // Associates the specified SSM document with the specified instance.
 //
 // When you associate an SSM document with an instance, the configuration agent
-// on the instance processes the document and configures the instance as specified.
+// on the instance (SSM agent for Linux and EC2Config service for Windows) processes
+// the document and configures the instance as specified.
 //
 // If you associate a document with an instance that already has an associated
 // document, the system throws the AssociationAlreadyExists exception.
@@ -126,7 +236,28 @@ func (c *SSM) CreateAssociation(input *CreateAssociationInput) (*CreateAssociati
 
 const opCreateAssociationBatch = "CreateAssociationBatch"
 
-// CreateAssociationBatchRequest generates a request for the CreateAssociationBatch operation.
+// CreateAssociationBatchRequest generates a "aws/request.Request" representing the
+// client's request for the CreateAssociationBatch operation. The "output" return
+// value can be used to capture response data after the request's "Send" method
+// is called.
+//
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the CreateAssociationBatch method directly
+// instead.
+//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
+//
+//    // Example sending a request using the CreateAssociationBatchRequest method.
+//    req, resp := client.CreateAssociationBatchRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
 func (c *SSM) CreateAssociationBatchRequest(input *CreateAssociationBatchInput) (req *request.Request, output *CreateAssociationBatchOutput) {
 	op := &request.Operation{
 		Name:       opCreateAssociationBatch,
@@ -147,7 +278,8 @@ func (c *SSM) CreateAssociationBatchRequest(input *CreateAssociationBatchInput) 
 // Associates the specified SSM document with the specified instances.
 //
 // When you associate an SSM document with an instance, the configuration agent
-// on the instance processes the document and configures the instance as specified.
+// on the instance (SSM agent for Linux and EC2Config service for Windows) processes
+// the document and configures the instance as specified.
 //
 // If you associate a document with an instance that already has an associated
 // document, the system throws the AssociationAlreadyExists exception.
@@ -159,7 +291,28 @@ func (c *SSM) CreateAssociationBatch(input *CreateAssociationBatchInput) (*Creat
 
 const opCreateDocument = "CreateDocument"
 
-// CreateDocumentRequest generates a request for the CreateDocument operation.
+// CreateDocumentRequest generates a "aws/request.Request" representing the
+// client's request for the CreateDocument operation. The "output" return
+// value can be used to capture response data after the request's "Send" method
+// is called.
+//
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the CreateDocument method directly
+// instead.
+//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
+//
+//    // Example sending a request using the CreateDocumentRequest method.
+//    req, resp := client.CreateDocumentRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
 func (c *SSM) CreateDocumentRequest(input *CreateDocumentInput) (req *request.Request, output *CreateDocumentOutput) {
 	op := &request.Operation{
 		Name:       opCreateDocument,
@@ -187,9 +340,124 @@ func (c *SSM) CreateDocument(input *CreateDocumentInput) (*CreateDocumentOutput,
 	return out, err
 }
 
+const opCreateMaintenanceWindow = "CreateMaintenanceWindow"
+
+// CreateMaintenanceWindowRequest generates a "aws/request.Request" representing the
+// client's request for the CreateMaintenanceWindow operation. The "output" return
+// value can be used to capture response data after the request's "Send" method
+// is called.
+//
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the CreateMaintenanceWindow method directly
+// instead.
+//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
+//
+//    // Example sending a request using the CreateMaintenanceWindowRequest method.
+//    req, resp := client.CreateMaintenanceWindowRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+func (c *SSM) CreateMaintenanceWindowRequest(input *CreateMaintenanceWindowInput) (req *request.Request, output *CreateMaintenanceWindowOutput) {
+	op := &request.Operation{
+		Name:       opCreateMaintenanceWindow,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &CreateMaintenanceWindowInput{}
+	}
+
+	req = c.newRequest(op, input, output)
+	output = &CreateMaintenanceWindowOutput{}
+	req.Data = output
+	return
+}
+
+func (c *SSM) CreateMaintenanceWindow(input *CreateMaintenanceWindowInput) (*CreateMaintenanceWindowOutput, error) {
+	req, out := c.CreateMaintenanceWindowRequest(input)
+	err := req.Send()
+	return out, err
+}
+
+const opCreatePatchBaseline = "CreatePatchBaseline"
+
+// CreatePatchBaselineRequest generates a "aws/request.Request" representing the
+// client's request for the CreatePatchBaseline operation. The "output" return
+// value can be used to capture response data after the request's "Send" method
+// is called.
+//
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the CreatePatchBaseline method directly
+// instead.
+//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
+//
+//    // Example sending a request using the CreatePatchBaselineRequest method.
+//    req, resp := client.CreatePatchBaselineRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+func (c *SSM) CreatePatchBaselineRequest(input *CreatePatchBaselineInput) (req *request.Request, output *CreatePatchBaselineOutput) {
+	op := &request.Operation{
+		Name:       opCreatePatchBaseline,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &CreatePatchBaselineInput{}
+	}
+
+	req = c.newRequest(op, input, output)
+	output = &CreatePatchBaselineOutput{}
+	req.Data = output
+	return
+}
+
+func (c *SSM) CreatePatchBaseline(input *CreatePatchBaselineInput) (*CreatePatchBaselineOutput, error) {
+	req, out := c.CreatePatchBaselineRequest(input)
+	err := req.Send()
+	return out, err
+}
+
 const opDeleteActivation = "DeleteActivation"
 
-// DeleteActivationRequest generates a request for the DeleteActivation operation.
+// DeleteActivationRequest generates a "aws/request.Request" representing the
+// client's request for the DeleteActivation operation. The "output" return
+// value can be used to capture response data after the request's "Send" method
+// is called.
+//
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the DeleteActivation method directly
+// instead.
+//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
+//
+//    // Example sending a request using the DeleteActivationRequest method.
+//    req, resp := client.DeleteActivationRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
 func (c *SSM) DeleteActivationRequest(input *DeleteActivationInput) (req *request.Request, output *DeleteActivationOutput) {
 	op := &request.Operation{
 		Name:       opDeleteActivation,
@@ -207,6 +475,10 @@ func (c *SSM) DeleteActivationRequest(input *DeleteActivationInput) (req *reques
 	return
 }
 
+// Deletes an activation. You are not required to delete an activation. If you
+// delete an activation, you can no longer use it to register additional managed
+// instances. Deleting an activation does not de-register managed instances.
+// You must manually de-register managed instances.
 func (c *SSM) DeleteActivation(input *DeleteActivationInput) (*DeleteActivationOutput, error) {
 	req, out := c.DeleteActivationRequest(input)
 	err := req.Send()
@@ -215,7 +487,28 @@ func (c *SSM) DeleteActivation(input *DeleteActivationInput) (*DeleteActivationO
 
 const opDeleteAssociation = "DeleteAssociation"
 
-// DeleteAssociationRequest generates a request for the DeleteAssociation operation.
+// DeleteAssociationRequest generates a "aws/request.Request" representing the
+// client's request for the DeleteAssociation operation. The "output" return
+// value can be used to capture response data after the request's "Send" method
+// is called.
+//
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the DeleteAssociation method directly
+// instead.
+//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
+//
+//    // Example sending a request using the DeleteAssociationRequest method.
+//    req, resp := client.DeleteAssociationRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
 func (c *SSM) DeleteAssociationRequest(input *DeleteAssociationInput) (req *request.Request, output *DeleteAssociationOutput) {
 	op := &request.Operation{
 		Name:       opDeleteAssociation,
@@ -247,7 +540,28 @@ func (c *SSM) DeleteAssociation(input *DeleteAssociationInput) (*DeleteAssociati
 
 const opDeleteDocument = "DeleteDocument"
 
-// DeleteDocumentRequest generates a request for the DeleteDocument operation.
+// DeleteDocumentRequest generates a "aws/request.Request" representing the
+// client's request for the DeleteDocument operation. The "output" return
+// value can be used to capture response data after the request's "Send" method
+// is called.
+//
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the DeleteDocument method directly
+// instead.
+//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
+//
+//    // Example sending a request using the DeleteDocumentRequest method.
+//    req, resp := client.DeleteDocumentRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
 func (c *SSM) DeleteDocumentRequest(input *DeleteDocumentInput) (req *request.Request, output *DeleteDocumentOutput) {
 	op := &request.Operation{
 		Name:       opDeleteDocument,
@@ -275,9 +589,171 @@ func (c *SSM) DeleteDocument(input *DeleteDocumentInput) (*DeleteDocumentOutput,
 	return out, err
 }
 
+const opDeleteMaintenanceWindow = "DeleteMaintenanceWindow"
+
+// DeleteMaintenanceWindowRequest generates a "aws/request.Request" representing the
+// client's request for the DeleteMaintenanceWindow operation. The "output" return
+// value can be used to capture response data after the request's "Send" method
+// is called.
+//
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the DeleteMaintenanceWindow method directly
+// instead.
+//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
+//
+//    // Example sending a request using the DeleteMaintenanceWindowRequest method.
+//    req, resp := client.DeleteMaintenanceWindowRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+func (c *SSM) DeleteMaintenanceWindowRequest(input *DeleteMaintenanceWindowInput) (req *request.Request, output *DeleteMaintenanceWindowOutput) {
+	op := &request.Operation{
+		Name:       opDeleteMaintenanceWindow,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &DeleteMaintenanceWindowInput{}
+	}
+
+	req = c.newRequest(op, input, output)
+	output = &DeleteMaintenanceWindowOutput{}
+	req.Data = output
+	return
+}
+
+func (c *SSM) DeleteMaintenanceWindow(input *DeleteMaintenanceWindowInput) (*DeleteMaintenanceWindowOutput, error) {
+	req, out := c.DeleteMaintenanceWindowRequest(input)
+	err := req.Send()
+	return out, err
+}
+
+const opDeleteParameter = "DeleteParameter"
+
+// DeleteParameterRequest generates a "aws/request.Request" representing the
+// client's request for the DeleteParameter operation. The "output" return
+// value can be used to capture response data after the request's "Send" method
+// is called.
+//
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the DeleteParameter method directly
+// instead.
+//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
+//
+//    // Example sending a request using the DeleteParameterRequest method.
+//    req, resp := client.DeleteParameterRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+func (c *SSM) DeleteParameterRequest(input *DeleteParameterInput) (req *request.Request, output *DeleteParameterOutput) {
+	op := &request.Operation{
+		Name:       opDeleteParameter,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &DeleteParameterInput{}
+	}
+
+	req = c.newRequest(op, input, output)
+	output = &DeleteParameterOutput{}
+	req.Data = output
+	return
+}
+
+func (c *SSM) DeleteParameter(input *DeleteParameterInput) (*DeleteParameterOutput, error) {
+	req, out := c.DeleteParameterRequest(input)
+	err := req.Send()
+	return out, err
+}
+
+const opDeletePatchBaseline = "DeletePatchBaseline"
+
+// DeletePatchBaselineRequest generates a "aws/request.Request" representing the
+// client's request for the DeletePatchBaseline operation. The "output" return
+// value can be used to capture response data after the request's "Send" method
+// is called.
+//
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the DeletePatchBaseline method directly
+// instead.
+//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
+//
+//    // Example sending a request using the DeletePatchBaselineRequest method.
+//    req, resp := client.DeletePatchBaselineRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+func (c *SSM) DeletePatchBaselineRequest(input *DeletePatchBaselineInput) (req *request.Request, output *DeletePatchBaselineOutput) {
+	op := &request.Operation{
+		Name:       opDeletePatchBaseline,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &DeletePatchBaselineInput{}
+	}
+
+	req = c.newRequest(op, input, output)
+	output = &DeletePatchBaselineOutput{}
+	req.Data = output
+	return
+}
+
+func (c *SSM) DeletePatchBaseline(input *DeletePatchBaselineInput) (*DeletePatchBaselineOutput, error) {
+	req, out := c.DeletePatchBaselineRequest(input)
+	err := req.Send()
+	return out, err
+}
+
 const opDeregisterManagedInstance = "DeregisterManagedInstance"
 
-// DeregisterManagedInstanceRequest generates a request for the DeregisterManagedInstance operation.
+// DeregisterManagedInstanceRequest generates a "aws/request.Request" representing the
+// client's request for the DeregisterManagedInstance operation. The "output" return
+// value can be used to capture response data after the request's "Send" method
+// is called.
+//
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the DeregisterManagedInstance method directly
+// instead.
+//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
+//
+//    // Example sending a request using the DeregisterManagedInstanceRequest method.
+//    req, resp := client.DeregisterManagedInstanceRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
 func (c *SSM) DeregisterManagedInstanceRequest(input *DeregisterManagedInstanceInput) (req *request.Request, output *DeregisterManagedInstanceOutput) {
 	op := &request.Operation{
 		Name:       opDeregisterManagedInstance,
@@ -295,20 +771,191 @@ func (c *SSM) DeregisterManagedInstanceRequest(input *DeregisterManagedInstanceI
 	return
 }
 
+// Removes the server or virtual machine from the list of registered servers.
+// You can reregister the instance again at any time. If you don’t plan to use
+// Run Command on the server, we suggest uninstalling the SSM agent first.
 func (c *SSM) DeregisterManagedInstance(input *DeregisterManagedInstanceInput) (*DeregisterManagedInstanceOutput, error) {
 	req, out := c.DeregisterManagedInstanceRequest(input)
 	err := req.Send()
 	return out, err
 }
 
+const opDeregisterPatchBaselineForPatchGroup = "DeregisterPatchBaselineForPatchGroup"
+
+// DeregisterPatchBaselineForPatchGroupRequest generates a "aws/request.Request" representing the
+// client's request for the DeregisterPatchBaselineForPatchGroup operation. The "output" return
+// value can be used to capture response data after the request's "Send" method
+// is called.
+//
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the DeregisterPatchBaselineForPatchGroup method directly
+// instead.
+//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
+//
+//    // Example sending a request using the DeregisterPatchBaselineForPatchGroupRequest method.
+//    req, resp := client.DeregisterPatchBaselineForPatchGroupRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+func (c *SSM) DeregisterPatchBaselineForPatchGroupRequest(input *DeregisterPatchBaselineForPatchGroupInput) (req *request.Request, output *DeregisterPatchBaselineForPatchGroupOutput) {
+	op := &request.Operation{
+		Name:       opDeregisterPatchBaselineForPatchGroup,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &DeregisterPatchBaselineForPatchGroupInput{}
+	}
+
+	req = c.newRequest(op, input, output)
+	output = &DeregisterPatchBaselineForPatchGroupOutput{}
+	req.Data = output
+	return
+}
+
+func (c *SSM) DeregisterPatchBaselineForPatchGroup(input *DeregisterPatchBaselineForPatchGroupInput) (*DeregisterPatchBaselineForPatchGroupOutput, error) {
+	req, out := c.DeregisterPatchBaselineForPatchGroupRequest(input)
+	err := req.Send()
+	return out, err
+}
+
+const opDeregisterTargetFromMaintenanceWindow = "DeregisterTargetFromMaintenanceWindow"
+
+// DeregisterTargetFromMaintenanceWindowRequest generates a "aws/request.Request" representing the
+// client's request for the DeregisterTargetFromMaintenanceWindow operation. The "output" return
+// value can be used to capture response data after the request's "Send" method
+// is called.
+//
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the DeregisterTargetFromMaintenanceWindow method directly
+// instead.
+//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
+//
+//    // Example sending a request using the DeregisterTargetFromMaintenanceWindowRequest method.
+//    req, resp := client.DeregisterTargetFromMaintenanceWindowRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+func (c *SSM) DeregisterTargetFromMaintenanceWindowRequest(input *DeregisterTargetFromMaintenanceWindowInput) (req *request.Request, output *DeregisterTargetFromMaintenanceWindowOutput) {
+	op := &request.Operation{
+		Name:       opDeregisterTargetFromMaintenanceWindow,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &DeregisterTargetFromMaintenanceWindowInput{}
+	}
+
+	req = c.newRequest(op, input, output)
+	output = &DeregisterTargetFromMaintenanceWindowOutput{}
+	req.Data = output
+	return
+}
+
+func (c *SSM) DeregisterTargetFromMaintenanceWindow(input *DeregisterTargetFromMaintenanceWindowInput) (*DeregisterTargetFromMaintenanceWindowOutput, error) {
+	req, out := c.DeregisterTargetFromMaintenanceWindowRequest(input)
+	err := req.Send()
+	return out, err
+}
+
+const opDeregisterTaskFromMaintenanceWindow = "DeregisterTaskFromMaintenanceWindow"
+
+// DeregisterTaskFromMaintenanceWindowRequest generates a "aws/request.Request" representing the
+// client's request for the DeregisterTaskFromMaintenanceWindow operation. The "output" return
+// value can be used to capture response data after the request's "Send" method
+// is called.
+//
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the DeregisterTaskFromMaintenanceWindow method directly
+// instead.
+//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
+//
+//    // Example sending a request using the DeregisterTaskFromMaintenanceWindowRequest method.
+//    req, resp := client.DeregisterTaskFromMaintenanceWindowRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+func (c *SSM) DeregisterTaskFromMaintenanceWindowRequest(input *DeregisterTaskFromMaintenanceWindowInput) (req *request.Request, output *DeregisterTaskFromMaintenanceWindowOutput) {
+	op := &request.Operation{
+		Name:       opDeregisterTaskFromMaintenanceWindow,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &DeregisterTaskFromMaintenanceWindowInput{}
+	}
+
+	req = c.newRequest(op, input, output)
+	output = &DeregisterTaskFromMaintenanceWindowOutput{}
+	req.Data = output
+	return
+}
+
+func (c *SSM) DeregisterTaskFromMaintenanceWindow(input *DeregisterTaskFromMaintenanceWindowInput) (*DeregisterTaskFromMaintenanceWindowOutput, error) {
+	req, out := c.DeregisterTaskFromMaintenanceWindowRequest(input)
+	err := req.Send()
+	return out, err
+}
+
 const opDescribeActivations = "DescribeActivations"
 
-// DescribeActivationsRequest generates a request for the DescribeActivations operation.
+// DescribeActivationsRequest generates a "aws/request.Request" representing the
+// client's request for the DescribeActivations operation. The "output" return
+// value can be used to capture response data after the request's "Send" method
+// is called.
+//
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the DescribeActivations method directly
+// instead.
+//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
+//
+//    // Example sending a request using the DescribeActivationsRequest method.
+//    req, resp := client.DescribeActivationsRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
 func (c *SSM) DescribeActivationsRequest(input *DescribeActivationsInput) (req *request.Request, output *DescribeActivationsOutput) {
 	op := &request.Operation{
 		Name:       opDescribeActivations,
 		HTTPMethod: "POST",
 		HTTPPath:   "/",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"NextToken"},
+			OutputTokens:    []string{"NextToken"},
+			LimitToken:      "MaxResults",
+			TruncationToken: "",
+		},
 	}
 
 	if input == nil {
@@ -321,15 +968,64 @@ func (c *SSM) DescribeActivationsRequest(input *DescribeActivationsInput) (req *
 	return
 }
 
+// Details about the activation, including: the date and time the activation
+// was created, the expiration date, the IAM role assigned to the instances
+// in the activation, and the number of instances activated by this registration.
 func (c *SSM) DescribeActivations(input *DescribeActivationsInput) (*DescribeActivationsOutput, error) {
 	req, out := c.DescribeActivationsRequest(input)
 	err := req.Send()
 	return out, err
 }
 
+// DescribeActivationsPages iterates over the pages of a DescribeActivations operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See DescribeActivations method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//    // Example iterating over at most 3 pages of a DescribeActivations operation.
+//    pageNum := 0
+//    err := client.DescribeActivationsPages(params,
+//        func(page *DescribeActivationsOutput, lastPage bool) bool {
+//            pageNum++
+//            fmt.Println(page)
+//            return pageNum <= 3
+//        })
+//
+func (c *SSM) DescribeActivationsPages(input *DescribeActivationsInput, fn func(p *DescribeActivationsOutput, lastPage bool) (shouldContinue bool)) error {
+	page, _ := c.DescribeActivationsRequest(input)
+	page.Handlers.Build.PushBack(request.MakeAddToUserAgentFreeFormHandler("Paginator"))
+	return page.EachPage(func(p interface{}, lastPage bool) bool {
+		return fn(p.(*DescribeActivationsOutput), lastPage)
+	})
+}
+
 const opDescribeAssociation = "DescribeAssociation"
 
-// DescribeAssociationRequest generates a request for the DescribeAssociation operation.
+// DescribeAssociationRequest generates a "aws/request.Request" representing the
+// client's request for the DescribeAssociation operation. The "output" return
+// value can be used to capture response data after the request's "Send" method
+// is called.
+//
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the DescribeAssociation method directly
+// instead.
+//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
+//
+//    // Example sending a request using the DescribeAssociationRequest method.
+//    req, resp := client.DescribeAssociationRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
 func (c *SSM) DescribeAssociationRequest(input *DescribeAssociationInput) (req *request.Request, output *DescribeAssociationOutput) {
 	op := &request.Operation{
 		Name:       opDescribeAssociation,
@@ -354,9 +1050,171 @@ func (c *SSM) DescribeAssociation(input *DescribeAssociationInput) (*DescribeAss
 	return out, err
 }
 
+const opDescribeAutomationActions = "DescribeAutomationActions"
+
+// DescribeAutomationActionsRequest generates a "aws/request.Request" representing the
+// client's request for the DescribeAutomationActions operation. The "output" return
+// value can be used to capture response data after the request's "Send" method
+// is called.
+//
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the DescribeAutomationActions method directly
+// instead.
+//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
+//
+//    // Example sending a request using the DescribeAutomationActionsRequest method.
+//    req, resp := client.DescribeAutomationActionsRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+func (c *SSM) DescribeAutomationActionsRequest(input *DescribeAutomationActionsInput) (req *request.Request, output *DescribeAutomationActionsOutput) {
+	op := &request.Operation{
+		Name:       opDescribeAutomationActions,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &DescribeAutomationActionsInput{}
+	}
+
+	req = c.newRequest(op, input, output)
+	output = &DescribeAutomationActionsOutput{}
+	req.Data = output
+	return
+}
+
+func (c *SSM) DescribeAutomationActions(input *DescribeAutomationActionsInput) (*DescribeAutomationActionsOutput, error) {
+	req, out := c.DescribeAutomationActionsRequest(input)
+	err := req.Send()
+	return out, err
+}
+
+const opDescribeAutomationExecutions = "DescribeAutomationExecutions"
+
+// DescribeAutomationExecutionsRequest generates a "aws/request.Request" representing the
+// client's request for the DescribeAutomationExecutions operation. The "output" return
+// value can be used to capture response data after the request's "Send" method
+// is called.
+//
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the DescribeAutomationExecutions method directly
+// instead.
+//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
+//
+//    // Example sending a request using the DescribeAutomationExecutionsRequest method.
+//    req, resp := client.DescribeAutomationExecutionsRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+func (c *SSM) DescribeAutomationExecutionsRequest(input *DescribeAutomationExecutionsInput) (req *request.Request, output *DescribeAutomationExecutionsOutput) {
+	op := &request.Operation{
+		Name:       opDescribeAutomationExecutions,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &DescribeAutomationExecutionsInput{}
+	}
+
+	req = c.newRequest(op, input, output)
+	output = &DescribeAutomationExecutionsOutput{}
+	req.Data = output
+	return
+}
+
+func (c *SSM) DescribeAutomationExecutions(input *DescribeAutomationExecutionsInput) (*DescribeAutomationExecutionsOutput, error) {
+	req, out := c.DescribeAutomationExecutionsRequest(input)
+	err := req.Send()
+	return out, err
+}
+
+const opDescribeAvailablePatches = "DescribeAvailablePatches"
+
+// DescribeAvailablePatchesRequest generates a "aws/request.Request" representing the
+// client's request for the DescribeAvailablePatches operation. The "output" return
+// value can be used to capture response data after the request's "Send" method
+// is called.
+//
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the DescribeAvailablePatches method directly
+// instead.
+//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
+//
+//    // Example sending a request using the DescribeAvailablePatchesRequest method.
+//    req, resp := client.DescribeAvailablePatchesRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+func (c *SSM) DescribeAvailablePatchesRequest(input *DescribeAvailablePatchesInput) (req *request.Request, output *DescribeAvailablePatchesOutput) {
+	op := &request.Operation{
+		Name:       opDescribeAvailablePatches,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &DescribeAvailablePatchesInput{}
+	}
+
+	req = c.newRequest(op, input, output)
+	output = &DescribeAvailablePatchesOutput{}
+	req.Data = output
+	return
+}
+
+func (c *SSM) DescribeAvailablePatches(input *DescribeAvailablePatchesInput) (*DescribeAvailablePatchesOutput, error) {
+	req, out := c.DescribeAvailablePatchesRequest(input)
+	err := req.Send()
+	return out, err
+}
+
 const opDescribeDocument = "DescribeDocument"
 
-// DescribeDocumentRequest generates a request for the DescribeDocument operation.
+// DescribeDocumentRequest generates a "aws/request.Request" representing the
+// client's request for the DescribeDocument operation. The "output" return
+// value can be used to capture response data after the request's "Send" method
+// is called.
+//
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the DescribeDocument method directly
+// instead.
+//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
+//
+//    // Example sending a request using the DescribeDocumentRequest method.
+//    req, resp := client.DescribeDocumentRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
 func (c *SSM) DescribeDocumentRequest(input *DescribeDocumentInput) (req *request.Request, output *DescribeDocumentOutput) {
 	op := &request.Operation{
 		Name:       opDescribeDocument,
@@ -381,9 +1239,77 @@ func (c *SSM) DescribeDocument(input *DescribeDocumentInput) (*DescribeDocumentO
 	return out, err
 }
 
+const opDescribeDocumentInternal = "DescribeDocumentInternal"
+
+// DescribeDocumentInternalRequest generates a "aws/request.Request" representing the
+// client's request for the DescribeDocumentInternal operation. The "output" return
+// value can be used to capture response data after the request's "Send" method
+// is called.
+//
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the DescribeDocumentInternal method directly
+// instead.
+//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
+//
+//    // Example sending a request using the DescribeDocumentInternalRequest method.
+//    req, resp := client.DescribeDocumentInternalRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+func (c *SSM) DescribeDocumentInternalRequest(input *DescribeDocumentInternalInput) (req *request.Request, output *DescribeDocumentInternalOutput) {
+	op := &request.Operation{
+		Name:       opDescribeDocumentInternal,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &DescribeDocumentInternalInput{}
+	}
+
+	req = c.newRequest(op, input, output)
+	output = &DescribeDocumentInternalOutput{}
+	req.Data = output
+	return
+}
+
+func (c *SSM) DescribeDocumentInternal(input *DescribeDocumentInternalInput) (*DescribeDocumentInternalOutput, error) {
+	req, out := c.DescribeDocumentInternalRequest(input)
+	err := req.Send()
+	return out, err
+}
+
 const opDescribeDocumentParameters = "DescribeDocumentParameters"
 
-// DescribeDocumentParametersRequest generates a request for the DescribeDocumentParameters operation.
+// DescribeDocumentParametersRequest generates a "aws/request.Request" representing the
+// client's request for the DescribeDocumentParameters operation. The "output" return
+// value can be used to capture response data after the request's "Send" method
+// is called.
+//
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the DescribeDocumentParameters method directly
+// instead.
+//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
+//
+//    // Example sending a request using the DescribeDocumentParametersRequest method.
+//    req, resp := client.DescribeDocumentParametersRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
 func (c *SSM) DescribeDocumentParametersRequest(input *DescribeDocumentParametersInput) (req *request.Request, output *DescribeDocumentParametersOutput) {
 	op := &request.Operation{
 		Name:       opDescribeDocumentParameters,
@@ -409,7 +1335,28 @@ func (c *SSM) DescribeDocumentParameters(input *DescribeDocumentParametersInput)
 
 const opDescribeDocumentPermission = "DescribeDocumentPermission"
 
-// DescribeDocumentPermissionRequest generates a request for the DescribeDocumentPermission operation.
+// DescribeDocumentPermissionRequest generates a "aws/request.Request" representing the
+// client's request for the DescribeDocumentPermission operation. The "output" return
+// value can be used to capture response data after the request's "Send" method
+// is called.
+//
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the DescribeDocumentPermission method directly
+// instead.
+//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
+//
+//    // Example sending a request using the DescribeDocumentPermissionRequest method.
+//    req, resp := client.DescribeDocumentPermissionRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
 func (c *SSM) DescribeDocumentPermissionRequest(input *DescribeDocumentPermissionInput) (req *request.Request, output *DescribeDocumentPermissionOutput) {
 	op := &request.Operation{
 		Name:       opDescribeDocumentPermission,
@@ -436,14 +1383,323 @@ func (c *SSM) DescribeDocumentPermission(input *DescribeDocumentPermissionInput)
 	return out, err
 }
 
+const opDescribeDocumentSchema = "DescribeDocumentSchema"
+
+// DescribeDocumentSchemaRequest generates a "aws/request.Request" representing the
+// client's request for the DescribeDocumentSchema operation. The "output" return
+// value can be used to capture response data after the request's "Send" method
+// is called.
+//
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the DescribeDocumentSchema method directly
+// instead.
+//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
+//
+//    // Example sending a request using the DescribeDocumentSchemaRequest method.
+//    req, resp := client.DescribeDocumentSchemaRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+func (c *SSM) DescribeDocumentSchemaRequest(input *DescribeDocumentSchemaInput) (req *request.Request, output *DescribeDocumentSchemaOutput) {
+	op := &request.Operation{
+		Name:       opDescribeDocumentSchema,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &DescribeDocumentSchemaInput{}
+	}
+
+	req = c.newRequest(op, input, output)
+	output = &DescribeDocumentSchemaOutput{}
+	req.Data = output
+	return
+}
+
+func (c *SSM) DescribeDocumentSchema(input *DescribeDocumentSchemaInput) (*DescribeDocumentSchemaOutput, error) {
+	req, out := c.DescribeDocumentSchemaRequest(input)
+	err := req.Send()
+	return out, err
+}
+
+const opDescribeDocumentStepSchema = "DescribeDocumentStepSchema"
+
+// DescribeDocumentStepSchemaRequest generates a "aws/request.Request" representing the
+// client's request for the DescribeDocumentStepSchema operation. The "output" return
+// value can be used to capture response data after the request's "Send" method
+// is called.
+//
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the DescribeDocumentStepSchema method directly
+// instead.
+//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
+//
+//    // Example sending a request using the DescribeDocumentStepSchemaRequest method.
+//    req, resp := client.DescribeDocumentStepSchemaRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+func (c *SSM) DescribeDocumentStepSchemaRequest(input *DescribeDocumentStepSchemaInput) (req *request.Request, output *DescribeDocumentStepSchemaOutput) {
+	op := &request.Operation{
+		Name:       opDescribeDocumentStepSchema,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &DescribeDocumentStepSchemaInput{}
+	}
+
+	req = c.newRequest(op, input, output)
+	output = &DescribeDocumentStepSchemaOutput{}
+	req.Data = output
+	return
+}
+
+func (c *SSM) DescribeDocumentStepSchema(input *DescribeDocumentStepSchemaInput) (*DescribeDocumentStepSchemaOutput, error) {
+	req, out := c.DescribeDocumentStepSchemaRequest(input)
+	err := req.Send()
+	return out, err
+}
+
+const opDescribeDocumentSteps = "DescribeDocumentSteps"
+
+// DescribeDocumentStepsRequest generates a "aws/request.Request" representing the
+// client's request for the DescribeDocumentSteps operation. The "output" return
+// value can be used to capture response data after the request's "Send" method
+// is called.
+//
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the DescribeDocumentSteps method directly
+// instead.
+//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
+//
+//    // Example sending a request using the DescribeDocumentStepsRequest method.
+//    req, resp := client.DescribeDocumentStepsRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+func (c *SSM) DescribeDocumentStepsRequest(input *DescribeDocumentStepsInput) (req *request.Request, output *DescribeDocumentStepsOutput) {
+	op := &request.Operation{
+		Name:       opDescribeDocumentSteps,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &DescribeDocumentStepsInput{}
+	}
+
+	req = c.newRequest(op, input, output)
+	output = &DescribeDocumentStepsOutput{}
+	req.Data = output
+	return
+}
+
+func (c *SSM) DescribeDocumentSteps(input *DescribeDocumentStepsInput) (*DescribeDocumentStepsOutput, error) {
+	req, out := c.DescribeDocumentStepsRequest(input)
+	err := req.Send()
+	return out, err
+}
+
+const opDescribeEffectiveInstanceAssociations = "DescribeEffectiveInstanceAssociations"
+
+// DescribeEffectiveInstanceAssociationsRequest generates a "aws/request.Request" representing the
+// client's request for the DescribeEffectiveInstanceAssociations operation. The "output" return
+// value can be used to capture response data after the request's "Send" method
+// is called.
+//
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the DescribeEffectiveInstanceAssociations method directly
+// instead.
+//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
+//
+//    // Example sending a request using the DescribeEffectiveInstanceAssociationsRequest method.
+//    req, resp := client.DescribeEffectiveInstanceAssociationsRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+func (c *SSM) DescribeEffectiveInstanceAssociationsRequest(input *DescribeEffectiveInstanceAssociationsInput) (req *request.Request, output *DescribeEffectiveInstanceAssociationsOutput) {
+	op := &request.Operation{
+		Name:       opDescribeEffectiveInstanceAssociations,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &DescribeEffectiveInstanceAssociationsInput{}
+	}
+
+	req = c.newRequest(op, input, output)
+	output = &DescribeEffectiveInstanceAssociationsOutput{}
+	req.Data = output
+	return
+}
+
+func (c *SSM) DescribeEffectiveInstanceAssociations(input *DescribeEffectiveInstanceAssociationsInput) (*DescribeEffectiveInstanceAssociationsOutput, error) {
+	req, out := c.DescribeEffectiveInstanceAssociationsRequest(input)
+	err := req.Send()
+	return out, err
+}
+
+const opDescribeEffectivePatchesForPatchBaseline = "DescribeEffectivePatchesForPatchBaseline"
+
+// DescribeEffectivePatchesForPatchBaselineRequest generates a "aws/request.Request" representing the
+// client's request for the DescribeEffectivePatchesForPatchBaseline operation. The "output" return
+// value can be used to capture response data after the request's "Send" method
+// is called.
+//
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the DescribeEffectivePatchesForPatchBaseline method directly
+// instead.
+//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
+//
+//    // Example sending a request using the DescribeEffectivePatchesForPatchBaselineRequest method.
+//    req, resp := client.DescribeEffectivePatchesForPatchBaselineRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+func (c *SSM) DescribeEffectivePatchesForPatchBaselineRequest(input *DescribeEffectivePatchesForPatchBaselineInput) (req *request.Request, output *DescribeEffectivePatchesForPatchBaselineOutput) {
+	op := &request.Operation{
+		Name:       opDescribeEffectivePatchesForPatchBaseline,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &DescribeEffectivePatchesForPatchBaselineInput{}
+	}
+
+	req = c.newRequest(op, input, output)
+	output = &DescribeEffectivePatchesForPatchBaselineOutput{}
+	req.Data = output
+	return
+}
+
+func (c *SSM) DescribeEffectivePatchesForPatchBaseline(input *DescribeEffectivePatchesForPatchBaselineInput) (*DescribeEffectivePatchesForPatchBaselineOutput, error) {
+	req, out := c.DescribeEffectivePatchesForPatchBaselineRequest(input)
+	err := req.Send()
+	return out, err
+}
+
+const opDescribeInstanceAssociationsStatus = "DescribeInstanceAssociationsStatus"
+
+// DescribeInstanceAssociationsStatusRequest generates a "aws/request.Request" representing the
+// client's request for the DescribeInstanceAssociationsStatus operation. The "output" return
+// value can be used to capture response data after the request's "Send" method
+// is called.
+//
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the DescribeInstanceAssociationsStatus method directly
+// instead.
+//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
+//
+//    // Example sending a request using the DescribeInstanceAssociationsStatusRequest method.
+//    req, resp := client.DescribeInstanceAssociationsStatusRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+func (c *SSM) DescribeInstanceAssociationsStatusRequest(input *DescribeInstanceAssociationsStatusInput) (req *request.Request, output *DescribeInstanceAssociationsStatusOutput) {
+	op := &request.Operation{
+		Name:       opDescribeInstanceAssociationsStatus,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &DescribeInstanceAssociationsStatusInput{}
+	}
+
+	req = c.newRequest(op, input, output)
+	output = &DescribeInstanceAssociationsStatusOutput{}
+	req.Data = output
+	return
+}
+
+func (c *SSM) DescribeInstanceAssociationsStatus(input *DescribeInstanceAssociationsStatusInput) (*DescribeInstanceAssociationsStatusOutput, error) {
+	req, out := c.DescribeInstanceAssociationsStatusRequest(input)
+	err := req.Send()
+	return out, err
+}
+
 const opDescribeInstanceInformation = "DescribeInstanceInformation"
 
-// DescribeInstanceInformationRequest generates a request for the DescribeInstanceInformation operation.
+// DescribeInstanceInformationRequest generates a "aws/request.Request" representing the
+// client's request for the DescribeInstanceInformation operation. The "output" return
+// value can be used to capture response data after the request's "Send" method
+// is called.
+//
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the DescribeInstanceInformation method directly
+// instead.
+//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
+//
+//    // Example sending a request using the DescribeInstanceInformationRequest method.
+//    req, resp := client.DescribeInstanceInformationRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
 func (c *SSM) DescribeInstanceInformationRequest(input *DescribeInstanceInformationInput) (req *request.Request, output *DescribeInstanceInformationOutput) {
 	op := &request.Operation{
 		Name:       opDescribeInstanceInformation,
 		HTTPMethod: "POST",
 		HTTPPath:   "/",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"NextToken"},
+			OutputTokens:    []string{"NextToken"},
+			LimitToken:      "MaxResults",
+			TruncationToken: "",
+		},
 	}
 
 	if input == nil {
@@ -457,20 +1713,207 @@ func (c *SSM) DescribeInstanceInformationRequest(input *DescribeInstanceInformat
 }
 
 // Describes one or more of your instances. You can use this to get information
-// about instances like the operating system platform, the SSM agent version,
-// status etc. If you specify one or more instance IDs, it returns information
-// for those instances. If you do not specify instance IDs, it returns information
-// for all your instances. If you specify an instance ID that is not valid or
-// an instance that you do not own, you receive an error.
+// about instances like the operating system platform, the SSM agent version
+// (Linux), status etc. If you specify one or more instance IDs, it returns
+// information for those instances. If you do not specify instance IDs, it returns
+// information for all your instances. If you specify an instance ID that is
+// not valid or an instance that you do not own, you receive an error.
 func (c *SSM) DescribeInstanceInformation(input *DescribeInstanceInformationInput) (*DescribeInstanceInformationOutput, error) {
 	req, out := c.DescribeInstanceInformationRequest(input)
 	err := req.Send()
 	return out, err
 }
 
+// DescribeInstanceInformationPages iterates over the pages of a DescribeInstanceInformation operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See DescribeInstanceInformation method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//    // Example iterating over at most 3 pages of a DescribeInstanceInformation operation.
+//    pageNum := 0
+//    err := client.DescribeInstanceInformationPages(params,
+//        func(page *DescribeInstanceInformationOutput, lastPage bool) bool {
+//            pageNum++
+//            fmt.Println(page)
+//            return pageNum <= 3
+//        })
+//
+func (c *SSM) DescribeInstanceInformationPages(input *DescribeInstanceInformationInput, fn func(p *DescribeInstanceInformationOutput, lastPage bool) (shouldContinue bool)) error {
+	page, _ := c.DescribeInstanceInformationRequest(input)
+	page.Handlers.Build.PushBack(request.MakeAddToUserAgentFreeFormHandler("Paginator"))
+	return page.EachPage(func(p interface{}, lastPage bool) bool {
+		return fn(p.(*DescribeInstanceInformationOutput), lastPage)
+	})
+}
+
+const opDescribeInstancePatchStates = "DescribeInstancePatchStates"
+
+// DescribeInstancePatchStatesRequest generates a "aws/request.Request" representing the
+// client's request for the DescribeInstancePatchStates operation. The "output" return
+// value can be used to capture response data after the request's "Send" method
+// is called.
+//
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the DescribeInstancePatchStates method directly
+// instead.
+//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
+//
+//    // Example sending a request using the DescribeInstancePatchStatesRequest method.
+//    req, resp := client.DescribeInstancePatchStatesRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+func (c *SSM) DescribeInstancePatchStatesRequest(input *DescribeInstancePatchStatesInput) (req *request.Request, output *DescribeInstancePatchStatesOutput) {
+	op := &request.Operation{
+		Name:       opDescribeInstancePatchStates,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &DescribeInstancePatchStatesInput{}
+	}
+
+	req = c.newRequest(op, input, output)
+	output = &DescribeInstancePatchStatesOutput{}
+	req.Data = output
+	return
+}
+
+func (c *SSM) DescribeInstancePatchStates(input *DescribeInstancePatchStatesInput) (*DescribeInstancePatchStatesOutput, error) {
+	req, out := c.DescribeInstancePatchStatesRequest(input)
+	err := req.Send()
+	return out, err
+}
+
+const opDescribeInstancePatchStatesForPatchGroup = "DescribeInstancePatchStatesForPatchGroup"
+
+// DescribeInstancePatchStatesForPatchGroupRequest generates a "aws/request.Request" representing the
+// client's request for the DescribeInstancePatchStatesForPatchGroup operation. The "output" return
+// value can be used to capture response data after the request's "Send" method
+// is called.
+//
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the DescribeInstancePatchStatesForPatchGroup method directly
+// instead.
+//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
+//
+//    // Example sending a request using the DescribeInstancePatchStatesForPatchGroupRequest method.
+//    req, resp := client.DescribeInstancePatchStatesForPatchGroupRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+func (c *SSM) DescribeInstancePatchStatesForPatchGroupRequest(input *DescribeInstancePatchStatesForPatchGroupInput) (req *request.Request, output *DescribeInstancePatchStatesForPatchGroupOutput) {
+	op := &request.Operation{
+		Name:       opDescribeInstancePatchStatesForPatchGroup,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &DescribeInstancePatchStatesForPatchGroupInput{}
+	}
+
+	req = c.newRequest(op, input, output)
+	output = &DescribeInstancePatchStatesForPatchGroupOutput{}
+	req.Data = output
+	return
+}
+
+func (c *SSM) DescribeInstancePatchStatesForPatchGroup(input *DescribeInstancePatchStatesForPatchGroupInput) (*DescribeInstancePatchStatesForPatchGroupOutput, error) {
+	req, out := c.DescribeInstancePatchStatesForPatchGroupRequest(input)
+	err := req.Send()
+	return out, err
+}
+
+const opDescribeInstancePatches = "DescribeInstancePatches"
+
+// DescribeInstancePatchesRequest generates a "aws/request.Request" representing the
+// client's request for the DescribeInstancePatches operation. The "output" return
+// value can be used to capture response data after the request's "Send" method
+// is called.
+//
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the DescribeInstancePatches method directly
+// instead.
+//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
+//
+//    // Example sending a request using the DescribeInstancePatchesRequest method.
+//    req, resp := client.DescribeInstancePatchesRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+func (c *SSM) DescribeInstancePatchesRequest(input *DescribeInstancePatchesInput) (req *request.Request, output *DescribeInstancePatchesOutput) {
+	op := &request.Operation{
+		Name:       opDescribeInstancePatches,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &DescribeInstancePatchesInput{}
+	}
+
+	req = c.newRequest(op, input, output)
+	output = &DescribeInstancePatchesOutput{}
+	req.Data = output
+	return
+}
+
+func (c *SSM) DescribeInstancePatches(input *DescribeInstancePatchesInput) (*DescribeInstancePatchesOutput, error) {
+	req, out := c.DescribeInstancePatchesRequest(input)
+	err := req.Send()
+	return out, err
+}
+
 const opDescribeInstanceProperties = "DescribeInstanceProperties"
 
-// DescribeInstancePropertiesRequest generates a request for the DescribeInstanceProperties operation.
+// DescribeInstancePropertiesRequest generates a "aws/request.Request" representing the
+// client's request for the DescribeInstanceProperties operation. The "output" return
+// value can be used to capture response data after the request's "Send" method
+// is called.
+//
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the DescribeInstanceProperties method directly
+// instead.
+//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
+//
+//    // Example sending a request using the DescribeInstancePropertiesRequest method.
+//    req, resp := client.DescribeInstancePropertiesRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
 func (c *SSM) DescribeInstancePropertiesRequest(input *DescribeInstancePropertiesInput) (req *request.Request, output *DescribeInstancePropertiesOutput) {
 	op := &request.Operation{
 		Name:       opDescribeInstanceProperties,
@@ -494,9 +1937,735 @@ func (c *SSM) DescribeInstanceProperties(input *DescribeInstancePropertiesInput)
 	return out, err
 }
 
+const opDescribeMaintenanceWindowExecutionTaskInvocations = "DescribeMaintenanceWindowExecutionTaskInvocations"
+
+// DescribeMaintenanceWindowExecutionTaskInvocationsRequest generates a "aws/request.Request" representing the
+// client's request for the DescribeMaintenanceWindowExecutionTaskInvocations operation. The "output" return
+// value can be used to capture response data after the request's "Send" method
+// is called.
+//
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the DescribeMaintenanceWindowExecutionTaskInvocations method directly
+// instead.
+//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
+//
+//    // Example sending a request using the DescribeMaintenanceWindowExecutionTaskInvocationsRequest method.
+//    req, resp := client.DescribeMaintenanceWindowExecutionTaskInvocationsRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+func (c *SSM) DescribeMaintenanceWindowExecutionTaskInvocationsRequest(input *DescribeMaintenanceWindowExecutionTaskInvocationsInput) (req *request.Request, output *DescribeMaintenanceWindowExecutionTaskInvocationsOutput) {
+	op := &request.Operation{
+		Name:       opDescribeMaintenanceWindowExecutionTaskInvocations,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &DescribeMaintenanceWindowExecutionTaskInvocationsInput{}
+	}
+
+	req = c.newRequest(op, input, output)
+	output = &DescribeMaintenanceWindowExecutionTaskInvocationsOutput{}
+	req.Data = output
+	return
+}
+
+func (c *SSM) DescribeMaintenanceWindowExecutionTaskInvocations(input *DescribeMaintenanceWindowExecutionTaskInvocationsInput) (*DescribeMaintenanceWindowExecutionTaskInvocationsOutput, error) {
+	req, out := c.DescribeMaintenanceWindowExecutionTaskInvocationsRequest(input)
+	err := req.Send()
+	return out, err
+}
+
+const opDescribeMaintenanceWindowExecutionTasks = "DescribeMaintenanceWindowExecutionTasks"
+
+// DescribeMaintenanceWindowExecutionTasksRequest generates a "aws/request.Request" representing the
+// client's request for the DescribeMaintenanceWindowExecutionTasks operation. The "output" return
+// value can be used to capture response data after the request's "Send" method
+// is called.
+//
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the DescribeMaintenanceWindowExecutionTasks method directly
+// instead.
+//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
+//
+//    // Example sending a request using the DescribeMaintenanceWindowExecutionTasksRequest method.
+//    req, resp := client.DescribeMaintenanceWindowExecutionTasksRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+func (c *SSM) DescribeMaintenanceWindowExecutionTasksRequest(input *DescribeMaintenanceWindowExecutionTasksInput) (req *request.Request, output *DescribeMaintenanceWindowExecutionTasksOutput) {
+	op := &request.Operation{
+		Name:       opDescribeMaintenanceWindowExecutionTasks,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &DescribeMaintenanceWindowExecutionTasksInput{}
+	}
+
+	req = c.newRequest(op, input, output)
+	output = &DescribeMaintenanceWindowExecutionTasksOutput{}
+	req.Data = output
+	return
+}
+
+func (c *SSM) DescribeMaintenanceWindowExecutionTasks(input *DescribeMaintenanceWindowExecutionTasksInput) (*DescribeMaintenanceWindowExecutionTasksOutput, error) {
+	req, out := c.DescribeMaintenanceWindowExecutionTasksRequest(input)
+	err := req.Send()
+	return out, err
+}
+
+const opDescribeMaintenanceWindowExecutions = "DescribeMaintenanceWindowExecutions"
+
+// DescribeMaintenanceWindowExecutionsRequest generates a "aws/request.Request" representing the
+// client's request for the DescribeMaintenanceWindowExecutions operation. The "output" return
+// value can be used to capture response data after the request's "Send" method
+// is called.
+//
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the DescribeMaintenanceWindowExecutions method directly
+// instead.
+//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
+//
+//    // Example sending a request using the DescribeMaintenanceWindowExecutionsRequest method.
+//    req, resp := client.DescribeMaintenanceWindowExecutionsRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+func (c *SSM) DescribeMaintenanceWindowExecutionsRequest(input *DescribeMaintenanceWindowExecutionsInput) (req *request.Request, output *DescribeMaintenanceWindowExecutionsOutput) {
+	op := &request.Operation{
+		Name:       opDescribeMaintenanceWindowExecutions,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &DescribeMaintenanceWindowExecutionsInput{}
+	}
+
+	req = c.newRequest(op, input, output)
+	output = &DescribeMaintenanceWindowExecutionsOutput{}
+	req.Data = output
+	return
+}
+
+func (c *SSM) DescribeMaintenanceWindowExecutions(input *DescribeMaintenanceWindowExecutionsInput) (*DescribeMaintenanceWindowExecutionsOutput, error) {
+	req, out := c.DescribeMaintenanceWindowExecutionsRequest(input)
+	err := req.Send()
+	return out, err
+}
+
+const opDescribeMaintenanceWindowTargets = "DescribeMaintenanceWindowTargets"
+
+// DescribeMaintenanceWindowTargetsRequest generates a "aws/request.Request" representing the
+// client's request for the DescribeMaintenanceWindowTargets operation. The "output" return
+// value can be used to capture response data after the request's "Send" method
+// is called.
+//
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the DescribeMaintenanceWindowTargets method directly
+// instead.
+//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
+//
+//    // Example sending a request using the DescribeMaintenanceWindowTargetsRequest method.
+//    req, resp := client.DescribeMaintenanceWindowTargetsRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+func (c *SSM) DescribeMaintenanceWindowTargetsRequest(input *DescribeMaintenanceWindowTargetsInput) (req *request.Request, output *DescribeMaintenanceWindowTargetsOutput) {
+	op := &request.Operation{
+		Name:       opDescribeMaintenanceWindowTargets,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &DescribeMaintenanceWindowTargetsInput{}
+	}
+
+	req = c.newRequest(op, input, output)
+	output = &DescribeMaintenanceWindowTargetsOutput{}
+	req.Data = output
+	return
+}
+
+func (c *SSM) DescribeMaintenanceWindowTargets(input *DescribeMaintenanceWindowTargetsInput) (*DescribeMaintenanceWindowTargetsOutput, error) {
+	req, out := c.DescribeMaintenanceWindowTargetsRequest(input)
+	err := req.Send()
+	return out, err
+}
+
+const opDescribeMaintenanceWindowTasks = "DescribeMaintenanceWindowTasks"
+
+// DescribeMaintenanceWindowTasksRequest generates a "aws/request.Request" representing the
+// client's request for the DescribeMaintenanceWindowTasks operation. The "output" return
+// value can be used to capture response data after the request's "Send" method
+// is called.
+//
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the DescribeMaintenanceWindowTasks method directly
+// instead.
+//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
+//
+//    // Example sending a request using the DescribeMaintenanceWindowTasksRequest method.
+//    req, resp := client.DescribeMaintenanceWindowTasksRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+func (c *SSM) DescribeMaintenanceWindowTasksRequest(input *DescribeMaintenanceWindowTasksInput) (req *request.Request, output *DescribeMaintenanceWindowTasksOutput) {
+	op := &request.Operation{
+		Name:       opDescribeMaintenanceWindowTasks,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &DescribeMaintenanceWindowTasksInput{}
+	}
+
+	req = c.newRequest(op, input, output)
+	output = &DescribeMaintenanceWindowTasksOutput{}
+	req.Data = output
+	return
+}
+
+func (c *SSM) DescribeMaintenanceWindowTasks(input *DescribeMaintenanceWindowTasksInput) (*DescribeMaintenanceWindowTasksOutput, error) {
+	req, out := c.DescribeMaintenanceWindowTasksRequest(input)
+	err := req.Send()
+	return out, err
+}
+
+const opDescribeMaintenanceWindows = "DescribeMaintenanceWindows"
+
+// DescribeMaintenanceWindowsRequest generates a "aws/request.Request" representing the
+// client's request for the DescribeMaintenanceWindows operation. The "output" return
+// value can be used to capture response data after the request's "Send" method
+// is called.
+//
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the DescribeMaintenanceWindows method directly
+// instead.
+//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
+//
+//    // Example sending a request using the DescribeMaintenanceWindowsRequest method.
+//    req, resp := client.DescribeMaintenanceWindowsRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+func (c *SSM) DescribeMaintenanceWindowsRequest(input *DescribeMaintenanceWindowsInput) (req *request.Request, output *DescribeMaintenanceWindowsOutput) {
+	op := &request.Operation{
+		Name:       opDescribeMaintenanceWindows,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &DescribeMaintenanceWindowsInput{}
+	}
+
+	req = c.newRequest(op, input, output)
+	output = &DescribeMaintenanceWindowsOutput{}
+	req.Data = output
+	return
+}
+
+func (c *SSM) DescribeMaintenanceWindows(input *DescribeMaintenanceWindowsInput) (*DescribeMaintenanceWindowsOutput, error) {
+	req, out := c.DescribeMaintenanceWindowsRequest(input)
+	err := req.Send()
+	return out, err
+}
+
+const opDescribeParameters = "DescribeParameters"
+
+// DescribeParametersRequest generates a "aws/request.Request" representing the
+// client's request for the DescribeParameters operation. The "output" return
+// value can be used to capture response data after the request's "Send" method
+// is called.
+//
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the DescribeParameters method directly
+// instead.
+//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
+//
+//    // Example sending a request using the DescribeParametersRequest method.
+//    req, resp := client.DescribeParametersRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+func (c *SSM) DescribeParametersRequest(input *DescribeParametersInput) (req *request.Request, output *DescribeParametersOutput) {
+	op := &request.Operation{
+		Name:       opDescribeParameters,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &DescribeParametersInput{}
+	}
+
+	req = c.newRequest(op, input, output)
+	output = &DescribeParametersOutput{}
+	req.Data = output
+	return
+}
+
+func (c *SSM) DescribeParameters(input *DescribeParametersInput) (*DescribeParametersOutput, error) {
+	req, out := c.DescribeParametersRequest(input)
+	err := req.Send()
+	return out, err
+}
+
+const opDescribePatchBaselines = "DescribePatchBaselines"
+
+// DescribePatchBaselinesRequest generates a "aws/request.Request" representing the
+// client's request for the DescribePatchBaselines operation. The "output" return
+// value can be used to capture response data after the request's "Send" method
+// is called.
+//
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the DescribePatchBaselines method directly
+// instead.
+//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
+//
+//    // Example sending a request using the DescribePatchBaselinesRequest method.
+//    req, resp := client.DescribePatchBaselinesRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+func (c *SSM) DescribePatchBaselinesRequest(input *DescribePatchBaselinesInput) (req *request.Request, output *DescribePatchBaselinesOutput) {
+	op := &request.Operation{
+		Name:       opDescribePatchBaselines,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &DescribePatchBaselinesInput{}
+	}
+
+	req = c.newRequest(op, input, output)
+	output = &DescribePatchBaselinesOutput{}
+	req.Data = output
+	return
+}
+
+func (c *SSM) DescribePatchBaselines(input *DescribePatchBaselinesInput) (*DescribePatchBaselinesOutput, error) {
+	req, out := c.DescribePatchBaselinesRequest(input)
+	err := req.Send()
+	return out, err
+}
+
+const opDescribePatchGroupState = "DescribePatchGroupState"
+
+// DescribePatchGroupStateRequest generates a "aws/request.Request" representing the
+// client's request for the DescribePatchGroupState operation. The "output" return
+// value can be used to capture response data after the request's "Send" method
+// is called.
+//
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the DescribePatchGroupState method directly
+// instead.
+//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
+//
+//    // Example sending a request using the DescribePatchGroupStateRequest method.
+//    req, resp := client.DescribePatchGroupStateRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+func (c *SSM) DescribePatchGroupStateRequest(input *DescribePatchGroupStateInput) (req *request.Request, output *DescribePatchGroupStateOutput) {
+	op := &request.Operation{
+		Name:       opDescribePatchGroupState,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &DescribePatchGroupStateInput{}
+	}
+
+	req = c.newRequest(op, input, output)
+	output = &DescribePatchGroupStateOutput{}
+	req.Data = output
+	return
+}
+
+func (c *SSM) DescribePatchGroupState(input *DescribePatchGroupStateInput) (*DescribePatchGroupStateOutput, error) {
+	req, out := c.DescribePatchGroupStateRequest(input)
+	err := req.Send()
+	return out, err
+}
+
+const opDescribePatchGroups = "DescribePatchGroups"
+
+// DescribePatchGroupsRequest generates a "aws/request.Request" representing the
+// client's request for the DescribePatchGroups operation. The "output" return
+// value can be used to capture response data after the request's "Send" method
+// is called.
+//
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the DescribePatchGroups method directly
+// instead.
+//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
+//
+//    // Example sending a request using the DescribePatchGroupsRequest method.
+//    req, resp := client.DescribePatchGroupsRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+func (c *SSM) DescribePatchGroupsRequest(input *DescribePatchGroupsInput) (req *request.Request, output *DescribePatchGroupsOutput) {
+	op := &request.Operation{
+		Name:       opDescribePatchGroups,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &DescribePatchGroupsInput{}
+	}
+
+	req = c.newRequest(op, input, output)
+	output = &DescribePatchGroupsOutput{}
+	req.Data = output
+	return
+}
+
+func (c *SSM) DescribePatchGroups(input *DescribePatchGroupsInput) (*DescribePatchGroupsOutput, error) {
+	req, out := c.DescribePatchGroupsRequest(input)
+	err := req.Send()
+	return out, err
+}
+
+const opGetAutomationAction = "GetAutomationAction"
+
+// GetAutomationActionRequest generates a "aws/request.Request" representing the
+// client's request for the GetAutomationAction operation. The "output" return
+// value can be used to capture response data after the request's "Send" method
+// is called.
+//
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the GetAutomationAction method directly
+// instead.
+//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
+//
+//    // Example sending a request using the GetAutomationActionRequest method.
+//    req, resp := client.GetAutomationActionRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+func (c *SSM) GetAutomationActionRequest(input *GetAutomationActionInput) (req *request.Request, output *GetAutomationActionOutput) {
+	op := &request.Operation{
+		Name:       opGetAutomationAction,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &GetAutomationActionInput{}
+	}
+
+	req = c.newRequest(op, input, output)
+	output = &GetAutomationActionOutput{}
+	req.Data = output
+	return
+}
+
+func (c *SSM) GetAutomationAction(input *GetAutomationActionInput) (*GetAutomationActionOutput, error) {
+	req, out := c.GetAutomationActionRequest(input)
+	err := req.Send()
+	return out, err
+}
+
+const opGetAutomationExecution = "GetAutomationExecution"
+
+// GetAutomationExecutionRequest generates a "aws/request.Request" representing the
+// client's request for the GetAutomationExecution operation. The "output" return
+// value can be used to capture response data after the request's "Send" method
+// is called.
+//
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the GetAutomationExecution method directly
+// instead.
+//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
+//
+//    // Example sending a request using the GetAutomationExecutionRequest method.
+//    req, resp := client.GetAutomationExecutionRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+func (c *SSM) GetAutomationExecutionRequest(input *GetAutomationExecutionInput) (req *request.Request, output *GetAutomationExecutionOutput) {
+	op := &request.Operation{
+		Name:       opGetAutomationExecution,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &GetAutomationExecutionInput{}
+	}
+
+	req = c.newRequest(op, input, output)
+	output = &GetAutomationExecutionOutput{}
+	req.Data = output
+	return
+}
+
+func (c *SSM) GetAutomationExecution(input *GetAutomationExecutionInput) (*GetAutomationExecutionOutput, error) {
+	req, out := c.GetAutomationExecutionRequest(input)
+	err := req.Send()
+	return out, err
+}
+
+const opGetCommandInvocation = "GetCommandInvocation"
+
+// GetCommandInvocationRequest generates a "aws/request.Request" representing the
+// client's request for the GetCommandInvocation operation. The "output" return
+// value can be used to capture response data after the request's "Send" method
+// is called.
+//
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the GetCommandInvocation method directly
+// instead.
+//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
+//
+//    // Example sending a request using the GetCommandInvocationRequest method.
+//    req, resp := client.GetCommandInvocationRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+func (c *SSM) GetCommandInvocationRequest(input *GetCommandInvocationInput) (req *request.Request, output *GetCommandInvocationOutput) {
+	op := &request.Operation{
+		Name:       opGetCommandInvocation,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &GetCommandInvocationInput{}
+	}
+
+	req = c.newRequest(op, input, output)
+	output = &GetCommandInvocationOutput{}
+	req.Data = output
+	return
+}
+
+func (c *SSM) GetCommandInvocation(input *GetCommandInvocationInput) (*GetCommandInvocationOutput, error) {
+	req, out := c.GetCommandInvocationRequest(input)
+	err := req.Send()
+	return out, err
+}
+
+const opGetDefaultPatchBaseline = "GetDefaultPatchBaseline"
+
+// GetDefaultPatchBaselineRequest generates a "aws/request.Request" representing the
+// client's request for the GetDefaultPatchBaseline operation. The "output" return
+// value can be used to capture response data after the request's "Send" method
+// is called.
+//
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the GetDefaultPatchBaseline method directly
+// instead.
+//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
+//
+//    // Example sending a request using the GetDefaultPatchBaselineRequest method.
+//    req, resp := client.GetDefaultPatchBaselineRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+func (c *SSM) GetDefaultPatchBaselineRequest(input *GetDefaultPatchBaselineInput) (req *request.Request, output *GetDefaultPatchBaselineOutput) {
+	op := &request.Operation{
+		Name:       opGetDefaultPatchBaseline,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &GetDefaultPatchBaselineInput{}
+	}
+
+	req = c.newRequest(op, input, output)
+	output = &GetDefaultPatchBaselineOutput{}
+	req.Data = output
+	return
+}
+
+func (c *SSM) GetDefaultPatchBaseline(input *GetDefaultPatchBaselineInput) (*GetDefaultPatchBaselineOutput, error) {
+	req, out := c.GetDefaultPatchBaselineRequest(input)
+	err := req.Send()
+	return out, err
+}
+
+const opGetDeployablePatchSnapshotForInstance = "GetDeployablePatchSnapshotForInstance"
+
+// GetDeployablePatchSnapshotForInstanceRequest generates a "aws/request.Request" representing the
+// client's request for the GetDeployablePatchSnapshotForInstance operation. The "output" return
+// value can be used to capture response data after the request's "Send" method
+// is called.
+//
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the GetDeployablePatchSnapshotForInstance method directly
+// instead.
+//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
+//
+//    // Example sending a request using the GetDeployablePatchSnapshotForInstanceRequest method.
+//    req, resp := client.GetDeployablePatchSnapshotForInstanceRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+func (c *SSM) GetDeployablePatchSnapshotForInstanceRequest(input *GetDeployablePatchSnapshotForInstanceInput) (req *request.Request, output *GetDeployablePatchSnapshotForInstanceOutput) {
+	op := &request.Operation{
+		Name:       opGetDeployablePatchSnapshotForInstance,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &GetDeployablePatchSnapshotForInstanceInput{}
+	}
+
+	req = c.newRequest(op, input, output)
+	output = &GetDeployablePatchSnapshotForInstanceOutput{}
+	req.Data = output
+	return
+}
+
+func (c *SSM) GetDeployablePatchSnapshotForInstance(input *GetDeployablePatchSnapshotForInstanceInput) (*GetDeployablePatchSnapshotForInstanceOutput, error) {
+	req, out := c.GetDeployablePatchSnapshotForInstanceRequest(input)
+	err := req.Send()
+	return out, err
+}
+
 const opGetDocument = "GetDocument"
 
-// GetDocumentRequest generates a request for the GetDocument operation.
+// GetDocumentRequest generates a "aws/request.Request" representing the
+// client's request for the GetDocument operation. The "output" return
+// value can be used to capture response data after the request's "Send" method
+// is called.
+//
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the GetDocument method directly
+// instead.
+//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
+//
+//    // Example sending a request using the GetDocumentRequest method.
+//    req, resp := client.GetDocumentRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
 func (c *SSM) GetDocumentRequest(input *GetDocumentInput) (req *request.Request, output *GetDocumentOutput) {
 	op := &request.Operation{
 		Name:       opGetDocument,
@@ -521,9 +2690,500 @@ func (c *SSM) GetDocument(input *GetDocumentInput) (*GetDocumentOutput, error) {
 	return out, err
 }
 
+const opGetDocumentInternal = "GetDocumentInternal"
+
+// GetDocumentInternalRequest generates a "aws/request.Request" representing the
+// client's request for the GetDocumentInternal operation. The "output" return
+// value can be used to capture response data after the request's "Send" method
+// is called.
+//
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the GetDocumentInternal method directly
+// instead.
+//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
+//
+//    // Example sending a request using the GetDocumentInternalRequest method.
+//    req, resp := client.GetDocumentInternalRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+func (c *SSM) GetDocumentInternalRequest(input *GetDocumentInternalInput) (req *request.Request, output *GetDocumentInternalOutput) {
+	op := &request.Operation{
+		Name:       opGetDocumentInternal,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &GetDocumentInternalInput{}
+	}
+
+	req = c.newRequest(op, input, output)
+	output = &GetDocumentInternalOutput{}
+	req.Data = output
+	return
+}
+
+func (c *SSM) GetDocumentInternal(input *GetDocumentInternalInput) (*GetDocumentInternalOutput, error) {
+	req, out := c.GetDocumentInternalRequest(input)
+	err := req.Send()
+	return out, err
+}
+
+const opGetInventory = "GetInventory"
+
+// GetInventoryRequest generates a "aws/request.Request" representing the
+// client's request for the GetInventory operation. The "output" return
+// value can be used to capture response data after the request's "Send" method
+// is called.
+//
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the GetInventory method directly
+// instead.
+//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
+//
+//    // Example sending a request using the GetInventoryRequest method.
+//    req, resp := client.GetInventoryRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+func (c *SSM) GetInventoryRequest(input *GetInventoryInput) (req *request.Request, output *GetInventoryOutput) {
+	op := &request.Operation{
+		Name:       opGetInventory,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &GetInventoryInput{}
+	}
+
+	req = c.newRequest(op, input, output)
+	output = &GetInventoryOutput{}
+	req.Data = output
+	return
+}
+
+func (c *SSM) GetInventory(input *GetInventoryInput) (*GetInventoryOutput, error) {
+	req, out := c.GetInventoryRequest(input)
+	err := req.Send()
+	return out, err
+}
+
+const opGetInventorySchema = "GetInventorySchema"
+
+// GetInventorySchemaRequest generates a "aws/request.Request" representing the
+// client's request for the GetInventorySchema operation. The "output" return
+// value can be used to capture response data after the request's "Send" method
+// is called.
+//
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the GetInventorySchema method directly
+// instead.
+//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
+//
+//    // Example sending a request using the GetInventorySchemaRequest method.
+//    req, resp := client.GetInventorySchemaRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+func (c *SSM) GetInventorySchemaRequest(input *GetInventorySchemaInput) (req *request.Request, output *GetInventorySchemaOutput) {
+	op := &request.Operation{
+		Name:       opGetInventorySchema,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &GetInventorySchemaInput{}
+	}
+
+	req = c.newRequest(op, input, output)
+	output = &GetInventorySchemaOutput{}
+	req.Data = output
+	return
+}
+
+func (c *SSM) GetInventorySchema(input *GetInventorySchemaInput) (*GetInventorySchemaOutput, error) {
+	req, out := c.GetInventorySchemaRequest(input)
+	err := req.Send()
+	return out, err
+}
+
+const opGetMaintenanceWindow = "GetMaintenanceWindow"
+
+// GetMaintenanceWindowRequest generates a "aws/request.Request" representing the
+// client's request for the GetMaintenanceWindow operation. The "output" return
+// value can be used to capture response data after the request's "Send" method
+// is called.
+//
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the GetMaintenanceWindow method directly
+// instead.
+//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
+//
+//    // Example sending a request using the GetMaintenanceWindowRequest method.
+//    req, resp := client.GetMaintenanceWindowRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+func (c *SSM) GetMaintenanceWindowRequest(input *GetMaintenanceWindowInput) (req *request.Request, output *GetMaintenanceWindowOutput) {
+	op := &request.Operation{
+		Name:       opGetMaintenanceWindow,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &GetMaintenanceWindowInput{}
+	}
+
+	req = c.newRequest(op, input, output)
+	output = &GetMaintenanceWindowOutput{}
+	req.Data = output
+	return
+}
+
+func (c *SSM) GetMaintenanceWindow(input *GetMaintenanceWindowInput) (*GetMaintenanceWindowOutput, error) {
+	req, out := c.GetMaintenanceWindowRequest(input)
+	err := req.Send()
+	return out, err
+}
+
+const opGetMaintenanceWindowExecution = "GetMaintenanceWindowExecution"
+
+// GetMaintenanceWindowExecutionRequest generates a "aws/request.Request" representing the
+// client's request for the GetMaintenanceWindowExecution operation. The "output" return
+// value can be used to capture response data after the request's "Send" method
+// is called.
+//
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the GetMaintenanceWindowExecution method directly
+// instead.
+//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
+//
+//    // Example sending a request using the GetMaintenanceWindowExecutionRequest method.
+//    req, resp := client.GetMaintenanceWindowExecutionRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+func (c *SSM) GetMaintenanceWindowExecutionRequest(input *GetMaintenanceWindowExecutionInput) (req *request.Request, output *GetMaintenanceWindowExecutionOutput) {
+	op := &request.Operation{
+		Name:       opGetMaintenanceWindowExecution,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &GetMaintenanceWindowExecutionInput{}
+	}
+
+	req = c.newRequest(op, input, output)
+	output = &GetMaintenanceWindowExecutionOutput{}
+	req.Data = output
+	return
+}
+
+func (c *SSM) GetMaintenanceWindowExecution(input *GetMaintenanceWindowExecutionInput) (*GetMaintenanceWindowExecutionOutput, error) {
+	req, out := c.GetMaintenanceWindowExecutionRequest(input)
+	err := req.Send()
+	return out, err
+}
+
+const opGetMaintenanceWindowExecutionTask = "GetMaintenanceWindowExecutionTask"
+
+// GetMaintenanceWindowExecutionTaskRequest generates a "aws/request.Request" representing the
+// client's request for the GetMaintenanceWindowExecutionTask operation. The "output" return
+// value can be used to capture response data after the request's "Send" method
+// is called.
+//
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the GetMaintenanceWindowExecutionTask method directly
+// instead.
+//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
+//
+//    // Example sending a request using the GetMaintenanceWindowExecutionTaskRequest method.
+//    req, resp := client.GetMaintenanceWindowExecutionTaskRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+func (c *SSM) GetMaintenanceWindowExecutionTaskRequest(input *GetMaintenanceWindowExecutionTaskInput) (req *request.Request, output *GetMaintenanceWindowExecutionTaskOutput) {
+	op := &request.Operation{
+		Name:       opGetMaintenanceWindowExecutionTask,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &GetMaintenanceWindowExecutionTaskInput{}
+	}
+
+	req = c.newRequest(op, input, output)
+	output = &GetMaintenanceWindowExecutionTaskOutput{}
+	req.Data = output
+	return
+}
+
+func (c *SSM) GetMaintenanceWindowExecutionTask(input *GetMaintenanceWindowExecutionTaskInput) (*GetMaintenanceWindowExecutionTaskOutput, error) {
+	req, out := c.GetMaintenanceWindowExecutionTaskRequest(input)
+	err := req.Send()
+	return out, err
+}
+
+const opGetParameterHistory = "GetParameterHistory"
+
+// GetParameterHistoryRequest generates a "aws/request.Request" representing the
+// client's request for the GetParameterHistory operation. The "output" return
+// value can be used to capture response data after the request's "Send" method
+// is called.
+//
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the GetParameterHistory method directly
+// instead.
+//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
+//
+//    // Example sending a request using the GetParameterHistoryRequest method.
+//    req, resp := client.GetParameterHistoryRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+func (c *SSM) GetParameterHistoryRequest(input *GetParameterHistoryInput) (req *request.Request, output *GetParameterHistoryOutput) {
+	op := &request.Operation{
+		Name:       opGetParameterHistory,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &GetParameterHistoryInput{}
+	}
+
+	req = c.newRequest(op, input, output)
+	output = &GetParameterHistoryOutput{}
+	req.Data = output
+	return
+}
+
+func (c *SSM) GetParameterHistory(input *GetParameterHistoryInput) (*GetParameterHistoryOutput, error) {
+	req, out := c.GetParameterHistoryRequest(input)
+	err := req.Send()
+	return out, err
+}
+
+const opGetParameters = "GetParameters"
+
+// GetParametersRequest generates a "aws/request.Request" representing the
+// client's request for the GetParameters operation. The "output" return
+// value can be used to capture response data after the request's "Send" method
+// is called.
+//
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the GetParameters method directly
+// instead.
+//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
+//
+//    // Example sending a request using the GetParametersRequest method.
+//    req, resp := client.GetParametersRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+func (c *SSM) GetParametersRequest(input *GetParametersInput) (req *request.Request, output *GetParametersOutput) {
+	op := &request.Operation{
+		Name:       opGetParameters,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &GetParametersInput{}
+	}
+
+	req = c.newRequest(op, input, output)
+	output = &GetParametersOutput{}
+	req.Data = output
+	return
+}
+
+func (c *SSM) GetParameters(input *GetParametersInput) (*GetParametersOutput, error) {
+	req, out := c.GetParametersRequest(input)
+	err := req.Send()
+	return out, err
+}
+
+const opGetPatchBaseline = "GetPatchBaseline"
+
+// GetPatchBaselineRequest generates a "aws/request.Request" representing the
+// client's request for the GetPatchBaseline operation. The "output" return
+// value can be used to capture response data after the request's "Send" method
+// is called.
+//
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the GetPatchBaseline method directly
+// instead.
+//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
+//
+//    // Example sending a request using the GetPatchBaselineRequest method.
+//    req, resp := client.GetPatchBaselineRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+func (c *SSM) GetPatchBaselineRequest(input *GetPatchBaselineInput) (req *request.Request, output *GetPatchBaselineOutput) {
+	op := &request.Operation{
+		Name:       opGetPatchBaseline,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &GetPatchBaselineInput{}
+	}
+
+	req = c.newRequest(op, input, output)
+	output = &GetPatchBaselineOutput{}
+	req.Data = output
+	return
+}
+
+func (c *SSM) GetPatchBaseline(input *GetPatchBaselineInput) (*GetPatchBaselineOutput, error) {
+	req, out := c.GetPatchBaselineRequest(input)
+	err := req.Send()
+	return out, err
+}
+
+const opGetPatchBaselineForPatchGroup = "GetPatchBaselineForPatchGroup"
+
+// GetPatchBaselineForPatchGroupRequest generates a "aws/request.Request" representing the
+// client's request for the GetPatchBaselineForPatchGroup operation. The "output" return
+// value can be used to capture response data after the request's "Send" method
+// is called.
+//
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the GetPatchBaselineForPatchGroup method directly
+// instead.
+//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
+//
+//    // Example sending a request using the GetPatchBaselineForPatchGroupRequest method.
+//    req, resp := client.GetPatchBaselineForPatchGroupRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+func (c *SSM) GetPatchBaselineForPatchGroupRequest(input *GetPatchBaselineForPatchGroupInput) (req *request.Request, output *GetPatchBaselineForPatchGroupOutput) {
+	op := &request.Operation{
+		Name:       opGetPatchBaselineForPatchGroup,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &GetPatchBaselineForPatchGroupInput{}
+	}
+
+	req = c.newRequest(op, input, output)
+	output = &GetPatchBaselineForPatchGroupOutput{}
+	req.Data = output
+	return
+}
+
+func (c *SSM) GetPatchBaselineForPatchGroup(input *GetPatchBaselineForPatchGroupInput) (*GetPatchBaselineForPatchGroupOutput, error) {
+	req, out := c.GetPatchBaselineForPatchGroupRequest(input)
+	err := req.Send()
+	return out, err
+}
+
 const opListAssociations = "ListAssociations"
 
-// ListAssociationsRequest generates a request for the ListAssociations operation.
+// ListAssociationsRequest generates a "aws/request.Request" representing the
+// client's request for the ListAssociations operation. The "output" return
+// value can be used to capture response data after the request's "Send" method
+// is called.
+//
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the ListAssociations method directly
+// instead.
+//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
+//
+//    // Example sending a request using the ListAssociationsRequest method.
+//    req, resp := client.ListAssociationsRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
 func (c *SSM) ListAssociationsRequest(input *ListAssociationsInput) (req *request.Request, output *ListAssociationsOutput) {
 	op := &request.Operation{
 		Name:       opListAssociations,
@@ -554,6 +3214,23 @@ func (c *SSM) ListAssociations(input *ListAssociationsInput) (*ListAssociationsO
 	return out, err
 }
 
+// ListAssociationsPages iterates over the pages of a ListAssociations operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See ListAssociations method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//    // Example iterating over at most 3 pages of a ListAssociations operation.
+//    pageNum := 0
+//    err := client.ListAssociationsPages(params,
+//        func(page *ListAssociationsOutput, lastPage bool) bool {
+//            pageNum++
+//            fmt.Println(page)
+//            return pageNum <= 3
+//        })
+//
 func (c *SSM) ListAssociationsPages(input *ListAssociationsInput, fn func(p *ListAssociationsOutput, lastPage bool) (shouldContinue bool)) error {
 	page, _ := c.ListAssociationsRequest(input)
 	page.Handlers.Build.PushBack(request.MakeAddToUserAgentFreeFormHandler("Paginator"))
@@ -564,7 +3241,28 @@ func (c *SSM) ListAssociationsPages(input *ListAssociationsInput, fn func(p *Lis
 
 const opListCommandInvocations = "ListCommandInvocations"
 
-// ListCommandInvocationsRequest generates a request for the ListCommandInvocations operation.
+// ListCommandInvocationsRequest generates a "aws/request.Request" representing the
+// client's request for the ListCommandInvocations operation. The "output" return
+// value can be used to capture response data after the request's "Send" method
+// is called.
+//
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the ListCommandInvocations method directly
+// instead.
+//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
+//
+//    // Example sending a request using the ListCommandInvocationsRequest method.
+//    req, resp := client.ListCommandInvocationsRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
 func (c *SSM) ListCommandInvocationsRequest(input *ListCommandInvocationsInput) (req *request.Request, output *ListCommandInvocationsOutput) {
 	op := &request.Operation{
 		Name:       opListCommandInvocations,
@@ -599,6 +3297,23 @@ func (c *SSM) ListCommandInvocations(input *ListCommandInvocationsInput) (*ListC
 	return out, err
 }
 
+// ListCommandInvocationsPages iterates over the pages of a ListCommandInvocations operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See ListCommandInvocations method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//    // Example iterating over at most 3 pages of a ListCommandInvocations operation.
+//    pageNum := 0
+//    err := client.ListCommandInvocationsPages(params,
+//        func(page *ListCommandInvocationsOutput, lastPage bool) bool {
+//            pageNum++
+//            fmt.Println(page)
+//            return pageNum <= 3
+//        })
+//
 func (c *SSM) ListCommandInvocationsPages(input *ListCommandInvocationsInput, fn func(p *ListCommandInvocationsOutput, lastPage bool) (shouldContinue bool)) error {
 	page, _ := c.ListCommandInvocationsRequest(input)
 	page.Handlers.Build.PushBack(request.MakeAddToUserAgentFreeFormHandler("Paginator"))
@@ -609,7 +3324,28 @@ func (c *SSM) ListCommandInvocationsPages(input *ListCommandInvocationsInput, fn
 
 const opListCommands = "ListCommands"
 
-// ListCommandsRequest generates a request for the ListCommands operation.
+// ListCommandsRequest generates a "aws/request.Request" representing the
+// client's request for the ListCommands operation. The "output" return
+// value can be used to capture response data after the request's "Send" method
+// is called.
+//
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the ListCommands method directly
+// instead.
+//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
+//
+//    // Example sending a request using the ListCommandsRequest method.
+//    req, resp := client.ListCommandsRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
 func (c *SSM) ListCommandsRequest(input *ListCommandsInput) (req *request.Request, output *ListCommandsOutput) {
 	op := &request.Operation{
 		Name:       opListCommands,
@@ -640,6 +3376,23 @@ func (c *SSM) ListCommands(input *ListCommandsInput) (*ListCommandsOutput, error
 	return out, err
 }
 
+// ListCommandsPages iterates over the pages of a ListCommands operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See ListCommands method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//    // Example iterating over at most 3 pages of a ListCommands operation.
+//    pageNum := 0
+//    err := client.ListCommandsPages(params,
+//        func(page *ListCommandsOutput, lastPage bool) bool {
+//            pageNum++
+//            fmt.Println(page)
+//            return pageNum <= 3
+//        })
+//
 func (c *SSM) ListCommandsPages(input *ListCommandsInput, fn func(p *ListCommandsOutput, lastPage bool) (shouldContinue bool)) error {
 	page, _ := c.ListCommandsRequest(input)
 	page.Handlers.Build.PushBack(request.MakeAddToUserAgentFreeFormHandler("Paginator"))
@@ -648,9 +3401,77 @@ func (c *SSM) ListCommandsPages(input *ListCommandsInput, fn func(p *ListCommand
 	})
 }
 
+const opListDocumentVersions = "ListDocumentVersions"
+
+// ListDocumentVersionsRequest generates a "aws/request.Request" representing the
+// client's request for the ListDocumentVersions operation. The "output" return
+// value can be used to capture response data after the request's "Send" method
+// is called.
+//
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the ListDocumentVersions method directly
+// instead.
+//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
+//
+//    // Example sending a request using the ListDocumentVersionsRequest method.
+//    req, resp := client.ListDocumentVersionsRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+func (c *SSM) ListDocumentVersionsRequest(input *ListDocumentVersionsInput) (req *request.Request, output *ListDocumentVersionsOutput) {
+	op := &request.Operation{
+		Name:       opListDocumentVersions,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &ListDocumentVersionsInput{}
+	}
+
+	req = c.newRequest(op, input, output)
+	output = &ListDocumentVersionsOutput{}
+	req.Data = output
+	return
+}
+
+func (c *SSM) ListDocumentVersions(input *ListDocumentVersionsInput) (*ListDocumentVersionsOutput, error) {
+	req, out := c.ListDocumentVersionsRequest(input)
+	err := req.Send()
+	return out, err
+}
+
 const opListDocuments = "ListDocuments"
 
-// ListDocumentsRequest generates a request for the ListDocuments operation.
+// ListDocumentsRequest generates a "aws/request.Request" representing the
+// client's request for the ListDocuments operation. The "output" return
+// value can be used to capture response data after the request's "Send" method
+// is called.
+//
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the ListDocuments method directly
+// instead.
+//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
+//
+//    // Example sending a request using the ListDocumentsRequest method.
+//    req, resp := client.ListDocumentsRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
 func (c *SSM) ListDocumentsRequest(input *ListDocumentsInput) (req *request.Request, output *ListDocumentsOutput) {
 	op := &request.Operation{
 		Name:       opListDocuments,
@@ -681,6 +3502,23 @@ func (c *SSM) ListDocuments(input *ListDocumentsInput) (*ListDocumentsOutput, er
 	return out, err
 }
 
+// ListDocumentsPages iterates over the pages of a ListDocuments operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See ListDocuments method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//    // Example iterating over at most 3 pages of a ListDocuments operation.
+//    pageNum := 0
+//    err := client.ListDocumentsPages(params,
+//        func(page *ListDocumentsOutput, lastPage bool) bool {
+//            pageNum++
+//            fmt.Println(page)
+//            return pageNum <= 3
+//        })
+//
 func (c *SSM) ListDocumentsPages(input *ListDocumentsInput, fn func(p *ListDocumentsOutput, lastPage bool) (shouldContinue bool)) error {
 	page, _ := c.ListDocumentsRequest(input)
 	page.Handlers.Build.PushBack(request.MakeAddToUserAgentFreeFormHandler("Paginator"))
@@ -689,9 +3527,124 @@ func (c *SSM) ListDocumentsPages(input *ListDocumentsInput, fn func(p *ListDocum
 	})
 }
 
+const opListInstanceAssociations = "ListInstanceAssociations"
+
+// ListInstanceAssociationsRequest generates a "aws/request.Request" representing the
+// client's request for the ListInstanceAssociations operation. The "output" return
+// value can be used to capture response data after the request's "Send" method
+// is called.
+//
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the ListInstanceAssociations method directly
+// instead.
+//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
+//
+//    // Example sending a request using the ListInstanceAssociationsRequest method.
+//    req, resp := client.ListInstanceAssociationsRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+func (c *SSM) ListInstanceAssociationsRequest(input *ListInstanceAssociationsInput) (req *request.Request, output *ListInstanceAssociationsOutput) {
+	op := &request.Operation{
+		Name:       opListInstanceAssociations,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &ListInstanceAssociationsInput{}
+	}
+
+	req = c.newRequest(op, input, output)
+	output = &ListInstanceAssociationsOutput{}
+	req.Data = output
+	return
+}
+
+func (c *SSM) ListInstanceAssociations(input *ListInstanceAssociationsInput) (*ListInstanceAssociationsOutput, error) {
+	req, out := c.ListInstanceAssociationsRequest(input)
+	err := req.Send()
+	return out, err
+}
+
+const opListInventoryEntries = "ListInventoryEntries"
+
+// ListInventoryEntriesRequest generates a "aws/request.Request" representing the
+// client's request for the ListInventoryEntries operation. The "output" return
+// value can be used to capture response data after the request's "Send" method
+// is called.
+//
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the ListInventoryEntries method directly
+// instead.
+//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
+//
+//    // Example sending a request using the ListInventoryEntriesRequest method.
+//    req, resp := client.ListInventoryEntriesRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+func (c *SSM) ListInventoryEntriesRequest(input *ListInventoryEntriesInput) (req *request.Request, output *ListInventoryEntriesOutput) {
+	op := &request.Operation{
+		Name:       opListInventoryEntries,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &ListInventoryEntriesInput{}
+	}
+
+	req = c.newRequest(op, input, output)
+	output = &ListInventoryEntriesOutput{}
+	req.Data = output
+	return
+}
+
+func (c *SSM) ListInventoryEntries(input *ListInventoryEntriesInput) (*ListInventoryEntriesOutput, error) {
+	req, out := c.ListInventoryEntriesRequest(input)
+	err := req.Send()
+	return out, err
+}
+
 const opListTagsForResource = "ListTagsForResource"
 
-// ListTagsForResourceRequest generates a request for the ListTagsForResource operation.
+// ListTagsForResourceRequest generates a "aws/request.Request" representing the
+// client's request for the ListTagsForResource operation. The "output" return
+// value can be used to capture response data after the request's "Send" method
+// is called.
+//
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the ListTagsForResource method directly
+// instead.
+//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
+//
+//    // Example sending a request using the ListTagsForResourceRequest method.
+//    req, resp := client.ListTagsForResourceRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
 func (c *SSM) ListTagsForResourceRequest(input *ListTagsForResourceInput) (req *request.Request, output *ListTagsForResourceOutput) {
 	op := &request.Operation{
 		Name:       opListTagsForResource,
@@ -709,6 +3662,7 @@ func (c *SSM) ListTagsForResourceRequest(input *ListTagsForResourceInput) (req *
 	return
 }
 
+// Returns a list of the tags assigned to the specified resource.
 func (c *SSM) ListTagsForResource(input *ListTagsForResourceInput) (*ListTagsForResourceOutput, error) {
 	req, out := c.ListTagsForResourceRequest(input)
 	err := req.Send()
@@ -717,7 +3671,28 @@ func (c *SSM) ListTagsForResource(input *ListTagsForResourceInput) (*ListTagsFor
 
 const opModifyDocumentPermission = "ModifyDocumentPermission"
 
-// ModifyDocumentPermissionRequest generates a request for the ModifyDocumentPermission operation.
+// ModifyDocumentPermissionRequest generates a "aws/request.Request" representing the
+// client's request for the ModifyDocumentPermission operation. The "output" return
+// value can be used to capture response data after the request's "Send" method
+// is called.
+//
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the ModifyDocumentPermission method directly
+// instead.
+//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
+//
+//    // Example sending a request using the ModifyDocumentPermissionRequest method.
+//    req, resp := client.ModifyDocumentPermissionRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
 func (c *SSM) ModifyDocumentPermissionRequest(input *ModifyDocumentPermissionInput) (req *request.Request, output *ModifyDocumentPermissionOutput) {
 	op := &request.Operation{
 		Name:       opModifyDocumentPermission,
@@ -745,9 +3720,171 @@ func (c *SSM) ModifyDocumentPermission(input *ModifyDocumentPermissionInput) (*M
 	return out, err
 }
 
+const opPutInventory = "PutInventory"
+
+// PutInventoryRequest generates a "aws/request.Request" representing the
+// client's request for the PutInventory operation. The "output" return
+// value can be used to capture response data after the request's "Send" method
+// is called.
+//
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the PutInventory method directly
+// instead.
+//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
+//
+//    // Example sending a request using the PutInventoryRequest method.
+//    req, resp := client.PutInventoryRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+func (c *SSM) PutInventoryRequest(input *PutInventoryInput) (req *request.Request, output *PutInventoryOutput) {
+	op := &request.Operation{
+		Name:       opPutInventory,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &PutInventoryInput{}
+	}
+
+	req = c.newRequest(op, input, output)
+	output = &PutInventoryOutput{}
+	req.Data = output
+	return
+}
+
+func (c *SSM) PutInventory(input *PutInventoryInput) (*PutInventoryOutput, error) {
+	req, out := c.PutInventoryRequest(input)
+	err := req.Send()
+	return out, err
+}
+
+const opPutParameter = "PutParameter"
+
+// PutParameterRequest generates a "aws/request.Request" representing the
+// client's request for the PutParameter operation. The "output" return
+// value can be used to capture response data after the request's "Send" method
+// is called.
+//
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the PutParameter method directly
+// instead.
+//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
+//
+//    // Example sending a request using the PutParameterRequest method.
+//    req, resp := client.PutParameterRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+func (c *SSM) PutParameterRequest(input *PutParameterInput) (req *request.Request, output *PutParameterOutput) {
+	op := &request.Operation{
+		Name:       opPutParameter,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &PutParameterInput{}
+	}
+
+	req = c.newRequest(op, input, output)
+	output = &PutParameterOutput{}
+	req.Data = output
+	return
+}
+
+func (c *SSM) PutParameter(input *PutParameterInput) (*PutParameterOutput, error) {
+	req, out := c.PutParameterRequest(input)
+	err := req.Send()
+	return out, err
+}
+
+const opRegisterDefaultPatchBaseline = "RegisterDefaultPatchBaseline"
+
+// RegisterDefaultPatchBaselineRequest generates a "aws/request.Request" representing the
+// client's request for the RegisterDefaultPatchBaseline operation. The "output" return
+// value can be used to capture response data after the request's "Send" method
+// is called.
+//
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the RegisterDefaultPatchBaseline method directly
+// instead.
+//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
+//
+//    // Example sending a request using the RegisterDefaultPatchBaselineRequest method.
+//    req, resp := client.RegisterDefaultPatchBaselineRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+func (c *SSM) RegisterDefaultPatchBaselineRequest(input *RegisterDefaultPatchBaselineInput) (req *request.Request, output *RegisterDefaultPatchBaselineOutput) {
+	op := &request.Operation{
+		Name:       opRegisterDefaultPatchBaseline,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &RegisterDefaultPatchBaselineInput{}
+	}
+
+	req = c.newRequest(op, input, output)
+	output = &RegisterDefaultPatchBaselineOutput{}
+	req.Data = output
+	return
+}
+
+func (c *SSM) RegisterDefaultPatchBaseline(input *RegisterDefaultPatchBaselineInput) (*RegisterDefaultPatchBaselineOutput, error) {
+	req, out := c.RegisterDefaultPatchBaselineRequest(input)
+	err := req.Send()
+	return out, err
+}
+
 const opRegisterManagedInstance = "RegisterManagedInstance"
 
-// RegisterManagedInstanceRequest generates a request for the RegisterManagedInstance operation.
+// RegisterManagedInstanceRequest generates a "aws/request.Request" representing the
+// client's request for the RegisterManagedInstance operation. The "output" return
+// value can be used to capture response data after the request's "Send" method
+// is called.
+//
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the RegisterManagedInstance method directly
+// instead.
+//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
+//
+//    // Example sending a request using the RegisterManagedInstanceRequest method.
+//    req, resp := client.RegisterManagedInstanceRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
 func (c *SSM) RegisterManagedInstanceRequest(input *RegisterManagedInstanceInput) (req *request.Request, output *RegisterManagedInstanceOutput) {
 	op := &request.Operation{
 		Name:       opRegisterManagedInstance,
@@ -771,9 +3908,171 @@ func (c *SSM) RegisterManagedInstance(input *RegisterManagedInstanceInput) (*Reg
 	return out, err
 }
 
+const opRegisterPatchBaselineForPatchGroup = "RegisterPatchBaselineForPatchGroup"
+
+// RegisterPatchBaselineForPatchGroupRequest generates a "aws/request.Request" representing the
+// client's request for the RegisterPatchBaselineForPatchGroup operation. The "output" return
+// value can be used to capture response data after the request's "Send" method
+// is called.
+//
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the RegisterPatchBaselineForPatchGroup method directly
+// instead.
+//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
+//
+//    // Example sending a request using the RegisterPatchBaselineForPatchGroupRequest method.
+//    req, resp := client.RegisterPatchBaselineForPatchGroupRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+func (c *SSM) RegisterPatchBaselineForPatchGroupRequest(input *RegisterPatchBaselineForPatchGroupInput) (req *request.Request, output *RegisterPatchBaselineForPatchGroupOutput) {
+	op := &request.Operation{
+		Name:       opRegisterPatchBaselineForPatchGroup,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &RegisterPatchBaselineForPatchGroupInput{}
+	}
+
+	req = c.newRequest(op, input, output)
+	output = &RegisterPatchBaselineForPatchGroupOutput{}
+	req.Data = output
+	return
+}
+
+func (c *SSM) RegisterPatchBaselineForPatchGroup(input *RegisterPatchBaselineForPatchGroupInput) (*RegisterPatchBaselineForPatchGroupOutput, error) {
+	req, out := c.RegisterPatchBaselineForPatchGroupRequest(input)
+	err := req.Send()
+	return out, err
+}
+
+const opRegisterTargetWithMaintenanceWindow = "RegisterTargetWithMaintenanceWindow"
+
+// RegisterTargetWithMaintenanceWindowRequest generates a "aws/request.Request" representing the
+// client's request for the RegisterTargetWithMaintenanceWindow operation. The "output" return
+// value can be used to capture response data after the request's "Send" method
+// is called.
+//
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the RegisterTargetWithMaintenanceWindow method directly
+// instead.
+//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
+//
+//    // Example sending a request using the RegisterTargetWithMaintenanceWindowRequest method.
+//    req, resp := client.RegisterTargetWithMaintenanceWindowRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+func (c *SSM) RegisterTargetWithMaintenanceWindowRequest(input *RegisterTargetWithMaintenanceWindowInput) (req *request.Request, output *RegisterTargetWithMaintenanceWindowOutput) {
+	op := &request.Operation{
+		Name:       opRegisterTargetWithMaintenanceWindow,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &RegisterTargetWithMaintenanceWindowInput{}
+	}
+
+	req = c.newRequest(op, input, output)
+	output = &RegisterTargetWithMaintenanceWindowOutput{}
+	req.Data = output
+	return
+}
+
+func (c *SSM) RegisterTargetWithMaintenanceWindow(input *RegisterTargetWithMaintenanceWindowInput) (*RegisterTargetWithMaintenanceWindowOutput, error) {
+	req, out := c.RegisterTargetWithMaintenanceWindowRequest(input)
+	err := req.Send()
+	return out, err
+}
+
+const opRegisterTaskWithMaintenanceWindow = "RegisterTaskWithMaintenanceWindow"
+
+// RegisterTaskWithMaintenanceWindowRequest generates a "aws/request.Request" representing the
+// client's request for the RegisterTaskWithMaintenanceWindow operation. The "output" return
+// value can be used to capture response data after the request's "Send" method
+// is called.
+//
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the RegisterTaskWithMaintenanceWindow method directly
+// instead.
+//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
+//
+//    // Example sending a request using the RegisterTaskWithMaintenanceWindowRequest method.
+//    req, resp := client.RegisterTaskWithMaintenanceWindowRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+func (c *SSM) RegisterTaskWithMaintenanceWindowRequest(input *RegisterTaskWithMaintenanceWindowInput) (req *request.Request, output *RegisterTaskWithMaintenanceWindowOutput) {
+	op := &request.Operation{
+		Name:       opRegisterTaskWithMaintenanceWindow,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &RegisterTaskWithMaintenanceWindowInput{}
+	}
+
+	req = c.newRequest(op, input, output)
+	output = &RegisterTaskWithMaintenanceWindowOutput{}
+	req.Data = output
+	return
+}
+
+func (c *SSM) RegisterTaskWithMaintenanceWindow(input *RegisterTaskWithMaintenanceWindowInput) (*RegisterTaskWithMaintenanceWindowOutput, error) {
+	req, out := c.RegisterTaskWithMaintenanceWindowRequest(input)
+	err := req.Send()
+	return out, err
+}
+
 const opRemoveTagsFromResource = "RemoveTagsFromResource"
 
-// RemoveTagsFromResourceRequest generates a request for the RemoveTagsFromResource operation.
+// RemoveTagsFromResourceRequest generates a "aws/request.Request" representing the
+// client's request for the RemoveTagsFromResource operation. The "output" return
+// value can be used to capture response data after the request's "Send" method
+// is called.
+//
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the RemoveTagsFromResource method directly
+// instead.
+//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
+//
+//    // Example sending a request using the RemoveTagsFromResourceRequest method.
+//    req, resp := client.RemoveTagsFromResourceRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
 func (c *SSM) RemoveTagsFromResourceRequest(input *RemoveTagsFromResourceInput) (req *request.Request, output *RemoveTagsFromResourceOutput) {
 	op := &request.Operation{
 		Name:       opRemoveTagsFromResource,
@@ -791,6 +4090,7 @@ func (c *SSM) RemoveTagsFromResourceRequest(input *RemoveTagsFromResourceInput) 
 	return
 }
 
+// Removes all tags from the specified resource.
 func (c *SSM) RemoveTagsFromResource(input *RemoveTagsFromResourceInput) (*RemoveTagsFromResourceOutput, error) {
 	req, out := c.RemoveTagsFromResourceRequest(input)
 	err := req.Send()
@@ -799,7 +4099,28 @@ func (c *SSM) RemoveTagsFromResource(input *RemoveTagsFromResourceInput) (*Remov
 
 const opRequestManagedInstanceRoleToken = "RequestManagedInstanceRoleToken"
 
-// RequestManagedInstanceRoleTokenRequest generates a request for the RequestManagedInstanceRoleToken operation.
+// RequestManagedInstanceRoleTokenRequest generates a "aws/request.Request" representing the
+// client's request for the RequestManagedInstanceRoleToken operation. The "output" return
+// value can be used to capture response data after the request's "Send" method
+// is called.
+//
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the RequestManagedInstanceRoleToken method directly
+// instead.
+//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
+//
+//    // Example sending a request using the RequestManagedInstanceRoleTokenRequest method.
+//    req, resp := client.RequestManagedInstanceRoleTokenRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
 func (c *SSM) RequestManagedInstanceRoleTokenRequest(input *RequestManagedInstanceRoleTokenInput) (req *request.Request, output *RequestManagedInstanceRoleTokenOutput) {
 	op := &request.Operation{
 		Name:       opRequestManagedInstanceRoleToken,
@@ -825,7 +4146,28 @@ func (c *SSM) RequestManagedInstanceRoleToken(input *RequestManagedInstanceRoleT
 
 const opSendCommand = "SendCommand"
 
-// SendCommandRequest generates a request for the SendCommand operation.
+// SendCommandRequest generates a "aws/request.Request" representing the
+// client's request for the SendCommand operation. The "output" return
+// value can be used to capture response data after the request's "Send" method
+// is called.
+//
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the SendCommand method directly
+// instead.
+//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
+//
+//    // Example sending a request using the SendCommandRequest method.
+//    req, resp := client.SendCommandRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
 func (c *SSM) SendCommandRequest(input *SendCommandInput) (req *request.Request, output *SendCommandOutput) {
 	op := &request.Operation{
 		Name:       opSendCommand,
@@ -850,9 +4192,218 @@ func (c *SSM) SendCommand(input *SendCommandInput) (*SendCommandOutput, error) {
 	return out, err
 }
 
+const opStartAssociationsOnce = "StartAssociationsOnce"
+
+// StartAssociationsOnceRequest generates a "aws/request.Request" representing the
+// client's request for the StartAssociationsOnce operation. The "output" return
+// value can be used to capture response data after the request's "Send" method
+// is called.
+//
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the StartAssociationsOnce method directly
+// instead.
+//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
+//
+//    // Example sending a request using the StartAssociationsOnceRequest method.
+//    req, resp := client.StartAssociationsOnceRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+func (c *SSM) StartAssociationsOnceRequest(input *StartAssociationsOnceInput) (req *request.Request, output *StartAssociationsOnceOutput) {
+	op := &request.Operation{
+		Name:       opStartAssociationsOnce,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &StartAssociationsOnceInput{}
+	}
+
+	req = c.newRequest(op, input, output)
+	output = &StartAssociationsOnceOutput{}
+	req.Data = output
+	return
+}
+
+func (c *SSM) StartAssociationsOnce(input *StartAssociationsOnceInput) (*StartAssociationsOnceOutput, error) {
+	req, out := c.StartAssociationsOnceRequest(input)
+	err := req.Send()
+	return out, err
+}
+
+const opStartAutomationExecution = "StartAutomationExecution"
+
+// StartAutomationExecutionRequest generates a "aws/request.Request" representing the
+// client's request for the StartAutomationExecution operation. The "output" return
+// value can be used to capture response data after the request's "Send" method
+// is called.
+//
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the StartAutomationExecution method directly
+// instead.
+//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
+//
+//    // Example sending a request using the StartAutomationExecutionRequest method.
+//    req, resp := client.StartAutomationExecutionRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+func (c *SSM) StartAutomationExecutionRequest(input *StartAutomationExecutionInput) (req *request.Request, output *StartAutomationExecutionOutput) {
+	op := &request.Operation{
+		Name:       opStartAutomationExecution,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &StartAutomationExecutionInput{}
+	}
+
+	req = c.newRequest(op, input, output)
+	output = &StartAutomationExecutionOutput{}
+	req.Data = output
+	return
+}
+
+func (c *SSM) StartAutomationExecution(input *StartAutomationExecutionInput) (*StartAutomationExecutionOutput, error) {
+	req, out := c.StartAutomationExecutionRequest(input)
+	err := req.Send()
+	return out, err
+}
+
+const opStopAutomationExecution = "StopAutomationExecution"
+
+// StopAutomationExecutionRequest generates a "aws/request.Request" representing the
+// client's request for the StopAutomationExecution operation. The "output" return
+// value can be used to capture response data after the request's "Send" method
+// is called.
+//
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the StopAutomationExecution method directly
+// instead.
+//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
+//
+//    // Example sending a request using the StopAutomationExecutionRequest method.
+//    req, resp := client.StopAutomationExecutionRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+func (c *SSM) StopAutomationExecutionRequest(input *StopAutomationExecutionInput) (req *request.Request, output *StopAutomationExecutionOutput) {
+	op := &request.Operation{
+		Name:       opStopAutomationExecution,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &StopAutomationExecutionInput{}
+	}
+
+	req = c.newRequest(op, input, output)
+	output = &StopAutomationExecutionOutput{}
+	req.Data = output
+	return
+}
+
+func (c *SSM) StopAutomationExecution(input *StopAutomationExecutionInput) (*StopAutomationExecutionOutput, error) {
+	req, out := c.StopAutomationExecutionRequest(input)
+	err := req.Send()
+	return out, err
+}
+
+const opUpdateAssociation = "UpdateAssociation"
+
+// UpdateAssociationRequest generates a "aws/request.Request" representing the
+// client's request for the UpdateAssociation operation. The "output" return
+// value can be used to capture response data after the request's "Send" method
+// is called.
+//
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the UpdateAssociation method directly
+// instead.
+//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
+//
+//    // Example sending a request using the UpdateAssociationRequest method.
+//    req, resp := client.UpdateAssociationRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+func (c *SSM) UpdateAssociationRequest(input *UpdateAssociationInput) (req *request.Request, output *UpdateAssociationOutput) {
+	op := &request.Operation{
+		Name:       opUpdateAssociation,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &UpdateAssociationInput{}
+	}
+
+	req = c.newRequest(op, input, output)
+	output = &UpdateAssociationOutput{}
+	req.Data = output
+	return
+}
+
+func (c *SSM) UpdateAssociation(input *UpdateAssociationInput) (*UpdateAssociationOutput, error) {
+	req, out := c.UpdateAssociationRequest(input)
+	err := req.Send()
+	return out, err
+}
+
 const opUpdateAssociationStatus = "UpdateAssociationStatus"
 
-// UpdateAssociationStatusRequest generates a request for the UpdateAssociationStatus operation.
+// UpdateAssociationStatusRequest generates a "aws/request.Request" representing the
+// client's request for the UpdateAssociationStatus operation. The "output" return
+// value can be used to capture response data after the request's "Send" method
+// is called.
+//
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the UpdateAssociationStatus method directly
+// instead.
+//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
+//
+//    // Example sending a request using the UpdateAssociationStatusRequest method.
+//    req, resp := client.UpdateAssociationStatusRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
 func (c *SSM) UpdateAssociationStatusRequest(input *UpdateAssociationStatusInput) (req *request.Request, output *UpdateAssociationStatusOutput) {
 	op := &request.Operation{
 		Name:       opUpdateAssociationStatus,
@@ -877,9 +4428,171 @@ func (c *SSM) UpdateAssociationStatus(input *UpdateAssociationStatusInput) (*Upd
 	return out, err
 }
 
+const opUpdateDocument = "UpdateDocument"
+
+// UpdateDocumentRequest generates a "aws/request.Request" representing the
+// client's request for the UpdateDocument operation. The "output" return
+// value can be used to capture response data after the request's "Send" method
+// is called.
+//
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the UpdateDocument method directly
+// instead.
+//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
+//
+//    // Example sending a request using the UpdateDocumentRequest method.
+//    req, resp := client.UpdateDocumentRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+func (c *SSM) UpdateDocumentRequest(input *UpdateDocumentInput) (req *request.Request, output *UpdateDocumentOutput) {
+	op := &request.Operation{
+		Name:       opUpdateDocument,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &UpdateDocumentInput{}
+	}
+
+	req = c.newRequest(op, input, output)
+	output = &UpdateDocumentOutput{}
+	req.Data = output
+	return
+}
+
+func (c *SSM) UpdateDocument(input *UpdateDocumentInput) (*UpdateDocumentOutput, error) {
+	req, out := c.UpdateDocumentRequest(input)
+	err := req.Send()
+	return out, err
+}
+
+const opUpdateDocumentDefaultVersion = "UpdateDocumentDefaultVersion"
+
+// UpdateDocumentDefaultVersionRequest generates a "aws/request.Request" representing the
+// client's request for the UpdateDocumentDefaultVersion operation. The "output" return
+// value can be used to capture response data after the request's "Send" method
+// is called.
+//
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the UpdateDocumentDefaultVersion method directly
+// instead.
+//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
+//
+//    // Example sending a request using the UpdateDocumentDefaultVersionRequest method.
+//    req, resp := client.UpdateDocumentDefaultVersionRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+func (c *SSM) UpdateDocumentDefaultVersionRequest(input *UpdateDocumentDefaultVersionInput) (req *request.Request, output *UpdateDocumentDefaultVersionOutput) {
+	op := &request.Operation{
+		Name:       opUpdateDocumentDefaultVersion,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &UpdateDocumentDefaultVersionInput{}
+	}
+
+	req = c.newRequest(op, input, output)
+	output = &UpdateDocumentDefaultVersionOutput{}
+	req.Data = output
+	return
+}
+
+func (c *SSM) UpdateDocumentDefaultVersion(input *UpdateDocumentDefaultVersionInput) (*UpdateDocumentDefaultVersionOutput, error) {
+	req, out := c.UpdateDocumentDefaultVersionRequest(input)
+	err := req.Send()
+	return out, err
+}
+
+const opUpdateInstanceAssociationStatus = "UpdateInstanceAssociationStatus"
+
+// UpdateInstanceAssociationStatusRequest generates a "aws/request.Request" representing the
+// client's request for the UpdateInstanceAssociationStatus operation. The "output" return
+// value can be used to capture response data after the request's "Send" method
+// is called.
+//
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the UpdateInstanceAssociationStatus method directly
+// instead.
+//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
+//
+//    // Example sending a request using the UpdateInstanceAssociationStatusRequest method.
+//    req, resp := client.UpdateInstanceAssociationStatusRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+func (c *SSM) UpdateInstanceAssociationStatusRequest(input *UpdateInstanceAssociationStatusInput) (req *request.Request, output *UpdateInstanceAssociationStatusOutput) {
+	op := &request.Operation{
+		Name:       opUpdateInstanceAssociationStatus,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &UpdateInstanceAssociationStatusInput{}
+	}
+
+	req = c.newRequest(op, input, output)
+	output = &UpdateInstanceAssociationStatusOutput{}
+	req.Data = output
+	return
+}
+
+func (c *SSM) UpdateInstanceAssociationStatus(input *UpdateInstanceAssociationStatusInput) (*UpdateInstanceAssociationStatusOutput, error) {
+	req, out := c.UpdateInstanceAssociationStatusRequest(input)
+	err := req.Send()
+	return out, err
+}
+
 const opUpdateInstanceInformation = "UpdateInstanceInformation"
 
-// UpdateInstanceInformationRequest generates a request for the UpdateInstanceInformation operation.
+// UpdateInstanceInformationRequest generates a "aws/request.Request" representing the
+// client's request for the UpdateInstanceInformation operation. The "output" return
+// value can be used to capture response data after the request's "Send" method
+// is called.
+//
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the UpdateInstanceInformation method directly
+// instead.
+//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
+//
+//    // Example sending a request using the UpdateInstanceInformationRequest method.
+//    req, resp := client.UpdateInstanceInformationRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
 func (c *SSM) UpdateInstanceInformationRequest(input *UpdateInstanceInformationInput) (req *request.Request, output *UpdateInstanceInformationOutput) {
 	op := &request.Operation{
 		Name:       opUpdateInstanceInformation,
@@ -903,9 +4616,77 @@ func (c *SSM) UpdateInstanceInformation(input *UpdateInstanceInformationInput) (
 	return out, err
 }
 
+const opUpdateMaintenanceWindow = "UpdateMaintenanceWindow"
+
+// UpdateMaintenanceWindowRequest generates a "aws/request.Request" representing the
+// client's request for the UpdateMaintenanceWindow operation. The "output" return
+// value can be used to capture response data after the request's "Send" method
+// is called.
+//
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the UpdateMaintenanceWindow method directly
+// instead.
+//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
+//
+//    // Example sending a request using the UpdateMaintenanceWindowRequest method.
+//    req, resp := client.UpdateMaintenanceWindowRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+func (c *SSM) UpdateMaintenanceWindowRequest(input *UpdateMaintenanceWindowInput) (req *request.Request, output *UpdateMaintenanceWindowOutput) {
+	op := &request.Operation{
+		Name:       opUpdateMaintenanceWindow,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &UpdateMaintenanceWindowInput{}
+	}
+
+	req = c.newRequest(op, input, output)
+	output = &UpdateMaintenanceWindowOutput{}
+	req.Data = output
+	return
+}
+
+func (c *SSM) UpdateMaintenanceWindow(input *UpdateMaintenanceWindowInput) (*UpdateMaintenanceWindowOutput, error) {
+	req, out := c.UpdateMaintenanceWindowRequest(input)
+	err := req.Send()
+	return out, err
+}
+
 const opUpdateManagedInstancePublicKey = "UpdateManagedInstancePublicKey"
 
-// UpdateManagedInstancePublicKeyRequest generates a request for the UpdateManagedInstancePublicKey operation.
+// UpdateManagedInstancePublicKeyRequest generates a "aws/request.Request" representing the
+// client's request for the UpdateManagedInstancePublicKey operation. The "output" return
+// value can be used to capture response data after the request's "Send" method
+// is called.
+//
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the UpdateManagedInstancePublicKey method directly
+// instead.
+//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
+//
+//    // Example sending a request using the UpdateManagedInstancePublicKeyRequest method.
+//    req, resp := client.UpdateManagedInstancePublicKeyRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
 func (c *SSM) UpdateManagedInstancePublicKeyRequest(input *UpdateManagedInstancePublicKeyInput) (req *request.Request, output *UpdateManagedInstancePublicKeyOutput) {
 	op := &request.Operation{
 		Name:       opUpdateManagedInstancePublicKey,
@@ -931,7 +4712,28 @@ func (c *SSM) UpdateManagedInstancePublicKey(input *UpdateManagedInstancePublicK
 
 const opUpdateManagedInstanceRole = "UpdateManagedInstanceRole"
 
-// UpdateManagedInstanceRoleRequest generates a request for the UpdateManagedInstanceRole operation.
+// UpdateManagedInstanceRoleRequest generates a "aws/request.Request" representing the
+// client's request for the UpdateManagedInstanceRole operation. The "output" return
+// value can be used to capture response data after the request's "Send" method
+// is called.
+//
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the UpdateManagedInstanceRole method directly
+// instead.
+//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
+//
+//    // Example sending a request using the UpdateManagedInstanceRoleRequest method.
+//    req, resp := client.UpdateManagedInstanceRoleRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
 func (c *SSM) UpdateManagedInstanceRoleRequest(input *UpdateManagedInstanceRoleInput) (req *request.Request, output *UpdateManagedInstanceRoleOutput) {
 	op := &request.Operation{
 		Name:       opUpdateManagedInstanceRole,
@@ -949,31 +4751,94 @@ func (c *SSM) UpdateManagedInstanceRoleRequest(input *UpdateManagedInstanceRoleI
 	return
 }
 
+// Assigns or changes an Amazon Identity and Access Management (IAM) role to
+// the managed instance.
 func (c *SSM) UpdateManagedInstanceRole(input *UpdateManagedInstanceRoleInput) (*UpdateManagedInstanceRoleOutput, error) {
 	req, out := c.UpdateManagedInstanceRoleRequest(input)
 	err := req.Send()
 	return out, err
 }
 
+const opUpdatePatchBaseline = "UpdatePatchBaseline"
+
+// UpdatePatchBaselineRequest generates a "aws/request.Request" representing the
+// client's request for the UpdatePatchBaseline operation. The "output" return
+// value can be used to capture response data after the request's "Send" method
+// is called.
+//
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the UpdatePatchBaseline method directly
+// instead.
+//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
+//
+//    // Example sending a request using the UpdatePatchBaselineRequest method.
+//    req, resp := client.UpdatePatchBaselineRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+func (c *SSM) UpdatePatchBaselineRequest(input *UpdatePatchBaselineInput) (req *request.Request, output *UpdatePatchBaselineOutput) {
+	op := &request.Operation{
+		Name:       opUpdatePatchBaseline,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &UpdatePatchBaselineInput{}
+	}
+
+	req = c.newRequest(op, input, output)
+	output = &UpdatePatchBaselineOutput{}
+	req.Data = output
+	return
+}
+
+func (c *SSM) UpdatePatchBaseline(input *UpdatePatchBaselineInput) (*UpdatePatchBaselineOutput, error) {
+	req, out := c.UpdatePatchBaselineRequest(input)
+	err := req.Send()
+	return out, err
+}
+
+// An activation registers one or more on-premises servers or virtual machines
+// (VMs) with AWS so that you can configure those servers or VMs using Run Command.
+// A server or VM that has been registered with AWS is called a managed instance.
 type Activation struct {
 	_ struct{} `type:"structure"`
 
+	// The ID created by SSM when you submitted the activation.
 	ActivationId *string `type:"string"`
 
+	// The date the activation was created.
 	CreatedDate *time.Time `type:"timestamp" timestampFormat:"unix"`
 
+	// A name for the managed instance when it is created.
 	DefaultInstanceName *string `type:"string"`
 
+	// A user defined description of the activation.
 	Description *string `type:"string"`
 
+	// The date when this activation can no longer be used to register managed instances.
 	ExpirationDate *time.Time `type:"timestamp" timestampFormat:"unix"`
 
+	// Whether or not the activation is expired.
 	Expired *bool `type:"boolean"`
 
+	// The Amazon Identity and Access Management (IAM) role to assign to the managed
+	// instance.
 	IamRole *string `type:"string"`
 
+	// The maximum number of managed instances that can be registered using this
+	// activation.
 	RegistrationLimit *int64 `min:"1" type:"integer"`
 
+	// The number of managed instances already registered with this activation.
 	RegistrationsCount *int64 `min:"1" type:"integer"`
 }
 
@@ -990,10 +4855,15 @@ func (s Activation) GoString() string {
 type AddTagsToResourceInput struct {
 	_ struct{} `type:"structure"`
 
+	// The resource ID you want to tag.
 	ResourceId *string `type:"string" required:"true"`
 
+	// Specifies the type of resource you are tagging.
 	ResourceType *string `type:"string" required:"true" enum:"ResourceTypeForTagging"`
 
+	// One or more tags. The value parameter is required, but if you don't want
+	// the tag to have a value, specify the parameter with no value, and we set
+	// the value to an empty string.
 	Tags []*Tag `type:"list" required:"true"`
 }
 
@@ -1054,11 +4924,23 @@ func (s AddTagsToResourceOutput) GoString() string {
 type Association struct {
 	_ struct{} `type:"structure"`
 
+	AssociationId *string `type:"string"`
+
+	DocumentVersion *string `type:"string"`
+
 	// The ID of the instance.
 	InstanceId *string `type:"string"`
 
+	LastExecutionDate *time.Time `type:"timestamp" timestampFormat:"unix"`
+
 	// The name of the SSM document.
 	Name *string `type:"string"`
+
+	Overview *AssociationOverview `type:"structure"`
+
+	ScheduleExpression *string `min:"1" type:"string"`
+
+	Targets []*Target `type:"list"`
 }
 
 // String returns the string representation
@@ -1075,20 +4957,38 @@ func (s Association) GoString() string {
 type AssociationDescription struct {
 	_ struct{} `type:"structure"`
 
+	AssociationId *string `type:"string"`
+
 	// The date when the association was made.
 	Date *time.Time `type:"timestamp" timestampFormat:"unix"`
+
+	DocumentVersion *string `type:"string"`
 
 	// The ID of the instance.
 	InstanceId *string `type:"string"`
 
+	LastExecutionDate *time.Time `type:"timestamp" timestampFormat:"unix"`
+
+	LastSuccessfulExecutionDate *time.Time `type:"timestamp" timestampFormat:"unix"`
+
+	LastUpdateAssociationDate *time.Time `type:"timestamp" timestampFormat:"unix"`
+
 	// The name of the SSM document.
 	Name *string `type:"string"`
+
+	OutputLocation *InstanceAssociationOutputLocation `type:"structure"`
+
+	Overview *AssociationOverview `type:"structure"`
 
 	// A description of the parameters for a document.
 	Parameters map[string][]*string `type:"map"`
 
+	ScheduleExpression *string `min:"1" type:"string"`
+
 	// The association status.
 	Status *AssociationStatus `type:"structure"`
+
+	Targets []*Target `type:"list"`
 }
 
 // String returns the string representation
@@ -1141,6 +5041,26 @@ func (s *AssociationFilter) Validate() error {
 	return nil
 }
 
+type AssociationOverview struct {
+	_ struct{} `type:"structure"`
+
+	AssociationStatusAggregatedCount map[string]*int64 `type:"map"`
+
+	DetailedStatus *string `type:"string"`
+
+	Status *string `type:"string"`
+}
+
+// String returns the string representation
+func (s AssociationOverview) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s AssociationOverview) GoString() string {
+	return s.String()
+}
+
 // Describes an association status.
 type AssociationStatus struct {
 	_ struct{} `type:"structure"`
@@ -1190,6 +5110,173 @@ func (s *AssociationStatus) Validate() error {
 	return nil
 }
 
+type AutomationAction struct {
+	_ struct{} `type:"structure"`
+
+	Description *string `type:"string"`
+
+	Inputs []*AutomationArgument `type:"list"`
+
+	Name *string `type:"string"`
+
+	Outputs []*AutomationArgument `type:"list"`
+}
+
+// String returns the string representation
+func (s AutomationAction) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s AutomationAction) GoString() string {
+	return s.String()
+}
+
+type AutomationArgument struct {
+	_ struct{} `type:"structure"`
+
+	Name *string `type:"string"`
+
+	Regex *string `type:"string"`
+
+	Required *bool `type:"boolean"`
+
+	Type *string `type:"string" enum:"AutomationArgumentType"`
+}
+
+// String returns the string representation
+func (s AutomationArgument) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s AutomationArgument) GoString() string {
+	return s.String()
+}
+
+type AutomationExecution struct {
+	_ struct{} `type:"structure"`
+
+	AutomationExecutionId *string `min:"36" type:"string"`
+
+	AutomationExecutionStatus *string `type:"string" enum:"AutomationExecutionStatus"`
+
+	DocumentName *string `type:"string"`
+
+	DocumentVersion *string `type:"string"`
+
+	ExecutionEndTime *time.Time `type:"timestamp" timestampFormat:"unix"`
+
+	ExecutionStartTime *time.Time `type:"timestamp" timestampFormat:"unix"`
+
+	Inputs map[string][]*string `min:"1" type:"map"`
+
+	Outputs map[string][]*string `min:"1" type:"map"`
+
+	StepExecutions []*StepExecution `type:"list"`
+}
+
+// String returns the string representation
+func (s AutomationExecution) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s AutomationExecution) GoString() string {
+	return s.String()
+}
+
+type AutomationExecutionFilter struct {
+	_ struct{} `type:"structure"`
+
+	Key *string `type:"string" required:"true" enum:"AutomationExecutionFilterKey"`
+
+	Values []*string `min:"1" type:"list" required:"true"`
+}
+
+// String returns the string representation
+func (s AutomationExecutionFilter) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s AutomationExecutionFilter) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *AutomationExecutionFilter) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "AutomationExecutionFilter"}
+	if s.Key == nil {
+		invalidParams.Add(request.NewErrParamRequired("Key"))
+	}
+	if s.Values == nil {
+		invalidParams.Add(request.NewErrParamRequired("Values"))
+	}
+	if s.Values != nil && len(s.Values) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Values", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+type AutomationExecutionMetadata struct {
+	_ struct{} `type:"structure"`
+
+	AutomationExecutionId *string `min:"36" type:"string"`
+
+	AutomationExecutionStatus *string `type:"string" enum:"AutomationExecutionStatus"`
+
+	DocumentName *string `type:"string"`
+
+	DocumentVersion *string `type:"string"`
+
+	ExecutedBy *string `type:"string"`
+
+	ExecutionEndTime *time.Time `type:"timestamp" timestampFormat:"unix"`
+
+	ExecutionStartTime *time.Time `type:"timestamp" timestampFormat:"unix"`
+
+	LogFile *string `type:"string"`
+
+	Outputs map[string][]*string `min:"1" type:"map"`
+}
+
+// String returns the string representation
+func (s AutomationExecutionMetadata) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s AutomationExecutionMetadata) GoString() string {
+	return s.String()
+}
+
+type BaselineIdentity struct {
+	_ struct{} `type:"structure"`
+
+	BaselineDescription *string `min:"1" type:"string"`
+
+	BaselineId *string `min:"20" type:"string"`
+
+	BaselineName *string `min:"3" type:"string"`
+
+	DefaultBaseline *bool `type:"boolean"`
+}
+
+// String returns the string representation
+func (s BaselineIdentity) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s BaselineIdentity) GoString() string {
+	return s.String()
+}
+
 type CancelCommandInput struct {
 	_ struct{} `type:"structure"`
 
@@ -1199,7 +5286,7 @@ type CancelCommandInput struct {
 	// (Optional) A list of instance IDs on which you want to cancel the command.
 	// If not provided, the command is canceled on every instance on which it was
 	// requested.
-	InstanceIds []*string `min:"1" type:"list"`
+	InstanceIds []*string `type:"list"`
 }
 
 // String returns the string representation
@@ -1220,9 +5307,6 @@ func (s *CancelCommandInput) Validate() error {
 	}
 	if s.CommandId != nil && len(*s.CommandId) < 36 {
 		invalidParams.Add(request.NewErrParamMinLen("CommandId", 36))
-	}
-	if s.InstanceIds != nil && len(s.InstanceIds) < 1 {
-		invalidParams.Add(request.NewErrParamMinLen("InstanceIds", 1))
 	}
 
 	if invalidParams.Len() > 0 {
@@ -1258,8 +5342,12 @@ type Command struct {
 	// of what the command should do.
 	Comment *string `type:"string"`
 
+	CompletedCount *int64 `type:"integer"`
+
 	// The name of the SSM document requested for execution.
 	DocumentName *string `type:"string"`
+
+	ErrorCount *int64 `type:"integer"`
 
 	// If this time is reached and the command has not already started executing,
 	// it will not execute. Calculated based on the ExpiresAfter user input provided
@@ -1267,8 +5355,13 @@ type Command struct {
 	ExpiresAfter *time.Time `type:"timestamp" timestampFormat:"unix"`
 
 	// The instance IDs against which this command was requested.
-	InstanceIds []*string `min:"1" type:"list"`
+	InstanceIds []*string `type:"list"`
 
+	MaxConcurrency *string `min:"1" type:"string"`
+
+	MaxErrors *string `min:"1" type:"string"`
+
+	// Configurations for sending notifications about command status changes.
 	NotificationConfig *NotificationConfig `type:"structure"`
 
 	// The S3 bucket where the responses to the command executions should be stored.
@@ -1279,6 +5372,8 @@ type Command struct {
 	// executions should be stored. This was requested when issuing the command.
 	OutputS3KeyPrefix *string `type:"string"`
 
+	OutputS3Region *string `min:"3" type:"string"`
+
 	// The parameter values to be inserted in the SSM document when executing the
 	// command.
 	Parameters map[string][]*string `type:"map"`
@@ -1286,10 +5381,18 @@ type Command struct {
 	// The date and time the command was requested.
 	RequestedDateTime *time.Time `type:"timestamp" timestampFormat:"unix"`
 
+	// The IAM service role that SSM uses to act on your behalf when sending notifications
+	// about command status changes.
 	ServiceRole *string `type:"string"`
 
 	// The status of the command.
 	Status *string `type:"string" enum:"CommandStatus"`
+
+	StatusDetails *string `type:"string"`
+
+	TargetCount *int64 `type:"integer"`
+
+	Targets []*Target `type:"list"`
 }
 
 // String returns the string representation
@@ -1365,15 +5468,27 @@ type CommandInvocation struct {
 	// The instance ID in which this invocation was requested.
 	InstanceId *string `type:"string"`
 
+	InstanceName *string `type:"string"`
+
+	// Configurations for sending notifications about command status changes on
+	// a per instance basis.
 	NotificationConfig *NotificationConfig `type:"structure"`
 
 	// The time and date the request was sent to this instance.
 	RequestedDateTime *time.Time `type:"timestamp" timestampFormat:"unix"`
 
+	// The IAM service role that SSM uses to act on your behalf when sending notifications
+	// about command status changes on a per instance basis.
 	ServiceRole *string `type:"string"`
+
+	StandardErrorUrl *string `type:"string"`
+
+	StandardOutputUrl *string `type:"string"`
 
 	// Whether or not the invocation succeeded, failed, or is pending.
 	Status *string `type:"string" enum:"CommandInvocationStatus"`
+
+	StatusDetails *string `type:"string"`
 
 	// Gets the trace output sent by the agent.
 	TraceOutput *string `type:"string"`
@@ -1402,12 +5517,36 @@ type CommandPlugin struct {
 	Output *string `type:"string"`
 
 	// The S3 bucket where the responses to the command executions should be stored.
-	// This was requested when issuing the command.
+	// This was requested when issuing the command. For example, in the following
+	// response:
+	//
+	//  test_folder/ab19cb99-a030-46dd-9dfc-8eSAMPLEPre-Fix/i-1234567876543/awsrunShellScript
+	//
+	//  test_folder is the name of the Amazon S3 bucket;
+	//
+	//  ab19cb99-a030-46dd-9dfc-8eSAMPLEPre-Fix is the name of the S3 prefix;
+	//
+	//  i-1234567876543 is the instance ID;
+	//
+	//  awsrunShellScript is the name of the plugin.
 	OutputS3BucketName *string `min:"3" type:"string"`
 
 	// The S3 directory path inside the bucket where the responses to the command
 	// executions should be stored. This was requested when issuing the command.
+	// For example, in the following response:
+	//
+	//  test_folder/ab19cb99-a030-46dd-9dfc-8eSAMPLEPre-Fix/i-1234567876543/awsrunShellScript
+	//
+	//  test_folder is the name of the Amazon S3 bucket;
+	//
+	//  ab19cb99-a030-46dd-9dfc-8eSAMPLEPre-Fix is the name of the S3 prefix;
+	//
+	//  i-1234567876543 is the instance ID;
+	//
+	//  awsrunShellScript is the name of the plugin.
 	OutputS3KeyPrefix *string `type:"string"`
+
+	OutputS3Region *string `min:"3" type:"string"`
 
 	// A numeric response code generated after executing the plugin.
 	ResponseCode *int64 `type:"integer"`
@@ -1419,8 +5558,14 @@ type CommandPlugin struct {
 	// The time the plugin started executing.
 	ResponseStartDateTime *time.Time `type:"timestamp" timestampFormat:"unix"`
 
+	StandardErrorUrl *string `type:"string"`
+
+	StandardOutputUrl *string `type:"string"`
+
 	// The status of this plugin. You can execute a document with multiple plugins.
 	Status *string `type:"string" enum:"CommandPluginStatus"`
+
+	StatusDetails *string `type:"string"`
 }
 
 // String returns the string representation
@@ -1436,14 +5581,24 @@ func (s CommandPlugin) GoString() string {
 type CreateActivationInput struct {
 	_ struct{} `type:"structure"`
 
+	// The name of the registered, managed instance as it will appear in the Amazon
+	// EC2 console or when you use the AWS command line tools to list EC2 resources.
 	DefaultInstanceName *string `type:"string"`
 
+	// A user-defined description of the resource that you want to register with
+	// Amazon EC2.
 	Description *string `type:"string"`
 
+	// The date by which this activation request should expire. The default value
+	// is 24 hours.
 	ExpirationDate *time.Time `type:"timestamp" timestampFormat:"unix"`
 
+	// The Amazon Identity and Access Management (IAM) role that you want to assign
+	// to the managed instance.
 	IamRole *string `type:"string" required:"true"`
 
+	// Specify the maximum number of managed instances you want to register. The
+	// default value is 1 instance.
 	RegistrationLimit *int64 `min:"1" type:"integer"`
 }
 
@@ -1476,8 +5631,12 @@ func (s *CreateActivationInput) Validate() error {
 type CreateActivationOutput struct {
 	_ struct{} `type:"structure"`
 
+	// The code the system generates when it processes the activation. The activation
+	// code functions like a password to validate the activation ID.
 	ActivationCode *string `min:"20" type:"string"`
 
+	// The ID number generated by the system when it processed the activation. The
+	// activation ID functions like a user name.
 	ActivationId *string `type:"string"`
 }
 
@@ -1558,14 +5717,22 @@ func (s CreateAssociationBatchOutput) GoString() string {
 type CreateAssociationBatchRequestEntry struct {
 	_ struct{} `type:"structure"`
 
+	DocumentVersion *string `type:"string"`
+
 	// The ID of the instance.
-	InstanceId *string `type:"string" required:"true"`
+	InstanceId *string `type:"string"`
 
 	// The name of the configuration document.
 	Name *string `type:"string" required:"true"`
 
+	OutputLocation *InstanceAssociationOutputLocation `type:"structure"`
+
 	// A description of the parameters for a document.
 	Parameters map[string][]*string `type:"map"`
+
+	ScheduleExpression *string `min:"1" type:"string"`
+
+	Targets []*Target `type:"list"`
 }
 
 // String returns the string representation
@@ -1581,11 +5748,26 @@ func (s CreateAssociationBatchRequestEntry) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *CreateAssociationBatchRequestEntry) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "CreateAssociationBatchRequestEntry"}
-	if s.InstanceId == nil {
-		invalidParams.Add(request.NewErrParamRequired("InstanceId"))
-	}
 	if s.Name == nil {
 		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+	if s.ScheduleExpression != nil && len(*s.ScheduleExpression) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ScheduleExpression", 1))
+	}
+	if s.OutputLocation != nil {
+		if err := s.OutputLocation.Validate(); err != nil {
+			invalidParams.AddNested("OutputLocation", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.Targets != nil {
+		for i, v := range s.Targets {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "Targets", i), err.(request.ErrInvalidParams))
+			}
+		}
 	}
 
 	if invalidParams.Len() > 0 {
@@ -1597,14 +5779,22 @@ func (s *CreateAssociationBatchRequestEntry) Validate() error {
 type CreateAssociationInput struct {
 	_ struct{} `type:"structure"`
 
+	DocumentVersion *string `type:"string"`
+
 	// The instance ID.
 	InstanceId *string `type:"string" required:"true"`
 
 	// The name of the SSM document.
 	Name *string `type:"string" required:"true"`
 
+	OutputLocation *InstanceAssociationOutputLocation `type:"structure"`
+
 	// The parameters for the documents runtime configuration.
 	Parameters map[string][]*string `type:"map"`
+
+	ScheduleExpression *string `min:"1" type:"string"`
+
+	Targets []*Target `type:"list"`
 }
 
 // String returns the string representation
@@ -1625,6 +5815,24 @@ func (s *CreateAssociationInput) Validate() error {
 	}
 	if s.Name == nil {
 		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+	if s.ScheduleExpression != nil && len(*s.ScheduleExpression) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ScheduleExpression", 1))
+	}
+	if s.OutputLocation != nil {
+		if err := s.OutputLocation.Validate(); err != nil {
+			invalidParams.AddNested("OutputLocation", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.Targets != nil {
+		for i, v := range s.Targets {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "Targets", i), err.(request.ErrInvalidParams))
+			}
+		}
 	}
 
 	if invalidParams.Len() > 0 {
@@ -1655,6 +5863,8 @@ type CreateDocumentInput struct {
 
 	// A valid JSON string.
 	Content *string `min:"1" type:"string" required:"true"`
+
+	DocumentType *string `type:"string" enum:"DocumentType"`
 
 	// A name for the SSM document.
 	Name *string `type:"string" required:"true"`
@@ -1706,9 +5916,165 @@ func (s CreateDocumentOutput) GoString() string {
 	return s.String()
 }
 
+type CreateMaintenanceWindowInput struct {
+	_ struct{} `type:"structure"`
+
+	AllowUnassociatedTargets *bool `type:"boolean" required:"true"`
+
+	ClientToken *string `min:"1" type:"string"`
+
+	Cutoff *int64 `type:"integer" required:"true"`
+
+	Duration *int64 `min:"1" type:"integer" required:"true"`
+
+	Name *string `min:"3" type:"string" required:"true"`
+
+	Schedule *string `min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s CreateMaintenanceWindowInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s CreateMaintenanceWindowInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CreateMaintenanceWindowInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CreateMaintenanceWindowInput"}
+	if s.AllowUnassociatedTargets == nil {
+		invalidParams.Add(request.NewErrParamRequired("AllowUnassociatedTargets"))
+	}
+	if s.ClientToken != nil && len(*s.ClientToken) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ClientToken", 1))
+	}
+	if s.Cutoff == nil {
+		invalidParams.Add(request.NewErrParamRequired("Cutoff"))
+	}
+	if s.Duration == nil {
+		invalidParams.Add(request.NewErrParamRequired("Duration"))
+	}
+	if s.Duration != nil && *s.Duration < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("Duration", 1))
+	}
+	if s.Name == nil {
+		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+	if s.Name != nil && len(*s.Name) < 3 {
+		invalidParams.Add(request.NewErrParamMinLen("Name", 3))
+	}
+	if s.Schedule == nil {
+		invalidParams.Add(request.NewErrParamRequired("Schedule"))
+	}
+	if s.Schedule != nil && len(*s.Schedule) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Schedule", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+type CreateMaintenanceWindowOutput struct {
+	_ struct{} `type:"structure"`
+
+	WindowId *string `min:"20" type:"string"`
+}
+
+// String returns the string representation
+func (s CreateMaintenanceWindowOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s CreateMaintenanceWindowOutput) GoString() string {
+	return s.String()
+}
+
+type CreatePatchBaselineInput struct {
+	_ struct{} `type:"structure"`
+
+	ApprovalRules *RuleGroup `type:"structure"`
+
+	ApprovedPatches []*string `type:"list"`
+
+	ClientToken *string `min:"1" type:"string"`
+
+	Description *string `min:"1" type:"string"`
+
+	GlobalFilters *FilterGroup `type:"structure"`
+
+	Name *string `min:"3" type:"string" required:"true"`
+
+	RejectedPatches []*string `type:"list"`
+}
+
+// String returns the string representation
+func (s CreatePatchBaselineInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s CreatePatchBaselineInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CreatePatchBaselineInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CreatePatchBaselineInput"}
+	if s.ClientToken != nil && len(*s.ClientToken) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ClientToken", 1))
+	}
+	if s.Description != nil && len(*s.Description) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Description", 1))
+	}
+	if s.Name == nil {
+		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+	if s.Name != nil && len(*s.Name) < 3 {
+		invalidParams.Add(request.NewErrParamMinLen("Name", 3))
+	}
+	if s.ApprovalRules != nil {
+		if err := s.ApprovalRules.Validate(); err != nil {
+			invalidParams.AddNested("ApprovalRules", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.GlobalFilters != nil {
+		if err := s.GlobalFilters.Validate(); err != nil {
+			invalidParams.AddNested("GlobalFilters", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+type CreatePatchBaselineOutput struct {
+	_ struct{} `type:"structure"`
+
+	BaselineId *string `min:"20" type:"string"`
+}
+
+// String returns the string representation
+func (s CreatePatchBaselineOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s CreatePatchBaselineOutput) GoString() string {
+	return s.String()
+}
+
 type DeleteActivationInput struct {
 	_ struct{} `type:"structure"`
 
+	// The ID of the activation that you want to delete.
 	ActivationId *string `type:"string" required:"true"`
 }
 
@@ -1751,6 +6117,8 @@ func (s DeleteActivationOutput) GoString() string {
 
 type DeleteAssociationInput struct {
 	_ struct{} `type:"structure"`
+
+	AssociationId *string `type:"string"`
 
 	// The ID of the instance.
 	InstanceId *string `type:"string" required:"true"`
@@ -1843,9 +6211,153 @@ func (s DeleteDocumentOutput) GoString() string {
 	return s.String()
 }
 
+type DeleteMaintenanceWindowInput struct {
+	_ struct{} `type:"structure"`
+
+	WindowId *string `min:"20" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s DeleteMaintenanceWindowInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DeleteMaintenanceWindowInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DeleteMaintenanceWindowInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DeleteMaintenanceWindowInput"}
+	if s.WindowId == nil {
+		invalidParams.Add(request.NewErrParamRequired("WindowId"))
+	}
+	if s.WindowId != nil && len(*s.WindowId) < 20 {
+		invalidParams.Add(request.NewErrParamMinLen("WindowId", 20))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+type DeleteMaintenanceWindowOutput struct {
+	_ struct{} `type:"structure"`
+
+	WindowId *string `min:"20" type:"string"`
+}
+
+// String returns the string representation
+func (s DeleteMaintenanceWindowOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DeleteMaintenanceWindowOutput) GoString() string {
+	return s.String()
+}
+
+type DeleteParameterInput struct {
+	_ struct{} `type:"structure"`
+
+	Name *string `min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s DeleteParameterInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DeleteParameterInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DeleteParameterInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DeleteParameterInput"}
+	if s.Name == nil {
+		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+	if s.Name != nil && len(*s.Name) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Name", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+type DeleteParameterOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation
+func (s DeleteParameterOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DeleteParameterOutput) GoString() string {
+	return s.String()
+}
+
+type DeletePatchBaselineInput struct {
+	_ struct{} `type:"structure"`
+
+	BaselineId *string `min:"20" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s DeletePatchBaselineInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DeletePatchBaselineInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DeletePatchBaselineInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DeletePatchBaselineInput"}
+	if s.BaselineId == nil {
+		invalidParams.Add(request.NewErrParamRequired("BaselineId"))
+	}
+	if s.BaselineId != nil && len(*s.BaselineId) < 20 {
+		invalidParams.Add(request.NewErrParamMinLen("BaselineId", 20))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+type DeletePatchBaselineOutput struct {
+	_ struct{} `type:"structure"`
+
+	BaselineId *string `min:"20" type:"string"`
+}
+
+// String returns the string representation
+func (s DeletePatchBaselineOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DeletePatchBaselineOutput) GoString() string {
+	return s.String()
+}
+
 type DeregisterManagedInstanceInput struct {
 	_ struct{} `type:"structure"`
 
+	// The ID assigned to the managed instance when you registered it using the
+	// activation process.
 	InstanceId *string `type:"string" required:"true"`
 }
 
@@ -1886,11 +6398,188 @@ func (s DeregisterManagedInstanceOutput) GoString() string {
 	return s.String()
 }
 
+type DeregisterPatchBaselineForPatchGroupInput struct {
+	_ struct{} `type:"structure"`
+
+	BaselineId *string `min:"20" type:"string" required:"true"`
+
+	PatchGroup *string `min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s DeregisterPatchBaselineForPatchGroupInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DeregisterPatchBaselineForPatchGroupInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DeregisterPatchBaselineForPatchGroupInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DeregisterPatchBaselineForPatchGroupInput"}
+	if s.BaselineId == nil {
+		invalidParams.Add(request.NewErrParamRequired("BaselineId"))
+	}
+	if s.BaselineId != nil && len(*s.BaselineId) < 20 {
+		invalidParams.Add(request.NewErrParamMinLen("BaselineId", 20))
+	}
+	if s.PatchGroup == nil {
+		invalidParams.Add(request.NewErrParamRequired("PatchGroup"))
+	}
+	if s.PatchGroup != nil && len(*s.PatchGroup) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("PatchGroup", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+type DeregisterPatchBaselineForPatchGroupOutput struct {
+	_ struct{} `type:"structure"`
+
+	BaselineId *string `min:"20" type:"string"`
+
+	PatchGroup *string `min:"1" type:"string"`
+}
+
+// String returns the string representation
+func (s DeregisterPatchBaselineForPatchGroupOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DeregisterPatchBaselineForPatchGroupOutput) GoString() string {
+	return s.String()
+}
+
+type DeregisterTargetFromMaintenanceWindowInput struct {
+	_ struct{} `type:"structure"`
+
+	WindowId *string `min:"20" type:"string" required:"true"`
+
+	WindowTargetId *string `min:"36" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s DeregisterTargetFromMaintenanceWindowInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DeregisterTargetFromMaintenanceWindowInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DeregisterTargetFromMaintenanceWindowInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DeregisterTargetFromMaintenanceWindowInput"}
+	if s.WindowId == nil {
+		invalidParams.Add(request.NewErrParamRequired("WindowId"))
+	}
+	if s.WindowId != nil && len(*s.WindowId) < 20 {
+		invalidParams.Add(request.NewErrParamMinLen("WindowId", 20))
+	}
+	if s.WindowTargetId == nil {
+		invalidParams.Add(request.NewErrParamRequired("WindowTargetId"))
+	}
+	if s.WindowTargetId != nil && len(*s.WindowTargetId) < 36 {
+		invalidParams.Add(request.NewErrParamMinLen("WindowTargetId", 36))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+type DeregisterTargetFromMaintenanceWindowOutput struct {
+	_ struct{} `type:"structure"`
+
+	WindowId *string `min:"20" type:"string"`
+
+	WindowTargetId *string `min:"36" type:"string"`
+}
+
+// String returns the string representation
+func (s DeregisterTargetFromMaintenanceWindowOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DeregisterTargetFromMaintenanceWindowOutput) GoString() string {
+	return s.String()
+}
+
+type DeregisterTaskFromMaintenanceWindowInput struct {
+	_ struct{} `type:"structure"`
+
+	WindowId *string `min:"20" type:"string" required:"true"`
+
+	WindowTaskId *string `min:"36" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s DeregisterTaskFromMaintenanceWindowInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DeregisterTaskFromMaintenanceWindowInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DeregisterTaskFromMaintenanceWindowInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DeregisterTaskFromMaintenanceWindowInput"}
+	if s.WindowId == nil {
+		invalidParams.Add(request.NewErrParamRequired("WindowId"))
+	}
+	if s.WindowId != nil && len(*s.WindowId) < 20 {
+		invalidParams.Add(request.NewErrParamMinLen("WindowId", 20))
+	}
+	if s.WindowTaskId == nil {
+		invalidParams.Add(request.NewErrParamRequired("WindowTaskId"))
+	}
+	if s.WindowTaskId != nil && len(*s.WindowTaskId) < 36 {
+		invalidParams.Add(request.NewErrParamMinLen("WindowTaskId", 36))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+type DeregisterTaskFromMaintenanceWindowOutput struct {
+	_ struct{} `type:"structure"`
+
+	WindowId *string `min:"20" type:"string"`
+
+	WindowTaskId *string `min:"36" type:"string"`
+}
+
+// String returns the string representation
+func (s DeregisterTaskFromMaintenanceWindowOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DeregisterTaskFromMaintenanceWindowOutput) GoString() string {
+	return s.String()
+}
+
+// Filter for the DescribeActivation API.
 type DescribeActivationsFilter struct {
 	_ struct{} `type:"structure"`
 
+	// The name of the filter.
 	FilterKey *string `type:"string" enum:"DescribeActivationsFilterKeys"`
 
+	// The filter values.
 	FilterValues []*string `type:"list"`
 }
 
@@ -1907,10 +6596,15 @@ func (s DescribeActivationsFilter) GoString() string {
 type DescribeActivationsInput struct {
 	_ struct{} `type:"structure"`
 
+	// A filter to view information about your activations.
 	Filters []*DescribeActivationsFilter `type:"list"`
 
+	// The maximum number of items to return for this call. The call also returns
+	// a token that you can specify in a subsequent call to get the next set of
+	// results.
 	MaxResults *int64 `min:"1" type:"integer"`
 
+	// A token to start the list. Use this token to get the next set of results.
 	NextToken *string `type:"string"`
 }
 
@@ -1940,8 +6634,11 @@ func (s *DescribeActivationsInput) Validate() error {
 type DescribeActivationsOutput struct {
 	_ struct{} `type:"structure"`
 
+	// A list of activations for your AWS account.
 	ActivationList []*Activation `type:"list"`
 
+	// The token for the next set of items to return. Use this token to get the
+	// next set of results.
 	NextToken *string `type:"string"`
 }
 
@@ -1957,6 +6654,8 @@ func (s DescribeActivationsOutput) GoString() string {
 
 type DescribeAssociationInput struct {
 	_ struct{} `type:"structure"`
+
+	AssociationId *string `type:"string"`
 
 	// The instance ID.
 	InstanceId *string `type:"string" required:"true"`
@@ -2008,8 +6707,160 @@ func (s DescribeAssociationOutput) GoString() string {
 	return s.String()
 }
 
+type DescribeAutomationActionsInput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation
+func (s DescribeAutomationActionsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DescribeAutomationActionsInput) GoString() string {
+	return s.String()
+}
+
+type DescribeAutomationActionsOutput struct {
+	_ struct{} `type:"structure"`
+
+	ActionList []*string `type:"list"`
+}
+
+// String returns the string representation
+func (s DescribeAutomationActionsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DescribeAutomationActionsOutput) GoString() string {
+	return s.String()
+}
+
+type DescribeAutomationExecutionsInput struct {
+	_ struct{} `type:"structure"`
+
+	Filters []*AutomationExecutionFilter `min:"1" type:"list"`
+
+	MaxResults *int64 `min:"1" type:"integer"`
+
+	NextToken *string `type:"string"`
+}
+
+// String returns the string representation
+func (s DescribeAutomationExecutionsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DescribeAutomationExecutionsInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DescribeAutomationExecutionsInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DescribeAutomationExecutionsInput"}
+	if s.Filters != nil && len(s.Filters) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Filters", 1))
+	}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
+	}
+	if s.Filters != nil {
+		for i, v := range s.Filters {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "Filters", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+type DescribeAutomationExecutionsOutput struct {
+	_ struct{} `type:"structure"`
+
+	AutomationExecutionMetadataList []*AutomationExecutionMetadata `type:"list"`
+
+	NextToken *string `type:"string"`
+}
+
+// String returns the string representation
+func (s DescribeAutomationExecutionsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DescribeAutomationExecutionsOutput) GoString() string {
+	return s.String()
+}
+
+type DescribeAvailablePatchesInput struct {
+	_ struct{} `type:"structure"`
+
+	FilterGroup *FilterGroup `type:"structure"`
+
+	MaxResults *int64 `min:"1" type:"integer"`
+
+	NextToken *string `type:"string"`
+}
+
+// String returns the string representation
+func (s DescribeAvailablePatchesInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DescribeAvailablePatchesInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DescribeAvailablePatchesInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DescribeAvailablePatchesInput"}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
+	}
+	if s.FilterGroup != nil {
+		if err := s.FilterGroup.Validate(); err != nil {
+			invalidParams.AddNested("FilterGroup", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+type DescribeAvailablePatchesOutput struct {
+	_ struct{} `type:"structure"`
+
+	NextToken *string `type:"string"`
+
+	Patches []*Patch `type:"list"`
+}
+
+// String returns the string representation
+func (s DescribeAvailablePatchesOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DescribeAvailablePatchesOutput) GoString() string {
+	return s.String()
+}
+
 type DescribeDocumentInput struct {
 	_ struct{} `type:"structure"`
+
+	DocumentVersion *string `type:"string"`
 
 	// The name of the SSM document.
 	Name *string `type:"string" required:"true"`
@@ -2038,6 +6889,59 @@ func (s *DescribeDocumentInput) Validate() error {
 	return nil
 }
 
+type DescribeDocumentInternalInput struct {
+	_ struct{} `type:"structure"`
+
+	CustomerAccountId *string `type:"string" required:"true"`
+
+	DocumentVersion *string `type:"string"`
+
+	Name *string `type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s DescribeDocumentInternalInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DescribeDocumentInternalInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DescribeDocumentInternalInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DescribeDocumentInternalInput"}
+	if s.CustomerAccountId == nil {
+		invalidParams.Add(request.NewErrParamRequired("CustomerAccountId"))
+	}
+	if s.Name == nil {
+		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+type DescribeDocumentInternalOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Describes an SSM document.
+	Document *DocumentDescription `type:"structure"`
+}
+
+// String returns the string representation
+func (s DescribeDocumentInternalOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DescribeDocumentInternalOutput) GoString() string {
+	return s.String()
+}
+
 type DescribeDocumentOutput struct {
 	_ struct{} `type:"structure"`
 
@@ -2059,6 +6963,8 @@ type DescribeDocumentParametersInput struct {
 	_ struct{} `type:"structure"`
 
 	DocumentName *string `type:"string" required:"true"`
+
+	DocumentVersion *string `type:"string"`
 }
 
 // String returns the string representation
@@ -2154,11 +7060,316 @@ func (s DescribeDocumentPermissionOutput) GoString() string {
 	return s.String()
 }
 
+type DescribeDocumentSchemaInput struct {
+	_ struct{} `type:"structure"`
+
+	DocumentType *string `type:"string" required:"true" enum:"DocumentType"`
+}
+
+// String returns the string representation
+func (s DescribeDocumentSchemaInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DescribeDocumentSchemaInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DescribeDocumentSchemaInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DescribeDocumentSchemaInput"}
+	if s.DocumentType == nil {
+		invalidParams.Add(request.NewErrParamRequired("DocumentType"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+type DescribeDocumentSchemaOutput struct {
+	_ struct{} `type:"structure"`
+
+	Config *string `type:"string"`
+}
+
+// String returns the string representation
+func (s DescribeDocumentSchemaOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DescribeDocumentSchemaOutput) GoString() string {
+	return s.String()
+}
+
+type DescribeDocumentStepSchemaInput struct {
+	_ struct{} `type:"structure"`
+
+	StepName *string `min:"4" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s DescribeDocumentStepSchemaInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DescribeDocumentStepSchemaInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DescribeDocumentStepSchemaInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DescribeDocumentStepSchemaInput"}
+	if s.StepName == nil {
+		invalidParams.Add(request.NewErrParamRequired("StepName"))
+	}
+	if s.StepName != nil && len(*s.StepName) < 4 {
+		invalidParams.Add(request.NewErrParamMinLen("StepName", 4))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+type DescribeDocumentStepSchemaOutput struct {
+	_ struct{} `type:"structure"`
+
+	Config *string `type:"string"`
+}
+
+// String returns the string representation
+func (s DescribeDocumentStepSchemaOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DescribeDocumentStepSchemaOutput) GoString() string {
+	return s.String()
+}
+
+type DescribeDocumentStepsInput struct {
+	_ struct{} `type:"structure"`
+
+	DocumentType *string `type:"string" required:"true" enum:"DocumentType"`
+}
+
+// String returns the string representation
+func (s DescribeDocumentStepsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DescribeDocumentStepsInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DescribeDocumentStepsInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DescribeDocumentStepsInput"}
+	if s.DocumentType == nil {
+		invalidParams.Add(request.NewErrParamRequired("DocumentType"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+type DescribeDocumentStepsOutput struct {
+	_ struct{} `type:"structure"`
+
+	StepList []*string `type:"list"`
+}
+
+// String returns the string representation
+func (s DescribeDocumentStepsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DescribeDocumentStepsOutput) GoString() string {
+	return s.String()
+}
+
+type DescribeEffectiveInstanceAssociationsInput struct {
+	_ struct{} `type:"structure"`
+
+	InstanceId *string `type:"string" required:"true"`
+
+	MaxResults *int64 `min:"1" type:"integer"`
+
+	NextToken *string `type:"string"`
+}
+
+// String returns the string representation
+func (s DescribeEffectiveInstanceAssociationsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DescribeEffectiveInstanceAssociationsInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DescribeEffectiveInstanceAssociationsInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DescribeEffectiveInstanceAssociationsInput"}
+	if s.InstanceId == nil {
+		invalidParams.Add(request.NewErrParamRequired("InstanceId"))
+	}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+type DescribeEffectiveInstanceAssociationsOutput struct {
+	_ struct{} `type:"structure"`
+
+	Associations []*InstanceAssociation `type:"list"`
+
+	NextToken *string `type:"string"`
+}
+
+// String returns the string representation
+func (s DescribeEffectiveInstanceAssociationsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DescribeEffectiveInstanceAssociationsOutput) GoString() string {
+	return s.String()
+}
+
+type DescribeEffectivePatchesForPatchBaselineInput struct {
+	_ struct{} `type:"structure"`
+
+	BaselineId *string `min:"20" type:"string" required:"true"`
+
+	MaxResults *int64 `min:"1" type:"integer"`
+
+	NextToken *string `type:"string"`
+}
+
+// String returns the string representation
+func (s DescribeEffectivePatchesForPatchBaselineInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DescribeEffectivePatchesForPatchBaselineInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DescribeEffectivePatchesForPatchBaselineInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DescribeEffectivePatchesForPatchBaselineInput"}
+	if s.BaselineId == nil {
+		invalidParams.Add(request.NewErrParamRequired("BaselineId"))
+	}
+	if s.BaselineId != nil && len(*s.BaselineId) < 20 {
+		invalidParams.Add(request.NewErrParamMinLen("BaselineId", 20))
+	}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+type DescribeEffectivePatchesForPatchBaselineOutput struct {
+	_ struct{} `type:"structure"`
+
+	EffectivePatches []*EffectivePatch `type:"list"`
+
+	NextToken *string `type:"string"`
+}
+
+// String returns the string representation
+func (s DescribeEffectivePatchesForPatchBaselineOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DescribeEffectivePatchesForPatchBaselineOutput) GoString() string {
+	return s.String()
+}
+
+type DescribeInstanceAssociationsStatusInput struct {
+	_ struct{} `type:"structure"`
+
+	InstanceId *string `type:"string" required:"true"`
+
+	MaxResults *int64 `min:"1" type:"integer"`
+
+	NextToken *string `type:"string"`
+}
+
+// String returns the string representation
+func (s DescribeInstanceAssociationsStatusInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DescribeInstanceAssociationsStatusInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DescribeInstanceAssociationsStatusInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DescribeInstanceAssociationsStatusInput"}
+	if s.InstanceId == nil {
+		invalidParams.Add(request.NewErrParamRequired("InstanceId"))
+	}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+type DescribeInstanceAssociationsStatusOutput struct {
+	_ struct{} `type:"structure"`
+
+	InstanceAssociationStatusInfos []*InstanceAssociationStatusInfo `type:"list"`
+
+	NextToken *string `type:"string"`
+}
+
+// String returns the string representation
+func (s DescribeInstanceAssociationsStatusOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DescribeInstanceAssociationsStatusOutput) GoString() string {
+	return s.String()
+}
+
 type DescribeInstanceInformationInput struct {
 	_ struct{} `type:"structure"`
 
+	Filters []*InstanceInformationStringFilter `locationNameList:"InstanceInformationStringFilter" type:"list"`
+
 	// One or more filters. Use a filter to return a more specific list of instances.
-	InstanceInformationFilterList []*InstanceInformationFilter `locationNameList:"InstanceInformationFilter" min:"1" type:"list"`
+	InstanceInformationFilterList []*InstanceInformationFilter `locationNameList:"InstanceInformationFilter" type:"list"`
 
 	// The maximum number of items to return for this call. The call also returns
 	// a token that you can specify in a subsequent call to get the next set of
@@ -2183,11 +7394,18 @@ func (s DescribeInstanceInformationInput) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *DescribeInstanceInformationInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "DescribeInstanceInformationInput"}
-	if s.InstanceInformationFilterList != nil && len(s.InstanceInformationFilterList) < 1 {
-		invalidParams.Add(request.NewErrParamMinLen("InstanceInformationFilterList", 1))
-	}
 	if s.MaxResults != nil && *s.MaxResults < 5 {
 		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 5))
+	}
+	if s.Filters != nil {
+		for i, v := range s.Filters {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "Filters", i), err.(request.ErrInvalidParams))
+			}
+		}
 	}
 	if s.InstanceInformationFilterList != nil {
 		for i, v := range s.InstanceInformationFilterList {
@@ -2227,8 +7445,199 @@ func (s DescribeInstanceInformationOutput) GoString() string {
 	return s.String()
 }
 
+type DescribeInstancePatchStatesForPatchGroupInput struct {
+	_ struct{} `type:"structure"`
+
+	Filters []*InstancePatchStateFilter `type:"list"`
+
+	MaxResults *int64 `min:"10" type:"integer"`
+
+	NextToken *string `type:"string"`
+
+	PatchGroup *string `min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s DescribeInstancePatchStatesForPatchGroupInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DescribeInstancePatchStatesForPatchGroupInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DescribeInstancePatchStatesForPatchGroupInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DescribeInstancePatchStatesForPatchGroupInput"}
+	if s.MaxResults != nil && *s.MaxResults < 10 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 10))
+	}
+	if s.PatchGroup == nil {
+		invalidParams.Add(request.NewErrParamRequired("PatchGroup"))
+	}
+	if s.PatchGroup != nil && len(*s.PatchGroup) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("PatchGroup", 1))
+	}
+	if s.Filters != nil {
+		for i, v := range s.Filters {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "Filters", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+type DescribeInstancePatchStatesForPatchGroupOutput struct {
+	_ struct{} `type:"structure"`
+
+	InstancePatchStates []*InstancePatchState `min:"1" type:"list"`
+
+	NextToken *string `type:"string"`
+}
+
+// String returns the string representation
+func (s DescribeInstancePatchStatesForPatchGroupOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DescribeInstancePatchStatesForPatchGroupOutput) GoString() string {
+	return s.String()
+}
+
+type DescribeInstancePatchStatesInput struct {
+	_ struct{} `type:"structure"`
+
+	InstanceIds []*string `type:"list" required:"true"`
+
+	MaxResults *int64 `min:"10" type:"integer"`
+
+	NextToken *string `type:"string"`
+}
+
+// String returns the string representation
+func (s DescribeInstancePatchStatesInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DescribeInstancePatchStatesInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DescribeInstancePatchStatesInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DescribeInstancePatchStatesInput"}
+	if s.InstanceIds == nil {
+		invalidParams.Add(request.NewErrParamRequired("InstanceIds"))
+	}
+	if s.MaxResults != nil && *s.MaxResults < 10 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 10))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+type DescribeInstancePatchStatesOutput struct {
+	_ struct{} `type:"structure"`
+
+	InstancePatchStates []*InstancePatchState `type:"list"`
+
+	NextToken *string `type:"string"`
+}
+
+// String returns the string representation
+func (s DescribeInstancePatchStatesOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DescribeInstancePatchStatesOutput) GoString() string {
+	return s.String()
+}
+
+type DescribeInstancePatchesInput struct {
+	_ struct{} `type:"structure"`
+
+	Filters []*PatchOrchestratorFilter `type:"list"`
+
+	InstanceId *string `type:"string" required:"true"`
+
+	MaxResults *int64 `min:"10" type:"integer"`
+
+	NextToken *string `type:"string"`
+}
+
+// String returns the string representation
+func (s DescribeInstancePatchesInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DescribeInstancePatchesInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DescribeInstancePatchesInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DescribeInstancePatchesInput"}
+	if s.InstanceId == nil {
+		invalidParams.Add(request.NewErrParamRequired("InstanceId"))
+	}
+	if s.MaxResults != nil && *s.MaxResults < 10 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 10))
+	}
+	if s.Filters != nil {
+		for i, v := range s.Filters {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "Filters", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+type DescribeInstancePatchesOutput struct {
+	_ struct{} `type:"structure"`
+
+	NextToken *string `type:"string"`
+
+	Patches []*PatchComplianceData `type:"list"`
+}
+
+// String returns the string representation
+func (s DescribeInstancePatchesOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DescribeInstancePatchesOutput) GoString() string {
+	return s.String()
+}
+
 type DescribeInstancePropertiesInput struct {
 	_ struct{} `type:"structure"`
+
+	FiltersWithOperator []*InstancePropertyStringFilter `locationNameList:"InstancePropertyStringFilter" min:"1" type:"list"`
 
 	InstancePropertyFilterList []*InstancePropertyFilter `locationNameList:"InstancePropertyFilter" type:"list"`
 
@@ -2250,8 +7659,21 @@ func (s DescribeInstancePropertiesInput) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *DescribeInstancePropertiesInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "DescribeInstancePropertiesInput"}
+	if s.FiltersWithOperator != nil && len(s.FiltersWithOperator) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("FiltersWithOperator", 1))
+	}
 	if s.MaxResults != nil && *s.MaxResults < 5 {
 		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 5))
+	}
+	if s.FiltersWithOperator != nil {
+		for i, v := range s.FiltersWithOperator {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "FiltersWithOperator", i), err.(request.ErrInvalidParams))
+			}
+		}
 	}
 	if s.InstancePropertyFilterList != nil {
 		for i, v := range s.InstancePropertyFilterList {
@@ -2288,6 +7710,667 @@ func (s DescribeInstancePropertiesOutput) GoString() string {
 	return s.String()
 }
 
+type DescribeMaintenanceWindowExecutionTaskInvocationsInput struct {
+	_ struct{} `type:"structure"`
+
+	Filters []*PatchOrchestratorFilter `type:"list"`
+
+	MaxResults *int64 `min:"10" type:"integer"`
+
+	NextToken *string `type:"string"`
+
+	TaskId *string `min:"36" type:"string" required:"true"`
+
+	WindowExecutionId *string `min:"36" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s DescribeMaintenanceWindowExecutionTaskInvocationsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DescribeMaintenanceWindowExecutionTaskInvocationsInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DescribeMaintenanceWindowExecutionTaskInvocationsInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DescribeMaintenanceWindowExecutionTaskInvocationsInput"}
+	if s.MaxResults != nil && *s.MaxResults < 10 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 10))
+	}
+	if s.TaskId == nil {
+		invalidParams.Add(request.NewErrParamRequired("TaskId"))
+	}
+	if s.TaskId != nil && len(*s.TaskId) < 36 {
+		invalidParams.Add(request.NewErrParamMinLen("TaskId", 36))
+	}
+	if s.WindowExecutionId == nil {
+		invalidParams.Add(request.NewErrParamRequired("WindowExecutionId"))
+	}
+	if s.WindowExecutionId != nil && len(*s.WindowExecutionId) < 36 {
+		invalidParams.Add(request.NewErrParamMinLen("WindowExecutionId", 36))
+	}
+	if s.Filters != nil {
+		for i, v := range s.Filters {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "Filters", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+type DescribeMaintenanceWindowExecutionTaskInvocationsOutput struct {
+	_ struct{} `type:"structure"`
+
+	NextToken *string `type:"string"`
+
+	WindowExecutionTaskInvocationIdentities []*MaintenanceWindowExecutionTaskInvocationIdentity `type:"list"`
+}
+
+// String returns the string representation
+func (s DescribeMaintenanceWindowExecutionTaskInvocationsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DescribeMaintenanceWindowExecutionTaskInvocationsOutput) GoString() string {
+	return s.String()
+}
+
+type DescribeMaintenanceWindowExecutionTasksInput struct {
+	_ struct{} `type:"structure"`
+
+	Filters []*PatchOrchestratorFilter `type:"list"`
+
+	MaxResults *int64 `min:"10" type:"integer"`
+
+	NextToken *string `type:"string"`
+
+	WindowExecutionId *string `min:"36" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s DescribeMaintenanceWindowExecutionTasksInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DescribeMaintenanceWindowExecutionTasksInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DescribeMaintenanceWindowExecutionTasksInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DescribeMaintenanceWindowExecutionTasksInput"}
+	if s.MaxResults != nil && *s.MaxResults < 10 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 10))
+	}
+	if s.WindowExecutionId == nil {
+		invalidParams.Add(request.NewErrParamRequired("WindowExecutionId"))
+	}
+	if s.WindowExecutionId != nil && len(*s.WindowExecutionId) < 36 {
+		invalidParams.Add(request.NewErrParamMinLen("WindowExecutionId", 36))
+	}
+	if s.Filters != nil {
+		for i, v := range s.Filters {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "Filters", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+type DescribeMaintenanceWindowExecutionTasksOutput struct {
+	_ struct{} `type:"structure"`
+
+	NextToken *string `type:"string"`
+
+	WindowExecutionTaskIdentities []*MaintenanceWindowExecutionTaskIdentity `type:"list"`
+}
+
+// String returns the string representation
+func (s DescribeMaintenanceWindowExecutionTasksOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DescribeMaintenanceWindowExecutionTasksOutput) GoString() string {
+	return s.String()
+}
+
+type DescribeMaintenanceWindowExecutionsInput struct {
+	_ struct{} `type:"structure"`
+
+	Filters []*PatchOrchestratorFilter `type:"list"`
+
+	MaxResults *int64 `min:"10" type:"integer"`
+
+	NextToken *string `type:"string"`
+
+	WindowId *string `min:"20" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s DescribeMaintenanceWindowExecutionsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DescribeMaintenanceWindowExecutionsInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DescribeMaintenanceWindowExecutionsInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DescribeMaintenanceWindowExecutionsInput"}
+	if s.MaxResults != nil && *s.MaxResults < 10 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 10))
+	}
+	if s.WindowId == nil {
+		invalidParams.Add(request.NewErrParamRequired("WindowId"))
+	}
+	if s.WindowId != nil && len(*s.WindowId) < 20 {
+		invalidParams.Add(request.NewErrParamMinLen("WindowId", 20))
+	}
+	if s.Filters != nil {
+		for i, v := range s.Filters {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "Filters", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+type DescribeMaintenanceWindowExecutionsOutput struct {
+	_ struct{} `type:"structure"`
+
+	NextToken *string `type:"string"`
+
+	WindowExecutions []*MaintenanceWindowExecution `type:"list"`
+}
+
+// String returns the string representation
+func (s DescribeMaintenanceWindowExecutionsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DescribeMaintenanceWindowExecutionsOutput) GoString() string {
+	return s.String()
+}
+
+type DescribeMaintenanceWindowTargetsInput struct {
+	_ struct{} `type:"structure"`
+
+	Filters []*PatchOrchestratorFilter `type:"list"`
+
+	MaxResults *int64 `min:"10" type:"integer"`
+
+	NextToken *string `type:"string"`
+
+	WindowId *string `min:"20" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s DescribeMaintenanceWindowTargetsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DescribeMaintenanceWindowTargetsInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DescribeMaintenanceWindowTargetsInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DescribeMaintenanceWindowTargetsInput"}
+	if s.MaxResults != nil && *s.MaxResults < 10 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 10))
+	}
+	if s.WindowId == nil {
+		invalidParams.Add(request.NewErrParamRequired("WindowId"))
+	}
+	if s.WindowId != nil && len(*s.WindowId) < 20 {
+		invalidParams.Add(request.NewErrParamMinLen("WindowId", 20))
+	}
+	if s.Filters != nil {
+		for i, v := range s.Filters {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "Filters", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+type DescribeMaintenanceWindowTargetsOutput struct {
+	_ struct{} `type:"structure"`
+
+	NextToken *string `type:"string"`
+
+	Targets []*MaintenanceWindowTarget `type:"list"`
+}
+
+// String returns the string representation
+func (s DescribeMaintenanceWindowTargetsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DescribeMaintenanceWindowTargetsOutput) GoString() string {
+	return s.String()
+}
+
+type DescribeMaintenanceWindowTasksInput struct {
+	_ struct{} `type:"structure"`
+
+	Filters []*PatchOrchestratorFilter `type:"list"`
+
+	MaxResults *int64 `min:"10" type:"integer"`
+
+	NextToken *string `type:"string"`
+
+	WindowId *string `min:"20" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s DescribeMaintenanceWindowTasksInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DescribeMaintenanceWindowTasksInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DescribeMaintenanceWindowTasksInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DescribeMaintenanceWindowTasksInput"}
+	if s.MaxResults != nil && *s.MaxResults < 10 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 10))
+	}
+	if s.WindowId == nil {
+		invalidParams.Add(request.NewErrParamRequired("WindowId"))
+	}
+	if s.WindowId != nil && len(*s.WindowId) < 20 {
+		invalidParams.Add(request.NewErrParamMinLen("WindowId", 20))
+	}
+	if s.Filters != nil {
+		for i, v := range s.Filters {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "Filters", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+type DescribeMaintenanceWindowTasksOutput struct {
+	_ struct{} `type:"structure"`
+
+	NextToken *string `type:"string"`
+
+	Tasks []*MaintenanceWindowTask `type:"list"`
+}
+
+// String returns the string representation
+func (s DescribeMaintenanceWindowTasksOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DescribeMaintenanceWindowTasksOutput) GoString() string {
+	return s.String()
+}
+
+type DescribeMaintenanceWindowsInput struct {
+	_ struct{} `type:"structure"`
+
+	Filters []*PatchOrchestratorFilter `type:"list"`
+
+	MaxResults *int64 `min:"10" type:"integer"`
+
+	NextToken *string `type:"string"`
+}
+
+// String returns the string representation
+func (s DescribeMaintenanceWindowsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DescribeMaintenanceWindowsInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DescribeMaintenanceWindowsInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DescribeMaintenanceWindowsInput"}
+	if s.MaxResults != nil && *s.MaxResults < 10 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 10))
+	}
+	if s.Filters != nil {
+		for i, v := range s.Filters {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "Filters", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+type DescribeMaintenanceWindowsOutput struct {
+	_ struct{} `type:"structure"`
+
+	NextToken *string `type:"string"`
+
+	WindowIdentities []*MaintenanceWindowIdentity `type:"list"`
+}
+
+// String returns the string representation
+func (s DescribeMaintenanceWindowsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DescribeMaintenanceWindowsOutput) GoString() string {
+	return s.String()
+}
+
+type DescribeParametersInput struct {
+	_ struct{} `type:"structure"`
+
+	Filters []*ParametersFilter `type:"list"`
+
+	MaxResults *int64 `min:"1" type:"integer"`
+
+	NextToken *string `type:"string"`
+}
+
+// String returns the string representation
+func (s DescribeParametersInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DescribeParametersInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DescribeParametersInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DescribeParametersInput"}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
+	}
+	if s.Filters != nil {
+		for i, v := range s.Filters {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "Filters", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+type DescribeParametersOutput struct {
+	_ struct{} `type:"structure"`
+
+	NextToken *string `type:"string"`
+
+	Parameters []*ParameterMetadata `type:"list"`
+}
+
+// String returns the string representation
+func (s DescribeParametersOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DescribeParametersOutput) GoString() string {
+	return s.String()
+}
+
+type DescribePatchBaselinesInput struct {
+	_ struct{} `type:"structure"`
+
+	Filters []*PatchOrchestratorFilter `type:"list"`
+
+	MaxResults *int64 `min:"1" type:"integer"`
+
+	NextToken *string `type:"string"`
+}
+
+// String returns the string representation
+func (s DescribePatchBaselinesInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DescribePatchBaselinesInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DescribePatchBaselinesInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DescribePatchBaselinesInput"}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
+	}
+	if s.Filters != nil {
+		for i, v := range s.Filters {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "Filters", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+type DescribePatchBaselinesOutput struct {
+	_ struct{} `type:"structure"`
+
+	BaselineIdentities []*BaselineIdentity `type:"list"`
+
+	NextToken *string `type:"string"`
+}
+
+// String returns the string representation
+func (s DescribePatchBaselinesOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DescribePatchBaselinesOutput) GoString() string {
+	return s.String()
+}
+
+type DescribePatchGroupStateInput struct {
+	_ struct{} `type:"structure"`
+
+	PatchGroup *string `min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s DescribePatchGroupStateInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DescribePatchGroupStateInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DescribePatchGroupStateInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DescribePatchGroupStateInput"}
+	if s.PatchGroup == nil {
+		invalidParams.Add(request.NewErrParamRequired("PatchGroup"))
+	}
+	if s.PatchGroup != nil && len(*s.PatchGroup) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("PatchGroup", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+type DescribePatchGroupStateOutput struct {
+	_ struct{} `type:"structure"`
+
+	Instances *int64 `type:"integer"`
+
+	InstancesWithFailedPatches *int64 `type:"integer"`
+
+	InstancesWithInstalledOtherPatches *int64 `type:"integer"`
+
+	InstancesWithInstalledPatches *int64 `type:"integer"`
+
+	InstancesWithMissingPatches *int64 `type:"integer"`
+
+	InstancesWithNotApplicablePatches *int64 `type:"integer"`
+}
+
+// String returns the string representation
+func (s DescribePatchGroupStateOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DescribePatchGroupStateOutput) GoString() string {
+	return s.String()
+}
+
+type DescribePatchGroupsInput struct {
+	_ struct{} `type:"structure"`
+
+	MaxResults *int64 `min:"1" type:"integer"`
+
+	NextToken *string `type:"string"`
+}
+
+// String returns the string representation
+func (s DescribePatchGroupsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DescribePatchGroupsInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DescribePatchGroupsInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DescribePatchGroupsInput"}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+type DescribePatchGroupsOutput struct {
+	_ struct{} `type:"structure"`
+
+	NextToken *string `type:"string"`
+
+	PatchGroupPatchBaselineMappings []*PatchGroupPatchBaselineMapping `type:"list"`
+}
+
+// String returns the string representation
+func (s DescribePatchGroupsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DescribePatchGroupsOutput) GoString() string {
+	return s.String()
+}
+
+type DocumentDefaultVersionDescription struct {
+	_ struct{} `type:"structure"`
+
+	DefaultVersion *string `type:"string"`
+
+	Name *string `type:"string"`
+}
+
+// String returns the string representation
+func (s DocumentDefaultVersionDescription) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DocumentDefaultVersionDescription) GoString() string {
+	return s.String()
+}
+
 // Describes an SSM document.
 type DocumentDescription struct {
 	_ struct{} `type:"structure"`
@@ -2295,8 +8378,14 @@ type DocumentDescription struct {
 	// The date when the SSM document was created.
 	CreatedDate *time.Time `type:"timestamp" timestampFormat:"unix"`
 
+	DefaultVersion *string `type:"string"`
+
 	// A description of the document.
 	Description *string `type:"string"`
+
+	DocumentType *string `type:"string" enum:"DocumentType"`
+
+	DocumentVersion *string `type:"string"`
 
 	// The Sha256 or Sha1 hash created by the system when the document was created.
 	//
@@ -2307,6 +8396,8 @@ type DocumentDescription struct {
 	//
 	//  Sha1 hashes have been deprecated.
 	HashType *string `type:"string" enum:"DocumentHashType"`
+
+	LatestVersion *string `type:"string"`
 
 	// The name of the SSM document.
 	Name *string `type:"string"`
@@ -2319,6 +8410,8 @@ type DocumentDescription struct {
 
 	// The list of OS platforms compatible with this SSM document.
 	PlatformTypes []*string `locationNameList:"PlatformType" type:"list"`
+
+	SchemaVersion *string `type:"string"`
 
 	// The SHA1 hash of the document, which you can use for verification purposes.
 	Sha1 *string `type:"string"`
@@ -2381,6 +8474,10 @@ func (s *DocumentFilter) Validate() error {
 type DocumentIdentifier struct {
 	_ struct{} `type:"structure"`
 
+	DocumentType *string `type:"string" enum:"DocumentType"`
+
+	DocumentVersion *string `type:"string"`
+
 	// The name of the SSM document.
 	Name *string `type:"string"`
 
@@ -2389,6 +8486,8 @@ type DocumentIdentifier struct {
 
 	// The operating system platform.
 	PlatformTypes []*string `locationNameList:"PlatformType" type:"list"`
+
+	SchemaVersion *string `type:"string"`
 }
 
 // String returns the string representation
@@ -2431,6 +8530,46 @@ func (s DocumentParameter) GoString() string {
 	return s.String()
 }
 
+type DocumentVersionInfo struct {
+	_ struct{} `type:"structure"`
+
+	CreatedDate *time.Time `type:"timestamp" timestampFormat:"unix"`
+
+	DocumentVersion *string `type:"string"`
+
+	IsDefaultVersion *bool `type:"boolean"`
+
+	Name *string `type:"string"`
+}
+
+// String returns the string representation
+func (s DocumentVersionInfo) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DocumentVersionInfo) GoString() string {
+	return s.String()
+}
+
+type EffectivePatch struct {
+	_ struct{} `type:"structure"`
+
+	Patch *Patch `type:"structure"`
+
+	PatchStatus *PatchStatus `type:"structure"`
+}
+
+// String returns the string representation
+func (s EffectivePatch) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s EffectivePatch) GoString() string {
+	return s.String()
+}
+
 // Describes a failed association.
 type FailedCreateAssociation struct {
 	_ struct{} `type:"structure"`
@@ -2455,8 +8594,315 @@ func (s FailedCreateAssociation) GoString() string {
 	return s.String()
 }
 
+type FilterGroup struct {
+	_ struct{} `type:"structure"`
+
+	FilterList []*PatchFilter `type:"list" required:"true"`
+}
+
+// String returns the string representation
+func (s FilterGroup) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s FilterGroup) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *FilterGroup) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "FilterGroup"}
+	if s.FilterList == nil {
+		invalidParams.Add(request.NewErrParamRequired("FilterList"))
+	}
+	if s.FilterList != nil {
+		for i, v := range s.FilterList {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "FilterList", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+type GetAutomationActionInput struct {
+	_ struct{} `type:"structure"`
+
+	Name *string `type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s GetAutomationActionInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s GetAutomationActionInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GetAutomationActionInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "GetAutomationActionInput"}
+	if s.Name == nil {
+		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+type GetAutomationActionOutput struct {
+	_ struct{} `type:"structure"`
+
+	ActionDetail *AutomationAction `type:"structure"`
+}
+
+// String returns the string representation
+func (s GetAutomationActionOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s GetAutomationActionOutput) GoString() string {
+	return s.String()
+}
+
+type GetAutomationExecutionInput struct {
+	_ struct{} `type:"structure"`
+
+	AutomationExecutionId *string `min:"36" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s GetAutomationExecutionInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s GetAutomationExecutionInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GetAutomationExecutionInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "GetAutomationExecutionInput"}
+	if s.AutomationExecutionId == nil {
+		invalidParams.Add(request.NewErrParamRequired("AutomationExecutionId"))
+	}
+	if s.AutomationExecutionId != nil && len(*s.AutomationExecutionId) < 36 {
+		invalidParams.Add(request.NewErrParamMinLen("AutomationExecutionId", 36))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+type GetAutomationExecutionOutput struct {
+	_ struct{} `type:"structure"`
+
+	AutomationExecution *AutomationExecution `type:"structure"`
+}
+
+// String returns the string representation
+func (s GetAutomationExecutionOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s GetAutomationExecutionOutput) GoString() string {
+	return s.String()
+}
+
+type GetCommandInvocationInput struct {
+	_ struct{} `type:"structure"`
+
+	CommandId *string `min:"36" type:"string" required:"true"`
+
+	InstanceId *string `type:"string" required:"true"`
+
+	PluginName *string `min:"4" type:"string"`
+}
+
+// String returns the string representation
+func (s GetCommandInvocationInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s GetCommandInvocationInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GetCommandInvocationInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "GetCommandInvocationInput"}
+	if s.CommandId == nil {
+		invalidParams.Add(request.NewErrParamRequired("CommandId"))
+	}
+	if s.CommandId != nil && len(*s.CommandId) < 36 {
+		invalidParams.Add(request.NewErrParamMinLen("CommandId", 36))
+	}
+	if s.InstanceId == nil {
+		invalidParams.Add(request.NewErrParamRequired("InstanceId"))
+	}
+	if s.PluginName != nil && len(*s.PluginName) < 4 {
+		invalidParams.Add(request.NewErrParamMinLen("PluginName", 4))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+type GetCommandInvocationOutput struct {
+	_ struct{} `type:"structure"`
+
+	CommandId *string `min:"36" type:"string"`
+
+	Comment *string `type:"string"`
+
+	DocumentName *string `type:"string"`
+
+	ExecutionElapsedTime *string `type:"string"`
+
+	ExecutionEndDateTime *string `type:"string"`
+
+	ExecutionStartDateTime *string `type:"string"`
+
+	InstanceId *string `type:"string"`
+
+	PluginName *string `min:"4" type:"string"`
+
+	ResponseCode *int64 `type:"integer"`
+
+	StandardErrorContent *string `type:"string"`
+
+	StandardErrorUrl *string `type:"string"`
+
+	StandardOutputContent *string `type:"string"`
+
+	StandardOutputUrl *string `type:"string"`
+
+	Status *string `type:"string" enum:"CommandInvocationStatus"`
+
+	StatusDetails *string `type:"string"`
+}
+
+// String returns the string representation
+func (s GetCommandInvocationOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s GetCommandInvocationOutput) GoString() string {
+	return s.String()
+}
+
+type GetDefaultPatchBaselineInput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation
+func (s GetDefaultPatchBaselineInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s GetDefaultPatchBaselineInput) GoString() string {
+	return s.String()
+}
+
+type GetDefaultPatchBaselineOutput struct {
+	_ struct{} `type:"structure"`
+
+	BaselineId *string `min:"20" type:"string"`
+}
+
+// String returns the string representation
+func (s GetDefaultPatchBaselineOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s GetDefaultPatchBaselineOutput) GoString() string {
+	return s.String()
+}
+
+type GetDeployablePatchSnapshotForInstanceInput struct {
+	_ struct{} `type:"structure"`
+
+	InstanceId *string `type:"string" required:"true"`
+
+	SnapshotId *string `min:"36" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s GetDeployablePatchSnapshotForInstanceInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s GetDeployablePatchSnapshotForInstanceInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GetDeployablePatchSnapshotForInstanceInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "GetDeployablePatchSnapshotForInstanceInput"}
+	if s.InstanceId == nil {
+		invalidParams.Add(request.NewErrParamRequired("InstanceId"))
+	}
+	if s.SnapshotId == nil {
+		invalidParams.Add(request.NewErrParamRequired("SnapshotId"))
+	}
+	if s.SnapshotId != nil && len(*s.SnapshotId) < 36 {
+		invalidParams.Add(request.NewErrParamMinLen("SnapshotId", 36))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+type GetDeployablePatchSnapshotForInstanceOutput struct {
+	_ struct{} `type:"structure"`
+
+	InstanceId *string `type:"string"`
+
+	SnapshotDownloadUrl *string `type:"string"`
+
+	SnapshotId *string `min:"36" type:"string"`
+}
+
+// String returns the string representation
+func (s GetDeployablePatchSnapshotForInstanceOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s GetDeployablePatchSnapshotForInstanceOutput) GoString() string {
+	return s.String()
+}
+
 type GetDocumentInput struct {
 	_ struct{} `type:"structure"`
+
+	DocumentVersion *string `type:"string"`
 
 	// The name of the SSM document.
 	Name *string `type:"string" required:"true"`
@@ -2485,11 +8931,73 @@ func (s *GetDocumentInput) Validate() error {
 	return nil
 }
 
+type GetDocumentInternalInput struct {
+	_ struct{} `type:"structure"`
+
+	CustomerAccountId *string `type:"string" required:"true"`
+
+	DocumentVersion *string `type:"string"`
+
+	Name *string `type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s GetDocumentInternalInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s GetDocumentInternalInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GetDocumentInternalInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "GetDocumentInternalInput"}
+	if s.CustomerAccountId == nil {
+		invalidParams.Add(request.NewErrParamRequired("CustomerAccountId"))
+	}
+	if s.Name == nil {
+		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+type GetDocumentInternalOutput struct {
+	_ struct{} `type:"structure"`
+
+	Content *string `min:"1" type:"string"`
+
+	DocumentType *string `type:"string" enum:"DocumentType"`
+
+	DocumentVersion *string `type:"string"`
+
+	Name *string `type:"string"`
+}
+
+// String returns the string representation
+func (s GetDocumentInternalOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s GetDocumentInternalOutput) GoString() string {
+	return s.String()
+}
+
 type GetDocumentOutput struct {
 	_ struct{} `type:"structure"`
 
 	// The contents of the SSM document.
 	Content *string `min:"1" type:"string"`
+
+	DocumentType *string `type:"string" enum:"DocumentType"`
+
+	DocumentVersion *string `type:"string"`
 
 	// The name of the SSM document.
 	Name *string `type:"string"`
@@ -2505,19 +9013,763 @@ func (s GetDocumentOutput) GoString() string {
 	return s.String()
 }
 
+type GetInventoryInput struct {
+	_ struct{} `type:"structure"`
+
+	Filters []*InventoryFilter `locationNameList:"InventoryFilter" min:"1" type:"list"`
+
+	MaxResults *int64 `min:"1" type:"integer"`
+
+	NextToken *string `type:"string"`
+
+	ResultAttributes []*ResultAttribute `locationNameList:"ResultAttribute" min:"1" type:"list"`
+}
+
+// String returns the string representation
+func (s GetInventoryInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s GetInventoryInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GetInventoryInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "GetInventoryInput"}
+	if s.Filters != nil && len(s.Filters) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Filters", 1))
+	}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
+	}
+	if s.ResultAttributes != nil && len(s.ResultAttributes) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ResultAttributes", 1))
+	}
+	if s.Filters != nil {
+		for i, v := range s.Filters {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "Filters", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+	if s.ResultAttributes != nil {
+		for i, v := range s.ResultAttributes {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "ResultAttributes", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+type GetInventoryOutput struct {
+	_ struct{} `type:"structure"`
+
+	Entities []*InventoryResultEntity `locationNameList:"Entity" type:"list"`
+
+	NextToken *string `type:"string"`
+}
+
+// String returns the string representation
+func (s GetInventoryOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s GetInventoryOutput) GoString() string {
+	return s.String()
+}
+
+type GetInventorySchemaInput struct {
+	_ struct{} `type:"structure"`
+
+	MaxResults *int64 `min:"50" type:"integer"`
+
+	NextToken *string `type:"string"`
+
+	TypeName *string `type:"string"`
+}
+
+// String returns the string representation
+func (s GetInventorySchemaInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s GetInventorySchemaInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GetInventorySchemaInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "GetInventorySchemaInput"}
+	if s.MaxResults != nil && *s.MaxResults < 50 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 50))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+type GetInventorySchemaOutput struct {
+	_ struct{} `type:"structure"`
+
+	NextToken *string `type:"string"`
+
+	Schemas []*InventoryItemSchema `type:"list"`
+}
+
+// String returns the string representation
+func (s GetInventorySchemaOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s GetInventorySchemaOutput) GoString() string {
+	return s.String()
+}
+
+type GetMaintenanceWindowExecutionInput struct {
+	_ struct{} `type:"structure"`
+
+	WindowExecutionId *string `min:"36" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s GetMaintenanceWindowExecutionInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s GetMaintenanceWindowExecutionInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GetMaintenanceWindowExecutionInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "GetMaintenanceWindowExecutionInput"}
+	if s.WindowExecutionId == nil {
+		invalidParams.Add(request.NewErrParamRequired("WindowExecutionId"))
+	}
+	if s.WindowExecutionId != nil && len(*s.WindowExecutionId) < 36 {
+		invalidParams.Add(request.NewErrParamMinLen("WindowExecutionId", 36))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+type GetMaintenanceWindowExecutionOutput struct {
+	_ struct{} `type:"structure"`
+
+	EndTime *time.Time `type:"timestamp" timestampFormat:"unix"`
+
+	StartTime *time.Time `type:"timestamp" timestampFormat:"unix"`
+
+	Status *string `type:"string" enum:"MaintenanceWindowExecutionStatus"`
+
+	TaskIds []*string `type:"list"`
+
+	WindowExecutionId *string `min:"36" type:"string"`
+}
+
+// String returns the string representation
+func (s GetMaintenanceWindowExecutionOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s GetMaintenanceWindowExecutionOutput) GoString() string {
+	return s.String()
+}
+
+type GetMaintenanceWindowExecutionTaskInput struct {
+	_ struct{} `type:"structure"`
+
+	TaskId *string `min:"36" type:"string" required:"true"`
+
+	WindowExecutionId *string `min:"36" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s GetMaintenanceWindowExecutionTaskInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s GetMaintenanceWindowExecutionTaskInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GetMaintenanceWindowExecutionTaskInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "GetMaintenanceWindowExecutionTaskInput"}
+	if s.TaskId == nil {
+		invalidParams.Add(request.NewErrParamRequired("TaskId"))
+	}
+	if s.TaskId != nil && len(*s.TaskId) < 36 {
+		invalidParams.Add(request.NewErrParamMinLen("TaskId", 36))
+	}
+	if s.WindowExecutionId == nil {
+		invalidParams.Add(request.NewErrParamRequired("WindowExecutionId"))
+	}
+	if s.WindowExecutionId != nil && len(*s.WindowExecutionId) < 36 {
+		invalidParams.Add(request.NewErrParamMinLen("WindowExecutionId", 36))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+type GetMaintenanceWindowExecutionTaskOutput struct {
+	_ struct{} `type:"structure"`
+
+	EndTime *time.Time `type:"timestamp" timestampFormat:"unix"`
+
+	MaxConcurrency *string `min:"1" type:"string"`
+
+	MaxErrors *string `min:"1" type:"string"`
+
+	Priority *int64 `type:"integer"`
+
+	ServiceRole *string `type:"string"`
+
+	StartTime *time.Time `type:"timestamp" timestampFormat:"unix"`
+
+	Status *string `type:"string" enum:"MaintenanceWindowExecutionStatus"`
+
+	TaskArn *string `min:"1" type:"string"`
+
+	TaskExecutionId *string `min:"36" type:"string"`
+
+	TaskParameters []map[string]*MaintenanceWindowTaskParameterValueExpression `type:"list"`
+
+	Type *string `type:"string" enum:"MaintenanceWindowTaskType"`
+
+	WindowExecutionId *string `min:"36" type:"string"`
+}
+
+// String returns the string representation
+func (s GetMaintenanceWindowExecutionTaskOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s GetMaintenanceWindowExecutionTaskOutput) GoString() string {
+	return s.String()
+}
+
+type GetMaintenanceWindowInput struct {
+	_ struct{} `type:"structure"`
+
+	WindowId *string `min:"20" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s GetMaintenanceWindowInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s GetMaintenanceWindowInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GetMaintenanceWindowInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "GetMaintenanceWindowInput"}
+	if s.WindowId == nil {
+		invalidParams.Add(request.NewErrParamRequired("WindowId"))
+	}
+	if s.WindowId != nil && len(*s.WindowId) < 20 {
+		invalidParams.Add(request.NewErrParamMinLen("WindowId", 20))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+type GetMaintenanceWindowOutput struct {
+	_ struct{} `type:"structure"`
+
+	AllowUnassociatedTargets *bool `type:"boolean"`
+
+	Cutoff *int64 `type:"integer"`
+
+	Duration *int64 `min:"1" type:"integer"`
+
+	Enabled *bool `type:"boolean"`
+
+	Name *string `min:"3" type:"string"`
+
+	Schedule *string `min:"1" type:"string"`
+
+	WindowId *string `min:"20" type:"string"`
+}
+
+// String returns the string representation
+func (s GetMaintenanceWindowOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s GetMaintenanceWindowOutput) GoString() string {
+	return s.String()
+}
+
+type GetParameterHistoryInput struct {
+	_ struct{} `type:"structure"`
+
+	Name *string `min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s GetParameterHistoryInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s GetParameterHistoryInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GetParameterHistoryInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "GetParameterHistoryInput"}
+	if s.Name == nil {
+		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+	if s.Name != nil && len(*s.Name) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Name", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+type GetParameterHistoryOutput struct {
+	_ struct{} `type:"structure"`
+
+	Parameter []*Parameter `type:"list"`
+}
+
+// String returns the string representation
+func (s GetParameterHistoryOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s GetParameterHistoryOutput) GoString() string {
+	return s.String()
+}
+
+type GetParametersInput struct {
+	_ struct{} `type:"structure"`
+
+	Names []*string `min:"1" type:"list" required:"true"`
+
+	WithDecryption *bool `type:"boolean"`
+}
+
+// String returns the string representation
+func (s GetParametersInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s GetParametersInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GetParametersInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "GetParametersInput"}
+	if s.Names == nil {
+		invalidParams.Add(request.NewErrParamRequired("Names"))
+	}
+	if s.Names != nil && len(s.Names) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Names", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+type GetParametersOutput struct {
+	_ struct{} `type:"structure"`
+
+	InvalidParameters []*string `min:"1" type:"list"`
+
+	Parameters []*Parameter `type:"list"`
+}
+
+// String returns the string representation
+func (s GetParametersOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s GetParametersOutput) GoString() string {
+	return s.String()
+}
+
+type GetPatchBaselineForPatchGroupInput struct {
+	_ struct{} `type:"structure"`
+
+	PatchGroup *string `min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s GetPatchBaselineForPatchGroupInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s GetPatchBaselineForPatchGroupInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GetPatchBaselineForPatchGroupInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "GetPatchBaselineForPatchGroupInput"}
+	if s.PatchGroup == nil {
+		invalidParams.Add(request.NewErrParamRequired("PatchGroup"))
+	}
+	if s.PatchGroup != nil && len(*s.PatchGroup) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("PatchGroup", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+type GetPatchBaselineForPatchGroupOutput struct {
+	_ struct{} `type:"structure"`
+
+	BaselineId *string `min:"20" type:"string"`
+
+	PatchGroup *string `min:"1" type:"string"`
+}
+
+// String returns the string representation
+func (s GetPatchBaselineForPatchGroupOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s GetPatchBaselineForPatchGroupOutput) GoString() string {
+	return s.String()
+}
+
+type GetPatchBaselineInput struct {
+	_ struct{} `type:"structure"`
+
+	BaselineId *string `min:"20" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s GetPatchBaselineInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s GetPatchBaselineInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GetPatchBaselineInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "GetPatchBaselineInput"}
+	if s.BaselineId == nil {
+		invalidParams.Add(request.NewErrParamRequired("BaselineId"))
+	}
+	if s.BaselineId != nil && len(*s.BaselineId) < 20 {
+		invalidParams.Add(request.NewErrParamMinLen("BaselineId", 20))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+type GetPatchBaselineOutput struct {
+	_ struct{} `type:"structure"`
+
+	ApprovalRules *RuleGroup `type:"structure"`
+
+	ApprovedPatches []*string `type:"list"`
+
+	BaselineId *string `min:"20" type:"string"`
+
+	CreatedDate *time.Time `type:"timestamp" timestampFormat:"unix"`
+
+	Description *string `min:"1" type:"string"`
+
+	GlobalFilters *FilterGroup `type:"structure"`
+
+	ModifiedDate *time.Time `type:"timestamp" timestampFormat:"unix"`
+
+	Name *string `min:"3" type:"string"`
+
+	RejectedPatches []*string `type:"list"`
+}
+
+// String returns the string representation
+func (s GetPatchBaselineOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s GetPatchBaselineOutput) GoString() string {
+	return s.String()
+}
+
+type InstanceAggregatedAssociationOverview struct {
+	_ struct{} `type:"structure"`
+
+	DetailedStatus *string `type:"string"`
+
+	InstanceAssociationStatusAggregatedCount map[string]*int64 `type:"map"`
+}
+
+// String returns the string representation
+func (s InstanceAggregatedAssociationOverview) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s InstanceAggregatedAssociationOverview) GoString() string {
+	return s.String()
+}
+
+type InstanceAssociation struct {
+	_ struct{} `type:"structure"`
+
+	AssociationId *string `type:"string"`
+
+	Content *string `min:"1" type:"string"`
+
+	InstanceId *string `type:"string"`
+}
+
+// String returns the string representation
+func (s InstanceAssociation) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s InstanceAssociation) GoString() string {
+	return s.String()
+}
+
+type InstanceAssociationExecutionResult struct {
+	_ struct{} `type:"structure"`
+
+	ErrorCode *string `type:"string"`
+
+	ExecutionDate *time.Time `type:"timestamp" timestampFormat:"unix" required:"true"`
+
+	ExecutionSummary *string `min:"1" type:"string" required:"true"`
+
+	OutputUrl *InstanceAssociationOutputUrl `type:"structure"`
+
+	Status *string `type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s InstanceAssociationExecutionResult) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s InstanceAssociationExecutionResult) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *InstanceAssociationExecutionResult) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "InstanceAssociationExecutionResult"}
+	if s.ExecutionDate == nil {
+		invalidParams.Add(request.NewErrParamRequired("ExecutionDate"))
+	}
+	if s.ExecutionSummary == nil {
+		invalidParams.Add(request.NewErrParamRequired("ExecutionSummary"))
+	}
+	if s.ExecutionSummary != nil && len(*s.ExecutionSummary) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ExecutionSummary", 1))
+	}
+	if s.Status == nil {
+		invalidParams.Add(request.NewErrParamRequired("Status"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+type InstanceAssociationOutputLocation struct {
+	_ struct{} `type:"structure"`
+
+	S3Location *S3OutputLocation `type:"structure"`
+}
+
+// String returns the string representation
+func (s InstanceAssociationOutputLocation) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s InstanceAssociationOutputLocation) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *InstanceAssociationOutputLocation) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "InstanceAssociationOutputLocation"}
+	if s.S3Location != nil {
+		if err := s.S3Location.Validate(); err != nil {
+			invalidParams.AddNested("S3Location", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+type InstanceAssociationOutputUrl struct {
+	_ struct{} `type:"structure"`
+
+	S3OutputUrl *S3OutputUrl `type:"structure"`
+}
+
+// String returns the string representation
+func (s InstanceAssociationOutputUrl) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s InstanceAssociationOutputUrl) GoString() string {
+	return s.String()
+}
+
+type InstanceAssociationStatusInfo struct {
+	_ struct{} `type:"structure"`
+
+	AssociationId *string `type:"string"`
+
+	DetailedStatus *string `type:"string"`
+
+	DocumentVersion *string `type:"string"`
+
+	ErrorCode *string `type:"string"`
+
+	ExecutionDate *time.Time `type:"timestamp" timestampFormat:"unix"`
+
+	ExecutionSummary *string `min:"1" type:"string"`
+
+	InstanceId *string `type:"string"`
+
+	Name *string `type:"string"`
+
+	OutputUrl *InstanceAssociationOutputUrl `type:"structure"`
+
+	Status *string `type:"string"`
+}
+
+// String returns the string representation
+func (s InstanceAssociationStatusInfo) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s InstanceAssociationStatusInfo) GoString() string {
+	return s.String()
+}
+
+type InstanceAssociationSummary struct {
+	_ struct{} `type:"structure"`
+
+	AssociationId *string `type:"string"`
+
+	Checksum *string `type:"string"`
+
+	DocumentVersion *string `type:"string"`
+
+	InstanceId *string `type:"string"`
+
+	Name *string `type:"string"`
+
+	OutputLocation *InstanceAssociationOutputLocation `type:"structure"`
+
+	Parameters map[string][]*string `type:"map"`
+
+	ScheduleExpression *string `min:"1" type:"string"`
+
+	Targets []*Target `type:"list"`
+}
+
+// String returns the string representation
+func (s InstanceAssociationSummary) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s InstanceAssociationSummary) GoString() string {
+	return s.String()
+}
+
 // Describes a filter for a specific list of instances.
 type InstanceInformation struct {
 	_ struct{} `type:"structure"`
 
+	// The activation ID created by SSM when the server or VM was registered.
 	ActivationId *string `type:"string"`
 
-	// The version of the SSM agent running on your instance.
+	// The version of the SSM agent running on your Linux instance.
 	AgentVersion *string `type:"string"`
 
-	ComputerName *string `type:"string"`
+	AssociationOverview *InstanceAggregatedAssociationOverview `type:"structure"`
 
+	AssociationStatus *string `type:"string"`
+
+	// The fully qualified host name of the managed instance.
+	ComputerName *string `min:"1" type:"string"`
+
+	// The IP address of the managed instance.
 	IPAddress *string `min:"1" type:"string"`
 
+	// The Amazon Identity and Access Management (IAM) role assigned to EC2 instances
+	// or managed instances.
 	IamRole *string `type:"string"`
 
 	// The instance ID.
@@ -2526,9 +9778,14 @@ type InstanceInformation struct {
 	// Indicates whether latest version of the SSM agent is running on your instance.
 	IsLatestVersion *bool `type:"boolean"`
 
+	LastAssociationExecutionDate *time.Time `type:"timestamp" timestampFormat:"unix"`
+
 	// The date and time when agent last pinged SSM service.
 	LastPingDateTime *time.Time `type:"timestamp" timestampFormat:"unix"`
 
+	LastSuccessfulAssociationExecutionDate *time.Time `type:"timestamp" timestampFormat:"unix"`
+
+	// The name of the managed instance.
 	Name *string `type:"string"`
 
 	// Connection status of the SSM agent.
@@ -2543,8 +9800,10 @@ type InstanceInformation struct {
 	// The version of the OS platform running on your instance.
 	PlatformVersion *string `type:"string"`
 
+	// The date the server or VM was registered with AWS as a managed instance.
 	RegistrationDate *time.Time `type:"timestamp" timestampFormat:"unix"`
 
+	// The type of instance. Instances are either EC2 instances or managed instances.
 	ResourceType *string `type:"string" enum:"ResourceType"`
 }
 
@@ -2598,6 +9857,127 @@ func (s *InstanceInformationFilter) Validate() error {
 	return nil
 }
 
+type InstanceInformationStringFilter struct {
+	_ struct{} `type:"structure"`
+
+	Key *string `min:"1" type:"string" required:"true"`
+
+	Values []*string `locationNameList:"InstanceInformationFilterValue" min:"1" type:"list" required:"true"`
+}
+
+// String returns the string representation
+func (s InstanceInformationStringFilter) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s InstanceInformationStringFilter) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *InstanceInformationStringFilter) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "InstanceInformationStringFilter"}
+	if s.Key == nil {
+		invalidParams.Add(request.NewErrParamRequired("Key"))
+	}
+	if s.Key != nil && len(*s.Key) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Key", 1))
+	}
+	if s.Values == nil {
+		invalidParams.Add(request.NewErrParamRequired("Values"))
+	}
+	if s.Values != nil && len(s.Values) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Values", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+type InstancePatchState struct {
+	_ struct{} `type:"structure"`
+
+	FailedCount *int64 `type:"integer"`
+
+	InstalledCount *int64 `type:"integer"`
+
+	InstalledOtherCount *int64 `type:"integer"`
+
+	InstanceId *string `type:"string" required:"true"`
+
+	MissingCount *int64 `type:"integer"`
+
+	NotApplicableCount *int64 `type:"integer"`
+
+	Operation *string `type:"string" required:"true" enum:"PatchOperationType"`
+
+	OperationEndTime *time.Time `type:"timestamp" timestampFormat:"unix" required:"true"`
+
+	OperationStartTime *time.Time `type:"timestamp" timestampFormat:"unix" required:"true"`
+
+	PatchBaselineId *string `min:"20" type:"string" required:"true"`
+
+	PatchGroup *string `min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s InstancePatchState) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s InstancePatchState) GoString() string {
+	return s.String()
+}
+
+type InstancePatchStateFilter struct {
+	_ struct{} `type:"structure"`
+
+	Key *string `min:"1" type:"string" required:"true"`
+
+	Type *string `type:"string" required:"true" enum:"InstancePatchStateOperatorType"`
+
+	Values []*string `min:"1" type:"list" required:"true"`
+}
+
+// String returns the string representation
+func (s InstancePatchStateFilter) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s InstancePatchStateFilter) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *InstancePatchStateFilter) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "InstancePatchStateFilter"}
+	if s.Key == nil {
+		invalidParams.Add(request.NewErrParamRequired("Key"))
+	}
+	if s.Key != nil && len(*s.Key) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Key", 1))
+	}
+	if s.Type == nil {
+		invalidParams.Add(request.NewErrParamRequired("Type"))
+	}
+	if s.Values == nil {
+		invalidParams.Add(request.NewErrParamRequired("Values"))
+	}
+	if s.Values != nil && len(s.Values) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Values", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
 type InstanceProperty struct {
 	_ struct{} `type:"structure"`
 
@@ -2607,9 +9987,13 @@ type InstanceProperty struct {
 
 	Architecture *string `type:"string"`
 
+	AssociationOverview *InstanceAggregatedAssociationOverview `type:"structure"`
+
+	AssociationStatus *string `type:"string"`
+
 	AvailabilityZone *string `type:"string"`
 
-	ComputerName *string `type:"string"`
+	ComputerName *string `min:"1" type:"string"`
 
 	IPAddress *string `min:"1" type:"string"`
 
@@ -2625,7 +10009,11 @@ type InstanceProperty struct {
 
 	KeyName *string `type:"string"`
 
+	LastAssociationExecutionDate *time.Time `type:"timestamp" timestampFormat:"unix"`
+
 	LastPingDateTime *time.Time `type:"timestamp" timestampFormat:"unix"`
+
+	LastSuccessfulAssociationExecutionDate *time.Time `type:"timestamp" timestampFormat:"unix"`
 
 	LaunchTime *time.Time `type:"timestamp" timestampFormat:"unix"`
 
@@ -2689,6 +10077,216 @@ func (s *InstancePropertyFilter) Validate() error {
 		return invalidParams
 	}
 	return nil
+}
+
+type InstancePropertyStringFilter struct {
+	_ struct{} `type:"structure"`
+
+	Key *string `min:"1" type:"string" required:"true"`
+
+	Operator *string `type:"string" enum:"InstancePropertyFilterOperator"`
+
+	Values []*string `locationNameList:"InstancePropertyFilterValue" min:"1" type:"list" required:"true"`
+}
+
+// String returns the string representation
+func (s InstancePropertyStringFilter) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s InstancePropertyStringFilter) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *InstancePropertyStringFilter) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "InstancePropertyStringFilter"}
+	if s.Key == nil {
+		invalidParams.Add(request.NewErrParamRequired("Key"))
+	}
+	if s.Key != nil && len(*s.Key) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Key", 1))
+	}
+	if s.Values == nil {
+		invalidParams.Add(request.NewErrParamRequired("Values"))
+	}
+	if s.Values != nil && len(s.Values) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Values", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+type InventoryFilter struct {
+	_ struct{} `type:"structure"`
+
+	Key *string `min:"1" type:"string" required:"true"`
+
+	Type *string `type:"string" enum:"InventoryQueryOperatorType"`
+
+	Values []*string `locationNameList:"FilterValue" min:"1" type:"list" required:"true"`
+}
+
+// String returns the string representation
+func (s InventoryFilter) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s InventoryFilter) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *InventoryFilter) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "InventoryFilter"}
+	if s.Key == nil {
+		invalidParams.Add(request.NewErrParamRequired("Key"))
+	}
+	if s.Key != nil && len(*s.Key) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Key", 1))
+	}
+	if s.Values == nil {
+		invalidParams.Add(request.NewErrParamRequired("Values"))
+	}
+	if s.Values != nil && len(s.Values) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Values", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+type InventoryItem struct {
+	_ struct{} `type:"structure"`
+
+	CaptureTime *string `type:"string" required:"true"`
+
+	Content []map[string]*string `type:"list"`
+
+	ContentHash *string `type:"string"`
+
+	SchemaVersion *string `type:"string" required:"true"`
+
+	TypeName *string `min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s InventoryItem) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s InventoryItem) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *InventoryItem) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "InventoryItem"}
+	if s.CaptureTime == nil {
+		invalidParams.Add(request.NewErrParamRequired("CaptureTime"))
+	}
+	if s.SchemaVersion == nil {
+		invalidParams.Add(request.NewErrParamRequired("SchemaVersion"))
+	}
+	if s.TypeName == nil {
+		invalidParams.Add(request.NewErrParamRequired("TypeName"))
+	}
+	if s.TypeName != nil && len(*s.TypeName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("TypeName", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+type InventoryItemAttribute struct {
+	_ struct{} `type:"structure"`
+
+	DataType *string `type:"string" required:"true" enum:"InventoryAttributeDataType"`
+
+	Name *string `type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s InventoryItemAttribute) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s InventoryItemAttribute) GoString() string {
+	return s.String()
+}
+
+type InventoryItemSchema struct {
+	_ struct{} `type:"structure"`
+
+	Attributes []*InventoryItemAttribute `locationNameList:"Attribute" min:"1" type:"list" required:"true"`
+
+	TypeName *string `min:"1" type:"string" required:"true"`
+
+	Version *string `type:"string"`
+}
+
+// String returns the string representation
+func (s InventoryItemSchema) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s InventoryItemSchema) GoString() string {
+	return s.String()
+}
+
+type InventoryResultEntity struct {
+	_ struct{} `type:"structure"`
+
+	Data map[string]*InventoryResultItem `type:"map"`
+
+	Id *string `type:"string"`
+}
+
+// String returns the string representation
+func (s InventoryResultEntity) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s InventoryResultEntity) GoString() string {
+	return s.String()
+}
+
+type InventoryResultItem struct {
+	_ struct{} `type:"structure"`
+
+	CaptureTime *string `type:"string"`
+
+	Content []map[string]*string `type:"list" required:"true"`
+
+	ContentHash *string `type:"string"`
+
+	SchemaVersion *string `type:"string" required:"true"`
+
+	TypeName *string `min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s InventoryResultItem) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s InventoryResultItem) GoString() string {
+	return s.String()
 }
 
 type ListAssociationsInput struct {
@@ -2937,6 +10535,60 @@ func (s ListCommandsOutput) GoString() string {
 	return s.String()
 }
 
+type ListDocumentVersionsInput struct {
+	_ struct{} `type:"structure"`
+
+	MaxResults *int64 `min:"1" type:"integer"`
+
+	Name *string `type:"string" required:"true"`
+
+	NextToken *string `type:"string"`
+}
+
+// String returns the string representation
+func (s ListDocumentVersionsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListDocumentVersionsInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListDocumentVersionsInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListDocumentVersionsInput"}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
+	}
+	if s.Name == nil {
+		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+type ListDocumentVersionsOutput struct {
+	_ struct{} `type:"structure"`
+
+	DocumentVersions []*DocumentVersionInfo `min:"1" type:"list"`
+
+	NextToken *string `type:"string"`
+}
+
+// String returns the string representation
+func (s ListDocumentVersionsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListDocumentVersionsOutput) GoString() string {
+	return s.String()
+}
+
 type ListDocumentsInput struct {
 	_ struct{} `type:"structure"`
 
@@ -3010,11 +10662,152 @@ func (s ListDocumentsOutput) GoString() string {
 	return s.String()
 }
 
+type ListInstanceAssociationsInput struct {
+	_ struct{} `type:"structure"`
+
+	InstanceId *string `type:"string" required:"true"`
+
+	MaxResults *int64 `min:"1" type:"integer"`
+
+	NextToken *string `type:"string"`
+}
+
+// String returns the string representation
+func (s ListInstanceAssociationsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListInstanceAssociationsInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListInstanceAssociationsInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListInstanceAssociationsInput"}
+	if s.InstanceId == nil {
+		invalidParams.Add(request.NewErrParamRequired("InstanceId"))
+	}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+type ListInstanceAssociationsOutput struct {
+	_ struct{} `type:"structure"`
+
+	Associations []*InstanceAssociationSummary `type:"list"`
+
+	NextToken *string `type:"string"`
+}
+
+// String returns the string representation
+func (s ListInstanceAssociationsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListInstanceAssociationsOutput) GoString() string {
+	return s.String()
+}
+
+type ListInventoryEntriesInput struct {
+	_ struct{} `type:"structure"`
+
+	Filters []*InventoryFilter `locationNameList:"InventoryFilter" min:"1" type:"list"`
+
+	InstanceId *string `type:"string" required:"true"`
+
+	MaxResults *int64 `min:"1" type:"integer"`
+
+	NextToken *string `type:"string"`
+
+	TypeName *string `min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s ListInventoryEntriesInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListInventoryEntriesInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListInventoryEntriesInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListInventoryEntriesInput"}
+	if s.Filters != nil && len(s.Filters) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Filters", 1))
+	}
+	if s.InstanceId == nil {
+		invalidParams.Add(request.NewErrParamRequired("InstanceId"))
+	}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
+	}
+	if s.TypeName == nil {
+		invalidParams.Add(request.NewErrParamRequired("TypeName"))
+	}
+	if s.TypeName != nil && len(*s.TypeName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("TypeName", 1))
+	}
+	if s.Filters != nil {
+		for i, v := range s.Filters {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "Filters", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+type ListInventoryEntriesOutput struct {
+	_ struct{} `type:"structure"`
+
+	CaptureTime *string `type:"string"`
+
+	Entries []map[string]*string `type:"list"`
+
+	InstanceId *string `type:"string"`
+
+	NextToken *string `type:"string"`
+
+	SchemaVersion *string `type:"string"`
+
+	TypeName *string `min:"1" type:"string"`
+}
+
+// String returns the string representation
+func (s ListInventoryEntriesOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListInventoryEntriesOutput) GoString() string {
+	return s.String()
+}
+
 type ListTagsForResourceInput struct {
 	_ struct{} `type:"structure"`
 
+	// The resource ID for which you want to see a list of tags.
 	ResourceId *string `type:"string" required:"true"`
 
+	// Returns a list of tags for a specific resource type.
 	ResourceType *string `type:"string" required:"true" enum:"ResourceTypeForTagging"`
 }
 
@@ -3047,6 +10840,7 @@ func (s *ListTagsForResourceInput) Validate() error {
 type ListTagsForResourceOutput struct {
 	_ struct{} `type:"structure"`
 
+	// A list of tags.
 	TagList []*Tag `type:"list"`
 }
 
@@ -3057,6 +10851,234 @@ func (s ListTagsForResourceOutput) String() string {
 
 // GoString returns the string representation
 func (s ListTagsForResourceOutput) GoString() string {
+	return s.String()
+}
+
+type LoggingInfo struct {
+	_ struct{} `type:"structure"`
+
+	S3BucketName *string `min:"3" type:"string" required:"true"`
+
+	S3KeyPrefix *string `type:"string"`
+
+	S3Region *string `min:"3" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s LoggingInfo) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s LoggingInfo) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *LoggingInfo) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "LoggingInfo"}
+	if s.S3BucketName == nil {
+		invalidParams.Add(request.NewErrParamRequired("S3BucketName"))
+	}
+	if s.S3BucketName != nil && len(*s.S3BucketName) < 3 {
+		invalidParams.Add(request.NewErrParamMinLen("S3BucketName", 3))
+	}
+	if s.S3Region == nil {
+		invalidParams.Add(request.NewErrParamRequired("S3Region"))
+	}
+	if s.S3Region != nil && len(*s.S3Region) < 3 {
+		invalidParams.Add(request.NewErrParamMinLen("S3Region", 3))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+type MaintenanceWindowExecution struct {
+	_ struct{} `type:"structure"`
+
+	EndTime *time.Time `type:"timestamp" timestampFormat:"unix"`
+
+	StartTime *time.Time `type:"timestamp" timestampFormat:"unix"`
+
+	Status *string `type:"string" enum:"MaintenanceWindowExecutionStatus"`
+
+	WindowExecutionId *string `min:"36" type:"string"`
+}
+
+// String returns the string representation
+func (s MaintenanceWindowExecution) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s MaintenanceWindowExecution) GoString() string {
+	return s.String()
+}
+
+type MaintenanceWindowExecutionTaskIdentity struct {
+	_ struct{} `type:"structure"`
+
+	EndTime *time.Time `type:"timestamp" timestampFormat:"unix"`
+
+	StartTime *time.Time `type:"timestamp" timestampFormat:"unix"`
+
+	Status *string `type:"string" enum:"MaintenanceWindowExecutionStatus"`
+
+	TaskId *string `min:"36" type:"string"`
+}
+
+// String returns the string representation
+func (s MaintenanceWindowExecutionTaskIdentity) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s MaintenanceWindowExecutionTaskIdentity) GoString() string {
+	return s.String()
+}
+
+type MaintenanceWindowExecutionTaskInvocationIdentity struct {
+	_ struct{} `type:"structure"`
+
+	EndTime *time.Time `type:"timestamp" timestampFormat:"unix"`
+
+	ExecutionId *string `type:"string"`
+
+	InvocationId *string `min:"36" type:"string"`
+
+	OwnerInformation *string `min:"1" type:"string"`
+
+	Parameters *string `type:"string"`
+
+	StartTime *time.Time `type:"timestamp" timestampFormat:"unix"`
+
+	Status *string `type:"string" enum:"MaintenanceWindowExecutionStatus"`
+
+	WindowTargetId *string `type:"string"`
+}
+
+// String returns the string representation
+func (s MaintenanceWindowExecutionTaskInvocationIdentity) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s MaintenanceWindowExecutionTaskInvocationIdentity) GoString() string {
+	return s.String()
+}
+
+type MaintenanceWindowIdentity struct {
+	_ struct{} `type:"structure"`
+
+	Enabled *bool `type:"boolean"`
+
+	Name *string `min:"3" type:"string"`
+
+	WindowId *string `min:"20" type:"string"`
+}
+
+// String returns the string representation
+func (s MaintenanceWindowIdentity) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s MaintenanceWindowIdentity) GoString() string {
+	return s.String()
+}
+
+type MaintenanceWindowTarget struct {
+	_ struct{} `type:"structure"`
+
+	OwnerInformation *string `min:"1" type:"string"`
+
+	TagFilterList []*TagFilter `type:"list"`
+
+	TargetIdList []*string `type:"list"`
+
+	TargetType *string `type:"string" enum:"MaintenanceWindowTargetType"`
+
+	WindowTargetId *string `min:"36" type:"string"`
+}
+
+// String returns the string representation
+func (s MaintenanceWindowTarget) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s MaintenanceWindowTarget) GoString() string {
+	return s.String()
+}
+
+type MaintenanceWindowTask struct {
+	_ struct{} `type:"structure"`
+
+	LoggingInfo *LoggingInfo `type:"structure"`
+
+	MaxConcurrency *string `min:"1" type:"string"`
+
+	MaxErrors *string `min:"1" type:"string"`
+
+	Priority *int64 `type:"integer"`
+
+	ServiceRoleArn *string `type:"string"`
+
+	Targets []*MaintenanceWindowTaskTarget `type:"list"`
+
+	TaskArn *string `min:"1" type:"string"`
+
+	TaskParameters map[string]*MaintenanceWindowTaskParameterValueExpression `type:"map"`
+
+	Type *string `type:"string" enum:"MaintenanceWindowTaskType"`
+
+	WindowTaskId *string `min:"36" type:"string"`
+}
+
+// String returns the string representation
+func (s MaintenanceWindowTask) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s MaintenanceWindowTask) GoString() string {
+	return s.String()
+}
+
+type MaintenanceWindowTaskParameterValueExpression struct {
+	_ struct{} `type:"structure"`
+
+	Values []*string `type:"list"`
+}
+
+// String returns the string representation
+func (s MaintenanceWindowTaskParameterValueExpression) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s MaintenanceWindowTaskParameterValueExpression) GoString() string {
+	return s.String()
+}
+
+type MaintenanceWindowTaskTarget struct {
+	_ struct{} `type:"structure"`
+
+	TaskTargetId *string `type:"string"`
+
+	TaskTargetType *string `type:"string" enum:"MaintenanceWindowTaskTargetType"`
+}
+
+// String returns the string representation
+func (s MaintenanceWindowTaskTarget) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s MaintenanceWindowTaskTarget) GoString() string {
 	return s.String()
 }
 
@@ -3120,13 +11142,23 @@ func (s ModifyDocumentPermissionOutput) GoString() string {
 	return s.String()
 }
 
+// Configurations for sending notifications.
 type NotificationConfig struct {
 	_ struct{} `type:"structure"`
 
+	// An Amazon Resource Name (ARN) for a Simple Notification Service (SNS) topic.
+	// SSM pushes notifications about command status changes to this topic.
 	NotificationArn *string `type:"string"`
 
+	// The different events for which you can receive notifications. These events
+	// include the following: All (events), InProgress, Success, TimedOut, Cancelled,
+	// Failed. To learn more about these events, see Monitoring Commands (http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/monitor-commands.html)
+	// in the Amazon Elastic Compute Cloud User Guide .
 	NotificationEvents []*string `type:"list"`
 
+	// Command: Receive notification when the status of a command changes. Invocation:
+	// For commands sent to multiple instances, receive notification on a per-instance
+	// basis when the status of a command changes.
 	NotificationType *string `type:"string" enum:"NotificationType"`
 }
 
@@ -3137,6 +11169,431 @@ func (s NotificationConfig) String() string {
 
 // GoString returns the string representation
 func (s NotificationConfig) GoString() string {
+	return s.String()
+}
+
+type Parameter struct {
+	_ struct{} `type:"structure"`
+
+	Name *string `min:"1" type:"string"`
+
+	Type *string `type:"string" enum:"ParameterType"`
+
+	Value *string `min:"1" type:"string"`
+}
+
+// String returns the string representation
+func (s Parameter) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s Parameter) GoString() string {
+	return s.String()
+}
+
+type ParameterMetadata struct {
+	_ struct{} `type:"structure"`
+
+	Description *string `min:"1" type:"string"`
+
+	LastModifyDate *time.Time `type:"timestamp" timestampFormat:"unix"`
+
+	LastModifyUser *string `type:"string"`
+
+	Name *string `min:"1" type:"string"`
+
+	Type *string `type:"string" enum:"ParameterType"`
+}
+
+// String returns the string representation
+func (s ParameterMetadata) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ParameterMetadata) GoString() string {
+	return s.String()
+}
+
+type ParametersFilter struct {
+	_ struct{} `type:"structure"`
+
+	Key *string `type:"string" enum:"ParametersFilterKey"`
+
+	Values []*string `min:"1" type:"list" required:"true"`
+}
+
+// String returns the string representation
+func (s ParametersFilter) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ParametersFilter) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ParametersFilter) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ParametersFilter"}
+	if s.Values == nil {
+		invalidParams.Add(request.NewErrParamRequired("Values"))
+	}
+	if s.Values != nil && len(s.Values) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Values", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+type Patch struct {
+	_ struct{} `type:"structure"`
+
+	Classification *string `type:"string"`
+
+	ContentUrl *string `type:"string"`
+
+	Description *string `type:"string"`
+
+	Id *string `type:"string"`
+
+	KbNumber *string `type:"string"`
+
+	Language *string `type:"string"`
+
+	MsrcClassification *string `type:"string"`
+
+	MsrcNumber *string `type:"string"`
+
+	Product *string `type:"string"`
+
+	ProductFamily *string `type:"string"`
+
+	ReleaseDate *time.Time `type:"timestamp" timestampFormat:"unix"`
+
+	Title *string `type:"string"`
+
+	Vendor *string `type:"string"`
+}
+
+// String returns the string representation
+func (s Patch) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s Patch) GoString() string {
+	return s.String()
+}
+
+type PatchComplianceData struct {
+	_ struct{} `type:"structure"`
+
+	Classification *string `type:"string" required:"true"`
+
+	InstalledBy *string `type:"string" required:"true"`
+
+	InstalledTime *time.Time `type:"timestamp" timestampFormat:"unix" required:"true"`
+
+	KBId *string `type:"string" required:"true"`
+
+	Severity *string `type:"string" required:"true"`
+
+	State *string `type:"string" required:"true" enum:"PatchComplianceDataState"`
+
+	Title *string `type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s PatchComplianceData) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s PatchComplianceData) GoString() string {
+	return s.String()
+}
+
+type PatchFilter struct {
+	_ struct{} `type:"structure"`
+
+	Key *string `type:"string" required:"true" enum:"PatchFilterKey"`
+
+	Values []*string `min:"1" type:"list" required:"true"`
+}
+
+// String returns the string representation
+func (s PatchFilter) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s PatchFilter) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *PatchFilter) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "PatchFilter"}
+	if s.Key == nil {
+		invalidParams.Add(request.NewErrParamRequired("Key"))
+	}
+	if s.Values == nil {
+		invalidParams.Add(request.NewErrParamRequired("Values"))
+	}
+	if s.Values != nil && len(s.Values) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Values", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+type PatchGroupPatchBaselineMapping struct {
+	_ struct{} `type:"structure"`
+
+	BaselineIdentity *BaselineIdentity `type:"structure"`
+
+	PatchGroup *string `min:"1" type:"string"`
+}
+
+// String returns the string representation
+func (s PatchGroupPatchBaselineMapping) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s PatchGroupPatchBaselineMapping) GoString() string {
+	return s.String()
+}
+
+type PatchOrchestratorFilter struct {
+	_ struct{} `type:"structure"`
+
+	Key *string `min:"1" type:"string"`
+
+	Values []*string `type:"list"`
+}
+
+// String returns the string representation
+func (s PatchOrchestratorFilter) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s PatchOrchestratorFilter) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *PatchOrchestratorFilter) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "PatchOrchestratorFilter"}
+	if s.Key != nil && len(*s.Key) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Key", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+type PatchStatus struct {
+	_ struct{} `type:"structure"`
+
+	ApprovalDate *time.Time `type:"timestamp" timestampFormat:"unix"`
+
+	DeploymentStatus *string `type:"string" enum:"PatchDeploymentStatus"`
+}
+
+// String returns the string representation
+func (s PatchStatus) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s PatchStatus) GoString() string {
+	return s.String()
+}
+
+type PutInventoryInput struct {
+	_ struct{} `type:"structure"`
+
+	InstanceId *string `type:"string" required:"true"`
+
+	Items []*InventoryItem `locationNameList:"Item" min:"1" type:"list" required:"true"`
+}
+
+// String returns the string representation
+func (s PutInventoryInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s PutInventoryInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *PutInventoryInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "PutInventoryInput"}
+	if s.InstanceId == nil {
+		invalidParams.Add(request.NewErrParamRequired("InstanceId"))
+	}
+	if s.Items == nil {
+		invalidParams.Add(request.NewErrParamRequired("Items"))
+	}
+	if s.Items != nil && len(s.Items) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Items", 1))
+	}
+	if s.Items != nil {
+		for i, v := range s.Items {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "Items", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+type PutInventoryOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation
+func (s PutInventoryOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s PutInventoryOutput) GoString() string {
+	return s.String()
+}
+
+type PutParameterInput struct {
+	_ struct{} `type:"structure"`
+
+	Description *string `min:"1" type:"string"`
+
+	KeyId *string `type:"string"`
+
+	Name *string `min:"1" type:"string" required:"true"`
+
+	Type *string `type:"string" required:"true" enum:"ParameterType"`
+
+	Value *string `min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s PutParameterInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s PutParameterInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *PutParameterInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "PutParameterInput"}
+	if s.Description != nil && len(*s.Description) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Description", 1))
+	}
+	if s.Name == nil {
+		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+	if s.Name != nil && len(*s.Name) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Name", 1))
+	}
+	if s.Type == nil {
+		invalidParams.Add(request.NewErrParamRequired("Type"))
+	}
+	if s.Value == nil {
+		invalidParams.Add(request.NewErrParamRequired("Value"))
+	}
+	if s.Value != nil && len(*s.Value) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Value", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+type PutParameterOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation
+func (s PutParameterOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s PutParameterOutput) GoString() string {
+	return s.String()
+}
+
+type RegisterDefaultPatchBaselineInput struct {
+	_ struct{} `type:"structure"`
+
+	BaselineId *string `min:"20" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s RegisterDefaultPatchBaselineInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s RegisterDefaultPatchBaselineInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *RegisterDefaultPatchBaselineInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "RegisterDefaultPatchBaselineInput"}
+	if s.BaselineId == nil {
+		invalidParams.Add(request.NewErrParamRequired("BaselineId"))
+	}
+	if s.BaselineId != nil && len(*s.BaselineId) < 20 {
+		invalidParams.Add(request.NewErrParamMinLen("BaselineId", 20))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+type RegisterDefaultPatchBaselineOutput struct {
+	_ struct{} `type:"structure"`
+
+	BaselineId *string `min:"20" type:"string"`
+}
+
+// String returns the string representation
+func (s RegisterDefaultPatchBaselineOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s RegisterDefaultPatchBaselineOutput) GoString() string {
 	return s.String()
 }
 
@@ -3208,13 +11665,242 @@ func (s RegisterManagedInstanceOutput) GoString() string {
 	return s.String()
 }
 
+type RegisterPatchBaselineForPatchGroupInput struct {
+	_ struct{} `type:"structure"`
+
+	BaselineId *string `min:"20" type:"string" required:"true"`
+
+	PatchGroup *string `min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s RegisterPatchBaselineForPatchGroupInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s RegisterPatchBaselineForPatchGroupInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *RegisterPatchBaselineForPatchGroupInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "RegisterPatchBaselineForPatchGroupInput"}
+	if s.BaselineId == nil {
+		invalidParams.Add(request.NewErrParamRequired("BaselineId"))
+	}
+	if s.BaselineId != nil && len(*s.BaselineId) < 20 {
+		invalidParams.Add(request.NewErrParamMinLen("BaselineId", 20))
+	}
+	if s.PatchGroup == nil {
+		invalidParams.Add(request.NewErrParamRequired("PatchGroup"))
+	}
+	if s.PatchGroup != nil && len(*s.PatchGroup) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("PatchGroup", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+type RegisterPatchBaselineForPatchGroupOutput struct {
+	_ struct{} `type:"structure"`
+
+	BaselineId *string `min:"20" type:"string"`
+
+	PatchGroup *string `min:"1" type:"string"`
+}
+
+// String returns the string representation
+func (s RegisterPatchBaselineForPatchGroupOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s RegisterPatchBaselineForPatchGroupOutput) GoString() string {
+	return s.String()
+}
+
+type RegisterTargetWithMaintenanceWindowInput struct {
+	_ struct{} `type:"structure"`
+
+	ClientToken *string `min:"1" type:"string"`
+
+	OwnerInformation *string `min:"1" type:"string"`
+
+	TagFilters []*TagFilter `type:"list"`
+
+	TargetIds []*string `type:"list"`
+
+	TargetType *string `type:"string" enum:"MaintenanceWindowTargetType"`
+
+	WindowId *string `min:"20" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s RegisterTargetWithMaintenanceWindowInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s RegisterTargetWithMaintenanceWindowInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *RegisterTargetWithMaintenanceWindowInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "RegisterTargetWithMaintenanceWindowInput"}
+	if s.ClientToken != nil && len(*s.ClientToken) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ClientToken", 1))
+	}
+	if s.OwnerInformation != nil && len(*s.OwnerInformation) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("OwnerInformation", 1))
+	}
+	if s.WindowId == nil {
+		invalidParams.Add(request.NewErrParamRequired("WindowId"))
+	}
+	if s.WindowId != nil && len(*s.WindowId) < 20 {
+		invalidParams.Add(request.NewErrParamMinLen("WindowId", 20))
+	}
+	if s.TagFilters != nil {
+		for i, v := range s.TagFilters {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "TagFilters", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+type RegisterTargetWithMaintenanceWindowOutput struct {
+	_ struct{} `type:"structure"`
+
+	WindowTargetId *string `min:"36" type:"string"`
+}
+
+// String returns the string representation
+func (s RegisterTargetWithMaintenanceWindowOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s RegisterTargetWithMaintenanceWindowOutput) GoString() string {
+	return s.String()
+}
+
+type RegisterTaskWithMaintenanceWindowInput struct {
+	_ struct{} `type:"structure"`
+
+	ClientToken *string `min:"1" type:"string"`
+
+	LoggingInfo *LoggingInfo `type:"structure"`
+
+	MaxConcurrency *string `min:"1" type:"string"`
+
+	MaxErrors *string `min:"1" type:"string"`
+
+	Priority *int64 `type:"integer"`
+
+	ServiceRoleArn *string `type:"string" required:"true"`
+
+	Targets []*MaintenanceWindowTaskTarget `type:"list"`
+
+	TaskArn *string `min:"1" type:"string" required:"true"`
+
+	TaskParameters map[string]*MaintenanceWindowTaskParameterValueExpression `type:"map"`
+
+	Type *string `type:"string" required:"true" enum:"MaintenanceWindowTaskType"`
+
+	WindowId *string `min:"20" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s RegisterTaskWithMaintenanceWindowInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s RegisterTaskWithMaintenanceWindowInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *RegisterTaskWithMaintenanceWindowInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "RegisterTaskWithMaintenanceWindowInput"}
+	if s.ClientToken != nil && len(*s.ClientToken) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ClientToken", 1))
+	}
+	if s.MaxConcurrency != nil && len(*s.MaxConcurrency) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("MaxConcurrency", 1))
+	}
+	if s.MaxErrors != nil && len(*s.MaxErrors) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("MaxErrors", 1))
+	}
+	if s.ServiceRoleArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("ServiceRoleArn"))
+	}
+	if s.TaskArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("TaskArn"))
+	}
+	if s.TaskArn != nil && len(*s.TaskArn) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("TaskArn", 1))
+	}
+	if s.Type == nil {
+		invalidParams.Add(request.NewErrParamRequired("Type"))
+	}
+	if s.WindowId == nil {
+		invalidParams.Add(request.NewErrParamRequired("WindowId"))
+	}
+	if s.WindowId != nil && len(*s.WindowId) < 20 {
+		invalidParams.Add(request.NewErrParamMinLen("WindowId", 20))
+	}
+	if s.LoggingInfo != nil {
+		if err := s.LoggingInfo.Validate(); err != nil {
+			invalidParams.AddNested("LoggingInfo", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+type RegisterTaskWithMaintenanceWindowOutput struct {
+	_ struct{} `type:"structure"`
+
+	WindowTaskId *string `min:"36" type:"string"`
+}
+
+// String returns the string representation
+func (s RegisterTaskWithMaintenanceWindowOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s RegisterTaskWithMaintenanceWindowOutput) GoString() string {
+	return s.String()
+}
+
 type RemoveTagsFromResourceInput struct {
 	_ struct{} `type:"structure"`
 
+	// The resource ID for which you want to remove tags.
 	ResourceId *string `type:"string" required:"true"`
 
+	// The type of resource of which you want to remove a tag.
 	ResourceType *string `type:"string" required:"true" enum:"ResourceTypeForTagging"`
 
+	// Tag keys that you want to remove from the specified resource.
 	TagKeys []*string `type:"list" required:"true"`
 }
 
@@ -3314,6 +12000,170 @@ func (s RequestManagedInstanceRoleTokenOutput) GoString() string {
 	return s.String()
 }
 
+type ResultAttribute struct {
+	_ struct{} `type:"structure"`
+
+	TypeName *string `min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s ResultAttribute) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ResultAttribute) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ResultAttribute) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ResultAttribute"}
+	if s.TypeName == nil {
+		invalidParams.Add(request.NewErrParamRequired("TypeName"))
+	}
+	if s.TypeName != nil && len(*s.TypeName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("TypeName", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+type Rule struct {
+	_ struct{} `type:"structure"`
+
+	ApproveAfterDays *int64 `type:"integer" required:"true"`
+
+	FilterGroup *FilterGroup `type:"structure" required:"true"`
+}
+
+// String returns the string representation
+func (s Rule) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s Rule) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *Rule) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "Rule"}
+	if s.ApproveAfterDays == nil {
+		invalidParams.Add(request.NewErrParamRequired("ApproveAfterDays"))
+	}
+	if s.FilterGroup == nil {
+		invalidParams.Add(request.NewErrParamRequired("FilterGroup"))
+	}
+	if s.FilterGroup != nil {
+		if err := s.FilterGroup.Validate(); err != nil {
+			invalidParams.AddNested("FilterGroup", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+type RuleGroup struct {
+	_ struct{} `type:"structure"`
+
+	RuleList []*Rule `type:"list" required:"true"`
+}
+
+// String returns the string representation
+func (s RuleGroup) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s RuleGroup) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *RuleGroup) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "RuleGroup"}
+	if s.RuleList == nil {
+		invalidParams.Add(request.NewErrParamRequired("RuleList"))
+	}
+	if s.RuleList != nil {
+		for i, v := range s.RuleList {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "RuleList", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+type S3OutputLocation struct {
+	_ struct{} `type:"structure"`
+
+	OutputS3BucketName *string `min:"3" type:"string"`
+
+	OutputS3KeyPrefix *string `type:"string"`
+
+	OutputS3Region *string `min:"3" type:"string"`
+}
+
+// String returns the string representation
+func (s S3OutputLocation) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s S3OutputLocation) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *S3OutputLocation) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "S3OutputLocation"}
+	if s.OutputS3BucketName != nil && len(*s.OutputS3BucketName) < 3 {
+		invalidParams.Add(request.NewErrParamMinLen("OutputS3BucketName", 3))
+	}
+	if s.OutputS3Region != nil && len(*s.OutputS3Region) < 3 {
+		invalidParams.Add(request.NewErrParamMinLen("OutputS3Region", 3))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+type S3OutputUrl struct {
+	_ struct{} `type:"structure"`
+
+	StandardErrorUrl *string `type:"string"`
+
+	StandardOutputUrl *string `type:"string"`
+}
+
+// String returns the string representation
+func (s S3OutputUrl) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s S3OutputUrl) GoString() string {
+	return s.String()
+}
+
 type SendCommandInput struct {
 	_ struct{} `type:"structure"`
 
@@ -3335,9 +12185,15 @@ type SendCommandInput struct {
 	// document or a custom document.
 	DocumentName *string `type:"string" required:"true"`
 
-	// Required. The instance IDs where the command should execute.
-	InstanceIds []*string `min:"1" type:"list" required:"true"`
+	// Required. The instance IDs where the command should execute. You can specify
+	// a maximum of 50 IDs.
+	InstanceIds []*string `type:"list"`
 
+	MaxConcurrency *string `min:"1" type:"string"`
+
+	MaxErrors *string `min:"1" type:"string"`
+
+	// Configurations for sending notifications.
 	NotificationConfig *NotificationConfig `type:"structure"`
 
 	// The name of the S3 bucket where command execution responses should be stored.
@@ -3347,11 +12203,16 @@ type SendCommandInput struct {
 	// stored.
 	OutputS3KeyPrefix *string `type:"string"`
 
+	OutputS3Region *string `min:"3" type:"string"`
+
 	// The required and optional parameters specified in the SSM document being
 	// executed.
 	Parameters map[string][]*string `type:"map"`
 
+	// The IAM role that SSM uses to send notifications.
 	ServiceRoleArn *string `type:"string"`
+
+	Targets []*Target `type:"list"`
 
 	// If this time is reached and the command has not already started executing,
 	// it will not execute.
@@ -3374,17 +12235,30 @@ func (s *SendCommandInput) Validate() error {
 	if s.DocumentName == nil {
 		invalidParams.Add(request.NewErrParamRequired("DocumentName"))
 	}
-	if s.InstanceIds == nil {
-		invalidParams.Add(request.NewErrParamRequired("InstanceIds"))
+	if s.MaxConcurrency != nil && len(*s.MaxConcurrency) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("MaxConcurrency", 1))
 	}
-	if s.InstanceIds != nil && len(s.InstanceIds) < 1 {
-		invalidParams.Add(request.NewErrParamMinLen("InstanceIds", 1))
+	if s.MaxErrors != nil && len(*s.MaxErrors) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("MaxErrors", 1))
 	}
 	if s.OutputS3BucketName != nil && len(*s.OutputS3BucketName) < 3 {
 		invalidParams.Add(request.NewErrParamMinLen("OutputS3BucketName", 3))
 	}
+	if s.OutputS3Region != nil && len(*s.OutputS3Region) < 3 {
+		invalidParams.Add(request.NewErrParamMinLen("OutputS3Region", 3))
+	}
 	if s.TimeoutSeconds != nil && *s.TimeoutSeconds < 30 {
 		invalidParams.Add(request.NewErrParamMinValue("TimeoutSeconds", 30))
+	}
+	if s.Targets != nil {
+		for i, v := range s.Targets {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "Targets", i), err.(request.ErrInvalidParams))
+			}
+		}
 	}
 
 	if invalidParams.Len() > 0 {
@@ -3411,11 +12285,188 @@ func (s SendCommandOutput) GoString() string {
 	return s.String()
 }
 
+type StartAssociationsOnceInput struct {
+	_ struct{} `type:"structure"`
+
+	AssociationIds []*string `min:"1" type:"list" required:"true"`
+}
+
+// String returns the string representation
+func (s StartAssociationsOnceInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s StartAssociationsOnceInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *StartAssociationsOnceInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "StartAssociationsOnceInput"}
+	if s.AssociationIds == nil {
+		invalidParams.Add(request.NewErrParamRequired("AssociationIds"))
+	}
+	if s.AssociationIds != nil && len(s.AssociationIds) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("AssociationIds", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+type StartAssociationsOnceOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation
+func (s StartAssociationsOnceOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s StartAssociationsOnceOutput) GoString() string {
+	return s.String()
+}
+
+type StartAutomationExecutionInput struct {
+	_ struct{} `type:"structure"`
+
+	DocumentName *string `type:"string" required:"true"`
+
+	DocumentVersion *string `type:"string"`
+
+	Inputs map[string][]*string `min:"1" type:"map"`
+}
+
+// String returns the string representation
+func (s StartAutomationExecutionInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s StartAutomationExecutionInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *StartAutomationExecutionInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "StartAutomationExecutionInput"}
+	if s.DocumentName == nil {
+		invalidParams.Add(request.NewErrParamRequired("DocumentName"))
+	}
+	if s.Inputs != nil && len(s.Inputs) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Inputs", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+type StartAutomationExecutionOutput struct {
+	_ struct{} `type:"structure"`
+
+	AutomationExecutionId *string `min:"36" type:"string"`
+}
+
+// String returns the string representation
+func (s StartAutomationExecutionOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s StartAutomationExecutionOutput) GoString() string {
+	return s.String()
+}
+
+type StepExecution struct {
+	_ struct{} `type:"structure"`
+
+	FailureMessage *string `type:"string"`
+
+	Inputs map[string]*string `type:"map"`
+
+	Outputs map[string][]*string `min:"1" type:"map"`
+
+	Response *string `type:"string"`
+
+	ResponseCode *string `type:"string"`
+
+	StepName *string `type:"string"`
+
+	StepStatus *string `type:"string" enum:"AutomationExecutionStatus"`
+}
+
+// String returns the string representation
+func (s StepExecution) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s StepExecution) GoString() string {
+	return s.String()
+}
+
+type StopAutomationExecutionInput struct {
+	_ struct{} `type:"structure"`
+
+	AutomationExecutionId *string `min:"36" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s StopAutomationExecutionInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s StopAutomationExecutionInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *StopAutomationExecutionInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "StopAutomationExecutionInput"}
+	if s.AutomationExecutionId == nil {
+		invalidParams.Add(request.NewErrParamRequired("AutomationExecutionId"))
+	}
+	if s.AutomationExecutionId != nil && len(*s.AutomationExecutionId) < 36 {
+		invalidParams.Add(request.NewErrParamMinLen("AutomationExecutionId", 36))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+type StopAutomationExecutionOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation
+func (s StopAutomationExecutionOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s StopAutomationExecutionOutput) GoString() string {
+	return s.String()
+}
+
+// Metadata that you assign to your managed instances. Tags enable you to categorize
+// your managed instances in different ways, for example, by purpose, owner,
+// or environment.
 type Tag struct {
 	_ struct{} `type:"structure"`
 
+	// The name of the tag.
 	Key *string `min:"1" type:"string" required:"true"`
 
+	// The value of the tag.
 	Value *string `min:"1" type:"string" required:"true"`
 }
 
@@ -3449,6 +12500,130 @@ func (s *Tag) Validate() error {
 		return invalidParams
 	}
 	return nil
+}
+
+type TagFilter struct {
+	_ struct{} `type:"structure"`
+
+	Key *string `min:"1" type:"string"`
+
+	Values []*string `type:"list"`
+}
+
+// String returns the string representation
+func (s TagFilter) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s TagFilter) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *TagFilter) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "TagFilter"}
+	if s.Key != nil && len(*s.Key) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Key", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+type Target struct {
+	_ struct{} `type:"structure"`
+
+	Key *string `min:"1" type:"string"`
+
+	Values []*string `type:"list"`
+}
+
+// String returns the string representation
+func (s Target) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s Target) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *Target) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "Target"}
+	if s.Key != nil && len(*s.Key) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Key", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+type UpdateAssociationInput struct {
+	_ struct{} `type:"structure"`
+
+	AssociationId *string `type:"string" required:"true"`
+
+	DocumentVersion *string `type:"string"`
+
+	OutputLocation *InstanceAssociationOutputLocation `type:"structure"`
+
+	Parameters map[string][]*string `type:"map"`
+
+	ScheduleExpression *string `min:"1" type:"string"`
+}
+
+// String returns the string representation
+func (s UpdateAssociationInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s UpdateAssociationInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *UpdateAssociationInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "UpdateAssociationInput"}
+	if s.AssociationId == nil {
+		invalidParams.Add(request.NewErrParamRequired("AssociationId"))
+	}
+	if s.ScheduleExpression != nil && len(*s.ScheduleExpression) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ScheduleExpression", 1))
+	}
+	if s.OutputLocation != nil {
+		if err := s.OutputLocation.Validate(); err != nil {
+			invalidParams.AddNested("OutputLocation", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+type UpdateAssociationOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Describes the parameters for a document.
+	AssociationDescription *AssociationDescription `type:"structure"`
+}
+
+// String returns the string representation
+func (s UpdateAssociationOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s UpdateAssociationOutput) GoString() string {
+	return s.String()
 }
 
 type UpdateAssociationStatusInput struct {
@@ -3515,14 +12690,180 @@ func (s UpdateAssociationStatusOutput) GoString() string {
 	return s.String()
 }
 
+type UpdateDocumentDefaultVersionInput struct {
+	_ struct{} `type:"structure"`
+
+	DocumentVersion *string `type:"string" required:"true"`
+
+	Name *string `type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s UpdateDocumentDefaultVersionInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s UpdateDocumentDefaultVersionInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *UpdateDocumentDefaultVersionInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "UpdateDocumentDefaultVersionInput"}
+	if s.DocumentVersion == nil {
+		invalidParams.Add(request.NewErrParamRequired("DocumentVersion"))
+	}
+	if s.Name == nil {
+		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+type UpdateDocumentDefaultVersionOutput struct {
+	_ struct{} `type:"structure"`
+
+	Description *DocumentDefaultVersionDescription `type:"structure"`
+}
+
+// String returns the string representation
+func (s UpdateDocumentDefaultVersionOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s UpdateDocumentDefaultVersionOutput) GoString() string {
+	return s.String()
+}
+
+type UpdateDocumentInput struct {
+	_ struct{} `type:"structure"`
+
+	Content *string `min:"1" type:"string" required:"true"`
+
+	DocumentVersion *string `type:"string"`
+
+	Name *string `type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s UpdateDocumentInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s UpdateDocumentInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *UpdateDocumentInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "UpdateDocumentInput"}
+	if s.Content == nil {
+		invalidParams.Add(request.NewErrParamRequired("Content"))
+	}
+	if s.Content != nil && len(*s.Content) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Content", 1))
+	}
+	if s.Name == nil {
+		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+type UpdateDocumentOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Describes an SSM document.
+	DocumentDescription *DocumentDescription `type:"structure"`
+}
+
+// String returns the string representation
+func (s UpdateDocumentOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s UpdateDocumentOutput) GoString() string {
+	return s.String()
+}
+
+type UpdateInstanceAssociationStatusInput struct {
+	_ struct{} `type:"structure"`
+
+	AssociationId *string `type:"string" required:"true"`
+
+	ExecutionResult *InstanceAssociationExecutionResult `type:"structure" required:"true"`
+
+	InstanceId *string `type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s UpdateInstanceAssociationStatusInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s UpdateInstanceAssociationStatusInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *UpdateInstanceAssociationStatusInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "UpdateInstanceAssociationStatusInput"}
+	if s.AssociationId == nil {
+		invalidParams.Add(request.NewErrParamRequired("AssociationId"))
+	}
+	if s.ExecutionResult == nil {
+		invalidParams.Add(request.NewErrParamRequired("ExecutionResult"))
+	}
+	if s.InstanceId == nil {
+		invalidParams.Add(request.NewErrParamRequired("InstanceId"))
+	}
+	if s.ExecutionResult != nil {
+		if err := s.ExecutionResult.Validate(); err != nil {
+			invalidParams.AddNested("ExecutionResult", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+type UpdateInstanceAssociationStatusOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation
+func (s UpdateInstanceAssociationStatusOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s UpdateInstanceAssociationStatusOutput) GoString() string {
+	return s.String()
+}
+
 type UpdateInstanceInformationInput struct {
 	_ struct{} `type:"structure"`
+
+	AgentName *string `min:"1" type:"string"`
 
 	AgentStatus *string `min:"1" type:"string"`
 
 	AgentVersion *string `type:"string"`
 
-	ComputerName *string `type:"string"`
+	ComputerName *string `min:"1" type:"string"`
 
 	IPAddress *string `min:"1" type:"string"`
 
@@ -3548,8 +12889,14 @@ func (s UpdateInstanceInformationInput) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *UpdateInstanceInformationInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "UpdateInstanceInformationInput"}
+	if s.AgentName != nil && len(*s.AgentName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("AgentName", 1))
+	}
 	if s.AgentStatus != nil && len(*s.AgentStatus) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("AgentStatus", 1))
+	}
+	if s.ComputerName != nil && len(*s.ComputerName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ComputerName", 1))
 	}
 	if s.IPAddress != nil && len(*s.IPAddress) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("IPAddress", 1))
@@ -3575,6 +12922,87 @@ func (s UpdateInstanceInformationOutput) String() string {
 
 // GoString returns the string representation
 func (s UpdateInstanceInformationOutput) GoString() string {
+	return s.String()
+}
+
+type UpdateMaintenanceWindowInput struct {
+	_ struct{} `type:"structure"`
+
+	AllowUnassociatedTargets *bool `type:"boolean"`
+
+	Cutoff *int64 `type:"integer"`
+
+	Duration *int64 `min:"1" type:"integer"`
+
+	Enabled *bool `type:"boolean"`
+
+	Name *string `min:"3" type:"string"`
+
+	Schedule *string `min:"1" type:"string"`
+
+	WindowId *string `min:"20" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s UpdateMaintenanceWindowInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s UpdateMaintenanceWindowInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *UpdateMaintenanceWindowInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "UpdateMaintenanceWindowInput"}
+	if s.Duration != nil && *s.Duration < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("Duration", 1))
+	}
+	if s.Name != nil && len(*s.Name) < 3 {
+		invalidParams.Add(request.NewErrParamMinLen("Name", 3))
+	}
+	if s.Schedule != nil && len(*s.Schedule) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Schedule", 1))
+	}
+	if s.WindowId == nil {
+		invalidParams.Add(request.NewErrParamRequired("WindowId"))
+	}
+	if s.WindowId != nil && len(*s.WindowId) < 20 {
+		invalidParams.Add(request.NewErrParamMinLen("WindowId", 20))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+type UpdateMaintenanceWindowOutput struct {
+	_ struct{} `type:"structure"`
+
+	AllowUnassociatedTargets *bool `type:"boolean"`
+
+	Cutoff *int64 `type:"integer"`
+
+	Duration *int64 `min:"1" type:"integer"`
+
+	Enabled *bool `type:"boolean"`
+
+	Name *string `min:"3" type:"string"`
+
+	Schedule *string `min:"1" type:"string"`
+
+	WindowId *string `min:"20" type:"string"`
+}
+
+// String returns the string representation
+func (s UpdateMaintenanceWindowOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s UpdateMaintenanceWindowOutput) GoString() string {
 	return s.String()
 }
 
@@ -3632,8 +13060,10 @@ func (s UpdateManagedInstancePublicKeyOutput) GoString() string {
 type UpdateManagedInstanceRoleInput struct {
 	_ struct{} `type:"structure"`
 
+	// The IAM role you want to assign or change.
 	IamRole *string `type:"string" required:"true"`
 
+	// The ID of the managed instance where you want to update the role.
 	InstanceId *string `type:"string" required:"true"`
 }
 
@@ -3677,11 +13107,113 @@ func (s UpdateManagedInstanceRoleOutput) GoString() string {
 	return s.String()
 }
 
+type UpdatePatchBaselineInput struct {
+	_ struct{} `type:"structure"`
+
+	ApprovalRules *RuleGroup `type:"structure"`
+
+	ApprovedPatches []*string `type:"list"`
+
+	BaselineId *string `min:"20" type:"string" required:"true"`
+
+	Description *string `min:"1" type:"string"`
+
+	GlobalFilters *FilterGroup `type:"structure"`
+
+	Name *string `min:"3" type:"string"`
+
+	RejectedPatches []*string `type:"list"`
+}
+
+// String returns the string representation
+func (s UpdatePatchBaselineInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s UpdatePatchBaselineInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *UpdatePatchBaselineInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "UpdatePatchBaselineInput"}
+	if s.BaselineId == nil {
+		invalidParams.Add(request.NewErrParamRequired("BaselineId"))
+	}
+	if s.BaselineId != nil && len(*s.BaselineId) < 20 {
+		invalidParams.Add(request.NewErrParamMinLen("BaselineId", 20))
+	}
+	if s.Description != nil && len(*s.Description) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Description", 1))
+	}
+	if s.Name != nil && len(*s.Name) < 3 {
+		invalidParams.Add(request.NewErrParamMinLen("Name", 3))
+	}
+	if s.ApprovalRules != nil {
+		if err := s.ApprovalRules.Validate(); err != nil {
+			invalidParams.AddNested("ApprovalRules", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.GlobalFilters != nil {
+		if err := s.GlobalFilters.Validate(); err != nil {
+			invalidParams.AddNested("GlobalFilters", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+type UpdatePatchBaselineOutput struct {
+	_ struct{} `type:"structure"`
+
+	ApprovalRules *RuleGroup `type:"structure"`
+
+	ApprovedPatches []*string `type:"list"`
+
+	BaselineId *string `min:"20" type:"string"`
+
+	CreatedDate *time.Time `type:"timestamp" timestampFormat:"unix"`
+
+	Description *string `min:"1" type:"string"`
+
+	GlobalFilters *FilterGroup `type:"structure"`
+
+	ModifiedDate *time.Time `type:"timestamp" timestampFormat:"unix"`
+
+	Name *string `min:"3" type:"string"`
+
+	RejectedPatches []*string `type:"list"`
+}
+
+// String returns the string representation
+func (s UpdatePatchBaselineOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s UpdatePatchBaselineOutput) GoString() string {
+	return s.String()
+}
+
 const (
 	// @enum AssociationFilterKey
 	AssociationFilterKeyInstanceId = "InstanceId"
 	// @enum AssociationFilterKey
 	AssociationFilterKeyName = "Name"
+	// @enum AssociationFilterKey
+	AssociationFilterKeyAssociationId = "AssociationId"
+	// @enum AssociationFilterKey
+	AssociationFilterKeyTargets = "Targets"
+	// @enum AssociationFilterKey
+	AssociationFilterKeyAssociationStatusName = "AssociationStatusName"
+	// @enum AssociationFilterKey
+	AssociationFilterKeyLastExecutedBefore = "LastExecutedBefore"
+	// @enum AssociationFilterKey
+	AssociationFilterKeyLastExecutedAfter = "LastExecutedAfter"
 )
 
 const (
@@ -3691,6 +13223,39 @@ const (
 	AssociationStatusNameSuccess = "Success"
 	// @enum AssociationStatusName
 	AssociationStatusNameFailed = "Failed"
+)
+
+const (
+	// @enum AutomationArgumentType
+	AutomationArgumentTypeString = "STRING"
+	// @enum AutomationArgumentType
+	AutomationArgumentTypeStringList = "STRING_LIST"
+	// @enum AutomationArgumentType
+	AutomationArgumentTypeInteger = "INTEGER"
+	// @enum AutomationArgumentType
+	AutomationArgumentTypeBoolean = "BOOLEAN"
+	// @enum AutomationArgumentType
+	AutomationArgumentTypeStringMap = "STRING_MAP"
+)
+
+const (
+	// @enum AutomationExecutionFilterKey
+	AutomationExecutionFilterKeyDocumentNamePrefix = "DocumentNamePrefix"
+	// @enum AutomationExecutionFilterKey
+	AutomationExecutionFilterKeyExecutionStatus = "ExecutionStatus"
+)
+
+const (
+	// @enum AutomationExecutionStatus
+	AutomationExecutionStatusPending = "Pending"
+	// @enum AutomationExecutionStatus
+	AutomationExecutionStatusRunning = "Running"
+	// @enum AutomationExecutionStatus
+	AutomationExecutionStatusCompleted = "Completed"
+	// @enum AutomationExecutionStatus
+	AutomationExecutionStatusCancelled = "Cancelled"
+	// @enum AutomationExecutionStatus
+	AutomationExecutionStatusFailed = "Failed"
 )
 
 const (
@@ -3712,15 +13277,17 @@ const (
 	// @enum CommandInvocationStatus
 	CommandInvocationStatusInProgress = "InProgress"
 	// @enum CommandInvocationStatus
-	CommandInvocationStatusCancelling = "Cancelling"
+	CommandInvocationStatusDelayed = "Delayed"
 	// @enum CommandInvocationStatus
 	CommandInvocationStatusSuccess = "Success"
-	// @enum CommandInvocationStatus
-	CommandInvocationStatusTimedOut = "TimedOut"
 	// @enum CommandInvocationStatus
 	CommandInvocationStatusCancelled = "Cancelled"
 	// @enum CommandInvocationStatus
 	CommandInvocationStatusFailed = "Failed"
+	// @enum CommandInvocationStatus
+	CommandInvocationStatusTimedOut = "TimedOut"
+	// @enum CommandInvocationStatus
+	CommandInvocationStatusCancelling = "Cancelling"
 )
 
 const (
@@ -3744,15 +13311,15 @@ const (
 	// @enum CommandStatus
 	CommandStatusInProgress = "InProgress"
 	// @enum CommandStatus
-	CommandStatusCancelling = "Cancelling"
-	// @enum CommandStatus
 	CommandStatusSuccess = "Success"
-	// @enum CommandStatus
-	CommandStatusTimedOut = "TimedOut"
 	// @enum CommandStatus
 	CommandStatusCancelled = "Cancelled"
 	// @enum CommandStatus
 	CommandStatusFailed = "Failed"
+	// @enum CommandStatus
+	CommandStatusTimedOut = "TimedOut"
+	// @enum CommandStatus
+	CommandStatusCancelling = "Cancelling"
 )
 
 const (
@@ -3771,6 +13338,8 @@ const (
 	DocumentFilterKeyOwner = "Owner"
 	// @enum DocumentFilterKey
 	DocumentFilterKeyPlatformTypes = "PlatformTypes"
+	// @enum DocumentFilterKey
+	DocumentFilterKeyDocumentType = "DocumentType"
 )
 
 const (
@@ -3798,7 +13367,18 @@ const (
 	// @enum DocumentStatus
 	DocumentStatusActive = "Active"
 	// @enum DocumentStatus
+	DocumentStatusUpdating = "Updating"
+	// @enum DocumentStatus
 	DocumentStatusDeleting = "Deleting"
+)
+
+const (
+	// @enum DocumentType
+	DocumentTypeCommand = "Command"
+	// @enum DocumentType
+	DocumentTypeAssociation = "Association"
+	// @enum DocumentType
+	DocumentTypeEc2automation = "Ec2Automation"
 )
 
 const (
@@ -3825,6 +13405,19 @@ const (
 	InstanceInformationFilterKeyIamRole = "IamRole"
 	// @enum InstanceInformationFilterKey
 	InstanceInformationFilterKeyResourceType = "ResourceType"
+	// @enum InstanceInformationFilterKey
+	InstanceInformationFilterKeyAssociationStatus = "AssociationStatus"
+)
+
+const (
+	// @enum InstancePatchStateOperatorType
+	InstancePatchStateOperatorTypeEqual = "Equal"
+	// @enum InstancePatchStateOperatorType
+	InstancePatchStateOperatorTypeNotEqual = "NotEqual"
+	// @enum InstancePatchStateOperatorType
+	InstancePatchStateOperatorTypeLessThan = "LessThan"
+	// @enum InstancePatchStateOperatorType
+	InstancePatchStateOperatorTypeGreaterThan = "GreaterThan"
 )
 
 const (
@@ -3844,6 +13437,77 @@ const (
 	InstancePropertyFilterKeyIamRole = "IamRole"
 	// @enum InstancePropertyFilterKey
 	InstancePropertyFilterKeyResourceType = "ResourceType"
+	// @enum InstancePropertyFilterKey
+	InstancePropertyFilterKeyAssociationStatus = "AssociationStatus"
+)
+
+const (
+	// @enum InstancePropertyFilterOperator
+	InstancePropertyFilterOperatorEqual = "Equal"
+	// @enum InstancePropertyFilterOperator
+	InstancePropertyFilterOperatorNotEqual = "NotEqual"
+	// @enum InstancePropertyFilterOperator
+	InstancePropertyFilterOperatorBeginWith = "BeginWith"
+	// @enum InstancePropertyFilterOperator
+	InstancePropertyFilterOperatorLessThan = "LessThan"
+	// @enum InstancePropertyFilterOperator
+	InstancePropertyFilterOperatorGreaterThan = "GreaterThan"
+)
+
+const (
+	// @enum InventoryAttributeDataType
+	InventoryAttributeDataTypeString = "string"
+	// @enum InventoryAttributeDataType
+	InventoryAttributeDataTypeNumber = "number"
+)
+
+const (
+	// @enum InventoryQueryOperatorType
+	InventoryQueryOperatorTypeEqual = "Equal"
+	// @enum InventoryQueryOperatorType
+	InventoryQueryOperatorTypeNotEqual = "NotEqual"
+	// @enum InventoryQueryOperatorType
+	InventoryQueryOperatorTypeBeginWith = "BeginWith"
+	// @enum InventoryQueryOperatorType
+	InventoryQueryOperatorTypeLessThan = "LessThan"
+	// @enum InventoryQueryOperatorType
+	InventoryQueryOperatorTypeGreaterThan = "GreaterThan"
+)
+
+const (
+	// @enum MaintenanceWindowExecutionStatus
+	MaintenanceWindowExecutionStatusPending = "PENDING"
+	// @enum MaintenanceWindowExecutionStatus
+	MaintenanceWindowExecutionStatusInProgress = "IN_PROGRESS"
+	// @enum MaintenanceWindowExecutionStatus
+	MaintenanceWindowExecutionStatusSuccess = "SUCCESS"
+	// @enum MaintenanceWindowExecutionStatus
+	MaintenanceWindowExecutionStatusFailed = "FAILED"
+	// @enum MaintenanceWindowExecutionStatus
+	MaintenanceWindowExecutionStatusTimedOut = "TIMED_OUT"
+	// @enum MaintenanceWindowExecutionStatus
+	MaintenanceWindowExecutionStatusCancelling = "CANCELLING"
+	// @enum MaintenanceWindowExecutionStatus
+	MaintenanceWindowExecutionStatusCancelled = "CANCELLED"
+	// @enum MaintenanceWindowExecutionStatus
+	MaintenanceWindowExecutionStatusSkippedOverlapping = "SKIPPED_OVERLAPPING"
+)
+
+const (
+	// @enum MaintenanceWindowTargetType
+	MaintenanceWindowTargetTypeInstance = "INSTANCE"
+)
+
+const (
+	// @enum MaintenanceWindowTaskTargetType
+	MaintenanceWindowTaskTargetTypeInstance = "INSTANCE"
+	// @enum MaintenanceWindowTaskTargetType
+	MaintenanceWindowTaskTargetTypeWindowTarget = "WINDOW_TARGET"
+)
+
+const (
+	// @enum MaintenanceWindowTaskType
+	MaintenanceWindowTaskTypeRunCommand = "RUN_COMMAND"
 )
 
 const (
@@ -3866,6 +13530,66 @@ const (
 	NotificationTypeCommand = "Command"
 	// @enum NotificationType
 	NotificationTypeInvocation = "Invocation"
+)
+
+const (
+	// @enum ParameterType
+	ParameterTypeString = "String"
+	// @enum ParameterType
+	ParameterTypeStringList = "StringList"
+	// @enum ParameterType
+	ParameterTypeSecureString = "SecureString"
+)
+
+const (
+	// @enum ParametersFilterKey
+	ParametersFilterKeyName = "Name"
+	// @enum ParametersFilterKey
+	ParametersFilterKeyType = "Type"
+	// @enum ParametersFilterKey
+	ParametersFilterKeyKeyId = "KeyId"
+)
+
+const (
+	// @enum PatchComplianceDataState
+	PatchComplianceDataStateInstalled = "INSTALLED"
+	// @enum PatchComplianceDataState
+	PatchComplianceDataStateInstalledOther = "INSTALLED_OTHER"
+	// @enum PatchComplianceDataState
+	PatchComplianceDataStateMissing = "MISSING"
+	// @enum PatchComplianceDataState
+	PatchComplianceDataStateNotApplicable = "NOT_APPLICABLE"
+	// @enum PatchComplianceDataState
+	PatchComplianceDataStateFailed = "FAILED"
+)
+
+const (
+	// @enum PatchDeploymentStatus
+	PatchDeploymentStatusApproved = "APPROVED"
+	// @enum PatchDeploymentStatus
+	PatchDeploymentStatusPendingApproval = "PENDING_APPROVAL"
+	// @enum PatchDeploymentStatus
+	PatchDeploymentStatusExplicitApproved = "EXPLICIT_APPROVED"
+	// @enum PatchDeploymentStatus
+	PatchDeploymentStatusExplicitRejected = "EXPLICIT_REJECTED"
+)
+
+const (
+	// @enum PatchFilterKey
+	PatchFilterKeyProduct = "PRODUCT"
+	// @enum PatchFilterKey
+	PatchFilterKeyClassification = "CLASSIFICATION"
+	// @enum PatchFilterKey
+	PatchFilterKeyMsrcClassification = "MSRC_CLASSIFICATION"
+	// @enum PatchFilterKey
+	PatchFilterKeyPatchId = "PATCH_ID"
+)
+
+const (
+	// @enum PatchOperationType
+	PatchOperationTypeScan = "Scan"
+	// @enum PatchOperationType
+	PatchOperationTypeInstall = "Install"
 )
 
 const (
@@ -3901,4 +13625,10 @@ const (
 const (
 	// @enum ResourceTypeForTagging
 	ResourceTypeForTaggingManagedInstance = "ManagedInstance"
+	// @enum ResourceTypeForTagging
+	ResourceTypeForTaggingDocument = "Document"
+	// @enum ResourceTypeForTagging
+	ResourceTypeForTaggingMaintenanceWindow = "MaintenanceWindow"
+	// @enum ResourceTypeForTagging
+	ResourceTypeForTaggingPatchBaseline = "PatchBaseline"
 )
