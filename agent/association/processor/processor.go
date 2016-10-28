@@ -319,7 +319,7 @@ func (p *Processor) persistAssociationForExecution(log log.T, docState *stateMod
 
 	if docState.DocumentInformation.RunOnce {
 		// record the last executed association file
-		if err := recorder.UpdateAssociatedDocument(docState.DocumentInformation.InstanceID, docState.DocumentInformation.DocumentName); err != nil {
+		if err := recorder.UpdateAssociatedDocument(docState.DocumentInformation.InstanceID, docState.DocumentInformation.AssociationID); err != nil {
 			log.Errorf("Failed to persist last executed association document, %v", err)
 		}
 	}
