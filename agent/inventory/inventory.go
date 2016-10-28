@@ -42,9 +42,9 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/sdkutil"
 	stateManagerModel "github.com/aws/amazon-ssm-agent/agent/statemanager/model"
 	"github.com/aws/amazon-ssm-agent/agent/task"
+	"github.com/aws/aws-sdk-go/aws/awserr"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/ssm"
-	"src/github.com/aws/aws-sdk-go/aws/awserr"
 )
 
 //TODO: add more unit tests.

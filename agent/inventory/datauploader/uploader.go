@@ -153,7 +153,6 @@ func (u *InventoryUploader) ConvertToSsmInventoryItems(context context.T, items 
 		nonOptimizedInventoryItems = append(nonOptimizedInventoryItems, nonOptimizedItem)
 
 		//populate optimized item - if content hash matches with earlier collected data.
-
 		oldHash = u.optimizer.GetContentHash(item.Name)
 		if newHash == oldHash {
 
