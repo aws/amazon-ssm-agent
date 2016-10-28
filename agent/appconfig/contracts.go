@@ -38,8 +38,6 @@ type SsmCfg struct {
 	// TODO: test hook, can be removed before release
 	// this is to skip ssl verification for the beta self signed certs
 	InsecureSkipVerify             bool
-	BasicInventoryGatherer         string
-	InventoryOptimizer             string
 	CustomInventoryDefaultLocation string
 }
 

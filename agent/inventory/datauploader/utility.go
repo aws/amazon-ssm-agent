@@ -15,57 +15,13 @@
 package datauploader
 
 import (
-	"crypto/md5"
-	"encoding/base64"
 	"encoding/json"
 	"fmt"
 	"reflect"
-	"sync"
 
 	"github.com/aws/amazon-ssm-agent/agent/inventory/model"
 	"github.com/aws/aws-sdk-go/service/ssm"
 )
-
-var (
-	lock  sync.RWMutex
-	store map[string]string
-)
-
-func init() {
-	store = make(map[string]string)
-}
-
-// ShouldUpdate returns if given inventoryItem should be updated or not, if yes - then it also updates the checksum
-// for future calls
-func ShouldUpdate(inventoryItemName, data string) bool {
-	//TODO: currently everything is in memory - we should have persistence for reboot scenarios as well
-	//so that we can optimize PutInventory across reboots
-
-	//TODO: abstract this into memory-vault kind of utility to make it consistent with our codebase.
-
-	//TODO: We should not update checksum - before knowing the data has been uploaded to SSM - or else, if agent crashes
-	//right after updating checksum but before uploading to SSM - agent would start getting contentHash mismatch exception.
-
-	//TODO: should update - must not side effects - like updating checksum.
-
-	//TODO: hash calculation should not be done here - since hash needs to be calculated and sent to SSM as per putinventory API call.
-
-	//calculate new checksum of given data
-	sum := md5.Sum([]byte(data))
-	newCheckSum := base64.StdEncoding.EncodeToString(sum[:])
-
-	lock.Lock()
-	defer lock.Unlock()
-
-	oldChecksum, isInventoryItemPresent := store[inventoryItemName]
-	if isInventoryItemPresent && newCheckSum == oldChecksum {
-		//no need to update given inventory data
-		return false
-	}
-
-	store[inventoryItemName] = newCheckSum
-	return true
-}
 
 // ConvertToSSMInventoryItem converts given InventoryItem to []map[string]*string
 func ConvertToSSMInventoryItem(item model.Item) (inventoryItem *ssm.InventoryItem, err error) {

@@ -50,6 +50,11 @@ const (
 	LongRunningPluginDataStoreFileName = "store"
 	PluginNameLongRunningPluginInvoker = "lrpminvoker"
 
+	//aws-ssm-agent bookkeeping constants for inventory plugin
+	InventoryRootDirName         = "inventory"
+	CustomInventoryRootDirName   = "custom"
+	InventoryContentHashFileName = "contentHash"
+
 	// DefaultDocumentRootDirName is the root directory for storing command states
 	DefaultDocumentRootDirName = "document"
 
