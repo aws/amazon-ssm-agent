@@ -15,7 +15,17 @@
 
 package plugin
 
+import (
+	"github.com/aws/amazon-ssm-agent/agent/log"
+)
+
 // RegisteredPlugins loads all registered long running plugins in memory
 func RegisteredPlugins() map[string]Plugin {
 	return make(map[string]Plugin)
+}
+
+// IsPluginSupportedForCurrentPlatform always returns true because currently, there is no plugin that particular
+// linux version doesn't support while other linux version does.
+func IsPluginSupportedForCurrentPlatform(log log.T, pluginID string) (bool, string) {
+	return false, ""
 }
