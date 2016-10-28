@@ -406,8 +406,8 @@ func parseCancelCommandMessage(context context.T, msg *ssmmds.Message, messagesO
 }
 
 func isUpdatePlugin(pluginConfig model.DocumentState) bool {
-	for pluginName := range pluginConfig.PluginsInformation {
-		if pluginName == appconfig.PluginEC2ConfigUpdate || pluginName == appconfig.PluginNameAwsAgentUpdate {
+	for _, pluginState := range pluginConfig.InstancePluginsInformation {
+		if pluginState.Name == appconfig.PluginEC2ConfigUpdate || pluginState.Name == appconfig.PluginNameAwsAgentUpdate {
 			return true
 		}
 	}
