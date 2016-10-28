@@ -28,10 +28,12 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
+	"github.com/aws/amazon-ssm-agent/agent/framework/runpluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/longrunning/manager"
 	managerContracts "github.com/aws/amazon-ssm-agent/agent/longrunning/plugin"
+	"github.com/aws/amazon-ssm-agent/agent/parameterstore"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/pluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/rebooter"
 	"github.com/aws/amazon-ssm-agent/agent/task"
@@ -83,7 +85,7 @@ func Name() string {
 }
 
 // Execute sends commands specific to long running plugins to long running plugin manager and accordingly sends reply back
-func (p *Plugin) Execute(context context.T, config contracts.Configuration, cancelFlag task.CancelFlag) (res contracts.PluginResult) {
+func (p *Plugin) Execute(context context.T, config contracts.Configuration, cancelFlag task.CancelFlag, subDocumentRunner runpluginutil.PluginRunner) (res contracts.PluginResult) {
 	log := context.Log()
 	log.Infof("long running plugin invoker has been invoked")
 
@@ -299,6 +301,17 @@ func (p *Plugin) prepareForStart(log log.T, config contracts.Configuration, plug
 			contracts.ResultStatusFailed)
 		return
 	}
+
+	// Resolve ssm parameters
+	// This may contain sensitive information, do not log this data after resolving.
+	if property, err = parameterstore.ResolveString(log, property); err != nil {
+		failed = true
+		log.Errorf("Failed to resolve ssm parameters. Error: - %v", err)
+		res = p.CreateResult(fmt.Sprintf("Failed to resolve ssm parameters. Error: - %v", err),
+			contracts.ResultStatusFailed)
+		return
+	}
+
 	//stop the plugin before reconfiguring it
 	log.Debugf("Stopping %s - before applying new configuration", pluginID)
 	if err = p.lrpm.StopPlugin(pluginID, cancelFlag); err != nil {

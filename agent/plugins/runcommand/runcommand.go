@@ -25,8 +25,10 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/executers"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
+	"github.com/aws/amazon-ssm-agent/agent/framework/runpluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/parameterstore"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/pluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/rebooter"
 	"github.com/aws/amazon-ssm-agent/agent/task"
@@ -35,6 +37,7 @@ import (
 // Plugin is the type for the RunCommand plugin.
 type Plugin struct {
 	pluginutil.DefaultPlugin
+	defaultWorkingDirectory string
 }
 
 // RunCommandPluginInput represents one set of commands executed by the RunCommand plugin.
@@ -70,17 +73,19 @@ func Name() string {
 
 // Execute runs multiple sets of commands and returns their outputs.
 // res.Output will contain a slice of RunCommandPluginOutput.
-func (p *Plugin) Execute(context context.T, config contracts.Configuration, cancelFlag task.CancelFlag) (res contracts.PluginResult) {
+func (p *Plugin) Execute(context context.T, config contracts.Configuration, cancelFlag task.CancelFlag, subDocumentRunner runpluginutil.PluginRunner) (res contracts.PluginResult) {
 	log := context.Log()
 	log.Infof("%v started with configuration %v", Name(), config)
 	res.StartDateTime = time.Now()
 	defer func() { res.EndDateTime = time.Now() }()
+	log.Debugf("DefaultWorkingDirectory %v", config.DefaultWorkingDirectory)
+	p.defaultWorkingDirectory = config.DefaultWorkingDirectory
 
 	//loading Properties as list since aws:runPowershellScript & aws:runShellScript uses properties as list
 	var properties []interface{}
 	if properties, res = pluginutil.LoadParametersAsList(log, config.Properties); res.Code != 0 {
 
-		pluginutil.PersistPluginInformationToCurrent(log, Name(), config, res)
+		pluginutil.PersistPluginInformationToCurrent(log, config.PluginID, config, res)
 		return res
 	}
 
@@ -119,7 +124,7 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 		res.StandardError = contracts.TruncateOutput(out[0].Stderr, "", 8000)
 	}
 
-	pluginutil.PersistPluginInformationToCurrent(log, Name(), config, res)
+	pluginutil.PersistPluginInformationToCurrent(log, config.PluginID, config, res)
 
 	return res
 }
@@ -155,8 +160,12 @@ func (p *Plugin) runCommands(log log.T, pluginInput RunCommandPluginInput, orche
 		orchestrationDirectory = tempDir
 	}
 
+	workingDir := pluginInput.WorkingDirectory
+	if workingDir == "" {
+		workingDir = p.defaultWorkingDirectory
+	}
 	orchestrationDir := fileutil.BuildPath(orchestrationDirectory, pluginInput.ID)
-	log.Debugf("Running commands %v in workingDirectory %v; orchestrationDir %v ", pluginInput.RunCommand, pluginInput.WorkingDirectory, orchestrationDir)
+	log.Debugf("Running commands %v in workingDirectory %v; orchestrationDir %v ", pluginInput.RunCommand, workingDir, orchestrationDir)
 
 	// create orchestration dir if needed
 	if err = fileutil.MakeDirsWithExecuteAccess(orchestrationDir); err != nil {
@@ -170,6 +179,14 @@ func (p *Plugin) runCommands(log log.T, pluginInput RunCommandPluginInput, orche
 	log.Debugf("Writing commands %v to file %v", pluginInput, scriptPath)
 
 	// Create script file
+	// Resolve ssm parameters
+	// This may contain sensitive information, do not log this data after resolving.
+	if pluginInput.RunCommand, err = parameterstore.ResolveStringList(log, pluginInput.RunCommand); err != nil {
+		out.Errors = append(out.Errors, err.Error())
+		log.Errorf("Failed to resolve ssm parameters. Error: - %v", err)
+		return
+	}
+
 	if err = pluginutil.CreateScriptFile(log, scriptPath, pluginInput.RunCommand); err != nil {
 		out.Errors = append(out.Errors, err.Error())
 		log.Errorf("failed to create script file. %v", err)
@@ -188,8 +205,16 @@ func (p *Plugin) runCommands(log log.T, pluginInput RunCommandPluginInput, orche
 	commandName := pluginutil.GetShellCommand()
 	commandArguments := append(pluginutil.GetShellArguments(), scriptPath, pluginutil.ExitCodeTrap)
 
+	// Resolve ssm parameters
+	// This may contain sensitive information, do not log this data after resolving.
+	if pluginInput.WorkingDirectory, err = parameterstore.ResolveString(log, pluginInput.WorkingDirectory); err != nil {
+		out.Errors = append(out.Errors, err.Error())
+		log.Errorf("Failed to resolve ssm parameters. Error: - %v", err)
+		return
+	}
+
 	// Execute Command
-	stdout, stderr, exitCode, errs := p.ExecuteCommand(log, pluginInput.WorkingDirectory, stdoutFilePath, stderrFilePath, cancelFlag, executionTimeout, commandName, commandArguments)
+	stdout, stderr, exitCode, errs := p.ExecuteCommand(log, workingDir, stdoutFilePath, stderrFilePath, cancelFlag, executionTimeout, commandName, commandArguments)
 
 	// Set output status
 	out.ExitCode = exitCode

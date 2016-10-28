@@ -28,8 +28,10 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
+	"github.com/aws/amazon-ssm-agent/agent/framework/runpluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/parameterstore"
 	"github.com/aws/amazon-ssm-agent/agent/platform"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/pluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/rebooter"
@@ -48,7 +50,7 @@ const (
 	// InstanceRegionArg represents the region of the instance for domain join
 	InstanceRegionArg = " --instance-region "
 	// DirectoryNameArg represents the dns ip addresses of directory for domain join
-	DnsAddressesArgs = " --dns-addresses "
+	DnsAddressesArgs = " --dns-addresses"
 	// DomainJoinPluginName is the name of the executable file of domain join plugin
 	DomainJoinPluginExecutableName = "AWS.DomainJoin.exe"
 	// Default folder name for logs
@@ -118,7 +120,7 @@ type convert func(log.T, string, string, string, string, string) (string, error)
 
 // Execute runs multiple sets of commands and returns their outputs.
 // res.Output will contain a slice of RunCommandPluginOutput.
-func (p *Plugin) Execute(context context.T, config contracts.Configuration, cancelFlag task.CancelFlag) (res contracts.PluginResult) {
+func (p *Plugin) Execute(context context.T, config contracts.Configuration, cancelFlag task.CancelFlag, subDocumentRunner runpluginutil.PluginRunner) (res contracts.PluginResult) {
 	log := context.Log()
 	log.Infof("%v started with configuration %v", Name(), config)
 	res.StartDateTime = time.Now()
@@ -127,7 +129,7 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 	//loading Properties as map since aws:domainJoin uses properties as map
 	var properties map[string]interface{}
 	if properties, res = pluginutil.LoadParametersAsMap(log, config.Properties); res.Code != 0 {
-		pluginutil.PersistPluginInformationToCurrent(log, Name(), config, res)
+		pluginutil.PersistPluginInformationToCurrent(log, config.PluginID, config, res)
 		return res
 	}
 
@@ -145,14 +147,14 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 	if cancelFlag.ShutDown() {
 		res.Code = 1
 		res.Status = contracts.ResultStatusFailed
-		pluginutil.PersistPluginInformationToCurrent(log, Name(), config, res)
+		pluginutil.PersistPluginInformationToCurrent(log, config.PluginID, config, res)
 		return
 	}
 
 	if cancelFlag.Canceled() {
 		res.Code = 1
 		res.Status = contracts.ResultStatusCancelled
-		pluginutil.PersistPluginInformationToCurrent(log, Name(), config, res)
+		pluginutil.PersistPluginInformationToCurrent(log, config.PluginID, config, res)
 		return
 	}
 
@@ -197,7 +199,7 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 	}
 
 	res.Output = finalOut.String()
-	pluginutil.PersistPluginInformationToCurrent(log, Name(), config, res)
+	pluginutil.PersistPluginInformationToCurrent(log, config.PluginID, config, res)
 
 	return res
 
@@ -247,7 +249,15 @@ func (p *Plugin) runCommands(log log.T, pluginInput DomainJoinPluginInput, orche
 	log.Debugf("stdoutFilePath file %v, stderrFilePath file %v", stdoutFilePath, stderrFilePath) //check if this is log path
 
 	// Construct Command line with executable file name and parameters
-	command := makeArgs(log, pluginInput)
+	var command string
+	if command, err = makeArgs(log, pluginInput); err != nil {
+		log.Errorf("Failed to build domain join command because : %v", err)
+		out.ExitCode = 1
+		out.Status = contracts.ResultStatusFailed
+		out.Stderr = fmt.Sprintf("Failed to build domain join command because : %v", err.Error())
+		return
+	}
+
 	log.Debugf("command line is : %v", command)
 	workingDir := fileutil.BuildPath(appconfig.DefaultPluginPath, DomainJoinFolderName)
 
@@ -264,6 +274,7 @@ func (p *Plugin) runCommands(log log.T, pluginInput DomainJoinPluginInput, orche
 	log.Debugf("stderr is: %v", out.Stderr)
 	log.Debugf("stdoutFilePath is: %v", stdoutFilePath)
 	log.Debugf("code is: %v", output)
+	log.Debugf("err is: %v", err)
 
 	// Upload output to S3
 	outputPath := filepath.Join(orchestrationDirectory, OutputFolder)
@@ -290,23 +301,35 @@ func (p *Plugin) runCommands(log log.T, pluginInput DomainJoinPluginInput, orche
 }
 
 // makeArguments Build the arguments for domain join plugin
-func makeArguments(log log.T, pluginInput DomainJoinPluginInput) (commandArguments string) {
+func makeArguments(log log.T, pluginInput DomainJoinPluginInput) (commandArguments string, err error) {
 
 	var buffer bytes.Buffer
 	buffer.WriteString("./")
 	buffer.WriteString(DomainJoinPluginExecutableName)
 
+	// Resolve ssm parameters
+	// This may contain sensitive information, do not log this data after resolving.
+	if pluginInput.DirectoryId, err = parameterstore.ResolveString(log, pluginInput.DirectoryId); err != nil {
+		log.Errorf("Failed to resolve ssm parameters. Error: - %v", err)
+		return
+	}
+
 	// required parameters for the domain join plugin
 	if len(pluginInput.DirectoryId) == 0 {
-		log.Debug("DirectoryId is required")
-		return
+		return "", fmt.Errorf("directoryId is required")
 	}
 	buffer.WriteString(DirectoryIdArg)
 	buffer.WriteString(pluginInput.DirectoryId)
 
-	if len(pluginInput.DirectoryName) == 0 {
-		log.Debug("DirectoryName is required")
+	// Resolve ssm parameters
+	// This may contain sensitive information, do not log this data after resolving.
+	if pluginInput.DirectoryName, err = parameterstore.ResolveString(log, pluginInput.DirectoryName); err != nil {
+		log.Errorf("Failed to resolve ssm parameters. Error: - %v", err)
 		return
+	}
+
+	if len(pluginInput.DirectoryName) == 0 {
+		return "", fmt.Errorf("directoryName is required")
 	}
 	buffer.WriteString(DirectoryNameArg)
 	buffer.WriteString(pluginInput.DirectoryName)
@@ -314,19 +337,27 @@ func makeArguments(log log.T, pluginInput DomainJoinPluginInput) (commandArgumen
 	buffer.WriteString(InstanceRegionArg)
 	region, err := getRegion()
 	if err != nil {
-		log.Debug("Cannot get the instance region information")
-		return
+		return "", fmt.Errorf("cannot get the instance region information")
 	}
 	buffer.WriteString(region)
 
-	if len(pluginInput.DnsIpAddresses) != 2 {
-		log.Debug("Must provide two dns addresses.")
+	// Resolve ssm parameters
+	// This may contain sensitive information, do not log this data after resolving.
+	if pluginInput.DnsIpAddresses, err = parameterstore.ResolveStringList(log, pluginInput.DnsIpAddresses); err != nil {
+		log.Errorf("Failed to resolve ssm parameters. Error: - %v", err)
 		return
 	}
-	buffer.WriteString(DnsAddressesArgs)
-	buffer.WriteString(pluginInput.DnsIpAddresses[0])
-	buffer.WriteString(" ")
-	buffer.WriteString(pluginInput.DnsIpAddresses[1])
 
-	return buffer.String()
+	if len(pluginInput.DnsIpAddresses) == 0 {
+		log.Debug("Do not provide dns addresses.")
+		return buffer.String(), nil
+	}
+
+	buffer.WriteString(DnsAddressesArgs)
+	for index := 0; index < len(pluginInput.DnsIpAddresses); index++ {
+		buffer.WriteString(" ")
+		buffer.WriteString(pluginInput.DnsIpAddresses[index])
+	}
+
+	return buffer.String(), nil
 }

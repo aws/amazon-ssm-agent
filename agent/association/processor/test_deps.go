@@ -51,7 +51,7 @@ type parserMock struct {
 // ParseDocumentWithParams mocks implementation for ParseDocumentWithParams
 func (m *parserMock) ParseDocumentWithParams(
 	log log.T,
-	rawData *model.AssociationRawData) (*messageContract.SendCommandPayload, error) {
+	rawData *model.InstanceAssociation) (*messageContract.SendCommandPayload, error) {
 
 	args := m.Called(log, rawData)
 	return args.Get(0).(*messageContract.SendCommandPayload), args.Error(1)
@@ -61,7 +61,7 @@ func (m *parserMock) ParseDocumentWithParams(
 func (m *parserMock) InitializeDocumentState(
 	context context.T,
 	payload *messageContract.SendCommandPayload,
-	rawData *model.AssociationRawData) stateModel.DocumentState {
+	rawData *model.InstanceAssociation) stateModel.DocumentState {
 
 	args := m.Called(context, payload, rawData)
 

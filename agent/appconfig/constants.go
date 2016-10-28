@@ -71,6 +71,9 @@ const (
 	// PluginNameAwsAgentUpdate is the name for agent update plugin
 	PluginNameAwsAgentUpdate = "aws:updateSsmAgent"
 
+	// PluginEC2ConfigUpdate is the name for ec2 config update plugin
+	PluginEC2ConfigUpdate = "aws:updateAgent"
+
 	AppConfigFileName    = "amazon-ssm-agent.json"
 	SeelogConfigFileName = "seelog.xml"
 
@@ -85,4 +88,8 @@ const (
 
 	// PluginNameConfigureContainers is the name of the configure containers plugin
 	PluginNameConfigureContainers = "aws:ConfigureContainers"
+
+	// PluginNameRefreshAssociation is the name of refresh association plugin
+	PluginNameRefreshAssociation = "aws:refreshAssociation"
+
 )

@@ -33,15 +33,17 @@ const (
 // corresponding plugin result.
 type PluginState struct {
 	Configuration contracts.Configuration
+	Name          string
 	Result        contracts.PluginResult
 	HasExecuted   bool
+	Id            string
 }
 
 // DocumentInfo represents information stored as interim state for a document
 type DocumentInfo struct {
 	AdditionalInfo      contracts.AdditionalInfo
-	CommandID           string
-	Destination         string
+	DocumentID          string
+	InstanceID          string
 	MessageID           string
 	RunID               string
 	CreatedDate         string
@@ -51,16 +53,19 @@ type DocumentInfo struct {
 	DocumentTraceOutput string
 	RuntimeStatus       map[string]*contracts.PluginRuntimeStatus
 	RunCount            int
+	RunOnce             bool
 	//ParsedDocumentContent string
 	//RuntimeStatus
 }
 
 // DocumentState represents information relevant to a command that gets executed by agent
 type DocumentState struct {
-	DocumentInformation DocumentInfo
-	DocumentType        DocumentType
-	PluginsInformation  map[string]PluginState
-	CancelInformation   CancelCommandInfo
+	DocumentInformation        DocumentInfo
+	DocumentType               DocumentType
+	PluginsInformation         map[string]PluginState
+	SchemaVersion              string
+	InstancePluginsInformation []PluginState
+	CancelInformation          CancelCommandInfo
 }
 
 // IsRebootRequired returns if reboot is needed

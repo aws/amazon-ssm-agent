@@ -13,7 +13,10 @@
     },
     "Ssm": {
         "Endpoint": "",
-        "HealthFrequencyMinutes": 5
+        "HealthFrequencyMinutes": 5,
+        "InventoryPlugin" : "Enabled",
+        "BasicInventoryGatherer": "Enabled",
+        "InventoryOptimizer": "Enabled"
     },
     "Agent": {
         "Name": "amazon-ssm-agent",

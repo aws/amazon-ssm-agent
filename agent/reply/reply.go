@@ -110,6 +110,7 @@ func prepareRuntimeStatus(log log.T, pluginResult contracts.PluginResult) contra
 
 	runtimeStatus := contracts.PluginRuntimeStatus{
 		Code:          pluginResult.Code,
+		Name:          pluginResult.PluginName,
 		Status:        pluginResult.Status,
 		Output:        resultAsString,
 		StartDateTime: times.ToIso8601UTC(pluginResult.StartDateTime),

@@ -24,9 +24,11 @@ import (
 
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
+	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	messageContracts "github.com/aws/amazon-ssm-agent/agent/message/contracts"
+	"github.com/aws/amazon-ssm-agent/agent/message/converter"
 	"github.com/aws/amazon-ssm-agent/agent/message/parser"
 	"github.com/aws/amazon-ssm-agent/agent/statemanager/model"
 	"github.com/aws/amazon-ssm-agent/agent/task"
@@ -359,17 +361,29 @@ func generateTestCaseFromFiles(t *testing.T, messagePayloadFile string, messageR
 	for pluginName, config := range configs {
 		state := model.PluginState{}
 		state.Configuration = *config
+		state.Name = pluginName
+		state.Id = pluginName
 		testCase.PluginStates[pluginName] = state
 	}
 
-	testCase.PluginResults = make(map[string]*contracts.PluginResult)
-	testCase.ReplyPayload = loadMessageReplyFromFile(t, messageReplyPayloadFile)
-	for pluginName, pluginRuntimeStatus := range testCase.ReplyPayload.RuntimeStatus {
-		pluginResult := parsePluginResult(t, *pluginRuntimeStatus)
-		testCase.PluginResults[pluginName] = &pluginResult
-	}
+	testCase.DocState = initializeSendCommandState(payload, orchestrationRootDir, s3KeyPrefix, testCase.Msg)
 
-	testCase.DocState = initializeSendCommandState(configs, testCase.Msg, testCase.MsgPayload)
+	return
+}
+
+func getPluginConfigurations(runtimeConfig map[string]*contracts.PluginConfig, orchestrationDir, s3BucketName, s3KeyPrefix, messageID string) (res map[string]*contracts.Configuration) {
+	res = make(map[string]*contracts.Configuration)
+	for pluginName, pluginConfig := range runtimeConfig {
+		res[pluginName] = &contracts.Configuration{
+			Settings:               pluginConfig.Settings,
+			Properties:             pluginConfig.Properties,
+			OutputS3BucketName:     s3BucketName,
+			OutputS3KeyPrefix:      fileutil.BuildS3Path(s3KeyPrefix, pluginName),
+			OrchestrationDirectory: fileutil.BuildPath(orchestrationDir, pluginName),
+			MessageId:              messageID,
+			BookKeepingFileName:    getCommandID(messageID),
+		}
+	}
 	return
 }
 
@@ -406,7 +420,9 @@ func testProcessSendCommandMessage(t *testing.T, testCase TestCaseSendCommand) {
 	// method should call plugin runner with the given configuration
 	pluginRunnerMock := new(MockedPluginRunner)
 	// mock.AnythingOfType("func(string, string, map[string]*plugin.Result)")
-	pluginRunnerMock.On("RunPlugins", mock.Anything, *testCase.Msg.MessageId, testCase.PluginStates, mock.Anything, cancelFlag).Return(testCase.PluginResults)
+
+	pluginStates := converter.ConvertPluginState(testCase.PluginStates)
+	pluginRunnerMock.On("RunPlugins", mock.Anything, *testCase.Msg.MessageId, pluginStates, mock.Anything, cancelFlag).Return(testCase.PluginResults)
 
 	// call method under test
 	//orchestrationRootDir is set to empty such that it can meet the test expectation.

@@ -33,7 +33,8 @@ type HealthCheck struct {
 }
 
 const (
-	name = "HealthCheck"
+	name      = "HealthCheck"
+	AgentName = "amazon-ssm-agent"
 )
 
 // NewHealthCheck creates a new health check core plugin.
@@ -57,7 +58,7 @@ func (h *HealthCheck) updateHealth() {
 	var err error
 	//TODO when will status become inactive?
 	// If both ssm config and command is inactive => agent is inactive.
-	if _, err = h.service.UpdateInstanceInformation(log, version.Version, "Active"); err != nil {
+	if _, err = h.service.UpdateInstanceInformation(log, version.Version, "Active", AgentName); err != nil {
 		sdkutil.HandleAwsError(log, err, h.healthCheckStopPolicy)
 	}
 	return
