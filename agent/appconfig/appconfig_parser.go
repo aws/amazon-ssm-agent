@@ -53,6 +53,11 @@ func parser(config *SsmagentConfig) {
 		DefaultSsmHealthFrequencyMinutesMin,
 		DefaultSsmHealthFrequencyMinutesMax,
 		DefaultSsmHealthFrequencyMinutes)
+	config.Ssm.AssociationFrequencyMinutes = getNumericValue(
+		config.Ssm.AssociationFrequencyMinutes,
+		DefaultSsmAssociationFrequencyMinutesMin,
+		DefaultSsmAssociationFrequencyMinutesMax,
+		DefaultSsmAssociationFrequencyMinutes)
 }
 
 func getStringValue(configValue string, defaultValue string) string {

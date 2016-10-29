@@ -60,9 +60,6 @@ const (
 	// note: the connection timeout for MDSPoll should be less than this.
 	pollMessageFrequencyMinutes = 15
 
-	// pollAssociationFrequencyMinutes is the frequency at which to resume poll for Association if the current thread dies due to stop policy
-	pollAssociationFrequencyMinutes = 30
-
 	// hardstopTimeout is the time before the processor will be shutdown during a hardstop
 	// TODO:  load this value from config
 	hardStopTimeout = time.Second * 4

@@ -35,6 +35,10 @@ const (
 	DefaultSsmHealthFrequencyMinutesMin = 5
 	DefaultSsmHealthFrequencyMinutesMax = 60
 
+	DefaultSsmAssociationFrequencyMinutes    = 30
+	DefaultSsmAssociationFrequencyMinutesMin = 5
+	DefaultSsmAssociationFrequencyMinutesMax = 120
+
 	//aws-ssm-agent bookkeeping constants
 	DefaultLocationOfPending     = "pending"
 	DefaultLocationOfCurrent     = "current"

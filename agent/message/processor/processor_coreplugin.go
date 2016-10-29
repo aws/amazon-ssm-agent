@@ -61,12 +61,14 @@ func (p *Processor) Execute(context context.T) (err error) {
 		context.Log().Errorf("unable to schedule message processor. %v", err)
 	}
 
+	associationFrequenceMinutes := context.AppConfig().Ssm.AssociationFrequencyMinutes
 	log.Info("Starting association polling")
+	log.Debugf("Association polling frequencey is %v", associationFrequenceMinutes)
 	var job *scheduler.Job
 	if job, err = asocitscheduler.CreateScheduler(
 		log,
 		p.assocProcessor.ProcessAssociation,
-		pollAssociationFrequencyMinutes); err != nil {
+		associationFrequenceMinutes); err != nil {
 		context.Log().Errorf("unable to schedule association processor. %v", err)
 	}
 	p.assocProcessor.InitializeAssociationProcessor()
