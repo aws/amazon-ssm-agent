@@ -104,7 +104,7 @@ func ParseDocument(context context.T, documentRaw []byte, orchestrationDir strin
 func (r *PluginRunner) ExecuteDocument(context context.T, pluginInput []model.PluginState, documentID string, documentCreatedDate string) (pluginOutputs map[string]*contracts.PluginResult) {
 	log := context.Log()
 	for _, state := range pluginInput {
-		log.Debugf("Document type %v", state.Name)
+		log.Debugf("Executing document contains input for plugin %v", state.Name)
 	}
 
 	return r.RunPlugins(context, documentID, documentCreatedDate, pluginInput, r.Plugins, r.SendReply, r.UpdateAssoc, r.CancelFlag)

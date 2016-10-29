@@ -143,14 +143,12 @@ func runConfigurePackage(
 	var input ConfigurePackagePluginInput
 	var err error
 	if err = jsonutil.Remarshal(rawPluginInput, &input); err != nil {
-		output.MarkAsFailed(log,
-			fmt.Errorf("invalid format in plugin properties %v; \nerror %v", rawPluginInput, err))
+		output.MarkAsFailed(log, fmt.Errorf("invalid format in plugin properties %v; \nerror %v", rawPluginInput, err))
 		return
 	}
 
 	if valid, err := manager.validateInput(&input); !valid {
-		output.MarkAsFailed(log,
-			fmt.Errorf("invalid input: %v", err))
+		output.MarkAsFailed(log, fmt.Errorf("invalid input: %v", err))
 		return
 	}
 
@@ -167,8 +165,7 @@ func runConfigurePackage(
 		// get version information
 		version, installedVersion, versionErr := manager.getVersionToInstall(log, &input, util, instanceContext)
 		if versionErr != nil {
-			output.MarkAsFailed(log,
-				fmt.Errorf("unable to determine version to install: %v", versionErr))
+			output.MarkAsFailed(log, fmt.Errorf("unable to determine version to install: %v", versionErr))
 			return
 		}
 
@@ -409,10 +406,9 @@ func (m *configureManager) downloadPackage(log log.T,
 	packageLocation := getS3Location(packageName, version, context, packageFilename)
 
 	// path to download destination
-	packageDestination, err := util.CreatePackageFolder(packageName, version)
-	if err != nil {
-		errMessage := fmt.Sprintf("failed to create local package repository, %v", err.Error())
-		return "", errors.New(errMessage)
+	packageDestination, createErr := util.CreatePackageFolder(packageName, version)
+	if createErr != nil {
+		return "", fmt.Errorf("failed to create local package repository, %v", createErr.Error())
 	}
 
 	downloadInput := artifact.DownloadInput{
@@ -426,6 +422,11 @@ func (m *configureManager) downloadPackage(log log.T,
 		if downloadErr != nil {
 			errMessage = fmt.Sprintf("%v, %v", errMessage, downloadErr.Error())
 		}
+		// attempt to clean up failed download folder
+		if errCleanup := filesysdep.RemoveAll(packageDestination); errCleanup != nil {
+			log.Errorf("Failed to clean up destination folder %v after failed download: %v", packageDestination, errCleanup)
+		}
+		// return download error
 		return "", errors.New(errMessage)
 	}
 
@@ -446,10 +447,10 @@ func runInstallPackage(p *Plugin,
 	status = contracts.ResultStatusSuccess
 
 	directory := filepath.Join(appconfig.PackageRoot, packageName, version)
-	_, status, err = executeAction(p, "install", packageName, version, log, output, directory)
-	if err == nil {
-		output.AppendInfo(log, "Successfully installed %v %v", packageName, version)
+	if _, status, err = executeAction(p, "install", packageName, version, log, output, directory); err != nil {
+		return status, err
 	}
+	output.AppendInfo(log, "Successfully installed %v %v", packageName, version)
 	return
 }
 
@@ -464,14 +465,14 @@ func runUninstallPackage(p *Plugin,
 	status = contracts.ResultStatusSuccess
 
 	directory := filepath.Join(appconfig.PackageRoot, packageName, version)
-	_, status, err = executeAction(p, "uninstall", packageName, version, log, output, directory)
-	if err == nil {
-		if err = filesysdep.RemoveAll(directory); err != nil {
-			return contracts.ResultStatusFailed, fmt.Errorf("failed to delete directory %v due to %v", directory, err)
-		}
-		output.AppendInfo(log, "Successfully uninstalled %v %v", packageName, version)
+	if _, status, err = executeAction(p, "uninstall", packageName, version, log, output, directory); err != nil {
+		return status, err
 	}
-	return
+	if err = filesysdep.RemoveAll(directory); err != nil {
+		return contracts.ResultStatusFailed, fmt.Errorf("failed to delete directory %v due to %v", directory, err)
+	}
+	output.AppendInfo(log, "Successfully uninstalled %v %v", packageName, version)
+	return status, nil
 }
 
 func executeAction(p *Plugin,
@@ -512,6 +513,9 @@ func executeAction(p *Plugin,
 			}
 			if pluginOut.StandardError != "" {
 				output.AppendInfo(log, "%v errors: %v", actionName, pluginOut.StandardError)
+			}
+			if pluginOut.Error != nil {
+				output.Errors = append(output.Errors, pluginOut.Error.Error())
 			}
 			status = contracts.MergeResultStatus(status, pluginOut.Status)
 		}
