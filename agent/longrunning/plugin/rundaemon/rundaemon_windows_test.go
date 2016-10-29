@@ -19,6 +19,7 @@ package rundaemon
 
 import (
 	"os"
+	"os/exec"
 	"testing"
 	"time"
 
@@ -45,32 +46,41 @@ func NewPlugin(pluginConfig pluginutil.PluginConfig) (*Plugin, error) {
 	return &plugin, nil
 }
 
+func MockRunDaemonExecutorWithNoError(daemonInvoke *exec.Cmd) (err error) {
+	return nil
+}
+
+func MockStopDaemonExecutorWithNoError(p *Plugin, context context.T) {
+	return
+}
+
+func MockBlockWhileDaemonRunning(context context.T, pid int) error {
+	time.Sleep(2 * time.Second)
+	return nil
+}
+
 // Test to perform a Start followed by a Stop operation
 func TestSingleStartStop(t *testing.T) {
 	context := context.NewMockDefault()
 	cancelFlag := task.NewMockDefault()
 	p, _ := NewPlugin(pluginConfig)
-	p.ExeLocation = `C:\testing`
-	p.Name = "TestStart"
-	componentName := "http.exe"
+	p.Name = "TestSingleStartStop"
+	DaemonCmdExecutor = MockRunDaemonExecutorWithNoError
+	BlockWhileDaemonRunningExecutor = MockBlockWhileDaemonRunning
+	StopDaemonExecutor = MockStopDaemonExecutorWithNoError
 	t.Logf("Daemon starting")
-	p.Start(context, componentName, "", cancelFlag)
+	p.Start(context, "Sleep 5", "", cancelFlag)
 	time.Sleep(2 * time.Second)
-	if p.Process != nil {
-		proc, err := os.FindProcess(p.Process.Pid)
-		if err != nil {
-			t.Fatalf("Daemon is not running. Bail out")
-			return
-		} else {
-			t.Logf("Process pid %v", proc.Pid)
-		}
+	t.Logf("Daemon is running")
+	if IsDaemonRunningExecutor(p) {
 	} else {
 		t.Fatalf("Daemon is not running. Bail out")
-		return
 	}
-	pid := p.Process.Pid
+	time.Sleep(2 * time.Second)
 	p.Stop(context, cancelFlag)
-	BlockWhileDaemonRunning(context, pid)
+	if p.Process != nil {
+		BlockWhileDaemonRunningExecutor(context, p.Process.Pid)
+	}
 	t.Logf("Daemon stopped")
 }
 
@@ -79,33 +89,35 @@ func TestSuccessiveStarts(t *testing.T) {
 	context := context.NewMockDefault()
 	cancelFlag := task.NewMockDefault()
 	p, _ := NewPlugin(pluginConfig)
-	p.ExeLocation = `C:\testing`
-	p.Name = "TestStart"
-	componentName := "http.exe"
+	var pid int
+	p.Name = "TestSuccessiveStarts"
+	DaemonCmdExecutor = MockRunDaemonExecutorWithNoError
+	BlockWhileDaemonRunningExecutor = MockBlockWhileDaemonRunning
+	StopDaemonExecutor = MockStopDaemonExecutorWithNoError
 	t.Logf("Daemon starting")
-	p.Start(context, componentName, "", cancelFlag)
-	time.Sleep(2 * time.Second)
-	if p.Process != nil {
-		proc, err := os.FindProcess(p.Process.Pid)
-		if err != nil {
-			t.Fatalf("Daemon is not running. Bail out")
-		} else {
-			t.Logf("Process pid %v", proc.Pid)
-		}
+	p.Start(context, "Sleep 5", "", cancelFlag)
+	time.Sleep(1 * time.Second)
+	t.Logf("Daemon is running")
+	if IsDaemonRunningExecutor(p) {
 	} else {
 		t.Fatalf("Daemon is not running. Bail out")
-		return
 	}
-	pid := p.Process.Pid
-	p.Start(context, componentName, "", cancelFlag)
-	time.Sleep(10 * time.Second)
-	if p.Process.Pid == pid {
-		t.Logf("Daemon was already running")
+	time.Sleep(1 * time.Second)
+	if p.Process != nil {
+		pid = p.Process.Pid
+	}
+	p.Start(context, "", "", cancelFlag)
+	time.Sleep(2 * time.Second)
+	if p.Process != nil {
+		if p.Process.Pid == pid {
+			t.Logf("Daemon was already running")
+		} else {
+			t.Fatalf("Another instance of daemon started while one running")
+		}
 	}
 	p.Stop(context, cancelFlag)
 	BlockWhileDaemonRunning(context, pid)
 	t.Logf("Daemon stopped")
-
 }
 
 // Test to perform Multiple Start-Stops
@@ -113,14 +125,14 @@ func TestMultipleStartStop(t *testing.T) {
 	context := context.NewMockDefault()
 	cancelFlag := task.NewMockDefault()
 	p, _ := NewPlugin(pluginConfig)
-	p.ExeLocation = `C:\\testing`
-	p.Name = "TestStart"
-	componentName := "http.exe"
-	time.Sleep(10 * time.Second)
+	p.Name = "TestMultipleStartStop"
+	DaemonCmdExecutor = RunDaemon
+	BlockWhileDaemonRunningExecutor = BlockWhileDaemonRunning
+	StopDaemonExecutor = StopDaemon
 	for i := 0; i < 50; i++ {
 		t.Logf("Daemon starting")
-		p.Start(context, componentName, "", cancelFlag)
-		time.Sleep(2 * time.Second)
+		p.Start(context, "Sleep 5", "", cancelFlag)
+		time.Sleep(5 * time.Second)
 		if p.Process != nil {
 			proc, err := os.FindProcess(p.Process.Pid)
 			if err != nil {
@@ -134,8 +146,9 @@ func TestMultipleStartStop(t *testing.T) {
 			return
 		}
 		pid := p.Process.Pid
+		t.Logf("Daemon stopping")
 		p.Stop(context, cancelFlag)
-		BlockWhileDaemonRunning(context, pid)
+		BlockWhileDaemonRunningExecutor(context, pid)
 	}
 }
 
@@ -144,8 +157,10 @@ func TestStopWithoutStart(t *testing.T) {
 	context := context.NewMockDefault()
 	cancelFlag := task.NewMockDefault()
 	p, _ := NewPlugin(pluginConfig)
-	p.ExeLocation = "C:\\testing"
-	p.Name = "TestStart"
+	DaemonCmdExecutor = MockRunDaemonExecutorWithNoError
+	BlockWhileDaemonRunningExecutor = MockBlockWhileDaemonRunning
+	StopDaemonExecutor = MockStopDaemonExecutorWithNoError
+	p.Name = "TestStopWithoutStart"
 	t.Logf("Attempting to Stopping a Daemon without starting")
 	err := p.Stop(context, cancelFlag)
 	if err != nil {

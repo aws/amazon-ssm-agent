@@ -30,6 +30,12 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/task"
 )
 
+// Created Executor function interfaces to allow for better testability
+var DaemonCmdExecutor = RunDaemon
+var BlockWhileDaemonRunningExecutor = BlockWhileDaemonRunning
+var StopDaemonExecutor = StopDaemon
+var IsDaemonRunningExecutor = IsDaemonRunning
+
 //  RequestedDaemonStateType represents whether the user has explicitly requested to start/stop the daemon
 type RequestedDaemonStateType uint
 
@@ -96,8 +102,19 @@ func (p *Plugin) stopRequested() bool {
 	return p.RequestedDaemonState == RequestedDisabled
 }
 
+func IsDaemonRunning(p *Plugin) bool {
+	p.ProcessStateLock.Lock()
+	defer p.ProcessStateLock.Unlock()
+	return p.CurrentDaemonState == CurrentRunning
+}
+
+func RunDaemon(daemonInvoke *exec.Cmd) (err error) {
+	err = daemonInvoke.Start()
+	return err
+}
+
 // Starts a given executable or a specified powershell script and enables daemon functionality
-func StartDaemon(context context.T, p *Plugin, configuration string) {
+func StartDaemon(p *Plugin, context context.T, configuration string) (err error) {
 	// Bail out if an explicit Stop daemon is requested by the user
 	if p.stopRequested() {
 		return
@@ -111,7 +128,7 @@ func StartDaemon(context context.T, p *Plugin, configuration string) {
 		start := time.Now()
 		log := context.Log()
 		if p.Process != nil {
-			err := BlockWhileDaemonRunning(context, p.Process.Pid)
+			err := BlockWhileDaemonRunningExecutor(context, p.Process.Pid)
 			if err != nil {
 				log.Infof("Encountered error: process may not have exited cleanly. Pid %v : %s", p.Process.Pid, err.Error())
 			}
@@ -124,7 +141,6 @@ func StartDaemon(context context.T, p *Plugin, configuration string) {
 
 		log.Infof("Attempting to Start Daemon")
 
-		//create script path
 		scriptPath := filepath.Join(p.ExeLocation, configuration)
 		commandName := pluginutil.GetShellCommand()
 		commandArguments := append(GetShellArguments(), scriptPath, pluginutil.ExitCodeTrap)
@@ -139,10 +155,11 @@ func StartDaemon(context context.T, p *Plugin, configuration string) {
 
 		daemonInvoke := exec.Command(commandName, commandArguments...)
 		daemonInvoke.Dir = p.ExeLocation
-		err := daemonInvoke.Start()
+		err := DaemonCmdExecutor(daemonInvoke)
+
 		if err != nil {
 			log.Errorf("Error starting Daemon: %s", err.Error())
-			break
+			return err
 		}
 		p.ProcessStateLock.Lock()
 		p.Process = daemonInvoke.Process
@@ -176,16 +193,15 @@ func (p *Plugin) Start(context context.T, configuration string, orchestrationDir
 		// Set the User Requested state to ENABLED
 		p.RequestedDaemonState = RequestedEnabled
 		p.ProcessStateLock.Unlock()
-		go StartDaemon(context, p, configuration)
+		go StartDaemon(p, context, configuration)
 	} else {
 		p.ProcessStateLock.Unlock()
 	}
 	return nil
 }
 
-func (p *Plugin) Stop(context context.T, cancelFlag task.CancelFlag) error {
+func StopDaemon(p *Plugin, context context.T) {
 	log := context.Log()
-	log.Infof("Stopping Daemon")
 	p.ProcessStateLock.Lock()
 	//TODO Explore replacing the need to call Unlock below with a defer statement here.
 	if p.Process != nil {
@@ -208,6 +224,11 @@ func (p *Plugin) Stop(context context.T, cancelFlag task.CancelFlag) error {
 		}
 	}
 	p.ProcessStateLock.Unlock()
+}
 
+func (p *Plugin) Stop(context context.T, cancelFlag task.CancelFlag) error {
+	log := context.Log()
+	log.Infof("Stopping Daemon")
+	StopDaemonExecutor(p, context)
 	return nil
 }
