@@ -16,7 +16,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/framework/engine"
-	"github.com/aws/amazon-ssm-agent/agent/framework/plugin"
+	"github.com/aws/amazon-ssm-agent/agent/framework/runpluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/statemanager"
 	stateModel "github.com/aws/amazon-ssm-agent/agent/statemanager/model"
@@ -56,8 +56,8 @@ type pluginExecutionService interface {
 		context context.T,
 		associationID string,
 		plugins []stateModel.PluginState,
-		pluginRegistry plugin.PluginRegistry,
-		sendReply engine.SendResponse,
+		pluginRegistry runpluginutil.PluginRegistry,
+		sendReply runpluginutil.SendResponse,
 		cancelFlag task.CancelFlag,
 	) (pluginOutputs map[string]*contracts.PluginResult)
 }
@@ -70,8 +70,8 @@ func (pluginExecutionImp) RunPlugins(
 	associationID string,
 	documentCreatedDate string,
 	plugins []stateModel.PluginState,
-	pluginRegistry plugin.PluginRegistry,
-	assocUpdate engine.UpdateAssociation,
+	pluginRegistry runpluginutil.PluginRegistry,
+	assocUpdate runpluginutil.UpdateAssociation,
 	cancelFlag task.CancelFlag,
 ) (pluginOutputs map[string]*contracts.PluginResult) {
 	return engine.RunPlugins(context, associationID, documentCreatedDate, plugins, pluginRegistry, nil, assocUpdate, cancelFlag)

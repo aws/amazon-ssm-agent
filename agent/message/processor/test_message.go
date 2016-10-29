@@ -16,7 +16,7 @@ package processor
 import (
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
-	"github.com/aws/amazon-ssm-agent/agent/framework/engine"
+	"github.com/aws/amazon-ssm-agent/agent/framework/runpluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	model "github.com/aws/amazon-ssm-agent/agent/message/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/message/service"
@@ -45,8 +45,8 @@ type MockedPluginRunner struct {
 }
 
 // RunPlugins mocks a PluginRunner (which is a func).
-func (runnerMock *MockedPluginRunner) RunPlugins(context context.T, commandID string, plugins []stateModel.PluginState, sendResponse engine.SendResponse, cancelFlag task.CancelFlag) (pluginOutputs map[string]*contracts.PluginResult) {
-	args := runnerMock.Called(context, commandID, plugins, sendResponse, cancelFlag)
+func (runnerMock *MockedPluginRunner) RunPlugins(context context.T, documentID string, plugins []stateModel.PluginState, sendResponse runpluginutil.SendResponse, cancelFlag task.CancelFlag) (pluginOutputs map[string]*contracts.PluginResult) {
+	args := runnerMock.Called(context, documentID, plugins, sendResponse, cancelFlag)
 	return args.Get(0).(map[string]*contracts.PluginResult)
 }
 

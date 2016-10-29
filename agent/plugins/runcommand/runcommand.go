@@ -25,6 +25,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/executers"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
+	"github.com/aws/amazon-ssm-agent/agent/framework/runpluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/parameterstore"
@@ -36,6 +37,7 @@ import (
 // Plugin is the type for the RunCommand plugin.
 type Plugin struct {
 	pluginutil.DefaultPlugin
+	defaultWorkingDirectory string
 }
 
 // RunCommandPluginInput represents one set of commands executed by the RunCommand plugin.
@@ -71,11 +73,13 @@ func Name() string {
 
 // Execute runs multiple sets of commands and returns their outputs.
 // res.Output will contain a slice of RunCommandPluginOutput.
-func (p *Plugin) Execute(context context.T, config contracts.Configuration, cancelFlag task.CancelFlag) (res contracts.PluginResult) {
+func (p *Plugin) Execute(context context.T, config contracts.Configuration, cancelFlag task.CancelFlag, subDocumentRunner runpluginutil.PluginRunner) (res contracts.PluginResult) {
 	log := context.Log()
 	log.Infof("%v started with configuration %v", Name(), config)
 	res.StartDateTime = time.Now()
 	defer func() { res.EndDateTime = time.Now() }()
+	log.Debugf("DefaultWorkingDirectory %v", config.DefaultWorkingDirectory)
+	p.defaultWorkingDirectory = config.DefaultWorkingDirectory
 
 	//loading Properties as list since aws:runPowershellScript & aws:runShellScript uses properties as list
 	var properties []interface{}
@@ -156,8 +160,12 @@ func (p *Plugin) runCommands(log log.T, pluginInput RunCommandPluginInput, orche
 		orchestrationDirectory = tempDir
 	}
 
+	workingDir := pluginInput.WorkingDirectory
+	if workingDir == "" {
+		workingDir = p.defaultWorkingDirectory
+	}
 	orchestrationDir := fileutil.BuildPath(orchestrationDirectory, pluginInput.ID)
-	log.Debugf("Running commands %v in workingDirectory %v; orchestrationDir %v ", pluginInput.RunCommand, pluginInput.WorkingDirectory, orchestrationDir)
+	log.Debugf("Running commands %v in workingDirectory %v; orchestrationDir %v ", pluginInput.RunCommand, workingDir, orchestrationDir)
 
 	// create orchestration dir if needed
 	if err = fileutil.MakeDirsWithExecuteAccess(orchestrationDir); err != nil {
@@ -206,7 +214,7 @@ func (p *Plugin) runCommands(log log.T, pluginInput RunCommandPluginInput, orche
 	}
 
 	// Execute Command
-	stdout, stderr, exitCode, errs := p.ExecuteCommand(log, pluginInput.WorkingDirectory, stdoutFilePath, stderrFilePath, cancelFlag, executionTimeout, commandName, commandArguments)
+	stdout, stderr, exitCode, errs := p.ExecuteCommand(log, workingDir, stdoutFilePath, stderrFilePath, cancelFlag, executionTimeout, commandName, commandArguments)
 
 	// Set output status
 	out.ExitCode = exitCode

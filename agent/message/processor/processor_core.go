@@ -26,7 +26,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
-	"github.com/aws/amazon-ssm-agent/agent/framework/engine"
+	"github.com/aws/amazon-ssm-agent/agent/framework/runpluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	messageContracts "github.com/aws/amazon-ssm-agent/agent/message/contracts"
@@ -53,7 +53,7 @@ func (p *Processor) runCmdsUsingCmdState(context context.T,
 	runPlugins PluginRunner,
 	cancelFlag task.CancelFlag,
 	buildReply replyBuilder,
-	sendResponse engine.SendResponse,
+	sendResponse runpluginutil.SendResponse,
 	docState model.DocumentState) {
 
 	log := context.Log()
@@ -238,7 +238,7 @@ func (p *Processor) processSendCommandMessage(context context.T,
 	runPlugins PluginRunner,
 	cancelFlag task.CancelFlag,
 	buildReply replyBuilder,
-	sendResponse engine.SendResponse,
+	sendResponse runpluginutil.SendResponse,
 	docState *model.DocumentState) {
 
 	log := context.Log()
@@ -406,8 +406,8 @@ func parseCancelCommandMessage(context context.T, msg *ssmmds.Message, messagesO
 }
 
 func isUpdatePlugin(pluginConfig model.DocumentState) bool {
-	for pluginName := range pluginConfig.PluginsInformation {
-		if pluginName == appconfig.PluginEC2ConfigUpdate || pluginName == appconfig.PluginNameAwsAgentUpdate {
+	for _, pluginState := range pluginConfig.InstancePluginsInformation {
+		if pluginState.Name == appconfig.PluginEC2ConfigUpdate || pluginState.Name == appconfig.PluginNameAwsAgentUpdate {
 			return true
 		}
 	}

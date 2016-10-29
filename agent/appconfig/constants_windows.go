@@ -115,6 +115,9 @@ func init() {
 	DefaultDataStorePath = filepath.Join(SSMDataPath, "InstanceData")
 	DownloadRoot = filepath.Join(temp, SSMFolder, "Download")
 	UpdaterArtifactsRoot = filepath.Join(temp, SSMFolder, "Update")
+	EC2UpdateArtifactsRoot = filepath.Join(EnvWinDir, EC2ConfigServiceFolder, "Update")
+	EC2UpdaterDownloadRoot = filepath.Join(temp, EC2ConfigAppDataFolder, "Download")
+
 	DefaultCustomInventoryFolder = filepath.Join(SSMDataPath, "Inventory", "Custom")
 	EC2UpdateArtifactsRoot = filepath.Join(EnvWinDir, EC2ConfigServiceFolder, "Update")
 	EC2UpdaterDownloadRoot = filepath.Join(temp, EC2ConfigAppDataFolder, "Download")

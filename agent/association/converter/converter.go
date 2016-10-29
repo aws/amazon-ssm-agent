@@ -23,7 +23,9 @@ func ConvertPluginsInformation(pluginsInformation map[string]model.PluginState) 
 	index := 0
 	for pluginID, pluginState := range pluginsInformation {
 		pluginState.Name = pluginID
+		pluginState.Id = pluginID
 		instancePluginsInformation[index] = pluginState
+		index++
 	}
 	return instancePluginsInformation
 }

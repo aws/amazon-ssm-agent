@@ -24,6 +24,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/executers"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
+	"github.com/aws/amazon-ssm-agent/agent/framework/runpluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/parameterstore"
@@ -46,6 +47,7 @@ var msiExecCommand = filepath.Join(os.Getenv("SystemRoot"), "System32", "msiexec
 // Plugin is the type for the applications plugin.
 type Plugin struct {
 	pluginutil.DefaultPlugin
+	DefaultWorkingDirectory string
 }
 
 // ApplicationPluginInput represents one set of commands executed by the Applications plugin.
@@ -101,10 +103,11 @@ func Name() string {
 
 // Execute runs multiple sets of commands and returns their outputs.
 // res.Output will contain a slice of PluginOutput.
-func (p *Plugin) Execute(context context.T, config contracts.Configuration, cancelFlag task.CancelFlag) (res contracts.PluginResult) {
+func (p *Plugin) Execute(context context.T, config contracts.Configuration, cancelFlag task.CancelFlag, subDocumentRunner runpluginutil.PluginRunner) (res contracts.PluginResult) {
 	log := context.Log()
 	log.Infof("%v started with configuration %v", Name(), config)
 	res.StartDateTime = time.Now()
+	p.DefaultWorkingDirectory = config.DefaultWorkingDirectory
 	defer func() { res.EndDateTime = time.Now() }()
 
 	//loading Properties as list since aws:applications uses properties as list
@@ -257,6 +260,7 @@ func (p *Plugin) runCommands(log log.T, pluginInput ApplicationPluginInput, orch
 		return
 	}
 
+	var localFilePath string
 	// Download file from source if available
 	downloadOutput, err := pluginutil.DownloadFileFromSource(log, pluginInput.Source, pluginInput.SourceHash, pluginInput.SourceHashType)
 	if err != nil || downloadOutput.IsHashMatched == false || downloadOutput.LocalFilePath == "" {
@@ -264,10 +268,11 @@ func (p *Plugin) runCommands(log log.T, pluginInput ApplicationPluginInput, orch
 		out.MarkAsFailed(log, errorString)
 		return
 	}
-	log.Debugf("local path to file is %v", downloadOutput.LocalFilePath)
+	localFilePath = downloadOutput.LocalFilePath
+	log.Debugf("local path to file is %v", localFilePath)
 
 	// Create msi related log file
-	localSourceLogFilePath := downloadOutput.LocalFilePath + ".msiexec.log.txt"
+	localSourceLogFilePath := localFilePath + ".msiexec.log.txt"
 	log.Debugf("log path is %v", localSourceLogFilePath)
 
 	// TODO: This needs to be pulled out of this function as it runs multiple times getting initialized with the same values
@@ -286,7 +291,7 @@ func (p *Plugin) runCommands(log log.T, pluginInput ApplicationPluginInput, orch
 
 	// Construct Command Name and Arguments
 	commandName := msiExecCommand
-	commandArguments := []string{mode, downloadOutput.LocalFilePath, "/quiet", "/norestart", "/log", localSourceLogFilePath}
+	commandArguments := []string{mode, localFilePath, "/quiet", "/norestart", "/log", localSourceLogFilePath}
 	if pluginInput.Parameters != "" {
 		log.Debugf("Got Parameters \"%v\"", pluginInput.Parameters)
 		params := processParams(log, pluginInput.Parameters)

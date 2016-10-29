@@ -23,6 +23,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/executers"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
+	"github.com/aws/amazon-ssm-agent/agent/framework/runpluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/pluginutil"
@@ -193,7 +194,7 @@ func testExecute(t *testing.T, testCase TestCase) {
 				OrchestrationDirectory: orchestrationDirectory,
 				BookKeepingFileName:    commandID,
 				PluginID:               "aws:runCommand1",
-			}, mockCancelFlag)
+			}, mockCancelFlag, runpluginutil.PluginRunner{})
 
 		// assert output is correct (mocked object expectations are tested automatically by testExecution)
 		assert.NotNil(t, res.StartDateTime)
