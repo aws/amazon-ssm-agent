@@ -79,6 +79,9 @@ const (
 
 	// List all plugin names, unfortunately golang doesn't support const arrays of strings
 
+	// PluginNameAwsConfigureDaemon is the name for configure daemon plugin
+	PluginNameAwsConfigureDaemon = "aws:configureDaemon"
+
 	// PluginNameAwsConfigurePackage is the name for configure package plugin
 	PluginNameAwsConfigurePackage = "aws:configurePackage"
 
