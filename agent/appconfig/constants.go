@@ -87,9 +87,10 @@ const (
 	PluginNameDockerContainer = "aws:runDockerAction"
 
 	// PluginNameConfigureContainers is the name of the configure containers plugin
-	PluginNameConfigureContainers = "aws:ConfigureContainers"
+	PluginNameConfigureContainers = "aws:configureContainers"
 
 	// PluginNameRefreshAssociation is the name of refresh association plugin
 	PluginNameRefreshAssociation = "aws:refreshAssociation"
+
 
 )

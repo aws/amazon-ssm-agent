@@ -25,8 +25,8 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/plugins/refreshassociation"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/runcommand"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/updatessmagent"
-	"github.com/aws/amazon-ssm-agent/agent/task"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/dockercontainer"
+	"github.com/aws/amazon-ssm-agent/agent/plugins/configurecontainers"
 )
 
 // registeredExecuters stores the registered plugins.
@@ -132,6 +132,15 @@ func loadPlatformIndependentPlugins(context context.T) runpluginutil.PluginRegis
 		log.Errorf("failed to create plugin %s %v", updateAgentPluginName, err)
 	} else {
 		workerPlugins[updateAgentPluginName] = updateAgentPlugin
+	}
+
+	// registering aws:configureContainers plugin
+	configureContainersPluginName := configurecontainers.Name()
+	configureContainersPlugin, err := configurecontainers.NewPlugin(pluginutil.DefaultPluginConfig())
+	if err != nil {
+		log.Errorf("failed to create plugin %s %v", configureContainersPluginName, err)
+	} else {
+		workerPlugins[configureContainersPluginName] = configureContainersPlugin
 	}
 
 	// registering aws:runDockerAction plugin
