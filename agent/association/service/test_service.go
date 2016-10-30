@@ -32,7 +32,7 @@ func NewMockDefault() *AssociationServiceMock {
 	return new(AssociationServiceMock)
 }
 
-// ListAssociations mocks implementation for ListAssociations
+// ListInstanceAssociations mocks implementation for ListAssociations
 func (m *AssociationServiceMock) ListInstanceAssociations(log log.T, instanceID string) ([]*model.InstanceAssociation, error) {
 	args := m.Called(log, instanceID)
 	return args.Get(0).([]*model.InstanceAssociation), args.Error(1)

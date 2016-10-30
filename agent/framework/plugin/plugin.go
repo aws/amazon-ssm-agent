@@ -20,6 +20,7 @@ import (
 
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/framework/runpluginutil"
+	"github.com/aws/amazon-ssm-agent/agent/inventory"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/lrpminvoker"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/pluginutil"
@@ -117,11 +118,17 @@ func loadPlatformIndependentPlugins(context context.T) runpluginutil.PluginRegis
 
 	// registering aws:runPowerShellScript & aws:runShellScript plugin
 	runcommandPluginName := runcommand.Name()
-	runcommandPlugin, err := runcommand.NewPlugin(pluginutil.DefaultPluginConfig())
-	if err != nil {
+	if runcommandPlugin, err := runcommand.NewPlugin(pluginutil.DefaultPluginConfig()); err != nil {
 		log.Errorf("failed to create plugin %s %v", runcommandPluginName, err)
 	} else {
 		workerPlugins[runcommandPluginName] = runcommandPlugin
+	}
+
+	inventoryPluginName := inventory.Name()
+	if inventoryPlugin, err := inventory.NewPlugin(context, pluginutil.DefaultPluginConfig()); err != nil {
+		log.Errorf("failed to create plugin %s %v", inventoryPluginName, err)
+	} else {
+		workerPlugins[inventoryPluginName] = inventoryPlugin
 	}
 
 	// registering aws:updateSsmAgent plugin

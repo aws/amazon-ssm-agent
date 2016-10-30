@@ -27,7 +27,6 @@ import (
 
 // T defines operations that all inventory gatherers support
 type T interface {
-
 	//returns the Name of the gatherer
 	Name() string
 	//runs the gatherer with a given configuration

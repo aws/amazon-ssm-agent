@@ -63,7 +63,8 @@ func initializeCancelCommandState(msg ssmmds.Message, parsedMsg messageContracts
 	documentInfo.InstanceID = *msg.Destination
 	documentInfo.CreatedDate = *msg.CreatedDate
 	documentInfo.MessageID = *msg.MessageId
-	documentInfo.DocumentID = getCommandID(*msg.MessageId)
+	documentInfo.CommandID = getCommandID(*msg.MessageId)
+	documentInfo.DocumentID = documentInfo.CommandID
 	documentInfo.RunID = times.ToIsoDashUTC(times.DefaultClock.Now())
 	documentInfo.DocumentStatus = contracts.ResultStatusInProgress
 

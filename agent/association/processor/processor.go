@@ -191,9 +191,8 @@ func (p *Processor) runScheduledAssociation(log log.T) {
 	signal.StopWaitTimerForNextScheduledAssociation()
 
 	if assocBookkeeping.IsDocumentCurrentlyExecuting(
-		*scheduledAssociation.Association.AssociationId,
+		scheduledAssociation.DocumentID,
 		*scheduledAssociation.Association.InstanceId) {
-
 		log.Infof("Association %v is executing, system will retry later", *scheduledAssociation.Association.AssociationId)
 		return
 	}
@@ -208,7 +207,7 @@ func (p *Processor) runScheduledAssociation(log log.T) {
 			contracts.AssociationErrorCodeInvalidAssociation,
 			times.ToIso8601UTC(time.Now()),
 			message)
-		schedulemanager.UpdateNextScheduledDate(log, *scheduledAssociation.Association.AssociationId)
+		schedulemanager.MarkAssociationAsCompleted(log, *scheduledAssociation.Association.AssociationId)
 		return
 	}
 
@@ -320,7 +319,7 @@ func (p *Processor) persistAssociationForExecution(log log.T, docState *stateMod
 
 	if docState.DocumentInformation.RunOnce {
 		// record the last executed association file
-		if err := recorder.UpdateAssociatedDocument(docState.DocumentInformation.InstanceID, docState.DocumentInformation.DocumentName); err != nil {
+		if err := recorder.UpdateAssociatedDocument(docState.DocumentInformation.InstanceID, docState.DocumentInformation.AssociationID); err != nil {
 			log.Errorf("Failed to persist last executed association document, %v", err)
 		}
 	}

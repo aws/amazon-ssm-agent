@@ -32,15 +32,14 @@ type MdsCfg struct {
 
 // SsmCfg represents configuration for Simple system manager (SSM)
 type SsmCfg struct {
-	Endpoint               string
-	HealthFrequencyMinutes int
-	AssociationRetryLimit  int
+	Endpoint                    string
+	HealthFrequencyMinutes      int
+	AssociationFrequencyMinutes int
+	AssociationRetryLimit       int
 	// TODO: test hook, can be removed before release
 	// this is to skip ssl verification for the beta self signed certs
-	InsecureSkipVerify     bool
-	BasicInventoryGatherer string
-	InventoryOptimizer     string
-	InventoryPlugin        string
+	InsecureSkipVerify             bool
+	CustomInventoryDefaultLocation string
 }
 
 // AgentInfo represents metadata for amazon-ssm-agent

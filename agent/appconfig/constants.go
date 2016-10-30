@@ -35,6 +35,10 @@ const (
 	DefaultSsmHealthFrequencyMinutesMin = 5
 	DefaultSsmHealthFrequencyMinutesMax = 60
 
+	DefaultSsmAssociationFrequencyMinutes    = 30
+	DefaultSsmAssociationFrequencyMinutesMin = 5
+	DefaultSsmAssociationFrequencyMinutesMax = 120
+
 	//aws-ssm-agent bookkeeping constants
 	DefaultLocationOfPending     = "pending"
 	DefaultLocationOfCurrent     = "current"
@@ -49,6 +53,11 @@ const (
 	LongRunningPluginDataStoreLocation = "datastore"
 	LongRunningPluginDataStoreFileName = "store"
 	PluginNameLongRunningPluginInvoker = "lrpminvoker"
+
+	//aws-ssm-agent bookkeeping constants for inventory plugin
+	InventoryRootDirName         = "inventory"
+	CustomInventoryRootDirName   = "custom"
+	InventoryContentHashFileName = "contentHash"
 
 	// DefaultDocumentRootDirName is the root directory for storing command states
 	DefaultDocumentRootDirName = "document"
@@ -78,6 +87,9 @@ const (
 
 	// PluginEC2ConfigUpdate is the name for ec2 config update plugin
 	PluginEC2ConfigUpdate = "aws:updateAgent"
+
+	// PluginNameAwsSoftwareInventory is the name for inventory plugin
+	PluginNameAwsSoftwareInventory = "aws:softwareInventory"
 
 	AppConfigFileName    = "amazon-ssm-agent.json"
 	SeelogConfigFileName = "seelog.xml"

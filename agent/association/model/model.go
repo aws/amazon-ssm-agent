@@ -32,6 +32,7 @@ const (
 
 // InstanceAssociation represents detail information of an association
 type InstanceAssociation struct {
+	DocumentID                  string
 	CreateDate                  time.Time
 	NextScheduledDate           time.Time
 	Association                 *ssm.InstanceAssociationSummary

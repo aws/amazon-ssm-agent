@@ -187,7 +187,9 @@ func (m *Manager) Execute(context context.T) (err error) {
 		log.Infof("there aren't any long running plugin to execute")
 	}
 
-	m.configCloudWatch(log)
+	if isPlatformSupported(context.Log(), appconfig.PluginNameCloudWatch) {
+		m.configCloudWatch(log)
+	}
 
 	//schedule periodic health check of all long running plugins
 	if m.managingLifeCycleJob, err = scheduler.Every(PollFrequencyMinutes).Minutes().Run(m.ensurePluginsAreRunning); err != nil {

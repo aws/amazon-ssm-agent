@@ -151,6 +151,12 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 		return
 	}
 
+	// Resolve ssm parameters
+	// This may contain sensitive information, do not log this data after resolving.
+	if setting.StartType, err = parameterstore.ResolveString(log, setting.StartType); err != nil {
+		log.Errorf("Failed to resolve ssm parameters. Error: - %v", err)
+		return
+	}
 	switch setting.StartType {
 	case "Enabled":
 		res = p.enablePlugin(log, config, pluginID, cancelFlag)

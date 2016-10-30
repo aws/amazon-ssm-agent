@@ -54,3 +54,7 @@ func GetShellCommand() string {
 func GetShellArguments() []string {
 	return ShellArgs
 }
+
+func GetScriptSelfDeleteCommand(scriptPath string) string {
+	return "rm -- $0"
+}

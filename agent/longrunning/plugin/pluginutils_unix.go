@@ -17,9 +17,16 @@ package plugin
 
 import (
 	"github.com/aws/amazon-ssm-agent/agent/context"
+	"github.com/aws/amazon-ssm-agent/agent/log"
 )
 
 // loadPlatformDepedentPlugins loads all registered long running plugins in memory
 func loadPlatformDependentPlugins(context context.T) map[string]Plugin {
 	return make(map[string]Plugin)
+}
+
+// IsPluginSupportedForCurrentPlatform always returns true because currently, there is no plugin that particular
+// linux version doesn't support while other linux version does.
+func IsPluginSupportedForCurrentPlatform(log log.T, pluginID string) (bool, string) {
+	return false, ""
 }

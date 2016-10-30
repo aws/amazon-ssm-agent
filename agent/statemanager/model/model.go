@@ -41,8 +41,13 @@ type PluginState struct {
 
 // DocumentInfo represents information stored as interim state for a document
 type DocumentInfo struct {
-	AdditionalInfo      contracts.AdditionalInfo
+	// DocumentID is a unique name for file system
+	// For Association, DocumentID = AssociationID.RunID
+	// For RunCommand, DocumentID = CommandID
 	DocumentID          string
+	AdditionalInfo      contracts.AdditionalInfo
+	CommandID           string
+	AssociationID       string
 	InstanceID          string
 	MessageID           string
 	RunID               string
@@ -54,8 +59,6 @@ type DocumentInfo struct {
 	RuntimeStatus       map[string]*contracts.PluginRuntimeStatus
 	RunCount            int
 	RunOnce             bool
-	//ParsedDocumentContent string
-	//RuntimeStatus
 }
 
 // DocumentState represents information relevant to a command that gets executed by agent
@@ -73,7 +76,7 @@ func (c *DocumentState) IsRebootRequired() bool {
 	return c.DocumentInformation.DocumentStatus == contracts.ResultStatusSuccessAndReboot
 }
 
-// IsAssociation returns if reboot is needed
+// IsAssociation returns if documentType is association
 func (c *DocumentState) IsAssociation() bool {
 	return c.DocumentType == Association
 }
