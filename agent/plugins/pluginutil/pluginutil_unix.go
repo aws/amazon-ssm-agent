@@ -34,6 +34,8 @@ func GetStatus(exitCode int, cancelFlag task.CancelFlag) contracts.ResultStatus 
 	switch exitCode {
 	case appconfig.SuccessExitCode:
 		return contracts.ResultStatusSuccess
+	case appconfig.RebootExitCode:
+		return contracts.ResultStatusSuccessAndReboot
 	case CommandStoppedPreemptivelyExitCode:
 		if cancelFlag.ShutDown() {
 			return contracts.ResultStatusFailed
