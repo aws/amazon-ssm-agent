@@ -1,10 +1,9 @@
 package dockercontainer
 
 import (
-	"encoding/json"
 	"fmt"
-	"io"
 	"io/ioutil"
+	"strconv"
 	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
@@ -18,11 +17,6 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/plugins/pluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/rebooter"
 	"github.com/aws/amazon-ssm-agent/agent/task"
-	"github.com/docker/docker/api/types"
-	"github.com/docker/docker/api/types/container"
-	"github.com/docker/docker/api/types/network"
-	"github.com/docker/docker/client"
-	dockercontext "golang.org/x/net/context"
 )
 
 const (
@@ -31,13 +25,14 @@ const (
 	START   = "Start"
 	RUN     = "Run"
 	STOP    = "Stop"
+	RM      = "Rm"
 	EXEC    = "Exec"
 	INSPECT = "Inspect"
 	LOGS    = "Logs"
 	PS      = "Ps"
 	STATS   = "Stats"
 	PULL    = "Pull"
-	LIST    = "List"
+	IMAGES  = "Images"
 	RMI     = "Rmi"
 
 	// defaultExecutionTimeoutInSeconds represents default timeout time for execution of command in seconds
@@ -50,7 +45,6 @@ var duration_Seconds time.Duration = 30 * time.Second
 // Plugin is the type for the plugin.
 type Plugin struct {
 	pluginutil.DefaultPlugin
-	dockerClient *client.Client
 }
 
 // RunCommandPluginInput represents one set of commands executed by the RunCommand plugin.
@@ -61,14 +55,14 @@ type DockerContainerPluginInput struct {
 	WorkingDirectory string
 	TimeoutSeconds   interface{}
 	Container        string
-	Cmd              []string
+	Cmd              string
 	Image            string
 	Memory           string
 	CpuShares        string
 	Volume           []string
-	env              string
-	user             string
-	ExposePort       string
+	Env              string
+	User             string
+	Publish          string
 }
 
 // PSModulePluginOutput represents the output of the plugin
@@ -104,7 +98,6 @@ func NewPlugin(pluginConfig pluginutil.PluginConfig) (*Plugin, error) {
 	exec := executers.ShellCommandExecuter{}
 	plugin.ExecuteCommand = pluginutil.CommandExecuter(exec.Execute)
 
-	plugin.dockerClient, err = client.NewClient(client.DefaultDockerHost, client.DefaultVersion, nil, nil)
 	return &plugin, err
 }
 
@@ -205,126 +198,170 @@ func (p *Plugin) runCommands(log log.T, pluginInput DockerContainerPluginInput, 
 		out.Errors = append(out.Errors, err.Error())
 		return
 	}
-	log.Info("********************************starting container plugin**************************************")
-	var outputBytes []byte
+	var command string = "docker"
+	var parameters []string
 	switch pluginInput.Action {
-	case CREATE:
-		config := container.Config{Image: pluginInput.Image, Cmd: pluginInput.Cmd}
-
-		hostConfig := container.HostConfig{}
-
-		hostConfig.Binds = pluginInput.Volume
-
-		networkingConfig := network.NetworkingConfig{}
-		log.Info("Container create")
-		response, err := p.dockerClient.ContainerCreate(dockercontext.Background(), &config, &hostConfig, &networkingConfig, pluginInput.Container)
-		if err != nil {
-			log.Error("Error Creating container", err)
+	case CREATE, RUN:
+		if len(pluginInput.Image) == 0 {
+			log.Errorf("Action %s requires paramter image", pluginInput.Action, err)
 			out.Errors = append(out.Errors, err.Error())
-			return
+			return out
 		}
-		log.Info("Container create passed", err)
-		outputBytes, err = json.Marshal(response)
-		if err != nil {
-			log.Error("Error marshalling json output", err)
-			out.Errors = append(out.Errors, err.Error())
-			return
+		parameters = make([]string, 0)
+		if pluginInput.Action == RUN {
+			parameters = append(parameters, "run", "-d")
+		} else {
+			parameters = append(parameters, "create")
 		}
+		if len(pluginInput.Volume) > 0 && len(pluginInput.Volume[0]) > 0 {
+			out.Stdout += "pluginInput.Volume:" + strconv.Itoa(len(pluginInput.Volume))
+
+			log.Info("pluginInput.Volume", len(pluginInput.Volume))
+			parameters = append(parameters, "--volume")
+			for _, vol := range pluginInput.Volume {
+				log.Info("pluginInput.Volume item", vol)
+				parameters = append(parameters, vol)
+			}
+		}
+		if len(pluginInput.Container) > 0 {
+			parameters = append(parameters, "--name")
+			parameters = append(parameters, pluginInput.Container)
+		}
+		if len(pluginInput.Memory) > 0 {
+			parameters = append(parameters, "--memory")
+			parameters = append(parameters, pluginInput.Memory)
+		}
+		if len(pluginInput.CpuShares) > 0 {
+			parameters = append(parameters, "--cpu-shares")
+			parameters = append(parameters, pluginInput.CpuShares)
+		}
+		if len(pluginInput.Publish) > 0 {
+			parameters = append(parameters, "--publish")
+			parameters = append(parameters, pluginInput.Publish)
+		}
+		if len(pluginInput.Env) > 0 {
+			parameters = append(parameters, "--env")
+			parameters = append(parameters, pluginInput.Env)
+		}
+		if len(pluginInput.User) > 0 {
+			parameters = append(parameters, "--user")
+			parameters = append(parameters, pluginInput.User)
+		}
+		parameters = append(parameters, pluginInput.Image)
+		parameters = append(parameters, pluginInput.Cmd)
+
 	case START:
-		err = p.dockerClient.ContainerStart(dockercontext.Background(), pluginInput.Container, types.ContainerStartOptions{})
-		if err != nil {
-			log.Error("Error starting container", err)
+		parameters = append(parameters, "start")
+		if len(pluginInput.Container) == 0 {
+			log.Error("Action Start requires paramter container", err)
 			out.Errors = append(out.Errors, err.Error())
-			return
+			return out
 		}
-	case RMI:
-		err = p.dockerClient.ContainerRemove(dockercontext.Background(), pluginInput.Container, types.ContainerRemoveOptions{Force: true, RemoveVolumes: false, RemoveLinks: false})
-		if err != nil {
-			log.Error("Error removing container", err)
+		parameters = append(parameters, pluginInput.Container)
+
+	case RM:
+		parameters = append(parameters, "rm")
+		if len(pluginInput.Container) == 0 {
+			log.Error("Action Rm requires paramter container", err)
 			out.Errors = append(out.Errors, err.Error())
-			return
+			return out
 		}
+		parameters = append(parameters, pluginInput.Container)
+
 	case STOP:
-		err = p.dockerClient.ContainerStop(dockercontext.Background(), pluginInput.Container, &duration_Seconds)
-		if err != nil {
-			log.Error("Error stopping container", err)
+		parameters = append(parameters, "stop")
+		if len(pluginInput.Container) == 0 {
+			log.Error("Action Stop requires paramter container", err)
 			out.Errors = append(out.Errors, err.Error())
-			return
+			return out
 		}
+		parameters = append(parameters, pluginInput.Container)
+
+	case EXEC:
+		parameters = append(parameters, "exec")
+		if len(pluginInput.Container) == 0 {
+			log.Error("Action Exec requires paramter container", err)
+			out.Errors = append(out.Errors, err.Error())
+			return out
+		}
+		if len(pluginInput.Cmd) == 0 {
+			log.Error("Action Exec requires paramter Cmd", err)
+			out.Errors = append(out.Errors, err.Error())
+			return out
+		}
+		if len(pluginInput.User) > 0 {
+			parameters = append(parameters, "--user")
+			parameters = append(parameters, pluginInput.User)
+		}
+		parameters = append(parameters, pluginInput.Container)
+		parameters = append(parameters, pluginInput.Cmd)
 	case INSPECT:
-		var containerJson types.ContainerJSON
-		containerJson, err = p.dockerClient.ContainerInspect(dockercontext.Background(), pluginInput.Container)
-		if err != nil {
-			log.Error("Error inspecting container", err)
+		parameters = append(parameters, "inspect")
+		if len(pluginInput.Container) == 0 || len(pluginInput.Image) == 0 {
+			log.Error("Action Inspect requires paramter container or image", err)
 			out.Errors = append(out.Errors, err.Error())
-			return
+			return out
 		}
-		outputBytes, err = json.Marshal(containerJson)
-		if err != nil {
-			log.Error("Error marshalling json output", err)
-			out.Errors = append(out.Errors, err.Error())
-			return
-		}
+		parameters = append(parameters, pluginInput.Container)
+		parameters = append(parameters, pluginInput.Image)
 	case STATS:
-		var containerStats types.ContainerStats
-		containerStats, err = p.dockerClient.ContainerStats(dockercontext.Background(), pluginInput.Container, false)
-		outputBytes, err = json.Marshal(containerStats)
-		if err != nil {
-			log.Error("Error marshalling json output", err)
-			out.Errors = append(out.Errors, err.Error())
-			return
+		parameters = append(parameters, "stats")
+		parameters = append(parameters, "--no-stream")
+		if len(pluginInput.Container) > 0 {
+			parameters = append(parameters, pluginInput.Container)
 		}
-		defer containerStats.Body.Close()
 	case LOGS:
-		var output io.ReadCloser
-		output, err = p.dockerClient.ContainerLogs(dockercontext.Background(), pluginInput.Container, types.ContainerLogsOptions{})
-		if err != nil {
-			log.Error("Error getting container logs", err)
+		parameters = append(parameters, "logs")
+		if len(pluginInput.Container) == 0 {
+			log.Error("Action Rm requires paramter container", err)
 			out.Errors = append(out.Errors, err.Error())
-			return
+			return out
 		}
-		defer output.Close()
-
-		outputBytes, err = ioutil.ReadAll(output)
-		if err != nil {
-			log.Error("Error reading logs output", err)
-			out.Errors = append(out.Errors, err.Error())
-			return
-		}
-
+		parameters = append(parameters, pluginInput.Container)
 	case PULL:
-		var output io.ReadCloser
-		output, err = p.dockerClient.ImagePull(dockercontext.Background(), pluginInput.Image, types.ImagePullOptions{})
-		defer output.Close()
-		outputBytes, err = ioutil.ReadAll(output)
-		if err != nil {
-			log.Error("Error reading pull output", err)
+		parameters = append(parameters, "pull")
+		if len(pluginInput.Image) == 0 {
+			log.Error("Action Pull requires paramter image", err)
 			out.Errors = append(out.Errors, err.Error())
-			return
+			return out
 		}
+		parameters = append(parameters, pluginInput.Image)
+	case IMAGES:
+		parameters = append(parameters, "images")
+	case RMI:
+		parameters = append(parameters, "rmi")
+		if len(pluginInput.Image) == 0 {
+			log.Error("Action Rmi requires paramter image", err)
+			out.Errors = append(out.Errors, err.Error())
+			return out
+		}
+		parameters = append(parameters, pluginInput.Image)
+
 	case PS:
-		options := types.ContainerListOptions{All: true}
-		var containers []types.Container
-		containers, err = p.dockerClient.ContainerList(dockercontext.Background(), options)
-		if err != nil {
-			log.Info("ContainerList failed", err)
-			out.Errors = append(out.Errors, err.Error())
-			return
-		}
-		outputBytes, err = json.Marshal(containers)
-		if err != nil {
-			log.Error("Error marshalling json output", err)
-			out.Errors = append(out.Errors, err.Error())
-			return
-		}
+		parameters = append(parameters, "ps", "--all")
 	default:
 		out.MarkAsFailed(log, fmt.Errorf("Docker Action is set to unsupported value: %v", pluginInput.Action))
 		return out
 	}
-	out.Stdout = string(outputBytes)
+
+	out.Stdout += command + " "
+	for _, parameter := range parameters {
+		out.Stdout += parameter + " "
+	}
+	out.Stdout += "\n"
+	log.Info(out.Stdout)
+	var output string
+	output, err = dep.UpdateUtilExeCommandOutput(1800, log, command, parameters, "", "", "", "", true)
+	if err != nil {
+		log.Error("Error running docker command ", err)
+		out.Errors = append(out.Errors, err.Error())
+		return out
+	}
+	log.Info("Save-Module output:", output)
+	out.Stdout += output
+
 	out.ExitCode = 0
 	out.Status = contracts.ResultStatusSuccess
-
 	// Upload output to S3
 	uploadOutputToS3BucketErrors := p.ExecuteUploadOutputToS3Bucket(log, pluginInput.ID, orchestrationDir, outputS3BucketName, outputS3KeyPrefix, useTempDirectory, tempDir, out.Stdout, out.Stderr)
 	out.Errors = append(out.Errors, uploadOutputToS3BucketErrors...)
@@ -332,5 +369,5 @@ func (p *Plugin) runCommands(log log.T, pluginInput DockerContainerPluginInput, 
 	// Return Json indented response
 	responseContent, _ := jsonutil.Marshal(out)
 	log.Debug("Returning response:\n", jsonutil.Indent(responseContent))
-	return
+	return out
 }

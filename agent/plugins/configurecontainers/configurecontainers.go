@@ -178,8 +178,6 @@ func (p *Plugin) runCommands(log log.T, pluginInput ConfigureContainerPluginInpu
 		return out
 	}
 	out.Stdout = string(outputBytes)
-	out.ExitCode = 0
-	out.Status = contracts.ResultStatusSuccess
 
 	// Upload output to S3
 	uploadOutputToS3BucketErrors := p.ExecuteUploadOutputToS3Bucket(log, pluginInput.ID, orchestrationDir, outputS3BucketName, outputS3KeyPrefix, useTempDirectory, tempDir, out.Stdout, out.Stderr)

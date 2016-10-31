@@ -42,8 +42,12 @@ func runInstallCommands(log log.T, pluginInput ConfigureContainerPluginInput, or
 	var command string
 	var parameters []string
 	var requireReboot bool
-	//util := updateutil.Utility{CustomUpdateExecutionTimeoutInSeconds: 3600}
+
 	var isNanoServer bool
+	var output string
+
+
+
 	isNanoServer, err = platform.IsPlatformNanoServer(log)
 	if err != nil {
 		log.Error("Error detecting if Nano Server", err)
@@ -51,7 +55,6 @@ func runInstallCommands(log log.T, pluginInput ConfigureContainerPluginInput, or
 		return
 	}
 	if isNanoServer {
-		var output string
 		command = "Get-PackageProvider -name NanoServerPackage"
 		parameters = make([]string, 0)
 		output, err = dep.UpdateUtilExeCommandOutput(30, log, command, parameters, "", "", "", "", true)
@@ -64,6 +67,7 @@ func runInstallCommands(log log.T, pluginInput ConfigureContainerPluginInput, or
 		packageInstalled := strings.Contains(output, "NanoServerPackage")
 
 		if !packageInstalled {
+			out.Stdout += "Installing Nano Server package provider\n"
 			command = `Save-Module -Path "$env:programfiles\WindowsPowerShell\Modules\" -Name NanoServerPackage -minimumVersion 1.0.1.0`
 			parameters = make([]string, 0)
 			output, err = dep.UpdateUtilExeCommandOutput(30, log, command, parameters, "", "", "", "", true)
@@ -98,6 +102,7 @@ func runInstallCommands(log log.T, pluginInput ConfigureContainerPluginInput, or
 		packageInstalled = strings.Contains(output, "Microsoft-NanoServer")
 
 		if !packageInstalled {
+			out.Stdout += "Installing containers package\n"
 			command = "Install-NanoServerPackage microsoft-nanoserver-containers-package"
 			parameters = make([]string, 0)
 			output, err = dep.UpdateUtilExeCommandOutput(30, log, command, parameters, "", "", "", "", true)
@@ -111,17 +116,31 @@ func runInstallCommands(log log.T, pluginInput ConfigureContainerPluginInput, or
 	} else {
 		//install windows containers feature
 
-		var installFeatureOutput string
-		command = "(Install-WindowsFeature -Name containers).RestartNeeded"
+		command = "Get-WindowsFeature -Name containers"
 		parameters = make([]string, 0)
-		installFeatureOutput, err = dep.UpdateUtilExeCommandOutput(30, log, command, parameters, "", "", "", "", true)
+		output, err = dep.UpdateUtilExeCommandOutput(30, log, command, parameters, "", "", "", "", true)
 		if err != nil {
-			log.Error("Error installing containers Windows feature", err)
+			log.Error("Error getting containers feature", err)
 			out.Errors = append(out.Errors, err.Error())
 			return
 		}
-		log.Info("Install-WindowsFeature output:", installFeatureOutput)
-		requireReboot = strings.HasPrefix(installFeatureOutput, "Yes")
+		log.Info("Get-WindowsFeature output:", output)
+		packageInstalled := strings.Contains(output, "containers")
+
+		if !packageInstalled {
+			out.Stdout += "Installing containers Windows feature\n"
+			command = "(Install-WindowsFeature -Name containers).RestartNeeded"
+			parameters = make([]string, 0)
+			output, err = dep.UpdateUtilExeCommandOutput(30, log, command, parameters, "", "", "", "", true)
+			if err != nil {
+				log.Error("Error installing containers Windows feature", err)
+				out.Errors = append(out.Errors, err.Error())
+				return
+			}
+			log.Info("Install-WindowsFeature output:", output)
+			requireReboot = strings.HasPrefix(output, "Yes")
+			log.Info("Requireboot:", requireReboot)
+		}
 	}
 
 	//Create docker config if it does not exist
@@ -143,8 +162,9 @@ func runInstallCommands(log log.T, pluginInput ConfigureContainerPluginInput, or
 
 	//Download docker
 	var downloadOutput artifact.DownloadOutput
-	downloadOutput, err = dep.ArtifaceDownload(log, artifact.DownloadInput{SourceURL: DOCKER_DOWNLOAD_URL, DestinationDirectory: os.TempDir()})
+	downloadOutput, err = dep.ArtifactDownload(log, artifact.DownloadInput{SourceURL: DOCKER_DOWNLOAD_URL, DestinationDirectory: os.TempDir()})
 	if downloadOutput.IsUpdated {
+		out.Stdout += "Unzipping Docker to program files directory\n"
 		//uncompress docker zip
 		fileutil.Uncompress(downloadOutput.LocalFilePath, DOCKER_UNCOMPRESS_DIRECTORY)
 	}
@@ -152,13 +172,14 @@ func runInstallCommands(log log.T, pluginInput ConfigureContainerPluginInput, or
 
 	//Set this process's path environment variable to include Docker
 	if !strings.Contains(strings.ToLower(os.Getenv("path")), strings.ToLower(DOCKER_INSTALLED_DIRECTORY)) {
+		out.Stdout += "Setting process path variable to include docker directory\n"
 		//set envvariable for this process
 		os.Setenv("path", DOCKER_INSTALLED_DIRECTORY+";"+os.Getenv("path"))
 
 	}
 	log.Info("Path set to ", os.Getenv("path"))
 
-	//set path env variable for machine tp include Docker
+	//set path env variable for machine to include Docker
 	var regKey registry.Key
 	regKey, err = dep.RegistryOpenKey(registry.LOCAL_MACHINE, `System\CurrentControlSet\Control\Session Manager\Environment`, registry.ALL_ACCESS)
 	if err != nil {
@@ -176,9 +197,9 @@ func runInstallCommands(log log.T, pluginInput ConfigureContainerPluginInput, or
 	}
 	log.Info("System Path set to ", currentSystemPathValue)
 	if !strings.Contains(strings.ToLower(currentSystemPathValue), strings.ToLower(DOCKER_INSTALLED_DIRECTORY)) {
+		out.Stdout += "Setting machine path variable to include docker directory\n"
 		command = "setx"
 		parameters = []string{"-m", "path", os.Getenv("path")}
-		log.Info("setx path command:", command)
 		var setPathOutput string
 		setPathOutput, err = dep.UpdateUtilExeCommandOutput(10, log, command, parameters, "", "", "", "", false)
 		if err != nil {
@@ -191,7 +212,10 @@ func runInstallCommands(log log.T, pluginInput ConfigureContainerPluginInput, or
 
 	//reboot if needed
 	if requireReboot {
-		out.Status = contracts.ResultStatusSuccessAndReboot
+		out.Stdout += "Rebooting machine to complete install\n"
+		log.Info("require reboot is true", requireReboot)
+		out.Status = contracts.ResultStatusPassedAndReboot
+		return out
 	}
 	log.Info("require reboot", requireReboot)
 
@@ -211,17 +235,19 @@ func runInstallCommands(log log.T, pluginInput ConfigureContainerPluginInput, or
 
 	//Register Service
 	if len(strings.TrimSpace(dockerServiceStatusOutput)) == 0 {
+		out.Stdout += "Registering dockerd.\n"
 		log.Info("dockerd installed directory:", DOCKER_INSTALLED_DIRECTORY)
 		command = "dockerd"
 		parameters = []string{"--register-service"}
 		dockerServiceStatusOutput, err = dep.UpdateUtilExeCommandOutput(120, log, command, parameters, DOCKER_INSTALLED_DIRECTORY, "", "", "", false)
 		if err != nil {
-			log.Error("Error starting docker service", err)
+			log.Error("Error registering docker service", err)
 			out.Errors = append(out.Errors, err.Error())
 			return
 		}
 		log.Info("dockerd output:", dockerServiceStatusOutput)
 		//set service to delayed start
+		out.Stdout += "set dockerd service configuration.\n"
 		command = "sc.exe"
 		parameters = []string{"config", "docker", "start=delayed-auto"}
 		dockerServiceStatusOutput, err = dep.UpdateUtilExeCommandOutput(10, log, command, parameters, "", "", "", "", false)

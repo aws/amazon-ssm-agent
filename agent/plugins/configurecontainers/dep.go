@@ -26,7 +26,7 @@ type dependencies interface {
 		stdOut string,
 		stdErr string,
 		usePlatformSpecificCommand bool) (output string, err error)
-	ArtifaceDownload(log log.T, input artifact.DownloadInput) (output artifact.DownloadOutput, err error)
+	ArtifactDownload(log log.T, input artifact.DownloadInput) (output artifact.DownloadOutput, err error)
 }
 
 type deps struct{}
@@ -63,6 +63,6 @@ func (deps) UpdateUtilExeCommandOutput(
 	return util.ExeCommandOutput(log, cmd, parameters, workingDir, outputRoot, stdOut, stdErr, usePlatformSpecificCommand)
 }
 
-func (deps) ArtifaceDownload(log log.T, input artifact.DownloadInput) (output artifact.DownloadOutput, err error) {
+func (deps) ArtifactDownload(log log.T, input artifact.DownloadInput) (output artifact.DownloadOutput, err error) {
 	return artifact.Download(log, input)
 }

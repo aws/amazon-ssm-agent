@@ -23,7 +23,7 @@ func (m *DepMock) MakeDirs(destinationDir string) (err error) {
 
 func (m *DepMock) TempDir(dir, prefix string) (name string, err error) {
 	args := m.Called(dir, prefix)
-	return args.String(0), args.Error(0)
+	return args.String(0), args.Error(1)
 }
 
 func (m *DepMock) RegistryOpenKey(k registry.Key, path string, access uint32) (registry.Key, error) {
@@ -38,7 +38,7 @@ func (m *DepMock) RegistryKeySetDWordValue(key registry.Key, name string, value 
 
 func (m *DepMock) RegistryKeyGetStringValue(key registry.Key, name string) (val string, valtype uint32, err error) {
 	args := m.Called(name)
-	return args.String(0), uint32(args.Int(0)), args.Error(0)
+	return args.String(0), uint32(args.Int(1)), args.Error(2)
 }
 
 func (m *DepMock) UpdateUtilExeCommandOutput(
@@ -52,10 +52,10 @@ func (m *DepMock) UpdateUtilExeCommandOutput(
 	stdErr string,
 	usePlatformSpecificCommand bool) (output string, err error) {
 	args := m.Called(log, cmd, parameters, workingDir, outputRoot, stdOut, stdErr, usePlatformSpecificCommand)
-	return args.String(0), args.Error(0)
+	return args.String(0), args.Error(1)
 }
 
-func (m *DepMock) ArtifaceDownload(log log.T, input artifact.DownloadInput) (output artifact.DownloadOutput, err error) {
+func (m *DepMock) ArtifactDownload(log log.T, input artifact.DownloadInput) (output artifact.DownloadOutput, err error) {
 	args := m.Called(log, input)
-	return artifact.DownloadOutput{}, args.Error(0)
+	return artifact.DownloadOutput{}, args.Error(1)
 }
