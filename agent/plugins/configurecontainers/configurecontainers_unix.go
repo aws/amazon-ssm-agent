@@ -15,9 +15,13 @@
 
 package configurecontainers
 
+import (
+	"github.com/aws/amazon-ssm-agent/agent/log"
+)
+
 func runInstallCommands(log log.T, pluginInput ConfigureContainerPluginInput, orchestrationDirectory string) (out ConfigureContainerPluginOutput) {
 	//TODO Unix install
 
-	out.Errors = append(out.Errors, err.Error("Configure Containers is not currently supported on unix"))
+	out.Errors = append(out.Errors, "Configure Containers is not currently supported on unix")
 	return out
 }

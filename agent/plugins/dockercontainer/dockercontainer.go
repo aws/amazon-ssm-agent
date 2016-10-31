@@ -203,7 +203,7 @@ func (p *Plugin) runCommands(log log.T, pluginInput DockerContainerPluginInput, 
 	switch pluginInput.Action {
 	case CREATE, RUN:
 		if len(pluginInput.Image) == 0 {
-			log.Errorf("Action %s requires paramter image", pluginInput.Action, err)
+			log.Errorf("Action %s requires paramter image ", pluginInput.Action)
 			out.Errors = append(out.Errors, err.Error())
 			return out
 		}
@@ -253,7 +253,7 @@ func (p *Plugin) runCommands(log log.T, pluginInput DockerContainerPluginInput, 
 	case START:
 		parameters = append(parameters, "start")
 		if len(pluginInput.Container) == 0 {
-			log.Error("Action Start requires paramter container", err)
+			log.Error("Action Start requires paramter container")
 			out.Errors = append(out.Errors, err.Error())
 			return out
 		}
@@ -262,7 +262,7 @@ func (p *Plugin) runCommands(log log.T, pluginInput DockerContainerPluginInput, 
 	case RM:
 		parameters = append(parameters, "rm")
 		if len(pluginInput.Container) == 0 {
-			log.Error("Action Rm requires paramter container", err)
+			log.Error("Action Rm requires paramter container")
 			out.Errors = append(out.Errors, err.Error())
 			return out
 		}
@@ -271,7 +271,7 @@ func (p *Plugin) runCommands(log log.T, pluginInput DockerContainerPluginInput, 
 	case STOP:
 		parameters = append(parameters, "stop")
 		if len(pluginInput.Container) == 0 {
-			log.Error("Action Stop requires paramter container", err)
+			log.Error("Action Stop requires paramter container")
 			out.Errors = append(out.Errors, err.Error())
 			return out
 		}
@@ -280,12 +280,12 @@ func (p *Plugin) runCommands(log log.T, pluginInput DockerContainerPluginInput, 
 	case EXEC:
 		parameters = append(parameters, "exec")
 		if len(pluginInput.Container) == 0 {
-			log.Error("Action Exec requires paramter container", err)
+			log.Error("Action Exec requires paramter container")
 			out.Errors = append(out.Errors, err.Error())
 			return out
 		}
 		if len(pluginInput.Cmd) == 0 {
-			log.Error("Action Exec requires paramter Cmd", err)
+			log.Error("Action Exec requires paramter Cmd")
 			out.Errors = append(out.Errors, err.Error())
 			return out
 		}
@@ -298,7 +298,7 @@ func (p *Plugin) runCommands(log log.T, pluginInput DockerContainerPluginInput, 
 	case INSPECT:
 		parameters = append(parameters, "inspect")
 		if len(pluginInput.Container) == 0 || len(pluginInput.Image) == 0 {
-			log.Error("Action Inspect requires paramter container or image", err)
+			log.Error("Action Inspect requires paramter container or image")
 			out.Errors = append(out.Errors, err.Error())
 			return out
 		}
@@ -313,7 +313,7 @@ func (p *Plugin) runCommands(log log.T, pluginInput DockerContainerPluginInput, 
 	case LOGS:
 		parameters = append(parameters, "logs")
 		if len(pluginInput.Container) == 0 {
-			log.Error("Action Rm requires paramter container", err)
+			log.Error("Action Rm requires paramter container")
 			out.Errors = append(out.Errors, err.Error())
 			return out
 		}
@@ -321,7 +321,7 @@ func (p *Plugin) runCommands(log log.T, pluginInput DockerContainerPluginInput, 
 	case PULL:
 		parameters = append(parameters, "pull")
 		if len(pluginInput.Image) == 0 {
-			log.Error("Action Pull requires paramter image", err)
+			log.Error("Action Pull requires paramter image")
 			out.Errors = append(out.Errors, err.Error())
 			return out
 		}
@@ -331,7 +331,7 @@ func (p *Plugin) runCommands(log log.T, pluginInput DockerContainerPluginInput, 
 	case RMI:
 		parameters = append(parameters, "rmi")
 		if len(pluginInput.Image) == 0 {
-			log.Error("Action Rmi requires paramter image", err)
+			log.Error("Action Rmi requires paramter image")
 			out.Errors = append(out.Errors, err.Error())
 			return out
 		}

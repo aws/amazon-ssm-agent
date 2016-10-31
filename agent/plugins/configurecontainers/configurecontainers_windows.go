@@ -46,8 +46,6 @@ func runInstallCommands(log log.T, pluginInput ConfigureContainerPluginInput, or
 	var isNanoServer bool
 	var output string
 
-
-
 	isNanoServer, err = platform.IsPlatformNanoServer(log)
 	if err != nil {
 		log.Error("Error detecting if Nano Server", err)
