@@ -21,6 +21,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	messageContracts "github.com/aws/amazon-ssm-agent/agent/message/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/parameters"
+	"github.com/aws/amazon-ssm-agent/agent/parameterstore"
 )
 
 // ParseMessageWithParams parses an MDS message and replaces the parameters where needed.
@@ -41,7 +42,10 @@ func ParseMessageWithParams(log log.T, payload string) (parsedMessage messageCon
 		}
 	}
 
-	ReplacePluginParameters(&parsedMessage, parameters, log)
+	err = ReplacePluginParameters(&parsedMessage, parameters, log)
+	if err != nil {
+		return
+	}
 	return
 }
 
@@ -62,7 +66,8 @@ func PrepareReplyPayloadToUpdateDocumentStatus(agentInfo contracts.AgentInfo, do
 func ReplacePluginParameters(
 	payload *messageContracts.SendCommandPayload,
 	params map[string]interface{},
-	logger log.T) {
+	logger log.T) error {
+	var err error
 
 	runtimeConfig := payload.DocumentContent.RuntimeConfig
 	// we assume that one of the runtimeConfig and mainSteps should be nil
@@ -73,9 +78,15 @@ func ReplacePluginParameters(
 				Settings:   parameters.ReplaceParameters(pluginConfig.Settings, params, logger),
 				Properties: parameters.ReplaceParameters(pluginConfig.Properties, params, logger),
 			}
+			if updatedRuntimeConfig[pluginName].Settings, err = parameterstore.Resolve(logger, updatedRuntimeConfig[pluginName].Settings, false); err != nil {
+				return err
+			}
+			if updatedRuntimeConfig[pluginName].Properties, err = parameterstore.Resolve(logger, updatedRuntimeConfig[pluginName].Properties, false); err != nil {
+				return err
+			}
 		}
 		payload.DocumentContent.RuntimeConfig = updatedRuntimeConfig
-		return
+		return nil
 	}
 
 	mainSteps := payload.DocumentContent.MainSteps
@@ -91,9 +102,12 @@ func ReplacePluginParameters(
 				Settings:    instancePluginConfig.Settings,
 				Inputs:      parameters.ReplaceParameters(instancePluginConfig.Inputs, params, logger),
 			}
+			if updatedMainSteps[index].Inputs, err = parameterstore.Resolve(logger, updatedMainSteps[index].Inputs, false); err != nil {
+				return err
+			}
 		}
 		payload.DocumentContent.MainSteps = updatedMainSteps
-		return
+		return nil
 	}
-	return
+	return nil
 }

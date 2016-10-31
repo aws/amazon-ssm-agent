@@ -153,7 +153,7 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 
 	// Resolve ssm parameters
 	// This may contain sensitive information, do not log this data after resolving.
-	if setting.StartType, err = parameterstore.ResolveString(log, setting.StartType); err != nil {
+	if setting.StartType, err = parameterstore.ResolveSecureString(log, setting.StartType); err != nil {
 		log.Errorf("Failed to resolve ssm parameters. Error: - %v", err)
 		return
 	}
@@ -310,7 +310,7 @@ func (p *Plugin) prepareForStart(log log.T, config contracts.Configuration, plug
 
 	// Resolve ssm parameters
 	// This may contain sensitive information, do not log this data after resolving.
-	if property, err = parameterstore.ResolveString(log, property); err != nil {
+	if property, err = parameterstore.ResolveSecureString(log, property); err != nil {
 		failed = true
 		log.Errorf("Failed to resolve ssm parameters. Error: - %v", err)
 		res = p.CreateResult(fmt.Sprintf("Failed to resolve ssm parameters. Error: - %v", err),

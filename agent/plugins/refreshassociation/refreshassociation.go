@@ -206,7 +206,7 @@ func (p *Plugin) runCommands(log log.T, pluginInput RefreshAssociationPluginInpu
 
 	// Resolve ssm parameters
 	// This may contain sensitive information, do not log this data after resolving.
-	if pluginInput.AssociationIds, err = parameterstore.ResolveStringList(log, pluginInput.AssociationIds); err != nil {
+	if pluginInput.AssociationIds, err = parameterstore.ResolveSecureStringForStringList(log, pluginInput.AssociationIds); err != nil {
 		out.Errors = append(out.Errors, err.Error())
 		log.Errorf("Failed to resolve ssm parameters. Error: - %v", err)
 		return

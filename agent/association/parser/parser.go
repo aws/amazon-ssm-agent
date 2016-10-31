@@ -79,7 +79,10 @@ func ParseDocumentWithParams(log log.T,
 		}
 	}
 
-	messageParser.ReplacePluginParameters(payload, validParams, log)
+	err = messageParser.ReplacePluginParameters(payload, validParams, log)
+	if err != nil {
+		return nil, err
+	}
 	return payload, nil
 }
 

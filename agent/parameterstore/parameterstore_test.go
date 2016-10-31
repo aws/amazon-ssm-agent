@@ -84,12 +84,12 @@ var StringListTestCases = []StringListTestCase{
 
 var logger = log.NewMockLog()
 
-func TestResolveString(t *testing.T) {
-	testString(t, StringTestCases[0])
-	testString(t, StringTestCases[1])
+func TestResolve(t *testing.T) {
+	testResolveMethod(t, StringTestCases[0])
+	testResolveMethod(t, StringTestCases[1])
 }
 
-func testString(t *testing.T, testCase StringTestCase) {
+func testResolveMethod(t *testing.T, testCase StringTestCase) {
 	callParameterService = func(
 		log log.T,
 		paramNames []string) (*GetParametersResponse, error) {
@@ -99,18 +99,18 @@ func testString(t *testing.T, testCase StringTestCase) {
 		return &result, nil
 	}
 
-	result, err := ResolveString(logger, testCase.Input)
+	result, err := Resolve(logger, testCase.Input, false)
 
 	assert.Equal(t, testCase.Output, result)
 	assert.Nil(t, err)
 }
 
-func TestResolveStringList(t *testing.T) {
-	testStringList(t, StringListTestCases[0])
-	testStringList(t, StringListTestCases[1])
+func TestResolveSecureString(t *testing.T) {
+	testResolveSecureStringMethod(t, StringTestCases[0])
+	testResolveSecureStringMethod(t, StringTestCases[1])
 }
 
-func testStringList(t *testing.T, testCase StringListTestCase) {
+func testResolveSecureStringMethod(t *testing.T, testCase StringTestCase) {
 	callParameterService = func(
 		log log.T,
 		paramNames []string) (*GetParametersResponse, error) {
@@ -120,7 +120,28 @@ func testStringList(t *testing.T, testCase StringListTestCase) {
 		return &result, nil
 	}
 
-	result, err := ResolveStringList(logger, testCase.Input)
+	result, err := ResolveSecureString(logger, testCase.Input)
+
+	assert.Equal(t, testCase.Output, result)
+	assert.Nil(t, err)
+}
+
+func TestResolveSecureStringForStringList(t *testing.T) {
+	testResolveSecureStringForStringListMethod(t, StringListTestCases[0])
+	testResolveSecureStringForStringListMethod(t, StringListTestCases[1])
+}
+
+func testResolveSecureStringForStringListMethod(t *testing.T, testCase StringListTestCase) {
+	callParameterService = func(
+		log log.T,
+		paramNames []string) (*GetParametersResponse, error) {
+		result := GetParametersResponse{}
+		result.Parameters = testCase.Parameters
+		result.InvalidParameters = testCase.InvalidParameters
+		return &result, nil
+	}
+
+	result, err := ResolveSecureStringForStringList(logger, testCase.Input)
 
 	assert.Equal(t, testCase.Output, result)
 	assert.Nil(t, err)

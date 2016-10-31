@@ -28,100 +28,80 @@ import (
 	"github.com/aws/aws-sdk-go/service/ssm"
 )
 
-// GetParametersResponse represents GetParameters API response
-type GetParametersResponse struct {
-	Parameters        []Parameter
-	InvalidParameters []string
-}
+const (
+	// defaultParamName is used for creating default regex for parameter name
+	defaultParamName = ""
 
-// Parameter contains info about the parameter
-type Parameter struct {
-	Name  string
-	Type  string
-	Value string
-}
+	// ParamTypeString represents the Param Type is SecureString
+	ParamTypeSecureString = "SecureString"
 
-// defaultParamName is used for creating default regex for parameter name
-const defaultParamName = ""
-const ParamTypeStringList = "StringList"
+	// ParamTypeStringList represents the Param Type is StringList
+	ParamTypeStringList = "StringList"
+)
 
 var callParameterService = callGetParameters
 
-// ResolveString resolves the ssm parameters if present in input string
-func ResolveString(log log.T, input string) (string, error) {
-	// get regex compiler
+// Resolve resolves ssm parameters of the format {{ssm:*}}
+func Resolve(log log.T, input interface{}, resolveSecureString bool) (interface{}, error) {
 	validSSMParam, err := getValidSSMParamRegexCompiler(log, defaultParamName)
 	if err != nil {
 		return input, err
 	}
 
-	// find all matching strings
-	ssmParams := validSSMParam.FindAllString(input, -1)
+	// Extract all SSM parameters from input
+	ssmParams := extractSSMParameters(log, input, validSSMParam)
 
-	// return original string if no ssm params found
+	// Return original string if no ssm params found
 	if len(ssmParams) == 0 {
 		return input, nil
 	}
 
-	resolvedParamMap, err := resolveSSMParameters(log, ssmParams)
+	// Get ssm parameter values
+	resolvedParamMap, err := getSSMParameterValues(log, ssmParams, resolveSecureString)
 	if err != nil {
 		return input, err
 	}
 
-	// replace param names with actual values
-	for paramName, paramObj := range resolvedParamMap {
-		input = strings.Replace(input, paramName, paramObj.Value, -1)
-	}
+	// Replace ssm parameter names with their values
+	input = replaceSSMParameters(log, input, resolvedParamMap)
 
+	// Return resolved input
 	return input, nil
 }
 
-// ResolveStringList resolves the ssm parameters if present in input stringList
-func ResolveStringList(log log.T, input []string) ([]string, error) {
-	// get regex compiler
-	validSSMParam, err := getValidSSMParamRegexCompiler(log, defaultParamName)
+// ResolveSecureString resolves the ssm parameters if present in input string
+func ResolveSecureString(log log.T, input string) (string, error) {
+	output, err := Resolve(log, input, true)
 	if err != nil {
 		return input, err
 	}
 
-	// find all matching strings
-	ssmParams := []string{}
-	for _, value := range input {
-		temp := validSSMParam.FindAllString(value, -1)
-		ssmParams = append(ssmParams, temp...)
-	}
-
-	// return original string if no ssm params found
-	if len(ssmParams) == 0 {
-		return input, nil
-	}
-
-	resolvedParamMap, err := resolveSSMParameters(log, ssmParams)
+	var reformatOutput string
+	err = jsonutil.Remarshal(output, &reformatOutput)
 	if err != nil {
 		return input, err
 	}
 
-	output := []string{}
-	for _, value := range input {
-		temp := value
-		for paramName, paramObj := range resolvedParamMap {
-			if strings.Compare(paramObj.Type, ParamTypeStringList) == 0 &&
-				strings.Compare(paramName, strings.TrimSpace(temp)) == 0 {
-				output = append(output, strings.Split(paramObj.Value, ",")...)
-				break
-			}
-			temp = strings.Replace(temp, paramName, paramObj.Value, -1)
-		}
-
-		// If original value changed then add it to output
-		if strings.Compare(temp, value) != 0 {
-			output = append(output, temp)
-		}
-	}
-
-	return output, nil
+	return reformatOutput, nil
 }
 
+// ResolveSecureStringForStringList resolves the ssm parameters if present in input stringList
+func ResolveSecureStringForStringList(log log.T, input []string) ([]string, error) {
+	output, err := Resolve(log, input, true)
+	if err != nil {
+		return input, err
+	}
+
+	var reformatOutput []string
+	err = jsonutil.Remarshal(output, &reformatOutput)
+	if err != nil {
+		return input, err
+	}
+
+	return reformatOutput, nil
+}
+
+// getValidSSMParamRegexCompiler returns a regex compiler
 func getValidSSMParamRegexCompiler(log log.T, paramName string) (*regexp.Regexp, error) {
 	var validSSMParamRegex string
 
@@ -140,8 +120,8 @@ func getValidSSMParamRegexCompiler(log log.T, paramName string) (*regexp.Regexp,
 	return validSSMParam, nil
 }
 
-// resolveSSMParameters takes a list of strings and resolves them by calling the GetParameters API
-func resolveSSMParameters(log log.T, ssmParams []string) (map[string]Parameter, error) {
+// getSSMParameterValues takes a list of strings and resolves them by calling the GetParameters API
+func getSSMParameterValues(log log.T, ssmParams []string, resolveSecureString bool) (map[string]Parameter, error) {
 	var result *GetParametersResponse
 	var err error
 
@@ -155,6 +135,7 @@ func resolveSSMParameters(log log.T, ssmParams []string) (map[string]Parameter, 
 		return nil, errorString
 	}
 
+	// Remove duplicates
 	paramNames := []string{}
 	seen := map[string]bool{}
 	for _, value := range ssmParams {
@@ -177,13 +158,18 @@ func resolveSSMParameters(log log.T, ssmParams []string) (map[string]Parameter, 
 	}
 
 	resolvedParamMap := map[string]Parameter{}
-
 	for _, paramObj := range result.Parameters {
+		// Skip secure parameters
+		if !resolveSecureString && strings.Compare(paramObj.Type, ParamTypeSecureString) == 0 {
+			continue
+		}
+
 		// get regex compiler
 		validSSMParam, err := getValidSSMParamRegexCompiler(log, paramObj.Name)
 		if err != nil {
 			return nil, err
 		}
+
 		for _, value := range ssmParams {
 			if validSSMParam.MatchString(value) {
 				resolvedParamMap[value] = paramObj

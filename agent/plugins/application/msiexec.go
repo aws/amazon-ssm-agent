@@ -42,7 +42,7 @@ func getMsiApplicationMode(log log.T, pluginInput ApplicationPluginInput) (strin
 	// Resolve ssm parameters
 	// This may contain sensitive information, do not log this data after resolving.
 	var err error
-	if pluginInput.Action, err = parameterstore.ResolveString(log, pluginInput.Action); err != nil {
+	if pluginInput.Action, err = parameterstore.ResolveSecureString(log, pluginInput.Action); err != nil {
 		log.Errorf("Failed to resolve ssm parameters. Error: - %v", err)
 		return "", err
 	}

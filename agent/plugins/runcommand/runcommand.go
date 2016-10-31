@@ -177,7 +177,7 @@ func (p *Plugin) runCommands(log log.T, pluginInput RunCommandPluginInput, orche
 	// Create script file
 	// Resolve ssm parameters
 	// This may contain sensitive information, do not log this data after resolving.
-	if pluginInput.RunCommand, err = parameterstore.ResolveStringList(log, pluginInput.RunCommand); err != nil {
+	if pluginInput.RunCommand, err = parameterstore.ResolveSecureStringForStringList(log, pluginInput.RunCommand); err != nil {
 		out.Errors = append(out.Errors, err.Error())
 		log.Errorf("Failed to resolve ssm parameters. Error: - %v", err)
 		return
@@ -190,6 +190,13 @@ func (p *Plugin) runCommands(log log.T, pluginInput RunCommandPluginInput, orche
 	}
 
 	// Set execution time
+	// Resolve ssm parameters
+	// This may contain sensitive information, do not log this data after resolving.
+	if pluginInput.TimeoutSeconds, err = parameterstore.Resolve(log, pluginInput.TimeoutSeconds, true); err != nil {
+		out.Errors = append(out.Errors, err.Error())
+		log.Errorf("Failed to resolve ssm parameters. Error: - %v", err)
+		return
+	}
 	executionTimeout := pluginutil.ValidateExecutionTimeout(log, pluginInput.TimeoutSeconds)
 
 	// Create output file paths
@@ -203,7 +210,7 @@ func (p *Plugin) runCommands(log log.T, pluginInput RunCommandPluginInput, orche
 
 	// Resolve ssm parameters
 	// This may contain sensitive information, do not log this data after resolving.
-	if pluginInput.WorkingDirectory, err = parameterstore.ResolveString(log, pluginInput.WorkingDirectory); err != nil {
+	if pluginInput.WorkingDirectory, err = parameterstore.ResolveSecureString(log, pluginInput.WorkingDirectory); err != nil {
 		out.Errors = append(out.Errors, err.Error())
 		log.Errorf("Failed to resolve ssm parameters. Error: - %v", err)
 		return

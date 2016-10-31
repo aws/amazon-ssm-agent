@@ -311,7 +311,7 @@ func makeArguments(log log.T, pluginInput DomainJoinPluginInput) (commandArgumen
 
 	// Resolve ssm parameters
 	// This may contain sensitive information, do not log this data after resolving.
-	if pluginInput.DirectoryId, err = parameterstore.ResolveString(log, pluginInput.DirectoryId); err != nil {
+	if pluginInput.DirectoryId, err = parameterstore.ResolveSecureString(log, pluginInput.DirectoryId); err != nil {
 		log.Errorf("Failed to resolve ssm parameters. Error: - %v", err)
 		return
 	}
@@ -325,7 +325,7 @@ func makeArguments(log log.T, pluginInput DomainJoinPluginInput) (commandArgumen
 
 	// Resolve ssm parameters
 	// This may contain sensitive information, do not log this data after resolving.
-	if pluginInput.DirectoryName, err = parameterstore.ResolveString(log, pluginInput.DirectoryName); err != nil {
+	if pluginInput.DirectoryName, err = parameterstore.ResolveSecureString(log, pluginInput.DirectoryName); err != nil {
 		log.Errorf("Failed to resolve ssm parameters. Error: - %v", err)
 		return
 	}
@@ -345,7 +345,7 @@ func makeArguments(log log.T, pluginInput DomainJoinPluginInput) (commandArgumen
 
 	// Resolve ssm parameters
 	// This may contain sensitive information, do not log this data after resolving.
-	if pluginInput.DnsIpAddresses, err = parameterstore.ResolveStringList(log, pluginInput.DnsIpAddresses); err != nil {
+	if pluginInput.DnsIpAddresses, err = parameterstore.ResolveSecureStringForStringList(log, pluginInput.DnsIpAddresses); err != nil {
 		log.Errorf("Failed to resolve ssm parameters. Error: - %v", err)
 		return
 	}
