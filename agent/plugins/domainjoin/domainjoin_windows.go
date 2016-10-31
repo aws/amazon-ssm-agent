@@ -116,7 +116,7 @@ func Name() string {
 	return appconfig.PluginNameDomainJoin
 }
 
-type convert func(log.T, string, string, string, string, string) (string, error)
+type convert func(log.T, string, []string, string, string, string, string, bool) (string, error)
 
 // Execute runs multiple sets of commands and returns their outputs.
 // res.Output will contain a slice of RunCommandPluginOutput.
@@ -260,15 +260,17 @@ func (p *Plugin) runCommands(log log.T, pluginInput DomainJoinPluginInput, orche
 
 	log.Debugf("command line is : %v", command)
 	workingDir := fileutil.BuildPath(appconfig.DefaultPluginPath, DomainJoinFolderName)
-
+	commandParts := strings.Fields(command)
 	out.Status = contracts.ResultStatusInProgress
 	var output string
 	output, err = utilExe(log,
-		command,
+		commandParts[0],
+		commandParts[1:],
 		workingDir,
 		orchestrationDirectory,
 		out.Stdout,
-		out.Stderr)
+		out.Stderr,
+		true)
 
 	log.Debugf("stdout is: %v", out.Stdout)
 	log.Debugf("stderr is: %v", out.Stderr)

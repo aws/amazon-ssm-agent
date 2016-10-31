@@ -12,6 +12,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/executers"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
+	"github.com/aws/amazon-ssm-agent/agent/framework/runpluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/pluginutil"
@@ -26,22 +27,21 @@ import (
 
 const (
 	//Action values
-	CREATE = "Create"
-	START = "Start"
-	RUN = "Run"
-	STOP = "Stop"
-	EXEC = "Exec"
+	CREATE  = "Create"
+	START   = "Start"
+	RUN     = "Run"
+	STOP    = "Stop"
+	EXEC    = "Exec"
 	INSPECT = "Inspect"
-	LOGS = "Logs"
-	PS = "Ps"
-	STATS = "Stats"
-	PULL = "Pull"
-	LIST = "List"
-	RMI = "Rmi"
+	LOGS    = "Logs"
+	PS      = "Ps"
+	STATS   = "Stats"
+	PULL    = "Pull"
+	LIST    = "List"
+	RMI     = "Rmi"
 
 	// defaultExecutionTimeoutInSeconds represents default timeout time for execution of command in seconds
 	defaultExecutionTimeoutInSeconds = 3600
-
 )
 
 var dockerExecCommand = "docker.exe"
@@ -104,8 +104,7 @@ func NewPlugin(pluginConfig pluginutil.PluginConfig) (*Plugin, error) {
 	exec := executers.ShellCommandExecuter{}
 	plugin.ExecuteCommand = pluginutil.CommandExecuter(exec.Execute)
 
-	plugin.dockerClient, err = client.NewClient("npipe:////./pipe/docker_engine", client.DefaultVersion, nil, nil)
-
+	plugin.dockerClient, err = client.NewClient(client.DefaultDockerHost, client.DefaultVersion, nil, nil)
 	return &plugin, err
 }
 
@@ -116,7 +115,7 @@ func Name() string {
 
 // Execute runs multiple sets of commands and returns their outputs.
 // res.Output will contain a slice of DockerContainerPluginOutput.
-func (p *Plugin) Execute(context context.T, config contracts.Configuration, cancelFlag task.CancelFlag) (res contracts.PluginResult) {
+func (p *Plugin) Execute(context context.T, config contracts.Configuration, cancelFlag task.CancelFlag, pluginRunner runpluginutil.PluginRunner) (res contracts.PluginResult) {
 	log := context.Log()
 	log.Infof("%v started with configuration %v", Name(), config)
 	res.StartDateTime = time.Now()

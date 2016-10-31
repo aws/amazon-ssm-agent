@@ -333,13 +333,21 @@ func (util *Utility) ExeCommand(
 func (util *Utility) ExeCommandOutput(
 	log log.T,
 	cmd string,
+	parameters []string,
 	workingDir string,
 	outputRoot string,
 	stdOut string,
-	stdErr string) (output string, err error) {
+	stdErr string,
+	usePlatformSpecificCommand bool) (output string, err error) {
 
-	parts := strings.Fields(cmd)
-	tempCmd := setPlatformSpecificCommand(parts)
+	parts := append([]string{cmd}, parameters...) //strings.Fields(cmd)
+	var tempCmd []string
+	if usePlatformSpecificCommand {
+		tempCmd = setPlatformSpecificCommand(parts)
+	} else {
+		tempCmd = parts
+	}
+
 	command := execCommand(tempCmd[0], tempCmd[1:]...)
 	command.Dir = workingDir
 	stdoutWriter, stderrWriter, exeErr := setExeOutErr(outputRoot, stdOut, stdErr)
