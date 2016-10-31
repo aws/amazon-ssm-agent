@@ -38,7 +38,7 @@ if(-not (Test-Path $SourcePath)) {
 }
 
 # Execute UnInstaller
-Invoke-Expression `"$UnInstaller`"
+Invoke-Expression "& '$UnInstaller'"
 if($LASTEXITCODE -gt 0) {
     Log-Warning("Uninstalling Amazon SSM Agent failed.. exit!")
     Exit 1
