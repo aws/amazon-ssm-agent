@@ -35,6 +35,10 @@ const (
 	DefaultSsmHealthFrequencyMinutesMin = 5
 	DefaultSsmHealthFrequencyMinutesMax = 60
 
+	DefaultSsmAssociationFrequencyMinutes    = 30
+	DefaultSsmAssociationFrequencyMinutesMin = 5
+	DefaultSsmAssociationFrequencyMinutesMax = 120
+
 	//aws-ssm-agent bookkeeping constants
 	DefaultLocationOfPending     = "pending"
 	DefaultLocationOfCurrent     = "current"
@@ -49,6 +53,11 @@ const (
 	LongRunningPluginDataStoreLocation = "datastore"
 	LongRunningPluginDataStoreFileName = "store"
 	PluginNameLongRunningPluginInvoker = "lrpminvoker"
+
+	//aws-ssm-agent bookkeeping constants for inventory plugin
+	InventoryRootDirName         = "inventory"
+	CustomInventoryRootDirName   = "custom"
+	InventoryContentHashFileName = "contentHash"
 
 	// DefaultDocumentRootDirName is the root directory for storing command states
 	DefaultDocumentRootDirName = "document"
@@ -68,11 +77,22 @@ const (
 	// DefaultPluginConfig is a default config with which the plugins are initialized
 	DefaultPluginConfig = "aws:defaultPluginConfig"
 
+	// List all plugin names, unfortunately golang doesn't support const arrays of strings
+
+	// PluginNameAwsConfigureDaemon is the name for configure daemon plugin
+	PluginNameAwsConfigureDaemon = "aws:configureDaemon"
+
+	// PluginNameAwsConfigurePackage is the name for configure package plugin
+	PluginNameAwsConfigurePackage = "aws:configurePackage"
+
 	// PluginNameAwsAgentUpdate is the name for agent update plugin
 	PluginNameAwsAgentUpdate = "aws:updateSsmAgent"
 
 	// PluginEC2ConfigUpdate is the name for ec2 config update plugin
 	PluginEC2ConfigUpdate = "aws:updateAgent"
+
+	// PluginNameAwsSoftwareInventory is the name for inventory plugin
+	PluginNameAwsSoftwareInventory = "aws:softwareInventory"
 
 	AppConfigFileName    = "amazon-ssm-agent.json"
 	SeelogConfigFileName = "seelog.xml"

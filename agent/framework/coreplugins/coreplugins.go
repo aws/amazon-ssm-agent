@@ -18,7 +18,6 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/health"
-	"github.com/aws/amazon-ssm-agent/agent/inventory"
 	"github.com/aws/amazon-ssm-agent/agent/longrunning/manager"
 	message "github.com/aws/amazon-ssm-agent/agent/message/processor"
 )
@@ -41,18 +40,6 @@ func RegisteredCorePlugins(context context.T) *PluginRegistry {
 func loadCorePlugins(context context.T) {
 	registeredCorePlugins = append(registeredCorePlugins, health.NewHealthCheck(context))
 	registeredCorePlugins = append(registeredCorePlugins, message.NewProcessor(context))
-
-	if basicInventoryPlugin, err := inventory.NewBasicInventoryProvider(context); err != nil {
-		context.Log().Errorf("Basic inventory plugin isn't configured - %v", err.Error())
-	} else {
-		registeredCorePlugins = append(registeredCorePlugins, basicInventoryPlugin)
-	}
-
-	if inventoryPlugin, err := inventory.NewPlugin(context); err != nil {
-		context.Log().Errorf("Inventory plugin isn't configured - %v", err.Error())
-	} else {
-		registeredCorePlugins = append(registeredCorePlugins, inventoryPlugin)
-	}
 
 	// registering the long running plugin manager as a core plugin
 	manager.EnsureInitialization(context)

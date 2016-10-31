@@ -51,8 +51,6 @@ func FakeStructForTesting() StructForTesting {
 	}
 }
 
-//TODO: add unit tests for ShouldUpdate after content hash is implemented
-
 func TestConvertToMap(t *testing.T) {
 
 	//setup

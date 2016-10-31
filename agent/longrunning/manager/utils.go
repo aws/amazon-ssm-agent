@@ -17,6 +17,7 @@ package manager
 import (
 	"sync"
 
+	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/longrunning/plugin"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 )
@@ -58,6 +59,6 @@ func (m *Manager) stopLifeCycleManagementJob() {
 }
 
 // RegisteredPlugins loads all registered long running plugins in memory
-func RegisteredPlugins() map[string]plugin.Plugin {
-	return plugin.RegisteredPlugins()
+func RegisteredPlugins(context context.T) map[string]plugin.Plugin {
+	return plugin.RegisteredPlugins(context)
 }

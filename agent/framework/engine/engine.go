@@ -22,6 +22,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/framework/plugin"
 	"github.com/aws/amazon-ssm-agent/agent/framework/runpluginutil"
+	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/rebooter"
 	stateModel "github.com/aws/amazon-ssm-agent/agent/statemanager/model"
 	"github.com/aws/amazon-ssm-agent/agent/task"
@@ -30,11 +31,14 @@ import (
 // SendDocumentLevelResponse is used to send status response before plugin begins
 type SendDocumentLevelResponse func(messageID string, resultStatus contracts.ResultStatus, documentTraceOutput string)
 
+// UpdateAssociation updates association status
+type UpdateAssociation func(log log.T, executionID string, documentCreatedDate string, pluginOutputs map[string]*contracts.PluginResult, totalNumberOfPlugins int)
+
 // RunPlugins executes a set of plugins. The plugin configurations are given in a map with pluginId as key.
 // Outputs the results of running the plugins, indexed by pluginId.
 func RunPlugins(
 	context context.T,
-	documentID string,
+	executionID string,
 	documentCreatedDate string,
 	plugins []stateModel.PluginState,
 	pluginRegistry runpluginutil.PluginRegistry,
@@ -53,13 +57,13 @@ func RunPlugins(
 			context.Log().Debugf(
 				"Skipping execution of Plugin - %v of document - %v since it has already executed.",
 				pluginName,
-				documentID)
+				executionID)
 			pluginOutput := pluginState.Result
 			pluginOutput.PluginName = pluginName //TODO change this into plugin result
 			pluginOutputs[pluginID] = &pluginOutput
 			continue
 		}
-		context.Log().Debugf("Executing plugin - %v of document - %v", pluginName, documentID)
+		context.Log().Debugf("Executing plugin - %v of document - %v", pluginName, executionID)
 
 		// populate plugin start time and status
 		configuration := pluginState.Configuration
@@ -133,11 +137,11 @@ func RunPlugins(
 		log := context.Log()
 		if sendReply != nil {
 			log.Infof("Sending response on plugin completion: %v", pluginName)
-			sendReply(documentID, pluginName, pluginOutputs)
+			sendReply(executionID, pluginName, pluginOutputs)
 		}
 		if updateAssoc != nil {
 			log.Infof("Update association on plugin completion: %v", pluginName)
-			updateAssoc(log, documentID, documentCreatedDate, pluginOutputs, totalNumberOfActions)
+			updateAssoc(log, executionID, documentCreatedDate, pluginOutputs, totalNumberOfActions)
 		}
 
 	}

@@ -229,7 +229,7 @@ func (p *Plugin) runCommands(log log.T, pluginInput ApplicationPluginInput, orch
 	}
 
 	// Get application mode
-	mode, err := getMsiApplicationMode(pluginInput)
+	mode, err := getMsiApplicationMode(log, pluginInput)
 	if err != nil {
 		out.MarkAsFailed(log, err)
 		return

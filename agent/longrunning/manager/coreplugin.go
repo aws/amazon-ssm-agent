@@ -62,6 +62,7 @@ type T interface {
 	RequestStop(stopType contracts.StopType) (err error)
 	StopPlugin(name string, cancelFlag task.CancelFlag) (err error)
 	StartPlugin(name, configuration string, orchestrationDir string, cancelFlag task.CancelFlag) (err error)
+	EnsurePluginRegistered(name string, plugin managerContracts.Plugin) (err error)
 }
 
 // Manager is the core plugin - that manages long running plugins
@@ -100,7 +101,7 @@ func EnsureInitialization(context context.T) {
 		//initialize pluginsInfo (which will store all information about long running plugins)
 		plugins := map[string]managerContracts.PluginInfo{}
 		//load all registered plugins
-		regPlugins := RegisteredPlugins()
+		regPlugins := RegisteredPlugins(context)
 		jsonB, _ := json.Marshal(&regPlugins)
 		log.Infof("registered plugins: %s", string(jsonB))
 
@@ -163,10 +164,14 @@ func (m *Manager) Execute(context context.T) (err error) {
 
 	//revive older long running plugins if they were running before
 	if len(m.runningPlugins) > 0 {
-		var p managerContracts.Plugin
 		for pluginName, pluginInfo := range m.runningPlugins {
 			//get the corresponding registered plugin
-			p = m.registeredPlugins[pluginName]
+			p, exists := m.registeredPlugins[pluginName]
+			if !exists {
+				//remove previously running plugins with no registered handlers
+				delete(m.runningPlugins, pluginName)
+				continue
+			}
 			p.Info = pluginInfo
 			log.Infof("Detected %s as a previously executing long running plugin. Starting that plugin again", p.Info.Name)
 			//submit the work of long running plugin to the task pool
@@ -183,7 +188,9 @@ func (m *Manager) Execute(context context.T) (err error) {
 		log.Infof("there aren't any long running plugin to execute")
 	}
 
-	m.configCloudWatch(log)
+	if isPlatformSupported(context.Log(), appconfig.PluginNameCloudWatch) {
+		m.configCloudWatch(log)
+	}
 
 	//schedule periodic health check of all long running plugins
 	if m.managingLifeCycleJob, err = scheduler.Every(PollFrequencyMinutes).Minutes().Run(m.ensurePluginsAreRunning); err != nil {
@@ -258,7 +265,14 @@ func (m *Manager) stopLongRunningPlugins(stopType contracts.StopType) {
 		}(&wg, i)
 		i++
 	}
+}
 
+// EnsurePluginRegistered adds a long-running plugin if it is not already in the registry
+func (m *Manager) EnsurePluginRegistered(name string, plugin managerContracts.Plugin) (err error) {
+	if _, exists := m.registeredPlugins[name]; !exists {
+		m.registeredPlugins[name] = plugin
+	}
+	return nil
 }
 
 // configCloudWatch checks the local configuration file for cloud watch plugin to see if any updates to config

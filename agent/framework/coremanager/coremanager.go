@@ -153,6 +153,28 @@ func initializeBookkeepingLocations(log logger.T, instanceID string) bool {
 		initStatus = false
 	}
 
+	//Create folders for inventory plugin
+	log.Infof("Initializing locations for inventory plugin")
+	inventoryLocation := filepath.Join(appconfig.DefaultDataStorePath,
+		instanceID,
+		appconfig.InventoryRootDirName)
+
+	if err := fileutil.MakeDirs(inventoryLocation); err != nil {
+		log.Error("encountered error while creating folders for inventory plugin", err)
+		initStatus = false
+	}
+
+	log.Infof("Initializing default location for custom inventory")
+	customInventoryLocation := filepath.Join(appconfig.DefaultDataStorePath,
+		instanceID,
+		appconfig.InventoryRootDirName,
+		appconfig.CustomInventoryRootDirName)
+
+	if err := fileutil.MakeDirs(customInventoryLocation); err != nil {
+		log.Error("encountered error while creating folders for custom inventory", err)
+		initStatus = false
+	}
+
 	return initStatus
 }
 

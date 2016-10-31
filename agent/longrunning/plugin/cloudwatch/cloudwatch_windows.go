@@ -217,7 +217,7 @@ func (p *Plugin) Start(context context.T, configuration string, orchestrationDir
 		log.Error(err)
 	}
 
-	log.Debugf("stdout - %s", sout)
+	log.Debugf("stdout - %v", len(sout))
 	log.Debugf("stderr - %s", serr)
 	log.Debugf("exitCode - %v", exitCode)
 	log.Debugf("errs - %v", errs)
@@ -332,7 +332,7 @@ func (p *Plugin) IsCloudWatchExeRunning(log log.T, workingDirectory, orchestrati
 		log.Error(err)
 	}
 
-	log.Debugf("stdout - %s", sout)
+	log.Debugf("stdout - %s", len(sout))
 	log.Debugf("stderr - %s", serr)
 	log.Debugf("exitCode - %v", exitCode)
 	log.Debugf("errs - %v", errs)

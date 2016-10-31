@@ -21,12 +21,17 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/inventory/model"
 	"github.com/aws/aws-sdk-go/service/ssm"
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/mock"
 )
 
 func MockInventoryUploader() *InventoryUploader {
 	var uploader InventoryUploader
 
-	uploader.isOptimizerEnabled = false
+	optimizer := NewMockDefault()
+	optimizer.On("GetContentHash", mock.AnythingOfType("string")).Return("RandomInventoryItem")
+	optimizer.On("UpdateContentHash", mock.AnythingOfType("string"), mock.AnythingOfType("string")).Return(nil)
+
+	uploader.optimizer = optimizer
 	return &uploader
 }
 
@@ -38,6 +43,7 @@ func FakeInventoryItems(count int) (items []model.Item) {
 			Name:          "RandomInventoryItem",
 			Content:       FakeStructForTesting(),
 			SchemaVersion: "1.0",
+			CaptureTime:   "time",
 		})
 		i++
 	}
@@ -60,7 +66,7 @@ func TestConvertToSsmInventoryItems(t *testing.T) {
 
 	//setting up inventory.Item
 	items = append(items, FakeInventoryItems(2)...)
-	inventoryItems, err = u.ConvertToSsmInventoryItems(c, items)
+	inventoryItems, _, err = u.ConvertToSsmInventoryItems(c, items)
 
 	assert.Nil(t, err, "Error shouldn't be thrown for multiple inventory items")
 	assert.Equal(t, len(items), len(inventoryItems), "Count of inventory items should be equal to input")
@@ -72,6 +78,6 @@ func TestConvertToSsmInventoryItems(t *testing.T) {
 	}
 	items = append(items, item)
 
-	inventoryItems, err = u.ConvertToSsmInventoryItems(c, items)
+	inventoryItems, _, err = u.ConvertToSsmInventoryItems(c, items)
 	assert.NotNil(t, err, "Error should be thrown for unsupported Item.Content")
 }

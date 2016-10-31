@@ -18,6 +18,7 @@ import (
 	"path/filepath"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
+	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/longrunning/datastore"
 	"github.com/aws/amazon-ssm-agent/agent/longrunning/plugin"
 	"github.com/aws/amazon-ssm-agent/agent/platform"
@@ -73,4 +74,10 @@ func getDataStoreLocation() (location, fileName string, err error) {
 		appconfig.LongRunningPluginDataStoreLocation,
 		appconfig.LongRunningPluginDataStoreFileName)
 	return
+}
+
+// isPlatformSupported returns if target plugin supported by current platform.
+func isPlatformSupported(log log.T, pluginName string) bool {
+	isSupported, _ := plugin.IsPluginSupportedForCurrentPlatform(log, pluginName)
+	return isSupported
 }

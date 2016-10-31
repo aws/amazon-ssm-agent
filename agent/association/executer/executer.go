@@ -70,7 +70,7 @@ func (r *AssociationExecuter) ExecutePendingDocument(context context.T, pool tas
 
 	r.assocSvc.UpdateInstanceAssociationStatus(
 		log,
-		docState.DocumentInformation.DocumentID,
+		docState.DocumentInformation.AssociationID,
 		docState.DocumentInformation.InstanceID,
 		contracts.AssociationStatusPending,
 		contracts.AssociationErrorCodeNoError,
@@ -83,7 +83,7 @@ func (r *AssociationExecuter) ExecutePendingDocument(context context.T, pool tas
 		appconfig.DefaultLocationOfPending,
 		appconfig.DefaultLocationOfCurrent)
 
-	if err := pool.Submit(log, docState.DocumentInformation.DocumentID, func(cancelFlag task.CancelFlag) {
+	if err := pool.Submit(log, docState.DocumentInformation.AssociationID, func(cancelFlag task.CancelFlag) {
 		r.ExecuteInProgressDocument(context, docState, cancelFlag)
 	}); err != nil {
 		return fmt.Errorf("failed to process association, %v", err)
@@ -97,7 +97,7 @@ func (r *AssociationExecuter) ExecuteInProgressDocument(context context.T, docSt
 	log := context.Log()
 
 	defer func() {
-		schedulemanager.UpdateNextScheduledDate(log, docState.DocumentInformation.DocumentID)
+		schedulemanager.UpdateNextScheduledDate(log, docState.DocumentInformation.AssociationID)
 		signal.ExecuteAssociation(log)
 	}()
 
@@ -110,7 +110,7 @@ func (r *AssociationExecuter) ExecuteInProgressDocument(context context.T, docSt
 	totalNumberOfActions := len(docState.InstancePluginsInformation)
 	outputs := pluginExecution.RunPlugins(
 		context,
-		docState.DocumentInformation.DocumentID,
+		docState.DocumentInformation.AssociationID,
 		docState.DocumentInformation.CreatedDate,
 		docState.InstancePluginsInformation,
 		plugin.RegisteredWorkerPlugins(context),
@@ -127,7 +127,7 @@ func (r *AssociationExecuter) ExecuteInProgressDocument(context context.T, docSt
 	r.parseAndPersistReplyContents(log, docState, outputs)
 	// Skip sending response when the document requires a reboot
 	if docState.IsRebootRequired() {
-		log.Debugf("skipping sending response of %v since the document requires a reboot", docState.DocumentInformation.DocumentID)
+		log.Debugf("skipping sending response of %v since the document requires a reboot", docState.DocumentInformation.AssociationID)
 		return
 	}
 
@@ -158,7 +158,7 @@ func (r *AssociationExecuter) ExecuteInProgressDocument(context context.T, docSt
 	}
 
 	//persist : commands execution in completed folder (terminal state folder)
-	log.Debugf("execution of %v is over. Moving docState file from Current to Completed folder", docState.DocumentInformation.DocumentID)
+	log.Debugf("execution of %v is over. Moving docState file from Current to Completed folder", docState.DocumentInformation.AssociationID)
 	bookkeepingSvc.MoveDocumentState(log,
 		docState.DocumentInformation.DocumentID,
 		docState.DocumentInformation.InstanceID,
@@ -197,7 +197,7 @@ func (r *AssociationExecuter) parseAndPersistReplyContents(log log.T,
 // pluginExecutionReport allow engine to update progress after every plugin execution
 func (r *AssociationExecuter) pluginExecutionReport(
 	log log.T,
-	documentID string,
+	associationID string,
 	documentCreatedDate string,
 	pluginOutputs map[string]*contracts.PluginResult,
 	totalNumberOfPlugins int) {
@@ -213,7 +213,7 @@ func (r *AssociationExecuter) pluginExecutionReport(
 
 	r.assocSvc.UpdateInstanceAssociationStatus(
 		log,
-		documentID,
+		associationID,
 		instanceID,
 		contracts.AssociationStatusInProgress,
 		contracts.AssociationErrorCodeNoError,
@@ -233,7 +233,7 @@ func (r *AssociationExecuter) associationExecutionReport(
 	executionSummary := buildOutput(runtimeStatuses, totalNumberOfPlugins)
 	r.assocSvc.UpdateInstanceAssociationStatus(
 		log,
-		docInfo.DocumentID,
+		docInfo.AssociationID,
 		docInfo.InstanceID,
 		associationStatus,
 		errorCode,

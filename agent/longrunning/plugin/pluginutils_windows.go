@@ -17,7 +17,13 @@
 package plugin
 
 import (
+	"fmt"
+
+	"github.com/aws/amazon-ssm-agent/agent/appconfig"
+	"github.com/aws/amazon-ssm-agent/agent/context"
+	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/longrunning/plugin/cloudwatch"
+	"github.com/aws/amazon-ssm-agent/agent/platform"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/pluginutil"
 )
 
@@ -25,8 +31,9 @@ const (
 	PluginNameAwsCloudwatch = "aws:cloudWatch"
 )
 
-// RegisteredPlugins loads all registered long running plugins in memory
-func RegisteredPlugins() map[string]Plugin {
+// loadPlatformDepedentPlugins loads all registered long running plugins in memory
+func loadPlatformDependentPlugins(context context.T) map[string]Plugin {
+	log := context.Log()
 	//long running plugins that can be started/stopped/configured by long running plugin manager
 	longrunningplugins := make(map[string]Plugin)
 
@@ -45,7 +52,24 @@ func RegisteredPlugins() map[string]Plugin {
 
 		//add the registered plugin in the map
 		longrunningplugins[PluginNameAwsCloudwatch] = cw
+	} else {
+		log.Errorf("failed to create long-running plugin %s %v", PluginNameAwsCloudwatch, err)
 	}
 
 	return longrunningplugins
+}
+
+// IsPluginSupportedForCurrentPlatform returns true if current platform supports the plugin with given name.
+func IsPluginSupportedForCurrentPlatform(log log.T, pluginID string) (bool, string) {
+	platformName, _ := platform.PlatformName(log)
+	platformVersion, _ := platform.PlatformVersion(log)
+
+	if isPlatformNanoServer, err := platform.IsPlatformNanoServer(log); err == nil && isPlatformNanoServer {
+		//if the current OS is Nano server, SSM Agent doesn't support the following plugins.
+		if pluginID == appconfig.PluginNameDomainJoin ||
+			pluginID == appconfig.PluginNameCloudWatch {
+			return false, fmt.Sprintf("%s (Nano Server) v%s", platformName, platformVersion)
+		}
+	}
+	return true, fmt.Sprintf("%s v%s", platformName, platformVersion)
 }

@@ -75,12 +75,17 @@ func (m *Mock) RequestStop(stopType contracts.StopType) (err error) {
 	return nil
 }
 
-// //StopPlugin stops a given plugin from executing and returns encountered error - returns nil here for testing
+// StopPlugin stops a given plugin from executing and returns encountered error - returns nil here for testing
 func (m *Mock) StopPlugin(name string, cancelFlag task.CancelFlag) (err error) {
 	return nil
 }
 
 // StartPlugin starts the given plugin with the given configuration and returns encountered error - returns nil here for testing
 func (m *Mock) StartPlugin(name, configuration, orchestrationDir string, cancelFlag task.CancelFlag) (err error) {
+	return nil
+}
+
+// EnsurePluginRegistered adds a long-running plugin if it is not already in the registry
+func (m *Mock) EnsurePluginRegistered(name string, plugin managerContracts.Plugin) (err error) {
 	return nil
 }

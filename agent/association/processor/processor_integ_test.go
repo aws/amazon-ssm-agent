@@ -48,7 +48,7 @@ func TestParseAssociationWithAssociationVersion1_2(t *testing.T) {
 	sampleFile := readFile(FILE_VERSION_1_2)
 
 	instanceID := "i-test"
-	commandId := "b2f71a28-cbe1-4429-b848-26c7e1f5ad0d"
+	assocId := "b2f71a28-cbe1-4429-b848-26c7e1f5ad0d"
 	associationName := "testV1.2"
 	assocRawData := model.InstanceAssociation{
 		CreateDate: time.Now(),
@@ -56,7 +56,7 @@ func TestParseAssociationWithAssociationVersion1_2(t *testing.T) {
 	}
 	assocRawData.Association = &ssm.InstanceAssociationSummary{}
 	assocRawData.Association.Name = &associationName
-	assocRawData.Association.AssociationId = &commandId
+	assocRawData.Association.AssociationId = &assocId
 	assocRawData.Association.InstanceId = &instanceID
 
 	params := make(map[string][]*string)
@@ -69,9 +69,9 @@ func TestParseAssociationWithAssociationVersion1_2(t *testing.T) {
 	docState, err := processor.parseAssociation(&assocRawData)
 
 	documentInfo := new(stateModel.DocumentInfo)
-	documentInfo.DocumentID = commandId
+	documentInfo.AssociationID = assocId
 	documentInfo.InstanceID = instanceID
-	documentInfo.MessageID = fmt.Sprintf("aws.ssm.%v.%v", commandId, instanceID)
+	documentInfo.MessageID = fmt.Sprintf("aws.ssm.%v.%v", assocId, instanceID)
 	documentInfo.DocumentName = associationName
 
 	pluginName := "aws:applications"
@@ -118,7 +118,7 @@ func TestParseAssociationWithAssociationVersion2_0(t *testing.T) {
 	sampleFile := readFile(FILE_VERSION_2_0)
 
 	instanceID := "i-test"
-	commandId := "b2f71a28-cbe1-4429-b848-26c7e1f5ad0d"
+	assocId := "b2f71a28-cbe1-4429-b848-26c7e1f5ad0d"
 	associationName := "testV2.0"
 	assocRawData := model.InstanceAssociation{
 		CreateDate: time.Now(),
@@ -126,7 +126,7 @@ func TestParseAssociationWithAssociationVersion2_0(t *testing.T) {
 	}
 	assocRawData.Association = &ssm.InstanceAssociationSummary{}
 	assocRawData.Association.Name = &associationName
-	assocRawData.Association.AssociationId = &commandId
+	assocRawData.Association.AssociationId = &assocId
 	assocRawData.Association.InstanceId = &instanceID
 
 	params := make(map[string][]*string)
@@ -143,9 +143,9 @@ func TestParseAssociationWithAssociationVersion2_0(t *testing.T) {
 	docState, err := processor.parseAssociation(&assocRawData)
 
 	documentInfo := new(stateModel.DocumentInfo)
-	documentInfo.DocumentID = commandId
+	documentInfo.AssociationID = assocId
 	documentInfo.InstanceID = instanceID
-	documentInfo.MessageID = fmt.Sprintf("aws.ssm.%v.%v", commandId, instanceID)
+	documentInfo.MessageID = fmt.Sprintf("aws.ssm.%v.%v", assocId, instanceID)
 	documentInfo.DocumentName = associationName
 
 	instancePluginsInfo := make([]stateModel.PluginState, 2)

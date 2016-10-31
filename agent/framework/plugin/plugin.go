@@ -20,7 +20,10 @@ import (
 
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/framework/runpluginutil"
+	"github.com/aws/amazon-ssm-agent/agent/inventory"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurecontainers"
+	"github.com/aws/amazon-ssm-agent/agent/plugins/configuredaemon"
+	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/dockercontainer"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/lrpminvoker"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/pluginutil"
@@ -118,11 +121,17 @@ func loadPlatformIndependentPlugins(context context.T) runpluginutil.PluginRegis
 
 	// registering aws:runPowerShellScript & aws:runShellScript plugin
 	runcommandPluginName := runcommand.Name()
-	runcommandPlugin, err := runcommand.NewPlugin(pluginutil.DefaultPluginConfig())
-	if err != nil {
+	if runcommandPlugin, err := runcommand.NewPlugin(pluginutil.DefaultPluginConfig()); err != nil {
 		log.Errorf("failed to create plugin %s %v", runcommandPluginName, err)
 	} else {
 		workerPlugins[runcommandPluginName] = runcommandPlugin
+	}
+
+	inventoryPluginName := inventory.Name()
+	if inventoryPlugin, err := inventory.NewPlugin(context, pluginutil.DefaultPluginConfig()); err != nil {
+		log.Errorf("failed to create plugin %s %v", inventoryPluginName, err)
+	} else {
+		workerPlugins[inventoryPluginName] = inventoryPlugin
 	}
 
 	// registering aws:updateSsmAgent plugin
@@ -159,6 +168,24 @@ func loadPlatformIndependentPlugins(context context.T) runpluginutil.PluginRegis
 		log.Errorf("failed to create plugin %s %v", refreshAssociationPluginName, err)
 	} else {
 		workerPlugins[refreshAssociationPluginName] = refreshAssociationPlugin
+	}
+
+	// registering aws:configureDaemon
+	configureDaemonPluginName := configuredaemon.Name()
+	configureDaemonPlugin, err := configuredaemon.NewPlugin(pluginutil.DefaultPluginConfig())
+	if err != nil {
+		log.Errorf("failed to create plugin %s %v", configureDaemonPluginName, err)
+	} else {
+		workerPlugins[configureDaemonPluginName] = configureDaemonPlugin
+	}
+
+	// registering aws:configurePackage
+	configurePackagePluginName := configurepackage.Name()
+	configurePackagePlugin, err := configurepackage.NewPlugin(pluginutil.DefaultPluginConfig())
+	if err != nil {
+		log.Errorf("failed to create plugin %s %v", configurePackagePluginName, err)
+	} else {
+		workerPlugins[configurePackagePluginName] = configurePackagePlugin
 	}
 
 	return workerPlugins

@@ -244,7 +244,7 @@ func MockReadFileAccessDenied(filename string) ([]byte, error) {
 	return nil, errors.New("Access Denied")
 }
 
-func MockReadFileInvalidJson(filename string) ([]byte, error) {
+func MockReadFileInvalidJSON(filename string) ([]byte, error) {
 	return []byte("{Invalid JSON}"), nil
 }
 
@@ -400,7 +400,7 @@ func TestDuplicateTypeName(t *testing.T) {
 func TestInvalidJson(t *testing.T) {
 	c := context.NewMockDefault()
 	g := Gatherer(c)
-	readFileFunc = MockReadFileInvalidJson
+	readFileFunc = MockReadFileInvalidJSON
 	readDirFunc = MockReadDir
 
 	items, err := g.Run(c, model.Config{})

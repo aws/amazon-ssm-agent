@@ -20,10 +20,9 @@ import (
 	"io"
 	"io/ioutil"
 	"os"
+	"path"
 	"path/filepath"
 	"strings"
-
-	"path"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 )
@@ -200,6 +199,32 @@ func IsDirEmpty(location string) (bool, error) {
 		return true, nil
 	}
 	return false, err
+}
+
+// GetDirectoryNames returns the names of all directories under a give srcPath
+func GetDirectoryNames(srcPath string) (directories []string, err error) {
+	if list, err := ioutil.ReadDir(srcPath); err == nil {
+		directories = make([]string, 0)
+		for _, fileinfo := range list {
+			if fileinfo.Mode().IsDir() {
+				directories = append(directories, fileinfo.Name())
+			}
+		}
+	}
+	return
+}
+
+// GetFileNames returns the names of all non-directories under a give srcPath
+func GetFileNames(srcPath string) (files []string, err error) {
+	if list, err := ioutil.ReadDir(srcPath); err == nil {
+		files = make([]string, 0)
+		for _, fileinfo := range list {
+			if !fileinfo.Mode().IsDir() {
+				files = append(files, fileinfo.Name())
+			}
+		}
+	}
+	return
 }
 
 // ReadDir returns files within the given location
