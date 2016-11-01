@@ -16,6 +16,7 @@ package parser
 
 import (
 	"encoding/json"
+	"fmt"
 
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/log"
@@ -29,8 +30,9 @@ func ParseMessageWithParams(log log.T, payload string) (parsedMessage messageCon
 	// parse message to retrieve parameters
 	err = json.Unmarshal([]byte(payload), &parsedMessage)
 	if err != nil {
-		log.Errorf("Encountered error while parsing SendCommandPayload")
-		return
+		errorMsg := "Encountered error while parsing input - internal error"
+		log.Errorf(errorMsg)
+		return parsedMessage, fmt.Errorf("%v", errorMsg)
 	}
 
 	parameters := parameters.ValidParameters(log, parsedMessage.Parameters)

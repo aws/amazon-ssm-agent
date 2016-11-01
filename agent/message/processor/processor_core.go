@@ -141,6 +141,11 @@ func (p *Processor) processMessage(msg *ssmmds.Message) {
 
 	if strings.HasPrefix(*msg.Topic, string(SendCommandTopicPrefix)) {
 		docState, err = loadDocStateFromSendCommand(context, msg, p.orchestrationRootDir)
+		if err != nil {
+			log.Error(err)
+			p.sendDocLevelResponse(*msg.MessageId, contracts.ResultStatusFailed, err.Error())
+			return
+		}
 	} else if strings.HasPrefix(*msg.Topic, string(CancelCommandTopicPrefix)) {
 		docState, err = loadDocStateFromCancelCommand(context, msg, p.orchestrationRootDir)
 	} else {

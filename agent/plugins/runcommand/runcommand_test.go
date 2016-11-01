@@ -36,7 +36,7 @@ import (
 
 type TestCase struct {
 	Input          RunCommandPluginInput
-	Output         contracts.PluginOutput
+	Output         RunCommandPluginOutput
 	ExecuterErrors []error
 	MessageID      string
 }
@@ -61,20 +61,23 @@ var TestCases = []TestCase{
 var logger = log.NewMockLog()
 
 func generateTestCaseOk(id string) TestCase {
-	return TestCase{
+
+	testCase := TestCase{
 		Input: RunCommandPluginInput{
 			RunCommand:       []string{"echo " + id},
 			ID:               id + ".aws:runScript",
 			WorkingDirectory: "Dir" + id,
 			TimeoutSeconds:   "1",
 		},
-		Output: contracts.PluginOutput{
-			Stdout:   "standard output of test case " + id,
-			Stderr:   "standard error of test case " + id,
-			ExitCode: 0,
-			Status:   "Success",
-		},
+		Output: RunCommandPluginOutput{},
 	}
+
+	testCase.Output.Stdout = "standard output of test case " + id
+	testCase.Output.Stderr = "standard error of test case " + id
+	testCase.Output.ExitCode = 0
+	testCase.Output.Status = "Success"
+
+	return testCase
 }
 
 func generateTestCaseFail(id string) TestCase {
@@ -106,7 +109,7 @@ func testRunCommands(t *testing.T, testCase TestCase, rawInput bool) {
 		setS3UploaderExpectations(mockS3Uploader, testCase, p)
 
 		// call method under test
-		var res contracts.PluginOutput
+		var res RunCommandPluginOutput
 		if rawInput {
 			// prepare plugin input
 			var rawPluginInput interface{}
@@ -143,7 +146,7 @@ func testBucketsInDifferentRegions(t *testing.T, testCase TestCase, testingBucke
 		setS3UploaderExpectations(mockS3Uploader, testCase, p)
 
 		// call method under test
-		var res contracts.PluginOutput
+		var res RunCommandPluginOutput
 		res = p.runCommands(logger, testCase.Input, orchestrationDirectory, mockCancelFlag, s3BucketName, s3KeyPrefix)
 
 		// assert output is correct (mocked object expectations are tested automatically by testExecution)

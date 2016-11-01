@@ -54,6 +54,24 @@ type RunCommandPluginInput struct {
 	TimeoutSeconds   interface{}
 }
 
+// RunCommandPluginOutput represents the output of the plugin
+type RunCommandPluginOutput struct {
+	contracts.PluginOutput
+}
+
+// Failed marks plugin as Failed
+func (out *RunCommandPluginOutput) MarkAsFailed(log log.T, err error) {
+	out.ExitCode = 1
+	out.Status = contracts.ResultStatusFailed
+	if len(out.Stderr) != 0 {
+		out.Stderr = fmt.Sprintf("\n%v\n%v", out.Stderr, err.Error())
+	} else {
+		out.Stderr = fmt.Sprintf("\n%v", err.Error())
+	}
+	log.Error(err.Error())
+	out.Errors = append(out.Errors, err.Error())
+}
+
 func (p *Plugin) AssignPluginConfigs(pluginConfig pluginutil.PluginConfig) {
 	p.MaxStdoutLength = pluginConfig.MaxStdoutLength
 	p.MaxStderrLength = pluginConfig.MaxStderrLength
@@ -85,7 +103,7 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 		return res
 	}
 
-	out := make([]contracts.PluginOutput, len(properties))
+	out := make([]RunCommandPluginOutput, len(properties))
 	for i, prop := range properties {
 		// check if a reboot has been requested
 		if rebooter.RebootRequested() {
@@ -94,14 +112,12 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 		}
 
 		if cancelFlag.ShutDown() {
-			out[i] = contracts.PluginOutput{Errors: []string{"Execution canceled due to ShutDown"}}
 			out[i].ExitCode = 1
 			out[i].Status = contracts.ResultStatusFailed
 			break
 		}
 
 		if cancelFlag.Canceled() {
-			out[i] = contracts.PluginOutput{Errors: []string{"Execution canceled"}}
 			out[i].ExitCode = 1
 			out[i].Status = contracts.ResultStatusCancelled
 			break
@@ -127,21 +143,19 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 
 // runCommandsRawInput executes one set of commands and returns their output.
 // The input is in the default json unmarshal format (e.g. map[string]interface{}).
-func (p *Plugin) runCommandsRawInput(log log.T, rawPluginInput interface{}, orchestrationDirectory string, cancelFlag task.CancelFlag, outputS3BucketName string, outputS3KeyPrefix string) (out contracts.PluginOutput) {
+func (p *Plugin) runCommandsRawInput(log log.T, rawPluginInput interface{}, orchestrationDirectory string, cancelFlag task.CancelFlag, outputS3BucketName string, outputS3KeyPrefix string) (out RunCommandPluginOutput) {
 	var pluginInput RunCommandPluginInput
 	err := jsonutil.Remarshal(rawPluginInput, &pluginInput)
 	if err != nil {
-		errorString := fmt.Sprintf("Invalid format in plugin properties %v;\nerror %v", rawPluginInput, err)
-		out.Errors = append(out.Errors, errorString)
-		out.Status = contracts.ResultStatusFailed
-		log.Error(errorString)
+		errorString := fmt.Errorf("Invalid format in plugin properties %v;\nerror %v", rawPluginInput, err)
+		out.MarkAsFailed(log, errorString)
 		return
 	}
 	return p.runCommands(log, pluginInput, orchestrationDirectory, cancelFlag, outputS3BucketName, outputS3KeyPrefix)
 }
 
 // runCommands executes one set of commands and returns their output.
-func (p *Plugin) runCommands(log log.T, pluginInput RunCommandPluginInput, orchestrationDirectory string, cancelFlag task.CancelFlag, outputS3BucketName string, outputS3KeyPrefix string) (out contracts.PluginOutput) {
+func (p *Plugin) runCommands(log log.T, pluginInput RunCommandPluginInput, orchestrationDirectory string, cancelFlag task.CancelFlag, outputS3BucketName string, outputS3KeyPrefix string) (out RunCommandPluginOutput) {
 	var err error
 
 	// if no orchestration directory specified, create temp directory
@@ -178,8 +192,8 @@ func (p *Plugin) runCommands(log log.T, pluginInput RunCommandPluginInput, orche
 	// Resolve ssm parameters
 	// This may contain sensitive information, do not log this data after resolving.
 	if pluginInput.RunCommand, err = parameterstore.ResolveSecureStringForStringList(log, pluginInput.RunCommand); err != nil {
-		out.Errors = append(out.Errors, err.Error())
-		log.Errorf("Failed to resolve ssm parameters. Error: - %v", err)
+		errorString := fmt.Errorf("Failed to resolve ssm parameters. Error: - %v", err)
+		out.MarkAsFailed(log, errorString)
 		return
 	}
 
@@ -193,8 +207,8 @@ func (p *Plugin) runCommands(log log.T, pluginInput RunCommandPluginInput, orche
 	// Resolve ssm parameters
 	// This may contain sensitive information, do not log this data after resolving.
 	if pluginInput.TimeoutSeconds, err = parameterstore.Resolve(log, pluginInput.TimeoutSeconds, true); err != nil {
-		out.Errors = append(out.Errors, err.Error())
-		log.Errorf("Failed to resolve ssm parameters. Error: - %v", err)
+		errorString := fmt.Errorf("Failed to resolve ssm parameters. Error: - %v", err)
+		out.MarkAsFailed(log, errorString)
 		return
 	}
 	executionTimeout := pluginutil.ValidateExecutionTimeout(log, pluginInput.TimeoutSeconds)
@@ -211,8 +225,8 @@ func (p *Plugin) runCommands(log log.T, pluginInput RunCommandPluginInput, orche
 	// Resolve ssm parameters
 	// This may contain sensitive information, do not log this data after resolving.
 	if pluginInput.WorkingDirectory, err = parameterstore.ResolveSecureString(log, pluginInput.WorkingDirectory); err != nil {
-		out.Errors = append(out.Errors, err.Error())
-		log.Errorf("Failed to resolve ssm parameters. Error: - %v", err)
+		errorString := fmt.Errorf("Failed to resolve ssm parameters. Error: - %v", err)
+		out.MarkAsFailed(log, errorString)
 		return
 	}
 

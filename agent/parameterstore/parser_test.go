@@ -30,7 +30,9 @@ type ReplaceSSMParamTestCase struct {
 func TestReplaceSSMParameters(t *testing.T) {
 	testCases := generateReplaceSSMParamTestCases()
 	for _, testCase := range testCases {
-		assert.Equal(t, testCase.Output, replaceSSMParameters(logger, testCase.Input, testCase.Params))
+		temp, err := replaceSSMParameters(logger, testCase.Input, testCase.Params)
+		assert.Equal(t, testCase.Output, temp)
+		assert.Nil(t, err)
 	}
 }
 

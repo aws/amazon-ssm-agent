@@ -195,9 +195,10 @@ func (p *Plugin) runCommands(log log.T, pluginInput PSModulePluginInput, orchest
 	// Create script file
 	// Resolve ssm parameters
 	// This may contain sensitive information, do not log this data after resolving.
+	// Sample error msg: "Failed to resolve ssm parameters. Error: - Input contains invalid ssm parameters [commands]"
 	if pluginInput.ParsedCommands, err = parameterstore.ResolveSecureStringForStringList(log, pluginInput.ParsedCommands); err != nil {
-		out.Errors = append(out.Errors, err.Error())
-		log.Errorf("Failed to resolve ssm parameters. Error: - %v", err)
+		errorString := fmt.Errorf("Failed to resolve ssm parameters. Error: - %v", err)
+		out.MarkAsFailed(log, errorString)
 		return
 	}
 	if err = pluginutil.CreateScriptFile(log, scriptPath, pluginInput.ParsedCommands); err != nil {
@@ -209,24 +210,24 @@ func (p *Plugin) runCommands(log log.T, pluginInput PSModulePluginInput, orchest
 	// Resolve ssm parameters
 	// This may contain sensitive information, do not log this data after resolving.
 	if pluginInput.Source, err = parameterstore.ResolveSecureString(log, pluginInput.Source); err != nil {
-		out.Errors = append(out.Errors, err.Error())
-		log.Errorf("Failed to resolve ssm parameters. Error: - %v", err)
+		errorString := fmt.Errorf("Failed to resolve ssm parameters. Error: - %v", err)
+		out.MarkAsFailed(log, errorString)
 		return
 	}
 
 	// Resolve ssm parameters
 	// This may contain sensitive information, do not log this data after resolving.
 	if pluginInput.SourceHash, err = parameterstore.ResolveSecureString(log, pluginInput.SourceHash); err != nil {
-		out.Errors = append(out.Errors, err.Error())
-		log.Errorf("Failed to resolve ssm parameters. Error: - %v", err)
+		errorString := fmt.Errorf("Failed to resolve ssm parameters. Error: - %v", err)
+		out.MarkAsFailed(log, errorString)
 		return
 	}
 
 	// Resolve ssm parameters
 	// This may contain sensitive information, do not log this data after resolving.
 	if pluginInput.SourceHashType, err = parameterstore.ResolveSecureString(log, pluginInput.SourceHashType); err != nil {
-		out.Errors = append(out.Errors, err.Error())
-		log.Errorf("Failed to resolve ssm parameters. Error: - %v", err)
+		errorString := fmt.Errorf("Failed to resolve ssm parameters. Error: - %v", err)
+		out.MarkAsFailed(log, errorString)
 		return
 	}
 
@@ -247,8 +248,8 @@ func (p *Plugin) runCommands(log log.T, pluginInput PSModulePluginInput, orchest
 	// Resolve ssm parameters
 	// This may contain sensitive information, do not log this data after resolving.
 	if pluginInput.TimeoutSeconds, err = parameterstore.Resolve(log, pluginInput.TimeoutSeconds, true); err != nil {
-		out.Errors = append(out.Errors, err.Error())
-		log.Errorf("Failed to resolve ssm parameters. Error: - %v", err)
+		errorString := fmt.Errorf("Failed to resolve ssm parameters. Error: - %v", err)
+		out.MarkAsFailed(log, errorString)
 		return
 	}
 	executionTimeout := pluginutil.ValidateExecutionTimeout(log, pluginInput.TimeoutSeconds)
@@ -265,8 +266,8 @@ func (p *Plugin) runCommands(log log.T, pluginInput PSModulePluginInput, orchest
 	// Resolve ssm parameters
 	// This may contain sensitive information, do not log this data after resolving.
 	if pluginInput.WorkingDirectory, err = parameterstore.ResolveSecureString(log, pluginInput.WorkingDirectory); err != nil {
-		out.Errors = append(out.Errors, err.Error())
-		log.Errorf("Failed to resolve ssm parameters. Error: - %v", err)
+		errorString := fmt.Errorf("Failed to resolve ssm parameters. Error: - %v", err)
+		out.MarkAsFailed(log, errorString)
 		return
 	}
 

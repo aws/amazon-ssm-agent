@@ -19,14 +19,10 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
-	"github.com/aws/amazon-ssm-agent/agent/sdkutil"
-	"github.com/aws/aws-sdk-go/aws"
-	"github.com/aws/aws-sdk-go/aws/session"
-	"github.com/aws/aws-sdk-go/service/ssm"
+	"github.com/aws/amazon-ssm-agent/agent/ssm"
 )
 
 const (
@@ -38,6 +34,9 @@ const (
 
 	// ParamTypeStringList represents the Param Type is StringList
 	ParamTypeStringList = "StringList"
+
+	// ErrorMsg represents the error message to be sent to the customer
+	ErrorMsg = "Encountered error while parsing input - internal error"
 )
 
 var callParameterService = callGetParameters
@@ -64,7 +63,10 @@ func Resolve(log log.T, input interface{}, resolveSecureString bool) (interface{
 	}
 
 	// Replace ssm parameter names with their values
-	input = replaceSSMParameters(log, input, resolvedParamMap)
+	input, err = replaceSSMParameters(log, input, resolvedParamMap)
+	if err != nil {
+		return input, err
+	}
 
 	// Return resolved input
 	return input, nil
@@ -76,6 +78,8 @@ func ValidateSSMParameters(
 	documentParameters map[string]*contracts.Parameter,
 	parameters map[string]interface{}) error {
 
+	log.Debug("Validating SSM parameters")
+
 	resolvedParameters, err := Resolve(log, parameters, true)
 	if err != nil {
 		return err
@@ -84,14 +88,16 @@ func ValidateSSMParameters(
 	var resolvedParamMap map[string]interface{}
 	err = jsonutil.Remarshal(resolvedParameters, &resolvedParamMap)
 	if err != nil {
-		return err
+		log.Debug(err)
+		return fmt.Errorf("%v", ErrorMsg)
 	}
 
 	for paramName, paramObj := range documentParameters {
 		if paramObj.AllowedPattern != "" {
 			validParamValue, err := regexp.Compile(paramObj.AllowedPattern)
 			if err != nil {
-				return err
+				log.Debug(err)
+				return fmt.Errorf("%v", ErrorMsg)
 			}
 
 			errorString := fmt.Errorf("Parameter value for %v does not match the allowed pattern %v", paramName, paramObj.AllowedPattern)
@@ -116,7 +122,7 @@ func ValidateSSMParameters(
 				}
 
 			default:
-				return fmt.Errorf("Invalid parameter value type for %v", paramName)
+				return fmt.Errorf("Unable to determine parameter value type for %v", paramName)
 			}
 		}
 	}
@@ -133,7 +139,8 @@ func ResolveSecureString(log log.T, input string) (string, error) {
 	var reformatOutput string
 	err = jsonutil.Remarshal(output, &reformatOutput)
 	if err != nil {
-		return input, err
+		log.Debug(err)
+		return input, fmt.Errorf("%v", ErrorMsg)
 	}
 
 	return reformatOutput, nil
@@ -149,7 +156,8 @@ func ResolveSecureStringForStringList(log log.T, input []string) ([]string, erro
 	var reformatOutput []string
 	err = jsonutil.Remarshal(output, &reformatOutput)
 	if err != nil {
-		return input, err
+		log.Debug(err)
+		return input, fmt.Errorf("%v", ErrorMsg)
 	}
 
 	return reformatOutput, nil
@@ -167,9 +175,8 @@ func getValidSSMParamRegexCompiler(log log.T, paramName string) (*regexp.Regexp,
 
 	validSSMParam, err := regexp.Compile(validSSMParamRegex)
 	if err != nil {
-		errorString := fmt.Errorf("Invalid regular expression used to resolve ssm parameters. Error: %v", err)
-		log.Debug(errorString)
-		return nil, errorString
+		log.Debug(err)
+		return nil, fmt.Errorf("%v", ErrorMsg)
 	}
 	return validSSMParam, nil
 }
@@ -184,9 +191,8 @@ func getSSMParameterValues(log log.T, ssmParams []string, resolveSecureString bo
 	validParamRegex := ":([/\\w]+)*"
 	validParam, err := regexp.Compile(validParamRegex)
 	if err != nil {
-		errorString := fmt.Errorf("Invalid regular expression used to resolve ssm parameters. Error: %v", err)
-		log.Debug(errorString)
-		return nil, errorString
+		log.Debug(err)
+		return nil, fmt.Errorf("%v", ErrorMsg)
 	}
 
 	// Remove duplicates
@@ -236,39 +242,19 @@ func getSSMParameterValues(log log.T, ssmParams []string, resolveSecureString bo
 
 // callGetParameters makes a GetParameters API call to the service
 func callGetParameters(log log.T, paramNames []string) (*GetParametersResponse, error) {
-	var result *ssm.GetParametersOutput
+	ssmSvc := ssm.NewService()
 
-	serviceParams := &ssm.GetParametersInput{
-		Names:          aws.StringSlice(paramNames),
-		WithDecryption: aws.Bool(true),
-	}
-
-	log.Debugf("Calling GetParameters API with params - %v", serviceParams)
-
-	// reading agent appconfig
-	appCfg, err := appconfig.Config(false)
+	result, err := ssmSvc.GetParameters(log, paramNames)
 	if err != nil {
-		log.Errorf("Could not load config file %v", err)
-		return nil, err
-	}
-
-	// setting ssm client config
-	cfg := sdkutil.AwsConfig()
-	cfg.Region = &appCfg.Agent.Region
-	cfg.Endpoint = &appCfg.Ssm.Endpoint
-
-	ssmObj := ssm.New(session.New(cfg))
-
-	if result, err = ssmObj.GetParameters(serviceParams); err != nil {
-		log.Errorf("Encountered error while calling GetParameters API. Error: %v", err)
 		return nil, err
 	}
 
 	var response GetParametersResponse
 	err = jsonutil.Remarshal(result, &response)
 	if err != nil {
-		log.Errorf("Invalid format of GetParameters output. Error: %v", err)
-		return nil, err
+		log.Debug(err)
+		errorString := "Encountered error while parsing GetParameters output"
+		return nil, fmt.Errorf("%v", errorString)
 	}
 
 	return &response, nil

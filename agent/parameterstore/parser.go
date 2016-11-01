@@ -15,9 +15,11 @@
 package parameterstore
 
 import (
+	"fmt"
 	"regexp"
 	"strings"
 
+	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 )
 
@@ -68,88 +70,129 @@ func extractSSMParameters(log log.T, input interface{}, validSSMParam *regexp.Re
 }
 
 // replaceSSMParameters replaces parameters of the format {{ssm:*}} with their actual values
-func replaceSSMParameters(log log.T, input interface{}, ssmParameters map[string]Parameter) interface{} {
+func replaceSSMParameters(log log.T, input interface{}, ssmParameters map[string]Parameter) (interface{}, error) {
 	switch input := input.(type) {
 	case string:
 		// replace param names with actual values
 		for paramName, paramObj := range ssmParameters {
 			input = strings.Replace(input, paramName, paramObj.Value, -1)
 		}
-		return input
+		return input, nil
 
 	case []string:
-		out := []string{}
-		for _, value := range input {
-			temp := value
-			found := false
-			for paramName, paramObj := range ssmParameters {
-				if strings.Compare(paramObj.Type, ParamTypeStringList) == 0 &&
-					strings.Compare(paramName, strings.TrimSpace(temp)) == 0 {
-					out = append(out, strings.Split(paramObj.Value, ",")...)
-					found = true
-					break
-				}
-				temp = strings.Replace(temp, paramName, paramObj.Value, -1)
-			}
-
-			// If value not found then add the string as it is
-			if !found {
-				out = append(out, temp)
-			}
+		out, err := parseStringList(log, input, ssmParameters)
+		if err != nil {
+			return nil, err
 		}
-		return out
+		return out, nil
 
 	case []interface{}:
 		switch input[0].(type) {
 		case string:
-			out := []string{}
-			for _, value := range input {
-				temp := value.(string)
-				found := false
-				for paramName, paramObj := range ssmParameters {
-					if strings.Compare(paramObj.Type, ParamTypeStringList) == 0 &&
-						strings.Compare(paramName, strings.TrimSpace(temp)) == 0 {
-						out = append(out, strings.Split(paramObj.Value, ",")...)
-						found = true
-						break
-					}
-					temp = strings.Replace(temp, paramName, paramObj.Value, -1)
-				}
-
-				// If value not found then add the string as it is
-				if !found {
-					out = append(out, temp)
-				}
+			out, err := parseStringList(log, input, ssmParameters)
+			if err != nil {
+				return nil, err
 			}
-			return out
+			return out, nil
 
 		default:
+			var err error
 			// for slices, recursively replace parameters on each element of the slice
 			out := make([]interface{}, len(input))
 			for i, v := range input {
-				out[i] = replaceSSMParameters(log, v, ssmParameters)
+				out[i], err = replaceSSMParameters(log, v, ssmParameters)
+				if err != nil {
+					return nil, err
+				}
 			}
-			return out
+			return out, nil
 		}
 
 	case []map[string]interface{}:
 		// this case is not caught by the one above because map cannot be converted to interface{}
 		out := make([]map[string]interface{}, len(input))
 		for i, v := range input {
-			out[i] = replaceSSMParameters(log, v, ssmParameters).(map[string]interface{})
+			temp, err := replaceSSMParameters(log, v, ssmParameters)
+			if err != nil {
+				return nil, err
+			}
+			out[i] = temp.(map[string]interface{})
 		}
-		return out
+		return out, nil
 
 	case map[string]interface{}:
+		var err error
 		// for maps, recursively replace parameters on each value in the map
 		out := make(map[string]interface{})
 		for k, v := range input {
-			out[k] = replaceSSMParameters(log, v, ssmParameters)
+			out[k], err = replaceSSMParameters(log, v, ssmParameters)
+			if err != nil {
+				return nil, err
+			}
 		}
-		return out
+		return out, nil
 
 	default:
 		// any other type, return as is
-		return input
+		return input, nil
 	}
+}
+
+func parseStringList(log log.T, input interface{}, ssmParameters map[string]Parameter) (interface{}, error) {
+	/*
+		This method parses the input and replaces ssm parameters of the format {{ssm:*}} with their
+		actual values. It includes a special case where if the ssm parameter is of type StringList then
+		split it into a string array and return.
+
+		Sample:
+
+		SSM parameter
+		{{ssm:commands}} = "ls,date,dir"
+		Type = StringList
+
+		Input:
+		["{{ssm:commands}}"]
+
+		Output:
+		["ls","date","dir"]
+
+		Edge case:
+		For input {{ssm:commands}} = "echo "a,b",ls,date,dir", output will be
+		echo "a
+		b"
+		ls
+		date
+		dir
+
+		We assume this use case to be validated at the service side. Even if the service doesn't validate it,
+		the agent will continue to split the input based on ","
+	*/
+
+	var reformatInput []string
+	err := jsonutil.Remarshal(input, &reformatInput)
+	if err != nil {
+		log.Debug(err)
+		return nil, fmt.Errorf("%v", ErrorMsg)
+	}
+
+	out := []string{}
+	for _, value := range reformatInput {
+		temp := value
+		found := false
+		for paramName, paramObj := range ssmParameters {
+			if strings.Compare(paramObj.Type, ParamTypeStringList) == 0 &&
+				strings.Compare(paramName, strings.TrimSpace(temp)) == 0 {
+				out = append(out, strings.Split(paramObj.Value, ",")...)
+				found = true
+				break
+			}
+			temp = strings.Replace(temp, paramName, paramObj.Value, -1)
+		}
+
+		// If value not found then add the string as it is
+		if !found {
+			out = append(out, temp)
+		}
+	}
+	return out, nil
 }

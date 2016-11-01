@@ -239,24 +239,24 @@ func (p *Plugin) runCommands(log log.T, pluginInput ApplicationPluginInput, orch
 	// Resolve ssm parameters
 	// This may contain sensitive information, do not log this data after resolving.
 	if pluginInput.Source, err = parameterstore.ResolveSecureString(log, pluginInput.Source); err != nil {
-		out.Errors = append(out.Errors, err.Error())
-		log.Errorf("Failed to resolve ssm parameters. Error: - %v", err)
+		errorString := fmt.Errorf("Failed to resolve ssm parameters. Error: - %v", err)
+		out.MarkAsFailed(log, errorString)
 		return
 	}
 
 	// Resolve ssm parameters
 	// This may contain sensitive information, do not log this data after resolving.
 	if pluginInput.SourceHash, err = parameterstore.ResolveSecureString(log, pluginInput.SourceHash); err != nil {
-		out.Errors = append(out.Errors, err.Error())
-		log.Errorf("Failed to resolve ssm parameters. Error: - %v", err)
+		errorString := fmt.Errorf("Failed to resolve ssm parameters. Error: - %v", err)
+		out.MarkAsFailed(log, errorString)
 		return
 	}
 
 	// Resolve ssm parameters
 	// This may contain sensitive information, do not log this data after resolving.
 	if pluginInput.SourceHashType, err = parameterstore.ResolveSecureString(log, pluginInput.SourceHashType); err != nil {
-		out.Errors = append(out.Errors, err.Error())
-		log.Errorf("Failed to resolve ssm parameters. Error: - %v", err)
+		errorString := fmt.Errorf("Failed to resolve ssm parameters. Error: - %v", err)
+		out.MarkAsFailed(log, errorString)
 		return
 	}
 
@@ -283,9 +283,10 @@ func (p *Plugin) runCommands(log log.T, pluginInput ApplicationPluginInput, orch
 
 	// Resolve ssm parameters
 	// This may contain sensitive information, do not log this data after resolving.
+	// Sample error msg: "Failed to resolve ssm parameters. Error: - Input contains invalid ssm parameters [commands]"
 	if pluginInput.Parameters, err = parameterstore.ResolveSecureString(log, pluginInput.Parameters); err != nil {
-		out.Errors = append(out.Errors, err.Error())
-		log.Errorf("Failed to resolve ssm parameters. Error: - %v", err)
+		errorString := fmt.Errorf("Failed to resolve ssm parameters. Error: - %v", err)
+		out.MarkAsFailed(log, errorString)
 		return
 	}
 
