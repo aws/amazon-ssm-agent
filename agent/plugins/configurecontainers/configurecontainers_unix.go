@@ -22,6 +22,7 @@ import (
 func runInstallCommands(log log.T, pluginInput ConfigureContainerPluginInput, orchestrationDirectory string) (out ConfigureContainerPluginOutput) {
 	//TODO Unix install
 
-	out.Errors = append(out.Errors, "Configure Containers is not currently supported on unix")
+	out.MarkAsFailed(log, errors.New("Configure Containers is not currently supported on unix"))
+
 	return out
 }
