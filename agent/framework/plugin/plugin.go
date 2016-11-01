@@ -20,11 +20,11 @@ import (
 
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/framework/runpluginutil"
-	"github.com/aws/amazon-ssm-agent/agent/inventory"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurecontainers"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configuredaemon"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/dockercontainer"
+	"github.com/aws/amazon-ssm-agent/agent/plugins/inventory"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/lrpminvoker"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/pluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/refreshassociation"
