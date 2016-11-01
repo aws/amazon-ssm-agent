@@ -17,6 +17,7 @@ package parameterstore
 import (
 	"testing"
 
+	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/stretchr/testify/assert"
 )
@@ -144,5 +145,24 @@ func testResolveSecureStringForStringListMethod(t *testing.T, testCase StringLis
 	result, err := ResolveSecureStringForStringList(logger, testCase.Input)
 
 	assert.Equal(t, testCase.Output, result)
+	assert.Nil(t, err)
+}
+
+func TestValidateSSMParameters(t *testing.T) {
+	var documentParameters = map[string]*contracts.Parameter{
+		"commands": &contracts.Parameter{
+			AllowedPattern: "^[a-zA-Z0-9]+$",
+		},
+		"workingDirectory": &contracts.Parameter{
+			AllowedPattern: "",
+		},
+	}
+
+	parameters := map[string]interface{}{
+		"commands":         "test",
+		"workingDirectory": "",
+	}
+
+	err := ValidateSSMParameters(logger, documentParameters, parameters)
 	assert.Nil(t, err)
 }

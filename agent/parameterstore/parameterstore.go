@@ -20,6 +20,7 @@ import (
 	"strings"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
+	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/sdkutil"
@@ -67,6 +68,59 @@ func Resolve(log log.T, input interface{}, resolveSecureString bool) (interface{
 
 	// Return resolved input
 	return input, nil
+}
+
+// ValidateSSMParameters validates whether the parameter value matches the allowed pattern
+func ValidateSSMParameters(
+	log log.T,
+	documentParameters map[string]*contracts.Parameter,
+	parameters map[string]interface{}) error {
+
+	resolvedParameters, err := Resolve(log, parameters, true)
+	if err != nil {
+		return err
+	}
+
+	var resolvedParamMap map[string]interface{}
+	err = jsonutil.Remarshal(resolvedParameters, &resolvedParamMap)
+	if err != nil {
+		return err
+	}
+
+	for paramName, paramObj := range documentParameters {
+		if paramObj.AllowedPattern != "" {
+			validParamValue, err := regexp.Compile(paramObj.AllowedPattern)
+			if err != nil {
+				return err
+			}
+
+			errorString := fmt.Errorf("Parameter value for %v does not match the allowed pattern %v", paramName, paramObj.AllowedPattern)
+			switch input := resolvedParamMap[paramName].(type) {
+			case string:
+				if !validParamValue.MatchString(input) {
+					return errorString
+				}
+
+			case []string:
+				for _, v := range input {
+					if !validParamValue.MatchString(v) {
+						return errorString
+					}
+				}
+
+			case []interface{}:
+				for _, v := range input {
+					if !validParamValue.MatchString(v.(string)) {
+						return errorString
+					}
+				}
+
+			default:
+				return fmt.Errorf("Invalid parameter value type for %v", paramName)
+			}
+		}
+	}
+	return nil
 }
 
 // ResolveSecureString resolves the ssm parameters if present in input string

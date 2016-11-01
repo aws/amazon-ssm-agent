@@ -69,6 +69,11 @@ func ReplacePluginParameters(
 	logger log.T) error {
 	var err error
 
+	// Validate SSM parameter values with allowed regex pattern
+	if err = parameterstore.ValidateSSMParameters(logger, payload.DocumentContent.Parameters, params); err != nil {
+		return err
+	}
+
 	runtimeConfig := payload.DocumentContent.RuntimeConfig
 	// we assume that one of the runtimeConfig and mainSteps should be nil
 	if runtimeConfig != nil && len(runtimeConfig) != 0 {

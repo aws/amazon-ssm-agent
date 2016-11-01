@@ -99,10 +99,11 @@ const (
 
 // A Parameter in the DocumentContent of an MDS message.
 type Parameter struct {
-	DefaultVal  interface{} `json:"default"`
-	Description string      `json:"description"`
-	ParamType   string      `json:"type"`
-	AllowedVal  []string    `json:"allowedValues"`
+	DefaultVal     interface{} `json:"default"`
+	Description    string      `json:"description"`
+	ParamType      string      `json:"type"`
+	AllowedVal     []string    `json:"allowedValues"`
+	AllowedPattern string      `json:"allowedPattern"`
 }
 
 // PluginConfig stores plugin configuration
