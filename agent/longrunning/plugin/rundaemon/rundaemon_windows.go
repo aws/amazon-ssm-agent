@@ -20,8 +20,8 @@ package rundaemon
 import (
 	"os"
 	"os/exec"
-	"path/filepath"
 	"strconv"
+	"strings"
 	"sync"
 	"time"
 
@@ -141,19 +141,15 @@ func StartDaemon(p *Plugin, context context.T, configuration string) (err error)
 
 		log.Infof("Attempting to Start Daemon")
 
-		scriptPath := filepath.Join(p.ExeLocation, configuration)
-		commandName := pluginutil.GetShellCommand()
-		commandArguments := append(GetShellArguments(), scriptPath, pluginutil.ExitCodeTrap)
-
 		//TODO Currently pathnames with spaces do not seem to work correctly with the below
 		// usage of exec.command. Given that ConfigurePackage defaults to a directory name which
 		// doesnt have spaces (C:/ProgramData/Amazon/SSM/....), the issue is not currently exposed.
 		// Needs to be fixed regardless.
 
-		log.Infof(commandName)
-		log.Infof("Running command: %v %v.", commandName, commandArguments)
+		commandArguments := append(strings.Split(configuration, " "), pluginutil.ExitCodeTrap)
+		log.Infof("Running command: %v.", commandArguments)
 
-		daemonInvoke := exec.Command(commandName, commandArguments...)
+		daemonInvoke := exec.Command(commandArguments[0], commandArguments[1:]...)
 		daemonInvoke.Dir = p.ExeLocation
 		err := DaemonCmdExecutor(daemonInvoke)
 

@@ -69,7 +69,7 @@ func TestSingleStartStop(t *testing.T) {
 	BlockWhileDaemonRunningExecutor = MockBlockWhileDaemonRunning
 	StopDaemonExecutor = MockStopDaemonExecutorWithNoError
 	t.Logf("Daemon starting")
-	p.Start(context, "Sleep 5", "", cancelFlag)
+	p.Start(context, "powershell Sleep 5", "", cancelFlag)
 	time.Sleep(2 * time.Second)
 	t.Logf("Daemon is running")
 	if IsDaemonRunningExecutor(p) {
@@ -95,7 +95,7 @@ func TestSuccessiveStarts(t *testing.T) {
 	BlockWhileDaemonRunningExecutor = MockBlockWhileDaemonRunning
 	StopDaemonExecutor = MockStopDaemonExecutorWithNoError
 	t.Logf("Daemon starting")
-	p.Start(context, "Sleep 5", "", cancelFlag)
+	p.Start(context, "powershell Sleep 5", "", cancelFlag)
 	time.Sleep(1 * time.Second)
 	t.Logf("Daemon is running")
 	if IsDaemonRunningExecutor(p) {
@@ -131,7 +131,7 @@ func TestMultipleStartStop(t *testing.T) {
 	StopDaemonExecutor = StopDaemon
 	for i := 0; i < 50; i++ {
 		t.Logf("Daemon starting")
-		p.Start(context, "Sleep 5", "", cancelFlag)
+		p.Start(context, "powershell Sleep 5", "", cancelFlag)
 		time.Sleep(5 * time.Second)
 		if p.Process != nil {
 			proc, err := os.FindProcess(p.Process.Pid)
