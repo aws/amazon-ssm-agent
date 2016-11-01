@@ -65,7 +65,6 @@ type DocumentInfo struct {
 type DocumentState struct {
 	DocumentInformation        DocumentInfo
 	DocumentType               DocumentType
-	PluginsInformation         map[string]PluginState
 	SchemaVersion              string
 	InstancePluginsInformation []PluginState
 	CancelInformation          CancelCommandInfo

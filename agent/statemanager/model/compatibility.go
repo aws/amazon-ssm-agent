@@ -49,49 +49,52 @@ func RemoveDependencyOnInstanceMetadata(context context.T, docState *DocumentSta
 	var properties []interface{}
 	var parsedDocumentProperties managedInstanceDocumentProperties
 
-	err := jsonutil.Remarshal(docState.PluginsInformation[appconfig.PluginNameAwsRunPowerShellScript].Configuration.Properties, &properties)
-	if err != nil {
-		log.Errorf("Invalid format of properties in %v document. error: %v", docState.DocumentInformation.DocumentName, err)
-		return err
-	}
+	for index, pluginState := range docState.InstancePluginsInformation {
+		if pluginState.Name == appconfig.PluginNameAwsRunPowerShellScript {
+			err := jsonutil.Remarshal(pluginState.Configuration.Properties, &properties)
+			if err != nil {
+				log.Errorf("Invalid format of properties in %v document. error: %v", docState.DocumentInformation.DocumentName, err)
+				return err
+			}
 
-	// Since 'Properties' is an array and we use only one property block for the above documents, array location '0' of 'Properties' is used.
-	err = jsonutil.Remarshal(properties[0], &parsedDocumentProperties)
-	if err != nil {
-		log.Errorf("Invalid format of properties in %v document. error: %v", docState.DocumentInformation.DocumentName, err)
-		return err
-	}
+			// Since 'Properties' is an array and we use only one property block for the above documents, array location '0' of 'Properties' is used.
+			err = jsonutil.Remarshal(properties[0], &parsedDocumentProperties)
+			if err != nil {
+				log.Errorf("Invalid format of properties in %v document. error: %v", docState.DocumentInformation.DocumentName, err)
+				return err
+			}
 
-	region, err := platform.Region()
-	if err != nil {
-		log.Errorf("Error retrieving agent region. error: %v", err)
-		return err
-	}
+			region, err := platform.Region()
+			if err != nil {
+				log.Errorf("Error retrieving agent region. error: %v", err)
+				return err
+			}
 
-	// Comment or replace the incompatible code from this document.
-	log.Info("Replacing managed instance incompatible code for AWS SSM Document.")
-	for i, command := range parsedDocumentProperties.RunCommand {
-		// remove the call to metadata service to retrieve the region for onprem instances
-		if strings.Contains(command, "$metadataLocation = 'http://169.254.169.254/latest/dynamic/instance-identity/document/region'") {
-			parsedDocumentProperties.RunCommand[i] = strings.Replace(command, "$metadataLocation = 'http://169.254.169.254/latest/dynamic/instance-identity/document/region'", "# $metadataLocation = 'http://169.254.169.254/latest/dynamic/instance-identity/document/region' (This is done to make it managed instance compatible)", 1)
+			// Comment or replace the incompatible code from this document.
+			log.Info("Replacing managed instance incompatible code for AWS SSM Document.")
+			for i, command := range parsedDocumentProperties.RunCommand {
+				// remove the call to metadata service to retrieve the region for onprem instances
+				if strings.Contains(command, "$metadataLocation = 'http://169.254.169.254/latest/dynamic/instance-identity/document/region'") {
+					parsedDocumentProperties.RunCommand[i] = strings.Replace(command, "$metadataLocation = 'http://169.254.169.254/latest/dynamic/instance-identity/document/region'", "# $metadataLocation = 'http://169.254.169.254/latest/dynamic/instance-identity/document/region' (This is done to make it managed instance compatible)", 1)
+				}
+
+				if strings.Contains(command, "$metadata = (New-Object Net.WebClient).DownloadString($metadataLocation)") {
+					parsedDocumentProperties.RunCommand[i] = strings.Replace(command, "$metadata = (New-Object Net.WebClient).DownloadString($metadataLocation)", "# $metadata = (New-Object Net.WebClient).DownloadString($metadataLocation) (This is done to make it managed instance compatible)", 1)
+				}
+
+				if strings.Contains(command, "$region = (ConvertFrom-JSON $metadata).region") {
+					parsedDocumentProperties.RunCommand[i] = strings.Replace(command, "$region = (ConvertFrom-JSON $metadata).region", "$region = '"+region+"'", 1)
+				}
+			}
+
+			// Plug-in the compatible 'Properties' block back to the document.
+			properties[0] = parsedDocumentProperties
+			var documentProperties interface{} = properties
+			pluginState.Configuration.Properties = documentProperties
+
+			docState.InstancePluginsInformation[index] = pluginState
 		}
-
-		if strings.Contains(command, "$metadata = (New-Object Net.WebClient).DownloadString($metadataLocation)") {
-			parsedDocumentProperties.RunCommand[i] = strings.Replace(command, "$metadata = (New-Object Net.WebClient).DownloadString($metadataLocation)", "# $metadata = (New-Object Net.WebClient).DownloadString($metadataLocation) (This is done to make it managed instance compatible)", 1)
-		}
-
-		if strings.Contains(command, "$region = (ConvertFrom-JSON $metadata).region") {
-			parsedDocumentProperties.RunCommand[i] = strings.Replace(command, "$region = (ConvertFrom-JSON $metadata).region", "$region = '"+region+"'", 1)
-		}
 	}
-
-	// Plug-in the compatible 'Properties' block back to the document.
-	properties[0] = parsedDocumentProperties
-	var documentProperties interface{} = properties
-	plugin := docState.PluginsInformation[appconfig.PluginNameAwsRunPowerShellScript]
-	plugin.Configuration.Properties = documentProperties
-
-	docState.PluginsInformation[appconfig.PluginNameAwsRunPowerShellScript] = plugin
 
 	return nil
 }

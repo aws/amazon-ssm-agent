@@ -19,7 +19,6 @@ import (
 	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
-	"github.com/aws/amazon-ssm-agent/agent/association/converter"
 	"github.com/aws/amazon-ssm-agent/agent/association/schedulemanager"
 	"github.com/aws/amazon-ssm-agent/agent/association/schedulemanager/signal"
 	"github.com/aws/amazon-ssm-agent/agent/association/service"
@@ -100,12 +99,6 @@ func (r *AssociationExecuter) ExecuteInProgressDocument(context context.T, docSt
 		schedulemanager.UpdateNextScheduledDate(log, docState.DocumentInformation.AssociationID)
 		signal.ExecuteAssociation(log)
 	}()
-
-	if docState.InstancePluginsInformation == nil {
-		log.Debug("Converting plugin information to fit v2 schema.")
-		docState.InstancePluginsInformation = converter.ConvertPluginsInformation(docState.PluginsInformation)
-		docState.PluginsInformation = map[string]stateModel.PluginState{}
-	}
 
 	totalNumberOfActions := len(docState.InstancePluginsInformation)
 	outputs := pluginExecution.RunPlugins(

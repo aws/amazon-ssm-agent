@@ -164,10 +164,10 @@ func buildPluginsInfo(
 
 	if payload.DocumentContent.RuntimeConfig != nil && len(payload.DocumentContent.RuntimeConfig) != 0 {
 		//initialize plugin states as map
-		pluginsInfo := make(map[string]stateModel.PluginState)
+		pluginsInfo := []stateModel.PluginState{}
 
 		// getPluginConfigurations converts from PluginConfig (structure from the MDS message) to plugin.Configuration (structure expected by the plugin)
-		pluginConfigurations := make(map[string]*contracts.Configuration)
+		pluginConfigurations := []*contracts.Configuration{}
 		for pluginName, pluginConfig := range payload.DocumentContent.RuntimeConfig {
 			config := contracts.Configuration{
 				Settings:               pluginConfig.Settings,
@@ -177,20 +177,21 @@ func buildPluginsInfo(
 				OrchestrationDirectory: fileutil.BuildPath(orchestrationDir, pluginName),
 				MessageId:              documentInfo.MessageID,
 				BookKeepingFileName:    documentInfo.DocumentID,
+				PluginID:               pluginName,
 			}
-			pluginConfigurations[pluginName] = &config
+			pluginConfigurations = append(pluginConfigurations, &config)
 		}
 
-		for key, value := range pluginConfigurations {
+		for _, config := range pluginConfigurations {
 			var plugin stateModel.PluginState
-			plugin.Configuration = *value
+			plugin.Configuration = *config
 			plugin.HasExecuted = false
-			plugin.Id = key
-			plugin.Name = key
-			pluginsInfo[key] = plugin
+			plugin.Id = config.PluginID
+			plugin.Name = config.PluginID
+			pluginsInfo = append(pluginsInfo, plugin)
 		}
 
-		docState.PluginsInformation = pluginsInfo
+		docState.InstancePluginsInformation = pluginsInfo
 		return
 	}
 

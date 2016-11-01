@@ -23,6 +23,7 @@ import (
 	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
+	"github.com/aws/amazon-ssm-agent/agent/association/converter"
 	"github.com/aws/amazon-ssm-agent/agent/association/model"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
@@ -84,9 +85,9 @@ func TestParseAssociationWithAssociationVersion1_2(t *testing.T) {
 	pluginsInfo[pluginName] = plugin
 
 	expectedDocState := stateModel.DocumentState{
-		PluginsInformation: pluginsInfo,
-		DocumentType:       stateModel.Association,
-		SchemaVersion:      "1.2",
+		InstancePluginsInformation: converter.ConvertPluginsInformation(pluginsInfo),
+		DocumentType:               stateModel.Association,
+		SchemaVersion:              "1.2",
 	}
 
 	payload := &messageContracts.SendCommandPayload{}
@@ -98,9 +99,8 @@ func TestParseAssociationWithAssociationVersion1_2(t *testing.T) {
 	assert.Equal(t, nil, err2)
 	assert.Equal(t, expectedDocState.SchemaVersion, docState.SchemaVersion)
 	assert.Equal(t, stateModel.Association, docState.DocumentType)
-	assert.True(t, docState.InstancePluginsInformation == nil)
 
-	pluginInfo := docState.PluginsInformation[pluginName]
+	pluginInfo := docState.InstancePluginsInformation[0]
 	expectedProp := []interface{}{map[string]interface{}{"source": source[0], "sourceHash": "", "id": "0.aws:applications", "action": "Install", "parameters": ""}}
 
 	assert.Equal(t, expectedProp, pluginInfo.Configuration.Properties)
@@ -176,7 +176,6 @@ func TestParseAssociationWithAssociationVersion2_0(t *testing.T) {
 	}
 
 	assert.Equal(t, nil, err)
-	assert.True(t, docState.PluginsInformation == nil)
 	assert.Equal(t, expectedDocState.SchemaVersion, docState.SchemaVersion)
 	assert.Equal(t, stateModel.Association, docState.DocumentType)
 	assert.Equal(t, documentInfo.MessageID, docState.DocumentInformation.MessageID)

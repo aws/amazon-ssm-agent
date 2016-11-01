@@ -98,7 +98,7 @@ func (p *Processor) processPendingDocuments(instanceID string) {
 
 	//iterate through all pending messages
 	for _, f := range files {
-		log.Debugf("Processing an older message with messageID - %v", f.Name())
+		log.Debugf("Processing an older document - %v", f.Name())
 
 		//construct the absolute path - safely assuming that interim state for older messages are already present in Pending folder
 		filePath := filepath.Join(pendingDocsLocation, f.Name())
@@ -106,7 +106,7 @@ func (p *Processor) processPendingDocuments(instanceID string) {
 		docState := model.DocumentState{}
 		//parse the message
 		if err := jsonutil.UnmarshalFile(filePath, &docState); err != nil {
-			log.Errorf("skipping processsing of pending messages. encountered error %v while reading pending message from file - %v", err, f)
+			log.Errorf("skipping processsing of pending document. encountered error %v while reading pending document from file - %v", err, f)
 			break
 		}
 
@@ -128,14 +128,14 @@ func (p *Processor) processInProgressDocuments(instanceID string) {
 	pendingDocsLocation := statemanager.DocumentStateDir(instanceID, appconfig.DefaultLocationOfCurrent)
 
 	if isDirectoryEmpty, _ := fileutil.IsDirEmpty(pendingDocsLocation); isDirectoryEmpty {
-		log.Debugf("no older messages to process from %v", pendingDocsLocation)
+		log.Debugf("no older document to process from %v", pendingDocsLocation)
 		return
 
 	}
 
 	files := []os.FileInfo{}
 	if files, err = ioutil.ReadDir(pendingDocsLocation); err != nil {
-		log.Errorf("skipping reading inprogress messages from %v. unexpected error encountered - %v", pendingDocsLocation, err)
+		log.Errorf("skipping reading inprogress document from %v. unexpected error encountered - %v", pendingDocsLocation, err)
 		return
 	}
 
@@ -149,7 +149,7 @@ func (p *Processor) processInProgressDocuments(instanceID string) {
 
 		//parse the message
 		if err := jsonutil.UnmarshalFile(file, &docState); err != nil {
-			log.Errorf("skipping processsing of previously unexecuted messages. encountered error %v while reading unprocessed message from file - %v", err, f)
+			log.Errorf("skipping processsing of previously unexecuted documents. encountered error %v while reading unprocessed document from file - %v", err, f)
 			//TODO: Move doc to corrupt/failed
 			break
 		}
@@ -165,18 +165,14 @@ func (p *Processor) processInProgressDocuments(instanceID string) {
 			break
 		}
 
-		pluginOutputs := make(map[string]*contracts.PluginResult)
-
 		// increment the command run count
 		docState.DocumentInformation.RunCount++
 		// Update reboot status
-		for v := range docState.PluginsInformation {
-			plugin := docState.PluginsInformation[v]
+		for index, plugin := range docState.InstancePluginsInformation {
 			if plugin.HasExecuted && plugin.Result.Status == contracts.ResultStatusSuccessAndReboot {
-				log.Debugf("plugin %v has completed a reboot. Setting status to InProgress to resume the work.", v)
+				log.Debugf("plugin %v has completed a reboot. Setting status to InProgress to resume the work.", plugin.Name)
 				plugin.Result.Status = contracts.ResultStatusInProgress
-				docState.PluginsInformation[v] = plugin
-				pluginOutputs[v] = &plugin.Result
+				docState.InstancePluginsInformation[index] = plugin
 			}
 		}
 
