@@ -1,8 +1,10 @@
 package dockercontainer
 
 import (
+	"errors"
 	"fmt"
 	"io/ioutil"
+	"regexp"
 	"strconv"
 	"time"
 
@@ -34,9 +36,6 @@ const (
 	PULL    = "Pull"
 	IMAGES  = "Images"
 	RMI     = "Rmi"
-
-	// defaultExecutionTimeoutInSeconds represents default timeout time for execution of command in seconds
-	defaultExecutionTimeoutInSeconds = 3600
 )
 
 var dockerExecCommand = "docker.exe"
@@ -182,8 +181,7 @@ func (p *Plugin) runCommands(log log.T, pluginInput DockerContainerPluginInput, 
 	var tempDir string
 	if useTempDirectory {
 		if tempDir, err = ioutil.TempDir("", "Ec2RunCommand"); err != nil {
-			out.Errors = append(out.Errors, err.Error())
-			log.Error(err)
+			out.MarkAsFailed(log, err)
 			return
 		}
 		orchestrationDirectory = tempDir
@@ -192,10 +190,16 @@ func (p *Plugin) runCommands(log log.T, pluginInput DockerContainerPluginInput, 
 	orchestrationDir := fileutil.BuildPath(orchestrationDirectory, pluginInput.ID)
 	log.Debugf("OrchestrationDir %v ", orchestrationDir)
 
+	if err = validateInputs(pluginInput); err != nil {
+		log.Error("Validation error", err)
+		out.MarkAsFailed(log, err)
+		return out
+	}
+
 	// create orchestration dir if needed
 	if err = fileutil.MakeDirs(orchestrationDir); err != nil {
 		log.Debug("failed to create orchestrationDir directory", orchestrationDir, err)
-		out.Errors = append(out.Errors, err.Error())
+		out.MarkAsFailed(log, err)
 		return
 	}
 	var command string = "docker"
@@ -204,7 +208,7 @@ func (p *Plugin) runCommands(log log.T, pluginInput DockerContainerPluginInput, 
 	case CREATE, RUN:
 		if len(pluginInput.Image) == 0 {
 			log.Errorf("Action %s requires paramter image ", pluginInput.Action)
-			out.Errors = append(out.Errors, err.Error())
+			out.MarkAsFailed(log, err)
 			return out
 		}
 		parameters = make([]string, 0)
@@ -254,7 +258,7 @@ func (p *Plugin) runCommands(log log.T, pluginInput DockerContainerPluginInput, 
 		parameters = append(parameters, "start")
 		if len(pluginInput.Container) == 0 {
 			log.Error("Action Start requires paramter container")
-			out.Errors = append(out.Errors, err.Error())
+			out.MarkAsFailed(log, err)
 			return out
 		}
 		parameters = append(parameters, pluginInput.Container)
@@ -263,7 +267,7 @@ func (p *Plugin) runCommands(log log.T, pluginInput DockerContainerPluginInput, 
 		parameters = append(parameters, "rm")
 		if len(pluginInput.Container) == 0 {
 			log.Error("Action Rm requires paramter container")
-			out.Errors = append(out.Errors, err.Error())
+			out.MarkAsFailed(log, err)
 			return out
 		}
 		parameters = append(parameters, pluginInput.Container)
@@ -272,7 +276,7 @@ func (p *Plugin) runCommands(log log.T, pluginInput DockerContainerPluginInput, 
 		parameters = append(parameters, "stop")
 		if len(pluginInput.Container) == 0 {
 			log.Error("Action Stop requires paramter container")
-			out.Errors = append(out.Errors, err.Error())
+			out.MarkAsFailed(log, err)
 			return out
 		}
 		parameters = append(parameters, pluginInput.Container)
@@ -281,12 +285,12 @@ func (p *Plugin) runCommands(log log.T, pluginInput DockerContainerPluginInput, 
 		parameters = append(parameters, "exec")
 		if len(pluginInput.Container) == 0 {
 			log.Error("Action Exec requires paramter container")
-			out.Errors = append(out.Errors, err.Error())
+			out.MarkAsFailed(log, err)
 			return out
 		}
 		if len(pluginInput.Cmd) == 0 {
 			log.Error("Action Exec requires paramter Cmd")
-			out.Errors = append(out.Errors, err.Error())
+			out.MarkAsFailed(log, err)
 			return out
 		}
 		if len(pluginInput.User) > 0 {
@@ -297,9 +301,9 @@ func (p *Plugin) runCommands(log log.T, pluginInput DockerContainerPluginInput, 
 		parameters = append(parameters, pluginInput.Cmd)
 	case INSPECT:
 		parameters = append(parameters, "inspect")
-		if len(pluginInput.Container) == 0 || len(pluginInput.Image) == 0 {
+		if len(pluginInput.Container) == 0 && len(pluginInput.Image) == 0 {
 			log.Error("Action Inspect requires paramter container or image")
-			out.Errors = append(out.Errors, err.Error())
+			out.MarkAsFailed(log, err)
 			return out
 		}
 		parameters = append(parameters, pluginInput.Container)
@@ -314,7 +318,7 @@ func (p *Plugin) runCommands(log log.T, pluginInput DockerContainerPluginInput, 
 		parameters = append(parameters, "logs")
 		if len(pluginInput.Container) == 0 {
 			log.Error("Action Rm requires paramter container")
-			out.Errors = append(out.Errors, err.Error())
+			out.MarkAsFailed(log, err)
 			return out
 		}
 		parameters = append(parameters, pluginInput.Container)
@@ -322,7 +326,7 @@ func (p *Plugin) runCommands(log log.T, pluginInput DockerContainerPluginInput, 
 		parameters = append(parameters, "pull")
 		if len(pluginInput.Image) == 0 {
 			log.Error("Action Pull requires paramter image")
-			out.Errors = append(out.Errors, err.Error())
+			out.MarkAsFailed(log, err)
 			return out
 		}
 		parameters = append(parameters, pluginInput.Image)
@@ -332,7 +336,7 @@ func (p *Plugin) runCommands(log log.T, pluginInput DockerContainerPluginInput, 
 		parameters = append(parameters, "rmi")
 		if len(pluginInput.Image) == 0 {
 			log.Error("Action Rmi requires paramter image")
-			out.Errors = append(out.Errors, err.Error())
+			out.MarkAsFailed(log, err)
 			return out
 		}
 		parameters = append(parameters, pluginInput.Image)
@@ -354,7 +358,7 @@ func (p *Plugin) runCommands(log log.T, pluginInput DockerContainerPluginInput, 
 	output, err = dep.UpdateUtilExeCommandOutput(1800, log, command, parameters, "", "", "", "", true)
 	if err != nil {
 		log.Error("Error running docker command ", err)
-		out.Errors = append(out.Errors, err.Error())
+		out.MarkAsFailed(log, err)
 		return out
 	}
 	log.Info("Save-Module output:", output)
@@ -370,4 +374,46 @@ func (p *Plugin) runCommands(log log.T, pluginInput DockerContainerPluginInput, 
 	responseContent, _ := jsonutil.Marshal(out)
 	log.Debug("Returning response:\n", jsonutil.Indent(responseContent))
 	return out
+}
+
+func validateInputs(pluginInput DockerContainerPluginInput) (err error) {
+	validContainerName := regexp.MustCompile(`^[a-zA-Z0-9_\-\\\/]*$`)
+	if !validContainerName.MatchString(pluginInput.Container) {
+		return errors.New("Invalid container name, only [a-zA-Z0-9_-] are allowed")
+	}
+	validImageValue := regexp.MustCompile(`^[a-zA-Z0-9_\-\\\/]*$`)
+	if !validImageValue.MatchString(pluginInput.Image) {
+		return errors.New("Invalid image value, only [a-zA-Z0-9_-] are allowed")
+	}
+	validUserValue := regexp.MustCompile(`^[a-zA-Z0-9_-]*$`)
+	if !validUserValue.MatchString(pluginInput.User) {
+		return errors.New("Invalid user value")
+	}
+	validPathName := regexp.MustCompile(`^[\w\\\/_\:\-\.\"\(\)\^ ]*$`)
+	for _, vol := range pluginInput.Volume {
+		if !validPathName.MatchString(vol) {
+			return errors.New("Invalid volume")
+		}
+	}
+	validCpuSharesValue := regexp.MustCompile(`^/?[a-zA-Z0-9_-]*$`)
+	if !validCpuSharesValue.MatchString(pluginInput.CpuShares) {
+		return errors.New("Invalid CpuShares value, only integars are allowed")
+	}
+	validMemoryValue := regexp.MustCompile(`^[0-9]*[bkmg]?$`)
+	if !validMemoryValue.MatchString(pluginInput.Memory) {
+		return errors.New("Invalid CpuShares value")
+	}
+	validPublishValue := regexp.MustCompile(`^[0-9a-zA-Z:\-\/.]*$`)
+	if !validPublishValue.MatchString(pluginInput.Publish) {
+		return errors.New("Invalid Publish value")
+	}
+	blacklist := regexp.MustCompile(`[;,&|]+`)
+	if blacklist.MatchString(pluginInput.Env) {
+		return errors.New("Invalid environment variable value")
+	}
+	if blacklist.MatchString(pluginInput.Cmd) {
+		return errors.New("Invalid command value")
+	}
+
+	return err
 }

@@ -74,7 +74,7 @@ func NewPlugin(pluginConfig pluginutil.PluginConfig) (*Plugin, error) {
 
 // Name returns the name of the plugin
 func Name() string {
-	return appconfig.PluginNameConfigureContainers
+	return appconfig.PluginNameConfigureDocker
 }
 
 // Execute runs multiple sets of commands and returns their outputs.
@@ -164,7 +164,7 @@ func (p *Plugin) runCommands(log log.T, pluginInput ConfigureContainerPluginInpu
 	// create orchestration dir if needed
 	if err = fileutil.MakeDirs(orchestrationDir); err != nil {
 		log.Debug("failed to create orchestrationDir directory", orchestrationDir, err)
-		out.Errors = append(out.Errors, err.Error())
+		out.MarkAsFailed(log, err)
 		return
 	}
 	log.Info("********************************starting configure container plugin**************************************")
@@ -172,6 +172,8 @@ func (p *Plugin) runCommands(log log.T, pluginInput ConfigureContainerPluginInpu
 	switch pluginInput.Action {
 	case INSTALL:
 		out = runInstallCommands(log, pluginInput, orchestrationDir)
+	case UNINSTALL:
+		out = runUninstallCommands(log, pluginInput, orchestrationDir)
 
 	default:
 		out.MarkAsFailed(log, fmt.Errorf("configure Action is set to unsupported value: %v", pluginInput.Action))
