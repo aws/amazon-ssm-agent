@@ -137,8 +137,8 @@ func (p *Processor) ProcessAssociation() {
 		log.Debug("Association content is \n", jsonutil.Indent(assocContent))
 
 		if err = p.assocSvc.LoadAssociationDetail(log, assoc); err != nil {
-			message := fmt.Sprintf("Unable to load association details, %v", err)
-			log.Error(message)
+			message := "Encountered error while loading association contents"
+			log.Errorf("%v, %v", message, err)
 			p.updateInstanceAssocStatus(
 				assoc.Association,
 				contracts.AssociationStatusFailed,
@@ -149,7 +149,7 @@ func (p *Processor) ProcessAssociation() {
 		}
 	}
 
-	schedulemanager.Refresh(log, associations)
+	schedulemanager.Refresh(log, associations, p.assocSvc)
 	signal.ExecuteAssociation(log)
 }
 
@@ -199,8 +199,8 @@ func (p *Processor) runScheduledAssociation(log log.T) {
 
 	var docState *stateModel.DocumentState
 	if docState, err = p.parseAssociation(scheduledAssociation); err != nil {
-		message := fmt.Sprintf("Unable to parse association, %v", err)
-		log.Error(message)
+		message := "Encountered error while parsing association"
+		log.Errorf("%v, %v", message, err)
 		p.updateInstanceAssocStatus(
 			scheduledAssociation.Association,
 			contracts.AssociationStatusFailed,
@@ -212,8 +212,8 @@ func (p *Processor) runScheduledAssociation(log log.T) {
 	}
 
 	if err = p.persistAssociationForExecution(log, docState); err != nil {
-		message := fmt.Sprintf("Unable to submit association for exectution, %v", err)
-		log.Error(message)
+		message := "Encountered error while loading association contents"
+		log.Errorf("%v, %v", message, err)
 		p.updateInstanceAssocStatus(
 			scheduledAssociation.Association,
 			contracts.AssociationStatusFailed,

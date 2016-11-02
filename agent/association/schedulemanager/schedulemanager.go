@@ -22,6 +22,8 @@ import (
 	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/association/model"
+	"github.com/aws/amazon-ssm-agent/agent/association/service"
+	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/times"
@@ -32,7 +34,7 @@ var associations = []*model.InstanceAssociation{}
 var lock sync.RWMutex
 
 // Refresh refreshes cached associationRawData
-func Refresh(log log.T, assocs []*model.InstanceAssociation) {
+func Refresh(log log.T, assocs []*model.InstanceAssociation, svc service.T) {
 	lock.Lock()
 	defer lock.Unlock()
 
@@ -54,7 +56,18 @@ func Refresh(log log.T, assocs []*model.InstanceAssociation) {
 		}
 
 		if !foundMatch || newAssoc.RunNow {
-			newAssoc.Initialize(log, currentTime)
+			if err := newAssoc.Initialize(log, currentTime); err != nil {
+				message := "Encountered error while initializing association"
+				log.Errorf("%v, %v", message, err)
+				svc.UpdateInstanceAssociationStatus(log,
+					*newAssoc.Association.AssociationId,
+					*newAssoc.Association.InstanceId,
+					contracts.AssociationStatusFailed,
+					contracts.AssociationErrorCodeInvalidExpression,
+					times.ToIso8601UTC(newAssoc.CreateDate),
+					message)
+				newAssoc.ExcludeFromFutureScheduling = true
+			}
 
 			//todo: call service to update association status
 			if newAssoc.ExcludeFromFutureScheduling {
