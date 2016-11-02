@@ -37,6 +37,9 @@ const (
 
 	// ErrorMsg represents the error message to be sent to the customer
 	ErrorMsg = "Encountered error while parsing input - internal error"
+
+	// MaxParametersPerCall represents the max number of parameters you can send in one GetParameters call
+	MaxParametersPerCall = 10
 )
 
 var callParameterService = callGetParameters
@@ -242,20 +245,32 @@ func getSSMParameterValues(log log.T, ssmParams []string, resolveSecureString bo
 
 // callGetParameters makes a GetParameters API call to the service
 func callGetParameters(log log.T, paramNames []string) (*GetParametersResponse, error) {
+	finalResult := GetParametersResponse{}
+
 	ssmSvc := ssm.NewService()
 
-	result, err := ssmSvc.GetParameters(log, paramNames)
-	if err != nil {
-		return nil, err
+	for i := 0; i < len(paramNames); i = i + MaxParametersPerCall {
+		limit := i + MaxParametersPerCall
+		if limit > len(paramNames) {
+			limit = len(paramNames)
+		}
+
+		result, err := ssmSvc.GetParameters(log, paramNames[i:limit])
+		if err != nil {
+			return nil, err
+		}
+
+		var response GetParametersResponse
+		err = jsonutil.Remarshal(result, &response)
+		if err != nil {
+			log.Debug(err)
+			errorString := "Encountered error while parsing GetParameters output"
+			return nil, fmt.Errorf("%v", errorString)
+		}
+
+		finalResult.Parameters = append(finalResult.Parameters, response.Parameters...)
+		finalResult.InvalidParameters = append(finalResult.InvalidParameters, response.InvalidParameters...)
 	}
 
-	var response GetParametersResponse
-	err = jsonutil.Remarshal(result, &response)
-	if err != nil {
-		log.Debug(err)
-		errorString := "Encountered error while parsing GetParameters output"
-		return nil, fmt.Errorf("%v", errorString)
-	}
-
-	return &response, nil
+	return &finalResult, nil
 }
