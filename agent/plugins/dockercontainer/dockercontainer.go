@@ -191,7 +191,7 @@ func (p *Plugin) runCommands(log log.T, pluginInput DockerContainerPluginInput, 
 	log.Debugf("OrchestrationDir %v ", orchestrationDir)
 
 	if err = validateInputs(pluginInput); err != nil {
-		log.Errorf("Validation error", err)
+		log.Error("Validation error", err)
 		out.MarkAsFailed(log, err)
 		return out
 	}
