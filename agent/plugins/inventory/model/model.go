@@ -62,10 +62,10 @@ type ApplicationData struct {
 	Name            string
 	Publisher       string
 	Version         string
-	InstalledTime   string
-	ApplicationType string
+	InstalledTime   string `json:",omitempty"`
+	ApplicationType string `json:",omitempty"`
 	Architecture    string
-	URL             string
+	URL             string `json:",omitempty"`
 }
 
 // NetworkData captures all attributes present in AWS:Network inventory type

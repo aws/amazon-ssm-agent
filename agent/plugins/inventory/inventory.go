@@ -269,7 +269,7 @@ func (p *Plugin) SendDataToInventory(context context.T, items []*ssm.InventoryIt
 		status = false
 		if aerr, ok := err.(awserr.Error); ok {
 			//NOTE: awserr.Code -> is not the error code but the exception name itself!!!!
-			if aerr.Code() == "ItemContentMismatchException" {
+			if aerr.Code() == "ItemContentMismatchException" || aerr.Code() == "InvalidItemContentException" {
 				log.Debugf("ItemContentMismatchException encountered - inventory plugin will try sending data again")
 				retryWithFullData = true
 			} else {

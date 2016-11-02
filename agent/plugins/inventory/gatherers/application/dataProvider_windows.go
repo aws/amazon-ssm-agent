@@ -29,8 +29,8 @@ import (
 
 const (
 	PowershellCmd            = "powershell"
-	ArgsFor32BitApplications = `Get-ItemProperty HKLM:\Software\Microsoft\Windows\CurrentVersion\Uninstall\* | Where-Object {$_.DisplayName -ne $null} | Select-Object @{Name="Name";Expression={$_."DisplayName"}}, @{Name="Version";Expression={$_."DisplayVersion"}}, Publisher, @{Name="InstalledTime";Expression={$_."InstallDate"}} | ConvertTo-Json`
-	ArgsFor64BitApplications = `Get-ItemProperty HKLM:\Software\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\* | Where-Object {$_.DisplayName -ne $null} | Select-Object @{Name="Name";Expression={$_."DisplayName"}}, @{Name="Version";Expression={$_."DisplayVersion"}}, Publisher, @{Name="InstalledTime";Expression={$_."InstallDate"}} | ConvertTo-Json`
+	ArgsFor32BitApplications = `Get-ItemProperty HKLM:\Software\Microsoft\Windows\CurrentVersion\Uninstall\* | Where-Object {$_.DisplayName -ne $null} | Select-Object @{Name="Name";Expression={$_."DisplayName"}}, @{Name="Version";Expression={$_."DisplayVersion"}}, Publisher, @{Name="InstalledTime";Expression={[datetime]::ParseExact($_."InstallDate","yyyyMMdd",$null).DateTime}} | ConvertTo-Json`
+	ArgsFor64BitApplications = `Get-ItemProperty HKLM:\Software\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\* | Where-Object {$_.DisplayName -ne $null} | Select-Object @{Name="Name";Expression={$_."DisplayName"}}, @{Name="Version";Expression={$_."DisplayVersion"}}, Publisher, @{Name="InstalledTime";Expression={[datetime]::ParseExact($_."InstallDate","yyyyMMdd",$null).DateTime}} | ConvertTo-Json`
 
 	Arch64Bit = "64-Bit"
 	Arch32Bit = "32-Bit"

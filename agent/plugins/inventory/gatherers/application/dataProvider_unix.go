@@ -43,7 +43,7 @@ const (
 	rpmCmd                        = "rpm"
 	rpmCmdArgToGetAllApplications = "-qa"
 	rpmQueryFormat                = "--queryformat"
-	rpmQueryFormatArgs            = `\{\"Name\":\"%{NAME}\",\"Publisher\":\"%{VENDOR}\",\"Version\":\"%{VERSION}\",\"InstalledTime\":\"%{INSTALLTIME}\",\"ApplicationType\":\"%{GROUP}\",\"Architecture\":\"%{ARCH}\",\"Url\":\"%{URL}\"\},`
+	rpmQueryFormatArgs            = `\{\"Name\":\"%{NAME}\",\"Publisher\":\"%{VENDOR}\",\"Version\":\"%{VERSION}\",\"InstalledTime\":\"%{INSTALLTIME:date}\",\"ApplicationType\":\"%{GROUP}\",\"Architecture\":\"%{ARCH}\",\"Url\":\"%{URL}\"\},`
 
 	// dpkg query commands related constants
 	dpkgCmd                      = "dpkg-query"
@@ -282,6 +282,8 @@ func ConvertToApplicationData(input string) (data []model.ApplicationData, err e
 
 	//unmarshall json string accordingly.
 	err = json.Unmarshal([]byte(str), &data)
+
+	//transform the date
 
 	return
 }
