@@ -15,9 +15,8 @@
 package plugin
 
 import (
-	"time"
-
 	"path/filepath"
+	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
