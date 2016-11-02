@@ -236,12 +236,15 @@ func (r *AssociationExecuter) associationExecutionReport(
 
 // buildOutput build the output message for association update
 func buildOutput(runtimeStatuses map[string]*contracts.PluginRuntimeStatus, totalNumberOfPlugins int) string {
-	completed := len(runtimeStatuses)
 	plural := ""
-
 	if totalNumberOfPlugins > 1 {
 		plural = "s"
 	}
+
+	completed := len(filterByStatus(runtimeStatuses, func(status contracts.ResultStatus) bool {
+		return status != ""
+	}))
+
 	success := len(filterByStatus(runtimeStatuses, func(status contracts.ResultStatus) bool {
 		return status == contracts.ResultStatusPassedAndReboot ||
 			status == contracts.ResultStatusSuccessAndReboot ||
