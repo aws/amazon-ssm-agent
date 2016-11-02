@@ -352,12 +352,7 @@ func (m *configureManager) validateInput(input *ConfigurePackagePluginInput) (va
 	}
 	validNameValue := regexp.MustCompile(`^[a-zA-Z_]+([-.][a-zA-Z0-9_]+)*$`)
 	if !validNameValue.MatchString(input.Name) {
-		return errors.New("Invalid name, must start and end with letter or _ and contain only letters, numbers, -, _, or single . characters")
-	}
-
-	// version not needed for uninstall
-	if input.Action == UninstallAction && input.Version == "" {
-		return true, nil
+		return false, errors.New("Invalid name, must start and end with letter or _ and contain only letters, numbers, -, _, or single . characters")
 	}
 
 	if version := input.Version; version != "" {
