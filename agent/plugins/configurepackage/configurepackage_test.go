@@ -200,6 +200,25 @@ func TestValidateInput(t *testing.T) {
 	assert.NoError(t, err)
 }
 
+func TestValidateInput_Source(t *testing.T) {
+	//pluginInformation := createStubPluginInput()
+
+	input := ConfigurePackagePluginInput{}
+
+	input.Version = "1.0.0"
+	input.Name = "PVDriver"
+	input.Action = "Install"
+	input.Source = "http://amazon.com"
+
+	manager := configureManager{}
+
+	result, err := manager.validateInput(&input)
+
+	assert.False(t, result)
+	assert.Error(t, err)
+	assert.Contains(t, err.Error(), "source parameter is not supported")
+}
+
 func TestValidateInput_Name(t *testing.T) {
 	input := ConfigurePackagePluginInput{}
 

@@ -56,6 +56,7 @@ type ConfigurePackagePluginInput struct {
 	Name    string `json:"name"`
 	Version string `json:"version"`
 	Action  string `json:"action"`
+	Source  string `json:"source"`
 }
 
 // ConfigurePackagePluginOutput represents the output of the plugin.
@@ -237,10 +238,12 @@ func runConfigurePackage(
 		if err != nil {
 			output.MarkAsFailed(log, fmt.Errorf("failed to install package: %v", err))
 		} else if result == contracts.ResultStatusSuccessAndReboot || result == contracts.ResultStatusPassedAndReboot {
+			output.AppendInfo(log, "Successfully installed %v %v", input.Name, version)
 			output.MarkAsSucceeded(true)
 		} else if result != contracts.ResultStatusSuccess {
 			output.MarkAsFailed(log, fmt.Errorf("install action state was %v and not %v", result, contracts.ResultStatusSuccess))
 		} else {
+			output.AppendInfo(log, "Successfully installed %v %v", input.Name, version)
 			output.MarkAsSucceeded(false)
 		}
 
@@ -267,10 +270,12 @@ func runConfigurePackage(
 		if err != nil {
 			output.MarkAsFailed(log, fmt.Errorf("failed to uninstall package: %v", err))
 		} else if result == contracts.ResultStatusSuccessAndReboot || result == contracts.ResultStatusPassedAndReboot {
+			output.AppendInfo(log, "Successfully uninstalled %v %v", input.Name, version)
 			output.MarkAsSucceeded(true)
 		} else if result != contracts.ResultStatusSuccess {
 			output.MarkAsFailed(log, fmt.Errorf("uninstall action state was %v and not %v", result, contracts.ResultStatusSuccess))
 		} else {
+			output.AppendInfo(log, "Successfully uninstalled %v %v", input.Name, version)
 			output.MarkAsSucceeded(false)
 		}
 	default:
@@ -336,9 +341,18 @@ func ensurePackage(log log.T,
 
 // validateInput ensures the plugin input matches the defined schema
 func (m *configureManager) validateInput(input *ConfigurePackagePluginInput) (valid bool, err error) {
+	// source not yet supported
+	if input.Source != "" {
+		return false, errors.New("source parameter is not supported in this version")
+	}
+
 	// ensure non-empty name
 	if input.Name == "" {
 		return false, errors.New("empty name field")
+	}
+	validNameValue := regexp.MustCompile(`^[a-zA-Z_]+([-.][a-zA-Z0-9_]+)*$`)
+	if !validNameValue.MatchString(input.Name) {
+		return errors.New("Invalid name, must start and end with letter or _ and contain only letters, numbers, -, _, or single . characters")
 	}
 
 	// version not needed for uninstall
@@ -450,7 +464,6 @@ func runInstallPackage(p *Plugin,
 	if _, status, err = executeAction(p, "install", packageName, version, log, output, directory); err != nil {
 		return status, err
 	}
-	output.AppendInfo(log, "Successfully installed %v %v", packageName, version)
 	return
 }
 
@@ -471,7 +484,6 @@ func runUninstallPackage(p *Plugin,
 	if err = filesysdep.RemoveAll(directory); err != nil {
 		return contracts.ResultStatusFailed, fmt.Errorf("failed to delete directory %v due to %v", directory, err)
 	}
-	output.AppendInfo(log, "Successfully uninstalled %v %v", packageName, version)
 	return status, nil
 }
 
@@ -495,7 +507,6 @@ func executeAction(p *Plugin,
 		if err != nil {
 			return true, contracts.ResultStatusFailed, err
 		}
-		//actionOrchDir := filepath.Join(filepath.Base(p.orchestrationDir), fmt.Sprintf("%v-%v", filepath.Dir(p.orchestrationDir), actionName))
 		pluginsInfo, err := execdep.ParseDocument(p, file, p.orchestrationDir, p.s3Bucket, p.s3Prefix, p.messageID, p.documentID, executeDirectory)
 		if err != nil {
 			return true, contracts.ResultStatusFailed, err
