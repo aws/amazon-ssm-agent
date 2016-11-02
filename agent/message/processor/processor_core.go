@@ -92,15 +92,15 @@ func (p *Processor) runCmdsUsingCmdState(context context.T,
 		newCmdState.DocumentInformation.InstanceID,
 		appconfig.DefaultLocationOfCurrent)
 
-	// Skip sending response when the document requires a reboot
-	if newCmdState.DocumentInformation.DocumentStatus == contracts.ResultStatusSuccessAndReboot {
-		log.Debug("skipping sending response of %v since the document requires a reboot", newCmdState.DocumentInformation.MessageID)
-		return
-	}
-
 	//send document level reply
 	log.Debug("sending reply on message completion ", outputs)
 	sendResponse(newCmdState.DocumentInformation.MessageID, "", outputs)
+
+	// Skip sending response when the document requires a reboot
+	if newCmdState.DocumentInformation.DocumentStatus == contracts.ResultStatusSuccessAndReboot {
+		log.Debugf("skipping moving interimState file %v since the document requires a reboot", newCmdState.DocumentInformation.CommandID)
+		return
+	}
 
 	//persist : commands execution in completed folder (terminal state folder)
 	log.Debugf("execution of %v is over. Moving interimState file from Current to Completed folder", newCmdState.DocumentInformation.MessageID)
@@ -274,14 +274,14 @@ func (p *Processor) processSendCommandMessage(context context.T,
 		newCmdState.DocumentInformation.InstanceID,
 		appconfig.DefaultLocationOfCurrent)
 
-	// Skip sending response when the document requires a reboot
-	if newCmdState.DocumentInformation.DocumentStatus == contracts.ResultStatusSuccessAndReboot {
-		log.Debug("skipping sending response of %v since the document requires a reboot", newCmdState.DocumentInformation.MessageID)
-		return
-	}
-
 	log.Debug("Sending reply on message completion ", outputs)
 	sendResponse(newCmdState.DocumentInformation.MessageID, "", outputs)
+
+	// Skip sending response when the document requires a reboot
+	if newCmdState.DocumentInformation.DocumentStatus == contracts.ResultStatusSuccessAndReboot {
+		log.Debugf("skipping moving interimState file %v since the document requires a reboot", newCmdState.DocumentInformation.CommandID)
+		return
+	}
 
 	//persist : commands execution in completed folder (terminal state folder)
 	log.Debugf("execution of %v is over. Moving interimState file from Current to Completed folder", newCmdState.DocumentInformation.MessageID)
