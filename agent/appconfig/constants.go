@@ -65,6 +65,12 @@ const (
 	// Orchestration Root Dir
 	defaultOrchestrationRootDirName = "orchestration"
 
+	// Configuration Root Dir - used in ec2 config
+	ConfigurationRootDirName = "Configuration"
+
+	// Workers Root Dir - used in ec2 config
+	WorkersRootDirName = "Workers"
+
 	// Permissions defaults
 	//NOTE: Limit READ, WRITE and EXECUTE access to administrators/root.
 	ReadWriteAccess        = 0600

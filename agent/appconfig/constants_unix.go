@@ -32,6 +32,12 @@ const (
 	// DefaultDataStorePath represents the directory for storing system data
 	DefaultDataStorePath = "/var/lib/amazon/ssm/"
 
+	// EC2ConfigDataStorePath represents the directory for storing ec2 config data
+	EC2ConfigDataStorePath = "/var/lib/amazon/ec2config/"
+
+	// EC2ConfigSettingPath represents the directory for storing ec2 config settings
+	EC2ConfigSettingPath = "/var/lib/amazon/ec2configservice/"
+
 	// UpdaterArtifactsRoot represents the directory for storing update related information
 	UpdaterArtifactsRoot = "/var/lib/amazon/ssm/update/"
 

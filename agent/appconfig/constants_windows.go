@@ -67,6 +67,12 @@ var DownloadRoot string
 // UpdaterArtifactsRoot represents the directory for storing update related information
 var UpdaterArtifactsRoot string
 
+// EC2ConfigDataStorePath represents the directory for storing ec2 config data
+var EC2ConfigDataStorePath string
+
+// EC2ConfigSettingPath represents the directory for storing ec2 config settings
+var EC2ConfigSettingPath string
+
 // EC2UpdaterArtifactsRoot represents the directory for storing ec2 config update related information
 var EC2UpdateArtifactsRoot string
 
@@ -122,5 +128,7 @@ func init() {
 	DefaultCustomInventoryFolder = filepath.Join(SSMDataPath, "Inventory", "Custom")
 	EC2UpdateArtifactsRoot = filepath.Join(EnvWinDir, EC2ConfigServiceFolder, "Update")
 	EC2UpdaterDownloadRoot = filepath.Join(temp, EC2ConfigAppDataFolder, "Download")
+	EC2ConfigDataStorePath = filepath.Join(programData, EC2ConfigAppDataFolder, "InstanceData")
 	UpdateContextFilePath = filepath.Join(programData, EC2ConfigAppDataFolder, "Update\\UpdateContext.json")
+	EC2ConfigSettingPath = filepath.Join(EnvProgramFiles, EC2ConfigServiceFolder, "Settings")
 }
