@@ -35,15 +35,22 @@ const (
 func MergeResultStatus(current ResultStatus, new ResultStatus) (merged ResultStatus) {
 	orderedResultStatus := [...]ResultStatus{
 		ResultStatusUnknown,
-		ResultStatusNotStarted,
-		ResultStatusInProgress,
 		ResultStatusSuccess,
 		ResultStatusSuccessAndReboot,
 		ResultStatusPassedAndReboot,
+		ResultStatusNotStarted,
+		ResultStatusInProgress,
 		ResultStatusFailed,
 		ResultStatusCancelled,
 		ResultStatusTimedOut,
 	}
+	if current == "" {
+		return new
+	}
+	if new == "" {
+		return current
+	}
+
 	// Return the "greater" ResultStatus - the one with a higher index in OrderedResultStatus
 	// We assume both exist in the array and therefore the first one found is at the lower index (so return the other one)
 	for _, ResultStatus := range orderedResultStatus {

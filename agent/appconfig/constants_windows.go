@@ -58,6 +58,9 @@ var DefaultDataStorePath string
 // PackageRoot specifies the directory under which packages will be downloaded and installed
 var PackageRoot string
 
+// DaemonRoot specifies the directory where daemon registration information is stored
+var DaemonRoot string
+
 // DefaultPluginPath represents the directory for storing plugins in SSM
 var DefaultPluginPath string
 
@@ -114,6 +117,7 @@ func init() {
 	AppConfigPath = filepath.Join(DefaultProgramFolder, AppConfigFileName)
 	DefaultDataStorePath = filepath.Join(SSMDataPath, "InstanceData")
 	PackageRoot = filepath.Join(SSMDataPath, "Packages")
+	DaemonRoot = filepath.Join(SSMDataPath, "Daemons")
 	DownloadRoot = filepath.Join(temp, SSMFolder, "Download")
 	UpdaterArtifactsRoot = filepath.Join(temp, SSMFolder, "Update")
 	EC2UpdateArtifactsRoot = filepath.Join(EnvWinDir, EC2ConfigServiceFolder, "Update")

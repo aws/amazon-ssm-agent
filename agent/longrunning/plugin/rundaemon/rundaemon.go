@@ -14,7 +14,12 @@
 // Package rundaemon implements rundaemon plugin and its configuration
 package rundaemon
 
-import "github.com/aws/amazon-ssm-agent/agent/contracts"
+import (
+	"errors"
+
+	"github.com/aws/amazon-ssm-agent/agent/contracts"
+	"github.com/aws/amazon-ssm-agent/agent/fileutil"
+)
 
 // ConfigureDaemonPluginInput represents an action to run a package as a daemon.
 type ConfigureDaemonPluginInput struct {
@@ -23,4 +28,20 @@ type ConfigureDaemonPluginInput struct {
 	Action          string `json:"action"`
 	PackageLocation string `json:"packagelocation"`
 	Command         string `json:"command"`
+}
+
+func ValidateDaemonInput(input ConfigureDaemonPluginInput) error {
+	if input.Name == "" {
+		return errors.New("daemon name is missing")
+	}
+	if input.PackageLocation == "" {
+		return errors.New("daemon location is missing")
+	}
+	if !fileutil.Exists(input.PackageLocation) {
+		return errors.New("daemon location does not exist")
+	}
+	if input.Action == "Start" && input.Command == "" {
+		return errors.New("daemon launch command is missing")
+	}
+	return nil
 }

@@ -20,7 +20,6 @@ import (
 
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/framework/runpluginutil"
-	"github.com/aws/amazon-ssm-agent/agent/plugins/configurecontainers"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configuredaemon"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/dockercontainer"
@@ -134,6 +133,7 @@ func loadPlatformIndependentPlugins(context context.T) runpluginutil.PluginRegis
 		workerPlugins[updateAgentPluginName] = updateAgentPlugin
 	}
 
+	/* TODO: Currently disabled - re-enabled before re:invent
 	// registering aws:configureContainers plugin
 	configureContainersPluginName := configurecontainers.Name()
 	configureContainersPlugin, err := configurecontainers.NewPlugin(pluginutil.DefaultPluginConfig())
@@ -142,6 +142,7 @@ func loadPlatformIndependentPlugins(context context.T) runpluginutil.PluginRegis
 	} else {
 		workerPlugins[configureContainersPluginName] = configureContainersPlugin
 	}
+	*/
 
 	// registering aws:runDockerAction plugin
 	runDockerPluginName := dockercontainer.Name()

@@ -15,8 +15,9 @@
 package plugin
 
 import (
-	"path/filepath"
 	"time"
+
+	"path/filepath"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
@@ -67,15 +68,20 @@ type LongRunningPluginInput struct {
 // RegisteredPlugins loads all long running plugins in memory
 func RegisteredPlugins(context context.T) map[string]Plugin {
 	longrunningplugins := make(map[string]Plugin)
-	context.Log().Debug("Registering long-running plugins")
+	log := context.Log()
+	log.Debug("Registering long-running plugins")
 
-	for key, value := range loadPlatformIndependentPlugins(context) {
-		context.Log().Debugf("Adding long-running plugin for %v", key)
+	for key, value := range loadPlatformDependentPlugins(context) {
+		log.Debugf("Adding platform-specific long-running plugin for %v", key)
 		longrunningplugins[key] = value
 	}
 
-	for key, value := range loadPlatformDependentPlugins(context) {
-		context.Log().Debugf("Adding platform-specific long-running plugin for %v", key)
+	for key, value := range loadPlatformIndependentPlugins(context) {
+		if _, exists := longrunningplugins[key]; exists {
+			log.Errorf("Duplicate long-running plugin - %v already registered", key)
+			continue
+		}
+		context.Log().Debugf("Adding long-running plugin for %v", key)
 		longrunningplugins[key] = value
 	}
 
@@ -88,45 +94,61 @@ func loadPlatformIndependentPlugins(context context.T) map[string]Plugin {
 	//long running plugins that can be started/stopped/configured by long running plugin manager
 	longrunningplugins := make(map[string]Plugin)
 
+	/* TODO: Currently disabled - re-enabled before re:invent
+	for key, value := range loadDaemonPlugins(context) {
+		context.Log().Debugf("Adding long-running plugin for %v", key)
+		longrunningplugins[key] = value
+	}
+	*/
+	return longrunningplugins
+}
+
+// loadDaemonPlugins registers long running plugin handlers for ssm daemons
+func loadDaemonPlugins(context context.T) map[string]Plugin {
+	//long running daemon plugins that can be started/stopped/removed/configured by long running plugin manager
+	daemonPlugins := make(map[string]Plugin)
+
 	log := context.Log()
 	// find all packages that should run as daemons and register a rundaemon plugin for each
-	if pkgdirs, err := fileutil.GetDirectoryNames(appconfig.PackageRoot); err == nil {
-		for _, pkgdir := range pkgdirs {
-			var verdirs []string
-			if verdirs, err = fileutil.GetDirectoryNames(filepath.Join(appconfig.PackageRoot, pkgdir)); err == nil {
-				for _, verdir := range verdirs {
-					daemonWorkingDir := filepath.Join(appconfig.PackageRoot, pkgdir, verdir)
-					daemonStartFile := filepath.Join(daemonWorkingDir, "ssm-daemon.json")
-					if fileutil.Exists(daemonStartFile) {
-						// load file
-						var input rundaemon.ConfigureDaemonPluginInput
-						if err = jsonutil.UnmarshalFile(daemonStartFile, &input); err == nil {
-							log.Infof("Registering long-running plugin for daemon %v", input.Name)
-							plugin := Plugin{
-								Info: PluginInfo{
-									Name:          input.Name,
-									Configuration: input.Command,
-									State:         PluginState{IsEnabled: true},
-								},
-								Handler: &rundaemon.Plugin{
-									ExeLocation: daemonWorkingDir,
-									Name:        input.Name,
-									CommandLine: input.Command,
-								},
-							}
-							// TODO:MF: if there are multiple version folders, use the latest that isn't installing?  Shouldn't be an issue because if there are multiple we SHOULD be mid-install but it would be good to be safe
-							longrunningplugins[input.Name] = plugin
-						} else {
-							log.Debugf("Error unmarshalling %v, %v", daemonStartFile, err.Error())
-						}
-					}
-				}
+	if err := fileutil.MakeDirs(appconfig.DaemonRoot); err != nil {
+		log.Errorf("Unable to create ssm daemon folder %v: %v", appconfig.DaemonRoot, err)
+		return daemonPlugins
+	}
+	daemons, err := fileutil.GetFileNames(appconfig.DaemonRoot)
+	if err != nil {
+		log.Errorf("error listing registered ssm daemons: %v", err)
+		return daemonPlugins
+	}
+	for _, daemonFile := range daemons {
+		// load file
+		daemonFilePath := filepath.Join(appconfig.DaemonRoot, daemonFile)
+		var input rundaemon.ConfigureDaemonPluginInput
+		if err = jsonutil.UnmarshalFile(daemonFilePath, &input); err != nil {
+			log.Errorf("Error unmarshalling %v, %v", daemonFilePath, err.Error())
+		} else {
+			if err := rundaemon.ValidateDaemonInput(input); err != nil {
+				log.Errorf("ssm daemon file %v is invalid: %v", daemonFilePath, err.Error())
 			} else {
-				log.Debugf("Error getting directory names under %v, %v", pkgdir, err.Error())
+				log.Infof("Registering long-running plugin for ssm daemon %v", input.Name)
+				plugin := Plugin{
+					Info: PluginInfo{
+						Name:          input.Name,
+						Configuration: input.Command,
+						State:         PluginState{IsEnabled: true},
+					},
+					Handler: &rundaemon.Plugin{
+						ExeLocation: input.PackageLocation,
+						Name:        input.Name,
+						CommandLine: input.Command,
+					},
+				}
+				if _, exists := daemonPlugins[input.Name]; exists {
+					log.Errorf("duplicate registrations exist for ssm daemon %v", input.Name)
+					continue
+				}
+				daemonPlugins[input.Name] = plugin
 			}
 		}
-	} else {
-		log.Debugf("Error getting directory names under %v, %v", appconfig.PackageRoot, err.Error())
 	}
-	return longrunningplugins
+	return daemonPlugins
 }

@@ -514,6 +514,7 @@ func executeAction(p *Plugin,
 			return true, contracts.ResultStatusFailed, errors.New("No output from executing install document (install.json)")
 		}
 		for _, pluginOut := range pluginOutputs {
+			log.Debugf("Plugin %v ResultStatus %v", pluginOut.PluginName, pluginOut.Status)
 			if pluginOut.StandardOutput != "" {
 				output.AppendInfo(log, "%v output: %v", actionName, pluginOut.StandardOutput)
 			}

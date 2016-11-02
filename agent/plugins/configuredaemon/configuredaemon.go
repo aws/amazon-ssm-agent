@@ -18,7 +18,6 @@ package configuredaemon
 import (
 	"fmt"
 	"path/filepath"
-	"strings"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
@@ -38,15 +37,6 @@ import (
 type Plugin struct {
 	pluginutil.DefaultPlugin
 	lrpm manager.T
-}
-
-// ConfigurePackagePluginInput represents one set of commands executed by the ConfigurePackage plugin.
-type ConfigureDaemonPluginInput struct {
-	contracts.PluginInput
-	Name            string `json:"name"`
-	Action          string `json:"action"`
-	PackageLocation string `json:"packagelocation"`
-	Command         string `json:"command"`
 }
 
 // ConfigureDaemonPluginOutput represents the output of the plugin.
@@ -126,25 +116,34 @@ func runConfigureDaemon(
 	cancelFlag task.CancelFlag) (output ConfigureDaemonPluginOutput) {
 	//log := context.Log()
 
+	// TODO:DAEMON: we're using the command line in a lot of places, we probably only need it in the rundaemon plugin or in the call to startplugin
 	var input rundaemon.ConfigureDaemonPluginInput
-	var WorkingDir string
 	var err error
 	if err = jsonutil.Remarshal(rawPluginInput, &input); err != nil {
 		output.Status = contracts.ResultStatusFailed
 		return
 	}
 
-	if input.PackageLocation != "" {
-		WorkingDir = input.PackageLocation
-	} else {
-		WorkingDir = daemonWorkingDir
+	if input.PackageLocation == "" {
+		input.PackageLocation = daemonWorkingDir
 	}
 
-	// TODO:DAEMON: we're using the command line in a lot of places, we probably only need it in the rundaemon plugin or in the call to startplugin
-	// TODO:DAEMON: Validate input
+	if err = rundaemon.ValidateDaemonInput(input); err != nil {
+		output.Stderr = fmt.Sprintf("%v\nconfigureDaemon input invalid: %v", output.Stderr, err.Error())
+		output.Status = contracts.ResultStatusFailed
+		return output
+	}
+
+	daemonFilePath := filepath.Join(appconfig.DaemonRoot, fmt.Sprintf("%v.json", input.Name))
+	// make sure directory for ssm daemons exists
+	if err := fileutil.MakeDirs(appconfig.DaemonRoot); err != nil {
+		output.Stderr = fmt.Sprintf("%v\nUnable to create ssm daemon folder %v: %v", output.Stderr, appconfig.DaemonRoot, err.Error())
+		output.Status = contracts.ResultStatusFailed
+		return output
+	}
+
 	switch input.Action {
 	case "Start":
-		// TODO:DAEMON: this creation and registration of the plugins need to also happen
 		// in longrunning/plugin/plugin.go (which should have the RegisteredPlugins method
 		// and call a platform specific helper) as part of exploration of the appconfig.PackageRoot
 		// directory tree looking for start.json (or whatever we call the daemon action)
@@ -155,35 +154,64 @@ func runConfigureDaemon(
 				State:         managerContracts.PluginState{IsEnabled: true},
 			},
 			Handler: &rundaemon.Plugin{
-				ExeLocation: WorkingDir,
+				ExeLocation: input.PackageLocation,
 				Name:        input.Name,
 				CommandLine: input.Command,
 			},
 		}
-		if strings.HasPrefix(daemonWorkingDir, appconfig.PackageRoot) {
-			// TODO:MF: make deps file to support mocking filesystem depedency
-			var errDaemonDoc error
-			var ssmDaemonDoc string
-			if ssmDaemonDoc, errDaemonDoc = jsonutil.Marshal(input); errDaemonDoc == nil {
-				daemonFileName := filepath.Join(daemonWorkingDir, "ssm-daemon.json")
-				if fileutil.Exists(daemonFileName) {
-					errDaemonDoc = fileutil.DeleteFile(daemonFileName)
-				}
-				if errDaemonDoc == nil {
-					errDaemonDoc = fileutil.WriteAllText(daemonFileName, ssmDaemonDoc)
-				}
+
+		// TODO:MF: make deps file to support mocking filesystem depedency
+		// Save daemon configuration file
+		var errDaemonDoc error
+		var ssmDaemonDoc string
+		if ssmDaemonDoc, errDaemonDoc = jsonutil.Marshal(input); errDaemonDoc == nil {
+			if fileutil.Exists(daemonFilePath) {
+				errDaemonDoc = fileutil.DeleteFile(daemonFilePath)
 			}
-			if errDaemonDoc != nil {
-				output.Stderr = fmt.Sprintf("%v\n%v", output.Stderr, fmt.Sprintf("Failed to register ssm daemon: %v", errDaemonDoc.Error()))
+			if errDaemonDoc == nil {
+				errDaemonDoc = fileutil.WriteAllText(daemonFilePath, ssmDaemonDoc)
 			}
 		}
+		if errDaemonDoc != nil {
+			output.Stderr = fmt.Sprintf("%v\nFailed to register ssm daemon %v: %v", output.Stderr, input.Name, errDaemonDoc.Error())
+			output.Status = contracts.ResultStatusFailed
+			return output
+		}
+
 		p.lrpm.EnsurePluginRegistered(input.Name, plugin)
-		// TODO need to test this
-		//p.lrpm.StopPlugin(input.Name, cancelFlag)
-		p.lrpm.StartPlugin(input.Name, input.Command, orchestrationDir, cancelFlag)
-	case "Stop":
 		p.lrpm.StopPlugin(input.Name, cancelFlag)
+		if errStart := p.lrpm.StartPlugin(input.Name, input.Command, orchestrationDir, cancelFlag); errStart != nil {
+			output.Stderr = fmt.Sprintf("%v\nFailed to start ssm daemon %v: %v", output.Stderr, input.Name, err.Error())
+			output.Status = contracts.ResultStatusFailed
+			return output
+		}
+	case "Stop":
+		if !fileutil.Exists(daemonFilePath) {
+			output.Stderr = fmt.Sprintf("%v\nNo ssm daemon %v exists", output.Stderr, input.Name)
+			output.Status = contracts.ResultStatusFailed
+			return output
+		}
+		err := p.lrpm.StopPlugin(input.Name, cancelFlag)
+		if err != nil {
+			output.Stderr = fmt.Sprintf("%v\nFailed to stop ssm daemon %v: %v", output.Stderr, input.Name, err.Error())
+			output.Status = contracts.ResultStatusFailed
+			return output
+		}
+		output.Stdout = fmt.Sprintf("%v\nDaemon %v stopped", output.Stdout, input.Name)
+	case "Remove":
+		if fileutil.Exists(daemonFilePath) {
+			p.lrpm.StopPlugin(input.Name, cancelFlag)
+			fileutil.DeleteFile(daemonFilePath)
+			output.Stdout = fmt.Sprintf("%v\nDaemon %v removed", output.Stdout, input.Name)
+		} else {
+			output.Stdout = fmt.Sprintf("%v\nDaemon %v is not installed", output.Stdout, input.Name)
+		}
+	default:
+		output.Stderr = fmt.Sprintf("%v\nUnsupported action %v", output.Stderr, input.Action)
+		output.Status = contracts.ResultStatusFailed
+		return output
 	}
+
 	output.Status = contracts.ResultStatusSuccess
 	return output
 
