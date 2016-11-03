@@ -118,7 +118,7 @@ func GetInstanceInformation(context context.T) (model.InstanceInformation, error
 	}
 
 	if instID, err := platform.InstanceID(); err == nil {
-		instanceInfo.InstanceID = *aws.String(instID)
+		instanceInfo.InstanceId = *aws.String(instID)
 	} else {
 		err = fmt.Errorf("unable to get instanceId due to - %v", err.Error())
 		log.Error(err.Error())
@@ -126,7 +126,7 @@ func GetInstanceInformation(context context.T) (model.InstanceInformation, error
 	}
 
 	if ip, err := platform.IP(); err == nil {
-		instanceInfo.IPAddress = *aws.String(ip)
+		instanceInfo.IpAddress = *aws.String(ip)
 	} else {
 		log.Warn(err)
 	}

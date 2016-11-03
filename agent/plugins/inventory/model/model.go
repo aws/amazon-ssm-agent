@@ -50,11 +50,13 @@ type InstanceInformation struct {
 	AgentStatus     string
 	AgentVersion    string
 	ComputerName    string
-	IPAddress       string
-	InstanceID      string
 	PlatformName    string
 	PlatformType    string
 	PlatformVersion string
+	// SSM Inventory expects it InstanceId and not InstanceID
+	InstanceId string
+	// SSM Inventory expects it IpAddress and not IPAddress
+	IpAddress string
 }
 
 // ApplicationData captures all attributes present in AWS:Application inventory type
