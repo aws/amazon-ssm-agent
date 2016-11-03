@@ -14,7 +14,7 @@
     "Ssm": {
         "Endpoint": "",
         "HealthFrequencyMinutes": 5,
-        "BasicInventoryGatherer": "Disabled"
+        "BasicInventoryGatherer": "Disabled",
         "CustomInventoryDefaultLocation" : ""
     },
     "Agent": {
