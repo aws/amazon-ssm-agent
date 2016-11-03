@@ -75,6 +75,10 @@ func replaceSSMParameters(log log.T, input interface{}, ssmParameters map[string
 	case string:
 		// replace param names with actual values
 		for paramName, paramObj := range ssmParameters {
+			if paramObj.Type == ParamTypeStringList && strings.Contains(input, paramName) {
+				return nil, fmt.Errorf("SSM parameter %v of type %v cannot be used as a %v", paramObj.Name, paramObj.Type, ParamTypeString)
+			}
+
 			input = strings.Replace(input, paramName, paramObj.Value, -1)
 		}
 		return input, nil
@@ -187,18 +191,25 @@ func parseStringList(log log.T, input interface{}, ssmParameters map[string]Para
 		temp := value
 		found := false
 		for paramName, paramObj := range ssmParameters {
-			if strings.Compare(paramObj.Type, ParamTypeStringList) == 0 &&
-				strings.Compare(paramName, strings.TrimSpace(temp)) == 0 {
-
-				stringListValue, err := convertToStringList(log, paramObj.Value)
-				if err != nil {
-					return nil, err
+			if paramObj.Type == ParamTypeStringList {
+				// Check if the temp string contains only one SSM parameter element of type StringList
+				if strings.Compare(paramName, strings.TrimSpace(temp)) == 0 {
+					stringListValue, err := convertToStringList(log, paramObj.Value)
+					if err != nil {
+						return nil, err
+					}
+					out = append(out, stringListValue...)
+					found = true
+					break
 				}
-				out = append(out, stringListValue...)
-				found = true
-				break
+
+				// Check if SSM parameter of type StringList is being used as a String
+				if strings.Contains(temp, paramName) {
+					return nil, fmt.Errorf("SSM parameter %v of type %v cannot be used as a %v", paramObj.Name, paramObj.Type, ParamTypeString)
+				}
+			} else {
+				temp = strings.Replace(temp, paramName, paramObj.Value, -1)
 			}
-			temp = strings.Replace(temp, paramName, paramObj.Value, -1)
 		}
 
 		// If value not found then add the string as it is

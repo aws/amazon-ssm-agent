@@ -149,11 +149,13 @@ func testResolveSecureStringForStringListMethod(t *testing.T, testCase StringLis
 }
 
 func TestValidateSSMParameters(t *testing.T) {
-	var documentParameters = map[string]*contracts.Parameter{
-		"commands": &contracts.Parameter{
+
+	// Test case 1 with no SSM parameters
+	documentParameters := map[string]*contracts.Parameter{
+		"commands": {
 			AllowedPattern: "^[a-zA-Z0-9]+$",
 		},
-		"workingDirectory": &contracts.Parameter{
+		"workingDirectory": {
 			AllowedPattern: "",
 		},
 	}
@@ -165,4 +167,117 @@ func TestValidateSSMParameters(t *testing.T) {
 
 	err := ValidateSSMParameters(logger, documentParameters, parameters)
 	assert.Nil(t, err)
+
+	// Test case 2 with SSM parameters and incorrect SSM parameter type
+	documentParameters = map[string]*contracts.Parameter{
+		"commands": {
+			AllowedPattern: "^[a-zA-Z0-9]+$",
+			ParamType:      ParamTypeSecureString,
+		},
+		"workingDirectory": {
+			AllowedPattern: "",
+		},
+	}
+
+	parameters = map[string]interface{}{
+		"commands":         "{{ssm:test}}",
+		"workingDirectory": "",
+	}
+
+	ssmParameters := []Parameter{
+		{
+			Name:  "test",
+			Type:  ParamTypeString,
+			Value: "test",
+		},
+	}
+
+	invalidSSMParameters := []string{}
+
+	callParameterService = func(
+		log log.T,
+		paramNames []string) (*GetParametersResponse, error) {
+		result := GetParametersResponse{}
+		result.Parameters = ssmParameters
+		result.InvalidParameters = invalidSSMParameters
+		return &result, nil
+	}
+
+	err = ValidateSSMParameters(logger, documentParameters, parameters)
+	assert.Equal(t, "Invalid SSM parameter type String being used for parameter name commands", err.Error())
+
+	// Test case 3 with SSM parameters and correct type
+	ssmParameters = []Parameter{
+		{
+			Name:  "test",
+			Type:  ParamTypeSecureString,
+			Value: "test",
+		},
+	}
+
+	callParameterService = func(
+		log log.T,
+		paramNames []string) (*GetParametersResponse, error) {
+		result := GetParametersResponse{}
+		result.Parameters = ssmParameters
+		result.InvalidParameters = invalidSSMParameters
+		return &result, nil
+	}
+
+	err = ValidateSSMParameters(logger, documentParameters, parameters)
+	assert.Nil(t, err)
+
+	// Test case 4 with SSM parameters and incorrect parameter value type
+	parameters = map[string]interface{}{
+		"commands":         []string{"{{ssm:test}}"},
+		"workingDirectory": "",
+	}
+
+	callParameterService = func(
+		log log.T,
+		paramNames []string) (*GetParametersResponse, error) {
+		result := GetParametersResponse{}
+		result.Parameters = ssmParameters
+		result.InvalidParameters = invalidSSMParameters
+		return &result, nil
+	}
+
+	err = ValidateSSMParameters(logger, documentParameters, parameters)
+	assert.Equal(t, "Invalid input type []string received instead of string for parameter name commands", err.Error())
+
+	// Test case 5 with SSM parameters and SSM parameter value doesn't match allowed pattern
+	documentParameters = map[string]*contracts.Parameter{
+		"commands": {
+			AllowedPattern: "^[a-zA-Z]+$",
+			ParamType:      ParamTypeString,
+		},
+		"workingDirectory": {
+			AllowedPattern: "",
+		},
+	}
+
+	parameters = map[string]interface{}{
+		"commands":         "{{ssm:test}}",
+		"workingDirectory": "",
+	}
+
+	ssmParameters = []Parameter{
+		{
+			Name:  "test",
+			Type:  ParamTypeString,
+			Value: "1234",
+		},
+	}
+
+	callParameterService = func(
+		log log.T,
+		paramNames []string) (*GetParametersResponse, error) {
+		result := GetParametersResponse{}
+		result.Parameters = ssmParameters
+		result.InvalidParameters = invalidSSMParameters
+		return &result, nil
+	}
+
+	err = ValidateSSMParameters(logger, documentParameters, parameters)
+	assert.Equal(t, "Parameter value for commands does not match the allowed pattern ^[a-zA-Z]+$", err.Error())
 }

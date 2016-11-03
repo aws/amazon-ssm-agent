@@ -16,6 +16,7 @@ package parameterstore
 
 import (
 	"fmt"
+	"reflect"
 	"regexp"
 	"strings"
 
@@ -28,6 +29,9 @@ import (
 const (
 	// defaultParamName is used for creating default regex for parameter name
 	defaultParamName = ""
+
+	// ParamTypeString represents the Param Type is String
+	ParamTypeString = "String"
 
 	// ParamTypeString represents the Param Type is SecureString
 	ParamTypeSecureString = "SecureString"
@@ -59,14 +63,16 @@ func Resolve(log log.T, input interface{}, resolveSecureString bool) (interface{
 		return input, nil
 	}
 
+	log.Info("Resolving SSM parameters")
+
 	// Get ssm parameter values
-	resolvedParamMap, err := getSSMParameterValues(log, ssmParams, resolveSecureString)
+	resolvedSSMParamMap, err := getSSMParameterValues(log, ssmParams, resolveSecureString)
 	if err != nil {
 		return input, err
 	}
 
 	// Replace ssm parameter names with their values
-	input, err = replaceSSMParameters(log, input, resolvedParamMap)
+	input, err = replaceSSMParameters(log, input, resolvedSSMParamMap)
 	if err != nil {
 		return input, err
 	}
@@ -75,27 +81,71 @@ func Resolve(log log.T, input interface{}, resolveSecureString bool) (interface{
 	return input, nil
 }
 
-// ValidateSSMParameters validates whether the parameter value matches the allowed pattern
+// ValidateSSMParameters validates SSM parameters
 func ValidateSSMParameters(
 	log log.T,
 	documentParameters map[string]*contracts.Parameter,
 	parameters map[string]interface{}) error {
 
-	log.Debug("Validating SSM parameters")
+	/*
+		This function validates the following things before the document is sent for execution
 
-	resolvedParameters, err := Resolve(log, parameters, true)
+		1. Only SecureString SSM parameter values are used for document parameters of type SecureString
+		2. SSM parameter values match the allowed pattern in the document
+	*/
+
+	log.Info("Validating SSM parameters")
+
+	validSSMParam, err := getValidSSMParamRegexCompiler(log, defaultParamName)
 	if err != nil {
 		return err
 	}
 
-	var resolvedParamMap map[string]interface{}
-	err = jsonutil.Remarshal(resolvedParameters, &resolvedParamMap)
+	// Extract all SSM parameters from input
+	ssmParams := extractSSMParameters(log, parameters, validSSMParam)
+
+	// Return original string if no ssm params found
+	if len(ssmParams) == 0 {
+		return nil
+	}
+
+	// Retrieves the SSM Parameter object for each SSM parameter in the input. Object contains {Name, Type, Value}
+	resolvedSSMParamMap, err := getSSMParameterValues(log, ssmParams, true)
+	if err != nil {
+		return err
+	}
+
+	// Replace SSM parameter names in the input with the values received in the previous step.
+	resolvedParameters, err := replaceSSMParameters(log, parameters, resolvedSSMParamMap)
+	if err != nil {
+		return err
+	}
+
+	// Reformat resolvedParameters to type map[string]interface{}
+	var reformatResolvedParameters map[string]interface{}
+	err = jsonutil.Remarshal(resolvedParameters, &reformatResolvedParameters)
 	if err != nil {
 		log.Debug(err)
 		return fmt.Errorf("%v", ErrorMsg)
 	}
 
 	for paramName, paramObj := range documentParameters {
+		// Check only SecureString SSM parameter values are used for document parameters of type SecureString
+		if paramObj.ParamType == ParamTypeSecureString {
+			// check if the parameter value is a string, throw error if its not
+			switch input := parameters[paramName].(type) {
+			case string:
+				ssmParameter := strings.TrimSpace(input)
+				if resolvedSSMParamMap[ssmParameter].Type != ParamTypeSecureString {
+					return fmt.Errorf("Invalid SSM parameter type %v being used for parameter name %v", resolvedSSMParamMap[ssmParameter].Type, paramName)
+				}
+
+			default:
+				return fmt.Errorf("Invalid input type %v received instead of string for parameter name %v", reflect.TypeOf(input), paramName)
+			}
+		}
+
+		// Check SSM parameter values match the allowed pattern in the document
 		if paramObj.AllowedPattern != "" {
 			validParamValue, err := regexp.Compile(paramObj.AllowedPattern)
 			if err != nil {
@@ -104,7 +154,7 @@ func ValidateSSMParameters(
 			}
 
 			errorString := fmt.Errorf("Parameter value for %v does not match the allowed pattern %v", paramName, paramObj.AllowedPattern)
-			switch input := resolvedParamMap[paramName].(type) {
+			switch input := reformatResolvedParameters[paramName].(type) {
 			case string:
 				if !validParamValue.MatchString(input) {
 					return errorString
@@ -188,8 +238,6 @@ func getValidSSMParamRegexCompiler(log log.T, paramName string) (*regexp.Regexp,
 func getSSMParameterValues(log log.T, ssmParams []string, resolveSecureString bool) (map[string]Parameter, error) {
 	var result *GetParametersResponse
 	var err error
-
-	log.Info("Resolving SSM parameters")
 
 	validParamRegex := ":([/\\w]+)*"
 	validParam, err := regexp.Compile(validParamRegex)
