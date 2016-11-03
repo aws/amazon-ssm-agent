@@ -211,8 +211,7 @@ func buildPluginsInfo(
 				OutputS3KeyPrefix:      fileutil.BuildS3Path(s3KeyPrefix, pluginName),
 				OrchestrationDirectory: fileutil.BuildPath(orchestrationDir, pluginName),
 				MessageId:              documentInfo.MessageID,
-				//BookKeepingFileName:    payload.CommandID,
-				BookKeepingFileName: documentInfo.DocumentID,
+				BookKeepingFileName:    documentInfo.DocumentID,
 			}
 
 			var plugin stateModel.PluginState

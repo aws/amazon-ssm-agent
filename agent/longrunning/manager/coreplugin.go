@@ -40,6 +40,9 @@ const (
 	//name is the core plugin name for long running plugins manager
 	Name = "LongRunningPluginsManager"
 
+	// NameOfCloudWatchJsonFile is the name of ec2 config cloudwatch local configuration file
+	NameOfCloudWatchJsonFile = "AWS.EC2.Windows.CloudWatch.json"
+
 	//number of long running workers
 	NumberOfLongRunningPluginWorkers = 5
 
@@ -405,7 +408,7 @@ func checkLegacyCloudWatchLocalConfig() (hasConfiguration bool, err error) {
 
 	configFileName := fileutil.BuildPath(
 		appconfig.EC2ConfigSettingPath,
-		"AWS.EC2.Windows.CloudWatch.json")
+		NameOfCloudWatchJsonFile)
 
 	var content []byte
 	content, err = ioutil.ReadFile(configFileName)

@@ -52,8 +52,8 @@ type LongRunningPluginSettings struct {
 
 // InvokerInput represents input to lrpm invoker
 type InvokerInput struct {
-	Settings   LongRunningPluginSettings
-	Properties string
+	ID         string      `json:"id"`
+	Properties interface{} `json:"properties"`
 }
 
 var readFile = ioutil.ReadFile
@@ -161,6 +161,7 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 		pluginPersister(log, pluginID, config, res)
 		return
 	}
+
 	switch setting.StartType {
 	case "Enabled":
 		res = p.enablePlugin(log, config, pluginID, cancelFlag)
@@ -298,7 +299,16 @@ func (p *Plugin) prepareForStart(log log.T, config contracts.Configuration, plug
 	case string:
 		break
 	default:
-		if prop, err = jsonutil.Marshal(config.Properties); err != nil {
+		var inputs InvokerInput
+		if err = jsonutil.Remarshal(config.Properties, &inputs); err != nil {
+			failed = true
+			log.Errorf(fmt.Sprintf("Invalid format in plugin configuration - %v;\nError %v", config.Properties, err))
+			res = p.CreateResult(fmt.Sprintf("Invalid format in plugin configuration - expecting property as string - %s", config.Properties),
+				contracts.ResultStatusFailed)
+			return
+		}
+		log.Info(inputs)
+		if prop, err = jsonutil.Marshal(inputs.Properties); err != nil {
 			log.Error("Cannot marshal properties, ", err)
 		}
 	}

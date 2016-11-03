@@ -65,10 +65,10 @@ const (
 	// Orchestration Root Dir
 	defaultOrchestrationRootDirName = "orchestration"
 
-	// Configuration Root Dir - used in ec2 config
+	// ConfigurationRootDirName - the configuration folder used in ec2 config
 	ConfigurationRootDirName = "Configuration"
 
-	// Workers Root Dir - used in ec2 config
+	// WorkersRootDirName  - the worker folder used in ec2 config
 	WorkersRootDirName = "Workers"
 
 	// Permissions defaults
