@@ -296,8 +296,10 @@ func (p *Plugin) prepareForStart(log log.T, config contracts.Configuration, plug
 	prop := config.Properties
 
 	switch prop.(type) {
+	// cloudwatch triggered by run command
 	case string:
 		break
+	// cloudwatch triggered by sssociation
 	default:
 		var inputs InvokerInput
 		if err = jsonutil.Remarshal(config.Properties, &inputs); err != nil {
@@ -307,7 +309,14 @@ func (p *Plugin) prepareForStart(log log.T, config contracts.Configuration, plug
 				contracts.ResultStatusFailed)
 			return
 		}
-		log.Info(inputs)
+		log.Debug(inputs)
+		// If the docuemnt type is 2.0, there is no Properties field in the docuemnt.
+		// The whole config.Properties is the Properties we want.
+		// So just need to marshal the whole Properties
+		if inputs.Properties == nil {
+			inputs.Properties = config.Properties
+		}
+
 		if prop, err = jsonutil.Marshal(inputs.Properties); err != nil {
 			log.Error("Cannot marshal properties, ", err)
 		}
