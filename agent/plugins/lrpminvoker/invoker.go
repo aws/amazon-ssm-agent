@@ -52,8 +52,8 @@ type LongRunningPluginSettings struct {
 
 // InvokerInput represents input to lrpm invoker
 type InvokerInput struct {
-	Settings   LongRunningPluginSettings
-	Properties string
+	ID         string      `json:"id"`
+	Properties interface{} `json:"properties"`
 }
 
 var readFile = ioutil.ReadFile
@@ -161,6 +161,7 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 		pluginPersister(log, pluginID, config, res)
 		return
 	}
+
 	switch setting.StartType {
 	case "Enabled":
 		res = p.enablePlugin(log, config, pluginID, cancelFlag)
@@ -295,10 +296,28 @@ func (p *Plugin) prepareForStart(log log.T, config contracts.Configuration, plug
 	prop := config.Properties
 
 	switch prop.(type) {
+	// cloudwatch triggered by run command
 	case string:
 		break
+	// cloudwatch triggered by sssociation
 	default:
-		if prop, err = jsonutil.Marshal(config.Properties); err != nil {
+		var inputs InvokerInput
+		if err = jsonutil.Remarshal(config.Properties, &inputs); err != nil {
+			failed = true
+			log.Errorf(fmt.Sprintf("Invalid format in plugin configuration - %v;\nError %v", config.Properties, err))
+			res = p.CreateResult(fmt.Sprintf("Invalid format in plugin configuration - expecting property as string - %s", config.Properties),
+				contracts.ResultStatusFailed)
+			return
+		}
+		log.Debug(inputs)
+		// If the docuemnt type is 2.0, there is no Properties field in the docuemnt.
+		// The whole config.Properties is the Properties we want.
+		// So just need to marshal the whole Properties
+		if inputs.Properties == nil {
+			inputs.Properties = config.Properties
+		}
+
+		if prop, err = jsonutil.Marshal(inputs.Properties); err != nil {
 			log.Error("Cannot marshal properties, ", err)
 		}
 	}

@@ -110,7 +110,7 @@ func ReplacePluginParameters(
 				MaxAttempts: instancePluginConfig.MaxAttempts,
 				OnFailure:   instancePluginConfig.OnFailure,
 				Timeout:     instancePluginConfig.Timeout,
-				Settings:    instancePluginConfig.Settings,
+				Settings:    parameters.ReplaceParameters(instancePluginConfig.Settings, params, logger),
 				Inputs:      parameters.ReplaceParameters(instancePluginConfig.Inputs, params, logger),
 			}
 

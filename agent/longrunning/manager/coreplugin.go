@@ -15,6 +15,7 @@
 package manager
 
 import (
+	"bytes"
 	"encoding/json"
 	"errors"
 	"io/ioutil"
@@ -25,6 +26,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
+	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	managerContracts "github.com/aws/amazon-ssm-agent/agent/longrunning/plugin"
 	"github.com/aws/amazon-ssm-agent/agent/longrunning/plugin/cloudwatch"
@@ -37,6 +39,9 @@ import (
 const (
 	//name is the core plugin name for long running plugins manager
 	Name = "LongRunningPluginsManager"
+
+	// NameOfCloudWatchJsonFile is the name of ec2 config cloudwatch local configuration file
+	NameOfCloudWatchJsonFile = "AWS.EC2.Windows.CloudWatch.json"
 
 	//number of long running workers
 	NumberOfLongRunningPluginWorkers = 5
@@ -280,60 +285,147 @@ func (m *Manager) configCloudWatch(log log.T) {
 
 	var err error
 	cloudwatch.Initialze()
+
+	var instanceId string
+	if instanceId, err = platform.InstanceID(); err != nil {
+		log.Errorf("Cannot get instance id.")
+		return
+	}
+
 	// Read from cloudwatch config file to check if any configuration need to make for cloud watch
 	if err = cloudwatch.Update(); err != nil {
 		log.Infof("Cannot read configuration from config file. %v", err)
-	} else {
-		cloudWatchConfig := cloudwatch.Instance()
-		if cloudWatchConfig.IsEnabled {
-			log.Infof("Detected cloud watch has updated configuration. Configuring that plugin again")
-			// TODO need to check the folder
-			var instanceId string
-			if instanceId, err = platform.InstanceID(); err != nil {
-				log.Errorf("Cannot get instance id.")
+
+		// We also need to check if any configuration has been made by ec2 config before
+		var hasConfiguration bool
+		var localConfig bool
+		if hasConfiguration, err = checkLegacyCloudWatchRunCommandConfig(instanceId); err != nil {
+			log.Debugf("Have problem read configuration from ec2config file. %v", err)
+			return
+		}
+
+		if !hasConfiguration {
+			if localConfig, err = checkLegacyCloudWatchLocalConfig(); err != nil {
+				log.Debugf("Have problem read configuration from ec2config file. %v", err)
 				return
 			}
+		}
 
-			orchestrationDir := fileutil.BuildPath(
-				appconfig.DefaultDataStorePath,
-				instanceId,
-				appconfig.DefaultDocumentRootDirName,
-				appconfig.PluginNameCloudWatch)
-			var config string
-			if config, err = cloudwatch.ParseEngineConfiguration(); err != nil {
-				log.Debug("Cannot parse EngineConfiguration to string format")
-			}
-
-			if err = m.StartPlugin(
-				appconfig.PluginNameCloudWatch,
-				config,
-				orchestrationDir,
-				task.NewChanneledCancelFlag()); err != nil {
-				log.Errorf("Failed to start the cloud watch plugin bacause: %s", err)
-			}
-
-			// check if configue the cloudwatch successfully
-			stderrFilePath := fileutil.BuildPath(orchestrationDir, appconfig.PluginNameCloudWatch, "stderr")
-			var errData []byte
-			var errorReadingFile error
-			if errData, errorReadingFile = ioutil.ReadFile(stderrFilePath); errorReadingFile != nil {
-				log.Errorf("Unable to read the stderr file - %s: %s", stderrFilePath, errorReadingFile.Error())
-			}
-			serr := string(errData)
-
-			if len(serr) > 0 {
-				log.Errorf("Unable to start the plugin - %s: %s", appconfig.PluginNameCloudWatch, serr)
-				// Stop the plugin if configuration failed.
-				if err := m.StopPlugin(appconfig.PluginNameCloudWatch, task.NewChanneledCancelFlag()); err != nil {
-					log.Errorf("Unable to start the plugin - %s: %s", appconfig.PluginNameCloudWatch, err.Error())
-				}
-			}
-
-		} else {
-			log.Infof("Detected cloud watch has been requested to stop. Stoping the plugin")
-			if err = m.StopPlugin(appconfig.PluginNameCloudWatch, task.NewChanneledCancelFlag()); err != nil {
-				log.Errorf("Failed to stop the cloud watch plugin bacause: %s", err)
-			}
+		if !hasConfiguration && !localConfig {
+			log.Debug("There is no cloudwatch running in ec2 config service before.")
+			return
 		}
 	}
+
+	cloudWatchConfig := cloudwatch.Instance()
+	if cloudWatchConfig.IsEnabled {
+		log.Infof("Detected cloud watch has updated configuration. Configuring that plugin again")
+		// TODO need to check the folder
+		orchestrationDir := fileutil.BuildPath(
+			appconfig.DefaultDataStorePath,
+			instanceId,
+			appconfig.DefaultDocumentRootDirName,
+			appconfig.PluginNameCloudWatch)
+		var config string
+		if config, err = cloudwatch.ParseEngineConfiguration(); err != nil {
+			log.Debug("Cannot parse EngineConfiguration to string format")
+		}
+
+		if err = m.StartPlugin(
+			appconfig.PluginNameCloudWatch,
+			config,
+			orchestrationDir,
+			task.NewChanneledCancelFlag()); err != nil {
+			log.Errorf("Failed to start the cloud watch plugin bacause: %s", err)
+		}
+
+		// check if configue the cloudwatch successfully
+		stderrFilePath := fileutil.BuildPath(orchestrationDir, appconfig.PluginNameCloudWatch, "stderr")
+		var errData []byte
+		var errorReadingFile error
+		if errData, errorReadingFile = ioutil.ReadFile(stderrFilePath); errorReadingFile != nil {
+			log.Errorf("Unable to read the stderr file - %s: %s", stderrFilePath, errorReadingFile.Error())
+		}
+		serr := string(errData)
+
+		if len(serr) > 0 {
+			log.Errorf("Unable to start the plugin - %s: %s", appconfig.PluginNameCloudWatch, serr)
+			// Stop the plugin if configuration failed.
+			if err := m.StopPlugin(appconfig.PluginNameCloudWatch, task.NewChanneledCancelFlag()); err != nil {
+				log.Errorf("Unable to start the plugin - %s: %s", appconfig.PluginNameCloudWatch, err.Error())
+			}
+		}
+
+	} else {
+		log.Infof("Detected cloud watch has been requested to stop. Stoping the plugin")
+		if err = m.StopPlugin(appconfig.PluginNameCloudWatch, task.NewChanneledCancelFlag()); err != nil {
+			log.Errorf("Failed to stop the cloud watch plugin bacause: %s", err)
+		}
+	}
+}
+
+// checkLegacyCloudWatchRunCommandConfig checks if ec2config has cloudwatch configuration document running before
+func checkLegacyCloudWatchRunCommandConfig(instanceId string) (hasConfiguration bool, err error) {
+	hasConfiguration = false
+	// check if configured cloudwatch before with runcommand
+	storeFileName := fileutil.BuildPath(
+		appconfig.EC2ConfigDataStorePath,
+		instanceId,
+		appconfig.ConfigurationRootDirName,
+		appconfig.WorkersRootDirName,
+		"aws.cloudWatch.ec2config")
+
+	if fileutil.Exists(storeFileName) {
+		lock.RLock()
+		defer lock.RUnlock()
+		var documentModel contracts.DocumentContent
+		if err = jsonutil.UnmarshalFile(storeFileName, &documentModel); err != nil {
+			//log.Infof("Cannot read configuration from ec2 configuration service file. %v", err)
+			return
+		}
+		pluginConfig := documentModel.RuntimeConfig[appconfig.PluginNameCloudWatch]
+		cloudWatchConfig := &cloudwatch.CloudWatchConfig{
+			EngineConfiguration: pluginConfig.Properties,
+			IsEnabled:           true,
+		}
+		if err = cloudwatch.Enable(cloudWatchConfig); err != nil {
+			return
+		}
+		hasConfiguration = true
+	}
+	return
+}
+
+// checkLegacyCloudWatchLocalConfig checks if users have cloudwatch local configuration before.
+func checkLegacyCloudWatchLocalConfig() (hasConfiguration bool, err error) {
+	hasConfiguration = false
+	// first check the config.xml file to see if the cloudwatch plugin is enabled
+	var isEnabled bool
+	isEnabled, err = cloudwatch.ParseXml()
+	if err != nil || !isEnabled {
+		return
+	}
+
+	configFileName := fileutil.BuildPath(
+		appconfig.EC2ConfigSettingPath,
+		NameOfCloudWatchJsonFile)
+
+	var content []byte
+	content, err = ioutil.ReadFile(configFileName)
+
+	bom := []byte{0xef, 0xbb, 0xbf} // UTF-8
+	// if byte-order mark found
+	if bytes.Equal(content[:3], bom) {
+		content = content[3:]
+	}
+
+	cloudWatchConfig := &cloudwatch.CloudWatchConfig{
+		EngineConfiguration: string(content),
+		IsEnabled:           true,
+	}
+
+	if err = cloudwatch.Enable(cloudWatchConfig); err != nil {
+		return
+	}
+	return true, nil
 }
