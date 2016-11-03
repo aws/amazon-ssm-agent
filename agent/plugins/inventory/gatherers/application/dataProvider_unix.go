@@ -21,6 +21,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"os/exec"
+	"sort"
 	"strings"
 
 	"github.com/aws/amazon-ssm-agent/agent/context"
@@ -130,6 +131,9 @@ func CollectApplicationData(context context.T) (appData []model.ApplicationData)
 			plName,
 			GathererName)
 	}
+
+	//sorts the data based on application-name
+	sort.Sort(model.ByName(appData))
 
 	return
 }

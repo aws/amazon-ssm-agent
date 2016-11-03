@@ -14,9 +14,7 @@
 // Package model contains contracts for inventory
 package model
 
-//TODO: add all inventory types here
-//TODO: if all attributes of inventory types become strong typed then we can directly refer to aws-sdk rather
-//than defining everything here
+import "strings"
 
 const (
 	// AWSInstanceInformation is inventory type of instance information
@@ -100,8 +98,6 @@ type Config struct {
 }
 
 // Policy defines how an inventory policy document looks like
-// TODO: this struct might change depending on the type of data associate plugin provides to inventory plugin
-// For e.g: this will incorporate association & runId after integrating with associate plugin.
 type Policy struct {
 	InventoryPolicy map[string]Config
 }
@@ -111,4 +107,20 @@ type CustomInventoryItem struct {
 	TypeName      string
 	SchemaVersion string
 	Content       interface{}
+}
+
+//ByName defines sort functionality for application data
+type ByName []ApplicationData
+
+func (s ByName) Len() int {
+	return len(s)
+}
+
+func (s ByName) Swap(i, j int) {
+	s[i], s[j] = s[j], s[i]
+}
+
+func (s ByName) Less(i, j int) bool {
+	//we need to compare string by ignoring it's case
+	return strings.ToLower(s[i].Name) < strings.ToLower(s[j].Name)
 }

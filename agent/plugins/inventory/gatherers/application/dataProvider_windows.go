@@ -21,6 +21,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"os/exec"
+	"sort"
 	"strings"
 
 	"github.com/aws/amazon-ssm-agent/agent/context"
@@ -74,6 +75,9 @@ func CollectApplicationData(context context.T) []model.ApplicationData {
 	//getting all 32 bit applications
 	apps = ExecutePowershellCommands(context, PowershellCmd, ArgsFor32BitApplications, Arch32Bit)
 	data = append(data, apps...)
+
+	//sorts the data based on application-name
+	sort.Sort(model.ByName(data))
 
 	return data
 }
