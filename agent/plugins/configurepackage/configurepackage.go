@@ -94,6 +94,13 @@ func (result *ConfigurePackagePluginOutput) AppendInfo(log log.T, format string,
 	result.Stdout = fmt.Sprintf("%v\n%v", result.Stdout, message)
 }
 
+// AppendError adds errors to ConfigurePackagePluginOutput StandardErr.
+func (result *ConfigurePackagePluginOutput) AppendError(log log.T, format string, params ...interface{}) {
+	message := fmt.Sprintf(format, params...)
+	log.Error(message)
+	result.Stderr = fmt.Sprintf("%v\n%v", result.Stderr, message)
+}
+
 // NewPlugin returns a new instance of the plugin.
 func NewPlugin(pluginConfig pluginutil.PluginConfig) (*Plugin, error) {
 	var plugin Plugin
@@ -199,16 +206,16 @@ func runConfigurePackage(
 			// even though that may or may not be the package that installed it - it is our only decent option
 			_, ensureErr := ensurePackage(log, manager, util, input.Name, installedVersion, &output, instanceContext)
 			if ensureErr != nil {
-				output.MarkAsFailed(log, fmt.Errorf("unable to obtain package: %v", ensureErr))
+				output.AppendError(log, "unable to obtain package: %v", ensureErr)
 			} else {
-				result, err := runUninstallPackage(p,
+				result, err := runUninstallPackagePre(p,
 					input.Name,
 					installedVersion,
 					&output,
 					log,
 					instanceContext)
 				if err != nil {
-					output.MarkAsFailed(log, fmt.Errorf("failed to uninstall currently installed version of package: %v", err))
+					output.AppendError(log, "failed to uninstall currently installed version of package: %v", err)
 				} else {
 					if result == contracts.ResultStatusSuccessAndReboot || result == contracts.ResultStatusPassedAndReboot {
 						// Reboot before continuing
@@ -221,11 +228,6 @@ func runConfigurePackage(
 
 		// defer clearing installing
 		defer unmarkInstallingPackage(input.Name)
-
-		// exit if we're in an error state
-		if output.ExitCode != 0 {
-			return
-		}
 
 		// install version
 		result, err := runInstallPackage(p,
@@ -247,6 +249,19 @@ func runConfigurePackage(
 			output.MarkAsSucceeded(false)
 		}
 
+		// uninstall post action
+		if installedVersion != "" {
+			_, err := runUninstallPackagePost(p,
+				input.Name,
+				installedVersion,
+				&output,
+				log,
+				instanceContext)
+			if err != nil {
+				output.AppendError(log, "failed to clean up currently installed version of package: %v", err)
+			}
+		}
+
 	case UninstallAction:
 		// get version information
 		version, versionErr := manager.getVersionToUninstall(log, &input, util, instanceContext)
@@ -261,12 +276,22 @@ func runConfigurePackage(
 			output.MarkAsFailed(log, fmt.Errorf("unable to obtain package: %v", ensureErr))
 			return
 		}
-		result, err := runUninstallPackage(p,
+		var resultPre, resultPost contracts.ResultStatus
+		resultPre, err = runUninstallPackagePre(p,
 			input.Name,
 			version,
 			&output,
 			log,
 			instanceContext)
+		if err == nil {
+			resultPost, err = runUninstallPackagePost(p,
+				input.Name,
+				version,
+				&output,
+				log,
+				instanceContext)
+		}
+		result := contracts.MergeResultStatus(resultPre, resultPost)
 		if err != nil {
 			output.MarkAsFailed(log, fmt.Errorf("failed to uninstall package: %v", err))
 		} else if result == contracts.ResultStatusSuccessAndReboot || result == contracts.ResultStatusPassedAndReboot {
@@ -462,26 +487,37 @@ func runInstallPackage(p *Plugin,
 	return
 }
 
-// runUninstallPackage executes the install script for the specific version of a package.
-func runUninstallPackage(p *Plugin,
+// runUninstallPackagePre executes the uninstall script for the specific version of a package.
+func runUninstallPackagePre(p *Plugin,
 	packageName string,
 	version string,
 	output *ConfigurePackagePluginOutput,
 	log log.T,
 	context *updateutil.InstanceContext,
 ) (status contracts.ResultStatus, err error) {
-	status = contracts.ResultStatusSuccess
-
 	directory := filepath.Join(appconfig.PackageRoot, packageName, version)
 	if _, status, err = executeAction(p, "uninstall", packageName, version, log, output, directory); err != nil {
 		return status, err
 	}
+	return contracts.ResultStatusSuccess, nil
+}
+
+// runUninstallPackagePost performs post uninstall actions, like deleting the package folder
+func runUninstallPackagePost(p *Plugin,
+	packageName string,
+	version string,
+	output *ConfigurePackagePluginOutput,
+	log log.T,
+	context *updateutil.InstanceContext,
+) (status contracts.ResultStatus, err error) {
+	directory := filepath.Join(appconfig.PackageRoot, packageName, version)
 	if err = filesysdep.RemoveAll(directory); err != nil {
 		return contracts.ResultStatusFailed, fmt.Errorf("failed to delete directory %v due to %v", directory, err)
 	}
-	return status, nil
+	return contracts.ResultStatusSuccess, nil
 }
 
+// executeAction executes a command document as a sub-document of the current command and returns the result
 func executeAction(p *Plugin,
 	actionName string,
 	packageName string,
@@ -530,6 +566,7 @@ func executeAction(p *Plugin,
 	return
 }
 
+// getInstanceContext uses the updateUtil to return an instance context
 func getInstanceContext(log log.T) (context *updateutil.InstanceContext, err error) {
 	updateUtil := new(updateutil.Utility)
 	return updateUtil.CreateInstanceContext(log)

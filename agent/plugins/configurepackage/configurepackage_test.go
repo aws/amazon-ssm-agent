@@ -171,14 +171,23 @@ func TestUninstallPackage(t *testing.T) {
 	stubs.Set()
 	defer stubs.Clear()
 
-	_, err := runUninstallPackage(plugin,
+	_, errPre := runUninstallPackagePre(plugin,
 		pluginInformation.Name,
 		pluginInformation.Version,
 		output,
 		logger,
 		instanceContext)
 
-	assert.NoError(t, err)
+	assert.NoError(t, errPre)
+
+	_, errPost := runUninstallPackagePost(plugin,
+		pluginInformation.Name,
+		pluginInformation.Version,
+		output,
+		logger,
+		instanceContext)
+
+	assert.NoError(t, errPost)
 }
 
 // TO DO: Uninstall test for exe command
