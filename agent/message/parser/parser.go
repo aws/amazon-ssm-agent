@@ -71,7 +71,7 @@ func ReplacePluginParameters(
 	logger log.T) error {
 	var err error
 
-	// Validate SSM parameter values with allowed regex pattern
+	// Validates SSM parameters
 	if err = parameterstore.ValidateSSMParameters(logger, payload.DocumentContent.Parameters, params); err != nil {
 		return err
 	}
@@ -85,9 +85,13 @@ func ReplacePluginParameters(
 				Settings:   parameters.ReplaceParameters(pluginConfig.Settings, params, logger),
 				Properties: parameters.ReplaceParameters(pluginConfig.Properties, params, logger),
 			}
+
+			// Resolves SSM parameters
 			if updatedRuntimeConfig[pluginName].Settings, err = parameterstore.Resolve(logger, updatedRuntimeConfig[pluginName].Settings, false); err != nil {
 				return err
 			}
+
+			// Resolves SSM parameters
 			if updatedRuntimeConfig[pluginName].Properties, err = parameterstore.Resolve(logger, updatedRuntimeConfig[pluginName].Properties, false); err != nil {
 				return err
 			}
@@ -109,6 +113,13 @@ func ReplacePluginParameters(
 				Settings:    instancePluginConfig.Settings,
 				Inputs:      parameters.ReplaceParameters(instancePluginConfig.Inputs, params, logger),
 			}
+
+			// Resolves SSM parameters
+			if updatedMainSteps[index].Settings, err = parameterstore.Resolve(logger, updatedMainSteps[index].Settings, false); err != nil {
+				return err
+			}
+
+			// Resolves SSM parameters
 			if updatedMainSteps[index].Inputs, err = parameterstore.Resolve(logger, updatedMainSteps[index].Inputs, false); err != nil {
 				return err
 			}

@@ -130,3 +130,29 @@ func generateExtractSSMParamTestCases() []ExtractSSMParamTestCase {
 
 	return testCases
 }
+
+func TestConvertToStringList(t *testing.T) {
+	input := "'echo \"a,b\"',dir,ls"
+	output := []string{"echo \"a,b\"", "dir", "ls"}
+	temp, err := convertToStringList(logger, input)
+	assert.Equal(t, output, temp)
+	assert.Nil(t, err)
+
+	input = "'echo \"a,b\"',   dir   ,   ls   "
+	output = []string{"echo \"a,b\"", "dir", "ls"}
+	temp, err = convertToStringList(logger, input)
+	assert.Equal(t, output, temp)
+	assert.Nil(t, err)
+
+	input = "echo a, dir ,ls"
+	output = []string{"echo a", "dir", "ls"}
+	temp, err = convertToStringList(logger, input)
+	assert.Equal(t, output, temp)
+	assert.Nil(t, err)
+
+	input = ",echo a, dir ,ls"
+	output = []string{"echo a", "dir", "ls"}
+	temp, err = convertToStringList(logger, input)
+	assert.Equal(t, output, temp)
+	assert.Nil(t, err)
+}

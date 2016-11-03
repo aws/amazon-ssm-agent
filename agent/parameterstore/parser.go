@@ -75,6 +75,10 @@ func replaceSSMParameters(log log.T, input interface{}, ssmParameters map[string
 	case string:
 		// replace param names with actual values
 		for paramName, paramObj := range ssmParameters {
+			if paramObj.Type == ParamTypeStringList && strings.Contains(input, paramName) {
+				return nil, fmt.Errorf("SSM parameter %v of type %v cannot be used as a %v", paramObj.Name, paramObj.Type, ParamTypeString)
+			}
+
 			input = strings.Replace(input, paramName, paramObj.Value, -1)
 		}
 		return input, nil
@@ -164,8 +168,15 @@ func parseStringList(log log.T, input interface{}, ssmParameters map[string]Para
 		date
 		dir
 
-		We assume this use case to be validated at the service side. Even if the service doesn't validate it,
-		the agent will continue to split the input based on ","
+		Edge case Expectation:
+		For input {{ssm:commands}} = "'echo "a,b"',ls,date,dir", output will be
+		echo "a,b"
+		ls
+		date
+		dir
+
+		We assume the customer to use escape character (') to avoid incorrect split. Even if the service
+		doesn't validate it, the agent will continue to split the input based on "," unless escape character is used.
 	*/
 
 	var reformatInput []string
@@ -180,13 +191,25 @@ func parseStringList(log log.T, input interface{}, ssmParameters map[string]Para
 		temp := value
 		found := false
 		for paramName, paramObj := range ssmParameters {
-			if strings.Compare(paramObj.Type, ParamTypeStringList) == 0 &&
-				strings.Compare(paramName, strings.TrimSpace(temp)) == 0 {
-				out = append(out, strings.Split(paramObj.Value, ",")...)
-				found = true
-				break
+			if paramObj.Type == ParamTypeStringList {
+				// Check if the temp string contains only one SSM parameter element of type StringList
+				if strings.Compare(paramName, strings.TrimSpace(temp)) == 0 {
+					stringListValue, err := convertToStringList(log, paramObj.Value)
+					if err != nil {
+						return nil, err
+					}
+					out = append(out, stringListValue...)
+					found = true
+					break
+				}
+
+				// Check if SSM parameter of type StringList is being used as a String
+				if strings.Contains(temp, paramName) {
+					return nil, fmt.Errorf("SSM parameter %v of type %v cannot be used as a %v", paramObj.Name, paramObj.Type, ParamTypeString)
+				}
+			} else {
+				temp = strings.Replace(temp, paramName, paramObj.Value, -1)
 			}
-			temp = strings.Replace(temp, paramName, paramObj.Value, -1)
 		}
 
 		// If value not found then add the string as it is
@@ -195,4 +218,30 @@ func parseStringList(log log.T, input interface{}, ssmParameters map[string]Para
 		}
 	}
 	return out, nil
+}
+
+// convertToStringList divides the input parameter string into valid string blocks
+func convertToStringList(log log.T, input string) ([]string, error) {
+
+	// Sample transformation:
+	// input = "'echo "a,b"',ls,date,dir"
+	// result: []string{"echo "a,b"", "ls", "date", "dir"}
+
+	escapeChar := "'"
+	blankChar := ""
+
+	validSSMParamValueRegex := "([^',]+)|('[^']+')"
+	validSSMParamValue, err := regexp.Compile(validSSMParamValueRegex)
+	if err != nil {
+		log.Debug(err)
+		return nil, fmt.Errorf("%v", ErrorMsg)
+	}
+
+	paramValues := validSSMParamValue.FindAllString(input, -1)
+
+	for i, v := range paramValues {
+		paramValues[i] = strings.TrimSpace(strings.Replace(v, escapeChar, blankChar, -1))
+	}
+
+	return paramValues, nil
 }

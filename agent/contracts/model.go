@@ -80,6 +80,8 @@ const (
 const (
 	// AssociationErrorCodeInvalidAssociation represents InvalidAssociation Error
 	AssociationErrorCodeInvalidAssociation = "InvalidAssoc"
+	// AssociationErrorCodeInvalidExpression represents InvalidExpression Error
+	AssociationErrorCodeInvalidExpression = "InvalidExpression"
 	// AssociationErrorCodeExecutionError represents Execution Error
 	AssociationErrorCodeExecutionError = "ExecutionError"
 	// AssociationErrorCodeListAssociationError represents ListAssociation Error
