@@ -26,6 +26,7 @@ import (
 	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/context"
+	"github.com/aws/amazon-ssm-agent/agent/jobobject"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/pluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 )
@@ -35,6 +36,7 @@ var DaemonCmdExecutor = RunDaemon
 var BlockWhileDaemonRunningExecutor = BlockWhileDaemonRunning
 var StopDaemonExecutor = StopDaemon
 var IsDaemonRunningExecutor = IsDaemonRunning
+var StartDaemonHelperExecutor = StartDaemonHelper
 
 //  RequestedDaemonStateType represents whether the user has explicitly requested to start/stop the daemon
 type RequestedDaemonStateType uint
@@ -91,32 +93,84 @@ func BlockWhileDaemonRunning(context context.T, pid int) error {
 
 // IsRunning returns if the said plugin is running or not, to the long running plugin manager.
 // We always return false here since the lifecycle of the underlying daemon is anyways being controlled here
-
 func (p *Plugin) IsRunning(context context.T) bool {
 	return false
 }
 
+// This function sets the flag to indicate that daemon stop has been requested via the StopPlugin call.
 func (p *Plugin) stopRequested() bool {
 	p.ProcessStateLock.Lock()
 	defer p.ProcessStateLock.Unlock()
 	return p.RequestedDaemonState == RequestedDisabled
 }
 
+// This function sets the daemon current state to being stopped.
+func (p *Plugin) SetDaemonStateStopped() {
+	p.ProcessStateLock.Lock()
+	defer p.ProcessStateLock.Unlock()
+	p.CurrentDaemonState = CurrentStopped
+}
+
+// Function RunDaemon invokes exec.Cmd.Start with appropriate arguments.
+func RunDaemon(daemonInvoke *exec.Cmd) (err error) {
+	err = daemonInvoke.Start()
+	return err
+}
+
+// Function checks if the daemon is currently running or not.
 func IsDaemonRunning(p *Plugin) bool {
 	p.ProcessStateLock.Lock()
 	defer p.ProcessStateLock.Unlock()
 	return p.CurrentDaemonState == CurrentRunning
 }
 
-func RunDaemon(daemonInvoke *exec.Cmd) (err error) {
-	err = daemonInvoke.Start()
-	return err
+// Starts a given executable or a specified powershell script and enables daemon functionality
+func StartDaemonHelper(p *Plugin, context context.T, configuration string) (err error) {
+	log := context.Log()
+	if IsDaemonRunningExecutor(p) {
+		log.Infof("Daemon already running: %v", configuration)
+		return
+	}
+
+	p.ProcessStateLock.Lock()
+	defer p.ProcessStateLock.Unlock()
+	log.Infof("Attempting to Start Daemon")
+
+	//TODO Currently pathnames with spaces do not seem to work correctly with the below
+	// usage of exec.command. Given that ConfigurePackage defaults to a directory name which
+	// doesnt have spaces (C:/ProgramData/Amazon/SSM/....), the issue is not currently exposed.
+	// Needs to be fixed regardless.
+
+	commandArguments := append(strings.Split(configuration, " "), pluginutil.ExitCodeTrap)
+	log.Infof("Running command: %v.", commandArguments)
+
+	daemonInvoke := exec.Command(commandArguments[0], commandArguments[1:]...)
+	daemonInvoke.Dir = p.ExeLocation
+	err = DaemonCmdExecutor(daemonInvoke)
+
+	if err != nil {
+		log.Errorf("Error starting Daemon: %s", err.Error())
+		return err
+	}
+	p.Process = daemonInvoke.Process
+
+	// Attach daemon process to the SSM agent job object
+	err = jobobject.AttachProcessToJobObject(uint32(daemonInvoke.Process.Pid))
+	if err != nil {
+		log.Errorf("Error attaching job object to Daemon: %s", err.Error())
+	} else {
+		log.Debugf("Succesfully attached job object to Daemon")
+	}
+	p.CurrentDaemonState = CurrentRunning
+	return
 }
 
 // Starts a given executable or a specified powershell script and enables daemon functionality
 func StartDaemon(p *Plugin, context context.T, configuration string) (err error) {
+	log := context.Log()
 	// Bail out if an explicit Stop daemon is requested by the user
 	if p.stopRequested() {
+		log.Infof("Daemon requested to be stopped: %v", configuration)
 		return
 	}
 
@@ -128,7 +182,8 @@ func StartDaemon(p *Plugin, context context.T, configuration string) (err error)
 		start := time.Now()
 		log := context.Log()
 		if p.Process != nil {
-			err := BlockWhileDaemonRunningExecutor(context, p.Process.Pid)
+			err = BlockWhileDaemonRunningExecutor(context, p.Process.Pid)
+			p.SetDaemonStateStopped()
 			if err != nil {
 				log.Infof("Encountered error: process may not have exited cleanly. Pid %v : %s", p.Process.Pid, err.Error())
 			}
@@ -136,33 +191,14 @@ func StartDaemon(p *Plugin, context context.T, configuration string) (err error)
 
 		// Bail out if an explicit Stop daemon is requested by the user
 		if p.stopRequested() {
+			log.Infof("Daemon requested to be stopped: %v", configuration)
 			return
 		}
-
-		log.Infof("Attempting to Start Daemon")
-
-		//TODO Currently pathnames with spaces do not seem to work correctly with the below
-		// usage of exec.command. Given that ConfigurePackage defaults to a directory name which
-		// doesnt have spaces (C:/ProgramData/Amazon/SSM/....), the issue is not currently exposed.
-		// Needs to be fixed regardless.
-
-		commandArguments := append(strings.Split(configuration, " "), pluginutil.ExitCodeTrap)
-		log.Infof("Running command: %v.", commandArguments)
-
-		daemonInvoke := exec.Command(commandArguments[0], commandArguments[1:]...)
-		daemonInvoke.Dir = p.ExeLocation
-		err := DaemonCmdExecutor(daemonInvoke)
-
+		// Invoke the helper function to start daermo
+		err = StartDaemonHelperExecutor(p, context, configuration)
 		if err != nil {
-			log.Errorf("Error starting Daemon: %s", err.Error())
-			return err
+			log.Infof("Started Daemon...")
 		}
-		p.ProcessStateLock.Lock()
-		p.Process = daemonInvoke.Process
-		p.CurrentDaemonState = CurrentRunning
-		p.ProcessStateLock.Unlock()
-
-		log.Infof("Started Daemon")
 
 		// Setting the time between successive daemon restarts to be atleast 60 seconds
 		end := time.Now()
@@ -182,8 +218,6 @@ func (p *Plugin) Start(context context.T, configuration string, orchestrationDir
 
 	// Start a new daemon handling goroutine if the goroutine is currently not running
 	p.ProcessStateLock.Lock()
-	//TODO Explore replacing the need to call Unlock in multiple places with a defer statement.
-	// Need to test before committing that change.
 	if p.CurrentDaemonState == CurrentStopped {
 		log.Infof(" Invoking goroutine to manage daemon lifecycle")
 		// Set the User Requested state to ENABLED
@@ -199,7 +233,7 @@ func (p *Plugin) Start(context context.T, configuration string, orchestrationDir
 func StopDaemon(p *Plugin, context context.T) {
 	log := context.Log()
 	p.ProcessStateLock.Lock()
-	//TODO Explore replacing the need to call Unlock below with a defer statement here.
+	defer p.ProcessStateLock.Unlock()
 	if p.Process != nil {
 		log.Infof("Process id of daemon -> %v", p.Process.Pid)
 		if p.CurrentDaemonState == CurrentRunning {
@@ -219,7 +253,6 @@ func StopDaemon(p *Plugin, context context.T) {
 			p.Process = nil
 		}
 	}
-	p.ProcessStateLock.Unlock()
 }
 
 func (p *Plugin) Stop(context context.T, cancelFlag task.CancelFlag) error {

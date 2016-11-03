@@ -93,12 +93,11 @@ func loadPlatformIndependentPlugins(context context.T) map[string]Plugin {
 	//long running plugins that can be started/stopped/configured by long running plugin manager
 	longrunningplugins := make(map[string]Plugin)
 
-	/* TODO: Currently disabled - re-enabled before re:invent
 	for key, value := range loadDaemonPlugins(context) {
 		context.Log().Debugf("Adding long-running plugin for %v", key)
 		longrunningplugins[key] = value
 	}
-	*/
+
 	return longrunningplugins
 }
 

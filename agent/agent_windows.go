@@ -59,6 +59,7 @@ func (a *amazonSSMAgentService) Execute(args []string, r <-chan svc.ChangeReques
 	// update service status to Running
 	const acceptCmds = svc.AcceptStop | svc.AcceptShutdown
 	s <- svc.Status{State: svc.Running, Accepts: acceptCmds}
+
 loop:
 	// using an infinite loop to wait for ChangeRequests
 	for {

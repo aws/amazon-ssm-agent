@@ -54,9 +54,17 @@ func MockStopDaemonExecutorWithNoError(p *Plugin, context context.T) {
 	return
 }
 
+func MockStartDaemonHelperExecutor(p *Plugin, context context.T, configuration string) error {
+	return nil
+}
+
 func MockBlockWhileDaemonRunning(context context.T, pid int) error {
 	time.Sleep(2 * time.Second)
 	return nil
+}
+
+func MockIsDaemonRunningExecutor(p *Plugin) bool {
+	return true
 }
 
 // Test to perform a Start followed by a Stop operation
@@ -68,6 +76,8 @@ func TestSingleStartStop(t *testing.T) {
 	DaemonCmdExecutor = MockRunDaemonExecutorWithNoError
 	BlockWhileDaemonRunningExecutor = MockBlockWhileDaemonRunning
 	StopDaemonExecutor = MockStopDaemonExecutorWithNoError
+	StartDaemonHelperExecutor = MockStartDaemonHelperExecutor
+	IsDaemonRunningExecutor = MockIsDaemonRunningExecutor
 	t.Logf("Daemon starting")
 	p.Start(context, "powershell Sleep 5", "", cancelFlag)
 	time.Sleep(2 * time.Second)
@@ -94,6 +104,8 @@ func TestSuccessiveStarts(t *testing.T) {
 	DaemonCmdExecutor = MockRunDaemonExecutorWithNoError
 	BlockWhileDaemonRunningExecutor = MockBlockWhileDaemonRunning
 	StopDaemonExecutor = MockStopDaemonExecutorWithNoError
+	StartDaemonHelperExecutor = MockStartDaemonHelperExecutor
+	IsDaemonRunningExecutor = MockIsDaemonRunningExecutor
 	t.Logf("Daemon starting")
 	p.Start(context, "powershell Sleep 5", "", cancelFlag)
 	time.Sleep(1 * time.Second)
@@ -129,6 +141,8 @@ func TestMultipleStartStop(t *testing.T) {
 	DaemonCmdExecutor = RunDaemon
 	BlockWhileDaemonRunningExecutor = BlockWhileDaemonRunning
 	StopDaemonExecutor = StopDaemon
+	StartDaemonHelperExecutor = StartDaemonHelper
+	IsDaemonRunningExecutor = IsDaemonRunning
 	for i := 0; i < 50; i++ {
 		t.Logf("Daemon starting")
 		p.Start(context, "powershell Sleep 5", "", cancelFlag)
@@ -160,6 +174,8 @@ func TestStopWithoutStart(t *testing.T) {
 	DaemonCmdExecutor = MockRunDaemonExecutorWithNoError
 	BlockWhileDaemonRunningExecutor = MockBlockWhileDaemonRunning
 	StopDaemonExecutor = MockStopDaemonExecutorWithNoError
+	StartDaemonHelperExecutor = MockStartDaemonHelperExecutor
+	IsDaemonRunningExecutor = MockIsDaemonRunningExecutor
 	p.Name = "TestStopWithoutStart"
 	t.Logf("Attempting to Stopping a Daemon without starting")
 	err := p.Stop(context, cancelFlag)
