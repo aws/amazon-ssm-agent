@@ -50,14 +50,14 @@ func PrepareReplyPayload(pluginID string, runtimeStatuses map[string]*contracts.
 	//	  with number of failed/cancelled items.
 	//    TODO : We need to handle above to be able to send document traceoutput in case of document level errors.
 
-	if runtimeStatusCounts[string(contracts.ResultStatusFailed)] > 0 {
+	if runtimeStatusCounts[string(contracts.ResultStatusSuccessAndReboot)] > 0 {
+		documentStatus = contracts.ResultStatusSuccessAndReboot
+	} else if runtimeStatusCounts[string(contracts.ResultStatusFailed)] > 0 {
 		documentStatus = contracts.ResultStatusFailed
 	} else if runtimeStatusCounts[string(contracts.ResultStatusTimedOut)] > 0 {
 		documentStatus = contracts.ResultStatusTimedOut
 	} else if runtimeStatusCounts[string(contracts.ResultStatusCancelled)] > 0 {
 		documentStatus = contracts.ResultStatusCancelled
-	} else if runtimeStatusCounts[string(contracts.ResultStatusSuccessAndReboot)] > 0 {
-		documentStatus = contracts.ResultStatusSuccessAndReboot
 	} else if runtimeStatusCounts[string(contracts.ResultStatusSuccess)] == pluginCounts {
 		documentStatus = contracts.ResultStatusSuccess
 	} else {
