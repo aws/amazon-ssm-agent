@@ -280,4 +280,41 @@ func TestValidateSSMParameters(t *testing.T) {
 
 	err = ValidateSSMParameters(logger, documentParameters, parameters)
 	assert.Equal(t, "Parameter value for commands does not match the allowed pattern ^[a-zA-Z]+$", err.Error())
+
+	// Test case 6 with SSM Secure parameters and incorrect SSM parameter name
+	documentParameters = map[string]*contracts.Parameter{
+		"commands": {
+			AllowedPattern: "^[a-zA-Z0-9]+$",
+			ParamType:      ParamTypeSecureString,
+		},
+		"workingDirectory": {
+			AllowedPattern: "",
+			ParamType:      ParamTypeSecureString,
+		},
+	}
+
+	parameters = map[string]interface{}{
+		"commands":         "{{ssm:test}}",
+		"workingDirectory": "{{ss:temp}}",
+	}
+
+	ssmParameters = []Parameter{
+		{
+			Name:  "test",
+			Type:  ParamTypeSecureString,
+			Value: "test",
+		},
+	}
+
+	callParameterService = func(
+		log log.T,
+		paramNames []string) (*GetParametersResponse, error) {
+		result := GetParametersResponse{}
+		result.Parameters = ssmParameters
+		result.InvalidParameters = invalidSSMParameters
+		return &result, nil
+	}
+
+	err = ValidateSSMParameters(logger, documentParameters, parameters)
+	assert.Equal(t, "Invalid value {{ss:temp}} for parameter name workingDirectory. Expecting SSM parameter of the format {{ssm:*}}", err.Error())
 }

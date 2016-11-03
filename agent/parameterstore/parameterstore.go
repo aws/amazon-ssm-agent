@@ -136,6 +136,10 @@ func ValidateSSMParameters(
 			switch input := parameters[paramName].(type) {
 			case string:
 				ssmParameter := strings.TrimSpace(input)
+				if _, exists := resolvedSSMParamMap[ssmParameter]; !exists {
+					return fmt.Errorf("Invalid value %v for parameter name %v. Expecting SSM parameter of the format {{ssm:*}}", ssmParameter, paramName)
+				}
+
 				if resolvedSSMParamMap[ssmParameter].Type != ParamTypeSecureString {
 					return fmt.Errorf("Invalid SSM parameter type %v being used for parameter name %v", resolvedSSMParamMap[ssmParameter].Type, paramName)
 				}
