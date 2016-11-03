@@ -44,7 +44,6 @@ import (
 	stateManagerModel "github.com/aws/amazon-ssm-agent/agent/statemanager/model"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 	"github.com/aws/aws-sdk-go/aws/awserr"
-	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/ssm"
 )
 
@@ -101,7 +100,6 @@ type Plugin struct {
 
 	context    context.T
 	stopPolicy *sdkutil.StopPolicy
-	ssm        *ssm.SSM
 
 	//supportedGatherers is a map of all inventory gatherers supported by current OS
 	// (e.g. WindowsUpdateGatherer is not included when running on Unix based systems)
@@ -131,7 +129,6 @@ func Name() string {
 
 // NewPlugin creates a new inventory worker plugin.
 func NewPlugin(context context.T, pluginConfig pluginutil.PluginConfig) (*Plugin, error) {
-	var appCfg appconfig.SsmagentConfig
 	var err error
 	var p = Plugin{}
 
@@ -158,19 +155,8 @@ func NewPlugin(context context.T, pluginConfig pluginutil.PluginConfig) (*Plugin
 		return &p, err
 	}
 
-	// reading agent appconfig
-	if appCfg, err = appconfig.Config(false); err != nil {
-		return &p, err
-	}
-
-	// setting ssm client config
-	cfg := sdkutil.AwsConfig()
-	cfg.Region = &appCfg.Agent.Region
-	cfg.Endpoint = &appCfg.Ssm.Endpoint
-
 	p.context = c
 	p.stopPolicy = sdkutil.NewStopPolicy(Name(), model.ErrorThreshold)
-	p.ssm = ssm.New(session.New(cfg))
 
 	//loads all registered gatherers (for now only a dummy application gatherer is loaded in memory)
 	p.supportedGatherers, p.installedGatherers = gatherers.InitializeGatherers(p.context)
@@ -270,7 +256,7 @@ func (p *Plugin) SendDataToInventory(context context.T, items []*ssm.InventoryIt
 		if aerr, ok := err.(awserr.Error); ok {
 			//NOTE: awserr.Code -> is not the error code but the exception name itself!!!!
 			if aerr.Code() == "ItemContentMismatchException" || aerr.Code() == "InvalidItemContentException" {
-				log.Debugf("ItemContentMismatchException encountered - inventory plugin will try sending data again")
+				log.Debugf("%v encountered - inventory plugin will try sending data again", aerr.Code())
 				retryWithFullData = true
 			} else {
 				log.Debugf("Unexpected error encountered - %v. No point trying to send data again", aerr.Code())

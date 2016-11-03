@@ -55,16 +55,19 @@ func NewInventoryUploader(context context.T) (*InventoryUploader, error) {
 	c := context.With("[" + Name + "]")
 	log := c.Log()
 
-	// reading agent appconfig
-	if appCfg, err = appconfig.Config(false); err != nil {
-		log.Errorf("Could not load config file %v", err.Error())
-		return &uploader, err
-	}
-
 	// setting ssm client config
 	cfg := sdkutil.AwsConfig()
-	cfg.Region = &appCfg.Agent.Region
-	cfg.Endpoint = &appCfg.Ssm.Endpoint
+
+	// overrides ssm client config from appconfig if applicable
+	if appCfg, err = appconfig.Config(false); err == nil {
+
+		if appCfg.Ssm.Endpoint != "" {
+			cfg.Endpoint = &appCfg.Ssm.Endpoint
+		}
+		if appCfg.Agent.Region != "" {
+			cfg.Region = &appCfg.Agent.Region
+		}
+	}
 
 	uploader.ssm = ssm.New(session.New(cfg))
 

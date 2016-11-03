@@ -28,7 +28,8 @@ import (
 )
 
 var (
-	lock sync.RWMutex
+	lock             sync.RWMutex
+	contentHashStore map[string]string
 )
 
 //TODO: add unit tests
@@ -48,9 +49,8 @@ type Optimizer interface {
 
 // Impl implements content hash optimizations for inventory plugin
 type Impl struct {
-	log              log.T
-	contentHashStore map[string]string
-	location         string //where the content hash data is persisted in file-systems
+	log      log.T
+	location string //where the content hash data is persisted in file-systems
 }
 
 func NewOptimizerImpl(context context.T) (*Impl, error) {
@@ -72,7 +72,7 @@ func NewOptimizerImpl(context context.T) (*Impl, error) {
 		appconfig.InventoryRootDirName,
 		appconfig.InventoryContentHashFileName)
 
-	optimizer.contentHashStore = make(map[string]string)
+	contentHashStore = make(map[string]string)
 
 	//read old content hash values from file
 	if fileutil.Exists(optimizer.location) {
@@ -84,7 +84,7 @@ func NewOptimizerImpl(context context.T) (*Impl, error) {
 				optimizer.location,
 				content)
 
-			if err = json.Unmarshal([]byte(content), &optimizer.contentHashStore); err != nil {
+			if err = json.Unmarshal([]byte(content), &contentHashStore); err != nil {
 				optimizer.log.Debugf("Unable to read content hash store of inventory plugin - thereby ignoring any older values")
 			}
 		}
@@ -97,10 +97,10 @@ func (i *Impl) UpdateContentHash(inventoryItemName, hash string) (err error) {
 	lock.Lock()
 	defer lock.Unlock()
 
-	i.contentHashStore[inventoryItemName] = hash
+	contentHashStore[inventoryItemName] = hash
 
 	//persist the data in file system
-	dataB, _ := json.Marshal(i.contentHashStore)
+	dataB, _ := json.Marshal(contentHashStore)
 
 	if _, err = fileutil.WriteIntoFileWithPermissions(i.location, string(dataB), appconfig.ReadWriteAccess); err != nil {
 		err = fmt.Errorf("Unable to update content hash in file - %v because - %v", i.location, err.Error())
@@ -116,7 +116,7 @@ func (i *Impl) GetContentHash(inventoryItemName string) (hash string) {
 
 	var found bool
 
-	if hash, found = i.contentHashStore[inventoryItemName]; !found {
+	if hash, found = contentHashStore[inventoryItemName]; !found {
 		// return empty string - if there is no content hash for given inventory data type
 		hash = ""
 	}
