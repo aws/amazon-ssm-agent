@@ -47,7 +47,6 @@ func TestPrepareReplyPayload(t *testing.T) {
 	for _, fileName := range sampleMessageReplyFiles {
 		// parse a test reply to see if we can regenerate it
 		expectedReply := loadMessageReplyFromFile(t, fileName)
-
 		testCases = append(testCases, testCase{
 			PluginRuntimeStatuses: expectedReply.RuntimeStatus,
 			DateTime:              times.ParseIso8601UTC(expectedReply.AdditionalInfo.DateTime),
@@ -106,6 +105,7 @@ func TestPrepareRuntimeStatus(t *testing.T) {
 func parsePluginResult(t *testing.T, pluginRuntimeStatus contracts.PluginRuntimeStatus) contracts.PluginResult {
 	parsedOutput := pluginRuntimeStatus.Output
 	return contracts.PluginResult{
+		PluginName:    pluginRuntimeStatus.Name,
 		Output:        parsedOutput,
 		Status:        pluginRuntimeStatus.Status,
 		StartDateTime: times.ParseIso8601UTC(pluginRuntimeStatus.StartDateTime),
