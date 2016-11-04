@@ -53,11 +53,12 @@ cp ${PKG_ROOT}/packaging/linux/amazon-ssm-agent.conf %{buildroot}/etc/init/
 
 %files
 %defattr(-,root,root,-)
-/etc/init/amazon-ssm-agent.conf
 /etc/amazon/ssm/amazon-ssm-agent.json.template
 /etc/amazon/ssm/seelog.xml.template
 /usr/bin/amazon-ssm-agent
 /var/lib/amazon/ssm/
+
+%config(noreplace) /etc/init/amazon-ssm-agent.conf
 
 %post
 if [ $1 -eq 1 ] ; then

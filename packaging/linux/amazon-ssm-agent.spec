@@ -15,12 +15,13 @@ This package provides the Amazon SSM Agent for managing EC2 Instances using SSM 
 
 %files
 %defattr(-,root,root,-)
-/etc/init/amazon-ssm-agent.conf
-/etc/systemd/system/amazon-ssm-agent.service
 /etc/amazon/ssm/amazon-ssm-agent.json.template
 /etc/amazon/ssm/seelog.xml.template
 /usr/bin/amazon-ssm-agent
 /var/lib/amazon/ssm/
+
+%config(noreplace) /etc/init/amazon-ssm-agent.conf
+%config(noreplace) /etc/systemd/system/amazon-ssm-agent.service
 
 # The scriptlets in %pre and %post are run before and after a package is installed.
 # The scriptlets %preun and %postun are run before and after a package is uninstalled.
