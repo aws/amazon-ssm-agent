@@ -200,7 +200,7 @@ func testCommandInvokerCancel(t *testing.T, invoke CommandInvoker, cancelFlag ta
 		cancelFlag.Set(task.Canceled)
 	}()
 
-	start := time.Now()
+	start := time.Now().UTC()
 	stdout, stderr, exitCode, errs := invoke(testCase.Commands)
 	duration := time.Since(start)
 

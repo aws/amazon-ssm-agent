@@ -19,6 +19,7 @@ import (
 	"fmt"
 	"path"
 	"path/filepath"
+	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/association/model"
@@ -122,7 +123,7 @@ func newDocumentInfo(rawData *model.InstanceAssociation, payload *messageContrac
 	documentInfo.AssociationID = *(rawData.Association.AssociationId)
 	documentInfo.InstanceID = *(rawData.Association.InstanceId)
 	documentInfo.MessageID = fmt.Sprintf("aws.ssm.%v.%v", documentInfo.AssociationID, documentInfo.InstanceID)
-	documentInfo.RunID = times.ToIsoDashUTC(times.DefaultClock.Now())
+	documentInfo.RunID = times.ToIsoDashUTC(time.Now())
 	documentInfo.DocumentID = *(rawData.Association.AssociationId) + "." + documentInfo.RunID
 	rawData.DocumentID = documentInfo.DocumentID
 	documentInfo.CreatedDate = times.ToIso8601UTC(rawData.CreateDate)

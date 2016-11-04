@@ -394,7 +394,7 @@ func (svc *sdkService) CancelCommand(log log.T, commandID string, instanceIDs []
 func (svc *sdkService) GetParameters(log log.T, paramNames []string) (response *ssm.GetParametersOutput, err error) {
 	serviceParams := ssm.GetParametersInput{
 		Names:          aws.StringSlice(paramNames),
-		WithDecryption: aws.Bool(true),
+		WithDecryption: aws.Bool(false),
 	}
 
 	log.Debugf("Calling GetParameters API with params - %v", serviceParams)
