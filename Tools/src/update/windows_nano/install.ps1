@@ -1,8 +1,12 @@
 param(
-    [switch] $register,
-    [string] $code,
-    [string] $id,
-    [string] $region
+    # These parameters are for managed instances
+    [switch] $Register,
+    [string] $Code,
+    [string] $Id,
+    [string] $Region,
+
+    # This switch is to disable SSMAgent after installation
+    [switch] $Disabled
 )
 
 function Log-Info {
@@ -47,7 +51,6 @@ if($LASTEXITCODE -gt 0) {
 Log-Info("Installing Amazon SSM Agent begins")
 
 # Extract source package to SSM location
-
 Log-Info("Unpacking $ServiceName package from {0} to {1}" -f $SourceZip, $Destination)
 
 $unpacked = $false;
@@ -101,10 +104,10 @@ if($unpacked -and (Test-Path $ExtractedPackage)) {
 Copy-Item $UnInstaller $Destination -Force
 
 # Check if register is set in argument
-if($register) {
+if($Register) {
     # Start RegisterManagedInstance process
     Log-Info("RegisterManagedInstance begins")
-    Invoke-Expression "& '$Executable' -register -code $code -id $id -region $region"
+    Invoke-Expression "& '$Executable' -register -code $Code -id $Id -region $Region"
 }
 
 # Register Amazon SSM Agent service to Windows service entry
@@ -112,7 +115,12 @@ Log-Info("Creating $ServiceName Service")
 if(Get-Command sc.exe -ErrorAction SilentlyContinue) {
     try {
         $ErrorActionPreference = "Stop";
-        sc.exe create $ServiceName binpath= "$Executable" start= auto displayname= $ServiceDesc
+        if(-not $Disabled) {
+            sc.exe create $ServiceName binpath= "$Executable" start= auto displayname= $ServiceDesc
+        } else {
+            sc.exe create $ServiceName binpath= "$Executable" start= disabled displayname= $ServiceDesc
+            Log-Info("Amazon SSM Agent service is diabled")
+        }
         sc.exe description $ServiceName $ServiceDesc
         sc.exe failure $ServiceName reset= 86400 actions= restart/1000/restart/1000//1000
     } catch {
@@ -124,15 +132,19 @@ if(Get-Command sc.exe -ErrorAction SilentlyContinue) {
     Exit 1
 }
 
-# Start service
-Log-Info("Starting Amazon SSM Agent service")
-try {
-    $ErrorActionPreference = "Stop";
-    net start $ServiceName
-} catch {
-    $ex = $Error[0].Exception
-    Log-Warning("{0}.. exit!" -f $ex)
-    Exit 1
+if(-not $Disabled) {
+    # Start service
+    Log-Info("Starting Amazon SSM Agent service")
+    try {
+        $ErrorActionPreference = "Stop";
+        net start $ServiceName
+    } catch {
+        $ex = $Error[0].Exception
+        Log-Warning("{0}.. exit!" -f $ex)
+        Exit 1
+    }
+} else {
+    Log-Info("Amazon SSM Agent service didn't start")
 }
 
 Log-Info("Installing Amazon SSM Agent successfully ended!")
