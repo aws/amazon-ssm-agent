@@ -205,10 +205,10 @@ func (p *Processor) ExecuteTasks() (err error) {
 	sp.WritePort(fmt.Sprintf("Amazon SSM Agent v%v is running", version.Version))
 
 	if windowsInfo, osInfo, err = getSystemInfo(log); err == nil {
-		sp.WritePort(fmt.Sprintf("OSProductName: %v", windowsInfo.ProductName))
-		sp.WritePort(fmt.Sprintf("OSInstallOption: %v", getInstallationOptionBySKU(osInfo.OperatingSystemSKU)))
-		sp.WritePort(fmt.Sprintf("OSVersion: %v", osInfo.Version))
-		sp.WritePort(fmt.Sprintf("OSBuildLabEx: %v", windowsInfo.BuildLabEx))
+		sp.WritePort(fmt.Sprintf("OsProductName: %v", windowsInfo.ProductName))
+		sp.WritePort(fmt.Sprintf("OsInstallOption: %v", getInstallationOptionBySKU(osInfo.OperatingSystemSKU)))
+		sp.WritePort(fmt.Sprintf("OsVersion: %v", osInfo.Version))
+		sp.WritePort(fmt.Sprintf("OsBuildLabEx: %v", windowsInfo.BuildLabEx))
 	}
 
 	// write all running AWS drivers to serial port.
