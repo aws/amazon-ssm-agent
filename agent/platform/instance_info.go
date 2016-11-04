@@ -100,6 +100,7 @@ func fetchInstanceID() (string, error) {
 // fetchRegion fetches the region with the following preference order.
 // 1. managed instance registration
 // 2. EC2 Instance Metadata
+// 3. EC2 Instance Dynamic Data
 func fetchRegion() (string, error) {
 	var err error
 	var region string
@@ -111,6 +112,11 @@ func fetchRegion() (string, error) {
 
 	// trying to get region from metadata
 	if region, err = metadata.Region(); region != "" && err == nil {
+		return region, nil
+	}
+
+	// trying to get region from dynamic data
+	if region, err = dynamicData.Region(); region != "" && err == nil {
 		return region, nil
 	}
 

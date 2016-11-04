@@ -35,7 +35,7 @@ func MakeInstanceIdentityDocument() InstanceIdentityDocument {
 		InstanceType:        "m3.large",
 		ImageID:             "ami-15984f7e",
 		PendingTimeAsString: "2015-08-06T17:06:28Z",
-		BillingProducts:     "null",
+		BillingProducts:     []string{},
 		KernelID:            "null",
 		RamdiskID:           "null",
 		DevpayProductCodes:  "null",

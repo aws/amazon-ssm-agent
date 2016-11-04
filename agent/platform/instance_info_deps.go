@@ -53,3 +53,28 @@ func (c instanceMetadata) GetMetadata(p string) (string, error) {
 
 // Region returns the region the instance is running in.
 func (c instanceMetadata) Region() (string, error) { return c.Client.Region() }
+
+// dependency for metadata
+var dynamicData dynamicDataClient = instanceDynamicData{
+	Client: NewEC2MetadataClient(),
+}
+
+type dynamicDataClient interface {
+	Region() (string, error)
+}
+
+type instanceDynamicData struct {
+	Client *EC2MetadataClient
+}
+
+// Region returns the region from dynamic data
+func (d instanceDynamicData) Region() (string, error) {
+	var instanceIdentityDocument *InstanceIdentityDocument
+	var err error
+
+	if instanceIdentityDocument, err = d.Client.InstanceIdentityDocument(); err == nil &&
+		instanceIdentityDocument != nil && instanceIdentityDocument.Region != "" {
+		return instanceIdentityDocument.Region, nil
+	}
+	return "", err
+}
