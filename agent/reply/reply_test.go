@@ -59,7 +59,7 @@ func TestPrepareReplyPayload(t *testing.T) {
 	// run test cases
 	for _, tst := range testCases {
 		// call our method under test
-		docResult := PrepareReplyPayload("", tst.PluginRuntimeStatuses, tst.DateTime, tst.Agent)
+		docResult := PrepareReplyPayload("", tst.PluginRuntimeStatuses, tst.DateTime, tst.Agent, true)
 
 		// check result
 		assert.Equal(t, tst.Result, docResult)
