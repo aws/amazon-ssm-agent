@@ -86,7 +86,7 @@ func ResetWaitTimerForNextScheduledAssociation(log log.T, targetDate time.Time) 
 		return
 	}
 	// duration can be negative, which will trigger the signal immediately
-	duration := targetDate.Sub(time.Now())
+	duration := targetDate.UTC().Sub(time.Now().UTC())
 
 	if nextScheduledDate.Equal(targetDate) {
 		log.Debugf("Next association is scheduled at %v, system will sleep for %v", nextScheduledDate, duration)

@@ -55,8 +55,9 @@ func (newAssoc *InstanceAssociation) Update(oldAssoc *InstanceAssociation) {
 }
 
 // Initialize initializes default values for the given new association
-func (newAssoc *InstanceAssociation) Initialize(log log.T, currentTime time.Time) error {
+func (newAssoc *InstanceAssociation) Initialize(log log.T) error {
 
+	currentTime := time.Now().UTC()
 	if newAssoc.Association.ScheduleExpression == nil || *newAssoc.Association.ScheduleExpression == "" {
 		newAssoc.Association.ScheduleExpression = aws.String(cronExpressionEveryFiveMinutes)
 		// legacy association, run only once
@@ -76,7 +77,7 @@ func (newAssoc *InstanceAssociation) Initialize(log log.T, currentTime time.Time
 		return fmt.Errorf("Failed to parse schedule expression %v, %v", newAssoc.Expression, err)
 	}
 
-	newAssoc.NextScheduledDate = cronexpr.MustParse(newAssoc.Expression).Next(currentTime)
+	newAssoc.NextScheduledDate = cronexpr.MustParse(newAssoc.Expression).Next(currentTime).UTC()
 	return nil
 }
 

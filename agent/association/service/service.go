@@ -108,7 +108,7 @@ func (s *AssociationService) ListInstanceAssociations(log log.T, instanceID stri
 		for _, assoc := range response.Associations {
 			rawData := &model.InstanceAssociation{}
 			rawData.Association = assoc
-			rawData.CreateDate = time.Now()
+			rawData.CreateDate = time.Now().UTC()
 			results = append(results, rawData)
 		}
 
