@@ -35,21 +35,25 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/times"
 )
 
+// ErrorMsg represents the error message to be sent to the customer
+const ErrorMsg = "Encountered error while parsing input - internal error"
+
 // ParseDocumentWithParams parses an document and replaces the parameters where needed.
 func ParseDocumentWithParams(log log.T,
 	rawData *model.InstanceAssociation) (*messageContracts.SendCommandPayload, error) {
 
 	rawDataContent, err := jsonutil.Marshal(rawData)
 	if err != nil {
-		log.Error("Could not marshal association! ", err)
-		return nil, err
+		log.Debugf("Could not marshal association! ", err)
+		return nil, fmt.Errorf("%v", ErrorMsg)
 	}
 	log.Debug("Processing assocation ", jsonutil.Indent(rawDataContent))
 
 	payload := &messageContracts.SendCommandPayload{}
 
 	if err = json.Unmarshal([]byte(*rawData.Document), &payload.DocumentContent); err != nil {
-		return nil, err
+		log.Debugf("Could not unmarshal parameters ", err)
+		return nil, fmt.Errorf("%v", ErrorMsg)
 	}
 	payload.DocumentName = *rawData.Association.Name
 	payload.CommandID = *rawData.Association.AssociationId
@@ -67,8 +71,8 @@ func ParseDocumentWithParams(log log.T,
 
 	var parametersContent string
 	if parametersContent, err = jsonutil.Marshal(payload.Parameters); err != nil {
-		log.Error("Could not marshal parameters ", err)
-		return nil, err
+		log.Debugf("Could not marshal parameters ", err)
+		return nil, fmt.Errorf("%v", ErrorMsg)
 	}
 	log.Debug("After marshal parameters ", jsonutil.Indent(parametersContent))
 
