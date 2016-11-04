@@ -177,6 +177,7 @@ func buildPluginsInfo(
 				OrchestrationDirectory: fileutil.BuildPath(orchestrationDir, pluginName),
 				MessageId:              documentInfo.MessageID,
 				BookKeepingFileName:    documentInfo.DocumentID,
+				PluginName:             pluginName,
 				PluginID:               pluginName,
 			}
 			pluginConfigurations = append(pluginConfigurations, &config)
@@ -187,7 +188,7 @@ func buildPluginsInfo(
 			plugin.Configuration = *config
 			plugin.HasExecuted = false
 			plugin.Id = config.PluginID
-			plugin.Name = config.PluginID
+			plugin.Name = config.PluginName
 			pluginsInfo = append(pluginsInfo, plugin)
 		}
 
@@ -212,13 +213,15 @@ func buildPluginsInfo(
 				OrchestrationDirectory: fileutil.BuildPath(orchestrationDir, pluginName),
 				MessageId:              documentInfo.MessageID,
 				BookKeepingFileName:    documentInfo.DocumentID,
+				PluginName:             pluginName,
+				PluginID:               instancePluginConfig.Name,
 			}
 
 			var plugin stateModel.PluginState
 			plugin.Configuration = config
 			plugin.HasExecuted = false
-			plugin.Id = instancePluginConfig.Name
-			plugin.Name = pluginName
+			plugin.Id = config.PluginID
+			plugin.Name = config.PluginName
 			instancePluginsInfo[index] = plugin
 		}
 		docState.InstancePluginsInformation = instancePluginsInfo

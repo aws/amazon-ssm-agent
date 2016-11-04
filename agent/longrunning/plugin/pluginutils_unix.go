@@ -27,6 +27,6 @@ func loadPlatformDependentPlugins(context context.T) map[string]Plugin {
 
 // IsPluginSupportedForCurrentPlatform always returns true because currently, there is no plugin that particular
 // linux version doesn't support while other linux version does.
-func IsPluginSupportedForCurrentPlatform(log log.T, pluginID string) (bool, string) {
+func IsPluginSupportedForCurrentPlatform(log log.T, pluginName string) (bool, string) {
 	return false, ""
 }

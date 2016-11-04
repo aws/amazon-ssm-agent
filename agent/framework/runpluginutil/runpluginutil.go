@@ -66,6 +66,7 @@ type PluginRunner struct {
 	CancelFlag  task.CancelFlag
 }
 
+// TODO check if this only support 1.2
 func ParseDocument(context context.T, documentRaw []byte, orchestrationDir string, s3Bucket string, s3KeyPrefix string, messageID string, documentID string, defaultWorkingDirectory string) (pluginsInfo []model.PluginState, err error) {
 	var docContent contracts.DocumentContent
 	err = json.Unmarshal(documentRaw, &docContent)
@@ -80,6 +81,7 @@ func ParseDocument(context context.T, documentRaw []byte, orchestrationDir strin
 			OrchestrationDirectory:  fileutil.BuildPath(orchestrationDir, pluginName),
 			MessageId:               messageID,
 			BookKeepingFileName:     documentID,
+			PluginName:              pluginName,
 			PluginID:                pluginName,
 			DefaultWorkingDirectory: defaultWorkingDirectory,
 		}
@@ -92,7 +94,7 @@ func ParseDocument(context context.T, documentRaw []byte, orchestrationDir strin
 	for _, value := range pluginConfigurations {
 		var plugin model.PluginState
 		plugin.Id = value.PluginID
-		plugin.Name = value.PluginID
+		plugin.Name = value.PluginName
 		plugin.Configuration = *value
 		plugin.HasExecuted = false
 		pluginsInfo = append(pluginsInfo, plugin)

@@ -58,8 +58,9 @@ func RunPlugins(
 				"Skipping execution of Plugin - %v of document - %v since it has already executed.",
 				pluginName,
 				executionID)
+			// TODO find where the result is from and how it can be saved. Should put name in result.
+			pluginState.Result.PluginName = pluginName
 			pluginOutput := pluginState.Result
-			pluginOutput.PluginName = pluginName //TODO change this into plugin result
 			pluginOutputs[pluginID] = &pluginOutput
 			continue
 		}
@@ -67,7 +68,6 @@ func RunPlugins(
 
 		// populate plugin start time and status
 		configuration := pluginState.Configuration
-		configuration.PluginID = pluginID
 
 		pluginOutputs[pluginID] = &contracts.PluginResult{
 			PluginName:    pluginName,

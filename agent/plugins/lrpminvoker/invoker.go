@@ -89,11 +89,12 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 	log := context.Log()
 	log.Infof("long running plugin invoker has been invoked")
 
-	var pluginID string
+	var pluginName string
 	var err error
-
+	pluginID := config.PluginID
+	// TODO not sure why we need to grab pluginId from the context. will figure out if need later
 	//grab pluginId from the context
-	if pluginID, err = p.GetPluginIdFromContext(context); err != nil {
+	if pluginName, err = p.GetPluginIdFromContext(context); err != nil {
 		log.Errorf("Unable to get plugin name from context - %s", context.CurrentContext())
 		res = p.CreateResult("Unable to get plugin name because of unsupported plugin name format",
 			contracts.ResultStatusFailed)
@@ -103,9 +104,9 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 	}
 
 	var pluginsMap = p.lrpm.GetRegisteredPlugins()
-	if _, ok := pluginsMap[pluginID]; !ok {
-		log.Errorf("Given plugin - %s is not registered", pluginID)
-		res = p.CreateResult(fmt.Sprintf("Plugin %s is not registered by agent", pluginID),
+	if _, ok := pluginsMap[pluginName]; !ok {
+		log.Errorf("Given plugin - %s is not registered", pluginName)
+		res = p.CreateResult(fmt.Sprintf("Plugin %s is not registered by agent", pluginName),
 			contracts.ResultStatusFailed)
 
 		pluginPersister(log, pluginID, config, res)
@@ -123,7 +124,7 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 	if err = jsonutil.Remarshal(config.Settings, &setting); err != nil {
 		log.Errorf(fmt.Sprintf("Invalid format in plugin configuration - %v;\nError %v", config.Settings, err))
 
-		res = p.CreateResult(fmt.Sprintf("Unable to parse Settings for %s", pluginID),
+		res = p.CreateResult(fmt.Sprintf("Unable to parse Settings for %s", pluginName),
 			contracts.ResultStatusFailed)
 
 		pluginPersister(log, pluginID, config, res)
@@ -131,7 +132,7 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 	}
 
 	if rebooter.RebootRequested() {
-		log.Infof("Stopping execution of %v plugin due to an external reboot request.", pluginID)
+		log.Infof("Stopping execution of %v plugin due to an external reboot request.", pluginName)
 		return
 	}
 
@@ -164,15 +165,15 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 
 	switch setting.StartType {
 	case "Enabled":
-		res = p.enablePlugin(log, config, pluginID, cancelFlag)
+		res = p.enablePlugin(log, config, pluginName, cancelFlag)
 
 		pluginPersister(log, pluginID, config, res)
 		return
 
 	case "Disabled":
 
-		log.Infof("Disabling %s", pluginID)
-		if err = p.lrpm.StopPlugin(pluginID, cancelFlag); err != nil {
+		log.Infof("Disabling %s", pluginName)
+		if err = p.lrpm.StopPlugin(pluginName, cancelFlag); err != nil {
 			log.Errorf("Unable to stop the plugin - %s: %s", pluginID, err.Error())
 			res = p.CreateResult(fmt.Sprintf("Encountered error while stopping the plugin: %s", err.Error()),
 				contracts.ResultStatusFailed)
@@ -180,7 +181,7 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 			pluginPersister(log, pluginID, config, res)
 			return
 		} else {
-			res = p.CreateResult(fmt.Sprintf("Disabled the plugin - %s successfully", pluginID),
+			res = p.CreateResult(fmt.Sprintf("Disabled the plugin - %s successfully", pluginName),
 				contracts.ResultStatusSuccess)
 			res.Status = contracts.ResultStatusSuccess
 
