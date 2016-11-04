@@ -315,10 +315,6 @@ func CreateScriptFile(log log.T, scriptPath string, runCommand []string) (err er
 		}
 	}
 
-	// Prepending a script self delete command to the customer provided commands.
-	// This ensures that the script gets deleted after it is loaded into memory and execution has started.
-	// runCommand = append([]string{GetScriptSelfDeleteCommand(scriptPath)}, runCommand...)
-
 	// write source commands to file
 	_, err = scriptFile.WriteString(strings.Join(runCommand, "\n") + "\n")
 	if err != nil {

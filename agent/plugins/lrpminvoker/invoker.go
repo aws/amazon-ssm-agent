@@ -33,7 +33,6 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/longrunning/manager"
 	managerContracts "github.com/aws/amazon-ssm-agent/agent/longrunning/plugin"
-	"github.com/aws/amazon-ssm-agent/agent/parameterstore"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/pluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/rebooter"
 	"github.com/aws/amazon-ssm-agent/agent/task"
@@ -147,17 +146,6 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 	if cancelFlag.Canceled() {
 		res.Code = 1
 		res.Status = contracts.ResultStatusCancelled
-
-		pluginPersister(log, pluginID, config, res)
-		return
-	}
-
-	// Resolve ssm parameters
-	// This may contain sensitive information, do not log this data after resolving.
-	if setting.StartType, err = parameterstore.ResolveSecureString(log, setting.StartType); err != nil {
-		log.Errorf("Failed to resolve ssm parameters. Error: - %v", err)
-		res = p.CreateResult(fmt.Sprintf("Failed to resolve ssm parameters. Error: - %v", err),
-			contracts.ResultStatusFailed)
 
 		pluginPersister(log, pluginID, config, res)
 		return
@@ -328,16 +316,6 @@ func (p *Plugin) prepareForStart(log log.T, config contracts.Configuration, plug
 		failed = true
 		log.Errorf(fmt.Sprintf("Invalid format in plugin configuration - %v;\nError %v", config.Properties, err))
 		res = p.CreateResult(fmt.Sprintf("Invalid format in plugin configuration - expecting property as string - %s", config.Properties),
-			contracts.ResultStatusFailed)
-		return
-	}
-
-	// Resolve ssm parameters
-	// This may contain sensitive information, do not log this data after resolving.
-	if property, err = parameterstore.ResolveSecureString(log, property); err != nil {
-		failed = true
-		log.Errorf("Failed to resolve ssm parameters. Error: - %v", err)
-		res = p.CreateResult(fmt.Sprintf("Failed to resolve ssm parameters. Error: - %v", err),
 			contracts.ResultStatusFailed)
 		return
 	}

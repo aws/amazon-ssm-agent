@@ -66,7 +66,3 @@ func GetShellCommand() string {
 func GetShellArguments() []string {
 	return strings.Split(PowerShellArgs, " ")
 }
-
-func GetScriptSelfDeleteCommand(scriptPath string) string {
-	return "Remove-Item " + scriptPath
-}
