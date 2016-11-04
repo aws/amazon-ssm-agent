@@ -82,7 +82,8 @@ type NetworkData struct {
 
 // WindowsUpdateData captures all attributes present in AWS:WindowsUpdate inventory type
 type WindowsUpdateData struct {
-	HotFixID      string
+	// SSM Inventory expects it HotFixId and not HotFixID
+	HotFixId      string
 	Description   string
 	InstalledTime string
 	InstalledBy   string
