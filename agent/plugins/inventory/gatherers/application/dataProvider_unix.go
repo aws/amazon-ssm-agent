@@ -22,7 +22,9 @@ import (
 	"fmt"
 	"os/exec"
 	"sort"
+	"strconv"
 	"strings"
+	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/log"
@@ -44,7 +46,7 @@ const (
 	rpmCmd                        = "rpm"
 	rpmCmdArgToGetAllApplications = "-qa"
 	rpmQueryFormat                = "--queryformat"
-	rpmQueryFormatArgs            = `\{\"Name\":\"%{NAME}\",\"Publisher\":\"%{VENDOR}\",\"Version\":\"%{VERSION}\",\"InstalledTime\":\"%{INSTALLTIME:date}\",\"ApplicationType\":\"%{GROUP}\",\"Architecture\":\"%{ARCH}\",\"Url\":\"%{URL}\"\},`
+	rpmQueryFormatArgs            = `\{\"Name\":\"%{NAME}\",\"Publisher\":\"%{VENDOR}\",\"Version\":\"%{VERSION}\",\"InstalledTime\":\"%{INSTALLTIME}\",\"ApplicationType\":\"%{GROUP}\",\"Architecture\":\"%{ARCH}\",\"Url\":\"%{URL}\"\},`
 
 	// dpkg query commands related constants
 	dpkgCmd                      = "dpkg-query"
@@ -285,9 +287,20 @@ func ConvertToApplicationData(input string) (data []model.ApplicationData, err e
 	str = fmt.Sprintf("[%v]", str)
 
 	//unmarshall json string accordingly.
-	err = json.Unmarshal([]byte(str), &data)
+	if err = json.Unmarshal([]byte(str), &data); err == nil {
 
-	//transform the date
+		//transform the date - by iterating over all elements
+		for j, item := range data {
+			if item.InstalledTime != "" {
+				if i, err := strconv.ParseInt(item.InstalledTime, 10, 64); err == nil {
+					//InstalledTime must comply with format: 2016-07-30T18:15:37Z to provide better search experience for customers
+					tm := time.Unix(i, 0).UTC()
+					data[j].InstalledTime = tm.Format(time.RFC3339)
+				}
+				//ignore the date transformation if error is encountered
+			}
+		}
+	}
 
 	return
 }
