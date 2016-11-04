@@ -22,13 +22,14 @@ import (
 	"path/filepath"
 	"strings"
 
+	"time"
+
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil/artifact"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/platform"
 	"golang.org/x/sys/windows/registry"
-	"time"
 )
 
 const (
