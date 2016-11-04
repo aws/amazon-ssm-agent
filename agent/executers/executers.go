@@ -53,6 +53,12 @@ func (sh ShellCommandExecuter) GetProcess() *os.Process {
 	return Process
 }
 
+type timeoutSignal struct {
+	// process kill doesn't send proper signal to the process status
+	// Setting the execInterruptedOnWindows to indicate execution was interrupted
+	execInterruptedOnWindows bool
+}
+
 // Execute executes a list of shell commands in the given working directory.
 // The orchestration directory specifies where to create the script file and where
 // to save stdout and stderr. The orchestration directory will be created if it doesn't exist.
@@ -274,10 +280,11 @@ func RunCommand(log log.T,
 		return
 	}
 
-	go killProcessOnCancel(log, command, cancelFlag)
+	signal := timeoutSignal{}
 
+	go killProcessOnCancel(log, command, cancelFlag, &signal)
 	timer := time.NewTimer(time.Duration(executionTimeout) * time.Second)
-	go killProcessOnTimeout(log, command, timer)
+	go killProcessOnTimeout(log, command, timer, &signal)
 
 	err = command.Wait()
 	timedOut := !timer.Stop() // returns false if called previously - indicates timedOut.
@@ -288,6 +295,12 @@ func RunCommand(log log.T,
 			// The program has exited with an exit code != 0
 			if status, ok := exiterr.Sys().(syscall.WaitStatus); ok {
 				exitCode = status.ExitStatus()
+
+				if signal.execInterruptedOnWindows {
+					log.Debug("command interrupted by cancel or timeout")
+					exitCode = -1
+				}
+
 				// First try to handle Cancel and Timeout scenarios
 				// SIGKILL will result in an exitcode of -1
 				if exitCode == -1 {
@@ -357,8 +370,8 @@ func StartCommand(log log.T,
 	}
 
 	Process = command.Process
-
-	go killProcessOnCancel(log, command, cancelFlag)
+	signal := timeoutSignal{}
+	go killProcessOnCancel(log, command, cancelFlag, &signal)
 
 	//todo: timeout is not really required here -> because it's a long running exe
 	//timer := time.NewTimer(time.Duration(executionTimeout) * time.Second)
@@ -373,6 +386,12 @@ func StartCommand(log log.T,
 			// The program has exited with an exit code != 0
 			if status, ok := exiterr.Sys().(syscall.WaitStatus); ok {
 				exitCode = status.ExitStatus()
+
+				if signal.execInterruptedOnWindows {
+					log.Debug("command interrupted by cancel or timeout")
+					exitCode = -1
+				}
+
 				// First try to handle Cancel and Timeout scenarios
 				// SIGKILL will result in an exitcode of -1
 				if exitCode == -1 {
@@ -413,13 +432,13 @@ func StartCommand(log log.T,
 // If a cancel request is received, this method kills the underlying
 // process of the command. This will unblock the command.Wait() call.
 // If the task completed successfully this method returns with no action.
-func killProcessOnCancel(log log.T, command *exec.Cmd, cancelFlag task.CancelFlag) {
+func killProcessOnCancel(log log.T, command *exec.Cmd, cancelFlag task.CancelFlag, signal *timeoutSignal) {
 	cancelFlag.Wait()
 	if cancelFlag.Canceled() {
 		log.Debug("Process cancelled. Attempting to stop process.")
 
 		// task has been asked to cancel, kill process
-		if err := killProcess(command.Process); err != nil {
+		if err := killProcess(command.Process, signal); err != nil {
 			log.Error(err)
 			return
 		}
@@ -432,12 +451,12 @@ func killProcessOnCancel(log log.T, command *exec.Cmd, cancelFlag task.CancelFla
 // When the timeout is reached, this method kills the underlying
 // process of the command. This will unblock the command.Wait() call.
 // If the task completed successfully this method returns with no action.
-func killProcessOnTimeout(log log.T, command *exec.Cmd, timer *time.Timer) {
+func killProcessOnTimeout(log log.T, command *exec.Cmd, timer *time.Timer, signal *timeoutSignal) {
 	<-timer.C
 	log.Debug("Process exceeded timeout. Attempting to stop process.")
 
 	// task has been exceeded the allowed execution timeout, kill process
-	if err := killProcess(command.Process); err != nil {
+	if err := killProcess(command.Process, signal); err != nil {
 		log.Error(err)
 		return
 	}

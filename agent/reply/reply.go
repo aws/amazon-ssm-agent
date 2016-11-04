@@ -29,7 +29,7 @@ func PrepareReplyPayload(pluginID string,
 	runtimeStatuses map[string]*contracts.PluginRuntimeStatus,
 	dateTime time.Time,
 	agentInfo contracts.AgentInfo,
-	isRunCommand bool) (payload messageContracts.SendReplyPayload) {
+	buildPayloadWithPluginName bool) (payload messageContracts.SendReplyPayload) {
 
 	// TODO instance this needs to be revised to be in parity with ec2config
 	documentStatus := contracts.ResultStatusSuccess
@@ -69,7 +69,7 @@ func PrepareReplyPayload(pluginID string,
 	}
 
 	// RunCommand still requires to use plugin name as the Id, this will be cleaned during next release
-	if isRunCommand {
+	if buildPayloadWithPluginName {
 		runtimeStatusesIndexedWithName := make(map[string]*contracts.PluginRuntimeStatus)
 
 		for pluginID, status := range runtimeStatuses {

@@ -27,7 +27,7 @@ func prepareProcess(command *exec.Cmd) {
 	command.SysProcAttr = &syscall.SysProcAttr{Setpgid: true}
 }
 
-func killProcess(process *os.Process) error {
+func killProcess(process *os.Process, signal *timeoutSignal) error {
 	//   NOTE: go only kills the process but not its sub processes.
 	//   The consequence is that command.Wait() does not return, for some reason.
 	//   As a workaround we use some (platform specific) magic:
