@@ -1,8 +1,22 @@
+// Copyright 2016 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+//
+// Licensed under the Apache License, Version 2.0 (the "License"). You may not
+// use this file except in compliance with the License. A copy of the
+// License is located at
+//
+// http://aws.amazon.com/apache2.0/
+//
+// or in the "license" file accompanying this file. This file is distributed
+// on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+// either express or implied. See the License for the specific language governing
+// permissions and limitations under the License.
+
 package configurecontainers
 
 import (
 	"fmt"
 	"io/ioutil"
+	"path/filepath"
 	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
@@ -83,12 +97,13 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 	log := context.Log()
 	log.Infof("%v started with configuration %v", Name(), config)
 	res.StartDateTime = time.Now()
-	defer func() { res.EndDateTime = time.Now() }()
+	defer func() {
+		res.EndDateTime = time.Now()
+	}()
 
-	//loading Properties as list since aws:psModule uses properties as list
 	var properties []interface{}
 	if properties, res = pluginutil.LoadParametersAsList(log, config.Properties); res.Code != 0 {
-
+		pluginutil.PersistPluginInformationToCurrent(log, config.PluginID, config, res)
 		pluginutil.PersistPluginInformationToCurrent(log, config.PluginID, config, res)
 		return res
 	}
@@ -167,8 +182,7 @@ func (p *Plugin) runCommands(log log.T, pluginInput ConfigureContainerPluginInpu
 		out.MarkAsFailed(log, err)
 		return
 	}
-	log.Info("********************************starting configure container plugin**************************************")
-	var outputBytes []byte
+	log.Info("********************************starting configure Docker plugin**************************************")
 	switch pluginInput.Action {
 	case INSTALL:
 		out = runInstallCommands(log, pluginInput, orchestrationDir)
@@ -179,14 +193,27 @@ func (p *Plugin) runCommands(log log.T, pluginInput ConfigureContainerPluginInpu
 		out.MarkAsFailed(log, fmt.Errorf("configure Action is set to unsupported value: %v", pluginInput.Action))
 		return out
 	}
-	out.Stdout = string(outputBytes)
 
-	// Upload output to S3
-	uploadOutputToS3BucketErrors := p.ExecuteUploadOutputToS3Bucket(log, pluginInput.ID, orchestrationDir, outputS3BucketName, outputS3KeyPrefix, useTempDirectory, tempDir, out.Stdout, out.Stderr)
-	out.Errors = append(out.Errors, uploadOutputToS3BucketErrors...)
-
+	if outputS3BucketName != "" {
+		// Create output file paths
+		stdoutFilePath := filepath.Join(orchestrationDir, p.StdoutFileName)
+		stderrFilePath := filepath.Join(orchestrationDir, p.StderrFileName)
+		log.Debugf("stdout file %v, stderr file %v", stdoutFilePath, stderrFilePath)
+		err = ioutil.WriteFile(stdoutFilePath, []byte(out.Stdout), 0644)
+		if err != nil {
+			out.Errors = append(out.Errors, err.Error())
+		}
+		err = ioutil.WriteFile(stderrFilePath, []byte(out.Stderr), 0644)
+		if err != nil {
+			out.Errors = append(out.Errors, err.Error())
+		}
+		// Upload output to S3
+		uploadOutputToS3BucketErrors := p.ExecuteUploadOutputToS3Bucket(log, pluginInput.ID, orchestrationDir, outputS3BucketName, outputS3KeyPrefix, useTempDirectory, tempDir, out.Stdout, out.Stderr)
+		out.Errors = append(out.Errors, uploadOutputToS3BucketErrors...)
+	}
 	// Return Json indented response
 	responseContent, _ := jsonutil.Marshal(out)
 	log.Debug("Returning response:\n", jsonutil.Indent(responseContent))
+	log.Info("********************************completing configure Docker plugin**************************************")
 	return
 }
