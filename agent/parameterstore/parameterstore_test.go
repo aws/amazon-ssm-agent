@@ -134,7 +134,7 @@ func TestValidateSSMParameters(t *testing.T) {
 	}
 
 	err = ValidateSSMParameters(logger, documentParameters, parameters)
-	assert.Equal(t, "SSM parameters [test test2] of type SecureString are not supported", err.Error())
+	assert.Equal(t, "Parameters [test test2] of type SecureString are not supported", err.Error())
 
 	// Test case 3 with SSM parameters and SSM parameter value doesn't match allowed pattern
 	documentParameters = map[string]*contracts.Parameter{
