@@ -52,6 +52,8 @@ const (
 	buildLabExProperty         = "BuildLabEx"
 	osVersionProperty          = "Version"
 	operatingSystemSkuProperty = "OperatingSystemSKU"
+	currentMajorVersionNumber  = "CurrentMajorVersionNumber"
+	currentMinorVersionNumber  = "CurrentMinorVersionNumber"
 
 	// PnpEntity Properties
 	deviceIDProperty = "DeviceID"
@@ -231,7 +233,7 @@ func (p *Processor) ExecuteTasks() (err error) {
 // getSystemInfo quries Windows information from registry key and OS information from Win32_OperatingSystem.
 func getSystemInfo(log log.T) (windowsInfo model.WindowsInfo, osInfo model.OperatingSystemInfo, err error) {
 	// this queries Windows info.
-	properties := []string{productNameProperty, buildLabExProperty}
+	properties := []string{productNameProperty, buildLabExProperty, currentMajorVersionNumber, currentMinorVersionNumber}
 	if err = runPowershell(&windowsInfo, getWindowsInfoCmd, properties, false); err != nil {
 		log.Infof("Error occurred while querying Windows info: %v", err.Error())
 	}
@@ -240,6 +242,18 @@ func getSystemInfo(log log.T) (windowsInfo model.WindowsInfo, osInfo model.Opera
 	properties = []string{osVersionProperty, operatingSystemSkuProperty}
 	if err = runPowershell(&osInfo, getOSInfoCmd, properties, false); err != nil {
 		log.Infof("Error occurred while querying OS info: %v", err.Error())
+	}
+
+	// ec2 console output must show only major and minor versions.
+	if windowsInfo.CurrentMajorVersionNumber == "" || windowsInfo.CurrentMinorVersionNumber == "" {
+		versionSplit := strings.Split(osInfo.Version, ".")
+		if len(versionSplit) > 1 {
+			osInfo.Version = fmt.Sprintf("%v.%v", versionSplit[0], versionSplit[1])
+		} else if len(versionSplit) == 1 {
+			osInfo.Version = fmt.Sprintf("%v.0", versionSplit[0])
+		}
+	} else {
+		osInfo.Version = fmt.Sprintf("%v.%v", windowsInfo.CurrentMajorVersionNumber, windowsInfo.CurrentMinorVersionNumber)
 	}
 
 	return

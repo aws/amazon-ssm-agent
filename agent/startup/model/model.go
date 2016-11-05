@@ -42,8 +42,10 @@ type DriverInfo struct {
 
 // WindowsInfo contains ProductName and BuildLabEx from HKLM:\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion.
 type WindowsInfo struct {
-	ProductName string `json:"ProductName"`
-	BuildLabEx  string `json:"BuildLabEx"`
+	ProductName               string `json:"ProductName"`
+	BuildLabEx                string `json:"BuildLabEx"`
+	CurrentMajorVersionNumber string `json:"CurrentMajorVersionNumber"`
+	CurrentMinorVersionNumber string `json:"CurrentMinorVersionNumber"`
 }
 
 // OperatingSystemInfo contains Version and OperatingSystemSKU from Win32_OperatingSystem.
