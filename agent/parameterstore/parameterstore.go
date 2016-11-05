@@ -189,7 +189,7 @@ func getSSMParameterValues(log log.T, ssmParams []string) (map[string]Parameter,
 	}
 
 	if len(paramNames) != len(result.Parameters) {
-		errorString := fmt.Errorf("Input contains invalid ssm parameters %v", result.InvalidParameters)
+		errorString := fmt.Errorf("Input contains invalid parameters %v", result.InvalidParameters)
 		log.Debug(errorString)
 		return nil, errorString
 	}
@@ -216,7 +216,7 @@ func getSSMParameterValues(log log.T, ssmParams []string) (map[string]Parameter,
 	}
 
 	if len(secureStringParams) > 0 {
-		return nil, fmt.Errorf("SSM parameters %v of type %v are not supported", secureStringParams, ParamTypeSecureString)
+		return nil, fmt.Errorf("Parameters %v of type %v are not supported", secureStringParams, ParamTypeSecureString)
 	}
 
 	return resolvedParamMap, nil
@@ -243,8 +243,7 @@ func callGetParameters(log log.T, paramNames []string) (*GetParametersResponse, 
 		err = jsonutil.Remarshal(result, &response)
 		if err != nil {
 			log.Debug(err)
-			errorString := "Encountered error while parsing GetParameters output"
-			return nil, fmt.Errorf("%v", errorString)
+			return nil, fmt.Errorf("%v", ErrorMsg)
 		}
 
 		finalResult.Parameters = append(finalResult.Parameters, response.Parameters...)
