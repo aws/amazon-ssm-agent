@@ -33,7 +33,8 @@ const (
 	SchemaVersionOfApplication = "1.0"
 
 	amazonPublisherName = "amazon"
-	amazonSsmAgent      = "amazon-ssm-agent"
+	amazonSsmAgentLinux = "amazon-ssm-agent"
+	amazonSsmAgentWin   = "amazon ssm agent"
 	awsToolsWindows     = "aws tools for windows"
 	ec2ConfigService    = "ec2configservice"
 	awsCfnBootstrap     = "aws-cfn-bootstrap"
@@ -53,7 +54,8 @@ func init() {
 	// have been identified in various OS - amazon linux, ubuntu, windows etc.
 	// This is also useful for amazon linux ami - where all packages have Amazon.com as publisher.
 	selectAwsApps = make(map[string]string)
-	selectAwsApps[amazonSsmAgent] = amazonPublisherName
+	selectAwsApps[amazonSsmAgentLinux] = amazonPublisherName
+	selectAwsApps[amazonSsmAgentWin] = amazonPublisherName
 	selectAwsApps[awsToolsWindows] = amazonPublisherName
 	selectAwsApps[ec2ConfigService] = amazonPublisherName
 	selectAwsApps[awsCfnBootstrap] = amazonPublisherName
