@@ -79,6 +79,7 @@ type Configuration struct {
 	OrchestrationDirectory  string
 	MessageId               string
 	BookKeepingFileName     string
+	PluginName              string
 	PluginID                string
 	DefaultWorkingDirectory string
 }

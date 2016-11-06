@@ -13,20 +13,16 @@
 //
 // +build darwin freebsd linux netbsd openbsd
 
-package plugin
+package startup
 
-import (
-	"github.com/aws/amazon-ssm-agent/agent/context"
-	"github.com/aws/amazon-ssm-agent/agent/log"
-)
-
-// loadPlatformDepedentPlugins loads all registered long running plugins in memory
-func loadPlatformDependentPlugins(context context.T) map[string]Plugin {
-	return make(map[string]Plugin)
+// IsAllowed returns true if the current platform allows startup processor.
+// Implement this if ExecuteTasks is implemented.
+func (p *Processor) IsAllowed() bool {
+	// return false since no startup tasks available for unix platform.
+	return false
 }
 
-// IsPluginSupportedForCurrentPlatform always returns true because currently, there is no plugin that particular
-// linux version doesn't support while other linux version does.
-func IsPluginSupportedForCurrentPlatform(log log.T, pluginName string) (bool, string) {
-	return false, ""
+// ExecuteTasks executes startup tasks in unix platform.
+func (p *Processor) ExecuteTasks() error {
+	return nil
 }

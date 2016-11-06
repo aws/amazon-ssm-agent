@@ -25,7 +25,11 @@ import (
 )
 
 // PrepareReplyPayload creates the payload object for SendReply based on plugin outputs.
-func PrepareReplyPayload(pluginID string, runtimeStatuses map[string]*contracts.PluginRuntimeStatus, dateTime time.Time, agentInfo contracts.AgentInfo) (payload messageContracts.SendReplyPayload) {
+func PrepareReplyPayload(pluginID string,
+	runtimeStatuses map[string]*contracts.PluginRuntimeStatus,
+	dateTime time.Time,
+	agentInfo contracts.AgentInfo,
+	buildPayloadWithPluginName bool) (payload messageContracts.SendReplyPayload) {
 
 	// TODO instance this needs to be revised to be in parity with ec2config
 	documentStatus := contracts.ResultStatusSuccess
@@ -62,6 +66,19 @@ func PrepareReplyPayload(pluginID string, runtimeStatuses map[string]*contracts.
 		documentStatus = contracts.ResultStatusSuccess
 	} else {
 		documentStatus = contracts.ResultStatusInProgress
+	}
+
+	// RunCommand still requires to use plugin name as the Id, this will be cleaned during next release
+	if buildPayloadWithPluginName {
+		runtimeStatusesIndexedWithName := make(map[string]*contracts.PluginRuntimeStatus)
+
+		for pluginID, status := range runtimeStatuses {
+			name := status.Name
+			status.Name = pluginID
+			runtimeStatusesIndexedWithName[name] = status
+		}
+
+		runtimeStatuses = runtimeStatusesIndexedWithName
 	}
 
 	runtimeStatusesFiltered := make(map[string]*contracts.PluginRuntimeStatus)

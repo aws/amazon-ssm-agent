@@ -55,6 +55,7 @@ type pluginExecutionService interface {
 	RunPlugins(
 		context context.T,
 		associationID string,
+		documentCreatedDate string,
 		plugins []stateModel.PluginState,
 		pluginRegistry runpluginutil.PluginRegistry,
 		sendReply runpluginutil.SendResponse,

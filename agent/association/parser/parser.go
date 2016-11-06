@@ -19,6 +19,7 @@ import (
 	"fmt"
 	"path"
 	"path/filepath"
+	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/association/model"
@@ -34,21 +35,25 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/times"
 )
 
+// ErrorMsg represents the error message to be sent to the customer
+const ErrorMsg = "Encountered error while parsing input - internal error"
+
 // ParseDocumentWithParams parses an document and replaces the parameters where needed.
 func ParseDocumentWithParams(log log.T,
 	rawData *model.InstanceAssociation) (*messageContracts.SendCommandPayload, error) {
 
 	rawDataContent, err := jsonutil.Marshal(rawData)
 	if err != nil {
-		log.Error("Could not marshal association! ", err)
-		return nil, err
+		log.Debugf("Could not marshal association! ", err)
+		return nil, fmt.Errorf("%v", ErrorMsg)
 	}
 	log.Debug("Processing assocation ", jsonutil.Indent(rawDataContent))
 
 	payload := &messageContracts.SendCommandPayload{}
 
 	if err = json.Unmarshal([]byte(*rawData.Document), &payload.DocumentContent); err != nil {
-		return nil, err
+		log.Debugf("Could not unmarshal parameters ", err)
+		return nil, fmt.Errorf("%v", ErrorMsg)
 	}
 	payload.DocumentName = *rawData.Association.Name
 	payload.CommandID = *rawData.Association.AssociationId
@@ -66,8 +71,8 @@ func ParseDocumentWithParams(log log.T,
 
 	var parametersContent string
 	if parametersContent, err = jsonutil.Marshal(payload.Parameters); err != nil {
-		log.Error("Could not marshal parameters ", err)
-		return nil, err
+		log.Debugf("Could not marshal parameters ", err)
+		return nil, fmt.Errorf("%v", ErrorMsg)
 	}
 	log.Debug("After marshal parameters ", jsonutil.Indent(parametersContent))
 
@@ -122,7 +127,7 @@ func newDocumentInfo(rawData *model.InstanceAssociation, payload *messageContrac
 	documentInfo.AssociationID = *(rawData.Association.AssociationId)
 	documentInfo.InstanceID = *(rawData.Association.InstanceId)
 	documentInfo.MessageID = fmt.Sprintf("aws.ssm.%v.%v", documentInfo.AssociationID, documentInfo.InstanceID)
-	documentInfo.RunID = times.ToIsoDashUTC(times.DefaultClock.Now())
+	documentInfo.RunID = times.ToIsoDashUTC(time.Now())
 	documentInfo.DocumentID = *(rawData.Association.AssociationId) + "." + documentInfo.RunID
 	rawData.DocumentID = documentInfo.DocumentID
 	documentInfo.CreatedDate = times.ToIso8601UTC(rawData.CreateDate)
@@ -177,6 +182,7 @@ func buildPluginsInfo(
 				OrchestrationDirectory: fileutil.BuildPath(orchestrationDir, pluginName),
 				MessageId:              documentInfo.MessageID,
 				BookKeepingFileName:    documentInfo.DocumentID,
+				PluginName:             pluginName,
 				PluginID:               pluginName,
 			}
 			pluginConfigurations = append(pluginConfigurations, &config)
@@ -187,7 +193,7 @@ func buildPluginsInfo(
 			plugin.Configuration = *config
 			plugin.HasExecuted = false
 			plugin.Id = config.PluginID
-			plugin.Name = config.PluginID
+			plugin.Name = config.PluginName
 			pluginsInfo = append(pluginsInfo, plugin)
 		}
 
@@ -212,13 +218,15 @@ func buildPluginsInfo(
 				OrchestrationDirectory: fileutil.BuildPath(orchestrationDir, pluginName),
 				MessageId:              documentInfo.MessageID,
 				BookKeepingFileName:    documentInfo.DocumentID,
+				PluginName:             pluginName,
+				PluginID:               instancePluginConfig.Name,
 			}
 
 			var plugin stateModel.PluginState
 			plugin.Configuration = config
 			plugin.HasExecuted = false
-			plugin.Id = instancePluginConfig.Name
-			plugin.Name = pluginName
+			plugin.Id = config.PluginID
+			plugin.Name = config.PluginName
 			instancePluginsInfo[index] = plugin
 		}
 		docState.InstancePluginsInformation = instancePluginsInfo

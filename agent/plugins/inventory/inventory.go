@@ -206,7 +206,7 @@ func (p *Plugin) ApplyInventoryPolicy(context context.T, inventoryInput PluginIn
 
 	//log collected data before sending
 	d, _ := json.Marshal(items)
-	log.Infof("Collected Inventory data: %v", string(d))
+	log.Debugf("Collected Inventory data: %v", string(d))
 
 	if optimizedInventoryItems, nonOptimizedInventoryItems, err = p.uploader.ConvertToSsmInventoryItems(p.context, items); err != nil {
 		log.Infof("Encountered error in converting data to SSM InventoryItems - %v. Skipping upload to SSM", err.Error())
@@ -240,8 +240,10 @@ func (p *Plugin) ApplyInventoryPolicy(context context.T, inventoryInput PluginIn
 		}
 	}
 
+	log.Infof("%v uploaded inventory data to SSM", Name())
 	inventoryOutput.ExitCode = 0
 	inventoryOutput.Stdout = successfulMsgForInventoryPlugin
+
 	return
 }
 

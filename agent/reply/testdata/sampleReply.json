@@ -16,6 +16,7 @@
   "documentTraceOutput": "",
   "runtimeStatus": {
     "aws:runScript": {
+      "name": "aws:runScript",
       "code": 0,
       "status": "Success",
       "output": "standard output of test case\n----------ERROR-------\nstandard error of test case",

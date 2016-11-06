@@ -166,13 +166,10 @@ func GetAdvancedNetworkData(context context.T, data []model.NetworkData) []model
 	var modifiedData []model.NetworkData
 	log := context.Log()
 
-	dataB, _ = json.Marshal(data)
-	log.Infof("Basic network interface information collected so far - %v", string(dataB))
-
 	for _, datum := range data {
 
 		dataB, _ = json.Marshal(datum)
-		log.Infof("Network interface information of - %v: \n%v", datum.Name, string(dataB))
+		log.Debugf("Network interface information of - %v: \n%v", datum.Name, string(dataB))
 
 		datum = GetNetworkDataUsingPowershell(context, datum)
 
@@ -180,7 +177,7 @@ func GetAdvancedNetworkData(context context.T, data []model.NetworkData) []model
 	}
 
 	dataB, _ = json.Marshal(modifiedData)
-	log.Infof("Modified Network Interface information - %v", string(dataB))
+	log.Debugf("Modified Network Interface information - %v", string(dataB))
 
 	return modifiedData
 }
@@ -204,7 +201,7 @@ func GetNetworkDataUsingPowershell(context context.T, networkData model.NetworkD
 
 		if networkData, err = EditNetworkData(log, networkData, cmdOutput); err == nil {
 			dataB, _ = json.Marshal(networkData)
-			log.Infof("Modified Network Interface information - %v", string(dataB))
+			log.Debugf("Modified Network Interface information - %v", string(dataB))
 		} else {
 			log.Errorf("Unable to add further information to network data because of error - %v", err.Error())
 			log.Infof("No modification to network data")
@@ -240,7 +237,7 @@ func EditNetworkData(log log.T, data model.NetworkData, cmdOutput string) (model
 	}
 
 	dataB, _ = json.Marshal(config)
-	log.Infof("Advanced network data of macaddress - %v - \n%v", data.MacAddress, jsonutil.Indent(string(dataB)))
+	log.Debugf("Advanced network data of macaddress - %v - \n%v", data.MacAddress, jsonutil.Indent(string(dataB)))
 
 	data.DHCPServer = config.DHCPServer
 

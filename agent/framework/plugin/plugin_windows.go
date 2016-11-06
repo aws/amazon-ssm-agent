@@ -35,14 +35,14 @@ import (
 )
 
 // IsPluginSupportedForCurrentPlatform returns true if current platform supports the plugin with given name.
-func IsPluginSupportedForCurrentPlatform(log log.T, pluginID string) (bool, string) {
+func IsPluginSupportedForCurrentPlatform(log log.T, pluginName string) (bool, string) {
 	platformName, _ := platform.PlatformName(log)
 	platformVersion, _ := platform.PlatformVersion(log)
 
 	if isPlatformNanoServer, err := platform.IsPlatformNanoServer(log); err == nil && isPlatformNanoServer {
 		//if the current OS is Nano server, SSM Agent doesn't support the following plugins.
-		if pluginID == appconfig.PluginNameDomainJoin ||
-			pluginID == appconfig.PluginNameCloudWatch {
+		if pluginName == appconfig.PluginNameDomainJoin ||
+			pluginName == appconfig.PluginNameCloudWatch {
 			return false, fmt.Sprintf("%s (Nano Server) v%s", platformName, platformVersion)
 		}
 	}

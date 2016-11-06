@@ -103,6 +103,8 @@ func initializeSendCommandStateWithRuntimeConfig(
 			OrchestrationDirectory: fileutil.BuildPath(orchestrationDir, pluginName),
 			MessageId:              messageID,
 			BookKeepingFileName:    payload.CommandID,
+			PluginName:             pluginName,
+			PluginID:               pluginName,
 		}
 		pluginConfigurations[pluginName] = &config
 	}
@@ -139,13 +141,15 @@ func initializeSendCommandStateWithMainStep(
 			OrchestrationDirectory: fileutil.BuildPath(orchestrationDir, pluginName),
 			MessageId:              messageID,
 			BookKeepingFileName:    payload.CommandID,
+			PluginName:             pluginName,
+			PluginID:               instancePluginConfig.Name,
 		}
 
 		var plugin stateModel.PluginState
 		plugin.Configuration = config
 		plugin.HasExecuted = false
-		plugin.Id = instancePluginConfig.Name
-		plugin.Name = pluginName
+		plugin.Id = config.PluginID
+		plugin.Name = config.PluginName
 		instancePluginsInfo[index] = plugin
 	}
 	return

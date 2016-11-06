@@ -76,7 +76,7 @@ func replaceSSMParameters(log log.T, input interface{}, ssmParameters map[string
 		// replace param names with actual values
 		for paramName, paramObj := range ssmParameters {
 			if paramObj.Type == ParamTypeStringList && strings.Contains(input, paramName) {
-				return nil, fmt.Errorf("SSM parameter %v of type %v cannot be used as a %v", paramObj.Name, paramObj.Type, ParamTypeString)
+				return nil, fmt.Errorf("Parameter %v of type %v cannot be used as a %v", paramObj.Name, paramObj.Type, ParamTypeString)
 			}
 
 			input = strings.Replace(input, paramName, paramObj.Value, -1)
@@ -205,7 +205,7 @@ func parseStringList(log log.T, input interface{}, ssmParameters map[string]Para
 
 				// Check if SSM parameter of type StringList is being used as a String
 				if strings.Contains(temp, paramName) {
-					return nil, fmt.Errorf("SSM parameter %v of type %v cannot be used as a %v", paramObj.Name, paramObj.Type, ParamTypeString)
+					return nil, fmt.Errorf("Parameter %v of type %v cannot be used as a %v", paramObj.Name, paramObj.Type, ParamTypeString)
 				}
 			} else {
 				temp = strings.Replace(temp, paramName, paramObj.Value, -1)

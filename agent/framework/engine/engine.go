@@ -58,8 +58,9 @@ func RunPlugins(
 				"Skipping execution of Plugin - %v of document - %v since it has already executed.",
 				pluginName,
 				executionID)
+			// TODO find where the result is from and how it can be saved. Should put name in result.
+			pluginState.Result.PluginName = pluginName
 			pluginOutput := pluginState.Result
-			pluginOutput.PluginName = pluginName //TODO change this into plugin result
 			pluginOutputs[pluginID] = &pluginOutput
 			continue
 		}
@@ -67,7 +68,6 @@ func RunPlugins(
 
 		// populate plugin start time and status
 		configuration := pluginState.Configuration
-		configuration.PluginID = pluginID
 
 		pluginOutputs[pluginID] = &contracts.PluginResult{
 			PluginName:    pluginName,
@@ -109,13 +109,13 @@ func RunPlugins(
 				context.Log().Infof("%s is a worker plugin", pluginName)
 				r = runPlugin(context, p, pluginName, configuration, cancelFlag, runner)
 			default:
-				err := fmt.Errorf("Plugin with id %s not found!", pluginName)
+				err := fmt.Errorf("Plugin with name %s not found!", pluginName)
 				pluginOutputs[pluginID].Status = contracts.ResultStatusFailed
 				pluginOutputs[pluginID].Error = err
 				context.Log().Error(err)
 			}
 		} else {
-			err := fmt.Errorf("Plugin with id %s is not supported in current platform!\n%s", pluginName, platformDetail)
+			err := fmt.Errorf("Plugin with name %s is not supported in current platform!\n%s", pluginName, platformDetail)
 			pluginOutputs[pluginID].Status = contracts.ResultStatusFailed
 			pluginOutputs[pluginID].Error = err
 			context.Log().Error(err)
@@ -140,7 +140,7 @@ func RunPlugins(
 			sendReply(executionID, pluginName, pluginOutputs)
 		}
 		if updateAssoc != nil {
-			log.Infof("Update association on plugin completion: %v", pluginName)
+			log.Infof("Update association on plugin completion: %v", pluginID)
 			updateAssoc(log, executionID, documentCreatedDate, pluginOutputs, totalNumberOfActions)
 		}
 

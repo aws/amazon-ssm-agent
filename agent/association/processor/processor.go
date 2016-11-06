@@ -206,7 +206,7 @@ func (p *Processor) runScheduledAssociation(log log.T) {
 			contracts.AssociationStatusFailed,
 			contracts.AssociationErrorCodeInvalidAssociation,
 			times.ToIso8601UTC(time.Now()),
-			message)
+			err.Error())
 		schedulemanager.MarkAssociationAsCompleted(log, *scheduledAssociation.Association.AssociationId)
 		return
 	}
@@ -281,12 +281,15 @@ func (p *Processor) parseAssociation(rawData *model.InstanceAssociation) (*state
 
 	document, err := assocParser.ParseDocumentWithParams(log, rawData)
 	if err != nil {
-		return &docState, fmt.Errorf("failed to parse association, %v", err)
+		log.Debugf("failed to parse association, %v", err)
+		return &docState, err
 	}
 
 	var parsedMessageContent string
 	if parsedMessageContent, err = jsonutil.Marshal(document); err != nil {
-		return &docState, fmt.Errorf("failed to parse document, %v", err)
+		errorMsg := "Encountered error while parsing input - internal error"
+		log.Debugf("failed to parse document, %v", err)
+		return &docState, fmt.Errorf("%v", errorMsg)
 	}
 	log.Debug("Parsed association content is \n", jsonutil.Indent(parsedMessageContent))
 
@@ -295,13 +298,17 @@ func (p *Processor) parseAssociation(rawData *model.InstanceAssociation) (*state
 
 	isMI, err := sys.IsManagedInstance()
 	if err != nil {
-		return &docState, fmt.Errorf("error determining managed instance, %v", err)
+		errorMsg := "Error determining type of instance - internal error"
+		log.Debugf("error determining managed instance, %v", err)
+		return &docState, fmt.Errorf("%v", errorMsg)
 	}
 
 	if isMI {
 		log.Debugf("Running incompatible AWS SSM Document %v on managed instance", docState.DocumentInformation.DocumentName)
 		if err = stateModel.RemoveDependencyOnInstanceMetadata(context, &docState); err != nil {
-			return &docState, err
+			errorMsg := "Encountered error while parsing input - internal error"
+			log.Debug(err)
+			return &docState, fmt.Errorf("%v", errorMsg)
 		}
 	}
 

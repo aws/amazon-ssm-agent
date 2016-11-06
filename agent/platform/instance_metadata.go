@@ -55,20 +55,20 @@ const (
 }
 */
 type InstanceIdentityDocument struct {
-	InstanceID          string `json:"instanceId"`
-	BillingProducts     string `json:"billingProducts"`
-	ImageID             string `json:"imageId"`
-	Architecture        string `json:"architecture"`
-	PendingTimeAsString string `json:"pendingTime"`
-	InstanceType        string `json:"instanceType"`
-	AccountID           string `json:"accountId"`
-	KernelID            string `json:"kernelId"`
-	RamdiskID           string `json:"ramdiskId"`
-	Region              string `json:"region"`
-	Version             string `json:"version"`
-	PrivateIP           string `json:"privateIp"`
-	DevpayProductCodes  string `json:"devpayProductCodes"`
-	AvailabilityZone    string `json:"availabilityZone"`
+	InstanceID          string   `json:"instanceId"`
+	BillingProducts     []string `json:"billingProducts"`
+	ImageID             string   `json:"imageId"`
+	Architecture        string   `json:"architecture"`
+	PendingTimeAsString string   `json:"pendingTime"`
+	InstanceType        string   `json:"instanceType"`
+	AccountID           string   `json:"accountId"`
+	KernelID            string   `json:"kernelId"`
+	RamdiskID           string   `json:"ramdiskId"`
+	Region              string   `json:"region"`
+	Version             string   `json:"version"`
+	PrivateIP           string   `json:"privateIp"`
+	DevpayProductCodes  string   `json:"devpayProductCodes"`
+	AvailabilityZone    string   `json:"availabilityZone"`
 }
 
 // PendingTime parses the PendingTimeAsString field into a time.
@@ -110,6 +110,7 @@ func (c EC2MetadataClient) InstanceIdentityDocument() (*InstanceIdentityDocument
 	if err != nil {
 		return nil, err
 	}
+
 	return &iid, nil
 }
 

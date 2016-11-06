@@ -16,7 +16,6 @@ package parameterstore
 
 import (
 	"fmt"
-	"reflect"
 	"regexp"
 	"strings"
 
@@ -49,7 +48,7 @@ const (
 var callParameterService = callGetParameters
 
 // Resolve resolves ssm parameters of the format {{ssm:*}}
-func Resolve(log log.T, input interface{}, resolveSecureString bool) (interface{}, error) {
+func Resolve(log log.T, input interface{}) (interface{}, error) {
 	validSSMParam, err := getValidSSMParamRegexCompiler(log, defaultParamName)
 	if err != nil {
 		return input, err
@@ -63,10 +62,8 @@ func Resolve(log log.T, input interface{}, resolveSecureString bool) (interface{
 		return input, nil
 	}
 
-	log.Info("Resolving SSM parameters")
-
 	// Get ssm parameter values
-	resolvedSSMParamMap, err := getSSMParameterValues(log, ssmParams, resolveSecureString)
+	resolvedSSMParamMap, err := getSSMParameterValues(log, ssmParams)
 	if err != nil {
 		return input, err
 	}
@@ -90,33 +87,11 @@ func ValidateSSMParameters(
 	/*
 		This function validates the following things before the document is sent for execution
 
-		1. Only SecureString SSM parameter values are used for document parameters of type SecureString
+		1. Document doesn't contain SecureString SSM Parameters
 		2. SSM parameter values match the allowed pattern in the document
 	*/
 
-	log.Info("Validating SSM parameters")
-
-	validSSMParam, err := getValidSSMParamRegexCompiler(log, defaultParamName)
-	if err != nil {
-		return err
-	}
-
-	// Extract all SSM parameters from input
-	ssmParams := extractSSMParameters(log, parameters, validSSMParam)
-
-	// Return original string if no ssm params found
-	if len(ssmParams) == 0 {
-		return nil
-	}
-
-	// Retrieves the SSM Parameter object for each SSM parameter in the input. Object contains {Name, Type, Value}
-	resolvedSSMParamMap, err := getSSMParameterValues(log, ssmParams, true)
-	if err != nil {
-		return err
-	}
-
-	// Replace SSM parameter names in the input with the values received in the previous step.
-	resolvedParameters, err := replaceSSMParameters(log, parameters, resolvedSSMParamMap)
+	resolvedParameters, err := Resolve(log, parameters)
 	if err != nil {
 		return err
 	}
@@ -130,25 +105,6 @@ func ValidateSSMParameters(
 	}
 
 	for paramName, paramObj := range documentParameters {
-		// Check only SecureString SSM parameter values are used for document parameters of type SecureString
-		if paramObj.ParamType == ParamTypeSecureString {
-			// check if the parameter value is a string, throw error if its not
-			switch input := parameters[paramName].(type) {
-			case string:
-				ssmParameter := strings.TrimSpace(input)
-				if _, exists := resolvedSSMParamMap[ssmParameter]; !exists {
-					return fmt.Errorf("Invalid value %v for parameter name %v. Expecting SSM parameter of the format {{ssm:*}}", ssmParameter, paramName)
-				}
-
-				if resolvedSSMParamMap[ssmParameter].Type != ParamTypeSecureString {
-					return fmt.Errorf("Invalid SSM parameter type %v being used for parameter name %v", resolvedSSMParamMap[ssmParameter].Type, paramName)
-				}
-
-			default:
-				return fmt.Errorf("Invalid input type %v received instead of string for parameter name %v", reflect.TypeOf(input), paramName)
-			}
-		}
-
 		// Check SSM parameter values match the allowed pattern in the document
 		if paramObj.AllowedPattern != "" {
 			validParamValue, err := regexp.Compile(paramObj.AllowedPattern)
@@ -186,40 +142,6 @@ func ValidateSSMParameters(
 	return nil
 }
 
-// ResolveSecureString resolves the ssm parameters if present in input string
-func ResolveSecureString(log log.T, input string) (string, error) {
-	output, err := Resolve(log, input, true)
-	if err != nil {
-		return input, err
-	}
-
-	var reformatOutput string
-	err = jsonutil.Remarshal(output, &reformatOutput)
-	if err != nil {
-		log.Debug(err)
-		return input, fmt.Errorf("%v", ErrorMsg)
-	}
-
-	return reformatOutput, nil
-}
-
-// ResolveSecureStringForStringList resolves the ssm parameters if present in input stringList
-func ResolveSecureStringForStringList(log log.T, input []string) ([]string, error) {
-	output, err := Resolve(log, input, true)
-	if err != nil {
-		return input, err
-	}
-
-	var reformatOutput []string
-	err = jsonutil.Remarshal(output, &reformatOutput)
-	if err != nil {
-		log.Debug(err)
-		return input, fmt.Errorf("%v", ErrorMsg)
-	}
-
-	return reformatOutput, nil
-}
-
 // getValidSSMParamRegexCompiler returns a regex compiler
 func getValidSSMParamRegexCompiler(log log.T, paramName string) (*regexp.Regexp, error) {
 	var validSSMParamRegex string
@@ -239,7 +161,7 @@ func getValidSSMParamRegexCompiler(log log.T, paramName string) (*regexp.Regexp,
 }
 
 // getSSMParameterValues takes a list of strings and resolves them by calling the GetParameters API
-func getSSMParameterValues(log log.T, ssmParams []string, resolveSecureString bool) (map[string]Parameter, error) {
+func getSSMParameterValues(log log.T, ssmParams []string) (map[string]Parameter, error) {
 	var result *GetParametersResponse
 	var err error
 
@@ -267,16 +189,17 @@ func getSSMParameterValues(log log.T, ssmParams []string, resolveSecureString bo
 	}
 
 	if len(paramNames) != len(result.Parameters) {
-		errorString := fmt.Errorf("Input contains invalid ssm parameters %v", result.InvalidParameters)
+		errorString := fmt.Errorf("Input contains invalid parameters %v", result.InvalidParameters)
 		log.Debug(errorString)
 		return nil, errorString
 	}
 
 	resolvedParamMap := map[string]Parameter{}
+	secureStringParams := []string{}
 	for _, paramObj := range result.Parameters {
-		// Skip secure parameters
-		if !resolveSecureString && strings.Compare(paramObj.Type, ParamTypeSecureString) == 0 {
-			continue
+		// Populate all the secure string parameters used in the document
+		if paramObj.Type == ParamTypeSecureString {
+			secureStringParams = append(secureStringParams, paramObj.Name)
 		}
 
 		// get regex compiler
@@ -290,6 +213,10 @@ func getSSMParameterValues(log log.T, ssmParams []string, resolveSecureString bo
 				resolvedParamMap[value] = paramObj
 			}
 		}
+	}
+
+	if len(secureStringParams) > 0 {
+		return nil, fmt.Errorf("Parameters %v of type %v are not supported", secureStringParams, ParamTypeSecureString)
 	}
 
 	return resolvedParamMap, nil
@@ -316,8 +243,7 @@ func callGetParameters(log log.T, paramNames []string) (*GetParametersResponse, 
 		err = jsonutil.Remarshal(result, &response)
 		if err != nil {
 			log.Debug(err)
-			errorString := "Encountered error while parsing GetParameters output"
-			return nil, fmt.Errorf("%v", errorString)
+			return nil, fmt.Errorf("%v", ErrorMsg)
 		}
 
 		finalResult.Parameters = append(finalResult.Parameters, response.Parameters...)

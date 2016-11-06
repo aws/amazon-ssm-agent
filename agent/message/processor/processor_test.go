@@ -382,6 +382,8 @@ func getPluginConfigurations(runtimeConfig map[string]*contracts.PluginConfig, o
 			OrchestrationDirectory: fileutil.BuildPath(orchestrationDir, pluginName),
 			MessageId:              messageID,
 			BookKeepingFileName:    getCommandID(messageID),
+			PluginName:             pluginName,
+			PluginID:               pluginName,
 		}
 	}
 	return

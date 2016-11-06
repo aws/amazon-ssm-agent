@@ -39,7 +39,6 @@ func Refresh(log log.T, assocs []*model.InstanceAssociation, svc service.T) {
 	defer lock.Unlock()
 
 	log.Debugf("Refresh cached association data with %v associations", len(assocs))
-	currentTime := times.DefaultClock.Now()
 	unchangedAssociation := 0
 
 	for _, newAssoc := range assocs {
@@ -56,7 +55,7 @@ func Refresh(log log.T, assocs []*model.InstanceAssociation, svc service.T) {
 		}
 
 		if !foundMatch || newAssoc.RunNow {
-			if err := newAssoc.Initialize(log, currentTime); err != nil {
+			if err := newAssoc.Initialize(log); err != nil {
 				message := "Encountered error while initializing association"
 				log.Errorf("%v, %v", message, err)
 				svc.UpdateInstanceAssociationStatus(log,
@@ -103,7 +102,10 @@ func LoadNextScheduledAssociation(log log.T) (*model.InstanceAssociation, error)
 			continue
 		}
 
-		if assoc.NextScheduledDate.Before(times.DefaultClock.Now()) || assoc.NextScheduledDate.Equal(times.DefaultClock.Now()) {
+		currentTime := time.Now().UTC()
+		if assoc.NextScheduledDate.Before(currentTime) ||
+			assoc.NextScheduledDate.Equal(currentTime) {
+
 			if assocContent, err := jsonutil.Marshal(assoc); err != nil {
 				return nil, fmt.Errorf("failed to parse scheduled association, %v", err)
 			} else {
@@ -149,10 +151,10 @@ func UpdateNextScheduledDate(log log.T, associationID string) {
 	lock.Lock()
 	defer lock.Unlock()
 
-	currentTime := times.DefaultClock.Now()
+	currentTime := time.Now().UTC()
 	for _, assoc := range associations {
 		if *assoc.Association.AssociationId == associationID {
-			assoc.NextScheduledDate = cronexpr.MustParse(assoc.Expression).Next(currentTime)
+			assoc.NextScheduledDate = cronexpr.MustParse(assoc.Expression).Next(currentTime).UTC()
 			log.Debugf("Update Association %v next ScheduledDate to %v", *assoc.Association.AssociationId, assoc.NextScheduledDate.String())
 			break
 		}

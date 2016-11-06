@@ -82,11 +82,11 @@ func NewInventoryUploader(context context.T) (*InventoryUploader, error) {
 // SendDataToSSM uploads given inventory items to SSM
 func (u *InventoryUploader) SendDataToSSM(context context.T, items []*ssm.InventoryItem) (err error) {
 	log := context.Log()
-	log.Infof("Uploading following inventory data to SSM - %v", items)
+	log.Debugf("Uploading following inventory data to SSM - %v", items)
 
 	var instanceID string
 
-	log.Infof("Inventory Items: %v", items)
+	log.Debugf("Inventory Items: %v", items)
 	log.Infof("Number of Inventory Items: %v", len(items))
 
 	if instanceID, err = platform.InstanceID(); err != nil {

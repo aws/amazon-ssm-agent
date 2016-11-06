@@ -71,7 +71,7 @@ func (p *Processor) runCmdsUsingCmdState(context context.T,
 	//construct sendReply payload
 	outputs := make(map[string]*contracts.PluginResult)
 	for _, pluginState := range newCmdState.InstancePluginsInformation {
-		outputs[pluginState.Name] = &pluginState.Result
+		outputs[pluginState.Id] = &pluginState.Result
 	}
 
 	pluginOutputContent, _ := jsonutil.Marshal(outputs)

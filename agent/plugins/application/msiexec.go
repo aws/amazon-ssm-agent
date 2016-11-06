@@ -18,7 +18,6 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/log"
-	"github.com/aws/amazon-ssm-agent/agent/parameterstore"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/pluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 )
@@ -39,13 +38,6 @@ const (
 
 // getMsiApplicationMode returns the msi exec mode based on plugin input
 func getMsiApplicationMode(log log.T, pluginInput ApplicationPluginInput) (string, error) {
-	// Resolve ssm parameters
-	// This may contain sensitive information, do not log this data after resolving.
-	var err error
-	if pluginInput.Action, err = parameterstore.ResolveSecureString(log, pluginInput.Action); err != nil {
-		log.Errorf("Failed to resolve ssm parameters. Error: - %v", err)
-		return "", err
-	}
 	switch pluginInput.Action {
 	case INSTALL:
 		return "/i", nil

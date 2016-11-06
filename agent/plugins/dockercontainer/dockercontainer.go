@@ -1,9 +1,23 @@
+// Copyright 2016 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+//
+// Licensed under the Apache License, Version 2.0 (the "License"). You may not
+// use this file except in compliance with the License. A copy of the
+// License is located at
+//
+// http://aws.amazon.com/apache2.0/
+//
+// or in the "license" file accompanying this file. This file is distributed
+// on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+// either express or implied. See the License for the specific language governing
+// permissions and limitations under the License.
+
 package dockercontainer
 
 import (
 	"errors"
 	"fmt"
 	"io/ioutil"
+	"path/filepath"
 	"regexp"
 	"strconv"
 	"time"
@@ -36,6 +50,9 @@ const (
 	PULL    = "Pull"
 	IMAGES  = "Images"
 	RMI     = "Rmi"
+)
+const (
+	ACTION_REQUIRES_PARAMETER = "Action %s requires parameter %s"
 )
 
 var dockerExecCommand = "docker.exe"
@@ -119,7 +136,7 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 	var properties []interface{}
 	if properties, res = pluginutil.LoadParametersAsList(log, config.Properties); res.Code != 0 {
 
-		pluginutil.PersistPluginInformationToCurrent(log, Name(), config, res)
+		pluginutil.PersistPluginInformationToCurrent(log, config.PluginID, config, res)
 		return res
 	}
 
@@ -152,7 +169,7 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 		res.Output = out[0].String()
 	}
 
-	pluginutil.PersistPluginInformationToCurrent(log, Name(), config, res)
+	pluginutil.PersistPluginInformationToCurrent(log, config.PluginID, config, res)
 
 	return res
 }
@@ -202,170 +219,190 @@ func (p *Plugin) runCommands(log log.T, pluginInput DockerContainerPluginInput, 
 		out.MarkAsFailed(log, err)
 		return
 	}
-	var command string = "docker"
-	var parameters []string
+	var commandName string = "docker"
+	var commandArguments []string
 	switch pluginInput.Action {
 	case CREATE, RUN:
 		if len(pluginInput.Image) == 0 {
-			log.Errorf("Action %s requires paramter image ", pluginInput.Action)
-			out.MarkAsFailed(log, err)
+			log.Errorf(ACTION_REQUIRES_PARAMETER, pluginInput.Action, "image")
+			out.MarkAsFailed(log, fmt.Errorf(ACTION_REQUIRES_PARAMETER, pluginInput.Action, "image"))
+
 			return out
 		}
-		parameters = make([]string, 0)
+		commandArguments = make([]string, 0)
 		if pluginInput.Action == RUN {
-			parameters = append(parameters, "run", "-d")
+			commandArguments = append(commandArguments, "run", "-d")
 		} else {
-			parameters = append(parameters, "create")
+			commandArguments = append(commandArguments, "create")
 		}
 		if len(pluginInput.Volume) > 0 && len(pluginInput.Volume[0]) > 0 {
 			out.Stdout += "pluginInput.Volume:" + strconv.Itoa(len(pluginInput.Volume))
 
 			log.Info("pluginInput.Volume", len(pluginInput.Volume))
-			parameters = append(parameters, "--volume")
+			commandArguments = append(commandArguments, "--volume")
 			for _, vol := range pluginInput.Volume {
 				log.Info("pluginInput.Volume item", vol)
-				parameters = append(parameters, vol)
+				commandArguments = append(commandArguments, vol)
 			}
 		}
 		if len(pluginInput.Container) > 0 {
-			parameters = append(parameters, "--name")
-			parameters = append(parameters, pluginInput.Container)
+			commandArguments = append(commandArguments, "--name")
+			commandArguments = append(commandArguments, pluginInput.Container)
 		}
 		if len(pluginInput.Memory) > 0 {
-			parameters = append(parameters, "--memory")
-			parameters = append(parameters, pluginInput.Memory)
+			commandArguments = append(commandArguments, "--memory")
+			commandArguments = append(commandArguments, pluginInput.Memory)
 		}
 		if len(pluginInput.CpuShares) > 0 {
-			parameters = append(parameters, "--cpu-shares")
-			parameters = append(parameters, pluginInput.CpuShares)
+			commandArguments = append(commandArguments, "--cpu-shares")
+			commandArguments = append(commandArguments, pluginInput.CpuShares)
 		}
 		if len(pluginInput.Publish) > 0 {
-			parameters = append(parameters, "--publish")
-			parameters = append(parameters, pluginInput.Publish)
+			commandArguments = append(commandArguments, "--publish")
+			commandArguments = append(commandArguments, pluginInput.Publish)
 		}
 		if len(pluginInput.Env) > 0 {
-			parameters = append(parameters, "--env")
-			parameters = append(parameters, pluginInput.Env)
+			commandArguments = append(commandArguments, "--env")
+			commandArguments = append(commandArguments, pluginInput.Env)
 		}
 		if len(pluginInput.User) > 0 {
-			parameters = append(parameters, "--user")
-			parameters = append(parameters, pluginInput.User)
+			commandArguments = append(commandArguments, "--user")
+			commandArguments = append(commandArguments, pluginInput.User)
 		}
-		parameters = append(parameters, pluginInput.Image)
-		parameters = append(parameters, pluginInput.Cmd)
+		commandArguments = append(commandArguments, pluginInput.Image)
+		commandArguments = append(commandArguments, pluginInput.Cmd)
 
 	case START:
-		parameters = append(parameters, "start")
+		commandArguments = append(commandArguments, "start")
 		if len(pluginInput.Container) == 0 {
-			log.Error("Action Start requires paramter container")
-			out.MarkAsFailed(log, err)
+			log.Errorf(ACTION_REQUIRES_PARAMETER, pluginInput.Action, "container")
+			out.MarkAsFailed(log, fmt.Errorf(ACTION_REQUIRES_PARAMETER, pluginInput.Action, "container"))
 			return out
 		}
-		parameters = append(parameters, pluginInput.Container)
+		commandArguments = append(commandArguments, pluginInput.Container)
 
 	case RM:
-		parameters = append(parameters, "rm")
+		commandArguments = append(commandArguments, "rm")
 		if len(pluginInput.Container) == 0 {
-			log.Error("Action Rm requires paramter container")
-			out.MarkAsFailed(log, err)
+			log.Errorf(ACTION_REQUIRES_PARAMETER, pluginInput.Action, "container")
+			out.MarkAsFailed(log, fmt.Errorf(ACTION_REQUIRES_PARAMETER, pluginInput.Action, "container"))
 			return out
 		}
-		parameters = append(parameters, pluginInput.Container)
+		commandArguments = append(commandArguments, pluginInput.Container)
 
 	case STOP:
-		parameters = append(parameters, "stop")
+		commandArguments = append(commandArguments, "stop")
 		if len(pluginInput.Container) == 0 {
-			log.Error("Action Stop requires paramter container")
-			out.MarkAsFailed(log, err)
+			log.Errorf(ACTION_REQUIRES_PARAMETER, pluginInput.Action, "container")
+			out.MarkAsFailed(log, fmt.Errorf(ACTION_REQUIRES_PARAMETER, pluginInput.Action, "container"))
 			return out
 		}
-		parameters = append(parameters, pluginInput.Container)
+		commandArguments = append(commandArguments, pluginInput.Container)
 
 	case EXEC:
-		parameters = append(parameters, "exec")
+		commandArguments = append(commandArguments, "exec")
 		if len(pluginInput.Container) == 0 {
-			log.Error("Action Exec requires paramter container")
-			out.MarkAsFailed(log, err)
+			log.Errorf(ACTION_REQUIRES_PARAMETER, pluginInput.Action, "container")
+			out.MarkAsFailed(log, fmt.Errorf(ACTION_REQUIRES_PARAMETER, pluginInput.Action, "container"))
 			return out
 		}
 		if len(pluginInput.Cmd) == 0 {
-			log.Error("Action Exec requires paramter Cmd")
-			out.MarkAsFailed(log, err)
+			log.Errorf(ACTION_REQUIRES_PARAMETER, pluginInput.Action, "cmd")
+			out.MarkAsFailed(log, fmt.Errorf(ACTION_REQUIRES_PARAMETER, pluginInput.Action, "cmd"))
 			return out
 		}
 		if len(pluginInput.User) > 0 {
-			parameters = append(parameters, "--user")
-			parameters = append(parameters, pluginInput.User)
+			commandArguments = append(commandArguments, "--user")
+			commandArguments = append(commandArguments, pluginInput.User)
 		}
-		parameters = append(parameters, pluginInput.Container)
-		parameters = append(parameters, pluginInput.Cmd)
+		commandArguments = append(commandArguments, pluginInput.Container)
+		commandArguments = append(commandArguments, pluginInput.Cmd)
 	case INSPECT:
-		parameters = append(parameters, "inspect")
+		commandArguments = append(commandArguments, "inspect")
 		if len(pluginInput.Container) == 0 && len(pluginInput.Image) == 0 {
-			log.Error("Action Inspect requires paramter container or image")
-			out.MarkAsFailed(log, err)
+			log.Errorf(ACTION_REQUIRES_PARAMETER, pluginInput.Action, "container or image")
+			out.MarkAsFailed(log, fmt.Errorf(ACTION_REQUIRES_PARAMETER, pluginInput.Action, "container or image"))
 			return out
 		}
-		parameters = append(parameters, pluginInput.Container)
-		parameters = append(parameters, pluginInput.Image)
+		commandArguments = append(commandArguments, pluginInput.Container)
+		commandArguments = append(commandArguments, pluginInput.Image)
 	case STATS:
-		parameters = append(parameters, "stats")
-		parameters = append(parameters, "--no-stream")
+		commandArguments = append(commandArguments, "stats")
+		commandArguments = append(commandArguments, "--no-stream")
 		if len(pluginInput.Container) > 0 {
-			parameters = append(parameters, pluginInput.Container)
+			commandArguments = append(commandArguments, pluginInput.Container)
 		}
 	case LOGS:
-		parameters = append(parameters, "logs")
+		commandArguments = append(commandArguments, "logs")
 		if len(pluginInput.Container) == 0 {
-			log.Error("Action Rm requires paramter container")
-			out.MarkAsFailed(log, err)
+			log.Errorf(ACTION_REQUIRES_PARAMETER, pluginInput.Action, "container")
+			out.MarkAsFailed(log, fmt.Errorf(ACTION_REQUIRES_PARAMETER, pluginInput.Action, "container"))
 			return out
 		}
-		parameters = append(parameters, pluginInput.Container)
+		commandArguments = append(commandArguments, pluginInput.Container)
 	case PULL:
-		parameters = append(parameters, "pull")
+		commandArguments = append(commandArguments, "pull")
 		if len(pluginInput.Image) == 0 {
-			log.Error("Action Pull requires paramter image")
-			out.MarkAsFailed(log, err)
+			log.Errorf(ACTION_REQUIRES_PARAMETER, pluginInput.Action, "image")
+			out.MarkAsFailed(log, fmt.Errorf(ACTION_REQUIRES_PARAMETER, pluginInput.Action, "image"))
 			return out
 		}
-		parameters = append(parameters, pluginInput.Image)
+		commandArguments = append(commandArguments, pluginInput.Image)
 	case IMAGES:
-		parameters = append(parameters, "images")
+		commandArguments = append(commandArguments, "images")
 	case RMI:
-		parameters = append(parameters, "rmi")
+		commandArguments = append(commandArguments, "rmi")
 		if len(pluginInput.Image) == 0 {
-			log.Error("Action Rmi requires paramter image")
-			out.MarkAsFailed(log, err)
+			log.Errorf(ACTION_REQUIRES_PARAMETER, pluginInput.Action, "image")
+			out.MarkAsFailed(log, fmt.Errorf(ACTION_REQUIRES_PARAMETER, pluginInput.Action, "image"))
 			return out
 		}
-		parameters = append(parameters, pluginInput.Image)
+		commandArguments = append(commandArguments, pluginInput.Image)
 
 	case PS:
-		parameters = append(parameters, "ps", "--all")
+		commandArguments = append(commandArguments, "ps", "--all")
 	default:
 		out.MarkAsFailed(log, fmt.Errorf("Docker Action is set to unsupported value: %v", pluginInput.Action))
 		return out
 	}
 
-	out.Stdout += command + " "
-	for _, parameter := range parameters {
-		out.Stdout += parameter + " "
-	}
-	out.Stdout += "\n"
-	log.Info(out.Stdout)
-	var output string
-	output, err = dep.UpdateUtilExeCommandOutput(1800, log, command, parameters, "", "", "", "", true)
-	if err != nil {
-		log.Error("Error running docker command ", err)
-		out.MarkAsFailed(log, err)
-		return out
-	}
-	log.Info("Save-Module output:", output)
-	out.Stdout += output
+	executionTimeout := pluginutil.ValidateExecutionTimeout(log, pluginInput.TimeoutSeconds)
+	// Create output file paths
+	stdoutFilePath := filepath.Join(orchestrationDir, p.StdoutFileName)
+	stderrFilePath := filepath.Join(orchestrationDir, p.StderrFileName)
+	log.Debugf("stdout file %v, stderr file %v", stdoutFilePath, stderrFilePath)
 
-	out.ExitCode = 0
-	out.Status = contracts.ResultStatusSuccess
+	// Execute Command
+	stdout, stderr, exitCode, errs := p.ExecuteCommand(log, pluginInput.WorkingDirectory, stdoutFilePath, stderrFilePath, cancelFlag, executionTimeout, commandName, commandArguments)
+
+	// Set output status
+	out.ExitCode = exitCode
+	out.Status = pluginutil.GetStatus(out.ExitCode, cancelFlag)
+
+	if len(errs) > 0 {
+		for _, err := range errs {
+			out.Errors = append(out.Errors, err.Error())
+			if out.Status != contracts.ResultStatusCancelled &&
+				out.Status != contracts.ResultStatusTimedOut &&
+				out.Status != contracts.ResultStatusSuccessAndReboot {
+				log.Error("failed to run commands: ", err)
+				out.Status = contracts.ResultStatusFailed
+			}
+		}
+	}
+
+	// read (a prefix of) the standard output/error
+	out.Stdout, err = pluginutil.ReadPrefix(stdout, p.MaxStdoutLength, p.OutputTruncatedSuffix)
+	if err != nil {
+		out.Errors = append(out.Errors, err.Error())
+		log.Error(err)
+	}
+	out.Stderr, err = pluginutil.ReadPrefix(stderr, p.MaxStderrLength, p.OutputTruncatedSuffix)
+	if err != nil {
+		out.Errors = append(out.Errors, err.Error())
+		log.Error(err)
+	}
+
 	// Upload output to S3
 	uploadOutputToS3BucketErrors := p.ExecuteUploadOutputToS3Bucket(log, pluginInput.ID, orchestrationDir, outputS3BucketName, outputS3KeyPrefix, useTempDirectory, tempDir, out.Stdout, out.Stderr)
 	out.Errors = append(out.Errors, uploadOutputToS3BucketErrors...)

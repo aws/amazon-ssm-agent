@@ -171,7 +171,7 @@ func (r *AssociationExecuter) parseAndPersistReplyContents(log log.T,
 		appconfig.DefaultLocationOfCurrent)
 
 	runtimeStatuses := reply.PrepareRuntimeStatuses(log, pluginOutputs)
-	replyPayload := reply.PrepareReplyPayload("", runtimeStatuses, time.Now(), *r.agentInfo)
+	replyPayload := reply.PrepareReplyPayload("", runtimeStatuses, time.Now(), *r.agentInfo, false)
 
 	// set document level information which wasn't set previously
 	docState.DocumentInformation.AdditionalInfo = replyPayload.AdditionalInfo

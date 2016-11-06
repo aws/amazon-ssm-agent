@@ -16,6 +16,9 @@ const (
 	sampleManagedInstError  = "registration error occured"
 	sampleManagedInstRegion = "us-west-1"
 	sampleManagedInstID     = "mi-e6c6f145e6c6f145"
+
+	sampleDynamicDataError  = "dynamic data error occured"
+	sampleDynamicDataRegion = "us-west-2"
 )
 
 // metadata stub
@@ -41,6 +44,15 @@ type registrationStub struct {
 func (r registrationStub) InstanceID() string { return r.instanceID }
 
 func (r registrationStub) Region() string { return r.region }
+
+// dynamicData stub
+type dynamicDataStub struct {
+	region  string
+	err     error
+	message string
+}
+
+func (d dynamicDataStub) Region() (string, error) { return d.region, d.err }
 
 // Examples
 
@@ -90,6 +102,7 @@ func ExampleSetRegion() {
 type instanceInfoTest struct {
 	inputMetadata       *metadataStub
 	inputRegistration   registrationStub
+	inputDynamicData    *dynamicDataStub
 	testMessage         string
 	expectedID          string
 	expectedIDError     error
@@ -102,31 +115,56 @@ var (
 	inValidMetadata     = &metadataStub{err: errors.New(sampleInstanceError), message: "invalid metadata"}
 	validRegistration   = registrationStub{instanceID: sampleManagedInstID, region: sampleManagedInstRegion, err: nil, message: "valid registration"}
 	inValidRegistration = registrationStub{message: "invalid registration"}
+	validDynamicData    = &dynamicDataStub{region: sampleDynamicDataRegion, err: nil, message: "valid dynamic data"}
+	inValidDynamicData  = &dynamicDataStub{err: errors.New(sampleDynamicDataError), message: "invalid dynamic data"}
 
-	instanceInfoTests = []instanceInfoTest{
+	instanceIDTests = []instanceInfoTest{
 		{
 			inputMetadata: validMetadata, inputRegistration: validRegistration,
-			expectedID: sampleManagedInstID, expectedRegion: sampleManagedInstRegion, expectedIDError: nil, expectedRegionError: nil,
+			expectedID: sampleManagedInstID, expectedIDError: nil,
 		},
 		{
 			inputMetadata: validMetadata, inputRegistration: inValidRegistration,
-			expectedID: sampleInstanceID, expectedRegion: sampleInstanceRegion, expectedIDError: nil, expectedRegionError: nil,
+			expectedID: sampleInstanceID, expectedIDError: nil,
 		},
 		{
 			inputMetadata: inValidMetadata, inputRegistration: validRegistration,
-			expectedID: sampleManagedInstID, expectedRegion: sampleManagedInstRegion, expectedIDError: nil, expectedRegionError: nil,
+			expectedID: sampleManagedInstID, expectedIDError: nil,
 		},
 		{
 			inputMetadata: inValidMetadata, inputRegistration: inValidRegistration,
-			expectedID: "", expectedRegion: "",
-			expectedIDError:     fmt.Errorf(errorMessage, "instance ID", sampleInstanceError),
-			expectedRegionError: fmt.Errorf(errorMessage, "region", sampleInstanceError),
+			expectedID:      "",
+			expectedIDError: fmt.Errorf(errorMessage, "instance ID", sampleInstanceError),
+		},
+	}
+
+	instanceRegionTests = []instanceInfoTest{
+		{
+			inputMetadata: validMetadata, inputRegistration: validRegistration, inputDynamicData: validDynamicData,
+			expectedRegion: sampleManagedInstRegion, expectedRegionError: nil,
+		},
+		{
+			inputMetadata: validMetadata, inputRegistration: inValidRegistration, inputDynamicData: inValidDynamicData,
+			expectedRegion: sampleInstanceRegion, expectedRegionError: nil,
+		},
+		{
+			inputMetadata: inValidMetadata, inputRegistration: validRegistration, inputDynamicData: inValidDynamicData,
+			expectedRegion: sampleManagedInstRegion, expectedRegionError: nil,
+		},
+		{
+			inputMetadata: inValidMetadata, inputRegistration: inValidRegistration, inputDynamicData: validDynamicData,
+			expectedRegion: sampleDynamicDataRegion, expectedRegionError: nil,
+		},
+		{
+			inputMetadata: inValidMetadata, inputRegistration: inValidRegistration, inputDynamicData: inValidDynamicData,
+			expectedRegion:      "",
+			expectedRegionError: fmt.Errorf(errorMessage, "region", sampleDynamicDataError),
 		},
 	}
 )
 
 func TestFetchInstanceID(t *testing.T) {
-	for _, test := range instanceInfoTests {
+	for _, test := range instanceIDTests {
 		metadata = test.inputMetadata
 		managedInstance = test.inputRegistration
 		actualOutput, actualError := fetchInstanceID()
@@ -136,11 +174,12 @@ func TestFetchInstanceID(t *testing.T) {
 }
 
 func TestFetchRegion(t *testing.T) {
-	for _, test := range instanceInfoTests {
+	for _, test := range instanceRegionTests {
 		metadata = test.inputMetadata
 		managedInstance = test.inputRegistration
+		dynamicData = test.inputDynamicData
 		actualOutput, actualError := fetchRegion()
-		assert.Equal(t, test.expectedRegion, actualOutput, "%s %s", test.inputMetadata.message, test.inputRegistration.message)
-		assert.Equal(t, test.expectedRegionError, actualError, "%s %s", test.inputMetadata.message, test.inputRegistration.message)
+		assert.Equal(t, test.expectedRegion, actualOutput, "%s %s, %s", test.inputMetadata.message, test.inputRegistration.message, test.inputDynamicData.message)
+		assert.Equal(t, test.expectedRegionError, actualError, "%s %s, %s", test.inputMetadata.message, test.inputRegistration.message, test.inputDynamicData.message)
 	}
 }

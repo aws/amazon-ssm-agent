@@ -71,6 +71,7 @@ func ReplacePluginParameters(
 	logger log.T) error {
 	var err error
 
+	logger.Info("Validating SSM parameters")
 	// Validates SSM parameters
 	if err = parameterstore.ValidateSSMParameters(logger, payload.DocumentContent.Parameters, params); err != nil {
 		return err
@@ -86,13 +87,14 @@ func ReplacePluginParameters(
 				Properties: parameters.ReplaceParameters(pluginConfig.Properties, params, logger),
 			}
 
+			logger.Debug("Resolving SSM parameters")
 			// Resolves SSM parameters
-			if updatedRuntimeConfig[pluginName].Settings, err = parameterstore.Resolve(logger, updatedRuntimeConfig[pluginName].Settings, false); err != nil {
+			if updatedRuntimeConfig[pluginName].Settings, err = parameterstore.Resolve(logger, updatedRuntimeConfig[pluginName].Settings); err != nil {
 				return err
 			}
 
 			// Resolves SSM parameters
-			if updatedRuntimeConfig[pluginName].Properties, err = parameterstore.Resolve(logger, updatedRuntimeConfig[pluginName].Properties, false); err != nil {
+			if updatedRuntimeConfig[pluginName].Properties, err = parameterstore.Resolve(logger, updatedRuntimeConfig[pluginName].Properties); err != nil {
 				return err
 			}
 		}
@@ -114,13 +116,14 @@ func ReplacePluginParameters(
 				Inputs:      parameters.ReplaceParameters(instancePluginConfig.Inputs, params, logger),
 			}
 
+			logger.Debug("Resolving SSM parameters")
 			// Resolves SSM parameters
-			if updatedMainSteps[index].Settings, err = parameterstore.Resolve(logger, updatedMainSteps[index].Settings, false); err != nil {
+			if updatedMainSteps[index].Settings, err = parameterstore.Resolve(logger, updatedMainSteps[index].Settings); err != nil {
 				return err
 			}
 
 			// Resolves SSM parameters
-			if updatedMainSteps[index].Inputs, err = parameterstore.Resolve(logger, updatedMainSteps[index].Inputs, false); err != nil {
+			if updatedMainSteps[index].Inputs, err = parameterstore.Resolve(logger, updatedMainSteps[index].Inputs); err != nil {
 				return err
 			}
 		}

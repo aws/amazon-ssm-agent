@@ -10,23 +10,23 @@
 // on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
 // either express or implied. See the License for the specific language governing
 // permissions and limitations under the License.
-
 // +build windows
 
-package executers
+// Package startup implements startup plugin processor
+package startup
 
-import (
-	"os"
-	"os/exec"
-)
+import "os/exec"
 
-func prepareProcess(command *exec.Cmd) {
-	// nothing to do on windows
+var cmdExec cmdExecutor = &cmdExecutorImp{}
+
+type cmdExecutor interface {
+	ExecuteCommand(command string, args ...string) ([]byte, error)
 }
 
-func killProcess(process *os.Process, signal *timeoutSignal) error {
-	// process kill doesn't send proper signal to the process status
-	// Setting the signal to indicate execution was interrupted
-	signal.execInterruptedOnWindows = true
-	return process.Kill()
+type cmdExecutorImp struct{}
+
+// ExecuteCommand is a wrapper of executes exec.Command
+func (cmdExecutorImp) ExecuteCommand(command string, args ...string) ([]byte, error) {
+	// decoupling exec.Command for easy testability
+	return exec.Command(command, args...).CombinedOutput()
 }
