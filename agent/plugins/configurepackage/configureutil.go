@@ -190,6 +190,7 @@ func getLatestVersion(versions []string, except string) (version string) {
 // getLatestS3Version finds the most recent version of a package in S3
 func getLatestS3Version(log log.T, name string, context *updateutil.InstanceContext) (latestVersion string, err error) {
 	amazonS3URL := s3util.ParseAmazonS3URL(log, getS3Url(name, context))
+	log.Debugf("looking up latest version of %v from %v", name, amazonS3URL.String())
 	folders, err := networkdep.ListS3Folders(log, amazonS3URL)
 	if err != nil {
 		return
@@ -228,5 +229,10 @@ func parseVersion(version string) (major int, minor int, build int, err error) {
 // GetLatestVersion looks up the latest version of a given package for this platform/arch in S3 or manifest at source location
 func (util *configureUtilImp) GetLatestVersion(log log.T, name string, context *updateutil.InstanceContext) (latestVersion string, err error) {
 	// TODO:OFFLINE: Copy manifest from source location, parse, and return version
-	return getLatestS3Version(log, name, context)
+	latestVersion, err = getLatestS3Version(log, name, context)
+	// handle case where we couldn't figure out which version to install but not because of an error in the S3 call
+	if latestVersion == "" {
+		return "", fmt.Errorf("no latest version found for package %v on platform %v[%v]", name, context.Platform, context.Arch)
+	}
+	return latestVersion, err
 }
