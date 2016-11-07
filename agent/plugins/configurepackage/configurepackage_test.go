@@ -228,13 +228,13 @@ func TestValidateInput_Source(t *testing.T) {
 	assert.Contains(t, err.Error(), "source parameter is not supported")
 }
 
-func TestValidateInput_Name(t *testing.T) {
+func TestValidateInput_NameEmpty(t *testing.T) {
 	input := ConfigurePackagePluginInput{}
 
 	// Set version to a large number to avoid conflict of the actual package release version
-	input.Version = "9000.0.0.0"
+	input.Version = "9000.0.0"
 	input.Name = ""
-	input.Action = "InvalidAction"
+	input.Action = "Install"
 
 	manager := configureManager{}
 	result, err := manager.validateInput(&input)
@@ -242,6 +242,63 @@ func TestValidateInput_Name(t *testing.T) {
 	assert.False(t, result)
 	assert.Error(t, err)
 	assert.Contains(t, err.Error(), "empty name field")
+}
+
+func TestValidateInput_NameInvalid(t *testing.T) {
+	input := ConfigurePackagePluginInput{}
+
+	// Set version to a large number to avoid conflict of the actual package release version
+	input.Version = "9000.0.0"
+	input.Name = "."
+	input.Action = "Install"
+
+	invalidNames := []string{".", ".abc", "-", "-abc", "abc.", "abc-", "0abc", "1234", "../foo", "abc..def"}
+
+	for _, name := range invalidNames {
+		input.Name = name
+
+		manager := configureManager{}
+		result, err := manager.validateInput(&input)
+
+		assert.False(t, result)
+		assert.Error(t, err)
+		assert.Contains(t, err.Error(), "invalid name")
+	}
+}
+
+func TestValidateInput_NameValid(t *testing.T) {
+	input := ConfigurePackagePluginInput{}
+	// Set version to a large number to avoid conflict of the actual package release version
+	input.Version = "9000.0.0"
+	input.Action = "Install"
+
+	validNames := []string{"a0", "_a", "_._._", "_-_", "A", "ABCDEFGHIJKLM-NOPQRSTUVWXYZ.abcdefghijklm-nopqrstuvwxyz.1234567890"}
+
+	for _, name := range validNames {
+		input.Name = name
+
+		manager := configureManager{}
+		result, err := manager.validateInput(&input)
+
+		assert.True(t, result)
+		assert.NoError(t, err)
+	}
+}
+
+func TestValidateInput_Version(t *testing.T) {
+	input := ConfigurePackagePluginInput{}
+
+	// Set version to a large number to avoid conflict of the actual package release version
+	input.Version = "9000.0.0.0"
+	input.Name = "PVDriver"
+	input.Action = "Install"
+
+	manager := configureManager{}
+	result, err := manager.validateInput(&input)
+
+	assert.False(t, result)
+	assert.Error(t, err)
+	assert.Contains(t, err.Error(), "invalid version")
 }
 
 func TestValidateInput_EmptyVersionWithInstall(t *testing.T) {
@@ -283,7 +340,7 @@ func TestDownloadPackage(t *testing.T) {
 	util := mockConfigureUtility{}
 
 	result := artifact.DownloadOutput{}
-	result.LocalFilePath = "packages/PVDriver/9000.0.0.0/PVDriver.zip"
+	result.LocalFilePath = "packages/PVDriver/9000.0.0/PVDriver.zip"
 
 	stubs := &ConfigurePackageStubs{fileSysDepStub: &FileSysDepStub{}, networkDepStub: &NetworkDepStub{downloadResultDefault: result}}
 	stubs.Set()
@@ -291,7 +348,7 @@ func TestDownloadPackage(t *testing.T) {
 
 	fileName, err := manager.downloadPackage(logger, &util, pluginInformation.Name, pluginInformation.Version, &output, context)
 
-	assert.Equal(t, "packages/PVDriver/9000.0.0.0/PVDriver.zip", fileName)
+	assert.Equal(t, "packages/PVDriver/9000.0.0/PVDriver.zip", fileName)
 	assert.NoError(t, err)
 }
 

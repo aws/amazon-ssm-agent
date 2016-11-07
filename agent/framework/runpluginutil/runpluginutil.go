@@ -66,28 +66,46 @@ type PluginRunner struct {
 	CancelFlag  task.CancelFlag
 }
 
-// TODO check if this only support 1.2
+// TODO:MF: Factor out the Configuration processing in processor_state and re-use here
 func ParseDocument(context context.T, documentRaw []byte, orchestrationDir string, s3Bucket string, s3KeyPrefix string, messageID string, documentID string, defaultWorkingDirectory string) (pluginsInfo []model.PluginState, err error) {
 	var docContent contracts.DocumentContent
 	err = json.Unmarshal(documentRaw, &docContent)
 	pluginConfigurations := make([]*contracts.Configuration, 0, len(docContent.RuntimeConfig))
 
-	for pluginName, pluginConfig := range docContent.RuntimeConfig {
-		config := contracts.Configuration{
-			Settings:                pluginConfig.Settings,
-			Properties:              pluginConfig.Properties,
-			OutputS3BucketName:      s3Bucket,
-			OutputS3KeyPrefix:       fileutil.BuildS3Path(s3KeyPrefix, pluginName),
-			OrchestrationDirectory:  fileutil.BuildPath(orchestrationDir, pluginName),
-			MessageId:               messageID,
-			BookKeepingFileName:     documentID,
-			PluginName:              pluginName,
-			PluginID:                pluginName,
-			DefaultWorkingDirectory: defaultWorkingDirectory,
+	if len(docContent.MainSteps) > 0 {
+		for _, pluginConfig := range docContent.MainSteps {
+			pluginName := pluginConfig.Action
+			config := contracts.Configuration{
+				Settings:                pluginConfig.Settings,
+				Properties:              pluginConfig.Inputs,
+				OutputS3BucketName:      s3Bucket,
+				OutputS3KeyPrefix:       fileutil.BuildS3Path(s3KeyPrefix, pluginName),
+				OrchestrationDirectory:  fileutil.BuildPath(orchestrationDir, pluginName),
+				MessageId:               messageID,
+				BookKeepingFileName:     documentID,
+				PluginName:              pluginName,
+				PluginID:                pluginConfig.Name,
+				DefaultWorkingDirectory: defaultWorkingDirectory,
+			}
+			pluginConfigurations = append(pluginConfigurations, &config)
 		}
-		pluginConfigurations = append(pluginConfigurations, &config)
+	} else {
+		for pluginName, pluginConfig := range docContent.RuntimeConfig {
+			config := contracts.Configuration{
+				Settings:                pluginConfig.Settings,
+				Properties:              pluginConfig.Properties,
+				OutputS3BucketName:      s3Bucket,
+				OutputS3KeyPrefix:       fileutil.BuildS3Path(s3KeyPrefix, pluginName),
+				OrchestrationDirectory:  fileutil.BuildPath(orchestrationDir, pluginName),
+				MessageId:               messageID,
+				BookKeepingFileName:     documentID,
+				PluginName:              pluginName,
+				PluginID:                pluginName,
+				DefaultWorkingDirectory: defaultWorkingDirectory,
+			}
+			pluginConfigurations = append(pluginConfigurations, &config)
+		}
 	}
-
 	//initialize plugin states
 	pluginsInfo = make([]model.PluginState, 0, len(pluginConfigurations))
 

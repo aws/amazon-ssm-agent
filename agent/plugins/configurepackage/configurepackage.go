@@ -375,9 +375,9 @@ func (m *configureManager) validateInput(input *ConfigurePackagePluginInput) (va
 	if input.Name == "" {
 		return false, errors.New("empty name field")
 	}
-	validNameValue := regexp.MustCompile(`^[a-zA-Z_]+([-.][a-zA-Z0-9_]+)*$`)
+	validNameValue := regexp.MustCompile(`^[a-zA-Z_]+(([-.])?[a-zA-Z0-9_]+)*$`)
 	if !validNameValue.MatchString(input.Name) {
-		return false, errors.New("Invalid name, must start with letter or _; end with letter, number, or _; and contain only letters, numbers, -, _, or single . characters")
+		return false, errors.New("invalid name, must start with letter or _; end with letter, number, or _; and contain only letters, numbers, -, _, or single . characters")
 	}
 
 	if version := input.Version; version != "" {
