@@ -111,7 +111,7 @@ func DefaultConfig() SsmagentConfig {
 	}
 	var ssm = SsmCfg{
 		HealthFrequencyMinutes:         5,
-		AssociationFrequencyMinutes:    30,
+		AssociationFrequencyMinutes:    10,
 		AssociationRetryLimit:          5,
 		BasicInventoryGatherer:         "Disabled",
 		CustomInventoryDefaultLocation: DefaultCustomInventoryFolder,
