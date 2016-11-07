@@ -148,7 +148,7 @@ func (p *Processor) IsAllowed() bool {
 	// check if the OS version is 10 or above
 	osMajorVersion, err := strconv.Atoi(osVersionSplit[0])
 	if err != nil || osMajorVersion < 10 {
-		log.Error("Startup processor requires OS version 10 or above")
+		// This is as designed to check OS version, so it is not an error
 		return false
 	}
 
@@ -156,7 +156,7 @@ func (p *Processor) IsAllowed() bool {
 	// maximum retry is 10 to ensure the failure/error is not caused by arbitrary reason.
 	ec2MetadataService := ec2metadata.New(session.New(aws.NewConfig().WithMaxRetries(10)))
 	if metadata, err := ec2MetadataService.GetMetadata(""); err != nil || metadata == "" {
-		log.Info("EC2 metadata service is not reachable")
+		// This is as designed to check if instance is in EC2, so it is not an error
 		return false
 	}
 
