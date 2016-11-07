@@ -122,7 +122,8 @@ if(Get-Command sc.exe -ErrorAction SilentlyContinue) {
             Log-Info("Amazon SSM Agent service is diabled")
         }
         sc.exe description $ServiceName $ServiceDesc
-        sc.exe failure $ServiceName reset= 86400 actions= restart/1000/restart/1000//1000
+        sc.exe failureflag $ServiceName 1
+        sc.exe failure $ServiceName reset= 86400 actions= restart/30000/restart/30000/restart/30000
     } catch {
         $ex = $Error[0].Exception
         Log-Warning("{0}.. exit!" -f $ex)
