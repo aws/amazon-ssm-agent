@@ -245,7 +245,7 @@ func getSystemInfo(log log.T) (windowsInfo model.WindowsInfo, osInfo model.Opera
 	}
 
 	// ec2 console output must show only major and minor versions.
-	if windowsInfo.CurrentMajorVersionNumber == "" || windowsInfo.CurrentMinorVersionNumber == "" {
+	if windowsInfo.CurrentMajorVersionNumber == 0 {
 		versionSplit := strings.Split(osInfo.Version, ".")
 		if len(versionSplit) > 1 {
 			osInfo.Version = fmt.Sprintf("%v.%v", versionSplit[0], versionSplit[1])

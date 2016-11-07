@@ -44,8 +44,8 @@ type DriverInfo struct {
 type WindowsInfo struct {
 	ProductName               string `json:"ProductName"`
 	BuildLabEx                string `json:"BuildLabEx"`
-	CurrentMajorVersionNumber string `json:"CurrentMajorVersionNumber"`
-	CurrentMinorVersionNumber string `json:"CurrentMinorVersionNumber"`
+	CurrentMajorVersionNumber int    `json:"CurrentMajorVersionNumber"`
+	CurrentMinorVersionNumber int    `json:"CurrentMinorVersionNumber"`
 }
 
 // OperatingSystemInfo contains Version and OperatingSystemSKU from Win32_OperatingSystem.
