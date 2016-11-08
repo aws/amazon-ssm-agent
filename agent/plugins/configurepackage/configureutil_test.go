@@ -61,7 +61,7 @@ func TestGetS3Location_Bjs(t *testing.T) {
 	context := createStubInstanceContextBjs()
 	fileName := "PVDriver.zip"
 
-	packageLocation := "https://s3.cn-north-1.amazonaws.com.cn/amazon-ssm-cn-north-1/Packages/PVDriver/windows/amd64/9000.0.0/PVDriver.zip"
+	packageLocation := "https://s3.cn-north-1.amazonaws.com.cn/amazon-ssm-packages-cn-north-1/Packages/PVDriver/windows/amd64/9000.0.0/PVDriver.zip"
 	result := getS3Location(pluginInformation.Name, pluginInformation.Version, context, fileName)
 
 	assert.Equal(t, packageLocation, result)
