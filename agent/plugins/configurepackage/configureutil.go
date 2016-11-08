@@ -42,11 +42,10 @@ const (
 
 	// PackageUrl represents the s3 location where all packages live
 	// the url to a specific package is this plus /{PackageName}/{Platform}/{Arch}/{PackageVersion}/{FileName}
-	//PackageUrl = "https://amazon-ssm-{Region}.s3.amazonaws.com/Packages"
-	PackageUrl = "https://s3.{Region}.amazonaws.com/configpentest-amazon-ssm-{Region}/Packages" // TODO:MF: For testing, only works in IAD (us-east-1) and FRA (eu-central-1)
+	PackageUrl = "https://s3.{Region}.amazonaws.com/amazon-ssm-packages-{Region}/Packages"
 
 	// PackageUrlBjs is the s3 location for BJS region where all packages live
-	PackageUrlBjs = "https://s3.{Region}.amazonaws.com.cn/amazon-ssm-{Region}/Packages"
+	PackageUrlBjs = "https://s3.{Region}.amazonaws.com.cn/amazon-ssm-packages-{Region}/Packages"
 
 	// RegionBjs represents the BJS region
 	RegionBjs = "cn-north-1"
