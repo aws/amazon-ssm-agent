@@ -54,7 +54,7 @@ func runInstallCommands(log log.T, pluginInput ConfigureContainerPluginInput, or
 		out.MarkAsFailed(log, fmt.Errorf("Error detecting platform version", err))
 		return out
 	}
-	log.Info("Platform Version:", platformVersion)
+	log.Debug("Platform Version:", platformVersion)
 	if !strings.HasPrefix(platformVersion, "10") {
 		out.MarkAsFailed(log, fmt.Errorf("ConfigureDocker is only supported on Microsoft Windows Server 2016."))
 		return out
@@ -75,7 +75,7 @@ func runInstallCommands(log log.T, pluginInput ConfigureContainerPluginInput, or
 			out.MarkAsFailed(log, fmt.Errorf("Error getting package providers", err))
 			return out
 		}
-		log.Info("Get-PackageProvider output:", output)
+		log.Debug("Get-PackageProvider output:", output)
 		packageInstalled := strings.Contains(output, "NanoServerPackage")
 
 		if !packageInstalled {
@@ -88,7 +88,7 @@ func runInstallCommands(log log.T, pluginInput ConfigureContainerPluginInput, or
 				out.MarkAsFailed(log, fmt.Errorf("Error installing Nuget package provider", err))
 				return out
 			}
-			log.Info("Save-Module output:", output)
+			log.Debug("Install Package provider output:", output)
 
 			command = `Save-Module -Path "$env:programfiles\WindowsPowerShell\Modules\" -Name NanoServerPackage -minimumVersion 1.0.1.0`
 			parameters = make([]string, 0)
@@ -98,7 +98,7 @@ func runInstallCommands(log log.T, pluginInput ConfigureContainerPluginInput, or
 				out.MarkAsFailed(log, fmt.Errorf("Error saving Nano server package", err))
 				return out
 			}
-			log.Info("Save-Module output:", output)
+			log.Debug("Save-Module output:", output)
 
 			command = `Import-PackageProvider NanoServerPackage`
 			parameters = make([]string, 0)
@@ -108,7 +108,7 @@ func runInstallCommands(log log.T, pluginInput ConfigureContainerPluginInput, or
 				out.MarkAsFailed(log, fmt.Errorf("Error importing package", err))
 				return out
 			}
-			log.Info("Import-PackageProvider output:", output)
+			log.Debug("Import-PackageProvider output:", output)
 		}
 
 		//Install containers package
@@ -120,7 +120,7 @@ func runInstallCommands(log log.T, pluginInput ConfigureContainerPluginInput, or
 			out.MarkAsFailed(log, fmt.Errorf("Error getting microsoft-nanoserver-containers-package", err))
 			return out
 		}
-		log.Info("Get-Package output:", output)
+		log.Debug("Get-Package output:", output)
 		packageInstalled = strings.Contains(output, "Microsoft-NanoServer-Containers-Package")
 
 		if !packageInstalled {
@@ -133,7 +133,7 @@ func runInstallCommands(log log.T, pluginInput ConfigureContainerPluginInput, or
 				out.MarkAsFailed(log, fmt.Errorf("Error installing microsoft-nanoserver-containers-package", err))
 				return out
 			}
-			log.Info("Install-NanoServerPackage output:", output)
+			log.Debug("Install-NanoServerPackage output:", output)
 			requireReboot = true
 		}
 	} else {
@@ -146,7 +146,7 @@ func runInstallCommands(log log.T, pluginInput ConfigureContainerPluginInput, or
 			out.MarkAsFailed(log, fmt.Errorf("Error getting containers feature", err))
 			return out
 		}
-		log.Info("Get-WindowsFeature output:", output)
+		log.Debug("Get-WindowsFeature output:", output)
 		packageInstalled := strings.Contains(output, "True")
 
 		if !packageInstalled {
@@ -159,9 +159,8 @@ func runInstallCommands(log log.T, pluginInput ConfigureContainerPluginInput, or
 				out.MarkAsFailed(log, fmt.Errorf("Error installing Windows containers feature", err))
 				return out
 			}
-			log.Info("Install-WindowsFeature output:", output)
+			log.Debug("Install-WindowsFeature output:", output)
 			requireReboot = strings.Contains(output, "Yes")
-			log.Info("Requireboot:", requireReboot)
 		}
 	}
 
@@ -185,12 +184,13 @@ func runInstallCommands(log log.T, pluginInput ConfigureContainerPluginInput, or
 	//Download docker
 	var downloadOutput artifact.DownloadOutput
 	downloadOutput, err = dep.ArtifactDownload(log, artifact.DownloadInput{SourceURL: DOCKER_DOWNLOAD_URL, DestinationDirectory: os.TempDir()})
-	if downloadOutput.IsUpdated {
+	_, installedErr := os.Stat(DOCKER_INSTALLED_DIRECTORY)
+	if downloadOutput.IsUpdated || installedErr != nil {
 		out.Stdout += "Unzipping Docker to program files directory\n"
 		//uncompress docker zip
 		fileutil.Uncompress(downloadOutput.LocalFilePath, DOCKER_UNCOMPRESS_DIRECTORY)
 	}
-	log.Info("downloaded to ", downloadOutput.LocalFilePath)
+	log.Debug("Zip dile downloaded to ", downloadOutput.LocalFilePath)
 
 	//Set this process's path environment variable to include Docker
 	if !strings.Contains(strings.ToLower(os.Getenv("path")), strings.ToLower(DOCKER_INSTALLED_DIRECTORY)) {
@@ -199,7 +199,7 @@ func runInstallCommands(log log.T, pluginInput ConfigureContainerPluginInput, or
 		os.Setenv("path", DOCKER_INSTALLED_DIRECTORY+";"+os.Getenv("path"))
 
 	}
-	log.Info("Path set to ", os.Getenv("path"))
+	log.Debug("Path set to ", os.Getenv("path"))
 
 	//set path env variable for machine to include Docker
 	var regKey registry.Key
@@ -217,7 +217,7 @@ func runInstallCommands(log log.T, pluginInput ConfigureContainerPluginInput, or
 		out.MarkAsFailed(log, fmt.Errorf("Error getting current machine registry key value", err))
 		return out
 	}
-	log.Info("System Path set to ", currentSystemPathValue)
+	log.Debug("System Path set to ", currentSystemPathValue)
 	if !strings.Contains(strings.ToLower(currentSystemPathValue), strings.ToLower(DOCKER_INSTALLED_DIRECTORY)) {
 		out.Stdout += "Setting machine path variable to include docker directory\n"
 		command = "setx"
@@ -229,17 +229,16 @@ func runInstallCommands(log log.T, pluginInput ConfigureContainerPluginInput, or
 			out.MarkAsFailed(log, fmt.Errorf("Error setting machine path environment variable", err))
 			return out
 		}
-		log.Info("setx path output:", setPathOutput)
+		log.Debug("setx path output:", setPathOutput)
 	}
 
 	//reboot if needed
 	if requireReboot {
 		out.Stdout += "Rebooting machine to complete install\n"
-		log.Info("require reboot is true")
+		log.Debug("require reboot is true")
 		out.Status = contracts.ResultStatusSuccessAndReboot
 		return out
 	}
-	log.Info("require reboot", requireReboot)
 
 	//Check if docker daemon registered
 	var dockerServiceStatusOutput string
@@ -251,15 +250,16 @@ func runInstallCommands(log log.T, pluginInput ConfigureContainerPluginInput, or
 		out.MarkAsFailed(log, fmt.Errorf("Error getting Docker service status", err))
 		return out
 	}
-	log.Info("Get-Service output:", dockerServiceStatusOutput)
+	log.Debug("Get-Service output:", dockerServiceStatusOutput)
 
 	ServiceRunning := strings.HasPrefix(dockerServiceStatusOutput, "Running")
 
 	//Register Service
 	if len(strings.TrimSpace(dockerServiceStatusOutput)) == 0 {
 		out.Stdout += "Registering dockerd.\n"
-		log.Info("dockerd installed directory:", DOCKER_INSTALLED_DIRECTORY)
-		command = "dockerd"
+
+		command = `dockerd`
+		log.Debug("dockerd cmd:", command)
 		parameters = []string{"--register-service"}
 		dockerServiceStatusOutput, err = dep.UpdateUtilExeCommandOutput(120, log, command, parameters, DOCKER_INSTALLED_DIRECTORY, "", "", "", false)
 		if err != nil {
@@ -267,7 +267,7 @@ func runInstallCommands(log log.T, pluginInput ConfigureContainerPluginInput, or
 			out.MarkAsFailed(log, fmt.Errorf("Error registering Docker service", err))
 			return out
 		}
-		log.Info("dockerd output:", dockerServiceStatusOutput)
+		log.Debug("dockerd output:", dockerServiceStatusOutput)
 		//set service to delayed start
 		out.Stdout += "set dockerd service configuration.\n"
 		command = "sc.exe"
@@ -278,7 +278,7 @@ func runInstallCommands(log log.T, pluginInput ConfigureContainerPluginInput, or
 			out.MarkAsFailed(log, fmt.Errorf("Error setting delayed start for Docker service", err))
 			return out
 		}
-		log.Info("sc output:", dockerServiceStatusOutput)
+		log.Debug("sc output:", dockerServiceStatusOutput)
 		//sleep 10 sec after registering
 		time.Sleep(10 * time.Second)
 	}
@@ -290,7 +290,7 @@ func runInstallCommands(log log.T, pluginInput ConfigureContainerPluginInput, or
 		out.MarkAsFailed(log, fmt.Errorf("Error creating registry key to set docker delayed start: %g", err))
 		return out
 	}
-	log.Info("created reg key:", created)
+	log.Debug("created reg key:", created)
 	defer regKey.Close()
 	err = dep.RegistryKeySetDWordValue(regKey, "AutoStartDelay", 240)
 	if err != nil {
@@ -311,10 +311,10 @@ func runInstallCommands(log log.T, pluginInput ConfigureContainerPluginInput, or
 			out.MarkAsFailed(log, fmt.Errorf("Error starting Docker service", err))
 			return out
 		}
-		log.Info("start-service output:", dockerServiceStatusOutput)
+		log.Debug("start-service output:", dockerServiceStatusOutput)
 	}
 	out.Stdout += "Installation complete\n"
-	log.Info("require reboot is true", requireReboot)
+	log.Debug("require reboot:", requireReboot)
 	out.Status = contracts.ResultStatusSuccess
 	return out
 }
@@ -335,7 +335,7 @@ func runUninstallCommands(log log.T, pluginInput ConfigureContainerPluginInput, 
 		out.MarkAsFailed(log, fmt.Errorf("Error detecting platform version", err))
 		return out
 	}
-	log.Info("Platform Version:", platformVersion)
+	log.Debug("Platform Version:", platformVersion)
 	if !strings.HasPrefix(platformVersion, "10") {
 		out.MarkAsFailed(log, fmt.Errorf("ConfigureDocker is only supported on Microsoft Windows Server 2016."))
 		return out
@@ -351,7 +351,7 @@ func runUninstallCommands(log log.T, pluginInput ConfigureContainerPluginInput, 
 		out.MarkAsFailed(log, fmt.Errorf("Error getting Docker service status", err))
 		return out
 	}
-	log.Info("Get-Service output:", dockerServiceStatusOutput)
+	log.Debug("Get-Service output:", dockerServiceStatusOutput)
 
 	ServiceRunning := strings.Contains(dockerServiceStatusOutput, "Running")
 
@@ -366,22 +366,22 @@ func runUninstallCommands(log log.T, pluginInput ConfigureContainerPluginInput, 
 			out.MarkAsFailed(log, fmt.Errorf("Error stopping Docker service", err))
 			return out
 		}
-		log.Info("stop-service output:", dockerServiceStatusOutput)
+		log.Debug("stop-service output:", dockerServiceStatusOutput)
 	}
 
 	//Unregister Service
 	if len(strings.TrimSpace(dockerServiceStatusOutput)) > 0 {
-		out.Stdout += "Unregistering dockerd.\n"
-		log.Info("dockerd installed directory:", DOCKER_INSTALLED_DIRECTORY)
-		command = "dockerd"
-		parameters = []string{"--unregister-service"}
-		dockerServiceStatusOutput, err = dep.UpdateUtilExeCommandOutput(120, log, command, parameters, DOCKER_INSTALLED_DIRECTORY, "", "", "", false)
+		out.Stdout += "Unregistering dockerd service.\n"
+		command = "(Get-WmiObject -Class Win32_Service -Filter \"Name='docker'\").delete()"
+
+		parameters = make([]string, 0)
+		dockerServiceStatusOutput, err = dep.UpdateUtilExeCommandOutput(120, log, command, parameters, DOCKER_INSTALLED_DIRECTORY, "", "", "", true)
 		if err != nil {
 			log.Error("Error unregistering Docker service", err)
-			out.MarkAsFailed(log, fmt.Errorf("Error unregistering Docker service", err))
+			out.MarkAsFailed(log, fmt.Errorf("Error unregistering Docker service.%v", err))
 			return out
 		}
-		log.Info("dockerd output:", dockerServiceStatusOutput)
+		log.Debug("dockerd output:", dockerServiceStatusOutput)
 
 	}
 
@@ -411,7 +411,7 @@ func runUninstallCommands(log log.T, pluginInput ConfigureContainerPluginInput, 
 			out.MarkAsFailed(log, fmt.Errorf("Error getting containers feature", err))
 			return out
 		}
-		log.Info("Get-WindowsFeature output:", output)
+		log.Debug("Get-WindowsFeature output:", output)
 		packageInstalled := strings.Contains(output, "True")
 
 		if packageInstalled {
@@ -424,20 +424,20 @@ func runUninstallCommands(log log.T, pluginInput ConfigureContainerPluginInput, 
 				out.MarkAsFailed(log, fmt.Errorf("Error uninstalling containers Windows feature", err))
 				return out
 			}
-			log.Info("Uninstall-WindowsFeature output:", output)
+			log.Debug("Uninstall-WindowsFeature output:", output)
 			requireReboot = strings.Contains(output, "Yes")
-			log.Info("Requireboot:", requireReboot)
+			log.Debug("Requireboot:", requireReboot)
 		}
 		//reboot if needed
 		if requireReboot {
 			out.Stdout += "Rebooting machine to complete install\n"
-			log.Info("require reboot is true", requireReboot)
+			log.Debug("require reboot is true", requireReboot)
 			out.Status = contracts.ResultStatusSuccessAndReboot
 			return out
 		}
 	}
 	out.Stdout += "Uninstallation complete\n"
-	log.Info("Uninstallation complete")
+	log.Debug("Uninstallation complete")
 	out.Status = contracts.ResultStatusSuccess
 
 	return out
