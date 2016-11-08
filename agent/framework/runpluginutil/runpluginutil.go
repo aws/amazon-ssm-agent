@@ -16,7 +16,6 @@ package runpluginutil
 
 import (
 	"encoding/json"
-
 	"fmt"
 
 	"github.com/aws/amazon-ssm-agent/agent/context"
