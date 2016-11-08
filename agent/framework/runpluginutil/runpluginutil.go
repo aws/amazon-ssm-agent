@@ -17,6 +17,8 @@ package runpluginutil
 import (
 	"encoding/json"
 
+	"fmt"
+
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
@@ -70,9 +72,9 @@ type PluginRunner struct {
 func ParseDocument(context context.T, documentRaw []byte, orchestrationDir string, s3Bucket string, s3KeyPrefix string, messageID string, documentID string, defaultWorkingDirectory string) (pluginsInfo []model.PluginState, err error) {
 	var docContent contracts.DocumentContent
 	err = json.Unmarshal(documentRaw, &docContent)
-	pluginConfigurations := make([]*contracts.Configuration, 0, len(docContent.RuntimeConfig))
+	pluginConfigurations := make([]*contracts.Configuration, 0)
 
-	if len(docContent.MainSteps) > 0 {
+	if docContent.SchemaVersion == "2.0" {
 		for _, pluginConfig := range docContent.MainSteps {
 			pluginName := pluginConfig.Action
 			config := contracts.Configuration{
@@ -89,7 +91,7 @@ func ParseDocument(context context.T, documentRaw []byte, orchestrationDir strin
 			}
 			pluginConfigurations = append(pluginConfigurations, &config)
 		}
-	} else {
+	} else if docContent.SchemaVersion == "1.2" {
 		for pluginName, pluginConfig := range docContent.RuntimeConfig {
 			config := contracts.Configuration{
 				Settings:                pluginConfig.Settings,
@@ -105,6 +107,8 @@ func ParseDocument(context context.T, documentRaw []byte, orchestrationDir strin
 			}
 			pluginConfigurations = append(pluginConfigurations, &config)
 		}
+	} else {
+		err = fmt.Errorf("unsupported schema version %v", docContent.SchemaVersion)
 	}
 	//initialize plugin states
 	pluginsInfo = make([]model.PluginState, 0, len(pluginConfigurations))
