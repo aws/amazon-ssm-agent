@@ -159,8 +159,6 @@ func UpdateNextScheduledDate(log log.T, associationID string) {
 			break
 		}
 	}
-
-	log.Debugf("Association %v no longer associated", associationID)
 }
 
 // MarkAssociationAsCompleted sets exclude from future scheduling to false
@@ -175,8 +173,6 @@ func MarkAssociationAsCompleted(log log.T, associationID string) {
 			break
 		}
 	}
-
-	log.Debugf("Association %v no longer associated", associationID)
 }
 
 // Schedules returns all the cached schedules
