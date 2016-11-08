@@ -158,7 +158,7 @@ func (p *Processor) runScheduledAssociation(log log.T) {
 	defer func() {
 		// recover in case the job panics
 		if msg := recover(); msg != nil {
-			log.Errorf("Execute association failed with message %v", msg)
+			log.Errorf("Execute association failed with message, %v", msg)
 		}
 	}()
 
