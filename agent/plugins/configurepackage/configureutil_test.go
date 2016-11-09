@@ -21,8 +21,7 @@ import (
 	"strings"
 	"testing"
 
-	"Amazon-ssm-agent/agent/appconfig"
-
+	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/updateutil"
 	"github.com/stretchr/testify/assert"
