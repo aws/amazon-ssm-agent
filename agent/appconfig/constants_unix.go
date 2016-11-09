@@ -26,6 +26,9 @@ const (
 	// PackageRoot specifies the directory under which packages will be downloaded and installed
 	PackageRoot = "/var/lib/amazon/ssm/packages"
 
+	// PackagePlatform is the platform name to use when looking for packages
+	PackagePlatform = "linux"
+
 	// DaemonRoot specifies the directory where daemon registration information is stored
 	DaemonRoot = "/var/lib/amazon/ssm/daemons"
 

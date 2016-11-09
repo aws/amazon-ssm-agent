@@ -44,6 +44,9 @@ const (
 
 	// PluginNameAwsApplications is the name of the Applications plugin
 	PluginNameAwsApplications = "aws:applications"
+
+	// PackagePlatform is the platform name to use when looking for packages
+	PackagePlatform = "windows"
 )
 
 // Program Folder

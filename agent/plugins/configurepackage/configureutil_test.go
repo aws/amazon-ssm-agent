@@ -21,6 +21,8 @@ import (
 	"strings"
 	"testing"
 
+	"Amazon-ssm-agent/agent/appconfig"
+
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/updateutil"
 	"github.com/stretchr/testify/assert"
@@ -50,7 +52,8 @@ func TestGetS3Location(t *testing.T) {
 	context := createStubInstanceContext()
 	fileName := "PVDriver.zip"
 
-	packageLocation := fmt.Sprintf("%v/PVDriver/windows/amd64/9000.0.0/PVDriver.zip", strings.Replace(PackageUrl, updateutil.RegionHolder, "us-west-2", -1))
+	packageLocation := fmt.Sprintf("%v/PVDriver/"+updateutil.PlatformHolder+"/amd64/9000.0.0/PVDriver.zip", strings.Replace(PackageUrl, updateutil.RegionHolder, "us-west-2", -1))
+	packageLocation = strings.Replace(packageLocation, updateutil.PlatformHolder, appconfig.PackagePlatform, -1)
 	result := getS3Location(pluginInformation.Name, pluginInformation.Version, context, fileName)
 
 	assert.Equal(t, packageLocation, result)
@@ -61,7 +64,8 @@ func TestGetS3Location_Bjs(t *testing.T) {
 	context := createStubInstanceContextBjs()
 	fileName := "PVDriver.zip"
 
-	packageLocation := "https://s3.cn-north-1.amazonaws.com.cn/amazon-ssm-packages-cn-north-1/Packages/PVDriver/windows/amd64/9000.0.0/PVDriver.zip"
+	packageLocation := "https://s3.cn-north-1.amazonaws.com.cn/amazon-ssm-packages-cn-north-1/Packages/PVDriver/" + updateutil.PlatformHolder + "/amd64/9000.0.0/PVDriver.zip"
+	packageLocation = strings.Replace(packageLocation, updateutil.PlatformHolder, appconfig.PackagePlatform, -1)
 	result := getS3Location(pluginInformation.Name, pluginInformation.Version, context, fileName)
 
 	assert.Equal(t, packageLocation, result)

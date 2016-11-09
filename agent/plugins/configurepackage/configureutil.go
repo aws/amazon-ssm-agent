@@ -117,7 +117,7 @@ func getS3Url(packageName string, context *updateutil.InstanceContext) (s3Url *u
 	}
 
 	s3Url, _ = url.Parse(strings.Replace(s3Location, updateutil.RegionHolder, context.Region, -1))
-	s3Url.Path = path.Join(s3Url.Path, packageName, context.Platform, context.Arch)
+	s3Url.Path = path.Join(s3Url.Path, packageName, appconfig.PackagePlatform, context.Arch)
 	return
 }
 
@@ -231,7 +231,7 @@ func (util *configureUtilImp) GetLatestVersion(log log.T, name string, context *
 	latestVersion, err = getLatestS3Version(log, name, context)
 	// handle case where we couldn't figure out which version to install but not because of an error in the S3 call
 	if latestVersion == "" {
-		return "", fmt.Errorf("no latest version found for package %v on platform %v[%v]", name, context.Platform, context.Arch)
+		return "", fmt.Errorf("no latest version found for package %v on platform %v[%v]", name, appconfig.PackagePlatform, context.Arch)
 	}
 	return latestVersion, err
 }
