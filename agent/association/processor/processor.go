@@ -155,12 +155,12 @@ func (p *Processor) ProcessAssociation() {
 
 // runScheduledAssociation runs the next scheduled association
 func (p *Processor) runScheduledAssociation(log log.T) {
-	//defer func() {
-	//	// recover in case the job panics
-	//	if msg := recover(); msg != nil {
-	//		log.Errorf("Execute association failed with message, %v", msg)
-	//	}
-	//}()
+	defer func() {
+		// recover in case the job panics
+		if msg := recover(); msg != nil {
+			log.Errorf("Execute association failed with message, %v", msg)
+		}
+	}()
 
 	var (
 		scheduledAssociation *model.InstanceAssociation
