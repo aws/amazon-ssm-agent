@@ -46,10 +46,16 @@ func RunPlugins(
 	updateAssoc runpluginutil.UpdateAssociation,
 	cancelFlag task.CancelFlag,
 ) (pluginOutputs map[string]*contracts.PluginResult) {
-
 	totalNumberOfActions := len(plugins)
 
 	pluginOutputs = make(map[string]*contracts.PluginResult)
+
+	for _, pluginState := range plugins {
+		pluginState.Result.PluginName = pluginState.Name
+		pluginOutput := pluginState.Result
+		pluginOutputs[pluginState.Id] = &pluginOutput
+	}
+
 	for _, pluginState := range plugins {
 		pluginID := pluginState.Id     // the identifier of the plugin
 		pluginName := pluginState.Name // the name of the plugin
@@ -58,10 +64,6 @@ func RunPlugins(
 				"Skipping execution of Plugin - %v of document - %v since it has already executed.",
 				pluginName,
 				executionID)
-			// TODO find where the result is from and how it can be saved. Should put name in result.
-			pluginState.Result.PluginName = pluginName
-			pluginOutput := pluginState.Result
-			pluginOutputs[pluginID] = &pluginOutput
 			continue
 		}
 		context.Log().Debugf("Executing plugin - %v of document - %v", pluginName, executionID)
