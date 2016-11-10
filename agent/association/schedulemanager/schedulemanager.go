@@ -42,19 +42,16 @@ func Refresh(log log.T, assocs []*model.InstanceAssociation, svc service.T) {
 	unchangedAssociation := 0
 
 	for _, newAssoc := range assocs {
-		foundMatch := false
+		isNew := true
 		for _, oldAssoc := range associations {
-			if *newAssoc.Association.AssociationId == *oldAssoc.Association.AssociationId {
-				if *newAssoc.Association.Checksum == *oldAssoc.Association.Checksum {
-					unchangedAssociation++
-					newAssoc.Update(oldAssoc)
-					foundMatch = true
-				}
-				break
+			if *newAssoc.Association.AssociationId == *oldAssoc.Association.AssociationId && *newAssoc.Association.Checksum == *oldAssoc.Association.Checksum {
+				unchangedAssociation++
+				newAssoc.Update(oldAssoc)
+				isNew = false
 			}
 		}
 
-		if !foundMatch || newAssoc.RunNow {
+		if isNew || newAssoc.RunNow || newAssoc.NextScheduledDate.IsZero() {
 			if err := newAssoc.Initialize(log); err != nil {
 				message := "Encountered error while initializing association"
 				log.Errorf("%v, %v", message, err)
@@ -68,7 +65,6 @@ func Refresh(log log.T, assocs []*model.InstanceAssociation, svc service.T) {
 				newAssoc.ExcludeFromFutureScheduling = true
 			}
 
-			//todo: call service to update association status
 			if newAssoc.ExcludeFromFutureScheduling {
 				log.Infof("Exclude association %v from future scheduling", *newAssoc.Association.AssociationId)
 			} else {

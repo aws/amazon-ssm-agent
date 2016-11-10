@@ -220,10 +220,14 @@ func (p *Plugin) runCommands(log log.T, pluginInput RefreshAssociationPluginInpu
 			return
 		}
 
-		for _, id := range pluginInput.AssociationIds {
-			if *assoc.Association.AssociationId == id {
-				assoc.RunNow = true
-				break
+		if len(pluginInput.AssociationIds) == 0 {
+			assoc.RunNow = true
+		} else {
+			for _, id := range pluginInput.AssociationIds {
+				if *assoc.Association.AssociationId == id {
+					assoc.RunNow = true
+					break
+				}
 			}
 		}
 	}
