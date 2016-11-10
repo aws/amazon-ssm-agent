@@ -111,7 +111,9 @@ func ResetWaitTimerForNextScheduledAssociation(log log.T, targetDate time.Time) 
 
 // StopWaitTimerForNextScheduledAssociation stops the timer so it will not get triggered and send signal for the next scheduled association
 func StopWaitTimerForNextScheduledAssociation() {
-	waitTimerForNextScheduledAssociation.Stop()
+	if waitTimerForNextScheduledAssociation != nil {
+		waitTimerForNextScheduledAssociation.Stop()
+	}
 }
 
 // ExecuteAssociation sends out signal to the worker to process next scheduled association
