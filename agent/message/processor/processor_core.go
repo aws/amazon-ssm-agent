@@ -60,24 +60,15 @@ func (p *Processor) runCmdsUsingCmdState(context context.T,
 
 	//Since only some plugins of a cmd gets executed here - there is no need to get output from engine & construct the sendReply output.
 	//Instead after all plugins of a command get executed, use persisted data to construct sendReply payload
-	runPlugins(context, docState.DocumentInformation.MessageID, docState.InstancePluginsInformation, sendResponse, cancelFlag)
+	outputs := runPlugins(context, docState.DocumentInformation.MessageID, docState.InstancePluginsInformation, sendResponse, cancelFlag)
+
+	payloadDoc := buildReply("", outputs)
 
 	//read from persisted file
 	newCmdState := commandStateHelper.GetDocumentInterimState(log,
 		docState.DocumentInformation.DocumentID,
 		docState.DocumentInformation.InstanceID,
 		appconfig.DefaultLocationOfCurrent)
-
-	//construct sendReply payload
-	outputs := make(map[string]*contracts.PluginResult)
-	for _, pluginState := range newCmdState.InstancePluginsInformation {
-		outputs[pluginState.Id] = &pluginState.Result
-	}
-
-	pluginOutputContent, _ := jsonutil.Marshal(outputs)
-	log.Debugf("plugin outputs %v", jsonutil.Indent(pluginOutputContent))
-
-	payloadDoc := buildReply("", outputs)
 
 	// set document level information which wasn't set previously
 	newCmdState.DocumentInformation.AdditionalInfo = payloadDoc.AdditionalInfo
@@ -91,6 +82,9 @@ func (p *Processor) runCmdsUsingCmdState(context context.T,
 		newCmdState.DocumentInformation.DocumentID,
 		newCmdState.DocumentInformation.InstanceID,
 		appconfig.DefaultLocationOfCurrent)
+
+	pluginOutputContent, _ := jsonutil.Marshal(outputs)
+	log.Debugf("plugin outputs %v", jsonutil.Indent(pluginOutputContent))
 
 	//send document level reply
 	log.Debug("sending reply on message completion ", outputs)
