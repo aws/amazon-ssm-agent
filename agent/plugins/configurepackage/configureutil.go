@@ -18,7 +18,6 @@ package configurepackage
 import (
 	"fmt"
 	"net/url"
-	"path"
 	"path/filepath"
 	"regexp"
 	"strconv"
@@ -40,12 +39,15 @@ const (
 	// PackageNameFormat represents the package name format based
 	PackageNameFormat = "{PackageName}.{Compressed}"
 
-	// PackageUrl represents the s3 location where all packages live
+	// PackageUrl represents the s3 folder where all versions of a package live
 	// the url to a specific package is this plus /{PackageName}/{Platform}/{Arch}/{PackageVersion}/{FileName}
-	PackageUrl = "https://s3.{Region}.amazonaws.com/amazon-ssm-packages-{Region}/Packages"
+	PackageUrl = "https://s3.{Region}.amazonaws.com/amazon-ssm-packages-{Region}/Packages/{PackageName}/{Platform}/{Arch}"
 
 	// PackageUrlBjs is the s3 location for BJS region where all packages live
-	PackageUrlBjs = "https://s3.{Region}.amazonaws.com.cn/amazon-ssm-packages-{Region}/Packages"
+	PackageUrlBjs = "https://s3.{Region}.amazonaws.com.cn/amazon-ssm-packages-{Region}/Packages/{PackageName}/{Platform}/{Arch}"
+
+	// PackageNameSuffix represents (when concatenated with the correct package url) the s3 location of a specific version of a package
+	PackageNameSuffix = "/{PackageVersion}/" + PackageNameFormat
 
 	// RegionBjs represents the BJS region
 	RegionBjs = "cn-north-1"
@@ -69,15 +71,7 @@ type configureUtil interface {
 
 type configureUtilImp struct{}
 
-// getManifestName constructs the manifest name to locate in the s3 bucket
-func getManifestName(packageName string) (manifestName string) {
-	manifestName = ManifestNameFormat
-	manifestName = strings.Replace(manifestName, PackageNameHolder, packageName, -1)
-
-	return manifestName
-}
-
-// getPackageFilename constructs the package name to locate in the s3 bucket
+// getPackageFilename constructs the package name to locate in the s3 bucket or on disk after download
 func getPackageFilename(packageName string, context *updateutil.InstanceContext) (packageFilename string) {
 	packageFilename = PackageNameFormat
 
@@ -87,21 +81,29 @@ func getPackageFilename(packageName string, context *updateutil.InstanceContext)
 	return packageFilename
 }
 
-// TODO:MF: Should we change this to URL instead of string?  Can we use URI instead of URL?
-// getS3PackageLocation returns the s3 location containing all versions of a package
-func getS3PackageLocation(packageName string, context *updateutil.InstanceContext) (s3Location string) {
-	s3Url := getS3Url(packageName, context)
-	s3Location = s3Url.String()
-	return s3Location
+// getManifestName constructs the manifest name to locate in the package on disk
+func getManifestName(packageName string) (manifestName string) {
+	manifestName = ManifestNameFormat
+	manifestName = strings.Replace(manifestName, PackageNameHolder, packageName, -1)
+
+	return manifestName
 }
 
-// TODO:MF: Should we change this to URL instead of string?
 // getS3Location constructs the s3 url to locate the package for downloading
-func getS3Location(packageName string, version string, context *updateutil.InstanceContext, fileName string) (s3Location string) {
-	s3Url := getS3Url(packageName, context)
-	s3Url.Path = path.Join(s3Url.Path, version, fileName)
+func getS3Location(packageName string, version string, context *updateutil.InstanceContext) (s3Location string) {
+	if context.Region == RegionBjs {
+		s3Location = PackageUrlBjs
+	} else {
+		s3Location = PackageUrl
+	}
+	s3Location += PackageNameSuffix
 
-	s3Location = s3Url.String()
+	s3Location = strings.Replace(s3Location, updateutil.RegionHolder, context.Region, -1)
+	s3Location = strings.Replace(s3Location, updateutil.PackageNameHolder, packageName, -1)
+	s3Location = strings.Replace(s3Location, updateutil.PlatformHolder, appconfig.PackagePlatform, -1)
+	s3Location = strings.Replace(s3Location, updateutil.ArchHolder, context.Arch, -1)
+	s3Location = strings.Replace(s3Location, updateutil.PackageVersionHolder, version, -1)
+	s3Location = strings.Replace(s3Location, updateutil.CompressedHolder, context.CompressFormat, -1)
 	return s3Location
 }
 
@@ -116,9 +118,13 @@ func getS3Url(packageName string, context *updateutil.InstanceContext) (s3Url *u
 		s3Location = PackageUrl
 	}
 
-	s3Url, _ = url.Parse(strings.Replace(s3Location, updateutil.RegionHolder, context.Region, -1))
-	s3Url.Path = path.Join(s3Url.Path, packageName, appconfig.PackagePlatform, context.Arch)
-	return
+	s3Location = strings.Replace(s3Location, updateutil.RegionHolder, context.Region, -1)
+	s3Location = strings.Replace(s3Location, updateutil.PackageNameHolder, packageName, -1)
+	s3Location = strings.Replace(s3Location, updateutil.PlatformHolder, appconfig.PackagePlatform, -1)
+	s3Location = strings.Replace(s3Location, updateutil.ArchHolder, context.Arch, -1)
+
+	s3Url, _ = url.Parse(s3Location)
+	return s3Url
 }
 
 // getPackageRoot returns the name of the folder containing all versions of a package

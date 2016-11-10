@@ -283,18 +283,23 @@ func runConfigurePackage(
 			&output,
 			log,
 			instanceContext)
-		if err == nil {
-			resultPost, err = runUninstallPackagePost(p,
-				input.Name,
-				version,
-				&output,
-				log,
-				instanceContext)
-		}
-		result := contracts.MergeResultStatus(resultPre, resultPost)
 		if err != nil {
 			output.MarkAsFailed(log, fmt.Errorf("failed to uninstall package: %v", err))
-		} else if result == contracts.ResultStatusSuccessAndReboot || result == contracts.ResultStatusPassedAndReboot {
+			return
+		}
+		resultPost, err = runUninstallPackagePost(p,
+			input.Name,
+			version,
+			&output,
+			log,
+			instanceContext)
+		if err != nil {
+			output.MarkAsFailed(log, fmt.Errorf("failed to uninstall package: %v", err))
+			return
+		}
+
+		result := contracts.MergeResultStatus(resultPre, resultPost)
+		if result == contracts.ResultStatusSuccessAndReboot || result == contracts.ResultStatusPassedAndReboot {
 			output.AppendInfo(log, "Successfully uninstalled %v %v", input.Name, version)
 			output.MarkAsSucceeded(true)
 		} else if result != contracts.ResultStatusSuccess {
@@ -429,15 +434,13 @@ func (m *configureManager) downloadPackage(log log.T,
 	version string,
 	output *ConfigurePackagePluginOutput,
 	context *updateutil.InstanceContext) (filePath string, err error) {
-	// package to download
-	packageFilename := getPackageFilename(packageName, context)
 
 	//TODO:OFFLINE: build packageLocation from source URI
 	//   We should probably support both a URI to a "folder" that gets a filename tacked onto the end
 	//   and a full path to a compressed package file
 
 	// path to package
-	packageLocation := getS3Location(packageName, version, context, packageFilename)
+	packageLocation := getS3Location(packageName, version, context)
 
 	// path to download destination
 	packageDestination, createErr := util.CreatePackageFolder(packageName, version)

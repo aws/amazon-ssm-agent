@@ -16,6 +16,7 @@ package rundaemon
 
 import (
 	"errors"
+	"regexp"
 
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
@@ -33,6 +34,11 @@ type ConfigureDaemonPluginInput struct {
 func ValidateDaemonInput(input ConfigureDaemonPluginInput) error {
 	if input.Name == "" {
 		return errors.New("daemon name is missing")
+	}
+	// Prevent names that would not be valid as file names
+	validNameValue := regexp.MustCompile(`^[a-zA-Z_]+(([-.])?[a-zA-Z0-9_]+)*$`)
+	if !validNameValue.MatchString(input.Name) {
+		return errors.New("Invalid daemon name, must start with letter or _; end with letter, number, or _; and contain only letters, numbers, -, _, or single . characters")
 	}
 	if input.PackageLocation == "" {
 		return errors.New("daemon location is missing")
