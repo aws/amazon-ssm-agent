@@ -59,7 +59,7 @@ func (p *Processor) loop() {
 			}
 		} else {
 			log.Debugf("creating new stop-policy.")
-			p.processorStopPolicy = newStopPolicy()
+			p.processorStopPolicy = newStopPolicy(p.name)
 		}
 
 		p.pollOnce()

@@ -18,6 +18,8 @@ package processor
 import (
 	"fmt"
 
+	"strings"
+
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	messageContracts "github.com/aws/amazon-ssm-agent/agent/message/contracts"
@@ -34,12 +36,18 @@ func initializeSendCommandState(
 	s3KeyPrefix string,
 	msg ssmmds.Message) stateModel.DocumentState {
 
+	var documentType stateModel.DocumentType
+	if strings.HasPrefix(*msg.Topic, string(SendCommandTopicPrefixOffline)) {
+		documentType = stateModel.SendCommandOffline
+	} else {
+		documentType = stateModel.SendCommand
+	}
 	//initialize document information with relevant values extracted from msg
 	documentInfo := newDocumentInfo(msg, payload)
 	//initialize command State
 	docState := stateModel.DocumentState{
 		DocumentInformation: documentInfo,
-		DocumentType:        stateModel.SendCommand,
+		DocumentType:        documentType,
 	}
 
 	if payload.DocumentContent.RuntimeConfig != nil && len(payload.DocumentContent.RuntimeConfig) != 0 {
@@ -76,10 +84,16 @@ func initializeCancelCommandState(msg ssmmds.Message, parsedMsg messageContracts
 	cancelCommand.CancelCommandID = commandID
 	cancelCommand.DebugInfo = fmt.Sprintf("Command %v is yet to be cancelled", commandID)
 
+	var documentType stateModel.DocumentType
+	if strings.HasPrefix(*msg.Topic, string(CancelCommandTopicPrefixOffline)) {
+		documentType = stateModel.CancelCommandOffline
+	} else {
+		documentType = stateModel.CancelCommand
+	}
 	return stateModel.DocumentState{
 		DocumentInformation: documentInfo,
 		CancelInformation:   *cancelCommand,
-		DocumentType:        stateModel.CancelCommand,
+		DocumentType:        documentType,
 	}
 }
 

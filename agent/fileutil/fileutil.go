@@ -170,6 +170,20 @@ func MoveFile(filename, srcPath, dstPath string) (result bool, err error) {
 	return
 }
 
+// RenameFile renames a file in its current location
+func RenameFile(folderPath, originalName, newName string) (result bool, err error) {
+	result = true
+	srcFile := filepath.Join(folderPath, originalName)
+	dstFile := filepath.Join(folderPath, newName)
+
+	err = fs.Rename(srcFile, dstFile)
+	if err != nil {
+		err = fmt.Errorf("unexpected error encountered while moving the file. Error details - %v", err)
+		result = false
+	}
+	return
+}
+
 // WriteIntoFileWithPermissions writes into file with given file mode permissions
 func WriteIntoFileWithPermissions(absolutePath, content string, perm os.FileMode) (result bool, err error) {
 	result = true

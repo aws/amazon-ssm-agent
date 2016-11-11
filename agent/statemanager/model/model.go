@@ -26,6 +26,10 @@ const (
 	CancelCommand DocumentType = "CancelComamnd"
 	// Association represents document type for association
 	Association DocumentType = "Association"
+	// SendCommandOffline represents document type for send command received from offline service
+	SendCommandOffline DocumentType = "SendCommandOffline"
+	// CancelCommandOffline represents document type for cancel command received from offline service
+	CancelCommandOffline DocumentType = "CancelComamndOffline"
 )
 
 // PluginState represents information stored as interim state for any plugin

@@ -51,10 +51,19 @@ const (
 	// CancelCommandTopicPrefix is the topic prefix for a cancel command MDS message.
 	CancelCommandTopicPrefix TopicPrefix = "aws.ssm.cancelCommand."
 
+	// SendCommandTopicPrefixOffline is the topic prefix for a send command MDS message received from the offline service.
+	SendCommandTopicPrefixOffline TopicPrefix = "aws.ssm.sendCommand.offline."
+
+	// CancelCommandTopicPrefix is the topic prefix for a cancel command MDS message received from the offline service.
+	CancelCommandTopicPrefixOffline TopicPrefix = "aws.ssm.cancelCommand.offline."
+
 	CancelWorkersLimit = 3
 
-	// name is the core plugin name
-	name = "MessageProcessor"
+	// mdsname is the core plugin name for the MDS processor
+	mdsName = "MessageProcessor"
+
+	// offlinename is the core plugin name for the offline command document processor
+	offlineName = "OfflineProcessor"
 
 	// pollMessageFrequencyMinutes is the frequency at which to resume poll for messages if the current thread dies due to stop policy
 	// note: the connection timeout for MDSPoll should be less than this.
@@ -77,6 +86,7 @@ type persistData func(state *model.DocumentState, bookkeeping string)
 // Processor is an object that can process MDS messages.
 type Processor struct {
 	context              context.T
+	name                 string
 	stopSignal           chan bool
 	config               contracts.AgentConfiguration
 	service              service.Service
@@ -91,6 +101,8 @@ type Processor struct {
 	messagePollJob       *scheduler.Job
 	assocProcessor       *processor.Processor
 	processorStopPolicy  *sdkutil.StopPolicy
+	pollAssociations     bool
+	supportedDocTypes    []model.DocumentType
 }
 
 // PluginRunner is a function that can run a set of plugins and return their outputs.
@@ -100,19 +112,39 @@ var pluginRunner = func(context context.T, documentID string, plugins []model.Pl
 	return engine.RunPlugins(context, documentID, "", plugins, plugin.RegisteredWorkerPlugins(context), sendResponse, nil, cancelFlag)
 }
 
-// NewProcessor initializes a new mds processor with the given parameters.
-func NewProcessor(context context.T) *Processor {
-	messageContext := context.With("[" + name + "]")
+// NewOfflineProcessor initialize a new offline command document processor
+func NewOfflineProcessor(context context.T) (*Processor, error) {
+	messageContext := context.With("[" + offlineName + "]")
 	log := messageContext.Log()
-	config := messageContext.AppConfig()
+
+	log.Debug("Creating offline command document service")
+	offlineService, err := newOfflineService(log)
+	if err != nil {
+		return nil, err
+	}
+
+	return NewProcessor(messageContext, offlineName, offlineService, 1, 1, false, []model.DocumentType{model.SendCommandOffline, model.CancelCommandOffline}), nil
+}
+
+// NewMdsProcessor initializes a new mds processor with the given parameters.
+func NewMdsProcessor(context context.T) *Processor {
+	messageContext := context.With("[" + mdsName + "]")
+	mdsService := newMdsService(context.AppConfig())
+	config := context.AppConfig()
+
+	return NewProcessor(messageContext, mdsName, mdsService, config.Mds.CommandWorkersLimit, CancelWorkersLimit, true, []model.DocumentType{model.SendCommand, model.CancelCommand})
+}
+
+// NewProcessor performs common initialization for Mds and Offline processors
+func NewProcessor(context context.T, processorName string, processorService service.Service, commandWorkerLimit int, cancelWorkerLimit int, pollAssoc bool, supportedDocs []model.DocumentType) *Processor {
+	log := context.Log()
+	config := context.AppConfig()
 
 	instanceID, err := platform.InstanceID()
 	if instanceID == "" {
 		log.Errorf("no instanceID provided, %v", err)
 		return nil
 	}
-
-	mdsService := newMdsService(config)
 
 	agentInfo := contracts.AgentInfo{
 		Lang:      config.Os.Lang,
@@ -131,7 +163,7 @@ func NewProcessor(context context.T) *Processor {
 	// so we can define the number of workers per each
 	cancelWaitDuration := 10000 * time.Millisecond
 	clock := times.DefaultClock
-	sendCommandTaskPool := task.NewPool(log, config.Mds.CommandWorkersLimit, cancelWaitDuration, clock)
+	sendCommandTaskPool := task.NewPool(log, commandWorkerLimit, cancelWaitDuration, clock)
 	cancelCommandTaskPool := task.NewPool(log, CancelWorkersLimit, cancelWaitDuration, clock)
 
 	// create new message processor
@@ -147,21 +179,21 @@ func NewProcessor(context context.T) *Processor {
 
 	}
 	// create a stop policy where we will stop after 10 consecutive errors and if time period expires.
-	processorStopPolicy := newStopPolicy()
+	processorStopPolicy := newStopPolicy(processorName)
 
 	// SendResponse is used to send response on plugin completion.
 	// If pluginID is empty it will send responses of all plugins.
 	// If pluginID is specified, response will be sent of that particular plugin.
 	sendResponse := func(messageID string, pluginID string, results map[string]*contracts.PluginResult) {
 		payloadDoc := replyBuilder(pluginID, results)
-		processSendReply(log, messageID, mdsService, payloadDoc, processorStopPolicy)
+		processSendReply(log, messageID, processorService, payloadDoc, processorStopPolicy)
 	}
 
 	// SendDocLevelResponse is used to send document level update
 	// Specify a new status of the document
 	sendDocLevelResponse := func(messageID string, resultStatus contracts.ResultStatus, documentTraceOutput string) {
 		payloadDoc := statusReplyBuilder(agentInfo, resultStatus, documentTraceOutput)
-		processSendReply(log, messageID, mdsService, payloadDoc, processorStopPolicy)
+		processSendReply(log, messageID, processorService, payloadDoc, processorStopPolicy)
 	}
 
 	// PersistData is used to persist the data into a bookkeeping folder
@@ -172,10 +204,11 @@ func NewProcessor(context context.T) *Processor {
 	assocProcessor := processor.NewAssociationProcessor(context, instanceID)
 
 	return &Processor{
-		context:              messageContext,
+		context:              context,
+		name:                 processorName,
 		stopSignal:           make(chan bool),
 		config:               agentConfig,
-		service:              mdsService,
+		service:              processorService,
 		pluginRunner:         pluginRunner,
 		sendCommandPool:      sendCommandTaskPool,
 		cancelCommandPool:    cancelCommandTaskPool,
@@ -186,6 +219,8 @@ func NewProcessor(context context.T) *Processor {
 		persistData:          persistData,
 		processorStopPolicy:  processorStopPolicy,
 		assocProcessor:       assocProcessor,
+		pollAssociations:     pollAssoc,
+		supportedDocTypes:    supportedDocs,
 	}
 }
 
@@ -202,6 +237,10 @@ func processSendReply(log log.T, messageID string, mdsService service.Service, p
 	}
 }
 
+var newOfflineService = func(log log.T) (service.Service, error) {
+	return service.NewOfflineService(log, string(SendCommandTopicPrefixOffline))
+}
+
 var newMdsService = func(config appconfig.SsmagentConfig) service.Service {
 	connectionTimeout := time.Duration(config.Mds.StopTimeoutMillis) * time.Millisecond
 
@@ -213,6 +252,6 @@ var newMdsService = func(config appconfig.SsmagentConfig) service.Service {
 	)
 }
 
-var newStopPolicy = func() *sdkutil.StopPolicy {
+var newStopPolicy = func(name string) *sdkutil.StopPolicy {
 	return sdkutil.NewStopPolicy(name, stopPolicyErrorThreshold)
 }

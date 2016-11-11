@@ -112,6 +112,7 @@ func ParseDocument(context context.T, documentRaw []byte, orchestrationDir strin
 	//initialize plugin states
 	pluginsInfo = make([]model.PluginState, 0, len(pluginConfigurations))
 
+	// TODO:MF: Use converter here if this was the 1.2 format (had runtimeconfig instead of mainsteps)
 	for _, value := range pluginConfigurations {
 		var plugin model.PluginState
 		plugin.Id = value.PluginID

@@ -32,6 +32,9 @@ const (
 	// DaemonRoot specifies the directory where daemon registration information is stored
 	DaemonRoot = "/var/lib/amazon/ssm/daemons"
 
+	// LocalCommandRoot specifies the directory where users can submit command documents offline
+	LocalCommandRoot = "/var/log/amazon/ssm/localcommands"
+
 	// DownloadRoot specifies the directory under which files will be downloaded
 	DownloadRoot = "/var/log/amazon/ssm/download/"
 

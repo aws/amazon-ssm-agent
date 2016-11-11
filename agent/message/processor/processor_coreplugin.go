@@ -37,7 +37,16 @@ import (
 
 // Name returns the Plugin Name
 func (p *Processor) Name() string {
-	return name
+	return p.name
+}
+
+func (p *Processor) isSupportedDocumentType(documentType model.DocumentType) bool {
+	for _, d := range p.supportedDocTypes {
+		if documentType == d {
+			return true
+		}
+	}
+	return false
 }
 
 // Execute starts the scheduling of the message processor plugin
@@ -61,18 +70,20 @@ func (p *Processor) Execute(context context.T) (err error) {
 		context.Log().Errorf("unable to schedule message processor. %v", err)
 	}
 
-	associationFrequenceMinutes := context.AppConfig().Ssm.AssociationFrequencyMinutes
-	log.Info("Starting association polling")
-	log.Debugf("Association polling frequencey is %v", associationFrequenceMinutes)
-	var job *scheduler.Job
-	if job, err = asocitscheduler.CreateScheduler(
-		log,
-		p.assocProcessor.ProcessAssociation,
-		associationFrequenceMinutes); err != nil {
-		context.Log().Errorf("unable to schedule association processor. %v", err)
+	if p.pollAssociations {
+		associationFrequenceMinutes := context.AppConfig().Ssm.AssociationFrequencyMinutes
+		log.Info("Starting association polling")
+		log.Debugf("Association polling frequencey is %v", associationFrequenceMinutes)
+		var job *scheduler.Job
+		if job, err = asocitscheduler.CreateScheduler(
+			log,
+			p.assocProcessor.ProcessAssociation,
+			associationFrequenceMinutes); err != nil {
+			context.Log().Errorf("unable to schedule association processor. %v", err)
+		}
+		p.assocProcessor.InitializeAssociationProcessor()
+		p.assocProcessor.SetPollJob(job)
 	}
-	p.assocProcessor.InitializeAssociationProcessor()
-	p.assocProcessor.SetPollJob(job)
 	return
 }
 
@@ -112,7 +123,8 @@ func (p *Processor) processPendingDocuments(instanceID string) {
 
 		if docState.IsAssociation() {
 			p.assocProcessor.ExecutePendingDocument(&docState)
-		} else {
+		} else if p.isSupportedDocumentType(docState.DocumentType) {
+			log.Debugf("processor %v processing pending document %v", p.name, docState.DocumentInformation.DocumentID)
 			p.ExecutePendingDocument(&docState)
 		}
 
@@ -185,22 +197,22 @@ func (p *Processor) processInProgressDocuments(instanceID string) {
 			}); err != nil {
 				log.Errorf("Association failed to resume previously unexecuted documents, %v", err)
 			}
-			return
-		}
-
-		//Submit the work to Job Pool so that we don't block for processing of new messages
-		err := p.sendCommandPool.Submit(log, docState.DocumentInformation.MessageID, func(cancelFlag task.CancelFlag) {
-			p.runCmdsUsingCmdState(p.context.With("[messageID="+docState.DocumentInformation.MessageID+"]"),
-				p.service,
-				p.pluginRunner,
-				cancelFlag,
-				p.buildReply,
-				p.sendResponse,
-				docState)
-		})
-		if err != nil {
-			log.Error("SendCommand failed for previously unexecuted commands", err)
-			break
+		} else if p.isSupportedDocumentType(docState.DocumentType) {
+			log.Debugf("processor %v processing in-progress document %v", p.name, docState.DocumentInformation.DocumentID)
+			//Submit the work to Job Pool so that we don't block for processing of new messages
+			err := p.sendCommandPool.Submit(log, docState.DocumentInformation.MessageID, func(cancelFlag task.CancelFlag) {
+				p.runCmdsUsingCmdState(p.context.With("[messageID="+docState.DocumentInformation.MessageID+"]"),
+					p.service,
+					p.pluginRunner,
+					cancelFlag,
+					p.buildReply,
+					p.sendResponse,
+					docState)
+			})
+			if err != nil {
+				log.Error("SendCommand failed for previously unexecuted commands", err)
+				break
+			}
 		}
 	}
 }

@@ -182,7 +182,7 @@ func (p *Processor) ExecutePendingDocument(docState *model.DocumentState) {
 		appconfig.DefaultLocationOfCurrent)
 
 	switch docState.DocumentType {
-	case model.SendCommand:
+	case model.SendCommand, model.SendCommandOffline:
 		err := p.sendCommandPool.Submit(log, docState.DocumentInformation.MessageID, func(cancelFlag task.CancelFlag) {
 			p.processSendCommandMessage(
 				p.context,
@@ -199,7 +199,7 @@ func (p *Processor) ExecutePendingDocument(docState *model.DocumentState) {
 			return
 		}
 
-	case model.CancelCommand:
+	case model.CancelCommand, model.CancelCommandOffline:
 		err := p.cancelCommandPool.Submit(log, docState.DocumentInformation.MessageID, func(cancelFlag task.CancelFlag) {
 			p.processCancelCommandMessage(p.context, p.service, p.sendCommandPool, docState)
 		})

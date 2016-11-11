@@ -41,7 +41,14 @@ func RegisteredCorePlugins(context context.T) *PluginRegistry {
 // register core plugins here
 func loadCorePlugins(context context.T) {
 	registeredCorePlugins = append(registeredCorePlugins, health.NewHealthCheck(context))
-	registeredCorePlugins = append(registeredCorePlugins, message.NewProcessor(context))
+	registeredCorePlugins = append(registeredCorePlugins, message.NewMdsProcessor(context))
+
+	if offlineProcessor, err := message.NewOfflineProcessor(context); err == nil {
+		registeredCorePlugins = append(registeredCorePlugins, offlineProcessor)
+	} else {
+		context.Log().Errorf("Failed to start offline command document processor")
+	}
+
 	registeredCorePlugins = append(registeredCorePlugins, startup.NewProcessor(context))
 
 	if basicInventoryPlugin, err := basicInventory.NewBasicInventoryProvider(context); err != nil {
