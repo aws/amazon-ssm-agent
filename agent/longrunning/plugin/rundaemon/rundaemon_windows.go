@@ -76,6 +76,14 @@ type Plugin struct {
 // Successive Daemon Restarts should be atleast 60sec apart
 const MinWaitBetweenRetries = 60 * time.Second
 
+// MaxThresholdToResetRetryCounter 5 hours
+// If the daemon process exits happens after this specified threshold, then
+// the Retrycount is set back to 0.
+const MaxTimeThresholdToResetRetryCounter = 18000 * time.Second
+
+// MaxRetryCountDuringFailures
+const MaxRetryCountDuringFailures = 10
+
 // BlockWhileDaemonRunning checks if the process with the given process id is still running
 // The function will block and the context swapped out while the underlying process is still running.
 func BlockWhileDaemonRunning(context context.T, pid int) error {
@@ -168,6 +176,7 @@ func StartDaemonHelper(p *Plugin, context context.T, configuration string) (err 
 // Starts a given executable or a specified powershell script and enables daemon functionality
 func StartDaemon(p *Plugin, context context.T, configuration string) (err error) {
 	log := context.Log()
+	RetryCount := 0
 	// Bail out if an explicit Stop daemon is requested by the user
 	if p.stopRequested() {
 		log.Infof("Daemon requested to be stopped: %v", configuration)
@@ -202,11 +211,20 @@ func StartDaemon(p *Plugin, context context.T, configuration string) (err error)
 
 		// Setting the time between successive daemon restarts to be atleast 60 seconds
 		end := time.Now()
-		elapsedMilliSecs := end.Sub(start)
-		MinWaitMilliSecs := MinWaitBetweenRetries
-		if elapsedMilliSecs < MinWaitMilliSecs {
-			log.Infof("Waiting %v milliseconds to start %s again", MinWaitMilliSecs-elapsedMilliSecs, p.Name)
-			time.Sleep(MinWaitMilliSecs - elapsedMilliSecs)
+		elapsedSecs := end.Sub(start)
+		MinWaitSecs := MinWaitBetweenRetries
+		MaxTimeToResetRetryCount := MaxTimeThresholdToResetRetryCounter
+		if elapsedSecs < MinWaitSecs {
+			RetryCount++
+			if RetryCount > MaxRetryCountDuringFailures {
+				log.Infof("Daemon %v process exited for %v times within the minimum threshold time window from its startup. Bailing out.", p.Name, RetryCount)
+				return
+			}
+			log.Infof("Waiting %v seconds to start %s again", MinWaitSecs-elapsedSecs, p.Name)
+			time.Sleep(MinWaitSecs - elapsedSecs)
+		} else if elapsedSecs > MaxTimeToResetRetryCount {
+			log.Infof("Setting retrycount for %s daemon back to 0", p.Name)
+			RetryCount = 0
 		}
 	}
 }
