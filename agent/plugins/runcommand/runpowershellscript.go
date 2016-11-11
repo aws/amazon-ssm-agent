@@ -16,8 +16,6 @@
 package runcommand
 
 import (
-	"os"
-	"path/filepath"
 	"strings"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
@@ -26,13 +24,6 @@ import (
 
 // powerShellScriptName is the script name where all downloaded or provided commands will be stored
 var powerShellScriptName = "_script.ps1"
-
-// powerShellArgs specifies the default arguments that we pass to powershell
-// Use Unrestricted as Execution Policy for running the script.
-// https://technet.microsoft.com/en-us/library/hh847748.aspx
-var powerShellArgs = "-InputFormat None -Noninteractive -NoProfile -ExecutionPolicy unrestricted -f"
-
-var powerShellCommand = filepath.Join(os.Getenv("SystemRoot"), "System32", "WindowsPowerShell", "v1.0", "powershell.exe")
 
 // PSPlugin is the type for the RunPowerShellScript plugin and embeds Plugin struct.
 type runPowerShellPlugin struct {
@@ -45,8 +36,8 @@ func NewRunPowerShellPlugin(pluginConfig pluginutil.PluginConfig) (*runPowerShel
 		Plugin{
 			Name:                 appconfig.PluginNameAwsRunPowerShellScript,
 			RunCommandScriptName: powerShellScriptName,
-			ShellCommand:         powerShellCommand,
-			ShellArguments:       strings.Split(powerShellArgs, " "),
+			ShellCommand:         appconfig.PowerShellPluginCommandName,
+			ShellArguments:       strings.Split(appconfig.PowerShellPluginCommandArgs, " "),
 		},
 	}
 

@@ -18,7 +18,10 @@ package executers
 import (
 	"os"
 	"os/exec"
+	"strings"
 	"syscall"
+
+	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 )
 
 func prepareProcess(command *exec.Cmd) {
@@ -38,4 +41,26 @@ func killProcess(process *os.Process, signal *timeoutSignal) error {
 	//   the kill here not just kills the shell but all its descendant
 	//   processes. [See manpage for kill(2)]
 	return syscall.Kill(-process.Pid, syscall.SIGKILL) // note the minus sign
+}
+
+// Running powershell on linux erquired the HOME env variable to be set and to remove the TERM env variable
+func validateEnvironmentVariables(command *exec.Cmd) {
+
+	if command.Path == appconfig.PowerShellPluginCommandName {
+		env := command.Env
+		env = append(env, fmtEnvVariable("HOME", "/"))
+		i := 0
+		for _, a := range env {
+			if strings.Contains(a, "TERM") {
+				if i == len(env)-1 {
+					env = env[:i]
+				} else {
+					env = append(env[:i], env[i+1:]...)
+				}
+				break
+			}
+			i += 1
+		}
+		command.Env = env
+	}
 }

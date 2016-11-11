@@ -47,7 +47,13 @@ const (
 
 	// PackagePlatform is the platform name to use when looking for packages
 	PackagePlatform = "windows"
+
+	//PowerShellPluginCommandArgs is the arguments of powershell.exe to be used by the runPowerShellScript plugin
+	PowerShellPluginCommandArgs = "-InputFormat None -Noninteractive -NoProfile -ExecutionPolicy unrestricted -f"
 )
+
+//PowerShellPluginCommandName is the path of the powershell.exe to be used by the runPowerShellScript plugin
+var PowerShellPluginCommandName = filepath.Join(os.Getenv("SystemRoot"), "System32", "WindowsPowerShell", "v1.0", "powershell.exe")
 
 // Program Folder
 var DefaultProgramFolder string

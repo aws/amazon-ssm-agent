@@ -30,3 +30,7 @@ func killProcess(process *os.Process, signal *timeoutSignal) error {
 	signal.execInterruptedOnWindows = true
 	return process.Kill()
 }
+
+// Running powershell on linux erquired the HOME env variable to be set and to remove the TERM env variable
+func validateEnvironmentVariables(command *exec.Cmd) {
+}

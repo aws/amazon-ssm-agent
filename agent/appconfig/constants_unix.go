@@ -57,4 +57,10 @@ const (
 
 	// Default Custom Inventory Inventory Folder
 	DefaultCustomInventoryFolder = DefaultDataStorePath + "inventory/custom"
+
+	//PowerShellPluginCommandName is the path of the powershell.exe to be used by the runPowerShellScript plugin
+	PowerShellPluginCommandName = "/usr/bin/powershell"
+
+	//PowerShellPluginCommandArgs is the arguments of powershell.exe to be used by the runPowerShellScript plugin
+	PowerShellPluginCommandArgs = ""
 )

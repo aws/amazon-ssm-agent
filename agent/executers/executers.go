@@ -474,6 +474,9 @@ func prepareEnvironment(command *exec.Cmd) {
 		env = append(env, fmtEnvVariable(envVarRegionName, region))
 	}
 	command.Env = env
+
+	// Running powershell on linux erquired the HOME env variable to be set and to remove the TERM env variable
+	validateEnvironmentVariables(command)
 }
 
 // fmtEnvVariable creates the string to append to the current set of environment variables.
