@@ -137,13 +137,16 @@ func fullyQualifiedDomainName() string {
 	var contentBytes []byte
 	if contentBytes, err = exec.Command(hostNameCommand, "--fqdn").Output(); err == nil {
 		fqdn = string(contentBytes)
+		//trim whitespaces - since by default above command appends '\n' at the end.
+		//e.g: 'ip-172-31-7-113.ec2.internal\n'
+		fqdn = strings.TrimSpace(fqdn)
 	}
 
 	if fqdn != "" {
 		return fqdn
 	}
 
-	return hostName
+	return strings.TrimSpace(hostName)
 }
 
 func isPlatformNanoServer(log log.T) (bool, error) {
