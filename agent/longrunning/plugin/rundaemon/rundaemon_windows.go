@@ -196,7 +196,7 @@ func StartDaemon(p *Plugin, context context.T, configuration string) (err error)
 		}
 		// Invoke the helper function to start daermo
 		err = StartDaemonHelperExecutor(p, context, configuration)
-		if err != nil {
+		if err == nil {
 			log.Infof("Started Daemon...")
 		}
 

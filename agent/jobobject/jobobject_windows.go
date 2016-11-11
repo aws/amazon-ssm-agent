@@ -137,8 +137,6 @@ func AttachProcessToJobObject(Pid uint32) (err error) {
 // The init function is automatically invoked prior to main function being invoked.
 func init() {
 	log := logger.Logger()
-	defer log.Close()
-	defer log.Flush()
 
 	var err error
 	SSMjobObject, err = createJobObject(nil, nil)
