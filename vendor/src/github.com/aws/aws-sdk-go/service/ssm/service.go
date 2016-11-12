@@ -23,20 +23,18 @@ import (
 // or Windows (http://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/execute-remote-commands.html).
 //
 //  You must register your on-premises servers and VMs through an activation
-// process before you can configure them using Run Command. Registered servers
-// and VMs are called managed instances. For more information, see Setting Up
-// Run Command On Managed Instances (On-Premises Servers and VMs) on Linux (http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/managed-instances.html)
-// or Setting Up Run Command On Managed Instances (On-Premises Servers and VMs)
-// on Windows (http://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/managed-instances.html).
+// process before you can configure them using Run Command. For more information,
+// see Setting Up Run Command in Hybrid Environments on Linux (http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/managed-instances.html)
+// or Setting Up Run Command in Hybrid Environments on Windows (http://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/managed-instances.html).
 //
 //   Run Command
 //
 // Run Command provides an on-demand experience for executing commands. You
 // can use pre-defined SSM documents to perform the actions listed later in
 // this section, or you can create your own documents. With these documents,
-// you can remotely configure your instances by sending commands using the Commands
-// page in the Amazon EC2 console (http://console.aws.amazon.com/ec2/), AWS
-// Tools for Windows PowerShell (http://docs.aws.amazon.com/powershell/latest/reference/items/Amazon_Simple_Systems_Management_cmdlets.html),
+// you can remotely configure your instances by sending commands using the Command
+// History page in the Amazon EC2 console (http://console.aws.amazon.com/ec2/),
+// AWS Tools for Windows PowerShell (http://docs.aws.amazon.com/powershell/latest/reference/items/Amazon_Simple_Systems_Management_cmdlets.html),
 // the AWS CLI (http://docs.aws.amazon.com/cli/latest/reference/ssm/index.html),
 // or AWS SDKs.
 //
@@ -53,17 +51,14 @@ import (
 //
 // SSM Config is a lightweight instance configuration solution. SSM Config
 // is currently only available for Windows instances. With SSM Config, you can
-// specify a setup configuration for your instances. SSM Config is similar to
-// EC2 User Data, which is another way of running one-time scripts or applying
-// settings during instance launch. SSM Config is an extension of this capability.
-// Using SSM documents, you can specify which actions the system should perform
-// on your instances, including which applications to install, which AWS Directory
-// Service directory to join, which Microsoft PowerShell modules to install,
-// etc. If an instance is missing one or more of these configurations, the system
-// makes those changes. By default, the system checks every five minutes to
-// see if there is a new configuration to apply as defined in a new SSM document.
-// If so, the system updates the instances accordingly. In this way, you can
-// remotely maintain a consistent configuration baseline on your instances.
+// specify a setup configuration for your instances. Using SSM documents, you
+// can specify which actions the system should perform on your instances, including
+// which applications to install, which AWS Directory Service directory to join,
+// which Microsoft PowerShell modules to install, etc. If an instance is missing
+// one or more of these configurations, the system makes those changes. By default,
+// the system checks every five minutes to see if there is a new configuration
+// to apply. If so, the system updates the instances accordingly. In this way,
+// you can remotely maintain a consistent configuration baseline on your instances.
 // SSM Config is available using the AWS CLI or the AWS Tools for Windows PowerShell.
 // For more information, see Managing Windows Instance Configuration (http://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/ec2-configuration-manage.html).
 //

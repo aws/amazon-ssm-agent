@@ -283,12 +283,12 @@ func ExampleSSM_CreatePatchBaseline() {
 
 	params := &ssm.CreatePatchBaselineInput{
 		Name: aws.String("BaselineName"), // Required
-		ApprovalRules: &ssm.RuleGroup{
-			RuleList: []*ssm.Rule{ // Required
+		ApprovalRules: &ssm.PatchRuleGroup{
+			PatchRules: []*ssm.PatchRule{ // Required
 				{ // Required
 					ApproveAfterDays: aws.Int64(1), // Required
-					FilterGroup: &ssm.FilterGroup{ // Required
-						FilterList: []*ssm.PatchFilter{ // Required
+					PatchFilterGroup: &ssm.PatchFilterGroup{ // Required
+						PatchFilters: []*ssm.PatchFilter{ // Required
 							{ // Required
 								Key: aws.String("PatchFilterKey"), // Required
 								Values: []*string{ // Required
@@ -309,8 +309,8 @@ func ExampleSSM_CreatePatchBaseline() {
 		},
 		ClientToken: aws.String("ClientToken"),
 		Description: aws.String("BaselineDescription"),
-		GlobalFilters: &ssm.FilterGroup{
-			FilterList: []*ssm.PatchFilter{ // Required
+		GlobalFilters: &ssm.PatchFilterGroup{
+			PatchFilters: []*ssm.PatchFilter{ // Required
 				{ // Required
 					Key: aws.String("PatchFilterKey"), // Required
 					Values: []*string{ // Required
@@ -726,17 +726,15 @@ func ExampleSSM_DescribeAvailablePatches() {
 	svc := ssm.New(sess)
 
 	params := &ssm.DescribeAvailablePatchesInput{
-		FilterGroup: &ssm.FilterGroup{
-			FilterList: []*ssm.PatchFilter{ // Required
-				{ // Required
-					Key: aws.String("PatchFilterKey"), // Required
-					Values: []*string{ // Required
-						aws.String("PatchFilterValue"), // Required
-						// More values...
-					},
+		Filters: []*ssm.PatchOrchestratorFilter{
+			{ // Required
+				Key: aws.String("PatchOrchestratorFilterKey"),
+				Values: []*string{
+					aws.String("PatchOrchestratorFilterValue"), // Required
+					// More values...
 				},
-				// More values...
 			},
+			// More values...
 		},
 		MaxResults: aws.Int64(1),
 		NextToken:  aws.String("NextToken"),
@@ -1893,7 +1891,10 @@ func ExampleSSM_GetParameterHistory() {
 	svc := ssm.New(sess)
 
 	params := &ssm.GetParameterHistoryInput{
-		Name: aws.String("PSParameterName"), // Required
+		Name:           aws.String("PSParameterName"), // Required
+		MaxResults:     aws.Int64(1),
+		NextToken:      aws.String("NextToken"),
+		WithDecryption: aws.Bool(true),
 	}
 	resp, err := svc.GetParameterHistory(params)
 
@@ -1919,7 +1920,7 @@ func ExampleSSM_GetParameters() {
 
 	params := &ssm.GetParametersInput{
 		Names: []*string{ // Required
-			aws.String("ParameterName"), // Required
+			aws.String("PSParameterName"), // Required
 			// More values...
 		},
 		WithDecryption: aws.Bool(true),
@@ -2333,6 +2334,7 @@ func ExampleSSM_PutParameter() {
 		Value:       aws.String("PSParameterValue"), // Required
 		Description: aws.String("ParameterDescription"),
 		KeyId:       aws.String("ParameterKeyId"),
+		Overwrite:   aws.Bool(true),
 	}
 	resp, err := svc.PutParameter(params)
 
@@ -2437,14 +2439,15 @@ func ExampleSSM_RegisterTargetWithMaintenanceWindow() {
 	svc := ssm.New(sess)
 
 	params := &ssm.RegisterTargetWithMaintenanceWindowInput{
-		WindowId:         aws.String("MaintenanceWindowId"), // Required
+		TargetType:       aws.String("MaintenanceWindowTargetType"), // Required
+		WindowId:         aws.String("MaintenanceWindowId"),         // Required
 		ClientToken:      aws.String("ClientToken"),
 		OwnerInformation: aws.String("OwnerInformation"),
-		TagFilters: []*ssm.TagFilter{
+		TagFilters: []*ssm.Target{
 			{ // Required
-				Key: aws.String("TagFilterKey"),
+				Key: aws.String("TargetKey"),
 				Values: []*string{
-					aws.String("TagFilterValue"), // Required
+					aws.String("TargetValue"), // Required
 					// More values...
 				},
 			},
@@ -2454,7 +2457,6 @@ func ExampleSSM_RegisterTargetWithMaintenanceWindow() {
 			aws.String("MaintenanceWindowTargetResourceId"), // Required
 			// More values...
 		},
-		TargetType: aws.String("MaintenanceWindowTargetType"),
 	}
 	resp, err := svc.RegisterTargetWithMaintenanceWindow(params)
 
@@ -2479,26 +2481,26 @@ func ExampleSSM_RegisterTaskWithMaintenanceWindow() {
 	svc := ssm.New(sess)
 
 	params := &ssm.RegisterTaskWithMaintenanceWindowInput{
-		ServiceRoleArn: aws.String("ServiceRole"),               // Required
-		TaskArn:        aws.String("MaintenanceWindowTaskArn"),  // Required
-		Type:           aws.String("MaintenanceWindowTaskType"), // Required
-		WindowId:       aws.String("MaintenanceWindowId"),       // Required
-		ClientToken:    aws.String("ClientToken"),
-		LoggingInfo: &ssm.LoggingInfo{
-			S3BucketName: aws.String("S3BucketName"), // Required
-			S3Region:     aws.String("S3Region"),     // Required
-			S3KeyPrefix:  aws.String("S3KeyPrefix"),
-		},
-		MaxConcurrency: aws.String("VelocityConstraint"),
-		MaxErrors:      aws.String("VelocityConstraint"),
-		Priority:       aws.Int64(1),
-		Targets: []*ssm.MaintenanceWindowTaskTarget{
+		MaxConcurrency: aws.String("VelocityConstraint"), // Required
+		MaxErrors:      aws.String("VelocityConstraint"), // Required
+		ServiceRoleArn: aws.String("ServiceRole"),        // Required
+		Targets: []*ssm.MaintenanceWindowTaskTarget{ // Required
 			{ // Required
 				TaskTargetId:   aws.String("MaintenanceWindowTaskTargetId"),
 				TaskTargetType: aws.String("MaintenanceWindowTaskTargetType"),
 			},
 			// More values...
 		},
+		TaskArn:     aws.String("MaintenanceWindowTaskArn"),  // Required
+		TaskType:    aws.String("MaintenanceWindowTaskType"), // Required
+		WindowId:    aws.String("MaintenanceWindowId"),       // Required
+		ClientToken: aws.String("ClientToken"),
+		LoggingInfo: &ssm.LoggingInfo{
+			S3BucketName: aws.String("S3BucketName"), // Required
+			S3Region:     aws.String("S3Region"),     // Required
+			S3KeyPrefix:  aws.String("S3KeyPrefix"),
+		},
+		Priority: aws.Int64(1),
 		TaskParameters: map[string]*ssm.MaintenanceWindowTaskParameterValueExpression{
 			"Key": { // Required
 				Values: []*string{
@@ -3018,12 +3020,12 @@ func ExampleSSM_UpdatePatchBaseline() {
 
 	params := &ssm.UpdatePatchBaselineInput{
 		BaselineId: aws.String("BaselineId"), // Required
-		ApprovalRules: &ssm.RuleGroup{
-			RuleList: []*ssm.Rule{ // Required
+		ApprovalRules: &ssm.PatchRuleGroup{
+			PatchRules: []*ssm.PatchRule{ // Required
 				{ // Required
 					ApproveAfterDays: aws.Int64(1), // Required
-					FilterGroup: &ssm.FilterGroup{ // Required
-						FilterList: []*ssm.PatchFilter{ // Required
+					PatchFilterGroup: &ssm.PatchFilterGroup{ // Required
+						PatchFilters: []*ssm.PatchFilter{ // Required
 							{ // Required
 								Key: aws.String("PatchFilterKey"), // Required
 								Values: []*string{ // Required
@@ -3043,8 +3045,8 @@ func ExampleSSM_UpdatePatchBaseline() {
 			// More values...
 		},
 		Description: aws.String("BaselineDescription"),
-		GlobalFilters: &ssm.FilterGroup{
-			FilterList: []*ssm.PatchFilter{ // Required
+		GlobalFilters: &ssm.PatchFilterGroup{
+			PatchFilters: []*ssm.PatchFilter{ // Required
 				{ // Required
 					Key: aws.String("PatchFilterKey"), // Required
 					Values: []*string{ // Required

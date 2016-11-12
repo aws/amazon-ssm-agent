@@ -6,7 +6,7 @@
     "jsonVersion":"1.1",
     "protocol":"json",
     "serviceAbbreviation":"Amazon SSM",
-    "serviceFullName":"Amazon Simple Systems Management Service",
+    "serviceFullName":"Amazon Simple Systems Manager (SSM)",
     "signatureVersion":"v4",
     "targetPrefix":"AmazonSSM"
   },
@@ -123,6 +123,7 @@
       "input":{"shape":"CreateMaintenanceWindowRequest"},
       "output":{"shape":"CreateMaintenanceWindowResult"},
       "errors":[
+        {"shape":"IdempotentParameterMismatch"},
         {"shape":"ResourceLimitExceededException"},
         {"shape":"InternalServerError"}
       ]
@@ -136,6 +137,7 @@
       "input":{"shape":"CreatePatchBaselineRequest"},
       "output":{"shape":"CreatePatchBaselineResult"},
       "errors":[
+        {"shape":"IdempotentParameterMismatch"},
         {"shape":"ResourceLimitExceededException"},
         {"shape":"InternalServerError"}
       ]
@@ -501,7 +503,11 @@
         "requestUri":"/"
       },
       "input":{"shape":"DescribeInstancePatchStatesRequest"},
-      "output":{"shape":"DescribeInstancePatchStatesResult"}
+      "output":{"shape":"DescribeInstancePatchStatesResult"},
+      "errors":[
+        {"shape":"InternalServerError"},
+        {"shape":"InvalidNextToken"}
+      ]
     },
     "DescribeInstancePatchStatesForPatchGroup":{
       "name":"DescribeInstancePatchStatesForPatchGroup",
@@ -510,7 +516,12 @@
         "requestUri":"/"
       },
       "input":{"shape":"DescribeInstancePatchStatesForPatchGroupRequest"},
-      "output":{"shape":"DescribeInstancePatchStatesForPatchGroupResult"}
+      "output":{"shape":"DescribeInstancePatchStatesForPatchGroupResult"},
+      "errors":[
+        {"shape":"InternalServerError"},
+        {"shape":"InvalidFilter"},
+        {"shape":"InvalidNextToken"}
+      ]
     },
     "DescribeInstancePatches":{
       "name":"DescribeInstancePatches",
@@ -519,7 +530,13 @@
         "requestUri":"/"
       },
       "input":{"shape":"DescribeInstancePatchesRequest"},
-      "output":{"shape":"DescribeInstancePatchesResult"}
+      "output":{"shape":"DescribeInstancePatchesResult"},
+      "errors":[
+        {"shape":"InternalServerError"},
+        {"shape":"InvalidInstanceId"},
+        {"shape":"InvalidFilter"},
+        {"shape":"InvalidNextToken"}
+      ]
     },
     "DescribeInstanceProperties":{
       "name":"DescribeInstanceProperties",
@@ -645,7 +662,11 @@
         "requestUri":"/"
       },
       "input":{"shape":"DescribePatchGroupStateRequest"},
-      "output":{"shape":"DescribePatchGroupStateResult"}
+      "output":{"shape":"DescribePatchGroupStateResult"},
+      "errors":[
+        {"shape":"InternalServerError"},
+        {"shape":"InvalidNextToken"}
+      ]
     },
     "DescribePatchGroups":{
       "name":"DescribePatchGroups",
@@ -697,7 +718,8 @@
         {"shape":"InternalServerError"},
         {"shape":"InvalidCommandId"},
         {"shape":"InvalidInstanceId"},
-        {"shape":"InvalidPluginName"}
+        {"shape":"InvalidPluginName"},
+        {"shape":"InvocationDoesNotExist"}
       ]
     },
     "GetDefaultPatchBaseline":{
@@ -831,7 +853,8 @@
       "output":{"shape":"GetParameterHistoryResult"},
       "errors":[
         {"shape":"InternalServerError"},
-        {"shape":"ParameterNotFound"}
+        {"shape":"ParameterNotFound"},
+        {"shape":"InvalidNextToken"}
       ]
     },
     "GetParameters":{
@@ -843,8 +866,7 @@
       "input":{"shape":"GetParametersRequest"},
       "output":{"shape":"GetParametersResult"},
       "errors":[
-        {"shape":"InternalServerError"},
-        {"shape":"ParameterNotFound"}
+        {"shape":"InternalServerError"}
       ]
     },
     "GetPatchBaseline":{
@@ -1021,7 +1043,8 @@
         {"shape":"TotalSizeLimitExceededException"},
         {"shape":"ItemSizeLimitExceededException"},
         {"shape":"ItemContentMismatchException"},
-        {"shape":"CustomSchemaCountLimitExceededException"}
+        {"shape":"CustomSchemaCountLimitExceededException"},
+        {"shape":"UnsupportedInventorySchemaVersionException"}
       ]
     },
     "PutParameter":{
@@ -1035,7 +1058,8 @@
       "errors":[
         {"shape":"InternalServerError"},
         {"shape":"InvalidKeyId"},
-        {"shape":"ParameterLimitExceeded"}
+        {"shape":"ParameterLimitExceeded"},
+        {"shape":"ParameterAlreadyExists"}
       ]
     },
     "RegisterDefaultPatchBaseline":{
@@ -1090,6 +1114,7 @@
       "input":{"shape":"RegisterTargetWithMaintenanceWindowRequest"},
       "output":{"shape":"RegisterTargetWithMaintenanceWindowResult"},
       "errors":[
+        {"shape":"IdempotentParameterMismatch"},
         {"shape":"DoesNotExistException"},
         {"shape":"InternalServerError"}
       ]
@@ -1103,6 +1128,7 @@
       "input":{"shape":"RegisterTaskWithMaintenanceWindowRequest"},
       "output":{"shape":"RegisterTaskWithMaintenanceWindowResult"},
       "errors":[
+        {"shape":"IdempotentParameterMismatch"},
         {"shape":"DoesNotExistException"},
         {"shape":"InternalServerError"}
       ]
@@ -1165,7 +1191,8 @@
       "input":{"shape":"StartAssociationsOnceRequest"},
       "output":{"shape":"StartAssociationsOnceResult"},
       "errors":[
-        {"shape":"InvalidAssociation"}
+        {"shape":"InvalidAssociation"},
+        {"shape":"AssociationDoesNotExist"}
       ]
     },
     "StartAutomationExecution":{
@@ -1209,7 +1236,7 @@
         {"shape":"InternalServerError"},
         {"shape":"InvalidSchedule"},
         {"shape":"InvalidParameters"},
-        {"shape":"InvalidOutputFolder"},
+        {"shape":"InvalidOutputLocation"},
         {"shape":"InvalidDocumentVersion"},
         {"shape":"AssociationDoesNotExist"},
         {"shape":"InvalidUpdate"},
@@ -1423,6 +1450,11 @@
       "type":"string",
       "max":32
     },
+    "AgentName":{
+      "type":"string",
+      "max":32,
+      "min":1
+    },
     "AgentStatus":{
       "type":"string",
       "max":100,
@@ -1459,7 +1491,6 @@
         "DocumentVersion":{"shape":"DocumentVersion"},
         "Targets":{"shape":"Targets"},
         "LastExecutionDate":{"shape":"DateTime"},
-        "Status":{"shape":"AssociationStatusName"},
         "Overview":{"shape":"AssociationOverview"},
         "ScheduleExpression":{"shape":"ScheduleExpression"}
       }
@@ -1477,7 +1508,6 @@
         "Name":{"shape":"DocumentName"},
         "InstanceId":{"shape":"InstanceId"},
         "Date":{"shape":"DateTime"},
-        "ExecutionDate":{"shape":"DateTime"},
         "LastUpdateAssociationDate":{"shape":"DateTime"},
         "Status":{"shape":"AssociationStatus"},
         "Overview":{"shape":"AssociationOverview"},
@@ -1522,7 +1552,6 @@
         "InstanceId",
         "Name",
         "AssociationId",
-        "Targets",
         "AssociationStatusName",
         "LastExecutedBefore",
         "LastExecutedAfter"
@@ -1813,17 +1842,6 @@
       "max":128,
       "min":20,
       "pattern":"^[a-zA-Z0-9_\\-:/]{20,128}$"
-    },
-    "BaselineIdentity":{
-      "type":"structure",
-      "members":{
-        "BaselineId":{"shape":"BaselineId"},
-        "BaselineName":{"shape":"BaselineName"}
-      }
-    },
-    "BaselineIdentityList":{
-      "type":"list",
-      "member":{"shape":"BaselineIdentity"}
     },
     "BaselineName":{
       "type":"string",
@@ -2146,8 +2164,8 @@
       "required":["Name"],
       "members":{
         "Name":{"shape":"BaselineName"},
-        "GlobalFilters":{"shape":"FilterGroup"},
-        "ApprovalRules":{"shape":"RuleGroup"},
+        "GlobalFilters":{"shape":"PatchFilterGroup"},
+        "ApprovalRules":{"shape":"PatchRuleGroup"},
         "ApprovedPatches":{"shape":"PatchIdList"},
         "RejectedPatches":{"shape":"PatchIdList"},
         "Description":{"shape":"BaselineDescription"},
@@ -2169,10 +2187,7 @@
       "exception":true
     },
     "DateTime":{"type":"timestamp"},
-    "DebugInfo":{
-      "type":"string",
-      "max":256
-    },
+    "DefaultBaseline":{"type":"boolean"},
     "DefaultInstanceName":{
       "type":"string",
       "max":256,
@@ -2411,7 +2426,7 @@
     "DescribeAvailablePatchesRequest":{
       "type":"structure",
       "members":{
-        "FilterGroup":{"shape":"FilterGroup"},
+        "Filters":{"shape":"PatchOrchestratorFilterList"},
         "MaxResults":{
           "shape":"PatchBaselineMaxResults",
           "box":true
@@ -2581,7 +2596,7 @@
     "DescribeInstanceAssociationsStatusResult":{
       "type":"structure",
       "members":{
-        "InstanceAssociationStatusInfosList":{"shape":"InstanceAssociationStatusInfosList"},
+        "InstanceAssociationStatusInfos":{"shape":"InstanceAssociationStatusInfos"},
         "NextToken":{"shape":"NextToken"}
       }
     },
@@ -2823,7 +2838,7 @@
     "DescribeParametersResult":{
       "type":"structure",
       "members":{
-        "Parameters":{"shape":"ParameterList"},
+        "Parameters":{"shape":"ParameterMetadataList"},
         "NextToken":{"shape":"NextToken"}
       }
     },
@@ -2841,7 +2856,7 @@
     "DescribePatchBaselinesResult":{
       "type":"structure",
       "members":{
-        "BaselineIdentities":{"shape":"BaselineIdentityList"},
+        "BaselineIdentities":{"shape":"PatchBaselineIdentityList"},
         "NextToken":{"shape":"NextToken"}
       }
     },
@@ -3055,8 +3070,8 @@
       "type":"string",
       "enum":[
         "Command",
-        "Association",
-        "Ec2Automation"
+        "Policy",
+        "Automation"
       ]
     },
     "DocumentVersion":{
@@ -3149,13 +3164,6 @@
         "Server",
         "Unknown"
       ]
-    },
-    "FilterGroup":{
-      "type":"structure",
-      "required":["FilterList"],
-      "members":{
-        "FilterList":{"shape":"PatchFilterList"}
-      }
     },
     "Fingerprint":{
       "type":"string",
@@ -3343,6 +3351,7 @@
         "WindowExecutionId":{"shape":"MaintenanceWindowExecutionId"},
         "TaskIds":{"shape":"MaintenanceWindowExecutionTaskIdList"},
         "Status":{"shape":"MaintenanceWindowExecutionStatus"},
+        "StatusDetails":{"shape":"MaintenanceWindowExecutionStatusDetails"},
         "StartTime":{"shape":"DateTime"},
         "EndTime":{"shape":"DateTime"}
       }
@@ -3371,6 +3380,7 @@
         "MaxConcurrency":{"shape":"VelocityConstraint"},
         "MaxErrors":{"shape":"VelocityConstraint"},
         "Status":{"shape":"MaintenanceWindowExecutionStatus"},
+        "StatusDetails":{"shape":"MaintenanceWindowExecutionStatusDetails"},
         "StartTime":{"shape":"DateTime"},
         "EndTime":{"shape":"DateTime"}
       }
@@ -3391,20 +3401,32 @@
         "Duration":{"shape":"MaintenanceWindowDurationHours"},
         "Cutoff":{"shape":"MaintenanceWindowCutoff"},
         "AllowUnassociatedTargets":{"shape":"MaintenanceWindowAllowUnassociatedTargets"},
-        "Enabled":{"shape":"MaintenanceWindowEnabled"}
+        "Enabled":{"shape":"MaintenanceWindowEnabled"},
+        "CreatedDate":{"shape":"DateTime"},
+        "ModifiedDate":{"shape":"DateTime"}
       }
     },
     "GetParameterHistoryRequest":{
       "type":"structure",
       "required":["Name"],
       "members":{
-        "Name":{"shape":"PSParameterName"}
+        "Name":{"shape":"PSParameterName"},
+        "WithDecryption":{
+          "shape":"Boolean",
+          "box":true
+        },
+        "MaxResults":{
+          "shape":"MaxResults",
+          "box":true
+        },
+        "NextToken":{"shape":"NextToken"}
       }
     },
     "GetParameterHistoryResult":{
       "type":"structure",
       "members":{
-        "Parameter":{"shape":"ParameterList"}
+        "Parameters":{"shape":"ParameterHistoryList"},
+        "NextToken":{"shape":"NextToken"}
       }
     },
     "GetParametersRequest":{
@@ -3451,8 +3473,8 @@
       "members":{
         "BaselineId":{"shape":"BaselineId"},
         "Name":{"shape":"BaselineName"},
-        "GlobalFilters":{"shape":"FilterGroup"},
-        "ApprovalRules":{"shape":"RuleGroup"},
+        "GlobalFilters":{"shape":"PatchFilterGroup"},
+        "ApprovalRules":{"shape":"PatchRuleGroup"},
         "ApprovedPatches":{"shape":"PatchIdList"},
         "RejectedPatches":{"shape":"PatchIdList"},
         "CreatedDate":{"shape":"DateTime"},
@@ -3468,6 +3490,13 @@
     "IamRole":{
       "type":"string",
       "max":64
+    },
+    "IdempotentParameterMismatch":{
+      "type":"structure",
+      "members":{
+        "Message":{"shape":"String"}
+      },
+      "exception":true
     },
     "InstanceAggregatedAssociationOverview":{
       "type":"structure",
@@ -3496,14 +3525,13 @@
         "Status":{"shape":"InstanceAssociationExecutionStatusName"},
         "ExecutionSummary":{"shape":"InstanceAssociationExecutionSummary"},
         "ErrorCode":{"shape":"AgentErrorCode"},
-        "DebugInfo":{"shape":"DebugInfo"},
         "OutputUrl":{"shape":"InstanceAssociationOutputUrl"}
       }
     },
     "InstanceAssociationExecutionStatusName":{"type":"string"},
     "InstanceAssociationExecutionSummary":{
       "type":"string",
-      "max":256,
+      "max":512,
       "min":1
     },
     "InstanceAssociationList":{
@@ -3536,13 +3564,13 @@
         "InstanceId":{"shape":"InstanceId"},
         "ExecutionDate":{"shape":"DateTime"},
         "Status":{"shape":"StatusName"},
+        "DetailedStatus":{"shape":"StatusName"},
         "ExecutionSummary":{"shape":"InstanceAssociationExecutionSummary"},
         "ErrorCode":{"shape":"AgentErrorCode"},
-        "DebugInfo":{"shape":"DebugInfo"},
         "OutputUrl":{"shape":"InstanceAssociationOutputUrl"}
       }
     },
-    "InstanceAssociationStatusInfosList":{
+    "InstanceAssociationStatusInfos":{
       "type":"list",
       "member":{"shape":"InstanceAssociationStatusInfo"}
     },
@@ -3557,7 +3585,8 @@
         "Targets":{"shape":"Targets"},
         "ScheduleExpression":{"shape":"ScheduleExpression"},
         "OutputLocation":{"shape":"InstanceAssociationOutputLocation"},
-        "Checksum":{"shape":"Checksum"}
+        "Checksum":{"shape":"Checksum"},
+        "LastExecutionDate":{"shape":"DateTime"}
       }
     },
     "InstanceAssociationSummaryList":{
@@ -3701,13 +3730,15 @@
         "InstanceId":{"shape":"InstanceId"},
         "PatchGroup":{"shape":"PatchGroup"},
         "PatchBaselineId":{"shape":"BaselineId"},
+        "SnapshotId":{"shape":"SnapshotId"},
+        "OwnerInformation":{"shape":"OwnerInformation"},
         "InstalledCount":{"shape":"PatchInstalledCount"},
         "InstalledOtherCount":{"shape":"PatchInstalledOtherCount"},
         "MissingCount":{"shape":"PatchMissingCount"},
         "FailedCount":{"shape":"PatchFailedCount"},
         "NotApplicableCount":{"shape":"PatchNotApplicableCount"},
-        "OperationStartTime":{"shape":"DateTime"},
-        "OperationEndTime":{"shape":"DateTime"},
+        "OperationStartTime":{"shape":"PatchOperationStartTime"},
+        "OperationEndTime":{"shape":"PatchOperationEndTime"},
         "Operation":{"shape":"PatchOperationType"}
       }
     },
@@ -3731,7 +3762,9 @@
     },
     "InstancePatchStateFilterList":{
       "type":"list",
-      "member":{"shape":"InstancePatchStateFilter"}
+      "member":{"shape":"InstancePatchStateFilter"},
+      "max":4,
+      "min":0
     },
     "InstancePatchStateFilterValue":{"type":"string"},
     "InstancePatchStateFilterValues":{
@@ -4231,7 +4264,7 @@
     "InventoryItemEntryList":{
       "type":"list",
       "member":{"shape":"InventoryItemEntry"},
-      "max":1000,
+      "max":10000,
       "min":0
     },
     "InventoryItemList":{
@@ -4267,7 +4300,7 @@
       "type":"string",
       "max":100,
       "min":1,
-      "pattern":"^(AWS|CUSTOM):.*$"
+      "pattern":"^(AWS|Custom):.*$"
     },
     "InventoryItemTypeNameFilter":{
       "type":"string",
@@ -4319,6 +4352,12 @@
       "type":"map",
       "key":{"shape":"InventoryResultItemKey"},
       "value":{"shape":"InventoryResultItem"}
+    },
+    "InvocationDoesNotExist":{
+      "type":"structure",
+      "members":{
+      },
+      "exception":true
     },
     "InvocationTraceOutput":{
       "type":"string",
@@ -4543,6 +4582,7 @@
     "MaintenanceWindowExecution":{
       "type":"structure",
       "members":{
+        "WindowId":{"shape":"MaintenanceWindowId"},
         "WindowExecutionId":{"shape":"MaintenanceWindowExecutionId"},
         "Status":{"shape":"MaintenanceWindowExecutionStatus"},
         "StartTime":{"shape":"DateTime"},
@@ -4572,6 +4612,11 @@
         "SKIPPED_OVERLAPPING"
       ]
     },
+    "MaintenanceWindowExecutionStatusDetails":{
+      "type":"string",
+      "max":250,
+      "min":0
+    },
     "MaintenanceWindowExecutionTaskExecutionId":{"type":"string"},
     "MaintenanceWindowExecutionTaskId":{
       "type":"string",
@@ -4586,10 +4631,14 @@
     "MaintenanceWindowExecutionTaskIdentity":{
       "type":"structure",
       "members":{
-        "TaskId":{"shape":"MaintenanceWindowExecutionTaskId"},
+        "WindowExecutionId":{"shape":"MaintenanceWindowExecutionId"},
+        "TaskExecutionId":{"shape":"MaintenanceWindowExecutionTaskId"},
         "Status":{"shape":"MaintenanceWindowExecutionStatus"},
+        "StatusDetails":{"shape":"MaintenanceWindowExecutionStatusDetails"},
         "StartTime":{"shape":"DateTime"},
-        "EndTime":{"shape":"DateTime"}
+        "EndTime":{"shape":"DateTime"},
+        "TaskArn":{"shape":"MaintenanceWindowTaskArn"},
+        "TaskType":{"shape":"MaintenanceWindowTaskType"}
       }
     },
     "MaintenanceWindowExecutionTaskIdentityList":{
@@ -4605,17 +4654,26 @@
     "MaintenanceWindowExecutionTaskInvocationIdentity":{
       "type":"structure",
       "members":{
+        "WindowExecutionId":{"shape":"MaintenanceWindowExecutionId"},
+        "TaskExecutionId":{"shape":"MaintenanceWindowExecutionTaskId"},
         "InvocationId":{"shape":"MaintenanceWindowExecutionTaskInvocationId"},
         "ExecutionId":{"shape":"MaintenanceWindowExecutionTaskExecutionId"},
-        "Parameters":{"shape":"String"},
+        "Parameters":{"shape":"MaintenanceWindowExecutionTaskInvocationParameters"},
         "Status":{"shape":"MaintenanceWindowExecutionStatus"},
+        "StatusDetails":{"shape":"MaintenanceWindowExecutionStatusDetails"},
         "StartTime":{"shape":"DateTime"},
-        "EndTime":{"shape":"DateTime"}
+        "EndTime":{"shape":"DateTime"},
+        "OwnerInformation":{"shape":"OwnerInformation"},
+        "WindowTargetId":{"shape":"MaintenanceWindowTaskTargetId"}
       }
     },
     "MaintenanceWindowExecutionTaskInvocationIdentityList":{
       "type":"list",
       "member":{"shape":"MaintenanceWindowExecutionTaskInvocationIdentity"}
+    },
+    "MaintenanceWindowExecutionTaskInvocationParameters":{
+      "type":"string",
+      "sensitive":true
     },
     "MaintenanceWindowId":{
       "type":"string",
@@ -4628,7 +4686,9 @@
       "members":{
         "WindowId":{"shape":"MaintenanceWindowId"},
         "Name":{"shape":"MaintenanceWindowName"},
-        "Enabled":{"shape":"MaintenanceWindowEnabled"}
+        "Enabled":{"shape":"MaintenanceWindowEnabled"},
+        "Duration":{"shape":"MaintenanceWindowDurationHours"},
+        "Cutoff":{"shape":"MaintenanceWindowCutoff"}
       }
     },
     "MaintenanceWindowIdentityList":{
@@ -4654,10 +4714,11 @@
     "MaintenanceWindowTarget":{
       "type":"structure",
       "members":{
+        "WindowId":{"shape":"MaintenanceWindowId"},
         "WindowTargetId":{"shape":"MaintenanceWindowTargetId"},
         "TargetType":{"shape":"MaintenanceWindowTargetType"},
-        "TargetIdList":{"shape":"MaintenanceWindowTargetIdList"},
-        "TagFilterList":{"shape":"TagFilterList"},
+        "TargetIds":{"shape":"MaintenanceWindowTargetIdList"},
+        "TagFilters":{"shape":"Targets"},
         "OwnerInformation":{"shape":"OwnerInformation"}
       }
     },
@@ -4686,6 +4747,7 @@
     "MaintenanceWindowTask":{
       "type":"structure",
       "members":{
+        "WindowId":{"shape":"MaintenanceWindowId"},
         "WindowTaskId":{"shape":"MaintenanceWindowTaskId"},
         "TaskArn":{"shape":"MaintenanceWindowTaskArn"},
         "Type":{"shape":"MaintenanceWindowTaskType"},
@@ -4693,7 +4755,7 @@
         "TaskParameters":{"shape":"MaintenanceWindowTaskParameters"},
         "Priority":{"shape":"MaintenanceWindowTaskPriority"},
         "LoggingInfo":{"shape":"LoggingInfo"},
-        "ServiceRole":{"shape":"ServiceRole"},
+        "ServiceRoleArn":{"shape":"ServiceRole"},
         "MaxConcurrency":{"shape":"VelocityConstraint"},
         "MaxErrors":{"shape":"VelocityConstraint"}
       }
@@ -4721,26 +4783,31 @@
     "MaintenanceWindowTaskParameterValue":{
       "type":"string",
       "max":255,
-      "min":1
+      "min":1,
+      "sensitive":true
     },
     "MaintenanceWindowTaskParameterValueExpression":{
       "type":"structure",
       "members":{
         "Values":{"shape":"MaintenanceWindowTaskParameterValueList"}
-      }
+      },
+      "sensitive":true
     },
     "MaintenanceWindowTaskParameterValueList":{
       "type":"list",
-      "member":{"shape":"MaintenanceWindowTaskParameterValue"}
+      "member":{"shape":"MaintenanceWindowTaskParameterValue"},
+      "sensitive":true
     },
     "MaintenanceWindowTaskParameters":{
       "type":"map",
       "key":{"shape":"MaintenanceWindowTaskParameterName"},
-      "value":{"shape":"MaintenanceWindowTaskParameterValueExpression"}
+      "value":{"shape":"MaintenanceWindowTaskParameterValueExpression"},
+      "sensitive":true
     },
     "MaintenanceWindowTaskParametersList":{
       "type":"list",
-      "member":{"shape":"MaintenanceWindowTaskParameters"}
+      "member":{"shape":"MaintenanceWindowTaskParameters"},
+      "sensitive":true
     },
     "MaintenanceWindowTaskPriority":{
       "type":"integer",
@@ -4851,39 +4918,61 @@
     "OwnerInformation":{
       "type":"string",
       "max":128,
-      "min":1
+      "min":1,
+      "sensitive":true
     },
     "PSParameterName":{
       "type":"string",
       "max":1024,
       "min":1,
-      "pattern":"^(?!^(?i)aws)(?!^(?i)ssm)(?=^[\\p{L}\\p{Z}\\p{N}_.:/=+\\-]*$).*$"
+      "pattern":"^(?!^([aA][wW][sS]|[sS][sS][mM]))(?=^[a-zA-Z0-9_.-]*$).*$"
     },
     "PSParameterValue":{
       "type":"string",
       "max":1024,
-      "min":1
+      "min":1,
+      "pattern":"^(?:(?!(\\{\\{.*\\}\\})).)*$"
     },
     "Parameter":{
       "type":"structure",
       "members":{
         "Name":{"shape":"PSParameterName"},
         "Type":{"shape":"ParameterType"},
-        "LastModifyDate":{"shape":"DateTime"},
-        "LastModifyUser":{"shape":"String"},
-        "Value":{"shape":"PSParameterValue"},
-        "Description":{"shape":"ParameterDescription"}
+        "Value":{"shape":"PSParameterValue"}
       }
+    },
+    "ParameterAlreadyExists":{
+      "type":"structure",
+      "members":{
+        "message":{"shape":"String"}
+      },
+      "exception":true
     },
     "ParameterDescription":{
       "type":"string",
       "max":1024,
       "min":1
     },
+    "ParameterHistory":{
+      "type":"structure",
+      "members":{
+        "Name":{"shape":"PSParameterName"},
+        "Type":{"shape":"ParameterType"},
+        "KeyId":{"shape":"ParameterKeyId"},
+        "LastModifiedDate":{"shape":"DateTime"},
+        "LastModifiedUser":{"shape":"String"},
+        "Description":{"shape":"ParameterDescription"},
+        "Value":{"shape":"PSParameterValue"}
+      }
+    },
+    "ParameterHistoryList":{
+      "type":"list",
+      "member":{"shape":"ParameterHistory"}
+    },
     "ParameterKeyId":{
       "type":"string",
       "max":256,
-      "min":0,
+      "min":1,
       "pattern":"^([a-zA-Z0-9:/_-]+)$"
     },
     "ParameterLimitExceeded":{
@@ -4897,6 +4986,21 @@
       "type":"list",
       "member":{"shape":"Parameter"}
     },
+    "ParameterMetadata":{
+      "type":"structure",
+      "members":{
+        "Name":{"shape":"PSParameterName"},
+        "Type":{"shape":"ParameterType"},
+        "KeyId":{"shape":"ParameterKeyId"},
+        "LastModifiedDate":{"shape":"DateTime"},
+        "LastModifiedUser":{"shape":"String"},
+        "Description":{"shape":"ParameterDescription"}
+      }
+    },
+    "ParameterMetadataList":{
+      "type":"list",
+      "member":{"shape":"ParameterMetadata"}
+    },
     "ParameterName":{
       "type":"string",
       "max":255,
@@ -4904,8 +5008,8 @@
     },
     "ParameterNameList":{
       "type":"list",
-      "member":{"shape":"ParameterName"},
-      "max":50,
+      "member":{"shape":"PSParameterName"},
+      "max":10,
       "min":1
     },
     "ParameterNotFound":{
@@ -4986,6 +5090,19 @@
         "Language":{"shape":"PatchLanguage"}
       }
     },
+    "PatchBaselineIdentity":{
+      "type":"structure",
+      "members":{
+        "BaselineId":{"shape":"BaselineId"},
+        "BaselineName":{"shape":"BaselineName"},
+        "BaselineDescription":{"shape":"BaselineDescription"},
+        "DefaultBaseline":{"shape":"DefaultBaseline"}
+      }
+    },
+    "PatchBaselineIdentityList":{
+      "type":"list",
+      "member":{"shape":"PatchBaselineIdentity"}
+    },
     "PatchBaselineMaxResults":{
       "type":"integer",
       "max":100,
@@ -5000,8 +5117,7 @@
         "Classification",
         "Severity",
         "State",
-        "InstalledTime",
-        "InstalledBy"
+        "InstalledTime"
       ],
       "members":{
         "Title":{"shape":"PatchTitle"},
@@ -5009,8 +5125,7 @@
         "Classification":{"shape":"PatchClassification"},
         "Severity":{"shape":"PatchSeverity"},
         "State":{"shape":"PatchComplianceDataState"},
-        "InstalledTime":{"shape":"DateTime"},
-        "InstalledBy":{"shape":"PatchInstalledBy"}
+        "InstalledTime":{"shape":"PatchInstalledTime"}
       }
     },
     "PatchComplianceDataList":{
@@ -5055,6 +5170,13 @@
         "Values":{"shape":"PatchFilterValueList"}
       }
     },
+    "PatchFilterGroup":{
+      "type":"structure",
+      "required":["PatchFilters"],
+      "members":{
+        "PatchFilters":{"shape":"PatchFilterList"}
+      }
+    },
     "PatchFilterKey":{
       "type":"string",
       "enum":[
@@ -5091,7 +5213,7 @@
       "type":"structure",
       "members":{
         "PatchGroup":{"shape":"PatchGroup"},
-        "BaselineIdentity":{"shape":"BaselineIdentity"}
+        "BaselineIdentity":{"shape":"PatchBaselineIdentity"}
       }
     },
     "PatchGroupPatchBaselineMappingList":{
@@ -5108,9 +5230,9 @@
       "max":50,
       "min":0
     },
-    "PatchInstalledBy":{"type":"string"},
     "PatchInstalledCount":{"type":"integer"},
     "PatchInstalledOtherCount":{"type":"integer"},
+    "PatchInstalledTime":{"type":"string"},
     "PatchKbNumber":{"type":"string"},
     "PatchLanguage":{"type":"string"},
     "PatchList":{
@@ -5121,6 +5243,8 @@
     "PatchMsrcClassification":{"type":"string"},
     "PatchMsrcNumber":{"type":"string"},
     "PatchNotApplicableCount":{"type":"integer"},
+    "PatchOperationEndTime":{"type":"string"},
+    "PatchOperationStartTime":{"type":"string"},
     "PatchOperationType":{
       "type":"string",
       "enum":[
@@ -5157,6 +5281,33 @@
     },
     "PatchProduct":{"type":"string"},
     "PatchProductFamily":{"type":"string"},
+    "PatchRule":{
+      "type":"structure",
+      "required":[
+        "PatchFilterGroup",
+        "ApproveAfterDays"
+      ],
+      "members":{
+        "PatchFilterGroup":{"shape":"PatchFilterGroup"},
+        "ApproveAfterDays":{
+          "shape":"ApproveAfterDays",
+          "box":true
+        }
+      }
+    },
+    "PatchRuleGroup":{
+      "type":"structure",
+      "required":["PatchRules"],
+      "members":{
+        "PatchRules":{"shape":"PatchRuleList"}
+      }
+    },
+    "PatchRuleList":{
+      "type":"list",
+      "member":{"shape":"PatchRule"},
+      "max":10,
+      "min":0
+    },
     "PatchSeverity":{"type":"string"},
     "PatchStatus":{
       "type":"structure",
@@ -5234,7 +5385,11 @@
         "Description":{"shape":"ParameterDescription"},
         "Value":{"shape":"PSParameterValue"},
         "Type":{"shape":"ParameterType"},
-        "KeyId":{"shape":"ParameterKeyId"}
+        "KeyId":{"shape":"ParameterKeyId"},
+        "Overwrite":{
+          "shape":"Boolean",
+          "box":true
+        }
       }
     },
     "PutParameterResult":{
@@ -5297,12 +5452,15 @@
     },
     "RegisterTargetWithMaintenanceWindowRequest":{
       "type":"structure",
-      "required":["WindowId"],
+      "required":[
+        "WindowId",
+        "TargetType"
+      ],
       "members":{
         "WindowId":{"shape":"MaintenanceWindowId"},
         "TargetType":{"shape":"MaintenanceWindowTargetType"},
         "TargetIds":{"shape":"MaintenanceWindowTargetIdList"},
-        "TagFilters":{"shape":"TagFilterList"},
+        "TagFilters":{"shape":"Targets"},
         "OwnerInformation":{"shape":"OwnerInformation"},
         "ClientToken":{"shape":"ClientToken"}
       }
@@ -5317,16 +5475,19 @@
       "type":"structure",
       "required":[
         "WindowId",
+        "Targets",
         "TaskArn",
-        "ServiceRole",
-        "Type"
+        "ServiceRoleArn",
+        "TaskType",
+        "MaxConcurrency",
+        "MaxErrors"
       ],
       "members":{
         "WindowId":{"shape":"MaintenanceWindowId"},
         "Targets":{"shape":"MaintenanceWindowTaskTargetList"},
         "TaskArn":{"shape":"MaintenanceWindowTaskArn"},
-        "ServiceRole":{"shape":"ServiceRole"},
-        "Type":{"shape":"MaintenanceWindowTaskType"},
+        "ServiceRoleArn":{"shape":"ServiceRole"},
+        "TaskType":{"shape":"MaintenanceWindowTaskType"},
         "TaskParameters":{"shape":"MaintenanceWindowTaskParameters"},
         "Priority":{
           "shape":"MaintenanceWindowTaskPriority",
@@ -5428,7 +5589,8 @@
         "ManagedInstance",
         "Document",
         "MaintenanceWindow",
-        "PatchBaseline"
+        "PatchBaseline",
+        "Parameter"
       ]
     },
     "ResponseCode":{"type":"integer"},
@@ -5447,30 +5609,6 @@
       },
       "max":1,
       "min":1
-    },
-    "Rule":{
-      "type":"structure",
-      "required":[
-        "FilterGroup",
-        "ApproveAfterDays"
-      ],
-      "members":{
-        "FilterGroup":{"shape":"FilterGroup"},
-        "ApproveAfterDays":{"shape":"ApproveAfterDays"}
-      }
-    },
-    "RuleGroup":{
-      "type":"structure",
-      "required":["RuleList"],
-      "members":{
-        "RuleList":{"shape":"RuleList"}
-      }
-    },
-    "RuleList":{
-      "type":"list",
-      "member":{"shape":"Rule"},
-      "max":10,
-      "min":0
     },
     "S3BucketName":{
       "type":"string",
@@ -5655,33 +5793,6 @@
         "Value":{"shape":"TagValue"}
       }
     },
-    "TagFilter":{
-      "type":"structure",
-      "members":{
-        "Key":{"shape":"TagFilterKey"},
-        "Values":{"shape":"TagFilterValues"}
-      }
-    },
-    "TagFilterKey":{
-      "type":"string",
-      "max":128,
-      "min":1,
-      "pattern":"^([\\p{L}\\p{Z}\\p{N}_.:/=+\\-@]*)$"
-    },
-    "TagFilterList":{
-      "type":"list",
-      "member":{"shape":"TagFilter"}
-    },
-    "TagFilterValue":{
-      "type":"string",
-      "max":256,
-      "min":1,
-      "pattern":"^([\\p{L}\\p{Z}\\p{N}_.:/=+\\-@]*)$"
-    },
-    "TagFilterValues":{
-      "type":"list",
-      "member":{"shape":"TagFilterValue"}
-    },
     "TagKey":{
       "type":"string",
       "max":128,
@@ -5744,6 +5855,13 @@
       "exception":true
     },
     "TotalSizeLimitExceededException":{
+      "type":"structure",
+      "members":{
+        "Message":{"shape":"String"}
+      },
+      "exception":true
+    },
+    "UnsupportedInventorySchemaVersionException":{
       "type":"structure",
       "members":{
         "Message":{"shape":"String"}
@@ -5857,7 +5975,8 @@
         "PlatformName":{"shape":"String"},
         "PlatformVersion":{"shape":"String"},
         "IPAddress":{"shape":"IPAddress"},
-        "ComputerName":{"shape":"ComputerName"}
+        "ComputerName":{"shape":"ComputerName"},
+        "AgentName":{"shape":"AgentName"}
       }
     },
     "UpdateInstanceInformationResult":{
@@ -5941,8 +6060,8 @@
       "members":{
         "BaselineId":{"shape":"BaselineId"},
         "Name":{"shape":"BaselineName"},
-        "GlobalFilters":{"shape":"FilterGroup"},
-        "ApprovalRules":{"shape":"RuleGroup"},
+        "GlobalFilters":{"shape":"PatchFilterGroup"},
+        "ApprovalRules":{"shape":"PatchRuleGroup"},
         "ApprovedPatches":{"shape":"PatchIdList"},
         "RejectedPatches":{"shape":"PatchIdList"},
         "Description":{"shape":"BaselineDescription"}
@@ -5953,8 +6072,8 @@
       "members":{
         "BaselineId":{"shape":"BaselineId"},
         "Name":{"shape":"BaselineName"},
-        "GlobalFilters":{"shape":"FilterGroup"},
-        "ApprovalRules":{"shape":"RuleGroup"},
+        "GlobalFilters":{"shape":"PatchFilterGroup"},
+        "ApprovalRules":{"shape":"PatchRuleGroup"},
         "ApprovedPatches":{"shape":"PatchIdList"},
         "RejectedPatches":{"shape":"PatchIdList"},
         "CreatedDate":{"shape":"DateTime"},

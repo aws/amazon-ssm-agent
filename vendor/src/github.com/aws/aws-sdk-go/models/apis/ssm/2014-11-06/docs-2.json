@@ -1,8 +1,8 @@
 {
   "version": "2.0",
-  "service": "<p>Amazon EC2 Simple Systems Manager (SSM) enables you to remotely manage the configuration of your Amazon EC2 instances, virtual machines (VMs), or servers in your on-premises environment or in an environment provided by other cloud providers using scripts, commands, or the Amazon EC2 console. SSM includes an on-demand solution called <i>Amazon EC2 Run Command</i> and a lightweight instance configuration solution called <i>SSM Config</i>. </p> <p>This references is intended to be used with the EC2 Run Command User Guide for <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/execute-remote-commands.html\">Linux</a> or <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/execute-remote-commands.html\">Windows</a>.</p> <note> <p>You must register your on-premises servers and VMs through an activation process before you can configure them using Run Command. Registered servers and VMs are called <i>managed instances</i>. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/managed-instances.html\">Setting Up Run Command On Managed Instances (On-Premises Servers and VMs) on Linux</a> or <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/managed-instances.html\">Setting Up Run Command On Managed Instances (On-Premises Servers and VMs) on Windows</a>.</p> </note> <p> <b>Run Command</b> </p> <p>Run Command provides an on-demand experience for executing commands. You can use pre-defined SSM documents to perform the actions listed later in this section, or you can create your own documents. With these documents, you can remotely configure your instances by sending commands using the <b>Commands</b> page in the <a href=\"http://console.aws.amazon.com/ec2/\">Amazon EC2 console</a>, <a href=\"http://docs.aws.amazon.com/powershell/latest/reference/items/Amazon_Simple_Systems_Management_cmdlets.html\">AWS Tools for Windows PowerShell</a>, the <a href=\"http://docs.aws.amazon.com/cli/latest/reference/ssm/index.html\">AWS CLI</a>, or AWS SDKs.</p> <p>Run Command reports the status of the command execution for each instance targeted by a command. You can also audit the command execution to understand who executed commands, when, and what changes were made. By switching between different SSM documents, you can quickly configure your instances with different types of commands. To get started with Run Command, verify that your environment meets the prerequisites for remotely running commands on EC2 instances (<a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/remote-commands-prereq.html\">Linux</a> or <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/remote-commands-prereq.html\">Windows</a>). </p> <p/> <p> <b>SSM Config</b> </p> <p>SSM Config is a lightweight instance configuration solution. SSM Config is currently only available for Windows instances. With SSM Config, you can specify a setup configuration for your instances. SSM Config is similar to EC2 User Data, which is another way of running one-time scripts or applying settings during instance launch. SSM Config is an extension of this capability. Using SSM documents, you can specify which actions the system should perform on your instances, including which applications to install, which AWS Directory Service directory to join, which Microsoft PowerShell modules to install, etc. If an instance is missing one or more of these configurations, the system makes those changes. By default, the system checks every five minutes to see if there is a new configuration to apply as defined in a new SSM document. If so, the system updates the instances accordingly. In this way, you can remotely maintain a consistent configuration baseline on your instances. SSM Config is available using the AWS CLI or the AWS Tools for Windows PowerShell. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/ec2-configuration-manage.html\">Managing Windows Instance Configuration</a>.</p> <p>SSM Config and Run Command include the following pre-defined documents.</p> <p> <b>Linux</b> </p> <ul> <li> <p> <b>AWS-RunShellScript</b> to run shell scripts</p> </li> <li> <p> <b>AWS-UpdateSSMAgent</b> to update the Amazon SSM agent</p> </li> </ul> <p/> <p> <b>Windows</b> </p> <ul> <li> <p> <b>AWS-JoinDirectoryServiceDomain</b> to join an AWS Directory</p> </li> <li> <p> <b>AWS-RunPowerShellScript</b> to run PowerShell commands or scripts</p> </li> <li> <p> <b>AWS-UpdateEC2Config</b> to update the EC2Config service</p> </li> <li> <p> <b>AWS-ConfigureWindowsUpdate</b> to configure Windows Update settings</p> </li> <li> <p> <b>AWS-InstallApplication</b> to install, repair, or uninstall software using an MSI package</p> </li> <li> <p> <b>AWS-InstallPowerShellModule</b> to install PowerShell modules </p> </li> <li> <p> <b>AWS-ConfigureCloudWatch</b> to configure Amazon CloudWatch Logs to monitor applications and systems</p> </li> <li> <p> <b>AWS-ListWindowsInventory</b> to collect information about an EC2 instance running in Windows.</p> </li> <li> <p> <b>AWS-FindWindowsUpdates</b> to scan an instance and determines which updates are missing.</p> </li> <li> <p> <b>AWS-InstallMissingWindowsUpdates</b> to install missing updates on your EC2 instance.</p> </li> <li> <p> <b>AWS-InstallSpecificWindowsUpdates</b> to install one or more specific updates.</p> </li> </ul> <important> <p>The commands or scripts specified in SSM documents run with administrative privilege on your instances because the Amazon SSM agent runs as root on Linux and the EC2Config service runs in the Local System account on Windows. If a user has permission to execute any of the pre-defined SSM documents (any document that begins with AWS-*) then that user also has administrator access to the instance. Delegate access to Run Command and SSM Config judiciously. This becomes extremely important if you create your own SSM documents. Amazon Web Services does not provide guidance about how to create secure SSM documents. You create SSM documents and delegate access to Run Command at your own risk. As a security best practice, we recommend that you assign access to \"AWS-*\" documents, especially the AWS-RunShellScript document on Linux and the AWS-RunPowerShellScript document on Windows, to trusted administrators only. You can create SSM documents for specific tasks and delegate access to non-administrators.</p> </important> <p>For information about creating and sharing SSM documents, see the following topics in the SSM User Guide: </p> <ul> <li> <p> <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/create-ssm-doc.html\">Creating SSM Documents</a> and <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ssm-sharing.html\">Sharing SSM Documents</a> (Linux)</p> </li> <li> <p> <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/create-ssm-doc.html\">Creating SSM Documents</a> and <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/ssm-sharing.html\">Sharing SSM Documents</a> (Windows)</p> </li> </ul>",
+  "service": "<p>Amazon EC2 Simple Systems Manager (SSM) enables you to remotely manage the configuration of your Amazon EC2 instances, virtual machines (VMs), or servers in your on-premises environment or in an environment provided by other cloud providers using scripts, commands, or the Amazon EC2 console. SSM includes an on-demand solution called <i>Amazon EC2 Run Command</i> and a lightweight instance configuration solution called <i>SSM Config</i>. </p> <p>This references is intended to be used with the EC2 Run Command User Guide for <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/execute-remote-commands.html\">Linux</a> or <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/execute-remote-commands.html\">Windows</a>.</p> <note> <p>You must register your on-premises servers and VMs through an activation process before you can configure them using Run Command. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/managed-instances.html\">Setting Up Run Command in Hybrid Environments on Linux</a> or <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/managed-instances.html\">Setting Up Run Command in Hybrid Environments on Windows</a>.</p> </note> <p> <b>Run Command</b> </p> <p>Run Command provides an on-demand experience for executing commands. You can use pre-defined SSM documents to perform the actions listed later in this section, or you can create your own documents. With these documents, you can remotely configure your instances by sending commands using the <b>Command History</b> page in the <a href=\"http://console.aws.amazon.com/ec2/\">Amazon EC2 console</a>, <a href=\"http://docs.aws.amazon.com/powershell/latest/reference/items/Amazon_Simple_Systems_Management_cmdlets.html\">AWS Tools for Windows PowerShell</a>, the <a href=\"http://docs.aws.amazon.com/cli/latest/reference/ssm/index.html\">AWS CLI</a>, or AWS SDKs.</p> <p>Run Command reports the status of the command execution for each instance targeted by a command. You can also audit the command execution to understand who executed commands, when, and what changes were made. By switching between different SSM documents, you can quickly configure your instances with different types of commands. To get started with Run Command, verify that your environment meets the prerequisites for remotely running commands on EC2 instances (<a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/remote-commands-prereq.html\">Linux</a> or <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/remote-commands-prereq.html\">Windows</a>). </p> <p/> <p> <b>SSM Config</b> </p> <p>SSM Config is a lightweight instance configuration solution. SSM Config is currently only available for Windows instances. With SSM Config, you can specify a setup configuration for your instances. Using SSM documents, you can specify which actions the system should perform on your instances, including which applications to install, which AWS Directory Service directory to join, which Microsoft PowerShell modules to install, etc. If an instance is missing one or more of these configurations, the system makes those changes. By default, the system checks every five minutes to see if there is a new configuration to apply. If so, the system updates the instances accordingly. In this way, you can remotely maintain a consistent configuration baseline on your instances. SSM Config is available using the AWS CLI or the AWS Tools for Windows PowerShell. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/ec2-configuration-manage.html\">Managing Windows Instance Configuration</a>.</p> <p>SSM Config and Run Command include the following pre-defined documents.</p> <p> <b>Linux</b> </p> <ul> <li> <p> <b>AWS-RunShellScript</b> to run shell scripts</p> </li> <li> <p> <b>AWS-UpdateSSMAgent</b> to update the Amazon SSM agent</p> </li> </ul> <p/> <p> <b>Windows</b> </p> <ul> <li> <p> <b>AWS-JoinDirectoryServiceDomain</b> to join an AWS Directory</p> </li> <li> <p> <b>AWS-RunPowerShellScript</b> to run PowerShell commands or scripts</p> </li> <li> <p> <b>AWS-UpdateEC2Config</b> to update the EC2Config service</p> </li> <li> <p> <b>AWS-ConfigureWindowsUpdate</b> to configure Windows Update settings</p> </li> <li> <p> <b>AWS-InstallApplication</b> to install, repair, or uninstall software using an MSI package</p> </li> <li> <p> <b>AWS-InstallPowerShellModule</b> to install PowerShell modules </p> </li> <li> <p> <b>AWS-ConfigureCloudWatch</b> to configure Amazon CloudWatch Logs to monitor applications and systems</p> </li> <li> <p> <b>AWS-ListWindowsInventory</b> to collect information about an EC2 instance running in Windows.</p> </li> <li> <p> <b>AWS-FindWindowsUpdates</b> to scan an instance and determines which updates are missing.</p> </li> <li> <p> <b>AWS-InstallMissingWindowsUpdates</b> to install missing updates on your EC2 instance.</p> </li> <li> <p> <b>AWS-InstallSpecificWindowsUpdates</b> to install one or more specific updates.</p> </li> </ul> <important> <p>The commands or scripts specified in SSM documents run with administrative privilege on your instances because the Amazon SSM agent runs as root on Linux and the EC2Config service runs in the Local System account on Windows. If a user has permission to execute any of the pre-defined SSM documents (any document that begins with AWS-*) then that user also has administrator access to the instance. Delegate access to Run Command and SSM Config judiciously. This becomes extremely important if you create your own SSM documents. Amazon Web Services does not provide guidance about how to create secure SSM documents. You create SSM documents and delegate access to Run Command at your own risk. As a security best practice, we recommend that you assign access to \"AWS-*\" documents, especially the AWS-RunShellScript document on Linux and the AWS-RunPowerShellScript document on Windows, to trusted administrators only. You can create SSM documents for specific tasks and delegate access to non-administrators.</p> </important> <p>For information about creating and sharing SSM documents, see the following topics in the SSM User Guide: </p> <ul> <li> <p> <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/create-ssm-doc.html\">Creating SSM Documents</a> and <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ssm-sharing.html\">Sharing SSM Documents</a> (Linux)</p> </li> <li> <p> <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/create-ssm-doc.html\">Creating SSM Documents</a> and <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/ssm-sharing.html\">Sharing SSM Documents</a> (Windows)</p> </li> </ul>",
   "operations": {
-    "AddTagsToResource": "<p>Adds or overwrites one or more tags for the specified resource. Tags are metadata that you assign to your managed instances. Tags enable you to categorize your managed instances in different ways, for example, by purpose, owner, or environment. Each tag consists of a key and an optional value, both of which you define. For example, you could define a set of tags for your account's managed instances that helps you track each instance's owner and stack level. For example: Key=Owner and Value=DbAdmin, SysAdmin, or Dev. Or Key=Stack and Value=Production, Pre-Production, or Test. Each resource can have a maximum of 10 tags. </p> <p> We recommend that you devise a set of tag keys that meets your needs for each resource type. Using a consistent set of tag keys makes it easier for you to manage your resources. You can search and filter the resources based on the tags you add. Tags don't have any semantic meaning to Amazon EC2 and are interpreted strictly as a string of characters. </p> <p>For more information about tags, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Using_Tags.html\">Tagging Your Amazon EC2 Resources</a> in the Amazon EC2 User Guide. </p>",
+    "AddTagsToResource": "<p>Adds or overwrites one or more tags for the specified resource. Tags are metadata that you assign to your managed instances. Tags enable you to categorize your managed instances in different ways, for example, by purpose, owner, or environment. Each tag consists of a key and an optional value, both of which you define. For example, you could define a set of tags for your account's managed instances that helps you track each instance's owner and stack level. For example: Key=Owner and Value=DbAdmin, SysAdmin, or Dev. Or Key=Stack and Value=Production, Pre-Production, or Test. Each resource can have a maximum of 10 tags. </p> <p>We recommend that you devise a set of tag keys that meets your needs for each resource type. Using a consistent set of tag keys makes it easier for you to manage your resources. You can search and filter the resources based on the tags you add. Tags don't have any semantic meaning to Amazon EC2 and are interpreted strictly as a string of characters. </p> <p>For more information about tags, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Using_Tags.html\">Tagging Your Amazon EC2 Resources</a> in the Amazon EC2 User Guide. </p>",
     "CancelCommand": "<p>Attempts to cancel the command specified by the Command ID. There is no guarantee that the command will be terminated and the underlying process stopped.</p>",
     "CreateActivation": "<p>Registers your on-premises server or virtual machine with Amazon EC2 so that you can manage these resources using Run Command. An on-premises server or virtual machine that has been registered with EC2 is called a managed instance. For more information about activations, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/managed-instances.html\">Setting Up Managed Instances (Linux)</a> or <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/managed-instances.html\">Setting Up Managed Instances (Windows)</a> in the Amazon EC2 User Guide. </p>",
     "CreateAssociation": "<p>Associates the specified SSM document with the specified instance.</p> <p>When you associate an SSM document with an instance, the configuration agent on the instance (SSM agent for Linux and EC2Config service for Windows) processes the document and configures the instance as specified.</p> <p>If you associate a document with an instance that already has an associated document, the system throws the AssociationAlreadyExists exception.</p>",
@@ -52,7 +52,7 @@
     "DescribePatchGroups": null,
     "GetAutomationAction": null,
     "GetAutomationExecution": null,
-    "GetCommandInvocation": null,
+    "GetCommandInvocation": "<p>Returns detailed information about command execution for an invocation or plugin. </p>",
     "GetDefaultPatchBaseline": null,
     "GetDeployablePatchSnapshotForInstance": null,
     "GetDocument": "<p>Gets the contents of the specified SSM document.</p>",
@@ -181,6 +181,12 @@
         "InstanceAssociationStatusInfo$ErrorCode": null
       }
     },
+    "AgentName": {
+      "base": null,
+      "refs": {
+        "UpdateInstanceInformationRequest$AgentName": null
+      }
+    },
     "AgentStatus": {
       "base": null,
       "refs": {
@@ -195,7 +201,7 @@
     "ApproveAfterDays": {
       "base": null,
       "refs": {
-        "Rule$ApproveAfterDays": null
+        "PatchRule$ApproveAfterDays": null
       }
     },
     "Architecture": {
@@ -320,7 +326,6 @@
     "AssociationStatusName": {
       "base": null,
       "refs": {
-        "Association$Status": null,
         "AssociationStatus$Name": "<p>The status.</p>"
       }
     },
@@ -510,6 +515,7 @@
       "refs": {
         "CreatePatchBaselineRequest$Description": null,
         "GetPatchBaselineResult$Description": null,
+        "PatchBaselineIdentity$BaselineDescription": null,
         "UpdatePatchBaselineRequest$Description": null,
         "UpdatePatchBaselineResult$Description": null
       }
@@ -517,7 +523,6 @@
     "BaselineId": {
       "base": null,
       "refs": {
-        "BaselineIdentity$BaselineId": null,
         "CreatePatchBaselineResult$BaselineId": null,
         "DeletePatchBaselineRequest$BaselineId": null,
         "DeletePatchBaselineResult$BaselineId": null,
@@ -529,6 +534,7 @@
         "GetPatchBaselineRequest$BaselineId": null,
         "GetPatchBaselineResult$BaselineId": null,
         "InstancePatchState$PatchBaselineId": null,
+        "PatchBaselineIdentity$BaselineId": null,
         "RegisterDefaultPatchBaselineRequest$BaselineId": null,
         "RegisterDefaultPatchBaselineResult$BaselineId": null,
         "RegisterPatchBaselineForPatchGroupRequest$BaselineId": null,
@@ -537,25 +543,12 @@
         "UpdatePatchBaselineResult$BaselineId": null
       }
     },
-    "BaselineIdentity": {
-      "base": null,
-      "refs": {
-        "BaselineIdentityList$member": null,
-        "PatchGroupPatchBaselineMapping$BaselineIdentity": null
-      }
-    },
-    "BaselineIdentityList": {
-      "base": null,
-      "refs": {
-        "DescribePatchBaselinesResult$BaselineIdentities": null
-      }
-    },
     "BaselineName": {
       "base": null,
       "refs": {
-        "BaselineIdentity$BaselineName": null,
         "CreatePatchBaselineRequest$Name": null,
         "GetPatchBaselineResult$Name": null,
+        "PatchBaselineIdentity$BaselineName": null,
         "UpdatePatchBaselineRequest$Name": null,
         "UpdatePatchBaselineResult$Name": null
       }
@@ -572,9 +565,11 @@
         "Activation$Expired": "<p>Whether or not the activation is expired.</p>",
         "AutomationArgument$Required": null,
         "DocumentVersionInfo$IsDefaultVersion": null,
+        "GetParameterHistoryRequest$WithDecryption": null,
         "GetParametersRequest$WithDecryption": null,
         "InstanceInformation$IsLatestVersion": "<p>Indicates whether latest version of the SSM agent is running on your instance. </p>",
-        "ListCommandInvocationsRequest$Details": "<p>(Optional) If set this returns the response of the command executions and any command output. By default this is set to False. </p>"
+        "ListCommandInvocationsRequest$Details": "<p>(Optional) If set this returns the response of the command executions and any command output. By default this is set to False. </p>",
+        "PutParameterRequest$Overwrite": null
       }
     },
     "CancelCommandRequest": {
@@ -640,8 +635,8 @@
         "CancelCommandRequest$CommandId": "<p>The ID of the command you want to cancel.</p>",
         "Command$CommandId": "<p>A unique identifier for this command.</p>",
         "CommandInvocation$CommandId": "<p>The command against which this invocation was requested.</p>",
-        "GetCommandInvocationRequest$CommandId": null,
-        "GetCommandInvocationResult$CommandId": null,
+        "GetCommandInvocationRequest$CommandId": "<p>(Required) The parent command ID of the invocation plugin.</p>",
+        "GetCommandInvocationResult$CommandId": "<p>The parent command ID of the invocation plugin.</p>",
         "ListCommandInvocationsRequest$CommandId": "<p>(Optional) The invocations for a specific command ID.</p>",
         "ListCommandsRequest$CommandId": "<p>(Optional) If provided, lists only the specified command.</p>"
       }
@@ -662,7 +657,7 @@
       "base": null,
       "refs": {
         "CommandInvocation$Status": "<p>Whether or not the invocation succeeded, failed, or is pending.</p>",
-        "GetCommandInvocationResult$Status": null
+        "GetCommandInvocationResult$Status": "<p>The status of the parent command for this invocation. This status can be different than <code>StatusDetails</code>.</p>"
       }
     },
     "CommandList": {
@@ -695,8 +690,8 @@
       "refs": {
         "CommandPlugin$Name": "<p>The name of the plugin. Must be one of the following: aws:updateAgent, aws:domainjoin, aws:applications, aws:runPowerShellScript, aws:psmodule, aws:cloudWatch, aws:runShellScript, or aws:updateSSMAgent. </p>",
         "DescribeDocumentStepSchemaRequest$StepName": null,
-        "GetCommandInvocationRequest$PluginName": null,
-        "GetCommandInvocationResult$PluginName": null
+        "GetCommandInvocationRequest$PluginName": "<p>(Optional) The name of the plugin for which you want detailed results. If the SSM document contains only one plugin, the name can be omitted and the details will be returned.</p>",
+        "GetCommandInvocationResult$PluginName": "<p>The name of the plugin for which you want detailed results. For example, aws:RunShellScript is a plugin.</p>"
       }
     },
     "CommandPluginOutput": {
@@ -722,14 +717,14 @@
       "refs": {
         "Command$Comment": "<p>User-specified information about the command, such as a brief description of what the command should do.</p>",
         "CommandInvocation$Comment": "<p>User-specified information about the command, such as a brief description of what the command should do.</p>",
-        "GetCommandInvocationResult$Comment": null,
+        "GetCommandInvocationResult$Comment": "<p>The comment text for the command.</p>",
         "SendCommandRequest$Comment": "<p>User-specified information about the command, such as a brief description of what the command should do.</p>"
       }
     },
     "CompletedCount": {
       "base": null,
       "refs": {
-        "Command$CompletedCount": null
+        "Command$CompletedCount": "<p>The number of targets for which the command invocation reached a terminal state. Terminal states include the following: <code>Success</code>, <code>Failed</code>, <code>Execution Timed Out</code>, <code>Delivery Timed Out</code>, <code>Canceled</code>, <code>Terminated</code>, or <code>Undeliverable</code>.</p>"
       }
     },
     "ComputerName": {
@@ -829,7 +824,6 @@
       "refs": {
         "Association$LastExecutionDate": null,
         "AssociationDescription$Date": "<p>The date when the association was made.</p>",
-        "AssociationDescription$ExecutionDate": null,
         "AssociationDescription$LastUpdateAssociationDate": null,
         "AssociationDescription$LastExecutionDate": null,
         "AssociationDescription$LastSuccessfulExecutionDate": null,
@@ -849,16 +843,17 @@
         "GetMaintenanceWindowExecutionResult$EndTime": null,
         "GetMaintenanceWindowExecutionTaskResult$StartTime": null,
         "GetMaintenanceWindowExecutionTaskResult$EndTime": null,
+        "GetMaintenanceWindowResult$CreatedDate": null,
+        "GetMaintenanceWindowResult$ModifiedDate": null,
         "GetPatchBaselineResult$CreatedDate": null,
         "GetPatchBaselineResult$ModifiedDate": null,
         "InstanceAssociationExecutionResult$ExecutionDate": null,
         "InstanceAssociationStatusInfo$ExecutionDate": null,
+        "InstanceAssociationSummary$LastExecutionDate": null,
         "InstanceInformation$LastPingDateTime": "<p>The date and time when agent last pinged SSM service. </p>",
         "InstanceInformation$RegistrationDate": "<p>The date the server or VM was registered with AWS as a managed instance.</p>",
         "InstanceInformation$LastAssociationExecutionDate": null,
         "InstanceInformation$LastSuccessfulAssociationExecutionDate": null,
-        "InstancePatchState$OperationStartTime": null,
-        "InstancePatchState$OperationEndTime": null,
         "InstanceProperty$LaunchTime": null,
         "InstanceProperty$LastPingDateTime": null,
         "InstanceProperty$RegistrationDate": null,
@@ -870,19 +865,18 @@
         "MaintenanceWindowExecutionTaskIdentity$EndTime": null,
         "MaintenanceWindowExecutionTaskInvocationIdentity$StartTime": null,
         "MaintenanceWindowExecutionTaskInvocationIdentity$EndTime": null,
-        "Parameter$LastModifyDate": null,
+        "ParameterHistory$LastModifiedDate": null,
+        "ParameterMetadata$LastModifiedDate": null,
         "Patch$ReleaseDate": null,
-        "PatchComplianceData$InstalledTime": null,
         "PatchStatus$ApprovalDate": null,
         "UpdatePatchBaselineResult$CreatedDate": null,
         "UpdatePatchBaselineResult$ModifiedDate": null
       }
     },
-    "DebugInfo": {
+    "DefaultBaseline": {
       "base": null,
       "refs": {
-        "InstanceAssociationExecutionResult$DebugInfo": null,
-        "InstanceAssociationStatusInfo$DebugInfo": null
+        "PatchBaselineIdentity$DefaultBaseline": null
       }
     },
     "DefaultInstanceName": {
@@ -1440,7 +1434,7 @@
         "DescribeDocumentPermissionRequest$Name": "<p>The name of the document for which you are the owner.</p>",
         "DocumentDefaultVersionDescription$Name": null,
         "DocumentVersionInfo$Name": null,
-        "GetCommandInvocationResult$DocumentName": null,
+        "GetCommandInvocationResult$DocumentName": "<p>The name of the SSM document that was executed. For example, AWS-RunShellScript is an SSM document.</p>",
         "InstanceAssociationStatusInfo$Name": null,
         "InstanceAssociationSummary$Name": null,
         "ListDocumentVersionsRequest$Name": null,
@@ -1639,7 +1633,7 @@
     "ErrorCount": {
       "base": null,
       "refs": {
-        "Command$ErrorCount": null
+        "Command$ErrorCount": "<p>The number of targets for which the status is <code>Failed</code> or <code>Execution Timed Out</code>.</p>"
       }
     },
     "ExpirationDate": {
@@ -1665,17 +1659,6 @@
       "base": null,
       "refs": {
         "FailedCreateAssociation$Fault": "<p>The source of the failure.</p>"
-      }
-    },
-    "FilterGroup": {
-      "base": null,
-      "refs": {
-        "CreatePatchBaselineRequest$GlobalFilters": null,
-        "DescribeAvailablePatchesRequest$FilterGroup": null,
-        "GetPatchBaselineResult$GlobalFilters": null,
-        "Rule$FilterGroup": null,
-        "UpdatePatchBaselineRequest$GlobalFilters": null,
-        "UpdatePatchBaselineResult$GlobalFilters": null
       }
     },
     "Fingerprint": {
@@ -1869,6 +1852,11 @@
         "UpdateManagedInstanceRoleRequest$IamRole": "<p>The IAM role you want to assign or change.</p>"
       }
     },
+    "IdempotentParameterMismatch": {
+      "base": null,
+      "refs": {
+      }
+    },
     "InstanceAggregatedAssociationOverview": {
       "base": null,
       "refs": {
@@ -1933,13 +1921,13 @@
     "InstanceAssociationStatusInfo": {
       "base": null,
       "refs": {
-        "InstanceAssociationStatusInfosList$member": null
+        "InstanceAssociationStatusInfos$member": null
       }
     },
-    "InstanceAssociationStatusInfosList": {
+    "InstanceAssociationStatusInfos": {
       "base": null,
       "refs": {
-        "DescribeInstanceAssociationsStatusResult$InstanceAssociationStatusInfosList": null
+        "DescribeInstanceAssociationsStatusResult$InstanceAssociationStatusInfos": null
       }
     },
     "InstanceAssociationSummary": {
@@ -1974,8 +1962,8 @@
         "DescribeEffectiveInstanceAssociationsRequest$InstanceId": null,
         "DescribeInstanceAssociationsStatusRequest$InstanceId": null,
         "DescribeInstancePatchesRequest$InstanceId": null,
-        "GetCommandInvocationRequest$InstanceId": null,
-        "GetCommandInvocationResult$InstanceId": null,
+        "GetCommandInvocationRequest$InstanceId": "<p>(Required) The ID of the managed instance targeted by the command. A managed instance can be an Amazon EC2 instance or an instance in your hybrid environment that is configured for SSM.</p>",
+        "GetCommandInvocationResult$InstanceId": "<p>The ID of the managed instance targeted by the command. A managed instance can be an Amazon EC2 instance or an instance in your hybrid environment that is configured for SSM.</p>",
         "GetDeployablePatchSnapshotForInstanceRequest$InstanceId": null,
         "GetDeployablePatchSnapshotForInstanceResult$InstanceId": null,
         "InstanceAssociation$InstanceId": null,
@@ -2070,7 +2058,7 @@
     "InstanceName": {
       "base": null,
       "refs": {
-        "CommandInvocation$InstanceName": null,
+        "CommandInvocation$InstanceName": "<p>The name of the invocation target. For Amazon EC2 instances this is the value for the <code>aws:Name</code> tag. For on-premises instances, this is the name of the instance.</p>",
         "InstanceProperty$Name": null
       }
     },
@@ -2301,7 +2289,7 @@
       }
     },
     "InvalidInstanceId": {
-      "base": "<p>The following problems can cause this exception:</p> <p>The SSM agent is not running. On managed instances and Linux instances, verify that the SSM agent is running. On EC2 Windows instances, verify that the EC2Config service is running.</p> <p>The SSM agent or EC2Config service is not registered to the SSM endpoint. Try reinstalling the SSM agent or EC2Config service.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p> <p>Or, you do not have permission to access the instance.</p>",
+      "base": "<p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>The SSM agent is not running. On managed instances and Linux instances, verify that the SSM agent is running. On EC2 Windows instances, verify that the EC2Config service is running.</p> <p>The SSM agent or EC2Config service is not registered to the SSM endpoint. Try reinstalling the SSM agent or EC2Config service.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>",
       "refs": {
       }
     },
@@ -2361,7 +2349,7 @@
       }
     },
     "InvalidPluginName": {
-      "base": null,
+      "base": "<p>The plugin name is not valid.</p>",
       "refs": {
       }
     },
@@ -2584,6 +2572,11 @@
         "InventoryResultEntity$Data": null
       }
     },
+    "InvocationDoesNotExist": {
+      "base": "<p>The command ID and instance ID you specified did not match any invocations. Verify the command ID adn the instance ID and try again. </p>",
+      "refs": {
+      }
+    },
     "InvocationTraceOutput": {
       "base": null,
       "refs": {
@@ -2718,6 +2711,7 @@
       "refs": {
         "CreateMaintenanceWindowRequest$Cutoff": null,
         "GetMaintenanceWindowResult$Cutoff": null,
+        "MaintenanceWindowIdentity$Cutoff": null,
         "UpdateMaintenanceWindowRequest$Cutoff": null,
         "UpdateMaintenanceWindowResult$Cutoff": null
       }
@@ -2727,6 +2721,7 @@
       "refs": {
         "CreateMaintenanceWindowRequest$Duration": null,
         "GetMaintenanceWindowResult$Duration": null,
+        "MaintenanceWindowIdentity$Duration": null,
         "UpdateMaintenanceWindowRequest$Duration": null,
         "UpdateMaintenanceWindowResult$Duration": null
       }
@@ -2755,7 +2750,9 @@
         "GetMaintenanceWindowExecutionResult$WindowExecutionId": null,
         "GetMaintenanceWindowExecutionTaskRequest$WindowExecutionId": null,
         "GetMaintenanceWindowExecutionTaskResult$WindowExecutionId": null,
-        "MaintenanceWindowExecution$WindowExecutionId": null
+        "MaintenanceWindowExecution$WindowExecutionId": null,
+        "MaintenanceWindowExecutionTaskIdentity$WindowExecutionId": null,
+        "MaintenanceWindowExecutionTaskInvocationIdentity$WindowExecutionId": null
       }
     },
     "MaintenanceWindowExecutionList": {
@@ -2774,6 +2771,15 @@
         "MaintenanceWindowExecutionTaskInvocationIdentity$Status": null
       }
     },
+    "MaintenanceWindowExecutionStatusDetails": {
+      "base": null,
+      "refs": {
+        "GetMaintenanceWindowExecutionResult$StatusDetails": null,
+        "GetMaintenanceWindowExecutionTaskResult$StatusDetails": null,
+        "MaintenanceWindowExecutionTaskIdentity$StatusDetails": null,
+        "MaintenanceWindowExecutionTaskInvocationIdentity$StatusDetails": null
+      }
+    },
     "MaintenanceWindowExecutionTaskExecutionId": {
       "base": null,
       "refs": {
@@ -2787,7 +2793,8 @@
         "GetMaintenanceWindowExecutionTaskRequest$TaskId": null,
         "GetMaintenanceWindowExecutionTaskResult$TaskExecutionId": null,
         "MaintenanceWindowExecutionTaskIdList$member": null,
-        "MaintenanceWindowExecutionTaskIdentity$TaskId": null
+        "MaintenanceWindowExecutionTaskIdentity$TaskExecutionId": null,
+        "MaintenanceWindowExecutionTaskInvocationIdentity$TaskExecutionId": null
       }
     },
     "MaintenanceWindowExecutionTaskIdList": {
@@ -2826,6 +2833,12 @@
         "DescribeMaintenanceWindowExecutionTaskInvocationsResult$WindowExecutionTaskInvocationIdentities": null
       }
     },
+    "MaintenanceWindowExecutionTaskInvocationParameters": {
+      "base": null,
+      "refs": {
+        "MaintenanceWindowExecutionTaskInvocationIdentity$Parameters": null
+      }
+    },
     "MaintenanceWindowId": {
       "base": null,
       "refs": {
@@ -2841,7 +2854,10 @@
         "DescribeMaintenanceWindowTasksRequest$WindowId": null,
         "GetMaintenanceWindowRequest$WindowId": null,
         "GetMaintenanceWindowResult$WindowId": null,
+        "MaintenanceWindowExecution$WindowId": null,
         "MaintenanceWindowIdentity$WindowId": null,
+        "MaintenanceWindowTarget$WindowId": null,
+        "MaintenanceWindowTask$WindowId": null,
         "RegisterTargetWithMaintenanceWindowRequest$WindowId": null,
         "RegisterTaskWithMaintenanceWindowRequest$WindowId": null,
         "UpdateMaintenanceWindowRequest$WindowId": null,
@@ -2908,7 +2924,7 @@
     "MaintenanceWindowTargetIdList": {
       "base": null,
       "refs": {
-        "MaintenanceWindowTarget$TargetIdList": null,
+        "MaintenanceWindowTarget$TargetIds": null,
         "RegisterTargetWithMaintenanceWindowRequest$TargetIds": null
       }
     },
@@ -2941,6 +2957,7 @@
       "base": null,
       "refs": {
         "GetMaintenanceWindowExecutionTaskResult$TaskArn": null,
+        "MaintenanceWindowExecutionTaskIdentity$TaskArn": null,
         "MaintenanceWindowTask$TaskArn": null,
         "RegisterTaskWithMaintenanceWindowRequest$TaskArn": null
       }
@@ -3015,6 +3032,7 @@
     "MaintenanceWindowTaskTargetId": {
       "base": null,
       "refs": {
+        "MaintenanceWindowExecutionTaskInvocationIdentity$WindowTargetId": null,
         "MaintenanceWindowTaskTarget$TaskTargetId": null
       }
     },
@@ -3035,8 +3053,9 @@
       "base": null,
       "refs": {
         "GetMaintenanceWindowExecutionTaskResult$Type": null,
+        "MaintenanceWindowExecutionTaskIdentity$TaskType": null,
         "MaintenanceWindowTask$Type": null,
-        "RegisterTaskWithMaintenanceWindowRequest$Type": null
+        "RegisterTaskWithMaintenanceWindowRequest$TaskType": null
       }
     },
     "ManagedInstanceId": {
@@ -3059,6 +3078,7 @@
         "DescribeInstanceAssociationsStatusRequest$MaxResults": null,
         "DescribeParametersRequest$MaxResults": null,
         "GetInventoryRequest$MaxResults": null,
+        "GetParameterHistoryRequest$MaxResults": null,
         "ListAssociationsRequest$MaxResults": "<p>The maximum number of items to return for this call. The call also returns a token that you can specify in a subsequent call to get the next set of results.</p>",
         "ListDocumentVersionsRequest$MaxResults": null,
         "ListDocumentsRequest$MaxResults": "<p>The maximum number of items to return for this call. The call also returns a token that you can specify in a subsequent call to get the next set of results.</p>",
@@ -3129,6 +3149,8 @@
         "GetInventoryResult$NextToken": null,
         "GetInventorySchemaRequest$NextToken": null,
         "GetInventorySchemaResult$NextToken": null,
+        "GetParameterHistoryRequest$NextToken": null,
+        "GetParameterHistoryResult$NextToken": null,
         "ListAssociationsRequest$NextToken": "<p>The token for the next set of items to return. (You received this token from a previous call.)</p>",
         "ListAssociationsResult$NextToken": "<p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>",
         "ListCommandInvocationsRequest$NextToken": "<p>(Optional) The token for the next set of items to return. (You received this token from a previous call.)</p>",
@@ -3186,6 +3208,8 @@
     "OwnerInformation": {
       "base": null,
       "refs": {
+        "InstancePatchState$OwnerInformation": null,
+        "MaintenanceWindowExecutionTaskInvocationIdentity$OwnerInformation": null,
         "MaintenanceWindowTarget$OwnerInformation": null,
         "RegisterTargetWithMaintenanceWindowRequest$OwnerInformation": null
       }
@@ -3196,6 +3220,9 @@
         "DeleteParameterRequest$Name": null,
         "GetParameterHistoryRequest$Name": null,
         "Parameter$Name": null,
+        "ParameterHistory$Name": null,
+        "ParameterMetadata$Name": null,
+        "ParameterNameList$member": null,
         "PutParameterRequest$Name": null
       }
     },
@@ -3203,6 +3230,7 @@
       "base": null,
       "refs": {
         "Parameter$Value": null,
+        "ParameterHistory$Value": null,
         "PutParameterRequest$Value": null
       }
     },
@@ -3212,16 +3240,36 @@
         "ParameterList$member": null
       }
     },
+    "ParameterAlreadyExists": {
+      "base": null,
+      "refs": {
+      }
+    },
     "ParameterDescription": {
       "base": null,
       "refs": {
-        "Parameter$Description": null,
+        "ParameterHistory$Description": null,
+        "ParameterMetadata$Description": null,
         "PutParameterRequest$Description": null
+      }
+    },
+    "ParameterHistory": {
+      "base": null,
+      "refs": {
+        "ParameterHistoryList$member": null
+      }
+    },
+    "ParameterHistoryList": {
+      "base": null,
+      "refs": {
+        "GetParameterHistoryResult$Parameters": null
       }
     },
     "ParameterKeyId": {
       "base": null,
       "refs": {
+        "ParameterHistory$KeyId": null,
+        "ParameterMetadata$KeyId": null,
         "PutParameterRequest$KeyId": null
       }
     },
@@ -3233,15 +3281,24 @@
     "ParameterList": {
       "base": null,
       "refs": {
-        "DescribeParametersResult$Parameters": null,
-        "GetParameterHistoryResult$Parameter": null,
         "GetParametersResult$Parameters": null
+      }
+    },
+    "ParameterMetadata": {
+      "base": null,
+      "refs": {
+        "ParameterMetadataList$member": null
+      }
+    },
+    "ParameterMetadataList": {
+      "base": null,
+      "refs": {
+        "DescribeParametersResult$Parameters": null
       }
     },
     "ParameterName": {
       "base": null,
       "refs": {
-        "ParameterNameList$member": null,
         "Parameters$key": null
       }
     },
@@ -3261,6 +3318,8 @@
       "base": null,
       "refs": {
         "Parameter$Type": null,
+        "ParameterHistory$Type": null,
+        "ParameterMetadata$Type": null,
         "PutParameterRequest$Type": null
       }
     },
@@ -3323,6 +3382,19 @@
       "refs": {
         "EffectivePatch$Patch": null,
         "PatchList$member": null
+      }
+    },
+    "PatchBaselineIdentity": {
+      "base": null,
+      "refs": {
+        "PatchBaselineIdentityList$member": null,
+        "PatchGroupPatchBaselineMapping$BaselineIdentity": null
+      }
+    },
+    "PatchBaselineIdentityList": {
+      "base": null,
+      "refs": {
+        "DescribePatchBaselinesResult$BaselineIdentities": null
       }
     },
     "PatchBaselineMaxResults": {
@@ -3397,6 +3469,16 @@
         "PatchFilterList$member": null
       }
     },
+    "PatchFilterGroup": {
+      "base": null,
+      "refs": {
+        "CreatePatchBaselineRequest$GlobalFilters": null,
+        "GetPatchBaselineResult$GlobalFilters": null,
+        "PatchRule$PatchFilterGroup": null,
+        "UpdatePatchBaselineRequest$GlobalFilters": null,
+        "UpdatePatchBaselineResult$GlobalFilters": null
+      }
+    },
     "PatchFilterKey": {
       "base": null,
       "refs": {
@@ -3406,7 +3488,7 @@
     "PatchFilterList": {
       "base": null,
       "refs": {
-        "FilterGroup$FilterList": null
+        "PatchFilterGroup$PatchFilters": null
       }
     },
     "PatchFilterValue": {
@@ -3468,12 +3550,6 @@
         "UpdatePatchBaselineResult$RejectedPatches": null
       }
     },
-    "PatchInstalledBy": {
-      "base": null,
-      "refs": {
-        "PatchComplianceData$InstalledBy": null
-      }
-    },
     "PatchInstalledCount": {
       "base": null,
       "refs": {
@@ -3484,6 +3560,12 @@
       "base": null,
       "refs": {
         "InstancePatchState$InstalledOtherCount": null
+      }
+    },
+    "PatchInstalledTime": {
+      "base": null,
+      "refs": {
+        "PatchComplianceData$InstalledTime": null
       }
     },
     "PatchKbNumber": {
@@ -3529,6 +3611,18 @@
         "InstancePatchState$NotApplicableCount": null
       }
     },
+    "PatchOperationEndTime": {
+      "base": null,
+      "refs": {
+        "InstancePatchState$OperationEndTime": null
+      }
+    },
+    "PatchOperationStartTime": {
+      "base": null,
+      "refs": {
+        "InstancePatchState$OperationStartTime": null
+      }
+    },
     "PatchOperationType": {
       "base": null,
       "refs": {
@@ -3550,6 +3644,7 @@
     "PatchOrchestratorFilterList": {
       "base": null,
       "refs": {
+        "DescribeAvailablePatchesRequest$Filters": null,
         "DescribeInstancePatchesRequest$Filters": null,
         "DescribeMaintenanceWindowExecutionTaskInvocationsRequest$Filters": null,
         "DescribeMaintenanceWindowExecutionTasksRequest$Filters": null,
@@ -3582,6 +3677,27 @@
       "base": null,
       "refs": {
         "Patch$ProductFamily": null
+      }
+    },
+    "PatchRule": {
+      "base": null,
+      "refs": {
+        "PatchRuleList$member": null
+      }
+    },
+    "PatchRuleGroup": {
+      "base": null,
+      "refs": {
+        "CreatePatchBaselineRequest$ApprovalRules": null,
+        "GetPatchBaselineResult$ApprovalRules": null,
+        "UpdatePatchBaselineRequest$ApprovalRules": null,
+        "UpdatePatchBaselineResult$ApprovalRules": null
+      }
+    },
+    "PatchRuleList": {
+      "base": null,
+      "refs": {
+        "PatchRuleGroup$PatchRules": null
       }
     },
     "PatchSeverity": {
@@ -3803,7 +3919,7 @@
       "base": null,
       "refs": {
         "CommandPlugin$ResponseCode": "<p>A numeric response code generated after executing the plugin. </p>",
-        "GetCommandInvocationResult$ResponseCode": null
+        "GetCommandInvocationResult$ResponseCode": "<p>The error level response code for the plugin script. If the response code is <code>-1</code>, then the command has not started executing on the instance, or it was not received by the instance.</p>"
       }
     },
     "ResultAttribute": {
@@ -3816,27 +3932,6 @@
       "base": null,
       "refs": {
         "GetInventoryRequest$ResultAttributes": null
-      }
-    },
-    "Rule": {
-      "base": null,
-      "refs": {
-        "RuleList$member": null
-      }
-    },
-    "RuleGroup": {
-      "base": null,
-      "refs": {
-        "CreatePatchBaselineRequest$ApprovalRules": null,
-        "GetPatchBaselineResult$ApprovalRules": null,
-        "UpdatePatchBaselineRequest$ApprovalRules": null,
-        "UpdatePatchBaselineResult$ApprovalRules": null
-      }
-    },
-    "RuleList": {
-      "base": null,
-      "refs": {
-        "RuleGroup$RuleList": null
       }
     },
     "S3BucketName": {
@@ -3874,11 +3969,11 @@
     "S3Region": {
       "base": null,
       "refs": {
-        "Command$OutputS3Region": null,
-        "CommandPlugin$OutputS3Region": null,
+        "Command$OutputS3Region": "<p>The region where the Amazon Simple Storage Service (Amazon S3) output bucket is located. The default value is the region where SSM is being called.</p>",
+        "CommandPlugin$OutputS3Region": "<p>The name of the region where the output is stored in Amazon S3.</p>",
         "LoggingInfo$S3Region": null,
         "S3OutputLocation$OutputS3Region": null,
-        "SendCommandRequest$OutputS3Region": null
+        "SendCommandRequest$OutputS3Region": "<p>(Optional) The region where the Amazon Simple Storage Service (Amazon S3) output bucket is located. The default value is the region where SSM is being called.</p>"
       }
     },
     "ScheduleExpression": {
@@ -3914,8 +4009,8 @@
         "Command$ServiceRole": "<p>The IAM service role that SSM uses to act on your behalf when sending notifications about command status changes. </p>",
         "CommandInvocation$ServiceRole": "<p>The IAM service role that SSM uses to act on your behalf when sending notifications about command status changes on a per instance basis.</p>",
         "GetMaintenanceWindowExecutionTaskResult$ServiceRole": null,
-        "MaintenanceWindowTask$ServiceRole": null,
-        "RegisterTaskWithMaintenanceWindowRequest$ServiceRole": null,
+        "MaintenanceWindowTask$ServiceRoleArn": null,
+        "RegisterTaskWithMaintenanceWindowRequest$ServiceRoleArn": null,
         "SendCommandRequest$ServiceRoleArn": "<p>The IAM role that SSM uses to send notifications. </p>"
       }
     },
@@ -3935,19 +4030,20 @@
       "base": null,
       "refs": {
         "GetDeployablePatchSnapshotForInstanceRequest$SnapshotId": null,
-        "GetDeployablePatchSnapshotForInstanceResult$SnapshotId": null
+        "GetDeployablePatchSnapshotForInstanceResult$SnapshotId": null,
+        "InstancePatchState$SnapshotId": null
       }
     },
     "StandardErrorContent": {
       "base": null,
       "refs": {
-        "GetCommandInvocationResult$StandardErrorContent": null
+        "GetCommandInvocationResult$StandardErrorContent": "<p>The first 8,000 characters written by the plugin to stderr. If the command has not finished executing, then this string is empty.</p>"
       }
     },
     "StandardOutputContent": {
       "base": null,
       "refs": {
-        "GetCommandInvocationResult$StandardOutputContent": null
+        "GetCommandInvocationResult$StandardOutputContent": "<p>The first 24,000 characters written by the plugin to stdout. If the command has not finished executing, if <code>ExecutionStatus</code> is neither <code>Succeeded</code> nor <code>Failed</code>, then this string is empty.</p>"
       }
     },
     "StartAssociationsOnceRequest": {
@@ -3979,10 +4075,10 @@
     "StatusDetails": {
       "base": null,
       "refs": {
-        "Command$StatusDetails": null,
-        "CommandInvocation$StatusDetails": null,
-        "CommandPlugin$StatusDetails": null,
-        "GetCommandInvocationResult$StatusDetails": null
+        "Command$StatusDetails": "<p>A detailed status of the command execution. <code>StatusDetails</code> includes more information than <code>Status</code> because it includes states resulting from error and concurrency control parameters. <code>StatusDetails</code> can show different results than <code>Status</code>. For more information about these statuses, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/monitor-commands.html\">Monitor Commands</a> (Linux) or <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/monitor-commands.html\">Monitor Commands</a> (Windows). <code>StatusDetails</code> can be one of the following values:</p> <ul> <li> <p>Pending â€“ The command has not been sent to any instances.</p> </li> <li> <p>In Progress â€“ The command has been sent to at least one instance but has not reached a final state on all instances.</p> </li> <li> <p>Success â€“ The command successfully executed on all invocations. This is a terminal state.</p> </li> <li> <p>Delivery Timed Out â€“ The value of <code>MaxErrors</code> or more command invocations shows a status of <code>Delivery Timed Out</code>. This is a terminal state.</p> </li> <li> <p>Execution Timed Out â€“ The value of <code>MaxErrors</code> or more command invocations shows a status of <code>Execution Timed Out</code>. This is a terminal state.</p> </li> <li> <p>Failed â€“ The value of <code>MaxErrors</code> or more command invocations shows a status of <code>Failed</code>. This is a terminal state.</p> </li> <li> <p>Incomplete â€“ The command was attempted on all instances and one or more of the invocations does not have a value of <code>Success</code>. However, not enough invocations failed for the status to be <code>Failed</code>. This is a terminal state.</p> </li> <li> <p>Canceled â€“ The command was terminated before it was completed. This is a terminal state.</p> </li> <li> <p>Rate Exceeded â€“ The number of instances targeted by the command exceeded the account limit for pending invocations. The system has canceled the command before executing it on any instance. This is a terminal state.</p> </li> </ul>",
+        "CommandInvocation$StatusDetails": "<p>A detailed status of the command execution for each invocation (each instance targeted by the command). <code>StatusDetails</code> includes more information than <code>Status</code> because it includes states resulting from error and concurrency control parameters. <code>StatusDetails</code> can show different results than <code>Status</code>. For more information about these statuses, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/monitor-commands.html\">Monitor Commands</a> (Linux) or <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/monitor-commands.html\">Monitor Commands</a> (Windows). <code>StatusDetails</code> can be one of the following values: </p> <ul> <li> <p>Pending â€“ The command has not been sent to the instance.</p> </li> <li> <p>In Progress â€“ The command has been sent to the instance but has not reached a terminal state.</p> </li> <li> <p>Success â€“ The execution of the command or plugin was successfully completed. This is a terminal state.</p> </li> <li> <p>Delivery Timed Out â€“ The command was not delivered to the instance before the delivery timeout expired. Delivery timeouts do not count against the parent commandâ€™s <code>MaxErrors</code> limit, but they do contribute to whether the parent command status is <code>Success</code> or <code>Incomplete</code>. This is a terminal state.</p> </li> <li> <p>Execution Timed Out â€“ Command execution started on the instance, but the execution was not complete before the execution timeout expired. Execution timeouts count against the <code>MaxErrors</code> limit of the parent command. This is a terminal state.</p> </li> <li> <p>Failed â€“ The command was not successful on the instance. For a plugin, this indicates that the result code was not zero. For a command invocation, this indicates that the result code for one or more plugins was not zero. Invocation failures count against the <code>MaxErrors</code> limit of the parent command. This is a terminal state.</p> </li> <li> <p>Canceled â€“ The command was terminated before it was completed. This is a terminal state.</p> </li> <li> <p>Undeliverable â€“ The command can't be delivered to the instance. The instance might not exist or might not be responding. Undeliverable invocations don't count against the parent commandâ€™s <code>MaxErrors</code> limit and don't contribute to whether the parent command status is <code>Success</code> or <code>Incomplete</code>. This is a terminal state.</p> </li> <li> <p>Terminated â€“ The parent command exceeded its <code>MaxErrors</code> limit and subsequent command invocations were canceled by the system. This is a terminal state.</p> </li> </ul>",
+        "CommandPlugin$StatusDetails": "<p>A detailed status of the plugin execution. <code>StatusDetails</code> includes more information than <code>Status</code> because it includes states resulting from error and concurrency control parameters. <code>StatusDetails</code> can show different results than <code>Status</code>. For more information about these statuses, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/monitor-commands.html\">Monitor Commands</a> (Linux) or <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/monitor-commands.html\">Monitor Commands</a> (Windows). <code>StatusDetails</code> can be one of the following values:</p> <ul> <li> <p>Pending â€“ The command has not been sent to the instance.</p> </li> <li> <p>In Progress â€“ The command has been sent to the instance but has not reached a terminal state.</p> </li> <li> <p>Success â€“ The execution of the command or plugin was successfully completed. This is a terminal state.</p> </li> <li> <p>Delivery Timed Out â€“ The command was not delivered to the instance before the delivery timeout expired. Delivery timeouts do not count against the parent commandâ€™s <code>MaxErrors</code> limit, but they do contribute to whether the parent command status is <code>Success</code> or <code>Incomplete</code>. This is a terminal state.</p> </li> <li> <p>Execution Timed Out â€“ Command execution started on the instance, but the execution was not complete before the execution timeout expired. Execution timeouts count against the <code>MaxErrors</code> limit of the parent command. This is a terminal state.</p> </li> <li> <p>Failed â€“ The command was not successful on the instance. For a plugin, this indicates that the result code was not zero. For a command invocation, this indicates that the result code for one or more plugins was not zero. Invocation failures count against the <code>MaxErrors</code> limit of the parent command. This is a terminal state.</p> </li> <li> <p>Canceled â€“ The command was terminated before it was completed. This is a terminal state.</p> </li> <li> <p>Undeliverable â€“ The command can't be delivered to the instance. The instance might not exist, or it might not be responding. Undeliverable invocations don't count against the parent commandâ€™s <code>MaxErrors</code> limit, and they don't contribute to whether the parent command status is <code>Success</code> or <code>Incomplete</code>. This is a terminal state.</p> </li> <li> <p>Terminated â€“ The parent command exceeded its <code>MaxErrors</code> limit and subsequent command invocations were canceled by the system. This is a terminal state.</p> </li> </ul>",
+        "GetCommandInvocationResult$StatusDetails": "<p>A detailed status of the command execution for an invocation. <code>StatusDetails</code> includes more information than <code>Status</code> because it includes states resulting from error and concurrency control parameters. <code>StatusDetails</code> can show different results than <code>Status</code>. For more information about these statuses, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/monitor-commands.html\">Monitor Commands</a> (Linux) or <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/monitor-commands.html\">Monitor Commands</a> (Windows). <code>StatusDetails</code> can be one of the following values: </p> <ul> <li> <p>Pending â€“ The command has not been sent to the instance.</p> </li> <li> <p>In Progress â€“ The command has been sent to the instance but has not reached a terminal state.</p> </li> <li> <p>Delayed â€“ The system attempted to send the command to the target, but the target was not available. The instance might not be available because of network issues, the instance was stopped, etc. The system will try to deliver the command again.</p> </li> <li> <p>Success â€“ The command or plugin was executed successfully. This is a terminal state.</p> </li> <li> <p>Delivery Timed Out â€“ The command was not delivered to the instance before the delivery timeout expired. Delivery timeouts do not count against the parent commandâ€™s <code>MaxErrors</code> limit, but they do contribute to whether the parent command status is <code>Success</code> or <code>Incomplete</code>. This is a terminal state.</p> </li> <li> <p>Execution Timed Out â€“ The command started to execute on the instance, but the execution was not complete before the timeout expired. Execution timeouts count against the <code>MaxErrors</code> limit of the parent command. This is a terminal state.</p> </li> <li> <p>Failed â€“ The command wasn't executed successfully on the instance. For a plugin, this indicates that the result code was not zero. For a command invocation, this indicates that the result code for one or more plugins was not zero. Invocation failures count against the <code>MaxErrors</code> limit of the parent command. This is a terminal state.</p> </li> <li> <p>Canceled â€“ The command was terminated before it was completed. This is a terminal state.</p> </li> <li> <p>Undeliverable â€“ The command can't be delivered to the instance. The instance might not exist or might not be responding. Undeliverable invocations don't count against the parent commandâ€™s <code>MaxErrors</code> limit and don't contribute to whether the parent command status is <code>Success</code> or <code>Incomplete</code>. This is a terminal state.</p> </li> <li> <p>Terminated â€“ The parent command exceeded its <code>MaxErrors</code> limit and subsequent command invocations were canceled by the system. This is a terminal state.</p> </li> </ul>"
       }
     },
     "StatusMessage": {
@@ -4000,6 +4096,7 @@
         "InstanceAggregatedAssociationOverview$DetailedStatus": null,
         "InstanceAssociationStatusAggregatedCount$key": null,
         "InstanceAssociationStatusInfo$Status": null,
+        "InstanceAssociationStatusInfo$DetailedStatus": null,
         "InstanceInformation$AssociationStatus": null,
         "InstanceProperty$AssociationStatus": null
       }
@@ -4056,6 +4153,7 @@
         "DocumentVersionLimitExceeded$Message": null,
         "DoesNotExistException$Message": null,
         "DuplicateDocumentContent$Message": null,
+        "IdempotentParameterMismatch$Message": null,
         "InstanceInformation$PlatformVersion": "<p>The version of the OS platform running on your instance. </p>",
         "InstanceInformation$Name": "<p>The name of the managed instance.</p>",
         "InstanceProperty$ResourceType": null,
@@ -4091,12 +4189,13 @@
         "ItemContentMismatchException$Message": null,
         "ItemSizeLimitExceededException$Message": null,
         "MachineFingerprintDoesNotMatch$message": null,
-        "MaintenanceWindowExecutionTaskInvocationIdentity$Parameters": null,
         "MaxDocumentSizeExceeded$Message": null,
         "NormalStringMap$key": null,
         "NormalStringMap$value": null,
-        "Parameter$LastModifyUser": null,
+        "ParameterAlreadyExists$message": null,
+        "ParameterHistory$LastModifiedUser": null,
         "ParameterLimitExceeded$message": null,
+        "ParameterMetadata$LastModifiedUser": null,
         "ParameterNotFound$message": null,
         "RegistrationLimitExceeded$message": null,
         "ResourceInUseException$Message": null,
@@ -4107,6 +4206,7 @@
         "StepExecution$FailureMessage": null,
         "StringList$member": null,
         "TotalSizeLimitExceededException$Message": null,
+        "UnsupportedInventorySchemaVersionException$Message": null,
         "UnsupportedPlatformType$Message": null,
         "UpdateInstanceInformationRequest$PlatformName": null,
         "UpdateInstanceInformationRequest$PlatformVersion": null
@@ -4115,9 +4215,9 @@
     "StringDateTime": {
       "base": null,
       "refs": {
-        "GetCommandInvocationResult$ExecutionStartDateTime": null,
-        "GetCommandInvocationResult$ExecutionElapsedTime": null,
-        "GetCommandInvocationResult$ExecutionEndDateTime": null
+        "GetCommandInvocationResult$ExecutionStartDateTime": "<p>The date and time the plugin started executing. Date and time are written in ISO 8601 format. For example, August 28, 2016 is represented as 2016-08-28. If the plugin has not started to execute, the string is empty.</p>",
+        "GetCommandInvocationResult$ExecutionElapsedTime": "<p>Duration since <code>ExecutionStartDateTime</code>.</p>",
+        "GetCommandInvocationResult$ExecutionEndDateTime": "<p>The date and time the plugin was finished executing. Date and time are written in ISO 8601 format. For example, August 28, 2016 is represented as 2016-08-28. If the plugin has not started to execute, the string is empty.</p>"
       }
     },
     "StringList": {
@@ -4127,40 +4227,9 @@
       }
     },
     "Tag": {
-      "base": "<p> Metadata that you assign to your managed instances. Tags enable you to categorize your managed instances in different ways, for example, by purpose, owner, or environment.</p>",
+      "base": "<p>Metadata that you assign to your managed instances. Tags enable you to categorize your managed instances in different ways, for example, by purpose, owner, or environment.</p>",
       "refs": {
         "TagList$member": null
-      }
-    },
-    "TagFilter": {
-      "base": null,
-      "refs": {
-        "TagFilterList$member": null
-      }
-    },
-    "TagFilterKey": {
-      "base": null,
-      "refs": {
-        "TagFilter$Key": null
-      }
-    },
-    "TagFilterList": {
-      "base": null,
-      "refs": {
-        "MaintenanceWindowTarget$TagFilterList": null,
-        "RegisterTargetWithMaintenanceWindowRequest$TagFilters": null
-      }
-    },
-    "TagFilterValue": {
-      "base": null,
-      "refs": {
-        "TagFilterValues$member": null
-      }
-    },
-    "TagFilterValues": {
-      "base": null,
-      "refs": {
-        "TagFilter$Values": null
       }
     },
     "TagKey": {
@@ -4184,7 +4253,7 @@
       }
     },
     "Target": {
-      "base": null,
+      "base": "<p>An array of search criteria that targets instances using a <code>Key</code>;<code>Value</code> combination that you specify. <code>Targets</code> is required if you don't provide one or more instance IDs in the call.</p>",
       "refs": {
         "Targets$member": null
       }
@@ -4192,13 +4261,13 @@
     "TargetCount": {
       "base": null,
       "refs": {
-        "Command$TargetCount": null
+        "Command$TargetCount": "<p>The number of targets for the command.</p>"
       }
     },
     "TargetKey": {
       "base": null,
       "refs": {
-        "Target$Key": null
+        "Target$Key": "<p>User-defined criteria for sending commands that target instances that meet the criteria. <code>Key</code> can be <code>tag:&lt;Amazon EC2 tag&gt;</code> or <code>name:&lt;Amazon EC2 instance ID&gt;</code>. For example, <code>tag:ServerRole</code> or <code>name:0123456789012345</code>. For more information about how to send commands that target instances using <code>Key</code>;<code>Value</code> parameters, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/run-command.html\">Executing a Command Using Amazon EC2 Run Command</a> (Linux) or <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/run-command.html\">Executing a Command Using Amazon EC2 Run Command</a> (Windows).</p>"
       }
     },
     "TargetValue": {
@@ -4210,7 +4279,7 @@
     "TargetValues": {
       "base": null,
       "refs": {
-        "Target$Values": null
+        "Target$Values": "<p>User-defined criteria that maps to <code>Key</code>. For example, if you specified <code>tag:ServerRole</code>, you could specify <code>value:WebServer</code> to execute a command on instances that include Amazon EC2 tags of ServerRole;WebServer. For more information about how to send commands that target instances using <code>Key</code>;<code>Value</code> parameters, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/run-command.html\">Executing a Command Using Amazon EC2 Run Command</a> (Linux) or <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/run-command.html\">Executing a Command Using Amazon EC2 Run Command</a> (Windows).</p>"
       }
     },
     "Targets": {
@@ -4218,11 +4287,13 @@
       "refs": {
         "Association$Targets": null,
         "AssociationDescription$Targets": null,
-        "Command$Targets": null,
+        "Command$Targets": "<p>An array of search criteria that targets instances using a <code>Key</code>;<code>Value</code> combination that you specify. <code>Targets</code> is required if you don't provide one or more instance IDs in the call.</p>",
         "CreateAssociationBatchRequestEntry$Targets": null,
         "CreateAssociationRequest$Targets": null,
         "InstanceAssociationSummary$Targets": null,
-        "SendCommandRequest$Targets": null
+        "MaintenanceWindowTarget$TagFilters": null,
+        "RegisterTargetWithMaintenanceWindowRequest$TagFilters": null,
+        "SendCommandRequest$Targets": "<p>(Optional) An array of search criteria that targets instances using a <code>Key</code>;<code>Value</code> combination that you specify. <code>Targets</code> is required if you don't provide one or more instance IDs in the call. For more information about how to use <code>Targets</code>, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/run-command.html\">Executing a Command Using Amazon EC2 Run Command</a> (Linux) or <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/run-command.html\">Executing a Command Using Amazon EC2 Run Command</a> (Windows).</p>"
       }
     },
     "TimeoutSeconds": {
@@ -4238,7 +4309,7 @@
       }
     },
     "TooManyTagsError": {
-      "base": null,
+      "base": "<p>The <code>Targets</code> parameter includes too many tags. Remove one or more tags and try the command again.</p>",
       "refs": {
       }
     },
@@ -4248,6 +4319,11 @@
       }
     },
     "TotalSizeLimitExceededException": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "UnsupportedInventorySchemaVersionException": {
       "base": null,
       "refs": {
       }
@@ -4366,12 +4442,12 @@
     "Url": {
       "base": null,
       "refs": {
-        "CommandInvocation$StandardOutputUrl": null,
-        "CommandInvocation$StandardErrorUrl": null,
-        "CommandPlugin$StandardOutputUrl": null,
-        "CommandPlugin$StandardErrorUrl": null,
-        "GetCommandInvocationResult$StandardOutputUrl": null,
-        "GetCommandInvocationResult$StandardErrorUrl": null,
+        "CommandInvocation$StandardOutputUrl": "<p>The URL to the pluginâ€™s StdOut file in Amazon S3, if the Amazon S3 bucket was defined for the parent command. For an invocation, <code>StandardOutputUrl</code> is populated if there is just one plugin defined for the command, and the Amazon S3 bucket was defined for the command.</p>",
+        "CommandInvocation$StandardErrorUrl": "<p>The URL to the pluginâ€™s StdErr file in Amazon S3, if the Amazon S3 bucket was defined for the parent command. For an invocation, <code>StandardErrorUrl</code> is populated if there is just one plugin defined for the command, and the Amazon S3 bucket was defined for the command.</p>",
+        "CommandPlugin$StandardOutputUrl": "<p>The URL for the complete text written by the plugin to stdout in Amazon S3. If the Amazon S3 bucket for the command was not specified, then this string is empty.</p>",
+        "CommandPlugin$StandardErrorUrl": "<p>The URL for the complete text written by the plugin to stderr. If execution is not yet complete, then this string is empty.</p>",
+        "GetCommandInvocationResult$StandardOutputUrl": "<p>The URL for the complete text written by the plugin to stdout in Amazon S3. If an Amazon S3 bucket was not specified, then this string is empty.</p>",
+        "GetCommandInvocationResult$StandardErrorUrl": "<p>The URL for the complete text written by the plugin to stderr. If the command has not finished executing, then this string is empty.</p>",
         "S3OutputUrl$StandardOutputUrl": null,
         "S3OutputUrl$StandardErrorUrl": null
       }
@@ -4379,16 +4455,16 @@
     "VelocityConstraint": {
       "base": null,
       "refs": {
-        "Command$MaxConcurrency": null,
-        "Command$MaxErrors": null,
+        "Command$MaxConcurrency": "<p>The maximum number of instances that are allowed to execute the command at the same time. You can specify a number of instances, such as 10, or a percentage of instances, such as 10%. The default value is 50. For more information about how to use <code>MaxConcurrency</code>, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/run-command.html\">Executing a Command Using Amazon EC2 Run Command</a> (Linux) or <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/run-command.html\">Executing a Command Using Amazon EC2 Run Command</a> (Windows). </p>",
+        "Command$MaxErrors": "<p>The maximum number of errors allowed before the system stops sending the command to additional targets. You can specify a number of errors, such as 10, or a percentage or errors, such as 10%. The default value is 50. For more information about how to use <code>MaxErrors</code>, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/run-command.html\">Executing a Command Using Amazon EC2 Run Command</a> (Linux) or <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/run-command.html\">Executing a Command Using Amazon EC2 Run Command</a> (Windows).</p>",
         "GetMaintenanceWindowExecutionTaskResult$MaxConcurrency": null,
         "GetMaintenanceWindowExecutionTaskResult$MaxErrors": null,
         "MaintenanceWindowTask$MaxConcurrency": null,
         "MaintenanceWindowTask$MaxErrors": null,
         "RegisterTaskWithMaintenanceWindowRequest$MaxConcurrency": null,
         "RegisterTaskWithMaintenanceWindowRequest$MaxErrors": null,
-        "SendCommandRequest$MaxConcurrency": null,
-        "SendCommandRequest$MaxErrors": null
+        "SendCommandRequest$MaxConcurrency": "<p>(Optional) The maximum number of instances that are allowed to execute the command at the same time. You can specify a number such as â€œ10â€ or a percentage such as â€œ10%â€. The default value is 50. For more information about how to use <code>MaxConcurrency</code>, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/run-command.html\">Executing a Command Using Amazon EC2 Run Command</a> (Linux) or <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/run-command.html\">Executing a Command Using Amazon EC2 Run Command</a> (Windows).</p>",
+        "SendCommandRequest$MaxErrors": "<p>(Optional) The maximum number of errors allowed before the system stops sending the command to additional targets. You can specify a number of errors such as 10, or a percentage of errors such as 10%. The default value is 50. For more information about how to use <code>MaxErrors</code>, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/run-command.html\">Executing a Command Using Amazon EC2 Run Command</a> (Linux) or <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/run-command.html\">Executing a Command Using Amazon EC2 Run Command</a> (Windows).</p>"
       }
     },
     "Version": {
