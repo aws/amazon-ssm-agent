@@ -137,7 +137,10 @@ func (svc *sdkService) ListInstanceAssociations(log log.T, instanceID string, ne
 
 	response, err = svc.sdk.ListInstanceAssociations(&params)
 	if err != nil {
-		sdkutil.HandleAwsError(log, err, ssmStopPolicy)
+		errCode := sdkutil.GetAwsErrorCode(err)
+		if errCode != "UnknownOperationException" {
+			sdkutil.HandleAwsError(log, err, ssmStopPolicy)
+		}
 		return
 	}
 	log.Debug("ListInstanceAssociations Response", response)

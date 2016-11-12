@@ -57,6 +57,16 @@ func HandleAwsError(log log.T, err error, stopPolicy *StopPolicy) {
 	}
 }
 
+// GetAwsErrorCode tries to return AwsError code
+func GetAwsErrorCode(err error) string {
+	errorCode := ""
+	if aErr, ok := err.(awserr.Error); ok {
+		return aErr.Code()
+	}
+
+	return errorCode
+}
+
 // resetStopPolicy will reset the stoppolicy error count
 func resetStopPolicy(stopPolicy *StopPolicy) {
 	if stopPolicy != nil {

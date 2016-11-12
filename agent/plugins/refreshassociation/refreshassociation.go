@@ -211,6 +211,7 @@ func (p *Plugin) runCommands(log log.T, pluginInput RefreshAssociationPluginInpu
 			p.assocSvc.UpdateInstanceAssociationStatus(
 				log,
 				*assoc.Association.AssociationId,
+				*assoc.Association.Name,
 				*assoc.Association.InstanceId,
 				contracts.AssociationStatusFailed,
 				contracts.AssociationErrorCodeListAssociationError,
@@ -220,6 +221,7 @@ func (p *Plugin) runCommands(log log.T, pluginInput RefreshAssociationPluginInpu
 			return
 		}
 
+		// if user provided empty associationIds in the document, we will run all the associations now
 		if len(pluginInput.AssociationIds) == 0 {
 			assoc.RunNow = true
 		} else {

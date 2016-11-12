@@ -67,6 +67,8 @@ func MergeResultStatus(current ResultStatus, new ResultStatus) (merged ResultSta
 const (
 	// AssociationStatusPending represents Pending status
 	AssociationStatusPending = "Pending"
+	// AssociationStatusAssociated represents Associated status
+	AssociationStatusAssociated = "Associated"
 	// AssociationStatusInProgress represents InProgress status
 	AssociationStatusInProgress = "InProgress"
 	// AssociationStatusSuccess represents Success status

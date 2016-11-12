@@ -119,7 +119,6 @@ func TestProcessAssociationUnableToLoadAssociationDetail(t *testing.T) {
 	processor := createProcessor()
 	svcMock := service.NewMockDefault()
 	assocRawData := createAssociationRawData()
-	output := ssm.UpdateInstanceAssociationStatusOutput{}
 	parserMock := parserMock{}
 	sys = &systemStub{}
 
@@ -142,7 +141,8 @@ func TestProcessAssociationUnableToLoadAssociationDetail(t *testing.T) {
 		mock.AnythingOfType("*log.Mock"),
 		mock.AnythingOfType("string"),
 		mock.AnythingOfType("string"),
-		mock.AnythingOfType("*ssm.InstanceAssociationExecutionResult")).Return(&output, nil)
+		mock.AnythingOfType("string"),
+		mock.AnythingOfType("*ssm.InstanceAssociationExecutionResult"))
 
 	// Act
 	processor.ProcessAssociation()
@@ -202,7 +202,9 @@ func mockService(svcMock *service.AssociationServiceMock, assocRawData []*model.
 		mock.AnythingOfType("*log.Mock"),
 		mock.AnythingOfType("string"),
 		mock.AnythingOfType("string"),
-		mock.AnythingOfType("*ssm.InstanceAssociationExecutionResult")).Return(output, nil)
+		mock.AnythingOfType("string"),
+		mock.AnythingOfType("string"),
+		mock.AnythingOfType("*ssm.InstanceAssociationExecutionResult"))
 }
 
 func TestProcessAssociationUnableToExecutePendingDocument(t *testing.T) {

@@ -70,6 +70,7 @@ func (r *AssociationExecuter) ExecutePendingDocument(context context.T, pool tas
 	r.assocSvc.UpdateInstanceAssociationStatus(
 		log,
 		docState.DocumentInformation.AssociationID,
+		docState.DocumentInformation.DocumentName,
 		docState.DocumentInformation.InstanceID,
 		contracts.AssociationStatusPending,
 		contracts.AssociationErrorCodeNoError,
@@ -195,6 +196,12 @@ func (r *AssociationExecuter) pluginExecutionReport(
 	pluginOutputs map[string]*contracts.PluginResult,
 	totalNumberOfPlugins int) {
 
+	// Legacy association api does not support plugin level status update
+	// it returns error for multiple update with same status
+	if !r.assocSvc.IsInstanceAssociationApiMode() {
+		return
+	}
+
 	instanceID, err := platform.InstanceID()
 	if err != nil {
 		log.Error("failed to load instance id ", err)
@@ -207,6 +214,7 @@ func (r *AssociationExecuter) pluginExecutionReport(
 	r.assocSvc.UpdateInstanceAssociationStatus(
 		log,
 		associationID,
+		"",
 		instanceID,
 		contracts.AssociationStatusInProgress,
 		contracts.AssociationErrorCodeNoError,
@@ -227,6 +235,7 @@ func (r *AssociationExecuter) associationExecutionReport(
 	r.assocSvc.UpdateInstanceAssociationStatus(
 		log,
 		docInfo.AssociationID,
+		docInfo.DocumentName,
 		docInfo.InstanceID,
 		associationStatus,
 		errorCode,

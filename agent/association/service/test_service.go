@@ -16,7 +16,6 @@ package service
 
 import (
 	"github.com/aws/amazon-ssm-agent/agent/association/model"
-	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/aws-sdk-go/service/ssm"
 	"github.com/stretchr/testify/mock"
@@ -53,25 +52,31 @@ func (m *AssociationServiceMock) LoadAssociationDetail(log log.T, assoc *model.I
 func (m *AssociationServiceMock) UpdateInstanceAssociationStatus(
 	log log.T,
 	associationID string,
+	associationName string,
 	instanceID string,
 	status string,
 	errorCode string,
 	executionDate string,
-	executionSummary string) (*ssm.UpdateInstanceAssociationStatusOutput, error) {
+	executionSummary string) {
 	executionResult := ssm.InstanceAssociationExecutionResult{}
 
-	args := m.Called(log, associationID, instanceID, &executionResult)
-	return args.Get(0).(*ssm.UpdateInstanceAssociationStatusOutput), args.Error(1)
+	m.Called(log, associationID, associationName, instanceID, &executionResult)
+	return
 }
 
 // UpdateAssociationStatus mocks implementation for UpdateAssociationStatus
 func (m *AssociationServiceMock) UpdateAssociationStatus(
 	log log.T,
+	associationName string,
 	instanceID string,
-	name string,
 	status string,
-	message string,
-	agentInfo *contracts.AgentInfo) (*ssm.UpdateAssociationStatusOutput, error) {
-	args := m.Called(log, instanceID, name, status, message, agentInfo)
-	return args.Get(0).(*ssm.UpdateAssociationStatusOutput), args.Error(1)
+	executionSummary string) {
+	m.Called(log, associationName, instanceID, status, executionSummary)
+	return
+}
+
+// UsesInstanceAssociationApi mocks implementation for UsesInstanceAssociationApi
+func (m *AssociationServiceMock) IsInstanceAssociationApiMode() bool {
+	args := m.Called()
+	return args.Get(0).(bool)
 }

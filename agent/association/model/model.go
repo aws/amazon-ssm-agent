@@ -39,7 +39,7 @@ type InstanceAssociation struct {
 	Expression                  string
 	ExpressionType              string
 	Document                    *string
-	RunOnce                     bool
+	LegacyAssociation           bool
 	RunNow                      bool
 	ExcludeFromFutureScheduling bool
 }
@@ -51,7 +51,7 @@ func (newAssoc *InstanceAssociation) Update(oldAssoc *InstanceAssociation) {
 	newAssoc.Expression = oldAssoc.Expression
 	newAssoc.ExpressionType = oldAssoc.ExpressionType
 	newAssoc.ExcludeFromFutureScheduling = oldAssoc.ExcludeFromFutureScheduling
-	newAssoc.RunOnce = oldAssoc.RunOnce
+	newAssoc.LegacyAssociation = oldAssoc.LegacyAssociation
 }
 
 // Initialize initializes default values for the given new association
@@ -61,7 +61,7 @@ func (newAssoc *InstanceAssociation) Initialize(log log.T) error {
 	if newAssoc.Association.ScheduleExpression == nil || *newAssoc.Association.ScheduleExpression == "" {
 		newAssoc.Association.ScheduleExpression = aws.String(cronExpressionEveryFiveMinutes)
 		// legacy association, run only once
-		newAssoc.RunOnce = true
+		newAssoc.LegacyAssociation = true
 	}
 
 	if newAssoc.RunNow {

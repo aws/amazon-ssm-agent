@@ -18,7 +18,6 @@ import (
 	"testing"
 
 	"github.com/aws/amazon-ssm-agent/agent/association/model"
-	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/sdkutil"
 	ssmSvc "github.com/aws/amazon-ssm-agent/agent/ssm"
@@ -111,23 +110,16 @@ func TestUpdateAssociationStatus(t *testing.T) {
 			},
 		},
 	}
-	info := contracts.AgentInfo{}
-
 	ssmMock.On("UpdateAssociationStatus",
 		mock.AnythingOfType("*log.Mock"),
 		mock.AnythingOfType("string"),
 		mock.AnythingOfType("string"),
 		mock.AnythingOfType("*ssm.AssociationStatus")).Return(&output, nil)
 
-	result, err := service.UpdateAssociationStatus(
+	service.UpdateAssociationStatus(
 		logMock,
 		instanceID,
 		associationName,
 		status,
-		"TestMessage",
-		&info)
-
-	assert.NotNil(t, result)
-	assert.NoError(t, err)
-	assert.Equal(t, *result.AssociationDescription.Status.Name, status)
+		"TestMessage")
 }

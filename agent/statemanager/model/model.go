@@ -58,7 +58,6 @@ type DocumentInfo struct {
 	DocumentTraceOutput string
 	RuntimeStatus       map[string]*contracts.PluginRuntimeStatus
 	RunCount            int
-	RunOnce             bool
 }
 
 // DocumentState represents information relevant to a command that gets executed by agent

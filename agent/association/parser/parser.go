@@ -134,7 +134,6 @@ func newDocumentInfo(rawData *model.InstanceAssociation, payload *messageContrac
 	documentInfo.DocumentName = payload.DocumentName
 	documentInfo.IsCommand = false
 	documentInfo.DocumentStatus = contracts.ResultStatusInProgress
-	documentInfo.RunOnce = rawData.RunOnce
 	documentInfo.DocumentTraceOutput = ""
 
 	return *documentInfo

@@ -22,7 +22,6 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/association/cache"
 	"github.com/aws/amazon-ssm-agent/agent/association/executer"
 	"github.com/aws/amazon-ssm-agent/agent/association/model"
-	"github.com/aws/amazon-ssm-agent/agent/association/recorder"
 	"github.com/aws/amazon-ssm-agent/agent/association/schedulemanager"
 	"github.com/aws/amazon-ssm-agent/agent/association/schedulemanager/signal"
 	assocScheduler "github.com/aws/amazon-ssm-agent/agent/association/scheduler"
@@ -182,12 +181,6 @@ func (p *Processor) runScheduledAssociation(log log.T) {
 		return
 	}
 
-	if scheduledAssociation.RunOnce && recorder.HasExecuted(*scheduledAssociation.Association.InstanceId, *scheduledAssociation.Association.AssociationId) {
-		log.Debugf("DocumentId %v hasn't changed. Skipping as it has been processed already.", *scheduledAssociation.Association.AssociationId)
-		schedulemanager.MarkAssociationAsCompleted(log, *scheduledAssociation.Association.AssociationId)
-		return
-	}
-
 	signal.StopWaitTimerForNextScheduledAssociation()
 
 	if assocBookkeeping.IsDocumentCurrentlyExecuting(
@@ -324,13 +317,6 @@ func (p *Processor) persistAssociationForExecution(log log.T, docState *stateMod
 		appconfig.DefaultLocationOfPending,
 		docState)
 
-	if docState.DocumentInformation.RunOnce {
-		// record the last executed association file
-		if err := recorder.UpdateAssociatedDocument(docState.DocumentInformation.InstanceID, docState.DocumentInformation.AssociationID); err != nil {
-			log.Errorf("Failed to persist last executed association document, %v", err)
-		}
-	}
-
 	return p.executer.ExecutePendingDocument(p.context, p.taskPool, docState)
 }
 
@@ -346,6 +332,7 @@ func (p *Processor) updateInstanceAssocStatus(
 	p.assocSvc.UpdateInstanceAssociationStatus(
 		log,
 		*assoc.AssociationId,
+		*assoc.Name,
 		*assoc.InstanceId,
 		status,
 		errorCode,
