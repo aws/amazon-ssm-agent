@@ -20,14 +20,12 @@ import (
 	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/log"
-	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/service/ssm"
 	"github.com/gorhill/cronexpr"
 )
 
 const (
-	cronExpressionEveryFiveMinutes = "cron(0 0/5 * 1/1 * ? *)"
-	expressionTypeCron             = "cron"
+	expressionTypeCron = "cron"
 )
 
 // InstanceAssociation represents detail information of an association
@@ -44,41 +42,43 @@ type InstanceAssociation struct {
 	ExcludeFromFutureScheduling bool
 }
 
-// Update updates new association with old association details
-func (newAssoc *InstanceAssociation) Update(oldAssoc *InstanceAssociation) {
+// Copy copies new association with old association details
+func (newAssoc *InstanceAssociation) Copy(oldAssoc *InstanceAssociation) {
+	// It'd be ideal to make associations immutable
+	// However, NextScheduledDate will be lost if refresh association happens during apply now
+	// The apply now will fail, we will keep the mutation associations as is and keep it minimum
+	// This logic will be cleaned during document execution.
 	newAssoc.CreateDate = oldAssoc.CreateDate
 	newAssoc.NextScheduledDate = oldAssoc.NextScheduledDate
-	newAssoc.Expression = oldAssoc.Expression
-	newAssoc.ExpressionType = oldAssoc.ExpressionType
 	newAssoc.ExcludeFromFutureScheduling = oldAssoc.ExcludeFromFutureScheduling
 	newAssoc.LegacyAssociation = oldAssoc.LegacyAssociation
 }
 
-// Initialize initializes default values for the given new association
-func (newAssoc *InstanceAssociation) Initialize(log log.T) error {
-
-	currentTime := time.Now().UTC()
-	if newAssoc.Association.ScheduleExpression == nil || *newAssoc.Association.ScheduleExpression == "" {
-		newAssoc.Association.ScheduleExpression = aws.String(cronExpressionEveryFiveMinutes)
-		// legacy association, run only once
-		newAssoc.LegacyAssociation = true
-	}
-
-	if newAssoc.RunNow {
-		newAssoc.NextScheduledDate = currentTime
-		return nil
-	}
-
+// ParseExpression parses the expression with the given association
+func (newAssoc *InstanceAssociation) ParseExpression(log log.T) error {
 	if err := parseExpression(log, newAssoc); err != nil {
 		return fmt.Errorf("Failed to parse schedule expression %v, %v", *newAssoc.Association.ScheduleExpression, err)
 	}
 
 	if _, err := cronexpr.Parse(newAssoc.Expression); err != nil {
-		return fmt.Errorf("Failed to parse schedule expression %v, %v", newAssoc.Expression, err)
+		return fmt.Errorf("Failed to parse cron expression %v, %v", newAssoc.Expression, err)
 	}
 
-	newAssoc.NextScheduledDate = cronexpr.MustParse(newAssoc.Expression).Next(currentTime).UTC()
 	return nil
+}
+
+// SetNextScheduledDate initializes default values for the given new association
+func (newAssoc *InstanceAssociation) SetNextScheduledDate() {
+	currentTime := time.Now().UTC()
+
+	// for all the association that doesn't have lastExecutionDate it will run now
+	if newAssoc.RunNow {
+		newAssoc.NextScheduledDate = currentTime
+		newAssoc.RunNow = false
+		return
+	}
+
+	newAssoc.NextScheduledDate = cronexpr.MustParse(newAssoc.Expression).Next(newAssoc.Association.LastExecutionDate.UTC()).UTC()
 }
 
 func parseExpression(log log.T, assoc *InstanceAssociation) error {

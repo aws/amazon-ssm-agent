@@ -235,7 +235,14 @@ func (p *Plugin) runCommands(log log.T, pluginInput RefreshAssociationPluginInpu
 	}
 
 	schedulemanager.Refresh(log, associations, p.assocSvc)
-	stdout := fmt.Sprintf("Associations %v have been requested to execute immediately", pluginInput.AssociationIds)
+
+	var stdout string
+	if len(associations) > 0 {
+		stdout = fmt.Sprintf("Associations %v have been requested to execute immediately", pluginInput.AssociationIds)
+	} else {
+		stdout = fmt.Sprintf("All the associations will be executed immediately")
+	}
+
 	log.Info(stdout)
 	signal.ExecuteAssociation(log)
 

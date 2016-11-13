@@ -35,8 +35,9 @@ import (
 )
 
 const (
-	stopPolicyErrorThreshold = 10
-	latestDoc                = "$LATEST"
+	stopPolicyErrorThreshold       = 10
+	latestDoc                      = "$LATEST"
+	cronExpressionEveryFiveMinutes = "cron(0 0/5 * 1/1 * ? *)"
 )
 
 type associationApiMode string
@@ -117,6 +118,7 @@ func (s *AssociationService) ListInstanceAssociations(log log.T, instanceID stri
 
 	uuid.SwitchFormat(uuid.CleanHyphen)
 	results := []*model.InstanceAssociation{}
+	var parameterResponse *ssm.DescribeAssociationOutput
 
 	response, err := s.ssmSvc.ListInstanceAssociations(log, instanceID, nil)
 	// if ListInstanceAssociations return error, system will try to use legacy ListAssociations
@@ -132,6 +134,28 @@ func (s *AssociationService) ListInstanceAssociations(log log.T, instanceID stri
 				rawData := &model.InstanceAssociation{}
 				rawData.Association = assoc
 				rawData.CreateDate = time.Now().UTC()
+				if rawData.Association.LastExecutionDate == nil {
+					rawData.Association.LastExecutionDate = aws.Time(time.Time{}.UTC())
+				}
+				// legacy association do not have ScheduleExpression
+				if rawData.Association.ScheduleExpression == nil || *rawData.Association.ScheduleExpression == "" {
+					// Call descriptionAssociation to get the status
+					if parameterResponse, err = s.ssmSvc.DescribeAssociation(log, instanceID, *assoc.Name); err != nil {
+						log.Errorf("unable to retrieve association parameter, %v", err)
+					}
+
+					// If legacy association has already been executed then skip it
+					if parameterResponse.AssociationDescription != nil &&
+						parameterResponse.AssociationDescription.Status != nil &&
+						*parameterResponse.AssociationDescription.Status.Name != contracts.AssociationStatusPending &&
+						*parameterResponse.AssociationDescription.Status.Name != contracts.AssociationStatusAssociated {
+						log.Debugf("Skipping association %v as it has been processed", *assoc.Name)
+						continue
+					}
+
+					rawData.Association.ScheduleExpression = aws.String(cronExpressionEveryFiveMinutes)
+				}
+
 				results = append(results, rawData)
 			}
 
@@ -189,13 +213,20 @@ func (s *AssociationService) ListAssociations(log log.T, instanceID string) ([]*
 
 		rawData := &model.InstanceAssociation{}
 		rawData.Association = &ssm.InstanceAssociationSummary{
-			AssociationId:   assoc.Name,
-			DocumentVersion: aws.String(latestDoc),
-			Name:            assoc.Name,
-			InstanceId:      aws.String(instanceID),
-			Checksum:        aws.String(""),
-			Parameters:      parameterResponse.AssociationDescription.Parameters,
+			AssociationId:      assoc.Name,
+			DocumentVersion:    aws.String(latestDoc),
+			Name:               assoc.Name,
+			InstanceId:         aws.String(instanceID),
+			Checksum:           aws.String(""),
+			Parameters:         parameterResponse.AssociationDescription.Parameters,
+			ScheduleExpression: aws.String(cronExpressionEveryFiveMinutes),
 		}
+
+		if rawData.Association.LastExecutionDate == nil {
+			rawData.Association.LastExecutionDate = aws.Time(time.Time{}.UTC())
+		}
+
+		rawData.LegacyAssociation = true
 		rawData.CreateDate = time.Now().UTC()
 		results = append(results, rawData)
 	}

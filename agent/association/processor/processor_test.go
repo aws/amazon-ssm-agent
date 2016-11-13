@@ -17,6 +17,7 @@ package processor
 import (
 	"errors"
 	"testing"
+	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/association/executer"
@@ -311,10 +312,12 @@ func createProcessor() *Processor {
 
 func createAssociationRawData() []*model.InstanceAssociation {
 	association := ssm.InstanceAssociationSummary{
-		Name:          aws.String("Test-Association"),
-		AssociationId: aws.String("Id-Test"),
-		InstanceId:    aws.String("test-association-id"),
-		Checksum:      aws.String("checksum"),
+		Name:               aws.String("Test-Association"),
+		AssociationId:      aws.String("Id-Test"),
+		InstanceId:         aws.String("test-association-id"),
+		Checksum:           aws.String("checksum"),
+		LastExecutionDate:  aws.Time(time.Now().UTC()),
+		ScheduleExpression: aws.String("cron(0 0/5 * 1/1 * ? *)"),
 	}
 	assocRawData := model.InstanceAssociation{
 		Association: &association,

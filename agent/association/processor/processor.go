@@ -172,6 +172,7 @@ func (p *Processor) runScheduledAssociation(log log.T) {
 	}
 
 	if scheduledAssociation == nil {
+		// if no scheduled association found at given time, get the next scheduled time and wait
 		nextScheduledDate := schedulemanager.LoadNextScheduledDate(log)
 		if !nextScheduledDate.IsZero() {
 			signal.ResetWaitTimerForNextScheduledAssociation(log, nextScheduledDate)
@@ -181,6 +182,7 @@ func (p *Processor) runScheduledAssociation(log log.T) {
 		return
 	}
 
+	// stop previous wait timer if there is scheduled association
 	signal.StopWaitTimerForNextScheduledAssociation()
 
 	if assocBookkeeping.IsDocumentCurrentlyExecuting(
@@ -200,7 +202,7 @@ func (p *Processor) runScheduledAssociation(log log.T) {
 			contracts.AssociationErrorCodeInvalidAssociation,
 			times.ToIso8601UTC(time.Now()),
 			err.Error())
-		schedulemanager.MarkAssociationAsCompleted(log, *scheduledAssociation.Association.AssociationId)
+		schedulemanager.ExcludeAssocFromFutureScheduling(log, *scheduledAssociation.Association.AssociationId)
 		return
 	}
 

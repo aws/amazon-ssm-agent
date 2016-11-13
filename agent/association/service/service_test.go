@@ -54,8 +54,11 @@ func TestListAssociations(t *testing.T) {
 		Content: &documentContent,
 	}
 
+	descriptOutput := ssm.DescribeAssociationOutput{}
+
 	ssmMock.On("ListInstanceAssociations", mock.AnythingOfType("*log.Mock"), mock.AnythingOfType("string")).Return(&output, nil)
 	ssmMock.On("GetDocument", mock.AnythingOfType("*log.Mock"), mock.AnythingOfType("string")).Return(&getDocumentOutput, nil)
+	ssmMock.On("DescribeAssociation", mock.AnythingOfType("*log.Mock"), mock.AnythingOfType("string"), mock.AnythingOfType("string")).Return(&descriptOutput, nil)
 
 	_, err := service.ListInstanceAssociations(logMock, instanceID)
 
