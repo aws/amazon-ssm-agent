@@ -33,7 +33,15 @@ const (
 	DaemonRoot = "/var/lib/amazon/ssm/daemons"
 
 	// LocalCommandRoot specifies the directory where users can submit command documents offline
-	LocalCommandRoot = "/var/log/amazon/ssm/localcommands"
+	LocalCommandRoot = "/var/lib/amazon/ssm/localcommands"
+
+	// LocalCommandRootSubmitted is the directory where locally submitted command documents
+	// are moved when they have been picked up
+	LocalCommandRootSubmitted = "/var/lib/amazon/ssm/localcommands/submitted"
+
+	// LocalCommandRootInvalid is the directory where locally submitted command documents
+	// are moved if the service cannot validate the document (generally impossible via cli)
+	LocalCommandRootInvalid = "/var/lib/amazon/ssm/localcommands/invalid"
 
 	// DownloadRoot specifies the directory under which files will be downloaded
 	DownloadRoot = "/var/log/amazon/ssm/download/"

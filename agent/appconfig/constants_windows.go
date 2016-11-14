@@ -73,6 +73,14 @@ var DaemonRoot string
 // LocalCommandRoot specifies the directory where users can submit command documents offline
 var LocalCommandRoot string
 
+// LocalCommandRootSubmitted is the directory where locally submitted command documents
+// are moved when they have been picked up
+var LocalCommandRootSubmitted string
+
+// LocalCommandRootInvalid is the directory where locally submitted command documents
+// are moved if the service cannot validate the document (generally impossible via cli)
+var LocalCommandRootInvalid string
+
 // DefaultPluginPath represents the directory for storing plugins in SSM
 var DefaultPluginPath string
 
@@ -137,6 +145,8 @@ func init() {
 	PackageRoot = filepath.Join(SSMDataPath, "Packages")
 	DaemonRoot = filepath.Join(SSMDataPath, "Daemons")
 	LocalCommandRoot = filepath.Join(SSMDataPath, "LocalCommands")
+	LocalCommandRootSubmitted = filepath.Join(LocalCommandRoot, "Submitted")
+	LocalCommandRootInvalid = filepath.Join(LocalCommandRoot, "Invalid")
 	DownloadRoot = filepath.Join(temp, SSMFolder, "Download")
 	UpdaterArtifactsRoot = filepath.Join(temp, SSMFolder, "Update")
 	EC2UpdateArtifactsRoot = filepath.Join(EnvWinDir, EC2ConfigServiceFolder, "Update")

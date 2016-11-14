@@ -6,6 +6,8 @@ import (
 	"strings"
 	"time"
 
+	"errors"
+
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
@@ -40,13 +42,14 @@ func (ols *offlineService) GetMessages(log log.T, instanceID string) (messages *
 	messages = &ssmmds.GetMessagesOutput{}
 
 	newCommandDir := appconfig.LocalCommandRoot
-	submittedCommandDir := filepath.Join(newCommandDir, "submitted")
-	invalidCommandDir := filepath.Join(newCommandDir, "invalid")
+	submittedCommandDir := appconfig.LocalCommandRootSubmitted
+	invalidCommandDir := appconfig.LocalCommandRootInvalid
 
 	// Look for unprocessed locally submitted documents
 	var docName, docPath string
 	var filenames []string
 	if filenames, err = fileutil.GetFileNames(newCommandDir); err != nil {
+		log.Debugf("offlineservice: error: %v", err.Error())
 		return messages, err
 	}
 	messages.Messages = make([]*ssmmds.Message, 0, len(filenames))
@@ -76,7 +79,9 @@ func (ols *offlineService) GetMessages(log log.T, instanceID string) (messages *
 		var payloadstr string
 		if payloadstr, err = jsonutil.Marshal(payload); err != nil {
 			log.Errorf("Error marshalling message for command document %v with message ID %v:\n%v", docName, messageID, err)
-			moveCommandDocument(newCommandDir, invalidCommandDir, docName, commandID)
+			if errMove := moveCommandDocument(newCommandDir, invalidCommandDir, docName, commandID); errMove != nil {
+				log.Errorf("Command %v was invalid but failed to move to invalid folder: %v", commandID, errMove.Error())
+			}
 			continue
 		}
 		created := times.ToIso8601UTC(time.Now())
@@ -91,7 +96,10 @@ func (ols *offlineService) GetMessages(log log.T, instanceID string) (messages *
 		messages.Messages = append(messages.Messages, message)
 
 		// Move to submitted
-		moveCommandDocument(newCommandDir, submittedCommandDir, docName, commandID)
+		if errMove := moveCommandDocument(newCommandDir, submittedCommandDir, docName, commandID); errMove != nil {
+			log.Errorf("Command %v was submitted but failed to move to submitted folder: %v", commandID, errMove.Error())
+			continue
+		}
 	}
 
 	debugMessages, _ := jsonutil.Marshal(messages)
@@ -99,11 +107,23 @@ func (ols *offlineService) GetMessages(log log.T, instanceID string) (messages *
 	return messages, nil
 }
 
-func moveCommandDocument(srcDir string, dstDir string, docName string, commandID string) {
-	fileutil.MakeDirs(dstDir)
+// TODO:MF: clean up old documents in dstDir?  Or maybe do that in SendReply?  Maybe both
+func moveCommandDocument(srcDir string, dstDir string, docName string, commandID string) error {
+	// Make directory with appropriate ACL
+	if err := fileutil.MakeDirs(dstDir); err != nil {
+		return err
+	}
 	newName := strings.Join([]string{docName, commandID}, ".")
-	fileutil.RenameFile(srcDir, docName, newName)
-	fileutil.MoveFile(newName, srcDir, dstDir)
+	if success, err := fileutil.MoveAndRenameFile(srcDir, docName, dstDir, newName); !success {
+		// Clean up submitted document that failed to move
+		defer fileutil.DeleteFile(filepath.Join(srcDir, docName))
+		if err != nil {
+			return err
+		} else {
+			return errors.New("failed to move file")
+		}
+	}
+	return nil
 }
 
 func (ols *offlineService) AcknowledgeMessage(log log.T, messageID string) error {

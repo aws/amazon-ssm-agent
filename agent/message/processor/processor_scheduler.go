@@ -24,21 +24,21 @@ import (
 	"github.com/carlescere/scheduler"
 )
 
-var lastPollTime time.Time
+var lastPollTimeMap map[string]time.Time = make(map[string]time.Time)
 var lock sync.RWMutex
 
 var processMessage = (*Processor).processMessage
 
-func updateLastPollTime(currentTime time.Time) {
+func updateLastPollTime(processorType string, currentTime time.Time) {
 	lock.Lock()
 	defer lock.Unlock()
-	lastPollTime = currentTime
+	lastPollTimeMap[processorType] = currentTime
 }
 
-func getLastPollTime() time.Time {
+func getLastPollTime(processorType string) time.Time {
 	lock.RLock()
 	defer lock.RUnlock()
-	return lastPollTime
+	return lastPollTimeMap[processorType]
 }
 
 // loop reads messages from MDS then processes them.
@@ -46,14 +46,14 @@ func (p *Processor) loop() {
 	// time lock to only have one loop active anytime.
 	// this is extra insurance to prevent any race condition
 	pollStartTime := time.Now()
-	updateLastPollTime(pollStartTime)
+	updateLastPollTime(p.name, pollStartTime)
 
 	log := p.context.Log()
 	if !p.isDone() {
 		if p.processorStopPolicy != nil {
-			log.Debugf("mdsprocessor's stoppolicy before polling is %v", p.processorStopPolicy)
+			log.Debugf("%v's stoppolicy before polling is %v", p.name, p.processorStopPolicy)
 			if p.processorStopPolicy.IsHealthy() == false {
-				log.Errorf("mdsprocessor stopped temporarily due to internal failure. We will retry automatically after %v minutes", pollMessageFrequencyMinutes)
+				log.Errorf("%v stopped temporarily due to internal failure. We will retry automatically after %v minutes", p.name, pollMessageFrequencyMinutes)
 				p.reset()
 				return
 			}
@@ -63,7 +63,7 @@ func (p *Processor) loop() {
 		}
 
 		p.pollOnce()
-		log.Debugf("mdsprocessor's stoppolicy after polling is %v", p.processorStopPolicy)
+		log.Debugf("%v's stoppolicy after polling is %v", p.name, p.processorStopPolicy)
 
 		// Slow down a bit in case GetMessages returns
 		// without blocking, which may cause us to
@@ -74,7 +74,7 @@ func (p *Processor) loop() {
 
 		// check if any other poll loop has started in the meantime
 		// to prevent any possible race condition due to the scheduler
-		if getLastPollTime() == pollStartTime {
+		if getLastPollTime(p.name) == pollStartTime {
 			// skip waiting for the next scheduler polling event and start polling immediately
 			scheduleNextRun(p.messagePollJob)
 		}
@@ -86,17 +86,23 @@ var scheduleNextRun = func(j *scheduler.Job) {
 }
 
 func (p *Processor) reset() {
+	log := p.context.Log()
+	log.Debugf("Resetting processor:%v", p.name)
 	// reset stop policy and let the scheduler start the polling after pollMessageFrequencyMinutes timeout
 	p.processorStopPolicy.ResetErrorCount()
 
 	// creating a new mds service object for the retry
 	// this is extra insurance to avoid service object getting corrupted - adding resiliency
 	config := p.context.AppConfig()
-	p.service = newMdsService(config)
+	if p.name == mdsName {
+		p.service = newMdsService(config)
+	}
 }
 
 // Stop stops the MDSProcessor.
 func (p *Processor) stop() {
+	log := p.context.Log()
+	log.Debugf("Stopping processor:%v", p.name)
 	p.service.Stop()
 
 	// close channel; subsequent calls to isDone will return true

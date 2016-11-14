@@ -171,10 +171,10 @@ func MoveFile(filename, srcPath, dstPath string) (result bool, err error) {
 }
 
 // RenameFile renames a file in its current location
-func RenameFile(folderPath, originalName, newName string) (result bool, err error) {
+func MoveAndRenameFile(srcPath, originalName, dstPath, newName string) (result bool, err error) {
 	result = true
-	srcFile := filepath.Join(folderPath, originalName)
-	dstFile := filepath.Join(folderPath, newName)
+	srcFile := filepath.Join(srcPath, originalName)
+	dstFile := filepath.Join(dstPath, newName)
 
 	err = fs.Rename(srcFile, dstFile)
 	if err != nil {
