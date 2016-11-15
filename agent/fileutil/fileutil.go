@@ -158,30 +158,18 @@ func IsFile(srcPath string) bool {
 // MoveFile moves file from srcPath directory to dstPath directory
 // only if both directories exist
 func MoveFile(filename, srcPath, dstPath string) (result bool, err error) {
-	result = true
-	srcFile := filepath.Join(srcPath, filename)
-	dstFile := filepath.Join(dstPath, filename)
-
-	err = fs.Rename(srcFile, dstFile)
-	if err != nil {
-		err = fmt.Errorf("unexpected error encountered while moving the file. Error details - %v", err)
-		result = false
-	}
-	return
+	return MoveAndRenameFile(srcPath, filename, dstPath, filename)
 }
 
-// RenameFile renames a file in its current location
+// MoveAndRenameFile moves a file from the srcPath directory to dstPath directory and gives it a new name
 func MoveAndRenameFile(srcPath, originalName, dstPath, newName string) (result bool, err error) {
-	result = true
 	srcFile := filepath.Join(srcPath, originalName)
 	dstFile := filepath.Join(dstPath, newName)
 
-	err = fs.Rename(srcFile, dstFile)
-	if err != nil {
-		err = fmt.Errorf("unexpected error encountered while moving the file. Error details - %v", err)
-		result = false
+	if err = fs.Rename(srcFile, dstFile); err != nil {
+		return false, fmt.Errorf("unexpected error encountered while moving the file. Error details - %v", err)
 	}
-	return
+	return true, nil
 }
 
 // WriteIntoFileWithPermissions writes into file with given file mode permissions

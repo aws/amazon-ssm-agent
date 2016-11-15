@@ -1,3 +1,17 @@
+// Copyright 2016 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+//
+// Licensed under the Apache License, Version 2.0 (the "License"). You may not
+// use this file except in compliance with the License. A copy of the
+// License is located at
+//
+// http://aws.amazon.com/apache2.0/
+//
+// or in the "license" file accompanying this file. This file is distributed
+// on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+// either express or implied. See the License for the specific language governing
+// permissions and limitations under the License.
+
+// Package service is a wrapper for the SSM Message Delivery Service and Offline Command Service
 package service
 
 import (
@@ -24,9 +38,9 @@ type offlineService struct {
 	newCommandDir       string
 	submittedCommandDir string
 	invalidCommandDir   string
-	completeCommandDir  string
 }
 
+// NewOfflineService initializes a service that looks for work in a local command folder
 func NewOfflineService(log log.T, topicPrefix string) (Service, error) {
 	uuid.SwitchFormat(uuid.CleanHyphen)
 	// Create and harden local document folder if needed
@@ -35,27 +49,29 @@ func NewOfflineService(log log.T, topicPrefix string) (Service, error) {
 		log.Errorf("Failed to create local command directory %v : %v", appconfig.LocalCommandRoot, err.Error())
 		return nil, err
 	}
-	return &offlineService{TopicPrefix: topicPrefix}, nil
+	return &offlineService{
+		TopicPrefix:         topicPrefix,
+		newCommandDir:       appconfig.LocalCommandRoot,
+		submittedCommandDir: appconfig.LocalCommandRootSubmitted,
+		invalidCommandDir:   appconfig.LocalCommandRootInvalid,
+	}, nil
 }
 
+// GetMessages looks for new local command documents on the filesystem and parses them into messages
 func (ols *offlineService) GetMessages(log log.T, instanceID string) (messages *ssmmds.GetMessagesOutput, err error) {
 	messages = &ssmmds.GetMessagesOutput{}
-
-	newCommandDir := appconfig.LocalCommandRoot
-	submittedCommandDir := appconfig.LocalCommandRootSubmitted
-	invalidCommandDir := appconfig.LocalCommandRootInvalid
 
 	// Look for unprocessed locally submitted documents
 	var docName, docPath string
 	var filenames []string
-	if filenames, err = fileutil.GetFileNames(newCommandDir); err != nil {
+	if filenames, err = fileutil.GetFileNames(ols.newCommandDir); err != nil {
 		log.Debugf("offlineservice: error: %v", err.Error())
 		return messages, err
 	}
 	messages.Messages = make([]*ssmmds.Message, 0, len(filenames))
 	for _, filename := range filenames {
 		docName = filename
-		docPath = filepath.Join(newCommandDir, docName)
+		docPath = filepath.Join(ols.newCommandDir, docName)
 		log.Debugf("Found local command document %v | %v", docName, docPath)
 
 		requestUuid := uuid.NewV4().String()
@@ -68,7 +84,9 @@ func (ols *offlineService) GetMessages(log log.T, instanceID string) (messages *
 		var content contracts.DocumentContent
 		if errContent := jsonutil.UnmarshalFile(docPath, &content); errContent != nil {
 			log.Errorf("Error parsing command document %v:\n%v", docName, errContent)
-			moveCommandDocument(newCommandDir, invalidCommandDir, docName, commandID)
+			if errMove := moveCommandDocument(ols.newCommandDir, ols.invalidCommandDir, docName, commandID); errMove != nil {
+				log.Errorf("Command %v was invalid but failed to move to invalid folder: %v", commandID, errMove.Error())
+			}
 			continue
 		}
 		debugContent, _ := jsonutil.Marshal(content)
@@ -79,7 +97,7 @@ func (ols *offlineService) GetMessages(log log.T, instanceID string) (messages *
 		var payloadstr string
 		if payloadstr, err = jsonutil.Marshal(payload); err != nil {
 			log.Errorf("Error marshalling message for command document %v with message ID %v:\n%v", docName, messageID, err)
-			if errMove := moveCommandDocument(newCommandDir, invalidCommandDir, docName, commandID); errMove != nil {
+			if errMove := moveCommandDocument(ols.newCommandDir, ols.invalidCommandDir, docName, commandID); errMove != nil {
 				log.Errorf("Command %v was invalid but failed to move to invalid folder: %v", commandID, errMove.Error())
 			}
 			continue
@@ -93,13 +111,13 @@ func (ols *offlineService) GetMessages(log log.T, instanceID string) (messages *
 			Payload:     &payloadstr,
 			Topic:       &topic,
 		}
-		messages.Messages = append(messages.Messages, message)
-
 		// Move to submitted
-		if errMove := moveCommandDocument(newCommandDir, submittedCommandDir, docName, commandID); errMove != nil {
-			log.Errorf("Command %v was submitted but failed to move to submitted folder: %v", commandID, errMove.Error())
-			continue
+		if errMove := moveCommandDocument(ols.newCommandDir, ols.submittedCommandDir, docName, commandID); errMove != nil {
+			log.Errorf("Command %v was valid but failed to move to submitted folder: %v", commandID, errMove.Error())
+			continue // If doc failed to move, we will not return this message - we don't want to reprocess it or make it impossible to know which command ID it was given
 		}
+
+		messages.Messages = append(messages.Messages, message)
 	}
 
 	debugMessages, _ := jsonutil.Marshal(messages)
@@ -108,14 +126,17 @@ func (ols *offlineService) GetMessages(log log.T, instanceID string) (messages *
 }
 
 // TODO:MF: clean up old documents in dstDir?  Or maybe do that in SendReply?  Maybe both
+// moveCommandDocument moves a command into its final destination and attaches the command ID file extension
 func moveCommandDocument(srcDir string, dstDir string, docName string, commandID string) error {
 	// Make directory with appropriate ACL
 	if err := fileutil.MakeDirs(dstDir); err != nil {
+		// This will fail if there is a file in the directory with the same name as
+		// the directory we're trying to create and the directory doesn't exist yet (see os.MakedirAll in path.go)
 		return err
 	}
 	newName := strings.Join([]string{docName, commandID}, ".")
 	if success, err := fileutil.MoveAndRenameFile(srcDir, docName, dstDir, newName); !success {
-		// Clean up submitted document that failed to move
+		// Clean up submitted document if we failed to move it (we don't want to keep trying to process it)
 		defer fileutil.DeleteFile(filepath.Join(srcDir, docName))
 		if err != nil {
 			return err

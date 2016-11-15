@@ -17,7 +17,6 @@ package processor
 
 import (
 	"fmt"
-
 	"strings"
 
 	"github.com/aws/amazon-ssm-agent/agent/contracts"

@@ -1,0 +1,1 @@
+{"schemaVersion": "2.0","mainSteps": [{"action": "aws:runShellScript","name": "test","inputs": {"runCommand": ["echo foo"]}}]}
