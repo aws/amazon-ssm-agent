@@ -153,6 +153,7 @@ func (s *AssociationService) ListInstanceAssociations(log log.T, instanceID stri
 						continue
 					}
 
+					rawData.LegacyAssociation = true
 					rawData.Association.ScheduleExpression = aws.String(cronExpressionEveryFiveMinutes)
 				}
 
