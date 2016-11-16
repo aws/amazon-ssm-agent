@@ -99,7 +99,7 @@ func InitializeDocumentState(context context.T,
 	//initialize document information with relevant values extracted from msg
 	documentInfo := newDocumentInfo(rawData, payload)
 	// adapt plugin configuration format from MDS to plugin expected format
-	s3KeyPrefix := path.Join(payload.OutputS3KeyPrefix, documentInfo.InstanceID, documentInfo.DocumentID)
+	s3KeyPrefix := path.Join(payload.OutputS3KeyPrefix, documentInfo.InstanceID, documentInfo.AssociationID, documentInfo.RunID)
 
 	orchestrationRootDir := filepath.Join(
 		appconfig.DefaultDataStorePath,
