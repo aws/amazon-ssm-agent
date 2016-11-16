@@ -2683,7 +2683,7 @@ func ExampleSSM_StartAutomationExecution() {
 	params := &ssm.StartAutomationExecutionInput{
 		DocumentName:    aws.String("DocumentName"), // Required
 		DocumentVersion: aws.String("DocumentVersion"),
-		Inputs: map[string][]*string{
+		Parameters: map[string][]*string{
 			"Key": { // Required
 				aws.String("AutomationParameterValue"), // Required
 				// More values...
@@ -2873,8 +2873,7 @@ func ExampleSSM_UpdateInstanceAssociationStatus() {
 			ErrorCode:        aws.String("AgentErrorCode"),
 			OutputUrl: &ssm.InstanceAssociationOutputUrl{
 				S3OutputUrl: &ssm.S3OutputUrl{
-					StandardErrorUrl:  aws.String("Url"),
-					StandardOutputUrl: aws.String("Url"),
+					OutputUrl: aws.String("Url"),
 				},
 			},
 		},

@@ -1205,7 +1205,7 @@
       "output":{"shape":"StartAutomationExecutionResult"},
       "errors":[
         {"shape":"AutomationDefinitionNotFoundException"},
-        {"shape":"InvalidAutomationExecutionInputException"},
+        {"shape":"InvalidAutomationExecutionParametersException"},
         {"shape":"AutomationExecutionLimitExceededException"},
         {"shape":"AutomationDefinitionVersionNotFoundException"},
         {"shape":"InternalServerError"}
@@ -1717,8 +1717,9 @@
         "ExecutionEndTime":{"shape":"DateTime"},
         "AutomationExecutionStatus":{"shape":"AutomationExecutionStatus"},
         "StepExecutions":{"shape":"StepExecutionList"},
-        "Inputs":{"shape":"AutomationParameterMap"},
-        "Outputs":{"shape":"AutomationParameterMap"}
+        "Parameters":{"shape":"AutomationParameterMap"},
+        "Outputs":{"shape":"AutomationParameterMap"},
+        "FailureMessage":{"shape":"String"}
       }
     },
     "AutomationExecutionFilter":{
@@ -1799,8 +1800,9 @@
       "type":"string",
       "enum":[
         "Pending",
-        "Running",
-        "Completed",
+        "InProgress",
+        "Success",
+        "TimedOut",
         "Cancelled",
         "Failed"
       ]
@@ -1814,12 +1816,12 @@
       "type":"map",
       "key":{"shape":"AutomationParameterKey"},
       "value":{"shape":"AutomationParameterValueList"},
-      "max":10,
+      "max":200,
       "min":1
     },
     "AutomationParameterValue":{
       "type":"string",
-      "max":250,
+      "max":512,
       "min":1
     },
     "AutomationParameterValueList":{
@@ -3949,7 +3951,7 @@
       },
       "exception":true
     },
-    "InvalidAutomationExecutionInputException":{
+    "InvalidAutomationExecutionParametersException":{
       "type":"structure",
       "members":{
         "Message":{"shape":"String"}
@@ -5630,8 +5632,7 @@
     "S3OutputUrl":{
       "type":"structure",
       "members":{
-        "StandardOutputUrl":{"shape":"Url"},
-        "StandardErrorUrl":{"shape":"Url"}
+        "OutputUrl":{"shape":"Url"}
       }
     },
     "S3Region":{
@@ -5713,7 +5714,7 @@
           "shape":"DocumentVersion",
           "box":true
         },
-        "Inputs":{"shape":"AutomationParameterMap"}
+        "Parameters":{"shape":"AutomationParameterMap"}
       }
     },
     "StartAutomationExecutionResult":{
@@ -5747,6 +5748,9 @@
       "type":"structure",
       "members":{
         "StepName":{"shape":"String"},
+        "Action":{"shape":"AutomationActionName"},
+        "ExecutionStartTime":{"shape":"DateTime"},
+        "ExecutionEndTime":{"shape":"DateTime"},
         "StepStatus":{"shape":"AutomationExecutionStatus"},
         "ResponseCode":{"shape":"String"},
         "Inputs":{"shape":"NormalStringMap"},

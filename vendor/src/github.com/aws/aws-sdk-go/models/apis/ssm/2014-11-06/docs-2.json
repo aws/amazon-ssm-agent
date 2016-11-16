@@ -370,7 +370,8 @@
       "base": null,
       "refs": {
         "AutomationAction$Name": null,
-        "GetAutomationActionRequest$Name": null
+        "GetAutomationActionRequest$Name": null,
+        "StepExecution$Action": null
       }
     },
     "AutomationActionNotFoundException": {
@@ -485,10 +486,10 @@
     "AutomationParameterMap": {
       "base": null,
       "refs": {
-        "AutomationExecution$Inputs": null,
+        "AutomationExecution$Parameters": null,
         "AutomationExecution$Outputs": null,
         "AutomationExecutionMetadata$Outputs": null,
-        "StartAutomationExecutionRequest$Inputs": null,
+        "StartAutomationExecutionRequest$Parameters": null,
         "StepExecution$Outputs": null
       }
     },
@@ -869,6 +870,8 @@
         "ParameterMetadata$LastModifiedDate": null,
         "Patch$ReleaseDate": null,
         "PatchStatus$ApprovalDate": null,
+        "StepExecution$ExecutionStartTime": null,
+        "StepExecution$ExecutionEndTime": null,
         "UpdatePatchBaselineResult$CreatedDate": null,
         "UpdatePatchBaselineResult$ModifiedDate": null
       }
@@ -2233,7 +2236,7 @@
       "refs": {
       }
     },
-    "InvalidAutomationExecutionInputException": {
+    "InvalidAutomationExecutionParametersException": {
       "base": null,
       "refs": {
       }
@@ -4141,6 +4144,7 @@
         "AutomationArgument$Regex": null,
         "AutomationDefinitionNotFoundException$Message": null,
         "AutomationDefinitionVersionNotFoundException$Message": null,
+        "AutomationExecution$FailureMessage": null,
         "AutomationExecutionLimitExceededException$Message": null,
         "AutomationExecutionMetadata$ExecutedBy": null,
         "AutomationExecutionMetadata$LogFile": null,
@@ -4161,7 +4165,7 @@
         "InvalidActivation$Message": null,
         "InvalidActivationId$Message": null,
         "InvalidAssociation$Message": null,
-        "InvalidAutomationExecutionInputException$Message": null,
+        "InvalidAutomationExecutionParametersException$Message": null,
         "InvalidDocument$Message": "<p>The SSM document does not exist or the document is not available to the user. This exception can be issued by CreateAssociation, CreateAssociationBatch, DeleteAssociation, DeleteDocument, DescribeAssociation, DescribeDocument, GetDocument, SendCommand, or UpdateAssociationStatus. </p>",
         "InvalidDocumentContent$Message": "<p>A description of the validation error.</p>",
         "InvalidDocumentOperation$Message": null,
@@ -4448,8 +4452,7 @@
         "CommandPlugin$StandardErrorUrl": "<p>The URL for the complete text written by the plugin to stderr. If execution is not yet complete, then this string is empty.</p>",
         "GetCommandInvocationResult$StandardOutputUrl": "<p>The URL for the complete text written by the plugin to stdout in Amazon S3. If an Amazon S3 bucket was not specified, then this string is empty.</p>",
         "GetCommandInvocationResult$StandardErrorUrl": "<p>The URL for the complete text written by the plugin to stderr. If the command has not finished executing, then this string is empty.</p>",
-        "S3OutputUrl$StandardOutputUrl": null,
-        "S3OutputUrl$StandardErrorUrl": null
+        "S3OutputUrl$OutputUrl": null
       }
     },
     "VelocityConstraint": {

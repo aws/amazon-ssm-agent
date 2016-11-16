@@ -5171,9 +5171,11 @@ type AutomationExecution struct {
 
 	ExecutionStartTime *time.Time `type:"timestamp" timestampFormat:"unix"`
 
-	Inputs map[string][]*string `min:"1" type:"map"`
+	FailureMessage *string `type:"string"`
 
 	Outputs map[string][]*string `min:"1" type:"map"`
+
+	Parameters map[string][]*string `min:"1" type:"map"`
 
 	StepExecutions []*StepExecution `type:"list"`
 }
@@ -12495,9 +12497,7 @@ func (s *S3OutputLocation) Validate() error {
 type S3OutputUrl struct {
 	_ struct{} `type:"structure"`
 
-	StandardErrorUrl *string `type:"string"`
-
-	StandardOutputUrl *string `type:"string"`
+	OutputUrl *string `type:"string"`
 }
 
 // String returns the string representation
@@ -12707,7 +12707,7 @@ type StartAutomationExecutionInput struct {
 
 	DocumentVersion *string `type:"string"`
 
-	Inputs map[string][]*string `min:"1" type:"map"`
+	Parameters map[string][]*string `min:"1" type:"map"`
 }
 
 // String returns the string representation
@@ -12726,8 +12726,8 @@ func (s *StartAutomationExecutionInput) Validate() error {
 	if s.DocumentName == nil {
 		invalidParams.Add(request.NewErrParamRequired("DocumentName"))
 	}
-	if s.Inputs != nil && len(s.Inputs) < 1 {
-		invalidParams.Add(request.NewErrParamMinLen("Inputs", 1))
+	if s.Parameters != nil && len(s.Parameters) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Parameters", 1))
 	}
 
 	if invalidParams.Len() > 0 {
@@ -12754,6 +12754,12 @@ func (s StartAutomationExecutionOutput) GoString() string {
 
 type StepExecution struct {
 	_ struct{} `type:"structure"`
+
+	Action *string `type:"string"`
+
+	ExecutionEndTime *time.Time `type:"timestamp" timestampFormat:"unix"`
+
+	ExecutionStartTime *time.Time `type:"timestamp" timestampFormat:"unix"`
 
 	FailureMessage *string `type:"string"`
 
@@ -13602,9 +13608,11 @@ const (
 	// @enum AutomationExecutionStatus
 	AutomationExecutionStatusPending = "Pending"
 	// @enum AutomationExecutionStatus
-	AutomationExecutionStatusRunning = "Running"
+	AutomationExecutionStatusInProgress = "InProgress"
 	// @enum AutomationExecutionStatus
-	AutomationExecutionStatusCompleted = "Completed"
+	AutomationExecutionStatusSuccess = "Success"
+	// @enum AutomationExecutionStatus
+	AutomationExecutionStatusTimedOut = "TimedOut"
 	// @enum AutomationExecutionStatus
 	AutomationExecutionStatusCancelled = "Cancelled"
 	// @enum AutomationExecutionStatus
