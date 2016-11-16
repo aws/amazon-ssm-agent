@@ -68,10 +68,11 @@ func TestLoop_Once(t *testing.T) {
 	messagePollJob, _ := scheduler.Every(10).Seconds().NotImmediately().Run(job)
 
 	proc := Processor{
+		name:                mdsName,
 		context:             contextMock,
 		service:             mdsMock,
 		messagePollJob:      messagePollJob,
-		processorStopPolicy: sdkutil.NewStopPolicy(name, stopPolicyThreshold),
+		processorStopPolicy: sdkutil.NewStopPolicy(mdsName, stopPolicyThreshold),
 	}
 
 	proc.loop()
@@ -98,10 +99,11 @@ func TestLoop_Multiple_Serial(t *testing.T) {
 	messagePollJob, _ := scheduler.Every(10).Seconds().NotImmediately().Run(job)
 
 	proc := Processor{
+		name:                mdsName,
 		context:             contextMock,
 		service:             mdsMock,
 		messagePollJob:      messagePollJob,
-		processorStopPolicy: sdkutil.NewStopPolicy(name, stopPolicyThreshold),
+		processorStopPolicy: sdkutil.NewStopPolicy(mdsName, stopPolicyThreshold),
 	}
 
 	start := time.Now()
@@ -137,10 +139,11 @@ func TestLoop_Multiple_Parallel(t *testing.T) {
 	messagePollJob, _ := scheduler.Every(10).Seconds().NotImmediately().Run(job)
 
 	proc := Processor{
+		name:                mdsName,
 		context:             contextMock,
 		service:             mdsMock,
 		messagePollJob:      messagePollJob,
-		processorStopPolicy: sdkutil.NewStopPolicy(name, stopPolicyThreshold),
+		processorStopPolicy: sdkutil.NewStopPolicy(mdsName, stopPolicyThreshold),
 	}
 
 	for i := 0; i < multipleRetryCount; i++ {
@@ -169,10 +172,11 @@ func TestLoop_Once_Error(t *testing.T) {
 	messagePollJob, _ := scheduler.Every(10).Seconds().NotImmediately().Run(job)
 
 	proc := Processor{
+		name:                mdsName,
 		context:             contextMock,
 		service:             mdsMock,
 		messagePollJob:      messagePollJob,
-		processorStopPolicy: sdkutil.NewStopPolicy(name, stopPolicyThreshold),
+		processorStopPolicy: sdkutil.NewStopPolicy(mdsName, stopPolicyThreshold),
 	}
 
 	proc.loop()
@@ -199,10 +203,11 @@ func TestLoop_Multiple_Serial_Error(t *testing.T) {
 	messagePollJob, _ := scheduler.Every(10).Seconds().NotImmediately().Run(job)
 
 	proc := Processor{
+		name:                mdsName,
 		context:             contextMock,
 		service:             mdsMock,
 		messagePollJob:      messagePollJob,
-		processorStopPolicy: sdkutil.NewStopPolicy(name, stopPolicyThreshold),
+		processorStopPolicy: sdkutil.NewStopPolicy(mdsName, stopPolicyThreshold),
 	}
 
 	start := time.Now()
@@ -239,10 +244,11 @@ func TestLoop_Multiple_Parallel_Error(t *testing.T) {
 	messagePollJob, _ := scheduler.Every(10).Seconds().NotImmediately().Run(job)
 
 	proc := Processor{
+		name:                mdsName,
 		context:             contextMock,
 		service:             mdsMock,
 		messagePollJob:      messagePollJob,
-		processorStopPolicy: sdkutil.NewStopPolicy(name, stopPolicyThreshold),
+		processorStopPolicy: sdkutil.NewStopPolicy(mdsName, stopPolicyThreshold),
 	}
 
 	for i := 0; i < multipleRetryCount; i++ {
