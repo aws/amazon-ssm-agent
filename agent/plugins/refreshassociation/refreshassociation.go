@@ -18,6 +18,8 @@ import (
 	"bytes"
 	"fmt"
 	"io/ioutil"
+	"os"
+	"path/filepath"
 	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
@@ -203,6 +205,9 @@ func (p *Plugin) runCommands(log log.T, pluginInput RefreshAssociationPluginInpu
 		cache.ValidateCache(assoc)
 	}
 
+	// if user provided empty list or "" in the document, we will run all the associations now
+	applyAll := len(pluginInput.AssociationIds) == 0 || (len(pluginInput.AssociationIds) == 1 && pluginInput.AssociationIds[0] == "")
+
 	// read from cache or load association details from service
 	for _, assoc := range associations {
 		if err = p.assocSvc.LoadAssociationDetail(log, assoc); err != nil {
@@ -221,8 +226,7 @@ func (p *Plugin) runCommands(log log.T, pluginInput RefreshAssociationPluginInpu
 			return
 		}
 
-		// if user provided empty associationIds in the document, we will run all the associations now
-		if len(pluginInput.AssociationIds) == 0 {
+		if applyAll {
 			assoc.RunNow = true
 		} else {
 			for _, id := range pluginInput.AssociationIds {
@@ -237,10 +241,10 @@ func (p *Plugin) runCommands(log log.T, pluginInput RefreshAssociationPluginInpu
 	schedulemanager.Refresh(log, associations, p.assocSvc)
 
 	var stdout string
-	if len(associations) > 0 {
-		stdout = fmt.Sprintf("Associations %v have been requested to execute immediately", pluginInput.AssociationIds)
-	} else {
+	if applyAll {
 		stdout = fmt.Sprintf("All the associations will be executed immediately")
+	} else {
+		stdout = fmt.Sprintf("Associations %v have been requested to execute immediately", pluginInput.AssociationIds)
 	}
 
 	log.Info(stdout)
@@ -255,6 +259,19 @@ func (p *Plugin) runCommands(log log.T, pluginInput RefreshAssociationPluginInpu
 	if err != nil {
 		out.Errors = append(out.Errors, err.Error())
 		log.Error(err)
+	}
+
+	// Create output file paths
+	stdoutFilePath := filepath.Join(orchestrationDir, p.StdoutFileName)
+	stderrFilePath := filepath.Join(orchestrationDir, p.StderrFileName)
+	log.Debugf("stdout file %v, stderr file %v", stdoutFilePath, stderrFilePath)
+
+	if _, err = fileutil.WriteIntoFileWithPermissions(stdoutFilePath, out.Stdout, os.FileMode(int(appconfig.ReadWriteAccess))); err != nil {
+		out.Errors = append(out.Errors, err.Error())
+	}
+
+	if _, err = fileutil.WriteIntoFileWithPermissions(stderrFilePath, out.Stderr, os.FileMode(int(appconfig.ReadWriteAccess))); err != nil {
+		out.Errors = append(out.Errors, err.Error())
 	}
 
 	// Upload output to S3

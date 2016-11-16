@@ -62,7 +62,7 @@ func Refresh(log log.T, assocs []*model.InstanceAssociation, svc service.T) {
 		}
 
 		if newAssoc.ExcludeFromFutureScheduling {
-			log.Debugf("Association %v is excluded from future scheduling", *newAssoc.Association.AssociationId)
+			log.Debugf("Association %v has been excluded from future scheduling", *newAssoc.Association.AssociationId)
 			continue
 		}
 

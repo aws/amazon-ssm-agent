@@ -99,7 +99,7 @@ func InitializeDocumentState(context context.T,
 	//initialize document information with relevant values extracted from msg
 	documentInfo := newDocumentInfo(rawData, payload)
 	// adapt plugin configuration format from MDS to plugin expected format
-	s3KeyPrefix := path.Join(payload.OutputS3KeyPrefix, documentInfo.DocumentID, documentInfo.InstanceID)
+	s3KeyPrefix := path.Join(payload.OutputS3KeyPrefix, documentInfo.InstanceID, documentInfo.DocumentID)
 
 	orchestrationRootDir := filepath.Join(
 		appconfig.DefaultDataStorePath,
@@ -213,8 +213,8 @@ func buildPluginsInfo(
 				Settings:               instancePluginConfig.Settings,
 				Properties:             instancePluginConfig.Inputs,
 				OutputS3BucketName:     payload.OutputS3BucketName,
-				OutputS3KeyPrefix:      fileutil.BuildS3Path(s3KeyPrefix, pluginName),
-				OrchestrationDirectory: fileutil.BuildPath(orchestrationDir, pluginName),
+				OutputS3KeyPrefix:      fileutil.BuildS3Path(s3KeyPrefix, instancePluginConfig.Name),
+				OrchestrationDirectory: fileutil.BuildPath(orchestrationDir, instancePluginConfig.Name),
 				MessageId:              documentInfo.MessageID,
 				BookKeepingFileName:    documentInfo.DocumentID,
 				PluginName:             pluginName,
