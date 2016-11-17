@@ -121,7 +121,7 @@ func (p *Processor) processPendingDocuments(instanceID string) {
 			break
 		}
 
-		if docState.IsAssociation() {
+		if docState.IsAssociation() && p.pollAssociations {
 			p.assocProcessor.ExecutePendingDocument(&docState)
 		} else if p.isSupportedDocumentType(docState.DocumentType) {
 			log.Debugf("processor %v processing pending document %v", p.name, docState.DocumentInformation.DocumentID)
@@ -190,31 +190,28 @@ func (p *Processor) processInProgressDocuments(instanceID string) {
 
 		statemanager.PersistData(log, docState.DocumentInformation.DocumentID, instanceID, appconfig.DefaultLocationOfCurrent, docState)
 
-		if docState.IsAssociation() {
+		if docState.IsAssociation() && p.pollAssociations {
 			//Submit the work to Job Pool so that we don't block for processing of new association
 			if err = p.assocProcessor.SubmitTask(log, docState.DocumentInformation.CommandID, func(cancelFlag task.CancelFlag) {
 				p.assocProcessor.ExecuteInProgressDocument(&docState, cancelFlag)
 			}); err != nil {
 				log.Errorf("Association failed to resume previously unexecuted documents, %v", err)
 			}
-		} else {
-			// If document is not association, it should be handled by the message processor
-			if p.isSupportedDocumentType(docState.DocumentType) {
-				log.Debugf("processor %v processing in-progress document %v", p.name, docState.DocumentInformation.DocumentID)
-				//Submit the work to Job Pool so that we don't block for processing of new messages
-				err := p.sendCommandPool.Submit(log, docState.DocumentInformation.MessageID, func(cancelFlag task.CancelFlag) {
-					p.runCmdsUsingCmdState(p.context.With("[messageID="+docState.DocumentInformation.MessageID+"]"),
-						p.service,
-						p.pluginRunner,
-						cancelFlag,
-						p.buildReply,
-						p.sendResponse,
-						docState)
-				})
-				if err != nil {
-					log.Error("SendCommand failed for previously unexecuted commands", err)
-					break
-				}
+		} else if p.isSupportedDocumentType(docState.DocumentType) {
+			log.Debugf("processor %v processing in-progress document %v", p.name, docState.DocumentInformation.DocumentID)
+			//Submit the work to Job Pool so that we don't block for processing of new messages
+			err := p.sendCommandPool.Submit(log, docState.DocumentInformation.MessageID, func(cancelFlag task.CancelFlag) {
+				p.runCmdsUsingCmdState(p.context.With("[messageID="+docState.DocumentInformation.MessageID+"]"),
+					p.service,
+					p.pluginRunner,
+					cancelFlag,
+					p.buildReply,
+					p.sendResponse,
+					docState)
+			})
+			if err != nil {
+				log.Error("SendCommand failed for previously unexecuted commands", err)
+				break
 			}
 		}
 	}
