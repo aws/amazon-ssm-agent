@@ -47,6 +47,7 @@ mkdir -p %{buildroot}/var/lib/amazon/ssm/
 PKG_ROOT=`pwd`/src/github.com/aws/amazon-ssm-agent
 
 cp ${PKG_ROOT}/bin/amazon-ssm-agent %{buildroot}/usr/bin/
+cp ${PKG_ROOT}/bin/ssm-cli %{buildroot}/usr/bin/
 cp ${PKG_ROOT}/seelog_unix.xml %{buildroot}/etc/amazon/ssm/seelog.xml.template
 cp ${PKG_ROOT}/amazon-ssm-agent.json.template %{buildroot}/etc/amazon/ssm/
 cp ${PKG_ROOT}/packaging/linux/amazon-ssm-agent.conf %{buildroot}/etc/init/

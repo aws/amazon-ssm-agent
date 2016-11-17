@@ -40,7 +40,7 @@ const (
 	PackageNameFormat = "{PackageName}.{Compressed}"
 
 	// PackageUrl represents the s3 folder where all versions of a package live
-	// the url to a specific package is this plus /{PackageName}/{Platform}/{Arch}/{PackageVersion}/{FileName}
+	// the url to a specific package has a format like https://s3.us-east-1.amazonaws.com/amazon-ssm-packages-us-east-1/Packages/Test/windows/amd64/1.0.0/Test.zip
 	PackageUrl = "https://s3.{Region}.amazonaws.com/amazon-ssm-packages-{Region}/Packages/{PackageName}/{Platform}/{Arch}"
 
 	// PackageUrlBjs is the s3 location for BJS region where all packages live

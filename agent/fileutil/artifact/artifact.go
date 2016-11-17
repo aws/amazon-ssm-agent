@@ -136,7 +136,10 @@ func awsConfig(log log.T, amazonS3URL s3util.AmazonS3URL) (config *aws.Config, e
 // and contain a / after the prefix.  The folder name is the part between the prefix and the /.
 func ListS3Folders(log log.T, amazonS3URL s3util.AmazonS3URL) (folderNames []string, err error) {
 	config, _ := awsConfig(log, amazonS3URL)
-	prefix := amazonS3URL.Key + "/"
+	prefix := amazonS3URL.Key
+	if !strings.HasSuffix(prefix, "/") {
+		prefix = prefix + "/"
+	}
 	params := &s3.ListObjectsInput{
 		Bucket:    aws.String(amazonS3URL.Bucket),
 		Prefix:    &prefix,
@@ -145,7 +148,9 @@ func ListS3Folders(log log.T, amazonS3URL s3util.AmazonS3URL) (folderNames []str
 	s3client := s3.New(session.New(config))
 	req, resp := s3client.ListObjectsRequest(params)
 	err = req.Send()
+	log.Debugf("ListS3Folders Bucket: %v, Prefix: %v, RequestID: %v", params.Bucket, params.Prefix, req.RequestID)
 	if err != nil {
+		log.Debugf("ListS3Folders error %v", err.Error())
 		return
 	}
 	//TODO:MF: This works, but the string trimming required makes me think there should be some easier way to get this information

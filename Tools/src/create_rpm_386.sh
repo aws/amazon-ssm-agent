@@ -22,11 +22,12 @@ mkdir -p ${BGO_SPACE}/bin/linux_386/linux/var/lib/amazon/ssm/
 echo "Copying application files"
 
 cp ${BGO_SPACE}/bin/linux_386/amazon-ssm-agent ${BGO_SPACE}/bin/linux_386/linux/usr/bin/
+cp ${BGO_SPACE}/bin/linux_386/ssm-cli ${BGO_SPACE}/bin/linux_386/linux/usr/bin/
 cp ${BGO_SPACE}/seelog_unix.xml ${BGO_SPACE}/bin/linux_386/linux/etc/amazon/ssm/seelog.xml.template
 cp ${BGO_SPACE}/amazon-ssm-agent.json.template ${BGO_SPACE}/bin/linux_386/linux/etc/amazon/ssm/
 cp ${BGO_SPACE}/packaging/linux/amazon-ssm-agent.conf ${BGO_SPACE}/bin/linux_386/linux/etc/init/
 cp ${BGO_SPACE}/packaging/linux/amazon-ssm-agent.service ${BGO_SPACE}/bin/linux_386/linux/etc/systemd/system/
-cd ${BGO_SPACE}/bin/linux_386/linux/usr/bin/; strip --strip-unneeded amazon-ssm-agent ;cd ~-
+cd ${BGO_SPACE}/bin/linux_386/linux/usr/bin/; strip --strip-unneeded amazon-ssm-agent; strip --strip-unneeded ssm-cli; cd ~-
 
 echo "Creating the rpm package"
 

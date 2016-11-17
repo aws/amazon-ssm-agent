@@ -51,7 +51,9 @@ func (p *Processor) loop() {
 	log := p.context.Log()
 	if !p.isDone() {
 		if p.processorStopPolicy != nil {
-			log.Debugf("%v's stoppolicy before polling is %v", p.name, p.processorStopPolicy)
+			if p.name == mdsName {
+				log.Debugf("%v's stoppolicy before polling is %v", p.name, p.processorStopPolicy)
+			}
 			if p.processorStopPolicy.IsHealthy() == false {
 				log.Errorf("%v stopped temporarily due to internal failure. We will retry automatically after %v minutes", p.name, pollMessageFrequencyMinutes)
 				p.reset()
@@ -63,7 +65,9 @@ func (p *Processor) loop() {
 		}
 
 		p.pollOnce()
-		log.Debugf("%v's stoppolicy after polling is %v", p.name, p.processorStopPolicy)
+		if p.name == mdsName {
+			log.Debugf("%v's stoppolicy after polling is %v", p.name, p.processorStopPolicy)
+		}
 
 		// Slow down a bit in case GetMessages returns
 		// without blocking, which may cause us to
@@ -131,16 +135,22 @@ func (p *Processor) isDone() bool {
 // pollOnce calls GetMessages once and processes the result.
 func (p *Processor) pollOnce() {
 	log := p.context.Log()
-	log.Debugf("Polling for messages")
+	if p.name == mdsName {
+		log.Debugf("Polling for messages")
+	}
 	messages, err := p.service.GetMessages(log, p.config.InstanceID)
 	if err != nil {
 		sdkutil.HandleAwsError(log, err, p.processorStopPolicy)
 		return
 	}
-	log.Debugf("Got %v messages", len(messages.Messages))
+	if len(messages.Messages) > 0 {
+		log.Debugf("Got %v messages", len(messages.Messages))
+	}
 
 	for _, msg := range messages.Messages {
 		processMessage(p, msg)
 	}
-	log.Debugf("Done poll once")
+	if p.name == mdsName {
+		log.Debugf("Done poll once")
+	}
 }

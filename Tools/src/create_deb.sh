@@ -18,7 +18,8 @@ mkdir -p ${BGO_SPACE}/bin/debian_amd64/debian/lib/systemd/system/
 echo "Copying application files"
 
 cp ${BGO_SPACE}/bin/linux_amd64/amazon-ssm-agent ${BGO_SPACE}/bin/debian_amd64/debian/usr/bin/
-cd ${BGO_SPACE}/bin/debian_amd64/debian/usr/bin/; strip --strip-unneeded amazon-ssm-agent ;cd ~-
+cp ${BGO_SPACE}/bin/linux_amd64/ssm-cli ${BGO_SPACE}/bin/debian_amd64/debian/usr/bin/
+cd ${BGO_SPACE}/bin/debian_amd64/debian/usr/bin/; strip --strip-unneeded amazon-ssm-agent; strip --strip-unneeded ssm-cli; cd ~-
 cp ${BGO_SPACE}/seelog_unix.xml ${BGO_SPACE}/bin/debian_amd64/debian/etc/amazon/ssm/seelog.xml.template
 cp ${BGO_SPACE}/amazon-ssm-agent.json.template ${BGO_SPACE}/bin/debian_amd64/debian/etc/amazon/ssm/
 cp ${BGO_SPACE}/packaging/ubuntu/amazon-ssm-agent.conf ${BGO_SPACE}/bin/debian_amd64/debian/etc/init/
