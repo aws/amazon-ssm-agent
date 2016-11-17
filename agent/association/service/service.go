@@ -147,7 +147,6 @@ func (s *AssociationService) ListInstanceAssociations(log log.T, instanceID stri
 					// If legacy association has already been executed then skip it
 					if parameterResponse.AssociationDescription != nil &&
 						parameterResponse.AssociationDescription.Status != nil &&
-						*parameterResponse.AssociationDescription.Status.Name != contracts.AssociationStatusPending &&
 						*parameterResponse.AssociationDescription.Status.Name != contracts.AssociationStatusAssociated {
 						log.Debugf("Skipping association %v as it has been processed", *assoc.Name)
 						continue
@@ -205,7 +204,6 @@ func (s *AssociationService) ListAssociations(log log.T, instanceID string) ([]*
 		// If legacy association has already been executed return empty
 		if parameterResponse.AssociationDescription != nil &&
 			parameterResponse.AssociationDescription.Status != nil &&
-			*parameterResponse.AssociationDescription.Status.Name != contracts.AssociationStatusPending &&
 			*parameterResponse.AssociationDescription.Status.Name != contracts.AssociationStatusAssociated {
 			log.Debugf("Skipping association %v as it has been processed", *assoc.Name)
 
