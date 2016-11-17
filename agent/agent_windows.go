@@ -8,10 +8,42 @@ import (
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	logger "github.com/aws/amazon-ssm-agent/agent/log"
+	"golang.org/x/sys/windows/registry"
 	"golang.org/x/sys/windows/svc"
+	"golang.org/x/sys/windows/svc/mgr"
 )
 
 const serviceName = "AmazonSSMAgent"
+const imageStateComplete = "IMAGE_STATE_COMPLETE"
+const automatic_startType = 2
+const manual_startType = 3
+const runningService = 4
+const disabled_startType = 4
+
+// isServiceRunning returns if the service is running
+func isServiceRunning(service *mgr.Service) (bool bool, err error) {
+	var status svc.Status
+	if status, err = service.Query(); err != nil {
+		log.Printf("Something went wrong while querying the status - %v", err)
+		return false, err
+	}
+	if status.State == runningService {
+		return true, nil
+	}
+	return false, nil
+}
+
+// getServiceStartType returns the current start type of the function
+func getServiceStartType(service *mgr.Service) (starttype uint32, err error) {
+	var config mgr.Config
+
+	if config, err = service.Config(); err != nil {
+		log.Printf("Something went wrong while checking the service start type - %v", err)
+		return
+	}
+	log.Printf("Start type is %v", config.StartType)
+	return config.StartType, nil
+}
 
 func main() {
 	// initialize logger
@@ -45,6 +77,76 @@ type amazonSSMAgentService struct {
 // Execute agent as Windows service.  Implement golang.org/x/sys/windows/svc#Handler.
 func (a *amazonSSMAgentService) Execute(args []string, r <-chan svc.ChangeRequest, s chan<- svc.Status) (bool, uint32) {
 
+	log := logger.Logger()
+	// check if sysPrep is done
+	ec2ConfigExists := false
+	ec2ConfigRunning := false
+
+	var winManager *mgr.Mgr
+	var erro error
+	var ec2ConfigStartType uint32
+	var ec2ConfigService *mgr.Service
+	if winManager, erro = mgr.Connect(); erro != nil {
+		log.Errorf("Something went wrong while trying to connect to Service Manager - %v", erro)
+		return true, appconfig.ErrorExitCode
+	}
+	defer winManager.Disconnect()
+	ec2ConfigService, erro = winManager.OpenService("EC2Config")
+	if erro != nil {
+		log.Errorf("Opening EC2Config Service failed with error %v", erro)
+		ec2ConfigStartType = 0
+		ec2ConfigExists = false
+	} else {
+		ec2ConfigExists = true
+		if ec2ConfigRunning, erro = isServiceRunning(ec2ConfigService); erro != nil {
+			log.Errorf("Error when trying to find out if service is running ")
+		}
+		if ec2ConfigStartType, erro = getServiceStartType(ec2ConfigService); erro != nil {
+			log.Errorf("Error when trying to find the start type")
+		}
+	}
+	if ec2ConfigService != nil {
+		defer ec2ConfigService.Close()
+	}
+
+	setupKey, err := registry.OpenKey(registry.LOCAL_MACHINE, `SOFTWARE\Microsoft\Windows\CurrentVersion\Setup\State`, registry.QUERY_VALUE)
+	if err != nil {
+		log.Errorf("Error while trying to obtain: %v", err)
+		return true, appconfig.ErrorExitCode
+	}
+	defer setupKey.Close()
+	log.Debugf("The setup key obtained : %v", setupKey)
+
+	windowsImageState, _, err := setupKey.GetStringValue("ImageState")
+	if err != nil {
+		log.Errorf("Image state cannot be obtained : %v", err)
+		return true, appconfig.ErrorExitCode
+	}
+	log.Debugf("The state of windows Image is : %v", windowsImageState)
+
+	// disable ssm agent if sysprep is not done and EC2 exists in automatic state or manual state while running
+	if windowsImageState != imageStateComplete {
+		log.Debugf("EC2 config exists? %v, EC2 Config Start type: %v, ec2Config is running? %v", ec2ConfigExists, ec2ConfigStartType, ec2ConfigRunning)
+		if ec2ConfigExists && ((ec2ConfigStartType == mgr.StartAutomatic) || (ec2ConfigStartType == mgr.StartManual && ec2ConfigRunning)) {
+			log.Info("Stopping SSM agent because sysprep hasn't completed")
+			return false, appconfig.SuccessExitCode
+		}
+	}
+	// loop around windowsImageState till it reaches IMAGE_STATE_COMPLETE
+	for windowsImageState != imageStateComplete {
+		windowsImageState, _, err = setupKey.GetStringValue("ImageState")
+		if err != nil {
+			log.Errorf("Image state cannot be obtained : %v", err)
+			return true, appconfig.ErrorExitCode
+		}
+		time.Sleep(15 * time.Second)
+	}
+	setupKey.Close()
+	if ec2ConfigService != nil {
+		ec2ConfigService.Close()
+	}
+	winManager.Disconnect()
+
 	// notify service controller status is now StartPending
 	s <- svc.Status{State: svc.StartPending}
 
@@ -52,7 +154,7 @@ func (a *amazonSSMAgentService) Execute(args []string, r <-chan svc.ChangeReques
 	var emptyString string
 	cpm, err := start(a.log, &emptyString, &emptyString)
 	if err != nil {
-		log.Printf("Failed to start agent. %v", err)
+		log.Errorf("Failed to start agent. %v", err)
 		return true, appconfig.ErrorExitCode
 	}
 
