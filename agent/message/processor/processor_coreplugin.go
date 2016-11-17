@@ -197,21 +197,24 @@ func (p *Processor) processInProgressDocuments(instanceID string) {
 			}); err != nil {
 				log.Errorf("Association failed to resume previously unexecuted documents, %v", err)
 			}
-		} else if p.isSupportedDocumentType(docState.DocumentType) {
-			log.Debugf("processor %v processing in-progress document %v", p.name, docState.DocumentInformation.DocumentID)
-			//Submit the work to Job Pool so that we don't block for processing of new messages
-			err := p.sendCommandPool.Submit(log, docState.DocumentInformation.MessageID, func(cancelFlag task.CancelFlag) {
-				p.runCmdsUsingCmdState(p.context.With("[messageID="+docState.DocumentInformation.MessageID+"]"),
-					p.service,
-					p.pluginRunner,
-					cancelFlag,
-					p.buildReply,
-					p.sendResponse,
-					docState)
-			})
-			if err != nil {
-				log.Error("SendCommand failed for previously unexecuted commands", err)
-				break
+		} else {
+			// If document is not association, it should be handled by the message processor
+			if p.isSupportedDocumentType(docState.DocumentType) {
+				log.Debugf("processor %v processing in-progress document %v", p.name, docState.DocumentInformation.DocumentID)
+				//Submit the work to Job Pool so that we don't block for processing of new messages
+				err := p.sendCommandPool.Submit(log, docState.DocumentInformation.MessageID, func(cancelFlag task.CancelFlag) {
+					p.runCmdsUsingCmdState(p.context.With("[messageID="+docState.DocumentInformation.MessageID+"]"),
+						p.service,
+						p.pluginRunner,
+						cancelFlag,
+						p.buildReply,
+						p.sendResponse,
+						docState)
+				})
+				if err != nil {
+					log.Error("SendCommand failed for previously unexecuted commands", err)
+					break
+				}
 			}
 		}
 	}
