@@ -18,7 +18,6 @@ package processor
 import (
 	"io/ioutil"
 	"os"
-	"path/filepath"
 	"sync"
 	"time"
 
@@ -27,7 +26,6 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
-	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/platform"
 	"github.com/aws/amazon-ssm-agent/agent/statemanager"
 	"github.com/aws/amazon-ssm-agent/agent/statemanager/model"
@@ -111,16 +109,8 @@ func (p *Processor) processPendingDocuments(instanceID string) {
 	for _, f := range files {
 		log.Debugf("Processing an older document - %v", f.Name())
 
-		//construct the absolute path - safely assuming that interim state for older messages are already present in Pending folder
-		filePath := filepath.Join(pendingDocsLocation, f.Name())
-
-		docState := model.DocumentState{}
-
-		//parse the message
-		if err := jsonutil.UnmarshalFile(filePath, &docState); err != nil {
-			log.Errorf("skipping processsing of pending document. encountered error %v while reading pending document from file - %v", err, f)
-			break
-		}
+		//inspect document state
+		docState := statemanager.GetDocumentInterimState(log, f.Name(), instanceID, appconfig.DefaultLocationOfPending)
 
 		if !p.isSupportedDocumentType(docState.DocumentType) && (!docState.IsAssociation() || !p.pollAssociations) {
 			continue // This is a document for a different processor to handle
@@ -161,16 +151,8 @@ func (p *Processor) processInProgressDocuments(instanceID string) {
 	for _, f := range files {
 		log.Debugf("processing previously unexecuted document - %v", f.Name())
 
-		//construct the absolute path - safely assuming that interim state for older messages are already present in Current folder
-		file := filepath.Join(pendingDocsLocation, f.Name())
-		var docState model.DocumentState
-
-		//parse the message
-		if err := jsonutil.UnmarshalFile(file, &docState); err != nil {
-			log.Errorf("skipping processsing of previously unexecuted documents. encountered error %v while reading unprocessed document from file - %v", err, f)
-			//TODO: Move doc to corrupt/failed
-			break
-		}
+		//inspect document state
+		docState := statemanager.GetDocumentInterimState(log, f.Name(), instanceID, appconfig.DefaultLocationOfCurrent)
 
 		if !p.isSupportedDocumentType(docState.DocumentType) && (!docState.IsAssociation() || !p.pollAssociations) {
 			log.Debugf("Skipping document %v type %v isaccoc %v and our pollAssociations is %v", docState.DocumentInformation.DocumentID, docState.DocumentType, docState.IsAssociation(), p.pollAssociations)
