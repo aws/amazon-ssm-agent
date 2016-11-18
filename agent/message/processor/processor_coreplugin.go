@@ -115,13 +115,19 @@ func (p *Processor) processPendingDocuments(instanceID string) {
 		filePath := filepath.Join(pendingDocsLocation, f.Name())
 
 		docState := model.DocumentState{}
+
 		//parse the message
 		if err := jsonutil.UnmarshalFile(filePath, &docState); err != nil {
 			log.Errorf("skipping processsing of pending document. encountered error %v while reading pending document from file - %v", err, f)
 			break
 		}
 
+		if !p.isSupportedDocumentType(docState.DocumentType) && (!docState.IsAssociation() || !p.pollAssociations) {
+			continue // This is a document for a different processor to handle
+		}
+
 		if docState.IsAssociation() && p.pollAssociations {
+			log.Debugf("processing pending association document: %v", docState.DocumentInformation.DocumentID)
 			p.assocProcessor.ExecutePendingDocument(&docState)
 		} else if p.isSupportedDocumentType(docState.DocumentType) {
 			log.Debugf("processor %v processing pending document %v", p.name, docState.DocumentInformation.DocumentID)
@@ -166,6 +172,11 @@ func (p *Processor) processInProgressDocuments(instanceID string) {
 			break
 		}
 
+		if !p.isSupportedDocumentType(docState.DocumentType) && (!docState.IsAssociation() || !p.pollAssociations) {
+			log.Debugf("Skipping document %v type %v isaccoc %v and our pollAssociations is %v", docState.DocumentInformation.DocumentID, docState.DocumentType, docState.IsAssociation(), p.pollAssociations)
+			continue // This is a document for a different processor to handle
+		}
+
 		retryLimit := config.Mds.CommandRetryLimit
 		if docState.IsAssociation() {
 			retryLimit = config.Ssm.AssociationRetryLimit
@@ -191,6 +202,7 @@ func (p *Processor) processInProgressDocuments(instanceID string) {
 		statemanager.PersistData(log, docState.DocumentInformation.DocumentID, instanceID, appconfig.DefaultLocationOfCurrent, docState)
 
 		if docState.IsAssociation() && p.pollAssociations {
+			log.Debugf("processing in-progress association document: %v", docState.DocumentInformation.DocumentID)
 			//Submit the work to Job Pool so that we don't block for processing of new association
 			if err = p.assocProcessor.SubmitTask(log, docState.DocumentInformation.CommandID, func(cancelFlag task.CancelFlag) {
 				p.assocProcessor.ExecuteInProgressDocument(&docState, cancelFlag)
@@ -250,7 +262,9 @@ func (p *Processor) RequestStop(stopType contracts.StopType) (err error) {
 	wg.Add(1)
 	go func() {
 		defer wg.Done()
-		p.assocProcessor.ShutdownAndWait(waitTimeout)
+		if p.assocProcessor != nil {
+			p.assocProcessor.ShutdownAndWait(waitTimeout)
+		}
 	}()
 
 	// wait for everything to shutdown

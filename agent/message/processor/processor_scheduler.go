@@ -118,7 +118,9 @@ func (p *Processor) stop() {
 		p.messagePollJob.Quit <- true
 	}
 
-	p.assocProcessor.Stop()
+	if p.assocProcessor != nil {
+		p.assocProcessor.Stop()
+	}
 }
 
 // isDone returns true if a stop has been requested, false otherwise.

@@ -201,8 +201,10 @@ func NewProcessor(context context.T, processorName string, processorService serv
 		statemanager.PersistData(log, state.DocumentInformation.DocumentID, state.DocumentInformation.InstanceID, bookkeeping, *state)
 	}
 
-	assocProcessor := processor.NewAssociationProcessor(context, instanceID)
-
+	var assocProc *processor.Processor
+	if pollAssoc {
+		assocProc = processor.NewAssociationProcessor(context, instanceID)
+	}
 	return &Processor{
 		context:              context,
 		name:                 processorName,
@@ -218,7 +220,7 @@ func NewProcessor(context context.T, processorName string, processorService serv
 		orchestrationRootDir: orchestrationRootDir,
 		persistData:          persistData,
 		processorStopPolicy:  processorStopPolicy,
-		assocProcessor:       assocProcessor,
+		assocProcessor:       assocProc,
 		pollAssociations:     pollAssoc,
 		supportedDocTypes:    supportedDocs,
 	}
