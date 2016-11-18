@@ -323,6 +323,7 @@ func (p *Processor) persistAssociationForExecution(log log.T, docState *stateMod
 }
 
 // updateInstanceAssocStatus provides wrapper for calling update association service
+// TODO: executionDate is not used, remove it from the method
 func (p *Processor) updateInstanceAssocStatus(
 	assoc *ssm.InstanceAssociationSummary,
 	status string,
@@ -338,6 +339,6 @@ func (p *Processor) updateInstanceAssocStatus(
 		*assoc.InstanceId,
 		status,
 		errorCode,
-		executionDate,
+		times.ToIso8601UTC(time.Now()),
 		message)
 }

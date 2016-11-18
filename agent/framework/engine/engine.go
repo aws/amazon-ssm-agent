@@ -26,6 +26,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/rebooter"
 	stateModel "github.com/aws/amazon-ssm-agent/agent/statemanager/model"
 	"github.com/aws/amazon-ssm-agent/agent/task"
+	"github.com/aws/amazon-ssm-agent/agent/times"
 )
 
 // SendDocumentLevelResponse is used to send status response before plugin begins
@@ -143,7 +144,7 @@ func RunPlugins(
 		}
 		if updateAssoc != nil {
 			log.Infof("Update association on plugin completion: %v", pluginID)
-			updateAssoc(log, executionID, documentCreatedDate, pluginOutputs, totalNumberOfActions)
+			updateAssoc(log, executionID, times.ToIso8601UTC(time.Now()), pluginOutputs, totalNumberOfActions)
 		}
 
 	}

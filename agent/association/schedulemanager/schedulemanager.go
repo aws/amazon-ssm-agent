@@ -56,7 +56,7 @@ func Refresh(log log.T, assocs []*model.InstanceAssociation, svc service.T) {
 				*newAssoc.Association.InstanceId,
 				contracts.AssociationStatusFailed,
 				contracts.AssociationErrorCodeInvalidExpression,
-				times.ToIso8601UTC(newAssoc.CreateDate),
+				times.ToIso8601UTC(time.Now()),
 				message)
 			newAssoc.ExcludeFromFutureScheduling = true
 		}

@@ -32,6 +32,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/reply"
 	stateModel "github.com/aws/amazon-ssm-agent/agent/statemanager/model"
 	"github.com/aws/amazon-ssm-agent/agent/task"
+	"github.com/aws/amazon-ssm-agent/agent/times"
 	"github.com/aws/aws-sdk-go/service/ssm"
 )
 
@@ -74,7 +75,7 @@ func (r *AssociationExecuter) ExecutePendingDocument(context context.T, pool tas
 		docState.DocumentInformation.InstanceID,
 		contracts.AssociationStatusPending,
 		contracts.AssociationErrorCodeNoError,
-		docState.DocumentInformation.CreatedDate,
+		times.ToIso8601UTC(time.Now()),
 		documentPendingMessage)
 
 	bookkeepingSvc.MoveDocumentState(log,
@@ -189,6 +190,7 @@ func (r *AssociationExecuter) parseAndPersistReplyContents(log log.T,
 }
 
 // pluginExecutionReport allow engine to update progress after every plugin execution
+// TODO: documentCreatedDate is not used, remove it from the method
 func (r *AssociationExecuter) pluginExecutionReport(
 	log log.T,
 	associationID string,
@@ -218,7 +220,7 @@ func (r *AssociationExecuter) pluginExecutionReport(
 		instanceID,
 		contracts.AssociationStatusInProgress,
 		contracts.AssociationErrorCodeNoError,
-		documentCreatedDate,
+		times.ToIso8601UTC(time.Now()),
 		executionSummary)
 }
 
@@ -239,7 +241,7 @@ func (r *AssociationExecuter) associationExecutionReport(
 		docInfo.InstanceID,
 		associationStatus,
 		errorCode,
-		docInfo.CreatedDate,
+		times.ToIso8601UTC(time.Now()),
 		executionSummary)
 }
 
