@@ -261,8 +261,20 @@ func (s *AssociationService) UpdateInstanceAssociationStatus(
 		log.Info("Updating association status ", jsonutil.Indent(executionResultContent))
 
 		response, err := s.ssmSvc.UpdateInstanceAssociationStatus(log, associationID, instanceID, &executionResult)
+
 		if err != nil {
 			log.Errorf("unable to update association status, %v", err)
+
+			// After machine reboot system turn back to use UpdateInstanceAssociationStatus for legacy association
+			// instead of using legacy UpdateAssociationStatus api
+			// When we get error during update, run UpdateAssociationStatus if associationName is equal to associationId
+			// which indicates legacy association loaded from ListAssociation api
+			// Otherwise log the error and return.
+
+			if associationID == associationName {
+				s.UpdateAssociationStatus(log, associationName, instanceID, status, executionSummary)
+			}
+
 			return
 		}
 		responseContent, err := jsonutil.Marshal(response)
