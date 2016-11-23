@@ -58,19 +58,6 @@ type RunCommandPluginOutput struct {
 	contracts.PluginOutput
 }
 
-// Failed marks plugin as Failed
-func (out *RunCommandPluginOutput) MarkAsFailed(log log.T, err error) {
-	out.ExitCode = 1
-	out.Status = contracts.ResultStatusFailed
-	if len(out.Stderr) != 0 {
-		out.Stderr = fmt.Sprintf("\n%v\n%v", out.Stderr, err.Error())
-	} else {
-		out.Stderr = fmt.Sprintf("\n%v", err.Error())
-	}
-	log.Error(err.Error())
-	out.Errors = append(out.Errors, err.Error())
-}
-
 func (p *Plugin) AssignPluginConfigs(pluginConfig pluginutil.PluginConfig) {
 	p.MaxStdoutLength = pluginConfig.MaxStdoutLength
 	p.MaxStderrLength = pluginConfig.MaxStderrLength
@@ -162,8 +149,7 @@ func (p *Plugin) runCommands(log log.T, pluginInput RunCommandPluginInput, orche
 	var tempDir string
 	if useTempDirectory {
 		if tempDir, err = ioutil.TempDir("", "Ec2RunCommand"); err != nil {
-			out.Errors = append(out.Errors, err.Error())
-			log.Error(err)
+			out.MarkAsFailed(log, err)
 			return
 		}
 		orchestrationDirectory = tempDir
@@ -178,8 +164,7 @@ func (p *Plugin) runCommands(log log.T, pluginInput RunCommandPluginInput, orche
 
 	// create orchestration dir if needed
 	if err = fileutil.MakeDirsWithExecuteAccess(orchestrationDir); err != nil {
-		log.Debug("failed to create orchestrationDir directory", orchestrationDir)
-		out.Errors = append(out.Errors, err.Error())
+		out.MarkAsFailed(log, fmt.Errorf("failed to create orchestrationDir directory, %v", orchestrationDir))
 		return
 	}
 
@@ -189,8 +174,7 @@ func (p *Plugin) runCommands(log log.T, pluginInput RunCommandPluginInput, orche
 
 	// Create script file
 	if err = pluginutil.CreateScriptFile(log, scriptPath, pluginInput.RunCommand); err != nil {
-		out.Errors = append(out.Errors, err.Error())
-		log.Errorf("failed to create script file. %v", err)
+		out.MarkAsFailed(log, fmt.Errorf("failed to create script file. %v", err))
 		return
 	}
 
@@ -215,12 +199,10 @@ func (p *Plugin) runCommands(log log.T, pluginInput RunCommandPluginInput, orche
 
 	if len(errs) > 0 {
 		for _, err := range errs {
-			out.Errors = append(out.Errors, err.Error())
 			if out.Status != contracts.ResultStatusCancelled &&
 				out.Status != contracts.ResultStatusTimedOut &&
 				out.Status != contracts.ResultStatusSuccessAndReboot {
-				log.Error("failed to run commands: ", err)
-				out.Status = contracts.ResultStatusFailed
+				out.MarkAsFailed(log, fmt.Errorf("failed to run commands: %v", err))
 			}
 		}
 	}
@@ -228,18 +210,18 @@ func (p *Plugin) runCommands(log log.T, pluginInput RunCommandPluginInput, orche
 	// read (a prefix of) the standard output/error
 	out.Stdout, err = pluginutil.ReadPrefix(stdout, p.MaxStdoutLength, p.OutputTruncatedSuffix)
 	if err != nil {
-		out.Errors = append(out.Errors, err.Error())
 		log.Error(err)
 	}
 	out.Stderr, err = pluginutil.ReadPrefix(stderr, p.MaxStderrLength, p.OutputTruncatedSuffix)
 	if err != nil {
-		out.Errors = append(out.Errors, err.Error())
 		log.Error(err)
 	}
 
 	// Upload output to S3
 	uploadOutputToS3BucketErrors := p.ExecuteUploadOutputToS3Bucket(log, pluginInput.ID, orchestrationDir, outputS3BucketName, outputS3KeyPrefix, useTempDirectory, tempDir, out.Stdout, out.Stderr)
-	out.Errors = append(out.Errors, uploadOutputToS3BucketErrors...)
+	if len(uploadOutputToS3BucketErrors) > 0 {
+		log.Errorf("Unable to upload the logs: %s", uploadOutputToS3BucketErrors)
+	}
 
 	// Return Json indented response
 	responseContent, _ := jsonutil.Marshal(out)

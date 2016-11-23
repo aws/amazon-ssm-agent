@@ -129,26 +129,13 @@ var fileUncompress = fileutil.Uncompress
 var updateAgent = runUpdateAgent
 
 //Succeed marks update as Successful
-func (out *UpdatePluginOutput) Succeed() {
+func (out *UpdatePluginOutput) MarkAsSucceed() {
 	out.ExitCode = 0
 	out.Status = contracts.ResultStatusSuccess
 }
 
-//Failed marks update as Failed
-func (out *UpdatePluginOutput) Failed(log log.T, err error) {
-	out.ExitCode = 1
-	out.Status = contracts.ResultStatusFailed
-	if len(out.Stderr) != 0 {
-		out.Stderr = fmt.Sprintf("\n%v\n%v", out.Stderr, err.Error())
-	} else {
-		out.Stderr = fmt.Sprintf("\n%v", err.Error())
-	}
-	log.Error(err.Error())
-	out.Errors = append(out.Errors, err.Error())
-}
-
 //Pending mark update as Pending
-func (out *UpdatePluginOutput) Pending() {
+func (out *UpdatePluginOutput) MarkAsPending() {
 	out.ExitCode = 0
 	out.Status = contracts.ResultStatusInProgress
 }
@@ -189,13 +176,13 @@ func runUpdateAgent(
 	var context *updateutil.InstanceContext
 
 	if err = jsonutil.Remarshal(rawPluginInput, &pluginInput); err != nil {
-		out.Failed(log,
+		out.MarkAsFailed(log,
 			fmt.Errorf("invalid format in plugin properties %v;\nerror %v", rawPluginInput, err))
 		return
 	}
 
 	if context, err = util.CreateInstanceContext(log); err != nil {
-		out.Failed(log, err)
+		out.MarkAsFailed(log, err)
 		return
 	}
 
@@ -220,7 +207,7 @@ func runUpdateAgent(
 	//Download manifest file
 	manifest, downloadErr := manager.downloadManifest(log, util, &pluginInput, context, &out)
 	if downloadErr != nil {
-		out.Failed(log, downloadErr)
+		out.MarkAsFailed(log, downloadErr)
 		return
 	}
 
@@ -228,7 +215,7 @@ func runUpdateAgent(
 	noNeedToUpdate := false
 	if noNeedToUpdate, err = manager.validateUpdate(log, &pluginInput, context, manifest, &out); noNeedToUpdate {
 		if err != nil {
-			out.Failed(log, err)
+			out.MarkAsFailed(log, err)
 		}
 		return
 	}
@@ -237,7 +224,7 @@ func runUpdateAgent(
 	updaterVersion := ""
 	if updaterVersion, err = manager.downloadUpdater(
 		log, util, pluginInput.UpdaterName, manifest, &out, context); err != nil {
-		out.Failed(log, err)
+		out.MarkAsFailed(log, err)
 		return
 	}
 
@@ -253,7 +240,7 @@ func runUpdateAgent(
 		p.StderrFileName,
 		outputS3KeyPrefix,
 		outputS3BucketName); err != nil {
-		out.Failed(log, err)
+		out.MarkAsFailed(log, err)
 		return
 	}
 	log.Debugf("Update command %v", cmd)
@@ -264,7 +251,7 @@ func runUpdateAgent(
 		StartDateTime: startTime,
 	}
 	if err = util.SaveUpdatePluginResult(log, appconfig.UpdaterArtifactsRoot, updatePluginResult); err != nil {
-		out.Failed(log, err)
+		out.MarkAsFailed(log, err)
 		return
 	}
 
@@ -272,7 +259,7 @@ func runUpdateAgent(
 	// If loading disk space fails, continue to update (agent update is backed by rollback handler)
 	log.Infof("Checking available disk space ...")
 	if isDiskSpaceSufficient, err := util.IsDiskSpaceSufficientForUpdate(log); err == nil && !isDiskSpaceSufficient {
-		out.Failed(log, errors.New("Insufficient available disk space"))
+		out.MarkAsFailed(log, errors.New("Insufficient available disk space"))
 		return
 	}
 
@@ -290,11 +277,11 @@ func runUpdateAgent(
 		p.StdoutFileName,
 		p.StderrFileName,
 		true); err != nil {
-		out.Failed(log, err)
+		out.MarkAsFailed(log, err)
 		return
 	}
 
-	out.Pending()
+	out.MarkAsPending()
 	return
 }
 
@@ -443,7 +430,7 @@ func (m *updateManager) validateUpdate(log log.T,
 		out.AppendInfo(log, "%v %v has already been installed, update skipped",
 			pluginInput.AgentName,
 			currentVersion)
-		out.Succeed()
+		out.MarkAsSucceed()
 		return true, nil
 	}
 	if pluginInput.TargetVersion < currentVersion && !allowDowngrade {
@@ -493,16 +480,18 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 		// check if a reboot has been requested
 		if rebooter.RebootRequested() {
 			log.Info("A plugin has requested a reboot.")
-			break
+			return
 		}
 
 		if cancelFlag.ShutDown() {
 			out[i] = UpdatePluginOutput{}
-			out[i].Errors = []string{"Execution canceled due to ShutDown"}
+			out[i].ExitCode = 1
+			out[i].Status = contracts.ResultStatusFailed
 			break
 		} else if cancelFlag.Canceled() {
 			out[i] = UpdatePluginOutput{}
-			out[i].Errors = []string{"Execution canceled"}
+			out[i].ExitCode = 1
+			out[i].Status = contracts.ResultStatusCancelled
 			break
 		}
 

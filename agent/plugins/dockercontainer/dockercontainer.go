@@ -86,19 +86,6 @@ type DockerContainerPluginOutput struct {
 	contracts.PluginOutput
 }
 
-// Failed marks plugin as Failed
-func (out *DockerContainerPluginOutput) MarkAsFailed(log log.T, err error) {
-	out.ExitCode = 1
-	out.Status = contracts.ResultStatusFailed
-	if len(out.Stderr) != 0 {
-		out.Stderr = fmt.Sprintf("\n%v\n%v", out.Stderr, err.Error())
-	} else {
-		out.Stderr = fmt.Sprintf("\n%v", err.Error())
-	}
-	log.Error(err.Error())
-	out.Errors = append(out.Errors, err.Error())
-}
-
 // NewPlugin returns a new instance of the plugin.
 func NewPlugin(pluginConfig pluginutil.PluginConfig) (*Plugin, error) {
 	var plugin Plugin
@@ -208,8 +195,7 @@ func (p *Plugin) runCommands(log log.T, pluginInput DockerContainerPluginInput, 
 	log.Debugf("OrchestrationDir %v ", orchestrationDir)
 
 	if err = validateInputs(pluginInput); err != nil {
-		log.Error("Validation error", err)
-		out.MarkAsFailed(log, err)
+		out.MarkAsFailed(log, fmt.Errorf("Validation error, %v", err))
 		return out
 	}
 
@@ -381,31 +367,28 @@ func (p *Plugin) runCommands(log log.T, pluginInput DockerContainerPluginInput, 
 
 	if len(errs) > 0 {
 		for _, err := range errs {
-			out.Errors = append(out.Errors, err.Error())
 			if out.Status != contracts.ResultStatusCancelled &&
 				out.Status != contracts.ResultStatusTimedOut &&
 				out.Status != contracts.ResultStatusSuccessAndReboot {
-				log.Error("failed to run commands: ", err)
+				out.MarkAsFailed(log, fmt.Errorf("failed to run commands: %v", err))
 				out.Status = contracts.ResultStatusFailed
 			}
 		}
 	}
 
 	// read (a prefix of) the standard output/error
-	out.Stdout, err = pluginutil.ReadPrefix(stdout, p.MaxStdoutLength, p.OutputTruncatedSuffix)
-	if err != nil {
-		out.Errors = append(out.Errors, err.Error())
+	if out.Stdout, err = pluginutil.ReadPrefix(stdout, p.MaxStdoutLength, p.OutputTruncatedSuffix); err != nil {
 		log.Error(err)
 	}
-	out.Stderr, err = pluginutil.ReadPrefix(stderr, p.MaxStderrLength, p.OutputTruncatedSuffix)
-	if err != nil {
-		out.Errors = append(out.Errors, err.Error())
+	if out.Stderr, err = pluginutil.ReadPrefix(stderr, p.MaxStderrLength, p.OutputTruncatedSuffix); err != nil {
 		log.Error(err)
 	}
 
 	// Upload output to S3
 	uploadOutputToS3BucketErrors := p.ExecuteUploadOutputToS3Bucket(log, pluginInput.ID, orchestrationDir, outputS3BucketName, outputS3KeyPrefix, useTempDirectory, tempDir, out.Stdout, out.Stderr)
-	out.Errors = append(out.Errors, uploadOutputToS3BucketErrors...)
+	if len(uploadOutputToS3BucketErrors) > 0 {
+		log.Errorf("Unable to upload the logs: %s", uploadOutputToS3BucketErrors)
+	}
 
 	// Return Json indented response
 	responseContent, _ := jsonutil.Marshal(out)

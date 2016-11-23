@@ -57,19 +57,9 @@ type RefreshAssociationPluginInput struct {
 // RefreshAssociationPluginOutput represents the output of the plugin
 type RefreshAssociationPluginOutput struct {
 	contracts.PluginOutput
-}
-
-// MarkAsFailed marks plugin as Failed
-func (out *RefreshAssociationPluginOutput) MarkAsFailed(log log.T, err error) {
-	out.ExitCode = 1
-	out.Status = contracts.ResultStatusFailed
-	if len(out.Stderr) != 0 {
-		out.Stderr = fmt.Sprintf("\n%v\n%v", out.Stderr, err.Error())
-	} else {
-		out.Stderr = fmt.Sprintf("\n%v", err.Error())
-	}
-	log.Error(err.Error())
-	out.Errors = append(out.Errors, err.Error())
+	orchestrationDir string
+	useTempDirectory bool
+	tempDir          string
 }
 
 // NewPlugin returns a new instance of the plugin.
@@ -156,32 +146,69 @@ func (p *Plugin) runCommandsRawInput(log log.T, rawPluginInput interface{}, orch
 		out.MarkAsFailed(log, errorString)
 		return
 	}
-	return p.runCommands(log, pluginInput, orchestrationDirectory, cancelFlag, outputS3BucketName, outputS3KeyPrefix)
+
+	out = p.runCommands(log, pluginInput, orchestrationDirectory, cancelFlag, outputS3BucketName, outputS3KeyPrefix)
+
+	// Set output status
+	out.Status = pluginutil.GetStatus(out.ExitCode, cancelFlag)
+
+	// Create output file paths
+	stdoutFilePath := filepath.Join(out.orchestrationDir, p.StdoutFileName)
+	stderrFilePath := filepath.Join(out.orchestrationDir, p.StderrFileName)
+	log.Debugf("stdout file %v, stderr file %v", stdoutFilePath, stderrFilePath)
+
+	if _, err = fileutil.WriteIntoFileWithPermissions(stdoutFilePath, out.Stdout, os.FileMode(int(appconfig.ReadWriteAccess))); err != nil {
+		log.Error(err)
+	}
+
+	if _, err = fileutil.WriteIntoFileWithPermissions(stderrFilePath, out.Stderr, os.FileMode(int(appconfig.ReadWriteAccess))); err != nil {
+		log.Error(err)
+	}
+
+	// read (a prefix of) the standard output/error
+	out.Stdout, err = pluginutil.ReadPrefix(bytes.NewBufferString(out.Stdout), p.MaxStdoutLength, p.OutputTruncatedSuffix)
+	if err != nil {
+		log.Error(err)
+	}
+	out.Stderr, err = pluginutil.ReadPrefix(bytes.NewBufferString(out.Stderr), p.MaxStderrLength, p.OutputTruncatedSuffix)
+	if err != nil {
+		log.Error(err)
+	}
+
+	// Upload output to S3
+	uploadOutputToS3BucketErrors := p.ExecuteUploadOutputToS3Bucket(log, pluginInput.ID, out.orchestrationDir, outputS3BucketName, outputS3KeyPrefix, out.useTempDirectory, out.tempDir, out.Stdout, out.Stderr)
+	if len(uploadOutputToS3BucketErrors) > 0 {
+		log.Errorf("Unable to upload the logs: %s", uploadOutputToS3BucketErrors)
+	}
+
+	// Return Json indented response
+	responseContent, _ := jsonutil.Marshal(out)
+	log.Debug("Returning response:\n", jsonutil.Indent(responseContent))
+
+	return out
 }
 
 // runCommands executes one the command and returns their output.
 func (p *Plugin) runCommands(log log.T, pluginInput RefreshAssociationPluginInput, orchestrationDirectory string, cancelFlag task.CancelFlag, outputS3BucketName string, outputS3KeyPrefix string) (out RefreshAssociationPluginOutput) {
 	var err error
 
+	out.ExitCode = 0
 	// if no orchestration directory specified, create temp directory
-	var useTempDirectory = (orchestrationDirectory == "")
-	var tempDir string
-	if useTempDirectory {
-		if tempDir, err = ioutil.TempDir("", "Ec2RunCommand"); err != nil {
-			out.Errors = append(out.Errors, err.Error())
-			log.Error(err)
+	out.useTempDirectory = (orchestrationDirectory == "")
+	if out.useTempDirectory {
+		if out.tempDir, err = ioutil.TempDir("", "Ec2RunCommand"); err != nil {
+			out.MarkAsFailed(log, err)
 			return
 		}
-		orchestrationDirectory = tempDir
+		orchestrationDirectory = out.tempDir
 	}
 
-	orchestrationDir := fileutil.BuildPath(orchestrationDirectory, pluginInput.ID)
-	log.Debugf("OrchestrationDir %v ", orchestrationDir)
+	out.orchestrationDir = fileutil.BuildPath(orchestrationDirectory, pluginInput.ID)
+	log.Debugf("OrchestrationDir %v ", out.orchestrationDir)
 
 	// create orchestration dir if needed
-	if err = fileutil.MakeDirs(orchestrationDir); err != nil {
-		log.Debug("failed to create orchestrationDir directory", orchestrationDir, err)
-		out.Errors = append(out.Errors, err.Error())
+	if err = fileutil.MakeDirs(out.orchestrationDir); err != nil {
+		out.MarkAsFailed(log, fmt.Errorf("failed to create orchestrationDir directory %v, %v", out.orchestrationDir, err))
 		return
 	}
 
@@ -189,15 +216,14 @@ func (p *Plugin) runCommands(log log.T, pluginInput RefreshAssociationPluginInpu
 	var associations []*model.InstanceAssociation
 
 	if instanceID, err = platform.InstanceID(); err != nil {
-		log.Debug("failed to load instance ID ", err)
-		out.Errors = append(out.Errors, err.Error())
+		out.MarkAsFailed(log, fmt.Errorf("failed to load instance ID, %v", err))
 		return
 	}
 
 	// Get associations
 	if associations, err = p.assocSvc.ListInstanceAssociations(log, instanceID); err != nil {
-		log.Debug("failed to list instance associations ", err)
-		out.Errors = append(out.Errors, err.Error())
+		out.MarkAsFailed(log, fmt.Errorf("failed to list instance associations, %v", err))
+		return
 	}
 
 	// update the cache first
@@ -211,8 +237,9 @@ func (p *Plugin) runCommands(log log.T, pluginInput RefreshAssociationPluginInpu
 	// read from cache or load association details from service
 	for _, assoc := range associations {
 		if err = p.assocSvc.LoadAssociationDetail(log, assoc); err != nil {
-			message := fmt.Sprintf("unable to load association details, %v", err)
-			log.Error(message)
+			err = fmt.Errorf("Encountered error while loading association %v contents, %v",
+				*assoc.Association.AssociationId,
+				err)
 			p.assocSvc.UpdateInstanceAssociationStatus(
 				log,
 				*assoc.Association.AssociationId,
@@ -221,8 +248,8 @@ func (p *Plugin) runCommands(log log.T, pluginInput RefreshAssociationPluginInpu
 				contracts.AssociationStatusFailed,
 				contracts.AssociationErrorCodeListAssociationError,
 				times.ToIso8601UTC(time.Now()),
-				message)
-			out.Errors = append(out.Errors, err.Error())
+				err.Error())
+			out.MarkAsFailed(log, err)
 			return
 		}
 
@@ -240,46 +267,13 @@ func (p *Plugin) runCommands(log log.T, pluginInput RefreshAssociationPluginInpu
 
 	schedulemanager.Refresh(log, associations, p.assocSvc)
 
-	var stdout string
 	if applyAll {
-		stdout = fmt.Sprintf("All the associations will be executed immediately")
+		out.AppendInfo(log, "All associations have been requested to execute immediately")
 	} else {
-		stdout = fmt.Sprintf("Associations %v have been requested to execute immediately", pluginInput.AssociationIds)
+		out.AppendInfo(log, "Associations %v have been requested to execute immediately", pluginInput.AssociationIds)
 	}
 
-	log.Info(stdout)
 	signal.ExecuteAssociation(log)
 
-	// Set output status
-	out.ExitCode = 0
-	out.Status = pluginutil.GetStatus(out.ExitCode, cancelFlag)
-
-	// read (a prefix of) the standard output/error
-	out.Stdout, err = pluginutil.ReadPrefix(bytes.NewBufferString(stdout), p.MaxStdoutLength, p.OutputTruncatedSuffix)
-	if err != nil {
-		out.Errors = append(out.Errors, err.Error())
-		log.Error(err)
-	}
-
-	// Create output file paths
-	stdoutFilePath := filepath.Join(orchestrationDir, p.StdoutFileName)
-	stderrFilePath := filepath.Join(orchestrationDir, p.StderrFileName)
-	log.Debugf("stdout file %v, stderr file %v", stdoutFilePath, stderrFilePath)
-
-	if _, err = fileutil.WriteIntoFileWithPermissions(stdoutFilePath, out.Stdout, os.FileMode(int(appconfig.ReadWriteAccess))); err != nil {
-		out.Errors = append(out.Errors, err.Error())
-	}
-
-	if _, err = fileutil.WriteIntoFileWithPermissions(stderrFilePath, out.Stderr, os.FileMode(int(appconfig.ReadWriteAccess))); err != nil {
-		out.Errors = append(out.Errors, err.Error())
-	}
-
-	// Upload output to S3
-	uploadOutputToS3BucketErrors := p.ExecuteUploadOutputToS3Bucket(log, pluginInput.ID, orchestrationDir, outputS3BucketName, outputS3KeyPrefix, useTempDirectory, tempDir, out.Stdout, out.Stderr)
-	out.Errors = append(out.Errors, uploadOutputToS3BucketErrors...)
-
-	// Return Json indented response
-	responseContent, _ := jsonutil.Marshal(out)
-	log.Debug("Returning response:\n", jsonutil.Indent(responseContent))
 	return
 }

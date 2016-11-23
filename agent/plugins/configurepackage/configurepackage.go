@@ -84,21 +84,6 @@ func (result *ConfigurePackagePluginOutput) MarkAsFailed(log log.T, err error) {
 		result.Stderr = fmt.Sprintf("\n%v", err.Error())
 	}
 	log.Error("failed to configure package", err.Error())
-	result.Errors = append(result.Errors, err.Error())
-}
-
-// AppendInfo adds info to ConfigurePackagePluginOutput StandardOut.
-func (result *ConfigurePackagePluginOutput) AppendInfo(log log.T, format string, params ...interface{}) {
-	message := fmt.Sprintf(format, params...)
-	log.Info(message)
-	result.Stdout = fmt.Sprintf("%v\n%v", result.Stdout, message)
-}
-
-// AppendError adds errors to ConfigurePackagePluginOutput StandardErr.
-func (result *ConfigurePackagePluginOutput) AppendError(log log.T, format string, params ...interface{}) {
-	message := fmt.Sprintf(format, params...)
-	log.Error(message)
-	result.Stderr = fmt.Sprintf("%v\n%v", result.Stderr, message)
 }
 
 // NewPlugin returns a new instance of the plugin.
@@ -561,7 +546,7 @@ func executeAction(p *Plugin,
 				output.AppendInfo(log, "%v errors: %v", actionName, pluginOut.StandardError)
 			}
 			if pluginOut.Error != nil {
-				output.Errors = append(output.Errors, pluginOut.Error.Error())
+				output.MarkAsFailed(log, pluginOut.Error)
 			}
 			status = contracts.MergeResultStatus(status, pluginOut.Status)
 		}
@@ -613,11 +598,13 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 
 		if cancelFlag.ShutDown() {
 			out[i] = ConfigurePackagePluginOutput{}
-			out[i].Errors = []string{"Execution canceled due to ShutDown"}
+			res.Code = 1
+			res.Status = contracts.ResultStatusFailed
 			break
 		} else if cancelFlag.Canceled() {
 			out[i] = ConfigurePackagePluginOutput{}
-			out[i].Errors = []string{"Execution canceled"}
+			res.Code = 1
+			res.Status = contracts.ResultStatusCancelled
 			break
 		}
 

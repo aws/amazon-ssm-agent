@@ -83,19 +83,6 @@ type DomainJoinPluginOutput struct {
 	contracts.PluginOutput
 }
 
-// MarkAsFailed marks plugin as Failed
-func (out *DomainJoinPluginOutput) MarkAsFailed(log log.T, err error) {
-	out.ExitCode = 1
-	out.Status = contracts.ResultStatusFailed
-	if out.Stderr != "" {
-		out.Stderr = fmt.Sprintf("\n%v\n%v", out.Stderr, err.Error())
-	} else {
-		out.Stderr = fmt.Sprintf("\n%v", err.Error())
-	}
-	log.Error(err.Error())
-	out.Errors = append(out.Errors, err.Error())
-}
-
 // NewPlugin returns a new instance of the plugin.
 func NewPlugin(pluginConfig pluginutil.PluginConfig) (*Plugin, error) {
 	var plugin Plugin
@@ -228,8 +215,7 @@ func (p *Plugin) runCommands(log log.T, pluginInput DomainJoinPluginInput, orche
 	var tempDir string
 	if useTempDirectory {
 		if tempDir, err = ioutil.TempDir("", "Ec2RunCommand"); err != nil {
-			out.Errors = append(out.Errors, err.Error())
-			log.Error(err)
+			out.MarkAsFailed(log, err)
 			return
 		}
 		orchestrationDirectory = tempDir
@@ -237,7 +223,7 @@ func (p *Plugin) runCommands(log log.T, pluginInput DomainJoinPluginInput, orche
 	// create orchestration dir if needed
 	if err = makeDir(orchestrationDirectory); err != nil {
 		log.Debug("failed to create orchestration directory", orchestrationDirectory, err)
-		out.Errors = append(out.Errors, err.Error())
+		out.MarkAsFailed(log, err)
 		return
 	}
 
@@ -280,7 +266,9 @@ func (p *Plugin) runCommands(log log.T, pluginInput DomainJoinPluginInput, orche
 	// Upload output to S3
 	outputPath := filepath.Join(orchestrationDirectory, OutputFolder)
 	uploadOutputToS3BucketErrors := p.ExecuteUploadOutputToS3Bucket(log, Name(), outputPath, outputS3BucketName, outputS3KeyPrefix, useTempDirectory, tempDir, stdoutFilePath, stderrFilePath) // should use out.Stdout and out.Stderr
-	out.Errors = append(out.Errors, uploadOutputToS3BucketErrors...)
+	if len(uploadOutputToS3BucketErrors) > 0 {
+		log.Errorf("Unable to upload the logs: %s", uploadOutputToS3BucketErrors)
+	}
 
 	if err != nil {
 		out.ExitCode = 1

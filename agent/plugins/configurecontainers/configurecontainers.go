@@ -55,19 +55,6 @@ type ConfigureContainerPluginOutput struct {
 	contracts.PluginOutput
 }
 
-// MarkAsFailed Failed marks plugin as Failed
-func (out *ConfigureContainerPluginOutput) MarkAsFailed(log log.T, err error) {
-	out.ExitCode = 1
-	out.Status = contracts.ResultStatusFailed
-	if len(out.Stderr) != 0 {
-		out.Stderr = fmt.Sprintf("\n%v\n%v", out.Stderr, err.Error())
-	} else {
-		out.Stderr = fmt.Sprintf("\n%v", err.Error())
-	}
-	log.Error(err.Error())
-	out.Errors = append(out.Errors, err.Error())
-}
-
 // NewPlugin returns a new instance of the plugin.
 func NewPlugin(pluginConfig pluginutil.PluginConfig) (*Plugin, error) {
 	var plugin Plugin
@@ -166,8 +153,7 @@ func (p *Plugin) runCommands(log log.T, pluginInput ConfigureContainerPluginInpu
 	var tempDir string
 	if useTempDirectory {
 		if tempDir, err = ioutil.TempDir("", "Ec2RunCommand"); err != nil {
-			out.Errors = append(out.Errors, err.Error())
-			log.Error(err)
+			out.MarkAsFailed(log, err)
 			return
 		}
 		orchestrationDirectory = tempDir
@@ -199,17 +185,18 @@ func (p *Plugin) runCommands(log log.T, pluginInput ConfigureContainerPluginInpu
 		stdoutFilePath := filepath.Join(orchestrationDir, p.StdoutFileName)
 		stderrFilePath := filepath.Join(orchestrationDir, p.StderrFileName)
 		log.Debugf("stdout file %v, stderr file %v", stdoutFilePath, stderrFilePath)
-		err = ioutil.WriteFile(stdoutFilePath, []byte(out.Stdout), 0644)
-		if err != nil {
-			out.Errors = append(out.Errors, err.Error())
+		if err = ioutil.WriteFile(stdoutFilePath, []byte(out.Stdout), 0644); err != nil {
+			log.Error(err)
 		}
-		err = ioutil.WriteFile(stderrFilePath, []byte(out.Stderr), 0644)
-		if err != nil {
-			out.Errors = append(out.Errors, err.Error())
+		if err = ioutil.WriteFile(stderrFilePath, []byte(out.Stderr), 0644); err != nil {
+			log.Error(err)
 		}
 		// Upload output to S3
 		uploadOutputToS3BucketErrors := p.ExecuteUploadOutputToS3Bucket(log, pluginInput.ID, orchestrationDir, outputS3BucketName, outputS3KeyPrefix, useTempDirectory, tempDir, out.Stdout, out.Stderr)
-		out.Errors = append(out.Errors, uploadOutputToS3BucketErrors...)
+		if len(uploadOutputToS3BucketErrors) > 0 {
+			log.Errorf("Unable to upload the logs: %s", uploadOutputToS3BucketErrors)
+		}
+
 	}
 	// Return Json indented response
 	responseContent, _ := jsonutil.Marshal(out)

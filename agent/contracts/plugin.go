@@ -19,6 +19,7 @@ import (
 	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/context"
+	"github.com/aws/amazon-ssm-agent/agent/log"
 )
 
 const (
@@ -100,11 +101,40 @@ type PluginOutput struct {
 	Status   ResultStatus
 	Stdout   string
 	Stderr   string
-	Errors   []string
 }
 
 func (p *PluginOutput) String() (response string) {
 	return TruncateOutput(p.Stdout, p.Stderr, MaximumPluginOutputSize)
+}
+
+// MarkAsFailed Failed marks plugin as Failed
+func (out *PluginOutput) MarkAsFailed(log log.T, err error) {
+	// Update the error exit code
+	if out.ExitCode == 0 {
+		out.ExitCode = 1
+	}
+
+	out.Status = ResultStatusFailed
+	if len(out.Stderr) != 0 {
+		out.Stderr = fmt.Sprintf("\n%v\n%v", out.Stderr, err.Error())
+	} else {
+		out.Stderr = fmt.Sprintf("\n%v", err.Error())
+	}
+	log.Error(err.Error())
+}
+
+// AppendInfo adds info to PluginOutput StandardOut.
+func (result *PluginOutput) AppendInfo(log log.T, format string, params ...interface{}) {
+	message := fmt.Sprintf(format, params...)
+	log.Info(message)
+	result.Stdout = fmt.Sprintf("%v\n%v", result.Stdout, message)
+}
+
+// AppendError adds errors to PluginOutput StandardErr.
+func (result *PluginOutput) AppendError(log log.T, format string, params ...interface{}) {
+	message := fmt.Sprintf(format, params...)
+	log.Error(message)
+	result.Stderr = fmt.Sprintf("%v\n%v", result.Stderr, message)
 }
 
 // TruncateOutput truncates the output

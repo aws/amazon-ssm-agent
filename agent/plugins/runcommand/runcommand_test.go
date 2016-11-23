@@ -85,8 +85,9 @@ func generateTestCaseFail(id string) TestCase {
 	t.ExecuterErrors = []error{fmt.Errorf("Error happened for cmd %v", id)}
 
 	for _, err := range t.ExecuterErrors {
-		t.Output.Errors = append(t.Output.Errors, err.Error())
+		t.Output.Stderr = fmt.Sprintf("%v\n%v", t.Output.Stderr, err)
 	}
+	t.Output.ExitCode = 1
 	t.Output.Status = "Failed"
 	return t
 }

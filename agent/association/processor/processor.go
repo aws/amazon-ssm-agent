@@ -118,7 +118,7 @@ func (p *Processor) ProcessAssociation() {
 	p.assocSvc.CreateNewServiceIfUnHealthy(log)
 
 	if associations, err = p.assocSvc.ListInstanceAssociations(log, instanceID); err != nil {
-		log.Errorf("Unable to load association summaries, %v", err)
+		log.Errorf("Unable to load instance associations, %v", err)
 		return
 	}
 
@@ -136,15 +136,17 @@ func (p *Processor) ProcessAssociation() {
 		log.Debug("Association content is \n", jsonutil.Indent(assocContent))
 
 		if err = p.assocSvc.LoadAssociationDetail(log, assoc); err != nil {
-			message := "Encountered error while loading association contents"
-			log.Errorf("%v, %v", message, err)
+			err = fmt.Errorf("Encountered error while loading association %v contents, %v",
+				*assoc.Association.AssociationId,
+				err)
+			log.Error(err)
 			p.updateInstanceAssocStatus(
 				assoc.Association,
 				contracts.AssociationStatusFailed,
 				contracts.AssociationErrorCodeListAssociationError,
 				times.ToIso8601UTC(time.Now()),
-				message)
-			return
+				err.Error())
+			assoc.ExcludeFromFutureScheduling = true
 		}
 	}
 
@@ -167,7 +169,7 @@ func (p *Processor) runScheduledAssociation(log log.T) {
 	)
 
 	if scheduledAssociation, err = schedulemanager.LoadNextScheduledAssociation(log); err != nil {
-		log.Errorf("Unable to apply association, %v, system will retry later", err)
+		log.Errorf("Unable to get next scheduled association, %v, system will retry later", err)
 		return
 	}
 
@@ -194,8 +196,10 @@ func (p *Processor) runScheduledAssociation(log log.T) {
 
 	var docState *stateModel.DocumentState
 	if docState, err = p.parseAssociation(scheduledAssociation); err != nil {
-		message := "Encountered error while parsing association"
-		log.Errorf("%v, %v", message, err)
+		err = fmt.Errorf("Encountered error while parsing association %v, %v",
+			docState.DocumentInformation.AssociationID,
+			err)
+		log.Error(err)
 		p.updateInstanceAssocStatus(
 			scheduledAssociation.Association,
 			contracts.AssociationStatusFailed,
@@ -207,14 +211,17 @@ func (p *Processor) runScheduledAssociation(log log.T) {
 	}
 
 	if err = p.persistAssociationForExecution(log, docState); err != nil {
-		message := "Encountered error while loading association contents"
-		log.Errorf("%v, %v", message, err)
+		err = fmt.Errorf("Encountered error while persist association %v for execution, %v",
+			docState.DocumentInformation.AssociationID,
+			err)
+		log.Error(err)
 		p.updateInstanceAssocStatus(
 			scheduledAssociation.Association,
 			contracts.AssociationStatusFailed,
 			contracts.AssociationErrorCodeSubmitAssociationError,
 			times.ToIso8601UTC(time.Now()),
-			message)
+			err.Error())
+		//TODO revisit the logic here
 		schedulemanager.UpdateNextScheduledDate(log, *scheduledAssociation.Association.AssociationId)
 		return
 	}

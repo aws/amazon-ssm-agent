@@ -77,16 +77,18 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 		// check if a reboot has been requested
 		if rebooter.RebootRequested() {
 			log.Info("A plugin has requested a reboot.")
-			break
+			return
 		}
 
 		if cancelFlag.ShutDown() {
 			out[i] = ConfigureDaemonPluginOutput{}
-			out[i].Errors = []string{"Execution canceled due to ShutDown"}
+			out[i].ExitCode = 1
+			out[i].Status = contracts.ResultStatusFailed
 			break
 		} else if cancelFlag.Canceled() {
 			out[i] = ConfigureDaemonPluginOutput{}
-			out[i].Errors = []string{"Execution canceled"}
+			out[i].ExitCode = 1
+			out[i].Status = contracts.ResultStatusCancelled
 			break
 		}
 		out[i] = runConfigureDaemon(p, context, prop, config.OrchestrationDirectory, config.DefaultWorkingDirectory, cancelFlag)

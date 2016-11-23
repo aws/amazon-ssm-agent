@@ -148,7 +148,7 @@ func (s *AssociationService) ListInstanceAssociations(log log.T, instanceID stri
 					if parameterResponse.AssociationDescription != nil &&
 						parameterResponse.AssociationDescription.Status != nil &&
 						*parameterResponse.AssociationDescription.Status.Name != contracts.AssociationStatusAssociated {
-						log.Debugf("Skipping association %v as it has been processed", *assoc.Name)
+						log.Infof("Skipping association %v as it has been processed", *assoc.Name)
 						continue
 					}
 
@@ -205,7 +205,7 @@ func (s *AssociationService) ListAssociations(log log.T, instanceID string) ([]*
 		if parameterResponse.AssociationDescription != nil &&
 			parameterResponse.AssociationDescription.Status != nil &&
 			*parameterResponse.AssociationDescription.Status.Name != contracts.AssociationStatusAssociated {
-			log.Debugf("Skipping association %v as it has been processed", *assoc.Name)
+			log.Infof("Skipping association %v as it has been processed", *assoc.Name)
 
 			return results, nil
 		}
@@ -318,6 +318,7 @@ func (s *AssociationService) LoadAssociationDetail(log log.T, assoc *model.Insta
 		err              error
 	)
 
+	// TODO: add a retry here
 	// Call getDocument and retrieve the document json string
 	if documentResponse, err = s.ssmSvc.GetDocument(log, *assoc.Association.Name, *assoc.Association.DocumentVersion); err != nil {
 		log.Errorf("unable to retrieve document, %v", err)
@@ -366,7 +367,7 @@ func (s *AssociationService) UpdateAssociationStatus(
 		log.Error("could not marshal associationStatus! ", err)
 		return
 	}
-	log.Debug("Update association status content is ", jsonutil.Indent(associationStatusContent))
+	log.Info("Update association status content is ", jsonutil.Indent(associationStatusContent))
 
 	// Call getDocument and retrieve the document json string
 	response, err := s.ssmSvc.UpdateAssociationStatus(

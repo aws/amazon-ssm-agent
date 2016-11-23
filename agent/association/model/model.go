@@ -43,14 +43,13 @@ type InstanceAssociation struct {
 }
 
 // Copy copies new association with old association details
+// TODO: get ride of the copy here, we want to make it completely stateless
 func (newAssoc *InstanceAssociation) Copy(oldAssoc *InstanceAssociation) {
 	// It'd be ideal to make associations immutable
 	// However, NextScheduledDate will be lost if refresh association happens during apply now
 	// The apply now will fail, we will keep the mutation associations as is and keep it minimum
 	// This logic will be cleaned during document execution.
-	newAssoc.CreateDate = oldAssoc.CreateDate
 	newAssoc.NextScheduledDate = oldAssoc.NextScheduledDate
-	newAssoc.ExcludeFromFutureScheduling = oldAssoc.ExcludeFromFutureScheduling
 	newAssoc.LegacyAssociation = oldAssoc.LegacyAssociation
 }
 

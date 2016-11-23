@@ -35,7 +35,7 @@ var logger = log.NewMockLog()
 func TestSucceed(t *testing.T) {
 	output := UpdatePluginOutput{}
 
-	output.Succeed()
+	output.MarkAsSucceed()
 
 	assert.Equal(t, output.ExitCode, 0)
 	assert.Equal(t, output.Status, contracts.ResultStatusSuccess)
@@ -44,7 +44,7 @@ func TestSucceed(t *testing.T) {
 func TestFailed(t *testing.T) {
 	output := UpdatePluginOutput{}
 
-	output.Failed(logger, fmt.Errorf("Error message"))
+	output.MarkAsFailed(logger, fmt.Errorf("Error message"))
 
 	assert.Equal(t, output.ExitCode, 1)
 	assert.Equal(t, output.Status, contracts.ResultStatusFailed)
@@ -54,7 +54,7 @@ func TestFailed(t *testing.T) {
 func TestPending(t *testing.T) {
 	output := UpdatePluginOutput{}
 
-	output.Pending()
+	output.MarkAsPending()
 
 	assert.Equal(t, output.ExitCode, 0)
 	assert.Equal(t, output.Status, contracts.ResultStatusInProgress)
@@ -318,7 +318,6 @@ func TestUpdateAgent(t *testing.T) {
 	for _, manager := range testCases {
 		out := updateAgent(plugin, config, logger, &manager, &util, pluginInput, mockCancelFlag, "", "", time.Now())
 		assert.Empty(t, out.Stderr)
-		assert.Empty(t, out.Errors)
 	}
 }
 
@@ -368,7 +367,6 @@ func TestUpdateAgent_NegativeTestCases(t *testing.T) {
 	for _, manager := range testCases {
 		out := updateAgent(plugin, config, logger, &manager, &util, pluginInput, mockCancelFlag, "", "", time.Now())
 		assert.NotEmpty(t, out.Stderr)
-		assert.NotEmpty(t, out.Errors)
 	}
 }
 
