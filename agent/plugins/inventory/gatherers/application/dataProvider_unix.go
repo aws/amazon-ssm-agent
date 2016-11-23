@@ -112,7 +112,7 @@ func CollectApplicationData(context context.T) (appData []model.ApplicationData)
 			args = append(args, rpmCmdArgToGetAllApplications, rpmQueryFormat, rpmQueryFormatArgs)
 
 		case DPKGPackageManager:
-			log.Errorf("Detected '%v' as package management system", DPKGPackageManager)
+			log.Infof("Detected '%v' as package management system", DPKGPackageManager)
 
 			//setting up dpkg query command:
 			cmd = dpkgCmd
@@ -257,7 +257,7 @@ func GetApplicationData(context context.T, command string, args []string) (data 
 // ConvertToApplicationData converts query output into json string so that it can be deserialized easily
 func ConvertToApplicationData(input string) (data []model.ApplicationData, err error) {
 
-	//This implementation is closely tied to the kind of rpm query. A change in rpm query MUST be accompanied
+	//This implementation is closely tied to the kind of rpm/dpkg query. A change in query MUST be accompanied
 	//with a change in transform logic or else json formatting will be impacted.
 
 	/*
