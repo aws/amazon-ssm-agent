@@ -282,7 +282,7 @@ func (s *AssociationService) UpdateInstanceAssociationStatus(
 			log.Error("could not marshal reponse! ", err)
 			return
 		}
-		log.Debug("Update instance association status response content is ", jsonutil.Indent(responseContent))
+		log.Info("Update instance association status response content is ", jsonutil.Indent(responseContent))
 
 		return
 	}
@@ -387,5 +387,5 @@ func (s *AssociationService) UpdateAssociationStatus(
 		log.Error("could not marshal reponse! ", err)
 		return
 	}
-	log.Debug("Update association status response content is ", jsonutil.Indent(responseContent))
+	log.Info("Update association status response content is ", jsonutil.Indent(responseContent))
 }

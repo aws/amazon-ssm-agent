@@ -65,7 +65,7 @@ func NewAssociationExecuter(assocSvc service.T, agentInfo *contracts.AgentInfo) 
 
 // ExecutePendingDocument moves doc to current folder and submit it for execution
 func (r *AssociationExecuter) ExecutePendingDocument(context context.T, pool taskpool.T, docState *stateModel.DocumentState) error {
-	log := context.Log()
+	log := context.With("[associationId=" + docState.DocumentInformation.AssociationID + "]").Log()
 	log.Debugf("Persist document and update association status to pending")
 
 	r.assocSvc.UpdateInstanceAssociationStatus(
@@ -95,7 +95,8 @@ func (r *AssociationExecuter) ExecutePendingDocument(context context.T, pool tas
 
 // ExecuteInProgressDocument parses and processes the document
 func (r *AssociationExecuter) ExecuteInProgressDocument(context context.T, docState *stateModel.DocumentState, cancelFlag task.CancelFlag) {
-	log := context.Log()
+	assocContext := context.With("[associationId=" + docState.DocumentInformation.AssociationID + "]")
+	log := assocContext.Log()
 
 	defer func() {
 		schedulemanager.UpdateNextScheduledDate(log, docState.DocumentInformation.AssociationID)
@@ -104,11 +105,11 @@ func (r *AssociationExecuter) ExecuteInProgressDocument(context context.T, docSt
 
 	totalNumberOfActions := len(docState.InstancePluginsInformation)
 	outputs := pluginExecution.RunPlugins(
-		context,
+		assocContext,
 		docState.DocumentInformation.AssociationID,
 		docState.DocumentInformation.CreatedDate,
 		docState.InstancePluginsInformation,
-		plugin.RegisteredWorkerPlugins(context),
+		plugin.RegisteredWorkerPlugins(assocContext),
 		r.pluginExecutionReport,
 		cancelFlag)
 
@@ -198,6 +199,13 @@ func (r *AssociationExecuter) pluginExecutionReport(
 	pluginOutputs map[string]*contracts.PluginResult,
 	totalNumberOfPlugins int) {
 
+	outputContent, err := jsonutil.Marshal(pluginOutputs)
+	if err != nil {
+		log.Error("could not marshal plugin outputs! ", err)
+		return
+	}
+	log.Info("Update instance association status with results ", jsonutil.Indent(outputContent))
+
 	// Legacy association api does not support plugin level status update
 	// it returns error for multiple update with same status
 	if !r.assocSvc.IsInstanceAssociationApiMode() {
@@ -232,6 +240,13 @@ func (r *AssociationExecuter) associationExecutionReport(
 	totalNumberOfPlugins int,
 	errorCode string,
 	associationStatus string) {
+
+	runtimeStatusesContent, err := jsonutil.Marshal(runtimeStatuses)
+	if err != nil {
+		log.Error("could not marshal plugin outputs ", err)
+		return
+	}
+	log.Info("Update instance association status with results ", jsonutil.Indent(runtimeStatusesContent))
 
 	executionSummary := buildOutput(runtimeStatuses, totalNumberOfPlugins)
 	r.assocSvc.UpdateInstanceAssociationStatus(

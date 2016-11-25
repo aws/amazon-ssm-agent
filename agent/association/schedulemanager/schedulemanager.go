@@ -113,7 +113,7 @@ func LoadNextScheduledAssociation(log log.T) (*model.InstanceAssociation, error)
 			if assocContent, err := jsonutil.Marshal(assoc); err != nil {
 				return nil, fmt.Errorf("failed to parse scheduled association, %v", err)
 			} else {
-				log.Debugf("Next scheduled association is %v", jsonutil.Indent(assocContent))
+				log.Infof("Next scheduled association is %v", jsonutil.Indent(assocContent))
 			}
 
 			return assoc, nil
@@ -161,10 +161,10 @@ func UpdateNextScheduledDate(log log.T, associationID string) {
 
 			if assoc.LegacyAssociation {
 				assoc.ExcludeFromFutureScheduling = true
-				log.Debugf("Association %v has been executed, excluding from future scheduling", *assoc.Association.AssociationId)
+				log.Infof("Association %v has been executed, excluding from future scheduling", *assoc.Association.Name)
 			} else {
 				assoc.SetNextScheduledDate()
-				log.Debugf("Association %v next ScheduledDate is updated to %v", *assoc.Association.AssociationId, assoc.NextScheduledDate.String())
+				log.Infof("Association %v next ScheduledDate is updated to %v", *assoc.Association.Name, assoc.NextScheduledDate.String())
 			}
 
 			break
@@ -180,7 +180,7 @@ func ExcludeAssocFromFutureScheduling(log log.T, associationID string) {
 	for _, assoc := range associations {
 		if *assoc.Association.AssociationId == associationID {
 			assoc.ExcludeFromFutureScheduling = true
-			log.Debugf("Association %v is excluded from future scheduling", *assoc.Association.AssociationId)
+			log.Debugf("Association %v is excluded from future scheduling", *assoc.Association.Name)
 			break
 		}
 	}

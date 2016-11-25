@@ -275,11 +275,11 @@ func (p *Processor) isStopped() bool {
 // parseAssociation parses the association to the document state
 func (p *Processor) parseAssociation(rawData *model.InstanceAssociation) (*stateModel.DocumentState, error) {
 	// create separate logger that includes messageID with every log message
-	context := p.context.With("[associationName=" + *rawData.Association.Name + "]")
+	context := p.context.With("[associationId=" + *rawData.Association.AssociationId + "]")
 	log := context.Log()
 	docState := stateModel.DocumentState{}
 
-	log.Infof("Executing association %v", *rawData.Association.AssociationId)
+	log.Info("Executing association")
 
 	document, err := assocParser.ParseDocumentWithParams(log, rawData)
 	if err != nil {
@@ -293,7 +293,7 @@ func (p *Processor) parseAssociation(rawData *model.InstanceAssociation) (*state
 		log.Debugf("failed to parse document, %v", err)
 		return &docState, fmt.Errorf("%v", errorMsg)
 	}
-	log.Debug("Parsed association content is \n", jsonutil.Indent(parsedMessageContent))
+	log.Debug("Executing association with document content: \n", jsonutil.Indent(parsedMessageContent))
 
 	//Data format persisted in Current Folder is defined by the struct - DocumentState
 	docState = assocParser.InitializeDocumentState(context, document, rawData)
@@ -319,7 +319,9 @@ func (p *Processor) parseAssociation(rawData *model.InstanceAssociation) (*state
 
 // persistAssociationForExecution saves the document to pending folder and submit it to the task pool
 func (p *Processor) persistAssociationForExecution(log log.T, docState *stateModel.DocumentState) error {
+	log = p.context.With("[associationId=" + docState.DocumentInformation.AssociationID + "]").Log()
 	log.Info("Persisting interim state in current execution folder")
+
 	assocBookkeeping.PersistData(log,
 		docState.DocumentInformation.DocumentID,
 		docState.DocumentInformation.InstanceID,
@@ -337,7 +339,7 @@ func (p *Processor) updateInstanceAssocStatus(
 	errorCode string,
 	executionDate string,
 	message string) {
-	log := p.context.Log()
+	log := p.context.With("[associationId=" + *assoc.AssociationId + "]").Log()
 
 	p.assocSvc.UpdateInstanceAssociationStatus(
 		log,
