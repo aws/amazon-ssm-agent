@@ -57,7 +57,8 @@ func (m *AssociationServiceMock) UpdateInstanceAssociationStatus(
 	status string,
 	errorCode string,
 	executionDate string,
-	executionSummary string) {
+	executionSummary string,
+	outputUrl string) {
 	executionResult := ssm.InstanceAssociationExecutionResult{}
 
 	m.Called(log, associationID, associationName, instanceID, &executionResult)

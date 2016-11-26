@@ -240,6 +240,7 @@ func (p *Plugin) runCommands(log log.T, pluginInput RefreshAssociationPluginInpu
 			err = fmt.Errorf("Encountered error while loading association %v contents, %v",
 				*assoc.Association.AssociationId,
 				err)
+
 			p.assocSvc.UpdateInstanceAssociationStatus(
 				log,
 				*assoc.Association.AssociationId,
@@ -248,7 +249,8 @@ func (p *Plugin) runCommands(log log.T, pluginInput RefreshAssociationPluginInpu
 				contracts.AssociationStatusFailed,
 				contracts.AssociationErrorCodeListAssociationError,
 				times.ToIso8601UTC(time.Now()),
-				err.Error())
+				err.Error(),
+				service.NoOutputUrl)
 			out.MarkAsFailed(log, err)
 			return
 		}

@@ -34,7 +34,6 @@ import (
 	stateModel "github.com/aws/amazon-ssm-agent/agent/statemanager/model"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 	"github.com/aws/amazon-ssm-agent/agent/times"
-	"github.com/aws/aws-sdk-go/service/ssm"
 	"github.com/carlescere/scheduler"
 )
 
@@ -140,12 +139,16 @@ func (p *Processor) ProcessAssociation() {
 				*assoc.Association.AssociationId,
 				err)
 			log.Error(err)
-			p.updateInstanceAssocStatus(
-				assoc.Association,
+			p.assocSvc.UpdateInstanceAssociationStatus(
+				log,
+				*assoc.Association.AssociationId,
+				*assoc.Association.Name,
+				*assoc.Association.InstanceId,
 				contracts.AssociationStatusFailed,
 				contracts.AssociationErrorCodeListAssociationError,
 				times.ToIso8601UTC(time.Now()),
-				err.Error())
+				err.Error(),
+				service.NoOutputUrl)
 			assoc.ExcludeFromFutureScheduling = true
 		}
 	}
@@ -200,12 +203,16 @@ func (p *Processor) runScheduledAssociation(log log.T) {
 			docState.DocumentInformation.AssociationID,
 			err)
 		log.Error(err)
-		p.updateInstanceAssocStatus(
-			scheduledAssociation.Association,
+		p.assocSvc.UpdateInstanceAssociationStatus(
+			log,
+			*scheduledAssociation.Association.AssociationId,
+			*scheduledAssociation.Association.Name,
+			*scheduledAssociation.Association.InstanceId,
 			contracts.AssociationStatusFailed,
 			contracts.AssociationErrorCodeInvalidAssociation,
 			times.ToIso8601UTC(time.Now()),
-			err.Error())
+			err.Error(),
+			service.NoOutputUrl)
 		schedulemanager.ExcludeAssocFromFutureScheduling(log, *scheduledAssociation.Association.AssociationId)
 		return
 	}
@@ -215,12 +222,16 @@ func (p *Processor) runScheduledAssociation(log log.T) {
 			docState.DocumentInformation.AssociationID,
 			err)
 		log.Error(err)
-		p.updateInstanceAssocStatus(
-			scheduledAssociation.Association,
+		p.assocSvc.UpdateInstanceAssociationStatus(
+			log,
+			*scheduledAssociation.Association.AssociationId,
+			*scheduledAssociation.Association.Name,
+			*scheduledAssociation.Association.InstanceId,
 			contracts.AssociationStatusFailed,
 			contracts.AssociationErrorCodeSubmitAssociationError,
 			times.ToIso8601UTC(time.Now()),
-			err.Error())
+			err.Error(),
+			service.NoOutputUrl)
 		//TODO revisit the logic here
 		schedulemanager.UpdateNextScheduledDate(log, *scheduledAssociation.Association.AssociationId)
 		return
@@ -329,25 +340,4 @@ func (p *Processor) persistAssociationForExecution(log log.T, docState *stateMod
 		docState)
 
 	return p.executer.ExecutePendingDocument(p.context, p.taskPool, docState)
-}
-
-// updateInstanceAssocStatus provides wrapper for calling update association service
-// TODO: executionDate is not used, remove it from the method
-func (p *Processor) updateInstanceAssocStatus(
-	assoc *ssm.InstanceAssociationSummary,
-	status string,
-	errorCode string,
-	executionDate string,
-	message string) {
-	log := p.context.With("[associationId=" + *assoc.AssociationId + "]").Log()
-
-	p.assocSvc.UpdateInstanceAssociationStatus(
-		log,
-		*assoc.AssociationId,
-		*assoc.Name,
-		*assoc.InstanceId,
-		status,
-		errorCode,
-		times.ToIso8601UTC(time.Now()),
-		message)
 }

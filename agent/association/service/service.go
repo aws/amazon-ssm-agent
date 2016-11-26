@@ -38,6 +38,7 @@ const (
 	stopPolicyErrorThreshold       = 10
 	latestDoc                      = "$LATEST"
 	cronExpressionEveryFiveMinutes = "cron(0 0/5 * 1/1 * ? *)"
+	NoOutputUrl                    = ""
 )
 
 type associationApiMode string
@@ -71,7 +72,8 @@ type T interface {
 		status string,
 		errorCode string,
 		executionDate string,
-		executionSummary string)
+		executionSummary string,
+		outputUrl string)
 	IsInstanceAssociationApiMode() bool
 }
 
@@ -242,15 +244,22 @@ func (s *AssociationService) UpdateInstanceAssociationStatus(
 	status string,
 	errorCode string,
 	executionDate string,
-	executionSummary string) {
+	executionSummary string,
+	outputUrl string) {
 
 	if s.IsInstanceAssociationApiMode() {
 		date := times.ParseIso8601UTC(executionDate)
+
 		executionResult := ssm.InstanceAssociationExecutionResult{
 			Status:           aws.String(status),
 			ErrorCode:        aws.String(errorCode),
 			ExecutionDate:    aws.Time(date),
 			ExecutionSummary: aws.String(executionSummary),
+		}
+
+		if outputUrl != NoOutputUrl {
+			s3OutputUrl := ssm.S3OutputUrl{OutputUrl: aws.String(outputUrl)}
+			executionResult.OutputUrl = &ssm.InstanceAssociationOutputUrl{S3OutputUrl: &s3OutputUrl}
 		}
 
 		executionResultContent, err := jsonutil.Marshal(executionResult)

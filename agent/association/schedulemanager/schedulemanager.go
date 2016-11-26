@@ -50,14 +50,16 @@ func Refresh(log log.T, assocs []*model.InstanceAssociation, svc service.T) {
 		if err := newAssoc.ParseExpression(log); err != nil {
 			message := fmt.Sprintf("Encountered error while parsing expression for association %v", *newAssoc.Association.AssociationId)
 			log.Errorf("%v, %v", message, err)
-			svc.UpdateInstanceAssociationStatus(log,
+			svc.UpdateInstanceAssociationStatus(
+				log,
 				*newAssoc.Association.AssociationId,
 				*newAssoc.Association.Name,
 				*newAssoc.Association.InstanceId,
 				contracts.AssociationStatusFailed,
 				contracts.AssociationErrorCodeInvalidExpression,
 				times.ToIso8601UTC(time.Now()),
-				message)
+				message,
+				service.NoOutputUrl)
 			newAssoc.ExcludeFromFutureScheduling = true
 		}
 

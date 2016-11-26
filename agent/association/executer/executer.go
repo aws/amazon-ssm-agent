@@ -16,6 +16,8 @@ package executer
 
 import (
 	"fmt"
+	"path"
+	"strings"
 	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
@@ -76,7 +78,8 @@ func (r *AssociationExecuter) ExecutePendingDocument(context context.T, pool tas
 		contracts.AssociationStatusPending,
 		contracts.AssociationErrorCodeNoError,
 		times.ToIso8601UTC(time.Now()),
-		documentPendingMessage)
+		documentPendingMessage,
+		service.NoOutputUrl)
 
 	bookkeepingSvc.MoveDocumentState(log,
 		docState.DocumentInformation.DocumentID,
@@ -219,7 +222,7 @@ func (r *AssociationExecuter) pluginExecutionReport(
 	}
 
 	runtimeStatuses := reply.PrepareRuntimeStatuses(log, pluginOutputs)
-	executionSummary := buildOutput(runtimeStatuses, totalNumberOfPlugins)
+	executionSummary, outputUrl := buildOutput(runtimeStatuses, totalNumberOfPlugins)
 
 	r.assocSvc.UpdateInstanceAssociationStatus(
 		log,
@@ -229,7 +232,8 @@ func (r *AssociationExecuter) pluginExecutionReport(
 		contracts.AssociationStatusInProgress,
 		contracts.AssociationErrorCodeNoError,
 		times.ToIso8601UTC(time.Now()),
-		executionSummary)
+		executionSummary,
+		outputUrl)
 }
 
 // associationExecutionReport update the status for association
@@ -248,7 +252,7 @@ func (r *AssociationExecuter) associationExecutionReport(
 	}
 	log.Info("Update instance association status with results ", jsonutil.Indent(runtimeStatusesContent))
 
-	executionSummary := buildOutput(runtimeStatuses, totalNumberOfPlugins)
+	executionSummary, outputUrl := buildOutput(runtimeStatuses, totalNumberOfPlugins)
 	r.assocSvc.UpdateInstanceAssociationStatus(
 		log,
 		docInfo.AssociationID,
@@ -257,11 +261,13 @@ func (r *AssociationExecuter) associationExecutionReport(
 		associationStatus,
 		errorCode,
 		times.ToIso8601UTC(time.Now()),
-		executionSummary)
+		executionSummary,
+		outputUrl)
 }
 
 // buildOutput build the output message for association update
-func buildOutput(runtimeStatuses map[string]*contracts.PluginRuntimeStatus, totalNumberOfPlugins int) string {
+// TODO: totalNumberOfPlugins is no longer needed, we can get the same value from len(runtimeStatuses)
+func buildOutput(runtimeStatuses map[string]*contracts.PluginRuntimeStatus, totalNumberOfPlugins int) (outputSummary, outputUrl string) {
 	plural := ""
 	if totalNumberOfPlugins > 1 {
 		plural = "s"
@@ -283,7 +289,16 @@ func buildOutput(runtimeStatuses map[string]*contracts.PluginRuntimeStatus, tota
 		return status == contracts.ResultStatusTimedOut
 	}))
 
-	return fmt.Sprintf(outputMessageTemplate, completed, totalNumberOfPlugins, plural, success, failed, timedOut)
+	for _, value := range runtimeStatuses {
+		paths := strings.Split(value.OutputS3KeyPrefix, "/")
+		for _, p := range paths[:len(paths)-1] {
+			outputUrl = path.Join(outputUrl, p)
+		}
+		outputUrl = path.Join(value.OutputS3BucketName, outputUrl)
+		break
+	}
+
+	return fmt.Sprintf(outputMessageTemplate, completed, totalNumberOfPlugins, plural, success, failed, timedOut), outputUrl
 }
 
 // filterByStatus represents the helper method that filter pluginResults base on ResultStatus

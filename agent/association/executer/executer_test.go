@@ -35,7 +35,7 @@ func TestOutputBuilderWithMultiplePlugins(t *testing.T) {
 		Status: contracts.ResultStatusFailed,
 	}
 
-	output := buildOutput(results, 5)
+	output, _ := buildOutput(results, 5)
 
 	fmt.Println(output)
 	assert.NotNil(t, output)
@@ -49,7 +49,7 @@ func TestOutputBuilderWithSinglePlugin(t *testing.T) {
 		Status: contracts.ResultStatusFailed,
 	}
 
-	output := buildOutput(results, 1)
+	output, _ := buildOutput(results, 1)
 
 	fmt.Println(output)
 	assert.NotNil(t, output)
