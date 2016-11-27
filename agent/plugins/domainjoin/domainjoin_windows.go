@@ -46,6 +46,8 @@ const (
 	DirectoryIdArg = " --directory-id "
 	// DirectoryNameArg represents the directory name for domain join
 	DirectoryNameArg = " --directory-name "
+	// DirectoryOUArg represents the directory OU for domain join
+	DirectoryOUArg = " --directory-ou "
 	// InstanceRegionArg represents the region of the instance for domain join
 	InstanceRegionArg = " --instance-region "
 	// DirectoryNameArg represents the dns ip addresses of directory for domain join
@@ -315,6 +317,13 @@ func makeArguments(log log.T, pluginInput DomainJoinPluginInput) (commandArgumen
 		return "", fmt.Errorf("cannot get the instance region information")
 	}
 	buffer.WriteString(region)
+
+	// check if user provides the directory OU parameter
+	if len(pluginInput.DirectoryOU) != 0 {
+		log.Debugf("Customized directory OU parameter provided: %v", pluginInput.DirectoryOU)
+		buffer.WriteString(DirectoryOUArg)
+		buffer.WriteString(pluginInput.DirectoryOU)
+	}
 
 	if len(pluginInput.DnsIpAddresses) == 0 {
 		log.Debug("Do not provide dns addresses.")
