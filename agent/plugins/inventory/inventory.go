@@ -646,7 +646,7 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 		res.Code = 1
 		res.Output = errorMsg
 		res.StandardError = errorMsg
-		res.Status = contracts.AssociationErrorCodeInvalidAssociation
+		res.Status = contracts.ResultStatusFailed
 
 		pluginutil.PersistPluginInformationToCurrent(log, config.PluginID, config, res)
 

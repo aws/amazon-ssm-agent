@@ -65,6 +65,9 @@ func MergeResultStatus(current ResultStatus, new ResultStatus) (merged ResultSta
 }
 
 const (
+	/*
+	NOTE: Following constants are meant to be used for setting plugin status only
+	 */
 	// AssociationStatusPending represents Pending status
 	AssociationStatusPending = "Pending"
 	// AssociationStatusAssociated represents Associated status
@@ -80,6 +83,10 @@ const (
 )
 
 const (
+	/*
+	NOTE: Following constants are meant to be used for setting error codes in plugin status only. If these are used
+	for setting plugin status -> the status will not be appropriately aggregated.
+	*/
 	// AssociationErrorCodeInvalidAssociation represents InvalidAssociation Error
 	AssociationErrorCodeInvalidAssociation = "InvalidAssoc"
 	// AssociationErrorCodeInvalidExpression represents InvalidExpression Error
