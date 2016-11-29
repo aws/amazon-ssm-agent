@@ -18,7 +18,6 @@
         "CustomInventoryDefaultLocation" : ""
     },
     "Agent": {
-        "Name": "amazon-ssm-agent",
         "Region": "",
         "OrchestrationRootDir": ""
     },

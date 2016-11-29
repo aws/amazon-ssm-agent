@@ -117,7 +117,8 @@ func DefaultConfig() SsmagentConfig {
 		CustomInventoryDefaultLocation: DefaultCustomInventoryFolder,
 	}
 	var agent = AgentInfo{
-		Name: "amazon-ssm-agent-default",
+		Name:                 "amazon-ssm-agent",
+		OrchestrationRootDir: defaultOrchestrationRootDirName,
 	}
 	var os = OsInfo{
 		Lang:    "en-US",
