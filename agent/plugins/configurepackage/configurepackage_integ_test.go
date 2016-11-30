@@ -21,6 +21,8 @@ import (
 	"io/ioutil"
 	"testing"
 
+	"github.com/aws/amazon-ssm-agent/agent/contracts"
+	"github.com/aws/amazon-ssm-agent/agent/statemanager/model"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -44,7 +46,6 @@ func TestConfigurePackage(t *testing.T) {
 		pluginInformation)
 
 	assert.Empty(t, output.Stderr)
-	assert.Empty(t, output.Errors)
 }
 
 func TestConfigurePackage_InvalidRawInput(t *testing.T) {
@@ -117,7 +118,6 @@ func TestConfigurePackage_DownloadFailed(t *testing.T) {
 		pluginInformation)
 
 	assert.NotEmpty(t, output.Stderr, output.Stdout)
-	assert.NotEmpty(t, output.Errors)
 }
 
 func TestInstallPackage_ExtractFailed(t *testing.T) {
@@ -146,7 +146,6 @@ func TestInstallPackage_ExtractFailed(t *testing.T) {
 		pluginInformation)
 
 	assert.NotEmpty(t, output.Stderr)
-	assert.NotEmpty(t, output.Errors)
 	assert.Contains(t, output.Stderr, "Cannot extract package")
 }
 
@@ -181,7 +180,6 @@ func TestInstallPackage_DeleteFailed(t *testing.T) {
 		pluginInformation)
 
 	assert.NotEmpty(t, output.Stderr)
-	assert.NotEmpty(t, output.Errors)
 	assert.Contains(t, output.Stderr, "failed to delete compressed package")
 }
 
@@ -206,7 +204,6 @@ func TestUninstallPackage_DoesNotExist(t *testing.T) {
 		pluginInformation)
 
 	assert.NotEmpty(t, output.Stderr)
-	assert.NotEmpty(t, output.Errors)
 	assert.Contains(t, output.Stderr, "unable to determine version")
 }
 
@@ -236,7 +233,35 @@ func TestUninstallPackage_RemovalFailed(t *testing.T) {
 		pluginInformation)
 
 	assert.NotEmpty(t, output.Stderr)
-	assert.NotEmpty(t, output.Errors)
 	assert.Contains(t, output.Stderr, "failed to delete directory")
 	assert.Contains(t, output.Stderr, "404")
+}
+
+func TestConfigurePackage_ExecuteError(t *testing.T) {
+	stubs := &ConfigurePackageStubs{
+		fileSysDepStub: fileSysStubSuccess(),
+		networkDepStub: networkStubSuccess(),
+		execDepStub:    &ExecDepStub{pluginInput: &model.PluginState{}, pluginOutput: &contracts.PluginResult{StandardError: "execute error"}},
+	}
+	stubs.Set()
+	defer stubs.Clear()
+
+	plugin := &Plugin{}
+	pluginInformation := createStubPluginInputInstall()
+
+	manager := &configureManager{}
+	util := &configureUtilImp{}
+	instanceContext := createStubInstanceContext()
+
+	output := runConfigurePackage(
+		plugin,
+		logger,
+		manager,
+		util,
+		instanceContext,
+		pluginInformation)
+
+	assert.Empty(t, output.Stderr)
+	assert.NotEmpty(t, output.Stdout)
+	assert.Contains(t, output.Stdout, "execute error")
 }

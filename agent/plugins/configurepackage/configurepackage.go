@@ -549,6 +549,8 @@ func executeAction(p *Plugin,
 				output.MarkAsFailed(log, pluginOut.Error)
 			}
 			status = contracts.MergeResultStatus(status, pluginOut.Status)
+
+			//TODO:MF: make sure this subdocument's HasExecuted == true even if it returned SuccessAndReboot - the parent document status will control whether it runs again after reboot
 		}
 	}
 	return
@@ -581,7 +583,8 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 	res.StartDateTime = time.Now()
 	defer func() { res.EndDateTime = time.Now() }()
 
-	//loading Properties as list since aws:configurePackage uses properties as list
+	//loading Properties as list since V1.2 schema uses properties as list - if we do get a list we will execute all of them
+	//TODO:MF: Consider handling this in conversion from 1.2 to the standard format by expanding multiple sets of properties into multiple plugins
 	var properties []interface{}
 	if properties, res = pluginutil.LoadParametersAsList(log, config.Properties); res.Code != 0 {
 		pluginutil.PersistPluginInformationToCurrent(log, config.PluginID, config, res)
@@ -621,19 +624,31 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 			util,
 			instanceContext,
 			prop)
-		//TODO:MF: make sure this subdocument's HasExecuted == true even if it returned SuccessAndReboot - the parent document status will control whether it runs again after reboot
 	}
 
-	// TODO:MF: handle merging multiple results for cases where we had more than one operation
-	// Currently assuming we have only one work.
-	if len(properties) > 0 {
+	if len(out) > 0 {
+		// Input is a list for V1.2 schema but we only return results for the first one
 		res.Code = out[0].ExitCode
 		res.Status = out[0].Status
 		res.Output = out[0].String()
 		res.StandardOutput = contracts.TruncateOutput(out[0].Stdout, "", 24000)
 		res.StandardError = contracts.TruncateOutput(out[0].Stderr, "", 8000)
+		if p.orchestrationDir != "" {
+			useTemp := false
+			outFile := filepath.Join(p.orchestrationDir, p.StdoutFileName)
+			if err := filesysdep.WriteFile(outFile, out[0].Stdout); err != nil {
+				out[0].AppendError(log, "Error saving stdout: %v", err.Error())
+			}
+			errFile := filepath.Join(p.orchestrationDir, p.StderrFileName)
+			if err := filesysdep.WriteFile(errFile, out[0].Stderr); err != nil {
+				out[0].AppendError(log, "Error saving stderr: %v", err.Error())
+			}
+			uploadErrs := p.UploadOutputToS3Bucket(log, config.PluginID, p.orchestrationDir, p.s3Bucket, p.s3Prefix, useTemp, p.orchestrationDir, out[0].Stdout, out[0].Stderr)
+			for _, uploadErr := range uploadErrs {
+				out[0].AppendError(log, uploadErr)
+			}
+		}
 	}
-
 	pluginutil.PersistPluginInformationToCurrent(log, config.PluginID, config, res)
 
 	return res

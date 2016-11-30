@@ -71,6 +71,7 @@ type PluginRunner struct {
 func ParseDocument(context context.T, documentRaw []byte, orchestrationDir string, s3Bucket string, s3KeyPrefix string, messageID string, documentID string, defaultWorkingDirectory string) (pluginsInfo []model.PluginState, err error) {
 	var docContent contracts.DocumentContent
 	err = json.Unmarshal(documentRaw, &docContent)
+	//TODO:MF: return this error
 	pluginConfigurations := make([]*contracts.Configuration, 0)
 
 	if docContent.SchemaVersion == "2.0" {
