@@ -19,7 +19,9 @@ import (
 	"strings"
 	"time"
 
+	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/service/ssm"
 	"github.com/gorhill/cronexpr"
 )
@@ -30,27 +32,14 @@ const (
 
 // InstanceAssociation represents detail information of an association
 type InstanceAssociation struct {
-	DocumentID                  string
-	CreateDate                  time.Time
-	NextScheduledDate           time.Time
-	Association                 *ssm.InstanceAssociationSummary
-	Expression                  string
-	ExpressionType              string
-	Document                    *string
-	LegacyAssociation           bool
-	RunNow                      bool
-	ExcludeFromFutureScheduling bool
-}
-
-// Copy copies new association with old association details
-// TODO: get ride of the copy here, we want to make it completely stateless
-func (newAssoc *InstanceAssociation) Copy(oldAssoc *InstanceAssociation) {
-	// It'd be ideal to make associations immutable
-	// However, NextScheduledDate will be lost if refresh association happens during apply now
-	// The apply now will fail, we will keep the mutation associations as is and keep it minimum
-	// This logic will be cleaned during document execution.
-	newAssoc.NextScheduledDate = oldAssoc.NextScheduledDate
-	newAssoc.LegacyAssociation = oldAssoc.LegacyAssociation
+	DocumentID        string
+	CreateDate        time.Time
+	NextScheduledDate *time.Time
+	Association       *ssm.InstanceAssociationSummary
+	Expression        string
+	ExpressionType    string
+	Document          *string
+	Errors            []error
 }
 
 // ParseExpression parses the expression with the given association
@@ -66,18 +55,45 @@ func (newAssoc *InstanceAssociation) ParseExpression(log log.T) error {
 	return nil
 }
 
-// SetNextScheduledDate initializes default values for the given new association
-func (newAssoc *InstanceAssociation) SetNextScheduledDate() {
-	currentTime := time.Now().UTC()
+// IsRunOnceAssociation return true for the association that doesn't have schedule expression and will run only once
+func (assoc *InstanceAssociation) IsRunOnceAssociation() bool {
+	return assoc.Association.ScheduleExpression == nil || *assoc.Association.ScheduleExpression == ""
+}
 
-	// for all the association that doesn't have lastExecutionDate it will run now
-	if newAssoc.RunNow {
-		newAssoc.NextScheduledDate = currentTime
-		newAssoc.RunNow = false
+// RunNow sets the NextScheduledDate to current time
+func (newAssoc *InstanceAssociation) RunNow() {
+	newAssoc.NextScheduledDate = aws.Time(time.Now().UTC())
+}
+
+// SetNextScheduledDate initializes default values for the given new association
+func (newAssoc *InstanceAssociation) SetNextScheduledDate(log log.T) {
+	// Run association immediately if DetailedStatus is Pending
+	if newAssoc.Association.DetailedStatus != nil &&
+		*newAssoc.Association.DetailedStatus == contracts.AssociationStatusPending {
+		newAssoc.RunNow()
 		return
 	}
 
-	newAssoc.NextScheduledDate = cronexpr.MustParse(newAssoc.Expression).Next(newAssoc.Association.LastExecutionDate.UTC()).UTC()
+	if newAssoc.IsRunOnceAssociation() {
+		if newAssoc.Association.DetailedStatus != nil &&
+			*newAssoc.Association.DetailedStatus == contracts.AssociationStatusAssociated {
+			// Run association immediately if RunOnceAssociation has not been run before
+			newAssoc.RunNow()
+		} else {
+			log.Infof("Skipping association %v as it has been processed", *newAssoc.Association.Name)
+			newAssoc.NextScheduledDate = nil
+		}
+		return
+	}
+
+	// Run association immediately if association has not been run before
+	if newAssoc.Association.LastExecutionDate == nil {
+		newAssoc.RunNow()
+		return
+	}
+
+	// Run association according to it's schedule
+	newAssoc.NextScheduledDate = aws.Time(cronexpr.MustParse(newAssoc.Expression).Next(newAssoc.Association.LastExecutionDate.UTC()).UTC())
 }
 
 func parseExpression(log log.T, assoc *InstanceAssociation) error {

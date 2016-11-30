@@ -39,6 +39,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/rebooter"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 	"github.com/aws/amazon-ssm-agent/agent/times"
+	"github.com/aws/aws-sdk-go/aws"
 )
 
 // Plugin is the type for the refreshassociation plugin.
@@ -213,7 +214,7 @@ func (p *Plugin) runCommands(log log.T, pluginInput RefreshAssociationPluginInpu
 	}
 
 	var instanceID string
-	var associations []*model.InstanceAssociation
+	associations := []*model.InstanceAssociation{}
 
 	if instanceID, err = platform.InstanceID(); err != nil {
 		out.MarkAsFailed(log, fmt.Errorf("failed to load instance ID, %v", err))
@@ -226,7 +227,7 @@ func (p *Plugin) runCommands(log log.T, pluginInput RefreshAssociationPluginInpu
 		return
 	}
 
-	// update the cache first
+	// evict the invalid cache first
 	for _, assoc := range associations {
 		cache.ValidateCache(assoc)
 	}
@@ -240,7 +241,7 @@ func (p *Plugin) runCommands(log log.T, pluginInput RefreshAssociationPluginInpu
 			err = fmt.Errorf("Encountered error while loading association %v contents, %v",
 				*assoc.Association.AssociationId,
 				err)
-
+			assoc.Errors = append(assoc.Errors, err)
 			p.assocSvc.UpdateInstanceAssociationStatus(
 				log,
 				*assoc.Association.AssociationId,
@@ -252,22 +253,50 @@ func (p *Plugin) runCommands(log log.T, pluginInput RefreshAssociationPluginInpu
 				err.Error(),
 				service.NoOutputUrl)
 			out.MarkAsFailed(log, err)
-			return
+			continue
 		}
 
-		if applyAll {
-			assoc.RunNow = true
-		} else {
-			for _, id := range pluginInput.AssociationIds {
-				if *assoc.Association.AssociationId == id {
-					assoc.RunNow = true
-					break
-				}
+		// validate association expression, fail association if expression cannot be passed
+		// Note: we do not want to fail runcommand with out.MarkAsFailed
+		if !assoc.IsRunOnceAssociation() {
+			if err := assoc.ParseExpression(log); err != nil {
+				message := fmt.Sprintf("Encountered error while parsing expression for association %v", *assoc.Association.AssociationId)
+				log.Errorf("%v, %v", message, err)
+				assoc.Errors = append(assoc.Errors, err)
+				p.assocSvc.UpdateInstanceAssociationStatus(
+					log,
+					*assoc.Association.AssociationId,
+					*assoc.Association.Name,
+					*assoc.Association.InstanceId,
+					contracts.AssociationStatusFailed,
+					contracts.AssociationErrorCodeInvalidExpression,
+					times.ToIso8601UTC(time.Now()),
+					message,
+					service.NoOutputUrl)
+				continue
+			}
+		}
+
+		if applyAll || isAssociationQualifiedToRunNow(pluginInput.AssociationIds, assoc) {
+			// If association is already InProgress, we don't want to run it again
+			if assoc.Association.DetailedStatus == nil || *assoc.Association.DetailedStatus != contracts.AssociationStatusInProgress {
+				// Updates status to pending, which is the indicator for schedulemanager for immediate execution
+				p.assocSvc.UpdateInstanceAssociationStatus(
+					log,
+					*assoc.Association.AssociationId,
+					*assoc.Association.Name,
+					*assoc.Association.InstanceId,
+					contracts.AssociationStatusPending,
+					contracts.AssociationErrorCodeNoError,
+					times.ToIso8601UTC(time.Now()),
+					contracts.AssociationPendingMessage,
+					service.NoOutputUrl)
+				assoc.Association.DetailedStatus = aws.String(contracts.AssociationStatusPending)
 			}
 		}
 	}
 
-	schedulemanager.Refresh(log, associations, p.assocSvc)
+	schedulemanager.Refresh(log, associations)
 
 	if applyAll {
 		out.AppendInfo(log, "All associations have been requested to execute immediately")
@@ -278,4 +307,15 @@ func (p *Plugin) runCommands(log log.T, pluginInput RefreshAssociationPluginInpu
 	signal.ExecuteAssociation(log)
 
 	return
+}
+
+// doesAssociationQualifiedToRunNow finds out if association is qualified to run now
+func isAssociationQualifiedToRunNow(AssociationIds []string, assoc *model.InstanceAssociation) bool {
+	for _, id := range AssociationIds {
+		if *assoc.Association.AssociationId == id {
+			return true
+		}
+	}
+
+	return false
 }

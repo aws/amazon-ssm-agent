@@ -38,12 +38,10 @@ import (
 	stateModel "github.com/aws/amazon-ssm-agent/agent/statemanager/model"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 	"github.com/aws/amazon-ssm-agent/agent/times"
-	"github.com/aws/aws-sdk-go/service/ssm"
 )
 
 const (
-	outputMessageTemplate  string = "%v out of %v plugin%v processed, %v success, %v failed, %v timedout"
-	documentPendingMessage string = "Association is pending"
+	outputMessageTemplate string = "%v out of %v plugin%v processed, %v success, %v failed, %v timedout"
 )
 
 // DocumentExecuter represents the interface for running a document
@@ -71,18 +69,7 @@ func NewAssociationExecuter(assocSvc service.T, agentInfo *contracts.AgentInfo) 
 // ExecutePendingDocument moves doc to current folder and submit it for execution
 func (r *AssociationExecuter) ExecutePendingDocument(context context.T, pool taskpool.T, docState *stateModel.DocumentState) error {
 	log := context.With("[associationId=" + docState.DocumentInformation.AssociationID + "]").Log()
-	log.Debugf("Persist document and update association status to pending")
-
-	r.assocSvc.UpdateInstanceAssociationStatus(
-		log,
-		docState.DocumentInformation.AssociationID,
-		docState.DocumentInformation.DocumentName,
-		docState.DocumentInformation.InstanceID,
-		contracts.AssociationStatusPending,
-		contracts.AssociationErrorCodeNoError,
-		times.ToIso8601UTC(time.Now()),
-		documentPendingMessage,
-		service.NoOutputUrl)
+	log.Debugf("Persist document to the state folder for execution")
 
 	bookkeepingSvc.MoveDocumentState(log,
 		docState.DocumentInformation.DocumentID,
@@ -147,16 +134,16 @@ func (r *AssociationExecuter) ExecuteInProgressDocument(context context.T, docSt
 			docState.DocumentInformation.RuntimeStatus,
 			totalNumberOfActions,
 			contracts.AssociationErrorCodeExecutionError,
-			ssm.AssociationStatusNameFailed)
+			contracts.AssociationStatusFailed)
 
-	} else if docState.DocumentInformation.DocumentStatus == contracts.ResultStatusSuccess {
+	} else {
 		r.associationExecutionReport(
 			log,
 			&docState.DocumentInformation,
 			docState.DocumentInformation.RuntimeStatus,
 			totalNumberOfActions,
 			contracts.AssociationErrorCodeNoError,
-			contracts.AssociationStatusSuccess)
+			string(docState.DocumentInformation.DocumentStatus))
 	}
 
 	//persist : commands execution in completed folder (terminal state folder)

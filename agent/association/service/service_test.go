@@ -18,6 +18,7 @@ import (
 	"testing"
 
 	"github.com/aws/amazon-ssm-agent/agent/association/model"
+	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/sdkutil"
 	ssmSvc "github.com/aws/amazon-ssm-agent/agent/ssm"
@@ -105,7 +106,7 @@ func TestUpdateAssociationStatus(t *testing.T) {
 	}
 
 	associationName := "test"
-	status := ssm.AssociationStatusNamePending
+	status := contracts.AssociationStatusPending
 	output := ssm.UpdateAssociationStatusOutput{
 		AssociationDescription: &ssm.AssociationDescription{
 			Status: &ssm.AssociationStatus{

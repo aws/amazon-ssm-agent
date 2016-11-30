@@ -16,6 +16,7 @@ package processor
 
 import (
 	"fmt"
+	"sync"
 	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
@@ -53,6 +54,8 @@ type Processor struct {
 	agentInfo  *contracts.AgentInfo
 	stopSignal chan bool
 }
+
+var lock sync.RWMutex
 
 // NewAssociationProcessor returns a new Processor with the given context.
 func NewAssociationProcessor(context context.T, instanceID string) *Processor {
@@ -101,7 +104,7 @@ func (p *Processor) SetPollJob(job *scheduler.Job) {
 // ProcessAssociation poll and process all the associations
 func (p *Processor) ProcessAssociation() {
 	log := p.context.Log()
-	var associations []*model.InstanceAssociation
+	associations := []*model.InstanceAssociation{}
 
 	if p.isStopped() {
 		log.Debug("Stopping association processor...")
@@ -121,7 +124,7 @@ func (p *Processor) ProcessAssociation() {
 		return
 	}
 
-	// update the cache first
+	// evict the invalid cache first
 	for _, assoc := range associations {
 		cache.ValidateCache(assoc)
 	}
@@ -134,11 +137,13 @@ func (p *Processor) ProcessAssociation() {
 		}
 		log.Debug("Association content is \n", jsonutil.Indent(assocContent))
 
+		//TODO: add retry for load association detail
 		if err = p.assocSvc.LoadAssociationDetail(log, assoc); err != nil {
 			err = fmt.Errorf("Encountered error while loading association %v contents, %v",
 				*assoc.Association.AssociationId,
 				err)
 			log.Error(err)
+			assoc.Errors = append(assoc.Errors, err)
 			p.assocSvc.UpdateInstanceAssociationStatus(
 				log,
 				*assoc.Association.AssociationId,
@@ -149,16 +154,38 @@ func (p *Processor) ProcessAssociation() {
 				times.ToIso8601UTC(time.Now()),
 				err.Error(),
 				service.NoOutputUrl)
-			assoc.ExcludeFromFutureScheduling = true
+			continue
+		}
+
+		if !assoc.IsRunOnceAssociation() {
+			if err = assoc.ParseExpression(log); err != nil {
+				message := fmt.Sprintf("Encountered error while parsing expression for association %v", *assoc.Association.AssociationId)
+				log.Errorf("%v, %v", message, err)
+				assoc.Errors = append(assoc.Errors, err)
+				p.assocSvc.UpdateInstanceAssociationStatus(
+					log,
+					*assoc.Association.AssociationId,
+					*assoc.Association.Name,
+					*assoc.Association.InstanceId,
+					contracts.AssociationStatusFailed,
+					contracts.AssociationErrorCodeInvalidExpression,
+					times.ToIso8601UTC(time.Now()),
+					message,
+					service.NoOutputUrl)
+				continue
+			}
 		}
 	}
 
-	schedulemanager.Refresh(log, associations, p.assocSvc)
+	schedulemanager.Refresh(log, associations)
 	signal.ExecuteAssociation(log)
 }
 
 // runScheduledAssociation runs the next scheduled association
 func (p *Processor) runScheduledAssociation(log log.T) {
+	lock.Lock()
+	defer lock.Unlock()
+
 	defer func() {
 		// recover in case the job panics
 		if msg := recover(); msg != nil {
@@ -179,8 +206,8 @@ func (p *Processor) runScheduledAssociation(log log.T) {
 	if scheduledAssociation == nil {
 		// if no scheduled association found at given time, get the next scheduled time and wait
 		nextScheduledDate := schedulemanager.LoadNextScheduledDate(log)
-		if !nextScheduledDate.IsZero() {
-			signal.ResetWaitTimerForNextScheduledAssociation(log, nextScheduledDate)
+		if nextScheduledDate != nil {
+			signal.ResetWaitTimerForNextScheduledAssociation(log, *nextScheduledDate)
 		} else {
 			log.Debug("No association scheduled at this time, system will retry later")
 		}
@@ -190,12 +217,24 @@ func (p *Processor) runScheduledAssociation(log log.T) {
 	// stop previous wait timer if there is scheduled association
 	signal.StopWaitTimerForNextScheduledAssociation()
 
-	if assocBookkeeping.IsDocumentCurrentlyExecuting(
-		scheduledAssociation.DocumentID,
-		*scheduledAssociation.Association.InstanceId) {
+	if (scheduledAssociation.Association.DetailedStatus != nil &&
+		*scheduledAssociation.Association.DetailedStatus == contracts.AssociationStatusInProgress) ||
+		assocBookkeeping.IsDocumentCurrentlyExecuting(scheduledAssociation.DocumentID, *scheduledAssociation.Association.InstanceId) {
 		log.Infof("Association %v is executing, system will retry later", *scheduledAssociation.Association.AssociationId)
 		return
 	}
+
+	// Update association status to pending
+	p.assocSvc.UpdateInstanceAssociationStatus(
+		log,
+		*scheduledAssociation.Association.AssociationId,
+		*scheduledAssociation.Association.Name,
+		*scheduledAssociation.Association.InstanceId,
+		contracts.AssociationStatusPending,
+		contracts.AssociationErrorCodeNoError,
+		times.ToIso8601UTC(time.Now()),
+		contracts.AssociationPendingMessage,
+		service.NoOutputUrl)
 
 	var docState *stateModel.DocumentState
 	if docState, err = p.parseAssociation(scheduledAssociation); err != nil {
@@ -213,7 +252,6 @@ func (p *Processor) runScheduledAssociation(log log.T) {
 			times.ToIso8601UTC(time.Now()),
 			err.Error(),
 			service.NoOutputUrl)
-		schedulemanager.ExcludeAssocFromFutureScheduling(log, *scheduledAssociation.Association.AssociationId)
 		return
 	}
 
@@ -338,6 +376,17 @@ func (p *Processor) persistAssociationForExecution(log log.T, docState *stateMod
 		docState.DocumentInformation.InstanceID,
 		appconfig.DefaultLocationOfPending,
 		docState)
+
+	p.assocSvc.UpdateInstanceAssociationStatus(
+		log,
+		docState.DocumentInformation.AssociationID,
+		docState.DocumentInformation.DocumentName,
+		docState.DocumentInformation.InstanceID,
+		contracts.AssociationStatusInProgress,
+		contracts.AssociationErrorCodeNoError,
+		times.ToIso8601UTC(time.Now()),
+		contracts.AssociationInProgressMessage,
+		service.NoOutputUrl)
 
 	return p.executer.ExecutePendingDocument(p.context, p.taskPool, docState)
 }

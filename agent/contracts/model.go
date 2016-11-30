@@ -102,6 +102,13 @@ const (
 )
 
 const (
+	// DocumentPendingMessages represents the summary message for pending association
+	AssociationPendingMessage string = "Association is pending"
+	// DocumentInProgressMessage represents the summary message for inprogress association
+	AssociationInProgressMessage string = "Executing association"
+)
+
+const (
 	// ParamTypeString represents the Param Type is String
 	ParamTypeString = "String"
 	// ParamTypeStringList represents the Param Type is StringList

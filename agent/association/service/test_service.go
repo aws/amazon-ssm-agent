@@ -81,3 +81,9 @@ func (m *AssociationServiceMock) IsInstanceAssociationApiMode() bool {
 	args := m.Called()
 	return args.Get(0).(bool)
 }
+
+// DescribeAssociation mocks implementation for DescribeAssociation
+func (m *AssociationServiceMock) DescribeAssociation(log log.T, instanceID string, docName string) (response *ssm.DescribeAssociationOutput, err error) {
+	args := m.Called(log, instanceID, docName)
+	return args.Get(0).(*ssm.DescribeAssociationOutput), args.Error(1)
+}

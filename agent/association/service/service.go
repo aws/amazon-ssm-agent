@@ -23,7 +23,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/association/cache"
 	"github.com/aws/amazon-ssm-agent/agent/association/model"
-	"github.com/aws/amazon-ssm-agent/agent/contracts"
+	"github.com/aws/amazon-ssm-agent/agent/association/schedulemanager"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/sdkutil"
@@ -75,6 +75,7 @@ type T interface {
 		executionSummary string,
 		outputUrl string)
 	IsInstanceAssociationApiMode() bool
+	DescribeAssociation(log log.T, instanceID string, docName string) (response *ssm.DescribeAssociationOutput, err error)
 }
 
 // AssociationService wraps the Ssm Service
@@ -120,7 +121,6 @@ func (s *AssociationService) ListInstanceAssociations(log log.T, instanceID stri
 
 	uuid.SwitchFormat(uuid.CleanHyphen)
 	results := []*model.InstanceAssociation{}
-	var parameterResponse *ssm.DescribeAssociationOutput
 
 	response, err := s.ssmSvc.ListInstanceAssociations(log, instanceID, nil)
 	// if ListInstanceAssociations return error, system will try to use legacy ListAssociations
@@ -136,27 +136,6 @@ func (s *AssociationService) ListInstanceAssociations(log log.T, instanceID stri
 				rawData := &model.InstanceAssociation{}
 				rawData.Association = assoc
 				rawData.CreateDate = time.Now().UTC()
-				if rawData.Association.LastExecutionDate == nil {
-					rawData.Association.LastExecutionDate = aws.Time(time.Time{}.UTC())
-				}
-				// legacy association do not have ScheduleExpression
-				if rawData.Association.ScheduleExpression == nil || *rawData.Association.ScheduleExpression == "" {
-					// Call descriptionAssociation to get the status
-					if parameterResponse, err = s.ssmSvc.DescribeAssociation(log, instanceID, *assoc.Name); err != nil {
-						log.Errorf("unable to retrieve association parameter, %v", err)
-					}
-
-					// If legacy association has already been executed then skip it
-					if parameterResponse.AssociationDescription != nil &&
-						parameterResponse.AssociationDescription.Status != nil &&
-						*parameterResponse.AssociationDescription.Status.Name != contracts.AssociationStatusAssociated {
-						log.Infof("Skipping association %v as it has been processed", *assoc.Name)
-						continue
-					}
-
-					rawData.LegacyAssociation = true
-					rawData.Association.ScheduleExpression = aws.String(cronExpressionEveryFiveMinutes)
-				}
 
 				results = append(results, rawData)
 			}
@@ -203,36 +182,27 @@ func (s *AssociationService) ListAssociations(log log.T, instanceID string) ([]*
 			return nil, err
 		}
 
-		// If legacy association has already been executed return empty
-		if parameterResponse.AssociationDescription != nil &&
-			parameterResponse.AssociationDescription.Status != nil &&
-			*parameterResponse.AssociationDescription.Status.Name != contracts.AssociationStatusAssociated {
-			log.Infof("Skipping association %v as it has been processed", *assoc.Name)
-
-			return results, nil
-		}
-
 		rawData := &model.InstanceAssociation{}
 		rawData.Association = &ssm.InstanceAssociationSummary{
-			AssociationId:      assoc.Name,
-			DocumentVersion:    aws.String(latestDoc),
-			Name:               assoc.Name,
-			InstanceId:         aws.String(instanceID),
-			Checksum:           aws.String(""),
-			Parameters:         parameterResponse.AssociationDescription.Parameters,
-			ScheduleExpression: aws.String(cronExpressionEveryFiveMinutes),
+			AssociationId:   assoc.Name,
+			DocumentVersion: aws.String(latestDoc),
+			Name:            assoc.Name,
+			InstanceId:      aws.String(instanceID),
+			Checksum:        aws.String(""),
+			Parameters:      parameterResponse.AssociationDescription.Parameters,
+			DetailedStatus:  parameterResponse.AssociationDescription.Status.Name,
 		}
 
-		if rawData.Association.LastExecutionDate == nil {
-			rawData.Association.LastExecutionDate = aws.Time(time.Time{}.UTC())
-		}
-
-		rawData.LegacyAssociation = true
 		rawData.CreateDate = time.Now().UTC()
 		results = append(results, rawData)
 	}
 
 	return results, nil
+}
+
+// DescribeAssociation wraps ssm service DescribeAssociation
+func (s *AssociationService) DescribeAssociation(log log.T, instanceID string, docName string) (response *ssm.DescribeAssociationOutput, err error) {
+	return s.ssmSvc.DescribeAssociation(log, instanceID, docName)
 }
 
 // UpdateInstanceAssociationStatus will get the Association and related document string
@@ -246,6 +216,9 @@ func (s *AssociationService) UpdateInstanceAssociationStatus(
 	executionDate string,
 	executionSummary string,
 	outputUrl string) {
+
+	// Update status in schedulemanager to ensure state matches with the one on the service
+	schedulemanager.UpdateAssociationStatus(associationID, status)
 
 	if s.IsInstanceAssociationApiMode() {
 		date := times.ParseIso8601UTC(executionDate)
