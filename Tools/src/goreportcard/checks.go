@@ -137,8 +137,8 @@ func newChecksResp(repo string, forceRefresh bool) (checksResp, error) {
 	if err != nil {
 		// Cannot download github package
 		// Search the package on local
-		isExist,_ := exists(dir)
-		if(!isExist){
+		isExist, _ := exists(dir)
+		if !isExist {
 			return checksResp{}, fmt.Errorf("could not clone repo: %v", err)
 		}
 	}
@@ -200,7 +200,11 @@ func newChecksResp(repo string, forceRefresh bool) (checksResp, error) {
 
 func exists(path string) (bool, error) {
 	_, err := os.Stat(path)
-	if err == nil { return true, nil }
-	if os.IsNotExist(err) { return false, nil }
+	if err == nil {
+		return true, nil
+	}
+	if os.IsNotExist(err) {
+		return false, nil
+	}
 	return true, err
 }

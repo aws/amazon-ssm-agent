@@ -17,7 +17,6 @@ import (
 const managedInstanceID string = "s-1234567890abcdefa"
 const publicKey string = "MIIEowIBAAKCAQEAralnpd1po1RzmYMP120ptm3MNBkykvtQFuWAvu7jqftYE1i7YiUpqRX+0f/A/3QLzyATDwX4F0hK1tQ1zhCBoGhH/zARhRk30kU/F8b1h4GuA+IVI5nGZYY8oLD8Q4eg+ZlunAWnhL12z1PcihzMvuRoloGh1htsTp0FG0XIyWFyRjgY5a1BDjyQ8KjFpYhhk0q74l+WgQq5xABq/ZKHgm0YiKCj30FnwYP0gtGcXiPJm5juUU6x6XfnzJSZt8xKIVytAFDtyqaZF4YeWRAVAYlfpPx/KWSkxBcpRlBcEBtxSHzwWhYpGtr4iWx84WZVeS/OXWXkDK2iexZkt9l9+QIDAQABAoIBACCRq9mkm8JA/Wkl9ludonwPPYPr0dtU/KE+q5WjcdkYRV1jf8kZVSXb9S1nPMfr+KcAyfJAWVXsffSqWejqmZT+2bnXRwHiR+DMkdegvb2LKZqa1QIXPekectJkPvtfPWZySxdBzDgN3HFnte3FFvUaGy9W4oYoIHjh4+pIfS6fI9rVZR9WjfS4C1mgFZqI0zRF7ql3uwM5MYzeN9HiNY9Yz+J6kuBkMlnyM6urVVvcfKIRZm9El8E+19EiRl34pozY7k0biRss1EDVSCZIBq9IeMarQXoz6QKpAtUKUWrcIKy8z7drWXtKiA29GafiujRHO2yvNx93ZFYzHsVykYECgYEA0LNWUUGjGM4aNRr+8o/AKkrfor7Hgp5fcOqdSsghcnMAI578Ae8IhQkjS+u8ytolpJ4vuUl0rozovDdu2ymWowfjaYFD93mMoRhMMGZtAHf48bFv4grLOlPJ+9/OCreKaq1b2K1ZlbHfGLkIkMmneexa0V4YZURl56bc/gptZ9ECgYEA1QUj+RJfpqwbm+Nr+w/7oCFXerYHf7GCl0QoWuE7hgq7RB3O7WZbxz6qpgKYvnQlSpLFB0cl6Sm500Af5upfzFnSrR2T7L3o2MhP11ZhPiqlhvvmlrc4egbzpbQMq5dPh9kaoFL3KvFt8YMtQr0Sey199AWkWmGWEaZPKs4i5akCgYBEtHVbJLeTp+4aw3tg0RAbHDEJO7Mkfgy/eI01nDLeoZtPHrypyk5MtZhoGwA4653u1qCxZ8xA1mSb6cfV4JgVrbgg+IwugVZZhk02tdF2kQhkUNybVqBW4FSjVadYAdpQiietakwOqtLeKbP3LluzGKtBN6/iTqUZoOYpv7cKsQKBgQCW/jvPcvyl8dzoFL4Xie68RKXzb0/FbZe5jTBlqr08eCLhV5ezoxhvFLZ1UeXfKgi84WgTjpUKvu7fFNcIIR2ihhDVcN/HsZ14/BPL+YiYPjZyhd+e+WRo6sCNtiA9CNXw3y0Gc4iLwfJCfM76PXb6JPbgn5cuEXoELLR1DQSjcQKBgBymCbcDnDikhyoeW00Yg9r8YRaHHjelMar1RmQk19RfuXoxTkOwyIc04B0Zxdnpvif20fQMBnm+/3DvmgJ5pR2EeOiUE8N7JxrTkN6bWgyhIHW1aR/1H6XR6B1JhxiGTNXAO+/1lsHE9AlCFudU3uoA7igiXsfB1PfAx6QUuV5D"
 
-
 func buildRsaSigner(serviceName string, region string, signTime time.Time, expireTime time.Duration, body string) signer {
 	endpoint := "https://" + serviceName + "." + region + ".amazonaws.com"
 	reader := strings.NewReader(body)
@@ -108,7 +107,6 @@ func TestIgnoreRsaResignRequestWithValidCreds(t *testing.T) {
 	SignRsa(r)
 	assert.Equal(t, sig, r.HTTPRequest.Header.Get("X-Amz-Signature"))
 }
-
 
 func TestRsaResignRequestExpiredCreds(t *testing.T) {
 	creds := credentials.NewStaticCredentials(managedInstanceID, publicKey, "")

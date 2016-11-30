@@ -1,15 +1,13 @@
 package v4
 
-
 import (
-	"net/url"
-	"strings"
 	"github.com/aws/amazon-ssm-agent/agent/managedInstances/auth"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/credentials"
 	"github.com/aws/aws-sdk-go/aws/request"
+	"net/url"
+	"strings"
 )
-
 
 // Sign requests with Beagle RSA using signature version 4.
 //
@@ -100,7 +98,6 @@ func (v4 *signer) signRsa() error {
 	return nil
 }
 
-
 func (v4 *signer) buildRsa() {
 
 	v4.buildTime()             // no depends
@@ -120,7 +117,7 @@ func (v4 *signer) buildRsa() {
 	v4.buildCanonicalHeaders(ignoredHeaders, unsignedHeaders)
 	v4.buildCanonicalString() // depends on canon headers / signed headers
 	v4.buildStringToSign()    // depends on canon string
-	v4.buildRsaSignature()       // depends on string to sign
+	v4.buildRsaSignature()    // depends on string to sign
 
 	if v4.isPresign {
 		v4.Request.URL.RawQuery += "&X-Amz-Signature=" + v4.signature
