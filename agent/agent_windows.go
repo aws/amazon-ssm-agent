@@ -15,10 +15,7 @@ import (
 
 const serviceName = "AmazonSSMAgent"
 const imageStateComplete = "IMAGE_STATE_COMPLETE"
-const automatic_startType = 2
-const manual_startType = 3
 const runningService = 4
-const disabled_startType = 4
 
 // isServiceRunning returns if the service is running
 func isServiceRunning(service *mgr.Service) (bool bool, err error) {
@@ -74,10 +71,8 @@ type amazonSSMAgentService struct {
 	log logger.T
 }
 
-// Execute agent as Windows service.  Implement golang.org/x/sys/windows/svc#Handler.
-func (a *amazonSSMAgentService) Execute(args []string, r <-chan svc.ChangeRequest, s chan<- svc.Status) (bool, uint32) {
-
-	log := logger.Logger()
+// waitForSysPrep checks if sysPrep is done before starting the agent
+func waitForSysPrep(log logger.T) (bool, uint32) {
 	// check if sysPrep is done
 	ec2ConfigExists := false
 	ec2ConfigRunning := false
@@ -93,13 +88,14 @@ func (a *amazonSSMAgentService) Execute(args []string, r <-chan svc.ChangeReques
 	defer winManager.Disconnect()
 	ec2ConfigService, erro = winManager.OpenService("EC2Config")
 	if erro != nil {
-		log.Errorf("Opening EC2Config Service failed with error %v", erro)
+		// If EC2Config does not exist, we do not consider that as an error, but just continue after giving the variables their defaults
+		log.Debugf("Opening EC2Config Service failed with error %v", erro)
 		ec2ConfigStartType = 0
 		ec2ConfigExists = false
 	} else {
 		ec2ConfigExists = true
 		if ec2ConfigRunning, erro = isServiceRunning(ec2ConfigService); erro != nil {
-			log.Errorf("Error when trying to find out if service is running ")
+			log.Errorf("Error when trying to find out if service is running")
 		}
 		if ec2ConfigStartType, erro = getServiceStartType(ec2ConfigService); erro != nil {
 			log.Errorf("Error when trying to find the start type")
@@ -109,10 +105,13 @@ func (a *amazonSSMAgentService) Execute(args []string, r <-chan svc.ChangeReques
 		defer ec2ConfigService.Close()
 	}
 
+	// setupKey contains the ImageState of windows which will indicate if windows is done with sys prep
 	setupKey, err := registry.OpenKey(registry.LOCAL_MACHINE, `SOFTWARE\Microsoft\Windows\CurrentVersion\Setup\State`, registry.QUERY_VALUE)
 	if err != nil {
-		log.Errorf("Error while trying to obtain: %v", err)
-		return true, appconfig.ErrorExitCode
+		log.Errorf("Error while trying to obtain setupKey: %v", err)
+		// In Windows 2003 and below, the path for the setupKey does not exist. Since we are making this corner case fix for domain join,
+		// and we know domain join is not supported for Windows 2003 and prior, we send back a success and continue
+		return true, appconfig.SuccessExitCode
 	}
 	defer setupKey.Close()
 	log.Debugf("The setup key obtained : %v", setupKey)
@@ -126,7 +125,7 @@ func (a *amazonSSMAgentService) Execute(args []string, r <-chan svc.ChangeReques
 
 	// disable ssm agent if sysprep is not done and EC2 exists in automatic state or manual state while running
 	if windowsImageState != imageStateComplete {
-		log.Debugf("EC2 config exists? %v, EC2 Config Start type: %v, ec2Config is running? %v", ec2ConfigExists, ec2ConfigStartType, ec2ConfigRunning)
+		log.Debugf("Does EC2 config exist? %v, EC2 Config Start type: %v, ec2Config is running? %v", ec2ConfigExists, ec2ConfigStartType, ec2ConfigRunning)
 		if ec2ConfigExists && ((ec2ConfigStartType == mgr.StartAutomatic) || (ec2ConfigStartType == mgr.StartManual && ec2ConfigRunning)) {
 			log.Info("Stopping SSM agent because sysprep hasn't completed")
 			return false, appconfig.SuccessExitCode
@@ -146,6 +145,19 @@ func (a *amazonSSMAgentService) Execute(args []string, r <-chan svc.ChangeReques
 		ec2ConfigService.Close()
 	}
 	winManager.Disconnect()
+
+	return true, appconfig.SuccessExitCode //return to continue starting the agent
+}
+
+// Execute agent as Windows service.  Implement golang.org/x/sys/windows/svc#Handler.
+func (a *amazonSSMAgentService) Execute(args []string, r <-chan svc.ChangeRequest, s chan<- svc.Status) (bool, uint32) {
+	log := logger.Logger()
+
+	isSysPrepEC, erro := waitForSysPrep(log)
+	if !(isSysPrepEC && erro == appconfig.SuccessExitCode) { //returnCode true with success exit code means we can continue to start the agent
+		// In this case, svcSpecificEC = sysPrepEC and so we will return it
+		return isSysPrepEC, erro
+	}
 
 	// notify service controller status is now StartPending
 	s <- svc.Status{State: svc.StartPending}
