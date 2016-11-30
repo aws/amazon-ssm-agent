@@ -231,9 +231,17 @@ type SSMAPI interface {
 
 	DescribeMaintenanceWindowTargets(*ssm.DescribeMaintenanceWindowTargetsInput) (*ssm.DescribeMaintenanceWindowTargetsOutput, error)
 
+	DescribeMaintenanceWindowTargetsPrivateRequest(*ssm.DescribeMaintenanceWindowTargetsPrivateInput) (*request.Request, *ssm.DescribeMaintenanceWindowTargetsPrivateOutput)
+
+	DescribeMaintenanceWindowTargetsPrivate(*ssm.DescribeMaintenanceWindowTargetsPrivateInput) (*ssm.DescribeMaintenanceWindowTargetsPrivateOutput, error)
+
 	DescribeMaintenanceWindowTasksRequest(*ssm.DescribeMaintenanceWindowTasksInput) (*request.Request, *ssm.DescribeMaintenanceWindowTasksOutput)
 
 	DescribeMaintenanceWindowTasks(*ssm.DescribeMaintenanceWindowTasksInput) (*ssm.DescribeMaintenanceWindowTasksOutput, error)
+
+	DescribeMaintenanceWindowTasksPrivateRequest(*ssm.DescribeMaintenanceWindowTasksPrivateInput) (*request.Request, *ssm.DescribeMaintenanceWindowTasksPrivateOutput)
+
+	DescribeMaintenanceWindowTasksPrivate(*ssm.DescribeMaintenanceWindowTasksPrivateInput) (*ssm.DescribeMaintenanceWindowTasksPrivateOutput, error)
 
 	DescribeMaintenanceWindowsRequest(*ssm.DescribeMaintenanceWindowsInput) (*request.Request, *ssm.DescribeMaintenanceWindowsOutput)
 
@@ -387,9 +395,17 @@ type SSMAPI interface {
 
 	RegisterTargetWithMaintenanceWindow(*ssm.RegisterTargetWithMaintenanceWindowInput) (*ssm.RegisterTargetWithMaintenanceWindowOutput, error)
 
+	RegisterTargetWithMaintenanceWindowPrivateRequest(*ssm.RegisterTargetWithMaintenanceWindowPrivateInput) (*request.Request, *ssm.RegisterTargetWithMaintenanceWindowPrivateOutput)
+
+	RegisterTargetWithMaintenanceWindowPrivate(*ssm.RegisterTargetWithMaintenanceWindowPrivateInput) (*ssm.RegisterTargetWithMaintenanceWindowPrivateOutput, error)
+
 	RegisterTaskWithMaintenanceWindowRequest(*ssm.RegisterTaskWithMaintenanceWindowInput) (*request.Request, *ssm.RegisterTaskWithMaintenanceWindowOutput)
 
 	RegisterTaskWithMaintenanceWindow(*ssm.RegisterTaskWithMaintenanceWindowInput) (*ssm.RegisterTaskWithMaintenanceWindowOutput, error)
+
+	RegisterTaskWithMaintenanceWindowPrivateRequest(*ssm.RegisterTaskWithMaintenanceWindowPrivateInput) (*request.Request, *ssm.RegisterTaskWithMaintenanceWindowPrivateOutput)
+
+	RegisterTaskWithMaintenanceWindowPrivate(*ssm.RegisterTaskWithMaintenanceWindowPrivateInput) (*ssm.RegisterTaskWithMaintenanceWindowPrivateOutput, error)
 
 	RemoveTagsFromResourceRequest(*ssm.RemoveTagsFromResourceInput) (*request.Request, *ssm.RemoveTagsFromResourceOutput)
 

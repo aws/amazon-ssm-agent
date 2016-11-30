@@ -461,6 +461,7 @@
       "input":{"shape":"DescribeEffectivePatchesForPatchBaselineRequest"},
       "output":{"shape":"DescribeEffectivePatchesForPatchBaselineResult"},
       "errors":[
+        {"shape":"InvalidResourceId"},
         {"shape":"DoesNotExistException"},
         {"shape":"InternalServerError"}
       ]
@@ -604,6 +605,18 @@
         {"shape":"InternalServerError"}
       ]
     },
+    "DescribeMaintenanceWindowTargetsPrivate":{
+      "name":"DescribeMaintenanceWindowTargetsPrivate",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"DescribeMaintenanceWindowTargetsPrivateRequest"},
+      "output":{"shape":"DescribeMaintenanceWindowTargetsPrivateResult"},
+      "errors":[
+        {"shape":"InternalServerError"}
+      ]
+    },
     "DescribeMaintenanceWindowTasks":{
       "name":"DescribeMaintenanceWindowTasks",
       "http":{
@@ -612,6 +625,19 @@
       },
       "input":{"shape":"DescribeMaintenanceWindowTasksRequest"},
       "output":{"shape":"DescribeMaintenanceWindowTasksResult"},
+      "errors":[
+        {"shape":"DoesNotExistException"},
+        {"shape":"InternalServerError"}
+      ]
+    },
+    "DescribeMaintenanceWindowTasksPrivate":{
+      "name":"DescribeMaintenanceWindowTasksPrivate",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"DescribeMaintenanceWindowTasksPrivateRequest"},
+      "output":{"shape":"DescribeMaintenanceWindowTasksPrivateResult"},
       "errors":[
         {"shape":"DoesNotExistException"},
         {"shape":"InternalServerError"}
@@ -879,6 +905,7 @@
       "output":{"shape":"GetPatchBaselineResult"},
       "errors":[
         {"shape":"DoesNotExistException"},
+        {"shape":"InvalidResourceId"},
         {"shape":"InternalServerError"}
       ]
     },
@@ -1059,7 +1086,9 @@
         {"shape":"InternalServerError"},
         {"shape":"InvalidKeyId"},
         {"shape":"ParameterLimitExceeded"},
-        {"shape":"ParameterAlreadyExists"}
+        {"shape":"TooManyUpdates"},
+        {"shape":"ParameterAlreadyExists"},
+        {"shape":"UnsupportedParameterType"}
       ]
     },
     "RegisterDefaultPatchBaseline":{
@@ -1071,6 +1100,7 @@
       "input":{"shape":"RegisterDefaultPatchBaselineRequest"},
       "output":{"shape":"RegisterDefaultPatchBaselineResult"},
       "errors":[
+        {"shape":"InvalidResourceId"},
         {"shape":"DoesNotExistException"},
         {"shape":"InternalServerError"}
       ]
@@ -1101,6 +1131,7 @@
       "errors":[
         {"shape":"AlreadyExistsException"},
         {"shape":"DoesNotExistException"},
+        {"shape":"InvalidResourceId"},
         {"shape":"ResourceLimitExceededException"},
         {"shape":"InternalServerError"}
       ]
@@ -1119,6 +1150,20 @@
         {"shape":"InternalServerError"}
       ]
     },
+    "RegisterTargetWithMaintenanceWindowPrivate":{
+      "name":"RegisterTargetWithMaintenanceWindowPrivate",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"RegisterTargetWithMaintenanceWindowPrivateRequest"},
+      "output":{"shape":"RegisterTargetWithMaintenanceWindowPrivateResult"},
+      "errors":[
+        {"shape":"IdempotentParameterMismatch"},
+        {"shape":"DoesNotExistException"},
+        {"shape":"InternalServerError"}
+      ]
+    },
     "RegisterTaskWithMaintenanceWindow":{
       "name":"RegisterTaskWithMaintenanceWindow",
       "http":{
@@ -1127,6 +1172,20 @@
       },
       "input":{"shape":"RegisterTaskWithMaintenanceWindowRequest"},
       "output":{"shape":"RegisterTaskWithMaintenanceWindowResult"},
+      "errors":[
+        {"shape":"IdempotentParameterMismatch"},
+        {"shape":"DoesNotExistException"},
+        {"shape":"InternalServerError"}
+      ]
+    },
+    "RegisterTaskWithMaintenanceWindowPrivate":{
+      "name":"RegisterTaskWithMaintenanceWindowPrivate",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"RegisterTaskWithMaintenanceWindowPrivateRequest"},
+      "output":{"shape":"RegisterTaskWithMaintenanceWindowPrivateResult"},
       "errors":[
         {"shape":"IdempotentParameterMismatch"},
         {"shape":"DoesNotExistException"},
@@ -2099,10 +2158,7 @@
     },
     "CreateAssociationRequest":{
       "type":"structure",
-      "required":[
-        "Name",
-        "InstanceId"
-      ],
+      "required":["Name"],
       "members":{
         "Name":{"shape":"DocumentName"},
         "DocumentVersion":{"shape":"DocumentVersion"},
@@ -2152,7 +2208,10 @@
         "Duration":{"shape":"MaintenanceWindowDurationHours"},
         "Cutoff":{"shape":"MaintenanceWindowCutoff"},
         "AllowUnassociatedTargets":{"shape":"MaintenanceWindowAllowUnassociatedTargets"},
-        "ClientToken":{"shape":"ClientToken"}
+        "ClientToken":{
+          "shape":"ClientToken",
+          "idempotencyToken":true
+        }
       }
     },
     "CreateMaintenanceWindowResult":{
@@ -2210,10 +2269,6 @@
     },
     "DeleteAssociationRequest":{
       "type":"structure",
-      "required":[
-        "Name",
-        "InstanceId"
-      ],
       "members":{
         "Name":{"shape":"DocumentName"},
         "InstanceId":{"shape":"InstanceId"},
@@ -2380,10 +2435,6 @@
     },
     "DescribeAssociationRequest":{
       "type":"structure",
-      "required":[
-        "Name",
-        "InstanceId"
-      ],
       "members":{
         "Name":{"shape":"DocumentName"},
         "InstanceId":{"shape":"InstanceId"},
@@ -2768,6 +2819,26 @@
         "NextToken":{"shape":"NextToken"}
       }
     },
+    "DescribeMaintenanceWindowTargetsPrivateRequest":{
+      "type":"structure",
+      "required":["WindowId"],
+      "members":{
+        "WindowId":{"shape":"MaintenanceWindowId"},
+        "Filters":{"shape":"PatchOrchestratorFilterList"},
+        "MaxResults":{
+          "shape":"MaintenanceWindowMaxResults",
+          "box":true
+        },
+        "NextToken":{"shape":"NextToken"}
+      }
+    },
+    "DescribeMaintenanceWindowTargetsPrivateResult":{
+      "type":"structure",
+      "members":{
+        "Targets":{"shape":"MaintenanceWindowTargetListPrivate"},
+        "NextToken":{"shape":"NextToken"}
+      }
+    },
     "DescribeMaintenanceWindowTargetsRequest":{
       "type":"structure",
       "required":["WindowId"],
@@ -2785,6 +2856,26 @@
       "type":"structure",
       "members":{
         "Targets":{"shape":"MaintenanceWindowTargetList"},
+        "NextToken":{"shape":"NextToken"}
+      }
+    },
+    "DescribeMaintenanceWindowTasksPrivateRequest":{
+      "type":"structure",
+      "required":["WindowId"],
+      "members":{
+        "WindowId":{"shape":"MaintenanceWindowId"},
+        "Filters":{"shape":"PatchOrchestratorFilterList"},
+        "MaxResults":{
+          "shape":"MaintenanceWindowMaxResults",
+          "box":true
+        },
+        "NextToken":{"shape":"NextToken"}
+      }
+    },
+    "DescribeMaintenanceWindowTasksPrivateResult":{
+      "type":"structure",
+      "members":{
+        "Tasks":{"shape":"MaintenanceWindowTaskListPrivate"},
         "NextToken":{"shape":"NextToken"}
       }
     },
@@ -3588,7 +3679,9 @@
         "ScheduleExpression":{"shape":"ScheduleExpression"},
         "OutputLocation":{"shape":"InstanceAssociationOutputLocation"},
         "Checksum":{"shape":"Checksum"},
-        "LastExecutionDate":{"shape":"DateTime"}
+        "LastExecutionDate":{"shape":"DateTime"},
+        "Status":{"shape":"StatusName"},
+        "DetailedStatus":{"shape":"StatusName"}
       }
     },
     "InstanceAssociationSummaryList":{
@@ -4391,7 +4484,6 @@
     },
     "ListAssociationsRequest":{
       "type":"structure",
-      "required":["AssociationFilterList"],
       "members":{
         "AssociationFilterList":{"shape":"AssociationFilterList"},
         "MaxResults":{
@@ -4587,6 +4679,7 @@
         "WindowId":{"shape":"MaintenanceWindowId"},
         "WindowExecutionId":{"shape":"MaintenanceWindowExecutionId"},
         "Status":{"shape":"MaintenanceWindowExecutionStatus"},
+        "StatusDetails":{"shape":"MaintenanceWindowExecutionStatusDetails"},
         "StartTime":{"shape":"DateTime"},
         "EndTime":{"shape":"DateTime"}
       }
@@ -4708,6 +4801,10 @@
       "min":3,
       "pattern":"^[a-zA-Z0-9_\\-.]{3,128}$"
     },
+    "MaintenanceWindowResourceType":{
+      "type":"string",
+      "enum":["INSTANCE"]
+    },
     "MaintenanceWindowSchedule":{
       "type":"string",
       "max":256,
@@ -4718,9 +4815,8 @@
       "members":{
         "WindowId":{"shape":"MaintenanceWindowId"},
         "WindowTargetId":{"shape":"MaintenanceWindowTargetId"},
-        "TargetType":{"shape":"MaintenanceWindowTargetType"},
-        "TargetIds":{"shape":"MaintenanceWindowTargetIdList"},
-        "TagFilters":{"shape":"Targets"},
+        "ResourceType":{"shape":"MaintenanceWindowResourceType"},
+        "Targets":{"shape":"Targets"},
         "OwnerInformation":{"shape":"OwnerInformation"}
       }
     },
@@ -4738,6 +4834,21 @@
       "type":"list",
       "member":{"shape":"MaintenanceWindowTarget"}
     },
+    "MaintenanceWindowTargetListPrivate":{
+      "type":"list",
+      "member":{"shape":"MaintenanceWindowTargetPrivate"}
+    },
+    "MaintenanceWindowTargetPrivate":{
+      "type":"structure",
+      "members":{
+        "WindowId":{"shape":"MaintenanceWindowId"},
+        "WindowTargetId":{"shape":"MaintenanceWindowTargetId"},
+        "TargetType":{"shape":"MaintenanceWindowTargetType"},
+        "TargetIds":{"shape":"MaintenanceWindowTargetIdList"},
+        "TagFilters":{"shape":"Targets"},
+        "OwnerInformation":{"shape":"OwnerInformation"}
+      }
+    },
     "MaintenanceWindowTargetResourceId":{
       "type":"string",
       "pattern":"(^i-(\\w{8}|\\w{17})$)|(^mi-\\w{17}$)"
@@ -4753,7 +4864,7 @@
         "WindowTaskId":{"shape":"MaintenanceWindowTaskId"},
         "TaskArn":{"shape":"MaintenanceWindowTaskArn"},
         "Type":{"shape":"MaintenanceWindowTaskType"},
-        "Targets":{"shape":"MaintenanceWindowTaskTargetList"},
+        "Targets":{"shape":"Targets"},
         "TaskParameters":{"shape":"MaintenanceWindowTaskParameters"},
         "Priority":{"shape":"MaintenanceWindowTaskPriority"},
         "LoggingInfo":{"shape":"LoggingInfo"},
@@ -4776,6 +4887,10 @@
     "MaintenanceWindowTaskList":{
       "type":"list",
       "member":{"shape":"MaintenanceWindowTask"}
+    },
+    "MaintenanceWindowTaskListPrivate":{
+      "type":"list",
+      "member":{"shape":"MaintenanceWindowTaskPrivate"}
     },
     "MaintenanceWindowTaskParameterName":{
       "type":"string",
@@ -4814,6 +4929,22 @@
     "MaintenanceWindowTaskPriority":{
       "type":"integer",
       "min":0
+    },
+    "MaintenanceWindowTaskPrivate":{
+      "type":"structure",
+      "members":{
+        "WindowId":{"shape":"MaintenanceWindowId"},
+        "WindowTaskId":{"shape":"MaintenanceWindowTaskId"},
+        "TaskArn":{"shape":"MaintenanceWindowTaskArn"},
+        "Type":{"shape":"MaintenanceWindowTaskType"},
+        "Targets":{"shape":"MaintenanceWindowTaskTargetList"},
+        "TaskParameters":{"shape":"MaintenanceWindowTaskParameters"},
+        "Priority":{"shape":"MaintenanceWindowTaskPriority"},
+        "LoggingInfo":{"shape":"LoggingInfo"},
+        "ServiceRoleArn":{"shape":"ServiceRole"},
+        "MaxConcurrency":{"shape":"VelocityConstraint"},
+        "MaxErrors":{"shape":"VelocityConstraint"}
+      }
     },
     "MaintenanceWindowTaskTarget":{
       "type":"structure",
@@ -5452,7 +5583,7 @@
         "PatchGroup":{"shape":"PatchGroup"}
       }
     },
-    "RegisterTargetWithMaintenanceWindowRequest":{
+    "RegisterTargetWithMaintenanceWindowPrivateRequest":{
       "type":"structure",
       "required":[
         "WindowId",
@@ -5467,13 +5598,37 @@
         "ClientToken":{"shape":"ClientToken"}
       }
     },
+    "RegisterTargetWithMaintenanceWindowPrivateResult":{
+      "type":"structure",
+      "members":{
+        "WindowTargetId":{"shape":"MaintenanceWindowTargetId"}
+      }
+    },
+    "RegisterTargetWithMaintenanceWindowRequest":{
+      "type":"structure",
+      "required":[
+        "WindowId",
+        "ResourceType",
+        "Targets"
+      ],
+      "members":{
+        "WindowId":{"shape":"MaintenanceWindowId"},
+        "ResourceType":{"shape":"MaintenanceWindowResourceType"},
+        "Targets":{"shape":"Targets"},
+        "OwnerInformation":{"shape":"OwnerInformation"},
+        "ClientToken":{
+          "shape":"ClientToken",
+          "idempotencyToken":true
+        }
+      }
+    },
     "RegisterTargetWithMaintenanceWindowResult":{
       "type":"structure",
       "members":{
         "WindowTargetId":{"shape":"MaintenanceWindowTargetId"}
       }
     },
-    "RegisterTaskWithMaintenanceWindowRequest":{
+    "RegisterTaskWithMaintenanceWindowPrivateRequest":{
       "type":"structure",
       "required":[
         "WindowId",
@@ -5499,6 +5654,43 @@
         "MaxErrors":{"shape":"VelocityConstraint"},
         "LoggingInfo":{"shape":"LoggingInfo"},
         "ClientToken":{"shape":"ClientToken"}
+      }
+    },
+    "RegisterTaskWithMaintenanceWindowPrivateResult":{
+      "type":"structure",
+      "members":{
+        "WindowTaskId":{"shape":"MaintenanceWindowTaskId"}
+      }
+    },
+    "RegisterTaskWithMaintenanceWindowRequest":{
+      "type":"structure",
+      "required":[
+        "WindowId",
+        "Targets",
+        "TaskArn",
+        "ServiceRoleArn",
+        "TaskType",
+        "MaxConcurrency",
+        "MaxErrors"
+      ],
+      "members":{
+        "WindowId":{"shape":"MaintenanceWindowId"},
+        "Targets":{"shape":"Targets"},
+        "TaskArn":{"shape":"MaintenanceWindowTaskArn"},
+        "ServiceRoleArn":{"shape":"ServiceRole"},
+        "TaskType":{"shape":"MaintenanceWindowTaskType"},
+        "TaskParameters":{"shape":"MaintenanceWindowTaskParameters"},
+        "Priority":{
+          "shape":"MaintenanceWindowTaskPriority",
+          "box":true
+        },
+        "MaxConcurrency":{"shape":"VelocityConstraint"},
+        "MaxErrors":{"shape":"VelocityConstraint"},
+        "LoggingInfo":{"shape":"LoggingInfo"},
+        "ClientToken":{
+          "shape":"ClientToken",
+          "idempotencyToken":true
+        }
       }
     },
     "RegisterTaskWithMaintenanceWindowResult":{
@@ -5559,10 +5751,7 @@
         "UpdateKeyPair":{"shape":"UpdateKeyPair"}
       }
     },
-    "ResourceId":{
-      "type":"string",
-      "pattern":"^mi-[0-9a-f]{17}$"
-    },
+    "ResourceId":{"type":"string"},
     "ResourceInUseException":{
       "type":"structure",
       "members":{
@@ -5869,6 +6058,13 @@
       "type":"structure",
       "members":{
         "Message":{"shape":"String"}
+      },
+      "exception":true
+    },
+    "UnsupportedParameterType":{
+      "type":"structure",
+      "members":{
+        "message":{"shape":"String"}
       },
       "exception":true
     },

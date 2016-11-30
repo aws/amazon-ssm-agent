@@ -116,9 +116,9 @@ func ExampleSSM_CreateAssociation() {
 	svc := ssm.New(sess)
 
 	params := &ssm.CreateAssociationInput{
-		InstanceId:      aws.String("InstanceId"),   // Required
 		Name:            aws.String("DocumentName"), // Required
 		DocumentVersion: aws.String("DocumentVersion"),
+		InstanceId:      aws.String("InstanceId"),
 		OutputLocation: &ssm.InstanceAssociationOutputLocation{
 			S3Location: &ssm.S3OutputLocation{
 				OutputS3BucketName: aws.String("S3BucketName"),
@@ -374,9 +374,9 @@ func ExampleSSM_DeleteAssociation() {
 	svc := ssm.New(sess)
 
 	params := &ssm.DeleteAssociationInput{
-		InstanceId:    aws.String("InstanceId"),   // Required
-		Name:          aws.String("DocumentName"), // Required
 		AssociationId: aws.String("AssociationId"),
+		InstanceId:    aws.String("InstanceId"),
+		Name:          aws.String("DocumentName"),
 	}
 	resp, err := svc.DeleteAssociation(params)
 
@@ -640,9 +640,9 @@ func ExampleSSM_DescribeAssociation() {
 	svc := ssm.New(sess)
 
 	params := &ssm.DescribeAssociationInput{
-		InstanceId:    aws.String("InstanceId"),   // Required
-		Name:          aws.String("DocumentName"), // Required
 		AssociationId: aws.String("AssociationId"),
+		InstanceId:    aws.String("InstanceId"),
+		Name:          aws.String("DocumentName"),
 	}
 	resp, err := svc.DescribeAssociation(params)
 
@@ -1360,6 +1360,43 @@ func ExampleSSM_DescribeMaintenanceWindowTargets() {
 	fmt.Println(resp)
 }
 
+func ExampleSSM_DescribeMaintenanceWindowTargetsPrivate() {
+	sess, err := session.NewSession()
+	if err != nil {
+		fmt.Println("failed to create session,", err)
+		return
+	}
+
+	svc := ssm.New(sess)
+
+	params := &ssm.DescribeMaintenanceWindowTargetsPrivateInput{
+		WindowId: aws.String("MaintenanceWindowId"), // Required
+		Filters: []*ssm.PatchOrchestratorFilter{
+			{ // Required
+				Key: aws.String("PatchOrchestratorFilterKey"),
+				Values: []*string{
+					aws.String("PatchOrchestratorFilterValue"), // Required
+					// More values...
+				},
+			},
+			// More values...
+		},
+		MaxResults: aws.Int64(1),
+		NextToken:  aws.String("NextToken"),
+	}
+	resp, err := svc.DescribeMaintenanceWindowTargetsPrivate(params)
+
+	if err != nil {
+		// Print the error, cast err to awserr.Error to get the Code and
+		// Message from an error.
+		fmt.Println(err.Error())
+		return
+	}
+
+	// Pretty-print the response data.
+	fmt.Println(resp)
+}
+
 func ExampleSSM_DescribeMaintenanceWindowTasks() {
 	sess, err := session.NewSession()
 	if err != nil {
@@ -1385,6 +1422,43 @@ func ExampleSSM_DescribeMaintenanceWindowTasks() {
 		NextToken:  aws.String("NextToken"),
 	}
 	resp, err := svc.DescribeMaintenanceWindowTasks(params)
+
+	if err != nil {
+		// Print the error, cast err to awserr.Error to get the Code and
+		// Message from an error.
+		fmt.Println(err.Error())
+		return
+	}
+
+	// Pretty-print the response data.
+	fmt.Println(resp)
+}
+
+func ExampleSSM_DescribeMaintenanceWindowTasksPrivate() {
+	sess, err := session.NewSession()
+	if err != nil {
+		fmt.Println("failed to create session,", err)
+		return
+	}
+
+	svc := ssm.New(sess)
+
+	params := &ssm.DescribeMaintenanceWindowTasksPrivateInput{
+		WindowId: aws.String("MaintenanceWindowId"), // Required
+		Filters: []*ssm.PatchOrchestratorFilter{
+			{ // Required
+				Key: aws.String("PatchOrchestratorFilterKey"),
+				Values: []*string{
+					aws.String("PatchOrchestratorFilterValue"), // Required
+					// More values...
+				},
+			},
+			// More values...
+		},
+		MaxResults: aws.Int64(1),
+		NextToken:  aws.String("NextToken"),
+	}
+	resp, err := svc.DescribeMaintenanceWindowTasksPrivate(params)
 
 	if err != nil {
 		// Print the error, cast err to awserr.Error to get the Code and
@@ -1998,7 +2072,7 @@ func ExampleSSM_ListAssociations() {
 	svc := ssm.New(sess)
 
 	params := &ssm.ListAssociationsInput{
-		AssociationFilterList: []*ssm.AssociationFilter{ // Required
+		AssociationFilterList: []*ssm.AssociationFilter{
 			{ // Required
 				Key:   aws.String("AssociationFilterKey"),   // Required
 				Value: aws.String("AssociationFilterValue"), // Required
@@ -2439,6 +2513,44 @@ func ExampleSSM_RegisterTargetWithMaintenanceWindow() {
 	svc := ssm.New(sess)
 
 	params := &ssm.RegisterTargetWithMaintenanceWindowInput{
+		ResourceType: aws.String("MaintenanceWindowResourceType"), // Required
+		Targets: []*ssm.Target{ // Required
+			{ // Required
+				Key: aws.String("TargetKey"),
+				Values: []*string{
+					aws.String("TargetValue"), // Required
+					// More values...
+				},
+			},
+			// More values...
+		},
+		WindowId:         aws.String("MaintenanceWindowId"), // Required
+		ClientToken:      aws.String("ClientToken"),
+		OwnerInformation: aws.String("OwnerInformation"),
+	}
+	resp, err := svc.RegisterTargetWithMaintenanceWindow(params)
+
+	if err != nil {
+		// Print the error, cast err to awserr.Error to get the Code and
+		// Message from an error.
+		fmt.Println(err.Error())
+		return
+	}
+
+	// Pretty-print the response data.
+	fmt.Println(resp)
+}
+
+func ExampleSSM_RegisterTargetWithMaintenanceWindowPrivate() {
+	sess, err := session.NewSession()
+	if err != nil {
+		fmt.Println("failed to create session,", err)
+		return
+	}
+
+	svc := ssm.New(sess)
+
+	params := &ssm.RegisterTargetWithMaintenanceWindowPrivateInput{
 		TargetType:       aws.String("MaintenanceWindowTargetType"), // Required
 		WindowId:         aws.String("MaintenanceWindowId"),         // Required
 		ClientToken:      aws.String("ClientToken"),
@@ -2458,7 +2570,7 @@ func ExampleSSM_RegisterTargetWithMaintenanceWindow() {
 			// More values...
 		},
 	}
-	resp, err := svc.RegisterTargetWithMaintenanceWindow(params)
+	resp, err := svc.RegisterTargetWithMaintenanceWindowPrivate(params)
 
 	if err != nil {
 		// Print the error, cast err to awserr.Error to get the Code and
@@ -2481,6 +2593,62 @@ func ExampleSSM_RegisterTaskWithMaintenanceWindow() {
 	svc := ssm.New(sess)
 
 	params := &ssm.RegisterTaskWithMaintenanceWindowInput{
+		MaxConcurrency: aws.String("VelocityConstraint"), // Required
+		MaxErrors:      aws.String("VelocityConstraint"), // Required
+		ServiceRoleArn: aws.String("ServiceRole"),        // Required
+		Targets: []*ssm.Target{ // Required
+			{ // Required
+				Key: aws.String("TargetKey"),
+				Values: []*string{
+					aws.String("TargetValue"), // Required
+					// More values...
+				},
+			},
+			// More values...
+		},
+		TaskArn:     aws.String("MaintenanceWindowTaskArn"),  // Required
+		TaskType:    aws.String("MaintenanceWindowTaskType"), // Required
+		WindowId:    aws.String("MaintenanceWindowId"),       // Required
+		ClientToken: aws.String("ClientToken"),
+		LoggingInfo: &ssm.LoggingInfo{
+			S3BucketName: aws.String("S3BucketName"), // Required
+			S3Region:     aws.String("S3Region"),     // Required
+			S3KeyPrefix:  aws.String("S3KeyPrefix"),
+		},
+		Priority: aws.Int64(1),
+		TaskParameters: map[string]*ssm.MaintenanceWindowTaskParameterValueExpression{
+			"Key": { // Required
+				Values: []*string{
+					aws.String("MaintenanceWindowTaskParameterValue"), // Required
+					// More values...
+				},
+			},
+			// More values...
+		},
+	}
+	resp, err := svc.RegisterTaskWithMaintenanceWindow(params)
+
+	if err != nil {
+		// Print the error, cast err to awserr.Error to get the Code and
+		// Message from an error.
+		fmt.Println(err.Error())
+		return
+	}
+
+	// Pretty-print the response data.
+	fmt.Println(resp)
+}
+
+func ExampleSSM_RegisterTaskWithMaintenanceWindowPrivate() {
+	sess, err := session.NewSession()
+	if err != nil {
+		fmt.Println("failed to create session,", err)
+		return
+	}
+
+	svc := ssm.New(sess)
+
+	params := &ssm.RegisterTaskWithMaintenanceWindowPrivateInput{
 		MaxConcurrency: aws.String("VelocityConstraint"), // Required
 		MaxErrors:      aws.String("VelocityConstraint"), // Required
 		ServiceRoleArn: aws.String("ServiceRole"),        // Required
@@ -2511,7 +2679,7 @@ func ExampleSSM_RegisterTaskWithMaintenanceWindow() {
 			// More values...
 		},
 	}
-	resp, err := svc.RegisterTaskWithMaintenanceWindow(params)
+	resp, err := svc.RegisterTaskWithMaintenanceWindowPrivate(params)
 
 	if err != nil {
 		// Print the error, cast err to awserr.Error to get the Code and
