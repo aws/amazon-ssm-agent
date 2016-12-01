@@ -33,6 +33,7 @@ type Manager struct {
 type T interface {
 	Submit(log log.T, jobID string, job task.Job) error
 	ShutdownAndWait(timeout time.Duration)
+	HasJob(jobID string) bool
 }
 
 // NewTaskPool creates a new instance of Manager
@@ -51,6 +52,11 @@ func NewTaskPool(log log.T, documentWorkersLimit int, cancelWaitDurationMillisec
 // Submit submits the task to the execution pool
 func (m Manager) Submit(log log.T, jobID string, job task.Job) error {
 	return m.executionPool.Submit(log, jobID, job)
+}
+
+// HasJob returns if execution pool has specified job
+func (m Manager) HasJob(jobID string) bool {
+	return m.executionPool.HasJob(jobID)
 }
 
 // ShutdownAndWait wait and shutdown the task pool

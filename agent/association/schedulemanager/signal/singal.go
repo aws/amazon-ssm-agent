@@ -140,6 +140,16 @@ func Stop() {
 	schedulerHealthTimer.Stop()
 }
 
+// StopExecutionSignal stops the signal channel, which stops the association execution
+func StopExecutionSignal() {
+	lock.Lock()
+	defer lock.Unlock()
+	if !instance.isStopped() {
+		close(instance.executeSignal)
+		close(instance.stopSignal)
+	}
+}
+
 func (s *AssociationExecutionSignal) isStopped() bool {
 	select {
 	case <-s.stopSignal:

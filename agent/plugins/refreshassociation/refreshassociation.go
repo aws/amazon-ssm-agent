@@ -279,7 +279,8 @@ func (p *Plugin) runCommands(log log.T, pluginInput RefreshAssociationPluginInpu
 
 		if applyAll || isAssociationQualifiedToRunNow(pluginInput.AssociationIds, assoc) {
 			// If association is already InProgress, we don't want to run it again
-			if assoc.Association.DetailedStatus == nil || *assoc.Association.DetailedStatus != contracts.AssociationStatusInProgress {
+			if assoc.Association.DetailedStatus == nil ||
+				(*assoc.Association.DetailedStatus != contracts.AssociationStatusInProgress && *assoc.Association.DetailedStatus != contracts.AssociationStatusPending) {
 				// Updates status to pending, which is the indicator for schedulemanager for immediate execution
 				p.assocSvc.UpdateInstanceAssociationStatus(
 					log,

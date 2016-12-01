@@ -49,6 +49,12 @@ func (mockPool *MockedPool) ShutdownAndWait(timeout time.Duration) (finished boo
 	return args.Bool(0)
 }
 
+// ShutdownAndWait mocks the method with the same name.
+func (mockPool *MockedPool) HasJob(jobID string) bool {
+	args := mockPool.Called(jobID)
+	return args.Bool(0)
+}
+
 // MockCancelFlag mocks a cancel flag.
 type MockCancelFlag struct {
 	mock.Mock

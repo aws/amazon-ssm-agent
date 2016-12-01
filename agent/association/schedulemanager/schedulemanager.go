@@ -21,6 +21,7 @@ import (
 	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/association/model"
+	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/times"
@@ -147,6 +148,28 @@ func UpdateAssociationStatus(associationID string, status string) {
 			break
 		}
 	}
+}
+
+// IsAssociationInProgress returns if given association has detailed status as InProgress
+func IsAssociationInProgress(associationID string) bool {
+	lock.Lock()
+	defer lock.Unlock()
+
+	for _, assoc := range associations {
+		if *assoc.Association.AssociationId == associationID {
+			if assoc.Association.DetailedStatus == nil {
+				return false
+			}
+
+			if *assoc.Association.DetailedStatus == contracts.AssociationStatusInProgress {
+				return true
+			}
+
+			return false
+		}
+	}
+
+	return false
 }
 
 // Schedules returns all the cached schedules

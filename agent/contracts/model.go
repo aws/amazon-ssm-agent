@@ -97,6 +97,8 @@ const (
 	AssociationErrorCodeListAssociationError = "ListAssocError"
 	// AssociationErrorCodeSubmitAssociationError represents SubmitAssociation Error
 	AssociationErrorCodeSubmitAssociationError = "SubmitAssocError"
+	// AssociationErrorCodeStuckAtInProgressError represents association stuck in InProgress Error
+	AssociationErrorCodeStuckAtInProgressError = "StuckAtInProgress"
 	// AssociationErrorCodeNoError represents no error
 	AssociationErrorCodeNoError = ""
 )

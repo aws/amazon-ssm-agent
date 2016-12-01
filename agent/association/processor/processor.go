@@ -39,9 +39,10 @@ import (
 )
 
 const (
-	name                          = "Association"
-	documentWorkersLimit          = 1
-	cancelWaitDurationMillisecond = 10000
+	name                             = "Association"
+	documentWorkersLimit             = 1
+	cancelWaitDurationMillisecond    = 10000
+	documentLevelTimeOutDurationHour = 2
 )
 
 // Processor contains the logic for processing association
@@ -217,13 +218,30 @@ func (p *Processor) runScheduledAssociation(log log.T) {
 	// stop previous wait timer if there is scheduled association
 	signal.StopWaitTimerForNextScheduledAssociation()
 
-	if (scheduledAssociation.Association.DetailedStatus != nil &&
-		*scheduledAssociation.Association.DetailedStatus == contracts.AssociationStatusInProgress) ||
-		assocBookkeeping.IsDocumentCurrentlyExecuting(scheduledAssociation.DocumentID, *scheduledAssociation.Association.InstanceId) {
-		log.Infof("Association %v is executing, system will retry later", *scheduledAssociation.Association.AssociationId)
+	if schedulemanager.IsAssociationInProgress(*scheduledAssociation.Association.AssociationId) {
+		if p.taskPool.HasJob(*scheduledAssociation.Association.AssociationId) {
+			log.Infof("Association %v is executing, system will retry later", *scheduledAssociation.Association.AssociationId)
+		}
+
+		if isAssociationTimedOut(scheduledAssociation) {
+			err = fmt.Errorf("Assocation stuck at InProgress for longer than %v hours", documentLevelTimeOutDurationHour)
+			log.Error(err)
+			p.assocSvc.UpdateInstanceAssociationStatus(
+				log,
+				*scheduledAssociation.Association.AssociationId,
+				*scheduledAssociation.Association.Name,
+				*scheduledAssociation.Association.InstanceId,
+				contracts.AssociationStatusFailed,
+				contracts.AssociationErrorCodeStuckAtInProgressError,
+				times.ToIso8601UTC(time.Now()),
+				err.Error(),
+				service.NoOutputUrl)
+		}
+
 		return
 	}
 
+	log.Debug("Update association %v to pending ", *scheduledAssociation.Association.AssociationId)
 	// Update association status to pending
 	p.assocSvc.UpdateInstanceAssociationStatus(
 		log,
@@ -260,20 +278,17 @@ func (p *Processor) runScheduledAssociation(log log.T) {
 			docState.DocumentInformation.AssociationID,
 			err)
 		log.Error(err)
-		p.assocSvc.UpdateInstanceAssociationStatus(
-			log,
-			*scheduledAssociation.Association.AssociationId,
-			*scheduledAssociation.Association.Name,
-			*scheduledAssociation.Association.InstanceId,
-			contracts.AssociationStatusFailed,
-			contracts.AssociationErrorCodeSubmitAssociationError,
-			times.ToIso8601UTC(time.Now()),
-			err.Error(),
-			service.NoOutputUrl)
-		//TODO revisit the logic here
-		schedulemanager.UpdateNextScheduledDate(log, *scheduledAssociation.Association.AssociationId)
 		return
 	}
+}
+
+func isAssociationTimedOut(assoc *model.InstanceAssociation) bool {
+	if assoc.Association.LastExecutionDate == nil {
+		return true
+	}
+
+	currentTime := time.Now().UTC()
+	return (*assoc.Association.LastExecutionDate).Add(documentLevelTimeOutDurationHour * time.Hour).UTC().Before(currentTime)
 }
 
 // ExecutePendingDocument wraps ExecutePendingDocument from document executer

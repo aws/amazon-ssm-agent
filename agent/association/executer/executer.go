@@ -91,11 +91,6 @@ func (r *AssociationExecuter) ExecuteInProgressDocument(context context.T, docSt
 	assocContext := context.With("[associationId=" + docState.DocumentInformation.AssociationID + "]")
 	log := assocContext.Log()
 
-	defer func() {
-		schedulemanager.UpdateNextScheduledDate(log, docState.DocumentInformation.AssociationID)
-		signal.ExecuteAssociation(log)
-	}()
-
 	totalNumberOfActions := len(docState.InstancePluginsInformation)
 	outputs := pluginExecution.RunPlugins(
 		assocContext,
@@ -109,7 +104,6 @@ func (r *AssociationExecuter) ExecuteInProgressDocument(context context.T, docSt
 	pluginOutputContent, err := jsonutil.Marshal(outputs)
 	if err != nil {
 		log.Error("failed to parse to json string ", err)
-		return
 	}
 	log.Debugf("Plugin outputs %v", jsonutil.Indent(pluginOutputContent))
 
@@ -117,12 +111,12 @@ func (r *AssociationExecuter) ExecuteInProgressDocument(context context.T, docSt
 	// Skip sending response when the document requires a reboot
 	if docState.IsRebootRequired() {
 		log.Debugf("skipping sending response of %v since the document requires a reboot", docState.DocumentInformation.AssociationID)
+		signal.StopExecutionSignal()
 		return
 	}
 
 	if pluginOutputContent, err = jsonutil.Marshal(outputs); err != nil {
 		log.Error("failed to parse to json string ", err)
-		return
 	}
 
 	log.Debug("Association execution completion ", pluginOutputContent)
@@ -136,7 +130,9 @@ func (r *AssociationExecuter) ExecuteInProgressDocument(context context.T, docSt
 			contracts.AssociationErrorCodeExecutionError,
 			contracts.AssociationStatusFailed)
 
-	} else {
+	} else if docState.DocumentInformation.DocumentStatus == contracts.ResultStatusSuccess ||
+		docState.DocumentInformation.DocumentStatus == contracts.AssociationStatusTimedOut ||
+		docState.DocumentInformation.DocumentStatus == contracts.ResultStatusCancelled {
 		r.associationExecutionReport(
 			log,
 			&docState.DocumentInformation,
@@ -156,6 +152,9 @@ func (r *AssociationExecuter) ExecuteInProgressDocument(context context.T, docSt
 
 	//clean association logs once the document state is moved to completed,
 	cleanOldAssociationLogs(log, docState.DocumentInformation.InstanceID, assocContext.AppConfig().Agent.OrchestrationRootDir)
+
+	schedulemanager.UpdateNextScheduledDate(log, docState.DocumentInformation.AssociationID)
+	signal.ExecuteAssociation(log)
 }
 
 // parseAndPersistReplyContents reloads interimDocState, updates it with replyPayload and persist it on disk.

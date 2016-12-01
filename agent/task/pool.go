@@ -42,6 +42,9 @@ type Pool interface {
 	// or until the timeout has elapsed, whichever comes first. Returns true if all
 	// workers terminated before the timeout or false if the timeout expired.
 	ShutdownAndWait(timeout time.Duration) (finished bool)
+
+	// HasJob returns if jobStore has specified job
+	HasJob(jobID string) bool
 }
 
 // pool implements a task pool where all jobs are managed by a root task
@@ -171,6 +174,12 @@ func (p *pool) Submit(log log.T, jobID string, job Job) (err error) {
 	}
 	p.jobQueue <- token
 	return
+}
+
+// HasJob returns if jobStore has specified job
+func (p *pool) HasJob(jobID string) bool {
+	_, found := p.jobStore.GetJob(jobID)
+	return found
 }
 
 // Cancel cancels the job with the given id.
