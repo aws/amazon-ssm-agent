@@ -265,9 +265,13 @@ func (svc *sdkService) CreateDocument(log log.T, docName string, docContent stri
 //GetDocument calls the GetDocument SSM API to retrieve document with given document name
 func (svc *sdkService) GetDocument(log log.T, docName string, docVersion string) (response *ssm.GetDocumentOutput, err error) {
 	params := ssm.GetDocumentInput{
-		Name:            aws.String(docName),
-		DocumentVersion: aws.String(docVersion),
+		Name: aws.String(docName),
 	}
+
+	if docVersion != "" {
+		params.DocumentVersion = aws.String(docVersion)
+	}
+
 	response, err = svc.sdk.GetDocument(&params)
 	if err != nil {
 		sdkutil.HandleAwsError(log, err, ssmStopPolicy)

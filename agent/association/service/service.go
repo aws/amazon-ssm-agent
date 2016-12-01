@@ -186,7 +186,7 @@ func (s *AssociationService) ListAssociations(log log.T, instanceID string) ([]*
 		rawData := &model.InstanceAssociation{}
 		rawData.Association = &ssm.InstanceAssociationSummary{
 			AssociationId:   assoc.Name,
-			DocumentVersion: aws.String(latestDoc),
+			DocumentVersion: aws.String(""),
 			Name:            assoc.Name,
 			InstanceId:      aws.String(instanceID),
 			Checksum:        aws.String(""),
