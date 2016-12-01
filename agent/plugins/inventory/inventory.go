@@ -50,7 +50,7 @@ import (
 //TODO: add more unit tests.
 
 const (
-	errorMsgForMultipleAssociations           = "%v doesn't support multiple associations"
+	errorMsgForMultipleAssociations           = "%v detected multiple inventory configurations associated to one instance. You can’t associate multiple inventory configurations to an instance. The association IDs are: %v and %v."
 	errorMsgForInvalidInventoryInput          = "Unrecongnized input for %v plugin"
 	errorMsgForExecutingInventoryViaAssociate = "%v plugin can only be invoked via ssm-associate"
 	errorMsgForUnableToDetectInvocationType   = "Unable to detect if %v plugin was invoked via ssm-associate because - %v"
@@ -476,7 +476,7 @@ func RefreshLastTrackedAssociationExecutions(oldTrackedExecutions, currentAssoci
 
 // IsMulitpleAssociationPresent returns true if there are multiple associations for inventory plugin else it returns false.
 // It also refreshes map of tracked association executions accordingly.
-func (p *Plugin) IsMulitpleAssociationPresent(currentAssociationID string) (status bool) {
+func (p *Plugin) IsMulitpleAssociationPresent(currentAssociationID string) (status bool, otherAssociationID string) {
 	var otherAssociationFound bool
 
 	// we might end up changing value of p.lastAssociationId
@@ -522,6 +522,9 @@ func (p *Plugin) IsMulitpleAssociationPresent(currentAssociationID string) (stat
 				//even though this execution run would fail we should still add this execution in the map
 				//of lastAssociationExecutions to fail executions of other associations
 				p.lastExecutedAssociations[currentAssociationID] = executionTime
+
+				//need to return the detected multiple association ID
+				otherAssociationID = associationID
 
 				//no need to check for any other associations from current associations - since we
 				//already found a multiple association
@@ -640,8 +643,12 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 	// NOTE: as per contract with associate functionality - bookkeepingfilename will always contain associationId.
 	// bookkeepingfilename will be of format - associationID.RunID for associations, for command it will simply be commandID
 
-	if p.IsMulitpleAssociationPresent(associationID) {
-		errorMsg = fmt.Sprintf(errorMsgForMultipleAssociations, pluginName)
+	if status, extraAssociationId := p.IsMulitpleAssociationPresent(associationID); status {
+		errorMsg = fmt.Sprintf(errorMsgForMultipleAssociations,
+			pluginName,
+			associationID,
+			extraAssociationId)
+
 		log.Error(errorMsg)
 		res.Code = 1
 		res.Output = errorMsg
