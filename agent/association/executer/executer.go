@@ -381,7 +381,7 @@ func cleanOldAssociationLogs(log log.T, instanceID string, orchestrationRootDirN
 
 			os.RemoveAll(completedLogFullPath)
 
-			orchestrationLogFullPath := filepath.Join(orchestrationRootDirName, assocID, isoDashUTCFormattedName)
+			orchestrationLogFullPath := filepath.Join(orchestrationRootDir, assocID, isoDashUTCFormattedName)
 			if !fileutil.Exists(orchestrationLogFullPath) {
 				log.Debugf("Orchestration log doesn't exist: %v", orchestrationLogFullPath)
 				continue
