@@ -72,3 +72,19 @@ func ParseIso8601UTC(t string) time.Time {
 	fmt.Sscanf(t, "%04d-%02d-%02dT%02d:%02d:%02d.%03dZ", &y, &m, &d, &h, &min, &s, &ms)
 	return time.Date(y, m, d, h, min, s, ms*1000000, time.UTC)
 }
+
+// ParseIsoDashUTC parses a time in IsoDash format and UTC timezone (yyyy-MM-ddTHH-mm-ss.fffZ).
+func ParseIsoDashUTC(t string) (time.Time, error) {
+	var y int
+	var m time.Month
+	var d int
+	var h int
+	var min int
+	var s int
+	var ms int
+
+	if _, err := fmt.Sscanf(t, "%04d-%02d-%02dT%02d-%02d-%02d.%03dZ", &y, &m, &d, &h, &min, &s, &ms); err != nil {
+		return time.Time{}, err
+	}
+	return time.Date(y, m, d, h, min, s, ms*1000000, time.UTC), nil
+}

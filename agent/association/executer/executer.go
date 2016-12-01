@@ -16,7 +16,9 @@ package executer
 
 import (
 	"fmt"
+	"os"
 	"path"
+	"path/filepath"
 	"strings"
 	"time"
 
@@ -27,6 +29,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/association/taskpool"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
+	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	"github.com/aws/amazon-ssm-agent/agent/framework/plugin"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
@@ -163,6 +166,9 @@ func (r *AssociationExecuter) ExecuteInProgressDocument(context context.T, docSt
 		docState.DocumentInformation.InstanceID,
 		appconfig.DefaultLocationOfCurrent,
 		appconfig.DefaultLocationOfCompleted)
+
+	//clean association logs once the document state is moved to completed,
+	cleanOldAssociationLogs(log, docState.DocumentInformation.InstanceID, assocContext.AppConfig().Agent.OrchestrationRootDir)
 }
 
 // parseAndPersistReplyContents reloads interimDocState, updates it with replyPayload and persist it on disk.
@@ -310,4 +316,78 @@ func filterByStatus(runtimeStatuses map[string]*contracts.PluginRuntimeStatus, p
 		}
 	}
 	return result
+}
+
+// cleanOldAssociationLogs removes all log directories under association's orchestration directory if the executed time passed one day
+func cleanOldAssociationLogs(log log.T, instanceID string, orchestrationRootDirName string) {
+
+	log.Debugf("Cleaning old association logs")
+
+	completedDir := filepath.Join(
+		appconfig.DefaultDataStorePath,
+		instanceID,
+		appconfig.DefaultDocumentRootDirName,
+		appconfig.DefaultLocationOfState,
+		appconfig.DefaultLocationOfCompleted)
+	if !fileutil.Exists(completedDir) {
+		log.Debugf("Completed log directory doesn't exist: %v", completedDir)
+		return
+	}
+
+	// create orchestration root directory
+	orchestrationRootDir := filepath.Join(
+		appconfig.DefaultDataStorePath,
+		instanceID,
+		appconfig.DefaultDocumentRootDirName,
+		orchestrationRootDirName)
+
+	completedLogs, err := fileutil.ReadDir(completedDir)
+	if err != nil {
+		log.Debugf("Failed to read subdirectories under %v", err)
+		return
+	}
+
+	if completedLogs == nil || len(completedLogs) == 0 {
+		log.Debugf("Completed log directory %v is invalid or empty", completedDir)
+		return
+	}
+
+	for _, completedLog := range completedLogs {
+		// skip if completed log file is a directory
+		if completedLog.IsDir() {
+			continue
+		}
+
+		// split the completed log's filename by dot and skip if it doesn't include only one dot
+		splitCompletedLog := strings.SplitN(completedLog.Name(), ".", 2)
+		if len(splitCompletedLog) != 2 {
+			continue
+		}
+
+		assocID := splitCompletedLog[0]
+		isoDashUTCFormattedName := splitCompletedLog[1]
+
+		// skip if the completed log's filename doesn't end with ISO Dash UTC format
+		executedTime, err := times.ParseIsoDashUTC(isoDashUTCFormattedName)
+		if err != nil {
+			continue
+		}
+
+		if time.Now().After(executedTime.Add(time.Hour * 24)) {
+			completedLogFullPath := filepath.Join(completedDir, completedLog.Name())
+			if !fileutil.Exists(completedLogFullPath) {
+				log.Debugf("Completed log directory doesn't exist: %v", completedLogFullPath)
+			}
+
+			os.RemoveAll(completedLogFullPath)
+
+			orchestrationLogFullPath := filepath.Join(orchestrationRootDirName, assocID, isoDashUTCFormattedName)
+			if !fileutil.Exists(orchestrationLogFullPath) {
+				log.Debugf("Orchestration log doesn't exist: %v", orchestrationLogFullPath)
+				continue
+			}
+
+			os.RemoveAll(orchestrationLogFullPath)
+		}
+	}
 }

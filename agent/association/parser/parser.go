@@ -107,7 +107,7 @@ func InitializeDocumentState(context context.T,
 		appconfig.DefaultDocumentRootDirName,
 		context.AppConfig().Agent.OrchestrationRootDir)
 
-	orchestrationDir := filepath.Join(orchestrationRootDir, documentInfo.DocumentID)
+	orchestrationDir := filepath.Join(orchestrationRootDir, documentInfo.AssociationID, documentInfo.RunID)
 	docState := stateModel.DocumentState{
 		DocumentInformation: documentInfo,
 		DocumentType:        stateModel.Association,
