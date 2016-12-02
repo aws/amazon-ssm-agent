@@ -273,6 +273,7 @@ func (p *Plugin) runCommands(log log.T, pluginInput RefreshAssociationPluginInpu
 					times.ToIso8601UTC(time.Now()),
 					message,
 					service.NoOutputUrl)
+				out.MarkAsFailed(log, err)
 				continue
 			}
 		}

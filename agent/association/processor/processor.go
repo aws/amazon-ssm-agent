@@ -221,9 +221,8 @@ func (p *Processor) runScheduledAssociation(log log.T) {
 	if schedulemanager.IsAssociationInProgress(*scheduledAssociation.Association.AssociationId) {
 		if p.taskPool.HasJob(*scheduledAssociation.Association.AssociationId) {
 			log.Infof("Association %v is executing, system will retry later", *scheduledAssociation.Association.AssociationId)
-		}
 
-		if isAssociationTimedOut(scheduledAssociation) {
+		} else if isAssociationTimedOut(scheduledAssociation) {
 			err = fmt.Errorf("Assocation stuck at InProgress for longer than %v hours", documentLevelTimeOutDurationHour)
 			log.Error(err)
 			p.assocSvc.UpdateInstanceAssociationStatus(
@@ -241,7 +240,7 @@ func (p *Processor) runScheduledAssociation(log log.T) {
 		return
 	}
 
-	log.Debug("Update association %v to pending ", *scheduledAssociation.Association.AssociationId)
+	log.Debugf("Update association %v to pending ", *scheduledAssociation.Association.AssociationId)
 	// Update association status to pending
 	p.assocSvc.UpdateInstanceAssociationStatus(
 		log,

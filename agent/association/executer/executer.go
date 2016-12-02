@@ -111,6 +111,7 @@ func (r *AssociationExecuter) ExecuteInProgressDocument(context context.T, docSt
 	// Skip sending response when the document requires a reboot
 	if docState.IsRebootRequired() {
 		log.Debugf("skipping sending response of %v since the document requires a reboot", docState.DocumentInformation.AssociationID)
+		// stop execution signal if detects reboot
 		signal.StopExecutionSignal()
 		return
 	}
@@ -133,6 +134,7 @@ func (r *AssociationExecuter) ExecuteInProgressDocument(context context.T, docSt
 	} else if docState.DocumentInformation.DocumentStatus == contracts.ResultStatusSuccess ||
 		docState.DocumentInformation.DocumentStatus == contracts.AssociationStatusTimedOut ||
 		docState.DocumentInformation.DocumentStatus == contracts.ResultStatusCancelled {
+		// Association should only update status when it's Failed, Success, TimedOut and Cancelled as Final status
 		r.associationExecutionReport(
 			log,
 			&docState.DocumentInformation,

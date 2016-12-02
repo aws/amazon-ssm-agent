@@ -23,7 +23,8 @@ import (
 
 const (
 	defaultScheduledJobQueueSize              = 100
-	defaultScheduleHealthTimerDurationSeconds = 60
+	defaultScheduleHealthTimerDurationSeconds = 300
+	scheduleForNextAssociationMessage         = "Next association is scheduled at %v, system will sleep for %v"
 )
 
 // AssociationExecutionSignal uses to manage the channel required by sending/receiving signals for executing scheduled association
@@ -89,7 +90,7 @@ func ResetWaitTimerForNextScheduledAssociation(log log.T, targetDate time.Time) 
 	duration := targetDate.UTC().Sub(time.Now().UTC())
 
 	if nextScheduledDate.Equal(targetDate) {
-		log.Debugf("Next association is scheduled at %v, system will sleep for %v", nextScheduledDate, duration)
+		log.Infof(scheduleForNextAssociationMessage, nextScheduledDate, duration)
 		return
 	}
 
@@ -101,7 +102,7 @@ func ResetWaitTimerForNextScheduledAssociation(log log.T, targetDate time.Time) 
 	waitTimerForNextScheduledAssociation = time.NewTimer(duration)
 	nextScheduledDate = targetDate
 
-	log.Infof("Next association is scheduled at %v, system will sleep for %v", targetDate, duration)
+	log.Infof(scheduleForNextAssociationMessage, targetDate, duration)
 	go func() {
 		<-waitTimerForNextScheduledAssociation.C
 		ExecuteAssociation(log)

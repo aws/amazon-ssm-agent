@@ -15,10 +15,10 @@
 package service
 
 import (
+	"bytes"
 	"fmt"
-	"time"
-
 	"sync"
+	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/association/cache"
@@ -26,6 +26,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/association/schedulemanager"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/plugins/pluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/sdkutil"
 	ssmsvc "github.com/aws/amazon-ssm-agent/agent/ssm"
 	"github.com/aws/amazon-ssm-agent/agent/times"
@@ -217,11 +218,16 @@ func (s *AssociationService) UpdateInstanceAssociationStatus(
 	executionSummary string,
 	outputUrl string) {
 
+	var err error
 	// Update status in schedulemanager to ensure state matches with the one on the service
 	schedulemanager.UpdateAssociationStatus(associationID, status)
 
 	if s.IsInstanceAssociationApiMode() {
 		date := times.ParseIso8601UTC(executionDate)
+
+		if executionSummary, err = pluginutil.ReadPrefix(bytes.NewBufferString(executionSummary), 510, "--output truncated--"); err != nil {
+			log.Error(err)
+		}
 
 		executionResult := ssm.InstanceAssociationExecutionResult{
 			Status:           aws.String(status),
@@ -235,16 +241,15 @@ func (s *AssociationService) UpdateInstanceAssociationStatus(
 			executionResult.OutputUrl = &ssm.InstanceAssociationOutputUrl{S3OutputUrl: &s3OutputUrl}
 		}
 
-		executionResultContent, err := jsonutil.Marshal(executionResult)
-		if err != nil {
+		var executionResultContent string
+		if executionResultContent, err = jsonutil.Marshal(executionResult); err != nil {
 			log.Errorf("could not marshal associationStatus, %v", err)
 			return
 		}
 		log.Info("Updating association status ", jsonutil.Indent(executionResultContent))
 
-		response, err := s.ssmSvc.UpdateInstanceAssociationStatus(log, associationID, instanceID, &executionResult)
-
-		if err != nil {
+		var response *ssm.UpdateInstanceAssociationStatusOutput
+		if response, err = s.ssmSvc.UpdateInstanceAssociationStatus(log, associationID, instanceID, &executionResult); err != nil {
 			log.Errorf("unable to update association status, %v", err)
 
 			// After machine reboot system turn back to use UpdateInstanceAssociationStatus for legacy association
@@ -259,13 +264,13 @@ func (s *AssociationService) UpdateInstanceAssociationStatus(
 
 			return
 		}
-		responseContent, err := jsonutil.Marshal(response)
-		if err != nil {
+
+		var responseContent string
+		if responseContent, err = jsonutil.Marshal(response); err != nil {
 			log.Error("could not marshal reponse! ", err)
 			return
 		}
 		log.Info("Update instance association status response content is ", jsonutil.Indent(responseContent))
-
 		return
 	}
 
