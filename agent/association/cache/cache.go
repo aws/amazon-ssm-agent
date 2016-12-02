@@ -1,7 +1,6 @@
 package cache
 
 import (
-	"fmt"
 	"sync"
 
 	"github.com/aws/amazon-ssm-agent/agent/association/model"
@@ -42,10 +41,7 @@ func (c *Cache) Add(associationID string, associationRawData *model.InstanceAsso
 	c.mutex.Lock()
 	defer c.mutex.Unlock()
 
-	found := c.isCached(associationID)
-	if found {
-		return fmt.Errorf("Item %s already exists", associationID)
-	}
+	// add or replace the cache
 	c.set(associationID, associationRawData)
 	return nil
 }
