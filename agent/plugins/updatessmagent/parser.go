@@ -49,7 +49,15 @@ type PackageVersion struct {
 	Checksum string `json:"Checksum"`
 }
 
-const minimumVersion = "0"
+const (
+	minimumVersion = "0"
+
+	// CommonManifestURL is the Manifest URL for regular regions
+	CommonManifestURL = "https://amazon-ssm-{Region}.s3.amazonaws.com/ssm-agent-manifest.json"
+
+	// ChinaManifestURL is the manifest URL for regions in China
+	ChinaManifestURL = "https://s3.{Region}.amazonaws.com.cn/amazon-ssm-{Region}/ssm-agent-manifest.json"
+)
 
 // ParseManifest parses the public manifest file to provide agent update information.
 func ParseManifest(log log.T,

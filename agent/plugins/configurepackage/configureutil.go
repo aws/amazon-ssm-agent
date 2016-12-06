@@ -49,9 +49,6 @@ const (
 	// PackageNameSuffix represents (when concatenated with the correct package url) the s3 location of a specific version of a package
 	PackageNameSuffix = "/{PackageVersion}/" + PackageNameFormat
 
-	// RegionBjs represents the BJS region
-	RegionBjs = "cn-north-1"
-
 	// InstallAction represents the json command to install package
 	InstallAction = "Install"
 
@@ -91,7 +88,7 @@ func getManifestName(packageName string) (manifestName string) {
 
 // getS3Location constructs the s3 url to locate the package for downloading
 func getS3Location(packageName string, version string, context *updateutil.InstanceContext) (s3Location string) {
-	if context.Region == RegionBjs {
+	if context.Region == s3util.RegionBJS {
 		s3Location = PackageUrlBjs
 	} else {
 		s3Location = PackageUrl
@@ -112,7 +109,7 @@ func getS3Url(packageName string, context *updateutil.InstanceContext) (s3Url *u
 	// s3 uri format based on agreed convention
 	// TO DO: Implement region/endpoint map (or integrate with aws sdk endpoints package) to handle cases better
 	var s3Location string
-	if context.Region == RegionBjs {
+	if context.Region == s3util.RegionBJS {
 		s3Location = PackageUrlBjs
 	} else {
 		s3Location = PackageUrl

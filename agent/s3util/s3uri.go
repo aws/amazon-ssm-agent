@@ -23,8 +23,13 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/log"
 )
 
-// EndpointPattern is a valid regular expression for s3 url pattern
-const EndpointPattern = "^(.+\\.)?s3[.-]([a-z0-9-]+)\\."
+const (
+	// EndpointPattern is a valid regular expression for s3 url pattern
+	EndpointPattern = "^(.+\\.)?s3[.-]([a-z0-9-]+)\\."
+
+	// RegionBJS represents the BJS region
+	RegionBJS = "cn-north-1"
+)
 
 // AmazonS3URL holds interesting pieces after parsing a s3 URL
 type AmazonS3URL struct {

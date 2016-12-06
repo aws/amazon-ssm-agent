@@ -37,6 +37,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/platform"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/pluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/rebooter"
+	"github.com/aws/amazon-ssm-agent/agent/s3util"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 	"github.com/aws/amazon-ssm-agent/agent/updateutil"
 )
@@ -629,11 +630,10 @@ func GetUpdatePluginConfig(context context.T) UpdatePluginConfig {
 	}
 
 	var manifestURL string
-	if region == "cn-north-1" {
-		//TODO test on BJS
-		manifestURL = "https://s3.cn-north-1.amazonaws.com.cn/aws-ssm-cn-north-1/manifest.json"
+	if region == s3util.RegionBJS {
+		manifestURL = ChinaManifestURL
 	} else {
-		manifestURL = "https://aws-ssm-{Region}.s3.amazonaws.com/manifest.json"
+		manifestURL = CommonManifestURL
 	}
 
 	return UpdatePluginConfig{
