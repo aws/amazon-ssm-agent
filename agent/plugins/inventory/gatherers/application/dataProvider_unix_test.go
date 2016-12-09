@@ -19,16 +19,12 @@ import (
 	"testing"
 
 	"github.com/aws/amazon-ssm-agent/agent/context"
-	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/inventory/model"
 	"github.com/stretchr/testify/assert"
 )
 
 const (
-	sampleData        = `{"Name":"amazon-ssm-agent","Version":"1.2.0.0-1","Publisher":"Amazon.com, Inc. <ec2-ssm-feedback@amazon.com>","ApplicationType":"admin","Architecture":"amd64","Url":""},{"Name":"adduser","Version":"3.113+nmu3ubuntu3","Publisher":"Ubuntu Core Developers <ubuntu-devel-discuss@lists.ubuntu.com>","ApplicationType":"admin","Architecture":"all","Url":"http://alioth.debian.org/projects/adduser/"},`
-	ubuntuOSName      = "Ubuntu"
-	amzLinuxOSName    = "Amazon Linux Ami"
-	unsupportedOSName = "Unsupported OS"
+	sampleData = `{"Name":"amazon-ssm-agent","Version":"1.2.0.0-1","Publisher":"Amazon.com, Inc. <ec2-ssm-feedback@amazon.com>","ApplicationType":"admin","Architecture":"amd64","Url":""},{"Name":"adduser","Version":"3.113+nmu3ubuntu3","Publisher":"Ubuntu Core Developers <ubuntu-devel-discuss@lists.ubuntu.com>","ApplicationType":"admin","Architecture":"all","Url":"http://alioth.debian.org/projects/adduser/"},`
 )
 
 func MockTestExecutorWithError(command string, args ...string) ([]byte, error) {
@@ -40,20 +36,16 @@ func MockTestExecutorWithoutError(command string, args ...string) ([]byte, error
 	return []byte(sampleData), nil
 }
 
-func MockPlatformInfoProviderReturningError(log log.T) (name string, err error) {
-	return "", fmt.Errorf("Random Error")
-}
+var i = 0
 
-func MockPlatformInfoProviderReturningAmazonLinux(log log.T) (name string, err error) {
-	return amzLinuxOSName, nil
-}
-
-func MockPlatformInfoProviderReturningUbuntu(log log.T) (name string, err error) {
-	return ubuntuOSName, nil
-}
-
-func MockPlatformInfoProviderReturningUnsupportedOS(log log.T) (name string, err error) {
-	return unsupportedOSName, nil
+// cmdExecutor returns error first (dpkg) and returns some valid result (rpm)
+func MockTestExecutorWithAndWithoutError(command string, args ...string) ([]byte, error) {
+	if i == 0 {
+		i++
+		return MockTestExecutorWithError(command, args...)
+	} else {
+		return MockTestExecutorWithoutError(command, args...)
+	}
 }
 
 func TestConvertToApplicationData(t *testing.T) {
@@ -94,54 +86,20 @@ func TestGetApplicationData(t *testing.T) {
 }
 
 func TestCollectApplicationData(t *testing.T) {
+	mockContext := context.NewMockDefault()
 
-	var data []model.ApplicationData
-
-	//setup
-	c := context.NewMockDefault()
-
-	//testing when platform info provider throws error
-	osInfoProvider = MockPlatformInfoProviderReturningError
-	data = CollectApplicationData(c)
-
-	assert.Equal(t, 0, len(data), "Application dataset must be empty - when platform provider throws error")
-
-	//testing for unsupported OS
-	osInfoProvider = MockPlatformInfoProviderReturningUnsupportedOS
-	data = CollectApplicationData(c)
-
-	assert.Equal(t, 0, len(data), "For unsupported OS - application dataset must be empty")
-
-	//testing for amazon linux
-
-	//testing when command executor doesn't return any error
-	osInfoProvider = MockPlatformInfoProviderReturningAmazonLinux
+	// both dpkg and rpm return result without error
 	cmdExecutor = MockTestExecutorWithoutError
-
-	data = CollectApplicationData(c)
+	data := CollectApplicationData(mockContext)
 	assert.Equal(t, 2, len(data), "Given sample data must return 2 entries of application data")
 
-	//testing when command executor return error
-	osInfoProvider = MockPlatformInfoProviderReturningAmazonLinux
+	// both dpkg and rpm return errors
 	cmdExecutor = MockTestExecutorWithError
+	data = CollectApplicationData(mockContext)
+	assert.Equal(t, 0, len(data), "When command execution fails - application dataset must be empty")
 
-	data = CollectApplicationData(c)
-	assert.Equal(t, 0, len(data), "Application dataset must be empty - if command fails for any OS")
-
-	//testing for Ubuntu
-
-	//testing when command executor doesn't return any error
-	osInfoProvider = MockPlatformInfoProviderReturningUbuntu
-	cmdExecutor = MockTestExecutorWithoutError
-
-	data = CollectApplicationData(c)
+	// dpkg returns error and rpm return some result
+	cmdExecutor = MockTestExecutorWithAndWithoutError
+	data = CollectApplicationData(mockContext)
 	assert.Equal(t, 2, len(data), "Given sample data must return 2 entries of application data")
-
-	//testing when command executor return error
-	osInfoProvider = MockPlatformInfoProviderReturningUbuntu
-	cmdExecutor = MockTestExecutorWithError
-
-	data = CollectApplicationData(c)
-	assert.Equal(t, 0, len(data), "Application dataset must be empty - if command fails for any OS")
-
 }

@@ -32,10 +32,6 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/plugins/inventory/model"
 )
 
-var (
-	pkgMgr map[string]string
-)
-
 const (
 	// RPMPackageManager represents rpm package management
 	RPMPackageManager = "rpm"
@@ -54,27 +50,12 @@ const (
 	dpkgQueryFormat              = `-f={"Name":"${Package}","Version":"${Version}","Publisher":"${Maintainer}","ApplicationType":"${Section}","Architecture":"${Architecture}","Url":"${Homepage}"},`
 )
 
-func init() {
-	//map of package managers in different linux distros
-	pkgMgr = make(map[string]string)
-
-	pkgMgr["amazon linux ami"] = RPMPackageManager
-	pkgMgr["centos"] = RPMPackageManager
-	pkgMgr["redhat"] = RPMPackageManager
-	pkgMgr["fedora"] = RPMPackageManager
-	pkgMgr["ubuntu"] = DPKGPackageManager
-	pkgMgr["debian"] = DPKGPackageManager
-}
-
 // decoupling exec.Command for easy testability
 var cmdExecutor = executeCommand
 
 func executeCommand(command string, args ...string) ([]byte, error) {
 	return exec.Command(command, args...).CombinedOutput()
 }
-
-// decoupling platform.PlatformName for easy testability
-var osInfoProvider = platformInfoProvider
 
 func platformInfoProvider(log log.T) (name string, err error) {
 	return platform.PlatformName(log)
@@ -83,55 +64,20 @@ func platformInfoProvider(log log.T) (name string, err error) {
 // CollectApplicationData collects all application data from the system using rpm or dpkg query.
 func CollectApplicationData(context context.T) (appData []model.ApplicationData) {
 
-	var plName string
 	var err error
 	log := context.Log()
 
-	//get platform name
-	if plName, err = osInfoProvider(log); err != nil {
-		log.Infof("Unable to detect platform because of %v - hence no inventory data for %v",
-			err.Error(),
-			GathererName)
-		return
-	}
+	args := []string{dpkgArgsToGetAllApplications, dpkgQueryFormat}
+	cmd := dpkgCmd
 
-	log.Infof("Platform name: %v, small case converstion: %v", plName, strings.ToLower(plName))
-
-	var args []string
-	var cmd string
-
-	//detect package manager and then get application data accordingly.
-	if mgr, ok := pkgMgr[strings.ToLower(plName)]; ok {
-
-		switch mgr {
-		case RPMPackageManager:
-			log.Infof("Detected '%v' as package management system", RPMPackageManager)
-
-			//setting up rpm query command:
-			cmd = rpmCmd
-			args = append(args, rpmCmdArgToGetAllApplications, rpmQueryFormat, rpmQueryFormatArgs)
-
-		case DPKGPackageManager:
-			log.Infof("Detected '%v' as package management system", DPKGPackageManager)
-
-			//setting up dpkg query command:
-			cmd = dpkgCmd
-			args = append(args, dpkgArgsToGetAllApplications, dpkgQueryFormat)
-
-		default:
-			log.Errorf("Unsupported package management system - %v, hence no inventory data for %v",
-				mgr, GathererName)
-			return
-		}
-
+	// try dpkg first, if any error occurs, use rpm
+	if appData, err = GetApplicationData(context, cmd, args); err != nil {
+		log.Info("Getting applications information using dpkg failed, trying rpm now")
+		cmd = rpmCmd
+		args = []string{rpmCmdArgToGetAllApplications, rpmQueryFormat, rpmQueryFormatArgs}
 		if appData, err = GetApplicationData(context, cmd, args); err != nil {
-			log.Infof("No inventory data because of unexpected errors - %v", err.Error())
+			log.Errorf("Unable to detect package manager - hence no inventory data for %v", GathererName)
 		}
-
-	} else {
-		log.Errorf("Unable to detect package manager of %v - hence no inventory data for %v",
-			plName,
-			GathererName)
 	}
 
 	//sorts the data based on application-name
@@ -231,7 +177,7 @@ func GetApplicationData(context context.T, command string, args []string) (data 
 	var output []byte
 	log := context.Log()
 
-	log.Infof("Executing command: %v %v", command, args)
+	log.Debugf("Executing command: %v %v", command, args)
 
 	if output, err = cmdExecutor(command, args...); err != nil {
 		log.Debugf("Failed to execute command : %v %v with error - %v",
