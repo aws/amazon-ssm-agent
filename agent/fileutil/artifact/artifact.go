@@ -16,6 +16,7 @@ package artifact
 
 import (
 	"crypto/md5"
+	"crypto/sha1"
 	"crypto/sha256"
 	"encoding/hex"
 	"fmt"
@@ -277,10 +278,8 @@ func Download(log log.T, input DownloadInput) (output DownloadOutput, err error)
 		// compute the local filename which is hash of url_filename
 		// Generating a hash_filename will also help against attackers
 		// from specifying a directory and filename to overwrite any ami/built-in files.
-		urlHash := md5.Sum([]byte(fileURL.String()))
-		fileName := filepath.Base(fileURL.String())
-
-		output.LocalFilePath = filepath.Join(destinationDir, fmt.Sprintf("%x_%v", urlHash, fileName))
+		urlHash := sha1.Sum([]byte(fileURL.String()))
+		output.LocalFilePath = filepath.Join(destinationDir, fmt.Sprintf("%x", urlHash))
 
 		amazonS3URL := s3util.ParseAmazonS3URL(log, fileURL)
 		if amazonS3URL.IsBucketAndKeyPresent() {
