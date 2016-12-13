@@ -162,7 +162,7 @@ func TestHttpHttpsDownloadArtifact(t *testing.T) {
 		SourceHashValue:      "39c9534e5fa6fecd3ac083ffd6256c2cc9a58f9f1058cb2e472d1782040231f9",
 		SourceHashType:       "sha256",
 	}
-	var expectedLocalPath = "23ac2f78ce2a6048417d8594fcc4eb9f_rfc1350.txt"
+	var expectedLocalPath = "dd5335f3e07903892245d100f4d7df03067e6402"
 	os.Remove(expectedLocalPath)
 	os.Remove(expectedLocalPath + ".etag")
 	expectedOutput := DownloadOutput{

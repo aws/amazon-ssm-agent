@@ -39,7 +39,7 @@ prepack:: prepack-linux prepack-linux-386 prepack-windows prepack-windows-386
 
 package:: create-package-folder package-linux package-windows
 
-release:: clean checkstyle build prepack package
+release:: clean checkstyle quick-test build prepack package
 
 ifneq ($(FINALIZE),)
 	bgo-final
