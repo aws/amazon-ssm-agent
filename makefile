@@ -39,7 +39,7 @@ prepack:: prepack-linux prepack-linux-386 prepack-windows prepack-windows-386
 
 package:: create-package-folder package-linux package-windows
 
-release:: clean checkstyle build prepack package
+release:: clean checkstyle release-test build prepack package
 
 ifneq ($(FINALIZE),)
 	bgo-final
@@ -48,6 +48,10 @@ endif
 clean:: remove-prepacked-folder
 	rm -rf build/* bin/ pkg/ vendor/bin/ vendor/pkg/ .cover/
 	find . -type f -name '*.log' -delete
+
+
+.PHONY: release-test
+release-test: copy-src pre-build quick-integtest
 
 .PHONY: pre-build
 pre-build:
