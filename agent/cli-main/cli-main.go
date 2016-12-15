@@ -18,14 +18,9 @@ import (
 	"os"
 
 	"github.com/aws/amazon-ssm-agent/agent/cli"
-	"github.com/aws/amazon-ssm-agent/agent/cli/clicommand"
-	"github.com/aws/amazon-ssm-agent/agent/cli/cliutil"
+	_ "github.com/aws/amazon-ssm-agent/agent/cli/clicommand"
 )
 
 func main() {
-	// TODO:MF: Would love to find a way to make commands self-registering
-	cliutil.Register(clicommand.SendOfflineCommand{})
-	cliutil.Register(clicommand.GetOfflineCommand{})
-
 	cli.RunCommand(os.Args, os.Stdout)
 }

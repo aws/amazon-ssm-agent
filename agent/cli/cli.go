@@ -40,7 +40,7 @@ func RunCommand(args []string, out io.Writer) {
 	}
 	if cmd, exists := cliutil.CliCommands[command]; exists {
 		if cliutil.IsHelp(subcommands, parameters) {
-			cmd.Help(out)
+			fmt.Fprint(out, cmd.Help())
 		} else {
 			cmdErr, result := cmd.Execute(subcommands, parameters)
 			if cmdErr != nil {

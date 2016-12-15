@@ -17,7 +17,6 @@ package cliutil
 import (
 	"encoding/json"
 	"fmt"
-	"io"
 	"net/url"
 	"strings"
 )
@@ -37,7 +36,7 @@ var CliCommands map[string]CliCommand
 // CliCommand defines the interface for all commands the cli can execute
 type CliCommand interface {
 	Execute(subcommands []string, parameters map[string][]string) (error, string)
-	Help(out io.Writer)
+	Help() string
 	Name() string
 }
 

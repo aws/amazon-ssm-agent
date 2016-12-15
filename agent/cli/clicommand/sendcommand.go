@@ -15,12 +15,13 @@
 package clicommand
 
 import (
+	"bytes"
 	"encoding/json"
 	"errors"
 	"fmt"
-	"io"
 	"path/filepath"
 	"strings"
+	"text/template"
 	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
@@ -38,49 +39,79 @@ const (
 	sendCommandContent = "content"
 )
 
-type SendOfflineCommand struct{}
+const sendCommandHelp = `NAME:
+    {{.SendCommandName}}
+
+DESCRIPTION
+SYNOPSIS
+    {{.SendCommandName}}
+    {{.ContentFlag}}
+
+PARAMETERS
+    {{.ContentFlag}} (string) JSON or URL to command document.
+    A valid command document is a configuration document with all parameters filled in.
+    For information about writing a configuration document, see Configuration Document in the SSM API Reference.
+
+EXAMPLES
+    This example runs a command in a document in S3.
+
+    Command:
+
+      {{.SsmCliName}} {{.SendCommandName}} {{.ContentFlag}} https://s3.amazonaws.com/bucketname/keypath/filename.json
+
+    Output:
+
+      Successfully submitted with command id 01234567-890a-bcde-f012-34567890abcd
+
+OUTPUT
+    Success message with command id or failure message - failure usually happens because you are not admin or provided invalid JSON
+`
+
+type sendCommandHelpParams struct {
+	SsmCliName      string
+	SendCommandName string
+	ContentFlag     string
+}
+
+func init() {
+	cliutil.Register(&SendOfflineCommand{})
+}
+
+type SendOfflineCommand struct {
+	helpText string
+}
 
 // Execute validates and executes the send-offline-command cli command
-func (SendOfflineCommand) Execute(subcommands []string, parameters map[string][]string) (error, string) {
-	validation := validateSendCommandInput(subcommands, parameters)
+func (c *SendOfflineCommand) Execute(subcommands []string, parameters map[string][]string) (error, string) {
+	validation := c.validateSendCommandInput(subcommands, parameters)
 	// return validation errors if any were found
 	if len(validation) > 0 {
 		return errors.New(strings.Join(validation, "\n")), ""
 	}
 
-	if err, content := loadContent(parameters[sendCommandContent][0]); err != nil {
+	if err, content := c.loadContent(parameters[sendCommandContent][0]); err != nil {
 		return err, ""
-	} else if err := validateContent(content); err != nil {
+	} else if err := c.validateContent(content); err != nil {
 		return err, ""
 	} else if contentString, err := jsonutil.Marshal(content); err != nil {
 		return err, ""
-	} else if err, documentName := submitCommandDocument(contentString); err != nil {
+	} else if err, documentName := c.submitCommandDocument(contentString); err != nil {
 		return err, ""
 	} else {
-		return nil, waitForSubmitStatus(documentName)
+		return nil, c.waitForSubmitStatus(documentName)
 	}
 }
 
 // Help prints help for the send-offline-command cli command
-func (SendOfflineCommand) Help(out io.Writer) {
-	fmt.Fprintln(out, "NAME:")
-	fmt.Fprintf(out, "    %v\n\n", sendCommand)
-	fmt.Fprintln(out, "DESCRIPTION")
-	fmt.Fprintln(out, "SYNOPSIS")
-	fmt.Fprintf(out, "    %v\n", sendCommand)
-	fmt.Fprintf(out, "    %v\n\n", cliutil.FormatFlag(sendCommandContent))
-	fmt.Fprintln(out, "PARAMETERS")
-	fmt.Fprintf(out, "    %v (string) JSON or URL to command document.\n", cliutil.FormatFlag(sendCommandContent))
-	fmt.Fprintf(out, "    A valid command document is a configuration document with all parameters filled in.\n")
-	fmt.Fprintf(out, "    For information about writing a configuration document, see Configuration Document in the SSM API Reference.\n\n")
-	fmt.Fprintln(out, "EXAMPLES")
-	fmt.Fprintf(out, "    This example runs a command in a document in S3\n\n")
-	fmt.Fprintf(out, "    Command:\n\n")
-	fmt.Fprintf(out, "      %v %v %v https://s3.amazonaws.com/bucketname/keypath/filename.json\n\n", cliutil.SsmCliName, sendCommand, cliutil.FormatFlag(sendCommandContent))
-	fmt.Fprintf(out, "    Output:\n\n")
-	fmt.Fprintf(out, "      Successfully submitted with command id 01234567-890a-bcde-f012-34567890abcd\n\n")
-	fmt.Fprintln(out, "OUTPUT")
-	fmt.Fprintf(out, "    Success message with command id or failure message - failure usually happens because you are not admin or provided invalid JSON\n")
+func (c *SendOfflineCommand) Help() string {
+	if len(c.helpText) == 0 {
+		t, _ := template.New("SendOfflineCommandHelp").Parse(sendCommandHelp)
+		params := sendCommandHelpParams{cliutil.SsmCliName, sendCommand, cliutil.FormatFlag(sendCommandContent)}
+		buf := new(bytes.Buffer)
+		t.Execute(buf, params)
+		c.helpText = buf.String()
+	}
+	return c.helpText
 }
 
 // Name is the command name used in the cli
@@ -89,7 +120,7 @@ func (SendOfflineCommand) Name() string {
 }
 
 // validateSendCommandInput checks the subcommands and parameters for required values, format, and unsupported values
-func validateSendCommandInput(subcommands []string, parameters map[string][]string) []string {
+func (SendOfflineCommand) validateSendCommandInput(subcommands []string, parameters map[string][]string) []string {
 	validation := make([]string, 0)
 	if subcommands != nil && len(subcommands) > 0 {
 		validation = append(validation, fmt.Sprintf("%v does not support subcommand %v", sendCommand, subcommands), "")
@@ -119,7 +150,7 @@ func validateSendCommandInput(subcommands []string, parameters map[string][]stri
 }
 
 // loadContent loads raw json or json obtained from a URL into DocumentContent
-func loadContent(rawContent string) (error, contracts.DocumentContent) {
+func (SendOfflineCommand) loadContent(rawContent string) (error, contracts.DocumentContent) {
 	var content contracts.DocumentContent
 	if cliutil.ValidJson(rawContent) {
 		err := json.Unmarshal([]byte(rawContent), &content)
@@ -142,7 +173,7 @@ func loadContent(rawContent string) (error, contracts.DocumentContent) {
 }
 
 //validateContent checks to see that content has at least one runtimeConfig for 1.2 or mainSteps for 2.0 and no unbound parameters
-func validateContent(content contracts.DocumentContent) error {
+func (SendOfflineCommand) validateContent(content contracts.DocumentContent) error {
 	// TODO:MF: also check for unbound parameters
 	if content.SchemaVersion == "1.2" {
 		if len(content.RuntimeConfig) == 0 {
@@ -159,7 +190,7 @@ func validateContent(content contracts.DocumentContent) error {
 }
 
 // submitCommandDocument
-func submitCommandDocument(content string) (error, string) {
+func (SendOfflineCommand) submitCommandDocument(content string) (error, string) {
 	documentName := uuid.NewV4().String()
 	documentPath := filepath.Join(appconfig.LocalCommandRoot, documentName)
 
@@ -172,29 +203,29 @@ func submitCommandDocument(content string) (error, string) {
 }
 
 // waitForSubmitStatus
-func waitForSubmitStatus(documentName string) string {
+func (c *SendOfflineCommand) waitForSubmitStatus(documentName string) string {
 	for i := 0; i < 10; i++ {
-		if processed, commandId := isDocumentProcessed(documentName, appconfig.LocalCommandRootSubmitted); processed {
+		if processed, commandId := c.isDocumentProcessed(documentName, appconfig.LocalCommandRootSubmitted); processed {
 			return fmt.Sprintf("successfully submitted with command id: %v", commandId)
 		}
-		if processed, _ := isDocumentProcessed(documentName, appconfig.LocalCommandRootInvalid); processed {
+		if processed, _ := c.isDocumentProcessed(documentName, appconfig.LocalCommandRootInvalid); processed {
 			return "failed to submit document: document was invalid"
 		}
 		time.Sleep(500 * time.Millisecond)
 	}
 	documentPath := filepath.Join(appconfig.LocalCommandRoot, documentName)
 	fileutil.DeleteFile(documentPath)
-	if processed, commandId := isDocumentProcessed(documentName, appconfig.LocalCommandRootSubmitted); processed {
+	if processed, commandId := c.isDocumentProcessed(documentName, appconfig.LocalCommandRootSubmitted); processed {
 		return fmt.Sprintf("successfully submitted with command id: %v", commandId)
 	}
-	if processed, _ := isDocumentProcessed(documentName, appconfig.LocalCommandRootInvalid); processed {
+	if processed, _ := c.isDocumentProcessed(documentName, appconfig.LocalCommandRootInvalid); processed {
 		return "failed to submit document: document was invalid"
 	}
 	return "failed to submit document: timed out"
 }
 
 // isDocumentProcessed checks for a document in the processed folder and returns the command id suffix
-func isDocumentProcessed(documentName string, folder string) (bool, string) {
+func (SendOfflineCommand) isDocumentProcessed(documentName string, folder string) (bool, string) {
 	files, _ := fileutil.GetFileNames(folder)
 	for _, file := range files {
 		if strings.HasPrefix(file, documentName) && strings.Contains(file, ".") {
