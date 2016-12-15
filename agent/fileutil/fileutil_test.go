@@ -209,6 +209,34 @@ func TestMoveFile(t *testing.T) {
 	fs = osFS{}
 }
 
+func TestUnderDir(t *testing.T) {
+	// Remove one or more directory levels
+	assert.True(t, isUnderDir(`~/foo/bar/../`, `~/foo`))
+	assert.True(t, isUnderDir(`~/foo/bar/..`, `~/foo`))
+	assert.False(t, isUnderDir(`~/foo/bar/../..`, `~/foo`))
+
+	// Remove one or more directory levels and add some levels
+	assert.True(t, isUnderDir(`~/foo/bar/../../foo`, `~/foo`))
+	assert.False(t, isUnderDir(`~/foo/bar/../../bar`, `~/foo`))
+	assert.True(t, isUnderDir(`~/foo/bar/../../foo/bar`, `~/foo/bar`))
+	assert.False(t, isUnderDir(`~/foo/bar/../../bar`, `~/foo/bar`))
+
+	// Ensure partial hex and unicode encoded strings also work
+	assert.True(t, isUnderDir("~\x2ffoo\x2fbar", `~/foo`))
+	assert.True(t, isUnderDir("~/foo/bar\x2f\x2e\x2e", `~/foo`))
+	assert.False(t, isUnderDir("~/foo/bar\x2f\x2e\x2e", `~/foo/bar`))
+	assert.False(t, isUnderDir("~/foo/bar\x2f\x2e\u002e", `~/foo/bar`))
+
+	// Ensure handling of trailing separators and substrings that are different directories works correctly
+	assert.True(t, isUnderDir("/foo/bar/", "/foo/bar"))
+	assert.True(t, isUnderDir("/foo/bar", "/foo/bar/"))
+	assert.False(t, isUnderDir("/foo/barbaz", "/foo/bar"))
+
+	// Assert behavior involving ~ (it is treated as a single directory level)
+	assert.True(t, isUnderDir(`~/../foo`, `foo`))
+	assert.True(t, isUnderDir(`~/../../foo`, `../foo`))
+}
+
 type osFSStub struct {
 	exists   bool
 	file     ioFile

@@ -18,6 +18,7 @@ package fileutil
 
 import (
 	"archive/zip"
+	"fmt"
 	"io"
 	"os"
 	"path/filepath"
@@ -54,6 +55,9 @@ func Uncompress(src, dest string) error {
 
 		path := filepath.Join(dest, f.Name)
 
+		if !isUnderDir(path, dest) {
+			return fmt.Errorf("%v attepts to place files outside %v subtree", f.Name, dest)
+		}
 		if f.FileInfo().IsDir() {
 			os.MkdirAll(path, f.Mode())
 		} else {

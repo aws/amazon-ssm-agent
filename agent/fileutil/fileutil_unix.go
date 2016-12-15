@@ -19,6 +19,7 @@ package fileutil
 import (
 	"archive/tar"
 	"compress/gzip"
+	"fmt"
 	"io"
 	"os"
 	"syscall"
@@ -50,10 +51,14 @@ func Uncompress(src, dest string) error {
 		} else if err != nil {
 			return err
 		}
+		itemPath := dest + string(os.PathSeparator) + hdr.Name
+		if !isUnderDir(itemPath, dest) {
+			return fmt.Errorf("%v attepts to place files outside %v subtree", file.Name(), dest)
+		}
 		if hdr.FileInfo().IsDir() {
-			os.MkdirAll(dest+string(os.PathSeparator)+hdr.Name, hdr.FileInfo().Mode())
+			os.MkdirAll(itemPath, hdr.FileInfo().Mode())
 		} else {
-			fw, err := os.OpenFile(dest+string(os.PathSeparator)+hdr.Name, os.O_CREATE|os.O_WRONLY|os.O_TRUNC, hdr.FileInfo().Mode())
+			fw, err := os.OpenFile(itemPath, os.O_CREATE|os.O_WRONLY|os.O_TRUNC, hdr.FileInfo().Mode())
 			if err != nil {
 				return err
 			}

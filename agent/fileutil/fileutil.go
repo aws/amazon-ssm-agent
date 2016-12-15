@@ -237,3 +237,8 @@ func ReadDir(location string) ([]os.FileInfo, error) {
 	}
 	return ioutil.ReadDir(location)
 }
+
+// isUnderDir determines if a given path is in or under a given parent directory (after accounting for path traversal)
+func isUnderDir(childPath, parentDirPath string) bool {
+	return strings.HasPrefix(filepath.Clean(childPath)+string(filepath.Separator), filepath.Clean(parentDirPath)+string(filepath.Separator))
+}
