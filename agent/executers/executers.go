@@ -276,6 +276,7 @@ func RunCommand(log log.T,
 	log.Debug()
 	if err = command.Start(); err != nil {
 		log.Error("error occurred starting the command", err)
+		io.WriteString(stderrWriter, err.Error())
 		exitCode = 1
 		return
 	}
