@@ -288,7 +288,12 @@ func (p *Plugin) prepareForStart(log log.T, config contracts.Configuration, plug
 	// cloudwatch triggered by run command
 	case string:
 		break
-	// cloudwatch triggered by sssociation
+	// cloudwatch triggered by create association
+	case *string:
+		temp := prop.(*string)
+		prop = *temp
+		break
+	// cloudwatch triggered by association document
 	default:
 		var inputs InvokerInput
 		if err = jsonutil.Remarshal(config.Properties, &inputs); err != nil {
