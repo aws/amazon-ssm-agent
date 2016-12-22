@@ -256,7 +256,7 @@ func (rw *rollingFileWriter) createFileAndFolderIfNeeded() error {
 
 		rw.currentFileSize = stat.Size()
 	} else {
-		rw.currentFile, err = os.Create(filePath)
+		rw.currentFile, err = os.OpenFile(filePath, os.O_RDWR|os.O_CREATE|os.O_TRUNC, defaultFilePermissions)
 		rw.currentFileSize = 0
 	}
 	if err != nil {
