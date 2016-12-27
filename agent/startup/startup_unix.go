@@ -15,14 +15,85 @@
 
 package startup
 
+import (
+	"errors"
+	"fmt"
+	"time"
+
+	"github.com/aws/amazon-ssm-agent/agent/platform"
+	"github.com/aws/amazon-ssm-agent/agent/startup/serialport"
+	"github.com/aws/amazon-ssm-agent/agent/version"
+	"github.com/aws/aws-sdk-go/aws"
+)
+
+const (
+	// Retry max count for opening serial port
+	serialPortRetryMaxCount = 30
+
+	// Wait time before retrying to open serial port
+	serialPortRetryWaitTime = 5
+)
+
 // IsAllowed returns true if the current platform allows startup processor.
-// Implement this if ExecuteTasks is implemented.
 func (p *Processor) IsAllowed() bool {
-	// return false since no startup tasks available for unix platform.
-	return false
+	return true
 }
 
 // ExecuteTasks executes startup tasks in unix platform.
-func (p *Processor) ExecuteTasks() error {
+func (p *Processor) ExecuteTasks() (err error) {
+	var sp *serialport.SerialPort
+
+	log := p.context.Log()
+	log.Info("Executing startup processor tasks")
+
+	platformName := ""
+	if n, err := platform.PlatformName(log); err == nil {
+		platformName = *aws.String(n)
+	} else {
+		log.Warn(err)
+	}
+
+	platformVersion := ""
+	if v, err := platform.PlatformVersion(log); err == nil {
+		platformVersion = *aws.String(v)
+	} else {
+		log.Warn(err)
+	}
+
+	// attempt to initialize and open the serial port.
+	// since only three minute is allowed to write logs to console during boot,
+	// it attempts to open serial port for approximately three minutes.
+	retryCount := 0
+	for retryCount < serialPortRetryMaxCount {
+		sp = serialport.NewSerialPort(log)
+		if err = sp.OpenPort(); err != nil {
+			log.Errorf("%v. Retrying in %v seconds...", err.Error(), serialPortRetryWaitTime)
+			time.Sleep(serialPortRetryWaitTime * time.Second)
+			retryCount++
+		} else {
+			break
+		}
+
+		// if the retry count hits the maximum count, log the error and return.
+		if retryCount == serialPortRetryMaxCount {
+			err = errors.New("Timeout: Serial port is in use or not available")
+			log.Errorf("Error occured while opening serial port: %v", err.Error())
+			return
+		}
+	}
+
+	// defer is set to close the serial port during unexpected.
+	defer func() {
+		//serial port MUST be closed.
+		sp.ClosePort()
+	}()
+
+	// write the agent version to serial port.
+	sp.WritePort(fmt.Sprintf("Amazon SSM Agent v%v is running", version.Version))
+
+	// write the platform name and version to serial port.
+	sp.WritePort(fmt.Sprintf("OsProductName: %v", platformName))
+	sp.WritePort(fmt.Sprintf("OsVersion: %v", platformVersion))
+
 	return nil
 }
