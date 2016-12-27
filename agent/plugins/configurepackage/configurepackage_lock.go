@@ -31,14 +31,14 @@ func lockPackage(packageName string, action string) error {
 	lockPackageAction.Lock()
 	defer lockPackageAction.Unlock()
 	if val, ok := mapPackageAction[packageName]; ok {
-		return errors.New(fmt.Sprintf("Package {%v} is already in the process of action {%v}", packageName, val))
+		return errors.New(fmt.Sprintf(`Package "%v" is already in the process of action "%v"`, packageName, val))
 	}
 	mapPackageAction[packageName] = action
 
 	return nil
 }
 
-// unlockPackage removes the package name from th elist of packages currnetly being acted on in a threadsafe way
+// unlockPackage removes the package name from the list of packages currently being acted on in a threadsafe way
 func unlockPackage(packageName string) {
 	lockPackageAction.Lock()
 	defer lockPackageAction.Unlock()

@@ -19,6 +19,8 @@ import (
 	"errors"
 	"fmt"
 	"io/ioutil"
+	"strings"
+	"sync"
 	"testing"
 	"time"
 
@@ -31,9 +33,11 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/task"
 	"github.com/aws/amazon-ssm-agent/agent/updateutil"
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/mock"
 )
 
-var logger = log.NewMockLog()
+var loggerMock = log.NewMockLog()
+var contextMock context.T = context.NewMockDefault()
 
 func fileSysStubSuccess() fileSysDep {
 	result, _ := ioutil.ReadFile("testdata/sampleManifest.json")
@@ -54,6 +58,68 @@ func setSuccessStubs() *ConfigurePackageStubs {
 	return stubs
 }
 
+func TestRunUpgrade(t *testing.T) {
+	plugin := &Plugin{}
+	instanceContext := createStubInstanceContext()
+	pluginInformation := createStubPluginInputInstall()
+
+	managerMock := ConfigPackageSuccessMock("/foo", "1.0.0", "0.5.6", &PackageManifest{}, contracts.ResultStatusSuccess, contracts.ResultStatusSuccess, contracts.ResultStatusSuccess)
+	output := runConfigurePackage(plugin, contextMock, managerMock, instanceContext, pluginInformation)
+
+	assert.Equal(t, output.ExitCode, 0)
+	assert.Contains(t, output.Stdout, "Successfully installed")
+	managerMock.AssertCalled(t, "setMark", "PVDriver", "1.0.0")
+	managerMock.AssertCalled(t, "runUninstallPackagePre", "PVDriver", "0.5.6", mock.Anything, mock.Anything)
+	managerMock.AssertCalled(t, "runUninstallPackagePost", "PVDriver", "0.5.6", mock.Anything, mock.Anything)
+	managerMock.AssertCalled(t, "clearMark", "PVDriver")
+}
+
+func TestRunUpgradeUninstallReboot(t *testing.T) {
+	plugin := &Plugin{}
+	instanceContext := createStubInstanceContext()
+	pluginInformation := createStubPluginInputInstall()
+
+	managerMock := ConfigPackageSuccessMock("/foo", "1.0.0", "0.5.6", &PackageManifest{}, contracts.ResultStatusSuccess, contracts.ResultStatusSuccessAndReboot, contracts.ResultStatusSuccess)
+	output := runConfigurePackage(plugin, contextMock, managerMock, instanceContext, pluginInformation)
+
+	assert.Equal(t, output.ExitCode, 0)
+	managerMock.AssertCalled(t, "setMark", "PVDriver", "1.0.0")
+	managerMock.AssertCalled(t, "runUninstallPackagePre", "PVDriver", "0.5.6", mock.Anything, mock.Anything)
+	managerMock.AssertNotCalled(t, "runInstallPackage")
+	managerMock.AssertNotCalled(t, "runUninstallPackagePost")
+	managerMock.AssertNotCalled(t, "clearMark")
+}
+
+func TestRunParallelSamePackage(t *testing.T) {
+	plugin := &Plugin{}
+	instanceContext := createStubInstanceContext()
+	pluginInformation := createStubPluginInputInstall()
+
+	managerMockFirst := ConfigPackageSuccessMock("/foo", "Wait1.0.0", "", &PackageManifest{}, contracts.ResultStatusSuccess, contracts.ResultStatusSuccess, contracts.ResultStatusSuccess)
+	managerMockSecond := ConfigPackageSuccessMock("/foo", "1.0.0", "", &PackageManifest{}, contracts.ResultStatusSuccess, contracts.ResultStatusSuccess, contracts.ResultStatusSuccess)
+
+	var outputFirst ConfigurePackagePluginOutput
+	var outputSecond ConfigurePackagePluginOutput
+	var wg sync.WaitGroup
+	wg.Add(1)
+	go func() {
+		defer wg.Done()
+		outputFirst = runConfigurePackage(plugin, contextMock, managerMockFirst, instanceContext, pluginInformation)
+	}()
+	// wait until first call is at getVersionToInstall
+	_ = <-managerMockFirst.waitChan
+	// start second call
+	outputSecond = runConfigurePackage(plugin, contextMock, managerMockSecond, instanceContext, pluginInformation)
+	// after second call completes, allow first call to continue
+	managerMockFirst.waitChan <- true
+	// wait until first call is complete
+	wg.Wait()
+
+	assert.Equal(t, outputFirst.ExitCode, 0)
+	assert.Equal(t, outputSecond.ExitCode, 1)
+	assert.True(t, strings.Contains(outputSecond.Stderr, `Package "PVDriver" is already in the process of action "Install"`))
+}
+
 func TestMarkAsSucceeded(t *testing.T) {
 	output := ConfigurePackagePluginOutput{}
 
@@ -66,7 +132,7 @@ func TestMarkAsSucceeded(t *testing.T) {
 func TestMarkAsFailed(t *testing.T) {
 	output := ConfigurePackagePluginOutput{}
 
-	output.MarkAsFailed(logger, fmt.Errorf("Error message"))
+	output.MarkAsFailed(loggerMock, fmt.Errorf("Error message"))
 
 	assert.Equal(t, output.ExitCode, 1)
 	assert.Equal(t, output.Status, contracts.ResultStatusFailed)
@@ -76,9 +142,11 @@ func TestMarkAsFailed(t *testing.T) {
 func TestAppendInfo(t *testing.T) {
 	output := ConfigurePackagePluginOutput{}
 
-	output.AppendInfo(logger, "Info message")
+	output.AppendInfo(loggerMock, "Info message")
+	output.AppendInfo(loggerMock, "Second entry")
 
 	assert.Contains(t, output.Stdout, "Info message")
+	assert.Contains(t, output.Stdout, "Second entry")
 }
 
 func TestExecute(t *testing.T) {
@@ -90,7 +158,6 @@ func TestExecute(t *testing.T) {
 	plugin := &Plugin{}
 
 	mockCancelFlag := new(task.MockCancelFlag)
-	mockContext := context.NewMockDefault()
 
 	getContextOrig := getContext
 	runConfigOrig := runConfig
@@ -99,10 +166,9 @@ func TestExecute(t *testing.T) {
 	}
 	runConfig = func(
 		p *Plugin,
-		log log.T,
-		manager pluginHelper,
-		util configureUtil,
-		context *updateutil.InstanceContext,
+		context context.T,
+		manager configurePackageManager,
+		instanceContext *updateutil.InstanceContext,
 		rawPluginInput interface{}) (out ConfigurePackagePluginOutput) {
 		out = ConfigurePackagePluginOutput{}
 		out.ExitCode = 1
@@ -122,48 +188,34 @@ func TestExecute(t *testing.T) {
 	mockCancelFlag.On("ShutDown").Return(false)
 	mockCancelFlag.On("Wait").Return(false).After(100 * time.Millisecond)
 
-	result := plugin.Execute(mockContext, config, mockCancelFlag, runpluginutil.PluginRunner{})
+	result := plugin.Execute(contextMock, config, mockCancelFlag, runpluginutil.PluginRunner{})
 
 	assert.Equal(t, result.Code, 1)
 	assert.Contains(t, result.Output, "error")
 }
 
 func TestInstallPackage(t *testing.T) {
-	plugin := &Plugin{}
 	pluginInformation := createStubPluginInputInstall()
-	context := createStubInstanceContext()
 
 	output := &ConfigurePackagePluginOutput{}
-	manifest, _ := parsePackageManifest(logger, "testdata/sampleManifest.json")
-	manager := &mockConfigureManager{
-		downloadManifestResult: manifest,
-		downloadManifestError:  nil,
-		downloadPackageResult:  "testdata/sampleManifest.json",
-		downloadPackageError:   nil,
-		validateInputResult:    true,
-		validateInputError:     nil,
-	}
+	manager := createInstance()
 
 	result, _ := ioutil.ReadFile("testdata/sampleManifest.json")
 	stubs := &ConfigurePackageStubs{fileSysDepStub: &FileSysDepStub{readResult: result}, networkDepStub: &NetworkDepStub{}, execDepStub: execStubSuccess()}
 	stubs.Set()
 	defer stubs.Clear()
 
-	_, err := runInstallPackage(plugin,
+	_, err := manager.runInstallPackage(contextMock,
 		pluginInformation.Name,
 		pluginInformation.Version,
-		output,
-		manager,
-		logger,
-		context)
+		output)
 
 	assert.NoError(t, err)
 }
 
 func TestUninstallPackage(t *testing.T) {
-	plugin := &Plugin{}
+	manager := createInstance()
 	pluginInformation := createStubPluginInputUninstall()
-	instanceContext := createStubInstanceContext()
 
 	output := &ConfigurePackagePluginOutput{}
 
@@ -171,21 +223,17 @@ func TestUninstallPackage(t *testing.T) {
 	stubs.Set()
 	defer stubs.Clear()
 
-	_, errPre := runUninstallPackagePre(plugin,
+	_, errPre := manager.runUninstallPackagePre(contextMock,
 		pluginInformation.Name,
 		pluginInformation.Version,
-		output,
-		logger,
-		instanceContext)
+		output)
 
 	assert.NoError(t, errPre)
 
-	_, errPost := runUninstallPackagePost(plugin,
+	_, errPost := manager.runUninstallPackagePost(contextMock,
 		pluginInformation.Name,
 		pluginInformation.Version,
-		output,
-		logger,
-		instanceContext)
+		output)
 
 	assert.NoError(t, errPost)
 }
@@ -193,25 +241,21 @@ func TestUninstallPackage(t *testing.T) {
 // TO DO: Uninstall test for exe command
 
 func TestValidateInput(t *testing.T) {
-	//pluginInformation := createStubPluginInput()
-
 	input := ConfigurePackagePluginInput{}
 
 	input.Version = "1.0.0"
 	input.Name = "PVDriver"
 	input.Action = "InvalidAction"
 
-	manager := configureManager{}
+	manager := createInstance()
 
-	result, err := manager.validateInput(&input)
+	result, err := manager.validateInput(contextMock, &input)
 
 	assert.True(t, result)
 	assert.NoError(t, err)
 }
 
 func TestValidateInput_Source(t *testing.T) {
-	//pluginInformation := createStubPluginInput()
-
 	input := ConfigurePackagePluginInput{}
 
 	input.Version = "1.0.0"
@@ -219,9 +263,9 @@ func TestValidateInput_Source(t *testing.T) {
 	input.Action = "Install"
 	input.Source = "http://amazon.com"
 
-	manager := configureManager{}
+	manager := createInstance()
 
-	result, err := manager.validateInput(&input)
+	result, err := manager.validateInput(contextMock, &input)
 
 	assert.False(t, result)
 	assert.Error(t, err)
@@ -236,8 +280,8 @@ func TestValidateInput_NameEmpty(t *testing.T) {
 	input.Name = ""
 	input.Action = "Install"
 
-	manager := configureManager{}
-	result, err := manager.validateInput(&input)
+	manager := createInstance()
+	result, err := manager.validateInput(contextMock, &input)
 
 	assert.False(t, result)
 	assert.Error(t, err)
@@ -257,8 +301,8 @@ func TestValidateInput_NameInvalid(t *testing.T) {
 	for _, name := range invalidNames {
 		input.Name = name
 
-		manager := configureManager{}
-		result, err := manager.validateInput(&input)
+		manager := createInstance()
+		result, err := manager.validateInput(contextMock, &input)
 
 		assert.False(t, result)
 		assert.Error(t, err)
@@ -277,8 +321,8 @@ func TestValidateInput_NameValid(t *testing.T) {
 	for _, name := range validNames {
 		input.Name = name
 
-		manager := configureManager{}
-		result, err := manager.validateInput(&input)
+		manager := createInstance()
+		result, err := manager.validateInput(contextMock, &input)
 
 		assert.True(t, result)
 		assert.NoError(t, err)
@@ -293,8 +337,8 @@ func TestValidateInput_Version(t *testing.T) {
 	input.Name = "PVDriver"
 	input.Action = "Install"
 
-	manager := configureManager{}
-	result, err := manager.validateInput(&input)
+	manager := createInstance()
+	result, err := manager.validateInput(contextMock, &input)
 
 	assert.False(t, result)
 	assert.Error(t, err)
@@ -309,8 +353,8 @@ func TestValidateInput_EmptyVersionWithInstall(t *testing.T) {
 	input.Name = "PVDriver"
 	input.Action = "Install"
 
-	manager := configureManager{}
-	result, err := manager.validateInput(&input)
+	manager := createInstance()
+	result, err := manager.validateInput(contextMock, &input)
 
 	assert.True(t, result)
 	assert.NoError(t, err)
@@ -324,8 +368,8 @@ func TestValidateInput_EmptyVersionWithUninstall(t *testing.T) {
 	input.Name = "PVDriver"
 	input.Action = "Uninstall"
 
-	manager := configureManager{}
-	result, err := manager.validateInput(&input)
+	manager := createInstance()
+	result, err := manager.validateInput(contextMock, &input)
 
 	assert.True(t, result)
 	assert.NoError(t, err)
@@ -333,10 +377,9 @@ func TestValidateInput_EmptyVersionWithUninstall(t *testing.T) {
 
 func TestDownloadPackage(t *testing.T) {
 	pluginInformation := createStubPluginInputInstall()
-	context := createStubInstanceContext()
 
 	output := ConfigurePackagePluginOutput{}
-	manager := configureManager{}
+	manager := createInstance()
 	util := mockConfigureUtility{}
 
 	result := artifact.DownloadOutput{}
@@ -346,7 +389,7 @@ func TestDownloadPackage(t *testing.T) {
 	stubs.Set()
 	defer stubs.Clear()
 
-	fileName, err := manager.downloadPackage(logger, &util, pluginInformation.Name, pluginInformation.Version, &output, context)
+	fileName, err := manager.downloadPackage(contextMock, &util, pluginInformation.Name, pluginInformation.Version, &output)
 
 	assert.Equal(t, "packages/PVDriver/9000.0.0/PVDriver.zip", fileName)
 	assert.NoError(t, err)
@@ -354,10 +397,9 @@ func TestDownloadPackage(t *testing.T) {
 
 func TestDownloadPackage_Failed(t *testing.T) {
 	pluginInformation := createStubPluginInputInstall()
-	context := createStubInstanceContext()
 
 	output := ConfigurePackagePluginOutput{}
-	manager := configureManager{}
+	manager := createInstance()
 	util := mockConfigureUtility{}
 
 	// file download failed
@@ -368,7 +410,7 @@ func TestDownloadPackage_Failed(t *testing.T) {
 	stubs.Set()
 	defer stubs.Clear()
 
-	fileName, err := manager.downloadPackage(logger, &util, pluginInformation.Name, pluginInformation.Version, &output, context)
+	fileName, err := manager.downloadPackage(contextMock, &util, pluginInformation.Name, pluginInformation.Version, &output)
 
 	assert.Empty(t, fileName)
 	assert.Error(t, err)
@@ -467,54 +509,4 @@ func lockAndUnlock(packageName string) (err error) {
 	}
 	defer unlockPackage(packageName)
 	return
-}
-
-type mockConfigureManager struct {
-	downloadManifestResult *PackageManifest
-	downloadManifestError  error
-	downloadPackageResult  string
-	downloadPackageError   error
-	validateInputResult    bool
-	validateInputError     error
-	installedVersion       string
-}
-
-func (m *mockConfigureManager) downloadPackage(log log.T,
-	util configureUtil,
-	packageName string,
-	version string,
-	output *ConfigurePackagePluginOutput,
-	context *updateutil.InstanceContext) (filePath string, err error) {
-
-	return "", m.downloadPackageError
-}
-
-func (m *mockConfigureManager) validateInput(input *ConfigurePackagePluginInput) (valid bool, err error) {
-	return m.validateInputResult, m.validateInputError
-}
-
-func (m *mockConfigureManager) getVersionToInstall(log log.T,
-	input *ConfigurePackagePluginInput,
-	util configureUtil,
-	context *updateutil.InstanceContext) (version string, installedVersion string, err error) {
-
-	if m.downloadManifestResult != nil {
-		version = m.downloadManifestResult.Version
-	} else {
-		version = ""
-	}
-	return version, m.installedVersion, m.downloadManifestError
-}
-
-func (m *mockConfigureManager) getVersionToUninstall(log log.T,
-	input *ConfigurePackagePluginInput,
-	util configureUtil,
-	context *updateutil.InstanceContext) (version string, err error) {
-
-	if m.downloadManifestResult != nil {
-		version = m.downloadManifestResult.Version
-	} else {
-		version = ""
-	}
-	return version, m.downloadManifestError
 }

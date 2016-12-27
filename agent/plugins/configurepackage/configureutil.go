@@ -39,9 +39,15 @@ const (
 	// PackageNameFormat represents the package name format based
 	PackageNameFormat = "{PackageName}.{Compressed}"
 
-	// PackageUrl represents the s3 folder where all versions of a package live
+	// PackageUrlStandard represents the s3 folder where all versions of a package live
 	// the url to a specific package has a format like https://s3.us-east-1.amazonaws.com/amazon-ssm-packages-us-east-1/Packages/Test/windows/amd64/1.0.0/Test.zip
-	PackageUrl = "https://s3.{Region}.amazonaws.com/amazon-ssm-packages-{Region}/Packages/{PackageName}/{Platform}/{Arch}"
+	PackageUrlStandard = "https://s3.{Region}.amazonaws.com/amazon-ssm-packages-{Region}/Packages/{PackageName}/{Platform}/{Arch}"
+
+	// PackageUrlBeta is the s3 location for ad-hoc testing by package developers
+	PackageUrlBeta = "https://s3.us-east-1.amazonaws.com/amazon-ssm-packages-beta/Packages/{PackageName}/{Platform}/{Arch}"
+
+	// PackageUrlGamma is the s3 location for internal pre-production testing
+	PackageUrlGamma = "https://s3.us-east-1.amazonaws.com/amazon-ssm-packages-us-east-1-gamma/Packages/{PackageName}/{Platform}/{Arch}"
 
 	// PackageUrlBjs is the s3 location for BJS region where all packages live
 	PackageUrlBjs = "https://s3.{Region}.amazonaws.com.cn/amazon-ssm-packages-{Region}/Packages/{PackageName}/{Platform}/{Arch}"
@@ -63,10 +69,31 @@ type configureUtil interface {
 	CreatePackageFolder(name string, version string) (folder string, err error)
 	HasValidPackage(name string, version string) bool
 	GetCurrentVersion(name string) (installedVersion string)
-	GetLatestVersion(log log.T, name string, context *updateutil.InstanceContext) (latestVersion string, err error)
+	GetLatestVersion(log log.T, name string) (latestVersion string, err error)
+	GetS3Location(packageName string, version string) (s3Location string)
 }
 
-type configureUtilImp struct{}
+type configureUtilImp struct {
+	packageUrl     string
+	compressFormat string
+}
+
+func NewUtil(instanceContext *updateutil.InstanceContext, repository string) configureUtil {
+	var packageUrl string
+	if repository == "beta" {
+		packageUrl = PackageUrlBeta
+	} else if repository == "gamma" {
+		packageUrl = PackageUrlGamma
+	} else if instanceContext.Region == s3util.RegionBJS {
+		packageUrl = PackageUrlBjs
+	} else {
+		packageUrl = PackageUrlStandard
+	}
+	packageUrl = strings.Replace(packageUrl, updateutil.RegionHolder, instanceContext.Region, -1)
+	packageUrl = strings.Replace(packageUrl, updateutil.PlatformHolder, appconfig.PackagePlatform, -1)
+	packageUrl = strings.Replace(packageUrl, updateutil.ArchHolder, instanceContext.Arch, -1)
+	return &configureUtilImp{packageUrl: packageUrl, compressFormat: instanceContext.CompressFormat}
+}
 
 // getPackageFilename constructs the package name to locate in the s3 bucket or on disk after download
 func getPackageFilename(packageName string, context *updateutil.InstanceContext) (packageFilename string) {
@@ -87,38 +114,21 @@ func getManifestName(packageName string) (manifestName string) {
 }
 
 // getS3Location constructs the s3 url to locate the package for downloading
-func getS3Location(packageName string, version string, context *updateutil.InstanceContext) (s3Location string) {
-	if context.Region == s3util.RegionBJS {
-		s3Location = PackageUrlBjs
-	} else {
-		s3Location = PackageUrl
-	}
+func (util *configureUtilImp) GetS3Location(packageName string, version string) (s3Location string) {
+	s3Location = util.packageUrl
 	s3Location += PackageNameSuffix
 
-	s3Location = strings.Replace(s3Location, updateutil.RegionHolder, context.Region, -1)
 	s3Location = strings.Replace(s3Location, updateutil.PackageNameHolder, packageName, -1)
-	s3Location = strings.Replace(s3Location, updateutil.PlatformHolder, appconfig.PackagePlatform, -1)
-	s3Location = strings.Replace(s3Location, updateutil.ArchHolder, context.Arch, -1)
 	s3Location = strings.Replace(s3Location, updateutil.PackageVersionHolder, version, -1)
-	s3Location = strings.Replace(s3Location, updateutil.CompressedHolder, context.CompressFormat, -1)
+	s3Location = strings.Replace(s3Location, updateutil.CompressedHolder, util.compressFormat, -1)
 	return s3Location
 }
 
 // getS3Url returns the s3 location containing all versions of a package
-func getS3Url(packageName string, context *updateutil.InstanceContext) (s3Url *url.URL) {
+func getS3Url(packageUrl string, packageName string) (s3Url *url.URL) {
 	// s3 uri format based on agreed convention
-	// TO DO: Implement region/endpoint map (or integrate with aws sdk endpoints package) to handle cases better
-	var s3Location string
-	if context.Region == s3util.RegionBJS {
-		s3Location = PackageUrlBjs
-	} else {
-		s3Location = PackageUrl
-	}
-
-	s3Location = strings.Replace(s3Location, updateutil.RegionHolder, context.Region, -1)
+	s3Location := packageUrl
 	s3Location = strings.Replace(s3Location, updateutil.PackageNameHolder, packageName, -1)
-	s3Location = strings.Replace(s3Location, updateutil.PlatformHolder, appconfig.PackagePlatform, -1)
-	s3Location = strings.Replace(s3Location, updateutil.ArchHolder, context.Arch, -1)
 
 	s3Url, _ = url.Parse(s3Location)
 	return s3Url
@@ -190,8 +200,8 @@ func getLatestVersion(versions []string, except string) (version string) {
 }
 
 // getLatestS3Version finds the most recent version of a package in S3
-func getLatestS3Version(log log.T, name string, context *updateutil.InstanceContext) (latestVersion string, err error) {
-	amazonS3URL := s3util.ParseAmazonS3URL(log, getS3Url(name, context))
+func getLatestS3Version(log log.T, packageUrl string, name string) (latestVersion string, err error) {
+	amazonS3URL := s3util.ParseAmazonS3URL(log, getS3Url(packageUrl, name))
 	log.Debugf("looking up latest version of %v from %v", name, amazonS3URL.String())
 	folders, err := networkdep.ListS3Folders(log, amazonS3URL)
 	if err != nil {
@@ -229,12 +239,12 @@ func parseVersion(version string) (major int, minor int, build int, err error) {
 
 // TODO:MF: This is the first utility function that calls out to S3 or some URI - perhaps this is part of a different set of utilities
 // GetLatestVersion looks up the latest version of a given package for this platform/arch in S3 or manifest at source location
-func (util *configureUtilImp) GetLatestVersion(log log.T, name string, context *updateutil.InstanceContext) (latestVersion string, err error) {
+func (util *configureUtilImp) GetLatestVersion(log log.T, name string) (latestVersion string, err error) {
 	// TODO:OFFLINE: Copy manifest from source location, parse, and return version
-	latestVersion, err = getLatestS3Version(log, name, context)
+	latestVersion, err = getLatestS3Version(log, util.packageUrl, name)
 	// handle case where we couldn't figure out which version to install but not because of an error in the S3 call
 	if latestVersion == "" {
-		return "", fmt.Errorf("no latest version found for package %v on platform %v[%v]", name, appconfig.PackagePlatform, context.Arch)
+		return "", fmt.Errorf("no latest version found for package %v on platform %v", name, appconfig.PackagePlatform)
 	}
 	return latestVersion, err
 }

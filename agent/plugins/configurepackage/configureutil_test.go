@@ -46,20 +46,20 @@ func TestGetPackageName(t *testing.T) {
 
 func TestGetS3Location(t *testing.T) {
 	pluginInformation := createStubPluginInputInstall()
-	context := createStubInstanceContext()
+	util := NewUtil(createStubInstanceContext(), "")
 
 	packageLocation := "https://s3.us-west-2.amazonaws.com/amazon-ssm-packages-us-west-2/Packages/PVDriver/" + appconfig.PackagePlatform + "/amd64/9000.0.0/PVDriver.zip"
-	result := getS3Location(pluginInformation.Name, pluginInformation.Version, context)
+	result := util.GetS3Location(pluginInformation.Name, pluginInformation.Version)
 
 	assert.Equal(t, packageLocation, result)
 }
 
 func TestGetS3Location_Bjs(t *testing.T) {
 	pluginInformation := createStubPluginInputInstall()
-	context := createStubInstanceContextBjs()
+	util := NewUtil(createStubInstanceContextBjs(), "")
 
 	packageLocation := "https://s3.cn-north-1.amazonaws.com.cn/amazon-ssm-packages-cn-north-1/Packages/PVDriver/" + appconfig.PackagePlatform + "/amd64/9000.0.0/PVDriver.zip"
-	result := getS3Location(pluginInformation.Name, pluginInformation.Version, context)
+	result := util.GetS3Location(pluginInformation.Name, pluginInformation.Version)
 
 	assert.Equal(t, packageLocation, result)
 }
@@ -198,6 +198,7 @@ type mockConfigureUtility struct {
 	currentVersion           string
 	latestVersion            string
 	getLatestVersionError    error
+	s3Location               string
 }
 
 func (u *mockConfigureUtility) CreatePackageFolder(name string, version string) (folder string, err error) {
@@ -212,6 +213,10 @@ func (u *mockConfigureUtility) GetCurrentVersion(name string) (installedVersion 
 	return u.currentVersion
 }
 
-func (u *mockConfigureUtility) GetLatestVersion(log log.T, name string, context *updateutil.InstanceContext) (latestVersion string, err error) {
+func (u *mockConfigureUtility) GetLatestVersion(log log.T, name string) (latestVersion string, err error) {
 	return u.latestVersion, u.getLatestVersionError
+}
+
+func (u *mockConfigureUtility) GetS3Location(packageName string, version string) (s3Location string) {
+	return u.s3Location
 }

@@ -17,11 +17,16 @@
 package configurepackage
 
 import (
+	"strings"
+
+	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil/artifact"
+	"github.com/aws/amazon-ssm-agent/agent/framework/runpluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/s3util"
 	"github.com/aws/amazon-ssm-agent/agent/statemanager/model"
+	"github.com/stretchr/testify/mock"
 )
 
 type ConfigurePackageStubs struct {
@@ -165,7 +170,7 @@ func (m *ExecDepStub) ExeCommand(log log.T, cmd string, workingDir string, updat
 	return m.execError
 }
 
-func (m *ExecDepStub) ParseDocument(plugin *Plugin, documentRaw []byte, orchestrationDir string, s3Bucket string, s3KeyPrefix string, messageID string, documentID string, defaultWorkingDirectory string) (pluginsInfo []model.PluginState, err error) {
+func (m *ExecDepStub) ParseDocument(context context.T, documentRaw []byte, orchestrationDir string, s3Bucket string, s3KeyPrefix string, messageID string, documentID string, defaultWorkingDirectory string) (pluginsInfo []model.PluginState, err error) {
 	pluginsInfo = make([]model.PluginState, 0, 1)
 	if m.pluginInput != nil {
 		pluginsInfo = append(pluginsInfo, *m.pluginInput)
@@ -173,10 +178,120 @@ func (m *ExecDepStub) ParseDocument(plugin *Plugin, documentRaw []byte, orchestr
 	return pluginsInfo, m.parseError
 }
 
-func (m *ExecDepStub) ExecuteDocument(plugin *Plugin, pluginInput []model.PluginState, documentID string, documentCreatedDate string) (pluginOutputs map[string]*contracts.PluginResult) {
+func (m *ExecDepStub) ExecuteDocument(runner runpluginutil.PluginRunner, context context.T, pluginInput []model.PluginState, documentID string, documentCreatedDate string) (pluginOutputs map[string]*contracts.PluginResult) {
 	pluginOutputs = make(map[string]*contracts.PluginResult)
 	if m.pluginOutput != nil {
 		pluginOutputs["test"] = m.pluginOutput
 	}
 	return
+}
+
+type MockedConfigurePackageManager struct {
+	mock.Mock
+	waitChan chan bool
+}
+
+func (configMock *MockedConfigurePackageManager) downloadPackage(context context.T,
+	util configureUtil,
+	packageName string,
+	version string,
+	output *ConfigurePackagePluginOutput) (filePath string, err error) {
+	args := configMock.Called(util, packageName, version, output)
+	return args.String(0), args.Error(1)
+}
+
+func (configMock *MockedConfigurePackageManager) validateInput(context context.T,
+	input *ConfigurePackagePluginInput) (valid bool, err error) {
+	args := configMock.Called(input)
+	return args.Bool(0), args.Error(1)
+}
+
+func (configMock *MockedConfigurePackageManager) getVersionToInstall(context context.T,
+	input *ConfigurePackagePluginInput,
+	util configureUtil) (version string, installedVersion string, err error) {
+	args := configMock.Called(input, util)
+	ver := args.String(0)
+	if strings.HasPrefix(ver, "Wait") {
+		configMock.waitChan <- true
+		_ = <-configMock.waitChan
+		ver = strings.TrimLeft(ver, "Wait")
+	}
+	return ver, args.String(1), args.Error(2)
+}
+
+func (configMock *MockedConfigurePackageManager) getVersionToUninstall(context context.T,
+	input *ConfigurePackagePluginInput,
+	util configureUtil) (version string, err error) {
+	args := configMock.Called(input, util)
+	ver := args.String(0)
+	if strings.HasPrefix(ver, "Wait") {
+		configMock.waitChan <- true
+		_ = <-configMock.waitChan
+		ver = strings.TrimLeft(ver, "Wait")
+	}
+	return ver, args.Error(1)
+}
+
+func (configMock *MockedConfigurePackageManager) setMark(context context.T, packageName string, version string) error {
+	args := configMock.Called(packageName, version)
+	return args.Error(0)
+}
+
+func (configMock *MockedConfigurePackageManager) clearMark(context context.T, packageName string) {
+	configMock.Called(packageName)
+}
+
+func (configMock *MockedConfigurePackageManager) ensurePackage(context context.T,
+	util configureUtil,
+	packageName string,
+	version string,
+	output *ConfigurePackagePluginOutput) (manifest *PackageManifest, err error) {
+	args := configMock.Called(util, packageName, version, output)
+	return args.Get(0).(*PackageManifest), args.Error(1)
+}
+
+func (configMock *MockedConfigurePackageManager) runUninstallPackagePre(context context.T,
+	packageName string,
+	version string,
+	output *ConfigurePackagePluginOutput) (status contracts.ResultStatus, err error) {
+	args := configMock.Called(packageName, version, output)
+	return args.Get(0).(contracts.ResultStatus), args.Error(1)
+}
+
+func (configMock *MockedConfigurePackageManager) runInstallPackage(context context.T,
+	packageName string,
+	version string,
+	output *ConfigurePackagePluginOutput) (status contracts.ResultStatus, err error) {
+	args := configMock.Called(packageName, version, output)
+	return args.Get(0).(contracts.ResultStatus), args.Error(1)
+}
+
+func (configMock *MockedConfigurePackageManager) runUninstallPackagePost(context context.T,
+	packageName string,
+	version string,
+	output *ConfigurePackagePluginOutput) (status contracts.ResultStatus, err error) {
+	args := configMock.Called(packageName, version, output)
+	return args.Get(0).(contracts.ResultStatus), args.Error(1)
+}
+
+func ConfigPackageSuccessMock(downloadFilePath string,
+	versionToActOn string,
+	versionCurrentlyInstalled string,
+	packageManifest *PackageManifest,
+	installResult contracts.ResultStatus,
+	uninstallPreResult contracts.ResultStatus,
+	uninstallPostResult contracts.ResultStatus) *MockedConfigurePackageManager {
+	mockConfig := MockedConfigurePackageManager{}
+	mockConfig.On("downloadPackage", mock.Anything, mock.Anything, mock.Anything, mock.Anything, mock.Anything).Return(downloadFilePath, nil)
+	mockConfig.On("validateInput", mock.Anything, mock.Anything).Return(true, nil)
+	mockConfig.On("getVersionToInstall", mock.Anything, mock.Anything, mock.Anything).Return(versionToActOn, versionCurrentlyInstalled, nil)
+	mockConfig.On("getVersionToUninstall", mock.Anything, mock.Anything, mock.Anything).Return(versionToActOn, nil)
+	mockConfig.On("setMark", mock.Anything, mock.Anything, mock.Anything).Return(nil)
+	mockConfig.On("clearMark", mock.Anything, mock.Anything)
+	mockConfig.On("ensurePackage", mock.Anything, mock.Anything, mock.Anything, mock.Anything, mock.Anything).Return(packageManifest, nil)
+	mockConfig.On("runUninstallPackagePre", mock.Anything, mock.Anything, mock.Anything, mock.Anything).Return(uninstallPreResult, nil)
+	mockConfig.On("runInstallPackage", mock.Anything, mock.Anything, mock.Anything, mock.Anything).Return(installResult, nil)
+	mockConfig.On("runUninstallPackagePost", mock.Anything, mock.Anything, mock.Anything, mock.Anything).Return(uninstallPostResult, nil)
+	mockConfig.waitChan = make(chan bool)
+	return &mockConfig
 }

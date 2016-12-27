@@ -41,22 +41,16 @@ import (
 // Plugin is the type for the configurepackage plugin.
 type Plugin struct {
 	pluginutil.DefaultPlugin
-	context          context.T
-	runner           runpluginutil.PluginRunner
-	orchestrationDir string
-	s3Bucket         string
-	s3Prefix         string
-	messageID        string
-	documentID       string
 }
 
 // ConfigurePackagePluginInput represents one set of commands executed by the ConfigurePackage plugin.
 type ConfigurePackagePluginInput struct {
 	contracts.PluginInput
-	Name    string `json:"name"`
-	Version string `json:"version"`
-	Action  string `json:"action"`
-	Source  string `json:"source"`
+	Name       string `json:"name"`
+	Version    string `json:"version"`
+	Action     string `json:"action"`
+	Source     string `json:"source"`
+	Repository string `json:"repository"`
 }
 
 // ConfigurePackagePluginOutput represents the output of the plugin.
@@ -102,37 +96,59 @@ func NewPlugin(pluginConfig pluginutil.PluginConfig) (*Plugin, error) {
 	return &plugin, nil
 }
 
-type configureManager struct{}
+type configurePackage struct {
+	contracts.Configuration
+	runner runpluginutil.PluginRunner
+}
 
-type pluginHelper interface {
-	downloadPackage(log log.T,
+type configurePackageManager interface {
+	downloadPackage(context context.T,
 		util configureUtil,
 		packageName string,
 		version string,
-		output *ConfigurePackagePluginOutput,
-		context *updateutil.InstanceContext) (filePath string, err error)
+		output *ConfigurePackagePluginOutput) (filePath string, err error)
 
-	validateInput(input *ConfigurePackagePluginInput) (valid bool, err error)
+	validateInput(context context.T, input *ConfigurePackagePluginInput) (valid bool, err error)
 
-	getVersionToInstall(log log.T,
-		input *ConfigurePackagePluginInput,
+	getVersionToInstall(context context.T, input *ConfigurePackagePluginInput, util configureUtil) (version string, installedVersion string, err error)
+
+	getVersionToUninstall(context context.T, input *ConfigurePackagePluginInput, util configureUtil) (version string, err error)
+
+	setMark(context context.T, packageName string, version string) error
+
+	clearMark(context context.T, packageName string)
+
+	ensurePackage(context context.T,
 		util configureUtil,
-		context *updateutil.InstanceContext) (version string, installedVersion string, err error)
+		packageName string,
+		version string,
+		output *ConfigurePackagePluginOutput) (manifest *PackageManifest, err error)
 
-	getVersionToUninstall(log log.T,
-		input *ConfigurePackagePluginInput,
-		util configureUtil,
-		context *updateutil.InstanceContext) (version string, err error)
+	runUninstallPackagePre(context context.T,
+		packageName string,
+		version string,
+		output *ConfigurePackagePluginOutput) (status contracts.ResultStatus, err error)
+
+	runInstallPackage(context context.T,
+		packageName string,
+		version string,
+		output *ConfigurePackagePluginOutput) (status contracts.ResultStatus, err error)
+
+	runUninstallPackagePost(context context.T,
+		packageName string,
+		version string,
+		output *ConfigurePackagePluginOutput) (status contracts.ResultStatus, err error)
 }
 
 // runConfigurePackage downloads the package and performs specified action
 func runConfigurePackage(
 	p *Plugin,
-	log log.T,
-	manager pluginHelper,
-	util configureUtil,
+	context context.T,
+	manager configurePackageManager,
 	instanceContext *updateutil.InstanceContext,
 	rawPluginInput interface{}) (output ConfigurePackagePluginOutput) {
+	log := context.Log()
+
 	var input ConfigurePackagePluginInput
 	var err error
 	if err = jsonutil.Remarshal(rawPluginInput, &input); err != nil {
@@ -140,7 +156,7 @@ func runConfigurePackage(
 		return
 	}
 
-	if valid, err := manager.validateInput(&input); !valid {
+	if valid, err := manager.validateInput(context, &input); !valid {
 		output.MarkAsFailed(log, fmt.Errorf("invalid input: %v", err))
 		return
 	}
@@ -153,10 +169,12 @@ func runConfigurePackage(
 	}
 	defer unlockPackage(input.Name)
 
+	configUtil := NewUtil(instanceContext, input.Repository)
+
 	switch input.Action {
 	case InstallAction:
 		// get version information
-		version, installedVersion, versionErr := manager.getVersionToInstall(log, &input, util, instanceContext)
+		version, installedVersion, versionErr := manager.getVersionToInstall(context, &input, configUtil)
 		if versionErr != nil {
 			output.MarkAsFailed(log, fmt.Errorf("unable to determine version to install: %v", versionErr))
 			return
@@ -171,14 +189,14 @@ func runConfigurePackage(
 		}
 
 		// ensure manifest file and package
-		_, ensureErr := ensurePackage(log, manager, util, input.Name, version, &output, instanceContext)
+		_, ensureErr := manager.ensurePackage(context, configUtil, input.Name, version, &output)
 		if ensureErr != nil {
 			output.MarkAsFailed(log, fmt.Errorf("unable to obtain package: %v", ensureErr))
 			return
 		}
 
 		// set installing flag for version
-		if markErr := markInstallingPackage(input.Name, version); markErr != nil {
+		if markErr := manager.setMark(context, input.Name, version); markErr != nil {
 			output.MarkAsFailed(log, fmt.Errorf("unable to mark package installing: %v", markErr))
 			return
 		}
@@ -189,16 +207,14 @@ func runConfigurePackage(
 			// NOTE: if source is specified on an install and we need to redownload the package for the
 			// currently installed version because it isn't valid on disk, we will pull from the source URI
 			// even though that may or may not be the package that installed it - it is our only decent option
-			_, ensureErr := ensurePackage(log, manager, util, input.Name, installedVersion, &output, instanceContext)
+			_, ensureErr := manager.ensurePackage(context, configUtil, input.Name, installedVersion, &output)
 			if ensureErr != nil {
 				output.AppendError(log, "unable to obtain package: %v", ensureErr)
 			} else {
-				result, err := runUninstallPackagePre(p,
+				result, err := manager.runUninstallPackagePre(context,
 					input.Name,
 					installedVersion,
-					&output,
-					log,
-					instanceContext)
+					&output)
 				if err != nil {
 					output.AppendError(log, "failed to uninstall currently installed version of package: %v", err)
 				} else {
@@ -212,16 +228,13 @@ func runConfigurePackage(
 		}
 
 		// defer clearing installing
-		defer unmarkInstallingPackage(input.Name)
+		defer manager.clearMark(context, input.Name)
 
 		// install version
-		result, err := runInstallPackage(p,
+		result, err := manager.runInstallPackage(context,
 			input.Name,
 			version,
-			&output,
-			manager,
-			log,
-			instanceContext)
+			&output)
 		if err != nil {
 			output.MarkAsFailed(log, fmt.Errorf("failed to install package: %v", err))
 		} else if result == contracts.ResultStatusSuccessAndReboot || result == contracts.ResultStatusPassedAndReboot {
@@ -236,12 +249,10 @@ func runConfigurePackage(
 
 		// uninstall post action
 		if installedVersion != "" {
-			_, err := runUninstallPackagePost(p,
+			_, err := manager.runUninstallPackagePost(context,
 				input.Name,
 				installedVersion,
-				&output,
-				log,
-				instanceContext)
+				&output)
 			if err != nil {
 				output.AppendError(log, "failed to clean up currently installed version of package: %v", err)
 			}
@@ -249,35 +260,31 @@ func runConfigurePackage(
 
 	case UninstallAction:
 		// get version information
-		version, versionErr := manager.getVersionToUninstall(log, &input, util, instanceContext)
+		version, versionErr := manager.getVersionToUninstall(context, &input, configUtil)
 		if versionErr != nil || version == "" {
 			output.MarkAsFailed(log, fmt.Errorf("unable to determine version to uninstall: %v", versionErr))
 			return
 		}
 
 		// ensure manifest file and package
-		_, ensureErr := ensurePackage(log, manager, util, input.Name, version, &output, instanceContext)
+		_, ensureErr := manager.ensurePackage(context, configUtil, input.Name, version, &output)
 		if ensureErr != nil {
 			output.MarkAsFailed(log, fmt.Errorf("unable to obtain package: %v", ensureErr))
 			return
 		}
 		var resultPre, resultPost contracts.ResultStatus
-		resultPre, err = runUninstallPackagePre(p,
+		resultPre, err = manager.runUninstallPackagePre(context,
 			input.Name,
 			version,
-			&output,
-			log,
-			instanceContext)
+			&output)
 		if err != nil {
 			output.MarkAsFailed(log, fmt.Errorf("failed to uninstall package: %v", err))
 			return
 		}
-		resultPost, err = runUninstallPackagePost(p,
+		resultPost, err = manager.runUninstallPackagePost(context,
 			input.Name,
 			version,
-			&output,
-			log,
-			instanceContext)
+			&output)
 		if err != nil {
 			output.MarkAsFailed(log, fmt.Errorf("failed to uninstall package: %v", err))
 			return
@@ -301,13 +308,11 @@ func runConfigurePackage(
 }
 
 // ensurePackage validates local copy of the manifest and package and downloads if needed
-func ensurePackage(log log.T,
-	manager pluginHelper,
+func (m *configurePackage) ensurePackage(context context.T,
 	util configureUtil,
 	packageName string,
 	version string,
-	output *ConfigurePackagePluginOutput,
-	context *updateutil.InstanceContext) (manifest *PackageManifest, err error) {
+	output *ConfigurePackagePluginOutput) (manifest *PackageManifest, err error) {
 
 	// manifest to download
 	manifestName := getManifestName(packageName)
@@ -317,7 +322,7 @@ func ensurePackage(log log.T,
 
 	// if we already have a valid manifest, return it
 	if exist := filesysdep.Exists(localManifestName); exist {
-		if manifest, err = parsePackageManifest(log, localManifestName); err == nil {
+		if manifest, err = parsePackageManifest(context.Log(), localManifestName); err == nil {
 			// TODO:MF: consider verifying name, version, platform, arch in parsed manifest
 			// TODO:MF: ensure the local package is valid before we return
 			return
@@ -328,7 +333,7 @@ func ensurePackage(log log.T,
 
 	// download package
 	var filePath string
-	if filePath, err = manager.downloadPackage(log, util, packageName, version, output, context); err != nil {
+	if filePath, err = m.downloadPackage(context, util, packageName, version, output); err != nil {
 		return
 	}
 
@@ -345,7 +350,7 @@ func ensurePackage(log log.T,
 		return
 	}
 
-	manifest, manifestErr := parsePackageManifest(log, localManifestName)
+	manifest, manifestErr := parsePackageManifest(context.Log(), localManifestName)
 	if manifestErr != nil {
 		err = fmt.Errorf("manifest is not valid for package %v, %v", filePath, manifestErr.Error())
 		return
@@ -355,7 +360,7 @@ func ensurePackage(log log.T,
 }
 
 // validateInput ensures the plugin input matches the defined schema
-func (m *configureManager) validateInput(input *ConfigurePackagePluginInput) (valid bool, err error) {
+func (m *configurePackage) validateInput(context context.T, input *ConfigurePackagePluginInput) (valid bool, err error) {
 	// source not yet supported
 	if input.Source != "" {
 		return false, errors.New("source parameter is not supported in this version")
@@ -377,20 +382,24 @@ func (m *configureManager) validateInput(input *ConfigurePackagePluginInput) (va
 		}
 	}
 
+	// dump any unsupported value for Repository
+	if input.Repository != "beta" && input.Repository != "gamma" {
+		input.Repository = ""
+	}
+
 	return true, nil
 }
 
 // getVersionToInstall decides which version to install and whether there is an existing version (that is not in the process of installing)
-func (m *configureManager) getVersionToInstall(log log.T,
+func (m *configurePackage) getVersionToInstall(context context.T,
 	input *ConfigurePackagePluginInput,
-	util configureUtil,
-	context *updateutil.InstanceContext) (version string, installedVersion string, err error) {
+	util configureUtil) (version string, installedVersion string, err error) {
 	installedVersion = util.GetCurrentVersion(input.Name)
 
 	if input.Version != "" {
 		version = input.Version
 	} else {
-		if version, err = util.GetLatestVersion(log, input.Name, context); err != nil {
+		if version, err = util.GetLatestVersion(context.Log(), input.Name); err != nil {
 			return
 		}
 	}
@@ -398,34 +407,44 @@ func (m *configureManager) getVersionToInstall(log log.T,
 }
 
 // getVersionToUninstall decides which version to uninstall
-func (m *configureManager) getVersionToUninstall(log log.T,
+func (m *configurePackage) getVersionToUninstall(context context.T,
 	input *ConfigurePackagePluginInput,
-	util configureUtil,
-	context *updateutil.InstanceContext) (version string, err error) {
+	util configureUtil) (version string, err error) {
 	if input.Version != "" {
 		version = input.Version
 	} else if installedVersion := util.GetCurrentVersion(input.Name); installedVersion != "" {
 		version = installedVersion
 	} else {
-		version, err = util.GetLatestVersion(log, input.Name, context)
+		version, err = util.GetLatestVersion(context.Log(), input.Name)
 	}
 	return
 }
 
+// setMark marks a particular version as installing so that if we uninstall and reboot we will know
+// to continue with the install even though the package is already present
+func (configurePackage) setMark(context context.T, packageName string, version string) error {
+	return markInstallingPackage(packageName, version)
+}
+
+// clearMark removes the file marking a package as being in the process of installation
+func (configurePackage) clearMark(context context.T, packageName string) {
+	unmarkInstallingPackage(packageName)
+}
+
 // downloadPackage downloads the installation package from s3 bucket or source URI and uncompresses it
-func (m *configureManager) downloadPackage(log log.T,
+func (m *configurePackage) downloadPackage(context context.T,
 	util configureUtil,
 	packageName string,
 	version string,
-	output *ConfigurePackagePluginOutput,
-	context *updateutil.InstanceContext) (filePath string, err error) {
+	output *ConfigurePackagePluginOutput) (filePath string, err error) {
 
+	log := context.Log()
 	//TODO:OFFLINE: build packageLocation from source URI
 	//   We should probably support both a URI to a "folder" that gets a filename tacked onto the end
 	//   and a full path to a compressed package file
 
 	// path to package
-	packageLocation := getS3Location(packageName, version, context)
+	packageLocation := util.GetS3Location(packageName, version)
 
 	// path to download destination
 	packageDestination, createErr := util.CreatePackageFolder(packageName, version)
@@ -458,46 +477,36 @@ func (m *configureManager) downloadPackage(log log.T,
 }
 
 // runInstallPackage executes the install script for the specific version of a package.
-func runInstallPackage(p *Plugin,
+func (m *configurePackage) runInstallPackage(context context.T,
 	packageName string,
 	version string,
-	output *ConfigurePackagePluginOutput,
-	manager pluginHelper,
-	log log.T,
-	instanceContext *updateutil.InstanceContext,
-) (status contracts.ResultStatus, err error) {
+	output *ConfigurePackagePluginOutput) (status contracts.ResultStatus, err error) {
 	status = contracts.ResultStatusSuccess
 
 	directory := filepath.Join(appconfig.PackageRoot, packageName, version)
-	if _, status, err = executeAction(p, "install", packageName, version, log, output, directory); err != nil {
+	if _, status, err = m.executeAction(context, "install", packageName, version, output, directory); err != nil {
 		return status, err
 	}
 	return
 }
 
 // runUninstallPackagePre executes the uninstall script for the specific version of a package.
-func runUninstallPackagePre(p *Plugin,
+func (m *configurePackage) runUninstallPackagePre(context context.T,
 	packageName string,
 	version string,
-	output *ConfigurePackagePluginOutput,
-	log log.T,
-	context *updateutil.InstanceContext,
-) (status contracts.ResultStatus, err error) {
+	output *ConfigurePackagePluginOutput) (status contracts.ResultStatus, err error) {
 	directory := filepath.Join(appconfig.PackageRoot, packageName, version)
-	if _, status, err = executeAction(p, "uninstall", packageName, version, log, output, directory); err != nil {
+	if _, status, err = m.executeAction(context, "uninstall", packageName, version, output, directory); err != nil {
 		return status, err
 	}
 	return contracts.ResultStatusSuccess, nil
 }
 
 // runUninstallPackagePost performs post uninstall actions, like deleting the package folder
-func runUninstallPackagePost(p *Plugin,
+func (m *configurePackage) runUninstallPackagePost(context context.T,
 	packageName string,
 	version string,
-	output *ConfigurePackagePluginOutput,
-	log log.T,
-	context *updateutil.InstanceContext,
-) (status contracts.ResultStatus, err error) {
+	output *ConfigurePackagePluginOutput) (status contracts.ResultStatus, err error) {
 	directory := filepath.Join(appconfig.PackageRoot, packageName, version)
 	if err = filesysdep.RemoveAll(directory); err != nil {
 		return contracts.ResultStatusFailed, fmt.Errorf("failed to delete directory %v due to %v", directory, err)
@@ -506,34 +515,33 @@ func runUninstallPackagePost(p *Plugin,
 }
 
 // executeAction executes a command document as a sub-document of the current command and returns the result
-func executeAction(p *Plugin,
+func (m *configurePackage) executeAction(context context.T,
 	actionName string,
 	packageName string,
 	version string,
-	log log.T,
 	output *ConfigurePackagePluginOutput,
-	executeDirectory string,
-) (actionExists bool, status contracts.ResultStatus, err error) {
+	executeDirectory string) (actionExists bool, status contracts.ResultStatus, err error) {
 	status = contracts.ResultStatusSuccess
 	err = nil
 	fileName := fmt.Sprintf("%v.json", actionName)
 	fileLocation := path.Join(executeDirectory, fileName)
 	actionExists = filesysdep.Exists(fileLocation)
 
+	log := context.Log()
 	if actionExists {
 		log.Infof("Initiating %v %v %v", packageName, version, actionName)
 		file, err := filesysdep.ReadFile(fileLocation)
 		if err != nil {
 			return true, contracts.ResultStatusFailed, err
 		}
-		pluginsInfo, err := execdep.ParseDocument(p, file, p.orchestrationDir, p.s3Bucket, p.s3Prefix, p.messageID, p.documentID, executeDirectory)
+		pluginsInfo, err := execdep.ParseDocument(context, file, m.OrchestrationDirectory, m.OutputS3BucketName, m.OutputS3KeyPrefix, m.MessageId, m.BookKeepingFileName, executeDirectory)
 		if err != nil {
 			return true, contracts.ResultStatusFailed, err
 		}
 		if len(pluginsInfo) == 0 {
 			return true, contracts.ResultStatusFailed, fmt.Errorf("%v contained no work and may be malformed", fileName)
 		}
-		pluginOutputs := execdep.ExecuteDocument(p, pluginsInfo, p.documentID, times.ToIso8601UTC(time.Now()))
+		pluginOutputs := execdep.ExecuteDocument(m.runner, context, pluginsInfo, m.BookKeepingFileName, times.ToIso8601UTC(time.Now()))
 		if pluginOutputs == nil {
 			return true, contracts.ResultStatusFailed, errors.New("No output from executing install document (install.json)")
 		}
@@ -557,7 +565,7 @@ func executeAction(p *Plugin,
 }
 
 // getInstanceContext uses the updateUtil to return an instance context
-func getInstanceContext(log log.T) (context *updateutil.InstanceContext, err error) {
+func getInstanceContext(log log.T) (instanceContext *updateutil.InstanceContext, err error) {
 	updateUtil := new(updateutil.Utility)
 	return updateUtil.CreateInstanceContext(log)
 }
@@ -568,17 +576,8 @@ var runConfig = runConfigurePackage
 // Execute runs multiple sets of commands and returns their outputs.
 // res.Output will contain a slice of RunCommandPluginOutput.
 func (p *Plugin) Execute(context context.T, config contracts.Configuration, cancelFlag task.CancelFlag, subDocumentRunner runpluginutil.PluginRunner) (res contracts.PluginResult) {
-	p.context = context
-	p.orchestrationDir = config.OrchestrationDirectory
-	p.s3Bucket = config.OutputS3BucketName
-	p.s3Prefix = config.OutputS3KeyPrefix
-	p.messageID = config.MessageId
-	p.documentID = config.BookKeepingFileName
-	p.runner = subDocumentRunner
 	log := context.Log()
 	log.Info("RunCommand started with configuration ", config)
-	util := new(configureUtilImp)
-	manager := new(configureManager)
 
 	res.StartDateTime = time.Now()
 	defer func() { res.EndDateTime = time.Now() }()
@@ -592,6 +591,17 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 	}
 
 	out := make([]ConfigurePackagePluginOutput, len(properties))
+
+	instanceContext, err := getContext(log)
+	if err != nil {
+		for _, output := range out {
+			output.MarkAsFailed(log,
+				fmt.Errorf("unable to create instance context: %v", err))
+		}
+		return
+	}
+	manager := &configurePackage{Configuration: config, runner: subDocumentRunner}
+
 	for i, prop := range properties {
 		// check if a reboot has been requested
 		if rebooter.RebootRequested() {
@@ -611,17 +621,9 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 			break
 		}
 
-		instanceContext, err := getContext(log)
-		if err != nil {
-			out[i].MarkAsFailed(log,
-				fmt.Errorf("unable to create instance context: %v", err))
-			return
-		}
-
 		out[i] = runConfig(p,
-			log,
+			context,
 			manager,
-			util,
 			instanceContext,
 			prop)
 	}
@@ -633,17 +635,32 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 		res.Output = out[0].String()
 		res.StandardOutput = contracts.TruncateOutput(out[0].Stdout, "", 24000)
 		res.StandardError = contracts.TruncateOutput(out[0].Stderr, "", 8000)
-		if p.orchestrationDir != "" {
+		if config.OrchestrationDirectory != "" {
 			useTemp := false
-			outFile := filepath.Join(p.orchestrationDir, p.StdoutFileName)
-			if err := filesysdep.WriteFile(outFile, out[0].Stdout); err != nil {
-				out[0].AppendError(log, "Error saving stdout: %v", err.Error())
+			outFile := filepath.Join(config.OrchestrationDirectory, p.StdoutFileName)
+			// create orchestration dir if needed
+			if err := filesysdep.MakeDirExecute(config.OrchestrationDirectory); err != nil {
+				out[0].AppendError(log, "Failed to create orchestrationDir directory for log files")
+			} else {
+				if err := filesysdep.WriteFile(outFile, out[0].Stdout); err != nil {
+					log.Debugf("Error writing to %v", outFile)
+					out[0].AppendError(log, "Error saving stdout: %v", err.Error())
+				}
+				errFile := filepath.Join(config.OrchestrationDirectory, p.StderrFileName)
+				if err := filesysdep.WriteFile(errFile, out[0].Stderr); err != nil {
+					log.Debugf("Error writing to %v", errFile)
+					out[0].AppendError(log, "Error saving stderr: %v", err.Error())
+				}
 			}
-			errFile := filepath.Join(p.orchestrationDir, p.StderrFileName)
-			if err := filesysdep.WriteFile(errFile, out[0].Stderr); err != nil {
-				out[0].AppendError(log, "Error saving stderr: %v", err.Error())
-			}
-			uploadErrs := p.UploadOutputToS3Bucket(log, config.PluginID, p.orchestrationDir, p.s3Bucket, p.s3Prefix, useTemp, p.orchestrationDir, out[0].Stdout, out[0].Stderr)
+			uploadErrs := p.UploadOutputToS3Bucket(log,
+				config.PluginID,
+				config.OrchestrationDirectory,
+				config.OutputS3BucketName,
+				config.OutputS3KeyPrefix,
+				useTemp,
+				config.OrchestrationDirectory,
+				out[0].Stdout,
+				out[0].Stderr)
 			for _, uploadErr := range uploadErrs {
 				out[0].AppendError(log, uploadErr)
 			}

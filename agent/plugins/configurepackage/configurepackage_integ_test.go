@@ -1,5 +1,3 @@
-// +build integration
-
 // Copyright 2016 Amazon.com, Inc. or its affiliates. All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License"). You may not
@@ -22,9 +20,14 @@ import (
 	"testing"
 
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
+	"github.com/aws/amazon-ssm-agent/agent/framework/runpluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/statemanager/model"
 	"github.com/stretchr/testify/assert"
 )
+
+func createInstance() configurePackageManager {
+	return &configurePackage{Configuration: contracts.Configuration{}, runner: runpluginutil.PluginRunner{}}
+}
 
 func TestConfigurePackage(t *testing.T) {
 	stubs := setSuccessStubs()
@@ -33,15 +36,13 @@ func TestConfigurePackage(t *testing.T) {
 	plugin := &Plugin{}
 	pluginInformation := createStubPluginInputInstall()
 
-	manager := &configureManager{}
-	util := &configureUtilImp{}
+	manager := createInstance()
 	instanceContext := createStubInstanceContext()
 
 	output := runConfigurePackage(
 		plugin,
-		logger,
+		contextMock,
 		manager,
-		util,
 		instanceContext,
 		pluginInformation)
 
@@ -56,15 +57,13 @@ func TestConfigurePackage_InvalidRawInput(t *testing.T) {
 	// string value will fail the Remarshal as it's not ConfigurePackagePluginInput
 	pluginInformation := "invalid value"
 
-	manager := &configureManager{}
-	util := &configureUtilImp{}
+	manager := createInstance()
 	instanceContext := createStubInstanceContext()
 
 	result := runConfigurePackage(
 		plugin,
-		logger,
+		contextMock,
 		manager,
-		util,
 		instanceContext,
 		pluginInformation)
 
@@ -78,15 +77,13 @@ func TestConfigurePackage_InvalidInput(t *testing.T) {
 	plugin := &Plugin{}
 	pluginInformation := createStubInvalidPluginInput()
 
-	manager := &configureManager{}
-	util := &configureUtilImp{}
+	manager := createInstance()
 	instanceContext := createStubInstanceContext()
 
 	result := runConfigurePackage(
 		plugin,
-		logger,
+		contextMock,
 		manager,
-		util,
 		instanceContext,
 		pluginInformation)
 
@@ -105,15 +102,13 @@ func TestConfigurePackage_DownloadFailed(t *testing.T) {
 	plugin := &Plugin{}
 	pluginInformation := createStubPluginInputInstall()
 
-	manager := &configureManager{}
-	util := &configureUtilImp{}
+	manager := createInstance()
 	instanceContext := createStubInstanceContext()
 
 	output := runConfigurePackage(
 		plugin,
-		logger,
+		contextMock,
 		manager,
-		util,
 		instanceContext,
 		pluginInformation)
 
@@ -133,15 +128,13 @@ func TestInstallPackage_ExtractFailed(t *testing.T) {
 	plugin := &Plugin{}
 	pluginInformation := createStubPluginInputInstall()
 
-	manager := &configureManager{}
-	util := &configureUtilImp{}
+	manager := createInstance()
 	instanceContext := createStubInstanceContext()
 
 	output := runConfigurePackage(
 		plugin,
-		logger,
+		contextMock,
 		manager,
-		util,
 		instanceContext,
 		pluginInformation)
 
@@ -167,15 +160,13 @@ func TestInstallPackage_DeleteFailed(t *testing.T) {
 	plugin := &Plugin{}
 	pluginInformation := createStubPluginInputInstall()
 
-	manager := &configureManager{}
-	util := &configureUtilImp{}
+	manager := createInstance()
 	instanceContext := createStubInstanceContext()
 
 	output := runConfigurePackage(
 		plugin,
-		logger,
+		contextMock,
 		manager,
-		util,
 		instanceContext,
 		pluginInformation)
 
@@ -191,15 +182,13 @@ func TestUninstallPackage_DoesNotExist(t *testing.T) {
 	plugin := &Plugin{}
 	pluginInformation := createStubPluginInputUninstallLatest()
 
-	manager := &configureManager{}
-	util := &configureUtilImp{}
+	manager := createInstance()
 	instanceContext := createStubInstanceContext()
 
 	output := runConfigurePackage(
 		plugin,
-		logger,
+		contextMock,
 		manager,
-		util,
 		instanceContext,
 		pluginInformation)
 
@@ -220,15 +209,13 @@ func TestUninstallPackage_RemovalFailed(t *testing.T) {
 	plugin := &Plugin{}
 	pluginInformation := createStubPluginInputUninstall()
 
-	manager := &configureManager{}
-	util := &configureUtilImp{}
+	manager := createInstance()
 	instanceContext := createStubInstanceContext()
 
 	output := runConfigurePackage(
 		plugin,
-		logger,
+		contextMock,
 		manager,
-		util,
 		instanceContext,
 		pluginInformation)
 
@@ -249,15 +236,13 @@ func TestConfigurePackage_ExecuteError(t *testing.T) {
 	plugin := &Plugin{}
 	pluginInformation := createStubPluginInputInstall()
 
-	manager := &configureManager{}
-	util := &configureUtilImp{}
+	manager := createInstance()
 	instanceContext := createStubInstanceContext()
 
 	output := runConfigurePackage(
 		plugin,
-		logger,
+		contextMock,
 		manager,
-		util,
 		instanceContext,
 		pluginInformation)
 
