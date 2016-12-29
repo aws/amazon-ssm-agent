@@ -135,7 +135,7 @@ func (p *Plugin) runCommandsRawInput(log log.T, rawPluginInput interface{}, orch
 }
 
 // runCommands executes one set of commands and returns their output.
-func (p *Plugin) runCommands(log log.T, pluginInput RunCommandPluginInput, orchestrationDirectory string, cancelFlag task.CancelFlag, outputS3BucketName string, outputS3KeyPrefix string) (out contracts.PluginOutput) {
+func (p *Plugin) runCommands(log log.T, pluginInput RunScriptPluginInput, orchestrationDirectory string, cancelFlag task.CancelFlag, outputS3BucketName string, outputS3KeyPrefix string) (out contracts.PluginOutput) {
 	var err error
 
 	workingDir := pluginInput.WorkingDirectory
