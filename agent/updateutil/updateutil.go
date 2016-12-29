@@ -336,8 +336,8 @@ func (util *Utility) ExeCommandOutput(
 	parameters []string,
 	workingDir string,
 	outputRoot string,
-	stdOut string,
-	stdErr string,
+	stdOutFileName string,
+	stdErrFileName string,
 	usePlatformSpecificCommand bool) (output string, err error) {
 
 	parts := append([]string{cmd}, parameters...) //strings.Fields(cmd)
@@ -350,17 +350,21 @@ func (util *Utility) ExeCommandOutput(
 
 	command := execCommand(tempCmd[0], tempCmd[1:]...)
 	command.Dir = workingDir
-	stdoutWriter, stderrWriter, exeErr := setExeOutErr(outputRoot, stdOut, stdErr)
+	stdoutWriter, stderrWriter, exeErr := setExeOutErr(outputRoot, stdOutFileName, stdErrFileName)
 	if exeErr != nil {
 		return output, exeErr
 	}
 	defer stdoutWriter.Close()
 	defer stderrWriter.Close()
 
+	// Don't set command.Stdout - we're going to return it instead of writing it
 	command.Stderr = stderrWriter
 
+	// Run the command and return its output
 	var out []byte
 	out, err = cmdOutput(command)
+	// Write the returned output so that we can upload it if needed
+	stdoutWriter.Write(out)
 	if err != nil {
 		return
 	}
@@ -511,16 +515,16 @@ func UpdateOutputDirectory(updateRoot string) string {
 	return filepath.Join(updateRoot, DefaultOutputFolder)
 }
 
-// UpdateStandOutPath returns stand output file path
-func UpdateStandOutPath(updateRoot string, fileName string) string {
+// UpdateStdOutPath returns stand output file path
+func UpdateStdOutPath(updateRoot string, fileName string) string {
 	if fileName == "" {
 		fileName = DefaultStandOut
 	}
 	return filepath.Join(UpdateOutputDirectory(updateRoot), fileName)
 }
 
-// UpdateStandErrPath returns stand error file path
-func UpdateStandErrPath(updateRoot string, fileName string) string {
+// UpdateStdErrPath returns stand error file path
+func UpdateStdErrPath(updateRoot string, fileName string) string {
 	if fileName == "" {
 		fileName = DefaultStandErr
 	}
@@ -563,25 +567,25 @@ func killProcessOnTimeout(log log.T, command *exec.Cmd, timer *time.Timer) {
 // setExeOutErr creates stderr and stdout file
 func setExeOutErr(
 	updaterRoot string,
-	stdOut string,
-	stdErr string) (stdoutWriter *os.File, stderrWriter *os.File, err error) {
+	stdOutFileName string,
+	stdErrFileName string) (stdoutWriter *os.File, stderrWriter *os.File, err error) {
 
 	if err = mkDirAll(UpdateOutputDirectory(updaterRoot), appconfig.ReadWriteExecuteAccess); err != nil {
 		return
 	}
 
-	stdOut = UpdateStandOutPath(updaterRoot, stdOut)
-	stdErr = UpdateStandErrPath(updaterRoot, stdErr)
+	stdOutPath := UpdateStdOutPath(updaterRoot, stdOutFileName)
+	stdErrPath := UpdateStdErrPath(updaterRoot, stdErrFileName)
 
 	// create stdout file
 	// Allow append so that if arrays of run command write to the same file, we keep appending to the file.
-	if stdoutWriter, err = openFile(stdOut, os.O_APPEND|os.O_WRONLY|os.O_CREATE, 0600); err != nil {
+	if stdoutWriter, err = openFile(stdOutPath, os.O_APPEND|os.O_WRONLY|os.O_CREATE, appconfig.ReadWriteAccess); err != nil {
 		return
 	}
 
 	// create stderr file
 	// Allow append so that if arrays of run command write to the same file, we keep appending to the file.
-	if stderrWriter, err = openFile(stdErr, os.O_APPEND|os.O_WRONLY|os.O_CREATE, 0600); err != nil {
+	if stderrWriter, err = openFile(stdErrPath, os.O_APPEND|os.O_WRONLY|os.O_CREATE, appconfig.ReadWriteAccess); err != nil {
 		return
 	}
 

@@ -39,11 +39,6 @@ type Plugin struct {
 	lrpm manager.T
 }
 
-// ConfigureDaemonPluginOutput represents the output of the plugin.
-type ConfigureDaemonPluginOutput struct {
-	contracts.PluginOutput
-}
-
 // NewPlugin returns lrpminvoker
 func NewPlugin(pluginConfig pluginutil.PluginConfig) (*Plugin, error) {
 	var plugin Plugin
@@ -72,7 +67,7 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 		return res
 	}
 
-	out := make([]ConfigureDaemonPluginOutput, len(properties))
+	out := make([]contracts.PluginOutput, len(properties))
 	for i, prop := range properties {
 		// check if a reboot has been requested
 		if rebooter.RebootRequested() {
@@ -81,12 +76,10 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 		}
 
 		if cancelFlag.ShutDown() {
-			out[i] = ConfigureDaemonPluginOutput{}
 			out[i].ExitCode = 1
 			out[i].Status = contracts.ResultStatusFailed
 			break
 		} else if cancelFlag.Canceled() {
-			out[i] = ConfigureDaemonPluginOutput{}
 			out[i].ExitCode = 1
 			out[i].Status = contracts.ResultStatusCancelled
 			break
@@ -100,8 +93,6 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 		res.Code = out[0].ExitCode
 		res.Status = out[0].Status
 		res.Output = out[0].String()
-		res.StandardOutput = contracts.TruncateOutput(out[0].Stdout, "", 24000)
-		res.StandardError = contracts.TruncateOutput(out[0].Stderr, "", 8000)
 	}
 
 	pluginutil.PersistPluginInformationToCurrent(log, config.PluginID, config, res)
@@ -115,7 +106,7 @@ func runConfigureDaemon(
 	rawPluginInput interface{},
 	orchestrationDir string,
 	daemonWorkingDir string,
-	cancelFlag task.CancelFlag) (output ConfigureDaemonPluginOutput) {
+	cancelFlag task.CancelFlag) (output contracts.PluginOutput) {
 	//log := context.Log()
 
 	// TODO:DAEMON: we're using the command line in a lot of places, we probably only need it in the rundaemon plugin or in the call to startplugin

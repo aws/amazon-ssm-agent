@@ -51,7 +51,7 @@ func getMsiApplicationMode(log log.T, pluginInput ApplicationPluginInput) (strin
 }
 
 // setMsiExecStatus sets the exit status and output to be returned to the user based on exit code
-func setMsiExecStatus(log log.T, pluginInput ApplicationPluginInput, cancelFlag task.CancelFlag, out *ApplicationPluginOutput) {
+func setMsiExecStatus(log log.T, pluginInput ApplicationPluginInput, cancelFlag task.CancelFlag, out *contracts.PluginOutput) {
 	out.Stdout = pluginInput.Source
 	out.Stderr = ""
 	out.Status = contracts.ResultStatusFailed

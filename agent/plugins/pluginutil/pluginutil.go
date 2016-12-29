@@ -104,6 +104,23 @@ type PluginConfig struct {
 	OutputTruncatedSuffix string
 }
 
+// StringPrefix returns the beginning part of a string, truncated to the given limit.
+func StringPrefix(input string, maxLength int, truncatedSuffix string) string {
+	// no need to truncate
+	if len(input) < maxLength {
+		return input
+	}
+
+	// truncate and add suffix
+	if maxLength > len(truncatedSuffix) {
+		pos := maxLength - len(truncatedSuffix)
+		return string(input[:pos]) + truncatedSuffix
+	}
+
+	// suffix longer than maxLength - return beginning of suffix
+	return truncatedSuffix[:maxLength]
+}
+
 // ReadPrefix returns the beginning data from a given Reader, truncated to the given limit.
 func ReadPrefix(input io.Reader, maxLength int, truncatedSuffix string) (out string, err error) {
 	// read up to maxLength bytes from input
@@ -112,21 +129,7 @@ func ReadPrefix(input io.Reader, maxLength int, truncatedSuffix string) (out str
 		return
 	}
 
-	// no need to truncate
-	if len(data) < maxLength {
-		out = string(data)
-		return
-	}
-
-	// truncate and add suffix
-	if maxLength > len(truncatedSuffix) {
-		pos := maxLength - len(truncatedSuffix)
-		out = string(data[:pos]) + truncatedSuffix
-		return
-	}
-
-	// suffix longer than maxLength - return beginning of suffix
-	out = truncatedSuffix[:maxLength]
+	out = StringPrefix(string(data), maxLength, truncatedSuffix)
 	return
 }
 

@@ -18,10 +18,11 @@ package configurecontainers
 import (
 	"errors"
 
+	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 )
 
-func runInstallCommands(log log.T, pluginInput ConfigureContainerPluginInput, orchestrationDirectory string) (out ConfigureContainerPluginOutput) {
+func runInstallCommands(log log.T, pluginInput ConfigureContainerPluginInput, orchestrationDirectory string) (out contracts.PluginOutput) {
 	//TODO Unix install
 
 	out.MarkAsFailed(log, errors.New("Configure Docker is not currently supported on unix"))
@@ -29,7 +30,7 @@ func runInstallCommands(log log.T, pluginInput ConfigureContainerPluginInput, or
 	return out
 }
 
-func runUninstallCommands(log log.T, pluginInput ConfigureContainerPluginInput, orchestrationDirectory string) (out ConfigureContainerPluginOutput) {
+func runUninstallCommands(log log.T, pluginInput ConfigureContainerPluginInput, orchestrationDirectory string) (out contracts.PluginOutput) {
 	//TODO Unix uninstall
 
 	out.MarkAsFailed(log, errors.New("Configure Docker is not currently supported on unix"))

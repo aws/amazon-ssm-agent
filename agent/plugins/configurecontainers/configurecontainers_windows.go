@@ -38,7 +38,7 @@ const (
 	DOCKER_INSTALLED_DIRECTORY  = DOCKER_UNCOMPRESS_DIRECTORY + "\\docker"
 )
 
-func runInstallCommands(log log.T, pluginInput ConfigureContainerPluginInput, orchestrationDirectory string) (out ConfigureContainerPluginOutput) {
+func runInstallCommands(log log.T, pluginInput ConfigureContainerPluginInput, orchestrationDirectory string) (out contracts.PluginOutput) {
 	var err error
 	var command string
 	var platformVersion string
@@ -319,7 +319,7 @@ func runInstallCommands(log log.T, pluginInput ConfigureContainerPluginInput, or
 	return out
 }
 
-func runUninstallCommands(log log.T, pluginInput ConfigureContainerPluginInput, orchestrationDirectory string) (out ConfigureContainerPluginOutput) {
+func runUninstallCommands(log log.T, pluginInput ConfigureContainerPluginInput, orchestrationDirectory string) (out contracts.PluginOutput) {
 	var err error
 	var command string
 	var parameters []string

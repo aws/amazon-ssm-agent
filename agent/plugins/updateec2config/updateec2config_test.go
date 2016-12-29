@@ -19,6 +19,7 @@ package updateec2config
 import (
 	"testing"
 
+	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/updateutil"
 	"github.com/stretchr/testify/assert"
@@ -45,7 +46,7 @@ func TestValidateUpdate(t *testing.T) {
 	manifest := createStubManifest()
 
 	manager := updateManager{}
-	out := UpdatePluginOutput{}
+	out := contracts.PluginOutput{}
 	fakeVersion := "1.0.0"
 
 	result, err := manager.validateUpdate(logger, plugin, context, manifest, &out, fakeVersion)
@@ -63,7 +64,7 @@ func TestValidateUpdate_GetLatestTargetVersionWhenTargetVersionIsEmpty(t *testin
 	manager := updateManager{}
 	// Setup, update target version to empty string
 	plugin.TargetVersion = ""
-	out := UpdatePluginOutput{}
+	out := contracts.PluginOutput{}
 	fakeVersion := "1.0.0"
 
 	result, err := manager.validateUpdate(logger, plugin, context, manifest, &out, fakeVersion)
@@ -82,7 +83,7 @@ func TestValidateUpdate_DowngradeVersion(t *testing.T) {
 	manifest := createStubManifest()
 
 	manager := updateManager{}
-	out := UpdatePluginOutput{}
+	out := contracts.PluginOutput{}
 
 	noNeedToUpdate, err := manager.validateUpdate(logger, plugin, context, manifest, &out, fakeVersion)
 
@@ -100,7 +101,7 @@ func TestValidateUpdate_UnsupportedTargetVersion(t *testing.T) {
 	manifest := createStubManifest()
 
 	manager := updateManager{}
-	out := UpdatePluginOutput{}
+	out := contracts.PluginOutput{}
 
 	result, err := manager.validateUpdate(logger, plugin, context, manifest, &out, fakeVersion)
 
@@ -117,7 +118,7 @@ func TestValidateUpdate_TargetVersionSameAsCurrentVersion(t *testing.T) {
 	manifest := createStubManifest()
 
 	manager := updateManager{}
-	out := UpdatePluginOutput{}
+	out := contracts.PluginOutput{}
 
 	noNeedToUpdate, err := manager.validateUpdate(logger, plugin, context, manifest, &out, plugin.TargetVersion)
 
@@ -133,7 +134,7 @@ func TestValidateUpdate_UnsupportedCurrentVersion(t *testing.T) {
 	manifest := createStubManifest()
 
 	manager := updateManager{}
-	out := UpdatePluginOutput{}
+	out := contracts.PluginOutput{}
 	result, err := manager.validateUpdate(logger, plugin, context, manifest, &out, "1.2.3.4")
 
 	assert.True(t, result)

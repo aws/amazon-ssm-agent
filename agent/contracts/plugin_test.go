@@ -14,8 +14,10 @@
 package contracts
 
 import (
+	"fmt"
 	"testing"
 
+	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -57,4 +59,44 @@ func TestTruncateOutput(t *testing.T) {
 		actual := TruncateOutput(test.stdout, test.stderr, test.capacity)
 		assert.Equal(t, test.expected, actual, "failed test case: %v", i)
 	}
+}
+
+var logger = log.NewMockLog()
+
+func TestSucceeded(t *testing.T) {
+	output := PluginOutput{}
+
+	output.MarkAsSucceeded()
+
+	assert.Equal(t, output.ExitCode, 0)
+	assert.Equal(t, output.Status, ResultStatusSuccess)
+}
+
+func TestFailed(t *testing.T) {
+	output := PluginOutput{}
+
+	output.MarkAsFailed(logger, fmt.Errorf("Error message"))
+
+	assert.Equal(t, output.ExitCode, 1)
+	assert.Equal(t, output.Status, ResultStatusFailed)
+	assert.Contains(t, output.Stderr, "Error message")
+}
+
+func TestPending(t *testing.T) {
+	output := PluginOutput{}
+
+	output.MarkAsInProgress()
+
+	assert.Equal(t, output.ExitCode, 0)
+	assert.Equal(t, output.Status, ResultStatusInProgress)
+}
+
+func TestAppendInfo(t *testing.T) {
+	output := PluginOutput{}
+
+	output.AppendInfo(logger, "Info message")
+	output.AppendInfo(logger, "Second entry")
+
+	assert.Contains(t, output.Stdout, "Info message")
+	assert.Contains(t, output.Stdout, "Second entry")
 }

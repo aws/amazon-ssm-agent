@@ -17,7 +17,6 @@ package refreshassociation
 import (
 	"bytes"
 	"fmt"
-	"io/ioutil"
 	"os"
 	"path/filepath"
 	"time"
@@ -53,14 +52,6 @@ type RefreshAssociationPluginInput struct {
 	contracts.PluginInput
 	ID             string
 	AssociationIds []string
-}
-
-// RefreshAssociationPluginOutput represents the output of the plugin
-type RefreshAssociationPluginOutput struct {
-	contracts.PluginOutput
-	orchestrationDir string
-	useTempDirectory bool
-	tempDir          string
 }
 
 // NewPlugin returns a new instance of the plugin.
@@ -99,7 +90,7 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 		return res
 	}
 
-	out := make([]RefreshAssociationPluginOutput, len(properties))
+	out := make([]contracts.PluginOutput, len(properties))
 	for i, prop := range properties {
 
 		// check if a reboot has been requested
@@ -128,8 +119,8 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 		res.Code = out[0].ExitCode
 		res.Status = out[0].Status
 		res.Output = out[0].String()
-		res.StandardOutput = contracts.TruncateOutput(out[0].Stdout, "", 24000)
-		res.StandardError = contracts.TruncateOutput(out[0].Stderr, "", 8000)
+		res.StandardOutput = pluginutil.StringPrefix(out[0].Stdout, p.MaxStdoutLength, p.OutputTruncatedSuffix)
+		res.StandardError = pluginutil.StringPrefix(out[0].Stderr, p.MaxStderrLength, p.OutputTruncatedSuffix)
 	}
 
 	pluginutil.PersistPluginInformationToCurrent(log, config.PluginID, config, res)
@@ -138,7 +129,7 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 
 // runCommandsRawInput executes one set of commands and returns their output.
 // The input is in the default json unmarshal format (e.g. map[string]interface{}).
-func (p *Plugin) runCommandsRawInput(log log.T, rawPluginInput interface{}, orchestrationDirectory string, cancelFlag task.CancelFlag, outputS3BucketName string, outputS3KeyPrefix string) (out RefreshAssociationPluginOutput) {
+func (p *Plugin) runCommandsRawInput(log log.T, rawPluginInput interface{}, orchestrationDirectory string, cancelFlag task.CancelFlag, outputS3BucketName string, outputS3KeyPrefix string) (out contracts.PluginOutput) {
 	var pluginInput RefreshAssociationPluginInput
 	err := jsonutil.Remarshal(rawPluginInput, &pluginInput)
 	log.Debugf("Plugin input %v", pluginInput)
@@ -154,10 +145,14 @@ func (p *Plugin) runCommandsRawInput(log log.T, rawPluginInput interface{}, orch
 	out.Status = pluginutil.GetStatus(out.ExitCode, cancelFlag)
 
 	// Create output file paths
-	stdoutFilePath := filepath.Join(out.orchestrationDir, p.StdoutFileName)
-	stderrFilePath := filepath.Join(out.orchestrationDir, p.StderrFileName)
+	stdoutFilePath := filepath.Join(orchestrationDirectory, p.StdoutFileName)
+	stderrFilePath := filepath.Join(orchestrationDirectory, p.StderrFileName)
 	log.Debugf("stdout file %v, stderr file %v", stdoutFilePath, stderrFilePath)
 
+	// create orchestration dir if needed
+	if err := fileutil.MakeDirs(orchestrationDirectory); err != nil {
+		out.AppendError(log, "Failed to create orchestrationDir directory for log files")
+	}
 	if _, err = fileutil.WriteIntoFileWithPermissions(stdoutFilePath, out.Stdout, os.FileMode(int(appconfig.ReadWriteAccess))); err != nil {
 		log.Error(err)
 	}
@@ -177,7 +172,7 @@ func (p *Plugin) runCommandsRawInput(log log.T, rawPluginInput interface{}, orch
 	}
 
 	// Upload output to S3
-	uploadOutputToS3BucketErrors := p.ExecuteUploadOutputToS3Bucket(log, pluginInput.ID, out.orchestrationDir, outputS3BucketName, outputS3KeyPrefix, out.useTempDirectory, out.tempDir, out.Stdout, out.Stderr)
+	uploadOutputToS3BucketErrors := p.ExecuteUploadOutputToS3Bucket(log, pluginInput.ID, orchestrationDirectory, outputS3BucketName, outputS3KeyPrefix, false, "", out.Stdout, out.Stderr)
 	if len(uploadOutputToS3BucketErrors) > 0 {
 		log.Errorf("Unable to upload the logs: %s", uploadOutputToS3BucketErrors)
 	}
@@ -190,29 +185,8 @@ func (p *Plugin) runCommandsRawInput(log log.T, rawPluginInput interface{}, orch
 }
 
 // runCommands executes one the command and returns their output.
-func (p *Plugin) runCommands(log log.T, pluginInput RefreshAssociationPluginInput, orchestrationDirectory string, cancelFlag task.CancelFlag, outputS3BucketName string, outputS3KeyPrefix string) (out RefreshAssociationPluginOutput) {
+func (p *Plugin) runCommands(log log.T, pluginInput RefreshAssociationPluginInput, orchestrationDirectory string, cancelFlag task.CancelFlag, outputS3BucketName string, outputS3KeyPrefix string) (out contracts.PluginOutput) {
 	var err error
-
-	out.ExitCode = 0
-	// if no orchestration directory specified, create temp directory
-	out.useTempDirectory = (orchestrationDirectory == "")
-	if out.useTempDirectory {
-		if out.tempDir, err = ioutil.TempDir("", "Ec2RunCommand"); err != nil {
-			out.MarkAsFailed(log, err)
-			return
-		}
-		orchestrationDirectory = out.tempDir
-	}
-
-	out.orchestrationDir = fileutil.BuildPath(orchestrationDirectory, pluginInput.ID)
-	log.Debugf("OrchestrationDir %v ", out.orchestrationDir)
-
-	// create orchestration dir if needed
-	if err = fileutil.MakeDirs(out.orchestrationDir); err != nil {
-		out.MarkAsFailed(log, fmt.Errorf("failed to create orchestrationDir directory %v, %v", out.orchestrationDir, err))
-		return
-	}
-
 	var instanceID string
 	associations := []*model.InstanceAssociation{}
 
@@ -234,6 +208,9 @@ func (p *Plugin) runCommands(log log.T, pluginInput RefreshAssociationPluginInpu
 
 	// if user provided empty list or "" in the document, we will run all the associations now
 	applyAll := len(pluginInput.AssociationIds) == 0 || (len(pluginInput.AssociationIds) == 1 && pluginInput.AssociationIds[0] == "")
+
+	// Default is success
+	out.MarkAsSucceeded()
 
 	// read from cache or load association details from service
 	for _, assoc := range associations {

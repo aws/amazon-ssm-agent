@@ -19,7 +19,6 @@ package domainjoin
 import (
 	"bytes"
 	"fmt"
-	"io/ioutil"
 	"path/filepath"
 	"strings"
 	"time"
@@ -54,8 +53,6 @@ const (
 	DnsAddressesArgs = " --dns-addresses"
 	// DomainJoinPluginName is the name of the executable file of domain join plugin
 	DomainJoinPluginExecutableName = "AWS.DomainJoin.exe"
-	// Default folder name for logs
-	OutputFolder = "output"
 	// Default folder name for domain join plugin
 	DomainJoinFolderName = "awsDomainJoin"
 )
@@ -78,11 +75,6 @@ type DomainJoinPluginInput struct {
 	DirectoryName  string
 	DirectoryOU    string
 	DnsIpAddresses []string
-}
-
-// DomainJoinPluginOutput represents the output of the plugin
-type DomainJoinPluginOutput struct {
-	contracts.PluginOutput
 }
 
 // NewPlugin returns a new instance of the plugin.
@@ -121,11 +113,7 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 		return res
 	}
 
-	msiFailureCount := 0
-	atleastOneRequestedReboot := false
-	finalStdOut := ""
-	finalStdErr := ""
-	var out DomainJoinPluginOutput
+	var out contracts.PluginOutput
 
 	if rebooter.RebootRequested() {
 		log.Infof("Stopping execution of %v plugin due to an external reboot request.", Name())
@@ -151,51 +139,22 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 	out = p.runCommandsRawInput(log, properties, config.OrchestrationDirectory, cancelFlag, config.OutputS3BucketName, config.OutputS3KeyPrefix, utilExe)
 
 	if out.Status == contracts.ResultStatusFailed {
-		msiFailureCount++
-		if out.Stdout != "" {
-			finalStdOut = fmt.Sprintf("%v\n%v", finalStdOut, out.Stdout)
-		}
-
-		if out.Stderr != "" {
-			finalStdErr = fmt.Sprintf("%v\n%v", finalStdErr, out.Stderr)
-		}
+		out.AppendInfo(log, "Domain join failed.")
+	} else if out.Status == contracts.ResultStatusSuccess {
+		out.AppendInfo(log, "Domain join succeeded.")
 	}
 
-	if out.Status == contracts.ResultStatusSuccessAndReboot || out.Status == contracts.ResultStatusPassedAndReboot {
-		atleastOneRequestedReboot = true
-		res.Code = out.ExitCode
-	}
-
-	if atleastOneRequestedReboot {
-		res.Status = contracts.ResultStatusSuccessAndReboot
-	} else {
-		res.Status = contracts.ResultStatusSuccess
-		res.Code = 0
-	}
-
-	if msiFailureCount > 0 {
-		finalStdOut = fmt.Sprintf("Domain join failed. Number of Failures: %v\n%v", msiFailureCount, finalStdOut)
-		res.Status = contracts.ResultStatusFailed
-		res.Code = 1
-	} else {
-		finalStdOut = fmt.Sprint("Domain join succeeded.")
-	}
-
-	finalOut := contracts.PluginOutput{
-		Stdout: finalStdOut,
-		Stderr: finalStdErr,
-	}
-
-	res.Output = finalOut.String()
+	res.Code = out.ExitCode
+	res.Status = out.Status
+	res.Output = out.String()
 	pluginutil.PersistPluginInformationToCurrent(log, config.PluginID, config, res)
 
 	return res
-
 }
 
 // runCommandsRawInput executes one set of commands and returns their output.
 // The input is in the default json unmarshal format (e.g. map[string]interface{}).
-func (p *Plugin) runCommandsRawInput(log log.T, rawPluginInput map[string]interface{}, orchestrationDirectory string, cancelFlag task.CancelFlag, outputS3BucketName string, outputS3KeyPrefix string, utilExe convert) (out DomainJoinPluginOutput) {
+func (p *Plugin) runCommandsRawInput(log log.T, rawPluginInput map[string]interface{}, orchestrationDirectory string, cancelFlag task.CancelFlag, outputS3BucketName string, outputS3KeyPrefix string, utilExe convert) (out contracts.PluginOutput) {
 	var pluginInput DomainJoinPluginInput
 	err := jsonutil.Remarshal(rawPluginInput, &pluginInput)
 	log.Debugf("Plugin input %v", pluginInput)
@@ -209,19 +168,9 @@ func (p *Plugin) runCommandsRawInput(log log.T, rawPluginInput map[string]interf
 }
 
 // runCommands executes the command and returns the output.
-func (p *Plugin) runCommands(log log.T, pluginInput DomainJoinPluginInput, orchestrationDirectory string, cancelFlag task.CancelFlag, outputS3BucketName string, outputS3KeyPrefix string, utilExe convert) (out DomainJoinPluginOutput) {
+func (p *Plugin) runCommands(log log.T, pluginInput DomainJoinPluginInput, orchestrationDirectory string, cancelFlag task.CancelFlag, outputS3BucketName string, outputS3KeyPrefix string, utilExe convert) (out contracts.PluginOutput) {
 	var err error
 
-	// if no orchestration directory specified, create temp directory
-	var useTempDirectory = (orchestrationDirectory == "")
-	var tempDir string
-	if useTempDirectory {
-		if tempDir, err = ioutil.TempDir("", "Ec2RunCommand"); err != nil {
-			out.MarkAsFailed(log, err)
-			return
-		}
-		orchestrationDirectory = tempDir
-	}
 	// create orchestration dir if needed
 	if err = makeDir(orchestrationDirectory); err != nil {
 		log.Debug("failed to create orchestration directory", orchestrationDirectory, err)
@@ -229,19 +178,10 @@ func (p *Plugin) runCommands(log log.T, pluginInput DomainJoinPluginInput, orche
 		return
 	}
 
-	// Create output file paths
-	stdoutFilePath := filepath.Join(orchestrationDirectory, OutputFolder, p.StdoutFileName)
-	stderrFilePath := filepath.Join(orchestrationDirectory, OutputFolder, p.StderrFileName)
-	log.Debugf("stdout file %v, stderr file %v", stdoutFilePath, stderrFilePath)
-	log.Debugf("stdoutFilePath file %v, stderrFilePath file %v", stdoutFilePath, stderrFilePath) //check if this is log path
-
 	// Construct Command line with executable file name and parameters
 	var command string
 	if command, err = makeArgs(log, pluginInput); err != nil {
-		log.Errorf("Failed to build domain join command because : %v", err)
-		out.ExitCode = 1
-		out.Status = contracts.ResultStatusFailed
-		out.Stderr = fmt.Sprintf("Failed to build domain join command because : %v", err.Error())
+		out.MarkAsFailed(log, fmt.Errorf("Failed to build domain join command because : %v", err.Error()))
 		return
 	}
 
@@ -255,39 +195,40 @@ func (p *Plugin) runCommands(log log.T, pluginInput DomainJoinPluginInput, orche
 		commandParts[1:],
 		workingDir,
 		orchestrationDirectory,
-		out.Stdout,
-		out.Stderr,
+		p.StdoutFileName,
+		p.StderrFileName,
 		true)
 
-	log.Debugf("stdout is: %v", out.Stdout)
-	log.Debugf("stderr is: %v", out.Stderr)
-	log.Debugf("stdoutFilePath is: %v", stdoutFilePath)
 	log.Debugf("code is: %v", output)
 	log.Debugf("err is: %v", err)
 
+	// Expected output file paths for debugging (UpdateUtil saves output files from running a command in a subdirectory of the orchestration directory named output)
+	log.Debugf("stdoutFilePath file %v, stderrFilePath file %v",
+		filepath.Join(orchestrationDirectory, updateutil.DefaultOutputFolder, p.StderrFileName),
+		filepath.Join(orchestrationDirectory, updateutil.DefaultOutputFolder, p.StdoutFileName)) //check if this is log path
+
 	// Upload output to S3
-	outputPath := filepath.Join(orchestrationDirectory, OutputFolder)
-	uploadOutputToS3BucketErrors := p.ExecuteUploadOutputToS3Bucket(log, Name(), outputPath, outputS3BucketName, outputS3KeyPrefix, useTempDirectory, tempDir, stdoutFilePath, stderrFilePath) // should use out.Stdout and out.Stderr
+	outputPath := filepath.Join(orchestrationDirectory, updateutil.DefaultOutputFolder)
+	// TODO: We don't have the stdout and stderr from the command execution which are the files we'd be uploading - and the out.Stdout and Stderr are likely empty - force upload by sending a non-empty string "TODO"
+	uploadOutputToS3BucketErrors := p.ExecuteUploadOutputToS3Bucket(log, Name(), outputPath, outputS3BucketName, outputS3KeyPrefix, false, "", "TODO", "TODO")
 	if len(uploadOutputToS3BucketErrors) > 0 {
 		log.Errorf("Unable to upload the logs: %s", uploadOutputToS3BucketErrors)
 	}
 
 	if err != nil {
-		out.ExitCode = 1
-		out.Status = contracts.ResultStatusFailed
+		out.MarkAsFailed(log, err)
 		return
 	}
 
+	// TODO:MF: Why is output a string that we parse to determine if a reboot is needed?  Can we shell out and run a command instead of using the updateutil approach?
 	// check output to see if the machine needs reboot
 	if strings.Contains(output, string(contracts.ResultStatusPassedAndReboot)) ||
 		strings.Contains(output, string(contracts.ResultStatusSuccessAndReboot)) {
-		out.ExitCode = 0
-		out.Status = contracts.ResultStatusSuccessAndReboot
+		out.MarkAsSuccessWithReboot()
 		return
 	}
 
-	out.Status = contracts.ResultStatusSuccess
-	out.ExitCode = 0
+	out.MarkAsSucceeded()
 	return
 }
 

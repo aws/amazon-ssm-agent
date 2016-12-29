@@ -30,7 +30,7 @@ import (
 
 type TestCase struct {
 	Input          DomainJoinPluginInput
-	Output         DomainJoinPluginOutput
+	Output         contracts.PluginOutput
 	ExecuterErrors []error
 	mark           bool
 }
@@ -63,7 +63,7 @@ func generateTestCaseOk(id string, name string, ipAddress []string) TestCase {
 
 	return TestCase{
 		Input:  generateDomainJoinPluginInput(id, name, ipAddress),
-		Output: DomainJoinPluginOutput{out},
+		Output: contracts.PluginOutput{out},
 		mark:   true,
 	}
 }
@@ -78,7 +78,7 @@ func generateTestCaseFail(id string, name string, ipAddress []string) TestCase {
 
 	return TestCase{
 		Input:  generateDomainJoinPluginInput(id, name, ipAddress),
-		Output: DomainJoinPluginOutput{out},
+		Output: contracts.PluginOutput{out},
 		mark:   false,
 	}
 }
@@ -122,7 +122,7 @@ func testRunCommands(t *testing.T, testCase TestCase, rawInput bool) {
 		return "cmd"
 	}
 
-	var res DomainJoinPluginOutput
+	var res contracts.PluginOutput
 	mockCancelFlag := new(task.MockCancelFlag)
 	p := new(Plugin)
 	p.StdoutFileName = "stdout"
@@ -157,7 +157,7 @@ func TestMakeArguments(t *testing.T) {
 	}
 
 	domainJoinInput := generateDomainJoinPluginInput(testDirectoryId, testDirectoryName, []string{"172.31.4.141", "172.31.21.240"})
-	commandRes := makeArguments(logger, domainJoinInput)
+	commandRes, _ := makeArguments(logger, domainJoinInput)
 	expected := "./Ec2Config.DomainJoin.exe --directory-id d-0123456789 --directory-name corp.test.com --instance-region us-east-1 --dns-addresses 172.31.4.141 172.31.21.240"
 
 	assert.Equal(t, expected, commandRes)

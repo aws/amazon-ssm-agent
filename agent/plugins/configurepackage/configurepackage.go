@@ -53,33 +53,6 @@ type ConfigurePackagePluginInput struct {
 	Repository string `json:"repository"`
 }
 
-// ConfigurePackagePluginOutput represents the output of the plugin.
-type ConfigurePackagePluginOutput struct {
-	contracts.PluginOutput
-}
-
-// MarkAsSucceeded marks plugin as Successful.
-func (result *ConfigurePackagePluginOutput) MarkAsSucceeded(reboot bool) {
-	result.ExitCode = 0
-	if reboot {
-		result.Status = contracts.ResultStatusSuccessAndReboot
-	} else {
-		result.Status = contracts.ResultStatusSuccess
-	}
-}
-
-// MarkAsFailed marks plugin as Failed.
-func (result *ConfigurePackagePluginOutput) MarkAsFailed(log log.T, err error) {
-	result.ExitCode = 1
-	result.Status = contracts.ResultStatusFailed
-	if result.Stderr != "" {
-		result.Stderr = fmt.Sprintf("\n%v\n%v", result.Stderr, err.Error())
-	} else {
-		result.Stderr = fmt.Sprintf("\n%v", err.Error())
-	}
-	log.Error("failed to configure package", err.Error())
-}
-
 // NewPlugin returns a new instance of the plugin.
 func NewPlugin(pluginConfig pluginutil.PluginConfig) (*Plugin, error) {
 	var plugin Plugin
@@ -106,7 +79,7 @@ type configurePackageManager interface {
 		util configureUtil,
 		packageName string,
 		version string,
-		output *ConfigurePackagePluginOutput) (filePath string, err error)
+		output *contracts.PluginOutput) (filePath string, err error)
 
 	validateInput(context context.T, input *ConfigurePackagePluginInput) (valid bool, err error)
 
@@ -122,22 +95,22 @@ type configurePackageManager interface {
 		util configureUtil,
 		packageName string,
 		version string,
-		output *ConfigurePackagePluginOutput) (manifest *PackageManifest, err error)
+		output *contracts.PluginOutput) (manifest *PackageManifest, err error)
 
 	runUninstallPackagePre(context context.T,
 		packageName string,
 		version string,
-		output *ConfigurePackagePluginOutput) (status contracts.ResultStatus, err error)
+		output *contracts.PluginOutput) (status contracts.ResultStatus, err error)
 
 	runInstallPackage(context context.T,
 		packageName string,
 		version string,
-		output *ConfigurePackagePluginOutput) (status contracts.ResultStatus, err error)
+		output *contracts.PluginOutput) (status contracts.ResultStatus, err error)
 
 	runUninstallPackagePost(context context.T,
 		packageName string,
 		version string,
-		output *ConfigurePackagePluginOutput) (status contracts.ResultStatus, err error)
+		output *contracts.PluginOutput) (status contracts.ResultStatus, err error)
 }
 
 // runConfigurePackage downloads the package and performs specified action
@@ -146,7 +119,7 @@ func runConfigurePackage(
 	context context.T,
 	manager configurePackageManager,
 	instanceContext *updateutil.InstanceContext,
-	rawPluginInput interface{}) (output ConfigurePackagePluginOutput) {
+	rawPluginInput interface{}) (output contracts.PluginOutput) {
 	log := context.Log()
 
 	var input ConfigurePackagePluginInput
@@ -184,7 +157,7 @@ func runConfigurePackage(
 		if version == installedVersion {
 			// TODO:MF: validate that installed version is basically valid - has manifest and at least one other non-etag file or folder?
 			output.AppendInfo(log, "%v %v is already installed", input.Name, version)
-			output.MarkAsSucceeded(false)
+			output.MarkAsSucceeded()
 			return
 		}
 
@@ -220,7 +193,7 @@ func runConfigurePackage(
 				} else {
 					if result == contracts.ResultStatusSuccessAndReboot || result == contracts.ResultStatusPassedAndReboot {
 						// Reboot before continuing
-						output.MarkAsSucceeded(true)
+						output.MarkAsSuccessWithReboot()
 						return
 					}
 				}
@@ -239,12 +212,12 @@ func runConfigurePackage(
 			output.MarkAsFailed(log, fmt.Errorf("failed to install package: %v", err))
 		} else if result == contracts.ResultStatusSuccessAndReboot || result == contracts.ResultStatusPassedAndReboot {
 			output.AppendInfo(log, "Successfully installed %v %v", input.Name, version)
-			output.MarkAsSucceeded(true)
+			output.MarkAsSuccessWithReboot()
 		} else if result != contracts.ResultStatusSuccess {
 			output.MarkAsFailed(log, fmt.Errorf("install action state was %v and not %v", result, contracts.ResultStatusSuccess))
 		} else {
 			output.AppendInfo(log, "Successfully installed %v %v", input.Name, version)
-			output.MarkAsSucceeded(false)
+			output.MarkAsSucceeded()
 		}
 
 		// uninstall post action
@@ -293,12 +266,12 @@ func runConfigurePackage(
 		result := contracts.MergeResultStatus(resultPre, resultPost)
 		if result == contracts.ResultStatusSuccessAndReboot || result == contracts.ResultStatusPassedAndReboot {
 			output.AppendInfo(log, "Successfully uninstalled %v %v", input.Name, version)
-			output.MarkAsSucceeded(true)
+			output.MarkAsSuccessWithReboot()
 		} else if result != contracts.ResultStatusSuccess {
 			output.MarkAsFailed(log, fmt.Errorf("uninstall action state was %v and not %v", result, contracts.ResultStatusSuccess))
 		} else {
 			output.AppendInfo(log, "Successfully uninstalled %v %v", input.Name, version)
-			output.MarkAsSucceeded(false)
+			output.MarkAsSucceeded()
 		}
 	default:
 		output.MarkAsFailed(log, fmt.Errorf("unsupported action: %v", input.Action))
@@ -312,7 +285,7 @@ func (m *configurePackage) ensurePackage(context context.T,
 	util configureUtil,
 	packageName string,
 	version string,
-	output *ConfigurePackagePluginOutput) (manifest *PackageManifest, err error) {
+	output *contracts.PluginOutput) (manifest *PackageManifest, err error) {
 
 	// manifest to download
 	manifestName := getManifestName(packageName)
@@ -436,7 +409,7 @@ func (m *configurePackage) downloadPackage(context context.T,
 	util configureUtil,
 	packageName string,
 	version string,
-	output *ConfigurePackagePluginOutput) (filePath string, err error) {
+	output *contracts.PluginOutput) (filePath string, err error) {
 
 	log := context.Log()
 	//TODO:OFFLINE: build packageLocation from source URI
@@ -480,7 +453,7 @@ func (m *configurePackage) downloadPackage(context context.T,
 func (m *configurePackage) runInstallPackage(context context.T,
 	packageName string,
 	version string,
-	output *ConfigurePackagePluginOutput) (status contracts.ResultStatus, err error) {
+	output *contracts.PluginOutput) (status contracts.ResultStatus, err error) {
 	status = contracts.ResultStatusSuccess
 
 	directory := filepath.Join(appconfig.PackageRoot, packageName, version)
@@ -494,7 +467,7 @@ func (m *configurePackage) runInstallPackage(context context.T,
 func (m *configurePackage) runUninstallPackagePre(context context.T,
 	packageName string,
 	version string,
-	output *ConfigurePackagePluginOutput) (status contracts.ResultStatus, err error) {
+	output *contracts.PluginOutput) (status contracts.ResultStatus, err error) {
 	directory := filepath.Join(appconfig.PackageRoot, packageName, version)
 	if _, status, err = m.executeAction(context, "uninstall", packageName, version, output, directory); err != nil {
 		return status, err
@@ -506,7 +479,7 @@ func (m *configurePackage) runUninstallPackagePre(context context.T,
 func (m *configurePackage) runUninstallPackagePost(context context.T,
 	packageName string,
 	version string,
-	output *ConfigurePackagePluginOutput) (status contracts.ResultStatus, err error) {
+	output *contracts.PluginOutput) (status contracts.ResultStatus, err error) {
 	directory := filepath.Join(appconfig.PackageRoot, packageName, version)
 	if err = filesysdep.RemoveAll(directory); err != nil {
 		return contracts.ResultStatusFailed, fmt.Errorf("failed to delete directory %v due to %v", directory, err)
@@ -519,7 +492,7 @@ func (m *configurePackage) executeAction(context context.T,
 	actionName string,
 	packageName string,
 	version string,
-	output *ConfigurePackagePluginOutput,
+	output *contracts.PluginOutput,
 	executeDirectory string) (actionExists bool, status contracts.ResultStatus, err error) {
 	status = contracts.ResultStatusSuccess
 	err = nil
@@ -529,7 +502,7 @@ func (m *configurePackage) executeAction(context context.T,
 
 	log := context.Log()
 	if actionExists {
-		log.Infof("Initiating %v %v %v", packageName, version, actionName)
+		output.AppendInfo(log, "Initiating %v %v %v", packageName, version, actionName)
 		file, err := filesysdep.ReadFile(fileLocation)
 		if err != nil {
 			return true, contracts.ResultStatusFailed, err
@@ -590,7 +563,7 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 		return res
 	}
 
-	out := make([]ConfigurePackagePluginOutput, len(properties))
+	out := make([]contracts.PluginOutput, len(properties))
 
 	instanceContext, err := getContext(log)
 	if err != nil {
@@ -610,12 +583,10 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 		}
 
 		if cancelFlag.ShutDown() {
-			out[i] = ConfigurePackagePluginOutput{}
 			res.Code = 1
 			res.Status = contracts.ResultStatusFailed
 			break
 		} else if cancelFlag.Canceled() {
-			out[i] = ConfigurePackagePluginOutput{}
 			res.Code = 1
 			res.Status = contracts.ResultStatusCancelled
 			break
@@ -633,8 +604,6 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 		res.Code = out[0].ExitCode
 		res.Status = out[0].Status
 		res.Output = out[0].String()
-		res.StandardOutput = contracts.TruncateOutput(out[0].Stdout, "", 24000)
-		res.StandardError = contracts.TruncateOutput(out[0].Stderr, "", 8000)
 		if config.OrchestrationDirectory != "" {
 			useTemp := false
 			outFile := filepath.Join(config.OrchestrationDirectory, p.StdoutFileName)

@@ -32,42 +32,6 @@ import (
 
 var logger = log.NewMockLog()
 
-func TestSucceed(t *testing.T) {
-	output := UpdatePluginOutput{}
-
-	output.MarkAsSucceed()
-
-	assert.Equal(t, output.ExitCode, 0)
-	assert.Equal(t, output.Status, contracts.ResultStatusSuccess)
-}
-
-func TestFailed(t *testing.T) {
-	output := UpdatePluginOutput{}
-
-	output.MarkAsFailed(logger, fmt.Errorf("Error message"))
-
-	assert.Equal(t, output.ExitCode, 1)
-	assert.Equal(t, output.Status, contracts.ResultStatusFailed)
-	assert.Contains(t, output.Stderr, "Error message")
-}
-
-func TestPending(t *testing.T) {
-	output := UpdatePluginOutput{}
-
-	output.MarkAsPending()
-
-	assert.Equal(t, output.ExitCode, 0)
-	assert.Equal(t, output.Status, contracts.ResultStatusInProgress)
-}
-
-func TestAppendInfo(t *testing.T) {
-	output := UpdatePluginOutput{}
-
-	output.AppendInfo(logger, "Info message")
-
-	assert.Contains(t, output.Stdout, "Info message")
-}
-
 func TestGenerateUpdateCmd(t *testing.T) {
 	plugin := createStubPluginInput()
 	context := createStubInstanceContext()
@@ -92,7 +56,7 @@ func TestDownloadManifest(t *testing.T) {
 
 	manager := updateManager{}
 	util := fakeUtility{}
-	out := UpdatePluginOutput{}
+	out := contracts.PluginOutput{}
 
 	fileDownload = func(log log.T, input artifact.DownloadInput) (output artifact.DownloadOutput, err error) {
 		result := artifact.DownloadOutput{}
@@ -114,7 +78,7 @@ func TestDownloadUpdater(t *testing.T) {
 
 	manager := updateManager{}
 	util := fakeUtility{}
-	out := UpdatePluginOutput{}
+	out := contracts.PluginOutput{}
 
 	fileDownload = func(log log.T, input artifact.DownloadInput) (output artifact.DownloadOutput, err error) {
 		result := artifact.DownloadOutput{}
@@ -139,7 +103,7 @@ func TestDownloadUpdater_HashDoesNotMatch(t *testing.T) {
 
 	manager := updateManager{}
 	util := fakeUtility{}
-	out := UpdatePluginOutput{}
+	out := contracts.PluginOutput{}
 
 	// file download failed
 	fileDownload = func(log log.T, input artifact.DownloadInput) (output artifact.DownloadOutput, err error) {
@@ -163,7 +127,7 @@ func TestDownloadUpdater_FailedDuringUnCompress(t *testing.T) {
 
 	manager := updateManager{}
 	util := fakeUtility{}
-	out := UpdatePluginOutput{}
+	out := contracts.PluginOutput{}
 
 	fileDownload = func(log log.T, input artifact.DownloadInput) (output artifact.DownloadOutput, err error) {
 		result := artifact.DownloadOutput{}
@@ -187,7 +151,7 @@ func TestValidateUpdate(t *testing.T) {
 	manifest := createStubManifest(plugin, context, true, true)
 
 	manager := updateManager{}
-	out := UpdatePluginOutput{}
+	out := contracts.PluginOutput{}
 
 	result, err := manager.validateUpdate(logger, plugin, context, manifest, &out)
 
@@ -203,7 +167,7 @@ func TestValidateUpdate_GetLatestTargetVersionWhenTargetVersionIsEmpty(t *testin
 	manager := updateManager{}
 	// Setup, update target version to empty string
 	plugin.TargetVersion = ""
-	out := UpdatePluginOutput{}
+	out := contracts.PluginOutput{}
 
 	result, err := manager.validateUpdate(logger, plugin, context, manifest, &out)
 
@@ -218,7 +182,7 @@ func TestValidateUpdate_TargetVersionSameAsCurrentVersion(t *testing.T) {
 	manifest := createStubManifest(plugin, context, true, true)
 
 	manager := updateManager{}
-	out := UpdatePluginOutput{}
+	out := contracts.PluginOutput{}
 
 	noNeedToUpdate, err := manager.validateUpdate(logger, plugin, context, manifest, &out)
 
@@ -235,7 +199,7 @@ func TestValidateUpdate_DowngradeVersion(t *testing.T) {
 	manifest := createStubManifest(plugin, context, true, true)
 
 	manager := updateManager{}
-	out := UpdatePluginOutput{}
+	out := contracts.PluginOutput{}
 
 	noNeedToUpdate, err := manager.validateUpdate(logger, plugin, context, manifest, &out)
 
@@ -251,7 +215,7 @@ func TestValidateUpdate_TargetVersionNotSupport(t *testing.T) {
 	manifest := createStubManifest(plugin, context, true, false)
 
 	manager := updateManager{}
-	out := UpdatePluginOutput{}
+	out := contracts.PluginOutput{}
 
 	result, err := manager.validateUpdate(logger, plugin, context, manifest, &out)
 
@@ -266,7 +230,7 @@ func TestValidateUpdate_UnsupportedCurrentVersion(t *testing.T) {
 	manifest := createStubManifest(plugin, context, false, true)
 
 	manager := updateManager{}
-	out := UpdatePluginOutput{}
+	out := contracts.PluginOutput{}
 	result, err := manager.validateUpdate(logger, plugin, context, manifest, &out)
 
 	if version.Version != updateutil.PipelineTestVersion {
@@ -394,8 +358,8 @@ func TestExecute(t *testing.T) {
 		cancelFlag task.CancelFlag,
 		outputS3BucketName string,
 		outputS3KeyPrefix string,
-		startTime time.Time) (out UpdatePluginOutput) {
-		out = UpdatePluginOutput{}
+		startTime time.Time) (out contracts.PluginOutput) {
+		out = contracts.PluginOutput{}
 		out.ExitCode = 1
 		out.Stderr = "error"
 
@@ -524,7 +488,7 @@ func (u *fakeUpdateManager) downloadManifest(log log.T,
 	util updateutil.T,
 	pluginInput *UpdatePluginInput,
 	context *updateutil.InstanceContext,
-	out *UpdatePluginOutput) (manifest *Manifest, err error) {
+	out *contracts.PluginOutput) (manifest *Manifest, err error) {
 	return u.downloadManifestResult, u.downloadManifestError
 }
 
@@ -532,7 +496,7 @@ func (u *fakeUpdateManager) downloadUpdater(log log.T,
 	util updateutil.T,
 	updaterPackageName string,
 	manifest *Manifest,
-	out *UpdatePluginOutput,
+	out *contracts.PluginOutput,
 	context *updateutil.InstanceContext) (version string, err error) {
 	return u.downloadUpdaterResult, u.downloadUpdaterError
 }
@@ -541,6 +505,6 @@ func (u *fakeUpdateManager) validateUpdate(log log.T,
 	pluginInput *UpdatePluginInput,
 	context *updateutil.InstanceContext,
 	manifest *Manifest,
-	out *UpdatePluginOutput) (noNeedToUpdate bool, err error) {
+	out *contracts.PluginOutput) (noNeedToUpdate bool, err error) {
 	return u.validateUpdateResult, u.validateUpdateError
 }

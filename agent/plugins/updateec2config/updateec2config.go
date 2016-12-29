@@ -87,11 +87,6 @@ type UpdatePluginConfig struct {
 	OutputTruncatedSuffix string
 }
 
-// UpdatePluginOutput represents the output of the plugin
-type UpdatePluginOutput struct {
-	contracts.PluginOutput
-}
-
 type updateManager struct{}
 
 //TODO move the interface and structs into a separate file to reduce the size of this main file
@@ -111,20 +106,20 @@ type pluginHelper interface {
 		util updateutil.T,
 		pluginInput *UpdatePluginInput,
 		context *updateutil.InstanceContext,
-		out *UpdatePluginOutput) (manifest *Manifest, err error)
+		out *contracts.PluginOutput) (manifest *Manifest, err error)
 
 	downloadUpdater(log log.T,
 		util updateutil.T,
 		updaterPackageName string,
 		manifest *Manifest,
-		out *UpdatePluginOutput,
+		out *contracts.PluginOutput,
 		context *updateutil.InstanceContext) (version string, err error)
 
 	validateUpdate(log log.T,
 		pluginInput *UpdatePluginInput,
 		context *updateutil.InstanceContext,
 		manifest *Manifest,
-		out *UpdatePluginOutput, version string) (noNeedToUpdate bool, err error)
+		out *contracts.PluginOutput, version string) (noNeedToUpdate bool, err error)
 
 	loadUpdateContext(log log.T,
 		path string) (updateContext *UpdateContextFile, err error)
@@ -136,25 +131,6 @@ var fileUncompress = fileutil.Uncompress
 var updateAgent = runUpdateAgent
 var mkDirAll = os.MkdirAll
 var agentVersion string
-
-// setToSuccess marks update as Successful
-func (out *UpdatePluginOutput) setToSuccess() {
-	out.ExitCode = 0
-	out.Status = contracts.ResultStatusSuccess
-}
-
-// Pending mark update as Pending
-func (out *UpdatePluginOutput) Pending() {
-	out.ExitCode = 0
-	out.Status = contracts.ResultStatusInProgress
-}
-
-// AppendInfo adds info to UpdateContext StandardOut
-func (out *UpdatePluginOutput) AppendInfo(log log.T, format string, params ...interface{}) {
-	message := fmt.Sprintf(format, params...)
-	log.Info(message)
-	out.Stdout = fmt.Sprintf("%v\n%v", out.Stdout, message)
-}
 
 // NewPlugin returns a new instance of the plugin.
 func NewPlugin(updatePluginConfig UpdatePluginConfig) (*Plugin, error) {
@@ -204,7 +180,7 @@ func runUpdateAgent(
 	rawPluginInput interface{},
 	outputS3BucketName string,
 	outputS3KeyPrefix string,
-	startTime time.Time) (out UpdatePluginOutput) {
+	startTime time.Time) (out contracts.PluginOutput) {
 	var pluginInput UpdatePluginInput
 	var updatecontext *UpdateContextFile = new(UpdateContextFile)
 	var err error
@@ -330,7 +306,7 @@ func runUpdateAgent(
 			out.MarkAsFailed(log, err)
 			return
 		}
-		out.Pending()
+		out.MarkAsInProgress()
 	}
 	return out
 }
@@ -432,7 +408,7 @@ func (m *updateManager) downloadManifest(log log.T,
 	util updateutil.T,
 	pluginInput *UpdatePluginInput,
 	context *updateutil.InstanceContext,
-	out *UpdatePluginOutput) (manifest *Manifest, err error) {
+	out *contracts.PluginOutput) (manifest *Manifest, err error) {
 	//Download source
 	var updateDownload = ""
 
@@ -460,7 +436,7 @@ func (m *updateManager) downloadUpdater(log log.T,
 	util updateutil.T,
 	updaterPackageName string,
 	manifest *Manifest,
-	out *UpdatePluginOutput,
+	out *contracts.PluginOutput,
 	context *updateutil.InstanceContext) (version string, err error) {
 	var hash = ""
 	var source = ""
@@ -512,7 +488,7 @@ func (m *updateManager) validateUpdate(log log.T,
 	pluginInput *UpdatePluginInput,
 	context *updateutil.InstanceContext,
 	manifest *Manifest,
-	out *UpdatePluginOutput, currentVersion string) (noNeedToUpdate bool, err error) {
+	out *contracts.PluginOutput, currentVersion string) (noNeedToUpdate bool, err error) {
 	var allowDowngrade = false
 
 	if len(pluginInput.TargetVersion) == 0 {
@@ -529,7 +505,7 @@ func (m *updateManager) validateUpdate(log log.T,
 		out.AppendInfo(log, "%v %v has already been installed, update skipped",
 			pluginInput.AgentName,
 			currentVersion)
-		out.setToSuccess()
+		out.MarkAsSucceeded()
 		return true, nil
 	}
 	if pluginInput.TargetVersion < currentVersion && !allowDowngrade {
@@ -578,7 +554,7 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 		return res
 	}
 
-	out := make([]UpdatePluginOutput, len(properties))
+	out := make([]contracts.PluginOutput, len(properties))
 	for i, prop := range properties {
 		// check if a reboot has been requested
 		if rebooter.RebootRequested() {
@@ -587,12 +563,10 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 		}
 
 		if cancelFlag.ShutDown() {
-			out[i] = UpdatePluginOutput{}
 			out[i].ExitCode = 1
 			out[i].Status = contracts.ResultStatusFailed
 			break
 		} else if cancelFlag.Canceled() {
-			out[i] = UpdatePluginOutput{}
 			out[i].ExitCode = 1
 			out[i].Status = contracts.ResultStatusCancelled
 			break
@@ -610,7 +584,7 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 
 		res.Code = out[i].ExitCode
 		res.Status = out[i].Status
-		res.Output = fmt.Sprintf("%v", out[i].String())
+		res.Output = out[i].String()
 	}
 
 	return

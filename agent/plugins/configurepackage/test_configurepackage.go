@@ -195,7 +195,7 @@ func (configMock *MockedConfigurePackageManager) downloadPackage(context context
 	util configureUtil,
 	packageName string,
 	version string,
-	output *ConfigurePackagePluginOutput) (filePath string, err error) {
+	output *contracts.PluginOutput) (filePath string, err error) {
 	args := configMock.Called(util, packageName, version, output)
 	return args.String(0), args.Error(1)
 }
@@ -245,7 +245,7 @@ func (configMock *MockedConfigurePackageManager) ensurePackage(context context.T
 	util configureUtil,
 	packageName string,
 	version string,
-	output *ConfigurePackagePluginOutput) (manifest *PackageManifest, err error) {
+	output *contracts.PluginOutput) (manifest *PackageManifest, err error) {
 	args := configMock.Called(util, packageName, version, output)
 	return args.Get(0).(*PackageManifest), args.Error(1)
 }
@@ -253,7 +253,7 @@ func (configMock *MockedConfigurePackageManager) ensurePackage(context context.T
 func (configMock *MockedConfigurePackageManager) runUninstallPackagePre(context context.T,
 	packageName string,
 	version string,
-	output *ConfigurePackagePluginOutput) (status contracts.ResultStatus, err error) {
+	output *contracts.PluginOutput) (status contracts.ResultStatus, err error) {
 	args := configMock.Called(packageName, version, output)
 	return args.Get(0).(contracts.ResultStatus), args.Error(1)
 }
@@ -261,7 +261,7 @@ func (configMock *MockedConfigurePackageManager) runUninstallPackagePre(context 
 func (configMock *MockedConfigurePackageManager) runInstallPackage(context context.T,
 	packageName string,
 	version string,
-	output *ConfigurePackagePluginOutput) (status contracts.ResultStatus, err error) {
+	output *contracts.PluginOutput) (status contracts.ResultStatus, err error) {
 	args := configMock.Called(packageName, version, output)
 	return args.Get(0).(contracts.ResultStatus), args.Error(1)
 }
@@ -269,7 +269,7 @@ func (configMock *MockedConfigurePackageManager) runInstallPackage(context conte
 func (configMock *MockedConfigurePackageManager) runUninstallPackagePost(context context.T,
 	packageName string,
 	version string,
-	output *ConfigurePackagePluginOutput) (status contracts.ResultStatus, err error) {
+	output *contracts.PluginOutput) (status contracts.ResultStatus, err error) {
 	args := configMock.Called(packageName, version, output)
 	return args.Get(0).(contracts.ResultStatus), args.Error(1)
 }

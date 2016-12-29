@@ -89,11 +89,6 @@ func machineInfoProvider() (name string, err error) {
 	return platform.InstanceID()
 }
 
-// PluginOutput represents the output of inventory plugin
-type PluginOutput struct {
-	contracts.PluginOutput
-}
-
 // Plugin encapsulates the logic of configuring, starting and stopping inventory plugin
 type Plugin struct {
 	pluginutil.DefaultPlugin
@@ -169,7 +164,7 @@ func NewPlugin(context context.T, pluginConfig pluginutil.PluginConfig) (*Plugin
 }
 
 // ApplyInventoryPolicy applies given inventory policy regarding which gatherers to run
-func (p *Plugin) ApplyInventoryPolicy(context context.T, inventoryInput PluginInput) (inventoryOutput PluginOutput) {
+func (p *Plugin) ApplyInventoryPolicy(context context.T, inventoryInput PluginInput) (inventoryOutput contracts.PluginOutput) {
 	log := p.context.Log()
 	var optimizedInventoryItems, nonOptimizedInventoryItems []*ssm.InventoryItem
 	var status, retryWithNonOptimized bool
@@ -605,7 +600,7 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 	var err error
 	var isAssociation bool
 	var inventoryInput PluginInput
-	var inventoryOutput PluginOutput
+	var inventoryOutput contracts.PluginOutput
 
 	pluginName := Name()
 	dataB, _ = json.Marshal(config)
@@ -692,8 +687,6 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 
 	inventoryOutput = p.ApplyInventoryPolicy(context, inventoryInput)
 	res.Code = inventoryOutput.ExitCode
-	res.StandardError = inventoryOutput.Stderr
-	res.StandardOutput = inventoryOutput.Stdout
 	res.Output = inventoryOutput.String()
 
 	//check inventory plugin output

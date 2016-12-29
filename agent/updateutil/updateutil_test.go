@@ -243,7 +243,7 @@ func TestUpdateStandOutPath(t *testing.T) {
 	}
 
 	for _, test := range testCases {
-		result := UpdateStandOutPath(appconfig.UpdaterArtifactsRoot, test.filename)
+		result := UpdateStdOutPath(appconfig.UpdaterArtifactsRoot, test.filename)
 		assert.Contains(t, result, test.expectedFileName)
 	}
 }
@@ -258,7 +258,7 @@ func TestUpdateStandErrPath(t *testing.T) {
 	}
 
 	for _, test := range testCases {
-		result := UpdateStandErrPath(appconfig.UpdaterArtifactsRoot, test.filename)
+		result := UpdateStdErrPath(appconfig.UpdaterArtifactsRoot, test.filename)
 		assert.Contains(t, result, test.expectedFileName)
 	}
 }

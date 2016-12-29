@@ -53,11 +53,6 @@ type PSModulePluginInput struct {
 	SourceHashType   string
 }
 
-// PSModulePluginOutput represents the output of the plugin
-type PSModulePluginOutput struct {
-	contracts.PluginOutput
-}
-
 // NewPlugin returns a new instance of the plugin.
 func NewPlugin(pluginConfig pluginutil.PluginConfig) (*Plugin, error) {
 	var plugin Plugin
@@ -96,7 +91,7 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 		return res
 	}
 
-	out := make([]PSModulePluginOutput, len(properties))
+	out := make([]contracts.PluginOutput, len(properties))
 	for i, prop := range properties {
 		// check if a reboot has been requested
 		if rebooter.RebootRequested() {
@@ -134,7 +129,7 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 
 // runCommandsRawInput executes one set of commands and returns their output.
 // The input is in the default json unmarshal format (e.g. map[string]interface{}).
-func (p *Plugin) runCommandsRawInput(log log.T, rawPluginInput interface{}, orchestrationDirectory string, cancelFlag task.CancelFlag, outputS3BucketName string, outputS3KeyPrefix string) (out PSModulePluginOutput) {
+func (p *Plugin) runCommandsRawInput(log log.T, rawPluginInput interface{}, orchestrationDirectory string, cancelFlag task.CancelFlag, outputS3BucketName string, outputS3KeyPrefix string) (out contracts.PluginOutput) {
 	var pluginInput PSModulePluginInput
 	err := jsonutil.Remarshal(rawPluginInput, &pluginInput)
 	log.Debugf("Plugin input %v", pluginInput)
@@ -149,20 +144,10 @@ func (p *Plugin) runCommandsRawInput(log log.T, rawPluginInput interface{}, orch
 }
 
 // runCommands executes one set of commands and returns their output.
-func (p *Plugin) runCommands(log log.T, pluginInput PSModulePluginInput, orchestrationDirectory string, cancelFlag task.CancelFlag, outputS3BucketName string, outputS3KeyPrefix string) (out PSModulePluginOutput) {
+func (p *Plugin) runCommands(log log.T, pluginInput PSModulePluginInput, orchestrationDirectory string, cancelFlag task.CancelFlag, outputS3BucketName string, outputS3KeyPrefix string) (out contracts.PluginOutput) {
 	var err error
 
-	// if no orchestration directory specified, create temp directory
-	var useTempDirectory = (orchestrationDirectory == "")
-	var tempDir string
-	if useTempDirectory {
-		if tempDir, err = ioutil.TempDir("", "Ec2RunCommand"); err != nil {
-			out.MarkAsFailed(log, err)
-			return
-		}
-		orchestrationDirectory = tempDir
-	}
-
+	// TODO:MF: This subdirectory is only needed because we could be running multiple sets of properties for the same plugin - otherwise the orchestration directory would already be unique
 	orchestrationDir := fileutil.BuildPath(orchestrationDirectory, pluginInput.ID)
 	log.Debugf("Running commands %v in workingDirectory %v; orchestrationDir %v ", pluginInput.ParsedCommands, pluginInput.WorkingDirectory, orchestrationDir)
 
@@ -228,18 +213,20 @@ func (p *Plugin) runCommands(log log.T, pluginInput PSModulePluginInput, orchest
 		}
 	}
 
-	// read (a prefix of) the standard output/error
-	out.Stdout, err = pluginutil.ReadPrefix(stdout, p.MaxStdoutLength, p.OutputTruncatedSuffix)
-	if err != nil {
-		out.MarkAsFailed(log, err)
+	// read all standard output/error
+	if bytesOut, err := ioutil.ReadAll(stdout); err != nil {
+		log.Error(err)
+	} else {
+		out.AppendInfo(log, string(bytesOut))
 	}
-	out.Stderr, err = pluginutil.ReadPrefix(stderr, p.MaxStderrLength, p.OutputTruncatedSuffix)
-	if err != nil {
-		out.MarkAsFailed(log, err)
+	if bytesErr, err := ioutil.ReadAll(stderr); err != nil {
+		log.Error(err)
+	} else {
+		out.AppendError(log, string(bytesErr))
 	}
 
 	// Upload output to S3
-	uploadOutputToS3BucketErrors := p.ExecuteUploadOutputToS3Bucket(log, pluginInput.ID, orchestrationDir, outputS3BucketName, outputS3KeyPrefix, useTempDirectory, tempDir, out.Stdout, out.Stderr)
+	uploadOutputToS3BucketErrors := p.ExecuteUploadOutputToS3Bucket(log, pluginInput.ID, orchestrationDir, outputS3BucketName, outputS3KeyPrefix, false, "", out.Stdout, out.Stderr)
 	if len(uploadOutputToS3BucketErrors) > 0 {
 		log.Errorf("Unable to upload the logs: %s", uploadOutputToS3BucketErrors)
 	}

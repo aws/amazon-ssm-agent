@@ -17,7 +17,6 @@ package configurepackage
 
 import (
 	"errors"
-	"fmt"
 	"io/ioutil"
 	"strings"
 	"sync"
@@ -98,8 +97,8 @@ func TestRunParallelSamePackage(t *testing.T) {
 	managerMockFirst := ConfigPackageSuccessMock("/foo", "Wait1.0.0", "", &PackageManifest{}, contracts.ResultStatusSuccess, contracts.ResultStatusSuccess, contracts.ResultStatusSuccess)
 	managerMockSecond := ConfigPackageSuccessMock("/foo", "1.0.0", "", &PackageManifest{}, contracts.ResultStatusSuccess, contracts.ResultStatusSuccess, contracts.ResultStatusSuccess)
 
-	var outputFirst ConfigurePackagePluginOutput
-	var outputSecond ConfigurePackagePluginOutput
+	var outputFirst contracts.PluginOutput
+	var outputSecond contracts.PluginOutput
 	var wg sync.WaitGroup
 	wg.Add(1)
 	go func() {
@@ -118,35 +117,6 @@ func TestRunParallelSamePackage(t *testing.T) {
 	assert.Equal(t, outputFirst.ExitCode, 0)
 	assert.Equal(t, outputSecond.ExitCode, 1)
 	assert.True(t, strings.Contains(outputSecond.Stderr, `Package "PVDriver" is already in the process of action "Install"`))
-}
-
-func TestMarkAsSucceeded(t *testing.T) {
-	output := ConfigurePackagePluginOutput{}
-
-	output.MarkAsSucceeded(false)
-
-	assert.Equal(t, output.ExitCode, 0)
-	assert.Equal(t, output.Status, contracts.ResultStatusSuccess)
-}
-
-func TestMarkAsFailed(t *testing.T) {
-	output := ConfigurePackagePluginOutput{}
-
-	output.MarkAsFailed(loggerMock, fmt.Errorf("Error message"))
-
-	assert.Equal(t, output.ExitCode, 1)
-	assert.Equal(t, output.Status, contracts.ResultStatusFailed)
-	assert.Contains(t, output.Stderr, "Error message")
-}
-
-func TestAppendInfo(t *testing.T) {
-	output := ConfigurePackagePluginOutput{}
-
-	output.AppendInfo(loggerMock, "Info message")
-	output.AppendInfo(loggerMock, "Second entry")
-
-	assert.Contains(t, output.Stdout, "Info message")
-	assert.Contains(t, output.Stdout, "Second entry")
 }
 
 func TestExecute(t *testing.T) {
@@ -169,8 +139,8 @@ func TestExecute(t *testing.T) {
 		context context.T,
 		manager configurePackageManager,
 		instanceContext *updateutil.InstanceContext,
-		rawPluginInput interface{}) (out ConfigurePackagePluginOutput) {
-		out = ConfigurePackagePluginOutput{}
+		rawPluginInput interface{}) (out contracts.PluginOutput) {
+		out = contracts.PluginOutput{}
 		out.ExitCode = 1
 		out.Stderr = "error"
 
@@ -197,7 +167,7 @@ func TestExecute(t *testing.T) {
 func TestInstallPackage(t *testing.T) {
 	pluginInformation := createStubPluginInputInstall()
 
-	output := &ConfigurePackagePluginOutput{}
+	output := &contracts.PluginOutput{}
 	manager := createInstance()
 
 	result, _ := ioutil.ReadFile("testdata/sampleManifest.json")
@@ -217,7 +187,7 @@ func TestUninstallPackage(t *testing.T) {
 	manager := createInstance()
 	pluginInformation := createStubPluginInputUninstall()
 
-	output := &ConfigurePackagePluginOutput{}
+	output := &contracts.PluginOutput{}
 
 	stubs := &ConfigurePackageStubs{fileSysDepStub: &FileSysDepStub{existsResultDefault: true}, networkDepStub: &NetworkDepStub{}, execDepStub: execStubSuccess()}
 	stubs.Set()
@@ -378,7 +348,7 @@ func TestValidateInput_EmptyVersionWithUninstall(t *testing.T) {
 func TestDownloadPackage(t *testing.T) {
 	pluginInformation := createStubPluginInputInstall()
 
-	output := ConfigurePackagePluginOutput{}
+	output := contracts.PluginOutput{}
 	manager := createInstance()
 	util := mockConfigureUtility{}
 
@@ -398,7 +368,7 @@ func TestDownloadPackage(t *testing.T) {
 func TestDownloadPackage_Failed(t *testing.T) {
 	pluginInformation := createStubPluginInputInstall()
 
-	output := ConfigurePackagePluginOutput{}
+	output := contracts.PluginOutput{}
 	manager := createInstance()
 	util := mockConfigureUtility{}
 
