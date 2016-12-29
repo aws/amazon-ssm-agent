@@ -11,7 +11,7 @@
 // either express or implied. See the License for the specific language governing
 // permissions and limitations under the License.
 
-package runcommand
+package runscript
 
 import (
 	"bytes"
@@ -35,7 +35,7 @@ import (
 )
 
 type TestCase struct {
-	Input          RunCommandPluginInput
+	Input          RunScriptPluginInput
 	Output         contracts.PluginOutput
 	ExecuterStdOut string
 	ExecuterStdErr string
@@ -65,8 +65,8 @@ var logger = log.NewMockLog()
 func generateTestCaseOk(id string) TestCase {
 
 	testCase := TestCase{
-		Input: RunCommandPluginInput{
-			RunCommand:       []string{"echo " + id},
+		Input: RunScriptPluginInput{
+			RunScript:        []string{"echo " + id},
 			ID:               id + ".aws:runScript",
 			WorkingDirectory: "Dir" + id,
 			TimeoutSeconds:   "1",
@@ -110,19 +110,19 @@ func generateTestCaseFail(id string) TestCase {
 	return t
 }
 
-// TestRunCommands tests the runCommands and runCommandsRawInput methods, which run one set of commands.
-func TestRunCommands(t *testing.T) {
+// TestRunScripts tests the runScripts and runScriptsRawInput methods, which run one set of commands.
+func TestRunScripts(t *testing.T) {
 	for _, testCase := range TestCases {
-		testRunCommands(t, testCase, true)
-		testRunCommands(t, testCase, false)
+		testRunScripts(t, testCase, true)
+		testRunScripts(t, testCase, false)
 	}
 }
 
-// testRunCommands tests the runCommands or the runCommandsRawInput method for one testcase.
-func testRunCommands(t *testing.T, testCase TestCase, rawInput bool) {
+// testRunScripts tests the runScripts or the runScriptsRawInput method for one testcase.
+func testRunScripts(t *testing.T, testCase TestCase, rawInput bool) {
 	logger.On("Error", mock.Anything).Return(nil)
 	logger.Infof("test run commands %v", testCase)
-	runCommandTester := func(p *Plugin, mockCancelFlag *task.MockCancelFlag, mockExecuter *executers.MockCommandExecuter, mockS3Uploader *pluginutil.MockDefaultPlugin) {
+	runScriptTester := func(p *Plugin, mockCancelFlag *task.MockCancelFlag, mockExecuter *executers.MockCommandExecuter, mockS3Uploader *pluginutil.MockDefaultPlugin) {
 		// set expectations
 		setExecuterExpectations(mockExecuter, testCase, mockCancelFlag, p)
 		setS3UploaderExpectations(mockS3Uploader, testCase, p)
@@ -144,10 +144,10 @@ func testRunCommands(t *testing.T, testCase TestCase, rawInput bool) {
 		assert.Equal(t, testCase.Output, res)
 	}
 
-	testExecution(t, runCommandTester)
+	testExecution(t, runScriptTester)
 }
 
-// TestBucketsInDifferentRegions tests runCommands when S3Buckets are present in IAD and PDX region.
+// TestBucketsInDifferentRegions tests runScripts when S3Buckets are present in IAD and PDX region.
 func TestBucketsInDifferentRegions(t *testing.T) {
 	for _, testCase := range TestCases {
 		testBucketsInDifferentRegions(t, testCase, true)
@@ -155,11 +155,11 @@ func TestBucketsInDifferentRegions(t *testing.T) {
 	}
 }
 
-// testBucketsInDifferentRegions tests the runCommands with S3 buckets present in IAD and PDX region.
+// testBucketsInDifferentRegions tests the runScripts with S3 buckets present in IAD and PDX region.
 func testBucketsInDifferentRegions(t *testing.T, testCase TestCase, testingBucketsInDifferentRegions bool) {
 	logger.On("Error", mock.Anything).Return(nil)
 	logger.Infof("test run commands %v", testCase)
-	runCommandTester := func(p *Plugin, mockCancelFlag *task.MockCancelFlag, mockExecuter *executers.MockCommandExecuter, mockS3Uploader *pluginutil.MockDefaultPlugin) {
+	runScriptTester := func(p *Plugin, mockCancelFlag *task.MockCancelFlag, mockExecuter *executers.MockCommandExecuter, mockS3Uploader *pluginutil.MockDefaultPlugin) {
 		// set expectations
 		setExecuterExpectations(mockExecuter, testCase, mockCancelFlag, p)
 		setS3UploaderExpectations(mockS3Uploader, testCase, p)
@@ -172,7 +172,7 @@ func testBucketsInDifferentRegions(t *testing.T, testCase TestCase, testingBucke
 		assert.Equal(t, testCase.Output, res)
 	}
 
-	testExecution(t, runCommandTester)
+	testExecution(t, runScriptTester)
 }
 
 // TestExecute tests the Execute method, which runs multiple sets of commands.
@@ -216,7 +216,7 @@ func testExecute(t *testing.T, testCase TestCase) {
 				OutputS3KeyPrefix:      s3KeyPrefix,
 				OrchestrationDirectory: orchestrationDirectory,
 				BookKeepingFileName:    commandID,
-				PluginID:               "aws:runCommand1",
+				PluginID:               "aws:runScript1",
 			}, mockCancelFlag, runpluginutil.PluginRunner{})
 
 		// assert output is correct (mocked object expectations are tested automatically by testExecution)
@@ -258,7 +258,7 @@ func testExecution(t *testing.T, commandtester CommandTester) {
 	p.ExecuteCommand = pluginutil.CommandExecuter(mockExecuter.Execute)
 	p.ExecuteUploadOutputToS3Bucket = pluginutil.UploadOutputToS3BucketExecuter(mockS3Uploader.UploadOutputToS3Bucket)
 	p.Name = "aws:runShellScript"
-	p.RunCommandScriptName = "_script.sh"
+	p.ScriptName = "_script.sh"
 	p.ShellCommand = "sh"
 	p.ShellArguments = []string{"-c"}
 

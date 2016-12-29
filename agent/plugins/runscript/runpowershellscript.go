@@ -11,9 +11,9 @@
 // either express or implied. See the License for the specific language governing
 // permissions and limitations under the License.
 
-// Package runcommand implements the RunCommand plugin.
+// Package runscript implements the RunScript plugin.
 // RunPowerShellScript contains implementation of the plugin that runs powershell scripts on linux or windows
-package runcommand
+package runscript
 
 import (
 	"strings"
@@ -34,10 +34,10 @@ type runPowerShellPlugin struct {
 func NewRunPowerShellPlugin(pluginConfig pluginutil.PluginConfig) (*runPowerShellPlugin, error) {
 	psplugin := runPowerShellPlugin{
 		Plugin{
-			Name:                 appconfig.PluginNameAwsRunPowerShellScript,
-			RunCommandScriptName: powerShellScriptName,
-			ShellCommand:         appconfig.PowerShellPluginCommandName,
-			ShellArguments:       strings.Split(appconfig.PowerShellPluginCommandArgs, " "),
+			Name:           appconfig.PluginNameAwsRunPowerShellScript,
+			ScriptName:     powerShellScriptName,
+			ShellCommand:   appconfig.PowerShellPluginCommandName,
+			ShellArguments: strings.Split(appconfig.PowerShellPluginCommandArgs, " "),
 		},
 	}
 

@@ -268,7 +268,7 @@ func prepareTestRunCommand(t *testing.T) (commandInvoker CommandInvoker, cancelF
 		var stdoutBuf bytes.Buffer
 		var stderrBuf bytes.Buffer
 		workDir := "."
-		tempExitCode, err := RunCommand(logger, cancelFlag, workDir, &stdoutBuf, &stderrBuf, defaultExecutionTimeout, commands[0], commands[1:])
+		tempExitCode, err := ExecuteCommand(logger, cancelFlag, workDir, &stdoutBuf, &stderrBuf, defaultExecutionTimeout, commands[0], commands[1:])
 		exitCode = tempExitCode
 
 		// record error if any

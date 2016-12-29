@@ -11,9 +11,9 @@
 // either express or implied. See the License for the specific language governing
 // permissions and limitations under the License.
 
-// Package runcommand implements the RunCommand plugin.
+// Package runscript implements the RunScript plugin.
 // RunShellScript contains implementation of the plugin that runs shell scripts on linux
-package runcommand
+package runscript
 
 import (
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
@@ -30,14 +30,14 @@ var shellScriptName = "_script.sh"
 var shellCommand = "sh"
 var shellArgs = []string{"-c"}
 
-// NewSHPlugin returns a new instance of the SHPlugin.
+// NewRunShellPlugin returns a new instance of the SHPlugin.
 func NewRunShellPlugin(log log.T, pluginConfig pluginutil.PluginConfig) (*runShellPlugin, error) {
 	shplugin := runShellPlugin{
 		Plugin{
-			Name:                 appconfig.PluginNameAwsRunShellScript,
-			RunCommandScriptName: shellScriptName,
-			ShellCommand:         shellCommand,
-			ShellArguments:       shellArgs,
+			Name:           appconfig.PluginNameAwsRunShellScript,
+			ScriptName:     shellScriptName,
+			ShellCommand:   shellCommand,
+			ShellArguments: shellArgs,
 		},
 	}
 

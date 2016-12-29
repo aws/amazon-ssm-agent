@@ -11,14 +11,15 @@
 // either express or implied. See the License for the specific language governing
 // permissions and limitations under the License.
 
-// Package runcommand implements the RunCommand plugin.
-package runcommand
+// Package runscript implements the runscript plugin.
+package runscript
 
 import (
 	"fmt"
-	"io/ioutil"
 	"path/filepath"
 	"time"
+
+	"io/ioutil"
 
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
@@ -32,22 +33,22 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/task"
 )
 
-// Plugin is the type for the RunCommand plugin.
+// Plugin is the type for the runscript plugin.
 type Plugin struct {
 	pluginutil.DefaultPlugin
 	defaultWorkingDirectory string
 
 	// Name is the plugin name (PowerShellScript or ShellScript)
-	Name                 string
-	RunCommandScriptName string
-	ShellCommand         string
-	ShellArguments       []string
+	Name           string
+	ScriptName     string
+	ShellCommand   string
+	ShellArguments []string
 }
 
-// RunCommandPluginInput represents one set of commands executed by the RunCommand plugin.
-type RunCommandPluginInput struct {
+// RunScriptPluginInput represents one set of commands executed by the RunScript plugin.
+type RunScriptPluginInput struct {
 	contracts.PluginInput
-	RunCommand       []string
+	RunScript        []string
 	ID               string
 	WorkingDirectory string
 	TimeoutSeconds   interface{}
@@ -67,7 +68,7 @@ func (p *Plugin) AssignPluginConfigs(pluginConfig pluginutil.PluginConfig) {
 }
 
 // Execute runs multiple sets of commands and returns their outputs.
-// res.Output will contain a slice of RunCommandPluginOutput.
+// res.Output will contain a slice of RunScriptPluginOutput.
 func (p *Plugin) Execute(context context.T, config contracts.Configuration, cancelFlag task.CancelFlag, subDocumentRunner runpluginutil.PluginRunner) (res contracts.PluginResult) {
 	log := context.Log()
 	log.Infof("%v started with configuration %v", p.Name, config)
@@ -123,7 +124,7 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 // runCommandsRawInput executes one set of commands and returns their output.
 // The input is in the default json unmarshal format (e.g. map[string]interface{}).
 func (p *Plugin) runCommandsRawInput(log log.T, rawPluginInput interface{}, orchestrationDirectory string, cancelFlag task.CancelFlag, outputS3BucketName string, outputS3KeyPrefix string) (out contracts.PluginOutput) {
-	var pluginInput RunCommandPluginInput
+	var pluginInput RunScriptPluginInput
 	err := jsonutil.Remarshal(rawPluginInput, &pluginInput)
 	if err != nil {
 		errorString := fmt.Errorf("Invalid format in plugin properties %v;\nerror %v", rawPluginInput, err)
@@ -144,7 +145,7 @@ func (p *Plugin) runCommands(log log.T, pluginInput RunCommandPluginInput, orche
 
 	// TODO:MF: This subdirectory is only needed because we could be running multiple sets of properties for the same plugin - otherwise the orchestration directory would already be unique
 	orchestrationDir := fileutil.BuildPath(orchestrationDirectory, pluginInput.ID)
-	log.Debugf("Running commands %v in workingDirectory %v; orchestrationDir %v ", pluginInput.RunCommand, workingDir, orchestrationDir)
+	log.Debugf("Running commands %v in workingDirectory %v; orchestrationDir %v ", pluginInput.RunScript, workingDir, orchestrationDir)
 
 	// create orchestration dir if needed
 	if err = fileutil.MakeDirsWithExecuteAccess(orchestrationDir); err != nil {
@@ -153,11 +154,11 @@ func (p *Plugin) runCommands(log log.T, pluginInput RunCommandPluginInput, orche
 	}
 
 	// Create script file path
-	scriptPath := filepath.Join(orchestrationDir, p.RunCommandScriptName)
+	scriptPath := filepath.Join(orchestrationDir, p.ScriptName)
 	log.Debugf("Writing commands %v to file %v", pluginInput, scriptPath)
 
 	// Create script file
-	if err = pluginutil.CreateScriptFile(log, scriptPath, pluginInput.RunCommand); err != nil {
+	if err = pluginutil.CreateScriptFile(log, scriptPath, pluginInput.RunScript); err != nil {
 		out.MarkAsFailed(log, fmt.Errorf("failed to create script file. %v", err))
 		return
 	}

@@ -79,7 +79,7 @@ func (sh ShellCommandExecuter) Execute(
 ) (stdout io.Reader, stderr io.Reader, exitCode int, errs []error) {
 
 	var err error
-	exitCode, err = runCommandOutputToFiles(log, cancelFlag, workingDir, stdoutFilePath, stderrFilePath, executionTimeout, commandName, commandArguments)
+	exitCode, err = executeCommandAndOutputToFiles(log, cancelFlag, workingDir, stdoutFilePath, stderrFilePath, executionTimeout, commandName, commandArguments)
 	if err != nil {
 		errs = append(errs, err)
 	}
@@ -111,7 +111,7 @@ func (sh ShellCommandExecuter) Execute(
 	return
 }
 
-// Execute executes a list of shell commands in the given working directory.
+// StartExe starts a list of shell commands in the given working directory.
 // The orchestration directory specifies where to create the script file and where
 // to save stdout and stderr. The orchestration directory will be created if it doesn't exist.
 // Returns readers for the standard output and standard error streams and a set of errors.
@@ -130,7 +130,7 @@ func (sh ShellCommandExecuter) StartExe(
 	commandArguments []string,
 ) (stdout io.Reader, stderr io.Reader, exitCode int, errs []error) {
 	var err error
-	exitCode, err = runCommandOutputToFiles2(log, cancelFlag, workingDir, stdoutFilePath, stderrFilePath, executionTimeout, commandName, commandArguments)
+	exitCode, err = startCommandAndOutputToFiles(log, cancelFlag, workingDir, stdoutFilePath, stderrFilePath, executionTimeout, commandName, commandArguments)
 	if err != nil {
 		errs = append(errs, err)
 	}
@@ -179,9 +179,9 @@ func CreateScriptFile(scriptPath string, commands []string) (err error) {
 	return
 }
 
-// runCommandOutputToFiles runs the given commands using the given working directory.
+// executeCommandAndOutputToFiles executes the given commands using the given working directory.
 // The directory must exist. Standard output and standard error are sent to the given files.
-func runCommandOutputToFiles(
+func executeCommandAndOutputToFiles(
 	log log.T,
 	cancelFlag task.CancelFlag,
 	workingDir string,
@@ -210,12 +210,12 @@ func runCommandOutputToFiles(
 	}
 	defer stderrWriter.Close()
 
-	return RunCommand(log, cancelFlag, workingDir, stdoutWriter, stderrWriter, executionTimeout, commandName, commandArguments)
+	return ExecuteCommand(log, cancelFlag, workingDir, stdoutWriter, stderrWriter, executionTimeout, commandName, commandArguments)
 }
 
-// runCommandOutputToFiles runs the given commands using the given working directory.
+// startCommandAndOutputToFiles starts the given commands using the given working directory.
 // The directory must exist. Standard output and standard error are sent to the given files.
-func runCommandOutputToFiles2(
+func startCommandAndOutputToFiles(
 	log log.T,
 	cancelFlag task.CancelFlag,
 	workingDir string,
@@ -247,9 +247,9 @@ func runCommandOutputToFiles2(
 	return StartCommand(log, cancelFlag, workingDir, stdoutWriter, stderrWriter, executionTimeout, commandName, commandArguments)
 }
 
-// RunCommand runs the given commands using the given working directory.
+// ExecuteCommand executes the given commands using the given working directory.
 // Standard output and standard error are sent to the given writers.
-func RunCommand(log log.T,
+func ExecuteCommand(log log.T,
 	cancelFlag task.CancelFlag,
 	workingDir string,
 	stdoutWriter io.Writer,
@@ -336,7 +336,7 @@ func RunCommand(log log.T,
 	return
 }
 
-// RunCommand runs the given commands using the given working directory.
+// StartCommand starts the given commands using the given working directory.
 // Standard output and standard error are sent to the given writers.
 func StartCommand(log log.T,
 	cancelFlag task.CancelFlag,
@@ -373,12 +373,7 @@ func StartCommand(log log.T,
 	signal := timeoutSignal{}
 	go killProcessOnCancel(log, command, cancelFlag, &signal)
 
-	//todo: timeout is not really required here -> because it's a long running exe
-	//timer := time.NewTimer(time.Duration(executionTimeout) * time.Second)
-	//go killProcessOnTimeout(log, command, timer)
-
-	//err = command.Wait()
-	//timedOut := !timer.Stop() // returns false if called previously - indicates timedOut.
+	//timeout is not really required here -> because it's a long running exe
 	if err != nil {
 		exitCode = 1
 		log.Debugf("command failed to run %v", err)
@@ -399,11 +394,7 @@ func StartCommand(log log.T,
 						// set appropriate exit code based on cancel or timeout
 						exitCode = pluginutil.CommandStoppedPreemptivelyExitCode
 						log.Infof("The execution of command was cancelled.")
-					} /*else if timedOut {
-						// set appropriate exit code based on cancel or timeout
-						exitCode = pluginutil.CommandStoppedPreemptivelyExitCode
-						log.Infof("The execution of command was timedout.")
-					}*/
+					}
 				} else {
 					log.Infof("The execution of command returned Exit Status: %d", exitCode)
 				}
@@ -417,11 +408,6 @@ func StartCommand(log log.T,
 			log.Errorf("the cancellation failed to stop the process.")
 			// do not return as the command could have been cancelled and also timedout
 		}
-		/*
-			if timedOut {
-				// This is when the timeout failed and the command completed successfully
-				log.Errorf("the timeout failed to stop the process.")
-			}*/
 	}
 
 	log.Debug("Done waiting!")
