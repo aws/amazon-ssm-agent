@@ -222,7 +222,7 @@ func runUpdateAgent(
 		return
 	}
 
-	out.AppendInfo(log, "Updating %v from %v to %v",
+	out.AppendInfof(log, "Updating %v from %v to %v",
 		pluginInput.AgentName,
 		agentVersion,
 		targetVersion)
@@ -427,7 +427,7 @@ func (m *updateManager) downloadManifest(log log.T,
 		downloadOutput.LocalFilePath == "" {
 		return nil, downloadErr
 	}
-	out.AppendInfo(log, "Successfully downloaded %v", downloadInput.SourceURL)
+	out.AppendInfof(log, "Successfully downloaded %v", downloadInput.SourceURL)
 	return ParseManifest(log, downloadOutput.LocalFilePath)
 }
 
@@ -470,7 +470,7 @@ func (m *updateManager) downloadUpdater(log log.T,
 		return version, errors.New(errMessage)
 	}
 
-	out.AppendInfo(log, "Successfully downloaded %v", downloadInput.SourceURL)
+	out.AppendInfof(log, "Successfully downloaded %v", downloadInput.SourceURL)
 	if uncompressErr := fileUncompress(
 		downloadOutput.LocalFilePath,
 		updateutil.UpdateArtifactFolder(appconfig.EC2UpdateArtifactsRoot, updaterPackageName, version)); uncompressErr != nil {
@@ -478,7 +478,7 @@ func (m *updateManager) downloadUpdater(log log.T,
 			downloadOutput.LocalFilePath,
 			uncompressErr.Error())
 	}
-	out.AppendInfo(log, "Successfully downloaded %v", downloadInput.SourceURL)
+	out.AppendInfof(log, "Successfully downloaded %v", downloadInput.SourceURL)
 
 	return version, nil
 }
@@ -502,7 +502,7 @@ func (m *updateManager) validateUpdate(log log.T,
 	}
 
 	if pluginInput.TargetVersion == currentVersion {
-		out.AppendInfo(log, "%v %v has already been installed, update skipped",
+		out.AppendInfof(log, "%v %v has already been installed, update skipped",
 			pluginInput.AgentName,
 			currentVersion)
 		out.MarkAsSucceeded()

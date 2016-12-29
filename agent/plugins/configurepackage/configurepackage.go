@@ -156,7 +156,7 @@ func runConfigurePackage(
 		// if already installed, exit
 		if version == installedVersion {
 			// TODO:MF: validate that installed version is basically valid - has manifest and at least one other non-etag file or folder?
-			output.AppendInfo(log, "%v %v is already installed", input.Name, version)
+			output.AppendInfof(log, "%v %v is already installed", input.Name, version)
 			output.MarkAsSucceeded()
 			return
 		}
@@ -182,14 +182,14 @@ func runConfigurePackage(
 			// even though that may or may not be the package that installed it - it is our only decent option
 			_, ensureErr := manager.ensurePackage(context, configUtil, input.Name, installedVersion, &output)
 			if ensureErr != nil {
-				output.AppendError(log, "unable to obtain package: %v", ensureErr)
+				output.AppendErrorf(log, "unable to obtain package: %v", ensureErr)
 			} else {
 				result, err := manager.runUninstallPackagePre(context,
 					input.Name,
 					installedVersion,
 					&output)
 				if err != nil {
-					output.AppendError(log, "failed to uninstall currently installed version of package: %v", err)
+					output.AppendErrorf(log, "failed to uninstall currently installed version of package: %v", err)
 				} else {
 					if result == contracts.ResultStatusSuccessAndReboot || result == contracts.ResultStatusPassedAndReboot {
 						// Reboot before continuing
@@ -211,12 +211,12 @@ func runConfigurePackage(
 		if err != nil {
 			output.MarkAsFailed(log, fmt.Errorf("failed to install package: %v", err))
 		} else if result == contracts.ResultStatusSuccessAndReboot || result == contracts.ResultStatusPassedAndReboot {
-			output.AppendInfo(log, "Successfully installed %v %v", input.Name, version)
+			output.AppendInfof(log, "Successfully installed %v %v", input.Name, version)
 			output.MarkAsSuccessWithReboot()
 		} else if result != contracts.ResultStatusSuccess {
 			output.MarkAsFailed(log, fmt.Errorf("install action state was %v and not %v", result, contracts.ResultStatusSuccess))
 		} else {
-			output.AppendInfo(log, "Successfully installed %v %v", input.Name, version)
+			output.AppendInfof(log, "Successfully installed %v %v", input.Name, version)
 			output.MarkAsSucceeded()
 		}
 
@@ -227,7 +227,7 @@ func runConfigurePackage(
 				installedVersion,
 				&output)
 			if err != nil {
-				output.AppendError(log, "failed to clean up currently installed version of package: %v", err)
+				output.AppendErrorf(log, "failed to clean up currently installed version of package: %v", err)
 			}
 		}
 
@@ -265,12 +265,12 @@ func runConfigurePackage(
 
 		result := contracts.MergeResultStatus(resultPre, resultPost)
 		if result == contracts.ResultStatusSuccessAndReboot || result == contracts.ResultStatusPassedAndReboot {
-			output.AppendInfo(log, "Successfully uninstalled %v %v", input.Name, version)
+			output.AppendInfof(log, "Successfully uninstalled %v %v", input.Name, version)
 			output.MarkAsSuccessWithReboot()
 		} else if result != contracts.ResultStatusSuccess {
 			output.MarkAsFailed(log, fmt.Errorf("uninstall action state was %v and not %v", result, contracts.ResultStatusSuccess))
 		} else {
-			output.AppendInfo(log, "Successfully uninstalled %v %v", input.Name, version)
+			output.AppendInfof(log, "Successfully uninstalled %v %v", input.Name, version)
 			output.MarkAsSucceeded()
 		}
 	default:
@@ -444,7 +444,7 @@ func (m *configurePackage) downloadPackage(context context.T,
 		return "", errors.New(errMessage)
 	}
 
-	output.AppendInfo(log, "Successfully downloaded %v", downloadInput.SourceURL)
+	output.AppendInfof(log, "Successfully downloaded %v", downloadInput.SourceURL)
 
 	return downloadOutput.LocalFilePath, nil
 }
@@ -502,7 +502,7 @@ func (m *configurePackage) executeAction(context context.T,
 
 	log := context.Log()
 	if actionExists {
-		output.AppendInfo(log, "Initiating %v %v %v", packageName, version, actionName)
+		output.AppendInfof(log, "Initiating %v %v %v", packageName, version, actionName)
 		file, err := filesysdep.ReadFile(fileLocation)
 		if err != nil {
 			return true, contracts.ResultStatusFailed, err
@@ -521,10 +521,10 @@ func (m *configurePackage) executeAction(context context.T,
 		for _, pluginOut := range pluginOutputs {
 			log.Debugf("Plugin %v ResultStatus %v", pluginOut.PluginName, pluginOut.Status)
 			if pluginOut.StandardOutput != "" {
-				output.AppendInfo(log, "%v output: %v", actionName, pluginOut.StandardOutput)
+				output.AppendInfof(log, "%v output: %v", actionName, pluginOut.StandardOutput)
 			}
 			if pluginOut.StandardError != "" {
-				output.AppendInfo(log, "%v errors: %v", actionName, pluginOut.StandardError)
+				output.AppendInfof(log, "%v errors: %v", actionName, pluginOut.StandardError)
 			}
 			if pluginOut.Error != nil {
 				output.MarkAsFailed(log, pluginOut.Error)
@@ -613,12 +613,12 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 			} else {
 				if err := filesysdep.WriteFile(outFile, out[0].Stdout); err != nil {
 					log.Debugf("Error writing to %v", outFile)
-					out[0].AppendError(log, "Error saving stdout: %v", err.Error())
+					out[0].AppendErrorf(log, "Error saving stdout: %v", err.Error())
 				}
 				errFile := filepath.Join(config.OrchestrationDirectory, p.StderrFileName)
 				if err := filesysdep.WriteFile(errFile, out[0].Stderr); err != nil {
 					log.Debugf("Error writing to %v", errFile)
-					out[0].AppendError(log, "Error saving stderr: %v", err.Error())
+					out[0].AppendErrorf(log, "Error saving stderr: %v", err.Error())
 				}
 			}
 			uploadErrs := p.UploadOutputToS3Bucket(log,

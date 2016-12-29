@@ -15,7 +15,6 @@
 package refreshassociation
 
 import (
-	"bytes"
 	"fmt"
 	"os"
 	"path/filepath"
@@ -161,16 +160,6 @@ func (p *Plugin) runCommandsRawInput(log log.T, rawPluginInput interface{}, orch
 		log.Error(err)
 	}
 
-	// read (a prefix of) the standard output/error
-	out.Stdout, err = pluginutil.ReadPrefix(bytes.NewBufferString(out.Stdout), p.MaxStdoutLength, p.OutputTruncatedSuffix)
-	if err != nil {
-		log.Error(err)
-	}
-	out.Stderr, err = pluginutil.ReadPrefix(bytes.NewBufferString(out.Stderr), p.MaxStderrLength, p.OutputTruncatedSuffix)
-	if err != nil {
-		log.Error(err)
-	}
-
 	// Upload output to S3
 	uploadOutputToS3BucketErrors := p.ExecuteUploadOutputToS3Bucket(log, pluginInput.ID, orchestrationDirectory, outputS3BucketName, outputS3KeyPrefix, false, "", out.Stdout, out.Stderr)
 	if len(uploadOutputToS3BucketErrors) > 0 {
@@ -280,7 +269,7 @@ func (p *Plugin) runCommands(log log.T, pluginInput RefreshAssociationPluginInpu
 	if applyAll {
 		out.AppendInfo(log, "All associations have been requested to execute immediately")
 	} else {
-		out.AppendInfo(log, "Associations %v have been requested to execute immediately", pluginInput.AssociationIds)
+		out.AppendInfof(log, "Associations %v have been requested to execute immediately", pluginInput.AssociationIds)
 	}
 
 	signal.ExecuteAssociation(log)

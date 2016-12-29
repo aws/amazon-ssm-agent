@@ -100,3 +100,30 @@ func TestAppendInfo(t *testing.T) {
 	assert.Contains(t, output.Stdout, "Info message")
 	assert.Contains(t, output.Stdout, "Second entry")
 }
+
+func TestAppendSpecialChars(t *testing.T) {
+	output := PluginOutput{}
+
+	var testString = "%v`~!@#$%^&*()-_=+[{]}|\\;:'\",<.>/?"
+	output.AppendInfo(logger, testString)
+	output.AppendError(logger, testString)
+
+	assert.Contains(t, output.Stdout, testString)
+	assert.Contains(t, output.Stderr, testString)
+}
+
+func TestAppendFormat(t *testing.T) {
+	output := PluginOutput{}
+
+	var testString = "%v`~!@#$%^&*()-_=+[{]}|\\;:'\",<.>/?%%"
+
+	// The first % is a %v - a variable to be replaced and we provided a value for it.
+	// The second % isn't escaped and is treated as a fmt parameter, but no value is provided for it.
+	// The double %% is an escaped single literal %.
+	var testStringFormatted = "foo`~!@#$%!^(MISSING)&*()-_=+[{]}|\\;:'\",<.>/?%"
+	output.AppendInfof(logger, testString, "foo")
+	output.AppendErrorf(logger, testString, "foo")
+
+	assert.Contains(t, output.Stdout, testStringFormatted)
+	assert.Contains(t, output.Stderr, testStringFormatted)
+}

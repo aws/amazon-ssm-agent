@@ -136,9 +136,8 @@ func (out *PluginOutput) MarkAsSuccessWithReboot() {
 }
 
 // AppendInfo adds info to PluginOutput StandardOut.
-func (out *PluginOutput) AppendInfo(log log.T, format string, params ...interface{}) {
-	if len(format) > 0 {
-		message := fmt.Sprintf(format, params...)
+func (out *PluginOutput) AppendInfo(log log.T, message string) {
+	if len(message) > 0 {
 		log.Info(message)
 		if len(out.Stdout) > 0 {
 			out.Stdout = fmt.Sprintf("%v\n%v", out.Stdout, message)
@@ -148,16 +147,31 @@ func (out *PluginOutput) AppendInfo(log log.T, format string, params ...interfac
 	}
 }
 
-// AppendError adds errors to PluginOutput StandardErr.
-func (out *PluginOutput) AppendError(log log.T, format string, params ...interface{}) {
+// AppendInfof adds info to PluginOutput StandardOut with formatting parameters.
+func (out *PluginOutput) AppendInfof(log log.T, format string, params ...interface{}) {
 	if len(format) > 0 {
 		message := fmt.Sprintf(format, params...)
+		out.AppendInfo(log, message)
+	}
+}
+
+// AppendError adds errors to PluginOutput StandardErr.
+func (out *PluginOutput) AppendError(log log.T, message string) {
+	if len(message) > 0 {
 		log.Error(message)
 		if len(out.Stderr) > 0 {
 			out.Stderr = fmt.Sprintf("%v\n%v", out.Stderr, message)
 		} else {
 			out.Stderr = message
 		}
+	}
+}
+
+// AppendErrorf adds errors to PluginOutput StandardErr with formatting parameters.
+func (out *PluginOutput) AppendErrorf(log log.T, format string, params ...interface{}) {
+	if len(format) > 0 {
+		message := fmt.Sprintf(format, params...)
+		out.AppendError(log, message)
 	}
 }
 
