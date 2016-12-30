@@ -1,4 +1,6 @@
 BUILDFILE_PATH := ./build/private/bgo_exports.makefile
+COPY := cp -p
+GO_BUILD := go build -i
 
 # Using the wildcard function to check if file exists
 ifneq ("$(wildcard $(BUILDFILE_PATH))","")
@@ -39,7 +41,7 @@ prepack:: prepack-linux prepack-linux-386 prepack-windows prepack-windows-386
 
 package:: create-package-folder package-linux package-windows
 
-release:: clean checkstyle release-test build prepack package
+release:: clean checkstyle release-test pre-release build prepack package
 
 ifneq ($(FINALIZE),)
 	bgo-final
@@ -49,82 +51,87 @@ clean:: remove-prepacked-folder
 	rm -rf build/* bin/ pkg/ vendor/bin/ vendor/pkg/ .cover/
 	find . -type f -name '*.log' -delete
 
-
 .PHONY: release-test
-release-test: copy-src pre-build quick-integtest
+release-test: copy-src pre-build pre-release quick-integtest
 
-.PHONY: pre-build
-pre-build:
+.PHONY: pre-release
+pre-release:
+	@echo "SSM Agent release build"
+	$(eval GO_BUILD := go build)
+	rm -rf $(BGO_SPACE)/vendro/pkg
+	@echo "Regenerate version file during pre-release"
 	go run $(BGO_SPACE)/agent/version/versiongenerator/version-gen.go
-	for file in $(BGO_SPACE)/Tools/src/*.sh; do chmod 755 $$file; done
-	@echo "Build amazon-ssm-agent"
-	@echo "GOPATH=$(GOPATH)"
-	rm -rf $(BGO_SPACE)/build/bin/ $(BGO_SPACE)/vendor/bin/ $(BGO_SPACE)/vendor/pkg/
-	mkdir -p $(BGO_SPACE)/bin/
-	cp $(BGO_SPACE)/Tools/src/PipelineRunTests.sh $(BGO_SPACE)/bin/
-	cp $(BGO_SPACE)/LICENSE $(BGO_SPACE)/bin/
-	cp $(BGO_SPACE)/amazon-ssm-agent.json.template $(BGO_SPACE)/bin/amazon-ssm-agent.json.template
-	cp $(BGO_SPACE)/seelog_unix.xml $(BGO_SPACE)/bin/
-	cp $(BGO_SPACE)/seelog_windows.xml.template $(BGO_SPACE)/bin/
-	cp $(BGO_SPACE)/VERSION $(BGO_SPACE)/bin/
-	cp $(BGO_SPACE)/agent/integration-cli/integration-cli.json $(BGO_SPACE)/bin/
-	cp $(BGO_SPACE)/packaging/plugin-binaries/* $(BGO_SPACE)/bin/
 ifneq ("$(wildcard $(BUILDFILE_PATH))","")
 	@echo "Copying version files generated in pre-build "
 	mkdir -p $(TEMPVERSIONPATH)
-	cp $(BGO_SPACE)/VERSION $(GOTEMPCOPYPATH)
-	cp $(BGO_SPACE)/agent/version/version.go $(TEMPVERSIONPATH)
+	$(COPY) $(BGO_SPACE)/VERSION $(GOTEMPCOPYPATH)
+	$(COPY) $(BGO_SPACE)/agent/version/version.go $(TEMPVERSIONPATH)
 endif
-	exit 0
+
+.PHONY: pre-build
+pre-build:
+	for file in $(BGO_SPACE)/Tools/src/*.sh; do chmod 755 $$file; done
+	@echo "Build amazon-ssm-agent"
+	@echo "GOPATH=$(GOPATH)"
+	rm -rf $(BGO_SPACE)/build/bin/ $(BGO_SPACE)/vendor/bin/
+	mkdir -p $(BGO_SPACE)/bin/
+	$(COPY) $(BGO_SPACE)/Tools/src/PipelineRunTests.sh $(BGO_SPACE)/bin/
+	$(COPY) $(BGO_SPACE)/LICENSE $(BGO_SPACE)/bin/
+	$(COPY) $(BGO_SPACE)/amazon-ssm-agent.json.template $(BGO_SPACE)/bin/amazon-ssm-agent.json.template
+	$(COPY) $(BGO_SPACE)/seelog_unix.xml $(BGO_SPACE)/bin/
+	$(COPY) $(BGO_SPACE)/seelog_windows.xml.template $(BGO_SPACE)/bin/
+	$(COPY) $(BGO_SPACE)/VERSION $(BGO_SPACE)/bin/
+	$(COPY) $(BGO_SPACE)/agent/integration-cli/integration-cli.json $(BGO_SPACE)/bin/
+	$(COPY) $(BGO_SPACE)/packaging/plugin-binaries/* $(BGO_SPACE)/bin/
 
 .PHONY: build-linux
 build-linux: checkstyle copy-src pre-build
 	@echo "Build for linux agent"
-	GOOS=linux GOARCH=amd64 go build -ldflags "-s -w" -o $(BGO_SPACE)/bin/linux_amd64/amazon-ssm-agent -v \
+	GOOS=linux GOARCH=amd64 $(GO_BUILD) -ldflags "-s -w" -o $(BGO_SPACE)/bin/linux_amd64/amazon-ssm-agent -v \
 	$(BGO_SPACE)/agent/agent.go $(BGO_SPACE)/agent/agent_unix.go $(BGO_SPACE)/agent/agent_parser.go
-	GOOS=linux GOARCH=amd64 go build -ldflags "-s -w" -o $(BGO_SPACE)/bin/linux_amd64/updater -v \
+	GOOS=linux GOARCH=amd64 $(GO_BUILD) -ldflags "-s -w" -o $(BGO_SPACE)/bin/linux_amd64/updater -v \
 	$(BGO_SPACE)/agent/update/updater/updater.go $(BGO_SPACE)/agent/update/updater/updater_unix.go
-	GOOS=linux GOARCH=amd64 go build -ldflags "-s -w" -o $(BGO_SPACE)/bin/linux_amd64/ssm-cli -v \
+	GOOS=linux GOARCH=amd64 $(GO_BUILD) -ldflags "-s -w" -o $(BGO_SPACE)/bin/linux_amd64/ssm-cli -v \
         $(BGO_SPACE)/agent/cli-main/cli-main.go
 
 .PHONY: build-darwin
 build-darwin: checkstyle copy-src pre-build
 	@echo "Rebuild for darwin agent"
-	GOOS=darwin GOARCH=amd64 go build -ldflags "-s -w" -o $(BGO_SPACE)/bin/darwin_amd64/amazon-ssm-agent -v \
+	GOOS=darwin GOARCH=amd64 $(GO_BUILD) -ldflags "-s -w" -o $(BGO_SPACE)/bin/darwin_amd64/amazon-ssm-agent -v \
 	$(BGO_SPACE)/agent/agent.go $(BGO_SPACE)/agent/agent_unix.go $(BGO_SPACE)/agent/agent_parser.go
-	GOOS=darwin GOARCH=amd64 go build -ldflags "-s -w" -o $(BGO_SPACE)/bin/darwin_amd64/updater -v \
+	GOOS=darwin GOARCH=amd64 $(GO_BUILD) -ldflags "-s -w" -o $(BGO_SPACE)/bin/darwin_amd64/updater -v \
 	$(BGO_SPACE)/agent/update/updater/updater.go $(BGO_SPACE)/agent/update/updater/updater_unix.go
-	GOOS=darwin GOARCH=amd64 go build -ldflags "-s -w" -o $(BGO_SPACE)/bin/darwin_amd64/ssm-cli -v \
+	GOOS=darwin GOARCH=amd64 $(GO_BUILD) -ldflags "-s -w" -o $(BGO_SPACE)/bin/darwin_amd64/ssm-cli -v \
         $(BGO_SPACE)/agent/cli-main/cli-main.go
 
 .PHONY: build-windows
 build-windows: checkstyle copy-src pre-build
 	@echo "Rebuild for windows agent"
-	GOOS=windows GOARCH=amd64 go build -ldflags "-s -w" -o $(BGO_SPACE)/bin/windows_amd64/amazon-ssm-agent.exe -v \
+	GOOS=windows GOARCH=amd64 $(GO_BUILD) -ldflags "-s -w" -o $(BGO_SPACE)/bin/windows_amd64/amazon-ssm-agent.exe -v \
 	$(BGO_SPACE)/agent/agent.go $(BGO_SPACE)/agent/agent_windows.go $(BGO_SPACE)/agent/agent_parser.go
-	GOOS=windows GOARCH=amd64 go build -ldflags "-s -w" -o $(BGO_SPACE)/bin/windows_amd64/updater.exe -v \
+	GOOS=windows GOARCH=amd64 $(GO_BUILD) -ldflags "-s -w" -o $(BGO_SPACE)/bin/windows_amd64/updater.exe -v \
 	$(BGO_SPACE)/agent/update/updater/updater.go $(BGO_SPACE)/agent/update/updater/updater_windows.go
-	GOOS=windows GOARCH=amd64 go build -ldflags "-s -w" -o $(BGO_SPACE)/bin/windows_amd64/ssm-cli.exe -v \
+	GOOS=windows GOARCH=amd64 $(GO_BUILD) -ldflags "-s -w" -o $(BGO_SPACE)/bin/windows_amd64/ssm-cli.exe -v \
         $(BGO_SPACE)/agent/cli-main/cli-main.go
 
 .PHONY: build-linux-386
 build-linux-386: checkstyle copy-src pre-build
 	@echo "Build for linux agent"
-	GOOS=linux GOARCH=386 go build -ldflags "-s -w" -o $(BGO_SPACE)/bin/linux_386/amazon-ssm-agent -v \
+	GOOS=linux GOARCH=386 $(GO_BUILD) -ldflags "-s -w" -o $(BGO_SPACE)/bin/linux_386/amazon-ssm-agent -v \
 	$(BGO_SPACE)/agent/agent.go $(BGO_SPACE)/agent/agent_unix.go $(BGO_SPACE)/agent/agent_parser.go
-	GOOS=linux GOARCH=386 go build -ldflags "-s -w" -o $(BGO_SPACE)/bin/linux_386/updater -v \
+	GOOS=linux GOARCH=386 $(GO_BUILD) -ldflags "-s -w" -o $(BGO_SPACE)/bin/linux_386/updater -v \
 	$(BGO_SPACE)/agent/update/updater/updater.go $(BGO_SPACE)/agent/update/updater/updater_unix.go
-	GOOS=linux GOARCH=386 go build -ldflags "-s -w" -o $(BGO_SPACE)/bin/linux_386/ssm-cli -v \
+	GOOS=linux GOARCH=386 $(GO_BUILD) -ldflags "-s -w" -o $(BGO_SPACE)/bin/linux_386/ssm-cli -v \
         $(BGO_SPACE)/agent/cli-main/cli-main.go
 
 .PHONY: build-darwin-386
 build-darwin-386: checkstyle copy-src pre-build
 	@echo "Rebuild for darwin agent"
-	GOOS=darwin GOARCH=386 go build -ldflags "-s -w" -o $(BGO_SPACE)/bin/darwin_386/amazon-ssm-agent -v \
+	GOOS=darwin GOARCH=386 $(GO_BUILD) -ldflags "-s -w" -o $(BGO_SPACE)/bin/darwin_386/amazon-ssm-agent -v \
 	$(BGO_SPACE)/agent/agent.go $(BGO_SPACE)/agent/agent_unix.go $(BGO_SPACE)/agent/agent_parser.go
-	GOOS=darwin GOARCH=386 go build -ldflags "-s -w" -o $(BGO_SPACE)/bin/darwin_386/updater -v \
+	GOOS=darwin GOARCH=386 $(GO_BUILD) -ldflags "-s -w" -o $(BGO_SPACE)/bin/darwin_386/updater -v \
 	$(BGO_SPACE)/agent/update/updater/updater.go $(BGO_SPACE)/agent/update/updater/updater_unix.go
-	GOOS=darwin GOARCH=386 go build -ldflags "-s -w" -o $(BGO_SPACE)/bin/darwin_386/ssm-cli -v \
+	GOOS=darwin GOARCH=386 $(GO_BUILD) -ldflags "-s -w" -o $(BGO_SPACE)/bin/darwin_386/ssm-cli -v \
         $(BGO_SPACE)/agent/cli-main/cli-main.go
 
 .PHONY: build-windows-386
@@ -143,7 +150,7 @@ ifneq ("$(wildcard $(BUILDFILE_PATH))","")
 	rm -rf $(GOTEMPCOPYPATH)
 	mkdir -p $(GOTEMPCOPYPATH)
 	@echo "copying files to $(GOTEMPCOPYPATH)"
-	cp -r $(BGO_SPACE)/agent $(GOTEMPCOPYPATH)
+	$(COPY) -r $(BGO_SPACE)/agent $(GOTEMPCOPYPATH)
 endif
 
 .PHONY: remove-prepacked-folder
@@ -153,62 +160,62 @@ remove-prepacked-folder:
 .PHONY: prepack-linux
 prepack-linux:
 	mkdir -p $(BGO_SPACE)/bin/prepacked/linux_amd64
-	cp $(BGO_SPACE)/bin/linux_amd64/amazon-ssm-agent $(BGO_SPACE)/bin/prepacked/linux_amd64/amazon-ssm-agent
-	cp $(BGO_SPACE)/bin/linux_amd64/updater $(BGO_SPACE)/bin/prepacked/linux_amd64/updater
-	cp $(BGO_SPACE)/bin/linux_amd64/ssm-cli $(BGO_SPACE)/bin/prepacked/linux_amd64/ssm-cli
-	cp $(BGO_SPACE)/bin/amazon-ssm-agent.json.template $(BGO_SPACE)/bin/prepacked/linux_amd64/amazon-ssm-agent.json.template
-	cp $(BGO_SPACE)/bin/seelog_unix.xml $(BGO_SPACE)/bin/prepacked/linux_amd64/seelog.xml
-	cp $(BGO_SPACE)/bin/LICENSE $(BGO_SPACE)/bin/prepacked/linux_amd64/LICENSE
+	$(COPY) $(BGO_SPACE)/bin/linux_amd64/amazon-ssm-agent $(BGO_SPACE)/bin/prepacked/linux_amd64/amazon-ssm-agent
+	$(COPY) $(BGO_SPACE)/bin/linux_amd64/updater $(BGO_SPACE)/bin/prepacked/linux_amd64/updater
+	$(COPY) $(BGO_SPACE)/bin/linux_amd64/ssm-cli $(BGO_SPACE)/bin/prepacked/linux_amd64/ssm-cli
+	$(COPY) $(BGO_SPACE)/bin/amazon-ssm-agent.json.template $(BGO_SPACE)/bin/prepacked/linux_amd64/amazon-ssm-agent.json.template
+	$(COPY) $(BGO_SPACE)/bin/seelog_unix.xml $(BGO_SPACE)/bin/prepacked/linux_amd64/seelog.xml
+	$(COPY) $(BGO_SPACE)/bin/LICENSE $(BGO_SPACE)/bin/prepacked/linux_amd64/LICENSE
 
 .PHONY: prepack-darwin
 prepack-darwin:
 	mkdir -p $(BGO_SPACE)/bin/prepacked/darwin_amd64
-	cp $(BGO_SPACE)/bin/darwin_amd64/amazon-ssm-agent $(BGO_SPACE)/bin/prepacked/darwin_amd64/amazon-ssm-agent
-	cp $(BGO_SPACE)/bin/darwin_amd64/updater $(BGO_SPACE)/bin/prepacked/darwin_amd64/updater
-	cp $(BGO_SPACE)/bin/darwin_amd64/ssm-cli $(BGO_SPACE)/bin/prepacked/darwin_amd64/ssm-cli
-	cp $(BGO_SPACE)/bin/amazon-ssm-agent.json.template $(BGO_SPACE)/bin/prepacked/darwin_amd64/amazon-ssm-agent.json.template
-	cp $(BGO_SPACE)/bin/seelog_unix.xml $(BGO_SPACE)/bin/prepacked/darwin_amd64/seelog.xml
-	cp $(BGO_SPACE)/bin/LICENSE $(BGO_SPACE)/bin/prepacked/darwin_amd64/LICENSE
+	$(COPY) $(BGO_SPACE)/bin/darwin_amd64/amazon-ssm-agent $(BGO_SPACE)/bin/prepacked/darwin_amd64/amazon-ssm-agent
+	$(COPY) $(BGO_SPACE)/bin/darwin_amd64/updater $(BGO_SPACE)/bin/prepacked/darwin_amd64/updater
+	$(COPY) $(BGO_SPACE)/bin/darwin_amd64/ssm-cli $(BGO_SPACE)/bin/prepacked/darwin_amd64/ssm-cli
+	$(COPY) $(BGO_SPACE)/bin/amazon-ssm-agent.json.template $(BGO_SPACE)/bin/prepacked/darwin_amd64/amazon-ssm-agent.json.template
+	$(COPY) $(BGO_SPACE)/bin/seelog_unix.xml $(BGO_SPACE)/bin/prepacked/darwin_amd64/seelog.xml
+	$(COPY) $(BGO_SPACE)/bin/LICENSE $(BGO_SPACE)/bin/prepacked/darwin_amd64/LICENSE
 
 .PHONY: prepack-windows
 prepack-windows:
 	mkdir -p $(BGO_SPACE)/bin/prepacked/windows_amd64
-	cp $(BGO_SPACE)/bin/windows_amd64/amazon-ssm-agent.exe $(BGO_SPACE)/bin/prepacked/windows_amd64/amazon-ssm-agent.exe
-	cp $(BGO_SPACE)/bin/windows_amd64/updater.exe $(BGO_SPACE)/bin/prepacked/windows_amd64/updater.exe
-	cp $(BGO_SPACE)/bin/windows_amd64/ssm-cli.exe $(BGO_SPACE)/bin/prepacked/windows_amd64/ssm-cli.exe
-	cp $(BGO_SPACE)/bin/amazon-ssm-agent.json.template $(BGO_SPACE)/bin/prepacked/windows_amd64/amazon-ssm-agent.json.template
-	cp $(BGO_SPACE)/bin/seelog_windows.xml.template $(BGO_SPACE)/bin/prepacked/windows_amd64/seelog.xml.template
-	cp $(BGO_SPACE)/bin/LICENSE $(BGO_SPACE)/bin/prepacked/windows_amd64/LICENSE
+	$(COPY) $(BGO_SPACE)/bin/windows_amd64/amazon-ssm-agent.exe $(BGO_SPACE)/bin/prepacked/windows_amd64/amazon-ssm-agent.exe
+	$(COPY) $(BGO_SPACE)/bin/windows_amd64/updater.exe $(BGO_SPACE)/bin/prepacked/windows_amd64/updater.exe
+	$(COPY) $(BGO_SPACE)/bin/windows_amd64/ssm-cli.exe $(BGO_SPACE)/bin/prepacked/windows_amd64/ssm-cli.exe
+	$(COPY) $(BGO_SPACE)/bin/amazon-ssm-agent.json.template $(BGO_SPACE)/bin/prepacked/windows_amd64/amazon-ssm-agent.json.template
+	$(COPY) $(BGO_SPACE)/bin/seelog_windows.xml.template $(BGO_SPACE)/bin/prepacked/windows_amd64/seelog.xml.template
+	$(COPY) $(BGO_SPACE)/bin/LICENSE $(BGO_SPACE)/bin/prepacked/windows_amd64/LICENSE
 
 .PHONY: prepack-linux-386
 prepack-linux-386:
 	mkdir -p $(BGO_SPACE)/bin/prepacked/linux_386
-	cp $(BGO_SPACE)/bin/linux_386/amazon-ssm-agent $(BGO_SPACE)/bin/prepacked/linux_386/amazon-ssm-agent
-	cp $(BGO_SPACE)/bin/linux_386/updater $(BGO_SPACE)/bin/prepacked/linux_386/updater
-	cp $(BGO_SPACE)/bin/linux_386/ssm-cli $(BGO_SPACE)/bin/prepacked/linux_386/ssm-cli
-	cp $(BGO_SPACE)/bin/amazon-ssm-agent.json.template $(BGO_SPACE)/bin/prepacked/linux_386/amazon-ssm-agent.json.template
-	cp $(BGO_SPACE)/bin/seelog_unix.xml $(BGO_SPACE)/bin/prepacked/linux_386/seelog.xml
-	cp $(BGO_SPACE)/bin/LICENSE $(BGO_SPACE)/bin/prepacked/linux_386/LICENSE
+	$(COPY) $(BGO_SPACE)/bin/linux_386/amazon-ssm-agent $(BGO_SPACE)/bin/prepacked/linux_386/amazon-ssm-agent
+	$(COPY) $(BGO_SPACE)/bin/linux_386/updater $(BGO_SPACE)/bin/prepacked/linux_386/updater
+	$(COPY) $(BGO_SPACE)/bin/linux_386/ssm-cli $(BGO_SPACE)/bin/prepacked/linux_386/ssm-cli
+	$(COPY) $(BGO_SPACE)/bin/amazon-ssm-agent.json.template $(BGO_SPACE)/bin/prepacked/linux_386/amazon-ssm-agent.json.template
+	$(COPY) $(BGO_SPACE)/bin/seelog_unix.xml $(BGO_SPACE)/bin/prepacked/linux_386/seelog.xml
+	$(COPY) $(BGO_SPACE)/bin/LICENSE $(BGO_SPACE)/bin/prepacked/linux_386/LICENSE
 
 .PHONY: prepack-darwin-386
 prepack-darwin-386:
 	mkdir -p $(BGO_SPACE)/bin/prepacked/darwin_386
-	cp $(BGO_SPACE)/bin/darwin_386/amazon-ssm-agent $(BGO_SPACE)/bin/prepacked/darwin_386/amazon-ssm-agent
-	cp $(BGO_SPACE)/bin/darwin_386/updater $(BGO_SPACE)/bin/prepacked/darwin_386/updater
-	cp $(BGO_SPACE)/bin/darwin_386/ssm-cli $(BGO_SPACE)/bin/prepacked/darwin_386/ssm-cli
-	cp $(BGO_SPACE)/bin/amazon-ssm-agent.json.template $(BGO_SPACE)/bin/prepacked/darwin_386/amazon-ssm-agent.json.template
-	cp $(BGO_SPACE)/bin/seelog_unix.xml $(BGO_SPACE)/bin/prepacked/darwin_386/seelog.xml
-	cp $(BGO_SPACE)/bin/LICENSE $(BGO_SPACE)/bin/prepacked/darwin_386/LICENSE
+	$(COPY) $(BGO_SPACE)/bin/darwin_386/amazon-ssm-agent $(BGO_SPACE)/bin/prepacked/darwin_386/amazon-ssm-agent
+	$(COPY) $(BGO_SPACE)/bin/darwin_386/updater $(BGO_SPACE)/bin/prepacked/darwin_386/updater
+	$(COPY) $(BGO_SPACE)/bin/darwin_386/ssm-cli $(BGO_SPACE)/bin/prepacked/darwin_386/ssm-cli
+	$(COPY) $(BGO_SPACE)/bin/amazon-ssm-agent.json.template $(BGO_SPACE)/bin/prepacked/darwin_386/amazon-ssm-agent.json.template
+	$(COPY) $(BGO_SPACE)/bin/seelog_unix.xml $(BGO_SPACE)/bin/prepacked/darwin_386/seelog.xml
+	$(COPY) $(BGO_SPACE)/bin/LICENSE $(BGO_SPACE)/bin/prepacked/darwin_386/LICENSE
 
 .PHONY: prepack-windows-386
 prepack-windows-386:
 	mkdir -p $(BGO_SPACE)/bin/prepacked/windows_386
-	cp $(BGO_SPACE)/bin/windows_386/amazon-ssm-agent.exe $(BGO_SPACE)/bin/prepacked/windows_386/amazon-ssm-agent.exe
-	cp $(BGO_SPACE)/bin/windows_386/updater.exe $(BGO_SPACE)/bin/prepacked/windows_386/updater.exe
-	cp $(BGO_SPACE)/bin/windows_386/ssm-cli.exe $(BGO_SPACE)/bin/prepacked/windows_386/ssm-cli.exe
-	cp $(BGO_SPACE)/bin/amazon-ssm-agent.json.template $(BGO_SPACE)/bin/prepacked/windows_386/amazon-ssm-agent.json.template
-	cp $(BGO_SPACE)/bin/seelog_windows.xml.template $(BGO_SPACE)/bin/prepacked/windows_386/seelog.xml.template
-	cp $(BGO_SPACE)/bin/LICENSE $(BGO_SPACE)/bin/prepacked/windows_386/LICENSE
+	$(COPY) $(BGO_SPACE)/bin/windows_386/amazon-ssm-agent.exe $(BGO_SPACE)/bin/prepacked/windows_386/amazon-ssm-agent.exe
+	$(COPY) $(BGO_SPACE)/bin/windows_386/updater.exe $(BGO_SPACE)/bin/prepacked/windows_386/updater.exe
+	$(COPY) $(BGO_SPACE)/bin/windows_386/ssm-cli.exe $(BGO_SPACE)/bin/prepacked/windows_386/ssm-cli.exe
+	$(COPY) $(BGO_SPACE)/bin/amazon-ssm-agent.json.template $(BGO_SPACE)/bin/prepacked/windows_386/amazon-ssm-agent.json.template
+	$(COPY) $(BGO_SPACE)/bin/seelog_windows.xml.template $(BGO_SPACE)/bin/prepacked/windows_386/seelog.xml.template
+	$(COPY) $(BGO_SPACE)/bin/LICENSE $(BGO_SPACE)/bin/prepacked/windows_386/LICENSE
 
 .PHONY: create-package-folder
 create-package-folder:

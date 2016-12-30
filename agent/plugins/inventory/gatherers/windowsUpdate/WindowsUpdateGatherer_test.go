@@ -24,10 +24,16 @@ import (
 
 var testUpdate = []model.WindowsUpdateData{
 	model.WindowsUpdateData{
-		"KB000001", "Security Update", "Wednesday, October 15, 2014 12:00:00 AM", "ADMINISTRATOR",
+		HotFixId:      "KB000001",
+		Description:   "Security Update",
+		InstalledTime: "Wednesday, October 15, 2014 12:00:00 AM",
+		InstalledBy:   "ADMINISTRATOR",
 	},
 	model.WindowsUpdateData{
-		"KB000002", "Update", "Friday, June 20, 2014 12:00:00 AM", "NT AUTHORITY SYSTEM",
+		HotFixId:      "KB000002",
+		Description:   "Update",
+		InstalledTime: "Friday, June 20, 2014 12:00:00 AM",
+		InstalledBy:   "NT AUTHORITY SYSTEM",
 	},
 }
 
