@@ -48,7 +48,7 @@ type Plugin struct {
 // RunScriptPluginInput represents one set of commands executed by the RunScript plugin.
 type RunScriptPluginInput struct {
 	contracts.PluginInput
-	RunScript        []string
+	RunCommand       []string
 	ID               string
 	WorkingDirectory string
 	TimeoutSeconds   interface{}
@@ -145,7 +145,7 @@ func (p *Plugin) runCommands(log log.T, pluginInput RunScriptPluginInput, orches
 
 	// TODO:MF: This subdirectory is only needed because we could be running multiple sets of properties for the same plugin - otherwise the orchestration directory would already be unique
 	orchestrationDir := fileutil.BuildPath(orchestrationDirectory, pluginInput.ID)
-	log.Debugf("Running commands %v in workingDirectory %v; orchestrationDir %v ", pluginInput.RunScript, workingDir, orchestrationDir)
+	log.Debugf("Running commands %v in workingDirectory %v; orchestrationDir %v ", pluginInput.RunCommand, workingDir, orchestrationDir)
 
 	// create orchestration dir if needed
 	if err = fileutil.MakeDirsWithExecuteAccess(orchestrationDir); err != nil {
@@ -158,7 +158,7 @@ func (p *Plugin) runCommands(log log.T, pluginInput RunScriptPluginInput, orches
 	log.Debugf("Writing commands %v to file %v", pluginInput, scriptPath)
 
 	// Create script file
-	if err = pluginutil.CreateScriptFile(log, scriptPath, pluginInput.RunScript); err != nil {
+	if err = pluginutil.CreateScriptFile(log, scriptPath, pluginInput.RunCommand); err != nil {
 		out.MarkAsFailed(log, fmt.Errorf("failed to create script file. %v", err))
 		return
 	}
