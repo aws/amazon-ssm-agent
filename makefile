@@ -72,12 +72,12 @@ pre-build:
 	$(COPY) $(BGO_SPACE)/amazon-ssm-agent.json.template $(BGO_SPACE)/bin/amazon-ssm-agent.json.template
 	$(COPY) $(BGO_SPACE)/seelog_unix.xml $(BGO_SPACE)/bin/
 	$(COPY) $(BGO_SPACE)/seelog_windows.xml.template $(BGO_SPACE)/bin/
-	$(COPY) $(BGO_SPACE)/VERSION $(BGO_SPACE)/bin/
 	$(COPY) $(BGO_SPACE)/agent/integration-cli/integration-cli.json $(BGO_SPACE)/bin/
 	$(COPY) $(BGO_SPACE)/packaging/plugin-binaries/* $(BGO_SPACE)/bin/
 
 	@echo "Regenerate version file during pre-release"
 	go run $(BGO_SPACE)/agent/version/versiongenerator/version-gen.go
+	$(COPY) $(BGO_SPACE)/VERSION $(BGO_SPACE)/bin/
 ifneq ("$(wildcard $(BUILDFILE_PATH))","")
 	@echo "Copying version files generated in pre-build "
 	mkdir -p $(TEMPVERSIONPATH)
