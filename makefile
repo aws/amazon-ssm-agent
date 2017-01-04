@@ -58,15 +58,7 @@ release-test: copy-src pre-build pre-release quick-integtest
 pre-release:
 	@echo "SSM Agent release build"
 	$(eval GO_BUILD := go build)
-	rm -rf $(BGO_SPACE)/vendro/pkg
-	@echo "Regenerate version file during pre-release"
-	go run $(BGO_SPACE)/agent/version/versiongenerator/version-gen.go
-ifneq ("$(wildcard $(BUILDFILE_PATH))","")
-	@echo "Copying version files generated in pre-build "
-	mkdir -p $(TEMPVERSIONPATH)
-	$(COPY) $(BGO_SPACE)/VERSION $(GOTEMPCOPYPATH)
-	$(COPY) $(BGO_SPACE)/agent/version/version.go $(TEMPVERSIONPATH)
-endif
+	rm -rf $(BGO_SPACE)/vendor/pkg
 
 .PHONY: pre-build
 pre-build:
@@ -83,6 +75,15 @@ pre-build:
 	$(COPY) $(BGO_SPACE)/VERSION $(BGO_SPACE)/bin/
 	$(COPY) $(BGO_SPACE)/agent/integration-cli/integration-cli.json $(BGO_SPACE)/bin/
 	$(COPY) $(BGO_SPACE)/packaging/plugin-binaries/* $(BGO_SPACE)/bin/
+
+	@echo "Regenerate version file during pre-release"
+	go run $(BGO_SPACE)/agent/version/versiongenerator/version-gen.go
+ifneq ("$(wildcard $(BUILDFILE_PATH))","")
+	@echo "Copying version files generated in pre-build "
+	mkdir -p $(TEMPVERSIONPATH)
+	$(COPY) $(BGO_SPACE)/VERSION $(GOTEMPCOPYPATH)
+	$(COPY) $(BGO_SPACE)/agent/version/version.go $(TEMPVERSIONPATH)
+endif
 
 .PHONY: build-linux
 build-linux: checkstyle copy-src pre-build

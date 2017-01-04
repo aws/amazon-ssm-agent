@@ -14,6 +14,7 @@
 package main
 
 import (
+	"bytes"
 	"encoding/base64"
 	"fmt"
 	"io/ioutil"
@@ -80,16 +81,30 @@ func main() {
 		Version: versionStr,
 	}
 
-	// filepath.join is more portable
-	outFile, err := os.Create(filepath.Join("agent", "version", "version.go"))
-	if err != nil {
-		log.Fatalf("Unable to create output version file: %v", err)
-	}
-	defer outFile.Close()
-	t := template.Must(template.New("version").Parse(string(licenseStr) + versiongoTemplate))
+	var newVersion bytes.Buffer
+	versionFilePath := filepath.Join("agent", "version", "version.go")
 
-	err = t.Execute(outFile, info)
+	t := template.Must(template.New("version").Parse(string(licenseStr) + versiongoTemplate))
+	err = t.Execute(&newVersion, info)
 	if err != nil {
 		log.Fatalf("Error applying template: %v", err)
+	}
+
+	oldContent, err := ioutil.ReadFile(versionFilePath)
+	if err != nil {
+		log.Fatalf("Error reading old version file: %v", err)
+	}
+
+	if newVersion.String() != string(oldContent) {
+		outFile, err := os.Create(versionFilePath)
+		if err != nil {
+			log.Fatalf("Unable to create output version file: %v", err)
+		}
+		defer outFile.Close()
+
+		err = t.Execute(outFile, info)
+		if err != nil {
+			log.Fatalf("Error applying template: %v", err)
+		}
 	}
 }
