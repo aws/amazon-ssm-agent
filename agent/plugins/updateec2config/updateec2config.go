@@ -145,28 +145,25 @@ func NewPlugin(updatePluginConfig UpdatePluginConfig) (*Plugin, error) {
 }
 
 // getEC2ConfigCurrentVersion gets the current version of EC2 config installed on the platform
-func getEC2ConfigCurrentVersion(log log.T) string {
-	cmdName := "wmic"
-	var err error
-	cmdArgs := []string{"DATAFILE", "where", "name='C:\\\\Program Files\\\\Amazon\\\\Ec2ConfigService\\\\Ec2Config.exe'", "get", "Version", "/format:list"}
+func getEC2ConfigCurrentVersion(log log.T) (res string, err error) {
+
+	ec2ConfigCLICmd := filepath.Join(os.Getenv("ProgramFiles"), "Amazon", "Ec2ConfigService", "ec2config-cli.exe")
 	var cmdOut []byte
-	if cmdOut, err = exec.Command(cmdName, cmdArgs...).Output(); err != nil {
-		log.Errorf("There was an error running %v %v. Error = %s", cmdName, cmdArgs, err)
-		return minimumVersion
+	cmdArgs := []string{"--ec2config-version"}
+
+	if cmdOut, err = exec.Command(ec2ConfigCLICmd, cmdArgs...).CombinedOutput(); err != nil {
+		log.Errorf("There was an error running %v %v. Error = %s", ec2ConfigCLICmd, cmdArgs, err)
+		return res, err
 	}
 
-	contents := string(cmdOut)
-	data := strings.Split(contents, "=")
+	data := string(cmdOut)
 	if len(data) > 1 {
-		version := strings.TrimSpace(data[1])
-		versionsplit := strings.Split(version, ".")
-		version = strings.TrimSuffix(version, versionsplit[3])
-		res := strings.TrimSuffix(version, ".")
-		log.Debug("GetEC2ConfigCurrentVersion: current version is ", res)
-		return res
+		version := strings.TrimSpace(data)
+		log.Debug("GetEC2ConfigCurrentVersion: version after trimming space is ", version)
+		return version, err
 	}
 
-	return minimumVersion
+	return res, fmt.Errorf("Ec2Config version cannot be determined")
 }
 
 // TODO add to update manager to merge codes between update agent and update ssm agent to avoid duplication
@@ -192,6 +189,7 @@ func runUpdateAgent(
 		return
 	}
 
+	log.Debugf("[runUpdateAgent]: Will now create the instance context")
 	if context, err = util.CreateInstanceContext(log); err != nil {
 		out.MarkAsFailed(log, err)
 		return
@@ -211,8 +209,12 @@ func runUpdateAgent(
 		targetVersion = "latest"
 	}
 
-	agentVersion = minimumVersion
-	agentVersion = getEC2ConfigCurrentVersion(log)
+	var agentVersion string
+	log.Debugf("[runUpdateAgent]: getting the current version of ec2config ")
+	if agentVersion, err = getEC2ConfigCurrentVersion(log); err != nil {
+		out.MarkAsFailed(log, err)
+		return
+	}
 
 	// If disk space is not sufficient, fail the update to prevent installation and notify user in output
 	// If loading disk space fails, continue to update (agent update is backed by rollback handler)
@@ -545,12 +547,12 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 	res.StartDateTime = time.Now()
 	defer func() { res.EndDateTime = time.Now() }()
 
-	test := make([]interface{}, 1)
-	test[0] = config.Properties
+	configProp := make([]interface{}, 1)
+	configProp[0] = config.Properties
 
-	//loading Properties as list since aws:updateSsmAgent uses properties as list
+	//loading Properties as list since aws:updateAgent uses properties as list
 	var properties []interface{}
-	if properties, res = pluginutil.LoadParametersAsList(log, test); res.Code != 0 {
+	if properties, res = pluginutil.LoadParametersAsList(log, configProp); res.Code != 0 {
 		return res
 	}
 
