@@ -43,8 +43,11 @@ func (m *Manager) StopPlugin(name string, cancelFlag task.CancelFlag) (err error
 	if isRegisteredPlugin && isRunningPlugin {
 		//stop the plugin
 		if err = p.Handler.Stop(m.context, cancelFlag); err != nil {
-			log.Errorf("Failed to stop long running plugin - %s because of %s", name, err)
-			return
+			// check if cloud watch exe process has been terminated manually
+			if p.Handler.IsRunning(m.context) {
+				log.Errorf("Failed to stop long running plugin - %s because of %s", name, err)
+				return
+			}
 		}
 		//remove the entry from the map of running plugins
 		delete(m.runningPlugins, name)
