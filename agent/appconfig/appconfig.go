@@ -113,7 +113,6 @@ func DefaultConfig() SsmagentConfig {
 		HealthFrequencyMinutes:         5,
 		AssociationFrequencyMinutes:    10,
 		AssociationRetryLimit:          5,
-		BasicInventoryGatherer:         "Disabled",
 		CustomInventoryDefaultLocation: DefaultCustomInventoryFolder,
 	}
 	var agent = AgentInfo{

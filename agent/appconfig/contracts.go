@@ -40,7 +40,6 @@ type SsmCfg struct {
 	// this is to skip ssl verification for the beta self signed certs
 	InsecureSkipVerify             bool
 	CustomInventoryDefaultLocation string
-	BasicInventoryGatherer         string
 }
 
 // AgentInfo represents metadata for amazon-ssm-agent
