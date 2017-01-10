@@ -199,8 +199,8 @@ func convertToItem(log log.T, content []byte) (item model.Item, err error) {
 		return
 	}
 
-	var attributes map[string]interface{}
-	if attributes, err = validateContentEntrySchema(log, customInventoryItem); err != nil {
+	var entryArray []map[string]interface{}
+	if entryArray, err = validateContentEntrySchema(log, customInventoryItem); err != nil {
 		return
 	}
 
@@ -209,11 +209,6 @@ func convertToItem(log log.T, content []byte) (item model.Item, err error) {
 	currentTime := time.Now().UTC()
 	captureTime := currentTime.Format(time.RFC3339)
 
-	// Convert content to array
-	var entryArray = []map[string]interface{}{}
-	if len(attributes) > 0 {
-		entryArray = append(entryArray, attributes)
-	}
 	item = model.Item{
 		Name:          customInventoryItem.TypeName,
 		SchemaVersion: customInventoryItem.SchemaVersion,
@@ -269,9 +264,62 @@ func validateSchemaVersion(log log.T, customInventoryItem model.CustomInventoryI
 	return
 }
 
+func validateContentEntryAttributes(log log.T, attributes map[string]interface{}) (err error) {
+	if attributes == nil {
+		err = fmt.Errorf("Custom inventory item content is not a valid json")
+		LogError(log, err)
+		return
+	}
+	if len(attributes) > AttributeCountLimit {
+		err = fmt.Errorf("One of custom inventory item (%v)'s content has %v attributes, exceed the limit %v",
+			attributes,
+			len(attributes),
+			AttributeCountLimit)
+		LogError(log, err)
+		return
+	}
+	for a, v := range attributes {
+		aLen := len(a)
+		if aLen > AttributeNameLengthLimit {
+			err = fmt.Errorf("Custom inventory attribute name (%v) length: %v, exceeded the limit: %v",
+				a,
+				aLen,
+				AttributeNameLengthLimit)
+			LogError(log, err)
+			return
+		} else if aLen == 0 {
+			err = fmt.Errorf("Custom inventory contains empty attribute name, which is illegal")
+			LogError(log, err)
+			return
+		}
+
+		if vStr, ok := v.(string); ok {
+			vLen := len(vStr)
+			if vLen > AttributeValueLengthLimit {
+				err = fmt.Errorf("Custom inventory (%v) has value's length: %v, "+
+					"which exceeded the limit: %v",
+					a,
+					vLen,
+					AttributeValueLengthLimit)
+				LogError(log, err)
+				return
+			}
+		} else {
+			err = fmt.Errorf("Custom inventory attribute (%v)'s value (%v) has type : %v, "+
+				"which is not supported, only string type is supported.",
+				a,
+				v,
+				reflect.TypeOf(v))
+			LogError(log, err)
+			return
+		}
+	}
+	return
+}
+
 // validateContentEntrySchema validates attribute name and value
 func validateContentEntrySchema(log log.T, customInventoryItem model.CustomInventoryItem) (
-	attributes map[string]interface{},
+	entryArray []map[string]interface{},
 	err error) {
 
 	if customInventoryItem.Content == nil {
@@ -282,66 +330,28 @@ func validateContentEntrySchema(log log.T, customInventoryItem model.CustomInven
 
 	contentValue := customInventoryItem.Content
 	log.Debugf("Content type of %v: %v", customInventoryItem.TypeName, reflect.TypeOf(contentValue))
-	var ok bool
-	if attributes, ok = contentValue.(map[string]interface{}); !ok {
-		err = fmt.Errorf("Custom inventory item %v's Content is not a valid json",
-			customInventoryItem.TypeName)
-		LogError(log, err)
-		return
-	}
-	if attributes == nil {
-		err = fmt.Errorf("Custom inventory item %v's Content is not a valid json",
-			customInventoryItem.TypeName)
-		LogError(log, err)
-		return
-	}
-	if len(attributes) > AttributeCountLimit {
-		err = fmt.Errorf("Custom inventory item (%v)'s content has %v attributes, exceed the limit %v",
-			customInventoryItem.TypeName,
-			len(attributes),
-			AttributeCountLimit)
-		LogError(log, err)
-		return
-	}
-	for a, v := range attributes {
-		aLen := len(a)
-		if aLen > AttributeNameLengthLimit {
-			err = fmt.Errorf("Custom inventory (%v)'s attribute name (%v) length: %v, exceeded the limit: %v",
-				customInventoryItem.TypeName,
-				a,
-				aLen,
-				AttributeNameLengthLimit)
-			LogError(log, err)
-			return
-		} else if aLen == 0 {
-			err = fmt.Errorf("Custom inventory (%v)'s contains empty attribute name, which is illegal",
-				customInventoryItem.TypeName)
-			LogError(log, err)
-			return
+	// custom inventory gatherer supports both map and array of map. For array of map, it goes through
+	// each map to validate content
+	if attributes, ok := contentValue.(map[string]interface{}); ok {
+		if err = validateContentEntryAttributes(log, attributes); err == nil {
+			entryArray = append(entryArray, attributes)
 		}
-
-		if vStr, ok := v.(string); ok {
-			vLen := len(vStr)
-			if vLen > AttributeValueLengthLimit {
-				err = fmt.Errorf("Attribute (%v) of custom inventory (%v) has value's length: %v, "+
-					"which exceeded the limit: %v",
-					customInventoryItem.TypeName,
-					a,
-					vLen,
-					AttributeValueLengthLimit)
+	} else if content, ok := contentValue.([]interface{}); ok {
+		for _, rawAttributes := range content {
+			if attributes, ok = rawAttributes.(map[string]interface{}); ok {
+				if err = validateContentEntryAttributes(log, attributes); err == nil {
+					entryArray = append(entryArray, attributes)
+				}
+			} else {
+				err = errors.New("Custom inventory entry is not valid")
 				LogError(log, err)
 				return
 			}
-		} else {
-			err = fmt.Errorf("Custom inventory (%v)'s attribute (%v)'s value (%v) has type : %v, "+
-				"which is not supported, only string type is supported.",
-				customInventoryItem.TypeName,
-				a,
-				v,
-				reflect.TypeOf(v))
-			LogError(log, err)
-			return
 		}
+	} else {
+		err = fmt.Errorf("Custom inventory item %v's Content is not a valid json",
+			customInventoryItem.TypeName)
+		LogError(log, err)
 	}
 	return
 }

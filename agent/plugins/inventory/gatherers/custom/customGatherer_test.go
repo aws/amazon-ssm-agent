@@ -150,13 +150,18 @@ func MockItemNoContent() model.CustomInventoryItem {
 }
 
 func MockItemContentIsArray() model.CustomInventoryItem {
-	var attributes = map[string]interface{}{
+	var attributes1 = map[string]interface{}{
 		"WebServer":  "corp.amazing.com",
 		"PortNumber": "8081",
 		"Version":    "1.2.3.4",
 	}
+	var attributes2 = map[string]interface{}{
+		"WebServer":  "corp.amazing.com",
+		"PortNumber": "8080",
+		"Version":    "1.2.3.5",
+	}
 	var entries = []map[string]interface{}{
-		attributes,
+		attributes1, attributes2,
 	}
 	return model.CustomInventoryItem{
 		TypeName:      "Custom:123",
@@ -482,7 +487,10 @@ func TestContentIsArray(t *testing.T) {
 
 	items, err := g.Run(c, model.Config{})
 	assert.Nil(t, err, "err shoud be nil as gather continues to load other custom inventory files")
-	assert.Nil(t, items, "Items should be nil")
+	assert.Equal(t, 1, len(items), "Custom Gather should return 1 inventory type data.")
+	entries, ok := items[0].Content.([]map[string]interface{})
+	assert.Equal(t, ok, true)
+	assert.Equal(t, 2, len(entries), "Custom Gather should return 2 entries.")
 }
 
 func TestContentAttributeCountExceedLimit(t *testing.T) {
