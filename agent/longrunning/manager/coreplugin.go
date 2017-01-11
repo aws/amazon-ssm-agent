@@ -339,7 +339,7 @@ func (m *Manager) configCloudWatch(log log.T) {
 			log.Errorf("Failed to start the cloud watch plugin bacause: %s", err)
 		}
 
-		// check if configue the cloudwatch successfully
+		// check if configure cloudwatch successfully
 		stderrFilePath := fileutil.BuildPath(orchestrationDir, appconfig.PluginNameCloudWatch, "stderr")
 		var errData []byte
 		var errorReadingFile error
@@ -413,14 +413,14 @@ func checkLegacyCloudWatchLocalConfig() (hasConfiguration bool, err error) {
 	var content []byte
 	content, err = ioutil.ReadFile(configFileName)
 
-	bom := []byte{0xef, 0xbb, 0xbf} // UTF-8
-	// if byte-order mark found
-	if bytes.Equal(content[:3], bom) {
-		content = content[3:]
-	}
+	validContent := checkAndRemoveBomCharacters(content)
+
+	// Update the config file with new configuration
+	var engineConfiguration interface{}
+	json.Unmarshal([]byte(validContent), &engineConfiguration)
 
 	cloudWatchConfig := &cloudwatch.CloudWatchConfig{
-		EngineConfiguration: string(content),
+		EngineConfiguration: engineConfiguration,
 		IsEnabled:           true,
 	}
 
@@ -428,4 +428,15 @@ func checkLegacyCloudWatchLocalConfig() (hasConfiguration bool, err error) {
 		return
 	}
 	return true, nil
+}
+
+// checkAndRemoveBomCharacters checks if there is any invalid bom characters at the beginning of the bytes.
+// If found, remove them to avoid unmarshall problem.
+func checkAndRemoveBomCharacters(content []byte) []byte {
+	bom := []byte{0xef, 0xbb, 0xbf} // UTF-8
+	// if byte-order mark found
+	if bytes.Equal(content[:3], bom) {
+		content = content[3:]
+	}
+	return content
 }

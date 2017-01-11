@@ -15,7 +15,8 @@
 package cloudwatch
 
 import (
-	"encoding/json"
+	"bytes"
+	"fmt"
 	"os"
 	"sync"
 
@@ -33,8 +34,8 @@ const (
 // cloudWatchConfig represents the data structure of cloudwatch configuration singleton,
 // which contains the essential information to configure cloudwatch plugin
 type CloudWatchConfig struct {
-	IsEnabled           bool
-	EngineConfiguration interface{}
+	IsEnabled           bool        `json:"IsEnabled"`
+	EngineConfiguration interface{} `json:"EngineConfiguration"`
 }
 
 var instance *CloudWatchConfig
@@ -55,23 +56,14 @@ func Instance() *CloudWatchConfig {
 
 // ParseEngineConfiguration marshals the EngineConfiguration from interface{} to string
 func ParseEngineConfiguration() (config string, err error) {
-	switch instance.EngineConfiguration.(type) {
-	case string:
-		var bytes []byte
-		rawIn := json.RawMessage(instance.EngineConfiguration.(string))
-		bytes, err = rawIn.MarshalJSON()
-		config = string(bytes[:])
-	default:
-		config, err = jsonutil.Marshal(instance.EngineConfiguration)
-	}
+	config, err = jsonutil.Marshal(instance.EngineConfiguration)
 
-	return
+	return buildFullConfiguration(config), err
 }
 
 // Update updates configuration from file system
 func Update() error {
 	var cwConfig CloudWatchConfig
-	//var config CloudWatchConfig
 	var err error
 	if cwConfig, err = load(); err != nil {
 		return err
@@ -92,7 +84,7 @@ func Write() error {
 	var err error
 	var content string
 
-	content, err = jsonutil.Marshal(instance)
+	content, err = jsonutil.MarshalIndent(instance)
 	if err != nil {
 		return err
 	}
@@ -117,8 +109,15 @@ func Write() error {
 
 // Enable changes the IsEnabled property in cloud watch config from false to true
 func Enable(config *CloudWatchConfig) error {
+	var tempConfig CloudWatchConfig
+	if err := jsonutil.Remarshal(config.EngineConfiguration, &tempConfig); err != nil {
+		errorString := fmt.Errorf("Cannot remarmal cloudwatch configuration format %v;\nerror %v",
+			config.EngineConfiguration, err)
+		return errorString
+	}
+
 	instance.IsEnabled = true
-	instance.EngineConfiguration = config.EngineConfiguration
+	instance.EngineConfiguration = tempConfig.EngineConfiguration
 	return Write()
 }
 
@@ -149,4 +148,15 @@ func getFileName() string {
 // getLocation returns the absolute path of the cloud watch config file folder.
 func getLocation() string {
 	return fileutil.BuildPath(appconfig.DefaultPluginPath, ConfigFileFolderName)
+}
+
+// buildFullConfiguration returns the complete cloud watch configuration for cloudwatch plugin.
+func buildFullConfiguration(config string) string {
+	// Put the "EngineConfiguration" back manually to pass to cloud watch exe
+	var buffer bytes.Buffer
+	buffer.WriteString("{\"EngineConfiguration\":")
+	buffer.WriteString(config)
+	buffer.WriteString("}")
+	configuration := buffer.String()
+	return configuration
 }

@@ -253,7 +253,13 @@ func (p *Plugin) Stop(context context.T, cancelFlag task.CancelFlag) (err error)
 	}
 
 	if err = p.Process.Kill(); err != nil {
-		log.Errorf("Encountered error while trying to kill the process %v : %s", p.Process.Pid, err.Error())
+		if p.IsRunning(context) {
+			log.Errorf("Encountered error while trying to kill the process %v : %s", p.Process.Pid, err.Error())
+		} else {
+			log.Debugf("No cloudwatch plugin is running currently.")
+			return nil
+		}
+
 	} else {
 		log.Infof("Successfully killed the process %v", p.Process.Pid)
 	}

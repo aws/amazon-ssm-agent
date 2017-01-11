@@ -19,10 +19,13 @@ import (
 	"encoding/json"
 )
 
+// jsonFormat json formatIndent
+const jsonFormat = "  "
+
 // Indent indents a json string.
 func Indent(jsonStr string) string {
 	var dst bytes.Buffer
-	json.Indent(&dst, []byte(jsonStr), "", "  ")
+	json.Indent(&dst, []byte(jsonStr), "", jsonFormat)
 	return string(dst.Bytes())
 }
 
@@ -60,5 +63,18 @@ func UnmarshalFile(filePath string, dest interface{}) (err error) {
 		return
 	}
 	err = json.Unmarshal(content, dest)
+	return
+}
+
+// MarshalIndent is like Marshal but applies Indent to format the output.
+// Returns empty string if marshal fails
+func MarshalIndent(obj interface{}) (result string, err error) {
+	var resultsByte []byte
+	// Make sure the output file keeps formal json format
+	resultsByte, err = json.MarshalIndent(obj, "", jsonFormat)
+	if err != nil {
+		return
+	}
+	result = string(resultsByte)
 	return
 }

@@ -15,6 +15,7 @@
 package manager
 
 import (
+	"encoding/json"
 	"fmt"
 	"time"
 
@@ -108,8 +109,11 @@ func (m *Manager) StartPlugin(name, configuration string, orchestrationDir strin
 	}
 
 	// Update the config file with new configuration
+	var engineConfiguration interface{}
+	json.Unmarshal([]byte(p.Info.Configuration), &engineConfiguration)
+
 	cloudWatchConfig := cloudwatch.Instance()
-	cloudWatchConfig.EngineConfiguration = p.Info.Configuration
+	cloudWatchConfig.EngineConfiguration = engineConfiguration
 	if err = cloudwatch.Enable(cloudWatchConfig); err != nil {
 		log.Errorf("Failed to update config file - because of %s", err)
 	}
