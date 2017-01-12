@@ -178,7 +178,7 @@ func (p *Plugin) ApplyInventoryPolicy(context context.T, inventoryInput PluginIn
 	if gatherers, err = p.ValidateInventoryInput(context, inventoryInput); err != nil {
 		log.Info(err.Error())
 		inventoryOutput.ExitCode = 1
-		inventoryOutput.Stdout = err.Error()
+		inventoryOutput.Stderr = err.Error()
 		return
 	}
 
@@ -186,7 +186,7 @@ func (p *Plugin) ApplyInventoryPolicy(context context.T, inventoryInput PluginIn
 	if items, err = p.RunGatherers(gatherers); err != nil {
 		log.Info(err.Error())
 		inventoryOutput.ExitCode = 1
-		inventoryOutput.Stdout = err.Error()
+		inventoryOutput.Stderr = err.Error()
 		return
 	}
 
@@ -206,7 +206,7 @@ func (p *Plugin) ApplyInventoryPolicy(context context.T, inventoryInput PluginIn
 	if optimizedInventoryItems, nonOptimizedInventoryItems, err = p.uploader.ConvertToSsmInventoryItems(p.context, items); err != nil {
 		log.Infof("Encountered error in converting data to SSM InventoryItems - %v. Skipping upload to SSM", err.Error())
 		inventoryOutput.ExitCode = 1
-		inventoryOutput.Stdout = err.Error()
+		inventoryOutput.Stderr = err.Error()
 		return
 	}
 
@@ -223,14 +223,14 @@ func (p *Plugin) ApplyInventoryPolicy(context context.T, inventoryInput PluginIn
 				//sending non-optimized data also failed
 				log.Info(errorMsgForInabilityToSendDataToSSM)
 				inventoryOutput.ExitCode = 1
-				inventoryOutput.Stdout = errorMsgForInabilityToSendDataToSSM
+				inventoryOutput.Stderr = errorMsgForInabilityToSendDataToSSM
 				return
 			}
 		} else {
 			//some other error happened for which there is no need to retry - upload failed
 			log.Info(errorMsgForInabilityToSendDataToSSM)
 			inventoryOutput.ExitCode = 1
-			inventoryOutput.Stdout = errorMsgForInabilityToSendDataToSSM
+			inventoryOutput.Stderr = errorMsgForInabilityToSendDataToSSM
 			return
 		}
 	}
@@ -606,6 +606,19 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 	dataB, _ = json.Marshal(config)
 	log.Debugf("Starting %v with configuration \n%v", pluginName, jsonutil.Indent(string(dataB)))
 
+	//set up orchestration dir where stdout & stderr files will be stored to be later uploaded to S3.
+	orchestrationDir := fileutil.BuildPath(config.OrchestrationDirectory, Name())
+	log.Debugf("Setting up orchestrationDir %v for Inventory Plugin's execution", orchestrationDir)
+
+	// create orchestration dir if needed - only with read-write access (no need for execute access on the folder)
+	// because inventory plugin only writes stdout, stderr in files unlike runshellscript plugin which also creates
+	// an executable script file in the orchestration dir
+	if err = fileutil.MakeDirs(orchestrationDir); err != nil {
+		inventoryOutput.MarkAsFailed(log, fmt.Errorf("failed to create orchestrationDir directory, %v", orchestrationDir))
+		res = setPluginResult(inventoryOutput, res)
+		return
+	}
+
 	//TODO: take care of cancel flag
 
 	associationID = p.ParseAssociationIdFromFileName(config.BookKeepingFileName)
@@ -620,11 +633,13 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 		}
 
 		log.Error(errorMsg)
-		res.Code = 1
-		res.Output = errorMsg
-		res.StandardError = errorMsg
-		res.Status = contracts.ResultStatusFailed
+		//setting up plugin output
+		inventoryOutput.ExitCode = 1
+		inventoryOutput.Stderr = errorMsg
+		inventoryOutput.Status = contracts.ResultStatusFailed
 
+		res = setPluginResult(inventoryOutput, res)
+		p.uploadOutputToS3(context, orchestrationDir, config.OutputS3BucketName, config.OutputS3KeyPrefix, res.StandardOutput, res.StandardError)
 		pluginutil.PersistPluginInformationToCurrent(log, config.PluginID, config, res)
 
 		return
@@ -645,11 +660,14 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 			extraAssociationId)
 
 		log.Error(errorMsg)
-		res.Code = 1
-		res.Output = errorMsg
-		res.StandardError = errorMsg
-		res.Status = contracts.ResultStatusFailed
 
+		//setting up plugin output
+		inventoryOutput.ExitCode = 1
+		inventoryOutput.Stderr = errorMsg
+		inventoryOutput.Status = contracts.ResultStatusFailed
+
+		res = setPluginResult(inventoryOutput, res)
+		p.uploadOutputToS3(context, orchestrationDir, config.OutputS3BucketName, config.OutputS3KeyPrefix, res.StandardOutput, res.StandardError)
 		pluginutil.PersistPluginInformationToCurrent(log, config.PluginID, config, res)
 
 		return
@@ -659,11 +677,13 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 	if dataB, err = json.Marshal(config.Properties); err != nil {
 		errorMsg = fmt.Sprintf("Unable to marshal plugin input to %v due to %v", pluginName, err.Error())
 		log.Error(errorMsg)
-		res.Code = 1
-		res.Output = errorMsg
-		res.StandardError = errorMsg
-		res.Status = contracts.ResultStatusFailed
+		//setting up plugin output
+		inventoryOutput.ExitCode = 1
+		inventoryOutput.Stderr = errorMsg
+		inventoryOutput.Status = contracts.ResultStatusFailed
 
+		res = setPluginResult(inventoryOutput, res)
+		p.uploadOutputToS3(context, orchestrationDir, config.OutputS3BucketName, config.OutputS3KeyPrefix, res.StandardOutput, res.StandardError)
 		pluginutil.PersistPluginInformationToCurrent(log, config.PluginID, config, res)
 
 		return
@@ -672,10 +692,13 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 	if err = json.Unmarshal(dataB, &inventoryInput); err != nil {
 		errorMsg = fmt.Sprintf(errorMsgForInvalidInventoryInput, pluginName)
 		log.Error(errorMsg)
-		res.Code = 1
-		res.Output = errorMsg
-		res.StandardError = errorMsg
-		res.Status = contracts.ResultStatusFailed
+		//setting up plugin output
+		inventoryOutput.ExitCode = 1
+		inventoryOutput.Stderr = errorMsg
+		inventoryOutput.Status = contracts.ResultStatusFailed
+
+		res = setPluginResult(inventoryOutput, res)
+		p.uploadOutputToS3(context, orchestrationDir, config.OutputS3BucketName, config.OutputS3KeyPrefix, res.StandardOutput, res.StandardError)
 
 		pluginutil.PersistPluginInformationToCurrent(log, config.PluginID, config, res)
 
@@ -686,8 +709,7 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 	log.Debugf("Inventory configuration after parsing - %v", string(dataB))
 
 	inventoryOutput = p.ApplyInventoryPolicy(context, inventoryInput)
-	res.Code = inventoryOutput.ExitCode
-	res.Output = inventoryOutput.String()
+	res = setPluginResult(inventoryOutput, res)
 
 	//check inventory plugin output
 	if inventoryOutput.ExitCode != 0 {
@@ -698,5 +720,49 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 		res.Status = contracts.ResultStatusSuccess
 	}
 
+	p.uploadOutputToS3(context, orchestrationDir, config.OutputS3BucketName, config.OutputS3KeyPrefix, res.StandardOutput, res.StandardError)
+
 	return
+}
+
+// setPluginResult sets plugin result that is returned to Agent framework from inventory plugin output
+func setPluginResult(pluginOutput contracts.PluginOutput, result contracts.PluginResult) contracts.PluginResult {
+	result.Code = pluginOutput.ExitCode
+	result.Status = pluginOutput.Status
+	result.StandardError = pluginOutput.Stderr
+	result.StandardOutput = pluginOutput.Stdout
+
+	//pluginOutput.String -> concatenates stdout & stderr - keeping in mind 2500 chars limit, which will reflect in
+	//association status/command result
+	result.Output = pluginOutput.String()
+
+	return result
+}
+
+// uploadOutputToS3 uploads inventory output to S3
+func (p *Plugin) uploadOutputToS3(context context.T, orchestrationDir, s3bucketKey, s3Key, stdout, stderr string) {
+
+	var status bool
+	log := context.Log()
+
+	// store stdout & stderr in files under orchestrationDir - because uploadToS3 utility works by uploading the
+	// concerned files to S3.
+
+	// Create output file paths - where stdout & stderr files will be stored
+	stdoutFilePath := filepath.Join(orchestrationDir, p.StdoutFileName)
+	stderrFilePath := filepath.Join(orchestrationDir, p.StderrFileName)
+	log.Debugf("stdout file %v, stderr file %v", stdoutFilePath, stderrFilePath)
+
+	if status, _ = fileutil.WriteIntoFileWithPermissions(stdoutFilePath, stdout, appconfig.ReadWriteAccess); !status {
+		log.Errorf("Unable to store %s output (stdout) to files", Name())
+	}
+
+	if status, _ = fileutil.WriteIntoFileWithPermissions(stderrFilePath, stderr, appconfig.ReadWriteAccess); !status {
+		log.Errorf("Unable to store %s output (stderr) to files", Name())
+	}
+
+	uploadOutputToS3BucketErrors := p.ExecuteUploadOutputToS3Bucket(log, Name(), orchestrationDir, s3bucketKey, s3Key, false, "", stdout, stderr)
+	if len(uploadOutputToS3BucketErrors) > 0 {
+		log.Errorf("Unable to upload the logs: %s", uploadOutputToS3BucketErrors)
+	}
 }
