@@ -92,9 +92,7 @@ func NewPlugin(pluginConfig pluginutil.PluginConfig) (*Plugin, error) {
 	plugin.OutputTruncatedSuffix = pluginConfig.OutputTruncatedSuffix
 	plugin.Uploader = pluginutil.GetS3Config()
 	plugin.ExecuteUploadOutputToS3Bucket = pluginutil.UploadOutputToS3BucketExecuter(plugin.UploadOutputToS3Bucket)
-
-	exec := executers.ShellCommandExecuter{}
-	plugin.ExecuteCommand = pluginutil.CommandExecuter(exec.Execute)
+	plugin.CommandExecuter = executers.ShellCommandExecuter{}
 
 	return &plugin, err
 }
@@ -344,7 +342,7 @@ func (p *Plugin) runCommands(log log.T, pluginInput DockerContainerPluginInput, 
 	log.Debugf("stdout file %v, stderr file %v", stdoutFilePath, stderrFilePath)
 
 	// Execute Command
-	stdout, stderr, exitCode, errs := p.ExecuteCommand(log, pluginInput.WorkingDirectory, stdoutFilePath, stderrFilePath, cancelFlag, executionTimeout, commandName, commandArguments)
+	stdout, stderr, exitCode, errs := p.CommandExecuter.Execute(log, pluginInput.WorkingDirectory, stdoutFilePath, stderrFilePath, cancelFlag, executionTimeout, commandName, commandArguments)
 
 	// Set output status
 	out.ExitCode = exitCode

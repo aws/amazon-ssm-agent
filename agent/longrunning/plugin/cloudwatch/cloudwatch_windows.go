@@ -24,7 +24,6 @@ import (
 	"path/filepath"
 	"strconv"
 	"strings"
-	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
@@ -64,9 +63,6 @@ var fileExist = fileutil.Exists
 var getInstanceId = platform.InstanceID
 var getRegion = platform.Region
 var exec = executers.ShellCommandExecuter{}
-var startExe = exec.StartExe
-var waitExe = exec.Execute
-var getProcess = exec.GetProcess
 var createScript = pluginutil.CreateScriptFile
 
 //todo: honor cancel flag for Start
@@ -100,7 +96,7 @@ func NewPlugin(pluginConfig pluginutil.PluginConfig) (*Plugin, error) {
 		appconfig.LongRunningPluginsHealthCheck,
 		plugin.Name)
 	_ = fileutil.MakeDirsWithExecuteAccess(plugin.DefaultHealthCheckOrchestrationDir)
-	plugin.ExecuteCommand = pluginutil.CommandExecuter(startExe)
+	plugin.CommandExecuter = exec
 
 	return &plugin, nil
 }
@@ -195,35 +191,16 @@ func (p *Plugin) Start(context context.T, configuration string, orchestrationDir
 	stdoutFilePath := filepath.Join(orchestrationDir, p.StdoutFileName)
 	stderrFilePath := filepath.Join(orchestrationDir, p.StderrFileName)
 
-	//executionTimeout -> starting cloudwatch.exe shouldn't take more than 600 seconds
-	//NOTE: exec.StartExe doesn't honor executionTimeout
-	executionTimeout := pluginutil.ValidateExecutionTimeout(log, 600)
-
-	stdout, stderr, exitCode, errs := p.ExecuteCommand(log, p.WorkingDir, stdoutFilePath, stderrFilePath, cancelFlag, executionTimeout, commandName, commandArguments)
-
-	// Have to wait sometime until finish writing logs
-	duration := time.Duration(5) * time.Second
-	time.Sleep(duration)
-
-	// read standard output/error
-	var sout, serr string
-	sout, err = pluginutil.ReadPrefix(stdout, p.MaxStdoutLength, p.OutputTruncatedSuffix)
-	if err != nil {
-		log.Error(err)
+	process, exitCode, errs := p.CommandExecuter.StartExe(log, p.WorkingDir, stdoutFilePath, stderrFilePath, cancelFlag, commandName, commandArguments)
+	if len(errs) > 0 || exitCode != 0 {
+		for _, err := range errs {
+			log.Error(err)
+		}
+		return fmt.Errorf("Errors occured while starting Cloudwatch exit code {0}, error count {1}", exitCode, len(errs))
 	}
 
-	serr, err = pluginutil.ReadPrefix(stderr, p.MaxStderrLength, p.OutputTruncatedSuffix)
-	if err != nil {
-		log.Error(err)
-	}
-
-	log.Debugf("stdout - %v", len(sout))
-	log.Debugf("stderr - %s", serr)
-	log.Debugf("exitCode - %v", exitCode)
-	log.Debugf("errs - %v", errs)
-
-	//Storing Cloudwatch process details
-	p.Process = *getProcess()
+	// Cloudwatch process details
+	p.Process = *process
 	log.Infof("Process id of cloudwatch.exe -> %v", p.Process.Pid)
 
 	return nil
@@ -277,8 +254,6 @@ func (p *Plugin) IsCloudWatchExeRunning(log log.T, workingDirectory, orchestrati
 		use exec.StartExe as pluginutil.CommandExecuter. After we are done, we will revert back to using exec.Execute for
 		future commands to enable/disable cloudwatch.
 	*/
-	//we need to wait for the command to finish so change this to Execute
-	p.ExecuteCommand = pluginutil.CommandExecuter(waitExe)
 	var err error
 
 	//constructing the powershell command to execute
@@ -300,7 +275,7 @@ func (p *Plugin) IsCloudWatchExeRunning(log log.T, workingDirectory, orchestrati
 	}
 
 	//create script path
-	scriptPath := filepath.Join(orchestrationDir, pluginutil.RunCommandScriptName)
+	scriptPath := filepath.Join(orchestrationDir, appconfig.RunCommandScriptName)
 
 	// Create script file
 	if err = createScript(log, scriptPath, cmds); err != nil {
@@ -310,7 +285,7 @@ func (p *Plugin) IsCloudWatchExeRunning(log log.T, workingDirectory, orchestrati
 
 	//construct command name and arguments
 	commandName := pluginutil.GetShellCommand()
-	commandArguments := append(pluginutil.GetShellArguments(), scriptPath, pluginutil.ExitCodeTrap)
+	commandArguments := append(pluginutil.GetShellArguments(), scriptPath, appconfig.ExitCodeTrap)
 	log.Infof("check running commandName: %s", commandName)
 	log.Infof("arguments passed: %s", commandArguments)
 
@@ -321,10 +296,7 @@ func (p *Plugin) IsCloudWatchExeRunning(log log.T, workingDirectory, orchestrati
 	executionTimeout := pluginutil.ValidateExecutionTimeout(log, 600)
 
 	// TODO no need to write to file, should return the result directly
-	stdout, stderr, exitCode, errs := p.ExecuteCommand(log, workingDirectory, stdoutFilePath, stderrFilePath, cancelFlag, executionTimeout, commandName, commandArguments)
-
-	//Reverting back to exec.StartExe (that doesn't wait for the command to finish)
-	p.ExecuteCommand = pluginutil.CommandExecuter(startExe)
+	stdout, stderr, exitCode, errs := p.CommandExecuter.Execute(log, workingDirectory, stdoutFilePath, stderrFilePath, cancelFlag, executionTimeout, commandName, commandArguments)
 
 	// read (a prefix of) the standard output/error
 	var sout, serr string
@@ -361,8 +333,6 @@ func (p *Plugin) GetPidOfCloudWatchExe(log log.T, orchestrationDir, workingDirec
 		done, we will revert back to using exec.Execute for future commands to enable/disable cloudwatch.
 	*/
 	var err error
-	//we need to wait for the command to finish so change this to Execute
-	p.ExecuteCommand = pluginutil.CommandExecuter(waitExe)
 	//constructing the powershell command to execute
 	var cmds []string
 	cloudwatchProcessName := CloudWatchProcessName
@@ -382,7 +352,7 @@ func (p *Plugin) GetPidOfCloudWatchExe(log log.T, orchestrationDir, workingDirec
 	}
 
 	//create script path
-	scriptPath := filepath.Join(orchestrationDir, pluginutil.RunCommandScriptName)
+	scriptPath := filepath.Join(orchestrationDir, appconfig.RunCommandScriptName)
 
 	// Create script file
 	if err = createScript(log, scriptPath, cmds); err != nil {
@@ -392,21 +362,16 @@ func (p *Plugin) GetPidOfCloudWatchExe(log log.T, orchestrationDir, workingDirec
 
 	//construct command name and arguments
 	commandName := pluginutil.GetShellCommand()
-	commandArguments := append(pluginutil.GetShellArguments(), scriptPath, pluginutil.ExitCodeTrap)
+	commandArguments := append(pluginutil.GetShellArguments(), scriptPath, appconfig.ExitCodeTrap)
 	log.Infof("commandName: %s", commandName)
 	log.Infof("arguments passed: %s", commandArguments)
-
-	//start the new process
 
 	stdoutFilePath := filepath.Join(orchestrationDir, p.StdoutFileName)
 	stderrFilePath := filepath.Join(orchestrationDir, p.StderrFileName)
 	//executionTimeout -> determining if a process is running or not shouldn't take more than 600 seconds
 	executionTimeout := pluginutil.ValidateExecutionTimeout(log, 600)
-
-	stdout, stderr, exitCode, errs := p.ExecuteCommand(log, workingDirectory, stdoutFilePath, stderrFilePath, cancelFlag, executionTimeout, commandName, commandArguments)
-
-	//Reverting back to exec.StartExe (that doesn't wait for the command to finish)
-	p.ExecuteCommand = pluginutil.CommandExecuter(startExe)
+	//execute the command
+	stdout, stderr, exitCode, errs := p.CommandExecuter.Execute(log, workingDirectory, stdoutFilePath, stderrFilePath, cancelFlag, executionTimeout, commandName, commandArguments)
 
 	// read (a prefix of) the standard output/error
 	var sout, serr string

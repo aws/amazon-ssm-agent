@@ -39,6 +39,11 @@ func DeleteFile(filepath string) (err error) {
 	return fs.Remove(filepath)
 }
 
+// DeleteDirectory deletes a directory and all its content.
+func DeleteDirectory(dirName string) (err error) {
+	return os.RemoveAll(dirName)
+}
+
 // ReadAllText reads all content from the specified file
 func ReadAllText(filePath string) (text string, err error) {
 	var exists = false

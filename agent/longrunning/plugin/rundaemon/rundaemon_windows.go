@@ -25,6 +25,7 @@ import (
 	"sync"
 	"time"
 
+	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/jobobject"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/pluginutil"
@@ -149,7 +150,7 @@ func StartDaemonHelper(p *Plugin, context context.T, configuration string) (err 
 	// doesnt have spaces (C:/ProgramData/Amazon/SSM/....), the issue is not currently exposed.
 	// Needs to be fixed regardless.
 
-	commandArguments := append(strings.Split(configuration, " "), pluginutil.ExitCodeTrap)
+	commandArguments := append(strings.Split(configuration, " "), appconfig.ExitCodeTrap)
 	log.Infof("Running command: %v.", commandArguments)
 
 	daemonInvoke := exec.Command(commandArguments[0], commandArguments[1:]...)

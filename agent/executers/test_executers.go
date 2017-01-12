@@ -30,11 +30,6 @@ type MockCommandExecuter struct {
 	mock.Mock
 }
 
-func (m *MockCommandExecuter) GetProcess() *os.Process {
-	var process os.Process
-	return &process
-}
-
 // Execute is a mocked method that just returns what mock tells it to.
 func (m *MockCommandExecuter) Execute(log log.T,
 	workingDir string,
@@ -56,11 +51,10 @@ func (m *MockCommandExecuter) StartExe(log log.T,
 	stdoutFilePath string,
 	stderrFilePath string,
 	cancelFlag task.CancelFlag,
-	executionTimeout int,
 	commandName string,
 	commandArguments []string,
-) (stdout io.Reader, stderr io.Reader, exitCode int, errs []error) {
-	args := m.Called(log, workingDir, stdoutFilePath, stderrFilePath, cancelFlag, executionTimeout, commandName, commandArguments)
+) (process *os.Process, exitCode int, errs []error) {
+	args := m.Called(log, workingDir, stdoutFilePath, stderrFilePath, cancelFlag, commandName, commandArguments)
 	log.Infof("args are %v", args)
-	return args.Get(0).(io.Reader), args.Get(1).(io.Reader), args.Get(2).(int), args.Get(3).([]error)
+	return args.Get(0).(*os.Process), args.Get(1).(int), args.Get(2).([]error)
 }

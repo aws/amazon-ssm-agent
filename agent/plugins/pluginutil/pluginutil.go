@@ -19,6 +19,7 @@ import (
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
+	"github.com/aws/amazon-ssm-agent/agent/executers"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil/artifact"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
@@ -27,7 +28,6 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/s3util"
 	"github.com/aws/amazon-ssm-agent/agent/sdkutil"
 	command_state_helper "github.com/aws/amazon-ssm-agent/agent/statemanager"
-	"github.com/aws/amazon-ssm-agent/agent/task"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/s3"
 )
@@ -47,9 +47,6 @@ var s3BjsEndpoint = "s3.cn-north-1.amazonaws.com.cn"
 
 var s3StandardEndpoint = "s3.amazonaws.com"
 
-// CommandExecuter is a function that can execute a set of commands.
-type CommandExecuter func(log log.T, workingDir string, stdoutFilePath string, stderrFilePath string, cancelFlag task.CancelFlag, executionTimeout int, commandName string, commandArguments []string) (stdout io.Reader, stderr io.Reader, exitCode int, errs []error)
-
 // UploadOutputToS3BucketExecuter is a function that can upload outputs to S3 bucket.
 type UploadOutputToS3BucketExecuter func(log log.T, pluginID string, orchestrationDir string, outputS3BucketName string, outputS3KeyPrefix string, useTempDirectory bool, tempDir string, Stdout string, Stderr string) []string
 
@@ -67,7 +64,7 @@ type S3Uploader interface {
 // DefaultPlugin is the type for the default plugin.
 type DefaultPlugin struct {
 	// ExecuteCommand is an object that can execute commands.
-	ExecuteCommand CommandExecuter
+	CommandExecuter executers.T
 
 	// ExecuteUploadOutputToS3Bucket is an object that can upload command outputs to S3 bucket.
 	ExecuteUploadOutputToS3Bucket UploadOutputToS3BucketExecuter
@@ -230,7 +227,11 @@ func (p *DefaultPlugin) UploadOutputToS3Bucket(log log.T, pluginID string, orche
 
 				if useTempDirectory {
 					// delete temp directory once we're done
-					defer DeleteDirectory(log, tempDir)
+					defer func() {
+						if err := fileutil.DeleteDirectory(tempDir); err != nil {
+							log.Error("error deleting directory", err)
+						}
+					}()
 				}
 
 				if Stdout != "" {
@@ -277,13 +278,6 @@ func (p *DefaultPlugin) UploadOutputToS3Bucket(log log.T, pluginID string, orche
 
 	//return out.Errors
 	return uploadOutputToS3BucketErrors
-}
-
-// DeleteDirectory deletes a directory and all its content.
-func DeleteDirectory(log log.T, dirName string) {
-	if err := os.RemoveAll(dirName); err != nil {
-		log.Error("error deleting directory", err)
-	}
 }
 
 // CreateScriptFile creates a script containing the given commands.

@@ -63,9 +63,7 @@ func NewPlugin(pluginConfig pluginutil.PluginConfig) (*Plugin, error) {
 	plugin.OutputTruncatedSuffix = pluginConfig.OutputTruncatedSuffix
 	plugin.Uploader = pluginutil.GetS3Config()
 	plugin.ExecuteUploadOutputToS3Bucket = pluginutil.UploadOutputToS3BucketExecuter(plugin.UploadOutputToS3Bucket)
-
-	exec := executers.ShellCommandExecuter{}
-	plugin.ExecuteCommand = pluginutil.CommandExecuter(exec.Execute)
+	plugin.CommandExecuter = executers.ShellCommandExecuter{}
 
 	return &plugin, nil
 }
@@ -159,7 +157,7 @@ func (p *Plugin) runCommands(log log.T, pluginInput PSModulePluginInput, orchest
 	}
 
 	// Create script file path
-	scriptPath := filepath.Join(orchestrationDir, pluginutil.RunCommandScriptName)
+	scriptPath := filepath.Join(orchestrationDir, appconfig.RunCommandScriptName)
 	log.Debugf("Writing commands %v to file %v", pluginInput, scriptPath)
 
 	// Create script file
@@ -193,10 +191,10 @@ func (p *Plugin) runCommands(log log.T, pluginInput PSModulePluginInput, orchest
 
 	// Construct Command Name and Arguments
 	commandName := pluginutil.GetShellCommand()
-	commandArguments := append(pluginutil.GetShellArguments(), scriptPath, pluginutil.ExitCodeTrap)
+	commandArguments := append(pluginutil.GetShellArguments(), scriptPath, appconfig.ExitCodeTrap)
 
 	// Execute Command
-	stdout, stderr, exitCode, errs := p.ExecuteCommand(log, pluginInput.WorkingDirectory, stdoutFilePath, stderrFilePath, cancelFlag, executionTimeout, commandName, commandArguments)
+	stdout, stderr, exitCode, errs := p.CommandExecuter.Execute(log, pluginInput.WorkingDirectory, stdoutFilePath, stderrFilePath, cancelFlag, executionTimeout, commandName, commandArguments)
 
 	// Set output status
 	out.ExitCode = exitCode

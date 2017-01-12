@@ -18,7 +18,6 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/log"
-	"github.com/aws/amazon-ssm-agent/agent/plugins/pluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 )
 
@@ -70,7 +69,7 @@ func setMsiExecStatus(log log.T, pluginInput ApplicationPluginInput, cancelFlag 
 		fallthrough
 	case appconfig.RebootExitCode:
 		out.Status = contracts.ResultStatusSuccessAndReboot
-	case pluginutil.CommandStoppedPreemptivelyExitCode:
+	case appconfig.CommandStoppedPreemptivelyExitCode:
 		if cancelFlag.ShutDown() {
 			out.Status = contracts.ResultStatusFailed
 		}

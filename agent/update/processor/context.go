@@ -25,8 +25,8 @@ import (
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
+	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
-	"github.com/aws/amazon-ssm-agent/agent/plugins/pluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/s3util"
 	"github.com/aws/amazon-ssm-agent/agent/sdkutil"
 	"github.com/aws/amazon-ssm-agent/agent/updateutil"
@@ -229,7 +229,11 @@ func (c *contextManager) uploadOutput(log log.T, context *UpdateContext) (err er
 	uploader := s3util.NewManager(s3)
 	uploadOutputsToS3 := func() {
 		// delete temp outputDir once we're done
-		defer pluginutil.DeleteDirectory(log, updateutil.UpdateOutputDirectory(context.Current.UpdateRoot))
+		defer func() {
+			if err := fileutil.DeleteDirectory(updateutil.UpdateOutputDirectory(context.Current.UpdateRoot)); err != nil {
+				log.Error("error deleting directory", err)
+			}
+		}()
 
 		// get stdout file path
 		stdoutPath := updateutil.UpdateStdOutPath(context.Current.UpdateRoot, context.Current.StdoutFileName)

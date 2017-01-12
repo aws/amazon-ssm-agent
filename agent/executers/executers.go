@@ -24,9 +24,9 @@ import (
 	"syscall"
 	"time"
 
+	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
-	"github.com/aws/amazon-ssm-agent/agent/plugins/pluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 )
 
@@ -38,19 +38,12 @@ const (
 
 // T is the interface type for ShellCommandExecuter.
 type T interface {
-	GetProcess() *os.Process
 	Execute(log.T, string, string, string, task.CancelFlag, int, string, []string) (io.Reader, io.Reader, int, []error)
-	StartExe(log.T, string, string, string, task.CancelFlag, int, string, []string) (io.Reader, io.Reader, int, []error)
+	StartExe(log.T, string, string, string, task.CancelFlag, string, []string) (*os.Process, int, []error)
 }
 
 // ShellCommandExecuter is specially added for testing purposes
 type ShellCommandExecuter struct {
-}
-
-var Process *os.Process
-
-func (sh ShellCommandExecuter) GetProcess() *os.Process {
-	return Process
 }
 
 type timeoutSignal struct {
@@ -67,7 +60,7 @@ type timeoutSignal struct {
 // even though some errors are reported. For example, if the command got killed while executing,
 // the streams will have whatever data was printed up to the kill point, and the errors will
 // indicate that the process got terminated.
-func (sh ShellCommandExecuter) Execute(
+func (ShellCommandExecuter) Execute(
 	log log.T,
 	workingDir string,
 	stdoutFilePath string,
@@ -119,44 +112,19 @@ func (sh ShellCommandExecuter) Execute(
 // even though some errors are reported. For example, if the command got killed while executing,
 // the streams will have whatever data was printed up to the kill point, and the errors will
 // indicate that the process got terminated.
-func (sh ShellCommandExecuter) StartExe(
+func (ShellCommandExecuter) StartExe(
 	log log.T,
 	workingDir string,
 	stdoutFilePath string,
 	stderrFilePath string,
 	cancelFlag task.CancelFlag,
-	executionTimeout int,
 	commandName string,
 	commandArguments []string,
-) (stdout io.Reader, stderr io.Reader, exitCode int, errs []error) {
+) (process *os.Process, exitCode int, errs []error) {
 	var err error
-	exitCode, err = startCommandAndOutputToFiles(log, cancelFlag, workingDir, stdoutFilePath, stderrFilePath, executionTimeout, commandName, commandArguments)
+	process, exitCode, err = startCommandAndOutputToFiles(log, cancelFlag, workingDir, stdoutFilePath, stderrFilePath, commandName, commandArguments)
 	if err != nil {
 		errs = append(errs, err)
-	}
-
-	emptyReader := bytes.NewReader([]byte{})
-
-	// create reader from stdout, if it exist, otherwise use empty reader
-	if fileutil.Exists(stdoutFilePath) {
-		stdout, err = os.Open(stdoutFilePath)
-		if err != nil {
-			// some unexpected error (file should exist)
-			errs = append(errs, err)
-		}
-	} else {
-		stdout = emptyReader
-	}
-
-	// create reader from stderr, if it exist, otherwise use empty reader
-	if fileutil.Exists(stderrFilePath) {
-		stderr, err = os.Open(stderrFilePath)
-		if err != nil {
-			// some unexpected error (file should exist)
-			errs = append(errs, err)
-		}
-	} else {
-		stderr = emptyReader
 	}
 
 	return
@@ -221,10 +189,9 @@ func startCommandAndOutputToFiles(
 	workingDir string,
 	stdoutFilePath string,
 	stderrFilePath string,
-	executionTimeout int,
 	commandName string,
 	commandArguments []string,
-) (exitCode int, err error) {
+) (process *os.Process, exitCode int, err error) {
 
 	// create stdout file
 	// fix the permissions appropriately
@@ -233,7 +200,7 @@ func startCommandAndOutputToFiles(
 	if err != nil {
 		return
 	}
-	defer stdoutWriter.Close()
+	defer stdoutWriter.Close() // Closing our instance of the file handle - the child process has its own copy
 
 	// create stderr file
 	// fix the permissions appropriately
@@ -242,9 +209,9 @@ func startCommandAndOutputToFiles(
 	if err != nil {
 		return
 	}
-	defer stderrWriter.Close()
+	defer stderrWriter.Close() // Closing our instance of the file handle - the child process has its own copy
 
-	return StartCommand(log, cancelFlag, workingDir, stdoutWriter, stderrWriter, executionTimeout, commandName, commandArguments)
+	return StartCommand(log, cancelFlag, workingDir, stdoutWriter, stderrWriter, commandName, commandArguments)
 }
 
 // ExecuteCommand executes the given commands using the given working directory.
@@ -306,11 +273,11 @@ func ExecuteCommand(log log.T,
 				if exitCode == -1 {
 					if cancelFlag.Canceled() {
 						// set appropriate exit code based on cancel or timeout
-						exitCode = pluginutil.CommandStoppedPreemptivelyExitCode
+						exitCode = appconfig.CommandStoppedPreemptivelyExitCode
 						log.Infof("The execution of command was cancelled.")
 					} else if timedOut {
 						// set appropriate exit code based on cancel or timeout
-						exitCode = pluginutil.CommandStoppedPreemptivelyExitCode
+						exitCode = appconfig.CommandStoppedPreemptivelyExitCode
 						log.Infof("The execution of command was timedout.")
 					}
 				} else {
@@ -343,10 +310,9 @@ func StartCommand(log log.T,
 	workingDir string,
 	stdoutWriter io.Writer,
 	stderrWriter io.Writer,
-	executionTimeout int,
 	commandName string,
 	commandArguments []string,
-) (exitCode int, err error) {
+) (process *os.Process, exitCode int, err error) {
 
 	command := exec.Command(commandName, commandArguments...)
 	command.Dir = workingDir
@@ -369,48 +335,10 @@ func StartCommand(log log.T,
 		return
 	}
 
-	Process = command.Process
+	process = command.Process
 	signal := timeoutSignal{}
 	go killProcessOnCancel(log, command, cancelFlag, &signal)
 
-	//timeout is not really required here -> because it's a long running exe
-	if err != nil {
-		exitCode = 1
-		log.Debugf("command failed to run %v", err)
-		if exiterr, ok := err.(*exec.ExitError); ok {
-			// The program has exited with an exit code != 0
-			if status, ok := exiterr.Sys().(syscall.WaitStatus); ok {
-				exitCode = status.ExitStatus()
-
-				if signal.execInterruptedOnWindows {
-					log.Debug("command interrupted by cancel or timeout")
-					exitCode = -1
-				}
-
-				// First try to handle Cancel and Timeout scenarios
-				// SIGKILL will result in an exitcode of -1
-				if exitCode == -1 {
-					if cancelFlag.Canceled() {
-						// set appropriate exit code based on cancel or timeout
-						exitCode = pluginutil.CommandStoppedPreemptivelyExitCode
-						log.Infof("The execution of command was cancelled.")
-					}
-				} else {
-					log.Infof("The execution of command returned Exit Status: %d", exitCode)
-				}
-			}
-		}
-	} else {
-		// check if cancellation or timeout failed to kill the process
-		// This will not occur as we do a SIGKILL, which is not recoverable.
-		if cancelFlag.Canceled() {
-			// This is when the cancellation failed and the command completed successfully
-			log.Errorf("the cancellation failed to stop the process.")
-			// do not return as the command could have been cancelled and also timedout
-		}
-	}
-
-	log.Debug("Done waiting!")
 	return
 }
 

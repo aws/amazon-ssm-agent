@@ -16,11 +16,11 @@ package runscript
 
 import (
 	"fmt"
+	"io/ioutil"
 	"path/filepath"
 	"time"
 
-	"io/ioutil"
-
+	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/executers"
@@ -62,9 +62,7 @@ func (p *Plugin) AssignPluginConfigs(pluginConfig pluginutil.PluginConfig) {
 	p.OutputTruncatedSuffix = pluginConfig.OutputTruncatedSuffix
 	p.Uploader = pluginutil.GetS3Config()
 	p.ExecuteUploadOutputToS3Bucket = pluginutil.UploadOutputToS3BucketExecuter(p.UploadOutputToS3Bucket)
-
-	exec := executers.ShellCommandExecuter{}
-	p.ExecuteCommand = pluginutil.CommandExecuter(exec.Execute)
+	p.CommandExecuter = executers.ShellCommandExecuter{}
 }
 
 // Execute runs multiple sets of commands and returns their outputs.
@@ -173,10 +171,10 @@ func (p *Plugin) runCommands(log log.T, pluginInput RunScriptPluginInput, orches
 
 	// Construct Command Name and Arguments
 	commandName := p.ShellCommand
-	commandArguments := append(p.ShellArguments, scriptPath, pluginutil.ExitCodeTrap)
+	commandArguments := append(p.ShellArguments, scriptPath, appconfig.ExitCodeTrap)
 
 	// Execute Command
-	stdout, stderr, exitCode, errs := p.ExecuteCommand(log, workingDir, stdoutFilePath, stderrFilePath, cancelFlag, executionTimeout, commandName, commandArguments)
+	stdout, stderr, exitCode, errs := p.CommandExecuter.Execute(log, workingDir, stdoutFilePath, stderrFilePath, cancelFlag, executionTimeout, commandName, commandArguments)
 
 	// Set output status
 	out.ExitCode = exitCode

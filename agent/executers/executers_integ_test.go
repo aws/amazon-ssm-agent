@@ -21,20 +21,25 @@ import (
 	"fmt"
 	"io"
 	"io/ioutil"
+	"os"
 	"os/exec"
 	"path/filepath"
 	"testing"
 	"time"
 
+	"github.com/aws/amazon-ssm-agent/agent/appconfig"
+	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
-	"github.com/aws/amazon-ssm-agent/agent/plugins/pluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 	"github.com/stretchr/testify/assert"
+	"github.com/twinj/uuid"
 )
 
 const (
 	stdoutMsg                       = "hello stdout"
 	stderrMsg                       = "hello stderr"
+	stdoutMsg2                      = "bye stdout"
+	stderrMsg2                      = "bye stderr"
 	cancelWaitTimeoutSeconds        = 3.0
 	successExitCode                 = 0
 	processTerminatedByUserExitCode = 137
@@ -100,6 +105,27 @@ var RunCommandCancelTestCases = []TestCase{
 	},
 }
 
+var RunCommandAsyncTestCases = []TestCase{
+	// test both stdout and stderr are captured
+	{
+		Commands:         []string{"sh", "-c", echoToStdout(stdoutMsg) + ";" + echoToStderr(stderrMsg)},
+		ExpectedStdout:   stdoutMsg + "\n",
+		ExpectedStderr:   stderrMsg + "\n",
+		ExpectedExitCode: successExitCode,
+	},
+	// test both stdout and stderr are captured if there is a delay between multiple outputs
+	{
+		Commands: []string{
+			"sh",
+			"-c",
+			echoToStdout(stdoutMsg) + ";" + echoToStderr(stderrMsg) + ";" + "sleep 1" + ";" + echoToStdout(stdoutMsg2) + ";" + echoToStderr(stderrMsg2),
+		},
+		ExpectedStdout:   stdoutMsg + "\n" + stdoutMsg2 + "\n",
+		ExpectedStderr:   stderrMsg + "\n" + stderrMsg2 + "\n",
+		ExpectedExitCode: successExitCode,
+	},
+}
+
 var ShellCommandExecuterTestCases = []TestCase{
 	// test stdout and stderr are captured
 	{
@@ -153,11 +179,23 @@ func TestRunCommand_cancel(t *testing.T) {
 	}
 }
 
+// TestRunCommand_cancel tests that RunCommand (in memory call, no local script or output files) is canceled correctly.
+func TestRunCommand_async(t *testing.T) {
+	instanceTemp := instance
+	instance = &instanceInfoStub{instanceID: testInstanceId, regionName: testRegionName}
+	defer func() { instance = instanceTemp }()
+
+	for _, testCase := range RunCommandAsyncTestCases {
+		startCommandInvoker, _ := prepareTestStartCommand(t)
+		testCommandInvoker(t, startCommandInvoker, testCase)
+	}
+}
+
 // TestShellCommandExecuter tests that ShellCommandExecuter (creates local script, redirects outputs to files) works
 func TestShellCommandExecuter(t *testing.T) {
 	runTest := func(testCase TestCase) {
 		orchestrationDir, shCommandExecuterInvoker, _ := prepareTestShellCommandExecuter(t)
-		defer pluginutil.DeleteDirectory(logger, orchestrationDir)
+		defer fileutil.DeleteDirectory(orchestrationDir)
 		testCommandInvoker(t, shCommandExecuterInvoker, testCase)
 	}
 
@@ -174,7 +212,7 @@ func TestShellCommandExecuter_cancel(t *testing.T) {
 
 	runTest := func(testCase TestCase) {
 		orchestrationDir, shCommandExecuterInvoker, cancelFlag := prepareTestShellCommandExecuter(t)
-		defer pluginutil.DeleteDirectory(logger, orchestrationDir)
+		defer fileutil.DeleteDirectory(orchestrationDir)
 		testCommandInvokerCancel(t, shCommandExecuterInvoker, cancelFlag, testCase)
 	}
 
@@ -246,7 +284,7 @@ func prepareTestShellCommandExecuter(t *testing.T) (orchestrationDir string, com
 	// commandInvoker calls the shell then sets the state of the flag to completed
 	commandInvoker = func(commands []string) (stdout io.Reader, stderr io.Reader, exitCode int, errs []error) {
 		defer cancelFlag.Set(task.Completed)
-		scriptPath := filepath.Join(orchestrationDir, pluginutil.RunCommandScriptName)
+		scriptPath := filepath.Join(orchestrationDir, appconfig.RunCommandScriptName)
 		stdoutFilePath := filepath.Join(orchestrationDir, stdOutFileName)
 		stderrFilePath := filepath.Join(orchestrationDir, stdErrFileName)
 
@@ -279,6 +317,72 @@ func prepareTestRunCommand(t *testing.T) (commandInvoker CommandInvoker, cancelF
 		}
 
 		// return readers that read from in-memory buffers
+		stdout = bytes.NewReader(stdoutBuf.Bytes())
+		stderr = bytes.NewReader(stderrBuf.Bytes())
+		return
+	}
+	return
+}
+
+// prepareTestStartCommand contains boiler plate code for testing start command, to avoid duplication.
+func prepareTestStartCommand(t *testing.T) (commandInvoker CommandInvoker, cancelFlag task.CancelFlag) {
+	cancelFlag = task.NewChanneledCancelFlag()
+	commandInvoker = func(commands []string) (stdout io.Reader, stderr io.Reader, exitCode int, errs []error) {
+		// run command and output to temp files
+		uuid.SwitchFormat(uuid.CleanHyphen)
+		orchestrationDir, err := ioutil.TempDir("", "TestAsyncExecute")
+		if err != nil {
+			t.Fatal(err)
+		}
+		defer fileutil.DeleteDirectory(orchestrationDir)
+
+		stdoutFilePath := filepath.Join(orchestrationDir, uuid.NewV4().String())
+		stdoutWriter, err := os.OpenFile(stdoutFilePath, os.O_APPEND|os.O_WRONLY|os.O_CREATE, 0600)
+		if err != nil {
+			t.Fatal(err)
+		}
+		defer os.Remove(stdoutFilePath)
+
+		stderrFilePath := filepath.Join(orchestrationDir, uuid.NewV4().String())
+		stderrWriter, err := os.OpenFile(stderrFilePath, os.O_APPEND|os.O_WRONLY|os.O_CREATE, 0600)
+		if err != nil {
+			t.Fatal(err)
+		}
+		defer os.Remove(stdoutFilePath)
+
+		workDir := "."
+		process, tempExitCode, err := StartCommand(logger, cancelFlag, workDir, stdoutWriter, stderrWriter, commands[0], commands[1:])
+		stdoutWriter.Close()
+		stderrWriter.Close()
+		exitCode = tempExitCode
+
+		// record error if any
+		if err != nil {
+			errs = append(errs, err)
+		} else {
+			errs = []error{}
+		}
+
+		// wait for async process to finish
+		process.Wait()
+
+		// read temp files before they are deleted and return buffers
+		stdoutBuf := bytes.NewBuffer(nil)
+		stdoutReader, _ := os.Open(stdoutFilePath)
+		defer stdoutReader.Close()
+		_, err = io.Copy(stdoutBuf, stdoutReader)
+		if err != nil {
+			t.Fatal(err)
+		}
+
+		stderrBuf := bytes.NewBuffer(nil)
+		stderrReader, _ := os.Open(stderrFilePath)
+		defer stderrReader.Close()
+		_, err = io.Copy(stderrBuf, stderrReader)
+		if err != nil {
+			t.Fatal(err)
+		}
+
 		stdout = bytes.NewReader(stdoutBuf.Bytes())
 		stderr = bytes.NewReader(stderrBuf.Bytes())
 		return

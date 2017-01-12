@@ -69,9 +69,7 @@ func NewPlugin(pluginConfig pluginutil.PluginConfig) (*Plugin, error) {
 	plugin.OutputTruncatedSuffix = pluginConfig.OutputTruncatedSuffix
 	plugin.Uploader = pluginutil.GetS3Config()
 	plugin.ExecuteUploadOutputToS3Bucket = pluginutil.UploadOutputToS3BucketExecuter(plugin.UploadOutputToS3Bucket)
-
-	exec := executers.ShellCommandExecuter{}
-	plugin.ExecuteCommand = pluginutil.CommandExecuter(exec.Execute)
+	plugin.CommandExecuter = executers.ShellCommandExecuter{}
 
 	return &plugin, nil
 }
@@ -236,7 +234,7 @@ func (p *Plugin) runCommands(log log.T, pluginInput ApplicationPluginInput, orch
 	}
 
 	// Execute Command
-	_, _, exitCode, errs := p.ExecuteCommand(log, defaultWorkingDirectory, stdoutFilePath, stderrFilePath, cancelFlag, defaultApplicationExecutionTimeoutInSeconds, commandName, commandArguments)
+	_, _, exitCode, errs := p.CommandExecuter.Execute(log, defaultWorkingDirectory, stdoutFilePath, stderrFilePath, cancelFlag, defaultApplicationExecutionTimeoutInSeconds, commandName, commandArguments)
 
 	// Set output status
 	out.ExitCode = exitCode

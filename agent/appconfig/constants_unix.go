@@ -69,9 +69,18 @@ const (
 	// Default Custom Inventory Inventory Folder
 	DefaultCustomInventoryFolder = DefaultDataStorePath + "inventory/custom"
 
-	//PowerShellPluginCommandName is the path of the powershell.exe to be used by the runPowerShellScript plugin
+	// PowerShellPluginCommandName is the path of the powershell.exe to be used by the runPowerShellScript plugin
 	PowerShellPluginCommandName = "/usr/bin/powershell"
 
-	//PowerShellPluginCommandArgs is the arguments of powershell.exe to be used by the runPowerShellScript plugin
+	// Used to capture and return exit code for windows powershell script execution - empty for unix shell script case
+	ExitCodeTrap = ""
+
+	// PowerShellPluginCommandArgs is the arguments of powershell.exe to be used by the runPowerShellScript plugin
 	PowerShellPluginCommandArgs = ""
+
+	// Exit Code for a command that exits before completion (generally due to timeout or cancel)
+	CommandStoppedPreemptivelyExitCode = 137 // Fatal error (128) + signal for SIGKILL (9) = 137
+
+	// RunCommandScriptName is the script name where all downloaded or provided commands will be stored
+	RunCommandScriptName = "_script.sh"
 )

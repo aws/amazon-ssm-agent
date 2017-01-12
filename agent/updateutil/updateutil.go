@@ -29,7 +29,6 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/platform"
-	"github.com/aws/amazon-ssm-agent/agent/plugins/pluginutil"
 )
 
 const (
@@ -316,7 +315,7 @@ func (util *Utility) ExeCommand(
 					exitCode := status.ExitStatus()
 					if exitCode == -1 && timedOut {
 						// set appropriate exit code based on cancel or timeout
-						exitCode = pluginutil.CommandStoppedPreemptivelyExitCode
+						exitCode = appconfig.CommandStoppedPreemptivelyExitCode
 						log.Infof("The execution of command was timedout.")
 					}
 					err = fmt.Errorf("The execution of command returned Exit Status: %d \n %v", exitCode, err.Error())

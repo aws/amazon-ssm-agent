@@ -44,24 +44,7 @@ import (
 
 // Plugin is the type for the RunCommand plugin.
 type Plugin struct {
-	// UploadToS3Sync is true if uploading to S3 should be done synchronously, false for async.
-	UploadToS3Sync bool
-
-	// StdoutFileName is the name of the file that stores standard output.
-	StdoutFileName string
-
-	// StderrFileName is the name of the file that stores standard error.
-	StderrFileName string
-
-	// MaxStdoutLength is the maximum length of the standard output returned in the plugin result.
-	// If the output is longer, it will be truncated. The full output will be uploaded to s3.
-	MaxStdoutLength int
-
-	// MaxStderrLength is the maximum length of the standard error returned in the plugin result.
-	MaxStderrLength int
-
-	// OutputTruncatedSuffix is an optional suffix that is inserted at the end of the truncated stdout/stderr.
-	OutputTruncatedSuffix string
+	pluginutil.DefaultPlugin
 
 	// Manifest location
 	ManifestLocation string

@@ -19,13 +19,6 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/task"
 )
 
-const (
-	// RunCommandScriptName is the script name where all downloaded or provided commands will be stored
-	RunCommandScriptName               = "_script.sh"
-	ExitCodeTrap                       = ""
-	CommandStoppedPreemptivelyExitCode = 137 // Fatal error (128) + signal for SIGKILL (9) = 137
-)
-
 var ShellCommand = "sh"
 var ShellArgs = []string{"-c"}
 
@@ -36,7 +29,7 @@ func GetStatus(exitCode int, cancelFlag task.CancelFlag) contracts.ResultStatus 
 		return contracts.ResultStatusSuccess
 	case appconfig.RebootExitCode:
 		return contracts.ResultStatusSuccessAndReboot
-	case CommandStoppedPreemptivelyExitCode:
+	case appconfig.CommandStoppedPreemptivelyExitCode:
 		if cancelFlag.ShutDown() {
 			return contracts.ResultStatusFailed
 		}

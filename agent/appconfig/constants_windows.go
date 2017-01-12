@@ -48,8 +48,21 @@ const (
 	// PackagePlatform is the platform name to use when looking for packages
 	PackagePlatform = "windows"
 
-	//PowerShellPluginCommandArgs is the arguments of powershell.exe to be used by the runPowerShellScript plugin
+	// PowerShellPluginCommandArgs specifies the default arguments that we pass to powershell
+	// Use Unrestricted as Execution Policy for running the script.
+	// https://technet.microsoft.com/en-us/library/hh847748.aspx
 	PowerShellPluginCommandArgs = "-InputFormat None -Noninteractive -NoProfile -ExecutionPolicy unrestricted -f"
+
+	// Currently we run powershell as powershell.exe [arguments], with this approach we are not able to get the $LASTEXITCODE value
+	// if we want to run multiple commands then we need to run them via shell and not directly the command.
+	// https://groups.google.com/forum/#!topic/golang-nuts/ggd3ww3ZKcI
+	ExitCodeTrap = " ; exit $LASTEXITCODE"
+
+	// Exit Code for a command that exits before completion (generally due to timeout or cancel)
+	CommandStoppedPreemptivelyExitCode = -1
+
+	// RunCommandScriptName is the script name where all downloaded or provided commands will be stored
+	RunCommandScriptName = "_script.ps1"
 )
 
 //PowerShellPluginCommandName is the path of the powershell.exe to be used by the runPowerShellScript plugin

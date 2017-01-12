@@ -255,7 +255,7 @@ func testExecution(t *testing.T, commandtester CommandTester) {
 	p.MaxStderrLength = 1000
 	p.OutputTruncatedSuffix = "-more-"
 	p.UploadToS3Sync = true
-	p.ExecuteCommand = pluginutil.CommandExecuter(mockExecuter.Execute)
+	p.CommandExecuter = mockExecuter
 	p.ExecuteUploadOutputToS3Bucket = pluginutil.UploadOutputToS3BucketExecuter(mockS3Uploader.UploadOutputToS3Bucket)
 	p.Name = "aws:runShellScript"
 	p.ScriptName = "_script.sh"
