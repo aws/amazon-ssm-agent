@@ -128,11 +128,11 @@ func ParseAmazonS3URL(log log.T, s3URL *url.URL) (output AmazonS3URL) {
 		}
 	}
 
-	// Temporary fix to allow pipeline tests to work
-	// Bucket ssmagent-alpha, ssmagent-beta, ssmagent are for internal testing
-	if (output.Bucket == "ssmagent-alpha" || output.Bucket == "ssmagent-beta" || output.Bucket == "ssmagent") && output.Region == "" {
+	// s3 bucket URL in us-east-1 doesn't include region
+	if output.Region == "" {
 		output.Region = "us-east-1"
 	}
+
 	return
 }
 

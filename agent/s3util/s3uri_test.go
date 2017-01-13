@@ -37,8 +37,8 @@ var (
 		{"a..bc", "https://s3.mock-region.amazonaws.com/a..bc/mykey/mykey", AmazonS3URL{true, true, "a..bc", "mykey/mykey", "mock-region"}},
 		{"johnsmith", "http://johnsmith.eu.s3-eu-west-1.amazonaws.com/homepage.html", AmazonS3URL{true, false, "johnsmith.eu", "homepage.html", "eu-west-1"}},
 		{"amazon-ssm-us-west-2", "https://s3-us-west-2.amazonaws.com/amazon-ssm-us-west-2/ssm-agent-manifest.json", AmazonS3URL{true, true, "amazon-ssm-us-west-2", "ssm-agent-manifest.json", "us-west-2"}},
-		{"amazon-ssm-us-west-2", "https://s3.amazonaws.com/amazon-ssm-us-west-2/ssm-agent-manifest.json", AmazonS3URL{true, true, "amazon-ssm-us-west-2", "ssm-agent-manifest.json", ""}},
-		{"amazon-ssm-us-west-2", "https://amazon-ssm-us-west-2.s3.amazonaws.com/ssm-agent-manifest.json", AmazonS3URL{true, false, "amazon-ssm-us-west-2", "ssm-agent-manifest.json", ""}},
+		{"amazon-ssm-us-west-2", "https://s3.amazonaws.com/amazon-ssm-us-west-2/ssm-agent-manifest.json", AmazonS3URL{true, true, "amazon-ssm-us-west-2", "ssm-agent-manifest.json", "us-east-1"}},
+		{"amazon-ssm-us-west-2", "https://amazon-ssm-us-west-2.s3.amazonaws.com/ssm-agent-manifest.json", AmazonS3URL{true, false, "amazon-ssm-us-west-2", "ssm-agent-manifest.json", "us-east-1"}},
 	}
 
 	noSslTests = []s3BucketTest{
