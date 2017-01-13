@@ -15,6 +15,9 @@
 package health
 
 import (
+	"math/rand"
+	"time"
+
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/sdkutil"
@@ -48,6 +51,15 @@ func NewHealthCheck(context context.T) *HealthCheck {
 		healthCheckStopPolicy: healthCheckStopPolicy,
 		service:               svc,
 	}
+}
+
+// schedules recurrent updateHealth calls
+func (h *HealthCheck) scheduleUpdateHealth() {
+	var err error
+	if h.healthJob, err = scheduler.Every(h.scheduleInMinutes()).Minutes().Run(h.updateHealth); err != nil {
+		h.context.Log().Errorf("unable to schedule health update. %v", err)
+	}
+	return
 }
 
 // updates SSM with the instance health information
@@ -89,9 +101,23 @@ func (h *HealthCheck) Name() string {
 
 // Execute starts the scheduling of the health check plugin
 func (h *HealthCheck) Execute(context context.T) (err error) {
-	if h.healthJob, err = scheduler.Every(h.scheduleInMinutes()).Minutes().Run(h.updateHealth); err != nil {
-		context.Log().Errorf("unable to schedule health update. %v", err)
-	}
+	rand.Seed(time.Now().UTC().UnixNano())
+	scheduleInMinutes := h.scheduleInMinutes()
+
+	randomSeconds := rand.Intn(scheduleInMinutes * 60)
+
+	// First call updateHealth once
+	go h.updateHealth()
+
+	// Wait randomSeconds and schedule recurrent updateHealth calls
+	next := time.Duration(randomSeconds) * time.Second
+	go func(h *HealthCheck) {
+		select {
+		case <-time.After(next):
+			go h.scheduleUpdateHealth()
+		}
+	}(h)
+
 	return
 }
 
