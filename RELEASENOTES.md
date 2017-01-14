@@ -1,3 +1,8 @@
+Latest
+================
+- Fixed CloudWatch crash issue
+- Various bug fixes
+
 2.0.671
 ================
 - Fixed Domain Join to support customized OU
@@ -5,7 +10,7 @@
 2.0.599
 ================
 - Added support for running Powershell on Linux
-- Fixed Cloud Watch doesn't work with creating association from Console
+- Fixed CloudWatch doesn't work with creating association from Console
 - Various bug fixes
 
 2.0.571
