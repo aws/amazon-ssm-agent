@@ -37,7 +37,7 @@ coverage:: build-linux
 
 build:: build-linux build-windows build-linux-386 build-windows-386
 
-prepack:: prepack-linux prepack-linux-386 prepack-windows prepack-windows-386
+prepack:: cpy-plugins prepack-linux prepack-linux-386 prepack-windows prepack-windows-386
 
 package:: create-package-folder package-linux package-windows
 
@@ -50,6 +50,12 @@ endif
 clean:: remove-prepacked-folder
 	rm -rf build/* bin/ pkg/ vendor/bin/ vendor/pkg/ .cover/
 	find . -type f -name '*.log' -delete
+
+.PHONY: cpy-plugins
+cpy-plugins:
+ifneq ("$(wildcard $(BUILDFILE_PATH))","")
+	$(BGO_SPACE)/Tools/src/copy_plugin_binaries.sh
+endif
 
 .PHONY: release-test
 release-test: copy-src pre-build pre-release quick-integtest
@@ -73,7 +79,6 @@ pre-build:
 	$(COPY) $(BGO_SPACE)/seelog_unix.xml $(BGO_SPACE)/bin/
 	$(COPY) $(BGO_SPACE)/seelog_windows.xml.template $(BGO_SPACE)/bin/
 	$(COPY) $(BGO_SPACE)/agent/integration-cli/integration-cli.json $(BGO_SPACE)/bin/
-	$(COPY) $(BGO_SPACE)/packaging/plugin-binaries/* $(BGO_SPACE)/bin/
 
 	@echo "Regenerate version file during pre-release"
 	go run $(BGO_SPACE)/agent/version/versiongenerator/version-gen.go

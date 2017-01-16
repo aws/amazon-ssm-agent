@@ -26,6 +26,7 @@ package.Amazon-ssm-agent = {
     # be exported to other packages that build against you.
     dependencies = {
         1.1 = {
+            EC2-Windows-EC2ConfigService = 1.0
         };
     };
 
