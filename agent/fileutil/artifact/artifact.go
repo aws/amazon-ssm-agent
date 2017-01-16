@@ -155,6 +155,7 @@ func ListS3Folders(log log.T, amazonS3URL s3util.AmazonS3URL) (folderNames []str
 		return
 	}
 	//TODO:MF: This works, but the string trimming required makes me think there should be some easier way to get this information
+	//TODO:MF: Check IsTruncated and if so, make additional request(s) with Marker - currently we're limited to 1000 results
 	folders := make([]string, 0)
 	for _, key := range resp.CommonPrefixes {
 		folders = append(folders, strings.TrimRight(strings.Replace(*key.Prefix, prefix, "", -1), "/"))

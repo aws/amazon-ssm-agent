@@ -106,17 +106,12 @@ var execdep execDep = &execDepImp{util: new(updateutil.Utility)}
 
 // dependency on action execution
 type execDep interface {
-	ExeCommand(log log.T, cmd string, workingDir string, updaterRoot string, stdOut string, stdErr string, isAsync bool) (err error)
 	ParseDocument(context context.T, documentRaw []byte, orchestrationDir string, s3Bucket string, s3KeyPrefix string, messageID string, documentID string, defaultWorkingDirectory string) (pluginsInfo []model.PluginState, err error)
 	ExecuteDocument(runner runpluginutil.PluginRunner, context context.T, pluginInput []model.PluginState, documentID string, documentCreatedDate string) (pluginOutputs map[string]*contracts.PluginResult)
 }
 
 type execDepImp struct {
 	util *updateutil.Utility
-}
-
-func (m *execDepImp) ExeCommand(log log.T, cmd string, workingDir string, updaterRoot string, stdOut string, stdErr string, isAsync bool) (err error) {
-	return m.util.ExeCommand(log, cmd, workingDir, updaterRoot, stdOut, stdErr, isAsync)
 }
 
 func (m *execDepImp) ParseDocument(context context.T, documentRaw []byte, orchestrationDir string, s3Bucket string, s3KeyPrefix string, messageID string, documentID string, defaultWorkingDirectory string) (pluginsInfo []model.PluginState, err error) {
