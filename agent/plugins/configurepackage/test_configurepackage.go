@@ -26,8 +26,35 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/s3util"
 	"github.com/aws/amazon-ssm-agent/agent/statemanager/model"
+	"github.com/aws/amazon-ssm-agent/agent/updateutil"
 	"github.com/stretchr/testify/mock"
 )
+
+func createStubInstanceContext() *updateutil.InstanceContext {
+	context := updateutil.InstanceContext{}
+
+	context.Region = "us-west-2"
+	context.Platform = "windows"
+	context.PlatformVersion = "2015.9"
+	context.InstallerName = "Windows"
+	context.Arch = "amd64"
+	context.CompressFormat = "zip"
+
+	return &context
+}
+
+func createStubInstanceContextBjs() *updateutil.InstanceContext {
+	context := updateutil.InstanceContext{}
+
+	context.Region = "cn-north-1"
+	context.Platform = "windows"
+	context.PlatformVersion = "2015.9"
+	context.InstallerName = "Windows"
+	context.Arch = "amd64"
+	context.CompressFormat = "zip"
+
+	return &context
+}
 
 type ConfigurePackageStubs struct {
 	// individual stub functions or interfaces go here with a temp variable for the original version
@@ -37,11 +64,15 @@ type ConfigurePackageStubs struct {
 	networkDepOrig networkDep
 	execDepStub    execDep
 	execDepOrig    execDep
+	stubsSet       bool
 }
 
 // Set replaces dependencies with stub versions and saves the original version.
 // it should always be followed by defer Clear()
 func (m *ConfigurePackageStubs) Set() {
+	if m.stubsSet {
+		m.Clear() // This protects us from double-setting stubs (we don't have a stack so we must only have one layer of stubs set at a time)
+	}
 	if m.fileSysDepStub != nil {
 		m.fileSysDepOrig = filesysdep
 		filesysdep = m.fileSysDepStub
@@ -54,10 +85,14 @@ func (m *ConfigurePackageStubs) Set() {
 		m.execDepOrig = execdep
 		execdep = m.execDepStub
 	}
+	m.stubsSet = true
 }
 
 // Clear resets dependencies to their original values.
 func (m *ConfigurePackageStubs) Clear() {
+	if !m.stubsSet {
+		return // This protects us from resetting to nil values if stubs were never set
+	}
 	if m.fileSysDepStub != nil {
 		filesysdep = m.fileSysDepOrig
 	}
@@ -67,6 +102,38 @@ func (m *ConfigurePackageStubs) Clear() {
 	if m.execDepStub != nil {
 		execdep = m.execDepOrig
 	}
+	m.stubsSet = false
+}
+
+func fileSysStubSuccess() fileSysDep {
+	result := `{
+  "name": "PVDriver",
+  "platform": "Windows",
+  "architecture": "amd64",
+  "version": "1.0.0"
+}`
+	return &FileSysDepStub{readResult: []byte(result), existsResultDefault: true}
+}
+
+func networkStubSuccess() networkDep {
+	return &NetworkDepStub{downloadResultDefault: artifact.DownloadOutput{LocalFilePath: "Stub"}}
+}
+
+func execStubSuccess() execDep {
+	return &ExecDepStub{pluginInput: &model.PluginState{}, pluginOutput: &contracts.PluginResult{Status: contracts.ResultStatusSuccess}}
+}
+
+func SetStubs() *ConfigurePackageStubs {
+	getContext = func(log log.T) (instanceContext *updateutil.InstanceContext, err error) {
+		return createStubInstanceContext(), nil
+	}
+	return setSuccessStubs()
+}
+
+func setSuccessStubs() *ConfigurePackageStubs {
+	stubs := &ConfigurePackageStubs{fileSysDepStub: fileSysStubSuccess(), networkDepStub: networkStubSuccess(), execDepStub: execStubSuccess()}
+	stubs.Set()
+	return stubs
 }
 
 type FileSysDepStub struct {
@@ -160,14 +227,9 @@ func (m *NetworkDepStub) Download(log log.T, input artifact.DownloadInput) (outp
 }
 
 type ExecDepStub struct {
-	execError    error
 	pluginInput  *model.PluginState
 	parseError   error
 	pluginOutput *contracts.PluginResult
-}
-
-func (m *ExecDepStub) ExeCommand(log log.T, cmd string, workingDir string, updaterRoot string, stdOut string, stdErr string, isAsync bool) (err error) {
-	return m.execError
 }
 
 func (m *ExecDepStub) ParseDocument(context context.T, documentRaw []byte, orchestrationDir string, s3Bucket string, s3KeyPrefix string, messageID string, documentID string, defaultWorkingDirectory string) (pluginsInfo []model.PluginState, err error) {

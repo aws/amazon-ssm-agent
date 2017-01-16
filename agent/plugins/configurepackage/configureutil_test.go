@@ -21,7 +21,6 @@ import (
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/log"
-	"github.com/aws/amazon-ssm-agent/agent/updateutil"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -164,32 +163,6 @@ func createStubInvalidPluginInput() *ConfigurePackagePluginInput {
 	input.Action = "InvalidAction"
 
 	return &input
-}
-
-func createStubInstanceContext() *updateutil.InstanceContext {
-	context := updateutil.InstanceContext{}
-
-	context.Region = "us-west-2"
-	context.Platform = "windows"
-	context.PlatformVersion = "2015.9"
-	context.InstallerName = "Windows"
-	context.Arch = "amd64"
-	context.CompressFormat = "zip"
-
-	return &context
-}
-
-func createStubInstanceContextBjs() *updateutil.InstanceContext {
-	context := updateutil.InstanceContext{}
-
-	context.Region = "cn-north-1"
-	context.Platform = "windows"
-	context.PlatformVersion = "2015.9"
-	context.InstallerName = "Windows"
-	context.Arch = "amd64"
-	context.CompressFormat = "zip"
-
-	return &context
 }
 
 type mockConfigureUtility struct {
