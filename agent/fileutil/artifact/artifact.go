@@ -284,11 +284,18 @@ func Download(log log.T, input DownloadInput) (output DownloadOutput, err error)
 		amazonS3URL := s3util.ParseAmazonS3URL(log, fileURL)
 		if amazonS3URL.IsBucketAndKeyPresent() {
 			// source is s3
-			output, err = s3Download(log, amazonS3URL, output.LocalFilePath)
+			var tempOutput DownloadOutput
+			tempOutput, err = s3Download(log, amazonS3URL, output.LocalFilePath)
+			// if s3 download fails, attempt http/https download as fallback
+			if err != nil {
+				tempOutput, err = httpDownload(log, input.SourceURL, output.LocalFilePath)
+			}
+			output = tempOutput
 		} else {
-			// simple httphttps download
+			// simple http/https download
 			output, err = httpDownload(log, input.SourceURL, output.LocalFilePath)
 		}
+
 		if err != nil {
 			return
 		}
