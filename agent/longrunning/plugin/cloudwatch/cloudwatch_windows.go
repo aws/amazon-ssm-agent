@@ -191,6 +191,10 @@ func (p *Plugin) Start(context context.T, configuration string, orchestrationDir
 	stdoutFilePath := filepath.Join(orchestrationDir, p.StdoutFileName)
 	stderrFilePath := filepath.Join(orchestrationDir, p.StderrFileName)
 
+	//remove previous output log files if they are present
+	fileutil.DeleteFile(stdoutFilePath)
+	fileutil.DeleteFile(stderrFilePath)
+
 	process, exitCode, errs := p.CommandExecuter.StartExe(log, p.WorkingDir, stdoutFilePath, stderrFilePath, cancelFlag, commandName, commandArguments)
 	if len(errs) > 0 || exitCode != 0 {
 		for _, err := range errs {

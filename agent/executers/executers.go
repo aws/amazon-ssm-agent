@@ -53,9 +53,8 @@ type timeoutSignal struct {
 }
 
 // Execute executes a list of shell commands in the given working directory.
-// The orchestration directory specifies where to create the script file and where
-// to save stdout and stderr. The orchestration directory will be created if it doesn't exist.
-// Returns readers for the standard output and standard error streams and a set of errors.
+// If no file path is provided for either stdout or stderr, output will be written to a byte buffer.
+// Returns readers for the standard output and standard error streams, process exit code, and a set of errors.
 // The errors need not be fatal - the output streams may still have data
 // even though some errors are reported. For example, if the command got killed while executing,
 // the streams will have whatever data was printed up to the kill point, and the errors will
@@ -71,15 +70,52 @@ func (ShellCommandExecuter) Execute(
 	commandArguments []string,
 ) (stdout io.Reader, stderr io.Reader, exitCode int, errs []error) {
 
+	var stdoutWriter io.Writer
+	var stdoutBuf *bytes.Buffer
+	if stdoutFilePath != "" {
+		// create stdout file
+		// fix the permissions appropriately
+		// Allow append so that if arrays of run command write to the same file, we keep appending to the file.
+		stdoutFileWriter, err := os.OpenFile(stdoutFilePath, appconfig.FileFlagsCreateOrAppend, appconfig.ReadWriteAccess)
+		if err != nil {
+			return
+		}
+		stdoutWriter = stdoutFileWriter
+		defer stdoutFileWriter.Close()
+	} else {
+		stdoutBuf = bytes.NewBuffer(nil)
+		stdoutWriter = stdoutBuf
+	}
+
+	var stderrWriter io.Writer
+	var stderrBuf *bytes.Buffer
+	if stderrFilePath != "" {
+		// create stderr file
+		// fix the permissions appropriately
+		// Allow append so that if arrays of run command write to the same file, we keep appending to the file.
+		stderrFileWriter, err := os.OpenFile(stderrFilePath, appconfig.FileFlagsCreateOrAppend, appconfig.ReadWriteAccess)
+		if err != nil {
+			return
+		}
+		stderrWriter = stderrFileWriter
+		defer stderrFileWriter.Close() // ExecuteCommand creates a copy of the handle
+	} else {
+		stderrBuf = bytes.NewBuffer(nil)
+		stderrWriter = stderrBuf
+	}
+
+	// NOTE: Regarding the defer close of the file writers.
+	// Technically, closing the files should happen after ExecuteCommand and before opening the files for reading.
+	// In this case, there is no need for that because the child process inherits copies of the file handles and does
+	// the actual writing to the files. So, when using files, it does not matter when we close our copies of the file writers.
+
 	var err error
-	exitCode, err = executeCommandAndOutputToFiles(log, cancelFlag, workingDir, stdoutFilePath, stderrFilePath, executionTimeout, commandName, commandArguments)
+	exitCode, err = ExecuteCommand(log, cancelFlag, workingDir, stdoutWriter, stderrWriter, executionTimeout, commandName, commandArguments)
 	if err != nil {
 		errs = append(errs, err)
 	}
 
-	emptyReader := bytes.NewReader([]byte{})
-
-	// create reader from stdout, if it exist, otherwise use empty reader
+	// create reader from stdout, if it exist, otherwise use the buffer
 	if fileutil.Exists(stdoutFilePath) {
 		stdout, err = os.Open(stdoutFilePath)
 		if err != nil {
@@ -87,10 +123,10 @@ func (ShellCommandExecuter) Execute(
 			errs = append(errs, err)
 		}
 	} else {
-		stdout = emptyReader
+		stdout = bytes.NewReader(stdoutBuf.Bytes())
 	}
 
-	// create reader from stderr, if it exist, otherwise use empty reader
+	// create reader from stderr, if it exist, otherwise use the buffer
 	if fileutil.Exists(stderrFilePath) {
 		stderr, err = os.Open(stderrFilePath)
 		if err != nil {
@@ -98,16 +134,14 @@ func (ShellCommandExecuter) Execute(
 			errs = append(errs, err)
 		}
 	} else {
-		stderr = emptyReader
+		stderr = bytes.NewReader(stderrBuf.Bytes())
 	}
 
 	return
 }
 
 // StartExe starts a list of shell commands in the given working directory.
-// The orchestration directory specifies where to create the script file and where
-// to save stdout and stderr. The orchestration directory will be created if it doesn't exist.
-// Returns readers for the standard output and standard error streams and a set of errors.
+// Returns process started, an exit code (0 if successfully launch, 1 if error launching process), and a set of errors.
 // The errors need not be fatal - the output streams may still have data
 // even though some errors are reported. For example, if the command got killed while executing,
 // the streams will have whatever data was printed up to the kill point, and the errors will
@@ -121,8 +155,37 @@ func (ShellCommandExecuter) StartExe(
 	commandName string,
 	commandArguments []string,
 ) (process *os.Process, exitCode int, errs []error) {
+
+	var stdoutWriter, stderrWriter *os.File
+	if stdoutFilePath != "" {
+		// create stdout file
+		// fix the permissions appropriately
+		// Allow append so that if arrays of run command write to the same file, we keep appending to the file.
+		stdoutWriter, err := os.OpenFile(stdoutFilePath, appconfig.FileFlagsCreateOrAppend, appconfig.ReadWriteAccess)
+		if err != nil {
+			return
+		}
+		defer stdoutWriter.Close() // Closing our instance of the file handle - the child process has its own copy
+	}
+
+	if stderrFilePath != "" {
+		// create stderr file
+		// fix the permissions appropriately
+		// Allow append so that if arrays of run command write to the same file, we keep appending to the file.
+		stderrWriter, err := os.OpenFile(stderrFilePath, appconfig.FileFlagsCreateOrAppend, appconfig.ReadWriteAccess)
+		if err != nil {
+			return
+		}
+		defer stderrWriter.Close() // Closing our instance of the file handle - the child process has its own copy
+	}
+
+	// NOTE: Regarding the defer close of the file writers.
+	// The defer will close these file handles before the asynchronous process uses them.
+	// In this case, it doesn't cause a problem because the child process inherits copies of the file handles and does
+	// the actual writing to the files. So, when using files, it does not matter when we close our copies of the file writers.
+
 	var err error
-	process, exitCode, err = startCommandAndOutputToFiles(log, cancelFlag, workingDir, stdoutFilePath, stderrFilePath, commandName, commandArguments)
+	process, exitCode, err = StartCommand(log, cancelFlag, workingDir, stdoutWriter, stderrWriter, commandName, commandArguments)
 	if err != nil {
 		errs = append(errs, err)
 	}
@@ -145,73 +208,6 @@ func CreateScriptFile(scriptPath string, commands []string) (err error) {
 		return
 	}
 	return
-}
-
-// executeCommandAndOutputToFiles executes the given commands using the given working directory.
-// The directory must exist. Standard output and standard error are sent to the given files.
-func executeCommandAndOutputToFiles(
-	log log.T,
-	cancelFlag task.CancelFlag,
-	workingDir string,
-	stdoutFilePath string,
-	stderrFilePath string,
-	executionTimeout int,
-	commandName string,
-	commandArguments []string,
-) (exitCode int, err error) {
-
-	// create stdout file
-	// fix the permissions appropriately
-	// Allow append so that if arrays of run command write to the same file, we keep appending to the file.
-	stdoutWriter, err := os.OpenFile(stdoutFilePath, os.O_APPEND|os.O_WRONLY|os.O_CREATE, 0600)
-	if err != nil {
-		return
-	}
-	defer stdoutWriter.Close()
-
-	// create stderr file
-	// fix the permissions appropriately
-	// Allow append so that if arrays of run command write to the same file, we keep appending to the file.
-	stderrWriter, err := os.OpenFile(stderrFilePath, os.O_APPEND|os.O_WRONLY|os.O_CREATE, 0600)
-	if err != nil {
-		return
-	}
-	defer stderrWriter.Close()
-
-	return ExecuteCommand(log, cancelFlag, workingDir, stdoutWriter, stderrWriter, executionTimeout, commandName, commandArguments)
-}
-
-// startCommandAndOutputToFiles starts the given commands using the given working directory.
-// The directory must exist. Standard output and standard error are sent to the given files.
-func startCommandAndOutputToFiles(
-	log log.T,
-	cancelFlag task.CancelFlag,
-	workingDir string,
-	stdoutFilePath string,
-	stderrFilePath string,
-	commandName string,
-	commandArguments []string,
-) (process *os.Process, exitCode int, err error) {
-
-	// create stdout file
-	// fix the permissions appropriately
-	// Allow append so that if arrays of run command write to the same file, we keep appending to the file.
-	stdoutWriter, err := os.OpenFile(stdoutFilePath, os.O_APPEND|os.O_WRONLY|os.O_CREATE, 0600)
-	if err != nil {
-		return
-	}
-	defer stdoutWriter.Close() // Closing our instance of the file handle - the child process has its own copy
-
-	// create stderr file
-	// fix the permissions appropriately
-	// Allow append so that if arrays of run command write to the same file, we keep appending to the file.
-	stderrWriter, err := os.OpenFile(stderrFilePath, os.O_CREATE|os.O_WRONLY|os.O_TRUNC, 0600)
-	if err != nil {
-		return
-	}
-	defer stderrWriter.Close() // Closing our instance of the file handle - the child process has its own copy
-
-	return StartCommand(log, cancelFlag, workingDir, stdoutWriter, stderrWriter, commandName, commandArguments)
 }
 
 // ExecuteCommand executes the given commands using the given working directory.
