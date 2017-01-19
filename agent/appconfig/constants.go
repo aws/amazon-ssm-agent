@@ -14,6 +14,8 @@
 // Package appconfig manages the configuration of the agent.
 package appconfig
 
+import "os"
+
 const (
 	// Agent defaults
 	DefaultAgentName = "amazon-ssm-agent"
@@ -75,6 +77,10 @@ const (
 	//NOTE: Limit READ, WRITE and EXECUTE access to administrators/root.
 	ReadWriteAccess        = 0600
 	ReadWriteExecuteAccess = 0700
+
+	// Common file flags when opening/creating files
+	FileFlagsCreateOrAppend   = os.O_APPEND | os.O_WRONLY | os.O_CREATE
+	FileFlagsCreateOrTruncate = os.O_TRUNC | os.O_WRONLY | os.O_CREATE
 
 	// ExitCodes
 	SuccessExitCode = 0

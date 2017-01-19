@@ -58,7 +58,7 @@ func Uncompress(src, dest string) error {
 		if hdr.FileInfo().IsDir() {
 			os.MkdirAll(itemPath, hdr.FileInfo().Mode())
 		} else {
-			fw, err := os.OpenFile(itemPath, os.O_CREATE|os.O_WRONLY|os.O_TRUNC, hdr.FileInfo().Mode())
+			fw, err := os.OpenFile(itemPath, appconfig.FileFlagsCreateOrTruncate, hdr.FileInfo().Mode())
 			if err != nil {
 				return err
 			}

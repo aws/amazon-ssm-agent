@@ -12,7 +12,6 @@ package pluginutil
 import (
 	"io"
 	"io/ioutil"
-	"os"
 	"path/filepath"
 	"strconv"
 	"strings"
@@ -282,40 +281,10 @@ func (p *DefaultPlugin) UploadOutputToS3Bucket(log log.T, pluginID string, orche
 
 // CreateScriptFile creates a script containing the given commands.
 func CreateScriptFile(log log.T, scriptPath string, runCommand []string) (err error) {
-	var sourceFile *os.File
-	var scriptFile *os.File
-
-	// create script file
-	mode := int(appconfig.ReadWriteExecuteAccess)
-	scriptFile, err = os.OpenFile(scriptPath, os.O_CREATE|os.O_WRONLY, os.FileMode(mode))
-	if err != nil {
-		log.Errorf("failed to create local script file %v, err %v", scriptPath, err)
-		return
-	}
-	defer func() {
-		cerr := scriptFile.Close()
-		if err == nil {
-			err = cerr
-		}
-	}()
-
 	// write source commands to file
-	if sourceFile != nil {
-		if _, err = io.Copy(scriptFile, sourceFile); err != nil {
-			log.Errorf("failed to write source scripts to file %v", scriptPath)
-			return
-		}
-		_, err = scriptFile.WriteString("\n")
-		if err != nil {
-			log.Errorf("failed to write source scripts scripts to file %v", scriptPath)
-			return
-		}
-	}
-
-	// write source commands to file
-	_, err = scriptFile.WriteString(strings.Join(runCommand, "\n") + "\n")
+	err = fileutil.WriteAllText(scriptPath, strings.Join(runCommand, "\n")+"\n")
 	if err != nil {
-		log.Errorf("failed to write runcommand scripts to file %v", scriptPath)
+		log.Errorf("failed to write runcommand scripts to file %v, err %v", scriptPath, err)
 		return
 	}
 

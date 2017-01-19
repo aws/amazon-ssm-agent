@@ -578,13 +578,13 @@ func setExeOutErr(
 
 	// create stdout file
 	// Allow append so that if arrays of run command write to the same file, we keep appending to the file.
-	if stdoutWriter, err = openFile(stdOutPath, os.O_APPEND|os.O_WRONLY|os.O_CREATE, appconfig.ReadWriteAccess); err != nil {
+	if stdoutWriter, err = openFile(stdOutPath, appconfig.FileFlagsCreateOrAppend, appconfig.ReadWriteAccess); err != nil {
 		return
 	}
 
 	// create stderr file
 	// Allow append so that if arrays of run command write to the same file, we keep appending to the file.
-	if stderrWriter, err = openFile(stdErrPath, os.O_APPEND|os.O_WRONLY|os.O_CREATE, appconfig.ReadWriteAccess); err != nil {
+	if stderrWriter, err = openFile(stdErrPath, appconfig.FileFlagsCreateOrAppend, appconfig.ReadWriteAccess); err != nil {
 		return
 	}
 

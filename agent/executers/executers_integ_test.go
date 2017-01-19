@@ -337,14 +337,14 @@ func prepareTestStartCommand(t *testing.T) (commandInvoker CommandInvoker, cance
 		defer fileutil.DeleteDirectory(orchestrationDir)
 
 		stdoutFilePath := filepath.Join(orchestrationDir, uuid.NewV4().String())
-		stdoutWriter, err := os.OpenFile(stdoutFilePath, os.O_APPEND|os.O_WRONLY|os.O_CREATE, 0600)
+		stdoutWriter, err := os.OpenFile(stdoutFilePath, appconfig.FileFlagsCreateOrAppend, appconfig.ReadWriteAccess)
 		if err != nil {
 			t.Fatal(err)
 		}
 		defer os.Remove(stdoutFilePath)
 
 		stderrFilePath := filepath.Join(orchestrationDir, uuid.NewV4().String())
-		stderrWriter, err := os.OpenFile(stderrFilePath, os.O_APPEND|os.O_WRONLY|os.O_CREATE, 0600)
+		stderrWriter, err := os.OpenFile(stderrFilePath, appconfig.FileFlagsCreateOrAppend, appconfig.ReadWriteAccess)
 		if err != nil {
 			t.Fatal(err)
 		}
