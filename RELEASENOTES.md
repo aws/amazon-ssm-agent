@@ -1,5 +1,9 @@
 Latest
 ================
+- Various bug fixes
+
+2.0.633
+================
 - Added support for aws:softwareInventory plugin to upload inventory related log messages to S3
 - Fixed CloudWatch crash issue
 - Various bug fixes
