@@ -41,7 +41,7 @@ checkstyle::
 coverage:: build-linux
 	$(BGO_SPACE)/Tools/src/coverage.sh github.com/aws/amazon-ssm-agent/agent/...
 
-build:: build-linux build-windows build-linux-386 build-windows-386
+build:: build-linux build-freebsd build-windows build-linux-386 build-windows-386
 
 prepack:: cpy-plugins prepack-linux prepack-linux-386 prepack-windows prepack-windows-386
 
@@ -107,6 +107,14 @@ build-linux: checkstyle copy-src pre-build
 	$(BGO_SPACE)/agent/update/updater/updater.go $(BGO_SPACE)/agent/update/updater/updater_unix.go
 	GOOS=linux GOARCH=amd64 $(GO_BUILD) -ldflags "-s -w" -o $(BGO_SPACE)/bin/linux_amd64/ssm-cli -v \
         $(BGO_SPACE)/agent/cli-main/cli-main.go
+
+.PHONY: build-freebsd
+build-freebsd: checkstyle copy-src pre-build
+	@echo "Build for freebsd agent"
+	GOOS=freebsd GOARCH=amd64 go build -ldflags "-s -w" -o $(BGO_SPACE)/bin/freebsd_amd64/amazon-ssm-agent -v \
+	$(BGO_SPACE)/agent/agent.go $(BGO_SPACE)/agent/agent_unix.go $(BGO_SPACE)/agent/agent_parser.go
+	GOOS=freebsd GOARCH=amd64 $(GO_BUILD) -ldflags "-s -w" -o $(BGO_SPACE)/bin/freebsd_amd64/ssm-cli -v \
+            $(BGO_SPACE)/agent/cli-main/cli-main.go
 
 .PHONY: build-darwin
 build-darwin: checkstyle copy-src pre-build

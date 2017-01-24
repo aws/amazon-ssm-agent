@@ -90,9 +90,10 @@ func GetDiskSpaceInfo() (diskSpaceInfo DiskSpaceInfo, err error) {
 
 	// return DiskSpaceInfo with calculated bytes
 	return DiskSpaceInfo{
-		AvailBytes: (int64)(stat.Bavail * bSize), // available space = # of available blocks * block size
-		FreeBytes:  (int64)(stat.Bfree * bSize),  // free space = # of free blocks * block size
-		TotalBytes: (int64)(stat.Blocks * bSize), // total space = # of total blocks * block size
+		// On Linux the struct statfs.f_bavail field is unsigned, but on FreeBSD the field is an int64
+		AvailBytes: (int64)((uint64)(stat.Bavail) * bSize), // available space = # of available blocks * block size
+		FreeBytes:  (int64)(stat.Bfree * bSize),            // free space = # of free blocks * block size
+		TotalBytes: (int64)(stat.Blocks * bSize),           // total space = # of total blocks * block size
 	}, nil
 }
 
