@@ -49,6 +49,8 @@ package:: create-package-folder package-linux package-windows
 
 release:: clean checkstyle release-test pre-release build prepack package
 
+open-source:: release update-plugins-binaries
+
 ifneq ($(FINALIZE),)
 	bgo-final
 endif
@@ -56,6 +58,10 @@ endif
 clean:: remove-prepacked-folder
 	rm -rf build/* bin/ pkg/ vendor/bin/ vendor/pkg/ .cover/
 	find . -type f -name '*.log' -delete
+
+.PHONY: update-plugins-binaries
+update-plugins-binaries:
+	$(BGO_SPACE)/Tools/src/release_dependencies.sh
 
 .PHONY: cpy-plugins
 cpy-plugins:
