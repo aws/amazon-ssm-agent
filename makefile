@@ -1,16 +1,20 @@
 BUILDFILE_PATH := ./build/private/bgo_exports.makefile
 COPY := cp -p
 GO_BUILD := go build -i
+BRAZIL_BUILD := false
 
 # Using the wildcard function to check if file exists
 ifneq ("$(wildcard $(BUILDFILE_PATH))","")
 	include $(BUILDFILE_PATH)
+	BRAZIL_BUILD := true
+endif
+
+ifeq ($(BRAZIL_BUILD), true)
 	GOTEMPPATH := $(BGO_SPACE)/build/private
 	GOTEMPCOPYPATH := $(GOTEMPPATH)/src/github.com/aws/amazon-ssm-agent
 	GOPATH := $(GOTEMPPATH):$(BGO_SPACE)/vendor:$(GOPATH)
 	TEMPVERSIONPATH := $(GOTEMPCOPYPATH)/agent/version
 	FINALIZE := $(shell command -v bgo-final 2>/dev/null)
-
 else
 #   Initailize workspace if it's empty
 	ifeq ($(WORKSPACE),)
@@ -26,7 +30,9 @@ else
 		GOPATH := $(path)
 	endif
 endif
+
 export GOPATH
+export BRAZIL_BUILD
 
 checkstyle::
 #   Run checkstyle script
@@ -53,9 +59,7 @@ clean:: remove-prepacked-folder
 
 .PHONY: cpy-plugins
 cpy-plugins:
-ifneq ("$(wildcard $(BUILDFILE_PATH))","")
-	$(BGO_SPACE)/Tools/src/copy_plugin_binaries.sh
-endif
+	$(BGO_SPACE)/Tools/src/copy_plugin_binaries.sh $(BRAZIL_BUILD)
 
 .PHONY: release-test
 release-test: copy-src pre-build pre-release quick-integtest
@@ -83,8 +87,8 @@ pre-build:
 	@echo "Regenerate version file during pre-release"
 	go run $(BGO_SPACE)/agent/version/versiongenerator/version-gen.go
 	$(COPY) $(BGO_SPACE)/VERSION $(BGO_SPACE)/bin/
-ifneq ("$(wildcard $(BUILDFILE_PATH))","")
-	@echo "Copying version files generated in pre-build "
+ifeq ($(BRAZIL_BUILD), true)
+	@echo "Copying version files generated in pre-build"
 	mkdir -p $(TEMPVERSIONPATH)
 	$(COPY) $(BGO_SPACE)/VERSION $(GOTEMPCOPYPATH)
 	$(COPY) $(BGO_SPACE)/agent/version/version.go $(TEMPVERSIONPATH)
@@ -152,7 +156,7 @@ build-windows-386: checkstyle copy-src pre-build
 
 .PHONY: copy-src
 copy-src:
-ifneq ("$(wildcard $(BUILDFILE_PATH))","")
+ifeq ($(BRAZIL_BUILD), true)
 	rm -rf $(GOTEMPCOPYPATH)
 	mkdir -p $(GOTEMPCOPYPATH)
 	@echo "copying files to $(GOTEMPCOPYPATH)"
