@@ -61,7 +61,7 @@ const (
 	S3Format = "https://s3.amazonaws.com/aws-ssm-{Region}"
 
 	// CommonManifestURL is the URL for the manifest file in regular regions
-	CommonManifestURL = "https://aws-ssm-{Region}.s3.amazonaws.com/manifest.json"
+	CommonManifestURL = "https://s3.{Region}.amazonaws.com/aws-ssm-{Region}/manifest.json"
 
 	// ChinaManifestURL is the URL for the manifest in regions in China
 	ChinaManifestURL = "https://s3.{Region}.amazonaws.com.cn/aws-ssm-{Region}/manifest.json"
