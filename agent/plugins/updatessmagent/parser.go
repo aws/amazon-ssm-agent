@@ -53,7 +53,7 @@ const (
 	minimumVersion = "0"
 
 	// CommonManifestURL is the Manifest URL for regular regions
-	CommonManifestURL = "https://amazon-ssm-{Region}.s3.amazonaws.com/ssm-agent-manifest.json"
+	CommonManifestURL = "https://s3.{Region}.amazonaws.com/amazon-ssm-{Region}/ssm-agent-manifest.json"
 
 	// ChinaManifestURL is the manifest URL for regions in China
 	ChinaManifestURL = "https://s3.{Region}.amazonaws.com.cn/amazon-ssm-{Region}/ssm-agent-manifest.json"
