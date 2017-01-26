@@ -80,7 +80,8 @@ type pluginHelper interface {
 		pluginInput *UpdatePluginInput,
 		context *updateutil.InstanceContext,
 		updaterPath string,
-		messageID string) (cmd string, err error)
+		messageID string,
+		agentVersion string) (cmd string, err error)
 
 	generateUpdateCmd(log log.T,
 		updaterPath string) (cmd string, err error)
@@ -113,7 +114,6 @@ var fileDownload = artifact.Download
 var fileUncompress = fileutil.Uncompress
 var updateAgent = runUpdateAgent
 var mkDirAll = os.MkdirAll
-var agentVersion string
 
 // NewPlugin returns a new instance of the plugin.
 func NewPlugin(updatePluginConfig UpdatePluginConfig) (*Plugin, error) {
@@ -252,7 +252,8 @@ func runUpdateAgent(
 			&pluginInput,
 			context,
 			UpdaterFilePath(appconfig.EC2UpdateArtifactsRoot, pluginInput.UpdaterName, updaterVersion),
-			config.MessageId); err != nil {
+			config.MessageId,
+			agentVersion); err != nil {
 			out.MarkAsFailed(log, err)
 			return
 		}
@@ -303,7 +304,8 @@ func (m *updateManager) generateSetupUpdateCmd(log log.T,
 	pluginInput *UpdatePluginInput,
 	context *updateutil.InstanceContext,
 	updaterPath string,
-	messageID string) (cmd string, err error) {
+	messageID string,
+	agentVersion string) (cmd string, err error) {
 	cmd = updaterPath + SetupInstallCmd //Command sent to updater to setup the installation
 	source := ""
 	hash := ""
@@ -463,7 +465,6 @@ func (m *updateManager) downloadUpdater(log log.T,
 			downloadOutput.LocalFilePath,
 			uncompressErr.Error())
 	}
-	out.AppendInfof(log, "Successfully downloaded %v", downloadInput.SourceURL)
 
 	return version, nil
 }
