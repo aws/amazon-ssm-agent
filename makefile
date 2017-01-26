@@ -49,8 +49,6 @@ package:: create-package-folder package-linux package-windows
 
 release:: clean checkstyle release-test pre-release build prepack package
 
-open-source:: release update-plugins-binaries
-
 ifneq ($(FINALIZE),)
 	bgo-final
 endif
