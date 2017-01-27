@@ -116,7 +116,7 @@ func (p *Plugin) IsRunning(context context.T) bool {
 // Start starts the executable file and returns encountered errors
 func (p *Plugin) Start(context context.T, configuration string, orchestrationDir string, cancelFlag task.CancelFlag) (err error) {
 	log := context.Log()
-	log.Infof("CloudWatch Configuration to be applied - %s", configuration)
+	log.Infof("CloudWatch Configuration to be applied")
 
 	//check if the exe is located
 	if !fileExist(p.ExeLocation) {
