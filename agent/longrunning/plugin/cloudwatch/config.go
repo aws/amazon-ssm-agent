@@ -16,6 +16,7 @@ package cloudwatch
 
 import (
 	"bytes"
+	"encoding/json"
 	"fmt"
 	"os"
 	"sync"
@@ -23,6 +24,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
+	"github.com/aws/amazon-ssm-agent/agent/log"
 )
 
 // ConfigFileName represents the name of the configuration file for cloud watch plugin
@@ -62,10 +64,10 @@ func ParseEngineConfiguration() (config string, err error) {
 }
 
 // Update updates configuration from file system
-func Update() error {
+func Update(log log.T) error {
 	var cwConfig CloudWatchConfig
 	var err error
-	if cwConfig, err = load(); err != nil {
+	if cwConfig, err = load(log); err != nil {
 		return err
 	}
 
@@ -128,7 +130,7 @@ func Disable() error {
 }
 
 // load reads cloud watch plugin configuration from config store (file system)
-func load() (CloudWatchConfig, error) {
+func load(log log.T) (CloudWatchConfig, error) {
 	lock.RLock()
 	defer lock.RUnlock()
 	fileName := getFileName()
@@ -136,6 +138,29 @@ func load() (CloudWatchConfig, error) {
 	var cwConfig CloudWatchConfig
 
 	err = jsonutil.UnmarshalFile(fileName, &cwConfig)
+
+	// For backward compatibility, check if the engine configuration is read as string due to escaped characters.
+	// If so, unmarshalling it again should correct the format to a tree of maps.
+	switch cwConfig.EngineConfiguration.(type) {
+	case string:
+		log.Info("Legacy configuration was detected - Reformatting the configuration...")
+		var engineConfiguration interface{}
+		rawIn := json.RawMessage(cwConfig.EngineConfiguration.(string))
+		json.Unmarshal([]byte(rawIn), &engineConfiguration)
+		cwConfig.EngineConfiguration = engineConfiguration
+	}
+
+	// For backward compatibility, check if the engine configuration contains
+	// another engine configuration parameter. If so, remove it from the map.
+	switch cwConfig.EngineConfiguration.(type) {
+	case map[string]interface{}:
+		if ecMap, ok := cwConfig.EngineConfiguration.(map[string]interface{}); ok {
+			if val, exist := ecMap["EngineConfiguration"]; exist {
+				log.Info("Legacy configuration was detected - Removing a redundant parameter...")
+				cwConfig.EngineConfiguration = val
+			}
+		}
+	}
 
 	return cwConfig, err
 }
