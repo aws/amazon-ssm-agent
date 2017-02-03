@@ -197,7 +197,7 @@ func runUpdateAgent(
 		config.MessageId,
 		p.StdoutFileName,
 		p.StderrFileName,
-		outputS3KeyPrefix,
+		fileutil.BuildS3Path(outputS3KeyPrefix, config.PluginID),
 		outputS3BucketName); err != nil {
 		out.MarkAsFailed(log, err)
 		return

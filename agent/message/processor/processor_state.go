@@ -150,7 +150,7 @@ func initializeSendCommandStateWithMainStep(
 			Settings:               instancePluginConfig.Settings,
 			Properties:             instancePluginConfig.Inputs,
 			OutputS3BucketName:     payload.OutputS3BucketName,
-			OutputS3KeyPrefix:      fileutil.BuildS3Path(s3KeyPrefix, instancePluginConfig.Name),
+			OutputS3KeyPrefix:      fileutil.BuildS3Path(s3KeyPrefix, pluginName),
 			OrchestrationDirectory: fileutil.BuildPath(orchestrationDir, instancePluginConfig.Name),
 			MessageId:              messageID,
 			BookKeepingFileName:    payload.CommandID,

@@ -20,14 +20,9 @@ import (
 	"testing"
 
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
-	"github.com/aws/amazon-ssm-agent/agent/framework/runpluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/statemanager/model"
 	"github.com/stretchr/testify/assert"
 )
-
-func createInstance() configurePackageManager {
-	return &configurePackage{Configuration: contracts.Configuration{}, runner: runpluginutil.PluginRunner{}}
-}
 
 func TestConfigurePackage(t *testing.T) {
 	stubs := setSuccessStubs()

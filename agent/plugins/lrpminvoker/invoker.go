@@ -17,12 +17,9 @@ package lrpminvoker
 
 import (
 	"encoding/json"
-	"errors"
 	"fmt"
 	"io/ioutil"
 	"path/filepath"
-	"regexp"
-	"strings"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
@@ -41,7 +38,8 @@ import (
 // Plugin is the type for the lrpm invoker plugin.
 type Plugin struct {
 	pluginutil.DefaultPlugin
-	lrpm manager.T
+	lrpm    manager.T
+	lrpName string
 }
 
 // LongRunningPluginSettings represents startType configuration of long running plugin
@@ -61,8 +59,8 @@ var pluginPersister = pluginutil.PersistPluginInformationToCurrent
 
 //todo: add interfaces & dependencies to simplify testing for all calls from lrpminvoker calls to lrpm
 
-// NewPlugin returns lrpminvoker
-func NewPlugin(pluginConfig pluginutil.PluginConfig) (*Plugin, error) {
+// NewPlugin returns an instance of lrpminvoker for a given long running plugin name
+func NewPlugin(pluginConfig pluginutil.PluginConfig, lrpName string) (*Plugin, error) {
 	var plugin Plugin
 	var err error
 	plugin.MaxStdoutLength = pluginConfig.MaxStdoutLength
@@ -75,6 +73,9 @@ func NewPlugin(pluginConfig pluginutil.PluginConfig) (*Plugin, error) {
 
 	//getting the reference of LRPM - long running plugin manager - which manages all long running plugins
 	plugin.lrpm, err = manager.GetInstance()
+	//name of the long running plugin that this instance of lrpminvoker interacts with - this is the name the lrpminvoker plugin instance is registered under
+	plugin.lrpName = lrpName
+
 	return &plugin, err
 }
 
@@ -88,24 +89,13 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 	log := context.Log()
 	log.Infof("long running plugin invoker has been invoked")
 
-	var pluginName string
 	var err error
 	pluginID := config.PluginID
-	// TODO not sure why we need to grab pluginId from the context. will figure out if need later
-	//grab pluginId from the context
-	if pluginName, err = p.GetPluginIdFromContext(context); err != nil {
-		log.Errorf("Unable to get plugin name from context - %s", context.CurrentContext())
-		res = p.CreateResult("Unable to get plugin name because of unsupported plugin name format",
-			contracts.ResultStatusFailed)
-
-		pluginPersister(log, pluginID, config, res)
-		return
-	}
 
 	var pluginsMap = p.lrpm.GetRegisteredPlugins()
-	if _, ok := pluginsMap[pluginName]; !ok {
-		log.Errorf("Given plugin - %s is not registered", pluginName)
-		res = p.CreateResult(fmt.Sprintf("Plugin %s is not registered by agent", pluginName),
+	if _, ok := pluginsMap[p.lrpName]; !ok {
+		log.Errorf("Given plugin - %s is not registered", p.lrpName)
+		res = p.CreateResult(fmt.Sprintf("Plugin %s is not registered by agent", p.lrpName),
 			contracts.ResultStatusFailed)
 
 		pluginPersister(log, pluginID, config, res)
@@ -123,7 +113,7 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 	if err = jsonutil.Remarshal(config.Settings, &setting); err != nil {
 		log.Errorf(fmt.Sprintf("Invalid format in plugin configuration - %v;\nError %v", config.Settings, err))
 
-		res = p.CreateResult(fmt.Sprintf("Unable to parse Settings for %s", pluginName),
+		res = p.CreateResult(fmt.Sprintf("Unable to parse Settings for %s", p.lrpName),
 			contracts.ResultStatusFailed)
 
 		pluginPersister(log, pluginID, config, res)
@@ -131,7 +121,7 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 	}
 
 	if rebooter.RebootRequested() {
-		log.Infof("Stopping execution of %v plugin due to an external reboot request.", pluginName)
+		log.Infof("Stopping execution of %v plugin due to an external reboot request.", p.lrpName)
 		return
 	}
 
@@ -153,15 +143,15 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 
 	switch setting.StartType {
 	case "Enabled":
-		res = p.enablePlugin(log, config, pluginName, cancelFlag)
+		res = p.enablePlugin(log, config, cancelFlag)
 
 		pluginPersister(log, pluginID, config, res)
 		return
 
 	case "Disabled":
 
-		log.Infof("Disabling %s", pluginName)
-		if err = p.lrpm.StopPlugin(pluginName, cancelFlag); err != nil {
+		log.Infof("Disabling %s", p.lrpName)
+		if err = p.lrpm.StopPlugin(p.lrpName, cancelFlag); err != nil {
 			log.Errorf("Unable to stop the plugin - %s: %s", pluginID, err.Error())
 			res = p.CreateResult(fmt.Sprintf("Encountered error while stopping the plugin: %s", err.Error()),
 				contracts.ResultStatusFailed)
@@ -169,7 +159,7 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 			pluginPersister(log, pluginID, config, res)
 			return
 		} else {
-			res = p.CreateResult(fmt.Sprintf("Disabled the plugin - %s successfully", pluginName),
+			res = p.CreateResult(fmt.Sprintf("Disabled the plugin - %s successfully", p.lrpName),
 				contracts.ResultStatusSuccess)
 			res.Status = contracts.ResultStatusSuccess
 
@@ -187,26 +177,6 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 	}
 }
 
-// GetPluginIdFromContext gets pluginId from context
-func (p *Plugin) GetPluginIdFromContext(context context.T) (string, error) {
-
-	//last element in context has pluginId in the following format:
-	//[pluginID=<pluginName e.g aws:cloudWatch>]
-	//finding plugin name from context
-	c := context.CurrentContext()
-	l := c[len(c)-1]
-	temp := strings.Split(l, "=")[1]
-	n := strings.Split(temp, "]")[0]
-
-	//verify that pluginName is of format: aws:blah e.g: aws:cloudWatch
-	pattern := regexp.MustCompile(`^aws:[aA-zZ]*`)
-	if pattern.MatchString(n) {
-		return n, nil
-	} else {
-		return "", errors.New("unable to parse pluginName from context")
-	}
-}
-
 // CreateResult returns a PluginResult for given message and status
 func (p *Plugin) CreateResult(msg string, status contracts.ResultStatus) (res contracts.PluginResult) {
 	res.Output = msg
@@ -221,8 +191,8 @@ func (p *Plugin) CreateResult(msg string, status contracts.ResultStatus) (res co
 	return
 }
 
-func (p *Plugin) enablePlugin(log log.T, config contracts.Configuration, pluginID string, cancelFlag task.CancelFlag) (res contracts.PluginResult) {
-	log.Infof("Enabling %s", pluginID)
+func (p *Plugin) enablePlugin(log log.T, config contracts.Configuration, cancelFlag task.CancelFlag) (res contracts.PluginResult) {
+	log.Infof("Enabling %s", p.lrpName)
 
 	//loading properties as string since aws:cloudWatch uses properties as string. Properties has new configuration for cloudwatch plugin.
 	//For more details refer to AWS-ConfigureCloudWatch
@@ -233,14 +203,14 @@ func (p *Plugin) enablePlugin(log log.T, config contracts.Configuration, pluginI
 	stdoutFilePath := filepath.Join(outputPath, p.StdoutFileName)
 	stderrFilePath := filepath.Join(outputPath, p.StderrFileName)
 
-	res, failed, property = p.prepareForStart(log, config, pluginID, cancelFlag)
+	res, failed, property = p.prepareForStart(log, config, cancelFlag)
 	if failed {
 		return
 	}
 
 	//start the plugin with the new configuration
-	if err := p.lrpm.StartPlugin(pluginID, property, config.OrchestrationDirectory, cancelFlag); err != nil {
-		log.Errorf("Unable to start the plugin - %s: %s", pluginID, err.Error())
+	if err := p.lrpm.StartPlugin(p.lrpName, property, config.OrchestrationDirectory, cancelFlag); err != nil {
+		log.Errorf("Unable to start the plugin - %s: %s", p.lrpName, err.Error())
 		res = p.CreateResult(fmt.Sprintf("Encountered error while starting the plugin: %s", err.Error()),
 			contracts.ResultStatusFailed)
 	} else {
@@ -252,11 +222,11 @@ func (p *Plugin) enablePlugin(log log.T, config contracts.Configuration, pluginI
 		serr := string(errData)
 
 		if len(serr) > 0 {
-			log.Errorf("Unable to start the plugin - %s: %s", pluginID, serr)
+			log.Errorf("Unable to start the plugin - %s: %s", p.lrpName, serr)
 
 			// Stop the plugin if configuration failed.
-			if err := p.lrpm.StopPlugin(pluginID, cancelFlag); err != nil {
-				log.Errorf("Unable to start the plugin - %s: %s", pluginID, err.Error())
+			if err := p.lrpm.StopPlugin(p.lrpName, cancelFlag); err != nil {
+				log.Errorf("Unable to start the plugin - %s: %s", p.lrpName, err.Error())
 			}
 
 			res = p.CreateResult(fmt.Sprintf("Encountered error while starting the plugin: %s", serr),
@@ -269,15 +239,15 @@ func (p *Plugin) enablePlugin(log log.T, config contracts.Configuration, pluginI
 	}
 
 	// Upload output to S3
-	uploadOutputToS3BucketErrors := p.ExecuteUploadOutputToS3Bucket(log, pluginID, outputPath, config.OutputS3BucketName, config.OutputS3KeyPrefix, false, "", stdoutFilePath, stderrFilePath)
+	uploadOutputToS3BucketErrors := p.ExecuteUploadOutputToS3Bucket(log, config.PluginID, outputPath, config.OutputS3BucketName, config.OutputS3KeyPrefix, false, "", stdoutFilePath, stderrFilePath)
 	if len(uploadOutputToS3BucketErrors) > 0 {
-		log.Errorf("Unable to upload the logs - %s: %s", pluginID, uploadOutputToS3BucketErrors)
+		log.Errorf("Unable to upload the logs - %s: %s", config.PluginID, uploadOutputToS3BucketErrors)
 	}
 	return
 }
 
 // prepareForStart remalshal the Property and stop the plug if it was running before.
-func (p *Plugin) prepareForStart(log log.T, config contracts.Configuration, pluginID string, cancelFlag task.CancelFlag) (res contracts.PluginResult, failed bool, property string) {
+func (p *Plugin) prepareForStart(log log.T, config contracts.Configuration, cancelFlag task.CancelFlag) (res contracts.PluginResult, failed bool, property string) {
 	// track if the preparation process succeed.
 
 	failed = false
@@ -326,10 +296,10 @@ func (p *Plugin) prepareForStart(log log.T, config contracts.Configuration, plug
 	}
 
 	//stop the plugin before reconfiguring it
-	log.Debugf("Stopping %s - before applying new configuration", pluginID)
-	if err = p.lrpm.StopPlugin(pluginID, cancelFlag); err != nil {
+	log.Debugf("Stopping %s - before applying new configuration", p.lrpName)
+	if err = p.lrpm.StopPlugin(p.lrpName, cancelFlag); err != nil {
 		failed = true
-		log.Errorf("Unable to stop the plugin - %s: %s", pluginID, err.Error())
+		log.Errorf("Unable to stop the plugin - %s: %s", p.lrpName, err.Error())
 		res = p.CreateResult(fmt.Sprintf("Encountered error while stopping the plugin: %s", err.Error()),
 			contracts.ResultStatusFailed)
 		return

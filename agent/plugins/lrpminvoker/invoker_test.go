@@ -25,18 +25,19 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/framework/runpluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/longrunning/manager"
+	"github.com/aws/amazon-ssm-agent/agent/plugins/pluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 	"github.com/stretchr/testify/assert"
 )
 
 type TestCase struct {
-	Config        contracts.Configuration
-	Context       context.T
-	ContextResult string
-	ContextErr    error
-	Message       string
-	Result        contracts.PluginResult
-	Status        contracts.ResultStatus
+	Config     contracts.Configuration
+	Context    context.T
+	LrpName    string
+	ContextErr error
+	Message    string
+	Result     contracts.PluginResult
+	Status     contracts.ResultStatus
 }
 
 var TestCases = []TestCase{
@@ -47,8 +48,6 @@ var TestCases = []TestCase{
 }
 
 var config = contracts.Configuration{}
-
-var p = new(Plugin)
 
 func generateTestCaseSuccess(msg, id string) TestCase {
 	var status = contracts.ResultStatusSuccess
@@ -63,13 +62,13 @@ func generateTestCaseSuccess(msg, id string) TestCase {
 	}
 
 	return TestCase{
-		Message:       msg,
-		Result:        res,
-		Status:        status,
-		Config:        config,
-		Context:       contextCase,
-		ContextResult: id,
-		ContextErr:    nil,
+		Message:    msg,
+		Result:     res,
+		Status:     status,
+		Config:     config,
+		Context:    contextCase,
+		LrpName:    id,
+		ContextErr: nil,
 	}
 }
 
@@ -86,13 +85,13 @@ func generateTestCaseFail(msg, id string) TestCase {
 	}
 
 	return TestCase{
-		Message:       msg,
-		Result:        res,
-		Status:        status,
-		Config:        config,
-		Context:       contextCase,
-		ContextResult: "",
-		ContextErr:    errors.New("unable to parse pluginName from context"),
+		Message:    msg,
+		Result:     res,
+		Status:     status,
+		Config:     config,
+		Context:    contextCase,
+		LrpName:    "",
+		ContextErr: errors.New("unable to parse pluginName from context"),
 	}
 }
 
@@ -101,8 +100,10 @@ func TestExecuteSuccess(t *testing.T) {
 	testCase := TestCases[0]
 	pluginPersister = func(log log.T, pluginName string, config contracts.Configuration, res contracts.PluginResult) {}
 
-	//mockS3Uploader := pluginutil.NewMockDefault()
+	//Create plugin instance
+	p, _ := NewPlugin(pluginutil.DefaultPluginConfig(), testCase.LrpName)
 	p.lrpm = manager.NewMockDefault()
+	//mockS3Uploader := pluginutil.NewMockDefault()
 
 	p.ExecuteUploadOutputToS3Bucket = func(log log.T, pluginID string, orchestrationDir string, outputS3BucketName string, outputS3KeyPrefix string, useTempDirectory bool, tempDir string, Stdout string, Stderr string) []string {
 		return []string{}
@@ -128,17 +129,21 @@ func TestExecuteSuccess(t *testing.T) {
 	assert.Equal(t, expectRes, res)
 }
 
-// TestExecuteFailWithContext tests the cloud watch invoker plugin's Execute method with incorrect context.
-func TestExecuteFailWithContext(t *testing.T) {
+// TestExecuteFailWithInvalidPlugin tests the cloud watch invoker plugin's Execute method with non-registered plugin name.
+func TestExecuteFailWithInvalidPlugin(t *testing.T) {
 	testCase := TestCases[2]
 	pluginPersister = func(log log.T, pluginName string, config contracts.Configuration, res contracts.PluginResult) {}
+
+	//Create plugin instance
+	p, _ := NewPlugin(pluginutil.DefaultPluginConfig(), testCase.LrpName)
+	p.lrpm = manager.NewMockDefault()
 
 	var cancelFlag = task.NewMockDefault()
 	cancelFlag.On("Canceled").Return(false)
 	cancelFlag.On("ShutDown").Return(false)
 
 	res := p.Execute(testCase.Context, config, cancelFlag, runpluginutil.PluginRunner{})
-	expectRes := p.CreateResult("Unable to get plugin name because of unsupported plugin name format",
+	expectRes := p.CreateResult(fmt.Sprintf("Plugin %s is not registered by agent", testCase.LrpName),
 		contracts.ResultStatusFailed)
 	assert.Equal(t, expectRes, res)
 }
@@ -147,6 +152,10 @@ func TestExecuteFailWithContext(t *testing.T) {
 func TestExecuteFailWithStartType(t *testing.T) {
 	testCase := TestCases[0]
 	pluginPersister = func(log log.T, pluginName string, config contracts.Configuration, res contracts.PluginResult) {}
+
+	//Create plugin instance
+	p, _ := NewPlugin(pluginutil.DefaultPluginConfig(), testCase.LrpName)
+	p.lrpm = manager.NewMockDefault()
 
 	var cancelFlag = task.NewMockDefault()
 	cancelFlag.On("Canceled").Return(false)
@@ -158,10 +167,14 @@ func TestExecuteFailWithStartType(t *testing.T) {
 	assert.Equal(t, expectRes, res)
 }
 
-// TestExecuteFailWithConfig tests the cloud watch invoker plugin's Execute method with incorrect config.
-func TestExecuteFailWithConfig(t *testing.T) {
+// TestExecuteFailWithSettings tests the cloud watch invoker plugin's Execute method with incorrect settings.
+func TestExecuteFailWithSettings(t *testing.T) {
 	testCase := TestCases[0]
 	pluginPersister = func(log log.T, pluginName string, config contracts.Configuration, res contracts.PluginResult) {}
+
+	//Create plugin instance
+	p, _ := NewPlugin(pluginutil.DefaultPluginConfig(), testCase.LrpName)
+	p.lrpm = manager.NewMockDefault()
 
 	var cancelFlag = task.NewMockDefault()
 	cancelFlag.On("Canceled").Return(false)
@@ -171,23 +184,17 @@ func TestExecuteFailWithConfig(t *testing.T) {
 		Settings: "Enabled",
 	}
 	res := p.Execute(testCase.Context, enabledConfig, cancelFlag, runpluginutil.PluginRunner{})
-	expectRes := p.CreateResult(fmt.Sprintf("Unable to parse Settings for %s", testCase.ContextResult),
+	expectRes := p.CreateResult(fmt.Sprintf("Unable to parse Settings for %s", testCase.LrpName),
 		contracts.ResultStatusFailed)
 	assert.Equal(t, expectRes, res)
-}
-
-// TestGetPluginIdFromContext tests the TestGetPluginIdFromContext methods
-func TestGetPluginIdFromContext(t *testing.T) {
-	for _, testCase := range TestCases {
-		res, err := p.GetPluginIdFromContext(testCase.Context)
-		assert.Equal(t, testCase.ContextResult, res)
-		assert.Equal(t, testCase.ContextErr, err)
-	}
 }
 
 // TestCreateResult tests the CreateResult method
 func TestCreateResult(t *testing.T) {
 	for _, testCase := range TestCases {
+		//Create plugin instance
+		p, _ := NewPlugin(pluginutil.DefaultPluginConfig(), testCase.LrpName)
+
 		var res = p.CreateResult(testCase.Message, testCase.Status)
 		assert.Equal(t, testCase.Result, res)
 	}

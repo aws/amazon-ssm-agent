@@ -18,6 +18,7 @@ package plugin
 import (
 	"sync"
 
+	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/framework/runpluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurecontainers"
@@ -85,14 +86,12 @@ func loadLongRunningPlugins(context context.T) runpluginutil.PluginRegistry {
 	//Long running plugins are handled by lrpm. lrpminvoker is a worker plugin that can communicate with lrpm.
 	//that's why all long running plugins are first handled by lrpminvoker - which then hands off the work to lrpm.
 
-	if handler, err := lrpminvoker.NewPlugin(pluginutil.DefaultPluginConfig()); err != nil {
+	//NOTE: register all long running plugins here (one instance of lrpminvoker per long running plugin)
+	if handler, err := lrpminvoker.NewPlugin(pluginutil.DefaultPluginConfig(), appconfig.PluginNameCloudWatch); err != nil {
 		log.Errorf("Failed to load lrpminvoker that will handle all long running plugins - %v", err)
 	} else {
-		//NOTE: register all long running plugins here
-
 		//registering handler for aws:cloudWatch plugin
-		cloudwatchPluginName := "aws:cloudWatch"
-		longRunningPlugins[cloudwatchPluginName] = handler
+		longRunningPlugins[appconfig.PluginNameCloudWatch] = handler
 	}
 
 	return longRunningPlugins

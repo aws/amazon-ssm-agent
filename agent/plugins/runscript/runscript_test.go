@@ -35,20 +35,24 @@ import (
 )
 
 type TestCase struct {
-	Input          RunScriptPluginInput
-	Output         contracts.PluginOutput
-	ExecuterStdOut string
-	ExecuterStdErr string
-	ExecuterErrors []error
-	MessageID      string
+	Input            RunScriptPluginInput
+	Output           contracts.PluginOutput
+	ExecuterStdOut   string
+	ExecuterStdErr   string
+	ExecuterErrors   []error
+	MessageID        string
+	AdditionalInputs []RunScriptPluginInput
 }
 
 type CommandTester func(p *Plugin, mockCancelFlag *task.MockCancelFlag, mockExecuter *executers.MockCommandExecuter, mockS3Uploader *pluginutil.MockDefaultPlugin)
+
+type PropertyBuilder func(t *testing.T, testCase TestCase) interface{}
 
 const (
 	orchestrationDirectory = "OrchesDir"
 	s3BucketName           = "bucket"
 	s3KeyPrefix            = "key"
+	pluginID               = "aws:runScript1"
 	testInstanceID         = "i-12345678"
 	bucketRegionErrorMsg   = "AuthorizationHeaderMalformed: The authorization header is malformed; the region 'us-east-1' is wrong; expecting 'us-west-2' status code: 400, request id: []"
 )
@@ -60,23 +64,43 @@ var TestCases = []TestCase{
 	generateTestCaseFail("3"),
 }
 
+var MultiInputTestCases = []TestCase{
+	generateTestCaseMultipleInputsOk([]string{"0", "1"}),
+}
+
 var logger = log.NewMockLog()
 
 func generateTestCaseOk(id string) TestCase {
+	return generateTestCaseMultipleInputsOk([]string{id})
+}
 
-	testCase := TestCase{
-		Input: RunScriptPluginInput{
+func generateTestCaseMultipleInputsOk(ids []string) TestCase {
+	var firstInput RunScriptPluginInput
+	var firstID string
+	additionalInputs := []RunScriptPluginInput{}
+	for index, id := range ids {
+		input := RunScriptPluginInput{
 			RunCommand:       []string{"echo " + id},
 			ID:               id + ".aws:runScript",
 			WorkingDirectory: "Dir" + id,
 			TimeoutSeconds:   "1",
-		},
-		Output: contracts.PluginOutput{},
+		}
+		if index == 0 {
+			firstInput = input
+			firstID = id
+		} else {
+			additionalInputs = append(additionalInputs, input)
+		}
+	}
+	testCase := TestCase{
+		Input:            firstInput,
+		Output:           contracts.PluginOutput{},
+		AdditionalInputs: additionalInputs,
 	}
 
-	testCase.Output.Stdout = "standard output of test case " + id
+	testCase.Output.Stdout = "standard output of test case " + firstID
 	testCase.ExecuterStdOut = testCase.Output.Stdout
-	testCase.Output.Stderr = "standard error of test case " + id
+	testCase.Output.Stderr = "standard error of test case " + firstID
 	testCase.ExecuterStdErr = testCase.Output.Stderr
 	testCase.Output.ExitCode = 0
 	testCase.Output.Status = "Success"
@@ -135,9 +159,9 @@ func testRunScripts(t *testing.T, testCase TestCase, rawInput bool) {
 			err := jsonutil.Remarshal(testCase.Input, &rawPluginInput)
 			assert.Nil(t, err)
 
-			res = p.runCommandsRawInput(logger, rawPluginInput, orchestrationDirectory, mockCancelFlag, s3BucketName, s3KeyPrefix)
+			res = p.runCommandsRawInput(logger, pluginID, rawPluginInput, orchestrationDirectory, mockCancelFlag, s3BucketName, s3KeyPrefix)
 		} else {
-			res = p.runCommands(logger, testCase.Input, orchestrationDirectory, mockCancelFlag, s3BucketName, s3KeyPrefix)
+			res = p.runCommands(logger, pluginID, testCase.Input, orchestrationDirectory, mockCancelFlag, s3BucketName, s3KeyPrefix)
 		}
 
 		// assert output is correct (mocked object expectations are tested automatically by testExecution)
@@ -166,7 +190,7 @@ func testBucketsInDifferentRegions(t *testing.T, testCase TestCase, testingBucke
 
 		// call method under test
 		var res contracts.PluginOutput
-		res = p.runCommands(logger, testCase.Input, orchestrationDirectory, mockCancelFlag, s3BucketName, s3KeyPrefix)
+		res = p.runCommands(logger, pluginID, testCase.Input, orchestrationDirectory, mockCancelFlag, s3BucketName, s3KeyPrefix)
 
 		// assert output is correct (mocked object expectations are tested automatically by testExecution)
 		assert.Equal(t, testCase.Output, res)
@@ -179,29 +203,56 @@ func testBucketsInDifferentRegions(t *testing.T, testCase TestCase, testingBucke
 func TestExecute(t *testing.T) {
 	// test each plugin input as a separate execution
 	for _, testCase := range TestCases {
-		testExecute(t, testCase)
+		testExecute(t, testCase, arrayPropertyBuilder)
+		testExecute(t, testCase, singleValuePropertyBuilder)
+	}
+	for _, testCase := range MultiInputTestCases {
+		testExecute(t, testCase, arrayPropertyBuilder)
 	}
 }
 
+func arrayPropertyBuilder(t *testing.T, testCase TestCase) interface{} {
+	var pluginProperties []interface{}
+
+	// prepare plugin input
+	var rawPluginInput interface{}
+	err := jsonutil.Remarshal(testCase.Input, &rawPluginInput)
+	assert.Nil(t, err)
+	// prepare plugin input
+	for _, input := range testCase.AdditionalInputs {
+		var rawPluginInput interface{}
+		err := jsonutil.Remarshal(input, &rawPluginInput)
+		assert.Nil(t, err)
+		pluginProperties = append(pluginProperties, rawPluginInput)
+	}
+
+	pluginProperties = append(pluginProperties, rawPluginInput)
+	return pluginProperties
+}
+
+func singleValuePropertyBuilder(t *testing.T, testCase TestCase) interface{} {
+	// prepare plugin input
+	var rawPluginInput interface{}
+	err := jsonutil.Remarshal(testCase.Input, &rawPluginInput)
+	assert.Nil(t, err)
+
+	return rawPluginInput
+}
+
 // testExecute tests the run command plugin's Execute method.
-func testExecute(t *testing.T, testCase TestCase) {
+func testExecute(t *testing.T, testCase TestCase, propBuilder PropertyBuilder) {
 	executeTester := func(p *Plugin, mockCancelFlag *task.MockCancelFlag, mockExecuter *executers.MockCommandExecuter, mockS3Uploader *pluginutil.MockDefaultPlugin) {
 		// setup expectations and correct outputs
-		var pluginProperties []interface{}
 		var correctOutputs string
 		mockContext := context.NewMockDefault()
 
 		// set expectations
-		setCancelFlagExpectations(mockCancelFlag)
+		setCancelFlagExpectations(mockCancelFlag, testCase)
 		setExecuterExpectations(mockExecuter, testCase, mockCancelFlag, p)
 		setS3UploaderExpectations(mockS3Uploader, testCase, p)
 
 		// prepare plugin input
-		var rawPluginInput interface{}
-		err := jsonutil.Remarshal(testCase.Input, &rawPluginInput)
-		assert.Nil(t, err)
-
-		pluginProperties = append(pluginProperties, rawPluginInput)
+		pluginProperties := propBuilder(t, testCase)
 		correctOutputs = testCase.Output.String()
 
 		//Create messageId which is in the format of aws.ssm.<commandID>.<InstanceID>
@@ -216,7 +267,7 @@ func testExecute(t *testing.T, testCase TestCase) {
 				OutputS3KeyPrefix:      s3KeyPrefix,
 				OrchestrationDirectory: orchestrationDirectory,
 				BookKeepingFileName:    commandID,
-				PluginID:               "aws:runScript1",
+				PluginID:               pluginID,
 			}, mockCancelFlag, runpluginutil.PluginRunner{})
 
 		// assert output is correct (mocked object expectations are tested automatically by testExecution)
@@ -229,9 +280,6 @@ func testExecute(t *testing.T, testCase TestCase) {
 		//assert.Equal(t, testCase.Output.Stderr, res.StandardError)
 		//assert.NotNil(t, res.StandardOutput)
 		//assert.Equal(t, testCase.Output.Stdout, res.StandardOutput)
-
-		// assert that the flag is checked after every set of commands
-		mockCancelFlag.AssertNumberOfCalls(t, "Canceled", 1)
 	}
 
 	testExecution(t, executeTester)
@@ -272,22 +320,33 @@ func testExecution(t *testing.T, commandtester CommandTester) {
 }
 
 func setExecuterExpectations(mockExecuter *executers.MockCommandExecuter, t TestCase, cancelFlag task.CancelFlag, p *Plugin) {
-	orchestrationDir := fileutil.BuildPath(orchestrationDirectory, t.Input.ID)
-	stdoutFilePath := filepath.Join(orchestrationDir, p.StdoutFileName)
-	stderrFilePath := filepath.Join(orchestrationDir, p.StderrFileName)
-	mockExecuter.On("Execute", mock.Anything, t.Input.WorkingDirectory, stdoutFilePath, stderrFilePath, cancelFlag, mock.Anything, mock.Anything, mock.Anything).Return(
-		readerFromString(t.ExecuterStdOut), readerFromString(t.ExecuterStdErr), t.Output.ExitCode, t.ExecuterErrors)
+	inputs := append(t.AdditionalInputs, t.Input)
+	for _, input := range inputs {
+		orchestrationDir := fileutil.BuildPath(orchestrationDirectory, input.ID)
+		stdoutFilePath := filepath.Join(orchestrationDir, p.StdoutFileName)
+		stderrFilePath := filepath.Join(orchestrationDir, p.StderrFileName)
+		mockExecuter.On("Execute", mock.Anything, input.WorkingDirectory, stdoutFilePath, stderrFilePath, cancelFlag, mock.Anything, mock.Anything, mock.Anything).Return(
+			readerFromString(t.ExecuterStdOut), readerFromString(t.ExecuterStdErr), t.Output.ExitCode, t.ExecuterErrors)
+	}
 }
 
 func setS3UploaderExpectations(mockS3Uploader *pluginutil.MockDefaultPlugin, t TestCase, p *Plugin) {
 	var emptyArray []string
-	orchestrationDir := fileutil.BuildPath(orchestrationDirectory, t.Input.ID)
-	mockS3Uploader.On("UploadOutputToS3Bucket", mock.Anything, t.Input.ID, orchestrationDir, s3BucketName, s3KeyPrefix, false, "", t.Output.Stdout, t.Output.Stderr).Return(emptyArray)
+	inputs := append(t.AdditionalInputs, t.Input)
+	for _, input := range inputs {
+		orchestrationDir := fileutil.BuildPath(orchestrationDirectory, input.ID)
+		s3PluginID := input.ID
+		if s3PluginID == "" {
+			s3PluginID = pluginID
+		}
+		mockS3Uploader.On("UploadOutputToS3Bucket", mock.Anything, s3PluginID, orchestrationDir, s3BucketName, s3KeyPrefix, false, "", t.Output.Stdout, t.Output.Stderr).Return(emptyArray)
+	}
 }
 
-func setCancelFlagExpectations(mockCancelFlag *task.MockCancelFlag) {
-	mockCancelFlag.On("Canceled").Return(false)
-	mockCancelFlag.On("ShutDown").Return(false)
+func setCancelFlagExpectations(mockCancelFlag *task.MockCancelFlag, t TestCase) {
+	times := 1 + len(t.AdditionalInputs)
+	mockCancelFlag.On("Canceled").Return(false).Times(times)
+	mockCancelFlag.On("ShutDown").Return(false).Times(times)
 }
 
 func readerFromString(s string) io.Reader {
