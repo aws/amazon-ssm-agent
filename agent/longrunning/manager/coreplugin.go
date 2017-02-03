@@ -293,7 +293,7 @@ func (m *Manager) configCloudWatch(log log.T) {
 	}
 
 	// Read from cloudwatch config file to check if any configuration need to make for cloud watch
-	if err = cloudwatch.Update(); err != nil {
+	if err = cloudwatch.Update(log); err != nil {
 		log.Debugf("There's no local configuration set for cloudwatch plugin. %v", err)
 
 		// We also need to check if any configuration has been made by ec2 config before
