@@ -136,7 +136,7 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 
 	util := updateutil.Utility{CustomUpdateExecutionTimeoutInSeconds: UpdateExecutionTimeoutInSeconds}
 	utilExe = util.ExeCommandOutput
-	out = p.runCommandsRawInput(log, properties, config.OrchestrationDirectory, cancelFlag, config.OutputS3BucketName, config.OutputS3KeyPrefix, utilExe)
+	out = p.runCommandsRawInput(log, config.PluginID, properties, config.OrchestrationDirectory, cancelFlag, config.OutputS3BucketName, config.OutputS3KeyPrefix, utilExe)
 
 	if out.Status == contracts.ResultStatusFailed {
 		out.AppendInfo(log, "Domain join failed.")
@@ -154,7 +154,7 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 
 // runCommandsRawInput executes one set of commands and returns their output.
 // The input is in the default json unmarshal format (e.g. map[string]interface{}).
-func (p *Plugin) runCommandsRawInput(log log.T, rawPluginInput map[string]interface{}, orchestrationDirectory string, cancelFlag task.CancelFlag, outputS3BucketName string, outputS3KeyPrefix string, utilExe convert) (out contracts.PluginOutput) {
+func (p *Plugin) runCommandsRawInput(log log.T, pluginID string, rawPluginInput map[string]interface{}, orchestrationDirectory string, cancelFlag task.CancelFlag, outputS3BucketName string, outputS3KeyPrefix string, utilExe convert) (out contracts.PluginOutput) {
 	var pluginInput DomainJoinPluginInput
 	err := jsonutil.Remarshal(rawPluginInput, &pluginInput)
 	log.Debugf("Plugin input %v", pluginInput)
@@ -164,11 +164,11 @@ func (p *Plugin) runCommandsRawInput(log log.T, rawPluginInput map[string]interf
 		out.MarkAsFailed(log, errorString)
 		return
 	}
-	return p.runCommands(log, pluginInput, orchestrationDirectory, cancelFlag, outputS3BucketName, outputS3KeyPrefix, utilExe)
+	return p.runCommands(log, pluginID, pluginInput, orchestrationDirectory, cancelFlag, outputS3BucketName, outputS3KeyPrefix, utilExe)
 }
 
 // runCommands executes the command and returns the output.
-func (p *Plugin) runCommands(log log.T, pluginInput DomainJoinPluginInput, orchestrationDirectory string, cancelFlag task.CancelFlag, outputS3BucketName string, outputS3KeyPrefix string, utilExe convert) (out contracts.PluginOutput) {
+func (p *Plugin) runCommands(log log.T, pluginID string, pluginInput DomainJoinPluginInput, orchestrationDirectory string, cancelFlag task.CancelFlag, outputS3BucketName string, outputS3KeyPrefix string, utilExe convert) (out contracts.PluginOutput) {
 	var err error
 
 	// create orchestration dir if needed
@@ -210,7 +210,7 @@ func (p *Plugin) runCommands(log log.T, pluginInput DomainJoinPluginInput, orche
 	// Upload output to S3
 	outputPath := filepath.Join(orchestrationDirectory, updateutil.DefaultOutputFolder)
 	// TODO: We don't have the stdout and stderr from the command execution which are the files we'd be uploading - and the out.Stdout and Stderr are likely empty - force upload by sending a non-empty string "TODO"
-	uploadOutputToS3BucketErrors := p.ExecuteUploadOutputToS3Bucket(log, Name(), outputPath, outputS3BucketName, outputS3KeyPrefix, false, "", "TODO", "TODO")
+	uploadOutputToS3BucketErrors := p.ExecuteUploadOutputToS3Bucket(log, pluginID, outputPath, outputS3BucketName, outputS3KeyPrefix, false, "", "TODO", "TODO")
 	if len(uploadOutputToS3BucketErrors) > 0 {
 		log.Errorf("Unable to upload the logs: %s", uploadOutputToS3BucketErrors)
 	}

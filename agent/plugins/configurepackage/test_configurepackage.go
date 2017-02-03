@@ -18,6 +18,7 @@ package configurepackage
 
 import (
 	"strings"
+	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
@@ -26,9 +27,20 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/s3util"
 	"github.com/aws/amazon-ssm-agent/agent/statemanager/model"
+	"github.com/aws/amazon-ssm-agent/agent/task"
 	"github.com/aws/amazon-ssm-agent/agent/updateutil"
 	"github.com/stretchr/testify/mock"
 )
+
+func createMockCancelFlag() task.CancelFlag {
+	mockCancelFlag := new(task.MockCancelFlag)
+	// Setup mocks
+	mockCancelFlag.On("Canceled").Return(false)
+	mockCancelFlag.On("ShutDown").Return(false)
+	mockCancelFlag.On("Wait").Return(false).After(100 * time.Millisecond)
+
+	return mockCancelFlag
+}
 
 func createStubInstanceContext() *updateutil.InstanceContext {
 	context := updateutil.InstanceContext{}

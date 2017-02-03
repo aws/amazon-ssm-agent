@@ -21,14 +21,13 @@ import (
 	"strings"
 	"sync"
 	"testing"
-	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil/artifact"
 	"github.com/aws/amazon-ssm-agent/agent/framework/runpluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
-	"github.com/aws/amazon-ssm-agent/agent/task"
+	"github.com/aws/amazon-ssm-agent/agent/plugins/pluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/updateutil"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
@@ -107,8 +106,6 @@ func TestExecute(t *testing.T) {
 	config.Properties = p
 	plugin := &Plugin{}
 
-	mockCancelFlag := new(task.MockCancelFlag)
-
 	getContextOrig := getContext
 	runConfigOrig := runConfig
 	getContext = func(log log.T) (context *updateutil.InstanceContext, err error) {
@@ -133,15 +130,119 @@ func TestExecute(t *testing.T) {
 
 	// TODO:MF Test result code for reboot in cases where that is expected?
 
-	// Setup mocks
-	mockCancelFlag.On("Canceled").Return(false)
-	mockCancelFlag.On("ShutDown").Return(false)
-	mockCancelFlag.On("Wait").Return(false).After(100 * time.Millisecond)
-
-	result := plugin.Execute(contextMock, config, mockCancelFlag, runpluginutil.PluginRunner{})
+	result := plugin.Execute(contextMock, config, createMockCancelFlag(), runpluginutil.PluginRunner{})
 
 	assert.Equal(t, result.Code, 1)
 	assert.Contains(t, result.Output, "error")
+}
+
+type S3PrefixTestCase struct {
+	PluginID         string
+	OrchestrationDir string
+	BucketName       string
+	PrefixIn         string
+	NumInputs        int
+}
+
+func testS3Prefix(t *testing.T, testCase S3PrefixTestCase) {
+	var mockPlugin pluginutil.MockDefaultPlugin
+	mockPlugin = pluginutil.MockDefaultPlugin{}
+	mockPlugin.On("UploadOutputToS3Bucket", mock.Anything, testCase.PluginID, testCase.OrchestrationDir, testCase.BucketName, testCase.PrefixIn, false, mock.Anything, mock.Anything, mock.Anything).Return([]string{})
+
+	plugin := &Plugin{}
+	plugin.ExecuteUploadOutputToS3Bucket = mockPlugin.UploadOutputToS3Bucket
+
+	config := contracts.Configuration{}
+	config.OrchestrationDirectory = testCase.OrchestrationDir
+	config.OutputS3BucketName = testCase.BucketName
+	config.OutputS3KeyPrefix = testCase.PrefixIn
+	config.PluginID = testCase.PluginID
+
+	getContextOrig := getContext
+	runConfigOrig := runConfig
+	getContext = func(log log.T) (context *updateutil.InstanceContext, err error) {
+		return createStubInstanceContext(), nil
+	}
+	runConfig = func(
+		p *Plugin,
+		context context.T,
+		manager configurePackageManager,
+		instanceContext *updateutil.InstanceContext,
+		rawPluginInput interface{}) (out contracts.PluginOutput) {
+		out = contracts.PluginOutput{}
+		out.ExitCode = 0
+
+		return out
+	}
+	defer func() {
+		runConfig = runConfigOrig
+		getContext = getContextOrig
+	}()
+	stubs := setSuccessStubs()
+	defer stubs.Clear()
+
+	pluginInformation := createStubPluginInputInstall()
+	var result contracts.PluginResult
+	if testCase.NumInputs == 1 {
+		var rawPluginInput interface{}
+		rawPluginInput = pluginInformation
+		config.Properties = rawPluginInput
+		result = plugin.Execute(contextMock, config, createMockCancelFlag(), runpluginutil.PluginRunner{})
+	} else {
+		rawPluginInput := make([]interface{}, testCase.NumInputs)
+		for i := 0; i < testCase.NumInputs; i++ {
+			rawPluginInput[i] = pluginInformation
+		}
+		config.Properties = rawPluginInput
+		result = plugin.Execute(contextMock, config, createMockCancelFlag(), runpluginutil.PluginRunner{})
+	}
+
+	assert.Equal(t, result.Code, 0)
+	mockPlugin.AssertExpectations(t)
+}
+
+func TestS3PrefixSchema1_2(t *testing.T) {
+	testCase := S3PrefixTestCase{
+		PluginID:         "aws:configurePackage",
+		OrchestrationDir: "OrchestrationDir",
+		BucketName:       "Bucket",
+		PrefixIn:         "Prefix",
+		NumInputs:        1,
+	}
+	testS3Prefix(t, testCase)
+}
+
+func TestS3PrefixSchema1_2x2(t *testing.T) {
+	testCase := S3PrefixTestCase{
+		PluginID:         "aws:configurePackage",
+		OrchestrationDir: "OrchestrationDir",
+		BucketName:       "Bucket",
+		PrefixIn:         "Prefix",
+		NumInputs:        2,
+	}
+	testS3Prefix(t, testCase)
+}
+
+func TestS3PrefixSchema2_0(t *testing.T) {
+	testCase := S3PrefixTestCase{
+		PluginID:         "configure:Package",
+		OrchestrationDir: "OrchestrationDir",
+		BucketName:       "Bucket",
+		PrefixIn:         "Prefix",
+		NumInputs:        1,
+	}
+	testS3Prefix(t, testCase)
+}
+
+func TestS3PrefixSchema2_0x2(t *testing.T) {
+	testCase := S3PrefixTestCase{
+		PluginID:         "configure:Package",
+		OrchestrationDir: "OrchestrationDir",
+		BucketName:       "Bucket",
+		PrefixIn:         "Prefix",
+		NumInputs:        2,
+	}
+	testS3Prefix(t, testCase)
 }
 
 func TestInstallPackage(t *testing.T) {
@@ -459,4 +560,8 @@ func lockAndUnlock(packageName string) (err error) {
 	}
 	defer unlockPackage(packageName)
 	return
+}
+
+func createInstance() configurePackageManager {
+	return &configurePackage{Configuration: contracts.Configuration{}, runner: runpluginutil.PluginRunner{}}
 }

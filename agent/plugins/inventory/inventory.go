@@ -639,7 +639,7 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 		inventoryOutput.Status = contracts.ResultStatusFailed
 
 		res = setPluginResult(inventoryOutput, res)
-		p.uploadOutputToS3(context, orchestrationDir, config.OutputS3BucketName, config.OutputS3KeyPrefix, res.StandardOutput, res.StandardError)
+		p.uploadOutputToS3(context, config.PluginID, orchestrationDir, config.OutputS3BucketName, config.OutputS3KeyPrefix, res.StandardOutput, res.StandardError)
 		pluginutil.PersistPluginInformationToCurrent(log, config.PluginID, config, res)
 
 		return
@@ -667,7 +667,7 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 		inventoryOutput.Status = contracts.ResultStatusFailed
 
 		res = setPluginResult(inventoryOutput, res)
-		p.uploadOutputToS3(context, orchestrationDir, config.OutputS3BucketName, config.OutputS3KeyPrefix, res.StandardOutput, res.StandardError)
+		p.uploadOutputToS3(context, config.PluginID, orchestrationDir, config.OutputS3BucketName, config.OutputS3KeyPrefix, res.StandardOutput, res.StandardError)
 		pluginutil.PersistPluginInformationToCurrent(log, config.PluginID, config, res)
 
 		return
@@ -683,7 +683,7 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 		inventoryOutput.Status = contracts.ResultStatusFailed
 
 		res = setPluginResult(inventoryOutput, res)
-		p.uploadOutputToS3(context, orchestrationDir, config.OutputS3BucketName, config.OutputS3KeyPrefix, res.StandardOutput, res.StandardError)
+		p.uploadOutputToS3(context, config.PluginID, orchestrationDir, config.OutputS3BucketName, config.OutputS3KeyPrefix, res.StandardOutput, res.StandardError)
 		pluginutil.PersistPluginInformationToCurrent(log, config.PluginID, config, res)
 
 		return
@@ -698,7 +698,7 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 		inventoryOutput.Status = contracts.ResultStatusFailed
 
 		res = setPluginResult(inventoryOutput, res)
-		p.uploadOutputToS3(context, orchestrationDir, config.OutputS3BucketName, config.OutputS3KeyPrefix, res.StandardOutput, res.StandardError)
+		p.uploadOutputToS3(context, config.PluginID, orchestrationDir, config.OutputS3BucketName, config.OutputS3KeyPrefix, res.StandardOutput, res.StandardError)
 
 		pluginutil.PersistPluginInformationToCurrent(log, config.PluginID, config, res)
 
@@ -720,7 +720,7 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 		res.Status = contracts.ResultStatusSuccess
 	}
 
-	p.uploadOutputToS3(context, orchestrationDir, config.OutputS3BucketName, config.OutputS3KeyPrefix, res.StandardOutput, res.StandardError)
+	p.uploadOutputToS3(context, config.PluginID, orchestrationDir, config.OutputS3BucketName, config.OutputS3KeyPrefix, res.StandardOutput, res.StandardError)
 
 	return
 }
@@ -740,7 +740,7 @@ func setPluginResult(pluginOutput contracts.PluginOutput, result contracts.Plugi
 }
 
 // uploadOutputToS3 uploads inventory output to S3
-func (p *Plugin) uploadOutputToS3(context context.T, orchestrationDir, s3bucketKey, s3Key, stdout, stderr string) {
+func (p *Plugin) uploadOutputToS3(context context.T, pluginID string, orchestrationDir, s3bucketKey, s3Key, stdout, stderr string) {
 
 	var status bool
 	log := context.Log()
@@ -761,7 +761,7 @@ func (p *Plugin) uploadOutputToS3(context context.T, orchestrationDir, s3bucketK
 		log.Errorf("Unable to store %s output (stderr) to files", Name())
 	}
 
-	uploadOutputToS3BucketErrors := p.ExecuteUploadOutputToS3Bucket(log, Name(), orchestrationDir, s3bucketKey, s3Key, false, "", stdout, stderr)
+	uploadOutputToS3BucketErrors := p.ExecuteUploadOutputToS3Bucket(log, pluginID, orchestrationDir, s3bucketKey, s3Key, false, "", stdout, stderr)
 	if len(uploadOutputToS3BucketErrors) > 0 {
 		log.Errorf("Unable to upload the logs: %s", uploadOutputToS3BucketErrors)
 	}

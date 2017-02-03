@@ -122,7 +122,7 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 			return
 		}
 
-		out[i] = p.runCommandsRawInput(log, prop, config.OrchestrationDirectory, cancelFlag, config.OutputS3BucketName, config.OutputS3KeyPrefix)
+		out[i] = p.runCommandsRawInput(log, config.PluginID, prop, config.OrchestrationDirectory, cancelFlag, config.OutputS3BucketName, config.OutputS3KeyPrefix)
 
 		if out[i].Status == contracts.ResultStatusFailed {
 			msiFailureCount++
@@ -168,7 +168,7 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 
 // runCommandsRawInput executes one set of commands and returns their output.
 // The input is in the default json unmarshal format (e.g. map[string]interface{}).
-func (p *Plugin) runCommandsRawInput(log log.T, rawPluginInput interface{}, orchestrationDirectory string, cancelFlag task.CancelFlag, outputS3BucketName string, outputS3KeyPrefix string) (out contracts.PluginOutput) {
+func (p *Plugin) runCommandsRawInput(log log.T, pluginID string, rawPluginInput interface{}, orchestrationDirectory string, cancelFlag task.CancelFlag, outputS3BucketName string, outputS3KeyPrefix string) (out contracts.PluginOutput) {
 	var pluginInput ApplicationPluginInput
 	err := jsonutil.Remarshal(rawPluginInput, &pluginInput)
 	log.Debugf("Plugin input %v", pluginInput)
@@ -177,11 +177,11 @@ func (p *Plugin) runCommandsRawInput(log log.T, rawPluginInput interface{}, orch
 		out.MarkAsFailed(log, errorString)
 		return
 	}
-	return p.runCommands(log, pluginInput, orchestrationDirectory, cancelFlag, outputS3BucketName, outputS3KeyPrefix)
+	return p.runCommands(log, pluginID, pluginInput, orchestrationDirectory, cancelFlag, outputS3BucketName, outputS3KeyPrefix)
 }
 
 // runCommands executes one set of commands and returns their output.
-func (p *Plugin) runCommands(log log.T, pluginInput ApplicationPluginInput, orchestrationDirectory string, cancelFlag task.CancelFlag, outputS3BucketName string, outputS3KeyPrefix string) (out contracts.PluginOutput) {
+func (p *Plugin) runCommands(log log.T, pluginID string, pluginInput ApplicationPluginInput, orchestrationDirectory string, cancelFlag task.CancelFlag, outputS3BucketName string, outputS3KeyPrefix string) (out contracts.PluginOutput) {
 	var err error
 
 	// TODO:MF: This subdirectory is only needed because we could be running multiple sets of properties for the same plugin - otherwise the orchestration directory would already be unique
@@ -248,7 +248,11 @@ func (p *Plugin) runCommands(log log.T, pluginInput ApplicationPluginInput, orch
 	}
 
 	// Upload output to S3
-	uploadOutputToS3BucketErrors := p.ExecuteUploadOutputToS3Bucket(log, pluginInput.ID, orchestrationDir, outputS3BucketName, outputS3KeyPrefix, false, "", out.Stdout, out.Stderr)
+	s3PluginID := pluginInput.ID
+	if s3PluginID == "" {
+		s3PluginID = pluginID
+	}
+	uploadOutputToS3BucketErrors := p.ExecuteUploadOutputToS3Bucket(log, s3PluginID, orchestrationDir, outputS3BucketName, outputS3KeyPrefix, false, "", out.Stdout, out.Stderr)
 	if len(uploadOutputToS3BucketErrors) > 0 {
 		log.Errorf("Unable to upload the logs: %s", uploadOutputToS3BucketErrors)
 	}

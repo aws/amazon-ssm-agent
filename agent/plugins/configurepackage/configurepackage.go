@@ -26,6 +26,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
+	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil/artifact"
 	"github.com/aws/amazon-ssm-agent/agent/framework/runpluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
@@ -504,7 +505,11 @@ func (m *configurePackage) executeAction(context context.T,
 		if err != nil {
 			return true, contracts.ResultStatusFailed, err
 		}
-		pluginsInfo, err := execdep.ParseDocument(context, file, m.OrchestrationDirectory, m.OutputS3BucketName, m.OutputS3KeyPrefix, m.MessageId, m.BookKeepingFileName, executeDirectory)
+		var s3Prefix string
+		if m.OutputS3BucketName != "" {
+			s3Prefix = fileutil.BuildS3Path(m.OutputS3KeyPrefix, m.PluginID, actionName)
+		}
+		pluginsInfo, err := execdep.ParseDocument(context, file, m.OrchestrationDirectory, m.OutputS3BucketName, s3Prefix, m.MessageId, m.BookKeepingFileName, executeDirectory)
 		if err != nil {
 			return true, contracts.ResultStatusFailed, err
 		}
@@ -618,7 +623,7 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 					out[0].AppendErrorf(log, "Error saving stderr: %v", err.Error())
 				}
 			}
-			uploadErrs := p.UploadOutputToS3Bucket(log,
+			uploadErrs := p.ExecuteUploadOutputToS3Bucket(log,
 				config.PluginID,
 				config.OrchestrationDirectory,
 				config.OutputS3BucketName,

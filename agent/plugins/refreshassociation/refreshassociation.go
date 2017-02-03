@@ -111,7 +111,7 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 			pluginutil.PersistPluginInformationToCurrent(log, config.PluginID, config, res)
 			return
 		}
-		out[i] = p.runCommandsRawInput(log, prop, config.OrchestrationDirectory, cancelFlag, config.OutputS3BucketName, config.OutputS3KeyPrefix)
+		out[i] = p.runCommandsRawInput(log, config.PluginID, prop, config.OrchestrationDirectory, cancelFlag, config.OutputS3BucketName, config.OutputS3KeyPrefix)
 	}
 
 	if len(properties) > 0 {
@@ -128,7 +128,7 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 
 // runCommandsRawInput executes one set of commands and returns their output.
 // The input is in the default json unmarshal format (e.g. map[string]interface{}).
-func (p *Plugin) runCommandsRawInput(log log.T, rawPluginInput interface{}, orchestrationDirectory string, cancelFlag task.CancelFlag, outputS3BucketName string, outputS3KeyPrefix string) (out contracts.PluginOutput) {
+func (p *Plugin) runCommandsRawInput(log log.T, pluginID string, rawPluginInput interface{}, orchestrationDirectory string, cancelFlag task.CancelFlag, outputS3BucketName string, outputS3KeyPrefix string) (out contracts.PluginOutput) {
 	var pluginInput RefreshAssociationPluginInput
 	err := jsonutil.Remarshal(rawPluginInput, &pluginInput)
 	log.Debugf("Plugin input %v", pluginInput)
@@ -161,7 +161,11 @@ func (p *Plugin) runCommandsRawInput(log log.T, rawPluginInput interface{}, orch
 	}
 
 	// Upload output to S3
-	uploadOutputToS3BucketErrors := p.ExecuteUploadOutputToS3Bucket(log, pluginInput.ID, orchestrationDirectory, outputS3BucketName, outputS3KeyPrefix, false, "", out.Stdout, out.Stderr)
+	s3PluginID := pluginInput.ID
+	if s3PluginID == "" {
+		s3PluginID = pluginID
+	}
+	uploadOutputToS3BucketErrors := p.ExecuteUploadOutputToS3Bucket(log, s3PluginID, orchestrationDirectory, outputS3BucketName, outputS3KeyPrefix, false, "", out.Stdout, out.Stderr)
 	if len(uploadOutputToS3BucketErrors) > 0 {
 		log.Errorf("Unable to upload the logs: %s", uploadOutputToS3BucketErrors)
 	}
