@@ -1,6 +1,10 @@
 Latest
 ================
 - Various bug fixes
+- Standardized S3 result paths across plugins; commands append command-id/instance-id/plugin-name/step-id
+  associations append instance-id/association-id/execution-date/plugin-name/step-id
+  * step-id is the id field in plugin input if present and supported, otherwise the step name (in 2.0 schema documents), otherwise the plugin-name again
+  * plugin-name and step-id have : characters removed
 
 2.0.633
 ================
