@@ -71,7 +71,16 @@ func (m *Manager) S3UploadFromReader(bucketName string, objectKey string, conten
 		Body:        content,
 		ContentType: aws.String("text/plain"),
 	}
-	_, err = m.S3.PutObject(params)
+	if _, err = m.S3.PutObject(params); err == nil {
+		aclParams := &s3.PutObjectAclInput{
+			Bucket: aws.String(bucketName),
+			Key:    aws.String(objectKey),
+			ACL:    aws.String("bucket-owner-full-control"),
+		}
+		// gracefully ignore the error, since the S3 putAcl policy may not be set
+		m.S3.PutObjectAcl(aclParams)
+	}
+	
 	return
 }
 
