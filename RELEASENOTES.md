@@ -5,6 +5,7 @@ Latest
   associations append instance-id/association-id/execution-date/plugin-name/step-id
   * step-id is the id field in plugin input if present and supported, otherwise the step name (in 2.0 schema documents), otherwise the plugin-name again
   * plugin-name and step-id have : characters removed
+- FreeBSD patches from external contributor
 
 2.0.633
 ================
@@ -12,7 +13,7 @@ Latest
 - Fixed CloudWatch crash issue
 - Various bug fixes
 
-2.0.671
+2.0.617
 ================
 - Fixed Domain Join to support customized OU
 
