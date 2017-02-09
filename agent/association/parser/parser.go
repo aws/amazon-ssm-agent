@@ -147,9 +147,13 @@ func parseParameters(log log.T, params map[string][]*string, paramsDef map[strin
 		if definition, ok := paramsDef[name]; ok {
 			switch definition.ParamType {
 			case contracts.ParamTypeString:
-				result[name] = param[0]
+				result[name] = *(param[0])
 			case contracts.ParamTypeStringList:
-				result[name] = param
+				newParam := []string{}
+				for _, value := range param {
+					newParam = append(newParam, *value)
+				}
+				result[name] = newParam
 			default:
 				log.Debug("unknown parameter type ", definition.ParamType)
 			}
