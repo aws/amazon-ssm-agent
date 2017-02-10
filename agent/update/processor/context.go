@@ -239,7 +239,7 @@ func (c *contextManager) uploadOutput(log log.T, context *UpdateContext) (err er
 		stdoutPath := updateutil.UpdateStdOutPath(context.Current.UpdateRoot, context.Current.StdoutFileName)
 		s3Key := path.Join(context.Current.OutputS3KeyPrefix, context.Current.StdoutFileName)
 		log.Debugf("Uploading %v to s3://%v/%v", stdoutPath, context.Current.OutputS3BucketName, s3Key)
-		err = uploader.S3Upload(context.Current.OutputS3BucketName, s3Key, stdoutPath)
+		err = uploader.S3Upload(log, context.Current.OutputS3BucketName, s3Key, stdoutPath)
 		if err != nil {
 			log.Errorf("failed uploading %v to s3://%v/%v \n err:%v",
 				stdoutPath,
@@ -252,7 +252,7 @@ func (c *contextManager) uploadOutput(log log.T, context *UpdateContext) (err er
 		stderrPath := updateutil.UpdateStdOutPath(context.Current.UpdateRoot, context.Current.StderrFileName)
 		s3Key = path.Join(context.Current.OutputS3KeyPrefix, context.Current.StderrFileName)
 		log.Debugf("Uploading %v to s3://%v/%v", stderrPath, context.Current.OutputS3BucketName, s3Key)
-		err = uploader.S3Upload(context.Current.OutputS3BucketName, s3Key, stderrPath)
+		err = uploader.S3Upload(log, context.Current.OutputS3BucketName, s3Key, stderrPath)
 		if err != nil {
 			log.Errorf("failed uploading %v to s3://%v/%v \n err:%v", stderrPath, context.Current.StderrFileName, s3Key, err)
 		}

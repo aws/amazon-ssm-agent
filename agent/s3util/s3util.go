@@ -55,16 +55,16 @@ func (m *Manager) SetS3ClientRegion(region string) {
 }
 
 // S3Upload uploads a file to s3.
-func (m *Manager) S3Upload(bucketName string, objectKey string, filePath string) (err error) {
+func (m *Manager) S3Upload(log log.T, bucketName string, objectKey string, filePath string) (err error) {
 	file, err := os.Open(filePath)
 	if err != nil {
 		return
 	}
-	return m.S3UploadFromReader(bucketName, objectKey, file)
+	return m.S3UploadFromReader(log, bucketName, objectKey, file)
 }
 
 // S3UploadFromReader uploads data to s3 from an io.ReadSeeker.
-func (m *Manager) S3UploadFromReader(bucketName string, objectKey string, content io.ReadSeeker) (err error) {
+func (m *Manager) S3UploadFromReader(log log.T, bucketName string, objectKey string, content io.ReadSeeker) (err error) {
 	params := &s3.PutObjectInput{
 		Bucket:      aws.String(bucketName),
 		Key:         aws.String(objectKey),
@@ -78,9 +78,11 @@ func (m *Manager) S3UploadFromReader(bucketName string, objectKey string, conten
 			ACL:    aws.String("bucket-owner-full-control"),
 		}
 		// gracefully ignore the error, since the S3 putAcl policy may not be set
-		m.S3.PutObjectAcl(aclParams)
+		if _, aclErr := m.S3.PutObjectAcl(aclParams); aclErr != nil {
+			log.Infof("PutAcl: bucket-owner-full-control failed, error: %v", aclErr)
+		}
 	}
-	
+
 	return
 }
 
