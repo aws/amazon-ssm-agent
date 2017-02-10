@@ -51,7 +51,7 @@ type UploadOutputToS3BucketExecuter func(log log.T, pluginID string, orchestrati
 
 // S3Uploader is an interface for objects that can upload data to s3.
 type S3Uploader interface {
-	S3Upload(bucketName string, bucketKey string, filePath string) error
+	S3Upload(log log.T, bucketName string, bucketKey string, filePath string) error
 	UploadS3TestFile(log log.T, bucketName, key string) error
 	IsS3ErrorRelatedToAccessDenied(errMsg string) bool
 	IsS3ErrorRelatedToWrongBucketRegion(errMsg string) bool
@@ -238,7 +238,7 @@ func (p *DefaultPlugin) UploadOutputToS3Bucket(log log.T, pluginID string, orche
 
 					s3Key := fileutil.BuildS3Path(outputS3KeyPrefix, pluginID, p.StdoutFileName)
 					log.Debugf("Uploading %v to s3://%v/%v", localPath, outputS3BucketName, s3Key)
-					err := p.Uploader.S3Upload(outputS3BucketName, s3Key, localPath)
+					err := p.Uploader.S3Upload(log, outputS3BucketName, s3Key, localPath)
 					if err != nil {
 
 						log.Errorf("failed uploading %v to s3://%v/%v err:%v", localPath, outputS3BucketName, s3Key, err)
@@ -254,7 +254,7 @@ func (p *DefaultPlugin) UploadOutputToS3Bucket(log log.T, pluginID string, orche
 
 					s3Key := fileutil.BuildS3Path(outputS3KeyPrefix, pluginID, p.StderrFileName)
 					log.Debugf("Uploading %v to s3://%v/%v", localPath, outputS3BucketName, s3Key)
-					err := p.Uploader.S3Upload(outputS3BucketName, s3Key, localPath)
+					err := p.Uploader.S3Upload(log, outputS3BucketName, s3Key, localPath)
 					if err != nil {
 						log.Errorf("failed uploading %v to s3://%v/%v err:%v", localPath, outputS3BucketName, s3Key, err)
 						if p.UploadToS3Sync {

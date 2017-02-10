@@ -29,7 +29,7 @@ type MockS3Uploader struct {
 var logger = log.NewMockLog()
 
 // S3Upload mocks the method with the same name.
-func (uploader *MockS3Uploader) S3Upload(bucketName string, bucketKey string, contentPath string) error {
+func (uploader *MockS3Uploader) S3Upload(log log.T, bucketName string, bucketKey string, contentPath string) error {
 	args := uploader.Called(bucketName, bucketKey, contentPath)
 	logger.Debugf("===========MockS3Upload Uploading %v to s3://%v/%v returns %v", contentPath, bucketName, bucketKey, args.Error(0))
 
