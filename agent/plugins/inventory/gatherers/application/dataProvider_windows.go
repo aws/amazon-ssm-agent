@@ -44,8 +44,8 @@ func executeCommand(command string, args ...string) ([]byte, error) {
 	return exec.Command(command, args...).CombinedOutput()
 }
 
-// CollectApplicationData collects application data for windows platform
-func CollectApplicationData(context context.T) []model.ApplicationData {
+// collectPlatformDependentApplicationData collects application data for windows platform
+func collectPlatformDependentApplicationData(context context.T) []model.ApplicationData {
 	/*
 		Note:
 
@@ -69,11 +69,11 @@ func CollectApplicationData(context context.T) []model.ApplicationData {
 	var data, apps []model.ApplicationData
 
 	//getting all 64 bit applications
-	apps = ExecutePowershellCommands(context, PowershellCmd, ArgsFor64BitApplications, Arch64Bit)
+	apps = executePowershellCommands(context, PowershellCmd, ArgsFor64BitApplications, Arch64Bit)
 	data = append(data, apps...)
 
 	//getting all 32 bit applications
-	apps = ExecutePowershellCommands(context, PowershellCmd, ArgsFor32BitApplications, Arch32Bit)
+	apps = executePowershellCommands(context, PowershellCmd, ArgsFor32BitApplications, Arch32Bit)
 	data = append(data, apps...)
 
 	//sorts the data based on application-name
@@ -82,8 +82,8 @@ func CollectApplicationData(context context.T) []model.ApplicationData {
 	return data
 }
 
-// ExecutePowershellCommands executes commands in powershell to get all windows applications installed.
-func ExecutePowershellCommands(context context.T, command, args, arch string) (data []model.ApplicationData) {
+// executePowershellCommands executes commands in powershell to get all windows applications installed.
+func executePowershellCommands(context context.T, command, args, arch string) (data []model.ApplicationData) {
 
 	var output []byte
 	var err error
@@ -105,7 +105,7 @@ func ExecutePowershellCommands(context context.T, command, args, arch string) (d
 		cmdOutput := string(output)
 		log.Debugf("Command output: %v", cmdOutput)
 
-		if data, err = ConvertToApplicationData(cmdOutput, arch); err != nil {
+		if data, err = convertToApplicationData(cmdOutput, arch); err != nil {
 			err = fmt.Errorf("Unable to convert query output to ApplicationData - %v", err.Error())
 			log.Error(err.Error())
 			log.Infof("No application data to return")
@@ -120,8 +120,8 @@ func ExecutePowershellCommands(context context.T, command, args, arch string) (d
 	return
 }
 
-// ConvertToApplicationData converts powershell command output to an array of model.ApplicationData
-func ConvertToApplicationData(cmdOutput, architecture string) (data []model.ApplicationData, err error) {
+// convertToApplicationData converts powershell command output to an array of model.ApplicationData
+func convertToApplicationData(cmdOutput, architecture string) (data []model.ApplicationData, err error) {
 	//This implementation is closely tied to the kind of powershell command we run in windows. A change in command
 	//MUST be accompanied with a change in json conversion logic as well.
 
@@ -163,10 +163,11 @@ func ConvertToApplicationData(cmdOutput, architecture string) (data []model.Appl
 	if err = json.Unmarshal([]byte(str), &data); err == nil {
 
 		//iterate over all entries and add default value of architecture as given input
-		for i, v := range data {
+		for i, item := range data {
 			//set architecture to given input
-			v.Architecture = architecture
-			data[i] = v
+			item.Architecture = architecture
+			item.CompType = componentType(item.Name)
+			data[i] = item
 		}
 	}
 

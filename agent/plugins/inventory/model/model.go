@@ -57,6 +57,13 @@ type InstanceInformation struct {
 	IpAddress string
 }
 
+// ComponentType is a flags enum that data providers can set and gatherers can filter on
+type ComponentType uint
+
+const (
+	AWSComponent ComponentType = 1 << iota
+)
+
 // ApplicationData captures all attributes present in AWS:Application inventory type
 type ApplicationData struct {
 	Name            string
@@ -65,7 +72,8 @@ type ApplicationData struct {
 	InstalledTime   string `json:",omitempty"`
 	ApplicationType string `json:",omitempty"`
 	Architecture    string
-	URL             string `json:",omitempty"`
+	URL             string        `json:",omitempty"`
+	CompType        ComponentType `json:"-"`
 }
 
 // NetworkData captures all attributes present in AWS:Network inventory type

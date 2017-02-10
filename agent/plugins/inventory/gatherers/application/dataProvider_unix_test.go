@@ -49,7 +49,7 @@ func MockTestExecutorWithAndWithoutError(command string, args ...string) ([]byte
 }
 
 func TestConvertToApplicationData(t *testing.T) {
-	data, err := ConvertToApplicationData(sampleData)
+	data, err := convertToApplicationData(sampleData)
 
 	assert.Nil(t, err, "Check conversion logic - since sample data in unit test is tied to implementation")
 	assert.Equal(t, 2, len(data), "Given sample data must return 2 entries of application data")
@@ -71,7 +71,7 @@ func TestGetApplicationData(t *testing.T) {
 	//testing with error
 	cmdExecutor = MockTestExecutorWithError
 
-	data, err = GetApplicationData(mockContext, mockCommand, mockArgs)
+	data, err = getApplicationData(mockContext, mockCommand, mockArgs)
 
 	assert.NotNil(t, err, "Error must be thrown when command execution fails")
 	assert.Equal(t, 0, len(data), "When command execution fails - application dataset must be empty")
@@ -79,7 +79,7 @@ func TestGetApplicationData(t *testing.T) {
 	//testing without error
 	cmdExecutor = MockTestExecutorWithoutError
 
-	data, err = GetApplicationData(mockContext, mockCommand, mockArgs)
+	data, err = getApplicationData(mockContext, mockCommand, mockArgs)
 
 	assert.Nil(t, err, "Error must not be thrown with MockTestExecutorWithoutError")
 	assert.Equal(t, 2, len(data), "Given sample data must return 2 entries of application data")
@@ -90,16 +90,16 @@ func TestCollectApplicationData(t *testing.T) {
 
 	// both dpkg and rpm return result without error
 	cmdExecutor = MockTestExecutorWithoutError
-	data := CollectApplicationData(mockContext)
+	data := collectPlatformDependentApplicationData(mockContext)
 	assert.Equal(t, 2, len(data), "Given sample data must return 2 entries of application data")
 
 	// both dpkg and rpm return errors
 	cmdExecutor = MockTestExecutorWithError
-	data = CollectApplicationData(mockContext)
+	data = collectPlatformDependentApplicationData(mockContext)
 	assert.Equal(t, 0, len(data), "When command execution fails - application dataset must be empty")
 
 	// dpkg returns error and rpm return some result
 	cmdExecutor = MockTestExecutorWithAndWithoutError
-	data = CollectApplicationData(mockContext)
+	data = collectPlatformDependentApplicationData(mockContext)
 	assert.Equal(t, 2, len(data), "Given sample data must return 2 entries of application data")
 }

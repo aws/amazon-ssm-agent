@@ -31,36 +31,10 @@ const (
 	GathererName = "AWS:AWSComponent"
 	// SchemaVersionOfApplication represents schema version of aws component gatherer
 	SchemaVersionOfApplication = "1.0"
-
-	amazonPublisherName = "amazon"
-	amazonSsmAgentLinux = "amazon-ssm-agent"
-	amazonSsmAgentWin   = "amazon ssm agent"
-	awsToolsWindows     = "aws tools for windows"
-	ec2ConfigService    = "ec2configservice"
-	awsCfnBootstrap     = "aws-cfn-bootstrap"
-	awsPVDrivers        = "aws pv drivers"
-	awsAPIToolsPrefix   = "aws-apitools-"
-	awsAMIToolsPrefix   = "aws-amitools-"
 )
 
 // T represents aws component gatherer which implements all contracts for gatherers.
 type T struct{}
-
-var selectAwsApps map[string]string
-
-func init() {
-	//NOTE:
-	// For V1 - to filter out aws components from aws applications - we are using a list of all aws components that
-	// have been identified in various OS - amazon linux, ubuntu, windows etc.
-	// This is also useful for amazon linux ami - where all packages have Amazon.com as publisher.
-	selectAwsApps = make(map[string]string)
-	selectAwsApps[amazonSsmAgentLinux] = amazonPublisherName
-	selectAwsApps[amazonSsmAgentWin] = amazonPublisherName
-	selectAwsApps[awsToolsWindows] = amazonPublisherName
-	selectAwsApps[ec2ConfigService] = amazonPublisherName
-	selectAwsApps[awsCfnBootstrap] = amazonPublisherName
-	selectAwsApps[awsPVDrivers] = amazonPublisherName
-}
 
 // decoupling platform.PlatformName for easy testability
 var osInfoProvider = platformInfoProvider
@@ -149,17 +123,8 @@ func FilterAWSComponent(appData []model.ApplicationData) (awsComponent []model.A
 	//iterate over entire list and select application if it's name is present in our pre-approved list of amazon
 	//published applications
 	for _, application := range appData {
-
-		formattedName := strings.TrimSpace(application.Name)
-		formattedName = strings.ToLower(formattedName)
-
-		if _, found := selectAwsApps[formattedName]; found {
+		if application.CompType&model.AWSComponent == model.AWSComponent {
 			awsComponent = append(awsComponent, application)
-		} else {
-			//check if application is part of aws-apitool- or aws-amitools- tool set.
-			if strings.Contains(formattedName, awsAPIToolsPrefix) || strings.Contains(formattedName, awsAMIToolsPrefix) {
-				awsComponent = append(awsComponent, application)
-			}
 		}
 	}
 
