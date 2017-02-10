@@ -50,7 +50,7 @@ func TestConvertToApplicationData(t *testing.T) {
 	var data []model.ApplicationData
 	var err error
 
-	data, err = ConvertToApplicationData(sampleData, mockArch)
+	data, err = convertToApplicationData(sampleData, mockArch)
 
 	assert.Nil(t, err, "Error is not expected for processing sample data - %v", sampleData)
 	assert.Equal(t, 3, len(data))
@@ -66,19 +66,19 @@ func TestExecutePowershellCommands(t *testing.T) {
 
 	//testing command executor without errors
 	cmdExecutor = MockTestExecutorWithoutError
-	data = ExecutePowershellCommands(c, mockCmd, mockArgs, mockArch)
+	data = executePowershellCommands(c, mockCmd, mockArgs, mockArch)
 
 	assert.Equal(t, 3, len(data), "There must be 3 applications for given sample data - %v", sampleData)
 
 	//testing command executor with errors
 	cmdExecutor = MockTestExecutorWithError
-	data = ExecutePowershellCommands(c, mockCmd, mockArgs, mockArch)
+	data = executePowershellCommands(c, mockCmd, mockArgs, mockArch)
 
 	assert.Equal(t, 0, len(data), "On encountering error - application dataset must be empty")
 
 	//testing command executor with ConvertToApplicationData throwing errors
 	cmdExecutor = MockTestExecutorWithConvertToApplicationDataReturningRandomString
-	data = ExecutePowershellCommands(c, mockCmd, mockArgs, mockArch)
+	data = executePowershellCommands(c, mockCmd, mockArgs, mockArch)
 
 	assert.Equal(t, 0, len(data), "On encountering error during json conversion - application dataset must be empty")
 }
@@ -90,13 +90,13 @@ func TestCollectApplicationData(t *testing.T) {
 
 	//testing command executor without errors
 	cmdExecutor = MockTestExecutorWithoutError
-	data = CollectApplicationData(c)
+	data = collectPlatformDependentApplicationData(c)
 
 	assert.Equal(t, 6, data, "MockExecutor will be called 2 times hence total entries must be 6")
 
 	//testing command executor with errors
 	cmdExecutor = MockTestExecutorWithError
-	data = CollectApplicationData(c)
+	data = collectPlatformDependentApplicationData(c)
 
 	assert.Equal(t, 0, data, "If MockExecutor throws error, application dataset must be empty")
 }

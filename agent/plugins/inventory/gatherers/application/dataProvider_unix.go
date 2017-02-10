@@ -61,8 +61,8 @@ func platformInfoProvider(log log.T) (name string, err error) {
 	return platform.PlatformName(log)
 }
 
-// CollectApplicationData collects all application data from the system using rpm or dpkg query.
-func CollectApplicationData(context context.T) (appData []model.ApplicationData) {
+// collectPlatformDependentApplicationData collects all application data from the system using rpm or dpkg query.
+func collectPlatformDependentApplicationData(context context.T) (appData []model.ApplicationData) {
 
 	var err error
 	log := context.Log()
@@ -71,11 +71,11 @@ func CollectApplicationData(context context.T) (appData []model.ApplicationData)
 	cmd := dpkgCmd
 
 	// try dpkg first, if any error occurs, use rpm
-	if appData, err = GetApplicationData(context, cmd, args); err != nil {
+	if appData, err = getApplicationData(context, cmd, args); err != nil {
 		log.Info("Getting applications information using dpkg failed, trying rpm now")
 		cmd = rpmCmd
 		args = []string{rpmCmdArgToGetAllApplications, rpmQueryFormat, rpmQueryFormatArgs}
-		if appData, err = GetApplicationData(context, cmd, args); err != nil {
+		if appData, err = getApplicationData(context, cmd, args); err != nil {
 			log.Errorf("Unable to detect package manager - hence no inventory data for %v", GathererName)
 		}
 	}
@@ -86,8 +86,8 @@ func CollectApplicationData(context context.T) (appData []model.ApplicationData)
 	return
 }
 
-// GetApplicationData runs a shell command and gets information about all packages/applications
-func GetApplicationData(context context.T, command string, args []string) (data []model.ApplicationData, err error) {
+// getApplicationData runs a shell command and gets information about all packages/applications
+func getApplicationData(context context.T, command string, args []string) (data []model.ApplicationData, err error) {
 
 	/*
 		Note: Following are samples of how rpm & dpkg stores package information.
@@ -190,7 +190,7 @@ func GetApplicationData(context context.T, command string, args []string) (data 
 		cmdOutput := string(output)
 		log.Debugf("Command output: %v", cmdOutput)
 
-		if data, err = ConvertToApplicationData(cmdOutput); err != nil {
+		if data, err = convertToApplicationData(cmdOutput); err != nil {
 			err = fmt.Errorf("Unable to convert query output to ApplicationData - %v", err.Error())
 		} else {
 			log.Infof("Number of applications detected - %v", len(data))
@@ -200,8 +200,8 @@ func GetApplicationData(context context.T, command string, args []string) (data 
 	return
 }
 
-// ConvertToApplicationData converts query output into json string so that it can be deserialized easily
-func ConvertToApplicationData(input string) (data []model.ApplicationData, err error) {
+// convertToApplicationData converts query output into json string so that it can be deserialized easily
+func convertToApplicationData(input string) (data []model.ApplicationData, err error) {
 
 	//This implementation is closely tied to the kind of rpm/dpkg query. A change in query MUST be accompanied
 	//with a change in transform logic or else json formatting will be impacted.
@@ -236,15 +236,17 @@ func ConvertToApplicationData(input string) (data []model.ApplicationData, err e
 	if err = json.Unmarshal([]byte(str), &data); err == nil {
 
 		//transform the date - by iterating over all elements
-		for j, item := range data {
+		for i, item := range data {
 			if item.InstalledTime != "" {
-				if i, err := strconv.ParseInt(item.InstalledTime, 10, 64); err == nil {
+				if sec, err := strconv.ParseInt(item.InstalledTime, 10, 64); err == nil {
 					//InstalledTime must comply with format: 2016-07-30T18:15:37Z to provide better search experience for customers
-					tm := time.Unix(i, 0).UTC()
-					data[j].InstalledTime = tm.Format(time.RFC3339)
+					tm := time.Unix(sec, 0).UTC()
+					item.InstalledTime = tm.Format(time.RFC3339)
 				}
 				//ignore the date transformation if error is encountered
 			}
+			item.CompType = componentType(item.Name)
+			data[i] = item
 		}
 	}
 

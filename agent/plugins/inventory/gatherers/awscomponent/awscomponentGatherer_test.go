@@ -59,6 +59,7 @@ var sampleAppDataForAmazonLinux = []model.ApplicationData{
 		Architecture:    "x86_64",
 		InstalledTime:   "1475774764",
 		ApplicationType: "Amazon/Tools",
+		CompType:        model.AWSComponent,
 	},
 	model.ApplicationData{
 		Name:            "aws-apitools-mon",
@@ -68,6 +69,7 @@ var sampleAppDataForAmazonLinux = []model.ApplicationData{
 		Architecture:    "noarch",
 		InstalledTime:   "1475774764",
 		ApplicationType: "Amazon/Tools",
+		CompType:        model.AWSComponent,
 	},
 	model.ApplicationData{
 		Name:            "aws-amitools-ec2",
@@ -77,6 +79,7 @@ var sampleAppDataForAmazonLinux = []model.ApplicationData{
 		Architecture:    "x86_64",
 		InstalledTime:   "1461974328",
 		ApplicationType: "System Environment/Base",
+		CompType:        model.AWSComponent,
 	},
 }
 
@@ -89,6 +92,7 @@ var sampleAWSComponentDataForAmazonLinux = []model.ApplicationData{
 		Architecture:    "x86_64",
 		InstalledTime:   "1475774764",
 		ApplicationType: "Amazon/Tools",
+		CompType:        model.AWSComponent,
 	},
 	model.ApplicationData{
 		Name:            "aws-apitools-mon",
@@ -98,6 +102,7 @@ var sampleAWSComponentDataForAmazonLinux = []model.ApplicationData{
 		Architecture:    "noarch",
 		InstalledTime:   "1475774764",
 		ApplicationType: "Amazon/Tools",
+		CompType:        model.AWSComponent,
 	},
 	model.ApplicationData{
 		Name:            "aws-amitools-ec2",
@@ -107,6 +112,7 @@ var sampleAWSComponentDataForAmazonLinux = []model.ApplicationData{
 		Architecture:    "x86_64",
 		InstalledTime:   "1461974328",
 		ApplicationType: "System Environment/Base",
+		CompType:        model.AWSComponent,
 	},
 }
 
@@ -128,6 +134,7 @@ var sampleAppDataForLinuxOtherThanAmazonLinux = []model.ApplicationData{
 		Architecture:    "amd64",
 		InstalledTime:   "",
 		ApplicationType: "admin",
+		CompType:        model.AWSComponent,
 	},
 }
 
@@ -140,6 +147,7 @@ var sampleAWSComponentDataForLinuxOtherThanAmazonLinux = []model.ApplicationData
 		Architecture:    "amd64",
 		InstalledTime:   "",
 		ApplicationType: "admin",
+		CompType:        model.AWSComponent,
 	},
 }
 
@@ -170,6 +178,7 @@ var sampleAppDataForWindows = []model.ApplicationData{
 		Architecture:    "64-Bit",
 		InstalledTime:   "20160512",
 		ApplicationType: "",
+		CompType:        model.AWSComponent,
 	},
 	model.ApplicationData{
 		Name:            "AWS PV Drivers",
@@ -179,6 +188,7 @@ var sampleAppDataForWindows = []model.ApplicationData{
 		Architecture:    "32-Bit",
 		InstalledTime:   "20150813",
 		ApplicationType: "",
+		CompType:        model.AWSComponent,
 	},
 }
 
@@ -191,6 +201,7 @@ var sampleAWSComponentDataForWindows = []model.ApplicationData{
 		Architecture:    "64-Bit",
 		InstalledTime:   "20160512",
 		ApplicationType: "",
+		CompType:        model.AWSComponent,
 	},
 	model.ApplicationData{
 		Name:            "AWS PV Drivers",
@@ -200,6 +211,7 @@ var sampleAWSComponentDataForWindows = []model.ApplicationData{
 		Architecture:    "32-Bit",
 		InstalledTime:   "20150813",
 		ApplicationType: "",
+		CompType:        model.AWSComponent,
 	},
 }
 
