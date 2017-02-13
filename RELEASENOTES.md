@@ -1,5 +1,10 @@
 Latest
 ================
+- Added bucket-owner-full-control ACL to S3 outputs to support cross-account upload
+- Various bug fixes
+
+2.0.660
+================
 - Various bug fixes
 - Standardized S3 result paths across plugins; commands append command-id/instance-id/plugin-name/step-id
   associations append instance-id/association-id/execution-date/plugin-name/step-id
