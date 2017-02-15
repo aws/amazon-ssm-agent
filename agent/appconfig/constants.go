@@ -20,9 +20,8 @@ const (
 	// Agent defaults
 	DefaultAgentName = "amazon-ssm-agent"
 
-	DefaultCommandWorkersLimit    = 1
+	DefaultCommandWorkersLimit    = 5
 	DefaultCommandWorkersLimitMin = 1
-	DefaultCommandWorkersLimitMax = 10
 
 	DefaultCommandRetryLimit    = 15
 	DefaultCommandRetryLimitMin = 1
