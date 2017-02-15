@@ -105,13 +105,13 @@ func DefaultConfig() SsmagentConfig {
 	}
 	var s3 S3Cfg
 	var mds = MdsCfg{
-		CommandWorkersLimit: 5,
-		StopTimeoutMillis:   20000,
-		CommandRetryLimit:   15,
+		CommandWorkersLimit: DefaultCommandWorkersLimit,
+		StopTimeoutMillis:   DefaultStopTimeoutMillis,
+		CommandRetryLimit:   DefaultCommandRetryLimit,
 	}
 	var ssm = SsmCfg{
-		HealthFrequencyMinutes:         5,
-		AssociationFrequencyMinutes:    10,
+		HealthFrequencyMinutes:         DefaultSsmHealthFrequencyMinutes,
+		AssociationFrequencyMinutes:    DefaultSsmAssociationFrequencyMinutes,
 		AssociationRetryLimit:          5,
 		CustomInventoryDefaultLocation: DefaultCustomInventoryFolder,
 	}
