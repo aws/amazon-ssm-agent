@@ -32,7 +32,7 @@ func parser(config *SsmagentConfig) {
 	config.Mds.CommandWorkersLimit = getNumericValue(
 		config.Mds.CommandWorkersLimit,
 		DefaultCommandWorkersLimitMin,
-		config.Mds.CommandWorkersLimit,			// we do not restrict max number of worker limit here
+		config.Mds.CommandWorkersLimit, // we do not restrict max number of worker limit here
 		DefaultCommandWorkersLimit)
 	config.Mds.CommandRetryLimit = getNumericValue(
 		config.Mds.CommandRetryLimit,
