@@ -181,7 +181,6 @@ func (p *Plugin) Start(context context.T, configuration string, orchestrationDir
 	//construct command name and arguments that will be run by executer
 	commandName := p.ExeLocation
 	var commandArguments []string
-	var logCommandArgs []string
 	var instanceId, instanceRegion string
 	if instanceId, err = getInstanceId(); err != nil {
 		log.Error("Cannot get the current instance ID")
@@ -193,8 +192,7 @@ func (p *Plugin) Start(context context.T, configuration string, orchestrationDir
 		return
 	}
 
-	logCommandArgs = append(logCommandArgs, instanceId, instanceRegion, logger.PrintCWConfig(configuration, log))
-	commandArguments = append(commandArguments, instanceId, instanceRegion, configuration)
+	commandArguments = append(commandArguments, instanceId, instanceRegion, getFileName())
 
 	value, _, err := pluginutil.LocalRegistryKeyGetStringsValue(appconfig.ItemPropertyPath, appconfig.ItemPropertyName)
 	if err != nil {
@@ -211,7 +209,7 @@ func (p *Plugin) Start(context context.T, configuration string, orchestrationDir
 	}
 
 	log.Debugf("commandName: %s", commandName)
-	log.Debugf("arguments passed: %s", logCommandArgs)
+	log.Debugf("arguments passed: %s", commandArguments)
 
 	//start the new process
 	stdoutFilePath := filepath.Join(orchestrationDir, p.StdoutFileName)
