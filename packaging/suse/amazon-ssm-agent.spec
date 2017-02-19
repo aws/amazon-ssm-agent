@@ -28,7 +28,6 @@ Patch1:         fix-version.patch
 BuildRequires:  go >= 1.5
 BuildRequires:  systemd
 Requires:       systemd
-Requires:       lsb-release
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 
 %description
