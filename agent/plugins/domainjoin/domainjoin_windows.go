@@ -52,6 +52,10 @@ const (
 	DnsAddressesArgs = " --dns-addresses"
 	// DomainJoinPluginName is the name of the executable file of domain join plugin
 	DomainJoinPluginExecutableName = "AWS.DomainJoin.exe"
+	// ProxyAddress represents the url addresses of proxy
+	ProxyAddress = " --proxy-address "
+	// NoProxy represents addresses that do not use the proxy.
+	NoProxy = " --no-proxy "
 	// Default folder name for domain join plugin
 	DomainJoinFolderName = "awsDomainJoin"
 )
@@ -260,6 +264,24 @@ func makeArguments(log log.T, pluginInput DomainJoinPluginInput) (commandArgumen
 		buffer.WriteString("'")
 		buffer.WriteString(pluginInput.DirectoryOU)
 		buffer.WriteString("'")
+	}
+
+	value, _, err := pluginutil.LocalRegistryKeyGetStringsValue(appconfig.ItemPropertyPath, appconfig.ItemPropertyName)
+	if err != nil {
+		log.Debug("Cannot find customized proxy setting.")
+	}
+	// if user has customized proxy setting
+	if (err == nil) && (len(value) != 0) {
+		url, noProxy := pluginutil.GetProxySetting(value)
+		if len(url) != 0 {
+			buffer.WriteString(ProxyAddress)
+			buffer.WriteString(url)
+		}
+
+		if len(noProxy) != 0 {
+			buffer.WriteString(NoProxy)
+			buffer.WriteString(noProxy)
+		}
 	}
 
 	if len(pluginInput.DnsIpAddresses) == 0 {

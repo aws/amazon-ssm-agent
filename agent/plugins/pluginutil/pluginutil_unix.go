@@ -14,6 +14,8 @@
 package pluginutil
 
 import (
+	"fmt"
+
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/task"
@@ -48,4 +50,8 @@ func GetShellCommand() string {
 
 func GetShellArguments() []string {
 	return ShellArgs
+}
+
+func LocalRegistryKeyGetStringsValue(path string, name string) (val []string, valtype uint32, err error) {
+	return nil, 0, fmt.Errorf("Not supported.")
 }

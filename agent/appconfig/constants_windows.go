@@ -63,6 +63,12 @@ const (
 
 	// RunCommandScriptName is the script name where all downloaded or provided commands will be stored
 	RunCommandScriptName = "_script.ps1"
+
+	// ItemPropertyPath is the registry path for AmazonSSMAgent service
+	ItemPropertyPath = "SYSTEM\\CurrentControlSet\\Services\\AmazonSSMAgent"
+
+	// ItemPropertyName is the registry variable name that stores proxy settings
+	ItemPropertyName = "Environment"
 )
 
 //PowerShellPluginCommandName is the path of the powershell.exe to be used by the runPowerShellScript plugin

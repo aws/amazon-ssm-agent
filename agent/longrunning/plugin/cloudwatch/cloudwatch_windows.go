@@ -187,6 +187,20 @@ func (p *Plugin) Start(context context.T, configuration string, orchestrationDir
 	logCommandArgs = append(logCommandArgs, instanceId, instanceRegion, logger.PrintCWConfig(configuration, log))
 	commandArguments = append(commandArguments, instanceId, instanceRegion, configuration)
 
+	value, _, err := pluginutil.LocalRegistryKeyGetStringsValue(appconfig.ItemPropertyPath, appconfig.ItemPropertyName)
+	if err != nil {
+		log.Debug("Cannot find customized proxy setting.")
+	}
+	// if user has customized proxy setting
+	if (err == nil) && (len(value) != 0) {
+		url, noProxy := pluginutil.GetProxySetting(value)
+		if (len(url) != 0) && (len(noProxy) != 0) {
+			commandArguments = append(commandArguments, url, noProxy)
+		} else if len(url) != 0 {
+			commandArguments = append(commandArguments, url)
+		}
+	}
+
 	log.Debugf("commandName: %s", commandName)
 	log.Debugf("arguments passed: %s", logCommandArgs)
 

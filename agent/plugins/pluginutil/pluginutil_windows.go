@@ -21,6 +21,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/task"
+	"golang.org/x/sys/windows/registry"
 )
 
 var PowerShellCommand = filepath.Join(os.Getenv("SystemRoot"), "System32", "WindowsPowerShell", "v1.0", "powershell.exe")
@@ -51,4 +52,17 @@ func GetShellCommand() string {
 
 func GetShellArguments() []string {
 	return strings.Split(appconfig.PowerShellPluginCommandArgs, " ")
+}
+
+func LocalRegistryKeyGetStringsValue(path string, name string) (val []string, valtype uint32, err error) {
+	key, err := openLocalRegistryKey(path)
+	if err != nil {
+		return nil, 0, err
+	}
+	defer key.Close()
+	return key.GetStringsValue(name)
+}
+
+func openLocalRegistryKey(path string) (registry.Key, error) {
+	return registry.OpenKey(registry.LOCAL_MACHINE, path, registry.ALL_ACCESS)
 }

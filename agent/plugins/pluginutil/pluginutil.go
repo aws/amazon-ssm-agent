@@ -446,3 +446,22 @@ func extractIntFromString(log log.T, input string) int {
 	}
 	return iNum
 }
+
+// GetProxySetting returns proxy setting from registry entries
+func GetProxySetting(proxyValue []string) (string, string) {
+	var url string
+	var noProxy string
+
+	for _, proxy := range proxyValue {
+		tmp := strings.TrimSpace(proxy)
+		parts := strings.Split(tmp, "=")
+		switch parts[0] {
+		case "http_proxy":
+			url = parts[1]
+		case "no_proxy":
+			noProxy = parts[1]
+		}
+	}
+
+	return url, noProxy
+}

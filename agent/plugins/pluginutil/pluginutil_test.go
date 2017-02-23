@@ -119,3 +119,23 @@ func TestValidateExecutionTimeout(t *testing.T) {
 	num = ValidateExecutionTimeout(logger, input)
 	assert.Equal(t, defaultExecutionTimeoutInSeconds, num)
 }
+
+func TestGetProxySetting(t *testing.T) {
+	var input []string
+	var outUrl, outNoProxy string
+
+	defaultProxyUrl := "hostname:port"
+	defaultNoProxy := "169.254.169.254"
+
+	// Check Environment contains both http_proxy=hostname:port and no_proxy=169.254.169.254 values
+	input = []string{"http_proxy=hostname:port", "no_proxy=169.254.169.254"}
+	outUrl, outNoProxy = GetProxySetting(input)
+	assert.Equal(t, defaultProxyUrl, outUrl)
+	assert.Equal(t, defaultNoProxy, outNoProxy)
+
+	// Check Environment contains only http_proxy=hostname:port value
+	input = []string{"http_proxy=hostname:port"}
+	outUrl, outNoProxy = GetProxySetting(input)
+	assert.Equal(t, defaultProxyUrl, outUrl)
+	assert.Equal(t, "", outNoProxy)
+}
