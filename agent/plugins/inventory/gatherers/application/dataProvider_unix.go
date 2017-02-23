@@ -32,11 +32,6 @@ import (
 )
 
 const (
-	// RPMPackageManager represents rpm package management
-	RPMPackageManager = "rpm"
-	// DPKGPackageManager represents dpkg package management
-	DPKGPackageManager = "dpkg"
-
 	// rpm commands related constants
 	rpmCmd                        = "rpm"
 	rpmCmdArgToGetAllApplications = "-qa"
@@ -231,7 +226,7 @@ func convertToApplicationData(input string) (data []model.ApplicationData, err e
 	//unmarshall json string accordingly.
 	if err = json.Unmarshal([]byte(str), &data); err == nil {
 
-		//transform the date - by iterating over all elements
+		//transform the date & architecture - by iterating over all elements
 		for i, item := range data {
 			if item.InstalledTime != "" {
 				if sec, err := strconv.ParseInt(item.InstalledTime, 10, 64); err == nil {
@@ -242,6 +237,22 @@ func convertToApplicationData(input string) (data []model.ApplicationData, err e
 				//ignore the date transformation if error is encountered
 			}
 			item.CompType = componentType(item.Name)
+
+			/*
+				dpkg reports applications architecture as amd64, i386, all
+				rpm reports applications architecture as x86_64, i386, noarch
+
+				For consistency, we want to ensure that architecture is reported as x86_64, i386 for
+				64bit & 32bit applications across all platforms.
+
+				However, since only dpkg reports 64 bit architecture as amd64, we need to edit only for
+				amd64 scenario.
+			*/
+
+			if strings.TrimSpace(strings.ToLower(item.Architecture)) == "amd64" {
+				item.Architecture = arch64Bit
+			}
+
 			data[i] = item
 		}
 	}
