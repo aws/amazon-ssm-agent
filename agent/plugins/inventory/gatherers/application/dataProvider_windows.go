@@ -21,6 +21,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"os/exec"
+	"runtime"
 	"strings"
 
 	"github.com/aws/amazon-ssm-agent/agent/context"
@@ -28,12 +29,14 @@ import (
 )
 
 const (
-	PowershellCmd            = "powershell"
-	ArgsFor32BitApplications = `Get-ItemProperty HKLM:\Software\Microsoft\Windows\CurrentVersion\Uninstall\* | Where-Object {$_.DisplayName -ne $null} | Select-Object @{n="Name";e={$_."DisplayName"}}, @{n="Version";e={$_."DisplayVersion"}}, Publisher, @{n="InstalledTime";e={[datetime]::ParseExact($_."InstallDate","yyyyMMdd",$null).ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ssZ")}} | ConvertTo-Json`
-	ArgsFor64BitApplications = `Get-ItemProperty HKLM:\Software\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\* | Where-Object {$_.DisplayName -ne $null} | Select-Object @{n="Name";e={$_."DisplayName"}}, @{n="Version";e={$_."DisplayVersion"}}, Publisher, @{n="InstalledTime";e={[datetime]::ParseExact($_."InstallDate","yyyyMMdd",$null).ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ssZ")}} | ConvertTo-Json`
-
-	Arch64Bit = "64-Bit"
-	Arch32Bit = "32-Bit"
+	PowershellCmd                                        = "powershell"
+	SysnativePowershellCmd                               = `C:\Windows\sysnative\WindowsPowerShell\v1.0\powershell.exe `
+	ArgsToReadRegistryFromWindowsCurrentVersionUninstall = `Get-ItemProperty HKLM:\Software\Microsoft\Windows\CurrentVersion\Uninstall\* | Where-Object {$_.DisplayName -ne $null} | Select-Object @{n="Name";e={$_."DisplayName"}}, @{n="Version";e={$_."DisplayVersion"}}, Publisher, @{n="InstalledTime";e={[datetime]::ParseExact($_."InstallDate","yyyyMMdd",$null).ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ssZ")}} | ConvertTo-Json `
+	ArgsToReadRegistryFromWow6432Node                    = `Get-ItemProperty HKLM:\Software\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\* | Where-Object {$_.DisplayName -ne $null} | Select-Object @{n="Name";e={$_."DisplayName"}}, @{n="Version";e={$_."DisplayVersion"}}, Publisher, @{n="InstalledTime";e={[datetime]::ParseExact($_."InstallDate","yyyyMMdd",$null).ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ssZ")}} | ConvertTo-Json`
+	ArgsForDetectingOSArch                               = `(gwmi win32_operatingsystem).OSArchitecture`
+	Architecture64BitReportedByPowershell                = "64-bit"
+	Architecture32BitReportedByPowershell                = "32-bit"
+	Architecture64BitReportedByGoRuntime                 = "amd64"
 )
 
 // decoupling exec.Command for easy testability
@@ -48,34 +51,102 @@ func collectPlatformDependentApplicationData(context context.T) []model.Applicat
 	/*
 		Note:
 
-		We use powershell to query registry for a list of 64 bit windows apps using following command:
+		We get list of installed apps by using powershell to query registry from 2 locations:
 
-		Get-ItemProperty HKLM:\Software\Microsoft\Windows\CurrentVersion\Uninstall\* | Where-Object {$_.DisplayName -ne $null} | Select-Object @{Name="Name";Expression={$_."DisplayName"}} | ConvertTo-Json
+		Path-1 => HKLM:\Software\Microsoft\Windows\CurrentVersion\Uninstall\*
+		Path-2 => HKLM:\Software\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\*
 
-		Similarly we use following command to query list of 32 bit windows apps:
+		Path-2 is used to get a list of 32 bit apps running on a 64 bit OS (when 64bit agent is running on 64bit OS)
+		For all other scenarios we use Path-1 to get the list of installed apps.
+		Reference: https://msdn.microsoft.com/en-us/library/windows/desktop/ms724072(v=vs.85).aspx
 
-		Get-ItemProperty HKLM:\Software\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\* | Where-Object {$_.DisplayName -ne $null} | Select-Object @{Name="Name";Expression={$_."DisplayName"}} | ConvertTo-Json
+		Powershell command format: Get-ItemProperty <REGISTRY PATH> | Where-Object {$_.DisplayName -ne $null} | Select-Object @{Name="Name";Expression={$_."DisplayName"}} | ConvertTo-Json
 
-		We make use of Calculated property of Select-Object to format the data accordingly.
-
-		For more details refer to: https://technet.microsoft.com/en-us/library/ff730948.aspx
+		We use calculated property of Select-Object to format the data accordingly. Reference: https://technet.microsoft.com/en-us/library/ff730948.aspx
 	*/
 
-	//TODO: Verify if HKLM:\Software\Microsoft\Windows\CurrentVersion\Uninstall\* contains 32 bit applications for 32 bit OS.
 	//TODO: powershell commands can be put in a script to generate that data - and then we can simply execute the script to get the data.
 	//it will enable us to run other complicated queries too.
 
 	var data, apps []model.ApplicationData
 
-	//getting all 64 bit applications
-	apps = executePowershellCommands(context, PowershellCmd, ArgsFor64BitApplications, Arch64Bit)
-	data = append(data, apps...)
+	log := context.Log()
 
-	//getting all 32 bit applications
-	apps = executePowershellCommands(context, PowershellCmd, ArgsFor32BitApplications, Arch32Bit)
-	data = append(data, apps...)
+	//detecting process architecture
+	exeArch := runtime.GOARCH
+	log.Infof("Exe architecture as detected by golang runtime - %v", exeArch)
+
+	//detecting OS architecture
+	osArch := detectOSArch(context, PowershellCmd, ArgsForDetectingOSArch)
+	log.Infof("Detected OS architecture as - %v", osArch)
+
+	if osArch == Architecture32BitReportedByPowershell {
+		//os architecture is 32 bit
+		if exeArch != Architecture64BitReportedByGoRuntime {
+			//exe architecture is also 32 bit
+			//since both exe & os are 32 bit - we need to detect only 32 bit apps
+			apps = executePowershellCommands(context, PowershellCmd, ArgsToReadRegistryFromWindowsCurrentVersionUninstall, arch32Bit)
+			data = append(data, apps...)
+		} else {
+			log.Infof("Detected an unsupported scenario of 64 bit amazon ssm agent running on 32 bit windows OS - nothing to report")
+		}
+	} else if osArch == Architecture64BitReportedByPowershell {
+		//os architecture is 64 bit
+		if exeArch == Architecture64BitReportedByGoRuntime {
+			//both exe & os architecture is 64 bit
+
+			//detecting 32 bit apps by querying Wow6432Node path in registry
+			apps = executePowershellCommands(context, PowershellCmd, ArgsToReadRegistryFromWow6432Node, arch32Bit)
+			data = append(data, apps...)
+
+			//detecting 64 bit apps by querying normal registry path
+			apps = executePowershellCommands(context, PowershellCmd, ArgsToReadRegistryFromWindowsCurrentVersionUninstall, arch64Bit)
+			data = append(data, apps...)
+		} else {
+			//exe architecture is 32 bit - all queries to registry path will be redirected to wow6432 so need to use sysnative
+			//reference: https://blogs.msdn.microsoft.com/david.wang/2006/03/27/howto-detect-process-bitness/
+
+			//detecting 32 bit apps by querying Wow632 registry node
+			apps = executePowershellCommands(context, PowershellCmd, ArgsToReadRegistryFromWow6432Node, arch32Bit)
+			data = append(data, apps...)
+
+			//detecting 64 bit apps by using sysnative for reading registry to avoid path redirection
+			apps = executePowershellCommands(context, SysnativePowershellCmd, ArgsToReadRegistryFromWindowsCurrentVersionUninstall, arch64Bit)
+			data = append(data, apps...)
+		}
+	} else {
+		log.Infof("Can't find application data because unable to detect OS architecture - nothing to report")
+	}
 
 	return data
+}
+
+// detectOSArch detects OS architecture
+func detectOSArch(context context.T, command, args string) (osArch string) {
+	var output []byte
+	var err error
+	log := context.Log()
+
+	log.Infof("Getting OS architecture")
+	log.Infof("Executing command: %v %v", command, args)
+
+	if output, err = cmdExecutor(command, args); err != nil {
+		log.Debugf("Failed to execute command : %v %v with error - %v",
+			command,
+			args,
+			err.Error())
+		log.Debugf("Command Stderr: %v", string(output))
+		err = fmt.Errorf("Command failed with error: %v", string(output))
+		log.Error(err.Error())
+		log.Infof("Unable to detect OS architecture")
+	} else {
+		cmdOutput := string(output)
+		log.Debugf("Command output: %v", cmdOutput)
+
+		osArch = strings.TrimSpace(cmdOutput)
+	}
+
+	return
 }
 
 // executePowershellCommands executes commands in powershell to get all windows applications installed.
@@ -106,7 +177,7 @@ func executePowershellCommands(context context.T, command, args, arch string) (d
 			log.Error(err.Error())
 			log.Infof("No application data to return")
 		} else {
-			log.Infof("Number of applications detected by %v - %v", GathererName, len(data))
+			log.Infof("Number of %v applications detected by %v - %v", arch, GathererName, len(data))
 
 			str, _ := json.Marshal(data)
 			log.Debugf("Gathered applications: %v", string(str))
