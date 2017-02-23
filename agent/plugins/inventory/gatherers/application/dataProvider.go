@@ -18,6 +18,8 @@ const (
 	awsPVDrivers        = "aws pv drivers"
 	awsAPIToolsPrefix   = "aws-apitools-"
 	awsAMIToolsPrefix   = "aws-amitools-"
+	arch64Bit           = "x86_64"
+	arch32Bit           = "i386"
 )
 
 var selectAwsApps map[string]string
