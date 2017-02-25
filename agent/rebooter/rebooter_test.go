@@ -19,41 +19,41 @@ import (
 	"testing"
 	"time"
 
+	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/stretchr/testify/assert"
 )
 
-func TestRequestPendingReboot(t *testing.T) {
-	var expected, actual int
-	var wg sync.WaitGroup
+func fakeWatchForReboot(log log.T) {
+	ch = GetChannel()
+	val := <-ch
+	if val == RebootRequestTypeReboot {
+		log.Info("start rebooting the machine...")
+	} else {
+		log.Error("reboot type not supported yet")
+	}
+}
 
+func TestRequestPendingReboot(t *testing.T) {
+	var successCount int = 0
+	var wg sync.WaitGroup
+	var logger = log.NewMockLog()
+	go fakeWatchForReboot(logger)
 	// Random number
-	expected = rand.Intn(100)
+	total := rand.Intn(10)
 
 	// Spawn goroutines to Request Pending Reboot
-	for i := 0; i < expected; i++ {
+	for i := 0; i < total; i++ {
 		wg.Add(1)
 		go func() {
 			defer wg.Done()
-			RequestPendingReboot()
+			if RequestPendingReboot(logger) {
+				successCount++
+			}
 		}()
 	}
 	wg.Wait()
 
 	// Wait a second to allow some ops to accumulate.
 	time.Sleep(time.Second)
-	actual = int(RebootRequestCount())
-
-	assert.Equal(t, expected, actual, "The RebootRequestedCount is not the same as the RequestPendingReboot count.")
-}
-
-func TestRebootRequested(t *testing.T) {
-	var expected, actual bool
-
-	expected = true
-
-	RequestPendingReboot()
-
-	actual = RebootRequested()
-
-	assert.Equal(t, expected, actual)
+	assert.Equal(t, successCount, 1, "Request reboot should only return true once")
 }

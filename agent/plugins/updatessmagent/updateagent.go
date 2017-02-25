@@ -31,7 +31,6 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/platform"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/pluginutil"
-	"github.com/aws/amazon-ssm-agent/agent/rebooter"
 	"github.com/aws/amazon-ssm-agent/agent/s3util"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 	"github.com/aws/amazon-ssm-agent/agent/updateutil"
@@ -436,11 +435,6 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 
 	out := make([]contracts.PluginOutput, len(properties))
 	for i, prop := range properties {
-		// check if a reboot has been requested
-		if rebooter.RebootRequested() {
-			log.Info("A plugin has requested a reboot.")
-			return
-		}
 
 		if cancelFlag.ShutDown() {
 			out[i].ExitCode = 1
@@ -466,6 +460,7 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 		res.Code = out[i].ExitCode
 		res.Status = out[i].Status
 		res.Output = out[i].String()
+
 	}
 
 	return
