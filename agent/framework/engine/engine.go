@@ -128,7 +128,8 @@ func RunPlugins(
 
 			if r.Status == contracts.ResultStatusSuccessAndReboot {
 				context.Log().Debug("Requesting reboot...")
-				rebooter.RequestPendingReboot()
+				//TODO care about true/false when we have more reboot types in future
+				rebooter.RequestPendingReboot(context.Log())
 			}
 		}
 		// set end time.
@@ -141,6 +142,10 @@ func RunPlugins(
 		if updateAssoc != nil {
 			log.Infof("Update association on plugin completion: %v", pluginID)
 			updateAssoc(log, executionID, times.ToIso8601UTC(time.Now()), pluginOutputs, totalNumberOfActions)
+		}
+		if pluginHandlerFound && r.Status == contracts.ResultStatusSuccessAndReboot {
+			// do not execute the the next plugin
+			break
 		}
 
 	}

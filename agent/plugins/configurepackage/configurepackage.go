@@ -32,7 +32,6 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/pluginutil"
-	"github.com/aws/amazon-ssm-agent/agent/rebooter"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 	"github.com/aws/amazon-ssm-agent/agent/times"
 	"github.com/aws/amazon-ssm-agent/agent/updateutil"
@@ -578,11 +577,6 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 	manager := &configurePackage{Configuration: config, runner: subDocumentRunner}
 
 	for i, prop := range properties {
-		// check if a reboot has been requested
-		if rebooter.RebootRequested() {
-			log.Info("A plugin has requested a reboot.")
-			break
-		}
 
 		if cancelFlag.ShutDown() {
 			res.Code = 1

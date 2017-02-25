@@ -32,7 +32,6 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/platform"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/pluginutil"
-	"github.com/aws/amazon-ssm-agent/agent/rebooter"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 	"github.com/aws/amazon-ssm-agent/agent/updateutil"
 )
@@ -114,11 +113,6 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 	}
 
 	var out contracts.PluginOutput
-
-	if rebooter.RebootRequested() {
-		log.Infof("Stopping execution of %v plugin due to an external reboot request.", Name())
-		return
-	}
 
 	if cancelFlag.ShutDown() {
 		res.Code = 1

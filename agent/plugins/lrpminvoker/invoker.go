@@ -31,7 +31,6 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/longrunning/manager"
 	managerContracts "github.com/aws/amazon-ssm-agent/agent/longrunning/plugin"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/pluginutil"
-	"github.com/aws/amazon-ssm-agent/agent/rebooter"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 )
 
@@ -117,11 +116,6 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 			contracts.ResultStatusFailed)
 
 		pluginPersister(log, pluginID, config, res)
-		return
-	}
-
-	if rebooter.RebootRequested() {
-		log.Infof("Stopping execution of %v plugin due to an external reboot request.", p.lrpName)
 		return
 	}
 

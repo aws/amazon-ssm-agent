@@ -14,57 +14,40 @@
 // Package rebooter provides utilities used to reboot a machine.
 package rebooter
 
-import (
-	"sync"
+import "github.com/aws/amazon-ssm-agent/agent/log"
 
-	"github.com/aws/amazon-ssm-agent/agent/log"
+type RebootType string
+
+const (
+	RebootRequestTypeReboot RebootType = "reboot"
+	RebootRequestTypeUpdate RebootType = "update"
 )
 
-var rebootRequestCount uint
-var rebootInitiated = false
-var syncObject sync.Mutex
+var ch = make(chan RebootType)
 
-// RebootMachine reboots the machine
+func GetChannel() chan RebootType {
+	return ch
+}
+
+//RebootMachine reboots the machine
 func RebootMachine(log log.T) {
-	log.Info("Executing reboot request...")
-	if RebootInitiated() {
-		return
-	}
 
-	syncObject.Lock()
-	defer syncObject.Unlock()
 	if err := reboot(log); err != nil {
 		log.Error("error in rebooting the machine", err)
 		return
 	}
-	rebootInitiated = true
 }
 
-// RequestPendingReboot requests a pending reboot.
-// A reboot will be initiated by the agent at an appropriate time.
-func RequestPendingReboot() {
-	syncObject.Lock()
-	defer syncObject.Unlock()
-	rebootRequestCount++
-}
+func RequestPendingReboot(log log.T) bool {
 
-// RebootInitiated returns whether the Reboot request has initiated.
-func RebootInitiated() bool {
-	syncObject.Lock()
-	defer syncObject.Unlock()
-	return rebootInitiated
-}
+	//non-blocking send
+	select {
+	case ch <- RebootRequestTypeReboot:
+		log.Info("successfully requested a reboot")
+		return true
+	default:
+		log.Info("reboot has already been requested...")
+		return false
+	}
 
-// RebootRequestCount returns the reboot request count.
-func RebootRequestCount() uint {
-	syncObject.Lock()
-	defer syncObject.Unlock()
-	return rebootRequestCount
-}
-
-// RebootRequested returns the reboot request count.
-func RebootRequested() bool {
-	syncObject.Lock()
-	defer syncObject.Unlock()
-	return rebootRequestCount > 0
 }

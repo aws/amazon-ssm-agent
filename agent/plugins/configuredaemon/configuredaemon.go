@@ -29,7 +29,6 @@ import (
 	managerContracts "github.com/aws/amazon-ssm-agent/agent/longrunning/plugin"
 	"github.com/aws/amazon-ssm-agent/agent/longrunning/plugin/rundaemon"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/pluginutil"
-	"github.com/aws/amazon-ssm-agent/agent/rebooter"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 )
 
@@ -69,11 +68,6 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 
 	out := make([]contracts.PluginOutput, len(properties))
 	for i, prop := range properties {
-		// check if a reboot has been requested
-		if rebooter.RebootRequested() {
-			log.Info("A plugin has requested a reboot.")
-			return
-		}
 
 		if cancelFlag.ShutDown() {
 			out[i].ExitCode = 1

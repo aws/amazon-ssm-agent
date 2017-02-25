@@ -248,21 +248,17 @@ func (c *CoreManager) stopCorePlugins(stopType contracts.StopType) {
 // watchForReboot watches for reboot events and request core plugins to stop when necessary
 func (c *CoreManager) watchForReboot() {
 	log := c.context.Log()
-	for {
-		// check if there is any pending reboot request
-		if rebooter.RebootRequested() {
-			// on reboot request, stop core plugins and request agent to initiate reboot.
-			c.context.Log().Info("A plugin has requested a reboot.")
-			c.stopCorePlugins(contracts.StopTypeSoftStop)
-			break
-		}
 
-		// wait for a second before checking again
-		time.Sleep(rebootPollingInterval)
-	}
-
-	log.Info("Processing reboot request...")
-	if rebooter.RebootRequested() && !rebooter.RebootInitiated() {
+	ch := rebooter.GetChannel()
+	// blocking receive
+	val := <-ch
+	log.Info("A plugin has requested a reboot.")
+	if val == rebooter.RebootRequestTypeReboot {
+		log.Info("Processing reboot request...")
+		c.stopCorePlugins(contracts.StopTypeSoftStop)
 		rebooter.RebootMachine(log)
+	} else {
+		log.Error("reboot type not supported yet")
 	}
+
 }
