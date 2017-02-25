@@ -88,7 +88,7 @@ type UpdateDetail struct {
 	SourceHash         string                 `json:"SourceHash"`
 	TargetVersion      string                 `json:"TargetVersion"`
 	TargetLocation     string                 `json:"TargetLocation"`
-	TargetHash         string                 `json:"TargetLocation"`
+	TargetHash         string                 `json:"TargetHash"`
 	PackageName        string                 `json:"PackageName"`
 	StartDateTime      time.Time              `json:"StartDateTime"`
 	EndDateTime        time.Time              `json:"EndDateTime"`
