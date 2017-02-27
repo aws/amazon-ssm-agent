@@ -23,12 +23,8 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/fileutil/artifact"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
-	"github.com/aws/amazon-ssm-agent/agent/platform"
 	"github.com/aws/amazon-ssm-agent/agent/s3util"
-	"github.com/aws/amazon-ssm-agent/agent/sdkutil"
 	command_state_helper "github.com/aws/amazon-ssm-agent/agent/statemanager"
-	"github.com/aws/aws-sdk-go/aws/session"
-	"github.com/aws/aws-sdk-go/service/s3"
 )
 
 const (
@@ -36,15 +32,6 @@ const (
 	maxExecutionTimeoutInSeconds     = 28800
 	minExecutionTimeoutInSeconds     = 5
 )
-
-// S3RegionUSStandard is a standard S3 Region used to upload output related documents.
-var S3RegionUSStandard = "us-east-1"
-
-var s3Bjs = "cn-north-1"
-
-var s3BjsEndpoint = "s3.cn-north-1.amazonaws.com.cn"
-
-var s3StandardEndpoint = "s3.amazonaws.com"
 
 // UploadOutputToS3BucketExecuter is a function that can upload outputs to S3 bucket.
 type UploadOutputToS3BucketExecuter func(log log.T, pluginID string, orchestrationDir string, outputS3BucketName string, outputS3KeyPrefix string, useTempDirectory bool, tempDir string, Stdout string, Stderr string) []string
@@ -140,131 +127,37 @@ func ReadAll(input io.Reader, maxLength int, truncatedSuffix string) (out string
 	return string(data), nil
 }
 
-// GetS3Config returns the S3 config used for uploading output files to S3
-func GetS3Config() *s3util.Manager {
-	//There are multiple ways of supporting the cross-region upload to S3 bucket:
-	//1) We can specify the url https://s3.amazonaws.com and not specify region in our s3 client. This approach only works in java & .net but not in golang
-	//since it enforces to use region in our client.
-	//2) We can make use of GetBucketLocation API to find the location of S3 bucket. This is a better way to handle this, however it has its own disadvantages:
-	//-> We will have to update the managed policy of AmazonEC2RoleforSSM so that agent will have permissions to make that call.
-	//-> We will still have to notify our customers regarding the change in our IAM policy - such that customers using inline policy will also make the change accordingly.
-	//3) Special behavior for S3 PutObject API for IAD region which is described in detail below.
-	//We have taken the 3rd option - until the changes for the 2nd option is in place.
-
-	//In our current implementation, we upload a test S3 file and use the error message to determine the bucket's region,
-	//but we do this with region set as "us-east-1". This is because of special behavior of S3 PutObject API:
-	//Only for the endpoint "us-east-1", if the bucket is present in any other region (i.e non IAD bucket) PutObject API will throw an
-	//error of type - AuthorizationHeaderMalformed with a message stating which region is the bucket present. A sample error message looks like:
-	//AuthorizationHeaderMalformed: The authorization header is malformed; the region 'us-east-1' is wrong; expecting 'us-west-2' status code: 400, request id: []
-
-	//We leverage the above error message to determine the bucket's region, and if there is no error - that means the bucket is indeed in IAD.
-
-	//Note: The above behavior only exists for IAD endpoint (special endpoint for S3) - not just any other region.
-	//For other region endpoints, you get a BucketRegionError which is not useful for us in determining where the bucket is present.
-	//Revisit this if S3 ensures the PutObject API behavior consistent over all endpoints - in which case - instead of using IAD endpoint,
-	//we can then pick the endpoint from meta-data instead.
-
-	awsConfig := sdkutil.AwsConfig()
-
-	if region, err := platform.Region(); err == nil && region == s3Bjs {
-		awsConfig.Endpoint = &s3BjsEndpoint
-		awsConfig.Region = &s3Bjs
-	} else {
-		awsConfig.Endpoint = &s3StandardEndpoint
-		awsConfig.Region = &S3RegionUSStandard
-	}
-	s3 := s3.New(session.New(awsConfig))
-	return s3util.NewManager(s3)
-}
-
 // UploadOutputToS3Bucket uploads outputs (if any) to s3
-func (p *DefaultPlugin) UploadOutputToS3Bucket(log log.T, pluginID string, orchestrationDir string, outputS3BucketName string, outputS3KeyPrefix string, useTempDirectory bool, tempDir string, Stdout string, Stderr string) []string {
+func (p *DefaultPlugin) UploadOutputToS3Bucket(log log.T, pluginID string, orchestrationDir string,
+	outputS3BucketName string, outputS3KeyPrefix string, useTempDirectory bool, tempDir string,
+	Stdout string, Stderr string) []string {
 	var uploadOutputToS3BucketErrors []string
 	if outputS3BucketName != "" {
+
 		uploadOutputsToS3 := func() {
-			uploadToS3 := true
-			var testUploadError error
-
-			if region, err := platform.Region(); err == nil && region != s3Bjs {
-				p.Uploader.SetS3ClientRegion(S3RegionUSStandard)
-			}
-
-			log.Infof("uploading a test file to s3 bucket - %v , s3 key - %v with S3Client using region endpoint - %v",
-				outputS3BucketName,
-				outputS3KeyPrefix,
-				p.Uploader.GetS3ClientRegion())
-
-			testUploadError = p.Uploader.UploadS3TestFile(log, outputS3BucketName, outputS3KeyPrefix)
-
-			if testUploadError != nil {
-				//Check if the error is related to Access Denied - i.e missing permissions
-				if p.Uploader.IsS3ErrorRelatedToAccessDenied(testUploadError.Error()) {
-					log.Debugf("encountered access denied related error - can't upload to S3 due to missing permissions -%v", testUploadError.Error())
-					uploadToS3 = false
-					//since we don't have permissions - no S3 calls will go through no matter what
-				} else if p.Uploader.IsS3ErrorRelatedToWrongBucketRegion(testUploadError.Error()) { //check if error is related to different bucket region
-
-					log.Debugf("encountered error related to wrong bucket region while uploading test file to S3 - %v. parsing the message to get expected region",
-						testUploadError.Error())
-
-					expectedBucketRegion := p.Uploader.GetS3BucketRegionFromErrorMsg(log, testUploadError.Error())
-
-					//set the region to expectedBucketRegion
-					p.Uploader.SetS3ClientRegion(expectedBucketRegion)
-				} else {
-					log.Debugf("encountered unexpected error while uploading test file to S3 - %v, no need to modify s3client", testUploadError.Error())
-				}
-			} else { //there were no errors while uploading a test file to S3 - our s3client should continue to use "us-east-1"
-
-				log.Debugf("there were no errors while uploading a test file to S3 in region - %v. S3 client will continue to use region - %v",
-					S3RegionUSStandard,
-					p.Uploader.GetS3ClientRegion())
-			}
-
-			if uploadToS3 {
-				log.Infof("uploading logs to S3 with client configured to use region - %v", p.Uploader.GetS3ClientRegion())
-
-				if useTempDirectory {
-					// delete temp directory once we're done
-					defer func() {
-						if err := fileutil.DeleteDirectory(tempDir); err != nil {
-							log.Error("error deleting directory", err)
-						}
-					}()
-				}
-
-				if Stdout != "" {
-					localPath := filepath.Join(orchestrationDir, p.StdoutFileName)
-
-					s3Key := fileutil.BuildS3Path(outputS3KeyPrefix, pluginID, p.StdoutFileName)
-					log.Debugf("Uploading %v to s3://%v/%v", localPath, outputS3BucketName, s3Key)
-					err := p.Uploader.S3Upload(log, outputS3BucketName, s3Key, localPath)
-					if err != nil {
-
-						log.Errorf("failed uploading %v to s3://%v/%v err:%v", localPath, outputS3BucketName, s3Key, err)
-						if p.UploadToS3Sync {
-							// if we are in synchronous mode, we can also return the error
-							uploadOutputToS3BucketErrors = append(uploadOutputToS3BucketErrors, err.Error())
-						}
+			if useTempDirectory {
+				// delete temp directory once we're done
+				defer func() {
+					if err := fileutil.DeleteDirectory(tempDir); err != nil {
+						log.Error("Error deleting directory", err)
 					}
+				}()
+			}
+			if Stdout != "" {
+				localPath := filepath.Join(orchestrationDir, p.StdoutFileName)
+				s3Key := fileutil.BuildS3Path(outputS3KeyPrefix, pluginID, p.StdoutFileName)
+				if err := s3util.NewAmazonS3Util(log, outputS3BucketName).S3Upload(log, outputS3BucketName, s3Key, localPath); err != nil && p.UploadToS3Sync {
+					// if we are in synchronous mode, we can also return the error
+					uploadOutputToS3BucketErrors = append(uploadOutputToS3BucketErrors, err.Error())
 				}
-
-				if Stderr != "" {
-					localPath := filepath.Join(orchestrationDir, p.StderrFileName)
-
-					s3Key := fileutil.BuildS3Path(outputS3KeyPrefix, pluginID, p.StderrFileName)
-					log.Debugf("Uploading %v to s3://%v/%v", localPath, outputS3BucketName, s3Key)
-					err := p.Uploader.S3Upload(log, outputS3BucketName, s3Key, localPath)
-					if err != nil {
-						log.Errorf("failed uploading %v to s3://%v/%v err:%v", localPath, outputS3BucketName, s3Key, err)
-						if p.UploadToS3Sync {
-							// if we are in synchronous mode, we can also return the error
-							uploadOutputToS3BucketErrors = append(uploadOutputToS3BucketErrors, err.Error())
-						}
-					}
+			}
+			if Stderr != "" {
+				localPath := filepath.Join(orchestrationDir, p.StderrFileName)
+				s3Key := fileutil.BuildS3Path(outputS3KeyPrefix, pluginID, p.StderrFileName)
+				if err := s3util.NewAmazonS3Util(log, outputS3BucketName).S3Upload(log, outputS3BucketName, s3Key, localPath); err != nil && p.UploadToS3Sync {
+					// if we are in synchronous mode, we can also return the error
+					uploadOutputToS3BucketErrors = append(uploadOutputToS3BucketErrors, err.Error())
 				}
-			} else {
-				//TODO:Bubble this up to engine - so that document level status reply can be sent stating no permissions to perform S3 upload - similar to ec2config
 			}
 		}
 

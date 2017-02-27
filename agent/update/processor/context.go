@@ -30,8 +30,6 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/s3util"
 	"github.com/aws/amazon-ssm-agent/agent/sdkutil"
 	"github.com/aws/amazon-ssm-agent/agent/updateutil"
-	"github.com/aws/aws-sdk-go/aws/session"
-	"github.com/aws/aws-sdk-go/service/s3"
 )
 
 // UpdateState represents the state of update process
@@ -223,10 +221,7 @@ func (c *contextManager) uploadOutput(log log.T, context *UpdateContext) (err er
 	}
 	log.Infof("Uploading output files to region: %v", *awsConfig.Region)
 
-	s3 := s3.New(session.New(awsConfig))
-
 	// upload outputs (if any) to s3
-	uploader := s3util.NewManager(s3)
 	uploadOutputsToS3 := func() {
 		// delete temp outputDir once we're done
 		defer func() {
@@ -239,7 +234,7 @@ func (c *contextManager) uploadOutput(log log.T, context *UpdateContext) (err er
 		stdoutPath := updateutil.UpdateStdOutPath(context.Current.UpdateRoot, context.Current.StdoutFileName)
 		s3Key := path.Join(context.Current.OutputS3KeyPrefix, context.Current.StdoutFileName)
 		log.Debugf("Uploading %v to s3://%v/%v", stdoutPath, context.Current.OutputS3BucketName, s3Key)
-		err = uploader.S3Upload(log, context.Current.OutputS3BucketName, s3Key, stdoutPath)
+		err = s3util.NewAmazonS3Util(log, context.Current.OutputS3BucketName).S3Upload(log, context.Current.OutputS3BucketName, s3Key, stdoutPath)
 		if err != nil {
 			log.Errorf("failed uploading %v to s3://%v/%v \n err:%v",
 				stdoutPath,
@@ -252,7 +247,7 @@ func (c *contextManager) uploadOutput(log log.T, context *UpdateContext) (err er
 		stderrPath := updateutil.UpdateStdOutPath(context.Current.UpdateRoot, context.Current.StderrFileName)
 		s3Key = path.Join(context.Current.OutputS3KeyPrefix, context.Current.StderrFileName)
 		log.Debugf("Uploading %v to s3://%v/%v", stderrPath, context.Current.OutputS3BucketName, s3Key)
-		err = uploader.S3Upload(log, context.Current.OutputS3BucketName, s3Key, stderrPath)
+		err = s3util.NewAmazonS3Util(log, context.Current.OutputS3BucketName).S3Upload(log, context.Current.OutputS3BucketName, s3Key, stderrPath)
 		if err != nil {
 			log.Errorf("failed uploading %v to s3://%v/%v \n err:%v", stderrPath, context.Current.StderrFileName, s3Key, err)
 		}
