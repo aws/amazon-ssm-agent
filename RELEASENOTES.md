@@ -1,5 +1,11 @@
 Latest
 ================
+- Added support for installing Docker on Linux
+- Removed the upper limit for the maximum number of parallel executing documents on the agent (previously the max was 10) 
+You can configure this number by setting the “CommandWorkerLimit” attribute in amazon-ssm-agent.json file
+
+2.0.672
+================
 - Added bucket-owner-full-control ACL to S3 outputs to support cross-account upload
 - Various bug fixes
 
