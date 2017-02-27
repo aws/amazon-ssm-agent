@@ -67,7 +67,6 @@ func NewPlugin(pluginConfig pluginutil.PluginConfig, lrpName string) (*Plugin, e
 	plugin.StdoutFileName = pluginConfig.StdoutFileName
 	plugin.StderrFileName = pluginConfig.StderrFileName
 	plugin.OutputTruncatedSuffix = pluginConfig.OutputTruncatedSuffix
-	plugin.Uploader = pluginutil.GetS3Config()
 	plugin.ExecuteUploadOutputToS3Bucket = pluginutil.UploadOutputToS3BucketExecuter(plugin.UploadOutputToS3Bucket)
 
 	//getting the reference of LRPM - long running plugin manager - which manages all long running plugins

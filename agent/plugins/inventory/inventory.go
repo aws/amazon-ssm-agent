@@ -133,7 +133,6 @@ func NewPlugin(context context.T, pluginConfig pluginutil.PluginConfig) (*Plugin
 	p.StdoutFileName = pluginConfig.StdoutFileName
 	p.StderrFileName = pluginConfig.StderrFileName
 	p.OutputTruncatedSuffix = pluginConfig.OutputTruncatedSuffix
-	p.Uploader = pluginutil.GetS3Config()
 	p.ExecuteUploadOutputToS3Bucket = pluginutil.UploadOutputToS3BucketExecuter(p.UploadOutputToS3Bucket)
 
 	// since this is initialization - lastExecutedAssociations should be empty.
