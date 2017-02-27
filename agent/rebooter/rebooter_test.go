@@ -14,7 +14,6 @@
 package rebooter
 
 import (
-	"math/rand"
 	"sync"
 	"testing"
 	"time"
@@ -38,15 +37,18 @@ func TestRequestPendingReboot(t *testing.T) {
 	var wg sync.WaitGroup
 	var logger = log.NewMockLog()
 	go fakeWatchForReboot(logger)
+	// make sure the receiving goroutine is already waiting there
+	time.Sleep(200 * time.Millisecond)
 	// Random number
-	total := rand.Intn(10)
-
+	total := 10
 	// Spawn goroutines to Request Pending Reboot
 	for i := 0; i < total; i++ {
 		wg.Add(1)
 		go func() {
+
 			defer wg.Done()
 			if RequestPendingReboot(logger) {
+
 				successCount++
 			}
 		}()
