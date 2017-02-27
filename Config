@@ -17,6 +17,7 @@ package.Amazon-ssm-agent = {
         1.1 = {
             GoLang = 1.0;
             BrazilMakeGo = 1.0;
+            RIPStaticConfig = 1.4;
         };
     };
 

@@ -59,7 +59,6 @@ func (p *Plugin) AssignPluginConfigs(pluginConfig pluginutil.PluginConfig) {
 	p.StdoutFileName = pluginConfig.StdoutFileName
 	p.StderrFileName = pluginConfig.StderrFileName
 	p.OutputTruncatedSuffix = pluginConfig.OutputTruncatedSuffix
-	p.Uploader = pluginutil.GetS3Config()
 	p.ExecuteUploadOutputToS3Bucket = pluginutil.UploadOutputToS3BucketExecuter(p.UploadOutputToS3Bucket)
 	p.CommandExecuter = executers.ShellCommandExecuter{}
 }
