@@ -11,155 +11,109 @@
 // either express or implied. See the License for the specific language governing
 // permissions and limitations under the License.
 
-// Package s3util contains methods for interracting with S3.
+// Package s3util contains methods for interacting with S3.
 package s3util
 
 import (
-	"bytes"
-	"io"
-	"io/ioutil"
+	"net/http"
 	"os"
-	"path"
-	"regexp"
-	"strings"
-	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/platform"
 	"github.com/aws/aws-sdk-go/aws"
-	"github.com/aws/aws-sdk-go/service/s3"
+	"github.com/aws/aws-sdk-go/aws/session"
+	"github.com/aws/aws-sdk-go/service/s3/s3manager"
 )
 
 const (
-	accessDeniedErrMsg    = "AccessDenied: Access Denied status code: 403"
-	diffRegionErrMsgRegex = "AuthorizationHeaderMalformed: The authorization header is malformed; the region '.+' is wrong; expecting '.+'"
+	s3ResponseRegionHeader = "x-amz-bucket-region"
 )
 
-// Manager is an object that can interact with s3.
-type Manager struct {
-	S3 *s3.S3
+var getRegion = platform.Region
+
+type IAmazonS3Util interface {
+	S3Upload(log log.T, bucketName string, objectKey string, filePath string) error
+	GetBucketRegion(log log.T, bucketName string) string
+	GetS3Header(log log.T, bucketName string, s3Endpoint string) string
 }
 
-// NewManager creates a new Manager object.
-func NewManager(s3 *s3.S3) *Manager {
-	return &Manager{S3: s3}
+type AmazonS3Util struct {
+	myUploader *s3manager.Uploader
 }
 
-// GetS3ClientRegion returns the S3 client's region
-func (m Manager) GetS3ClientRegion() string {
-	return *m.S3.Config.Region
-}
-
-// SetS3ClientRegion returns the S3 client's region
-func (m *Manager) SetS3ClientRegion(region string) {
-	*m.S3.Config.Region = region
+func NewAmazonS3Util(log log.T, bucketName string) *AmazonS3Util {
+	bucketRegion := GetBucketRegion(log, bucketName)
+	return &AmazonS3Util{
+		myUploader: s3manager.NewUploader(session.New(&aws.Config{
+			Region: &bucketRegion,
+		})),
+	}
 }
 
 // S3Upload uploads a file to s3.
-func (m *Manager) S3Upload(log log.T, bucketName string, objectKey string, filePath string) (err error) {
+func (u *AmazonS3Util) S3Upload(log log.T, bucketName string, objectKey string, filePath string) (err error) {
 	file, err := os.Open(filePath)
 	if err != nil {
-		return
+		log.Errorf("Failed to open file %v", err)
+		return err
 	}
-	return m.S3UploadFromReader(log, bucketName, objectKey, file)
-}
+	defer file.Close()
 
-// S3UploadFromReader uploads data to s3 from an io.ReadSeeker.
-func (m *Manager) S3UploadFromReader(log log.T, bucketName string, objectKey string, content io.ReadSeeker) (err error) {
-	params := &s3.PutObjectInput{
+	log.Infof("Uploading %v to s3://%v/%v", filePath, bucketName, objectKey)
+	params := &s3manager.UploadInput{
 		Bucket:      aws.String(bucketName),
 		Key:         aws.String(objectKey),
-		Body:        content,
+		Body:        file,
 		ContentType: aws.String("text/plain"),
 	}
-	if _, err = m.S3.PutObject(params); err == nil {
-		aclParams := &s3.PutObjectAclInput{
+	if result, err := u.myUploader.Upload(params); err == nil {
+		log.Infof("Successfully uploaded file to ", result.Location)
+		aclParams := &s3manager.UploadInput{
 			Bucket: aws.String(bucketName),
 			Key:    aws.String(objectKey),
 			ACL:    aws.String("bucket-owner-full-control"),
 		}
-		// gracefully ignore the error, since the S3 putAcl policy may not be set
-		if _, aclErr := m.S3.PutObjectAcl(aclParams); aclErr != nil {
-			log.Debugf("PutAcl: bucket-owner-full-control failed, error: %v", aclErr)
+		if _, aclErr := u.myUploader.Upload(aclParams); aclErr == nil {
+			log.Infof("PutAcl: bucket-owner-full-control succeeded.")
+		} else {
+			// gracefully ignore the error, since the S3 putAcl policy may not be set
+			log.Infof("PutAcl: bucket-owner-full-control failed, error: %v", aclErr)
 		}
+	} else {
+		log.Errorf("Failed uploading %v to s3://%v/%v err:%v", filePath, bucketName, objectKey, err)
 	}
-
-	return
-}
-
-// S3Download downloads an s3 object in memory.
-func (m *Manager) S3Download(bucketName string, objectKey string) (data []byte, err error) {
-	params := &s3.GetObjectInput{
-		Bucket: aws.String(bucketName),
-		Key:    aws.String(objectKey),
-	}
-	resp, err := m.S3.GetObject(params)
-	if err != nil {
-		return
-	}
-	data, err = ioutil.ReadAll(resp.Body)
-	return
-}
-
-// S3DeleteKey deletes an s3 object.
-func (m *Manager) S3DeleteKey(bucketName string, objectKey string) (err error) {
-	params := &s3.DeleteObjectInput{
-		Bucket: aws.String(bucketName),
-		Key:    aws.String(objectKey),
-	}
-	_, err = m.S3.DeleteObject(params)
-	return
-}
-
-// UploadS3TestFile uploads a test S3 file (with current datetime) to given s3 bucket and key
-func (m *Manager) UploadS3TestFile(log log.T, bucketName, key string) error {
-	var err error
-	//create a test content
-	testData := time.Now().String()
-	log.Debugf("Data being written in S3 - %v", testData)
-	content := bytes.NewReader([]byte(testData))
-
-	//objectName to be uploaded in S3
-	var objectKey = path.Join(key, "ssmaccesstext.txt")
-
-	params := &s3.PutObjectInput{
-		Bucket:      aws.String(bucketName),
-		Key:         aws.String(objectKey),
-		Body:        content,
-		ContentType: aws.String("text/plain"),
-	}
-	_, err = m.S3.PutObject(params)
-
 	return err
 }
 
-// GetS3BucketRegionFromErrorMsg gets the expected region from the error message
-func (m *Manager) GetS3BucketRegionFromErrorMsg(log log.T, errMsg string) string {
-	var expectedBucketRegion = ""
-	if errMsg != "" && m.IsS3ErrorRelatedToWrongBucketRegion(errMsg) {
-		//Sample error message:
-		//AuthorizationHeaderMalformed: The authorization header is malformed; the region 'us-east-1' is wrong; expecting 'us-west-2' status code: 400, request id: []
-		splitResult := strings.Split(errMsg, ";")
-		furtherSplitResult := strings.Split(splitResult[len(splitResult)-1], "'")
-		expectedBucketRegion = furtherSplitResult[1]
-		log.Debugf("expected region according to error message = %v", expectedBucketRegion)
-
-		if expectedBucketRegion == "" {
-			log.Debugf("Setting expected region = us-east-1 as per http://docs.aws.amazon.com/AmazonS3/latest/API/RESTBucketGETlocation.html")
-			expectedBucketRegion = "us-east-1"
-		}
+// This function returns the Amazon S3 Bucket region based on its name and the EC2 instance region.
+// It will return the same instance region if it failed to guess the bucket region.
+func GetBucketRegion(log log.T, bucketName string) (region string) {
+	instanceRegion, err := getRegion()
+	if err != nil {
+		log.Error("Cannot get the current instance region information")
+		return instanceRegion // Default
 	}
-	return expectedBucketRegion
+	log.Infof("Instance region is %v", instanceRegion)
+
+	bucketRegion := GetS3Header(log, bucketName, GetS3Endpoint(instanceRegion))
+	if bucketRegion == "" {
+		return instanceRegion // Default
+	} else {
+		return bucketRegion
+	}
 }
 
-// IsS3ErrorRelatedToAccessDenied determines if the given error message regarding AccessDenied
-func (m *Manager) IsS3ErrorRelatedToAccessDenied(errMsg string) bool {
-	return strings.Contains(errMsg, accessDeniedErrMsg)
-}
-
-// IsS3ErrorRelatedToWrongBucketRegion determines if the given error message is related to S3 bucket being in a different region than the one mentioned in S3client.
-func (m *Manager) IsS3ErrorRelatedToWrongBucketRegion(errMsg string) bool {
-	//If the bucket region is not correct then we get an error like following:
-	//AuthorizationHeaderMalformed: The authorization header is malformed; the region 'us-east-1' is wrong; expecting 'us-west-2' status code: 400, request id: []
-	match, _ := regexp.MatchString(diffRegionErrMsgRegex, errMsg)
-	return match
+/*
+This function return the S3 bucket region that is returned as a result of a CURL operation on an S3 path.
+The starting endpoint does not need to be the same as the returned region.
+For example, we might query an endpoint in us-east-1 and get a return of us-west-2, if the bucket is actually in us-west-2.
+*/
+func GetS3Header(log log.T, bucketName string, s3Endpoint string) (region string) {
+	resp, err := http.Head("http://" + bucketName + "." + s3Endpoint)
+	if err != nil {
+		log.Infof("Error when querying S3 bucket using address http://%v.%v. Error details: %v",
+			bucketName, s3Endpoint, err)
+		return ""
+	}
+	return resp.Header.Get(s3ResponseRegionHeader)
 }
