@@ -66,6 +66,13 @@ func UnmarshalFile(filePath string, dest interface{}) (err error) {
 	return
 }
 
+// Unmarshal unmarshals the content in string format to an object.
+func Unmarshal(jsonContent string, dest interface{}) (err error) {
+	content := []byte(jsonContent)
+	err = json.Unmarshal(content, dest)
+	return
+}
+
 // MarshalIndent is like Marshal but applies Indent to format the output.
 // Returns empty string if marshal fails
 func MarshalIndent(obj interface{}) (result string, err error) {

@@ -22,6 +22,7 @@ import (
 	"syscall"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
+	"github.com/aws/amazon-ssm-agent/agent/log"
 )
 
 func prepareProcess(command *exec.Cmd) {
@@ -63,4 +64,11 @@ func validateEnvironmentVariables(command *exec.Cmd) {
 		}
 		command.Env = env
 	}
+}
+
+// printCommand is to print the directory and command.
+func printCommand(log log.T, workingDir string, commandName string, commandArguments []string) {
+	log.Debug()
+	log.Debugf("Running in directory %v, command: %v.", workingDir, commandName, commandArguments)
+	log.Debug()
 }
