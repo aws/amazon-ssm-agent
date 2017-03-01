@@ -135,7 +135,18 @@ func TestRemarshall(t *testing.T) {
 	err = Remarshal(prop2, &newProp2)
 	assert.NoError(t, err, "key mismatch should not report error")
 	assert.Equal(t, Property{}, newProp2, "mismatched remarshall should return an empty object")
+}
 
+func TestUnmarshal(t *testing.T) {
+	content1 := `{"parameter": "1"}`
+	var dest interface{}
+
+	err1 := Unmarshal(content1, &dest)
+	assert.NoError(t, err1, "Message should parse correctly")
+
+	content2 := `"Hello"`
+	err2 := Unmarshal(content2, &dest)
+	assert.NoError(t, err2, "This is not json format. Error expected")
 }
 
 // ioutil stub

@@ -29,7 +29,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/executers"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
-	"github.com/aws/amazon-ssm-agent/agent/log"
+	logger "github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/platform"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/pluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/task"
@@ -116,7 +116,8 @@ func (p *Plugin) IsRunning(context context.T) bool {
 // Start starts the executable file and returns encountered errors
 func (p *Plugin) Start(context context.T, configuration string, orchestrationDir string, cancelFlag task.CancelFlag) (err error) {
 	log := context.Log()
-	log.Infof("CloudWatch Configuration to be applied")
+	logFormatConfig := logger.PrintCWConfig(configuration, log)
+	log.Infof("CloudWatch Configuration to be applied - %s ", logFormatConfig)
 
 	//check if the exe is located
 	if !fileExist(p.ExeLocation) {
@@ -171,6 +172,7 @@ func (p *Plugin) Start(context context.T, configuration string, orchestrationDir
 	//construct command name and arguments that will be run by executer
 	commandName := p.ExeLocation
 	var commandArguments []string
+	var logCommandArgs []string
 	var instanceId, instanceRegion string
 	if instanceId, err = getInstanceId(); err != nil {
 		log.Error("Cannot get the current instance ID")
@@ -182,10 +184,11 @@ func (p *Plugin) Start(context context.T, configuration string, orchestrationDir
 		return
 	}
 
+	logCommandArgs = append(logCommandArgs, instanceId, instanceRegion, logger.PrintCWConfig(configuration, log))
 	commandArguments = append(commandArguments, instanceId, instanceRegion, configuration)
 
 	log.Debugf("commandName: %s", commandName)
-	log.Debugf("arguments passed: %s", commandArguments)
+	log.Debugf("arguments passed: %s", logCommandArgs)
 
 	//start the new process
 	stdoutFilePath := filepath.Join(orchestrationDir, p.StdoutFileName)
@@ -249,7 +252,7 @@ func (p *Plugin) Stop(context context.T, cancelFlag task.CancelFlag) (err error)
 }
 
 // IsCloudWatchExeRunning runs a powershell script to determine if the given process is running
-func (p *Plugin) IsCloudWatchExeRunning(log log.T, workingDirectory, orchestrationDir string, cancelFlag task.CancelFlag) bool {
+func (p *Plugin) IsCloudWatchExeRunning(log logger.T, workingDirectory, orchestrationDir string, cancelFlag task.CancelFlag) bool {
 	/*
 		Since most functions in "os" package in GoLang isn't implemented for Windows platform, we run a powershell
 		script (using Get-Process) to get process details in Windows.
@@ -331,7 +334,7 @@ func (p *Plugin) IsCloudWatchExeRunning(log log.T, workingDirectory, orchestrati
 }
 
 // IsCloudWatchExeRunning runs a powershell script to determine if the given process is running
-func (p *Plugin) GetPidOfCloudWatchExe(log log.T, orchestrationDir, workingDirectory string, cancelFlag task.CancelFlag) (int, error) {
+func (p *Plugin) GetPidOfCloudWatchExe(log logger.T, orchestrationDir, workingDirectory string, cancelFlag task.CancelFlag) (int, error) {
 	/*
 		We will execute a powershell script by using exec.StartExe as pluginutil.CommandExecuter. After we are
 		done, we will revert back to using exec.Execute for future commands to enable/disable cloudwatch.

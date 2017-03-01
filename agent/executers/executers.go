@@ -234,9 +234,7 @@ func ExecuteCommand(log log.T,
 	// configure environment variables
 	prepareEnvironment(command)
 
-	log.Debug()
-	log.Debugf("Running in directory %v, command: %v %v.", workingDir, commandName, commandArguments)
-	log.Debug()
+	printCommand(log, workingDir, commandName, commandArguments)
 	if err = command.Start(); err != nil {
 		log.Error("error occurred starting the command", err)
 		exitCode = 1
@@ -322,9 +320,7 @@ func StartCommand(log log.T,
 	// configure environment variables
 	prepareEnvironment(command)
 
-	log.Debug()
-	log.Debugf("Running in directory %v, command: %v %v.", workingDir, commandName, commandArguments)
-	log.Debug()
+	printCommand(log, workingDir, commandName, commandArguments)
 	if err = command.Start(); err != nil {
 		log.Error("error occurred starting the command: ", err)
 		exitCode = 1
