@@ -58,6 +58,7 @@ func testPool(t *testing.T, nWorkers int, nJobs int, shouldCancel bool) {
 
 	shutdownTimeout := 10000 * time.Millisecond
 	clock.On("After", shutdownTimeout).Return(clock.AfterChannel)
+	clock.On("After", shutdownTimeout+waitTimeout).Return(clock.AfterChannel)
 
 	pool := NewPool(logger, nWorkers, waitTimeout, clock)
 	var wg sync.WaitGroup
@@ -81,6 +82,7 @@ func testPool(t *testing.T, nWorkers int, nJobs int, shouldCancel bool) {
 	// Not verifying clock.After(waitTimeout) here. Refer to proc.go. We can't guarantee that 'doneChan' is not set the
 	// first time waitEither(doneChan, clock.After) is checked.
 	clock.AssertCalled(t, "After", shutdownTimeout)
+	clock.AssertCalled(t, "After", shutdownTimeout+waitTimeout)
 }
 
 func exercisePool(t *testing.T, pool Pool, jobID string, shouldCancel bool) {
