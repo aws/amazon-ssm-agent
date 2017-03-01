@@ -78,7 +78,7 @@ func NewChanneledCancelFlag() *ChanneledCancelFlag {
 func (t *ChanneledCancelFlag) Canceled() bool {
 	t.m.RLock()
 	defer t.m.RUnlock()
-	return t.state == Canceled || t.state == ShutDown
+	return t.state == Canceled
 }
 
 // ShutDown returns true if this flag has been set to ShutDown state, false otherwise.

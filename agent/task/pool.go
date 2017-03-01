@@ -49,14 +49,15 @@ type Pool interface {
 
 // pool implements a task pool where all jobs are managed by a root task
 type pool struct {
-	log        log.T
-	jobQueue   chan JobToken
-	nWorkers   int
-	doneWorker chan struct{}
-	isShutdown bool
-	clock      times.Clock
-	mut        sync.Mutex
-	jobStore   *JobStore
+	log            log.T
+	jobQueue       chan JobToken
+	nWorkers       int
+	doneWorker     chan struct{}
+	isShutdown     bool
+	clock          times.Clock
+	mut            sync.Mutex
+	jobStore       *JobStore
+	cancelDuration time.Duration
 }
 
 // JobToken embeds a job and its associated info
@@ -72,11 +73,12 @@ type JobToken struct {
 // to complete a cancellation request.
 func NewPool(log log.T, maxParallel int, cancelWaitDuration time.Duration, clock times.Clock) Pool {
 	p := &pool{
-		log:        log,
-		jobQueue:   make(chan JobToken),
-		nWorkers:   maxParallel,
-		doneWorker: make(chan struct{}),
-		clock:      clock,
+		log:            log,
+		jobQueue:       make(chan JobToken),
+		nWorkers:       maxParallel,
+		doneWorker:     make(chan struct{}),
+		clock:          clock,
+		cancelDuration: cancelWaitDuration,
 	}
 
 	p.jobStore = NewJobStore()
@@ -116,6 +118,7 @@ func (p *pool) ShutdownAndWait(timeout time.Duration) (finished bool) {
 	p.Shutdown()
 
 	timeoutTimer := p.clock.After(timeout)
+	exitTimer := p.clock.After(timeout + p.cancelDuration)
 	workersRunning := p.nWorkers
 	for workersRunning > 0 {
 		select {
@@ -128,7 +131,11 @@ func (p *pool) ShutdownAndWait(timeout time.Duration) (finished bool) {
 			p.log.Debugf("Pool worker done; %d still running", workersRunning)
 
 		case <-timeoutTimer:
-			p.log.Debugf("Pool shutdown timed out with %d workers still running", workersRunning)
+			p.log.Debugf("Pool shutdown timed out with %d workers still running, start cancelling jobs...", workersRunning)
+			// wait for the worker pool to react to the cancel flag and fail the ongoing jobs
+			p.CancelAll()
+		case <-exitTimer:
+			p.log.Debugf("Pool eventual timeout with %d workers still running ", workersRunning)
 			return false
 		}
 	}

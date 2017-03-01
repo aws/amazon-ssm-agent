@@ -138,6 +138,17 @@ var ShellCommandExecuterTestCases = []TestCase{
 		ExpectedStderr:   stderrMsg + "\n",
 		ExpectedExitCode: successExitCode,
 	},
+	// test both stdout and stderr are captured if there is a delay between multiple outputs
+	{
+		Commands: []string{
+			"sh",
+			"-c",
+			echoToStdout(stdoutMsg) + ";" + echoToStderr(stderrMsg) + ";" + "sleep 1" + ";" + echoToStdout(stdoutMsg2) + ";" + echoToStderr(stderrMsg2),
+		},
+		ExpectedStdout:   stdoutMsg + "\n" + stdoutMsg2 + "\n",
+		ExpectedStderr:   stderrMsg + "\n" + stderrMsg2 + "\n",
+		ExpectedExitCode: successExitCode,
+	},
 }
 
 var ShellCommandExecuterCancelTestCases = []TestCase{
@@ -186,8 +197,9 @@ func TestRunCommand_async(t *testing.T) {
 	defer func() { instance = instanceTemp }()
 
 	for _, testCase := range RunCommandAsyncTestCases {
-		startCommandInvoker, _ := prepareTestStartCommand(t)
+		startCommandInvoker, cancelFlag := prepareTestStartCommand(t)
 		testCommandInvoker(t, startCommandInvoker, testCase)
+		testCommandInvokerShutdown(t, startCommandInvoker, cancelFlag, testCase)
 	}
 }
 
@@ -198,9 +210,15 @@ func TestShellCommandExecuter(t *testing.T) {
 		defer fileutil.DeleteDirectory(orchestrationDir)
 		testCommandInvoker(t, shCommandExecuterInvoker, testCase)
 	}
+	runTestShutdown := func(testCase TestCase) {
+		orchestrationDir, shCommandExecuterInvoker, cancelFlag := prepareTestShellCommandExecuter(t)
+		defer fileutil.DeleteDirectory(orchestrationDir)
+		testCommandInvokerShutdown(t, shCommandExecuterInvoker, cancelFlag, testCase)
+	}
 
 	for _, testCase := range ShellCommandExecuterTestCases {
 		runTest(testCase)
+		runTestShutdown(testCase)
 	}
 }
 
@@ -226,6 +244,22 @@ func testCommandInvoker(t *testing.T, invoke CommandInvoker, testCase TestCase) 
 	stdout, stderr, exitCode, errs := invoke(testCase.Commands)
 	logger.Infof("errors %v", errs)
 
+	assert.Equal(t, 0, len(errs))
+	assertReaderEquals(t, testCase.ExpectedStdout, stdout)
+	assertReaderEquals(t, testCase.ExpectedStderr, stderr)
+	assert.Equal(t, exitCode, testCase.ExpectedExitCode)
+}
+
+//using long-running testcases for this test
+func testCommandInvokerShutdown(t *testing.T, invoke CommandInvoker, cancelFlag task.CancelFlag, testCase TestCase) {
+	go func() {
+		time.Sleep(100 * time.Millisecond)
+		cancelFlag.Set(task.ShutDown)
+	}()
+	logger.Infof("testCommandInvoker with shutdown")
+	stdout, stderr, exitCode, errs := invoke(testCase.Commands)
+	logger.Infof("errors %v", errs)
+	// commmand should be uninterferred
 	assert.Equal(t, 0, len(errs))
 	assertReaderEquals(t, testCase.ExpectedStdout, stdout)
 	assertReaderEquals(t, testCase.ExpectedStderr, stderr)

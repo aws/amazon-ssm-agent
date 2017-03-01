@@ -26,9 +26,16 @@ func TestCanceled(t *testing.T) {
 
 	cancelFlag.Set(Canceled)
 	assert.Equal(t, cancelFlag.Canceled(), true)
+	assert.NotEqual(t, cancelFlag.ShutDown(), true)
+
+	cancelFlag.Set(ShutDown)
+	assert.Equal(t, cancelFlag.ShutDown(), true)
+	assert.NotEqual(t, cancelFlag.Canceled(), true)
 
 	cancelFlag.Set(Completed)
 	assert.Equal(t, cancelFlag.Canceled(), false)
+	assert.Equal(t, cancelFlag.ShutDown(), false)
+
 }
 
 // TestWait tests that the Wait method blocks the caller and returns the
