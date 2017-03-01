@@ -14,7 +14,13 @@
 // Package model contains contracts for inventory
 package model
 
-import "strings"
+import (
+	"sort"
+	"strconv"
+	"strings"
+
+	"github.com/coreos/go-semver/semver"
+)
 
 const (
 	// AWSInstanceInformation is inventory type of instance information
@@ -118,18 +124,172 @@ type CustomInventoryItem struct {
 	Content       interface{}
 }
 
-//ByName defines sort functionality for application data
-type ByName []ApplicationData
+// ByNamePublisherVersion implements sorting ApplicationData elements by name (case insensitive) then by publisher (case insensitive) then version (by component)
+type ByNamePublisherVersion []ApplicationData
 
-func (s ByName) Len() int {
+func (s ByNamePublisherVersion) Len() int {
 	return len(s)
 }
 
-func (s ByName) Swap(i, j int) {
+func (s ByNamePublisherVersion) Swap(i, j int) {
 	s[i], s[j] = s[j], s[i]
 }
 
-func (s ByName) Less(i, j int) bool {
+func (s ByNamePublisherVersion) Less(i, j int) bool {
 	//we need to compare string by ignoring it's case
-	return strings.ToLower(s[i].Name) < strings.ToLower(s[j].Name)
+	return compareApplicationData(s[i], s[j], true) < 0
+}
+
+func compareApplicationData(this ApplicationData, other ApplicationData, strictSort bool) int {
+	if nameResult := compareName(this.Name, other.Name); nameResult != 0 {
+		return nameResult
+	}
+	if publisherResult := comparePublisher(this.Publisher, other.Publisher, strictSort); publisherResult != 0 {
+		return publisherResult
+	}
+	return compareVersion(this.Version, other.Version, strictSort)
+}
+
+func compareName(this string, other string) int {
+	return strings.Compare(strings.ToLower(this), strings.ToLower(other))
+}
+
+func comparePublisher(this string, other string, strictSort bool) int {
+	if !strictSort && (this == "" || other == "") { // If either publisher is blank and this isn't a strict sort, assume a match because publisher isn't required
+		return 0
+	} else {
+		return strings.Compare(strings.ToLower(this), strings.ToLower(other))
+	}
+}
+
+func compareVersion(this string, other string, strictSort bool) int {
+	// If both versions are compliant with SemVer, use the SemVer comparison rules
+	thisSemVer, thisSemErr := semver.NewVersion(this)
+	otherSemVer, otherSemErr := semver.NewVersion(other)
+	if thisSemErr == nil && otherSemErr == nil {
+		return thisSemVer.Compare(*otherSemVer)
+	}
+
+	thisVersion := this
+	otherVersion := other
+	if !strictSort {
+		// Unless we need a strict ordering, trailing 0 components of version should be ignored
+		thisVersion = removeTrailingZeros(thisVersion)
+		otherVersion = removeTrailingZeros(otherVersion)
+	}
+
+	thisComponents := strings.Split(thisVersion, ".")
+	otherComponents := strings.Split(otherVersion, ".")
+
+	for i := 0; i < len(thisComponents) && i < len(otherComponents); i++ {
+		thisNum, errThis := strconv.Atoi(thisComponents[i])
+		otherNum, errOther := strconv.Atoi(otherComponents[i])
+		isNumeric := errThis == nil && errOther == nil
+		if isNumeric {
+			// If we can compare numbers, compare numbers
+			if thisNum < otherNum {
+				return -1
+			} else if thisNum > otherNum {
+				return 1
+			}
+		} else {
+			// If either component is not numeric, compare them as text
+			if thisComponents[i] < otherComponents[i] {
+				return -1
+			} else if thisComponents[i] > otherComponents[i] {
+				return 1
+			}
+		}
+	}
+	return len(thisComponents) - len(otherComponents)
+}
+
+// removeTrailingZeros removes components of path at the end that are numerically equal to 0
+func removeTrailingZeros(version string) string {
+	if len(version) == 0 {
+		return version
+	}
+	lenSignificant := len(version)
+	for i := len(version) - 1; i >= 0; i-- {
+		if version[i] != '0' && version[i] != '.' {
+			break
+		}
+		if version[i] == '.' {
+			lenSignificant = i
+		}
+		if i == 0 {
+			lenSignificant = 0
+		}
+	}
+	return version[0:lenSignificant]
+}
+
+// MergeLists combines a list of application data from a secondary source with a list from a primary source and returns a sorted result
+func MergeLists(primary []ApplicationData, secondary []ApplicationData) []ApplicationData {
+	//sorts the data based on application-name
+	sort.Sort(ByNamePublisherVersion(primary))
+	sort.Sort(ByNamePublisherVersion(secondary))
+
+	if len(primary) == 0 {
+		return secondary
+	}
+	if len(secondary) == 0 {
+		return primary
+	}
+
+	//merge the arrays
+	result := make([]ApplicationData, 0)
+
+	indexPrimary := 0
+	indexSecondary := 0
+
+	for indexPrimary < len(primary) && indexSecondary < len(secondary) {
+		compareResult := compareApplicationData(primary[indexPrimary], secondary[indexSecondary], false)
+		switch {
+		case compareResult < 0:
+			result = append(result, primary[indexPrimary])
+			indexPrimary++
+		case compareResult > 0:
+			result = append(result, secondary[indexSecondary])
+			indexSecondary++
+		default:
+			result = append(result, mergeItems(primary[indexPrimary], secondary[indexSecondary]))
+			indexPrimary++
+			indexSecondary++
+		}
+	}
+	// append any remaining primary items
+	if indexPrimary < len(primary) {
+		result = append(result, primary[indexPrimary:]...)
+	}
+	// append any remaining secondary items
+	if indexSecondary < len(secondary) {
+		result = append(result, secondary[indexSecondary:]...)
+	}
+
+	return result
+}
+
+// mergeItems merges values from a secondary source of application data into a matching primary source
+func mergeItems(primary ApplicationData, secondary ApplicationData) ApplicationData {
+	merged := primary
+	if primary.ApplicationType == "" {
+		merged.ApplicationType = secondary.ApplicationType
+	}
+	if primary.Architecture == "" {
+		merged.Architecture = secondary.Architecture
+	}
+	if primary.CompType == ComponentType(0) {
+		merged.CompType = secondary.CompType
+	}
+	if primary.InstalledTime == "" {
+		merged.InstalledTime = secondary.InstalledTime
+	}
+	if primary.Publisher == "" {
+		merged.Publisher = secondary.Publisher
+	}
+	if primary.URL == "" {
+		merged.URL = secondary.URL
+	}
+	return merged
 }

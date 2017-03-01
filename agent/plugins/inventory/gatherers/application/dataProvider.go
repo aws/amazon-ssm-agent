@@ -4,6 +4,7 @@ import (
 	"strings"
 
 	"github.com/aws/amazon-ssm-agent/agent/context"
+	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/inventory/model"
 )
 
@@ -49,6 +50,11 @@ func componentType(applicationName string) model.ComponentType {
 	return compType
 }
 
+// CollectApplicationData collects all application data from the system using platform specific queries and merges in applications installed via configurePackage
 func CollectApplicationData(context context.T) (appData []model.ApplicationData) {
-	return collectPlatformDependentApplicationData(context)
+	platformAppData := collectPlatformDependentApplicationData(context)
+	packageAppData := configurepackage.CollectApplicationData(context)
+
+	//merge packageAppData into appData
+	return model.MergeLists(platformAppData, packageAppData)
 }

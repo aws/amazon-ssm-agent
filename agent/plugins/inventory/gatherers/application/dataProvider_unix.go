@@ -21,7 +21,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"os/exec"
-	"sort"
 	"strconv"
 	"strings"
 	"time"
@@ -79,9 +78,6 @@ func collectPlatformDependentApplicationData(context context.T) (appData []model
 			log.Errorf("Unable to detect package manager - hence no inventory data for %v", GathererName)
 		}
 	}
-
-	//sorts the data based on application-name
-	sort.Sort(model.ByName(appData))
 
 	return
 }
