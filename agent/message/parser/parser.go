@@ -23,6 +23,7 @@ import (
 	messageContracts "github.com/aws/amazon-ssm-agent/agent/message/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/parameters"
 	"github.com/aws/amazon-ssm-agent/agent/parameterstore"
+	"github.com/aws/amazon-ssm-agent/agent/times"
 )
 
 // ParseMessageWithParams parses an MDS message and replaces the parameters where needed.
@@ -53,9 +54,11 @@ func ParseMessageWithParams(log log.T, payload string) (parsedMessage messageCon
 
 // PrepareReplyPayloadToUpdateDocumentStatus creates the payload object for SendReply based on document status change.
 func PrepareReplyPayloadToUpdateDocumentStatus(agentInfo contracts.AgentInfo, documentStatus contracts.ResultStatus, documentTraceOutput string) (payload messageContracts.SendReplyPayload) {
+
 	payload = messageContracts.SendReplyPayload{
 		AdditionalInfo: contracts.AdditionalInfo{
-			Agent: agentInfo,
+			Agent:    agentInfo,
+			DateTime: times.ToIso8601UTC(times.DefaultClock.Now()),
 		},
 		DocumentStatus:      documentStatus,
 		DocumentTraceOutput: documentTraceOutput,
