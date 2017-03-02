@@ -428,9 +428,8 @@ func testProcessSendCommandMessage(t *testing.T, testCase TestCaseSendCommand) {
 
 	// call method under test
 	//orchestrationRootDir is set to empty such that it can meet the test expectation.
-	orchestrationRootDir := ""
 	p := Processor{}
-	p.processSendCommandMessage(context.NewMockDefault(), mdsMock, orchestrationRootDir, pluginRunnerMock.RunPlugins, cancelFlag, replyBuilderMock.BuildReply, sendResponse, &testCase.DocState)
+	p.processSendCommandMessage(context.NewMockDefault(), mdsMock, pluginRunnerMock.RunPlugins, cancelFlag, replyBuilderMock.BuildReply, sendResponse, &testCase.DocState)
 
 	// assert that the expectations were met
 	pluginRunnerMock.AssertExpectations(t)

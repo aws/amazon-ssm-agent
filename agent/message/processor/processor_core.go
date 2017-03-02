@@ -46,77 +46,6 @@ var once sync.Once
 var loadDocStateFromSendCommand = parseSendCommandMessage
 var loadDocStateFromCancelCommand = parseCancelCommandMessage
 
-// runCmdsUsingCmdState takes commandState as an input and executes only those plugins which haven't yet executed. This is functionally
-// very similar to processSendCommandMessage because everything to do with cmd execution is part of that function right now.
-func (p *Processor) runCmdsUsingCmdState(context context.T,
-	mdsService service.Service,
-	runPlugins PluginRunner,
-	cancelFlag task.CancelFlag,
-	buildReply replyBuilder,
-	sendResponse runpluginutil.SendResponse,
-	docState model.DocumentState) {
-
-	log := context.Log()
-
-	//Since only some plugins of a cmd gets executed here - there is no need to get output from engine & construct the sendReply output.
-	//Instead after all plugins of a command get executed, use persisted data to construct sendReply payload
-	outputs := runPlugins(context, docState.DocumentInformation.MessageID, docState.InstancePluginsInformation, sendResponse, cancelFlag)
-
-	payloadDoc := buildReply("", outputs)
-
-	//read from persisted file
-	newCmdState := commandStateHelper.GetDocumentInterimState(log,
-		docState.DocumentInformation.DocumentID,
-		docState.DocumentInformation.InstanceID,
-		appconfig.DefaultLocationOfCurrent)
-
-	// set document level information which wasn't set previously
-	newCmdState.DocumentInformation.AdditionalInfo = payloadDoc.AdditionalInfo
-	newCmdState.DocumentInformation.DocumentStatus = payloadDoc.DocumentStatus
-	newCmdState.DocumentInformation.DocumentTraceOutput = payloadDoc.DocumentTraceOutput
-	newCmdState.DocumentInformation.RuntimeStatus = payloadDoc.RuntimeStatus
-
-	//persist final documentInfo.
-	commandStateHelper.PersistDocumentInfo(log,
-		newCmdState.DocumentInformation,
-		newCmdState.DocumentInformation.DocumentID,
-		newCmdState.DocumentInformation.InstanceID,
-		appconfig.DefaultLocationOfCurrent)
-
-	pluginOutputContent, _ := jsonutil.Marshal(outputs)
-	log.Debugf("plugin outputs %v", jsonutil.Indent(pluginOutputContent))
-
-	//send document level reply
-	log.Debug("sending reply on message completion ", outputs)
-	sendResponse(newCmdState.DocumentInformation.MessageID, "", outputs)
-
-	// Skip sending response when the document requires a reboot
-	if newCmdState.DocumentInformation.DocumentStatus == contracts.ResultStatusSuccessAndReboot {
-		log.Debugf("skipping moving interimState file %v since the document requires a reboot", newCmdState.DocumentInformation.CommandID)
-		return
-	}
-
-	//persist : commands execution in completed folder (terminal state folder)
-	log.Debugf("execution of %v is over. Moving interimState file from Current to Completed folder", newCmdState.DocumentInformation.MessageID)
-
-	commandStateHelper.MoveDocumentState(log,
-		newCmdState.DocumentInformation.DocumentID,
-		newCmdState.DocumentInformation.InstanceID,
-		appconfig.DefaultLocationOfCurrent,
-		appconfig.DefaultLocationOfCompleted)
-
-	log.Debugf("deleting message")
-
-	if !isUpdatePlugin(newCmdState) {
-		err := mdsService.DeleteMessage(log, newCmdState.DocumentInformation.MessageID)
-		if err != nil {
-			sdkutil.HandleAwsError(log, err, p.processorStopPolicy)
-		}
-	} else {
-		log.Debug("messageDeletion skipped as it will be handled by external process")
-	}
-}
-
 func (p *Processor) processMessage(msg *ssmmds.Message) {
 	var (
 		docState *model.DocumentState
@@ -187,7 +116,6 @@ func (p *Processor) ExecutePendingDocument(docState *model.DocumentState) {
 			p.processSendCommandMessage(
 				p.context,
 				p.service,
-				p.orchestrationRootDir,
 				p.pluginRunner,
 				cancelFlag,
 				p.buildReply,
@@ -233,7 +161,6 @@ func loadPluginConfigurations(log log.T, plugins map[string]model.PluginState, c
 // processSendCommandMessage processes a single send command message received from MDS.
 func (p *Processor) processSendCommandMessage(context context.T,
 	mdsService service.Service,
-	messagesOrchestrationRootDir string,
 	runPlugins PluginRunner,
 	cancelFlag task.CancelFlag,
 	buildReply replyBuilder,
