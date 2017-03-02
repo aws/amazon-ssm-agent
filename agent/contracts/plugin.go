@@ -58,10 +58,10 @@ type IPlugin interface {
 	RequestStop(stopType StopType) (err error)
 }
 
-// ICorePlugin is the very much of core itself will be implemented as plugins
+// ICoreModule is the very much of core itself will be implemented as plugins
 // that are simply hardcoded to run with agent framework.
-// The hardcoded plugins will implement the ICorePlugin
-type ICorePlugin interface {
+// The hardcoded plugins will implement the ICoreModule
+type ICoreModule interface {
 	Name() string
 	Execute(context context.T) (err error)
 	RequestStop(stopType StopType) (err error)

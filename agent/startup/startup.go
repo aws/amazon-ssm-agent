@@ -27,7 +27,6 @@ const (
 
 // Processor is an object that can process startup tasks.
 type Processor struct {
-	contracts.ICorePlugin
 	context context.T
 }
 

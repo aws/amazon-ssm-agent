@@ -37,7 +37,7 @@ import (
 )
 
 const (
-	//name is the core plugin name for long running plugins manager
+	//name is the core module name for long running plugins manager
 	Name = "LongRunningPluginsManager"
 
 	// NameOfCloudWatchJsonFile is the name of ec2 config cloudwatch local configuration file
@@ -61,16 +61,14 @@ const (
 
 // T manages long running plugins - get information of long running plugins and starts, stops & configures long running plugins
 type T interface {
+	contracts.ICoreModule
 	GetRegisteredPlugins() map[string]managerContracts.Plugin
-	Name() string
-	Execute(context context.T) (err error)
-	RequestStop(stopType contracts.StopType) (err error)
 	StopPlugin(name string, cancelFlag task.CancelFlag) (err error)
 	StartPlugin(name, configuration string, orchestrationDir string, cancelFlag task.CancelFlag) (err error)
 	EnsurePluginRegistered(name string, plugin managerContracts.Plugin) (err error)
 }
 
-// Manager is the core plugin - that manages long running plugins
+// Manager is the core module - that manages long running plugins
 type Manager struct {
 	context context.T
 
@@ -95,7 +93,7 @@ var once sync.Once
 
 // EnsureManagerIsInitialized ensures that manager is initialized at least once
 func EnsureInitialization(context context.T) {
-	//todo: After we start using 1 task pool for entire agent (even for core plugins), we can then move all initializations to init()
+	//todo: After we start using 1 task pool for entire agent (even for core modules), we can then move all initializations to init()
 
 	//only components with access to context are expected to call this
 

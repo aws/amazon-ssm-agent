@@ -35,7 +35,7 @@ import (
 // registeredExecuters stores the registered plugins.
 var registeredExecuters, registeredLongRunningPlugins *runpluginutil.PluginRegistry
 
-// RegisteredWorkerPlugins returns all registered core plugins.
+// RegisteredWorkerPlugins returns all registered core modules.
 func RegisteredWorkerPlugins(context context.T) runpluginutil.PluginRegistry {
 	if !isLoaded() {
 		cache(loadWorkerPlugins(context), loadLongRunningPlugins(context))
