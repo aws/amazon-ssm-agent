@@ -11,7 +11,7 @@
 // either express or implied. See the License for the specific language governing
 // permissions and limitations under the License.
 
-// Package coremanager encapsulates the logic for configuring, starting and stopping core plugins
+// Package coremanager encapsulates the logic for configuring, starting and stopping core modules
 package coremanager
 
 import (
@@ -34,13 +34,13 @@ const (
 	hardStopTimeout       = time.Second * 5
 )
 
-// CoreManager encapsulates the logic for configuring, starting and stopping core plugins
+// CoreManager encapsulates the logic for configuring, starting and stopping core modules
 type CoreManager struct {
 	context     context.T
-	corePlugins coreplugins.PluginRegistry
+	coreModules coreplugins.ModuleRegistry
 }
 
-// NewCoreManager creates a new core plugin manager.
+// NewCoreManager creates a new core module manager.
 func NewCoreManager(instanceIdPtr *string, regionPtr *string, log logger.T) (cm *CoreManager, err error) {
 
 	// initialize appconfig
@@ -92,18 +92,18 @@ func NewCoreManager(instanceIdPtr *string, regionPtr *string, log logger.T) (cm 
 	}
 
 	context := context.Default(log, config).With("[instanceID=" + instanceId + "]")
-	corePlugins := coreplugins.RegisteredCorePlugins(context)
+	coreModules := coreplugins.RegisteredCoreModules(context)
 
 	return &CoreManager{
 		context:     context,
-		corePlugins: *corePlugins,
+		coreModules: *coreModules,
 	}, nil
 }
 
 // initializeBookkeepingLocations - initializes all folder locations required for bookkeeping
 func initializeBookkeepingLocations(log logger.T, instanceID string) bool {
 
-	//TODO: initializations for all state tracking folders of core plugins should be moved inside the corresponding core plugins.
+	//TODO: initializations for all state tracking folders of core modules should be moved inside the corresponding core modules.
 
 	//Create folders pending, current, completed, corrupt under the location DefaultLogDirPath/<instanceId>
 	log.Info("Initializing bookkeeping folders")
@@ -178,32 +178,32 @@ func initializeBookkeepingLocations(log logger.T, instanceID string) bool {
 	return initStatus
 }
 
-// Start executes the registered core plugins while watching for reboot request
+// Start executes the registered core modules while watching for reboot request
 func (c *CoreManager) Start() {
 	go c.watchForReboot()
-	c.executeCorePlugins()
+	c.executeCoreModules()
 }
 
-// Stop requests the core plugins to stop executing
+// Stop requests the core modules to stop executing
 // Stop would be called by the agent and should be treated as hard stop
 func (c *CoreManager) Stop() {
-	c.stopCorePlugins(contracts.StopTypeHardStop)
+	c.stopCoreModules(contracts.StopTypeHardStop)
 }
 
-// executeCorePlugins launches all the core plugins
-func (c *CoreManager) executeCorePlugins() {
+// executeCoreModules launches all the core modules
+func (c *CoreManager) executeCoreModules() {
 	var wg sync.WaitGroup
-	l := len(c.corePlugins)
+	l := len(c.coreModules)
 	for i := 0; i < l; i++ {
 		go func(wgc *sync.WaitGroup, i int) {
 			wgc.Add(1)
 			defer wgc.Done()
 
-			plugin := c.corePlugins[i]
+			module := c.coreModules[i]
 			var err error
-			if err = plugin.Execute(c.context); err != nil {
-				c.context.Log().Errorf("error occured trying to start core plugin. Plugin name: %v. Error: %v",
-					plugin.Name(),
+			if err = module.Execute(c.context); err != nil {
+				c.context.Log().Errorf("error occured trying to start core module. Plugin name: %v. Error: %v",
+					module.Name(),
 					err)
 			}
 		}(&wg, i)
@@ -211,14 +211,14 @@ func (c *CoreManager) executeCorePlugins() {
 	wg.Wait()
 }
 
-// stopCorePlugins requests the core plugins to stop
-func (c *CoreManager) stopCorePlugins(stopType contracts.StopType) {
-	// use waitgroups in case of softstop to wait for the core plugins to finish their work
+// stopCoreModules requests the core modules to stop
+func (c *CoreManager) stopCoreModules(stopType contracts.StopType) {
+	// use waitgroups in case of softstop to wait for the core modules to finish their work
 	// use timeout for hardstop and return control
 	log := c.context.Log()
 	log.Infof("core manager stop requested. Stop type: %v", stopType)
 	var wg sync.WaitGroup
-	l := len(c.corePlugins)
+	l := len(c.coreModules)
 	for i := 0; i < l; i++ {
 		go func(wgc *sync.WaitGroup, i int) {
 			if stopType == contracts.StopTypeSoftStop {
@@ -226,17 +226,17 @@ func (c *CoreManager) stopCorePlugins(stopType contracts.StopType) {
 				defer wgc.Done()
 			}
 
-			plugin := c.corePlugins[i]
-			if err := plugin.RequestStop(stopType); err != nil {
+			module := c.coreModules[i]
+			if err := module.RequestStop(stopType); err != nil {
 				log.Errorf("Plugin (%v) failed to stop with error: %v",
-					plugin.Name(),
+					module.Name(),
 					err)
 			}
 
 		}(&wg, i)
 	}
 
-	// use waitgroups in case of softstop to wait for the core plugins to finish their work
+	// use waitgroups in case of softstop to wait for the core modules to finish their work
 	// use timeout for hardstop and return control
 	if stopType == contracts.StopTypeSoftStop {
 		wg.Wait()
@@ -245,7 +245,7 @@ func (c *CoreManager) stopCorePlugins(stopType contracts.StopType) {
 	}
 }
 
-// watchForReboot watches for reboot events and request core plugins to stop when necessary
+// watchForReboot watches for reboot events and request core modules to stop when necessary
 func (c *CoreManager) watchForReboot() {
 	log := c.context.Log()
 
@@ -255,7 +255,7 @@ func (c *CoreManager) watchForReboot() {
 	log.Info("A plugin has requested a reboot.")
 	if val == rebooter.RebootRequestTypeReboot {
 		log.Info("Processing reboot request...")
-		c.stopCorePlugins(contracts.StopTypeSoftStop)
+		c.stopCoreModules(contracts.StopTypeSoftStop)
 		rebooter.RebootMachine(log)
 	} else {
 		log.Error("reboot type not supported yet")

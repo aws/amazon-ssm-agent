@@ -12,7 +12,7 @@
 // permissions and limitations under the License.
 
 // Package processor implements MDS plugin processor
-// processor_coreplugin contains the ICorePlugin implementation
+// processor_coreplugin contains the ICoreModule implementation
 package processor
 
 import (

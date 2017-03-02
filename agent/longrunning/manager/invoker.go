@@ -24,7 +24,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/task"
 )
 
-//this file contains all methods that will be called by LRPM invoker (a worker plugin) when prompted by SSM Config or MDS core plugins.
+//this file contains all methods that will be called by LRPM invoker (a worker plugin) when prompted by SSM Config or MDS core modules.
 
 //todo: we are passing m.Context to p.Handler.Start & p.Handler.Stop -> we might want have to change StartPlugin and StopPlugin to accept context directly
 //todo: honor the cancel flag for both Start and Stop plugin functions

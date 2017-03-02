@@ -11,7 +11,7 @@
 // either express or implied. See the License for the specific language governing
 // permissions and limitations under the License.
 
-// Package coreplugins contains a list of implemented core plugins.
+// Package coreplugins contains a list of implemented core modules.
 package coreplugins
 
 import (
@@ -23,37 +23,37 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/startup"
 )
 
-// PluginRegistry stores a set of core plugins.
-type PluginRegistry []contracts.ICorePlugin
+// ModuleRegistry stores a set of core modules.
+type ModuleRegistry []contracts.ICoreModule
 
-// registeredCorePlugins stores the registered core plugins.
-var registeredCorePlugins PluginRegistry
+// registeredCorePlugins stores the registered core modules.
+var registeredModules ModuleRegistry
 
-// RegisteredCorePlugins returns all registered core plugins.
-func RegisteredCorePlugins(context context.T) *PluginRegistry {
-	if registeredCorePlugins == nil {
+// RegisteredCoreModules returns all registered core modules.
+func RegisteredCoreModules(context context.T) *ModuleRegistry {
+	if registeredModules == nil {
 		loadCorePlugins(context)
 	}
-	return &registeredCorePlugins
+	return &registeredModules
 }
 
-// register core plugins here
+// register core modules here
 func loadCorePlugins(context context.T) {
-	registeredCorePlugins = append(registeredCorePlugins, health.NewHealthCheck(context))
-	registeredCorePlugins = append(registeredCorePlugins, message.NewMdsProcessor(context))
+	registeredModules = append(registeredModules, health.NewHealthCheck(context))
+	registeredModules = append(registeredModules, message.NewMdsProcessor(context))
 
 	if offlineProcessor, err := message.NewOfflineProcessor(context); err == nil {
-		registeredCorePlugins = append(registeredCorePlugins, offlineProcessor)
+		registeredModules = append(registeredModules, offlineProcessor)
 	} else {
 		context.Log().Errorf("Failed to start offline command document processor")
 	}
 
-	registeredCorePlugins = append(registeredCorePlugins, startup.NewProcessor(context))
+	registeredModules = append(registeredModules, startup.NewProcessor(context))
 
-	// registering the long running plugin manager as a core plugin
+	// registering the long running plugin manager as a core module
 	manager.EnsureInitialization(context)
 	if lrpm, err := manager.GetInstance(); err == nil {
-		registeredCorePlugins = append(registeredCorePlugins, lrpm)
+		registeredModules = append(registeredModules, lrpm)
 	} else {
 		context.Log().Errorf("Something went wrong during initialization of long running plugin manager")
 	}

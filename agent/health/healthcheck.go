@@ -26,9 +26,8 @@ import (
 	"github.com/carlescere/scheduler"
 )
 
-// HealthCheck encapsulates the logic on configuring, starting and stopping core plugins
+// HealthCheck encapsulates the logic on configuring, starting and stopping core modules
 type HealthCheck struct {
-	contracts.ICorePlugin
 	context               context.T
 	healthCheckStopPolicy *sdkutil.StopPolicy
 	healthJob             *scheduler.Job
@@ -40,7 +39,7 @@ const (
 	AgentName = "amazon-ssm-agent"
 )
 
-// NewHealthCheck creates a new health check core plugin.
+// NewHealthCheck creates a new health check core module.
 func NewHealthCheck(context context.T) *HealthCheck {
 	healthContext := context.With("[" + name + "]")
 	healthCheckStopPolicy := sdkutil.NewStopPolicy(name, 10)
@@ -92,7 +91,7 @@ func (h *HealthCheck) scheduleInMinutes() int {
 	return updateHealthFrequencyMins
 }
 
-// ICorePlugin implementation
+// ICoreModule implementation
 
 // Name returns the Plugin Name
 func (h *HealthCheck) Name() string {

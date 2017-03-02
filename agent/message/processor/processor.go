@@ -59,10 +59,10 @@ const (
 
 	CancelWorkersLimit = 3
 
-	// mdsname is the core plugin name for the MDS processor
+	// mdsname is the core module name for the MDS processor
 	mdsName = "MessageProcessor"
 
-	// offlinename is the core plugin name for the offline command document processor
+	// offlinename is the core module name for the offline command document processor
 	offlineName = "OfflineProcessor"
 
 	// pollMessageFrequencyMinutes is the frequency at which to resume poll for messages if the current thread dies due to stop policy
