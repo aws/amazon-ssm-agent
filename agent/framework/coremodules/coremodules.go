@@ -11,8 +11,8 @@
 // either express or implied. See the License for the specific language governing
 // permissions and limitations under the License.
 
-// Package coreplugins contains a list of implemented core modules.
-package coreplugins
+// Package coremodules contains a list of implemented core modules.
+package coremodules
 
 import (
 	"github.com/aws/amazon-ssm-agent/agent/context"
@@ -26,34 +26,34 @@ import (
 // ModuleRegistry stores a set of core modules.
 type ModuleRegistry []contracts.ICoreModule
 
-// registeredCorePlugins stores the registered core modules.
-var registeredModules ModuleRegistry
+// registeredCoreModules stores the registered core modules.
+var registeredCoreModules ModuleRegistry
 
 // RegisteredCoreModules returns all registered core modules.
 func RegisteredCoreModules(context context.T) *ModuleRegistry {
-	if registeredModules == nil {
-		loadCorePlugins(context)
+	if registeredCoreModules == nil {
+		loadCoreModules(context)
 	}
-	return &registeredModules
+	return &registeredCoreModules
 }
 
 // register core modules here
-func loadCorePlugins(context context.T) {
-	registeredModules = append(registeredModules, health.NewHealthCheck(context))
-	registeredModules = append(registeredModules, message.NewMdsProcessor(context))
+func loadCoreModules(context context.T) {
+	registeredCoreModules = append(registeredCoreModules, health.NewHealthCheck(context))
+	registeredCoreModules = append(registeredCoreModules, message.NewMdsProcessor(context))
 
 	if offlineProcessor, err := message.NewOfflineProcessor(context); err == nil {
-		registeredModules = append(registeredModules, offlineProcessor)
+		registeredCoreModules = append(registeredCoreModules, offlineProcessor)
 	} else {
 		context.Log().Errorf("Failed to start offline command document processor")
 	}
 
-	registeredModules = append(registeredModules, startup.NewProcessor(context))
+	registeredCoreModules = append(registeredCoreModules, startup.NewProcessor(context))
 
 	// registering the long running plugin manager as a core module
 	manager.EnsureInitialization(context)
 	if lrpm, err := manager.GetInstance(); err == nil {
-		registeredModules = append(registeredModules, lrpm)
+		registeredCoreModules = append(registeredCoreModules, lrpm)
 	} else {
 		context.Log().Errorf("Something went wrong during initialization of long running plugin manager")
 	}

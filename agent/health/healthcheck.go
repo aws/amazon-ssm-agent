@@ -75,7 +75,7 @@ func (h *HealthCheck) updateHealth() {
 	return
 }
 
-// CorePlugin Run Schedule In Minutes
+// CoreModule Run Schedule In Minutes
 func (h *HealthCheck) scheduleInMinutes() int {
 	updateHealthFrequencyMins := 5
 	config := h.context.AppConfig()

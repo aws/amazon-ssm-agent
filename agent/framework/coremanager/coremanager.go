@@ -23,7 +23,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
-	"github.com/aws/amazon-ssm-agent/agent/framework/coreplugins"
+	"github.com/aws/amazon-ssm-agent/agent/framework/coremodules"
 	logger "github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/platform"
 	"github.com/aws/amazon-ssm-agent/agent/rebooter"
@@ -37,7 +37,7 @@ const (
 // CoreManager encapsulates the logic for configuring, starting and stopping core modules
 type CoreManager struct {
 	context     context.T
-	coreModules coreplugins.ModuleRegistry
+	coreModules coremodules.ModuleRegistry
 }
 
 // NewCoreManager creates a new core module manager.
@@ -92,7 +92,7 @@ func NewCoreManager(instanceIdPtr *string, regionPtr *string, log logger.T) (cm 
 	}
 
 	context := context.Default(log, config).With("[instanceID=" + instanceId + "]")
-	coreModules := coreplugins.RegisteredCoreModules(context)
+	coreModules := coremodules.RegisteredCoreModules(context)
 
 	return &CoreManager{
 		context:     context,
