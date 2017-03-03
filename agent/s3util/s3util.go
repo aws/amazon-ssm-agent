@@ -79,7 +79,7 @@ func (m *Manager) S3UploadFromReader(log log.T, bucketName string, objectKey str
 		}
 		// gracefully ignore the error, since the S3 putAcl policy may not be set
 		if _, aclErr := m.S3.PutObjectAcl(aclParams); aclErr != nil {
-			log.Infof("PutAcl: bucket-owner-full-control failed, error: %v", aclErr)
+			log.Debugf("PutAcl: bucket-owner-full-control failed, error: %v", aclErr)
 		}
 	}
 

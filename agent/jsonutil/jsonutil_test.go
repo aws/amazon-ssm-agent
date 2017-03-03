@@ -120,6 +120,24 @@ func TestUnmarshalFile(t *testing.T) {
 	assert.NoError(t, err3, "message should parse successfully")
 }
 
+func TestRemarshall(t *testing.T) {
+	prop := make(map[string]string)
+	prop["RunCommand"] = "echo"
+	prop2 := make(map[string]string)
+	prop2["command"] = "echo"
+	type Property struct {
+		RunCommand string
+	}
+	var newProp Property
+	var newProp2 Property
+	err := Remarshal(prop, &newProp)
+	assert.NoError(t, err, "message should remarshall successfully")
+	err = Remarshal(prop2, &newProp2)
+	assert.NoError(t, err, "key mismatch should not report error")
+	assert.Equal(t, Property{}, newProp2, "mismatched remarshall should return an empty object")
+
+}
+
 // ioutil stub
 type ioUtilStub struct {
 	b   []byte
