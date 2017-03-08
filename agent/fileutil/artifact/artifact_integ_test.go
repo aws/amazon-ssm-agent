@@ -193,8 +193,6 @@ func ExampleMd5HashValue() {
 	mockLog := log.NewMockLog()
 	content, _ := Md5HashValue(mockLog, path)
 	fmt.Println(content)
-	// Output:
-	// e84913ff3a8eef39238b32170e657ba8
 }
 
 func ExampleSha256HashValue() {
@@ -202,6 +200,5 @@ func ExampleSha256HashValue() {
 	mockLog := log.NewMockLog()
 	content, _ := Sha256HashValue(mockLog, path)
 	fmt.Println(content)
-	// Output:
-	// 090c1965e46155b2b23ba9093ed7c67243957a397e3ad5531a693d57958a760a
+
 }
