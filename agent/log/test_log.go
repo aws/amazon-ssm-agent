@@ -42,128 +42,91 @@ func NewMockLog() *Mock {
 
 // Tracef mocks the Tracef function.
 func (_m *Mock) Tracef(format string, params ...interface{}) {
-	//fmt.Printf("Tracef: "+format, params)
+	fmt.Printf("Tracef: "+format+"\n", params...)
 	_m.Called(format, params)
 }
 
 // Debugf mocks the Debugf function.
 func (_m *Mock) Debugf(format string, params ...interface{}) {
-	//fmt.Printf("Debugf: "+format, params)
+	fmt.Printf("Debugf: "+format, params...)
+	fmt.Println()
 	_m.Called(format, params)
 }
 
 // Infof mocks the Infof function.
 func (_m *Mock) Infof(format string, params ...interface{}) {
-	//fmt.Printf("Infof: "+format, params)
+	fmt.Printf("Infof: "+format, params...)
+	fmt.Println()
 	_m.Called(format, params)
 }
 
 // Warnf mocks the Warnf function.
 func (_m *Mock) Warnf(format string, params ...interface{}) error {
-	//fmt.Printf("Warnf: "+format, params)
+	fmt.Printf("Warnf: "+format, params...)
+	fmt.Println()
 	ret := _m.Called(format, params)
-
-	var r0 error
-	if rf, ok := ret.Get(0).(func(string, ...interface{}) error); ok {
-		r0 = rf(format, params...)
-	} else {
-		r0 = ret.Error(0)
-	}
-
-	return r0
+	return ret.Error(0)
 }
 
 // Errorf mocks the Errorf function.
 func (_m *Mock) Errorf(format string, params ...interface{}) error {
-	//fmt.Printf("Errorf: "+format, params)
+	fmt.Printf("Errorf: "+format, params...)
+	fmt.Println()
 	ret := _m.Called(format, params)
-
-	var r0 error
-	if rf, ok := ret.Get(0).(func(string, ...interface{}) error); ok {
-		r0 = rf(format, params...)
-	} else {
-		r0 = ret.Error(0)
-	}
-
-	return r0
+	return ret.Error(0)
 }
 
 // Criticalf mocks the Criticalf function.
 func (_m *Mock) Criticalf(format string, params ...interface{}) error {
-	fmt.Printf("Criticalf: "+format, params)
+	fmt.Printf("Criticalf: "+format, params...)
+	fmt.Println()
 	ret := _m.Called(format, params)
-
-	var r0 error
-	if rf, ok := ret.Get(0).(func(string, ...interface{}) error); ok {
-		r0 = rf(format, params...)
-	} else {
-		r0 = ret.Error(0)
-	}
-
-	return r0
+	return ret.Error(0)
 }
 
 // Trace mocks the Trace function.
 func (_m *Mock) Trace(v ...interface{}) {
-	//fmt.Printf("Trace: %v", v)
+	fmt.Print("Trace: ")
+	fmt.Println(v...)
 	_m.Called(v)
 }
 
 // Debug mocks the Debug function.
 func (_m *Mock) Debug(v ...interface{}) {
-	//fmt.Printf("Debug: %v", v)
+	fmt.Print("Debug: ")
+	fmt.Println(v...)
 	_m.Called(v)
 }
 
 // Info mocks the Info function.
 func (_m *Mock) Info(v ...interface{}) {
-	//fmt.Printf("Info %v", v)
+	fmt.Print("Info: ")
+	fmt.Println(v...)
 	_m.Called(v)
 }
 
 // Warn mocks the Warn function.
 func (_m *Mock) Warn(v ...interface{}) error {
-	//fmt.Printf("Warn: %v", v)
+	fmt.Print("Warn: ")
+	fmt.Println(v...)
 	ret := _m.Called(v)
-
-	var r0 error
-	if rf, ok := ret.Get(0).(func(...interface{}) error); ok {
-		r0 = rf(v...)
-	} else {
-		r0 = ret.Error(0)
-	}
-
-	return r0
+	return ret.Error(0)
 }
 
 // Error mocks the Error function.
 func (_m *Mock) Error(v ...interface{}) error {
-	//fmt.Printf("Error: %v", v)
+	fmt.Print("Error: ")
+	fmt.Println(v...)
 	ret := _m.Called(v)
-
-	var r0 error
-	if rf, ok := ret.Get(0).(func(...interface{}) error); ok {
-		r0 = rf(v...)
-	} else {
-		r0 = ret.Error(0)
-	}
-
-	return r0
+	return ret.Error(0)
 }
 
 // Critical mocks the Critical function.
 func (_m *Mock) Critical(v ...interface{}) error {
-	fmt.Printf("Critical: %v", v)
+	fmt.Print("Critical: ")
+	fmt.Println(v...)
 	ret := _m.Called(v)
-
-	var r0 error
-	if rf, ok := ret.Get(0).(func(...interface{}) error); ok {
-		r0 = rf(v...)
-	} else {
-		r0 = ret.Error(0)
-	}
-
-	return r0
+	return ret.Error(0)
 }
 
 // Flush mocks the Flush function.
