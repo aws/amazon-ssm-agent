@@ -187,6 +187,8 @@ type PluginRuntimeStatus struct {
 	EndDateTime        string       `json:"endDateTime"`
 	OutputS3BucketName string       `json:"outputS3BucketName"`
 	OutputS3KeyPrefix  string       `json:"outputS3KeyPrefix"`
+	StandardOutput     string       `json:"standardOutput"`
+	StandardError      string       `json:"standardError"`
 }
 
 // AgentConfiguration is a struct that stores information about the agent and instance.

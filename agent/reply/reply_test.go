@@ -105,11 +105,13 @@ func TestPrepareRuntimeStatus(t *testing.T) {
 func parsePluginResult(t *testing.T, pluginRuntimeStatus contracts.PluginRuntimeStatus) contracts.PluginResult {
 	parsedOutput := pluginRuntimeStatus.Output
 	return contracts.PluginResult{
-		PluginName:    pluginRuntimeStatus.Name,
-		Output:        parsedOutput,
-		Status:        pluginRuntimeStatus.Status,
-		StartDateTime: times.ParseIso8601UTC(pluginRuntimeStatus.StartDateTime),
-		EndDateTime:   times.ParseIso8601UTC(pluginRuntimeStatus.EndDateTime),
+		PluginName:     pluginRuntimeStatus.Name,
+		Output:         parsedOutput,
+		Status:         pluginRuntimeStatus.Status,
+		StartDateTime:  times.ParseIso8601UTC(pluginRuntimeStatus.StartDateTime),
+		EndDateTime:    times.ParseIso8601UTC(pluginRuntimeStatus.EndDateTime),
+		StandardOutput: pluginRuntimeStatus.StandardOutput,
+		StandardError:  pluginRuntimeStatus.StandardError,
 	}
 }
 
