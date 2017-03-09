@@ -125,6 +125,8 @@ func RunPlugins(
 			pluginOutputs[pluginID].Status = r.Status
 			pluginOutputs[pluginID].Error = r.Error
 			pluginOutputs[pluginID].Output = r.Output
+			pluginOutputs[pluginID].StandardOutput = r.StandardOutput
+			pluginOutputs[pluginID].StandardError = r.StandardError
 
 			if r.Status == contracts.ResultStatusSuccessAndReboot {
 				context.Log().Debug("Requesting reboot...")

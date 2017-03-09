@@ -126,12 +126,14 @@ func prepareRuntimeStatus(log log.T, pluginResult contracts.PluginResult) contra
 	}
 
 	runtimeStatus := contracts.PluginRuntimeStatus{
-		Code:          pluginResult.Code,
-		Name:          pluginResult.PluginName,
-		Status:        pluginResult.Status,
-		Output:        resultAsString,
-		StartDateTime: times.ToIso8601UTC(pluginResult.StartDateTime),
-		EndDateTime:   times.ToIso8601UTC(pluginResult.EndDateTime),
+		Code:           pluginResult.Code,
+		Name:           pluginResult.PluginName,
+		Status:         pluginResult.Status,
+		Output:         resultAsString,
+		StartDateTime:  times.ToIso8601UTC(pluginResult.StartDateTime),
+		EndDateTime:    times.ToIso8601UTC(pluginResult.EndDateTime),
+		StandardOutput: pluginResult.StandardOutput,
+		StandardError:  pluginResult.StandardError,
 	}
 
 	if pluginResult.OutputS3BucketName != "" {

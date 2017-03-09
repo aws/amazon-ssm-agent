@@ -35,13 +35,12 @@ func TestRunPluginsWithRegistry(t *testing.T) {
 	pluginRegistry := runpluginutil.PluginRegistry{}
 	documentID := "TestDocument"
 
-	sendResponse := func(messageID string, pluginID string, results map[string]*contracts.PluginResult) {
-	}
-
 	var cancelFlag task.CancelFlag
 	ctx := context.NewMockDefault()
 	defaultTime := time.Now()
+	defaultOutput := "output"
 	pluginConfigs2 := make([]model.PluginState, len(pluginNames))
+
 	for index, name := range pluginNames {
 
 		// create an instance of our test object
@@ -60,10 +59,12 @@ func TestRunPluginsWithRegistry(t *testing.T) {
 		}
 
 		pluginResults[name] = &contracts.PluginResult{
-			Output:        name,
-			PluginName:    name,
-			StartDateTime: defaultTime,
-			EndDateTime:   defaultTime,
+			Output:         name,
+			PluginName:     name,
+			StartDateTime:  defaultTime,
+			EndDateTime:    defaultTime,
+			StandardOutput: defaultOutput,
+			StandardError:  defaultOutput,
 		}
 
 		if name == "plugin2" {
@@ -75,7 +76,21 @@ func TestRunPluginsWithRegistry(t *testing.T) {
 
 		pluginConfigs2[index] = pluginConfigs[name]
 	}
-
+	called := 0
+	sendResponse := func(messageID string, pluginID string, results map[string]*contracts.PluginResult) {
+		for _, result := range results {
+			result.EndDateTime = defaultTime
+			result.StartDateTime = defaultTime
+		}
+		if called == 0 {
+			assert.Equal(t, results["plugin1"], pluginResults["plugin1"])
+		} else if called == 1 {
+			assert.Equal(t, results, pluginResults)
+		} else {
+			assert.Fail(t, "sendreply shouldn't been called more than twice")
+		}
+		called++
+	}
 	// call the code we are testing
 	outputs := RunPlugins(ctx, documentID, "", pluginConfigs2, pluginRegistry, sendResponse, nil, cancelFlag)
 
