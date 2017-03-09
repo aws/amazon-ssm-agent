@@ -21,7 +21,9 @@
       "status": "Success",
       "output": "standard output of test case\n----------ERROR-------\nstandard error of test case",
       "startDateTime": "2015-07-09T23:23:39.019Z",
-      "endDateTime": "2015-07-09T23:23:39.023Z"
+      "endDateTime": "2015-07-09T23:23:39.023Z",
+      "standardOutput": "output",
+      "standardError": "error"
     }
   }
 }
