@@ -40,13 +40,13 @@ func NewProcessor(context context.T) *Processor {
 	}
 }
 
-// Name returns the name of the processor that executes the startup tasks.
-func (p *Processor) Name() string {
+// Name returns the name of the module that executes the startup tasks.
+func (p *Processor) ModuleName() string {
 	return name
 }
 
 // Execute executes the startup tasks and return error if any.
-func (p *Processor) Execute(context context.T) (err error) {
+func (p *Processor) ModuleExecute(context context.T) (err error) {
 	defer func() {
 		if r := recover(); r != nil {
 			err = fmt.Errorf("Internal error occured by startup processor: %v", r)
@@ -60,6 +60,6 @@ func (p *Processor) Execute(context context.T) (err error) {
 }
 
 // RequestStop is not necessarily used since startup task only happens once.
-func (p *Processor) RequestStop(stopType contracts.StopType) (err error) {
+func (p *Processor) ModuleRequestStop(stopType contracts.StopType) (err error) {
 	return nil
 }
