@@ -93,13 +93,13 @@ func (h *HealthCheck) scheduleInMinutes() int {
 
 // ICoreModule implementation
 
-// Name returns the Plugin Name
-func (h *HealthCheck) Name() string {
+// Name returns the module name
+func (h *HealthCheck) ModuleName() string {
 	return name
 }
 
-// Execute starts the scheduling of the health check plugin
-func (h *HealthCheck) Execute(context context.T) (err error) {
+// Execute starts the scheduling of the health check module
+func (h *HealthCheck) ModuleExecute(context context.T) (err error) {
 	rand.Seed(time.Now().UTC().UnixNano())
 	scheduleInMinutes := h.scheduleInMinutes()
 
@@ -120,8 +120,8 @@ func (h *HealthCheck) Execute(context context.T) (err error) {
 	return
 }
 
-// RequestStop handles the termination of the health check plugin job
-func (h *HealthCheck) RequestStop(stopType contracts.StopType) (err error) {
+// RequestStop handles the termination of the health check module job
+func (h *HealthCheck) ModuleRequestStop(stopType contracts.StopType) (err error) {
 	if h.healthJob != nil {
 		h.context.Log().Info("stopping update instance health job.")
 		h.healthJob.Quit <- true
