@@ -33,8 +33,8 @@ import (
 	"github.com/carlescere/scheduler"
 )
 
-// Name returns the Plugin Name
-func (p *Processor) Name() string {
+// Name returns the module name
+func (p *Processor) ModuleName() string {
 	return p.name
 }
 
@@ -48,7 +48,7 @@ func (p *Processor) isSupportedDocumentType(documentType model.DocumentType) boo
 }
 
 // Execute starts the scheduling of the message processor plugin
-func (p *Processor) Execute(context context.T) (err error) {
+func (p *Processor) ModuleExecute(context context.T) (err error) {
 
 	log := p.context.Log()
 	//process the older messages from Current & Pending folder
@@ -212,7 +212,7 @@ func (p *Processor) processInProgressDocuments(instanceID string) {
 }
 
 // RequestStop handles the termination of the message processor plugin job
-func (p *Processor) RequestStop(stopType contracts.StopType) (err error) {
+func (p *Processor) ModuleRequestStop(stopType contracts.StopType) (err error) {
 	var waitTimeout time.Duration
 
 	if stopType == contracts.StopTypeSoftStop {

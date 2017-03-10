@@ -58,20 +58,20 @@ func (m *Mock) GetRegisteredPlugins() map[string]managerContracts.Plugin {
 	return args.Get(0).(map[string]managerContracts.Plugin)
 }
 
-// Name returns the Plugin Name
-func (m *Mock) Name() string {
+// Name returns the module name
+func (m *Mock) ModuleName() string {
 	args := m.Called()
 	return args.Get(0).(string)
 }
 
 // Execute starts long running plugin manager and returns encountered error - returns nil here for testing
-func (m *Mock) Execute(context context.T) (err error) {
+func (m *Mock) ModuleExecute(context context.T) (err error) {
 	args := m.Called(context)
 	return args.Get(0).(error)
 }
 
 // RequestStop handles the termination of the message processor plugin job and returns encountered error - returns nil here for testing
-func (m *Mock) RequestStop(stopType contracts.StopType) (err error) {
+func (m *Mock) ModuleRequestStop(stopType contracts.StopType) (err error) {
 	return nil
 }
 

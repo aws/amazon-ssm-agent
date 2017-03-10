@@ -201,9 +201,9 @@ func (c *CoreManager) executeCoreModules() {
 
 			module := c.coreModules[i]
 			var err error
-			if err = module.Execute(c.context); err != nil {
+			if err = module.ModuleExecute(c.context); err != nil {
 				c.context.Log().Errorf("error occured trying to start core module. Plugin name: %v. Error: %v",
-					module.Name(),
+					module.ModuleName(),
 					err)
 			}
 		}(&wg, i)
@@ -227,9 +227,9 @@ func (c *CoreManager) stopCoreModules(stopType contracts.StopType) {
 			}
 
 			module := c.coreModules[i]
-			if err := module.RequestStop(stopType); err != nil {
+			if err := module.ModuleRequestStop(stopType); err != nil {
 				log.Errorf("Plugin (%v) failed to stop with error: %v",
-					module.Name(),
+					module.ModuleName(),
 					err)
 			}
 
