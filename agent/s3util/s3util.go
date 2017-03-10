@@ -22,6 +22,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/platform"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
+	"github.com/aws/aws-sdk-go/service/s3"
 	"github.com/aws/aws-sdk-go/service/s3/s3manager"
 )
 
@@ -68,16 +69,15 @@ func (u *AmazonS3Util) S3Upload(log log.T, bucketName string, objectKey string, 
 	}
 	if result, err := u.myUploader.Upload(params); err == nil {
 		log.Infof("Successfully uploaded file to ", result.Location)
-		aclParams := &s3manager.UploadInput{
+		if _, aclErr := u.myUploader.S3.PutObjectAcl(&s3.PutObjectAclInput{
 			Bucket: aws.String(bucketName),
 			Key:    aws.String(objectKey),
 			ACL:    aws.String("bucket-owner-full-control"),
-		}
-		if _, aclErr := u.myUploader.Upload(aclParams); aclErr == nil {
+		}); aclErr == nil {
 			log.Infof("PutAcl: bucket-owner-full-control succeeded.")
 		} else {
 			// gracefully ignore the error, since the S3 putAcl policy may not be set
-			log.Infof("PutAcl: bucket-owner-full-control failed, error: %v", aclErr)
+			log.Debugf("PutAcl: bucket-owner-full-control failed, error: %v", aclErr)
 		}
 	} else {
 		log.Errorf("Failed uploading %v to s3://%v/%v err:%v", filePath, bucketName, objectKey, err)
