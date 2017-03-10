@@ -62,9 +62,9 @@ type IPlugin interface {
 // that are simply hardcoded to run with agent framework.
 // The hardcoded plugins will implement the ICoreModule
 type ICoreModule interface {
-	Name() string
-	Execute(context context.T) (err error)
-	RequestStop(stopType StopType) (err error)
+	ModuleName() string
+	ModuleExecute(context context.T) (err error)
+	ModuleRequestStop(stopType StopType) (err error)
 }
 
 // IWorkerPlugin is the plugins which do not form part of core

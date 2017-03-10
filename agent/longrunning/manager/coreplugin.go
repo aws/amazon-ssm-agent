@@ -143,13 +143,13 @@ func (m *Manager) GetRegisteredPlugins() map[string]managerContracts.Plugin {
 	return m.registeredPlugins
 }
 
-// Name returns the Plugin Name
-func (m *Manager) Name() string {
+// Name returns the module name
+func (m *Manager) ModuleName() string {
 	return Name
 }
 
 // Execute starts long running plugin manager
-func (m *Manager) Execute(context context.T) (err error) {
+func (m *Manager) ModuleExecute(context context.T) (err error) {
 
 	log := m.context.Log()
 	log.Infof("starting long running plugin manager")
@@ -161,7 +161,7 @@ func (m *Manager) Execute(context context.T) (err error) {
 	}
 
 	if err != nil {
-		log.Errorf("%s is exiting - unable to read from data store", m.Name())
+		log.Errorf("%s is exiting - unable to read from data store", m.ModuleName())
 		return
 	}
 
@@ -203,8 +203,8 @@ func (m *Manager) Execute(context context.T) (err error) {
 	return
 }
 
-// RequestStop handles the termination of the message processor plugin job
-func (m *Manager) RequestStop(stopType contracts.StopType) (err error) {
+// RequestStop handles the termination of the long running plugin manager
+func (m *Manager) ModuleRequestStop(stopType contracts.StopType) (err error) {
 	var waitTimeout time.Duration
 
 	if stopType == contracts.StopTypeSoftStop {
