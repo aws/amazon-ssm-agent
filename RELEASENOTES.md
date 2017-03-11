@@ -1,5 +1,10 @@
 Latest
 ================
+- Pass proxy settings to domain join and CloudWatch
+- Various bug fixes
+
+2.0.706.0
+================
 - Added support for installing Docker on Linux
 - Removed the upper limit for the maximum number of parallel executing documents on the agent (previously the max was 10) 
 You can configure this number by setting the “CommandWorkerLimit” attribute in amazon-ssm-agent.json file
