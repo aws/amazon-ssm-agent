@@ -56,8 +56,6 @@ func PrintCWConfig(jsonConfig string, log T) string {
 				var parameters map[string]interface{}
 				var ok bool
 				if parameters, ok = cwParameters.(map[string]interface{}); ok {
-					log.Debug("Scrubbing credentials from logs to avoid printing " +
-						"Access and Secret keys")
 					scrubCreds(parameters)
 				}
 
