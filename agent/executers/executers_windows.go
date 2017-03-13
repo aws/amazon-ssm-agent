@@ -55,6 +55,6 @@ func printCommand(log logger.T, workingDir string, commandName string, commandAr
 	}
 
 	log.Debug()
-	log.Debugf("Running in directory %v, command: %v.", workingDir, commandName, commandArgs)
+	log.Debugf("Running in directory %v, command: %v %v", workingDir, commandName, commandArgs)
 	log.Debug()
 }
