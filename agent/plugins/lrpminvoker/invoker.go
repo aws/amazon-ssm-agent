@@ -16,7 +16,6 @@
 package lrpminvoker
 
 import (
-	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"path/filepath"
@@ -27,7 +26,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	"github.com/aws/amazon-ssm-agent/agent/framework/runpluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
-	"github.com/aws/amazon-ssm-agent/agent/log"
+	logger "github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/longrunning/manager"
 	managerContracts "github.com/aws/amazon-ssm-agent/agent/longrunning/plugin"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/pluginutil"
@@ -103,8 +102,12 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 	//NOTE: All long running plugins have json node similar to aws:cloudWatch as mentioned in SSM document - AWS-ConfigureCloudWatch
 
 	//check if plugin is enabled or not - which would be stored in settings
-	jsonB, _ := json.Marshal(&config)
-	log.Debugf("Received plugin configuration - %s", jsonutil.Indent(string(jsonB)))
+	if configJson, ok := config.Properties.(string); ok {
+		log.Debugf("Received plugin configuration - Setting: %s\n Properties: %s\n OutputS3BucketName: %s\n OutputS3Prefix: %s\n "+
+			"OrchestrationDirectory: %s\n MessageId: %s\n BookKeepingFileName: %s\n PluginName: %s\n PluginID: %s\n DefaultWorkingDirectory: %s",
+			config.Settings, logger.PrintCWConfig(configJson, log), config.OutputS3BucketName, config.OutputS3KeyPrefix, config.OrchestrationDirectory,
+			config.MessageId, config.BookKeepingFileName, config.PluginName, config.PluginID, config.DefaultWorkingDirectory)
+	}
 
 	//load settings from plugin input -> for more details refer to AWS-ConfigureCloudWatch
 	var setting LongRunningPluginSettings
@@ -184,7 +187,7 @@ func (p *Plugin) CreateResult(msg string, status contracts.ResultStatus) (res co
 	return
 }
 
-func (p *Plugin) enablePlugin(log log.T, config contracts.Configuration, cancelFlag task.CancelFlag) (res contracts.PluginResult) {
+func (p *Plugin) enablePlugin(log logger.T, config contracts.Configuration, cancelFlag task.CancelFlag) (res contracts.PluginResult) {
 	log.Infof("Enabling %s", p.lrpName)
 
 	//loading properties as string since aws:cloudWatch uses properties as string. Properties has new configuration for cloudwatch plugin.
@@ -226,7 +229,7 @@ func (p *Plugin) enablePlugin(log log.T, config contracts.Configuration, cancelF
 				contracts.ResultStatusFailed)
 
 		} else {
-			log.Info("Start Clound Watch successfully.")
+			log.Info("Start Cloud Watch successfully.")
 			res = p.CreateResult("success", contracts.ResultStatusSuccess)
 		}
 	}
@@ -240,9 +243,8 @@ func (p *Plugin) enablePlugin(log log.T, config contracts.Configuration, cancelF
 }
 
 // prepareForStart remalshal the Property and stop the plug if it was running before.
-func (p *Plugin) prepareForStart(log log.T, config contracts.Configuration, cancelFlag task.CancelFlag) (res contracts.PluginResult, failed bool, property string) {
+func (p *Plugin) prepareForStart(log logger.T, config contracts.Configuration, cancelFlag task.CancelFlag) (res contracts.PluginResult, failed bool, property string) {
 	// track if the preparation process succeed.
-
 	failed = false
 	var err error
 	prop := config.Properties

@@ -28,7 +28,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/framework/runpluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
-	"github.com/aws/amazon-ssm-agent/agent/log"
+	logger "github.com/aws/amazon-ssm-agent/agent/log"
 	messageContracts "github.com/aws/amazon-ssm-agent/agent/message/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/message/parser"
 	"github.com/aws/amazon-ssm-agent/agent/message/service"
@@ -38,6 +38,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/statemanager/model"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 	"github.com/aws/aws-sdk-go/service/ssmmds"
+	"github.com/gabs"
 )
 
 var singletonMapOfUnsupportedSSMDocs map[string]bool
@@ -45,6 +46,14 @@ var once sync.Once
 
 var loadDocStateFromSendCommand = parseSendCommandMessage
 var loadDocStateFromCancelCommand = parseCancelCommandMessage
+
+const (
+	documentContent = "DocumentContent"
+	runtimeConfig = "runtimeConfig"
+	cloudwatchPlugin = "aws:cloudWatch"
+	properties = "properties"
+	parameters = "Parameters"
+)
 
 func (p *Processor) processMessage(msg *ssmmds.Message) {
 	var (
@@ -90,12 +99,13 @@ func (p *Processor) processMessage(msg *ssmmds.Message) {
 		return
 	}
 
-	log.Debugf("Ack done. Received message - messageId - %v, MessageString - %v", *msg.MessageId, msg.GoString())
+	log.Debugf("Ack done. Received message - messageId - %v", *msg.MessageId)
+
 	log.Debugf("Processing to send a reply to update the document status to InProgress")
 
 	p.sendDocLevelResponse(*msg.MessageId, contracts.ResultStatusInProgress, "")
 
-	log.Debugf("SendReply done. Received message - messageId - %v, MessageString - %v", *msg.MessageId, msg.GoString())
+	log.Debugf("SendReply done. Received message - messageId - %v", *msg.MessageId)
 
 	p.ExecutePendingDocument(docState)
 }
@@ -142,7 +152,7 @@ func (p *Processor) ExecutePendingDocument(docState *model.DocumentState) {
 }
 
 // loadPluginConfigurations returns plugin configurations that hasn't been executed
-func loadPluginConfigurations(log log.T, plugins map[string]model.PluginState, commandID string) map[string]*contracts.Configuration {
+func loadPluginConfigurations(log logger.T, plugins map[string]model.PluginState, commandID string) map[string]*contracts.Configuration {
 	configs := make(map[string]*contracts.Configuration)
 
 	for pluginName, pluginConfig := range plugins {
@@ -235,9 +245,35 @@ func parseSendCommandMessage(context context.T, msg *ssmmds.Message, messagesOrc
 	if err != nil {
 		return nil, err
 	}
-
 	parsedMessageContent, _ := jsonutil.Marshal(parsedMessage)
-	log.Debug("ParsedMessage is ", jsonutil.Indent(parsedMessageContent))
+
+	var parsedContentJson *gabs.Container
+
+	if parsedContentJson, err = gabs.ParseJSON([]byte(parsedMessageContent)); err != nil {
+		log.Debugf("Parsed message is in the wrong json format. Error is ", err)
+	}
+	//Search for "DocumentContent" > "runtimeConfig" > "aws:cloudWatch" > "properties" which has the cloudwatch
+	// config file and scrub the credentials, if present
+	obj := parsedContentJson.Search(documentContent, runtimeConfig, cloudwatchPlugin, properties).String()
+	if obj != "" {
+		//This will be true only for aws:cloudwatch
+		stripConfig := strings.Replace(strings.Replace(strings.Replace(obj, "\\t", "", -1), "\\n", "", -1), "\\", "", -1)
+		stripConfig = strings.TrimSuffix(strings.TrimPrefix(stripConfig, "\""), "\"")
+
+		finalLogConfig := logger.PrintCWConfig(stripConfig, log)
+
+		// Parameters > properties is another path where the config file is printed
+		if _, err = parsedContentJson.Set(finalLogConfig, parameters, properties); err != nil {
+			log.Debug("Error occurred when setting Parameters->properties with scrubbed credentials - ", err)
+		}
+		if _, err = parsedContentJson.Set(finalLogConfig, documentContent, runtimeConfig, cloudwatchPlugin, properties); err != nil {
+			log.Debug("Error occurred when setting aws:cloudWatch->properties with scrubbed credentials - ", err)
+		}
+		log.Debug("ParsedMessage is ", parsedContentJson.StringIndent("", "  "))
+	} else {
+		//For plugins that are not aws:cloudwatch
+		log.Debug("ParsedMessage is ", jsonutil.Indent(parsedMessageContent))
+	}
 
 	// adapt plugin configuration format from MDS to plugin expected format
 	s3KeyPrefix := path.Join(parsedMessage.OutputS3KeyPrefix, parsedMessage.CommandID, *msg.Destination)
@@ -249,12 +285,6 @@ func parseSendCommandMessage(context context.T, msg *ssmmds.Message, messagesOrc
 
 	//Data format persisted in Current Folder is defined by the struct - CommandState
 	docState := initializeSendCommandState(parsedMessage, messageOrchestrationDirectory, s3KeyPrefix, *msg)
-
-	var docStateContent string
-	if docStateContent, err = jsonutil.Marshal(docState); err != nil {
-		return nil, err
-	}
-	log.Debug("Document state is ", jsonutil.Indent(docStateContent))
 
 	// Check if it is a managed instance and its executing managed instance incompatible AWS SSM public document.
 	// A few public AWS SSM documents contain code which is not compatible when run on managed instances.
@@ -317,14 +347,13 @@ func (p *Processor) processCancelCommandMessage(context context.T,
 func parseCancelCommandMessage(context context.T, msg *ssmmds.Message, messagesOrchestrationRootDir string) (*model.DocumentState, error) {
 	log := context.Log()
 
-	log.Debug("Processing cancel command message ", jsonutil.Indent(*msg.Payload))
+	log.Debug("Processing cancel command message - ", *msg.MessageId)
 
 	var parsedMessage messageContracts.CancelPayload
 	err := json.Unmarshal([]byte(*msg.Payload), &parsedMessage)
 	if err != nil {
 		return nil, err
 	}
-	log.Debugf("ParsedMessage is %v", parsedMessage)
 
 	//persist in current folder here
 	docState := initializeCancelCommandState(*msg, parsedMessage)

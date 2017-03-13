@@ -69,6 +69,6 @@ func validateEnvironmentVariables(command *exec.Cmd) {
 // printCommand is to print the directory and command.
 func printCommand(log log.T, workingDir string, commandName string, commandArguments []string) {
 	log.Debug()
-	log.Debugf("Running in directory %v, command: %v.", workingDir, commandName, commandArguments)
+	log.Debugf("Running in directory %v, command: %v %v", workingDir, commandName, commandArguments)
 	log.Debug()
 }
