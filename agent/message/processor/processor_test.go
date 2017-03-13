@@ -59,7 +59,7 @@ var testTopicCancel = "aws.ssm.cancelCommand.test"
 var testCreatedDate = "2015-01-01T00:00:00.000Z"
 var testEmptyMessage = ""
 
-var logger = log.NewMockLog()
+var loggers = log.NewMockLog()
 
 type TestCaseSendCommand struct {
 	// Msg stores a parsed MDS message as received from GetMessages.
@@ -317,7 +317,7 @@ func TestProcessMessageWithInvalidMessage(t *testing.T) {
 
 	// check expectations
 	tc.ContextMock.AssertCalled(t, "Log")
-	tc.MdsMock.AssertNotCalled(t, "AcknowledgeMessage", mock.AnythingOfType("log.T"))
+	tc.MdsMock.AssertNotCalled(t, "AcknowledgeMessage", mock.AnythingOfType("logger.T"))
 	tc.SendCommandTaskPoolMock.AssertNotCalled(t, "Submit")
 	tc.CancelCommandTaskPoolMock.AssertNotCalled(t, "Submit")
 	assert.False(t, *tc.IsDocLevelResponseSent)
@@ -336,7 +336,7 @@ func TestProcessSendCommandMessage(t *testing.T) {
 
 func generateTestCaseFromFiles(t *testing.T, messagePayloadFile string, messageReplyPayloadFile string, instanceID string) (testCase TestCaseSendCommand) {
 	// load message payload and create MDS message from it
-	payload, err := parser.ParseMessageWithParams(logger, string(loadFile(t, messagePayloadFile)))
+	payload, err := parser.ParseMessageWithParams(loggers, string(loadFile(t, messagePayloadFile)))
 	if err != nil {
 		t.Fatal(err)
 	}
