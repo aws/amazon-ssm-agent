@@ -48,11 +48,11 @@ var loadDocStateFromSendCommand = parseSendCommandMessage
 var loadDocStateFromCancelCommand = parseCancelCommandMessage
 
 const (
-	documentContent = "DocumentContent"
-	runtimeConfig = "runtimeConfig"
+	documentContent  = "DocumentContent"
+	runtimeConfig    = "runtimeConfig"
 	cloudwatchPlugin = "aws:cloudWatch"
-	properties = "properties"
-	parameters = "Parameters"
+	properties       = "properties"
+	parameters       = "Parameters"
 )
 
 func (p *Processor) processMessage(msg *ssmmds.Message) {
