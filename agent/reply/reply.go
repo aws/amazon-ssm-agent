@@ -37,35 +37,36 @@ func PrepareReplyPayload(pluginID string,
 	pluginCounts := len(runtimeStatuses)
 
 	for _, pluginResult := range runtimeStatuses {
-		if pluginResult.Status == contracts.ResultStatusFailed {
-			documentStatus = contracts.ResultStatusFailed
-		}
 		runtimeStatusCounts[string(pluginResult.Status)]++
 	}
+	if pluginID == "" {
+		//	  New precedence order of plugin states
+		//	  Failed > TimedOut > Cancelled > Success > Cancelling > InProgress > Pending
+		//	  The above order is a contract between SSM service and agent and hence for the calculation of aggregate
+		//	  status of a (command) document, we follow the above precedence order.
+		//
+		//	  Note:
+		//	  A command could have been failed/cancelled even before a plugin started executing, during which pendingItems > 0
+		//	  but overallResult.Status would be Failed/Cancelled. That's the reason we check for OverallResult status along
+		//	  with number of failed/cancelled items.
+		//    TODO : We need to handle above to be able to send document traceoutput in case of document level errors.
+		if runtimeStatusCounts[string(contracts.ResultStatusSuccessAndReboot)] > 0 {
+			documentStatus = contracts.ResultStatusSuccessAndReboot
+		} else if runtimeStatusCounts[string(contracts.ResultStatusFailed)] > 0 {
+			documentStatus = contracts.ResultStatusFailed
+		} else if runtimeStatusCounts[string(contracts.ResultStatusTimedOut)] > 0 {
+			documentStatus = contracts.ResultStatusTimedOut
+		} else if runtimeStatusCounts[string(contracts.ResultStatusCancelled)] > 0 {
+			documentStatus = contracts.ResultStatusCancelled
+		} else if runtimeStatusCounts[string(contracts.ResultStatusSuccess)] == pluginCounts {
+			documentStatus = contracts.ResultStatusSuccess
+		} else {
+			documentStatus = contracts.ResultStatusInProgress
+		}
 
-	//	  New precedence order of plugin states
-	//	  Failed > TimedOut > Cancelled > Success > Cancelling > InProgress > Pending
-	//	  The above order is a contract between SSM service and agent and hence for the calculation of aggregate
-	//	  status of a (command) document, we follow the above precedence order.
-	//
-	//	  Note:
-	//	  A command could have been failed/cancelled even before a plugin started executing, during which pendingItems > 0
-	//	  but overallResult.Status would be Failed/Cancelled. That's the reason we check for OverallResult status along
-	//	  with number of failed/cancelled items.
-	//    TODO : We need to handle above to be able to send document traceoutput in case of document level errors.
-
-	if runtimeStatusCounts[string(contracts.ResultStatusSuccessAndReboot)] > 0 {
-		documentStatus = contracts.ResultStatusSuccessAndReboot
-	} else if runtimeStatusCounts[string(contracts.ResultStatusFailed)] > 0 {
-		documentStatus = contracts.ResultStatusFailed
-	} else if runtimeStatusCounts[string(contracts.ResultStatusTimedOut)] > 0 {
-		documentStatus = contracts.ResultStatusTimedOut
-	} else if runtimeStatusCounts[string(contracts.ResultStatusCancelled)] > 0 {
-		documentStatus = contracts.ResultStatusCancelled
-	} else if runtimeStatusCounts[string(contracts.ResultStatusSuccess)] == pluginCounts {
-		documentStatus = contracts.ResultStatusSuccess
 	} else {
 		documentStatus = contracts.ResultStatusInProgress
+
 	}
 
 	// RunCommand still requires to use plugin name as the Id, this will be cleaned during next release
