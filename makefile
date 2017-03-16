@@ -101,7 +101,7 @@ ifeq ($(BRAZIL_BUILD), true)
 	@echo "Update riputil file during pre-release"
 	$(COPY) $(BGO_SPACE)/../../env/RIPStaticConfig-1.4/runtime/configuration/rip/rip_static_config.json $(BGO_SPACE)/agent/s3util
 	go run $(BGO_SPACE)/agent/s3util/generator/riputil-gen.go
-	gofmt -w $(BGO_SPACE)/agent/s3util/generator/riputil-gen.go
+	gofmt -w $(BGO_SPACE)/agent/s3util/riputil.go
 endif
 
 .PHONY: build-linux
