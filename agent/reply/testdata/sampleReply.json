@@ -12,7 +12,7 @@
       "Success": 1
     }
   },
-  "documentStatus": "Success",
+  "documentStatus": "",
   "documentTraceOutput": "",
   "runtimeStatus": {
     "aws:runScript": {
