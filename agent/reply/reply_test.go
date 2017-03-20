@@ -58,12 +58,12 @@ func TestPrepareReplyPayload(t *testing.T) {
 	// run test cases
 	for _, tst := range testCases {
 		// call our method under test
-		docResult := PrepareReplyPayload("", tst.PluginRuntimeStatuses, tst.DateTime, tst.Agent, true)
+		docResult := PrepareReplyPayload("", tst.PluginRuntimeStatuses, tst.DateTime, tst.Agent)
 		tst.Result.DocumentStatus = contracts.ResultStatusSuccess
 		// check result
 		assert.Equal(t, tst.Result, docResult)
 		tst.Result.DocumentStatus = contracts.ResultStatusInProgress
-		docResult = PrepareReplyPayload("aws:runScript", tst.PluginRuntimeStatuses, tst.DateTime, tst.Agent, true)
+		docResult = PrepareReplyPayload("aws:runScript", tst.PluginRuntimeStatuses, tst.DateTime, tst.Agent)
 		assert.Equal(t, tst.Result, docResult)
 
 	}
