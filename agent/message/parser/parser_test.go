@@ -26,10 +26,12 @@ import (
 
 var sampleMessageFiles = []string{
 	"../testdata/sampleMsg.json",
+	"../testdata/sampleMsgVersion2_0.json",
 }
 
 var sampleMessageReplacedParamsFiles = []string{
 	"../testdata/sampleMsgReplacedParams.json",
+	"../testdata/sampleMsgReplacedParamsVersion2_0.json",
 }
 
 var logger = log.NewMockLog()
