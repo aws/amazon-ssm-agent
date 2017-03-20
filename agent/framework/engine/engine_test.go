@@ -175,7 +175,6 @@ func TestRunPluginsWithCancelFlagShutdown(t *testing.T) {
 	assert.Equal(t, pluginResults["plugin1"], outputs["plugin1"])
 	//empty struct
 	assert.Equal(t, pluginResults["plugin2"], outputs["plugin2"])
-
 }
 
 func TestRunPluginsWithInProgressDocuments(t *testing.T) {
@@ -270,3 +269,88 @@ func TestRunPluginsWithInProgressDocuments(t *testing.T) {
 //	plugins[pluginName].AssertExpectations(t)
 //	assert.Equal(t, pluginResults[pluginName], outputs[pluginName])
 //}
+
+func TestRunPluginsWithDuplicatePluginType(t *testing.T) {
+	pluginType := "aws:runShellScript"
+	pluginNames := []string{"plugin1", "plugin2"}
+	pluginConfigs := make(map[string]model.PluginState)
+	pluginResults := make(map[string]*contracts.PluginResult)
+	// create an instance of our test object
+	plugin := new(plugin.Mock)
+	pluginRegistry := runpluginutil.PluginRegistry{}
+	documentID := "TestDocument"
+
+	var cancelFlag task.CancelFlag
+	ctx := context.NewMockDefault()
+	defaultTime := time.Now()
+	defaultOutput := "output"
+	pluginConfigs2 := make([]model.PluginState, len(pluginNames))
+
+	for index, name := range pluginNames {
+
+		// create configuration for execution
+		config := contracts.Configuration{
+			PluginID: name,
+		}
+
+		// setup expectations
+		pluginConfigs[name] = model.PluginState{
+			Name:          pluginType,
+			Id:            name,
+			Configuration: config,
+		}
+
+		pluginResults[name] = &contracts.PluginResult{
+			Output:         name,
+			PluginName:     pluginType,
+			StartDateTime:  defaultTime,
+			EndDateTime:    defaultTime,
+			StandardOutput: defaultOutput,
+			StandardError:  defaultOutput,
+		}
+
+		if name == "plugin2" {
+			pluginResults[name].Status = contracts.ResultStatusSuccessAndReboot
+		}
+
+		plugin.On("Execute", ctx, pluginConfigs[name].Configuration, cancelFlag).Return(*pluginResults[name])
+		pluginRegistry[pluginType] = plugin
+
+		pluginConfigs2[index] = pluginConfigs[name]
+	}
+	called := 0
+	sendResponse := func(messageID string, pluginID string, results map[string]*contracts.PluginResult) {
+		for _, result := range results {
+			result.EndDateTime = defaultTime
+			result.StartDateTime = defaultTime
+		}
+		if called == 0 {
+			assert.Equal(t, results["plugin1"], pluginResults["plugin1"])
+		} else if called == 1 {
+			assert.Equal(t, results, pluginResults)
+		} else {
+			assert.Fail(t, "sendreply shouldn't been called more than twice")
+		}
+		called++
+	}
+	// call the code we are testing
+	outputs := RunPlugins(ctx, documentID, "", pluginConfigs2, pluginRegistry, sendResponse, nil, cancelFlag)
+
+	// fix the times expectation.
+	for _, result := range outputs {
+		result.EndDateTime = defaultTime
+		result.StartDateTime = defaultTime
+	}
+
+	// assert that the expectations were met
+	plugin.AssertExpectations(t)
+
+	ctx.AssertCalled(t, "Log")
+	assert.Equal(t, pluginResults["plugin1"], outputs["plugin1"])
+	assert.Equal(t, pluginResults["plugin2"], outputs["plugin2"])
+
+	assert.Equal(t, pluginType, outputs["plugin1"].PluginName)
+	assert.Equal(t, pluginType, outputs["plugin2"].PluginName)
+
+	assert.Equal(t, pluginResults, outputs)
+}

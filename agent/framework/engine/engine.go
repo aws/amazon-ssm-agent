@@ -151,8 +151,8 @@ func RunPlugins(
 		// set end time.
 		pluginOutputs[pluginID].EndDateTime = time.Now()
 		if sendReply != nil {
-			context.Log().Infof("Sending response on plugin completion: %v", pluginName)
-			sendReply(executionID, pluginName, pluginOutputs)
+			context.Log().Infof("Sending response on plugin completion: %v", pluginID)
+			sendReply(executionID, pluginID, pluginOutputs)
 		}
 		if updateAssoc != nil {
 			context.Log().Infof("Update association on plugin completion: %v", pluginID)

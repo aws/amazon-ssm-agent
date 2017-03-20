@@ -42,14 +42,17 @@ import (
 
 var sampleMessageFiles = []string{
 	"../testdata/sampleMsg.json",
+	"../testdata/sampleMsgVersion2_0.json",
 }
 
 var sampleMessageReplacedParamsFiles = []string{
 	"../testdata/sampleMsgReplacedParams.json",
+	"../testdata/sampleMsgReplacedParamsVersion2_0.json",
 }
 
 var sampleMessageReplyFiles = []string{
 	"../testdata/sampleReply.json",
+	"../testdata/sampleReplyVersion2_0.json",
 }
 
 var testMessageId = "03f44d19-90fe-44d4-bd4c-298b966a1e1a"
@@ -74,6 +77,9 @@ type TestCaseSendCommand struct {
 	// PluginStates stores the configurations that the plugins require to run.
 	// These configurations hav a slightly different structure from what we receive in the MDS message payload.
 	PluginStates map[string]model.PluginState
+
+	// PluginStatesArray stores the configurations that the plugins require to run for document version 2.0
+	PluginStatesArray []model.PluginState
 
 	// PluginResults stores the (unmarshalled) results that the plugins are expected to produce.
 	PluginResults map[string]*contracts.PluginResult
@@ -351,19 +357,45 @@ func generateTestCaseFromFiles(t *testing.T, messagePayloadFile string, messageR
 	//orchestrationRootDir is set to CommandID considering that orchestration root directory name will be empty in the test case.
 	orchestrationRootDir := getCommandID(*testCase.Msg.MessageId)
 
-	configs := getPluginConfigurations(payload.DocumentContent.RuntimeConfig,
-		orchestrationRootDir,
-		payload.OutputS3BucketName,
-		s3KeyPrefix,
-		*testCase.Msg.MessageId)
-
+	//configs := make(map[string]*contracts.Configuration)
 	testCase.PluginStates = make(map[string]model.PluginState)
-	for pluginName, config := range configs {
-		state := model.PluginState{}
-		state.Configuration = *config
-		state.Name = pluginName
-		state.Id = pluginName
-		testCase.PluginStates[pluginName] = state
+
+	// document 1.0 & 1.2
+	if payload.DocumentContent.RuntimeConfig != nil {
+		configs := make(map[string]*contracts.Configuration)
+		configs = getPluginConfigurationsFromRuntimeConfig(payload.DocumentContent.RuntimeConfig,
+			orchestrationRootDir,
+			payload.OutputS3BucketName,
+			s3KeyPrefix,
+			*testCase.Msg.MessageId)
+
+		for pluginName, config := range configs {
+			state := model.PluginState{}
+			state.Configuration = *config
+			state.Name = pluginName
+			state.Id = pluginName
+			testCase.PluginStates[pluginName] = state
+		}
+	}
+
+	// document 2.0
+	if payload.DocumentContent.MainSteps != nil {
+		configs := []*contracts.Configuration{}
+		configs = getPluginConfigurationsFromMainStep(payload.DocumentContent.MainSteps,
+			orchestrationRootDir,
+			payload.OutputS3BucketName,
+			s3KeyPrefix,
+			*testCase.Msg.MessageId)
+
+		pluginStatesArrays := make([]model.PluginState, len(configs))
+		for index, config := range configs {
+			state := model.PluginState{}
+			state.Configuration = *config
+			state.Name = config.PluginName
+			state.Id = config.PluginID
+			pluginStatesArrays[index] = state
+		}
+		testCase.PluginStatesArray = pluginStatesArrays
 	}
 
 	testCase.DocState = initializeSendCommandState(payload, orchestrationRootDir, s3KeyPrefix, testCase.Msg)
@@ -371,7 +403,7 @@ func generateTestCaseFromFiles(t *testing.T, messagePayloadFile string, messageR
 	return
 }
 
-func getPluginConfigurations(runtimeConfig map[string]*contracts.PluginConfig, orchestrationDir, s3BucketName, s3KeyPrefix, messageID string) (res map[string]*contracts.Configuration) {
+func getPluginConfigurationsFromRuntimeConfig(runtimeConfig map[string]*contracts.PluginConfig, orchestrationDir, s3BucketName, s3KeyPrefix, messageID string) (res map[string]*contracts.Configuration) {
 	res = make(map[string]*contracts.Configuration)
 	for pluginName, pluginConfig := range runtimeConfig {
 		res[pluginName] = &contracts.Configuration{
@@ -384,6 +416,26 @@ func getPluginConfigurations(runtimeConfig map[string]*contracts.PluginConfig, o
 			BookKeepingFileName:    getCommandID(messageID),
 			PluginName:             pluginName,
 			PluginID:               pluginName,
+		}
+	}
+	return
+}
+
+func getPluginConfigurationsFromMainStep(mainSteps []*contracts.InstancePluginConfig, orchestrationDir, s3BucketName, s3KeyPrefix, messageID string) (res []*contracts.Configuration) {
+	res = make([]*contracts.Configuration, len(mainSteps))
+	for index, instancePluginConfig := range mainSteps {
+		pluginId := instancePluginConfig.Name
+		pluginName := instancePluginConfig.Action
+		res[index] = &contracts.Configuration{
+			Settings:               instancePluginConfig.Settings,
+			Properties:             instancePluginConfig.Inputs,
+			OutputS3BucketName:     s3BucketName,
+			OutputS3KeyPrefix:      fileutil.BuildS3Path(s3KeyPrefix, pluginName),
+			OrchestrationDirectory: fileutil.BuildPath(orchestrationDir, pluginId),
+			MessageId:              messageID,
+			BookKeepingFileName:    getCommandID(messageID),
+			PluginName:             pluginName,
+			PluginID:               pluginId,
 		}
 	}
 	return
@@ -423,7 +475,14 @@ func testProcessSendCommandMessage(t *testing.T, testCase TestCaseSendCommand) {
 	pluginRunnerMock := new(MockedPluginRunner)
 	// mock.AnythingOfType("func(string, string, map[string]*plugin.Result)")
 
-	pluginStates := converter.ConvertPluginState(testCase.PluginStates)
+	pluginStates := []model.PluginState{}
+	// For document 2.0
+	if testCase.PluginStatesArray != nil {
+		pluginStates = testCase.PluginStatesArray
+	} else {
+		pluginStates = converter.ConvertPluginState(testCase.PluginStates)
+	}
+
 	pluginRunnerMock.On("RunPlugins", mock.Anything, *testCase.Msg.MessageId, pluginStates, mock.Anything, cancelFlag).Return(testCase.PluginResults)
 
 	// call method under test
