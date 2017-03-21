@@ -24,10 +24,11 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/statemanager/model"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/mock"
 )
 
 // TestRunPlugins tests that RunPluginsWithRegistry calls all the expected plugins.
-func TestRunPluginsWithRegistry(t *testing.T) {
+func TestRunPluginsWithNewDocument(t *testing.T) {
 	pluginNames := []string{"plugin1", "plugin2"}
 	pluginConfigs := make(map[string]model.PluginState)
 	pluginResults := make(map[string]*contracts.PluginResult)
@@ -35,7 +36,8 @@ func TestRunPluginsWithRegistry(t *testing.T) {
 	pluginRegistry := runpluginutil.PluginRegistry{}
 	documentID := "TestDocument"
 
-	var cancelFlag task.CancelFlag
+	var cancelFlag task.CancelFlag = task.NewChanneledCancelFlag()
+
 	ctx := context.NewMockDefault()
 	defaultTime := time.Now()
 	defaultOutput := "output"
@@ -57,7 +59,6 @@ func TestRunPluginsWithRegistry(t *testing.T) {
 			Id:            name,
 			Configuration: config,
 		}
-
 		pluginResults[name] = &contracts.PluginResult{
 			Output:         name,
 			PluginName:     name,
@@ -109,5 +110,163 @@ func TestRunPluginsWithRegistry(t *testing.T) {
 	assert.Equal(t, pluginResults["plugin2"], outputs["plugin2"])
 
 	assert.Equal(t, pluginResults, outputs)
-	time.Sleep(10 * time.Second)
+
 }
+
+//TODO cancelFlag should not fail subsequent plugins
+func TestRunPluginsWithCancelFlagShutdown(t *testing.T) {
+	pluginNames := []string{"plugin1", "plugin2"}
+	pluginStates := make([]model.PluginState, 2)
+	pluginResults := make(map[string]*contracts.PluginResult)
+	plugins := make(map[string]*plugin.Mock)
+	pluginRegistry := runpluginutil.PluginRegistry{}
+	documentID := "TestDocument2"
+
+	sendResponse := func(messageID string, pluginID string, results map[string]*contracts.PluginResult) {
+	}
+
+	var cancelFlag task.CancelFlag = task.NewChanneledCancelFlag()
+	ctx := context.NewMockDefault()
+	defaultTime := time.Now()
+
+	for index, name := range pluginNames {
+		plugins[name] = new(plugin.Mock)
+		config := contracts.Configuration{
+			PluginID: name,
+		}
+		pluginState := model.PluginState{
+			Name:          name,
+			Id:            name,
+			Configuration: config,
+		}
+
+		pluginResults[name] = &contracts.PluginResult{
+			Output:        name,
+			PluginName:    name,
+			StartDateTime: defaultTime,
+			EndDateTime:   defaultTime,
+		}
+		if name == "plugin1" {
+			pluginResults[name].Status = contracts.ResultStatusSuccess
+			plugins[name].On("Execute", ctx, pluginState.Configuration, cancelFlag).Run(func(args mock.Arguments) {
+				flag := args.Get(2).(task.CancelFlag)
+				flag.Set(task.ShutDown)
+			}).Return(*pluginResults[name])
+
+		} else {
+			pluginResults[name].Status = contracts.ResultStatusFailed
+			plugins[name].On("Execute", ctx, pluginState.Configuration, cancelFlag).Return(*pluginResults[name])
+		}
+		pluginStates[index] = pluginState
+		pluginRegistry[name] = plugins[name]
+	}
+
+	outputs := RunPlugins(ctx, documentID, "", pluginStates, pluginRegistry, sendResponse, nil, cancelFlag)
+
+	// fix the times expectation.
+	for _, result := range outputs {
+		result.EndDateTime = defaultTime
+		result.StartDateTime = defaultTime
+	}
+	for _, mockPlugin := range plugins {
+		mockPlugin.AssertExpectations(t)
+	}
+	ctx.AssertCalled(t, "Log")
+	assert.Equal(t, pluginResults["plugin1"], outputs["plugin1"])
+	//empty struct
+	assert.Equal(t, pluginResults["plugin2"], outputs["plugin2"])
+
+}
+
+func TestRunPluginsWithInProgressDocuments(t *testing.T) {
+	pluginNames := []string{"plugin1", "plugin2"}
+	pluginStates := make([]model.PluginState, 2)
+	pluginResults := make(map[string]*contracts.PluginResult)
+	plugins := make(map[string]*plugin.Mock)
+	pluginRegistry := runpluginutil.PluginRegistry{}
+	documentID := "TestDocument2"
+
+	sendResponse := func(messageID string, pluginID string, results map[string]*contracts.PluginResult) {
+	}
+
+	var cancelFlag task.CancelFlag = task.NewChanneledCancelFlag()
+	ctx := context.NewMockDefault()
+	defaultTime := time.Now()
+
+	for index, name := range pluginNames {
+		plugins[name] = new(plugin.Mock)
+		config := contracts.Configuration{
+			PluginID: name,
+		}
+		pluginState := model.PluginState{
+			Name:          name,
+			Id:            name,
+			Configuration: config,
+		}
+
+		pluginResults[name] = &contracts.PluginResult{
+			Output:        name,
+			Status:        contracts.ResultStatusSuccess,
+			PluginName:    name,
+			StartDateTime: defaultTime,
+			EndDateTime:   defaultTime,
+		}
+		//plugin1 has already been executed, plugin2 has not started yet
+		if name == "plugin1" {
+			pluginState.Result = *pluginResults[name]
+		} else {
+			pluginState.Result.Status = contracts.ResultStatusNotStarted
+			plugins[name].On("Execute", ctx, pluginState.Configuration, cancelFlag).Return(*pluginResults[name])
+		}
+		pluginStates[index] = pluginState
+		pluginRegistry[name] = plugins[name]
+	}
+
+	outputs := RunPlugins(ctx, documentID, "", pluginStates, pluginRegistry, sendResponse, nil, cancelFlag)
+	// fix the times expectation.
+	for _, result := range outputs {
+		result.EndDateTime = defaultTime
+		result.StartDateTime = defaultTime
+	}
+	for _, mockPlugin := range plugins {
+		mockPlugin.AssertExpectations(t)
+	}
+	assert.Equal(t, pluginResults["plugin1"], outputs["plugin1"])
+	assert.Equal(t, pluginResults["plugin2"], outputs["plugin2"])
+
+}
+
+//TODO this test wont work cuz we don't have a good way to mock lib functions
+//func TestEngineUnhandledPlugins(t *testing.T) {
+//	pluginName := "nonexited_plugin"
+//	pluginStates := make([]model.PluginState, 1)
+//	pluginResults := make(map[string]*contracts.PluginResult)
+//	plugins := make(map[string]*plugin.Mock)
+//	pluginRegistry := runpluginutil.PluginRegistry{}
+//	documentID := "TestDocument3"
+//
+//	sendResponse := func(messageID string, pluginID string, results map[string]*contracts.PluginResult) {
+//	}
+//
+//	var cancelFlag task.CancelFlag = task.NewChanneledCancelFlag()
+//	ctx := context.NewMockDefault()
+//
+//	plugins[pluginName] = new(plugin.Mock)
+//	config := contracts.Configuration{
+//		PluginID: pluginName,
+//	}
+//	pluginState := model.PluginState{
+//		Name:          pluginName,
+//		Id:            pluginName,
+//		Configuration: config,
+//	}
+//
+//	pluginResults[pluginName] = &contracts.PluginResult{
+//		Status:     contracts.ResultStatusFailed,
+//		PluginName: pluginName,
+//	}
+//	pluginStates[0] = pluginState
+//	outputs := RunPlugins(ctx, documentID, "", pluginStates, pluginRegistry, sendResponse, nil, cancelFlag)
+//	plugins[pluginName].AssertExpectations(t)
+//	assert.Equal(t, pluginResults[pluginName], outputs[pluginName])
+//}

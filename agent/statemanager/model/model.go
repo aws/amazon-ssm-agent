@@ -39,7 +39,6 @@ type PluginState struct {
 	Configuration contracts.Configuration
 	Name          string
 	Result        contracts.PluginResult
-	HasExecuted   bool
 	Id            string
 }
 
