@@ -125,7 +125,6 @@ func initializeSendCommandStateWithRuntimeConfig(
 	for key, value := range pluginConfigurations {
 		var plugin stateModel.PluginState
 		plugin.Configuration = *value
-		plugin.HasExecuted = false
 		plugin.Id = key
 		plugin.Name = key
 		pluginsInfo[key] = plugin
@@ -160,7 +159,6 @@ func initializeSendCommandStateWithMainStep(
 
 		var plugin stateModel.PluginState
 		plugin.Configuration = config
-		plugin.HasExecuted = false
 		plugin.Id = config.PluginID
 		plugin.Name = config.PluginName
 		instancePluginsInfo[index] = plugin

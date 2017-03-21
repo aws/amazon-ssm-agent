@@ -119,7 +119,6 @@ func ParseDocument(context context.T, documentRaw []byte, orchestrationDir strin
 		plugin.Id = value.PluginID
 		plugin.Name = value.PluginName
 		plugin.Configuration = *value
-		plugin.HasExecuted = false
 		pluginsInfo = append(pluginsInfo, plugin)
 	}
 
