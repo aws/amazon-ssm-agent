@@ -172,14 +172,6 @@ func (p *Processor) processInProgressDocuments(instanceID string) {
 
 		// increment the command run count
 		docState.DocumentInformation.RunCount++
-		// Update reboot status
-		for index, plugin := range docState.InstancePluginsInformation {
-			if plugin.HasExecuted && plugin.Result.Status == contracts.ResultStatusSuccessAndReboot {
-				log.Debugf("plugin %v has completed a reboot. Setting status to InProgress to resume the work.", plugin.Name)
-				plugin.Result.Status = contracts.ResultStatusInProgress
-				docState.InstancePluginsInformation[index] = plugin
-			}
-		}
 
 		statemanager.PersistData(log, docState.DocumentInformation.DocumentID, instanceID, appconfig.DefaultLocationOfCurrent, docState)
 

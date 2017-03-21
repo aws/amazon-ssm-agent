@@ -42,7 +42,6 @@ func TestParseDocument_Valid(t *testing.T) {
 	assert.Equal(t, 1, len(pluginsInfo))
 
 	pluginInfoTest := pluginsInfo[0]
-	assert.False(t, pluginInfoTest.HasExecuted)
 	assert.Nil(t, pluginInfoTest.Result.Error)
 	assert.Equal(t, filepath.Join(testOrchDir, "awsrunPowerShellScript"), pluginInfoTest.Configuration.OrchestrationDirectory)
 	assert.Equal(t, testS3Bucket, pluginInfoTest.Configuration.OutputS3BucketName)
