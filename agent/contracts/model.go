@@ -20,7 +20,6 @@ package contracts
 type ResultStatus string
 
 const (
-	ResultStatusUnknown          ResultStatus = "Unknown"
 	ResultStatusNotStarted       ResultStatus = "NotStarted"
 	ResultStatusInProgress       ResultStatus = "InProgress"
 	ResultStatusSuccess          ResultStatus = "Success"
@@ -34,7 +33,6 @@ const (
 // MergeResultStatus takes two ResultStatuses (presumably from sub-tasks) and decides what the overall task status should be
 func MergeResultStatus(current ResultStatus, new ResultStatus) (merged ResultStatus) {
 	orderedResultStatus := [...]ResultStatus{
-		ResultStatusUnknown,
 		ResultStatusSuccess,
 		ResultStatusSuccessAndReboot,
 		ResultStatusPassedAndReboot,

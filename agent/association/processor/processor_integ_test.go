@@ -80,7 +80,6 @@ func TestParseAssociationWithAssociationVersion1_2(t *testing.T) {
 	config := contracts.Configuration{}
 	var plugin stateModel.PluginState
 	plugin.Configuration = config
-	plugin.HasExecuted = false
 	plugin.Id = pluginName
 	pluginsInfo[pluginName] = plugin
 
@@ -154,7 +153,6 @@ func TestParseAssociationWithAssociationVersion2_0(t *testing.T) {
 	name0 := "runPowerShellScript1"
 	var plugin0 stateModel.PluginState
 	plugin0.Configuration = contracts.Configuration{}
-	plugin0.HasExecuted = false
 	plugin0.Id = name0
 	plugin0.Name = action0
 	instancePluginsInfo[0] = plugin0
@@ -163,7 +161,6 @@ func TestParseAssociationWithAssociationVersion2_0(t *testing.T) {
 	name1 := "runPowerShellScript2"
 	var plugin1 stateModel.PluginState
 	plugin1.Configuration = contracts.Configuration{}
-	plugin1.HasExecuted = false
 	plugin1.Id = name1
 	plugin1.Name = action1
 	instancePluginsInfo[1] = plugin1

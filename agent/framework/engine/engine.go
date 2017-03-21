@@ -52,31 +52,45 @@ func RunPlugins(
 	pluginOutputs = make(map[string]*contracts.PluginResult)
 
 	for _, pluginState := range plugins {
-		pluginState.Result.PluginName = pluginState.Name
-		pluginOutput := pluginState.Result
-		pluginOutputs[pluginState.Id] = &pluginOutput
-	}
-
-	for _, pluginState := range plugins {
 		pluginID := pluginState.Id     // the identifier of the plugin
 		pluginName := pluginState.Name // the name of the plugin
-		if pluginState.HasExecuted {
-			context.Log().Debugf(
-				"Skipping execution of Plugin - %v of document - %v since it has already executed.",
+		pluginOutput := pluginState.Result
+		pluginOutput.PluginName = pluginName
+		pluginOutputs[pluginID] = &pluginOutput
+		switch pluginOutput.Status {
+		//TODO properly initialize the plugin status
+		case "":
+			context.Log().Debugf("plugin - %v of document - %v has empty state, initialize as NotStarted",
+				pluginName,
+				executionID)
+			pluginOutput.StartDateTime = time.Now()
+			pluginOutput.Status = contracts.ResultStatusNotStarted
+
+		case contracts.ResultStatusNotStarted, contracts.ResultStatusInProgress:
+			context.Log().Debugf("plugin - %v of document - %v status %v",
+				pluginName,
+				executionID,
+				pluginOutput.Status)
+			pluginOutput.StartDateTime = time.Now()
+
+		case contracts.ResultStatusSuccessAndReboot:
+			context.Log().Debugf("plugin - %v of document - %v just experienced reboot, reset to InProgress...",
+				pluginName,
+				executionID)
+			pluginOutput.Status = contracts.ResultStatusInProgress
+
+		default:
+			context.Log().Debugf("plugin - %v of document - %v already executed, skipping...",
 				pluginName,
 				executionID)
 			continue
 		}
+
 		context.Log().Debugf("Executing plugin - %v of document - %v", pluginName, executionID)
 
 		// populate plugin start time and status
 		configuration := pluginState.Configuration
 
-		pluginOutputs[pluginID] = &contracts.PluginResult{
-			PluginName:    pluginName,
-			Status:        contracts.ResultStatusInProgress,
-			StartDateTime: time.Now(),
-		}
 		if configuration.OutputS3BucketName != "" {
 			pluginOutputs[pluginID].OutputS3BucketName = configuration.OutputS3BucketName
 			if configuration.OutputS3KeyPrefix != "" {
@@ -130,21 +144,21 @@ func RunPlugins(
 
 			if r.Status == contracts.ResultStatusSuccessAndReboot {
 				context.Log().Debug("Requesting reboot...")
-				//TODO care about true/false when we have more reboot types in future
+				//TODO move this into plugin.Execute()?
 				rebooter.RequestPendingReboot(context.Log())
 			}
 		}
 		// set end time.
 		pluginOutputs[pluginID].EndDateTime = time.Now()
-		log := context.Log()
 		if sendReply != nil {
-			log.Infof("Sending response on plugin completion: %v", pluginName)
+			context.Log().Infof("Sending response on plugin completion: %v", pluginName)
 			sendReply(executionID, pluginName, pluginOutputs)
 		}
 		if updateAssoc != nil {
-			log.Infof("Update association on plugin completion: %v", pluginID)
-			updateAssoc(log, executionID, times.ToIso8601UTC(time.Now()), pluginOutputs, totalNumberOfActions)
+			context.Log().Infof("Update association on plugin completion: %v", pluginID)
+			updateAssoc(context.Log(), executionID, times.ToIso8601UTC(time.Now()), pluginOutputs, totalNumberOfActions)
 		}
+		//TODO handle cancelFlag here
 		if pluginHandlerFound && r.Status == contracts.ResultStatusSuccessAndReboot {
 			// do not execute the the next plugin
 			break

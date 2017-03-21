@@ -151,23 +151,6 @@ func (p *Processor) ExecutePendingDocument(docState *model.DocumentState) {
 	}
 }
 
-// loadPluginConfigurations returns plugin configurations that hasn't been executed
-func loadPluginConfigurations(log logger.T, plugins map[string]model.PluginState, commandID string) map[string]*contracts.Configuration {
-	configs := make(map[string]*contracts.Configuration)
-
-	for pluginName, pluginConfig := range plugins {
-		if pluginConfig.HasExecuted {
-			log.Debugf("skipping execution of Plugin - %v of command - %v since it has already executed.", pluginName, commandID)
-			continue
-		}
-		log.Debugf("Plugin - %v of command - %v will be executed", pluginName, commandID)
-		config := pluginConfig.Configuration
-		configs[pluginName] = &config
-	}
-
-	return configs
-}
-
 // processSendCommandMessage processes a single send command message received from MDS.
 func (p *Processor) processSendCommandMessage(context context.T,
 	mdsService service.Service,
@@ -208,9 +191,10 @@ func (p *Processor) processSendCommandMessage(context context.T,
 	log.Debug("Sending reply on message completion ", outputs)
 	sendResponse(newCmdState.DocumentInformation.MessageID, "", outputs)
 
-	// Skip sending response when the document requires a reboot
+	// Skip move docState since the document has not finshed yet
+	// TODO cancelFlag should be handled here
 	if newCmdState.DocumentInformation.DocumentStatus == contracts.ResultStatusSuccessAndReboot {
-		log.Debugf("skipping moving interimState file %v since the document requires a reboot", newCmdState.DocumentInformation.CommandID)
+		log.Infof("document %v did not finish up execution, need to resume", newCmdState.DocumentInformation.MessageID)
 		return
 	}
 

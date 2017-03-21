@@ -194,7 +194,6 @@ func buildPluginsInfo(
 		for _, config := range pluginConfigurations {
 			var plugin stateModel.PluginState
 			plugin.Configuration = *config
-			plugin.HasExecuted = false
 			plugin.Id = config.PluginID
 			plugin.Name = config.PluginName
 			pluginsInfo = append(pluginsInfo, plugin)
@@ -227,7 +226,6 @@ func buildPluginsInfo(
 
 			var plugin stateModel.PluginState
 			plugin.Configuration = config
-			plugin.HasExecuted = false
 			plugin.Id = config.PluginID
 			plugin.Name = config.PluginName
 			instancePluginsInfo[index] = plugin
