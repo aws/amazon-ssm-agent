@@ -37,6 +37,7 @@ package version
 // Version is the version of the Agent
 const Version = "{{.Version}}"
 `
+const releaseNotesFile = "RELEASENOTES.md"
 
 type versionInfo struct {
 	Version string
@@ -107,4 +108,22 @@ func main() {
 			log.Fatalf("Error applying template: %v", err)
 		}
 	}
+
+	// Adding the version generated to the release notes
+	releaseNoteInFile, err := ioutil.ReadFile(filepath.Join(releaseNotesFile))
+	if err != nil {
+		log.Fatalf("Unable to open RELEASENOTES.md file ")
+	}
+
+	releaseNoteLines := strings.Split(string(releaseNoteInFile), "\n")
+
+	//Adding version to the top of the file
+	releaseNoteLines[0] = versionStr
+
+	releaseNoteOutFile := strings.Join(releaseNoteLines, "\n")
+
+	if err = ioutil.WriteFile(filepath.Join(releaseNotesFile), []byte(releaseNoteOutFile), appconfig.ReadWriteAccess); err != nil {
+		log.Fatalf("Error writing to RELEASENOTES.md file. %v", err)
+	}
+
 }
