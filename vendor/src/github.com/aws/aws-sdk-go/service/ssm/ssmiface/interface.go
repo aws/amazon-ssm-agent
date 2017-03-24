@@ -45,7 +45,7 @@ import (
 //        // mock response/functionality
 //    }
 //
-//    func TestMyFunc(t *testing.T) {
+//    TestMyFunc(t *testing.T) {
 //        // Setup Test
 //        mockSvc := &mockSSMClient{}
 //
