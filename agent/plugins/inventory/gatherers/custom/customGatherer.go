@@ -50,7 +50,7 @@ const (
 	// AttributeNameLengthLimit represents custom inventory entry's attribute name length limit
 	AttributeNameLengthLimit = 64
 	// AttributeValueLengthLimit represents custom inventory entry's attribute value length limit
-	AttributeValueLengthLimit = 1024
+	AttributeValueLengthLimit = 4096
 )
 
 // T represents custom gatherer
@@ -296,8 +296,9 @@ func validateContentEntryAttributes(log log.T, attributes map[string]interface{}
 		if vStr, ok := v.(string); ok {
 			vLen := len(vStr)
 			if vLen > AttributeValueLengthLimit {
-				err = fmt.Errorf("Custom inventory (%v) has value's length: %v, "+
-					"which exceeded the limit: %v",
+				err = fmt.Errorf("Custom inventory attribute (%v)'s value length (%v) "+
+					"exceeded the limit (%v). Please either reduce the length or split the attribute "+
+					"into multiple attributes.",
 					a,
 					vLen,
 					AttributeValueLengthLimit)
@@ -305,8 +306,8 @@ func validateContentEntryAttributes(log log.T, attributes map[string]interface{}
 				return
 			}
 		} else {
-			err = fmt.Errorf("Custom inventory attribute (%v)'s value (%v) has type : %v, "+
-				"which is not supported, only string type is supported.",
+			err = fmt.Errorf("Custom inventory attribute (%v)'s value (%v)'s type (%v) is not supported. "+
+				"Only string type is supported, suggest to use empty string for Nil or Null value.",
 				a,
 				v,
 				reflect.TypeOf(v))
