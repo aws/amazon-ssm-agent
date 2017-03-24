@@ -239,7 +239,7 @@ func parseSendCommandMessage(context context.T, msg *ssmmds.Message, messagesOrc
 	//Search for "DocumentContent" > "runtimeConfig" > "aws:cloudWatch" > "properties" which has the cloudwatch
 	// config file and scrub the credentials, if present
 	obj := parsedContentJson.Search(documentContent, runtimeConfig, cloudwatchPlugin, properties).String()
-	if obj != "" {
+	if obj != "{}" {
 		//This will be true only for aws:cloudwatch
 		stripConfig := strings.Replace(strings.Replace(strings.Replace(obj, "\\t", "", -1), "\\n", "", -1), "\\", "", -1)
 		stripConfig = strings.TrimSuffix(strings.TrimPrefix(stripConfig, "\""), "\"")
