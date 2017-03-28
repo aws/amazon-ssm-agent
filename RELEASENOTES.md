@@ -1,4 +1,8 @@
 Latest
+===============
+- Fixed issues with agent starting before network is ready on systemd systems. 
+
+2.0.716.0
 ================
 - Pass proxy settings to domain join and CloudWatch
 - Various bug fixes
