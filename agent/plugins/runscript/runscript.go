@@ -149,7 +149,7 @@ func (p *Plugin) runCommands(log log.T, pluginID string, pluginInput RunScriptPl
 	log.Debugf("Writing commands %v to file %v", pluginInput, scriptPath)
 
 	// Create script file
-	if err = pluginutil.CreateScriptFile(log, scriptPath, pluginInput.RunCommand); err != nil {
+	if err = pluginutil.CreateScriptFileUTF8(log, scriptPath, pluginInput.RunCommand); err != nil {
 		out.MarkAsFailed(log, fmt.Errorf("failed to create script file. %v", err))
 		return
 	}

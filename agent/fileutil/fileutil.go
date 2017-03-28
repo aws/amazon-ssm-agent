@@ -188,6 +188,18 @@ func WriteIntoFileWithPermissions(absolutePath, content string, perm os.FileMode
 	return
 }
 
+// WriteIntoFileWithPermissions writes into file with given file mode permissions
+func WriteIntoFileWithPermissionsUTF8(absolutePath, content string, perm os.FileMode) (result bool, err error) {
+	result = true
+	utf8ByteOrderMark := []byte{0xEF, 0xBB, 0xBF}
+	err = ioUtil.WriteFile(absolutePath, append(utf8ByteOrderMark, []byte(content)...), perm)
+	if err != nil {
+		err = fmt.Errorf("couldn't write into file - %v", err)
+		result = false
+	}
+	return
+}
+
 // IsDirEmpty returns true if the given directory is empty else it returns false
 func IsDirEmpty(location string) (bool, error) {
 	f, err := os.Open(location)
