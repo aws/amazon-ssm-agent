@@ -184,6 +184,18 @@ func CreateScriptFile(log log.T, scriptPath string, runCommand []string) (err er
 	return
 }
 
+// CreateScriptFileUTF8 creates a script containing the given commands.
+func CreateScriptFileUTF8(log log.T, scriptPath string, runCommand []string) (err error) {
+	// write source commands to file
+	_, err = fileutil.WriteIntoFileWithPermissionsUTF8(scriptPath, strings.Join(runCommand, "\n")+"\n", appconfig.ReadWriteExecuteAccess)
+	if err != nil {
+		log.Errorf("failed to write runcommand scripts to file %v, err %v", scriptPath, err)
+		return
+	}
+
+	return
+}
+
 // DownloadFileFromSource downloads file from source
 func DownloadFileFromSource(log log.T, source string, sourceHash string, sourceHashType string) (artifact.DownloadOutput, error) {
 	// download source and verify its integrity
