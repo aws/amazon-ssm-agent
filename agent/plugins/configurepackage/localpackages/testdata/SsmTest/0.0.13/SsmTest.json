@@ -1,0 +1,10 @@
+{
+    "name": "SsmTest",
+    "platform": "windows",
+    "architecture": "amd64",
+    "version": "0.0.13",
+    "appname": "X-SSM_Test-Y",
+    "apppublisher": "Amazon AWS SSM",
+    "appreferenceurl": "http://www.amazon.com",
+    "apptype": "Test"
+}
