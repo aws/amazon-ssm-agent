@@ -35,6 +35,10 @@ const (
 	SizeLimitKBPerInventoryType = 200
 	// TotalSizeLimitKB represents size limit in KB for 1 PutInventory API call
 	TotalSizeLimitKB = 1024
+	// Standard name for 64-bit architecture
+	Arch64Bit = "x86_64"
+	// Standard name for 32-bit architecture
+	Arch32Bit = "i386"
 )
 
 // Item encapsulates an inventory item
@@ -122,6 +126,18 @@ type CustomInventoryItem struct {
 	TypeName      string
 	SchemaVersion string
 	Content       interface{}
+}
+
+// FormatArchitecture converts different architecture values to the standard inventory value
+func FormatArchitecture(arch string) string {
+	arch = strings.ToLower(strings.TrimSpace(arch))
+	if arch == "amd64" {
+		return Arch64Bit
+	}
+	if arch == "386" {
+		return Arch32Bit
+	}
+	return arch
 }
 
 // ByNamePublisherVersion implements sorting ApplicationData elements by name (case insensitive) then by publisher (case insensitive) then version (by component)

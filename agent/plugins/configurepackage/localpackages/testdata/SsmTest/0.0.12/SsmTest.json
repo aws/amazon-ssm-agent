@@ -1,0 +1,6 @@
+{
+    "name": "NotSsmTest",
+    "platform": "windows",
+    "architecture": "amd64",
+    "version": "0.0.12"
+}
