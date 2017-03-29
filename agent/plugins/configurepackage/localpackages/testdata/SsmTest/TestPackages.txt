@@ -1,0 +1,16 @@
+Package versions for SsmTest package, all windows/amd64
+0.0.1 - simple install text file and copy to new name, no uninstall.json
+0.0.2 - invalid package name (but directory exists)
+0.0.3 - corrupted compressed file (with correct name)
+0.0.4 - install.json fails
+0.0.5 - uninstall.json contains reboot
+0.0.6 - install.json contains reboot
+0.0.7 - uninstall.json fails (should still be possible to upgrade from this version)
+0.0.8 - validate.json fails
+0.0.9 - install.json contains reboot, validate.json succeeds (should look a lot like 0.0.6)
+0.0.10 - corrupted manifest
+0.0.11 - corrupted install.json action
+0.0.12 - manifest name mismatch
+0.0.13 - contains all optional inventory values
+0.1.2 - simple success case (but should not be considered latest version)
+0.1.10 - simple success case (used to verify that .10 > .2 when requesting latest version)
