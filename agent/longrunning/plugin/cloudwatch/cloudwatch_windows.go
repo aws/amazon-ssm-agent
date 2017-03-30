@@ -17,18 +17,19 @@
 package cloudwatch
 
 import (
+	"bytes"
 	"errors"
 	"fmt"
 	"io/ioutil"
 	"os"
 	"path/filepath"
-	"strconv"
 	"strings"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/executers"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
+	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	logger "github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/platform"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/pluginutil"
@@ -48,7 +49,7 @@ type Plugin struct {
 const (
 	//TODO: Change the way the output is being returned to return exit codes
 	IsProcessRunning = "$ProcessActive = Get-Process -Name %v -ErrorAction SilentlyContinue ; $ProcessActive -ne $null"
-	GetPidOfExe      = "$ProcessActive = Get-Process -Name %v -ErrorAction SilentlyContinue ; if ($ProcessActive -ne $null) {$ProcessActive.Id} else {'Process not found'}"
+	GetPidOfExe      = "Get-Process -Name %v -ErrorAction SilentlyContinue | ConvertTo-Json"
 	ProcessNotFound  = "Process not found"
 	// CloudWatchProcessName represents CloudWatch Exe Absolute Path
 	CloudWatchProcessName = "AWS.CloudWatch"
@@ -57,6 +58,12 @@ const (
 	// CloudWatchFolderName represents the default folder name for cloud watch plugin
 	CloudWatchFolderName = "awsCloudWatch"
 )
+
+// CloudwatchProcessInfo is a structure for info returned by Cloudwatch process
+type CloudwatchProcessInfo struct {
+	ProcessName string `json:"ProcessName"`
+	CWId        int    `json:"Id"`
+}
 
 // Assign method to global variables to allow unittest to override
 // TODO change these to deps.go later
@@ -152,9 +159,9 @@ func (p *Plugin) Start(context context.T, configuration string, orchestrationDir
 
 	//check if cloudwatch.exe is already running or not
 	if p.IsCloudWatchExeRunning(log, p.DefaultHealthCheckOrchestrationDir, p.DefaultHealthCheckOrchestrationDir, cancelFlag) {
-		log.Debug("Cloudwatch executable already running. Starting to terminate the process %v", p.Process.Pid)
+		log.Debug("Cloudwatch executable is already running. Starting to terminate the process")
 		if err = p.Stop(context, cancelFlag); err != nil {
-			// not stop successfully
+			// not stopped successfully
 			log.Errorf("Unable to disable current running cloudwatch. error: %s", err.Error())
 			return
 		}
@@ -232,35 +239,36 @@ func (p *Plugin) Start(context context.T, configuration string, orchestrationDir
 func (p *Plugin) Stop(context context.T, cancelFlag task.CancelFlag) (err error) {
 	log := context.Log()
 
-	log.Debug("PID of Cloudwatch is ", p.Process.Pid)
-	//By default p.Process.Pid = 0 (when struct is not assigned any value)
-	//For windows, pid = 0 means Idle process -> serious things can go wrong we even try to kill that process
-	var pid int
-	//If p.Process.Pid == 0, get process id of cloudwatch.exe
-	if p.Process.Pid == 0 {
-		log.Infof("Pid = 0 in windows is system idle process and is definitely Cloudwatch.exe. Getting Pid of Cloudwatch.exe")
-
-		pid, err = p.GetPidOfCloudWatchExe(log,
-			p.DefaultHealthCheckOrchestrationDir,
-			p.DefaultHealthCheckOrchestrationDir,
-			task.NewChanneledCancelFlag())
-		if err != nil {
-			log.Infof("Can't stop cloudwatch because unable to find Pid of cloudwatch.exe. It might not be even running.")
-			return nil
+	var cwProcInfo []CloudwatchProcessInfo
+	if cwProcInfo, err = p.GetProcInfoOfCloudWatchExe(log,
+		p.DefaultHealthCheckOrchestrationDir,
+		p.DefaultHealthCheckOrchestrationDir,
+		task.NewChanneledCancelFlag()); err != nil {
+		log.Errorf("Can't stop cloudwatch because unable to find Pid of cloudwatch.exe.")
+		return err
+	}
+	log.Info("The number of cloudwatch processes running are ", len(cwProcInfo))
+	var processKillError error
+	processKillError = nil
+	for _, cloudwatchInfo := range cwProcInfo {
+		p.Process.Pid = cloudwatchInfo.CWId
+		log.Debug("PID of Cloudwatch is ", p.Process.Pid)
+		if err = p.Process.Kill(); err != nil {
+			// Continuing here without returning to kill whatever processes can be killed even if something goes wrong.
+			// return on error later
+			log.Errorf("Encountered error while trying to kill the process %v : %s", p.Process.Pid, err)
+			processKillError = err
+		} else {
+			log.Infof("Successfully killed the process %v", p.Process.Pid)
 		}
-
-		p.Process.Pid = pid
 	}
-
-	if err = p.Process.Kill(); p.IsRunning(context) || err != nil {
-		log.Errorf("Encountered error while trying to kill the process %v : %s", p.Process.Pid, err.Error())
+	if p.IsRunning(context) || processKillError != nil {
+		log.Errorf("There was an error while killing Cloudwatch.")
+		return processKillError
 	} else {
-		log.Debugf("No cloudwatch plugin is running currently.")
-		log.Infof("Successfully killed the process %v", p.Process.Pid)
-		return nil
+		log.Infof("All existing Cloudwatch processes killed successfully.")
 	}
-
-	return err
+	return nil
 }
 
 // IsCloudWatchExeRunning runs a powershell script to determine if the given process is running
@@ -270,36 +278,14 @@ func (p *Plugin) IsCloudWatchExeRunning(log logger.T, workingDirectory, orchestr
 		script (using Get-Process) to get process details in Windows.
 	*/
 	//constructing the powershell command to execute
-	var cmds []string
+	var commandArguments []string
 	var err error
 	cloudwatchProcessName := CloudWatchProcessName
 	cmdIsExeRunning := fmt.Sprintf(IsProcessRunning, cloudwatchProcessName)
-	log.Debugf("Final cmd to check if process is still running : %s", cmdIsExeRunning)
-	cmds = append(cmds, cmdIsExeRunning)
+	log.Debugf("Final cmd to check if process is still running is", cmdIsExeRunning)
+	commandArguments = append(commandArguments, cmdIsExeRunning)
 
-	//running commands to see if process exists or not
-	orchestrationDir = filepath.Join(orchestrationDir, "IsExeRunning")
-
-	// create orchestration dir if needed
-	if !fileExist(orchestrationDir) {
-		if err = fileutil.MakeDirsWithExecuteAccess(orchestrationDir); err != nil {
-			log.Errorf("Encountered error while creating orchestrationDir directory %s:%s", orchestrationDir, err.Error())
-			return false
-		}
-	}
-
-	//create script path
-	scriptPath := filepath.Join(orchestrationDir, appconfig.RunCommandScriptName)
-
-	// Create script file
-	if err = createScript(log, scriptPath, cmds); err != nil {
-		log.Errorf("Failed to create script file : %v. Returning False because of this.", err)
-		return false
-	}
-
-	//construct command arguments
-	commandArguments := append(pluginutil.GetShellArguments(), scriptPath, appconfig.ExitCodeTrap)
-
+	// execute the command
 	var commandOutput string
 	if commandOutput, err = p.runPowerShell(log, workingDirectory, cancelFlag, commandArguments); err != nil {
 		//TODO Returning false here because we are unsure if Cloudwatch is running. Trying to kill PID will lead to error. Handle this situation
@@ -312,7 +298,6 @@ func (p *Plugin) IsCloudWatchExeRunning(log logger.T, workingDirectory, orchestr
 		log.Infof("Process %s is running", cloudwatchProcessName)
 		return true
 	} else if !strings.Contains(commandOutput, "False") {
-		//TODO: Handle the situation so that multiple Cloudwatch.exe never run
 		log.Infof("Multiple processes of %s running. Command output is ", cloudwatchProcessName, commandOutput)
 		return true
 	}
@@ -321,59 +306,33 @@ func (p *Plugin) IsCloudWatchExeRunning(log logger.T, workingDirectory, orchestr
 	return false
 }
 
-// GetPidOfCloudWatchExe runs a powershell script to determine the process ID of the Cloudwatch process
-func (p *Plugin) GetPidOfCloudWatchExe(log logger.T, orchestrationDir, workingDirectory string, cancelFlag task.CancelFlag) (int, error) {
-	var err error
+// GetProcInfoOfCloudWatchExe runs a powershell script to determine the process ID of the Cloudwatch process. It should be called only after confirming that cloudwatch is running
+func (p *Plugin) GetProcInfoOfCloudWatchExe(log logger.T, orchestrationDir, workingDirectory string, cancelFlag task.CancelFlag) (cwProcInfo []CloudwatchProcessInfo, err error) {
 	//constructing the powershell command to execute
-	var cmds []string
-	cloudwatchProcessName := CloudWatchProcessName
-	cmdIsExeRunning := fmt.Sprintf(GetPidOfExe, cloudwatchProcessName)
-	log.Debugf("Final cmd to check if process is still running is %s", cmdIsExeRunning)
-	cmds = append(cmds, cmdIsExeRunning)
+	var commandArguments []string
+	cmdGetPidOfCW := fmt.Sprintf(GetPidOfExe, CloudWatchProcessName)
+	log.Debugf("Command to get the PID info is ", cmdGetPidOfCW)
+	commandArguments = append(commandArguments, cmdGetPidOfCW)
 
-	//running commands to see if process exists or not
-	orchestrationDir = filepath.Join(orchestrationDir, "GetPidOfExe")
-
-	// create orchestration dir if needed
-	if !fileExist(orchestrationDir) {
-		if err = fileutil.MakeDirsWithExecuteAccess(orchestrationDir); err != nil {
-			log.Errorf("Encountered error while creating orchestrationDir directory %s:%s", orchestrationDir, err.Error())
-			return 0, errors.New(fmt.Sprintf("Couldn't create orchestrationDirectory to find Pid of cloudwatch"))
-		}
-	}
-
-	//create script path
-	scriptPath := filepath.Join(orchestrationDir, appconfig.RunCommandScriptName)
-
-	// Create script file
-	if err = createScript(log, scriptPath, cmds); err != nil {
-		log.Errorf("Failed to create script file : %v. Returning False because of this.", err)
-		return 0, errors.New(fmt.Sprintf("Couldn't create script file to find Pid of cloudwatch"))
-	}
-
-	//construct command arguments
-	commandArguments := append(pluginutil.GetShellArguments(), scriptPath, appconfig.ExitCodeTrap)
-
-	// read (a prefix of) the standard output/error
+	// execute the command
 	var commandOutput string
 	if commandOutput, err = p.runPowerShell(log, workingDirectory, cancelFlag, commandArguments); err != nil {
-		return 0, err
+		return cwProcInfo, err
 	}
 
-	//Parse pid from the output
-	log.Debugf("The output of PID is %s", commandOutput)
-	if strings.Contains(commandOutput, ProcessNotFound) {
-		log.Infof("Process %s is not running", cloudwatchProcessName)
-		return 0, errors.New(fmt.Sprintf("%s is not running", cloudwatchProcessName))
-	} else {
-		if pid, err := strconv.Atoi(strings.TrimSpace(commandOutput)); err != nil {
-			log.Infof("Unable to get parse pid from command output: %s", commandOutput)
-			return 0, err
-		} else {
-			log.Infof("Pid of cloudwatch process running is %s", pid)
-			return pid, nil
-		}
+	//Since output is returned as a Json, checking to see if output is not in the form of an array
+	//Output will be in the form of an array only in case of multiple Cloudwatch instances running
+	if !strings.HasPrefix(commandOutput, "[") && !strings.HasSuffix(commandOutput, "]") {
+		commandOutput = "[" + commandOutput + "]"
 	}
+
+	//Unmarshal the result into json obj.
+	if err = jsonutil.Unmarshal(commandOutput, &cwProcInfo); err != nil {
+		log.Errorf("Error unmarshalling Cloudwatch process information is %s", err)
+		return cwProcInfo, err
+	}
+
+	return cwProcInfo, err
 }
 
 // runPowerShell is a wrapper around Execute command to run powershell script
@@ -385,23 +344,20 @@ func (p *Plugin) runPowerShell(log logger.T, workingDirectory string, cancelFlag
 	//If the stdoutFile and stderrFile path is empty, p.CommandExecuter.Execute return the output as a buffer
 	stdoutFilePath := ""
 	stderrFilePath := ""
-	//executionTimeout -> determining if a process is running or not shouldn't take more than 600 seconds
-	executionTimeout := pluginutil.ValidateExecutionTimeout(log, 600)
+	//executionTimeout -> determining if a process is running or not shouldn't take more than 60 seconds
+	executionTimeout := pluginutil.ValidateExecutionTimeout(log, 60)
 
 	//execute the command
 	stdout, stderr, exitCode, errs := p.CommandExecuter.Execute(log, workingDirectory, stdoutFilePath,
 		stderrFilePath, cancelFlag, executionTimeout, commandName, commandArguments)
 
-	// read (a prefix of) the standard output/error
-	var commandOutputError string
-	if commandOutput, err = pluginutil.ReadAll(stdout, p.MaxStdoutLength, p.OutputTruncatedSuffix); err != nil {
-		log.Error("Error retrieving stdout for execution to obtain PID of Cloudwatch is ", err)
-		return "", err
-	}
-	if commandOutputError, err = pluginutil.ReadAll(stderr, p.MaxStdoutLength, p.OutputTruncatedSuffix); err != nil {
-		log.Error("Error retrieving stderr for execution to obtain PID of Cloudwatch is ", err)
-		return "", err
-	}
+	stdOutBuf := new(bytes.Buffer)
+	stdOutBuf.ReadFrom(stdout)
+	commandOutput = stdOutBuf.String()
+	stdErrBuf := new(bytes.Buffer)
+	stdErrBuf.ReadFrom(stderr)
+	commandOutputError := stdErrBuf.String()
+
 	//We don't expect any errors because the powershell script that we run has error action set as SilentlyContinue
 	if commandOutputError != "" {
 		log.Errorf("Powershell script to get process ID of the Cloudwatch executable currently running failed with error - ", commandOutputError)
