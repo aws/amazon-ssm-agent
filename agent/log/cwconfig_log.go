@@ -21,7 +21,6 @@ import (
 // CWJson represents the data structure of the cloudwatch configuration file
 // which contains essential information required to configure cloudwatch
 type cWJson struct {
-	IsEnabled    bool           `json:"IsEnabled"`
 	EngineConfig cWEngineConfig `json:"EngineConfiguration"`
 }
 
