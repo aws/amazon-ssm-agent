@@ -55,7 +55,7 @@ type Repository interface {
 	AddPackage(context context.T, packageName string, version string, downloader DownloadDelegate) error
 	SetInstallState(context context.T, packageName string, version string, state InstallState) error
 	GetInstallState(context context.T, packageName string) (state InstallState, version string)
-	GetAction(context context.T, packageName string, version string, actionName string) (exists bool, actionDocument string, err error)
+	GetAction(context context.T, packageName string, version string, actionName string) (exists bool, actionDocument []byte, workingDir string, err error)
 	RemovePackage(context context.T, packageName string, version string) error
 	GetInventoryData(context context.T) []model.ApplicationData
 }
@@ -175,20 +175,20 @@ func (repo *localRepository) GetInstallState(context context.T, packageName stri
 
 // GetAction returns a JSON document describing a management action (including working directory) or an empty string
 // if there is nothing to do for a given action
-func (repo *localRepository) GetAction(context context.T, packageName string, version string, actionName string) (exists bool, actionDocument string, err error) {
+func (repo *localRepository) GetAction(context context.T, packageName string, version string, actionName string) (exists bool, actionDocument []byte, workingDir string, err error) {
 	actionPath := repo.getActionPath(packageName, version, actionName)
 	if !repo.filesysdep.Exists(actionPath) {
-		return false, "", nil
+		return false, []byte{}, "", nil
 	}
 	if actionContent, err := repo.filesysdep.ReadFile(actionPath); err != nil {
-		return true, "", err
+		return true, []byte{}, "", err
 	} else {
 		actionJson := string(actionContent[:])
 		var jsonTest interface{}
 		if err = jsonutil.Unmarshal(actionJson, &jsonTest); err != nil {
-			return true, "", err
+			return true, []byte{}, "", err
 		}
-		return true, actionJson, nil
+		return true, actionContent, repo.getPackageVersionPath(packageName, version), nil
 	}
 }
 

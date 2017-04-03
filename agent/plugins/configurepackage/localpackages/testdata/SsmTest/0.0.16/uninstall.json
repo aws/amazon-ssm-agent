@@ -1,0 +1,14 @@
+{
+	"schemaVersion": "2.0.1",
+	"description": "Install or uninstall a component to the latest version or specified version.",
+	"mainSteps": [{
+		"action":"aws:runPowerShellScript",
+		"name":"uninstall",
+		"inputs": {
+			"runCommand": [
+				"mv test_installed.txt test_uninstalled.txt",
+				"exit 0"
+			]
+		}
+	}]
+}

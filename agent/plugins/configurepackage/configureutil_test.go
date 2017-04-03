@@ -16,7 +16,6 @@
 package configurepackage
 
 import (
-	"errors"
 	"testing"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
@@ -24,30 +23,11 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestGetManifestName(t *testing.T) {
-	pluginInformation := createStubPluginInputInstall()
-
-	manifestName := "PVDriver.json"
-	result := getManifestName(pluginInformation.Name)
-
-	assert.Equal(t, manifestName, result)
-}
-
-func TestGetPackageName(t *testing.T) {
-	pluginInformation := createStubPluginInputInstall()
-	context := createStubInstanceContext()
-
-	packageName := "PVDriver.zip"
-	result := getPackageFilename(pluginInformation.Name, context)
-
-	assert.Equal(t, packageName, result)
-}
-
 func TestGetS3Location(t *testing.T) {
 	pluginInformation := createStubPluginInputInstall()
 	util := NewUtil(createStubInstanceContext(), "")
 
-	packageLocation := "https://s3.us-west-2.amazonaws.com/amazon-ssm-packages-us-west-2/Packages/PVDriver/" + appconfig.PackagePlatform + "/amd64/9000.0.0/PVDriver.zip"
+	packageLocation := "https://s3.us-west-2.amazonaws.com/amazon-ssm-packages-us-west-2/Packages/PVDriver/" + appconfig.PackagePlatform + "/amd64/1.0.0/PVDriver.zip"
 	result := util.GetS3Location(pluginInformation.Name, pluginInformation.Version)
 
 	assert.Equal(t, packageLocation, result)
@@ -57,35 +37,10 @@ func TestGetS3Location_Bjs(t *testing.T) {
 	pluginInformation := createStubPluginInputInstall()
 	util := NewUtil(createStubInstanceContextBjs(), "")
 
-	packageLocation := "https://s3.cn-north-1.amazonaws.com.cn/amazon-ssm-packages-cn-north-1/Packages/PVDriver/" + appconfig.PackagePlatform + "/amd64/9000.0.0/PVDriver.zip"
+	packageLocation := "https://s3.cn-north-1.amazonaws.com.cn/amazon-ssm-packages-cn-north-1/Packages/PVDriver/" + appconfig.PackagePlatform + "/amd64/1.0.0/PVDriver.zip"
 	result := util.GetS3Location(pluginInformation.Name, pluginInformation.Version)
 
 	assert.Equal(t, packageLocation, result)
-}
-
-func TestCreatePackageFolderSucceeded(t *testing.T) {
-	pluginInformation := createStubPluginInputInstall()
-	util := configureUtilImp{}
-	stubs := &ConfigurePackageStubs{fileSysDepStub: &FileSysDepStub{}}
-	stubs.Set()
-	defer stubs.Clear()
-
-	result, _ := util.CreatePackageFolder(pluginInformation.Name, pluginInformation.Version)
-
-	assert.Contains(t, result, "packages")
-	assert.Contains(t, result, pluginInformation.Name)
-	assert.Contains(t, result, pluginInformation.Version)
-}
-
-func TestCreatePackageFolderFailed(t *testing.T) {
-	pluginInformation := createStubPluginInputInstall()
-	util := configureUtilImp{}
-	stubs := &ConfigurePackageStubs{fileSysDepStub: &FileSysDepStub{makeFileError: errors.New("Folder cannot be created")}}
-	stubs.Set()
-	defer stubs.Clear()
-
-	_, err := util.CreatePackageFolder(pluginInformation.Name, pluginInformation.Version)
-	assert.Error(t, err)
 }
 
 func TestGetLatestVersion_NumericSort(t *testing.T) {
@@ -115,8 +70,7 @@ func TestGetLatestVersion_None(t *testing.T) {
 func createStubPluginInputInstall() *ConfigurePackagePluginInput {
 	input := ConfigurePackagePluginInput{}
 
-	// Set version to a large number to avoid conflict of the actual package release version
-	input.Version = "9000.0.0"
+	input.Version = "1.0.0"
 	input.Name = "PVDriver"
 	input.Action = "Install"
 
@@ -126,7 +80,6 @@ func createStubPluginInputInstall() *ConfigurePackagePluginInput {
 func createStubPluginInputInstallLatest() *ConfigurePackagePluginInput {
 	input := ConfigurePackagePluginInput{}
 
-	// Set version to a large number to avoid conflict of the actual package release version
 	input.Name = "PVDriver"
 	input.Action = "Install"
 
@@ -136,8 +89,7 @@ func createStubPluginInputInstallLatest() *ConfigurePackagePluginInput {
 func createStubPluginInputUninstall() *ConfigurePackagePluginInput {
 	input := ConfigurePackagePluginInput{}
 
-	// Set version to a large number to avoid conflict of the actual package release version
-	input.Version = "9000.0.0"
+	input.Version = "1.0.0"
 	input.Name = "PVDriver"
 	input.Action = "Uninstall"
 
@@ -147,7 +99,6 @@ func createStubPluginInputUninstall() *ConfigurePackagePluginInput {
 func createStubPluginInputUninstallLatest() *ConfigurePackagePluginInput {
 	input := ConfigurePackagePluginInput{}
 
-	// Set version to a large number to avoid conflict of the actual package release version
 	input.Name = "PVDriver"
 	input.Action = "Uninstall"
 
@@ -157,7 +108,6 @@ func createStubPluginInputUninstallLatest() *ConfigurePackagePluginInput {
 func createStubInvalidPluginInput() *ConfigurePackagePluginInput {
 	input := ConfigurePackagePluginInput{}
 
-	// Set version to a large number to avoid conflict of the actual package release version
 	input.Version = "7.2"
 	input.Name = ""
 	input.Action = "InvalidAction"
@@ -165,25 +115,22 @@ func createStubInvalidPluginInput() *ConfigurePackagePluginInput {
 	return &input
 }
 
+func createStubPluginInputFoo() *ConfigurePackagePluginInput {
+	input := ConfigurePackagePluginInput{}
+
+	input.Version = "1.0.0"
+	input.Name = "PVDriver"
+	input.Action = "Foo"
+
+	return &input
+}
+
 type mockConfigureUtility struct {
 	packageFolder            string
 	createPackageFolderError error
-	currentVersion           string
 	latestVersion            string
 	getLatestVersionError    error
 	s3Location               string
-}
-
-func (u *mockConfigureUtility) CreatePackageFolder(name string, version string) (folder string, err error) {
-	return u.packageFolder, u.createPackageFolderError
-}
-
-func (u *mockConfigureUtility) HasValidPackage(name string, version string) bool {
-	return true
-}
-
-func (u *mockConfigureUtility) GetCurrentVersion(name string) (installedVersion string) {
-	return u.currentVersion
 }
 
 func (u *mockConfigureUtility) GetLatestVersion(log log.T, name string) (latestVersion string, err error) {
