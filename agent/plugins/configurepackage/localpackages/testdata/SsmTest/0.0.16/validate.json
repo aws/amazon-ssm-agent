@@ -1,0 +1,16 @@
+{
+	"schemaVersion": "2.0.1",
+	"description": "Install or uninstall a component to the latest version or specified version.",
+	"mainSteps": [{
+		"action":"aws:runPowerShellScript",
+		"name":"validate",
+		"inputs": {
+			"runCommand": [
+				"if (!(Test-Path(\"done\"))) {",
+				"exit 1",
+				"}",
+				"exit 0"
+			]
+		}
+	}]
+}

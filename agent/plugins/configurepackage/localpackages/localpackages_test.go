@@ -282,10 +282,11 @@ func TestGetAction(t *testing.T) {
 	repo := NewRepository(&mockFileSys, testRepoRoot)
 
 	// Call and validate mock expectations and return value
-	exists, actionDoc, err := repo.GetAction(contextMock, testPackage, version, "Foo")
+	exists, actionDoc, workingDir, err := repo.GetAction(contextMock, testPackage, version, "Foo")
 	mockFileSys.AssertExpectations(t)
 	assert.True(t, exists)
 	assert.NotEmpty(t, actionDoc)
+	assert.Equal(t, workingDir, path.Join(testRepoRoot, testPackage, version))
 	assert.Nil(t, err)
 }
 
@@ -300,10 +301,11 @@ func TestGetActionInvalid(t *testing.T) {
 	repo := NewRepository(&mockFileSys, testRepoRoot)
 
 	// Call and validate mock expectations and return value
-	exists, actionDoc, err := repo.GetAction(contextMock, testPackage, version, "Foo")
+	exists, actionDoc, workingDir, err := repo.GetAction(contextMock, testPackage, version, "Foo")
 	mockFileSys.AssertExpectations(t)
 	assert.True(t, exists)
 	assert.Empty(t, actionDoc)
+	assert.Empty(t, workingDir)
 	assert.NotNil(t, err)
 }
 
@@ -317,10 +319,11 @@ func TestGetActionMissing(t *testing.T) {
 	repo := NewRepository(&mockFileSys, testRepoRoot)
 
 	// Call and validate mock expectations and return value
-	exists, actionDoc, err := repo.GetAction(contextMock, testPackage, version, "Foo")
+	exists, actionDoc, workingDir, err := repo.GetAction(contextMock, testPackage, version, "Foo")
 	mockFileSys.AssertExpectations(t)
 	assert.False(t, exists)
 	assert.Empty(t, actionDoc)
+	assert.Empty(t, workingDir)
 	assert.Nil(t, err)
 }
 
@@ -371,7 +374,7 @@ func TestGetInventoryData(t *testing.T) {
 		InstalledTime: installTime.Format(time.RFC3339),
 	}
 
-	testInventory(t, map[string]InventoryTestData{"SsmTest": testData}, []model.ApplicationData{expectedInventory})
+	testInventory(t, []InventoryTestData{testData}, []model.ApplicationData{expectedInventory})
 }
 
 func TestGetInventoryDataMultiple(t *testing.T) {
@@ -403,7 +406,7 @@ func TestGetInventoryDataMultiple(t *testing.T) {
 		InstalledTime: installTime.Format(time.RFC3339),
 	}
 
-	testInventory(t, map[string]InventoryTestData{"SsmTest": testData1, "Foo": testData2}, []model.ApplicationData{expectedInventory1, expectedInventory2})
+	testInventory(t, []InventoryTestData{testData1, testData2}, []model.ApplicationData{expectedInventory1, expectedInventory2})
 }
 
 func TestGetInventoryDataComplex(t *testing.T) {
@@ -427,30 +430,28 @@ func TestGetInventoryDataComplex(t *testing.T) {
 		InstalledTime: installTime.Format(time.RFC3339),
 	}
 
-	testInventory(t, map[string]InventoryTestData{"SsmTest": testData1, "Foo": testData2}, []model.ApplicationData{expectedInventory})
+	testInventory(t, []InventoryTestData{testData1, testData2}, []model.ApplicationData{expectedInventory})
 }
 
-func testInventory(t *testing.T, testData map[string]InventoryTestData, expected []model.ApplicationData) {
+func testInventory(t *testing.T, testData []InventoryTestData, expected []model.ApplicationData) {
 	mockPackages := make([]string, len(testData))
 	i := 0
-	for packageName, _ := range testData {
-		mockPackages[i] = packageName
-		i++
-	}
 	// Setup mock with expectations
 	mockFileSys := MockedFileSys{}
-	mockFileSys.On("GetDirectoryNames", path.Join(testRepoRoot)).Return(mockPackages, nil).Once()
-	for packageName, testItem := range testData {
-		mockFileSys.On("Exists", path.Join(testRepoRoot, packageName, "installstate")).Return(true).Once()
+	for _, testItem := range testData {
+		mockPackages[i] = testItem.Name
+		i++
+		mockFileSys.On("Exists", path.Join(testRepoRoot, testItem.Name, "installstate")).Return(true).Once()
 		stateContent, _ := jsonutil.Marshal(testItem.State)
-		mockFileSys.On("ReadFile", path.Join(testRepoRoot, packageName, "installstate")).Return([]byte(stateContent), nil).Once()
+		mockFileSys.On("ReadFile", path.Join(testRepoRoot, testItem.Name, "installstate")).Return([]byte(stateContent), nil).Once()
 
 		if (testItem.Manifest != PackageManifest{}) {
-			mockFileSys.On("Exists", path.Join(testRepoRoot, packageName, testItem.Version, fmt.Sprintf("%v.json", packageName))).Return(true).Once()
+			mockFileSys.On("Exists", path.Join(testRepoRoot, testItem.Name, testItem.Version, fmt.Sprintf("%v.json", testItem.Name))).Return(true).Once()
 			manifestContent, _ := jsonutil.Marshal(testItem.Manifest)
-			mockFileSys.On("ReadFile", path.Join(testRepoRoot, packageName, testItem.Version, fmt.Sprintf("%v.json", packageName))).Return([]byte(manifestContent), nil).Once()
+			mockFileSys.On("ReadFile", path.Join(testRepoRoot, testItem.Name, testItem.Version, fmt.Sprintf("%v.json", testItem.Name))).Return([]byte(manifestContent), nil).Once()
 		}
 	}
+	mockFileSys.On("GetDirectoryNames", path.Join(testRepoRoot)).Return(mockPackages, nil).Once()
 
 	// Instantiate repository with mock
 	repo := NewRepository(&mockFileSys, testRepoRoot)
