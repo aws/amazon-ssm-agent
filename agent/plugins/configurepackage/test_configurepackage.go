@@ -25,6 +25,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/fileutil/artifact"
 	"github.com/aws/amazon-ssm-agent/agent/framework/runpluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/localpackages"
 	"github.com/aws/amazon-ssm-agent/agent/s3util"
 	"github.com/aws/amazon-ssm-agent/agent/statemanager/model"
 	"github.com/aws/amazon-ssm-agent/agent/task"
@@ -117,18 +118,18 @@ func (m *ConfigurePackageStubs) Clear() {
 	m.stubsSet = false
 }
 
-func fileSysStubSuccess() fileSysDep {
+func fileSysStubSuccessNewPackage() fileSysDep {
 	result := `{
   "name": "PVDriver",
   "platform": "Windows",
   "architecture": "amd64",
   "version": "1.0.0"
 }`
-	return &FileSysDepStub{readResult: []byte(result), existsResultDefault: true}
+	return &FileSysDepStub{readResult: []byte(result), existsResultDefault: true, existsResultSequence: []bool{false, false, false}}
 }
 
 func networkStubSuccess() networkDep {
-	return &NetworkDepStub{downloadResultDefault: artifact.DownloadOutput{LocalFilePath: "Stub"}}
+	return &NetworkDepStub{downloadResultDefault: artifact.DownloadOutput{LocalFilePath: "Stub"}, foldersResult: []string{"1.0.0"}}
 }
 
 func execStubSuccess() execDep {
@@ -143,7 +144,7 @@ func SetStubs() *ConfigurePackageStubs {
 }
 
 func setSuccessStubs() *ConfigurePackageStubs {
-	stubs := &ConfigurePackageStubs{fileSysDepStub: fileSysStubSuccess(), networkDepStub: networkStubSuccess(), execDepStub: execStubSuccess()}
+	stubs := &ConfigurePackageStubs{fileSysDepStub: fileSysStubSuccessNewPackage(), networkDepStub: networkStubSuccess(), execDepStub: execStubSuccess()}
 	stubs.Set()
 	return stubs
 }
@@ -239,14 +240,16 @@ func (m *NetworkDepStub) Download(log log.T, input artifact.DownloadInput) (outp
 }
 
 type ExecDepStub struct {
-	pluginInput  *model.PluginState
-	parseError   error
-	pluginOutput *contracts.PluginResult
+	pluginInput     *model.PluginState
+	parseError      error
+	pluginOutput    *contracts.PluginResult
+	pluginOutputMap map[string]*contracts.PluginResult
 }
 
 func (m *ExecDepStub) ParseDocument(context context.T, documentRaw []byte, orchestrationDir string, s3Bucket string, s3KeyPrefix string, messageID string, documentID string, defaultWorkingDirectory string) (pluginsInfo []model.PluginState, err error) {
 	pluginsInfo = make([]model.PluginState, 0, 1)
 	if m.pluginInput != nil {
+		m.pluginInput.Configuration.DefaultWorkingDirectory = defaultWorkingDirectory
 		pluginsInfo = append(pluginsInfo, *m.pluginInput)
 	}
 	return pluginsInfo, m.parseError
@@ -254,7 +257,10 @@ func (m *ExecDepStub) ParseDocument(context context.T, documentRaw []byte, orche
 
 func (m *ExecDepStub) ExecuteDocument(runner runpluginutil.PluginRunner, context context.T, pluginInput []model.PluginState, documentID string, documentCreatedDate string) (pluginOutputs map[string]*contracts.PluginResult) {
 	pluginOutputs = make(map[string]*contracts.PluginResult)
-	if m.pluginOutput != nil {
+	// TODO:MF: We're using the working directory as an index into the stub results.  We should convert all of this to testify mocks.
+	if output, ok := m.pluginOutputMap[pluginInput[0].Configuration.DefaultWorkingDirectory]; ok {
+		pluginOutputs["test"] = output
+	} else if m.pluginOutput != nil {
 		pluginOutputs["test"] = m.pluginOutput
 	}
 	return
@@ -265,15 +271,6 @@ type MockedConfigurePackageManager struct {
 	waitChan chan bool
 }
 
-func (configMock *MockedConfigurePackageManager) downloadPackage(context context.T,
-	util configureUtil,
-	packageName string,
-	version string,
-	output *contracts.PluginOutput) (filePath string, err error) {
-	args := configMock.Called(util, packageName, version, output)
-	return args.String(0), args.Error(1)
-}
-
 func (configMock *MockedConfigurePackageManager) validateInput(context context.T,
 	input *ConfigurePackagePluginInput) (valid bool, err error) {
 	args := configMock.Called(input)
@@ -282,7 +279,7 @@ func (configMock *MockedConfigurePackageManager) validateInput(context context.T
 
 func (configMock *MockedConfigurePackageManager) getVersionToInstall(context context.T,
 	input *ConfigurePackagePluginInput,
-	util configureUtil) (version string, installedVersion string, err error) {
+	util configureUtil) (version string, installedVersion string, installState localpackages.InstallState, err error) {
 	args := configMock.Called(input, util)
 	ver := args.String(0)
 	if strings.HasPrefix(ver, "Wait") {
@@ -290,7 +287,7 @@ func (configMock *MockedConfigurePackageManager) getVersionToInstall(context con
 		_ = <-configMock.waitChan
 		ver = strings.TrimLeft(ver, "Wait")
 	}
-	return ver, args.String(1), args.Error(2)
+	return ver, args.String(1), args.Get(2).(localpackages.InstallState), args.Error(3)
 }
 
 func (configMock *MockedConfigurePackageManager) getVersionToUninstall(context context.T,
@@ -306,22 +303,13 @@ func (configMock *MockedConfigurePackageManager) getVersionToUninstall(context c
 	return ver, args.Error(1)
 }
 
-func (configMock *MockedConfigurePackageManager) setMark(context context.T, packageName string, version string) error {
-	args := configMock.Called(packageName, version)
-	return args.Error(0)
-}
-
-func (configMock *MockedConfigurePackageManager) clearMark(context context.T, packageName string) {
-	configMock.Called(packageName)
-}
-
 func (configMock *MockedConfigurePackageManager) ensurePackage(context context.T,
 	util configureUtil,
 	packageName string,
 	version string,
-	output *contracts.PluginOutput) (manifest *PackageManifest, err error) {
+	output *contracts.PluginOutput) error {
 	args := configMock.Called(util, packageName, version, output)
-	return args.Get(0).(*PackageManifest), args.Error(1)
+	return args.Error(0)
 }
 
 func (configMock *MockedConfigurePackageManager) runUninstallPackagePre(context context.T,
@@ -348,24 +336,41 @@ func (configMock *MockedConfigurePackageManager) runUninstallPackagePost(context
 	return args.Get(0).(contracts.ResultStatus), args.Error(1)
 }
 
+func (configMock *MockedConfigurePackageManager) runValidatePackage(context context.T,
+	packageName string,
+	version string,
+	output *contracts.PluginOutput) (status contracts.ResultStatus, err error) {
+	args := configMock.Called(packageName, version, output)
+	return args.Get(0).(contracts.ResultStatus), args.Error(1)
+}
+
+func (configMock *MockedConfigurePackageManager) setInstallState(context context.T,
+	packageName string,
+	version string,
+	state localpackages.InstallState) error {
+	args := configMock.Called(packageName, version, state)
+	return args.Error(0)
+}
+
 func ConfigPackageSuccessMock(downloadFilePath string,
 	versionToActOn string,
 	versionCurrentlyInstalled string,
-	packageManifest *PackageManifest,
 	installResult contracts.ResultStatus,
 	uninstallPreResult contracts.ResultStatus,
 	uninstallPostResult contracts.ResultStatus) *MockedConfigurePackageManager {
 	mockConfig := MockedConfigurePackageManager{}
 	mockConfig.On("downloadPackage", mock.Anything, mock.Anything, mock.Anything, mock.Anything, mock.Anything).Return(downloadFilePath, nil)
 	mockConfig.On("validateInput", mock.Anything, mock.Anything).Return(true, nil)
-	mockConfig.On("getVersionToInstall", mock.Anything, mock.Anything, mock.Anything).Return(versionToActOn, versionCurrentlyInstalled, nil)
+	mockConfig.On("getVersionToInstall", mock.Anything, mock.Anything, mock.Anything).Return(versionToActOn, versionCurrentlyInstalled, localpackages.None, nil)
 	mockConfig.On("getVersionToUninstall", mock.Anything, mock.Anything, mock.Anything).Return(versionToActOn, nil)
 	mockConfig.On("setMark", mock.Anything, mock.Anything, mock.Anything).Return(nil)
 	mockConfig.On("clearMark", mock.Anything, mock.Anything)
-	mockConfig.On("ensurePackage", mock.Anything, mock.Anything, mock.Anything, mock.Anything, mock.Anything).Return(packageManifest, nil)
+	mockConfig.On("ensurePackage", mock.Anything, mock.Anything, mock.Anything, mock.Anything, mock.Anything).Return(nil)
 	mockConfig.On("runUninstallPackagePre", mock.Anything, mock.Anything, mock.Anything, mock.Anything).Return(uninstallPreResult, nil)
 	mockConfig.On("runInstallPackage", mock.Anything, mock.Anything, mock.Anything, mock.Anything).Return(installResult, nil)
 	mockConfig.On("runUninstallPackagePost", mock.Anything, mock.Anything, mock.Anything, mock.Anything).Return(uninstallPostResult, nil)
+	mockConfig.On("runValidatePackage", mock.Anything, mock.Anything, mock.Anything, mock.Anything).Return(contracts.ResultStatusSuccess, nil)
+	mockConfig.On("setInstallState", mock.Anything, mock.Anything, mock.Anything, mock.Anything).Return(nil)
 	mockConfig.waitChan = make(chan bool)
 	return &mockConfig
 }

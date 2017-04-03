@@ -12,5 +12,8 @@ Package versions for SsmTest package, all windows/amd64
 0.0.11 - corrupted install.json action
 0.0.12 - manifest name mismatch
 0.0.13 - contains all optional inventory values
+0.0.14 - idempotent 2-reboot uninstall
+0.0.15 - idempotent 2-reboot install
+0.0.16 - idempotent 2-reboot install with validate check
 0.1.2 - simple success case (but should not be considered latest version)
 0.1.10 - simple success case (used to verify that .10 > .2 when requesting latest version)

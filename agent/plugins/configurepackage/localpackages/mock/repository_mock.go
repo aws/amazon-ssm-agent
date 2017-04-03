@@ -56,9 +56,9 @@ func (repoMock *MockedRepository) GetInstallState(context context.T, packageName
 	return args.Get(0).(localpackages.InstallState), args.String(1)
 }
 
-func (repoMock *MockedRepository) GetAction(context context.T, packageName string, version string, actionName string) (exists bool, actionDocument string, err error) {
+func (repoMock *MockedRepository) GetAction(context context.T, packageName string, version string, actionName string) (exists bool, actionDocument []byte, workingDir string, err error) {
 	args := repoMock.Called(context, packageName, version, actionName)
-	return args.Bool(0), args.String(1), args.Error(2)
+	return args.Bool(0), args.Get(1).([]byte), args.String(2), args.Error(3)
 }
 
 func (repoMock *MockedRepository) RemovePackage(context context.T, packageName string, version string) error {
