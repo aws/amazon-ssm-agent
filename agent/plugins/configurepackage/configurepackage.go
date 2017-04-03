@@ -18,7 +18,6 @@ package configurepackage
 import (
 	"errors"
 	"fmt"
-	"path"
 	"path/filepath"
 	"regexp"
 	"time"
@@ -31,10 +30,19 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/framework/runpluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/localpackages"
+	"github.com/aws/amazon-ssm-agent/agent/plugins/inventory/model"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/pluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 	"github.com/aws/amazon-ssm-agent/agent/times"
 	"github.com/aws/amazon-ssm-agent/agent/updateutil"
+)
+
+const (
+	// InstallAction represents the json command to install package
+	InstallAction = "Install"
+	// UninstallAction represents the json command to uninstall package
+	UninstallAction = "Uninstall"
 )
 
 // Plugin is the type for the configurepackage plugin.
@@ -65,33 +73,29 @@ func NewPlugin(pluginConfig pluginutil.PluginConfig) (*Plugin, error) {
 	return &plugin, nil
 }
 
+// CollectApplicationData is a stub until we commit changes to use localpackages repository to get this
+func CollectApplicationData(context context.T) []model.ApplicationData {
+	return nil
+}
+
 type configurePackage struct {
 	contracts.Configuration
-	runner runpluginutil.PluginRunner
+	runner     runpluginutil.PluginRunner
+	repository localpackages.Repository
 }
 
 type configurePackageManager interface {
-	downloadPackage(context context.T,
-		util configureUtil,
-		packageName string,
-		version string,
-		output *contracts.PluginOutput) (filePath string, err error)
-
 	validateInput(context context.T, input *ConfigurePackagePluginInput) (valid bool, err error)
 
-	getVersionToInstall(context context.T, input *ConfigurePackagePluginInput, util configureUtil) (version string, installedVersion string, err error)
+	getVersionToInstall(context context.T, input *ConfigurePackagePluginInput, util configureUtil) (version string, installedVersion string, installState localpackages.InstallState, err error)
 
 	getVersionToUninstall(context context.T, input *ConfigurePackagePluginInput, util configureUtil) (version string, err error)
-
-	setMark(context context.T, packageName string, version string) error
-
-	clearMark(context context.T, packageName string)
 
 	ensurePackage(context context.T,
 		util configureUtil,
 		packageName string,
 		version string,
-		output *contracts.PluginOutput) (manifest *PackageManifest, err error)
+		output *contracts.PluginOutput) error
 
 	runUninstallPackagePre(context context.T,
 		packageName string,
@@ -107,6 +111,13 @@ type configurePackageManager interface {
 		packageName string,
 		version string,
 		output *contracts.PluginOutput) (status contracts.ResultStatus, err error)
+
+	runValidatePackage(context context.T,
+		packageName string,
+		version string,
+		output *contracts.PluginOutput) (status contracts.ResultStatus, err error)
+
+	setInstallState(context context.T, packageName string, version string, state localpackages.InstallState) error
 }
 
 // runConfigurePackage downloads the package and performs specified action
@@ -143,43 +154,50 @@ func runConfigurePackage(
 	switch input.Action {
 	case InstallAction:
 		// get version information
-		version, installedVersion, versionErr := manager.getVersionToInstall(context, &input, configUtil)
+		version, installedVersion, installState, versionErr := manager.getVersionToInstall(context, &input, configUtil)
 		if versionErr != nil {
 			output.MarkAsFailed(log, fmt.Errorf("unable to determine version to install: %v", versionErr))
 			return
 		}
 
-		// if already installed, exit
-		if version == installedVersion {
-			// TODO:MF: validate that installed version is basically valid - has manifest and at least one other non-etag file or folder?
-			output.AppendInfof(log, "%v %v is already installed", input.Name, version)
-			output.MarkAsSucceeded()
-			return
-		}
-
 		// ensure manifest file and package
-		_, ensureErr := manager.ensurePackage(context, configUtil, input.Name, version, &output)
+		ensureErr := manager.ensurePackage(context, configUtil, input.Name, version, &output)
 		if ensureErr != nil {
 			output.MarkAsFailed(log, fmt.Errorf("unable to obtain package: %v", ensureErr))
 			return
 		}
 
-		// set installing flag for version
-		if markErr := manager.setMark(context, input.Name, version); markErr != nil {
-			output.MarkAsFailed(log, fmt.Errorf("unable to mark package installing: %v", markErr))
-			return
+		// if no previous version, set state to new
+		if installState == localpackages.None {
+			manager.setInstallState(context, input.Name, version, localpackages.New)
 		}
 
-		// NOTE: do not return before clearing installing mark after this point unless you want it to remain set - once we defer the unmark it is OK to return again
+		// if already installed and valid, exit
+		if (version == installedVersion && (installState == localpackages.Installed || installState == localpackages.Unknown)) || installState == localpackages.Installing {
+			// TODO: When existing packages have idempotent installers and no reboot loops, remove this check for installing packages and allow the install to continue until it reports success without reboot
+			if result, err := manager.runValidatePackage(context, input.Name, version, &output); err == nil && result == contracts.ResultStatusSuccess {
+				if installState == localpackages.Installing {
+					output.AppendInfof(log, "Successfully installed %v %v", input.Name, version)
+				} else {
+					output.AppendInfof(log, "%v %v is already installed", input.Name, version)
+				}
+				output.MarkAsSucceeded()
+				if installState != localpackages.Installed && installState != localpackages.Unknown {
+					manager.setInstallState(context, input.Name, version, localpackages.Installed)
+					return
+				}
+				return
+			}
+		}
+
 		// if different version is installed, uninstall
-		if installedVersion != "" {
-			// NOTE: if source is specified on an install and we need to redownload the package for the
-			// currently installed version because it isn't valid on disk, we will pull from the source URI
-			// even though that may or may not be the package that installed it - it is our only decent option
-			_, ensureErr := manager.ensurePackage(context, configUtil, input.Name, installedVersion, &output)
+		// if status is "installing" then we are returning after a reboot in a case where the uninstall of the previous version has already happened
+		if installedVersion != "" && installedVersion != version && installState != localpackages.Installing {
+			ensureErr := manager.ensurePackage(context, configUtil, input.Name, installedVersion, &output)
 			if ensureErr != nil {
 				output.AppendErrorf(log, "unable to obtain package: %v", ensureErr)
 			} else {
+				manager.setInstallState(context, input.Name, version, localpackages.Upgrading)
 				result, err := manager.runUninstallPackagePre(context,
 					input.Name,
 					installedVersion,
@@ -196,28 +214,37 @@ func runConfigurePackage(
 			}
 		}
 
-		// defer clearing installing
-		defer manager.clearMark(context, input.Name)
-
 		// install version
+		manager.setInstallState(context, input.Name, version, localpackages.Installing)
 		result, err := manager.runInstallPackage(context,
 			input.Name,
 			version,
 			&output)
 		if err != nil {
 			output.MarkAsFailed(log, fmt.Errorf("failed to install package: %v", err))
+			manager.setInstallState(context, input.Name, version, localpackages.Failed)
 		} else if result == contracts.ResultStatusSuccessAndReboot || result == contracts.ResultStatusPassedAndReboot {
-			output.AppendInfof(log, "Successfully installed %v %v", input.Name, version)
+			output.AppendInfof(log, "Rebooting to finish installation of %v %v", input.Name, version)
 			output.MarkAsSuccessWithReboot()
+			// NOTE: When we support rollback, we should exit here before we delete the previous package
+			// NOTE: status remains "installing" here, plugin will re-run and either pass validation after reboot and get marked as "installed" or run the idempotent install again until it succeeds or arrives at a valid state
 		} else if result != contracts.ResultStatusSuccess {
 			output.MarkAsFailed(log, fmt.Errorf("install action state was %v and not %v", result, contracts.ResultStatusSuccess))
+			manager.setInstallState(context, input.Name, version, localpackages.Failed)
 		} else {
-			output.AppendInfof(log, "Successfully installed %v %v", input.Name, version)
-			output.MarkAsSucceeded()
+			if result, err := manager.runValidatePackage(context, input.Name, version, &output); err != nil || result != contracts.ResultStatusSuccess {
+				output.MarkAsFailed(log, fmt.Errorf("failed to install package.  Validation status %v, Validation error %v", result, err))
+				manager.setInstallState(context, input.Name, version, localpackages.Failed)
+			} else {
+				output.AppendInfof(log, "Successfully installed %v %v", input.Name, version)
+				output.MarkAsSucceeded()
+				manager.setInstallState(context, input.Name, version, localpackages.Installed)
+			}
 		}
 
+		// NOTE: When we support rollback, we should rollback here if status is failed
 		// uninstall post action
-		if installedVersion != "" {
+		if installedVersion != "" && installedVersion != version {
 			_, err := manager.runUninstallPackagePost(context,
 				input.Name,
 				installedVersion,
@@ -236,11 +263,13 @@ func runConfigurePackage(
 		}
 
 		// ensure manifest file and package
-		_, ensureErr := manager.ensurePackage(context, configUtil, input.Name, version, &output)
+		ensureErr := manager.ensurePackage(context, configUtil, input.Name, version, &output)
 		if ensureErr != nil {
 			output.MarkAsFailed(log, fmt.Errorf("unable to obtain package: %v", ensureErr))
 			return
 		}
+
+		manager.setInstallState(context, input.Name, version, localpackages.Uninstalling)
 		var resultPre, resultPost contracts.ResultStatus
 		resultPre, err = manager.runUninstallPackagePre(context,
 			input.Name,
@@ -248,16 +277,26 @@ func runConfigurePackage(
 			&output)
 		if err != nil {
 			output.MarkAsFailed(log, fmt.Errorf("failed to uninstall package: %v", err))
+			manager.setInstallState(context, input.Name, version, localpackages.Failed)
 			return
+		} else {
+			if resultPre == contracts.ResultStatusSuccessAndReboot || resultPre == contracts.ResultStatusPassedAndReboot {
+				// Reboot before continuing
+				output.MarkAsSuccessWithReboot()
+				return
+			}
 		}
+
 		resultPost, err = manager.runUninstallPackagePost(context,
 			input.Name,
 			version,
 			&output)
 		if err != nil {
 			output.MarkAsFailed(log, fmt.Errorf("failed to uninstall package: %v", err))
+			manager.setInstallState(context, input.Name, version, localpackages.Failed)
 			return
 		}
+		manager.setInstallState(context, input.Name, version, localpackages.Uninstalled)
 
 		result := contracts.MergeResultStatus(resultPre, resultPost)
 		if result == contracts.ResultStatusSuccessAndReboot || result == contracts.ResultStatusPassedAndReboot {
@@ -281,51 +320,17 @@ func (m *configurePackage) ensurePackage(context context.T,
 	util configureUtil,
 	packageName string,
 	version string,
-	output *contracts.PluginOutput) (manifest *PackageManifest, err error) {
+	output *contracts.PluginOutput) error {
 
-	// manifest to download
-	manifestName := getManifestName(packageName)
-
-	// path to local manifest
-	localManifestName := filepath.Join(appconfig.PackageRoot, packageName, version, manifestName)
-
-	// if we already have a valid manifest, return it
-	if exist := filesysdep.Exists(localManifestName); exist {
-		if manifest, err = parsePackageManifest(context.Log(), localManifestName); err == nil {
-			// TODO:MF: consider verifying name, version, platform, arch in parsed manifest
-			// TODO:MF: ensure the local package is valid before we return
-			return
-		}
+	currentState, currentVersion := m.repository.GetInstallState(context, packageName)
+	if err := m.repository.ValidatePackage(context, packageName, version); err != nil || (currentVersion == version && currentState == localpackages.Failed) {
+		context.Log().Debugf("Current %v Target %v State %v", currentVersion, version, currentState)
+		context.Log().Debugf("Refreshing package content for %v %v %v", packageName, version, err)
+		return m.repository.RefreshPackage(context, packageName, version, func(targetDirectory string) error {
+			return downloadPackageFromS3(context, util.GetS3Location(packageName, version), targetDirectory)
+		})
 	}
-
-	// TODO:OFFLINE: if source but no version, download to temp, determine version from manifest and copy to correct location
-
-	// download package
-	var filePath string
-	if filePath, err = m.downloadPackage(context, util, packageName, version, output); err != nil {
-		return
-	}
-
-	packageDestination := filepath.Join(appconfig.PackageRoot, packageName, version)
-	if uncompressErr := filesysdep.Uncompress(filePath, packageDestination); uncompressErr != nil {
-		err = fmt.Errorf("failed to extract package installer package %v from %v, %v", filePath, packageDestination, uncompressErr.Error())
-		return
-	}
-
-	// NOTE: this could be considered a warning - it likely points to a real problem, but if uncompress succeeded, we could continue
-	// delete compressed package after using
-	if cleanupErr := filesysdep.RemoveAll(filePath); cleanupErr != nil {
-		err = fmt.Errorf("failed to delete compressed package %v, %v", filePath, cleanupErr.Error())
-		return
-	}
-
-	manifest, manifestErr := parsePackageManifest(context.Log(), localManifestName)
-	if manifestErr != nil {
-		err = fmt.Errorf("manifest is not valid for package %v, %v", filePath, manifestErr.Error())
-		return
-	}
-
-	return manifest, nil
+	return nil
 }
 
 // validateInput ensures the plugin input matches the defined schema
@@ -362,8 +367,13 @@ func (m *configurePackage) validateInput(context context.T, input *ConfigurePack
 // getVersionToInstall decides which version to install and whether there is an existing version (that is not in the process of installing)
 func (m *configurePackage) getVersionToInstall(context context.T,
 	input *ConfigurePackagePluginInput,
-	util configureUtil) (version string, installedVersion string, err error) {
-	installedVersion = util.GetCurrentVersion(input.Name)
+	util configureUtil) (version string, installedVersion string, installState localpackages.InstallState, err error) {
+	installedVersion = m.repository.GetInstalledVersion(context, input.Name)
+	currentState, currentVersion := m.repository.GetInstallState(context, input.Name)
+	if currentState == localpackages.Failed {
+		// TODO: once rollback is implemented, this will only happen if install failed with no previous successful install or if rollback failed
+		installedVersion = currentVersion
+	}
 
 	if input.Version != "" {
 		version = input.Version
@@ -372,7 +382,7 @@ func (m *configurePackage) getVersionToInstall(context context.T,
 			return
 		}
 	}
-	return version, installedVersion, nil
+	return version, installedVersion, currentState, nil
 }
 
 // getVersionToUninstall decides which version to uninstall
@@ -381,7 +391,7 @@ func (m *configurePackage) getVersionToUninstall(context context.T,
 	util configureUtil) (version string, err error) {
 	if input.Version != "" {
 		version = input.Version
-	} else if installedVersion := util.GetCurrentVersion(input.Name); installedVersion != "" {
+	} else if installedVersion := m.repository.GetInstalledVersion(context, input.Name); installedVersion != "" {
 		version = installedVersion
 	} else {
 		version, err = util.GetLatestVersion(context.Log(), input.Name)
@@ -389,43 +399,13 @@ func (m *configurePackage) getVersionToUninstall(context context.T,
 	return
 }
 
-// setMark marks a particular version as installing so that if we uninstall and reboot we will know
-// to continue with the install even though the package is already present
-func (configurePackage) setMark(context context.T, packageName string, version string) error {
-	return markInstallingPackage(packageName, version)
-}
-
-// clearMark removes the file marking a package as being in the process of installation
-func (configurePackage) clearMark(context context.T, packageName string) {
-	unmarkInstallingPackage(packageName)
-}
-
-// downloadPackage downloads the installation package from s3 bucket or source URI and uncompresses it
-func (m *configurePackage) downloadPackage(context context.T,
-	util configureUtil,
-	packageName string,
-	version string,
-	output *contracts.PluginOutput) (filePath string, err error) {
-
+// downloadPackageFromS3 downloads and uncompresses the installation package from s3 bucket
+func downloadPackageFromS3(context context.T, packageS3Source string, packageDestination string) error {
 	log := context.Log()
-	//TODO:OFFLINE: build packageLocation from source URI
-	//   We should probably support both a URI to a "folder" that gets a filename tacked onto the end
-	//   and a full path to a compressed package file
-
-	// path to package
-	packageLocation := util.GetS3Location(packageName, version)
-
-	// path to download destination
-	packageDestination, createErr := util.CreatePackageFolder(packageName, version)
-	if createErr != nil {
-		return "", fmt.Errorf("failed to create local package repository, %v", createErr.Error())
-	}
-
 	downloadInput := artifact.DownloadInput{
-		SourceURL:            packageLocation,
+		SourceURL:            packageS3Source,
 		DestinationDirectory: packageDestination}
 
-	// download package
 	downloadOutput, downloadErr := networkdep.Download(log, downloadInput)
 	if downloadErr != nil || downloadOutput.LocalFilePath == "" {
 		errMessage := fmt.Sprintf("failed to download installation package reliably, %v", downloadInput.SourceURL)
@@ -437,12 +417,41 @@ func (m *configurePackage) downloadPackage(context context.T,
 			log.Errorf("Failed to clean up destination folder %v after failed download: %v", packageDestination, errCleanup)
 		}
 		// return download error
-		return "", errors.New(errMessage)
+		return errors.New(errMessage)
 	}
 
-	output.AppendInfof(log, "Successfully downloaded %v", downloadInput.SourceURL)
+	filePath := downloadOutput.LocalFilePath
+	if uncompressErr := filesysdep.Uncompress(filePath, packageDestination); uncompressErr != nil {
+		return fmt.Errorf("failed to extract package installer package %v from %v, %v", filePath, packageDestination, uncompressErr.Error())
+	}
 
-	return downloadOutput.LocalFilePath, nil
+	// NOTE: this could be considered a warning - it likely points to a real problem, but if uncompress succeeded, we could continue
+	// delete compressed package after using
+	if cleanupErr := filesysdep.RemoveAll(filePath); cleanupErr != nil {
+		return fmt.Errorf("failed to delete compressed package %v, %v", filePath, cleanupErr.Error())
+	}
+
+	return nil
+}
+
+// setInstallState sets the current installation state for the package in the persistent store.
+func (m *configurePackage) setInstallState(context context.T, packageName string, version string, state localpackages.InstallState) error {
+	err := m.repository.SetInstallState(context, packageName, version, state)
+	if err != nil {
+		context.Log().Errorf("failed to set install state to Installing: %v", err)
+	}
+	return err
+}
+
+// runValidatePackage executes the install script for the specific version of a package.
+func (m *configurePackage) runValidatePackage(context context.T,
+	packageName string,
+	version string,
+	output *contracts.PluginOutput) (status contracts.ResultStatus, err error) {
+	if exists, status, err := m.executeAction(context, "validate", packageName, version, output); exists {
+		return status, err
+	}
+	return contracts.ResultStatusSuccess, nil
 }
 
 // runInstallPackage executes the install script for the specific version of a package.
@@ -450,13 +459,10 @@ func (m *configurePackage) runInstallPackage(context context.T,
 	packageName string,
 	version string,
 	output *contracts.PluginOutput) (status contracts.ResultStatus, err error) {
-	status = contracts.ResultStatusSuccess
-
-	directory := filepath.Join(appconfig.PackageRoot, packageName, version)
-	if _, status, err = m.executeAction(context, "install", packageName, version, output, directory); err != nil {
+	if exists, status, err := m.executeAction(context, "install", packageName, version, output); exists {
 		return status, err
 	}
-	return
+	return contracts.ResultStatusSuccess, nil
 }
 
 // runUninstallPackagePre executes the uninstall script for the specific version of a package.
@@ -464,8 +470,7 @@ func (m *configurePackage) runUninstallPackagePre(context context.T,
 	packageName string,
 	version string,
 	output *contracts.PluginOutput) (status contracts.ResultStatus, err error) {
-	directory := filepath.Join(appconfig.PackageRoot, packageName, version)
-	if _, status, err = m.executeAction(context, "uninstall", packageName, version, output, directory); err != nil {
+	if exists, status, err := m.executeAction(context, "uninstall", packageName, version, output); exists {
 		return status, err
 	}
 	return contracts.ResultStatusSuccess, nil
@@ -476,9 +481,9 @@ func (m *configurePackage) runUninstallPackagePost(context context.T,
 	packageName string,
 	version string,
 	output *contracts.PluginOutput) (status contracts.ResultStatus, err error) {
-	directory := filepath.Join(appconfig.PackageRoot, packageName, version)
-	if err = filesysdep.RemoveAll(directory); err != nil {
-		return contracts.ResultStatusFailed, fmt.Errorf("failed to delete directory %v due to %v", directory, err)
+
+	if err = m.repository.RemovePackage(context, packageName, version); err != nil {
+		return contracts.ResultStatusFailed, err
 	}
 	return contracts.ResultStatusSuccess, nil
 }
@@ -488,31 +493,27 @@ func (m *configurePackage) executeAction(context context.T,
 	actionName string,
 	packageName string,
 	version string,
-	output *contracts.PluginOutput,
-	executeDirectory string) (actionExists bool, status contracts.ResultStatus, err error) {
+	output *contracts.PluginOutput) (actionExists bool, status contracts.ResultStatus, err error) {
 	status = contracts.ResultStatusSuccess
 	err = nil
-	fileName := fmt.Sprintf("%v.json", actionName)
-	fileLocation := path.Join(executeDirectory, fileName)
-	actionExists = filesysdep.Exists(fileLocation)
 
 	log := context.Log()
+	actionExists, actionContent, executeDirectory, err := m.repository.GetAction(context, packageName, version, actionName)
+	if err != nil {
+		return true, contracts.ResultStatusFailed, err
+	}
 	if actionExists {
 		output.AppendInfof(log, "Initiating %v %v %v", packageName, version, actionName)
-		file, err := filesysdep.ReadFile(fileLocation)
-		if err != nil {
-			return true, contracts.ResultStatusFailed, err
-		}
 		var s3Prefix string
 		if m.OutputS3BucketName != "" {
 			s3Prefix = fileutil.BuildS3Path(m.OutputS3KeyPrefix, m.PluginID, actionName)
 		}
-		pluginsInfo, err := execdep.ParseDocument(context, file, m.OrchestrationDirectory, m.OutputS3BucketName, s3Prefix, m.MessageId, m.BookKeepingFileName, executeDirectory)
+		pluginsInfo, err := execdep.ParseDocument(context, actionContent, m.OrchestrationDirectory, m.OutputS3BucketName, s3Prefix, m.MessageId, m.BookKeepingFileName, executeDirectory)
 		if err != nil {
 			return true, contracts.ResultStatusFailed, err
 		}
 		if len(pluginsInfo) == 0 {
-			return true, contracts.ResultStatusFailed, fmt.Errorf("%v contained no work and may be malformed", fileName)
+			return true, contracts.ResultStatusFailed, fmt.Errorf("%v document contained no work and may be malformed", actionName)
 		}
 		pluginOutputs := execdep.ExecuteDocument(m.runner, context, pluginsInfo, m.BookKeepingFileName, times.ToIso8601UTC(time.Now()))
 		if pluginOutputs == nil {
@@ -530,8 +531,6 @@ func (m *configurePackage) executeAction(context context.T,
 				output.MarkAsFailed(log, pluginOut.Error)
 			}
 			status = contracts.MergeResultStatus(status, pluginOut.Status)
-
-			//TODO:MF: make sure this subdocument's HasExecuted == true even if it returned SuccessAndReboot - the parent document status will control whether it runs again after reboot
 		}
 	}
 	return
@@ -573,7 +572,7 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 		}
 		return
 	}
-	manager := &configurePackage{Configuration: config, runner: subDocumentRunner}
+	manager := &configurePackage{Configuration: config, runner: subDocumentRunner, repository: localpackages.NewRepository(filesysdep, appconfig.PackageRoot)}
 
 	for i, prop := range properties {
 

@@ -31,6 +31,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/updateutil"
 )
 
+// TODO:MF: This should be able to go away when localpackages has encapsulated all filesystem access
 var filesysdep fileSysDep = &fileSysDepImp{}
 
 // dependency on filesystem and os utility functions

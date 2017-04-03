@@ -79,7 +79,7 @@ func TestConfigurePackageOutput(t *testing.T) {
 		PluginName:    name,
 		StartDateTime: mockTime,
 		EndDateTime:   mockTime,
-		Output:        "Initiating PVDriver 1.0.0 install\nSuccessfully installed PVDriver 1.0.0",
+		Output:        "Initiating PVDriver 1.0.0 install\nInitiating PVDriver 1.0.0 validate\nSuccessfully installed PVDriver 1.0.0",
 		Status:        contracts.ResultStatusSuccess,
 	}
 

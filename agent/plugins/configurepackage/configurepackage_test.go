@@ -16,7 +16,6 @@
 package configurepackage
 
 import (
-	"errors"
 	"io/ioutil"
 	"strings"
 	"sync"
@@ -24,9 +23,9 @@ import (
 
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
-	"github.com/aws/amazon-ssm-agent/agent/fileutil/artifact"
 	"github.com/aws/amazon-ssm-agent/agent/framework/runpluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/localpackages"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/pluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/updateutil"
 	"github.com/stretchr/testify/assert"
@@ -41,15 +40,13 @@ func TestRunUpgrade(t *testing.T) {
 	instanceContext := createStubInstanceContext()
 	pluginInformation := createStubPluginInputInstall()
 
-	managerMock := ConfigPackageSuccessMock("/foo", "1.0.0", "0.5.6", &PackageManifest{}, contracts.ResultStatusSuccess, contracts.ResultStatusSuccess, contracts.ResultStatusSuccess)
+	managerMock := ConfigPackageSuccessMock("/foo", "1.0.0", "0.5.6", contracts.ResultStatusSuccess, contracts.ResultStatusSuccess, contracts.ResultStatusSuccess)
 	output := runConfigurePackage(plugin, contextMock, managerMock, instanceContext, pluginInformation)
 
 	assert.Equal(t, output.ExitCode, 0)
 	assert.Contains(t, output.Stdout, "Successfully installed")
-	managerMock.AssertCalled(t, "setMark", "PVDriver", "1.0.0")
 	managerMock.AssertCalled(t, "runUninstallPackagePre", "PVDriver", "0.5.6", mock.Anything, mock.Anything)
 	managerMock.AssertCalled(t, "runUninstallPackagePost", "PVDriver", "0.5.6", mock.Anything, mock.Anything)
-	managerMock.AssertCalled(t, "clearMark", "PVDriver")
 }
 
 func TestRunUpgradeUninstallReboot(t *testing.T) {
@@ -57,15 +54,13 @@ func TestRunUpgradeUninstallReboot(t *testing.T) {
 	instanceContext := createStubInstanceContext()
 	pluginInformation := createStubPluginInputInstall()
 
-	managerMock := ConfigPackageSuccessMock("/foo", "1.0.0", "0.5.6", &PackageManifest{}, contracts.ResultStatusSuccess, contracts.ResultStatusSuccessAndReboot, contracts.ResultStatusSuccess)
+	managerMock := ConfigPackageSuccessMock("/foo", "1.0.0", "0.5.6", contracts.ResultStatusSuccess, contracts.ResultStatusSuccessAndReboot, contracts.ResultStatusSuccess)
 	output := runConfigurePackage(plugin, contextMock, managerMock, instanceContext, pluginInformation)
 
 	assert.Equal(t, output.ExitCode, 0)
-	managerMock.AssertCalled(t, "setMark", "PVDriver", "1.0.0")
 	managerMock.AssertCalled(t, "runUninstallPackagePre", "PVDriver", "0.5.6", mock.Anything, mock.Anything)
 	managerMock.AssertNotCalled(t, "runInstallPackage")
 	managerMock.AssertNotCalled(t, "runUninstallPackagePost")
-	managerMock.AssertNotCalled(t, "clearMark")
 }
 
 func TestRunParallelSamePackage(t *testing.T) {
@@ -73,8 +68,8 @@ func TestRunParallelSamePackage(t *testing.T) {
 	instanceContext := createStubInstanceContext()
 	pluginInformation := createStubPluginInputInstall()
 
-	managerMockFirst := ConfigPackageSuccessMock("/foo", "Wait1.0.0", "", &PackageManifest{}, contracts.ResultStatusSuccess, contracts.ResultStatusSuccess, contracts.ResultStatusSuccess)
-	managerMockSecond := ConfigPackageSuccessMock("/foo", "1.0.0", "", &PackageManifest{}, contracts.ResultStatusSuccess, contracts.ResultStatusSuccess, contracts.ResultStatusSuccess)
+	managerMockFirst := ConfigPackageSuccessMock("/foo", "Wait1.0.0", "", contracts.ResultStatusSuccess, contracts.ResultStatusSuccess, contracts.ResultStatusSuccess)
+	managerMockSecond := ConfigPackageSuccessMock("/foo", "1.0.0", "", contracts.ResultStatusSuccess, contracts.ResultStatusSuccess, contracts.ResultStatusSuccess)
 
 	var outputFirst contracts.PluginOutput
 	var outputSecond contracts.PluginOutput
@@ -426,49 +421,6 @@ func TestValidateInput_EmptyVersionWithUninstall(t *testing.T) {
 	assert.NoError(t, err)
 }
 
-func TestDownloadPackage(t *testing.T) {
-	pluginInformation := createStubPluginInputInstall()
-
-	output := contracts.PluginOutput{}
-	manager := createInstance()
-	util := mockConfigureUtility{}
-
-	result := artifact.DownloadOutput{}
-	result.LocalFilePath = "packages/PVDriver/9000.0.0/PVDriver.zip"
-
-	stubs := &ConfigurePackageStubs{fileSysDepStub: &FileSysDepStub{}, networkDepStub: &NetworkDepStub{downloadResultDefault: result}}
-	stubs.Set()
-	defer stubs.Clear()
-
-	fileName, err := manager.downloadPackage(contextMock, &util, pluginInformation.Name, pluginInformation.Version, &output)
-
-	assert.Equal(t, "packages/PVDriver/9000.0.0/PVDriver.zip", fileName)
-	assert.NoError(t, err)
-}
-
-func TestDownloadPackage_Failed(t *testing.T) {
-	pluginInformation := createStubPluginInputInstall()
-
-	output := contracts.PluginOutput{}
-	manager := createInstance()
-	util := mockConfigureUtility{}
-
-	// file download failed
-	result := artifact.DownloadOutput{}
-	result.LocalFilePath = ""
-
-	stubs := &ConfigurePackageStubs{fileSysDepStub: &FileSysDepStub{}, networkDepStub: &NetworkDepStub{downloadResultDefault: result, downloadErrorDefault: errors.New("404")}}
-	stubs.Set()
-	defer stubs.Clear()
-
-	fileName, err := manager.downloadPackage(contextMock, &util, pluginInformation.Name, pluginInformation.Version, &output)
-
-	assert.Empty(t, fileName)
-	assert.Error(t, err)
-	assert.Contains(t, err.Error(), "failed to download installation package reliably")
-	assert.Contains(t, err.Error(), "404")
-}
-
 func TestPackageLock(t *testing.T) {
 	// lock Foo for Install
 	err := lockPackage("Foo", "Install")
@@ -503,47 +455,6 @@ func TestPackageLock(t *testing.T) {
 	assert.NotNil(t, err)
 }
 
-func TestPackageMark(t *testing.T) {
-	stubs := &ConfigurePackageStubs{fileSysDepStub: &FileSysDepStub{existsResultDefault: false}}
-	stubs.Set()
-	defer stubs.Clear()
-
-	err := markInstallingPackage("Foo", "999.999.999")
-	assert.Nil(t, err)
-}
-
-func TestPackageInstalling(t *testing.T) {
-	stubs := &ConfigurePackageStubs{fileSysDepStub: &FileSysDepStub{existsResultDefault: true, readResult: []byte("999.999.999")}}
-	stubs.Set()
-	defer stubs.Clear()
-
-	assert.Equal(t, "999.999.999", getInstallingPackageVersion("Foo"))
-}
-
-func TestPackageNotInstalling(t *testing.T) {
-	stubs := &ConfigurePackageStubs{fileSysDepStub: &FileSysDepStub{existsResultDefault: false}}
-	stubs.Set()
-	defer stubs.Clear()
-
-	assert.Equal(t, "", getInstallingPackageVersion("Foo"))
-}
-
-func TestPackageUnreadableInstalling(t *testing.T) {
-	stubs := &ConfigurePackageStubs{fileSysDepStub: &FileSysDepStub{existsResultDefault: false, readResult: []byte(""), readError: errors.New("Foo")}}
-	stubs.Set()
-	defer stubs.Clear()
-
-	assert.Equal(t, "", getInstallingPackageVersion("Foo"))
-}
-
-func TestUnmarkPackage(t *testing.T) {
-	stubs := &ConfigurePackageStubs{fileSysDepStub: &FileSysDepStub{existsResultDefault: true}}
-	stubs.Set()
-	defer stubs.Clear()
-
-	assert.Nil(t, unmarkInstallingPackage("Foo"))
-}
-
 func lockAndUnlockGo(packageName string, channel chan error) {
 	err := lockPackage(packageName, "Install")
 	channel <- err
@@ -563,5 +474,9 @@ func lockAndUnlock(packageName string) (err error) {
 }
 
 func createInstance() configurePackageManager {
-	return &configurePackage{Configuration: contracts.Configuration{}, runner: runpluginutil.PluginRunner{}}
+	return &configurePackage{Configuration: contracts.Configuration{}, runner: runpluginutil.PluginRunner{}, repository: localpackages.NewRepository(filesysdep, "testdata")}
+}
+
+func createInstanceWithRepoMock(repoMock localpackages.Repository) configurePackageManager {
+	return &configurePackage{Configuration: contracts.Configuration{}, runner: runpluginutil.PluginRunner{}, repository: repoMock}
 }

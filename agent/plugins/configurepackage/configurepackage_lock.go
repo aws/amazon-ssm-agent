@@ -18,7 +18,6 @@ package configurepackage
 import (
 	"errors"
 	"fmt"
-	"path/filepath"
 	"sync"
 )
 
@@ -45,34 +44,4 @@ func unlockPackage(packageName string) {
 	if _, ok := mapPackageAction[packageName]; ok {
 		delete(mapPackageAction, packageName)
 	}
-}
-
-// getLockFile is a helper function that builds the name of the mark file
-func getMarkFile(packageName string) string {
-	return filepath.Join(getPackageRoot(packageName), "installing")
-}
-
-// markInstallingPackage writes a file with the version that is downloaded but not yet installed
-// so that when a configurePackage restarts after a reboot triggered by uninstall, it will
-// not consider the package to be already installed - the content of the file is the version number
-func markInstallingPackage(packageName string, version string) error {
-	return filesysdep.WriteFile(getMarkFile(packageName), version)
-}
-
-// getInstallingPackageVersion returns the version in the installing mark file if the file exists
-func getInstallingPackageVersion(packageName string) string {
-	fileLocation := getMarkFile(packageName)
-	if !filesysdep.Exists(fileLocation) {
-		return ""
-	}
-	content, err := filesysdep.ReadFile(fileLocation)
-	if err != nil {
-		return ""
-	}
-	return string(content)
-}
-
-// unmarkInstallingPackage removes the file flag indicating that a package has been downloaded but not yet installed
-func unmarkInstallingPackage(packageName string) error {
-	return filesysdep.RemoveAll(getMarkFile(packageName))
 }

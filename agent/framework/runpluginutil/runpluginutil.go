@@ -71,10 +71,13 @@ type PluginRunner struct {
 func ParseDocument(context context.T, documentRaw []byte, orchestrationDir string, s3Bucket string, s3KeyPrefix string, messageID string, documentID string, defaultWorkingDirectory string) (pluginsInfo []model.PluginState, err error) {
 	var docContent contracts.DocumentContent
 	err = json.Unmarshal(documentRaw, &docContent)
-	//TODO:MF: return this error
+	if err != nil {
+		return
+	}
 	pluginConfigurations := make([]*contracts.Configuration, 0)
 
-	if docContent.SchemaVersion == "2.0" {
+	switch docContent.SchemaVersion {
+	case "2.0", "2.0.1": // Version 2.0.1 is added to support installers that require capabilities that did not exist before the build where 2.0.1 was added
 		for _, pluginConfig := range docContent.MainSteps {
 			pluginName := pluginConfig.Action
 			config := contracts.Configuration{
@@ -91,7 +94,7 @@ func ParseDocument(context context.T, documentRaw []byte, orchestrationDir strin
 			}
 			pluginConfigurations = append(pluginConfigurations, &config)
 		}
-	} else if docContent.SchemaVersion == "1.2" {
+	case "1.2":
 		for pluginName, pluginConfig := range docContent.RuntimeConfig {
 			config := contracts.Configuration{
 				Settings:                pluginConfig.Settings,
@@ -107,9 +110,10 @@ func ParseDocument(context context.T, documentRaw []byte, orchestrationDir strin
 			}
 			pluginConfigurations = append(pluginConfigurations, &config)
 		}
-	} else {
+	default:
 		err = fmt.Errorf("unsupported schema version %v", docContent.SchemaVersion)
 	}
+
 	//initialize plugin states
 	pluginsInfo = make([]model.PluginState, 0, len(pluginConfigurations))
 
