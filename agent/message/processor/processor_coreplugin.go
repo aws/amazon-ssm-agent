@@ -165,14 +165,13 @@ func (p *Processor) processInProgressDocuments(instanceID string) {
 		}
 
 		if docState.DocumentInformation.RunCount >= retryLimit {
-			//TODO:  Move doc to corrupt/failed
-			// do not process as the command has failed too many times
-			break
+			statemanager.MoveDocumentState(log, f.Name(), instanceID, appconfig.DefaultLocationOfCurrent, appconfig.DefaultLocationOfCorrupt)
+			continue
 		}
 
 		// increment the command run count
 		docState.DocumentInformation.RunCount++
-
+		
 		statemanager.PersistData(log, docState.DocumentInformation.DocumentID, instanceID, appconfig.DefaultLocationOfCurrent, docState)
 
 		if docState.IsAssociation() && p.pollAssociations {
