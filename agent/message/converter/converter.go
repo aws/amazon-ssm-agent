@@ -13,7 +13,7 @@
 package converter
 
 import (
-	"github.com/aws/amazon-ssm-agent/agent/statemanager/model"
+	"github.com/aws/amazon-ssm-agent/agent/docmanager/model"
 )
 
 // ConvertPluginState converts plugin state from map to array to fit the requirement of association document v2 schema
