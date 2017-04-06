@@ -25,7 +25,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/association/model"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
-	stateModel "github.com/aws/amazon-ssm-agent/agent/docmanager/model"
+	docModel "github.com/aws/amazon-ssm-agent/agent/docmanager/model"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
@@ -94,7 +94,7 @@ func ParseDocumentWithParams(log log.T,
 // InitializeDocumentState - an interim state that is used around during an execution of a document
 func InitializeDocumentState(context context.T,
 	payload *messageContracts.SendCommandPayload,
-	rawData *model.InstanceAssociation) stateModel.DocumentState {
+	rawData *model.InstanceAssociation) docModel.DocumentState {
 
 	//initialize document information with relevant values extracted from msg
 	documentInfo := newDocumentInfo(rawData, payload)
@@ -108,9 +108,9 @@ func InitializeDocumentState(context context.T,
 		context.AppConfig().Agent.OrchestrationRootDir)
 
 	orchestrationDir := filepath.Join(orchestrationRootDir, documentInfo.AssociationID, documentInfo.RunID)
-	docState := stateModel.DocumentState{
+	docState := docModel.DocumentState{
 		DocumentInformation: documentInfo,
-		DocumentType:        stateModel.Association,
+		DocumentType:        docModel.Association,
 		SchemaVersion:       payload.DocumentContent.SchemaVersion,
 	}
 
@@ -120,9 +120,9 @@ func InitializeDocumentState(context context.T,
 }
 
 // newDocumentInfo initializes new DocumentInfo object
-func newDocumentInfo(rawData *model.InstanceAssociation, payload *messageContracts.SendCommandPayload) stateModel.DocumentInfo {
+func newDocumentInfo(rawData *model.InstanceAssociation, payload *messageContracts.SendCommandPayload) docModel.DocumentInfo {
 
-	documentInfo := new(stateModel.DocumentInfo)
+	documentInfo := new(docModel.DocumentInfo)
 
 	documentInfo.AssociationID = *(rawData.Association.AssociationId)
 	documentInfo.InstanceID = *(rawData.Association.InstanceId)
@@ -165,14 +165,14 @@ func parseParameters(log log.T, params map[string][]*string, paramsDef map[strin
 // buildPluginsInfo builds the PluginsInfo for document state
 func buildPluginsInfo(
 	payload *messageContracts.SendCommandPayload,
-	documentInfo stateModel.DocumentInfo,
+	documentInfo docModel.DocumentInfo,
 	s3KeyPrefix string,
 	orchestrationDir string,
-	docState *stateModel.DocumentState) {
+	docState *docModel.DocumentState) {
 
 	if payload.DocumentContent.RuntimeConfig != nil && len(payload.DocumentContent.RuntimeConfig) != 0 {
 		//initialize plugin states as map
-		pluginsInfo := []stateModel.PluginState{}
+		pluginsInfo := []docModel.PluginState{}
 
 		// getPluginConfigurations converts from PluginConfig (structure from the MDS message) to plugin.Configuration (structure expected by the plugin)
 		pluginConfigurations := []*contracts.Configuration{}
@@ -192,7 +192,7 @@ func buildPluginsInfo(
 		}
 
 		for _, config := range pluginConfigurations {
-			var plugin stateModel.PluginState
+			var plugin docModel.PluginState
 			plugin.Configuration = *config
 			plugin.Id = config.PluginID
 			plugin.Name = config.PluginName
@@ -205,7 +205,7 @@ func buildPluginsInfo(
 
 	if payload.DocumentContent.MainSteps != nil && len(payload.DocumentContent.MainSteps) != 0 {
 		//initialize plugin states as array
-		instancePluginsInfo := make([]stateModel.PluginState, len(payload.DocumentContent.MainSteps))
+		instancePluginsInfo := make([]docModel.PluginState, len(payload.DocumentContent.MainSteps))
 
 		// getPluginConfigurations converts from PluginConfig (structure from the MDS message) to plugin.Configuration (structure expected by the plugin)
 
@@ -224,7 +224,7 @@ func buildPluginsInfo(
 				PluginID:               instancePluginConfig.Name,
 			}
 
-			var plugin stateModel.PluginState
+			var plugin docModel.PluginState
 			plugin.Configuration = config
 			plugin.Id = config.PluginID
 			plugin.Name = config.PluginName

@@ -20,7 +20,7 @@ import (
 	"strings"
 
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
-	stateModel "github.com/aws/amazon-ssm-agent/agent/docmanager/model"
+	docModel "github.com/aws/amazon-ssm-agent/agent/docmanager/model"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	messageContracts "github.com/aws/amazon-ssm-agent/agent/message/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/message/converter"
@@ -33,18 +33,18 @@ func initializeSendCommandState(
 	payload messageContracts.SendCommandPayload,
 	orchestrationDir string,
 	s3KeyPrefix string,
-	msg ssmmds.Message) stateModel.DocumentState {
+	msg ssmmds.Message) docModel.DocumentState {
 
-	var documentType stateModel.DocumentType
+	var documentType docModel.DocumentType
 	if strings.HasPrefix(*msg.Topic, string(SendCommandTopicPrefixOffline)) {
-		documentType = stateModel.SendCommandOffline
+		documentType = docModel.SendCommandOffline
 	} else {
-		documentType = stateModel.SendCommand
+		documentType = docModel.SendCommand
 	}
 	//initialize document information with relevant values extracted from msg
 	documentInfo := newDocumentInfo(msg, payload)
 	//initialize command State
-	docState := stateModel.DocumentState{
+	docState := docModel.DocumentState{
 		DocumentInformation: documentInfo,
 		DocumentType:        documentType,
 	}
@@ -65,8 +65,8 @@ func initializeSendCommandState(
 }
 
 // initializes CancelCommandState - an interim state that is used during a command cancelling
-func initializeCancelCommandState(msg ssmmds.Message, parsedMsg messageContracts.CancelPayload) stateModel.DocumentState {
-	documentInfo := stateModel.DocumentInfo{}
+func initializeCancelCommandState(msg ssmmds.Message, parsedMsg messageContracts.CancelPayload) docModel.DocumentState {
+	documentInfo := docModel.DocumentInfo{}
 	documentInfo.InstanceID = *msg.Destination
 	documentInfo.CreatedDate = *msg.CreatedDate
 	documentInfo.MessageID = *msg.MessageId
@@ -75,7 +75,7 @@ func initializeCancelCommandState(msg ssmmds.Message, parsedMsg messageContracts
 	documentInfo.RunID = times.ToIsoDashUTC(times.DefaultClock.Now())
 	documentInfo.DocumentStatus = contracts.ResultStatusInProgress
 
-	cancelCommand := new(stateModel.CancelCommandInfo)
+	cancelCommand := new(docModel.CancelCommandInfo)
 	cancelCommand.Payload = *msg.Payload
 	cancelCommand.CancelMessageID = parsedMsg.CancelMessageID
 	commandID := getCommandID(parsedMsg.CancelMessageID)
@@ -83,13 +83,13 @@ func initializeCancelCommandState(msg ssmmds.Message, parsedMsg messageContracts
 	cancelCommand.CancelCommandID = commandID
 	cancelCommand.DebugInfo = fmt.Sprintf("Command %v is yet to be cancelled", commandID)
 
-	var documentType stateModel.DocumentType
+	var documentType docModel.DocumentType
 	if strings.HasPrefix(*msg.Topic, string(CancelCommandTopicPrefixOffline)) {
-		documentType = stateModel.CancelCommandOffline
+		documentType = docModel.CancelCommandOffline
 	} else {
-		documentType = stateModel.CancelCommand
+		documentType = docModel.CancelCommand
 	}
-	return stateModel.DocumentState{
+	return docModel.DocumentState{
 		DocumentInformation: documentInfo,
 		CancelInformation:   *cancelCommand,
 		DocumentType:        documentType,
@@ -101,10 +101,10 @@ func initializeSendCommandStateWithRuntimeConfig(
 	payload messageContracts.SendCommandPayload,
 	orchestrationDir string,
 	s3KeyPrefix string,
-	messageID string) (pluginsInfo map[string]stateModel.PluginState) {
+	messageID string) (pluginsInfo map[string]docModel.PluginState) {
 
 	//initialize plugin states as map
-	pluginsInfo = make(map[string]stateModel.PluginState)
+	pluginsInfo = make(map[string]docModel.PluginState)
 	// getPluginConfigurations converts from PluginConfig (structure from the MDS message) to plugin.Configuration (structure expected by the plugin)
 	pluginConfigurations := make(map[string]*contracts.Configuration)
 	for pluginName, pluginConfig := range payload.DocumentContent.RuntimeConfig {
@@ -123,7 +123,7 @@ func initializeSendCommandStateWithRuntimeConfig(
 	}
 
 	for key, value := range pluginConfigurations {
-		var plugin stateModel.PluginState
+		var plugin docModel.PluginState
 		plugin.Configuration = *value
 		plugin.Id = key
 		plugin.Name = key
@@ -137,10 +137,10 @@ func initializeSendCommandStateWithMainStep(
 	payload messageContracts.SendCommandPayload,
 	orchestrationDir string,
 	s3KeyPrefix string,
-	messageID string) (instancePluginsInfo []stateModel.PluginState) {
+	messageID string) (instancePluginsInfo []docModel.PluginState) {
 
 	//initialize plugin states as array
-	instancePluginsInfo = make([]stateModel.PluginState, len(payload.DocumentContent.MainSteps))
+	instancePluginsInfo = make([]docModel.PluginState, len(payload.DocumentContent.MainSteps))
 
 	// getPluginConfigurations converts from PluginConfig (structure from the MDS message) to plugin.Configuration (structure expected by the plugin)
 	for index, instancePluginConfig := range payload.DocumentContent.MainSteps {
@@ -157,7 +157,7 @@ func initializeSendCommandStateWithMainStep(
 			PluginID:               instancePluginConfig.Name,
 		}
 
-		var plugin stateModel.PluginState
+		var plugin docModel.PluginState
 		plugin.Configuration = config
 		plugin.Id = config.PluginID
 		plugin.Name = config.PluginName
