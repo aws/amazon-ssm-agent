@@ -27,7 +27,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/association/model"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
-	stateModel "github.com/aws/amazon-ssm-agent/agent/docmanager/model"
+	docModel "github.com/aws/amazon-ssm-agent/agent/docmanager/model"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	messageContracts "github.com/aws/amazon-ssm-agent/agent/message/contracts"
 	"github.com/aws/aws-sdk-go/service/ssm"
@@ -69,23 +69,23 @@ func TestParseAssociationWithAssociationVersion1_2(t *testing.T) {
 
 	docState, err := processor.parseAssociation(&assocRawData)
 
-	documentInfo := new(stateModel.DocumentInfo)
+	documentInfo := new(docModel.DocumentInfo)
 	documentInfo.AssociationID = assocId
 	documentInfo.InstanceID = instanceID
 	documentInfo.MessageID = fmt.Sprintf("aws.ssm.%v.%v", assocId, instanceID)
 	documentInfo.DocumentName = associationName
 
 	pluginName := "aws:applications"
-	pluginsInfo := make(map[string]stateModel.PluginState)
+	pluginsInfo := make(map[string]docModel.PluginState)
 	config := contracts.Configuration{}
-	var plugin stateModel.PluginState
+	var plugin docModel.PluginState
 	plugin.Configuration = config
 	plugin.Id = pluginName
 	pluginsInfo[pluginName] = plugin
 
-	expectedDocState := stateModel.DocumentState{
+	expectedDocState := docModel.DocumentState{
 		InstancePluginsInformation: converter.ConvertPluginsInformation(pluginsInfo),
-		DocumentType:               stateModel.Association,
+		DocumentType:               docModel.Association,
 		SchemaVersion:              "1.2",
 	}
 
@@ -97,7 +97,7 @@ func TestParseAssociationWithAssociationVersion1_2(t *testing.T) {
 	assert.Equal(t, nil, err)
 	assert.Equal(t, nil, err2)
 	assert.Equal(t, expectedDocState.SchemaVersion, docState.SchemaVersion)
-	assert.Equal(t, stateModel.Association, docState.DocumentType)
+	assert.Equal(t, docModel.Association, docState.DocumentType)
 
 	pluginInfo := docState.InstancePluginsInformation[0]
 	expectedProp := []interface{}{map[string]interface{}{"source": *source[0], "sourceHash": "", "id": "0.aws:applications", "action": "Install", "parameters": ""}}
@@ -141,17 +141,17 @@ func TestParseAssociationWithAssociationVersion2_0(t *testing.T) {
 	// test the method
 	docState, err := processor.parseAssociation(&assocRawData)
 
-	documentInfo := new(stateModel.DocumentInfo)
+	documentInfo := new(docModel.DocumentInfo)
 	documentInfo.AssociationID = assocId
 	documentInfo.InstanceID = instanceID
 	documentInfo.MessageID = fmt.Sprintf("aws.ssm.%v.%v", assocId, instanceID)
 	documentInfo.DocumentName = associationName
 
-	instancePluginsInfo := make([]stateModel.PluginState, 2)
+	instancePluginsInfo := make([]docModel.PluginState, 2)
 
 	action0 := "aws:runPowerShellScript"
 	name0 := "runPowerShellScript1"
-	var plugin0 stateModel.PluginState
+	var plugin0 docModel.PluginState
 	plugin0.Configuration = contracts.Configuration{}
 	plugin0.Id = name0
 	plugin0.Name = action0
@@ -159,22 +159,22 @@ func TestParseAssociationWithAssociationVersion2_0(t *testing.T) {
 
 	action1 := "aws:runPowerShellScript"
 	name1 := "runPowerShellScript2"
-	var plugin1 stateModel.PluginState
+	var plugin1 docModel.PluginState
 	plugin1.Configuration = contracts.Configuration{}
 	plugin1.Id = name1
 	plugin1.Name = action1
 	instancePluginsInfo[1] = plugin1
 
-	expectedDocState := stateModel.DocumentState{
+	expectedDocState := docModel.DocumentState{
 		//DocumentInformation: documentInfo,
 		InstancePluginsInformation: instancePluginsInfo,
-		DocumentType:               stateModel.Association,
+		DocumentType:               docModel.Association,
 		SchemaVersion:              "2.0",
 	}
 
 	assert.Equal(t, nil, err)
 	assert.Equal(t, expectedDocState.SchemaVersion, docState.SchemaVersion)
-	assert.Equal(t, stateModel.Association, docState.DocumentType)
+	assert.Equal(t, docModel.Association, docState.DocumentType)
 	assert.Equal(t, documentInfo.MessageID, docState.DocumentInformation.MessageID)
 
 	pluginInfo1 := docState.InstancePluginsInformation[0]

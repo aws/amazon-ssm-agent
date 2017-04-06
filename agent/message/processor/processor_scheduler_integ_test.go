@@ -255,6 +255,6 @@ func TestLoop_Multiple_Parallel_Error(t *testing.T) {
 		go proc.loop()
 	}
 
-	time.Sleep(4 * time.Second)
+	time.Sleep(5 * time.Second)
 	assert.Equal(t, 1, called)
 }
