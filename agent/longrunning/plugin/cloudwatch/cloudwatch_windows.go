@@ -62,7 +62,7 @@ const (
 // CloudwatchProcessInfo is a structure for info returned by Cloudwatch process
 type CloudwatchProcessInfo struct {
 	ProcessName string `json:"ProcessName"`
-	CWId        int    `json:"Id"`
+	PId         int    `json:"Id"`
 }
 
 // Assign method to global variables to allow unittest to override
@@ -249,13 +249,17 @@ func (p *Plugin) Stop(context context.T, cancelFlag task.CancelFlag) (err error)
 	}
 	log.Info("The number of cloudwatch processes running are ", len(cwProcInfo))
 	var processKillError error
+	var currentProcess os.Process
 	processKillError = nil
+	//Iterating through the cwProcess info to in case multiple Cloudwatch processes are running.
+	//All existing processes must be killed
 	for _, cloudwatchInfo := range cwProcInfo {
-		p.Process.Pid = cloudwatchInfo.CWId
+		//Assigning existing cloudwatch process Id to currentProcess in order to kill that process.
+		currentProcess.Pid = cloudwatchInfo.PId
 		log.Debug("PID of Cloudwatch is ", p.Process.Pid)
-		if err = p.Process.Kill(); err != nil {
-			// Continuing here without returning to kill whatever processes can be killed even if something goes wrong.
-			// return on error later
+		if err = currentProcess.Kill(); err != nil {
+			// Continuing here without returning to kill whatever processes can be killed even if something
+			// goes wrong. Return on error later
 			log.Errorf("Encountered error while trying to kill the process %v : %s", p.Process.Pid, err)
 			processKillError = err
 		} else {
