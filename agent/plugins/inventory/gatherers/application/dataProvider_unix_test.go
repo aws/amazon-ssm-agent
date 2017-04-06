@@ -103,3 +103,39 @@ func TestCollectApplicationData(t *testing.T) {
 	data = collectPlatformDependentApplicationData(mockContext)
 	assert.Equal(t, 2, len(data), "Given sample data must return 2 entries of application data")
 }
+
+func TestCollectAndMergePackages(t *testing.T) {
+	mockContext := context.NewMockDefault()
+	packageRepository = MockPackageRepository([]model.ApplicationData{
+		{Name: "amazon-ssm-agent", Version: "1.2.0.0-1", Architecture: model.Arch64Bit, CompType: model.AWSComponent},
+		{Name: "AwsXRayDaemon", Version: "1.2.3", Architecture: model.Arch64Bit, CompType: model.AWSComponent},
+	})
+
+	// both dpkg and rpm return result without error
+	cmdExecutor = MockTestExecutorWithoutError
+	data := CollectApplicationData(mockContext)
+	assert.Equal(t, 3, len(data), "Given sample data must return 3 entries of application data")
+}
+
+func TestCollectAndMergePackagesEmpty(t *testing.T) {
+	mockContext := context.NewMockDefault()
+	packageRepository = MockPackageRepositoryEmpty()
+
+	// both dpkg and rpm return result without error
+	cmdExecutor = MockTestExecutorWithoutError
+	data := CollectApplicationData(mockContext)
+	assert.Equal(t, 2, len(data), "Given sample data must return 2 entries of application data")
+}
+
+func TestCollectAndMergePackagesPlatformError(t *testing.T) {
+	mockContext := context.NewMockDefault()
+	packageRepository = MockPackageRepository([]model.ApplicationData{
+		{Name: "amazon-ssm-agent", Version: "1.2.0.0-1", Architecture: model.Arch64Bit, CompType: model.AWSComponent},
+		{Name: "AwsXRayDaemon", Version: "1.2.3", Architecture: model.Arch64Bit, CompType: model.AWSComponent},
+	})
+
+	// both dpkg and rpm return result without error
+	cmdExecutor = MockTestExecutorWithError
+	data := CollectApplicationData(mockContext)
+	assert.Equal(t, 2, len(data), "Given sample data must return 2 entries of application data")
+}

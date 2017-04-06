@@ -364,17 +364,22 @@ func TestGetInventoryData(t *testing.T) {
 		Name:     "SsmTest",
 		Version:  "0.0.1",
 		State:    PackageInstallState{Name: "SsmTest", Version: "0.0.1", State: Installed, Time: installTime},
-		Manifest: PackageManifest{Name: "SsmTest", Version: "0.0.1", Platform: "windows", Architecture: "amd64"},
+		Manifest: PackageManifest{Name: "SsmTest", Version: "0.0.1", Platform: "windows", Architecture: "amd64", AppPublisher: "Amazon AWS"},
 	}
 	expectedInventory := model.ApplicationData{
 		Name:          "SsmTest",
 		Version:       "0.0.1",
 		Architecture:  "x86_64",
+		Publisher:     "Amazon AWS",
 		CompType:      model.AWSComponent,
 		InstalledTime: installTime.Format(time.RFC3339),
 	}
 
 	testInventory(t, []InventoryTestData{testData}, []model.ApplicationData{expectedInventory})
+}
+
+func TestGetInventoryDataEmpty(t *testing.T) {
+	testInventory(t, []InventoryTestData{}, []model.ApplicationData{})
 }
 
 func TestGetInventoryDataMultiple(t *testing.T) {
@@ -383,27 +388,29 @@ func TestGetInventoryDataMultiple(t *testing.T) {
 		Name:     "SsmTest",
 		Version:  "0.0.1",
 		State:    PackageInstallState{Name: "SsmTest", Version: "0.0.1", State: Installed, Time: installTime},
-		Manifest: PackageManifest{Name: "SsmTest", Version: "0.0.1", Platform: "windows", Architecture: "amd64"},
+		Manifest: PackageManifest{Name: "SsmTest", Version: "0.0.1", Platform: "windows", Architecture: "amd64", AppPublisher: "Amazon AWS"},
 	}
 	testData2 := InventoryTestData{
 		Name:     "Foo",
 		Version:  "1.0.1",
 		State:    PackageInstallState{Name: "Foo", Version: "1.0.1", State: Installed, Time: installTime},
-		Manifest: PackageManifest{Name: "Foo", Version: "1.0.1", Platform: "windows", Architecture: "amd64"},
+		Manifest: PackageManifest{Name: "Foo", Version: "1.0.1", Platform: "windows", Architecture: "amd64", AppType: "Driver"},
 	}
 	expectedInventory1 := model.ApplicationData{
 		Name:          "SsmTest",
 		Version:       "0.0.1",
 		Architecture:  "x86_64",
+		Publisher:     "Amazon AWS",
 		CompType:      model.AWSComponent,
 		InstalledTime: installTime.Format(time.RFC3339),
 	}
 	expectedInventory2 := model.ApplicationData{
-		Name:          "Foo",
-		Version:       "1.0.1",
-		Architecture:  "x86_64",
-		CompType:      model.AWSComponent,
-		InstalledTime: installTime.Format(time.RFC3339),
+		Name:            "Foo",
+		Version:         "1.0.1",
+		Architecture:    "x86_64",
+		CompType:        model.AWSComponent,
+		ApplicationType: "Driver",
+		InstalledTime:   installTime.Format(time.RFC3339),
 	}
 
 	testInventory(t, []InventoryTestData{testData1, testData2}, []model.ApplicationData{expectedInventory1, expectedInventory2})
@@ -422,6 +429,12 @@ func TestGetInventoryDataComplex(t *testing.T) {
 		Version: "1.0.1",
 		State:   PackageInstallState{Name: "Foo", Version: "1.0.1", State: Installing, Time: installTime},
 	}
+	testData3 := InventoryTestData{
+		Name:     "SsmTest2",
+		Version:  "0.1.2",
+		State:    PackageInstallState{Name: "SsmTest", Version: "0.1.2", State: Installed, Time: installTime},
+		Manifest: PackageManifest{Name: "SsmTest", Version: "0.1.2", Platform: "windows", Architecture: "386"},
+	}
 	expectedInventory := model.ApplicationData{
 		Name:          "SSM Test Package",
 		Version:       "0.0.1",
@@ -430,7 +443,22 @@ func TestGetInventoryDataComplex(t *testing.T) {
 		InstalledTime: installTime.Format(time.RFC3339),
 	}
 
-	testInventory(t, []InventoryTestData{testData1, testData2}, []model.ApplicationData{expectedInventory})
+	testInventory(t, []InventoryTestData{testData1, testData2, testData3}, []model.ApplicationData{expectedInventory})
+}
+
+func TestGetInventoryError(t *testing.T) {
+	// Setup mock with expectations
+	mockFileSys := MockedFileSys{}
+	mockFileSys.On("GetDirectoryNames", path.Join(testRepoRoot)).Return([]string{}, errors.New("Failed")).Once()
+
+	// Instantiate repository with mock
+	repo := NewRepository(&mockFileSys, testRepoRoot)
+
+	// Call and validate mock expectations and return value
+	inventory := repo.GetInventoryData(contextMock)
+	mockFileSys.AssertExpectations(t)
+
+	assert.True(t, len(inventory) == 0)
 }
 
 func testInventory(t *testing.T, testData []InventoryTestData, expected []model.ApplicationData) {

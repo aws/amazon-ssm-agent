@@ -4,7 +4,7 @@ import (
 	"strings"
 
 	"github.com/aws/amazon-ssm-agent/agent/context"
-	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage"
+	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/localpackages"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/inventory/model"
 )
 
@@ -18,9 +18,10 @@ const (
 	awsPVDrivers        = "aws pv drivers"
 	awsAPIToolsPrefix   = "aws-apitools-"
 	awsAMIToolsPrefix   = "aws-amitools-"
-	arch64Bit           = "x86_64"
-	arch32Bit           = "i386"
 )
+
+// decoupling package repository for easy testability
+var packageRepository = localpackages.NewRepositoryDefault()
 
 var selectAwsApps map[string]string
 
@@ -55,7 +56,7 @@ func componentType(applicationName string) model.ComponentType {
 // CollectApplicationData collects all application data from the system using platform specific queries and merges in applications installed via configurePackage
 func CollectApplicationData(context context.T) (appData []model.ApplicationData) {
 	platformAppData := collectPlatformDependentApplicationData(context)
-	packageAppData := configurepackage.CollectApplicationData(context)
+	packageAppData := packageRepository.GetInventoryData(context)
 
 	//merge packageAppData into appData
 	return model.MergeLists(platformAppData, packageAppData)
