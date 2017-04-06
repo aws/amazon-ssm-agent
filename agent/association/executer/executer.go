@@ -29,7 +29,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/association/taskpool"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
-	stateModel "github.com/aws/amazon-ssm-agent/agent/docmanager/model"
+	docModel "github.com/aws/amazon-ssm-agent/agent/docmanager/model"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	"github.com/aws/amazon-ssm-agent/agent/framework/plugin"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
@@ -46,8 +46,8 @@ const (
 
 // DocumentExecuter represents the interface for running a document
 type DocumentExecuter interface {
-	ExecutePendingDocument(context context.T, pool taskpool.T, docState *stateModel.DocumentState) error
-	ExecuteInProgressDocument(context context.T, docState *stateModel.DocumentState, cancelFlag task.CancelFlag)
+	ExecutePendingDocument(context context.T, pool taskpool.T, docState *docModel.DocumentState) error
+	ExecuteInProgressDocument(context context.T, docState *docModel.DocumentState, cancelFlag task.CancelFlag)
 }
 
 // AssociationExecuter represents the implementation of document executer
@@ -67,7 +67,7 @@ func NewAssociationExecuter(assocSvc service.T, agentInfo *contracts.AgentInfo) 
 }
 
 // ExecutePendingDocument moves doc to current folder and submit it for execution
-func (r *AssociationExecuter) ExecutePendingDocument(context context.T, pool taskpool.T, docState *stateModel.DocumentState) error {
+func (r *AssociationExecuter) ExecutePendingDocument(context context.T, pool taskpool.T, docState *docModel.DocumentState) error {
 	log := context.With("[associationId=" + docState.DocumentInformation.AssociationID + "]").Log()
 	log.Debugf("Persist document to the state folder for execution")
 
@@ -87,7 +87,7 @@ func (r *AssociationExecuter) ExecutePendingDocument(context context.T, pool tas
 }
 
 // ExecuteInProgressDocument parses and processes the document
-func (r *AssociationExecuter) ExecuteInProgressDocument(context context.T, docState *stateModel.DocumentState, cancelFlag task.CancelFlag) {
+func (r *AssociationExecuter) ExecuteInProgressDocument(context context.T, docState *docModel.DocumentState, cancelFlag task.CancelFlag) {
 	assocContext := context.With("[associationId=" + docState.DocumentInformation.AssociationID + "]")
 	log := assocContext.Log()
 
@@ -161,7 +161,7 @@ func (r *AssociationExecuter) ExecuteInProgressDocument(context context.T, docSt
 
 // parseAndPersistReplyContents reloads interimDocState, updates it with replyPayload and persist it on disk.
 func (r *AssociationExecuter) parseAndPersistReplyContents(log log.T,
-	docState *stateModel.DocumentState,
+	docState *docModel.DocumentState,
 	pluginOutputs map[string]*contracts.PluginResult) {
 
 	//update interim cmd state file
@@ -233,7 +233,7 @@ func (r *AssociationExecuter) pluginExecutionReport(
 // associationExecutionReport update the status for association
 func (r *AssociationExecuter) associationExecutionReport(
 	log log.T,
-	docInfo *stateModel.DocumentInfo,
+	docInfo *docModel.DocumentInfo,
 	runtimeStatuses map[string]*contracts.PluginRuntimeStatus,
 	totalNumberOfPlugins int,
 	errorCode string,
