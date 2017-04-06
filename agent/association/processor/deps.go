@@ -18,11 +18,11 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/association/model"
 	"github.com/aws/amazon-ssm-agent/agent/association/parser"
 	"github.com/aws/amazon-ssm-agent/agent/context"
+	"github.com/aws/amazon-ssm-agent/agent/docmanager"
+	stateModel "github.com/aws/amazon-ssm-agent/agent/docmanager/model"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	messageContract "github.com/aws/amazon-ssm-agent/agent/message/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/platform"
-	"github.com/aws/amazon-ssm-agent/agent/statemanager"
-	stateModel "github.com/aws/amazon-ssm-agent/agent/statemanager/model"
 )
 
 var assocParser parserService = &assocParserService{}
@@ -47,7 +47,7 @@ func (systemImp) IsManagedInstance() (bool, error) {
 	return platform.IsManagedInstance()
 }
 
-// bookkeepingService represents the dependency for statemanager
+// bookkeepingService represents the dependency for docmanager
 type bookkeepingService interface {
 	PersistData(log log.T, documentID, instanceID, locationFolder string, object interface{})
 	IsDocumentCurrentlyExecuting(documentID, instanceID string) bool
@@ -55,14 +55,14 @@ type bookkeepingService interface {
 
 type assocBookkeepingService struct{}
 
-// PersistData wraps statemanager PersistData
+// PersistData wraps docmanager PersistData
 func (assocBookkeepingService) PersistData(log log.T, documentID, instanceID, locationFolder string, object interface{}) {
-	statemanager.PersistData(log, documentID, instanceID, locationFolder, object)
+	docmanager.PersistData(log, documentID, instanceID, locationFolder, object)
 }
 
-// IsDocumentExist wraps statemanager IsDocumentExist
+// IsDocumentExist wraps docmanager IsDocumentExist
 func (assocBookkeepingService) IsDocumentCurrentlyExecuting(documentID, instanceID string) bool {
-	return statemanager.IsDocumentCurrentlyExecuting(documentID, instanceID)
+	return docmanager.IsDocumentCurrentlyExecuting(documentID, instanceID)
 }
 
 // parserService represents the dependency for association parser

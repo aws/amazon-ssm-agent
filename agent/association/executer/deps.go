@@ -15,18 +15,18 @@ package executer
 import (
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
+	"github.com/aws/amazon-ssm-agent/agent/docmanager"
+	stateModel "github.com/aws/amazon-ssm-agent/agent/docmanager/model"
 	"github.com/aws/amazon-ssm-agent/agent/framework/engine"
 	"github.com/aws/amazon-ssm-agent/agent/framework/runpluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
-	"github.com/aws/amazon-ssm-agent/agent/statemanager"
-	stateModel "github.com/aws/amazon-ssm-agent/agent/statemanager/model"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 )
 
 var bookkeepingSvc = bookkeepingImp{}
 var pluginExecution = pluginExecutionImp{}
 
-// bookkeepingService represents the dependency for statemanager
+// bookkeepingService represents the dependency for docmanager
 type bookkeepingService interface {
 	GetDocumentInfo(log log.T, documentID, instanceID, locationFolder string) stateModel.DocumentInfo
 	PersistDocumentInfo(log log.T, docInfo stateModel.DocumentInfo, documentID, instanceID, locationFolder string)
@@ -35,19 +35,19 @@ type bookkeepingService interface {
 
 type bookkeepingImp struct{}
 
-// GetDocumentInfo wraps statemanager GetDocumentInfo
+// GetDocumentInfo wraps docmanager GetDocumentInfo
 func (bookkeepingImp) GetDocumentInfo(log log.T, documentID, instanceID, locationFolder string) stateModel.DocumentInfo {
-	return statemanager.GetDocumentInfo(log, documentID, instanceID, locationFolder)
+	return docmanager.GetDocumentInfo(log, documentID, instanceID, locationFolder)
 }
 
-// PersistDocumentInfo wraps statemanager PersistDocumentInfo
+// PersistDocumentInfo wraps docmanager PersistDocumentInfo
 func (bookkeepingImp) PersistDocumentInfo(log log.T, docInfo stateModel.DocumentInfo, documentID, instanceID, locationFolder string) {
-	statemanager.PersistDocumentInfo(log, docInfo, documentID, instanceID, locationFolder)
+	docmanager.PersistDocumentInfo(log, docInfo, documentID, instanceID, locationFolder)
 }
 
-// MoveDocumentState wraps statemanager MoveDocumentState
+// MoveDocumentState wraps docmanager MoveDocumentState
 func (bookkeepingImp) MoveDocumentState(log log.T, documentID, instanceID, srcLocationFolder, dstLocationFolder string) {
-	statemanager.MoveDocumentState(log, documentID, instanceID, srcLocationFolder, dstLocationFolder)
+	docmanager.MoveDocumentState(log, documentID, instanceID, srcLocationFolder, dstLocationFolder)
 }
 
 // pluginExecutionService represents the dependency for engine

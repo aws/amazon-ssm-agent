@@ -25,10 +25,10 @@ import (
 	asocitscheduler "github.com/aws/amazon-ssm-agent/agent/association/scheduler"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
+	"github.com/aws/amazon-ssm-agent/agent/docmanager"
+	"github.com/aws/amazon-ssm-agent/agent/docmanager/model"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	"github.com/aws/amazon-ssm-agent/agent/platform"
-	"github.com/aws/amazon-ssm-agent/agent/statemanager"
-	"github.com/aws/amazon-ssm-agent/agent/statemanager/model"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 	"github.com/carlescere/scheduler"
 )
@@ -92,7 +92,7 @@ func (p *Processor) processPendingDocuments(instanceID string) {
 	var err error
 
 	//process older documents from PENDING folder
-	pendingDocsLocation := statemanager.DocumentStateDir(instanceID, appconfig.DefaultLocationOfPending)
+	pendingDocsLocation := docmanager.DocumentStateDir(instanceID, appconfig.DefaultLocationOfPending)
 
 	if isDirectoryEmpty, _ := fileutil.IsDirEmpty(pendingDocsLocation); isDirectoryEmpty {
 		log.Debugf("No documents to process from %v", pendingDocsLocation)
@@ -110,7 +110,7 @@ func (p *Processor) processPendingDocuments(instanceID string) {
 		log.Debugf("Processing an older document - %v", f.Name())
 
 		//inspect document state
-		docState := statemanager.GetDocumentInterimState(log, f.Name(), instanceID, appconfig.DefaultLocationOfPending)
+		docState := docmanager.GetDocumentInterimState(log, f.Name(), instanceID, appconfig.DefaultLocationOfPending)
 
 		if !p.isSupportedDocumentType(docState.DocumentType) && (!docState.IsAssociation() || !p.pollAssociations) {
 			continue // This is a document for a different processor to handle
@@ -133,7 +133,7 @@ func (p *Processor) processInProgressDocuments(instanceID string) {
 	config := p.context.AppConfig()
 	var err error
 
-	pendingDocsLocation := statemanager.DocumentStateDir(instanceID, appconfig.DefaultLocationOfCurrent)
+	pendingDocsLocation := docmanager.DocumentStateDir(instanceID, appconfig.DefaultLocationOfCurrent)
 
 	if isDirectoryEmpty, _ := fileutil.IsDirEmpty(pendingDocsLocation); isDirectoryEmpty {
 		log.Debugf("no older document to process from %v", pendingDocsLocation)
@@ -152,7 +152,7 @@ func (p *Processor) processInProgressDocuments(instanceID string) {
 		log.Debugf("processing previously unexecuted document - %v", f.Name())
 
 		//inspect document state
-		docState := statemanager.GetDocumentInterimState(log, f.Name(), instanceID, appconfig.DefaultLocationOfCurrent)
+		docState := docmanager.GetDocumentInterimState(log, f.Name(), instanceID, appconfig.DefaultLocationOfCurrent)
 
 		if !p.isSupportedDocumentType(docState.DocumentType) && (!docState.IsAssociation() || !p.pollAssociations) {
 			log.Debugf("Skipping document %v type %v isaccoc %v and our pollAssociations is %v", docState.DocumentInformation.DocumentID, docState.DocumentType, docState.IsAssociation(), p.pollAssociations)
@@ -165,14 +165,14 @@ func (p *Processor) processInProgressDocuments(instanceID string) {
 		}
 
 		if docState.DocumentInformation.RunCount >= retryLimit {
-			statemanager.MoveDocumentState(log, f.Name(), instanceID, appconfig.DefaultLocationOfCurrent, appconfig.DefaultLocationOfCorrupt)
+			docmanager.MoveDocumentState(log, f.Name(), instanceID, appconfig.DefaultLocationOfCurrent, appconfig.DefaultLocationOfCorrupt)
 			continue
 		}
 
 		// increment the command run count
 		docState.DocumentInformation.RunCount++
-		
-		statemanager.PersistData(log, docState.DocumentInformation.DocumentID, instanceID, appconfig.DefaultLocationOfCurrent, docState)
+
+		docmanager.PersistData(log, docState.DocumentInformation.DocumentID, instanceID, appconfig.DefaultLocationOfCurrent, docState)
 
 		if docState.IsAssociation() && p.pollAssociations {
 			log.Debugf("processing in-progress association document: %v", docState.DocumentInformation.DocumentID)

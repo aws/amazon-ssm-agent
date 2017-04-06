@@ -27,6 +27,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/association/schedulemanager"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
+	docmanagerModel "github.com/aws/amazon-ssm-agent/agent/docmanager/model"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	"github.com/aws/amazon-ssm-agent/agent/framework/runpluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
@@ -41,7 +42,6 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/plugins/inventory/model"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/pluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/sdkutil"
-	stateManagerModel "github.com/aws/amazon-ssm-agent/agent/statemanager/model"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 	"github.com/aws/aws-sdk-go/aws/awserr"
 	"github.com/aws/aws-sdk-go/service/ssm"
@@ -550,7 +550,7 @@ func (p *Plugin) IsMulitpleAssociationPresent(currentAssociationID string) (stat
 // It throws error if the detection itself fails
 func (p *Plugin) IsInventoryBeingInvokedAsAssociation(fileName string) (status bool, err error) {
 	var content string
-	var docState stateManagerModel.DocumentState
+	var docState docmanagerModel.DocumentState
 	log := p.context.Log()
 
 	//since the document is still getting executed - it must be in Current folder
