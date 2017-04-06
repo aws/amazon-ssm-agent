@@ -244,14 +244,8 @@ func convertToApplicationData(input string) (data []model.ApplicationData, err e
 
 				For consistency, we want to ensure that architecture is reported as x86_64, i386 for
 				64bit & 32bit applications across all platforms.
-
-				However, since only dpkg reports 64 bit architecture as amd64, we need to edit only for
-				amd64 scenario.
 			*/
-
-			if strings.TrimSpace(strings.ToLower(item.Architecture)) == "amd64" {
-				item.Architecture = arch64Bit
-			}
+			item.Architecture = model.FormatArchitecture(item.Architecture)
 
 			data[i] = item
 		}

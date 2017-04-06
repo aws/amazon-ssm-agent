@@ -17,8 +17,11 @@ package application
 import (
 	"testing"
 
+	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/localpackages"
+	repomock "github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/localpackages/mock"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/inventory/model"
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/mock"
 )
 
 func TestComponentType(t *testing.T) {
@@ -32,4 +35,16 @@ func TestComponentType(t *testing.T) {
 	for _, name := range nonawsComponents {
 		assert.Equal(t, model.ComponentType(0), componentType(name))
 	}
+}
+
+func MockPackageRepositoryEmpty() localpackages.Repository {
+	mockRepo := repomock.MockedRepository{}
+	mockRepo.On("GetInventoryData", mock.Anything).Return([]model.ApplicationData{})
+	return &mockRepo
+}
+
+func MockPackageRepository(result []model.ApplicationData) localpackages.Repository {
+	mockRepo := repomock.MockedRepository{}
+	mockRepo.On("GetInventoryData", mock.Anything).Return(result)
+	return &mockRepo
 }
