@@ -17,6 +17,7 @@ package runscript
 
 import (
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
+	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/pluginutil"
 )
@@ -38,6 +39,7 @@ func NewRunShellPlugin(log log.T, pluginConfig pluginutil.PluginConfig) (*runShe
 			ScriptName:     shellScriptName,
 			ShellCommand:   shellCommand,
 			ShellArguments: shellArgs,
+			ByteOrderMark:  fileutil.ByteOrderMarkSkip,
 		},
 	}
 

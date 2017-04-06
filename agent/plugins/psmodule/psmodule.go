@@ -154,7 +154,7 @@ func (p *Plugin) runCommands(log log.T, pluginID string, pluginInput PSModulePlu
 	log.Debugf("Writing commands %v to file %v", pluginInput, scriptPath)
 
 	// Create script file
-	if err = pluginutil.CreateScriptFile(log, scriptPath, pluginInput.ParsedCommands); err != nil {
+	if err = pluginutil.CreateScriptFile(log, scriptPath, pluginInput.ParsedCommands, fileutil.ByteOrderMarkSkip); err != nil {
 		out.MarkAsFailed(log, fmt.Errorf("failed to create script file. %v", err))
 		return
 	}

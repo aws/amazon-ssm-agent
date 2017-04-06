@@ -173,9 +173,9 @@ func (p *DefaultPlugin) UploadOutputToS3Bucket(log log.T, pluginID string, orche
 }
 
 // CreateScriptFile creates a script containing the given commands.
-func CreateScriptFile(log log.T, scriptPath string, runCommand []string) (err error) {
+func CreateScriptFile(log log.T, scriptPath string, runCommand []string, byteOrderMark fileutil.ByteOrderMark) (err error) {
 	// write source commands to file
-	_, err = fileutil.WriteIntoFileWithPermissions(scriptPath, strings.Join(runCommand, "\n")+"\n", appconfig.ReadWriteExecuteAccess)
+	_, err = fileutil.WriteIntoFileWithPermissionsExtended(scriptPath, strings.Join(runCommand, "\n")+"\n", appconfig.ReadWriteExecuteAccess, byteOrderMark)
 	if err != nil {
 		log.Errorf("failed to write runcommand scripts to file %v, err %v", scriptPath, err)
 		return

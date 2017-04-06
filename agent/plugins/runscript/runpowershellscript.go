@@ -19,6 +19,7 @@ import (
 	"strings"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
+	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/pluginutil"
 )
 
@@ -38,6 +39,7 @@ func NewRunPowerShellPlugin(pluginConfig pluginutil.PluginConfig) (*runPowerShel
 			ScriptName:     powerShellScriptName,
 			ShellCommand:   appconfig.PowerShellPluginCommandName,
 			ShellArguments: strings.Split(appconfig.PowerShellPluginCommandArgs, " "),
+			ByteOrderMark:  fileutil.ByteOrderMarkEmit,
 		},
 	}
 
