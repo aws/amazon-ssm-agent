@@ -85,7 +85,7 @@ func collectPlatformDependentApplicationData(context context.T) []model.Applicat
 		if exeArch != Architecture64BitReportedByGoRuntime {
 			//exe architecture is also 32 bit
 			//since both exe & os are 32 bit - we need to detect only 32 bit apps
-			apps = executePowershellCommands(context, PowershellCmd, ArgsToReadRegistryFromWindowsCurrentVersionUninstall, arch32Bit)
+			apps = executePowershellCommands(context, PowershellCmd, ArgsToReadRegistryFromWindowsCurrentVersionUninstall, model.Arch32Bit)
 			data = append(data, apps...)
 		} else {
 			log.Infof("Detected an unsupported scenario of 64 bit amazon ssm agent running on 32 bit windows OS - nothing to report")
@@ -96,22 +96,22 @@ func collectPlatformDependentApplicationData(context context.T) []model.Applicat
 			//both exe & os architecture is 64 bit
 
 			//detecting 32 bit apps by querying Wow6432Node path in registry
-			apps = executePowershellCommands(context, PowershellCmd, ArgsToReadRegistryFromWow6432Node, arch32Bit)
+			apps = executePowershellCommands(context, PowershellCmd, ArgsToReadRegistryFromWow6432Node, model.Arch32Bit)
 			data = append(data, apps...)
 
 			//detecting 64 bit apps by querying normal registry path
-			apps = executePowershellCommands(context, PowershellCmd, ArgsToReadRegistryFromWindowsCurrentVersionUninstall, arch64Bit)
+			apps = executePowershellCommands(context, PowershellCmd, ArgsToReadRegistryFromWindowsCurrentVersionUninstall, model.Arch64Bit)
 			data = append(data, apps...)
 		} else {
 			//exe architecture is 32 bit - all queries to registry path will be redirected to wow6432 so need to use sysnative
 			//reference: https://blogs.msdn.microsoft.com/david.wang/2006/03/27/howto-detect-process-bitness/
 
 			//detecting 32 bit apps by querying Wow632 registry node
-			apps = executePowershellCommands(context, PowershellCmd, ArgsToReadRegistryFromWow6432Node, arch32Bit)
+			apps = executePowershellCommands(context, PowershellCmd, ArgsToReadRegistryFromWow6432Node, model.Arch32Bit)
 			data = append(data, apps...)
 
 			//detecting 64 bit apps by using sysnative for reading registry to avoid path redirection
-			apps = executePowershellCommands(context, SysnativePowershellCmd, ArgsToReadRegistryFromWindowsCurrentVersionUninstall, arch64Bit)
+			apps = executePowershellCommands(context, SysnativePowershellCmd, ArgsToReadRegistryFromWindowsCurrentVersionUninstall, model.Arch64Bit)
 			data = append(data, apps...)
 		}
 	} else {

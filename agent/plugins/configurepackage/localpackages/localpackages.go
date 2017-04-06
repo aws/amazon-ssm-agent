@@ -198,6 +198,7 @@ func (repo *localRepository) RemovePackage(context context.T, packageName string
 }
 
 // GetInventoryData returns ApplicationData for every successfully and currently installed package in the repository
+// that has inventory fields in its manifest
 func (repo *localRepository) GetInventoryData(context context.T) []model.ApplicationData {
 	result := make([]model.ApplicationData, 0)
 
@@ -205,7 +206,7 @@ func (repo *localRepository) GetInventoryData(context context.T) []model.Applica
 	var dirs []string
 	var err error
 	if dirs, err = repo.filesysdep.GetDirectoryNames(repo.repoRoot); err != nil {
-		return nil
+		return result
 	}
 
 	for _, packageName := range dirs {
@@ -215,13 +216,19 @@ func (repo *localRepository) GetInventoryData(context context.T) []model.Applica
 		}
 		// NOTE: We could put inventory info in the installstate file.  That might be simpler than opening two files in this method.
 		var manifest *PackageManifest
-		if manifest, err = repo.openPackageManifest(repo.filesysdep, packageName, packageState.Version); err != nil {
-			continue
+		manifest, err = repo.openPackageManifest(repo.filesysdep, packageName, packageState.Version)
+		if hasInventoryData(manifest) {
+			result = append(result, createApplicationData(manifest, packageState))
 		}
-		result = append(result, createApplicationData(manifest, packageState))
 	}
 
 	return result
+}
+
+// hasInventoryData determines if a package should be reported to inventory by the repository
+// if false, it is assumed that the package used an installer type that is already collected by inventory
+func hasInventoryData(manifest *PackageManifest) bool {
+	return manifest != nil && (manifest.AppName != "" || manifest.AppPublisher != "" || manifest.AppType != "" || manifest.AppReferenceURL != "")
 }
 
 // createApplicationData creates an ApplicationData item from a package manifest
