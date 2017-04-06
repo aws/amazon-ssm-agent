@@ -42,6 +42,7 @@ type Plugin struct {
 	ScriptName     string
 	ShellCommand   string
 	ShellArguments []string
+	ByteOrderMark  fileutil.ByteOrderMark
 }
 
 // RunScriptPluginInput represents one set of commands executed by the RunScript plugin.
@@ -149,7 +150,7 @@ func (p *Plugin) runCommands(log log.T, pluginID string, pluginInput RunScriptPl
 	log.Debugf("Writing commands %v to file %v", pluginInput, scriptPath)
 
 	// Create script file
-	if err = pluginutil.CreateScriptFile(log, scriptPath, pluginInput.RunCommand); err != nil {
+	if err = pluginutil.CreateScriptFile(log, scriptPath, pluginInput.RunCommand, p.ByteOrderMark); err != nil {
 		out.MarkAsFailed(log, fmt.Errorf("failed to create script file. %v", err))
 		return
 	}

@@ -27,6 +27,13 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 )
 
+type ByteOrderMark uint8
+
+const (
+	ByteOrderMarkEmit ByteOrderMark = iota
+	ByteOrderMarkSkip ByteOrderMark = iota
+)
+
 // DiskSpaceInfo stores the available, free, and total bytes
 type DiskSpaceInfo struct {
 	AvailBytes int64
@@ -179,8 +186,18 @@ func MoveAndRenameFile(srcPath, originalName, dstPath, newName string) (result b
 
 // WriteIntoFileWithPermissions writes into file with given file mode permissions
 func WriteIntoFileWithPermissions(absolutePath, content string, perm os.FileMode) (result bool, err error) {
+	return WriteIntoFileWithPermissionsExtended(absolutePath, content, perm, ByteOrderMarkSkip)
+}
+
+// WriteIntoFileWithPermissionsExtended writes into file with given file mode permissions
+func WriteIntoFileWithPermissionsExtended(absolutePath, content string, perm os.FileMode, byteOrderMark ByteOrderMark) (result bool, err error) {
 	result = true
-	err = ioUtil.WriteFile(absolutePath, []byte(content), perm)
+	if byteOrderMark == ByteOrderMarkEmit {
+		utf8ByteOrderMark := []byte{0xEF, 0xBB, 0xBF}
+		err = ioUtil.WriteFile(absolutePath, append(utf8ByteOrderMark, []byte(content)...), perm)
+	} else {
+		err = ioUtil.WriteFile(absolutePath, []byte(content), perm)
+	}
 	if err != nil {
 		err = fmt.Errorf("couldn't write into file - %v", err)
 		result = false

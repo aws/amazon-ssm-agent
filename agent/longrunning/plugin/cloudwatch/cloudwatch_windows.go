@@ -71,7 +71,8 @@ var fileExist = fileutil.Exists
 var getInstanceId = platform.InstanceID
 var getRegion = platform.Region
 var exec = executers.ShellCommandExecuter{}
-var createScript = pluginutil.CreateScriptFile
+
+// var createScript = pluginutil.CreateScriptFile
 
 //todo: honor cancel flag for Start
 //todo: honor cancel flag for Stop
