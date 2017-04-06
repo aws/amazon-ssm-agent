@@ -61,6 +61,7 @@ func TestExecutePowershellCommands(t *testing.T) {
 
 	var data []model.ApplicationData
 	c := context.NewMockDefault()
+	packageRepository = MockPackageRepositoryEmpty()
 	mockCmd := "RandomCommand"
 	mockArgs := "RandomCommandArgs"
 
@@ -87,6 +88,7 @@ func TestCollectApplicationData(t *testing.T) {
 
 	var data []model.ApplicationData
 	c := context.NewMockDefault()
+	packageRepository = MockPackageRepositoryEmpty()
 
 	//testing command executor without errors
 	cmdExecutor = MockTestExecutorWithoutError
@@ -99,4 +101,17 @@ func TestCollectApplicationData(t *testing.T) {
 	data = collectPlatformDependentApplicationData(c)
 
 	assert.Equal(t, 0, data, "If MockExecutor throws error, application dataset must be empty")
+}
+
+func TestCollectAndMergePackages(t *testing.T) {
+	mockContext := context.NewMockDefault()
+	packageRepository = MockPackageRepository([]model.ApplicationData{
+		{Name: "AWS Tools for Windows", Version: "3.9.344.0", Architecture: model.Arch64Bit, CompType: model.AWSComponent},
+		{Name: "IntelSriovDriver", Version: "1.2.3", Architecture: model.Arch64Bit},
+	})
+
+	// both dpkg and rpm return result without error
+	cmdExecutor = MockTestExecutorWithoutError
+	data := CollectApplicationData(mockContext)
+	assert.Equal(t, 3, len(data), "Given sample data must return 3 entries of application data")
 }
