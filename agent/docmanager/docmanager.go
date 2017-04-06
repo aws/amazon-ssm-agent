@@ -11,8 +11,8 @@
 // either express or implied. See the License for the specific language governing
 // permissions and limitations under the License.
 
-// Package statemanager helps persist documents state to disk
-package statemanager
+// Package docmanager helps persist documents state to disk
+package docmanager
 
 import (
 	"os"
@@ -22,10 +22,10 @@ import (
 	"path/filepath"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
+	"github.com/aws/amazon-ssm-agent/agent/docmanager/model"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
-	"github.com/aws/amazon-ssm-agent/agent/statemanager/model"
 )
 
 //TODO:  Revisit this when making Persistence invasive - i.e failure in file-systems should resort to Agent crash instead of swallowing errors
