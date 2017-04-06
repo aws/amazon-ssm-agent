@@ -16,7 +16,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/docmanager"
-	stateModel "github.com/aws/amazon-ssm-agent/agent/docmanager/model"
+	docModel "github.com/aws/amazon-ssm-agent/agent/docmanager/model"
 	"github.com/aws/amazon-ssm-agent/agent/framework/engine"
 	"github.com/aws/amazon-ssm-agent/agent/framework/runpluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
@@ -28,20 +28,20 @@ var pluginExecution = pluginExecutionImp{}
 
 // bookkeepingService represents the dependency for docmanager
 type bookkeepingService interface {
-	GetDocumentInfo(log log.T, documentID, instanceID, locationFolder string) stateModel.DocumentInfo
-	PersistDocumentInfo(log log.T, docInfo stateModel.DocumentInfo, documentID, instanceID, locationFolder string)
+	GetDocumentInfo(log log.T, documentID, instanceID, locationFolder string) docModel.DocumentInfo
+	PersistDocumentInfo(log log.T, docInfo docModel.DocumentInfo, documentID, instanceID, locationFolder string)
 	MoveCommandState(log log.T, documentID, instanceID, srcLocationFolder, dstLocationFolder string)
 }
 
 type bookkeepingImp struct{}
 
 // GetDocumentInfo wraps docmanager GetDocumentInfo
-func (bookkeepingImp) GetDocumentInfo(log log.T, documentID, instanceID, locationFolder string) stateModel.DocumentInfo {
+func (bookkeepingImp) GetDocumentInfo(log log.T, documentID, instanceID, locationFolder string) docModel.DocumentInfo {
 	return docmanager.GetDocumentInfo(log, documentID, instanceID, locationFolder)
 }
 
 // PersistDocumentInfo wraps docmanager PersistDocumentInfo
-func (bookkeepingImp) PersistDocumentInfo(log log.T, docInfo stateModel.DocumentInfo, documentID, instanceID, locationFolder string) {
+func (bookkeepingImp) PersistDocumentInfo(log log.T, docInfo docModel.DocumentInfo, documentID, instanceID, locationFolder string) {
 	docmanager.PersistDocumentInfo(log, docInfo, documentID, instanceID, locationFolder)
 }
 
@@ -56,7 +56,7 @@ type pluginExecutionService interface {
 		context context.T,
 		associationID string,
 		documentCreatedDate string,
-		plugins []stateModel.PluginState,
+		plugins []docModel.PluginState,
 		pluginRegistry runpluginutil.PluginRegistry,
 		sendReply runpluginutil.SendResponse,
 		cancelFlag task.CancelFlag,
@@ -70,7 +70,7 @@ func (pluginExecutionImp) RunPlugins(
 	context context.T,
 	associationID string,
 	documentCreatedDate string,
-	plugins []stateModel.PluginState,
+	plugins []docModel.PluginState,
 	pluginRegistry runpluginutil.PluginRegistry,
 	assocUpdate runpluginutil.UpdateAssociation,
 	cancelFlag task.CancelFlag,

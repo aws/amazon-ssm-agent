@@ -20,7 +20,7 @@ import (
 
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
-	stateModel "github.com/aws/amazon-ssm-agent/agent/docmanager/model"
+	docModel "github.com/aws/amazon-ssm-agent/agent/docmanager/model"
 	"github.com/aws/amazon-ssm-agent/agent/framework/plugin"
 	"github.com/aws/amazon-ssm-agent/agent/framework/runpluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
@@ -41,7 +41,7 @@ func RunPlugins(
 	context context.T,
 	executionID string,
 	documentCreatedDate string,
-	plugins []stateModel.PluginState,
+	plugins []docModel.PluginState,
 	pluginRegistry runpluginutil.PluginRegistry,
 	sendReply runpluginutil.SendResponse,
 	updateAssoc runpluginutil.UpdateAssociation,
