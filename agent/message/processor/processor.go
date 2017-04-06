@@ -23,6 +23,8 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/association/processor"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
+	"github.com/aws/amazon-ssm-agent/agent/docmanager"
+	"github.com/aws/amazon-ssm-agent/agent/docmanager/model"
 	"github.com/aws/amazon-ssm-agent/agent/framework/engine"
 	"github.com/aws/amazon-ssm-agent/agent/framework/plugin"
 	"github.com/aws/amazon-ssm-agent/agent/framework/runpluginutil"
@@ -34,8 +36,6 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/platform"
 	"github.com/aws/amazon-ssm-agent/agent/reply"
 	"github.com/aws/amazon-ssm-agent/agent/sdkutil"
-	"github.com/aws/amazon-ssm-agent/agent/statemanager"
-	"github.com/aws/amazon-ssm-agent/agent/statemanager/model"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 	"github.com/aws/amazon-ssm-agent/agent/times"
 	"github.com/carlescere/scheduler"
@@ -198,7 +198,7 @@ func NewProcessor(context context.T, processorName string, processorService serv
 
 	// PersistData is used to persist the data into a bookkeeping folder
 	persistData := func(state *model.DocumentState, bookkeeping string) {
-		statemanager.PersistData(log, state.DocumentInformation.DocumentID, state.DocumentInformation.InstanceID, bookkeeping, *state)
+		docmanager.PersistData(log, state.DocumentInformation.DocumentID, state.DocumentInformation.InstanceID, bookkeeping, *state)
 	}
 
 	var assocProc *processor.Processor

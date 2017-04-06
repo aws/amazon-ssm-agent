@@ -17,9 +17,9 @@ package processor
 import (
 	"github.com/aws/amazon-ssm-agent/agent/association/model"
 	"github.com/aws/amazon-ssm-agent/agent/context"
+	stateModel "github.com/aws/amazon-ssm-agent/agent/docmanager/model"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	messageContract "github.com/aws/amazon-ssm-agent/agent/message/contracts"
-	stateModel "github.com/aws/amazon-ssm-agent/agent/statemanager/model"
 	"github.com/stretchr/testify/mock"
 )
 
