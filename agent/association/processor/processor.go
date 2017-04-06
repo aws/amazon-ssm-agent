@@ -30,7 +30,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/association/taskpool"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
-	stateModel "github.com/aws/amazon-ssm-agent/agent/docmanager/model"
+	docModel "github.com/aws/amazon-ssm-agent/agent/docmanager/model"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/task"
@@ -253,7 +253,7 @@ func (p *Processor) runScheduledAssociation(log log.T) {
 		contracts.AssociationPendingMessage,
 		service.NoOutputUrl)
 
-	var docState *stateModel.DocumentState
+	var docState *docModel.DocumentState
 	if docState, err = p.parseAssociation(scheduledAssociation); err != nil {
 		err = fmt.Errorf("Encountered error while parsing association %v, %v",
 			docState.DocumentInformation.AssociationID,
@@ -291,7 +291,7 @@ func isAssociationTimedOut(assoc *model.InstanceAssociation) bool {
 }
 
 // ExecutePendingDocument wraps ExecutePendingDocument from document executer
-func (p *Processor) ExecutePendingDocument(docState *stateModel.DocumentState) {
+func (p *Processor) ExecutePendingDocument(docState *docModel.DocumentState) {
 	log := p.context.Log()
 	if err := p.executer.ExecutePendingDocument(p.context, p.taskPool, docState); err != nil {
 		log.Error("Failed to execute pending documents ", err)
@@ -299,7 +299,7 @@ func (p *Processor) ExecutePendingDocument(docState *stateModel.DocumentState) {
 }
 
 // ExecuteInProgressDocument wraps ExecuteInProgressDocument from document executer
-func (p *Processor) ExecuteInProgressDocument(docState *stateModel.DocumentState, cancelFlag task.CancelFlag) {
+func (p *Processor) ExecuteInProgressDocument(docState *docModel.DocumentState, cancelFlag task.CancelFlag) {
 	p.executer.ExecuteInProgressDocument(p.context, docState, cancelFlag)
 }
 
@@ -336,11 +336,11 @@ func (p *Processor) isStopped() bool {
 }
 
 // parseAssociation parses the association to the document state
-func (p *Processor) parseAssociation(rawData *model.InstanceAssociation) (*stateModel.DocumentState, error) {
+func (p *Processor) parseAssociation(rawData *model.InstanceAssociation) (*docModel.DocumentState, error) {
 	// create separate logger that includes messageID with every log message
 	context := p.context.With("[associationId=" + *rawData.Association.AssociationId + "]")
 	log := context.Log()
-	docState := stateModel.DocumentState{}
+	docState := docModel.DocumentState{}
 
 	log.Info("Executing association")
 
@@ -370,7 +370,7 @@ func (p *Processor) parseAssociation(rawData *model.InstanceAssociation) (*state
 
 	if isMI {
 		log.Debugf("Running incompatible AWS SSM Document %v on managed instance", docState.DocumentInformation.DocumentName)
-		if err = stateModel.RemoveDependencyOnInstanceMetadata(context, &docState); err != nil {
+		if err = docModel.RemoveDependencyOnInstanceMetadata(context, &docState); err != nil {
 			errorMsg := "Encountered error while parsing input - internal error"
 			log.Debug(err)
 			return &docState, fmt.Errorf("%v", errorMsg)
@@ -381,7 +381,7 @@ func (p *Processor) parseAssociation(rawData *model.InstanceAssociation) (*state
 }
 
 // persistAssociationForExecution saves the document to pending folder and submit it to the task pool
-func (p *Processor) persistAssociationForExecution(log log.T, docState *stateModel.DocumentState) error {
+func (p *Processor) persistAssociationForExecution(log log.T, docState *docModel.DocumentState) error {
 	log = p.context.With("[associationId=" + docState.DocumentInformation.AssociationID + "]").Log()
 	log.Info("Persisting interim state in current execution folder")
 

@@ -25,7 +25,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/association/service"
 	"github.com/aws/amazon-ssm-agent/agent/association/taskpool"
 	"github.com/aws/amazon-ssm-agent/agent/context"
-	stateModel "github.com/aws/amazon-ssm-agent/agent/docmanager/model"
+	docModel "github.com/aws/amazon-ssm-agent/agent/docmanager/model"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	messageContracts "github.com/aws/amazon-ssm-agent/agent/message/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/task"
@@ -81,7 +81,7 @@ func TestProcessAssociationUnableToGetAssociation(t *testing.T) {
 
 func TestProcessAssociationExecutePendingDocument(t *testing.T) {
 	processor := createProcessor()
-	docState := stateModel.DocumentState{}
+	docState := docModel.DocumentState{}
 	executerMock := executer.DocumentExecuterMock{}
 	sys = &systemStub{}
 
@@ -100,7 +100,7 @@ func TestProcessAssociationExecutePendingDocument(t *testing.T) {
 
 func TestProcessAssociationExecuteInProgressDocument(t *testing.T) {
 	processor := createProcessor()
-	docState := stateModel.DocumentState{}
+	docState := docModel.DocumentState{}
 	cancelFlag := task.ChanneledCancelFlag{}
 	executerMock := executer.DocumentExecuterMock{}
 	sys = &systemStub{}
@@ -216,7 +216,7 @@ func TestProcessAssociationUnableToExecutePendingDocument(t *testing.T) {
 	sys = &systemStub{}
 
 	payload := messageContracts.SendCommandPayload{}
-	docState := stateModel.DocumentState{}
+	docState := docModel.DocumentState{}
 	parserMock := parserMock{}
 	executerMock := executer.DocumentExecuterMock{}
 
@@ -248,7 +248,7 @@ func TestProcessAssociationUnableToExecutePendingDocument(t *testing.T) {
 	assert.True(t, svcMock.AssertNumberOfCalls(t, "LoadAssociationDetail", 1))
 }
 
-func mockParser(parserMock *parserMock, payload *messageContracts.SendCommandPayload, docState stateModel.DocumentState) {
+func mockParser(parserMock *parserMock, payload *messageContracts.SendCommandPayload, docState docModel.DocumentState) {
 	parserMock.On(
 		"ParseDocumentWithParams",
 		mock.AnythingOfType("*log.Mock"),
@@ -268,7 +268,7 @@ func TestProcessAssociationSuccessful(t *testing.T) {
 	sys = &systemStub{}
 
 	payload := messageContracts.SendCommandPayload{}
-	docState := stateModel.DocumentState{}
+	docState := docModel.DocumentState{}
 	parserMock := parserMock{}
 	executerMock := executer.DocumentExecuterMock{}
 

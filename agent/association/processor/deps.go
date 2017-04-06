@@ -19,7 +19,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/association/parser"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/docmanager"
-	stateModel "github.com/aws/amazon-ssm-agent/agent/docmanager/model"
+	docModel "github.com/aws/amazon-ssm-agent/agent/docmanager/model"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	messageContract "github.com/aws/amazon-ssm-agent/agent/message/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/platform"
@@ -70,7 +70,7 @@ type parserService interface {
 	ParseDocumentWithParams(log log.T, rawData *model.InstanceAssociation) (*messageContract.SendCommandPayload, error)
 	InitializeDocumentState(context context.T,
 		payload *messageContract.SendCommandPayload,
-		rawData *model.InstanceAssociation) stateModel.DocumentState
+		rawData *model.InstanceAssociation) docModel.DocumentState
 }
 
 type assocParserService struct{}
@@ -86,7 +86,7 @@ func (assocParserService) ParseDocumentWithParams(
 // InitializeDocumentState wraps engine InitializeCommandState
 func (assocParserService) InitializeDocumentState(context context.T,
 	payload *messageContract.SendCommandPayload,
-	rawData *model.InstanceAssociation) stateModel.DocumentState {
+	rawData *model.InstanceAssociation) docModel.DocumentState {
 
 	return parser.InitializeDocumentState(context, payload, rawData)
 }
