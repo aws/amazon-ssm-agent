@@ -1,5 +1,10 @@
 Latest
 ===============
+- Fixed bugs that prevented CloudWatch from launching and allowed multiple instances of CloudWatch to launch on Windows
+- Various bug fixes
+
+2.0.730.0
+===============
 - Fixed issues with agent starting before network is ready on systemd systems. 
 
 2.0.716.0
@@ -9,10 +14,13 @@ Latest
 
 2.0.706.0
 ================
+- Various bug fixes
+
+2.0.682.0
+================
 - Added support for installing Docker on Linux
 - Removed the upper limit for the maximum number of parallel executing documents on the agent (previously the max was 10) 
 You can configure this number by setting the “CommandWorkerLimit” attribute in amazon-ssm-agent.json file
-- Various bug fixes
 
 2.0.672
 ================
