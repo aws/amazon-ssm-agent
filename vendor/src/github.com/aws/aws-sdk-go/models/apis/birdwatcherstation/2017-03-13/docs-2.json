@@ -1,0 +1,124 @@
+{
+  "version": "2.0",
+  "service": null,
+  "operations": {
+    "GetManifest": null,
+    "PutConfigurePackageResult": null
+  },
+  "shapes": {
+    "Action": {
+      "base": null,
+      "refs": {
+        "PackageResultStep$Action": null
+      }
+    },
+    "Arn": {
+      "base": null,
+      "refs": {
+        "Auth$UserArn": null
+      }
+    },
+    "Auth": {
+      "base": null,
+      "refs": {
+        "GetManifestRequest$Auth": null,
+        "PutConfigurePackageResultRequest$Auth": null
+      }
+    },
+    "ExitCode": {
+      "base": null,
+      "refs": {
+        "PackageResultStep$Result": null,
+        "PutConfigurePackageResultRequest$Result": null
+      }
+    },
+    "GetManifestRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "GetManifestResponse": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "Manifest": {
+      "base": null,
+      "refs": {
+        "GetManifestResponse$Manifest": null
+      }
+    },
+    "Name": {
+      "base": null,
+      "refs": {
+        "PackageResultAttributes$key": null
+      }
+    },
+    "PackageName": {
+      "base": null,
+      "refs": {
+        "GetManifestRequest$PackageName": null,
+        "PutConfigurePackageResultRequest$PackageName": null
+      }
+    },
+    "PackageResultAttributes": {
+      "base": null,
+      "refs": {
+        "PutConfigurePackageResultRequest$PackageResultAttributes": null
+      }
+    },
+    "PackageResultStep": {
+      "base": null,
+      "refs": {
+        "PackageResultSteps$member": null
+      }
+    },
+    "PackageResultSteps": {
+      "base": null,
+      "refs": {
+        "PutConfigurePackageResultRequest$PackageResultSteps": null
+      }
+    },
+    "PackageVersion": {
+      "base": null,
+      "refs": {
+        "GetManifestRequest$PackageVersion": null,
+        "PutConfigurePackageResultRequest$PackageVersion": null
+      }
+    },
+    "PutConfigurePackageResultRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "PutConfigurePackageResultResponse": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "ResourceNotFoundException": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "String": {
+      "base": null,
+      "refs": {
+        "ResourceNotFoundException$Message": null
+      }
+    },
+    "Timing": {
+      "base": null,
+      "refs": {
+        "PackageResultStep$Timing": null,
+        "PutConfigurePackageResultRequest$OverallTiming": null
+      }
+    },
+    "Value": {
+      "base": null,
+      "refs": {
+        "PackageResultAttributes$value": null
+      }
+    }
+  }
+}
