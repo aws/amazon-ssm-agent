@@ -326,7 +326,7 @@ func checkAlreadyInstalled(context context.T,
 func selectService(serviceEndpoint string) packageservice.PackageService {
 	region, _ := platform.Region()
 	packageService := ssms3.New(serviceEndpoint, region)
-	//packageService = birdwatcher.New(log)
+	//packageService = birdwatcher.New(log, repository)
 
 	return packageService
 }
