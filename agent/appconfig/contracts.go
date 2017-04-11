@@ -74,13 +74,22 @@ type S3Cfg struct {
 	LogKey    string
 }
 
+// BirdwatcherCfg represents configuration related to ConfigurePackage Birdwatcher integration
+// NOTE: probably temporary as long as Birdwatcher is not behind the ssm facade
+type BirdwatcherCfg struct {
+	Endpoint   string
+	Region     string
+	DisableSSL bool
+}
+
 // SsmagentConfig stores agent configuration values.
 type SsmagentConfig struct {
-	Profile CredentialProfile
-	Mds     MdsCfg
-	Ssm     SsmCfg
-	Mfs     MfsCfg
-	Agent   AgentInfo
-	Os      OsInfo
-	S3      S3Cfg
+	Profile     CredentialProfile
+	Mds         MdsCfg
+	Ssm         SsmCfg
+	Mfs         MfsCfg
+	Agent       AgentInfo
+	Os          OsInfo
+	S3          S3Cfg
+	Birdwatcher BirdwatcherCfg
 }
