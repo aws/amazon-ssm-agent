@@ -53,6 +53,7 @@ if [ $1 -eq 0 ] ; then
         sleep 1
     elif [[ `systemctl` =~ -\.mount ]]; then
         systemctl stop amazon-ssm-agent
+        systemctl disable amazon-ssm-agent
         systemctl daemon-reload
     fi
 fi
@@ -63,6 +64,7 @@ if [ $1 -ge 0 ]; then
     if [[ `/sbin/init --version` =~ upstart ]]; then
         /sbin/start amazon-ssm-agent
     elif [[ `systemctl` =~ -\.mount ]]; then
+        systemctl enable amazon-ssm-agent
         systemctl start amazon-ssm-agent
         systemctl daemon-reload
     fi
