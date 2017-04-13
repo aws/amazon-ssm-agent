@@ -26,15 +26,14 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
-	"github.com/aws/amazon-ssm-agent/agent/fileutil/artifact"
 	"github.com/aws/amazon-ssm-agent/agent/framework/runpluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
-	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/localpackages"
+	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/packageservice"
+	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/ssms3"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/pluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 	"github.com/aws/amazon-ssm-agent/agent/times"
-	"github.com/aws/amazon-ssm-agent/agent/updateutil"
 )
 
 const (
@@ -42,6 +41,9 @@ const (
 	InstallAction = "Install"
 	// UninstallAction represents the json command to uninstall package
 	UninstallAction = "Uninstall"
+
+	// PatternVersion represents the regular expression for validating version
+	PatternVersion = "^(?:(\\d+)\\.)(?:(\\d+)\\.)(\\d+)$"
 )
 
 // Plugin is the type for the configurepackage plugin.
@@ -74,19 +76,19 @@ func NewPlugin(pluginConfig pluginutil.PluginConfig) (*Plugin, error) {
 
 type configurePackage struct {
 	contracts.Configuration
-	runner     runpluginutil.PluginRunner
-	repository localpackages.Repository
+	runner         runpluginutil.PluginRunner
+	repository     localpackages.Repository
+	packageservice packageservice.PackageService
 }
 
 type configurePackageManager interface {
 	validateInput(context context.T, input *ConfigurePackagePluginInput) (valid bool, err error)
 
-	getVersionToInstall(context context.T, input *ConfigurePackagePluginInput, util configureUtil) (version string, installedVersion string, installState localpackages.InstallState, err error)
+	getVersionToInstall(context context.T, input *ConfigurePackagePluginInput) (version string, installedVersion string, installState localpackages.InstallState, err error)
 
-	getVersionToUninstall(context context.T, input *ConfigurePackagePluginInput, util configureUtil) (version string, err error)
+	getVersionToUninstall(context context.T, input *ConfigurePackagePluginInput) (version string, err error)
 
 	ensurePackage(context context.T,
-		util configureUtil,
 		packageName string,
 		version string,
 		output *contracts.PluginOutput) error
@@ -119,7 +121,6 @@ func runConfigurePackage(
 	p *Plugin,
 	context context.T,
 	manager configurePackageManager,
-	instanceContext *updateutil.InstanceContext,
 	rawPluginInput interface{}) (output contracts.PluginOutput) {
 	log := context.Log()
 
@@ -143,19 +144,17 @@ func runConfigurePackage(
 	}
 	defer unlockPackage(input.Name)
 
-	configUtil := NewUtil(instanceContext, input.Repository)
-
 	switch input.Action {
 	case InstallAction:
 		// get version information
-		version, installedVersion, installState, versionErr := manager.getVersionToInstall(context, &input, configUtil)
+		version, installedVersion, installState, versionErr := manager.getVersionToInstall(context, &input)
 		if versionErr != nil {
 			output.MarkAsFailed(log, fmt.Errorf("unable to determine version to install: %v", versionErr))
 			return
 		}
 
 		// ensure manifest file and package
-		ensureErr := manager.ensurePackage(context, configUtil, input.Name, version, &output)
+		ensureErr := manager.ensurePackage(context, input.Name, version, &output)
 		if ensureErr != nil {
 			output.MarkAsFailed(log, fmt.Errorf("unable to obtain package: %v", ensureErr))
 			return
@@ -187,7 +186,7 @@ func runConfigurePackage(
 		// if different version is installed, uninstall
 		// if status is "installing" then we are returning after a reboot in a case where the uninstall of the previous version has already happened
 		if installedVersion != "" && installedVersion != version && installState != localpackages.Installing {
-			ensureErr := manager.ensurePackage(context, configUtil, input.Name, installedVersion, &output)
+			ensureErr := manager.ensurePackage(context, input.Name, installedVersion, &output)
 			if ensureErr != nil {
 				output.AppendErrorf(log, "unable to obtain package: %v", ensureErr)
 			} else {
@@ -250,14 +249,14 @@ func runConfigurePackage(
 
 	case UninstallAction:
 		// get version information
-		version, versionErr := manager.getVersionToUninstall(context, &input, configUtil)
+		version, versionErr := manager.getVersionToUninstall(context, &input)
 		if versionErr != nil || version == "" {
 			output.MarkAsFailed(log, fmt.Errorf("unable to determine version to uninstall: %v", versionErr))
 			return
 		}
 
 		// ensure manifest file and package
-		ensureErr := manager.ensurePackage(context, configUtil, input.Name, version, &output)
+		ensureErr := manager.ensurePackage(context, input.Name, version, &output)
 		if ensureErr != nil {
 			output.MarkAsFailed(log, fmt.Errorf("unable to obtain package: %v", ensureErr))
 			return
@@ -311,7 +310,6 @@ func runConfigurePackage(
 
 // ensurePackage validates local copy of the manifest and package and downloads if needed
 func (m *configurePackage) ensurePackage(context context.T,
-	util configureUtil,
 	packageName string,
 	version string,
 	output *contracts.PluginOutput) error {
@@ -321,7 +319,9 @@ func (m *configurePackage) ensurePackage(context context.T,
 		context.Log().Debugf("Current %v Target %v State %v", currentVersion, version, currentState)
 		context.Log().Debugf("Refreshing package content for %v %v %v", packageName, version, err)
 		return m.repository.RefreshPackage(context, packageName, version, func(targetDirectory string) error {
-			return downloadPackageFromS3(context, util.GetS3Location(packageName, version), targetDirectory)
+			_, err := m.packageservice.DownloadArtifact(context.Log(), packageName, version, targetDirectory)
+			// TODO: do something with file? uncompress?
+			return err
 		})
 	}
 	return nil
@@ -360,8 +360,8 @@ func (m *configurePackage) validateInput(context context.T, input *ConfigurePack
 
 // getVersionToInstall decides which version to install and whether there is an existing version (that is not in the process of installing)
 func (m *configurePackage) getVersionToInstall(context context.T,
-	input *ConfigurePackagePluginInput,
-	util configureUtil) (version string, installedVersion string, installState localpackages.InstallState, err error) {
+	input *ConfigurePackagePluginInput) (version string, installedVersion string, installState localpackages.InstallState, err error) {
+
 	installedVersion = m.repository.GetInstalledVersion(context, input.Name)
 	currentState, currentVersion := m.repository.GetInstallState(context, input.Name)
 	if currentState == localpackages.Failed {
@@ -372,8 +372,10 @@ func (m *configurePackage) getVersionToInstall(context context.T,
 	if input.Version != "" {
 		version = input.Version
 	} else {
-		if version, err = util.GetLatestVersion(context.Log(), input.Name); err != nil {
-			return
+		// TODO: targetdir
+		version, err = m.packageservice.DownloadManifest(context.Log(), input.Name, "latest", "targetdir")
+		if err != nil {
+			return "", installedVersion, currentState, err
 		}
 	}
 	return version, installedVersion, currentState, nil
@@ -381,51 +383,15 @@ func (m *configurePackage) getVersionToInstall(context context.T,
 
 // getVersionToUninstall decides which version to uninstall
 func (m *configurePackage) getVersionToUninstall(context context.T,
-	input *ConfigurePackagePluginInput,
-	util configureUtil) (version string, err error) {
+	input *ConfigurePackagePluginInput) (version string, err error) {
 	if input.Version != "" {
 		version = input.Version
 	} else if installedVersion := m.repository.GetInstalledVersion(context, input.Name); installedVersion != "" {
 		version = installedVersion
 	} else {
-		version, err = util.GetLatestVersion(context.Log(), input.Name)
+		version, err = m.packageservice.DownloadManifest(context.Log(), input.Name, "latest", "targetdir") // TODO: targetdir
 	}
 	return
-}
-
-// downloadPackageFromS3 downloads and uncompresses the installation package from s3 bucket
-func downloadPackageFromS3(context context.T, packageS3Source string, packageDestination string) error {
-	log := context.Log()
-	downloadInput := artifact.DownloadInput{
-		SourceURL:            packageS3Source,
-		DestinationDirectory: packageDestination}
-
-	downloadOutput, downloadErr := networkdep.Download(log, downloadInput)
-	if downloadErr != nil || downloadOutput.LocalFilePath == "" {
-		errMessage := fmt.Sprintf("failed to download installation package reliably, %v", downloadInput.SourceURL)
-		if downloadErr != nil {
-			errMessage = fmt.Sprintf("%v, %v", errMessage, downloadErr.Error())
-		}
-		// attempt to clean up failed download folder
-		if errCleanup := filesysdep.RemoveAll(packageDestination); errCleanup != nil {
-			log.Errorf("Failed to clean up destination folder %v after failed download: %v", packageDestination, errCleanup)
-		}
-		// return download error
-		return errors.New(errMessage)
-	}
-
-	filePath := downloadOutput.LocalFilePath
-	if uncompressErr := filesysdep.Uncompress(filePath, packageDestination); uncompressErr != nil {
-		return fmt.Errorf("failed to extract package installer package %v from %v, %v", filePath, packageDestination, uncompressErr.Error())
-	}
-
-	// NOTE: this could be considered a warning - it likely points to a real problem, but if uncompress succeeded, we could continue
-	// delete compressed package after using
-	if cleanupErr := filesysdep.RemoveAll(filePath); cleanupErr != nil {
-		return fmt.Errorf("failed to delete compressed package %v, %v", filePath, cleanupErr.Error())
-	}
-
-	return nil
 }
 
 // setInstallState sets the current installation state for the package in the persistent store.
@@ -530,13 +496,6 @@ func (m *configurePackage) executeAction(context context.T,
 	return
 }
 
-// getInstanceContext uses the updateUtil to return an instance context
-func getInstanceContext(log log.T) (instanceContext *updateutil.InstanceContext, err error) {
-	updateUtil := new(updateutil.Utility)
-	return updateUtil.CreateInstanceContext(log)
-}
-
-var getContext = getInstanceContext
 var runConfig = runConfigurePackage
 
 // Execute runs multiple sets of commands and returns their outputs.
@@ -558,15 +517,16 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 
 	out := make([]contracts.PluginOutput, len(properties))
 
-	instanceContext, err := getContext(log)
-	if err != nil {
-		for _, output := range out {
-			output.MarkAsFailed(log,
-				fmt.Errorf("unable to create instance context: %v", err))
-		}
-		return
+	var pkgservice packageservice.PackageService
+	pkgservice = ssms3.New(log, "", "REGION") // TODO: input.Repository) // TODO: REGION
+	//pkgservice = birdwatcher.New(log, "") // TODO: input.Repository)
+
+	manager := &configurePackage{
+		Configuration:  config,
+		runner:         subDocumentRunner,
+		repository:     localpackages.NewRepository(),
+		packageservice: pkgservice,
 	}
-	manager := &configurePackage{Configuration: config, runner: subDocumentRunner, repository: localpackages.NewRepository()}
 
 	for i, prop := range properties {
 
@@ -583,7 +543,6 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 		out[i] = runConfig(p,
 			context,
 			manager,
-			instanceContext,
 			prop)
 	}
 
