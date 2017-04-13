@@ -113,7 +113,7 @@ func (ds *PackageService) DownloadArtifact(log log.T, packageName string, versio
 	return "", err
 }
 
-func (*PackageService) ReportResult(result packageservice.PackageResult) error {
+func (*PackageService) ReportResult(log log.T, result packageservice.PackageResult) error {
 	// NOP
 	return nil
 }

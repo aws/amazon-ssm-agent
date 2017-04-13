@@ -17,17 +17,11 @@
 package configurepackage
 
 import (
-	"os"
-
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/docmanager/model"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
-	"github.com/aws/amazon-ssm-agent/agent/fileutil/artifact"
 	"github.com/aws/amazon-ssm-agent/agent/framework/runpluginutil"
-	"github.com/aws/amazon-ssm-agent/agent/log"
-	"github.com/aws/amazon-ssm-agent/agent/s3util"
-	"github.com/aws/amazon-ssm-agent/agent/updateutil"
 )
 
 // TODO:MF: This should be able to go away when localpackages has encapsulated all filesystem access
@@ -36,8 +30,6 @@ var filesysdep fileSysDep = &fileSysDepImp{}
 // dependency on filesystem and os utility functions
 type fileSysDep interface {
 	MakeDirExecute(destinationDir string) (err error)
-	Uncompress(src, dest string) error
-	RemoveAll(path string) error
 	WriteFile(filename string, content string) error
 }
 
@@ -47,37 +39,11 @@ func (fileSysDepImp) MakeDirExecute(destinationDir string) (err error) {
 	return fileutil.MakeDirsWithExecuteAccess(destinationDir)
 }
 
-func (fileSysDepImp) Uncompress(src, dest string) error {
-	return fileutil.Uncompress(src, dest)
-}
-
-func (fileSysDepImp) RemoveAll(path string) error {
-	return os.RemoveAll(path)
-}
-
 func (fileSysDepImp) WriteFile(filename string, content string) error {
 	return fileutil.WriteAllText(filename, content)
 }
 
-var networkdep networkDep = &networkDepImp{}
-
-// dependency on S3 and downloaded artifacts
-type networkDep interface {
-	ListS3Folders(log log.T, amazonS3URL s3util.AmazonS3URL) (folderNames []string, err error)
-	Download(log log.T, input artifact.DownloadInput) (output artifact.DownloadOutput, err error)
-}
-
-type networkDepImp struct{}
-
-func (networkDepImp) ListS3Folders(log log.T, amazonS3URL s3util.AmazonS3URL) (folderNames []string, err error) {
-	return artifact.ListS3Folders(log, amazonS3URL)
-}
-
-func (networkDepImp) Download(log log.T, input artifact.DownloadInput) (output artifact.DownloadOutput, err error) {
-	return artifact.Download(log, input)
-}
-
-var execdep execDep = &execDepImp{util: new(updateutil.Utility)}
+var execdep execDep = &execDepImp{}
 
 // dependency on action execution
 type execDep interface {
@@ -86,7 +52,6 @@ type execDep interface {
 }
 
 type execDepImp struct {
-	util *updateutil.Utility
 }
 
 func (m *execDepImp) ParseDocument(context context.T, documentRaw []byte, orchestrationDir string, s3Bucket string, s3KeyPrefix string, messageID string, documentID string, defaultWorkingDirectory string) (pluginsInfo []model.PluginState, err error) {
