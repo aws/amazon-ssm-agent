@@ -27,6 +27,44 @@ import (
 	"github.com/stretchr/testify/mock"
 )
 
+func createStubPluginInputFoo() *ConfigurePackagePluginInput {
+	input := ConfigurePackagePluginInput{}
+
+	input.Version = "1.0.0"
+	input.Name = "PVDriver"
+	input.Action = "Foo"
+
+	return &input
+}
+
+func createStubPluginInputInstallLatest() *ConfigurePackagePluginInput {
+	input := ConfigurePackagePluginInput{}
+
+	input.Name = "PVDriver"
+	input.Action = "Install"
+
+	return &input
+}
+
+func createStubPluginInputUninstallLatest() *ConfigurePackagePluginInput {
+	input := ConfigurePackagePluginInput{}
+
+	input.Name = "PVDriver"
+	input.Action = "Uninstall"
+
+	return &input
+}
+
+func createStubInvalidPluginInput() *ConfigurePackagePluginInput {
+	input := ConfigurePackagePluginInput{}
+
+	input.Version = "7.2"
+	input.Name = ""
+	input.Action = "InvalidAction"
+
+	return &input
+}
+
 func TestConfigurePackage(t *testing.T) {
 	stubs := setSuccessStubs()
 	defer stubs.Clear()
