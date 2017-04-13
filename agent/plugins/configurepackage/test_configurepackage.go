@@ -23,13 +23,9 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/docmanager/model"
-	"github.com/aws/amazon-ssm-agent/agent/fileutil/artifact"
 	"github.com/aws/amazon-ssm-agent/agent/framework/runpluginutil"
-	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/localpackages"
-	"github.com/aws/amazon-ssm-agent/agent/s3util"
 	"github.com/aws/amazon-ssm-agent/agent/task"
-	"github.com/aws/amazon-ssm-agent/agent/updateutil"
 	"github.com/stretchr/testify/mock"
 )
 
@@ -43,38 +39,10 @@ func createMockCancelFlag() task.CancelFlag {
 	return mockCancelFlag
 }
 
-func createStubInstanceContext() *updateutil.InstanceContext {
-	context := updateutil.InstanceContext{}
-
-	context.Region = "us-west-2"
-	context.Platform = "windows"
-	context.PlatformVersion = "2015.9"
-	context.InstallerName = "Windows"
-	context.Arch = "amd64"
-	context.CompressFormat = "zip"
-
-	return &context
-}
-
-func createStubInstanceContextBjs() *updateutil.InstanceContext {
-	context := updateutil.InstanceContext{}
-
-	context.Region = "cn-north-1"
-	context.Platform = "windows"
-	context.PlatformVersion = "2015.9"
-	context.InstallerName = "Windows"
-	context.Arch = "amd64"
-	context.CompressFormat = "zip"
-
-	return &context
-}
-
 type ConfigurePackageStubs struct {
 	// individual stub functions or interfaces go here with a temp variable for the original version
 	fileSysDepStub fileSysDep
 	fileSysDepOrig fileSysDep
-	networkDepStub networkDep
-	networkDepOrig networkDep
 	execDepStub    execDep
 	execDepOrig    execDep
 	stubsSet       bool
@@ -89,10 +57,6 @@ func (m *ConfigurePackageStubs) Set() {
 	if m.fileSysDepStub != nil {
 		m.fileSysDepOrig = filesysdep
 		filesysdep = m.fileSysDepStub
-	}
-	if m.networkDepStub != nil {
-		m.networkDepOrig = networkdep
-		networkdep = m.networkDepStub
 	}
 	if m.execDepStub != nil {
 		m.execDepOrig = execdep
@@ -109,86 +73,33 @@ func (m *ConfigurePackageStubs) Clear() {
 	if m.fileSysDepStub != nil {
 		filesysdep = m.fileSysDepOrig
 	}
-	if m.networkDepStub != nil {
-		networkdep = m.networkDepOrig
-	}
 	if m.execDepStub != nil {
 		execdep = m.execDepOrig
 	}
 	m.stubsSet = false
 }
 
-func networkStubSuccess() networkDep {
-	return &NetworkDepStub{downloadResultDefault: artifact.DownloadOutput{LocalFilePath: "Stub"}, foldersResult: []string{"1.0.0"}}
-}
-
 func execStubSuccess() execDep {
 	return &ExecDepStub{pluginInput: &model.PluginState{}, pluginOutput: &contracts.PluginResult{Status: contracts.ResultStatusSuccess}}
 }
 
-func SetStubs() *ConfigurePackageStubs {
-	getContext = func(log log.T) (instanceContext *updateutil.InstanceContext, err error) {
-		return createStubInstanceContext(), nil
-	}
-	return setSuccessStubs()
-}
-
 func setSuccessStubs() *ConfigurePackageStubs {
-	stubs := &ConfigurePackageStubs{fileSysDepStub: &FileSysDepStub{}, networkDepStub: networkStubSuccess(), execDepStub: execStubSuccess()}
+	stubs := &ConfigurePackageStubs{fileSysDepStub: &FileSysDepStub{}, execDepStub: execStubSuccess()}
 	stubs.Set()
 	return stubs
 }
 
 type FileSysDepStub struct {
-	makeFileError   error
-	uncompressError error
-	removeError     error
-	writeError      error
+	makeFileError error
+	writeError    error
 }
 
 func (m *FileSysDepStub) MakeDirExecute(destinationDir string) (err error) {
 	return m.makeFileError
 }
 
-func (m *FileSysDepStub) Uncompress(src, dest string) error {
-	return m.uncompressError
-}
-
-func (m *FileSysDepStub) RemoveAll(path string) error {
-	return m.removeError
-}
-
 func (m *FileSysDepStub) WriteFile(filename string, content string) error {
 	return m.writeError
-}
-
-type NetworkDepStub struct {
-	foldersResult          []string
-	foldersError           error
-	downloadResultDefault  artifact.DownloadOutput
-	downloadErrorDefault   error
-	downloadResultSequence []artifact.DownloadOutput
-	downloadErrorSequence  []error
-}
-
-func (m *NetworkDepStub) ListS3Folders(log log.T, amazonS3URL s3util.AmazonS3URL) (folderNames []string, err error) {
-	return m.foldersResult, m.foldersError
-}
-
-func (m *NetworkDepStub) Download(log log.T, input artifact.DownloadInput) (output artifact.DownloadOutput, err error) {
-	if len(m.downloadResultSequence) > 0 {
-		result := m.downloadResultSequence[0]
-		error := m.downloadErrorSequence[0]
-		if len(m.downloadResultSequence) > 1 {
-			m.downloadResultSequence = append(m.downloadResultSequence[:0], m.downloadResultSequence[1:]...)
-			m.downloadErrorSequence = append(m.downloadErrorSequence[:0], m.downloadErrorSequence[1:]...)
-		} else {
-			m.downloadResultSequence = nil
-			m.downloadErrorSequence = nil
-		}
-		return result, error
-	}
-	return m.downloadResultDefault, m.downloadErrorDefault
 }
 
 type ExecDepStub struct {
@@ -230,9 +141,8 @@ func (configMock *MockedConfigurePackageManager) validateInput(context context.T
 }
 
 func (configMock *MockedConfigurePackageManager) getVersionToInstall(context context.T,
-	input *ConfigurePackagePluginInput,
-	util configureUtil) (version string, installedVersion string, installState localpackages.InstallState, err error) {
-	args := configMock.Called(input, util)
+	input *ConfigurePackagePluginInput) (version string, installedVersion string, installState localpackages.InstallState, err error) {
+	args := configMock.Called(input)
 	ver := args.String(0)
 	if strings.HasPrefix(ver, "Wait") {
 		configMock.waitChan <- true
@@ -243,9 +153,8 @@ func (configMock *MockedConfigurePackageManager) getVersionToInstall(context con
 }
 
 func (configMock *MockedConfigurePackageManager) getVersionToUninstall(context context.T,
-	input *ConfigurePackagePluginInput,
-	util configureUtil) (version string, err error) {
-	args := configMock.Called(input, util)
+	input *ConfigurePackagePluginInput) (version string, err error) {
+	args := configMock.Called(input)
 	ver := args.String(0)
 	if strings.HasPrefix(ver, "Wait") {
 		configMock.waitChan <- true
@@ -256,11 +165,10 @@ func (configMock *MockedConfigurePackageManager) getVersionToUninstall(context c
 }
 
 func (configMock *MockedConfigurePackageManager) ensurePackage(context context.T,
-	util configureUtil,
 	packageName string,
 	version string,
 	output *contracts.PluginOutput) error {
-	args := configMock.Called(util, packageName, version, output)
+	args := configMock.Called(packageName, version, output)
 	return args.Error(0)
 }
 
@@ -325,4 +233,25 @@ func ConfigPackageSuccessMock(downloadFilePath string,
 	mockConfig.On("setInstallState", mock.Anything, mock.Anything, mock.Anything, mock.Anything).Return(nil)
 	mockConfig.waitChan = make(chan bool)
 	return &mockConfig
+}
+
+// -- form configureutil_test.go
+func createStubPluginInputInstall() *ConfigurePackagePluginInput {
+	input := ConfigurePackagePluginInput{}
+
+	input.Version = "1.0.0"
+	input.Name = "PVDriver"
+	input.Action = "Install"
+
+	return &input
+}
+
+func createStubPluginInputUninstall() *ConfigurePackagePluginInput {
+	input := ConfigurePackagePluginInput{}
+
+	input.Version = "1.0.0"
+	input.Name = "PVDriver"
+	input.Action = "Uninstall"
+
+	return &input
 }

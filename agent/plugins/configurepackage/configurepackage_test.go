@@ -27,8 +27,8 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/localpackages"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/localpackages/mock"
+	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/ssms3"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/pluginutil"
-	"github.com/aws/amazon-ssm-agent/agent/updateutil"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )
@@ -38,11 +38,10 @@ var contextMock context.T = context.NewMockDefault()
 
 func TestRunUpgrade(t *testing.T) {
 	plugin := &Plugin{}
-	instanceContext := createStubInstanceContext()
 	pluginInformation := createStubPluginInputInstall()
 
 	managerMock := ConfigPackageSuccessMock("/foo", "1.0.0", "0.5.6", contracts.ResultStatusSuccess, contracts.ResultStatusSuccess, contracts.ResultStatusSuccess)
-	output := runConfigurePackage(plugin, contextMock, managerMock, instanceContext, pluginInformation)
+	output := runConfigurePackage(plugin, contextMock, managerMock, pluginInformation)
 
 	assert.Equal(t, output.ExitCode, 0)
 	assert.Contains(t, output.Stdout, "Successfully installed")
@@ -52,11 +51,10 @@ func TestRunUpgrade(t *testing.T) {
 
 func TestRunUpgradeUninstallReboot(t *testing.T) {
 	plugin := &Plugin{}
-	instanceContext := createStubInstanceContext()
 	pluginInformation := createStubPluginInputInstall()
 
 	managerMock := ConfigPackageSuccessMock("/foo", "1.0.0", "0.5.6", contracts.ResultStatusSuccess, contracts.ResultStatusSuccessAndReboot, contracts.ResultStatusSuccess)
-	output := runConfigurePackage(plugin, contextMock, managerMock, instanceContext, pluginInformation)
+	output := runConfigurePackage(plugin, contextMock, managerMock, pluginInformation)
 
 	assert.Equal(t, output.ExitCode, 0)
 	managerMock.AssertCalled(t, "runUninstallPackagePre", "PVDriver", "0.5.6", mock.Anything, mock.Anything)
@@ -66,7 +64,6 @@ func TestRunUpgradeUninstallReboot(t *testing.T) {
 
 func TestRunParallelSamePackage(t *testing.T) {
 	plugin := &Plugin{}
-	instanceContext := createStubInstanceContext()
 	pluginInformation := createStubPluginInputInstall()
 
 	managerMockFirst := ConfigPackageSuccessMock("/foo", "Wait1.0.0", "", contracts.ResultStatusSuccess, contracts.ResultStatusSuccess, contracts.ResultStatusSuccess)
@@ -78,12 +75,12 @@ func TestRunParallelSamePackage(t *testing.T) {
 	wg.Add(1)
 	go func() {
 		defer wg.Done()
-		outputFirst = runConfigurePackage(plugin, contextMock, managerMockFirst, instanceContext, pluginInformation)
+		outputFirst = runConfigurePackage(plugin, contextMock, managerMockFirst, pluginInformation)
 	}()
 	// wait until first call is at getVersionToInstall
 	_ = <-managerMockFirst.waitChan
 	// start second call
-	outputSecond = runConfigurePackage(plugin, contextMock, managerMockSecond, instanceContext, pluginInformation)
+	outputSecond = runConfigurePackage(plugin, contextMock, managerMockSecond, pluginInformation)
 	// after second call completes, allow first call to continue
 	managerMockFirst.waitChan <- true
 	// wait until first call is complete
@@ -102,16 +99,11 @@ func TestExecute(t *testing.T) {
 	config.Properties = p
 	plugin := &Plugin{}
 
-	getContextOrig := getContext
 	runConfigOrig := runConfig
-	getContext = func(log log.T) (context *updateutil.InstanceContext, err error) {
-		return createStubInstanceContext(), nil
-	}
 	runConfig = func(
 		p *Plugin,
 		context context.T,
 		manager configurePackageManager,
-		instanceContext *updateutil.InstanceContext,
 		rawPluginInput interface{}) (out contracts.PluginOutput) {
 		out = contracts.PluginOutput{}
 		out.ExitCode = 1
@@ -121,7 +113,6 @@ func TestExecute(t *testing.T) {
 	}
 	defer func() {
 		runConfig = runConfigOrig
-		getContext = getContextOrig
 	}()
 
 	// TODO:MF Test result code for reboot in cases where that is expected?
@@ -154,16 +145,11 @@ func testS3Prefix(t *testing.T, testCase S3PrefixTestCase) {
 	config.OutputS3KeyPrefix = testCase.PrefixIn
 	config.PluginID = testCase.PluginID
 
-	getContextOrig := getContext
 	runConfigOrig := runConfig
-	getContext = func(log log.T) (context *updateutil.InstanceContext, err error) {
-		return createStubInstanceContext(), nil
-	}
 	runConfig = func(
 		p *Plugin,
 		context context.T,
 		manager configurePackageManager,
-		instanceContext *updateutil.InstanceContext,
 		rawPluginInput interface{}) (out contracts.PluginOutput) {
 		out = contracts.PluginOutput{}
 		out.ExitCode = 0
@@ -172,7 +158,6 @@ func testS3Prefix(t *testing.T, testCase S3PrefixTestCase) {
 	}
 	defer func() {
 		runConfig = runConfigOrig
-		getContext = getContextOrig
 	}()
 	stubs := setSuccessStubs()
 	defer stubs.Clear()
@@ -484,9 +469,9 @@ func lockAndUnlock(packageName string) (err error) {
 }
 
 func createInstance() configurePackageManager {
-	return &configurePackage{Configuration: contracts.Configuration{}, runner: runpluginutil.PluginRunner{}, repository: &repository_mock.MockedRepository{}}
+	return &configurePackage{Configuration: contracts.Configuration{}, runner: runpluginutil.PluginRunner{}, repository: &repository_mock.MockedRepository{}, packageservice: &ssms3.PackageService{}}
 }
 
 func createInstanceWithRepoMock(repoMock localpackages.Repository) configurePackageManager {
-	return &configurePackage{Configuration: contracts.Configuration{}, runner: runpluginutil.PluginRunner{}, repository: repoMock}
+	return &configurePackage{Configuration: contracts.Configuration{}, runner: runpluginutil.PluginRunner{}, repository: repoMock, packageservice: &ssms3.PackageService{}}
 }

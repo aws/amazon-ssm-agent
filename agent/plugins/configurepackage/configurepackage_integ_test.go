@@ -73,13 +73,11 @@ func TestConfigurePackage(t *testing.T) {
 	pluginInformation := createStubPluginInputInstall()
 
 	manager := createInstance()
-	instanceContext := createStubInstanceContext()
 
 	output := runConfigurePackage(
 		plugin,
 		contextMock,
 		manager,
-		instanceContext,
 		pluginInformation)
 
 	assert.Empty(t, output.Stderr)
@@ -93,13 +91,11 @@ func TestConfigurePackage_InvalidAction(t *testing.T) {
 	pluginInformation := createStubPluginInputFoo()
 
 	manager := createInstance()
-	instanceContext := createStubInstanceContext()
 
 	result := runConfigurePackage(
 		plugin,
 		contextMock,
 		manager,
-		instanceContext,
 		pluginInformation)
 
 	assert.Contains(t, result.Stderr, "unsupported action")
@@ -114,13 +110,11 @@ func TestConfigurePackage_InvalidRawInput(t *testing.T) {
 	pluginInformation := "invalid value"
 
 	manager := createInstance()
-	instanceContext := createStubInstanceContext()
 
 	result := runConfigurePackage(
 		plugin,
 		contextMock,
 		manager,
-		instanceContext,
 		pluginInformation)
 
 	assert.Contains(t, result.Stderr, "invalid format in plugin properties")
@@ -134,13 +128,11 @@ func TestConfigurePackage_InvalidInput(t *testing.T) {
 	pluginInformation := createStubInvalidPluginInput()
 
 	manager := createInstance()
-	instanceContext := createStubInstanceContext()
 
 	result := runConfigurePackage(
 		plugin,
 		contextMock,
 		manager,
-		instanceContext,
 		pluginInformation)
 
 	assert.Contains(t, result.Stderr, "invalid input")
@@ -149,7 +141,6 @@ func TestConfigurePackage_InvalidInput(t *testing.T) {
 func TestInstallPackage_DownloadFailed(t *testing.T) {
 	stubs := &ConfigurePackageStubs{
 		fileSysDepStub: &FileSysDepStub{existsResultDefault: false},
-		networkDepStub: &NetworkDepStub{downloadErrorDefault: errors.New("Cannot download package")},
 		execDepStub:    execStubSuccess(),
 	}
 	stubs.Set()
@@ -159,13 +150,11 @@ func TestInstallPackage_DownloadFailed(t *testing.T) {
 	pluginInformation := createStubPluginInputInstall()
 
 	manager := createInstance()
-	instanceContext := createStubInstanceContext()
 
 	output := runConfigurePackage(
 		plugin,
 		contextMock,
 		manager,
-		instanceContext,
 		pluginInformation)
 
 	assert.NotEmpty(t, output.Stderr, output.Stdout)
@@ -187,13 +176,11 @@ func TestInstallPackage_AlreadyInstalled(t *testing.T) {
 	mockRepo.On("GetAction", mock.Anything, pluginInformation.Name, pluginInformation.Version, "validate").Return(true, action, `foo`, nil)
 
 	manager := createInstanceWithRepoMock(&mockRepo)
-	instanceContext := createStubInstanceContext()
 
 	output := runConfigurePackage(
 		plugin,
 		contextMock,
 		manager,
-		instanceContext,
 		pluginInformation)
 
 	mockRepo.AssertExpectations(t)
@@ -203,7 +190,6 @@ func TestInstallPackage_AlreadyInstalled(t *testing.T) {
 func TestInstallPackage_Repair(t *testing.T) {
 	stubs := &ConfigurePackageStubs{
 		fileSysDepStub: fileSysStubSuccessNewPackage(),
-		networkDepStub: networkStubSuccess(),
 		execDepStub: &ExecDepStub{pluginInput: &model.PluginState{},
 			pluginOutputMap: map[string]*contracts.PluginResult{
 				"validate1": {Status: contracts.ResultStatusFailed},
@@ -230,13 +216,11 @@ func TestInstallPackage_Repair(t *testing.T) {
 	mockRepo.On("SetInstallState", mock.Anything, pluginInformation.Name, pluginInformation.Version, mock.Anything).Return(nil)
 
 	manager := createInstanceWithRepoMock(&mockRepo)
-	instanceContext := createStubInstanceContext()
 
 	output := runConfigurePackage(
 		plugin,
 		contextMock,
 		manager,
-		instanceContext,
 		pluginInformation)
 
 	mockRepo.AssertExpectations(t)
@@ -246,7 +230,6 @@ func TestInstallPackage_Repair(t *testing.T) {
 func TestInstallPackage_RetryFailedLatest(t *testing.T) {
 	stubs := &ConfigurePackageStubs{
 		fileSysDepStub: fileSysStubSuccessNewPackage(),
-		networkDepStub: networkStubSuccess(),
 		execDepStub:    execStubSuccess(),
 	}
 	stubs.Set()
@@ -268,13 +251,11 @@ func TestInstallPackage_RetryFailedLatest(t *testing.T) {
 	mockRepo.On("SetInstallState", mock.Anything, pluginInformation.Name, version, mock.Anything).Return(nil)
 
 	manager := createInstanceWithRepoMock(&mockRepo)
-	instanceContext := createStubInstanceContext()
 
 	output := runConfigurePackage(
 		plugin,
 		contextMock,
 		manager,
-		instanceContext,
 		pluginInformation)
 
 	mockRepo.AssertExpectations(t)
@@ -285,7 +266,6 @@ func TestInstallPackage_ExtractFailed(t *testing.T) {
 	result, _ := ioutil.ReadFile("testdata/sampleManifest.json")
 	stubs := &ConfigurePackageStubs{
 		fileSysDepStub: &FileSysDepStub{readResult: result, uncompressError: errors.New("Cannot extract package")},
-		networkDepStub: networkStubSuccess(),
 		execDepStub:    execStubSuccess(),
 	}
 	stubs.Set()
@@ -295,13 +275,11 @@ func TestInstallPackage_ExtractFailed(t *testing.T) {
 	pluginInformation := createStubPluginInputInstall()
 
 	manager := createInstance()
-	instanceContext := createStubInstanceContext()
 
 	output := runConfigurePackage(
 		plugin,
 		contextMock,
 		manager,
-		instanceContext,
 		pluginInformation)
 
 	assert.NotEmpty(t, output.Stderr)
@@ -317,8 +295,7 @@ func TestInstallPackage_DeleteFailed(t *testing.T) {
 			existsResultDefault:  true,
 			removeError:          errors.New("failed to delete compressed package"),
 		},
-		networkDepStub: networkStubSuccess(),
-		execDepStub:    execStubSuccess(),
+		execDepStub: execStubSuccess(),
 	}
 	stubs.Set()
 	defer stubs.Clear()
@@ -327,13 +304,11 @@ func TestInstallPackage_DeleteFailed(t *testing.T) {
 	pluginInformation := createStubPluginInputInstall()
 
 	manager := createInstance()
-	instanceContext := createStubInstanceContext()
 
 	output := runConfigurePackage(
 		plugin,
 		contextMock,
 		manager,
-		instanceContext,
 		pluginInformation)
 
 	assert.NotEmpty(t, output.Stderr)
@@ -343,7 +318,6 @@ func TestInstallPackage_DeleteFailed(t *testing.T) {
 func TestInstallPackage_Reboot(t *testing.T) {
 	stubs := &ConfigurePackageStubs{
 		fileSysDepStub: fileSysStubSuccessNewPackage(),
-		networkDepStub: networkStubSuccess(),
 		execDepStub: &ExecDepStub{pluginInput: &model.PluginState{},
 			pluginOutputMap: map[string]*contracts.PluginResult{
 				"install": {Status: contracts.ResultStatusSuccessAndReboot},
@@ -366,13 +340,11 @@ func TestInstallPackage_Reboot(t *testing.T) {
 	mockRepo.On("SetInstallState", mock.Anything, pluginInformation.Name, pluginInformation.Version, mock.Anything).Return(nil)
 
 	manager := createInstanceWithRepoMock(&mockRepo)
-	instanceContext := createStubInstanceContext()
 
 	output := runConfigurePackage(
 		plugin,
 		contextMock,
 		manager,
-		instanceContext,
 		pluginInformation)
 
 	mockRepo.AssertExpectations(t)
@@ -383,7 +355,6 @@ func TestInstallPackage_Reboot(t *testing.T) {
 func TestInstallPackage_Failed(t *testing.T) {
 	stubs := &ConfigurePackageStubs{
 		fileSysDepStub: fileSysStubSuccessNewPackage(),
-		networkDepStub: networkStubSuccess(),
 		execDepStub: &ExecDepStub{pluginInput: &model.PluginState{},
 			pluginOutputMap: map[string]*contracts.PluginResult{
 				"install": {Status: contracts.ResultStatusFailed},
@@ -406,13 +377,11 @@ func TestInstallPackage_Failed(t *testing.T) {
 	mockRepo.On("SetInstallState", mock.Anything, pluginInformation.Name, pluginInformation.Version, mock.Anything).Return(nil)
 
 	manager := createInstanceWithRepoMock(&mockRepo)
-	instanceContext := createStubInstanceContext()
 
 	output := runConfigurePackage(
 		plugin,
 		contextMock,
 		manager,
-		instanceContext,
 		pluginInformation)
 
 	mockRepo.AssertExpectations(t)
@@ -423,7 +392,6 @@ func TestInstallPackage_Failed(t *testing.T) {
 func TestInstallPackage_Invalid(t *testing.T) {
 	stubs := &ConfigurePackageStubs{
 		fileSysDepStub: fileSysStubSuccessNewPackage(),
-		networkDepStub: networkStubSuccess(),
 		execDepStub: &ExecDepStub{pluginInput: &model.PluginState{},
 			pluginOutputMap: map[string]*contracts.PluginResult{
 				"install":  {Status: contracts.ResultStatusSuccess},
@@ -448,13 +416,11 @@ func TestInstallPackage_Invalid(t *testing.T) {
 	mockRepo.On("SetInstallState", mock.Anything, pluginInformation.Name, pluginInformation.Version, mock.Anything).Return(nil)
 
 	manager := createInstanceWithRepoMock(&mockRepo)
-	instanceContext := createStubInstanceContext()
 
 	output := runConfigurePackage(
 		plugin,
 		contextMock,
 		manager,
-		instanceContext,
 		pluginInformation)
 
 	mockRepo.AssertExpectations(t)
@@ -471,13 +437,11 @@ func TestUninstallPackage_Success(t *testing.T) {
 	pluginInformation := createStubPluginInputUninstallLatest()
 
 	manager := createInstance()
-	instanceContext := createStubInstanceContext()
 
 	output := runConfigurePackage(
 		plugin,
 		contextMock,
 		manager,
-		instanceContext,
 		pluginInformation)
 
 	assert.True(t, output.Status == contracts.ResultStatusSuccess)
@@ -485,7 +449,7 @@ func TestUninstallPackage_Success(t *testing.T) {
 }
 
 func TestUninstallPackage_DoesNotExist(t *testing.T) {
-	stubs := &ConfigurePackageStubs{fileSysDepStub: &FileSysDepStub{existsResultDefault: false}, networkDepStub: networkStubSuccess(), execDepStub: execStubSuccess()}
+	stubs := &ConfigurePackageStubs{fileSysDepStub: &FileSysDepStub{existsResultDefault: false}, execDepStub: execStubSuccess()}
 	stubs.Set()
 	defer stubs.Clear()
 
@@ -493,20 +457,18 @@ func TestUninstallPackage_DoesNotExist(t *testing.T) {
 	pluginInformation := createStubPluginInputUninstallLatest()
 
 	manager := createInstance()
-	instanceContext := createStubInstanceContext()
 
 	output := runConfigurePackage(
 		plugin,
 		contextMock,
 		manager,
-		instanceContext,
 		pluginInformation)
 
 	assert.Empty(t, output.Stderr)
 }
 
 func TestUninstallPackage_DoesNotExistAtAll(t *testing.T) {
-	stubs := &ConfigurePackageStubs{fileSysDepStub: &FileSysDepStub{existsResultDefault: false}, networkDepStub: &NetworkDepStub{foldersResult: []string{}}, execDepStub: execStubSuccess()}
+	stubs := &ConfigurePackageStubs{fileSysDepStub: &FileSysDepStub{existsResultDefault: false}, execDepStub: execStubSuccess()}
 	stubs.Set()
 	defer stubs.Clear()
 
@@ -514,13 +476,11 @@ func TestUninstallPackage_DoesNotExistAtAll(t *testing.T) {
 	pluginInformation := createStubPluginInputUninstallLatest()
 
 	manager := createInstance()
-	instanceContext := createStubInstanceContext()
 
 	output := runConfigurePackage(
 		plugin,
 		contextMock,
 		manager,
-		instanceContext,
 		pluginInformation)
 
 	assert.NotEmpty(t, output.Stderr)
@@ -531,7 +491,6 @@ func TestUninstallPackage_RemovalFailed(t *testing.T) {
 	result, _ := ioutil.ReadFile("testdata/sampleManifest.json")
 	stubs := &ConfigurePackageStubs{
 		fileSysDepStub: &FileSysDepStub{readResult: result, existsResultDefault: true, removeError: errors.New("404"), filesResult: []string{"PVDriver.json", "install.json"}},
-		networkDepStub: networkStubSuccess(),
 		execDepStub:    execStubSuccess(),
 	}
 	stubs.Set()
@@ -541,13 +500,11 @@ func TestUninstallPackage_RemovalFailed(t *testing.T) {
 	pluginInformation := createStubPluginInputUninstall()
 
 	manager := createInstance()
-	instanceContext := createStubInstanceContext()
 
 	output := runConfigurePackage(
 		plugin,
 		contextMock,
 		manager,
-		instanceContext,
 		pluginInformation)
 
 	assert.NotEmpty(t, output.Stderr)
@@ -558,7 +515,6 @@ func TestUninstallPackage_RemovalFailed(t *testing.T) {
 func TestConfigurePackage_ExecuteError(t *testing.T) {
 	stubs := &ConfigurePackageStubs{
 		fileSysDepStub: fileSysStubSuccessNewPackage(),
-		networkDepStub: networkStubSuccess(),
 		execDepStub:    &ExecDepStub{pluginInput: &model.PluginState{}, pluginOutput: &contracts.PluginResult{StandardError: "execute error"}},
 	}
 	stubs.Set()
@@ -568,13 +524,11 @@ func TestConfigurePackage_ExecuteError(t *testing.T) {
 	pluginInformation := createStubPluginInputInstall()
 
 	manager := createInstance()
-	instanceContext := createStubInstanceContext()
 
 	output := runConfigurePackage(
 		plugin,
 		contextMock,
 		manager,
-		instanceContext,
 		pluginInformation)
 
 	assert.Empty(t, output.Stderr)
