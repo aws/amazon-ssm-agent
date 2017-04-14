@@ -20,6 +20,8 @@ This package provides the Amazon SSM Agent for managing EC2 Instances using SSM 
 /usr/bin/amazon-ssm-agent
 /usr/bin/ssm-cli
 /var/lib/amazon/ssm/
+%doc /etc/amazon/ssm/RELEASENOTES.md
+%doc /etc/amazon/ssm/README.md
 
 %config(noreplace) /etc/init/amazon-ssm-agent.conf
 %config(noreplace) /etc/systemd/system/amazon-ssm-agent.service
