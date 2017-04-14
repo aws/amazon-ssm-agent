@@ -27,8 +27,11 @@ cp ${BGO_SPACE}/packaging/ubuntu/amazon-ssm-agent.service ${BGO_SPACE}/bin/debia
 
 echo "Copying debian package config files"
 
+cp ${BGO_SPACE}/RELEASENOTES.md ${BGO_SPACE}/bin/debian_amd64/debian/etc/amazon/ssm/RELEASENOTES.md
+cp ${BGO_SPACE}/README.md ${BGO_SPACE}/bin/debian_amd64/debian/etc/amazon/ssm/README.md
 cp ${BGO_SPACE}/Tools/src/LICENSE ${BGO_SPACE}/bin/debian_amd64/debian/usr/share/doc/amazon-ssm-agent/copyright
 cp ${BGO_SPACE}/packaging/ubuntu/conffiles ${BGO_SPACE}/bin/debian_amd64/debian/
+cp ${BGO_SPACE}/packaging/ubuntu/docs ${BGO_SPACE}/bin/debian_amd64/debian/
 cp ${BGO_SPACE}/packaging/ubuntu/preinst ${BGO_SPACE}/bin/debian_amd64/debian/
 cp ${BGO_SPACE}/packaging/ubuntu/postinst ${BGO_SPACE}/bin/debian_amd64/debian/
 cp ${BGO_SPACE}/packaging/ubuntu/prerm ${BGO_SPACE}/bin/debian_amd64/debian/
@@ -53,7 +56,7 @@ cat ${BGO_SPACE}/packaging/ubuntu/changelog >> ${BGO_SPACE}/bin/debian_amd64/deb
 cp ${BGO_SPACE}/packaging/ubuntu/changelog.Debian ${BGO_SPACE}/bin/debian_amd64/debian/usr/share/doc/amazon-ssm-agent/
 cp ${BGO_SPACE}/packaging/ubuntu/debian-binary ${BGO_SPACE}/bin/debian_amd64/debian/
 
-echo "Setting permissioning as required by debian"
+echo "Setting permissions as required by debian"
 
 cd ${BGO_SPACE}/bin/debian_amd64/; find ./debian -type d | xargs chmod 755; cd ~-
 
@@ -68,9 +71,9 @@ rm ${BGO_SPACE}/bin/debian_amd64/debian/usr/share/doc/amazon-ssm-agent/changelog
 echo "Creating tar"
 # the below permissioning is required by debian
 cd ${BGO_SPACE}/bin/debian_amd64/debian/; tar czf data.tar.gz usr etc lib --owner=0 --group=0 ; cd ~-
-cd ${BGO_SPACE}/bin/debian_amd64/debian/; tar czf control.tar.gz control conffiles preinst postinst prerm --owner=0 --group=0 ; cd ~-
+cd ${BGO_SPACE}/bin/debian_amd64/debian/; tar czf control.tar.gz control conffiles docs preinst postinst prerm --owner=0 --group=0 ; cd ~-
 
-echo "Constructing the deb packagage"
+echo "Constructing the deb package"
 ar r ${BGO_SPACE}/bin/amazon-ssm-agent-`cat ${BGO_SPACE}/VERSION`-1.deb ${BGO_SPACE}/bin/debian_amd64/debian/debian-binary
 ar r ${BGO_SPACE}/bin/amazon-ssm-agent-`cat ${BGO_SPACE}/VERSION`-1.deb ${BGO_SPACE}/bin/debian_amd64/debian/control.tar.gz
 ar r ${BGO_SPACE}/bin/amazon-ssm-agent-`cat ${BGO_SPACE}/VERSION`-1.deb ${BGO_SPACE}/bin/debian_amd64/debian/data.tar.gz
