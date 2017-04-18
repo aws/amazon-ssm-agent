@@ -90,7 +90,7 @@ func (ds *PackageService) DownloadManifest(log log.T, packageName string, versio
 	var latestVersion string
 	var err error
 
-	if version != "" {
+	if packageservice.IsLatest(version) {
 		latestVersion = version
 	} else {
 		latestVersion, err := getLatestS3Version(log, ds.packageURL, packageName)
