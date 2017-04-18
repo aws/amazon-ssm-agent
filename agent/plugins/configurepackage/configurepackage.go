@@ -551,7 +551,7 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 	//loading Properties as list since V1.2 schema uses properties as list - if we do get a list we will execute all of them
 	//TODO:MF: Consider handling this in conversion from 1.2 to the standard format by expanding multiple sets of properties into multiple plugins
 	var properties []interface{}
-	if properties, res = pluginutil.LoadParametersAsList(log, config.Properties); res.Code != 0 {
+	if properties = pluginutil.LoadParametersAsList(log, config.Properties, &res); res.Code != 0 {
 		pluginutil.PersistPluginInformationToCurrent(log, config.PluginID, config, res)
 		return res
 	}

@@ -373,6 +373,8 @@ func TestExecute(t *testing.T) {
 
 	result := plugin.Execute(mockContext, config, mockCancelFlag, runpluginutil.PluginRunner{})
 
+	assert.NotEmpty(t, result.StartDateTime)
+	assert.NotEmpty(t, result.EndDateTime)
 	assert.Equal(t, result.Code, 1)
 	assert.Contains(t, result.Output, "error")
 }

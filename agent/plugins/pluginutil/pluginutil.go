@@ -239,10 +239,7 @@ func PersistPluginInformationToCurrent(log log.T, pluginID string, config contra
 }
 
 // LoadParametersAsList returns properties as a list and appropriate PluginResult if error is encountered
-func LoadParametersAsList(log log.T, prop interface{}) ([]interface{}, contracts.PluginResult) {
-
-	var properties []interface{}
-	var res contracts.PluginResult
+func LoadParametersAsList(log log.T, prop interface{}, res *contracts.PluginResult) (properties []interface{}) {
 
 	switch prop := prop.(type) {
 	case []interface{}:
@@ -255,14 +252,11 @@ func LoadParametersAsList(log log.T, prop interface{}) ([]interface{}, contracts
 	default:
 		properties = append(properties, prop)
 	}
-
-	return properties, res
+	return
 }
 
 // LoadParametersAsMap returns properties as a map and appropriate PluginResult if error is encountered
-func LoadParametersAsMap(log log.T, prop interface{}) (map[string]interface{}, contracts.PluginResult) {
-	var properties map[string]interface{}
-	var res contracts.PluginResult
+func LoadParametersAsMap(log log.T, prop interface{}, res *contracts.PluginResult) (properties map[string]interface{}) {
 
 	if err := jsonutil.Remarshal(prop, &properties); err != nil {
 		log.Errorf("unable to parse plugin configuration")
@@ -270,8 +264,7 @@ func LoadParametersAsMap(log log.T, prop interface{}) (map[string]interface{}, c
 		res.Code = 1
 		res.Status = contracts.ResultStatusFailed
 	}
-
-	return properties, res
+	return
 }
 
 // ValidateExecutionTimeout validates the supplied input interface and converts it into a valid int value.
