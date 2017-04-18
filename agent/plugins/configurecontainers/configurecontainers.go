@@ -80,7 +80,7 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 	}()
 
 	var properties []interface{}
-	if properties, res = pluginutil.LoadParametersAsList(log, config.Properties); res.Code != 0 {
+	if properties = pluginutil.LoadParametersAsList(log, config.Properties, &res); res.Code != 0 {
 		pluginutil.PersistPluginInformationToCurrent(log, config.PluginID, config, res)
 		pluginutil.PersistPluginInformationToCurrent(log, config.PluginID, config, res)
 		return res

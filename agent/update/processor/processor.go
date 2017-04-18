@@ -19,6 +19,8 @@ import (
 	"fmt"
 	"sync"
 
+	"time"
+
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil/artifact"
 	"github.com/aws/amazon-ssm-agent/agent/log"
@@ -81,7 +83,10 @@ func (u *Updater) InitializeUpdate(log log.T, detail *UpdateDetail) (context *Up
 		return nil, fmt.Errorf("update failed, no rollback needed %v", err.Error())
 	}
 	detail.StandardOut = pluginResult.StandOut
-	detail.StartDateTime = pluginResult.StartDateTime
+	// if failed to read time from updateplugin file
+	if !pluginResult.StartDateTime.Equal(time.Time{}) {
+		detail.StartDateTime = pluginResult.StartDateTime
+	}
 
 	// Load UpdateContext from local storage, set current update with the new UpdateDetail
 	if context, err = LoadUpdateContext(log, updateutil.UpdateContextFilePath(detail.UpdateRoot)); err != nil {
