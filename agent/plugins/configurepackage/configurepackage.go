@@ -359,7 +359,7 @@ func validateInput(input *ConfigurePackagePluginInput) (valid bool, err error) {
 		return false, errors.New("invalid name, must start with letter or _; end with letter, number, or _; and contain only letters, numbers, -, _, or single . characters")
 	}
 
-	if version := input.Version; version != "" {
+	if version := input.Version; !packageservice.IsLatest(version) {
 		// ensure version follows format <major>.<minor>.<build>
 		if matched, err := regexp.MatchString(PatternVersion, version); matched == false || err != nil {
 			return false, errors.New("invalid version - should be in format major.minor.build")
@@ -385,10 +385,10 @@ func (m *configurePackage) getVersionToInstall(context context.T,
 		installedVersion = currentVersion
 	}
 
-	if input.Version != "" {
+	if !packageservice.IsLatest(input.Version) {
 		version = input.Version
 	} else {
-		version, err = m.packageservice.DownloadManifest(context.Log(), input.Name, "latest")
+		version, err = m.packageservice.DownloadManifest(context.Log(), input.Name, packageservice.Latest)
 		if err != nil {
 			return "", installedVersion, currentState, err
 		}
@@ -399,12 +399,12 @@ func (m *configurePackage) getVersionToInstall(context context.T,
 // getVersionToUninstall decides which version to uninstall
 func (m *configurePackage) getVersionToUninstall(context context.T,
 	input *ConfigurePackagePluginInput) (version string, err error) {
-	if input.Version != "" {
+	if !packageservice.IsLatest(input.Version) {
 		version = input.Version
 	} else if installedVersion := m.repository.GetInstalledVersion(context, input.Name); installedVersion != "" {
 		version = installedVersion
 	} else {
-		version, err = m.packageservice.DownloadManifest(context.Log(), input.Name, "latest")
+		version, err = m.packageservice.DownloadManifest(context.Log(), input.Name, packageservice.Latest)
 	}
 	return
 }

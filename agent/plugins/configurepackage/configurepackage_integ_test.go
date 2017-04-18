@@ -245,7 +245,7 @@ func TestInstallPackage_RetryFailedLatest(t *testing.T) {
 	mockRepo.On("SetInstallState", mock.Anything, pluginInformation.Name, version, mock.Anything).Return(nil)
 
 	mockDS := packageservice_mock.Mock{}
-	mockDS.On("DownloadManifest", mock.Anything, pluginInformation.Name, "latest").Return(version, nil)
+	mockDS.On("DownloadManifest", mock.Anything, pluginInformation.Name, packageservice.Latest).Return(version, nil)
 
 	manager := createInstanceWithRepoAndDSMock(&mockRepo, &mockDS)
 
