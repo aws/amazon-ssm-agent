@@ -23,7 +23,7 @@ const (
 )
 
 // decoupling package repository for easy testability
-var packageRepository = localpackages.NewRepositoryDefault()
+var packageRepository = localpackages.NewRepository()
 
 var selectAwsApps map[string]string
 

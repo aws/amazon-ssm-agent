@@ -26,6 +26,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/framework/runpluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/localpackages"
+	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/localpackages/mock"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/pluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/updateutil"
 	"github.com/stretchr/testify/assert"
@@ -244,11 +245,14 @@ func TestInstallPackage(t *testing.T) {
 	pluginInformation := createStubPluginInputInstall()
 
 	output := &contracts.PluginOutput{}
-	manager := createInstance()
 
 	result, _ := ioutil.ReadFile("testdata/sampleManifest.json")
-	stubs := &ConfigurePackageStubs{fileSysDepStub: &FileSysDepStub{readResult: result}, networkDepStub: &NetworkDepStub{}, execDepStub: execStubSuccess()}
-	stubs.Set()
+	mockRepo := repository_mock.MockedRepository{}
+	mockRepo.On("GetAction", mock.Anything, pluginInformation.Name, pluginInformation.Version, "install").Return(true, result, `install`, nil).Once()
+
+	manager := createInstanceWithRepoMock(&mockRepo)
+
+	stubs := setSuccessStubs()
 	defer stubs.Clear()
 
 	_, err := manager.runInstallPackage(contextMock,
@@ -260,13 +264,19 @@ func TestInstallPackage(t *testing.T) {
 }
 
 func TestUninstallPackage(t *testing.T) {
-	manager := createInstance()
 	pluginInformation := createStubPluginInputUninstall()
 
 	output := &contracts.PluginOutput{}
 
-	stubs := &ConfigurePackageStubs{fileSysDepStub: &FileSysDepStub{existsResultDefault: true}, networkDepStub: &NetworkDepStub{}, execDepStub: execStubSuccess()}
-	stubs.Set()
+	result, _ := ioutil.ReadFile("testdata/sampleManifest.json")
+
+	mockRepo := repository_mock.MockedRepository{}
+	mockRepo.On("GetAction", mock.Anything, pluginInformation.Name, pluginInformation.Version, "uninstall").Return(true, result, `install`, nil).Once()
+	mockRepo.On("RemovePackage", mock.Anything, pluginInformation.Name, pluginInformation.Version).Return(nil).Once()
+
+	manager := createInstanceWithRepoMock(&mockRepo)
+
+	stubs := setSuccessStubs()
 	defer stubs.Clear()
 
 	_, errPre := manager.runUninstallPackagePre(contextMock,
@@ -474,7 +484,7 @@ func lockAndUnlock(packageName string) (err error) {
 }
 
 func createInstance() configurePackageManager {
-	return &configurePackage{Configuration: contracts.Configuration{}, runner: runpluginutil.PluginRunner{}, repository: localpackages.NewRepository(filesysdep, "testdata")}
+	return &configurePackage{Configuration: contracts.Configuration{}, runner: runpluginutil.PluginRunner{}, repository: &repository_mock.MockedRepository{}}
 }
 
 func createInstanceWithRepoMock(repoMock localpackages.Repository) configurePackageManager {
