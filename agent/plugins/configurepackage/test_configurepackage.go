@@ -118,16 +118,6 @@ func (m *ConfigurePackageStubs) Clear() {
 	m.stubsSet = false
 }
 
-func fileSysStubSuccessNewPackage() fileSysDep {
-	result := `{
-  "name": "PVDriver",
-  "platform": "Windows",
-  "architecture": "amd64",
-  "version": "1.0.0"
-}`
-	return &FileSysDepStub{readResult: []byte(result), existsResultDefault: true, existsResultSequence: []bool{false, false, false}}
-}
-
 func networkStubSuccess() networkDep {
 	return &NetworkDepStub{downloadResultDefault: artifact.DownloadOutput{LocalFilePath: "Stub"}, foldersResult: []string{"1.0.0"}}
 }
@@ -144,50 +134,20 @@ func SetStubs() *ConfigurePackageStubs {
 }
 
 func setSuccessStubs() *ConfigurePackageStubs {
-	stubs := &ConfigurePackageStubs{fileSysDepStub: fileSysStubSuccessNewPackage(), networkDepStub: networkStubSuccess(), execDepStub: execStubSuccess()}
+	stubs := &ConfigurePackageStubs{fileSysDepStub: &FileSysDepStub{}, networkDepStub: networkStubSuccess(), execDepStub: execStubSuccess()}
 	stubs.Set()
 	return stubs
 }
 
 type FileSysDepStub struct {
-	makeFileError        error
-	directoriesResult    []string
-	directoriesError     error
-	filesResult          []string
-	filesError           error
-	existsResultDefault  bool
-	existsResultSequence []bool
-	uncompressError      error
-	removeError          error
-	renameError          error
-	readResult           []byte
-	readError            error
-	writeError           error
+	makeFileError   error
+	uncompressError error
+	removeError     error
+	writeError      error
 }
 
 func (m *FileSysDepStub) MakeDirExecute(destinationDir string) (err error) {
 	return m.makeFileError
-}
-
-func (m *FileSysDepStub) GetDirectoryNames(srcPath string) (directories []string, err error) {
-	return m.directoriesResult, m.directoriesError
-}
-
-func (m *FileSysDepStub) GetFileNames(srcPath string) (files []string, err error) {
-	return m.filesResult, m.filesError
-}
-
-func (m *FileSysDepStub) Exists(filePath string) bool {
-	if len(m.existsResultSequence) > 0 {
-		result := m.existsResultSequence[0]
-		if len(m.existsResultSequence) > 1 {
-			m.existsResultSequence = append(m.existsResultSequence[:0], m.existsResultSequence[1:]...)
-		} else {
-			m.existsResultSequence = nil
-		}
-		return result
-	}
-	return m.existsResultDefault
 }
 
 func (m *FileSysDepStub) Uncompress(src, dest string) error {
@@ -196,14 +156,6 @@ func (m *FileSysDepStub) Uncompress(src, dest string) error {
 
 func (m *FileSysDepStub) RemoveAll(path string) error {
 	return m.removeError
-}
-
-func (m *FileSysDepStub) Rename(oldpath, newpath string) error {
-	return m.renameError
-}
-
-func (m *FileSysDepStub) ReadFile(filename string) ([]byte, error) {
-	return m.readResult, m.readError
 }
 
 func (m *FileSysDepStub) WriteFile(filename string, content string) error {

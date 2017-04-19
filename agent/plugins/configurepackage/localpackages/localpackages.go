@@ -61,17 +61,8 @@ type Repository interface {
 }
 
 // NewRepositoryDefault is the factory method for the package repository with default file system dependencies
-func NewRepositoryDefault() Repository {
+func NewRepository() Repository {
 	return &localRepository{filesysdep: &fileSysDepImp{}, repoRoot: appconfig.PackageRoot}
-}
-
-// TODO:MF: When we have unit tests specifically for the repository and are using the mock repository in
-//   configurePackage tests, it should be possible to make this filesysdep a static dep instead of an instance parameter
-//   (like other deps) but need to consider how to provide access to the repository root
-
-// NewRepository is the factory method for the package repository
-func NewRepository(fileSystemDependencies FileSysDep, repositoryRoot string) Repository {
-	return &localRepository{filesysdep: fileSystemDependencies, repoRoot: repositoryRoot}
 }
 
 // PackageInstallState represents the json structure of the current package state
