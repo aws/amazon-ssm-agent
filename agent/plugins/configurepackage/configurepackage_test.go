@@ -27,7 +27,8 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/localpackages"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/localpackages/mock"
-	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/ssms3"
+	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/packageservice"
+	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/packageservice/mock"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/pluginutil"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
@@ -469,9 +470,13 @@ func lockAndUnlock(packageName string) (err error) {
 }
 
 func createInstance() configurePackageManager {
-	return &configurePackage{Configuration: contracts.Configuration{}, runner: runpluginutil.PluginRunner{}, repository: &repository_mock.MockedRepository{}, packageservice: &ssms3.PackageService{}}
+	return &configurePackage{Configuration: contracts.Configuration{}, runner: runpluginutil.PluginRunner{}, repository: &repository_mock.MockedRepository{}, packageservice: &packageservice_mock.Mock{}}
 }
 
 func createInstanceWithRepoMock(repoMock localpackages.Repository) configurePackageManager {
-	return &configurePackage{Configuration: contracts.Configuration{}, runner: runpluginutil.PluginRunner{}, repository: repoMock, packageservice: &ssms3.PackageService{}}
+	return &configurePackage{Configuration: contracts.Configuration{}, runner: runpluginutil.PluginRunner{}, repository: repoMock, packageservice: &packageservice_mock.Mock{}}
+}
+
+func createInstanceWithRepoAndDSMock(repoMock localpackages.Repository, dsMock packageservice.PackageService) configurePackageManager {
+	return &configurePackage{Configuration: contracts.Configuration{}, runner: runpluginutil.PluginRunner{}, repository: repoMock, packageservice: dsMock}
 }
