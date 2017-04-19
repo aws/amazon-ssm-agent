@@ -566,7 +566,7 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 		}
 		return
 	}
-	manager := &configurePackage{Configuration: config, runner: subDocumentRunner, repository: localpackages.NewRepository(filesysdep, appconfig.PackageRoot)}
+	manager := &configurePackage{Configuration: config, runner: subDocumentRunner, repository: localpackages.NewRepository()}
 
 	for i, prop := range properties {
 

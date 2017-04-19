@@ -17,7 +17,6 @@
 package configurepackage
 
 import (
-	"io/ioutil"
 	"os"
 
 	"github.com/aws/amazon-ssm-agent/agent/context"
@@ -37,13 +36,8 @@ var filesysdep fileSysDep = &fileSysDepImp{}
 // dependency on filesystem and os utility functions
 type fileSysDep interface {
 	MakeDirExecute(destinationDir string) (err error)
-	GetDirectoryNames(srcPath string) (directories []string, err error)
-	GetFileNames(srcPath string) (files []string, err error)
-	Exists(filePath string) bool
 	Uncompress(src, dest string) error
 	RemoveAll(path string) error
-	Rename(oldpath, newpath string) error
-	ReadFile(filename string) ([]byte, error)
 	WriteFile(filename string, content string) error
 }
 
@@ -53,32 +47,12 @@ func (fileSysDepImp) MakeDirExecute(destinationDir string) (err error) {
 	return fileutil.MakeDirsWithExecuteAccess(destinationDir)
 }
 
-func (fileSysDepImp) GetDirectoryNames(srcPath string) (directories []string, err error) {
-	return fileutil.GetDirectoryNames(srcPath)
-}
-
-func (fileSysDepImp) GetFileNames(srcPath string) (files []string, err error) {
-	return fileutil.GetFileNames(srcPath)
-}
-
-func (fileSysDepImp) Exists(filePath string) bool {
-	return fileutil.Exists(filePath)
-}
-
 func (fileSysDepImp) Uncompress(src, dest string) error {
 	return fileutil.Uncompress(src, dest)
 }
 
 func (fileSysDepImp) RemoveAll(path string) error {
 	return os.RemoveAll(path)
-}
-
-func (fileSysDepImp) Rename(oldpath, newpath string) error {
-	return os.Rename(oldpath, newpath)
-}
-
-func (fileSysDepImp) ReadFile(filename string) ([]byte, error) {
-	return ioutil.ReadFile(filename)
 }
 
 func (fileSysDepImp) WriteFile(filename string, content string) error {
