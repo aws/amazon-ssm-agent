@@ -15,42 +15,12 @@
 package birdwatcher
 
 import (
-	"io/ioutil"
 	"runtime"
 
-	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil/artifact"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/platform"
 )
-
-var filesysdep fileSysDep = &fileSysDepImp{}
-
-// dependency on filesystem and os utility functions
-type fileSysDep interface {
-	MakeDirExecute(destinationDir string) error
-	Exists(filePath string) bool
-	ReadFile(filename string) ([]byte, error)
-	WriteFile(filename string, content string) error
-}
-
-type fileSysDepImp struct{}
-
-func (fileSysDepImp) MakeDirExecute(destinationDir string) error {
-	return fileutil.MakeDirsWithExecuteAccess(destinationDir)
-}
-
-func (fileSysDepImp) Exists(filePath string) bool {
-	return fileutil.Exists(filePath)
-}
-
-func (fileSysDepImp) ReadFile(filename string) ([]byte, error) {
-	return ioutil.ReadFile(filename)
-}
-
-func (fileSysDepImp) WriteFile(filename string, content string) error {
-	return fileutil.WriteAllText(filename, content)
-}
 
 // dependency on S3 and downloaded artifacts
 type networkDep interface {
