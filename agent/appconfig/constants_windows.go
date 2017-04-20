@@ -34,6 +34,9 @@ const (
 	//Ec2configServiceFolder is the folder required by SSM agent
 	EC2ConfigServiceFolder = "Amazon\\Ec2ConfigService"
 
+	// ManifestCacheFolder path under local app data
+	ManifestCacheFolder = "Amazon\\SSM\\Manifests"
+
 	// Exit Code that would trigger a Soft Reboot
 	RebootExitCode = 3010
 
@@ -103,6 +106,9 @@ var LocalCommandRootInvalid string
 // DefaultPluginPath represents the directory for storing plugins in SSM
 var DefaultPluginPath string
 
+// ManifestCacheDirectory represents the directory for storing all downloaded manifest files
+var ManifestCacheDirectory string
+
 // DownloadRoot specifies the directory under which files will be downloaded
 var DownloadRoot string
 
@@ -159,6 +165,7 @@ func init() {
 
 	DefaultProgramFolder = filepath.Join(EnvProgramFiles, SSMFolder)
 	DefaultPluginPath = filepath.Join(EnvProgramFiles, SSMPluginFolder)
+	ManifestCacheDirectory = filepath.Join(EnvProgramFiles, ManifestCacheFolder)
 	AppConfigPath = filepath.Join(DefaultProgramFolder, AppConfigFileName)
 	DefaultDataStorePath = filepath.Join(SSMDataPath, "InstanceData")
 	PackageRoot = filepath.Join(SSMDataPath, "Packages")

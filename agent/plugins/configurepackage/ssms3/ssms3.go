@@ -86,7 +86,7 @@ func New(log log.T, repository string, region string) packageservice.PackageServ
 }
 
 // DownloadManifest looks up the latest version of a given package for this platform/arch in S3 or manifest at source location
-func (ds *PackageService) DownloadManifest(log log.T, packageName string, version string, targetDir string) (string, error) {
+func (ds *PackageService) DownloadManifest(log log.T, packageName string, version string) (string, error) {
 	var latestVersion string
 	var err error
 
@@ -106,11 +106,9 @@ func (ds *PackageService) DownloadManifest(log log.T, packageName string, versio
 	return latestVersion, err
 }
 
-func (ds *PackageService) DownloadArtifact(log log.T, packageName string, version string, targetDir string) (string, error) {
+func (ds *PackageService) DownloadArtifact(log log.T, packageName string, version string) (string, error) {
 	s3Location := getS3Location(packageName, version, ds.packageURL)
-	err := downloadPackageFromS3(log, s3Location, targetDir)
-	// TODO: destination file?
-	return "", err
+	return downloadPackageFromS3(log, s3Location)
 }
 
 func (*PackageService) ReportResult(log log.T, result packageservice.PackageResult) error {
@@ -121,11 +119,11 @@ func (*PackageService) ReportResult(log log.T, result packageservice.PackageResu
 // utils
 
 // downloadPackageFromS3 downloads and uncompresses the installation package from s3 bucket
-func downloadPackageFromS3(log log.T, packageS3Source string, packageDestination string) error {
+func downloadPackageFromS3(log log.T, packageS3Source string) (string, error) {
 	// TODO: deduplicate with birdwatcher download
 	downloadInput := artifact.DownloadInput{
-		SourceURL:            packageS3Source,
-		DestinationDirectory: packageDestination}
+		SourceURL: packageS3Source,
+	}
 
 	downloadOutput, downloadErr := networkdep.Download(log, downloadInput)
 	if downloadErr != nil || downloadOutput.LocalFilePath == "" {
@@ -133,27 +131,25 @@ func downloadPackageFromS3(log log.T, packageS3Source string, packageDestination
 		if downloadErr != nil {
 			errMessage = fmt.Sprintf("%v, %v", errMessage, downloadErr.Error())
 		}
-		// attempt to clean up failed download folder
-		if errCleanup := filesysdep.RemoveAll(packageDestination); errCleanup != nil {
-			log.Errorf("Failed to clean up destination folder %v after failed download: %v", packageDestination, errCleanup)
-		}
+		// TODO: cleanup download artefacts
+
 		// return download error
-		return errors.New(errMessage)
+		return "", errors.New(errMessage)
 	}
 
 	filePath := downloadOutput.LocalFilePath
 	// TODO: remove uncompress?
-	if uncompressErr := filesysdep.Uncompress(filePath, packageDestination); uncompressErr != nil {
-		return fmt.Errorf("failed to extract package installer package %v from %v, %v", filePath, packageDestination, uncompressErr.Error())
+	if uncompressErr := filesysdep.Uncompress(filePath, "."); uncompressErr != nil {
+		return "", fmt.Errorf("failed to extract package installer package %v from %v", filePath, uncompressErr.Error())
 	}
 
 	// NOTE: this could be considered a warning - it likely points to a real problem, but if uncompress succeeded, we could continue
 	// delete compressed package after using
 	if cleanupErr := filesysdep.RemoveAll(filePath); cleanupErr != nil {
-		return fmt.Errorf("failed to delete compressed package %v, %v", filePath, cleanupErr.Error())
+		return "", fmt.Errorf("failed to delete compressed package %v, %v", filePath, cleanupErr.Error())
 	}
 
-	return nil
+	return filePath, nil
 }
 
 // getS3Location constructs the s3 url to locate the package for downloading
