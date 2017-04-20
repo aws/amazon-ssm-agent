@@ -121,6 +121,20 @@ build-freebsd: checkstyle copy-src pre-build
 	GOOS=freebsd GOARCH=amd64 $(GO_BUILD) -ldflags "-s -w" -o $(BGO_SPACE)/bin/freebsd_amd64/ssm-cli -v \
             $(BGO_SPACE)/agent/cli-main/cli-main.go
 
+.PHONY: build-freebsd
+build-freebsd: checkstyle copy-src pre-build
+	@echo "Build for freebsd agent"
+	GOOS=freebsd GOARCH=amd64 go build -ldflags "-s -w" -o $(BGO_SPACE)/bin/freebsd_amd64/amazon-ssm-agent -v \
+	$(BGO_SPACE)/agent/agent.go $(BGO_SPACE)/agent/agent_unix.go $(BGO_SPACE)/agent/agent_parser.go
+
+.PHONY: install-freebsd
+install-freebsd:
+	@echo "Install for freebsd agent"
+	install -m 555 $(BGO_SPACE)/bin/freebsd_amd64/amazon-ssm-agent $(DESTDIR)$(PREFIX)/sbin/
+	mkdir -p $(DESTDIR)$(PREFIX)/etc/amazon/ssm
+	install -m 644 $(BGO_SPACE)/bin/amazon-ssm-agent.json.template $(DESTDIR)$(PREFIX)/etc/amazon/ssm
+	install -m 644 $(BGO_SPACE)/bin/seelog_unix.xml $(DESTDIR)$(PREFIX)/etc/amazon/ssm/seelog_unix.xml.template
+
 .PHONY: build-darwin
 build-darwin: checkstyle copy-src pre-build
 	@echo "Rebuild for darwin agent"
