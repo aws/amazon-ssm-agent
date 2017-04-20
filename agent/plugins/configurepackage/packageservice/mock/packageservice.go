@@ -24,13 +24,13 @@ type Mock struct {
 	mock.Mock
 }
 
-func (ds *Mock) DownloadManifest(log log.T, packageName string, version string, targetDir string) (string, error) {
-	args := ds.Called(log, packageName, version, targetDir)
+func (ds *Mock) DownloadManifest(log log.T, packageName string, version string) (string, error) {
+	args := ds.Called(log, packageName, version)
 	return args.String(0), args.Error(1)
 }
 
-func (ds *Mock) DownloadArtifact(log log.T, packageName string, version string, targetDir string) (string, error) {
-	args := ds.Called(log, packageName, version, targetDir)
+func (ds *Mock) DownloadArtifact(log log.T, packageName string, version string) (string, error) {
+	args := ds.Called(log, packageName, version)
 	return args.String(0), args.Error(1)
 }
 
