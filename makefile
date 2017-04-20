@@ -35,8 +35,10 @@ export GOPATH
 export BRAZIL_BUILD
 
 checkstyle::
+ifndef SKIP_CHECKSTYLE
 #   Run checkstyle script
 	$(BGO_SPACE)/Tools/src/checkstyle.sh
+endif
 
 coverage:: build-linux
 	$(BGO_SPACE)/Tools/src/coverage.sh github.com/aws/amazon-ssm-agent/agent/...
