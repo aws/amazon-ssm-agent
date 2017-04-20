@@ -61,6 +61,9 @@ const (
 	// DefaultPluginPath represents the directory for storing plugins in SSM
 	DefaultPluginPath = "/var/lib/amazon/ssm/plugins"
 
+	// ManifestCacheDirectory represents the directory for storing all downloaded manifest files
+	ManifestCacheDirectory = "/var/lib/amazon/ssm/manifests"
+
 	// List all plugin names, unfortunately golang doesn't support const arrays of strings
 
 	// RebootExitCode that would trigger a Soft Reboot

@@ -308,7 +308,7 @@ func (m *configurePackage) ensurePackage(context context.T,
 		context.Log().Debugf("Current %v Target %v State %v", currentVersion, version, currentState)
 		context.Log().Debugf("Refreshing package content for %v %v %v", packageName, version, err)
 		return m.repository.RefreshPackage(context, packageName, version, func(targetDirectory string) error {
-			_, err := m.packageservice.DownloadArtifact(context.Log(), packageName, version, targetDirectory)
+			_, err := m.packageservice.DownloadArtifact(context.Log(), packageName, version)
 			// TODO: do something with file? uncompress?
 			return err
 		})
@@ -375,8 +375,7 @@ func (m *configurePackage) getVersionToInstall(context context.T,
 	if input.Version != "" {
 		version = input.Version
 	} else {
-		// TODO: targetdir
-		version, err = m.packageservice.DownloadManifest(context.Log(), input.Name, "latest", "targetdir")
+		version, err = m.packageservice.DownloadManifest(context.Log(), input.Name, "latest")
 		if err != nil {
 			return "", installedVersion, currentState, err
 		}
@@ -392,7 +391,7 @@ func (m *configurePackage) getVersionToUninstall(context context.T,
 	} else if installedVersion := m.repository.GetInstalledVersion(context, input.Name); installedVersion != "" {
 		version = installedVersion
 	} else {
-		version, err = m.packageservice.DownloadManifest(context.Log(), input.Name, "latest", "targetdir") // TODO: targetdir
+		version, err = m.packageservice.DownloadManifest(context.Log(), input.Name, "latest")
 	}
 	return
 }
