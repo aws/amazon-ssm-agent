@@ -72,44 +72,6 @@ func (p *platformProviderMock) Architecture(log log.T) (string, error) {
 	return p.architecture, p.architectureerr
 }
 
-// filesysMock
-type filesysMock struct {
-	makeDirExecutePath  string
-	makeDirExecuteError error
-
-	existsPath   string
-	existsResult bool
-
-	readFilePath   string
-	readFileResult []byte
-	readFileError  error
-
-	writeFilePath    string
-	writeFileContent string
-	writeFileError   error
-}
-
-func (p *filesysMock) MakeDirExecute(filePath string) error {
-	p.makeDirExecutePath = filePath
-	return p.makeDirExecuteError
-}
-
-func (p *filesysMock) Exists(filePath string) bool {
-	p.existsPath = filePath
-	return p.existsResult
-}
-
-func (p *filesysMock) ReadFile(filePath string) ([]byte, error) {
-	p.readFilePath = filePath
-	return p.readFileResult, p.readFileError
-}
-
-func (p *filesysMock) WriteFile(filePath string, content string) error {
-	p.writeFilePath = filePath
-	p.writeFileContent = content
-	return p.writeFileError
-}
-
 // networkMock
 type networkMock struct {
 	downloadInput  artifact.DownloadInput
