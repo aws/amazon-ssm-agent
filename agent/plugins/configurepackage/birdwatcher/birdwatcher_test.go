@@ -16,7 +16,6 @@ package birdwatcher
 
 import (
 	"errors"
-	"path/filepath"
 	"testing"
 
 	"github.com/aws/amazon-ssm-agent/agent/fileutil/artifact"
@@ -272,7 +271,7 @@ func TestReportResult(t *testing.T) {
 
 	for _, testdata := range data {
 		t.Run(testdata.name, func(t *testing.T) {
-			ds := &PackageService{bwclient: &testdata.bwclient}
+			ds := &PackageService{bwclient: &testdata.bwclient, manifestCache: &ManifestCacheMem{cache: map[string][]byte{}}}
 
 			err := ds.ReportResult(loggerMock, pkgresult)
 			if testdata.expectedErr {
@@ -291,14 +290,12 @@ func TestReportResult(t *testing.T) {
 func TestDownloadManifest(t *testing.T) {
 	manifestStrErr := "xkj]{}["
 	manifestStr := "{\"version\": \"1234\"}"
-	targetdir := "targetdir"
 
 	data := []struct {
 		name           string
 		packageName    string
 		packageVersion string
 		bwclient       birdwatcherStationServiceMock
-		filesys        filesysMock
 		expectedErr    bool
 	}{
 		{
@@ -310,7 +307,6 @@ func TestDownloadManifest(t *testing.T) {
 					Manifest: &manifestStr,
 				},
 			},
-			filesysMock{},
 			false,
 		},
 		{
@@ -322,7 +318,6 @@ func TestDownloadManifest(t *testing.T) {
 					Manifest: &manifestStr,
 				},
 			},
-			filesysMock{},
 			false,
 		},
 		{
@@ -332,7 +327,6 @@ func TestDownloadManifest(t *testing.T) {
 			birdwatcherStationServiceMock{
 				getManifestError: errors.New("testerror"),
 			},
-			filesysMock{},
 			true,
 		},
 		{
@@ -344,45 +338,15 @@ func TestDownloadManifest(t *testing.T) {
 					Manifest: &manifestStrErr,
 				},
 			},
-			filesysMock{},
-			true,
-		},
-		{
-			"error in creating target dir",
-			"packagename",
-			"latest",
-			birdwatcherStationServiceMock{
-				getManifestOutput: &birdwatcherstationservice.GetManifestOutput{
-					Manifest: &manifestStr,
-				},
-			},
-			filesysMock{
-				makeDirExecuteError: errors.New("testerror"),
-			},
-			true,
-		},
-		{
-			"error in creating manifest file",
-			"packagename",
-			"latest",
-			birdwatcherStationServiceMock{
-				getManifestOutput: &birdwatcherstationservice.GetManifestOutput{
-					Manifest: &manifestStr,
-				},
-			},
-			filesysMock{
-				writeFileError: errors.New("testerror"),
-			},
 			true,
 		},
 	}
 
 	for _, testdata := range data {
 		t.Run(testdata.name, func(t *testing.T) {
-			ds := &PackageService{bwclient: &testdata.bwclient}
-			filesysdep = &testdata.filesys
+			ds := &PackageService{bwclient: &testdata.bwclient, manifestCache: &ManifestCacheMem{cache: map[string][]byte{}}}
 
-			result, err := ds.DownloadManifest(loggerMock, testdata.packageName, testdata.packageVersion, targetdir)
+			result, err := ds.DownloadManifest(loggerMock, testdata.packageName, testdata.packageVersion)
 
 			if testdata.expectedErr {
 				assert.Error(t, err)
@@ -390,11 +354,6 @@ func TestDownloadManifest(t *testing.T) {
 				// verify parameter for api call
 				assert.Equal(t, testdata.packageName, *testdata.bwclient.getManifestInput.PackageName)
 				assert.Equal(t, testdata.packageVersion, *testdata.bwclient.getManifestInput.PackageVersion)
-				// verify manifest.json written
-				dir := filepath.Join(targetdir, testdata.packageName, "1234")
-				assert.Equal(t, dir, testdata.filesys.makeDirExecutePath)
-				assert.Equal(t, filepath.Join(dir, "manifest.json"), testdata.filesys.writeFilePath)
-				assert.Equal(t, manifestStr, testdata.filesys.writeFileContent)
 				// verify result
 				assert.Equal(t, "1234", result)
 				assert.NoError(t, err)
@@ -404,65 +363,25 @@ func TestDownloadManifest(t *testing.T) {
 }
 
 func TestFindFileFromManifest(t *testing.T) {
-	targetdir := "targetdir"
 	platformProviderdep = &platformProviderMock{
 		name:         "platformName",
 		version:      "platformVersion",
 		architecture: "architecture",
 	}
-	manifestStr := `
-	{
-		"packages": {
-			"platformName": {
-				"platformVersion": {
-					"architecture": {
-						"file": "test.zip"
-					}
-				}
-			}
-		},
-		"files": {
-			"test.zip": {
-				"downloadLocation": "https://example.com/agent"
-			}
-		}
-	}
-	`
-	manifestStrErr := "xkj]{}["
-	manifestStrEmpty := `{ "packages": {}, "files": {} }`
-	manifestStrEmptyFiles := `
-	{
-		"packages": {
-			"platformName": {
-				"platformVersion": {
-					"architecture": {
-						"file": "test.zip"
-					}
-				}
-			}
-		},
-		"files": {
-			"nomatch": {
-				"downloadLocation": "https://example.com/agent"
-			}
-		}
-	}
-	`
 
 	data := []struct {
-		name           string
-		packageName    string
-		packageVersion string
-		filesys        filesysMock
-		file           File
-		expectedErr    bool
+		name        string
+		manifest    *Manifest
+		file        File
+		expectedErr bool
 	}{
 		{
 			"successful file read",
-			"packageName",
-			"1234",
-			filesysMock{
-				readFileResult: []byte(manifestStr),
+			&Manifest{
+				Packages: manifestPackageGen(&[]pkgselector{
+					{"platformName", "platformVersion", "architecture", &PackageInfo{File: "test.zip"}},
+				}),
+				Files: map[string]*File{"test.zip": &File{DownloadLocation: "https://example.com/agent"}},
 			},
 			File{
 				DownloadLocation: "https://example.com/agent",
@@ -470,41 +389,32 @@ func TestFindFileFromManifest(t *testing.T) {
 			false,
 		},
 		{
-			"fail to read file",
-			"packageName",
-			"1234",
-			filesysMock{
-				readFileError: errors.New("testerror"),
-			},
-			File{},
-			true,
-		},
-		{
-			"fail to parse file",
-			"packageName",
-			"1234",
-			filesysMock{
-				readFileResult: []byte(manifestStrErr),
-			},
-			File{},
-			true,
-		},
-		{
 			"fail to find match in file",
-			"packageName",
-			"1234",
-			filesysMock{
-				readFileResult: []byte(manifestStrEmpty),
+			&Manifest{
+				Packages: manifestPackageGen(&[]pkgselector{}),
+				Files:    map[string]*File{},
 			},
 			File{},
 			true,
 		},
 		{
 			"fail to find file name",
-			"packageName",
-			"1234",
-			filesysMock{
-				readFileResult: []byte(manifestStrEmptyFiles),
+			&Manifest{
+				Packages: manifestPackageGen(&[]pkgselector{
+					{"platformName", "platformVersion", "architecture", &PackageInfo{File: "test.zip"}},
+				}),
+				Files: map[string]*File{},
+			},
+			File{},
+			true,
+		},
+		{
+			"fail to find matching file name",
+			&Manifest{
+				Packages: manifestPackageGen(&[]pkgselector{
+					{"platformName", "platformVersion", "architecture", &PackageInfo{File: "test.zip"}},
+				}),
+				Files: map[string]*File{"nomatch": &File{DownloadLocation: "https://example.com/agent"}},
 			},
 			File{},
 			true,
@@ -513,26 +423,19 @@ func TestFindFileFromManifest(t *testing.T) {
 
 	for _, testdata := range data {
 		t.Run(testdata.name, func(t *testing.T) {
-			filesysdep = &testdata.filesys
-
-			result, err := findFileFromManifest(loggerMock, testdata.packageName, testdata.packageVersion, targetdir)
+			result, err := findFileFromManifest(loggerMock, testdata.manifest)
 
 			if testdata.expectedErr {
 				assert.Error(t, err)
 			} else {
 				assert.NoError(t, err)
 				assert.Equal(t, testdata.file, *result)
-				// verify file read
-				dir := filepath.Join(targetdir, testdata.packageName, "1234")
-				assert.Equal(t, filepath.Join(dir, "manifest.json"), testdata.filesys.readFilePath)
 			}
 		})
 	}
 }
 
 func TestDownloadFile(t *testing.T) {
-	targetdir := "targetdir"
-
 	data := []struct {
 		name        string
 		network     networkMock
@@ -587,7 +490,7 @@ func TestDownloadFile(t *testing.T) {
 		t.Run(testdata.name, func(t *testing.T) {
 			networkdep = &testdata.network
 
-			result, err := downloadFile(loggerMock, testdata.file, targetdir)
+			result, err := downloadFile(loggerMock, testdata.file)
 			if testdata.expectedErr {
 				assert.Error(t, err)
 			} else {
@@ -595,10 +498,9 @@ func TestDownloadFile(t *testing.T) {
 				assert.Equal(t, "agent.zip", result)
 				// verify download input
 				input := artifact.DownloadInput{
-					SourceURL:            testdata.file.DownloadLocation,
-					DestinationDirectory: targetdir,
-					SourceHashType:       "sha256",
-					SourceHashValue:      "asdf",
+					SourceURL:       testdata.file.DownloadLocation,
+					SourceHashType:  "sha256",
+					SourceHashValue: "asdf",
 				}
 				assert.Equal(t, input, testdata.network.downloadInput)
 			}
@@ -607,7 +509,6 @@ func TestDownloadFile(t *testing.T) {
 }
 
 func TestDownloadArtifact(t *testing.T) {
-	targetdir := "targetdir"
 	platformProviderdep = &platformProviderMock{
 		name:         "platformName",
 		version:      "platformVersion",
@@ -636,7 +537,6 @@ func TestDownloadArtifact(t *testing.T) {
 		name           string
 		packageName    string
 		packageVersion string
-		filesys        filesysMock
 		network        networkMock
 		expectedErr    bool
 	}{
@@ -644,9 +544,6 @@ func TestDownloadArtifact(t *testing.T) {
 			"successful download",
 			"packageName",
 			"1234",
-			filesysMock{
-				readFileResult: []byte(manifestStr),
-			},
 			networkMock{
 				downloadOutput: artifact.DownloadOutput{
 					LocalFilePath: "agent.zip",
@@ -658,9 +555,6 @@ func TestDownloadArtifact(t *testing.T) {
 			"failed manifest loading",
 			"packageName",
 			"1234",
-			filesysMock{
-				readFileError: errors.New("testerror"),
-			},
 			networkMock{},
 			true,
 		},
@@ -668,11 +562,13 @@ func TestDownloadArtifact(t *testing.T) {
 
 	for _, testdata := range data {
 		t.Run(testdata.name, func(t *testing.T) {
-			ds := &PackageService{}
-			filesysdep = &testdata.filesys
+			cache := &ManifestCacheMem{cache: map[string][]byte{}}
+			cache.WriteManifest(testdata.packageName, testdata.packageVersion, []byte(manifestStr))
+
+			ds := &PackageService{manifestCache: cache}
 			networkdep = &testdata.network
 
-			result, err := ds.DownloadArtifact(loggerMock, testdata.packageName, testdata.packageVersion, targetdir)
+			result, err := ds.DownloadArtifact(loggerMock, testdata.packageName, testdata.packageVersion)
 
 			if testdata.expectedErr {
 				assert.Error(t, err)

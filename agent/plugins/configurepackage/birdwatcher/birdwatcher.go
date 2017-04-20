@@ -19,8 +19,6 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"path/filepath"
-	"strings"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil/artifact"
@@ -34,7 +32,8 @@ import (
 
 // PackageService is the concrete type for Birdwatcher PackageService
 type PackageService struct {
-	bwclient birdwatcherstationserviceiface.BirdwatcherStationServiceAPI
+	bwclient      birdwatcherstationserviceiface.BirdwatcherStationServiceAPI
+	manifestCache ManifestCache
 }
 
 // New constructor for PackageService
@@ -56,54 +55,36 @@ func New(log log.T, endpoint string) packageservice.PackageService {
 	}
 
 	return &PackageService{
-		bwclient: birdwatcherstationservice.New(session.New(cfg)),
+		bwclient:      birdwatcherstationservice.New(session.New(cfg)),
+		manifestCache: ManifestCacheDisk{CachePath: appconfig.ManifestCacheDirectory},
 	}
 }
 
 // DownloadManifest downloads the manifest for a given version (or latest) and returns the agent version specified in manifest
-func (ds *PackageService) DownloadManifest(log log.T, packageName string, version string, targetDir string) (string, error) {
-	var manifest Manifest
-
-	resp, err := ds.bwclient.GetManifest(
-		&birdwatcherstationservice.GetManifestInput{
-			PackageName:    &packageName,
-			PackageVersion: &version,
-		},
-	)
-
+func (ds *PackageService) DownloadManifest(log log.T, packageName string, version string) (string, error) {
+	manifest, err := downloadManifest(ds, packageName, version)
 	if err != nil {
-		return "", fmt.Errorf("failed to retrieve manifest: %v", err)
+		return "", err
 	}
-
-	if err := json.NewDecoder(strings.NewReader(*resp.Manifest)).Decode(&manifest); err != nil {
-		return "", fmt.Errorf("failed to decode manifest: %v", err)
-	}
-
-	// TODO: sanitize filepath
-	dir := filepath.Join(targetDir, packageName, manifest.Version)
-	file := filepath.Join(dir, "manifest.json")
-
-	err = filesysdep.MakeDirExecute(dir)
-	if err != nil {
-		return "", fmt.Errorf("failed to create directory for manifest: %v", err)
-	}
-
-	err = filesysdep.WriteFile(file, *resp.Manifest)
-	if err != nil {
-		return "", fmt.Errorf("failed to write manifest to file: %v", err)
-	}
-
 	return manifest.Version, nil
 }
 
 // DownloadArtifact downloads the platform matching artifact specified in the manifest
-func (*PackageService) DownloadArtifact(log log.T, packageName string, version string, targetDir string) (string, error) {
-	file, err := findFileFromManifest(log, packageName, version, targetDir)
+func (ds *PackageService) DownloadArtifact(log log.T, packageName string, version string) (string, error) {
+	manifest, err := readManifestFromCache(ds.manifestCache, packageName, version)
+	if err != nil {
+		manifest, err = downloadManifest(ds, packageName, version)
+		if err != nil {
+			return "", fmt.Errorf("failed to read manifest from file system: %v", err)
+		}
+	}
+
+	file, err := findFileFromManifest(log, manifest)
 	if err != nil {
 		return "", err
 	}
 
-	return downloadFile(log, file, targetDir)
+	return downloadFile(log, file)
 }
 
 // ReportResult sents back the result of the install/upgrade/uninstall run back to Birdwatcher
@@ -128,21 +109,56 @@ func (ds *PackageService) ReportResult(log log.T, result packageservice.PackageR
 }
 
 // utils
-func findFileFromManifest(log log.T, packageName string, version string, targetDir string) (*File, error) {
+func readManifestFromCache(cache ManifestCache, packageName string, version string) (*Manifest, error) {
+	data, err := cache.ReadManifest(packageName, version)
+	if err != nil {
+		return nil, err
+	}
+
+	return parseManifest(&data)
+}
+
+func downloadManifest(ds *PackageService, packageName string, version string) (*Manifest, error) {
+	resp, err := ds.bwclient.GetManifest(
+		&birdwatcherstationservice.GetManifestInput{
+			PackageName:    &packageName,
+			PackageVersion: &version,
+		},
+	)
+	if err != nil {
+		return nil, fmt.Errorf("failed to retrieve manifest: %v", err)
+	}
+
+	byteManifest := []byte(*resp.Manifest)
+
+	manifest, err := parseManifest(&byteManifest)
+	if err != nil {
+		return nil, err
+	}
+
+	err = ds.manifestCache.WriteManifest(packageName, version, byteManifest)
+	if err != nil {
+		return nil, fmt.Errorf("failed to write manifest to file: %v", err)
+	}
+
+	return manifest, nil
+}
+
+func parseManifest(data *[]byte) (*Manifest, error) {
 	var manifest Manifest
+
+	// TODO: additional validation
+	if err := json.NewDecoder(bytes.NewReader(*data)).Decode(&manifest); err != nil {
+		return nil, fmt.Errorf("failed to decode manifest: %v", err)
+	}
+
+	return &manifest, nil
+}
+
+func findFileFromManifest(log log.T, manifest *Manifest) (*File, error) {
 	var file *File
 
-	manifestfile := filepath.Join(targetDir, packageName, version, "manifest.json")
-	content, err := filesysdep.ReadFile(manifestfile)
-	if err != nil {
-		return nil, fmt.Errorf("failed to read manifest from file system: %v", err)
-	}
-
-	if err := json.NewDecoder(bytes.NewReader(content)).Decode(&manifest); err != nil {
-		return nil, fmt.Errorf("failed to decode manifest from file system: %v", err)
-	}
-
-	pkginfo, err := extractPackageInfo(log, &manifest)
+	pkginfo, err := extractPackageInfo(log, manifest)
 	if err != nil {
 		return nil, fmt.Errorf("failed to find platform: %v", err)
 	}
@@ -161,10 +177,9 @@ func findFileFromManifest(log log.T, packageName string, version string, targetD
 	return file, nil
 }
 
-func downloadFile(log log.T, file *File, targetDir string) (string, error) {
+func downloadFile(log log.T, file *File) (string, error) {
 	downloadInput := artifact.DownloadInput{
-		SourceURL:            file.DownloadLocation,
-		DestinationDirectory: targetDir,
+		SourceURL: file.DownloadLocation,
 		// TODO don't hardcode sha256 - use multiple checksums
 		SourceHashValue: file.Checksums["sha256"],
 		SourceHashType:  "sha256",
