@@ -1,5 +1,11 @@
 Latest
 ===============
+- Amazon-ssm-agent service automatically started after reboot on systemd platforms
+- Added Release notes to be available on linux packages
+- Various bug fixes
+
+2.0.755.0
+===============
 - Fixed bugs that prevented CloudWatch from launching and allowed multiple instances of CloudWatch to launch on Windows
 - Various bug fixes
 
