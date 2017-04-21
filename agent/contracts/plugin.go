@@ -25,9 +25,8 @@ import (
 const (
 	//MaximumPluginOutputSize represents the maximum output size that agent supports
 	MaximumPluginOutputSize = 2400
-
-	truncOut   = "\n---Output truncated---"
-	truncError = "\n---Error truncated----"
+	truncOut                = "\n---Output truncated---"
+	truncError              = "\n---Error truncated----"
 )
 
 var (
