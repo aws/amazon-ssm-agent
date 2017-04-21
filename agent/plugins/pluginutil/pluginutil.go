@@ -201,8 +201,8 @@ func DefaultPluginConfig() PluginConfig {
 	return PluginConfig{
 		StdoutFileName:        "stdout",
 		StderrFileName:        "stderr",
-		MaxStdoutLength:       2500,
-		MaxStderrLength:       2500,
+		MaxStdoutLength:       24000,
+		MaxStderrLength:       8000,
 		OutputTruncatedSuffix: "--output truncated--",
 	}
 }
