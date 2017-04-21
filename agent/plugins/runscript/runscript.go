@@ -57,9 +57,9 @@ type RunScriptPluginInput struct {
 func (p *Plugin) AssignPluginConfigs(pluginConfig pluginutil.PluginConfig) {
 	p.MaxStdoutLength = pluginConfig.MaxStdoutLength
 	p.MaxStderrLength = pluginConfig.MaxStderrLength
+	p.OutputTruncatedSuffix = pluginConfig.OutputTruncatedSuffix
 	p.StdoutFileName = pluginConfig.StdoutFileName
 	p.StderrFileName = pluginConfig.StderrFileName
-	p.OutputTruncatedSuffix = pluginConfig.OutputTruncatedSuffix
 	p.ExecuteUploadOutputToS3Bucket = pluginutil.UploadOutputToS3BucketExecuter(p.UploadOutputToS3Bucket)
 	p.CommandExecuter = executers.ShellCommandExecuter{}
 }
@@ -106,6 +106,8 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 		res.Code = out[0].ExitCode
 		res.Status = out[0].Status
 		res.Output = out[0].String()
+		res.StandardOutput = pluginutil.StringPrefix(out[0].Stdout, p.MaxStdoutLength, p.OutputTruncatedSuffix)
+		res.StandardError = pluginutil.StringPrefix(out[0].Stderr, p.MaxStderrLength, p.OutputTruncatedSuffix)
 	}
 
 	pluginutil.PersistPluginInformationToCurrent(log, config.PluginID, config, res)
