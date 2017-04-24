@@ -308,9 +308,22 @@ func (m *configurePackage) ensurePackage(context context.T,
 		context.Log().Debugf("Current %v Target %v State %v", currentVersion, version, currentState)
 		context.Log().Debugf("Refreshing package content for %v %v %v", packageName, version, err)
 		return m.repository.RefreshPackage(context, packageName, version, func(targetDirectory string) error {
-			_, err := m.packageservice.DownloadArtifact(context.Log(), packageName, version)
-			// TODO: do something with file? uncompress?
-			return err
+			filePath, err := m.packageservice.DownloadArtifact(context.Log(), packageName, version)
+			if err != nil {
+				return err
+			}
+
+			if uncompressErr := filesysdep.Uncompress(filePath, targetDirectory); uncompressErr != nil {
+				return fmt.Errorf("failed to extract package installer package %v from %v, %v", filePath, targetDirectory, uncompressErr.Error())
+			}
+
+			// NOTE: this could be considered a warning - it likely points to a real problem, but if uncompress succeeded, we could continue
+			// delete compressed package after using
+			if cleanupErr := filesysdep.RemoveAll(filePath); cleanupErr != nil {
+				return fmt.Errorf("failed to delete compressed package %v, %v", filePath, cleanupErr.Error())
+			}
+
+			return nil
 		})
 	}
 	return nil

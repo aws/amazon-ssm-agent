@@ -137,19 +137,7 @@ func downloadPackageFromS3(log log.T, packageS3Source string) (string, error) {
 		return "", errors.New(errMessage)
 	}
 
-	filePath := downloadOutput.LocalFilePath
-	// TODO: remove uncompress?
-	if uncompressErr := filesysdep.Uncompress(filePath, "."); uncompressErr != nil {
-		return "", fmt.Errorf("failed to extract package installer package %v from %v", filePath, uncompressErr.Error())
-	}
-
-	// NOTE: this could be considered a warning - it likely points to a real problem, but if uncompress succeeded, we could continue
-	// delete compressed package after using
-	if cleanupErr := filesysdep.RemoveAll(filePath); cleanupErr != nil {
-		return "", fmt.Errorf("failed to delete compressed package %v, %v", filePath, cleanupErr.Error())
-	}
-
-	return filePath, nil
+	return downloadOutput.LocalFilePath, nil
 }
 
 // getS3Location constructs the s3 url to locate the package for downloading

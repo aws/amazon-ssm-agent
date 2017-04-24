@@ -15,31 +15,10 @@
 package ssms3
 
 import (
-	"os"
-
-	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil/artifact"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/s3util"
 )
-
-// dependency on filesystem and os utility functions
-type fileSysDep interface {
-	RemoveAll(path string) error
-	Uncompress(src, dest string) error
-}
-
-type fileSysDepImp struct{}
-
-var filesysdep fileSysDep = &fileSysDepImp{}
-
-func (fileSysDepImp) Uncompress(src, dest string) error {
-	return fileutil.Uncompress(src, dest)
-}
-
-func (fileSysDepImp) RemoveAll(path string) error {
-	return os.RemoveAll(path)
-}
 
 // dependency on S3 and downloaded artifacts
 type networkDep interface {
