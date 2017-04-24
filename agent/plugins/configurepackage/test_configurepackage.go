@@ -90,12 +90,22 @@ func setSuccessStubs() *ConfigurePackageStubs {
 }
 
 type FileSysDepStub struct {
-	makeFileError error
-	writeError    error
+	makeFileError   error
+	uncompressError error
+	removeError     error
+	writeError      error
 }
 
 func (m *FileSysDepStub) MakeDirExecute(destinationDir string) (err error) {
 	return m.makeFileError
+}
+
+func (m *FileSysDepStub) Uncompress(src, dest string) error {
+	return m.uncompressError
+}
+
+func (m *FileSysDepStub) RemoveAll(path string) error {
+	return m.removeError
 }
 
 func (m *FileSysDepStub) WriteFile(filename string, content string) error {
