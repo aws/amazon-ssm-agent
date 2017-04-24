@@ -17,6 +17,8 @@
 package configurepackage
 
 import (
+	"os"
+
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/docmanager/model"
@@ -31,6 +33,8 @@ var filesysdep fileSysDep = &fileSysDepImp{}
 type fileSysDep interface {
 	MakeDirExecute(destinationDir string) (err error)
 	WriteFile(filename string, content string) error
+	Uncompress(src, dest string) error
+	RemoveAll(path string) error
 }
 
 type fileSysDepImp struct{}
@@ -41,6 +45,14 @@ func (fileSysDepImp) MakeDirExecute(destinationDir string) (err error) {
 
 func (fileSysDepImp) WriteFile(filename string, content string) error {
 	return fileutil.WriteAllText(filename, content)
+}
+
+func (fileSysDepImp) Uncompress(src, dest string) error {
+	return fileutil.Uncompress(src, dest)
+}
+
+func (fileSysDepImp) RemoveAll(path string) error {
+	return os.RemoveAll(path)
 }
 
 var execdep execDep = &execDepImp{}
