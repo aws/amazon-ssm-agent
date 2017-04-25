@@ -518,6 +518,7 @@ func TestUninstallPackage_RemovalFailed(t *testing.T) {
 	pluginInformation := createStubPluginInputUninstall()
 
 	mockRepo := repository_mock.MockedRepository{}
+	mockRepo.On("GetInstalledVersion", mock.Anything, pluginInformation.Name).Return(pluginInformation.Version)
 	mockRepo.On("GetInstallState", mock.Anything, pluginInformation.Name).Return(localpackages.Installed, pluginInformation.Version)
 	mockRepo.On("ValidatePackage", mock.Anything, pluginInformation.Name, pluginInformation.Version).Return(nil)
 

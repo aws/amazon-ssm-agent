@@ -398,15 +398,21 @@ func (m *configurePackage) getVersionToInstall(context context.T,
 
 // getVersionToUninstall decides which version to uninstall
 func (m *configurePackage) getVersionToUninstall(context context.T,
-	input *ConfigurePackagePluginInput) (version string, err error) {
+	input *ConfigurePackagePluginInput) (string, error) {
+
+	installedVersion := m.repository.GetInstalledVersion(context, input.Name)
+
 	if !packageservice.IsLatest(input.Version) {
-		version = input.Version
-	} else if installedVersion := m.repository.GetInstalledVersion(context, input.Name); installedVersion != "" {
-		version = installedVersion
-	} else {
-		version, err = m.packageservice.DownloadManifest(context.Log(), input.Name, packageservice.Latest)
+		if input.Version != installedVersion {
+			return "", fmt.Errorf("selected version (%s) is not installed (%s)", input.Version, installedVersion)
+		}
 	}
-	return
+
+	if installedVersion != "" {
+		return installedVersion, nil
+	}
+
+	return "", nil
 }
 
 // setInstallState sets the current installation state for the package in the persistent store.
