@@ -16,18 +16,14 @@ package model
 
 import (
 	"fmt"
-	"strings"
 	"time"
 
+	"github.com/aws/amazon-ssm-agent/agent/association/scheduleexpression"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/times"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/service/ssm"
-	"github.com/gorhill/cronexpr"
-)
-
-const (
-	expressionTypeCron = "cron"
 )
 
 // InstanceAssociation represents detail information of an association
@@ -36,22 +32,21 @@ type InstanceAssociation struct {
 	CreateDate        time.Time
 	NextScheduledDate *time.Time
 	Association       *ssm.InstanceAssociationSummary
-	Expression        string
-	ExpressionType    string
+	ParsedExpression  scheduleexpression.ScheduleExpression
 	Document          *string
 	Errors            []error
 }
 
 // ParseExpression parses the expression with the given association
 func (newAssoc *InstanceAssociation) ParseExpression(log log.T) error {
-	if err := parseExpression(log, newAssoc); err != nil {
+
+	parsedScheduleExpression, err := scheduleexpression.CreateScheduleExpression(log, *newAssoc.Association.ScheduleExpression)
+
+	if err != nil {
 		return fmt.Errorf("Failed to parse schedule expression %v, %v", *newAssoc.Association.ScheduleExpression, err)
 	}
 
-	if _, err := cronexpr.Parse(newAssoc.Expression); err != nil {
-		return fmt.Errorf("Failed to parse cron expression %v, %v", newAssoc.Expression, err)
-	}
-
+	newAssoc.ParsedExpression = parsedScheduleExpression
 	return nil
 }
 
@@ -65,7 +60,7 @@ func (newAssoc *InstanceAssociation) RunNow() {
 	newAssoc.NextScheduledDate = aws.Time(time.Now().UTC())
 }
 
-// SetNextScheduledDate initializes default values for the given new association
+// SetNextScheduledDate sets next scheduled date for the given association
 func (newAssoc *InstanceAssociation) SetNextScheduledDate(log log.T) {
 	// Run association immediately if DetailedStatus is Pending
 	if newAssoc.Association.DetailedStatus != nil &&
@@ -92,18 +87,21 @@ func (newAssoc *InstanceAssociation) SetNextScheduledDate(log log.T) {
 		return
 	}
 
-	// Run association according to it's schedule
-	newAssoc.NextScheduledDate = aws.Time(cronexpr.MustParse(newAssoc.Expression).Next(newAssoc.Association.LastExecutionDate.UTC()).UTC())
-}
+	if newAssoc.ParsedExpression == nil {
+		if err := newAssoc.ParseExpression(log); err != nil {
+			log.Errorf("Skipping association %v as there was an error parsing schedule expression %v."+
+				" Error received while parsing was %v.",
+				*newAssoc.Association.AssociationId, *newAssoc.Association.ScheduleExpression, err)
 
-func parseExpression(log log.T, assoc *InstanceAssociation) error {
-	expression := *assoc.Association.ScheduleExpression
-
-	if strings.HasPrefix(expression, expressionTypeCron) {
-		assoc.ExpressionType = expressionTypeCron
-		assoc.Expression = expression[len(expressionTypeCron)+1 : len(expression)-1]
-		return nil
+			newAssoc.NextScheduledDate = nil
+			return
+		}
 	}
 
-	return fmt.Errorf("unkonw expression type")
+	// Set next schedule date of association according to it's schedule
+	newAssoc.NextScheduledDate = aws.Time(
+		newAssoc.ParsedExpression.Next(newAssoc.Association.LastExecutionDate.UTC()).UTC())
+	log.Infof("Based upon expression %v and last execution date %v, next scheduled date for association %v is %v",
+		*newAssoc.Association.ScheduleExpression, times.ToIsoDashUTC(*newAssoc.Association.LastExecutionDate),
+		*newAssoc.Association.AssociationId, times.ToIsoDashUTC(*newAssoc.NextScheduledDate))
 }
