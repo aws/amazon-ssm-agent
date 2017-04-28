@@ -1,5 +1,12 @@
 Latest
 ===============
+- Returning longer StandardOutput and StandardError from RunShellScript and RunPowerShellScript
+  which show up in the results of GetCommandInvocation and the detailed output of ListCommandInvocation
+- Added Document v2.0 support for Run Command, which includes support for multiple actions of same plugin type
+- Various bug fixes
+
+2.0.761.0
+===============
 - Amazon-ssm-agent service automatically started after reboot on systemd platforms
 - Added Release notes to be available on linux packages
 - Various bug fixes
