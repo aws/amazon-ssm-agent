@@ -271,7 +271,7 @@ func TestReportResult(t *testing.T) {
 
 	for _, testdata := range data {
 		t.Run(testdata.name, func(t *testing.T) {
-			ds := &PackageService{bwclient: &testdata.bwclient, manifestCache: &ManifestCacheMem{cache: map[string][]byte{}}}
+			ds := &PackageService{bwclient: &testdata.bwclient, manifestCache: packageservice.ManifestCacheMemNew()}
 
 			err := ds.ReportResult(loggerMock, pkgresult)
 			if testdata.expectedErr {
@@ -344,7 +344,7 @@ func TestDownloadManifest(t *testing.T) {
 
 	for _, testdata := range data {
 		t.Run(testdata.name, func(t *testing.T) {
-			ds := &PackageService{bwclient: &testdata.bwclient, manifestCache: &ManifestCacheMem{cache: map[string][]byte{}}}
+			ds := &PackageService{bwclient: &testdata.bwclient, manifestCache: packageservice.ManifestCacheMemNew()}
 
 			result, err := ds.DownloadManifest(loggerMock, testdata.packageName, testdata.packageVersion)
 
@@ -562,7 +562,7 @@ func TestDownloadArtifact(t *testing.T) {
 
 	for _, testdata := range data {
 		t.Run(testdata.name, func(t *testing.T) {
-			cache := &ManifestCacheMem{cache: map[string][]byte{}}
+			cache := packageservice.ManifestCacheMemNew()
 			cache.WriteManifest(testdata.packageName, testdata.packageVersion, []byte(manifestStr))
 
 			ds := &PackageService{manifestCache: cache}
