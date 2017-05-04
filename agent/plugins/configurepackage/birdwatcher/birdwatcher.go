@@ -33,11 +33,11 @@ import (
 // PackageService is the concrete type for Birdwatcher PackageService
 type PackageService struct {
 	bwclient      birdwatcherstationserviceiface.BirdwatcherStationServiceAPI
-	manifestCache ManifestCache
+	manifestCache packageservice.ManifestCache
 }
 
 // New constructor for PackageService
-func New(log log.T, endpoint string) packageservice.PackageService {
+func New(log log.T, endpoint string, manifestCache packageservice.ManifestCache) packageservice.PackageService {
 	// TODO: endpoint vs appconfig
 	cfg := sdkutil.AwsConfig()
 
@@ -56,7 +56,7 @@ func New(log log.T, endpoint string) packageservice.PackageService {
 
 	return &PackageService{
 		bwclient:      birdwatcherstationservice.New(session.New(cfg)),
-		manifestCache: ManifestCacheDisk{CachePath: appconfig.ManifestCacheDirectory},
+		manifestCache: manifestCache,
 	}
 }
 
@@ -109,7 +109,7 @@ func (ds *PackageService) ReportResult(log log.T, result packageservice.PackageR
 }
 
 // utils
-func readManifestFromCache(cache ManifestCache, packageName string, version string) (*Manifest, error) {
+func readManifestFromCache(cache packageservice.ManifestCache, packageName string, version string) (*Manifest, error) {
 	data, err := cache.ReadManifest(packageName, version)
 	if err != nil {
 		return nil, err
