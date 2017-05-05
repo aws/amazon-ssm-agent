@@ -207,8 +207,10 @@ func buildPluginsInfo(
 		//initialize plugin states as array
 		instancePluginsInfo := make([]docModel.PluginState, len(payload.DocumentContent.MainSteps))
 
-		// getPluginConfigurations converts from PluginConfig (structure from the MDS message) to plugin.Configuration (structure expected by the plugin)
+		// set precondition flag based on document schema version
+		isPreconditionEnabled := contracts.IsPreconditionEnabled(payload.DocumentContent.SchemaVersion)
 
+		// getPluginConfigurations converts from PluginConfig (structure from the MDS message) to plugin.Configuration (structure expected by the plugin)
 		for index, instancePluginConfig := range payload.DocumentContent.MainSteps {
 
 			pluginName := instancePluginConfig.Action
@@ -222,6 +224,8 @@ func buildPluginsInfo(
 				BookKeepingFileName:    documentInfo.DocumentID,
 				PluginName:             pluginName,
 				PluginID:               instancePluginConfig.Name,
+				Preconditions:          instancePluginConfig.Preconditions,
+				IsPreconditionEnabled:  isPreconditionEnabled,
 			}
 
 			var plugin docModel.PluginState

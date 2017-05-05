@@ -34,6 +34,10 @@ func getPlatformName(log log.T) (value string, err error) {
 	return
 }
 
+func getPlatformType(log log.T) (value string, err error) {
+	return "linux", nil
+}
+
 func getPlatformVersion(log log.T) (value string, err error) {
 	value, err = getPlatformDetail(log, "-productVersion")
 	log.Debugf("platform version: %v", value)

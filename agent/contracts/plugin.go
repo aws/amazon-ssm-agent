@@ -20,6 +20,7 @@ import (
 
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/updateutil"
 )
 
 const (
@@ -27,6 +28,10 @@ const (
 	MaximumPluginOutputSize = 2400
 	truncOut                = "\n---Output truncated---"
 	truncError              = "\n---Error truncated----"
+)
+
+const (
+	preconditionSchemaVersion string = "2.1"
 )
 
 var (
@@ -82,6 +87,8 @@ type Configuration struct {
 	PluginName              string
 	PluginID                string
 	DefaultWorkingDirectory string
+	Preconditions           map[string]string
+	IsPreconditionEnabled   bool
 }
 
 // Plugin wraps the plugin configuration and plugin result.
@@ -210,4 +217,17 @@ func TruncateOutput(stdout string, stderr string, capacity int) (response string
 	// trunc output when error is short
 	truncSize := availableSpace - lenTruncOut
 	return fmt.Sprint(stdout[:truncSize-errorSize], truncOut, errorTitle, stderr)
+}
+
+// Check if precondition support is enabled by checking document schema version
+func IsPreconditionEnabled(schemaVersion string) (response bool) {
+	response = false
+
+	// set precondition flag based on schema version
+	versionCompare, err := updateutil.VersionCompare(schemaVersion, preconditionSchemaVersion)
+	if err == nil && versionCompare >= 0 {
+		response = true
+	}
+
+	return response
 }

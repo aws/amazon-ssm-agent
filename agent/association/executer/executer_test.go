@@ -34,12 +34,15 @@ func TestOutputBuilderWithMultiplePlugins(t *testing.T) {
 	results["pluginC"] = &contracts.PluginRuntimeStatus{
 		Status: contracts.ResultStatusFailed,
 	}
+	results["pluginD"] = &contracts.PluginRuntimeStatus{
+		Status: contracts.ResultStatusSkipped,
+	}
 
 	output, _ := buildOutput(results, 5)
 
 	fmt.Println(output)
 	assert.NotNil(t, output)
-	assert.Equal(t, output, "3 out of 5 plugins processed, 2 success, 1 failed, 0 timedout")
+	assert.Equal(t, output, "4 out of 5 plugins processed, 2 success, 1 failed, 0 timedout, 1 skipped")
 }
 
 func TestOutputBuilderWithSinglePlugin(t *testing.T) {
@@ -53,5 +56,19 @@ func TestOutputBuilderWithSinglePlugin(t *testing.T) {
 
 	fmt.Println(output)
 	assert.NotNil(t, output)
-	assert.Equal(t, output, "1 out of 1 plugin processed, 0 success, 1 failed, 0 timedout")
+	assert.Equal(t, output, "1 out of 1 plugin processed, 0 success, 1 failed, 0 timedout, 0 skipped")
+}
+
+func TestOutputBuilderWithSinglePluginWithSkippedStatus(t *testing.T) {
+	results := make(map[string]*contracts.PluginRuntimeStatus)
+
+	results["pluginA"] = &contracts.PluginRuntimeStatus{
+		Status: contracts.ResultStatusSkipped,
+	}
+
+	output, _ := buildOutput(results, 1)
+
+	fmt.Println(output)
+	assert.NotNil(t, output)
+	assert.Equal(t, output, "1 out of 1 plugin processed, 0 success, 0 failed, 0 timedout, 1 skipped")
 }

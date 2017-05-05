@@ -41,7 +41,7 @@ import (
 )
 
 const (
-	outputMessageTemplate string = "%v out of %v plugin%v processed, %v success, %v failed, %v timedout"
+	outputMessageTemplate string = "%v out of %v plugin%v processed, %v success, %v failed, %v timedout, %v skipped"
 )
 
 // DocumentExecuter represents the interface for running a document
@@ -133,8 +133,9 @@ func (r *AssociationExecuter) ExecuteInProgressDocument(context context.T, docSt
 
 	} else if docState.DocumentInformation.DocumentStatus == contracts.ResultStatusSuccess ||
 		docState.DocumentInformation.DocumentStatus == contracts.AssociationStatusTimedOut ||
-		docState.DocumentInformation.DocumentStatus == contracts.ResultStatusCancelled {
-		// Association should only update status when it's Failed, Success, TimedOut and Cancelled as Final status
+		docState.DocumentInformation.DocumentStatus == contracts.ResultStatusCancelled ||
+		docState.DocumentInformation.DocumentStatus == contracts.ResultStatusSkipped {
+		// Association should only update status when it's Failed, Success, TimedOut, Cancelled or Skipped as Final status
 		r.associationExecutionReport(
 			log,
 			&docState.DocumentInformation,
@@ -282,6 +283,9 @@ func buildOutput(runtimeStatuses map[string]*contracts.PluginRuntimeStatus, tota
 	timedOut := len(filterByStatus(runtimeStatuses, func(status contracts.ResultStatus) bool {
 		return status == contracts.ResultStatusTimedOut
 	}))
+	skipped := len(filterByStatus(runtimeStatuses, func(status contracts.ResultStatus) bool {
+		return status == contracts.ResultStatusSkipped
+	}))
 
 	for _, value := range runtimeStatuses {
 		paths := strings.Split(value.OutputS3KeyPrefix, "/")
@@ -292,7 +296,7 @@ func buildOutput(runtimeStatuses map[string]*contracts.PluginRuntimeStatus, tota
 		break
 	}
 
-	return fmt.Sprintf(outputMessageTemplate, completed, totalNumberOfPlugins, plural, success, failed, timedOut), outputUrl
+	return fmt.Sprintf(outputMessageTemplate, completed, totalNumberOfPlugins, plural, success, failed, timedOut, skipped), outputUrl
 }
 
 // filterByStatus represents the helper method that filter pluginResults base on ResultStatus
