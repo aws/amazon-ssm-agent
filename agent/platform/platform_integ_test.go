@@ -38,3 +38,11 @@ func TestFullyQualifiedDomainName(t *testing.T) {
 	t.Logf("fqdn/hostname is %v", fullyQualifiedDomainName())
 	assert.True(t, true, "expected no error trying to retireve the fqdn/hostname value")
 }
+
+func TestGetPlatformType(t *testing.T) {
+	var log = logger.NewMockLog()
+	t.Log("get platform type")
+	data, err := PlatformType(log)
+	t.Logf("platform type is %v ", data)
+	assert.NoError(t, err, "get platform type should not result in err")
+}

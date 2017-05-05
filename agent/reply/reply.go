@@ -49,6 +49,10 @@ func PrepareReplyPayload(pluginID string,
 		//	  but overallResult.Status would be Failed/Cancelled. That's the reason we check for OverallResult status along
 		//	  with number of failed/cancelled items.
 		//    TODO : We need to handle above to be able to send document traceoutput in case of document level errors.
+
+		// Skipped is a form of success
+		successCounts := runtimeStatusCounts[string(contracts.ResultStatusSuccess)] + runtimeStatusCounts[string(contracts.ResultStatusSkipped)]
+
 		if runtimeStatusCounts[string(contracts.ResultStatusSuccessAndReboot)] > 0 {
 			documentStatus = contracts.ResultStatusSuccessAndReboot
 		} else if runtimeStatusCounts[string(contracts.ResultStatusFailed)] > 0 {
@@ -57,15 +61,13 @@ func PrepareReplyPayload(pluginID string,
 			documentStatus = contracts.ResultStatusTimedOut
 		} else if runtimeStatusCounts[string(contracts.ResultStatusCancelled)] > 0 {
 			documentStatus = contracts.ResultStatusCancelled
-		} else if runtimeStatusCounts[string(contracts.ResultStatusSuccess)] == pluginCounts {
+		} else if successCounts == pluginCounts {
 			documentStatus = contracts.ResultStatusSuccess
 		} else {
 			documentStatus = contracts.ResultStatusInProgress
 		}
-
 	} else {
 		documentStatus = contracts.ResultStatusInProgress
-
 	}
 
 	runtimeStatusesFiltered := make(map[string]*contracts.PluginRuntimeStatus)

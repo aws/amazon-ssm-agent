@@ -33,6 +33,11 @@ func PlatformName(log log.T) (name string, err error) {
 	return getPlatformName(log)
 }
 
+// PlatformType gets the OS specific platform type, valid values are windows and linux.
+func PlatformType(log log.T) (name string, err error) {
+	return getPlatformType(log)
+}
+
 // PlatformVersion gets the OS specific platform version.
 func PlatformVersion(log log.T) (version string, err error) {
 	return getPlatformVersion(log)

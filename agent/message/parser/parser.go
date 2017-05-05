@@ -110,13 +110,14 @@ func ReplacePluginParameters(
 		updatedMainSteps := make([]*contracts.InstancePluginConfig, len(mainSteps))
 		for index, instancePluginConfig := range mainSteps {
 			updatedMainSteps[index] = &contracts.InstancePluginConfig{
-				Action:      instancePluginConfig.Action,
-				Name:        instancePluginConfig.Name,
-				MaxAttempts: instancePluginConfig.MaxAttempts,
-				OnFailure:   instancePluginConfig.OnFailure,
-				Timeout:     instancePluginConfig.Timeout,
-				Settings:    parameters.ReplaceParameters(instancePluginConfig.Settings, params, logger),
-				Inputs:      parameters.ReplaceParameters(instancePluginConfig.Inputs, params, logger),
+				Action:        instancePluginConfig.Action,
+				Name:          instancePluginConfig.Name,
+				MaxAttempts:   instancePluginConfig.MaxAttempts,
+				OnFailure:     instancePluginConfig.OnFailure,
+				Timeout:       instancePluginConfig.Timeout,
+				Settings:      parameters.ReplaceParameters(instancePluginConfig.Settings, params, logger),
+				Inputs:        parameters.ReplaceParameters(instancePluginConfig.Inputs, params, logger),
+				Preconditions: instancePluginConfig.Preconditions,
 			}
 
 			logger.Debug("Resolving SSM parameters")

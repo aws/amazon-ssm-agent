@@ -1,0 +1,36 @@
+{
+  "additionalInfo": {
+    "agent": {
+      "lang": "en-US",
+      "name": "EC2Config",
+      "os": "Linux",
+      "osver": "2",
+      "ver": "1"
+    },
+    "dateTime": "2015-07-09T23:23:40.023Z",
+    "runtimeStatusCounts": {
+      "Skipped": 1,
+      "Success": 1
+    }
+  },
+  "documentStatus": "Success",
+  "documentTraceOutput": "",
+  "runtimeStatus": {
+    "runPowerShellScript1": {
+      "code": 0,
+      "name": "aws:runPowerShellScript",
+      "status": "Skipped",
+      "output": "Step execution skipped due to incompatible platform",
+      "startDateTime": "2015-07-09T23:23:39.019Z",
+      "endDateTime": "2015-07-09T23:23:39.023Z"
+    },
+    "runPowerShellScript2": {
+      "code": 0,
+      "name": "aws:runPowerShellScript",
+      "status": "Success",
+      "output": "standard output of test case\n----------ERROR-------\nstandard error of test case",
+      "startDateTime": "2015-07-09T23:23:39.019Z",
+      "endDateTime": "2015-07-09T23:23:39.023Z"
+    }
+  }
+}
