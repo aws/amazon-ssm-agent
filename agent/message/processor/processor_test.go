@@ -43,16 +43,13 @@ import (
 var sampleMessageFiles = []string{
 	"../testdata/sampleMsg.json",
 	"../testdata/sampleMsgVersion2_0.json",
-}
-
-var sampleMessageReplacedParamsFiles = []string{
-	"../testdata/sampleMsgReplacedParams.json",
-	"../testdata/sampleMsgReplacedParamsVersion2_0.json",
+	"../testdata/sampleMsgVersion2_1.json",
 }
 
 var sampleMessageReplyFiles = []string{
 	"../testdata/sampleReply.json",
 	"../testdata/sampleReplyVersion2_0.json",
+	"../testdata/sampleReplyVersion2_1.json",
 }
 
 var testMessageId = "03f44d19-90fe-44d4-bd4c-298b966a1e1a"
@@ -378,14 +375,15 @@ func generateTestCaseFromFiles(t *testing.T, messagePayloadFile string, messageR
 		}
 	}
 
-	// document 2.0
+	// document 2.0 & 2.1
 	if payload.DocumentContent.MainSteps != nil {
 		configs := []*contracts.Configuration{}
 		configs = getPluginConfigurationsFromMainStep(payload.DocumentContent.MainSteps,
 			orchestrationRootDir,
 			payload.OutputS3BucketName,
 			s3KeyPrefix,
-			*testCase.Msg.MessageId)
+			*testCase.Msg.MessageId,
+			payload.DocumentContent.SchemaVersion)
 
 		pluginStatesArrays := make([]model.PluginState, len(configs))
 		for index, config := range configs {
@@ -421,8 +419,12 @@ func getPluginConfigurationsFromRuntimeConfig(runtimeConfig map[string]*contract
 	return
 }
 
-func getPluginConfigurationsFromMainStep(mainSteps []*contracts.InstancePluginConfig, orchestrationDir, s3BucketName, s3KeyPrefix, messageID string) (res []*contracts.Configuration) {
+func getPluginConfigurationsFromMainStep(mainSteps []*contracts.InstancePluginConfig, orchestrationDir, s3BucketName, s3KeyPrefix, messageID string, schemaVersion string) (res []*contracts.Configuration) {
 	res = make([]*contracts.Configuration, len(mainSteps))
+
+	// set precondition flag based on document schema version
+	isPreconditionEnabled := contracts.IsPreconditionEnabled(schemaVersion)
+
 	for index, instancePluginConfig := range mainSteps {
 		pluginId := instancePluginConfig.Name
 		pluginName := instancePluginConfig.Action
@@ -436,6 +438,8 @@ func getPluginConfigurationsFromMainStep(mainSteps []*contracts.InstancePluginCo
 			BookKeepingFileName:    getCommandID(messageID),
 			PluginName:             pluginName,
 			PluginID:               pluginId,
+			Preconditions:          instancePluginConfig.Preconditions,
+			IsPreconditionEnabled:  isPreconditionEnabled,
 		}
 	}
 	return

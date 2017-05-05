@@ -70,6 +70,35 @@ func TestPrepareReplyPayload(t *testing.T) {
 
 }
 
+func TestPrepareReplyPayloadForCrossPlatformDocument(t *testing.T) {
+	type testCase struct {
+		PluginRuntimeStatuses map[string]*contracts.PluginRuntimeStatus
+		DateTime              time.Time
+		Agent                 contracts.AgentInfo
+		Result                messageContracts.SendReplyPayload
+	}
+
+	sampleReplyVersion21File := "./../message/testdata/sampleReplyVersion2_1.json"
+
+	// parse a test reply to see if we can regenerate it
+	expectedReply := loadMessageReplyFromFile(t, sampleReplyVersion21File)
+
+	// generate test case
+	test := testCase{
+		PluginRuntimeStatuses: expectedReply.RuntimeStatus,
+		DateTime:              times.ParseIso8601UTC(expectedReply.AdditionalInfo.DateTime),
+		Agent:                 expectedReply.AdditionalInfo.Agent,
+		Result:                expectedReply,
+	}
+	test.Result.DocumentStatus = contracts.ResultStatusSuccess
+
+	// run test case
+	docResult := PrepareReplyPayload("", test.PluginRuntimeStatuses, test.DateTime, test.Agent)
+
+	// check result
+	assert.Equal(t, test.Result, docResult)
+}
+
 func TestPrepareRuntimeStatus(t *testing.T) {
 	type testCase struct {
 		Input  contracts.PluginResult

@@ -1,0 +1,54 @@
+{
+  "CommandId": "12345c50-d2b4-4380-acac-213fb7c12345",
+  "Parameters": {
+    "commands": [
+      "echo ship_it"
+    ]
+  },
+  "DocumentContent": {
+    "schemaVersion": "2.1",
+    "description": "Cross-platform document",
+    "mainSteps": [
+      {
+        "action": "aws:runPowerShellScript",
+        "precondition": {
+          "platformType": "Windows"
+        },
+        "inputs": {
+          "commands": "date"
+        },
+        "maxAttempts": 0,
+        "name": "runPowerShellScript1",
+        "onFailure": "",
+        "settings": null,
+        "timeoutSeconds": 0
+      },
+      {
+        "action": "aws:runPowerShellScript",
+        "precondition": {
+          "platformType": "Linux"
+        },
+        "inputs": {
+          "commands": "echo ship_it"
+        },
+        "maxAttempts": 0,
+        "name": "runPowerShellScript2",
+        "onFailure": "",
+        "settings": null,
+        "timeoutSeconds": 0
+      }
+    ],
+    "parameters": {
+      "commands": {
+        "allowedPattern": "",
+        "allowedValues": null,
+        "default": null,
+        "description": "(Required) Specify a shell script or a command to run.",
+        "type": "StringList"
+      }
+    }
+  },
+  "DocumentName": "ship-it",
+  "OutputS3BucketName": "",
+  "OutputS3KeyPrefix": ""
+}

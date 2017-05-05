@@ -64,6 +64,10 @@ func getPlatformName(log log.T) (value string, err error) {
 	return getPlatformDetails(caption, log)
 }
 
+func getPlatformType(log log.T) (value string, err error) {
+	return "windows", nil
+}
+
 func getPlatformVersion(log log.T) (value string, err error) {
 	return getPlatformDetails(version, log)
 }

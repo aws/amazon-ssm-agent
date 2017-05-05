@@ -28,6 +28,7 @@ const (
 	ResultStatusFailed           ResultStatus = "Failed"
 	ResultStatusCancelled        ResultStatus = "Cancelled"
 	ResultStatusTimedOut         ResultStatus = "TimedOut"
+	ResultStatusSkipped          ResultStatus = "Skipped"
 )
 
 // MergeResultStatus takes two ResultStatuses (presumably from sub-tasks) and decides what the overall task status should be
@@ -41,6 +42,7 @@ func MergeResultStatus(current ResultStatus, new ResultStatus) (merged ResultSta
 		ResultStatusFailed,
 		ResultStatusCancelled,
 		ResultStatusTimedOut,
+		ResultStatusSkipped,
 	}
 	if current == "" {
 		return new
@@ -140,13 +142,14 @@ type PluginConfig struct {
 
 // InstancePluginConfig stores plugin configuration
 type InstancePluginConfig struct {
-	Action      string      `json:"action"` // plugin name
-	Inputs      interface{} `json:"inputs"` // Properties
-	MaxAttempts int         `json:"maxAttempts"`
-	Name        string      `json:"name"` // unique identifier
-	OnFailure   string      `json:"onFailure"`
-	Settings    interface{} `json:"settings"`
-	Timeout     int         `json:"timeoutSeconds"`
+	Action        string            `json:"action"` // plugin name
+	Inputs        interface{}       `json:"inputs"` // Properties
+	MaxAttempts   int               `json:"maxAttempts"`
+	Name          string            `json:"name"` // unique identifier
+	OnFailure     string            `json:"onFailure"`
+	Settings      interface{}       `json:"settings"`
+	Timeout       int               `json:"timeoutSeconds"`
+	Preconditions map[string]string `json:"precondition"`
 }
 
 // DocumentContent object which represents ssm document content.
