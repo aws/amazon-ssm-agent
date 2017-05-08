@@ -28,6 +28,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	"github.com/aws/amazon-ssm-agent/agent/framework/runpluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
+	"github.com/aws/amazon-ssm-agent/agent/platform"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/localpackages"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/packageservice"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/ssms3"
@@ -542,7 +543,8 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 		}
 
 		var pkgservice packageservice.PackageService
-		pkgservice = ssms3.New(log, input.Repository, "REGION") // TODO: REGION
+		region, _ := platform.Region()
+		pkgservice = ssms3.New(log, input.Repository, region)
 		//pkgservice = birdwatcher.New(log)
 
 		manager := &configurePackage{
