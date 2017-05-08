@@ -35,7 +35,7 @@ var getRegion = platform.Region
 type IAmazonS3Util interface {
 	S3Upload(log log.T, bucketName string, objectKey string, filePath string) error
 	GetBucketRegion(log log.T, bucketName string) string
-	GetS3Header(log log.T, bucketName string, s3Endpoint string) string
+	GetS3Header(log log.T, bucketName string, instanceRegion string) string
 }
 
 type AmazonS3Util struct {
@@ -95,7 +95,7 @@ func GetBucketRegion(log log.T, bucketName string) (region string) {
 	}
 	log.Infof("Instance region is %v", instanceRegion)
 
-	bucketRegion := GetS3Header(log, bucketName, GetS3Endpoint(instanceRegion))
+	bucketRegion := GetS3Header(log, bucketName, instanceRegion)
 	if bucketRegion == "" {
 		return instanceRegion // Default
 	} else {
@@ -108,12 +108,24 @@ This function return the S3 bucket region that is returned as a result of a CURL
 The starting endpoint does not need to be the same as the returned region.
 For example, we might query an endpoint in us-east-1 and get a return of us-west-2, if the bucket is actually in us-west-2.
 */
-func GetS3Header(log log.T, bucketName string, s3Endpoint string) (region string) {
+func GetS3Header(log log.T, bucketName string, instanceRegion string) (region string) {
+	s3Endpoint := GetS3Endpoint(instanceRegion)
 	resp, err := http.Head("http://" + bucketName + "." + s3Endpoint)
-	if err != nil {
-		log.Infof("Error when querying S3 bucket using address http://%v.%v. Error details: %v",
-			bucketName, s3Endpoint, err)
-		return ""
+	if err == nil {
+		return resp.Header.Get(s3ResponseRegionHeader)
 	}
-	return resp.Header.Get(s3ResponseRegionHeader)
+	// Fail over to the generic regional end point, if different from the regional end point
+	genericEndPoint := GetS3GenericEndPoint(instanceRegion)
+	if genericEndPoint != s3Endpoint {
+		log.Infof("Error when querying S3 bucket using address http://%v.%v. Error details: %v. Retrying with the generic regional endpoint %v...",
+			bucketName, s3Endpoint, err, genericEndPoint)
+		resp, err = http.Head("http://" + bucketName + "." + genericEndPoint)
+		if err == nil {
+			return resp.Header.Get(s3ResponseRegionHeader)
+		}
+	}
+	// Could not query the bucket region. Log the error.
+	log.Infof("Error when querying S3 bucket using address http://%v.%v. Error details: %v",
+		bucketName, genericEndPoint, err)
+	return ""
 }

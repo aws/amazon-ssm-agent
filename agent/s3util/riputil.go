@@ -51,3 +51,17 @@ func GetS3Endpoint(region string) (s3Endpoint string) {
 	}
 	return "s3.amazonaws.com" // default global endpoint
 }
+
+/*
+This function will get the generic S3 endpoint for a certain region.
+Most regions will use IAD endpoint except special ones such as BJS, PDT, and ZHY
+*/
+func GetS3GenericEndPoint(region string) (s3Endpoint string) {
+	if region == "us-gov-west-1" || region == "us-iso-east-1" || region == "us-isob-east-1" {
+		return GetS3Endpoint(region) // Restricted regions
+	}
+	if region == "cn-north-1" || region == "cn-northwest-1" {
+		return GetS3Endpoint("cn-north-1") // Use BJS/cn-north-1 for China
+	}
+	return GetS3Endpoint("us-east-1") // For all other regions, use IAD/us-east-1
+}
