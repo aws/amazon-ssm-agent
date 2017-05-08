@@ -25,6 +25,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/framework/runpluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/platform"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/localpackages"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/localpackages/mock"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/packageservice"
@@ -100,6 +101,9 @@ func TestExecute(t *testing.T) {
 	config.Properties = p
 	plugin := &Plugin{}
 
+	// set region in cache to prevent test delay because of detecion failures
+	platform.SetRegion("testregion")
+
 	runConfigOrig := runConfig
 
 	runConfig = func(
@@ -137,6 +141,9 @@ func testS3Prefix(t *testing.T, testCase S3PrefixTestCase) {
 	var mockPlugin pluginutil.MockDefaultPlugin
 	mockPlugin = pluginutil.MockDefaultPlugin{}
 	mockPlugin.On("UploadOutputToS3Bucket", mock.Anything, testCase.PluginID, testCase.OrchestrationDir, testCase.BucketName, testCase.PrefixIn, false, mock.Anything, mock.Anything, mock.Anything).Return([]string{})
+
+	// set region in cache to prevent test delay because of detecion failures
+	platform.SetRegion("testregion")
 
 	plugin := &Plugin{}
 	plugin.ExecuteUploadOutputToS3Bucket = mockPlugin.UploadOutputToS3Bucket
