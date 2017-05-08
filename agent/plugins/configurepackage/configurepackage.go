@@ -82,8 +82,6 @@ type configurePackage struct {
 }
 
 type configurePackageManager interface {
-	validateInput(context context.T, input *ConfigurePackagePluginInput) (valid bool, err error)
-
 	getVersionToInstall(context context.T, input *ConfigurePackagePluginInput) (version string, installedVersion string, installState localpackages.InstallState, err error)
 
 	getVersionToUninstall(context context.T, input *ConfigurePackagePluginInput) (version string, err error)
@@ -121,20 +119,10 @@ func runConfigurePackage(
 	p *Plugin,
 	context context.T,
 	manager configurePackageManager,
-	rawPluginInput interface{}) (output contracts.PluginOutput) {
-	log := context.Log()
+	input *ConfigurePackagePluginInput) (output contracts.PluginOutput) {
 
-	var input ConfigurePackagePluginInput
 	var err error
-	if err = jsonutil.Remarshal(rawPluginInput, &input); err != nil {
-		output.MarkAsFailed(log, fmt.Errorf("invalid format in plugin properties %v; \nerror %v", rawPluginInput, err))
-		return
-	}
-
-	if valid, err := manager.validateInput(context, &input); !valid {
-		output.MarkAsFailed(log, fmt.Errorf("invalid input: %v", err))
-		return
-	}
+	log := context.Log()
 
 	// do not allow multiple actions to be performed at the same time for the same package
 	// this is possible with multiple concurrent runcommand documents
@@ -147,7 +135,7 @@ func runConfigurePackage(
 	switch input.Action {
 	case InstallAction:
 		// get version information
-		version, installedVersion, installState, versionErr := manager.getVersionToInstall(context, &input)
+		version, installedVersion, installState, versionErr := manager.getVersionToInstall(context, input)
 		if versionErr != nil {
 			output.MarkAsFailed(log, fmt.Errorf("unable to determine version to install: %v", versionErr))
 			return
@@ -249,7 +237,7 @@ func runConfigurePackage(
 
 	case UninstallAction:
 		// get version information
-		version, versionErr := manager.getVersionToUninstall(context, &input)
+		version, versionErr := manager.getVersionToUninstall(context, input)
 		if versionErr != nil || version == "" {
 			output.MarkAsFailed(log, fmt.Errorf("unable to determine version to uninstall: %v", versionErr))
 			return
@@ -327,8 +315,22 @@ func (m *configurePackage) ensurePackage(context context.T,
 	return nil
 }
 
+func parseAndValidateInput(rawPluginInput interface{}) (*ConfigurePackagePluginInput, error) {
+	var input ConfigurePackagePluginInput
+	var err error
+	if err = jsonutil.Remarshal(rawPluginInput, &input); err != nil {
+		return nil, fmt.Errorf("invalid format in plugin properties %v; \nerror %v", rawPluginInput, err)
+	}
+
+	if valid, err := validateInput(&input); !valid {
+		return nil, fmt.Errorf("invalid input: %v", err)
+	}
+
+	return &input, nil
+}
+
 // validateInput ensures the plugin input matches the defined schema
-func (m *configurePackage) validateInput(context context.T, input *ConfigurePackagePluginInput) (valid bool, err error) {
+func validateInput(input *ConfigurePackagePluginInput) (valid bool, err error) {
 	// source not yet supported
 	if input.Source != "" {
 		return false, errors.New("source parameter is not supported in this version")
@@ -517,16 +519,7 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 
 	out := make([]contracts.PluginOutput, len(properties))
 
-	var pkgservice packageservice.PackageService
-	pkgservice = ssms3.New(log, "", "REGION") // TODO: input.Repository) // TODO: REGION
-	//pkgservice = birdwatcher.New(log, "") // TODO: input.Repository)
-
-	manager := &configurePackage{
-		Configuration:  config,
-		runner:         subDocumentRunner,
-		repository:     localpackages.NewRepository(),
-		packageservice: pkgservice,
-	}
+	repository := localpackages.NewRepository()
 
 	for i, prop := range properties {
 
@@ -540,10 +533,29 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 			break
 		}
 
+		input, err := parseAndValidateInput(prop)
+		if err != nil {
+			var output contracts.PluginOutput
+			output.MarkAsFailed(log, err)
+			out[i] = output
+			continue
+		}
+
+		var pkgservice packageservice.PackageService
+		pkgservice = ssms3.New(log, input.Repository, "REGION") // TODO: REGION
+		//pkgservice = birdwatcher.New(log)
+
+		manager := &configurePackage{
+			Configuration:  config,
+			runner:         subDocumentRunner,
+			repository:     repository,
+			packageservice: pkgservice,
+		}
+
 		out[i] = runConfig(p,
 			context,
 			manager,
-			prop)
+			input)
 	}
 
 	if len(out) > 0 {
