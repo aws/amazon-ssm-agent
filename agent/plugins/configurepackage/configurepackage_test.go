@@ -101,11 +101,12 @@ func TestExecute(t *testing.T) {
 	plugin := &Plugin{}
 
 	runConfigOrig := runConfig
+
 	runConfig = func(
 		p *Plugin,
 		context context.T,
 		manager configurePackageManager,
-		rawPluginInput interface{}) (out contracts.PluginOutput) {
+		input *ConfigurePackagePluginInput) (out contracts.PluginOutput) {
 		out = contracts.PluginOutput{}
 		out.ExitCode = 1
 		out.Stderr = "error"
@@ -151,7 +152,7 @@ func testS3Prefix(t *testing.T, testCase S3PrefixTestCase) {
 		p *Plugin,
 		context context.T,
 		manager configurePackageManager,
-		rawPluginInput interface{}) (out contracts.PluginOutput) {
+		input *ConfigurePackagePluginInput) (out contracts.PluginOutput) {
 		out = contracts.PluginOutput{}
 		out.ExitCode = 0
 
@@ -289,9 +290,7 @@ func TestValidateInput(t *testing.T) {
 	input.Name = "PVDriver"
 	input.Action = "InvalidAction"
 
-	manager := createInstance()
-
-	result, err := manager.validateInput(contextMock, &input)
+	result, err := validateInput(&input)
 
 	assert.True(t, result)
 	assert.NoError(t, err)
@@ -305,9 +304,7 @@ func TestValidateInput_Source(t *testing.T) {
 	input.Action = "Install"
 	input.Source = "http://amazon.com"
 
-	manager := createInstance()
-
-	result, err := manager.validateInput(contextMock, &input)
+	result, err := validateInput(&input)
 
 	assert.False(t, result)
 	assert.Error(t, err)
@@ -322,8 +319,7 @@ func TestValidateInput_NameEmpty(t *testing.T) {
 	input.Name = ""
 	input.Action = "Install"
 
-	manager := createInstance()
-	result, err := manager.validateInput(contextMock, &input)
+	result, err := validateInput(&input)
 
 	assert.False(t, result)
 	assert.Error(t, err)
@@ -343,8 +339,7 @@ func TestValidateInput_NameInvalid(t *testing.T) {
 	for _, name := range invalidNames {
 		input.Name = name
 
-		manager := createInstance()
-		result, err := manager.validateInput(contextMock, &input)
+		result, err := validateInput(&input)
 
 		assert.False(t, result)
 		assert.Error(t, err)
@@ -363,8 +358,7 @@ func TestValidateInput_NameValid(t *testing.T) {
 	for _, name := range validNames {
 		input.Name = name
 
-		manager := createInstance()
-		result, err := manager.validateInput(contextMock, &input)
+		result, err := validateInput(&input)
 
 		assert.True(t, result)
 		assert.NoError(t, err)
@@ -379,8 +373,7 @@ func TestValidateInput_Version(t *testing.T) {
 	input.Name = "PVDriver"
 	input.Action = "Install"
 
-	manager := createInstance()
-	result, err := manager.validateInput(contextMock, &input)
+	result, err := validateInput(&input)
 
 	assert.False(t, result)
 	assert.Error(t, err)
@@ -395,8 +388,7 @@ func TestValidateInput_EmptyVersionWithInstall(t *testing.T) {
 	input.Name = "PVDriver"
 	input.Action = "Install"
 
-	manager := createInstance()
-	result, err := manager.validateInput(contextMock, &input)
+	result, err := validateInput(&input)
 
 	assert.True(t, result)
 	assert.NoError(t, err)
@@ -410,8 +402,7 @@ func TestValidateInput_EmptyVersionWithUninstall(t *testing.T) {
 	input.Name = "PVDriver"
 	input.Action = "Uninstall"
 
-	manager := createInstance()
-	result, err := manager.validateInput(contextMock, &input)
+	result, err := validateInput(&input)
 
 	assert.True(t, result)
 	assert.NoError(t, err)

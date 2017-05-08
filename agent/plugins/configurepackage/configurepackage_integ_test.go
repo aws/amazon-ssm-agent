@@ -113,40 +113,20 @@ func TestConfigurePackage_InvalidAction(t *testing.T) {
 }
 
 func TestConfigurePackage_InvalidRawInput(t *testing.T) {
-	stubs := setSuccessStubs()
-	defer stubs.Clear()
-
-	plugin := &Plugin{}
 	// string value will fail the Remarshal as it's not ConfigurePackagePluginInput
 	pluginInformation := "invalid value"
 
-	manager := createInstance()
-
-	result := runConfigurePackage(
-		plugin,
-		contextMock,
-		manager,
-		pluginInformation)
-
-	assert.Contains(t, result.Stderr, "invalid format in plugin properties")
+	result, err := parseAndValidateInput(pluginInformation)
+	assert.Contains(t, err.Error(), "invalid format in plugin properties")
+	assert.Nil(t, result)
 }
 
 func TestConfigurePackage_InvalidInput(t *testing.T) {
-	stubs := setSuccessStubs()
-	defer stubs.Clear()
-
-	plugin := &Plugin{}
 	pluginInformation := createStubInvalidPluginInput()
 
-	manager := createInstance()
-
-	result := runConfigurePackage(
-		plugin,
-		contextMock,
-		manager,
-		pluginInformation)
-
-	assert.Contains(t, result.Stderr, "invalid input")
+	result, err := parseAndValidateInput(pluginInformation)
+	assert.Contains(t, err.Error(), "invalid input")
+	assert.Nil(t, result)
 }
 
 func TestInstallPackage_DownloadFailed(t *testing.T) {
