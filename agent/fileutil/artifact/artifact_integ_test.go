@@ -45,8 +45,9 @@ var (
 			DownloadInput{
 				localPathExist,
 				downloadFolder,
-				"090c1965e46155b2b23ba9093ed7c67243957a397e3ad5531a693d57958a760a",
-				"sha256"},
+				map[string]string{
+					"sha256": "090c1965e46155b2b23ba9093ed7c67243957a397e3ad5531a693d57958a760a",
+				}},
 			DownloadOutput{
 				localPathExist,
 				false,
@@ -57,8 +58,9 @@ var (
 			DownloadInput{
 				localPathExist,
 				downloadFolder,
-				"111111111",
-				"sha256"},
+				map[string]string{
+					"sha256": "111111111",
+				}},
 			DownloadOutput{
 				localPathExist,
 				false,
@@ -69,8 +71,9 @@ var (
 			DownloadInput{
 				localPathExist,
 				downloadFolder,
-				"e84913ff3a8eef39238b32170e657ba8",
-				"md5"},
+				map[string]string{
+					"md5": "e84913ff3a8eef39238b32170e657ba8",
+				}},
 			DownloadOutput{
 				localPathExist,
 				false,
@@ -82,8 +85,9 @@ var (
 			DownloadInput{
 				localPathExist,
 				downloadFolder,
-				"222222222",
-				"md5"},
+				map[string]string{
+					"md5": "222222222",
+				}},
 			DownloadOutput{
 				localPathExist,
 				false,
@@ -94,8 +98,9 @@ var (
 			DownloadInput{
 				localPathExist,
 				downloadFolder,
-				"090c1965e46155b2b23ba9093ed7c67243957a397e3ad5531a693d57958a760a",
-				""},
+				map[string]string{
+					"": "090c1965e46155b2b23ba9093ed7c67243957a397e3ad5531a693d57958a760a",
+				}},
 			DownloadOutput{
 				localPathExist,
 				false,
@@ -106,8 +111,9 @@ var (
 			DownloadInput{
 				"IamRelativeFilePath",
 				downloadFolder,
-				"090c1965e46155b2b23ba9093ed7c67243957a397e3ad5531a693d57958a760a",
-				""},
+				map[string]string{
+					"": "090c1965e46155b2b23ba9093ed7c67243957a397e3ad5531a693d57958a760a",
+				}},
 			DownloadOutput{
 				"",
 				false,
@@ -118,8 +124,9 @@ var (
 			DownloadInput{
 				"IamRelativeFilePath/IdontExist",
 				downloadFolder,
-				"090c1965e46155b2b23ba9093ed7c67243957a397e3ad5531a693d57958a760a",
-				""},
+				map[string]string{
+					"": "090c1965e46155b2b23ba9093ed7c67243957a397e3ad5531a693d57958a760a",
+				}},
 			DownloadOutput{
 				"",
 				false,
@@ -130,12 +137,70 @@ var (
 			DownloadInput{
 				"https://s3.amazonaws.com/ssmnotsuchbucket/ssmnosuchfile.txt",
 				downloadFolder,
-				"",
-				""},
+				map[string]string{
+					"": "",
+				}},
 			DownloadOutput{
 				"",
 				false,
 				false},
+		},
+		{
+			// ensure empty map is valid
+			DownloadInput{
+				localPathExist,
+				downloadFolder,
+				map[string]string{},
+			},
+			DownloadOutput{
+				localPathExist,
+				false,
+				true},
+		},
+		{
+			// first checksum fails, the second one succeeds
+			DownloadInput{
+				localPathExist,
+				downloadFolder,
+				map[string]string{
+					"md5":    "111111111",
+					"sha256": "090c1965e46155b2b23ba9093ed7c67243957a397e3ad5531a693d57958a760a",
+				},
+			},
+			DownloadOutput{
+				localPathExist,
+				false,
+				false},
+		},
+		{
+			// none of the provided algorithms are supported
+			DownloadInput{
+				localPathExist,
+				downloadFolder,
+				map[string]string{
+					"sha512": "111111111",
+					"sha1":   "090c1965e46155b2b23ba9093ed7c67243957a397e3ad5531a693d57958a760a",
+				},
+			},
+			DownloadOutput{
+				localPathExist,
+				false,
+				false},
+		},
+		{
+			// one supported algorithm and one not supported
+			DownloadInput{
+				localPathExist,
+				downloadFolder,
+				map[string]string{
+					"foo":    "123456789",
+					"sha256": "090c1965e46155b2b23ba9093ed7c67243957a397e3ad5531a693d57958a760a",
+				},
+			},
+			DownloadOutput{
+				localPathExist,
+				false,
+				true},
 		},
 	}
 )
@@ -159,8 +224,9 @@ func TestHttpHttpsDownloadArtifact(t *testing.T) {
 	downloadInput := DownloadInput{
 		DestinationDirectory: ".",
 		SourceURL:            testFilePath,
-		SourceHashValue:      "39c9534e5fa6fecd3ac083ffd6256c2cc9a58f9f1058cb2e472d1782040231f9",
-		SourceHashType:       "sha256",
+		SourceChecksums: map[string]string{
+			"sha256": "39c9534e5fa6fecd3ac083ffd6256c2cc9a58f9f1058cb2e472d1782040231f9",
+		},
 	}
 	var expectedLocalPath = "dd5335f3e07903892245d100f4d7df03067e6402"
 	os.Remove(expectedLocalPath)
