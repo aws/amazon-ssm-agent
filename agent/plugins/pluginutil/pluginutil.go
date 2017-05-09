@@ -188,9 +188,10 @@ func CreateScriptFile(log log.T, scriptPath string, runCommand []string, byteOrd
 func DownloadFileFromSource(log log.T, source string, sourceHash string, sourceHashType string) (artifact.DownloadOutput, error) {
 	// download source and verify its integrity
 	downloadInput := artifact.DownloadInput{
-		SourceURL:       source,
-		SourceHashValue: sourceHash,
-		SourceHashType:  sourceHashType,
+		SourceURL: source,
+		SourceChecksums: map[string]string{
+			sourceHashType: sourceHash,
+		},
 	}
 	log.Debug("Downloading file")
 	return artifact.Download(log, downloadInput)

@@ -334,9 +334,10 @@ func (m *updateManager) downloadUpdater(log log.T,
 	}
 
 	downloadInput := artifact.DownloadInput{
-		SourceURL:            source,
-		SourceHashValue:      hash,
-		SourceHashType:       updateutil.HashType,
+		SourceURL: source,
+		SourceChecksums: map[string]string{
+			updateutil.HashType: hash,
+		},
 		DestinationDirectory: updateDownloadFolder,
 	}
 	downloadOutput, downloadErr := fileDownload(log, downloadInput)
