@@ -47,8 +47,7 @@ type DownloadOutput struct {
 type DownloadInput struct {
 	SourceURL            string
 	DestinationDirectory string
-	SourceHashValue      string
-	SourceHashType       string
+	SourceChecksums      map[string]string
 }
 
 // httpDownload attempts to download a file via http/s call
@@ -311,35 +310,53 @@ func Download(log log.T, input DownloadInput) (output DownloadOutput, err error)
 }
 
 // VerifyHash verifies the hash of the url file as per specified hash algorithm type and its value
-func VerifyHash(log log.T, input DownloadInput, output DownloadOutput) (match bool, err error) {
-	match = false
-	// if there is no hash specified, do not check
-	if input.SourceHashValue == "" {
-		match = true
-		return
-	}
+func VerifyHash(log log.T, input DownloadInput, output DownloadOutput) (bool, error) {
+	hasMatchingHash := false
 
 	// check and set default hashing algorithm
-	hashAlgorithm := input.SourceHashType
-	if hashAlgorithm == "" {
-		hashAlgorithm = "sha256"
+	checksums := input.SourceChecksums
+
+	if len(checksums) == 0 {
+		return true, nil
 	}
 
-	computedHashValue := ""
-	if strings.EqualFold(hashAlgorithm, "sha256") {
-		computedHashValue, err = Sha256HashValue(log, output.LocalFilePath)
+	//backwards compatibility for empty HashValues and HashTypes
+	if len(checksums) == 1 {
+		hashValue, ok := checksums[""]
+		if ok && hashValue == "" {
+			return true, nil
+		}
+	}
 
-	} else if strings.EqualFold(hashAlgorithm, "md5") {
-		computedHashValue, err = Md5HashValue(log, output.LocalFilePath)
+	for hashAlgorithm, hashValue := range checksums {
+		var computedHashValue string
+		var err error
+		// check the sha256 algorithm by default
+		if hashAlgorithm == "" || strings.EqualFold(hashAlgorithm, "sha256") {
+			computedHashValue, err = Sha256HashValue(log, output.LocalFilePath)
+		} else if strings.EqualFold(hashAlgorithm, "md5") {
+			computedHashValue, err = Md5HashValue(log, output.LocalFilePath)
+		} else {
+			continue
+		}
+
+		if err != nil {
+			return false, fmt.Errorf("the algorithm returned an error when trying to compute the checksum %v", input)
+		}
+
+		if !strings.EqualFold(hashValue, computedHashValue) {
+			return false, fmt.Errorf("failed to verify hash of downloadinput %v", input)
+		}
+
+		hasMatchingHash = true
 	}
-	if err != nil {
-		return
+
+	//if a supported hash algorithm was not provided, jut return an error
+	if !hasMatchingHash {
+		return false, fmt.Errorf("no supported algorithm was provided for downloadinput %v", input)
 	}
-	match = strings.EqualFold(input.SourceHashValue, computedHashValue)
-	if match == false {
-		err = fmt.Errorf("failed to verify hash of downloadinput %v", input)
-	}
-	return
+
+	return true, nil
 }
 
 // Sha256HashValue gets the sha256 hash value

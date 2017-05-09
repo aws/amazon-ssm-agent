@@ -163,9 +163,10 @@ func prepareInstallationPackages(mgr *updateManager, log log.T, context *UpdateC
 
 	// Download source
 	downloadInput := artifact.DownloadInput{
-		SourceURL:            context.Current.SourceLocation,
-		SourceHashValue:      context.Current.SourceHash,
-		SourceHashType:       updateutil.HashType,
+		SourceURL: context.Current.SourceLocation,
+		SourceChecksums: map[string]string{
+			updateutil.HashType: context.Current.SourceHash,
+		},
 		DestinationDirectory: updateDownload,
 	}
 
@@ -175,9 +176,10 @@ func prepareInstallationPackages(mgr *updateManager, log log.T, context *UpdateC
 
 	// Download target
 	downloadInput = artifact.DownloadInput{
-		SourceURL:            context.Current.TargetLocation,
-		SourceHashValue:      context.Current.TargetHash,
-		SourceHashType:       updateutil.HashType,
+		SourceURL: context.Current.TargetLocation,
+		SourceChecksums: map[string]string{
+			updateutil.HashType: context.Current.TargetHash,
+		},
 		DestinationDirectory: updateDownload,
 	}
 
