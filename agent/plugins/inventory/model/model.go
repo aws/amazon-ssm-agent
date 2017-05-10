@@ -83,6 +83,8 @@ type ApplicationData struct {
 	ApplicationType string `json:",omitempty"`
 	Architecture    string
 	URL             string        `json:",omitempty"`
+	Summary         string        `json:",omitempty"`
+	PackageID       string        `json:",omitempty"`
 	CompType        ComponentType `json:"-"`
 }
 

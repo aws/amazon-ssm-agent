@@ -23,9 +23,74 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-const (
-	sampleData = `{"Name":"amazon-ssm-agent","Version":"1.2.0.0-1","Publisher":"Amazon.com, Inc. <ec2-ssm-feedback@amazon.com>","ApplicationType":"admin","Architecture":"amd64","Url":""},{"Name":"adduser","Version":"3.113+nmu3ubuntu3","Publisher":"Ubuntu Core Developers <ubuntu-devel-discuss@lists.ubuntu.com>","ApplicationType":"admin","Architecture":"all","Url":"http://alioth.debian.org/projects/adduser/"},`
+var (
+	sampleData = `{"Name":"amazon-ssm-agent","Version":"1.2.0.0-1","Publisher":"Amazon.com, Inc. <ec2-ssm-feedback@amazon.com>",` +
+		`"ApplicationType":"admin","Architecture":"amd64","Url":"","Summary":"` +
+		mark(`Description with "quotes" 'and' `+"tabs\t"+` and
+		new lines`) + `","PackageID":"amazon-ssm-agent_1.2_amd64.rpm"},` +
+
+		`{"Name":"adduser","Version":"3.113+nmu3ubuntu3","Publisher":"Ubuntu Core Developers <ubuntu-devel-discuss@lists.ubuntu.com>",` +
+		`"ApplicationType":"admin","Architecture":"all","Url":"http://alioth.debian.org/projects/adduser/",` +
+		`"Summary":"` + mark(`add and remove users and groups
+ This package includes the 'adduser' and 'deluser' commands for creating
+ and removing users.`) + `","PackageID":"adduser_3.113+nmu3ubuntu4_all.deb"},` +
+
+		`{"Name":"sed","Publisher":"Amazon.com","Version":"4.2.1","InstalledTime":"1454346676",` +
+		`"ApplicationType":"Applications/Text","Architecture":"x86_64","Url":"http://sed.sourceforge.net/",` +
+		`"Summary":"` + mark(`A GNU stream text editor`) + `","PackageID":"sed-4.2.1-7.9.amzn1.src.rpm"},` +
+
+		`{"Name":"sed","Version":"4.2.2-7","Publisher":"Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>",` +
+		`"ApplicationType":"utils","Architecture":"amd64","Url":"http://www.gnu.org/software/sed/",` +
+		`"Summary":"` + mark(`The GNU sed stream editor
+sed reads the specified files or the standard input if no
+files are specified, makes editing changes according to a
+list of commands, and writes the results to the standard
+output.`) + `","PackageID":"sed_4.2.2-7_amd64.deb"},`
 )
+
+var sampleDataParsed = []model.ApplicationData{
+	{
+		Name:            "amazon-ssm-agent",
+		Version:         "1.2.0.0-1",
+		Publisher:       "Amazon.com, Inc. <ec2-ssm-feedback@amazon.com>",
+		ApplicationType: "admin",
+		Architecture:    "x86_64",
+		URL:             "",
+		Summary:         "Description with \"quotes\" 'and' tabs\t and",
+		PackageID:       "amazon-ssm-agent_1.2_amd64.rpm",
+	},
+	{
+		Name:            "adduser",
+		Version:         "3.113+nmu3ubuntu3",
+		Publisher:       "Ubuntu Core Developers <ubuntu-devel-discuss@lists.ubuntu.com>",
+		ApplicationType: "admin",
+		Architecture:    "all",
+		URL:             "http://alioth.debian.org/projects/adduser/",
+		Summary:         "add and remove users and groups",
+		PackageID:       "adduser_3.113+nmu3ubuntu4_all.deb",
+	},
+	{
+		Name:            "sed",
+		Version:         "4.2.1",
+		Publisher:       "Amazon.com",
+		InstalledTime:   "2016-02-01T17:11:16Z",
+		ApplicationType: "Applications/Text",
+		Architecture:    "x86_64",
+		URL:             "http://sed.sourceforge.net/",
+		Summary:         "A GNU stream text editor",
+		PackageID:       "sed-4.2.1-7.9.amzn1.src.rpm",
+	},
+	{
+		Name:            "sed",
+		Version:         "4.2.2-7",
+		Publisher:       "Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>",
+		ApplicationType: "utils",
+		Architecture:    "x86_64",
+		URL:             "http://www.gnu.org/software/sed/",
+		Summary:         "The GNU sed stream editor",
+		PackageID:       "sed_4.2.2-7_amd64.deb",
+	},
+}
 
 func MockTestExecutorWithError(command string, args ...string) ([]byte, error) {
 	var result []byte
@@ -52,7 +117,7 @@ func TestConvertToApplicationData(t *testing.T) {
 	data, err := convertToApplicationData(sampleData)
 
 	assert.Nil(t, err, "Check conversion logic - since sample data in unit test is tied to implementation")
-	assert.Equal(t, 2, len(data), "Given sample data must return 2 entries of application data")
+	assertEqual(t, sampleDataParsed, data)
 }
 
 func TestGetApplicationData(t *testing.T) {
@@ -82,7 +147,7 @@ func TestGetApplicationData(t *testing.T) {
 	data, err = getApplicationData(mockContext, mockCommand, mockArgs)
 
 	assert.Nil(t, err, "Error must not be thrown with MockTestExecutorWithoutError")
-	assert.Equal(t, 2, len(data), "Given sample data must return 2 entries of application data")
+	assertEqual(t, sampleDataParsed, data)
 }
 
 func TestCollectApplicationData(t *testing.T) {
@@ -91,7 +156,7 @@ func TestCollectApplicationData(t *testing.T) {
 	// both dpkg and rpm return result without error
 	cmdExecutor = MockTestExecutorWithoutError
 	data := collectPlatformDependentApplicationData(mockContext)
-	assert.Equal(t, 2, len(data), "Given sample data must return 2 entries of application data")
+	assertEqual(t, sampleDataParsed, data)
 
 	// both dpkg and rpm return errors
 	cmdExecutor = MockTestExecutorWithError
@@ -101,7 +166,7 @@ func TestCollectApplicationData(t *testing.T) {
 	// dpkg returns error and rpm return some result
 	cmdExecutor = MockTestExecutorWithAndWithoutError
 	data = collectPlatformDependentApplicationData(mockContext)
-	assert.Equal(t, 2, len(data), "Given sample data must return 2 entries of application data")
+	assertEqual(t, sampleDataParsed, data)
 }
 
 func TestCollectAndMergePackages(t *testing.T) {
@@ -114,7 +179,7 @@ func TestCollectAndMergePackages(t *testing.T) {
 	// both dpkg and rpm return result without error
 	cmdExecutor = MockTestExecutorWithoutError
 	data := CollectApplicationData(mockContext)
-	assert.Equal(t, 3, len(data), "Given sample data must return 3 entries of application data")
+	assert.Equal(t, len(sampleDataParsed)+1, len(data), "Wrong nuber of entries parsed")
 }
 
 func TestCollectAndMergePackagesEmpty(t *testing.T) {
@@ -124,18 +189,39 @@ func TestCollectAndMergePackagesEmpty(t *testing.T) {
 	// both dpkg and rpm return result without error
 	cmdExecutor = MockTestExecutorWithoutError
 	data := CollectApplicationData(mockContext)
-	assert.Equal(t, 2, len(data), "Given sample data must return 2 entries of application data")
+	assert.Equal(t, len(sampleDataParsed), len(data), "Wrong nuber of entries parsed")
 }
 
 func TestCollectAndMergePackagesPlatformError(t *testing.T) {
 	mockContext := context.NewMockDefault()
-	packageRepository = MockPackageRepository([]model.ApplicationData{
+	mockData := []model.ApplicationData{
 		{Name: "amazon-ssm-agent", Version: "1.2.0.0-1", Architecture: model.Arch64Bit, CompType: model.AWSComponent},
 		{Name: "AwsXRayDaemon", Version: "1.2.3", Architecture: model.Arch64Bit, CompType: model.AWSComponent},
-	})
+	}
+	packageRepository = MockPackageRepository(mockData)
 
 	// both dpkg and rpm return result without error
 	cmdExecutor = MockTestExecutorWithError
 	data := CollectApplicationData(mockContext)
-	assert.Equal(t, 2, len(data), "Given sample data must return 2 entries of application data")
+	assert.Equal(t, len(mockData), len(data), "Wrong number of entries")
+}
+
+func assertEqual(t *testing.T, expected []model.ApplicationData, found []model.ApplicationData) {
+	assert.Equal(t, len(expected), len(found))
+	for i, expectedApp := range expected {
+		foundApp := found[i]
+		assertEqualApps(t, expectedApp, foundApp)
+	}
+}
+
+func assertEqualApps(t *testing.T, a model.ApplicationData, b model.ApplicationData) {
+	assert.Equal(t, a.Name, b.Name)
+	assert.Equal(t, a.Publisher, b.Publisher)
+	assert.Equal(t, a.Version, b.Version)
+	assert.Equal(t, a.InstalledTime, b.InstalledTime)
+	assert.Equal(t, a.ApplicationType, b.ApplicationType)
+	assert.Equal(t, a.Architecture, b.Architecture)
+	assert.Equal(t, a.URL, b.URL)
+	assert.Equal(t, a.Summary, b.Summary)
+	assert.Equal(t, a.PackageID, b.PackageID)
 }
