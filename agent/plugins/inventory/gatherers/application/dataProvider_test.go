@@ -15,6 +15,7 @@
 package application
 
 import (
+	"strings"
 	"testing"
 
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/localpackages"
@@ -47,4 +48,50 @@ func MockPackageRepository(result []model.ApplicationData) localpackages.Reposit
 	mockRepo := repomock.MockedRepository{}
 	mockRepo.On("GetInventoryData", mock.Anything).Return(result)
 	return &mockRepo
+}
+
+func TestCleanupJsonField(t *testing.T) {
+	inOut := [][]string{
+		{"a\nb", `a`},
+		{"a\tb\nc", `a\tb`},
+		{`a\b`, `a\\b`},
+		{`a"b`, `a\"b`},
+		{`\"b` + "\n", `\\\"b`},
+		{"description\non\nmulti\nline", `description`},
+		{"a simple text", `a simple text`},
+	}
+	for _, test := range inOut {
+		input, output := test[0], test[1]
+		result := cleanupJsonField(input)
+		assert.Equal(t, output, result)
+	}
+}
+
+func TestReplaceMarkedFields(t *testing.T) {
+	identity := func(a string) string { return a }
+	replaceWithDummy := func(a string) string { return "dummy" }
+	type testCase struct {
+		input       string
+		startMarker string
+		endMarker   string
+		replacer    func(string) string
+		output      string
+	}
+	inOut := []testCase{
+		{"a<-tom->s", "<-", "->", identity, "atoms"},
+		{"a<-tom->s", "<-", "->", replaceWithDummy, "adummys"},
+		{"a<>t</>s", "<>", "</>", strings.ToUpper, "aTs"},
+		{`a<tom>abc<de>`, "<", ">", strings.ToUpper, `aTOMabcDE`},
+		{`|tom|abc|de|`, "|", "|", strings.ToUpper, `TOMabcDE`},
+		{"atoms", "[missingMarker]", "[/missingMarker]", strings.ToUpper, "atoms"},
+		{"at<start>oms", "<start>", "</missingEnd>", strings.ToUpper, ""}, // error case
+	}
+	for _, tst := range inOut {
+		result, err := replaceMarkedFields(tst.input, tst.startMarker, tst.endMarker, tst.replacer)
+		if tst.output != "" {
+			assert.Equal(t, tst.output, result)
+		} else {
+			assert.NotNil(t, err)
+		}
+	}
 }

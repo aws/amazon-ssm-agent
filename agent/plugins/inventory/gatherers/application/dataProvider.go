@@ -1,6 +1,7 @@
 package application
 
 import (
+	"errors"
 	"strings"
 
 	"github.com/aws/amazon-ssm-agent/agent/context"
@@ -18,6 +19,7 @@ const (
 	awsPVDrivers        = "aws pv drivers"
 	awsAPIToolsPrefix   = "aws-apitools-"
 	awsAMIToolsPrefix   = "aws-amitools-"
+	maxSummaryLength    = 100
 )
 
 // decoupling package repository for easy testability
@@ -60,4 +62,52 @@ func CollectApplicationData(context context.T) (appData []model.ApplicationData)
 
 	//merge packageAppData into appData
 	return model.MergeLists(platformAppData, packageAppData)
+}
+
+// cleanupJsonField converts a text to a json friendly text as follows:
+// - converts multi-line fields to single line by removing all but the first line
+// - escapes special characters
+// - truncates remaining line to length no more than maxSummaryLength
+func cleanupJsonField(field string) string {
+	res := field
+	endOfLinePos := strings.Index(res, "\n")
+	if endOfLinePos >= 0 {
+		res = res[0:endOfLinePos]
+	}
+	res = strings.Replace(res, `\`, `\\`, -1)
+	res = strings.Replace(res, `"`, `\"`, -1)
+	res = strings.Replace(res, "\t", `\t`, -1)
+	if len(res) > maxSummaryLength {
+		res = res[0:maxSummaryLength]
+	}
+	return res
+}
+
+// replaceMarkedFields finds substrings delimited by the start and end markers,
+// removes the markers, and replaces the text between the markers with the result
+// of calling the fieldReplacer function on that text substring. For example, if
+// the input string is:  "a string with <a>text</a> marked"
+// the startMarker is:   "<a>"
+// the end marker is:    "</a>"
+// and fieldReplacer is: strings.ToUpper
+// then the output will be: "a string with TEXT marked"
+func replaceMarkedFields(str, startMarker, endMarker string, fieldReplacer func(string) string) (newStr string, err error) {
+	startIndex := strings.Index(str, startMarker)
+	newStr = ""
+	for startIndex >= 0 {
+		newStr += str[:startIndex]
+		fieldStart := str[startIndex+len(startMarker):]
+		endIndex := strings.Index(fieldStart, endMarker)
+		if endIndex < 0 {
+			err = errors.New("Found startMarker without endMarker!")
+			return
+		}
+		field := fieldStart[:endIndex]
+		transformedField := fieldReplacer(field)
+		newStr += transformedField
+		str = fieldStart[endIndex+len(endMarker):]
+		startIndex = strings.Index(str, startMarker)
+	}
+	newStr += str
+	return newStr, nil
 }
