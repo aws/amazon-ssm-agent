@@ -11,10 +11,9 @@
 // either express or implied. See the License for the specific language governing
 // permissions and limitations under the License.
 
-// Package application contains application gatherer.
-
 // +build darwin freebsd linux netbsd openbsd
 
+// Package application contains application gatherer.
 package application
 
 import (
@@ -29,20 +28,37 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/platform"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/inventory/model"
+	"github.com/twinj/uuid"
 )
 
-const (
+var (
+	startMarker = "<start" + randomString(8) + ">"
+	endMarker   = "<end" + randomString(8) + ">"
+
 	// rpm commands related constants
 	rpmCmd                        = "rpm"
 	rpmCmdArgToGetAllApplications = "-qa"
 	rpmQueryFormat                = "--queryformat"
-	rpmQueryFormatArgs            = `\{\"Name\":\"%{NAME}\",\"Publisher\":\"%{VENDOR}\",\"Version\":\"%{VERSION}\",\"InstalledTime\":\"%{INSTALLTIME}\",\"ApplicationType\":\"%{GROUP}\",\"Architecture\":\"%{ARCH}\",\"Url\":\"%{URL}\"\},`
+	rpmQueryFormatArgs            = `\{"Name":"%{NAME}","Publisher":"%{VENDOR}","Version":"%{VERSION}","InstalledTime":"%{INSTALLTIME}","ApplicationType":"%{GROUP}","Architecture":"%{ARCH}","Url":"%{URL}",` +
+		`"Summary":"` + mark(`%{Summary}`) + `","PackageID":"%{SourceRPM}"\},`
 
 	// dpkg query commands related constants
 	dpkgCmd                      = "dpkg-query"
 	dpkgArgsToGetAllApplications = "-W"
-	dpkgQueryFormat              = `-f={"Name":"${Package}","Version":"${Version}","Publisher":"${Maintainer}","ApplicationType":"${Section}","Architecture":"${Architecture}","Url":"${Homepage}"},`
+	dpkgQueryFormat              = `-f={"Name":"${Package}","Publisher":"${Maintainer}","Version":"${Version}","ApplicationType":"${Section}","Architecture":"${Architecture}","Url":"${Homepage}",` +
+		`"Summary":"` + mark(`${Description}`) + `",` +
+		// PackageID should be something like ${Filename}, but for some reason that field does not get printed,
+		// so we build PackageID from parts
+		`"PackageID":"${Package}_${Version}_${Architecture}.deb"},`
 )
+
+func randomString(length int) string {
+	return uuid.NewV4().String()[:length]
+}
+
+func mark(s string) string {
+	return startMarker + s + endMarker
+}
 
 // decoupling exec.Command for easy testability
 var cmdExecutor = executeCommand
@@ -120,26 +136,30 @@ func getApplicationData(context context.T, command string, args []string) (data 
 
 		DPKG:
 
-		Package: netcat
-		Priority: optional
-		Section: universe/net
-		Installed-Size: 30
-		Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
-		Original-Maintainer: Ruben Molina <rmolina@udea.edu.co>
-		Architecture: all
-		Version: 1.10-40
-		Depends: netcat-traditional (>= 1.10-39)
-		Filename: pool/universe/n/netcat/netcat_1.10-40_all.deb
-		Size: 3340
-		MD5sum: 37c303f02b260481fa4fc9fb8b2c1004
-		SHA1: 0371a3950d6967480985aa014fbb6fb898bcea3a
-		SHA256: eeecb4c93f03f455d2c3f57b0a1e83b54dbeced0918ae563784e86a37bcc16c9
-		Description-en: TCP/IP swiss army knife -- transitional package
-		 This is a "dummy" package that depends on lenny's default version of
-		 netcat, to ease upgrades. It may be safely removed.
-		Description-md5: 1353f8c1d079348417c2180319bdde09
-		Bugs: https://bugs.launchpad.net/ubuntu/+filebug
+		Package: sed
+		Essential: yes
+		Priority: required
+		Section: utils
+		Installed-Size: 304
 		Origin: Ubuntu
+		Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+		Bugs: https://bugs.launchpad.net/ubuntu/+filebug
+		Architecture: amd64
+		Multi-Arch: foreign
+		Version: 4.2.2-7
+		Depends: dpkg (>= 1.15.4) | install-info
+		Pre-Depends: libc6 (>= 2.14), libselinux1 (>= 1.32)
+		Filename: pool/main/s/sed/sed_4.2.2-7_amd64.deb
+		Size: 138916
+		MD5sum: cb5d3a67bb2859bc2549f1916b9a1818
+		Description: The GNU sed stream editor
+		Original-Maintainer: Clint Adams <clint@debian.org>
+		SHA1: dc7e76d7a861b329ed73e807153c2dd89d6a0c71
+		SHA256: 0623b35cdc60f8bc74e6b31ee32ed4585433fb0bc7b99c9a62985c115dbb7f0d
+		Homepage: http://www.gnu.org/software/sed/
+		Description-md5: 67b5a614216e15a54b09cad62d5d5afc
+		Supported: 5y
+		Task: minimal
 
 
 		Following fields are relevant for inventory type AWS:Application
@@ -150,8 +170,12 @@ func getApplicationData(context context.T, command string, args []string) (data 
 		- Url
 		- InstalledTime
 		- ApplicationType
+		- Summary: For rpm, we take the multi line Description and keep the first line only.
+		  The first line is a short summary. For dpkg-query we take the Summary field.
+		- PackageID: we take the rpm/deb filename
 
-		We use rpm query & dpkg-query to get above fields and then tranform the data to convert into json
+
+		We use rpm query & dpkg-query to get above fields and then transform the data to convert into json
 		to simplify its processing.
 
 		Sample rpm query is of following format:
@@ -171,7 +195,7 @@ func getApplicationData(context context.T, command string, args []string) (data 
 	log.Debugf("Executing command: %v %v", command, args)
 
 	if output, err = cmdExecutor(command, args...); err != nil {
-		log.Debugf("Failed to execute command : %v %v with error - %v",
+		log.Errorf("Failed to execute command : %v %v with error - %v",
 			command,
 			args,
 			err.Error())
@@ -183,6 +207,7 @@ func getApplicationData(context context.T, command string, args []string) (data 
 
 		if data, err = convertToApplicationData(cmdOutput); err != nil {
 			err = fmt.Errorf("Unable to convert query output to ApplicationData - %v", err.Error())
+			log.Errorf(err.Error())
 		} else {
 			log.Infof("Number of applications detected - %v", len(data))
 		}
@@ -220,10 +245,16 @@ func convertToApplicationData(input string) (data []model.ApplicationData, err e
 	//remove last ',' from string
 	str = strings.TrimSuffix(str, ",")
 
+	// keep single line out of multi-line fields and escape special characters
+	str, err = replaceMarkedFields(str, startMarker, endMarker, cleanupJsonField)
+	if err != nil {
+		return
+	}
+
 	//add "[" in beginning & "]" at the end to create valid json string
 	str = fmt.Sprintf("[%v]", str)
 
-	//unmarshall json string accordingly.
+	//unmarshal json string accordingly.
 	if err = json.Unmarshal([]byte(str), &data); err == nil {
 
 		//transform the date & architecture - by iterating over all elements
