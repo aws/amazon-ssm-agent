@@ -33,9 +33,9 @@ const (
 	SysnativePowershellCmd                               = `C:\Windows\sysnative\WindowsPowerShell\v1.0\powershell.exe `
 	ArgsToReadRegistryFromWindowsCurrentVersionUninstall = `Get-ItemProperty HKLM:\Software\Microsoft\Windows\CurrentVersion\Uninstall\* | Where-Object {$_.DisplayName -ne $null} | Select-Object @{n="Name";e={$_."DisplayName"}}, @{n="Version";e={$_."DisplayVersion"}}, Publisher, @{n="InstalledTime";e={[datetime]::ParseExact($_."InstallDate","yyyyMMdd",$null).ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ssZ")}} | ConvertTo-Json `
 	ArgsToReadRegistryFromWow6432Node                    = `Get-ItemProperty HKLM:\Software\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\* | Where-Object {$_.DisplayName -ne $null} | Select-Object @{n="Name";e={$_."DisplayName"}}, @{n="Version";e={$_."DisplayVersion"}}, Publisher, @{n="InstalledTime";e={[datetime]::ParseExact($_."InstallDate","yyyyMMdd",$null).ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ssZ")}} | ConvertTo-Json`
-	ArgsForDetectingOSArch                               = `(gwmi win32_operatingsystem).OSArchitecture`
-	Architecture64BitReportedByPowershell                = "64-bit"
-	Architecture32BitReportedByPowershell                = "32-bit"
+	ArgsForDetectingOSArch                               = `get-wmiobject -class win32_processor | select-object addresswidth`
+	KeywordFor64BitArchitectureReportedByPowershell      = "64"
+	KeywordFor32BitArchitectureReportedByPowershell      = "32"
 	Architecture64BitReportedByGoRuntime                 = "amd64"
 )
 
@@ -63,6 +63,15 @@ func collectPlatformDependentApplicationData(context context.T) []model.Applicat
 		Powershell command format: Get-ItemProperty <REGISTRY PATH> | Where-Object {$_.DisplayName -ne $null} | Select-Object @{Name="Name";Expression={$_."DisplayName"}} | ConvertTo-Json
 
 		We use calculated property of Select-Object to format the data accordingly. Reference: https://technet.microsoft.com/en-us/library/ff730948.aspx
+
+		For determining the OS architecture we use the following command:
+
+		get-wmiobject -class win32_processor | select-object addresswidth
+
+		addresswidth - On a 32-bit operating system, the value is 32 and on a 64-bit operating system it is 64.
+
+		Reference:
+		https://msdn.microsoft.com/en-us/library/aa394373%28v=vs.85%29.aspx
 	*/
 
 	//TODO: powershell commands can be put in a script to generate that data - and then we can simply execute the script to get the data.
@@ -80,7 +89,7 @@ func collectPlatformDependentApplicationData(context context.T) []model.Applicat
 	osArch := detectOSArch(context, PowershellCmd, ArgsForDetectingOSArch)
 	log.Infof("Detected OS architecture as - %v", osArch)
 
-	if osArch == Architecture32BitReportedByPowershell {
+	if strings.Contains(osArch, KeywordFor32BitArchitectureReportedByPowershell) {
 		//os architecture is 32 bit
 		if exeArch != Architecture64BitReportedByGoRuntime {
 			//exe architecture is also 32 bit
@@ -90,7 +99,7 @@ func collectPlatformDependentApplicationData(context context.T) []model.Applicat
 		} else {
 			log.Infof("Detected an unsupported scenario of 64 bit amazon ssm agent running on 32 bit windows OS - nothing to report")
 		}
-	} else if osArch == Architecture64BitReportedByPowershell {
+	} else if strings.Contains(osArch, KeywordFor64BitArchitectureReportedByPowershell) {
 		//os architecture is 64 bit
 		if exeArch == Architecture64BitReportedByGoRuntime {
 			//both exe & os architecture is 64 bit
