@@ -334,6 +334,10 @@ package-deb: create-package-folder
 package-win: create-package-folder
 	$(BGO_SPACE)/Tools/src/create_win.sh
 
+.PHONY: package-darwin
+package-darwin:
+	$(BGO_SPACE)/Tools/src/create_darwin.sh
+
 .PHONY: package-rpm-386
 package-rpm-386: create-package-folder
 	$(BGO_SPACE)/Tools/src/create_rpm_386.sh
