@@ -87,23 +87,25 @@ func New(log log.T, repository string, region string) packageservice.PackageServ
 
 // DownloadManifest looks up the latest version of a given package for this platform/arch in S3 or manifest at source location
 func (ds *PackageService) DownloadManifest(log log.T, packageName string, version string) (string, error) {
-	var latestVersion string
+	var targetVersion string
 	var err error
 
-	if packageservice.IsLatest(version) {
-		latestVersion = version
+	if !packageservice.IsLatest(version) {
+		targetVersion = version
 	} else {
-		latestVersion, err := getLatestS3Version(log, ds.packageURL, packageName)
+		var err error
+		targetVersion, err = getLatestS3Version(log, ds.packageURL, packageName)
+		log.Debugf("latest version: %v", targetVersion)
 		if err != nil {
 			return "", err
 		}
 		// handle case where we couldn't figure out which version to install but not because of an error in the S3 call
-		if latestVersion == "" {
+		if targetVersion == "" {
 			return "", fmt.Errorf("no latest version found for package %v on platform %v", packageName, appconfig.PackagePlatform)
 		}
 	}
 
-	return latestVersion, err
+	return targetVersion, err
 }
 
 func (ds *PackageService) DownloadArtifact(log log.T, packageName string, version string) (string, error) {
@@ -146,7 +148,8 @@ func getS3Location(packageName string, version string, url string) string {
 
 	s3Location = strings.Replace(s3Location, updateutil.PackageNameHolder, packageName, -1)
 	s3Location = strings.Replace(s3Location, updateutil.PackageVersionHolder, version, -1)
-	s3Location = strings.Replace(s3Location, updateutil.CompressedHolder, "zip", -1)
+	// TODO: switch to zip for simplicity across different packages with the revision that relaxes version constraints (and bump supported schema version)
+	s3Location = strings.Replace(s3Location, updateutil.CompressedHolder, updateutil.CompressFormat, -1)
 	return s3Location
 }
 
@@ -191,6 +194,7 @@ func getLatestS3Version(log log.T, packageURL string, name string) (latestVersio
 	log.Debugf("looking up latest version of %v from %v", name, amazonS3URL.String())
 	folders, err := networkdep.ListS3Folders(log, amazonS3URL)
 	if err != nil {
+		log.Debugf("Error listing S3 folders: %v", err)
 		return
 	}
 	return getLatestVersion(folders[:], ""), nil
