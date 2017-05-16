@@ -248,6 +248,16 @@ func TestReportResult(t *testing.T) {
 		Exitcode:    815,
 	}
 
+	platformProviderdep = &platformProviderMock{
+		name:             "abc",
+		version:          "567",
+		architecture:     "xyz",
+		instanceID:       "instanceIDX",
+		instanceType:     "instanceTypeZ",
+		availabilityZone: "AZ1",
+		region:           "Reg1",
+	}
+
 	data := []struct {
 		name        string
 		bwclient    birdwatcherStationServiceMock
@@ -282,6 +292,13 @@ func TestReportResult(t *testing.T) {
 				assert.Equal(t, pkgresult.Version, *testdata.bwclient.putConfigurePackageResultInput.PackageVersion)
 				assert.Equal(t, pkgresult.Timing, *testdata.bwclient.putConfigurePackageResultInput.OverallTiming)
 				assert.Equal(t, pkgresult.Exitcode, *testdata.bwclient.putConfigurePackageResultInput.Result)
+				assert.Equal(t, "abc", *testdata.bwclient.putConfigurePackageResultInput.PackageResultAttributes["platformName"])
+				assert.Equal(t, "567", *testdata.bwclient.putConfigurePackageResultInput.PackageResultAttributes["platformVersion"])
+				assert.Equal(t, "xyz", *testdata.bwclient.putConfigurePackageResultInput.PackageResultAttributes["architecture"])
+				assert.Equal(t, "instanceIDX", *testdata.bwclient.putConfigurePackageResultInput.PackageResultAttributes["instanceID"])
+				assert.Equal(t, "instanceTypeZ", *testdata.bwclient.putConfigurePackageResultInput.PackageResultAttributes["instanceType"])
+				assert.Equal(t, "AZ1", *testdata.bwclient.putConfigurePackageResultInput.PackageResultAttributes["availabilityZone"])
+				assert.Equal(t, "Reg1", *testdata.bwclient.putConfigurePackageResultInput.PackageResultAttributes["region"])
 			}
 		})
 	}
@@ -364,9 +381,13 @@ func TestDownloadManifest(t *testing.T) {
 
 func TestFindFileFromManifest(t *testing.T) {
 	platformProviderdep = &platformProviderMock{
-		name:         "platformName",
-		version:      "platformVersion",
-		architecture: "architecture",
+		name:             "platformName",
+		version:          "platformVersion",
+		architecture:     "architecture",
+		instanceID:       "instanceID",
+		instanceType:     "instanceType",
+		availabilityZone: "availabilityZone",
+		region:           "region",
 	}
 
 	data := []struct {
@@ -510,9 +531,13 @@ func TestDownloadFile(t *testing.T) {
 
 func TestDownloadArtifact(t *testing.T) {
 	platformProviderdep = &platformProviderMock{
-		name:         "platformName",
-		version:      "platformVersion",
-		architecture: "architecture",
+		name:             "platformName",
+		version:          "platformVersion",
+		architecture:     "architecture",
+		instanceID:       "instanceID",
+		instanceType:     "instanceType",
+		availabilityZone: "availabilityZone",
+		region:           "region",
 	}
 	manifestStr := `
 	{

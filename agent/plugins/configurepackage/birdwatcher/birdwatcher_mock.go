@@ -52,12 +52,20 @@ func (m *birdwatcherStationServiceMock) PutConfigurePackageResult(input *birdwat
 
 // platformProviderMock
 type platformProviderMock struct {
-	name            string
-	nameerr         error
-	version         string
-	versionerr      error
-	architecture    string
-	architectureerr error
+	name                string
+	nameerr             error
+	version             string
+	versionerr          error
+	architecture        string
+	architectureerr     error
+	instanceID          string
+	instaceIDerr        error
+	instanceType        string
+	instanceTypeerr     error
+	availabilityZone    string
+	availabilityZoneerr error
+	region              string
+	regionerr           error
 }
 
 func (p *platformProviderMock) Name(log log.T) (string, error) {
@@ -70,6 +78,22 @@ func (p *platformProviderMock) Version(log log.T) (string, error) {
 
 func (p *platformProviderMock) Architecture(log log.T) (string, error) {
 	return p.architecture, p.architectureerr
+}
+
+func (p *platformProviderMock) InstanceID(log log.T) (string, error) {
+	return p.instanceID, p.instaceIDerr
+}
+
+func (p *platformProviderMock) InstanceType(log log.T) (string, error) {
+	return p.instanceType, p.instanceTypeerr
+}
+
+func (p *platformProviderMock) AvailabilityZone(log log.T) (string, error) {
+	return p.availabilityZone, p.availabilityZoneerr
+}
+
+func (p *platformProviderMock) Region(log log.T) (string, error) {
+	return p.region, p.regionerr
 }
 
 // networkMock
