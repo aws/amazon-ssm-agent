@@ -92,12 +92,30 @@ func (ds *PackageService) ReportResult(log log.T, result packageservice.PackageR
 	// TODO: include trace and properties
 	// TODO: collect as much as possible data:
 	// * AZ, instance id, instance type, platform, version, arch, init system, ...
+
+	instanceID, _ := platformProviderdep.InstanceID(log)
+	instanceType, _ := platformProviderdep.InstanceType(log)
+	region, _ := platformProviderdep.Region(log)
+	availabilityZone, _ := platformProviderdep.AvailabilityZone(log)
+	platformName, _ := platformProviderdep.Name(log)
+	platformVersion, _ := platformProviderdep.Version(log)
+	architecture, _ := platformProviderdep.Architecture(log)
+
 	_, err := ds.bwclient.PutConfigurePackageResult(
 		&birdwatcherstationservice.PutConfigurePackageResultInput{
 			PackageName:    &result.PackageName,
 			PackageVersion: &result.Version,
 			OverallTiming:  &result.Timing,
 			Result:         &result.Exitcode,
+			PackageResultAttributes: map[string]*string{
+				"platformName":     &platformName,
+				"platformVersion":  &platformVersion,
+				"architecture":     &architecture,
+				"instanceID":       &instanceID,
+				"instanceType":     &instanceType,
+				"region":           &region,
+				"availabilityZone": &availabilityZone,
+			},
 		},
 	)
 
