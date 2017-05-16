@@ -1,5 +1,15 @@
 Latest
 ===============
+- Added support for rate/interval based schedule expressions for associations
+- Added Summary and PackageID fields to inventory's aws:application gatherer
+- Changed inventory's aws:application gatherer to use win32_processor: addressWidth to detect OS architecture
+  to avoid localization based errors
+- Fixed CloudWatch issue with large configuration
+- Fixed S3 upload when instance and bucket are not in the same region
+- Various bug fixes
+
+2.0.767.0
+===============
 - Returning longer StandardOutput and StandardError from RunShellScript and RunPowerShellScript
   which show up in the results of GetCommandInvocation and the detailed output of ListCommandInvocation
 - Added Document v2.0 support for Run Command, which includes support for multiple actions of same plugin type
