@@ -20,7 +20,7 @@ import (
 	"sync"
 )
 
-var cachedRegion string
+var cachedRegion, cachedAvailabilityZone, cachedInstanceType string
 var lock sync.RWMutex
 
 const errorMessage = "Failed to fetch %s. Data from vault is empty. %v"
@@ -40,6 +40,25 @@ func SetInstanceID(instanceID string) error {
 	if instanceID == "" {
 		return fmt.Errorf("invalid instanceID")
 	}
+	return nil
+}
+
+// InstanceType returns the current instance type
+func InstanceType() (string, error) {
+	lock.RLock()
+	defer lock.RUnlock()
+
+	return fetchInstanceType()
+}
+
+// SetInstanceType overrides the platform instance type
+func SetInstanceType(instanceType string) error {
+	lock.Lock()
+	defer lock.Unlock()
+	if instanceType == "" {
+		return fmt.Errorf("invalid instance type")
+	}
+	cachedInstanceType = instanceType
 	return nil
 }
 
@@ -65,6 +84,30 @@ func SetRegion(region string) error {
 		return fmt.Errorf("invalid region")
 	}
 	cachedRegion = region
+	return nil
+}
+
+// AvailabilityZone returns the instance availability zone
+func AvailabilityZone() (string, error) {
+	var err error
+	lock.RLock()
+	defer lock.RUnlock()
+	if cachedAvailabilityZone != "" {
+		return cachedAvailabilityZone, nil
+	}
+
+	cachedAvailabilityZone, err = fetchAvailabilityZone()
+	return cachedAvailabilityZone, err
+}
+
+// SetAvailabilityZone overrides the platform availability zone
+func SetAvailabilityZone(availabilityZone string) error {
+	lock.Lock()
+	defer lock.Unlock()
+	if availabilityZone == "" {
+		return fmt.Errorf("invalid availability zone")
+	}
+	cachedAvailabilityZone = availabilityZone
 	return nil
 }
 
@@ -102,6 +145,22 @@ func fetchInstanceID() (string, error) {
 	return "", fmt.Errorf(errorMessage, "instance ID", err)
 }
 
+// fetchInstanceType fetches the instance type with the following preference order.
+// 1. EC2 Instance Metadata
+// Ignoring the on prem case for now
+func fetchInstanceType() (string, error) {
+	var err error
+	var instanceType string
+
+	// trying to get instance id from ec2 metadata
+	if instanceType, err = metadata.GetMetadata("instance-type"); instanceType != "" && err == nil {
+		return instanceType, nil
+	}
+
+	// return combined error messages
+	return "", fmt.Errorf(errorMessage, "instance Type", err)
+}
+
 // fetchRegion fetches the region with the following preference order.
 // 1. managed instance registration
 // 2. EC2 Instance Metadata
@@ -127,4 +186,26 @@ func fetchRegion() (string, error) {
 
 	// return combined error messages
 	return "", fmt.Errorf(errorMessage, "region", err)
+}
+
+// fetchAvailabilityZone fetches the  availability zone with the following preference order.
+// 1. EC2 Instance Metadata
+// 2. EC2 Instance Dynamic Data
+// Ignoring the on prem case for now
+func fetchAvailabilityZone() (string, error) {
+	var err error
+	var availabilityZone string
+
+	// trying to get instance id from ec2 metadata
+	if availabilityZone, err = metadata.GetMetadata("placement/availability-zone"); availabilityZone != "" && err == nil {
+		return availabilityZone, nil
+	}
+
+	// trying to get region from dynamic data
+	if availabilityZone, err = dynamicData.Region(); availabilityZone != "" && err == nil {
+		return availabilityZone, nil
+	}
+
+	// return combined error messages
+	return "", fmt.Errorf(errorMessage, "availability zone", err)
 }

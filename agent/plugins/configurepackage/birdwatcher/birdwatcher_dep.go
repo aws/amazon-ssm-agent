@@ -40,6 +40,10 @@ type platformProviderDep interface {
 	Name(log log.T) (string, error)
 	Version(log log.T) (string, error)
 	Architecture(log log.T) (string, error)
+	InstanceID(log log.T) (string, error)
+	InstanceType(log log.T) (string, error)
+	AvailabilityZone(log log.T) (string, error)
+	Region(log log.T) (string, error)
 }
 
 var platformProviderdep platformProviderDep = &platformProviderDepImp{}
@@ -56,4 +60,20 @@ func (*platformProviderDepImp) Version(log log.T) (string, error) {
 
 func (*platformProviderDepImp) Architecture(log log.T) (string, error) {
 	return runtime.GOARCH, nil
+}
+
+func (*platformProviderDepImp) InstanceID(log log.T) (string, error) {
+	return platform.InstanceID()
+}
+
+func (*platformProviderDepImp) InstanceType(log log.T) (string, error) {
+	return platform.InstanceType()
+}
+
+func (*platformProviderDepImp) AvailabilityZone(log log.T) (string, error) {
+	return platform.AvailabilityZone()
+}
+
+func (*platformProviderDepImp) Region(log log.T) (string, error) {
+	return platform.Region()
 }
