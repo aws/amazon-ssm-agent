@@ -15,6 +15,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/plugins/inventory/gatherers/application"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/inventory/gatherers/awscomponent"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/inventory/gatherers/custom"
+	"github.com/aws/amazon-ssm-agent/agent/plugins/inventory/gatherers/instancedetailedinformation"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/inventory/gatherers/network"
 )
 
@@ -23,4 +24,5 @@ var supportedGathererNames = []string{
 	awscomponent.GathererName,
 	custom.GathererName,
 	network.GathererName,
+	instancedetailedinformation.GathererName,
 }
