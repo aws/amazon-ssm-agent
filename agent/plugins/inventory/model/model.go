@@ -83,7 +83,7 @@ type ApplicationData struct {
 	Architecture    string
 	URL             string        `json:",omitempty"`
 	Summary         string        `json:",omitempty"`
-	PackageID       string        `json:",omitempty"`
+	PackageId       string        `json:",omitempty"`
 	CompType        ComponentType `json:"-"`
 }
 
@@ -106,6 +106,16 @@ type WindowsUpdateData struct {
 	Description   string
 	InstalledTime string
 	InstalledBy   string
+}
+
+// InstanceDetailedInformation captures all attributes present in AWS:InstanceDetailedInformation inventory type
+type InstanceDetailedInformation struct {
+	CPUModel              string
+	CPUSpeedMHz           string
+	CPUs                  string
+	CPUSockets            string
+	CPUCores              string
+	CPUHyperThreadEnabled string
 }
 
 // Config captures all various properties (including optional) that can be supplied to a gatherer.
