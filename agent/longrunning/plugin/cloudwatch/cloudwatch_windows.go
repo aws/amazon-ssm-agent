@@ -49,7 +49,7 @@ type Plugin struct {
 const (
 	//TODO: Change the way the output is being returned to return exit codes
 	IsProcessRunning = "$ProcessActive = Get-Process -Name %v -ErrorAction SilentlyContinue ; $ProcessActive -ne $null"
-	GetPidOfExe      = "Get-Process -Name %v -ErrorAction SilentlyContinue | ConvertTo-Json"
+	GetPidOfExe      = "Get-Process -Name %v -ErrorAction SilentlyContinue | Select ProcessName, Id | ConvertTo-Json"
 	ProcessNotFound  = "Process not found"
 	// CloudWatchProcessName represents CloudWatch Exe Absolute Path
 	CloudWatchProcessName = "AWS.CloudWatch"
