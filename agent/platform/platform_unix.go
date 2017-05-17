@@ -132,7 +132,7 @@ func getPlatformDetails(log log.T) (name string, version string, err error) {
 		log.Debugf(fetchingDetailsMessage, unameCommand)
 
 		if contentsBytes, err = exec.Command(unameCommand, "-sr").Output(); err != nil {
-			log.Debugf(fetchingDetailsMessage, lsbReleaseCommand, err)
+			log.Debugf(fetchingDetailsMessage, unameCommand, err)
 			return
 		}
 		log.Debugf(commandOutputMessage, contentsBytes)
