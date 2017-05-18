@@ -144,6 +144,9 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 	res.Code = out.ExitCode
 	res.Status = out.Status
 	res.Output = out.String()
+	res.StandardOutput = pluginutil.StringPrefix(out.Stdout, p.MaxStdoutLength, p.OutputTruncatedSuffix)
+	res.StandardError = pluginutil.StringPrefix(out.Stderr, p.MaxStderrLength, p.OutputTruncatedSuffix)
+
 	pluginutil.PersistPluginInformationToCurrent(log, config.PluginID, config, res)
 
 	return res
