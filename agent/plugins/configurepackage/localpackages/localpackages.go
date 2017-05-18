@@ -246,7 +246,7 @@ func createApplicationData(manifest *PackageManifest, packageState *PackageInsta
 
 // getPackageRoot is a helper function that returns the path to the folder containing all versions of a package
 func (repo *localRepository) getPackageRoot(packageName string) string {
-	return filepath.Join(repo.repoRoot, packageName)
+	return filepath.Join(repo.repoRoot, normalizeDirectory(packageName))
 }
 
 // getInstallStatePath is a helper function that builds the path to the install state file
@@ -256,7 +256,7 @@ func (repo *localRepository) getInstallStatePath(packageName string) string {
 
 // getPackageVersionPath is a helper function that builds a path to the directory containing the given version of a package
 func (repo *localRepository) getPackageVersionPath(packageName string, version string) string {
-	return filepath.Join(repo.getPackageRoot(packageName), version)
+	return filepath.Join(repo.getPackageRoot(packageName), normalizeDirectory(version))
 }
 
 // getActionPath is a helper function that builds the path to an action document file

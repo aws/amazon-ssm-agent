@@ -19,7 +19,6 @@ import (
 	"errors"
 	"fmt"
 	"path/filepath"
-	"regexp"
 	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
@@ -42,9 +41,6 @@ const (
 	InstallAction = "Install"
 	// UninstallAction represents the json command to uninstall package
 	UninstallAction = "Uninstall"
-
-	// PatternVersion represents the regular expression for validating version
-	PatternVersion = "^(?:(\\d+)\\.)(?:(\\d+)\\.)(\\d+)$"
 )
 
 // Plugin is the type for the configurepackage plugin.
@@ -353,17 +349,6 @@ func validateInput(input *ConfigurePackagePluginInput) (valid bool, err error) {
 	// ensure non-empty name
 	if input.Name == "" {
 		return false, errors.New("empty name field")
-	}
-	validNameValue := regexp.MustCompile(`^[a-zA-Z_]+(([-.])?[a-zA-Z0-9_]+)*$`)
-	if !validNameValue.MatchString(input.Name) {
-		return false, errors.New("invalid name, must start with letter or _; end with letter, number, or _; and contain only letters, numbers, -, _, or single . characters")
-	}
-
-	if version := input.Version; !packageservice.IsLatest(version) {
-		// ensure version follows format <major>.<minor>.<build>
-		if matched, err := regexp.MatchString(PatternVersion, version); matched == false || err != nil {
-			return false, errors.New("invalid version - should be in format major.minor.build")
-		}
 	}
 
 	// dump any unsupported value for Repository

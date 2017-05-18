@@ -16,10 +16,9 @@ package model
 
 import (
 	"sort"
-	"strconv"
 	"strings"
 
-	"github.com/coreos/go-semver/semver"
+	"github.com/aws/amazon-ssm-agent/agent/versionutil"
 )
 
 const (
@@ -165,7 +164,7 @@ func compareApplicationData(this ApplicationData, other ApplicationData, strictS
 	if publisherResult := comparePublisher(this.Publisher, other.Publisher, strictSort); publisherResult != 0 {
 		return publisherResult
 	}
-	return compareVersion(this.Version, other.Version, strictSort)
+	return versionutil.Compare(this.Version, other.Version, strictSort)
 }
 
 func compareName(this string, other string) int {
@@ -178,68 +177,6 @@ func comparePublisher(this string, other string, strictSort bool) int {
 	} else {
 		return strings.Compare(strings.ToLower(this), strings.ToLower(other))
 	}
-}
-
-func compareVersion(this string, other string, strictSort bool) int {
-	// If both versions are compliant with SemVer, use the SemVer comparison rules
-	thisSemVer, thisSemErr := semver.NewVersion(this)
-	otherSemVer, otherSemErr := semver.NewVersion(other)
-	if thisSemErr == nil && otherSemErr == nil {
-		return thisSemVer.Compare(*otherSemVer)
-	}
-
-	thisVersion := this
-	otherVersion := other
-	if !strictSort {
-		// Unless we need a strict ordering, trailing 0 components of version should be ignored
-		thisVersion = removeTrailingZeros(thisVersion)
-		otherVersion = removeTrailingZeros(otherVersion)
-	}
-
-	thisComponents := strings.Split(thisVersion, ".")
-	otherComponents := strings.Split(otherVersion, ".")
-
-	for i := 0; i < len(thisComponents) && i < len(otherComponents); i++ {
-		thisNum, errThis := strconv.Atoi(thisComponents[i])
-		otherNum, errOther := strconv.Atoi(otherComponents[i])
-		isNumeric := errThis == nil && errOther == nil
-		if isNumeric {
-			// If we can compare numbers, compare numbers
-			if thisNum < otherNum {
-				return -1
-			} else if thisNum > otherNum {
-				return 1
-			}
-		} else {
-			// If either component is not numeric, compare them as text
-			if thisComponents[i] < otherComponents[i] {
-				return -1
-			} else if thisComponents[i] > otherComponents[i] {
-				return 1
-			}
-		}
-	}
-	return len(thisComponents) - len(otherComponents)
-}
-
-// removeTrailingZeros removes components of path at the end that are numerically equal to 0
-func removeTrailingZeros(version string) string {
-	if len(version) == 0 {
-		return version
-	}
-	lenSignificant := len(version)
-	for i := len(version) - 1; i >= 0; i-- {
-		if version[i] != '0' && version[i] != '.' {
-			break
-		}
-		if version[i] == '.' {
-			lenSignificant = i
-		}
-		if i == 0 {
-			lenSignificant = 0
-		}
-	}
-	return version[0:lenSignificant]
 }
 
 // MergeLists combines a list of application data from a secondary source with a list from a primary source and returns a sorted result
