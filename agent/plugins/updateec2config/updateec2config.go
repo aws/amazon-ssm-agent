@@ -61,12 +61,8 @@ type UpdatePluginInput struct {
 
 // UpdatePluginConfig is used for initializing update agent plugin with default values
 type UpdatePluginConfig struct {
-	ManifestLocation      string
-	StdoutFileName        string
-	StderrFileName        string
-	MaxStdoutLength       int
-	MaxStderrLength       int
-	OutputTruncatedSuffix string
+	pluginutil.PluginConfig
+	ManifestLocation string
 }
 
 type updateManager struct{}
@@ -565,6 +561,8 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 		res.Code = out[i].ExitCode
 		res.Status = out[i].Status
 		res.Output = out[i].String()
+		res.StandardOutput = pluginutil.StringPrefix(out[i].Stdout, p.MaxStdoutLength, p.OutputTruncatedSuffix)
+		res.StandardError = pluginutil.StringPrefix(out[i].Stderr, p.MaxStderrLength, p.OutputTruncatedSuffix)
 	}
 
 	return
@@ -591,11 +589,7 @@ func GetUpdatePluginConfig(context context.T) UpdatePluginConfig {
 	}
 
 	return UpdatePluginConfig{
-		ManifestLocation:      manifestURL,
-		StdoutFileName:        "stdout",
-		StderrFileName:        "stderr",
-		MaxStdoutLength:       2500,
-		MaxStderrLength:       2500,
-		OutputTruncatedSuffix: "--output truncated--",
+		PluginConfig:     pluginutil.DefaultPluginConfig(),
+		ManifestLocation: manifestURL,
 	}
 }

@@ -52,9 +52,10 @@ var config = contracts.Configuration{}
 func generateTestCaseSuccess(msg, id string) TestCase {
 	var status = contracts.ResultStatusSuccess
 	var res = contracts.PluginResult{
-		Status: status,
-		Output: msg,
-		Code:   0,
+		Status:         status,
+		Output:         msg,
+		StandardOutput: msg,
+		Code:           0,
 	}
 	var contextCase = context.NewMockDefaultWithContext([]string{"pluginID=" + id})
 	var config = contracts.Configuration{
@@ -75,9 +76,10 @@ func generateTestCaseSuccess(msg, id string) TestCase {
 func generateTestCaseFail(msg, id string) TestCase {
 	var status = contracts.ResultStatusFailed
 	var res = contracts.PluginResult{
-		Status: status,
-		Output: msg,
-		Code:   1,
+		Status:        status,
+		Output:        msg,
+		StandardError: msg,
+		Code:          1,
 	}
 	var contextCase = context.NewMockDefaultWithContext([]string{id})
 	var config = contracts.Configuration{
