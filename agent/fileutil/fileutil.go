@@ -15,6 +15,7 @@
 package fileutil
 
 import (
+	"archive/zip"
 	"bytes"
 	"fmt"
 	"io"
@@ -263,4 +264,66 @@ func ReadDir(location string) ([]os.FileInfo, error) {
 // isUnderDir determines if a given path is in or under a given parent directory (after accounting for path traversal)
 func isUnderDir(childPath, parentDirPath string) bool {
 	return strings.HasPrefix(filepath.Clean(childPath)+string(filepath.Separator), filepath.Clean(parentDirPath)+string(filepath.Separator))
+}
+
+// Unzip unzips the installation package (using platform agnostic zip functionality)
+// For platform specific implementation that uses tar.gz on Linux, use Uncompress
+func Unzip(src, dest string) error {
+	r, err := zip.OpenReader(src)
+	if err != nil {
+		return err
+	}
+	defer func() {
+		if err := r.Close(); err != nil {
+			return
+		}
+	}()
+
+	os.MkdirAll(dest, appconfig.ReadWriteExecuteAccess)
+	// Closure to address file descriptors issue with all the deferred .Close() methods
+	extractAndWriteFile := func(f *zip.File) error {
+		rc, err := f.Open()
+		if err != nil {
+			return err
+		}
+		defer func() {
+			if err := rc.Close(); err != nil {
+				return
+			}
+		}()
+
+		path := filepath.Join(dest, f.Name)
+
+		if !isUnderDir(path, dest) {
+			return fmt.Errorf("%v attepts to place files outside %v subtree", f.Name, dest)
+		}
+		if f.FileInfo().IsDir() {
+			os.MkdirAll(path, f.Mode())
+		} else {
+			os.MkdirAll(filepath.Dir(path), f.Mode())
+			f, err := os.OpenFile(path, appconfig.FileFlagsCreateOrTruncate, f.Mode())
+			if err != nil {
+				return err
+			}
+			defer func() {
+				if err := f.Close(); err != nil {
+					return
+				}
+			}()
+
+			_, err = io.Copy(f, rc)
+			if err != nil {
+				return err
+			}
+		}
+		return nil
+	}
+	for _, f := range r.File {
+		err := extractAndWriteFile(f)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
 }

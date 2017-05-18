@@ -42,7 +42,7 @@ const (
 	ArchHolder = "{Arch}"
 
 	// PackageNameFormat represents the package name format based
-	PackageNameFormat = "{PackageName}.{Compressed}"
+	PackageNameFormat = "{PackageName}.zip"
 
 	// PackageURLStandard represents the s3 folder where all versions of a package live
 	// the url to a specific package has a format like https://s3.us-east-1.amazonaws.com/amazon-ssm-packages-us-east-1/Packages/Test/windows/amd64/1.0.0/Test.zip
@@ -148,8 +148,6 @@ func getS3Location(packageName string, version string, url string) string {
 
 	s3Location = strings.Replace(s3Location, updateutil.PackageNameHolder, packageName, -1)
 	s3Location = strings.Replace(s3Location, updateutil.PackageVersionHolder, version, -1)
-	// TODO: switch to zip for simplicity across different packages with the revision that relaxes version constraints (and bump supported schema version)
-	s3Location = strings.Replace(s3Location, updateutil.CompressedHolder, updateutil.CompressFormat, -1)
 	return s3Location
 }
 

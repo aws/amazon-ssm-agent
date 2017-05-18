@@ -333,27 +333,6 @@ func TestValidateInput_NameEmpty(t *testing.T) {
 	assert.Contains(t, err.Error(), "empty name field")
 }
 
-func TestValidateInput_NameInvalid(t *testing.T) {
-	input := ConfigurePackagePluginInput{}
-
-	// Set version to a large number to avoid conflict of the actual package release version
-	input.Version = "9000.0.0"
-	input.Name = "."
-	input.Action = "Install"
-
-	invalidNames := []string{".", ".abc", "-", "-abc", "abc.", "abc-", "0abc", "1234", "../foo", "abc..def"}
-
-	for _, name := range invalidNames {
-		input.Name = name
-
-		result, err := validateInput(&input)
-
-		assert.False(t, result)
-		assert.Error(t, err)
-		assert.Contains(t, err.Error(), "invalid name")
-	}
-}
-
 func TestValidateInput_NameValid(t *testing.T) {
 	input := ConfigurePackagePluginInput{}
 	// Set version to a large number to avoid conflict of the actual package release version
@@ -372,19 +351,21 @@ func TestValidateInput_NameValid(t *testing.T) {
 	}
 }
 
-func TestValidateInput_Version(t *testing.T) {
+func TestValidateInput_VersionValid(t *testing.T) {
 	input := ConfigurePackagePluginInput{}
 
-	// Set version to a large number to avoid conflict of the actual package release version
-	input.Version = "9000.0.0.0"
-	input.Name = "PVDriver"
-	input.Action = "Install"
+	validVersions := []string{"1.0.0", "9000.0.0.0", "0.21.0", "1.2.3.4", "5.4.3.2.1", "1.2.3-a.b.c.10.d.5+beta"}
 
-	result, err := validateInput(&input)
+	for _, version := range validVersions {
+		input.Version = version
+		input.Name = "PVDriver"
+		input.Action = "Install"
 
-	assert.False(t, result)
-	assert.Error(t, err)
-	assert.Contains(t, err.Error(), "invalid version")
+		result, err := validateInput(&input)
+
+		assert.True(t, result)
+		assert.NoError(t, err)
+	}
 }
 
 func TestValidateInput_EmptyVersionWithInstall(t *testing.T) {
