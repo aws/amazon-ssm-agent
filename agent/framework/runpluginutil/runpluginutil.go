@@ -77,7 +77,9 @@ func ParseDocument(context context.T, documentRaw []byte, orchestrationDir strin
 	pluginConfigurations := make([]*contracts.Configuration, 0)
 
 	switch docContent.SchemaVersion {
-	case "2.0", "2.0.1": // Version 2.0.1 is added to support installers that require capabilities that did not exist before the build where 2.0.1 was added
+	// Version 2.0.1 and 2.0.2 are added to support install documents for configurePackage that require capabilities
+	// that did not exist before the build where support for these versions was added
+	case "2.0", "2.0.1", "2.0.2":
 		for _, pluginConfig := range docContent.MainSteps {
 			pluginName := pluginConfig.Action
 			config := contracts.Configuration{

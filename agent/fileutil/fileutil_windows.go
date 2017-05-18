@@ -17,11 +17,7 @@
 package fileutil
 
 import (
-	"archive/zip"
-	"fmt"
-	"io"
 	"os"
-	"path/filepath"
 	"syscall"
 	"unsafe"
 
@@ -30,63 +26,7 @@ import (
 
 // Uncompress unzips the installation package
 func Uncompress(src, dest string) error {
-	r, err := zip.OpenReader(src)
-	if err != nil {
-		return err
-	}
-	defer func() {
-		if err := r.Close(); err != nil {
-			return
-		}
-	}()
-
-	os.MkdirAll(dest, appconfig.ReadWriteExecuteAccess)
-	// Closure to address file descriptors issue with all the deferred .Close() methods
-	extractAndWriteFile := func(f *zip.File) error {
-		rc, err := f.Open()
-		if err != nil {
-			return err
-		}
-		defer func() {
-			if err := rc.Close(); err != nil {
-				return
-			}
-		}()
-
-		path := filepath.Join(dest, f.Name)
-
-		if !isUnderDir(path, dest) {
-			return fmt.Errorf("%v attepts to place files outside %v subtree", f.Name, dest)
-		}
-		if f.FileInfo().IsDir() {
-			os.MkdirAll(path, f.Mode())
-		} else {
-			os.MkdirAll(filepath.Dir(path), f.Mode())
-			f, err := os.OpenFile(path, appconfig.FileFlagsCreateOrTruncate, f.Mode())
-			if err != nil {
-				return err
-			}
-			defer func() {
-				if err := f.Close(); err != nil {
-					return
-				}
-			}()
-
-			_, err = io.Copy(f, rc)
-			if err != nil {
-				return err
-			}
-		}
-		return nil
-	}
-	for _, f := range r.File {
-		err := extractAndWriteFile(f)
-		if err != nil {
-			return err
-		}
-	}
-
-	return nil
+	return Unzip(src, dest)
 }
 
 // GetDiskSpaceInfo returns available, free, and total bytes respectively from system disk space

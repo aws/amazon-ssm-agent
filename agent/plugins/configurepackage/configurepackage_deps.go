@@ -48,7 +48,7 @@ func (fileSysDepImp) WriteFile(filename string, content string) error {
 }
 
 func (fileSysDepImp) Uncompress(src, dest string) error {
-	return fileutil.Uncompress(src, dest)
+	return fileutil.Unzip(src, dest)
 }
 
 func (fileSysDepImp) RemoveAll(path string) error {
