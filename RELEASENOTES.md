@@ -6,6 +6,7 @@ Latest
   to avoid localization based errors
 - Fixed CloudWatch issue with large configuration
 - Fixed S3 upload when instance and bucket are not in the same region
+- Fixed bug in which native language AMIs (Japanese AMI) stopped uploading Cloudwatch Logs
 - Various bug fixes
 
 2.0.767.0
