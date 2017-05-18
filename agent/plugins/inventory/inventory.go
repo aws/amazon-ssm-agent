@@ -709,6 +709,8 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 
 	inventoryOutput = p.ApplyInventoryPolicy(context, inventoryInput)
 	res = setPluginResult(inventoryOutput, res)
+	res.StandardOutput = pluginutil.StringPrefix(res.StandardOutput, p.MaxStdoutLength, p.OutputTruncatedSuffix)
+	res.StandardError = pluginutil.StringPrefix(res.StandardError, p.MaxStderrLength, p.OutputTruncatedSuffix)
 
 	//check inventory plugin output
 	if inventoryOutput.ExitCode != 0 {

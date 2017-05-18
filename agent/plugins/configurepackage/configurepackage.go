@@ -568,6 +568,8 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 		res.Code = out[0].ExitCode
 		res.Status = out[0].Status
 		res.Output = out[0].String()
+		res.StandardOutput = pluginutil.StringPrefix(out[0].Stdout, p.MaxStdoutLength, p.OutputTruncatedSuffix)
+		res.StandardError = pluginutil.StringPrefix(out[0].Stderr, p.MaxStderrLength, p.OutputTruncatedSuffix)
 		if config.OrchestrationDirectory != "" {
 			useTemp := false
 			outFile := filepath.Join(config.OrchestrationDirectory, p.StdoutFileName)

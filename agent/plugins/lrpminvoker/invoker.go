@@ -178,8 +178,10 @@ func (p *Plugin) CreateResult(msg string, status contracts.ResultStatus) (res co
 	res.Output = msg
 
 	if status == contracts.ResultStatusFailed {
+		res.StandardError = msg
 		res.Code = 1
 	} else {
+		res.StandardOutput = msg
 		res.Code = 0
 	}
 
