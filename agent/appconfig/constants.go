@@ -135,3 +135,10 @@ const (
 	AppConfigFileName    = "amazon-ssm-agent.json"
 	SeelogConfigFileName = "seelog.xml"
 )
+
+var SupportedDocumentVersions = map[string]struct{}{
+	"1.0": {},
+	"1.2": {},
+	"2.0": {},
+	"2.1": {},
+}

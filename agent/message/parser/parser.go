@@ -18,6 +18,7 @@ import (
 	"encoding/json"
 	"fmt"
 
+	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	messageContracts "github.com/aws/amazon-ssm-agent/agent/message/contracts"
@@ -28,10 +29,22 @@ import (
 
 // ParseMessageWithParams parses an MDS message and replaces the parameters where needed.
 func ParseMessageWithParams(log log.T, payload string) (parsedMessage messageContracts.SendCommandPayload, err error) {
+
 	// parse message to retrieve parameters
 	err = json.Unmarshal([]byte(payload), &parsedMessage)
 	if err != nil {
 		errorMsg := "Encountered error while parsing input - internal error"
+		log.Errorf(errorMsg)
+		return parsedMessage, fmt.Errorf("%v", errorMsg)
+	}
+
+	// Check if the document version is supported by this agent version
+	documentSchemaVersion := parsedMessage.DocumentContent.SchemaVersion
+	_, isDocumentVersionSupport := appconfig.SupportedDocumentVersions[documentSchemaVersion]
+	if !isDocumentVersionSupport {
+		errorMsg := fmt.Sprintf(
+			"Document with schema version %s is not supported by this version of ssm agent, please update to latest version",
+			documentSchemaVersion)
 		log.Errorf(errorMsg)
 		return parsedMessage, fmt.Errorf("%v", errorMsg)
 	}

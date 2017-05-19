@@ -1,0 +1,37 @@
+{
+  "CommandId": "12345c50-d2b4-4380-acac-213fb7c12345",
+  "Parameters": {
+    "commands": [
+      "echo ship_it"
+    ]
+  },
+  "DocumentContent": {
+    "schemaVersion": "9999.0",
+    "description": "Cross-platform document with schema version 9999.0, this is only for test.",
+    "mainSteps": [
+      {
+        "action": "aws:runPowerShellScript",
+        "inputs": {
+          "commands": "date"
+        },
+        "maxAttempts": 0,
+        "name": "runPowerShellScript1",
+        "onFailure": "",
+        "settings": null,
+        "timeoutSeconds": 0
+      }
+    ],
+    "parameters": {
+      "commands": {
+        "allowedPattern": "",
+        "allowedValues": null,
+        "default": null,
+        "description": "(Required) Specify a shell script or a command to run.",
+        "type": "StringList"
+      }
+    }
+  },
+  "DocumentName": "ship-it",
+  "OutputS3BucketName": "",
+  "OutputS3KeyPrefix": ""
+}

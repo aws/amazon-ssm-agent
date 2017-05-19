@@ -7,7 +7,7 @@
     "workingDirectory": ""
   },
   "DocumentContent": {
-    "schemaVersion": "1.1",
+    "schemaVersion": "1.2",
     "description": "This document defines the PowerShell command to run or path to a script which is to be executed.",
     "runtimeConfig": {
       "aws:runScript": {

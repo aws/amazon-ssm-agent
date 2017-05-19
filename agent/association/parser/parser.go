@@ -55,6 +55,18 @@ func ParseDocumentWithParams(log log.T,
 		log.Debugf("Could not unmarshal parameters ", err)
 		return nil, fmt.Errorf("%v", ErrorMsg)
 	}
+
+	// Check if the document version is supported by this agent version
+	documentSchemaVersion := payload.DocumentContent.SchemaVersion
+	_, isDocumentVersionSupport := appconfig.SupportedDocumentVersions[documentSchemaVersion]
+	if !isDocumentVersionSupport {
+		errorMsg := fmt.Sprintf(
+			"Document with schema version %s is not supported by this version of ssm agent, please update to latest version",
+			documentSchemaVersion)
+		log.Errorf(errorMsg)
+		return nil, fmt.Errorf("%v", errorMsg)
+	}
+
 	payload.DocumentName = *rawData.Association.Name
 	payload.CommandID = *rawData.Association.AssociationId
 
