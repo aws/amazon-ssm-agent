@@ -16,6 +16,7 @@ package parser
 
 import (
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"testing"
 
@@ -63,6 +64,56 @@ func TestParseMessageWithParams(t *testing.T) {
 		assert.Nil(t, err)
 		assert.Equal(t, tst.Output, parsedMsg)
 	}
+}
+
+// This test should fail when we add support for 2.2 schema, at that point this should be moved to above test - TestParseMessageWithParams
+func TestParseMessageWithDocumentSchemaVersion22(t *testing.T) {
+	type testCase struct {
+		Input  string
+		Output messageContracts.SendCommandPayload
+		Error  error
+	}
+
+	documentWithSchemaVersion22 := "../testdata/sampleMsgVersion2_2.json"
+
+	// generate test case
+	var tst = testCase{
+		Input:  string(loadFile(t, documentWithSchemaVersion22)),
+		Output: loadMessageFromFile(t, documentWithSchemaVersion22),
+		Error:  fmt.Errorf("Document with schema version 2.2 is not supported by this version of ssm agent, please update to latest version"),
+	}
+
+	// run test
+	parsedMsg, err := ParseMessageWithParams(logger, tst.Input)
+
+	// check results
+	assert.Equal(t, tst.Error, err)
+	assert.Equal(t, tst.Output, parsedMsg)
+}
+
+// This test should always pass
+func TestParseMessageWithDocumentSchemaVersion9999(t *testing.T) {
+	type testCase struct {
+		Input  string
+		Output messageContracts.SendCommandPayload
+		Error  error
+	}
+
+	documentWithSchemaVersion22 := "../testdata/sampleMsgVersion9999_0.json"
+
+	// generate test case
+	var tst = testCase{
+		Input:  string(loadFile(t, documentWithSchemaVersion22)),
+		Output: loadMessageFromFile(t, documentWithSchemaVersion22),
+		Error:  fmt.Errorf("Document with schema version 9999.0 is not supported by this version of ssm agent, please update to latest version"),
+	}
+
+	// run test
+	parsedMsg, err := ParseMessageWithParams(logger, tst.Input)
+
+	// check results
+	assert.Equal(t, tst.Error, err)
+	assert.Equal(t, tst.Output, parsedMsg)
 }
 
 func loadFile(t *testing.T, fileName string) (result []byte) {
