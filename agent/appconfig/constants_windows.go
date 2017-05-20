@@ -40,14 +40,6 @@ const (
 	// Exit Code that would trigger a Soft Reboot
 	RebootExitCode = 3010
 
-	// List all plugin names, unfortunately golang doesn't support const arrays of strings
-
-	// PluginNameAwsPowerShellModule is the name of the PowerShell Module
-	PluginNameAwsPowerShellModule = "aws:psModule"
-
-	// PluginNameAwsApplications is the name of the Applications plugin
-	PluginNameAwsApplications = "aws:applications"
-
 	// PackagePlatform is the platform name to use when looking for packages
 	PackagePlatform = "windows"
 
