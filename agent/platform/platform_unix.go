@@ -25,9 +25,11 @@ import (
 
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/go-ini/ini"
 )
 
 const (
+	osReleaseCommand       = "/etc/os-release"
 	systemReleaseCommand   = "/etc/system-release"
 	redhatReleaseCommand   = "/etc/redhat-release"
 	unameCommand           = "/usr/bin/uname"
@@ -35,6 +37,11 @@ const (
 	fetchingDetailsMessage = "fetching platform details from %v"
 	errorOccurredMessage   = "There was an error running %v, err: %v"
 )
+
+type Release struct {
+	PRETTY_NAME string
+	VERSION_ID  string
+}
 
 func getPlatformName(log log.T) (value string, err error) {
 	value, _, err = getPlatformDetails(log)
@@ -57,7 +64,21 @@ func getPlatformDetails(log log.T) (name string, version string, err error) {
 	name = notAvailableMessage
 	version = notAvailableMessage
 
-	if fileutil.Exists(systemReleaseCommand) {
+	if fileutil.Exists(osReleaseCommand) {
+		log.Debugf(fetchingDetailsMessage, osReleaseCommand)
+
+		contents := new(Release)
+		err = ini.MapTo(contents, osReleaseCommand)
+		log.Debugf(commandOutputMessage, contents)
+
+		if err != nil {
+			log.Debugf(errorOccurredMessage, osReleaseCommand, err)
+			return
+		}
+
+		name = contents.PRETTY_NAME
+		version = contents.VERSION_ID
+	} else if fileutil.Exists(systemReleaseCommand) {
 		log.Debugf(fetchingDetailsMessage, systemReleaseCommand)
 
 		contents, err = fileutil.ReadAllText(systemReleaseCommand)
