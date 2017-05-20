@@ -23,14 +23,44 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/docmanager/model"
 	"github.com/aws/amazon-ssm-agent/agent/framework/plugin"
 	"github.com/aws/amazon-ssm-agent/agent/framework/runpluginutil"
+	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )
 
+const (
+	testPlugin1           = "plugin1"
+	testPlugin2           = "plugin2"
+	testUnknownPlugin     = "plugin3"
+	testUnsupportedPlugin = "plugin4"
+)
+
+var origIsSupported func(log log.T, pluginName string) (isKnown bool, isSupported bool, message string)
+
+func setIsSupportedMock() {
+	origIsSupported = isSupportedPlugin
+	isSupportedPlugin = func(log log.T, pluginName string) (isKnown bool, isSupported bool, message string) {
+		switch pluginName {
+		case testUnknownPlugin:
+			return false, true, ""
+		case testUnsupportedPlugin:
+			return true, false, ""
+		default:
+			return true, true, ""
+		}
+	}
+}
+
+func restoreIsSupported() {
+	isSupportedPlugin = origIsSupported
+}
+
 // TestRunPlugins tests that RunPluginsWithRegistry calls all the expected plugins.
 func TestRunPluginsWithNewDocument(t *testing.T) {
-	pluginNames := []string{"plugin1", "plugin2"}
+	setIsSupportedMock()
+	defer restoreIsSupported()
+	pluginNames := []string{testPlugin1, testPlugin2}
 	pluginConfigs := make(map[string]model.PluginState)
 	pluginResults := make(map[string]*contracts.PluginResult)
 	pluginInstances := make(map[string]*plugin.Mock)
@@ -69,7 +99,7 @@ func TestRunPluginsWithNewDocument(t *testing.T) {
 			StandardError:  defaultOutput,
 		}
 
-		if name == "plugin2" {
+		if name == testPlugin2 {
 			pluginResults[name].Status = contracts.ResultStatusSuccessAndReboot
 		}
 
@@ -85,7 +115,7 @@ func TestRunPluginsWithNewDocument(t *testing.T) {
 			result.StartDateTime = defaultTime
 		}
 		if called == 0 {
-			assert.Equal(t, results["plugin1"], pluginResults["plugin1"])
+			assert.Equal(t, results[testPlugin1], pluginResults[testPlugin1])
 		} else if called == 1 {
 			assert.Equal(t, results, pluginResults)
 		} else {
@@ -107,8 +137,8 @@ func TestRunPluginsWithNewDocument(t *testing.T) {
 		mockPlugin.AssertExpectations(t)
 	}
 	ctx.AssertCalled(t, "Log")
-	assert.Equal(t, pluginResults["plugin1"], outputs["plugin1"])
-	assert.Equal(t, pluginResults["plugin2"], outputs["plugin2"])
+	assert.Equal(t, pluginResults[testPlugin1], outputs[testPlugin1])
+	assert.Equal(t, pluginResults[testPlugin2], outputs[testPlugin2])
 
 	assert.Equal(t, pluginResults, outputs)
 
@@ -116,7 +146,9 @@ func TestRunPluginsWithNewDocument(t *testing.T) {
 
 // Document with steps containing unknown plugin (i.e. when plugin handler is not found), steps must fail
 func TestRunPluginsWithMissingPluginHandler(t *testing.T) {
-	pluginNames := []string{"plugin1", "plugin2"}
+	setIsSupportedMock()
+	defer restoreIsSupported()
+	pluginNames := []string{testPlugin1, testPlugin2}
 	pluginConfigs := make(map[string]model.PluginState)
 	pluginResults := make(map[string]*contracts.PluginResult)
 	pluginInstances := make(map[string]*plugin.Mock)
@@ -168,7 +200,7 @@ func TestRunPluginsWithMissingPluginHandler(t *testing.T) {
 			result.StartDateTime = defaultTime
 		}
 		if called == 0 {
-			assert.Equal(t, results["plugin1"], pluginResults["plugin1"])
+			assert.Equal(t, results[testPlugin1], pluginResults[testPlugin1])
 		} else if called == 1 {
 			assert.Equal(t, results, pluginResults)
 		} else {
@@ -190,8 +222,8 @@ func TestRunPluginsWithMissingPluginHandler(t *testing.T) {
 		mockPlugin.AssertExpectations(t)
 	}
 	ctx.AssertCalled(t, "Log")
-	assert.Equal(t, pluginResults["plugin1"], outputs["plugin1"])
-	assert.Equal(t, pluginResults["plugin2"], outputs["plugin2"])
+	assert.Equal(t, pluginResults[testPlugin1], outputs[testPlugin1])
+	assert.Equal(t, pluginResults[testPlugin2], outputs[testPlugin2])
 
 	assert.Equal(t, pluginResults, outputs)
 
@@ -199,7 +231,9 @@ func TestRunPluginsWithMissingPluginHandler(t *testing.T) {
 
 //TODO cancelFlag should not fail subsequent plugins
 func TestRunPluginsWithCancelFlagShutdown(t *testing.T) {
-	pluginNames := []string{"plugin1", "plugin2"}
+	setIsSupportedMock()
+	defer restoreIsSupported()
+	pluginNames := []string{testPlugin1, testPlugin2}
 	pluginStates := make([]model.PluginState, 2)
 	pluginResults := make(map[string]*contracts.PluginResult)
 	plugins := make(map[string]*plugin.Mock)
@@ -230,7 +264,7 @@ func TestRunPluginsWithCancelFlagShutdown(t *testing.T) {
 			StartDateTime: defaultTime,
 			EndDateTime:   defaultTime,
 		}
-		if name == "plugin1" {
+		if name == testPlugin1 {
 			pluginResults[name].Status = contracts.ResultStatusSuccess
 			plugins[name].On("Execute", ctx, pluginState.Configuration, cancelFlag).Run(func(args mock.Arguments) {
 				flag := args.Get(2).(task.CancelFlag)
@@ -256,13 +290,15 @@ func TestRunPluginsWithCancelFlagShutdown(t *testing.T) {
 		mockPlugin.AssertExpectations(t)
 	}
 	ctx.AssertCalled(t, "Log")
-	assert.Equal(t, pluginResults["plugin1"], outputs["plugin1"])
+	assert.Equal(t, pluginResults[testPlugin1], outputs[testPlugin1])
 	//empty struct
-	assert.Equal(t, pluginResults["plugin2"], outputs["plugin2"])
+	assert.Equal(t, pluginResults[testPlugin2], outputs[testPlugin2])
 }
 
 func TestRunPluginsWithInProgressDocuments(t *testing.T) {
-	pluginNames := []string{"plugin1", "plugin2"}
+	setIsSupportedMock()
+	defer restoreIsSupported()
+	pluginNames := []string{testPlugin1, testPlugin2}
 	pluginStates := make([]model.PluginState, 2)
 	pluginResults := make(map[string]*contracts.PluginResult)
 	plugins := make(map[string]*plugin.Mock)
@@ -295,7 +331,7 @@ func TestRunPluginsWithInProgressDocuments(t *testing.T) {
 			EndDateTime:   defaultTime,
 		}
 		//plugin1 has already been executed, plugin2 has not started yet
-		if name == "plugin1" {
+		if name == testPlugin1 {
 			pluginState.Result = *pluginResults[name]
 		} else {
 			pluginState.Result.Status = contracts.ResultStatusNotStarted
@@ -314,8 +350,8 @@ func TestRunPluginsWithInProgressDocuments(t *testing.T) {
 	for _, mockPlugin := range plugins {
 		mockPlugin.AssertExpectations(t)
 	}
-	assert.Equal(t, pluginResults["plugin1"], outputs["plugin1"])
-	assert.Equal(t, pluginResults["plugin2"], outputs["plugin2"])
+	assert.Equal(t, pluginResults[testPlugin1], outputs[testPlugin1])
+	assert.Equal(t, pluginResults[testPlugin2], outputs[testPlugin2])
 
 }
 
@@ -355,8 +391,10 @@ func TestRunPluginsWithInProgressDocuments(t *testing.T) {
 //}
 
 func TestRunPluginsWithDuplicatePluginType(t *testing.T) {
+	setIsSupportedMock()
+	defer restoreIsSupported()
 	pluginType := "aws:runShellScript"
-	pluginNames := []string{"plugin1", "plugin2"}
+	pluginNames := []string{testPlugin1, testPlugin2}
 	pluginConfigs := make(map[string]model.PluginState)
 	pluginResults := make(map[string]*contracts.PluginResult)
 	// create an instance of our test object
@@ -393,7 +431,7 @@ func TestRunPluginsWithDuplicatePluginType(t *testing.T) {
 			StandardError:  defaultOutput,
 		}
 
-		if name == "plugin2" {
+		if name == testPlugin2 {
 			pluginResults[name].Status = contracts.ResultStatusSuccessAndReboot
 		}
 
@@ -409,11 +447,11 @@ func TestRunPluginsWithDuplicatePluginType(t *testing.T) {
 			result.StartDateTime = defaultTime
 		}
 		if called == 0 {
-			assert.Equal(t, results["plugin1"], pluginResults["plugin1"])
+			assert.Equal(t, results[testPlugin1], pluginResults[testPlugin1])
 		} else if called == 1 {
 			assert.Equal(t, results, pluginResults)
 		} else {
-			assert.Fail(t, "sendreply shouldn't been called more than twice")
+			assert.Fail(t, "sendreply shouldn't be called more than twice")
 		}
 		called++
 	}
@@ -430,18 +468,20 @@ func TestRunPluginsWithDuplicatePluginType(t *testing.T) {
 	plugin.AssertExpectations(t)
 
 	ctx.AssertCalled(t, "Log")
-	assert.Equal(t, pluginResults["plugin1"], outputs["plugin1"])
-	assert.Equal(t, pluginResults["plugin2"], outputs["plugin2"])
+	assert.Equal(t, pluginResults[testPlugin1], outputs[testPlugin1])
+	assert.Equal(t, pluginResults[testPlugin2], outputs[testPlugin2])
 
-	assert.Equal(t, pluginType, outputs["plugin1"].PluginName)
-	assert.Equal(t, pluginType, outputs["plugin2"].PluginName)
+	assert.Equal(t, pluginType, outputs[testPlugin1].PluginName)
+	assert.Equal(t, pluginType, outputs[testPlugin2].PluginName)
 
 	assert.Equal(t, pluginResults, outputs)
 }
 
 // Crossplatform document with compatible precondition, steps must be executed
 func TestRunPluginsWithCompatiblePreconditionForSteps(t *testing.T) {
-	pluginNames := []string{"plugin1", "plugin2"}
+	setIsSupportedMock()
+	defer restoreIsSupported()
+	pluginNames := []string{testPlugin1, testPlugin2}
 	pluginConfigs := make(map[string]model.PluginState)
 	pluginResults := make(map[string]*contracts.PluginResult)
 	pluginInstances := make(map[string]*plugin.Mock)
@@ -497,11 +537,11 @@ func TestRunPluginsWithCompatiblePreconditionForSteps(t *testing.T) {
 			result.StartDateTime = defaultTime
 		}
 		if called == 0 {
-			assert.Equal(t, results["plugin1"], pluginResults["plugin1"])
+			assert.Equal(t, results[testPlugin1], pluginResults[testPlugin1])
 		} else if called == 1 {
 			assert.Equal(t, results, pluginResults)
 		} else {
-			assert.Fail(t, "sendreply shouldn't been called more than twice")
+			assert.Fail(t, "sendreply shouldn't be called more than twice")
 		}
 		called++
 	}
@@ -519,15 +559,17 @@ func TestRunPluginsWithCompatiblePreconditionForSteps(t *testing.T) {
 		mockPlugin.AssertExpectations(t)
 	}
 	ctx.AssertCalled(t, "Log")
-	assert.Equal(t, pluginResults["plugin1"], outputs["plugin1"])
-	assert.Equal(t, pluginResults["plugin2"], outputs["plugin2"])
+	assert.Equal(t, pluginResults[testPlugin1], outputs[testPlugin1])
+	assert.Equal(t, pluginResults[testPlugin2], outputs[testPlugin2])
 
 	assert.Equal(t, pluginResults, outputs)
 }
 
 // Crossplatform document with incompatible precondition, steps must be skipped
 func TestRunPluginsWithIncompatiblePreconditionForSteps(t *testing.T) {
-	pluginNames := []string{"plugin1", "plugin2"}
+	setIsSupportedMock()
+	defer restoreIsSupported()
+	pluginNames := []string{testPlugin1, testPlugin2}
 	pluginConfigs := make(map[string]model.PluginState)
 	pluginResults := make(map[string]*contracts.PluginResult)
 	pluginInstances := make(map[string]*plugin.Mock)
@@ -582,11 +624,11 @@ func TestRunPluginsWithIncompatiblePreconditionForSteps(t *testing.T) {
 			result.StartDateTime = defaultTime
 		}
 		if called == 0 {
-			assert.Equal(t, results["plugin1"], pluginResults["plugin1"])
+			assert.Equal(t, results[testPlugin1], pluginResults[testPlugin1])
 		} else if called == 1 {
 			assert.Equal(t, results, pluginResults)
 		} else {
-			assert.Fail(t, "sendreply shouldn't been called more than twice")
+			assert.Fail(t, "sendreply shouldn't be called more than twice")
 		}
 		called++
 	}
@@ -604,15 +646,17 @@ func TestRunPluginsWithIncompatiblePreconditionForSteps(t *testing.T) {
 		mockPlugin.AssertExpectations(t)
 	}
 	ctx.AssertCalled(t, "Log")
-	assert.Equal(t, pluginResults["plugin1"], outputs["plugin1"])
-	assert.Equal(t, pluginResults["plugin2"], outputs["plugin2"])
+	assert.Equal(t, pluginResults[testPlugin1], outputs[testPlugin1])
+	assert.Equal(t, pluginResults[testPlugin2], outputs[testPlugin2])
 
 	assert.Equal(t, pluginResults, outputs)
 }
 
 // Crossplatform document with unknown plugin (i.e. when plugin handler is not found), steps must be skipped
 func TestRunPluginsWithCompatiblePreconditionButMissingPluginHandler(t *testing.T) {
-	pluginNames := []string{"plugin1", "plugin2"}
+	setIsSupportedMock()
+	defer restoreIsSupported()
+	pluginNames := []string{testPlugin1, testPlugin2}
 	pluginConfigs := make(map[string]model.PluginState)
 	pluginResults := make(map[string]*contracts.PluginResult)
 	pluginInstances := make(map[string]*plugin.Mock)
@@ -665,11 +709,11 @@ func TestRunPluginsWithCompatiblePreconditionButMissingPluginHandler(t *testing.
 			result.StartDateTime = defaultTime
 		}
 		if called == 0 {
-			assert.Equal(t, results["plugin1"], pluginResults["plugin1"])
+			assert.Equal(t, results[testPlugin1], pluginResults[testPlugin1])
 		} else if called == 1 {
 			assert.Equal(t, results, pluginResults)
 		} else {
-			assert.Fail(t, "sendreply shouldn't been called more than twice")
+			assert.Fail(t, "sendreply shouldn't be called more than twice")
 		}
 		called++
 	}
@@ -687,15 +731,17 @@ func TestRunPluginsWithCompatiblePreconditionButMissingPluginHandler(t *testing.
 		mockPlugin.AssertExpectations(t)
 	}
 	ctx.AssertCalled(t, "Log")
-	assert.Equal(t, pluginResults["plugin1"], outputs["plugin1"])
-	assert.Equal(t, pluginResults["plugin2"], outputs["plugin2"])
+	assert.Equal(t, pluginResults[testPlugin1], outputs[testPlugin1])
+	assert.Equal(t, pluginResults[testPlugin2], outputs[testPlugin2])
 
 	assert.Equal(t, pluginResults, outputs)
 }
 
 // Crossplatform document with more than 1 precondition, steps must fail
 func TestRunPluginsWithMoreThanOnePrecondition(t *testing.T) {
-	pluginNames := []string{"plugin1", "plugin2"}
+	setIsSupportedMock()
+	defer restoreIsSupported()
+	pluginNames := []string{testPlugin1, testPlugin2}
 	pluginConfigs := make(map[string]model.PluginState)
 	pluginResults := make(map[string]*contracts.PluginResult)
 	pluginInstances := make(map[string]*plugin.Mock)
@@ -753,11 +799,11 @@ func TestRunPluginsWithMoreThanOnePrecondition(t *testing.T) {
 			result.StartDateTime = defaultTime
 		}
 		if called == 0 {
-			assert.Equal(t, results["plugin1"], pluginResults["plugin1"])
+			assert.Equal(t, results[testPlugin1], pluginResults[testPlugin1])
 		} else if called == 1 {
 			assert.Equal(t, results, pluginResults)
 		} else {
-			assert.Fail(t, "sendreply shouldn't been called more than twice")
+			assert.Fail(t, "sendreply shouldn't be called more than twice")
 		}
 		called++
 	}
@@ -775,15 +821,17 @@ func TestRunPluginsWithMoreThanOnePrecondition(t *testing.T) {
 		mockPlugin.AssertExpectations(t)
 	}
 	ctx.AssertCalled(t, "Log")
-	assert.Equal(t, pluginResults["plugin1"], outputs["plugin1"])
-	assert.Equal(t, pluginResults["plugin2"], outputs["plugin2"])
+	assert.Equal(t, pluginResults[testPlugin1], outputs[testPlugin1])
+	assert.Equal(t, pluginResults[testPlugin2], outputs[testPlugin2])
 
 	assert.Equal(t, pluginResults, outputs)
 }
 
 // Crossplatform document with unrecognized precondition, steps must fail
 func TestRunPluginsWithUnrecognizedPrecondition(t *testing.T) {
-	pluginNames := []string{"plugin1", "plugin2"}
+	setIsSupportedMock()
+	defer restoreIsSupported()
+	pluginNames := []string{testPlugin1, testPlugin2}
 	pluginConfigs := make(map[string]model.PluginState)
 	pluginResults := make(map[string]*contracts.PluginResult)
 	pluginInstances := make(map[string]*plugin.Mock)
@@ -841,11 +889,11 @@ func TestRunPluginsWithUnrecognizedPrecondition(t *testing.T) {
 			result.StartDateTime = defaultTime
 		}
 		if called == 0 {
-			assert.Equal(t, results["plugin1"], pluginResults["plugin1"])
+			assert.Equal(t, results[testPlugin1], pluginResults[testPlugin1])
 		} else if called == 1 {
 			assert.Equal(t, results, pluginResults)
 		} else {
-			assert.Fail(t, "sendreply shouldn't been called more than twice")
+			assert.Fail(t, "sendreply shouldn't be called more than twice")
 		}
 		called++
 	}
@@ -863,8 +911,112 @@ func TestRunPluginsWithUnrecognizedPrecondition(t *testing.T) {
 		mockPlugin.AssertExpectations(t)
 	}
 	ctx.AssertCalled(t, "Log")
-	assert.Equal(t, pluginResults["plugin1"], outputs["plugin1"])
-	assert.Equal(t, pluginResults["plugin2"], outputs["plugin2"])
+	assert.Equal(t, pluginResults[testPlugin1], outputs[testPlugin1])
+	assert.Equal(t, pluginResults[testPlugin2], outputs[testPlugin2])
+
+	assert.Equal(t, pluginResults, outputs)
+}
+
+// Crossplatform document with unknown plugin, steps must fail
+func TestRunPluginsWithUnknownPlugin(t *testing.T) {
+	setIsSupportedMock()
+	defer restoreIsSupported()
+	pluginNames := []string{testPlugin1, testUnknownPlugin, testPlugin2}
+	pluginConfigs := make(map[string]model.PluginState)
+	pluginResults := make(map[string]*contracts.PluginResult)
+	pluginInstances := make(map[string]*plugin.Mock)
+	pluginRegistry := runpluginutil.PluginRegistry{}
+	documentID := "TestDocument"
+
+	var cancelFlag task.CancelFlag = task.NewChanneledCancelFlag()
+
+	ctx := context.NewMockDefault()
+	defaultTime := time.Now()
+	defaultOutput := ""
+	pluginConfigs2 := make([]model.PluginState, len(pluginNames))
+
+	preconditions := map[string]string{"platformType": "Linux"}
+
+	for index, name := range pluginNames {
+
+		// create an instance of our test object, but not if it is an unknown plugin
+		if name != testUnknownPlugin {
+			pluginInstances[name] = new(plugin.Mock)
+		}
+
+		// create configuration for execution
+		config := contracts.Configuration{
+			PluginID:              name,
+			IsPreconditionEnabled: true,
+			Preconditions:         preconditions,
+		}
+
+		// setup expectations
+		pluginConfigs[name] = model.PluginState{
+			Name:          name,
+			Id:            name,
+			Configuration: config,
+		}
+
+		if name == testUnknownPlugin {
+			pluginError := fmt.Errorf("Plugin with name %s is not supported by this version of ssm agent, please update to latest version", name)
+
+			pluginResults[name] = &contracts.PluginResult{
+				PluginName:     name,
+				StartDateTime:  defaultTime,
+				EndDateTime:    defaultTime,
+				StandardOutput: defaultOutput,
+				StandardError:  defaultOutput,
+				Status:         contracts.ResultStatusFailed,
+				Error:          pluginError,
+			}
+		} else {
+			pluginResults[name] = &contracts.PluginResult{
+				Output:         name,
+				PluginName:     name,
+				StartDateTime:  defaultTime,
+				EndDateTime:    defaultTime,
+				StandardOutput: defaultOutput,
+				StandardError:  defaultOutput,
+				Status:         contracts.ResultStatusSuccess,
+			}
+			pluginInstances[name].On("Execute", ctx, pluginConfigs[name].Configuration, cancelFlag).Return(*pluginResults[name])
+		}
+
+		pluginRegistry[name] = pluginInstances[name]
+
+		pluginConfigs2[index] = pluginConfigs[name]
+	}
+	called := 0
+	sendResponse := func(messageID string, pluginID string, results map[string]*contracts.PluginResult) {
+		for _, result := range results {
+			result.EndDateTime = defaultTime
+			result.StartDateTime = defaultTime
+		}
+		if called > 2 {
+			assert.Fail(t, "sendreply shouldn't be called more than three times")
+		} else if called == 2 {
+			assert.Equal(t, results, pluginResults)
+		}
+		called++
+	}
+	// call the code we are testing
+	outputs := RunPlugins(ctx, documentID, "", pluginConfigs2, pluginRegistry, sendResponse, nil, cancelFlag)
+
+	// fix the times expectation.
+	for _, result := range outputs {
+		result.EndDateTime = defaultTime
+		result.StartDateTime = defaultTime
+	}
+
+	// assert that the expectations were met
+	for _, mockPlugin := range pluginInstances {
+		mockPlugin.AssertExpectations(t)
+	}
+	ctx.AssertCalled(t, "Log")
+	assert.Equal(t, pluginResults[testPlugin1], outputs[testPlugin1])
+	assert.Equal(t, pluginResults[testUnknownPlugin], outputs[testUnknownPlugin])
+	assert.Equal(t, pluginResults[testPlugin2], outputs[testPlugin2])
 
 	assert.Equal(t, pluginResults, outputs)
 }

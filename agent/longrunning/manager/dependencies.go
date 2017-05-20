@@ -78,6 +78,6 @@ func getDataStoreLocation() (location, fileName string, err error) {
 
 // isPlatformSupported returns if target plugin supported by current platform.
 func isPlatformSupported(log log.T, pluginName string) bool {
-	isSupported, _ := plugin.IsPluginSupportedForCurrentPlatform(log, pluginName)
+	isSupported, _ := plugin.IsLongRunningPluginSupportedForCurrentPlatform(log, pluginName)
 	return isSupported
 }

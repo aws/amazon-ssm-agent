@@ -25,8 +25,8 @@ func loadPlatformDependentPlugins(context context.T) map[string]Plugin {
 	return make(map[string]Plugin)
 }
 
-// IsPluginSupportedForCurrentPlatform always returns true because currently, there is no plugin that particular
-// linux version doesn't support while other linux version does.
-func IsPluginSupportedForCurrentPlatform(log log.T, pluginName string) (bool, string) {
+// IsLongRunningPluginSupportedForCurrentPlatform always returns false because currently, there are no long-running plugins
+// supported on Linux
+func IsLongRunningPluginSupportedForCurrentPlatform(log log.T, pluginName string) (bool, string) {
 	return false, ""
 }

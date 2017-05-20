@@ -27,10 +27,6 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/plugins/pluginutil"
 )
 
-const (
-	PluginNameAwsCloudwatch = "aws:cloudWatch"
-)
-
 // loadPlatformDepedentPlugins loads all registered long running plugins in memory
 func loadPlatformDependentPlugins(context context.T) map[string]Plugin {
 	log := context.Log()
@@ -42,7 +38,7 @@ func loadPlatformDependentPlugins(context context.T) map[string]Plugin {
 	var cwInfo PluginInfo
 
 	//initializing cloudwatch info
-	cwInfo.Name = PluginNameAwsCloudwatch
+	cwInfo.Name = appconfig.PluginNameCloudWatch
 	cwInfo.Configuration = ""
 	cwInfo.State = PluginState{}
 
@@ -51,25 +47,26 @@ func loadPlatformDependentPlugins(context context.T) map[string]Plugin {
 		cw.Handler = handler
 
 		//add the registered plugin in the map
-		longrunningplugins[PluginNameAwsCloudwatch] = cw
+		longrunningplugins[appconfig.PluginNameCloudWatch] = cw
 	} else {
-		log.Errorf("failed to create long-running plugin %s %v", PluginNameAwsCloudwatch, err)
+		log.Errorf("failed to create long-running plugin %s %v", appconfig.PluginNameCloudWatch, err)
 	}
 
 	return longrunningplugins
 }
 
-// IsPluginSupportedForCurrentPlatform returns true if current platform supports the plugin with given name.
-func IsPluginSupportedForCurrentPlatform(log log.T, pluginName string) (bool, string) {
+// IsLongRunningPluginSupportedForCurrentPlatform returns true if current platform supports the plugin with given name.
+func IsLongRunningPluginSupportedForCurrentPlatform(log log.T, pluginName string) (bool, string) {
 	platformName, _ := platform.PlatformName(log)
 	platformVersion, _ := platform.PlatformVersion(log)
 
-	if isPlatformNanoServer, err := platform.IsPlatformNanoServer(log); err == nil && isPlatformNanoServer {
-		//if the current OS is Nano server, SSM Agent doesn't support the following plugins.
-		if pluginName == appconfig.PluginNameDomainJoin ||
-			pluginName == appconfig.PluginNameCloudWatch {
+	if pluginName == appconfig.PluginNameCloudWatch {
+		if isPlatformNanoServer, err := platform.IsPlatformNanoServer(log); err == nil && isPlatformNanoServer {
+			//if the current OS is Nano server, SSM Agent doesn't support the following plugins.
 			return false, fmt.Sprintf("%s (Nano Server) v%s", platformName, platformVersion)
+		} else {
+			return true, fmt.Sprintf("%s v%s", platformName, platformVersion)
 		}
 	}
-	return true, fmt.Sprintf("%s v%s", platformName, platformVersion)
+	return false, fmt.Sprintf("%s v%s", platformName, platformVersion)
 }
