@@ -111,9 +111,6 @@ const (
 	// PluginNameAwsSoftwareInventory is the name for inventory plugin
 	PluginNameAwsSoftwareInventory = "aws:softwareInventory"
 
-	AppConfigFileName    = "amazon-ssm-agent.json"
-	SeelogConfigFileName = "seelog.xml"
-
 	// PluginNameDomainJoin is the name of domain join plugin
 	PluginNameDomainJoin = "aws:domainJoin"
 
@@ -128,4 +125,13 @@ const (
 
 	// PluginNameRefreshAssociation is the name of refresh association plugin
 	PluginNameRefreshAssociation = "aws:refreshAssociation"
+
+	// PluginNameAwsPowerShellModule is the name of the PowerShell Module
+	PluginNameAwsPowerShellModule = "aws:psModule"
+
+	// PluginNameAwsApplications is the name of the Applications plugin
+	PluginNameAwsApplications = "aws:applications"
+
+	AppConfigFileName    = "amazon-ssm-agent.json"
+	SeelogConfigFileName = "seelog.xml"
 )

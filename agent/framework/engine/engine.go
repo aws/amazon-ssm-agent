@@ -43,7 +43,11 @@ const (
 	failStep                 string = "fail"
 	unsupportedStep          string = "unsupported"
 	unrecognizedPrecondition string = "unrecognizedPrecondition"
+	unknownPlugin            string = "unknownPlugin"
 )
+
+// Assign method to global variables to allow unittest to override
+var isSupportedPlugin = plugin.IsPluginSupportedForCurrentPlatform
 
 // RunPlugins executes a set of plugins. The plugin configurations are given in a map with pluginId as key.
 // Outputs the results of running the plugins, indexed by pluginId.
@@ -126,8 +130,8 @@ func RunPlugins(
 			CancelFlag:  cancelFlag,
 		}
 
-		isSupported, platformDetail := plugin.IsPluginSupportedForCurrentPlatform(context.Log(), pluginName)
-		operation, moreDetails := getStepExecutionOperation(context.Log(), isSupported, pluginHandlerFound, configuration.IsPreconditionEnabled, configuration.Preconditions)
+		isKnown, isSupported, platformDetail := isSupportedPlugin(context.Log(), pluginName)
+		operation, moreDetails := getStepExecutionOperation(context.Log(), isKnown, isSupported, pluginHandlerFound, configuration.IsPreconditionEnabled, configuration.Preconditions)
 
 		switch operation {
 		case executeStep:
@@ -163,6 +167,11 @@ func RunPlugins(
 			context.Log().Error(err)
 		case unsupportedStep:
 			err := fmt.Errorf("Plugin with name %s is not supported in current platform!\n%s", pluginName, platformDetail)
+			pluginOutputs[pluginID].Status = contracts.ResultStatusFailed
+			pluginOutputs[pluginID].Error = err
+			context.Log().Error(err)
+		case unknownPlugin:
+			err := fmt.Errorf("Plugin with name %s is not supported by this version of ssm agent, please update to latest version", pluginName)
 			pluginOutputs[pluginID].Status = contracts.ResultStatusFailed
 			pluginOutputs[pluginID].Error = err
 			context.Log().Error(err)
@@ -223,6 +232,7 @@ func runPlugin(
 // Checks plugin compatibility and step precondition and returns if it should be executed, skipped or failed
 func getStepExecutionOperation(
 	log log.T,
+	isKnown bool,
 	isSupported bool,
 	isPluginHandlerFound bool,
 	isPreconditionEnabled bool,
@@ -234,7 +244,9 @@ func getStepExecutionOperation(
 
 	if !isPreconditionEnabled {
 		// 1.x or 2.0 document
-		if !isSupported {
+		if !isKnown {
+			return unknownPlugin, ""
+		} else if !isSupported {
 			return unsupportedStep, ""
 		} else if len(preconditions) > 0 || !isPluginHandlerFound {
 			// if 1.x or 2.0 document contains precondition or plugin not found, failStep
@@ -248,7 +260,9 @@ func getStepExecutionOperation(
 			log.Debug("Cross-platform Precondition is not present")
 
 			// precondition is not present - if pluginFound executeStep, else skipStep
-			if isSupported && isPluginHandlerFound {
+			if !isKnown {
+				return unknownPlugin, ""
+			} else if isSupported && isPluginHandlerFound {
 				return executeStep, ""
 			} else {
 				return skipStep, ""
@@ -272,10 +286,9 @@ func getStepExecutionOperation(
 					isAllowed = false
 				}
 			}
-
-			if !isAllowed ||
-				!isSupported ||
-				!isPluginHandlerFound {
+			if isAllowed && !isKnown {
+				return unknownPlugin, ""
+			} else if !isAllowed || !isSupported || !isPluginHandlerFound {
 				return skipStep, ""
 			} else if len(unrecognizedPreconditionList) > 0 {
 				return unrecognizedPrecondition, strings.Join(unrecognizedPreconditionList, ", ")

@@ -16,17 +16,24 @@
 package plugin
 
 import (
+	"fmt"
+
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/framework/runpluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/platform"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/pluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/runscript"
 )
 
-// IsPluginSupportedForCurrentPlatform always returns true because currently, there is no plugin that particular
-// linux version doesn't support while other linux version does.
-func IsPluginSupportedForCurrentPlatform(log log.T, pluginName string) (bool, string) {
-	return true, ""
+// IsPluginSupportedForCurrentPlatform always returns true for plugins that exist for linux because currently there
+// are no plugins that are supported on only one distribution or version of linux.
+func IsPluginSupportedForCurrentPlatform(log log.T, pluginName string) (isKnown bool, isSupported bool, message string) {
+	_, known := allPlugins[pluginName]
+	platformName, _ := platform.PlatformName(log)
+	platformVersion, _ := platform.PlatformVersion(log)
+
+	return known, true, fmt.Sprintf("%s v%s", platformName, platformVersion)
 }
 
 // loadPlatformDependentPlugins registers platform dependent plugins
