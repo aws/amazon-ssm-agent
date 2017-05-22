@@ -25,16 +25,24 @@ import (
 
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/go-ini/ini"
 )
 
 const (
-	systemReleaseCommand   = "/etc/system-release"
-	redhatReleaseCommand   = "/etc/redhat-release"
+	osReleaseFile          = "/etc/os-release"
+	systemReleaseFile      = "/etc/system-release"
+	redhatReleaseFile      = "/etc/redhat-release"
 	unameCommand           = "/usr/bin/uname"
 	lsbReleaseCommand      = "lsb_release"
 	fetchingDetailsMessage = "fetching platform details from %v"
 	errorOccurredMessage   = "There was an error running %v, err: %v"
 )
+
+// this structure is similar to the /etc/os-release file
+type osRelease struct {
+	NAME       string
+	VERSION_ID string
+}
 
 func getPlatformName(log log.T) (value string, err error) {
 	value, _, err = getPlatformDetails(log)
@@ -61,14 +69,30 @@ func getPlatformDetails(log log.T) (name string, version string, err error) {
 	name = notAvailableMessage
 	version = notAvailableMessage
 
-	if fileutil.Exists(systemReleaseCommand) {
-		log.Debugf(fetchingDetailsMessage, systemReleaseCommand)
+	if fileutil.Exists(osReleaseFile) {
 
-		contents, err = fileutil.ReadAllText(systemReleaseCommand)
+		log.Debugf(fetchingDetailsMessage, osReleaseFile)
+		contents := new(osRelease)
+		err = ini.MapTo(contents, osReleaseFile)
+		log.Debugf(commandOutputMessage, contents)
+		if err != nil {
+			log.Debugf(errorOccurredMessage, osReleaseFile, err)
+			return
+		}
+
+		name = contents.NAME
+		version = contents.VERSION_ID
+
+	} else if fileutil.Exists(systemReleaseFile) {
+		// We want to fall back to legacy behaviour in case some older versions of
+		// linux distributions do not have the or-release file
+		log.Debugf(fetchingDetailsMessage, systemReleaseFile)
+
+		contents, err = fileutil.ReadAllText(systemReleaseFile)
 		log.Debugf(commandOutputMessage, contents)
 
 		if err != nil {
-			log.Debugf(errorOccurredMessage, systemReleaseCommand, err)
+			log.Debugf(errorOccurredMessage, systemReleaseFile, err)
 			return
 		}
 		if strings.Contains(contents, "Amazon") {
@@ -83,15 +107,19 @@ func getPlatformDetails(log log.T) (name string, version string, err error) {
 			data := strings.Split(contents, "release")
 			name = strings.TrimSpace(data[0])
 			version = strings.TrimSpace(data[1])
+		} else if strings.Contains(contents, "SLES") {
+			data := strings.Split(contents, "release")
+			name = strings.TrimSpace(data[0])
+			version = strings.TrimSpace(data[1])
 		}
-	} else if fileutil.Exists(redhatReleaseCommand) {
-		log.Debugf(fetchingDetailsMessage, redhatReleaseCommand)
+	} else if fileutil.Exists(redhatReleaseFile) {
+		log.Debugf(fetchingDetailsMessage, redhatReleaseFile)
 
-		contents, err = fileutil.ReadAllText(redhatReleaseCommand)
+		contents, err = fileutil.ReadAllText(redhatReleaseFile)
 		log.Debugf(commandOutputMessage, contents)
 
 		if err != nil {
-			log.Debugf(errorOccurredMessage, redhatReleaseCommand, err)
+			log.Debugf(errorOccurredMessage, redhatReleaseFile, err)
 			return
 		}
 		if strings.Contains(contents, "Red Hat") {
