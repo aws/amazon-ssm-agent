@@ -217,11 +217,12 @@ type AgentConfiguration struct {
 }
 
 type DocumentResult struct {
-	DocumentName  string
-	MessageID     string
-	AssociationID string
-	PluginResults map[string]*PluginResult
-	Status        ResultStatus
-	LastPlugin    string
-	NPlugins      int
+	DocumentName    string
+	DocumentVersion string
+	MessageID       string
+	AssociationID   string
+	PluginResults   map[string]*PluginResult
+	Status          ResultStatus
+	LastPlugin      string
+	NPlugins        int
 }

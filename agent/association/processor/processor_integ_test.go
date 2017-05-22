@@ -51,12 +51,14 @@ func TestParseAssociationWithAssociationVersion1_2(t *testing.T) {
 	instanceID := "i-test"
 	assocId := "b2f71a28-cbe1-4429-b848-26c7e1f5ad0d"
 	associationName := "testV1.2"
+	documentVersion := "1"
 	assocRawData := model.InstanceAssociation{
 		CreateDate: time.Now(),
 		Document:   &sampleFile,
 	}
 	assocRawData.Association = &ssm.InstanceAssociationSummary{}
 	assocRawData.Association.Name = &associationName
+	assocRawData.Association.DocumentVersion = &documentVersion
 	assocRawData.Association.AssociationId = &assocId
 	assocRawData.Association.InstanceId = &instanceID
 
@@ -74,6 +76,7 @@ func TestParseAssociationWithAssociationVersion1_2(t *testing.T) {
 	documentInfo.InstanceID = instanceID
 	documentInfo.MessageID = fmt.Sprintf("aws.ssm.%v.%v", assocId, instanceID)
 	documentInfo.DocumentName = associationName
+	documentInfo.DocumentVersion = documentVersion
 
 	pluginName := "aws:applications"
 	pluginsInfo := make(map[string]docModel.PluginState)
@@ -119,12 +122,14 @@ func TestParseAssociationWithAssociationVersion2_0(t *testing.T) {
 	instanceID := "i-test"
 	assocId := "b2f71a28-cbe1-4429-b848-26c7e1f5ad0d"
 	associationName := "testV2.0"
+	documentVersion := "1"
 	assocRawData := model.InstanceAssociation{
 		CreateDate: time.Now(),
 		Document:   &sampleFile,
 	}
 	assocRawData.Association = &ssm.InstanceAssociationSummary{}
 	assocRawData.Association.Name = &associationName
+	assocRawData.Association.DocumentVersion = &documentVersion
 	assocRawData.Association.AssociationId = &assocId
 	assocRawData.Association.InstanceId = &instanceID
 
@@ -146,6 +151,7 @@ func TestParseAssociationWithAssociationVersion2_0(t *testing.T) {
 	documentInfo.InstanceID = instanceID
 	documentInfo.MessageID = fmt.Sprintf("aws.ssm.%v.%v", assocId, instanceID)
 	documentInfo.DocumentName = associationName
+	documentInfo.DocumentVersion = documentVersion
 
 	instancePluginsInfo := make([]docModel.PluginState, 2)
 
