@@ -18,6 +18,7 @@ import (
 	"fmt"
 	"net/http"
 	"runtime"
+	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/log"
@@ -42,6 +43,15 @@ type Service interface {
 		associationID string,
 		instanceID string,
 		executionResult *ssm.InstanceAssociationExecutionResult) (response *ssm.UpdateInstanceAssociationStatusOutput, err error)
+	PutComplianceItems(
+		log log.T,
+		executionTime *time.Time,
+		executionType string,
+		executionId string,
+		instanceId string,
+		complianceType string,
+		itemContentHash string,
+		items []*ssm.ComplianceItemEntry) (response *ssm.PutComplianceItemsOutput, err error)
 	SendCommand(log log.T,
 		documentName string,
 		instanceIDs []string,
@@ -144,6 +154,42 @@ func (svc *sdkService) ListInstanceAssociations(log log.T, instanceID string, ne
 		return
 	}
 	log.Debug("ListInstanceAssociations Response", response)
+	return
+}
+
+// PutComplianceItem calls to PutComplianceItem SSM API.
+func (svc *sdkService) PutComplianceItems(
+	log log.T,
+	executionTime *time.Time,
+	executionType string,
+	executionId string,
+	instanceId string,
+	complianceType string,
+	itemContentHash string,
+	items []*ssm.ComplianceItemEntry) (response *ssm.PutComplianceItemsOutput, err error) {
+
+	executionSummary := &ssm.ComplianceExecutionSummary{
+		ExecutionId:   aws.String(executionId),
+		ExecutionType: aws.String(executionType),
+		ExecutionTime: executionTime}
+	params := &ssm.PutComplianceItemsInput{
+		ResourceId:       aws.String(instanceId),
+		ResourceType:     aws.String("ManagedInstance"),
+		ComplianceType:   aws.String(complianceType),
+		ExecutionSummary: executionSummary,
+		ItemContentHash:  aws.String(itemContentHash),
+		Items:            items,
+	}
+
+	response, err = svc.sdk.PutComplianceItems(params)
+	if err != nil {
+		errCode := sdkutil.GetAwsErrorCode(err)
+		if errCode != "UnknownOperationException" && errCode != "AccessDeniedException" {
+			sdkutil.HandleAwsError(log, err, ssmStopPolicy)
+		}
+		return
+	}
+	log.Debug("PutComplianceItems Response ", response)
 	return
 }
 
