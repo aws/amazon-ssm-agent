@@ -199,8 +199,7 @@ func downloadFile(log log.T, file *File) (string, error) {
 	downloadInput := artifact.DownloadInput{
 		SourceURL: file.DownloadLocation,
 		// TODO don't hardcode sha256 - use multiple checksums
-		SourceHashValue: file.Checksums["sha256"],
-		SourceHashType:  "sha256",
+		SourceChecksums: file.Checksums,
 	}
 
 	downloadOutput, downloadErr := networkdep.Download(log, downloadInput)
