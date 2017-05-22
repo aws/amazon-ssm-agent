@@ -520,8 +520,7 @@ func TestDownloadFile(t *testing.T) {
 				// verify download input
 				input := artifact.DownloadInput{
 					SourceURL:       testdata.file.DownloadLocation,
-					SourceHashType:  "sha256",
-					SourceHashValue: "asdf",
+					SourceChecksums: map[string]string{"sha256": "asdf"},
 				}
 				assert.Equal(t, input, testdata.network.downloadInput)
 			}
