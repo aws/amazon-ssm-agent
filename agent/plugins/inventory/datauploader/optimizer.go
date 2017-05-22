@@ -54,11 +54,15 @@ type Impl struct {
 }
 
 func NewOptimizerImpl(context context.T) (*Impl, error) {
+	return NewOptimizerImplWithLocation(context.Log(), appconfig.InventoryRootDirName, appconfig.InventoryContentHashFileName)
+}
+
+func NewOptimizerImplWithLocation(log log.T, rootDir string, fileName string) (*Impl, error) {
 	var optimizer = Impl{}
 	var machineID, content string
 	var err error
 
-	optimizer.log = context.Log()
+	optimizer.log = log
 
 	//get machineID - return if not able to detect machineID
 	if machineID, err = machineIDProvider(); err != nil {
@@ -69,8 +73,8 @@ func NewOptimizerImpl(context context.T) (*Impl, error) {
 
 	optimizer.location = filepath.Join(appconfig.DefaultDataStorePath,
 		machineID,
-		appconfig.InventoryRootDirName,
-		appconfig.InventoryContentHashFileName)
+		rootDir,
+		fileName)
 
 	contentHashStore = make(map[string]string)
 

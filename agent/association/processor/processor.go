@@ -16,13 +16,14 @@ package processor
 
 import (
 	"fmt"
-	"path"
-	"strings"
 	"sync"
 	"time"
 
 	"path/filepath"
 	"regexp"
+
+	"path"
+	"strings"
 
 	"github.com/aws/amazon-ssm-agent/agent/association/cache"
 	"github.com/aws/amazon-ssm-agent/agent/association/model"
@@ -30,6 +31,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/association/schedulemanager/signal"
 	assocScheduler "github.com/aws/amazon-ssm-agent/agent/association/scheduler"
 	"github.com/aws/amazon-ssm-agent/agent/association/service"
+	complianceUploader "github.com/aws/amazon-ssm-agent/agent/compliance/uploader"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/docmanager"
@@ -52,13 +54,14 @@ const (
 
 // Processor contains the logic for processing association
 type Processor struct {
-	pollJob    *scheduler.Job
-	assocSvc   service.T
-	context    context.T
-	agentInfo  *contracts.AgentInfo
-	stopSignal chan bool
-	proc       processor.Processor
-	resChan    chan contracts.DocumentResult
+	pollJob            *scheduler.Job
+	assocSvc           service.T
+	complianceUploader complianceUploader.T
+	context            context.T
+	agentInfo          *contracts.AgentInfo
+	stopSignal         chan bool
+	proc               processor.Processor
+	resChan            chan contracts.DocumentResult
 }
 
 var lock sync.RWMutex
@@ -79,16 +82,18 @@ func NewAssociationProcessor(context context.T, instanceID string) *Processor {
 	}
 
 	assocSvc := service.NewAssociationService(name)
+	uploader := complianceUploader.NewComplianceUploader(context)
 
 	//TODO Rename everything to service and move package to framework
 	//association has no cancel worker
 	proc := processor.NewEngineProcessor(assocContext, documentWorkersLimit, documentWorkersLimit, []docModel.DocumentType{docModel.Association})
 	return &Processor{
-		context:    assocContext,
-		assocSvc:   assocSvc,
-		agentInfo:  &agentInfo,
-		stopSignal: make(chan bool),
-		proc:       proc,
+		context:            assocContext,
+		assocSvc:           assocSvc,
+		complianceUploader: uploader,
+		agentInfo:          &agentInfo,
+		stopSignal:         make(chan bool),
+		proc:               proc,
 	}
 }
 
@@ -130,6 +135,7 @@ func (p *Processor) ProcessAssociation() {
 	}
 
 	p.assocSvc.CreateNewServiceIfUnHealthy(log)
+	p.complianceUploader.CreateNewServiceIfUnHealthy(log)
 
 	if associations, err = p.assocSvc.ListInstanceAssociations(log, instanceID); err != nil {
 		log.Errorf("Unable to load instance associations, %v", err)
@@ -166,6 +172,14 @@ func (p *Processor) ProcessAssociation() {
 				times.ToIso8601UTC(time.Now()),
 				err.Error(),
 				service.NoOutputUrl)
+
+			p.complianceUploader.UpdateAssociationCompliance(
+				*assoc.Association.AssociationId,
+				*assoc.Association.InstanceId,
+				*assoc.Association.Name,
+				*assoc.Association.DocumentVersion,
+				contracts.AssociationStatusFailed,
+				time.Now().UTC())
 			continue
 		}
 
@@ -184,6 +198,14 @@ func (p *Processor) ProcessAssociation() {
 					times.ToIso8601UTC(time.Now()),
 					message,
 					service.NoOutputUrl)
+
+				p.complianceUploader.UpdateAssociationCompliance(
+					*assoc.Association.AssociationId,
+					*assoc.Association.InstanceId,
+					*assoc.Association.Name,
+					*assoc.Association.DocumentVersion,
+					contracts.AssociationStatusFailed,
+					time.Now().UTC())
 				continue
 			}
 		}
@@ -243,6 +265,14 @@ func (p *Processor) runScheduledAssociation(log log.T) {
 				times.ToIso8601UTC(time.Now()),
 				err.Error(),
 				service.NoOutputUrl)
+			p.complianceUploader.UpdateAssociationCompliance(
+				*scheduledAssociation.Association.AssociationId,
+				*scheduledAssociation.Association.InstanceId,
+				*scheduledAssociation.Association.Name,
+				*scheduledAssociation.Association.DocumentVersion,
+				contracts.AssociationStatusFailed,
+				time.Now().UTC())
+
 		}
 
 		return
@@ -277,6 +307,13 @@ func (p *Processor) runScheduledAssociation(log log.T) {
 			times.ToIso8601UTC(time.Now()),
 			err.Error(),
 			service.NoOutputUrl)
+		p.complianceUploader.UpdateAssociationCompliance(
+			*scheduledAssociation.Association.AssociationId,
+			*scheduledAssociation.Association.InstanceId,
+			*scheduledAssociation.Association.Name,
+			*scheduledAssociation.Association.DocumentVersion,
+			contracts.AssociationStatusFailed,
+			time.Now().UTC())
 		return
 	}
 
@@ -423,7 +460,8 @@ func (r *Processor) pluginExecutionReport(
 func (r *Processor) associationExecutionReport(
 	log log.T,
 	associationID string,
-	associationName string,
+	documentName string,
+	documentVersion string,
 	outputs map[string]*contracts.PluginResult,
 	totalNumberOfPlugins int,
 	errorCode string,
@@ -442,13 +480,21 @@ func (r *Processor) associationExecutionReport(
 	r.assocSvc.UpdateInstanceAssociationStatus(
 		log,
 		associationID,
-		associationName,
+		documentName,
 		instanceID,
 		associationStatus,
 		errorCode,
 		times.ToIso8601UTC(time.Now()),
 		executionSummary,
 		outputUrl)
+
+	r.complianceUploader.UpdateAssociationCompliance(
+		associationID,
+		instanceID,
+		documentName,
+		documentVersion,
+		associationStatus,
+		time.Now().UTC())
 }
 
 func (r *Processor) lisenToResponses() {
@@ -471,6 +517,7 @@ func (r *Processor) lisenToResponses() {
 					log,
 					res.AssociationID,
 					res.DocumentName,
+					res.DocumentVersion,
 					res.PluginResults,
 					res.NPlugins,
 					contracts.AssociationErrorCodeExecutionError,
@@ -485,6 +532,7 @@ func (r *Processor) lisenToResponses() {
 					log,
 					res.AssociationID,
 					res.DocumentName,
+					res.DocumentVersion,
 					res.PluginResults,
 					res.NPlugins,
 					contracts.AssociationErrorCodeNoError,
