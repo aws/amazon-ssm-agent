@@ -1,5 +1,6 @@
 Latest
 ===============
+- Added support for step-level preconditions
 - Added support for rate/interval based schedule expressions for associations
 - Added Summary and PackageID fields to inventory's aws:application gatherer
 - Changed inventory's aws:application gatherer to use win32_processor: addressWidth to detect OS architecture
