@@ -14,6 +14,8 @@
 package ssm
 
 import (
+	"time"
+
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/aws-sdk-go/service/ssm"
 	"github.com/stretchr/testify/mock"
@@ -129,4 +131,20 @@ func (m *Mock) UpdateInstanceInformation(log log.T, agentVersion, agentStatus, a
 func (m *Mock) GetParameters(log log.T, paramNames []string) (response *ssm.GetParametersOutput, err error) {
 	args := m.Called(log, paramNames)
 	return args.Get(0).(*ssm.GetParametersOutput), args.Error(1)
+}
+
+// PutComplianceItem mocks the PutComplianceItem function
+func (m *Mock) PutComplianceItems(
+	log log.T,
+	executionTime *time.Time,
+	executionType string,
+	executionId string,
+	instanceId string,
+	complianceType string,
+	itemContentHash string,
+	items []*ssm.ComplianceItemEntry) (response *ssm.PutComplianceItemsOutput, err error) {
+
+	args := m.Called(log, executionTime, executionType, executionId, instanceId, complianceType, itemContentHash, items)
+	return args.Get(0).(*ssm.PutComplianceItemsOutput), args.Error(1)
+
 }

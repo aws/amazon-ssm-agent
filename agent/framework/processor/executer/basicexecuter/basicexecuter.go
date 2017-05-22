@@ -61,6 +61,7 @@ func run(context context.T,
 	associationID := docState.DocumentInformation.AssociationID
 	nPlugins := len(docState.InstancePluginsInformation)
 	documentName := docState.DocumentInformation.DocumentName
+	documentVersion := docState.DocumentInformation.DocumentVersion
 	//status channel for plugins update
 	statusChan := make(chan contracts.PluginResult)
 	var wg sync.WaitGroup
@@ -79,13 +80,14 @@ func run(context context.T,
 			//TODO decompose this function to return only Status
 			status, _, _ := docmanager.DocumentResultAggregator(context.Log(), res.PluginName, results)
 			docResult := contracts.DocumentResult{
-				Status:        status,
-				PluginResults: results,
-				LastPlugin:    res.PluginName,
-				AssociationID: associationID,
-				MessageID:     messageID,
-				NPlugins:      nPlugins,
-				DocumentName:  documentName,
+				Status:          status,
+				PluginResults:   results,
+				LastPlugin:      res.PluginName,
+				AssociationID:   associationID,
+				MessageID:       messageID,
+				NPlugins:        nPlugins,
+				DocumentName:    documentName,
+				DocumentVersion: documentVersion,
 			}
 			resChan <- docResult
 		}
@@ -100,13 +102,14 @@ func run(context context.T,
 	//send DocLevel response
 	status, _, runtimeStatuses := docmanager.DocumentResultAggregator(context.Log(), "", outputs)
 	result := contracts.DocumentResult{
-		Status:        status,
-		PluginResults: outputs,
-		LastPlugin:    "",
-		MessageID:     messageID,
-		AssociationID: associationID,
-		NPlugins:      nPlugins,
-		DocumentName:  documentName,
+		Status:          status,
+		PluginResults:   outputs,
+		LastPlugin:      "",
+		MessageID:       messageID,
+		AssociationID:   associationID,
+		NPlugins:        nPlugins,
+		DocumentName:    documentName,
+		DocumentVersion: documentVersion,
 	}
 	resChan <- result
 	//TODO runtimeStatus is redundant and will be removed in future

@@ -65,6 +65,10 @@ const (
 	CustomInventoryRootDirName   = "custom"
 	InventoryContentHashFileName = "contentHash"
 
+	//aws-ssm-agent bookkeeping constants for compliance
+	ComplianceRootDirName         = "compliance"
+	ComplianceContentHashFileName = "contentHash"
+
 	// DefaultDocumentRootDirName is the root directory for storing command states
 	DefaultDocumentRootDirName = "document"
 

@@ -57,6 +57,7 @@ type DocumentInfo struct {
 	CreatedDate         string
 	DocumentName        string
 	IsCommand           bool
+	DocumentVersion     string
 	DocumentStatus      contracts.ResultStatus
 	DocumentTraceOutput string
 	RuntimeStatus       map[string]*contracts.PluginRuntimeStatus
