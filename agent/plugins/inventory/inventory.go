@@ -37,7 +37,6 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/plugins/inventory/gatherers/application"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/inventory/gatherers/awscomponent"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/inventory/gatherers/custom"
-	"github.com/aws/amazon-ssm-agent/agent/plugins/inventory/gatherers/instancedetailedinformation"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/inventory/gatherers/network"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/inventory/gatherers/windowsUpdate"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/inventory/model"
@@ -68,13 +67,12 @@ var (
 // PluginInput represents configuration which is applied to inventory plugin during execution.
 type PluginInput struct {
 	contracts.PluginInput
-	Applications                string
-	AWSComponents               string
-	NetworkConfig               string
-	WindowsUpdates              string
-	InstanceDetailedInformation string
-	CustomInventory             string
-	CustomInventoryDirectory    string
+	Applications             string
+	AWSComponents            string
+	NetworkConfig            string
+	WindowsUpdates           string
+	CustomInventory          string
+	CustomInventoryDirectory string
 }
 
 // decoupling schedulemanager.Schedules() for easy testability
@@ -362,13 +360,6 @@ func (p *Plugin) ValidateInventoryInput(context context.T, input PluginInput) (c
 
 	//checking windows updates gatherer
 	if canGathererRun, gatherer, cfg, err = p.validatePredefinedGatherer(context, input.WindowsUpdates, windowsUpdate.GathererName); err != nil {
-		return
-	} else if canGathererRun {
-		configuredGatherers[gatherer] = cfg
-	}
-
-	//checking instance detailed information gatherer
-	if canGathererRun, gatherer, cfg, err = p.validatePredefinedGatherer(context, input.InstanceDetailedInformation, instancedetailedinformation.GathererName); err != nil {
 		return
 	} else if canGathererRun {
 		configuredGatherers[gatherer] = cfg
