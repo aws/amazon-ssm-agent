@@ -40,16 +40,16 @@ var (
 	rpmCmdArgToGetAllApplications = "-qa"
 	rpmQueryFormat                = "--queryformat"
 	rpmQueryFormatArgs            = `\{"Name":"%{NAME}","Publisher":"%{VENDOR}","Version":"%{VERSION}","InstalledTime":"%{INSTALLTIME}","ApplicationType":"%{GROUP}","Architecture":"%{ARCH}","Url":"%{URL}",` +
-		`"Summary":"` + mark(`%{Summary}`) + `","PackageId":"%{SourceRPM}"\},`
+		`"Summary":"` + mark(`%{Summary}`) + `","PackageID":"%{SourceRPM}"\},`
 
 	// dpkg query commands related constants
 	dpkgCmd                      = "dpkg-query"
 	dpkgArgsToGetAllApplications = "-W"
 	dpkgQueryFormat              = `-f={"Name":"${Package}","Publisher":"${Maintainer}","Version":"${Version}","ApplicationType":"${Section}","Architecture":"${Architecture}","Url":"${Homepage}",` +
 		`"Summary":"` + mark(`${Description}`) + `",` +
-		// PackageId should be something like ${Filename}, but for some reason that field does not get printed,
-		// so we build PackageId from parts
-		`"PackageId":"${Package}_${Version}_${Architecture}.deb"},`
+		// PackageID should be something like ${Filename}, but for some reason that field does not get printed,
+		// so we build PackageID from parts
+		`"PackageID":"${Package}_${Version}_${Architecture}.deb"},`
 )
 
 func randomString(length int) string {
