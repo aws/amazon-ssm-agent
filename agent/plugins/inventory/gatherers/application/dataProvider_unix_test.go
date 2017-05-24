@@ -27,17 +27,17 @@ var (
 	sampleData = `{"Name":"amazon-ssm-agent","Version":"1.2.0.0-1","Publisher":"Amazon.com, Inc. <ec2-ssm-feedback@amazon.com>",` +
 		`"ApplicationType":"admin","Architecture":"amd64","Url":"","Summary":"` +
 		mark(`Description with "quotes" 'and' `+"tabs\t"+` and
-		new lines`) + `","PackageId":"amazon-ssm-agent_1.2_amd64.rpm"},` +
+		new lines`) + `","PackageID":"amazon-ssm-agent_1.2_amd64.rpm"},` +
 
 		`{"Name":"adduser","Version":"3.113+nmu3ubuntu3","Publisher":"Ubuntu Core Developers <ubuntu-devel-discuss@lists.ubuntu.com>",` +
 		`"ApplicationType":"admin","Architecture":"all","Url":"http://alioth.debian.org/projects/adduser/",` +
 		`"Summary":"` + mark(`add and remove users and groups
  This package includes the 'adduser' and 'deluser' commands for creating
- and removing users.`) + `","PackageId":"adduser_3.113+nmu3ubuntu4_all.deb"},` +
+ and removing users.`) + `","PackageID":"adduser_3.113+nmu3ubuntu4_all.deb"},` +
 
 		`{"Name":"sed","Publisher":"Amazon.com","Version":"4.2.1","InstalledTime":"1454346676",` +
 		`"ApplicationType":"Applications/Text","Architecture":"x86_64","Url":"http://sed.sourceforge.net/",` +
-		`"Summary":"` + mark(`A GNU stream text editor`) + `","PackageId":"sed-4.2.1-7.9.amzn1.src.rpm"},` +
+		`"Summary":"` + mark(`A GNU stream text editor`) + `","PackageID":"sed-4.2.1-7.9.amzn1.src.rpm"},` +
 
 		`{"Name":"sed","Version":"4.2.2-7","Publisher":"Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>",` +
 		`"ApplicationType":"utils","Architecture":"amd64","Url":"http://www.gnu.org/software/sed/",` +
@@ -45,7 +45,7 @@ var (
 sed reads the specified files or the standard input if no
 files are specified, makes editing changes according to a
 list of commands, and writes the results to the standard
-output.`) + `","PackageId":"sed_4.2.2-7_amd64.deb"},`
+output.`) + `","PackageID":"sed_4.2.2-7_amd64.deb"},`
 )
 
 var sampleDataParsed = []model.ApplicationData{
@@ -57,7 +57,7 @@ var sampleDataParsed = []model.ApplicationData{
 		Architecture:    "x86_64",
 		URL:             "",
 		Summary:         "Description with \"quotes\" 'and' tabs\t and",
-		PackageId:       "amazon-ssm-agent_1.2_amd64.rpm",
+		PackageID:       "amazon-ssm-agent_1.2_amd64.rpm",
 	},
 	{
 		Name:            "adduser",
@@ -67,7 +67,7 @@ var sampleDataParsed = []model.ApplicationData{
 		Architecture:    "all",
 		URL:             "http://alioth.debian.org/projects/adduser/",
 		Summary:         "add and remove users and groups",
-		PackageId:       "adduser_3.113+nmu3ubuntu4_all.deb",
+		PackageID:       "adduser_3.113+nmu3ubuntu4_all.deb",
 	},
 	{
 		Name:            "sed",
@@ -78,7 +78,7 @@ var sampleDataParsed = []model.ApplicationData{
 		Architecture:    "x86_64",
 		URL:             "http://sed.sourceforge.net/",
 		Summary:         "A GNU stream text editor",
-		PackageId:       "sed-4.2.1-7.9.amzn1.src.rpm",
+		PackageID:       "sed-4.2.1-7.9.amzn1.src.rpm",
 	},
 	{
 		Name:            "sed",
@@ -88,7 +88,7 @@ var sampleDataParsed = []model.ApplicationData{
 		Architecture:    "x86_64",
 		URL:             "http://www.gnu.org/software/sed/",
 		Summary:         "The GNU sed stream editor",
-		PackageId:       "sed_4.2.2-7_amd64.deb",
+		PackageID:       "sed_4.2.2-7_amd64.deb",
 	},
 }
 
@@ -223,5 +223,5 @@ func assertEqualApps(t *testing.T, a model.ApplicationData, b model.ApplicationD
 	assert.Equal(t, a.Architecture, b.Architecture)
 	assert.Equal(t, a.URL, b.URL)
 	assert.Equal(t, a.Summary, b.Summary)
-	assert.Equal(t, a.PackageId, b.PackageId)
+	assert.Equal(t, a.PackageID, b.PackageID)
 }
