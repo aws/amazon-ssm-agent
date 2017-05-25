@@ -23,10 +23,10 @@ fi
 # allow ssm-agent to finish it's work
 sleep 2
 
-if [[ `/sbin/init --version` =~ upstart ]]; then
+if [[ $(/sbin/init --version 2> /dev/null) =~ upstart ]]; then
 	echo "upstart detected"
 	echo "Installing agent" 
-	yum install -y amazon-ssm-agent.rpm
+	rpm --install amazon-ssm-agent.rpm
 
 	if [ "$DO_REGISTER" = true ]; then
 		/sbin/stop amazon-ssm-agent
@@ -38,7 +38,7 @@ if [[ `/sbin/init --version` =~ upstart ]]; then
 	echo "starting agent"
 	/sbin/start amazon-ssm-agent
 	echo "$(status amazon-ssm-agent)"
-elif [[ `systemctl` =~ -\.mount ]]; then
+elif [[ $(systemctl 2> /dev/null) =~ -\.mount ]]; then
 	if [[ "$(systemctl is-active amazon-ssm-agent)" == "active" ]]; then
 		echo "-> Agent is running in the instance"
 		echo "Stopping the agent"
@@ -51,7 +51,7 @@ elif [[ `systemctl` =~ -\.mount ]]; then
 	fi
 		
 	echo "Installing agent" 
-	echo "$(yum install -y amazon-ssm-agent.rpm)"
+	echo "$(rpm --install amazon-ssm-agent.rpm)"
 
 	if [ "$DO_REGISTER" = true ]; then
 		$(systemctl stop amazon-ssm-agent)

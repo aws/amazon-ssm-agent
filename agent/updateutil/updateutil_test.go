@@ -93,6 +93,7 @@ func TestCreateInstanceContext(t *testing.T) {
 	testCases := []testInstanceContext{
 		{"us-east-1", PlatformAmazonLinux, nil, "2015.9", nil, PlatformLinux, PlatformLinux, false},
 		{"us-east-1", PlatformCentOS, nil, "7.1", nil, PlatformCentOS, PlatformLinux, false},
+		{"us-east-1", PlatformSuseOS, nil, "12", nil, PlatformSuseOS, PlatformLinux, false},
 		{"us-east-1", PlatformRedHat, nil, "6.8", nil, PlatformRedHat, PlatformLinux, false},
 		{"us-east-1", PlatformUbuntu, nil, "12", nil, PlatformUbuntu, PlatformUbuntu, false},
 		{"us-east-1", PlatformWindows, nil, "5", nil, PlatformWindows, PlatformWindows, false},
@@ -327,6 +328,7 @@ func TestIsPlatformUsingSystemD(t *testing.T) {
 		{InstanceContext{"us-east-1", PlatformRedHat, "6.5", "linux", "amd64", "tar.gz"}, false},
 		{InstanceContext{"us-east-1", PlatformRedHat, "7.0", "linux", "amd64", "tar.gz"}, true},
 		{InstanceContext{"us-west-1", PlatformCentOS, "6.1", "linux", "amd64", "tar.gz"}, false},
+		{InstanceContext{"us-east-1", PlatformSuseOS, "12", "linux", "amd64", "tar.gz"}, true},
 		{InstanceContext{"us-west-1", PlatformCentOS, "7", "linux", "amd64", "tar.gz"}, true},
 	}
 
