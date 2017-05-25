@@ -92,6 +92,9 @@ const (
 	// PlatformCentOS represents CentOS
 	PlatformCentOS = "centos"
 
+	// PlatformSuse represents SLES(SUSe)
+	PlatformSuseOS = "sles"
+
 	// PlatformWindows represents windows
 	PlatformWindows = "windows"
 
@@ -225,6 +228,9 @@ func (util *Utility) CreateInstanceContext(log log.T) (context *InstanceContext,
 		installerName = PlatformUbuntu
 	} else if strings.Contains(platformName, PlatformCentOS) {
 		platformName = PlatformCentOS
+		installerName = PlatformLinux
+	} else if strings.Contains(platformName, PlatformSuseOS) {
+		platformName = PlatformSuseOS
 		installerName = PlatformLinux
 	} else if isNano, _ := platform.IsPlatformNanoServer(log); isNano {
 		//TODO move this logic to instance context
@@ -449,6 +455,7 @@ func getMinimumVersionForSystemD() (systemDMap *map[string]string) {
 		isUsingSystemD[PlatformCentOS] = "7"
 		isUsingSystemD[PlatformRedHat] = "7"
 		isUsingSystemD[PlatformUbuntu] = "15"
+		isUsingSystemD[PlatformSuseOS] = "12"
 	})
 	return &isUsingSystemD
 }

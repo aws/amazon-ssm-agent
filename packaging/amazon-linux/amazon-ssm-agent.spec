@@ -16,7 +16,7 @@ Vendor       : Amazon.com
 BuildRequires: golang >= 1.5
 
 %description
-This package provides the Amazon SSM Agent for managing EC2 Instances using SSM APIs
+This package provides Amazon SSM Agent for managing EC2 Instances using SSM APIs
 
 %prep
 
