@@ -48,13 +48,61 @@ var StringTestCases = []StringTestCase{
 		},
 		InvalidParameters: []string{},
 	},
+	StringTestCase{
+		Input:  "This is a {{ssm:test.p1}} with dot string",
+		Output: "This is a testvalueWithDot with dot string",
+		Parameters: []Parameter{
+			{
+				Name:  "test.p1",
+				Type:  "String",
+				Value: "testvalueWithDot",
+			},
+		},
+		InvalidParameters: []string{},
+	},
+	StringTestCase{
+		Input:  "This is a {{ssm:test-p1}} with dash string",
+		Output: "This is a testValueWithDash with dash string",
+		Parameters: []Parameter{
+			{
+				Name:  "test-p1",
+				Type:  "String",
+				Value: "testValueWithDash",
+			},
+		},
+		InvalidParameters: []string{},
+	},
+	StringTestCase{
+		Input:  "This is a {{ssm:test/p1}} with slash string",
+		Output: "This is a testValueWithSlash with slash string",
+		Parameters: []Parameter{
+			{
+				Name:  "test/p1",
+				Type:  "String",
+				Value: "testValueWithSlash",
+			},
+		},
+		InvalidParameters: []string{},
+	},StringTestCase{
+		Input:  "This is a {{ssm:test/p5}} that does not exist",
+		Output: "This is a {{ssm:test/p5}} that does not exist",
+		Parameters: []Parameter{
+			{
+				Name:  "testp1",
+				Type:  "String",
+				Value: "testValueWithSlash",
+			},
+		},
+		InvalidParameters: []string{},
+	},
 }
 
 var logger = log.NewMockLog()
 
 func TestResolve(t *testing.T) {
-	testResolveMethod(t, StringTestCases[0])
-	testResolveMethod(t, StringTestCases[1])
+	for _, testCase := range StringTestCases {
+		testResolveMethod(t, testCase)
+	}
 }
 
 func testResolveMethod(t *testing.T, testCase StringTestCase) {
