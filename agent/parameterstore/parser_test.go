@@ -48,6 +48,16 @@ func generateReplaceSSMParamTestCases() []ReplaceSSMParamTestCase {
 			Type:  "String",
 			Name:  "param2",
 		},
+		"{{ssm:param3.p1}}": {
+			Value: "a parameter with dot",
+			Type:  "String",
+			Name:  "param3.p1",
+		},
+		"{{ssm:param4.p1}}": {
+			Value: "5",
+			Type:  "String",
+			Name:  "param4.p1",
+		},
 	}
 
 	var testCases []ReplaceSSMParamTestCase
@@ -107,6 +117,20 @@ func generateExtractSSMParamTestCases() []ExtractSSMParamTestCase {
 			Value: "5",
 			Type:  "String",
 			Name:  "param2",
+		},
+		"{{ssm:param3/p1}}": {
+			Value: "a parameter with slash",
+			Type:  "String",
+			Name:  "param3/p1",
+		}, "{{ssm:param4-p1}}": {
+			Value: "a parameter with dash",
+			Type:  "String",
+			Name:  "ssm:param4-p1",
+		},
+		"{{ssm:param5.p1}}": {
+			Value: "a parameter with dot",
+			Type:  "String",
+			Name:  "param5.p1",
 		},
 	}
 
