@@ -29,7 +29,7 @@ const (
 
 	schemaVersionOfWindowsUpdate = "1.0"
 	cmd                          = "powershell"
-	windowsUpdateQueryCmd        = `Get-WmiObject -Class win32_quickfixengineering | sort InstalledOn -desc | Select-Object HotFixId,Description,@{N="InstalledTime";E={$_.InstalledOn.ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ssZ")}},InstalledBy | ConvertTo-Json`
+	windowsUpdateQueryCmd        = `Get-WmiObject -Class win32_quickfixengineering | Select-Object HotFixId,Description,@{l="InstalledTime";e={[DateTime]::Parse($_.psbase.properties["installedon"].value,$([System.Globalization.CultureInfo]::GetCultureInfo("en-US"))).ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ssZ")}},InstalledBy | sort InstalledTime -desc | ConvertTo-Json`
 )
 
 // T represents windows update gatherer
