@@ -29,15 +29,85 @@ import (
 )
 
 const (
-	PowershellCmd                                        = "powershell"
-	SysnativePowershellCmd                               = `C:\Windows\sysnative\WindowsPowerShell\v1.0\powershell.exe `
-	ArgsToReadRegistryFromWindowsCurrentVersionUninstall = `Get-ItemProperty HKLM:\Software\Microsoft\Windows\CurrentVersion\Uninstall\* | Where-Object {$_.DisplayName -ne $null} | Select-Object @{n="Name";e={$_."DisplayName"}}, @{n="Version";e={$_."DisplayVersion"}}, Publisher, @{n="InstalledTime";e={[datetime]::ParseExact($_."InstallDate","yyyyMMdd",$null).ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ssZ")}} | ConvertTo-Json `
-	ArgsToReadRegistryFromWow6432Node                    = `Get-ItemProperty HKLM:\Software\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\* | Where-Object {$_.DisplayName -ne $null} | Select-Object @{n="Name";e={$_."DisplayName"}}, @{n="Version";e={$_."DisplayVersion"}}, Publisher, @{n="InstalledTime";e={[datetime]::ParseExact($_."InstallDate","yyyyMMdd",$null).ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ssZ")}} | ConvertTo-Json`
-	ArgsForDetectingOSArch                               = `get-wmiobject -class win32_processor | select-object addresswidth`
-	KeywordFor64BitArchitectureReportedByPowershell      = "64"
-	KeywordFor32BitArchitectureReportedByPowershell      = "32"
-	Architecture64BitReportedByGoRuntime                 = "amd64"
+	PowershellCmd                                   = "powershell"
+	SysnativePowershellCmd                          = `C:\Windows\sysnative\WindowsPowerShell\v1.0\powershell.exe `
+	ArgsForDetectingOSArch                          = `get-wmiobject -class win32_processor | select-object addresswidth`
+	KeywordFor64BitArchitectureReportedByPowershell = "64"
+	KeywordFor32BitArchitectureReportedByPowershell = "32"
+	Architecture64BitReportedByGoRuntime            = "amd64"
 )
+
+var ConvertGuidToCompressedGuidCmd = `function Convert-GuidToCompressedGuid {
+						[CmdletBinding()]
+						[OutputType()]
+						param (
+							[Parameter(ValueFromPipeline, ValueFromPipelineByPropertyName, Mandatory)]
+							[string]$Guid
+						)
+						begin {
+							$Guid = $Guid.Replace('-', '').Replace('{', '').Replace('}', '')
+						}
+						process {
+							try {
+								$Groups = @(
+									$Guid.Substring(0, 8).ToCharArray(),
+									$Guid.Substring(8, 4).ToCharArray(),
+									$Guid.Substring(12, 4).ToCharArray(),
+									$Guid.Substring(16, 16).ToCharArray()
+								)
+								$Groups[0..2] | foreach {
+									[array]::Reverse($_)
+								}
+								$CompressedGuid = ($Groups[0..2] | foreach { $_ -join '' }) -join ''
+
+								$chararr = $Groups[3]
+								for ($i = 0; $i -lt $chararr.count; $i++) {
+									if (($i % 2) -eq 0) {
+										$CompressedGuid += ($chararr[$i+1] + $chararr[$i]) -join ''
+									}
+								}
+								$CompressedGuid
+							} catch {
+								Write-Error $_.Exception.Message
+							}
+						}
+					}
+
+				     `
+var ArgsToReadRegistryFromProducts = `$products = Get-ItemProperty HKLM:\Software\Classes\Installer\Products\* | Select-Object  @{n="PSChildName";e={$_."PSChildName"}} |
+				      Select -expand PSChildName
+
+				     `
+var ArgsToReadRegistryFromWindowsCurrentVersionUninstall = `Get-ItemProperty HKLM:\Software\Microsoft\Windows\CurrentVersion\Uninstall\*  |
+								Where-Object {($_.DisplayName -ne $null -and $_DisplayName -ne '' -and $_.DisplayName -notmatch '^KB[000000-999999]') -and
+								       ($_.UninstallString -ne $null -and $_.UninstallString -ne '') -and
+								       ($_.SystemComponent -eq $null -or ($_.SystemComponent -ne $null -and $_.SystemComponent -eq '0'))  -and
+								       ($_.ParentKeyName -eq $null) -and
+								       ($_.WindowsInstaller -eq $null -or ($_.WindowsInstaller -eq 1 -and $products -contains (Convert-GuidToCompressedGuid $_.PSChildName))) -and
+								       ($_.ReleaseType -eq $null -or
+										($_.ReleaseType -ne $null -and
+										$_.ReleaseType -ne 'Security Update' -and
+										$_.ReleaseType -ne 'Update Rollup' -and
+										$_.ReleaseType -ne 'Hotfix'))
+							        } |
+							       Select-Object @{n="Name";e={$_."DisplayName"}},@{n="WindowsInstaller";e={$_."WindowsInstaller"}},
+							       @{n="PSChildName";e={$_."PSChildName"}}, @{n="Version";e={$_."DisplayVersion"}}, Publisher,
+							       @{n="InstalledTime";e={[datetime]::ParseExact($_."InstallDate","yyyyMMdd",$null).ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ssZ")}} | ConvertTo-Json `
+var ArgsToReadRegistryFromWow6432Node = `Get-ItemProperty HKLM:\Software\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\*  |
+					     Where-Object {($_.DisplayName -ne $null -and $_DisplayName -ne '' -and $_.DisplayName -notmatch '^KB[000000-999999]') -and
+						     ($_.UninstallString -ne $null -and $_.UninstallString -ne '') -and
+						     ($_.SystemComponent -eq $null -or ($_.SystemComponent -ne $null -and $_.SystemComponent -eq '0'))  -and
+						     ($_.ParentKeyName -eq $null) -and
+						     ($_.WindowsInstaller -eq $null -or ($_.WindowsInstaller -eq 1 -and $products -contains (Convert-GuidToCompressedGuid $_.PSChildName))) -and
+						     ($_.ReleaseType -eq $null -or
+							     ($_.ReleaseType -ne $null -and
+							     $_.ReleaseType -ne 'Security Update' -and
+							     $_.ReleaseType -ne 'Update Rollup' -and
+							     $_.ReleaseType -ne 'Hotfix'))
+              				     } |
+              				     Select-Object @{n="Name";e={$_."DisplayName"}},@{n="WindowsInstaller";e={$_."WindowsInstaller"}},
+              				     @{n="PSChildName";e={$_."PSChildName"}},
+               				     @{n="Version";e={$_."DisplayVersion"}}, Publisher, @{n="InstalledTime";e={[datetime]::ParseExact($_."InstallDate","yyyyMMdd",$null).ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ssZ")}} | ConvertTo-Json `
 
 // decoupling exec.Command for easy testability
 var cmdExecutor = executeCommand
@@ -72,12 +142,34 @@ func collectPlatformDependentApplicationData(context context.T) []model.Applicat
 
 		Reference:
 		https://msdn.microsoft.com/en-us/library/aa394373%28v=vs.85%29.aspx
+
+		When quering the registry, the following rules will be applied
+
+		1. There must be a value within named DisplayName and it must have text in it. This is the name that will appear in Add/Remove Programs for this program -
+		and yes you can have a bit of fun and change the value of this to anything you like and it will show up as that in Add/Remove Programs, as I have done in the screenshot :)
+		2. There must be a value within named UninstallString and it must have text in it. This is the command line that Add/Remove Programs will execute when you attempt to uninstall this program.
+		Knowing this can come in handy in certain situations.
+		3. There must NOT be a value named SystemComponent that is set to 1. If the SystemComponent value does not exist or if it does exist but is set to 0 then that is fine,
+		but if it is set to 1 then this program will not be added to the list. This is usually only set on programs that have been installed via a Windows Installer package (MSI). See below.
+		4. There must NOT be a value named WindowsInstaller that is set to 1. Again if it is set to 0 or if it does not exist then that is fine.
+		5. The subkey must not have a name that starts with KB and is followed by 6 numbers, e.g KB879032. If it has this name format then it will be classed as a Windows Update and will be added to
+		the list of programs that only appear when you click Show Installed Updates.
+		6. There must NOT be a value named ParentKeyName, as this indicates that this is an update to an existing program (and the text within the ParentKeyName value will indicate which program it is an update for)
+		7. There must NOT be a value named ReleaseType set to any of the following: Security Update, Update Rollup, Hotfix. As again this indicates that it is an update rather than a full program.
+
+		For rule 4, if the record has a windows installer value of 1, it will look at HKLM\Software\Classes\Installer\Products, we will convert its guid to a compressed version, and if we find a
+		corresponding record in the Products, we will add it to the results too.
+
+		For example, if the Guid id is {2BE0FA87-5B36-43CF-95C8-C68D6673FB94}, the compressed Guid will be {78AF0EB263B543CF8C5949BF3766D86C}
+
+		Reference:
+		https://community.spiceworks.com/how_to/2238-how-add-remove-programs-works
 	*/
 
-	//TODO: powershell commands can be put in a script to generate that data - and then we can simply execute the script to get the data.
 	//it will enable us to run other complicated queries too.
 
 	var data, apps []model.ApplicationData
+	var cmd string
 
 	log := context.Log()
 
@@ -94,10 +186,11 @@ func collectPlatformDependentApplicationData(context context.T) []model.Applicat
 		if exeArch != Architecture64BitReportedByGoRuntime {
 			//exe architecture is also 32 bit
 			//since both exe & os are 32 bit - we need to detect only 32 bit apps
-			apps = executePowershellCommands(context, PowershellCmd, ArgsToReadRegistryFromWindowsCurrentVersionUninstall, model.Arch32Bit)
+			cmd = ConvertGuidToCompressedGuidCmd + ArgsToReadRegistryFromProducts + ArgsToReadRegistryFromWindowsCurrentVersionUninstall
+			apps = executePowershellCommands(context, PowershellCmd, cmd, model.Arch32Bit)
 			data = append(data, apps...)
 		} else {
-			log.Infof("Detected an unsupported scenario of 64 bit amazon ssm agent running on 32 bit windows OS - nothing to report")
+			log.Error("Detected an unsupported scenario of 64 bit amazon ssm agent running on 32 bit windows OS - nothing to report")
 		}
 	} else if strings.Contains(osArch, KeywordFor64BitArchitectureReportedByPowershell) {
 		//os architecture is 64 bit
@@ -105,26 +198,30 @@ func collectPlatformDependentApplicationData(context context.T) []model.Applicat
 			//both exe & os architecture is 64 bit
 
 			//detecting 32 bit apps by querying Wow6432Node path in registry
-			apps = executePowershellCommands(context, PowershellCmd, ArgsToReadRegistryFromWow6432Node, model.Arch32Bit)
+			cmd = ConvertGuidToCompressedGuidCmd + ArgsToReadRegistryFromProducts + ArgsToReadRegistryFromWow6432Node
+			apps = executePowershellCommands(context, PowershellCmd, cmd, model.Arch32Bit)
 			data = append(data, apps...)
 
 			//detecting 64 bit apps by querying normal registry path
-			apps = executePowershellCommands(context, PowershellCmd, ArgsToReadRegistryFromWindowsCurrentVersionUninstall, model.Arch64Bit)
+			cmd = ConvertGuidToCompressedGuidCmd + ArgsToReadRegistryFromProducts + ArgsToReadRegistryFromWindowsCurrentVersionUninstall
+			apps = executePowershellCommands(context, PowershellCmd, cmd, model.Arch64Bit)
 			data = append(data, apps...)
 		} else {
 			//exe architecture is 32 bit - all queries to registry path will be redirected to wow6432 so need to use sysnative
 			//reference: https://blogs.msdn.microsoft.com/david.wang/2006/03/27/howto-detect-process-bitness/
 
 			//detecting 32 bit apps by querying Wow632 registry node
-			apps = executePowershellCommands(context, PowershellCmd, ArgsToReadRegistryFromWow6432Node, model.Arch32Bit)
+			cmd = ConvertGuidToCompressedGuidCmd + ArgsToReadRegistryFromProducts + ArgsToReadRegistryFromWow6432Node
+			apps = executePowershellCommands(context, PowershellCmd, cmd, model.Arch32Bit)
 			data = append(data, apps...)
 
 			//detecting 64 bit apps by using sysnative for reading registry to avoid path redirection
-			apps = executePowershellCommands(context, SysnativePowershellCmd, ArgsToReadRegistryFromWindowsCurrentVersionUninstall, model.Arch64Bit)
+			cmd = ConvertGuidToCompressedGuidCmd + ArgsToReadRegistryFromProducts + ArgsToReadRegistryFromWindowsCurrentVersionUninstall
+			apps = executePowershellCommands(context, SysnativePowershellCmd, cmd, model.Arch64Bit)
 			data = append(data, apps...)
 		}
 	} else {
-		log.Infof("Can't find application data because unable to detect OS architecture - nothing to report")
+		log.Error("Can't find application data because unable to detect OS architecture - nothing to report")
 	}
 
 	return data
