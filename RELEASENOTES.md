@@ -1,5 +1,9 @@
 Latest
 ===============
+- Various bug fixes
+
+2.0.790.0
+===============
 - Added support for step-level preconditions
 - Added support for rate/interval based schedule expressions for associations
 - Added Summary and PackageID fields to inventory's aws:application gatherer
