@@ -15,13 +15,19 @@
 package ssms3
 
 import (
+	"errors"
 	"fmt"
 	"runtime"
 	"testing"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
+	"github.com/aws/amazon-ssm-agent/agent/fileutil/artifact"
+	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/mock"
 )
+
+var loggerMock = log.NewMockLog()
 
 func TestGetLatestVersion_NumericSort(t *testing.T) {
 	versions := [3]string{"1.0.0", "2.0.0", "10.0.0"}
@@ -90,4 +96,92 @@ func TestEndpointUsEast1Beta(t *testing.T) {
 func TestEndpointUsEast1Gamma(t *testing.T) {
 	service := New("gamma", "us-east-1")
 	assert.Equal(t, fmt.Sprintf("https://s3.amazonaws.com/amazon-ssm-packages-us-east-1-gamma/Packages/{PackageName}/%v/%v", appconfig.PackagePlatform, runtime.GOARCH), service.packageURL)
+}
+
+func TestGetLatestVersion_RandomStringsAreNotValid(t *testing.T) {
+	versions := []string{"foo", "bar", "asdf", "1234567890", "foo.bar.abc", "-10.-10.-10", "1234567890.asdf.1234567890", "123.abcd"}
+	latest := getLatestVersion(versions[:], "")
+	assert.Equal(t, "", latest)
+}
+
+func TestGetLatestVersion_DifferentLengthMajorMinorBuildVersion(t *testing.T) {
+	versions := []string{"123.0.126789", "12.3455.67", "65535.8765432.6543"}
+	latest := getLatestVersion(versions[:], "")
+	assert.Equal(t, "65535.8765432.6543", latest)
+}
+
+func TestGetLatestVersion_ZeroStartingMajorMinorBuildVersion(t *testing.T) {
+	versions := []string{"01.1.1", "0.02.1", "0.1.02", "03.03.03"}
+	latest := getLatestVersion(versions[:], "")
+	assert.Equal(t, "03.03.03", latest)
+}
+
+func TestGetLatestVersion_OnlyMajorMinorVersionBuildFormatsAreValid(t *testing.T) {
+	versions := []string{"1.0.0", "0.0", "1", "", "4.5.6.7.8.9.1.2.3"}
+	latest := getLatestVersion(versions[:], "")
+	assert.Equal(t, "1.0.0", latest)
+}
+
+func TestGetLatestVersion_NegativeVersionsAreNotValid(t *testing.T) {
+	versions := []string{"-1.-1.-1", "-2.0.1", "0.1.-1", "1.-2.0"}
+	latest := getLatestVersion(versions[:], "")
+	assert.Equal(t, "", latest)
+}
+
+func TestSuccessfulDownloadManifest(t *testing.T) {
+	ds := &PackageService{packageURL: "https://abc.s3.mock-region.amazonaws.com/"}
+	result, err := ds.DownloadManifest(loggerMock, "packageName", "1234")
+
+	assert.Equal(t, "1234", result)
+	assert.NoError(t, err)
+}
+
+func TestDownloadManifestWithLatest(t *testing.T) {
+	mockObj := new(SSMS3Mock)
+	mockObj.On("ListS3Folders", mock.Anything, mock.Anything).Return([]string{"1.0.0", "2.0.0"}, nil)
+
+	networkdep = mockObj
+
+	ds := &PackageService{packageURL: "https://abc.s3.mock-region.amazonaws.com/"}
+	result, err := ds.DownloadManifest(loggerMock, "packageName", "latest")
+
+	assert.Equal(t, "2.0.0", result)
+	assert.NoError(t, err)
+}
+
+func TestDownloadManifestWithError(t *testing.T) {
+	mockObj := new(SSMS3Mock)
+	mockObj.On("ListS3Folders", mock.Anything, mock.Anything).Return([]string{"1.0.0", "2.0.0"}, errors.New("testerror"))
+
+	networkdep = mockObj
+
+	ds := &PackageService{packageURL: "https://abc.s3.mock-region.amazonaws.com/"}
+	_, err := ds.DownloadManifest(loggerMock, "packageName", "latest")
+
+	assert.Error(t, err)
+}
+
+func TestSuccessfulDownloadArtifact(t *testing.T) {
+	mockObj := new(SSMS3Mock)
+	mockObj.On("Download", mock.Anything, mock.Anything).Return(artifact.DownloadOutput{"somePath", false, true}, nil)
+
+	networkdep = mockObj
+
+	ds := &PackageService{packageURL: "https://abc.s3.mock-region.amazonaws.com/"}
+	result, err := ds.DownloadArtifact(loggerMock, "packageName", "1234")
+
+	assert.Equal(t, "somePath", result)
+	assert.NoError(t, err)
+}
+
+func TestDownloadArtifactWithError(t *testing.T) {
+	mockObj := new(SSMS3Mock)
+	mockObj.On("Download", mock.Anything, mock.Anything).Return(artifact.DownloadOutput{"somePath", false, true}, errors.New("testerror"))
+
+	networkdep = mockObj
+
+	ds := &PackageService{packageURL: "https://abc.s3.mock-region.amazonaws.com/"}
+	_, err := ds.DownloadArtifact(loggerMock, "packageName", "1234")
+
+	assert.Error(t, err)
 }
