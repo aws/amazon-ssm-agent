@@ -17,9 +17,9 @@ package docmanager
 import (
 	"os"
 	"path"
-	"sync"
-
 	"path/filepath"
+	"sync"
+	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/docmanager/model"
@@ -27,6 +27,13 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 )
+
+const (
+	maxLogFileDeletions int = 100
+)
+
+type validString func(string) bool
+type modifyString func(string) string
 
 //TODO:  Revisit this when making Persistence invasive - i.e failure in file-systems should resort to Agent crash instead of swallowing errors
 
@@ -227,6 +234,101 @@ func DocumentStateDir(instanceID, locationFolder string) string {
 		appconfig.DefaultDocumentRootDirName,
 		appconfig.DefaultLocationOfState,
 		locationFolder)
+}
+
+// orchestrationDir returns the absolute path of the orchestration directory
+func orchestrationDir(instanceID, orchestrationRootDirName string) string {
+	return path.Join(appconfig.DefaultDataStorePath,
+		instanceID,
+		appconfig.DefaultDocumentRootDirName,
+		orchestrationRootDirName)
+}
+
+// DeleteOldDocumentFolderLogs deletes the logs from document/state/completed and document/orchestration folders older than retention duration which satisfy the file name format
+func DeleteOldDocumentFolderLogs(log log.T, instanceID, orchestrationRootDirName string, retentionDurationHours int, isIntendedFileNameFormat validString, formOrchestrationFolderName modifyString) {
+	defer func() {
+		// recover in case the function panics
+		if msg := recover(); msg != nil {
+			log.Errorf("DeleteOldDocumentFolderLogs failed with message %v", msg)
+		}
+	}()
+
+	// Form the path for completed document state dir
+	completedDir := DocumentStateDir(instanceID, appconfig.DefaultLocationOfCompleted)
+
+	// Form the path for orchestration logs dir
+	orchestrationRootDir := orchestrationDir(instanceID, orchestrationRootDirName)
+
+	if !fileutil.Exists(completedDir) {
+		log.Debugf("Completed log directory doesn't exist: %v", completedDir)
+		return
+	}
+
+	completedFiles, err := fileutil.GetFileNames(completedDir)
+	if err != nil {
+		log.Debugf("Failed to read files under %v", err)
+		return
+	}
+
+	if completedFiles == nil || len(completedFiles) == 0 {
+		log.Debugf("Completed log directory %v is invalid or empty", completedDir)
+		return
+	}
+
+	// Go through all log files in the completed logs dir, delete max maxLogFileDeletions files and the corresponding dirs from orchestration folder
+	countOfDeletions := 0
+	for _, completedFile := range completedFiles {
+
+		completedLogFullPath := filepath.Join(completedDir, completedFile)
+
+		//Checking for the file name format so that the function only deletes the files it is called to do. Also checking whether the file is beyond retention time.
+		if isIntendedFileNameFormat(completedFile) && isOlderThan(log, completedLogFullPath, retentionDurationHours) {
+			//The file name is valid for deletion and is also old. Go ahead for deletion.
+			orchestrationFolder := formOrchestrationFolderName(completedFile)
+			orchestrationDirFullPath := filepath.Join(orchestrationRootDir, orchestrationFolder)
+
+			log.Debugf("Attempting Deletion of folder : %v", orchestrationDirFullPath)
+
+			err := fileutil.DeleteDirectory(orchestrationDirFullPath)
+			if err != nil {
+				log.Debugf("Error deleting dir %v: %v", orchestrationDirFullPath, err)
+				continue
+			}
+
+			// Deletion of orchestration dir was successful. Delete the document state file
+			log.Debugf("Attempting Deletion of file : %v", completedLogFullPath)
+
+			err = fileutil.DeleteDirectory(completedLogFullPath)
+
+			if err != nil {
+				log.Debugf("Error deleting file %v: %v", completedLogFullPath, err)
+				continue
+			}
+
+			// Deletion of both document state and orchestration file was successful
+			countOfDeletions += 2
+			if countOfDeletions > maxLogFileDeletions {
+				break
+			}
+
+		}
+
+	}
+
+	log.Debugf("Completed DeleteOldDocumentFolderLogs")
+}
+
+// isOlderThan checks whether the file is older than the retention duration
+func isOlderThan(log log.T, fileFullPath string, retentionDurationHours int) bool {
+	modificationTime, err := fileutil.GetFileModificationTime(fileFullPath)
+
+	if err != nil {
+		log.Debugf("Failed to get modification time %v", err)
+		return false
+	}
+
+	// Check whether the current time is after modification time plus the retention duration
+	return modificationTime.Add(time.Hour * time.Duration(retentionDurationHours)).Before(time.Now())
 }
 
 // getDocState reads commandState from given file
