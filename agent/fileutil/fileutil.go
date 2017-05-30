@@ -24,6 +24,7 @@ import (
 	"path"
 	"path/filepath"
 	"strings"
+	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 )
@@ -49,6 +50,7 @@ func DeleteFile(filepath string) (err error) {
 
 // DeleteDirectory deletes a directory and all its content.
 func DeleteDirectory(dirName string) (err error) {
+
 	return os.RemoveAll(dirName)
 }
 
@@ -203,6 +205,20 @@ func WriteIntoFileWithPermissionsExtended(absolutePath, content string, perm os.
 		err = fmt.Errorf("couldn't write into file - %v", err)
 		result = false
 	}
+	return
+}
+
+// GetFileModificationTime returns the modification time of the file
+func GetFileModificationTime(srcPath string) (modificationTime time.Time, err error) {
+
+	srcFileInfo, err := fs.Stat(srcPath)
+	if err != nil {
+		err = fmt.Errorf("error looking up file information: %v, Error: %v", srcPath, err)
+		return
+	}
+
+	modificationTime = srcFileInfo.ModTime()
+
 	return
 }
 
