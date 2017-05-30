@@ -110,10 +110,12 @@ func DefaultConfig() SsmagentConfig {
 		CommandRetryLimit:   DefaultCommandRetryLimit,
 	}
 	var ssm = SsmCfg{
-		HealthFrequencyMinutes:         DefaultSsmHealthFrequencyMinutes,
-		AssociationFrequencyMinutes:    DefaultSsmAssociationFrequencyMinutes,
-		AssociationRetryLimit:          5,
-		CustomInventoryDefaultLocation: DefaultCustomInventoryFolder,
+		HealthFrequencyMinutes:                DefaultSsmHealthFrequencyMinutes,
+		AssociationFrequencyMinutes:           DefaultSsmAssociationFrequencyMinutes,
+		AssociationRetryLimit:                 5,
+		CustomInventoryDefaultLocation:        DefaultCustomInventoryFolder,
+		AssociationLogsRetentionDurationHours: DefaultAssociationLogsRetentionDurationHours,
+		RunCommandLogsRetentionDurationHours:  DefaultRunCommandLogsRetentionDurationHours,
 	}
 	var agent = AgentInfo{
 		Name:                 "amazon-ssm-agent",
