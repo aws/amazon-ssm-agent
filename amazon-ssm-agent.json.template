@@ -14,7 +14,9 @@
     "Ssm": {
         "Endpoint": "",
         "HealthFrequencyMinutes": 5,
-        "CustomInventoryDefaultLocation" : ""
+        "CustomInventoryDefaultLocation" : "",
+        "AssociationLogsRetentionDurationHours" : 24,
+        "RunCommandLogsRetentionDurationHours" : 336
     },
     "Agent": {
         "Region": "",

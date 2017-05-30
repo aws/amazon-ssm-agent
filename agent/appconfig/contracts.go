@@ -38,8 +38,10 @@ type SsmCfg struct {
 	AssociationRetryLimit       int
 	// TODO: test hook, can be removed before release
 	// this is to skip ssl verification for the beta self signed certs
-	InsecureSkipVerify             bool
-	CustomInventoryDefaultLocation string
+	InsecureSkipVerify                    bool
+	CustomInventoryDefaultLocation        string
+	AssociationLogsRetentionDurationHours int
+	RunCommandLogsRetentionDurationHours  int
 }
 
 // AgentInfo represents metadata for amazon-ssm-agent

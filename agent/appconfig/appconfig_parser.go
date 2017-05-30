@@ -58,8 +58,18 @@ func parser(config *SsmagentConfig) {
 		DefaultSsmAssociationFrequencyMinutesMin,
 		DefaultSsmAssociationFrequencyMinutesMax,
 		DefaultSsmAssociationFrequencyMinutes)
+	config.Ssm.AssociationLogsRetentionDurationHours = getNumericValueAboveMin(
+		config.Ssm.AssociationLogsRetentionDurationHours,
+		DefaultStateOrchestrationLogsRetentionDurationHoursMin,
+		DefaultAssociationLogsRetentionDurationHours)
+	config.Ssm.RunCommandLogsRetentionDurationHours = getNumericValueAboveMin(
+		config.Ssm.RunCommandLogsRetentionDurationHours,
+		DefaultStateOrchestrationLogsRetentionDurationHoursMin,
+		DefaultRunCommandLogsRetentionDurationHours)
+
 }
 
+// getStringValue returns the default value if config is empty, else the config value
 func getStringValue(configValue string, defaultValue string) string {
 	if configValue == "" {
 		return defaultValue
@@ -67,6 +77,15 @@ func getStringValue(configValue string, defaultValue string) string {
 	return configValue
 }
 
+// getNumericValueAboveMin returns the default if config is below minimum
+func getNumericValueAboveMin(configValue int, minValue int, defaultValue int) int {
+	if configValue < minValue {
+		return defaultValue
+	}
+	return configValue
+}
+
+// getNumericValue returns the default if config value is below min or above max
 func getNumericValue(configValue int, minValue int, maxValue int, defaultValue int) int {
 	if configValue < minValue || configValue > maxValue {
 		return defaultValue
@@ -74,6 +93,7 @@ func getNumericValue(configValue int, minValue int, maxValue int, defaultValue i
 	return configValue
 }
 
+// getNumeric64Value returns the default if config value is below min or above max
 func getNumeric64Value(configValue int64, minValue int64, maxValue int64, defaultValue int64) int64 {
 	if configValue < minValue || configValue > maxValue {
 		return defaultValue
