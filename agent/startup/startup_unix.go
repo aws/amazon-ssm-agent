@@ -24,6 +24,8 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/startup/serialport"
 	"github.com/aws/amazon-ssm-agent/agent/version"
 	"github.com/aws/aws-sdk-go/aws"
+	"github.com/aws/aws-sdk-go/aws/ec2metadata"
+	"github.com/aws/aws-sdk-go/aws/session"
 )
 
 const (
@@ -34,8 +36,15 @@ const (
 	serialPortRetryWaitTime = 5
 )
 
-// IsAllowed returns true if the current platform allows startup processor.
+// IsAllowed returns true if the current environment allows startup processor.
 func (p *Processor) IsAllowed() bool {
+	// check if metadata is reachable which indicates the instance is in EC2.
+	// maximum retry is 10 to ensure the failure/error is not caused by arbitrary reason.
+	ec2MetadataService := ec2metadata.New(session.New(aws.NewConfig().WithMaxRetries(10)))
+	if metadata, err := ec2MetadataService.GetMetadata(""); err != nil || metadata == "" {
+		return false
+	}
+
 	return true
 }
 
