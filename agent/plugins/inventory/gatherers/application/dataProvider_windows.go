@@ -143,24 +143,25 @@ func collectPlatformDependentApplicationData(context context.T) []model.Applicat
 		Reference:
 		https://msdn.microsoft.com/en-us/library/aa394373%28v=vs.85%29.aspx
 
-		When quering the registry, the following rules will be applied
+		We use following rules to detect applications from Registry. This is done to ensure AWS:Application’s behavior is similar to Add/Remove programs in Windows:
+		Records that meets all rules are added in the result set:
 
-		1. There must be a value within named DisplayName and it must have text in it. This is the name that will appear in Add/Remove Programs for this program -
-		and yes you can have a bit of fun and change the value of this to anything you like and it will show up as that in Add/Remove Programs, as I have done in the screenshot :)
-		2. There must be a value within named UninstallString and it must have text in it. This is the command line that Add/Remove Programs will execute when you attempt to uninstall this program.
-		Knowing this can come in handy in certain situations.
-		3. There must NOT be a value named SystemComponent that is set to 1. If the SystemComponent value does not exist or if it does exist but is set to 0 then that is fine,
-		but if it is set to 1 then this program will not be added to the list. This is usually only set on programs that have been installed via a Windows Installer package (MSI). See below.
-		4. There must NOT be a value named WindowsInstaller that is set to 1. Again if it is set to 0 or if it does not exist then that is fine.
-		5. The subkey must not have a name that starts with KB and is followed by 6 numbers, e.g KB879032. If it has this name format then it will be classed as a Windows Update and will be added to
-		the list of programs that only appear when you click Show Installed Updates.
-		6. There must NOT be a value named ParentKeyName, as this indicates that this is an update to an existing program (and the text within the ParentKeyName value will indicate which program it is an update for)
-		7. There must NOT be a value named ReleaseType set to any of the following: Security Update, Update Rollup, Hotfix. As again this indicates that it is an update rather than a full program.
+		1. ‘DisplayName’  must be present with a valid value, as this is reflected as Display Name in AWS:Application inventory type. Also, its value must not start with ‘KB’ followed by 6 numbers - as that indicates a Windows update.
+		2. ‘UninstallString’ must be present, because it stores the command line that gets executed by Add/Remove programs, when user tries to uninstall a program.
+		3. ‘SystemComponent’ must be either absent or present with value set to 0, because this value is usually set on programs that have been installed via a Windows Installer Package (MSI).
+		4. ‘ParentKeyName’ must NOT be present, because that indicates its an update to the parent program.
+		5. ‘ReleaseType’ must either be absent or if present must not have value set to ‘Security Update’, ‘Update Rollup’, ‘Hotfix’, because that indicates its an update to an existing program.
+		6. ‘WindowsInstaller’ must be either absent or present with value 0. If the value is set to 1, then the application is included in the list if and only if the corresponding compressed guid (explained below) is also present in HKLM:\Software\Classes\Installer\Products\
 
-		For rule 4, if the record has a windows installer value of 1, it will look at HKLM\Software\Classes\Installer\Products, we will convert its guid to a compressed version, and if we find a
-		corresponding record in the Products, we will add it to the results too.
+		Calculation of compressed guid:
+		Each Guid has 5 parts seperated by '-'. For the first three each one will be totally reversed, and for the remaining two each one will be reversed by every other character.
+		Then the final compressed Guid will be constructed by concatinating all the reversed parts without '-'.
 
-		For example, if the Guid id is {2BE0FA87-5B36-43CF-95C8-C68D6673FB94}, the compressed Guid will be {78AF0EB263B543CF8C5949BF3766D86C}
+		-Example-
+
+		Input  : 		2BE0FA87-5B36-43CF-95C8-C68D6673FB94
+		Reversed :		78AF0EB2-63B5-FC34-598C-6CD86637BF49
+		Final Compressed Guid:  78AF0EB263B5FC34598C6CD86637BF49
 
 		Reference:
 		https://community.spiceworks.com/how_to/2238-how-add-remove-programs-works
