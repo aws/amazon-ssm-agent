@@ -36,6 +36,8 @@ type PackageService struct {
 	manifestCache packageservice.ManifestCache
 }
 
+var temporaryAuthString string = "arn:aws:ec2:us-east-1:476441631524:instance/i-0efc08f171ce5f3fb"
+
 // New constructor for PackageService
 func New(log log.T, endpoint string, manifestCache packageservice.ManifestCache) packageservice.PackageService {
 	// TODO: endpoint vs appconfig
@@ -103,6 +105,7 @@ func (ds *PackageService) ReportResult(log log.T, result packageservice.PackageR
 
 	_, err := ds.bwclient.PutConfigurePackageResult(
 		&birdwatcherstationservice.PutConfigurePackageResultInput{
+			Auth:           &birdwatcherstationservice.Auth{UserArn: &temporaryAuthString},
 			PackageName:    &result.PackageName,
 			PackageVersion: &result.Version,
 			OverallTiming:  &result.Timing,
@@ -139,6 +142,7 @@ func readManifestFromCache(cache packageservice.ManifestCache, packageName strin
 func downloadManifest(ds *PackageService, packageName string, version string) (*Manifest, error) {
 	resp, err := ds.bwclient.GetManifest(
 		&birdwatcherstationservice.GetManifestInput{
+			Auth:           &birdwatcherstationservice.Auth{UserArn: &temporaryAuthString},
 			PackageName:    &packageName,
 			PackageVersion: &version,
 		},
