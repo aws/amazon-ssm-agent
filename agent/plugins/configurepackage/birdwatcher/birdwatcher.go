@@ -25,6 +25,8 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/packageservice"
 	"github.com/aws/amazon-ssm-agent/agent/sdkutil"
+	"github.com/aws/amazon-ssm-agent/agent/version"
+	"github.com/aws/aws-sdk-go/aws/request"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/birdwatcherstationservice"
 	"github.com/aws/aws-sdk-go/service/birdwatcherstationservice/birdwatcherstationserviceiface"
@@ -56,8 +58,19 @@ func New(log log.T, endpoint string, manifestCache packageservice.ManifestCache)
 		}
 	}
 
+	bwStationServiceClientSession := session.New(cfg)
+
+	// Define a request handler with current agentName and version
+	SSMAgentVersionUserAgentHandler := request.NamedHandler{
+		Name: "ssm.SSMAgentVersionUserAgentHandler",
+		Fn:   request.MakeAddToUserAgentHandler(appconfig.DefaultConfig().Agent.Name, version.Version),
+	}
+
+	// Add the handler to each request to the BirdwatcherStationService
+	bwStationServiceClientSession.Handlers.Build.PushBackNamed(SSMAgentVersionUserAgentHandler)
+
 	return &PackageService{
-		bwclient:      birdwatcherstationservice.New(session.New(cfg)),
+		bwclient:      birdwatcherstationservice.New(bwStationServiceClientSession),
 		manifestCache: manifestCache,
 	}
 }
