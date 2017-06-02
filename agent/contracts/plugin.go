@@ -31,7 +31,7 @@ const (
 )
 
 const (
-	preconditionSchemaVersion string = "2.1"
+	preconditionSchemaVersion string = "2.2"
 )
 
 var (
@@ -87,7 +87,7 @@ type Configuration struct {
 	PluginName              string
 	PluginID                string
 	DefaultWorkingDirectory string
-	Preconditions           map[string]string
+	Preconditions           Precondition
 	IsPreconditionEnabled   bool
 }
 
