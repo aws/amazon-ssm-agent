@@ -11,11 +11,11 @@
 // either express or implied. See the License for the specific language governing
 // permissions and limitations under the License.
 
-// Package application contains a application gatherer.
+// +build darwin freebsd linux netbsd openbsd
+
 package instancedetailedinformation
 
 import (
-	"fmt"
 	"testing"
 
 	"github.com/aws/amazon-ssm-agent/agent/context"
@@ -24,7 +24,7 @@ import (
 )
 
 var (
-	sampleData = []string{
+	sampleDataUnix = []string{
 		// Amazon Linux XLarge
 		`Architecture:          x86_64
 CPU op-mode(s):        32-bit, 64-bit
@@ -130,7 +130,7 @@ NUMA node0 CPU(s):     0`,
 	}
 )
 
-var sampleDataParsed = []model.InstanceDetailedInformation{
+var sampleDataUnixParsed = []model.InstanceDetailedInformation{
 	{
 		CPUModel:              "Intel(R) Xeon(R) CPU E5-2686 v4 @ 2.30GHz",
 		CPUSpeedMHz:           "1772",
@@ -165,32 +165,21 @@ var sampleDataParsed = []model.InstanceDetailedInformation{
 	},
 }
 
-func TestParse(t *testing.T) {
-	for i, sampleData := range sampleData {
-		parsedItems := parse(sampleData)
+func TestParseLscpuOutput(t *testing.T) {
+	for i, sampleData := range sampleDataUnix {
+		parsedItems := parseLscpuOutput(sampleData)
 		assert.Equal(t, len(parsedItems), 1)
-		assert.Equal(t, sampleDataParsed[i], parsedItems[0])
-	}
-}
-
-func MockTestExecutorWithError(command string, args ...string) ([]byte, error) {
-	var result []byte
-	return result, fmt.Errorf("Random Error")
-}
-
-func createMockExecutor(stdout string) func(string, ...string) ([]byte, error) {
-	return func(string, ...string) ([]byte, error) {
-		return []byte(stdout), nil
+		assert.Equal(t, sampleDataUnixParsed[i], parsedItems[0])
 	}
 }
 
 func TestCollectPlatformDependentInstanceData(t *testing.T) {
 	mockContext := context.NewMockDefault()
-	for i, sampleData := range sampleData {
+	for i, sampleData := range sampleDataUnix {
 		cmdExecutor = createMockExecutor(sampleData)
 		parsedItems := collectPlatformDependentInstanceData(mockContext)
 		assert.Equal(t, len(parsedItems), 1)
-		assert.Equal(t, sampleDataParsed[i], parsedItems[0])
+		assert.Equal(t, sampleDataUnixParsed[i], parsedItems[0])
 	}
 
 	cmdExecutor = MockTestExecutorWithError

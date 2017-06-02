@@ -58,20 +58,20 @@ func collectPlatformDependentInstanceData(context context.T) (appData []model.In
 		return
 	}
 
-	log.Infof(":::Parsing output %v", output)
-	r := parse(string(output))
-	log.Infof(":::Parsed output %v", r)
+	log.Infof("Parsing output %v", string(output))
+	r := parseLscpuOutput(string(output))
+	log.Infof("Parsed output %v", r)
 	return r
 }
 
-// parse collects relevant fields from lscpu output, which has the following format (some lines omitted):
+// parseLscpuOutput collects relevant fields from lscpu output, which has the following format (some lines omitted):
 //   CPU(s):                2
 //   Thread(s) per core:    1
 //   Core(s) per socket:    2
 //   Socket(s):             1
 //   Model name:            Intel(R) Xeon(R) CPU E5-2676 v3 @ 2.40GHz
 //   CPU MHz:               2400.072
-func parse(output string) (data []model.InstanceDetailedInformation) {
+func parseLscpuOutput(output string) (data []model.InstanceDetailedInformation) {
 	cpuSpeedMHzStr := getFieldValue(output, cpuSpeedMHzKey)
 	if cpuSpeedMHzStr != "" {
 		cpuSpeedMHzStr = strconv.Itoa(int(math.Trunc(parseFloat(cpuSpeedMHzStr, 0))))

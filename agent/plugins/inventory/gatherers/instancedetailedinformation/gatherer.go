@@ -69,5 +69,5 @@ func (t *T) Run(context context.T, configuration model.Config) (items []model.It
 
 // RequestStop stops the execution of gatherer
 func (t *T) RequestStop(stopType contracts.StopType) error {
-	return errors.New("Ggatherer stop not supported!")
+	return errors.New("gatherer stop not supported")
 }
