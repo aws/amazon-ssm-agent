@@ -28,13 +28,13 @@ import (
 var sampleMessageFiles = []string{
 	"../testdata/sampleMsg.json",
 	"../testdata/sampleMsgVersion2_0.json",
-	"../testdata/sampleMsgVersion2_1.json",
+	"../testdata/sampleMsgVersion2_2.json",
 }
 
 var sampleMessageReplacedParamsFiles = []string{
 	"../testdata/sampleMsgReplacedParams.json",
 	"../testdata/sampleMsgReplacedParamsVersion2_0.json",
-	"../testdata/sampleMsgReplacedParamsVersion2_1.json",
+	"../testdata/sampleMsgReplacedParamsVersion2_2.json",
 }
 
 var logger = log.NewMockLog()
@@ -66,32 +66,7 @@ func TestParseMessageWithParams(t *testing.T) {
 	}
 }
 
-// This test should fail when we add support for 2.2 schema, at that point this should be moved to above test - TestParseMessageWithParams
-func TestParseMessageWithDocumentSchemaVersion22(t *testing.T) {
-	type testCase struct {
-		Input  string
-		Output messageContracts.SendCommandPayload
-		Error  error
-	}
-
-	documentWithSchemaVersion22 := "../testdata/sampleMsgVersion2_2.json"
-
-	// generate test case
-	var tst = testCase{
-		Input:  string(loadFile(t, documentWithSchemaVersion22)),
-		Output: loadMessageFromFile(t, documentWithSchemaVersion22),
-		Error:  fmt.Errorf("Document with schema version 2.2 is not supported by this version of ssm agent, please update to latest version"),
-	}
-
-	// run test
-	parsedMsg, err := ParseMessageWithParams(logger, tst.Input)
-
-	// check results
-	assert.Equal(t, tst.Error, err)
-	assert.Equal(t, tst.Output, parsedMsg)
-}
-
-// This test should always pass
+// Unsupported document schema version
 func TestParseMessageWithDocumentSchemaVersion9999(t *testing.T) {
 	type testCase struct {
 		Input  string
@@ -99,12 +74,12 @@ func TestParseMessageWithDocumentSchemaVersion9999(t *testing.T) {
 		Error  error
 	}
 
-	documentWithSchemaVersion22 := "../testdata/sampleMsgVersion9999_0.json"
+	documentWithSchemaVersion := "../testdata/sampleMsgVersion9999_0.json"
 
 	// generate test case
 	var tst = testCase{
-		Input:  string(loadFile(t, documentWithSchemaVersion22)),
-		Output: loadMessageFromFile(t, documentWithSchemaVersion22),
+		Input:  string(loadFile(t, documentWithSchemaVersion)),
+		Output: loadMessageFromFile(t, documentWithSchemaVersion),
 		Error:  fmt.Errorf("Document with schema version 9999.0 is not supported by this version of ssm agent, please update to latest version"),
 	}
 

@@ -6,13 +6,13 @@
     ]
   },
   "DocumentContent": {
-    "schemaVersion": "2.1",
+    "schemaVersion": "2.2",
     "description": "Cross-platform document",
     "mainSteps": [
       {
         "action": "aws:runPowerShellScript",
         "precondition": {
-          "platformType": "Windows"
+          "StringEquals": ["platformType", "Windows"]
         },
         "inputs": {
           "commands": "date"
@@ -26,7 +26,7 @@
       {
         "action": "aws:runPowerShellScript",
         "precondition": {
-          "platformType": "Linux"
+          "StringEquals": ["platformType", "Linux"]
         },
         "inputs": {
           "commands": "echo ship_it"

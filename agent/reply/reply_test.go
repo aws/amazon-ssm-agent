@@ -78,10 +78,10 @@ func TestPrepareReplyPayloadForCrossPlatformDocument(t *testing.T) {
 		Result                messageContracts.SendReplyPayload
 	}
 
-	sampleReplyVersion21File := "./../message/testdata/sampleReplyVersion2_1.json"
+	sampleReplyFile := "./../message/testdata/sampleReplyVersion2_2.json"
 
 	// parse a test reply to see if we can regenerate it
-	expectedReply := loadMessageReplyFromFile(t, sampleReplyVersion21File)
+	expectedReply := loadMessageReplyFromFile(t, sampleReplyFile)
 
 	// generate test case
 	test := testCase{

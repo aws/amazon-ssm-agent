@@ -141,9 +141,11 @@ const (
 	SeelogConfigFileName = "seelog.xml"
 )
 
+// Document versions that are supported by this Agent version.
+// Note that 1.1 and 2.1 are deprecated schemas and hence are not added here.
 var SupportedDocumentVersions = map[string]struct{}{
 	"1.0": {},
 	"1.2": {},
 	"2.0": {},
-	"2.1": {},
+	"2.2": {},
 }
