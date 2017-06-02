@@ -1,5 +1,11 @@
 Latest
+==============
+- Added support for SLES (SuSE) (64-bit, v12 and above)
+- Various bug fixes
+
+2.0.796.0
 ===============
+- Linux platform version now based on os-release when available
 - Various bug fixes
 
 2.0.790.0
