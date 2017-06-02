@@ -44,13 +44,13 @@ import (
 var sampleMessageFiles = []string{
 	"../testdata/sampleMsg.json",
 	"../testdata/sampleMsgVersion2_0.json",
-	"../testdata/sampleMsgVersion2_1.json",
+	"../testdata/sampleMsgVersion2_2.json",
 }
 
 var sampleMessageReplyFiles = []string{
 	"../testdata/sampleReply.json",
 	"../testdata/sampleReplyVersion2_0.json",
-	"../testdata/sampleReplyVersion2_1.json",
+	"../testdata/sampleReplyVersion2_2.json",
 }
 
 var testMessageId = "03f44d19-90fe-44d4-bd4c-298b966a1e1a"
@@ -376,7 +376,7 @@ func generateTestCaseFromFiles(t *testing.T, messagePayloadFile string, messageR
 		}
 	}
 
-	// document 2.0 & 2.1
+	// document 2.0 & 2.2
 	if payload.DocumentContent.MainSteps != nil {
 		configs := []*contracts.Configuration{}
 		configs = getPluginConfigurationsFromMainStep(payload.DocumentContent.MainSteps,

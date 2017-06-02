@@ -136,10 +136,10 @@ func TestIsCrossPlatformEnabledForSchema20(t *testing.T) {
 	assert.False(t, isCrossPlatformEnabled)
 }
 
-func TestIsCrossPlatformEnabledForSchema21(t *testing.T) {
-	var schemaVersion = "2.1"
+func TestIsCrossPlatformEnabledForSchema22(t *testing.T) {
+	var schemaVersion = "2.2"
 	isCrossPlatformEnabled := IsPreconditionEnabled(schemaVersion)
 
-	// isCrossPlatformEnabled should be true for 2.1 document
+	// isCrossPlatformEnabled should be true for 2.2 document
 	assert.True(t, isCrossPlatformEnabled)
 }

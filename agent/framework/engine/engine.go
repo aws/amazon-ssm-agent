@@ -38,12 +38,9 @@ type SendDocumentLevelResponse func(messageID string, resultStatus contracts.Res
 type UpdateAssociation func(log log.T, executionID string, documentCreatedDate string, pluginOutputs map[string]*contracts.PluginResult, totalNumberOfPlugins int)
 
 const (
-	executeStep              string = "execute"
-	skipStep                 string = "skip"
-	failStep                 string = "fail"
-	unsupportedStep          string = "unsupported"
-	unrecognizedPrecondition string = "unrecognizedPrecondition"
-	unknownPlugin            string = "unknownPlugin"
+	executeStep string = "execute"
+	skipStep    string = "skip"
+	failStep    string = "fail"
 )
 
 // Assign method to global variables to allow unittest to override
@@ -130,8 +127,16 @@ func RunPlugins(
 			CancelFlag:  cancelFlag,
 		}
 
-		isKnown, isSupported, platformDetail := isSupportedPlugin(context.Log(), pluginName)
-		operation, moreDetails := getStepExecutionOperation(context.Log(), isKnown, isSupported, pluginHandlerFound, configuration.IsPreconditionEnabled, configuration.Preconditions)
+		isKnown, isSupported, _ := isSupportedPlugin(context.Log(), pluginName)
+		operation, logMessage := getStepExecutionOperation(
+			context.Log(),
+			pluginName,
+			pluginID,
+			isKnown,
+			isSupported,
+			pluginHandlerFound,
+			configuration.IsPreconditionEnabled,
+			configuration.Preconditions)
 
 		switch operation {
 		case executeStep:
@@ -150,28 +155,12 @@ func RunPlugins(
 				rebooter.RequestPendingReboot(context.Log())
 			}
 		case skipStep:
-			skipMessage := fmt.Sprintf("Step execution skipped due to incompatible platform. Plugin: %s", pluginName)
-			context.Log().Info(skipMessage)
+			context.Log().Info(logMessage)
 			pluginOutputs[pluginID].Status = contracts.ResultStatusSkipped
 			pluginOutputs[pluginID].Code = 0
-			pluginOutputs[pluginID].Output = skipMessage
+			pluginOutputs[pluginID].Output = logMessage
 		case failStep:
-			err := fmt.Errorf("Plugin with name %s not found", pluginName)
-			pluginOutputs[pluginID].Status = contracts.ResultStatusFailed
-			pluginOutputs[pluginID].Error = err
-			context.Log().Error(err)
-		case unrecognizedPrecondition:
-			err := fmt.Errorf("Unrecognized precondition(s): '%s' in plugin: %s, please update agent to latest version", moreDetails, pluginName)
-			pluginOutputs[pluginID].Status = contracts.ResultStatusFailed
-			pluginOutputs[pluginID].Error = err
-			context.Log().Error(err)
-		case unsupportedStep:
-			err := fmt.Errorf("Plugin with name %s is not supported in current platform!\n%s", pluginName, platformDetail)
-			pluginOutputs[pluginID].Status = contracts.ResultStatusFailed
-			pluginOutputs[pluginID].Error = err
-			context.Log().Error(err)
-		case unknownPlugin:
-			err := fmt.Errorf("Plugin with name %s is not supported by this version of ssm agent, please update to latest version", pluginName)
+			err := fmt.Errorf(logMessage)
 			pluginOutputs[pluginID].Status = contracts.ResultStatusFailed
 			pluginOutputs[pluginID].Error = err
 			context.Log().Error(err)
@@ -197,7 +186,6 @@ func RunPlugins(
 			// do not execute the the next plugin
 			break
 		}
-
 	}
 
 	return
@@ -232,11 +220,13 @@ func runPlugin(
 // Checks plugin compatibility and step precondition and returns if it should be executed, skipped or failed
 func getStepExecutionOperation(
 	log log.T,
+	pluginName string,
+	pluginId string,
 	isKnown bool,
 	isSupported bool,
 	isPluginHandlerFound bool,
 	isPreconditionEnabled bool,
-	preconditions map[string]string,
+	preconditions contracts.Precondition,
 ) (string, string) {
 	log.Debugf("isSupported flag = %t", isSupported)
 	log.Debugf("isPluginHandlerFound flag = %t", isPluginHandlerFound)
@@ -245,56 +235,115 @@ func getStepExecutionOperation(
 	if !isPreconditionEnabled {
 		// 1.x or 2.0 document
 		if !isKnown {
-			return unknownPlugin, ""
+			return failStep, fmt.Sprintf(
+				"Plugin with name %s is not supported by this version of ssm agent, please update to latest version. Step name: %s",
+				pluginName,
+				pluginId)
 		} else if !isSupported {
-			return unsupportedStep, ""
-		} else if len(preconditions) > 0 || !isPluginHandlerFound {
+			return failStep, fmt.Sprintf(
+				"Plugin with name %s is not supported in current platform. Step name: %s",
+				pluginName,
+				pluginId)
+		} else if len(preconditions.Precondition.Expression) > 0 {
 			// if 1.x or 2.0 document contains precondition or plugin not found, failStep
-			return failStep, ""
+			return failStep, fmt.Sprintf(
+				"Precondition is not supported for document schema version prior to 2.2. Step name: %s",
+				pluginId)
+		} else if !isPluginHandlerFound {
+			return failStep, fmt.Sprintf(
+				"Plugin with name %s not found. Step name: %s",
+				pluginName,
+				pluginId)
 		} else {
 			return executeStep, ""
 		}
 	} else {
-		// 2.1 or higher (cross-platform) document
-		if len(preconditions) == 0 {
+		// 2.2 or higher (cross-platform) document
+		if len(preconditions.Precondition.Expression) == 0 {
 			log.Debug("Cross-platform Precondition is not present")
 
 			// precondition is not present - if pluginFound executeStep, else skipStep
 			if !isKnown {
-				return unknownPlugin, ""
+				return failStep, fmt.Sprintf(
+					"Plugin with name %s is not supported by this version of ssm agent, please update to latest version. Step name: %s",
+					pluginName,
+					pluginId)
 			} else if isSupported && isPluginHandlerFound {
 				return executeStep, ""
 			} else {
-				return skipStep, ""
+				return skipStep, fmt.Sprintf(
+					"Step execution skipped due to incompatible platform. Step name: %s",
+					pluginId)
 			}
 		} else {
 			log.Debugf("Cross-platform Precondition is present, precondition = %v", preconditions)
 
-			// Platform type of OS on the instance
-			instancePlatformType, _ := platform.PlatformType(log)
-			log.Debugf("OS platform type of this instance = %s", instancePlatformType)
+			isAllowed, unrecognizedPreconditionList := evaluatePreconditions(log, preconditions)
 
-			var isAllowed = true
-			var unrecognizedPreconditionList []string
-
-			for k, v := range preconditions {
-				if strings.Compare(k, "platformType") != 0 {
-					// if there's unrecognized precondition, mark it for unrecognizedPrecondition (which is a form of failure)
-					unrecognizedPreconditionList = append(unrecognizedPreconditionList, k)
-				} else if strings.Compare(instancePlatformType, strings.ToLower(v)) != 0 {
-					// if precondition doesn't match for platformType, mark it for skip
-					isAllowed = false
-				}
-			}
 			if isAllowed && !isKnown {
-				return unknownPlugin, ""
+				return failStep, fmt.Sprintf(
+					"Plugin with name %s is not supported by this version of ssm agent, please update to latest version. Step name: %s",
+					pluginName,
+					pluginId)
 			} else if !isAllowed || !isSupported || !isPluginHandlerFound {
-				return skipStep, ""
+				return skipStep, fmt.Sprintf(
+					"Step execution skipped due to incompatible platform. Step name: %s",
+					pluginId)
 			} else if len(unrecognizedPreconditionList) > 0 {
-				return unrecognizedPrecondition, strings.Join(unrecognizedPreconditionList, ", ")
+				return failStep, fmt.Sprintf(
+					"Unrecognized precondition(s): '%s', please update agent to latest version. Step name: %s",
+					strings.Join(unrecognizedPreconditionList, ", "),
+					pluginId)
 			} else {
 				return executeStep, ""
 			}
 		}
 	}
+}
+
+// Evaluate precondition and return precondition result and unrecognized preconditions (if any)
+func evaluatePreconditions(
+	log log.T,
+	preconditions contracts.Precondition,
+) (bool, []string) {
+
+	var isAllowed = true
+	var unrecognizedPreconditionList []string
+
+	// For current release, we only support "StringEquals" operator and "platformType"
+	// operand, so explicitly checking for those and number of operands must be 2
+	for key, value := range preconditions.Precondition.Expression {
+		switch key {
+		case "StringEquals":
+			// Platform type of OS on the instance
+			instancePlatformType, _ := platform.PlatformType(log)
+			log.Debugf("OS platform type of this instance = %s", instancePlatformType)
+
+			if len(value) != 2 ||
+				(strings.Compare(value[0], "platformType") == 0 && strings.Compare(value[1], "platformType") == 0) ||
+				(strings.Compare(value[0], "platformType") != 0 && strings.Compare(value[1], "platformType") != 0) {
+
+				unrecognizedPreconditionList = append(unrecognizedPreconditionList, fmt.Sprintf("\"%s\": %v", key, value))
+			} else {
+				// Variable and value can be in any order, i.e. both "StringEquals": ["platformType", "Windows"]
+				// and "StringEquals": ["Windows", "platformType"] are valid
+				var platformTypeValue string
+				if strings.Compare(value[0], "platformType") == 0 {
+					platformTypeValue = value[1]
+				} else {
+					platformTypeValue = value[0]
+				}
+
+				if strings.Compare(instancePlatformType, strings.ToLower(platformTypeValue)) != 0 {
+					// if precondition doesn't match for platformType, mark step for skip
+					isAllowed = false
+				}
+			}
+		default:
+			// mark for unrecognizedPrecondition (which is a form of failure)
+			unrecognizedPreconditionList = append(unrecognizedPreconditionList, fmt.Sprintf("\"%s\": %v", key, value))
+		}
+	}
+
+	return isAllowed, unrecognizedPreconditionList
 }
