@@ -36,7 +36,7 @@ func initLogger() (logger T) {
 	var logConfigBytes []byte
 	var err error
 	if logConfigBytes, err = ioutil.ReadFile(DefaultSeelogConfigFilePath); err != nil {
-		fmt.Println("Error occured fetching the seelog config file path: ", err)
+		fmt.Println("Error occurred fetching the seelog config file path: ", err)
 		logConfigBytes = defaultConfig()
 	}
 

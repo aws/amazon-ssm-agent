@@ -72,7 +72,7 @@ func HasManagedInstancesCredentials() (bool, error) {
 	return info.PrivateKey != "" && info.Region != "" && info.InstanceID != "", nil
 }
 
-// UpdatePrivateKey saves the private key into the registration persistance store
+// UpdatePrivateKey saves the private key into the registration persistence store
 func UpdatePrivateKey(privateKey, privateKeyType string) (err error) {
 	info := getInstanceInfo()
 	info.PrivateKey = privateKey
@@ -80,7 +80,7 @@ func UpdatePrivateKey(privateKey, privateKeyType string) (err error) {
 	return updateServerInfo(info)
 }
 
-// UpdateServerInfo saves the instance info into the registration persistance store
+// UpdateServerInfo saves the instance info into the registration persistence store
 func UpdateServerInfo(instanceID, region, privateKey, privateKeyType string) (err error) {
 	info := instanceInfo{
 		InstanceID:     instanceID,

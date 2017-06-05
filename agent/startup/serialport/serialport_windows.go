@@ -65,7 +65,7 @@ func (sp *SerialPort) OpenPort() (err error) {
 	var comPortName *uint16
 	comPortName, err = syscall.UTF16PtrFromString(comport)
 	if err != nil {
-		sp.log.Errorf("Error occured while opening serial port: %v", err.Error())
+		sp.log.Errorf("Error occurred while opening serial port: %v", err.Error())
 		return err
 	}
 
@@ -79,7 +79,7 @@ func (sp *SerialPort) OpenPort() (err error) {
 		syscall.FILE_ATTRIBUTE_NORMAL,
 		0)
 	if err != nil {
-		sp.log.Errorf("Error occured while opening serial port: %v", err.Error())
+		sp.log.Errorf("Error occurred while opening serial port: %v", err.Error())
 		return
 	}
 
@@ -92,7 +92,7 @@ func (sp *SerialPort) OpenPort() (err error) {
 		uintptr(unsafe.Pointer(&sp.dcb)),
 	)
 	if r == 0 {
-		sp.log.Errorf("Error occured while opening serial port: %v", err.Error())
+		sp.log.Errorf("Error occurred while opening serial port: %v", err.Error())
 		return
 	}
 
@@ -102,11 +102,11 @@ func (sp *SerialPort) OpenPort() (err error) {
 // ClosePort closes the serial port, which MUST be done at the end.
 func (sp *SerialPort) ClosePort() {
 	if sp.fileHandle == nil {
-		sp.log.Error("Error occured while closing serial port: Port must be opened")
+		sp.log.Error("Error occurred while closing serial port: Port must be opened")
 		return
 	}
 	if err := sp.fileHandle.Close(); err != nil {
-		sp.log.Errorf("Error occured while closing serial port: %v", err.Error())
+		sp.log.Errorf("Error occurred while closing serial port: %v", err.Error())
 	}
 	return
 }
@@ -118,7 +118,7 @@ func (sp *SerialPort) WritePort(message string) {
 	var done uint32
 	formattedMessage := fmt.Sprintf("%v: %v\n", time.Now().UTC().Format("2006/01/02 15:04:05Z"), message)
 	if err := syscall.WriteFile(sp.handle, []byte(formattedMessage), &done, nil); err != nil {
-		sp.log.Errorf("Error occured while writing to serial port: %v", err.Error())
+		sp.log.Errorf("Error occurred while writing to serial port: %v", err.Error())
 	}
 
 	return

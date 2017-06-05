@@ -259,7 +259,7 @@ func testCommandInvokerShutdown(t *testing.T, invoke CommandInvoker, cancelFlag 
 	logger.Infof("testCommandInvoker with shutdown")
 	stdout, stderr, exitCode, errs := invoke(testCase.Commands)
 	logger.Infof("errors %v", errs)
-	// commmand should be uninterferred
+	// command should be uninterferred
 	assert.Equal(t, 0, len(errs))
 	assertReaderEquals(t, testCase.ExpectedStdout, stdout)
 	assertReaderEquals(t, testCase.ExpectedStderr, stderr)

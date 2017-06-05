@@ -223,7 +223,7 @@ func (p *Processor) runScheduledAssociation(log log.T) {
 			log.Infof("Association %v is executing, system will retry later", *scheduledAssociation.Association.AssociationId)
 
 		} else if isAssociationTimedOut(scheduledAssociation) {
-			err = fmt.Errorf("Assocation stuck at InProgress for longer than %v hours", documentLevelTimeOutDurationHour)
+			err = fmt.Errorf("Association stuck at InProgress for longer than %v hours", documentLevelTimeOutDurationHour)
 			log.Error(err)
 			p.assocSvc.UpdateInstanceAssociationStatus(
 				log,

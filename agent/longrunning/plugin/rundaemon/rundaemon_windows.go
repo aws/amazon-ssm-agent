@@ -95,7 +95,7 @@ func BlockWhileDaemonRunning(context context.T, pid int) error {
 		return err
 	}
 	log.Infof("Waiting for the process to die")
-	// Control blocks here untill this process stops running (gets killed for example)
+	// Control blocks here until this process stops running (gets killed for example)
 	_, err = process.Wait()
 	return err
 }
@@ -168,7 +168,7 @@ func StartDaemonHelper(p *Plugin, context context.T, configuration string) (err 
 	if err != nil {
 		log.Errorf("Error attaching job object to Daemon: %s", err.Error())
 	} else {
-		log.Debugf("Succesfully attached job object to Daemon")
+		log.Debugf("Successfully attached job object to Daemon")
 	}
 	p.CurrentDaemonState = CurrentRunning
 	return

@@ -148,7 +148,7 @@ func runConfigureDaemon(
 			},
 		}
 
-		// TODO:MF: make deps file to support mocking filesystem depedency
+		// TODO:MF: make deps file to support mocking filesystem dependency
 		// Save daemon configuration file
 		var errDaemonDoc error
 		var ssmDaemonDoc string

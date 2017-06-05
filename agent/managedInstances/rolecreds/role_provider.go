@@ -104,7 +104,7 @@ func (m *managedInstancesRoleProvider) Retrieve() (credentials.Value, error) {
 
 	roleCreds, err := m.Client.RequestManagedInstanceRoleToken(fingerprint)
 	if err != nil {
-		return emptyCredential, fmt.Errorf("error occured in RequestManagedInstanceRoleToken: %v", err)
+		return emptyCredential, fmt.Errorf("error occurred in RequestManagedInstanceRoleToken: %v", err)
 	}
 
 	// check if SSM has requested the agent to update the instance keypair
@@ -136,7 +136,7 @@ func (m *managedInstancesRoleProvider) Retrieve() (credentials.Value, error) {
 	if shareCreds {
 		err = sharedCredentials.Store(*roleCreds.AccessKeyId, *roleCreds.SecretAccessKey, *roleCreds.SessionToken, shareProfile)
 		if err != nil {
-			logger.Error(ProviderName, "Error occured sharing credentials. ", err) // error does not stop execution
+			logger.Error(ProviderName, "Error occurred sharing credentials. ", err) // error does not stop execution
 		}
 	}
 

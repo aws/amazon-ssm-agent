@@ -58,7 +58,7 @@ func start(log logger.T, instanceIDPtr *string, regionPtr *string) (cpm *coreman
 	}()
 
 	if cpm, err = coremanager.NewCoreManager(instanceIDPtr, regionPtr, log); err != nil {
-		log.Errorf("error occured when starting core manager: %v", err)
+		log.Errorf("error occurred when starting core manager: %v", err)
 		return
 	}
 	cpm.Start()
@@ -95,7 +95,7 @@ func run(log logger.T) {
 	// run core manager
 	cpm, err := start(log, instanceIDPtr, regionPtr)
 	if err != nil {
-		log.Errorf("error occured when starting amazon-ssm-agent: %v", err)
+		log.Errorf("error occurred when starting amazon-ssm-agent: %v", err)
 		return
 	}
 	blockUntilSignaled(log)

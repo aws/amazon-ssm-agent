@@ -267,7 +267,7 @@ func (s *AssociationService) UpdateInstanceAssociationStatus(
 
 		var responseContent string
 		if responseContent, err = jsonutil.Marshal(response); err != nil {
-			log.Error("could not marshal reponse! ", err)
+			log.Error("could not marshal response! ", err)
 			return
 		}
 		log.Info("Update instance association status response content is ", jsonutil.Indent(responseContent))
@@ -371,7 +371,7 @@ func (s *AssociationService) UpdateAssociationStatus(
 
 	responseContent, err := jsonutil.Marshal(response)
 	if err != nil {
-		log.Error("could not marshal reponse! ", err)
+		log.Error("could not marshal response! ", err)
 		return
 	}
 	log.Info("Update association status response content is ", jsonutil.Indent(responseContent))
