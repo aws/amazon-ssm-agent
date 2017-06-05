@@ -35,9 +35,8 @@ const (
 	KeywordFor64BitArchitectureReportedByPowershell = "64"
 	KeywordFor32BitArchitectureReportedByPowershell = "32"
 	Architecture64BitReportedByGoRuntime            = "amd64"
-)
 
-var ConvertGuidToCompressedGuidCmd = `function Convert-GuidToCompressedGuid {
+	ConvertGuidToCompressedGuidCmd = `function Convert-GuidToCompressedGuid {
 						[CmdletBinding()]
 						[OutputType()]
 						param (
@@ -74,40 +73,32 @@ var ConvertGuidToCompressedGuidCmd = `function Convert-GuidToCompressedGuid {
 					}
 
 				     `
-var ArgsToReadRegistryFromProducts = `$products = Get-ItemProperty HKLM:\Software\Classes\Installer\Products\* | Select-Object  @{n="PSChildName";e={$_."PSChildName"}} |
+	ArgsToReadRegistryFromProducts = `$products = Get-ItemProperty HKLM:\Software\Classes\Installer\Products\* | Select-Object  @{n="PSChildName";e={$_."PSChildName"}} |
 				      Select -expand PSChildName
 
 				     `
-var ArgsToReadRegistryFromWindowsCurrentVersionUninstall = `Get-ItemProperty HKLM:\Software\Microsoft\Windows\CurrentVersion\Uninstall\*  |
-								Where-Object {($_.DisplayName -ne $null -and $_DisplayName -ne '' -and $_.DisplayName -notmatch '^KB[000000-999999]') -and
-								       ($_.UninstallString -ne $null -and $_.UninstallString -ne '') -and
-								       ($_.SystemComponent -eq $null -or ($_.SystemComponent -ne $null -and $_.SystemComponent -eq '0'))  -and
-								       ($_.ParentKeyName -eq $null) -and
-								       ($_.WindowsInstaller -eq $null -or ($_.WindowsInstaller -eq 1 -and $products -contains (Convert-GuidToCompressedGuid $_.PSChildName))) -and
-								       ($_.ReleaseType -eq $null -or
-										($_.ReleaseType -ne $null -and
-										$_.ReleaseType -ne 'Security Update' -and
-										$_.ReleaseType -ne 'Update Rollup' -and
-										$_.ReleaseType -ne 'Hotfix'))
-							        } |
-							       Select-Object @{n="Name";e={$_."DisplayName"}},@{n="WindowsInstaller";e={$_."WindowsInstaller"}},
-							       @{n="PSChildName";e={$_."PSChildName"}}, @{n="Version";e={$_."DisplayVersion"}}, Publisher,
-							       @{n="InstalledTime";e={[datetime]::ParseExact($_."InstallDate","yyyyMMdd",$null).ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ssZ")}} | ConvertTo-Json `
-var ArgsToReadRegistryFromWow6432Node = `Get-ItemProperty HKLM:\Software\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\*  |
-					     Where-Object {($_.DisplayName -ne $null -and $_DisplayName -ne '' -and $_.DisplayName -notmatch '^KB[000000-999999]') -and
-						     ($_.UninstallString -ne $null -and $_.UninstallString -ne '') -and
-						     ($_.SystemComponent -eq $null -or ($_.SystemComponent -ne $null -and $_.SystemComponent -eq '0'))  -and
-						     ($_.ParentKeyName -eq $null) -and
-						     ($_.WindowsInstaller -eq $null -or ($_.WindowsInstaller -eq 1 -and $products -contains (Convert-GuidToCompressedGuid $_.PSChildName))) -and
-						     ($_.ReleaseType -eq $null -or
-							     ($_.ReleaseType -ne $null -and
-							     $_.ReleaseType -ne 'Security Update' -and
-							     $_.ReleaseType -ne 'Update Rollup' -and
-							     $_.ReleaseType -ne 'Hotfix'))
-              				     } |
-              				     Select-Object @{n="Name";e={$_."DisplayName"}},@{n="WindowsInstaller";e={$_."WindowsInstaller"}},
-              				     @{n="PSChildName";e={$_."PSChildName"}},
-               				     @{n="Version";e={$_."DisplayVersion"}}, Publisher, @{n="InstalledTime";e={[datetime]::ParseExact($_."InstallDate","yyyyMMdd",$null).ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ssZ")}} | ConvertTo-Json `
+	RegistryPathCurrentVersionUninstall            = `HKLM:\Software\Microsoft\Windows\CurrentVersion\Uninstall\*`
+	RegistryPathWow6432NodeCurrentVersionUninstall = `HKLM:\Software\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\*`
+	ArgsToReadRegistryApplications                 = `Get-ItemProperty %v |
+Where-Object {($_.DisplayName -ne $null -and $_DisplayName -ne '' -and $_.DisplayName -notmatch '^KB[000000-999999]') -and
+	($_.UninstallString -ne $null -and $_.UninstallString -ne '') -and
+	($_.SystemComponent -eq $null -or ($_.SystemComponent -ne $null -and $_.SystemComponent -eq '0'))  -and
+	($_.ParentKeyName -eq $null) -and
+	($_.WindowsInstaller -eq $null -or ($_.WindowsInstaller -eq 1 -and $products -contains (Convert-GuidToCompressedGuid $_.PSChildName))) -and
+	($_.ReleaseType -eq $null -or ($_.ReleaseType -ne $null -and
+		$_.ReleaseType -ne 'Security Update' -and
+		$_.ReleaseType -ne 'Update Rollup' -and
+		$_.ReleaseType -ne 'Hotfix'))
+} |
+Select-Object @{n="Name";e={$_."DisplayName"}},
+	@{n="PackageId";e={$_."PSChildName"}}, @{n="Version";e={$_."DisplayVersion"}}, Publisher,
+	@{n="InstalledTime";e={[datetime]::ParseExact($_."InstallDate","yyyyMMdd",$null).ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ssZ")}},
+	@{n="Summary";e={$_."Comments"}} |
+ConvertTo-Json `
+)
+
+var ArgsToReadRegistryFromWindowsCurrentVersionUninstall = fmt.Sprintf(ArgsToReadRegistryApplications, RegistryPathCurrentVersionUninstall)
+var ArgsToReadRegistryFromWow6432Node = fmt.Sprintf(ArgsToReadRegistryApplications, RegistryPathWow6432NodeCurrentVersionUninstall)
 
 // decoupling exec.Command for easy testability
 var cmdExecutor = executeCommand
@@ -228,8 +219,10 @@ func collectPlatformDependentApplicationData(context context.T) []model.Applicat
 	return data
 }
 
-// detectOSArch detects OS architecture
-func detectOSArch(context context.T, command, args string) (osArch string) {
+// detectOSArch detects OS architecture; decouple for unit test
+var detectOSArch = detectOSArchFun
+
+func detectOSArchFun(context context.T, command, args string) (osArch string) {
 	var output []byte
 	var err error
 	log := context.Log()

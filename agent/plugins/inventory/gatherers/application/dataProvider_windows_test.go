@@ -27,10 +27,87 @@ import (
 )
 
 const (
-	sampleData   = `[{"Name":"Notepad++","Version":"6.9.2","Publisher":"Notepad++ Team","InstalledTime":null},{"Name":"AWS Tools for Windows","Version":"3.9.344.0","Publisher":"Amazon Web Services Developer Relations","InstalledTime":"20160512"},{"Name":"EC2ConfigService","Version":"3.16.930.0","Publisher":"Amazon Web Services","InstalledTime":null}]`
+	sampleData = `[
+		{"Name":"Notepad++","Version":"6.9.2","Publisher":"Notepad++ Team","InstalledTime":null},
+		{"Name":"AWS Tools for Windows","Version":"3.9.344.0","Publisher":"Amazon Web Services Developer Relations","InstalledTime":"20160512"},
+		{"Name":"EC2ConfigService","Version":"3.16.930.0","Publisher":"Amazon Web Services","InstalledTime":null},` +
+		// Windows 2008 samples:
+		`{
+			"Name":  "Microsoft Visual C++ 2008 Redistributable - x64 9.0.30729",
+			"PackageId":  "{4FFA2088-8317-3B14-93CD-4C699DB37843}",
+			"Version":  "9.0.30729",
+			"Publisher":  "Microsoft Corporation",
+			"InstalledTime":  "2011-03-05T00:00:00Z",
+			"Summary":  ""
+		},
+		{
+			"Name":  "Microsoft .NET Framework 4.5.2",
+			"PackageId":  "{92FB6C44-E685-45AD-9B20-CADF4CABA132} - 1033",
+			"Version":  "4.5.51209",
+			"Publisher":  "Microsoft Corporation",
+			"InstalledTime":  null,
+			"Summary":  null
+		},` +
+		// Windows 2016 samples:
+		`{
+			"Name":  "Mozilla Firefox 53.0.3 (x64 en-US)",
+			"PackageId":  "Mozilla Firefox 53.0.3 (x64 en-US)",
+			"Version":  "53.0.3",
+			"Publisher":  "Mozilla",
+			"InstalledTime":  null,
+			"Summary":  "Mozilla Firefox 53.0.3 (x64 en-US)"
+		},
+		{
+			"Name":  "Go Programming Language amd64 go1.8.3",
+			"PackageId":  "{854BC448-6940-4253-9E50-E433E8C2E96A}",
+			"Version":  "1.8.3",
+			"Publisher":  "https://golang.org",
+			"InstalledTime":  "2017-05-31T00:00:00Z",
+			"Summary":  "The Go programming language is a fast, statically typed, compiled language that feels like a dynamically typed, interpreted language."
+		}]`
 	mockArch     = "randomArch"
 	randomString = "blahblah"
 )
+
+var sampleDataParsed = []model.ApplicationData{
+	{Name: "Notepad++", Version: "6.9.2", Publisher: "Notepad++ Team", InstalledTime: ""},
+	{Name: "AWS Tools for Windows", Version: "3.9.344.0", Publisher: "Amazon Web Services Developer Relations", InstalledTime: "20160512"},
+	{Name: "EC2ConfigService", Version: "3.16.930.0", Publisher: "Amazon Web Services", InstalledTime: ""},
+	// Windows 2008 samples:
+	{
+		Name:          "Microsoft Visual C++ 2008 Redistributable - x64 9.0.30729",
+		PackageId:     "{4FFA2088-8317-3B14-93CD-4C699DB37843}",
+		Version:       "9.0.30729",
+		Publisher:     "Microsoft Corporation",
+		InstalledTime: "2011-03-05T00:00:00Z",
+		Summary:       "",
+	},
+	{
+		Name:          "Microsoft .NET Framework 4.5.2",
+		PackageId:     "{92FB6C44-E685-45AD-9B20-CADF4CABA132} - 1033",
+		Version:       "4.5.51209",
+		Publisher:     "Microsoft Corporation",
+		InstalledTime: "",
+		Summary:       "",
+	},
+	// Windows 2016 samples:
+	{
+		Name:          "Mozilla Firefox 53.0.3 (x64 en-US)",
+		PackageId:     "Mozilla Firefox 53.0.3 (x64 en-US)",
+		Version:       "53.0.3",
+		Publisher:     "Mozilla",
+		InstalledTime: "",
+		Summary:       "Mozilla Firefox 53.0.3 (x64 en-US)",
+	},
+	{
+		Name:          "Go Programming Language amd64 go1.8.3",
+		PackageId:     "{854BC448-6940-4253-9E50-E433E8C2E96A}",
+		Version:       "1.8.3",
+		Publisher:     "https://golang.org",
+		InstalledTime: "2017-05-31T00:00:00Z",
+		Summary:       "The Go programming language is a fast, statically typed, compiled language that feels like a dynamically typed, interpreted language.",
+	},
+}
 
 func MockTestExecutorWithError(command string, args ...string) ([]byte, error) {
 	var result []byte
@@ -53,8 +130,15 @@ func TestConvertToApplicationData(t *testing.T) {
 	data, err = convertToApplicationData(sampleData, mockArch)
 
 	assert.Nil(t, err, "Error is not expected for processing sample data - %v", sampleData)
-	assert.Equal(t, 3, len(data))
-	assert.Equal(t, mockArch, data[0].Architecture, "Architecture must be - %v", mockArch)
+	assertEqual(t, getDataWithArchitecture(sampleDataParsed, mockArch), data)
+}
+
+func getDataWithArchitecture(data []model.ApplicationData, architecture string) (dataWithArchitecture []model.ApplicationData) {
+	dataWithArchitecture = append(dataWithArchitecture, data...)
+	for i := range dataWithArchitecture {
+		dataWithArchitecture[i].Architecture = architecture
+	}
+	return
 }
 
 func TestExecutePowershellCommands(t *testing.T) {
@@ -69,7 +153,7 @@ func TestExecutePowershellCommands(t *testing.T) {
 	cmdExecutor = MockTestExecutorWithoutError
 	data = executePowershellCommands(c, mockCmd, mockArgs, mockArch)
 
-	assert.Equal(t, 3, len(data), "There must be 3 applications for given sample data - %v", sampleData)
+	assertEqual(t, getDataWithArchitecture(sampleDataParsed, mockArch), data)
 
 	//testing command executor with errors
 	cmdExecutor = MockTestExecutorWithError
@@ -90,17 +174,26 @@ func TestCollectApplicationData(t *testing.T) {
 	c := context.NewMockDefault()
 	packageRepository = MockPackageRepositoryEmpty()
 
+	// mock OS arch
+	detectOSArch = func(context context.T, command, args string) (osArch string) {
+		return KeywordFor64BitArchitectureReportedByPowershell
+	}
+
 	//testing command executor without errors
 	cmdExecutor = MockTestExecutorWithoutError
 	data = collectPlatformDependentApplicationData(c)
 
-	assert.Equal(t, 6, data, "MockExecutor will be called 2 times hence total entries must be 6")
+	// MockExecutor will be called 2 times: once for i386, once for amd64, hence total entries must be twice the sample data
+	var doubleResult []model.ApplicationData
+	doubleResult = append(doubleResult, getDataWithArchitecture(sampleDataParsed, model.Arch32Bit)...)
+	doubleResult = append(doubleResult, getDataWithArchitecture(sampleDataParsed, model.Arch64Bit)...)
+	assertEqual(t, doubleResult, data)
 
 	//testing command executor with errors
 	cmdExecutor = MockTestExecutorWithError
 	data = collectPlatformDependentApplicationData(c)
 
-	assert.Equal(t, 0, data, "If MockExecutor throws error, application dataset must be empty")
+	assert.Equal(t, 0, len(data), "If MockExecutor throws error, application dataset must be empty")
 }
 
 func TestCollectAndMergePackages(t *testing.T) {
@@ -110,8 +203,8 @@ func TestCollectAndMergePackages(t *testing.T) {
 		{Name: "IntelSriovDriver", Version: "1.2.3", Architecture: model.Arch64Bit},
 	})
 
-	// both dpkg and rpm return result without error
 	cmdExecutor = MockTestExecutorWithoutError
 	data := CollectApplicationData(mockContext)
-	assert.Equal(t, 3, len(data), "Given sample data must return 3 entries of application data")
+	// MockExecutor will be called 2 times and there is one extra application from the merge
+	assert.Equal(t, 2*len(sampleDataParsed)+1, len(data))
 }

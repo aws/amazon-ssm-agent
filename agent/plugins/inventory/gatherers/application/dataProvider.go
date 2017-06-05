@@ -64,11 +64,11 @@ func CollectApplicationData(context context.T) (appData []model.ApplicationData)
 	return model.MergeLists(platformAppData, packageAppData)
 }
 
-// cleanupJsonField converts a text to a json friendly text as follows:
+// cleanupJSONField converts a text to a json friendly text as follows:
 // - converts multi-line fields to single line by removing all but the first line
 // - escapes special characters
 // - truncates remaining line to length no more than maxSummaryLength
-func cleanupJsonField(field string) string {
+func cleanupJSONField(field string) string {
 	res := field
 	endOfLinePos := strings.Index(res, "\n")
 	if endOfLinePos >= 0 {

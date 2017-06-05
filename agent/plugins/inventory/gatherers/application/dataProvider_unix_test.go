@@ -11,6 +11,8 @@
 // either express or implied. See the License for the specific language governing
 // permissions and limitations under the License.
 
+// +build darwin freebsd linux netbsd openbsd
+
 // Package application contains a application gatherer.
 package application
 
@@ -94,7 +96,7 @@ var sampleDataParsed = []model.ApplicationData{
 
 func MockTestExecutorWithError(command string, args ...string) ([]byte, error) {
 	var result []byte
-	return result, fmt.Errorf("Random Error")
+	return result, fmt.Errorf("random error")
 }
 
 func MockTestExecutorWithoutError(command string, args ...string) ([]byte, error) {
@@ -108,9 +110,8 @@ func MockTestExecutorWithAndWithoutError(command string, args ...string) ([]byte
 	if i == 0 {
 		i++
 		return MockTestExecutorWithError(command, args...)
-	} else {
-		return MockTestExecutorWithoutError(command, args...)
 	}
+	return MockTestExecutorWithoutError(command, args...)
 }
 
 func TestConvertToApplicationData(t *testing.T) {
@@ -204,24 +205,4 @@ func TestCollectAndMergePackagesPlatformError(t *testing.T) {
 	cmdExecutor = MockTestExecutorWithError
 	data := CollectApplicationData(mockContext)
 	assert.Equal(t, len(mockData), len(data), "Wrong number of entries")
-}
-
-func assertEqual(t *testing.T, expected []model.ApplicationData, found []model.ApplicationData) {
-	assert.Equal(t, len(expected), len(found))
-	for i, expectedApp := range expected {
-		foundApp := found[i]
-		assertEqualApps(t, expectedApp, foundApp)
-	}
-}
-
-func assertEqualApps(t *testing.T, a model.ApplicationData, b model.ApplicationData) {
-	assert.Equal(t, a.Name, b.Name)
-	assert.Equal(t, a.Publisher, b.Publisher)
-	assert.Equal(t, a.Version, b.Version)
-	assert.Equal(t, a.InstalledTime, b.InstalledTime)
-	assert.Equal(t, a.ApplicationType, b.ApplicationType)
-	assert.Equal(t, a.Architecture, b.Architecture)
-	assert.Equal(t, a.URL, b.URL)
-	assert.Equal(t, a.Summary, b.Summary)
-	assert.Equal(t, a.PackageId, b.PackageId)
 }
