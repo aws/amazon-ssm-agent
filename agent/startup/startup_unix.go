@@ -86,7 +86,7 @@ func (p *Processor) ExecuteTasks() (err error) {
 		// if the retry count hits the maximum count, log the error and return.
 		if retryCount == serialPortRetryMaxCount {
 			err = errors.New("Timeout: Serial port is in use or not available")
-			log.Errorf("Error occured while opening serial port: %v", err.Error())
+			log.Errorf("Error occurred while opening serial port: %v", err.Error())
 			return
 		}
 	}

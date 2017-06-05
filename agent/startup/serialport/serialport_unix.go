@@ -48,7 +48,7 @@ func (sp *SerialPort) OpenPort() (err error) {
 	fileHandle, err := os.OpenFile(comport, syscall.O_RDWR, 0)
 
 	if err != nil {
-		sp.log.Errorf("Error occured while opening serial port: %v", err.Error())
+		sp.log.Errorf("Error occurred while opening serial port: %v", err.Error())
 		return err
 	}
 
@@ -69,7 +69,7 @@ func (sp *SerialPort) OpenPort() (err error) {
 		0,
 		0,
 	); err != 0 {
-		sp.log.Errorf("Error occured while configuring serial port: %v", err.Error())
+		sp.log.Errorf("Error occurred while configuring serial port: %v", err.Error())
 		return err
 	}
 
@@ -81,7 +81,7 @@ func (sp *SerialPort) OpenPort() (err error) {
 // ClosePort closes the serial port, which MUST be done at the end.
 func (sp *SerialPort) ClosePort() {
 	if sp.fileHandle == nil {
-		sp.log.Error("Error occured while closing serial port: Port must be opened")
+		sp.log.Error("Error occurred while closing serial port: Port must be opened")
 	}
 	sp.fileHandle.Close()
 	return
@@ -93,7 +93,7 @@ func (sp *SerialPort) WritePort(message string) {
 	sp.log.Infof("Write to serial port: %v", message)
 	formattedMessage := fmt.Sprintf("%v: %v\n", time.Now().UTC().Format("2006/01/02 15:04:05Z"), message)
 	if _, err := sp.fileHandle.WriteString(formattedMessage); err != nil {
-		sp.log.Errorf("Error occured while writing to serial port: %v", err.Error())
+		sp.log.Errorf("Error occurred while writing to serial port: %v", err.Error())
 	}
 
 	return

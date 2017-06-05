@@ -67,11 +67,11 @@ type DefaultPlugin struct {
 	// StderrFileName is the name of the file that stores standard error.
 	StderrFileName string
 
-	// MaxStdoutLength is the maximum lenght of the standard output returned in the plugin result.
+	// MaxStdoutLength is the maximum length of the standard output returned in the plugin result.
 	// If the output is longer, it will be truncated. The full output will be uploaded to s3.
 	MaxStdoutLength int
 
-	// MaxStderrLength is the maximum lenght of the standard error returned in the plugin result.
+	// MaxStderrLength is the maximum length of the standard error returned in the plugin result.
 	MaxStderrLength int
 
 	// OutputTruncatedSuffix is an optional suffix that is inserted at the end of the truncated stdout/stderr.

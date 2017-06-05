@@ -132,16 +132,16 @@ func (p *Processor) IsAllowed() bool {
 	// get the current OS version
 	osVersion, err := platform.PlatformVersion(log)
 	if err != nil {
-		log.Errorf("Error occured while getting OS version: %v", err.Error())
+		log.Errorf("Error occurred while getting OS version: %v", err.Error())
 		return false
 	} else if osVersion == "" {
-		log.Errorf("Error occured while getting OS version: OS version was empty")
+		log.Errorf("Error occurred while getting OS version: OS version was empty")
 	}
 
 	// check if split worked
 	osVersionSplit := strings.Split(osVersion, ".")
 	if osVersionSplit == nil || len(osVersionSplit) == 0 {
-		log.Error("Error occured while parsing OS version")
+		log.Error("Error occurred while parsing OS version")
 		return false
 	}
 
@@ -192,7 +192,7 @@ func (p *Processor) ExecuteTasks() (err error) {
 		// if the retry count hits the maximum count, log the error and return.
 		if retryCount == serialPortRetryMaxCount {
 			err = errors.New("Timeout: Serial port is in use or not available")
-			log.Errorf("Error occured while opening serial port: %v", err.Error())
+			log.Errorf("Error occurred while opening serial port: %v", err.Error())
 			return
 		}
 	}
@@ -220,7 +220,7 @@ func (p *Processor) ExecuteTasks() (err error) {
 		}
 	}
 
-	// write all bugchecks occured since the last boot time.
+	// write all bugchecks occurred since the last boot time.
 	if bugChecks, err = getBugChecks(log); err == nil {
 		for _, bugCheck := range bugChecks {
 			sp.WritePort(fmt.Sprintf("BCC: %v", bugCheck))
@@ -360,7 +360,7 @@ func getBugChecks(log log.T) (bugChecks []string, err error) {
 		return
 	}
 
-	// iterate result eventlogs and find bugchecks occured since the last boot time.
+	// iterate result eventlogs and find bugchecks occurred since the last boot time.
 	for _, eventLog := range eventLogs {
 		// iterate until [Microsoft-Windows-Kernel-General 12 Information] is found.
 		if eventLog.ProviderName == "Microsoft-Windows-Kernel-General" && eventLog.ID == 12 && eventLog.Level == 4 {

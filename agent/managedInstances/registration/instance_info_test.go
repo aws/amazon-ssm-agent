@@ -14,7 +14,7 @@ import (
 )
 
 const (
-	sampleError            = "registration error occured"
+	sampleError            = "registration error occurred"
 	sampleRegion           = "us-west-1"
 	sampleID               = "mi-e6c6f145e6c6f145"
 	samplePrivateKey       = "KEYe6c6f145e6c6f145"

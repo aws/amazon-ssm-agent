@@ -36,7 +36,7 @@ func TestGetPlatformName(t *testing.T) {
 
 func TestFullyQualifiedDomainName(t *testing.T) {
 	t.Logf("fqdn/hostname is %v", fullyQualifiedDomainName())
-	assert.True(t, true, "expected no error trying to retireve the fqdn/hostname value")
+	assert.True(t, true, "expected no error trying to retrieve the fqdn/hostname value")
 }
 
 func TestGetPlatformType(t *testing.T) {

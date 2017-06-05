@@ -45,7 +45,7 @@ func (instanceInfo) GenerateKeyPair() (publicKey, privateKey, keyType string, er
 	return registration.GenerateKeyPair()
 }
 
-// UpdatePrivateKey saves the private key into the registration persistance store
+// UpdatePrivateKey saves the private key into the registration persistence store
 func (instanceInfo) UpdatePrivateKey(privateKey, privateKeyType string) (err error) {
 	return registration.UpdatePrivateKey(privateKey, privateKeyType)
 }

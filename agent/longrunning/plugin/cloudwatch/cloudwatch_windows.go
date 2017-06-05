@@ -224,7 +224,7 @@ func (p *Plugin) Start(context context.T, configuration string, orchestrationDir
 		for _, err := range errs {
 			log.Error(err)
 		}
-		return fmt.Errorf("Errors occured while starting Cloudwatch exit code {0}, error count {1}", exitCode, len(errs))
+		return fmt.Errorf("Errors occurred while starting Cloudwatch exit code {0}, error count {1}", exitCode, len(errs))
 	}
 
 	// Cloudwatch process details

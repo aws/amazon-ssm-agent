@@ -49,7 +49,7 @@ func (p *Processor) ModuleName() string {
 func (p *Processor) ModuleExecute(context context.T) (err error) {
 	defer func() {
 		if r := recover(); r != nil {
-			err = fmt.Errorf("Internal error occured by startup processor: %v", r)
+			err = fmt.Errorf("Internal error occurred by startup processor: %v", r)
 		}
 	}()
 

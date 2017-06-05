@@ -154,7 +154,7 @@ func collectPlatformDependentApplicationData(context context.T) []model.Applicat
 		6. ‘WindowsInstaller’ must be either absent or present with value 0. If the value is set to 1, then the application is included in the list if and only if the corresponding compressed guid (explained below) is also present in HKLM:\Software\Classes\Installer\Products\
 
 		Calculation of compressed guid:
-		Each Guid has 5 parts seperated by '-'. For the first three each one will be totally reversed, and for the remaining two each one will be reversed by every other character.
+		Each Guid has 5 parts separated by '-'. For the first three each one will be totally reversed, and for the remaining two each one will be reversed by every other character.
 		Then the final compressed Guid will be constructed by concatinating all the reversed parts without '-'.
 
 		-Example-

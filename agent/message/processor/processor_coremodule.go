@@ -71,7 +71,7 @@ func (p *Processor) ModuleExecute(context context.T) (err error) {
 	if p.pollAssociations {
 		associationFrequenceMinutes := context.AppConfig().Ssm.AssociationFrequencyMinutes
 		log.Info("Starting association polling")
-		log.Debugf("Association polling frequencey is %v", associationFrequenceMinutes)
+		log.Debugf("Association polling frequency is %v", associationFrequenceMinutes)
 		var job *scheduler.Job
 		if job, err = asocitscheduler.CreateScheduler(
 			log,

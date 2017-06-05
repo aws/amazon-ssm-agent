@@ -53,7 +53,7 @@ func NewCoreManager(instanceIdPtr *string, regionPtr *string, log logger.T) (cm 
 	// initialize region
 	if *regionPtr != "" {
 		if err = platform.SetRegion(*regionPtr); err != nil {
-			log.Errorf("error occured setting the region, %v", err)
+			log.Errorf("error occurred setting the region, %v", err)
 			return
 		}
 	}
@@ -68,7 +68,7 @@ func NewCoreManager(instanceIdPtr *string, regionPtr *string, log logger.T) (cm 
 	// initialize instance ID
 	if *instanceIdPtr != "" {
 		if err = platform.SetInstanceID(*instanceIdPtr); err != nil {
-			log.Errorf("error occured setting the instance ID, %v", err)
+			log.Errorf("error occurred setting the instance ID, %v", err)
 			return
 		}
 	}
@@ -202,7 +202,7 @@ func (c *CoreManager) executeCoreModules() {
 			module := c.coreModules[i]
 			var err error
 			if err = module.ModuleExecute(c.context); err != nil {
-				c.context.Log().Errorf("error occured trying to start core module. Plugin name: %v. Error: %v",
+				c.context.Log().Errorf("error occurred trying to start core module. Plugin name: %v. Error: %v",
 					module.ModuleName(),
 					err)
 			}

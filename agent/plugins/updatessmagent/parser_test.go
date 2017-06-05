@@ -39,7 +39,7 @@ type testCase struct {
 	Output *Manifest
 }
 
-//TestParseManifest testing parses valid manfiest files
+//TestParseManifest testing parses valid manifest files
 func TestParseManifest(t *testing.T) {
 	// generate test cases
 	var testCases []testCase

@@ -9,15 +9,15 @@ import (
 )
 
 const (
-	sampleInstanceError  = "metadata error occured"
+	sampleInstanceError  = "metadata error occurred"
 	sampleInstanceRegion = "us-east-1"
 	sampleInstanceID     = "i-e6c6f145"
 
-	sampleManagedInstError  = "registration error occured"
+	sampleManagedInstError  = "registration error occurred"
 	sampleManagedInstRegion = "us-west-1"
 	sampleManagedInstID     = "mi-e6c6f145e6c6f145"
 
-	sampleDynamicDataError  = "dynamic data error occured"
+	sampleDynamicDataError  = "dynamic data error occurred"
 	sampleDynamicDataRegion = "us-west-2"
 )
 
