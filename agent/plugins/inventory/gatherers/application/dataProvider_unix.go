@@ -246,7 +246,7 @@ func convertToApplicationData(input string) (data []model.ApplicationData, err e
 	str = strings.TrimSuffix(str, ",")
 
 	// keep single line out of multi-line fields and escape special characters
-	str, err = replaceMarkedFields(str, startMarker, endMarker, cleanupJsonField)
+	str, err = replaceMarkedFields(str, startMarker, endMarker, cleanupJSONField)
 	if err != nil {
 		return
 	}

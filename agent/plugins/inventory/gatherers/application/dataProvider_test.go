@@ -50,7 +50,7 @@ func MockPackageRepository(result []model.ApplicationData) localpackages.Reposit
 	return &mockRepo
 }
 
-func TestCleanupJsonField(t *testing.T) {
+func TestCleanupJSONField(t *testing.T) {
 	inOut := [][]string{
 		{"a\nb", `a`},
 		{"a\tb\nc", `a\tb`},
@@ -62,7 +62,7 @@ func TestCleanupJsonField(t *testing.T) {
 	}
 	for _, test := range inOut {
 		input, output := test[0], test[1]
-		result := cleanupJsonField(input)
+		result := cleanupJSONField(input)
 		assert.Equal(t, output, result)
 	}
 }
@@ -94,4 +94,24 @@ func TestReplaceMarkedFields(t *testing.T) {
 			assert.NotNil(t, err)
 		}
 	}
+}
+
+func assertEqual(t *testing.T, expected []model.ApplicationData, found []model.ApplicationData) {
+	assert.Equal(t, len(expected), len(found))
+	for i, expectedApp := range expected {
+		foundApp := found[i]
+		assertEqualApps(t, expectedApp, foundApp)
+	}
+}
+
+func assertEqualApps(t *testing.T, a model.ApplicationData, b model.ApplicationData) {
+	assert.Equal(t, a.Name, b.Name)
+	assert.Equal(t, a.Publisher, b.Publisher)
+	assert.Equal(t, a.Version, b.Version)
+	assert.Equal(t, a.InstalledTime, b.InstalledTime)
+	assert.Equal(t, a.ApplicationType, b.ApplicationType)
+	assert.Equal(t, a.Architecture, b.Architecture)
+	assert.Equal(t, a.URL, b.URL)
+	assert.Equal(t, a.Summary, b.Summary)
+	assert.Equal(t, a.PackageId, b.PackageId)
 }
