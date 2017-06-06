@@ -30,13 +30,13 @@ type StringTestCase struct {
 }
 
 var StringTestCases = []StringTestCase{
-	StringTestCase{
+	{
 		Input:             "This is a test string",
 		Output:            "This is a test string",
 		Parameters:        []Parameter{},
 		InvalidParameters: []string{},
 	},
-	StringTestCase{
+	{
 		Input:  "This is a {{ssm:test}} string",
 		Output: "This is a testvalue string",
 		Parameters: []Parameter{

@@ -27,15 +27,15 @@ type TestCase struct {
 }
 
 var TestCases = []TestCase{
-	TestCase{
+	{
 		Input:  0,
 		Output: contracts.ResultStatusSuccess,
 	},
-	TestCase{
+	{
 		Input:  appconfig.RebootExitCode,
 		Output: contracts.ResultStatusSuccessAndReboot,
 	},
-	TestCase{
+	{
 		Input:  commandStoppedPreemptivelyExitCode,
 		Output: contracts.ResultStatusTimedOut,
 	},

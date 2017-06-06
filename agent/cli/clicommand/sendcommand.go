@@ -141,7 +141,7 @@ func (SendOfflineCommand) validateSendCommandInput(subcommands []string, paramet
 	}
 
 	// look for unsupported parameters
-	for key, _ := range parameters {
+	for key := range parameters {
 		if key != sendCommandContent {
 			validation = append(validation, fmt.Sprintf("unknown parameter %v", cliutil.FormatFlag(key)))
 		}

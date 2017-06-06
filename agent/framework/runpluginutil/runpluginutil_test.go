@@ -73,7 +73,7 @@ func TestExecuteDocument(t *testing.T) {
 		updateAssoc UpdateAssociation,
 		cancelFlag task.CancelFlag,
 	) (pluginOutputs map[string]*contracts.PluginResult) {
-		return map[string]*contracts.PluginResult{"foo": &contracts.PluginResult{}}
+		return map[string]*contracts.PluginResult{"foo": {}}
 	},
 		SendReply:   NoReply,
 		UpdateAssoc: NoUpdate,

@@ -139,7 +139,7 @@ func processParams(log log.T, str string) []string {
 
 	// This handles the last word in str
 	if lastbit < len(str) {
-		params = append(params, str[lastbit:len(str)])
+		params = append(params, str[lastbit:])
 	}
 
 	log.Debug("Parameters after processing...")

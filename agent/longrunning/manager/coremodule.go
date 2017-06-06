@@ -251,7 +251,7 @@ func (m *Manager) stopLongRunningPlugins(stopType contracts.StopType) {
 
 	var wg sync.WaitGroup
 	i := 0
-	for pluginName, _ := range m.runningPlugins {
+	for pluginName := range m.runningPlugins {
 		go func(wgc *sync.WaitGroup, i int) {
 			if stopType == contracts.StopTypeSoftStop {
 				wgc.Add(1)
