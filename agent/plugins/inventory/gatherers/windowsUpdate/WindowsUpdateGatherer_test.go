@@ -23,13 +23,13 @@ import (
 )
 
 var testUpdate = []model.WindowsUpdateData{
-	model.WindowsUpdateData{
+	{
 		HotFixId:      "KB000001",
 		Description:   "Security Update",
 		InstalledTime: "Wednesday, October 15, 2014 12:00:00 AM",
 		InstalledBy:   "ADMINISTRATOR",
 	},
-	model.WindowsUpdateData{
+	{
 		HotFixId:      "KB000002",
 		Description:   "Update",
 		InstalledTime: "Friday, June 20, 2014 12:00:00 AM",

@@ -33,7 +33,7 @@ const (
 // sample data used for testing
 
 var sampleAppDataForAmazonLinux = []model.ApplicationData{
-	model.ApplicationData{
+	{
 		Name:            "pcre",
 		URL:             "http://www.pcre.org/",
 		Publisher:       "Amazon.com",
@@ -42,7 +42,7 @@ var sampleAppDataForAmazonLinux = []model.ApplicationData{
 		InstalledTime:   "1461974300",
 		ApplicationType: "System Environment/libraries",
 	},
-	model.ApplicationData{
+	{
 		Name:            "kbd-misc",
 		URL:             "http://ftp.altlinux.org/pub/people/legion/kbd",
 		Publisher:       "Amazon.com",
@@ -51,7 +51,7 @@ var sampleAppDataForAmazonLinux = []model.ApplicationData{
 		InstalledTime:   "1461974292",
 		ApplicationType: "System Environment Base",
 	},
-	model.ApplicationData{
+	{
 		Name:            "amazon-ssm-agent",
 		URL:             "http://docs.aws.amazon.com/ssm/latest/APIReference/Welcome.html",
 		Publisher:       "Amazon.com",
@@ -61,7 +61,7 @@ var sampleAppDataForAmazonLinux = []model.ApplicationData{
 		ApplicationType: "Amazon/Tools",
 		CompType:        model.AWSComponent,
 	},
-	model.ApplicationData{
+	{
 		Name:            "aws-apitools-mon",
 		URL:             "http://aws.amazon.com/cloudwatch",
 		Publisher:       "Amazon.com",
@@ -71,7 +71,7 @@ var sampleAppDataForAmazonLinux = []model.ApplicationData{
 		ApplicationType: "Amazon/Tools",
 		CompType:        model.AWSComponent,
 	},
-	model.ApplicationData{
+	{
 		Name:            "aws-amitools-ec2",
 		URL:             "http://aws.amazon.com/ec2",
 		Publisher:       "Amazon AWS",
@@ -84,7 +84,7 @@ var sampleAppDataForAmazonLinux = []model.ApplicationData{
 }
 
 var sampleAWSComponentDataForAmazonLinux = []model.ApplicationData{
-	model.ApplicationData{
+	{
 		Name:            "amazon-ssm-agent",
 		URL:             "http://docs.aws.amazon.com/ssm/latest/APIReference/Welcome.html",
 		Publisher:       "Amazon.com",
@@ -94,7 +94,7 @@ var sampleAWSComponentDataForAmazonLinux = []model.ApplicationData{
 		ApplicationType: "Amazon/Tools",
 		CompType:        model.AWSComponent,
 	},
-	model.ApplicationData{
+	{
 		Name:            "aws-apitools-mon",
 		URL:             "http://aws.amazon.com/cloudwatch",
 		Publisher:       "Amazon.com",
@@ -104,7 +104,7 @@ var sampleAWSComponentDataForAmazonLinux = []model.ApplicationData{
 		ApplicationType: "Amazon/Tools",
 		CompType:        model.AWSComponent,
 	},
-	model.ApplicationData{
+	{
 		Name:            "aws-amitools-ec2",
 		URL:             "http://aws.amazon.com/ec2",
 		Publisher:       "Amazon AWS",
@@ -117,7 +117,7 @@ var sampleAWSComponentDataForAmazonLinux = []model.ApplicationData{
 }
 
 var sampleAppDataForLinuxOtherThanAmazonLinux = []model.ApplicationData{
-	model.ApplicationData{
+	{
 		Name:            "accountsservice",
 		URL:             "http://cgit.freedesktop.org/accountsservice/",
 		Publisher:       "Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>",
@@ -126,7 +126,7 @@ var sampleAppDataForLinuxOtherThanAmazonLinux = []model.ApplicationData{
 		InstalledTime:   "",
 		ApplicationType: "admin",
 	},
-	model.ApplicationData{
+	{
 		Name:            "amazon-ssm-agent",
 		URL:             "",
 		Publisher:       "Amazon.com, Inc. <ec2-ssm-feedback@amazon.com>",
@@ -139,7 +139,7 @@ var sampleAppDataForLinuxOtherThanAmazonLinux = []model.ApplicationData{
 }
 
 var sampleAWSComponentDataForLinuxOtherThanAmazonLinux = []model.ApplicationData{
-	model.ApplicationData{
+	{
 		Name:            "amazon-ssm-agent",
 		URL:             "",
 		Publisher:       "Amazon.com, Inc. <ec2-ssm-feedback@amazon.com>",
@@ -152,7 +152,7 @@ var sampleAWSComponentDataForLinuxOtherThanAmazonLinux = []model.ApplicationData
 }
 
 var sampleAppDataForWindows = []model.ApplicationData{
-	model.ApplicationData{
+	{
 		Name:            "Notepad++",
 		URL:             "",
 		Publisher:       "Notepad++ Team",
@@ -161,7 +161,7 @@ var sampleAppDataForWindows = []model.ApplicationData{
 		InstalledTime:   "",
 		ApplicationType: "",
 	},
-	model.ApplicationData{
+	{
 		Name:            "Google Update Helper",
 		URL:             "",
 		Publisher:       "Google Inc.",
@@ -170,7 +170,7 @@ var sampleAppDataForWindows = []model.ApplicationData{
 		InstalledTime:   "20161012",
 		ApplicationType: "",
 	},
-	model.ApplicationData{
+	{
 		Name:            "AWS Tools for Windows",
 		URL:             "",
 		Publisher:       "Amazon Web Services Developer Relations",
@@ -180,7 +180,7 @@ var sampleAppDataForWindows = []model.ApplicationData{
 		ApplicationType: "",
 		CompType:        model.AWSComponent,
 	},
-	model.ApplicationData{
+	{
 		Name:            "AWS PV Drivers",
 		URL:             "",
 		Publisher:       "Amazon Web Services",
@@ -193,7 +193,7 @@ var sampleAppDataForWindows = []model.ApplicationData{
 }
 
 var sampleAWSComponentDataForWindows = []model.ApplicationData{
-	model.ApplicationData{
+	{
 		Name:            "AWS Tools for Windows",
 		URL:             "",
 		Publisher:       "Amazon Web Services Developer Relations",
@@ -203,7 +203,7 @@ var sampleAWSComponentDataForWindows = []model.ApplicationData{
 		ApplicationType: "",
 		CompType:        model.AWSComponent,
 	},
-	model.ApplicationData{
+	{
 		Name:            "AWS PV Drivers",
 		URL:             "",
 		Publisher:       "Amazon Web Services",

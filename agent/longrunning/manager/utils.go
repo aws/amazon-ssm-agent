@@ -35,7 +35,7 @@ func (m *Manager) ensurePluginsAreRunning() {
 	defer lock.RUnlock()
 
 	if len(m.runningPlugins) > 0 {
-		for n, _ := range m.runningPlugins {
+		for n := range m.runningPlugins {
 			p, isRegistered := m.registeredPlugins[n]
 			if isRegistered && !p.Handler.IsRunning(m.context) {
 				log.Infof("Starting %s since it wasn't running before")
