@@ -92,8 +92,7 @@ Where-Object {($_.DisplayName -ne $null -and $_DisplayName -ne '' -and $_.Displa
 } |
 Select-Object @{n="Name";e={$_."DisplayName"}},
 	@{n="PackageId";e={$_."PSChildName"}}, @{n="Version";e={$_."DisplayVersion"}}, Publisher,
-	@{n="InstalledTime";e={[datetime]::ParseExact($_."InstallDate","yyyyMMdd",$null).ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ssZ")}},
-	@{n="Summary";e={$_."Comments"}} |
+	@{n="InstalledTime";e={[datetime]::ParseExact($_."InstallDate","yyyyMMdd",$null).ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ssZ")}} |
 ConvertTo-Json `
 )
 
