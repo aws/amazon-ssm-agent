@@ -25,6 +25,8 @@ import (
 	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/context"
+	"github.com/aws/amazon-ssm-agent/agent/contracts"
+	"github.com/aws/amazon-ssm-agent/agent/framework/runpluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/inventory/model"
 	"github.com/stretchr/testify/assert"
@@ -37,6 +39,12 @@ const testRepoRoot = "testdata"
 const testPackage = "SsmTest"
 
 var contextMock context.T = context.NewMockDefault()
+
+func TestGetInstaller(t *testing.T) {
+	repo := NewRepository()
+	inst := repo.GetInstaller(contextMock, contracts.Configuration{}, runpluginutil.PluginRunner{}, testPackage, "1.0.0")
+	assert.NotNil(t, inst)
+}
 
 func TestGetInstallState(t *testing.T) {
 	// Setup mock with expectations
@@ -268,62 +276,6 @@ func TestRemovePackage(t *testing.T) {
 	// Call and validate mock expectations and return value
 	err := repo.RemovePackage(contextMock, testPackage, version)
 	mockFileSys.AssertExpectations(t)
-	assert.Nil(t, err)
-}
-
-func TestGetAction(t *testing.T) {
-	version := "0.0.1"
-	// Setup mock with expectations
-	mockFileSys := MockedFileSys{}
-	mockFileSys.On("Exists", path.Join(testRepoRoot, testPackage, version, "Foo.json")).Return(true).Once()
-	mockFileSys.On("ReadFile", path.Join(testRepoRoot, testPackage, version, "Foo.json")).Return(loadFile(t, path.Join(testRepoRoot, testPackage, version, "install.json")), nil).Once()
-
-	// Instantiate repository with mock
-	repo := localRepository{filesysdep: &mockFileSys, repoRoot: testRepoRoot}
-
-	// Call and validate mock expectations and return value
-	exists, actionDoc, workingDir, err := repo.GetAction(contextMock, testPackage, version, "Foo")
-	mockFileSys.AssertExpectations(t)
-	assert.True(t, exists)
-	assert.NotEmpty(t, actionDoc)
-	assert.Equal(t, workingDir, path.Join(testRepoRoot, testPackage, version))
-	assert.Nil(t, err)
-}
-
-func TestGetActionInvalid(t *testing.T) {
-	version := "0.0.11"
-	// Setup mock with expectations
-	mockFileSys := MockedFileSys{}
-	mockFileSys.On("Exists", path.Join(testRepoRoot, testPackage, version, "Foo.json")).Return(true).Once()
-	mockFileSys.On("ReadFile", path.Join(testRepoRoot, testPackage, version, "Foo.json")).Return(loadFile(t, path.Join(testRepoRoot, testPackage, version, "install.json")), nil).Once()
-
-	// Instantiate repository with mock
-	repo := localRepository{filesysdep: &mockFileSys, repoRoot: testRepoRoot}
-
-	// Call and validate mock expectations and return value
-	exists, actionDoc, workingDir, err := repo.GetAction(contextMock, testPackage, version, "Foo")
-	mockFileSys.AssertExpectations(t)
-	assert.True(t, exists)
-	assert.Empty(t, actionDoc)
-	assert.Empty(t, workingDir)
-	assert.NotNil(t, err)
-}
-
-func TestGetActionMissing(t *testing.T) {
-	version := "0.0.1"
-	// Setup mock with expectations
-	mockFileSys := MockedFileSys{}
-	mockFileSys.On("Exists", path.Join(testRepoRoot, testPackage, version, "Foo.json")).Return(false).Once()
-
-	// Instantiate repository with mock
-	repo := localRepository{filesysdep: &mockFileSys, repoRoot: testRepoRoot}
-
-	// Call and validate mock expectations and return value
-	exists, actionDoc, workingDir, err := repo.GetAction(contextMock, testPackage, version, "Foo")
-	mockFileSys.AssertExpectations(t)
-	assert.False(t, exists)
-	assert.Empty(t, actionDoc)
-	assert.Empty(t, workingDir)
 	assert.Nil(t, err)
 }
 

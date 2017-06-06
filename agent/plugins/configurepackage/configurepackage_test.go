@@ -16,7 +16,6 @@
 package configurepackage
 
 import (
-	"io/ioutil"
 	"strings"
 	"sync"
 	"testing"
@@ -26,6 +25,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/framework/runpluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/platform"
+	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/installer/mock"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/localpackages"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/localpackages/mock"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/packageservice"
@@ -240,9 +240,10 @@ func TestInstallPackage(t *testing.T) {
 
 	output := &contracts.PluginOutput{}
 
-	result, _ := ioutil.ReadFile("testdata/sampleManifest.json")
 	mockRepo := repository_mock.MockedRepository{}
-	mockRepo.On("GetAction", mock.Anything, pluginInformation.Name, pluginInformation.Version, "install").Return(true, result, `install`, nil).Once()
+	mockInst := installer_mock.Mock{}
+	mockInst.On("Install", mock.Anything).Return(&contracts.PluginOutput{Status: contracts.ResultStatusSuccess}).Once()
+	mockRepo.On("GetInstaller", mock.Anything, mock.Anything, mock.Anything, pluginInformation.Name, pluginInformation.Version).Return(&mockInst)
 
 	manager := createInstanceWithRepoMock(&mockRepo)
 
@@ -262,10 +263,10 @@ func TestUninstallPackage(t *testing.T) {
 
 	output := &contracts.PluginOutput{}
 
-	result, _ := ioutil.ReadFile("testdata/sampleManifest.json")
-
 	mockRepo := repository_mock.MockedRepository{}
-	mockRepo.On("GetAction", mock.Anything, pluginInformation.Name, pluginInformation.Version, "uninstall").Return(true, result, `install`, nil).Once()
+	mockInst := installer_mock.Mock{}
+	mockInst.On("Uninstall", mock.Anything).Return(&contracts.PluginOutput{Status: contracts.ResultStatusSuccess}).Once()
+	mockRepo.On("GetInstaller", mock.Anything, mock.Anything, mock.Anything, pluginInformation.Name, pluginInformation.Version).Return(&mockInst)
 	mockRepo.On("RemovePackage", mock.Anything, pluginInformation.Name, pluginInformation.Version).Return(nil).Once()
 
 	manager := createInstanceWithRepoMock(&mockRepo)

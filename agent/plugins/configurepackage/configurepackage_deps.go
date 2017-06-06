@@ -19,11 +19,7 @@ package configurepackage
 import (
 	"os"
 
-	"github.com/aws/amazon-ssm-agent/agent/context"
-	"github.com/aws/amazon-ssm-agent/agent/contracts"
-	"github.com/aws/amazon-ssm-agent/agent/docmanager/model"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
-	"github.com/aws/amazon-ssm-agent/agent/framework/runpluginutil"
 )
 
 // TODO:MF: This should be able to go away when localpackages has encapsulated all filesystem access
@@ -53,25 +49,4 @@ func (fileSysDepImp) Uncompress(src, dest string) error {
 
 func (fileSysDepImp) RemoveAll(path string) error {
 	return os.RemoveAll(path)
-}
-
-var execdep execDep = &execDepImp{}
-
-// dependency on action execution
-type execDep interface {
-	ParseDocument(context context.T, documentRaw []byte, orchestrationDir string, s3Bucket string, s3KeyPrefix string, messageID string, documentID string, defaultWorkingDirectory string) (pluginsInfo []model.PluginState, err error)
-	ExecuteDocument(runner runpluginutil.PluginRunner, context context.T, pluginInput []model.PluginState, documentID string, documentCreatedDate string) (pluginOutputs map[string]*contracts.PluginResult)
-}
-
-type execDepImp struct {
-}
-
-func (m *execDepImp) ParseDocument(context context.T, documentRaw []byte, orchestrationDir string, s3Bucket string, s3KeyPrefix string, messageID string, documentID string, defaultWorkingDirectory string) (pluginsInfo []model.PluginState, err error) {
-	return runpluginutil.ParseDocument(context, documentRaw, orchestrationDir, s3Bucket, s3KeyPrefix, messageID, documentID, defaultWorkingDirectory)
-}
-
-func (m *execDepImp) ExecuteDocument(runner runpluginutil.PluginRunner, context context.T, pluginInput []model.PluginState, documentID string, documentCreatedDate string) (pluginOutputs map[string]*contracts.PluginResult) {
-	log := context.Log()
-	log.Debugf("Running subcommand")
-	return runner.ExecuteDocument(context, pluginInput, documentID, documentCreatedDate)
 }

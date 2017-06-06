@@ -17,6 +17,9 @@ package repository_mock
 
 import (
 	"github.com/aws/amazon-ssm-agent/agent/context"
+	"github.com/aws/amazon-ssm-agent/agent/contracts"
+	"github.com/aws/amazon-ssm-agent/agent/framework/runpluginutil"
+	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/installer"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/localpackages"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/inventory/model"
 	"github.com/stretchr/testify/mock"
@@ -56,11 +59,6 @@ func (repoMock *MockedRepository) GetInstallState(context context.T, packageName
 	return args.Get(0).(localpackages.InstallState), args.String(1)
 }
 
-func (repoMock *MockedRepository) GetAction(context context.T, packageName string, version string, actionName string) (exists bool, actionDocument []byte, workingDir string, err error) {
-	args := repoMock.Called(context, packageName, version, actionName)
-	return args.Bool(0), args.Get(1).([]byte), args.String(2), args.Error(3)
-}
-
 func (repoMock *MockedRepository) RemovePackage(context context.T, packageName string, version string) error {
 	args := repoMock.Called(context, packageName, version)
 	return args.Error(0)
@@ -69,4 +67,13 @@ func (repoMock *MockedRepository) RemovePackage(context context.T, packageName s
 func (repoMock *MockedRepository) GetInventoryData(context context.T) []model.ApplicationData {
 	args := repoMock.Called(context)
 	return args.Get(0).([]model.ApplicationData)
+}
+
+func (repoMock *MockedRepository) GetInstaller(context context.T,
+	configuration contracts.Configuration,
+	runner runpluginutil.PluginRunner,
+	packageName string,
+	version string) installer.Installer {
+	args := repoMock.Called(context, configuration, runner, packageName, version)
+	return args.Get(0).(installer.Installer)
 }

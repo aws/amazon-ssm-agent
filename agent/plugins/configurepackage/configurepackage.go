@@ -28,12 +28,12 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/framework/runpluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/platform"
+	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/installer"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/localpackages"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/packageservice"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/ssms3"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/pluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/task"
-	"github.com/aws/amazon-ssm-agent/agent/times"
 )
 
 const (
@@ -207,7 +207,8 @@ func runConfigurePackage(
 			// NOTE: When we support rollback, we should exit here before we delete the previous package
 			// NOTE: status remains "installing" here, plugin will re-run and either pass validation after reboot and get marked as "installed" or run the idempotent install again until it succeeds or arrives at a valid state
 		} else if result != contracts.ResultStatusSuccess {
-			output.MarkAsFailed(log, fmt.Errorf("install action state was %v and not %v", result, contracts.ResultStatusSuccess))
+			log.Debugf("expected %v but got %v", contracts.ResultStatusSuccess, result)
+			output.MarkAsFailed(log, fmt.Errorf("install action was not successful"))
 			manager.setInstallState(context, input.Name, version, localpackages.Failed)
 		} else {
 			if result, err := manager.runValidatePackage(context, input.Name, version, &output); err != nil || result != contracts.ResultStatusSuccess {
@@ -409,15 +410,26 @@ func (m *configurePackage) setInstallState(context context.T, packageName string
 	return err
 }
 
+// TODO:MF: Get the Installer in the main function and call these methods directly, the helper method isn't really necessary
 // runValidatePackage executes the install script for the specific version of a package.
 func (m *configurePackage) runValidatePackage(context context.T,
 	packageName string,
 	version string,
 	output *contracts.PluginOutput) (status contracts.ResultStatus, err error) {
-	if exists, status, err := m.executeAction(context, "validate", packageName, version, output); exists {
-		return status, err
+	log := context.Log()
+
+	var inst installer.Installer
+	config := m.Configuration
+	config.OutputS3KeyPrefix = fileutil.BuildS3Path(config.OutputS3KeyPrefix, config.PluginID)
+	if inst = m.repository.GetInstaller(context, config, m.runner, packageName, version); inst == nil {
+		return contracts.ResultStatusFailed, fmt.Errorf("failed to validate %v", packageName)
 	}
-	return contracts.ResultStatusSuccess, nil
+	result := inst.Validate(context)
+
+	output.AppendInfo(log, result.Stdout)
+	output.AppendError(log, result.Stderr)
+
+	return result.Status, nil
 }
 
 // runInstallPackage executes the install script for the specific version of a package.
@@ -425,10 +437,20 @@ func (m *configurePackage) runInstallPackage(context context.T,
 	packageName string,
 	version string,
 	output *contracts.PluginOutput) (status contracts.ResultStatus, err error) {
-	if exists, status, err := m.executeAction(context, "install", packageName, version, output); exists {
-		return status, err
+	log := context.Log()
+
+	var inst installer.Installer
+	config := m.Configuration
+	config.OutputS3KeyPrefix = fileutil.BuildS3Path(config.OutputS3KeyPrefix, config.PluginID)
+	if inst = m.repository.GetInstaller(context, config, m.runner, packageName, version); inst == nil {
+		return contracts.ResultStatusFailed, fmt.Errorf("failed to install %v", packageName)
 	}
-	return contracts.ResultStatusSuccess, nil
+	result := inst.Install(context)
+
+	output.AppendInfo(log, result.Stdout)
+	output.AppendError(log, result.Stderr)
+
+	return result.Status, nil
 }
 
 // runUninstallPackagePre executes the uninstall script for the specific version of a package.
@@ -436,10 +458,20 @@ func (m *configurePackage) runUninstallPackagePre(context context.T,
 	packageName string,
 	version string,
 	output *contracts.PluginOutput) (status contracts.ResultStatus, err error) {
-	if exists, status, err := m.executeAction(context, "uninstall", packageName, version, output); exists {
-		return status, err
+	log := context.Log()
+
+	var inst installer.Installer
+	config := m.Configuration
+	config.OutputS3KeyPrefix = fileutil.BuildS3Path(config.OutputS3KeyPrefix, config.PluginID)
+	if inst = m.repository.GetInstaller(context, config, m.runner, packageName, version); inst == nil {
+		return contracts.ResultStatusFailed, fmt.Errorf("failed to uninstall %v", packageName)
 	}
-	return contracts.ResultStatusSuccess, nil
+	result := inst.Uninstall(context)
+
+	output.AppendInfo(log, result.Stdout)
+	output.AppendError(log, result.Stderr)
+
+	return result.Status, nil
 }
 
 // runUninstallPackagePost performs post uninstall actions, like deleting the package folder
@@ -452,54 +484,6 @@ func (m *configurePackage) runUninstallPackagePost(context context.T,
 		return contracts.ResultStatusFailed, err
 	}
 	return contracts.ResultStatusSuccess, nil
-}
-
-// executeAction executes a command document as a sub-document of the current command and returns the result
-func (m *configurePackage) executeAction(context context.T,
-	actionName string,
-	packageName string,
-	version string,
-	output *contracts.PluginOutput) (actionExists bool, status contracts.ResultStatus, err error) {
-	status = contracts.ResultStatusSuccess
-	err = nil
-
-	log := context.Log()
-	actionExists, actionContent, executeDirectory, err := m.repository.GetAction(context, packageName, version, actionName)
-	if err != nil {
-		return true, contracts.ResultStatusFailed, err
-	}
-	if actionExists {
-		output.AppendInfof(log, "Initiating %v %v %v", packageName, version, actionName)
-		var s3Prefix string
-		if m.OutputS3BucketName != "" {
-			s3Prefix = fileutil.BuildS3Path(m.OutputS3KeyPrefix, m.PluginID, actionName)
-		}
-		pluginsInfo, err := execdep.ParseDocument(context, actionContent, m.OrchestrationDirectory, m.OutputS3BucketName, s3Prefix, m.MessageId, m.BookKeepingFileName, executeDirectory)
-		if err != nil {
-			return true, contracts.ResultStatusFailed, err
-		}
-		if len(pluginsInfo) == 0 {
-			return true, contracts.ResultStatusFailed, fmt.Errorf("%v document contained no work and may be malformed", actionName)
-		}
-		pluginOutputs := execdep.ExecuteDocument(m.runner, context, pluginsInfo, m.BookKeepingFileName, times.ToIso8601UTC(time.Now()))
-		if pluginOutputs == nil {
-			return true, contracts.ResultStatusFailed, errors.New("No output from executing install document (install.json)")
-		}
-		for _, pluginOut := range pluginOutputs {
-			log.Debugf("Plugin %v ResultStatus %v", pluginOut.PluginName, pluginOut.Status)
-			if pluginOut.StandardOutput != "" {
-				output.AppendInfof(log, "%v output: %v", actionName, pluginOut.StandardOutput)
-			}
-			if pluginOut.StandardError != "" {
-				output.AppendInfof(log, "%v errors: %v", actionName, pluginOut.StandardError)
-			}
-			if pluginOut.Error != nil {
-				output.MarkAsFailed(log, pluginOut.Error)
-			}
-			status = contracts.MergeResultStatus(status, pluginOut.Status)
-		}
-	}
-	return
 }
 
 var runConfig = runConfigurePackage

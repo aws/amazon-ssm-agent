@@ -16,11 +16,10 @@ package configurepackage
 
 import (
 	"errors"
-	"io/ioutil"
 	"testing"
 
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
-	"github.com/aws/amazon-ssm-agent/agent/docmanager/model"
+	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/installer/mock"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/localpackages"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/localpackages/mock"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/packageservice"
@@ -79,9 +78,13 @@ func TestConfigurePackage(t *testing.T) {
 	mockRepo.On("GetInstallState", mock.Anything, pluginInformation.Name).Return(localpackages.None, "")
 	mockRepo.On("ValidatePackage", mock.Anything, pluginInformation.Name, pluginInformation.Version).Return(nil)
 
-	mockRepo.On("GetAction", mock.Anything, pluginInformation.Name, pluginInformation.Version, "install").Return(true, []byte{}, `install`, nil).Once()
-	mockRepo.On("GetAction", mock.Anything, pluginInformation.Name, pluginInformation.Version, "validate").Return(true, []byte{}, `validate1`, nil).Once()
+	mockInst := installer_mock.Mock{}
+	mockInst.On("Install", mock.Anything).Return(&contracts.PluginOutput{Status: contracts.ResultStatusSuccess}).Once()
+	mockInst.On("Validate", mock.Anything).Return(&contracts.PluginOutput{Status: contracts.ResultStatusSuccess}).Once()
+	mockRepo.On("GetInstaller", mock.Anything, mock.Anything, mock.Anything, pluginInformation.Name, pluginInformation.Version).Return(&mockInst)
+
 	mockRepo.On("SetInstallState", mock.Anything, pluginInformation.Name, pluginInformation.Version, mock.Anything).Return(nil)
+
 	manager := createInstanceWithRepoMock(&mockRepo)
 
 	output := runConfigurePackage(
@@ -161,13 +164,14 @@ func TestInstallPackage_AlreadyInstalled(t *testing.T) {
 	plugin := &Plugin{}
 	pluginInformation := createStubPluginInputInstall()
 
-	action, _ := ioutil.ReadFile("testdata/sampleAction.json")
-
 	mockRepo := repository_mock.MockedRepository{}
 	mockRepo.On("GetInstalledVersion", mock.Anything, pluginInformation.Name).Return(pluginInformation.Version)
 	mockRepo.On("GetInstallState", mock.Anything, pluginInformation.Name).Return(localpackages.Installed, pluginInformation.Version)
 	mockRepo.On("ValidatePackage", mock.Anything, pluginInformation.Name, pluginInformation.Version).Return(nil)
-	mockRepo.On("GetAction", mock.Anything, pluginInformation.Name, pluginInformation.Version, "validate").Return(true, action, `foo`, nil)
+
+	mockInst := installer_mock.Mock{}
+	mockInst.On("Validate", mock.Anything).Return(&contracts.PluginOutput{Status: contracts.ResultStatusSuccess}).Once()
+	mockRepo.On("GetInstaller", mock.Anything, mock.Anything, mock.Anything, pluginInformation.Name, pluginInformation.Version).Return(&mockInst)
 
 	manager := createInstanceWithRepoMock(&mockRepo)
 
@@ -184,13 +188,6 @@ func TestInstallPackage_AlreadyInstalled(t *testing.T) {
 func TestInstallPackage_Repair(t *testing.T) {
 	stubs := &ConfigurePackageStubs{
 		fileSysDepStub: &FileSysDepStub{},
-		execDepStub: &ExecDepStub{pluginInput: &model.PluginState{},
-			pluginOutputMap: map[string]*contracts.PluginResult{
-				"validate1": {Status: contracts.ResultStatusFailed},
-				"install":   {Status: contracts.ResultStatusSuccess},
-				"validate2": {Status: contracts.ResultStatusSuccess},
-			},
-		},
 	}
 	stubs.Set()
 	defer stubs.Clear()
@@ -198,15 +195,15 @@ func TestInstallPackage_Repair(t *testing.T) {
 	plugin := &Plugin{}
 	pluginInformation := createStubPluginInputInstall()
 
-	action, _ := ioutil.ReadFile("testdata/sampleAction.json")
-
 	mockRepo := repository_mock.MockedRepository{}
 	mockRepo.On("GetInstalledVersion", mock.Anything, pluginInformation.Name).Return(pluginInformation.Version)
 	mockRepo.On("GetInstallState", mock.Anything, pluginInformation.Name).Return(localpackages.Installed, pluginInformation.Version)
 	mockRepo.On("ValidatePackage", mock.Anything, pluginInformation.Name, pluginInformation.Version).Return(nil)
-	mockRepo.On("GetAction", mock.Anything, pluginInformation.Name, pluginInformation.Version, "validate").Return(true, action, `validate1`, nil).Once()
-	mockRepo.On("GetAction", mock.Anything, pluginInformation.Name, pluginInformation.Version, "install").Return(true, action, `install`, nil).Once()
-	mockRepo.On("GetAction", mock.Anything, pluginInformation.Name, pluginInformation.Version, "validate").Return(true, action, `validate2`, nil).Once()
+	mockInst := installer_mock.Mock{}
+	mockInst.On("Validate", mock.Anything).Return(&contracts.PluginOutput{Status: contracts.ResultStatusFailed}).Once()
+	mockInst.On("Install", mock.Anything).Return(&contracts.PluginOutput{Status: contracts.ResultStatusSuccess}).Once()
+	mockInst.On("Validate", mock.Anything).Return(&contracts.PluginOutput{Status: contracts.ResultStatusSuccess}).Once()
+	mockRepo.On("GetInstaller", mock.Anything, mock.Anything, mock.Anything, pluginInformation.Name, pluginInformation.Version).Return(&mockInst)
 	mockRepo.On("SetInstallState", mock.Anything, pluginInformation.Name, pluginInformation.Version, mock.Anything).Return(nil)
 
 	manager := createInstanceWithRepoMock(&mockRepo)
@@ -224,7 +221,6 @@ func TestInstallPackage_Repair(t *testing.T) {
 func TestInstallPackage_RetryFailedLatest(t *testing.T) {
 	stubs := &ConfigurePackageStubs{
 		fileSysDepStub: &FileSysDepStub{},
-		execDepStub:    execStubSuccess(),
 	}
 	stubs.Set()
 	defer stubs.Clear()
@@ -233,15 +229,15 @@ func TestInstallPackage_RetryFailedLatest(t *testing.T) {
 	pluginInformation := createStubPluginInputInstallLatest()
 	version := "1.0.0"
 
-	action, _ := ioutil.ReadFile("testdata/sampleAction.json")
-
 	mockRepo := repository_mock.MockedRepository{}
 	mockRepo.On("GetInstalledVersion", mock.Anything, pluginInformation.Name).Return(version)
 	mockRepo.On("GetInstallState", mock.Anything, pluginInformation.Name).Return(localpackages.Failed, version)
 	mockRepo.On("RefreshPackage", mock.Anything, pluginInformation.Name, version, mock.Anything).Return(nil)
 	mockRepo.On("ValidatePackage", mock.Anything, pluginInformation.Name, version).Return(nil)
-	mockRepo.On("GetAction", mock.Anything, pluginInformation.Name, version, "install").Return(true, action, `install`, nil).Once()
-	mockRepo.On("GetAction", mock.Anything, pluginInformation.Name, version, "validate").Return(true, action, `validate`, nil).Once()
+	mockInst := installer_mock.Mock{}
+	mockInst.On("Install", mock.Anything).Return(&contracts.PluginOutput{Status: contracts.ResultStatusSuccess}).Once()
+	mockInst.On("Validate", mock.Anything).Return(&contracts.PluginOutput{Status: contracts.ResultStatusSuccess}).Once()
+	mockRepo.On("GetInstaller", mock.Anything, mock.Anything, mock.Anything, pluginInformation.Name, version).Return(&mockInst)
 	mockRepo.On("SetInstallState", mock.Anything, pluginInformation.Name, version, mock.Anything).Return(nil)
 
 	mockDS := packageservice_mock.Mock{}
@@ -318,11 +314,6 @@ func TestInstallPackage_DeleteFailed(t *testing.T) {
 func TestInstallPackage_Reboot(t *testing.T) {
 	stubs := &ConfigurePackageStubs{
 		fileSysDepStub: &FileSysDepStub{},
-		execDepStub: &ExecDepStub{pluginInput: &model.PluginState{},
-			pluginOutputMap: map[string]*contracts.PluginResult{
-				"install": {Status: contracts.ResultStatusSuccessAndReboot},
-			},
-		},
 	}
 	stubs.Set()
 	defer stubs.Clear()
@@ -330,13 +321,13 @@ func TestInstallPackage_Reboot(t *testing.T) {
 	plugin := &Plugin{}
 	pluginInformation := createStubPluginInputInstall()
 
-	action, _ := ioutil.ReadFile("testdata/sampleAction.json")
-
 	mockRepo := repository_mock.MockedRepository{}
 	mockRepo.On("GetInstalledVersion", mock.Anything, pluginInformation.Name).Return("")
 	mockRepo.On("GetInstallState", mock.Anything, pluginInformation.Name).Return(localpackages.None, pluginInformation.Version)
 	mockRepo.On("ValidatePackage", mock.Anything, pluginInformation.Name, pluginInformation.Version).Return(nil)
-	mockRepo.On("GetAction", mock.Anything, pluginInformation.Name, pluginInformation.Version, "install").Return(true, action, `install`, nil)
+	mockInst := installer_mock.Mock{}
+	mockInst.On("Install", mock.Anything).Return(&contracts.PluginOutput{Status: contracts.ResultStatusSuccessAndReboot}).Once()
+	mockRepo.On("GetInstaller", mock.Anything, mock.Anything, mock.Anything, pluginInformation.Name, pluginInformation.Version).Return(&mockInst)
 	mockRepo.On("SetInstallState", mock.Anything, pluginInformation.Name, pluginInformation.Version, mock.Anything).Return(nil)
 
 	manager := createInstanceWithRepoMock(&mockRepo)
@@ -355,11 +346,6 @@ func TestInstallPackage_Reboot(t *testing.T) {
 func TestInstallPackage_Failed(t *testing.T) {
 	stubs := &ConfigurePackageStubs{
 		fileSysDepStub: &FileSysDepStub{},
-		execDepStub: &ExecDepStub{pluginInput: &model.PluginState{},
-			pluginOutputMap: map[string]*contracts.PluginResult{
-				"install": {Status: contracts.ResultStatusFailed},
-			},
-		},
 	}
 	stubs.Set()
 	defer stubs.Clear()
@@ -367,13 +353,13 @@ func TestInstallPackage_Failed(t *testing.T) {
 	plugin := &Plugin{}
 	pluginInformation := createStubPluginInputInstall()
 
-	action, _ := ioutil.ReadFile("testdata/sampleAction.json")
-
 	mockRepo := repository_mock.MockedRepository{}
 	mockRepo.On("GetInstalledVersion", mock.Anything, pluginInformation.Name).Return("")
 	mockRepo.On("GetInstallState", mock.Anything, pluginInformation.Name).Return(localpackages.None, pluginInformation.Version)
 	mockRepo.On("ValidatePackage", mock.Anything, pluginInformation.Name, pluginInformation.Version).Return(nil)
-	mockRepo.On("GetAction", mock.Anything, pluginInformation.Name, pluginInformation.Version, "install").Return(true, action, `install`, nil)
+	mockInst := installer_mock.Mock{}
+	mockInst.On("Install", mock.Anything).Return(&contracts.PluginOutput{Status: contracts.ResultStatusFailed}).Once()
+	mockRepo.On("GetInstaller", mock.Anything, mock.Anything, mock.Anything, pluginInformation.Name, pluginInformation.Version).Return(&mockInst)
 	mockRepo.On("SetInstallState", mock.Anything, pluginInformation.Name, pluginInformation.Version, mock.Anything).Return(nil)
 
 	manager := createInstanceWithRepoMock(&mockRepo)
@@ -386,18 +372,12 @@ func TestInstallPackage_Failed(t *testing.T) {
 
 	mockRepo.AssertExpectations(t)
 	assert.NotEmpty(t, output.Stderr)
-	assert.Contains(t, output.Stderr, "install action state was Failed and not Success")
+	assert.Contains(t, output.Stderr, "install action was not successful")
 }
 
 func TestInstallPackage_Invalid(t *testing.T) {
 	stubs := &ConfigurePackageStubs{
 		fileSysDepStub: &FileSysDepStub{},
-		execDepStub: &ExecDepStub{pluginInput: &model.PluginState{},
-			pluginOutputMap: map[string]*contracts.PluginResult{
-				"install":  {Status: contracts.ResultStatusSuccess},
-				"validate": {Status: contracts.ResultStatusFailed},
-			},
-		},
 	}
 	stubs.Set()
 	defer stubs.Clear()
@@ -405,14 +385,14 @@ func TestInstallPackage_Invalid(t *testing.T) {
 	plugin := &Plugin{}
 	pluginInformation := createStubPluginInputInstall()
 
-	action, _ := ioutil.ReadFile("testdata/sampleAction.json")
-
 	mockRepo := repository_mock.MockedRepository{}
 	mockRepo.On("GetInstalledVersion", mock.Anything, pluginInformation.Name).Return("")
 	mockRepo.On("GetInstallState", mock.Anything, pluginInformation.Name).Return(localpackages.None, pluginInformation.Version)
 	mockRepo.On("ValidatePackage", mock.Anything, pluginInformation.Name, pluginInformation.Version).Return(nil)
-	mockRepo.On("GetAction", mock.Anything, pluginInformation.Name, pluginInformation.Version, "install").Return(true, action, `install`, nil)
-	mockRepo.On("GetAction", mock.Anything, pluginInformation.Name, pluginInformation.Version, "validate").Return(true, action, `validate`, nil)
+	mockInst := installer_mock.Mock{}
+	mockInst.On("Install", mock.Anything).Return(&contracts.PluginOutput{Status: contracts.ResultStatusSuccess}).Once()
+	mockInst.On("Validate", mock.Anything).Return(&contracts.PluginOutput{Status: contracts.ResultStatusFailed}).Once()
+	mockRepo.On("GetInstaller", mock.Anything, mock.Anything, mock.Anything, pluginInformation.Name, pluginInformation.Version).Return(&mockInst)
 	mockRepo.On("SetInstallState", mock.Anything, pluginInformation.Name, pluginInformation.Version, mock.Anything).Return(nil)
 
 	manager := createInstanceWithRepoMock(&mockRepo)
@@ -440,7 +420,9 @@ func TestUninstallPackage_Success(t *testing.T) {
 	mockRepo.On("GetInstalledVersion", mock.Anything, pluginInformation.Name).Return("someversion")
 	mockRepo.On("GetInstallState", mock.Anything, pluginInformation.Name).Return(localpackages.Installed, pluginInformation.Version)
 	mockRepo.On("ValidatePackage", mock.Anything, pluginInformation.Name, "someversion").Return(nil)
-	mockRepo.On("GetAction", mock.Anything, pluginInformation.Name, "someversion", "uninstall").Return(true, []byte{}, `uninstall`, nil)
+	mockInst := installer_mock.Mock{}
+	mockInst.On("Uninstall", mock.Anything).Return(&contracts.PluginOutput{Status: contracts.ResultStatusSuccess}).Once()
+	mockRepo.On("GetInstaller", mock.Anything, mock.Anything, mock.Anything, pluginInformation.Name, "someversion").Return(&mockInst)
 	mockRepo.On("SetInstallState", mock.Anything, pluginInformation.Name, "someversion", localpackages.Uninstalling).Return(nil)
 	mockRepo.On("RemovePackage", mock.Anything, pluginInformation.Name, "someversion").Return(nil)
 	mockRepo.On("SetInstallState", mock.Anything, pluginInformation.Name, "someversion", localpackages.Uninstalled).Return(nil)
@@ -470,7 +452,9 @@ func TestUninstallPackage_DoesNotExist(t *testing.T) {
 	mockRepo.On("GetInstallState", mock.Anything, pluginInformation.Name).Return(localpackages.None, "")
 	mockRepo.On("ValidatePackage", mock.Anything, pluginInformation.Name, "someversion").Return(errors.New("invalid"))
 	mockRepo.On("RefreshPackage", mock.Anything, pluginInformation.Name, "someversion", mock.Anything).Return(nil)
-	mockRepo.On("GetAction", mock.Anything, pluginInformation.Name, "someversion", "uninstall").Return(true, []byte{}, `uninstall`, nil)
+	mockInst := installer_mock.Mock{}
+	mockInst.On("Uninstall", mock.Anything).Return(&contracts.PluginOutput{Status: contracts.ResultStatusSuccess}).Once()
+	mockRepo.On("GetInstaller", mock.Anything, mock.Anything, mock.Anything, pluginInformation.Name, "someversion").Return(&mockInst)
 	mockRepo.On("SetInstallState", mock.Anything, pluginInformation.Name, "someversion", localpackages.Uninstalling).Return(nil)
 	mockRepo.On("RemovePackage", mock.Anything, pluginInformation.Name, "someversion").Return(nil)
 	mockRepo.On("SetInstallState", mock.Anything, pluginInformation.Name, "someversion", localpackages.Uninstalled).Return(nil)
@@ -522,7 +506,9 @@ func TestUninstallPackage_RemovalFailed(t *testing.T) {
 	mockRepo.On("GetInstallState", mock.Anything, pluginInformation.Name).Return(localpackages.Installed, pluginInformation.Version)
 	mockRepo.On("ValidatePackage", mock.Anything, pluginInformation.Name, pluginInformation.Version).Return(nil)
 
-	mockRepo.On("GetAction", mock.Anything, pluginInformation.Name, pluginInformation.Version, "uninstall").Return(true, []byte{}, `uninstall`, nil)
+	mockInst := installer_mock.Mock{}
+	mockInst.On("Uninstall", mock.Anything).Return(&contracts.PluginOutput{Status: contracts.ResultStatusSuccess}).Once()
+	mockRepo.On("GetInstaller", mock.Anything, mock.Anything, mock.Anything, pluginInformation.Name, pluginInformation.Version).Return(&mockInst)
 	mockRepo.On("SetInstallState", mock.Anything, pluginInformation.Name, pluginInformation.Version, localpackages.Uninstalling).Return(nil)
 	mockRepo.On("RemovePackage", mock.Anything, pluginInformation.Name, pluginInformation.Version).Return(errors.New("testfail"))
 	mockRepo.On("SetInstallState", mock.Anything, pluginInformation.Name, pluginInformation.Version, localpackages.Failed).Return(nil)
@@ -539,36 +525,4 @@ func TestUninstallPackage_RemovalFailed(t *testing.T) {
 	assert.NotEmpty(t, output.Stderr)
 	assert.Contains(t, output.Stderr, "failed to uninstall package")
 	assert.Contains(t, output.Stderr, "testfail")
-}
-
-func TestConfigurePackage_ExecuteError(t *testing.T) {
-	stubs := &ConfigurePackageStubs{
-		fileSysDepStub: &FileSysDepStub{},
-		execDepStub:    &ExecDepStub{pluginInput: &model.PluginState{}, pluginOutput: &contracts.PluginResult{StandardError: "execute error"}},
-	}
-	stubs.Set()
-	defer stubs.Clear()
-
-	plugin := &Plugin{}
-	pluginInformation := createStubPluginInputInstall()
-
-	mockRepo := repository_mock.MockedRepository{}
-	mockRepo.On("GetInstalledVersion", mock.Anything, pluginInformation.Name).Return("")
-	mockRepo.On("GetInstallState", mock.Anything, pluginInformation.Name).Return(localpackages.None, "")
-	mockRepo.On("ValidatePackage", mock.Anything, pluginInformation.Name, pluginInformation.Version).Return(nil)
-	mockRepo.On("GetAction", mock.Anything, pluginInformation.Name, pluginInformation.Version, "install").Return(true, []byte{}, `install`, nil).Once()
-	mockRepo.On("GetAction", mock.Anything, pluginInformation.Name, pluginInformation.Version, "validate").Return(true, []byte{}, `validate`, nil).Once()
-	mockRepo.On("SetInstallState", mock.Anything, pluginInformation.Name, pluginInformation.Version, mock.Anything).Return(nil)
-	manager := createInstanceWithRepoMock(&mockRepo)
-
-	output := runConfigurePackage(
-		plugin,
-		contextMock,
-		manager,
-		pluginInformation)
-
-	mockRepo.AssertExpectations(t)
-	assert.Empty(t, output.Stderr)
-	assert.NotEmpty(t, output.Stdout)
-	assert.Contains(t, output.Stdout, "execute error")
 }
