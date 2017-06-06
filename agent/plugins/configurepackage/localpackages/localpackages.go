@@ -24,7 +24,11 @@ import (
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
+	"github.com/aws/amazon-ssm-agent/agent/contracts"
+	"github.com/aws/amazon-ssm-agent/agent/framework/runpluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
+	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/installer"
+	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/ssminstaller"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/inventory/model"
 )
 
@@ -55,12 +59,12 @@ type Repository interface {
 	AddPackage(context context.T, packageName string, version string, downloader DownloadDelegate) error
 	SetInstallState(context context.T, packageName string, version string, state InstallState) error
 	GetInstallState(context context.T, packageName string) (state InstallState, version string)
-	GetAction(context context.T, packageName string, version string, actionName string) (exists bool, actionDocument []byte, workingDir string, err error)
 	RemovePackage(context context.T, packageName string, version string) error
 	GetInventoryData(context context.T) []model.ApplicationData
+	GetInstaller(context context.T, configuration contracts.Configuration, runner runpluginutil.PluginRunner, packageName string, version string) installer.Installer
 }
 
-// NewRepositoryDefault is the factory method for the package repository with default file system dependencies
+// NewRepository is the factory method for the package repository with default file system dependencies
 func NewRepository() Repository {
 	return &localRepository{filesysdep: &fileSysDepImp{}, repoRoot: appconfig.PackageRoot}
 }
@@ -90,6 +94,21 @@ type PackageManifest struct {
 type localRepository struct {
 	filesysdep FileSysDep
 	repoRoot   string
+}
+
+// GetInstaller returns an Installer appropriate for the package and version
+// The configuration should include the appropriate OutputS3KeyPrefix for documents run by the Installer
+func (repo *localRepository) GetInstaller(context context.T,
+	configuration contracts.Configuration,
+	runner runpluginutil.PluginRunner,
+	packageName string,
+	version string) installer.Installer {
+
+	return ssminstaller.New(packageName,
+		version,
+		repo.getPackageVersionPath(packageName, version),
+		configuration,
+		runner)
 }
 
 // GetInstalledVersion returns the version of the last successfully installed package
@@ -162,25 +181,6 @@ func (repo *localRepository) SetInstallState(context context.T, packageName stri
 func (repo *localRepository) GetInstallState(context context.T, packageName string) (state InstallState, version string) {
 	installState := repo.loadInstallState(repo.filesysdep, context, packageName)
 	return installState.State, installState.Version
-}
-
-// GetAction returns a JSON document describing a management action (including working directory) or an empty string
-// if there is nothing to do for a given action
-func (repo *localRepository) GetAction(context context.T, packageName string, version string, actionName string) (exists bool, actionDocument []byte, workingDir string, err error) {
-	actionPath := repo.getActionPath(packageName, version, actionName)
-	if !repo.filesysdep.Exists(actionPath) {
-		return false, []byte{}, "", nil
-	}
-	if actionContent, err := repo.filesysdep.ReadFile(actionPath); err != nil {
-		return true, []byte{}, "", err
-	} else {
-		actionJson := string(actionContent[:])
-		var jsonTest interface{}
-		if err = jsonutil.Unmarshal(actionJson, &jsonTest); err != nil {
-			return true, []byte{}, "", err
-		}
-		return true, actionContent, repo.getPackageVersionPath(packageName, version), nil
-	}
 }
 
 // RemovePackage deletes an entry in the repository and removes package artifacts
@@ -257,11 +257,6 @@ func (repo *localRepository) getInstallStatePath(packageName string) string {
 // getPackageVersionPath is a helper function that builds a path to the directory containing the given version of a package
 func (repo *localRepository) getPackageVersionPath(packageName string, version string) string {
 	return filepath.Join(repo.getPackageRoot(packageName), normalizeDirectory(version))
-}
-
-// getActionPath is a helper function that builds the path to an action document file
-func (repo *localRepository) getActionPath(packageName string, version string, actionName string) string {
-	return filepath.Join(repo.getPackageVersionPath(packageName, version), fmt.Sprintf("%v.json", actionName))
 }
 
 // getManifestPath is a helper function that builds the path to the manifest file for a given version of a package

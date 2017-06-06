@@ -32,7 +32,7 @@ type PackageResult struct {
 	Operation   string
 	Timing      int64
 	Exitcode    int64
-	Envionrment map[string]string
+	Environment map[string]string
 	Trace       map[string]Trace
 }
 

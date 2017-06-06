@@ -22,12 +22,12 @@ import (
 
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
-	"github.com/aws/amazon-ssm-agent/agent/docmanager/model"
-	"github.com/aws/amazon-ssm-agent/agent/framework/runpluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/localpackages"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 	"github.com/stretchr/testify/mock"
 )
+
+// TODO:MF: This whole file is now used only by tests and should be merged into an existing _test file or renamed to have the _test suffix.
 
 func createMockCancelFlag() task.CancelFlag {
 	mockCancelFlag := new(task.MockCancelFlag)
@@ -43,48 +43,29 @@ type ConfigurePackageStubs struct {
 	// individual stub functions or interfaces go here with a temp variable for the original version
 	fileSysDepStub fileSysDep
 	fileSysDepOrig fileSysDep
-	execDepStub    execDep
-	execDepOrig    execDep
 	stubsSet       bool
 }
 
 // Set replaces dependencies with stub versions and saves the original version.
 // it should always be followed by defer Clear()
 func (m *ConfigurePackageStubs) Set() {
-	if m.stubsSet {
-		m.Clear() // This protects us from double-setting stubs (we don't have a stack so we must only have one layer of stubs set at a time)
-	}
 	if m.fileSysDepStub != nil {
 		m.fileSysDepOrig = filesysdep
 		filesysdep = m.fileSysDepStub
-	}
-	if m.execDepStub != nil {
-		m.execDepOrig = execdep
-		execdep = m.execDepStub
 	}
 	m.stubsSet = true
 }
 
 // Clear resets dependencies to their original values.
 func (m *ConfigurePackageStubs) Clear() {
-	if !m.stubsSet {
-		return // This protects us from resetting to nil values if stubs were never set
-	}
 	if m.fileSysDepStub != nil {
 		filesysdep = m.fileSysDepOrig
-	}
-	if m.execDepStub != nil {
-		execdep = m.execDepOrig
 	}
 	m.stubsSet = false
 }
 
-func execStubSuccess() execDep {
-	return &ExecDepStub{pluginInput: &model.PluginState{}, pluginOutput: &contracts.PluginResult{Status: contracts.ResultStatusSuccess}}
-}
-
 func setSuccessStubs() *ConfigurePackageStubs {
-	stubs := &ConfigurePackageStubs{fileSysDepStub: &FileSysDepStub{}, execDepStub: execStubSuccess()}
+	stubs := &ConfigurePackageStubs{fileSysDepStub: &FileSysDepStub{}}
 	stubs.Set()
 	return stubs
 }
@@ -110,33 +91,6 @@ func (m *FileSysDepStub) RemoveAll(path string) error {
 
 func (m *FileSysDepStub) WriteFile(filename string, content string) error {
 	return m.writeError
-}
-
-type ExecDepStub struct {
-	pluginInput     *model.PluginState
-	parseError      error
-	pluginOutput    *contracts.PluginResult
-	pluginOutputMap map[string]*contracts.PluginResult
-}
-
-func (m *ExecDepStub) ParseDocument(context context.T, documentRaw []byte, orchestrationDir string, s3Bucket string, s3KeyPrefix string, messageID string, documentID string, defaultWorkingDirectory string) (pluginsInfo []model.PluginState, err error) {
-	pluginsInfo = make([]model.PluginState, 0, 1)
-	if m.pluginInput != nil {
-		m.pluginInput.Configuration.DefaultWorkingDirectory = defaultWorkingDirectory
-		pluginsInfo = append(pluginsInfo, *m.pluginInput)
-	}
-	return pluginsInfo, m.parseError
-}
-
-func (m *ExecDepStub) ExecuteDocument(runner runpluginutil.PluginRunner, context context.T, pluginInput []model.PluginState, documentID string, documentCreatedDate string) (pluginOutputs map[string]*contracts.PluginResult) {
-	pluginOutputs = make(map[string]*contracts.PluginResult)
-	// TODO:MF: We're using the working directory as an index into the stub results.  We should convert all of this to testify mocks.
-	if output, ok := m.pluginOutputMap[pluginInput[0].Configuration.DefaultWorkingDirectory]; ok {
-		pluginOutputs["test"] = output
-	} else if m.pluginOutput != nil {
-		pluginOutputs["test"] = m.pluginOutput
-	}
-	return
 }
 
 type MockedConfigurePackageManager struct {
