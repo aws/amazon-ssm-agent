@@ -37,16 +37,14 @@ const (
 			"PackageId":  "{4FFA2088-8317-3B14-93CD-4C699DB37843}",
 			"Version":  "9.0.30729",
 			"Publisher":  "Microsoft Corporation",
-			"InstalledTime":  "2011-03-05T00:00:00Z",
-			"Summary":  ""
+			"InstalledTime":  "2011-03-05T00:00:00Z"
 		},
 		{
 			"Name":  "Microsoft .NET Framework 4.5.2",
 			"PackageId":  "{92FB6C44-E685-45AD-9B20-CADF4CABA132} - 1033",
 			"Version":  "4.5.51209",
 			"Publisher":  "Microsoft Corporation",
-			"InstalledTime":  null,
-			"Summary":  null
+			"InstalledTime":  null
 		},` +
 		// Windows 2016 samples:
 		`{
@@ -54,16 +52,14 @@ const (
 			"PackageId":  "Mozilla Firefox 53.0.3 (x64 en-US)",
 			"Version":  "53.0.3",
 			"Publisher":  "Mozilla",
-			"InstalledTime":  null,
-			"Summary":  "Mozilla Firefox 53.0.3 (x64 en-US)"
+			"InstalledTime":  null
 		},
 		{
 			"Name":  "Go Programming Language amd64 go1.8.3",
 			"PackageId":  "{854BC448-6940-4253-9E50-E433E8C2E96A}",
 			"Version":  "1.8.3",
 			"Publisher":  "https://golang.org",
-			"InstalledTime":  "2017-05-31T00:00:00Z",
-			"Summary":  "The Go programming language is a fast, statically typed, compiled language that feels like a dynamically typed, interpreted language."
+			"InstalledTime":  "2017-05-31T00:00:00Z"
 		}]`
 	mockArch     = "randomArch"
 	randomString = "blahblah"
@@ -80,7 +76,6 @@ var sampleDataParsed = []model.ApplicationData{
 		Version:       "9.0.30729",
 		Publisher:     "Microsoft Corporation",
 		InstalledTime: "2011-03-05T00:00:00Z",
-		Summary:       "",
 	},
 	{
 		Name:          "Microsoft .NET Framework 4.5.2",
@@ -88,7 +83,6 @@ var sampleDataParsed = []model.ApplicationData{
 		Version:       "4.5.51209",
 		Publisher:     "Microsoft Corporation",
 		InstalledTime: "",
-		Summary:       "",
 	},
 	// Windows 2016 samples:
 	{
@@ -97,7 +91,6 @@ var sampleDataParsed = []model.ApplicationData{
 		Version:       "53.0.3",
 		Publisher:     "Mozilla",
 		InstalledTime: "",
-		Summary:       "Mozilla Firefox 53.0.3 (x64 en-US)",
 	},
 	{
 		Name:          "Go Programming Language amd64 go1.8.3",
@@ -105,7 +98,6 @@ var sampleDataParsed = []model.ApplicationData{
 		Version:       "1.8.3",
 		Publisher:     "https://golang.org",
 		InstalledTime: "2017-05-31T00:00:00Z",
-		Summary:       "The Go programming language is a fast, statically typed, compiled language that feels like a dynamically typed, interpreted language.",
 	},
 }
 
