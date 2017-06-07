@@ -23,22 +23,20 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil/artifact"
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/birdwatcher/facade"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/packageservice"
 	"github.com/aws/amazon-ssm-agent/agent/sdkutil"
 	"github.com/aws/amazon-ssm-agent/agent/version"
 	"github.com/aws/aws-sdk-go/aws/request"
 	"github.com/aws/aws-sdk-go/aws/session"
-	"github.com/aws/aws-sdk-go/service/birdwatcherstationservice"
-	"github.com/aws/aws-sdk-go/service/birdwatcherstationservice/birdwatcherstationserviceiface"
+	"github.com/aws/aws-sdk-go/service/ssm"
 )
 
 // PackageService is the concrete type for Birdwatcher PackageService
 type PackageService struct {
-	bwclient      birdwatcherstationserviceiface.BirdwatcherStationServiceAPI
+	facadeClient  facade.BirdwatcherFacade
 	manifestCache packageservice.ManifestCache
 }
-
-var temporaryAuthString string = "arn:aws:ec2:us-east-1:476441631524:instance/i-0efc08f171ce5f3fb"
 
 // New constructor for PackageService
 func New(log log.T, endpoint string, manifestCache packageservice.ManifestCache) packageservice.PackageService {
@@ -58,7 +56,7 @@ func New(log log.T, endpoint string, manifestCache packageservice.ManifestCache)
 		}
 	}
 
-	bwStationServiceClientSession := session.New(cfg)
+	facadeClientSession := session.New(cfg)
 
 	// Define a request handler with current agentName and version
 	SSMAgentVersionUserAgentHandler := request.NamedHandler{
@@ -67,10 +65,10 @@ func New(log log.T, endpoint string, manifestCache packageservice.ManifestCache)
 	}
 
 	// Add the handler to each request to the BirdwatcherStationService
-	bwStationServiceClientSession.Handlers.Build.PushBackNamed(SSMAgentVersionUserAgentHandler)
+	facadeClientSession.Handlers.Build.PushBackNamed(SSMAgentVersionUserAgentHandler)
 
 	return &PackageService{
-		bwclient:      birdwatcherstationservice.New(bwStationServiceClientSession),
+		facadeClient:  ssm.New(facadeClientSession),
 		manifestCache: manifestCache,
 	}
 }
@@ -116,9 +114,8 @@ func (ds *PackageService) ReportResult(log log.T, result packageservice.PackageR
 	platformVersion, _ := platformProviderdep.Version(log)
 	architecture, _ := platformProviderdep.Architecture(log)
 
-	_, err := ds.bwclient.PutConfigurePackageResult(
-		&birdwatcherstationservice.PutConfigurePackageResultInput{
-			Auth:           &birdwatcherstationservice.Auth{UserArn: &temporaryAuthString},
+	_, err := ds.facadeClient.PutConfigurePackageResult(
+		&ssm.PutConfigurePackageResultInput{
 			PackageName:    &result.PackageName,
 			PackageVersion: &result.Version,
 			OverallTiming:  &result.Timing,
@@ -153,9 +150,8 @@ func readManifestFromCache(cache packageservice.ManifestCache, packageName strin
 }
 
 func downloadManifest(ds *PackageService, packageName string, version string) (*Manifest, error) {
-	resp, err := ds.bwclient.GetManifest(
-		&birdwatcherstationservice.GetManifestInput{
-			Auth:           &birdwatcherstationservice.Auth{UserArn: &temporaryAuthString},
+	resp, err := ds.facadeClient.GetManifest(
+		&ssm.GetManifestInput{
 			PackageName:    &packageName,
 			PackageVersion: &version,
 		},
