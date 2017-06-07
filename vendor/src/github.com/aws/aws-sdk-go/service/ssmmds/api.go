@@ -188,6 +188,22 @@ func (s AcknowledgeMessageInput) GoString() string {
 	return s.String()
 }
 
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *AcknowledgeMessageInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "AcknowledgeMessageInput"}
+	if s.MessageId == nil {
+		invalidParams.Add(request.NewErrParamRequired("MessageId"))
+	}
+	if s.MessageId != nil && len(*s.MessageId) < 16 {
+		invalidParams.Add(request.NewErrParamMinLen("MessageId", 16))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
 type AcknowledgeMessageOutput struct {
 	_ struct{} `type:"structure"`
 }
@@ -216,6 +232,22 @@ func (s DeleteMessageInput) String() string {
 // GoString returns the string representation
 func (s DeleteMessageInput) GoString() string {
 	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DeleteMessageInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DeleteMessageInput"}
+	if s.MessageId == nil {
+		invalidParams.Add(request.NewErrParamRequired("MessageId"))
+	}
+	if s.MessageId != nil && len(*s.MessageId) < 16 {
+		invalidParams.Add(request.NewErrParamMinLen("MessageId", 16))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
 }
 
 type DeleteMessageOutput struct {
@@ -270,6 +302,25 @@ func (s FailMessageInput) GoString() string {
 	return s.String()
 }
 
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *FailMessageInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "FailMessageInput"}
+	if s.FailureType == nil {
+		invalidParams.Add(request.NewErrParamRequired("FailureType"))
+	}
+	if s.MessageId == nil {
+		invalidParams.Add(request.NewErrParamRequired("MessageId"))
+	}
+	if s.MessageId != nil && len(*s.MessageId) < 16 {
+		invalidParams.Add(request.NewErrParamMinLen("MessageId", 16))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
 type FailMessageOutput struct {
 	_ struct{} `type:"structure"`
 }
@@ -298,6 +349,22 @@ func (s GetEndpointInput) String() string {
 // GoString returns the string representation
 func (s GetEndpointInput) GoString() string {
 	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GetEndpointInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "GetEndpointInput"}
+	if s.Destination == nil {
+		invalidParams.Add(request.NewErrParamRequired("Destination"))
+	}
+	if s.Destination != nil && len(*s.Destination) < 10 {
+		invalidParams.Add(request.NewErrParamMinLen("Destination", 10))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
 }
 
 type GetEndpointOutput struct {
@@ -336,6 +403,28 @@ func (s GetMessagesInput) String() string {
 // GoString returns the string representation
 func (s GetMessagesInput) GoString() string {
 	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GetMessagesInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "GetMessagesInput"}
+	if s.Destination == nil {
+		invalidParams.Add(request.NewErrParamRequired("Destination"))
+	}
+	if s.Destination != nil && len(*s.Destination) < 10 {
+		invalidParams.Add(request.NewErrParamMinLen("Destination", 10))
+	}
+	if s.MessagesRequestId == nil {
+		invalidParams.Add(request.NewErrParamRequired("MessagesRequestId"))
+	}
+	if s.MessagesRequestId != nil && len(*s.MessagesRequestId) < 16 {
+		invalidParams.Add(request.NewErrParamMinLen("MessagesRequestId", 16))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
 }
 
 type GetMessagesOutput struct {
@@ -406,6 +495,31 @@ func (s SendReplyInput) String() string {
 // GoString returns the string representation
 func (s SendReplyInput) GoString() string {
 	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *SendReplyInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "SendReplyInput"}
+	if s.MessageId == nil {
+		invalidParams.Add(request.NewErrParamRequired("MessageId"))
+	}
+	if s.MessageId != nil && len(*s.MessageId) < 16 {
+		invalidParams.Add(request.NewErrParamMinLen("MessageId", 16))
+	}
+	if s.Payload == nil {
+		invalidParams.Add(request.NewErrParamRequired("Payload"))
+	}
+	if s.ReplyId == nil {
+		invalidParams.Add(request.NewErrParamRequired("ReplyId"))
+	}
+	if s.ReplyId != nil && len(*s.ReplyId) < 16 {
+		invalidParams.Add(request.NewErrParamMinLen("ReplyId", 16))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
 }
 
 type SendReplyOutput struct {

@@ -16,13 +16,7 @@ var _ time.Duration
 var _ bytes.Buffer
 
 func ExampleSSM_AddTagsToResource() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
-
-	svc := ssm.New(sess)
+	svc := ssm.New(session.New())
 
 	params := &ssm.AddTagsToResourceInput{
 		ResourceId:   aws.String("ResourceId"),             // Required
@@ -49,13 +43,7 @@ func ExampleSSM_AddTagsToResource() {
 }
 
 func ExampleSSM_CancelCommand() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
-
-	svc := ssm.New(sess)
+	svc := ssm.New(session.New())
 
 	params := &ssm.CancelCommandInput{
 		CommandId: aws.String("CommandId"), // Required
@@ -78,13 +66,7 @@ func ExampleSSM_CancelCommand() {
 }
 
 func ExampleSSM_CreateActivation() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
-
-	svc := ssm.New(sess)
+	svc := ssm.New(session.New())
 
 	params := &ssm.CreateActivationInput{
 		IamRole:             aws.String("IamRole"), // Required
@@ -107,13 +89,7 @@ func ExampleSSM_CreateActivation() {
 }
 
 func ExampleSSM_CreateAssociation() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
-
-	svc := ssm.New(sess)
+	svc := ssm.New(session.New())
 
 	params := &ssm.CreateAssociationInput{
 		Name:            aws.String("DocumentName"), // Required
@@ -159,13 +135,7 @@ func ExampleSSM_CreateAssociation() {
 }
 
 func ExampleSSM_CreateAssociationBatch() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
-
-	svc := ssm.New(sess)
+	svc := ssm.New(session.New())
 
 	params := &ssm.CreateAssociationBatchInput{
 		Entries: []*ssm.CreateAssociationBatchRequestEntry{ // Required
@@ -216,13 +186,7 @@ func ExampleSSM_CreateAssociationBatch() {
 }
 
 func ExampleSSM_CreateDocument() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
-
-	svc := ssm.New(sess)
+	svc := ssm.New(session.New())
 
 	params := &ssm.CreateDocumentInput{
 		Content:      aws.String("DocumentContent"), // Required
@@ -243,13 +207,7 @@ func ExampleSSM_CreateDocument() {
 }
 
 func ExampleSSM_CreateMaintenanceWindow() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
-
-	svc := ssm.New(sess)
+	svc := ssm.New(session.New())
 
 	params := &ssm.CreateMaintenanceWindowInput{
 		AllowUnassociatedTargets: aws.Bool(true), // Required
@@ -258,6 +216,7 @@ func ExampleSSM_CreateMaintenanceWindow() {
 		Name:        aws.String("MaintenanceWindowName"),     // Required
 		Schedule:    aws.String("MaintenanceWindowSchedule"), // Required
 		ClientToken: aws.String("ClientToken"),
+		Description: aws.String("MaintenanceWindowDescription"),
 	}
 	resp, err := svc.CreateMaintenanceWindow(params)
 
@@ -273,13 +232,7 @@ func ExampleSSM_CreateMaintenanceWindow() {
 }
 
 func ExampleSSM_CreatePatchBaseline() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
-
-	svc := ssm.New(sess)
+	svc := ssm.New(session.New())
 
 	params := &ssm.CreatePatchBaselineInput{
 		Name: aws.String("BaselineName"), // Required
@@ -299,6 +252,7 @@ func ExampleSSM_CreatePatchBaseline() {
 							// More values...
 						},
 					},
+					ComplianceLevel: aws.String("PatchComplianceLevel"),
 				},
 				// More values...
 			},
@@ -307,8 +261,9 @@ func ExampleSSM_CreatePatchBaseline() {
 			aws.String("PatchId"), // Required
 			// More values...
 		},
-		ClientToken: aws.String("ClientToken"),
-		Description: aws.String("BaselineDescription"),
+		ApprovedPatchesComplianceLevel: aws.String("PatchComplianceLevel"),
+		ClientToken:                    aws.String("ClientToken"),
+		Description:                    aws.String("BaselineDescription"),
 		GlobalFilters: &ssm.PatchFilterGroup{
 			PatchFilters: []*ssm.PatchFilter{ // Required
 				{ // Required
@@ -321,6 +276,7 @@ func ExampleSSM_CreatePatchBaseline() {
 				// More values...
 			},
 		},
+		OperatingSystem: aws.String("OperatingSystem"),
 		RejectedPatches: []*string{
 			aws.String("PatchId"), // Required
 			// More values...
@@ -339,14 +295,33 @@ func ExampleSSM_CreatePatchBaseline() {
 	fmt.Println(resp)
 }
 
-func ExampleSSM_DeleteActivation() {
-	sess, err := session.NewSession()
+func ExampleSSM_CreateResourceDataSync() {
+	svc := ssm.New(session.New())
+
+	params := &ssm.CreateResourceDataSyncInput{
+		S3Destination: &ssm.ResourceDataSyncS3Destination{ // Required
+			BucketName: aws.String("ResourceDataSyncS3BucketName"), // Required
+			Region:     aws.String("ResourceDataSyncS3Region"),     // Required
+			SyncFormat: aws.String("ResourceDataSyncS3Format"),     // Required
+			Prefix:     aws.String("ResourceDataSyncS3Prefix"),
+		},
+		SyncName: aws.String("ResourceDataSyncName"), // Required
+	}
+	resp, err := svc.CreateResourceDataSync(params)
+
 	if err != nil {
-		fmt.Println("failed to create session,", err)
+		// Print the error, cast err to awserr.Error to get the Code and
+		// Message from an error.
+		fmt.Println(err.Error())
 		return
 	}
 
-	svc := ssm.New(sess)
+	// Pretty-print the response data.
+	fmt.Println(resp)
+}
+
+func ExampleSSM_DeleteActivation() {
+	svc := ssm.New(session.New())
 
 	params := &ssm.DeleteActivationInput{
 		ActivationId: aws.String("ActivationId"), // Required
@@ -365,13 +340,7 @@ func ExampleSSM_DeleteActivation() {
 }
 
 func ExampleSSM_DeleteAssociation() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
-
-	svc := ssm.New(sess)
+	svc := ssm.New(session.New())
 
 	params := &ssm.DeleteAssociationInput{
 		AssociationId: aws.String("AssociationId"),
@@ -392,13 +361,7 @@ func ExampleSSM_DeleteAssociation() {
 }
 
 func ExampleSSM_DeleteDocument() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
-
-	svc := ssm.New(sess)
+	svc := ssm.New(session.New())
 
 	params := &ssm.DeleteDocumentInput{
 		Name: aws.String("DocumentName"), // Required
@@ -417,13 +380,7 @@ func ExampleSSM_DeleteDocument() {
 }
 
 func ExampleSSM_DeleteMaintenanceWindow() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
-
-	svc := ssm.New(sess)
+	svc := ssm.New(session.New())
 
 	params := &ssm.DeleteMaintenanceWindowInput{
 		WindowId: aws.String("MaintenanceWindowId"), // Required
@@ -442,13 +399,7 @@ func ExampleSSM_DeleteMaintenanceWindow() {
 }
 
 func ExampleSSM_DeleteParameter() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
-
-	svc := ssm.New(sess)
+	svc := ssm.New(session.New())
 
 	params := &ssm.DeleteParameterInput{
 		Name: aws.String("PSParameterName"), // Required
@@ -466,14 +417,30 @@ func ExampleSSM_DeleteParameter() {
 	fmt.Println(resp)
 }
 
-func ExampleSSM_DeletePatchBaseline() {
-	sess, err := session.NewSession()
+func ExampleSSM_DeleteParameters() {
+	svc := ssm.New(session.New())
+
+	params := &ssm.DeleteParametersInput{
+		Names: []*string{ // Required
+			aws.String("PSParameterName"), // Required
+			// More values...
+		},
+	}
+	resp, err := svc.DeleteParameters(params)
+
 	if err != nil {
-		fmt.Println("failed to create session,", err)
+		// Print the error, cast err to awserr.Error to get the Code and
+		// Message from an error.
+		fmt.Println(err.Error())
 		return
 	}
 
-	svc := ssm.New(sess)
+	// Pretty-print the response data.
+	fmt.Println(resp)
+}
+
+func ExampleSSM_DeletePatchBaseline() {
+	svc := ssm.New(session.New())
 
 	params := &ssm.DeletePatchBaselineInput{
 		BaselineId: aws.String("BaselineId"), // Required
@@ -491,14 +458,27 @@ func ExampleSSM_DeletePatchBaseline() {
 	fmt.Println(resp)
 }
 
-func ExampleSSM_DeregisterManagedInstance() {
-	sess, err := session.NewSession()
+func ExampleSSM_DeleteResourceDataSync() {
+	svc := ssm.New(session.New())
+
+	params := &ssm.DeleteResourceDataSyncInput{
+		SyncName: aws.String("ResourceDataSyncName"), // Required
+	}
+	resp, err := svc.DeleteResourceDataSync(params)
+
 	if err != nil {
-		fmt.Println("failed to create session,", err)
+		// Print the error, cast err to awserr.Error to get the Code and
+		// Message from an error.
+		fmt.Println(err.Error())
 		return
 	}
 
-	svc := ssm.New(sess)
+	// Pretty-print the response data.
+	fmt.Println(resp)
+}
+
+func ExampleSSM_DeregisterManagedInstance() {
+	svc := ssm.New(session.New())
 
 	params := &ssm.DeregisterManagedInstanceInput{
 		InstanceId: aws.String("ManagedInstanceId"), // Required
@@ -517,13 +497,7 @@ func ExampleSSM_DeregisterManagedInstance() {
 }
 
 func ExampleSSM_DeregisterPatchBaselineForPatchGroup() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
-
-	svc := ssm.New(sess)
+	svc := ssm.New(session.New())
 
 	params := &ssm.DeregisterPatchBaselineForPatchGroupInput{
 		BaselineId: aws.String("BaselineId"), // Required
@@ -543,17 +517,12 @@ func ExampleSSM_DeregisterPatchBaselineForPatchGroup() {
 }
 
 func ExampleSSM_DeregisterTargetFromMaintenanceWindow() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
-
-	svc := ssm.New(sess)
+	svc := ssm.New(session.New())
 
 	params := &ssm.DeregisterTargetFromMaintenanceWindowInput{
 		WindowId:       aws.String("MaintenanceWindowId"),       // Required
 		WindowTargetId: aws.String("MaintenanceWindowTargetId"), // Required
+		Safe:           aws.Bool(true),
 	}
 	resp, err := svc.DeregisterTargetFromMaintenanceWindow(params)
 
@@ -569,13 +538,7 @@ func ExampleSSM_DeregisterTargetFromMaintenanceWindow() {
 }
 
 func ExampleSSM_DeregisterTaskFromMaintenanceWindow() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
-
-	svc := ssm.New(sess)
+	svc := ssm.New(session.New())
 
 	params := &ssm.DeregisterTaskFromMaintenanceWindowInput{
 		WindowId:     aws.String("MaintenanceWindowId"),     // Required
@@ -595,13 +558,7 @@ func ExampleSSM_DeregisterTaskFromMaintenanceWindow() {
 }
 
 func ExampleSSM_DescribeActivations() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
-
-	svc := ssm.New(sess)
+	svc := ssm.New(session.New())
 
 	params := &ssm.DescribeActivationsInput{
 		Filters: []*ssm.DescribeActivationsFilter{
@@ -631,18 +588,13 @@ func ExampleSSM_DescribeActivations() {
 }
 
 func ExampleSSM_DescribeAssociation() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
-
-	svc := ssm.New(sess)
+	svc := ssm.New(session.New())
 
 	params := &ssm.DescribeAssociationInput{
-		AssociationId: aws.String("AssociationId"),
-		InstanceId:    aws.String("InstanceId"),
-		Name:          aws.String("DocumentName"),
+		AssociationId:      aws.String("AssociationId"),
+		AssociationVersion: aws.String("AssociationVersion"),
+		InstanceId:         aws.String("InstanceId"),
+		Name:               aws.String("DocumentName"),
 	}
 	resp, err := svc.DescribeAssociation(params)
 
@@ -658,13 +610,7 @@ func ExampleSSM_DescribeAssociation() {
 }
 
 func ExampleSSM_DescribeAutomationActions() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
-
-	svc := ssm.New(sess)
+	svc := ssm.New(session.New())
 
 	var params *ssm.DescribeAutomationActionsInput
 	resp, err := svc.DescribeAutomationActions(params)
@@ -681,13 +627,7 @@ func ExampleSSM_DescribeAutomationActions() {
 }
 
 func ExampleSSM_DescribeAutomationExecutions() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
-
-	svc := ssm.New(sess)
+	svc := ssm.New(session.New())
 
 	params := &ssm.DescribeAutomationExecutionsInput{
 		Filters: []*ssm.AutomationExecutionFilter{
@@ -717,13 +657,7 @@ func ExampleSSM_DescribeAutomationExecutions() {
 }
 
 func ExampleSSM_DescribeAvailablePatches() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
-
-	svc := ssm.New(sess)
+	svc := ssm.New(session.New())
 
 	params := &ssm.DescribeAvailablePatchesInput{
 		Filters: []*ssm.PatchOrchestratorFilter{
@@ -753,13 +687,7 @@ func ExampleSSM_DescribeAvailablePatches() {
 }
 
 func ExampleSSM_DescribeDocument() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
-
-	svc := ssm.New(sess)
+	svc := ssm.New(session.New())
 
 	params := &ssm.DescribeDocumentInput{
 		Name:            aws.String("DocumentARN"), // Required
@@ -779,18 +707,13 @@ func ExampleSSM_DescribeDocument() {
 }
 
 func ExampleSSM_DescribeDocumentInternal() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
-
-	svc := ssm.New(sess)
+	svc := ssm.New(session.New())
 
 	params := &ssm.DescribeDocumentInternalInput{
 		CustomerAccountId: aws.String("AccountId"),   // Required
 		Name:              aws.String("DocumentARN"), // Required
 		DocumentVersion:   aws.String("DocumentVersion"),
+		InstanceId:        aws.String("InstanceId"),
 	}
 	resp, err := svc.DescribeDocumentInternal(params)
 
@@ -806,13 +729,7 @@ func ExampleSSM_DescribeDocumentInternal() {
 }
 
 func ExampleSSM_DescribeDocumentParameters() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
-
-	svc := ssm.New(sess)
+	svc := ssm.New(session.New())
 
 	params := &ssm.DescribeDocumentParametersInput{
 		DocumentName:    aws.String("DocumentARN"), // Required
@@ -832,13 +749,7 @@ func ExampleSSM_DescribeDocumentParameters() {
 }
 
 func ExampleSSM_DescribeDocumentPermission() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
-
-	svc := ssm.New(sess)
+	svc := ssm.New(session.New())
 
 	params := &ssm.DescribeDocumentPermissionInput{
 		Name:           aws.String("DocumentName"),           // Required
@@ -858,13 +769,7 @@ func ExampleSSM_DescribeDocumentPermission() {
 }
 
 func ExampleSSM_DescribeDocumentSchema() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
-
-	svc := ssm.New(sess)
+	svc := ssm.New(session.New())
 
 	params := &ssm.DescribeDocumentSchemaInput{
 		DocumentType: aws.String("DocumentType"), // Required
@@ -883,13 +788,7 @@ func ExampleSSM_DescribeDocumentSchema() {
 }
 
 func ExampleSSM_DescribeDocumentStepSchema() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
-
-	svc := ssm.New(sess)
+	svc := ssm.New(session.New())
 
 	params := &ssm.DescribeDocumentStepSchemaInput{
 		StepName: aws.String("CommandPluginName"), // Required
@@ -908,13 +807,7 @@ func ExampleSSM_DescribeDocumentStepSchema() {
 }
 
 func ExampleSSM_DescribeDocumentSteps() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
-
-	svc := ssm.New(sess)
+	svc := ssm.New(session.New())
 
 	params := &ssm.DescribeDocumentStepsInput{
 		DocumentType: aws.String("DocumentType"), // Required
@@ -933,13 +826,7 @@ func ExampleSSM_DescribeDocumentSteps() {
 }
 
 func ExampleSSM_DescribeEffectiveInstanceAssociations() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
-
-	svc := ssm.New(sess)
+	svc := ssm.New(session.New())
 
 	params := &ssm.DescribeEffectiveInstanceAssociationsInput{
 		InstanceId: aws.String("InstanceId"), // Required
@@ -960,13 +847,7 @@ func ExampleSSM_DescribeEffectiveInstanceAssociations() {
 }
 
 func ExampleSSM_DescribeEffectivePatchesForPatchBaseline() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
-
-	svc := ssm.New(sess)
+	svc := ssm.New(session.New())
 
 	params := &ssm.DescribeEffectivePatchesForPatchBaselineInput{
 		BaselineId: aws.String("BaselineId"), // Required
@@ -987,18 +868,14 @@ func ExampleSSM_DescribeEffectivePatchesForPatchBaseline() {
 }
 
 func ExampleSSM_DescribeInstanceAssociationsStatus() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
-
-	svc := ssm.New(sess)
+	svc := ssm.New(session.New())
 
 	params := &ssm.DescribeInstanceAssociationsStatusInput{
-		InstanceId: aws.String("InstanceId"), // Required
-		MaxResults: aws.Int64(1),
-		NextToken:  aws.String("NextToken"),
+		InstanceId:         aws.String("InstanceId"), // Required
+		AssociationId:      aws.String("AssociationId"),
+		AssociationVersion: aws.String("AssociationVersion"),
+		MaxResults:         aws.Int64(1),
+		NextToken:          aws.String("NextToken"),
 	}
 	resp, err := svc.DescribeInstanceAssociationsStatus(params)
 
@@ -1014,13 +891,7 @@ func ExampleSSM_DescribeInstanceAssociationsStatus() {
 }
 
 func ExampleSSM_DescribeInstanceInformation() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
-
-	svc := ssm.New(sess)
+	svc := ssm.New(session.New())
 
 	params := &ssm.DescribeInstanceInformationInput{
 		Filters: []*ssm.InstanceInformationStringFilter{
@@ -1060,13 +931,7 @@ func ExampleSSM_DescribeInstanceInformation() {
 }
 
 func ExampleSSM_DescribeInstancePatchStates() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
-
-	svc := ssm.New(sess)
+	svc := ssm.New(session.New())
 
 	params := &ssm.DescribeInstancePatchStatesInput{
 		InstanceIds: []*string{ // Required
@@ -1090,13 +955,7 @@ func ExampleSSM_DescribeInstancePatchStates() {
 }
 
 func ExampleSSM_DescribeInstancePatchStatesForPatchGroup() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
-
-	svc := ssm.New(sess)
+	svc := ssm.New(session.New())
 
 	params := &ssm.DescribeInstancePatchStatesForPatchGroupInput{
 		PatchGroup: aws.String("PatchGroup"), // Required
@@ -1128,13 +987,7 @@ func ExampleSSM_DescribeInstancePatchStatesForPatchGroup() {
 }
 
 func ExampleSSM_DescribeInstancePatches() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
-
-	svc := ssm.New(sess)
+	svc := ssm.New(session.New())
 
 	params := &ssm.DescribeInstancePatchesInput{
 		InstanceId: aws.String("InstanceId"), // Required
@@ -1165,13 +1018,7 @@ func ExampleSSM_DescribeInstancePatches() {
 }
 
 func ExampleSSM_DescribeInstanceProperties() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
-
-	svc := ssm.New(sess)
+	svc := ssm.New(session.New())
 
 	params := &ssm.DescribeInstancePropertiesInput{
 		FiltersWithOperator: []*ssm.InstancePropertyStringFilter{
@@ -1212,13 +1059,7 @@ func ExampleSSM_DescribeInstanceProperties() {
 }
 
 func ExampleSSM_DescribeMaintenanceWindowExecutionTaskInvocations() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
-
-	svc := ssm.New(sess)
+	svc := ssm.New(session.New())
 
 	params := &ssm.DescribeMaintenanceWindowExecutionTaskInvocationsInput{
 		TaskId:            aws.String("MaintenanceWindowExecutionTaskId"), // Required
@@ -1250,13 +1091,7 @@ func ExampleSSM_DescribeMaintenanceWindowExecutionTaskInvocations() {
 }
 
 func ExampleSSM_DescribeMaintenanceWindowExecutionTasks() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
-
-	svc := ssm.New(sess)
+	svc := ssm.New(session.New())
 
 	params := &ssm.DescribeMaintenanceWindowExecutionTasksInput{
 		WindowExecutionId: aws.String("MaintenanceWindowExecutionId"), // Required
@@ -1287,13 +1122,7 @@ func ExampleSSM_DescribeMaintenanceWindowExecutionTasks() {
 }
 
 func ExampleSSM_DescribeMaintenanceWindowExecutions() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
-
-	svc := ssm.New(sess)
+	svc := ssm.New(session.New())
 
 	params := &ssm.DescribeMaintenanceWindowExecutionsInput{
 		WindowId: aws.String("MaintenanceWindowId"), // Required
@@ -1324,13 +1153,7 @@ func ExampleSSM_DescribeMaintenanceWindowExecutions() {
 }
 
 func ExampleSSM_DescribeMaintenanceWindowTargets() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
-
-	svc := ssm.New(sess)
+	svc := ssm.New(session.New())
 
 	params := &ssm.DescribeMaintenanceWindowTargetsInput{
 		WindowId: aws.String("MaintenanceWindowId"), // Required
@@ -1361,13 +1184,7 @@ func ExampleSSM_DescribeMaintenanceWindowTargets() {
 }
 
 func ExampleSSM_DescribeMaintenanceWindowTargetsPrivate() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
-
-	svc := ssm.New(sess)
+	svc := ssm.New(session.New())
 
 	params := &ssm.DescribeMaintenanceWindowTargetsPrivateInput{
 		WindowId: aws.String("MaintenanceWindowId"), // Required
@@ -1398,13 +1215,7 @@ func ExampleSSM_DescribeMaintenanceWindowTargetsPrivate() {
 }
 
 func ExampleSSM_DescribeMaintenanceWindowTasks() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
-
-	svc := ssm.New(sess)
+	svc := ssm.New(session.New())
 
 	params := &ssm.DescribeMaintenanceWindowTasksInput{
 		WindowId: aws.String("MaintenanceWindowId"), // Required
@@ -1435,13 +1246,7 @@ func ExampleSSM_DescribeMaintenanceWindowTasks() {
 }
 
 func ExampleSSM_DescribeMaintenanceWindowTasksPrivate() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
-
-	svc := ssm.New(sess)
+	svc := ssm.New(session.New())
 
 	params := &ssm.DescribeMaintenanceWindowTasksPrivateInput{
 		WindowId: aws.String("MaintenanceWindowId"), // Required
@@ -1472,13 +1277,7 @@ func ExampleSSM_DescribeMaintenanceWindowTasksPrivate() {
 }
 
 func ExampleSSM_DescribeMaintenanceWindows() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
-
-	svc := ssm.New(sess)
+	svc := ssm.New(session.New())
 
 	params := &ssm.DescribeMaintenanceWindowsInput{
 		Filters: []*ssm.PatchOrchestratorFilter{
@@ -1508,27 +1307,32 @@ func ExampleSSM_DescribeMaintenanceWindows() {
 }
 
 func ExampleSSM_DescribeParameters() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
-
-	svc := ssm.New(sess)
+	svc := ssm.New(session.New())
 
 	params := &ssm.DescribeParametersInput{
 		Filters: []*ssm.ParametersFilter{
 			{ // Required
+				Key: aws.String("ParametersFilterKey"), // Required
 				Values: []*string{ // Required
 					aws.String("ParametersFilterValue"), // Required
 					// More values...
 				},
-				Key: aws.String("ParametersFilterKey"),
 			},
 			// More values...
 		},
 		MaxResults: aws.Int64(1),
 		NextToken:  aws.String("NextToken"),
+		ParameterFilters: []*ssm.ParameterStringFilter{
+			{ // Required
+				Key:    aws.String("ParameterStringFilterKey"), // Required
+				Option: aws.String("ParameterStringQueryOption"),
+				Values: []*string{
+					aws.String("ParameterStringFilterValue"), // Required
+					// More values...
+				},
+			},
+			// More values...
+		},
 	}
 	resp, err := svc.DescribeParameters(params)
 
@@ -1544,13 +1348,7 @@ func ExampleSSM_DescribeParameters() {
 }
 
 func ExampleSSM_DescribePatchBaselines() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
-
-	svc := ssm.New(sess)
+	svc := ssm.New(session.New())
 
 	params := &ssm.DescribePatchBaselinesInput{
 		Filters: []*ssm.PatchOrchestratorFilter{
@@ -1580,13 +1378,7 @@ func ExampleSSM_DescribePatchBaselines() {
 }
 
 func ExampleSSM_DescribePatchGroupState() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
-
-	svc := ssm.New(sess)
+	svc := ssm.New(session.New())
 
 	params := &ssm.DescribePatchGroupStateInput{
 		PatchGroup: aws.String("PatchGroup"), // Required
@@ -1605,15 +1397,19 @@ func ExampleSSM_DescribePatchGroupState() {
 }
 
 func ExampleSSM_DescribePatchGroups() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
-
-	svc := ssm.New(sess)
+	svc := ssm.New(session.New())
 
 	params := &ssm.DescribePatchGroupsInput{
+		Filters: []*ssm.PatchOrchestratorFilter{
+			{ // Required
+				Key: aws.String("PatchOrchestratorFilterKey"),
+				Values: []*string{
+					aws.String("PatchOrchestratorFilterValue"), // Required
+					// More values...
+				},
+			},
+			// More values...
+		},
 		MaxResults: aws.Int64(1),
 		NextToken:  aws.String("NextToken"),
 	}
@@ -1631,13 +1427,7 @@ func ExampleSSM_DescribePatchGroups() {
 }
 
 func ExampleSSM_GetAutomationAction() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
-
-	svc := ssm.New(sess)
+	svc := ssm.New(session.New())
 
 	params := &ssm.GetAutomationActionInput{
 		Name: aws.String("AutomationActionName"), // Required
@@ -1656,13 +1446,7 @@ func ExampleSSM_GetAutomationAction() {
 }
 
 func ExampleSSM_GetAutomationExecution() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
-
-	svc := ssm.New(sess)
+	svc := ssm.New(session.New())
 
 	params := &ssm.GetAutomationExecutionInput{
 		AutomationExecutionId: aws.String("AutomationExecutionId"), // Required
@@ -1681,13 +1465,7 @@ func ExampleSSM_GetAutomationExecution() {
 }
 
 func ExampleSSM_GetCommandInvocation() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
-
-	svc := ssm.New(sess)
+	svc := ssm.New(session.New())
 
 	params := &ssm.GetCommandInvocationInput{
 		CommandId:  aws.String("CommandId"),  // Required
@@ -1708,15 +1486,11 @@ func ExampleSSM_GetCommandInvocation() {
 }
 
 func ExampleSSM_GetDefaultPatchBaseline() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
+	svc := ssm.New(session.New())
+
+	params := &ssm.GetDefaultPatchBaselineInput{
+		OperatingSystem: aws.String("OperatingSystem"),
 	}
-
-	svc := ssm.New(sess)
-
-	var params *ssm.GetDefaultPatchBaselineInput
 	resp, err := svc.GetDefaultPatchBaseline(params)
 
 	if err != nil {
@@ -1731,13 +1505,7 @@ func ExampleSSM_GetDefaultPatchBaseline() {
 }
 
 func ExampleSSM_GetDeployablePatchSnapshotForInstance() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
-
-	svc := ssm.New(sess)
+	svc := ssm.New(session.New())
 
 	params := &ssm.GetDeployablePatchSnapshotForInstanceInput{
 		InstanceId: aws.String("InstanceId"), // Required
@@ -1757,13 +1525,7 @@ func ExampleSSM_GetDeployablePatchSnapshotForInstance() {
 }
 
 func ExampleSSM_GetDocument() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
-
-	svc := ssm.New(sess)
+	svc := ssm.New(session.New())
 
 	params := &ssm.GetDocumentInput{
 		Name:            aws.String("DocumentARN"), // Required
@@ -1783,18 +1545,13 @@ func ExampleSSM_GetDocument() {
 }
 
 func ExampleSSM_GetDocumentInternal() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
-
-	svc := ssm.New(sess)
+	svc := ssm.New(session.New())
 
 	params := &ssm.GetDocumentInternalInput{
 		CustomerAccountId: aws.String("AccountId"),   // Required
 		Name:              aws.String("DocumentARN"), // Required
 		DocumentVersion:   aws.String("DocumentVersion"),
+		InstanceId:        aws.String("InstanceId"),
 	}
 	resp, err := svc.GetDocumentInternal(params)
 
@@ -1810,15 +1567,18 @@ func ExampleSSM_GetDocumentInternal() {
 }
 
 func ExampleSSM_GetInventory() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
-
-	svc := ssm.New(sess)
+	svc := ssm.New(session.New())
 
 	params := &ssm.GetInventoryInput{
+		Aggregators: []*ssm.InventoryAggregator{
+			{ // Required
+				Aggregators: []*ssm.InventoryAggregator{
+				// Recursive values...
+				},
+				Expression: aws.String("InventoryAggregatorExpression"),
+			},
+			// More values...
+		},
 		Filters: []*ssm.InventoryFilter{
 			{ // Required
 				Key: aws.String("InventoryFilterKey"), // Required
@@ -1853,18 +1613,15 @@ func ExampleSSM_GetInventory() {
 }
 
 func ExampleSSM_GetInventorySchema() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
-
-	svc := ssm.New(sess)
+	svc := ssm.New(session.New())
 
 	params := &ssm.GetInventorySchemaInput{
-		MaxResults: aws.Int64(1),
-		NextToken:  aws.String("NextToken"),
-		TypeName:   aws.String("InventoryItemTypeNameFilter"),
+		Aggregator:   aws.Bool(true),
+		MaxResults:   aws.Int64(1),
+		NextToken:    aws.String("NextToken"),
+		ResourceId:   aws.String("InventoryResourceId"),
+		ResourceType: aws.String("InventoryResourceType"),
+		TypeName:     aws.String("InventoryItemTypeNameFilter"),
 	}
 	resp, err := svc.GetInventorySchema(params)
 
@@ -1880,13 +1637,7 @@ func ExampleSSM_GetInventorySchema() {
 }
 
 func ExampleSSM_GetMaintenanceWindow() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
-
-	svc := ssm.New(sess)
+	svc := ssm.New(session.New())
 
 	params := &ssm.GetMaintenanceWindowInput{
 		WindowId: aws.String("MaintenanceWindowId"), // Required
@@ -1905,13 +1656,7 @@ func ExampleSSM_GetMaintenanceWindow() {
 }
 
 func ExampleSSM_GetMaintenanceWindowExecution() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
-
-	svc := ssm.New(sess)
+	svc := ssm.New(session.New())
 
 	params := &ssm.GetMaintenanceWindowExecutionInput{
 		WindowExecutionId: aws.String("MaintenanceWindowExecutionId"), // Required
@@ -1930,13 +1675,7 @@ func ExampleSSM_GetMaintenanceWindowExecution() {
 }
 
 func ExampleSSM_GetMaintenanceWindowExecutionTask() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
-
-	svc := ssm.New(sess)
+	svc := ssm.New(session.New())
 
 	params := &ssm.GetMaintenanceWindowExecutionTaskInput{
 		TaskId:            aws.String("MaintenanceWindowExecutionTaskId"), // Required
@@ -1955,14 +1694,89 @@ func ExampleSSM_GetMaintenanceWindowExecutionTask() {
 	fmt.Println(resp)
 }
 
-func ExampleSSM_GetParameterHistory() {
-	sess, err := session.NewSession()
+func ExampleSSM_GetMaintenanceWindowExecutionTaskInvocation() {
+	svc := ssm.New(session.New())
+
+	params := &ssm.GetMaintenanceWindowExecutionTaskInvocationInput{
+		InvocationId:      aws.String("MaintenanceWindowExecutionTaskInvocationId"), // Required
+		TaskId:            aws.String("MaintenanceWindowExecutionTaskId"),           // Required
+		WindowExecutionId: aws.String("MaintenanceWindowExecutionId"),               // Required
+	}
+	resp, err := svc.GetMaintenanceWindowExecutionTaskInvocation(params)
+
 	if err != nil {
-		fmt.Println("failed to create session,", err)
+		// Print the error, cast err to awserr.Error to get the Code and
+		// Message from an error.
+		fmt.Println(err.Error())
 		return
 	}
 
-	svc := ssm.New(sess)
+	// Pretty-print the response data.
+	fmt.Println(resp)
+}
+
+func ExampleSSM_GetMaintenanceWindowTask() {
+	svc := ssm.New(session.New())
+
+	params := &ssm.GetMaintenanceWindowTaskInput{
+		WindowId:     aws.String("MaintenanceWindowId"),     // Required
+		WindowTaskId: aws.String("MaintenanceWindowTaskId"), // Required
+	}
+	resp, err := svc.GetMaintenanceWindowTask(params)
+
+	if err != nil {
+		// Print the error, cast err to awserr.Error to get the Code and
+		// Message from an error.
+		fmt.Println(err.Error())
+		return
+	}
+
+	// Pretty-print the response data.
+	fmt.Println(resp)
+}
+
+func ExampleSSM_GetManifest() {
+	svc := ssm.New(session.New())
+
+	params := &ssm.GetManifestInput{
+		PackageName:    aws.String("PackageName"),    // Required
+		PackageVersion: aws.String("PackageVersion"), // Required
+	}
+	resp, err := svc.GetManifest(params)
+
+	if err != nil {
+		// Print the error, cast err to awserr.Error to get the Code and
+		// Message from an error.
+		fmt.Println(err.Error())
+		return
+	}
+
+	// Pretty-print the response data.
+	fmt.Println(resp)
+}
+
+func ExampleSSM_GetParameter() {
+	svc := ssm.New(session.New())
+
+	params := &ssm.GetParameterInput{
+		Name:           aws.String("PSParameterName"), // Required
+		WithDecryption: aws.Bool(true),
+	}
+	resp, err := svc.GetParameter(params)
+
+	if err != nil {
+		// Print the error, cast err to awserr.Error to get the Code and
+		// Message from an error.
+		fmt.Println(err.Error())
+		return
+	}
+
+	// Pretty-print the response data.
+	fmt.Println(resp)
+}
+
+func ExampleSSM_GetParameterHistory() {
+	svc := ssm.New(session.New())
 
 	params := &ssm.GetParameterHistoryInput{
 		Name:           aws.String("PSParameterName"), // Required
@@ -1984,13 +1798,7 @@ func ExampleSSM_GetParameterHistory() {
 }
 
 func ExampleSSM_GetParameters() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
-
-	svc := ssm.New(sess)
+	svc := ssm.New(session.New())
 
 	params := &ssm.GetParametersInput{
 		Names: []*string{ // Required
@@ -2012,14 +1820,42 @@ func ExampleSSM_GetParameters() {
 	fmt.Println(resp)
 }
 
-func ExampleSSM_GetPatchBaseline() {
-	sess, err := session.NewSession()
+func ExampleSSM_GetParametersByPath() {
+	svc := ssm.New(session.New())
+
+	params := &ssm.GetParametersByPathInput{
+		Path:       aws.String("PSParameterName"), // Required
+		MaxResults: aws.Int64(1),
+		NextToken:  aws.String("NextToken"),
+		ParameterFilters: []*ssm.ParameterStringFilter{
+			{ // Required
+				Key:    aws.String("ParameterStringFilterKey"), // Required
+				Option: aws.String("ParameterStringQueryOption"),
+				Values: []*string{
+					aws.String("ParameterStringFilterValue"), // Required
+					// More values...
+				},
+			},
+			// More values...
+		},
+		Recursive:      aws.Bool(true),
+		WithDecryption: aws.Bool(true),
+	}
+	resp, err := svc.GetParametersByPath(params)
+
 	if err != nil {
-		fmt.Println("failed to create session,", err)
+		// Print the error, cast err to awserr.Error to get the Code and
+		// Message from an error.
+		fmt.Println(err.Error())
 		return
 	}
 
-	svc := ssm.New(sess)
+	// Pretty-print the response data.
+	fmt.Println(resp)
+}
+
+func ExampleSSM_GetPatchBaseline() {
+	svc := ssm.New(session.New())
 
 	params := &ssm.GetPatchBaselineInput{
 		BaselineId: aws.String("BaselineId"), // Required
@@ -2038,16 +1874,11 @@ func ExampleSSM_GetPatchBaseline() {
 }
 
 func ExampleSSM_GetPatchBaselineForPatchGroup() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
-
-	svc := ssm.New(sess)
+	svc := ssm.New(session.New())
 
 	params := &ssm.GetPatchBaselineForPatchGroupInput{
-		PatchGroup: aws.String("PatchGroup"), // Required
+		PatchGroup:      aws.String("PatchGroup"), // Required
+		OperatingSystem: aws.String("OperatingSystem"),
 	}
 	resp, err := svc.GetPatchBaselineForPatchGroup(params)
 
@@ -2063,13 +1894,7 @@ func ExampleSSM_GetPatchBaselineForPatchGroup() {
 }
 
 func ExampleSSM_ListAssociations() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
-
-	svc := ssm.New(sess)
+	svc := ssm.New(session.New())
 
 	params := &ssm.ListAssociationsInput{
 		AssociationFilterList: []*ssm.AssociationFilter{
@@ -2096,13 +1921,7 @@ func ExampleSSM_ListAssociations() {
 }
 
 func ExampleSSM_ListCommandInvocations() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
-
-	svc := ssm.New(sess)
+	svc := ssm.New(session.New())
 
 	params := &ssm.ListCommandInvocationsInput{
 		CommandId: aws.String("CommandId"),
@@ -2132,13 +1951,7 @@ func ExampleSSM_ListCommandInvocations() {
 }
 
 func ExampleSSM_ListCommands() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
-
-	svc := ssm.New(sess)
+	svc := ssm.New(session.New())
 
 	params := &ssm.ListCommandsInput{
 		CommandId: aws.String("CommandId"),
@@ -2166,14 +1979,47 @@ func ExampleSSM_ListCommands() {
 	fmt.Println(resp)
 }
 
-func ExampleSSM_ListDocumentVersions() {
-	sess, err := session.NewSession()
+func ExampleSSM_ListComplianceItems() {
+	svc := ssm.New(session.New())
+
+	params := &ssm.ListComplianceItemsInput{
+		Filters: []*ssm.ComplianceStringFilter{
+			{ // Required
+				Key:  aws.String("ComplianceStringFilterKey"),
+				Type: aws.String("InventoryQueryOperatorType"),
+				Values: []*string{
+					aws.String("ComplianceFilterValue"), // Required
+					// More values...
+				},
+			},
+			// More values...
+		},
+		MaxResults: aws.Int64(1),
+		NextToken:  aws.String("NextToken"),
+		ResourceIds: []*string{
+			aws.String("ComplianceResourceId"), // Required
+			// More values...
+		},
+		ResourceTypes: []*string{
+			aws.String("ComplianceResourceType"), // Required
+			// More values...
+		},
+	}
+	resp, err := svc.ListComplianceItems(params)
+
 	if err != nil {
-		fmt.Println("failed to create session,", err)
+		// Print the error, cast err to awserr.Error to get the Code and
+		// Message from an error.
+		fmt.Println(err.Error())
 		return
 	}
 
-	svc := ssm.New(sess)
+	// Pretty-print the response data.
+	fmt.Println(resp)
+}
+
+func ExampleSSM_ListDocumentVersions() {
+	svc := ssm.New(session.New())
 
 	params := &ssm.ListDocumentVersionsInput{
 		Name:       aws.String("DocumentName"), // Required
@@ -2194,13 +2040,7 @@ func ExampleSSM_ListDocumentVersions() {
 }
 
 func ExampleSSM_ListDocuments() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
-
-	svc := ssm.New(sess)
+	svc := ssm.New(session.New())
 
 	params := &ssm.ListDocumentsInput{
 		DocumentFilterList: []*ssm.DocumentFilter{
@@ -2227,13 +2067,7 @@ func ExampleSSM_ListDocuments() {
 }
 
 func ExampleSSM_ListInstanceAssociations() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
-
-	svc := ssm.New(sess)
+	svc := ssm.New(session.New())
 
 	params := &ssm.ListInstanceAssociationsInput{
 		InstanceId: aws.String("InstanceId"), // Required
@@ -2254,13 +2088,7 @@ func ExampleSSM_ListInstanceAssociations() {
 }
 
 func ExampleSSM_ListInventoryEntries() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
-
-	svc := ssm.New(sess)
+	svc := ssm.New(session.New())
 
 	params := &ssm.ListInventoryEntriesInput{
 		InstanceId: aws.String("InstanceId"),            // Required
@@ -2292,14 +2120,59 @@ func ExampleSSM_ListInventoryEntries() {
 	fmt.Println(resp)
 }
 
-func ExampleSSM_ListTagsForResource() {
-	sess, err := session.NewSession()
+func ExampleSSM_ListResourceComplianceSummaries() {
+	svc := ssm.New(session.New())
+
+	params := &ssm.ListResourceComplianceSummariesInput{
+		Filters: []*ssm.ComplianceStringFilter{
+			{ // Required
+				Key:  aws.String("ComplianceStringFilterKey"),
+				Type: aws.String("InventoryQueryOperatorType"),
+				Values: []*string{
+					aws.String("ComplianceFilterValue"), // Required
+					// More values...
+				},
+			},
+			// More values...
+		},
+		MaxResults: aws.Int64(1),
+		NextToken:  aws.String("NextToken"),
+	}
+	resp, err := svc.ListResourceComplianceSummaries(params)
+
 	if err != nil {
-		fmt.Println("failed to create session,", err)
+		// Print the error, cast err to awserr.Error to get the Code and
+		// Message from an error.
+		fmt.Println(err.Error())
 		return
 	}
 
-	svc := ssm.New(sess)
+	// Pretty-print the response data.
+	fmt.Println(resp)
+}
+
+func ExampleSSM_ListResourceDataSync() {
+	svc := ssm.New(session.New())
+
+	params := &ssm.ListResourceDataSyncInput{
+		MaxResults: aws.Int64(1),
+		NextToken:  aws.String("NextToken"),
+	}
+	resp, err := svc.ListResourceDataSync(params)
+
+	if err != nil {
+		// Print the error, cast err to awserr.Error to get the Code and
+		// Message from an error.
+		fmt.Println(err.Error())
+		return
+	}
+
+	// Pretty-print the response data.
+	fmt.Println(resp)
+}
+
+func ExampleSSM_ListTagsForResource() {
+	svc := ssm.New(session.New())
 
 	params := &ssm.ListTagsForResourceInput{
 		ResourceId:   aws.String("ResourceId"),             // Required
@@ -2319,13 +2192,7 @@ func ExampleSSM_ListTagsForResource() {
 }
 
 func ExampleSSM_ModifyDocumentPermission() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
-
-	svc := ssm.New(sess)
+	svc := ssm.New(session.New())
 
 	params := &ssm.ModifyDocumentPermissionInput{
 		Name:           aws.String("DocumentName"),           // Required
@@ -2352,14 +2219,82 @@ func ExampleSSM_ModifyDocumentPermission() {
 	fmt.Println(resp)
 }
 
-func ExampleSSM_PutInventory() {
-	sess, err := session.NewSession()
+func ExampleSSM_PutComplianceItem() {
+	svc := ssm.New(session.New())
+
+	params := &ssm.PutComplianceItemInput{
+		ComplianceType: aws.String("ComplianceTypeName"), // Required
+		ExecutionSummary: &ssm.ComplianceExecutionSummary{ // Required
+			ExecutionTime: aws.String("ComplianceExecutionTime"), // Required
+			ExecutionId:   aws.String("ComplianceExecutionId"),
+			ExecutionType: aws.String("ComplianceExecutionType"),
+		},
+		Items: []*ssm.ComplianceItemEntry{ // Required
+			{ // Required
+				Severity: aws.String("ComplianceSeverity"), // Required
+				Status:   aws.String("ComplianceStatus"),   // Required
+				Details: map[string]*string{
+					"Key": aws.String("AttributeValue"), // Required
+					// More values...
+				},
+				Id:    aws.String("ComplianceItemId"),
+				Title: aws.String("ComplianceItemTitle"),
+			},
+			// More values...
+		},
+		ResourceId:      aws.String("ComplianceResourceId"),   // Required
+		ResourceType:    aws.String("ComplianceResourceType"), // Required
+		ItemContentHash: aws.String("ComplianceItemContentHash"),
+	}
+	resp, err := svc.PutComplianceItem(params)
+
 	if err != nil {
-		fmt.Println("failed to create session,", err)
+		// Print the error, cast err to awserr.Error to get the Code and
+		// Message from an error.
+		fmt.Println(err.Error())
 		return
 	}
 
-	svc := ssm.New(sess)
+	// Pretty-print the response data.
+	fmt.Println(resp)
+}
+
+func ExampleSSM_PutConfigurePackageResult() {
+	svc := ssm.New(session.New())
+
+	params := &ssm.PutConfigurePackageResultInput{
+		OverallTiming:  aws.Int64(1),                 // Required
+		PackageName:    aws.String("PackageName"),    // Required
+		PackageVersion: aws.String("PackageVersion"), // Required
+		Result:         aws.Int64(1),                 // Required
+		PackageResultAttributes: map[string]*string{
+			"Key": aws.String("Value"), // Required
+			// More values...
+		},
+		PackageResultSteps: []*ssm.PackageResultStep{
+			{ // Required
+				Action: aws.String("Action"),
+				Result: aws.Int64(1),
+				Timing: aws.Int64(1),
+			},
+			// More values...
+		},
+	}
+	resp, err := svc.PutConfigurePackageResult(params)
+
+	if err != nil {
+		// Print the error, cast err to awserr.Error to get the Code and
+		// Message from an error.
+		fmt.Println(err.Error())
+		return
+	}
+
+	// Pretty-print the response data.
+	fmt.Println(resp)
+}
+
+func ExampleSSM_PutInventory() {
+	svc := ssm.New(session.New())
 
 	params := &ssm.PutInventoryInput{
 		InstanceId: aws.String("InstanceId"), // Required
@@ -2376,6 +2311,10 @@ func ExampleSSM_PutInventory() {
 					// More values...
 				},
 				ContentHash: aws.String("InventoryItemContentHash"),
+				Context: map[string]*string{
+					"Key": aws.String("AttributeValue"), // Required
+					// More values...
+				},
 			},
 			// More values...
 		},
@@ -2394,21 +2333,16 @@ func ExampleSSM_PutInventory() {
 }
 
 func ExampleSSM_PutParameter() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
-
-	svc := ssm.New(sess)
+	svc := ssm.New(session.New())
 
 	params := &ssm.PutParameterInput{
-		Name:        aws.String("PSParameterName"),  // Required
-		Type:        aws.String("ParameterType"),    // Required
-		Value:       aws.String("PSParameterValue"), // Required
-		Description: aws.String("ParameterDescription"),
-		KeyId:       aws.String("ParameterKeyId"),
-		Overwrite:   aws.Bool(true),
+		Name:           aws.String("PSParameterName"),  // Required
+		Type:           aws.String("ParameterType"),    // Required
+		Value:          aws.String("PSParameterValue"), // Required
+		AllowedPattern: aws.String("AllowedPattern"),
+		Description:    aws.String("ParameterDescription"),
+		KeyId:          aws.String("ParameterKeyId"),
+		Overwrite:      aws.Bool(true),
 	}
 	resp, err := svc.PutParameter(params)
 
@@ -2424,13 +2358,7 @@ func ExampleSSM_PutParameter() {
 }
 
 func ExampleSSM_RegisterDefaultPatchBaseline() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
-
-	svc := ssm.New(sess)
+	svc := ssm.New(session.New())
 
 	params := &ssm.RegisterDefaultPatchBaselineInput{
 		BaselineId: aws.String("BaselineId"), // Required
@@ -2449,13 +2377,7 @@ func ExampleSSM_RegisterDefaultPatchBaseline() {
 }
 
 func ExampleSSM_RegisterManagedInstance() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
-
-	svc := ssm.New(sess)
+	svc := ssm.New(session.New())
 
 	params := &ssm.RegisterManagedInstanceInput{
 		ActivationCode: aws.String("ActivationCode"), // Required
@@ -2478,13 +2400,7 @@ func ExampleSSM_RegisterManagedInstance() {
 }
 
 func ExampleSSM_RegisterPatchBaselineForPatchGroup() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
-
-	svc := ssm.New(sess)
+	svc := ssm.New(session.New())
 
 	params := &ssm.RegisterPatchBaselineForPatchGroupInput{
 		BaselineId: aws.String("BaselineId"), // Required
@@ -2504,13 +2420,7 @@ func ExampleSSM_RegisterPatchBaselineForPatchGroup() {
 }
 
 func ExampleSSM_RegisterTargetWithMaintenanceWindow() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
-
-	svc := ssm.New(sess)
+	svc := ssm.New(session.New())
 
 	params := &ssm.RegisterTargetWithMaintenanceWindowInput{
 		ResourceType: aws.String("MaintenanceWindowResourceType"), // Required
@@ -2526,6 +2436,8 @@ func ExampleSSM_RegisterTargetWithMaintenanceWindow() {
 		},
 		WindowId:         aws.String("MaintenanceWindowId"), // Required
 		ClientToken:      aws.String("ClientToken"),
+		Description:      aws.String("MaintenanceWindowDescription"),
+		Name:             aws.String("MaintenanceWindowName"),
 		OwnerInformation: aws.String("OwnerInformation"),
 	}
 	resp, err := svc.RegisterTargetWithMaintenanceWindow(params)
@@ -2542,13 +2454,7 @@ func ExampleSSM_RegisterTargetWithMaintenanceWindow() {
 }
 
 func ExampleSSM_RegisterTargetWithMaintenanceWindowPrivate() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
-
-	svc := ssm.New(sess)
+	svc := ssm.New(session.New())
 
 	params := &ssm.RegisterTargetWithMaintenanceWindowPrivateInput{
 		TargetType:       aws.String("MaintenanceWindowTargetType"), // Required
@@ -2584,18 +2490,12 @@ func ExampleSSM_RegisterTargetWithMaintenanceWindowPrivate() {
 }
 
 func ExampleSSM_RegisterTaskWithMaintenanceWindow() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
-
-	svc := ssm.New(sess)
+	svc := ssm.New(session.New())
 
 	params := &ssm.RegisterTaskWithMaintenanceWindowInput{
-		MaxConcurrency: aws.String("VelocityConstraint"), // Required
-		MaxErrors:      aws.String("VelocityConstraint"), // Required
-		ServiceRoleArn: aws.String("ServiceRole"),        // Required
+		MaxConcurrency: aws.String("MaxConcurrency"), // Required
+		MaxErrors:      aws.String("MaxErrors"),      // Required
+		ServiceRoleArn: aws.String("ServiceRole"),    // Required
 		Targets: []*ssm.Target{ // Required
 			{ // Required
 				Key: aws.String("TargetKey"),
@@ -2610,12 +2510,60 @@ func ExampleSSM_RegisterTaskWithMaintenanceWindow() {
 		TaskType:    aws.String("MaintenanceWindowTaskType"), // Required
 		WindowId:    aws.String("MaintenanceWindowId"),       // Required
 		ClientToken: aws.String("ClientToken"),
+		Description: aws.String("MaintenanceWindowDescription"),
 		LoggingInfo: &ssm.LoggingInfo{
 			S3BucketName: aws.String("S3BucketName"), // Required
 			S3Region:     aws.String("S3Region"),     // Required
 			S3KeyPrefix:  aws.String("S3KeyPrefix"),
 		},
+		Name:     aws.String("MaintenanceWindowName"),
 		Priority: aws.Int64(1),
+		TaskInvocationParameters: &ssm.MaintenanceWindowTaskInvocationParameters{
+			Automation: &ssm.MaintenanceWindowAutomationParameters{
+				DocumentVersion: aws.String("DocumentVersion"),
+				Parameters: map[string][]*string{
+					"Key": { // Required
+						aws.String("AutomationParameterValue"), // Required
+						// More values...
+					},
+					// More values...
+				},
+			},
+			Lambda: &ssm.MaintenanceWindowLambdaParameters{
+				ClientContext: aws.String("MaintenanceWindowLambdaClientContext"),
+				Payload:       []byte("PAYLOAD"),
+				Qualifier:     aws.String("MaintenanceWindowLambdaQualifier"),
+			},
+			RunCommand: &ssm.MaintenanceWindowRunCommandParameters{
+				Comment:          aws.String("Comment"),
+				DocumentHash:     aws.String("DocumentHash"),
+				DocumentHashType: aws.String("DocumentHashType"),
+				NotificationConfig: &ssm.NotificationConfig{
+					NotificationArn: aws.String("NotificationArn"),
+					NotificationEvents: []*string{
+						aws.String("NotificationEvent"), // Required
+						// More values...
+					},
+					NotificationType: aws.String("NotificationType"),
+				},
+				OutputS3BucketName: aws.String("S3BucketName"),
+				OutputS3KeyPrefix:  aws.String("S3KeyPrefix"),
+				OutputS3Region:     aws.String("S3Region"),
+				Parameters: map[string][]*string{
+					"Key": { // Required
+						aws.String("ParameterValue"), // Required
+						// More values...
+					},
+					// More values...
+				},
+				ServiceRoleArn: aws.String("ServiceRole"),
+				TimeoutSeconds: aws.Int64(1),
+			},
+			StepFunctions: &ssm.MaintenanceWindowStepFunctionsParameters{
+				Input: aws.String("MaintenanceWindowStepFunctionsInput"),
+				Name:  aws.String("MaintenanceWindowStepFunctionsName"),
+			},
+		},
 		TaskParameters: map[string]*ssm.MaintenanceWindowTaskParameterValueExpression{
 			"Key": { // Required
 				Values: []*string{
@@ -2640,18 +2588,12 @@ func ExampleSSM_RegisterTaskWithMaintenanceWindow() {
 }
 
 func ExampleSSM_RegisterTaskWithMaintenanceWindowPrivate() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
-
-	svc := ssm.New(sess)
+	svc := ssm.New(session.New())
 
 	params := &ssm.RegisterTaskWithMaintenanceWindowPrivateInput{
-		MaxConcurrency: aws.String("VelocityConstraint"), // Required
-		MaxErrors:      aws.String("VelocityConstraint"), // Required
-		ServiceRoleArn: aws.String("ServiceRole"),        // Required
+		MaxConcurrency: aws.String("MaxConcurrency"), // Required
+		MaxErrors:      aws.String("MaxErrors"),      // Required
+		ServiceRoleArn: aws.String("ServiceRole"),    // Required
 		Targets: []*ssm.MaintenanceWindowTaskTarget{ // Required
 			{ // Required
 				TaskTargetId:   aws.String("MaintenanceWindowTaskTargetId"),
@@ -2693,13 +2635,7 @@ func ExampleSSM_RegisterTaskWithMaintenanceWindowPrivate() {
 }
 
 func ExampleSSM_RemoveTagsFromResource() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
-
-	svc := ssm.New(sess)
+	svc := ssm.New(session.New())
 
 	params := &ssm.RemoveTagsFromResourceInput{
 		ResourceId:   aws.String("ResourceId"),             // Required
@@ -2723,13 +2659,7 @@ func ExampleSSM_RemoveTagsFromResource() {
 }
 
 func ExampleSSM_RequestManagedInstanceRoleToken() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
-
-	svc := ssm.New(sess)
+	svc := ssm.New(session.New())
 
 	params := &ssm.RequestManagedInstanceRoleTokenInput{
 		Fingerprint: aws.String("Fingerprint"), // Required
@@ -2748,13 +2678,7 @@ func ExampleSSM_RequestManagedInstanceRoleToken() {
 }
 
 func ExampleSSM_SendCommand() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
-
-	svc := ssm.New(sess)
+	svc := ssm.New(session.New())
 
 	params := &ssm.SendCommandInput{
 		DocumentName:     aws.String("DocumentARN"), // Required
@@ -2765,8 +2689,8 @@ func ExampleSSM_SendCommand() {
 			aws.String("InstanceId"), // Required
 			// More values...
 		},
-		MaxConcurrency: aws.String("VelocityConstraint"),
-		MaxErrors:      aws.String("VelocityConstraint"),
+		MaxConcurrency: aws.String("MaxConcurrency"),
+		MaxErrors:      aws.String("MaxErrors"),
 		NotificationConfig: &ssm.NotificationConfig{
 			NotificationArn: aws.String("NotificationArn"),
 			NotificationEvents: []*string{
@@ -2812,13 +2736,7 @@ func ExampleSSM_SendCommand() {
 }
 
 func ExampleSSM_StartAssociationsOnce() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
-
-	svc := ssm.New(sess)
+	svc := ssm.New(session.New())
 
 	params := &ssm.StartAssociationsOnceInput{
 		AssociationIds: []*string{ // Required
@@ -2840,16 +2758,11 @@ func ExampleSSM_StartAssociationsOnce() {
 }
 
 func ExampleSSM_StartAutomationExecution() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
-
-	svc := ssm.New(sess)
+	svc := ssm.New(session.New())
 
 	params := &ssm.StartAutomationExecutionInput{
-		DocumentName:    aws.String("DocumentName"), // Required
+		DocumentName:    aws.String("DocumentARN"), // Required
+		ClientToken:     aws.String("IdempotencyToken"),
 		DocumentVersion: aws.String("DocumentVersion"),
 		Parameters: map[string][]*string{
 			"Key": { // Required
@@ -2873,13 +2786,7 @@ func ExampleSSM_StartAutomationExecution() {
 }
 
 func ExampleSSM_StopAutomationExecution() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
-
-	svc := ssm.New(sess)
+	svc := ssm.New(session.New())
 
 	params := &ssm.StopAutomationExecutionInput{
 		AutomationExecutionId: aws.String("AutomationExecutionId"), // Required
@@ -2898,17 +2805,13 @@ func ExampleSSM_StopAutomationExecution() {
 }
 
 func ExampleSSM_UpdateAssociation() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
-
-	svc := ssm.New(sess)
+	svc := ssm.New(session.New())
 
 	params := &ssm.UpdateAssociationInput{
-		AssociationId:   aws.String("AssociationId"), // Required
-		DocumentVersion: aws.String("DocumentVersion"),
+		AssociationId:      aws.String("AssociationId"), // Required
+		AssociationVersion: aws.String("AssociationVersion"),
+		DocumentVersion:    aws.String("DocumentVersion"),
+		Name:               aws.String("DocumentName"),
 		OutputLocation: &ssm.InstanceAssociationOutputLocation{
 			S3Location: &ssm.S3OutputLocation{
 				OutputS3BucketName: aws.String("S3BucketName"),
@@ -2924,6 +2827,16 @@ func ExampleSSM_UpdateAssociation() {
 			// More values...
 		},
 		ScheduleExpression: aws.String("ScheduleExpression"),
+		Targets: []*ssm.Target{
+			{ // Required
+				Key: aws.String("TargetKey"),
+				Values: []*string{
+					aws.String("TargetValue"), // Required
+					// More values...
+				},
+			},
+			// More values...
+		},
 	}
 	resp, err := svc.UpdateAssociation(params)
 
@@ -2939,13 +2852,7 @@ func ExampleSSM_UpdateAssociation() {
 }
 
 func ExampleSSM_UpdateAssociationStatus() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
-
-	svc := ssm.New(sess)
+	svc := ssm.New(session.New())
 
 	params := &ssm.UpdateAssociationStatusInput{
 		AssociationStatus: &ssm.AssociationStatus{ // Required
@@ -2971,13 +2878,7 @@ func ExampleSSM_UpdateAssociationStatus() {
 }
 
 func ExampleSSM_UpdateDocument() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
-
-	svc := ssm.New(sess)
+	svc := ssm.New(session.New())
 
 	params := &ssm.UpdateDocumentInput{
 		Content:         aws.String("DocumentContent"), // Required
@@ -2998,13 +2899,7 @@ func ExampleSSM_UpdateDocument() {
 }
 
 func ExampleSSM_UpdateDocumentDefaultVersion() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
-
-	svc := ssm.New(sess)
+	svc := ssm.New(session.New())
 
 	params := &ssm.UpdateDocumentDefaultVersionInput{
 		DocumentVersion: aws.String("DocumentVersionNumber"), // Required
@@ -3024,13 +2919,7 @@ func ExampleSSM_UpdateDocumentDefaultVersion() {
 }
 
 func ExampleSSM_UpdateInstanceAssociationStatus() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
-
-	svc := ssm.New(sess)
+	svc := ssm.New(session.New())
 
 	params := &ssm.UpdateInstanceAssociationStatusInput{
 		AssociationId: aws.String("AssociationId"), // Required
@@ -3045,7 +2934,8 @@ func ExampleSSM_UpdateInstanceAssociationStatus() {
 				},
 			},
 		},
-		InstanceId: aws.String("InstanceId"), // Required
+		InstanceId:         aws.String("InstanceId"), // Required
+		AssociationVersion: aws.String("AssociationVersion"),
 	}
 	resp, err := svc.UpdateInstanceAssociationStatus(params)
 
@@ -3061,13 +2951,7 @@ func ExampleSSM_UpdateInstanceAssociationStatus() {
 }
 
 func ExampleSSM_UpdateInstanceInformation() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
-
-	svc := ssm.New(sess)
+	svc := ssm.New(session.New())
 
 	params := &ssm.UpdateInstanceInformationInput{
 		InstanceId:      aws.String("InstanceId"), // Required
@@ -3094,22 +2978,18 @@ func ExampleSSM_UpdateInstanceInformation() {
 }
 
 func ExampleSSM_UpdateMaintenanceWindow() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
-
-	svc := ssm.New(sess)
+	svc := ssm.New(session.New())
 
 	params := &ssm.UpdateMaintenanceWindowInput{
 		WindowId:                 aws.String("MaintenanceWindowId"), // Required
 		AllowUnassociatedTargets: aws.Bool(true),
-		Cutoff:   aws.Int64(1),
-		Duration: aws.Int64(1),
-		Enabled:  aws.Bool(true),
-		Name:     aws.String("MaintenanceWindowName"),
-		Schedule: aws.String("MaintenanceWindowSchedule"),
+		Cutoff:      aws.Int64(1),
+		Description: aws.String("MaintenanceWindowDescription"),
+		Duration:    aws.Int64(1),
+		Enabled:     aws.Bool(true),
+		Name:        aws.String("MaintenanceWindowName"),
+		Replace:     aws.Bool(true),
+		Schedule:    aws.String("MaintenanceWindowSchedule"),
 	}
 	resp, err := svc.UpdateMaintenanceWindow(params)
 
@@ -3124,14 +3004,140 @@ func ExampleSSM_UpdateMaintenanceWindow() {
 	fmt.Println(resp)
 }
 
-func ExampleSSM_UpdateManagedInstancePublicKey() {
-	sess, err := session.NewSession()
+func ExampleSSM_UpdateMaintenanceWindowTarget() {
+	svc := ssm.New(session.New())
+
+	params := &ssm.UpdateMaintenanceWindowTargetInput{
+		WindowId:         aws.String("MaintenanceWindowId"),       // Required
+		WindowTargetId:   aws.String("MaintenanceWindowTargetId"), // Required
+		Description:      aws.String("MaintenanceWindowDescription"),
+		Name:             aws.String("MaintenanceWindowName"),
+		OwnerInformation: aws.String("OwnerInformation"),
+		Replace:          aws.Bool(true),
+		Targets: []*ssm.Target{
+			{ // Required
+				Key: aws.String("TargetKey"),
+				Values: []*string{
+					aws.String("TargetValue"), // Required
+					// More values...
+				},
+			},
+			// More values...
+		},
+	}
+	resp, err := svc.UpdateMaintenanceWindowTarget(params)
+
 	if err != nil {
-		fmt.Println("failed to create session,", err)
+		// Print the error, cast err to awserr.Error to get the Code and
+		// Message from an error.
+		fmt.Println(err.Error())
 		return
 	}
 
-	svc := ssm.New(sess)
+	// Pretty-print the response data.
+	fmt.Println(resp)
+}
+
+func ExampleSSM_UpdateMaintenanceWindowTask() {
+	svc := ssm.New(session.New())
+
+	params := &ssm.UpdateMaintenanceWindowTaskInput{
+		WindowId:     aws.String("MaintenanceWindowId"),     // Required
+		WindowTaskId: aws.String("MaintenanceWindowTaskId"), // Required
+		Description:  aws.String("MaintenanceWindowDescription"),
+		LoggingInfo: &ssm.LoggingInfo{
+			S3BucketName: aws.String("S3BucketName"), // Required
+			S3Region:     aws.String("S3Region"),     // Required
+			S3KeyPrefix:  aws.String("S3KeyPrefix"),
+		},
+		MaxConcurrency: aws.String("MaxConcurrency"),
+		MaxErrors:      aws.String("MaxErrors"),
+		Name:           aws.String("MaintenanceWindowName"),
+		Priority:       aws.Int64(1),
+		Replace:        aws.Bool(true),
+		ServiceRoleArn: aws.String("ServiceRole"),
+		Targets: []*ssm.Target{
+			{ // Required
+				Key: aws.String("TargetKey"),
+				Values: []*string{
+					aws.String("TargetValue"), // Required
+					// More values...
+				},
+			},
+			// More values...
+		},
+		TaskArn: aws.String("MaintenanceWindowTaskArn"),
+		TaskInvocationParameters: &ssm.MaintenanceWindowTaskInvocationParameters{
+			Automation: &ssm.MaintenanceWindowAutomationParameters{
+				DocumentVersion: aws.String("DocumentVersion"),
+				Parameters: map[string][]*string{
+					"Key": { // Required
+						aws.String("AutomationParameterValue"), // Required
+						// More values...
+					},
+					// More values...
+				},
+			},
+			Lambda: &ssm.MaintenanceWindowLambdaParameters{
+				ClientContext: aws.String("MaintenanceWindowLambdaClientContext"),
+				Payload:       []byte("PAYLOAD"),
+				Qualifier:     aws.String("MaintenanceWindowLambdaQualifier"),
+			},
+			RunCommand: &ssm.MaintenanceWindowRunCommandParameters{
+				Comment:          aws.String("Comment"),
+				DocumentHash:     aws.String("DocumentHash"),
+				DocumentHashType: aws.String("DocumentHashType"),
+				NotificationConfig: &ssm.NotificationConfig{
+					NotificationArn: aws.String("NotificationArn"),
+					NotificationEvents: []*string{
+						aws.String("NotificationEvent"), // Required
+						// More values...
+					},
+					NotificationType: aws.String("NotificationType"),
+				},
+				OutputS3BucketName: aws.String("S3BucketName"),
+				OutputS3KeyPrefix:  aws.String("S3KeyPrefix"),
+				OutputS3Region:     aws.String("S3Region"),
+				Parameters: map[string][]*string{
+					"Key": { // Required
+						aws.String("ParameterValue"), // Required
+						// More values...
+					},
+					// More values...
+				},
+				ServiceRoleArn: aws.String("ServiceRole"),
+				TimeoutSeconds: aws.Int64(1),
+			},
+			StepFunctions: &ssm.MaintenanceWindowStepFunctionsParameters{
+				Input: aws.String("MaintenanceWindowStepFunctionsInput"),
+				Name:  aws.String("MaintenanceWindowStepFunctionsName"),
+			},
+		},
+		TaskParameters: map[string]*ssm.MaintenanceWindowTaskParameterValueExpression{
+			"Key": { // Required
+				Values: []*string{
+					aws.String("MaintenanceWindowTaskParameterValue"), // Required
+					// More values...
+				},
+			},
+			// More values...
+		},
+	}
+	resp, err := svc.UpdateMaintenanceWindowTask(params)
+
+	if err != nil {
+		// Print the error, cast err to awserr.Error to get the Code and
+		// Message from an error.
+		fmt.Println(err.Error())
+		return
+	}
+
+	// Pretty-print the response data.
+	fmt.Println(resp)
+}
+
+func ExampleSSM_UpdateManagedInstancePublicKey() {
+	svc := ssm.New(session.New())
 
 	params := &ssm.UpdateManagedInstancePublicKeyInput{
 		NewPublicKey:     aws.String("PublicKey"),     // Required
@@ -3151,13 +3157,7 @@ func ExampleSSM_UpdateManagedInstancePublicKey() {
 }
 
 func ExampleSSM_UpdateManagedInstanceRole() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
-
-	svc := ssm.New(sess)
+	svc := ssm.New(session.New())
 
 	params := &ssm.UpdateManagedInstanceRoleInput{
 		IamRole:    aws.String("IamRole"),           // Required
@@ -3177,13 +3177,7 @@ func ExampleSSM_UpdateManagedInstanceRole() {
 }
 
 func ExampleSSM_UpdatePatchBaseline() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
-
-	svc := ssm.New(sess)
+	svc := ssm.New(session.New())
 
 	params := &ssm.UpdatePatchBaselineInput{
 		BaselineId: aws.String("BaselineId"), // Required
@@ -3203,6 +3197,7 @@ func ExampleSSM_UpdatePatchBaseline() {
 							// More values...
 						},
 					},
+					ComplianceLevel: aws.String("PatchComplianceLevel"),
 				},
 				// More values...
 			},
@@ -3211,7 +3206,8 @@ func ExampleSSM_UpdatePatchBaseline() {
 			aws.String("PatchId"), // Required
 			// More values...
 		},
-		Description: aws.String("BaselineDescription"),
+		ApprovedPatchesComplianceLevel: aws.String("PatchComplianceLevel"),
+		Description:                    aws.String("BaselineDescription"),
 		GlobalFilters: &ssm.PatchFilterGroup{
 			PatchFilters: []*ssm.PatchFilter{ // Required
 				{ // Required
