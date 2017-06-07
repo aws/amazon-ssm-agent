@@ -26,12 +26,13 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/docmanager"
 	"github.com/aws/amazon-ssm-agent/agent/docmanager/model"
 	"github.com/aws/amazon-ssm-agent/agent/framework/engine"
-	"github.com/aws/amazon-ssm-agent/agent/framework/plugin"
 	"github.com/aws/amazon-ssm-agent/agent/framework/runpluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	messageContracts "github.com/aws/amazon-ssm-agent/agent/message/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/message/parser"
+	"github.com/aws/amazon-ssm-agent/agent/message/processor/executer"
+	"github.com/aws/amazon-ssm-agent/agent/message/processor/executer/basicexecuter"
 	"github.com/aws/amazon-ssm-agent/agent/message/service"
 	"github.com/aws/amazon-ssm-agent/agent/platform"
 	"github.com/aws/amazon-ssm-agent/agent/reply"
@@ -77,11 +78,11 @@ const (
 	stopPolicyErrorThreshold = 10
 )
 
-type replyBuilder func(pluginID string, results map[string]*contracts.PluginResult) messageContracts.SendReplyPayload
-
 type statusReplyBuilder func(agentInfo contracts.AgentInfo, resultStatus contracts.ResultStatus)
 
 type persistData func(state *model.DocumentState, bookkeeping string)
+
+type ExecuterCreator func() executer.Executer
 
 // Processor is an object that can process MDS messages.
 type Processor struct {
@@ -90,10 +91,10 @@ type Processor struct {
 	stopSignal           chan bool
 	config               contracts.AgentConfiguration
 	service              service.Service
-	pluginRunner         PluginRunner
+	executerCreator      ExecuterCreator
 	sendCommandPool      task.Pool
 	cancelCommandPool    task.Pool
-	buildReply           replyBuilder
+	buildReply           executer.ReplyBuilder
 	sendResponse         runpluginutil.SendResponse
 	sendDocLevelResponse engine.SendDocumentLevelResponse
 	persistData          persistData
@@ -103,13 +104,6 @@ type Processor struct {
 	processorStopPolicy  *sdkutil.StopPolicy
 	pollAssociations     bool
 	supportedDocTypes    []model.DocumentType
-}
-
-// PluginRunner is a function that can run a set of plugins and return their outputs.
-type PluginRunner func(context context.T, documentID string, plugins []model.PluginState, sendResponse runpluginutil.SendResponse, cancelFlag task.CancelFlag) (pluginOutputs map[string]*contracts.PluginResult)
-
-var pluginRunner = func(context context.T, documentID string, plugins []model.PluginState, sendResponse runpluginutil.SendResponse, cancelFlag task.CancelFlag) (pluginOutputs map[string]*contracts.PluginResult) {
-	return engine.RunPlugins(context, documentID, "", plugins, plugin.RegisteredWorkerPlugins(context), sendResponse, nil, cancelFlag)
 }
 
 // NewOfflineProcessor initialize a new offline command document processor
@@ -205,13 +199,18 @@ func NewProcessor(context context.T, processorName string, processorService serv
 	if pollAssoc {
 		assocProc = processor.NewAssociationProcessor(context, instanceID)
 	}
+	//TODO in future, this function object should be injected by service, and can have arguments to inject in executer's constructor
+	var executerCreator = func() executer.Executer {
+		return basicexecuter.NewBasicExecuter()
+	}
+
 	return &Processor{
 		context:              context,
 		name:                 processorName,
 		stopSignal:           make(chan bool),
 		config:               agentConfig,
 		service:              processorService,
-		pluginRunner:         pluginRunner,
+		executerCreator:      executerCreator,
 		sendCommandPool:      sendCommandTaskPool,
 		cancelCommandPool:    cancelCommandTaskPool,
 		buildReply:           replyBuilder,
