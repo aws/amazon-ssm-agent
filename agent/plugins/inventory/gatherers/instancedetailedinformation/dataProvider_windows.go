@@ -28,7 +28,7 @@ import (
 
 const (
 	PowershellCmd = "powershell"
-	Script        = `
+	CPUInfoScript = `
 $wmi_proc = Get-WmiObject -Class Win32_Processor
 if (@($wmi_proc)[0].NumberOfCores) #Modern OS
 {
@@ -53,6 +53,10 @@ if ($Cores -lt $CPUs) {
 Write-Host -nonewline @"
 {"CPUModel":"$CPUModel","CPUSpeedMHz":"$CPUSpeed","CPUs":"$CPUs","CPUSockets":"$Sockets","CPUCores":"$Cores","CPUHyperThreadEnabled":"$HyperThread"}
 "@`
+	OsInfoScript = `GET-WMIOBJECT -class win32_operatingsystem |
+SELECT-OBJECT ServicePackMajorVersion,BuildNumber | % { Write-Output @"
+{"OSServicePack":"$($_.ServicePackMajorVersion)"}
+"@}`
 )
 
 // decoupling exec.Command for easy testability
@@ -66,8 +70,23 @@ func executeCommand(command string, args ...string) ([]byte, error) {
 func collectPlatformDependentInstanceData(context context.T) (appData []model.InstanceDetailedInformation) {
 	log := context.Log()
 	log.Infof("Getting %v data", GathererName)
-	log.Infof("Executing command: %v", Script)
-	output, err := executePowershellCommands(context, Script, "")
+	var instanceDetailedInfo model.InstanceDetailedInformation
+	err1 := collectDataFromPowershell(context, CPUInfoScript, &instanceDetailedInfo)
+	err2 := collectDataFromPowershell(context, OsInfoScript, &instanceDetailedInfo)
+	if err1 != nil && err2 != nil {
+		// if both commands fail, return no data
+		return
+	}
+	appData = append(appData, instanceDetailedInfo)
+	str, _ := json.Marshal(appData)
+	log.Debugf("%v gathered: %v", GathererName, string(str))
+	return
+}
+
+func collectDataFromPowershell(context context.T, powershellCommand string, instanceDetailedInfoResult *model.InstanceDetailedInformation) (err error) {
+	log := context.Log()
+	log.Infof("Executing command: %v", powershellCommand)
+	output, err := executePowershellCommands(context, powershellCommand, "")
 	if err != nil {
 		log.Errorf("Error executing command - %v", err.Error())
 		return
@@ -75,17 +94,11 @@ func collectPlatformDependentInstanceData(context context.T) (appData []model.In
 	output = []byte(cleanupNewLines(string(output)))
 	log.Infof("Command output: %v", string(output))
 
-	var instanceDetailedInfo model.InstanceDetailedInformation
-	if err = json.Unmarshal([]byte(output), &instanceDetailedInfo); err != nil {
+	if err = json.Unmarshal([]byte(output), instanceDetailedInfoResult); err != nil {
 		err = fmt.Errorf("Unable to parse command output - %v", err.Error())
 		log.Error(err.Error())
 		log.Infof("Error parsing command output - no data to return")
-		return
 	}
-
-	appData = append(appData, instanceDetailedInfo)
-	str, _ := json.Marshal(appData)
-	log.Infof("%v gathered: %v", GathererName, string(str))
 	return
 }
 
