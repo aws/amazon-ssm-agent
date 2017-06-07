@@ -116,6 +116,7 @@ type InstanceDetailedInformation struct {
 	CPUSockets            string
 	CPUCores              string
 	CPUHyperThreadEnabled string
+	OSServicePack         string
 }
 
 // Config captures all various properties (including optional) that can be supplied to a gatherer.
