@@ -22,7 +22,6 @@ import (
 	"testing"
 	"time"
 
-	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/docmanager/model"
@@ -30,8 +29,9 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	messageContracts "github.com/aws/amazon-ssm-agent/agent/message/contracts"
-	"github.com/aws/amazon-ssm-agent/agent/message/converter"
 	"github.com/aws/amazon-ssm-agent/agent/message/parser"
+	"github.com/aws/amazon-ssm-agent/agent/message/processor/executer"
+	"github.com/aws/amazon-ssm-agent/agent/message/processor/executer/mock"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 	"github.com/aws/amazon-ssm-agent/agent/times"
 	"github.com/aws/aws-sdk-go/aws"
@@ -451,7 +451,7 @@ func testProcessSendCommandMessage(t *testing.T, testCase TestCaseSendCommand) {
 	cancelFlag := task.NewChanneledCancelFlag()
 
 	// method should call replyBuilder to format the response
-	replyBuilderMock := new(MockedReplyBuilder)
+	replyBuilderMock := new(executermocks.MockedReplyBuilder)
 	replyBuilderMock.On("BuildReply", mock.Anything, testCase.PluginResults).Return(testCase.ReplyPayload)
 
 	// method should call the proper APIs on the MDS service
@@ -475,31 +475,25 @@ func testProcessSendCommandMessage(t *testing.T, testCase TestCaseSendCommand) {
 		// call the mock sendreply so that we can assert the reply sent
 		err = mdsMock.SendReply(log, messageID, payload)
 	}
-
-	// method should call plugin runner with the given configuration
-	pluginRunnerMock := new(MockedPluginRunner)
-	// mock.AnythingOfType("func(string, string, map[string]*plugin.Result)")
-
-	pluginStates := []model.PluginState{}
-	// For document 2.0
-	if testCase.PluginStatesArray != nil {
-		pluginStates = testCase.PluginStatesArray
-	} else {
-		pluginStates = converter.ConvertPluginState(testCase.PluginStates)
-	}
-
-	pluginRunnerMock.On("RunPlugins", mock.Anything, *testCase.Msg.MessageId, pluginStates, mock.Anything, cancelFlag).Return(testCase.PluginResults)
-
+	executerMock := new(executermocks.MockedExecuter)
+	executerMock.On("Run", mock.Anything, cancelFlag, mock.Anything, mock.Anything, &testCase.DocState).Return(nil).Run(func(args mock.Arguments) {
+		sendResponse(testCase.DocState.DocumentInformation.MessageID, "pluginID", testCase.PluginResults)
+	})
 	// call method under test
 	//orchestrationRootDir is set to empty such that it can meet the test expectation.
-	p := Processor{}
-	context := context.Default(log.NewMockLog(), appconfig.SsmagentConfig{})
-	p.processSendCommandMessage(context, mdsMock, pluginRunnerMock.RunPlugins, cancelFlag, replyBuilderMock.BuildReply, sendResponse, &testCase.DocState)
+
+	creator := func() executer.Executer {
+		return executerMock
+	}
+	p := Processor{
+		executerCreator: creator,
+	}
+	p.processSendCommandMessage(context.NewMockDefault(), mdsMock, cancelFlag, replyBuilderMock.BuildReply, sendResponse, &testCase.DocState)
 
 	// assert that the expectations were met
-	pluginRunnerMock.AssertExpectations(t)
 	replyBuilderMock.AssertExpectations(t)
 	mdsMock.AssertExpectations(t)
+	executerMock.AssertExpectations(t)
 
 	// check that the method sent the right reply
 	var parsedReply messageContracts.SendReplyPayload
@@ -665,7 +659,6 @@ func prepareTestProcessMessage(testTopic string) (proc Processor, testCase TestC
 		context:              contextMock,
 		config:               agentConfig,
 		service:              mdsMock,
-		pluginRunner:         pluginRunner,
 		sendCommandPool:      sendCommandTaskPool,
 		cancelCommandPool:    cancelCommandTaskPool,
 		sendDocLevelResponse: sendDocLevelResponse,

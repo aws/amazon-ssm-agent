@@ -14,14 +14,9 @@
 package processor
 
 import (
-	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
-	docModel "github.com/aws/amazon-ssm-agent/agent/docmanager/model"
-	"github.com/aws/amazon-ssm-agent/agent/framework/runpluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
-	model "github.com/aws/amazon-ssm-agent/agent/message/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/message/service"
-	"github.com/aws/amazon-ssm-agent/agent/task"
 	"github.com/aws/aws-sdk-go/service/ssmmds"
 	"github.com/stretchr/testify/mock"
 )
@@ -37,28 +32,6 @@ type MockedSendResponse struct {
 // SendResponse mocks a SendResponse (which is a func).
 func (sendResponseMock *MockedSendResponse) SendResponse(messageID string, pluginID string, results map[string]*contracts.PluginResult) {
 	//sendResponseMock.Called(messageID, pluginID, results)
-}
-
-// MockedPluginRunner stands for a mock plugin runner.
-type MockedPluginRunner struct {
-	mock.Mock
-}
-
-// RunPlugins mocks a PluginRunner (which is a func).
-func (runnerMock *MockedPluginRunner) RunPlugins(context context.T, documentID string, plugins []docModel.PluginState, sendResponse runpluginutil.SendResponse, cancelFlag task.CancelFlag) (pluginOutputs map[string]*contracts.PluginResult) {
-	args := runnerMock.Called(context, documentID, plugins, sendResponse, cancelFlag)
-	return args.Get(0).(map[string]*contracts.PluginResult)
-}
-
-// MockedReplyBuilder stands for a mock reply builder.
-type MockedReplyBuilder struct {
-	mock.Mock
-}
-
-// BuildReply mocks a ReplyBuilder (which is a func).
-func (replyBuilderMock *MockedReplyBuilder) BuildReply(pluginID string, pluginResults map[string]*contracts.PluginResult) model.SendReplyPayload {
-	args := replyBuilderMock.Called(pluginID, pluginResults)
-	return args.Get(0).(model.SendReplyPayload)
 }
 
 // MockedMDS stands for a mock MDS service.

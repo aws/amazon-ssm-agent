@@ -188,11 +188,11 @@ func (p *Processor) processInProgressDocuments(instanceID string) {
 			err := p.sendCommandPool.Submit(log, docState.DocumentInformation.MessageID, func(cancelFlag task.CancelFlag) {
 				p.processSendCommandMessage(p.context.With("[messageID="+docState.DocumentInformation.MessageID+"]"),
 					p.service,
-					p.pluginRunner,
 					cancelFlag,
 					p.buildReply,
 					p.sendResponse,
 					&docState)
+
 			})
 			if err != nil {
 				log.Error("SendCommand failed for previously unexecuted commands", err)
