@@ -18,34 +18,34 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/fileutil/artifact"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/aws-sdk-go/aws/request"
-	"github.com/aws/aws-sdk-go/service/birdwatcherstationservice"
+	"github.com/aws/aws-sdk-go/service/ssm"
 )
 
-// birdwatcherStationServiceMock
-type birdwatcherStationServiceMock struct {
-	getManifestInput  *birdwatcherstationservice.GetManifestInput
-	getManifestOutput *birdwatcherstationservice.GetManifestOutput
+// facadeMock
+type facadeMock struct {
+	getManifestInput  *ssm.GetManifestInput
+	getManifestOutput *ssm.GetManifestOutput
 	getManifestError  error
 
-	putConfigurePackageResultInput  *birdwatcherstationservice.PutConfigurePackageResultInput
-	putConfigurePackageResultOutput *birdwatcherstationservice.PutConfigurePackageResultOutput
+	putConfigurePackageResultInput  *ssm.PutConfigurePackageResultInput
+	putConfigurePackageResultOutput *ssm.PutConfigurePackageResultOutput
 	putConfigurePackageResultError  error
 }
 
-func (*birdwatcherStationServiceMock) GetManifestRequest(*birdwatcherstationservice.GetManifestInput) (*request.Request, *birdwatcherstationservice.GetManifestOutput) {
+func (*facadeMock) GetManifestRequest(*ssm.GetManifestInput) (*request.Request, *ssm.GetManifestOutput) {
 	panic("not implemented")
 }
 
-func (m *birdwatcherStationServiceMock) GetManifest(input *birdwatcherstationservice.GetManifestInput) (*birdwatcherstationservice.GetManifestOutput, error) {
+func (m *facadeMock) GetManifest(input *ssm.GetManifestInput) (*ssm.GetManifestOutput, error) {
 	m.getManifestInput = input
 	return m.getManifestOutput, m.getManifestError
 }
 
-func (*birdwatcherStationServiceMock) PutConfigurePackageResultRequest(*birdwatcherstationservice.PutConfigurePackageResultInput) (*request.Request, *birdwatcherstationservice.PutConfigurePackageResultOutput) {
+func (*facadeMock) PutConfigurePackageResultRequest(*ssm.PutConfigurePackageResultInput) (*request.Request, *ssm.PutConfigurePackageResultOutput) {
 	panic("not implemented")
 }
 
-func (m *birdwatcherStationServiceMock) PutConfigurePackageResult(input *birdwatcherstationservice.PutConfigurePackageResultInput) (*birdwatcherstationservice.PutConfigurePackageResultOutput, error) {
+func (m *facadeMock) PutConfigurePackageResult(input *ssm.PutConfigurePackageResultInput) (*ssm.PutConfigurePackageResultOutput, error) {
 	m.putConfigurePackageResultInput = input
 	return m.putConfigurePackageResultOutput, m.putConfigurePackageResultError
 }
