@@ -7,25 +7,23 @@ import (
 	"github.com/aws/aws-sdk-go/aws/client"
 	"github.com/aws/aws-sdk-go/aws/client/metadata"
 	"github.com/aws/aws-sdk-go/aws/request"
-	"github.com/aws/aws-sdk-go/aws/signer/v4"
 	"github.com/aws/aws-sdk-go/private/protocol/jsonrpc"
+	"github.com/aws/aws-sdk-go/private/signer/v4"
 )
 
-// Amazon EC2 Systems Manager is a suite of services that helps you automate
-// management tasks such as collecting system inventory, applying operating
-// system patches, automating the creation of Amazon Machine Images (AMIs),
-// and configuring operating systems and applications at scale. Systems Manager
-// works with managed instances: Amazon EC2 instances and servers or virtual
-// machines in your on-premises environment that are configured for Systems
-// Manager.
+// Amazon EC2 Systems Manager is a collection of capabilities that helps you
+// automate management tasks such as collecting system inventory, applying operating
+// system (OS) patches, automating the creation of Amazon Machine Images (AMIs),
+// and configuring operating systems (OSs) and applications at scale. Systems
+// Manager lets you remotely and securely manage the configuration of your managed
+// instances. A managed instance is any Amazon EC2 instance or on-premises machine
+// in your hybrid environment that has been configured for Systems Manager.
 //
-// This references is intended to be used with the EC2 Systems Manager User
-// Guide for Linux (http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/systems-manager.html)
-// or Windows (http://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/systems-manager.html).
+// This reference is intended to be used with the Amazon EC2 Systems Manager
+// User Guide (http://docs.aws.amazon.com/systems-manager/latest/userguide/).
 //
 // To get started, verify prerequisites and configure managed instances. For
-// more information, see Linux (http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/systems-manager-prereqs.html)
-// or Windows (http://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/systems-manager-prereqs.html)
+// more information, see Systems Manager Prerequisites (http://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-prereqs.html).
 //The service client's operations are safe to be used concurrently.
 // It is not safe to mutate any of the client's properties though.
 type SSM struct {
@@ -74,7 +72,7 @@ func newClient(cfg aws.Config, handlers request.Handlers, endpoint, signingRegio
 	}
 
 	// Handlers
-	svc.Handlers.Sign.PushBackNamed(v4.SignRequestHandler)
+	svc.Handlers.Sign.PushBack(v4.Sign)
 	svc.Handlers.Build.PushBackNamed(jsonrpc.BuildHandler)
 	svc.Handlers.Unmarshal.PushBackNamed(jsonrpc.UnmarshalHandler)
 	svc.Handlers.UnmarshalMeta.PushBackNamed(jsonrpc.UnmarshalMetaHandler)
