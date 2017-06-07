@@ -1,40 +1,19 @@
 {
   "pagination": {
-    "DescribeInstanceInformation": {
+    "DescribeParameters": {
       "input_token": "NextToken",
       "output_token": "NextToken",
-      "limit_key": "MaxResults",
-      "result_key": "InstanceInformationList"
+      "limit_key": "MaxResults"
     },
-    "ListAssociations": {
+    "GetParameterHistory": {
       "input_token": "NextToken",
       "output_token": "NextToken",
-      "limit_key": "MaxResults",
-      "result_key": "Associations"
+      "limit_key": "MaxResults"
     },
-    "ListCommandInvocations": {
+    "GetParametersByPath": {
       "input_token": "NextToken",
       "output_token": "NextToken",
-      "limit_key": "MaxResults",
-      "result_key": "CommandInvocations"
-    },
-    "ListCommands": {
-      "input_token": "NextToken",
-      "output_token": "NextToken",
-      "limit_key": "MaxResults",
-      "result_key": "Commands"
-    },
-    "ListDocuments": {
-      "input_token": "NextToken",
-      "output_token": "NextToken",
-      "limit_key": "MaxResults",
-      "result_key": "DocumentIdentifiers"
-    },
-    "DescribeActivations": {
-      "input_token": "NextToken",
-      "output_token": "NextToken",
-      "limit_key": "MaxResults",
-      "result_key": "ActivationList"
+      "limit_key": "MaxResults"
     }
   }
 }
