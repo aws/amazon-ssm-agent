@@ -481,7 +481,6 @@ func testProcessSendCommandMessage(t *testing.T, testCase TestCaseSendCommand) {
 	})
 	// call method under test
 	//orchestrationRootDir is set to empty such that it can meet the test expectation.
-
 	creator := func() executer.Executer {
 		return executerMock
 	}
