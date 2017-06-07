@@ -21,7 +21,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/fileutil/artifact"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/packageservice"
-	"github.com/aws/aws-sdk-go/service/birdwatcherstationservice"
+	"github.com/aws/aws-sdk-go/service/ssm"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -259,20 +259,20 @@ func TestReportResult(t *testing.T) {
 	}
 
 	data := []struct {
-		name        string
-		bwclient    birdwatcherStationServiceMock
-		expectedErr bool
+		name         string
+		facadeClient facadeMock
+		expectedErr  bool
 	}{
 		{
 			"successful api call",
-			birdwatcherStationServiceMock{
-				putConfigurePackageResultOutput: &birdwatcherstationservice.PutConfigurePackageResultOutput{},
+			facadeMock{
+				putConfigurePackageResultOutput: &ssm.PutConfigurePackageResultOutput{},
 			},
 			false,
 		},
 		{
 			"successful api call",
-			birdwatcherStationServiceMock{
+			facadeMock{
 				putConfigurePackageResultError: errors.New("testerror"),
 			},
 			true,
@@ -281,24 +281,24 @@ func TestReportResult(t *testing.T) {
 
 	for _, testdata := range data {
 		t.Run(testdata.name, func(t *testing.T) {
-			ds := &PackageService{bwclient: &testdata.bwclient, manifestCache: packageservice.ManifestCacheMemNew()}
+			ds := &PackageService{facadeClient: &testdata.facadeClient, manifestCache: packageservice.ManifestCacheMemNew()}
 
 			err := ds.ReportResult(loggerMock, pkgresult)
 			if testdata.expectedErr {
 				assert.Error(t, err)
 			} else {
 				assert.NoError(t, err)
-				assert.Equal(t, pkgresult.PackageName, *testdata.bwclient.putConfigurePackageResultInput.PackageName)
-				assert.Equal(t, pkgresult.Version, *testdata.bwclient.putConfigurePackageResultInput.PackageVersion)
-				assert.Equal(t, pkgresult.Timing, *testdata.bwclient.putConfigurePackageResultInput.OverallTiming)
-				assert.Equal(t, pkgresult.Exitcode, *testdata.bwclient.putConfigurePackageResultInput.Result)
-				assert.Equal(t, "abc", *testdata.bwclient.putConfigurePackageResultInput.PackageResultAttributes["platformName"])
-				assert.Equal(t, "567", *testdata.bwclient.putConfigurePackageResultInput.PackageResultAttributes["platformVersion"])
-				assert.Equal(t, "xyz", *testdata.bwclient.putConfigurePackageResultInput.PackageResultAttributes["architecture"])
-				assert.Equal(t, "instanceIDX", *testdata.bwclient.putConfigurePackageResultInput.PackageResultAttributes["instanceID"])
-				assert.Equal(t, "instanceTypeZ", *testdata.bwclient.putConfigurePackageResultInput.PackageResultAttributes["instanceType"])
-				assert.Equal(t, "AZ1", *testdata.bwclient.putConfigurePackageResultInput.PackageResultAttributes["availabilityZone"])
-				assert.Equal(t, "Reg1", *testdata.bwclient.putConfigurePackageResultInput.PackageResultAttributes["region"])
+				assert.Equal(t, pkgresult.PackageName, *testdata.facadeClient.putConfigurePackageResultInput.PackageName)
+				assert.Equal(t, pkgresult.Version, *testdata.facadeClient.putConfigurePackageResultInput.PackageVersion)
+				assert.Equal(t, pkgresult.Timing, *testdata.facadeClient.putConfigurePackageResultInput.OverallTiming)
+				assert.Equal(t, pkgresult.Exitcode, *testdata.facadeClient.putConfigurePackageResultInput.Result)
+				assert.Equal(t, "abc", *testdata.facadeClient.putConfigurePackageResultInput.PackageResultAttributes["platformName"])
+				assert.Equal(t, "567", *testdata.facadeClient.putConfigurePackageResultInput.PackageResultAttributes["platformVersion"])
+				assert.Equal(t, "xyz", *testdata.facadeClient.putConfigurePackageResultInput.PackageResultAttributes["architecture"])
+				assert.Equal(t, "instanceIDX", *testdata.facadeClient.putConfigurePackageResultInput.PackageResultAttributes["instanceID"])
+				assert.Equal(t, "instanceTypeZ", *testdata.facadeClient.putConfigurePackageResultInput.PackageResultAttributes["instanceType"])
+				assert.Equal(t, "AZ1", *testdata.facadeClient.putConfigurePackageResultInput.PackageResultAttributes["availabilityZone"])
+				assert.Equal(t, "Reg1", *testdata.facadeClient.putConfigurePackageResultInput.PackageResultAttributes["region"])
 			}
 		})
 	}
@@ -312,15 +312,15 @@ func TestDownloadManifest(t *testing.T) {
 		name           string
 		packageName    string
 		packageVersion string
-		bwclient       birdwatcherStationServiceMock
+		facadeClient   facadeMock
 		expectedErr    bool
 	}{
 		{
 			"successful getManifest with concrete version",
 			"packagename",
 			"1234",
-			birdwatcherStationServiceMock{
-				getManifestOutput: &birdwatcherstationservice.GetManifestOutput{
+			facadeMock{
+				getManifestOutput: &ssm.GetManifestOutput{
 					Manifest: &manifestStr,
 				},
 			},
@@ -330,8 +330,8 @@ func TestDownloadManifest(t *testing.T) {
 			"successful getManifest with latest",
 			"packagename",
 			packageservice.Latest,
-			birdwatcherStationServiceMock{
-				getManifestOutput: &birdwatcherstationservice.GetManifestOutput{
+			facadeMock{
+				getManifestOutput: &ssm.GetManifestOutput{
 					Manifest: &manifestStr,
 				},
 			},
@@ -341,7 +341,7 @@ func TestDownloadManifest(t *testing.T) {
 			"error in getManifest",
 			"packagename",
 			packageservice.Latest,
-			birdwatcherStationServiceMock{
+			facadeMock{
 				getManifestError: errors.New("testerror"),
 			},
 			true,
@@ -350,8 +350,8 @@ func TestDownloadManifest(t *testing.T) {
 			"error in parsing manifest",
 			"packagename",
 			packageservice.Latest,
-			birdwatcherStationServiceMock{
-				getManifestOutput: &birdwatcherstationservice.GetManifestOutput{
+			facadeMock{
+				getManifestOutput: &ssm.GetManifestOutput{
 					Manifest: &manifestStrErr,
 				},
 			},
@@ -361,7 +361,7 @@ func TestDownloadManifest(t *testing.T) {
 
 	for _, testdata := range data {
 		t.Run(testdata.name, func(t *testing.T) {
-			ds := &PackageService{bwclient: &testdata.bwclient, manifestCache: packageservice.ManifestCacheMemNew()}
+			ds := &PackageService{facadeClient: &testdata.facadeClient, manifestCache: packageservice.ManifestCacheMemNew()}
 
 			result, err := ds.DownloadManifest(loggerMock, testdata.packageName, testdata.packageVersion)
 
@@ -369,8 +369,8 @@ func TestDownloadManifest(t *testing.T) {
 				assert.Error(t, err)
 			} else {
 				// verify parameter for api call
-				assert.Equal(t, testdata.packageName, *testdata.bwclient.getManifestInput.PackageName)
-				assert.Equal(t, testdata.packageVersion, *testdata.bwclient.getManifestInput.PackageVersion)
+				assert.Equal(t, testdata.packageName, *testdata.facadeClient.getManifestInput.PackageName)
+				assert.Equal(t, testdata.packageVersion, *testdata.facadeClient.getManifestInput.PackageVersion)
 				// verify result
 				assert.Equal(t, "1234", result)
 				assert.NoError(t, err)
