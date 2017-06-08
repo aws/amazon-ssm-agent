@@ -96,6 +96,43 @@ func TestReplaceMarkedFields(t *testing.T) {
 	}
 }
 
+func TestConvertEntriesToJsonArray(t *testing.T) {
+	inOut := [][]string{
+		{
+			`{"k1":"v1","k2":"v2"},{"s1":"t1"},`,
+			`[{"k1":"v1","k2":"v2"},{"s1":"t1"}]`,
+		},
+		{
+			`{"Name":"nss-softokn"},{"Name":"basesystem"},{"Name":"pcre"},`,
+			`[{"Name":"nss-softokn"},{"Name":"basesystem"},{"Name":"pcre"}]`,
+		},
+		{`{"k1":"v1"},`, `[{"k1":"v1"}]`},
+		{`{"k1":"v1"}`, `[{"k1":"v1"}]`},
+		{`,`, `[]`},
+		{``, `[]`},
+	}
+	for _, test := range inOut {
+		input, output := test[0], test[1]
+		result := convertEntriesToJsonArray(input)
+		assert.Equal(t, output, result)
+	}
+}
+
+func TestCleanupNewLines(t *testing.T) {
+	inOut := [][]string{
+		{"ab\nc", "abc"},
+		{"\nab\n\rc\n\r", "abc"},
+		{"abc\r", "abc"},
+		{"a", "a"},
+		{"", ""},
+	}
+	for _, test := range inOut {
+		input, output := test[0], test[1]
+		result := cleanupNewLines(input)
+		assert.Equal(t, output, result)
+	}
+}
+
 func assertEqual(t *testing.T, expected []model.ApplicationData, found []model.ApplicationData) {
 	assert.Equal(t, len(expected), len(found))
 	for i, expectedApp := range expected {
@@ -114,4 +151,21 @@ func assertEqualApps(t *testing.T, a model.ApplicationData, b model.ApplicationD
 	assert.Equal(t, a.URL, b.URL)
 	assert.Equal(t, a.Summary, b.Summary)
 	assert.Equal(t, a.PackageId, b.PackageId)
+}
+
+// createMockExecutor creates an executor that returns the given stdout values on subsequent invocations.
+// If the number of invocations exceeds the number of outputs provided, the executor will return the last output.
+// For example createMockExecutor("a", "b", "c") will return an executor that returns the following values:
+// on first call -> "a"
+// on second call -> "b"
+// on third call -> "c"
+// on every call after that -> "c"
+func createMockExecutor(stdout ...string) func(string, ...string) ([]byte, error) {
+	var index = 0
+	return func(string, ...string) ([]byte, error) {
+		if index < len(stdout) {
+			index += 1
+		}
+		return []byte(stdout[index-1]), nil
+	}
 }

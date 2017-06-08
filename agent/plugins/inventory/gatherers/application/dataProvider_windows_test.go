@@ -26,13 +26,13 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-const (
-	sampleData = `[
-		{"Name":"Notepad++","Version":"6.9.2","Publisher":"Notepad++ Team","InstalledTime":null},
+var (
+	sampleDataSets = []string{
+		`{"Name":"Notepad++","Version":"6.9.2","Publisher":"Notepad++ Team","InstalledTime":null},
 		{"Name":"AWS Tools for Windows","Version":"3.9.344.0","Publisher":"Amazon Web Services Developer Relations","InstalledTime":"20160512"},
 		{"Name":"EC2ConfigService","Version":"3.16.930.0","Publisher":"Amazon Web Services","InstalledTime":null},` +
-		// Windows 2008 samples:
-		`{
+			// Windows 2008 samples:
+			`{
 			"Name":  "Microsoft Visual C++ 2008 Redistributable - x64 9.0.30729",
 			"PackageId":  "{4FFA2088-8317-3B14-93CD-4C699DB37843}",
 			"Version":  "9.0.30729",
@@ -46,8 +46,8 @@ const (
 			"Publisher":  "Microsoft Corporation",
 			"InstalledTime":  null
 		},` +
-		// Windows 2016 samples:
-		`{
+			// Windows 2016 samples:
+			`{
 			"Name":  "Mozilla Firefox 53.0.3 (x64 en-US)",
 			"PackageId":  "Mozilla Firefox 53.0.3 (x64 en-US)",
 			"Version":  "53.0.3",
@@ -60,54 +60,61 @@ const (
 			"Version":  "1.8.3",
 			"Publisher":  "https://golang.org",
 			"InstalledTime":  "2017-05-31T00:00:00Z"
-		}]`
+		},`,
+		// single entry testcase
+		`{"Name":"Notepad++","Version":"6.9.2","Publisher":"Notepad++ Team","InstalledTime":null},`,
+		// no result testcase
+		``,
+	}
 	mockArch     = "randomArch"
 	randomString = "blahblah"
 )
 
-var sampleDataParsed = []model.ApplicationData{
-	{Name: "Notepad++", Version: "6.9.2", Publisher: "Notepad++ Team", InstalledTime: ""},
-	{Name: "AWS Tools for Windows", Version: "3.9.344.0", Publisher: "Amazon Web Services Developer Relations", InstalledTime: "20160512"},
-	{Name: "EC2ConfigService", Version: "3.16.930.0", Publisher: "Amazon Web Services", InstalledTime: ""},
-	// Windows 2008 samples:
+var sampleDataSetsParsed = [][]model.ApplicationData{
 	{
-		Name:          "Microsoft Visual C++ 2008 Redistributable - x64 9.0.30729",
-		PackageId:     "{4FFA2088-8317-3B14-93CD-4C699DB37843}",
-		Version:       "9.0.30729",
-		Publisher:     "Microsoft Corporation",
-		InstalledTime: "2011-03-05T00:00:00Z",
+		{Name: "Notepad++", Version: "6.9.2", Publisher: "Notepad++ Team", InstalledTime: ""},
+		{Name: "AWS Tools for Windows", Version: "3.9.344.0", Publisher: "Amazon Web Services Developer Relations", InstalledTime: "20160512"},
+		{Name: "EC2ConfigService", Version: "3.16.930.0", Publisher: "Amazon Web Services", InstalledTime: ""},
+		// Windows 2008 samples:
+		{
+			Name:          "Microsoft Visual C++ 2008 Redistributable - x64 9.0.30729",
+			PackageId:     "{4FFA2088-8317-3B14-93CD-4C699DB37843}",
+			Version:       "9.0.30729",
+			Publisher:     "Microsoft Corporation",
+			InstalledTime: "2011-03-05T00:00:00Z",
+		},
+		{
+			Name:          "Microsoft .NET Framework 4.5.2",
+			PackageId:     "{92FB6C44-E685-45AD-9B20-CADF4CABA132} - 1033",
+			Version:       "4.5.51209",
+			Publisher:     "Microsoft Corporation",
+			InstalledTime: "",
+		},
+		// Windows 2016 samples:
+		{
+			Name:          "Mozilla Firefox 53.0.3 (x64 en-US)",
+			PackageId:     "Mozilla Firefox 53.0.3 (x64 en-US)",
+			Version:       "53.0.3",
+			Publisher:     "Mozilla",
+			InstalledTime: "",
+		},
+		{
+			Name:          "Go Programming Language amd64 go1.8.3",
+			PackageId:     "{854BC448-6940-4253-9E50-E433E8C2E96A}",
+			Version:       "1.8.3",
+			Publisher:     "https://golang.org",
+			InstalledTime: "2017-05-31T00:00:00Z",
+		},
 	},
 	{
-		Name:          "Microsoft .NET Framework 4.5.2",
-		PackageId:     "{92FB6C44-E685-45AD-9B20-CADF4CABA132} - 1033",
-		Version:       "4.5.51209",
-		Publisher:     "Microsoft Corporation",
-		InstalledTime: "",
+		{Name: "Notepad++", Version: "6.9.2", Publisher: "Notepad++ Team", InstalledTime: ""},
 	},
-	// Windows 2016 samples:
-	{
-		Name:          "Mozilla Firefox 53.0.3 (x64 en-US)",
-		PackageId:     "Mozilla Firefox 53.0.3 (x64 en-US)",
-		Version:       "53.0.3",
-		Publisher:     "Mozilla",
-		InstalledTime: "",
-	},
-	{
-		Name:          "Go Programming Language amd64 go1.8.3",
-		PackageId:     "{854BC448-6940-4253-9E50-E433E8C2E96A}",
-		Version:       "1.8.3",
-		Publisher:     "https://golang.org",
-		InstalledTime: "2017-05-31T00:00:00Z",
-	},
+	{},
 }
 
 func MockTestExecutorWithError(command string, args ...string) ([]byte, error) {
 	var result []byte
 	return result, fmt.Errorf("Random Error")
-}
-
-func MockTestExecutorWithoutError(command string, args ...string) ([]byte, error) {
-	return []byte(sampleData), nil
 }
 
 func MockTestExecutorWithConvertToApplicationDataReturningRandomString(command string, args ...string) ([]byte, error) {
@@ -119,10 +126,12 @@ func TestConvertToApplicationData(t *testing.T) {
 	var data []model.ApplicationData
 	var err error
 
-	data, err = convertToApplicationData(sampleData, mockArch)
+	for i, sampleData := range sampleDataSets {
+		data, err = convertToApplicationData(sampleData, mockArch)
 
-	assert.Nil(t, err, "Error is not expected for processing sample data - %v", sampleData)
-	assertEqual(t, getDataWithArchitecture(sampleDataParsed, mockArch), data)
+		assert.Nil(t, err, "Error is not expected for processing sample data - %v", sampleData)
+		assertEqual(t, getDataWithArchitecture(sampleDataSetsParsed[i], mockArch), data)
+	}
 }
 
 func getDataWithArchitecture(data []model.ApplicationData, architecture string) (dataWithArchitecture []model.ApplicationData) {
@@ -142,10 +151,12 @@ func TestExecutePowershellCommands(t *testing.T) {
 	mockArgs := "RandomCommandArgs"
 
 	//testing command executor without errors
-	cmdExecutor = MockTestExecutorWithoutError
-	data = executePowershellCommands(c, mockCmd, mockArgs, mockArch)
+	for i, sampleData := range sampleDataSets {
+		cmdExecutor = createMockExecutor(sampleData)
+		data = executePowershellCommands(c, mockCmd, mockArgs, mockArch)
 
-	assertEqual(t, getDataWithArchitecture(sampleDataParsed, mockArch), data)
+		assertEqual(t, getDataWithArchitecture(sampleDataSetsParsed[i], mockArch), data)
+	}
 
 	//testing command executor with errors
 	cmdExecutor = MockTestExecutorWithError
@@ -172,14 +183,16 @@ func TestCollectApplicationData(t *testing.T) {
 	}
 
 	//testing command executor without errors
-	cmdExecutor = MockTestExecutorWithoutError
-	data = collectPlatformDependentApplicationData(c)
+	for i, sampleData := range sampleDataSets {
+		cmdExecutor = createMockExecutor(sampleData)
+		data = collectPlatformDependentApplicationData(c)
 
-	// MockExecutor will be called 2 times: once for i386, once for amd64, hence total entries must be twice the sample data
-	var doubleResult []model.ApplicationData
-	doubleResult = append(doubleResult, getDataWithArchitecture(sampleDataParsed, model.Arch32Bit)...)
-	doubleResult = append(doubleResult, getDataWithArchitecture(sampleDataParsed, model.Arch64Bit)...)
-	assertEqual(t, doubleResult, data)
+		// MockExecutor will be called 2 times: once for i386, once for amd64, hence total entries must be twice the sample data
+		var doubleResult []model.ApplicationData
+		doubleResult = append(doubleResult, getDataWithArchitecture(sampleDataSetsParsed[i], model.Arch32Bit)...)
+		doubleResult = append(doubleResult, getDataWithArchitecture(sampleDataSetsParsed[i], model.Arch64Bit)...)
+		assertEqual(t, doubleResult, data)
+	}
 
 	//testing command executor with errors
 	cmdExecutor = MockTestExecutorWithError
@@ -195,8 +208,10 @@ func TestCollectAndMergePackages(t *testing.T) {
 		{Name: "IntelSriovDriver", Version: "1.2.3", Architecture: model.Arch64Bit},
 	})
 
-	cmdExecutor = MockTestExecutorWithoutError
-	data := CollectApplicationData(mockContext)
-	// MockExecutor will be called 2 times and there is one extra application from the merge
-	assert.Equal(t, 2*len(sampleDataParsed)+1, len(data))
+	for i, sampleData := range sampleDataSets {
+		cmdExecutor = createMockExecutor(sampleData)
+		data := CollectApplicationData(mockContext)
+		// MockExecutor will be called 2 times and there are one or two extra application from the merge
+		assert.True(t, 2*len(sampleDataSetsParsed[i])+1 <= len(data))
+	}
 }
