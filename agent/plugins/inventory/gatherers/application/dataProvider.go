@@ -4,6 +4,8 @@ import (
 	"errors"
 	"strings"
 
+	"fmt"
+
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/localpackages"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/inventory/model"
@@ -110,4 +112,27 @@ func replaceMarkedFields(str, startMarker, endMarker string, fieldReplacer func(
 	}
 	newStr += str
 	return newStr, nil
+}
+
+// convertEntriesToJsonArray converts a series of comma separated json objects
+// to an array of objects. For example, if entries is:
+// {"k1":"v1","k2":"v2"},{"s1":"t1"},
+// then this method will return
+// [{"k1":"v1","k2":"v2"},{"s1":"t1"}]
+func convertEntriesToJsonArray(entries string) string {
+	//trim spaces
+	str := strings.TrimSpace(entries)
+
+	//remove last ',' from string
+	str = strings.TrimSuffix(str, ",")
+
+	//add "[" in beginning & "]" at the end to create valid json string
+	str = fmt.Sprintf("[%v]", str)
+
+	return str
+}
+
+// cleanupNewLines removes all newlines from the given input
+func cleanupNewLines(s string) string {
+	return strings.Replace(strings.Replace(s, "\n", "", -1), "\r", "", -1)
 }

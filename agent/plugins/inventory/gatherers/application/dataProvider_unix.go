@@ -21,7 +21,6 @@ import (
 	"fmt"
 	"os/exec"
 	"strconv"
-	"strings"
 	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/context"
@@ -239,20 +238,13 @@ func convertToApplicationData(input string) (data []model.ApplicationData, err e
 		[{"Name":"nss-softokn"},{"Name":"basesystem"},{"Name":"pcre"}]
 	*/
 
-	//trim spaces
-	str := strings.TrimSpace(input)
-
-	//remove last ',' from string
-	str = strings.TrimSuffix(str, ",")
+	str := convertEntriesToJsonArray(input)
 
 	// keep single line out of multi-line fields and escape special characters
 	str, err = replaceMarkedFields(str, startMarker, endMarker, cleanupJSONField)
 	if err != nil {
 		return
 	}
-
-	//add "[" in beginning & "]" at the end to create valid json string
-	str = fmt.Sprintf("[%v]", str)
 
 	//unmarshal json string accordingly.
 	if err = json.Unmarshal([]byte(str), &data); err == nil {
