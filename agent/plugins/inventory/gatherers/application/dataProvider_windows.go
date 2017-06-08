@@ -38,9 +38,9 @@ const (
 
 	ConvertGuidToCompressedGuidCmd = `function Convert-GuidToCompressedGuid {
 						[CmdletBinding()]
-						[OutputType()]
+						[OutputType('System.String')]
 						param (
-							[Parameter(ValueFromPipeline, ValueFromPipelineByPropertyName, Mandatory)]
+							[Parameter(ValueFromPipeline="", ValueFromPipelineByPropertyName="", Mandatory=$true)]
 							[string]$Guid
 						)
 						begin {
@@ -92,8 +92,9 @@ Where-Object {($_.DisplayName -ne $null -and $_DisplayName -ne '' -and $_.Displa
 } |
 Select-Object @{n="Name";e={$_."DisplayName"}},
 	@{n="PackageId";e={$_."PSChildName"}}, @{n="Version";e={$_."DisplayVersion"}}, Publisher,
-	@{n="InstalledTime";e={[datetime]::ParseExact($_."InstallDate","yyyyMMdd",$null).ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ssZ")}} |
-ConvertTo-Json `
+	@{n="InstalledTime";e={[datetime]::ParseExact($_."InstallDate","yyyyMMdd",$null).ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ssZ")}} | %% { Write-Output @"
+{"Name":"$($_.Name)","PackageId":"$($_.PackageId)","Version":"$($_.Version)","Publisher":"$($_.Publisher)","InstalledTime":"$($_.InstalledTime)"},
+"@} `
 )
 
 var ArgsToReadRegistryFromWindowsCurrentVersionUninstall = fmt.Sprintf(ArgsToReadRegistryApplications, RegistryPathCurrentVersionUninstall)
@@ -292,38 +293,21 @@ func convertToApplicationData(cmdOutput, architecture string) (data []model.Appl
 	//MUST be accompanied with a change in json conversion logic as well.
 
 	/*
-			Sample powershell command that we run in windows to get applications information:
+			The powershell command that we run in windows to get applications information
+			will generate data in the following format:
+			    { "Name":  "EC2ConfigService", "Version":  "3.17.1032.0" },
+			    { "Name":  "aws-cfn-bootstrap", "Version":  "1.4.10" },
+			    { "Name":  "AWS PV Drivers", "Version":  "7.3.2" },
 
-			Get-ItemProperty HKLM:\Software\Microsoft\Windows\CurrentVersion\Uninstall\* |
-			Where-Object {$_.DisplayName -ne $null} |
-			Select-Object @{Name="Name";Expression={$_."DisplayName"}},@{Name="Version";Expression={$_."DisplayVersion"}} |
-			ConvertTo-Json
-
-			Above command will generate data in json format:
-			[
-			    {
-				"Name":  "EC2ConfigService",
-				"Version":  "3.17.1032.0"
-			    },
-			    {
-				"Name":  "aws-cfn-bootstrap",
-				"Version":  "1.4.10"
-			    },
-			    {
-				"Name":  "AWS PV Drivers",
-				"Version":  "7.3.2"
-			    }
-			]
-
-		        Since command output is in json - we do following operations:
-		        - trim spaces
+		        We do the following operations:
+		        - convert the string to a json array string
 		        - unmarshal the string
 		        - add architecture details as given input
-
 	*/
 
-	//trim spaces
-	str := strings.TrimSpace(cmdOutput)
+	str := convertEntriesToJsonArray(cmdOutput)
+	// remove newlines because powershell 2.0 sometimes inserts newlines every 80 characters or so
+	str = cleanupNewLines(str)
 
 	//unmarshall json string & add architecture information
 	if err = json.Unmarshal([]byte(str), &data); err == nil {
