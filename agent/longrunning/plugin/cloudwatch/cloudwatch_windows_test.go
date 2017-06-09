@@ -12,7 +12,7 @@
 // permissions and limitations under the License.
 //
 // +build windows
-//
+
 // Package cloudwatch implements cloudwatch plugin and its configuration
 package cloudwatch
 

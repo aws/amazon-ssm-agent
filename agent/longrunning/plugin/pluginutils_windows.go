@@ -12,7 +12,7 @@
 // permissions and limitations under the License.
 //
 // +build windows
-//
+
 // Package plugin contains all essential structs/interfaces for long running plugins
 package plugin
 

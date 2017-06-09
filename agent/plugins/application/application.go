@@ -242,7 +242,7 @@ func (p *Plugin) runCommands(log log.T, pluginID string, pluginInput Application
 
 	if len(errs) > 0 {
 		for _, err := range errs {
-			out.MarkAsFailed(log, fmt.Errorf("failed to run commands: ", err))
+			out.MarkAsFailed(log, fmt.Errorf("failed to run commands: %v", err))
 		}
 		return
 	}

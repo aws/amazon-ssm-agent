@@ -12,7 +12,7 @@
 // permissions and limitations under the License.
 //
 // +build windows
-//
+
 // Package cloudwatch implements cloudwatch plugin and its configuration
 package cloudwatch
 
@@ -224,7 +224,7 @@ func (p *Plugin) Start(context context.T, configuration string, orchestrationDir
 		for _, err := range errs {
 			log.Error(err)
 		}
-		return fmt.Errorf("Errors occurred while starting Cloudwatch exit code {0}, error count {1}", exitCode, len(errs))
+		return fmt.Errorf("Errors occurred while starting Cloudwatch exit code %v, error count %v", exitCode, len(errs))
 	}
 
 	// Cloudwatch process details
@@ -363,7 +363,7 @@ func (p *Plugin) runPowerShell(log logger.T, workingDirectory string, cancelFlag
 
 	//We don't expect any errors because the powershell script that we run has error action set as SilentlyContinue
 	if commandOutputError != "" {
-		log.Errorf("Powershell script to get process ID of the Cloudwatch executable currently running failed with error - ", commandOutputError)
+		log.Errorf("Powershell script to get process ID of the Cloudwatch executable currently running failed with error - %v", commandOutputError)
 	}
 
 	log.Debugf("exitCode - %v", exitCode)
