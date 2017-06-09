@@ -1,5 +1,11 @@
 Latest
-==============
+===============
+- Added support for using the OS proxy settings by default in Windows
+- Fixed issue preventing CloudWatch proxy settings from being retained on update
+- Various bug fixes
+
+2.0.805.0
+===============
 - Added support for SLES (SuSE) (64-bit, v12 and above)
 - Various bug fixes
 
