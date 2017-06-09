@@ -12,7 +12,7 @@
 // permissions and limitations under the License.
 //
 // +build windows
-//
+
 // Package domainjoin implements the domain join plugin.
 package domainjoin
 
