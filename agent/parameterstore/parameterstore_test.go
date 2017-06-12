@@ -83,7 +83,7 @@ var StringTestCases = []StringTestCase{
 			},
 		},
 		InvalidParameters: []string{},
-	},StringTestCase{
+	}, StringTestCase{
 		Input:  "This is a {{ssm:test/p5}} that does not exist",
 		Output: "This is a {{ssm:test/p5}} that does not exist",
 		Parameters: []Parameter{
