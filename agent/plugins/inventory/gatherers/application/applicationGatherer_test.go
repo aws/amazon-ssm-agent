@@ -52,4 +52,9 @@ func TestGatherer(t *testing.T) {
 	items, err := g.Run(c, model.Config{})
 	assert.Nil(t, err, "Unexpected error thrown")
 	assert.Equal(t, 1, len(items), "ApplicationGatherer always returns 1 inventory type data - which is why number of entries must be 1.")
+	item := items[0]
+	assert.Equal(t, GathererName, item.Name)
+	assert.Equal(t, SchemaVersionOfApplication, item.SchemaVersion)
+	assert.Equal(t, collectData(c), item.Content)
+	assert.NotNil(t, item.CaptureTime)
 }

@@ -26,7 +26,7 @@ const (
 	// GathererName captures name of application gatherer
 	GathererName = "AWS:Application"
 	// SchemaVersionOfApplication represents schema version of application gatherer
-	SchemaVersionOfApplication = "1.0"
+	SchemaVersionOfApplication = "1.1"
 )
 
 // T represents application gatherer which implements all contracts for gatherers.
