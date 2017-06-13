@@ -53,6 +53,13 @@ type AgentInfo struct {
 	DownloadRootDir      string
 }
 
+// MfsCfg represents configuration for HummingBird service (MFS)
+type MfsCfg struct {
+	Endpoint  string
+	Url       string
+	ChannelId string
+}
+
 // OsInfo represents os related information
 type OsInfo struct {
 	Lang    string
@@ -72,6 +79,7 @@ type SsmagentConfig struct {
 	Profile CredentialProfile
 	Mds     MdsCfg
 	Ssm     SsmCfg
+	Mfs     MfsCfg
 	Agent   AgentInfo
 	Os      OsInfo
 	S3      S3Cfg
