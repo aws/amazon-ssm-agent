@@ -11,7 +11,7 @@
 // either express or implied. See the License for the specific language governing
 // permissions and limitations under the License.
 
-package engine
+package basicexecuter
 
 import (
 	"fmt"
@@ -21,9 +21,9 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/docmanager/model"
-	"github.com/aws/amazon-ssm-agent/agent/framework/plugin"
 	"github.com/aws/amazon-ssm-agent/agent/framework/runpluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/message/processor/executer/plugin"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
@@ -124,7 +124,7 @@ func TestRunPluginsWithNewDocument(t *testing.T) {
 		called++
 	}
 	// call the code we are testing
-	outputs := RunPlugins(ctx, documentID, "", pluginConfigs2, pluginRegistry, sendResponse, nil, cancelFlag)
+	outputs := runPlugins(ctx, documentID, "", pluginConfigs2, pluginRegistry, sendResponse, nil, cancelFlag)
 
 	// fix the times expectation.
 	for _, result := range outputs {
@@ -209,7 +209,7 @@ func TestRunPluginsWithMissingPluginHandler(t *testing.T) {
 		called++
 	}
 	// call the code we are testing
-	outputs := RunPlugins(ctx, documentID, "", pluginConfigs2, pluginRegistry, sendResponse, nil, cancelFlag)
+	outputs := runPlugins(ctx, documentID, "", pluginConfigs2, pluginRegistry, sendResponse, nil, cancelFlag)
 
 	// fix the times expectation.
 	for _, result := range outputs {
@@ -279,7 +279,7 @@ func TestRunPluginsWithCancelFlagShutdown(t *testing.T) {
 		pluginRegistry[name] = plugins[name]
 	}
 
-	outputs := RunPlugins(ctx, documentID, "", pluginStates, pluginRegistry, sendResponse, nil, cancelFlag)
+	outputs := runPlugins(ctx, documentID, "", pluginStates, pluginRegistry, sendResponse, nil, cancelFlag)
 
 	// fix the times expectation.
 	for _, result := range outputs {
@@ -341,7 +341,7 @@ func TestRunPluginsWithInProgressDocuments(t *testing.T) {
 		pluginRegistry[name] = plugins[name]
 	}
 
-	outputs := RunPlugins(ctx, documentID, "", pluginStates, pluginRegistry, sendResponse, nil, cancelFlag)
+	outputs := runPlugins(ctx, documentID, "", pluginStates, pluginRegistry, sendResponse, nil, cancelFlag)
 	// fix the times expectation.
 	for _, result := range outputs {
 		result.EndDateTime = defaultTime
@@ -385,7 +385,7 @@ func TestRunPluginsWithInProgressDocuments(t *testing.T) {
 //		PluginName: pluginName,
 //	}
 //	pluginStates[0] = pluginState
-//	outputs := RunPlugins(ctx, documentID, "", pluginStates, pluginRegistry, sendResponse, nil, cancelFlag)
+//	outputs := (ctx, documentID, "", pluginStates, pluginRegistry, sendResponse, nil, cancelFlag)
 //	plugins[pluginName].AssertExpectations(t)
 //	assert.Equal(t, pluginResults[pluginName], outputs[pluginName])
 //}
@@ -456,7 +456,7 @@ func TestRunPluginsWithDuplicatePluginType(t *testing.T) {
 		called++
 	}
 	// call the code we are testing
-	outputs := RunPlugins(ctx, documentID, "", pluginConfigs2, pluginRegistry, sendResponse, nil, cancelFlag)
+	outputs := runPlugins(ctx, documentID, "", pluginConfigs2, pluginRegistry, sendResponse, nil, cancelFlag)
 
 	// fix the times expectation.
 	for _, result := range outputs {
@@ -547,7 +547,7 @@ func TestRunPluginsWithCompatiblePrecondition(t *testing.T) {
 		called++
 	}
 	// call the code we are testing
-	outputs := RunPlugins(ctx, documentID, "", pluginConfigs2, pluginRegistry, sendResponse, nil, cancelFlag)
+	outputs := runPlugins(ctx, documentID, "", pluginConfigs2, pluginRegistry, sendResponse, nil, cancelFlag)
 
 	// fix the times expectation.
 	for _, result := range outputs {
@@ -636,7 +636,7 @@ func TestRunPluginsWithCompatiblePreconditionWithValueFirst(t *testing.T) {
 		called++
 	}
 	// call the code we are testing
-	outputs := RunPlugins(ctx, documentID, "", pluginConfigs2, pluginRegistry, sendResponse, nil, cancelFlag)
+	outputs := runPlugins(ctx, documentID, "", pluginConfigs2, pluginRegistry, sendResponse, nil, cancelFlag)
 
 	// fix the times expectation.
 	for _, result := range outputs {
@@ -723,7 +723,7 @@ func TestRunPluginsWithIncompatiblePrecondition(t *testing.T) {
 		called++
 	}
 	// call the code we are testing
-	outputs := RunPlugins(ctx, documentID, "", pluginConfigs2, pluginRegistry, sendResponse, nil, cancelFlag)
+	outputs := runPlugins(ctx, documentID, "", pluginConfigs2, pluginRegistry, sendResponse, nil, cancelFlag)
 
 	// fix the times expectation.
 	for _, result := range outputs {
@@ -808,7 +808,7 @@ func TestRunPluginsWithCompatiblePreconditionButMissingPluginHandler(t *testing.
 		called++
 	}
 	// call the code we are testing
-	outputs := RunPlugins(ctx, documentID, "", pluginConfigs2, pluginRegistry, sendResponse, nil, cancelFlag)
+	outputs := runPlugins(ctx, documentID, "", pluginConfigs2, pluginRegistry, sendResponse, nil, cancelFlag)
 
 	// fix the times expectation.
 	for _, result := range outputs {
@@ -903,7 +903,7 @@ func TestRunPluginsWithMoreThanOnePrecondition(t *testing.T) {
 		called++
 	}
 	// call the code we are testing
-	outputs := RunPlugins(ctx, documentID, "", pluginConfigs2, pluginRegistry, sendResponse, nil, cancelFlag)
+	outputs := runPlugins(ctx, documentID, "", pluginConfigs2, pluginRegistry, sendResponse, nil, cancelFlag)
 
 	// fix the times expectation.
 	for _, result := range outputs {
@@ -995,7 +995,7 @@ func TestRunPluginsWithUnrecognizedPreconditionOperator(t *testing.T) {
 		called++
 	}
 	// call the code we are testing
-	outputs := RunPlugins(ctx, documentID, "", pluginConfigs2, pluginRegistry, sendResponse, nil, cancelFlag)
+	outputs := runPlugins(ctx, documentID, "", pluginConfigs2, pluginRegistry, sendResponse, nil, cancelFlag)
 
 	// fix the times expectation.
 	for _, result := range outputs {
@@ -1087,7 +1087,7 @@ func TestRunPluginsWithUnrecognizedPreconditionOperand(t *testing.T) {
 		called++
 	}
 	// call the code we are testing
-	outputs := RunPlugins(ctx, documentID, "", pluginConfigs2, pluginRegistry, sendResponse, nil, cancelFlag)
+	outputs := runPlugins(ctx, documentID, "", pluginConfigs2, pluginRegistry, sendResponse, nil, cancelFlag)
 
 	// fix the times expectation.
 	for _, result := range outputs {
@@ -1180,7 +1180,7 @@ func TestRunPluginsWithUnrecognizedPreconditionDuplicateVariable(t *testing.T) {
 		called++
 	}
 	// call the code we are testing
-	outputs := RunPlugins(ctx, documentID, "", pluginConfigs2, pluginRegistry, sendResponse, nil, cancelFlag)
+	outputs := runPlugins(ctx, documentID, "", pluginConfigs2, pluginRegistry, sendResponse, nil, cancelFlag)
 
 	// fix the times expectation.
 	for _, result := range outputs {
@@ -1272,7 +1272,7 @@ func TestRunPluginsWithMoreThanTwoPreconditionOperands(t *testing.T) {
 		called++
 	}
 	// call the code we are testing
-	outputs := RunPlugins(ctx, documentID, "", pluginConfigs2, pluginRegistry, sendResponse, nil, cancelFlag)
+	outputs := runPlugins(ctx, documentID, "", pluginConfigs2, pluginRegistry, sendResponse, nil, cancelFlag)
 
 	// fix the times expectation.
 	for _, result := range outputs {
@@ -1378,7 +1378,7 @@ func TestRunPluginsWithUnknownPlugin(t *testing.T) {
 		called++
 	}
 	// call the code we are testing
-	outputs := RunPlugins(ctx, documentID, "", pluginConfigs2, pluginRegistry, sendResponse, nil, cancelFlag)
+	outputs := runPlugins(ctx, documentID, "", pluginConfigs2, pluginRegistry, sendResponse, nil, cancelFlag)
 
 	// fix the times expectation.
 	for _, result := range outputs {

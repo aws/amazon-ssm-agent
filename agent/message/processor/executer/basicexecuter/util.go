@@ -12,7 +12,7 @@
 // permissions and limitations under the License.
 
 // Package engine contains the general purpose plugin runner of the plugin framework.
-package engine
+package basicexecuter
 
 import (
 	"fmt"
@@ -22,17 +22,14 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	docModel "github.com/aws/amazon-ssm-agent/agent/docmanager/model"
-	"github.com/aws/amazon-ssm-agent/agent/framework/plugin"
 	"github.com/aws/amazon-ssm-agent/agent/framework/runpluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/message/processor/executer/plugin"
 	"github.com/aws/amazon-ssm-agent/agent/platform"
 	"github.com/aws/amazon-ssm-agent/agent/rebooter"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 	"github.com/aws/amazon-ssm-agent/agent/times"
 )
-
-// SendDocumentLevelResponse is used to send status response before plugin begins
-type SendDocumentLevelResponse func(messageID string, resultStatus contracts.ResultStatus, documentTraceOutput string)
 
 // UpdateAssociation updates association status
 type UpdateAssociation func(log log.T, executionID string, documentCreatedDate string, pluginOutputs map[string]*contracts.PluginResult, totalNumberOfPlugins int)
@@ -48,12 +45,14 @@ var isSupportedPlugin = plugin.IsPluginSupportedForCurrentPlatform
 
 // RunPlugins executes a set of plugins. The plugin configurations are given in a map with pluginId as key.
 // Outputs the results of running the plugins, indexed by pluginId.
-func RunPlugins(
+// Make this function private in case everybody tries to reference it everywhere, this is a private member of Executer
+func runPlugins(
 	context context.T,
 	executionID string,
 	documentCreatedDate string,
 	plugins []docModel.PluginState,
 	pluginRegistry runpluginutil.PluginRegistry,
+	//TODO should not different between these 2 services, remove the callback and use status update channel
 	sendReply runpluginutil.SendResponse,
 	updateAssoc runpluginutil.UpdateAssociation,
 	cancelFlag task.CancelFlag,
@@ -120,7 +119,7 @@ func RunPlugins(
 		}
 
 		runner := runpluginutil.PluginRunner{
-			RunPlugins:  RunPlugins,
+			RunPlugins:  runPlugins,
 			Plugins:     pluginRegistry,
 			SendReply:   runpluginutil.NoReply,
 			UpdateAssoc: runpluginutil.NoUpdate,
