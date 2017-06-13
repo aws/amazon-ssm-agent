@@ -31,9 +31,11 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/docmanager"
 	docModel "github.com/aws/amazon-ssm-agent/agent/docmanager/model"
-	"github.com/aws/amazon-ssm-agent/agent/framework/plugin"
+
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/message/contracts"
+	"github.com/aws/amazon-ssm-agent/agent/message/processor/executer/basicexecuter"
 	"github.com/aws/amazon-ssm-agent/agent/platform"
 	"github.com/aws/amazon-ssm-agent/agent/reply"
 	"github.com/aws/amazon-ssm-agent/agent/task"
@@ -92,22 +94,15 @@ func (r *AssociationExecuter) ExecuteInProgressDocument(context context.T, docSt
 	log := assocContext.Log()
 
 	totalNumberOfActions := len(docState.InstancePluginsInformation)
-	outputs := pluginExecution.RunPlugins(
-		assocContext,
-		docState.DocumentInformation.AssociationID,
-		docState.DocumentInformation.CreatedDate,
-		docState.InstancePluginsInformation,
-		plugin.RegisteredWorkerPlugins(assocContext),
-		r.pluginExecutionReport,
-		cancelFlag)
-
-	pluginOutputContent, err := jsonutil.Marshal(outputs)
-	if err != nil {
-		log.Error("failed to parse to json string ", err)
+	//TODO build reply should be moved to Service
+	replyBuilder := func(pluginID string, results map[string]*contracts.PluginResult) model.SendReplyPayload {
+		runtimeStatuses := reply.PrepareRuntimeStatuses(log, results)
+		return reply.PrepareReplyPayload(pluginID, runtimeStatuses, time.Now(), *r.agentInfo)
 	}
-	log.Debugf("Plugin outputs %v", jsonutil.Indent(pluginOutputContent))
+	//TODO we should have a creator for factory construct of Executer
+	executer := basicexecuter.NewBasicExecuter()
+	executer.Run(assocContext, cancelFlag, replyBuilder, r.pluginExecutionReport, nil, docState)
 
-	r.parseAndPersistReplyContents(log, docState, outputs)
 	// Skip sending response when the document requires a reboot
 	if docState.IsRebootRequired() {
 		log.Debugf("skipping sending response of %v since the document requires a reboot", docState.DocumentInformation.AssociationID)
@@ -116,11 +111,7 @@ func (r *AssociationExecuter) ExecuteInProgressDocument(context context.T, docSt
 		return
 	}
 
-	if pluginOutputContent, err = jsonutil.Marshal(outputs); err != nil {
-		log.Error("failed to parse to json string ", err)
-	}
-
-	log.Debug("Association execution completion ", pluginOutputContent)
+	log.Debug("Association execution completion ", docState.InstancePluginsInformation)
 	log.Debug("Association execution status is ", docState.DocumentInformation.DocumentStatus)
 	if docState.DocumentInformation.DocumentStatus == contracts.ResultStatusFailed {
 		r.associationExecutionReport(

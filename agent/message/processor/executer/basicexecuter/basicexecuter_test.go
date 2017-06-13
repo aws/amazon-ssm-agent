@@ -97,7 +97,12 @@ func testBasicExecuter(t *testing.T, testCase TestCase) {
 		assert.Equal(t, results, testCase.PluginResults)
 		return testCase.ReplyPayload
 	}
-	pluginRunner = func(context context.T, documentID string, plugins []docModel.PluginState, sendResponse runpluginutil.SendResponse, cancelFlag task.CancelFlag) (pluginOutputs map[string]*contracts.PluginResult) {
+	pluginRunner = func(context context.T,
+		documentID string,
+		plugins []docModel.PluginState,
+		updateAssoc runpluginutil.UpdateAssociation,
+		sendResponse runpluginutil.SendResponse,
+		cancelFlag task.CancelFlag) (pluginOutputs map[string]*contracts.PluginResult) {
 		return testCase.PluginResults
 	}
 
@@ -105,7 +110,7 @@ func testBasicExecuter(t *testing.T, testCase TestCase) {
 	//orchestrationRootDir is set to empty such that it can meet the test expectation.
 	e := NewBasicExecuter()
 	state := testCase.DocState
-	e.Run(context.NewMockDefault(), cancelFlag, buildReply, sendResponse, &state)
+	e.Run(context.NewMockDefault(), cancelFlag, buildReply, nil, sendResponse, &state)
 
 	// assert docState matched the testCase's reply payload
 	assert.Equal(t, testCase.ReplyPayload.DocumentStatus, state.DocumentInformation.DocumentStatus)

@@ -240,6 +240,7 @@ func (p *Processor) processSendCommandMessage(context context.T,
 	e.Run(p.context,
 		cancelFlag,
 		p.buildReply,
+		nil,
 		p.sendResponse,
 		docState,
 	)

@@ -20,22 +20,26 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/docmanager"
 	"github.com/aws/amazon-ssm-agent/agent/docmanager/model"
-	"github.com/aws/amazon-ssm-agent/agent/framework/engine"
-	"github.com/aws/amazon-ssm-agent/agent/framework/plugin"
 	"github.com/aws/amazon-ssm-agent/agent/framework/runpluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/message/processor/executer"
+	"github.com/aws/amazon-ssm-agent/agent/message/processor/executer/plugin"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 )
 
 // BasicExecuter is a thin wrapper over runPlugins().
 type BasicExecuter struct {
 	//TODO 3. populate the attribute once we get 1 and 2 done
+	//TODO possible attributes: inbound/outbound channel, context, registered plugins
 }
 
-var pluginRunner = func(context context.T, documentID string, plugins []model.PluginState, sendResponse runpluginutil.SendResponse, cancelFlag task.CancelFlag) (pluginOutputs map[string]*contracts.PluginResult) {
-	//TODO move the engine package into executer, so that everything about document execution is contained within Executer package, and only have a couple of public functions exposed by Executer
-	return engine.RunPlugins(context, documentID, "", plugins, plugin.RegisteredWorkerPlugins(context), sendResponse, nil, cancelFlag)
+var pluginRunner = func(context context.T,
+	documentID string,
+	plugins []model.PluginState,
+	updateAssoc runpluginutil.UpdateAssociation,
+	sendResponse runpluginutil.SendResponse,
+	cancelFlag task.CancelFlag) (pluginOutputs map[string]*contracts.PluginResult) {
+	return runPlugins(context, documentID, "", plugins, plugin.RegisteredWorkerPlugins(context), sendResponse, updateAssoc, cancelFlag)
 }
 
 func NewBasicExecuter() executer.Executer {
@@ -46,12 +50,13 @@ func NewBasicExecuter() executer.Executer {
 func (e BasicExecuter) Run(context context.T,
 	cancelFlag task.CancelFlag,
 	buildReply executer.ReplyBuilder,
+	updateAssoc runpluginutil.UpdateAssociation,
 	sendResponse runpluginutil.SendResponse,
 	docState *model.DocumentState) {
 	log := context.Log()
-
+	//TODO split plugin state and docState into 2 different classes?
 	log.Debug("Running plugins...")
-	outputs := pluginRunner(context, docState.DocumentInformation.MessageID, docState.InstancePluginsInformation, sendResponse, cancelFlag)
+	outputs := pluginRunner(context, docState.DocumentInformation.MessageID, docState.InstancePluginsInformation, updateAssoc, sendResponse, cancelFlag)
 	pluginOutputContent, _ := jsonutil.Marshal(outputs)
 	log.Debugf("Plugin outputs %v", jsonutil.Indent(pluginOutputContent))
 
@@ -77,6 +82,9 @@ func (e BasicExecuter) Run(context context.T,
 		newCmdState.DocumentInformation.InstanceID,
 		appconfig.DefaultLocationOfCurrent)
 	log.Debug("Sending reply on message completion ", outputs)
-	sendResponse(newCmdState.DocumentInformation.MessageID, "", outputs)
+	if sendResponse != nil {
+		sendResponse(newCmdState.DocumentInformation.MessageID, "", outputs)
+
+	}
 	*docState = newCmdState
 }

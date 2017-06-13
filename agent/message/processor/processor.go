@@ -25,7 +25,6 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/docmanager"
 	"github.com/aws/amazon-ssm-agent/agent/docmanager/model"
-	"github.com/aws/amazon-ssm-agent/agent/framework/engine"
 	"github.com/aws/amazon-ssm-agent/agent/framework/runpluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
@@ -84,6 +83,9 @@ type persistData func(state *model.DocumentState, bookkeeping string)
 
 type ExecuterCreator func() executer.Executer
 
+// SendDocumentLevelResponse is used to send status response before plugin begins
+type SendDocumentLevelResponse func(messageID string, resultStatus contracts.ResultStatus, documentTraceOutput string)
+
 // Processor is an object that can process MDS messages.
 type Processor struct {
 	context              context.T
@@ -96,7 +98,7 @@ type Processor struct {
 	cancelCommandPool    task.Pool
 	buildReply           executer.ReplyBuilder
 	sendResponse         runpluginutil.SendResponse
-	sendDocLevelResponse engine.SendDocumentLevelResponse
+	sendDocLevelResponse SendDocumentLevelResponse
 	persistData          persistData
 	orchestrationRootDir string
 	messagePollJob       *scheduler.Job
