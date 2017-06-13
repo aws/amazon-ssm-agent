@@ -55,6 +55,7 @@ type MockedExecuter struct {
 func (executerMock MockedExecuter) Run(context context.T,
 	cancelFlag task.CancelFlag,
 	buildReply executer.ReplyBuilder,
+	updateAssoc runpluginutil.UpdateAssociation,
 	sendResponse runpluginutil.SendResponse,
 	docState *docModel.DocumentState) {
 	executerMock.Called(context, cancelFlag, buildReply, sendResponse, docState)

@@ -17,7 +17,6 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/docmanager"
 	docModel "github.com/aws/amazon-ssm-agent/agent/docmanager/model"
-	"github.com/aws/amazon-ssm-agent/agent/framework/engine"
 	"github.com/aws/amazon-ssm-agent/agent/framework/runpluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/task"
@@ -64,16 +63,3 @@ type pluginExecutionService interface {
 }
 
 type pluginExecutionImp struct{}
-
-// RunPlugins wraps engine RunPlugins
-func (pluginExecutionImp) RunPlugins(
-	context context.T,
-	associationID string,
-	documentCreatedDate string,
-	plugins []docModel.PluginState,
-	pluginRegistry runpluginutil.PluginRegistry,
-	assocUpdate runpluginutil.UpdateAssociation,
-	cancelFlag task.CancelFlag,
-) (pluginOutputs map[string]*contracts.PluginResult) {
-	return engine.RunPlugins(context, associationID, documentCreatedDate, plugins, pluginRegistry, nil, assocUpdate, cancelFlag)
-}
