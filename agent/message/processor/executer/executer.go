@@ -29,12 +29,13 @@ type Executer interface {
 	Run(context context.T,
 		cancelFlag task.CancelFlag,
 		buildReply ReplyBuilder,
+		updateAssoc runpluginutil.UpdateAssociation,
 		sendResponse runpluginutil.SendResponse,
 		docState *model.DocumentState)
 	//TODO 1. expose these 2 functions instead of using cancelFlag
 	//Shutdown()
 	//Cancel()
+	//Close()
 }
 
-type PluginRunner func(context context.T, documentID string, plugins []model.PluginState, sendResponse runpluginutil.SendResponse, cancelFlag task.CancelFlag) (pluginOutputs map[string]*contracts.PluginResult)
 type ReplyBuilder func(pluginID string, results map[string]*contracts.PluginResult) messageContracts.SendReplyPayload

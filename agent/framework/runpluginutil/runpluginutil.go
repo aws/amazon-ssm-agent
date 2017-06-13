@@ -11,6 +11,7 @@
 // either express or implied. See the License for the specific language governing
 // permissions and limitations under the License.
 
+//TODO re-examine this package's role in the "Executer" model, we probably should let other plugins use Executers.
 // Package runpluginutil provides interfaces for running plugins that can be referenced by other plugins and a utility method for parsing documents
 package runpluginutil
 
