@@ -29,10 +29,14 @@ import (
 )
 
 const (
-	startMarker = "//AUTOGEN_START"
-	endMarker   = "//AUTOGEN_END"
-	serviceName = "s3"
+	startMarker   = "//AUTOGEN_START"
+	endMarker     = "//AUTOGEN_END"
+	serviceName   = "s3"
+	serviceStatus = "GA"
 )
+
+var desiredAccessibilityAttribute = []string{"PUBLICLY_ANNOUNCED"}
+var avoidedAccessibilityAttribute = []string{"ISOLATED", "RETAIL", "TEST"}
 
 var ripConfigJsonFilePath = filepath.Join("agent", "s3util", "rip_static_config.json")
 var ripUtilFilePath = filepath.Join("agent", "s3util", "riputil.go")
@@ -47,9 +51,12 @@ func main() {
 	}
 	var mapEntries []string
 	for i, region := range ripConfig.Regions {
-		for _, service := range ripConfig.Regions[i].Services {
-			if service.Name == serviceName {
-				mapEntries = append(mapEntries, "\""+region.RegionName+"\" :\t\""+service.Endpoint+"\",\n")
+		if allStringsInSlice(desiredAccessibilityAttribute, region.AccessibilityAttributes) &&
+			!anyStringInSlice(avoidedAccessibilityAttribute, region.AccessibilityAttributes) {
+			for _, service := range ripConfig.Regions[i].Services {
+				if service.Name == serviceName && service.Status == serviceStatus {
+					mapEntries = append(mapEntries, "\""+region.RegionName+"\" :\t\""+service.Endpoint+"\",\n")
+				}
 			}
 		}
 	}
@@ -77,6 +84,30 @@ func replaceFileContents(newContent string) (err error) {
 		}
 	}
 	return
+}
+
+func anyStringInSlice(keyWords []string, searchList []string) bool {
+	for _, listItem := range searchList {
+		for _, keyword := range keyWords {
+			if keyword == listItem {
+				return true
+			}
+		}
+	}
+	return false
+}
+
+func allStringsInSlice(keyWords []string, searchList []string) bool {
+	foundCount := 0
+	for _, listItem := range searchList {
+		for _, keyword := range keyWords {
+			if keyword == listItem {
+				foundCount++
+				break
+			}
+		}
+	}
+	return len(keyWords) == foundCount
 }
 
 // Auto generated using https://mholt.github.io/json-to-go/
