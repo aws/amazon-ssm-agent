@@ -151,32 +151,19 @@ func parseStringList(log log.T, input interface{}, ssmParameters map[string]Para
 		Sample:
 
 		SSM parameter
-		{{ssm:commands}} = "ls,date,dir"
-		Type = StringList
-
-		Input:
-		["{{ssm:commands}}"]
-
-		Output:
-		["ls","date","dir"]
-
-		Edge case:
-		For input {{ssm:commands}} = "echo "a,b",ls,date,dir", output will be
-		echo "a
-		b"
+		For {{ssm:commands}} = "ls,date,dir" output will be
 		ls
 		date
 		dir
 
-		Edge case Expectation:
-		For input {{ssm:commands}} = "'echo "a,b"',ls,date,dir", output will be
-		echo "a,b"
-		ls
+		For {{ssm:commands}} = "'ls,echo a',date,dir" output will be
+		'ls
+		echo a'
 		date
 		dir
 
-		We assume the customer to use escape character (') to avoid incorrect split. Even if the service
-		doesn't validate it, the agent will continue to split the input based on "," unless escape character is used.
+		Irrespective of other special characters in the string, StringList type SSM Parameters will always be
+		split on comma.
 	*/
 
 	var reformatInput []string
@@ -194,10 +181,7 @@ func parseStringList(log log.T, input interface{}, ssmParameters map[string]Para
 			if paramObj.Type == ParamTypeStringList {
 				// Check if the temp string contains only one SSM parameter element of type StringList
 				if strings.Compare(paramName, strings.TrimSpace(temp)) == 0 {
-					stringListValue, err := convertToStringList(log, paramObj.Value)
-					if err != nil {
-						return nil, err
-					}
+					stringListValue := strings.Split(paramObj.Value, StringListDelimiter)
 					out = append(out, stringListValue...)
 					found = true
 					break
@@ -218,30 +202,4 @@ func parseStringList(log log.T, input interface{}, ssmParameters map[string]Para
 		}
 	}
 	return out, nil
-}
-
-// convertToStringList divides the input parameter string into valid string blocks
-func convertToStringList(log log.T, input string) ([]string, error) {
-
-	// Sample transformation:
-	// input = "'echo "a,b"',ls,date,dir"
-	// result: []string{"echo "a,b"", "ls", "date", "dir"}
-
-	escapeChar := "'"
-	blankChar := ""
-
-	validSSMParamValueRegex := "([^',]+)|('[^']+')"
-	validSSMParamValue, err := regexp.Compile(validSSMParamValueRegex)
-	if err != nil {
-		log.Debug(err)
-		return nil, fmt.Errorf("%v", ErrorMsg)
-	}
-
-	paramValues := validSSMParamValue.FindAllString(input, -1)
-
-	for i, v := range paramValues {
-		paramValues[i] = strings.TrimSpace(strings.Replace(v, escapeChar, blankChar, -1))
-	}
-
-	return paramValues, nil
 }
