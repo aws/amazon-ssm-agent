@@ -48,8 +48,9 @@ func NewWebsocketUtil(logger log.T, dialerInput *websocket.Dialer) *WebsocketUti
 			dialer: dialerInput,
 			log:    logger,
 		}
-		return websocketUtil
 	}
+
+	return websocketUtil
 }
 
 // OpenConnection opens a websocket connection provided an input url.
