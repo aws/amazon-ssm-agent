@@ -26,7 +26,6 @@ var awsS3EndpointMap = map[string]string{
 	"ca-central-1":   "s3.ca-central-1.amazonaws.com",
 	"cn-north-1":     "s3.cn-north-1.amazonaws.com.cn",
 	"eu-central-1":   "s3.eu-central-1.amazonaws.com",
-	"eu-south-1":     "s3.eu-south-1.amazonaws.com",
 	"eu-west-1":      "s3-eu-west-1.amazonaws.com",
 	"eu-west-2":      "s3.eu-west-2.amazonaws.com",
 	"sa-east-1":      "s3-sa-east-1.amazonaws.com",
@@ -54,8 +53,8 @@ func GetS3GenericEndPoint(region string) (s3Endpoint string) {
 	if region == "us-gov-west-1" {
 		return GetS3Endpoint(region) // Restricted regions
 	}
-	if region == "cn-north-1" || region == "cn-northwest-1" {
-		return GetS3Endpoint("cn-north-1") // Use cn-north-1
+	if region == "cn-north-1" {
+		return GetS3Endpoint("cn-north-1") // Use cn-north-1 for China
 	}
-	return GetS3Endpoint("us-east-1") // For all other regions
+	return GetS3Endpoint("us-east-1") // For all other regions, use us-east-1
 }
