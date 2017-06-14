@@ -43,6 +43,9 @@ const (
 
 	// MaxParametersPerCall represents the max number of parameters you can send in one GetParameters call
 	MaxParametersPerCall = 10
+
+	// Delimiter used for splitting StringList type SSM parameters.
+	StringListDelimiter = ","
 )
 
 var callParameterService = callGetParameters
