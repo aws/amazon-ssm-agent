@@ -16,6 +16,7 @@ package parameterstore
 
 import (
 	"fmt"
+	"strings"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -60,6 +61,19 @@ func generateReplaceSSMParamTestCases() []ReplaceSSMParamTestCase {
 		},
 	}
 
+	stringListParams := map[string]Parameter{
+		"{{ssm:param5}}": {
+			Value: "a,b,c",
+			Type:  "StringList",
+			Name:  "param5",
+		},
+		"{{ssm:param6.p1}}": {
+			Value: "'a,b',c",
+			Type:  "StringList",
+			Name:  "param6.p1",
+		},
+	}
+
 	var testCases []ReplaceSSMParamTestCase
 
 	// test cases for replacement in parameter-only strings
@@ -68,6 +82,15 @@ func generateReplaceSSMParamTestCases() []ReplaceSSMParamTestCase {
 			Input:  fmt.Sprintf("%v", paramName),
 			Params: params,
 			Output: paramValue.Value,
+		})
+	}
+
+	// test cases for StringList params
+	for paramName, paramValue := range stringListParams {
+		testCases = append(testCases, ReplaceSSMParamTestCase{
+			Input:  []string{paramName},
+			Params: stringListParams,
+			Output: strings.Split(paramValue.Value, StringListDelimiter),
 		})
 	}
 
@@ -153,30 +176,4 @@ func generateExtractSSMParamTestCases() []ExtractSSMParamTestCase {
 	}
 
 	return testCases
-}
-
-func TestConvertToStringList(t *testing.T) {
-	input := "'echo \"a,b\"',dir,ls"
-	output := []string{"echo \"a,b\"", "dir", "ls"}
-	temp, err := convertToStringList(logger, input)
-	assert.Equal(t, output, temp)
-	assert.Nil(t, err)
-
-	input = "'echo \"a,b\"',   dir   ,   ls   "
-	output = []string{"echo \"a,b\"", "dir", "ls"}
-	temp, err = convertToStringList(logger, input)
-	assert.Equal(t, output, temp)
-	assert.Nil(t, err)
-
-	input = "echo a, dir ,ls"
-	output = []string{"echo a", "dir", "ls"}
-	temp, err = convertToStringList(logger, input)
-	assert.Equal(t, output, temp)
-	assert.Nil(t, err)
-
-	input = ",echo a, dir ,ls"
-	output = []string{"echo a", "dir", "ls"}
-	temp, err = convertToStringList(logger, input)
-	assert.Equal(t, output, temp)
-	assert.Nil(t, err)
 }
