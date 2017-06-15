@@ -32,6 +32,8 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/message/parser"
 	"github.com/aws/amazon-ssm-agent/agent/message/processor/executer"
 	"github.com/aws/amazon-ssm-agent/agent/message/processor/executer/mock"
+	"github.com/aws/amazon-ssm-agent/agent/message/service"
+	"github.com/aws/amazon-ssm-agent/agent/sdkutil"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 	"github.com/aws/amazon-ssm-agent/agent/times"
 	"github.com/aws/aws-sdk-go/aws"
@@ -450,55 +452,39 @@ func testProcessSendCommandMessage(t *testing.T, testCase TestCaseSendCommand) {
 
 	cancelFlag := task.NewChanneledCancelFlag()
 
-	// method should call replyBuilder to format the response
-	replyBuilderMock := new(executermocks.MockedReplyBuilder)
-	replyBuilderMock.On("BuildReply", mock.Anything, testCase.PluginResults).Return(testCase.ReplyPayload)
-
 	// method should call the proper APIs on the MDS service
 	mdsMock := new(MockedMDS)
-	var replyPayload string
-	mdsMock.On("SendReply", mock.Anything, mock.AnythingOfType("string"), mock.AnythingOfType("string")).Return(nil).Run(func(args mock.Arguments) {
-		replyPayload = args.Get(2).(string)
-	})
+	// assert delete message operation
 	mdsMock.On("DeleteMessage", mock.Anything, mock.AnythingOfType("string")).Return(nil)
-
-	// create a mock sendResponse function
-	sendResponse := func(messageID string, pluginID string, results map[string]*contracts.PluginResult) {
-		contextMock := context.NewMockDefault()
-		log := contextMock.Log()
-		payloadDoc := replyBuilderMock.BuildReply(pluginID, results)
-		payloadB, err := json.Marshal(payloadDoc)
-		if err != nil {
+	docCompleteCalled := false
+	// stub the responseProvider as no-op
+	responseProvider = func(log log.T, messageID string, mdsService service.Service, agentInfo contracts.AgentInfo, stopPolicy *sdkutil.StopPolicy) SendResponse {
+		assert.Equal(t, messageID, testCase.DocState.DocumentInformation.MessageID)
+		return func(pluginID string, pluginResult contracts.PluginResult) {
+			assert.Equal(t, pluginID, "")
+			docCompleteCalled = true
 			return
 		}
-		payload := string(payloadB)
-		// call the mock sendreply so that we can assert the reply sent
-		err = mdsMock.SendReply(log, messageID, payload)
+
 	}
-	executerMock := new(executermocks.MockedExecuter)
-	executerMock.On("Run", mock.Anything, cancelFlag, mock.Anything, mock.Anything, mock.AnythingOfType("*executer.DocumentFileStore")).Return(nil).Run(func(args mock.Arguments) {
-		sendResponse(testCase.DocState.DocumentInformation.MessageID, "pluginID", testCase.PluginResults)
-	})
+	executerMock := executermocks.NewMockExecuter()
+	resChan := make(chan contracts.PluginResult)
+	executerMock.On("Run", cancelFlag, mock.AnythingOfType("*executer.DocumentFileStore")).Return(resChan)
+
 	// call method under test
 	//orchestrationRootDir is set to empty such that it can meet the test expectation.
-	creator := func() executer.Executer {
+	creator := func(ctx context.T) executer.Executer {
 		return executerMock
 	}
 	p := Processor{
 		executerCreator: creator,
 	}
-	p.processSendCommandMessage(context.NewMockDefault(), mdsMock, cancelFlag, replyBuilderMock.BuildReply, sendResponse, &testCase.DocState)
+	close(resChan)
+	p.processSendCommandMessage(context.NewMockDefault(), mdsMock, cancelFlag, &testCase.DocState)
 
-	// assert that the expectations were met
-	replyBuilderMock.AssertExpectations(t)
 	mdsMock.AssertExpectations(t)
 	executerMock.AssertExpectations(t)
-
-	// check that the method sent the right reply
-	var parsedReply messageContracts.SendReplyPayload
-	err := json.Unmarshal([]byte(replyPayload), &parsedReply)
-	assert.Nil(t, err)
-	assert.Equal(t, testCase.ReplyPayload, parsedReply)
+	assert.True(t, docCompleteCalled)
 }
 
 func createMDSMessage(commandID string, payload string, topic string, instanceID string) ssmmds.Message {

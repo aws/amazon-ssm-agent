@@ -19,28 +19,16 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/docmanager"
 	"github.com/aws/amazon-ssm-agent/agent/docmanager/model"
-	"github.com/aws/amazon-ssm-agent/agent/framework/runpluginutil"
-	messageContracts "github.com/aws/amazon-ssm-agent/agent/message/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 )
 
-//TODO change callback to go channel, remove service dependency
 //Executer accepts an DocumentStore object, save when necessary for crash-recovery, and return when finshes the run, while
 //the caller will pick up the result from the same docStore object
 type Executer interface {
-	Run(context context.T,
-		cancelFlag task.CancelFlag,
-		buildReply ReplyBuilder,
-		updateAssoc runpluginutil.UpdateAssociation,
-		sendResponse runpluginutil.SendResponse,
-		docStore DocumentStore)
-	//TODO 1. expose these 2 functions instead of using cancelFlag
-	//Shutdown()
-	//Cancel()
-	//Close()
+	// Given a document and run it, receiving results from status update channel, return a map of plugin results
+	Run(cancelFlag task.CancelFlag, //Inbound message
+		docStore DocumentStore) chan contracts.PluginResult
 }
-
-type ReplyBuilder func(pluginID string, results map[string]*contracts.PluginResult) messageContracts.SendReplyPayload
 
 //DocumentStore is an wrapper over the document state class that provides additional persisting functions for the Executer
 type DocumentStore interface {
