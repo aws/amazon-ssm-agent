@@ -25,7 +25,6 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/docmanager"
 	"github.com/aws/amazon-ssm-agent/agent/docmanager/model"
-	"github.com/aws/amazon-ssm-agent/agent/framework/runpluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	messageContracts "github.com/aws/amazon-ssm-agent/agent/message/contracts"
@@ -81,10 +80,26 @@ type statusReplyBuilder func(agentInfo contracts.AgentInfo, resultStatus contrac
 
 type persistData func(state *model.DocumentState, bookkeeping string)
 
-type ExecuterCreator func() executer.Executer
+type ExecuterCreator func(ctx context.T) executer.Executer
 
+//TODO move these 2 type to service
 // SendDocumentLevelResponse is used to send status response before plugin begins
 type SendDocumentLevelResponse func(messageID string, resultStatus contracts.ResultStatus, documentTraceOutput string)
+type SendResponse func(pluginID string, res contracts.PluginResult)
+
+// responseProvider is a closure to hold replyBuilder, before we create the service interface
+var responseProvider = func(log log.T, messageID string, mdsService service.Service, agentInfo contracts.AgentInfo, stopPolicy *sdkutil.StopPolicy) SendResponse {
+	replyBuilder := reply.NewSendReplyBuilder()
+	return func(pluginID string, res contracts.PluginResult) {
+		//TODO this is temporarily solution before we have service; once we have it, a nice and clean protocol will be defined in terms of status update
+		if pluginID == "" {
+			processSendReply(log, messageID, mdsService, replyBuilder.FormatPayload(log, "", agentInfo), stopPolicy)
+			return
+		}
+		replyBuilder.UpdatePluginResult(res)
+		processSendReply(log, messageID, mdsService, replyBuilder.FormatPayload(log, res.PluginName, agentInfo), stopPolicy)
+	}
+}
 
 // Processor is an object that can process MDS messages.
 type Processor struct {
@@ -96,8 +111,6 @@ type Processor struct {
 	executerCreator      ExecuterCreator
 	sendCommandPool      task.Pool
 	cancelCommandPool    task.Pool
-	buildReply           executer.ReplyBuilder
-	sendResponse         runpluginutil.SendResponse
 	sendDocLevelResponse SendDocumentLevelResponse
 	persistData          persistData
 	orchestrationRootDir string
@@ -132,9 +145,9 @@ func NewMdsProcessor(context context.T) *Processor {
 }
 
 // NewProcessor performs common initialization for Mds and Offline processors
-func NewProcessor(context context.T, processorName string, processorService service.Service, commandWorkerLimit int, cancelWorkerLimit int, pollAssoc bool, supportedDocs []model.DocumentType) *Processor {
-	log := context.Log()
-	config := context.AppConfig()
+func NewProcessor(ctx context.T, processorName string, processorService service.Service, commandWorkerLimit int, cancelWorkerLimit int, pollAssoc bool, supportedDocs []model.DocumentType) *Processor {
+	log := ctx.Log()
+	config := ctx.AppConfig()
 
 	instanceID, err := platform.InstanceID()
 	if instanceID == "" {
@@ -165,11 +178,6 @@ func NewProcessor(context context.T, processorName string, processorService serv
 	// create new message processor
 	orchestrationRootDir := filepath.Join(appconfig.DefaultDataStorePath, instanceID, appconfig.DefaultDocumentRootDirName, config.Agent.OrchestrationRootDir)
 
-	replyBuilder := func(pluginID string, results map[string]*contracts.PluginResult) messageContracts.SendReplyPayload {
-		runtimeStatuses := reply.PrepareRuntimeStatuses(log, results)
-		return reply.PrepareReplyPayload(pluginID, runtimeStatuses, clock.Now(), agentConfig.AgentInfo)
-	}
-
 	statusReplyBuilder := func(agentInfo contracts.AgentInfo, resultStatus contracts.ResultStatus, documentTraceOutput string) messageContracts.SendReplyPayload {
 		return parser.PrepareReplyPayloadToUpdateDocumentStatus(agentInfo, resultStatus, documentTraceOutput)
 
@@ -177,14 +185,7 @@ func NewProcessor(context context.T, processorName string, processorService serv
 	// create a stop policy where we will stop after 10 consecutive errors and if time period expires.
 	processorStopPolicy := newStopPolicy(processorName)
 
-	// SendResponse is used to send response on plugin completion.
-	// If pluginID is empty it will send responses of all plugins.
-	// If pluginID is specified, response will be sent of that particular plugin.
-	sendResponse := func(messageID string, pluginID string, results map[string]*contracts.PluginResult) {
-		payloadDoc := replyBuilder(pluginID, results)
-		processSendReply(log, messageID, processorService, payloadDoc, processorStopPolicy)
-	}
-
+	//TODO move this function to service
 	// SendDocLevelResponse is used to send document level update
 	// Specify a new status of the document
 	sendDocLevelResponse := func(messageID string, resultStatus contracts.ResultStatus, documentTraceOutput string) {
@@ -199,15 +200,15 @@ func NewProcessor(context context.T, processorName string, processorService serv
 
 	var assocProc *processor.Processor
 	if pollAssoc {
-		assocProc = processor.NewAssociationProcessor(context, instanceID)
+		assocProc = processor.NewAssociationProcessor(ctx, instanceID)
 	}
-	//TODO in future, this function object should be injected by service, and can have arguments to inject in executer's constructor
-	var executerCreator = func() executer.Executer {
-		return basicexecuter.NewBasicExecuter()
+	//TODO in future, this attribute should be injected by service
+	var executerCreator = func(ctx context.T) executer.Executer {
+		return basicexecuter.NewBasicExecuter(ctx)
 	}
 
 	return &Processor{
-		context:              context,
+		context:              ctx,
 		name:                 processorName,
 		stopSignal:           make(chan bool),
 		config:               agentConfig,
@@ -215,8 +216,6 @@ func NewProcessor(context context.T, processorName string, processorService serv
 		executerCreator:      executerCreator,
 		sendCommandPool:      sendCommandTaskPool,
 		cancelCommandPool:    cancelCommandTaskPool,
-		buildReply:           replyBuilder,
-		sendResponse:         sendResponse,
 		sendDocLevelResponse: sendDocLevelResponse,
 		orchestrationRootDir: orchestrationRootDir,
 		persistData:          persistData,

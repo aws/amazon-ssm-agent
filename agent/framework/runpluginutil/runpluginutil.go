@@ -27,10 +27,11 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/task"
 )
 
+//TODO remove legacy SendResponse
 // SendResponse is used to send response on plugin completion.
 // If pluginID is empty it will send responses of all plugins.
 // If pluginID is specified, response will be sent of that particular plugin.
-type SendResponse func(messageID string, pluginID string, results map[string]*contracts.PluginResult)
+type SendResponseLegacy func(messageID string, pluginID string, results map[string]*contracts.PluginResult)
 
 func NoReply(messageID string, pluginID string, results map[string]*contracts.PluginResult) {}
 
@@ -58,12 +59,12 @@ type PluginRunner struct {
 		documentCreatedDate string,
 		plugins []model.PluginState,
 		pluginRegistry PluginRegistry,
-		sendReply SendResponse,
+		sendReply SendResponseLegacy,
 		updateAssoc UpdateAssociation,
 		cancelFlag task.CancelFlag,
 	) (pluginOutputs map[string]*contracts.PluginResult)
 	Plugins     PluginRegistry
-	SendReply   SendResponse
+	SendReply   SendResponseLegacy
 	UpdateAssoc UpdateAssociation
 	CancelFlag  task.CancelFlag
 }
