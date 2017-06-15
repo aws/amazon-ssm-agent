@@ -69,7 +69,7 @@ func TestExecuteDocument(t *testing.T) {
 		documentCreateData string,
 		plugins []model.PluginState,
 		pluginRegistry PluginRegistry,
-		sendReply SendResponse,
+		sendReply SendResponseLegacy,
 		updateAssoc UpdateAssociation,
 		cancelFlag task.CancelFlag,
 	) (pluginOutputs map[string]*contracts.PluginResult) {

@@ -11,17 +11,16 @@
 // either express or implied. See the License for the specific language governing
 // permissions and limitations under the License.
 
+//TODO move this package to service, or contract package
 // Package reply provides utilities to parse reply payload
 package reply
 
 import (
-	"fmt"
-	"time"
-
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
+	"github.com/aws/amazon-ssm-agent/agent/docmanager"
+	"github.com/aws/amazon-ssm-agent/agent/docmanager/model"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	messageContracts "github.com/aws/amazon-ssm-agent/agent/message/contracts"
-	"github.com/aws/amazon-ssm-agent/agent/times"
 )
 
 //TODO once we remove the callback "SendReply", use this class to build reply
@@ -52,121 +51,18 @@ func (builder SendReplyBuilder) UpdatePluginResult(res contracts.PluginResult) e
 
 // build SendReply Payload from the internal plugins map
 func (builder SendReplyBuilder) FormatPayload(log log.T, pluginID string, agentInfo contracts.AgentInfo) messageContracts.SendReplyPayload {
-	statuses := PrepareRuntimeStatuses(log, builder.pluginResults)
-	return PrepareReplyPayload(pluginID, statuses, time.Now(), agentInfo)
+	docInfo := docmanager.DocumentResultAggregator(log, pluginID, builder.pluginResults)
+	return PrepareReplyPayload(docInfo, agentInfo)
 }
 
 // PrepareReplyPayload creates the payload object for SendReply based on plugin outputs.
-func PrepareReplyPayload(pluginID string,
-	runtimeStatuses map[string]*contracts.PluginRuntimeStatus,
-	dateTime time.Time,
-	agentInfo contracts.AgentInfo) (payload messageContracts.SendReplyPayload) {
-
-	// TODO instance this needs to be revised to be in parity with ec2config
-	documentStatus := contracts.ResultStatusSuccess
-	var runtimeStatusCounts = map[string]int{}
-	pluginCounts := len(runtimeStatuses)
-
-	for _, pluginResult := range runtimeStatuses {
-		runtimeStatusCounts[string(pluginResult.Status)]++
-	}
-	if pluginID == "" {
-		//	  New precedence order of plugin states
-		//	  Failed > TimedOut > Cancelled > Success > Cancelling > InProgress > Pending
-		//	  The above order is a contract between SSM service and agent and hence for the calculation of aggregate
-		//	  status of a (command) document, we follow the above precedence order.
-		//
-		//	  Note:
-		//	  A command could have been failed/cancelled even before a plugin started executing, during which pendingItems > 0
-		//	  but overallResult.Status would be Failed/Cancelled. That's the reason we check for OverallResult status along
-		//	  with number of failed/cancelled items.
-		//    TODO : We need to handle above to be able to send document traceoutput in case of document level errors.
-
-		// Skipped is a form of success
-		successCounts := runtimeStatusCounts[string(contracts.ResultStatusSuccess)] + runtimeStatusCounts[string(contracts.ResultStatusSkipped)]
-
-		if runtimeStatusCounts[string(contracts.ResultStatusSuccessAndReboot)] > 0 {
-			documentStatus = contracts.ResultStatusSuccessAndReboot
-		} else if runtimeStatusCounts[string(contracts.ResultStatusFailed)] > 0 {
-			documentStatus = contracts.ResultStatusFailed
-		} else if runtimeStatusCounts[string(contracts.ResultStatusTimedOut)] > 0 {
-			documentStatus = contracts.ResultStatusTimedOut
-		} else if runtimeStatusCounts[string(contracts.ResultStatusCancelled)] > 0 {
-			documentStatus = contracts.ResultStatusCancelled
-		} else if successCounts == pluginCounts {
-			documentStatus = contracts.ResultStatusSuccess
-		} else {
-			documentStatus = contracts.ResultStatusInProgress
-		}
-	} else {
-		documentStatus = contracts.ResultStatusInProgress
-	}
-
-	runtimeStatusesFiltered := make(map[string]*contracts.PluginRuntimeStatus)
-
-	if pluginID != "" {
-		runtimeStatusesFiltered[pluginID] = runtimeStatuses[pluginID]
-	} else {
-		runtimeStatusesFiltered = runtimeStatuses
-	}
-
+func PrepareReplyPayload(docInfo model.DocumentInfo, agentInfo contracts.AgentInfo) (payload messageContracts.SendReplyPayload) {
+	docInfo.AdditionalInfo.Agent = agentInfo
 	payload = messageContracts.SendReplyPayload{
-		AdditionalInfo: contracts.AdditionalInfo{
-			Agent:               agentInfo,
-			DateTime:            times.ToIso8601UTC(dateTime),
-			RuntimeStatusCounts: runtimeStatusCounts,
-		},
-		DocumentStatus:      documentStatus,
+		AdditionalInfo:      docInfo.AdditionalInfo,
+		DocumentStatus:      docInfo.DocumentStatus,
 		DocumentTraceOutput: "", // TODO: Fill me appropriately
-		RuntimeStatus:       runtimeStatusesFiltered,
+		RuntimeStatus:       docInfo.RuntimeStatus,
 	}
 	return
-}
-
-// PrepareRuntimeStatuses creates runtime statuses from plugin outputs.
-// contracts.PluginResult and contracts.PluginRuntimeStatus are mostly same.
-// however they are decoupled on purpose so that we can do any special handling / serializing when sending response to server side.
-func PrepareRuntimeStatuses(log log.T, pluginOutputs map[string]*contracts.PluginResult) (runtimeStatuses map[string]*contracts.PluginRuntimeStatus) {
-	runtimeStatuses = make(map[string]*contracts.PluginRuntimeStatus)
-	for pluginID, pluginResult := range pluginOutputs {
-		rs := prepareRuntimeStatus(log, *pluginResult)
-		runtimeStatuses[pluginID] = &rs
-	}
-	return
-}
-
-// prepareRuntimeStatus creates the structure for the runtimeStatus section of the payload of SendReply
-// for a particular plugin.
-func prepareRuntimeStatus(log log.T, pluginResult contracts.PluginResult) contracts.PluginRuntimeStatus {
-	var resultAsString string
-
-	if err := pluginResult.Error; err == nil {
-		resultAsString = fmt.Sprintf("%v", pluginResult.Output)
-	} else {
-		resultAsString = err.Error()
-	}
-
-	runtimeStatus := contracts.PluginRuntimeStatus{
-		Code:           pluginResult.Code,
-		Name:           pluginResult.PluginName,
-		Status:         pluginResult.Status,
-		Output:         resultAsString,
-		StartDateTime:  times.ToIso8601UTC(pluginResult.StartDateTime),
-		EndDateTime:    times.ToIso8601UTC(pluginResult.EndDateTime),
-		StandardOutput: pluginResult.StandardOutput,
-		StandardError:  pluginResult.StandardError,
-	}
-
-	if pluginResult.OutputS3BucketName != "" {
-		runtimeStatus.OutputS3BucketName = pluginResult.OutputS3BucketName
-		if pluginResult.OutputS3KeyPrefix != "" {
-			runtimeStatus.OutputS3KeyPrefix = pluginResult.OutputS3KeyPrefix
-		}
-	}
-
-	if runtimeStatus.Status == contracts.ResultStatusFailed && runtimeStatus.Code == 0 {
-		runtimeStatus.Code = 1
-	}
-
-	return runtimeStatus
 }

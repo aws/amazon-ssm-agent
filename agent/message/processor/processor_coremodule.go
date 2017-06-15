@@ -189,8 +189,6 @@ func (p *Processor) processInProgressDocuments(instanceID string) {
 				p.processSendCommandMessage(p.context.With("[messageID="+docState.DocumentInformation.MessageID+"]"),
 					p.service,
 					cancelFlag,
-					p.buildReply,
-					p.sendResponse,
 					&docState)
 
 			})

@@ -20,15 +20,14 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	docModel "github.com/aws/amazon-ssm-agent/agent/docmanager/model"
-	"github.com/aws/amazon-ssm-agent/agent/framework/runpluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
-	messageContracts "github.com/aws/amazon-ssm-agent/agent/message/contracts"
+	"github.com/aws/amazon-ssm-agent/agent/message/processor/executer"
 	executermock "github.com/aws/amazon-ssm-agent/agent/message/processor/executer/mock"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 	"github.com/stretchr/testify/assert"
 )
 
-var loggers = log.NewMockLog()
+var logger = log.NewMockLog()
 
 type TestCase struct {
 	// Msg stores a parsed MDS message as received from GetMessages.
@@ -39,9 +38,6 @@ type TestCase struct {
 
 	// PluginResults stores the (unmarshalled) results that the plugins are expected to produce.
 	PluginResults map[string]*contracts.PluginResult
-
-	// ReplyPayload stores the message payload expected to be sent via SendReply (contains marshalled plugin results).
-	ReplyPayload messageContracts.SendReplyPayload
 }
 
 // TestBasicExecuter test the execution of a given document
@@ -67,19 +63,16 @@ func TestBasicExecuter(t *testing.T) {
 	}
 
 	result := contracts.PluginResult{
-		Status: contracts.ResultStatusSuccess,
+		PluginName: "aws:runScript",
+		Status:     contracts.ResultStatusSuccess,
 	}
 	results := make(map[string]*contracts.PluginResult)
 	results[pluginState.Id] = &result
-	payload := messageContracts.SendReplyPayload{
-		DocumentStatus:      contracts.ResultStatusSuccess,
-		DocumentTraceOutput: "output",
-	}
+
 	//form test case
 	testCase := TestCase{
 		MsgId:         "aws.ssm.13e8e6ad-e195-4ccb-86ee-328153b0dafe.i-400e1090",
 		DocState:      docState,
-		ReplyPayload:  payload,
 		PluginResults: results,
 	}
 	testBasicExecuter(t, testCase)
@@ -88,42 +81,38 @@ func TestBasicExecuter(t *testing.T) {
 func testBasicExecuter(t *testing.T, testCase TestCase) {
 
 	cancelFlag := task.NewChanneledCancelFlag()
-
-	//TODO replace this callback with go channel
-	sendResponseCalled := false
-	sendResponse := func(messageID string, pluginID string, results map[string]*contracts.PluginResult) {
-		sendResponseCalled = true
-	}
-	buildReply := func(pluginID string, results map[string]*contracts.PluginResult) messageContracts.SendReplyPayload {
-		assert.Equal(t, results, testCase.PluginResults)
-		return testCase.ReplyPayload
-	}
-	pluginRunner = func(context context.T,
-		documentID string,
-		plugins []docModel.PluginState,
-		updateAssoc runpluginutil.UpdateAssociation,
-		sendResponse runpluginutil.SendResponse,
-		cancelFlag task.CancelFlag) (pluginOutputs map[string]*contracts.PluginResult) {
-		assert.Equal(t, plugins, testCase.DocState.InstancePluginsInformation)
-		return testCase.PluginResults
-	}
+	nPlugins := len(testCase.DocState.InstancePluginsInformation)
 
 	// call method under test
 	//orchestrationRootDir is set to empty such that it can meet the test expectation.
-	e := NewBasicExecuter()
+	e := NewBasicExecuter(context.NewMockDefault())
+
+	nStatusReceived := 0
+
 	state := testCase.DocState
 	dataStoreMock := executermock.MockDocumentStore{}
 	dataStoreMock.On("Load").Return(&state)
 	dataStoreMock.On("Save").Return()
+	pluginRunner = func(context context.T,
+		docStore executer.DocumentStore,
+		resChan chan contracts.PluginResult,
+		cancelFlag task.CancelFlag) {
+		assert.Equal(t, docStore, dataStoreMock)
+		for _, pluginState := range testCase.DocState.InstancePluginsInformation {
+			resChan <- *testCase.PluginResults[pluginState.Id]
+		}
+		docStore.Save()
+		close(resChan)
+	}
+	resChan := e.Run(cancelFlag, dataStoreMock)
 
-	e.Run(context.NewMockDefault(), cancelFlag, buildReply, nil, sendResponse, dataStoreMock)
+	for res := range resChan {
+		nStatusReceived++
+		assert.Equal(t, res, *testCase.PluginResults[res.PluginName])
 
-	// assert docState matched the testCase's reply payload
-	assert.Equal(t, testCase.ReplyPayload.DocumentStatus, state.DocumentInformation.DocumentStatus)
-	assert.Equal(t, testCase.ReplyPayload.RuntimeStatus, state.DocumentInformation.RuntimeStatus)
-	assert.Equal(t, testCase.ReplyPayload.DocumentTraceOutput, state.DocumentInformation.DocumentTraceOutput)
+	}
+	assert.Equal(t, nStatusReceived, nPlugins)
 
 	dataStoreMock.AssertExpectations(t)
-	// assert sendReponse is called
-	assert.True(t, sendResponseCalled)
+
 }

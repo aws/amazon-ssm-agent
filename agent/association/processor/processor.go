@@ -66,7 +66,7 @@ func NewAssociationProcessor(context context.T, instanceID string) *Processor {
 	config := assocContext.AppConfig()
 
 	taskPool := taskpool.NewTaskPool(log, documentWorkersLimit, cancelWaitDurationMillisecond)
-
+	//TODO this is what service should know
 	agentInfo := contracts.AgentInfo{
 		Lang:      config.Os.Lang,
 		Name:      config.Agent.Name,
