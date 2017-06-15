@@ -237,7 +237,7 @@ func (p *Processor) processSendCommandMessage(context context.T,
 	//TODO This will be changed to a function (or channel) that hands the result over to service
 	sendResponse := responseProvider(log, messageID, mdsService, p.config.AgentInfo, p.processorStopPolicy)
 	e := p.executerCreator(context)
-	docStore := executer.NewDocumentFileStore(context, documentID, instanceID, appconfig.DefaultLocationOfCurrent, docState)
+	docStore := executer.NewDocumentFileStore(context, instanceID, documentID, appconfig.DefaultLocationOfCurrent, docState)
 	resChan := e.Run(
 		cancelFlag,
 		&docStore,
