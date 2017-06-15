@@ -29,16 +29,14 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/association/taskpool"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
-	"github.com/aws/amazon-ssm-agent/agent/docmanager"
 	docModel "github.com/aws/amazon-ssm-agent/agent/docmanager/model"
 
+	"github.com/aws/amazon-ssm-agent/agent/docmanager"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
-	"github.com/aws/amazon-ssm-agent/agent/message/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/message/processor/executer"
 	"github.com/aws/amazon-ssm-agent/agent/message/processor/executer/basicexecuter"
 	"github.com/aws/amazon-ssm-agent/agent/platform"
-	"github.com/aws/amazon-ssm-agent/agent/reply"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 	"github.com/aws/amazon-ssm-agent/agent/times"
 )
@@ -46,6 +44,11 @@ import (
 const (
 	outputMessageTemplate string = "%v out of %v plugin%v processed, %v success, %v failed, %v timedout, %v skipped"
 )
+
+//TODO this should be the dependency injected into the association service later
+var executerCreator = func(assocContext context.T) executer.Executer {
+	return basicexecuter.NewBasicExecuter(assocContext)
+}
 
 // DocumentExecuter represents the interface for running a document
 type DocumentExecuter interface {
@@ -95,74 +98,76 @@ func (r *AssociationExecuter) ExecuteInProgressDocument(context context.T, docSt
 	log := assocContext.Log()
 
 	totalNumberOfActions := len(docState.InstancePluginsInformation)
-	//TODO build reply should be moved to Service
-	replyBuilder := func(pluginID string, results map[string]*contracts.PluginResult) model.SendReplyPayload {
-		runtimeStatuses := reply.PrepareRuntimeStatuses(log, results)
-		return reply.PrepareReplyPayload(pluginID, runtimeStatuses, time.Now(), *r.agentInfo)
-	}
-	//TODO we should have a creator for factory construct of Executer
-	e := basicexecuter.NewBasicExecuter()
-	instanceID, err := platform.InstanceID()
-	if err != nil {
-		log.Error("failed to load instance id ", err)
-		return
-	}
-	docStore := executer.NewDocumentFileStore(assocContext, instanceID, docState.DocumentInformation.DocumentID, appconfig.DefaultLocationOfCurrent, docState)
-	e.Run(assocContext, cancelFlag, replyBuilder, r.pluginExecutionReport, nil, &docStore)
 
-	//load the resulted document state
-	docState = docStore.Load()
+	assocID := docState.DocumentInformation.AssociationID
+	documentID := docState.DocumentInformation.DocumentID
+	instanceID := docState.DocumentInformation.InstanceID
+
+	//TODO we should have a creator for factory construct of Executer
+	e := executerCreator(assocContext)
+	docStore := executer.NewDocumentFileStore(assocContext, instanceID, documentID, appconfig.DefaultLocationOfCurrent, docState)
+
+	resChan := e.Run(cancelFlag, &docStore)
+	var outputs = make(map[string]*contracts.PluginResult)
+	for res := range resChan {
+		log.Infof("update association status upon plugin $v completion", res.PluginName)
+		outputs[res.PluginName] = &res
+		r.pluginExecutionReport(log, assocID, res.PluginName, outputs, totalNumberOfActions)
+	}
+
+	//TODO below is processor's responisbility, make sure them parity with Processor
+	newCmdState := docStore.Load()
 	// Skip sending response when the document requires a reboot
-	if docState.IsRebootRequired() {
-		log.Debugf("skipping sending response of %v since the document requires a reboot", docState.DocumentInformation.AssociationID)
+	if newCmdState.IsRebootRequired() {
+		log.Debugf("skipping sending response of %v since the document requires a reboot", newCmdState.DocumentInformation.AssociationID)
 		// stop execution signal if detects reboot
 		signal.StopExecutionSignal()
 		return
 	}
 
-	log.Debug("Association execution completion ", docState.InstancePluginsInformation)
-	log.Debug("Association execution status is ", docState.DocumentInformation.DocumentStatus)
-	if docState.DocumentInformation.DocumentStatus == contracts.ResultStatusFailed {
+	log.Debug("Association execution completion ", newCmdState.InstancePluginsInformation)
+	log.Debug("Association execution status is ", newCmdState.DocumentInformation.DocumentStatus)
+	if newCmdState.DocumentInformation.DocumentStatus == contracts.ResultStatusFailed {
 		r.associationExecutionReport(
 			log,
-			&docState.DocumentInformation,
-			docState.DocumentInformation.RuntimeStatus,
+			&newCmdState.DocumentInformation,
+			newCmdState.DocumentInformation.RuntimeStatus,
 			totalNumberOfActions,
 			contracts.AssociationErrorCodeExecutionError,
 			contracts.AssociationStatusFailed)
 
-	} else if docState.DocumentInformation.DocumentStatus == contracts.ResultStatusSuccess ||
-		docState.DocumentInformation.DocumentStatus == contracts.AssociationStatusTimedOut ||
-		docState.DocumentInformation.DocumentStatus == contracts.ResultStatusCancelled ||
-		docState.DocumentInformation.DocumentStatus == contracts.ResultStatusSkipped {
+	} else if newCmdState.DocumentInformation.DocumentStatus == contracts.ResultStatusSuccess ||
+		newCmdState.DocumentInformation.DocumentStatus == contracts.AssociationStatusTimedOut ||
+		newCmdState.DocumentInformation.DocumentStatus == contracts.ResultStatusCancelled ||
+		newCmdState.DocumentInformation.DocumentStatus == contracts.ResultStatusSkipped {
 		// Association should only update status when it's Failed, Success, TimedOut, Cancelled or Skipped as Final status
 		r.associationExecutionReport(
 			log,
-			&docState.DocumentInformation,
-			docState.DocumentInformation.RuntimeStatus,
+			&newCmdState.DocumentInformation,
+			newCmdState.DocumentInformation.RuntimeStatus,
 			totalNumberOfActions,
 			contracts.AssociationErrorCodeNoError,
-			string(docState.DocumentInformation.DocumentStatus))
+			string(newCmdState.DocumentInformation.DocumentStatus))
 	}
 
 	//persist : commands execution in completed folder (terminal state folder)
-	log.Debugf("execution of %v is over. Moving docState file from Current to Completed folder", docState.DocumentInformation.AssociationID)
+	log.Debugf("execution of %v is over. Moving newCmdState file from Current to Completed folder", newCmdState.DocumentInformation.AssociationID)
 	bookkeepingSvc.MoveDocumentState(log,
-		docState.DocumentInformation.DocumentID,
-		docState.DocumentInformation.InstanceID,
+		documentID,
+		instanceID,
 		appconfig.DefaultLocationOfCurrent,
 		appconfig.DefaultLocationOfCompleted)
 
 	//clean association logs once the document state is moved to completed
 	//clean completed document state files and orchestration dirs. Takes care of only files generated by association in the folder
-	go docmanager.DeleteOldDocumentFolderLogs(log,
-		docState.DocumentInformation.InstanceID,
+	go bookkeepingSvc.DeleteOldDocumentFolderLogs(log,
+		instanceID,
 		assocContext.AppConfig().Agent.OrchestrationRootDir,
 		context.AppConfig().Ssm.AssociationLogsRetentionDurationHours,
 		isAssociationLogFile,
 		formAssociationOrchestrationFolder)
-
-	schedulemanager.UpdateNextScheduledDate(log, docState.DocumentInformation.AssociationID)
+	//TODO move this part to service
+	schedulemanager.UpdateNextScheduledDate(log, newCmdState.DocumentInformation.AssociationID)
 	signal.ExecuteAssociation(log)
 }
 
@@ -183,44 +188,18 @@ func formAssociationOrchestrationFolder(documentStateFileName string) string {
 	return documentStateFileName
 }
 
-// parseAndPersistReplyContents reloads interimDocState, updates it with replyPayload and persist it on disk.
-func (r *AssociationExecuter) parseAndPersistReplyContents(log log.T,
-	docState *docModel.DocumentState,
-	pluginOutputs map[string]*contracts.PluginResult) {
-
-	//update interim cmd state file
-	docState.DocumentInformation = bookkeepingSvc.GetDocumentInfo(log,
-		docState.DocumentInformation.DocumentID,
-		docState.DocumentInformation.InstanceID,
-		appconfig.DefaultLocationOfCurrent)
-
-	runtimeStatuses := reply.PrepareRuntimeStatuses(log, pluginOutputs)
-	replyPayload := reply.PrepareReplyPayload("", runtimeStatuses, time.Now(), *r.agentInfo)
-
-	// set document level information which wasn't set previously
-	docState.DocumentInformation.AdditionalInfo = replyPayload.AdditionalInfo
-	docState.DocumentInformation.DocumentStatus = replyPayload.DocumentStatus
-	docState.DocumentInformation.DocumentTraceOutput = replyPayload.DocumentTraceOutput
-	docState.DocumentInformation.RuntimeStatus = replyPayload.RuntimeStatus
-
-	//persist final documentInfo.
-	bookkeepingSvc.PersistDocumentInfo(log,
-		docState.DocumentInformation,
-		docState.DocumentInformation.DocumentID,
-		docState.DocumentInformation.InstanceID,
-		appconfig.DefaultLocationOfCurrent)
-}
-
 // pluginExecutionReport allow engine to update progress after every plugin execution
-// TODO: documentCreatedDate is not used, remove it from the method
+// TODO: add unittest for this function
 func (r *AssociationExecuter) pluginExecutionReport(
 	log log.T,
 	associationID string,
-	documentCreatedDate string,
-	pluginOutputs map[string]*contracts.PluginResult,
+	pluginID string,
+	outputs map[string]*contracts.PluginResult,
 	totalNumberOfPlugins int) {
 
-	outputContent, err := jsonutil.Marshal(pluginOutputs)
+	docInfo := docmanager.DocumentResultAggregator(log, pluginID, outputs)
+	runtimeStatuses := docInfo.RuntimeStatus
+	outputContent, err := jsonutil.Marshal(runtimeStatuses)
 	if err != nil {
 		log.Error("could not marshal plugin outputs! ", err)
 		return
@@ -239,7 +218,6 @@ func (r *AssociationExecuter) pluginExecutionReport(
 		return
 	}
 
-	runtimeStatuses := reply.PrepareRuntimeStatuses(log, pluginOutputs)
 	executionSummary, outputUrl := buildOutput(runtimeStatuses, totalNumberOfPlugins)
 
 	r.assocSvc.UpdateInstanceAssociationStatus(
