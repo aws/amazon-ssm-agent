@@ -1,5 +1,10 @@
 Latest
 ===============
+- Various bug fixes
+
+2.0.822.0
+===============
+- [Bug] This version is not a valid update target from version 2.0.761.0.
 - Added support for using the OS proxy settings by default in Windows
 - Fixed issue preventing CloudWatch proxy settings from being retained on update
 - Various bug fixes
