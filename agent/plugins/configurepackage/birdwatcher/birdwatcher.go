@@ -24,6 +24,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/fileutil/artifact"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/birdwatcher/facade"
+	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/envdetect"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/packageservice"
 	"github.com/aws/amazon-ssm-agent/agent/sdkutil"
 	"github.com/aws/amazon-ssm-agent/agent/version"
@@ -36,6 +37,7 @@ import (
 type PackageService struct {
 	facadeClient  facade.BirdwatcherFacade
 	manifestCache packageservice.ManifestCache
+	collector     envdetect.Collector
 }
 
 // New constructor for PackageService
@@ -70,6 +72,7 @@ func New(log log.T, endpoint string, manifestCache packageservice.ManifestCache)
 	return &PackageService{
 		facadeClient:  ssm.New(facadeClientSession),
 		manifestCache: manifestCache,
+		collector:     &envdetect.CollectorImp{},
 	}
 }
 
@@ -92,7 +95,7 @@ func (ds *PackageService) DownloadArtifact(log log.T, packageName string, versio
 		}
 	}
 
-	file, err := findFileFromManifest(log, manifest)
+	file, err := ds.findFileFromManifest(log, manifest)
 	if err != nil {
 		return "", err
 	}
@@ -106,13 +109,7 @@ func (ds *PackageService) ReportResult(log log.T, result packageservice.PackageR
 	// TODO: collect as much as possible data:
 	// * AZ, instance id, instance type, platform, version, arch, init system, ...
 
-	instanceID, _ := platformProviderdep.InstanceID(log)
-	instanceType, _ := platformProviderdep.InstanceType(log)
-	region, _ := platformProviderdep.Region(log)
-	availabilityZone, _ := platformProviderdep.AvailabilityZone(log)
-	platformName, _ := platformProviderdep.Name(log)
-	platformVersion, _ := platformProviderdep.Version(log)
-	architecture, _ := platformProviderdep.Architecture(log)
+	env, _ := ds.collector.CollectData(log)
 
 	_, err := ds.facadeClient.PutConfigurePackageResult(
 		&ssm.PutConfigurePackageResultInput{
@@ -121,13 +118,13 @@ func (ds *PackageService) ReportResult(log log.T, result packageservice.PackageR
 			OverallTiming:  &result.Timing,
 			Result:         &result.Exitcode,
 			PackageResultAttributes: map[string]*string{
-				"platformName":     &platformName,
-				"platformVersion":  &platformVersion,
-				"architecture":     &architecture,
-				"instanceID":       &instanceID,
-				"instanceType":     &instanceType,
-				"region":           &region,
-				"availabilityZone": &availabilityZone,
+				"platformName":     &env.OperatingSystem.Platform,
+				"platformVersion":  &env.OperatingSystem.PlatformVersion,
+				"architecture":     &env.OperatingSystem.Architecture,
+				"instanceID":       &env.Ec2Infrastructure.InstanceID,
+				"instanceType":     &env.Ec2Infrastructure.InstanceType,
+				"region":           &env.Ec2Infrastructure.Region,
+				"availabilityZone": &env.Ec2Infrastructure.AvailabilityZone,
 			},
 		},
 	)
@@ -186,10 +183,10 @@ func parseManifest(data *[]byte) (*Manifest, error) {
 	return &manifest, nil
 }
 
-func findFileFromManifest(log log.T, manifest *Manifest) (*File, error) {
+func (ds *PackageService) findFileFromManifest(log log.T, manifest *Manifest) (*File, error) {
 	var file *File
 
-	pkginfo, err := extractPackageInfo(log, manifest)
+	pkginfo, err := ds.extractPackageInfo(log, manifest)
 	if err != nil {
 		return nil, fmt.Errorf("failed to find platform: %v", err)
 	}
@@ -231,31 +228,22 @@ func downloadFile(log log.T, file *File) (string, error) {
 }
 
 // ExtractPackageInfo returns the correct PackageInfo for the current instances platform/version/arch
-func extractPackageInfo(log log.T, manifest *Manifest) (*PackageInfo, error) {
-	name, err := platformProviderdep.Name(log)
+func (ds *PackageService) extractPackageInfo(log log.T, manifest *Manifest) (*PackageInfo, error) {
+	env, err := ds.collector.CollectData(log)
 	if err != nil {
-		return nil, fmt.Errorf("failed to detect platform: %v", err)
+		return nil, fmt.Errorf("failed to collect data: %v", err)
 	}
 
-	version, err := platformProviderdep.Version(log)
-	if err != nil {
-		return nil, fmt.Errorf("failed to detect platform version: %v", err)
-	}
-
-	arch, err := platformProviderdep.Architecture(log)
-	if err != nil {
-		return nil, fmt.Errorf("failed to detect architecture: %v", err)
-	}
-
-	if keyplatform, ok := matchPackageSelectorPlatform(name, manifest.Packages); ok {
-		if keyversion, ok := matchPackageSelectorVersion(version, manifest.Packages[keyplatform]); ok {
-			if keyarch, ok := matchPackageSelectorArch(arch, manifest.Packages[keyplatform][keyversion]); ok {
+	if keyplatform, ok := matchPackageSelectorPlatform(env.OperatingSystem.Platform, manifest.Packages); ok {
+		if keyversion, ok := matchPackageSelectorVersion(env.OperatingSystem.PlatformVersion, manifest.Packages[keyplatform]); ok {
+			if keyarch, ok := matchPackageSelectorArch(env.OperatingSystem.Architecture, manifest.Packages[keyplatform][keyversion]); ok {
 				return manifest.Packages[keyplatform][keyversion][keyarch], nil
 			}
 		}
 	}
 
-	return nil, fmt.Errorf("no manifest found for platform: %s, version %s, architecture %s", name, version, arch)
+	return nil, fmt.Errorf("no manifest found for platform: %s, version %s, architecture %s",
+		env.OperatingSystem.Platform, env.OperatingSystem.PlatformVersion, env.OperatingSystem.Architecture)
 }
 
 func matchPackageSelectorPlatform(key string, dict map[string]map[string]map[string]*PackageInfo) (string, bool) {
