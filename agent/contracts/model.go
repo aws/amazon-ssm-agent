@@ -140,35 +140,16 @@ type PluginConfig struct {
 	Description string      `json:"description"`
 }
 
-// For current release, precondition consists of single expression, in future this will
-// contain composite/nested expressions, i.e. map[string][]SingleExpression
-/* Examples:
-Current version -
-     {"StringEquals": ["platformType", "Windows"]},
-Future -
-     "And": [
-         {"StringEquals": ["platformType", "Windows"]},
-         {"StringEquals": ["platformVersion", "Server 2016"]}
-      ]
-*/
-type Precondition struct {
-	Precondition SingleExpression
-}
-
-type SingleExpression struct {
-	Expression map[string][]string
-}
-
 // InstancePluginConfig stores plugin configuration
 type InstancePluginConfig struct {
-	Action        string       `json:"action"` // plugin name
-	Inputs        interface{}  `json:"inputs"` // Properties
-	MaxAttempts   int          `json:"maxAttempts"`
-	Name          string       `json:"name"` // unique identifier
-	OnFailure     string       `json:"onFailure"`
-	Settings      interface{}  `json:"settings"`
-	Timeout       int          `json:"timeoutSeconds"`
-	Preconditions Precondition `json:"precondition"`
+	Action        string              `json:"action"` // plugin name
+	Inputs        interface{}         `json:"inputs"` // Properties
+	MaxAttempts   int                 `json:"maxAttempts"`
+	Name          string              `json:"name"` // unique identifier
+	OnFailure     string              `json:"onFailure"`
+	Settings      interface{}         `json:"settings"`
+	Timeout       int                 `json:"timeoutSeconds"`
+	Preconditions map[string][]string `json:"precondition"`
 }
 
 // DocumentContent object which represents ssm document content.

@@ -87,7 +87,7 @@ type Configuration struct {
 	PluginName              string
 	PluginID                string
 	DefaultWorkingDirectory string
-	Preconditions           Precondition
+	Preconditions           map[string][]string
 	IsPreconditionEnabled   bool
 }
 
