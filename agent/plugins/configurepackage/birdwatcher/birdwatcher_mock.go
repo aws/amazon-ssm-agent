@@ -17,8 +17,10 @@ package birdwatcher
 import (
 	"github.com/aws/amazon-ssm-agent/agent/fileutil/artifact"
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/envdetect"
 	"github.com/aws/aws-sdk-go/aws/request"
 	"github.com/aws/aws-sdk-go/service/ssm"
+	"github.com/stretchr/testify/mock"
 )
 
 // facadeMock
@@ -50,52 +52,6 @@ func (m *facadeMock) PutConfigurePackageResult(input *ssm.PutConfigurePackageRes
 	return m.putConfigurePackageResultOutput, m.putConfigurePackageResultError
 }
 
-// platformProviderMock
-type platformProviderMock struct {
-	name                string
-	nameerr             error
-	version             string
-	versionerr          error
-	architecture        string
-	architectureerr     error
-	instanceID          string
-	instaceIDerr        error
-	instanceType        string
-	instanceTypeerr     error
-	availabilityZone    string
-	availabilityZoneerr error
-	region              string
-	regionerr           error
-}
-
-func (p *platformProviderMock) Name(log log.T) (string, error) {
-	return p.name, p.nameerr
-}
-
-func (p *platformProviderMock) Version(log log.T) (string, error) {
-	return p.version, p.versionerr
-}
-
-func (p *platformProviderMock) Architecture(log log.T) (string, error) {
-	return p.architecture, p.architectureerr
-}
-
-func (p *platformProviderMock) InstanceID(log log.T) (string, error) {
-	return p.instanceID, p.instaceIDerr
-}
-
-func (p *platformProviderMock) InstanceType(log log.T) (string, error) {
-	return p.instanceType, p.instanceTypeerr
-}
-
-func (p *platformProviderMock) AvailabilityZone(log log.T) (string, error) {
-	return p.availabilityZone, p.availabilityZoneerr
-}
-
-func (p *platformProviderMock) Region(log log.T) (string, error) {
-	return p.region, p.regionerr
-}
-
 // networkMock
 type networkMock struct {
 	downloadInput  artifact.DownloadInput
@@ -106,4 +62,13 @@ type networkMock struct {
 func (p *networkMock) Download(log log.T, input artifact.DownloadInput) (artifact.DownloadOutput, error) {
 	p.downloadInput = input
 	return p.downloadOutput, p.downloadError
+}
+
+type CollectorMock struct {
+	mock.Mock
+}
+
+func (cd *CollectorMock) CollectData(log log.T) (*envdetect.Environment, error) {
+	args := cd.Called(log)
+	return args.Get(0).(*envdetect.Environment), args.Error(1)
 }
