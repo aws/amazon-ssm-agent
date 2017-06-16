@@ -226,7 +226,7 @@ func getStepExecutionOperation(
 	isSupported bool,
 	isPluginHandlerFound bool,
 	isPreconditionEnabled bool,
-	preconditions contracts.Precondition,
+	preconditions map[string][]string,
 ) (string, string) {
 	log.Debugf("isSupported flag = %t", isSupported)
 	log.Debugf("isPluginHandlerFound flag = %t", isPluginHandlerFound)
@@ -244,7 +244,7 @@ func getStepExecutionOperation(
 				"Plugin with name %s is not supported in current platform. Step name: %s",
 				pluginName,
 				pluginId)
-		} else if len(preconditions.Precondition.Expression) > 0 {
+		} else if len(preconditions) > 0 {
 			// if 1.x or 2.0 document contains precondition or plugin not found, failStep
 			return failStep, fmt.Sprintf(
 				"Precondition is not supported for document schema version prior to 2.2. Step name: %s",
@@ -259,7 +259,7 @@ func getStepExecutionOperation(
 		}
 	} else {
 		// 2.2 or higher (cross-platform) document
-		if len(preconditions.Precondition.Expression) == 0 {
+		if len(preconditions) == 0 {
 			log.Debug("Cross-platform Precondition is not present")
 
 			// precondition is not present - if pluginFound executeStep, else skipStep
@@ -304,7 +304,7 @@ func getStepExecutionOperation(
 // Evaluate precondition and return precondition result and unrecognized preconditions (if any)
 func evaluatePreconditions(
 	log log.T,
-	preconditions contracts.Precondition,
+	preconditions map[string][]string,
 ) (bool, []string) {
 
 	var isAllowed = true
@@ -312,7 +312,7 @@ func evaluatePreconditions(
 
 	// For current release, we only support "StringEquals" operator and "platformType"
 	// operand, so explicitly checking for those and number of operands must be 2
-	for key, value := range preconditions.Precondition.Expression {
+	for key, value := range preconditions {
 		switch key {
 		case "StringEquals":
 			// Platform type of OS on the instance

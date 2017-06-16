@@ -496,9 +496,7 @@ func TestRunPluginsWithCompatiblePrecondition(t *testing.T) {
 	defaultOutput := "output"
 	pluginConfigs2 := make([]model.PluginState, len(pluginNames))
 
-	var expression = map[string][]string{"StringEquals": []string{"platformType", "Linux"}}
-	var singleExpression = contracts.SingleExpression{expression}
-	preconditions := contracts.Precondition{singleExpression}
+	preconditions := map[string][]string{"StringEquals": []string{"platformType", "Linux"}}
 
 	for index, name := range pluginNames {
 
@@ -587,9 +585,7 @@ func TestRunPluginsWithCompatiblePreconditionWithValueFirst(t *testing.T) {
 	defaultOutput := "output"
 	pluginConfigs2 := make([]model.PluginState, len(pluginNames))
 
-	var expression = map[string][]string{"StringEquals": []string{"Linux", "platformType"}}
-	var singleExpression = contracts.SingleExpression{expression}
-	preconditions := contracts.Precondition{singleExpression}
+	preconditions := map[string][]string{"StringEquals": []string{"Linux", "platformType"}}
 
 	for index, name := range pluginNames {
 
@@ -677,9 +673,7 @@ func TestRunPluginsWithIncompatiblePrecondition(t *testing.T) {
 	defaultOutput := ""
 	pluginConfigs2 := make([]model.PluginState, len(pluginNames))
 
-	var expression = map[string][]string{"StringEquals": []string{"platformType", "Windows"}}
-	var singleExpression = contracts.SingleExpression{expression}
-	preconditions := contracts.Precondition{singleExpression}
+	preconditions := map[string][]string{"StringEquals": []string{"platformType", "Windows"}}
 
 	for index, name := range pluginNames {
 
@@ -766,9 +760,7 @@ func TestRunPluginsWithCompatiblePreconditionButMissingPluginHandler(t *testing.
 	defaultOutput := ""
 	pluginConfigs2 := make([]model.PluginState, len(pluginNames))
 
-	var expression = map[string][]string{"StringEquals": []string{"platformType", "Linux"}}
-	var singleExpression = contracts.SingleExpression{expression}
-	preconditions := contracts.Precondition{singleExpression}
+	preconditions := map[string][]string{"StringEquals": []string{"platformType", "Linux"}}
 
 	for index, name := range pluginNames {
 
@@ -853,12 +845,10 @@ func TestRunPluginsWithMoreThanOnePrecondition(t *testing.T) {
 	defaultOutput := ""
 	pluginConfigs2 := make([]model.PluginState, len(pluginNames))
 
-	var expression = map[string][]string{
+	preconditions := map[string][]string{
 		"StringEquals": []string{"platformType", "Linux"},
 		"foo":          []string{"operand1", "operand2"},
 	}
-	var singleExpression = contracts.SingleExpression{expression}
-	preconditions := contracts.Precondition{singleExpression}
 
 	for index, name := range pluginNames {
 
@@ -950,9 +940,7 @@ func TestRunPluginsWithUnrecognizedPreconditionOperator(t *testing.T) {
 	defaultOutput := ""
 	pluginConfigs2 := make([]model.PluginState, len(pluginNames))
 
-	var expression = map[string][]string{"foo": []string{"platformType", "Linux"}}
-	var singleExpression = contracts.SingleExpression{expression}
-	preconditions := contracts.Precondition{singleExpression}
+	preconditions := map[string][]string{"foo": []string{"platformType", "Linux"}}
 
 	for index, name := range pluginNames {
 
@@ -1044,9 +1032,7 @@ func TestRunPluginsWithUnrecognizedPreconditionOperand(t *testing.T) {
 	defaultOutput := ""
 	pluginConfigs2 := make([]model.PluginState, len(pluginNames))
 
-	var expression = map[string][]string{"StringEquals": []string{"foo", "Linux"}}
-	var singleExpression = contracts.SingleExpression{expression}
-	preconditions := contracts.Precondition{singleExpression}
+	preconditions := map[string][]string{"StringEquals": []string{"foo", "Linux"}}
 
 	for index, name := range pluginNames {
 
@@ -1139,9 +1125,7 @@ func TestRunPluginsWithUnrecognizedPreconditionDuplicateVariable(t *testing.T) {
 	defaultOutput := ""
 	pluginConfigs2 := make([]model.PluginState, len(pluginNames))
 
-	var expression = map[string][]string{"StringEquals": []string{"platformType", "platformType"}}
-	var singleExpression = contracts.SingleExpression{expression}
-	preconditions := contracts.Precondition{singleExpression}
+	preconditions := map[string][]string{"StringEquals": []string{"platformType", "platformType"}}
 
 	for index, name := range pluginNames {
 
@@ -1233,9 +1217,7 @@ func TestRunPluginsWithMoreThanTwoPreconditionOperands(t *testing.T) {
 	defaultOutput := ""
 	pluginConfigs2 := make([]model.PluginState, len(pluginNames))
 
-	var expression = map[string][]string{"StringEquals": []string{"platformType", "Linux", "foo"}}
-	var singleExpression = contracts.SingleExpression{expression}
-	preconditions := contracts.Precondition{singleExpression}
+	preconditions := map[string][]string{"StringEquals": []string{"platformType", "Linux", "foo"}}
 
 	for index, name := range pluginNames {
 
@@ -1327,9 +1309,7 @@ func TestRunPluginsWithUnknownPlugin(t *testing.T) {
 	defaultOutput := ""
 	pluginConfigs2 := make([]model.PluginState, len(pluginNames))
 
-	var expression = map[string][]string{"StringEquals": []string{"platformType", "Linux"}}
-	var singleExpression = contracts.SingleExpression{expression}
-	preconditions := contracts.Precondition{singleExpression}
+	preconditions := map[string][]string{"StringEquals": []string{"platformType", "Linux"}}
 
 	for index, name := range pluginNames {
 
