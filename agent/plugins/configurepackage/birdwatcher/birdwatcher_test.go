@@ -20,9 +20,13 @@ import (
 
 	"github.com/aws/amazon-ssm-agent/agent/fileutil/artifact"
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/envdetect"
+	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/envdetect/ec2infradetect"
+	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/envdetect/osdetect"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/packageservice"
 	"github.com/aws/aws-sdk-go/service/ssm"
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/mock"
 )
 
 var loggerMock = log.NewMockLog()
@@ -58,13 +62,7 @@ func manifestPackageGen(sel *[]pkgselector) pkgtree {
 	return result
 }
 
-func TestExtracePackageInfo(t *testing.T) {
-	platformProviderdep = &platformProviderMock{
-		name:         platformName,
-		version:      platformVersion,
-		architecture: architecture,
-	}
-
+func TestExtractPackageInfo(t *testing.T) {
 	data := []struct {
 		name        string
 		manifest    *Manifest
@@ -188,7 +186,20 @@ func TestExtracePackageInfo(t *testing.T) {
 
 	for _, testdata := range data {
 		t.Run(testdata.name, func(t *testing.T) {
-			result, err := extractPackageInfo(loggerMock, testdata.manifest)
+			mockedCollector := CollectorMock{}
+
+			mockedCollector.On("CollectData", mock.Anything).Return(&envdetect.Environment{
+				&osdetect.OperatingSystem{platformName, platformVersion, "", architecture, "", ""},
+				nil,
+			}, nil).Once()
+
+			facadeClientMock := facadeMock{
+				putConfigurePackageResultOutput: &ssm.PutConfigurePackageResultOutput{},
+			}
+
+			ds := &PackageService{facadeClient: &facadeClientMock, manifestCache: packageservice.ManifestCacheMemNew(), collector: &mockedCollector}
+
+			result, err := ds.extractPackageInfo(loggerMock, testdata.manifest)
 			if testdata.expectedErr {
 				assert.Error(t, err)
 			} else {
@@ -199,63 +210,12 @@ func TestExtracePackageInfo(t *testing.T) {
 	}
 }
 
-func TestExtracePackageInfoError(t *testing.T) {
-	var manifest Manifest // not used
-
-	data := []struct {
-		name        string
-		provider    platformProviderDep
-		expectedErr string
-	}{
-		{
-			"error in platform detection",
-			&platformProviderMock{
-				nameerr: errors.New("testerror"),
-			},
-			"failed to detect platform: testerror",
-		},
-		{
-			"error in version detection",
-			&platformProviderMock{
-				versionerr: errors.New("testerror"),
-			},
-			"failed to detect platform version: testerror",
-		},
-		{
-			"error in arch detection",
-			&platformProviderMock{
-				architectureerr: errors.New("testerror"),
-			},
-			"failed to detect architecture: testerror",
-		},
-	}
-
-	for _, testdata := range data {
-		t.Run(testdata.name, func(t *testing.T) {
-			platformProviderdep = testdata.provider
-
-			_, err := extractPackageInfo(loggerMock, &manifest)
-			assert.EqualError(t, err, testdata.expectedErr)
-		})
-	}
-}
-
 func TestReportResult(t *testing.T) {
 	pkgresult := packageservice.PackageResult{
 		PackageName: "name",
 		Version:     "1234",
 		Timing:      29347,
 		Exitcode:    815,
-	}
-
-	platformProviderdep = &platformProviderMock{
-		name:             "abc",
-		version:          "567",
-		architecture:     "xyz",
-		instanceID:       "instanceIDX",
-		instanceType:     "instanceTypeZ",
-		availabilityZone: "AZ1",
-		region:           "Reg1",
 	}
 
 	data := []struct {
@@ -281,7 +241,13 @@ func TestReportResult(t *testing.T) {
 
 	for _, testdata := range data {
 		t.Run(testdata.name, func(t *testing.T) {
-			ds := &PackageService{facadeClient: &testdata.facadeClient, manifestCache: packageservice.ManifestCacheMemNew()}
+			mockedCollector := CollectorMock{}
+
+			mockedCollector.On("CollectData", mock.Anything).Return(&envdetect.Environment{
+				&osdetect.OperatingSystem{"abc", "567", "", "xyz", "", ""},
+				&ec2infradetect.Ec2Infrastructure{"instanceIDX", "Reg1", "", "AZ1", "instanceTypeZ"},
+			}, nil).Once()
+			ds := &PackageService{facadeClient: &testdata.facadeClient, manifestCache: packageservice.ManifestCacheMemNew(), collector: &mockedCollector}
 
 			err := ds.ReportResult(loggerMock, pkgresult)
 			if testdata.expectedErr {
@@ -361,7 +327,14 @@ func TestDownloadManifest(t *testing.T) {
 
 	for _, testdata := range data {
 		t.Run(testdata.name, func(t *testing.T) {
-			ds := &PackageService{facadeClient: &testdata.facadeClient, manifestCache: packageservice.ManifestCacheMemNew()}
+			mockedCollector := CollectorMock{}
+			envdata := &envdetect.Environment{
+				&osdetect.OperatingSystem{"abc", "567", "", "xyz", "", ""},
+				&ec2infradetect.Ec2Infrastructure{"instanceIDX", "Reg1", "", "AZ1", "instanceTypeZ"},
+			}
+
+			mockedCollector.On("CollectData", mock.Anything).Return(envdata, nil).Once()
+			ds := &PackageService{facadeClient: &testdata.facadeClient, manifestCache: packageservice.ManifestCacheMemNew(), collector: &mockedCollector}
 
 			result, err := ds.DownloadManifest(loggerMock, testdata.packageName, testdata.packageVersion)
 
@@ -380,16 +353,6 @@ func TestDownloadManifest(t *testing.T) {
 }
 
 func TestFindFileFromManifest(t *testing.T) {
-	platformProviderdep = &platformProviderMock{
-		name:             "platformName",
-		version:          "platformVersion",
-		architecture:     "architecture",
-		instanceID:       "instanceID",
-		instanceType:     "instanceType",
-		availabilityZone: "availabilityZone",
-		region:           "region",
-	}
-
 	data := []struct {
 		name        string
 		manifest    *Manifest
@@ -444,7 +407,19 @@ func TestFindFileFromManifest(t *testing.T) {
 
 	for _, testdata := range data {
 		t.Run(testdata.name, func(t *testing.T) {
-			result, err := findFileFromManifest(loggerMock, testdata.manifest)
+			mockedCollector := CollectorMock{}
+
+			mockedCollector.On("CollectData", mock.Anything).Return(&envdetect.Environment{
+				&osdetect.OperatingSystem{"platformName", "platformVersion", "", "architecture", "", ""},
+				&ec2infradetect.Ec2Infrastructure{"instanceID", "region", "", "availabilityZone", "instanceType"},
+			}, nil).Once()
+
+			facadeClientMock := facadeMock{
+				putConfigurePackageResultOutput: &ssm.PutConfigurePackageResultOutput{},
+			}
+			ds := &PackageService{facadeClient: &facadeClientMock, manifestCache: packageservice.ManifestCacheMemNew(), collector: &mockedCollector}
+
+			result, err := ds.findFileFromManifest(loggerMock, testdata.manifest)
 
 			if testdata.expectedErr {
 				assert.Error(t, err)
@@ -529,15 +504,6 @@ func TestDownloadFile(t *testing.T) {
 }
 
 func TestDownloadArtifact(t *testing.T) {
-	platformProviderdep = &platformProviderMock{
-		name:             "platformName",
-		version:          "platformVersion",
-		architecture:     "architecture",
-		instanceID:       "instanceID",
-		instanceType:     "instanceType",
-		availabilityZone: "availabilityZone",
-		region:           "region",
-	}
 	manifestStr := `
 	{
 		"packages": {
@@ -589,7 +555,14 @@ func TestDownloadArtifact(t *testing.T) {
 			cache := packageservice.ManifestCacheMemNew()
 			cache.WriteManifest(testdata.packageName, testdata.packageVersion, []byte(manifestStr))
 
-			ds := &PackageService{manifestCache: cache}
+			mockedCollector := CollectorMock{}
+
+			mockedCollector.On("CollectData", mock.Anything).Return(&envdetect.Environment{
+				&osdetect.OperatingSystem{"platformName", "platformVersion", "", "architecture", "", ""},
+				&ec2infradetect.Ec2Infrastructure{"instanceID", "region", "", "availabilityZone", "instanceType"},
+			}, nil).Once()
+
+			ds := &PackageService{manifestCache: cache, collector: &mockedCollector}
 			networkdep = &testdata.network
 
 			result, err := ds.DownloadArtifact(loggerMock, testdata.packageName, testdata.packageVersion)
