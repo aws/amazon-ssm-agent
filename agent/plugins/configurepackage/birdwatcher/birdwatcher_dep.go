@@ -15,11 +15,8 @@
 package birdwatcher
 
 import (
-	"runtime"
-
 	"github.com/aws/amazon-ssm-agent/agent/fileutil/artifact"
 	"github.com/aws/amazon-ssm-agent/agent/log"
-	"github.com/aws/amazon-ssm-agent/agent/platform"
 )
 
 // dependency on S3 and downloaded artifacts
@@ -33,47 +30,4 @@ type networkDepImp struct{}
 
 func (networkDepImp) Download(log log.T, input artifact.DownloadInput) (artifact.DownloadOutput, error) {
 	return artifact.Download(log, input)
-}
-
-// dependency on platform detection
-type platformProviderDep interface {
-	Name(log log.T) (string, error)
-	Version(log log.T) (string, error)
-	Architecture(log log.T) (string, error)
-	InstanceID(log log.T) (string, error)
-	InstanceType(log log.T) (string, error)
-	AvailabilityZone(log log.T) (string, error)
-	Region(log log.T) (string, error)
-}
-
-var platformProviderdep platformProviderDep = &platformProviderDepImp{}
-
-type platformProviderDepImp struct{}
-
-func (*platformProviderDepImp) Name(log log.T) (string, error) {
-	return platform.PlatformName(log)
-}
-
-func (*platformProviderDepImp) Version(log log.T) (string, error) {
-	return platform.PlatformVersion(log)
-}
-
-func (*platformProviderDepImp) Architecture(log log.T) (string, error) {
-	return runtime.GOARCH, nil
-}
-
-func (*platformProviderDepImp) InstanceID(log log.T) (string, error) {
-	return platform.InstanceID()
-}
-
-func (*platformProviderDepImp) InstanceType(log log.T) (string, error) {
-	return platform.InstanceType()
-}
-
-func (*platformProviderDepImp) AvailabilityZone(log log.T) (string, error) {
-	return platform.AvailabilityZone()
-}
-
-func (*platformProviderDepImp) Region(log log.T) (string, error) {
-	return platform.Region()
 }
