@@ -38,16 +38,19 @@ type DownloadDelegate func(targetDirectory string) error
 // InstallState is an enum describing the installation state of a package
 type InstallState uint
 
+// NOTE: Do not change the order of this enum - the numeric value is serialized as package state and must deserialize to the same value
 const (
-	None         InstallState = iota // Package version not present in repository
-	Unknown      InstallState = iota // Present in repository but no state information or corrupt state
-	Failed       InstallState = iota // Installation of the package version was attempted but failed
-	Uninstalling InstallState = iota // Package version being uninstalled version but not yet uninstalled
-	Uninstalled  InstallState = iota // Successfully uninstalled version of a package (but not yet deleted)
-	New          InstallState = iota // Present in the repository but not yet installed
-	Upgrading    InstallState = iota // Uninstalling previous version
-	Installing   InstallState = iota // Package version being installed but not yet installed
-	Installed    InstallState = iota // Successfully installed version of a package
+	None              InstallState = iota // Package version not present in repository
+	Unknown           InstallState = iota // Present in repository but no state information or corrupt state
+	Failed            InstallState = iota // Installation of the package version was attempted but failed
+	Uninstalling      InstallState = iota // Package version being uninstalled version but not yet uninstalled
+	Uninstalled       InstallState = iota // Successfully uninstalled version of a package (but not yet deleted)
+	New               InstallState = iota // Present in the repository but not yet installed
+	Upgrading         InstallState = iota // Uninstalling previous version
+	Installing        InstallState = iota // Package version being installed but not yet installed
+	Installed         InstallState = iota // Successfully installed version of a package
+	RollbackUninstall InstallState = iota // Uninstalling as part of rollback
+	RollbackInstall   InstallState = iota // Installing as part of rollback
 )
 
 // Repository represents local storage for packages managed by configurePackage
@@ -104,6 +107,8 @@ func (repo *localRepository) GetInstaller(context context.T,
 	packageName string,
 	version string) installer.Installer {
 
+	// Give each version an independent orchestration directory to support install and uninstall for two versions during rollback
+	configuration.OrchestrationDirectory = filepath.Join(configuration.OrchestrationDirectory, normalizeDirectory(version))
 	return ssminstaller.New(packageName,
 		version,
 		repo.getPackageVersionPath(packageName, version),
@@ -148,12 +153,21 @@ func (repo *localRepository) AddPackage(context context.T, packageName string, v
 	if err := repo.filesysdep.MakeDirExecute(packagePath); err != nil {
 		return err
 	}
-	return downloader(packagePath)
+	if err := downloader(packagePath); err != nil {
+		return err
+	}
+	// if no previous version, set state to new
+	repo.SetInstallState(context, packageName, version, New)
+
+	return nil
 }
 
 // SetInstallState flags the state of a version of a package downloaded to the repository for installation
 func (repo *localRepository) SetInstallState(context context.T, packageName string, version string, state InstallState) error {
 	var packageState = repo.loadInstallState(repo.filesysdep, context, packageName)
+	if state == New && packageState.State != None {
+		return nil
+	}
 	packageState.Version = version
 	packageState.Time = time.Now()
 	if packageState.State == state {

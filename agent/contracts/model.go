@@ -31,6 +31,24 @@ const (
 	ResultStatusSkipped          ResultStatus = "Skipped"
 )
 
+func (rs ResultStatus) IsSuccess() bool {
+	switch rs {
+	case ResultStatusSuccess, ResultStatusPassedAndReboot, ResultStatusSuccessAndReboot:
+		return true
+	default:
+		return false
+	}
+}
+
+func (rs ResultStatus) IsReboot() bool {
+	switch rs {
+	case ResultStatusPassedAndReboot, ResultStatusSuccessAndReboot:
+		return true
+	default:
+		return false
+	}
+}
+
 // MergeResultStatus takes two ResultStatuses (presumably from sub-tasks) and decides what the overall task status should be
 func MergeResultStatus(current ResultStatus, new ResultStatus) (merged ResultStatus) {
 	orderedResultStatus := [...]ResultStatus{

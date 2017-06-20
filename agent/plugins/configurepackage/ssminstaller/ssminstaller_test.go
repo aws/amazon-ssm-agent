@@ -32,17 +32,31 @@ const testPackagePath = "testdata"
 
 var contextMock context.T = context.NewMockDefault()
 
+func TestPackageName(t *testing.T) {
+	testName := "TestName"
+	testVersion := "TestVersion"
+	inst := Installer{packageName: testName, version: testVersion}
+	assert.Equal(t, testName, inst.packageName)
+}
+
+func TestPackageVersion(t *testing.T) {
+	testName := "TestName"
+	testVersion := "TestVersion"
+	inst := Installer{packageName: testName, version: testVersion}
+	assert.Equal(t, testVersion, inst.version)
+}
+
 func TestReadAction(t *testing.T) {
 	// Setup mock with expectations
 	mockFileSys := MockedFileSys{}
 	mockFileSys.On("Exists", path.Join(testPackagePath, "Foo.json")).Return(true).Once()
 	mockFileSys.On("ReadFile", path.Join(testPackagePath, "Foo.json")).Return(loadFile(t, path.Join(testPackagePath, "valid-action.json")), nil).Once()
 
-	// Instantiate repository with mock
-	repo := Installer{filesysdep: &mockFileSys, packagePath: testPackagePath}
+	// Instantiate installer with mock
+	inst := Installer{filesysdep: &mockFileSys, packagePath: testPackagePath}
 
 	// Call and validate mock expectations and return value
-	exists, actionDoc, workingDir, err := repo.readAction(contextMock, "Foo")
+	exists, actionDoc, workingDir, err := inst.readAction(contextMock, "Foo")
 	mockFileSys.AssertExpectations(t)
 	assert.True(t, exists)
 	assert.NotEmpty(t, actionDoc)
@@ -56,11 +70,11 @@ func TestReadActionInvalid(t *testing.T) {
 	mockFileSys.On("Exists", path.Join(testPackagePath, "Foo.json")).Return(true).Once()
 	mockFileSys.On("ReadFile", path.Join(testPackagePath, "Foo.json")).Return(loadFile(t, path.Join(testPackagePath, "invalid-action.json")), nil).Once()
 
-	// Instantiate repository with mock
-	repo := Installer{filesysdep: &mockFileSys, packagePath: testPackagePath}
+	// Instantiate installer with mock
+	inst := Installer{filesysdep: &mockFileSys, packagePath: testPackagePath}
 
 	// Call and validate mock expectations and return value
-	exists, actionDoc, workingDir, err := repo.readAction(contextMock, "Foo")
+	exists, actionDoc, workingDir, err := inst.readAction(contextMock, "Foo")
 	mockFileSys.AssertExpectations(t)
 	assert.True(t, exists)
 	assert.Empty(t, actionDoc)
