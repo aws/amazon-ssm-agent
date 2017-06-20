@@ -32,13 +32,16 @@ import (
 )
 
 const (
-	// RegionHolder represents Place holder for Region
+	// EndpointHolder represent placeholder for S3 endpoint
+	EndpointHolder = "{Endpoint}"
+
+	// RegionHolder represents placeholder for region
 	RegionHolder = "{Region}"
 
-	// PlatformHolder represents Place holder for platform
+	// PlatformHolder represents placeholder for platform
 	PlatformHolder = "{Platform}"
 
-	// ArchHolder represents Place holder for Arch
+	// ArchHolder represents placeholder for Arch
 	ArchHolder = "{Arch}"
 
 	// PackageNameFormat represents the package name format based
@@ -46,16 +49,13 @@ const (
 
 	// PackageURLStandard represents the s3 folder where all versions of a package live
 	// the url to a specific package has a format like https://s3.us-east-1.amazonaws.com/amazon-ssm-packages-us-east-1/Packages/Test/windows/amd64/1.0.0/Test.zip
-	PackageURLStandard = "https://s3.{Region}.amazonaws.com/amazon-ssm-packages-{Region}/Packages/{PackageName}/{Platform}/{Arch}"
+	PackageURLStandard = "https://{Endpoint}/amazon-ssm-packages-{Region}/Packages/{PackageName}/{Platform}/{Arch}"
 
 	// PackageURLBeta is the s3 location for ad-hoc testing by package developers
-	PackageURLBeta = "https://s3.us-east-1.amazonaws.com/amazon-ssm-packages-beta/Packages/{PackageName}/{Platform}/{Arch}"
+	PackageURLBeta = "https://s3.amazonaws.com/amazon-ssm-packages-beta/Packages/{PackageName}/{Platform}/{Arch}"
 
 	// PackageURLGamma is the s3 location for internal pre-production testing
-	PackageURLGamma = "https://s3.us-east-1.amazonaws.com/amazon-ssm-packages-us-east-1-gamma/Packages/{PackageName}/{Platform}/{Arch}"
-
-	// PackageURLBjs is the s3 location for BJS region where all packages live
-	PackageURLBjs = "https://s3.{Region}.amazonaws.com.cn/amazon-ssm-packages-{Region}/Packages/{PackageName}/{Platform}/{Arch}"
+	PackageURLGamma = "https://s3.amazonaws.com/amazon-ssm-packages-us-east-1-gamma/Packages/{PackageName}/{Platform}/{Arch}"
 
 	// PackageNameSuffix represents (when concatenated with the correct package url) the s3 location of a specific version of a package
 	PackageNameSuffix = "/{PackageVersion}/" + PackageNameFormat
@@ -68,17 +68,16 @@ type PackageService struct {
 	packageURL string
 }
 
-func New(log log.T, repository string, region string) packageservice.PackageService {
+func New(repository string, region string) *PackageService {
 	var packageURL string
 	if repository == "beta" {
 		packageURL = PackageURLBeta
 	} else if repository == "gamma" {
 		packageURL = PackageURLGamma
-	} else if region == s3util.RegionBJS {
-		packageURL = PackageURLBjs
 	} else {
 		packageURL = PackageURLStandard
 	}
+	packageURL = strings.Replace(packageURL, EndpointHolder, s3util.GetS3Endpoint(region), -1)
 	packageURL = strings.Replace(packageURL, RegionHolder, region, -1)
 	packageURL = strings.Replace(packageURL, PlatformHolder, appconfig.PackagePlatform, -1)
 	packageURL = strings.Replace(packageURL, ArchHolder, runtime.GOARCH, -1)

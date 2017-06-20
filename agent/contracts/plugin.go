@@ -120,7 +120,9 @@ func (out *PluginOutput) MarkAsFailed(log log.T, err error) {
 		out.ExitCode = 1
 	}
 	out.Status = ResultStatusFailed
-	out.AppendError(log, err.Error())
+	if err != nil {
+		out.AppendError(log, err.Error())
+	}
 }
 
 // MarkAsSucceeded marks plugin as Successful.

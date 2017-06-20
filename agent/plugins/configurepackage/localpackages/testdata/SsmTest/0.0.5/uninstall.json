@@ -6,8 +6,11 @@
 			"properties": [{
 				"id": "0.aws:runPowerShellScript",
 				"runCommand": [
+	                                "if (!(Test-Path(\"test_uninstalled.txt\"))) {",
 					"cp test_installed.txt test_uninstalled.txt",
-					"exit 3010"
+					"exit 3010",
+					"}",
+					"exit 0"
 				]
 			}]
 		}

@@ -39,3 +39,13 @@ func (inst *Mock) Validate(context context.T) *contracts.PluginOutput {
 	args := inst.Called(context)
 	return args.Get(0).(*contracts.PluginOutput)
 }
+
+func (inst *Mock) Version() string {
+	args := inst.Called()
+	return args.String(0)
+}
+
+func (inst *Mock) PackageName() string {
+	args := inst.Called()
+	return args.String(0)
+}
