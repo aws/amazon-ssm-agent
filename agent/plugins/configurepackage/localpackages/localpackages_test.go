@@ -231,6 +231,30 @@ func TestAddPackage(t *testing.T) {
 	// Setup mock with expectations
 	mockFileSys := MockedFileSys{}
 	mockFileSys.On("MakeDirExecute", path.Join(testRepoRoot, testPackage, version)).Return(nil).Once()
+	mockFileSys.On("Exists", path.Join(testRepoRoot, testPackage, "installstate")).Return(true).Once()
+	mockFileSys.On("ReadFile", path.Join(testRepoRoot, testPackage, "installstate")).Return(loadFile(t, path.Join(testRepoRoot, testPackage, "installstate_success")), nil).Once()
+
+	mockDownload := MockedDownloader{}
+	mockDownload.On("Download", path.Join(testRepoRoot, testPackage, version)).Return(nil).Once()
+
+	// Instantiate repository with mock
+	repo := localRepository{filesysdep: &mockFileSys, repoRoot: testRepoRoot}
+
+	// Call and validate mock expectations and return value
+	err := repo.AddPackage(contextMock, testPackage, version, mockDownload.Download)
+	mockFileSys.AssertExpectations(t)
+	mockDownload.AssertExpectations(t)
+	assert.Nil(t, err)
+}
+
+func TestAddNewPackage(t *testing.T) {
+	version := "0.0.1"
+	// Setup mock with expectations
+	mockFileSys := MockedFileSys{}
+	mockFileSys.On("MakeDirExecute", path.Join(testRepoRoot, testPackage, version)).Return(nil).Once()
+	mockFileSys.On("Exists", path.Join(testRepoRoot, testPackage, "installstate")).Return(false).Once()
+	mockFileSys.On("GetDirectoryNames", path.Join(testRepoRoot, testPackage)).Return(make([]string, 0), nil).Once()
+	mockFileSys.On("WriteFile", path.Join(testRepoRoot, testPackage, "installstate"), mock.Anything).Return(nil).Once()
 
 	mockDownload := MockedDownloader{}
 	mockDownload.On("Download", path.Join(testRepoRoot, testPackage, version)).Return(nil).Once()
@@ -250,6 +274,8 @@ func TestRefreshPackage(t *testing.T) {
 	// Setup mock with expectations
 	mockFileSys := MockedFileSys{}
 	mockFileSys.On("MakeDirExecute", path.Join(testRepoRoot, testPackage, version)).Return(nil).Once()
+	mockFileSys.On("Exists", path.Join(testRepoRoot, testPackage, "installstate")).Return(true).Once()
+	mockFileSys.On("ReadFile", path.Join(testRepoRoot, testPackage, "installstate")).Return(loadFile(t, path.Join(testRepoRoot, testPackage, "installstate_success")), nil).Once()
 
 	mockDownload := MockedDownloader{}
 	mockDownload.On("Download", path.Join(testRepoRoot, testPackage, version)).Return(nil).Once()

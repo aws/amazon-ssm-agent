@@ -16,117 +16,392 @@
 package configurepackage
 
 import (
-	"strings"
-	"sync"
 	"testing"
 
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/framework/runpluginutil"
-	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/platform"
-	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/installer/mock"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/localpackages"
-	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/localpackages/mock"
-	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/packageservice"
-	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/packageservice/mock"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/pluginutil"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )
 
-var loggerMock = log.NewMockLog()
 var contextMock context.T = context.NewMockDefault()
 
-func TestRunUpgrade(t *testing.T) {
-	plugin := &Plugin{}
-	pluginInformation := createStubPluginInputInstall()
+func createStubPluginInputInstall() *ConfigurePackagePluginInput {
+	input := ConfigurePackagePluginInput{}
 
-	managerMock := ConfigPackageSuccessMock("/foo", "1.0.0", "0.5.6", contracts.ResultStatusSuccess, contracts.ResultStatusSuccess, contracts.ResultStatusSuccess)
-	output := runConfigurePackage(plugin, contextMock, managerMock, pluginInformation)
+	input.Version = "0.0.1"
+	input.Name = "PVDriver"
+	input.Action = "Install"
 
-	assert.Equal(t, output.ExitCode, 0)
-	assert.Contains(t, output.Stdout, "Successfully installed")
-	managerMock.AssertCalled(t, "runUninstallPackagePre", "PVDriver", "0.5.6", mock.Anything, mock.Anything)
-	managerMock.AssertCalled(t, "runUninstallPackagePost", "PVDriver", "0.5.6", mock.Anything, mock.Anything)
+	return &input
 }
 
-func TestRunUpgradeUninstallReboot(t *testing.T) {
-	plugin := &Plugin{}
-	pluginInformation := createStubPluginInputInstall()
+func createStubPluginInputInstallLatest() *ConfigurePackagePluginInput {
+	input := ConfigurePackagePluginInput{}
 
-	managerMock := ConfigPackageSuccessMock("/foo", "1.0.0", "0.5.6", contracts.ResultStatusSuccess, contracts.ResultStatusSuccessAndReboot, contracts.ResultStatusSuccess)
-	output := runConfigurePackage(plugin, contextMock, managerMock, pluginInformation)
+	input.Name = "PVDriver"
+	input.Action = "Install"
 
-	assert.Equal(t, output.ExitCode, 0)
-	managerMock.AssertCalled(t, "runUninstallPackagePre", "PVDriver", "0.5.6", mock.Anything, mock.Anything)
-	managerMock.AssertNotCalled(t, "runInstallPackage")
-	managerMock.AssertNotCalled(t, "runUninstallPackagePost")
+	return &input
 }
 
-func TestRunParallelSamePackage(t *testing.T) {
-	plugin := &Plugin{}
+func createStubPluginInputUninstall(version string) *ConfigurePackagePluginInput {
+	input := ConfigurePackagePluginInput{}
+
+	input.Version = version
+	input.Name = "PVDriver"
+	input.Action = "Uninstall"
+
+	return &input
+}
+
+func createStubPluginInputUninstallCurrent() *ConfigurePackagePluginInput {
+	input := ConfigurePackagePluginInput{}
+
+	input.Name = "PVDriver"
+	input.Action = "Uninstall"
+
+	return &input
+}
+
+func createStubPluginInputFoo() *ConfigurePackagePluginInput {
+	input := ConfigurePackagePluginInput{}
+
+	input.Version = "0.0.1"
+	input.Name = "PVDriver"
+	input.Action = "Foo"
+
+	return &input
+}
+
+func TestName(t *testing.T) {
+	assert.Equal(t, "aws:configurePackage", Name())
+}
+
+func TestPrepareNewInstall(t *testing.T) {
+	// file stubs are needed for ensurePackage because it handles the unzip
+	stubs := setSuccessStubs()
+	defer stubs.Clear()
+
 	pluginInformation := createStubPluginInputInstall()
+	installerMock := installerNotCalledMock()
+	repoMock := repoInstallMock(pluginInformation, installerMock)
+	serviceMock := serviceSuccessMock()
+	output := &contracts.PluginOutput{}
 
-	managerMockFirst := ConfigPackageSuccessMock("/foo", "Wait1.0.0", "", contracts.ResultStatusSuccess, contracts.ResultStatusSuccess, contracts.ResultStatusSuccess)
-	managerMockSecond := ConfigPackageSuccessMock("/foo", "1.0.0", "", contracts.ResultStatusSuccess, contracts.ResultStatusSuccess, contracts.ResultStatusSuccess)
+	inst, uninst, installState, installedVersion := prepareConfigurePackage(
+		contextMock,
+		buildConfigSimple(pluginInformation),
+		runpluginutil.PluginRunner{},
+		repoMock,
+		serviceMock,
+		pluginInformation,
+		output)
 
-	var outputFirst contracts.PluginOutput
-	var outputSecond contracts.PluginOutput
-	var wg sync.WaitGroup
-	wg.Add(1)
-	go func() {
-		defer wg.Done()
-		outputFirst = runConfigurePackage(plugin, contextMock, managerMockFirst, pluginInformation)
-	}()
-	// wait until first call is at getVersionToInstall
-	_ = <-managerMockFirst.waitChan
-	// start second call
-	outputSecond = runConfigurePackage(plugin, contextMock, managerMockSecond, pluginInformation)
-	// after second call completes, allow first call to continue
-	managerMockFirst.waitChan <- true
-	// wait until first call is complete
-	wg.Wait()
+	assert.NotNil(t, inst)
+	assert.Nil(t, uninst)
+	assert.Equal(t, localpackages.None, installState)
+	assert.Empty(t, installedVersion)
+	assert.Equal(t, 0, output.ExitCode)
+	assert.Empty(t, output.Stderr)
 
-	assert.Equal(t, outputFirst.ExitCode, 0)
-	assert.Equal(t, outputSecond.ExitCode, 1)
-	assert.True(t, strings.Contains(outputSecond.Stderr, `Package "PVDriver" is already in the process of action "Install"`))
+	installerMock.AssertExpectations(t)
+}
+
+func TestPrepareUpgrade(t *testing.T) {
+	// file stubs are needed for ensurePackage because it handles the unzip
+	stubs := setSuccessStubs()
+	defer stubs.Clear()
+
+	pluginInformation := createStubPluginInputInstallLatest()
+	installerMock := installerNotCalledMock()
+	repoMock := repoUpgradeMock(pluginInformation, installerMock)
+	serviceMock := serviceUpgradeMock()
+	output := &contracts.PluginOutput{}
+
+	inst, uninst, installState, installedVersion := prepareConfigurePackage(
+		contextMock,
+		buildConfigSimple(pluginInformation),
+		runpluginutil.PluginRunner{},
+		repoMock,
+		serviceMock,
+		pluginInformation,
+		output)
+
+	assert.NotNil(t, inst)
+	assert.NotNil(t, uninst)
+	assert.Equal(t, localpackages.Installed, installState)
+	assert.NotEmpty(t, installedVersion)
+	assert.Equal(t, 0, output.ExitCode)
+	assert.Empty(t, output.Stderr)
+
+	installerMock.AssertExpectations(t)
+}
+
+func TestPrepareUninstall(t *testing.T) {
+	// file stubs are needed for ensurePackage because it handles the unzip
+	stubs := setSuccessStubs()
+	defer stubs.Clear()
+
+	pluginInformation := createStubPluginInputUninstall("0.0.1")
+	installerMock := installerNotCalledMock()
+	repoMock := repoUninstallMock(pluginInformation, installerMock)
+	serviceMock := serviceSuccessMock()
+	output := &contracts.PluginOutput{}
+
+	inst, uninst, installState, installedVersion := prepareConfigurePackage(
+		contextMock,
+		buildConfigSimple(pluginInformation),
+		runpluginutil.PluginRunner{},
+		repoMock,
+		serviceMock,
+		pluginInformation,
+		output)
+
+	assert.Nil(t, inst)
+	assert.NotNil(t, uninst)
+	assert.Equal(t, localpackages.Installed, installState)
+	assert.NotEmpty(t, installedVersion)
+	assert.Equal(t, 0, output.ExitCode)
+	assert.Empty(t, output.Stderr)
+
+	installerMock.AssertExpectations(t)
+}
+
+func TestPrepareUninstallCurrent(t *testing.T) {
+	// file stubs are needed for ensurePackage because it handles the unzip
+	stubs := setSuccessStubs()
+	defer stubs.Clear()
+
+	pluginInformation := createStubPluginInputUninstallCurrent()
+	installerMock := installerNotCalledMock()
+	repoMock := repoUninstallMock(pluginInformation, installerMock)
+	serviceMock := serviceSuccessMock()
+	output := &contracts.PluginOutput{}
+
+	inst, uninst, installState, installedVersion := prepareConfigurePackage(
+		contextMock,
+		buildConfigSimple(pluginInformation),
+		runpluginutil.PluginRunner{},
+		repoMock,
+		serviceMock,
+		pluginInformation,
+		output)
+
+	assert.Nil(t, inst)
+	assert.NotNil(t, uninst)
+	assert.Equal(t, localpackages.Installed, installState)
+	assert.NotEmpty(t, installedVersion)
+	assert.Equal(t, 0, output.ExitCode)
+	assert.Empty(t, output.Stderr)
+
+	installerMock.AssertExpectations(t)
+}
+
+func TestPrepareUninstallWrongVersion(t *testing.T) {
+	// file stubs are needed for ensurePackage because it handles the unzip
+	stubs := setSuccessStubs()
+	defer stubs.Clear()
+
+	pluginInformation := createStubPluginInputUninstall("2.3.4")
+	installerMock := installerNotCalledMock()
+	repoMock := repoUninstallMock(pluginInformation, installerMock)
+	serviceMock := serviceSuccessMock()
+	output := &contracts.PluginOutput{}
+
+	inst, uninst, installState, installedVersion := prepareConfigurePackage(
+		contextMock,
+		buildConfigSimple(pluginInformation),
+		runpluginutil.PluginRunner{},
+		repoMock,
+		serviceMock,
+		pluginInformation,
+		output)
+
+	assert.Nil(t, inst)
+	assert.Nil(t, uninst)
+	assert.Equal(t, localpackages.Installed, installState)
+	assert.NotEmpty(t, installedVersion)
+	assert.Equal(t, 1, output.ExitCode)
+	assert.NotEmpty(t, output.Stderr)
+
+	installerMock.AssertExpectations(t)
+}
+
+func TestInstalledValid(t *testing.T) {
+	pluginInformation := createStubPluginInputInstall()
+	installerMock := installerSuccessMock(pluginInformation.Name, pluginInformation.Version)
+	uninstallerMock := installerNotCalledMock()
+	repoMock := repoInstallMock(pluginInformation, installerMock)
+	output := &contracts.PluginOutput{}
+
+	alreadyInstalled := checkAlreadyInstalled(
+		contextMock,
+		repoMock,
+		installerMock.Version(),
+		localpackages.Installed,
+		installerMock,
+		uninstallerMock,
+		output)
+	assert.True(t, alreadyInstalled)
+}
+
+func TestNotInstalled(t *testing.T) {
+	pluginInformation := createStubPluginInputInstall()
+	installerMock := installerSuccessMock(pluginInformation.Name, pluginInformation.Version)
+	uninstallerMock := installerNotCalledMock()
+	repoMock := repoInstallMock(pluginInformation, installerMock)
+	output := &contracts.PluginOutput{}
+
+	alreadyInstalled := checkAlreadyInstalled(
+		contextMock,
+		repoMock,
+		"",
+		localpackages.None,
+		installerMock,
+		uninstallerMock,
+		output)
+	assert.False(t, alreadyInstalled)
+}
+
+func TestOtherVersionInstalled(t *testing.T) {
+	pluginInformation := createStubPluginInputInstall()
+	installerMock := installerSuccessMock(pluginInformation.Name, pluginInformation.Version)
+	uninstallerMock := installerNotCalledMock()
+	repoMock := repoInstallMock(pluginInformation, installerMock)
+	output := &contracts.PluginOutput{}
+
+	alreadyInstalled := checkAlreadyInstalled(
+		contextMock,
+		repoMock,
+		"2.3.4",
+		localpackages.Installed,
+		installerMock,
+		uninstallerMock,
+		output)
+	assert.False(t, alreadyInstalled)
+}
+
+func TestInstallingValid(t *testing.T) {
+	pluginInformation := createStubPluginInputInstall()
+	installerMock := installerSuccessMock(pluginInformation.Name, pluginInformation.Version)
+	uninstallerMock := installerNameVersionOnlyMock(pluginInformation.Name, pluginInformation.Version)
+	repoMock := repoInstallMock(pluginInformation, installerMock)
+	repoMock.On("RemovePackage", mock.Anything, pluginInformation.Name, pluginInformation.Version).Return(nil)
+	output := &contracts.PluginOutput{}
+
+	alreadyInstalled := checkAlreadyInstalled(
+		contextMock,
+		repoMock,
+		installerMock.Version(),
+		localpackages.Installing,
+		installerMock,
+		uninstallerMock,
+		output)
+	assert.True(t, alreadyInstalled)
+}
+
+func TestRollbackValid(t *testing.T) {
+	pluginInformation := createStubPluginInputInstall()
+	installerMock := installerNameVersionOnlyMock(pluginInformation.Name, pluginInformation.Version)
+	uninstallerMock := installerSuccessMock(pluginInformation.Name, pluginInformation.Version)
+	repoMock := repoInstallMock(pluginInformation, installerMock)
+	repoMock.On("RemovePackage", mock.Anything, pluginInformation.Name, pluginInformation.Version).Return(nil)
+	output := &contracts.PluginOutput{}
+
+	alreadyInstalled := checkAlreadyInstalled(
+		contextMock,
+		repoMock,
+		installerMock.Version(),
+		localpackages.RollbackInstall,
+		installerMock,
+		uninstallerMock,
+		output)
+	assert.True(t, alreadyInstalled)
+}
+
+func TestInstallingNotValid(t *testing.T) {
+	pluginInformation := createStubPluginInputInstall()
+	installerMock := installerInvalidMock(pluginInformation.Name, pluginInformation.Version)
+	uninstallerMock := installerNotCalledMock()
+	repoMock := repoInstallMock(pluginInformation, installerMock)
+	repoMock.On("RemovePackage", mock.Anything, pluginInformation.Name, pluginInformation.Version).Return(nil)
+	output := &contracts.PluginOutput{}
+
+	alreadyInstalled := checkAlreadyInstalled(
+		contextMock,
+		repoMock,
+		installerMock.Version(),
+		localpackages.Installing,
+		installerMock,
+		uninstallerMock,
+		output)
+	assert.False(t, alreadyInstalled)
 }
 
 func TestExecute(t *testing.T) {
+	// file stubs are needed for ensurePackage because it handles the unzip
+	stubs := setSuccessStubs()
+	defer stubs.Clear()
+
 	pluginInformation := createStubPluginInputInstall()
-	config := contracts.Configuration{}
-	p := make([]interface{}, 1)
-	p[0] = pluginInformation
-	config.Properties = p
-	plugin := &Plugin{}
+	installerMock := installerSuccessMock(pluginInformation.Name, pluginInformation.Version)
+	repoMock := repoInstallMock(pluginInformation, installerMock)
+	serviceMock := serviceSuccessMock()
 
-	// set region in cache to prevent test delay because of detecion failures
-	platform.SetRegion("testregion")
-
-	runConfigOrig := runConfig
-
-	runConfig = func(
-		p *Plugin,
-		context context.T,
-		manager configurePackageManager,
-		input *ConfigurePackagePluginInput) (out contracts.PluginOutput) {
-		out = contracts.PluginOutput{}
-		out.ExitCode = 1
-		out.Stderr = "error"
-
-		return out
+	plugin := &Plugin{
+		localRepository:        repoMock,
+		packageServiceSelector: selectMockService(serviceMock),
 	}
-	defer func() {
-		runConfig = runConfigOrig
-	}()
+	result := plugin.execute(contextMock, buildConfigSimple(pluginInformation), createMockCancelFlag(), runpluginutil.PluginRunner{}, mockPersistPluginInfo)
 
-	// TODO:MF Test result code for reboot in cases where that is expected?
+	assert.Equal(t, 0, result.Code)
+	repoMock.AssertExpectations(t)
+	installerMock.AssertExpectations(t)
+	serviceMock.AssertExpectations(t)
+}
 
-	result := plugin.Execute(contextMock, config, createMockCancelFlag(), runpluginutil.PluginRunner{})
+func TestExecuteArrayInput(t *testing.T) {
+	pluginInformation := createStubPluginInputInstall()
+	installerMock := installerSuccessMock(pluginInformation.Name, pluginInformation.Version)
+	repoMock := repoInstallMock(pluginInformation, installerMock)
+	serviceMock := serviceSuccessMock()
 
-	assert.Equal(t, result.Code, 1)
-	assert.Contains(t, result.Output, "error")
+	plugin := &Plugin{
+		localRepository:        repoMock,
+		packageServiceSelector: selectMockService(serviceMock),
+	}
+
+	config := contracts.Configuration{}
+	var rawPluginInputs []interface{}
+	rawPluginInputs = append(rawPluginInputs, pluginInformation)
+	rawPluginInputs = append(rawPluginInputs, pluginInformation)
+	config.Properties = rawPluginInputs
+
+	result := plugin.execute(contextMock, config, createMockCancelFlag(), runpluginutil.PluginRunner{}, mockPersistPluginInfo)
+
+	assert.Equal(t, 1, result.Code)
+	assert.Contains(t, result.Output, "invalid format in plugin properties")
+}
+
+func TestConfigurePackage_InvalidAction(t *testing.T) {
+	pluginInformation := createStubPluginInputFoo()
+	installerMock := installerNotCalledMock()
+	repoMock := repoInstallMock(pluginInformation, installerMock)
+	serviceMock := serviceSuccessMock()
+
+	plugin := &Plugin{
+		localRepository:        repoMock,
+		packageServiceSelector: selectMockService(serviceMock),
+	}
+	result := plugin.execute(contextMock, buildConfigSimple(pluginInformation), createMockCancelFlag(), runpluginutil.PluginRunner{}, mockPersistPluginInfo)
+
+	assert.Equal(t, 1, result.Code)
+	assert.Contains(t, result.Output, "unsupported action")
 }
 
 type S3PrefixTestCase struct {
@@ -134,10 +409,14 @@ type S3PrefixTestCase struct {
 	OrchestrationDir string
 	BucketName       string
 	PrefixIn         string
-	NumInputs        int
 }
 
 func testS3Prefix(t *testing.T, testCase S3PrefixTestCase) {
+	// file stubs are needed for ensurePackage since it is responsible for unzip
+	// and S3 upload because it writes to file before it uploads
+	stubs := setSuccessStubs()
+	defer stubs.Clear()
+
 	var mockPlugin pluginutil.MockDefaultPlugin
 	mockPlugin = pluginutil.MockDefaultPlugin{}
 	mockPlugin.On("UploadOutputToS3Bucket", mock.Anything, testCase.PluginID, testCase.OrchestrationDir, testCase.BucketName, testCase.PrefixIn, false, mock.Anything, mock.Anything, mock.Anything).Return([]string{})
@@ -145,50 +424,44 @@ func testS3Prefix(t *testing.T, testCase S3PrefixTestCase) {
 	// set region in cache to prevent test delay because of detecion failures
 	platform.SetRegion("testregion")
 
-	plugin := &Plugin{}
+	pluginInformation := createStubPluginInputInstall()
+
+	plugin := &Plugin{
+		localRepository:        repoInstallMock(pluginInformation, installerSuccessMock(pluginInformation.Name, pluginInformation.Version)),
+		packageServiceSelector: selectMockService(serviceSuccessMock()),
+	}
 	plugin.ExecuteUploadOutputToS3Bucket = mockPlugin.UploadOutputToS3Bucket
 
-	config := contracts.Configuration{}
-	config.OrchestrationDirectory = testCase.OrchestrationDir
-	config.OutputS3BucketName = testCase.BucketName
-	config.OutputS3KeyPrefix = testCase.PrefixIn
-	config.PluginID = testCase.PluginID
-
-	runConfigOrig := runConfig
-	runConfig = func(
-		p *Plugin,
-		context context.T,
-		manager configurePackageManager,
-		input *ConfigurePackagePluginInput) (out contracts.PluginOutput) {
-		out = contracts.PluginOutput{}
-		out.ExitCode = 0
-
-		return out
-	}
-	defer func() {
-		runConfig = runConfigOrig
-	}()
-	stubs := setSuccessStubs()
-	defer stubs.Clear()
-
-	pluginInformation := createStubPluginInputInstall()
+	config := buildConfig(pluginInformation, testCase.OrchestrationDir, testCase.BucketName, testCase.PrefixIn, testCase.PluginID)
 	var result contracts.PluginResult
-	if testCase.NumInputs == 1 {
-		var rawPluginInput interface{}
-		rawPluginInput = pluginInformation
-		config.Properties = rawPluginInput
-		result = plugin.Execute(contextMock, config, createMockCancelFlag(), runpluginutil.PluginRunner{})
-	} else {
-		rawPluginInput := make([]interface{}, testCase.NumInputs)
-		for i := 0; i < testCase.NumInputs; i++ {
-			rawPluginInput[i] = pluginInformation
-		}
-		config.Properties = rawPluginInput
-		result = plugin.Execute(contextMock, config, createMockCancelFlag(), runpluginutil.PluginRunner{})
-	}
+	result = plugin.execute(contextMock, config, createMockCancelFlag(), runpluginutil.PluginRunner{}, mockPersistPluginInfo)
 
 	assert.Equal(t, result.Code, 0)
 	mockPlugin.AssertExpectations(t)
+}
+
+func buildConfigSimple(pluginInformation *ConfigurePackagePluginInput) contracts.Configuration {
+	config := contracts.Configuration{}
+
+	var rawPluginInput interface{}
+	rawPluginInput = pluginInformation
+	config.Properties = rawPluginInput
+
+	return config
+}
+
+func buildConfig(pluginInformation *ConfigurePackagePluginInput, orchestrationDir string, bucketName string, prefix string, pluginID string) contracts.Configuration {
+	config := contracts.Configuration{}
+	config.OrchestrationDirectory = orchestrationDir
+	config.OutputS3BucketName = bucketName
+	config.OutputS3KeyPrefix = prefix
+	config.PluginID = pluginID
+
+	var rawPluginInput interface{}
+	rawPluginInput = pluginInformation
+	config.Properties = rawPluginInput
+
+	return config
 }
 
 func TestS3PrefixSchema1_2(t *testing.T) {
@@ -197,18 +470,6 @@ func TestS3PrefixSchema1_2(t *testing.T) {
 		OrchestrationDir: "OrchestrationDir",
 		BucketName:       "Bucket",
 		PrefixIn:         "Prefix",
-		NumInputs:        1,
-	}
-	testS3Prefix(t, testCase)
-}
-
-func TestS3PrefixSchema1_2x2(t *testing.T) {
-	testCase := S3PrefixTestCase{
-		PluginID:         "aws:configurePackage",
-		OrchestrationDir: "OrchestrationDir",
-		BucketName:       "Bucket",
-		PrefixIn:         "Prefix",
-		NumInputs:        2,
 	}
 	testS3Prefix(t, testCase)
 }
@@ -219,77 +480,9 @@ func TestS3PrefixSchema2_0(t *testing.T) {
 		OrchestrationDir: "OrchestrationDir",
 		BucketName:       "Bucket",
 		PrefixIn:         "Prefix",
-		NumInputs:        1,
 	}
 	testS3Prefix(t, testCase)
 }
-
-func TestS3PrefixSchema2_0x2(t *testing.T) {
-	testCase := S3PrefixTestCase{
-		PluginID:         "configure:Package",
-		OrchestrationDir: "OrchestrationDir",
-		BucketName:       "Bucket",
-		PrefixIn:         "Prefix",
-		NumInputs:        2,
-	}
-	testS3Prefix(t, testCase)
-}
-
-func TestInstallPackage(t *testing.T) {
-	pluginInformation := createStubPluginInputInstall()
-
-	output := &contracts.PluginOutput{}
-
-	mockRepo := repository_mock.MockedRepository{}
-	mockInst := installer_mock.Mock{}
-	mockInst.On("Install", mock.Anything).Return(&contracts.PluginOutput{Status: contracts.ResultStatusSuccess}).Once()
-	mockRepo.On("GetInstaller", mock.Anything, mock.Anything, mock.Anything, pluginInformation.Name, pluginInformation.Version).Return(&mockInst)
-
-	manager := createInstanceWithRepoMock(&mockRepo)
-
-	stubs := setSuccessStubs()
-	defer stubs.Clear()
-
-	_, err := manager.runInstallPackage(contextMock,
-		pluginInformation.Name,
-		pluginInformation.Version,
-		output)
-
-	assert.NoError(t, err)
-}
-
-func TestUninstallPackage(t *testing.T) {
-	pluginInformation := createStubPluginInputUninstall()
-
-	output := &contracts.PluginOutput{}
-
-	mockRepo := repository_mock.MockedRepository{}
-	mockInst := installer_mock.Mock{}
-	mockInst.On("Uninstall", mock.Anything).Return(&contracts.PluginOutput{Status: contracts.ResultStatusSuccess}).Once()
-	mockRepo.On("GetInstaller", mock.Anything, mock.Anything, mock.Anything, pluginInformation.Name, pluginInformation.Version).Return(&mockInst)
-	mockRepo.On("RemovePackage", mock.Anything, pluginInformation.Name, pluginInformation.Version).Return(nil).Once()
-
-	manager := createInstanceWithRepoMock(&mockRepo)
-
-	stubs := setSuccessStubs()
-	defer stubs.Clear()
-
-	_, errPre := manager.runUninstallPackagePre(contextMock,
-		pluginInformation.Name,
-		pluginInformation.Version,
-		output)
-
-	assert.NoError(t, errPre)
-
-	_, errPost := manager.runUninstallPackagePost(contextMock,
-		pluginInformation.Name,
-		pluginInformation.Version,
-		output)
-
-	assert.NoError(t, errPost)
-}
-
-// TO DO: Uninstall test for exe command
 
 func TestValidateInput(t *testing.T) {
 	input := ConfigurePackagePluginInput{}
@@ -395,68 +588,4 @@ func TestValidateInput_EmptyVersionWithUninstall(t *testing.T) {
 
 	assert.True(t, result)
 	assert.NoError(t, err)
-}
-
-func TestPackageLock(t *testing.T) {
-	// lock Foo for Install
-	err := lockPackage("Foo", "Install")
-	assert.Nil(t, err)
-	defer unlockPackage("Foo")
-
-	// shouldn't be able to lock Foo, even for a different action
-	err = lockPackage("Foo", "Uninstall")
-	assert.NotNil(t, err)
-
-	// lock and unlock Bar (with defer)
-	err = lockAndUnlock("Bar")
-	assert.Nil(t, err)
-
-	// should be able to lock and then unlock Bar
-	err = lockPackage("Bar", "Uninstall")
-	assert.Nil(t, err)
-	unlockPackage("Bar")
-
-	// should be able to lock Bar
-	err = lockPackage("Bar", "Uninstall")
-	assert.Nil(t, err)
-	defer unlockPackage("Bar")
-
-	// lock in a goroutine with a 10ms sleep
-	errorChan := make(chan error)
-	go lockAndUnlockGo("Foobar", errorChan)
-	err = <-errorChan // wait until the goroutine has acquired the lock
-	assert.Nil(t, err)
-	err = lockPackage("Foobar", "Install")
-	errorChan <- err // signal the goroutine to exit
-	assert.NotNil(t, err)
-}
-
-func lockAndUnlockGo(packageName string, channel chan error) {
-	err := lockPackage(packageName, "Install")
-	channel <- err
-	_ = <-channel
-	if err == nil {
-		defer unlockPackage(packageName)
-	}
-	return
-}
-
-func lockAndUnlock(packageName string) (err error) {
-	if err = lockPackage(packageName, "Install"); err != nil {
-		return
-	}
-	defer unlockPackage(packageName)
-	return
-}
-
-func createInstance() configurePackageManager {
-	return &configurePackage{Configuration: contracts.Configuration{}, runner: runpluginutil.PluginRunner{}, repository: &repository_mock.MockedRepository{}, packageservice: &packageservice_mock.Mock{}}
-}
-
-func createInstanceWithRepoMock(repoMock localpackages.Repository) configurePackageManager {
-	return &configurePackage{Configuration: contracts.Configuration{}, runner: runpluginutil.PluginRunner{}, repository: repoMock, packageservice: &packageservice_mock.Mock{}}
-}
-
-func createInstanceWithRepoAndDSMock(repoMock localpackages.Repository, dsMock packageservice.PackageService) configurePackageManager {
-	return &configurePackage{Configuration: contracts.Configuration{}, runner: runpluginutil.PluginRunner{}, repository: repoMock, packageservice: dsMock}
 }

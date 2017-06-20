@@ -25,4 +25,6 @@ type Installer interface {
 	Install(context context.T) *contracts.PluginOutput
 	Uninstall(context context.T) *contracts.PluginOutput
 	Validate(context context.T) *contracts.PluginOutput // TODO:MF consider whether we can remove validate in V1 - I think it depends on having truly idempotent installers for anything that reboots
+	PackageName() string
+	Version() string
 }
