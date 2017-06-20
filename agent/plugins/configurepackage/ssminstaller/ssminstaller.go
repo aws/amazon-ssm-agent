@@ -36,7 +36,7 @@ type Installer struct {
 	packageName string
 	version     string
 	packagePath string
-	config      contracts.Configuration
+	config      contracts.Configuration // TODO:MF: See if we can use a smaller struct that has just the things we need
 	runner      runpluginutil.PluginRunner
 }
 
@@ -66,6 +66,14 @@ func (inst *Installer) Uninstall(context context.T) *contracts.PluginOutput {
 
 func (inst *Installer) Validate(context context.T) *contracts.PluginOutput {
 	return inst.executeAction(context, "validate")
+}
+
+func (inst *Installer) Version() string {
+	return inst.version
+}
+
+func (inst *Installer) PackageName() string {
+	return inst.packageName
 }
 
 func (inst *Installer) executeAction(context context.T, actionName string) *contracts.PluginOutput {
@@ -122,10 +130,11 @@ func (inst *Installer) parseAction(context context.T,
 	if inst.config.OutputS3BucketName != "" {
 		s3Prefix = fileutil.BuildS3Path(inst.config.OutputS3KeyPrefix, actionName)
 	}
+	orchestrationDir := filepath.Join(inst.config.OrchestrationDirectory, actionName)
 	pluginsInfo, err = inst.execdep.ParseDocument(
 		context,
 		actionContent,
-		inst.config.OrchestrationDirectory,
+		orchestrationDir,
 		inst.config.OutputS3BucketName,
 		s3Prefix,
 		inst.config.MessageId,

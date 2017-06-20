@@ -70,6 +70,8 @@ func TestSucceeded(t *testing.T) {
 
 	assert.Equal(t, output.ExitCode, 0)
 	assert.Equal(t, output.Status, ResultStatusSuccess)
+	assert.True(t, output.Status.IsSuccess())
+	assert.False(t, output.Status.IsReboot())
 }
 
 func TestFailed(t *testing.T) {
@@ -80,6 +82,8 @@ func TestFailed(t *testing.T) {
 	assert.Equal(t, output.ExitCode, 1)
 	assert.Equal(t, output.Status, ResultStatusFailed)
 	assert.Contains(t, output.Stderr, "Error message")
+	assert.False(t, output.Status.IsSuccess())
+	assert.False(t, output.Status.IsReboot())
 }
 
 func TestPending(t *testing.T) {
@@ -89,6 +93,19 @@ func TestPending(t *testing.T) {
 
 	assert.Equal(t, output.ExitCode, 0)
 	assert.Equal(t, output.Status, ResultStatusInProgress)
+	assert.False(t, output.Status.IsSuccess())
+	assert.False(t, output.Status.IsReboot())
+}
+
+func TestReboot(t *testing.T) {
+	output := PluginOutput{}
+
+	output.MarkAsSuccessWithReboot()
+
+	assert.Equal(t, output.ExitCode, 0)
+	assert.Equal(t, output.Status, ResultStatusSuccessAndReboot)
+	assert.True(t, output.Status.IsSuccess())
+	assert.True(t, output.Status.IsReboot())
 }
 
 func TestAppendInfo(t *testing.T) {
