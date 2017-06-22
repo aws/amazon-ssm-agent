@@ -27,11 +27,10 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/framework/runpluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
-	"github.com/aws/amazon-ssm-agent/agent/platform"
+	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/birdwatcher"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/installer"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/localpackages"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/packageservice"
-	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/ssms3"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/pluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 )
@@ -46,7 +45,7 @@ const (
 // Plugin is the type for the configurepackage plugin.
 type Plugin struct {
 	pluginutil.DefaultPlugin
-	packageServiceSelector func(serviceEndpoint string) packageservice.PackageService
+	packageServiceSelector func(serviceEndpoint string, localrepo localpackages.Repository) packageservice.PackageService
 	localRepository        localpackages.Repository
 }
 
@@ -323,10 +322,10 @@ func checkAlreadyInstalled(context context.T,
 }
 
 // selectService chooses the implementation of PackageService to use for a given execution of the plugin
-func selectService(serviceEndpoint string) packageservice.PackageService {
-	region, _ := platform.Region()
-	packageService := ssms3.New(serviceEndpoint, region)
-	//packageService = birdwatcher.New(log, repository)
+func selectService(serviceEndpoint string, localrepo localpackages.Repository) packageservice.PackageService {
+	//region, _ := platform.Region()
+	//packageService := ssms3.New(serviceEndpoint, region)
+	packageService := birdwatcher.New(serviceEndpoint, localrepo)
 
 	return packageService
 }
@@ -365,7 +364,7 @@ func (p *Plugin) execute(context context.T, config contracts.Configuration, canc
 		}
 		defer unlockPackage(input.Name)
 
-		packageService := p.packageServiceSelector(input.Repository)
+		packageService := p.packageServiceSelector(input.Repository, p.localRepository)
 
 		log.Debugf("Prepare for %v %v %v", input.Action, input.Name, input.Version)
 		inst, uninst, installState, installedVersion := prepareConfigurePackage(
