@@ -159,8 +159,10 @@ func installerNotCalledMock() *installerMock.Mock {
 	return &installerMock.Mock{}
 }
 
-func selectMockService(service packageservice.PackageService) func(repository string) packageservice.PackageService {
-	return func(repository string) packageservice.PackageService { return service }
+func selectMockService(service packageservice.PackageService) func(repository string, localrepo localpackages.Repository) packageservice.PackageService {
+	return func(repository string, localrepo localpackages.Repository) packageservice.PackageService {
+		return service
+	}
 }
 
 func serviceSuccessMock() *serviceMock.Mock {
