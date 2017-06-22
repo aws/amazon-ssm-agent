@@ -41,7 +41,7 @@ type PackageService struct {
 }
 
 // New constructor for PackageService
-func New(log log.T, endpoint string, manifestCache packageservice.ManifestCache) packageservice.PackageService {
+func New(endpoint string, manifestCache packageservice.ManifestCache) packageservice.PackageService {
 	// TODO: endpoint vs appconfig
 	cfg := sdkutil.AwsConfig()
 
