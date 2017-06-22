@@ -121,6 +121,17 @@ func testResolveMethod(t *testing.T, testCase StringTestCase) {
 	assert.Nil(t, err)
 }
 
+func testGetValidSSMParamRegexCompiler(t *testing.T) {
+	validSSMParam, _ := getValidSSMParamRegexCompiler(logger, "test.p1")
+	assert.True(t, validSSMParam.MatchString("test.p1"), "test.p1 should not match test.p1")
+	assert.False(t, validSSMParam.MatchString("test-p1"), "test.p1 should not match test-p1")
+	assert.False(t, validSSMParam.MatchString("testap1"), "test.p1 should not match test-p1")
+	validSSMParam2, _ := getValidSSMParamRegexCompiler(logger, "test.p1.p2.p3")
+	assert.True(t, validSSMParam2.MatchString("test.p1.p2.p3"), "test.p1.p2.p3 should not match test.p1.p2.p3")
+	assert.False(t, validSSMParam2.MatchString("test.p1-p2-p3"), "test.p1.p2.p3  should not match test.p1-p2-p3")
+	assert.False(t, validSSMParam2.MatchString("test.p1.p2-p3"), "test.p1.p2.p3 should not match test.p1.p2-p3")
+}
+
 func TestValidateSSMParameters(t *testing.T) {
 
 	// Test case 1 with no SSM parameters
@@ -131,11 +142,15 @@ func TestValidateSSMParameters(t *testing.T) {
 		"workingDirectory": {
 			AllowedPattern: "",
 		},
+		"testDocument": {
+			AllowedPattern: "",
+		},
 	}
 
 	parameters := map[string]interface{}{
 		"commands":         "test",
-		"workingDirectory": "",
+		"workingDirectory": "testdot.p1",
+		"testDocument":     "testdash-p1",
 	}
 
 	err := ValidateSSMParameters(logger, documentParameters, parameters)
@@ -197,12 +212,17 @@ func TestValidateSSMParameters(t *testing.T) {
 
 	parameters = map[string]interface{}{
 		"commands":         "{{ssm:test}}",
-		"workingDirectory": "",
+		"workingDirectory": "{{ssm:test.p1}}",
 	}
 
 	ssmParameters = []Parameter{
 		{
 			Name:  "test",
+			Type:  ParamTypeString,
+			Value: "1234",
+		},
+		{
+			Name:  "test.p1",
 			Type:  ParamTypeString,
 			Value: "1234",
 		},
