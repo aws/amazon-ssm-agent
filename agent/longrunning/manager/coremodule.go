@@ -176,21 +176,26 @@ func (m *Manager) ModuleExecute(context context.T) (err error) {
 				continue
 			}
 			p.Info = pluginInfo
+			if pluginName == appconfig.PluginNameCloudWatch {
+				//skip CW plugin since it'll be handled later
+				continue
+			}
 			log.Infof("Detected %s as a previously executing long running plugin. Starting that plugin again", p.Info.Name)
 			//submit the work of long running plugin to the task pool
 			/*
 				Note: All long running plugins are singleton in nature - hence jobId = plugin name.
 				This is in sync with our task-pool - which rejects jobs with duplicate jobIds.
 			*/
-			//todo: implement the singleton thing - ensure that there are no more than 1 cloudwatch plugin running at a time
 			//todo: orchestrationDir should be set accordingly - 3rd parameter for Start
 			p.Handler.Start(m.context, p.Info.Configuration, "", task.NewChanneledCancelFlag())
 			m.registeredPlugins[pluginName] = p
 		}
 	} else {
 		log.Infof("there aren't any long running plugin to execute")
+
 	}
 
+	//if no previous CW has been found, start a new one based on the json config
 	if isPlatformSupported(context.Log(), appconfig.PluginNameCloudWatch) {
 		m.configCloudWatch(log)
 	}
