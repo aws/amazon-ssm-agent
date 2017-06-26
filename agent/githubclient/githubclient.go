@@ -108,6 +108,6 @@ func (git *GitClient) ParseGetOptions(log log.T, getOptions string) (*github.Rep
 	log.Info("GetOptions value - ", branchOrSHA[1])
 
 	return &github.RepositoryContentGetOptions{
-		Ref: branchOrSHA[1],
+		Ref: strings.TrimSpace(branchOrSHA[1]),
 	}, nil
 }
