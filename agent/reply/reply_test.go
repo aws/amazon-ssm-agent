@@ -34,6 +34,39 @@ var sampleMessageReplyFiles = []string{
 
 var logger = log.NewMockLog()
 
+func TestSendReplyBuilder_UpdatePluginResult(t *testing.T) {
+	res := contracts.PluginResult{
+		PluginName:     "pluginName",
+		Output:         "output",
+		Status:         contracts.ResultStatusSuccess,
+		StandardOutput: "output",
+		StandardError:  "error",
+	}
+	builder := NewSendReplyBuilder()
+	builder.UpdatePluginResult(res)
+	assert.Equal(t, len(builder.pluginResults), 1)
+	assert.Equal(t, builder.pluginResults["pluginName"], &res)
+}
+
+func TestSendReplyBuilder_FormatPayload(t *testing.T) {
+
+	for _, fileName := range sampleMessageReplyFiles {
+		// load the test data
+		sampleReply := loadMessageReplyFromFile(t, fileName)
+		builder := NewSendReplyBuilder()
+		for _, pluginRuntimeStatus := range sampleReply.RuntimeStatus {
+			pluginResult := parsePluginResult(t, *pluginRuntimeStatus)
+			builder.UpdatePluginResult(pluginResult)
+		}
+		// format the payload for document status update
+		payload := builder.FormatPayload(logger, "", sampleReply.AdditionalInfo.Agent)
+		// fix the date time
+		payload.AdditionalInfo.DateTime = sampleReply.AdditionalInfo.DateTime
+		assert.Equal(t, payload, sampleReply)
+	}
+
+}
+
 func TestPrepareReplyPayload(t *testing.T) {
 	type testCase struct {
 		PluginRuntimeStatuses map[string]*contracts.PluginRuntimeStatus
