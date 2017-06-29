@@ -139,6 +139,10 @@ const (
 
 	AppConfigFileName    = "amazon-ssm-agent.json"
 	SeelogConfigFileName = "seelog.xml"
+
+	// Output truncation limits
+	MaxStdoutLength = 24000
+	MaxStderrLength = 8000
 )
 
 // Document versions that are supported by this Agent version.
