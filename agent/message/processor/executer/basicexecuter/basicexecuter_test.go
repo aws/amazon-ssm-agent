@@ -23,6 +23,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/framework/runpluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	messageContracts "github.com/aws/amazon-ssm-agent/agent/message/contracts"
+	executermock "github.com/aws/amazon-ssm-agent/agent/message/processor/executer/mock"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 	"github.com/stretchr/testify/assert"
 )
@@ -103,6 +104,7 @@ func testBasicExecuter(t *testing.T, testCase TestCase) {
 		updateAssoc runpluginutil.UpdateAssociation,
 		sendResponse runpluginutil.SendResponse,
 		cancelFlag task.CancelFlag) (pluginOutputs map[string]*contracts.PluginResult) {
+		assert.Equal(t, plugins, testCase.DocState.InstancePluginsInformation)
 		return testCase.PluginResults
 	}
 
@@ -110,13 +112,18 @@ func testBasicExecuter(t *testing.T, testCase TestCase) {
 	//orchestrationRootDir is set to empty such that it can meet the test expectation.
 	e := NewBasicExecuter()
 	state := testCase.DocState
-	e.Run(context.NewMockDefault(), cancelFlag, buildReply, nil, sendResponse, &state)
+	dataStoreMock := executermock.MockDocumentStore{}
+	dataStoreMock.On("Load").Return(&state)
+	dataStoreMock.On("Save").Return()
+
+	e.Run(context.NewMockDefault(), cancelFlag, buildReply, nil, sendResponse, dataStoreMock)
 
 	// assert docState matched the testCase's reply payload
 	assert.Equal(t, testCase.ReplyPayload.DocumentStatus, state.DocumentInformation.DocumentStatus)
 	assert.Equal(t, testCase.ReplyPayload.RuntimeStatus, state.DocumentInformation.RuntimeStatus)
 	assert.Equal(t, testCase.ReplyPayload.DocumentTraceOutput, state.DocumentInformation.DocumentTraceOutput)
 
+	dataStoreMock.AssertExpectations(t)
 	// assert sendReponse is called
 	assert.True(t, sendResponseCalled)
 }

@@ -237,14 +237,16 @@ func (p *Processor) processSendCommandMessage(context context.T,
 
 	log.Debug("Running executer...")
 	e := p.executerCreator()
+
+	docStore := executer.NewDocumentFileStore(context, docState.DocumentInformation.InstanceID, docState.DocumentInformation.DocumentID, appconfig.DefaultLocationOfCurrent, docState)
 	e.Run(p.context,
 		cancelFlag,
 		p.buildReply,
 		nil,
 		p.sendResponse,
-		docState,
+		docStore,
 	)
-	newCmdState := docState
+	newCmdState := docStore.Load()
 
 	// Skip move docState since the document has not finshed yet
 	if newCmdState.DocumentInformation.DocumentStatus == contracts.ResultStatusSuccessAndReboot {

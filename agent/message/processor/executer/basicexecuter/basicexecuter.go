@@ -15,10 +15,8 @@
 package basicexecuter
 
 import (
-	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
-	"github.com/aws/amazon-ssm-agent/agent/docmanager"
 	"github.com/aws/amazon-ssm-agent/agent/docmanager/model"
 	"github.com/aws/amazon-ssm-agent/agent/framework/runpluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
@@ -52,39 +50,32 @@ func (e BasicExecuter) Run(context context.T,
 	buildReply executer.ReplyBuilder,
 	updateAssoc runpluginutil.UpdateAssociation,
 	sendResponse runpluginutil.SendResponse,
-	docState *model.DocumentState) {
+	docStore executer.DocumentStore) {
 	log := context.Log()
 	//TODO split plugin state and docState into 2 different classes?
 	log.Debug("Running plugins...")
+	docState := docStore.Load()
 	outputs := pluginRunner(context, docState.DocumentInformation.MessageID, docState.InstancePluginsInformation, updateAssoc, sendResponse, cancelFlag)
 	pluginOutputContent, _ := jsonutil.Marshal(outputs)
 	log.Debugf("Plugin outputs %v", jsonutil.Indent(pluginOutputContent))
 
-	//TODO this part should be moved to IOHandler
 	//TODO buildReply function will be depracated, with part of its job moved to service and part moved to IOHandler
 	payloadDoc := buildReply("", outputs)
-	//update documentInfo in interim cmd state file
-	newCmdState := docmanager.GetDocumentInterimState(log,
-		docState.DocumentInformation.DocumentID,
-		docState.DocumentInformation.InstanceID,
-		appconfig.DefaultLocationOfCurrent)
+
+	//load the plugin state as well as document info
+	//TODO Get rid of individual plugin saving its own state, too heavy file IO just for crash protection
+	newDocState := docStore.Load()
 
 	// set document level information which wasn't set previously
-	newCmdState.DocumentInformation.AdditionalInfo = payloadDoc.AdditionalInfo
-	newCmdState.DocumentInformation.DocumentStatus = payloadDoc.DocumentStatus
-	newCmdState.DocumentInformation.DocumentTraceOutput = payloadDoc.DocumentTraceOutput
-	newCmdState.DocumentInformation.RuntimeStatus = payloadDoc.RuntimeStatus
+	newDocState.DocumentInformation.AdditionalInfo = payloadDoc.AdditionalInfo
+	newDocState.DocumentInformation.DocumentStatus = payloadDoc.DocumentStatus
+	newDocState.DocumentInformation.DocumentTraceOutput = payloadDoc.DocumentTraceOutput
+	newDocState.DocumentInformation.RuntimeStatus = payloadDoc.RuntimeStatus
 
-	//persist final documentInfo.
-	docmanager.PersistDocumentInfo(log,
-		newCmdState.DocumentInformation,
-		newCmdState.DocumentInformation.DocumentID,
-		newCmdState.DocumentInformation.InstanceID,
-		appconfig.DefaultLocationOfCurrent)
+	docStore.Save()
 	log.Debug("Sending reply on message completion ", outputs)
 	if sendResponse != nil {
-		sendResponse(newCmdState.DocumentInformation.MessageID, "", outputs)
+		sendResponse(newDocState.DocumentInformation.MessageID, "", outputs)
 
 	}
-	*docState = newCmdState
 }
