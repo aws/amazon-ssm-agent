@@ -118,35 +118,26 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 	var out contracts.PluginOutput
 
 	if cancelFlag.ShutDown() {
-		res.Code = 1
-		res.Status = contracts.ResultStatusFailed
-		pluginutil.PersistPluginInformationToCurrent(log, config.PluginID, config, res)
-		return
+		out.MarkAsShutdown()
+	} else if cancelFlag.Canceled() {
+		out.MarkAsCancelled()
+	} else {
+		util := updateutil.Utility{CustomUpdateExecutionTimeoutInSeconds: UpdateExecutionTimeoutInSeconds}
+		utilExe = util.ExeCommandOutput
+		out = p.runCommandsRawInput(log, config.PluginID, properties, config.OrchestrationDirectory, cancelFlag, config.OutputS3BucketName, config.OutputS3KeyPrefix, utilExe)
+
+		if out.Status == contracts.ResultStatusFailed {
+			out.AppendInfo(log, "Domain join failed.")
+		} else if out.Status == contracts.ResultStatusSuccess {
+			out.AppendInfo(log, "Domain join succeeded.")
+		}
+
+		res.Code = out.ExitCode
+		res.Status = out.Status
+		res.Output = out.String()
+		res.StandardOutput = pluginutil.StringPrefix(out.Stdout, p.MaxStdoutLength, p.OutputTruncatedSuffix)
+		res.StandardError = pluginutil.StringPrefix(out.Stderr, p.MaxStderrLength, p.OutputTruncatedSuffix)
 	}
-
-	if cancelFlag.Canceled() {
-		res.Code = 1
-		res.Status = contracts.ResultStatusCancelled
-		pluginutil.PersistPluginInformationToCurrent(log, config.PluginID, config, res)
-		return
-	}
-
-	util := updateutil.Utility{CustomUpdateExecutionTimeoutInSeconds: UpdateExecutionTimeoutInSeconds}
-	utilExe = util.ExeCommandOutput
-	out = p.runCommandsRawInput(log, config.PluginID, properties, config.OrchestrationDirectory, cancelFlag, config.OutputS3BucketName, config.OutputS3KeyPrefix, utilExe)
-
-	if out.Status == contracts.ResultStatusFailed {
-		out.AppendInfo(log, "Domain join failed.")
-	} else if out.Status == contracts.ResultStatusSuccess {
-		out.AppendInfo(log, "Domain join succeeded.")
-	}
-
-	res.Code = out.ExitCode
-	res.Status = out.Status
-	res.Output = out.String()
-	res.StandardOutput = pluginutil.StringPrefix(out.Stdout, p.MaxStdoutLength, p.OutputTruncatedSuffix)
-	res.StandardError = pluginutil.StringPrefix(out.Stderr, p.MaxStderrLength, p.OutputTruncatedSuffix)
-
 	pluginutil.PersistPluginInformationToCurrent(log, config.PluginID, config, res)
 
 	return res

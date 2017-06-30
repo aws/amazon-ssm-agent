@@ -81,38 +81,32 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 	defer func() { res.EndDateTime = time.Now() }()
 
 	p.assocSvc.CreateNewServiceIfUnHealthy(log)
-	//loading Properties as list since aws:updateSsmAgent uses properties as list
+	//loading Properties as list since aws:refreshAssociation uses properties as list
 	var properties []interface{}
 	if properties = pluginutil.LoadParametersAsList(log, config.Properties, &res); res.Code != 0 {
 		return res
 	}
 
-	out := make([]contracts.PluginOutput, len(properties))
-	for i, prop := range properties {
+	out := contracts.PluginOutput{}
+	for _, prop := range properties {
 
 		if cancelFlag.ShutDown() {
-			res.Code = 1
-			res.Status = contracts.ResultStatusFailed
-			pluginutil.PersistPluginInformationToCurrent(log, config.PluginID, config, res)
-			return
+			out.MarkAsShutdown()
+			break
 		}
 
 		if cancelFlag.Canceled() {
-			res.Code = 1
-			res.Status = contracts.ResultStatusCancelled
-			pluginutil.PersistPluginInformationToCurrent(log, config.PluginID, config, res)
-			return
+			out.MarkAsCancelled()
+			break
 		}
-		out[i] = p.runCommandsRawInput(log, config.PluginID, prop, config.OrchestrationDirectory, cancelFlag, config.OutputS3BucketName, config.OutputS3KeyPrefix)
+		out.Merge(log, p.runCommandsRawInput(log, config.PluginID, prop, config.OrchestrationDirectory, cancelFlag, config.OutputS3BucketName, config.OutputS3KeyPrefix))
 	}
 
-	if len(properties) > 0 {
-		res.Code = out[0].ExitCode
-		res.Status = out[0].Status
-		res.Output = out[0].String()
-		res.StandardOutput = pluginutil.StringPrefix(out[0].Stdout, p.MaxStdoutLength, p.OutputTruncatedSuffix)
-		res.StandardError = pluginutil.StringPrefix(out[0].Stderr, p.MaxStderrLength, p.OutputTruncatedSuffix)
-	}
+	res.Code = out.ExitCode
+	res.Status = out.Status
+	res.Output = out.String()
+	res.StandardOutput = pluginutil.StringPrefix(out.Stdout, p.MaxStdoutLength, p.OutputTruncatedSuffix)
+	res.StandardError = pluginutil.StringPrefix(out.Stderr, p.MaxStderrLength, p.OutputTruncatedSuffix)
 
 	pluginutil.PersistPluginInformationToCurrent(log, config.PluginID, config, res)
 	return res

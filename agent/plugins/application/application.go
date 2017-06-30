@@ -100,66 +100,35 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 	}
 
 	msiFailureCount := 0
-	atleastOneRequestedReboot := false
-	finalStdOut := ""
-	finalStdErr := ""
-	out := make([]contracts.PluginOutput, len(properties))
-	for i, prop := range properties {
+	out := contracts.PluginOutput{}
+	for _, prop := range properties {
 
 		if cancelFlag.ShutDown() {
-			res.Code = 1
-			res.Status = contracts.ResultStatusFailed
-			pluginutil.PersistPluginInformationToCurrent(log, config.PluginID, config, res)
-			return
+			out.MarkAsShutdown()
+			break
 		}
 
 		if cancelFlag.Canceled() {
-			res.Code = 1
-			res.Status = contracts.ResultStatusCancelled
-			pluginutil.PersistPluginInformationToCurrent(log, config.PluginID, config, res)
-			return
+			out.MarkAsCancelled()
+			break
 		}
 
-		out[i] = p.runCommandsRawInput(log, config.PluginID, prop, config.OrchestrationDirectory, cancelFlag, config.OutputS3BucketName, config.OutputS3KeyPrefix)
-
-		if out[i].Status == contracts.ResultStatusFailed {
+		newOutput := p.runCommandsRawInput(log, config.PluginID, prop, config.OrchestrationDirectory, cancelFlag, config.OutputS3BucketName, config.OutputS3KeyPrefix)
+		if newOutput.Status == contracts.ResultStatusFailed {
 			msiFailureCount++
-
-			if out[i].Stdout != "" {
-				finalStdOut = fmt.Sprintf("%v\n%v", finalStdOut, out[i].Stdout)
-			}
-
-			if out[i].Stderr != "" {
-				finalStdErr = fmt.Sprintf("%v\n%v", finalStdErr, out[i].Stderr)
-			}
 		}
-
-		if out[i].Status == contracts.ResultStatusSuccessAndReboot {
-			atleastOneRequestedReboot = true
-			res.Code = out[i].ExitCode
-		}
-	}
-
-	if atleastOneRequestedReboot {
-		res.Status = contracts.ResultStatusSuccessAndReboot
-	} else {
-		res.Status = contracts.ResultStatusSuccess
-		res.Code = 0
+		out.Merge(log, newOutput)
 	}
 
 	if msiFailureCount > 0 {
-		finalStdOut = fmt.Sprintf("Number of Failures: %v\n%v", msiFailureCount, finalStdOut)
-		res.Status = contracts.ResultStatusFailed
-		res.Code = 1
+		out.AppendError(log, fmt.Sprintf("Number of Failures: %v", msiFailureCount))
 	}
 
-	finalOut := contracts.PluginOutput{
-		Stdout: finalStdOut,
-		Stderr: finalStdErr,
-	}
-	res.Output = finalOut.String()
-	res.StandardOutput = pluginutil.StringPrefix(finalStdOut, p.MaxStdoutLength, p.OutputTruncatedSuffix)
-	res.StandardError = pluginutil.StringPrefix(finalStdErr, p.MaxStderrLength, p.OutputTruncatedSuffix)
+	res.Code = out.ExitCode
+	res.Status = out.Status
+	res.Output = out.String()
+	res.StandardOutput = pluginutil.StringPrefix(out.Stdout, p.MaxStdoutLength, p.OutputTruncatedSuffix)
+	res.StandardError = pluginutil.StringPrefix(out.Stderr, p.MaxStderrLength, p.OutputTruncatedSuffix)
 
 	pluginutil.PersistPluginInformationToCurrent(log, config.PluginID, config, res)
 
