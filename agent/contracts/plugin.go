@@ -109,6 +109,15 @@ type PluginOutput struct {
 	Stderr   string
 }
 
+func (p *PluginOutput) Merge(log log.T, mergeOutput PluginOutput) {
+	p.AppendInfo(log, mergeOutput.Stdout)
+	p.AppendError(log, mergeOutput.Stderr)
+	if p.ExitCode == 0 {
+		p.ExitCode = mergeOutput.ExitCode
+	}
+	p.Status = MergeResultStatus(p.Status, mergeOutput.Status)
+}
+
 func (p *PluginOutput) String() (response string) {
 	return TruncateOutput(p.Stdout, p.Stderr, MaximumPluginOutputSize)
 }
@@ -141,6 +150,18 @@ func (out *PluginOutput) MarkAsInProgress() {
 func (out *PluginOutput) MarkAsSuccessWithReboot() {
 	out.ExitCode = 0
 	out.Status = ResultStatusSuccessAndReboot
+}
+
+// MarkAsCancelled marks a plugin as Cancelled.
+func (out *PluginOutput) MarkAsCancelled() {
+	out.ExitCode = 1
+	out.Status = ResultStatusCancelled
+}
+
+// MarkAsShutdown marks a plugin as Failed in the case of interruption due to shutdown signal.
+func (out *PluginOutput) MarkAsShutdown() {
+	out.ExitCode = 1
+	out.Status = ResultStatusCancelled
 }
 
 // AppendInfo adds info to PluginOutput StandardOut.
