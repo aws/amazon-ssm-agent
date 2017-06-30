@@ -57,7 +57,21 @@ func (executerMock MockedExecuter) Run(context context.T,
 	buildReply executer.ReplyBuilder,
 	updateAssoc runpluginutil.UpdateAssociation,
 	sendResponse runpluginutil.SendResponse,
-	docState *docModel.DocumentState) {
-	executerMock.Called(context, cancelFlag, buildReply, sendResponse, docState)
+	docStore executer.DocumentStore) {
+	executerMock.Called(context, cancelFlag, buildReply, sendResponse, docStore)
 	return
+}
+
+type MockDocumentStore struct {
+	mock.Mock
+}
+
+func (m MockDocumentStore) Save() {
+	m.Called()
+	return
+}
+
+func (m MockDocumentStore) Load() *docModel.DocumentState {
+	args := m.Called()
+	return args.Get(0).(*docModel.DocumentState)
 }

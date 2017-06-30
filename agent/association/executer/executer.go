@@ -35,6 +35,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/message/contracts"
+	"github.com/aws/amazon-ssm-agent/agent/message/processor/executer"
 	"github.com/aws/amazon-ssm-agent/agent/message/processor/executer/basicexecuter"
 	"github.com/aws/amazon-ssm-agent/agent/platform"
 	"github.com/aws/amazon-ssm-agent/agent/reply"
@@ -100,9 +101,17 @@ func (r *AssociationExecuter) ExecuteInProgressDocument(context context.T, docSt
 		return reply.PrepareReplyPayload(pluginID, runtimeStatuses, time.Now(), *r.agentInfo)
 	}
 	//TODO we should have a creator for factory construct of Executer
-	executer := basicexecuter.NewBasicExecuter()
-	executer.Run(assocContext, cancelFlag, replyBuilder, r.pluginExecutionReport, nil, docState)
+	e := basicexecuter.NewBasicExecuter()
+	instanceID, err := platform.InstanceID()
+	if err != nil {
+		log.Error("failed to load instance id ", err)
+		return
+	}
+	docStore := executer.NewDocumentFileStore(assocContext, instanceID, docState.DocumentInformation.DocumentID, appconfig.DefaultLocationOfCurrent, docState)
+	e.Run(assocContext, cancelFlag, replyBuilder, r.pluginExecutionReport, nil, docStore)
 
+	//load the resulted document state
+	docState = docStore.Load()
 	// Skip sending response when the document requires a reboot
 	if docState.IsRebootRequired() {
 		log.Debugf("skipping sending response of %v since the document requires a reboot", docState.DocumentInformation.AssociationID)
