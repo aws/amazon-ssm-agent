@@ -144,3 +144,64 @@ func TestGetProxySetting(t *testing.T) {
 	assert.Equal(t, defaultProxyUrl, outUrl)
 	assert.Equal(t, "", outNoProxy)
 }
+
+func TestReplaceMarkedFields(t *testing.T) {
+	identity := func(a string) string { return a }
+	replaceWithDummy := func(a string) string { return "dummy" }
+	type testCase struct {
+		input       string
+		startMarker string
+		endMarker   string
+		replacer    func(string) string
+		output      string
+	}
+	inOut := []testCase{
+		{"a<-tom->s", "<-", "->", identity, "atoms"},
+		{"a<-tom->s", "<-", "->", replaceWithDummy, "adummys"},
+		{"a<>t</>s", "<>", "</>", strings.ToUpper, "aTs"},
+		{`a<tom>abc<de>`, "<", ">", strings.ToUpper, `aTOMabcDE`},
+		{`|tom|abc|de|`, "|", "|", strings.ToUpper, `TOMabcDE`},
+		{"atoms", "[missingMarker]", "[/missingMarker]", strings.ToUpper, "atoms"},
+		{"at<start>oms", "<start>", "</missingEnd>", strings.ToUpper, ""}, // error case
+	}
+	for _, tst := range inOut {
+		result, err := ReplaceMarkedFields(tst.input, tst.startMarker, tst.endMarker, tst.replacer)
+		if tst.output != "" {
+			assert.Equal(t, tst.output, result)
+		} else {
+			assert.NotNil(t, err)
+		}
+	}
+}
+
+func TestCleanupNewLines(t *testing.T) {
+	inOut := [][]string{
+		{"ab\nc", "abc"},
+		{"\nab\n\rc\n\r", "abc"},
+		{"abc\r", "abc"},
+		{"a", "a"},
+		{"", ""},
+	}
+	for _, test := range inOut {
+		input, output := test[0], test[1]
+		result := CleanupNewLines(input)
+		assert.Equal(t, output, result)
+	}
+}
+
+func TestCleanupJSONField(t *testing.T) {
+	inOut := [][]string{
+		{"a\nb", `a`},
+		{"a\tb\nc", `a\tb`},
+		{`a\b`, `a\\b`},
+		{`a"b`, `a\"b`},
+		{`\"b` + "\n", `\\\"b`},
+		{"description\non\nmulti\nline", `description`},
+		{"a simple text", `a simple text`},
+	}
+	for _, test := range inOut {
+		input, output := test[0], test[1]
+		result := CleanupJSONField(input)
+		assert.Equal(t, output, result)
+	}
+}

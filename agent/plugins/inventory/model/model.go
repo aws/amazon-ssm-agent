@@ -88,6 +88,22 @@ type ApplicationData struct {
 	CompType        ComponentType `json:"-"`
 }
 
+// FileData captures all attributes present in AWS:File inventory type
+type FileData struct {
+	Name             string
+	Size             string
+	Description      string
+	FileVersion      string
+	InstalledDate    string
+	ModificationTime string
+	LastAccessTime   string
+	ProductName      string
+	InstalledDir     string
+	CompanyName      string
+	ProductVersion   string
+	ProductLanguage  string
+}
+
 // NetworkData captures all attributes present in AWS:Network inventory type
 type NetworkData struct {
 	Name       string
@@ -124,9 +140,9 @@ type InstanceDetailedInformation struct {
 // NOTE: Not all properties will be applicable to all gatherers.
 // E.g: Applications gatherer uses Collection, Files use Filters, Custom uses Collection & Location.
 type Config struct {
-	Collection string
-	Filters    []string
-	Location   string
+	Collection string `json:"Collection"`
+	Filters    string `json:"Filters"`
+	Location   string `json:"Location"`
 }
 
 // Policy defines how an inventory policy document looks like
