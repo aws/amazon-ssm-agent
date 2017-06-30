@@ -342,27 +342,22 @@ func (p *Plugin) execute(context context.T, config contracts.Configuration, canc
 	log.Info("RunCommand started with configuration ", config)
 
 	res.StartDateTime = time.Now()
-	defer func() { res.EndDateTime = time.Now() }()
+	defer func() {
+		res.EndDateTime = time.Now()
+	}()
 
+	out := contracts.PluginOutput{}
 	if cancelFlag.ShutDown() {
-		res.Code = 1
-		res.Status = contracts.ResultStatusFailed
+		out.MarkAsShutdown()
 	} else if cancelFlag.Canceled() {
-		res.Code = 1
-		res.Status = contracts.ResultStatusCancelled
-	}
-
-	output := contracts.PluginOutput{}
-	input, err := parseAndValidateInput(config.Properties)
-	if err != nil {
-		output.MarkAsFailed(log, err)
-	} else {
+		out.MarkAsShutdown()
+	} else if input, err := parseAndValidateInput(config.Properties); err != nil {
+		out.MarkAsFailed(log, err)
+	} else if err := lockPackage(input.Name, input.Action); err != nil {
 		// do not allow multiple actions to be performed at the same time for the same package
 		// this is possible with multiple concurrent runcommand documents
-		if err := lockPackage(input.Name, input.Action); err != nil {
-			output.MarkAsFailed(log, err)
-			return
-		}
+		out.MarkAsFailed(log, err)
+	} else {
 		defer unlockPackage(input.Name)
 
 		packageService := p.packageServiceSelector(input.Repository)
@@ -375,60 +370,59 @@ func (p *Plugin) execute(context context.T, config contracts.Configuration, canc
 			p.localRepository,
 			packageService,
 			input,
-			&output)
+			&out)
 		log.Debugf("HasInst %v, HasUninst %v, InstallState %v, InstalledVersion %v", inst != nil, uninst != nil, installState, installedVersion)
 		// if already failed or already installed and valid, do not execute install
-		if output.Status != contracts.ResultStatusFailed && !checkAlreadyInstalled(context, p.localRepository, installedVersion, installState, inst, uninst, &output) {
-			log.Debugf("Calling execute, current status %v", output.Status)
+		if out.Status != contracts.ResultStatusFailed && !checkAlreadyInstalled(context, p.localRepository, installedVersion, installState, inst, uninst, &out) {
+			log.Debugf("Calling execute, current status %v", out.Status)
 			result := executeConfigurePackage(context,
 				p.localRepository,
 				inst,
 				uninst,
 				installState,
-				&output)
-			if !output.Status.IsReboot() {
+				&out)
+			if !out.Status.IsReboot() {
 				packageService.ReportResult(context.Log(), result)
 			}
 		}
-	}
 
-	if config.OrchestrationDirectory != "" {
-		useTemp := false
-		outFile := filepath.Join(config.OrchestrationDirectory, p.StdoutFileName)
-		// create orchestration dir if needed
-		if err := filesysdep.MakeDirExecute(config.OrchestrationDirectory); err != nil {
-			output.AppendError(log, "Failed to create orchestrationDir directory for log files")
-		} else {
-			if err := filesysdep.WriteFile(outFile, output.Stdout); err != nil {
-				log.Debugf("Error writing to %v", outFile)
-				output.AppendErrorf(log, "Error saving stdout: %v", err.Error())
+		if config.OrchestrationDirectory != "" {
+			useTemp := false
+			outFile := filepath.Join(config.OrchestrationDirectory, p.StdoutFileName)
+			// create orchestration dir if needed
+			if err := filesysdep.MakeDirExecute(config.OrchestrationDirectory); err != nil {
+				out.AppendError(log, "Failed to create orchestrationDir directory for log files")
+			} else {
+				if err := filesysdep.WriteFile(outFile, out.Stdout); err != nil {
+					log.Debugf("Error writing to %v", outFile)
+					out.AppendErrorf(log, "Error saving stdout: %v", err.Error())
+				}
+				errFile := filepath.Join(config.OrchestrationDirectory, p.StderrFileName)
+				if err := filesysdep.WriteFile(errFile, out.Stderr); err != nil {
+					log.Debugf("Error writing to %v", errFile)
+					out.AppendErrorf(log, "Error saving stderr: %v", err.Error())
+				}
 			}
-			errFile := filepath.Join(config.OrchestrationDirectory, p.StderrFileName)
-			if err := filesysdep.WriteFile(errFile, output.Stderr); err != nil {
-				log.Debugf("Error writing to %v", errFile)
-				output.AppendErrorf(log, "Error saving stderr: %v", err.Error())
+			uploadErrs := p.ExecuteUploadOutputToS3Bucket(log,
+				config.PluginID,
+				config.OrchestrationDirectory,
+				config.OutputS3BucketName,
+				config.OutputS3KeyPrefix,
+				useTemp,
+				config.OrchestrationDirectory,
+				out.Stdout,
+				out.Stderr)
+			for _, uploadErr := range uploadErrs {
+				out.AppendError(log, uploadErr)
 			}
-		}
-		uploadErrs := p.ExecuteUploadOutputToS3Bucket(log,
-			config.PluginID,
-			config.OrchestrationDirectory,
-			config.OutputS3BucketName,
-			config.OutputS3KeyPrefix,
-			useTemp,
-			config.OrchestrationDirectory,
-			output.Stdout,
-			output.Stderr)
-		for _, uploadErr := range uploadErrs {
-			output.AppendError(log, uploadErr)
 		}
 	}
+	res.Code = out.ExitCode
+	res.Status = out.Status
+	res.Output = out.String()
+	res.StandardOutput = pluginutil.StringPrefix(out.Stdout, p.MaxStdoutLength, p.OutputTruncatedSuffix)
+	res.StandardError = pluginutil.StringPrefix(out.Stderr, p.MaxStderrLength, p.OutputTruncatedSuffix)
 	persistPluginInfo(log, config.PluginID, config, res)
-
-	res.Code = output.ExitCode
-	res.Status = output.Status
-	res.Output = output.String()
-	res.StandardOutput = pluginutil.StringPrefix(output.Stdout, p.MaxStdoutLength, p.OutputTruncatedSuffix)
-	res.StandardError = pluginutil.StringPrefix(output.Stderr, p.MaxStderrLength, p.OutputTruncatedSuffix)
 
 	return res
 }

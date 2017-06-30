@@ -124,53 +124,35 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 	if cancelFlag.ShutDown() {
 		res.Code = 1
 		res.Status = contracts.ResultStatusFailed
-
-		pluginPersister(log, pluginID, config, res)
-		return
-	}
-
-	if cancelFlag.Canceled() {
+	} else if cancelFlag.Canceled() {
 		res.Code = 1
 		res.Status = contracts.ResultStatusCancelled
+	} else {
+		switch setting.StartType {
+		case "Enabled":
+			res = p.enablePlugin(log, config, cancelFlag)
 
-		pluginPersister(log, pluginID, config, res)
-		return
-	}
+		case "Disabled":
+			log.Infof("Disabling %s", p.lrpName)
+			if err = p.lrpm.StopPlugin(p.lrpName, cancelFlag); err != nil {
+				log.Errorf("Unable to stop the plugin - %s: %s", pluginID, err.Error())
+				res = p.CreateResult(fmt.Sprintf("Encountered error while stopping the plugin: %s", err.Error()),
+					contracts.ResultStatusFailed)
 
-	switch setting.StartType {
-	case "Enabled":
-		res = p.enablePlugin(log, config, cancelFlag)
+			} else {
+				res = p.CreateResult(fmt.Sprintf("Disabled the plugin - %s successfully", p.lrpName),
+					contracts.ResultStatusSuccess)
+				res.Status = contracts.ResultStatusSuccess
+			}
 
-		pluginPersister(log, pluginID, config, res)
-		return
-
-	case "Disabled":
-
-		log.Infof("Disabling %s", p.lrpName)
-		if err = p.lrpm.StopPlugin(p.lrpName, cancelFlag); err != nil {
-			log.Errorf("Unable to stop the plugin - %s: %s", pluginID, err.Error())
-			res = p.CreateResult(fmt.Sprintf("Encountered error while stopping the plugin: %s", err.Error()),
+		default:
+			log.Errorf("Allowed Values of StartType: Enabled | Disabled")
+			res = p.CreateResult("Allowed Values of StartType: Enabled | Disabled",
 				contracts.ResultStatusFailed)
-
-			pluginPersister(log, pluginID, config, res)
-			return
-		} else {
-			res = p.CreateResult(fmt.Sprintf("Disabled the plugin - %s successfully", p.lrpName),
-				contracts.ResultStatusSuccess)
-			res.Status = contracts.ResultStatusSuccess
-
-			pluginPersister(log, pluginID, config, res)
-			return
 		}
-
-	default:
-		log.Errorf("Allowed Values of StartType: Enabled | Disabled")
-		res = p.CreateResult("Allowed Values of StartType: Enabled | Disabled",
-			contracts.ResultStatusFailed)
-
-		pluginPersister(log, pluginID, config, res)
-		return res
 	}
+	pluginPersister(log, pluginID, config, res)
+	return
 }
 
 // CreateResult returns a PluginResult for given message and status
