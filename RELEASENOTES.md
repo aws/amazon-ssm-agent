@@ -1,5 +1,9 @@
 Latest
 ===============
+- Various bug fixes
+
+2.0.842.0
+===============
 - Added rollback support in aws:configurePackage
 - Various bug fixes
 
