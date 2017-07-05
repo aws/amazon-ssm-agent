@@ -476,7 +476,7 @@ func testProcessSendCommandMessage(t *testing.T, testCase TestCaseSendCommand) {
 		err = mdsMock.SendReply(log, messageID, payload)
 	}
 	executerMock := new(executermocks.MockedExecuter)
-	executerMock.On("Run", mock.Anything, cancelFlag, mock.Anything, mock.Anything, mock.AnythingOfType("executer.DocumentFileStore")).Return(nil).Run(func(args mock.Arguments) {
+	executerMock.On("Run", mock.Anything, cancelFlag, mock.Anything, mock.Anything, mock.AnythingOfType("*executer.DocumentFileStore")).Return(nil).Run(func(args mock.Arguments) {
 		sendResponse(testCase.DocState.DocumentInformation.MessageID, "pluginID", testCase.PluginResults)
 	})
 	// call method under test
