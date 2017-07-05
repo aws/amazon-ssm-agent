@@ -244,7 +244,7 @@ func (p *Processor) processSendCommandMessage(context context.T,
 		p.buildReply,
 		nil,
 		p.sendResponse,
-		docStore,
+		&docStore,
 	)
 	newCmdState := docStore.Load()
 

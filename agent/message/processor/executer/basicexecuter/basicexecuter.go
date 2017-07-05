@@ -32,12 +32,12 @@ type BasicExecuter struct {
 }
 
 var pluginRunner = func(context context.T,
-	documentID string,
+	executionID string,
 	plugins []model.PluginState,
 	updateAssoc runpluginutil.UpdateAssociation,
 	sendResponse runpluginutil.SendResponse,
 	cancelFlag task.CancelFlag) (pluginOutputs map[string]*contracts.PluginResult) {
-	return runPlugins(context, documentID, "", plugins, plugin.RegisteredWorkerPlugins(context), sendResponse, updateAssoc, cancelFlag)
+	return runPlugins(context, executionID, "", plugins, plugin.RegisteredWorkerPlugins(context), sendResponse, updateAssoc, cancelFlag)
 }
 
 func NewBasicExecuter() executer.Executer {
@@ -55,7 +55,17 @@ func (e BasicExecuter) Run(context context.T,
 	//TODO split plugin state and docState into 2 different classes?
 	log.Debug("Running plugins...")
 	docState := docStore.Load()
-	outputs := pluginRunner(context, docState.DocumentInformation.MessageID, docState.InstancePluginsInformation, updateAssoc, sendResponse, cancelFlag)
+	var executionID string
+	if updateAssoc != nil {
+		executionID = docState.DocumentInformation.AssociationID
+	} else if sendResponse != nil {
+		executionID = docState.DocumentInformation.MessageID
+	} else {
+		log.Error("Executer is not used by either SendCommand or Association")
+		return
+	}
+
+	outputs := pluginRunner(context, executionID, docState.InstancePluginsInformation, updateAssoc, sendResponse, cancelFlag)
 	pluginOutputContent, _ := jsonutil.Marshal(outputs)
 	log.Debugf("Plugin outputs %v", jsonutil.Indent(pluginOutputContent))
 
@@ -73,8 +83,8 @@ func (e BasicExecuter) Run(context context.T,
 	newDocState.DocumentInformation.RuntimeStatus = payloadDoc.RuntimeStatus
 
 	docStore.Save()
-	log.Debug("Sending reply on message completion ", outputs)
 	if sendResponse != nil {
+		log.Debug("Sending reply on message completion ", outputs)
 		sendResponse(newDocState.DocumentInformation.MessageID, "", outputs)
 
 	}
