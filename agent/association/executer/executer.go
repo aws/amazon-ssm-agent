@@ -108,7 +108,7 @@ func (r *AssociationExecuter) ExecuteInProgressDocument(context context.T, docSt
 		return
 	}
 	docStore := executer.NewDocumentFileStore(assocContext, instanceID, docState.DocumentInformation.DocumentID, appconfig.DefaultLocationOfCurrent, docState)
-	e.Run(assocContext, cancelFlag, replyBuilder, r.pluginExecutionReport, nil, docStore)
+	e.Run(assocContext, cancelFlag, replyBuilder, r.pluginExecutionReport, nil, &docStore)
 
 	//load the resulted document state
 	docState = docStore.Load()
