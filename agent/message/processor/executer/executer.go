@@ -70,7 +70,7 @@ func NewDocumentFileStore(context context.T, instID, docID, location string, sta
 
 //TODO should we deprecate the existing docmanager and move the functionalities here?
 //Save the document info struct to the current folder
-func (f DocumentFileStore) Save() {
+func (f *DocumentFileStore) Save() {
 	log := f.context.Log()
 	docmanager.PersistDocumentInfo(log,
 		f.state.DocumentInformation,
@@ -82,7 +82,7 @@ func (f DocumentFileStore) Save() {
 
 //TODO Load() should have dirty flag to encourage in-memory load, this can be done once we remove the plugin saving part
 //Load the document state object from the current folder
-func (f DocumentFileStore) Load() *model.DocumentState {
+func (f *DocumentFileStore) Load() *model.DocumentState {
 	log := f.context.Log()
 	f.state = docmanager.GetDocumentInterimState(log,
 		f.documentID,
