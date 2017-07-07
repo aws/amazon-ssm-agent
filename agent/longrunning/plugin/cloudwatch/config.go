@@ -17,7 +17,6 @@ package cloudwatch
 import (
 	"bytes"
 	"encoding/json"
-	"fmt"
 	"os"
 	"sync"
 
@@ -33,52 +32,62 @@ const (
 	ConfigFileFolderName = "awsCloudWatch"
 )
 
-// cloudWatchConfig represents the data structure of cloudwatch configuration singleton,
+var (
+	instance CloudWatchConfig
+	lock     sync.RWMutex
+	once     sync.Once
+)
+
+type CloudWatchConfig interface {
+	GetIsEnabled() bool
+	Enable(engineConfiguration interface{}) error
+	Disable() error
+	ParseEngineConfiguration() (config string, err error)
+	Update(log log.T) error
+	Write() error
+}
+
+// CloudWatchConfigImpl represents the data structure of cloudwatch configuration singleton,
 // which contains the essential information to configure cloudwatch plugin
-type CloudWatchConfig struct {
+type CloudWatchConfigImpl struct {
 	IsEnabled           bool        `json:"IsEnabled"`
 	EngineConfiguration interface{} `json:"EngineConfiguration"`
 }
 
-var instance *CloudWatchConfig
-var once sync.Once
-var lock sync.RWMutex
-
-// Initialze ensures the instance has been initialized
-func Initialze() {
-	once.Do(func() {
-		instance = &CloudWatchConfig{}
-	})
+type EngineConfigurationParser struct {
+	EngineConfiguration interface{} `json:"EngineConfiguration"`
 }
 
 // Instance returns a singleton of CloudWatchConfig instance
-func Instance() *CloudWatchConfig {
+func Instance() CloudWatchConfig {
+	once.Do(func() {
+		instance = &CloudWatchConfigImpl{}
+	})
 	return instance
 }
 
 // ParseEngineConfiguration marshals the EngineConfiguration from interface{} to string
-func ParseEngineConfiguration() (config string, err error) {
-	config, err = jsonutil.Marshal(instance.EngineConfiguration)
-
+func (cwcInstance *CloudWatchConfigImpl) ParseEngineConfiguration() (config string, err error) {
+	config, err = jsonutil.Marshal(cwcInstance.EngineConfiguration)
 	return buildFullConfiguration(config), err
 }
 
 // Update updates configuration from file system
-func Update(log log.T) error {
-	var cwConfig CloudWatchConfig
+func (cwcInstance *CloudWatchConfigImpl) Update(log log.T) error {
+	var cwConfig CloudWatchConfigImpl
 	var err error
 	if cwConfig, err = load(log); err != nil {
 		return err
 	}
 
-	instance.IsEnabled = cwConfig.IsEnabled
-	instance.EngineConfiguration = cwConfig.EngineConfiguration
+	cwcInstance.IsEnabled = cwConfig.IsEnabled
+	cwcInstance.EngineConfiguration = cwConfig.EngineConfiguration
 
 	return err
 }
 
 // Write writes the updated configuration of cloud watch to file system
-func Write() error {
+func (cwcInstance *CloudWatchConfigImpl) Write() error {
 	lock.Lock()
 	defer lock.Unlock()
 	fileName := getFileName()
@@ -86,20 +95,20 @@ func Write() error {
 	var err error
 	var content string
 
-	content, err = jsonutil.MarshalIndent(instance)
+	content, err = jsonutil.MarshalIndent(cwcInstance)
 	if err != nil {
 		return err
 	}
 
 	//verify if parent folder exist
-	if !fileUtilWrapper.Exists(location) {
-		if err = fileUtilWrapper.MakeDirs(location); err != nil {
+	if !fileutil.Exists(location) {
+		if err = fileutil.MakeDirs(location); err != nil {
 			return err
 		}
 	}
 
 	//it's fine even if we overwrite the content of previous file
-	if _, err = fileUtilWrapper.WriteIntoFileWithPermissions(
+	if _, err = fileutil.WriteIntoFileWithPermissions(
 		fileName,
 		content,
 		os.FileMode(int(appconfig.ReadWriteAccess))); err != nil {
@@ -110,32 +119,30 @@ func Write() error {
 }
 
 // Enable changes the IsEnabled property in cloud watch config from false to true
-func Enable(config *CloudWatchConfig) error {
-	var tempConfig CloudWatchConfig
-	if err := jsonutil.Remarshal(config.EngineConfiguration, &tempConfig); err != nil {
-		errorString := fmt.Errorf("Cannot remarmal cloudwatch configuration format %v;\nerror %v",
-			config.EngineConfiguration, err)
-		return errorString
-	}
-
-	instance.IsEnabled = true
-	instance.EngineConfiguration = tempConfig.EngineConfiguration
-	return Write()
+func (cwcInstance *CloudWatchConfigImpl) Enable(engineConfiguration interface{}) error {
+	cwcInstance.IsEnabled = true
+	cwcInstance.EngineConfiguration = engineConfiguration
+	return cwcInstance.Write()
 }
 
 // Disable changes the IsEnabled property in cloud watch config from true to false
-func Disable() error {
-	instance.IsEnabled = false
-	return Write()
+func (cwcInstance *CloudWatchConfigImpl) Disable() error {
+	cwcInstance.IsEnabled = false
+	return cwcInstance.Write()
+}
+
+// GetIsEnabled returns true if configuration is enabled. Otherwise, it returns false.
+func (cwcInstance *CloudWatchConfigImpl) GetIsEnabled() bool {
+	return cwcInstance.IsEnabled
 }
 
 // load reads cloud watch plugin configuration from config store (file system)
-func load(log log.T) (CloudWatchConfig, error) {
+func load(log log.T) (CloudWatchConfigImpl, error) {
 	lock.RLock()
 	defer lock.RUnlock()
 	fileName := getFileName()
 	var err error
-	var cwConfig CloudWatchConfig
+	var cwConfig CloudWatchConfigImpl
 
 	err = jsonutil.UnmarshalFile(fileName, &cwConfig)
 
