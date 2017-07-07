@@ -1,0 +1,43 @@
+{
+  "schemaVersion": "2.2",
+  "description": "Cross-platform document",
+  "mainSteps": [
+    {
+      "action": "aws:runPowerShellScript",
+      "precondition": {
+        "StringEquals": ["platformType", "Windows"]
+      },
+      "inputs": {
+        "commands": "date"
+      },
+      "maxAttempts": 0,
+      "name": "runPowerShellScript1",
+      "onFailure": "",
+      "settings": null,
+      "timeoutSeconds": 0
+    },
+    {
+      "action": "aws:runPowerShellScript",
+      "precondition": {
+        "StringEquals": ["platformType", "Linux"]
+      },
+      "inputs": {
+        "commands": "{{ commands }}"
+      },
+      "maxAttempts": 0,
+      "name": "runPowerShellScript2",
+      "onFailure": "",
+      "settings": null,
+      "timeoutSeconds": 0
+    }
+  ],
+  "parameters": {
+    "commands": {
+      "allowedPattern": "",
+      "allowedValues": null,
+      "default": null,
+      "description": "(Required) Specify a shell script or a command to run.",
+      "type": "StringList"
+    }
+  }
+}
