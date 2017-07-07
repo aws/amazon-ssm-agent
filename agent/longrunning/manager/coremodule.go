@@ -18,7 +18,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
-	"io/ioutil"
+	"fmt"
 	"sync"
 	"time"
 
@@ -26,8 +26,8 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
-	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/longrunning"
 	managerContracts "github.com/aws/amazon-ssm-agent/agent/longrunning/plugin"
 	"github.com/aws/amazon-ssm-agent/agent/longrunning/plugin/cloudwatch"
 	"github.com/aws/amazon-ssm-agent/agent/platform"
@@ -86,6 +86,12 @@ type Manager struct {
 
 	//manages lifecycle of all long running plugins
 	managingLifeCycleJob *scheduler.Job
+
+	//manages file system related functions
+	fileSysUtil longrunning.FileSysUtil
+
+	//ec2config's configuration xml parser
+	ec2ConfigXmlParser cloudwatch.Ec2ConfigXmlParser
 }
 
 var singletonInstance *Manager
@@ -115,12 +121,20 @@ func EnsureInitialization(context context.T) {
 		startPluginPool := task.NewPool(log, NumberOfLongRunningPluginWorkers, cancelWaitDuration, clock)
 		stopPluginPool := task.NewPool(log, NumberOfCancelWorkers, cancelWaitDuration, clock)
 
+		fileSysUtil := &longrunning.FileSysUtilImpl{}
+
+		ec2ConfigXmlParser := &cloudwatch.Ec2ConfigXmlParserImpl{
+			FileSysUtil: fileSysUtil,
+		}
+
 		singletonInstance = &Manager{
-			context:           managerContext,
-			startPlugin:       startPluginPool,
-			stopPlugin:        stopPluginPool,
-			runningPlugins:    plugins,
-			registeredPlugins: regPlugins,
+			context:            managerContext,
+			startPlugin:        startPluginPool,
+			stopPlugin:         stopPluginPool,
+			runningPlugins:     plugins,
+			registeredPlugins:  regPlugins,
+			fileSysUtil:        fileSysUtil,
+			ec2ConfigXmlParser: ec2ConfigXmlParser,
 		}
 	})
 
@@ -287,7 +301,6 @@ func (m *Manager) EnsurePluginRegistered(name string, plugin managerContracts.Pl
 func (m *Manager) configCloudWatch(log log.T) {
 
 	var err error
-	cloudwatch.Initialze()
 
 	var instanceId string
 	if instanceId, err = platform.InstanceID(); err != nil {
@@ -296,19 +309,19 @@ func (m *Manager) configCloudWatch(log log.T) {
 	}
 
 	// Read from cloudwatch config file to check if any configuration need to make for cloud watch
-	if err = cloudwatch.Update(log); err != nil {
+	if err = cloudwatch.Instance().Update(log); err != nil {
 		log.Debugf("There's no local configuration set for cloudwatch plugin. %v", err)
 
 		// We also need to check if any configuration has been made by ec2 config before
 		var hasConfiguration bool
 		var localConfig bool
-		if hasConfiguration, err = checkLegacyCloudWatchRunCommandConfig(instanceId); err != nil {
+		if hasConfiguration, err = checkLegacyCloudWatchRunCommandConfig(instanceId, cloudwatch.Instance(), m.fileSysUtil); err != nil {
 			log.Debugf("Have problem read configuration from ec2config file. %v", err)
 			return
 		}
 
 		if !hasConfiguration {
-			if localConfig, err = checkLegacyCloudWatchLocalConfig(); err != nil {
+			if localConfig, err = checkLegacyCloudWatchLocalConfig(cloudwatch.Instance(), m.ec2ConfigXmlParser, m.fileSysUtil); err != nil {
 				log.Debugf("Have problem read configuration from ec2config file. %v", err)
 				return
 			}
@@ -320,8 +333,7 @@ func (m *Manager) configCloudWatch(log log.T) {
 		}
 	}
 
-	cloudWatchConfig := cloudwatch.Instance()
-	if cloudWatchConfig.IsEnabled {
+	if cloudwatch.Instance().GetIsEnabled() {
 		log.Infof("Detected cloud watch has updated configuration. Configuring that plugin again")
 		// TODO need to check the folder
 		orchestrationDir := fileutil.BuildPath(
@@ -330,7 +342,7 @@ func (m *Manager) configCloudWatch(log log.T) {
 			appconfig.DefaultDocumentRootDirName,
 			appconfig.PluginNameCloudWatch)
 		var config string
-		if config, err = cloudwatch.ParseEngineConfiguration(); err != nil {
+		if config, err = cloudwatch.Instance().ParseEngineConfiguration(); err != nil {
 			log.Debug("Cannot parse EngineConfiguration to string format")
 		}
 
@@ -346,7 +358,7 @@ func (m *Manager) configCloudWatch(log log.T) {
 		stderrFilePath := fileutil.BuildPath(orchestrationDir, appconfig.PluginNameCloudWatch, "stderr")
 		var errData []byte
 		var errorReadingFile error
-		if errData, errorReadingFile = ioutil.ReadFile(stderrFilePath); errorReadingFile != nil {
+		if errData, errorReadingFile = m.fileSysUtil.ReadFile(stderrFilePath); errorReadingFile != nil {
 			log.Errorf("Unable to read the stderr file - %s: %s", stderrFilePath, errorReadingFile.Error())
 		}
 		serr := string(errData)
@@ -368,43 +380,64 @@ func (m *Manager) configCloudWatch(log log.T) {
 }
 
 // checkLegacyCloudWatchRunCommandConfig checks if ec2config has cloudwatch configuration document running before
-func checkLegacyCloudWatchRunCommandConfig(instanceId string) (hasConfiguration bool, err error) {
-	hasConfiguration = false
-	// check if configured cloudwatch before with runcommand
+func checkLegacyCloudWatchRunCommandConfig(instanceId string, cwcInstance cloudwatch.CloudWatchConfig, fileSysUtil longrunning.FileSysUtil) (hasConfiguration bool, err error) {
+	var engineConfigurationParser cloudwatch.EngineConfigurationParser
+	var documentModel contracts.DocumentContent
+	var content []byte
+
 	storeFileName := fileutil.BuildPath(
 		appconfig.EC2ConfigDataStorePath,
 		instanceId,
 		appconfig.ConfigurationRootDirName,
 		appconfig.WorkersRootDirName,
 		"aws.cloudWatch.ec2config")
+	hasConfiguration = false
 
-	if fileutil.Exists(storeFileName) {
-		lock.RLock()
-		defer lock.RUnlock()
-		var documentModel contracts.DocumentContent
-		if err = jsonutil.UnmarshalFile(storeFileName, &documentModel); err != nil {
-			//log.Infof("Cannot read configuration from ec2 configuration service file. %v", err)
-			return
-		}
-		pluginConfig := documentModel.RuntimeConfig[appconfig.PluginNameCloudWatch]
-		cloudWatchConfig := &cloudwatch.CloudWatchConfig{
-			EngineConfiguration: pluginConfig.Properties,
-			IsEnabled:           true,
-		}
-		if err = cloudwatch.Enable(cloudWatchConfig); err != nil {
-			return
-		}
-		hasConfiguration = true
+	if !fileSysUtil.Exists(storeFileName) {
+		return
 	}
+
+	lock.RLock()
+	defer lock.RUnlock()
+	content, err = fileSysUtil.ReadFile(storeFileName)
+	if err != nil {
+		return
+	}
+
+	if json.Unmarshal(content, &documentModel); err != nil {
+		return
+	}
+
+	pluginConfig := documentModel.RuntimeConfig[appconfig.PluginNameCloudWatch]
+	if pluginConfig == nil || pluginConfig.Properties == nil {
+		err = fmt.Errorf("%v doesn't contain %v", storeFileName, appconfig.PluginNameCloudWatch)
+		return
+	}
+
+	// The legacy Ec2Config's plugin config properties may contain escaped characters.
+	// Unmarshalling the raw string should correct the format to a tree of maps.
+	rawIn := json.RawMessage(pluginConfig.Properties.(string))
+	if err = json.Unmarshal([]byte(rawIn), &engineConfigurationParser); err != nil {
+		return
+	}
+
+	if err = cwcInstance.Enable(engineConfigurationParser.EngineConfiguration); err != nil {
+		return
+	}
+	hasConfiguration = true
+
 	return
 }
 
 // checkLegacyCloudWatchLocalConfig checks if users have cloudwatch local configuration before.
-func checkLegacyCloudWatchLocalConfig() (hasConfiguration bool, err error) {
-	hasConfiguration = false
-	// first check the config.xml file to see if the cloudwatch plugin is enabled
+func checkLegacyCloudWatchLocalConfig(cwcInstance cloudwatch.CloudWatchConfig, ec2ConfigXmlParser cloudwatch.Ec2ConfigXmlParser, fileSysUtil longrunning.FileSysUtil) (hasConfiguration bool, err error) {
+	var engineConfigurationParser cloudwatch.EngineConfigurationParser
+	var content []byte
 	var isEnabled bool
-	isEnabled, err = cloudwatch.ParseXml()
+	hasConfiguration = false
+
+	// first check the config.xml file to see if the cloudwatch plugin is enabled
+	isEnabled, err = ec2ConfigXmlParser.IsCloudWatchEnabled()
 	if err != nil || !isEnabled {
 		return
 	}
@@ -413,23 +446,28 @@ func checkLegacyCloudWatchLocalConfig() (hasConfiguration bool, err error) {
 		appconfig.EC2ConfigSettingPath,
 		NameOfCloudWatchJsonFile)
 
-	var content []byte
-	content, err = ioutil.ReadFile(configFileName)
+	if !fileSysUtil.Exists(configFileName) {
+		return
+	}
+
+	lock.RLock()
+	defer lock.RUnlock()
+	content, err = fileSysUtil.ReadFile(configFileName)
+	if err != nil {
+		return
+	}
 
 	validContent := checkAndRemoveBomCharacters(content)
 
 	// Update the config file with new configuration
-	var engineConfiguration interface{}
-	json.Unmarshal([]byte(validContent), &engineConfiguration)
-
-	cloudWatchConfig := &cloudwatch.CloudWatchConfig{
-		EngineConfiguration: engineConfiguration,
-		IsEnabled:           true,
-	}
-
-	if err = cloudwatch.Enable(cloudWatchConfig); err != nil {
+	if err = json.Unmarshal(validContent, &engineConfigurationParser); err != nil {
 		return
 	}
+
+	if err = cwcInstance.Enable(engineConfigurationParser.EngineConfiguration); err != nil {
+		return
+	}
+
 	return true, nil
 }
 

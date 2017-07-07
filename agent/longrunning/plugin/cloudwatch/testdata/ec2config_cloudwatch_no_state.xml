@@ -1,0 +1,8 @@
+<?xml version="1.0" standalone="yes"?>
+<Ec2ConfigurationSettings>
+    <Plugins>
+        <Plugin>
+            <Name>AWS.EC2.Windows.CloudWatch.PlugIn</Name>
+        </Plugin>
+    </Plugins>
+</Ec2ConfigurationSettings>
