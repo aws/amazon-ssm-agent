@@ -16,6 +16,7 @@ package docparser
 
 import (
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"path/filepath"
 	"testing"
@@ -24,7 +25,6 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/docmanager/model"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
-	messageContracts "github.com/aws/amazon-ssm-agent/agent/message/contracts"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -41,9 +41,9 @@ const invaliddocument = `{"schemaVersion":"1.2","description":"PowerShell.","FOO
 const testparameters = `{"commands":["date"]}`
 
 var sampleMessageFiles = []string{
-	"../message/testdata/sampleMsg.json",
-	"../message/testdata/sampleMsgVersion2_0.json",
-	"../message/testdata/sampleMsgVersion2_2.json",
+	"testdata/sampleMessageVersion2_0.json",
+	"testdata/sampleMessage.json",
+	"testdata/sampleMessageVersion2_2.json",
 }
 
 func TestParseDocument_ValidRuntimeConfig(t *testing.T) {
@@ -200,34 +200,8 @@ func TestParseDocument_InvalidSchema(t *testing.T) {
 		DefaultWorkingDir: testWorkingDir,
 	}
 	var testDocContent contracts.DocumentContent
-	//TODO meloniam@ Use file from testData, once refactored
-	//invalidschema := loadFile(t, "../message/testdata/sampleMsgVersion9999_0.json")
-	invalidschema := `{
-  	"schemaVersion": "9999.0",
-  	"description": "Cross-platform document with schema version 9999.0, this is only for test.",
- 	 "mainSteps": [
-    		{
-      		"action": "aws:runPowerShellScript",
-     	 	"inputs": {
-        		"commands": "date"
-      		},
-      		"maxAttempts": 0,
-      		"name": "runPowerShellScript1",
-     		"onFailure": "",
-      		"settings": null,
-      		"timeoutSeconds": 0
-    		}
-  	],
-  	"parameters": {
-    		"commands": {
-      			"allowedPattern": "",
-      			"allowedValues": null,
-      			"default": null,
-      			"description": "(Required) Specify a shell script or a command to run.",
-      			"type": "StringList"
-    		}
-  	}
-}`
+	invalidschema := loadFile(t, "testdata/schemaVersion9999.json")
+
 	err := json.Unmarshal([]byte(invalidschema), &testDocContent)
 	assert.Nil(t, err)
 	assert.NoError(t, err, "Error occured when trying to unmarshal invalidschema")
@@ -315,6 +289,7 @@ func TestParseMessageWithParams(t *testing.T) {
 	var testCases []testCase
 	for _, msgFileName := range sampleMessageFiles {
 		outputDoc, outputParam := loadMessageFromFile(t, msgFileName)
+		fmt.Print(msgFileName)
 		testCases = append(testCases, testCase{
 			Input:       string(loadFile(t, msgFileName)),
 			OutputDoc:   outputDoc,
@@ -325,18 +300,18 @@ func TestParseMessageWithParams(t *testing.T) {
 	// run tests
 	for _, tst := range testCases {
 		// call method
-		//origMessage, _ := jsonutil.Marshal(tst.OutputDoc)
+		origMessage, _ := jsonutil.Marshal(tst.OutputDoc)
 		pluginsInfo, err := ParseDocument(mockLog, &tst.OutputDoc, testParserInfo, tst.OutputParam)
-		//parsedMessage, _ := jsonutil.Marshal(tst.OutputDoc)
+		parsedMessage, _ := jsonutil.Marshal(tst.OutputDoc)
 
 		// check results
+		fmt.Print(tst.OutputDoc)
 		assert.Nil(t, err)
 		assert.Equal(t, testS3Bucket, pluginsInfo[0].Configuration.OutputS3BucketName)
 		assert.Equal(t, testMessageID, pluginsInfo[0].Configuration.MessageId)
 		assert.Equal(t, testDocumentID, pluginsInfo[0].Configuration.BookKeepingFileName)
 		assert.Equal(t, testWorkingDir, pluginsInfo[0].Configuration.DefaultWorkingDirectory)
-		//TODO meloniam@ add once refactoring done
-		//assert.NotEqual(t, origMessage, parsedMessage)
+		assert.NotEqual(t, origMessage, parsedMessage)
 	}
 }
 
@@ -350,10 +325,14 @@ func loadFile(t *testing.T, fileName string) (result []byte) {
 
 func loadMessageFromFile(t *testing.T, fileName string) (testDocContent contracts.DocumentContent, params map[string]interface{}) {
 	b := loadFile(t, fileName)
-	var payload messageContracts.SendCommandPayload
-	err := json.Unmarshal(b, &payload)
+	err := json.Unmarshal(b, &testDocContent)
 	if err != nil {
 		t.Fatal(err)
 	}
-	return payload.DocumentContent, payload.Parameters
+	p := loadFile(t, "testdata/sampleMessageParameters.json")
+	err = json.Unmarshal(p, &params)
+	if err != nil {
+		t.Fatal(err)
+	}
+	return testDocContent, params
 }
