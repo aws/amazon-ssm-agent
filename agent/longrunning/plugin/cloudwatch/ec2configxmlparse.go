@@ -17,16 +17,15 @@ package cloudwatch
 import (
 	"encoding/xml"
 	"fmt"
-	"io/ioutil"
-	"os"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
+	"github.com/aws/amazon-ssm-agent/agent/longrunning"
 )
 
 const (
-	EC2SeriveceConfigFileName = "config.xml"
-	PluginName                = "AWS.EC2.Windows.CloudWatch.PlugIn"
+	EC2ServiceConfigFileName = "config.xml"
+	PluginName               = "AWS.EC2.Windows.CloudWatch.PlugIn"
 )
 
 type Query struct {
@@ -42,33 +41,43 @@ type PluginInfo struct {
 	State string `xml:"State"`
 }
 
-// ParseXml parses the ec2config xml file and check if the aws:cloudWatch plugin is enabled or not.
-func ParseXml() (bool, error) {
-	lock.RLock()
-	defer lock.RUnlock()
+// Ec2ConfigXmlParser is an interface for Ec2Config's configuration xml parser
+type Ec2ConfigXmlParser interface {
+	IsCloudWatchEnabled() (bool, error)
+}
+
+// Ec2ConfigXmlParserImpl provides functionality to parse the cloudwatch config state from Ec2Config's configuration xml
+type Ec2ConfigXmlParserImpl struct {
+	FileSysUtil longrunning.FileSysUtil
+}
+
+// IsCloudWatchEnabled returns true if the CloudWatch is enabled in Ec2Config xml file.
+func (e *Ec2ConfigXmlParserImpl) IsCloudWatchEnabled() (bool, error) {
+	var fileContent []byte
+	var err error
 
 	fileName := fileutil.BuildPath(
 		appconfig.EC2ConfigSettingPath,
-		EC2SeriveceConfigFileName)
+		EC2ServiceConfigFileName)
 
-	if !fileutil.Exists(fileName) {
+	if !e.FileSysUtil.Exists(fileName) {
 		return false, nil
 	}
 
-	xmlFile, err := os.Open(fileName)
-	if err != nil {
-		return false, err
-	}
-	defer xmlFile.Close()
+	lock.RLock()
+	defer lock.RUnlock()
 
-	var fileContent []byte
-	if fileContent, err = ioutil.ReadAll(xmlFile); err != nil {
+	if fileContent, err = e.FileSysUtil.ReadFile(fileName); err != nil {
 		return false, err
 	}
 
 	var configSettings Query
 	if err = xml.Unmarshal(fileContent, &configSettings); err != nil {
 		return false, err
+	}
+
+	if configSettings.Plugins.PluginList == nil {
+		return false, fmt.Errorf("%v contains an invalid format", fileName)
 	}
 
 	for _, configSetting := range configSettings.Plugins.PluginList {
@@ -83,5 +92,6 @@ func ParseXml() (bool, error) {
 			}
 		}
 	}
+
 	return false, nil
 }
