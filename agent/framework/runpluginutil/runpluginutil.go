@@ -16,13 +16,9 @@
 package runpluginutil
 
 import (
-	"encoding/json"
-	"fmt"
-
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/docmanager/model"
-	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 )
@@ -67,70 +63,6 @@ type PluginRunner struct {
 	SendReply   SendResponseLegacy
 	UpdateAssoc UpdateAssociation
 	CancelFlag  task.CancelFlag
-}
-
-// TODO:MF: Factor out the Configuration processing in processor_state and re-use here
-func ParseDocument(context context.T, documentRaw []byte, orchestrationDir string, s3Bucket string, s3KeyPrefix string, messageID string, documentID string, defaultWorkingDirectory string) (pluginsInfo []model.PluginState, err error) {
-	var docContent contracts.DocumentContent
-	err = json.Unmarshal(documentRaw, &docContent)
-	if err != nil {
-		return
-	}
-	pluginConfigurations := make([]*contracts.Configuration, 0)
-
-	switch docContent.SchemaVersion {
-	// Version 2.0.1, 2.0.2, and 2.0.3 are added to support install documents for configurePackage that require capabilities
-	// that did not exist before the build where support for these versions was added
-	case "2.0", "2.0.1", "2.0.2", "2.0.3":
-		for _, pluginConfig := range docContent.MainSteps {
-			pluginName := pluginConfig.Action
-			config := contracts.Configuration{
-				Settings:                pluginConfig.Settings,
-				Properties:              pluginConfig.Inputs,
-				OutputS3BucketName:      s3Bucket,
-				OutputS3KeyPrefix:       fileutil.BuildS3Path(s3KeyPrefix, pluginConfig.Name),
-				OrchestrationDirectory:  fileutil.BuildPath(orchestrationDir, pluginConfig.Name),
-				MessageId:               messageID,
-				BookKeepingFileName:     documentID,
-				PluginName:              pluginName,
-				PluginID:                pluginConfig.Name,
-				DefaultWorkingDirectory: defaultWorkingDirectory,
-			}
-			pluginConfigurations = append(pluginConfigurations, &config)
-		}
-	case "1.2":
-		for pluginName, pluginConfig := range docContent.RuntimeConfig {
-			config := contracts.Configuration{
-				Settings:                pluginConfig.Settings,
-				Properties:              pluginConfig.Properties,
-				OutputS3BucketName:      s3Bucket,
-				OutputS3KeyPrefix:       fileutil.BuildS3Path(s3KeyPrefix, pluginName),
-				OrchestrationDirectory:  fileutil.BuildPath(orchestrationDir, pluginName),
-				MessageId:               messageID,
-				BookKeepingFileName:     documentID,
-				PluginName:              pluginName,
-				PluginID:                pluginName,
-				DefaultWorkingDirectory: defaultWorkingDirectory,
-			}
-			pluginConfigurations = append(pluginConfigurations, &config)
-		}
-	default:
-		err = fmt.Errorf("unsupported schema version %v", docContent.SchemaVersion)
-	}
-
-	//initialize plugin states
-	pluginsInfo = make([]model.PluginState, 0, len(pluginConfigurations))
-
-	// TODO:MF: Use converter here if this was the 1.2 format (had runtimeconfig instead of mainsteps)
-	for _, value := range pluginConfigurations {
-		var plugin model.PluginState
-		plugin.Id = value.PluginID
-		plugin.Name = value.PluginName
-		plugin.Configuration = *value
-		pluginsInfo = append(pluginsInfo, plugin)
-	}
-
-	return
 }
 
 func (r *PluginRunner) ExecuteDocument(context context.T, pluginInput []model.PluginState, documentID string, documentCreatedDate string) (pluginOutputs map[string]*contracts.PluginResult) {

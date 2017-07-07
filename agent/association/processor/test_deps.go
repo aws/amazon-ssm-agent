@@ -48,12 +48,12 @@ type parserMock struct {
 	mock.Mock
 }
 
-// ParseDocumentWithParams mocks implementation for ParseDocumentWithParams
-func (m *parserMock) ParseDocumentWithParams(
-	log log.T,
-	rawData *model.InstanceAssociation) (*messageContract.SendCommandPayload, error) {
+// InitializeDocumentState mocks implementation for InitializeDocumentState
+func (m *parserMock) ParseDocumentForPayload(
+	log log.T, rawData *model.InstanceAssociation) (*messageContract.SendCommandPayload, error) {
 
 	args := m.Called(log, rawData)
+
 	return args.Get(0).(*messageContract.SendCommandPayload), args.Error(1)
 }
 
@@ -61,9 +61,9 @@ func (m *parserMock) ParseDocumentWithParams(
 func (m *parserMock) InitializeDocumentState(
 	context context.T,
 	payload *messageContract.SendCommandPayload,
-	rawData *model.InstanceAssociation) docModel.DocumentState {
+	rawData *model.InstanceAssociation) (docModel.DocumentState, error) {
 
 	args := m.Called(context, payload, rawData)
 
-	return args.Get(0).(docModel.DocumentState)
+	return args.Get(0).(docModel.DocumentState), args.Error(1)
 }

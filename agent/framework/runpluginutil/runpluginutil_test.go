@@ -15,12 +15,14 @@
 package runpluginutil
 
 import (
-	"path/filepath"
+	"encoding/json"
 	"testing"
 
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/docmanager/model"
+	"github.com/aws/amazon-ssm-agent/agent/docparser"
+	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 	"github.com/stretchr/testify/assert"
 )
@@ -33,36 +35,24 @@ const testDocumentID = "test-documentID"
 const testWorkingDir = "test-defaultWorkingDirectory"
 const validdocument = `{"schemaVersion":"1.2","description":"PowerShell.","runtimeConfig":{"aws:runPowerShellScript":{"properties":[{"id":"0.aws:runPowerShellScript","runCommand":["echo foo"],"timeoutSeconds":"5"}]}}}`
 
-func TestParseDocument_Valid(t *testing.T) {
-	mockContext := context.NewMockDefault()
-
-	pluginsInfo, err := ParseDocument(mockContext, []byte(validdocument), testOrchDir, testS3Bucket, testS3Prefix, testMessageID, testDocumentID, testWorkingDir)
-
-	assert.Nil(t, err)
-	assert.Equal(t, 1, len(pluginsInfo))
-
-	pluginInfoTest := pluginsInfo[0]
-	assert.Nil(t, pluginInfoTest.Result.Error)
-	assert.Equal(t, filepath.Join(testOrchDir, "awsrunPowerShellScript"), pluginInfoTest.Configuration.OrchestrationDirectory)
-	assert.Equal(t, testS3Bucket, pluginInfoTest.Configuration.OutputS3BucketName)
-	assert.Equal(t, filepath.Join(testS3Prefix, "awsrunPowerShellScript"), pluginInfoTest.Configuration.OutputS3KeyPrefix)
-	assert.Equal(t, testMessageID, pluginInfoTest.Configuration.MessageId)
-	assert.Equal(t, testDocumentID, pluginInfoTest.Configuration.BookKeepingFileName)
-	assert.Equal(t, testWorkingDir, pluginInfoTest.Configuration.DefaultWorkingDirectory)
-}
-
-func TestParseDocument_Invalid(t *testing.T) {
-	mockContext := context.NewMockDefault()
-	invaliddocument := `FOO`
-
-	_, err := ParseDocument(mockContext, []byte(invaliddocument), testOrchDir, testS3Bucket, testS3Prefix, testMessageID, testDocumentID, testWorkingDir)
-
-	assert.NotNil(t, err)
-}
-
 func TestExecuteDocument(t *testing.T) {
+	mockLog := log.NewMockLog()
 	mockContext := context.NewMockDefault()
-	pluginsInfo, _ := ParseDocument(mockContext, []byte(validdocument), testOrchDir, testS3Bucket, testS3Prefix, testMessageID, testDocumentID, testWorkingDir)
+
+	testParserInfo := docparser.DocumentParserInfo{
+		OrchestrationDir:  testOrchDir,
+		S3Bucket:          testS3Bucket,
+		S3Prefix:          testS3Prefix,
+		MessageId:         testMessageID,
+		DocumentId:        testDocumentID,
+		DefaultWorkingDir: testWorkingDir,
+	}
+	var testDocContent contracts.DocumentContent
+	err := json.Unmarshal([]byte(validdocument), &testDocContent)
+	if err != nil {
+		assert.Error(t, err, "Error occured when trying to unmarshal validDocument")
+	}
+	pluginsInfo, _ := docparser.ParseDocument(mockLog, &testDocContent, testParserInfo, nil)
 	runner := &PluginRunner{RunPlugins: func(
 		context context.T,
 		documentID string,

@@ -344,12 +344,15 @@ func (p *Processor) parseAssociation(rawData *model.InstanceAssociation) (*docMo
 
 	log.Info("Executing association")
 
-	document, err := assocParser.ParseDocumentWithParams(log, rawData)
+	document, err := assocParser.ParseDocumentForPayload(log, rawData)
 	if err != nil {
-		log.Debugf("failed to parse association, %v", err)
+		log.Debugf("Failed to parse association, %v", err)
 		return &docState, err
 	}
-
+	//Data format persisted in Current Folder is defined by the struct - DocumentState
+	if docState, err = assocParser.InitializeDocumentState(context, document, rawData); err != nil {
+		return &docState, err
+	}
 	var parsedMessageContent string
 	if parsedMessageContent, err = jsonutil.Marshal(document); err != nil {
 		errorMsg := "Encountered error while parsing input - internal error"
@@ -357,9 +360,6 @@ func (p *Processor) parseAssociation(rawData *model.InstanceAssociation) (*docMo
 		return &docState, fmt.Errorf("%v", errorMsg)
 	}
 	log.Debug("Executing association with document content: \n", jsonutil.Indent(parsedMessageContent))
-
-	//Data format persisted in Current Folder is defined by the struct - DocumentState
-	docState = assocParser.InitializeDocumentState(context, document, rawData)
 
 	isMI, err := sys.IsManagedInstance()
 	if err != nil {
