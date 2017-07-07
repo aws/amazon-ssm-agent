@@ -25,6 +25,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
+	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	"github.com/aws/amazon-ssm-agent/agent/framework/runpluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/installer"
@@ -252,6 +253,10 @@ func (r *localRepository) ReadManifest(packageName string, packageVersion string
 
 // ReadManifest will put the manifest data for a given package name and package version into the cache
 func (r *localRepository) WriteManifest(packageName string, packageVersion string, content []byte) error {
+	err := fileutil.MakeDirs(r.manifestCachePath)
+	if err != nil {
+		return err
+	}
 	return r.filesysdep.WriteFile(r.filePath(packageName, packageVersion), string(content))
 }
 
