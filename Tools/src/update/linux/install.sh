@@ -26,7 +26,7 @@ sleep 2
 if [[ $(/sbin/init --version 2> /dev/null) =~ upstart ]]; then
 	echo "upstart detected"
 	echo "Installing agent" 
-	rpm --install amazon-ssm-agent.rpm
+	rpm -U amazon-ssm-agent.rpm
 
 	if [ "$DO_REGISTER" = true ]; then
 		/sbin/stop amazon-ssm-agent
@@ -51,7 +51,7 @@ elif [[ $(systemctl 2> /dev/null) =~ -\.mount ]]; then
 	fi
 		
 	echo "Installing agent" 
-	echo "$(rpm --install amazon-ssm-agent.rpm)"
+	echo "$(rpm -U amazon-ssm-agent.rpm)"
 
 	if [ "$DO_REGISTER" = true ]; then
 		$(systemctl stop amazon-ssm-agent)
