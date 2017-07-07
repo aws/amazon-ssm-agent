@@ -1,0 +1,9 @@
+{
+  "schemaVersion": "1.2",
+  "description": "This is a test document for cloudwatch test",
+  "noRunTimeConfig": {
+    "aws:cloudWatch": {
+      "properties": "{\"EngineConfiguration\": {\"PollInterval\": \"00:00:15\", \"Components\": [ {\"Id\": \"ApplicationEventLog\",\"FullName\": \"AWS.EC2.Windows.CloudWatch.EventLog.EventLogInputComponent,AWS.EC2.Windows.CloudWatch\",\"Parameters\": {\"LogName\": \"Application\",\"Levels\": \"4\"}},{\"Id\": \"CloudWatchLogs\",\"FullName\": \"AWS.EC2.Windows.CloudWatch.CloudWatchLogsOutput,AWS.EC2.Windows.CloudWatch\",\"Parameters\": {\"AccessKey\": \"\",\"SecretKey\": \"\",\"Region\": \"us-east-1\",\"LogGroup\": \"Test-Group\",\"LogStream\": \"{instance_id}\"}}],\"Flows\": {\"Flows\": [\"(ApplicationEventLog),CloudWatchLogs\"]}}}"
+    }
+  }
+}
