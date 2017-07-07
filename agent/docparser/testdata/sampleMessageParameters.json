@@ -1,0 +1,9 @@
+{
+  "Parameters": {
+    "commands": [
+      "echo hello",
+      "ls"
+    ],
+    "workingDirectory": ""
+  }
+}

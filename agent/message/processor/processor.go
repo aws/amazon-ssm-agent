@@ -28,7 +28,6 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	messageContracts "github.com/aws/amazon-ssm-agent/agent/message/contracts"
-	"github.com/aws/amazon-ssm-agent/agent/message/parser"
 	"github.com/aws/amazon-ssm-agent/agent/message/processor/executer"
 	"github.com/aws/amazon-ssm-agent/agent/message/processor/executer/basicexecuter"
 	"github.com/aws/amazon-ssm-agent/agent/message/service"
@@ -179,7 +178,7 @@ func NewProcessor(ctx context.T, processorName string, processorService service.
 	orchestrationRootDir := filepath.Join(appconfig.DefaultDataStorePath, instanceID, appconfig.DefaultDocumentRootDirName, config.Agent.OrchestrationRootDir)
 
 	statusReplyBuilder := func(agentInfo contracts.AgentInfo, resultStatus contracts.ResultStatus, documentTraceOutput string) messageContracts.SendReplyPayload {
-		return parser.PrepareReplyPayloadToUpdateDocumentStatus(agentInfo, resultStatus, documentTraceOutput)
+		return prepareReplyPayloadToUpdateDocumentStatus(agentInfo, resultStatus, documentTraceOutput)
 
 	}
 	// create a stop policy where we will stop after 10 consecutive errors and if time period expires.
@@ -224,6 +223,21 @@ func NewProcessor(ctx context.T, processorName string, processorService service.
 		pollAssociations:     pollAssoc,
 		supportedDocTypes:    supportedDocs,
 	}
+}
+
+// prepareReplyPayloadToUpdateDocumentStatus creates the payload object for SendReply based on document status change.
+func prepareReplyPayloadToUpdateDocumentStatus(agentInfo contracts.AgentInfo, documentStatus contracts.ResultStatus, documentTraceOutput string) (payload messageContracts.SendReplyPayload) {
+
+	payload = messageContracts.SendReplyPayload{
+		AdditionalInfo: contracts.AdditionalInfo{
+			Agent:    agentInfo,
+			DateTime: times.ToIso8601UTC(times.DefaultClock.Now()),
+		},
+		DocumentStatus:      documentStatus,
+		DocumentTraceOutput: documentTraceOutput,
+		RuntimeStatus:       nil,
+	}
+	return
 }
 
 func processSendReply(log log.T, messageID string, mdsService service.Service, payloadDoc messageContracts.SendReplyPayload, processorStopPolicy *sdkutil.StopPolicy) {

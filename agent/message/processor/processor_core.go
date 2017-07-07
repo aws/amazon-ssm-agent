@@ -28,10 +28,10 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	commandStateHelper "github.com/aws/amazon-ssm-agent/agent/docmanager"
 	"github.com/aws/amazon-ssm-agent/agent/docmanager/model"
+	"github.com/aws/amazon-ssm-agent/agent/docparser"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	logger "github.com/aws/amazon-ssm-agent/agent/log"
 	messageContracts "github.com/aws/amazon-ssm-agent/agent/message/contracts"
-	"github.com/aws/amazon-ssm-agent/agent/message/parser"
 	"github.com/aws/amazon-ssm-agent/agent/message/processor/executer"
 	"github.com/aws/amazon-ssm-agent/agent/message/service"
 	"github.com/aws/amazon-ssm-agent/agent/platform"
@@ -159,7 +159,37 @@ func parseSendCommandMessage(context context.T, msg *ssmmds.Message, messagesOrc
 	log.Debug("Processing send command message ", *msg.MessageId)
 	log.Trace("Processing send command message ", jsonutil.Indent(*msg.Payload))
 
-	parsedMessage, err := parser.ParseMessageWithParams(log, *msg.Payload)
+	// parse message to retrieve parameters
+	var parsedMessage messageContracts.SendCommandPayload
+	err := json.Unmarshal([]byte(*msg.Payload), &parsedMessage)
+	if err != nil {
+		errorMsg := "Encountered error while parsing input - internal error"
+		log.Errorf(errorMsg)
+		return nil, fmt.Errorf("%v", errorMsg)
+	}
+
+	// adapt plugin configuration format from MDS to plugin expected format
+	s3KeyPrefix := path.Join(parsedMessage.OutputS3KeyPrefix, parsedMessage.CommandID, *msg.Destination)
+
+	messageOrchestrationDirectory := filepath.Join(messagesOrchestrationRootDir, commandID)
+
+	var documentType model.DocumentType
+	if strings.HasPrefix(*msg.Topic, string(SendCommandTopicPrefixOffline)) {
+		documentType = model.SendCommandOffline
+	} else {
+		documentType = model.SendCommand
+	}
+	documentInfo := newDocumentInfo(*msg, parsedMessage)
+	parserInfo := docparser.DocumentParserInfo{
+		OrchestrationDir: messageOrchestrationDirectory,
+		S3Bucket:         parsedMessage.OutputS3BucketName,
+		S3Prefix:         s3KeyPrefix,
+		MessageId:        documentInfo.MessageID,
+		DocumentId:       documentInfo.DocumentID,
+	}
+
+	//Data format persisted in Current Folder is defined by the struct - CommandState
+	docState, err := docparser.InitializeDocState(log, documentType, &parsedMessage.DocumentContent, documentInfo, parserInfo, parsedMessage.Parameters)
 	if err != nil {
 		return nil, err
 	}
@@ -192,18 +222,6 @@ func parseSendCommandMessage(context context.T, msg *ssmmds.Message, messagesOrc
 		//For plugins that are not aws:cloudwatch
 		log.Debug("ParsedMessage is ", jsonutil.Indent(parsedMessageContent))
 	}
-
-	// adapt plugin configuration format from MDS to plugin expected format
-	s3KeyPrefix := path.Join(parsedMessage.OutputS3KeyPrefix, parsedMessage.CommandID, *msg.Destination)
-
-	messageOrchestrationDirectory := filepath.Join(messagesOrchestrationRootDir, commandID)
-
-	//persist : all information in current folder
-	log.Info("Persisting message in current execution folder")
-
-	//Data format persisted in Current Folder is defined by the struct - CommandState
-	docState := initializeSendCommandState(parsedMessage, messageOrchestrationDirectory, s3KeyPrefix, *msg)
-
 	// Check if it is a managed instance and its executing managed instance incompatible AWS SSM public document.
 	// A few public AWS SSM documents contain code which is not compatible when run on managed instances.
 	// isManagedInstanceIncompatibleAWSSSMDocument makes sure to find such documents at runtime and replace the incompatible code.
