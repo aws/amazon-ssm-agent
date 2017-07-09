@@ -32,6 +32,7 @@ type BasicExecuter struct {
 	ctx        context.T
 }
 
+//TODO determine the common functions shared by BasicExecuter and out-of-proc Executer
 var pluginRunner = func(context context.T,
 	docStore executer.DocumentStore,
 	resChan chan contracts.PluginResult,
@@ -45,9 +46,10 @@ var pluginRunner = func(context context.T,
 	outputs := runPlugins(context, docState.DocumentInformation.MessageID, "", docState.InstancePluginsInformation, plugin.RegisteredWorkerPlugins(context), resChan, cancelFlag)
 	pluginOutputContent, _ := jsonutil.Marshal(outputs)
 	context.Log().Debugf("Plugin outputs %v", jsonutil.Indent(pluginOutputContent))
-	//TODO DocInfo is a service oriented object, and may not be persisted by Executer
-	// aggregate the document information from plugin outputs
-	docState.DocumentInformation = docmanager.DocumentResultAggregator(context.Log(), "", outputs)
+	//TODO result aggregation should not be done && persisted in the Executer, remove this part once service extraction is done
+	status, _, runtimeStatuses := docmanager.DocumentResultAggregator(context.Log(), "", outputs)
+	docState.DocumentInformation.DocumentStatus = status
+	docState.DocumentInformation.RuntimeStatus = runtimeStatuses
 	// persist the docState object
 	docStore.Save()
 	//sender close the channel

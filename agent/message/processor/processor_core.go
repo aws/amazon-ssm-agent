@@ -274,7 +274,7 @@ func (p *Processor) processSendCommandMessage(context context.T,
 
 	//TODO this part should be moved to service
 	if !isUpdatePlugin(newCmdState) {
-		if err := mdsService.DeleteMessage(log, newCmdState.DocumentInformation.MessageID); err != nil {
+		if err := mdsService.DeleteMessage(log, messageID); err != nil {
 			sdkutil.HandleAwsError(log, err, p.processorStopPolicy)
 		}
 	} else {
