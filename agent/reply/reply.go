@@ -16,11 +16,13 @@
 package reply
 
 import (
+	"time"
+
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/docmanager"
-	"github.com/aws/amazon-ssm-agent/agent/docmanager/model"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	messageContracts "github.com/aws/amazon-ssm-agent/agent/message/contracts"
+	"github.com/aws/amazon-ssm-agent/agent/times"
 )
 
 //TODO once we remove the callback "SendReply", use this class to build reply
@@ -51,18 +53,17 @@ func (builder SendReplyBuilder) UpdatePluginResult(res contracts.PluginResult) e
 
 // build SendReply Payload from the internal plugins map
 func (builder SendReplyBuilder) FormatPayload(log log.T, pluginID string, agentInfo contracts.AgentInfo) messageContracts.SendReplyPayload {
-	docInfo := docmanager.DocumentResultAggregator(log, pluginID, builder.pluginResults)
-	return PrepareReplyPayload(docInfo, agentInfo)
-}
-
-// PrepareReplyPayload creates the payload object for SendReply based on plugin outputs.
-func PrepareReplyPayload(docInfo model.DocumentInfo, agentInfo contracts.AgentInfo) (payload messageContracts.SendReplyPayload) {
-	docInfo.AdditionalInfo.Agent = agentInfo
-	payload = messageContracts.SendReplyPayload{
-		AdditionalInfo:      docInfo.AdditionalInfo,
-		DocumentStatus:      docInfo.DocumentStatus,
-		DocumentTraceOutput: "", // TODO: Fill me appropriately
-		RuntimeStatus:       docInfo.RuntimeStatus,
+	status, statusCount, runtimeStatuses := docmanager.DocumentResultAggregator(log, pluginID, builder.pluginResults)
+	additionalInfo := contracts.AdditionalInfo{
+		Agent:               agentInfo,
+		DateTime:            times.ToIso8601UTC(time.Now()),
+		RuntimeStatusCounts: statusCount,
 	}
-	return
+	payload := messageContracts.SendReplyPayload{
+		AdditionalInfo:      additionalInfo,
+		DocumentStatus:      status,
+		DocumentTraceOutput: "", // TODO: Fill me appropriately
+		RuntimeStatus:       runtimeStatuses,
+	}
+	return payload
 }

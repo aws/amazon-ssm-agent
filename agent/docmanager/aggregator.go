@@ -17,10 +17,7 @@ package docmanager
 import (
 	"fmt"
 
-	"time"
-
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
-	"github.com/aws/amazon-ssm-agent/agent/docmanager/model"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/times"
 )
@@ -64,7 +61,7 @@ func prepareRuntimeStatus(log log.T, pluginResult contracts.PluginResult) contra
 
 func DocumentResultAggregator(log log.T,
 	pluginID string,
-	pluginOutputs map[string]*contracts.PluginResult) model.DocumentInfo {
+	pluginOutputs map[string]*contracts.PluginResult) (contracts.ResultStatus, map[string]int, map[string]*contracts.PluginRuntimeStatus) {
 
 	runtimeStatuses := make(map[string]*contracts.PluginRuntimeStatus)
 	for pluginID, pluginResult := range pluginOutputs {
@@ -119,14 +116,6 @@ func DocumentResultAggregator(log log.T,
 		runtimeStatusesFiltered = runtimeStatuses
 	}
 
-	return model.DocumentInfo{
-		AdditionalInfo: contracts.AdditionalInfo{
-			DateTime:            times.ToIso8601UTC(time.Now()),
-			RuntimeStatusCounts: runtimeStatusCounts,
-		},
-		DocumentStatus:      documentStatus,
-		DocumentTraceOutput: "", // TODO: Fill me appropriately
-		RuntimeStatus:       runtimeStatusesFiltered,
-	}
+	return documentStatus, runtimeStatusCounts, runtimeStatusesFiltered
 
 }
