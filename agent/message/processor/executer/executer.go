@@ -56,7 +56,6 @@ func NewDocumentFileStore(context context.T, instID, docID, location string, sta
 	}
 }
 
-//TODO should we deprecate the existing docmanager and move the functionalities here?
 //Save the document info struct to the current folder
 func (f *DocumentFileStore) Save() {
 	log := f.context.Log()

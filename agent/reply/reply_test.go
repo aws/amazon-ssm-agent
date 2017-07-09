@@ -21,7 +21,6 @@ import (
 	"testing"
 
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
-	"github.com/aws/amazon-ssm-agent/agent/docmanager/model"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	messageContracts "github.com/aws/amazon-ssm-agent/agent/message/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/times"
@@ -64,42 +63,6 @@ func TestSendReplyBuilder_FormatPayload(t *testing.T) {
 		// fix the date time
 		payload.AdditionalInfo.DateTime = sampleReply.AdditionalInfo.DateTime
 		assert.Equal(t, payload, sampleReply)
-	}
-
-}
-
-func TestPrepareReplyPayload(t *testing.T) {
-	type testCase struct {
-		DocInfo model.DocumentInfo
-		Result  messageContracts.SendReplyPayload
-		Agent   contracts.AgentInfo
-	}
-
-	// generate test cases
-	var testCases []testCase
-	for _, fileName := range sampleMessageReplyFiles {
-		// parse a test reply to see if we can regenerate it
-		expectedReply := loadMessageReplyFromFile(t, fileName)
-
-		testCases = append(testCases, testCase{
-			DocInfo: model.DocumentInfo{
-				AdditionalInfo:      expectedReply.AdditionalInfo,
-				DocumentStatus:      expectedReply.DocumentStatus,
-				DocumentTraceOutput: expectedReply.DocumentTraceOutput,
-				RuntimeStatus:       expectedReply.RuntimeStatus,
-			},
-			Result: expectedReply,
-			Agent:  expectedReply.AdditionalInfo.Agent,
-		})
-	}
-
-	// run test cases
-	for _, tst := range testCases {
-		// call our method under test
-		docResult := PrepareReplyPayload(tst.DocInfo, tst.Agent)
-		// check result
-		assert.Equal(t, tst.Result, docResult)
-
 	}
 
 }

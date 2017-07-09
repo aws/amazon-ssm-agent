@@ -123,10 +123,41 @@ func TestDocumentStatus(t *testing.T) {
 		},
 	}
 	for _, tstCase := range testCases {
-		docInfo1 := DocumentResultAggregator(logger, "aws:runScript", tstCase.Input)
-		docInfo2 := DocumentResultAggregator(logger, "", tstCase.Input)
-		assert.Equal(t, docInfo1.DocumentStatus, contracts.ResultStatusInProgress)
-		assert.Equal(t, docInfo2.DocumentStatus, tstCase.Output)
+		status1, _, _ := DocumentResultAggregator(logger, "aws:runScript", tstCase.Input)
+		status2, _, _ := DocumentResultAggregator(logger, "", tstCase.Input)
+		assert.Equal(t, status1, contracts.ResultStatusInProgress)
+		assert.Equal(t, status2, tstCase.Output)
 	}
 
+}
+
+func TestDocumentStatusCount(t *testing.T) {
+	input := map[string]*contracts.PluginResult{
+		"aws:runScript": &contracts.PluginResult{
+			PluginName:     "aws:runScript",
+			Code:           0,
+			Status:         "Success",
+			Output:         "standard output of test case\n----------ERROR-------\nstandard error of test case",
+			StartDateTime:  times.ParseIso8601UTC("2015-07-09T23:23:39.019Z"),
+			EndDateTime:    times.ParseIso8601UTC("2015-07-09T23:23:39.023Z"),
+			StandardError:  "error",
+			StandardOutput: "output",
+		},
+		"aws:runPowerShellScript": &contracts.PluginResult{
+			PluginName:     "aws:runScript",
+			Code:           0,
+			Status:         "Failed",
+			Output:         "standard output of test case\n----------ERROR-------\nstandard error of test case",
+			StartDateTime:  times.ParseIso8601UTC("2015-07-09T23:23:39.019Z"),
+			EndDateTime:    times.ParseIso8601UTC("2015-07-09T23:23:39.023Z"),
+			StandardError:  "error",
+			StandardOutput: "output",
+		},
+	}
+	output := map[string]int{
+		"Success": 1,
+		"Failed":  1,
+	}
+	_, statusCount, _ := DocumentResultAggregator(logger, "", input)
+	assert.Equal(t, statusCount, output)
 }
