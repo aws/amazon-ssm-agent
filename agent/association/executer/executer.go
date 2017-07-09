@@ -197,8 +197,7 @@ func (r *AssociationExecuter) pluginExecutionReport(
 	outputs map[string]*contracts.PluginResult,
 	totalNumberOfPlugins int) {
 
-	docInfo := docmanager.DocumentResultAggregator(log, pluginID, outputs)
-	runtimeStatuses := docInfo.RuntimeStatus
+	_, _, runtimeStatuses := docmanager.DocumentResultAggregator(log, pluginID, outputs)
 	outputContent, err := jsonutil.Marshal(runtimeStatuses)
 	if err != nil {
 		log.Error("could not marshal plugin outputs! ", err)
