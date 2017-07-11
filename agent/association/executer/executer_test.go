@@ -18,8 +18,6 @@ import (
 	"fmt"
 	"testing"
 
-	"time"
-
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/association/service"
 	"github.com/aws/amazon-ssm-agent/agent/context"
@@ -126,11 +124,8 @@ func TestAssociationExecuter_ExecuteInProgressDocument(t *testing.T) {
 	bookkeepingMock := NewMockBookkeepingSvc()
 	bookkeepingSvc = bookkeepingMock
 	bookkeepingMock.On("MoveDocumentState", ctxMock.Log(), docID, instID, appconfig.DefaultLocationOfCurrent, appconfig.DefaultLocationOfCompleted).Return(nil)
-	bookkeepingMock.On("DeleteOldDocumentFolderLogs", ctxMock.Log(), instID, "", 0, mock.Anything, mock.Anything).Return(nil)
 	close(resChan)
 	r.ExecuteInProgressDocument(ctxMock, &docState, &cancelFlag)
-	//wait for go routine to complete
-	time.Sleep(2)
 	executerMock.AssertExpectations(t)
 	bookkeepingMock.AssertExpectations(t)
 	svcMock.AssertExpectations(t)
@@ -168,6 +163,6 @@ func (m *BookkeepingSvcMock) MoveDocumentState(log log.T, documentID, instanceID
 }
 
 func (m *BookkeepingSvcMock) DeleteOldDocumentFolderLogs(log log.T, instanceID, orchestrationRootDirName string, retentionDurationHours int, isIntendedFileNameFormat func(string) bool, formOrchestrationFolderName func(string) string) {
-	m.Called(log, instanceID, orchestrationRootDirName, retentionDurationHours, isIntendedFileNameFormat, formOrchestrationFolderName)
+	//do not adverize you're called since we don't set expectations on this function
 	return
 }
