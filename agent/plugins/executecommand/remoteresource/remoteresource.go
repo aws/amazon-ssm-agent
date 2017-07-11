@@ -32,6 +32,7 @@ const (
 type RemoteResource interface {
 	Download(log log.T, filesys filemanager.FileSystem, entireDir bool, destinationDir string) error
 	PopulateResourceInfo(log log.T, destinationDir string, entireDir bool) (resourceInfo ResourceInfo, err error)
+	ValidateLocationInfo() (bool, error)
 }
 
 // ResourceInfo represents the required information after downloading the remote resource

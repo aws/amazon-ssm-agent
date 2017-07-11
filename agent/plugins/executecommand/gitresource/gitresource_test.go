@@ -312,3 +312,67 @@ func TestGitResource_PopulateResourceInfoEntireDirFalseScript(t *testing.T) {
 	assert.Equal(t, resourceInfo.LocalDestinationPath, filepath.Join("destination", "path/to/file.rb"))
 
 }
+
+func TestGitResource_ValidateLocationInfoOwner(t *testing.T) {
+	locationInfo := `{
+		"repository": "repo",
+		"path":"path/to/file.rb",
+		"getOptions": ""
+	}`
+
+	gitresource, _ := NewGitResource(nil, locationInfo)
+	_, err := gitresource.ValidateLocationInfo()
+
+	assert.Error(t, err)
+	assert.Equal(t, "Owner for Git LocationType must be specified", err)
+}
+
+func TestGitResource_ValidateLocationInfoRepo(t *testing.T) {
+	locationInfo := `{
+		"owner": "owner",
+		"path":"path/to/file.rb",
+		"getOptions": ""
+	}`
+	gitresource, _ := NewGitResource(nil, locationInfo)
+	_, err := gitresource.ValidateLocationInfo()
+
+	assert.Error(t, err)
+	assert.Equal(t, "Repository for Git LocationType must be specified", err)
+}
+func TestGitResource_ValidateLocationInfoPath(t *testing.T) {
+
+	locationInfo := `{
+		"owner": "owner",
+		"repository": "repo",
+		"getOptions": ""
+	}`
+
+	gitresource, _ := NewGitResource(nil, locationInfo)
+	_, err := gitresource.ValidateLocationInfo()
+
+	assert.Error(t, err)
+	assert.Equal(t, "Path for Git LocationType must be specified", err)
+
+}
+func TestGitResource_ValidateLocationInfo(t *testing.T) {
+
+	locationInfo := `{
+		"owner": "owner",
+		"repository": "repo",
+		"path":"path/to/file.rb",
+		"getOptions": ""
+	}`
+
+	gitresource, _ := NewGitResource(nil, locationInfo)
+	_, err := gitresource.ValidateLocationInfo()
+
+	assert.NoError(t, err)
+}
+
+func TestNewGitResource_parseLocationInfoFail(t *testing.T) {
+
+	_, err := NewGitResource(nil, "")
+
+	assert.Error(t, err)
+	assert.Equal(t, "Location Info could not be unmarshalled for location type Git. Please check JSON format of locationInfo", err.Error())
+}
