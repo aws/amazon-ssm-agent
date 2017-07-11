@@ -19,17 +19,18 @@ import (
 	"fmt"
 	"io/ioutil"
 	"path"
+	"strings"
 	"testing"
 	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/docmanager/model"
+	"github.com/aws/amazon-ssm-agent/agent/docparser"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	messageContracts "github.com/aws/amazon-ssm-agent/agent/message/contracts"
-	"github.com/aws/amazon-ssm-agent/agent/message/parser"
 	"github.com/aws/amazon-ssm-agent/agent/message/processor/executer"
 	"github.com/aws/amazon-ssm-agent/agent/message/processor/executer/mock"
 	"github.com/aws/amazon-ssm-agent/agent/message/service"
@@ -342,7 +343,8 @@ func TestProcessSendCommandMessage(t *testing.T) {
 
 func generateTestCaseFromFiles(t *testing.T, messagePayloadFile string, messageReplyPayloadFile string, instanceID string) (testCase TestCaseSendCommand) {
 	// load message payload and create MDS message from it
-	payload, err := parser.ParseMessageWithParams(loggers, string(loadFile(t, messagePayloadFile)))
+	var payload messageContracts.SendCommandPayload
+	err := json.Unmarshal((loadFile(t, messagePayloadFile)), &payload)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -398,8 +400,26 @@ func generateTestCaseFromFiles(t *testing.T, messagePayloadFile string, messageR
 		}
 		testCase.PluginStatesArray = pluginStatesArrays
 	}
+	var documentType model.DocumentType
+	if strings.HasPrefix(*testCase.Msg.Topic, string(SendCommandTopicPrefixOffline)) {
+		documentType = model.SendCommandOffline
+	} else {
+		documentType = model.SendCommand
+	}
+	documentInfo := newDocumentInfo(testCase.Msg, payload)
+	parserInfo := docparser.DocumentParserInfo{
+		OrchestrationDir: orchestrationRootDir,
+		S3Bucket:         payload.OutputS3BucketName,
+		S3Prefix:         s3KeyPrefix,
+		MessageId:        documentInfo.MessageID,
+		DocumentId:       documentInfo.DocumentID,
+	}
 
-	testCase.DocState = initializeSendCommandState(payload, orchestrationRootDir, s3KeyPrefix, testCase.Msg)
+	//Data format persisted in Current Folder is defined by the struct - CommandState
+	testCase.DocState, err = docparser.InitializeDocState(loggers, documentType, &payload.DocumentContent, documentInfo, parserInfo, payload.Parameters)
+	if err != nil {
+		t.Fatal(err)
+	}
 
 	return
 }
