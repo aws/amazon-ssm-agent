@@ -25,6 +25,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/plugins/executecommand/remoteresource"
 	"github.com/go-github/github"
 
+	"errors"
 	"fmt"
 	"net/http"
 	"path/filepath"
@@ -161,6 +162,24 @@ func (git *GitResource) PopulateResourceInfo(log log.T, destinationDir string, e
 
 	return resourceInfo, nil
 
+}
+
+// ValidateLocationInfo ensures that the required parameters of Location Info are specified
+func (git *GitResource) ValidateLocationInfo() (valid bool, err error) {
+	// source not yet supported
+	if git.Info.Owner == "" {
+		return false, errors.New("Owner for Git LocationType must be specified")
+	}
+
+	if git.Info.Repository == "" {
+		return false, errors.New("Repository for Git LocationType must be specified")
+	}
+
+	if git.Info.Path == "" {
+		return false, errors.New("Path for Git LocationType must be specified")
+	}
+
+	return true, nil
 }
 
 // isFileContentType returns true if the repository content points to a file
