@@ -21,7 +21,6 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	docModel "github.com/aws/amazon-ssm-agent/agent/docmanager/model"
 	"github.com/aws/amazon-ssm-agent/agent/log"
-	"github.com/aws/amazon-ssm-agent/agent/message/processor/executer"
 	executermock "github.com/aws/amazon-ssm-agent/agent/message/processor/executer/mock"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 	"github.com/stretchr/testify/assert"
@@ -38,6 +37,9 @@ type TestCase struct {
 
 	// PluginResults stores the (unmarshalled) results that the plugins are expected to produce.
 	PluginResults map[string]*contracts.PluginResult
+
+	//Result
+	ResultStatus contracts.ResultStatus
 }
 
 // TestBasicExecuter test the execution of a given document
@@ -74,6 +76,7 @@ func TestBasicExecuter(t *testing.T) {
 		MsgId:         "aws.ssm.13e8e6ad-e195-4ccb-86ee-328153b0dafe.i-400e1090",
 		DocState:      docState,
 		PluginResults: results,
+		ResultStatus:  contracts.ResultStatusSuccess,
 	}
 	testBasicExecuter(t, testCase)
 }
@@ -94,25 +97,46 @@ func testBasicExecuter(t *testing.T, testCase TestCase) {
 	dataStoreMock.On("Load").Return(&state)
 	dataStoreMock.On("Save").Return()
 	pluginRunner = func(context context.T,
-		docStore executer.DocumentStore,
+		executionID string,
+		documentCreatedDate string,
+		plugins []docModel.PluginState,
 		resChan chan contracts.PluginResult,
-		cancelFlag task.CancelFlag) {
-		assert.Equal(t, docStore, dataStoreMock)
+		cancelFlag task.CancelFlag) map[string]*contracts.PluginResult {
+		outputs := make(map[string]*contracts.PluginResult)
 		for _, pluginState := range testCase.DocState.InstancePluginsInformation {
 			resChan <- *testCase.PluginResults[pluginState.Id]
+			outputs[pluginState.Id] = testCase.PluginResults[pluginState.Id]
 		}
-		docStore.Save()
-		close(resChan)
+		return outputs
 	}
+
 	resChan := e.Run(cancelFlag, dataStoreMock)
-
+	done := false
 	for res := range resChan {
+		if done {
+			assert.FailNow(t, "response channel is not closed")
+		}
+		//receive overall results
+		if res.LastPlugin == "" {
+			//all individual plugin has finished execution
+			assert.Equal(t, nStatusReceived, nPlugins)
+			assert.Equal(t, res.Status, testCase.ResultStatus)
+			assert.Equal(t, res.PluginResults, testCase.PluginResults)
+			//assert channel close last
+			done = true
+			continue
+		}
+		curPlugin := testCase.DocState.InstancePluginsInformation[nStatusReceived].Name
+		//assert plugin execution order
+		assert.Equal(t, curPlugin, res.LastPlugin)
 		nStatusReceived++
-		assert.Equal(t, res, *testCase.PluginResults[res.PluginName])
-
+		//Assert the number of plugins have been updated
+		assert.Equal(t, len(res.PluginResults), nStatusReceived)
+		//Assert the specific latest plugin is updated
+		assert.Equal(t, res.PluginResults[res.LastPlugin], testCase.PluginResults[res.LastPlugin])
 	}
-	assert.Equal(t, nStatusReceived, nPlugins)
-
+	//assert transaction has completed
+	assert.True(t, done)
 	dataStoreMock.AssertExpectations(t)
 
 }

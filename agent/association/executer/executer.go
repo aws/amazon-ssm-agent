@@ -108,11 +108,9 @@ func (r *AssociationExecuter) ExecuteInProgressDocument(context context.T, docSt
 	docStore := executer.NewDocumentFileStore(assocContext, instanceID, documentID, appconfig.DefaultLocationOfCurrent, docState)
 
 	resChan := e.Run(cancelFlag, &docStore)
-	var outputs = make(map[string]*contracts.PluginResult)
 	for res := range resChan {
-		log.Infof("update association status upon plugin $v completion", res.PluginName)
-		outputs[res.PluginName] = &res
-		r.pluginExecutionReport(log, assocID, res.PluginName, outputs, totalNumberOfActions)
+		log.Infof("update association status upon plugin $v completion", res.LastPlugin)
+		r.pluginExecutionReport(log, assocID, res.LastPlugin, res.PluginResults, totalNumberOfActions)
 	}
 
 	//TODO below is processor's responisbility, make sure them parity with Processor

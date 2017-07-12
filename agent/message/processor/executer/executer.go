@@ -25,9 +25,10 @@ import (
 //Executer accepts an DocumentStore object, save when necessary for crash-recovery, and return when finshes the run, while
 //the caller will pick up the result from the same docStore object
 type Executer interface {
+	//TODO in future, docState should be de-composed into static/dynamic && plugin/document informations
 	// Given a document and run it, receiving results from status update channel, return a map of plugin results
 	Run(cancelFlag task.CancelFlag, //Inbound message
-		docStore DocumentStore) chan contracts.PluginResult
+		docStore DocumentStore) chan contracts.DocumentResult
 }
 
 //DocumentStore is an wrapper over the document state class that provides additional persisting functions for the Executer
