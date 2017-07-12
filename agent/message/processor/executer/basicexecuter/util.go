@@ -107,10 +107,6 @@ func runPlugins(
 
 		//check if the said plugin is a worker plugin
 		p, pluginHandlerFound := pluginRegistry[pluginName]
-		if !pluginHandlerFound {
-			//check if the said plugin is a long running plugin
-			p, pluginHandlerFound = plugin.RegisteredLongRunningPlugins(context)[pluginName]
-		}
 
 		runner := runpluginutil.PluginRunner{
 			RunPlugins:  RunPluginsLegacy,
@@ -404,10 +400,6 @@ func RunPluginsLegacy(
 
 		//check if the said plugin is a worker plugin
 		p, pluginHandlerFound := pluginRegistry[pluginName]
-		if !pluginHandlerFound {
-			//check if the said plugin is a long running plugin
-			p, pluginHandlerFound = plugin.RegisteredLongRunningPlugins(context)[pluginName]
-		}
 
 		runner := runpluginutil.PluginRunner{
 			RunPlugins:  RunPluginsLegacy,
