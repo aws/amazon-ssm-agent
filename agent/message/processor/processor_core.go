@@ -248,31 +248,28 @@ func (p *Processor) processSendCommandMessage(context context.T,
 
 	log := context.Log()
 
-	log.Debug("Running executer...")
 	documentID := docState.DocumentInformation.DocumentID
 	instanceID := docState.DocumentInformation.InstanceID
 	messageID := docState.DocumentInformation.MessageID
 	//TODO This will be changed to a function (or channel) that hands the result over to service
 	sendResponse := responseProvider(log, messageID, mdsService, p.config.AgentInfo, p.processorStopPolicy)
+	//This should be the only allocation Processor has
 	e := p.executerCreator(context)
 	docStore := executer.NewDocumentFileStore(context, instanceID, documentID, appconfig.DefaultLocationOfCurrent, docState)
+	log.Debug("Running executer...")
 	resChan := e.Run(
 		cancelFlag,
 		&docStore,
 	)
 
 	for res := range resChan {
-		log.Infof("sending reply for plugin %v update", res.PluginName)
+		log.Infof("sending reply for plugin %v update", res.LastPlugin)
 		//TODO move this function and its bounded closure to service
-		sendResponse(res.PluginName, res)
+		sendResponse(res.LastPlugin, res)
+
 	}
+
 	newCmdState := docStore.Load()
-
-	//TODO DocLevel response should eventually move to Service module
-	//send document complete response
-	log.Debug("Sending reply on message completion ", documentID)
-	sendResponse("", contracts.PluginResult{})
-
 	// Skip move docState since the document has not finshed yet
 	if newCmdState.DocumentInformation.DocumentStatus == contracts.ResultStatusSuccessAndReboot {
 		log.Infof("document %v did not finish up execution, need to resume", newCmdState.DocumentInformation.MessageID)

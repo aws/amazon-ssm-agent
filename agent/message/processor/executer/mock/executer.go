@@ -32,9 +32,9 @@ func NewMockExecuter() *MockedExecuter {
 
 func (executerMock *MockedExecuter) Run(
 	cancelFlag task.CancelFlag,
-	docStore executer.DocumentStore) chan contracts.PluginResult {
+	docStore executer.DocumentStore) chan contracts.DocumentResult {
 	args := executerMock.Called(cancelFlag, docStore)
-	return args.Get(0).(chan contracts.PluginResult)
+	return args.Get(0).(chan contracts.DocumentResult)
 }
 
 type MockDocumentStore struct {
