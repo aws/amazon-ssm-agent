@@ -21,6 +21,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/docparser"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	"github.com/aws/amazon-ssm-agent/agent/framework/runpluginutil"
+	"github.com/aws/amazon-ssm-agent/agent/platform"
 
 	"encoding/json"
 	"io/ioutil"
@@ -76,3 +77,19 @@ func (fileSysDepImp) Exists(filePath string) bool {
 func (fileSysDepImp) ReadFile(filename string) ([]byte, error) {
 	return ioutil.ReadFile(filename)
 }
+
+var instance instanceInfo = &instanceInfoImp{}
+
+// system represents the dependency for platform
+type instanceInfo interface {
+	InstanceID() (string, error)
+	Region() (string, error)
+}
+
+type instanceInfoImp struct{}
+
+// InstanceID wraps platform InstanceID
+func (instanceInfoImp) InstanceID() (string, error) { return platform.InstanceID() }
+
+// Region wraps platform Region
+func (instanceInfoImp) Region() (string, error) { return platform.Region() }
