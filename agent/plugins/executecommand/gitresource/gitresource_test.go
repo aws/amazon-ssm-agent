@@ -75,10 +75,8 @@ func TestGitResource_Download(t *testing.T) {
 	clientMock.On("GetRepositoryContents", logMock, gitInfo.Owner, gitInfo.Repository, gitInfo.Path, opt).Return(&fileMetadata, dirMetadata, mockErr).Once()
 
 	fileMock := filemock.FileSystemMock{}
-	var fileMockErr error
-	fileMockErr = nil
-	fileMock.On("MakeDirs", mock.Anything).Return(fileMockErr)
-	fileMock.On("WriteFile", mock.Anything, mock.Anything).Return(fileMockErr)
+	fileMock.On("MakeDirs", mock.Anything).Return(nil)
+	fileMock.On("WriteFile", mock.Anything, mock.Anything).Return(nil)
 
 	err := gitResource.Download(logMock, fileMock, false, "")
 	clientMock.AssertExpectations(t)
@@ -324,7 +322,7 @@ func TestGitResource_ValidateLocationInfoOwner(t *testing.T) {
 	_, err := gitresource.ValidateLocationInfo()
 
 	assert.Error(t, err)
-	assert.Equal(t, "Owner for Git LocationType must be specified", err)
+	assert.Equal(t, "Owner for Git LocationType must be specified", err.Error())
 }
 
 func TestGitResource_ValidateLocationInfoRepo(t *testing.T) {
@@ -337,7 +335,7 @@ func TestGitResource_ValidateLocationInfoRepo(t *testing.T) {
 	_, err := gitresource.ValidateLocationInfo()
 
 	assert.Error(t, err)
-	assert.Equal(t, "Repository for Git LocationType must be specified", err)
+	assert.Equal(t, "Repository for Git LocationType must be specified", err.Error())
 }
 func TestGitResource_ValidateLocationInfoPath(t *testing.T) {
 
@@ -351,7 +349,7 @@ func TestGitResource_ValidateLocationInfoPath(t *testing.T) {
 	_, err := gitresource.ValidateLocationInfo()
 
 	assert.Error(t, err)
-	assert.Equal(t, "Path for Git LocationType must be specified", err)
+	assert.Equal(t, "Path for Git LocationType must be specified", err.Error())
 
 }
 func TestGitResource_ValidateLocationInfo(t *testing.T) {
