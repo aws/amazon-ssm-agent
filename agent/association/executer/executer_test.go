@@ -118,7 +118,7 @@ func TestAssociationExecuter_ExecuteInProgressDocument(t *testing.T) {
 	r := NewAssociationExecuter(svcMock, &agentInfo)
 	cancelFlag := task.ChanneledCancelFlag{}
 	executerMock := executermocks.NewMockExecuter()
-	resChan := make(chan contracts.PluginResult)
+	resChan := make(chan contracts.DocumentResult)
 	executerMock.On("Run", &cancelFlag, mock.AnythingOfType("*executer.DocumentFileStore")).Return(resChan)
 	executerCreator = func(ctx context.T) executer.Executer {
 		return executerMock

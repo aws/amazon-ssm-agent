@@ -334,6 +334,7 @@ func TestProcessMessageWithInvalidMessage(t *testing.T) {
 // TestProcessMessage tests that processSendCommandMessage calls all the expected APIs
 // with the correct response.
 func TestProcessSendCommandMessage(t *testing.T) {
+	//TODO we parsing in processor test anymore, the Actual contents of DocState Processor does not care, in fact we should test the shutdown-resume scenarios
 	for i, messagePayloadFile := range sampleMessageFiles {
 		messageReplyPayloadFile := sampleMessageReplyFiles[i]
 		testCase := generateTestCaseFromFiles(t, messagePayloadFile, messageReplyPayloadFile, "i-400e1090")
@@ -480,7 +481,7 @@ func testProcessSendCommandMessage(t *testing.T, testCase TestCaseSendCommand) {
 	// stub the responseProvider as no-op
 	responseProvider = func(log log.T, messageID string, mdsService service.Service, agentInfo contracts.AgentInfo, stopPolicy *sdkutil.StopPolicy) SendResponse {
 		assert.Equal(t, messageID, testCase.DocState.DocumentInformation.MessageID)
-		return func(pluginID string, pluginResult contracts.PluginResult) {
+		return func(pluginID string, res contracts.DocumentResult) {
 			assert.Equal(t, pluginID, "")
 			docCompleteCalled = true
 			return
@@ -488,8 +489,18 @@ func testProcessSendCommandMessage(t *testing.T, testCase TestCaseSendCommand) {
 
 	}
 	executerMock := executermocks.NewMockExecuter()
-	resChan := make(chan contracts.PluginResult)
-	executerMock.On("Run", cancelFlag, mock.AnythingOfType("*executer.DocumentFileStore")).Return(resChan)
+	//res is buffered channel for non-blocking send/receive throughout the document cycle
+	resChan := make(chan contracts.DocumentResult, len(testCase.DocState.InstancePluginsInformation))
+	executerMock.On("Run", cancelFlag, mock.AnythingOfType("*executer.DocumentFileStore")).Return(resChan).Run(func(mock.Arguments) {
+		//TODO fill status with test cases and assert accordingly to test shutdown/cancel
+		//for processor unittest, only return one complete final result, Processor actually care not about the contents of result, only the status of it
+		resChan <- contracts.DocumentResult{
+			Status:     contracts.ResultStatusSuccess,
+			LastPlugin: "",
+		}
+		//complete signal
+		close(resChan)
+	})
 
 	// call method under test
 	//orchestrationRootDir is set to empty such that it can meet the test expectation.
@@ -499,7 +510,6 @@ func testProcessSendCommandMessage(t *testing.T, testCase TestCaseSendCommand) {
 	p := Processor{
 		executerCreator: creator,
 	}
-	close(resChan)
 	p.processSendCommandMessage(context.NewMockDefault(), mdsMock, cancelFlag, &testCase.DocState)
 
 	mdsMock.AssertExpectations(t)

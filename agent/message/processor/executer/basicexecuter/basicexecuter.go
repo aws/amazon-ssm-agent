@@ -18,6 +18,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/docmanager"
+	docModel "github.com/aws/amazon-ssm-agent/agent/docmanager/model"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/message/processor/executer"
 	"github.com/aws/amazon-ssm-agent/agent/message/processor/executer/plugin"
@@ -27,15 +28,24 @@ import (
 //TODO currently BasicExecuter.Run() is not idempotent, we should make it so in future
 // BasicExecuter is a thin wrapper over runPlugins().
 type BasicExecuter struct {
-	//TODO add cancelFlag attribute
-	statusChan chan contracts.PluginResult
-	ctx        context.T
+	resChan chan contracts.DocumentResult
+	ctx     context.T
+}
+
+var pluginRunner = func(context context.T,
+	executionID string,
+	documentCreatedDate string,
+	plugins []docModel.PluginState,
+	resChan chan contracts.PluginResult,
+	cancelFlag task.CancelFlag) (pluginOutputs map[string]*contracts.PluginResult) {
+	return runPlugins(context, executionID, documentCreatedDate, plugins, plugin.RegisteredWorkerPlugins(context), resChan, cancelFlag)
+
 }
 
 //TODO determine the common functions shared by BasicExecuter and out-of-proc Executer
-var pluginRunner = func(context context.T,
+func run(context context.T,
 	docStore executer.DocumentStore,
-	resChan chan contracts.PluginResult,
+	resChan chan contracts.DocumentResult,
 	cancelFlag task.CancelFlag) {
 	defer func() {
 		if msg := recover(); msg != nil {
@@ -43,11 +53,41 @@ var pluginRunner = func(context context.T,
 		}
 	}()
 	docState := docStore.Load()
-	outputs := runPlugins(context, docState.DocumentInformation.MessageID, "", docState.InstancePluginsInformation, plugin.RegisteredWorkerPlugins(context), resChan, cancelFlag)
+	statusChan := make(chan contracts.PluginResult)
+	//The go-routine to listen to individual plugin update
+	go func() {
+		defer func() {
+			if msg := recover(); msg != nil {
+				context.Log().Errorf("Executer listener panic: %v", msg)
+			}
+		}()
+		results := make(map[string]*contracts.PluginResult)
+		for res := range statusChan {
+			results[res.PluginName] = &res
+			//TODO decompose this function to return only Status
+			status, _, _ := docmanager.DocumentResultAggregator(context.Log(), res.PluginName, results)
+			docResult := contracts.DocumentResult{
+				Status:        status,
+				PluginResults: results,
+				LastPlugin:    res.PluginName,
+			}
+			resChan <- docResult
+		}
+	}()
+
+	outputs := pluginRunner(context, docState.DocumentInformation.MessageID, "", docState.InstancePluginsInformation, statusChan, cancelFlag)
+	close(statusChan)
 	pluginOutputContent, _ := jsonutil.Marshal(outputs)
 	context.Log().Debugf("Plugin outputs %v", jsonutil.Indent(pluginOutputContent))
-	//TODO result aggregation should not be done && persisted in the Executer, remove this part once service extraction is done
+	//send DocLevel response
 	status, _, runtimeStatuses := docmanager.DocumentResultAggregator(context.Log(), "", outputs)
+	result := contracts.DocumentResult{
+		Status:        status,
+		PluginResults: outputs,
+		LastPlugin:    "",
+	}
+	resChan <- result
+	//TODO documentInformation is an ambiguous struct, will be removed in future
 	docState.DocumentInformation.DocumentStatus = status
 	docState.DocumentInformation.RuntimeStatus = runtimeStatuses
 	// persist the docState object
@@ -60,21 +100,21 @@ var pluginRunner = func(context context.T,
 // using a pointer so that it can be shared among multiple threads(go-routines)
 func NewBasicExecuter(context context.T) executer.Executer {
 	return &BasicExecuter{
-		ctx: context,
+		ctx: context.With("[BasicExecuter]"),
 	}
 }
 
 func (e *BasicExecuter) Run(
 	cancelFlag task.CancelFlag,
-	docStore executer.DocumentStore) chan contracts.PluginResult {
+	docStore executer.DocumentStore) chan contracts.DocumentResult {
 
 	log := e.ctx.Log()
 	docState := docStore.Load()
 	nPlugins := len(docState.InstancePluginsInformation)
 	// we're creating a buffered channel according to the number of plugins the document has
-	e.statusChan = make(chan contracts.PluginResult, nPlugins)
+	e.resChan = make(chan contracts.DocumentResult, nPlugins)
 
 	log.Debug("Running plugins...")
-	go pluginRunner(e.ctx, docStore, e.statusChan, cancelFlag)
-	return e.statusChan
+	go run(e.ctx, docStore, e.resChan, cancelFlag)
+	return e.resChan
 }
