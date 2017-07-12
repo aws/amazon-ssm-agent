@@ -52,56 +52,24 @@ var allPlugins = map[string]struct{}{
 	appconfig.PluginNameRefreshAssociation:     {},
 }
 
-// registeredExecuters stores the registered plugins.
-var registeredExecuters, registeredLongRunningPlugins *runpluginutil.PluginRegistry
+var once sync.Once
+
+// registeredPlugins stores the registered plugins.
+var registeredPlugins *runpluginutil.PluginRegistry
 
 // RegisteredWorkerPlugins returns all registered core modules.
 func RegisteredWorkerPlugins(context context.T) runpluginutil.PluginRegistry {
-	if !isLoaded() {
-		cache(loadWorkerPlugins(context), loadLongRunningPlugins(context))
-	}
-	return getCachedWorkerPlugins()
+	once.Do(func() {
+		loadWorkers(context)
+	})
+	return *registeredPlugins
 }
 
-// LongRunningPlugins returns a map of long running plugins and their respective handlers
-func RegisteredLongRunningPlugins(context context.T) runpluginutil.PluginRegistry {
-	if !isLoaded() {
-		cache(loadWorkerPlugins(context), loadLongRunningPlugins(context))
-	}
-	return getCachedLongRunningPlugins()
-}
-
-var lock sync.RWMutex
-
-func isLoaded() bool {
-	lock.RLock()
-	defer lock.RUnlock()
-	return registeredExecuters != nil
-}
-
-func cache(workerPlugins, longRunningPlugins runpluginutil.PluginRegistry) {
-	lock.Lock()
-	defer lock.Unlock()
-	registeredExecuters = &workerPlugins
-	registeredLongRunningPlugins = &longRunningPlugins
-}
-
-func getCachedWorkerPlugins() runpluginutil.PluginRegistry {
-	lock.RLock()
-	defer lock.RUnlock()
-	return *registeredExecuters
-}
-
-func getCachedLongRunningPlugins() runpluginutil.PluginRegistry {
-	lock.RLock()
-	defer lock.RUnlock()
-	return *registeredLongRunningPlugins
-}
-
-// loadLongRunningPlugins loads all long running plugins
-func loadLongRunningPlugins(context context.T) runpluginutil.PluginRegistry {
+// loadWorkers loads all worker plugins that are invokers for interacting with long running plugins and
+// then all standard worker plugins (if there are any conflicting names, the standard worker plugin wins)
+func loadWorkers(context context.T) {
 	log := context.Log()
-	var longRunningPlugins = runpluginutil.PluginRegistry{}
+	plugins := runpluginutil.PluginRegistry{}
 
 	//Long running plugins are handled by lrpm. lrpminvoker is a worker plugin that can communicate with lrpm.
 	//that's why all long running plugins are first handled by lrpminvoker - which then hands off the work to lrpm.
@@ -111,25 +79,18 @@ func loadLongRunningPlugins(context context.T) runpluginutil.PluginRegistry {
 		log.Errorf("Failed to load lrpminvoker that will handle all long running plugins - %v", err)
 	} else {
 		//registering handler for aws:cloudWatch plugin
-		longRunningPlugins[appconfig.PluginNameCloudWatch] = handler
+		plugins[appconfig.PluginNameCloudWatch] = handler
 	}
 
-	return longRunningPlugins
-}
-
-// loadWorkerPlugins loads all plugins
-func loadWorkerPlugins(context context.T) runpluginutil.PluginRegistry {
-	var workerPlugins = runpluginutil.PluginRegistry{}
-
 	for key, value := range loadPlatformIndependentPlugins(context) {
-		workerPlugins[key] = value
+		plugins[key] = value
 	}
 
 	for key, value := range loadPlatformDependentPlugins(context) {
-		workerPlugins[key] = value
+		plugins[key] = value
 	}
 
-	return workerPlugins
+	registeredPlugins = &plugins
 }
 
 // loadPlatformIndependentPlugins registers plugins common to all platforms
