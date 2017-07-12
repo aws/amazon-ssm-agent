@@ -84,19 +84,13 @@ type ExecuterCreator func(ctx context.T) executer.Executer
 //TODO move these 2 type to service
 // SendDocumentLevelResponse is used to send status response before plugin begins
 type SendDocumentLevelResponse func(messageID string, resultStatus contracts.ResultStatus, documentTraceOutput string)
-type SendResponse func(pluginID string, res contracts.PluginResult)
+type SendResponse func(pluginID string, res contracts.DocumentResult)
 
+//TODO this is temporarily solution before we have service; once we have it, a nice and clean protocol will be defined in terms of status update
 // responseProvider is a closure to hold replyBuilder, before we create the service interface
 var responseProvider = func(log log.T, messageID string, mdsService service.Service, agentInfo contracts.AgentInfo, stopPolicy *sdkutil.StopPolicy) SendResponse {
-	replyBuilder := reply.NewSendReplyBuilder()
-	return func(pluginID string, res contracts.PluginResult) {
-		//TODO this is temporarily solution before we have service; once we have it, a nice and clean protocol will be defined in terms of status update
-		if pluginID == "" {
-			processSendReply(log, messageID, mdsService, replyBuilder.FormatPayload(log, "", agentInfo), stopPolicy)
-			return
-		}
-		replyBuilder.UpdatePluginResult(res)
-		processSendReply(log, messageID, mdsService, replyBuilder.FormatPayload(log, res.PluginName, agentInfo), stopPolicy)
+	return func(pluginID string, res contracts.DocumentResult) {
+		processSendReply(log, messageID, mdsService, reply.FormatPayload(log, pluginID, agentInfo, res.PluginResults), stopPolicy)
 	}
 }
 

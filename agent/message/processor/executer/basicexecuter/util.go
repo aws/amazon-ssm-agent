@@ -40,6 +40,7 @@ const (
 // Assign method to global variables to allow unittest to override
 var isSupportedPlugin = plugin.IsPluginSupportedForCurrentPlatform
 
+//TODO remove executionID and creation date
 // RunPlugins executes a set of plugins. The plugin configurations are given in a map with pluginId as key.
 // Outputs the results of running the plugins, indexed by pluginId.
 // Make this function private in case everybody tries to reference it everywhere, this is a private member of Executer
