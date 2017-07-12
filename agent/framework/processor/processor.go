@@ -67,6 +67,7 @@ type EngineProcessor struct {
 	//TODO this should be abstract as the Processor's domain
 	supportedDocTypes []model.DocumentType
 	resChan           chan contracts.DocumentResult
+	documentMgr       docmanager.DocumentMgr
 }
 
 //TODO worker pool should be triggered in the Start() function
@@ -83,6 +84,7 @@ func NewEngineProcessor(ctx context.T, commandWorkerLimit int, cancelWorkerLimit
 	executerCreator := func(ctx context.T) executer.Executer {
 		return outofproc.NewOutOfProcExecuter(ctx)
 	}
+	documentMgr := docmanager.NewDocumentFileMgr(appconfig.DefaultDataStorePath, appconfig.DefaultDocumentRootDirName, appconfig.DefaultLocationOfState)
 	return &EngineProcessor{
 		context:           ctx.With("[EngineProcessor]"),
 		executerCreator:   executerCreator,
@@ -90,6 +92,7 @@ func NewEngineProcessor(ctx context.T, commandWorkerLimit int, cancelWorkerLimit
 		cancelCommandPool: cancelCommandTaskPool,
 		supportedDocTypes: supportedDocs,
 		resChan:           resChan,
+		documentMgr:       documentMgr,
 	}
 }
 
@@ -117,12 +120,12 @@ func (p *EngineProcessor) Start() (resChan chan contracts.DocumentResult, err er
 func (p *EngineProcessor) Submit(docState model.DocumentState) {
 	log := p.context.Log()
 	//queue up the pending document
-	docmanager.PersistData(log, docState.DocumentInformation.DocumentID, docState.DocumentInformation.InstanceID, appconfig.DefaultLocationOfPending, docState)
+	p.documentMgr.PersistDocumentState(log, docState.DocumentInformation.DocumentID, docState.DocumentInformation.InstanceID, appconfig.DefaultLocationOfPending, docState)
 	err := p.submit(&docState)
 	if err != nil {
 		log.Error("Document Submission failed", err)
 		//move the fail-to-submit document to corrupt folder
-		docmanager.MoveDocumentState(log, docState.DocumentInformation.DocumentID, docState.DocumentInformation.InstanceID, appconfig.DefaultLocationOfPending, appconfig.DefaultLocationOfCorrupt)
+		p.documentMgr.MoveDocumentState(log, docState.DocumentInformation.DocumentID, docState.DocumentInformation.InstanceID, appconfig.DefaultLocationOfPending, appconfig.DefaultLocationOfCorrupt)
 		return
 	}
 	return
@@ -143,7 +146,8 @@ func (p *EngineProcessor) submit(docState *model.DocumentState) error {
 			p.executerCreator,
 			cancelFlag,
 			p.resChan,
-			docState)
+			docState,
+			p.documentMgr)
 	})
 
 }
@@ -158,9 +162,9 @@ func (p *EngineProcessor) Cancel(docState model.DocumentState) {
 		jobID = docState.DocumentInformation.MessageID
 	}
 	//queue up the pending document
-	docmanager.PersistData(log, docState.DocumentInformation.DocumentID, docState.DocumentInformation.InstanceID, appconfig.DefaultLocationOfPending, docState)
+	p.documentMgr.PersistDocumentState(log, docState.DocumentInformation.DocumentID, docState.DocumentInformation.InstanceID, appconfig.DefaultLocationOfPending, docState)
 	err := p.cancelCommandPool.Submit(log, jobID, func(cancelFlag task.CancelFlag) {
-		processCancelCommand(p.context, p.sendCommandPool, &docState)
+		processCancelCommand(p.context, p.sendCommandPool, &docState, p.documentMgr)
 	})
 	if err != nil {
 		log.Error("CancelCommand failed", err)
@@ -224,7 +228,7 @@ func (p *EngineProcessor) processPendingDocuments(instanceID string) {
 	for _, f := range files {
 		log.Infof("Processing pending document - %v", f.Name())
 		//inspect document state
-		docState := docmanager.GetDocumentInterimState(log, f.Name(), instanceID, appconfig.DefaultLocationOfPending)
+		docState := p.documentMgr.GetDocumentState(log, f.Name(), instanceID, appconfig.DefaultLocationOfPending)
 
 		if p.isSupportedDocumentType(docState.DocumentType) {
 			log.Debugf("processor processing pending document %v", docState.DocumentInformation.DocumentID)
@@ -259,25 +263,25 @@ func (p *EngineProcessor) processInProgressDocuments(instanceID string) {
 		log.Infof("processing in progress document - %v", f.Name())
 
 		//inspect document state
-		docState := docmanager.GetDocumentInterimState(log, f.Name(), instanceID, appconfig.DefaultLocationOfCurrent)
+		docState := p.documentMgr.GetDocumentState(log, f.Name(), instanceID, appconfig.DefaultLocationOfCurrent)
 
 		retryLimit := config.Mds.CommandRetryLimit
 		if docState.DocumentInformation.RunCount >= retryLimit {
-			docmanager.MoveDocumentState(log, f.Name(), instanceID, appconfig.DefaultLocationOfCurrent, appconfig.DefaultLocationOfCorrupt)
+			p.documentMgr.MoveDocumentState(log, f.Name(), instanceID, appconfig.DefaultLocationOfCurrent, appconfig.DefaultLocationOfCorrupt)
 			continue
 		}
 
 		// increment the command run count
 		docState.DocumentInformation.RunCount++
 
-		docmanager.PersistData(log, docState.DocumentInformation.DocumentID, instanceID, appconfig.DefaultLocationOfCurrent, docState)
+		p.documentMgr.PersistDocumentState(log, docState.DocumentInformation.DocumentID, instanceID, appconfig.DefaultLocationOfCurrent, docState)
 
 		if p.isSupportedDocumentType(docState.DocumentType) {
 			log.Debugf("processor processing in-progress document %v", docState.DocumentInformation.DocumentID)
 			//Submit the work to Job Pool so that we don't block for processing of new messages
 			if err := p.submit(&docState); err != nil {
 				log.Errorf("failed to submit in progress document %v : %v", docState.DocumentInformation.DocumentID, err)
-				docmanager.MoveDocumentState(log, f.Name(), instanceID, appconfig.DefaultLocationOfCurrent, appconfig.DefaultLocationOfCorrupt)
+				p.documentMgr.MoveDocumentState(log, f.Name(), instanceID, appconfig.DefaultLocationOfCurrent, appconfig.DefaultLocationOfCorrupt)
 			}
 		}
 	}
@@ -292,10 +296,10 @@ func (p *EngineProcessor) isSupportedDocumentType(documentType model.DocumentTyp
 	return false
 }
 
-func processCommand(context context.T, executerCreator ExecuterCreator, cancelFlag task.CancelFlag, resChan chan contracts.DocumentResult, docState *model.DocumentState) {
+func processCommand(context context.T, executerCreator ExecuterCreator, cancelFlag task.CancelFlag, resChan chan contracts.DocumentResult, docState *model.DocumentState, docMgr docmanager.DocumentMgr) {
 	log := context.Log()
 	//persist the current running document
-	docmanager.MoveDocumentState(log,
+	docMgr.MoveDocumentState(log,
 		docState.DocumentInformation.DocumentID,
 		docState.DocumentInformation.InstanceID,
 		appconfig.DefaultLocationOfPending,
@@ -305,7 +309,7 @@ func processCommand(context context.T, executerCreator ExecuterCreator, cancelFl
 	instanceID := docState.DocumentInformation.InstanceID
 	messageID := docState.DocumentInformation.MessageID
 	e := executerCreator(context)
-	docStore := executer.NewDocumentFileStore(context, instanceID, documentID, appconfig.DefaultLocationOfCurrent, docState)
+	docStore := executer.NewDocumentFileStore(context, instanceID, documentID, appconfig.DefaultLocationOfCurrent, docState, docMgr)
 	statusChan := e.Run(
 		cancelFlag,
 		&docStore,
@@ -338,7 +342,7 @@ func processCommand(context context.T, executerCreator ExecuterCreator, cancelFl
 	//persist : commands execution in completed folder (terminal state folder)
 	log.Infof("execution of %v is over. Moving interimState file from Current to Completed folder", messageID)
 
-	docmanager.MoveDocumentState(log,
+	docMgr.MoveDocumentState(log,
 		documentID,
 		instanceID,
 		appconfig.DefaultLocationOfCurrent,
@@ -347,7 +351,7 @@ func processCommand(context context.T, executerCreator ExecuterCreator, cancelFl
 }
 
 //TODO CancelCommand is currently treated as a special type of Command by the Processor, but in general Cancel operation should be seen as a probe to existing commands
-func processCancelCommand(context context.T, sendCommandPool task.Pool, docState *model.DocumentState) {
+func processCancelCommand(context context.T, sendCommandPool task.Pool, docState *model.DocumentState, docMgr docmanager.DocumentMgr) {
 
 	log := context.Log()
 
@@ -363,15 +367,15 @@ func processCancelCommand(context context.T, sendCommandPool task.Pool, docState
 	}
 
 	//persist the final status of cancel-message in current folder
-	docmanager.PersistData(log,
+	docMgr.PersistDocumentState(log,
 		docState.DocumentInformation.DocumentID,
 		docState.DocumentInformation.InstanceID,
-		appconfig.DefaultLocationOfCurrent, docState)
+		appconfig.DefaultLocationOfCurrent, *docState)
 
 	//persist : commands execution in completed folder (terminal state folder)
 	log.Debugf("Execution of %v is over. Moving interimState file from Current to Completed folder", docState.DocumentInformation.MessageID)
 
-	docmanager.MoveDocumentState(log,
+	docMgr.MoveDocumentState(log,
 		docState.DocumentInformation.DocumentID,
 		docState.DocumentInformation.InstanceID,
 		appconfig.DefaultLocationOfCurrent,

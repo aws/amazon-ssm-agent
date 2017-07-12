@@ -40,20 +40,22 @@ type DocumentStore interface {
 //TODO need to refactor global lock in docmanager, or discard the entire package and impl the file IO here
 //DocumentFileStore dependent on the current file functions in docmanager to provide file save/load operations
 type DocumentFileStore struct {
-	context    context.T
-	state      model.DocumentState
-	documentID string
-	instanceID string
-	location   string
+	context     context.T
+	state       model.DocumentState
+	documentID  string
+	instanceID  string
+	location    string
+	documentMgr docmanager.DocumentMgr
 }
 
-func NewDocumentFileStore(context context.T, instID, docID, location string, state *model.DocumentState) DocumentFileStore {
+func NewDocumentFileStore(context context.T, instID, docID, location string, state *model.DocumentState, docMgr docmanager.DocumentMgr) DocumentFileStore {
 	return DocumentFileStore{
-		context:    context,
-		instanceID: instID,
-		documentID: docID,
-		location:   location,
-		state:      *state,
+		context:     context,
+		instanceID:  instID,
+		documentID:  docID,
+		location:    location,
+		state:       *state,
+		documentMgr: docMgr,
 	}
 }
 
@@ -62,12 +64,11 @@ func (f *DocumentFileStore) Save(docState model.DocumentState) {
 	log := f.context.Log()
 	//copy the state struct
 	f.state = docState
-	//docStore only saves the document level informations
-	docmanager.PersistDocumentInfo(log,
-		f.state.DocumentInformation,
+	f.documentMgr.PersistDocumentState(log,
 		f.documentID,
 		f.instanceID,
-		f.location)
+		f.location,
+		docState)
 	return
 }
 

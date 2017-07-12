@@ -26,6 +26,7 @@ import (
 	"io/ioutil"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
+	"github.com/aws/amazon-ssm-agent/agent/docmanager"
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer"
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/basicexecuter"
 	"github.com/aws/amazon-ssm-agent/agent/task"
@@ -77,7 +78,7 @@ func (m *execDepImp) ExecuteDocument(context context.T, pluginInput []model.Plug
 		log.Error("faile to load instance id")
 		return
 	}
-	docStore := executer.NewDocumentFileStore(context, documentID, instanceID, appconfig.DefaultLocationOfCurrent, &docState)
+	docStore := executer.NewDocumentFileStore(context, documentID, instanceID, appconfig.DefaultLocationOfCurrent, &docState, docmanager.NewDocumentFileMgr(appconfig.DefaultDataStorePath, appconfig.DefaultDocumentRootDirName, appconfig.DefaultLocationOfState))
 	cancelFlag := task.NewChanneledCancelFlag()
 	resChan := exe.Run(cancelFlag, &docStore)
 

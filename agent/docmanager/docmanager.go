@@ -40,92 +40,43 @@ type modifyString func(string) string
 var lock sync.RWMutex
 var docLock = make(map[string]*sync.RWMutex)
 
-// GetDocumentInterimState returns CommandState object after reading file <fileName> from locationFolder
-// under defaultLogDir/instanceID
-func GetDocumentInterimState(log log.T, fileName, instanceID, locationFolder string) model.DocumentState {
-
-	rLockDocument(fileName)
-	defer rUnlockDocument(fileName)
-
-	absoluteFileName := docStateFileName(fileName, instanceID, locationFolder)
-
-	docState := getDocState(log, absoluteFileName)
-
-	return docState
+type DocumentMgr interface {
+	MoveDocumentState(log log.T, fileName, instanceID, srcLocationFolder, dstLocationFolder string)
+	PersistDocumentState(log log.T, fileName, instanceID, locationFolder string, state model.DocumentState)
+	GetDocumentState(log log.T, fileName, instanceID, locationFolder string) model.DocumentState
 }
 
-// PersistData stores the given object in the file-system in pretty Json indented format
-// This will override the contents of an already existing file
-func PersistData(log log.T, fileName, instanceID, locationFolder string, object interface{}) {
+//TODO use class lock instead of global lock?
+//TODO decouple the DocState model to better fit the service-processor-executer architecture
+//DocumentFileMgr encapsulate the file access and perform bookkeeping operations at the specified file location
+type DocumentFileMgr struct {
+	dataStorePath string
+	rootDirName   string
+	stateLocation string
+}
 
-	lockDocument(fileName)
-	defer unlockDocument(fileName)
-
-	absoluteFileName := docStateFileName(fileName, instanceID, locationFolder)
-
-	content, err := jsonutil.Marshal(object)
-	if err != nil {
-		log.Errorf("encountered error with message %v while marshalling %v to string", err, object)
-	} else {
-		if fileutil.Exists(absoluteFileName) {
-			log.Debugf("overwriting contents of %v", absoluteFileName)
-		}
-		log.Tracef("persisting interim state %v in file %v", jsonutil.Indent(content), absoluteFileName)
-		if s, err := fileutil.WriteIntoFileWithPermissions(absoluteFileName, jsonutil.Indent(content), os.FileMode(int(appconfig.ReadWriteAccess))); s && err == nil {
-			log.Debugf("successfully persisted interim state in %v", locationFolder)
-		} else {
-			log.Debugf("persisting interim state in %v failed with error %v", locationFolder, err)
-		}
+func NewDocumentFileMgr(dataStorePath, rootDirName, stateLocation string) *DocumentFileMgr {
+	return &DocumentFileMgr{
+		dataStorePath: dataStorePath,
+		rootDirName:   rootDirName,
+		stateLocation: stateLocation,
 	}
 }
 
-// IsDocumentCurrentlyExecuting checks if document already present in Pending or Current folder
-func IsDocumentCurrentlyExecuting(fileName, instanceID string) bool {
-
-	if len(fileName) == 0 {
-		return false
-	}
-
-	lockDocument(fileName)
-	defer unlockDocument(fileName)
-
-	absoluteFileName := docStateFileName(fileName, instanceID, appconfig.DefaultLocationOfPending)
-	if fileutil.Exists(absoluteFileName) {
-		return true
-	}
-	absoluteFileName = docStateFileName(fileName, instanceID, appconfig.DefaultLocationOfCurrent)
-	return fileutil.Exists(absoluteFileName)
-}
-
-// RemoveData deletes the fileName from locationFolder under defaultLogDir/instanceID
-func RemoveData(log log.T, commandID, instanceID, locationFolder string) {
-
-	absoluteFileName := docStateFileName(commandID, instanceID, locationFolder)
-
-	err := fileutil.DeleteFile(absoluteFileName)
-	if err != nil {
-		log.Errorf("encountered error %v while deleting file %v", err, absoluteFileName)
-	} else {
-		log.Debugf("successfully deleted file %v", absoluteFileName)
-	}
-}
-
-// MoveDocumentState moves the document file to target location
-func MoveDocumentState(log log.T, fileName, instanceID, srcLocationFolder, dstLocationFolder string) {
-
+func (d *DocumentFileMgr) MoveDocumentState(log log.T, fileName, instanceID, srcLocationFolder, dstLocationFolder string) {
 	//get a lock for documentID specific lock
 	lockDocument(fileName)
 
-	absoluteSource := path.Join(appconfig.DefaultDataStorePath,
+	absoluteSource := path.Join(d.dataStorePath,
 		instanceID,
-		appconfig.DefaultDocumentRootDirName,
-		appconfig.DefaultLocationOfState,
+		d.rootDirName,
+		d.stateLocation,
 		srcLocationFolder)
 
-	absoluteDestination := path.Join(appconfig.DefaultDataStorePath,
+	absoluteDestination := path.Join(d.dataStorePath,
 		instanceID,
-		appconfig.DefaultDocumentRootDirName,
-		appconfig.DefaultLocationOfState,
+		d.rootDirName,
+		d.stateLocation,
 		dstLocationFolder)
 
 	if s, err := fileutil.MoveFile(fileName, absoluteSource, absoluteDestination); s && err == nil {
@@ -145,88 +96,74 @@ func MoveDocumentState(log log.T, fileName, instanceID, srcLocationFolder, dstLo
 	}
 }
 
-// GetDocumentInfo returns the document info for the specified fileName
-func GetDocumentInfo(log log.T, fileName, instanceID, locationFolder string) model.DocumentInfo {
-	rLockDocument(fileName)
-	defer rUnlockDocument(fileName)
-
-	absoluteFileName := docStateFileName(fileName, instanceID, locationFolder)
-
-	commandState := getDocState(log, absoluteFileName)
-
-	return commandState.DocumentInformation
-}
-
-// PersistDocumentInfo stores the given PluginState in file-system in pretty Json indented format
-// This will override the contents of an already existing file
-func PersistDocumentInfo(log log.T, docInfo model.DocumentInfo, fileName, instanceID, locationFolder string) {
-
-	absoluteFileName := docStateFileName(fileName, instanceID, locationFolder)
-
-	//get documentID specific write lock
+func (d *DocumentFileMgr) PersistDocumentState(log log.T, fileName, instanceID, locationFolder string, state model.DocumentState) {
 	lockDocument(fileName)
 	defer unlockDocument(fileName)
 
-	//Plugins should safely assume that there already
-	//exists a persisted interim state file - if not then it should throw error
+	absoluteFileName := path.Join(path.Join(d.dataStorePath,
+		instanceID,
+		d.rootDirName,
+		d.stateLocation,
+		locationFolder), fileName)
 
-	//read command state from file-system first
-	commandState := getDocState(log, absoluteFileName)
-
-	commandState.DocumentInformation = docInfo
-
-	setDocState(log, commandState, absoluteFileName, locationFolder)
-}
-
-// GetPluginState returns PluginState after reading fileName from given locationFolder under defaultLogDir/instanceID
-func GetPluginState(log log.T, pluginID, commandID, instanceID, locationFolder string) *model.PluginState {
-
-	rLockDocument(commandID)
-	defer rUnlockDocument(commandID)
-
-	absoluteFileName := docStateFileName(commandID, instanceID, locationFolder)
-
-	commandState := getDocState(log, absoluteFileName)
-
-	for _, pluginState := range commandState.InstancePluginsInformation {
-		if pluginState.Id == pluginID {
-			return &pluginState
-		}
-	}
-
-	return nil
-}
-
-// PersistPluginState stores the given PluginState in file-system in pretty Json indented format
-// This will override the contents of an already existing file
-func PersistPluginState(log log.T, pluginState model.PluginState, pluginID, commandID, instanceID, locationFolder string) {
-
-	lockDocument(commandID)
-	defer unlockDocument(commandID)
-
-	absoluteFileName := docStateFileName(commandID, instanceID, locationFolder)
-
-	//Plugins should safely assume that there already
-	//exists a persisted interim state file - if not then it should throw error
-	commandState := getDocState(log, absoluteFileName)
-
-	//TODO:  after adding unit-tests for persist data - this can be removed
-	if commandState.InstancePluginsInformation == nil {
-		pluginsInfo := []model.PluginState{}
-		pluginsInfo = append(pluginsInfo, pluginState)
-		commandState.InstancePluginsInformation = pluginsInfo
+	content, err := jsonutil.Marshal(state)
+	if err != nil {
+		log.Errorf("encountered error with message %v while marshalling %v to string", err, state)
 	} else {
-		for index, plugin := range commandState.InstancePluginsInformation {
-			if plugin.Id == pluginID {
-				commandState.InstancePluginsInformation[index] = pluginState
-				break
-			}
+		if fileutil.Exists(absoluteFileName) {
+			log.Debugf("overwriting contents of %v", absoluteFileName)
+		}
+		log.Tracef("persisting interim state %v in file %v", jsonutil.Indent(content), absoluteFileName)
+		if s, err := fileutil.WriteIntoFileWithPermissions(absoluteFileName, jsonutil.Indent(content), os.FileMode(int(appconfig.ReadWriteAccess))); s && err == nil {
+			log.Debugf("successfully persisted interim state in %v", locationFolder)
+		} else {
+			log.Debugf("persisting interim state in %v failed with error %v", locationFolder, err)
+		}
+	}
+}
+
+func (d *DocumentFileMgr) GetDocumentState(log log.T, fileName, instanceID, locationFolder string) model.DocumentState {
+
+	rLockDocument(fileName)
+	defer rUnlockDocument(fileName)
+
+	absoluteFileName := path.Join(path.Join(d.dataStorePath,
+		instanceID,
+		d.rootDirName,
+		d.stateLocation,
+		locationFolder), fileName)
+
+	var commandState model.DocumentState
+	err := jsonutil.UnmarshalFile(absoluteFileName, &commandState)
+	if err != nil {
+		log.Errorf("encountered error with message %v while reading Interim state of command from file - %v", err, fileName)
+	} else {
+		//logging interim state as read from the file
+		jsonString, err := jsonutil.Marshal(commandState)
+		if err != nil {
+			log.Errorf("encountered error with message %v while marshalling %v to string", err, commandState)
+		} else {
+			log.Tracef("interim CommandState read from file-system - %v", jsonutil.Indent(jsonString))
 		}
 	}
 
-	setDocState(log, commandState, absoluteFileName, locationFolder)
+	return commandState
 }
 
+// RemoveData deletes the fileName from locationFolder under defaultLogDir/instanceID
+func RemoveData(log log.T, commandID, instanceID, locationFolder string) {
+
+	absoluteFileName := docStateFileName(commandID, instanceID, locationFolder)
+
+	err := fileutil.DeleteFile(absoluteFileName)
+	if err != nil {
+		log.Errorf("encountered error %v while deleting file %v", err, absoluteFileName)
+	} else {
+		log.Debugf("successfully deleted file %v", absoluteFileName)
+	}
+}
+
+//TODO rework this part
 // DocumentStateDir returns absolute filename where command states are persisted
 func DocumentStateDir(instanceID, locationFolder string) string {
 	return filepath.Join(appconfig.DefaultDataStorePath,
@@ -329,45 +266,6 @@ func isOlderThan(log log.T, fileFullPath string, retentionDurationHours int) boo
 
 	// Check whether the current time is after modification time plus the retention duration
 	return modificationTime.Add(time.Hour * time.Duration(retentionDurationHours)).Before(time.Now())
-}
-
-// getDocState reads commandState from given file
-func getDocState(log log.T, fileName string) model.DocumentState {
-
-	var commandState model.DocumentState
-	err := jsonutil.UnmarshalFile(fileName, &commandState)
-	if err != nil {
-		log.Errorf("encountered error with message %v while reading Interim state of command from file - %v", err, fileName)
-	} else {
-		//logging interim state as read from the file
-		jsonString, err := jsonutil.Marshal(commandState)
-		if err != nil {
-			log.Errorf("encountered error with message %v while marshalling %v to string", err, commandState)
-		} else {
-			log.Tracef("interim CommandState read from file-system - %v", jsonutil.Indent(jsonString))
-		}
-	}
-
-	return commandState
-}
-
-// setDocState persists given commandState
-func setDocState(log log.T, commandState model.DocumentState, absoluteFileName, locationFolder string) {
-
-	content, err := jsonutil.Marshal(commandState)
-	if err != nil {
-		log.Errorf("encountered error with message %v while marshalling %v to string", err, commandState)
-	} else {
-		if fileutil.Exists(absoluteFileName) {
-			log.Debugf("overwriting contents of %v", absoluteFileName)
-		}
-		log.Tracef("persisting interim state %v in file %v", jsonutil.Indent(content), absoluteFileName)
-		if s, err := fileutil.WriteIntoFileWithPermissions(absoluteFileName, jsonutil.Indent(content), os.FileMode(int(appconfig.ReadWriteAccess))); s && err == nil {
-			log.Debugf("successfully persisted interim state in %v", locationFolder)
-		} else {
-			log.Debugf("persisting interim state in %v failed with error %v", locationFolder, err)
-		}
-	}
 }
 
 // rLockDocument locks id specific RWMutex for reading
