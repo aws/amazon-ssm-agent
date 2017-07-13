@@ -132,6 +132,27 @@ func awsConfig(log log.T, amazonS3URL s3util.AmazonS3URL) (config *aws.Config, e
 	return config, nil
 }
 
+// CanGetS3Object returns true if it is possible to fetch an object because it exists, is not deleted, and read permissions exist for this request
+func CanGetS3Object(log log.T, amazonS3URL s3util.AmazonS3URL) bool {
+	config, _ := awsConfig(log, amazonS3URL)
+	bucketName := amazonS3URL.Bucket
+	objectKey := amazonS3URL.Key
+
+	params := &s3.HeadObjectInput{
+		Bucket: aws.String(bucketName),
+		Key:    aws.String(objectKey),
+	}
+
+	s3client := s3.New(session.New(config))
+	var res *s3.HeadObjectOutput
+	var err error
+	if res, err = s3client.HeadObject(params); err != nil {
+		return false
+	}
+	// Even with versioning on, a deleted object should return a 404, but to be certain, exclude delete markers explicitly
+	return res.DeleteMarker == nil || !*(res.DeleteMarker)
+}
+
 // ListS3Folders returns the folders under a given S3 URL where folders are keys whose prefix is the URL key
 // and contain a / after the prefix.  The folder name is the part between the prefix and the /.
 func ListS3Folders(log log.T, amazonS3URL s3util.AmazonS3URL) (folderNames []string, err error) {
