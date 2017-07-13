@@ -23,6 +23,7 @@ import (
 // dependency on S3 and downloaded artifacts
 type networkDep interface {
 	ListS3Folders(log log.T, amazonS3URL s3util.AmazonS3URL) (folderNames []string, err error)
+	CanGetS3Object(log log.T, amazonS3URL s3util.AmazonS3URL) bool
 	Download(log log.T, input artifact.DownloadInput) (artifact.DownloadOutput, error)
 }
 
@@ -32,6 +33,10 @@ var networkdep networkDep = &networkDepImp{}
 
 func (networkDepImp) ListS3Folders(log log.T, amazonS3URL s3util.AmazonS3URL) (folderNames []string, err error) {
 	return artifact.ListS3Folders(log, amazonS3URL)
+}
+
+func (networkDepImp) CanGetS3Object(log log.T, amazonS3URL s3util.AmazonS3URL) bool {
+	return artifact.CanGetS3Object(log, amazonS3URL)
 }
 
 func (networkDepImp) Download(log log.T, input artifact.DownloadInput) (artifact.DownloadOutput, error) {

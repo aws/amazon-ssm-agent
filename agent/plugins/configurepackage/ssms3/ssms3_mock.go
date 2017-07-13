@@ -31,6 +31,11 @@ func (ds *SSMS3Mock) ListS3Folders(log log.T, amazonS3URL s3util.AmazonS3URL) (f
 	return args.Get(0).([]string), args.Error(1)
 }
 
+func (ds *SSMS3Mock) CanGetS3Object(log log.T, amazonS3URL s3util.AmazonS3URL) bool {
+	args := ds.Called(log, amazonS3URL)
+	return args.Bool(0)
+}
+
 func (ds *SSMS3Mock) Download(log log.T, input artifact.DownloadInput) (artifact.DownloadOutput, error) {
 	args := ds.Called(log, input)
 	return args.Get(0).(artifact.DownloadOutput), args.Error(1)

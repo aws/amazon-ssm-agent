@@ -274,8 +274,8 @@ func (repo *localRepository) getPackageVersionPath(packageName string, version s
 }
 
 // getManifestPath is a helper function that builds the path to the manifest file for a given version of a package
-func (repo *localRepository) getManifestPath(packageName string, version string) string {
-	return filepath.Join(repo.getPackageVersionPath(packageName, version), fmt.Sprintf("%v.json", packageName))
+func (repo *localRepository) getManifestPath(packageName string, version string, manifestName string) string {
+	return filepath.Join(repo.getPackageVersionPath(packageName, version), fmt.Sprintf("%v.json", manifestName))
 }
 
 // loadInstallState loads the existing installstate file or returns an appropriate default state
@@ -303,12 +303,17 @@ func (repo *localRepository) loadInstallState(filesysdep FileSysDep, context con
 
 // openPackageManifest returns the valid manifest or validation error for a given package version
 func (repo *localRepository) openPackageManifest(filesysdep FileSysDep, packageName string, version string) (manifest *PackageManifest, err error) {
-	manifestPath := repo.getManifestPath(packageName, version)
-	if !filesysdep.Exists(manifestPath) {
-		return nil, fmt.Errorf("No manifest found for package %v, version %v", packageName, version)
-	} else {
+	manifestPath := repo.getManifestPath(packageName, version, packageName)
+	if filesysdep.Exists(manifestPath) {
 		return parsePackageManifest(filesysdep, manifestPath, packageName, version)
 	}
+
+	manifestPath = repo.getManifestPath(packageName, version, "manifest")
+	if filesysdep.Exists(manifestPath) {
+		return parsePackageManifest(filesysdep, manifestPath, packageName, version)
+	}
+
+	return &PackageManifest{}, nil
 }
 
 // parsePackageManifest parses the manifest to ensure it is valid.
@@ -347,7 +352,6 @@ func validatePackageManifest(parsedManifest *PackageManifest, packageName string
 			return fmt.Errorf("manifest version (%v) does not match expected package version (%v)", manifestVersion, version)
 		}
 	}
-	// TODO:MF: see if we can remove platform and arch.  We don't really use them... arch shows up in inventory but does it need to for SSM Packages?  If the SSM Package installs an rpm, for example, arch will be present there.
 
 	return nil
 }
