@@ -46,7 +46,7 @@ const (
 // Plugin is the type for the configurepackage plugin.
 type Plugin struct {
 	pluginutil.DefaultPlugin
-	packageServiceSelector func(serviceEndpoint string) packageservice.PackageService
+	packageServiceSelector func(log log.T, serviceEndpoint string) packageservice.PackageService
 	localRepository        localpackages.Repository
 }
 
@@ -323,12 +323,13 @@ func checkAlreadyInstalled(context context.T,
 }
 
 // selectService chooses the implementation of PackageService to use for a given execution of the plugin
-func selectService(serviceEndpoint string) packageservice.PackageService {
+func selectService(log log.T, serviceEndpoint string) packageservice.PackageService {
 	region, _ := platform.Region()
-	packageService := ssms3.New(serviceEndpoint, region)
-	//packageService = birdwatcher.New(log)
-
-	return packageService
+	if !ssms3.UseSSMS3Service(log, serviceEndpoint, region) {
+		//return birdwatcher.New(log)
+		log.Debugf("S3 repository is not marked active in %v %v", region, serviceEndpoint)
+	}
+	return ssms3.New(serviceEndpoint, region)
 }
 
 // Execute runs the plugin operation and returns output
@@ -350,7 +351,7 @@ func (p *Plugin) execute(context context.T, config contracts.Configuration, canc
 	if cancelFlag.ShutDown() {
 		out.MarkAsShutdown()
 	} else if cancelFlag.Canceled() {
-		out.MarkAsShutdown()
+		out.MarkAsCancelled()
 	} else if input, err := parseAndValidateInput(config.Properties); err != nil {
 		out.MarkAsFailed(log, err)
 	} else if err := lockPackage(input.Name, input.Action); err != nil {
@@ -360,7 +361,7 @@ func (p *Plugin) execute(context context.T, config contracts.Configuration, canc
 	} else {
 		defer unlockPackage(input.Name)
 
-		packageService := p.packageServiceSelector(input.Repository)
+		packageService := p.packageServiceSelector(log, input.Repository)
 
 		log.Debugf("Prepare for %v %v %v", input.Action, input.Name, input.Version)
 		inst, uninst, installState, installedVersion := prepareConfigurePackage(
