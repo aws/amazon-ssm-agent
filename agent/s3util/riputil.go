@@ -16,6 +16,8 @@
 // Package s3util contains methods for interacting with S3.
 package s3util
 
+import "github.com/aws/amazon-ssm-agent/agent/appconfig"
+
 var awsS3EndpointMap = map[string]string{
 	//AUTOGEN_START
 	"ap-northeast-1": "s3-ap-northeast-1.amazonaws.com",
@@ -37,8 +39,16 @@ var awsS3EndpointMap = map[string]string{
 	//AUTOGEN_END
 }
 
-// This function returns the Amazon S3 endpoint in a certain region
+/* This function returns the s3 endpoint specified by the user in appconfig.
+If the user didn't specify one, it will return the Amazon S3 endpoint in a certain region
+*/
 func GetS3Endpoint(region string) (s3Endpoint string) {
+	if appConfig, err := appconfig.Config(false); err == nil {
+		if appConfig.S3.Endpoint != "" {
+			return appConfig.S3.Endpoint
+		}
+	}
+
 	if s3Endpoint, ok := awsS3EndpointMap[region]; ok {
 		return s3Endpoint
 	}
