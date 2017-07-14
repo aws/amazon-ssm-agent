@@ -33,17 +33,17 @@ type FileSystem interface {
 type FileSystemImpl struct{}
 
 // MakeDirs creates a directory with execute access
-func (FileSystemImpl) MakeDirs(destinationDir string) (err error) {
+func (f FileSystemImpl) MakeDirs(destinationDir string) (err error) {
 	return fileutil.MakeDirsWithExecuteAccess(destinationDir)
 }
 
 // WriteFile writes the content in the file path provided
-func (FileSystemImpl) WriteFile(filename string, content string) error {
+func (f FileSystemImpl) WriteFile(filename string, content string) error {
 	return fileutil.WriteAllText(filename, content)
 }
 
 // ReadFile reads the contents of file in path provided
-func (FileSystemImpl) ReadFile(filename string) (string, error) {
+func (f FileSystemImpl) ReadFile(filename string) (string, error) {
 	return fileutil.ReadAllText(filename)
 }
 

@@ -22,6 +22,7 @@ import (
 
 const (
 	JSONExtension = ".json"
+	YamlExtension = ".yaml"
 
 	Unknown = iota
 	Script
@@ -31,7 +32,7 @@ const (
 // RemoteResource is an interface for accessing remote resources. Every type of remote resource is expected to implement RemoteResource interface
 type RemoteResource interface {
 	Download(log log.T, filesys filemanager.FileSystem, entireDir bool, destinationDir string) error
-	PopulateResourceInfo(log log.T, destinationDir string, entireDir bool) (resourceInfo ResourceInfo, err error)
+	PopulateResourceInfo(log log.T, destinationDir string, entireDir bool) (resourceInfo ResourceInfo)
 	ValidateLocationInfo() (bool, error)
 }
 

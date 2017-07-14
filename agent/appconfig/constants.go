@@ -118,6 +118,9 @@ const (
 	// PluginEC2ConfigUpdate is the name for ec2 config update plugin
 	PluginEC2ConfigUpdate = "aws:updateAgent"
 
+	// PluginExecuteCommand is the name for execute plugin
+	PluginExecuteCommand = "aws:executeCommand"
+
 	// PluginNameAwsSoftwareInventory is the name for inventory plugin
 	PluginNameAwsSoftwareInventory = "aws:softwareInventory"
 
