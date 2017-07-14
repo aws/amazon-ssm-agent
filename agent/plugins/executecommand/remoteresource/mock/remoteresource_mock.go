@@ -31,9 +31,9 @@ func (resourceMock RemoteResourceMock) Download(log log.T, filesys filemanager.F
 	return args.Error(0)
 }
 
-func (resourceMock RemoteResourceMock) PopulateResourceInfo(log log.T, destinationDir string, entireDir bool) (resourceInfo remoteresource.ResourceInfo, err error) {
+func (resourceMock RemoteResourceMock) PopulateResourceInfo(log log.T, destinationDir string, entireDir bool) (resourceInfo remoteresource.ResourceInfo) {
 	args := resourceMock.Called(log, destinationDir, entireDir)
-	return args.Get(0).(remoteresource.ResourceInfo), args.Error(1)
+	return args.Get(0).(remoteresource.ResourceInfo)
 }
 
 func (resourceMock RemoteResourceMock) ValidateLocationInfo() (bool, error) {
