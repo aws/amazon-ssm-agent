@@ -31,9 +31,10 @@ const (
 	// InventoryPolicyDocName represents name of inventory policy doc
 	InventoryPolicyDocName = "policy.json"
 	// SizeLimitKBPerInventoryType represents size limit in KB for 1 inventory data type
-	SizeLimitKBPerInventoryType = 200
+	// Bump up to 1MB for agent. We have more strict size limit rule in the micro service.
+	SizeLimitKBPerInventoryType = 3072
 	// TotalSizeLimitKB represents size limit in KB for 1 PutInventory API call
-	TotalSizeLimitKB = 1024
+	TotalSizeLimitKB = 10240
 	// Standard name for 64-bit architecture
 	Arch64Bit = "x86_64"
 	// Standard name for 32-bit architecture
