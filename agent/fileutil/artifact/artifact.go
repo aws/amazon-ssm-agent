@@ -122,6 +122,9 @@ func awsConfig(log log.T, amazonS3URL s3util.AmazonS3URL) (config *aws.Config, e
 	if errConfig != nil {
 		log.Error("failed to read appconfig.")
 	} else {
+		if appConfig.S3.Endpoint != "" {
+			config.Endpoint = &appConfig.S3.Endpoint
+		}
 		creds, err1 := appConfig.ProfileCredentials()
 		if err1 != nil {
 			config.Credentials = creds
