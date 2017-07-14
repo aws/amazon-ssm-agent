@@ -28,6 +28,7 @@
         "Version": "1"
     },
     "S3": {
+        "Endpoint": "",
         "Region": "",
         "LogBucket":"",
         "LogKey":""
