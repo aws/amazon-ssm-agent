@@ -17,11 +17,16 @@ import (
 	"sync"
 )
 
+// DelegateLogger holds the base logger for logging
+type DelegateLogger struct {
+	BaseLoggerInstance T
+}
+
 // Wrapper is a logger that can modify the format of a log message before delegating to another logger.
 type Wrapper struct {
 	Format   FormatFilter
-	Delegate T
 	M        *sync.Mutex
+	Delegate *DelegateLogger
 }
 
 // FormatFilter can modify the format and or parameters to be passed to a logger.
@@ -36,134 +41,142 @@ type FormatFilter interface {
 
 // Tracef formats message according to format specifier
 // and writes to log with level = Trace.
-func (w Wrapper) Tracef(format string, params ...interface{}) {
+func (w *Wrapper) Tracef(format string, params ...interface{}) {
 	format, params = w.Format.Filterf(format, params...)
 
 	w.M.Lock()
 	defer w.M.Unlock()
-	w.Delegate.Tracef(format, params...)
+	w.Delegate.BaseLoggerInstance.Tracef(format, params...)
 }
 
 // Debugf formats message according to format specifier
 // and writes to log with level = Debug.
-func (w Wrapper) Debugf(format string, params ...interface{}) {
+func (w *Wrapper) Debugf(format string, params ...interface{}) {
 	format, params = w.Format.Filterf(format, params...)
 
 	w.M.Lock()
 	defer w.M.Unlock()
-	w.Delegate.Debugf(format, params...)
+	w.Delegate.BaseLoggerInstance.Debugf(format, params...)
 }
 
 // Infof formats message according to format specifier
 // and writes to log with level = Info.
-func (w Wrapper) Infof(format string, params ...interface{}) {
+func (w *Wrapper) Infof(format string, params ...interface{}) {
 	format, params = w.Format.Filterf(format, params...)
 
 	w.M.Lock()
 	defer w.M.Unlock()
-	w.Delegate.Infof(format, params...)
+	w.Delegate.BaseLoggerInstance.Infof(format, params...)
 }
 
 // Warnf formats message according to format specifier
 // and writes to log with level = Warn.
-func (w Wrapper) Warnf(format string, params ...interface{}) error {
+func (w *Wrapper) Warnf(format string, params ...interface{}) error {
 	format, params = w.Format.Filterf(format, params...)
 
 	w.M.Lock()
 	defer w.M.Unlock()
-	return w.Delegate.Warnf(format, params...)
+	return w.Delegate.BaseLoggerInstance.Warnf(format, params...)
 }
 
 // Errorf formats message according to format specifier
 // and writes to log with level = Error.
-func (w Wrapper) Errorf(format string, params ...interface{}) error {
+func (w *Wrapper) Errorf(format string, params ...interface{}) error {
 	format, params = w.Format.Filterf(format, params...)
 
 	w.M.Lock()
 	defer w.M.Unlock()
-	return w.Delegate.Errorf(format, params...)
+	return w.Delegate.BaseLoggerInstance.Errorf(format, params...)
 }
 
 // Criticalf formats message according to format specifier
 // and writes to log with level = Critical.
-func (w Wrapper) Criticalf(format string, params ...interface{}) error {
+func (w *Wrapper) Criticalf(format string, params ...interface{}) error {
 	format, params = w.Format.Filterf(format, params...)
 
 	w.M.Lock()
 	defer w.M.Unlock()
-	return w.Delegate.Criticalf(format, params...)
+	return w.Delegate.BaseLoggerInstance.Criticalf(format, params...)
 }
 
 // Trace formats message using the default formats for its operands
 // and writes to log with level = Trace
-func (w Wrapper) Trace(v ...interface{}) {
+func (w *Wrapper) Trace(v ...interface{}) {
 	v = w.Format.Filter(v...)
-
 	w.M.Lock()
 	defer w.M.Unlock()
-	w.Delegate.Trace(v...)
+	w.Delegate.BaseLoggerInstance.Trace(v...)
 }
 
 // Debug formats message using the default formats for its operands
 // and writes to log with level = Debug
-func (w Wrapper) Debug(v ...interface{}) {
+func (w *Wrapper) Debug(v ...interface{}) {
 	v = w.Format.Filter(v...)
 
 	w.M.Lock()
 	defer w.M.Unlock()
-	w.Delegate.Debug(v...)
+	w.Delegate.BaseLoggerInstance.Debug(v...)
 }
 
 // Info formats message using the default formats for its operands
 // and writes to log with level = Info
-func (w Wrapper) Info(v ...interface{}) {
+func (w *Wrapper) Info(v ...interface{}) {
 	v = w.Format.Filter(v...)
 
 	w.M.Lock()
 	defer w.M.Unlock()
-	w.Delegate.Info(v...)
+	w.Delegate.BaseLoggerInstance.Info(v...)
 }
 
 // Warn formats message using the default formats for its operands
 // and writes to log with level = Warn
-func (w Wrapper) Warn(v ...interface{}) error {
+func (w *Wrapper) Warn(v ...interface{}) error {
 	v = w.Format.Filter(v...)
 
 	w.M.Lock()
 	defer w.M.Unlock()
-	return w.Delegate.Warn(v...)
+	return w.Delegate.BaseLoggerInstance.Warn(v...)
 }
 
 // Error formats message using the default formats for its operands
 // and writes to log with level = Error
-func (w Wrapper) Error(v ...interface{}) error {
+func (w *Wrapper) Error(v ...interface{}) error {
 	v = w.Format.Filter(v...)
 
 	w.M.Lock()
 	defer w.M.Unlock()
-	return w.Delegate.Error(v...)
+	return w.Delegate.BaseLoggerInstance.Error(v...)
 }
 
 // Critical formats message using the default formats for its operands
 // and writes to log with level = Critical
-func (w Wrapper) Critical(v ...interface{}) error {
+func (w *Wrapper) Critical(v ...interface{}) error {
 	v = w.Format.Filter(v...)
 
 	w.M.Lock()
 	defer w.M.Unlock()
-	return w.Delegate.Critical(v...)
+	return w.Delegate.BaseLoggerInstance.Critical(v...)
 }
 
 // Flush flushes all the messages in the logger.
-func (w Wrapper) Flush() {
+func (w *Wrapper) Flush() {
 	w.M.Lock()
 	defer w.M.Unlock()
-	w.Delegate.Flush()
+	w.Delegate.BaseLoggerInstance.Flush()
 }
 
 // Close flushes all the messages in the logger and closes it. It cannot be used after this operation.
-func (w Wrapper) Close() {
+func (w *Wrapper) Close() {
 	w.M.Lock()
 	defer w.M.Unlock()
-	w.Delegate.Close()
+	w.Delegate.BaseLoggerInstance.Close()
+}
+
+// ReplaceDelegate replaces the delegate logger with a new logger
+func (w *Wrapper) replaceDelegate(newLogger T) {
+	w.M.Lock()
+	defer w.M.Unlock()
+	w.Delegate.BaseLoggerInstance.Flush()
+	w.Delegate.BaseLoggerInstance = newLogger
+	w.Delegate.BaseLoggerInstance.Info("Logger Replaced. New Logger Used to log the message")
 }
