@@ -28,7 +28,6 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/s3util"
-	"github.com/aws/amazon-ssm-agent/agent/sdkutil"
 	"github.com/aws/amazon-ssm-agent/agent/updateutil"
 )
 
@@ -207,19 +206,6 @@ func parseContext(log log.T, fileName string) (context *UpdateContext, err error
 
 // uploadOutput uploads the stdout and stderr file to S3
 func (c *contextManager) uploadOutput(log log.T, context *UpdateContext) (err error) {
-
-	awsConfig := sdkutil.AwsConfig()
-	var config appconfig.SsmagentConfig
-	config, err = appconfig.Config(false)
-
-	if err != nil {
-		return fmt.Errorf("could not load config file: %v", err)
-	}
-	// If customers have provided override in app config, honor that.
-	if config.S3.Region != "" {
-		awsConfig.Region = &config.S3.Region
-	}
-	log.Infof("Uploading output files to region: %v", *awsConfig.Region)
 
 	// upload outputs (if any) to s3
 	uploadOutputsToS3 := func() {

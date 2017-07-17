@@ -17,24 +17,63 @@ package executer
 import (
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
+	"github.com/aws/amazon-ssm-agent/agent/docmanager"
 	"github.com/aws/amazon-ssm-agent/agent/docmanager/model"
-	"github.com/aws/amazon-ssm-agent/agent/framework/runpluginutil"
-	messageContracts "github.com/aws/amazon-ssm-agent/agent/message/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 )
 
-// Executer is an interface that execute a given docuemnt
-//TODO change callback to go channel, remove service dependency
+//Executer accepts an DocumentStore object, save when necessary for crash-recovery, and return when finshes the run, while
+//the caller will pick up the result from the same docStore object
 type Executer interface {
-	Run(context context.T,
-		cancelFlag task.CancelFlag,
-		buildReply ReplyBuilder,
-		sendResponse runpluginutil.SendResponse,
-		docState *model.DocumentState)
-	//TODO 1. expose these 2 functions instead of using cancelFlag
-	//Shutdown()
-	//Cancel()
+	// Given a document and run it, receiving results from status update channel, return a map of plugin results
+	Run(cancelFlag task.CancelFlag, //Inbound message
+		docStore DocumentStore) chan contracts.PluginResult
 }
 
-type PluginRunner func(context context.T, documentID string, plugins []model.PluginState, sendResponse runpluginutil.SendResponse, cancelFlag task.CancelFlag) (pluginOutputs map[string]*contracts.PluginResult)
-type ReplyBuilder func(pluginID string, results map[string]*contracts.PluginResult) messageContracts.SendReplyPayload
+//DocumentStore is an wrapper over the document state class that provides additional persisting functions for the Executer
+type DocumentStore interface {
+	Save()
+	Load() *model.DocumentState
+}
+
+//TODO need to refactor global lock in docmanager, or discard the entire package and impl the file IO here
+//DocumentFileStore dependent on the current file functions in docmanager to provide file save/load operations
+type DocumentFileStore struct {
+	context    context.T
+	state      model.DocumentState
+	documentID string
+	instanceID string
+	location   string
+}
+
+func NewDocumentFileStore(context context.T, instID, docID, location string, state *model.DocumentState) DocumentFileStore {
+	return DocumentFileStore{
+		context:    context,
+		instanceID: instID,
+		documentID: docID,
+		location:   location,
+		state:      *state,
+	}
+}
+
+//Save the document info struct to the current folder
+func (f *DocumentFileStore) Save() {
+	log := f.context.Log()
+	docmanager.PersistDocumentInfo(log,
+		f.state.DocumentInformation,
+		f.documentID,
+		f.instanceID,
+		f.location)
+	return
+}
+
+//TODO Load() should have dirty flag to encourage in-memory load, this can be done once we remove the plugin saving part
+//Load the document state object from the current folder
+func (f *DocumentFileStore) Load() *model.DocumentState {
+	log := f.context.Log()
+	f.state = docmanager.GetDocumentInterimState(log,
+		f.documentID,
+		f.instanceID,
+		f.location)
+	return &f.state
+}

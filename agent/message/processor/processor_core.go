@@ -28,11 +28,10 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	commandStateHelper "github.com/aws/amazon-ssm-agent/agent/docmanager"
 	"github.com/aws/amazon-ssm-agent/agent/docmanager/model"
-	"github.com/aws/amazon-ssm-agent/agent/framework/runpluginutil"
+	"github.com/aws/amazon-ssm-agent/agent/docparser"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	logger "github.com/aws/amazon-ssm-agent/agent/log"
 	messageContracts "github.com/aws/amazon-ssm-agent/agent/message/contracts"
-	"github.com/aws/amazon-ssm-agent/agent/message/parser"
 	"github.com/aws/amazon-ssm-agent/agent/message/processor/executer"
 	"github.com/aws/amazon-ssm-agent/agent/message/service"
 	"github.com/aws/amazon-ssm-agent/agent/platform"
@@ -105,6 +104,7 @@ func (p *Processor) processMessage(msg *ssmmds.Message) {
 
 	log.Debugf("Processing to send a reply to update the document status to InProgress")
 
+	//TODO This function should be called in service when it submits the document to the engine
 	p.sendDocLevelResponse(*msg.MessageId, contracts.ResultStatusInProgress, "")
 
 	log.Debugf("SendReply done. Received message - messageId - %v", *msg.MessageId)
@@ -130,8 +130,6 @@ func (p *Processor) ExecutePendingDocument(docState *model.DocumentState) {
 				p.context,
 				p.service,
 				cancelFlag,
-				p.buildReply,
-				p.sendResponse,
 				docState)
 		})
 		if err != nil {
@@ -161,7 +159,37 @@ func parseSendCommandMessage(context context.T, msg *ssmmds.Message, messagesOrc
 	log.Debug("Processing send command message ", *msg.MessageId)
 	log.Trace("Processing send command message ", jsonutil.Indent(*msg.Payload))
 
-	parsedMessage, err := parser.ParseMessageWithParams(log, *msg.Payload)
+	// parse message to retrieve parameters
+	var parsedMessage messageContracts.SendCommandPayload
+	err := json.Unmarshal([]byte(*msg.Payload), &parsedMessage)
+	if err != nil {
+		errorMsg := "Encountered error while parsing input - internal error"
+		log.Errorf(errorMsg)
+		return nil, fmt.Errorf("%v", errorMsg)
+	}
+
+	// adapt plugin configuration format from MDS to plugin expected format
+	s3KeyPrefix := path.Join(parsedMessage.OutputS3KeyPrefix, parsedMessage.CommandID, *msg.Destination)
+
+	messageOrchestrationDirectory := filepath.Join(messagesOrchestrationRootDir, commandID)
+
+	var documentType model.DocumentType
+	if strings.HasPrefix(*msg.Topic, string(SendCommandTopicPrefixOffline)) {
+		documentType = model.SendCommandOffline
+	} else {
+		documentType = model.SendCommand
+	}
+	documentInfo := newDocumentInfo(*msg, parsedMessage)
+	parserInfo := docparser.DocumentParserInfo{
+		OrchestrationDir: messageOrchestrationDirectory,
+		S3Bucket:         parsedMessage.OutputS3BucketName,
+		S3Prefix:         s3KeyPrefix,
+		MessageId:        documentInfo.MessageID,
+		DocumentId:       documentInfo.DocumentID,
+	}
+
+	//Data format persisted in Current Folder is defined by the struct - CommandState
+	docState, err := docparser.InitializeDocState(log, documentType, &parsedMessage.DocumentContent, documentInfo, parserInfo, parsedMessage.Parameters)
 	if err != nil {
 		return nil, err
 	}
@@ -194,18 +222,6 @@ func parseSendCommandMessage(context context.T, msg *ssmmds.Message, messagesOrc
 		//For plugins that are not aws:cloudwatch
 		log.Debug("ParsedMessage is ", jsonutil.Indent(parsedMessageContent))
 	}
-
-	// adapt plugin configuration format from MDS to plugin expected format
-	s3KeyPrefix := path.Join(parsedMessage.OutputS3KeyPrefix, parsedMessage.CommandID, *msg.Destination)
-
-	messageOrchestrationDirectory := filepath.Join(messagesOrchestrationRootDir, commandID)
-
-	//persist : all information in current folder
-	log.Info("Persisting message in current execution folder")
-
-	//Data format persisted in Current Folder is defined by the struct - CommandState
-	docState := initializeSendCommandState(parsedMessage, messageOrchestrationDirectory, s3KeyPrefix, *msg)
-
 	// Check if it is a managed instance and its executing managed instance incompatible AWS SSM public document.
 	// A few public AWS SSM documents contain code which is not compatible when run on managed instances.
 	// isManagedInstanceIncompatibleAWSSSMDocument makes sure to find such documents at runtime and replace the incompatible code.
@@ -225,25 +241,37 @@ func parseSendCommandMessage(context context.T, msg *ssmmds.Message, messagesOrc
 }
 
 // processSendCommandMessage processes a single send command message received from MDS.
-//TODO this function needs to be part of worker, instead of wrapped up as a callback passing to the worker
 func (p *Processor) processSendCommandMessage(context context.T,
 	mdsService service.Service,
 	cancelFlag task.CancelFlag,
-	buildReply executer.ReplyBuilder,
-	sendResponse runpluginutil.SendResponse,
 	docState *model.DocumentState) {
 
 	log := context.Log()
 
 	log.Debug("Running executer...")
-	e := p.executerCreator()
-	e.Run(p.context,
+	documentID := docState.DocumentInformation.DocumentID
+	instanceID := docState.DocumentInformation.InstanceID
+	messageID := docState.DocumentInformation.MessageID
+	//TODO This will be changed to a function (or channel) that hands the result over to service
+	sendResponse := responseProvider(log, messageID, mdsService, p.config.AgentInfo, p.processorStopPolicy)
+	e := p.executerCreator(context)
+	docStore := executer.NewDocumentFileStore(context, instanceID, documentID, appconfig.DefaultLocationOfCurrent, docState)
+	resChan := e.Run(
 		cancelFlag,
-		p.buildReply,
-		p.sendResponse,
-		docState,
+		&docStore,
 	)
-	newCmdState := docState
+
+	for res := range resChan {
+		log.Infof("sending reply for plugin %v update", res.PluginName)
+		//TODO move this function and its bounded closure to service
+		sendResponse(res.PluginName, res)
+	}
+	newCmdState := docStore.Load()
+
+	//TODO DocLevel response should eventually move to Service module
+	//send document complete response
+	log.Debug("Sending reply on message completion ", documentID)
+	sendResponse("", contracts.PluginResult{})
 
 	// Skip move docState since the document has not finshed yet
 	if newCmdState.DocumentInformation.DocumentStatus == contracts.ResultStatusSuccessAndReboot {
@@ -255,15 +283,16 @@ func (p *Processor) processSendCommandMessage(context context.T,
 	log.Debugf("execution of %v is over. Moving interimState file from Current to Completed folder", newCmdState.DocumentInformation.MessageID)
 
 	commandStateHelper.MoveDocumentState(log,
-		newCmdState.DocumentInformation.DocumentID,
-		newCmdState.DocumentInformation.InstanceID,
+		documentID,
+		instanceID,
 		appconfig.DefaultLocationOfCurrent,
 		appconfig.DefaultLocationOfCompleted)
 
 	log.Debugf("Deleting message")
 
+	//TODO this part should be moved to service
 	if !isUpdatePlugin(newCmdState) {
-		if err := mdsService.DeleteMessage(log, newCmdState.DocumentInformation.MessageID); err != nil {
+		if err := mdsService.DeleteMessage(log, messageID); err != nil {
 			sdkutil.HandleAwsError(log, err, p.processorStopPolicy)
 		}
 	} else {

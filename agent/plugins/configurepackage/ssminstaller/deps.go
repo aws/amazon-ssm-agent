@@ -15,13 +15,16 @@
 package ssminstaller
 
 import (
-	"io/ioutil"
-
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/docmanager/model"
+	"github.com/aws/amazon-ssm-agent/agent/docparser"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	"github.com/aws/amazon-ssm-agent/agent/framework/runpluginutil"
+	"github.com/aws/amazon-ssm-agent/agent/platform"
+
+	"encoding/json"
+	"io/ioutil"
 )
 
 // dependency on action execution
@@ -34,7 +37,23 @@ type execDepImp struct {
 }
 
 func (m *execDepImp) ParseDocument(context context.T, documentRaw []byte, orchestrationDir string, s3Bucket string, s3KeyPrefix string, messageID string, documentID string, defaultWorkingDirectory string) (pluginsInfo []model.PluginState, err error) {
-	return runpluginutil.ParseDocument(context, documentRaw, orchestrationDir, s3Bucket, s3KeyPrefix, messageID, documentID, defaultWorkingDirectory)
+	log := context.Log()
+	parserInfo := docparser.DocumentParserInfo{
+		OrchestrationDir:  orchestrationDir,
+		S3Bucket:          s3Bucket,
+		S3Prefix:          s3KeyPrefix,
+		MessageId:         messageID,
+		DocumentId:        documentID,
+		DefaultWorkingDir: defaultWorkingDirectory,
+	}
+
+	var docContent contracts.DocumentContent
+	err = json.Unmarshal(documentRaw, &docContent)
+	if err != nil {
+		return
+	}
+	// TODO Add parameters
+	return docparser.ParseDocument(log, &docContent, parserInfo, nil)
 }
 
 func (m *execDepImp) ExecuteDocument(runner runpluginutil.PluginRunner, context context.T, pluginInput []model.PluginState, documentID string, documentCreatedDate string) (pluginOutputs map[string]*contracts.PluginResult) {
@@ -58,3 +77,19 @@ func (fileSysDepImp) Exists(filePath string) bool {
 func (fileSysDepImp) ReadFile(filename string) ([]byte, error) {
 	return ioutil.ReadFile(filename)
 }
+
+var instance instanceInfo = &instanceInfoImp{}
+
+// system represents the dependency for platform
+type instanceInfo interface {
+	InstanceID() (string, error)
+	Region() (string, error)
+}
+
+type instanceInfoImp struct{}
+
+// InstanceID wraps platform InstanceID
+func (instanceInfoImp) InstanceID() (string, error) { return platform.InstanceID() }
+
+// Region wraps platform Region
+func (instanceInfoImp) Region() (string, error) { return platform.Region() }

@@ -31,7 +31,7 @@ type Mock struct {
 func NewMockDefault() *Mock {
 	ctx := new(Mock)
 	log := log.NewMockLog()
-	config := appconfig.NewMockAppConfig()
+	config := appconfig.SsmagentConfig{}
 	ctx.On("Log").Return(log)
 	ctx.On("AppConfig").Return(config)
 	ctx.On("With", mock.AnythingOfType("string")).Return(ctx)
@@ -43,7 +43,7 @@ func NewMockDefault() *Mock {
 func NewMockDefaultWithContext(context []string) *Mock {
 	ctx := new(Mock)
 	log := log.NewMockLog()
-	config := appconfig.NewMockAppConfig()
+	config := appconfig.SsmagentConfig{}
 	ctx.On("Log").Return(log)
 	ctx.On("AppConfig").Return(config)
 	ctx.On("With", mock.AnythingOfType("string")).Return(ctx)

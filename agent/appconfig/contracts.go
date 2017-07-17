@@ -69,6 +69,7 @@ type OsInfo struct {
 
 // S3Cfg represents configurations related to S3 bucket and key for SSM
 type S3Cfg struct {
+	Endpoint  string
 	Region    string
 	LogBucket string
 	LogKey    string
