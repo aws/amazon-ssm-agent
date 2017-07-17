@@ -194,3 +194,52 @@ func TestPrintCWConfig_ComponentsMissing(t *testing.T) {
 	assert.Contains(t, newConfig, `"Components": null`)
 	assert.Contains(t, newConfig, `"PollInterval": "00:00:01"`)
 }
+
+func TestReplaceLogger(t *testing.T) {
+	var out bytes.Buffer
+	msg := "Some Message"
+
+	context := "<context>"
+	callingFunctionName := "TestReplaceLogger"
+	oldLevelStr := "Debug"
+	newLevelStr := "Info"
+	oldFormat := "%FuncShort [%Level] %Msg%n"
+	newFormat := "%FuncShort %Level %Msg%n"
+	oldOutput := fmt.Sprintf("%s [%v] %v %v\n", callingFunctionName, oldLevelStr, context, msg)
+	newOutput := fmt.Sprintf("%s %v %v %v\n", callingFunctionName, newLevelStr, context, msg)
+
+	// create old (to be replaced) seelog logger that outputs to buffer
+	seelogger, err := seelog.LoggerFromWriterWithMinLevelAndFormat(&out, seelog.DebugLvl, oldFormat)
+	assert.Nil(t, err)
+
+	// create logger with context
+	logger := withContext(seelogger, context)
+
+	// test the logger
+	logger.Debug(msg)
+	logger.Flush()
+	assert.Equal(t, oldOutput, out.String())
+
+	// Check for correct type of logger
+	wrapper, ok := logger.(*Wrapper)
+	assert.True(t, ok, "withContext did not create a logger of type *Wrapper. Conversion not ok")
+
+	// create new (to be replaced with) seelog logger that outputs to buffer
+	newSeelogger, err := seelog.LoggerFromWriterWithMinLevelAndFormat(&out, seelog.InfoLvl, newFormat)
+	assert.Nil(t, err)
+	setStackDepth(newSeelogger)
+
+	// Replace the underlying base logger in wrapper
+	wrapper.replaceDelegate(newSeelogger)
+
+	// Use the same original context logger and check difference in logging
+	// Reset test buffer
+
+	out.Reset()
+
+	// test the logger
+	logger.Info(msg)
+	logger.Flush()
+	assert.Equal(t, newOutput, out.String())
+
+}
