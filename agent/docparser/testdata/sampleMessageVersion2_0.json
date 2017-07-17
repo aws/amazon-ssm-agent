@@ -1,0 +1,37 @@
+{
+  "schemaVersion": "2.0",
+  "description": "Ship it",
+  "mainSteps": [
+    {
+      "action": "aws:runPowerShellScript",
+      "inputs": {
+        "commands": "date"
+      },
+      "maxAttempts": 0,
+      "name": "runPowerShellScript1",
+      "onFailure": "",
+      "settings": null,
+      "timeoutSeconds": 0
+    },
+    {
+      "action": "aws:runPowerShellScript",
+      "inputs": {
+        "commands": "{{ commands }}"
+      },
+      "maxAttempts": 0,
+      "name": "runPowerShellScript2",
+      "onFailure": "",
+      "settings": null,
+      "timeoutSeconds": 0
+    }
+  ],
+  "parameters": {
+    "commands": {
+      "allowedPattern": "",
+      "allowedValues": null,
+      "default": null,
+      "description": "(Required) Specify a shell script or a command to run.",
+      "type": "StringList"
+    }
+  }
+}

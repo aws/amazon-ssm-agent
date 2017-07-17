@@ -27,7 +27,8 @@ import (
 )
 
 const (
-	comport = "/dev/ttyS0"
+	comport   = "/dev/ttyS0"
+	comportPV = "/dev/hvc0"
 )
 
 type SerialPort struct {
@@ -44,11 +45,11 @@ func NewSerialPort(log log.T) (sp *SerialPort) {
 }
 
 // OpenPort opens the serial port which MUST be done before WritePort is called.
-func (sp *SerialPort) OpenPort() (err error) {
-	fileHandle, err := os.OpenFile(comport, syscall.O_RDWR, 0)
+func (sp *SerialPort) openPort(name string) (err error) {
+	fileHandle, err := os.OpenFile(name, syscall.O_RDWR, 0)
 
 	if err != nil {
-		sp.log.Errorf("Error occurred while opening serial port: %v", err.Error())
+		sp.log.Infof("Unable to open serial port %v: %v", name, err.Error())
 		return err
 	}
 
@@ -69,11 +70,24 @@ func (sp *SerialPort) OpenPort() (err error) {
 		0,
 		0,
 	); err != 0 {
-		sp.log.Errorf("Error occurred while configuring serial port: %v", err.Error())
+		sp.log.Infof("Unable to configure serial port %v: %v", name, err.Error())
 		return err
 	}
 
 	sp.fileHandle = fileHandle
+
+	return nil
+}
+
+func (sp *SerialPort) OpenPort() (err error) {
+	if err = sp.openPort(comport); err != nil {
+		sp.log.Infof("Attempting to use different port (PV): %s", comportPV)
+		if err = sp.openPort(comportPV); err != nil {
+			err = fmt.Errorf("Error opening serial port: %v", err.Error())
+			sp.log.Errorf("%v", err.Error())
+			return err
+		}
+	}
 
 	return nil
 }

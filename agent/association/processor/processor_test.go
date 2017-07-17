@@ -162,7 +162,6 @@ func TestProcessAssociationUnableToParseAssociation(t *testing.T) {
 	output := ssm.UpdateInstanceAssociationStatusOutput{}
 	sys = &systemStub{}
 
-	payload := messageContracts.SendCommandPayload{}
 	parserMock := parserMock{}
 
 	// Arrange
@@ -171,12 +170,6 @@ func TestProcessAssociationUnableToParseAssociation(t *testing.T) {
 
 	// Mock service
 	mockService(svcMock, assocRawData, &output)
-
-	// Mock parser
-	parserMock.On(
-		"ParseDocumentWithParams",
-		mock.AnythingOfType("*log.Mock"),
-		mock.AnythingOfType("*model.InstanceAssociation")).Return(&payload, errors.New("failed to parse data"))
 
 	// Act
 	processor.InitializeAssociationProcessor()
@@ -249,10 +242,6 @@ func TestProcessAssociationUnableToExecutePendingDocument(t *testing.T) {
 }
 
 func mockParser(parserMock *parserMock, payload *messageContracts.SendCommandPayload, docState docModel.DocumentState) {
-	parserMock.On(
-		"ParseDocumentWithParams",
-		mock.AnythingOfType("*log.Mock"),
-		mock.AnythingOfType("*model.InstanceAssociation")).Return(payload, nil)
 	parserMock.On(
 		"InitializeDocumentState",
 		mock.AnythingOfType("*context.Mock"),

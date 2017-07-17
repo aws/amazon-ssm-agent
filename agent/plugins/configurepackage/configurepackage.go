@@ -27,10 +27,12 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/framework/runpluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/platform"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/birdwatcher"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/installer"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/localpackages"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/packageservice"
+	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/ssms3"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/pluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 )
@@ -45,7 +47,7 @@ const (
 // Plugin is the type for the configurepackage plugin.
 type Plugin struct {
 	pluginutil.DefaultPlugin
-	packageServiceSelector func(serviceEndpoint string, localrepo localpackages.Repository) packageservice.PackageService
+	packageServiceSelector func(log log.T, serviceEndpoint string, localrepo localpackages.Repository) packageservice.PackageService
 	localRepository        localpackages.Repository
 }
 
@@ -322,12 +324,13 @@ func checkAlreadyInstalled(context context.T,
 }
 
 // selectService chooses the implementation of PackageService to use for a given execution of the plugin
-func selectService(serviceEndpoint string, localrepo localpackages.Repository) packageservice.PackageService {
-	//region, _ := platform.Region()
-	//packageService := ssms3.New(serviceEndpoint, region)
-	packageService := birdwatcher.New(serviceEndpoint, localrepo)
-
-	return packageService
+func selectService(log log.T, serviceEndpoint string, localrepo localpackages.Repository) packageservice.PackageService {
+	region, _ := platform.Region()
+	if !ssms3.UseSSMS3Service(log, serviceEndpoint, region) {
+		log.Debugf("S3 repository is not marked active in %v %v", region, serviceEndpoint)
+		return birdwatcher.New(serviceEndpoint, localrepo)
+	}
+	return ssms3.New(serviceEndpoint, region)
 }
 
 // Execute runs the plugin operation and returns output
@@ -341,30 +344,25 @@ func (p *Plugin) execute(context context.T, config contracts.Configuration, canc
 	log.Info("RunCommand started with configuration ", config)
 
 	res.StartDateTime = time.Now()
-	defer func() { res.EndDateTime = time.Now() }()
+	defer func() {
+		res.EndDateTime = time.Now()
+	}()
 
+	out := contracts.PluginOutput{}
 	if cancelFlag.ShutDown() {
-		res.Code = 1
-		res.Status = contracts.ResultStatusFailed
+		out.MarkAsShutdown()
 	} else if cancelFlag.Canceled() {
-		res.Code = 1
-		res.Status = contracts.ResultStatusCancelled
-	}
-
-	output := contracts.PluginOutput{}
-	input, err := parseAndValidateInput(config.Properties)
-	if err != nil {
-		output.MarkAsFailed(log, err)
-	} else {
+		out.MarkAsCancelled()
+	} else if input, err := parseAndValidateInput(config.Properties); err != nil {
+		out.MarkAsFailed(log, err)
+	} else if err := lockPackage(input.Name, input.Action); err != nil {
 		// do not allow multiple actions to be performed at the same time for the same package
 		// this is possible with multiple concurrent runcommand documents
-		if err := lockPackage(input.Name, input.Action); err != nil {
-			output.MarkAsFailed(log, err)
-			return
-		}
+		out.MarkAsFailed(log, err)
+	} else {
 		defer unlockPackage(input.Name)
 
-		packageService := p.packageServiceSelector(input.Repository, p.localRepository)
+		packageService := p.packageServiceSelector(log, input.Repository, p.localRepository)
 
 		log.Debugf("Prepare for %v %v %v", input.Action, input.Name, input.Version)
 		inst, uninst, installState, installedVersion := prepareConfigurePackage(
@@ -374,60 +372,59 @@ func (p *Plugin) execute(context context.T, config contracts.Configuration, canc
 			p.localRepository,
 			packageService,
 			input,
-			&output)
+			&out)
 		log.Debugf("HasInst %v, HasUninst %v, InstallState %v, InstalledVersion %v", inst != nil, uninst != nil, installState, installedVersion)
 		// if already failed or already installed and valid, do not execute install
-		if output.Status != contracts.ResultStatusFailed && !checkAlreadyInstalled(context, p.localRepository, installedVersion, installState, inst, uninst, &output) {
-			log.Debugf("Calling execute, current status %v", output.Status)
+		if out.Status != contracts.ResultStatusFailed && !checkAlreadyInstalled(context, p.localRepository, installedVersion, installState, inst, uninst, &out) {
+			log.Debugf("Calling execute, current status %v", out.Status)
 			result := executeConfigurePackage(context,
 				p.localRepository,
 				inst,
 				uninst,
 				installState,
-				&output)
-			if !output.Status.IsReboot() {
+				&out)
+			if !out.Status.IsReboot() {
 				packageService.ReportResult(context.Log(), result)
 			}
 		}
-	}
 
-	if config.OrchestrationDirectory != "" {
-		useTemp := false
-		outFile := filepath.Join(config.OrchestrationDirectory, p.StdoutFileName)
-		// create orchestration dir if needed
-		if err := filesysdep.MakeDirExecute(config.OrchestrationDirectory); err != nil {
-			output.AppendError(log, "Failed to create orchestrationDir directory for log files")
-		} else {
-			if err := filesysdep.WriteFile(outFile, output.Stdout); err != nil {
-				log.Debugf("Error writing to %v", outFile)
-				output.AppendErrorf(log, "Error saving stdout: %v", err.Error())
+		if config.OrchestrationDirectory != "" {
+			useTemp := false
+			outFile := filepath.Join(config.OrchestrationDirectory, p.StdoutFileName)
+			// create orchestration dir if needed
+			if err := filesysdep.MakeDirExecute(config.OrchestrationDirectory); err != nil {
+				out.AppendError(log, "Failed to create orchestrationDir directory for log files")
+			} else {
+				if err := filesysdep.WriteFile(outFile, out.Stdout); err != nil {
+					log.Debugf("Error writing to %v", outFile)
+					out.AppendErrorf(log, "Error saving stdout: %v", err.Error())
+				}
+				errFile := filepath.Join(config.OrchestrationDirectory, p.StderrFileName)
+				if err := filesysdep.WriteFile(errFile, out.Stderr); err != nil {
+					log.Debugf("Error writing to %v", errFile)
+					out.AppendErrorf(log, "Error saving stderr: %v", err.Error())
+				}
 			}
-			errFile := filepath.Join(config.OrchestrationDirectory, p.StderrFileName)
-			if err := filesysdep.WriteFile(errFile, output.Stderr); err != nil {
-				log.Debugf("Error writing to %v", errFile)
-				output.AppendErrorf(log, "Error saving stderr: %v", err.Error())
+			uploadErrs := p.ExecuteUploadOutputToS3Bucket(log,
+				config.PluginID,
+				config.OrchestrationDirectory,
+				config.OutputS3BucketName,
+				config.OutputS3KeyPrefix,
+				useTemp,
+				config.OrchestrationDirectory,
+				out.Stdout,
+				out.Stderr)
+			for _, uploadErr := range uploadErrs {
+				out.AppendError(log, uploadErr)
 			}
-		}
-		uploadErrs := p.ExecuteUploadOutputToS3Bucket(log,
-			config.PluginID,
-			config.OrchestrationDirectory,
-			config.OutputS3BucketName,
-			config.OutputS3KeyPrefix,
-			useTemp,
-			config.OrchestrationDirectory,
-			output.Stdout,
-			output.Stderr)
-		for _, uploadErr := range uploadErrs {
-			output.AppendError(log, uploadErr)
 		}
 	}
+	res.Code = out.ExitCode
+	res.Status = out.Status
+	res.Output = out.String()
+	res.StandardOutput = pluginutil.StringPrefix(out.Stdout, p.MaxStdoutLength, p.OutputTruncatedSuffix)
+	res.StandardError = pluginutil.StringPrefix(out.Stderr, p.MaxStderrLength, p.OutputTruncatedSuffix)
 	persistPluginInfo(log, config.PluginID, config, res)
-
-	res.Code = output.ExitCode
-	res.Status = output.Status
-	res.Output = output.String()
-	res.StandardOutput = pluginutil.StringPrefix(output.Stdout, p.MaxStdoutLength, p.OutputTruncatedSuffix)
-	res.StandardError = pluginutil.StringPrefix(output.Stderr, p.MaxStderrLength, p.OutputTruncatedSuffix)
 
 	return res
 }

@@ -62,10 +62,32 @@ const (
 
 	// PatternVersion represents the regular expression for validating version
 	PatternVersion = "^(?:(\\d+)\\.)(?:(\\d+)\\.)(\\d+)$"
+
+	// ActiveServiceURL is the s3 object whose presence indicates the SSMS3 service implementation should be used
+	ActiveServiceURL      = "https://{Endpoint}/amazon-ssm-packages-{Region}/active"
+	ActiveServiceURLBeta  = "https://s3.amazonaws.com/amazon-ssm-packages-beta/active"
+	ActiveServiceURLGamma = "https://s3.amazonaws.com/amazon-ssm-packages-us-east-1-gamma/active"
 )
 
 type PackageService struct {
 	packageURL string
+}
+
+// UseSSMS3Service checks for existence of the active service indicator file.  If the file has been removed, it indicates that the new package service should be used
+func UseSSMS3Service(log log.T, repository string, region string) bool {
+	var checkURL string
+	if repository == "beta" {
+		checkURL = ActiveServiceURLBeta
+	} else if repository == "gamma" {
+		checkURL = ActiveServiceURLGamma
+	} else {
+		checkURL = ActiveServiceURL
+	}
+	checkURL = strings.Replace(checkURL, EndpointHolder, s3util.GetS3Endpoint(region), -1)
+	checkURL = strings.Replace(checkURL, RegionHolder, region, -1)
+
+	parsedURL, _ := url.Parse(checkURL)
+	return networkdep.CanGetS3Object(log, s3util.ParseAmazonS3URL(log, parsedURL))
 }
 
 func New(repository string, region string) *PackageService {
