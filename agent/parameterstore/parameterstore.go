@@ -151,7 +151,8 @@ func getValidSSMParamRegexCompiler(log log.T, paramName string) (*regexp.Regexp,
 	if strings.Compare(paramName, defaultParamName) == 0 {
 		validSSMParamRegex = "\\{\\{ *ssm:[/\\w.-]+ *\\}\\}"
 	} else {
-		validSSMParamRegex = "\\{\\{ *ssm:" + paramName + " *\\}\\}"
+		//[BUG FIX] escape . in the paramName
+		validSSMParamRegex = "\\{\\{ *ssm:" + strings.Replace(paramName, ".", "\\.", -1) + " *\\}\\}"
 	}
 
 	validSSMParam, err := regexp.Compile(validSSMParamRegex)
@@ -168,7 +169,7 @@ func getSSMParameterValues(log log.T, ssmParams []string) (map[string]Parameter,
 	var result *GetParametersResponse
 	var err error
 
-	validParamRegex := ":([/\\w]+)*"
+	validParamRegex := ":([/\\w.-]+)*"
 	validParam, err := regexp.Compile(validParamRegex)
 	if err != nil {
 		log.Debug(err)

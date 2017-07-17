@@ -36,6 +36,10 @@ const (
 	ByteOrderMarkSkip ByteOrderMark = iota
 )
 
+func CreateUTF8ByteOrderMark() (result []byte) {
+	return []byte{0xEF, 0xBB, 0xBF}
+}
+
 // DiskSpaceInfo stores the available, free, and total bytes
 type DiskSpaceInfo struct {
 	AvailBytes int64
@@ -196,8 +200,7 @@ func WriteIntoFileWithPermissions(absolutePath, content string, perm os.FileMode
 func WriteIntoFileWithPermissionsExtended(absolutePath, content string, perm os.FileMode, byteOrderMark ByteOrderMark) (result bool, err error) {
 	result = true
 	if byteOrderMark == ByteOrderMarkEmit {
-		utf8ByteOrderMark := []byte{0xEF, 0xBB, 0xBF}
-		err = ioUtil.WriteFile(absolutePath, append(utf8ByteOrderMark, []byte(content)...), perm)
+		err = ioUtil.WriteFile(absolutePath, append(CreateUTF8ByteOrderMark(), []byte(content)...), perm)
 	} else {
 		err = ioUtil.WriteFile(absolutePath, []byte(content), perm)
 	}

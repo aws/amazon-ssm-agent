@@ -41,17 +41,6 @@ const (
 // UploadOutputToS3BucketExecuter is a function that can upload outputs to S3 bucket.
 type UploadOutputToS3BucketExecuter func(log log.T, pluginID string, orchestrationDir string, outputS3BucketName string, outputS3KeyPrefix string, useTempDirectory bool, tempDir string, Stdout string, Stderr string) []string
 
-// S3Uploader is an interface for objects that can upload data to s3.
-type S3Uploader interface {
-	S3Upload(log log.T, bucketName string, bucketKey string, filePath string) error
-	UploadS3TestFile(log log.T, bucketName, key string) error
-	IsS3ErrorRelatedToAccessDenied(errMsg string) bool
-	IsS3ErrorRelatedToWrongBucketRegion(errMsg string) bool
-	GetS3BucketRegionFromErrorMsg(log log.T, errMsg string) string
-	GetS3ClientRegion() string
-	SetS3ClientRegion(region string)
-}
-
 // DefaultPlugin is the type for the default plugin.
 type DefaultPlugin struct {
 	// ExecuteCommand is an object that can execute commands.
@@ -59,9 +48,6 @@ type DefaultPlugin struct {
 
 	// ExecuteUploadOutputToS3Bucket is an object that can upload command outputs to S3 bucket.
 	ExecuteUploadOutputToS3Bucket UploadOutputToS3BucketExecuter
-
-	// Uploader is an object that can upload data to s3.
-	Uploader S3Uploader
 
 	// UploadToS3Sync is true if uploading to S3 should be done synchronously, false for async.
 	UploadToS3Sync bool

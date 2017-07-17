@@ -2,6 +2,15 @@ Latest
 ===============
 - Various bug fixes
 
+2.0.842.0
+===============
+- Added rollback support in aws:configurePackage
+- Various bug fixes
+
+2.0.834.0
+===============
+- Various bug fixes
+
 2.0.822.0
 ===============
 - [Bug] This version is not a valid update target from version 2.0.761.0.

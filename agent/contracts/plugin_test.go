@@ -144,19 +144,3 @@ func TestAppendFormat(t *testing.T) {
 	assert.Contains(t, output.Stdout, testStringFormatted)
 	assert.Contains(t, output.Stderr, testStringFormatted)
 }
-
-func TestIsCrossPlatformEnabledForSchema20(t *testing.T) {
-	var schemaVersion = "2.0"
-	isCrossPlatformEnabled := IsPreconditionEnabled(schemaVersion)
-
-	// isCrossPlatformEnabled should be false for 2.0 document
-	assert.False(t, isCrossPlatformEnabled)
-}
-
-func TestIsCrossPlatformEnabledForSchema22(t *testing.T) {
-	var schemaVersion = "2.2"
-	isCrossPlatformEnabled := IsPreconditionEnabled(schemaVersion)
-
-	// isCrossPlatformEnabled should be true for 2.2 document
-	assert.True(t, isCrossPlatformEnabled)
-}

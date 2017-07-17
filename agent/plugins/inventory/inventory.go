@@ -627,7 +627,7 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 		return
 	}
 
-	//TODO: take care of cancel flag
+	//TODO: take care of cancel flag (SSM-INV-233)
 
 	associationID = p.ParseAssociationIdFromFileName(config.BookKeepingFileName)
 
