@@ -11,7 +11,7 @@
 // either express or implied. See the License for the specific language governing
 // permissions and limitations under the License.
 
-package engine
+package basicexecuter
 
 import (
 	"fmt"
@@ -21,9 +21,9 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/docmanager/model"
-	"github.com/aws/amazon-ssm-agent/agent/framework/plugin"
 	"github.com/aws/amazon-ssm-agent/agent/framework/runpluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/message/processor/executer/plugin"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
@@ -109,22 +109,25 @@ func TestRunPluginsWithNewDocument(t *testing.T) {
 		pluginConfigs2[index] = pluginConfigs[name]
 	}
 	called := 0
-	sendResponse := func(messageID string, pluginID string, results map[string]*contracts.PluginResult) {
-		for _, result := range results {
+
+	ch := make(chan contracts.PluginResult)
+	go func() {
+		for result := range ch {
 			result.EndDateTime = defaultTime
 			result.StartDateTime = defaultTime
+			if called == 0 {
+				assert.Equal(t, result, *pluginResults[testPlugin1])
+			} else if called == 1 {
+				assert.Equal(t, result, *pluginResults[testPlugin2])
+			} else {
+				assert.Fail(t, "there shouldn't be more than 2 update")
+			}
+			called++
 		}
-		if called == 0 {
-			assert.Equal(t, results[testPlugin1], pluginResults[testPlugin1])
-		} else if called == 1 {
-			assert.Equal(t, results, pluginResults)
-		} else {
-			assert.Fail(t, "sendreply shouldn't been called more than twice")
-		}
-		called++
-	}
+	}()
 	// call the code we are testing
-	outputs := RunPlugins(ctx, documentID, "", pluginConfigs2, pluginRegistry, sendResponse, nil, cancelFlag)
+	outputs := runPlugins(ctx, documentID, "", pluginConfigs2, pluginRegistry, ch, cancelFlag)
+	close(ch)
 
 	// fix the times expectation.
 	for _, result := range outputs {
@@ -194,22 +197,24 @@ func TestRunPluginsWithMissingPluginHandler(t *testing.T) {
 		pluginConfigs2[index] = pluginConfigs[name]
 	}
 	called := 0
-	sendResponse := func(messageID string, pluginID string, results map[string]*contracts.PluginResult) {
-		for _, result := range results {
+
+	ch := make(chan contracts.PluginResult)
+	go func() {
+		for result := range ch {
 			result.EndDateTime = defaultTime
 			result.StartDateTime = defaultTime
+			if called == 0 {
+				assert.Equal(t, result, *pluginResults[testPlugin1])
+			} else if called == 1 {
+				assert.Equal(t, result, *pluginResults[testPlugin2])
+			} else {
+				assert.Fail(t, "there shouldn't be more than 2 update")
+			}
+			called++
 		}
-		if called == 0 {
-			assert.Equal(t, results[testPlugin1], pluginResults[testPlugin1])
-		} else if called == 1 {
-			assert.Equal(t, results, pluginResults)
-		} else {
-			assert.Fail(t, "sendreply shouldn't been called more than twice")
-		}
-		called++
-	}
+	}()
 	// call the code we are testing
-	outputs := RunPlugins(ctx, documentID, "", pluginConfigs2, pluginRegistry, sendResponse, nil, cancelFlag)
+	outputs := runPlugins(ctx, documentID, "", pluginConfigs2, pluginRegistry, ch, cancelFlag)
 
 	// fix the times expectation.
 	for _, result := range outputs {
@@ -239,9 +244,6 @@ func TestRunPluginsWithCancelFlagShutdown(t *testing.T) {
 	plugins := make(map[string]*plugin.Mock)
 	pluginRegistry := runpluginutil.PluginRegistry{}
 	documentID := "TestDocument2"
-
-	sendResponse := func(messageID string, pluginID string, results map[string]*contracts.PluginResult) {
-	}
 
 	var cancelFlag task.CancelFlag = task.NewChanneledCancelFlag()
 	ctx := context.NewMockDefault()
@@ -279,7 +281,11 @@ func TestRunPluginsWithCancelFlagShutdown(t *testing.T) {
 		pluginRegistry[name] = plugins[name]
 	}
 
-	outputs := RunPlugins(ctx, documentID, "", pluginStates, pluginRegistry, sendResponse, nil, cancelFlag)
+	ch := make(chan contracts.PluginResult, 2)
+
+	outputs := runPlugins(ctx, documentID, "", pluginStates, pluginRegistry, ch, cancelFlag)
+
+	close(ch)
 
 	// fix the times expectation.
 	for _, result := range outputs {
@@ -304,9 +310,6 @@ func TestRunPluginsWithInProgressDocuments(t *testing.T) {
 	plugins := make(map[string]*plugin.Mock)
 	pluginRegistry := runpluginutil.PluginRegistry{}
 	documentID := "TestDocument2"
-
-	sendResponse := func(messageID string, pluginID string, results map[string]*contracts.PluginResult) {
-	}
 
 	var cancelFlag task.CancelFlag = task.NewChanneledCancelFlag()
 	ctx := context.NewMockDefault()
@@ -341,7 +344,9 @@ func TestRunPluginsWithInProgressDocuments(t *testing.T) {
 		pluginRegistry[name] = plugins[name]
 	}
 
-	outputs := RunPlugins(ctx, documentID, "", pluginStates, pluginRegistry, sendResponse, nil, cancelFlag)
+	ch := make(chan contracts.PluginResult, 2)
+	outputs := runPlugins(ctx, documentID, "", pluginStates, pluginRegistry, ch, cancelFlag)
+	close(ch)
 	// fix the times expectation.
 	for _, result := range outputs {
 		result.EndDateTime = defaultTime
@@ -385,7 +390,7 @@ func TestRunPluginsWithInProgressDocuments(t *testing.T) {
 //		PluginName: pluginName,
 //	}
 //	pluginStates[0] = pluginState
-//	outputs := RunPlugins(ctx, documentID, "", pluginStates, pluginRegistry, sendResponse, nil, cancelFlag)
+//	outputs := (ctx, documentID, "", pluginStates, pluginRegistry, sendResponse, nil, cancelFlag)
 //	plugins[pluginName].AssertExpectations(t)
 //	assert.Equal(t, pluginResults[pluginName], outputs[pluginName])
 //}
@@ -441,22 +446,23 @@ func TestRunPluginsWithDuplicatePluginType(t *testing.T) {
 		pluginConfigs2[index] = pluginConfigs[name]
 	}
 	called := 0
-	sendResponse := func(messageID string, pluginID string, results map[string]*contracts.PluginResult) {
-		for _, result := range results {
+	ch := make(chan contracts.PluginResult)
+	go func() {
+		for result := range ch {
 			result.EndDateTime = defaultTime
 			result.StartDateTime = defaultTime
+			if called == 0 {
+				assert.Equal(t, result, *pluginResults[testPlugin1])
+			} else if called == 1 {
+				assert.Equal(t, result, *pluginResults[testPlugin2])
+			} else {
+				assert.Fail(t, "there shouldn't be more than 2 update")
+			}
+			called++
 		}
-		if called == 0 {
-			assert.Equal(t, results[testPlugin1], pluginResults[testPlugin1])
-		} else if called == 1 {
-			assert.Equal(t, results, pluginResults)
-		} else {
-			assert.Fail(t, "sendreply shouldn't be called more than twice")
-		}
-		called++
-	}
+	}()
 	// call the code we are testing
-	outputs := RunPlugins(ctx, documentID, "", pluginConfigs2, pluginRegistry, sendResponse, nil, cancelFlag)
+	outputs := runPlugins(ctx, documentID, "", pluginConfigs2, pluginRegistry, ch, cancelFlag)
 
 	// fix the times expectation.
 	for _, result := range outputs {
@@ -532,22 +538,23 @@ func TestRunPluginsWithCompatiblePrecondition(t *testing.T) {
 		pluginConfigs2[index] = pluginConfigs[name]
 	}
 	called := 0
-	sendResponse := func(messageID string, pluginID string, results map[string]*contracts.PluginResult) {
-		for _, result := range results {
+	ch := make(chan contracts.PluginResult)
+	go func() {
+		for result := range ch {
 			result.EndDateTime = defaultTime
 			result.StartDateTime = defaultTime
+			if called == 0 {
+				assert.Equal(t, result, *pluginResults[testPlugin1])
+			} else if called == 1 {
+				assert.Equal(t, result, *pluginResults[testPlugin2])
+			} else {
+				assert.Fail(t, "there shouldn't be more than 2 update")
+			}
+			called++
 		}
-		if called == 0 {
-			assert.Equal(t, results[testPlugin1], pluginResults[testPlugin1])
-		} else if called == 1 {
-			assert.Equal(t, results, pluginResults)
-		} else {
-			assert.Fail(t, "sendreply shouldn't be called more than twice")
-		}
-		called++
-	}
+	}()
 	// call the code we are testing
-	outputs := RunPlugins(ctx, documentID, "", pluginConfigs2, pluginRegistry, sendResponse, nil, cancelFlag)
+	outputs := runPlugins(ctx, documentID, "", pluginConfigs2, pluginRegistry, ch, cancelFlag)
 
 	// fix the times expectation.
 	for _, result := range outputs {
@@ -621,23 +628,23 @@ func TestRunPluginsWithCompatiblePreconditionWithValueFirst(t *testing.T) {
 		pluginConfigs2[index] = pluginConfigs[name]
 	}
 	called := 0
-	sendResponse := func(messageID string, pluginID string, results map[string]*contracts.PluginResult) {
-		for _, result := range results {
+	ch := make(chan contracts.PluginResult)
+	go func() {
+		for result := range ch {
 			result.EndDateTime = defaultTime
 			result.StartDateTime = defaultTime
+			if called == 0 {
+				assert.Equal(t, result, *pluginResults[testPlugin1])
+			} else if called == 1 {
+				assert.Equal(t, result, *pluginResults[testPlugin2])
+			} else {
+				assert.Fail(t, "there shouldn't be more than 2 update")
+			}
+			called++
 		}
-		if called == 0 {
-			assert.Equal(t, results[testPlugin1], pluginResults[testPlugin1])
-		} else if called == 1 {
-			assert.Equal(t, results, pluginResults)
-		} else {
-			assert.Fail(t, "sendreply shouldn't be called more than twice")
-		}
-		called++
-	}
+	}()
 	// call the code we are testing
-	outputs := RunPlugins(ctx, documentID, "", pluginConfigs2, pluginRegistry, sendResponse, nil, cancelFlag)
-
+	outputs := runPlugins(ctx, documentID, "", pluginConfigs2, pluginRegistry, ch, cancelFlag)
 	// fix the times expectation.
 	for _, result := range outputs {
 		result.EndDateTime = defaultTime
@@ -708,23 +715,23 @@ func TestRunPluginsWithIncompatiblePrecondition(t *testing.T) {
 		pluginConfigs2[index] = pluginConfigs[name]
 	}
 	called := 0
-	sendResponse := func(messageID string, pluginID string, results map[string]*contracts.PluginResult) {
-		for _, result := range results {
+	ch := make(chan contracts.PluginResult)
+	go func() {
+		for result := range ch {
 			result.EndDateTime = defaultTime
 			result.StartDateTime = defaultTime
+			if called == 0 {
+				assert.Equal(t, result, *pluginResults[testPlugin1])
+			} else if called == 1 {
+				assert.Equal(t, result, *pluginResults[testPlugin2])
+			} else {
+				assert.Fail(t, "there shouldn't be more than 2 update")
+			}
+			called++
 		}
-		if called == 0 {
-			assert.Equal(t, results[testPlugin1], pluginResults[testPlugin1])
-		} else if called == 1 {
-			assert.Equal(t, results, pluginResults)
-		} else {
-			assert.Fail(t, "sendreply shouldn't be called more than twice")
-		}
-		called++
-	}
+	}()
 	// call the code we are testing
-	outputs := RunPlugins(ctx, documentID, "", pluginConfigs2, pluginRegistry, sendResponse, nil, cancelFlag)
-
+	outputs := runPlugins(ctx, documentID, "", pluginConfigs2, pluginRegistry, ch, cancelFlag)
 	// fix the times expectation.
 	for _, result := range outputs {
 		result.EndDateTime = defaultTime
@@ -793,23 +800,23 @@ func TestRunPluginsWithCompatiblePreconditionButMissingPluginHandler(t *testing.
 		pluginConfigs2[index] = pluginConfigs[name]
 	}
 	called := 0
-	sendResponse := func(messageID string, pluginID string, results map[string]*contracts.PluginResult) {
-		for _, result := range results {
+	ch := make(chan contracts.PluginResult)
+	go func() {
+		for result := range ch {
 			result.EndDateTime = defaultTime
 			result.StartDateTime = defaultTime
+			if called == 0 {
+				assert.Equal(t, result, *pluginResults[testPlugin1])
+			} else if called == 1 {
+				assert.Equal(t, result, *pluginResults[testPlugin2])
+			} else {
+				assert.Fail(t, "there shouldn't be more than 2 update")
+			}
+			called++
 		}
-		if called == 0 {
-			assert.Equal(t, results[testPlugin1], pluginResults[testPlugin1])
-		} else if called == 1 {
-			assert.Equal(t, results, pluginResults)
-		} else {
-			assert.Fail(t, "sendreply shouldn't be called more than twice")
-		}
-		called++
-	}
+	}()
 	// call the code we are testing
-	outputs := RunPlugins(ctx, documentID, "", pluginConfigs2, pluginRegistry, sendResponse, nil, cancelFlag)
-
+	outputs := runPlugins(ctx, documentID, "", pluginConfigs2, pluginRegistry, ch, cancelFlag)
 	// fix the times expectation.
 	for _, result := range outputs {
 		result.EndDateTime = defaultTime
@@ -888,23 +895,23 @@ func TestRunPluginsWithMoreThanOnePrecondition(t *testing.T) {
 		pluginConfigs2[index] = pluginConfigs[name]
 	}
 	called := 0
-	sendResponse := func(messageID string, pluginID string, results map[string]*contracts.PluginResult) {
-		for _, result := range results {
+	ch := make(chan contracts.PluginResult)
+	go func() {
+		for result := range ch {
 			result.EndDateTime = defaultTime
 			result.StartDateTime = defaultTime
+			if called == 0 {
+				assert.Equal(t, result, *pluginResults[testPlugin1])
+			} else if called == 1 {
+				assert.Equal(t, result, *pluginResults[testPlugin2])
+			} else {
+				assert.Fail(t, "there shouldn't be more than 2 update")
+			}
+			called++
 		}
-		if called == 0 {
-			assert.Equal(t, results[testPlugin1], pluginResults[testPlugin1])
-		} else if called == 1 {
-			assert.Equal(t, results, pluginResults)
-		} else {
-			assert.Fail(t, "sendreply shouldn't be called more than twice")
-		}
-		called++
-	}
+	}()
 	// call the code we are testing
-	outputs := RunPlugins(ctx, documentID, "", pluginConfigs2, pluginRegistry, sendResponse, nil, cancelFlag)
-
+	outputs := runPlugins(ctx, documentID, "", pluginConfigs2, pluginRegistry, ch, cancelFlag)
 	// fix the times expectation.
 	for _, result := range outputs {
 		result.EndDateTime = defaultTime
@@ -980,22 +987,23 @@ func TestRunPluginsWithUnrecognizedPreconditionOperator(t *testing.T) {
 		pluginConfigs2[index] = pluginConfigs[name]
 	}
 	called := 0
-	sendResponse := func(messageID string, pluginID string, results map[string]*contracts.PluginResult) {
-		for _, result := range results {
+	ch := make(chan contracts.PluginResult)
+	go func() {
+		for result := range ch {
 			result.EndDateTime = defaultTime
 			result.StartDateTime = defaultTime
+			if called == 0 {
+				assert.Equal(t, result, *pluginResults[testPlugin1])
+			} else if called == 1 {
+				assert.Equal(t, result, *pluginResults[testPlugin2])
+			} else {
+				assert.Fail(t, "there shouldn't be more than 2 update")
+			}
+			called++
 		}
-		if called == 0 {
-			assert.Equal(t, results[testPlugin1], pluginResults[testPlugin1])
-		} else if called == 1 {
-			assert.Equal(t, results, pluginResults)
-		} else {
-			assert.Fail(t, "sendreply shouldn't be called more than twice")
-		}
-		called++
-	}
+	}()
 	// call the code we are testing
-	outputs := RunPlugins(ctx, documentID, "", pluginConfigs2, pluginRegistry, sendResponse, nil, cancelFlag)
+	outputs := runPlugins(ctx, documentID, "", pluginConfigs2, pluginRegistry, ch, cancelFlag)
 
 	// fix the times expectation.
 	for _, result := range outputs {
@@ -1072,22 +1080,23 @@ func TestRunPluginsWithUnrecognizedPreconditionOperand(t *testing.T) {
 		pluginConfigs2[index] = pluginConfigs[name]
 	}
 	called := 0
-	sendResponse := func(messageID string, pluginID string, results map[string]*contracts.PluginResult) {
-		for _, result := range results {
+	ch := make(chan contracts.PluginResult)
+	go func() {
+		for result := range ch {
 			result.EndDateTime = defaultTime
 			result.StartDateTime = defaultTime
+			if called == 0 {
+				assert.Equal(t, result, *pluginResults[testPlugin1])
+			} else if called == 1 {
+				assert.Equal(t, result, *pluginResults[testPlugin2])
+			} else {
+				assert.Fail(t, "there shouldn't be more than 2 update")
+			}
+			called++
 		}
-		if called == 0 {
-			assert.Equal(t, results[testPlugin1], pluginResults[testPlugin1])
-		} else if called == 1 {
-			assert.Equal(t, results, pluginResults)
-		} else {
-			assert.Fail(t, "sendreply shouldn't be called more than twice")
-		}
-		called++
-	}
+	}()
 	// call the code we are testing
-	outputs := RunPlugins(ctx, documentID, "", pluginConfigs2, pluginRegistry, sendResponse, nil, cancelFlag)
+	outputs := runPlugins(ctx, documentID, "", pluginConfigs2, pluginRegistry, ch, cancelFlag)
 
 	// fix the times expectation.
 	for _, result := range outputs {
@@ -1165,22 +1174,23 @@ func TestRunPluginsWithUnrecognizedPreconditionDuplicateVariable(t *testing.T) {
 		pluginConfigs2[index] = pluginConfigs[name]
 	}
 	called := 0
-	sendResponse := func(messageID string, pluginID string, results map[string]*contracts.PluginResult) {
-		for _, result := range results {
+	ch := make(chan contracts.PluginResult)
+	go func() {
+		for result := range ch {
 			result.EndDateTime = defaultTime
 			result.StartDateTime = defaultTime
+			if called == 0 {
+				assert.Equal(t, result, *pluginResults[testPlugin1])
+			} else if called == 1 {
+				assert.Equal(t, result, *pluginResults[testPlugin2])
+			} else {
+				assert.Fail(t, "there shouldn't be more than 2 update")
+			}
+			called++
 		}
-		if called == 0 {
-			assert.Equal(t, results[testPlugin1], pluginResults[testPlugin1])
-		} else if called == 1 {
-			assert.Equal(t, results, pluginResults)
-		} else {
-			assert.Fail(t, "sendreply shouldn't be called more than twice")
-		}
-		called++
-	}
+	}()
 	// call the code we are testing
-	outputs := RunPlugins(ctx, documentID, "", pluginConfigs2, pluginRegistry, sendResponse, nil, cancelFlag)
+	outputs := runPlugins(ctx, documentID, "", pluginConfigs2, pluginRegistry, ch, cancelFlag)
 
 	// fix the times expectation.
 	for _, result := range outputs {
@@ -1257,22 +1267,23 @@ func TestRunPluginsWithMoreThanTwoPreconditionOperands(t *testing.T) {
 		pluginConfigs2[index] = pluginConfigs[name]
 	}
 	called := 0
-	sendResponse := func(messageID string, pluginID string, results map[string]*contracts.PluginResult) {
-		for _, result := range results {
+	ch := make(chan contracts.PluginResult)
+	go func() {
+		for result := range ch {
 			result.EndDateTime = defaultTime
 			result.StartDateTime = defaultTime
+			if called == 0 {
+				assert.Equal(t, result, *pluginResults[testPlugin1])
+			} else if called == 1 {
+				assert.Equal(t, result, *pluginResults[testPlugin2])
+			} else {
+				assert.Fail(t, "there shouldn't be more than 2 update")
+			}
+			called++
 		}
-		if called == 0 {
-			assert.Equal(t, results[testPlugin1], pluginResults[testPlugin1])
-		} else if called == 1 {
-			assert.Equal(t, results, pluginResults)
-		} else {
-			assert.Fail(t, "sendreply shouldn't be called more than twice")
-		}
-		called++
-	}
+	}()
 	// call the code we are testing
-	outputs := RunPlugins(ctx, documentID, "", pluginConfigs2, pluginRegistry, sendResponse, nil, cancelFlag)
+	outputs := runPlugins(ctx, documentID, "", pluginConfigs2, pluginRegistry, ch, cancelFlag)
 
 	// fix the times expectation.
 	for _, result := range outputs {
@@ -1365,20 +1376,19 @@ func TestRunPluginsWithUnknownPlugin(t *testing.T) {
 		pluginConfigs2[index] = pluginConfigs[name]
 	}
 	called := 0
-	sendResponse := func(messageID string, pluginID string, results map[string]*contracts.PluginResult) {
-		for _, result := range results {
+	ch := make(chan contracts.PluginResult)
+	go func() {
+		for result := range ch {
 			result.EndDateTime = defaultTime
 			result.StartDateTime = defaultTime
+			if called > 2 {
+				assert.Fail(t, "there shouldn't be more than 3 update")
+			}
+			called++
 		}
-		if called > 2 {
-			assert.Fail(t, "sendreply shouldn't be called more than three times")
-		} else if called == 2 {
-			assert.Equal(t, results, pluginResults)
-		}
-		called++
-	}
+	}()
 	// call the code we are testing
-	outputs := RunPlugins(ctx, documentID, "", pluginConfigs2, pluginRegistry, sendResponse, nil, cancelFlag)
+	outputs := runPlugins(ctx, documentID, "", pluginConfigs2, pluginRegistry, ch, cancelFlag)
 
 	// fix the times expectation.
 	for _, result := range outputs {

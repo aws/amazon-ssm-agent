@@ -185,3 +185,21 @@ func TestDownloadArtifactWithError(t *testing.T) {
 
 	assert.Error(t, err)
 }
+
+func TestUseSSMS3Service_True(t *testing.T) {
+	mockObj := new(SSMS3Mock)
+	mockObj.On("CanGetS3Object", mock.Anything, mock.Anything).Return(true)
+
+	networkdep = mockObj
+
+	assert.True(t, UseSSMS3Service(loggerMock, "", "eu-central-1"))
+}
+
+func TestUseSSMS3Service_False(t *testing.T) {
+	mockObj := new(SSMS3Mock)
+	mockObj.On("CanGetS3Object", mock.Anything, mock.Anything).Return(false)
+
+	networkdep = mockObj
+
+	assert.False(t, UseSSMS3Service(loggerMock, "beta", "eu-central-1"))
+}

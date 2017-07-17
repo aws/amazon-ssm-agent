@@ -58,7 +58,7 @@ func (m *Manager) StopPlugin(name string, cancelFlag task.CancelFlag) (err error
 		}
 
 		// Update the config file to "IsEnabled": "false"
-		if err = cloudwatch.Disable(); err != nil {
+		if err = cloudwatch.Instance().Disable(); err != nil {
 			log.Errorf("Failed to update config file - because of %s", err)
 		}
 
@@ -109,12 +109,9 @@ func (m *Manager) StartPlugin(name, configuration string, orchestrationDir strin
 	}
 
 	// Update the config file with new configuration
-	var engineConfiguration interface{}
-	json.Unmarshal([]byte(p.Info.Configuration), &engineConfiguration)
-
-	cloudWatchConfig := cloudwatch.Instance()
-	cloudWatchConfig.EngineConfiguration = engineConfiguration
-	if err = cloudwatch.Enable(cloudWatchConfig); err != nil {
+	var engineConfigurationParser cloudwatch.EngineConfigurationParser
+	json.Unmarshal([]byte(p.Info.Configuration), &engineConfigurationParser)
+	if err = cloudwatch.Instance().Enable(engineConfigurationParser.EngineConfiguration); err != nil {
 		log.Errorf("Failed to update config file - because of %s", err)
 	}
 

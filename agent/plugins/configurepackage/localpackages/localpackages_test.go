@@ -188,6 +188,41 @@ func TestValidatePackage(t *testing.T) {
 	assert.Nil(t, err)
 }
 
+func TestValidatePackage_Manifest(t *testing.T) {
+	version := "0.0.1"
+	// Setup mock with expectations
+	mockFileSys := MockedFileSys{}
+	mockFileSys.On("Exists", path.Join(testRepoRoot, testPackage, version, "SsmTest.json")).Return(false).Once()
+	mockFileSys.On("Exists", path.Join(testRepoRoot, testPackage, version, "manifest.json")).Return(true).Once()
+	mockFileSys.On("ReadFile", path.Join(testRepoRoot, testPackage, version, "manifest.json")).Return(loadFile(t, path.Join(testRepoRoot, testPackage, version, "SsmTest.json")), nil).Once()
+	mockFileSys.On("GetFileNames", path.Join(testRepoRoot, testPackage, version)).Return([]string{"SsmTest.json", "install.json"}, nil)
+
+	// Instantiate repository with mock
+	repo := localRepository{filesysdep: &mockFileSys, repoRoot: testRepoRoot}
+
+	// Call and validate mock expectations and return value
+	err := repo.ValidatePackage(contextMock, testPackage, version)
+	mockFileSys.AssertExpectations(t)
+	assert.Nil(t, err)
+}
+
+func TestValidatePackage_NoManifest(t *testing.T) {
+	version := "0.0.1"
+	// Setup mock with expectations
+	mockFileSys := MockedFileSys{}
+	mockFileSys.On("Exists", path.Join(testRepoRoot, testPackage, version, "SsmTest.json")).Return(false).Once()
+	mockFileSys.On("Exists", path.Join(testRepoRoot, testPackage, version, "manifest.json")).Return(false).Once()
+	mockFileSys.On("GetFileNames", path.Join(testRepoRoot, testPackage, version)).Return([]string{"install.json", "uninstall.json"}, nil)
+
+	// Instantiate repository with mock
+	repo := localRepository{filesysdep: &mockFileSys, repoRoot: testRepoRoot}
+
+	// Call and validate mock expectations and return value
+	err := repo.ValidatePackage(contextMock, testPackage, version)
+	mockFileSys.AssertExpectations(t)
+	assert.Nil(t, err)
+}
+
 func TestValidatePackageNoContent(t *testing.T) {
 	version := "0.0.1"
 	// Setup mock with expectations

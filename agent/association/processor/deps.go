@@ -67,26 +67,26 @@ func (assocBookkeepingService) IsDocumentCurrentlyExecuting(documentID, instance
 
 // parserService represents the dependency for association parser
 type parserService interface {
-	ParseDocumentWithParams(log log.T, rawData *model.InstanceAssociation) (*messageContract.SendCommandPayload, error)
+	ParseDocumentForPayload(log log.T, rawData *model.InstanceAssociation) (*messageContract.SendCommandPayload, error)
 	InitializeDocumentState(context context.T,
 		payload *messageContract.SendCommandPayload,
-		rawData *model.InstanceAssociation) docModel.DocumentState
+		rawData *model.InstanceAssociation) (docModel.DocumentState, error)
 }
 
 type assocParserService struct{}
 
 // ParseDocumentWithParams wraps parser ParseDocumentWithParams
-func (assocParserService) ParseDocumentWithParams(
+func (assocParserService) ParseDocumentForPayload(
 	log log.T,
 	rawData *model.InstanceAssociation) (*messageContract.SendCommandPayload, error) {
 
-	return parser.ParseDocumentWithParams(log, rawData)
+	return parser.ParseDocumentForPayload(log, rawData)
 }
 
 // InitializeDocumentState wraps engine InitializeCommandState
 func (assocParserService) InitializeDocumentState(context context.T,
 	payload *messageContract.SendCommandPayload,
-	rawData *model.InstanceAssociation) docModel.DocumentState {
+	rawData *model.InstanceAssociation) (docModel.DocumentState, error) {
 
 	return parser.InitializeDocumentState(context, payload, rawData)
 }

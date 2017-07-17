@@ -13,24 +13,20 @@
 package executer
 
 import (
-	"github.com/aws/amazon-ssm-agent/agent/context"
-	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/docmanager"
 	docModel "github.com/aws/amazon-ssm-agent/agent/docmanager/model"
-	"github.com/aws/amazon-ssm-agent/agent/framework/engine"
-	"github.com/aws/amazon-ssm-agent/agent/framework/runpluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
-	"github.com/aws/amazon-ssm-agent/agent/task"
 )
 
-var bookkeepingSvc = bookkeepingImp{}
-var pluginExecution = pluginExecutionImp{}
+var bookkeepingSvc bookkeepingService = bookkeepingImp{}
 
 // bookkeepingService represents the dependency for docmanager
 type bookkeepingService interface {
 	GetDocumentInfo(log log.T, documentID, instanceID, locationFolder string) docModel.DocumentInfo
 	PersistDocumentInfo(log log.T, docInfo docModel.DocumentInfo, documentID, instanceID, locationFolder string)
-	MoveCommandState(log log.T, documentID, instanceID, srcLocationFolder, dstLocationFolder string)
+	MoveDocumentState(log log.T, documentID, instanceID, srcLocationFolder, dstLocationFolder string)
+	GetDocumentInterimState(log log.T, documentID, instanceID, locationFolder string) docModel.DocumentState
+	DeleteOldDocumentFolderLogs(log log.T, instanceID, orchestrationRootDirName string, retentionDurationHours int, isIntendedFileNameFormat func(string) bool, formOrchestrationFolderName func(string) string)
 }
 
 type bookkeepingImp struct{}
@@ -45,35 +41,16 @@ func (bookkeepingImp) PersistDocumentInfo(log log.T, docInfo docModel.DocumentIn
 	docmanager.PersistDocumentInfo(log, docInfo, documentID, instanceID, locationFolder)
 }
 
+// GetDocumentInterimState wraps the docmanager GetDocumentInterimState
+func (bookkeepingImp) GetDocumentInterimState(log log.T, documentID, instanceID, locationFolder string) docModel.DocumentState {
+	return docmanager.GetDocumentInterimState(log, documentID, instanceID, locationFolder)
+}
+
 // MoveDocumentState wraps docmanager MoveDocumentState
 func (bookkeepingImp) MoveDocumentState(log log.T, documentID, instanceID, srcLocationFolder, dstLocationFolder string) {
 	docmanager.MoveDocumentState(log, documentID, instanceID, srcLocationFolder, dstLocationFolder)
 }
 
-// pluginExecutionService represents the dependency for engine
-type pluginExecutionService interface {
-	RunPlugins(
-		context context.T,
-		associationID string,
-		documentCreatedDate string,
-		plugins []docModel.PluginState,
-		pluginRegistry runpluginutil.PluginRegistry,
-		sendReply runpluginutil.SendResponse,
-		cancelFlag task.CancelFlag,
-	) (pluginOutputs map[string]*contracts.PluginResult)
-}
-
-type pluginExecutionImp struct{}
-
-// RunPlugins wraps engine RunPlugins
-func (pluginExecutionImp) RunPlugins(
-	context context.T,
-	associationID string,
-	documentCreatedDate string,
-	plugins []docModel.PluginState,
-	pluginRegistry runpluginutil.PluginRegistry,
-	assocUpdate runpluginutil.UpdateAssociation,
-	cancelFlag task.CancelFlag,
-) (pluginOutputs map[string]*contracts.PluginResult) {
-	return engine.RunPlugins(context, associationID, documentCreatedDate, plugins, pluginRegistry, nil, assocUpdate, cancelFlag)
+func (bookkeepingImp) DeleteOldDocumentFolderLogs(log log.T, instanceID, orchestrationRootDirName string, retentionDurationHours int, isIntendedFileNameFormat func(string) bool, formOrchestrationFolderName func(string) string) {
+	docmanager.DeleteOldDocumentFolderLogs(log, instanceID, orchestrationRootDirName, retentionDurationHours, isIntendedFileNameFormat, formOrchestrationFolderName)
 }

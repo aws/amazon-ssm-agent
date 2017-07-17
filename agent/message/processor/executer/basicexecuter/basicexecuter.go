@@ -15,68 +15,66 @@
 package basicexecuter
 
 import (
-	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/docmanager"
-	"github.com/aws/amazon-ssm-agent/agent/docmanager/model"
-	"github.com/aws/amazon-ssm-agent/agent/framework/engine"
-	"github.com/aws/amazon-ssm-agent/agent/framework/plugin"
-	"github.com/aws/amazon-ssm-agent/agent/framework/runpluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/message/processor/executer"
+	"github.com/aws/amazon-ssm-agent/agent/message/processor/executer/plugin"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 )
 
+//TODO currently BasicExecuter.Run() is not idempotent, we should make it so in future
 // BasicExecuter is a thin wrapper over runPlugins().
 type BasicExecuter struct {
-	//TODO 3. populate the attribute once we get 1 and 2 done
+	//TODO add cancelFlag attribute
+	statusChan chan contracts.PluginResult
+	ctx        context.T
 }
 
-var pluginRunner = func(context context.T, documentID string, plugins []model.PluginState, sendResponse runpluginutil.SendResponse, cancelFlag task.CancelFlag) (pluginOutputs map[string]*contracts.PluginResult) {
-	//TODO move the engine package into executer, so that everything about document execution is contained within Executer package, and only have a couple of public functions exposed by Executer
-	return engine.RunPlugins(context, documentID, "", plugins, plugin.RegisteredWorkerPlugins(context), sendResponse, nil, cancelFlag)
+//TODO determine the common functions shared by BasicExecuter and out-of-proc Executer
+var pluginRunner = func(context context.T,
+	docStore executer.DocumentStore,
+	resChan chan contracts.PluginResult,
+	cancelFlag task.CancelFlag) {
+	defer func() {
+		if msg := recover(); msg != nil {
+			context.Log().Errorf("Executer run panic: %v", msg)
+		}
+	}()
+	docState := docStore.Load()
+	outputs := runPlugins(context, docState.DocumentInformation.MessageID, "", docState.InstancePluginsInformation, plugin.RegisteredWorkerPlugins(context), resChan, cancelFlag)
+	pluginOutputContent, _ := jsonutil.Marshal(outputs)
+	context.Log().Debugf("Plugin outputs %v", jsonutil.Indent(pluginOutputContent))
+	//TODO result aggregation should not be done && persisted in the Executer, remove this part once service extraction is done
+	status, _, runtimeStatuses := docmanager.DocumentResultAggregator(context.Log(), "", outputs)
+	docState.DocumentInformation.DocumentStatus = status
+	docState.DocumentInformation.RuntimeStatus = runtimeStatuses
+	// persist the docState object
+	docStore.Save()
+	//sender close the channel
+	close(resChan)
 }
 
-func NewBasicExecuter() executer.Executer {
-	return BasicExecuter{}
+// NewBasicExecuter returns a pointer that impl the Executer interface
+// using a pointer so that it can be shared among multiple threads(go-routines)
+func NewBasicExecuter(context context.T) executer.Executer {
+	return &BasicExecuter{
+		ctx: context,
+	}
 }
 
-//TODO 2. do not use callback for sendreply
-func (e BasicExecuter) Run(context context.T,
+func (e *BasicExecuter) Run(
 	cancelFlag task.CancelFlag,
-	buildReply executer.ReplyBuilder,
-	sendResponse runpluginutil.SendResponse,
-	docState *model.DocumentState) {
-	log := context.Log()
+	docStore executer.DocumentStore) chan contracts.PluginResult {
+
+	log := e.ctx.Log()
+	docState := docStore.Load()
+	nPlugins := len(docState.InstancePluginsInformation)
+	// we're creating a buffered channel according to the number of plugins the document has
+	e.statusChan = make(chan contracts.PluginResult, nPlugins)
 
 	log.Debug("Running plugins...")
-	outputs := pluginRunner(context, docState.DocumentInformation.MessageID, docState.InstancePluginsInformation, sendResponse, cancelFlag)
-	pluginOutputContent, _ := jsonutil.Marshal(outputs)
-	log.Debugf("Plugin outputs %v", jsonutil.Indent(pluginOutputContent))
-
-	//TODO this part should be moved to IOHandler
-	//TODO buildReply function will be depracated, with part of its job moved to service and part moved to IOHandler
-	payloadDoc := buildReply("", outputs)
-	//update documentInfo in interim cmd state file
-	newCmdState := docmanager.GetDocumentInterimState(log,
-		docState.DocumentInformation.DocumentID,
-		docState.DocumentInformation.InstanceID,
-		appconfig.DefaultLocationOfCurrent)
-
-	// set document level information which wasn't set previously
-	newCmdState.DocumentInformation.AdditionalInfo = payloadDoc.AdditionalInfo
-	newCmdState.DocumentInformation.DocumentStatus = payloadDoc.DocumentStatus
-	newCmdState.DocumentInformation.DocumentTraceOutput = payloadDoc.DocumentTraceOutput
-	newCmdState.DocumentInformation.RuntimeStatus = payloadDoc.RuntimeStatus
-
-	//persist final documentInfo.
-	docmanager.PersistDocumentInfo(log,
-		newCmdState.DocumentInformation,
-		newCmdState.DocumentInformation.DocumentID,
-		newCmdState.DocumentInformation.InstanceID,
-		appconfig.DefaultLocationOfCurrent)
-	log.Debug("Sending reply on message completion ", outputs)
-	sendResponse(newCmdState.DocumentInformation.MessageID, "", outputs)
-	*docState = newCmdState
+	go pluginRunner(e.ctx, docStore, e.statusChan, cancelFlag)
+	return e.statusChan
 }
