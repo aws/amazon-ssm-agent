@@ -252,9 +252,11 @@ func (r *cancellableWriter) Write(p []byte) (n int, err error) {
 		r.cancelled = true
 		return 0, io.ErrClosedPipe
 	default:
+		n, err = r.baseWriter.Write(p)
 		// Necessary to prevent a busy loop from a process writing massive amounts of output from starving a timeout timer
+		// Yield after the write to prevent another process from interrupting the write to the underlying writer
 		runtime.Gosched()
-		return r.baseWriter.Write(p)
+		return
 	}
 }
 
