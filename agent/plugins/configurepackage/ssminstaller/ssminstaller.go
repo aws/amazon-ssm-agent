@@ -115,27 +115,27 @@ func (inst *Installer) getActionPath(actionName string, extension string) string
 func (inst *Installer) readScriptAction(context context.T, action *Action, workingDir string, pluginName string, runCommand []interface{}) (pluginsInfo []model.PluginState, err error) {
 	pluginsInfo = []model.PluginState{}
 
+	pluginFullName := fmt.Sprintf("aws:%v", pluginName)
 	var s3Prefix string
 	if inst.config.OutputS3BucketName != "" {
-		s3Prefix = fileutil.BuildS3Path(inst.config.OutputS3KeyPrefix, action.actionName)
+		s3Prefix = fileutil.BuildS3Path(inst.config.OutputS3KeyPrefix, inst.config.PluginID, action.actionName, pluginFullName)
 	}
+	orchestrationDir := filepath.Join(inst.config.OrchestrationDirectory, action.actionName)
 
 	inputs := make(map[string]interface{})
-	inputs["id"] = "0.aws:runShellScript"
 	inputs["workingDirectory"] = workingDir
-	inputs["timeoutSeconds"] = "300"
 	inputs["runCommand"] = runCommand
 
 	config := contracts.Configuration{
 		Settings:                nil,
 		Properties:              inputs,
 		OutputS3BucketName:      inst.config.OutputS3BucketName,
-		OutputS3KeyPrefix:       fileutil.BuildS3Path(s3Prefix, pluginName),
-		OrchestrationDirectory:  fileutil.BuildPath(workingDir, pluginName),
+		OutputS3KeyPrefix:       s3Prefix,
+		OrchestrationDirectory:  orchestrationDir,
 		MessageId:               inst.config.MessageId,
 		BookKeepingFileName:     inst.config.BookKeepingFileName,
-		PluginName:              fmt.Sprintf("aws:%v", pluginName),
-		PluginID:                pluginName,
+		PluginName:              pluginFullName,
+		PluginID:                inst.version,
 		Preconditions:           make(map[string][]string),
 		IsPreconditionEnabled:   false,
 		DefaultWorkingDirectory: workingDir,
@@ -178,10 +178,10 @@ func (inst *Installer) readPs1Action(context context.T, action *Action, workingD
 	runCommand = append(runCommand, fmt.Sprintf("echo Running %v.ps1", action.actionName))
 
 	for k, v := range envVars {
-		runCommand = append(runCommand, fmt.Sprintf("$env:%v = \"%v\"", k, v))
+		runCommand = append(runCommand, fmt.Sprintf("$env:%v = \"%v\"; ", k, v))
 	}
 
-	runCommand = append(runCommand, fmt.Sprintf(".\\%v.ps1", action.actionName))
+	runCommand = append(runCommand, fmt.Sprintf(".\\%v.ps1; exit $LASTEXITCODE", action.actionName))
 
 	return inst.readScriptAction(context, action, workingDir, "runPowerShellScript", runCommand)
 }
@@ -207,7 +207,7 @@ func (inst *Installer) readJsonAction(context context.T, action *Action, working
 
 	var s3Prefix string
 	if inst.config.OutputS3BucketName != "" {
-		s3Prefix = fileutil.BuildS3Path(inst.config.OutputS3KeyPrefix, action.actionName)
+		s3Prefix = fileutil.BuildS3Path(inst.config.OutputS3KeyPrefix, inst.config.PluginID, action.actionName)
 	}
 	orchestrationDir := filepath.Join(inst.config.OrchestrationDirectory, action.actionName)
 
