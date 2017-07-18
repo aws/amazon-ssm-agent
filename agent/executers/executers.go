@@ -280,16 +280,21 @@ func ExecuteCommand(log log.T,
 	exitCode = 0
 
 	// If we assign the writers directly, the command may never exit even though a command.Process.Wait() does due to https://github.com/golang/go/issues/13155
-	stdoutPipe, err := command.StdoutPipe()
-	if err != nil {
-		return 1, err
-	}
-	stderrPipe, err := command.StderrPipe()
-	if err != nil {
-		return 1, err
-	}
-	go io.Copy(stdoutInterruptable, stdoutPipe)
-	go io.Copy(stderrInterruptable, stderrPipe)
+	// However, if we run goroutines to copy from the StdoutPipe and StderrPipe we may lose the last write.
+	command.Stdout = stdoutInterruptable
+	command.Stderr = stderrInterruptable
+	/*
+		stdoutPipe, err := command.StdoutPipe()
+		if err != nil {
+			return 1, err
+		}
+		stderrPipe, err := command.StderrPipe()
+		if err != nil {
+			return 1, err
+		}
+		go io.Copy(stdoutInterruptable, stdoutPipe)
+		go io.Copy(stderrInterruptable, stderrPipe)
+	*/
 
 	// configure OS-specific process settings
 	prepareProcess(command)
