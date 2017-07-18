@@ -306,10 +306,12 @@ func ExecuteCommand(log log.T,
 
 	cancelled := make(chan bool, 1)
 	go func() {
-		cancelFlag.Wait()
+		cancelState := cancelFlag.Wait()
 		if cancelFlag.Canceled() {
 			cancelled <- true
+			log.Debug("Cancel flag set to cancelled")
 		}
+		log.Debugf("Cancel flag set to %v", cancelState)
 	}()
 
 	done := make(chan error, 1)
@@ -345,9 +347,10 @@ func ExecuteCommand(log log.T,
 			log.Infof("The execution of command was cancelled.")
 		}
 	case err = <-done:
+		log.Debug("Process completed.")
 		if err != nil {
 			exitCode = 1
-			log.Debugf("command failed to run %v", err)
+			log.Debugf("command returned error %v", err)
 			if exiterr, ok := err.(*exec.ExitError); ok {
 				// The program has exited with an exit code != 0
 				if status, ok := exiterr.Sys().(syscall.WaitStatus); ok {
