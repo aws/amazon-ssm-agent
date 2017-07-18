@@ -314,7 +314,7 @@ func (util *Utility) ExeCommand(
 		err = command.Wait()
 		timedOut := !timer.Stop()
 		if err != nil {
-			log.Debugf("command failed to run %v", err)
+			log.Debugf("command returned error %v", err)
 			if exitErr, ok := err.(*exec.ExitError); ok {
 				// The program has exited with an exit code != 0
 				if status, ok := exitErr.Sys().(syscall.WaitStatus); ok {
