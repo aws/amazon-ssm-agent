@@ -88,3 +88,35 @@ func TestGitClient_ParseGetOptionsInvalidOptions(t *testing.T) {
 	assert.Equal(t, expected, opt)
 
 }
+
+func Test_isFileContentTypeTrue(t *testing.T) {
+	file := contentTypeFile
+	fileMetada := github.RepositoryContent{
+		Type: &file,
+	}
+	client := NewClient(nil)
+
+	isFile := client.IsFileContentType(&fileMetada)
+
+	assert.True(t, isFile)
+}
+
+func Test_isFileContentTypeFalse(t *testing.T) {
+	dir := contentTypeDirectory
+	dirMetada := github.RepositoryContent{
+		Type: &dir,
+	}
+	client := NewClient(nil)
+	isFile := client.IsFileContentType(&dirMetada)
+
+	assert.False(t, isFile)
+}
+
+func Test_isFileContentTypeNil(t *testing.T) {
+	var fileMetadata *github.RepositoryContent
+	fileMetadata = nil
+	client := NewClient(nil)
+	isFile := client.IsFileContentType(fileMetadata)
+
+	assert.False(t, isFile)
+}

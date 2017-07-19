@@ -23,18 +23,12 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/executecommand/filemanager"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/executecommand/remoteresource"
-	"github.com/go-github/github"
 
 	"errors"
 	"fmt"
 	"net/http"
 	"path/filepath"
 	"strings"
-)
-
-const (
-	contentTypeFile      = "file"
-	contentTypeDirectory = "dir"
 )
 
 // GitResource is a struct for the remote resource of type git
@@ -86,8 +80,8 @@ func (git *GitResource) Download(log log.T, filesys filemanager.FileSystem, enti
 //download pulls down either the file or directory specified and stores it on disk
 func (git *GitResource) download(log log.T, filesys filemanager.FileSystem, info GitInfo, entireDir bool, destinationDir string) (err error) {
 
-	var opt *github.RepositoryContentGetOptions
-	if opt, err = git.client.ParseGetOptions(log, info.GetOptions); err != nil {
+	opt, err := git.client.ParseGetOptions(log, info.GetOptions)
+	if err != nil {
 		return err
 	}
 	fileMetadata, directoryMetadata, err := git.client.GetRepositoryContents(log, info.Owner, info.Repository, info.Path, opt)
@@ -117,7 +111,7 @@ func (git *GitResource) download(log log.T, filesys filemanager.FileSystem, info
 				return err
 			}
 		}
-	} else if isFileContentType(fileMetadata) { // If content returned is by GetRepositoryContents is a file, it needs to be saved on disk.
+	} else if git.client.IsFileContentType(fileMetadata) { // If content returned is by GetRepositoryContents is a file, it needs to be saved on disk.
 		var content string
 		if content, err = fileMetadata.GetContent(); err != nil {
 			log.Error("File content could not be retrieved - ", err)
@@ -138,7 +132,7 @@ func (git *GitResource) download(log log.T, filesys filemanager.FileSystem, info
 }
 
 // PopulateResourceInfo set the member variables of ResourceInfo
-func (git *GitResource) PopulateResourceInfo(log log.T, destinationDir string, entireDir bool) (remoteresource.ResourceInfo, error) {
+func (git *GitResource) PopulateResourceInfo(log log.T, destinationDir string, entireDir bool) remoteresource.ResourceInfo {
 	var resourceInfo remoteresource.ResourceInfo
 
 	//if destination directory is not specified, specify the directory
@@ -160,7 +154,7 @@ func (git *GitResource) PopulateResourceInfo(log log.T, destinationDir string, e
 		}
 	}
 
-	return resourceInfo, nil
+	return resourceInfo
 
 }
 
@@ -180,14 +174,4 @@ func (git *GitResource) ValidateLocationInfo() (valid bool, err error) {
 	}
 
 	return true, nil
-}
-
-// isFileContentType returns true if the repository content points to a file
-func isFileContentType(file *github.RepositoryContent) bool {
-	if file != nil {
-		if file.GetType() == contentTypeFile {
-			return true
-		}
-	}
-	return false
 }
