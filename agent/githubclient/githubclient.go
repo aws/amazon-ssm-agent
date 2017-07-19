@@ -29,6 +29,11 @@ const (
 	defaultBranch = "master"
 )
 
+const (
+	contentTypeFile      = "file"
+	contentTypeDirectory = "dir"
+)
+
 // NewClient is a constructor for GitClient
 func NewClient(httpClient *http.Client) IGitClient {
 
@@ -46,6 +51,7 @@ type GitClient struct {
 type IGitClient interface {
 	GetRepositoryContents(log log.T, owner, repo, path string, opt *github.RepositoryContentGetOptions) (fileContent *github.RepositoryContent, directoryContent []*github.RepositoryContent, err error)
 	ParseGetOptions(log log.T, getOptions string) (*github.RepositoryContentGetOptions, error)
+	IsFileContentType(file *github.RepositoryContent) bool
 }
 
 // GetRepositoryContents is a wrapper around GetContents method in gitub SDK
@@ -110,4 +116,15 @@ func (git *GitClient) ParseGetOptions(log log.T, getOptions string) (*github.Rep
 	return &github.RepositoryContentGetOptions{
 		Ref: strings.TrimSpace(branchOrSHA[1]),
 	}, nil
+}
+
+// IsFileContentType returns true if the repository content points to a file
+func (git *GitClient) IsFileContentType(file *github.RepositoryContent) bool {
+	//TODO: Change this to GetContentType instead of IsFileContentType
+	if file != nil {
+		if file.GetType() == contentTypeFile {
+			return true
+		}
+	}
+	return false
 }
