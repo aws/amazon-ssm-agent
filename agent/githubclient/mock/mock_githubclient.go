@@ -34,3 +34,8 @@ func (git_mock *ClientMock) ParseGetOptions(log log.T, getOptions string) (*gith
 	args := git_mock.Called(log, getOptions)
 	return args.Get(0).(*github.RepositoryContentGetOptions), args.Error(1)
 }
+
+func (git_mock *ClientMock) IsFileContentType(content *github.RepositoryContent) bool {
+	args := git_mock.Called(content)
+	return args.Bool(0)
+}

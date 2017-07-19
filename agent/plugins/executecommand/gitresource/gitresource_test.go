@@ -67,12 +67,11 @@ func TestGitResource_Download(t *testing.T) {
 	}
 	var dirMetadata []*github.RepositoryContent
 	dirMetadata = nil
-	var mockErr error
-	mockErr = nil
 
 	gitResource := NewResourceWithMockedClient(&clientMock)
 	clientMock.On("ParseGetOptions", logMock, gitInfo.GetOptions).Return(opt, nil)
-	clientMock.On("GetRepositoryContents", logMock, gitInfo.Owner, gitInfo.Repository, gitInfo.Path, opt).Return(&fileMetadata, dirMetadata, mockErr).Once()
+	clientMock.On("GetRepositoryContents", logMock, gitInfo.Owner, gitInfo.Repository, gitInfo.Path, opt).Return(&fileMetadata, dirMetadata, nil).Once()
+	clientMock.On("IsFileContentType", mock.AnythingOfType("*github.RepositoryContent")).Return(true)
 
 	fileMock := filemock.FileSystemMock{}
 	fileMock.On("MakeDirs", mock.Anything).Return(nil)
@@ -103,6 +102,7 @@ func TestGitResource_DownloadEntireDirFalse(t *testing.T) {
 
 	clientMock.On("ParseGetOptions", logMock, gitInfo.GetOptions).Return(opt, nil)
 	clientMock.On("GetRepositoryContents", logMock, gitInfo.Owner, gitInfo.Repository, gitInfo.Path, opt).Return(fileMetadata, dirMetadata, nil).Once()
+	clientMock.On("IsFileContentType", mock.AnythingOfType("*github.RepositoryContent")).Return(false)
 	fileMock := filemock.FileSystemMock{}
 
 	gitResource := NewResourceWithMockedClient(&clientMock)
@@ -135,6 +135,7 @@ func TestGitResource_DownloadFileMissing(t *testing.T) {
 
 	clientMock.On("ParseGetOptions", logMock, gitInfo.GetOptions).Return(opt, nil)
 	clientMock.On("GetRepositoryContents", logMock, gitInfo.Owner, gitInfo.Repository, gitInfo.Path, opt).Return(fileMetadata, dirMetadata, nil).Once()
+	clientMock.On("IsFileContentType", mock.AnythingOfType("*github.RepositoryContent")).Return(false)
 
 	gitResource := NewResourceWithMockedClient(&clientMock)
 
@@ -198,37 +199,6 @@ func TestGitResource_DownloadGetRepositoryContentsFail(t *testing.T) {
 	clientMock.AssertExpectations(t)
 	assert.Error(t, err)
 	assert.Contains(t, err.Error(), "Rate limit exceeded")
-}
-
-func Test_isFileContentTypeTrue(t *testing.T) {
-	file := contentTypeFile
-	fileMetada := github.RepositoryContent{
-		Type: &file,
-	}
-
-	isFile := isFileContentType(&fileMetada)
-
-	assert.True(t, isFile)
-}
-
-func Test_isFileContentTypeFalse(t *testing.T) {
-	dir := contentTypeDirectory
-	dirMetada := github.RepositoryContent{
-		Type: &dir,
-	}
-
-	isFile := isFileContentType(&dirMetada)
-
-	assert.False(t, isFile)
-}
-
-func Test_isFileContentTypeNil(t *testing.T) {
-	var fileMetadata *github.RepositoryContent
-	fileMetadata = nil
-
-	isFile := isFileContentType(fileMetadata)
-
-	assert.False(t, isFile)
 }
 
 func TestGitResource_PopulateResourceInfoEntireDirFalseJSON(t *testing.T) {
