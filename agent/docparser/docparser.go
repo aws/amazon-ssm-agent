@@ -84,10 +84,6 @@ func ParseDocument(log log.T,
 func ParseParameters(log log.T, params map[string][]*string, paramsDef map[string]*contracts.Parameter) map[string]interface{} {
 	result := make(map[string]interface{})
 
-	if len(params) == 0 {
-		return nil
-	}
-
 	for name, param := range params {
 
 		if definition, ok := paramsDef[name]; ok {
@@ -105,6 +101,7 @@ func ParseParameters(log log.T, params map[string][]*string, paramsDef map[strin
 			}
 		}
 	}
+	log.Debug("Parameters to be applied are ", result)
 	return result
 }
 

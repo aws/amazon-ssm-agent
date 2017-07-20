@@ -167,7 +167,7 @@ func TestVerifyInventoryDataSize(t *testing.T) {
 	//small inventory item
 	items = MockInventoryItems()
 	smallItem = items[0]
-	largeItem = LargeInventoryItem(1024 * 1024)
+	largeItem = LargeInventoryItem(1024 * 10240)
 
 	//TESTING
 	//testing normal scenario when both item and items are within size limits
@@ -180,5 +180,5 @@ func TestVerifyInventoryDataSize(t *testing.T) {
 	items = append(items, largeItem)
 	result = p.VerifyInventoryDataSize(smallItem, items)
 
-	assert.Equal(t, false, result, "Expected to return false when items size is greater than 1024")
+	assert.Equal(t, false, result, "Expected to return false when items size is greater than the limit")
 }

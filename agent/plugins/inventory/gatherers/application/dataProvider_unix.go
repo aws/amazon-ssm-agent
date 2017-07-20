@@ -38,17 +38,18 @@ var (
 	rpmCmd                        = "rpm"
 	rpmCmdArgToGetAllApplications = "-qa"
 	rpmQueryFormat                = "--queryformat"
-	rpmQueryFormatArgs            = `\{"Name":"%{NAME}","Publisher":"%{VENDOR}","Version":"%{VERSION}","InstalledTime":"%{INSTALLTIME}","ApplicationType":"%{GROUP}","Architecture":"%{ARCH}","Url":"%{URL}",` +
-		`"Summary":"` + mark(`%{Summary}`) + `","PackageId":"%{SourceRPM}"\},`
+	rpmQueryFormatArgs            = `\{"Name":"` + mark(`%{NAME}`) + `","Publisher":"` + mark(`%{VENDOR}`) + `","Version":"` + mark(`%{VERSION}`) + `","InstalledTime":"` + mark(`%{INSTALLTIME}`) +
+		`","ApplicationType":"` + mark(`%{GROUP}`) + `","Architecture":"` + mark(`%{ARCH}`) + `","Url":"` + mark(`%{URL}`) + `",` +
+		`"Summary":"` + mark(`%{Summary}`) + `","PackageId":"` + mark(`%{SourceRPM}`) + `"\},`
 
 	// dpkg query commands related constants
 	dpkgCmd                      = "dpkg-query"
 	dpkgArgsToGetAllApplications = "-W"
-	dpkgQueryFormat              = `-f={"Name":"${Package}","Publisher":"${Maintainer}","Version":"${Version}","ApplicationType":"${Section}","Architecture":"${Architecture}","Url":"${Homepage}",` +
-		`"Summary":"` + mark(`${Description}`) + `",` +
+	dpkgQueryFormat              = `-f={"Name":"` + mark(`${Package}`) + `","Publisher":"` + mark(`${Maintainer}`) + `","Version":"` + mark(`${Version}`) + `","ApplicationType":"` + mark(`${Section}`) +
+		`","Architecture":"` + mark(`${Architecture}`) + `","Url":"` + mark(`${Homepage}`) + `","Summary":"` + mark(`${Description}`) +
 		// PackageId should be something like ${Filename}, but for some reason that field does not get printed,
 		// so we build PackageId from parts
-		`"PackageId":"${Package}_${Version}_${Architecture}.deb"},`
+		`","PackageId":"` + mark(`${Package}_${Version}_${Architecture}.deb`) + `"},`
 )
 
 func randomString(length int) string {

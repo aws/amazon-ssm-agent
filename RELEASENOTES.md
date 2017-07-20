@@ -1,5 +1,10 @@
 Latest
 ===============
+- Add capability to configure custom s3 endpoint for the agent
+- Various bug fixes
+
+2.0.847.0
+===============
 - Various bug fixes
 
 2.0.842.0
