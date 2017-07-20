@@ -21,6 +21,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/platform"
+	"github.com/aws/amazon-ssm-agent/agent/sdkutil"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/s3"
@@ -46,7 +47,7 @@ type AmazonS3Util struct {
 func NewAmazonS3Util(log log.T, bucketName string) *AmazonS3Util {
 	bucketRegion := GetBucketRegion(log, bucketName)
 
-	config := &aws.Config{}
+	config := sdkutil.AwsConfig()
 	var appConfig appconfig.SsmagentConfig
 	appConfig, errConfig := appconfig.Config(false)
 	if errConfig != nil {

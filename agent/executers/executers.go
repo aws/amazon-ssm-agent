@@ -18,8 +18,10 @@ import (
 	"bytes"
 	"fmt"
 	"io"
+	"io/ioutil"
 	"os"
 	"os/exec"
+	"runtime"
 	"strings"
 	"syscall"
 	"time"
@@ -59,6 +61,13 @@ type timeoutSignal struct {
 // even though some errors are reported. For example, if the command got killed while executing,
 // the streams will have whatever data was printed up to the kill point, and the errors will
 // indicate that the process got terminated.
+//
+// For files, the reader returned will not contain more than appconfig.MaxStdoutLength and appconfig.MaxStderrLength respectively
+// so if the caller needs to process more output than that, it should open its own reader on the output files.
+//
+// For byte buffer output, the reader will be a reader over the buffer, which will accumulate the entire output.  Be careful
+// not to use the byte buffer approach for extremely large output (or unknown output) because it could take up a large amount
+// of memory.
 func (ShellCommandExecuter) Execute(
 	log log.T,
 	workingDir string,
@@ -107,7 +116,8 @@ func (ShellCommandExecuter) Execute(
 	// NOTE: Regarding the defer close of the file writers.
 	// Technically, closing the files should happen after ExecuteCommand and before opening the files for reading.
 	// In this case, there is no need for that because the child process inherits copies of the file handles and does
-	// the actual writing to the files. So, when using files, it does not matter when we close our copies of the file writers.
+	// the actual writing to the files. So, when using files, it does not matter when we close our copies of the file
+	// writers as long as it is after the process starts.
 
 	var err error
 	exitCode, err = ExecuteCommand(log, cancelFlag, workingDir, stdoutWriter, stderrWriter, executionTimeout, commandName, commandArguments)
@@ -117,22 +127,28 @@ func (ShellCommandExecuter) Execute(
 
 	// create reader from stdout, if it exist, otherwise use the buffer
 	if fileutil.Exists(stdoutFilePath) {
-		stdout, err = os.Open(stdoutFilePath)
+		stdoutReader, err := os.Open(stdoutFilePath)
 		if err != nil {
 			// some unexpected error (file should exist)
 			errs = append(errs, err)
 		}
+		defer stdoutReader.Close()
+		stdoutString, _ := ioutil.ReadAll(io.LimitReader(stdoutReader, appconfig.MaxStdoutLength))
+		stdout = bytes.NewReader([]byte(stdoutString))
 	} else {
 		stdout = bytes.NewReader(stdoutBuf.Bytes())
 	}
 
 	// create reader from stderr, if it exist, otherwise use the buffer
 	if fileutil.Exists(stderrFilePath) {
-		stderr, err = os.Open(stderrFilePath)
+		stderrReader, err := os.Open(stderrFilePath)
 		if err != nil {
 			// some unexpected error (file should exist)
 			errs = append(errs, err)
 		}
+		defer stderrReader.Close()
+		stderrString, _ := ioutil.ReadAll(io.LimitReader(stderrReader, appconfig.MaxStderrLength))
+		stderr = bytes.NewReader([]byte(stderrString))
 	} else {
 		stderr = bytes.NewReader(stderrBuf.Bytes())
 	}
@@ -210,6 +226,40 @@ func CreateScriptFile(scriptPath string, commands []string) (err error) {
 	return
 }
 
+// Wrapper around a writer (such as a file) that provides a way to stop writing to the file
+// This allows us to disconnect the writer on cancel or timeout even if the process is running and writing a large volume of output
+type cancellableWriter struct {
+	baseWriter    io.Writer
+	cancelChannel chan bool
+	cancelled     bool
+}
+
+func newWriter(writer io.Writer) (*cancellableWriter, chan bool) {
+	newCancelChannel := make(chan bool, 1)
+	return &cancellableWriter{
+		baseWriter:    writer,
+		cancelChannel: newCancelChannel,
+	}, newCancelChannel
+}
+
+func (r *cancellableWriter) Write(p []byte) (n int, err error) {
+	if r.cancelled {
+		runtime.Gosched()
+		return 0, io.ErrClosedPipe
+	}
+	select {
+	case <-r.cancelChannel:
+		r.cancelled = true
+		return 0, io.ErrClosedPipe
+	default:
+		n, err = r.baseWriter.Write(p)
+		// Necessary to prevent a busy loop from a process writing massive amounts of output from starving a timeout timer
+		// Yield after the write to prevent another process from interrupting the write to the underlying writer
+		runtime.Gosched()
+		return
+	}
+}
+
 // ExecuteCommand executes the given commands using the given working directory.
 // Standard output and standard error are sent to the given writers.
 func ExecuteCommand(log log.T,
@@ -222,11 +272,29 @@ func ExecuteCommand(log log.T,
 	commandArguments []string,
 ) (exitCode int, err error) {
 
+	stdoutInterruptable, stopStdout := newWriter(stdoutWriter)
+	stderrInterruptable, stopStderr := newWriter(stderrWriter)
+
 	command := exec.Command(commandName, commandArguments...)
 	command.Dir = workingDir
-	command.Stdout = stdoutWriter
-	command.Stderr = stderrWriter
 	exitCode = 0
+
+	// If we assign the writers directly, the command may never exit even though a command.Process.Wait() does due to https://github.com/golang/go/issues/13155
+	// However, if we run goroutines to copy from the StdoutPipe and StderrPipe we may lose the last write.
+	command.Stdout = stdoutInterruptable
+	command.Stderr = stderrInterruptable
+	/*
+		stdoutPipe, err := command.StdoutPipe()
+		if err != nil {
+			return 1, err
+		}
+		stderrPipe, err := command.StderrPipe()
+		if err != nil {
+			return 1, err
+		}
+		go io.Copy(stdoutInterruptable, stdoutPipe)
+		go io.Copy(stderrInterruptable, stderrPipe)
+	*/
 
 	// configure OS-specific process settings
 	prepareProcess(command)
@@ -243,57 +311,86 @@ func ExecuteCommand(log log.T,
 
 	signal := timeoutSignal{}
 
-	go killProcessOnCancel(log, command, cancelFlag, &signal)
-	timer := time.NewTimer(time.Duration(executionTimeout) * time.Second)
-	go killProcessOnTimeout(log, command, timer, &signal)
+	cancelled := make(chan bool, 1)
+	go func() {
+		cancelState := cancelFlag.Wait()
+		if cancelFlag.Canceled() {
+			cancelled <- true
+			log.Debug("Cancel flag set to cancelled")
+		}
+		log.Debugf("Cancel flag set to %v", cancelState)
+	}()
 
-	err = command.Wait()
-	timedOut := !timer.Stop() // returns false if called previously - indicates timedOut.
-	if err != nil {
-		exitCode = 1
-		log.Debugf("command failed to run %v", err)
-		if exiterr, ok := err.(*exec.ExitError); ok {
-			// The program has exited with an exit code != 0
-			if status, ok := exiterr.Sys().(syscall.WaitStatus); ok {
-				exitCode = status.ExitStatus()
+	done := make(chan error, 1)
+	go func() {
+		done <- command.Wait()
+	}()
 
-				if signal.execInterruptedOnWindows {
-					log.Debug("command interrupted by cancel or timeout")
-					exitCode = -1
-				}
+	select {
+	case <-time.After(time.Duration(executionTimeout) * time.Second):
+		stopStdout <- true
+		stopStderr <- true
+		if err = killProcess(command.Process, &signal); err != nil {
+			exitCode = 1
+			log.Error(err)
+		} else {
+			// set appropriate exit code based on timeout
+			exitCode = appconfig.CommandStoppedPreemptivelyExitCode
+			err = &exec.ExitError{Stderr: []byte("Process timed out")}
+			log.Infof("The execution of command was timedout.")
+		}
+	case <-cancelled:
+		// task has been asked to cancel, kill process
+		log.Debug("Process cancelled. Attempting to stop process.")
+		stopStdout <- true
+		stopStderr <- true
+		if err = killProcess(command.Process, &signal); err != nil {
+			exitCode = 1
+			log.Error(err)
+		} else {
+			// set appropriate exit code based on cancel
+			exitCode = appconfig.CommandStoppedPreemptivelyExitCode
+			err = &exec.ExitError{Stderr: []byte("Cancelled process")}
+			log.Infof("The execution of command was cancelled.")
+		}
+	case err = <-done:
+		log.Debug("Process completed.")
+		if err != nil {
+			exitCode = 1
+			log.Debugf("command returned error %v", err)
+			if exiterr, ok := err.(*exec.ExitError); ok {
+				// The program has exited with an exit code != 0
+				if status, ok := exiterr.Sys().(syscall.WaitStatus); ok {
+					exitCode = status.ExitStatus()
 
-				// First try to handle Cancel and Timeout scenarios
-				// SIGKILL will result in an exitcode of -1
-				if exitCode == -1 {
-					if cancelFlag.Canceled() {
-						// set appropriate exit code based on cancel or timeout
-						exitCode = appconfig.CommandStoppedPreemptivelyExitCode
-						log.Infof("The execution of command was cancelled.")
-					} else if timedOut {
-						// set appropriate exit code based on cancel or timeout
-						exitCode = appconfig.CommandStoppedPreemptivelyExitCode
-						log.Infof("The execution of command was timedout.")
+					if signal.execInterruptedOnWindows {
+						log.Debug("command interrupted by cancel or timeout")
+						exitCode = -1
 					}
-				} else {
-					log.Infof("The execution of command returned Exit Status: %d", exitCode)
+
+					// First try to handle Cancel and Timeout scenarios
+					// SIGKILL will result in an exitcode of -1
+					if exitCode == -1 {
+						if cancelFlag.Canceled() {
+							// set appropriate exit code based on cancel or timeout
+							exitCode = appconfig.CommandStoppedPreemptivelyExitCode
+							log.Infof("The execution of command was cancelled.")
+						}
+					} else {
+						log.Infof("The execution of command returned Exit Status: %d", exitCode)
+					}
 				}
 			}
-		}
-	} else {
-		// check if cancellation or timeout failed to kill the process
-		// This will not occur as we do a SIGKILL, which is not recoverable.
-		if cancelFlag.Canceled() {
-			// This is when the cancellation failed and the command completed successfully
-			log.Errorf("the cancellation failed to stop the process.")
-			// do not return as the command could have been cancelled and also timedout
-		}
-		if timedOut {
-			// This is when the timeout failed and the command completed successfully
-			log.Errorf("the timeout failed to stop the process.")
+		} else {
+			// check if cancellation or timeout failed to kill the process
+			// This will not occur as we do a SIGKILL, which is not recoverable.
+			if cancelFlag.Canceled() {
+				// This is when the cancellation failed and the command completed successfully
+				log.Errorf("the cancellation failed to stop the process.")
+				// do not return as the command could have been cancelled and also timedout
+			}
 		}
 	}
-
-	log.Debug("Done waiting!")
 	return
 }
 
@@ -329,7 +426,11 @@ func StartCommand(log log.T,
 
 	process = command.Process
 	signal := timeoutSignal{}
-	go killProcessOnCancel(log, command, cancelFlag, &signal)
+	// Async commands don't use cancellable writers because we rely on the process having an independent copy of
+	// the writer when it is a file handle and when the cancellable writer is assigned, it doesn't (by design) give
+	// a reference to the file handle to the process
+	cancelChannel := make(chan bool, 2)
+	go killProcessOnCancel(log, command, cancelChannel, cancelChannel, cancelFlag, &signal)
 
 	return
 }
@@ -338,36 +439,23 @@ func StartCommand(log log.T,
 // If a cancel request is received, this method kills the underlying
 // process of the command. This will unblock the command.Wait() call.
 // If the task completed successfully this method returns with no action.
-func killProcessOnCancel(log log.T, command *exec.Cmd, cancelFlag task.CancelFlag, signal *timeoutSignal) {
+func killProcessOnCancel(log log.T, command *exec.Cmd, cancelStdout chan bool, cancelStderr chan bool, cancelFlag task.CancelFlag, signal *timeoutSignal) {
 	cancelFlag.Wait()
 	if cancelFlag.Canceled() {
 		log.Debug("Process cancelled. Attempting to stop process.")
 
+		cancelStdout <- true
+		cancelStderr <- true
+		runtime.Gosched()
+
 		// task has been asked to cancel, kill process
 		if err := killProcess(command.Process, signal); err != nil {
 			log.Error(err)
-			return
+		} else {
+			log.Debug("Process stopped successfully.")
 		}
-
-		log.Debug("Process stopped successfully.")
-	}
-}
-
-// killProcessOnTimeout waits for a timeout.
-// When the timeout is reached, this method kills the underlying
-// process of the command. This will unblock the command.Wait() call.
-// If the task completed successfully this method returns with no action.
-func killProcessOnTimeout(log log.T, command *exec.Cmd, timer *time.Timer, signal *timeoutSignal) {
-	<-timer.C
-	log.Debug("Process exceeded timeout. Attempting to stop process.")
-
-	// task has been exceeded the allowed execution timeout, kill process
-	if err := killProcess(command.Process, signal); err != nil {
-		log.Error(err)
 		return
 	}
-
-	log.Debug("Process stopped successfully")
 }
 
 // prepareEnvironment adds ssm agent standard environment variables to the command
