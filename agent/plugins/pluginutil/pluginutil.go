@@ -193,8 +193,8 @@ func DefaultPluginConfig() PluginConfig {
 	return PluginConfig{
 		StdoutFileName:        "stdout",
 		StderrFileName:        "stderr",
-		MaxStdoutLength:       24000,
-		MaxStderrLength:       8000,
+		MaxStdoutLength:       appconfig.MaxStdoutLength,
+		MaxStderrLength:       appconfig.MaxStderrLength,
 		OutputTruncatedSuffix: "--output truncated--",
 	}
 }

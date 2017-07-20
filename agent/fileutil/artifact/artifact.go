@@ -31,6 +31,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/s3util"
+	"github.com/aws/amazon-ssm-agent/agent/sdkutil"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/s3"
@@ -116,7 +117,7 @@ func httpDownload(log log.T, fileURL string, destFile string) (output DownloadOu
 
 // awsConfig creates a config and sets region and credential information given an S3 URL
 func awsConfig(log log.T, amazonS3URL s3util.AmazonS3URL) (config *aws.Config, err error) {
-	config = &aws.Config{}
+	config = sdkutil.AwsConfig()
 	var appConfig appconfig.SsmagentConfig
 	appConfig, errConfig := appconfig.Config(false)
 	if errConfig != nil {
@@ -124,10 +125,6 @@ func awsConfig(log log.T, amazonS3URL s3util.AmazonS3URL) (config *aws.Config, e
 	} else {
 		if appConfig.S3.Endpoint != "" {
 			config.Endpoint = &appConfig.S3.Endpoint
-		}
-		creds, err1 := appConfig.ProfileCredentials()
-		if err1 != nil {
-			config.Credentials = creds
 		}
 	}
 	config.S3ForcePathStyle = aws.Bool(amazonS3URL.IsPathStyle)
