@@ -23,8 +23,8 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/message/processor/executer"
 	"github.com/aws/amazon-ssm-agent/agent/message/processor/executer/mock"
 	"github.com/aws/amazon-ssm-agent/agent/task"
-	"src/github.com/stretchr/testify/assert"
-	"src/github.com/stretchr/testify/mock"
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/mock"
 )
 
 //TODO implement processor_integ_test once we encapsulate docmanager
@@ -123,7 +123,7 @@ func TestProcessCancelCommand_Success(t *testing.T) {
 	sendCommandPoolMock := new(task.MockedPool)
 	docState := model.DocumentState{}
 	docState.CancelInformation.CancelMessageID = "messageID"
-	sendCommandPoolMock.On("Cancel").Return(true)
+	sendCommandPoolMock.On("Cancel", "messageID").Return(true)
 	processCancelCommand(ctx, sendCommandPoolMock, &docState)
 	sendCommandPoolMock.AssertExpectations(t)
 	assert.Equal(t, docState.DocumentInformation.DocumentStatus, contracts.ResultStatusSuccess)
