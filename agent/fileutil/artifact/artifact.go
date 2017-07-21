@@ -193,6 +193,43 @@ func ListS3Folders(log log.T, amazonS3URL s3util.AmazonS3URL) (folderNames []str
 	return folders, nil
 }
 
+// ListS3Objects returns all the objects (files nad folders) under a given S3 URL where folders are keys whose prefix
+// is the URL key and contain a / after the prefix.
+func ListS3Objects(log log.T, amazonS3URL s3util.AmazonS3URL) (folderNames []string, err error) {
+	config, _ := awsConfig(log, amazonS3URL)
+	var params *s3.ListObjectsInput
+	prefix := amazonS3URL.Key
+	if prefix != "" {
+		// appending "/" if it does not already exist
+		if !strings.HasSuffix(prefix, "/") {
+			prefix = prefix + "/"
+		}
+		params = &s3.ListObjectsInput{
+			Bucket: aws.String(amazonS3URL.Bucket),
+			Prefix: &prefix,
+		}
+	} else {
+		params = &s3.ListObjectsInput{
+			Bucket: aws.String(amazonS3URL.Bucket),
+		}
+	}
+	log.Debugf("ListS3Object Bucket: %v, Prefix: %v", params.Bucket, params.Prefix)
+
+	s3client := s3.New(session.New(config))
+	obj, err := s3client.ListObjects(params)
+	if err != nil {
+		log.Errorf("ListS3Folders error %v", err.Error())
+		return folderNames, err
+	}
+
+	log.Debugf("Contents %v ", obj.Contents)
+	for i, contents := range obj.Contents {
+		folderNames = append(folderNames, *contents.Key)
+		log.Debug("Name of folder - ", folderNames[i])
+	}
+	return
+}
+
 // s3Download attempts to download a file via the aws sdk.
 func s3Download(log log.T, amazonS3URL s3util.AmazonS3URL, destFile string) (output DownloadOutput, err error) {
 	log.Debugf("attempting to download as s3 download %v", destFile)

@@ -39,3 +39,15 @@ func (fileMock FileSystemMock) ReadFile(filename string) (string, error) {
 	args := fileMock.Called(filename)
 	return args.Get(0).(string), args.Error(1)
 }
+
+// MakeDirs creates a directory with execute access
+func (fileMock FileSystemMock) MoveAndRenameFile(sourcePath, sourceName, destPath, destName string) (result bool, err error) {
+	args := fileMock.Called(sourcePath, sourceName, destPath, destName)
+	return args.Bool(0), args.Error(1)
+}
+
+// WriteFile writes the content in the file path provided
+func (fileMock FileSystemMock) DeleteFile(fileName string) (err error) {
+	args := fileMock.Called(fileName)
+	return args.Error(0)
+}

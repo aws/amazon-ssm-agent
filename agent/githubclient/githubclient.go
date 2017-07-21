@@ -69,7 +69,7 @@ func (git *GitClient) GetRepositoryContents(log log.T, owner, repo, path string,
 	// TODO: meloniam@ Check github documentation and add checks for other status codes.
 	if err != nil {
 
-		log.Error("Error retreiving information from github repository. Error - %v and response - %v", err, resp)
+		log.Errorf("Error retreiving information from github repository. Error - %v and response - %v", err, resp)
 		return nil, nil, err
 	} else if resp.StatusCode == http.StatusForbidden && resp.Rate.Limit == 0 {
 		return nil, nil, fmt.Errorf("Rate limit exceeded")

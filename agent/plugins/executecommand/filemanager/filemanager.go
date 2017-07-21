@@ -28,6 +28,8 @@ type FileSystem interface {
 	MakeDirs(destinationDir string) (err error)
 	WriteFile(filename string, content string) error
 	ReadFile(filename string) (string, error)
+	MoveAndRenameFile(sourcePath, sourceName, destPath, destName string) (result bool, err error)
+	DeleteFile(filename string) (err error)
 }
 
 type FileSystemImpl struct{}
@@ -35,6 +37,16 @@ type FileSystemImpl struct{}
 // MakeDirs creates a directory with execute access
 func (f FileSystemImpl) MakeDirs(destinationDir string) (err error) {
 	return fileutil.MakeDirsWithExecuteAccess(destinationDir)
+}
+
+// MoveAndRenameFile moves and renames the file
+func (f FileSystemImpl) MoveAndRenameFile(sourcePath, sourceName, destPath, destName string) (result bool, err error) {
+	return fileutil.MoveAndRenameFile(sourcePath, sourceName, destPath, destName)
+}
+
+// DeleteFile deletes the file
+func (f FileSystemImpl) DeleteFile(filename string) (err error) {
+	return fileutil.DeleteFile(filename)
 }
 
 // WriteFile writes the content in the file path provided
@@ -69,6 +81,7 @@ func SaveFileContent(log log.T, filesysdep FileSystem, destDir string, contents 
 	return nil
 }
 
+// ReadFileContents is a method to read the contents of a give file path
 func ReadFileContents(log log.T, filesysdep FileSystem, destinationPath string) (fileContent []byte, err error) {
 
 	log.Debug("Reading file contents from file - ", destinationPath)
@@ -83,4 +96,17 @@ func ReadFileContents(log log.T, filesysdep FileSystem, destinationPath string) 
 	}
 
 	return []byte(rawFile), nil
+}
+
+// RenameFile is a method that renames a file and deletes the original copy
+func RenameFile(log log.T, filesys FileSystem, fullSourceName, destName string) error {
+
+	filePath := filepath.Dir(fullSourceName)
+	log.Debug("File path is ", filePath)
+	log.Debug("New file name is ", destName)
+
+	if _, err := filesys.MoveAndRenameFile(filePath, filepath.Base(fullSourceName), filePath, destName); err != nil {
+		return err
+	}
+	return nil
 }
