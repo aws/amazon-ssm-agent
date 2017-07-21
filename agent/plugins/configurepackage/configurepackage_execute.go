@@ -20,7 +20,6 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/installer"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/localpackages"
-	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/packageservice"
 )
 
 // TODO: consider passing in the timeout and cancel channels - does cancel trigger rollback?
@@ -30,37 +29,23 @@ func executeConfigurePackage(context context.T,
 	inst installer.Installer,
 	uninst installer.Installer,
 	initialInstallState localpackages.InstallState,
-	output *contracts.PluginOutput) packageservice.PackageResult {
-
-	// Load package result from orchestration folder
-	packageResult := loadPackageResult()
+	output *contracts.PluginOutput) {
 
 	switch initialInstallState {
 	case localpackages.Installing:
 		// This could be picking up an install after reboot or an upgrade that rebooted during install (after a successful uninstall)
-		return executeInstall(context, repository, inst, uninst, false, output, packageResult)
+		executeInstall(context, repository, inst, uninst, false, output)
 	case localpackages.RollbackInstall:
-		return executeInstall(context, repository, uninst, inst, true, output, packageResult)
+		executeInstall(context, repository, uninst, inst, true, output)
 	case localpackages.RollbackUninstall:
-		return executeUninstall(context, repository, uninst, inst, true, output, packageResult)
+		executeUninstall(context, repository, uninst, inst, true, output)
 	default:
 		if uninst != nil {
-			return executeUninstall(context, repository, inst, uninst, false, output, packageResult)
+			executeUninstall(context, repository, inst, uninst, false, output)
 		} else {
-			return executeInstall(context, repository, inst, uninst, false, output, packageResult)
+			executeInstall(context, repository, inst, uninst, false, output)
 		}
 	}
-}
-
-// savePackageResult store the current PackageResult in the orchestration folder so that it can be restored after a reboot
-func savePackageResult(result packageservice.PackageResult) {
-	// TODO: persist to orchestration folder
-}
-
-// loadPackageResult returns the saved state (from before a reboot) or a fresh new PackageResult
-func loadPackageResult() packageservice.PackageResult {
-	// TODO: load from orchestration folder
-	return packageservice.PackageResult{}
 }
 
 // set package install state and log any error
@@ -76,8 +61,7 @@ func executeInstall(context context.T,
 	inst installer.Installer,
 	uninst installer.Installer,
 	isRollback bool,
-	output *contracts.PluginOutput,
-	packageResult packageservice.PackageResult) packageservice.PackageResult {
+	output *contracts.PluginOutput) {
 
 	if isRollback {
 		setNewInstallState(context, repository, inst, localpackages.RollbackInstall)
@@ -97,7 +81,7 @@ func executeInstall(context context.T,
 	if result.Status.IsReboot() {
 		output.AppendInfof(log, "Rebooting to finish installation of %v %v", inst.PackageName(), inst.Version())
 		output.MarkAsSuccessWithReboot()
-		return packageResult
+		return
 	}
 	if !result.Status.IsSuccess() {
 		output.AppendErrorf(log, "Failed to install package; install status %v", result.Status)
@@ -105,12 +89,11 @@ func executeInstall(context context.T,
 			output.MarkAsFailed(context.Log(), nil)
 			// TODO: Remove from repository if this isn't the last successfully installed version?  Run uninstall to clean up?
 			setNewInstallState(context, repository, inst, localpackages.Failed)
-			return packageResult
+			return
 		}
-		// Serialize result to orchestration folder
-		savePackageResult(packageResult)
 		// Execute rollback
-		return executeUninstall(context, repository, uninst, inst, true, output, packageResult)
+		executeUninstall(context, repository, uninst, inst, true, output)
+		return
 	}
 	if uninst != nil {
 		cleanupAfterUninstall(context, repository, uninst, output)
@@ -119,12 +102,12 @@ func executeInstall(context context.T,
 		output.AppendInfof(log, "Failed to install %v %v, successfully rolled back to %v %v", uninst.PackageName(), uninst.Version(), inst.PackageName(), inst.Version())
 		setNewInstallState(context, repository, inst, localpackages.Installed)
 		output.MarkAsFailed(context.Log(), nil)
-		return packageResult
+		return
 	}
 	output.AppendInfof(log, "Successfully installed %v %v", inst.PackageName(), inst.Version())
 	setNewInstallState(context, repository, inst, localpackages.Installed)
 	output.MarkAsSucceeded()
-	return packageResult
+	return
 }
 
 // executeUninstall performs uninstall of a package
@@ -133,8 +116,7 @@ func executeUninstall(context context.T,
 	inst installer.Installer,
 	uninst installer.Installer,
 	isRollback bool,
-	output *contracts.PluginOutput,
-	packageResult packageservice.PackageResult) packageservice.PackageResult {
+	output *contracts.PluginOutput) {
 
 	if isRollback {
 		setNewInstallState(context, repository, uninst, localpackages.RollbackUninstall)
@@ -153,25 +135,26 @@ func executeUninstall(context context.T,
 	if !result.Status.IsSuccess() {
 		output.AppendErrorf(context.Log(), "Failed to uninstall version %v of package; uninstall status %v", uninst.Version(), result.Status)
 		if inst != nil {
-			return executeInstall(context, repository, inst, uninst, isRollback, output, packageResult)
+			executeInstall(context, repository, inst, uninst, isRollback, output)
+			return
 		}
 		setNewInstallState(context, repository, uninst, localpackages.Failed)
 		output.MarkAsFailed(context.Log(), nil)
-		return packageResult
+		return
 	}
 	if result.Status.IsReboot() {
 		output.AppendInfof(context.Log(), "Rebooting to finish uninstall of %v %v", uninst.PackageName(), uninst.Version())
 		output.MarkAsSuccessWithReboot()
-		return packageResult
+		return
 	}
 	output.AppendInfof(context.Log(), "Successfully uninstalled %v %v", uninst.PackageName(), uninst.Version())
 	if inst != nil {
-		return executeInstall(context, repository, inst, uninst, isRollback, output, packageResult)
+		executeInstall(context, repository, inst, uninst, isRollback, output)
+		return
 	}
 	cleanupAfterUninstall(context, repository, uninst, output)
 	setNewInstallState(context, repository, uninst, localpackages.None)
 	output.MarkAsSucceeded()
-	return packageResult
 }
 
 // cleanupAfterUninstall removes packages that are no longer needed in the repository
