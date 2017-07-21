@@ -27,7 +27,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/plugins/executecommand/filemanager"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/executecommand/gitresource"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/executecommand/remoteresource"
-	//"github.com/aws/amazon-ssm-agent/agent/plugins/executecommand/s3resource"
+	"github.com/aws/amazon-ssm-agent/agent/plugins/executecommand/s3resource"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/pluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 
@@ -77,7 +77,7 @@ type ExecutePluginInput struct {
 type Plugin struct {
 	pluginutil.DefaultPlugin
 	executeCommandDepth   int
-	remoteResourceCreator func(locationType string, locationInfo string) (remoteresource.RemoteResource, error)
+	remoteResourceCreator func(log log.T, locationType string, locationInfo string) (remoteresource.RemoteResource, error)
 	pluginManager         executePluginManager
 }
 
@@ -138,7 +138,8 @@ func (p *Plugin) execute(context context.T, config contracts.Configuration, canc
 		var pluginsInfo []model.PluginState
 
 		// remoteResourceCreator makes a call to a function that creates a new remote resource based on the location type
-		remoteResource, err := p.remoteResourceCreator(input.LocationType, input.LocationInfo)
+		log.Debug("Creating resource of type - ", input.LocationType)
+		remoteResource, err := p.remoteResourceCreator(log, input.LocationType, input.LocationInfo)
 		if err != nil {
 			output.MarkAsFailed(log, err)
 			return
@@ -213,9 +214,11 @@ func (m executePlugin) GetResource(log log.T,
 	if entireDir, err = strconv.ParseBool(input.EntireDirectory); err != nil {
 		return
 	}
+	log.Debug("About to validate location info")
 	if valid, err := remoteResource.ValidateLocationInfo(); !valid {
 		return resourceInfo, err
 	}
+	log.Debug("Downloading resource")
 	if err = remoteResource.Download(log, m.filesys, entireDir, destinationDir); err != nil {
 		return
 
@@ -292,7 +295,7 @@ func validateInput(input *ExecutePluginInput) (valid bool, err error) {
 }
 
 // newRemoteResource switches between the location type and returns a struct of the location type that implements remoteresource
-func newRemoteResource(locationType string, locationInfo string) (resource remoteresource.RemoteResource, err error) {
+func newRemoteResource(log log.T, locationType string, locationInfo string) (resource remoteresource.RemoteResource, err error) {
 
 	switch locationType {
 	case Github:
@@ -300,13 +303,11 @@ func newRemoteResource(locationType string, locationInfo string) (resource remot
 		// TODO: meloniam@ Replace string type to map[string]inteface{} type once Runcommand supports string maps
 		return gitresource.NewGitResource(nil, locationInfo)
 	case S3:
-		// TODO: add support for S3
-		//s3Resource, err := s3resource.NewS3Resource(locationInfo)
-		//if err != nil {
-		//	return s3Resource, err
-		//}
-		//return s3Resource, nil
-		return nil, errors.New("S3 resource not yet implemented")
+		s3Resource, err := s3resource.NewS3Resource(log, locationInfo)
+		if err != nil {
+			return s3Resource, err
+		}
+		return s3Resource, nil
 	case SSMDocument:
 		// TODO add support for SSM Documents
 		return nil, errors.New("SSMDocument resource not yet implemented")

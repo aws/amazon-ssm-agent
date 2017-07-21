@@ -20,6 +20,7 @@ import (
 	filemock "github.com/aws/amazon-ssm-agent/agent/plugins/executecommand/filemanager/mock"
 	"github.com/stretchr/testify/assert"
 
+	"errors"
 	"fmt"
 	"path/filepath"
 	"testing"
@@ -29,11 +30,9 @@ var logMock = log.NewMockLog()
 
 func TestSaveFileContent_MakeDirFail(t *testing.T) {
 	var fileMock filemock.FileSystemMock
-	//var mockError error
 	destinationDir := "destinationDir"
 	contents := "contents"
 	resourcePath := "resourcePath"
-	//mockError = fmt.Errorf("failed to create directory ")
 
 	fileMock.On("MakeDirs", destinationDir).Return(fmt.Errorf("failed to create directory "))
 
@@ -44,8 +43,6 @@ func TestSaveFileContent_MakeDirFail(t *testing.T) {
 
 func TestSaveFileContent_WriteFileFail(t *testing.T) {
 	var fileMock filemock.FileSystemMock
-	//var mockError error
-	//mockError = fmt.Errorf("failed to create directory ")
 
 	destinationDir := "destinationDir"
 	contents := "contents"
@@ -89,8 +86,6 @@ func TestReadFileContents(t *testing.T) {
 func TestReadFileContents_Fail(t *testing.T) {
 	fileMock := filemock.FileSystemMock{}
 	destinationDir := "destination"
-	//var mockErr error
-	//mockErr =
 
 	fileMock.On("ReadFile", destinationDir).Return("content", fmt.Errorf("Error"))
 
@@ -98,4 +93,32 @@ func TestReadFileContents_Fail(t *testing.T) {
 
 	assert.Error(t, err)
 	fileMock.AssertExpectations(t)
+}
+
+func TestRenameFile(t *testing.T) {
+	fileMock := filemock.FileSystemMock{}
+	sourceName := "destination/oldFileName.ext"
+	newFileName := "newFileName.ext"
+
+	fileMock.On("MoveAndRenameFile", "destination", "oldFileName.ext", "destination", "newFileName.ext").Return(true, nil)
+
+	err := RenameFile(logMock, fileMock, sourceName, newFileName)
+
+	assert.NoError(t, err)
+	fileMock.AssertExpectations(t)
+}
+
+func TestRenameFile_Error(t *testing.T) {
+	fileMock := filemock.FileSystemMock{}
+	sourceName := "destination/oldFileName.ext"
+	newFileName := "newFileName.ext"
+
+	fileMock.On("MoveAndRenameFile", "destination", "oldFileName.ext", "destination", "newFileName.ext").Return(true, errors.New("There was an error"))
+
+	err := RenameFile(logMock, fileMock, sourceName, newFileName)
+
+	assert.Error(t, err)
+	assert.Equal(t, "There was an error", err.Error())
+	fileMock.AssertExpectations(t)
+
 }

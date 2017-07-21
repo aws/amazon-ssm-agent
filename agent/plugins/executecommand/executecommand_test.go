@@ -44,7 +44,7 @@ var executeResourceMock = resourcemock.RemoteResourceMock{}
 func TestNewRemoteResource_InvalidLocationType(t *testing.T) {
 
 	var mockLocationInfo string
-	remoteresource, err := newRemoteResource("invalid", mockLocationInfo)
+	remoteresource, err := newRemoteResource(logger, "invalid", mockLocationInfo)
 
 	assert.Nil(t, remoteresource)
 	assert.Error(t, err)
@@ -58,7 +58,7 @@ func TestNewRemoteResource_Github(t *testing.T) {
 		"owner" : "test-owner",
 		"repository" :	 "test-repo"
 		}`
-	remoteresource, err := newRemoteResource("Github", locationInfo)
+	remoteresource, err := newRemoteResource(logger, "Github", locationInfo)
 
 	assert.NotNil(t, remoteresource)
 	assert.NoError(t, err)
@@ -124,7 +124,7 @@ func TestExecutePlugin_GetResourceBadLocationInfo(t *testing.T) {
 		"owner" = "test-owner",
 		"repository" = "test-repo"
 		}`
-	remoteResource, err := newRemoteResource("Github", locationInfo)
+	remoteResource, err := newRemoteResource(logger, "Github", locationInfo)
 	config := createStubConfiguration("orch", "bucket", "prefix", "1234-1234-1234", "directory")
 
 	input := ExecutePluginInput{}
@@ -361,7 +361,7 @@ func createStubPluginInputGithub() *ExecutePluginInput {
 	return &input
 }
 
-func NewRemoteResourceMockScript(locationtype, locationInfo string) (remoteresource.RemoteResource, error) {
+func NewRemoteResourceMockScript(log log.T, locationtype, locationInfo string) (remoteresource.RemoteResource, error) {
 	resource := createStubResourceInfoScript()
 
 	executeResourceMock.On("ValidateLocationInfo").Return(true, nil).Once()
@@ -371,7 +371,7 @@ func NewRemoteResourceMockScript(locationtype, locationInfo string) (remoteresou
 	return executeResourceMock, nil
 }
 
-func NewRemoteResourceMockDoc(locationtype, locationInfo string) (remoteresource.RemoteResource, error) {
+func NewRemoteResourceMockDoc(log log.T, locationtype, locationInfo string) (remoteresource.RemoteResource, error) {
 	resource := createStubResourceInfoDocument()
 
 	executeResourceMock.On("ValidateLocationInfo").Return(true, nil).Once()
