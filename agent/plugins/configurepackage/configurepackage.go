@@ -383,7 +383,14 @@ func (p *Plugin) execute(context context.T, config contracts.Configuration, canc
 				installState,
 				&out)
 			if !out.Status.IsReboot() {
-				err := packageService.ReportResult(context.Log(), packageservice.PackageResult{})
+				err := packageService.ReportResult(context.Log(), packageservice.PackageResult{
+					Exitcode:               int64(out.ExitCode),
+					Operation:              input.Action,
+					PackageName:            input.Name,
+					PreviousPackageVersion: installedVersion,
+					Timing:                 1,
+					Version:                input.Version,
+				})
 				if err != nil {
 					out.AppendErrorf(log, "Error reporting results: %v", err.Error())
 				}
