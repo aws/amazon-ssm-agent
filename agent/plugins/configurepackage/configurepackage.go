@@ -326,7 +326,9 @@ func checkAlreadyInstalled(context context.T,
 // selectService chooses the implementation of PackageService to use for a given execution of the plugin
 func selectService(log log.T, serviceEndpoint string, localrepo localpackages.Repository) packageservice.PackageService {
 	region, _ := platform.Region()
-	if !ssms3.UseSSMS3Service(log, serviceEndpoint, region) {
+	appCfg, err := appconfig.Config(false)
+
+	if (err == nil && appCfg.Birdwatcher.ForceEnable) || !ssms3.UseSSMS3Service(log, serviceEndpoint, region) {
 		log.Debugf("S3 repository is not marked active in %v %v", region, serviceEndpoint)
 		return birdwatcher.New(serviceEndpoint, localrepo)
 	}
