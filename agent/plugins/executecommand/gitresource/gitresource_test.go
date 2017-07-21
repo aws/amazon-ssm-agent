@@ -210,11 +210,10 @@ func TestGitResource_PopulateResourceInfoEntireDirFalseJSON(t *testing.T) {
 	}`
 
 	resourceInfo := remoteresource.ResourceInfo{}
-	gitresource, err := NewGitResource(nil, locationInfo)
+	gitresource, _ := NewGitResource(nil, locationInfo)
 
-	resourceInfo, err = gitresource.PopulateResourceInfo(logMock, "", false)
+	resourceInfo = gitresource.PopulateResourceInfo(logMock, "", false)
 
-	assert.NoError(t, err)
 	assert.Equal(t, remoteresource.Document, resourceInfo.TypeOfResource)
 	assert.False(t, resourceInfo.EntireDir)
 	assert.Equal(t, "file.json", resourceInfo.StarterFile)
@@ -231,9 +230,8 @@ func TestGitResource_PopulateResourceInfoEntireDirTrue(t *testing.T) {
 
 	gitresource, _ := NewGitResource(nil, locationInfo)
 
-	resourceInfo, err := gitresource.PopulateResourceInfo(logMock, "", true)
+	resourceInfo := gitresource.PopulateResourceInfo(logMock, "", true)
 
-	assert.NoError(t, err)
 	assert.True(t, resourceInfo.EntireDir)
 	assert.Equal(t, remoteresource.Script, resourceInfo.TypeOfResource)
 	assert.NotEqual(t, "path/to/file.rb", resourceInfo.StarterFile)
@@ -251,9 +249,8 @@ func TestGitResource_PopulateResourceInfoEntireDirTrueInvalidStarter(t *testing.
 
 	gitresource, _ := NewGitResource(nil, locationInfo)
 
-	resourceInfo, err := gitresource.PopulateResourceInfo(logMock, "", true)
+	resourceInfo := gitresource.PopulateResourceInfo(logMock, "", true)
 
-	assert.NoError(t, err)
 	assert.True(t, resourceInfo.EntireDir)
 	assert.Equal(t, remoteresource.Script, resourceInfo.TypeOfResource)
 	assert.Equal(t, "to", resourceInfo.StarterFile)
@@ -271,9 +268,8 @@ func TestGitResource_PopulateResourceInfoEntireDirFalseScript(t *testing.T) {
 	}`
 
 	gitresource, _ := NewGitResource(nil, locationInfo)
-	resourceInfo, err := gitresource.PopulateResourceInfo(logMock, "destination", false)
+	resourceInfo := gitresource.PopulateResourceInfo(logMock, "destination", false)
 
-	assert.NoError(t, err)
 	assert.False(t, resourceInfo.EntireDir)
 	assert.Equal(t, remoteresource.Script, resourceInfo.TypeOfResource)
 	assert.Equal(t, "file.rb", resourceInfo.StarterFile)

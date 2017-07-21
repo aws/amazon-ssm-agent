@@ -21,12 +21,14 @@ import (
 )
 
 const (
-	JSONExtension = ".json"
-	YamlExtension = ".yaml"
-
 	Unknown = iota
 	Script
 	Document
+)
+
+const (
+	JSONExtension = ".json"
+	YamlExtension = ".yaml"
 )
 
 // RemoteResource is an interface for accessing remote resources. Every type of remote resource is expected to implement RemoteResource interface
