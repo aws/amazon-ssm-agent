@@ -13,7 +13,8 @@
 
 // +build integration
 
-package processor
+// Package runcommand implements runcommand core processing module
+package runcommand
 
 import (
 	"errors"
@@ -22,8 +23,9 @@ import (
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
+	mds "github.com/aws/amazon-ssm-agent/agent/framework/service/runcommand/mds"
+	"github.com/aws/amazon-ssm-agent/agent/framework/service/runcommand/mock"
 	"github.com/aws/amazon-ssm-agent/agent/log"
-	"github.com/aws/amazon-ssm-agent/agent/message/service"
 	"github.com/aws/amazon-ssm-agent/agent/sdkutil"
 	"github.com/aws/aws-sdk-go/aws/awserr"
 	"github.com/aws/aws-sdk-go/service/ssmmds"
@@ -61,9 +63,9 @@ func TestLoop_Once(t *testing.T) {
 	log := contextMock.Log()
 
 	// create mocked service and set expectations
-	mdsMock := new(MockedMDS)
+	mdsMock := new(runcommandmock.MockedMDS)
 	mdsMock.On("GetMessages", log, sampleInstanceID).Return(&ssmmds.GetMessagesOutput{}, nil)
-	newMdsService = func(appconfig.SsmagentConfig) service.Service {
+	newMdsService = func(appconfig.SsmagentConfig) mds.Service {
 		return mdsMock
 	}
 	called := 0
@@ -72,7 +74,7 @@ func TestLoop_Once(t *testing.T) {
 	}
 	messagePollJob, _ := scheduler.Every(10).Seconds().NotImmediately().Run(job)
 
-	proc := Processor{
+	proc := RunCommandService{
 		name:                mdsName,
 		context:             contextMock,
 		service:             mdsMock,
@@ -92,9 +94,9 @@ func TestLoop_Multiple_Serial(t *testing.T) {
 	log := contextMock.Log()
 
 	// create mocked service and set expectations
-	mdsMock := new(MockedMDS)
+	mdsMock := new(runcommandmock.MockedMDS)
 	mdsMock.On("GetMessages", log, sampleInstanceID).Return(&ssmmds.GetMessagesOutput{}, nil)
-	newMdsService = func(appconfig.SsmagentConfig) service.Service {
+	newMdsService = func(appconfig.SsmagentConfig) mds.Service {
 		return mdsMock
 	}
 	called := 0
@@ -103,7 +105,7 @@ func TestLoop_Multiple_Serial(t *testing.T) {
 	}
 	messagePollJob, _ := scheduler.Every(10).Seconds().NotImmediately().Run(job)
 
-	proc := Processor{
+	proc := RunCommandService{
 		name:                mdsName,
 		context:             contextMock,
 		service:             mdsMock,
@@ -132,9 +134,9 @@ func TestLoop_Multiple_Parallel(t *testing.T) {
 	log := contextMock.Log()
 
 	// create mocked service and set expectations
-	mdsMock := new(MockedMDS)
+	mdsMock := new(runcommandmock.MockedMDS)
 	mdsMock.On("GetMessages", log, sampleInstanceID).Return(&ssmmds.GetMessagesOutput{}, nil)
-	newMdsService = func(appconfig.SsmagentConfig) service.Service {
+	newMdsService = func(appconfig.SsmagentConfig) mds.Service {
 		return mdsMock
 	}
 	called := 0
@@ -143,7 +145,7 @@ func TestLoop_Multiple_Parallel(t *testing.T) {
 	}
 	messagePollJob, _ := scheduler.Every(10).Seconds().NotImmediately().Run(job)
 
-	proc := Processor{
+	proc := RunCommandService{
 		name:                mdsName,
 		context:             contextMock,
 		service:             mdsMock,
@@ -165,9 +167,9 @@ func TestLoop_Once_Error(t *testing.T) {
 	log := contextMock.Log()
 
 	// create mocked service and set expectations
-	mdsMock := new(MockedMDS)
+	mdsMock := new(runcommandmock.MockedMDS)
 	mdsMock.On("GetMessages", log, sampleInstanceID).Return(&ssmmds.GetMessagesOutput{}, errSample)
-	newMdsService = func(appconfig.SsmagentConfig) service.Service {
+	newMdsService = func(appconfig.SsmagentConfig) mds.Service {
 		return mdsMock
 	}
 	called := 0
@@ -176,7 +178,7 @@ func TestLoop_Once_Error(t *testing.T) {
 	}
 	messagePollJob, _ := scheduler.Every(10).Seconds().NotImmediately().Run(job)
 
-	proc := Processor{
+	proc := RunCommandService{
 		name:                mdsName,
 		context:             contextMock,
 		service:             mdsMock,
@@ -196,9 +198,9 @@ func TestLoop_Multiple_Serial_Error(t *testing.T) {
 	log := contextMock.Log()
 
 	// create mocked service and set expectations
-	mdsMock := new(MockedMDS)
+	mdsMock := new(runcommandmock.MockedMDS)
 	mdsMock.On("GetMessages", log, sampleInstanceID).Return(&ssmmds.GetMessagesOutput{}, errSample)
-	newMdsService = func(appconfig.SsmagentConfig) service.Service {
+	newMdsService = func(appconfig.SsmagentConfig) mds.Service {
 		return mdsMock
 	}
 	called := 0
@@ -207,7 +209,7 @@ func TestLoop_Multiple_Serial_Error(t *testing.T) {
 	}
 	messagePollJob, _ := scheduler.Every(10).Seconds().NotImmediately().Run(job)
 
-	proc := Processor{
+	proc := RunCommandService{
 		name:                mdsName,
 		context:             contextMock,
 		service:             mdsMock,
@@ -237,9 +239,9 @@ func TestLoop_Multiple_Parallel_Error(t *testing.T) {
 	log := contextMock.Log()
 
 	// create mocked service and set expectations
-	mdsMock := new(MockedMDS)
+	mdsMock := new(runcommandmock.MockedMDS)
 	mdsMock.On("GetMessages", log, sampleInstanceID).Return(&ssmmds.GetMessagesOutput{}, errSample)
-	newMdsService = func(appconfig.SsmagentConfig) service.Service {
+	newMdsService = func(appconfig.SsmagentConfig) mds.Service {
 		return mdsMock
 	}
 	called := 0
@@ -248,7 +250,7 @@ func TestLoop_Multiple_Parallel_Error(t *testing.T) {
 	}
 	messagePollJob, _ := scheduler.Every(10).Seconds().NotImmediately().Run(job)
 
-	proc := Processor{
+	proc := RunCommandService{
 		name:                mdsName,
 		context:             contextMock,
 		service:             mdsMock,

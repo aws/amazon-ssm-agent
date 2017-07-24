@@ -27,14 +27,13 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/docmanager"
 	"github.com/aws/amazon-ssm-agent/agent/docmanager/model"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
-	"github.com/aws/amazon-ssm-agent/agent/message/processor/executer"
+	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer"
+	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/basicexecuter"
 	"github.com/aws/amazon-ssm-agent/agent/platform"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 	"github.com/aws/amazon-ssm-agent/agent/times"
 )
 
-// TopicPrefix is the prefix of the Topic field in an MDS message.
-type TopicPrefix string
 type ExecuterCreator func(ctx context.T) executer.Executer
 
 const (
@@ -42,14 +41,11 @@ const (
 	// hardstopTimeout is the time before the processor will be shutdown during a hardstop
 	// TODO:  load this value from config
 	hardStopTimeout = time.Second * 4
-
-	// the default stoppolicy error threshold. After 10 consecutive errors the plugin will stop for 15 minutes.
-	stopPolicyErrorThreshold = 10
 )
 
 type Processor interface {
 	//Start activate the Processor and pick up the left over document in the last run, it returns a channel to caller to gather DocumentResult
-	Start() (error, chan contracts.DocumentResult)
+	Start() (chan contracts.DocumentResult, error)
 	//Stop the processor, save the current state to resume later
 	Stop(stopType contracts.StopType)
 	//submit to the pool a document in form of docState object, results will be streamed back from the central channel returned by Start()
@@ -71,7 +67,7 @@ type EngineProcessor struct {
 }
 
 //TODO worker pool should be triggered in the Start() function
-func NewEngineProcessor(ctx context.T, commandWorkerLimit int, cancelWorkerLimit int, executerCreator ExecuterCreator, supportedDocs []model.DocumentType) *EngineProcessor {
+func NewEngineProcessor(ctx context.T, commandWorkerLimit int, cancelWorkerLimit int, supportedDocs []model.DocumentType) *EngineProcessor {
 	log := ctx.Log()
 	// sendCommand and cancelCommand will be processed by separate worker pools
 	// so we can define the number of workers per each
@@ -80,6 +76,9 @@ func NewEngineProcessor(ctx context.T, commandWorkerLimit int, cancelWorkerLimit
 	sendCommandTaskPool := task.NewPool(log, commandWorkerLimit, cancelWaitDuration, clock)
 	cancelCommandTaskPool := task.NewPool(log, cancelWorkerLimit, cancelWaitDuration, clock)
 	resChan := make(chan contracts.DocumentResult)
+	executerCreator := func(ctx context.T) executer.Executer {
+		return basicexecuter.NewBasicExecuter(ctx)
+	}
 	return &EngineProcessor{
 		context:           ctx.With("[EngineProcessor]"),
 		executerCreator:   executerCreator,
@@ -90,10 +89,10 @@ func NewEngineProcessor(ctx context.T, commandWorkerLimit int, cancelWorkerLimit
 	}
 }
 
-func (p *EngineProcessor) Start() (err error, resChan chan contracts.DocumentResult) {
+func (p *EngineProcessor) Start() (resChan chan contracts.DocumentResult, err error) {
 	context := p.context
 	if context == nil {
-		return fmt.Errorf("EngineProcessor is not initialized"), nil
+		return nil, fmt.Errorf("EngineProcessor is not initialized")
 	}
 	log := context.Log()
 	//process the older jobs from Current & Pending folder
@@ -124,6 +123,8 @@ func (p *EngineProcessor) Submit(docState model.DocumentState) {
 	})
 	if err != nil {
 		log.Error("Document Submission failed", err)
+		//move the fail-to-submit document to corrupt folder
+		docmanager.MoveDocumentState(log, docState.DocumentInformation.DocumentID, docState.DocumentInformation.InstanceID, appconfig.DefaultLocationOfPending, appconfig.DefaultLocationOfCorrupt)
 		return
 	}
 	return
@@ -168,6 +169,8 @@ func (p *EngineProcessor) Stop(stopType contracts.StopType) {
 
 	// wait for everything to shutdown
 	wg.Wait()
+	// close the receiver channel only after we're sure all the ongoing jobs are stopped and no sender is on this channel
+	close(p.resChan)
 }
 
 //TODO remove the direct file dependency once we encapsulate docmanager package
@@ -280,7 +283,12 @@ func processCommand(context context.T, executerCreator ExecuterCreator, cancelFl
 	// Listen for reboot
 	isReboot := false
 	for res := range statusChan {
-		log.Infof("sending reply for plugin %v update", res.LastPlugin)
+		if res.LastPlugin == "" {
+			log.Infof("sending document: %v complete response", documentID)
+		} else {
+			log.Infof("sending reply for plugin update: %v", res.LastPlugin)
+
+		}
 		//hand off the message to Service
 		resChan <- res
 		isReboot = res.Status == contracts.ResultStatusSuccessAndReboot
@@ -319,6 +327,7 @@ func processCancelCommand(context context.T, sendCommandPool task.Pool, docState
 		docState.DocumentInformation.DocumentStatus = contracts.ResultStatusSuccess
 	}
 
+	//TODO remove this block
 	//persist the final status of cancel-message in current folder
 	docmanager.PersistData(log,
 		docState.DocumentInformation.DocumentID,
