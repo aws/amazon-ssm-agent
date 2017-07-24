@@ -20,8 +20,8 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	docModel "github.com/aws/amazon-ssm-agent/agent/docmanager/model"
+	executermock "github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/mock"
 	"github.com/aws/amazon-ssm-agent/agent/log"
-	executermock "github.com/aws/amazon-ssm-agent/agent/message/processor/executer/mock"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 	"github.com/stretchr/testify/assert"
 )
@@ -49,6 +49,7 @@ func TestBasicExecuter(t *testing.T) {
 	docInfo := docModel.DocumentInfo{
 		CreatedDate:  "2017-06-10T01-23-07.853Z",
 		CommandID:    "13e8e6ad-e195-4ccb-86ee-328153b0dafe",
+		MessageID:    "MessageID",
 		DocumentName: "AWS-RunPowerShellScript",
 		InstanceID:   "i-400e1090",
 		RunCount:     0,
@@ -122,6 +123,7 @@ func testBasicExecuter(t *testing.T, testCase TestCase) {
 			assert.Equal(t, nStatusReceived, nPlugins)
 			assert.Equal(t, res.Status, testCase.ResultStatus)
 			assert.Equal(t, res.PluginResults, testCase.PluginResults)
+			assert.Equal(t, "MessageID", res.MessageID)
 			//assert channel close last
 			done = true
 			continue
@@ -129,6 +131,8 @@ func testBasicExecuter(t *testing.T, testCase TestCase) {
 		curPlugin := testCase.DocState.InstancePluginsInformation[nStatusReceived].Name
 		//assert plugin execution order
 		assert.Equal(t, curPlugin, res.LastPlugin)
+		//assert message id
+		assert.Equal(t, "MessageID", res.MessageID)
 		nStatusReceived++
 		//Assert the number of plugins have been updated
 		assert.Equal(t, len(res.PluginResults), nStatusReceived)

@@ -20,8 +20,11 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/docmanager"
 	docModel "github.com/aws/amazon-ssm-agent/agent/docmanager/model"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
-	"github.com/aws/amazon-ssm-agent/agent/message/processor/executer"
-	"github.com/aws/amazon-ssm-agent/agent/message/processor/executer/plugin"
+
+	"sync"
+
+	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer"
+	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/plugin"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 )
 
@@ -53,13 +56,17 @@ func run(context context.T,
 		}
 	}()
 	docState := docStore.Load()
+	messageID := docState.DocumentInformation.MessageID
 	statusChan := make(chan contracts.PluginResult)
+	var wg sync.WaitGroup
+	wg.Add(1)
 	//The go-routine to listen to individual plugin update
 	go func() {
 		defer func() {
 			if msg := recover(); msg != nil {
 				context.Log().Errorf("Executer listener panic: %v", msg)
 			}
+			wg.Done()
 		}()
 		results := make(map[string]*contracts.PluginResult)
 		for res := range statusChan {
@@ -70,13 +77,16 @@ func run(context context.T,
 				Status:        status,
 				PluginResults: results,
 				LastPlugin:    res.PluginName,
+				MessageID:     messageID,
 			}
 			resChan <- docResult
 		}
 	}()
 
-	outputs := pluginRunner(context, docState.DocumentInformation.MessageID, "", docState.InstancePluginsInformation, statusChan, cancelFlag)
+	outputs := pluginRunner(context, messageID, "", docState.InstancePluginsInformation, statusChan, cancelFlag)
 	close(statusChan)
+	//make sure the launched go routine has finshed before sending the final response
+	wg.Wait()
 	pluginOutputContent, _ := jsonutil.Marshal(outputs)
 	context.Log().Debugf("Plugin outputs %v", jsonutil.Indent(pluginOutputContent))
 	//send DocLevel response
@@ -85,6 +95,7 @@ func run(context context.T,
 		Status:        status,
 		PluginResults: outputs,
 		LastPlugin:    "",
+		MessageID:     messageID,
 	}
 	resChan <- result
 	//TODO documentInformation is an ambiguous struct, will be removed in future

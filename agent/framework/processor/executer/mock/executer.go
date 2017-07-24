@@ -17,7 +17,7 @@ package executermocks
 import (
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/docmanager/model"
-	"github.com/aws/amazon-ssm-agent/agent/message/processor/executer"
+	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 	"github.com/stretchr/testify/mock"
 )
