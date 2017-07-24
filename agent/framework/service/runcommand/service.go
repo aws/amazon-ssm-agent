@@ -11,8 +11,8 @@
 // either express or implied. See the License for the specific language governing
 // permissions and limitations under the License.
 
-// Package processor implements MDS plugin processor
-package processor
+// Package runcommand implements runcommand core processing module
+package runcommand
 
 import (
 	"encoding/json"
@@ -20,21 +20,18 @@ import (
 	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
-	"github.com/aws/amazon-ssm-agent/agent/association/processor"
+	associationProcessor "github.com/aws/amazon-ssm-agent/agent/association/processor"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
-	"github.com/aws/amazon-ssm-agent/agent/docmanager"
 	"github.com/aws/amazon-ssm-agent/agent/docmanager/model"
+	"github.com/aws/amazon-ssm-agent/agent/framework/processor"
+	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer"
+	messageContracts "github.com/aws/amazon-ssm-agent/agent/framework/service/runcommand/contracts"
+	mdsService "github.com/aws/amazon-ssm-agent/agent/framework/service/runcommand/mds"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
-	messageContracts "github.com/aws/amazon-ssm-agent/agent/message/contracts"
-	"github.com/aws/amazon-ssm-agent/agent/message/processor/executer"
-	"github.com/aws/amazon-ssm-agent/agent/message/processor/executer/basicexecuter"
-	"github.com/aws/amazon-ssm-agent/agent/message/service"
 	"github.com/aws/amazon-ssm-agent/agent/platform"
-	"github.com/aws/amazon-ssm-agent/agent/reply"
 	"github.com/aws/amazon-ssm-agent/agent/sdkutil"
-	"github.com/aws/amazon-ssm-agent/agent/task"
 	"github.com/aws/amazon-ssm-agent/agent/times"
 	"github.com/carlescere/scheduler"
 )
@@ -58,64 +55,47 @@ const (
 	CancelWorkersLimit = 3
 
 	// mdsname is the core module name for the MDS processor
-	mdsName = "MessageProcessor"
+	mdsName = "MessagingDeliveryService"
 
 	// offlinename is the core module name for the offline command document processor
-	offlineName = "OfflineProcessor"
+	offlineName = "OfflineService"
 
 	// pollMessageFrequencyMinutes is the frequency at which to resume poll for messages if the current thread dies due to stop policy
 	// note: the connection timeout for MDSPoll should be less than this.
 	pollMessageFrequencyMinutes = 15
 
-	// hardstopTimeout is the time before the processor will be shutdown during a hardstop
-	// TODO:  load this value from config
-	hardStopTimeout = time.Second * 4
-
 	// the default stoppolicy error threshold. After 10 consecutive errors the plugin will stop for 15 minutes.
 	stopPolicyErrorThreshold = 10
 )
-
-type statusReplyBuilder func(agentInfo contracts.AgentInfo, resultStatus contracts.ResultStatus)
 
 type persistData func(state *model.DocumentState, bookkeeping string)
 
 type ExecuterCreator func(ctx context.T) executer.Executer
 
-//TODO move these 2 type to service
 // SendDocumentLevelResponse is used to send status response before plugin begins
 type SendDocumentLevelResponse func(messageID string, resultStatus contracts.ResultStatus, documentTraceOutput string)
-type SendResponse func(pluginID string, res contracts.DocumentResult)
-
-//TODO this is temporarily solution before we have service; once we have it, a nice and clean protocol will be defined in terms of status update
-// responseProvider is a closure to hold replyBuilder, before we create the service interface
-var responseProvider = func(log log.T, messageID string, mdsService service.Service, agentInfo contracts.AgentInfo, stopPolicy *sdkutil.StopPolicy) SendResponse {
-	return func(pluginID string, res contracts.DocumentResult) {
-		processSendReply(log, messageID, mdsService, reply.FormatPayload(log, pluginID, agentInfo, res.PluginResults), stopPolicy)
-	}
-}
+type SendResponse func(messageID string, res contracts.DocumentResult)
 
 // Processor is an object that can process MDS messages.
-type Processor struct {
+type RunCommandService struct {
 	context              context.T
 	name                 string
 	stopSignal           chan bool
 	config               contracts.AgentConfiguration
-	service              service.Service
-	executerCreator      ExecuterCreator
-	sendCommandPool      task.Pool
-	cancelCommandPool    task.Pool
+	service              mdsService.Service
 	sendDocLevelResponse SendDocumentLevelResponse
-	persistData          persistData
+	sendResponse         SendResponse
 	orchestrationRootDir string
 	messagePollJob       *scheduler.Job
-	assocProcessor       *processor.Processor
-	processorStopPolicy  *sdkutil.StopPolicy
-	pollAssociations     bool
-	supportedDocTypes    []model.DocumentType
+	//TODO move association poller out, we surely have to
+	assocProcessor      *associationProcessor.Processor
+	processorStopPolicy *sdkutil.StopPolicy
+	pollAssociations    bool
+	processor           processor.Processor
 }
 
 // NewOfflineProcessor initialize a new offline command document processor
-func NewOfflineProcessor(context context.T) (*Processor, error) {
+func NewOfflineService(context context.T) (*RunCommandService, error) {
 	messageContext := context.With("[" + offlineName + "]")
 	log := messageContext.Log()
 
@@ -125,20 +105,20 @@ func NewOfflineProcessor(context context.T) (*Processor, error) {
 		return nil, err
 	}
 
-	return NewProcessor(messageContext, offlineName, offlineService, 1, 1, false, []model.DocumentType{model.SendCommandOffline, model.CancelCommandOffline}), nil
+	return NewService(messageContext, offlineName, offlineService, 1, 1, false, []model.DocumentType{model.SendCommandOffline, model.CancelCommandOffline}), nil
 }
 
 // NewMdsProcessor initializes a new mds processor with the given parameters.
-func NewMdsProcessor(context context.T) *Processor {
+func NewMDSService(context context.T) *RunCommandService {
 	messageContext := context.With("[" + mdsName + "]")
 	mdsService := newMdsService(context.AppConfig())
 	config := context.AppConfig()
 
-	return NewProcessor(messageContext, mdsName, mdsService, config.Mds.CommandWorkersLimit, CancelWorkersLimit, true, []model.DocumentType{model.SendCommand, model.CancelCommand})
+	return NewService(messageContext, mdsName, mdsService, config.Mds.CommandWorkersLimit, CancelWorkersLimit, true, []model.DocumentType{model.SendCommand, model.CancelCommand})
 }
 
 // NewProcessor performs common initialization for Mds and Offline processors
-func NewProcessor(ctx context.T, processorName string, processorService service.Service, commandWorkerLimit int, cancelWorkerLimit int, pollAssoc bool, supportedDocs []model.DocumentType) *Processor {
+func NewService(ctx context.T, serviceName string, service mdsService.Service, commandWorkerLimit int, cancelWorkerLimit int, pollAssoc bool, supportedDocs []model.DocumentType) *RunCommandService {
 	log := ctx.Log()
 	config := ctx.AppConfig()
 
@@ -161,61 +141,43 @@ func NewProcessor(ctx context.T, processorName string, processorService service.
 		InstanceID: instanceID,
 	}
 
-	// sendCommand and cancelCommand will be processed by separate worker pools
-	// so we can define the number of workers per each
-	cancelWaitDuration := 10000 * time.Millisecond
-	clock := times.DefaultClock
-	sendCommandTaskPool := task.NewPool(log, commandWorkerLimit, cancelWaitDuration, clock)
-	cancelCommandTaskPool := task.NewPool(log, CancelWorkersLimit, cancelWaitDuration, clock)
-
 	// create new message processor
 	orchestrationRootDir := filepath.Join(appconfig.DefaultDataStorePath, instanceID, appconfig.DefaultDocumentRootDirName, config.Agent.OrchestrationRootDir)
 
-	statusReplyBuilder := func(agentInfo contracts.AgentInfo, resultStatus contracts.ResultStatus, documentTraceOutput string) messageContracts.SendReplyPayload {
-		return prepareReplyPayloadToUpdateDocumentStatus(agentInfo, resultStatus, documentTraceOutput)
-
-	}
 	// create a stop policy where we will stop after 10 consecutive errors and if time period expires.
-	processorStopPolicy := newStopPolicy(processorName)
+	stopPolicy := newStopPolicy(serviceName)
 
-	//TODO move this function to service
 	// SendDocLevelResponse is used to send document level update
 	// Specify a new status of the document
 	sendDocLevelResponse := func(messageID string, resultStatus contracts.ResultStatus, documentTraceOutput string) {
-		payloadDoc := statusReplyBuilder(agentInfo, resultStatus, documentTraceOutput)
-		processSendReply(log, messageID, processorService, payloadDoc, processorStopPolicy)
+		payloadDoc := prepareReplyPayloadToUpdateDocumentStatus(agentInfo, resultStatus, documentTraceOutput)
+		processSendReply(log, messageID, service, payloadDoc, stopPolicy)
 	}
 
-	// PersistData is used to persist the data into a bookkeeping folder
-	persistData := func(state *model.DocumentState, bookkeeping string) {
-		docmanager.PersistData(log, state.DocumentInformation.DocumentID, state.DocumentInformation.InstanceID, bookkeeping, *state)
+	sendResponse := func(messageID string, res contracts.DocumentResult) {
+		pluginID := res.LastPlugin
+		processSendReply(log, messageID, service, FormatPayload(log, pluginID, agentInfo, res.PluginResults), stopPolicy)
 	}
 
-	var assocProc *processor.Processor
+	var assocProc *associationProcessor.Processor
 	if pollAssoc {
-		assocProc = processor.NewAssociationProcessor(ctx, instanceID)
-	}
-	//TODO in future, this attribute should be injected by service
-	var executerCreator = func(ctx context.T) executer.Executer {
-		return basicexecuter.NewBasicExecuter(ctx)
+		assocProc = associationProcessor.NewAssociationProcessor(ctx, instanceID)
 	}
 
-	return &Processor{
+	processor := processor.NewEngineProcessor(ctx, commandWorkerLimit, cancelWorkerLimit, supportedDocs)
+	return &RunCommandService{
 		context:              ctx,
-		name:                 processorName,
+		name:                 serviceName,
 		stopSignal:           make(chan bool),
 		config:               agentConfig,
-		service:              processorService,
-		executerCreator:      executerCreator,
-		sendCommandPool:      sendCommandTaskPool,
-		cancelCommandPool:    cancelCommandTaskPool,
+		service:              service,
 		sendDocLevelResponse: sendDocLevelResponse,
+		sendResponse:         sendResponse,
 		orchestrationRootDir: orchestrationRootDir,
-		persistData:          persistData,
-		processorStopPolicy:  processorStopPolicy,
+		processorStopPolicy:  stopPolicy,
 		assocProcessor:       assocProc,
 		pollAssociations:     pollAssoc,
-		supportedDocTypes:    supportedDocs,
+		processor:            processor,
 	}
 }
 
@@ -234,7 +196,7 @@ func prepareReplyPayloadToUpdateDocumentStatus(agentInfo contracts.AgentInfo, do
 	return
 }
 
-func processSendReply(log log.T, messageID string, mdsService service.Service, payloadDoc messageContracts.SendReplyPayload, processorStopPolicy *sdkutil.StopPolicy) {
+func processSendReply(log log.T, messageID string, mdsService mdsService.Service, payloadDoc messageContracts.SendReplyPayload, processorStopPolicy *sdkutil.StopPolicy) {
 	payloadB, err := json.Marshal(payloadDoc)
 	if err != nil {
 		log.Error("could not marshal reply payload!", err)
@@ -247,14 +209,14 @@ func processSendReply(log log.T, messageID string, mdsService service.Service, p
 	}
 }
 
-var newOfflineService = func(log log.T) (service.Service, error) {
-	return service.NewOfflineService(log, string(SendCommandTopicPrefixOffline))
+var newOfflineService = func(log log.T) (mdsService.Service, error) {
+	return mdsService.NewOfflineService(log, string(SendCommandTopicPrefixOffline))
 }
 
-var newMdsService = func(config appconfig.SsmagentConfig) service.Service {
+var newMdsService = func(config appconfig.SsmagentConfig) mdsService.Service {
 	connectionTimeout := time.Duration(config.Mds.StopTimeoutMillis) * time.Millisecond
 
-	return service.NewService(
+	return mdsService.NewService(
 		config.Agent.Region,
 		config.Mds.Endpoint,
 		nil,

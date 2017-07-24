@@ -18,8 +18,8 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/association/model"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	docModel "github.com/aws/amazon-ssm-agent/agent/docmanager/model"
+	messageContract "github.com/aws/amazon-ssm-agent/agent/framework/service/runcommand/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/log"
-	messageContract "github.com/aws/amazon-ssm-agent/agent/message/contracts"
 	"github.com/stretchr/testify/mock"
 )
 

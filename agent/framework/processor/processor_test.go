@@ -17,11 +17,13 @@ package processor
 import (
 	"testing"
 
+	"fmt"
+
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/docmanager/model"
-	"github.com/aws/amazon-ssm-agent/agent/message/processor/executer"
-	"github.com/aws/amazon-ssm-agent/agent/message/processor/executer/mock"
+	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer"
+	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/mock"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
@@ -70,10 +72,12 @@ func TestEngineProcessor_Stop(t *testing.T) {
 	sendCommandPoolMock := new(task.MockedPool)
 	cancelCommandPoolMock := new(task.MockedPool)
 	ctx := context.NewMockDefault()
+	resChan := make(chan contracts.DocumentResult)
 	processor := EngineProcessor{
 		sendCommandPool:   sendCommandPoolMock,
 		cancelCommandPool: cancelCommandPoolMock,
 		context:           ctx,
+		resChan:           resChan,
 	}
 	sendCommandPoolMock.On("ShutdownAndWait", mock.AnythingOfType("time.Duration")).Return(true)
 	cancelCommandPoolMock.On("ShutdownAndWait", mock.AnythingOfType("time.Duration")).Return(true)
@@ -103,7 +107,10 @@ func TestProcessCommand(t *testing.T) {
 	go func() {
 		//send 3 updates
 		for i := 0; i < 3; i++ {
-			res := contracts.DocumentResult{Status: contracts.ResultStatusSuccess}
+			res := contracts.DocumentResult{
+				LastPlugin: fmt.Sprintf("plugin%d", i),
+				Status:     contracts.ResultStatusSuccess,
+			}
 			statusChan <- res
 			res2 := <-resChan
 			assert.Equal(t, res, res2)

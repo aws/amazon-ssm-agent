@@ -11,8 +11,8 @@
 // either express or implied. See the License for the specific language governing
 // permissions and limitations under the License.
 
-// package parser contains utilities for parsing and encoding MDS/SSM messages.
-package reply
+// Package runcommand implements runcommand core processing module
+package runcommand
 
 import (
 	"encoding/json"
@@ -21,8 +21,8 @@ import (
 	"testing"
 
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
+	messageContracts "github.com/aws/amazon-ssm-agent/agent/framework/service/runcommand/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/log"
-	messageContracts "github.com/aws/amazon-ssm-agent/agent/message/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/times"
 	"github.com/stretchr/testify/assert"
 )
@@ -30,19 +30,21 @@ import (
 //TODO once service is moved out, merge all the reply tests here
 var sampleMessageReplyFiles = []string{
 	"./testdata/sampleReply.json",
+	"./testdata/sampleReplyVersion2_0.json",
+	"./testdata/sampleReplyVersion2_2.json",
 }
 
-var logger = log.NewMockLog()
-
 func TestFormatPayload(t *testing.T) {
-
+	logger := log.NewMockLog()
 	for _, fileName := range sampleMessageReplyFiles {
 		// load the test data
+		logger.Infof("loading test file %v", fileName)
 		sampleReply := loadMessageReplyFromFile(t, fileName)
 		outputs := make(map[string]*contracts.PluginResult)
-		for _, pluginRuntimeStatus := range sampleReply.RuntimeStatus {
+		//PluginID is the Runtimestatus map key
+		for pluginID, pluginRuntimeStatus := range sampleReply.RuntimeStatus {
 			pluginResult := parsePluginResult(t, *pluginRuntimeStatus)
-			outputs[pluginResult.PluginName] = &pluginResult
+			outputs[pluginID] = &pluginResult
 		}
 		// format the payload for document status update
 		payload := FormatPayload(logger, "", sampleReply.AdditionalInfo.Agent, outputs)

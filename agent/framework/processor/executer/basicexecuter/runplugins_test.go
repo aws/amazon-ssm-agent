@@ -21,15 +21,43 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/docmanager/model"
+	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/plugin"
 	"github.com/aws/amazon-ssm-agent/agent/framework/runpluginutil"
-	"github.com/aws/amazon-ssm-agent/agent/message/processor/executer/plugin"
+	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )
 
+const (
+	testPlugin1           = "plugin1"
+	testPlugin2           = "plugin2"
+	testUnknownPlugin     = "plugin3"
+	testUnsupportedPlugin = "plugin4"
+)
+
+var origIsSupported func(log log.T, pluginName string) (isKnown bool, isSupported bool, message string)
+
+func setIsSupportedMock() {
+	origIsSupported = isSupportedPlugin
+	isSupportedPlugin = func(log log.T, pluginName string) (isKnown bool, isSupported bool, message string) {
+		switch pluginName {
+		case testUnknownPlugin:
+			return false, true, ""
+		case testUnsupportedPlugin:
+			return true, false, ""
+		default:
+			return true, true, ""
+		}
+	}
+}
+
+func restoreIsSupported() {
+	isSupportedPlugin = origIsSupported
+}
+
 // TestRunPlugins tests that RunPluginsWithRegistry calls all the expected plugins.
-func TestRunPluginsLegacyWithNewDocument(t *testing.T) {
+func TestRunPluginsWithNewDocument(t *testing.T) {
 	setIsSupportedMock()
 	defer restoreIsSupported()
 	pluginNames := []string{testPlugin1, testPlugin2}
@@ -81,22 +109,25 @@ func TestRunPluginsLegacyWithNewDocument(t *testing.T) {
 		pluginConfigs2[index] = pluginConfigs[name]
 	}
 	called := 0
-	sendResponse := func(messageID string, pluginID string, results map[string]*contracts.PluginResult) {
-		for _, result := range results {
+
+	ch := make(chan contracts.PluginResult)
+	go func() {
+		for result := range ch {
 			result.EndDateTime = defaultTime
 			result.StartDateTime = defaultTime
+			if called == 0 {
+				assert.Equal(t, result, *pluginResults[testPlugin1])
+			} else if called == 1 {
+				assert.Equal(t, result, *pluginResults[testPlugin2])
+			} else {
+				assert.Fail(t, "there shouldn't be more than 2 update")
+			}
+			called++
 		}
-		if called == 0 {
-			assert.Equal(t, results[testPlugin1], pluginResults[testPlugin1])
-		} else if called == 1 {
-			assert.Equal(t, results, pluginResults)
-		} else {
-			assert.Fail(t, "sendreply shouldn't been called more than twice")
-		}
-		called++
-	}
+	}()
 	// call the code we are testing
-	outputs := RunPluginsLegacy(ctx, documentID, "", pluginConfigs2, pluginRegistry, sendResponse, nil, cancelFlag)
+	outputs := runPlugins(ctx, documentID, "", pluginConfigs2, pluginRegistry, ch, cancelFlag)
+	close(ch)
 
 	// fix the times expectation.
 	for _, result := range outputs {
@@ -117,7 +148,7 @@ func TestRunPluginsLegacyWithNewDocument(t *testing.T) {
 }
 
 // Document with steps containing unknown plugin (i.e. when plugin handler is not found), steps must fail
-func TestRunPluginsLegacyWithMissingPluginHandler(t *testing.T) {
+func TestRunPluginsWithMissingPluginHandler(t *testing.T) {
 	setIsSupportedMock()
 	defer restoreIsSupported()
 	pluginNames := []string{testPlugin1, testPlugin2}
@@ -166,22 +197,24 @@ func TestRunPluginsLegacyWithMissingPluginHandler(t *testing.T) {
 		pluginConfigs2[index] = pluginConfigs[name]
 	}
 	called := 0
-	sendResponse := func(messageID string, pluginID string, results map[string]*contracts.PluginResult) {
-		for _, result := range results {
+
+	ch := make(chan contracts.PluginResult)
+	go func() {
+		for result := range ch {
 			result.EndDateTime = defaultTime
 			result.StartDateTime = defaultTime
+			if called == 0 {
+				assert.Equal(t, result, *pluginResults[testPlugin1])
+			} else if called == 1 {
+				assert.Equal(t, result, *pluginResults[testPlugin2])
+			} else {
+				assert.Fail(t, "there shouldn't be more than 2 update")
+			}
+			called++
 		}
-		if called == 0 {
-			assert.Equal(t, results[testPlugin1], pluginResults[testPlugin1])
-		} else if called == 1 {
-			assert.Equal(t, results, pluginResults)
-		} else {
-			assert.Fail(t, "sendreply shouldn't been called more than twice")
-		}
-		called++
-	}
+	}()
 	// call the code we are testing
-	outputs := RunPluginsLegacy(ctx, documentID, "", pluginConfigs2, pluginRegistry, sendResponse, nil, cancelFlag)
+	outputs := runPlugins(ctx, documentID, "", pluginConfigs2, pluginRegistry, ch, cancelFlag)
 
 	// fix the times expectation.
 	for _, result := range outputs {
@@ -202,7 +235,7 @@ func TestRunPluginsLegacyWithMissingPluginHandler(t *testing.T) {
 }
 
 //TODO cancelFlag should not fail subsequent plugins
-func TestRunPluginsLegacyWithCancelFlagShutdown(t *testing.T) {
+func TestRunPluginsWithCancelFlagShutdown(t *testing.T) {
 	setIsSupportedMock()
 	defer restoreIsSupported()
 	pluginNames := []string{testPlugin1, testPlugin2}
@@ -211,9 +244,6 @@ func TestRunPluginsLegacyWithCancelFlagShutdown(t *testing.T) {
 	plugins := make(map[string]*plugin.Mock)
 	pluginRegistry := runpluginutil.PluginRegistry{}
 	documentID := "TestDocument2"
-
-	sendResponse := func(messageID string, pluginID string, results map[string]*contracts.PluginResult) {
-	}
 
 	var cancelFlag task.CancelFlag = task.NewChanneledCancelFlag()
 	ctx := context.NewMockDefault()
@@ -251,7 +281,11 @@ func TestRunPluginsLegacyWithCancelFlagShutdown(t *testing.T) {
 		pluginRegistry[name] = plugins[name]
 	}
 
-	outputs := RunPluginsLegacy(ctx, documentID, "", pluginStates, pluginRegistry, sendResponse, nil, cancelFlag)
+	ch := make(chan contracts.PluginResult, 2)
+
+	outputs := runPlugins(ctx, documentID, "", pluginStates, pluginRegistry, ch, cancelFlag)
+
+	close(ch)
 
 	// fix the times expectation.
 	for _, result := range outputs {
@@ -267,7 +301,7 @@ func TestRunPluginsLegacyWithCancelFlagShutdown(t *testing.T) {
 	assert.Equal(t, pluginResults[testPlugin2], outputs[testPlugin2])
 }
 
-func TestRunPluginsLegacyWithInProgressDocuments(t *testing.T) {
+func TestRunPluginsWithInProgressDocuments(t *testing.T) {
 	setIsSupportedMock()
 	defer restoreIsSupported()
 	pluginNames := []string{testPlugin1, testPlugin2}
@@ -276,9 +310,6 @@ func TestRunPluginsLegacyWithInProgressDocuments(t *testing.T) {
 	plugins := make(map[string]*plugin.Mock)
 	pluginRegistry := runpluginutil.PluginRegistry{}
 	documentID := "TestDocument2"
-
-	sendResponse := func(messageID string, pluginID string, results map[string]*contracts.PluginResult) {
-	}
 
 	var cancelFlag task.CancelFlag = task.NewChanneledCancelFlag()
 	ctx := context.NewMockDefault()
@@ -313,7 +344,9 @@ func TestRunPluginsLegacyWithInProgressDocuments(t *testing.T) {
 		pluginRegistry[name] = plugins[name]
 	}
 
-	outputs := RunPluginsLegacy(ctx, documentID, "", pluginStates, pluginRegistry, sendResponse, nil, cancelFlag)
+	ch := make(chan contracts.PluginResult, 2)
+	outputs := runPlugins(ctx, documentID, "", pluginStates, pluginRegistry, ch, cancelFlag)
+	close(ch)
 	// fix the times expectation.
 	for _, result := range outputs {
 		result.EndDateTime = defaultTime
@@ -362,7 +395,7 @@ func TestRunPluginsLegacyWithInProgressDocuments(t *testing.T) {
 //	assert.Equal(t, pluginResults[pluginName], outputs[pluginName])
 //}
 
-func TestRunPluginsLegacyWithDuplicatePluginType(t *testing.T) {
+func TestRunPluginsWithDuplicatePluginType(t *testing.T) {
 	setIsSupportedMock()
 	defer restoreIsSupported()
 	pluginType := "aws:runShellScript"
@@ -413,22 +446,23 @@ func TestRunPluginsLegacyWithDuplicatePluginType(t *testing.T) {
 		pluginConfigs2[index] = pluginConfigs[name]
 	}
 	called := 0
-	sendResponse := func(messageID string, pluginID string, results map[string]*contracts.PluginResult) {
-		for _, result := range results {
+	ch := make(chan contracts.PluginResult)
+	go func() {
+		for result := range ch {
 			result.EndDateTime = defaultTime
 			result.StartDateTime = defaultTime
+			if called == 0 {
+				assert.Equal(t, result, *pluginResults[testPlugin1])
+			} else if called == 1 {
+				assert.Equal(t, result, *pluginResults[testPlugin2])
+			} else {
+				assert.Fail(t, "there shouldn't be more than 2 update")
+			}
+			called++
 		}
-		if called == 0 {
-			assert.Equal(t, results[testPlugin1], pluginResults[testPlugin1])
-		} else if called == 1 {
-			assert.Equal(t, results, pluginResults)
-		} else {
-			assert.Fail(t, "sendreply shouldn't be called more than twice")
-		}
-		called++
-	}
+	}()
 	// call the code we are testing
-	outputs := RunPluginsLegacy(ctx, documentID, "", pluginConfigs2, pluginRegistry, sendResponse, nil, cancelFlag)
+	outputs := runPlugins(ctx, documentID, "", pluginConfigs2, pluginRegistry, ch, cancelFlag)
 
 	// fix the times expectation.
 	for _, result := range outputs {
@@ -451,7 +485,7 @@ func TestRunPluginsLegacyWithDuplicatePluginType(t *testing.T) {
 
 // Crossplatform document with compatible precondition, steps must be executed
 // Precondition = "StringEquals": ["platformType", "Linux"]
-func TestRunPluginsLegacyWithCompatiblePrecondition(t *testing.T) {
+func TestRunPluginsWithCompatiblePrecondition(t *testing.T) {
 	setIsSupportedMock()
 	defer restoreIsSupported()
 	pluginNames := []string{testPlugin1, testPlugin2}
@@ -504,22 +538,23 @@ func TestRunPluginsLegacyWithCompatiblePrecondition(t *testing.T) {
 		pluginConfigs2[index] = pluginConfigs[name]
 	}
 	called := 0
-	sendResponse := func(messageID string, pluginID string, results map[string]*contracts.PluginResult) {
-		for _, result := range results {
+	ch := make(chan contracts.PluginResult)
+	go func() {
+		for result := range ch {
 			result.EndDateTime = defaultTime
 			result.StartDateTime = defaultTime
+			if called == 0 {
+				assert.Equal(t, result, *pluginResults[testPlugin1])
+			} else if called == 1 {
+				assert.Equal(t, result, *pluginResults[testPlugin2])
+			} else {
+				assert.Fail(t, "there shouldn't be more than 2 update")
+			}
+			called++
 		}
-		if called == 0 {
-			assert.Equal(t, results[testPlugin1], pluginResults[testPlugin1])
-		} else if called == 1 {
-			assert.Equal(t, results, pluginResults)
-		} else {
-			assert.Fail(t, "sendreply shouldn't be called more than twice")
-		}
-		called++
-	}
+	}()
 	// call the code we are testing
-	outputs := RunPluginsLegacy(ctx, documentID, "", pluginConfigs2, pluginRegistry, sendResponse, nil, cancelFlag)
+	outputs := runPlugins(ctx, documentID, "", pluginConfigs2, pluginRegistry, ch, cancelFlag)
 
 	// fix the times expectation.
 	for _, result := range outputs {
@@ -540,7 +575,7 @@ func TestRunPluginsLegacyWithCompatiblePrecondition(t *testing.T) {
 
 // Crossplatform document with compatible precondition, steps must be executed
 // Precondition = "StringEquals": ["Linux", "platformType"]
-func TestRunPluginsLegacyWithCompatiblePreconditionWithValueFirst(t *testing.T) {
+func TestRunPluginsWithCompatiblePreconditionWithValueFirst(t *testing.T) {
 	setIsSupportedMock()
 	defer restoreIsSupported()
 	pluginNames := []string{testPlugin1, testPlugin2}
@@ -593,23 +628,23 @@ func TestRunPluginsLegacyWithCompatiblePreconditionWithValueFirst(t *testing.T) 
 		pluginConfigs2[index] = pluginConfigs[name]
 	}
 	called := 0
-	sendResponse := func(messageID string, pluginID string, results map[string]*contracts.PluginResult) {
-		for _, result := range results {
+	ch := make(chan contracts.PluginResult)
+	go func() {
+		for result := range ch {
 			result.EndDateTime = defaultTime
 			result.StartDateTime = defaultTime
+			if called == 0 {
+				assert.Equal(t, result, *pluginResults[testPlugin1])
+			} else if called == 1 {
+				assert.Equal(t, result, *pluginResults[testPlugin2])
+			} else {
+				assert.Fail(t, "there shouldn't be more than 2 update")
+			}
+			called++
 		}
-		if called == 0 {
-			assert.Equal(t, results[testPlugin1], pluginResults[testPlugin1])
-		} else if called == 1 {
-			assert.Equal(t, results, pluginResults)
-		} else {
-			assert.Fail(t, "sendreply shouldn't be called more than twice")
-		}
-		called++
-	}
+	}()
 	// call the code we are testing
-	outputs := RunPluginsLegacy(ctx, documentID, "", pluginConfigs2, pluginRegistry, sendResponse, nil, cancelFlag)
-
+	outputs := runPlugins(ctx, documentID, "", pluginConfigs2, pluginRegistry, ch, cancelFlag)
 	// fix the times expectation.
 	for _, result := range outputs {
 		result.EndDateTime = defaultTime
@@ -628,7 +663,7 @@ func TestRunPluginsLegacyWithCompatiblePreconditionWithValueFirst(t *testing.T) 
 }
 
 // Crossplatform document with incompatible precondition, steps must be skipped
-func TestRunPluginsLegacyWithIncompatiblePrecondition(t *testing.T) {
+func TestRunPluginsWithIncompatiblePrecondition(t *testing.T) {
 	setIsSupportedMock()
 	defer restoreIsSupported()
 	pluginNames := []string{testPlugin1, testPlugin2}
@@ -680,23 +715,23 @@ func TestRunPluginsLegacyWithIncompatiblePrecondition(t *testing.T) {
 		pluginConfigs2[index] = pluginConfigs[name]
 	}
 	called := 0
-	sendResponse := func(messageID string, pluginID string, results map[string]*contracts.PluginResult) {
-		for _, result := range results {
+	ch := make(chan contracts.PluginResult)
+	go func() {
+		for result := range ch {
 			result.EndDateTime = defaultTime
 			result.StartDateTime = defaultTime
+			if called == 0 {
+				assert.Equal(t, result, *pluginResults[testPlugin1])
+			} else if called == 1 {
+				assert.Equal(t, result, *pluginResults[testPlugin2])
+			} else {
+				assert.Fail(t, "there shouldn't be more than 2 update")
+			}
+			called++
 		}
-		if called == 0 {
-			assert.Equal(t, results[testPlugin1], pluginResults[testPlugin1])
-		} else if called == 1 {
-			assert.Equal(t, results, pluginResults)
-		} else {
-			assert.Fail(t, "sendreply shouldn't be called more than twice")
-		}
-		called++
-	}
+	}()
 	// call the code we are testing
-	outputs := RunPluginsLegacy(ctx, documentID, "", pluginConfigs2, pluginRegistry, sendResponse, nil, cancelFlag)
-
+	outputs := runPlugins(ctx, documentID, "", pluginConfigs2, pluginRegistry, ch, cancelFlag)
 	// fix the times expectation.
 	for _, result := range outputs {
 		result.EndDateTime = defaultTime
@@ -715,7 +750,7 @@ func TestRunPluginsLegacyWithIncompatiblePrecondition(t *testing.T) {
 }
 
 // Crossplatform document with unknown plugin (i.e. when plugin handler is not found), steps must be skipped
-func TestRunPluginsLegacyWithCompatiblePreconditionButMissingPluginHandler(t *testing.T) {
+func TestRunPluginsWithCompatiblePreconditionButMissingPluginHandler(t *testing.T) {
 	setIsSupportedMock()
 	defer restoreIsSupported()
 	pluginNames := []string{testPlugin1, testPlugin2}
@@ -765,23 +800,23 @@ func TestRunPluginsLegacyWithCompatiblePreconditionButMissingPluginHandler(t *te
 		pluginConfigs2[index] = pluginConfigs[name]
 	}
 	called := 0
-	sendResponse := func(messageID string, pluginID string, results map[string]*contracts.PluginResult) {
-		for _, result := range results {
+	ch := make(chan contracts.PluginResult)
+	go func() {
+		for result := range ch {
 			result.EndDateTime = defaultTime
 			result.StartDateTime = defaultTime
+			if called == 0 {
+				assert.Equal(t, result, *pluginResults[testPlugin1])
+			} else if called == 1 {
+				assert.Equal(t, result, *pluginResults[testPlugin2])
+			} else {
+				assert.Fail(t, "there shouldn't be more than 2 update")
+			}
+			called++
 		}
-		if called == 0 {
-			assert.Equal(t, results[testPlugin1], pluginResults[testPlugin1])
-		} else if called == 1 {
-			assert.Equal(t, results, pluginResults)
-		} else {
-			assert.Fail(t, "sendreply shouldn't be called more than twice")
-		}
-		called++
-	}
+	}()
 	// call the code we are testing
-	outputs := RunPluginsLegacy(ctx, documentID, "", pluginConfigs2, pluginRegistry, sendResponse, nil, cancelFlag)
-
+	outputs := runPlugins(ctx, documentID, "", pluginConfigs2, pluginRegistry, ch, cancelFlag)
 	// fix the times expectation.
 	for _, result := range outputs {
 		result.EndDateTime = defaultTime
@@ -800,7 +835,7 @@ func TestRunPluginsLegacyWithCompatiblePreconditionButMissingPluginHandler(t *te
 }
 
 // Crossplatform document with more than 1 precondition, steps must fail
-func TestRunPluginsLegacyWithMoreThanOnePrecondition(t *testing.T) {
+func TestRunPluginsWithMoreThanOnePrecondition(t *testing.T) {
 	setIsSupportedMock()
 	defer restoreIsSupported()
 	pluginNames := []string{testPlugin1, testPlugin2}
@@ -860,23 +895,23 @@ func TestRunPluginsLegacyWithMoreThanOnePrecondition(t *testing.T) {
 		pluginConfigs2[index] = pluginConfigs[name]
 	}
 	called := 0
-	sendResponse := func(messageID string, pluginID string, results map[string]*contracts.PluginResult) {
-		for _, result := range results {
+	ch := make(chan contracts.PluginResult)
+	go func() {
+		for result := range ch {
 			result.EndDateTime = defaultTime
 			result.StartDateTime = defaultTime
+			if called == 0 {
+				assert.Equal(t, result, *pluginResults[testPlugin1])
+			} else if called == 1 {
+				assert.Equal(t, result, *pluginResults[testPlugin2])
+			} else {
+				assert.Fail(t, "there shouldn't be more than 2 update")
+			}
+			called++
 		}
-		if called == 0 {
-			assert.Equal(t, results[testPlugin1], pluginResults[testPlugin1])
-		} else if called == 1 {
-			assert.Equal(t, results, pluginResults)
-		} else {
-			assert.Fail(t, "sendreply shouldn't be called more than twice")
-		}
-		called++
-	}
+	}()
 	// call the code we are testing
-	outputs := RunPluginsLegacy(ctx, documentID, "", pluginConfigs2, pluginRegistry, sendResponse, nil, cancelFlag)
-
+	outputs := runPlugins(ctx, documentID, "", pluginConfigs2, pluginRegistry, ch, cancelFlag)
 	// fix the times expectation.
 	for _, result := range outputs {
 		result.EndDateTime = defaultTime
@@ -895,7 +930,7 @@ func TestRunPluginsLegacyWithMoreThanOnePrecondition(t *testing.T) {
 }
 
 // Crossplatform document with unrecognized precondition operator, steps must fail
-func TestRunPluginsLegacyWithUnrecognizedPreconditionOperator(t *testing.T) {
+func TestRunPluginsWithUnrecognizedPreconditionOperator(t *testing.T) {
 	setIsSupportedMock()
 	defer restoreIsSupported()
 	pluginNames := []string{testPlugin1, testPlugin2}
@@ -952,22 +987,23 @@ func TestRunPluginsLegacyWithUnrecognizedPreconditionOperator(t *testing.T) {
 		pluginConfigs2[index] = pluginConfigs[name]
 	}
 	called := 0
-	sendResponse := func(messageID string, pluginID string, results map[string]*contracts.PluginResult) {
-		for _, result := range results {
+	ch := make(chan contracts.PluginResult)
+	go func() {
+		for result := range ch {
 			result.EndDateTime = defaultTime
 			result.StartDateTime = defaultTime
+			if called == 0 {
+				assert.Equal(t, result, *pluginResults[testPlugin1])
+			} else if called == 1 {
+				assert.Equal(t, result, *pluginResults[testPlugin2])
+			} else {
+				assert.Fail(t, "there shouldn't be more than 2 update")
+			}
+			called++
 		}
-		if called == 0 {
-			assert.Equal(t, results[testPlugin1], pluginResults[testPlugin1])
-		} else if called == 1 {
-			assert.Equal(t, results, pluginResults)
-		} else {
-			assert.Fail(t, "sendreply shouldn't be called more than twice")
-		}
-		called++
-	}
+	}()
 	// call the code we are testing
-	outputs := RunPluginsLegacy(ctx, documentID, "", pluginConfigs2, pluginRegistry, sendResponse, nil, cancelFlag)
+	outputs := runPlugins(ctx, documentID, "", pluginConfigs2, pluginRegistry, ch, cancelFlag)
 
 	// fix the times expectation.
 	for _, result := range outputs {
@@ -987,7 +1023,7 @@ func TestRunPluginsLegacyWithUnrecognizedPreconditionOperator(t *testing.T) {
 }
 
 // Crossplatform document with unrecognized precondition operand, steps must fail
-func TestRunPluginsLegacyWithUnrecognizedPreconditionOperand(t *testing.T) {
+func TestRunPluginsWithUnrecognizedPreconditionOperand(t *testing.T) {
 	setIsSupportedMock()
 	defer restoreIsSupported()
 	pluginNames := []string{testPlugin1, testPlugin2}
@@ -1044,22 +1080,23 @@ func TestRunPluginsLegacyWithUnrecognizedPreconditionOperand(t *testing.T) {
 		pluginConfigs2[index] = pluginConfigs[name]
 	}
 	called := 0
-	sendResponse := func(messageID string, pluginID string, results map[string]*contracts.PluginResult) {
-		for _, result := range results {
+	ch := make(chan contracts.PluginResult)
+	go func() {
+		for result := range ch {
 			result.EndDateTime = defaultTime
 			result.StartDateTime = defaultTime
+			if called == 0 {
+				assert.Equal(t, result, *pluginResults[testPlugin1])
+			} else if called == 1 {
+				assert.Equal(t, result, *pluginResults[testPlugin2])
+			} else {
+				assert.Fail(t, "there shouldn't be more than 2 update")
+			}
+			called++
 		}
-		if called == 0 {
-			assert.Equal(t, results[testPlugin1], pluginResults[testPlugin1])
-		} else if called == 1 {
-			assert.Equal(t, results, pluginResults)
-		} else {
-			assert.Fail(t, "sendreply shouldn't be called more than twice")
-		}
-		called++
-	}
+	}()
 	// call the code we are testing
-	outputs := RunPluginsLegacy(ctx, documentID, "", pluginConfigs2, pluginRegistry, sendResponse, nil, cancelFlag)
+	outputs := runPlugins(ctx, documentID, "", pluginConfigs2, pluginRegistry, ch, cancelFlag)
 
 	// fix the times expectation.
 	for _, result := range outputs {
@@ -1080,7 +1117,7 @@ func TestRunPluginsLegacyWithUnrecognizedPreconditionOperand(t *testing.T) {
 
 // Crossplatform document with invalid precondition, steps must fail
 // Precondition: "StringEquals": ["platformType", "platformType"]
-func TestRunPluginsLegacyWithUnrecognizedPreconditionDuplicateVariable(t *testing.T) {
+func TestRunPluginsWithUnrecognizedPreconditionDuplicateVariable(t *testing.T) {
 	setIsSupportedMock()
 	defer restoreIsSupported()
 	pluginNames := []string{testPlugin1, testPlugin2}
@@ -1137,22 +1174,23 @@ func TestRunPluginsLegacyWithUnrecognizedPreconditionDuplicateVariable(t *testin
 		pluginConfigs2[index] = pluginConfigs[name]
 	}
 	called := 0
-	sendResponse := func(messageID string, pluginID string, results map[string]*contracts.PluginResult) {
-		for _, result := range results {
+	ch := make(chan contracts.PluginResult)
+	go func() {
+		for result := range ch {
 			result.EndDateTime = defaultTime
 			result.StartDateTime = defaultTime
+			if called == 0 {
+				assert.Equal(t, result, *pluginResults[testPlugin1])
+			} else if called == 1 {
+				assert.Equal(t, result, *pluginResults[testPlugin2])
+			} else {
+				assert.Fail(t, "there shouldn't be more than 2 update")
+			}
+			called++
 		}
-		if called == 0 {
-			assert.Equal(t, results[testPlugin1], pluginResults[testPlugin1])
-		} else if called == 1 {
-			assert.Equal(t, results, pluginResults)
-		} else {
-			assert.Fail(t, "sendreply shouldn't be called more than twice")
-		}
-		called++
-	}
+	}()
 	// call the code we are testing
-	outputs := RunPluginsLegacy(ctx, documentID, "", pluginConfigs2, pluginRegistry, sendResponse, nil, cancelFlag)
+	outputs := runPlugins(ctx, documentID, "", pluginConfigs2, pluginRegistry, ch, cancelFlag)
 
 	// fix the times expectation.
 	for _, result := range outputs {
@@ -1172,7 +1210,7 @@ func TestRunPluginsLegacyWithUnrecognizedPreconditionDuplicateVariable(t *testin
 }
 
 // Crossplatform document with more than 2 precondition operands, steps must fail
-func TestRunPluginsLegacyWithMoreThanTwoPreconditionOperands(t *testing.T) {
+func TestRunPluginsWithMoreThanTwoPreconditionOperands(t *testing.T) {
 	setIsSupportedMock()
 	defer restoreIsSupported()
 	pluginNames := []string{testPlugin1, testPlugin2}
@@ -1229,22 +1267,23 @@ func TestRunPluginsLegacyWithMoreThanTwoPreconditionOperands(t *testing.T) {
 		pluginConfigs2[index] = pluginConfigs[name]
 	}
 	called := 0
-	sendResponse := func(messageID string, pluginID string, results map[string]*contracts.PluginResult) {
-		for _, result := range results {
+	ch := make(chan contracts.PluginResult)
+	go func() {
+		for result := range ch {
 			result.EndDateTime = defaultTime
 			result.StartDateTime = defaultTime
+			if called == 0 {
+				assert.Equal(t, result, *pluginResults[testPlugin1])
+			} else if called == 1 {
+				assert.Equal(t, result, *pluginResults[testPlugin2])
+			} else {
+				assert.Fail(t, "there shouldn't be more than 2 update")
+			}
+			called++
 		}
-		if called == 0 {
-			assert.Equal(t, results[testPlugin1], pluginResults[testPlugin1])
-		} else if called == 1 {
-			assert.Equal(t, results, pluginResults)
-		} else {
-			assert.Fail(t, "sendreply shouldn't be called more than twice")
-		}
-		called++
-	}
+	}()
 	// call the code we are testing
-	outputs := RunPluginsLegacy(ctx, documentID, "", pluginConfigs2, pluginRegistry, sendResponse, nil, cancelFlag)
+	outputs := runPlugins(ctx, documentID, "", pluginConfigs2, pluginRegistry, ch, cancelFlag)
 
 	// fix the times expectation.
 	for _, result := range outputs {
@@ -1264,7 +1303,7 @@ func TestRunPluginsLegacyWithMoreThanTwoPreconditionOperands(t *testing.T) {
 }
 
 // Crossplatform document with unknown plugin, steps must fail
-func TestRunPluginsLegacyWithUnknownPlugin(t *testing.T) {
+func TestRunPluginsWithUnknownPlugin(t *testing.T) {
 	setIsSupportedMock()
 	defer restoreIsSupported()
 	pluginNames := []string{testPlugin1, testUnknownPlugin, testPlugin2}
@@ -1337,20 +1376,19 @@ func TestRunPluginsLegacyWithUnknownPlugin(t *testing.T) {
 		pluginConfigs2[index] = pluginConfigs[name]
 	}
 	called := 0
-	sendResponse := func(messageID string, pluginID string, results map[string]*contracts.PluginResult) {
-		for _, result := range results {
+	ch := make(chan contracts.PluginResult)
+	go func() {
+		for result := range ch {
 			result.EndDateTime = defaultTime
 			result.StartDateTime = defaultTime
+			if called > 2 {
+				assert.Fail(t, "there shouldn't be more than 3 update")
+			}
+			called++
 		}
-		if called > 2 {
-			assert.Fail(t, "sendreply shouldn't be called more than three times")
-		} else if called == 2 {
-			assert.Equal(t, results, pluginResults)
-		}
-		called++
-	}
+	}()
 	// call the code we are testing
-	outputs := RunPluginsLegacy(ctx, documentID, "", pluginConfigs2, pluginRegistry, sendResponse, nil, cancelFlag)
+	outputs := runPlugins(ctx, documentID, "", pluginConfigs2, pluginRegistry, ch, cancelFlag)
 
 	// fix the times expectation.
 	for _, result := range outputs {
