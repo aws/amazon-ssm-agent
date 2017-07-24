@@ -54,6 +54,10 @@ type SSMAPI interface {
 
 	DeleteAssociation(*ssm.DeleteAssociationInput) (*ssm.DeleteAssociationOutput, error)
 
+	DeleteCommandsRequest(*ssm.DeleteCommandsInput) (*request.Request, *ssm.DeleteCommandsOutput)
+
+	DeleteCommands(*ssm.DeleteCommandsInput) (*ssm.DeleteCommandsOutput, error)
+
 	DeleteDocumentRequest(*ssm.DeleteDocumentInput) (*request.Request, *ssm.DeleteDocumentOutput)
 
 	DeleteDocument(*ssm.DeleteDocumentInput) (*ssm.DeleteDocumentOutput, error)
@@ -106,9 +110,17 @@ type SSMAPI interface {
 
 	DescribeAutomationActions(*ssm.DescribeAutomationActionsInput) (*ssm.DescribeAutomationActionsOutput, error)
 
+	DescribeAutomationExecutionParametersRequest(*ssm.DescribeAutomationExecutionParametersInput) (*request.Request, *ssm.DescribeAutomationExecutionParametersOutput)
+
+	DescribeAutomationExecutionParameters(*ssm.DescribeAutomationExecutionParametersInput) (*ssm.DescribeAutomationExecutionParametersOutput, error)
+
 	DescribeAutomationExecutionsRequest(*ssm.DescribeAutomationExecutionsInput) (*request.Request, *ssm.DescribeAutomationExecutionsOutput)
 
 	DescribeAutomationExecutions(*ssm.DescribeAutomationExecutionsInput) (*ssm.DescribeAutomationExecutionsOutput, error)
+
+	DescribeAutomationStepExecutionsRequest(*ssm.DescribeAutomationStepExecutionsInput) (*request.Request, *ssm.DescribeAutomationStepExecutionsOutput)
+
+	DescribeAutomationStepExecutions(*ssm.DescribeAutomationStepExecutionsInput) (*ssm.DescribeAutomationStepExecutionsOutput, error)
 
 	DescribeAvailablePatchesRequest(*ssm.DescribeAvailablePatchesInput) (*request.Request, *ssm.DescribeAvailablePatchesOutput)
 
@@ -312,6 +324,10 @@ type SSMAPI interface {
 
 	GetPatchBaselineForPatchGroup(*ssm.GetPatchBaselineForPatchGroupInput) (*ssm.GetPatchBaselineForPatchGroupOutput, error)
 
+	ListAssociationVersionsRequest(*ssm.ListAssociationVersionsInput) (*request.Request, *ssm.ListAssociationVersionsOutput)
+
+	ListAssociationVersions(*ssm.ListAssociationVersionsInput) (*ssm.ListAssociationVersionsOutput, error)
+
 	ListAssociationsRequest(*ssm.ListAssociationsInput) (*request.Request, *ssm.ListAssociationsOutput)
 
 	ListAssociations(*ssm.ListAssociationsInput) (*ssm.ListAssociationsOutput, error)
@@ -327,6 +343,10 @@ type SSMAPI interface {
 	ListComplianceItemsRequest(*ssm.ListComplianceItemsInput) (*request.Request, *ssm.ListComplianceItemsOutput)
 
 	ListComplianceItems(*ssm.ListComplianceItemsInput) (*ssm.ListComplianceItemsOutput, error)
+
+	ListComplianceSummariesRequest(*ssm.ListComplianceSummariesInput) (*request.Request, *ssm.ListComplianceSummariesOutput)
+
+	ListComplianceSummaries(*ssm.ListComplianceSummariesInput) (*ssm.ListComplianceSummariesOutput, error)
 
 	ListDocumentVersionsRequest(*ssm.ListDocumentVersionsInput) (*request.Request, *ssm.ListDocumentVersionsOutput)
 
@@ -360,9 +380,9 @@ type SSMAPI interface {
 
 	ModifyDocumentPermission(*ssm.ModifyDocumentPermissionInput) (*ssm.ModifyDocumentPermissionOutput, error)
 
-	PutComplianceItemRequest(*ssm.PutComplianceItemInput) (*request.Request, *ssm.PutComplianceItemOutput)
+	PutComplianceItemsRequest(*ssm.PutComplianceItemsInput) (*request.Request, *ssm.PutComplianceItemsOutput)
 
-	PutComplianceItem(*ssm.PutComplianceItemInput) (*ssm.PutComplianceItemOutput, error)
+	PutComplianceItems(*ssm.PutComplianceItemsInput) (*ssm.PutComplianceItemsOutput, error)
 
 	PutConfigurePackageResultRequest(*ssm.PutConfigurePackageResultInput) (*request.Request, *ssm.PutConfigurePackageResultOutput)
 
@@ -411,6 +431,10 @@ type SSMAPI interface {
 	RequestManagedInstanceRoleTokenRequest(*ssm.RequestManagedInstanceRoleTokenInput) (*request.Request, *ssm.RequestManagedInstanceRoleTokenOutput)
 
 	RequestManagedInstanceRoleToken(*ssm.RequestManagedInstanceRoleTokenInput) (*ssm.RequestManagedInstanceRoleTokenOutput, error)
+
+	SendAutomationSignalRequest(*ssm.SendAutomationSignalInput) (*request.Request, *ssm.SendAutomationSignalOutput)
+
+	SendAutomationSignal(*ssm.SendAutomationSignalInput) (*ssm.SendAutomationSignalOutput, error)
 
 	SendCommandRequest(*ssm.SendCommandInput) (*request.Request, *ssm.SendCommandOutput)
 

@@ -358,6 +358,32 @@ func (c *SSM) DeleteAssociation(input *DeleteAssociationInput) (*DeleteAssociati
 	return out, err
 }
 
+const opDeleteCommands = "DeleteCommands"
+
+// DeleteCommandsRequest generates a request for the DeleteCommands operation.
+func (c *SSM) DeleteCommandsRequest(input *DeleteCommandsInput) (req *request.Request, output *DeleteCommandsOutput) {
+	op := &request.Operation{
+		Name:       opDeleteCommands,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &DeleteCommandsInput{}
+	}
+
+	req = c.newRequest(op, input, output)
+	output = &DeleteCommandsOutput{}
+	req.Data = output
+	return
+}
+
+func (c *SSM) DeleteCommands(input *DeleteCommandsInput) (*DeleteCommandsOutput, error) {
+	req, out := c.DeleteCommandsRequest(input)
+	err := req.Send()
+	return out, err
+}
+
 const opDeleteDocument = "DeleteDocument"
 
 // DeleteDocumentRequest generates a request for the DeleteDocument operation.
@@ -715,6 +741,32 @@ func (c *SSM) DescribeAutomationActions(input *DescribeAutomationActionsInput) (
 	return out, err
 }
 
+const opDescribeAutomationExecutionParameters = "DescribeAutomationExecutionParameters"
+
+// DescribeAutomationExecutionParametersRequest generates a request for the DescribeAutomationExecutionParameters operation.
+func (c *SSM) DescribeAutomationExecutionParametersRequest(input *DescribeAutomationExecutionParametersInput) (req *request.Request, output *DescribeAutomationExecutionParametersOutput) {
+	op := &request.Operation{
+		Name:       opDescribeAutomationExecutionParameters,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &DescribeAutomationExecutionParametersInput{}
+	}
+
+	req = c.newRequest(op, input, output)
+	output = &DescribeAutomationExecutionParametersOutput{}
+	req.Data = output
+	return
+}
+
+func (c *SSM) DescribeAutomationExecutionParameters(input *DescribeAutomationExecutionParametersInput) (*DescribeAutomationExecutionParametersOutput, error) {
+	req, out := c.DescribeAutomationExecutionParametersRequest(input)
+	err := req.Send()
+	return out, err
+}
+
 const opDescribeAutomationExecutions = "DescribeAutomationExecutions"
 
 // DescribeAutomationExecutionsRequest generates a request for the DescribeAutomationExecutions operation.
@@ -738,6 +790,32 @@ func (c *SSM) DescribeAutomationExecutionsRequest(input *DescribeAutomationExecu
 // Provides details about all active and terminated Automation executions.
 func (c *SSM) DescribeAutomationExecutions(input *DescribeAutomationExecutionsInput) (*DescribeAutomationExecutionsOutput, error) {
 	req, out := c.DescribeAutomationExecutionsRequest(input)
+	err := req.Send()
+	return out, err
+}
+
+const opDescribeAutomationStepExecutions = "DescribeAutomationStepExecutions"
+
+// DescribeAutomationStepExecutionsRequest generates a request for the DescribeAutomationStepExecutions operation.
+func (c *SSM) DescribeAutomationStepExecutionsRequest(input *DescribeAutomationStepExecutionsInput) (req *request.Request, output *DescribeAutomationStepExecutionsOutput) {
+	op := &request.Operation{
+		Name:       opDescribeAutomationStepExecutions,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &DescribeAutomationStepExecutionsInput{}
+	}
+
+	req = c.newRequest(op, input, output)
+	output = &DescribeAutomationStepExecutionsOutput{}
+	req.Data = output
+	return
+}
+
+func (c *SSM) DescribeAutomationStepExecutions(input *DescribeAutomationStepExecutionsInput) (*DescribeAutomationStepExecutionsOutput, error) {
+	req, out := c.DescribeAutomationStepExecutionsRequest(input)
 	err := req.Send()
 	return out, err
 }
@@ -2112,6 +2190,32 @@ func (c *SSM) GetPatchBaselineForPatchGroup(input *GetPatchBaselineForPatchGroup
 	return out, err
 }
 
+const opListAssociationVersions = "ListAssociationVersions"
+
+// ListAssociationVersionsRequest generates a request for the ListAssociationVersions operation.
+func (c *SSM) ListAssociationVersionsRequest(input *ListAssociationVersionsInput) (req *request.Request, output *ListAssociationVersionsOutput) {
+	op := &request.Operation{
+		Name:       opListAssociationVersions,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &ListAssociationVersionsInput{}
+	}
+
+	req = c.newRequest(op, input, output)
+	output = &ListAssociationVersionsOutput{}
+	req.Data = output
+	return
+}
+
+func (c *SSM) ListAssociationVersions(input *ListAssociationVersionsInput) (*ListAssociationVersionsOutput, error) {
+	req, out := c.ListAssociationVersionsRequest(input)
+	err := req.Send()
+	return out, err
+}
+
 const opListAssociations = "ListAssociations"
 
 // ListAssociationsRequest generates a request for the ListAssociations operation.
@@ -2219,6 +2323,32 @@ func (c *SSM) ListComplianceItemsRequest(input *ListComplianceItemsInput) (req *
 
 func (c *SSM) ListComplianceItems(input *ListComplianceItemsInput) (*ListComplianceItemsOutput, error) {
 	req, out := c.ListComplianceItemsRequest(input)
+	err := req.Send()
+	return out, err
+}
+
+const opListComplianceSummaries = "ListComplianceSummaries"
+
+// ListComplianceSummariesRequest generates a request for the ListComplianceSummaries operation.
+func (c *SSM) ListComplianceSummariesRequest(input *ListComplianceSummariesInput) (req *request.Request, output *ListComplianceSummariesOutput) {
+	op := &request.Operation{
+		Name:       opListComplianceSummaries,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &ListComplianceSummariesInput{}
+	}
+
+	req = c.newRequest(op, input, output)
+	output = &ListComplianceSummariesOutput{}
+	req.Data = output
+	return
+}
+
+func (c *SSM) ListComplianceSummaries(input *ListComplianceSummariesInput) (*ListComplianceSummariesOutput, error) {
+	req, out := c.ListComplianceSummariesRequest(input)
 	err := req.Send()
 	return out, err
 }
@@ -2439,28 +2569,28 @@ func (c *SSM) ModifyDocumentPermission(input *ModifyDocumentPermissionInput) (*M
 	return out, err
 }
 
-const opPutComplianceItem = "PutComplianceItem"
+const opPutComplianceItems = "PutComplianceItems"
 
-// PutComplianceItemRequest generates a request for the PutComplianceItem operation.
-func (c *SSM) PutComplianceItemRequest(input *PutComplianceItemInput) (req *request.Request, output *PutComplianceItemOutput) {
+// PutComplianceItemsRequest generates a request for the PutComplianceItems operation.
+func (c *SSM) PutComplianceItemsRequest(input *PutComplianceItemsInput) (req *request.Request, output *PutComplianceItemsOutput) {
 	op := &request.Operation{
-		Name:       opPutComplianceItem,
+		Name:       opPutComplianceItems,
 		HTTPMethod: "POST",
 		HTTPPath:   "/",
 	}
 
 	if input == nil {
-		input = &PutComplianceItemInput{}
+		input = &PutComplianceItemsInput{}
 	}
 
 	req = c.newRequest(op, input, output)
-	output = &PutComplianceItemOutput{}
+	output = &PutComplianceItemsOutput{}
 	req.Data = output
 	return
 }
 
-func (c *SSM) PutComplianceItem(input *PutComplianceItemInput) (*PutComplianceItemOutput, error) {
-	req, out := c.PutComplianceItemRequest(input)
+func (c *SSM) PutComplianceItems(input *PutComplianceItemsInput) (*PutComplianceItemsOutput, error) {
+	req, out := c.PutComplianceItemsRequest(input)
 	err := req.Send()
 	return out, err
 }
@@ -2782,6 +2912,32 @@ func (c *SSM) RequestManagedInstanceRoleTokenRequest(input *RequestManagedInstan
 
 func (c *SSM) RequestManagedInstanceRoleToken(input *RequestManagedInstanceRoleTokenInput) (*RequestManagedInstanceRoleTokenOutput, error) {
 	req, out := c.RequestManagedInstanceRoleTokenRequest(input)
+	err := req.Send()
+	return out, err
+}
+
+const opSendAutomationSignal = "SendAutomationSignal"
+
+// SendAutomationSignalRequest generates a request for the SendAutomationSignal operation.
+func (c *SSM) SendAutomationSignalRequest(input *SendAutomationSignalInput) (req *request.Request, output *SendAutomationSignalOutput) {
+	op := &request.Operation{
+		Name:       opSendAutomationSignal,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &SendAutomationSignalInput{}
+	}
+
+	req = c.newRequest(op, input, output)
+	output = &SendAutomationSignalOutput{}
+	req.Data = output
+	return
+}
+
+func (c *SSM) SendAutomationSignal(input *SendAutomationSignalInput) (*SendAutomationSignalOutput, error) {
+	req, out := c.SendAutomationSignalRequest(input)
 	err := req.Send()
 	return out, err
 }
@@ -3338,6 +3494,8 @@ type Association struct {
 	// is a binding between a document and a set of targets with a schedule.
 	AssociationId *string `type:"string"`
 
+	AssociationName *string `type:"string"`
+
 	AssociationVersion *string `type:"string"`
 
 	// The version of the document used in the association.
@@ -3378,6 +3536,8 @@ type AssociationDescription struct {
 
 	// The association ID.
 	AssociationId *string `type:"string"`
+
+	AssociationName *string `type:"string"`
 
 	AssociationVersion *string `type:"string"`
 
@@ -3544,6 +3704,41 @@ func (s *AssociationStatus) Validate() error {
 		return invalidParams
 	}
 	return nil
+}
+
+type AssociationVersionInfo struct {
+	_ struct{} `type:"structure"`
+
+	AssociationId *string `type:"string"`
+
+	AssociationName *string `type:"string"`
+
+	AssociationVersion *string `type:"string"`
+
+	CreatedDate *time.Time `type:"timestamp" timestampFormat:"unix"`
+
+	DocumentVersion *string `type:"string"`
+
+	Name *string `type:"string"`
+
+	// An Amazon S3 bucket where you want to store the results of this request.
+	OutputLocation *InstanceAssociationOutputLocation `type:"structure"`
+
+	Parameters map[string][]*string `type:"map"`
+
+	ScheduleExpression *string `min:"1" type:"string"`
+
+	Targets []*Target `type:"list"`
+}
+
+// String returns the string representation
+func (s AssociationVersionInfo) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s AssociationVersionInfo) GoString() string {
+	return s.String()
 }
 
 type AutomationAction struct {
@@ -3722,6 +3917,26 @@ func (s AutomationExecutionMetadata) String() string {
 
 // GoString returns the string representation
 func (s AutomationExecutionMetadata) GoString() string {
+	return s.String()
+}
+
+type AutomationParameter struct {
+	_ struct{} `type:"structure"`
+
+	Name *string `min:"1" type:"string"`
+
+	Type *string `type:"string" enum:"AutomationParameterType"`
+
+	Values []*string `type:"list"`
+}
+
+// String returns the string representation
+func (s AutomationParameter) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s AutomationParameter) GoString() string {
 	return s.String()
 }
 
@@ -4186,7 +4401,7 @@ type ComplianceExecutionSummary struct {
 
 	ExecutionId *string `type:"string"`
 
-	ExecutionTime *string `type:"string" required:"true"`
+	ExecutionTime *time.Time `type:"timestamp" timestampFormat:"unix" required:"true"`
 
 	ExecutionType *string `type:"string"`
 }
@@ -4294,7 +4509,7 @@ type ComplianceStringFilter struct {
 
 	Key *string `min:"1" type:"string"`
 
-	Type *string `type:"string" enum:"InventoryQueryOperatorType"`
+	Type *string `type:"string" enum:"ComplianceQueryOperatorType"`
 
 	Values []*string `locationNameList:"FilterValue" min:"1" type:"list"`
 }
@@ -4325,10 +4540,30 @@ func (s *ComplianceStringFilter) Validate() error {
 	return nil
 }
 
+type ComplianceSummaryItem struct {
+	_ struct{} `type:"structure"`
+
+	ComplianceType *string `min:"1" type:"string"`
+
+	CompliantSummary *CompliantSummary `type:"structure"`
+
+	NonCompliantSummary *NonCompliantSummary `type:"structure"`
+}
+
+// String returns the string representation
+func (s ComplianceSummaryItem) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ComplianceSummaryItem) GoString() string {
+	return s.String()
+}
+
 type CompliantSummary struct {
 	_ struct{} `type:"structure"`
 
-	CompliantCount *string `type:"string"`
+	CompliantCount *int64 `type:"integer"`
 
 	SeveritySummary *SeveritySummary `type:"structure"`
 }
@@ -4482,6 +4717,8 @@ func (s CreateAssociationBatchOutput) GoString() string {
 type CreateAssociationBatchRequestEntry struct {
 	_ struct{} `type:"structure"`
 
+	AssociationName *string `type:"string"`
+
 	// The document version.
 	DocumentVersion *string `type:"string"`
 
@@ -4547,6 +4784,8 @@ func (s *CreateAssociationBatchRequestEntry) Validate() error {
 
 type CreateAssociationInput struct {
 	_ struct{} `type:"structure"`
+
+	AssociationName *string `type:"string"`
 
 	// The document version you want to associate with the target(s). Can be a specific
 	// version or the default version.
@@ -5004,6 +5243,52 @@ func (s DeleteAssociationOutput) String() string {
 
 // GoString returns the string representation
 func (s DeleteAssociationOutput) GoString() string {
+	return s.String()
+}
+
+type DeleteCommandsInput struct {
+	_ struct{} `type:"structure"`
+
+	CommandIds []*string `min:"1" type:"list" required:"true"`
+}
+
+// String returns the string representation
+func (s DeleteCommandsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DeleteCommandsInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DeleteCommandsInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DeleteCommandsInput"}
+	if s.CommandIds == nil {
+		invalidParams.Add(request.NewErrParamRequired("CommandIds"))
+	}
+	if s.CommandIds != nil && len(s.CommandIds) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("CommandIds", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+type DeleteCommandsOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation
+func (s DeleteCommandsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DeleteCommandsOutput) GoString() string {
 	return s.String()
 }
 
@@ -5679,6 +5964,60 @@ func (s DescribeAutomationActionsOutput) GoString() string {
 	return s.String()
 }
 
+type DescribeAutomationExecutionParametersInput struct {
+	_ struct{} `type:"structure"`
+
+	AutomationExecutionId *string `min:"36" type:"string"`
+
+	MaxResults *int64 `min:"1" type:"integer"`
+
+	NextToken *string `type:"string"`
+}
+
+// String returns the string representation
+func (s DescribeAutomationExecutionParametersInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DescribeAutomationExecutionParametersInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DescribeAutomationExecutionParametersInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DescribeAutomationExecutionParametersInput"}
+	if s.AutomationExecutionId != nil && len(*s.AutomationExecutionId) < 36 {
+		invalidParams.Add(request.NewErrParamMinLen("AutomationExecutionId", 36))
+	}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+type DescribeAutomationExecutionParametersOutput struct {
+	_ struct{} `type:"structure"`
+
+	NextToken *string `type:"string"`
+
+	Parameters []*AutomationParameter `type:"list"`
+}
+
+// String returns the string representation
+func (s DescribeAutomationExecutionParametersOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DescribeAutomationExecutionParametersOutput) GoString() string {
+	return s.String()
+}
+
 type DescribeAutomationExecutionsInput struct {
 	_ struct{} `type:"structure"`
 
@@ -5750,6 +6089,70 @@ func (s DescribeAutomationExecutionsOutput) String() string {
 
 // GoString returns the string representation
 func (s DescribeAutomationExecutionsOutput) GoString() string {
+	return s.String()
+}
+
+type DescribeAutomationStepExecutionsInput struct {
+	_ struct{} `type:"structure"`
+
+	Filters []*AutomationExecutionFilter `min:"1" type:"list"`
+
+	MaxResults *int64 `min:"1" type:"integer"`
+
+	NextToken *string `type:"string"`
+}
+
+// String returns the string representation
+func (s DescribeAutomationStepExecutionsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DescribeAutomationStepExecutionsInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DescribeAutomationStepExecutionsInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DescribeAutomationStepExecutionsInput"}
+	if s.Filters != nil && len(s.Filters) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Filters", 1))
+	}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
+	}
+	if s.Filters != nil {
+		for i, v := range s.Filters {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "Filters", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+type DescribeAutomationStepExecutionsOutput struct {
+	_ struct{} `type:"structure"`
+
+	NextToken *string `type:"string"`
+
+	StepExecutions []*StepExecution `type:"list"`
+}
+
+// String returns the string representation
+func (s DescribeAutomationStepExecutionsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DescribeAutomationStepExecutionsOutput) GoString() string {
 	return s.String()
 }
 
@@ -8318,6 +8721,8 @@ type GetDeployablePatchSnapshotForInstanceOutput struct {
 	// The ID of the instance.
 	InstanceId *string `type:"string"`
 
+	Product *string `type:"string"`
+
 	// A pre-signed Amazon S3 URL that can be used to download the patch snapshot.
 	SnapshotDownloadUrl *string `type:"string"`
 
@@ -8575,6 +8980,8 @@ type GetInventorySchemaInput struct {
 	ResourceId *string `type:"string"`
 
 	ResourceType *string `type:"string" enum:"InventoryResourceType"`
+
+	SubType *bool `type:"boolean"`
 
 	// The type of inventory item to return.
 	TypeName *string `type:"string"`
@@ -9638,6 +10045,8 @@ type InstanceAssociationStatusInfo struct {
 	// The association ID.
 	AssociationId *string `type:"string"`
 
+	AssociationName *string `type:"string"`
+
 	AssociationVersion *string `type:"string"`
 
 	// Detailed status information about the instance association.
@@ -10403,6 +10812,60 @@ func (s InventoryResultItem) GoString() string {
 	return s.String()
 }
 
+type ListAssociationVersionsInput struct {
+	_ struct{} `type:"structure"`
+
+	AssociationId *string `type:"string" required:"true"`
+
+	MaxResults *int64 `min:"1" type:"integer"`
+
+	NextToken *string `type:"string"`
+}
+
+// String returns the string representation
+func (s ListAssociationVersionsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListAssociationVersionsInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListAssociationVersionsInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListAssociationVersionsInput"}
+	if s.AssociationId == nil {
+		invalidParams.Add(request.NewErrParamRequired("AssociationId"))
+	}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+type ListAssociationVersionsOutput struct {
+	_ struct{} `type:"structure"`
+
+	AssociationVersions []*AssociationVersionInfo `min:"1" type:"list"`
+
+	NextToken *string `type:"string"`
+}
+
+// String returns the string representation
+func (s ListAssociationVersionsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListAssociationVersionsOutput) GoString() string {
+	return s.String()
+}
+
 type ListAssociationsInput struct {
 	_ struct{} `type:"structure"`
 
@@ -10714,6 +11177,67 @@ func (s ListComplianceItemsOutput) String() string {
 
 // GoString returns the string representation
 func (s ListComplianceItemsOutput) GoString() string {
+	return s.String()
+}
+
+type ListComplianceSummariesInput struct {
+	_ struct{} `type:"structure"`
+
+	Filters []*ComplianceStringFilter `locationNameList:"ComplianceFilter" type:"list"`
+
+	MaxResults *int64 `min:"1" type:"integer"`
+
+	NextToken *string `type:"string"`
+}
+
+// String returns the string representation
+func (s ListComplianceSummariesInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListComplianceSummariesInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListComplianceSummariesInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListComplianceSummariesInput"}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
+	}
+	if s.Filters != nil {
+		for i, v := range s.Filters {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "Filters", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+type ListComplianceSummariesOutput struct {
+	_ struct{} `type:"structure"`
+
+	ComplianceSummaryItems []*ComplianceSummaryItem `locationNameList:"Item" type:"list"`
+
+	NextToken *string `type:"string"`
+}
+
+// String returns the string representation
+func (s ListComplianceSummariesOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListComplianceSummariesOutput) GoString() string {
 	return s.String()
 }
 
@@ -11504,7 +12028,7 @@ func (s *MaintenanceWindowRunCommandParameters) Validate() error {
 type MaintenanceWindowStepFunctionsParameters struct {
 	_ struct{} `type:"structure"`
 
-	Input *string `min:"1" type:"string"`
+	Input *string `type:"string"`
 
 	Name *string `min:"1" type:"string"`
 }
@@ -11522,9 +12046,6 @@ func (s MaintenanceWindowStepFunctionsParameters) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *MaintenanceWindowStepFunctionsParameters) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "MaintenanceWindowStepFunctionsParameters"}
-	if s.Input != nil && len(*s.Input) < 1 {
-		invalidParams.Add(request.NewErrParamMinLen("Input", 1))
-	}
 	if s.Name != nil && len(*s.Name) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("Name", 1))
 	}
@@ -11841,7 +12362,7 @@ func (s ModifyDocumentPermissionOutput) GoString() string {
 type NonCompliantSummary struct {
 	_ struct{} `type:"structure"`
 
-	NonCompliantCount *string `type:"string"`
+	NonCompliantCount *int64 `type:"integer"`
 
 	SeveritySummary *SeveritySummary `type:"structure"`
 }
@@ -12117,7 +12638,7 @@ type Patch struct {
 
 	// The ID of the patch (this is different than the Microsoft Knowledge Base
 	// ID).
-	Id *string `type:"string"`
+	Id *string `min:"1" type:"string"`
 
 	// The Microsoft Knowledge Base ID of the patch.
 	KbNumber *string `type:"string"`
@@ -12451,6 +12972,8 @@ type PatchStatus struct {
 	// The date the patch was approved (or will be approved if the status is PENDING_APPROVAL).
 	ApprovalDate *time.Time `type:"timestamp" timestampFormat:"unix"`
 
+	ComplianceLevel *string `type:"string" enum:"PatchComplianceLevel"`
+
 	// The approval status of a patch (APPROVED, PENDING_APPROVAL, EXPLICIT_APPROVED,
 	// EXPLICIT_REJECTED).
 	DeploymentStatus *string `type:"string" enum:"PatchDeploymentStatus"`
@@ -12466,7 +12989,7 @@ func (s PatchStatus) GoString() string {
 	return s.String()
 }
 
-type PutComplianceItemInput struct {
+type PutComplianceItemsInput struct {
 	_ struct{} `type:"structure"`
 
 	ComplianceType *string `min:"1" type:"string" required:"true"`
@@ -12483,18 +13006,18 @@ type PutComplianceItemInput struct {
 }
 
 // String returns the string representation
-func (s PutComplianceItemInput) String() string {
+func (s PutComplianceItemsInput) String() string {
 	return awsutil.Prettify(s)
 }
 
 // GoString returns the string representation
-func (s PutComplianceItemInput) GoString() string {
+func (s PutComplianceItemsInput) GoString() string {
 	return s.String()
 }
 
 // Validate inspects the fields of the type to determine if they are valid.
-func (s *PutComplianceItemInput) Validate() error {
-	invalidParams := request.ErrInvalidParams{Context: "PutComplianceItemInput"}
+func (s *PutComplianceItemsInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "PutComplianceItemsInput"}
 	if s.ComplianceType == nil {
 		invalidParams.Add(request.NewErrParamRequired("ComplianceType"))
 	}
@@ -12541,22 +13064,24 @@ func (s *PutComplianceItemInput) Validate() error {
 	return nil
 }
 
-type PutComplianceItemOutput struct {
+type PutComplianceItemsOutput struct {
 	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation
-func (s PutComplianceItemOutput) String() string {
+func (s PutComplianceItemsOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
 // GoString returns the string representation
-func (s PutComplianceItemOutput) GoString() string {
+func (s PutComplianceItemsOutput) GoString() string {
 	return s.String()
 }
 
 type PutConfigurePackageResultInput struct {
 	_ struct{} `type:"structure"`
+
+	Operation *string `type:"string" required:"true"`
 
 	OverallTiming *int64 `type:"integer" required:"true"`
 
@@ -12567,6 +13092,8 @@ type PutConfigurePackageResultInput struct {
 	PackageResultSteps []*PackageResultStep `min:"1" type:"list"`
 
 	PackageVersion *string `min:"1" type:"string" required:"true"`
+
+	PreviousPackageVersion *string `min:"1" type:"string"`
 
 	Result *int64 `type:"integer" required:"true"`
 }
@@ -12584,6 +13111,9 @@ func (s PutConfigurePackageResultInput) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *PutConfigurePackageResultInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "PutConfigurePackageResultInput"}
+	if s.Operation == nil {
+		invalidParams.Add(request.NewErrParamRequired("Operation"))
+	}
 	if s.OverallTiming == nil {
 		invalidParams.Add(request.NewErrParamRequired("OverallTiming"))
 	}
@@ -12604,6 +13134,9 @@ func (s *PutConfigurePackageResultInput) Validate() error {
 	}
 	if s.PackageVersion != nil && len(*s.PackageVersion) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("PackageVersion", 1))
+	}
+	if s.PreviousPackageVersion != nil && len(*s.PreviousPackageVersion) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("PreviousPackageVersion", 1))
 	}
 	if s.Result == nil {
 		invalidParams.Add(request.NewErrParamRequired("Result"))
@@ -13696,6 +14229,62 @@ func (s S3OutputUrl) GoString() string {
 	return s.String()
 }
 
+type SendAutomationSignalInput struct {
+	_ struct{} `type:"structure"`
+
+	AutomationExecutionId *string `min:"36" type:"string" required:"true"`
+
+	Payload map[string][]*string `min:"1" type:"map"`
+
+	SignalType *string `type:"string" required:"true" enum:"SignalType"`
+}
+
+// String returns the string representation
+func (s SendAutomationSignalInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s SendAutomationSignalInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *SendAutomationSignalInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "SendAutomationSignalInput"}
+	if s.AutomationExecutionId == nil {
+		invalidParams.Add(request.NewErrParamRequired("AutomationExecutionId"))
+	}
+	if s.AutomationExecutionId != nil && len(*s.AutomationExecutionId) < 36 {
+		invalidParams.Add(request.NewErrParamMinLen("AutomationExecutionId", 36))
+	}
+	if s.Payload != nil && len(s.Payload) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Payload", 1))
+	}
+	if s.SignalType == nil {
+		invalidParams.Add(request.NewErrParamRequired("SignalType"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+type SendAutomationSignalOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation
+func (s SendAutomationSignalOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s SendAutomationSignalOutput) GoString() string {
+	return s.String()
+}
+
 type SendCommandInput struct {
 	_ struct{} `type:"structure"`
 
@@ -13839,17 +14428,17 @@ func (s SendCommandOutput) GoString() string {
 type SeveritySummary struct {
 	_ struct{} `type:"structure"`
 
-	CriticalCount *string `type:"string"`
+	CriticalCount *int64 `type:"integer"`
 
-	HighCount *string `type:"string"`
+	HighCount *int64 `type:"integer"`
 
-	InformationalCount *string `type:"string"`
+	InformationalCount *int64 `type:"integer"`
 
-	LowCount *string `type:"string"`
+	LowCount *int64 `type:"integer"`
 
-	MediumCount *string `type:"string"`
+	MediumCount *int64 `type:"integer"`
 
-	UnspecifiedCount *string `type:"string"`
+	UnspecifiedCount *int64 `type:"integer"`
 }
 
 // String returns the string representation
@@ -14162,6 +14751,8 @@ type UpdateAssociationInput struct {
 
 	// The ID of the association you want to update.
 	AssociationId *string `type:"string" required:"true"`
+
+	AssociationName *string `type:"string"`
 
 	AssociationVersion *string `type:"string"`
 
@@ -15123,6 +15714,8 @@ const (
 	AssociationFilterKeyLastExecutedBefore = "LastExecutedBefore"
 	// @enum AssociationFilterKey
 	AssociationFilterKeyLastExecutedAfter = "LastExecutedAfter"
+	// @enum AssociationFilterKey
+	AssociationFilterKeyAssociationName = "AssociationName"
 )
 
 const (
@@ -15162,6 +15755,8 @@ const (
 	// @enum AutomationExecutionStatus
 	AutomationExecutionStatusInProgress = "InProgress"
 	// @enum AutomationExecutionStatus
+	AutomationExecutionStatusWaiting = "Waiting"
+	// @enum AutomationExecutionStatus
 	AutomationExecutionStatusSuccess = "Success"
 	// @enum AutomationExecutionStatus
 	AutomationExecutionStatusTimedOut = "TimedOut"
@@ -15169,6 +15764,17 @@ const (
 	AutomationExecutionStatusCancelled = "Cancelled"
 	// @enum AutomationExecutionStatus
 	AutomationExecutionStatusFailed = "Failed"
+)
+
+const (
+	// @enum AutomationParameterType
+	AutomationParameterTypeDocumentParameter = "DocumentParameter"
+	// @enum AutomationParameterType
+	AutomationParameterTypeGlobalParameter = "GlobalParameter"
+	// @enum AutomationParameterType
+	AutomationParameterTypeRuntimeParameter = "RuntimeParameter"
+	// @enum AutomationParameterType
+	AutomationParameterTypeStepOutputParameter = "StepOutputParameter"
 )
 
 const (
@@ -15233,6 +15839,19 @@ const (
 	CommandStatusTimedOut = "TimedOut"
 	// @enum CommandStatus
 	CommandStatusCancelling = "Cancelling"
+)
+
+const (
+	// @enum ComplianceQueryOperatorType
+	ComplianceQueryOperatorTypeEqual = "EQUAL"
+	// @enum ComplianceQueryOperatorType
+	ComplianceQueryOperatorTypeNotEqual = "NOT_EQUAL"
+	// @enum ComplianceQueryOperatorType
+	ComplianceQueryOperatorTypeBeginWith = "BEGIN_WITH"
+	// @enum ComplianceQueryOperatorType
+	ComplianceQueryOperatorTypeLessThan = "LESS_THAN"
+	// @enum ComplianceQueryOperatorType
+	ComplianceQueryOperatorTypeGreaterThan = "GREATER_THAN"
 )
 
 const (
@@ -15575,8 +16194,6 @@ const (
 	PatchFilterKeyPriority = "PRIORITY"
 	// @enum PatchFilterKey
 	PatchFilterKeySeverity = "SEVERITY"
-	// @enum PatchFilterKey
-	PatchFilterKeyCve = "CVE"
 )
 
 const (
@@ -15632,4 +16249,11 @@ const (
 	ResourceTypeForTaggingPatchBaseline = "PatchBaseline"
 	// @enum ResourceTypeForTagging
 	ResourceTypeForTaggingParameter = "Parameter"
+)
+
+const (
+	// @enum SignalType
+	SignalTypeApprove = "Approve"
+	// @enum SignalType
+	SignalTypeReject = "Reject"
 )
