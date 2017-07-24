@@ -14,12 +14,22 @@
 package fsvault
 
 import (
-	"github.com/aws/amazon-ssm-agent/agent/test"
+	"fmt"
+
 	"github.com/stretchr/testify/mock"
 )
 
 type fsvFileSystemMock struct {
 	mock.Mock
+}
+
+func ByteArrayArg(args mock.Arguments, index int) []byte {
+	var s []byte
+	var ok bool
+	if s, ok = args.Get(index).([]byte); !ok {
+		panic(fmt.Sprintf("assert: arguments: ByteArrayArg(%d) failed because object wasn't correct type: %v", index, args.Get(index)))
+	}
+	return s
 }
 
 func (m *fsvFileSystemMock) Exists(path string) bool {
@@ -39,7 +49,7 @@ func (m *fsvFileSystemMock) RecursivelyHarden(path string) error {
 
 func (m *fsvFileSystemMock) ReadFile(path string) ([]byte, error) {
 	args := m.Called(path)
-	return test.ByteArrayArg(args, 0), args.Error(1)
+	return ByteArrayArg(args, 0), args.Error(1)
 }
 
 func (m *fsvFileSystemMock) Remove(path string) error {
@@ -58,7 +68,7 @@ type fsvJsonHandlerMock struct {
 
 func (m *fsvJsonHandlerMock) Marshal(v interface{}) ([]byte, error) {
 	args := m.Called(v)
-	return test.ByteArrayArg(args, 0), args.Error(1)
+	return ByteArrayArg(args, 0), args.Error(1)
 }
 
 func (m *fsvJsonHandlerMock) Unmarshal(data []byte, v interface{}) error {
