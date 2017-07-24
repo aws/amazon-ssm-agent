@@ -11,28 +11,17 @@
 // either express or implied. See the License for the specific language governing
 // permissions and limitations under the License.
 
-package processor
+package runcommandmock
 
 import (
-	"github.com/aws/amazon-ssm-agent/agent/contracts"
+	mdsService "github.com/aws/amazon-ssm-agent/agent/framework/service/runcommand/mds"
 	"github.com/aws/amazon-ssm-agent/agent/log"
-	"github.com/aws/amazon-ssm-agent/agent/message/service"
 	"github.com/aws/aws-sdk-go/service/ssmmds"
 	"github.com/stretchr/testify/mock"
 )
 
 // Note: This code is used in the test files. However, this code is not in a _test.go file
 // because then we would have to copy it in every test package that needs the mock.
-
-// MockedSendResponse stands for a mock send response.
-type MockedSendResponse struct {
-	mock.Mock
-}
-
-// SendResponse mocks a SendResponse (which is a func).
-func (sendResponseMock *MockedSendResponse) SendResponse(messageID string, pluginID string, results map[string]*contracts.PluginResult) {
-	//sendResponseMock.Called(messageID, pluginID, results)
-}
 
 // MockedMDS stands for a mock MDS service.
 type MockedMDS struct {
@@ -56,7 +45,7 @@ func (mdsMock *MockedMDS) SendReply(log log.T, messageID string, payload string)
 }
 
 // FailMessage mocks the service function with the same name.
-func (mdsMock *MockedMDS) FailMessage(log log.T, messageID string, failureType service.FailureType) error {
+func (mdsMock *MockedMDS) FailMessage(log log.T, messageID string, failureType mdsService.FailureType) error {
 	return mdsMock.Called(log, messageID, failureType).Error(0)
 }
 

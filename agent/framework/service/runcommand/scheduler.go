@@ -11,9 +11,8 @@
 // either express or implied. See the License for the specific language governing
 // permissions and limitations under the License.
 
-// Package processor implements MDS plugin processor
-// processor_scheduler contains the GetMessages Scheduler implementation
-package processor
+// Package runcommand implements runcommand core processing module
+package runcommand
 
 import (
 	"math/rand"
@@ -27,7 +26,7 @@ import (
 var lastPollTimeMap map[string]time.Time = make(map[string]time.Time)
 var lock sync.RWMutex
 
-var processMessage = (*Processor).processMessage
+var processMessage = (*RunCommandService).processMessage
 
 func updateLastPollTime(processorType string, currentTime time.Time) {
 	lock.Lock()
@@ -42,31 +41,31 @@ func getLastPollTime(processorType string) time.Time {
 }
 
 // loop reads messages from MDS then processes them.
-func (p *Processor) loop() {
+func (s *RunCommandService) loop() {
 	// time lock to only have one loop active anytime.
 	// this is extra insurance to prevent any race condition
 	pollStartTime := time.Now()
-	updateLastPollTime(p.name, pollStartTime)
+	updateLastPollTime(s.name, pollStartTime)
 
-	log := p.context.Log()
-	if !p.isDone() {
-		if p.processorStopPolicy != nil {
-			if p.name == mdsName {
-				log.Debugf("%v's stoppolicy before polling is %v", p.name, p.processorStopPolicy)
+	log := s.context.Log()
+	if !s.isDone() {
+		if s.processorStopPolicy != nil {
+			if s.name == mdsName {
+				log.Debugf("%v's stoppolicy before polling is %v", s.name, s.processorStopPolicy)
 			}
-			if p.processorStopPolicy.IsHealthy() == false {
-				log.Errorf("%v stopped temporarily due to internal failure. We will retry automatically after %v minutes", p.name, pollMessageFrequencyMinutes)
-				p.reset()
+			if s.processorStopPolicy.IsHealthy() == false {
+				log.Errorf("%v stopped temporarily due to internal failure. We will retry automatically after %v minutes", s.name, pollMessageFrequencyMinutes)
+				s.reset()
 				return
 			}
 		} else {
 			log.Debugf("creating new stop-policy.")
-			p.processorStopPolicy = newStopPolicy(p.name)
+			s.processorStopPolicy = newStopPolicy(s.name)
 		}
 
-		p.pollOnce()
-		if p.name == mdsName {
-			log.Debugf("%v's stoppolicy after polling is %v", p.name, p.processorStopPolicy)
+		s.pollOnce()
+		if s.name == mdsName {
+			log.Debugf("%v's stoppolicy after polling is %v", s.name, s.processorStopPolicy)
 		}
 
 		// Slow down a bit in case GetMessages returns
@@ -78,9 +77,9 @@ func (p *Processor) loop() {
 
 		// check if any other poll loop has started in the meantime
 		// to prevent any possible race condition due to the scheduler
-		if getLastPollTime(p.name) == pollStartTime {
+		if getLastPollTime(s.name) == pollStartTime {
 			// skip waiting for the next scheduler polling event and start polling immediately
-			scheduleNextRun(p.messagePollJob)
+			scheduleNextRun(s.messagePollJob)
 		}
 	}
 }
@@ -89,44 +88,44 @@ var scheduleNextRun = func(j *scheduler.Job) {
 	j.SkipWait <- true
 }
 
-func (p *Processor) reset() {
-	log := p.context.Log()
-	log.Debugf("Resetting processor:%v", p.name)
+func (s *RunCommandService) reset() {
+	log := s.context.Log()
+	log.Debugf("Resetting processor:%v", s.name)
 	// reset stop policy and let the scheduler start the polling after pollMessageFrequencyMinutes timeout
-	p.processorStopPolicy.ResetErrorCount()
+	s.processorStopPolicy.ResetErrorCount()
 
 	// creating a new mds service object for the retry
 	// this is extra insurance to avoid service object getting corrupted - adding resiliency
-	config := p.context.AppConfig()
-	if p.name == mdsName {
-		p.service = newMdsService(config)
+	config := s.context.AppConfig()
+	if s.name == mdsName {
+		s.service = newMdsService(config)
 	}
 }
 
-// Stop stops the MDSProcessor.
-func (p *Processor) stop() {
-	log := p.context.Log()
-	log.Debugf("Stopping processor:%v", p.name)
-	p.service.Stop()
+// Stop stops the message poller.
+func (s *RunCommandService) stop() {
+	log := s.context.Log()
+	log.Debugf("Stopping processor:%v", s.name)
+	s.service.Stop()
 
 	// close channel; subsequent calls to isDone will return true
-	if !p.isDone() {
-		close(p.stopSignal)
+	if !s.isDone() {
+		close(s.stopSignal)
 	}
 
-	if p.messagePollJob != nil {
-		p.messagePollJob.Quit <- true
+	if s.messagePollJob != nil {
+		s.messagePollJob.Quit <- true
 	}
 
-	if p.assocProcessor != nil {
-		p.assocProcessor.Stop()
+	if s.assocProcessor != nil {
+		s.assocProcessor.Stop()
 	}
 }
 
 // isDone returns true if a stop has been requested, false otherwise.
-func (p *Processor) isDone() bool {
+func (s *RunCommandService) isDone() bool {
 	select {
-	case <-p.stopSignal:
+	case <-s.stopSignal:
 		// received signal or channel already closed
 		return true
 	default:
@@ -135,14 +134,14 @@ func (p *Processor) isDone() bool {
 }
 
 // pollOnce calls GetMessages once and processes the result.
-func (p *Processor) pollOnce() {
-	log := p.context.Log()
-	if p.name == mdsName {
+func (s *RunCommandService) pollOnce() {
+	log := s.context.Log()
+	if s.name == mdsName {
 		log.Debugf("Polling for messages")
 	}
-	messages, err := p.service.GetMessages(log, p.config.InstanceID)
+	messages, err := s.service.GetMessages(log, s.config.InstanceID)
 	if err != nil {
-		sdkutil.HandleAwsError(log, err, p.processorStopPolicy)
+		sdkutil.HandleAwsError(log, err, s.processorStopPolicy)
 		return
 	}
 	if len(messages.Messages) > 0 {
@@ -150,9 +149,9 @@ func (p *Processor) pollOnce() {
 	}
 
 	for _, msg := range messages.Messages {
-		processMessage(p, msg)
+		processMessage(s, msg)
 	}
-	if p.name == mdsName {
+	if s.name == mdsName {
 		log.Debugf("Done poll once")
 	}
 }

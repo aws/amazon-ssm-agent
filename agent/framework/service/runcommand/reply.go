@@ -11,17 +11,16 @@
 // either express or implied. See the License for the specific language governing
 // permissions and limitations under the License.
 
-//TODO move this package to service, or contract package
-// Package reply provides utilities to parse reply payload
-package reply
+// Package runcommand implements runcommand core processing module
+package runcommand
 
 import (
 	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/docmanager"
+	messageContracts "github.com/aws/amazon-ssm-agent/agent/framework/service/runcommand/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/log"
-	messageContracts "github.com/aws/amazon-ssm-agent/agent/message/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/times"
 )
 

@@ -32,10 +32,10 @@ import (
 	docModel "github.com/aws/amazon-ssm-agent/agent/docmanager/model"
 
 	"github.com/aws/amazon-ssm-agent/agent/docmanager"
+	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer"
+	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/basicexecuter"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
-	"github.com/aws/amazon-ssm-agent/agent/message/processor/executer"
-	"github.com/aws/amazon-ssm-agent/agent/message/processor/executer/basicexecuter"
 	"github.com/aws/amazon-ssm-agent/agent/platform"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 	"github.com/aws/amazon-ssm-agent/agent/times"

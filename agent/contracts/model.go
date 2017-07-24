@@ -217,6 +217,7 @@ type AgentConfiguration struct {
 }
 
 type DocumentResult struct {
+	MessageID     string
 	PluginResults map[string]*PluginResult
 	Status        ResultStatus
 	LastPlugin    string
