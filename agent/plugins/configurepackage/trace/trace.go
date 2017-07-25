@@ -275,6 +275,7 @@ func (t *Trace) WithExitcode(exitcode int64) *Trace {
 
 // WithExitcode sets the error of the trace
 func (t *Trace) WithError(err error) *Trace {
+	t.logger.Error(err)
 	t.Error = err
 	return t
 }
