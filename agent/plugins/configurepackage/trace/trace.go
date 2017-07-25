@@ -302,32 +302,35 @@ func (t *Trace) EndWithError(err *error) *Trace {
 // PluginOutput
 
 // AppendInfo adds info to PluginOutput StandardOut.
-func (t *Trace) AppendInfo(message string) {
+func (t *Trace) AppendInfo(message string) *Trace {
 	t.logger.Info(message)
 	t.InfoOut.WriteString(message)
 	t.InfoOut.WriteString("\n")
+	return t
 }
 
 // AppendInfof adds info to PluginOutput StandardOut with formatting parameters.
-func (t *Trace) AppendInfof(format string, params ...interface{}) {
-	t.AppendInfo(fmt.Sprintf(format, params...))
+func (t *Trace) AppendInfof(format string, params ...interface{}) *Trace {
+	return t.AppendInfo(fmt.Sprintf(format, params...))
 }
 
 // AppendError adds errors to PluginOutput StandardErr.
-func (t *Trace) AppendError(message string) {
+func (t *Trace) AppendError(message string) *Trace {
 	t.logger.Error(message)
 	t.ErrorOut.WriteString(message)
 	t.ErrorOut.WriteString("\n")
+	return t
 }
 
 // AppendErrorf adds errors to PluginOutput StandardErr with formatting parameters.
-func (t *Trace) AppendErrorf(format string, params ...interface{}) {
+func (t *Trace) AppendErrorf(format string, params ...interface{}) *Trace {
 	t.AppendError(fmt.Sprintf(format, params...))
+	return t
 }
 
 // subtraces
 
-func (t *Trace) AppendWithSubtraces(message string) {
+func (t *Trace) AppendWithSubtraces(message string) *Trace {
 	// TODO: detect subtraces
-	t.AppendInfo(message)
+	return t.AppendInfo(message)
 }
