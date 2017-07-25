@@ -32,6 +32,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/localpackages"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/packageservice"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/ssms3"
+	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/trace"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/pluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 )
@@ -78,6 +79,7 @@ func NewPlugin(pluginConfig pluginutil.PluginConfig) (*Plugin, error) {
 
 // prepareConfigurePackage ensures the packages are present with the right version for the scenario requested and returns their installers
 func prepareConfigurePackage(
+	tracer trace.Tracer,
 	context context.T,
 	config contracts.Configuration,
 	repository localpackages.Repository,
@@ -86,53 +88,70 @@ func prepareConfigurePackage(
 	output contracts.PluginOutputer) (inst installer.Installer, uninst installer.Installer, installState localpackages.InstallState, installedVersion string) {
 
 	log := context.Log()
+	prepareTrace := tracer.BeginSection(fmt.Sprintf("prepare %s", input.Action))
+	defer prepareTrace.End()
 
 	switch input.Action {
 	case InstallAction:
 		// get version information
 		var version string
 		var err error
-		version, installedVersion, installState, err = getVersionToInstall(context, repository, packageService, input)
+		trace := tracer.BeginSection("determine version to install")
+		version, installedVersion, installState, err = getVersionToInstall(tracer, context, repository, packageService, input)
 		if err != nil {
-			output.MarkAsFailed(log, fmt.Errorf("unable to determine version to install: %v", err))
+			trace.WithError(err).End()
+			output.MarkAsFailed(log, nil)
 			return
 		}
+		trace.AppendInfof("installed: %v in state %v, to install: %v", installedVersion, installState, version).End()
 
 		// ensure manifest file and package
+		trace = tracer.BeginSection("ensure package is local available")
 		inst, err = ensurePackage(context, repository, packageService, input.Name, version, config)
 		if err != nil {
-			output.MarkAsFailed(log, fmt.Errorf("unable to obtain package: %v", err))
+			trace.WithError(err).End()
+			output.MarkAsFailed(log, nil)
 			return
 		}
+		trace.End()
 
 		// if different version is installed, uninstall
+		trace = tracer.BeginSection("ensure old package is local available")
 		if installedVersion != "" && installedVersion != version {
 			uninst, err = ensurePackage(context, repository, packageService, input.Name, installedVersion, config)
 			if err != nil {
-				output.AppendErrorf(log, "unable to obtain package: %v", err)
+				trace.WithError(err)
 			}
 		}
+		trace.End()
 
 	case UninstallAction:
 		// get version information
 		var version string
 		var err error
+		trace := tracer.BeginSection("determine version to uninstall")
 		version, installState, err = getVersionToUninstall(context, repository, input)
 		installedVersion = version
 		if err != nil || version == "" {
-			output.MarkAsFailed(log, fmt.Errorf("unable to determine version to uninstall: %v", err))
+			trace.WithError(err).End()
+			output.MarkAsFailed(log, nil)
 			return
 		}
+		trace.AppendInfof("installed: %v in state: %v", version, installState).End()
 
 		// ensure manifest file and package
+		trace = tracer.BeginSection("ensure package is local available")
 		uninst, err = ensurePackage(context, repository, packageService, input.Name, version, config)
 		if err != nil {
-			output.MarkAsFailed(log, fmt.Errorf("unable to obtain package: %v", err))
+			trace.WithError(err).End()
+			output.MarkAsFailed(log, nil)
 			return
 		}
+		trace.End()
 
 	default:
-		output.MarkAsFailed(log, fmt.Errorf("unsupported action: %v", input.Action))
+		prepareTrace.AppendErrorf("unsupported action: %v", input.Action)
+		output.MarkAsFailed(log, nil)
 		return
 	}
 
@@ -186,7 +205,8 @@ func buildDownloadDelegate(context context.T, packageService packageservice.Pack
 }
 
 // getVersionToInstall decides which version to install and whether there is an existing version (that is not in the process of installing)
-func getVersionToInstall(context context.T,
+func getVersionToInstall(tracer trace.Tracer,
+	context context.T,
 	repository localpackages.Repository,
 	packageService packageservice.PackageService,
 	input *ConfigurePackagePluginInput) (version string, installedVersion string, installState localpackages.InstallState, err error) {
@@ -342,6 +362,9 @@ func (p *Plugin) execute(context context.T, config contracts.Configuration, canc
 	log := context.Log()
 	log.Info("RunCommand started with configuration ", config)
 
+	tracer := trace.NewTracer(log)
+	defer tracer.BeginSection("configurePackage").End()
+
 	res.StartDateTime = time.Now()
 	defer func() {
 		res.EndDateTime = time.Now()
@@ -365,6 +388,7 @@ func (p *Plugin) execute(context context.T, config contracts.Configuration, canc
 
 		log.Debugf("Prepare for %v %v %v", input.Action, input.Name, input.Version)
 		inst, uninst, installState, installedVersion := prepareConfigurePackage(
+			tracer,
 			context,
 			config,
 			p.localRepository,
