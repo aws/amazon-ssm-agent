@@ -18,7 +18,7 @@ package cloudwatchlogspublisher
 import (
 	"testing"
 
-	"github.com/aws/amazon-ssm-agent/agent/cloudwatchlogspublisher/mock"
+	"github.com/aws/amazon-ssm-agent/agent/agentlogstocloudwatch/cloudwatchlogspublisher/mock"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/sdkutil"
 	"github.com/aws/aws-sdk-go/service/cloudwatchlogs"

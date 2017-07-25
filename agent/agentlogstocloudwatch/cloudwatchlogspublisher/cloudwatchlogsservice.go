@@ -18,11 +18,12 @@ package cloudwatchlogspublisher
 import (
 	"errors"
 
-	"github.com/aws/amazon-ssm-agent/agent/cloudwatchlogspublisher/cloudwatchlogsinterface"
+	"github.com/aws/amazon-ssm-agent/agent/agentlogstocloudwatch/cloudwatchlogspublisher/cloudwatchlogsinterface"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/sdkutil"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/client"
+	"github.com/aws/aws-sdk-go/aws/credentials"
 	"github.com/aws/aws-sdk-go/aws/request"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/cloudwatchlogs"
@@ -52,6 +53,19 @@ func createCloudWatchClient() cloudwatchlogsinterface.CloudWatchLogsClient {
 	config = request.WithRetryer(config, client.DefaultRetryer{
 		NumMaxRetries: maxRetries,
 	})
+
+	sess := session.New(config)
+	return cloudwatchlogs.New(sess)
+}
+
+// createCloudWatchClientWithCredentials creates a client to call CloudWatchLogs APIs using credentials from the id and secret passed
+func createCloudWatchClientWithCredentials(id, secret string) cloudwatchlogsinterface.CloudWatchLogsClient {
+	config := sdkutil.AwsConfig().WithCredentials(credentials.NewStaticCredentials(id, secret, ""))
+	//Adding the AWS SDK Retrier with Exponential Backoff
+	config = request.WithRetryer(config, client.DefaultRetryer{
+		NumMaxRetries: maxRetries,
+	})
+
 	sess := session.New(config)
 	return cloudwatchlogs.New(sess)
 }
@@ -60,6 +74,15 @@ func createCloudWatchClient() cloudwatchlogsinterface.CloudWatchLogsClient {
 func NewCloudWatchLogsService() *CloudWatchLogsService {
 	cloudWatchLogsService := CloudWatchLogsService{
 		cloudWatchLogsClient: createCloudWatchClient(),
+		stopPolicy:           createCloudWatchStopPolicy(),
+	}
+	return &cloudWatchLogsService
+}
+
+// NewCloudWatchLogsServiceWithCredentials Creates a new instance of the CloudWatchLogsService using credentials from the Id and Secret passed
+func NewCloudWatchLogsServiceWithCredentials(id, secret string) *CloudWatchLogsService {
+	cloudWatchLogsService := CloudWatchLogsService{
+		cloudWatchLogsClient: createCloudWatchClientWithCredentials(id, secret),
 		stopPolicy:           createCloudWatchStopPolicy(),
 	}
 	return &cloudWatchLogsService
@@ -341,7 +364,7 @@ func (service *CloudWatchLogsService) PutLogEvents(log log.T, messages []*cloudw
 			// 400 Error, occurs when the SequenceToken has been used. Create new SequenceToken and use it again
 			// Adding Error Count to StopPolicy before retrying to ensure the retries stop after Stop Policy error counts exceed
 			service.stopPolicy.AddErrorCount(1)
-			service.retryPutWithNewSequenceToken(log, messages, logGroup, logStream)
+			return service.retryPutWithNewSequenceToken(log, messages, logGroup, logStream)
 		default:
 			// Other 400 Errors, 500 Errors even after retries. Log the error
 			log.Errorf("Error in PutLogEvents:%v", err.Error())
