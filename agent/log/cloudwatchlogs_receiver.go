@@ -18,7 +18,7 @@ package log
 import (
 	"time"
 
-	"github.com/aws/amazon-ssm-agent/agent/cloudwatchlogsqueue"
+	"github.com/aws/amazon-ssm-agent/agent/agentlogstocloudwatch/cloudwatchlogsqueue"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/service/cloudwatchlogs"
 	"github.com/cihub/seelog"
