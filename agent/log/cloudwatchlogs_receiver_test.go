@@ -17,10 +17,9 @@ package log
 
 import (
 	"testing"
-
 	"time"
 
-	"github.com/aws/amazon-ssm-agent/agent/cloudwatchlogsqueue"
+	"github.com/aws/amazon-ssm-agent/agent/agentlogstocloudwatch/cloudwatchlogsqueue"
 	"github.com/cihub/seelog"
 	"github.com/stretchr/testify/assert"
 )
@@ -28,7 +27,6 @@ import (
 func TestCloudWatchLogsReceiver(t *testing.T) {
 	xmlCustomAttrs := make(map[string]string)
 	xmlCustomAttrs["log-group"] = "LogGroup"
-	xmlCustomAttrs["log-stream"] = "LogStream"
 
 	initArgs := seelog.CustomReceiverInitArgs{
 		XmlCustomAttrs: xmlCustomAttrs,
@@ -43,7 +41,6 @@ func TestCloudWatchLogsReceiver(t *testing.T) {
 	assert.Nil(t, messages, "No Messages should be present")
 
 	assert.Equal(t, "LogGroup", cloudwatchlogsqueue.GetLogGroup(), "LogGroup Name Incorrect")
-	assert.Equal(t, "LogStream", cloudwatchlogsqueue.GetLogStream(), "LogStream Name Incorrect")
 
 	cwLogReceiver.ReceiveMessage("Message", seelog.DebugLvl, nil)
 

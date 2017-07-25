@@ -18,11 +18,11 @@ package cloudwatchlogsqueue
 import (
 	"errors"
 	"fmt"
+	"strconv"
 	"sync"
 	"time"
 
 	"github.com/Workiva/go-datastructures/queue"
-	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/aws-sdk-go/service/cloudwatchlogs"
 	"github.com/cihub/seelog"
 )
@@ -31,15 +31,15 @@ const (
 	batchSize            int64 = 10000 // The Max Batch Supported by the AWS CW Logs Push API
 	initialQueueCapacity int64 = 10    // The initial capacity of slice. Would not need to resize till this length
 	queueLimit           int64 = 10000 // The Limit of the number of messages in the queue (~40kB of queue)
-	defaultLogGroup            = appconfig.DefaultCloudWatchLogsGroup
-	defaultLogStream           = appconfig.DefaultCloudWatchLogsStream
+	defaultLogGroup            = "SSMAgentLogs"
 )
 
 // logDataFacade stores the CloudWatchLogs Destination and Queue being used to store the messages
 type logDataFacade struct {
-	logGroup     string
-	logStream    string
-	messageQueue *queue.Queue // Access to message queue is restricted from the facade
+	logGroup           string
+	logSharingEnabled  bool
+	sharingDestination string
+	messageQueue       *queue.Queue // Access to message queue is restricted from the facade
 }
 
 // CloudWatchLogsEvents event codes for changes in cloudwatchlogs publishing
@@ -89,18 +89,19 @@ func CreateCloudWatchDataInstance(initArgs seelog.CustomReceiverInitArgs) (err e
 	return
 }
 
-// setLogDestination updates the logGroup and logStream if needed
+// setLogDestination updates the logGroup if needed
 func setLogDestination(initArgs seelog.CustomReceiverInitArgs) {
-	logGroup, logStream := parseXMLConfigs(initArgs)
-	if logDataFacadeInstance.logGroup == logGroup && logDataFacadeInstance.logStream == logStream {
+	logGroup, sharingDestination, logSharingEnabled := parseXMLConfigs(initArgs)
+	if logDataFacadeInstance.logGroup == logGroup && logDataFacadeInstance.logSharingEnabled == logSharingEnabled && logDataFacadeInstance.sharingDestination == sharingDestination {
 		return
 	}
 
 	fmt.Println("Logging to LogGroup:", logGroup)
-	fmt.Println("Logging to LogStream:", logStream)
+	fmt.Println("Log Sharing:", logSharingEnabled)
 
 	logDataFacadeInstance.logGroup = logGroup
-	logDataFacadeInstance.logStream = logStream
+	logDataFacadeInstance.logSharingEnabled = logSharingEnabled
+	logDataFacadeInstance.sharingDestination = sharingDestination
 
 	// Signal the publisher that there has been a change in destination in non-blocking way
 	select {
@@ -111,18 +112,34 @@ func setLogDestination(initArgs seelog.CustomReceiverInitArgs) {
 	}
 }
 
-// parseXMLConfigs parses the logGroup and logStream from seelog config
-func parseXMLConfigs(xmlConfig seelog.CustomReceiverInitArgs) (logGroup, logStream string) {
+// parseXMLConfigs parses the logGroup from seelog config
+func parseXMLConfigs(xmlConfig seelog.CustomReceiverInitArgs) (logGroup, sharingDestination string, logSharingEnabled bool) {
 	// Getting the log group from seelog config
 	logGroup, ok := xmlConfig.XmlCustomAttrs["log-group"]
 	if !ok {
 		logGroup = defaultLogGroup
+		fmt.Println("No Log Group in Config. Will log in default group")
 	}
 
-	// Getting the log stream from seelog config
-	logStream, ok = xmlConfig.XmlCustomAttrs["log-stream"]
+	var err error
+	logSharingEnabledParam, ok := xmlConfig.XmlCustomAttrs["log-sharing-enabled"]
 	if !ok {
-		logStream = defaultLogStream
+		fmt.Println("No Sharing parameter in XML. Assuming sharing false")
+		logSharingEnabled = false
+	} else {
+		logSharingEnabled, err = strconv.ParseBool(logSharingEnabledParam)
+		if err != nil {
+			fmt.Printf("Incorrect format of log-sharing-enabled : %v", err)
+			logSharingEnabled = false
+		}
+	}
+
+	if logSharingEnabled {
+		sharingDestination, ok = xmlConfig.XmlCustomAttrs["sharing-destination"]
+		if !ok {
+			fmt.Println("No Sharing Destination in XML. Turning Sharing Off")
+			logSharingEnabled = false
+		}
 	}
 
 	return
@@ -168,9 +185,14 @@ func GetLogGroup() string {
 	return logDataFacadeInstance.logGroup
 }
 
-// GetLogStream returns the log stream intended for logging
-func GetLogStream() string {
-	return logDataFacadeInstance.logStream
+// IsLogSharingEnabled returns true if log sharing is enabled
+func IsLogSharingEnabled() bool {
+	return logDataFacadeInstance.logSharingEnabled
+}
+
+// GetSharingDestination returns the destination for sharing
+func GetSharingDestination() string {
+	return logDataFacadeInstance.sharingDestination
 }
 
 // Enqueue to add message to queue
@@ -205,10 +227,12 @@ func DestroyCloudWatchDataInstance() {
 	// Acquiring Read Write Lock on the instance. Will wait until all  running Enqueues/Dequeues have completed
 	mutex.Lock()
 	defer mutex.Unlock()
-	// Dispose the queue
-	logDataFacadeInstance.messageQueue.Dispose()
-	// Discard the old instance
-	logDataFacadeInstance = nil
+	if IsActive() {
+		// Dispose the queue
+		logDataFacadeInstance.messageQueue.Dispose()
+		// Discard the old instance
+		logDataFacadeInstance = nil
+	}
 	// Allow the creation of new instance
 	once = new(sync.Once)
 }

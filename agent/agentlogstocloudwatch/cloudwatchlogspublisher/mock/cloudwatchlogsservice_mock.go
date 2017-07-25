@@ -16,7 +16,7 @@
 package cloudwatchlogspublisher_mock
 
 import (
-	"github.com/aws/amazon-ssm-agent/agent/cloudwatchlogspublisher/cloudwatchlogsinterface"
+	"github.com/aws/amazon-ssm-agent/agent/agentlogstocloudwatch/cloudwatchlogspublisher/cloudwatchlogsinterface"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/aws-sdk-go/service/cloudwatchlogs"
 	"github.com/stretchr/testify/mock"
@@ -125,6 +125,9 @@ func (m *CloudWatchLogsServiceMock) IsLogStreamPresent(log log.T, logGroupName, 
 // GetSequenceTokenForStream mocks CloudWatchLogsService GetSequenceTokenForStream method
 func (m *CloudWatchLogsServiceMock) GetSequenceTokenForStream(log log.T, logGroupName, logStreamName string) (sequenceToken *string) {
 	args := m.Called(log, logGroupName, logStreamName)
+	if args.Get(0) == nil {
+		return nil
+	}
 	return args.Get(0).(*string)
 }
 
@@ -137,6 +140,9 @@ func (m *CloudWatchLogsServiceMock) getLogStreamDetails(log log.T, logGroupName,
 // PutLogEvents mocks CloudWatchLogsService PutLogEvents method
 func (m *CloudWatchLogsServiceMock) PutLogEvents(log log.T, messages []*cloudwatchlogs.InputLogEvent, logGroup, logStream string, sequenceToken *string) (nextSequenceToken *string, err error) {
 	args := m.Called(log, messages, logGroup, logStream, sequenceToken)
+	if args.Get(0) == nil {
+		return nil, args.Error(1)
+	}
 	return args.Get(0).(*string), args.Error(1)
 }
 
