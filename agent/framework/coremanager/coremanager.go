@@ -19,6 +19,7 @@ import (
 	"sync"
 	"time"
 
+	"github.com/aws/amazon-ssm-agent/agent/agentlogstocloudwatch/cloudwatchlogspublisher"
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
@@ -36,8 +37,9 @@ const (
 
 // CoreManager encapsulates the logic for configuring, starting and stopping core modules
 type CoreManager struct {
-	context     context.T
-	coreModules coremodules.ModuleRegistry
+	context             context.T
+	coreModules         coremodules.ModuleRegistry
+	cloudwatchPublisher *cloudwatchlogspublisher.CloudWatchPublisher
 }
 
 // NewCoreManager creates a new core module manager.
@@ -91,12 +93,16 @@ func NewCoreManager(instanceIdPtr *string, regionPtr *string, log logger.T) (cm 
 		return
 	}
 
+	// Initialize the client diagnostics
+	cloudwatchPublisher := initializeClientDiagnostics(log)
+
 	context := context.Default(log, config).With("[instanceID=" + instanceId + "]")
 	coreModules := coremodules.RegisteredCoreModules(context)
 
 	return &CoreManager{
-		context:     context,
-		coreModules: *coreModules,
+		context:             context,
+		coreModules:         *coreModules,
+		cloudwatchPublisher: cloudwatchPublisher,
 	}, nil
 }
 
@@ -176,6 +182,13 @@ func initializeBookkeepingLocations(log logger.T, instanceID string) bool {
 	}
 
 	return initStatus
+}
+
+// initializeClientDiagnostics initializes the cloudwatchlogs publisher once the agent configurations are setup so that it can connect to cloudwatch services
+func initializeClientDiagnostics(log logger.T) *cloudwatchlogspublisher.CloudWatchPublisher {
+	cloudwatchPublisher := &cloudwatchlogspublisher.CloudWatchPublisher{}
+	cloudwatchPublisher.Init(log)
+	return cloudwatchPublisher
 }
 
 // Start executes the registered core modules while watching for reboot request
