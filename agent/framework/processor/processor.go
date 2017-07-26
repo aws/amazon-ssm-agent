@@ -39,7 +39,6 @@ type ExecuterCreator func(ctx context.T) executer.Executer
 const (
 
 	// hardstopTimeout is the time before the processor will be shutdown during a hardstop
-	// TODO:  load this value from config
 	hardStopTimeout = time.Second * 4
 )
 
@@ -111,9 +110,16 @@ func (p *EngineProcessor) Start() (resChan chan contracts.DocumentResult, err er
 
 func (p *EngineProcessor) Submit(docState model.DocumentState) {
 	log := p.context.Log()
+	//TODO this is a hack, in future jobID should be managed by Processing engine itself, instead of inferring from job's internal field
+	var jobID string
+	if docState.IsAssociation() {
+		jobID = docState.DocumentInformation.AssociationID
+	} else {
+		jobID = docState.DocumentInformation.MessageID
+	}
 	//queue up the pending document
 	docmanager.PersistData(log, docState.DocumentInformation.DocumentID, docState.DocumentInformation.InstanceID, appconfig.DefaultLocationOfPending, docState)
-	err := p.sendCommandPool.Submit(log, docState.DocumentInformation.MessageID, func(cancelFlag task.CancelFlag) {
+	err := p.sendCommandPool.Submit(log, jobID, func(cancelFlag task.CancelFlag) {
 		processCommand(
 			p.context,
 			p.executerCreator,
@@ -132,7 +138,16 @@ func (p *EngineProcessor) Submit(docState model.DocumentState) {
 
 func (p *EngineProcessor) Cancel(docState model.DocumentState) {
 	log := p.context.Log()
-	err := p.cancelCommandPool.Submit(log, docState.DocumentInformation.MessageID, func(cancelFlag task.CancelFlag) {
+	//TODO this is a hack, in future jobID should be managed by Processing engine itself, instead of inferring from job's internal field
+	var jobID string
+	if docState.IsAssociation() {
+		jobID = docState.DocumentInformation.AssociationID
+	} else {
+		jobID = docState.DocumentInformation.MessageID
+	}
+	//queue up the pending document
+	docmanager.PersistData(log, docState.DocumentInformation.DocumentID, docState.DocumentInformation.InstanceID, appconfig.DefaultLocationOfPending, docState)
+	err := p.cancelCommandPool.Submit(log, jobID, func(cancelFlag task.CancelFlag) {
 		processCancelCommand(p.context, p.sendCommandPool, &docState)
 	})
 	if err != nil {
@@ -327,7 +342,6 @@ func processCancelCommand(context context.T, sendCommandPool task.Pool, docState
 		docState.DocumentInformation.DocumentStatus = contracts.ResultStatusSuccess
 	}
 
-	//TODO remove this block
 	//persist the final status of cancel-message in current folder
 	docmanager.PersistData(log,
 		docState.DocumentInformation.DocumentID,

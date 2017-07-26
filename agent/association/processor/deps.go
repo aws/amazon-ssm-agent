@@ -27,7 +27,20 @@ import (
 
 var assocParser parserService = &assocParserService{}
 var assocBookkeeping bookkeepingService = &assocBookkeepingService{}
+
+//TODO in future, platform calls will be stubbed
 var sys system = &systemImp{}
+
+// bookkeepingService represents the dependency for docmanager
+type bookkeepingService interface {
+	DeleteOldDocumentFolderLogs(log log.T, instanceID, orchestrationRootDirName string, retentionDurationHours int, isIntendedFileNameFormat func(string) bool, formOrchestrationFolderName func(string) string)
+}
+
+type assocBookkeepingService struct{}
+
+func (assocBookkeepingService) DeleteOldDocumentFolderLogs(log log.T, instanceID, orchestrationRootDirName string, retentionDurationHours int, isIntendedFileNameFormat func(string) bool, formOrchestrationFolderName func(string) string) {
+	docmanager.DeleteOldDocumentFolderLogs(log, instanceID, orchestrationRootDirName, retentionDurationHours, isIntendedFileNameFormat, formOrchestrationFolderName)
+}
 
 // system represents the dependency for platform
 type system interface {
@@ -45,24 +58,6 @@ func (systemImp) InstanceID() (string, error) {
 // IsManagedInstance wraps platform IsManagedInstance
 func (systemImp) IsManagedInstance() (bool, error) {
 	return platform.IsManagedInstance()
-}
-
-// bookkeepingService represents the dependency for docmanager
-type bookkeepingService interface {
-	PersistData(log log.T, documentID, instanceID, locationFolder string, object interface{})
-	IsDocumentCurrentlyExecuting(documentID, instanceID string) bool
-}
-
-type assocBookkeepingService struct{}
-
-// PersistData wraps docmanager PersistData
-func (assocBookkeepingService) PersistData(log log.T, documentID, instanceID, locationFolder string, object interface{}) {
-	docmanager.PersistData(log, documentID, instanceID, locationFolder, object)
-}
-
-// IsDocumentExist wraps docmanager IsDocumentExist
-func (assocBookkeepingService) IsDocumentCurrentlyExecuting(documentID, instanceID string) bool {
-	return docmanager.IsDocumentCurrentlyExecuting(documentID, instanceID)
 }
 
 // parserService represents the dependency for association parser
