@@ -56,7 +56,12 @@ func run(context context.T,
 		}
 	}()
 	docState := docStore.Load()
+	//document information summary
 	messageID := docState.DocumentInformation.MessageID
+	associationID := docState.DocumentInformation.AssociationID
+	nPlugins := len(docState.InstancePluginsInformation)
+	documentName := docState.DocumentInformation.DocumentName
+	//status channel for plugins update
 	statusChan := make(chan contracts.PluginResult)
 	var wg sync.WaitGroup
 	wg.Add(1)
@@ -77,7 +82,10 @@ func run(context context.T,
 				Status:        status,
 				PluginResults: results,
 				LastPlugin:    res.PluginName,
+				AssociationID: associationID,
 				MessageID:     messageID,
+				NPlugins:      nPlugins,
+				DocumentName:  documentName,
 			}
 			resChan <- docResult
 		}
@@ -96,9 +104,12 @@ func run(context context.T,
 		PluginResults: outputs,
 		LastPlugin:    "",
 		MessageID:     messageID,
+		AssociationID: associationID,
+		NPlugins:      nPlugins,
+		DocumentName:  documentName,
 	}
 	resChan <- result
-	//TODO documentInformation is an ambiguous struct, will be removed in future
+	//TODO runtimeStatus is redundant and will be removed in future
 	docState.DocumentInformation.DocumentStatus = status
 	docState.DocumentInformation.RuntimeStatus = runtimeStatuses
 	// persist the docState object

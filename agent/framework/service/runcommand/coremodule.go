@@ -19,8 +19,6 @@ import (
 	"strings"
 	"sync"
 
-	"time"
-
 	asocitscheduler "github.com/aws/amazon-ssm-agent/agent/association/scheduler"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
@@ -89,22 +87,14 @@ func (s *RunCommandService) ModuleRequestStop(stopType contracts.StopType) (err 
 	//second stop the message processor
 	s.processor.Stop(stopType)
 
-	//TODO Remove this part once we have Association processor moved out
-	//Stop the association processor
-	var waitTimeout time.Duration
-
-	if stopType == contracts.StopTypeSoftStop {
-		waitTimeout = time.Duration(s.context.AppConfig().Mds.StopTimeoutMillis) * time.Millisecond
-	} else {
-		waitTimeout = time.Second * 4
-	}
+	//TODO move this out once we have association moved to a different core module
 	var wg sync.WaitGroup
 	// shutdown the association task pool in a separate go routine
 	wg.Add(1)
 	go func() {
 		defer wg.Done()
 		if s.assocProcessor != nil {
-			s.assocProcessor.ShutdownAndWait(waitTimeout)
+			s.assocProcessor.ShutdownAndWait(stopType)
 		}
 	}()
 

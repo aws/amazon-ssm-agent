@@ -16,44 +16,49 @@ package processor
 
 import (
 	"fmt"
+	"path"
+	"strings"
 	"sync"
 	"time"
 
-	"github.com/aws/amazon-ssm-agent/agent/appconfig"
+	"path/filepath"
+	"regexp"
+
 	"github.com/aws/amazon-ssm-agent/agent/association/cache"
-	"github.com/aws/amazon-ssm-agent/agent/association/executer"
 	"github.com/aws/amazon-ssm-agent/agent/association/model"
 	"github.com/aws/amazon-ssm-agent/agent/association/schedulemanager"
 	"github.com/aws/amazon-ssm-agent/agent/association/schedulemanager/signal"
 	assocScheduler "github.com/aws/amazon-ssm-agent/agent/association/scheduler"
 	"github.com/aws/amazon-ssm-agent/agent/association/service"
-	"github.com/aws/amazon-ssm-agent/agent/association/taskpool"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
+	"github.com/aws/amazon-ssm-agent/agent/docmanager"
 	docModel "github.com/aws/amazon-ssm-agent/agent/docmanager/model"
+	"github.com/aws/amazon-ssm-agent/agent/framework/processor"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
-	"github.com/aws/amazon-ssm-agent/agent/task"
+	"github.com/aws/amazon-ssm-agent/agent/platform"
 	"github.com/aws/amazon-ssm-agent/agent/times"
 	"github.com/carlescere/scheduler"
 )
 
 const (
-	name                             = "Association"
-	documentWorkersLimit             = 1
-	cancelWaitDurationMillisecond    = 10000
-	documentLevelTimeOutDurationHour = 2
+	name                                    = "Association"
+	documentWorkersLimit                    = 1
+	cancelWaitDurationMillisecond           = 10000
+	documentLevelTimeOutDurationHour        = 2
+	outputMessageTemplate            string = "%v out of %v plugin%v processed, %v success, %v failed, %v timedout, %v skipped"
 )
 
 // Processor contains the logic for processing association
 type Processor struct {
 	pollJob    *scheduler.Job
 	assocSvc   service.T
-	executer   executer.DocumentExecuter
 	context    context.T
-	taskPool   taskpool.T
 	agentInfo  *contracts.AgentInfo
 	stopSignal chan bool
+	proc       processor.Processor
+	resChan    chan contracts.DocumentResult
 }
 
 var lock sync.RWMutex
@@ -62,10 +67,8 @@ var lock sync.RWMutex
 func NewAssociationProcessor(context context.T, instanceID string) *Processor {
 	assocContext := context.With("[" + name + "]")
 
-	log := assocContext.Log()
 	config := assocContext.AppConfig()
 
-	taskPool := taskpool.NewTaskPool(log, documentWorkersLimit, cancelWaitDurationMillisecond)
 	//TODO this is what service should know
 	agentInfo := contracts.AgentInfo{
 		Lang:      config.Os.Lang,
@@ -76,25 +79,33 @@ func NewAssociationProcessor(context context.T, instanceID string) *Processor {
 	}
 
 	assocSvc := service.NewAssociationService(name)
-	executer := executer.NewAssociationExecuter(assocSvc, &agentInfo)
 
+	//TODO Rename everything to service and move package to framework
+	//association has no cancel worker
+	proc := processor.NewEngineProcessor(assocContext, documentWorkersLimit, documentWorkersLimit, []docModel.DocumentType{docModel.Association})
 	return &Processor{
 		context:    assocContext,
 		assocSvc:   assocSvc,
-		taskPool:   taskPool,
-		executer:   executer,
 		agentInfo:  &agentInfo,
 		stopSignal: make(chan bool),
+		proc:       proc,
 	}
 }
 
 // StartAssociationWorker starts worker to process scheduled association
 func (p *Processor) InitializeAssociationProcessor() {
 	log := p.context.Log()
-
+	if resChan, err := p.proc.Start(); err != nil {
+		log.Errorf("starting EngineProcessor encountered error: %v", err)
+		return
+	} else {
+		p.resChan = resChan
+	}
 	log.Info("Initializing association scheduling service")
 	signal.InitializeAssociationSignalService(log, p.runScheduledAssociation)
 	log.Info("Association scheduling service initialized")
+	log.Info("Launching response handler")
+	go p.lisenToResponses()
 }
 
 // SetPollJob represents setter for PollJob
@@ -219,10 +230,7 @@ func (p *Processor) runScheduledAssociation(log log.T) {
 	signal.StopWaitTimerForNextScheduledAssociation()
 
 	if schedulemanager.IsAssociationInProgress(*scheduledAssociation.Association.AssociationId) {
-		if p.taskPool.HasJob(*scheduledAssociation.Association.AssociationId) {
-			log.Infof("Association %v is executing, system will retry later", *scheduledAssociation.Association.AssociationId)
-
-		} else if isAssociationTimedOut(scheduledAssociation) {
+		if isAssociationTimedOut(scheduledAssociation) {
 			err = fmt.Errorf("Association stuck at InProgress for longer than %v hours", documentLevelTimeOutDurationHour)
 			log.Error(err)
 			p.assocSvc.UpdateInstanceAssociationStatus(
@@ -272,13 +280,20 @@ func (p *Processor) runScheduledAssociation(log log.T) {
 		return
 	}
 
-	if err = p.persistAssociationForExecution(log, docState); err != nil {
-		err = fmt.Errorf("Encountered error while persist association %v for execution, %v",
-			docState.DocumentInformation.AssociationID,
-			err)
-		log.Error(err)
-		return
-	}
+	log = p.context.With("[associationId=" + docState.DocumentInformation.AssociationID + "]").Log()
+
+	p.assocSvc.UpdateInstanceAssociationStatus(
+		log,
+		docState.DocumentInformation.AssociationID,
+		docState.DocumentInformation.DocumentName,
+		docState.DocumentInformation.InstanceID,
+		contracts.AssociationStatusInProgress,
+		contracts.AssociationErrorCodeNoError,
+		times.ToIso8601UTC(time.Now()),
+		contracts.AssociationInProgressMessage,
+		service.NoOutputUrl)
+
+	p.proc.Submit(*docState)
 }
 
 func isAssociationTimedOut(assoc *model.InstanceAssociation) bool {
@@ -290,27 +305,9 @@ func isAssociationTimedOut(assoc *model.InstanceAssociation) bool {
 	return (*assoc.Association.LastExecutionDate).Add(documentLevelTimeOutDurationHour * time.Hour).UTC().Before(currentTime)
 }
 
-// ExecutePendingDocument wraps ExecutePendingDocument from document executer
-func (p *Processor) ExecutePendingDocument(docState *docModel.DocumentState) {
-	log := p.context.Log()
-	if err := p.executer.ExecutePendingDocument(p.context, p.taskPool, docState); err != nil {
-		log.Error("Failed to execute pending documents ", err)
-	}
-}
-
-// ExecuteInProgressDocument wraps ExecuteInProgressDocument from document executer
-func (p *Processor) ExecuteInProgressDocument(docState *docModel.DocumentState, cancelFlag task.CancelFlag) {
-	p.executer.ExecuteInProgressDocument(p.context, docState, cancelFlag)
-}
-
-// SubmitTask wraps SubmitTask for taskpool
-func (p *Processor) SubmitTask(log log.T, jobID string, job task.Job) error {
-	return p.taskPool.Submit(log, jobID, job)
-}
-
-// ShutdownAndWait wraps the ShutdownAndWait for task pool
-func (p *Processor) ShutdownAndWait(timeout time.Duration) {
-	p.taskPool.ShutdownAndWait(timeout)
+// ShutdownAndWait Stops the contained processor
+func (p *Processor) ShutdownAndWait(stopType contracts.StopType) {
+	p.proc.Stop(stopType)
 }
 
 // Stop stops the association processor and stops the poll job
@@ -349,7 +346,7 @@ func (p *Processor) parseAssociation(rawData *model.InstanceAssociation) (*docMo
 		log.Debugf("Failed to parse association, %v", err)
 		return &docState, err
 	}
-	//Data format persisted in Current Folder is defined by the struct - DocumentState
+
 	if docState, err = assocParser.InitializeDocumentState(context, document, rawData); err != nil {
 		return &docState, err
 	}
@@ -380,27 +377,200 @@ func (p *Processor) parseAssociation(rawData *model.InstanceAssociation) (*docMo
 	return &docState, nil
 }
 
-// persistAssociationForExecution saves the document to pending folder and submit it to the task pool
-func (p *Processor) persistAssociationForExecution(log log.T, docState *docModel.DocumentState) error {
-	log = p.context.With("[associationId=" + docState.DocumentInformation.AssociationID + "]").Log()
-	log.Info("Persisting interim state in current execution folder")
+// pluginExecutionReport allow engine to update progress after every plugin execution
+func (r *Processor) pluginExecutionReport(
+	log log.T,
+	associationID string,
+	pluginID string,
+	outputs map[string]*contracts.PluginResult,
+	totalNumberOfPlugins int) {
 
-	assocBookkeeping.PersistData(log,
-		docState.DocumentInformation.DocumentID,
-		docState.DocumentInformation.InstanceID,
-		appconfig.DefaultLocationOfPending,
-		docState)
+	_, _, runtimeStatuses := docmanager.DocumentResultAggregator(log, pluginID, outputs)
+	outputContent, err := jsonutil.Marshal(runtimeStatuses)
+	if err != nil {
+		log.Error("could not marshal plugin outputs! ", err)
+		return
+	}
+	log.Info("Update instance association status with results ", jsonutil.Indent(outputContent))
 
-	p.assocSvc.UpdateInstanceAssociationStatus(
+	// Legacy association api does not support plugin level status update
+	// it returns error for multiple update with same status
+	if !r.assocSvc.IsInstanceAssociationApiMode() {
+		return
+	}
+
+	instanceID, err := platform.InstanceID()
+	if err != nil {
+		log.Error("failed to load instance id ", err)
+		return
+	}
+
+	executionSummary, outputUrl := buildOutput(runtimeStatuses, totalNumberOfPlugins)
+
+	r.assocSvc.UpdateInstanceAssociationStatus(
 		log,
-		docState.DocumentInformation.AssociationID,
-		docState.DocumentInformation.DocumentName,
-		docState.DocumentInformation.InstanceID,
+		associationID,
+		"",
+		instanceID,
 		contracts.AssociationStatusInProgress,
 		contracts.AssociationErrorCodeNoError,
 		times.ToIso8601UTC(time.Now()),
-		contracts.AssociationInProgressMessage,
-		service.NoOutputUrl)
+		executionSummary,
+		outputUrl)
+}
 
-	return p.executer.ExecutePendingDocument(p.context, p.taskPool, docState)
+// associationExecutionReport update the status for association
+func (r *Processor) associationExecutionReport(
+	log log.T,
+	associationID string,
+	associationName string,
+	outputs map[string]*contracts.PluginResult,
+	totalNumberOfPlugins int,
+	errorCode string,
+	associationStatus string) {
+
+	_, _, runtimeStatuses := docmanager.DocumentResultAggregator(log, "", outputs)
+	runtimeStatusesContent, err := jsonutil.Marshal(runtimeStatuses)
+	if err != nil {
+		log.Error("could not marshal plugin outputs ", err)
+		return
+	}
+	log.Info("Update instance association status with results ", jsonutil.Indent(runtimeStatusesContent))
+
+	executionSummary, outputUrl := buildOutput(runtimeStatuses, totalNumberOfPlugins)
+	instanceID, _ := sys.InstanceID()
+	r.assocSvc.UpdateInstanceAssociationStatus(
+		log,
+		associationID,
+		associationName,
+		instanceID,
+		associationStatus,
+		errorCode,
+		times.ToIso8601UTC(time.Now()),
+		executionSummary,
+		outputUrl)
+}
+
+func (r *Processor) lisenToResponses() {
+	log := r.context.Log()
+	for res := range r.resChan {
+		if res.LastPlugin != "" {
+			log.Infof("update association status upon plugin $v completion", res.LastPlugin)
+			r.pluginExecutionReport(log, res.AssociationID, res.LastPlugin, res.PluginResults, res.NPlugins)
+		}
+		if res.Status == contracts.ResultStatusSuccessAndReboot {
+			signal.StopExecutionSignal()
+			return
+		}
+		//send asociation completion response
+		if res.LastPlugin == "" {
+			log.Debug("Association execution completion: ", res.AssociationID)
+			log.Debug("Association execution status is ", res.Status)
+			if res.Status == contracts.ResultStatusFailed {
+				r.associationExecutionReport(
+					log,
+					res.AssociationID,
+					res.DocumentName,
+					res.PluginResults,
+					res.NPlugins,
+					contracts.AssociationErrorCodeExecutionError,
+					contracts.AssociationStatusFailed)
+
+			} else if res.Status == contracts.ResultStatusSuccess ||
+				res.Status == contracts.AssociationStatusTimedOut ||
+				res.Status == contracts.ResultStatusCancelled ||
+				res.Status == contracts.ResultStatusSkipped {
+				// Association should only update status when it's Failed, Success, TimedOut, Cancelled or Skipped as Final status
+				r.associationExecutionReport(
+					log,
+					res.AssociationID,
+					res.DocumentName,
+					res.PluginResults,
+					res.NPlugins,
+					contracts.AssociationErrorCodeNoError,
+					string(res.Status))
+			}
+			instanceID, _ := sys.InstanceID()
+			//clean association logs once the document state is moved to completed
+			//clean completed document state files and orchestration dirs. Takes care of only files generated by association in the folder
+			go assocBookkeeping.DeleteOldDocumentFolderLogs(log,
+				instanceID,
+				r.context.AppConfig().Agent.OrchestrationRootDir,
+				r.context.AppConfig().Ssm.AssociationLogsRetentionDurationHours,
+				isAssociationLogFile,
+				formAssociationOrchestrationFolder)
+			//TODO move this part to service
+			schedulemanager.UpdateNextScheduledDate(log, res.AssociationID)
+			signal.ExecuteAssociation(log)
+
+		}
+
+	}
+}
+
+// isAssociationLogFile checks whether the file name passed is of the format of Association Files
+func isAssociationLogFile(fileName string) (matched bool) {
+	matched, _ = regexp.MatchString("^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}\\.[0-9]{4}-[0-9]{2}-[0-9]{2}.*$", fileName)
+	return
+}
+
+// formAssociationOrchestrationFolder forms the orchestration dir name from the document state file
+func formAssociationOrchestrationFolder(documentStateFileName string) string {
+	splitFileName := strings.SplitN(documentStateFileName, ".", 2)
+	if len(splitFileName) == 2 {
+		assocID := splitFileName[0]
+		isoDashUTCFormattedName := splitFileName[1]
+		return filepath.Join(assocID, isoDashUTCFormattedName)
+	}
+	return documentStateFileName
+}
+
+// buildOutput build the output message for association update
+// TODO: totalNumberOfPlugins is no longer needed, we can get the same value from len(runtimeStatuses)
+func buildOutput(runtimeStatuses map[string]*contracts.PluginRuntimeStatus, totalNumberOfPlugins int) (outputSummary, outputUrl string) {
+	plural := ""
+	if totalNumberOfPlugins > 1 {
+		plural = "s"
+	}
+
+	completed := len(filterByStatus(runtimeStatuses, func(status contracts.ResultStatus) bool {
+		return status != ""
+	}))
+
+	success := len(filterByStatus(runtimeStatuses, func(status contracts.ResultStatus) bool {
+		return status == contracts.ResultStatusPassedAndReboot ||
+			status == contracts.ResultStatusSuccessAndReboot ||
+			status == contracts.ResultStatusSuccess
+	}))
+	failed := len(filterByStatus(runtimeStatuses, func(status contracts.ResultStatus) bool {
+		return status == contracts.ResultStatusFailed
+	}))
+	timedOut := len(filterByStatus(runtimeStatuses, func(status contracts.ResultStatus) bool {
+		return status == contracts.ResultStatusTimedOut
+	}))
+	skipped := len(filterByStatus(runtimeStatuses, func(status contracts.ResultStatus) bool {
+		return status == contracts.ResultStatusSkipped
+	}))
+
+	for _, value := range runtimeStatuses {
+		paths := strings.Split(value.OutputS3KeyPrefix, "/")
+		for _, p := range paths[:len(paths)-1] {
+			outputUrl = path.Join(outputUrl, p)
+		}
+		outputUrl = path.Join(value.OutputS3BucketName, outputUrl)
+		break
+	}
+
+	return fmt.Sprintf(outputMessageTemplate, completed, totalNumberOfPlugins, plural, success, failed, timedOut, skipped), outputUrl
+}
+
+// filterByStatus represents the helper method that filter pluginResults base on ResultStatus
+func filterByStatus(runtimeStatuses map[string]*contracts.PluginRuntimeStatus, predicate func(contracts.ResultStatus) bool) map[string]*contracts.PluginRuntimeStatus {
+	result := make(map[string]*contracts.PluginRuntimeStatus)
+	for name, value := range runtimeStatuses {
+		if predicate(value.Status) {
+			result[name] = value
+		}
+	}
+	return result
 }

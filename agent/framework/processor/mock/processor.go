@@ -12,7 +12,7 @@ type MockedProcessor struct {
 
 func (m *MockedProcessor) Start() (chan contracts.DocumentResult, error) {
 	args := m.Called()
-	return args.Get(1).(chan contracts.DocumentResult), args.Error(0)
+	return args.Get(0).(chan contracts.DocumentResult), args.Error(1)
 }
 
 func (m *MockedProcessor) Stop(stopType contracts.StopType) {
