@@ -147,6 +147,7 @@ func CanGetS3Object(log log.T, amazonS3URL s3util.AmazonS3URL) bool {
 	var res *s3.HeadObjectOutput
 	var err error
 	if res, err = s3client.HeadObject(params); err != nil {
+		log.Debugf("CanGetS3Object err: %v", err)
 		return false
 	}
 	// Even with versioning on, a deleted object should return a 404, but to be certain, exclude delete markers explicitly
