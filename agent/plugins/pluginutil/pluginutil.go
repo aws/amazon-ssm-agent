@@ -36,7 +36,7 @@ import (
 
 const (
 	defaultExecutionTimeoutInSeconds = 3600
-	maxExecutionTimeoutInSeconds     = 28800
+	maxExecutionTimeoutInSeconds     = 172800
 	minExecutionTimeoutInSeconds     = 5
 )
 
