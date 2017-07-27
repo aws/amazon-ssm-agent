@@ -243,7 +243,7 @@ func (repo *localRepository) GetInventoryData(context context.T) []model.Applica
 
 // filePath will return the manifest file path for a package name and package version
 func (r *localRepository) filePath(packageName string, packageVersion string) string {
-	return filepath.Join(r.manifestCachePath, fmt.Sprintf("%s_%s.json", packageName, packageVersion))
+	return filepath.Join(r.manifestCachePath, fmt.Sprintf("%s_%s.json", normalizeDirectory(packageName), normalizeDirectory(packageVersion)))
 }
 
 // ReadManifest will return the manifest data for a given package name and package version from the cache
