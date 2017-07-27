@@ -100,7 +100,7 @@ func TestValidateExecutionTimeout(t *testing.T) {
 	assert.Equal(t, defaultExecutionTimeoutInSeconds, num)
 
 	// Check with a value more than max value
-	input = 28900
+	input = 176400
 	num = ValidateExecutionTimeout(logger, input)
 	assert.Equal(t, defaultExecutionTimeoutInSeconds, num)
 
