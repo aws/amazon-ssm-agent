@@ -41,12 +41,12 @@ type MockDocumentStore struct {
 	mock.Mock
 }
 
-func (m MockDocumentStore) Save(docState model.DocumentState) {
+func (m *MockDocumentStore) Save(docState model.DocumentState) {
 	m.Called(docState)
 	return
 }
 
-func (m MockDocumentStore) Load() model.DocumentState {
+func (m *MockDocumentStore) Load() model.DocumentState {
 	args := m.Called()
 	return args.Get(0).(model.DocumentState)
 }
