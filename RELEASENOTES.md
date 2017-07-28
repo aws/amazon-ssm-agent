@@ -1,5 +1,12 @@
 Latest
 ===============
+- Added support for uploading agent logs to CloudWatch for SSM Agent diagnostics
+- Added additional gatherers for inventory
+- Added configuration compliance support for association
+- Various bug fixes
+
+2.0.879.0
+===============
 - Add capability to configure custom s3 endpoint for the agent
 - Various bug fixes
 
@@ -65,7 +72,7 @@ Latest
 
 2.0.730.0
 ===============
-- Fixed issues with agent starting before network is ready on systemd systems. 
+- Fixed issues with agent starting before network is ready on systemd systems.
 
 2.0.716.0
 ================
@@ -79,7 +86,7 @@ Latest
 2.0.682.0
 ================
 - Added support for installing Docker on Linux
-- Removed the upper limit for the maximum number of parallel executing documents on the agent (previously the max was 10) 
+- Removed the upper limit for the maximum number of parallel executing documents on the agent (previously the max was 10)
 You can configure this number by setting the “CommandWorkerLimit” attribute in amazon-ssm-agent.json file
 
 2.0.672
