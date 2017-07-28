@@ -41,9 +41,9 @@ checkstyle::
 coverage:: build-linux
 	$(BGO_SPACE)/Tools/src/coverage.sh github.com/aws/amazon-ssm-agent/agent/...
 
-build:: build-linux build-freebsd build-windows build-linux-386 build-windows-386
+build:: build-linux build-freebsd build-windows build-linux-386 build-windows-386 build-arm
 
-prepack:: cpy-plugins prepack-linux prepack-linux-386 prepack-windows prepack-windows-386
+prepack:: cpy-plugins prepack-linux prepack-linux-386 prepack-windows prepack-windows-386 prepack-arm
 
 package:: create-package-folder package-linux package-windows
 
@@ -171,6 +171,16 @@ build-windows-386: checkstyle copy-src pre-build
 	GOOS=windows GOARCH=386 go build -ldflags "-s -w" -o $(BGO_SPACE)/bin/windows_386/ssm-cli.exe -v \
         $(BGO_SPACE)/agent/cli-main/cli-main.go
 
+.PHONY: build-arm
+build-arm: checkstyle copy-src pre-build
+	@echo "Build for ARM platforms"
+	GOOS=linux GOARCH=arm $(GO_BUILD) -ldflags "-s -w" -o $(BGO_SPACE)/bin/linux_arm/amazon-ssm-agent -v \
+	    $(BGO_SPACE)/agent/agent.go $(BGO_SPACE)/agent/agent_unix.go $(BGO_SPACE)/agent/agent_parser.go
+	GOOS=linux GOARCH=arm $(GO_BUILD) -ldflags "-s -w" -o $(BGO_SPACE)/bin/linux_arm/updater -v \
+	    $(BGO_SPACE)/agent/update/updater/updater.go $(BGO_SPACE)/agent/update/updater/updater_unix.go
+	GOOS=linux GOARCH=arm $(GO_BUILD) -ldflags "-s -w" -o $(BGO_SPACE)/bin/linux_arm/ssm-cli -v \
+	    $(BGO_SPACE)/agent/cli-main/cli-main.go
+
 .PHONY: copy-src
 copy-src:
 ifeq ($(BRAZIL_BUILD), true)
@@ -244,13 +254,23 @@ prepack-windows-386:
 	$(COPY) $(BGO_SPACE)/bin/seelog_windows.xml.template $(BGO_SPACE)/bin/prepacked/windows_386/seelog.xml.template
 	$(COPY) $(BGO_SPACE)/bin/LICENSE $(BGO_SPACE)/bin/prepacked/windows_386/LICENSE
 
+.PHONY: prepack-arm
+prepack-arm:
+	mkdir -p $(BGO_SPACE)/bin/prepacked/linux_arm
+	$(COPY) $(BGO_SPACE)/bin/linux_arm/amazon-ssm-agent $(BGO_SPACE)/bin/prepacked/linux_arm/amazon-ssm-agent
+	$(COPY) $(BGO_SPACE)/bin/linux_arm/updater $(BGO_SPACE)/bin/prepacked/linux_arm/updater
+	$(COPY) $(BGO_SPACE)/bin/linux_arm/ssm-cli $(BGO_SPACE)/bin/prepacked/linux_arm/ssm-cli
+	$(COPY) $(BGO_SPACE)/bin/amazon-ssm-agent.json.template $(BGO_SPACE)/bin/prepacked/linux_arm/amazon-ssm-agent.json.template
+	$(COPY) $(BGO_SPACE)/bin/seelog_unix.xml $(BGO_SPACE)/bin/prepacked/linux_arm/seelog.xml
+	$(COPY) $(BGO_SPACE)/bin/LICENSE $(BGO_SPACE)/bin/prepacked/linux_arm/LICENSE
+
 .PHONY: create-package-folder
 create-package-folder:
 	mkdir -p $(BGO_SPACE)/bin/updates/amazon-ssm-agent/`cat $(BGO_SPACE)/VERSION`/
 	mkdir -p $(BGO_SPACE)/bin/updates/amazon-ssm-agent-updater/`cat $(BGO_SPACE)/VERSION`/
 
 .PHONY: package-linux
-package-linux: package-rpm-386 package-deb-386 package-rpm package-deb
+package-linux: package-rpm-386 package-deb-386 package-rpm package-deb package-deb-arm
 	$(BGO_SPACE)/Tools/src/create_linux_package.sh
 
 .PHONY: package-windows
@@ -281,6 +301,10 @@ package-deb-386: create-package-folder
 .PHONY: package-win-386
 package-win-386: create-package-folder
 	$(BGO_SPACE)/Tools/src/create_win_386.sh
+
+.PHONY: package-deb-arm
+package-deb-arm: create-package-folder
+	$(BGO_SPACE)/Tools/src/create_deb_arm.sh
 
 .PHONY: get-tools
 get-tools:
