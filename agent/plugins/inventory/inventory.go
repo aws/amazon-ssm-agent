@@ -37,6 +37,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/plugins/inventory/gatherers/application"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/inventory/gatherers/awscomponent"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/inventory/gatherers/custom"
+	"github.com/aws/amazon-ssm-agent/agent/plugins/inventory/gatherers/file"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/inventory/gatherers/instancedetailedinformation"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/inventory/gatherers/network"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/inventory/gatherers/windowsUpdate"
@@ -71,6 +72,7 @@ type PluginInput struct {
 	Applications                string
 	AWSComponents               string
 	NetworkConfig               string
+	Files                       string
 	WindowsUpdates              string
 	InstanceDetailedInformation string
 	CustomInventory             string
@@ -79,6 +81,7 @@ type PluginInput struct {
 
 // decoupling schedulemanager.Schedules() for easy testability
 var associationsProvider = getCurrentAssociations
+var pluginPersister = pluginutil.PersistPluginInformationToCurrent
 
 func getCurrentAssociations() []*associateModel.InstanceAssociation {
 	return schedulemanager.Schedules()
@@ -305,6 +308,20 @@ func (p *Plugin) validatePredefinedGatherer(context context.T, collectionPolicy,
 	return
 }
 
+func (p *Plugin) validateGathererWithFilters(context context.T, collectionPolicy, gathererName string, filters string) (status bool, gatherer gatherers.T, policy model.Config, err error) {
+	if filters != "" {
+		if status, gatherer, err = p.CanGathererRun(context, gathererName); err != nil {
+			return
+		}
+
+		if status {
+			policy = model.Config{Collection: collectionPolicy, Filters: filters}
+		}
+	}
+
+	return
+}
+
 func (p *Plugin) validateCustomGatherer(context context.T, collectionPolicy, location string) (status bool, gatherer gatherers.T, policy model.Config, err error) {
 
 	if collectionPolicy == model.Enabled {
@@ -348,6 +365,12 @@ func (p *Plugin) ValidateInventoryInput(context context.T, input PluginInput) (c
 
 	//checking awscomponents gatherer
 	if canGathererRun, gatherer, cfg, err = p.validatePredefinedGatherer(context, input.AWSComponents, awscomponent.GathererName); err != nil {
+		return
+	} else if canGathererRun {
+		configuredGatherers[gatherer] = cfg
+	}
+
+	if canGathererRun, gatherer, cfg, err = p.validateGathererWithFilters(context, "", file.GathererName, input.Files); err != nil {
 		return
 	} else if canGathererRun {
 		configuredGatherers[gatherer] = cfg
@@ -399,15 +422,19 @@ func (p *Plugin) RunGatherers(gatherers map[gatherers.T]model.Config) (items []m
 	for gatherer, config := range gatherers {
 		name := gatherer.Name()
 		log.Infof("Invoking gatherer - %v", name)
+		start := time.Now()
 
 		if gItems, err = gatherer.Run(p.context, config); err != nil {
 			err = fmt.Errorf("Encountered error while executing %v. Error - %v", name, err.Error())
 			break
 
 		} else {
+			elapsed := time.Since(start)
+			log.Infof("execution time for gatherer - %v: %s", name, elapsed)
+
 			items = append(items, gItems...)
 
-			//TODO: Each gather shall check each item's size and stop collecting if size exceed immediately
+			//TODO: Each gatherer shall check each item's size and stop collecting if size exceed immediately
 			//TODO: only check the total item size at this function, whenever total size exceed, stop
 			//TODO: immediately and raise association error
 			//return error if collected data breaches size limit
@@ -433,10 +460,12 @@ func (p *Plugin) VerifyInventoryDataSize(item model.Item, items []model.Item) bo
 	itemB, _ := json.Marshal(item)
 	itemSize = float32(len(itemB))
 
+	log.Infof("Size (Bytes) of %v - %v", item.Name, itemSize)
 	log.Debugf("Size (Bytes) of %v - %v", item.Name, itemSize)
 
 	itemsSizeB, _ := json.Marshal(items)
 	itemsSize = float32(len(itemsSizeB))
+
 	log.Debugf("Total size (Bytes) of inventory items after including %v - %v", item.Name, itemsSize)
 
 	//Refer to https://wiki.ubuntu.com/UnitsPolicy regarding KiB to bytes conversion.
