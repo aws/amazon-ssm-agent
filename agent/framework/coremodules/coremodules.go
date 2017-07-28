@@ -17,9 +17,9 @@ package coremodules
 import (
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
+	"github.com/aws/amazon-ssm-agent/agent/framework/service/runcommand"
 	"github.com/aws/amazon-ssm-agent/agent/health"
 	"github.com/aws/amazon-ssm-agent/agent/longrunning/manager"
-	message "github.com/aws/amazon-ssm-agent/agent/message/processor"
 	"github.com/aws/amazon-ssm-agent/agent/startup"
 )
 
@@ -40,9 +40,9 @@ func RegisteredCoreModules(context context.T) *ModuleRegistry {
 // register core modules here
 func loadCoreModules(context context.T) {
 	registeredCoreModules = append(registeredCoreModules, health.NewHealthCheck(context))
-	registeredCoreModules = append(registeredCoreModules, message.NewMdsProcessor(context))
+	registeredCoreModules = append(registeredCoreModules, runcommand.NewMDSService(context))
 
-	if offlineProcessor, err := message.NewOfflineProcessor(context); err == nil {
+	if offlineProcessor, err := runcommand.NewOfflineService(context); err == nil {
 		registeredCoreModules = append(registeredCoreModules, offlineProcessor)
 	} else {
 		context.Log().Errorf("Failed to start offline command document processor")

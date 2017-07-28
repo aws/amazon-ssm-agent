@@ -27,9 +27,9 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	docModel "github.com/aws/amazon-ssm-agent/agent/docmanager/model"
 	"github.com/aws/amazon-ssm-agent/agent/docparser"
+	messageContracts "github.com/aws/amazon-ssm-agent/agent/framework/service/runcommand/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
-	messageContracts "github.com/aws/amazon-ssm-agent/agent/message/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/times"
 )
 
@@ -113,6 +113,7 @@ func newDocumentInfo(rawData *model.InstanceAssociation, payload *messageContrac
 	rawData.DocumentID = documentInfo.DocumentID
 	documentInfo.CreatedDate = times.ToIso8601UTC(rawData.CreateDate)
 	documentInfo.DocumentName = payload.DocumentName
+	documentInfo.DocumentVersion = *(rawData.Association.DocumentVersion)
 	documentInfo.IsCommand = false
 	documentInfo.DocumentStatus = contracts.ResultStatusInProgress
 	documentInfo.DocumentTraceOutput = ""

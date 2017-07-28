@@ -379,14 +379,24 @@ func (p *Plugin) execute(context context.T, config contracts.Configuration, canc
 		// if already failed or already installed and valid, do not execute install
 		if out.Status != contracts.ResultStatusFailed && !checkAlreadyInstalled(context, p.localRepository, installedVersion, installState, inst, uninst, &out) {
 			log.Debugf("Calling execute, current status %v", out.Status)
-			result := executeConfigurePackage(context,
+			executeConfigurePackage(context,
 				p.localRepository,
 				inst,
 				uninst,
 				installState,
 				&out)
 			if !out.Status.IsReboot() {
-				packageService.ReportResult(context.Log(), result)
+				err := packageService.ReportResult(context.Log(), packageservice.PackageResult{
+					Exitcode:               int64(out.ExitCode),
+					Operation:              input.Action,
+					PackageName:            input.Name,
+					PreviousPackageVersion: installedVersion,
+					Timing:                 1,
+					Version:                input.Version,
+				})
+				if err != nil {
+					out.AppendErrorf(log, "Error reporting results: %v", err.Error())
+				}
 			}
 		}
 

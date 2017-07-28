@@ -13,6 +13,7 @@
     "CreateResourceDataSync": null,
     "DeleteActivation": "<p>Deletes an activation. You are not required to delete an activation. If you delete an activation, you can no longer use it to register additional managed instances. Deleting an activation does not de-register managed instances. You must manually de-register managed instances.</p>",
     "DeleteAssociation": "<p>Disassociates the specified Systems Manager document from the specified instance.</p> <p>When you disassociate a document from an instance, it does not change the configuration of the instance. To change the configuration state of an instance after you disassociate a document, you must create a new document with the desired configuration and associate it with the instance.</p>",
+    "DeleteCommands": null,
     "DeleteDocument": "<p>Deletes the Systems Manager document and all instance associations to the document.</p> <p>Before you delete the document, we recommend that you use <a>DeleteAssociation</a> to disassociate all instances that are associated with the document.</p>",
     "DeleteMaintenanceWindow": "<p>Deletes a Maintenance Window.</p>",
     "DeleteParameter": "<p>Delete a parameter from the system.</p>",
@@ -26,7 +27,9 @@
     "DescribeActivations": "<p>Details about the activation, including: the date and time the activation was created, the expiration date, the IAM role assigned to the instances in the activation, and the number of instances activated by this registration.</p>",
     "DescribeAssociation": "<p>Describes the associations for the specified Systems Manager document or instance.</p>",
     "DescribeAutomationActions": null,
+    "DescribeAutomationExecutionParameters": null,
     "DescribeAutomationExecutions": "<p>Provides details about all active and terminated Automation executions.</p>",
+    "DescribeAutomationStepExecutions": null,
     "DescribeAvailablePatches": "<p>Lists all patches that could possibly be included in a patch baseline.</p>",
     "DescribeDocument": "<p>Describes the specified SSM document.</p>",
     "DescribeDocumentInternal": null,
@@ -76,10 +79,12 @@
     "GetParametersByPath": null,
     "GetPatchBaseline": "<p>Retrieves information about a patch baseline.</p>",
     "GetPatchBaselineForPatchGroup": "<p>Retrieves the patch baseline that should be used for the specified patch group.</p>",
+    "ListAssociationVersions": null,
     "ListAssociations": "<p>Lists the associations for the specified Systems Manager document or instance.</p>",
     "ListCommandInvocations": "<p>An invocation is copy of a command sent to a specific instance. A command can apply to one or more instances. A command invocation applies to one instance. For example, if a user executes SendCommand against three instances, then a command invocation is created for each requested instance ID. ListCommandInvocations provide status about command execution.</p>",
     "ListCommands": "<p>Lists the commands requested by users of the AWS account.</p>",
     "ListComplianceItems": null,
+    "ListComplianceSummaries": null,
     "ListDocumentVersions": "<p>List all versions for a document.</p>",
     "ListDocuments": "<p>Describes one or more of your SSM documents.</p>",
     "ListInstanceAssociations": null,
@@ -88,7 +93,7 @@
     "ListResourceDataSync": null,
     "ListTagsForResource": "<p>Returns a list of the tags assigned to the specified resource.</p>",
     "ModifyDocumentPermission": "<p>Shares a Systems Manager document publicly or privately. If you share a document privately, you must specify the AWS user account IDs for those people who can use the document. If you share a document publicly, you must specify <i>All</i> as the account ID.</p>",
-    "PutComplianceItem": null,
+    "PutComplianceItems": null,
     "PutConfigurePackageResult": null,
     "PutInventory": "<p>Bulk update custom inventory items on one more instance. The request adds an inventory item, if it doesn't already exist, or updates an inventory item, if it does exist.</p>",
     "PutParameter": "<p>Add one or more paramaters to the system.</p>",
@@ -101,6 +106,7 @@
     "RegisterTaskWithMaintenanceWindowPrivate": null,
     "RemoveTagsFromResource": "<p>Removes all tags from the specified resource.</p>",
     "RequestManagedInstanceRoleToken": null,
+    "SendAutomationSignal": null,
     "SendCommand": "<p>Executes commands on one or more remote instances.</p>",
     "StartAssociationsOnce": null,
     "StartAutomationExecution": "<p>Initiates execution of an Automation document.</p>",
@@ -316,12 +322,14 @@
         "Association$AssociationId": "<p>The ID created by the system when you create an association. An association is a binding between a document and a set of targets with a schedule.</p>",
         "AssociationDescription$AssociationId": "<p>The association ID.</p>",
         "AssociationIdList$member": null,
+        "AssociationVersionInfo$AssociationId": null,
         "DeleteAssociationRequest$AssociationId": "<p>The association ID that you want to delete.</p>",
         "DescribeAssociationRequest$AssociationId": "<p>The association ID for which you want information.</p>",
         "DescribeInstanceAssociationsStatusRequest$AssociationId": null,
         "InstanceAssociation$AssociationId": "<p>The association ID.</p>",
         "InstanceAssociationStatusInfo$AssociationId": "<p>The association ID.</p>",
         "InstanceAssociationSummary$AssociationId": null,
+        "ListAssociationVersionsRequest$AssociationId": null,
         "UpdateAssociationRequest$AssociationId": "<p>The ID of the association you want to update. </p>",
         "UpdateInstanceAssociationStatusRequest$AssociationId": null
       }
@@ -341,6 +349,18 @@
       "base": null,
       "refs": {
         "ListAssociationsResult$Associations": "<p>The associations.</p>"
+      }
+    },
+    "AssociationName": {
+      "base": null,
+      "refs": {
+        "Association$AssociationName": null,
+        "AssociationDescription$AssociationName": null,
+        "AssociationVersionInfo$AssociationName": null,
+        "CreateAssociationBatchRequestEntry$AssociationName": null,
+        "CreateAssociationRequest$AssociationName": null,
+        "InstanceAssociationStatusInfo$AssociationName": null,
+        "UpdateAssociationRequest$AssociationName": null
       }
     },
     "AssociationOverview": {
@@ -374,6 +394,7 @@
       "refs": {
         "Association$AssociationVersion": null,
         "AssociationDescription$AssociationVersion": null,
+        "AssociationVersionInfo$AssociationVersion": null,
         "DescribeAssociationRequest$AssociationVersion": null,
         "DescribeInstanceAssociationsStatusRequest$AssociationVersion": null,
         "InstanceAssociation$AssociationVersion": null,
@@ -381,6 +402,23 @@
         "InstanceAssociationSummary$AssociationVersion": null,
         "UpdateAssociationRequest$AssociationVersion": null,
         "UpdateInstanceAssociationStatusRequest$AssociationVersion": null
+      }
+    },
+    "AssociationVersionInfo": {
+      "base": null,
+      "refs": {
+        "AssociationVersionList$member": null
+      }
+    },
+    "AssociationVersionLimitExceeded": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "AssociationVersionList": {
+      "base": null,
+      "refs": {
+        "ListAssociationVersionsResult$AssociationVersions": null
       }
     },
     "AttributeName": {
@@ -480,7 +518,8 @@
     "AutomationExecutionFilterList": {
       "base": null,
       "refs": {
-        "DescribeAutomationExecutionsRequest$Filters": "<p>Filters used to limit the scope of executions that are requested.</p>"
+        "DescribeAutomationExecutionsRequest$Filters": "<p>Filters used to limit the scope of executions that are requested.</p>",
+        "DescribeAutomationStepExecutionsRequest$Filters": null
       }
     },
     "AutomationExecutionFilterValue": {
@@ -500,7 +539,9 @@
       "refs": {
         "AutomationExecution$AutomationExecutionId": "<p>The execution ID.</p>",
         "AutomationExecutionMetadata$AutomationExecutionId": "<p>The execution ID.</p>",
+        "DescribeAutomationExecutionParametersRequest$AutomationExecutionId": null,
         "GetAutomationExecutionRequest$AutomationExecutionId": "<p>The unique identifier for an existing automation execution to examine. The execution ID is returned by StartAutomationExecution when the execution of an Automation document is initiated.</p>",
+        "SendAutomationSignalRequest$AutomationExecutionId": null,
         "StartAutomationExecutionResult$AutomationExecutionId": "<p>The unique ID of a newly scheduled automation execution.</p>",
         "StopAutomationExecutionRequest$AutomationExecutionId": "<p>The execution ID of the Automation to stop.</p>"
       }
@@ -535,10 +576,23 @@
         "StepExecution$StepStatus": "<p>The execution status for this step. Valid values include: Pending, InProgress, Success, Cancelled, Failed, and TimedOut.</p>"
       }
     },
+    "AutomationParameter": {
+      "base": null,
+      "refs": {
+        "AutomationParameterList$member": null
+      }
+    },
     "AutomationParameterKey": {
       "base": null,
       "refs": {
+        "AutomationParameter$Name": null,
         "AutomationParameterMap$key": null
+      }
+    },
+    "AutomationParameterList": {
+      "base": null,
+      "refs": {
+        "DescribeAutomationExecutionParametersResult$Parameters": null
       }
     },
     "AutomationParameterMap": {
@@ -549,8 +603,15 @@
         "AutomationExecutionMetadata$Outputs": "<p>The list of execution outputs as defined in the Automation document.</p>",
         "FailureDetails$Details": "<p>Detailed information about the Automation step failure.</p>",
         "MaintenanceWindowAutomationParameters$Parameters": null,
+        "SendAutomationSignalRequest$Payload": null,
         "StartAutomationExecutionRequest$Parameters": "<p>A key-value map of execution parameters, which match the declared parameters in the Automation document.</p>",
         "StepExecution$Outputs": "<p>Returned values from the execution of the step.</p>"
+      }
+    },
+    "AutomationParameterType": {
+      "base": null,
+      "refs": {
+        "AutomationParameter$Type": null
       }
     },
     "AutomationParameterValue": {
@@ -562,6 +623,7 @@
     "AutomationParameterValueList": {
       "base": null,
       "refs": {
+        "AutomationParameter$Values": null,
         "AutomationParameterMap$value": null
       }
     },
@@ -704,11 +766,18 @@
       "refs": {
         "CancelCommandRequest$CommandId": "<p>The ID of the command you want to cancel.</p>",
         "Command$CommandId": "<p>A unique identifier for this command.</p>",
+        "CommandIdList$member": null,
         "CommandInvocation$CommandId": "<p>The command against which this invocation was requested.</p>",
         "GetCommandInvocationRequest$CommandId": "<p>(Required) The parent command ID of the invocation plugin.</p>",
         "GetCommandInvocationResult$CommandId": "<p>The parent command ID of the invocation plugin.</p>",
         "ListCommandInvocationsRequest$CommandId": "<p>(Optional) The invocations for a specific command ID.</p>",
         "ListCommandsRequest$CommandId": "<p>(Optional) If provided, lists only the specified command.</p>"
+      }
+    },
+    "CommandIdList": {
+      "base": null,
+      "refs": {
+        "DeleteCommandsRequest$CommandIds": null
       }
     },
     "CommandInvocation": {
@@ -741,6 +810,16 @@
       "refs": {
         "ListCommandInvocationsRequest$MaxResults": "<p>(Optional) The maximum number of items to return for this call. The call also returns a token that you can specify in a subsequent call to get the next set of results.</p>",
         "ListCommandsRequest$MaxResults": "<p>(Optional) The maximum number of items to return for this call. The call also returns a token that you can specify in a subsequent call to get the next set of results.</p>"
+      }
+    },
+    "CommandNotFound": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "CommandNotInTerminalState": {
+      "base": null,
+      "refs": {
       }
     },
     "CommandPlugin": {
@@ -808,14 +887,8 @@
       "base": null,
       "refs": {
         "ComplianceItem$ExecutionSummary": null,
-        "PutComplianceItemRequest$ExecutionSummary": null,
+        "PutComplianceItemsRequest$ExecutionSummary": null,
         "ResourceComplianceSummaryItem$ExecutionSummary": null
-      }
-    },
-    "ComplianceExecutionTime": {
-      "base": null,
-      "refs": {
-        "ComplianceExecutionSummary$ExecutionTime": null
       }
     },
     "ComplianceExecutionType": {
@@ -839,7 +912,7 @@
     "ComplianceItemContentHash": {
       "base": null,
       "refs": {
-        "PutComplianceItemRequest$ItemContentHash": null
+        "PutComplianceItemsRequest$ItemContentHash": null
       }
     },
     "ComplianceItemDetails": {
@@ -858,7 +931,7 @@
     "ComplianceItemEntryList": {
       "base": null,
       "refs": {
-        "PutComplianceItemRequest$Items": null
+        "PutComplianceItemsRequest$Items": null
       }
     },
     "ComplianceItemId": {
@@ -881,12 +954,18 @@
         "ComplianceItemEntry$Title": null
       }
     },
+    "ComplianceQueryOperatorType": {
+      "base": null,
+      "refs": {
+        "ComplianceStringFilter$Type": null
+      }
+    },
     "ComplianceResourceId": {
       "base": null,
       "refs": {
         "ComplianceItem$ResourceId": null,
         "ComplianceResourceIdList$member": null,
-        "PutComplianceItemRequest$ResourceId": null,
+        "PutComplianceItemsRequest$ResourceId": null,
         "ResourceComplianceSummaryItem$ResourceId": null
       }
     },
@@ -901,7 +980,7 @@
       "refs": {
         "ComplianceItem$ResourceType": null,
         "ComplianceResourceTypeList$member": null,
-        "PutComplianceItemRequest$ResourceType": null,
+        "PutComplianceItemsRequest$ResourceType": null,
         "ResourceComplianceSummaryItem$ResourceType": null
       }
     },
@@ -943,6 +1022,7 @@
       "base": null,
       "refs": {
         "ListComplianceItemsRequest$Filters": null,
+        "ListComplianceSummariesRequest$Filters": null,
         "ListResourceComplianceSummariesRequest$Filters": null
       }
     },
@@ -965,17 +1045,36 @@
         "SeveritySummary$UnspecifiedCount": null
       }
     },
+    "ComplianceSummaryItem": {
+      "base": null,
+      "refs": {
+        "ComplianceSummaryItemList$member": null
+      }
+    },
+    "ComplianceSummaryItemList": {
+      "base": null,
+      "refs": {
+        "ListComplianceSummariesResult$ComplianceSummaryItems": null
+      }
+    },
+    "ComplianceTypeCountLimitExceededException": {
+      "base": null,
+      "refs": {
+      }
+    },
     "ComplianceTypeName": {
       "base": null,
       "refs": {
         "ComplianceItem$ComplianceType": null,
-        "PutComplianceItemRequest$ComplianceType": null,
+        "ComplianceSummaryItem$ComplianceType": null,
+        "PutComplianceItemsRequest$ComplianceType": null,
         "ResourceComplianceSummaryItem$ComplianceType": null
       }
     },
     "CompliantSummary": {
       "base": null,
       "refs": {
+        "ComplianceSummaryItem$CompliantSummary": null,
         "ResourceComplianceSummaryItem$CompliantSummary": null
       }
     },
@@ -1090,6 +1189,7 @@
         "AssociationDescription$LastExecutionDate": "<p>The date on which the association was last run.</p>",
         "AssociationDescription$LastSuccessfulExecutionDate": "<p>The last date on which the association was successfully run.</p>",
         "AssociationStatus$Date": "<p>The date when the status changed.</p>",
+        "AssociationVersionInfo$CreatedDate": null,
         "AutomationExecution$ExecutionStartTime": "<p>The time the execution started.</p>",
         "AutomationExecution$ExecutionEndTime": "<p>The time the execution finished.</p>",
         "AutomationExecutionMetadata$ExecutionStartTime": "<p>The time the execution started.&gt;</p>",
@@ -1099,6 +1199,7 @@
         "CommandInvocation$RequestedDateTime": "<p>The time and date the request was sent to this instance.</p>",
         "CommandPlugin$ResponseStartDateTime": "<p>The time the plugin started executing. </p>",
         "CommandPlugin$ResponseFinishDateTime": "<p>The time the plugin stopped executing. Could stop prematurely if, for example, a cancel command was sent. </p>",
+        "ComplianceExecutionSummary$ExecutionTime": null,
         "DocumentDescription$CreatedDate": "<p>The date when the document was created.</p>",
         "DocumentVersionInfo$CreatedDate": "<p>The date the document was created.</p>",
         "GetMaintenanceWindowExecutionResult$StartTime": "<p>The time the Maintenance Window started executing.</p>",
@@ -1171,6 +1272,16 @@
       }
     },
     "DeleteAssociationResult": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "DeleteCommandsRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "DeleteCommandsResult": {
       "base": null,
       "refs": {
       }
@@ -1323,12 +1434,32 @@
       "refs": {
       }
     },
+    "DescribeAutomationExecutionParametersRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "DescribeAutomationExecutionParametersResult": {
+      "base": null,
+      "refs": {
+      }
+    },
     "DescribeAutomationExecutionsRequest": {
       "base": null,
       "refs": {
       }
     },
     "DescribeAutomationExecutionsResult": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "DescribeAutomationStepExecutionsRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "DescribeAutomationStepExecutionsResult": {
       "base": null,
       "refs": {
       }
@@ -1735,6 +1866,7 @@
       "refs": {
         "Association$Name": "<p>The name of the SSM document.</p>",
         "AssociationDescription$Name": "<p>The name of the SSM document.</p>",
+        "AssociationVersionInfo$Name": null,
         "AutomationExecution$DocumentName": "<p>The name of the Automation document used during the execution.</p>",
         "AutomationExecutionMetadata$DocumentName": "<p>The name of the Automation document used during execution.</p>",
         "CreateAssociationBatchRequestEntry$Name": "<p>The name of the configuration document. </p>",
@@ -1854,6 +1986,7 @@
       "refs": {
         "Association$DocumentVersion": "<p>The version of the document used in the association.</p>",
         "AssociationDescription$DocumentVersion": "<p>The document version.</p>",
+        "AssociationVersionInfo$DocumentVersion": null,
         "AutomationExecution$DocumentVersion": "<p>The version of the document to use during execution.</p>",
         "AutomationExecutionMetadata$DocumentVersion": "<p>The document version used during the execution.</p>",
         "CreateAssociationBatchRequestEntry$DocumentVersion": "<p>The document version.</p>",
@@ -1907,6 +2040,11 @@
       "refs": {
       }
     },
+    "DuplicateCommandId": {
+      "base": null,
+      "refs": {
+      }
+    },
     "DuplicateDocumentContent": {
       "base": "<p>The content of the association document matches another document. Change the content of the document and try again.</p>",
       "refs": {
@@ -1956,11 +2094,6 @@
         "PutConfigurePackageResultRequest$Result": null
       }
     },
-    "ExpectedAssociationVersionNotEqual": {
-      "base": null,
-      "refs": {
-      }
-    },
     "ExpirationDate": {
       "base": null,
       "refs": {
@@ -1990,6 +2123,11 @@
       "base": null,
       "refs": {
         "FailedCreateAssociation$Fault": "<p>The source of the failure.</p>"
+      }
+    },
+    "FeatureNotAvailableException": {
+      "base": null,
+      "refs": {
       }
     },
     "Fingerprint": {
@@ -2302,6 +2440,7 @@
       "base": "<p>An Amazon S3 bucket where you want to store the results of this request.</p>",
       "refs": {
         "AssociationDescription$OutputLocation": "<p>An Amazon S3 bucket where you want to store the output details of the request.</p>",
+        "AssociationVersionInfo$OutputLocation": null,
         "CreateAssociationBatchRequestEntry$OutputLocation": "<p>An Amazon S3 bucket where you want to store the results of this request.</p>",
         "CreateAssociationRequest$OutputLocation": "<p>An Amazon S3 bucket where you want to store the output details of the request.</p>",
         "InstanceAssociationSummary$OutputLocation": null,
@@ -2648,8 +2787,18 @@
       "refs": {
       }
     },
+    "InvalidAssociationVersion": {
+      "base": null,
+      "refs": {
+      }
+    },
     "InvalidAutomationExecutionParametersException": {
       "base": "<p>The supplied parameters for invoking the specified Automation document are incorrect. For example, they may not match the set of parameters permitted for the specified Automation document.</p>",
+      "refs": {
+      }
+    },
+    "InvalidAutomationSignalException": {
+      "base": null,
       "refs": {
       }
     },
@@ -2724,6 +2873,11 @@
       }
     },
     "InvalidInstancePropertyFilterValue": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "InvalidInventoryItemContextException": {
       "base": null,
       "refs": {
       }
@@ -2971,7 +3125,8 @@
         "ItemSizeLimitExceededException$TypeName": null,
         "ListInventoryEntriesRequest$TypeName": "<p>The type of inventory item for which you want information.</p>",
         "ListInventoryEntriesResult$TypeName": "<p>The type of inventory item returned by the request.</p>",
-        "ResultAttribute$TypeName": "<p>Name of the inventory item type. Valid value: AWS:InstanceInformation. Default Value: AWS:InstanceInformation.</p>"
+        "ResultAttribute$TypeName": "<p>Name of the inventory item type. Valid value: AWS:InstanceInformation. Default Value: AWS:InstanceInformation.</p>",
+        "UnsupportedInventoryItemContextException$TypeName": null
       }
     },
     "InventoryItemTypeNameFilter": {
@@ -2983,7 +3138,6 @@
     "InventoryQueryOperatorType": {
       "base": null,
       "refs": {
-        "ComplianceStringFilter$Type": null,
         "InventoryFilter$Type": "<p>The type of filter. Valid values include the following: \"Equal\"|\"NotEqual\"|\"BeginWith\"|\"LessThan\"|\"GreaterThan\"</p>"
       }
     },
@@ -3052,6 +3206,12 @@
         "CommandInvocation$TraceOutput": "<p> Gets the trace output sent by the agent. </p>"
       }
     },
+    "IsSubTypeSchema": {
+      "base": null,
+      "refs": {
+        "GetInventorySchemaRequest$SubType": null
+      }
+    },
     "ItemContentMismatchException": {
       "base": "<p>The inventory item has invalid content. </p>",
       "refs": {
@@ -3092,6 +3252,16 @@
         "ResourceDataSyncItem$LastSuccessfulSyncTime": null
       }
     },
+    "ListAssociationVersionsRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "ListAssociationVersionsResult": {
+      "base": null,
+      "refs": {
+      }
+    },
     "ListAssociationsRequest": {
       "base": null,
       "refs": {
@@ -3128,6 +3298,16 @@
       }
     },
     "ListComplianceItemsResult": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "ListComplianceSummariesRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "ListComplianceSummariesResult": {
       "base": null,
       "refs": {
       }
@@ -3810,13 +3990,17 @@
       "base": null,
       "refs": {
         "DescribeActivationsRequest$MaxResults": "<p>The maximum number of items to return for this call. The call also returns a token that you can specify in a subsequent call to get the next set of results.</p>",
+        "DescribeAutomationExecutionParametersRequest$MaxResults": null,
         "DescribeAutomationExecutionsRequest$MaxResults": "<p>The maximum number of items to return for this call. The call also returns a token that you can specify in a subsequent call to get the next set of results.</p>",
+        "DescribeAutomationStepExecutionsRequest$MaxResults": null,
         "DescribeInstanceAssociationsStatusRequest$MaxResults": "<p>The maximum number of items to return for this call. The call also returns a token that you can specify in a subsequent call to get the next set of results.</p>",
         "DescribeParametersRequest$MaxResults": "<p>The maximum number of items to return for this call. The call also returns a token that you can specify in a subsequent call to get the next set of results.</p>",
         "GetInventoryRequest$MaxResults": "<p>The maximum number of items to return for this call. The call also returns a token that you can specify in a subsequent call to get the next set of results.</p>",
         "GetParameterHistoryRequest$MaxResults": "<p>The maximum number of items to return for this call. The call also returns a token that you can specify in a subsequent call to get the next set of results.</p>",
+        "ListAssociationVersionsRequest$MaxResults": null,
         "ListAssociationsRequest$MaxResults": "<p>The maximum number of items to return for this call. The call also returns a token that you can specify in a subsequent call to get the next set of results.</p>",
         "ListComplianceItemsRequest$MaxResults": null,
+        "ListComplianceSummariesRequest$MaxResults": null,
         "ListDocumentVersionsRequest$MaxResults": "<p>The maximum number of items to return for this call. The call also returns a token that you can specify in a subsequent call to get the next set of results.</p>",
         "ListDocumentsRequest$MaxResults": "<p>The maximum number of items to return for this call. The call also returns a token that you can specify in a subsequent call to get the next set of results.</p>",
         "ListInstanceAssociationsRequest$MaxResults": null,
@@ -3852,8 +4036,12 @@
       "refs": {
         "DescribeActivationsRequest$NextToken": "<p>A token to start the list. Use this token to get the next set of results. </p>",
         "DescribeActivationsResult$NextToken": "<p> The token for the next set of items to return. Use this token to get the next set of results. </p>",
+        "DescribeAutomationExecutionParametersRequest$NextToken": null,
+        "DescribeAutomationExecutionParametersResult$NextToken": null,
         "DescribeAutomationExecutionsRequest$NextToken": "<p>The token for the next set of items to return. (You received this token from a previous call.)</p>",
         "DescribeAutomationExecutionsResult$NextToken": "<p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>",
+        "DescribeAutomationStepExecutionsRequest$NextToken": null,
+        "DescribeAutomationStepExecutionsResult$NextToken": null,
         "DescribeAvailablePatchesRequest$NextToken": "<p>The token for the next set of items to return. (You received this token from a previous call.)</p>",
         "DescribeAvailablePatchesResult$NextToken": "<p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>",
         "DescribeEffectiveInstanceAssociationsRequest$NextToken": "<p>The token for the next set of items to return. (You received this token from a previous call.)</p>",
@@ -3902,6 +4090,8 @@
         "GetParameterHistoryResult$NextToken": "<p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>",
         "GetParametersByPathRequest$NextToken": null,
         "GetParametersByPathResult$NextToken": null,
+        "ListAssociationVersionsRequest$NextToken": null,
+        "ListAssociationVersionsResult$NextToken": null,
         "ListAssociationsRequest$NextToken": "<p>The token for the next set of items to return. (You received this token from a previous call.)</p>",
         "ListAssociationsResult$NextToken": "<p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>",
         "ListCommandInvocationsRequest$NextToken": "<p>(Optional) The token for the next set of items to return. (You received this token from a previous call.)</p>",
@@ -3910,6 +4100,8 @@
         "ListCommandsResult$NextToken": "<p>(Optional) The token for the next set of items to return. (You received this token from a previous call.)</p>",
         "ListComplianceItemsRequest$NextToken": null,
         "ListComplianceItemsResult$NextToken": null,
+        "ListComplianceSummariesRequest$NextToken": null,
+        "ListComplianceSummariesResult$NextToken": null,
         "ListDocumentVersionsRequest$NextToken": "<p>The token for the next set of items to return. (You received this token from a previous call.)</p>",
         "ListDocumentVersionsResult$NextToken": "<p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>",
         "ListDocumentsRequest$NextToken": "<p>The token for the next set of items to return. (You received this token from a previous call.)</p>",
@@ -3927,6 +4119,7 @@
     "NonCompliantSummary": {
       "base": null,
       "refs": {
+        "ComplianceSummaryItem$NonCompliantSummary": null,
         "ResourceComplianceSummaryItem$NonCompliantSummary": null
       }
     },
@@ -3980,6 +4173,12 @@
         "GetPatchBaselineResult$OperatingSystem": null,
         "PatchBaselineIdentity$OperatingSystem": null,
         "UpdatePatchBaselineResult$OperatingSystem": null
+      }
+    },
+    "Operation": {
+      "base": null,
+      "refs": {
+        "PutConfigurePackageResultRequest$Operation": null
       }
     },
     "OwnerInformation": {
@@ -4047,7 +4246,8 @@
       "base": null,
       "refs": {
         "GetManifestRequest$PackageVersion": null,
-        "PutConfigurePackageResultRequest$PackageVersion": null
+        "PutConfigurePackageResultRequest$PackageVersion": null,
+        "PutConfigurePackageResultRequest$PreviousPackageVersion": null
       }
     },
     "Parameter": {
@@ -4202,6 +4402,7 @@
       "base": null,
       "refs": {
         "AssociationDescription$Parameters": "<p>A description of the parameters for a document. </p>",
+        "AssociationVersionInfo$Parameters": null,
         "Command$Parameters": "<p>The parameter values to be inserted in the document when executing the command.</p>",
         "CreateAssociationBatchRequestEntry$Parameters": "<p>A description of the parameters for a document. </p>",
         "CreateAssociationRequest$Parameters": "<p>The parameters for the documents runtime configuration. </p>",
@@ -4301,6 +4502,7 @@
         "CreatePatchBaselineRequest$ApprovedPatchesComplianceLevel": null,
         "GetPatchBaselineResult$ApprovedPatchesComplianceLevel": null,
         "PatchRule$ComplianceLevel": null,
+        "PatchStatus$ComplianceLevel": null,
         "UpdatePatchBaselineRequest$ApprovedPatchesComplianceLevel": null,
         "UpdatePatchBaselineResult$ApprovedPatchesComplianceLevel": null
       }
@@ -4627,6 +4829,12 @@
         "InstanceProperty$PlatformVersion": null
       }
     },
+    "Product": {
+      "base": null,
+      "refs": {
+        "GetDeployablePatchSnapshotForInstanceResult$Product": null
+      }
+    },
     "PublicKey": {
       "base": null,
       "refs": {
@@ -4641,12 +4849,12 @@
         "UpdateManagedInstancePublicKeyRequest$NewPublicKeyType": null
       }
     },
-    "PutComplianceItemRequest": {
+    "PutComplianceItemsRequest": {
       "base": null,
       "refs": {
       }
     },
-    "PutComplianceItemResult": {
+    "PutComplianceItemsResult": {
       "base": null,
       "refs": {
       }
@@ -4986,6 +5194,7 @@
       "refs": {
         "Association$ScheduleExpression": "<p>A cron expression that specifies a schedule when the association runs.</p>",
         "AssociationDescription$ScheduleExpression": "<p>A cron expression that specifies a schedule when the association runs.</p>",
+        "AssociationVersionInfo$ScheduleExpression": null,
         "CreateAssociationBatchRequestEntry$ScheduleExpression": "<p>A cron expression that specifies a schedule when the association runs.</p>",
         "CreateAssociationRequest$ScheduleExpression": "<p>A cron expression when the association will be applied to the target(s).</p>",
         "InstanceAssociationSummary$ScheduleExpression": null,
@@ -4996,6 +5205,16 @@
       "base": null,
       "refs": {
         "RequestManagedInstanceRoleTokenResult$SecretAccessKey": null
+      }
+    },
+    "SendAutomationSignalRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "SendAutomationSignalResult": {
+      "base": null,
+      "refs": {
       }
     },
     "SendCommandRequest": {
@@ -5036,6 +5255,12 @@
       "refs": {
         "CompliantSummary$SeveritySummary": null,
         "NonCompliantSummary$SeveritySummary": null
+      }
+    },
+    "SignalType": {
+      "base": null,
+      "refs": {
+        "SendAutomationSignalRequest$SignalType": null
       }
     },
     "SnapshotDownloadUrl": {
@@ -5135,7 +5360,8 @@
     "StepExecutionList": {
       "base": null,
       "refs": {
-        "AutomationExecution$StepExecutions": "<p>A list of details about the current state of all steps that comprise an execution. An Automation document contains a list of steps that are executed in order.</p>"
+        "AutomationExecution$StepExecutions": "<p>A list of details about the current state of all steps that comprise an execution. An Automation document contains a list of steps that are executed in order.</p>",
+        "DescribeAutomationStepExecutionsResult$StepExecutions": null
       }
     },
     "StopAutomationExecutionRequest": {
@@ -5155,6 +5381,7 @@
         "AlreadyExistsException$Message": null,
         "AssociationAlreadyExists$Message": null,
         "AssociationDoesNotExist$Message": null,
+        "AssociationVersionLimitExceeded$Message": null,
         "AutomationActionList$member": null,
         "AutomationActionNotFoundException$Message": null,
         "AutomationArgument$Name": null,
@@ -5166,6 +5393,9 @@
         "AutomationExecutionMetadata$ExecutedBy": "<p>The IAM role ARN of the user who executed the Automation.</p>",
         "AutomationExecutionMetadata$LogFile": "<p>An Amazon S3 bucket where execution information is stored.</p>",
         "AutomationExecutionNotFoundException$Message": null,
+        "CommandNotFound$Message": null,
+        "CommandNotInTerminalState$Message": null,
+        "ComplianceTypeCountLimitExceededException$Message": null,
         "CustomSchemaCountLimitExceededException$Message": null,
         "DocumentAlreadyExists$Message": null,
         "DocumentLimitExceeded$Message": null,
@@ -5174,9 +5404,9 @@
         "DocumentVersionLimitExceeded$Message": null,
         "DoesNotExistException$Message": null,
         "DuplicateDocumentContent$Message": null,
-        "ExpectedAssociationVersionNotEqual$Message": null,
         "FailureDetails$FailureStage": "<p>The stage of the Automation execution when the failure occurred. The stages include the following: InputValidation, PreVerification, Invocation, PostVerification.</p>",
         "FailureDetails$FailureType": "<p>The type of Automation failure. Failure types include the following: Action, Permission, Throttling, Verification, Internal.</p>",
+        "FeatureNotAvailableException$Message": null,
         "HierarchyLevelLimitExceededException$message": null,
         "HierarchyTypeMismatchException$message": null,
         "IdempotentParameterMismatch$Message": null,
@@ -5189,7 +5419,9 @@
         "InvalidAggregatorException$Message": null,
         "InvalidAllowedPatternException$message": null,
         "InvalidAssociation$Message": null,
+        "InvalidAssociationVersion$Message": null,
         "InvalidAutomationExecutionParametersException$Message": null,
+        "InvalidAutomationSignalException$Message": null,
         "InvalidDocument$Message": "<p>The document does not exist or the document is not available to the user. This exception can be issued by CreateAssociation, CreateAssociationBatch, DeleteAssociation, DeleteDocument, DescribeAssociation, DescribeDocument, GetDocument, SendCommand, or UpdateAssociationStatus. </p>",
         "InvalidDocumentContent$Message": "<p>A description of the validation error.</p>",
         "InvalidDocumentOperation$Message": null,
@@ -5204,6 +5436,7 @@
         "InvalidInstanceInformationFilterValue$message": null,
         "InvalidInstanceInformationValue$message": null,
         "InvalidInstancePropertyFilterValue$message": null,
+        "InvalidInventoryItemContextException$Message": null,
         "InvalidInventoryResourceIdException$Message": null,
         "InvalidItemContentException$Message": null,
         "InvalidKeyId$message": null,
@@ -5242,9 +5475,11 @@
         "StepExecution$Response": "<p>A message associated with the response code for an execution.</p>",
         "StepExecution$FailureMessage": "<p>If a step failed, this message explains why the execution failed.</p>",
         "StringList$member": null,
+        "SubTypeCountLimitExceededException$Message": null,
         "TargetInUseException$Message": null,
         "TooManyUpdates$Message": null,
         "TotalSizeLimitExceededException$Message": null,
+        "UnsupportedInventoryItemContextException$Message": null,
         "UnsupportedInventorySchemaVersionException$Message": null,
         "UnsupportedOperatingSystem$Message": null,
         "UnsupportedParameterType$message": null,
@@ -5265,6 +5500,11 @@
       "base": null,
       "refs": {
         "DescribeActivationsFilter$FilterValues": "<p>The filter values.</p>"
+      }
+    },
+    "SubTypeCountLimitExceededException": {
+      "base": null,
+      "refs": {
       }
     },
     "Tag": {
@@ -5333,6 +5573,7 @@
       "refs": {
         "Association$Targets": "<p>The instances targeted by the request to create an association. </p>",
         "AssociationDescription$Targets": "<p>The instances targeted by the request. </p>",
+        "AssociationVersionInfo$Targets": null,
         "Command$Targets": "<p>An array of search criteria that targets instances using a Key,Value combination that you specify. Targets is required if you don't provide one or more instance IDs in the call.</p>",
         "CreateAssociationBatchRequestEntry$Targets": "<p>The instances targeted by the request.</p>",
         "CreateAssociationRequest$Targets": "<p>The targets (either instances or tags) for the association.</p>",
@@ -5384,6 +5625,11 @@
     },
     "TotalSizeLimitExceededException": {
       "base": "<p>The size of inventory data has exceeded the total size limit for the resource.</p>",
+      "refs": {
+      }
+    },
+    "UnsupportedInventoryItemContextException": {
+      "base": null,
       "refs": {
       }
     },
