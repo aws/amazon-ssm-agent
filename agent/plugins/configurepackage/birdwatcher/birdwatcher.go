@@ -128,6 +128,14 @@ func (ds *PackageService) ReportResult(log log.T, result packageservice.PackageR
 				"region":           &env.Ec2Infrastructure.Region,
 				"availabilityZone": &env.Ec2Infrastructure.AvailabilityZone,
 			},
+			PackageResultSteps: []*ssm.PackageResultStep{
+				&ssm.PackageResultStep{
+					// FIXME: this is just a copy of the overall execution for now
+					Action: &result.Operation,
+					Result: &result.Exitcode,
+					Timing: &result.Timing,
+				},
+			},
 		},
 	)
 
