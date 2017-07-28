@@ -113,10 +113,12 @@ func (ds *PackageService) ReportResult(log log.T, result packageservice.PackageR
 
 	_, err := ds.facadeClient.PutConfigurePackageResult(
 		&ssm.PutConfigurePackageResultInput{
-			PackageName:    &result.PackageName,
-			PackageVersion: &result.Version,
-			OverallTiming:  &result.Timing,
-			Result:         &result.Exitcode,
+			PackageName:            &result.PackageName,
+			PackageVersion:         &result.Version,
+			PreviousPackageVersion: &result.PreviousPackageVersion,
+			Operation:              &result.Operation,
+			OverallTiming:          &result.Timing,
+			Result:                 &result.Exitcode,
 			PackageResultAttributes: map[string]*string{
 				"platformName":     &env.OperatingSystem.Platform,
 				"platformVersion":  &env.OperatingSystem.PlatformVersion,
