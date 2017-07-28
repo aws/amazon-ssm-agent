@@ -256,6 +256,8 @@ func TestReportResult(t *testing.T) {
 				assert.NoError(t, err)
 				assert.Equal(t, pkgresult.PackageName, *testdata.facadeClient.putConfigurePackageResultInput.PackageName)
 				assert.Equal(t, pkgresult.Version, *testdata.facadeClient.putConfigurePackageResultInput.PackageVersion)
+				assert.Equal(t, pkgresult.Operation, *testdata.facadeClient.putConfigurePackageResultInput.Operation)
+				assert.Equal(t, pkgresult.PreviousPackageVersion, *testdata.facadeClient.putConfigurePackageResultInput.PreviousPackageVersion)
 				assert.Equal(t, pkgresult.Timing, *testdata.facadeClient.putConfigurePackageResultInput.OverallTiming)
 				assert.Equal(t, pkgresult.Exitcode, *testdata.facadeClient.putConfigurePackageResultInput.Result)
 				assert.Equal(t, "abc", *testdata.facadeClient.putConfigurePackageResultInput.PackageResultAttributes["platformName"])
