@@ -51,6 +51,7 @@ func TestCWPublisherDequeueMessages(t *testing.T) {
 		cloudWatchLogsService: serviceMock,
 		QueuePollingInterval:  time.Millisecond * 100,
 		QueuePollingWaitTime:  time.Millisecond,
+		instanceID:            "InstanceID",
 	}
 
 	xmlArgs := make(map[string]string)
@@ -88,6 +89,7 @@ func TestCreateLogGroupError(t *testing.T) {
 	cwPublisher := CloudWatchPublisher{
 		log: logMock,
 		cloudWatchLogsService: serviceMock,
+		instanceID:            "instanceID",
 	}
 
 	err := cwPublisher.createLogGroupAndStream("GroupDoesNotExist", "Stream")
@@ -104,6 +106,7 @@ func TestCreateLogStreamError(t *testing.T) {
 	cwPublisher := CloudWatchPublisher{
 		log: logMock,
 		cloudWatchLogsService: serviceMock,
+		instanceID:            "instanceID",
 	}
 
 	err := cwPublisher.createLogGroupAndStream("Group", "StreamDoesNotExist")
@@ -141,6 +144,7 @@ func TestCloudWatchLogsEventsListener(t *testing.T) {
 		cloudWatchLogsService: serviceMock,
 		QueuePollingInterval:  time.Millisecond * 100,
 		QueuePollingWaitTime:  time.Millisecond,
+		instanceID:            "InstanceID",
 	}
 	cwPublisher.Init(logMock)
 
@@ -257,6 +261,7 @@ func TestStopSharingOnAccessError(t *testing.T) {
 			logGroup:  "GroupSharing",
 			logStream: "StreamSharing",
 		},
+		instanceID: "instanceID",
 	}
 	cwPublisher.startPolling(&sequenceToken, &sharingSequenceToken)
 
