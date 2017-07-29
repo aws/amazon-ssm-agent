@@ -17,9 +17,9 @@ package coremodules
 import (
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
-	"github.com/aws/amazon-ssm-agent/agent/framework/service/runcommand"
 	"github.com/aws/amazon-ssm-agent/agent/health"
 	"github.com/aws/amazon-ssm-agent/agent/longrunning/manager"
+	"github.com/aws/amazon-ssm-agent/agent/runcommand"
 	"github.com/aws/amazon-ssm-agent/agent/startup"
 )
 
