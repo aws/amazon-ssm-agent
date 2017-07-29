@@ -50,6 +50,7 @@ type CloudWatchPublisher struct {
 	QueuePollingInterval         time.Duration // The interval after which the publisher polls the queue
 	QueuePollingWaitTime         time.Duration // The duration for which the publisher blocks while polling. For negative value will wait until enqueue
 	log                          log.T
+	instanceID                   string
 }
 
 // destinationConfigurations captures the cloudwatchlogs destination configurations required for pushing logs
@@ -135,17 +136,23 @@ func (cloudwatchPublisher *CloudWatchPublisher) Start() {
 
 	cloudwatchPublisher.log.Infof("Start the cloudwatchlogs publisher")
 
+	var err error
 	// If service nil, create a new service, else use the exiting one
 	if cloudwatchPublisher.cloudWatchLogsService == nil {
 		cloudwatchPublisher.cloudWatchLogsService = NewCloudWatchLogsService()
 	}
 
 	logGroup := cloudwatchlogsqueue.GetLogGroup()
-	logStream, err := platform.InstanceID()
-	if err != nil {
-		cloudwatchPublisher.log.Errorf("Error in getting instance Id :%v. Aborting CloudWatchlogs publisher start", err)
-		return
+	if cloudwatchPublisher.instanceID == "" {
+		// Fetch the instance ID if empty
+		cloudwatchPublisher.instanceID, err = platform.InstanceID()
+		if err != nil {
+			cloudwatchPublisher.log.Errorf("Error in getting instance Id :%v. Aborting CloudWatchlogs publisher start", err)
+			return
+		}
 	}
+
+	logStream := cloudwatchPublisher.instanceID
 
 	cloudwatchPublisher.log.Debugf("Cloudwatchlogs Publishing Logs to LogGroup: %v", logGroup)
 	cloudwatchPublisher.log.Debugf("Cloudwatchlogs Publishing Logs to LogStream: %v", logStream)
@@ -156,7 +163,7 @@ func (cloudwatchPublisher *CloudWatchPublisher) Start() {
 	}
 
 	// Create if the LogGroup and LogStream are not present
-	if err := cloudwatchPublisher.createLogGroupAndStream(logGroup, logStream); err != nil {
+	if err = cloudwatchPublisher.createLogGroupAndStream(logGroup, logStream); err != nil {
 		// Aborting Start
 		cloudwatchPublisher.log.Errorf("Error in ensuring log group and stream are present:%v", err)
 		return
