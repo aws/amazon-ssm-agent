@@ -107,17 +107,12 @@ func (s *RunCommandService) listenReply(resultChan chan contracts.DocumentResult
 	log := s.context.Log()
 	//processor guarantees to close this channel upon stop
 	for res := range resultChan {
-		s.sendResponse(res.MessageID, res)
-		//document completed, initiate cleanup process
-		if res.LastPlugin == "" {
-			if !isUpdatePlugin(res.PluginResults) {
-				if err := s.service.DeleteMessage(log, res.MessageID); err != nil {
-					sdkutil.HandleAwsError(log, err, s.processorStopPolicy)
-				}
-			} else {
-				log.Debug("MessageDeletion skipped as it will be handled by external process")
-			}
+		if res.LastPlugin != "" {
+			log.Infof("received plugin: %v result from Processor", res.LastPlugin)
+		} else {
+			log.Infof("command: %v complete", res.MessageID)
 		}
+		s.sendResponse(res.MessageID, res)
 	}
 }
 
