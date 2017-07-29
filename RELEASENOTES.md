@@ -1,4 +1,4 @@
-Latest
+2.0.0.0
 ===============
 - Added support for uploading agent logs to CloudWatch for SSM Agent diagnostics
 - Added additional gatherers for inventory

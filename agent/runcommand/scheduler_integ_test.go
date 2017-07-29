@@ -23,9 +23,9 @@ import (
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
-	mds "github.com/aws/amazon-ssm-agent/agent/framework/service/runcommand/mds"
-	"github.com/aws/amazon-ssm-agent/agent/framework/service/runcommand/mock"
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	mds "github.com/aws/amazon-ssm-agent/agent/runcommand/mds"
+	"github.com/aws/amazon-ssm-agent/agent/runcommand/mock"
 	"github.com/aws/amazon-ssm-agent/agent/sdkutil"
 	"github.com/aws/aws-sdk-go/aws/awserr"
 	"github.com/aws/aws-sdk-go/service/ssmmds"

@@ -58,7 +58,7 @@ func TestParseDocument_ValidRuntimeConfig(t *testing.T) {
 		DefaultWorkingDir: testWorkingDir,
 	}
 
-	validdocumentruntimeconfig := loadFile(t, "../framework/service/runcommand/mds/testdata/validcommand12.json")
+	validdocumentruntimeconfig := loadFile(t, "../runcommand/mds/testdata/validcommand12.json")
 	var testDocContent contracts.DocumentContent
 	err := json.Unmarshal(validdocumentruntimeconfig, &testDocContent)
 	if err != nil {
@@ -92,7 +92,7 @@ func TestParseDocument_ValidMainSteps(t *testing.T) {
 	}
 
 	var testDocContent contracts.DocumentContent
-	validdocumentmainsteps := loadFile(t, "../framework/service/runcommand/mds/testdata/validcommand20.json")
+	validdocumentmainsteps := loadFile(t, "../runcommand/mds/testdata/validcommand20.json")
 	err := json.Unmarshal(validdocumentmainsteps, &testDocContent)
 	if err != nil {
 		assert.Error(t, err, "Error occured when trying to unmarshal validDocument")
@@ -125,7 +125,7 @@ func TestInitializeDocState_Valid(t *testing.T) {
 	}
 
 	var testDocContent contracts.DocumentContent
-	validdocumentruntimeconfig := loadFile(t, "../framework/service/runcommand/mds/testdata/validcommand12.json")
+	validdocumentruntimeconfig := loadFile(t, "../runcommand/mds/testdata/validcommand12.json")
 	err := json.Unmarshal(validdocumentruntimeconfig, &testDocContent)
 	if err != nil {
 		assert.Error(t, err, "Error occured when trying to unmarshal validDocument")
