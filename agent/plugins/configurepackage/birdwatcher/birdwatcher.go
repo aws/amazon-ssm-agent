@@ -47,14 +47,11 @@ func New(endpoint string, manifestCache packageservice.ManifestCache) packageser
 
 	// overrides ssm client config from appconfig if applicable
 	if appCfg, err := appconfig.Config(false); err == nil {
-		if appCfg.Birdwatcher.Endpoint != "" {
-			cfg.Endpoint = &appCfg.Birdwatcher.Endpoint
+		if appCfg.Ssm.Endpoint != "" {
+			cfg.Endpoint = &appCfg.Ssm.Endpoint
 		}
-		if appCfg.Birdwatcher.Region != "" {
-			cfg.Region = &appCfg.Birdwatcher.Region
-		}
-		if appCfg.Birdwatcher.DisableSSL {
-			cfg.DisableSSL = &appCfg.Birdwatcher.DisableSSL
+		if appCfg.Agent.Region != "" {
+			cfg.Region = &appCfg.Agent.Region
 		}
 	}
 
