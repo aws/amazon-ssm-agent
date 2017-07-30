@@ -28,6 +28,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/platform"
+	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/birdwatcher"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/installer"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/localpackages"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/packageservice"
@@ -46,7 +47,7 @@ const (
 // Plugin is the type for the configurepackage plugin.
 type Plugin struct {
 	pluginutil.DefaultPlugin
-	packageServiceSelector func(log log.T, serviceEndpoint string) packageservice.PackageService
+	packageServiceSelector func(log log.T, serviceEndpoint string, localrepo localpackages.Repository) packageservice.PackageService
 	localRepository        localpackages.Repository
 }
 
@@ -323,11 +324,13 @@ func checkAlreadyInstalled(context context.T,
 }
 
 // selectService chooses the implementation of PackageService to use for a given execution of the plugin
-func selectService(log log.T, serviceEndpoint string) packageservice.PackageService {
+func selectService(log log.T, serviceEndpoint string, localrepo localpackages.Repository) packageservice.PackageService {
 	region, _ := platform.Region()
-	if !ssms3.UseSSMS3Service(log, serviceEndpoint, region) {
-		//return birdwatcher.New(log)
+	appCfg, err := appconfig.Config(false)
+
+	if (err == nil && appCfg.Birdwatcher.ForceEnable) || !ssms3.UseSSMS3Service(log, serviceEndpoint, region) {
 		log.Debugf("S3 repository is not marked active in %v %v", region, serviceEndpoint)
+		return birdwatcher.New(serviceEndpoint, localrepo)
 	}
 	return ssms3.New(serviceEndpoint, region)
 }
@@ -361,7 +364,7 @@ func (p *Plugin) execute(context context.T, config contracts.Configuration, canc
 	} else {
 		defer unlockPackage(input.Name)
 
-		packageService := p.packageServiceSelector(log, input.Repository)
+		packageService := p.packageServiceSelector(log, input.Repository, p.localRepository)
 
 		log.Debugf("Prepare for %v %v %v", input.Action, input.Name, input.Version)
 		inst, uninst, installState, installedVersion := prepareConfigurePackage(

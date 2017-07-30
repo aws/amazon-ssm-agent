@@ -77,3 +77,13 @@ func (repoMock *MockedRepository) GetInstaller(context context.T,
 	args := repoMock.Called(context, configuration, runner, packageName, version)
 	return args.Get(0).(installer.Installer)
 }
+
+func (repoMock *MockedRepository) ReadManifest(packageName string, packageVersion string) ([]byte, error) {
+	args := repoMock.Called(packageName, packageVersion)
+	return args.Get(0).([]byte), args.Error(1)
+}
+
+func (repoMock *MockedRepository) WriteManifest(packageName string, packageVersion string, content []byte) error {
+	args := repoMock.Called(packageName, packageVersion, content)
+	return args.Error(0)
+}
