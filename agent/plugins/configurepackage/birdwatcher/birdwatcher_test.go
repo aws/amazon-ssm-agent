@@ -1,0 +1,580 @@
+// Copyright 2017 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+//
+// Licensed under the Apache License, Version 2.0 (the "License"). You may not
+// use this file except in compliance with the License. A copy of the
+// License is located at
+//
+// http://aws.amazon.com/apache2.0/
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+// implied. See the License for the specific language governing
+// permissions and limitations under the License.
+
+package birdwatcher
+
+import (
+	"errors"
+	"testing"
+
+	"github.com/aws/amazon-ssm-agent/agent/fileutil/artifact"
+	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/envdetect"
+	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/envdetect/ec2infradetect"
+	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/envdetect/osdetect"
+	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/packageservice"
+	"github.com/aws/aws-sdk-go/service/ssm"
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/mock"
+)
+
+var loggerMock = log.NewMockLog()
+var platformName = "testplatform"
+var platformVersion = "testversion"
+var architecture = "testarch"
+
+type pkgtree map[string]map[string]map[string]*PackageInfo
+type pkgselector struct {
+	platform     string
+	version      string
+	architecture string
+	pkginfo      *PackageInfo
+}
+
+func manifestPackageGen(sel *[]pkgselector) pkgtree {
+	result := pkgtree{}
+	for _, s := range *sel {
+		if _, ok := result[s.platform]; !ok {
+			result[s.platform] = map[string]map[string]*PackageInfo{}
+		}
+
+		if _, ok := result[s.platform][s.version]; !ok {
+			result[s.platform][s.version] = map[string]*PackageInfo{}
+		}
+
+		if _, ok := result[s.platform][s.version][s.architecture]; !ok {
+			result[s.platform][s.version][s.architecture] = s.pkginfo
+		} else {
+			panic("invalid test data")
+		}
+	}
+	return result
+}
+
+func TestExtractPackageInfo(t *testing.T) {
+	data := []struct {
+		name        string
+		manifest    *Manifest
+		expected    *PackageInfo
+		expectedErr bool
+	}{
+		{
+			"single entry, matching manifest",
+			&Manifest{
+				Packages: manifestPackageGen(&[]pkgselector{
+					{platformName, platformVersion, architecture, &PackageInfo{File: "filename"}},
+				}),
+			},
+			&PackageInfo{File: "filename"},
+			false,
+		},
+		{
+			"non-matching name in manifest",
+			&Manifest{
+				Packages: manifestPackageGen(&[]pkgselector{
+					{"nonexistname", platformVersion, architecture, &PackageInfo{File: "filename"}},
+				}),
+			},
+			nil,
+			true,
+		},
+		{
+			"non-matching version in manifest",
+			&Manifest{
+				Packages: manifestPackageGen(&[]pkgselector{
+					{platformName, "nonexistversion", architecture, &PackageInfo{File: "filename"}},
+				}),
+			},
+			nil,
+			true,
+		},
+		{
+			"non-matching arch in manifest",
+			&Manifest{
+				Packages: manifestPackageGen(&[]pkgselector{
+					{platformName, platformVersion, "nonexistarch", &PackageInfo{File: "filename"}},
+				}),
+			},
+			nil,
+			true,
+		},
+		{
+			"multiple entry, matching manifest",
+			&Manifest{
+				Packages: manifestPackageGen(&[]pkgselector{
+					{platformName, platformVersion, "nonexistarch", &PackageInfo{File: "wrongfilename"}},
+					{platformName, platformVersion, architecture, &PackageInfo{File: "filename"}},
+				}),
+			},
+			&PackageInfo{File: "filename"},
+			false,
+		},
+		{
+			"`_any` platform entry, matching manifest",
+			&Manifest{
+				Packages: manifestPackageGen(&[]pkgselector{
+					{"_any", platformVersion, architecture, &PackageInfo{File: "filename"}},
+				}),
+			},
+			&PackageInfo{File: "filename"},
+			false,
+		},
+		{
+			"`_any` version entry, matching manifest",
+			&Manifest{
+				Packages: manifestPackageGen(&[]pkgselector{
+					{platformName, "_any", architecture, &PackageInfo{File: "filename"}},
+				}),
+			},
+			&PackageInfo{File: "filename"},
+			false,
+		},
+		{
+			"`_any` arch entry, matching manifest",
+			&Manifest{
+				Packages: manifestPackageGen(&[]pkgselector{
+					{platformName, platformVersion, "_any", &PackageInfo{File: "filename"}},
+				}),
+			},
+			&PackageInfo{File: "filename"},
+			false,
+		},
+		{
+			"`_any` entry and concrete entry, matching manifest",
+			&Manifest{
+				Packages: manifestPackageGen(&[]pkgselector{
+					{platformName, platformVersion, "_any", &PackageInfo{File: "wrongfilename"}},
+					{platformName, platformVersion, architecture, &PackageInfo{File: "filename"}},
+				}),
+			},
+			&PackageInfo{File: "filename"},
+			false,
+		},
+		{
+			"multi-level`_any` entry, matching manifest",
+			&Manifest{
+				Packages: manifestPackageGen(&[]pkgselector{
+					{"_any", "_any", "_any", &PackageInfo{File: "filename"}},
+				}),
+			},
+			&PackageInfo{File: "filename"},
+			false,
+		},
+		{
+			"`_any` entry and non-matching entry, non-matching manifest",
+			&Manifest{
+				Packages: manifestPackageGen(&[]pkgselector{
+					{"_any", platformVersion, architecture, &PackageInfo{File: "wrongfilename"}},
+					{platformName, platformVersion, "nonexistarch", &PackageInfo{File: "alsowrongfilename"}},
+				}),
+			},
+			nil,
+			true,
+		},
+	}
+
+	for _, testdata := range data {
+		t.Run(testdata.name, func(t *testing.T) {
+			mockedCollector := CollectorMock{}
+
+			mockedCollector.On("CollectData", mock.Anything).Return(&envdetect.Environment{
+				&osdetect.OperatingSystem{platformName, platformVersion, "", architecture, "", ""},
+				nil,
+			}, nil).Once()
+
+			facadeClientMock := facadeMock{
+				putConfigurePackageResultOutput: &ssm.PutConfigurePackageResultOutput{},
+			}
+
+			ds := &PackageService{facadeClient: &facadeClientMock, manifestCache: packageservice.ManifestCacheMemNew(), collector: &mockedCollector}
+
+			result, err := ds.extractPackageInfo(loggerMock, testdata.manifest)
+			if testdata.expectedErr {
+				assert.Error(t, err)
+			} else {
+				assert.NoError(t, err)
+				assert.Equal(t, testdata.expected, result)
+			}
+		})
+	}
+}
+
+func TestReportResult(t *testing.T) {
+	pkgresult := packageservice.PackageResult{
+		PackageName: "name",
+		Version:     "1234",
+		Timing:      29347,
+		Exitcode:    815,
+	}
+
+	data := []struct {
+		name         string
+		facadeClient facadeMock
+		expectedErr  bool
+	}{
+		{
+			"successful api call",
+			facadeMock{
+				putConfigurePackageResultOutput: &ssm.PutConfigurePackageResultOutput{},
+			},
+			false,
+		},
+		{
+			"successful api call",
+			facadeMock{
+				putConfigurePackageResultError: errors.New("testerror"),
+			},
+			true,
+		},
+	}
+
+	for _, testdata := range data {
+		t.Run(testdata.name, func(t *testing.T) {
+			mockedCollector := CollectorMock{}
+
+			mockedCollector.On("CollectData", mock.Anything).Return(&envdetect.Environment{
+				&osdetect.OperatingSystem{"abc", "567", "", "xyz", "", ""},
+				&ec2infradetect.Ec2Infrastructure{"instanceIDX", "Reg1", "", "AZ1", "instanceTypeZ"},
+			}, nil).Once()
+			ds := &PackageService{facadeClient: &testdata.facadeClient, manifestCache: packageservice.ManifestCacheMemNew(), collector: &mockedCollector}
+
+			err := ds.ReportResult(loggerMock, pkgresult)
+			if testdata.expectedErr {
+				assert.Error(t, err)
+			} else {
+				assert.NoError(t, err)
+				assert.Equal(t, pkgresult.PackageName, *testdata.facadeClient.putConfigurePackageResultInput.PackageName)
+				assert.Equal(t, pkgresult.Version, *testdata.facadeClient.putConfigurePackageResultInput.PackageVersion)
+				assert.Equal(t, pkgresult.Operation, *testdata.facadeClient.putConfigurePackageResultInput.Operation)
+				assert.Equal(t, pkgresult.PreviousPackageVersion, *testdata.facadeClient.putConfigurePackageResultInput.PreviousPackageVersion)
+				assert.Equal(t, pkgresult.Timing, *testdata.facadeClient.putConfigurePackageResultInput.OverallTiming)
+				assert.Equal(t, pkgresult.Exitcode, *testdata.facadeClient.putConfigurePackageResultInput.Result)
+				assert.Equal(t, "abc", *testdata.facadeClient.putConfigurePackageResultInput.PackageResultAttributes["platformName"])
+				assert.Equal(t, "567", *testdata.facadeClient.putConfigurePackageResultInput.PackageResultAttributes["platformVersion"])
+				assert.Equal(t, "xyz", *testdata.facadeClient.putConfigurePackageResultInput.PackageResultAttributes["architecture"])
+				assert.Equal(t, "instanceIDX", *testdata.facadeClient.putConfigurePackageResultInput.PackageResultAttributes["instanceID"])
+				assert.Equal(t, "instanceTypeZ", *testdata.facadeClient.putConfigurePackageResultInput.PackageResultAttributes["instanceType"])
+				assert.Equal(t, "AZ1", *testdata.facadeClient.putConfigurePackageResultInput.PackageResultAttributes["availabilityZone"])
+				assert.Equal(t, "Reg1", *testdata.facadeClient.putConfigurePackageResultInput.PackageResultAttributes["region"])
+			}
+		})
+	}
+}
+
+func TestDownloadManifest(t *testing.T) {
+	manifestStrErr := "xkj]{}["
+	manifestStr := "{\"version\": \"1234\"}"
+
+	data := []struct {
+		name           string
+		packageName    string
+		packageVersion string
+		facadeClient   facadeMock
+		expectedErr    bool
+	}{
+		{
+			"successful getManifest with concrete version",
+			"packagename",
+			"1234",
+			facadeMock{
+				getManifestOutput: &ssm.GetManifestOutput{
+					Manifest: &manifestStr,
+				},
+			},
+			false,
+		},
+		{
+			"successful getManifest with latest",
+			"packagename",
+			packageservice.Latest,
+			facadeMock{
+				getManifestOutput: &ssm.GetManifestOutput{
+					Manifest: &manifestStr,
+				},
+			},
+			false,
+		},
+		{
+			"error in getManifest",
+			"packagename",
+			packageservice.Latest,
+			facadeMock{
+				getManifestError: errors.New("testerror"),
+			},
+			true,
+		},
+		{
+			"error in parsing manifest",
+			"packagename",
+			packageservice.Latest,
+			facadeMock{
+				getManifestOutput: &ssm.GetManifestOutput{
+					Manifest: &manifestStrErr,
+				},
+			},
+			true,
+		},
+	}
+
+	for _, testdata := range data {
+		t.Run(testdata.name, func(t *testing.T) {
+			mockedCollector := CollectorMock{}
+			envdata := &envdetect.Environment{
+				&osdetect.OperatingSystem{"abc", "567", "", "xyz", "", ""},
+				&ec2infradetect.Ec2Infrastructure{"instanceIDX", "Reg1", "", "AZ1", "instanceTypeZ"},
+			}
+
+			mockedCollector.On("CollectData", mock.Anything).Return(envdata, nil).Once()
+			ds := &PackageService{facadeClient: &testdata.facadeClient, manifestCache: packageservice.ManifestCacheMemNew(), collector: &mockedCollector}
+
+			result, err := ds.DownloadManifest(loggerMock, testdata.packageName, testdata.packageVersion)
+
+			if testdata.expectedErr {
+				assert.Error(t, err)
+			} else {
+				// verify parameter for api call
+				assert.Equal(t, testdata.packageName, *testdata.facadeClient.getManifestInput.PackageName)
+				assert.Equal(t, testdata.packageVersion, *testdata.facadeClient.getManifestInput.PackageVersion)
+				// verify result
+				assert.Equal(t, "1234", result)
+				assert.NoError(t, err)
+			}
+		})
+	}
+}
+
+func TestFindFileFromManifest(t *testing.T) {
+	data := []struct {
+		name        string
+		manifest    *Manifest
+		file        File
+		expectedErr bool
+	}{
+		{
+			"successful file read",
+			&Manifest{
+				Packages: manifestPackageGen(&[]pkgselector{
+					{"platformName", "platformVersion", "architecture", &PackageInfo{File: "test.zip"}},
+				}),
+				Files: map[string]*File{"test.zip": &File{DownloadLocation: "https://example.com/agent"}},
+			},
+			File{
+				DownloadLocation: "https://example.com/agent",
+			},
+			false,
+		},
+		{
+			"fail to find match in file",
+			&Manifest{
+				Packages: manifestPackageGen(&[]pkgselector{}),
+				Files:    map[string]*File{},
+			},
+			File{},
+			true,
+		},
+		{
+			"fail to find file name",
+			&Manifest{
+				Packages: manifestPackageGen(&[]pkgselector{
+					{"platformName", "platformVersion", "architecture", &PackageInfo{File: "test.zip"}},
+				}),
+				Files: map[string]*File{},
+			},
+			File{},
+			true,
+		},
+		{
+			"fail to find matching file name",
+			&Manifest{
+				Packages: manifestPackageGen(&[]pkgselector{
+					{"platformName", "platformVersion", "architecture", &PackageInfo{File: "test.zip"}},
+				}),
+				Files: map[string]*File{"nomatch": &File{DownloadLocation: "https://example.com/agent"}},
+			},
+			File{},
+			true,
+		},
+	}
+
+	for _, testdata := range data {
+		t.Run(testdata.name, func(t *testing.T) {
+			mockedCollector := CollectorMock{}
+
+			mockedCollector.On("CollectData", mock.Anything).Return(&envdetect.Environment{
+				&osdetect.OperatingSystem{"platformName", "platformVersion", "", "architecture", "", ""},
+				&ec2infradetect.Ec2Infrastructure{"instanceID", "region", "", "availabilityZone", "instanceType"},
+			}, nil).Once()
+
+			facadeClientMock := facadeMock{
+				putConfigurePackageResultOutput: &ssm.PutConfigurePackageResultOutput{},
+			}
+			ds := &PackageService{facadeClient: &facadeClientMock, manifestCache: packageservice.ManifestCacheMemNew(), collector: &mockedCollector}
+
+			result, err := ds.findFileFromManifest(loggerMock, testdata.manifest)
+
+			if testdata.expectedErr {
+				assert.Error(t, err)
+			} else {
+				assert.NoError(t, err)
+				assert.Equal(t, testdata.file, *result)
+			}
+		})
+	}
+}
+
+func TestDownloadFile(t *testing.T) {
+	data := []struct {
+		name        string
+		network     networkMock
+		file        *File
+		expectedErr bool
+	}{
+		{
+			"working file download",
+			networkMock{
+				downloadOutput: artifact.DownloadOutput{
+					LocalFilePath: "agent.zip",
+				},
+			},
+			&File{
+				DownloadLocation: "https://example.com/agent",
+				Checksums: map[string]string{
+					"sha256": "asdf",
+				},
+			},
+			false,
+		},
+		{
+			"empty local file location",
+			networkMock{
+				downloadOutput: artifact.DownloadOutput{
+					LocalFilePath: "",
+				},
+			},
+			&File{
+				DownloadLocation: "https://example.com/agent",
+				Checksums: map[string]string{
+					"sha256": "asdf",
+				},
+			},
+			true,
+		},
+		{
+			"error during file download",
+			networkMock{
+				downloadError: errors.New("testerror"),
+			},
+			&File{
+				DownloadLocation: "https://example.com/agent",
+				Checksums: map[string]string{
+					"sha256": "asdf",
+				},
+			},
+			true,
+		},
+	}
+	for _, testdata := range data {
+		t.Run(testdata.name, func(t *testing.T) {
+			networkdep = &testdata.network
+
+			result, err := downloadFile(loggerMock, testdata.file)
+			if testdata.expectedErr {
+				assert.Error(t, err)
+			} else {
+				assert.NoError(t, err)
+				assert.Equal(t, "agent.zip", result)
+				// verify download input
+				input := artifact.DownloadInput{
+					SourceURL:       testdata.file.DownloadLocation,
+					SourceChecksums: map[string]string{"sha256": "asdf"},
+				}
+				assert.Equal(t, input, testdata.network.downloadInput)
+			}
+		})
+	}
+}
+
+func TestDownloadArtifact(t *testing.T) {
+	manifestStr := `
+	{
+		"packages": {
+			"platformName": {
+				"platformVersion": {
+					"architecture": {
+						"file": "test.zip"
+					}
+				}
+			}
+		},
+		"files": {
+			"test.zip": {
+				"downloadLocation": "https://example.com/agent"
+			}
+		}
+	}
+	`
+
+	data := []struct {
+		name           string
+		packageName    string
+		packageVersion string
+		network        networkMock
+		expectedErr    bool
+	}{
+		{
+			"successful download",
+			"packageName",
+			"1234",
+			networkMock{
+				downloadOutput: artifact.DownloadOutput{
+					LocalFilePath: "agent.zip",
+				},
+			},
+			false,
+		},
+		{
+			"failed manifest loading",
+			"packageName",
+			"1234",
+			networkMock{},
+			true,
+		},
+	}
+
+	for _, testdata := range data {
+		t.Run(testdata.name, func(t *testing.T) {
+			cache := packageservice.ManifestCacheMemNew()
+			cache.WriteManifest(testdata.packageName, testdata.packageVersion, []byte(manifestStr))
+
+			mockedCollector := CollectorMock{}
+
+			mockedCollector.On("CollectData", mock.Anything).Return(&envdetect.Environment{
+				&osdetect.OperatingSystem{"platformName", "platformVersion", "", "architecture", "", ""},
+				&ec2infradetect.Ec2Infrastructure{"instanceID", "region", "", "availabilityZone", "instanceType"},
+			}, nil).Once()
+
+			ds := &PackageService{manifestCache: cache, collector: &mockedCollector}
+			networkdep = &testdata.network
+
+			result, err := ds.DownloadArtifact(loggerMock, testdata.packageName, testdata.packageVersion)
+
+			if testdata.expectedErr {
+				assert.Error(t, err)
+			} else {
+				assert.NoError(t, err)
+				assert.Equal(t, "agent.zip", result)
+			}
+		})
+	}
+}
