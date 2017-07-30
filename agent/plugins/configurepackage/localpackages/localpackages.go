@@ -25,6 +25,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
+	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	"github.com/aws/amazon-ssm-agent/agent/framework/runpluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/installer"
@@ -65,11 +66,18 @@ type Repository interface {
 	RemovePackage(context context.T, packageName string, version string) error
 	GetInventoryData(context context.T) []model.ApplicationData
 	GetInstaller(context context.T, configuration contracts.Configuration, runner runpluginutil.PluginRunner, packageName string, version string) installer.Installer
+
+	ReadManifest(packageName string, packageVersion string) ([]byte, error)
+	WriteManifest(packageName string, packageVersion string, content []byte) error
 }
 
 // NewRepository is the factory method for the package repository with default file system dependencies
 func NewRepository() Repository {
-	return &localRepository{filesysdep: &fileSysDepImp{}, repoRoot: appconfig.PackageRoot}
+	return &localRepository{
+		filesysdep:        &fileSysDepImp{},
+		repoRoot:          appconfig.PackageRoot,
+		manifestCachePath: appconfig.ManifestCacheDirectory,
+	}
 }
 
 // PackageInstallState represents the json structure of the current package state
@@ -95,8 +103,9 @@ type PackageManifest struct {
 }
 
 type localRepository struct {
-	filesysdep FileSysDep
-	repoRoot   string
+	filesysdep        FileSysDep
+	repoRoot          string
+	manifestCachePath string
 }
 
 // GetInstaller returns an Installer appropriate for the package and version
@@ -228,6 +237,27 @@ func (repo *localRepository) GetInventoryData(context context.T) []model.Applica
 	}
 
 	return result
+}
+
+// manifest cache
+
+// filePath will return the manifest file path for a package name and package version
+func (r *localRepository) filePath(packageName string, packageVersion string) string {
+	return filepath.Join(r.manifestCachePath, fmt.Sprintf("%s_%s.json", normalizeDirectory(packageName), normalizeDirectory(packageVersion)))
+}
+
+// ReadManifest will return the manifest data for a given package name and package version from the cache
+func (r *localRepository) ReadManifest(packageName string, packageVersion string) ([]byte, error) {
+	return r.filesysdep.ReadFile(r.filePath(packageName, packageVersion))
+}
+
+// ReadManifest will put the manifest data for a given package name and package version into the cache
+func (r *localRepository) WriteManifest(packageName string, packageVersion string, content []byte) error {
+	err := fileutil.MakeDirs(r.manifestCachePath)
+	if err != nil {
+		return err
+	}
+	return r.filesysdep.WriteFile(r.filePath(packageName, packageVersion), string(content))
 }
 
 // hasInventoryData determines if a package should be reported to inventory by the repository

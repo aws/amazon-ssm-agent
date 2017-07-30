@@ -125,14 +125,16 @@ func DefaultConfig() SsmagentConfig {
 		Lang:    "en-US",
 		Version: "1",
 	}
+	var birdwatcher BirdwatcherCfg
 
 	var ssmagentCfg = SsmagentConfig{
-		Profile: credsProfile,
-		Mds:     mds,
-		Ssm:     ssm,
-		Agent:   agent,
-		Os:      os,
-		S3:      s3,
+		Profile:     credsProfile,
+		Mds:         mds,
+		Ssm:         ssm,
+		Agent:       agent,
+		Os:          os,
+		S3:          s3,
+		Birdwatcher: birdwatcher,
 	}
 
 	return ssmagentCfg
