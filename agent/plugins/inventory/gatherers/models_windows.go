@@ -24,6 +24,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/plugins/inventory/gatherers/file"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/inventory/gatherers/instancedetailedinformation"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/inventory/gatherers/network"
+	"github.com/aws/amazon-ssm-agent/agent/plugins/inventory/gatherers/registry"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/inventory/gatherers/role"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/inventory/gatherers/service"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/inventory/gatherers/windowsUpdate"
@@ -39,4 +40,5 @@ var supportedGathererNames = []string{
 	instancedetailedinformation.GathererName,
 	role.GathererName,
 	service.GathererName,
+	registry.GathererName,
 }
