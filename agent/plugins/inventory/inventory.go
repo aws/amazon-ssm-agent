@@ -35,6 +35,8 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/plugins/inventory/gatherers/file"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/inventory/gatherers/instancedetailedinformation"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/inventory/gatherers/network"
+	"github.com/aws/amazon-ssm-agent/agent/plugins/inventory/gatherers/role"
+	"github.com/aws/amazon-ssm-agent/agent/plugins/inventory/gatherers/service"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/inventory/gatherers/windowsUpdate"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/inventory/model"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/pluginutil"
@@ -44,11 +46,11 @@ import (
 	"github.com/aws/aws-sdk-go/service/ssm"
 )
 
-//TODO: add more unit tests.
+// TODO: add more unit tests.
 
 const (
 	errorMsgForMultipleAssociations           = "%v detected multiple inventory configurations associated to one instance. You can’t associate multiple inventory configurations to an instance. The association IDs are: %v and %v."
-	errorMsgForInvalidInventoryInput          = "Unrecongnized input for %v plugin"
+	errorMsgForInvalidInventoryInput          = "Unrecognized input for %v plugin"
 	errorMsgForExecutingInventoryViaAssociate = "%v plugin can only be invoked via ssm-associate"
 	errorMsgForUnableToDetectInvocationType   = "Unable to detect if %v plugin was invoked via ssm-associate because - %v"
 	errorMsgForInabilityToSendDataToSSM       = "Unable to upload inventory data to SSM"
@@ -63,6 +65,8 @@ type PluginInput struct {
 	AWSComponents               string
 	NetworkConfig               string
 	Files                       string
+	WindowsRoles                string
+	Services                    string
 	WindowsUpdates              string
 	InstanceDetailedInformation string
 	CustomInventory             string
@@ -322,54 +326,45 @@ func (p *Plugin) ValidateInventoryInput(context context.T, input PluginInput) (c
 	dataB, _ = json.Marshal(input)
 	log.Debugf("Validating gatherers from inventory input - \n%v", jsonutil.Indent(string(dataB)))
 
+	predefinedGatherers := map[string]string{
+		application.GathererName:                 input.Applications,
+		awscomponent.GathererName:                input.AWSComponents,
+		role.GathererName:                        input.WindowsRoles,
+		service.GathererName:                     input.Services,
+		network.GathererName:                     input.NetworkConfig,
+		windowsUpdate.GathererName:               input.WindowsUpdates,
+		instancedetailedinformation.GathererName: input.InstanceDetailedInformation,
+	}
+
+	predefinedGatherersWithFilters := map[string]string{
+		file.GathererName: input.Files,
+	}
+
 	//NOTE:
 	// If the gatherer is installed but not supported by current platform, we will skip that gatherer. If the
 	// gatherer is not installed,  we error out & don't send the data collected from other supported gatherers
 	// - this is because we don't send partial inventory data as part of 1 inventory policy.
-
-	//checking application gatherer
-	if canGathererRun, gatherer, cfg, err = p.validatePredefinedGatherer(context, input.Applications, application.GathererName); err != nil {
-		return
-	} else if canGathererRun {
-		configuredGatherers[gatherer] = cfg
+	for gathererName, collectionPolicy := range predefinedGatherers {
+		if canGathererRun, gatherer, cfg, err = p.validatePredefinedGatherer(context, collectionPolicy, gathererName); err != nil {
+			log.Errorf("Error while validating gatherer %v", err.Error())
+			return
+		} else if canGathererRun {
+			configuredGatherers[gatherer] = cfg
+		}
 	}
 
-	//checking awscomponents gatherer
-	if canGathererRun, gatherer, cfg, err = p.validatePredefinedGatherer(context, input.AWSComponents, awscomponent.GathererName); err != nil {
-		return
-	} else if canGathererRun {
-		configuredGatherers[gatherer] = cfg
-	}
-
-	if canGathererRun, gatherer, cfg, err = p.validateGathererWithFilters(context, "", file.GathererName, input.Files); err != nil {
-		return
-	} else if canGathererRun {
-		configuredGatherers[gatherer] = cfg
-	}
-
-	//checking network gatherer
-	if canGathererRun, gatherer, cfg, err = p.validatePredefinedGatherer(context, input.NetworkConfig, network.GathererName); err != nil {
-		return
-	} else if canGathererRun {
-		configuredGatherers[gatherer] = cfg
-	}
-
-	//checking windows updates gatherer
-	if canGathererRun, gatherer, cfg, err = p.validatePredefinedGatherer(context, input.WindowsUpdates, windowsUpdate.GathererName); err != nil {
-		return
-	} else if canGathererRun {
-		configuredGatherers[gatherer] = cfg
-	}
-
-	//checking instance detailed information gatherer
-	if canGathererRun, gatherer, cfg, err = p.validatePredefinedGatherer(context, input.InstanceDetailedInformation, instancedetailedinformation.GathererName); err != nil {
-		return
-	} else if canGathererRun {
-		configuredGatherers[gatherer] = cfg
+	for gathererName, filters := range predefinedGatherersWithFilters {
+		if canGathererRun, gatherer, cfg, err = p.validateGathererWithFilters(context, "", gathererName, filters); err != nil {
+			log.Errorf("Error while validating gatherer %v", err.Error())
+			return
+		} else if canGathererRun {
+			configuredGatherers[gatherer] = cfg
+		}
 	}
 
 	//checking custom gatherer
 	if canGathererRun, gatherer, cfg, err = p.validateCustomGatherer(context, input.CustomInventory, input.CustomInventoryDirectory); err != nil {
+		log.Errorf("Error while validating gatherer %v", err.Error())
 		return
 	} else if canGathererRun {
 		configuredGatherers[gatherer] = cfg
@@ -592,6 +587,7 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 	}
 
 	//loading Properties as map since aws:softwareInventory gets configuration in form of map
+	log.Infof("config.Properties %v", config.Properties)
 	if dataB, err = json.Marshal(config.Properties); err != nil {
 		errorMsg = fmt.Sprintf("Unable to marshal plugin input to %v due to %v", pluginName, err.Error())
 		log.Error(errorMsg)
@@ -621,7 +617,7 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 	}
 
 	dataB, _ = json.Marshal(inventoryInput)
-	log.Debugf("Inventory configuration after parsing - %v", string(dataB))
+	log.Infof("Inventory configuration after parsing - %v", string(dataB))
 
 	inventoryOutput = p.ApplyInventoryPolicy(context, inventoryInput)
 	res = setPluginResult(inventoryOutput, res)
