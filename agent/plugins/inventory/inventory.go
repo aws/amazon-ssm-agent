@@ -35,6 +35,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/plugins/inventory/gatherers/file"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/inventory/gatherers/instancedetailedinformation"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/inventory/gatherers/network"
+	"github.com/aws/amazon-ssm-agent/agent/plugins/inventory/gatherers/registry"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/inventory/gatherers/role"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/inventory/gatherers/service"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/inventory/gatherers/windowsUpdate"
@@ -67,6 +68,7 @@ type PluginInput struct {
 	Files                       string
 	WindowsRoles                string
 	Services                    string
+	WindowsRegistry             string
 	WindowsUpdates              string
 	InstanceDetailedInformation string
 	CustomInventory             string
@@ -337,7 +339,8 @@ func (p *Plugin) ValidateInventoryInput(context context.T, input PluginInput) (c
 	}
 
 	predefinedGatherersWithFilters := map[string]string{
-		file.GathererName: input.Files,
+		file.GathererName:     input.Files,
+		registry.GathererName: input.WindowsRegistry,
 	}
 
 	//NOTE:
