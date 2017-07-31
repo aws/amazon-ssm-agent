@@ -71,10 +71,8 @@ func ParseDocument(log log.T,
 	if err = validateSchema(docContent.SchemaVersion); err != nil {
 		return
 	}
-	if params != nil {
-		if err = getValidatedParameters(log, params, docContent); err != nil {
-			return
-		}
+	if err = getValidatedParameters(log, params, docContent); err != nil {
+		return
 	}
 
 	return parseDocumentContent(*docContent, parserInfo)
