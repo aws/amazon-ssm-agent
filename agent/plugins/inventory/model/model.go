@@ -104,6 +104,30 @@ type FileData struct {
 	ProductLanguage  string
 }
 
+type RoleData struct {
+	Name                      string
+	DisplayName               string
+	Description               string
+	Installed                 string
+	InstalledState            string
+	FeatureType               string
+	Path                      string
+	SubFeatures               string
+	ServerComponentDescriptor string
+	DependsOn                 string
+	Parent                    string
+}
+
+type ServiceData struct {
+	Name               string
+	DisplayName        string
+	Status             string
+	DependentServices  string
+	ServicesDependedOn string
+	ServiceType        string
+	StartType          string
+}
+
 // NetworkData captures all attributes present in AWS:Network inventory type
 type NetworkData struct {
 	Name       string
