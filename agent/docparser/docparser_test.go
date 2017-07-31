@@ -252,6 +252,43 @@ func TestParseDocument_ValidParameters(t *testing.T) {
 	assert.NotEqual(t, parsedMessage, originalMessage)
 }
 
+func TestParseDocument_ReplaceDefaultParameters(t *testing.T) {
+	mockLog := log.NewMockLog()
+
+	testParserInfo := DocumentParserInfo{
+		OrchestrationDir:  testOrchDir,
+		S3Bucket:          testS3Bucket,
+		S3Prefix:          testS3Prefix,
+		MessageId:         testMessageID,
+		DocumentId:        testDocumentID,
+		DefaultWorkingDir: testWorkingDir,
+	}
+
+	var testDocContent contracts.DocumentContent
+	defaultParamatersDoc := loadFile(t, "testdata/sampleReplaceDefaultParams.json")
+
+	err := json.Unmarshal([]byte(defaultParamatersDoc), &testDocContent)
+	assert.Nil(t, err)
+	assert.NoError(t, err, "Error occured when trying to unmarshal testparameters")
+	originalMessage, _ := jsonutil.Marshal(testDocContent)
+
+	pluginsInfo, err := ParseDocument(mockLog, &testDocContent, testParserInfo, nil)
+	parsedMessage, _ := jsonutil.Marshal(testDocContent)
+
+	assert.Nil(t, err)
+	assert.Equal(t, 1, len(pluginsInfo))
+
+	pluginInfoTest := pluginsInfo[0]
+	assert.Nil(t, pluginInfoTest.Result.Error)
+	assert.Equal(t, filepath.Join(testOrchDir, "example"), pluginInfoTest.Configuration.OrchestrationDirectory)
+	assert.Equal(t, testS3Bucket, pluginInfoTest.Configuration.OutputS3BucketName)
+	assert.Equal(t, filepath.Join(testS3Prefix, "awsrunPowerShellScript"), pluginInfoTest.Configuration.OutputS3KeyPrefix)
+	assert.Equal(t, testMessageID, pluginInfoTest.Configuration.MessageId)
+	assert.Equal(t, testDocumentID, pluginInfoTest.Configuration.BookKeepingFileName)
+	assert.Equal(t, testWorkingDir, pluginInfoTest.Configuration.DefaultWorkingDirectory)
+	assert.NotEqual(t, parsedMessage, originalMessage)
+}
+
 func TestIsCrossPlatformEnabledForSchema20(t *testing.T) {
 	var schemaVersion = "2.0"
 	isCrossPlatformEnabled := isPreconditionEnabled(schemaVersion)
