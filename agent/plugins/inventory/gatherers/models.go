@@ -23,6 +23,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/plugins/inventory/gatherers/file"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/inventory/gatherers/instancedetailedinformation"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/inventory/gatherers/network"
+	"github.com/aws/amazon-ssm-agent/agent/plugins/inventory/gatherers/registry"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/inventory/gatherers/role"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/inventory/gatherers/service"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/inventory/gatherers/windowsUpdate"
@@ -62,6 +63,7 @@ func InitializeGatherers(context context.T) (SupportedGatherer, InstalledGathere
 		instancedetailedinformation.GathererName: instancedetailedinformation.Gatherer(context),
 		role.GathererName:                        role.Gatherer(context),
 		service.GathererName:                     service.Gatherer(context),
+		registry.GathererName:                    registry.Gatherer(context),
 	}
 
 	for key := range installedGatherer {

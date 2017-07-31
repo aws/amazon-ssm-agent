@@ -128,6 +128,13 @@ type ServiceData struct {
 	StartType          string
 }
 
+type RegistryData struct {
+	ValueName string
+	ValueType string
+	KeyPath   string
+	Value     string
+}
+
 // NetworkData captures all attributes present in AWS:Network inventory type
 type NetworkData struct {
 	Name       string
