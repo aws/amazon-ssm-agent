@@ -211,17 +211,12 @@ func TestExtractPackageInfo(t *testing.T) {
 }
 
 func TestReportResult(t *testing.T) {
-	pkgresult := packageservice.PackageResult{
-		PackageName: "name",
-		Version:     "1234",
-		Timing:      29347,
-		Exitcode:    815,
-	}
 
 	data := []struct {
-		name         string
-		facadeClient facadeMock
-		expectedErr  bool
+		name          string
+		facadeClient  facadeMock
+		expectedErr   bool
+		packageResult packageservice.PackageResult
 	}{
 		{
 			"successful api call",
@@ -229,13 +224,40 @@ func TestReportResult(t *testing.T) {
 				putConfigurePackageResultOutput: &ssm.PutConfigurePackageResultOutput{},
 			},
 			false,
+			packageservice.PackageResult{
+				PackageName:            "name",
+				Version:                "1234",
+				PreviousPackageVersion: "5678",
+				Timing:                 29347,
+				Exitcode:               815,
+			},
 		},
 		{
-			"successful api call",
+			"successful api call without previous version",
+			facadeMock{
+				putConfigurePackageResultOutput: &ssm.PutConfigurePackageResultOutput{},
+			},
+			false,
+			packageservice.PackageResult{
+				PackageName: "name",
+				Version:     "1234",
+				Timing:      29347,
+				Exitcode:    815,
+			},
+		},
+		{
+			"failing api call",
 			facadeMock{
 				putConfigurePackageResultError: errors.New("testerror"),
 			},
 			true,
+			packageservice.PackageResult{
+				PackageName:            "name",
+				Version:                "1234",
+				PreviousPackageVersion: "5678",
+				Timing:                 29347,
+				Exitcode:               815,
+			},
 		},
 	}
 
@@ -249,17 +271,21 @@ func TestReportResult(t *testing.T) {
 			}, nil).Once()
 			ds := &PackageService{facadeClient: &testdata.facadeClient, manifestCache: packageservice.ManifestCacheMemNew(), collector: &mockedCollector}
 
-			err := ds.ReportResult(loggerMock, pkgresult)
+			err := ds.ReportResult(loggerMock, testdata.packageResult)
 			if testdata.expectedErr {
 				assert.Error(t, err)
 			} else {
 				assert.NoError(t, err)
-				assert.Equal(t, pkgresult.PackageName, *testdata.facadeClient.putConfigurePackageResultInput.PackageName)
-				assert.Equal(t, pkgresult.Version, *testdata.facadeClient.putConfigurePackageResultInput.PackageVersion)
-				assert.Equal(t, pkgresult.Operation, *testdata.facadeClient.putConfigurePackageResultInput.Operation)
-				assert.Equal(t, pkgresult.PreviousPackageVersion, *testdata.facadeClient.putConfigurePackageResultInput.PreviousPackageVersion)
-				assert.Equal(t, pkgresult.Timing, *testdata.facadeClient.putConfigurePackageResultInput.OverallTiming)
-				assert.Equal(t, pkgresult.Exitcode, *testdata.facadeClient.putConfigurePackageResultInput.Result)
+				assert.Equal(t, testdata.packageResult.PackageName, *testdata.facadeClient.putConfigurePackageResultInput.PackageName)
+				assert.Equal(t, testdata.packageResult.Version, *testdata.facadeClient.putConfigurePackageResultInput.PackageVersion)
+				assert.Equal(t, testdata.packageResult.Operation, *testdata.facadeClient.putConfigurePackageResultInput.Operation)
+				if testdata.packageResult.PreviousPackageVersion == "" {
+					assert.Nil(t, testdata.facadeClient.putConfigurePackageResultInput.PreviousPackageVersion)
+				} else {
+					assert.EqualValues(t, &testdata.packageResult.PreviousPackageVersion, testdata.facadeClient.putConfigurePackageResultInput.PreviousPackageVersion)
+				}
+				assert.Equal(t, testdata.packageResult.Timing, *testdata.facadeClient.putConfigurePackageResultInput.OverallTiming)
+				assert.Equal(t, testdata.packageResult.Exitcode, *testdata.facadeClient.putConfigurePackageResultInput.Result)
 				assert.Equal(t, "abc", *testdata.facadeClient.putConfigurePackageResultInput.PackageResultAttributes["platformName"])
 				assert.Equal(t, "567", *testdata.facadeClient.putConfigurePackageResultInput.PackageResultAttributes["platformVersion"])
 				assert.Equal(t, "xyz", *testdata.facadeClient.putConfigurePackageResultInput.PackageResultAttributes["architecture"])
