@@ -27,6 +27,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/docmanager/model"
 	"github.com/aws/amazon-ssm-agent/agent/docparser"
+	"github.com/aws/amazon-ssm-agent/agent/executers"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	"github.com/aws/amazon-ssm-agent/agent/framework/runpluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
@@ -160,7 +161,8 @@ func (inst *Installer) readShAction(context context.T, action *Action, workingDi
 	runCommand = append(runCommand, fmt.Sprintf("echo Running sh %v.sh", action.actionName))
 
 	for k, v := range envVars {
-		runCommand = append(runCommand, fmt.Sprintf("export %v=\"%v\"", k, v))
+		v = executers.QuoteShString(v)
+		runCommand = append(runCommand, fmt.Sprintf("export %v=%v", k, v))
 	}
 
 	runCommand = append(runCommand, fmt.Sprintf("sh %v.sh", action.actionName))
@@ -178,7 +180,8 @@ func (inst *Installer) readPs1Action(context context.T, action *Action, workingD
 	runCommand = append(runCommand, fmt.Sprintf("echo Running %v.ps1", action.actionName))
 
 	for k, v := range envVars {
-		runCommand = append(runCommand, fmt.Sprintf("$env:%v = \"%v\"; ", k, v))
+		v = executers.QuotePsString(v)
+		runCommand = append(runCommand, fmt.Sprintf("$env:%v = %v", k, v))
 	}
 
 	runCommand = append(runCommand, fmt.Sprintf(".\\%v.ps1; exit $LASTEXITCODE", action.actionName))
