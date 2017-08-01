@@ -100,7 +100,7 @@ func run(context context.T,
 	pluginOutputContent, _ := jsonutil.Marshal(outputs)
 	context.Log().Debugf("Plugin outputs %v", jsonutil.Indent(pluginOutputContent))
 	//send DocLevel response
-	status, _, runtimeStatuses := docmanager.DocumentResultAggregator(context.Log(), "", outputs)
+	status, _, _ := docmanager.DocumentResultAggregator(context.Log(), "", outputs)
 	result := contracts.DocumentResult{
 		Status:          status,
 		PluginResults:   outputs,
@@ -112,11 +112,9 @@ func run(context context.T,
 		DocumentVersion: documentVersion,
 	}
 	resChan <- result
-	//TODO runtimeStatus is redundant and will be removed in future
 	docState.DocumentInformation.DocumentStatus = status
-	docState.DocumentInformation.RuntimeStatus = runtimeStatuses
 	// persist the docState object
-	docStore.Save()
+	docStore.Save(docState)
 	//sender close the channel
 	close(resChan)
 }

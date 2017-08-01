@@ -94,9 +94,11 @@ func testBasicExecuter(t *testing.T, testCase TestCase) {
 	nStatusReceived := 0
 
 	state := testCase.DocState
+	resultState := state
+	resultState.DocumentInformation.DocumentStatus = testCase.ResultStatus
 	dataStoreMock := executermock.MockDocumentStore{}
-	dataStoreMock.On("Load").Return(&state)
-	dataStoreMock.On("Save").Return()
+	dataStoreMock.On("Load").Return(state)
+	dataStoreMock.On("Save", resultState).Return()
 	pluginRunner = func(context context.T,
 		executionID string,
 		documentCreatedDate string,

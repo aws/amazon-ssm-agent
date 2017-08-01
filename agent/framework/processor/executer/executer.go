@@ -33,8 +33,8 @@ type Executer interface {
 
 //DocumentStore is an wrapper over the document state class that provides additional persisting functions for the Executer
 type DocumentStore interface {
-	Save()
-	Load() *model.DocumentState
+	Save(model.DocumentState)
+	Load() model.DocumentState
 }
 
 //TODO need to refactor global lock in docmanager, or discard the entire package and impl the file IO here
@@ -57,9 +57,12 @@ func NewDocumentFileStore(context context.T, instID, docID, location string, sta
 	}
 }
 
-//Save the document info struct to the current folder
-func (f *DocumentFileStore) Save() {
+//Save the document info struct to the current folder, Save() is desired only for crash-recovery
+func (f *DocumentFileStore) Save(docState model.DocumentState) {
 	log := f.context.Log()
+	//copy the state struct
+	f.state = docState
+	//docStore only saves the document level informations
 	docmanager.PersistDocumentInfo(log,
 		f.state.DocumentInformation,
 		f.documentID,
@@ -68,13 +71,7 @@ func (f *DocumentFileStore) Save() {
 	return
 }
 
-//TODO Load() should have dirty flag to encourage in-memory load, this can be done once we remove the plugin saving part
-//Load the document state object from the current folder
-func (f *DocumentFileStore) Load() *model.DocumentState {
-	log := f.context.Log()
-	f.state = docmanager.GetDocumentInterimState(log,
-		f.documentID,
-		f.instanceID,
-		f.location)
-	return &f.state
+//Load() should happen in memory
+func (f *DocumentFileStore) Load() model.DocumentState {
+	return f.state
 }
