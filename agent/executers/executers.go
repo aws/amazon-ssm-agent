@@ -477,3 +477,14 @@ func prepareEnvironment(command *exec.Cmd) {
 func fmtEnvVariable(name string, val string) string {
 	return fmt.Sprintf("%s=%s", name, val)
 }
+
+func QuoteShString(str string) (result string) {
+	// Simple quote replacement for now
+	return fmt.Sprintf("'%v'", strings.Replace(str, "'", "'\\''", -1))
+}
+
+func QuotePsString(str string) (result string) {
+	// Simple quote replacement for now
+	str = strings.Replace(str, "`", "``", -1)
+	return fmt.Sprintf("\"%v\"", strings.Replace(str, "\"", "`\"", -1))
+}
