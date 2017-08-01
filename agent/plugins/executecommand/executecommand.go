@@ -28,6 +28,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/plugins/executecommand/gitresource"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/executecommand/remoteresource"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/executecommand/s3resource"
+	"github.com/aws/amazon-ssm-agent/agent/plugins/executecommand/ssmdocresource"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/pluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 
@@ -40,9 +41,9 @@ import (
 )
 
 const (
-	Github      = "Github"      //Github represents the location type "Github" from where the resource can be downloaded
-	S3          = "S3"          //S3 represents the location type "S3" from where the resource is being downloaded
-	SSMDocument = "SSMDocument" //SSMDocument represents the location type as SSM Document
+	Github      = "Github"       //Github represents the location type "Github" from where the resource can be downloaded
+	S3          = "S3"           //S3 represents the location type "S3" from where the resource is being downloaded
+	SSMDocument = "SSM Document" //SSMDocument represents the location type as SSM Document
 
 	executeCommandMaxDepth = 3 //Maximum depth of document execution
 )
@@ -302,15 +303,13 @@ func newRemoteResource(log log.T, locationType string, locationInfo string) (res
 		// TODO: meloniam@ Replace nil with auth information once work is done
 		// TODO: meloniam@ Replace string type to map[string]inteface{} type once Runcommand supports string maps
 		return gitresource.NewGitResource(nil, locationInfo)
+
 	case S3:
-		s3Resource, err := s3resource.NewS3Resource(log, locationInfo)
-		if err != nil {
-			return s3Resource, err
-		}
-		return s3Resource, nil
+		return s3resource.NewS3Resource(log, locationInfo)
+
 	case SSMDocument:
-		// TODO add support for SSM Documents
-		return nil, errors.New("SSMDocument resource not yet implemented")
+		return ssmdocresource.NewSSMDocResource(locationInfo)
+
 	default:
 		return nil, fmt.Errorf("Invalid Location type.")
 	}
