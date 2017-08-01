@@ -89,3 +89,46 @@ func TestEnvironmentVariables_None(t *testing.T) {
 	assert.Empty(t, getEnvVariableValue(command.Env, envVarInstanceId))
 	assert.Empty(t, getEnvVariableValue(command.Env, envVarRegionName))
 }
+
+func TestQuoteShString(t *testing.T) {
+	var result string
+
+	result = QuoteShString("")
+	assert.Equal(t, "''", result)
+
+	result = QuoteShString("abc")
+	assert.Equal(t, "'abc'", result)
+}
+
+func TestQuoteShStringWithQuotes(t *testing.T) {
+	var result string
+
+	result = QuoteShString("\"abc\"")
+	assert.Equal(t, "'\"abc\"'", result)
+
+	result = QuoteShString("'abc'")
+	assert.Equal(t, "''\\''abc'\\'''", result)
+}
+
+func TestQuotePsString(t *testing.T) {
+	var result string
+
+	result = QuotePsString("")
+	assert.Equal(t, "\"\"", result)
+
+	result = QuotePsString("abc")
+	assert.Equal(t, "\"abc\"", result)
+}
+
+func TestQuotePsStringWithQuotes(t *testing.T) {
+	var result string
+
+	result = QuotePsString("\"abc\"")
+	assert.Equal(t, "\"`\"abc`\"\"", result)
+
+	result = QuotePsString("'abc'")
+	assert.Equal(t, "\"'abc'\"", result)
+
+	result = QuotePsString("`abc`")
+	assert.Equal(t, "\"``abc``\"", result)
+}
