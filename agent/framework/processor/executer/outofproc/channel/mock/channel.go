@@ -1,27 +1,24 @@
 package channelmock
 
-import (
-	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/outofproc/contracts"
-	"github.com/stretchr/testify/mock"
-)
+import "github.com/stretchr/testify/mock"
 
 type MockedChannel struct {
 	mock.Mock
 }
 
-func (m *MockedChannel) Connect() error {
-	args := m.Called()
+func (m *MockedChannel) Open(name string) error {
+	args := m.Called(name)
 	return args.Error(0)
 }
 
-func (m *MockedChannel) Send(msg contracts.Message) error {
+func (m *MockedChannel) Send(msg string) error {
 	args := m.Called(msg)
 	return args.Error(0)
 }
 
-func (m *MockedChannel) GetMessageChannel() chan contracts.Message {
+func (m *MockedChannel) GetMessageChannel() chan string {
 	args := m.Called()
-	return args.Get(0).(chan contracts.Message)
+	return args.Get(0).(chan string)
 }
 
 func (m *MockedChannel) Close() {
