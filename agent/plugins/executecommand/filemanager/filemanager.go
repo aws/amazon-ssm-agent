@@ -71,7 +71,7 @@ func SaveFileContent(log log.T, filesysdep FileSystem, destDir string, contents 
 		log.Error("failed to create directory for github - ", err)
 		return err
 	}
-	log.Debug("Content obtained from github - ", contents)
+	log.Debug("Content obtained - ", contents)
 
 	if err = filesysdep.WriteFile(filePath, contents); err != nil {
 		log.Errorf("Error writing to file %v - %v", filePath, err)
