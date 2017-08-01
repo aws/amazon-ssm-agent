@@ -108,11 +108,15 @@ func (ds *PackageService) ReportResult(log log.T, result packageservice.PackageR
 
 	env, _ := ds.collector.CollectData(log)
 
+	var previousPackageVersion *string
+	if result.PreviousPackageVersion != "" {
+		previousPackageVersion = &result.PreviousPackageVersion
+	}
 	_, err := ds.facadeClient.PutConfigurePackageResult(
 		&ssm.PutConfigurePackageResultInput{
 			PackageName:            &result.PackageName,
 			PackageVersion:         &result.Version,
-			PreviousPackageVersion: &result.PreviousPackageVersion,
+			PreviousPackageVersion: previousPackageVersion,
 			Operation:              &result.Operation,
 			OverallTiming:          &result.Timing,
 			Result:                 &result.Exitcode,
