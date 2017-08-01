@@ -25,6 +25,11 @@ import (
 
 	"encoding/json"
 	"io/ioutil"
+
+	"github.com/aws/amazon-ssm-agent/agent/appconfig"
+	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer"
+	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/basicexecuter"
+	"github.com/aws/amazon-ssm-agent/agent/task"
 )
 
 // dependency on action execution
@@ -59,7 +64,32 @@ func (m *execDepImp) ParseDocument(context context.T, documentRaw []byte, orches
 func (m *execDepImp) ExecuteDocument(runner runpluginutil.PluginRunner, context context.T, pluginInput []model.PluginState, documentID string, documentCreatedDate string) (pluginOutputs map[string]*contracts.PluginResult) {
 	log := context.Log()
 	log.Debugf("Running subcommand")
-	return runner.ExecuteDocument(context, pluginInput, documentID, documentCreatedDate)
+	exe := basicexecuter.NewBasicExecuter(context)
+
+	docState := model.DocumentState{
+		DocumentInformation: model.DocumentInfo{
+			DocumentID: documentID,
+		},
+		InstancePluginsInformation: pluginInput,
+	}
+	//specify the subdocument's bookkeeping location
+	instanceID, err := instance.InstanceID()
+	if err != nil {
+		log.Error("faile to load instance id")
+		return
+	}
+	docStore := executer.NewDocumentFileStore(context, documentID, instanceID, appconfig.DefaultLocationOfCurrent, &docState)
+	cancelFlag := task.NewChanneledCancelFlag()
+	resChan := exe.Run(cancelFlag, &docStore)
+
+	for res := range resChan {
+		//basicExecuter can guarantee result order, however outofproc Executer cannot
+		if res.LastPlugin == "" {
+			pluginOutputs = res.PluginResults
+			break
+		}
+	}
+	return
 }
 
 // dependency on filesystem and os utility functions
