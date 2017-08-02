@@ -11,8 +11,8 @@
 // either express or implied. See the License for the specific language governing
 // permissions and limitations under the License.
 
-// Package engine contains the general purpose plugin runner of the plugin framework.
-package basicexecuter
+// Package runpluginutil run plugin utility functions without referencing the actually plugin impl packages
+package runpluginutil
 
 import (
 	"fmt"
@@ -22,7 +22,6 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	docModel "github.com/aws/amazon-ssm-agent/agent/docmanager/model"
-	"github.com/aws/amazon-ssm-agent/agent/framework/runpluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/platform"
 	"github.com/aws/amazon-ssm-agent/agent/rebooter"
@@ -37,18 +36,16 @@ const (
 )
 
 // Assign method to global variables to allow unittest to override
-var isSupportedPlugin = runpluginutil.IsPluginSupportedForCurrentPlatform
+var isSupportedPlugin = IsPluginSupportedForCurrentPlatform
 
 //TODO remove executionID and creation date
 // RunPlugins executes a set of plugins. The plugin configurations are given in a map with pluginId as key.
 // Outputs the results of running the plugins, indexed by pluginId.
 // Make this function private in case everybody tries to reference it everywhere, this is a private member of Executer
-func runPlugins(
+func RunPlugins(
 	context context.T,
-	executionID string,
-	documentCreatedDate string,
 	plugins []docModel.PluginState,
-	pluginRegistry runpluginutil.PluginRegistry,
+	pluginRegistry PluginRegistry,
 	resChan chan contracts.PluginResult,
 	cancelFlag task.CancelFlag,
 ) (pluginOutputs map[string]*contracts.PluginResult) {
@@ -64,33 +61,29 @@ func runPlugins(
 		switch pluginOutput.Status {
 		//TODO properly initialize the plugin status
 		case "":
-			context.Log().Debugf("plugin - %v of document - %v has empty state, initialize as NotStarted",
-				pluginName,
-				executionID)
+			context.Log().Debugf("plugin - %v has empty state, initialize as NotStarted",
+				pluginName)
 			pluginOutput.StartDateTime = time.Now()
 			pluginOutput.Status = contracts.ResultStatusNotStarted
 
 		case contracts.ResultStatusNotStarted, contracts.ResultStatusInProgress:
-			context.Log().Debugf("plugin - %v of document - %v status %v",
+			context.Log().Debugf("plugin - %v status %v",
 				pluginName,
-				executionID,
 				pluginOutput.Status)
 			pluginOutput.StartDateTime = time.Now()
 
 		case contracts.ResultStatusSuccessAndReboot:
-			context.Log().Debugf("plugin - %v of document - %v just experienced reboot, reset to InProgress...",
-				pluginName,
-				executionID)
+			context.Log().Debugf("plugin - %v just experienced reboot, reset to InProgress...",
+				pluginName)
 			pluginOutput.Status = contracts.ResultStatusInProgress
 
 		default:
-			context.Log().Debugf("plugin - %v of document - %v already executed, skipping...",
-				pluginName,
-				executionID)
+			context.Log().Debugf("plugin - %v already executed, skipping...",
+				pluginName)
 			continue
 		}
 
-		context.Log().Debugf("Executing plugin - %v of document - %v", pluginName, executionID)
+		context.Log().Debugf("Executing plugin - %v", pluginName)
 
 		// populate plugin start time and status
 		configuration := pluginState.Configuration
@@ -108,11 +101,11 @@ func runPlugins(
 		//check if the said plugin is a worker plugin
 		p, pluginHandlerFound := pluginRegistry[pluginName]
 
-		runner := runpluginutil.PluginRunner{
+		runner := PluginRunner{
 			RunPlugins:  RunPluginsLegacy,
 			Plugins:     pluginRegistry,
-			SendReply:   runpluginutil.NoReply,
-			UpdateAssoc: runpluginutil.NoUpdate,
+			SendReply:   NoReply,
+			UpdateAssoc: NoUpdate,
 			CancelFlag:  cancelFlag,
 		}
 
@@ -178,11 +171,11 @@ func runPlugins(
 
 func runPlugin(
 	context context.T,
-	p runpluginutil.T,
+	p T,
 	pluginID string,
 	config contracts.Configuration,
 	cancelFlag task.CancelFlag,
-	runner runpluginutil.PluginRunner,
+	runner PluginRunner,
 ) (res contracts.PluginResult) {
 	// create a new context that includes plugin ID
 	context = context.With("[pluginID=" + pluginID + "]")
@@ -339,9 +332,9 @@ func RunPluginsLegacy(
 	executionID string,
 	documentCreatedDate string,
 	plugins []docModel.PluginState,
-	pluginRegistry runpluginutil.PluginRegistry,
-	sendReply runpluginutil.SendResponseLegacy,
-	updateAssoc runpluginutil.UpdateAssociation,
+	pluginRegistry PluginRegistry,
+	sendReply SendResponseLegacy,
+	updateAssoc UpdateAssociation,
 	cancelFlag task.CancelFlag,
 ) (pluginOutputs map[string]*contracts.PluginResult) {
 	totalNumberOfActions := len(plugins)
@@ -401,11 +394,11 @@ func RunPluginsLegacy(
 		//check if the said plugin is a worker plugin
 		p, pluginHandlerFound := pluginRegistry[pluginName]
 
-		runner := runpluginutil.PluginRunner{
+		runner := PluginRunner{
 			RunPlugins:  RunPluginsLegacy,
 			Plugins:     pluginRegistry,
-			SendReply:   runpluginutil.NoReply,
-			UpdateAssoc: runpluginutil.NoUpdate,
+			SendReply:   NoReply,
+			UpdateAssoc: NoUpdate,
 			CancelFlag:  cancelFlag,
 		}
 

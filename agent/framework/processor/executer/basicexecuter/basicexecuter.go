@@ -24,6 +24,7 @@ import (
 	"sync"
 
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer"
+	"github.com/aws/amazon-ssm-agent/agent/framework/runpluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 )
 
@@ -35,16 +36,13 @@ type BasicExecuter struct {
 }
 
 var pluginRunner = func(context context.T,
-	executionID string,
-	documentCreatedDate string,
 	plugins []docModel.PluginState,
 	resChan chan contracts.PluginResult,
 	cancelFlag task.CancelFlag) (pluginOutputs map[string]*contracts.PluginResult) {
-	return runPlugins(context, executionID, documentCreatedDate, plugins, executer.PluginRegistry, resChan, cancelFlag)
+	return runpluginutil.RunPlugins(context, plugins, executer.PluginRegistry, resChan, cancelFlag)
 
 }
 
-//TODO determine the common functions shared by BasicExecuter and out-of-proc Executer
 func run(context context.T,
 	docStore executer.DocumentStore,
 	resChan chan contracts.DocumentResult,
@@ -92,7 +90,7 @@ func run(context context.T,
 		}
 	}()
 
-	outputs := pluginRunner(context, messageID, "", docState.InstancePluginsInformation, statusChan, cancelFlag)
+	outputs := pluginRunner(context, docState.InstancePluginsInformation, statusChan, cancelFlag)
 	close(statusChan)
 	//make sure the launched go routine has finshed before sending the final response
 	wg.Wait()
