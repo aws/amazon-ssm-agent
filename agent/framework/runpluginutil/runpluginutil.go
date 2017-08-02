@@ -11,11 +11,12 @@
 // either express or implied. See the License for the specific language governing
 // permissions and limitations under the License.
 
-//TODO re-examine this package's role in the "Executer" model, we probably should let other plugins use Executers.
-// Package runpluginutil provides interfaces for running plugins that can be referenced by other plugins and a utility method for parsing documents
+//TODO remove the legacy RunPlugins and SendResponse method
+// Package runpluginutil provides Plugins factory as PluginRegistry interface and other utility functions for running plugins
 package runpluginutil
 
 import (
+	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/docmanager/model"
@@ -23,7 +24,6 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/task"
 )
 
-//TODO remove legacy SendResponse
 // SendResponse is used to send response on plugin completion.
 // If pluginID is empty it will send responses of all plugins.
 // If pluginID is specified, response will be sent of that particular plugin.
@@ -72,4 +72,24 @@ func (r *PluginRunner) ExecuteDocument(context context.T, pluginInput []model.Pl
 	}
 
 	return r.RunPlugins(context, documentID, documentCreatedDate, pluginInput, r.Plugins, r.SendReply, r.UpdateAssoc, r.CancelFlag)
+}
+
+// allPlugins is the list of all known plugins.
+// This allows us to differentiate between the case where a document asks for a plugin that exists but isn't supported on this platform
+// and the case where a plugin name isn't known at all to this version of the agent (and the user should probably upgrade their agent)
+var allPlugins = map[string]struct{}{
+	appconfig.PluginNameAwsAgentUpdate:         {},
+	appconfig.PluginNameAwsApplications:        {},
+	appconfig.PluginNameAwsConfigureDaemon:     {},
+	appconfig.PluginNameAwsConfigurePackage:    {},
+	appconfig.PluginNameAwsPowerShellModule:    {},
+	appconfig.PluginNameAwsRunPowerShellScript: {},
+	appconfig.PluginNameAwsRunShellScript:      {},
+	appconfig.PluginNameAwsSoftwareInventory:   {},
+	appconfig.PluginNameCloudWatch:             {},
+	appconfig.PluginNameConfigureDocker:        {},
+	appconfig.PluginNameDockerContainer:        {},
+	appconfig.PluginNameDomainJoin:             {},
+	appconfig.PluginEC2ConfigUpdate:            {},
+	appconfig.PluginNameRefreshAssociation:     {},
 }

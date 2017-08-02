@@ -24,7 +24,6 @@ import (
 	"sync"
 
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer"
-	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/plugin"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 )
 
@@ -41,7 +40,7 @@ var pluginRunner = func(context context.T,
 	plugins []docModel.PluginState,
 	resChan chan contracts.PluginResult,
 	cancelFlag task.CancelFlag) (pluginOutputs map[string]*contracts.PluginResult) {
-	return runPlugins(context, executionID, documentCreatedDate, plugins, plugin.RegisteredWorkerPlugins(context), resChan, cancelFlag)
+	return runPlugins(context, executionID, documentCreatedDate, plugins, executer.PluginRegistry, resChan, cancelFlag)
 
 }
 
