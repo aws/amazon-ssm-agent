@@ -11,12 +11,11 @@
 // either express or implied. See the License for the specific language governing
 // permissions and limitations under the License.
 
-package plugin
+package runpluginutil
 
 import (
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
-	"github.com/aws/amazon-ssm-agent/agent/framework/runpluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 	"github.com/stretchr/testify/mock"
 )
@@ -25,12 +24,12 @@ import (
 // because then we would have to copy it in every test package that needs the mock.
 
 // Mock stands for a mocked plugin.
-type Mock struct {
+type PluginMock struct {
 	mock.Mock
 }
 
 // Execute mocks a plugin execution.
-func (m *Mock) Execute(context context.T, config contracts.Configuration, cancelFlag task.CancelFlag, subDocumentRunner runpluginutil.PluginRunner) (res contracts.PluginResult) {
+func (m *PluginMock) Execute(context context.T, config contracts.Configuration, cancelFlag task.CancelFlag, subDocumentRunner PluginRunner) (res contracts.PluginResult) {
 	args := m.Called(context, config, cancelFlag)
 	return args.Get(0).(contracts.PluginResult)
 }

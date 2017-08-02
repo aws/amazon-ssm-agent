@@ -11,7 +11,7 @@
 // either express or implied. See the License for the specific language governing
 // permissions and limitations under the License.
 
-// Package runpluginutil provides interfaces for running plugins that can be referenced by other plugins and a utility method for parsing documents
+// Package runpluginutil run plugin utility functions without referencing the actually plugin impl packages
 package runpluginutil
 
 import (
