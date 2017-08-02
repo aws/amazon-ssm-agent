@@ -13,7 +13,8 @@
 //
 // +build darwin freebsd linux netbsd openbsd
 
-package plugin
+// Package runpluginutil provides Plugins factory as PluginRegistry interface and other utility functions for running plugins
+package runpluginutil
 
 import (
 	"testing"
