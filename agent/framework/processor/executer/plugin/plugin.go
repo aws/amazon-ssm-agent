@@ -32,26 +32,6 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/plugins/updatessmagent"
 )
 
-// allPlugins is the list of all known plugins.
-// This allows us to differentiate between the case where a document asks for a plugin that exists but isn't supported on this platform
-// and the case where a plugin name isn't known at all to this version of the agent (and the user should probably upgrade their agent)
-var allPlugins = map[string]struct{}{
-	appconfig.PluginNameAwsAgentUpdate:         {},
-	appconfig.PluginNameAwsApplications:        {},
-	appconfig.PluginNameAwsConfigureDaemon:     {},
-	appconfig.PluginNameAwsConfigurePackage:    {},
-	appconfig.PluginNameAwsPowerShellModule:    {},
-	appconfig.PluginNameAwsRunPowerShellScript: {},
-	appconfig.PluginNameAwsRunShellScript:      {},
-	appconfig.PluginNameAwsSoftwareInventory:   {},
-	appconfig.PluginNameCloudWatch:             {},
-	appconfig.PluginNameConfigureDocker:        {},
-	appconfig.PluginNameDockerContainer:        {},
-	appconfig.PluginNameDomainJoin:             {},
-	appconfig.PluginEC2ConfigUpdate:            {},
-	appconfig.PluginNameRefreshAssociation:     {},
-}
-
 var once sync.Once
 
 // registeredPlugins stores the registered plugins.

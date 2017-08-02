@@ -22,7 +22,6 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	docModel "github.com/aws/amazon-ssm-agent/agent/docmanager/model"
-	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/plugin"
 	"github.com/aws/amazon-ssm-agent/agent/framework/runpluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/platform"
@@ -38,7 +37,7 @@ const (
 )
 
 // Assign method to global variables to allow unittest to override
-var isSupportedPlugin = plugin.IsPluginSupportedForCurrentPlatform
+var isSupportedPlugin = runpluginutil.IsPluginSupportedForCurrentPlatform
 
 //TODO remove executionID and creation date
 // RunPlugins executes a set of plugins. The plugin configurations are given in a map with pluginId as key.
