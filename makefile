@@ -111,7 +111,9 @@ build-linux: checkstyle copy-src pre-build
 	GOOS=linux GOARCH=amd64 $(GO_BUILD) -ldflags "-s -w" -o $(BGO_SPACE)/bin/linux_amd64/updater -v \
 	$(BGO_SPACE)/agent/update/updater/updater.go $(BGO_SPACE)/agent/update/updater/updater_unix.go
 	GOOS=linux GOARCH=amd64 $(GO_BUILD) -ldflags "-s -w" -o $(BGO_SPACE)/bin/linux_amd64/ssm-cli -v \
-        $(BGO_SPACE)/agent/cli-main/cli-main.go
+		$(BGO_SPACE)/agent/cli-main/cli-main.go
+	GOOS=linux GOARCH=amd64 $(GO_BUILD) -ldflags "-s -w" -o $(BGO_SPACE)/bin/linux_amd64/ssm-document-worker -v \
+							$(BGO_SPACE)/agent/framework/processor/executer/outofproc/worker/main.go
 
 .PHONY: build-freebsd
 build-freebsd: checkstyle copy-src pre-build
@@ -119,7 +121,9 @@ build-freebsd: checkstyle copy-src pre-build
 	GOOS=freebsd GOARCH=amd64 go build -ldflags "-s -w" -o $(BGO_SPACE)/bin/freebsd_amd64/amazon-ssm-agent -v \
 	$(BGO_SPACE)/agent/agent.go $(BGO_SPACE)/agent/agent_unix.go $(BGO_SPACE)/agent/agent_parser.go
 	GOOS=freebsd GOARCH=amd64 $(GO_BUILD) -ldflags "-s -w" -o $(BGO_SPACE)/bin/freebsd_amd64/ssm-cli -v \
-            $(BGO_SPACE)/agent/cli-main/cli-main.go
+			$(BGO_SPACE)/agent/cli-main/cli-main.go
+	GOOS=freebsd GOARCH=amd64 $(GO_BUILD) -ldflags "-s -w" -o $(BGO_SPACE)/bin/freebsd_amd64/ssm-document-worker -v \
+								$(BGO_SPACE)/agent/framework/processor/executer/outofproc/worker/main.go
 
 .PHONY: build-darwin
 build-darwin: checkstyle copy-src pre-build
@@ -129,7 +133,9 @@ build-darwin: checkstyle copy-src pre-build
 	GOOS=darwin GOARCH=amd64 $(GO_BUILD) -ldflags "-s -w" -o $(BGO_SPACE)/bin/darwin_amd64/updater -v \
 	$(BGO_SPACE)/agent/update/updater/updater.go $(BGO_SPACE)/agent/update/updater/updater_unix.go
 	GOOS=darwin GOARCH=amd64 $(GO_BUILD) -ldflags "-s -w" -o $(BGO_SPACE)/bin/darwin_amd64/ssm-cli -v \
-        $(BGO_SPACE)/agent/cli-main/cli-main.go
+		$(BGO_SPACE)/agent/cli-main/cli-main.go
+	GOOS=darwin GOARCH=amd64 $(GO_BUILD) -ldflags "-s -w" -o $(BGO_SPACE)/bin/darwin_amd64/ssm-document-worker -v \
+								$(BGO_SPACE)/agent/framework/processor/executer/outofproc/worker/main.go
 
 .PHONY: build-windows
 build-windows: checkstyle copy-src pre-build
@@ -139,7 +145,9 @@ build-windows: checkstyle copy-src pre-build
 	GOOS=windows GOARCH=amd64 $(GO_BUILD) -ldflags "-s -w" -o $(BGO_SPACE)/bin/windows_amd64/updater.exe -v \
 	$(BGO_SPACE)/agent/update/updater/updater.go $(BGO_SPACE)/agent/update/updater/updater_windows.go
 	GOOS=windows GOARCH=amd64 $(GO_BUILD) -ldflags "-s -w" -o $(BGO_SPACE)/bin/windows_amd64/ssm-cli.exe -v \
-        $(BGO_SPACE)/agent/cli-main/cli-main.go
+		$(BGO_SPACE)/agent/cli-main/cli-main.go
+	GOOS=windows GOARCH=amd64 $(GO_BUILD) -ldflags "-s -w" -o $(BGO_SPACE)/bin/windows_amd64/ssm-document-worker.exe -v \
+								$(BGO_SPACE)/agent/framework/processor/executer/outofproc/worker/main.go
 
 .PHONY: build-linux-386
 build-linux-386: checkstyle copy-src pre-build
@@ -149,7 +157,9 @@ build-linux-386: checkstyle copy-src pre-build
 	GOOS=linux GOARCH=386 $(GO_BUILD) -ldflags "-s -w" -o $(BGO_SPACE)/bin/linux_386/updater -v \
 	$(BGO_SPACE)/agent/update/updater/updater.go $(BGO_SPACE)/agent/update/updater/updater_unix.go
 	GOOS=linux GOARCH=386 $(GO_BUILD) -ldflags "-s -w" -o $(BGO_SPACE)/bin/linux_386/ssm-cli -v \
-        $(BGO_SPACE)/agent/cli-main/cli-main.go
+		$(BGO_SPACE)/agent/cli-main/cli-main.go
+	GOOS=linux GOARCH=386 $(GO_BUILD) -ldflags "-s -w" -o $(BGO_SPACE)/bin/linux_386/ssm-document-worker -v \
+								$(BGO_SPACE)/agent/framework/processor/executer/outofproc/worker/main.go
 
 .PHONY: build-darwin-386
 build-darwin-386: checkstyle copy-src pre-build
@@ -159,7 +169,9 @@ build-darwin-386: checkstyle copy-src pre-build
 	GOOS=darwin GOARCH=386 $(GO_BUILD) -ldflags "-s -w" -o $(BGO_SPACE)/bin/darwin_386/updater -v \
 	$(BGO_SPACE)/agent/update/updater/updater.go $(BGO_SPACE)/agent/update/updater/updater_unix.go
 	GOOS=darwin GOARCH=386 $(GO_BUILD) -ldflags "-s -w" -o $(BGO_SPACE)/bin/darwin_386/ssm-cli -v \
-        $(BGO_SPACE)/agent/cli-main/cli-main.go
+		$(BGO_SPACE)/agent/cli-main/cli-main.go
+	GOOS=darwin GOARCH=386 $(GO_BUILD) -ldflags "-s -w" -o $(BGO_SPACE)/bin/darwin_386/ssm-document-worker -v \
+								$(BGO_SPACE)/agent/framework/processor/executer/outofproc/worker/main.go
 
 .PHONY: build-windows-386
 build-windows-386: checkstyle copy-src pre-build
@@ -169,17 +181,21 @@ build-windows-386: checkstyle copy-src pre-build
 	GOOS=windows GOARCH=386 go build -ldflags "-s -w" -o $(BGO_SPACE)/bin/windows_386/updater.exe -v \
 	$(BGO_SPACE)/agent/update/updater/updater.go $(BGO_SPACE)/agent/update/updater/updater_windows.go
 	GOOS=windows GOARCH=386 go build -ldflags "-s -w" -o $(BGO_SPACE)/bin/windows_386/ssm-cli.exe -v \
-        $(BGO_SPACE)/agent/cli-main/cli-main.go
+		$(BGO_SPACE)/agent/cli-main/cli-main.go
+	GOOS=windows GOARCH=386 go build -ldflags "-s -w" -o $(BGO_SPACE)/bin/windows_386/ssm-document-worker.exe -v \
+								$(BGO_SPACE)/agent/framework/processor/executer/outofproc/worker/main.go
 
 .PHONY: build-arm
 build-arm: checkstyle copy-src pre-build
 	@echo "Build for ARM platforms"
 	GOOS=linux GOARCH=arm $(GO_BUILD) -ldflags "-s -w" -o $(BGO_SPACE)/bin/linux_arm/amazon-ssm-agent -v \
-	    $(BGO_SPACE)/agent/agent.go $(BGO_SPACE)/agent/agent_unix.go $(BGO_SPACE)/agent/agent_parser.go
+		$(BGO_SPACE)/agent/agent.go $(BGO_SPACE)/agent/agent_unix.go $(BGO_SPACE)/agent/agent_parser.go
 	GOOS=linux GOARCH=arm $(GO_BUILD) -ldflags "-s -w" -o $(BGO_SPACE)/bin/linux_arm/updater -v \
-	    $(BGO_SPACE)/agent/update/updater/updater.go $(BGO_SPACE)/agent/update/updater/updater_unix.go
+		$(BGO_SPACE)/agent/update/updater/updater.go $(BGO_SPACE)/agent/update/updater/updater_unix.go
 	GOOS=linux GOARCH=arm $(GO_BUILD) -ldflags "-s -w" -o $(BGO_SPACE)/bin/linux_arm/ssm-cli -v \
-	    $(BGO_SPACE)/agent/cli-main/cli-main.go
+		$(BGO_SPACE)/agent/cli-main/cli-main.go
+	GOOS=linux GOARCH=arm $(GO_BUILD) -ldflags "-s -w" -o $(BGO_SPACE)/bin/linux_arm/ssm-document-worker -v \
+								$(BGO_SPACE)/agent/framework/processor/executer/outofproc/worker/main.go
 
 .PHONY: copy-src
 copy-src:
@@ -200,6 +216,7 @@ prepack-linux:
 	$(COPY) $(BGO_SPACE)/bin/linux_amd64/amazon-ssm-agent $(BGO_SPACE)/bin/prepacked/linux_amd64/amazon-ssm-agent
 	$(COPY) $(BGO_SPACE)/bin/linux_amd64/updater $(BGO_SPACE)/bin/prepacked/linux_amd64/updater
 	$(COPY) $(BGO_SPACE)/bin/linux_amd64/ssm-cli $(BGO_SPACE)/bin/prepacked/linux_amd64/ssm-cli
+	$(COPY) $(BGO_SPACE)/bin/linux_amd64/ssm-document-worker $(BGO_SPACE)/bin/prepacked/linux_amd64/ssm-document-worker
 	$(COPY) $(BGO_SPACE)/bin/amazon-ssm-agent.json.template $(BGO_SPACE)/bin/prepacked/linux_amd64/amazon-ssm-agent.json.template
 	$(COPY) $(BGO_SPACE)/bin/seelog_unix.xml $(BGO_SPACE)/bin/prepacked/linux_amd64/seelog.xml
 	$(COPY) $(BGO_SPACE)/bin/LICENSE $(BGO_SPACE)/bin/prepacked/linux_amd64/LICENSE
@@ -210,6 +227,7 @@ prepack-darwin:
 	$(COPY) $(BGO_SPACE)/bin/darwin_amd64/amazon-ssm-agent $(BGO_SPACE)/bin/prepacked/darwin_amd64/amazon-ssm-agent
 	$(COPY) $(BGO_SPACE)/bin/darwin_amd64/updater $(BGO_SPACE)/bin/prepacked/darwin_amd64/updater
 	$(COPY) $(BGO_SPACE)/bin/darwin_amd64/ssm-cli $(BGO_SPACE)/bin/prepacked/darwin_amd64/ssm-cli
+	$(COPY) $(BGO_SPACE)/bin/darwin_amd64/ssm-document-worker $(BGO_SPACE)/bin/prepacked/darwin_amd64/ssm-document-worker
 	$(COPY) $(BGO_SPACE)/bin/amazon-ssm-agent.json.template $(BGO_SPACE)/bin/prepacked/darwin_amd64/amazon-ssm-agent.json.template
 	$(COPY) $(BGO_SPACE)/bin/seelog_unix.xml $(BGO_SPACE)/bin/prepacked/darwin_amd64/seelog.xml
 	$(COPY) $(BGO_SPACE)/bin/LICENSE $(BGO_SPACE)/bin/prepacked/darwin_amd64/LICENSE
@@ -220,6 +238,7 @@ prepack-windows:
 	$(COPY) $(BGO_SPACE)/bin/windows_amd64/amazon-ssm-agent.exe $(BGO_SPACE)/bin/prepacked/windows_amd64/amazon-ssm-agent.exe
 	$(COPY) $(BGO_SPACE)/bin/windows_amd64/updater.exe $(BGO_SPACE)/bin/prepacked/windows_amd64/updater.exe
 	$(COPY) $(BGO_SPACE)/bin/windows_amd64/ssm-cli.exe $(BGO_SPACE)/bin/prepacked/windows_amd64/ssm-cli.exe
+	$(COPY) $(BGO_SPACE)/bin/windows_amd64/ssm-document-worker.exe $(BGO_SPACE)/bin/prepacked/windows_amd64/ssm-document-worker.exe
 	$(COPY) $(BGO_SPACE)/bin/amazon-ssm-agent.json.template $(BGO_SPACE)/bin/prepacked/windows_amd64/amazon-ssm-agent.json.template
 	$(COPY) $(BGO_SPACE)/bin/seelog_windows.xml.template $(BGO_SPACE)/bin/prepacked/windows_amd64/seelog.xml.template
 	$(COPY) $(BGO_SPACE)/bin/LICENSE $(BGO_SPACE)/bin/prepacked/windows_amd64/LICENSE
@@ -230,6 +249,7 @@ prepack-linux-386:
 	$(COPY) $(BGO_SPACE)/bin/linux_386/amazon-ssm-agent $(BGO_SPACE)/bin/prepacked/linux_386/amazon-ssm-agent
 	$(COPY) $(BGO_SPACE)/bin/linux_386/updater $(BGO_SPACE)/bin/prepacked/linux_386/updater
 	$(COPY) $(BGO_SPACE)/bin/linux_386/ssm-cli $(BGO_SPACE)/bin/prepacked/linux_386/ssm-cli
+	$(COPY) $(BGO_SPACE)/bin/linux_386/ssm-document-worker $(BGO_SPACE)/bin/prepacked/linux_386/ssm-document-worker
 	$(COPY) $(BGO_SPACE)/bin/amazon-ssm-agent.json.template $(BGO_SPACE)/bin/prepacked/linux_386/amazon-ssm-agent.json.template
 	$(COPY) $(BGO_SPACE)/bin/seelog_unix.xml $(BGO_SPACE)/bin/prepacked/linux_386/seelog.xml
 	$(COPY) $(BGO_SPACE)/bin/LICENSE $(BGO_SPACE)/bin/prepacked/linux_386/LICENSE
@@ -240,6 +260,7 @@ prepack-darwin-386:
 	$(COPY) $(BGO_SPACE)/bin/darwin_386/amazon-ssm-agent $(BGO_SPACE)/bin/prepacked/darwin_386/amazon-ssm-agent
 	$(COPY) $(BGO_SPACE)/bin/darwin_386/updater $(BGO_SPACE)/bin/prepacked/darwin_386/updater
 	$(COPY) $(BGO_SPACE)/bin/darwin_386/ssm-cli $(BGO_SPACE)/bin/prepacked/darwin_386/ssm-cli
+	$(COPY) $(BGO_SPACE)/bin/darwin_386/ssm-document-worker $(BGO_SPACE)/bin/prepacked/darwin_386/ssm-document-worker
 	$(COPY) $(BGO_SPACE)/bin/amazon-ssm-agent.json.template $(BGO_SPACE)/bin/prepacked/darwin_386/amazon-ssm-agent.json.template
 	$(COPY) $(BGO_SPACE)/bin/seelog_unix.xml $(BGO_SPACE)/bin/prepacked/darwin_386/seelog.xml
 	$(COPY) $(BGO_SPACE)/bin/LICENSE $(BGO_SPACE)/bin/prepacked/darwin_386/LICENSE
@@ -250,6 +271,7 @@ prepack-windows-386:
 	$(COPY) $(BGO_SPACE)/bin/windows_386/amazon-ssm-agent.exe $(BGO_SPACE)/bin/prepacked/windows_386/amazon-ssm-agent.exe
 	$(COPY) $(BGO_SPACE)/bin/windows_386/updater.exe $(BGO_SPACE)/bin/prepacked/windows_386/updater.exe
 	$(COPY) $(BGO_SPACE)/bin/windows_386/ssm-cli.exe $(BGO_SPACE)/bin/prepacked/windows_386/ssm-cli.exe
+	$(COPY) $(BGO_SPACE)/bin/windows_386/ssm-document-worker.exe $(BGO_SPACE)/bin/prepacked/windows_386/ssm-document-worker.exe
 	$(COPY) $(BGO_SPACE)/bin/amazon-ssm-agent.json.template $(BGO_SPACE)/bin/prepacked/windows_386/amazon-ssm-agent.json.template
 	$(COPY) $(BGO_SPACE)/bin/seelog_windows.xml.template $(BGO_SPACE)/bin/prepacked/windows_386/seelog.xml.template
 	$(COPY) $(BGO_SPACE)/bin/LICENSE $(BGO_SPACE)/bin/prepacked/windows_386/LICENSE
@@ -260,6 +282,7 @@ prepack-arm:
 	$(COPY) $(BGO_SPACE)/bin/linux_arm/amazon-ssm-agent $(BGO_SPACE)/bin/prepacked/linux_arm/amazon-ssm-agent
 	$(COPY) $(BGO_SPACE)/bin/linux_arm/updater $(BGO_SPACE)/bin/prepacked/linux_arm/updater
 	$(COPY) $(BGO_SPACE)/bin/linux_arm/ssm-cli $(BGO_SPACE)/bin/prepacked/linux_arm/ssm-cli
+	$(COPY) $(BGO_SPACE)/bin/linux_arm/ssm-document-worker $(BGO_SPACE)/bin/prepacked/linux_arm/ssm-document-worker
 	$(COPY) $(BGO_SPACE)/bin/amazon-ssm-agent.json.template $(BGO_SPACE)/bin/prepacked/linux_arm/amazon-ssm-agent.json.template
 	$(COPY) $(BGO_SPACE)/bin/seelog_unix.xml $(BGO_SPACE)/bin/prepacked/linux_arm/seelog.xml
 	$(COPY) $(BGO_SPACE)/bin/LICENSE $(BGO_SPACE)/bin/prepacked/linux_arm/LICENSE
