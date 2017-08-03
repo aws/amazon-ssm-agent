@@ -18,6 +18,7 @@ package document_mock
 import (
 	"github.com/aws/amazon-ssm-agent/agent/docmanager/model"
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/plugins/executecommand/remoteresource"
 	"github.com/stretchr/testify/mock"
 )
 
@@ -29,7 +30,7 @@ type ExecMock struct {
 	mock.Mock
 }
 
-func (e ExecMock) ParseDocument(log log.T, documentRaw []byte, orchestrationDir string, s3Bucket string, s3KeyPrefix string, messageID string, documentID string, defaultWorkingDirectory string, params map[string]interface{}) (pluginsInfo []model.PluginState, err error) {
-	args := e.Called(log, documentRaw, orchestrationDir, s3Bucket, s3KeyPrefix, messageID, documentID, defaultWorkingDirectory, params)
+func (e ExecMock) ParseDocument(log log.T, resourceInfo remoteresource.ResourceInfo, documentRaw []byte, orchestrationDir string, s3Bucket string, s3KeyPrefix string, messageID string, documentID string, defaultWorkingDirectory string, params map[string]interface{}) (pluginsInfo []model.PluginState, err error) {
+	args := e.Called(log, resourceInfo, documentRaw, orchestrationDir, s3Bucket, s3KeyPrefix, messageID, documentID, defaultWorkingDirectory, params)
 	return args.Get(0).([]model.PluginState), args.Error(1)
 }

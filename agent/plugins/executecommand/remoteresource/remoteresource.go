@@ -28,7 +28,7 @@ const (
 
 const (
 	JSONExtension = ".json"
-	YamlExtension = ".yaml"
+	YAMLExtension = ".yaml"
 )
 
 // RemoteResource is an interface for accessing remote resources. Every type of remote resource is expected to implement RemoteResource interface
@@ -44,4 +44,5 @@ type ResourceInfo struct {
 	EntireDir            bool
 	TypeOfResource       int    //Valid values are either Unknown, Script or Document
 	StarterFile          string //Name of the file
+	ResourceExtension    string
 }

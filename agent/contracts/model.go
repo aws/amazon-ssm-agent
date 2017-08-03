@@ -172,11 +172,11 @@ type InstancePluginConfig struct {
 
 // DocumentContent object which represents ssm document content.
 type DocumentContent struct {
-	SchemaVersion string                   `json:"schemaVersion"`
-	Description   string                   `json:"description"`
-	RuntimeConfig map[string]*PluginConfig `json:"runtimeConfig"`
-	MainSteps     []*InstancePluginConfig  `json:"mainSteps"`
-	Parameters    map[string]*Parameter    `json:"parameters"`
+	SchemaVersion string                   `json:"schemaVersion" yaml:"schemaVersion"`
+	Description   string                   `json:"description" yaml:"description"`
+	RuntimeConfig map[string]*PluginConfig `json:"runtimeConfig" yaml:"runtimeConfig"`
+	MainSteps     []*InstancePluginConfig  `json:"mainSteps" yaml:"mainSteps"`
+	Parameters    map[string]*Parameter    `json:"parameters" yaml:"parameters"`
 }
 
 // AdditionalInfo section in agent response
