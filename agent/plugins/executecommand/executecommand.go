@@ -252,7 +252,7 @@ func (m executePlugin) PrepareDocumentForExecution(log log.T, remoteResourceInfo
 	}
 	log.Infof("Sending the document received - %v for parsing", string(rawDocument))
 
-	return m.doc.ParseDocument(log, rawDocument, config.OrchestrationDirectory, config.OutputS3BucketName, config.OutputS3KeyPrefix, config.MessageId, config.PluginID, config.DefaultWorkingDirectory, parameters)
+	return m.doc.ParseDocument(log, remoteResourceInfo, rawDocument, config.OrchestrationDirectory, config.OutputS3BucketName, config.OutputS3KeyPrefix, config.MessageId, config.PluginID, config.DefaultWorkingDirectory, parameters)
 }
 
 // Name returns the plugin name

@@ -40,7 +40,7 @@ type S3Resource struct {
 
 // S3Info represents the locationInfo type sent by runcommand
 type S3Info struct {
-	Path string `json:"Path"`
+	Path string `json:"path"`
 }
 
 // NewS3Resource is a constructor of type GitResource
@@ -134,13 +134,14 @@ func (s3 *S3Resource) PopulateResourceInfo(log log.T, destinationDir string, ent
 	}
 	resourceInfo.LocalDestinationPath = fileutil.BuildPath(destinationDir, s3.s3Object.Bucket, s3.s3Object.Key)
 	resourceInfo.StarterFile = filepath.Base(resourceInfo.LocalDestinationPath)
+	resourceInfo.ResourceExtension = filepath.Ext(resourceInfo.StarterFile)
 
 	if entireDir {
 		resourceInfo.TypeOfResource = remoteresource.Script //Because EntireDirectory option is valid only for scripts
 		resourceInfo.EntireDir = true
 	} else {
-		extension := filepath.Ext(resourceInfo.StarterFile)
-		if strings.Compare(extension, remoteresource.JSONExtension) == 0 {
+
+		if strings.Compare(resourceInfo.ResourceExtension, remoteresource.JSONExtension) == 0 || strings.Compare(resourceInfo.ResourceExtension, remoteresource.YAMLExtension) == 0 {
 			resourceInfo.TypeOfResource = remoteresource.Document
 		} else { // It is assumed that the file is a script if the extension is not JSON. TODO: Add YAML
 			resourceInfo.TypeOfResource = remoteresource.Script

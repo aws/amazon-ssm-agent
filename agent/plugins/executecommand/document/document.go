@@ -20,8 +20,11 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/docmanager/model"
 	"github.com/aws/amazon-ssm-agent/agent/docparser"
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/plugins/executecommand/remoteresource"
+	"github.com/go-yaml/yaml"
 
 	"encoding/json"
+	"errors"
 )
 
 const (
@@ -29,7 +32,7 @@ const (
 )
 
 type ExecCommand interface {
-	ParseDocument(log log.T, documentRaw []byte, orchestrationDir string, s3Bucket string, s3KeyPrefix string, messageID string, documentID string, defaultWorkingDirectory string, params map[string]interface{}) (pluginsInfo []model.PluginState, err error)
+	ParseDocument(log log.T, resource remoteresource.ResourceInfo, documentRaw []byte, orchestrationDir string, s3Bucket string, s3KeyPrefix string, messageID string, documentID string, defaultWorkingDirectory string, params map[string]interface{}) (pluginsInfo []model.PluginState, err error)
 	//ExecuteDocument() (pluginOutputs map[string]*contracts.PluginResult)
 }
 
@@ -37,16 +40,22 @@ type ExecCommandImpl struct{}
 
 // ParseDocument parses the remote document obtained to a format that the executer can use.
 // This function is also responsible for all the validation of document and parameters
-func (doc ExecCommandImpl) ParseDocument(log log.T, documentRaw []byte, orchestrationDir string, s3Bucket string, s3KeyPrefix string, messageID string, documentID string, defaultWorkingDirectory string, params map[string]interface{}) (pluginsInfo []model.PluginState, err error) {
+func (doc ExecCommandImpl) ParseDocument(log log.T, resource remoteresource.ResourceInfo, documentRaw []byte, orchestrationDir string, s3Bucket string, s3KeyPrefix string, messageID string, documentID string, defaultWorkingDirectory string, params map[string]interface{}) (pluginsInfo []model.PluginState, err error) {
 	var docContent contracts.DocumentContent
-	// TODO : convert to json if in yaml format.
-	// we do not want to unmarshal from different languages.
-	// Instead convert to json ( Is this required? )
-	// yaml to json is supported on document versions 2.x and above
-	if err := json.Unmarshal(documentRaw, &docContent); err != nil {
-		return pluginsInfo, err
-	}
+	if resource.ResourceExtension == remoteresource.YAMLExtension {
+		if err := yaml.Unmarshal(documentRaw, &docContent); err != nil {
+			log.Error("Unmarshalling YAML remote resource document failed. Please make sure the document is in the right format")
+			return pluginsInfo, err
+		}
 
+	} else if resource.ResourceExtension == remoteresource.JSONExtension {
+		if err := json.Unmarshal(documentRaw, &docContent); err != nil {
+			log.Error("Unmarshalling JSON remote resource document failed. Please make sure the document is in the right format")
+			return pluginsInfo, err
+		}
+	} else {
+		return pluginsInfo, errors.New("Extension type for documents is not supported")
+	}
 	parserInfo := docparser.DocumentParserInfo{
 		OrchestrationDir:  orchestrationDir,
 		S3Bucket:          s3Bucket,
@@ -57,7 +66,7 @@ func (doc ExecCommandImpl) ParseDocument(log log.T, documentRaw []byte, orchestr
 	}
 	pluginsInfo, err = docparser.ParseDocument(log, &docContent, parserInfo, params)
 
-	log.Info("Parsed document - ", docContent)
-	log.Info("Plugins Info - ", pluginsInfo)
+	log.Debug("Parsed document - ", docContent)
+	log.Debug("Plugins Info - ", pluginsInfo)
 	return
 }
