@@ -19,6 +19,7 @@ This package provides Amazon SSM Agent for managing EC2 Instances using SSM APIs
 /etc/amazon/ssm/seelog.xml.template
 /usr/bin/amazon-ssm-agent
 /usr/bin/ssm-cli
+/usr/bin/ssm-document-worker
 /var/lib/amazon/ssm/
 %doc /etc/amazon/ssm/RELEASENOTES.md
 %doc /etc/amazon/ssm/README.md
