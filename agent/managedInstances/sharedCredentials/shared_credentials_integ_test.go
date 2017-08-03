@@ -101,7 +101,7 @@ func TestSharedCredentialsFilenameFromUserProfile(t *testing.T) {
 
 	_, err1 := filename()
 
-	assert.Error(t, err1, "Expect error when no HOME or USERPROFILE set")
+	assert.Nil(t, err1, "Expect no error when no HOME or USERPROFILE set")
 
 	os.Clearenv()
 	os.Setenv("USERPROFILE", "")
@@ -111,13 +111,4 @@ func TestSharedCredentialsFilenameFromUserProfile(t *testing.T) {
 
 	assert.Nil(t, err2, "Expect no error when HOME is set")
 	assert.Equal(t, "hometest/.aws/credentials", file2, "HOME dir does not match")
-
-	os.Clearenv()
-	os.Setenv("USERPROFILE", "usertest")
-	os.Setenv("HOME", "")
-
-	file3, err3 := filename()
-
-	assert.Nil(t, err3, "Expect no error when USERPROFILE is set")
-	assert.Equal(t, "usertest/.aws/credentials", file3, "HOME dir does not match")
 }
