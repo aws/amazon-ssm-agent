@@ -31,8 +31,8 @@ var logMock = log.NewMockLog()
 func TestSSMDocResource_ValidateLocationInfo(t *testing.T) {
 
 	locationInfo := `{
-		"Name": "AWS-ExecuteCommand",
-		"Version": ""
+		"name": "AWS-ExecuteCommand",
+		"vßersion": ""
 	}`
 
 	ssmresource, _ := NewSSMDocResource(locationInfo)
@@ -44,8 +44,8 @@ func TestSSMDocResource_ValidateLocationInfo(t *testing.T) {
 func TestSSMDocResource_ValidateLocationInfoNoName(t *testing.T) {
 
 	locationInfo := `{
-		"Name": "",
-		"Version": "10"
+		"name": "",
+		"version": "10"
 	}`
 
 	ssmresource, _ := NewSSMDocResource(locationInfo)
@@ -57,8 +57,8 @@ func TestSSMDocResource_ValidateLocationInfoNoName(t *testing.T) {
 
 func TestSSMDocResource_PopulateResourceInfo(t *testing.T) {
 	locationInfo := `{
-		"Name": "AWS-ExecuteCommand",
-		"Version": "10"
+		"name": "AWS-ExecuteCommand",
+		"version": "10"
 	}`
 
 	ssmresource, _ := NewSSMDocResource(locationInfo)
@@ -76,8 +76,8 @@ func TestSSMDocResource_Download(t *testing.T) {
 	fileMock := filemock.FileSystemMock{}
 
 	locationInfo := `{
-		"Name": "AWS-ExecuteCommand",
-		"Version": "10"
+		"name": "AWS-ExecuteCommand",
+		"version": "10"
 	}`
 	content := "content"
 	docOutput := ssm.GetDocumentOutput{
@@ -102,8 +102,8 @@ func TestSSMDocResource_DownloadEntireDirTrue(t *testing.T) {
 	fileMock := filemock.FileSystemMock{}
 
 	locationInfo := `{
-		"Name": "AWS-ExecuteCommand",
-		"Version": "10"
+		"name": "AWS-ExecuteCommand",
+		"version": "10"
 	}`
 
 	ssmresource, _ := NewSSMDocResource(locationInfo)

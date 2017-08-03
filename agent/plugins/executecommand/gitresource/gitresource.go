@@ -141,13 +141,13 @@ func (git *GitResource) PopulateResourceInfo(log log.T, destinationDir string, e
 	}
 	resourceInfo.StarterFile = filepath.Base(git.Info.Path)
 	resourceInfo.LocalDestinationPath = fileutil.BuildPath(destinationDir, git.Info.Path)
+	resourceInfo.ResourceExtension = filepath.Ext(resourceInfo.StarterFile)
 
 	if entireDir {
 		resourceInfo.TypeOfResource = remoteresource.Script //Because EntireDirectory option is valid only for scripts
 		resourceInfo.EntireDir = true
 	} else {
-		extension := filepath.Ext(resourceInfo.StarterFile)
-		if strings.Compare(extension, remoteresource.JSONExtension) == 0 {
+		if strings.Compare(resourceInfo.ResourceExtension, remoteresource.JSONExtension) == 0 || strings.Compare(resourceInfo.ResourceExtension, remoteresource.YAMLExtension) == 0 {
 			resourceInfo.TypeOfResource = remoteresource.Document
 		} else { // It is assumed that the file is a script if the extension is not JSON. TODO: Add YAML
 			resourceInfo.TypeOfResource = remoteresource.Script
