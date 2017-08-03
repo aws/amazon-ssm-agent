@@ -12,11 +12,6 @@
 // permissions and limitations under the License.
 
 // package sharedCredentials provides access to the aws shared credentials file.
-//
-// It will look for "AWS_SHARED_CREDENTIALS_FILE" env variable.
-// If the env value is empty will default to current user's home directory.
-// Linux/OSX: "$HOME/.aws/credentials"
-// Windows:   "%USERPROFILE%\.aws\credentials"
 package sharedCredentials
 
 import (
@@ -40,21 +35,15 @@ const (
 //
 // Will return an error if the user's home directory path cannot be found.
 func filename() (string, error) {
-	// Look for "AWS_SHARED_CREDENTIALS_FILE" env variable.
-	// If the env value is empty will default to current user's home directory.
-	// Linux/OSX: "$HOME/.aws/credentials"
-	// Windows:   "%USERPROFILE%\.aws\credentials"
 	if credPath := os.Getenv("AWS_SHARED_CREDENTIALS_FILE"); credPath != "" {
 		return credPath, nil
 	}
 
-	homeDir := os.Getenv("HOME") // *nix
-	if homeDir == "" {           // Windows
-		homeDir = os.Getenv("USERPROFILE")
-	}
+	homeDir := getPlatformSpecificHomeLocation()
 	if homeDir == "" {
 		return "", awserr.New("UserHomeNotFound", "user home directory not found.", nil)
 	}
+
 	return filepath.Join(homeDir, ".aws", "credentials"), nil
 }
 
