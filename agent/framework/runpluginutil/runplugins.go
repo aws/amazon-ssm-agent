@@ -131,11 +131,6 @@ func RunPlugins(
 			pluginOutputs[pluginID].StandardOutput = r.StandardOutput
 			pluginOutputs[pluginID].StandardError = r.StandardError
 
-			if r.Status == contracts.ResultStatusSuccessAndReboot {
-				context.Log().Debug("Requesting reboot...")
-				//TODO move this into plugin.Execute()?
-				rebooter.RequestPendingReboot(context.Log())
-			}
 		case skipStep:
 			context.Log().Info(logMessage)
 			pluginOutputs[pluginID].Status = contracts.ResultStatusSkipped
