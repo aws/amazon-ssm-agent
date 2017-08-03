@@ -30,6 +30,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer"
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/basicexecuter"
 	"github.com/aws/amazon-ssm-agent/agent/platform"
+	"github.com/aws/amazon-ssm-agent/agent/rebooter"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 	"github.com/aws/amazon-ssm-agent/agent/times"
 )
@@ -311,7 +312,8 @@ func processCommand(context context.T, executerCreator ExecuterCreator, cancelFl
 	//TODO since there's a bug in UpdatePlugin that returns InProgress even if the document is completed, we cannot use InProgress to judge here, we need to fix the bug by the time out-of-proc is done
 	// Shutdown/reboot detection
 	if isReboot {
-		log.Infof("document %v did not finish up execution, need to resume", messageID)
+		log.Infof("document %v requested reboot, need to resume", messageID)
+		rebooter.RequestPendingReboot(context.Log())
 		return
 	}
 
