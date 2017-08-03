@@ -7,9 +7,11 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/docmanager/model"
+	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer"
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/outofproc"
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/outofproc/channel"
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/plugin"
+	"github.com/aws/amazon-ssm-agent/agent/framework/runpluginutil"
 	logger "github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 )
@@ -23,7 +25,7 @@ var pluginRunner = func(
 	resChan chan contracts.PluginResult,
 	cancelFlag task.CancelFlag,
 ) {
-	runPlugins(context, plugins, plugin.RegisteredWorkerPlugins(ctx), resChan, cancelFlag)
+	runpluginutil.RunPlugins(context, plugins, executer.PluginRegistry, resChan, cancelFlag)
 	//signal the client that job complete
 	close(resChan)
 }
@@ -46,6 +48,8 @@ func main() {
 	handle := string(args[1])
 	//use process as context name
 	ctx = context.Default(log, config).With(name)
+	//initialize PluginRegistry
+	executer.PluginRegistry = plugin.RegisteredWorkerPlugins(ctx)
 	if err := outofproc.Client(ctx, handle, pluginRunner); err != nil {
 		log.Errorf("client encountered error: %v", err)
 		os.Exit(1)
