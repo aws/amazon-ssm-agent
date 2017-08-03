@@ -36,8 +36,8 @@ type SSMDocResource struct {
 
 // S3Info represents the locationInfo type sent by runcommand
 type SSMDocInfo struct {
-	DocName    string `json:"Name"`
-	DocVersion string `json:"Version"`
+	DocName    string `json:"name"`
+	DocVersion string `json:"version"`
 }
 
 // NewS3Resource is a constructor of type GitResource
@@ -101,6 +101,7 @@ func (ssmdoc *SSMDocResource) PopulateResourceInfo(log log.T, destinationDir str
 	resourceInfo.StarterFile = filepath.Base(resourceInfo.LocalDestinationPath)
 	resourceInfo.TypeOfResource = remoteresource.Document
 	resourceInfo.EntireDir = entireDir
+	resourceInfo.ResourceExtension = filepath.Ext(resourceInfo.StarterFile)
 
 	return resourceInfo
 }

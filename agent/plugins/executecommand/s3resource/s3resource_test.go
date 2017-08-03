@@ -48,7 +48,7 @@ func TestS3Resource_ValidateLocationInfoPath(t *testing.T) {
 func TestS3Resource_ValidateLocationInfoNoPath(t *testing.T) {
 
 	locationInfo := `{
-		"Path": ""
+		"path": ""
 	}`
 
 	s3resource, _ := NewS3Resource(logMock, locationInfo)
@@ -130,7 +130,7 @@ func TestS3Resource_GetSourceURL_NotFolder(t *testing.T) {
 
 func TestS3Resource_PopulateResourceInfoEntireDirFalseJSON(t *testing.T) {
 	locationInfo := `{
-		"Path" : "https://s3.amazonaws.com/my-bucket/mydummyfolder/file.json"
+		"path" : "https://s3.amazonaws.com/my-bucket/mydummyfolder/file.json"
 	}`
 
 	resourceInfo := remoteresource.ResourceInfo{}
@@ -148,7 +148,7 @@ func TestS3Resource_PopulateResourceInfoEntireDirFalseJSON(t *testing.T) {
 
 func TestS3Resource_PopulateResourceInfoEntireDirTrue(t *testing.T) {
 	locationInfo := `{
-		"Path" : "https://s3.amazonaws.com/my-bucket/mydummyfolder/file.rb"
+		"path" : "https://s3.amazonaws.com/my-bucket/mydummyfolder/file.rb"
 	}`
 
 	resourceInfo := remoteresource.ResourceInfo{}
@@ -166,7 +166,7 @@ func TestS3Resource_PopulateResourceInfoEntireDirTrue(t *testing.T) {
 
 func TestS3Resource_PopulateResourceInfoEntireDirTrueInvalidStarter(t *testing.T) {
 	locationInfo := `{
-		"Path" : "https://s3.amazonaws.com/my-bucket/path/to/"
+		"path" : "https://s3.amazonaws.com/my-bucket/path/to/"
 	}`
 
 	resourceInfo := remoteresource.ResourceInfo{}
@@ -186,7 +186,7 @@ func TestS3Resource_PopulateResourceInfoEntireDirTrueInvalidStarter(t *testing.T
 func TestS3Resource_PopulateResourceInfoEntireDirFalseScript(t *testing.T) {
 
 	locationInfo := `{
-		"Path" : "https://s3.amazonaws.com/my-bucket/mydummyfolder/file.rb"
+		"path" : "https://s3.amazonaws.com/my-bucket/mydummyfolder/file.rb"
 	}`
 
 	resourceInfo := remoteresource.ResourceInfo{}
@@ -207,7 +207,7 @@ func TestS3Resource_Download(t *testing.T) {
 
 	depMock := new(s3DepMock)
 	locationInfo := `{
-		"Path" : "https://s3.amazonaws.com/my-bucket/mydummyfolder/file.rb"
+		"path" : "https://s3.amazonaws.com/my-bucket/mydummyfolder/file.rb"
 	}`
 	fileMock := filemock.FileSystemMock{}
 	resource, _ := NewS3Resource(logMock, locationInfo)
@@ -263,7 +263,7 @@ func TestS3Resource_DownloadEntireDirFalse(t *testing.T) {
 func TestS3Resource_DownloadEntireDirTrue(t *testing.T) {
 	depMock := new(s3DepMock)
 	locationInfo := `{
-		"Path" : "https://s3.amazonaws.com/my-bucket/mydummyfolder/filename.ps"
+		"path" : "https://s3.amazonaws.com/my-bucket/mydummyfolder/filename.ps"
 	}`
 	fileMock := filemock.FileSystemMock{}
 	resource, _ := NewS3Resource(logMock, locationInfo)
@@ -306,7 +306,7 @@ func TestS3Resource_DownloadEntireDirTrue(t *testing.T) {
 func TestS3Resource_DownloadEntireDirTruePathInvalid(t *testing.T) {
 	depMock := new(s3DepMock)
 	locationInfo := `{
-		"Path" : "https://s3.amazonaws.com/my-bucket/mydummyfolder/"
+		"path" : "https://s3.amazonaws.com/my-bucket/mydummyfolder/"
 	}`
 	fileMock := filemock.FileSystemMock{}
 	resource, _ := NewS3Resource(logMock, locationInfo)
