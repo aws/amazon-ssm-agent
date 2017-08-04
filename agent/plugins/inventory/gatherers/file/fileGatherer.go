@@ -12,7 +12,7 @@ const (
 	// GathererName captures name of file gatherer
 	GathererName = "AWS:File"
 	// SchemaVersionOfFileGatherer represents schema version of file gatherer
-	SchemaVersionOfFileGatherer = "2.0"
+	SchemaVersionOfFileGatherer = "1.0"
 )
 
 type T struct{}
