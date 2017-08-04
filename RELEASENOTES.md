@@ -1,5 +1,11 @@
 Latest
 ===============
+- Updated golang/sys dependency to the latest
+- Increased run command document maximum execution timeout to 48 hours
+- Various bug fixes
+
+2.0.902.0
+===============
 - Added support for uploading agent logs to CloudWatch for SSM Agent diagnostics
 - Added additional gatherers for inventory
 - Added configuration compliance support for association
