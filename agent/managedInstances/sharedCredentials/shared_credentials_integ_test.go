@@ -94,16 +94,6 @@ func TestSharedCredentialsStoreDefaultProfile(t *testing.T) {
 func TestSharedCredentialsFilenameFromUserProfile(t *testing.T) {
 	// Test setup
 	os.Clearenv()
-
-	// Test
-	os.Setenv("HOME", "")
-	os.Setenv("USERPROFILE", "")
-
-	_, err1 := filename()
-
-	assert.Nil(t, err1, "Expect no error when no HOME or USERPROFILE set")
-
-	os.Clearenv()
 	os.Setenv("USERPROFILE", "")
 	os.Setenv("HOME", "hometest")
 
