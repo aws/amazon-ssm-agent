@@ -30,16 +30,18 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/executers"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
+	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/envdetect"
 	"github.com/aws/amazon-ssm-agent/agent/times"
 )
 
 type Installer struct {
-	filesysdep  fileSysDep
-	execdep     execDep
-	packageName string
-	version     string
-	packagePath string
-	config      contracts.Configuration // TODO:MF: See if we can use a smaller struct that has just the things we need
+	filesysdep         fileSysDep
+	execdep            execDep
+	packageName        string
+	version            string
+	packagePath        string
+	config             contracts.Configuration // TODO:MF: See if we can use a smaller struct that has just the things we need
+	envdetectCollector envdetect.Collector
 }
 
 type ActionType uint8
@@ -59,14 +61,16 @@ type Action struct {
 func New(packageName string,
 	version string,
 	packagePath string,
-	configuration contracts.Configuration) *Installer {
+	configuration contracts.Configuration,
+	envdetectCollector envdetect.Collector) *Installer {
 	return &Installer{
-		filesysdep:  &fileSysDepImp{},
-		execdep:     &execDepImp{},
-		packageName: packageName,
-		version:     version,
-		packagePath: packagePath,
-		config:      configuration,
+		filesysdep:         &fileSysDepImp{},
+		execdep:            &execDepImp{},
+		packageName:        packageName,
+		version:            version,
+		packagePath:        packagePath,
+		config:             configuration,
+		envdetectCollector: envdetectCollector,
 	}
 }
 
@@ -279,7 +283,9 @@ func (inst *Installer) resolveAction(context context.T, actionName string) (exis
 	return false, nil, nil
 }
 
-func (inst *Installer) getEnvVars(context context.T) (envVars map[string]string) {
+func (inst *Installer) getEnvVars(context context.T) (envVars map[string]string, err error) {
+	log := context.Log()
+
 	envVars = make(map[string]string)
 
 	// Set proxy settings from the environment
@@ -287,17 +293,21 @@ func (inst *Installer) getEnvVars(context context.T) (envVars map[string]string)
 	envVars["BWS_HTTP_PROXY"] = os.Getenv("http_proxy")
 	envVars["BWS_NO_PROXY"] = os.Getenv("no_proxy")
 
-	// Should we set instance id and region name?
-	// (These are already available to script as AWS_SSM_INSTANCE_ID and AWS_SSM_REGION_NAME)
-	if instanceId, err := instance.InstanceID(); err == nil {
-		envVars["BWS_AWS_SSM_INSTANCE_ID"] = instanceId
+	env, err := inst.envdetectCollector.CollectData(log)
+	if err != nil {
+		return envVars, fmt.Errorf("failed to collect data: %v", err)
 	}
 
-	if region, err := instance.Region(); err == nil {
-		envVars["BWS_AWS_SSM_REGION_NAME"] = region
-	}
+	// (Some of these are already available to script as AWS_SSM_INSTANCE_ID and AWS_SSM_REGION_NAME)
+	envVars["BWS_PLATFORM_NAME"] = env.OperatingSystem.Platform
+	envVars["BWS_PLATFORM_VERSION"] = env.OperatingSystem.PlatformVersion
+	envVars["BWS_ARCHITECTURE"] = env.OperatingSystem.Architecture
+	envVars["BWS_INSTANCE_ID"] = env.Ec2Infrastructure.InstanceID
+	envVars["BWS_INSTANCE_TYPE"] = env.Ec2Infrastructure.InstanceType
+	envVars["BWS_REGION"] = env.Ec2Infrastructure.Region
+	envVars["BWS_AVAILABILITY_ZONE"] = env.Ec2Infrastructure.AvailabilityZone
 
-	return
+	return envVars, err
 }
 
 // readAction returns a JSON document describing a management action and its working directory, or an empty string
@@ -314,7 +324,10 @@ func (inst *Installer) readAction(context context.T, actionName string) (exists 
 	workingDir = inst.packagePath
 
 	if action.actionType == ACTION_TYPE_SH {
-		envVars := inst.getEnvVars(context)
+		var envVars map[string]string
+		if envVars, err = inst.getEnvVars(context); err != nil {
+			return exists, nil, "", err
+		}
 
 		if pluginsInfo, err = inst.readShAction(context, action, workingDir, envVars); err != nil {
 			return exists, nil, "", err
@@ -322,7 +335,10 @@ func (inst *Installer) readAction(context context.T, actionName string) (exists 
 
 		return exists, pluginsInfo, workingDir, nil
 	} else if action.actionType == ACTION_TYPE_PS1 {
-		envVars := inst.getEnvVars(context)
+		var envVars map[string]string
+		if envVars, err = inst.getEnvVars(context); err != nil {
+			return exists, nil, "", err
+		}
 
 		if pluginsInfo, err = inst.readPs1Action(context, action, workingDir, envVars); err != nil {
 			return exists, nil, "", err

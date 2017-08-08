@@ -27,6 +27,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
+	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/envdetect"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/installer"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/ssminstaller"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/inventory/model"
@@ -119,7 +120,8 @@ func (repo *localRepository) GetInstaller(context context.T,
 	return ssminstaller.New(packageName,
 		version,
 		repo.getPackageVersionPath(packageName, version),
-		configuration)
+		configuration,
+		&envdetect.CollectorImp{})
 }
 
 // GetInstalledVersion returns the version of the last successfully installed package
