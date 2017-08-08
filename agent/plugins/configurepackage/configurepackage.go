@@ -24,7 +24,6 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
-	"github.com/aws/amazon-ssm-agent/agent/framework/runpluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/platform"
@@ -81,7 +80,6 @@ func NewPlugin(pluginConfig pluginutil.PluginConfig) (*Plugin, error) {
 func prepareConfigurePackage(
 	context context.T,
 	config contracts.Configuration,
-	runner runpluginutil.PluginRunner,
 	repository localpackages.Repository,
 	packageService packageservice.PackageService,
 	input *ConfigurePackagePluginInput,
@@ -101,7 +99,7 @@ func prepareConfigurePackage(
 		}
 
 		// ensure manifest file and package
-		inst, err = ensurePackage(context, repository, packageService, input.Name, version, config, runner)
+		inst, err = ensurePackage(context, repository, packageService, input.Name, version, config)
 		if err != nil {
 			output.MarkAsFailed(log, fmt.Errorf("unable to obtain package: %v", err))
 			return
@@ -109,7 +107,7 @@ func prepareConfigurePackage(
 
 		// if different version is installed, uninstall
 		if installedVersion != "" && installedVersion != version {
-			uninst, err = ensurePackage(context, repository, packageService, input.Name, installedVersion, config, runner)
+			uninst, err = ensurePackage(context, repository, packageService, input.Name, installedVersion, config)
 			if err != nil {
 				output.AppendErrorf(log, "unable to obtain package: %v", err)
 			}
@@ -127,7 +125,7 @@ func prepareConfigurePackage(
 		}
 
 		// ensure manifest file and package
-		uninst, err = ensurePackage(context, repository, packageService, input.Name, version, config, runner)
+		uninst, err = ensurePackage(context, repository, packageService, input.Name, version, config)
 		if err != nil {
 			output.MarkAsFailed(log, fmt.Errorf("unable to obtain package: %v", err))
 			return
@@ -147,8 +145,7 @@ func ensurePackage(context context.T,
 	packageService packageservice.PackageService,
 	packageName string,
 	version string,
-	config contracts.Configuration,
-	runner runpluginutil.PluginRunner) (installer.Installer, error) {
+	config contracts.Configuration) (installer.Installer, error) {
 
 	currentState, currentVersion := repository.GetInstallState(context, packageName)
 	if err := repository.ValidatePackage(context, packageName, version); err != nil || (currentVersion == version && currentState == localpackages.Failed) {
@@ -162,7 +159,7 @@ func ensurePackage(context context.T,
 			return nil, err
 		}
 	}
-	return repository.GetInstaller(context, config, runner, packageName, version), nil
+	return repository.GetInstaller(context, config, packageName, version), nil
 }
 
 // buildDownloadDelegate constructs the delegate used by the repository to download a package from the service
@@ -337,11 +334,11 @@ func selectService(log log.T, serviceEndpoint string, localrepo localpackages.Re
 
 // Execute runs the plugin operation and returns output
 // res.Output will contain a slice of RunCommandPluginOutput
-func (p *Plugin) Execute(context context.T, config contracts.Configuration, cancelFlag task.CancelFlag, subDocumentRunner runpluginutil.PluginRunner) (res contracts.PluginResult) {
-	return p.execute(context, config, cancelFlag, subDocumentRunner, pluginutil.PersistPluginInformationToCurrent)
+func (p *Plugin) Execute(context context.T, config contracts.Configuration, cancelFlag task.CancelFlag) (res contracts.PluginResult) {
+	return p.execute(context, config, cancelFlag, pluginutil.PersistPluginInformationToCurrent)
 }
 
-func (p *Plugin) execute(context context.T, config contracts.Configuration, cancelFlag task.CancelFlag, subDocumentRunner runpluginutil.PluginRunner, persistPluginInfo func(log log.T, pluginID string, config contracts.Configuration, res contracts.PluginResult)) (res contracts.PluginResult) {
+func (p *Plugin) execute(context context.T, config contracts.Configuration, cancelFlag task.CancelFlag, persistPluginInfo func(log log.T, pluginID string, config contracts.Configuration, res contracts.PluginResult)) (res contracts.PluginResult) {
 	log := context.Log()
 	log.Info("RunCommand started with configuration ", config)
 
@@ -370,7 +367,6 @@ func (p *Plugin) execute(context context.T, config contracts.Configuration, canc
 		inst, uninst, installState, installedVersion := prepareConfigurePackage(
 			context,
 			config,
-			subDocumentRunner,
 			p.localRepository,
 			packageService,
 			input,

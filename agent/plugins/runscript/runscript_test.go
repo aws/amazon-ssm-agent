@@ -24,7 +24,6 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/executers"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
-	"github.com/aws/amazon-ssm-agent/agent/framework/runpluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/pluginutil"
@@ -270,7 +269,7 @@ func testExecuteMultiInput(t *testing.T, testCases []TestCase) {
 				OrchestrationDirectory: orchestrationDirectory,
 				BookKeepingFileName:    commandID,
 				PluginID:               pluginID,
-			}, mockCancelFlag, runpluginutil.PluginRunner{})
+			}, mockCancelFlag)
 
 		// assert output is correct (mocked object expectations are tested automatically by testExecution)
 		expectedStandardOutput, expectedStandardError, expectedOutput := buildOutputs(testCases)
@@ -315,7 +314,7 @@ func testExecute(t *testing.T, testCase TestCase) {
 				OrchestrationDirectory: orchestrationDirectory,
 				BookKeepingFileName:    commandID,
 				PluginID:               pluginID,
-			}, mockCancelFlag, runpluginutil.PluginRunner{})
+			}, mockCancelFlag)
 
 		// assert output is correct (mocked object expectations are tested automatically by testExecution)
 		assert.NotNil(t, res.StartDateTime)

@@ -26,7 +26,6 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
-	"github.com/aws/amazon-ssm-agent/agent/framework/runpluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/installer"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/ssminstaller"
@@ -65,7 +64,7 @@ type Repository interface {
 	GetInstallState(context context.T, packageName string) (state InstallState, version string)
 	RemovePackage(context context.T, packageName string, version string) error
 	GetInventoryData(context context.T) []model.ApplicationData
-	GetInstaller(context context.T, configuration contracts.Configuration, runner runpluginutil.PluginRunner, packageName string, version string) installer.Installer
+	GetInstaller(context context.T, configuration contracts.Configuration, packageName string, version string) installer.Installer
 
 	ReadManifest(packageName string, packageVersion string) ([]byte, error)
 	WriteManifest(packageName string, packageVersion string, content []byte) error
@@ -112,7 +111,6 @@ type localRepository struct {
 // The configuration should include the appropriate OutputS3KeyPrefix for documents run by the Installer
 func (repo *localRepository) GetInstaller(context context.T,
 	configuration contracts.Configuration,
-	runner runpluginutil.PluginRunner,
 	packageName string,
 	version string) installer.Installer {
 
@@ -121,8 +119,7 @@ func (repo *localRepository) GetInstaller(context context.T,
 	return ssminstaller.New(packageName,
 		version,
 		repo.getPackageVersionPath(packageName, version),
-		configuration,
-		runner)
+		configuration)
 }
 
 // GetInstalledVersion returns the version of the last successfully installed package

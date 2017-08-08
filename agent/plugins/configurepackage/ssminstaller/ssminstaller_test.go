@@ -24,7 +24,6 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/docmanager/model"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
-	"github.com/aws/amazon-ssm-agent/agent/framework/runpluginutil"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )
@@ -257,11 +256,10 @@ func (execMock *MockedExec) ParseDocument(
 }
 
 func (execMock *MockedExec) ExecuteDocument(
-	runner runpluginutil.PluginRunner,
 	context context.T,
 	pluginInput []model.PluginState,
 	documentID string,
 	documentCreatedDate string) (pluginOutputs map[string]*contracts.PluginResult) {
-	args := execMock.Called(runner, context, pluginInput, documentID, documentCreatedDate)
+	args := execMock.Called(context, pluginInput, documentID, documentCreatedDate)
 	return args.Get(0).(map[string]*contracts.PluginResult)
 }
