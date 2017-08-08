@@ -111,6 +111,10 @@ func getPlatformDetails(log log.T) (name string, version string, err error) {
 			data := strings.Split(contents, "release")
 			name = strings.TrimSpace(data[0])
 			version = strings.TrimSpace(data[1])
+		} else if strings.Contains(contents, "Raspbian") {
+			data := strings.Split(contents, "release")
+			name = strings.TrimSpace(data[0])
+			version = strings.TrimSpace(data[1])
 		}
 	} else if fileutil.Exists(redhatReleaseFile) {
 		log.Debugf(fetchingDetailsMessage, redhatReleaseFile)

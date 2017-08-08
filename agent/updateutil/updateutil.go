@@ -95,6 +95,9 @@ const (
 	// PlatformSuse represents SLES(SUSe)
 	PlatformSuseOS = "sles"
 
+	// PlatformSuse represents Raspbian
+	PlatformRaspbian = "raspbian"
+
 	// PlatformWindows represents windows
 	PlatformWindows = "windows"
 
@@ -204,6 +207,10 @@ var cmdOutput = (*exec.Cmd).Output
 var isUsingSystemD map[string]string
 var once sync.Once
 
+var possiblyUsingSystemD = map[string]bool{
+	PlatformRaspbian: true,
+}
+
 // CreateInstanceContext create instance related information such as region, platform and arch
 func (util *Utility) CreateInstanceContext(log log.T) (context *InstanceContext, err error) {
 	region := ""
@@ -232,6 +239,9 @@ func (util *Utility) CreateInstanceContext(log log.T) (context *InstanceContext,
 	} else if strings.Contains(platformName, PlatformSuseOS) {
 		platformName = PlatformSuseOS
 		installerName = PlatformLinux
+	} else if strings.Contains(platformName, PlatformRaspbian) {
+		platformName = PlatformRaspbian
+		installerName = PlatformUbuntu
 	} else if isNano, _ := platform.IsPlatformNanoServer(log); isNano {
 		//TODO move this logic to instance context
 		platformName = PlatformWindowsNano
@@ -444,6 +454,13 @@ func (i *InstanceContext) IsPlatformUsingSystemD(log log.T) (result bool, err er
 		if compareResult >= 0 {
 			return true, nil
 		}
+	} else if _, ok := possiblyUsingSystemD[i.Platform]; ok {
+		// attempt to execute 'systemctl --version' to verify systemd
+		if _, commandErr := execCommand("systemctl", "--version").Output(); commandErr != nil {
+			return false, nil
+		}
+
+		return true, nil
 	}
 
 	return false, nil
