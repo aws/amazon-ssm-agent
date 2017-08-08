@@ -16,11 +16,17 @@
 package document
 
 import (
+	"github.com/aws/amazon-ssm-agent/agent/appconfig"
+	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/docmanager/model"
 	"github.com/aws/amazon-ssm-agent/agent/docparser"
+	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer"
+	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/basicexecuter"
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/platform"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/executecommand/remoteresource"
+	"github.com/aws/amazon-ssm-agent/agent/task"
 	"github.com/go-yaml/yaml"
 
 	"encoding/json"
@@ -32,23 +38,26 @@ const (
 )
 
 type ExecCommand interface {
-	ParseDocument(log log.T, resource remoteresource.ResourceInfo, documentRaw []byte, orchestrationDir string, s3Bucket string, s3KeyPrefix string, messageID string, documentID string, defaultWorkingDirectory string, params map[string]interface{}) (pluginsInfo []model.PluginState, err error)
-	//ExecuteDocument() (pluginOutputs map[string]*contracts.PluginResult)
+	ParseDocument(log log.T, extension string, documentRaw []byte, orchestrationDir string, s3Bucket string, s3KeyPrefix string, messageID string, documentID string, defaultWorkingDirectory string, params map[string]interface{}) (pluginsInfo []model.PluginState, err error)
+	ExecuteDocument(context context.T, pluginInput []model.PluginState, documentID string, documentCreatedDate string) (pluginOutputs map[string]*contracts.PluginResult)
 }
 
 type ExecCommandImpl struct{}
 
-// ParseDocument parses the remote document obtained to a format that the executer can use.
-// This function is also responsible for all the validation of document and parameters
-func (doc ExecCommandImpl) ParseDocument(log log.T, resource remoteresource.ResourceInfo, documentRaw []byte, orchestrationDir string, s3Bucket string, s3KeyPrefix string, messageID string, documentID string, defaultWorkingDirectory string, params map[string]interface{}) (pluginsInfo []model.PluginState, err error) {
+// ParseDocument parses the remote document obtained to a format that the executor can use.
+// This function is also responsible for all the validation of document and replacement of parameters
+func (doc ExecCommandImpl) ParseDocument(log log.T, extension string, documentRaw []byte, orchestrationDir string,
+	s3Bucket string, s3KeyPrefix string, messageID string, documentID string, defaultWorkingDirectory string,
+	params map[string]interface{}) (pluginsInfo []model.PluginState, err error) {
 	var docContent contracts.DocumentContent
-	if resource.ResourceExtension == remoteresource.YAMLExtension {
+	if extension == remoteresource.YAMLExtension {
 		if err := yaml.Unmarshal(documentRaw, &docContent); err != nil {
 			log.Error("Unmarshalling YAML remote resource document failed. Please make sure the document is in the right format")
 			return pluginsInfo, err
 		}
 
-	} else if resource.ResourceExtension == remoteresource.JSONExtension {
+	}
+	if extension == remoteresource.JSONExtension {
 		if err := json.Unmarshal(documentRaw, &docContent); err != nil {
 			log.Error("Unmarshalling JSON remote resource document failed. Please make sure the document is in the right format")
 			return pluginsInfo, err
@@ -68,5 +77,37 @@ func (doc ExecCommandImpl) ParseDocument(log log.T, resource remoteresource.Reso
 
 	log.Debug("Parsed document - ", docContent)
 	log.Debug("Plugins Info - ", pluginsInfo)
+	return
+}
+
+// ExecuteDocument is responsible to execute the sub-documents that are created or downloaded by the executeCommand plugin
+func (doc ExecCommandImpl) ExecuteDocument(context context.T, pluginInput []model.PluginState, documentID string,
+	documentCreatedDate string) (pluginOutputs map[string]*contracts.PluginResult) {
+	log := context.Log()
+	log.Info("Running sub-document")
+	exe := basicexecuter.NewBasicExecuter(context)
+
+	docState := model.DocumentState{
+		DocumentInformation: model.DocumentInfo{
+			DocumentID: documentID,
+		},
+		InstancePluginsInformation: pluginInput,
+	}
+	//specify the sub-document's bookkeeping location
+	instanceID, err := platform.InstanceID()
+	if err != nil {
+		log.Error("failed to load instance id")
+		return
+	}
+	docStore := executer.NewDocumentFileStore(context, documentID, instanceID, appconfig.DefaultLocationOfCurrent, &docState)
+	cancelFlag := task.NewChanneledCancelFlag()
+	resultChannels := exe.Run(cancelFlag, &docStore)
+
+	for res := range resultChannels {
+		if res.LastPlugin == "" {
+			pluginOutputs = res.PluginResults
+			break
+		}
+	}
 	return
 }
