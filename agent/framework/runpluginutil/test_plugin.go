@@ -29,7 +29,7 @@ type PluginMock struct {
 }
 
 // Execute mocks a plugin execution.
-func (m *PluginMock) Execute(context context.T, config contracts.Configuration, cancelFlag task.CancelFlag, subDocumentRunner PluginRunner) (res contracts.PluginResult) {
+func (m *PluginMock) Execute(context context.T, config contracts.Configuration, cancelFlag task.CancelFlag) (res contracts.PluginResult) {
 	args := m.Called(context, config, cancelFlag)
 	return args.Get(0).(contracts.PluginResult)
 }
