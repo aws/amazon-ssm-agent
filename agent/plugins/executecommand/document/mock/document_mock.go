@@ -16,9 +16,10 @@
 package document_mock
 
 import (
+	"github.com/aws/amazon-ssm-agent/agent/context"
+	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/docmanager/model"
 	"github.com/aws/amazon-ssm-agent/agent/log"
-	"github.com/aws/amazon-ssm-agent/agent/plugins/executecommand/remoteresource"
 	"github.com/stretchr/testify/mock"
 )
 
@@ -30,7 +31,12 @@ type ExecMock struct {
 	mock.Mock
 }
 
-func (e ExecMock) ParseDocument(log log.T, resourceInfo remoteresource.ResourceInfo, documentRaw []byte, orchestrationDir string, s3Bucket string, s3KeyPrefix string, messageID string, documentID string, defaultWorkingDirectory string, params map[string]interface{}) (pluginsInfo []model.PluginState, err error) {
-	args := e.Called(log, resourceInfo, documentRaw, orchestrationDir, s3Bucket, s3KeyPrefix, messageID, documentID, defaultWorkingDirectory, params)
+func (e ExecMock) ParseDocument(log log.T, extension string, documentRaw []byte, orchestrationDir string, s3Bucket string, s3KeyPrefix string, messageID string, documentID string, defaultWorkingDirectory string, params map[string]interface{}) (pluginsInfo []model.PluginState, err error) {
+	args := e.Called(log, extension, documentRaw, orchestrationDir, s3Bucket, s3KeyPrefix, messageID, documentID, defaultWorkingDirectory, params)
 	return args.Get(0).([]model.PluginState), args.Error(1)
+}
+
+func (e ExecMock) ExecuteDocument(context context.T, pluginInput []model.PluginState, documentID string, documentCreatedDate string) (pluginOutputs map[string]*contracts.PluginResult) {
+	args := e.Called(context, pluginInput, documentID, documentCreatedDate)
+	return args.Get(0).(map[string]*contracts.PluginResult)
 }
