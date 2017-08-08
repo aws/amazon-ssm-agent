@@ -37,7 +37,7 @@ func repoInstallMock(pluginInformation *ConfigurePackagePluginInput, installerMo
 	mockRepo.On("GetInstallState", mock.Anything, pluginInformation.Name).Return(localpackages.None, "")
 	mockRepo.On("ValidatePackage", mock.Anything, pluginInformation.Name, pluginInformation.Version).Return(nil)
 	mockRepo.On("SetInstallState", mock.Anything, pluginInformation.Name, pluginInformation.Version, mock.Anything).Return(nil)
-	mockRepo.On("GetInstaller", mock.Anything, mock.Anything, mock.Anything, pluginInformation.Name, pluginInformation.Version).Return(installerMock)
+	mockRepo.On("GetInstaller", mock.Anything, mock.Anything, pluginInformation.Name, pluginInformation.Version).Return(installerMock)
 	return &mockRepo
 }
 
@@ -48,8 +48,8 @@ func repoUpgradeMock(pluginInformation *ConfigurePackagePluginInput, installerMo
 	mockRepo.On("ValidatePackage", mock.Anything, pluginInformation.Name, "0.0.1").Return(nil)
 	mockRepo.On("ValidatePackage", mock.Anything, pluginInformation.Name, "0.0.2").Return(nil)
 	mockRepo.On("SetInstallState", mock.Anything, pluginInformation.Name, "0.0.2", mock.Anything).Return(nil)
-	mockRepo.On("GetInstaller", mock.Anything, mock.Anything, mock.Anything, pluginInformation.Name, "0.0.1").Return(installerMock)
-	mockRepo.On("GetInstaller", mock.Anything, mock.Anything, mock.Anything, pluginInformation.Name, "0.0.2").Return(installerMock)
+	mockRepo.On("GetInstaller", mock.Anything, mock.Anything, pluginInformation.Name, "0.0.1").Return(installerMock)
+	mockRepo.On("GetInstaller", mock.Anything, mock.Anything, pluginInformation.Name, "0.0.2").Return(installerMock)
 	return &mockRepo
 }
 
@@ -58,7 +58,7 @@ func repoUninstallMock(pluginInformation *ConfigurePackagePluginInput, installer
 	mockRepo.On("GetInstalledVersion", mock.Anything, pluginInformation.Name).Return("0.0.1")
 	mockRepo.On("GetInstallState", mock.Anything, pluginInformation.Name).Return(localpackages.Installed, "")
 	mockRepo.On("ValidatePackage", mock.Anything, pluginInformation.Name, "0.0.1").Return(nil)
-	mockRepo.On("GetInstaller", mock.Anything, mock.Anything, mock.Anything, pluginInformation.Name, "0.0.1").Return(installerMock)
+	mockRepo.On("GetInstaller", mock.Anything, mock.Anything, pluginInformation.Name, "0.0.1").Return(installerMock)
 	return &mockRepo
 }
 

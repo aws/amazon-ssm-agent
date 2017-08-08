@@ -22,7 +22,6 @@ import (
 
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
-	"github.com/aws/amazon-ssm-agent/agent/framework/runpluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/longrunning/manager"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/pluginutil"
@@ -126,7 +125,7 @@ func TestExecuteSuccess(t *testing.T) {
 		return []byte{}, nil
 	}
 
-	res := p.Execute(testCase.Context, enabledConfig, cancelFlag, runpluginutil.PluginRunner{})
+	res := p.Execute(testCase.Context, enabledConfig, cancelFlag)
 	expectRes := p.CreateResult("success", contracts.ResultStatusSuccess)
 	assert.Equal(t, expectRes, res)
 }
@@ -144,7 +143,7 @@ func TestExecuteFailWithInvalidPlugin(t *testing.T) {
 	cancelFlag.On("Canceled").Return(false)
 	cancelFlag.On("ShutDown").Return(false)
 
-	res := p.Execute(testCase.Context, config, cancelFlag, runpluginutil.PluginRunner{})
+	res := p.Execute(testCase.Context, config, cancelFlag)
 	expectRes := p.CreateResult(fmt.Sprintf("Plugin %s is not registered by agent", testCase.LrpName),
 		contracts.ResultStatusFailed)
 	assert.Equal(t, expectRes, res)
@@ -163,7 +162,7 @@ func TestExecuteFailWithStartType(t *testing.T) {
 	cancelFlag.On("Canceled").Return(false)
 	cancelFlag.On("ShutDown").Return(false)
 
-	res := p.Execute(testCase.Context, config, cancelFlag, runpluginutil.PluginRunner{})
+	res := p.Execute(testCase.Context, config, cancelFlag)
 	expectRes := p.CreateResult(fmt.Sprintf("Allowed Values of StartType: Enabled | Disabled"),
 		contracts.ResultStatusFailed)
 	assert.Equal(t, expectRes, res)
@@ -185,7 +184,7 @@ func TestExecuteFailWithSettings(t *testing.T) {
 	var enabledConfig = contracts.Configuration{
 		Settings: "Enabled",
 	}
-	res := p.Execute(testCase.Context, enabledConfig, cancelFlag, runpluginutil.PluginRunner{})
+	res := p.Execute(testCase.Context, enabledConfig, cancelFlag)
 	expectRes := p.CreateResult(fmt.Sprintf("Unable to parse Settings for %s", testCase.LrpName),
 		contracts.ResultStatusFailed)
 	assert.Equal(t, expectRes, res)

@@ -29,7 +29,6 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/docparser"
 	"github.com/aws/amazon-ssm-agent/agent/executers"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
-	"github.com/aws/amazon-ssm-agent/agent/framework/runpluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/times"
 )
@@ -41,7 +40,6 @@ type Installer struct {
 	version     string
 	packagePath string
 	config      contracts.Configuration // TODO:MF: See if we can use a smaller struct that has just the things we need
-	runner      runpluginutil.PluginRunner
 }
 
 type ActionType uint8
@@ -61,8 +59,7 @@ type Action struct {
 func New(packageName string,
 	version string,
 	packagePath string,
-	configuration contracts.Configuration,
-	runner runpluginutil.PluginRunner) *Installer {
+	configuration contracts.Configuration) *Installer {
 	return &Installer{
 		filesysdep:  &fileSysDepImp{},
 		execdep:     &execDepImp{},
@@ -70,7 +67,6 @@ func New(packageName string,
 		version:     version,
 		packagePath: packagePath,
 		config:      configuration,
-		runner:      runner,
 	}
 }
 
@@ -351,7 +347,7 @@ func (inst *Installer) executeDocument(context context.T,
 	output *contracts.PluginOutput) {
 	log := context.Log()
 
-	pluginOutputs := inst.execdep.ExecuteDocument(inst.runner, context, pluginsInfo, inst.config.BookKeepingFileName, times.ToIso8601UTC(time.Now()))
+	pluginOutputs := inst.execdep.ExecuteDocument(context, pluginsInfo, inst.config.BookKeepingFileName, times.ToIso8601UTC(time.Now()))
 	if pluginOutputs == nil {
 		output.MarkAsFailed(log, errors.New("No output from executing install document (install.json)"))
 	}

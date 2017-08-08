@@ -20,7 +20,6 @@ import (
 
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
-	"github.com/aws/amazon-ssm-agent/agent/framework/runpluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/platform"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/localpackages"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/pluginutil"
@@ -96,7 +95,6 @@ func TestPrepareNewInstall(t *testing.T) {
 	inst, uninst, installState, installedVersion := prepareConfigurePackage(
 		contextMock,
 		buildConfigSimple(pluginInformation),
-		runpluginutil.PluginRunner{},
 		repoMock,
 		serviceMock,
 		pluginInformation,
@@ -126,7 +124,6 @@ func TestPrepareUpgrade(t *testing.T) {
 	inst, uninst, installState, installedVersion := prepareConfigurePackage(
 		contextMock,
 		buildConfigSimple(pluginInformation),
-		runpluginutil.PluginRunner{},
 		repoMock,
 		serviceMock,
 		pluginInformation,
@@ -156,7 +153,6 @@ func TestPrepareUninstall(t *testing.T) {
 	inst, uninst, installState, installedVersion := prepareConfigurePackage(
 		contextMock,
 		buildConfigSimple(pluginInformation),
-		runpluginutil.PluginRunner{},
 		repoMock,
 		serviceMock,
 		pluginInformation,
@@ -186,7 +182,6 @@ func TestPrepareUninstallCurrent(t *testing.T) {
 	inst, uninst, installState, installedVersion := prepareConfigurePackage(
 		contextMock,
 		buildConfigSimple(pluginInformation),
-		runpluginutil.PluginRunner{},
 		repoMock,
 		serviceMock,
 		pluginInformation,
@@ -216,7 +211,6 @@ func TestPrepareUninstallWrongVersion(t *testing.T) {
 	inst, uninst, installState, installedVersion := prepareConfigurePackage(
 		contextMock,
 		buildConfigSimple(pluginInformation),
-		runpluginutil.PluginRunner{},
 		repoMock,
 		serviceMock,
 		pluginInformation,
@@ -357,7 +351,7 @@ func TestExecute(t *testing.T) {
 		localRepository:        repoMock,
 		packageServiceSelector: selectMockService(serviceMock),
 	}
-	result := plugin.execute(contextMock, buildConfigSimple(pluginInformation), createMockCancelFlag(), runpluginutil.PluginRunner{}, mockPersistPluginInfo)
+	result := plugin.execute(contextMock, buildConfigSimple(pluginInformation), createMockCancelFlag(), mockPersistPluginInfo)
 
 	assert.Equal(t, 0, result.Code)
 	repoMock.AssertExpectations(t)
@@ -382,7 +376,7 @@ func TestExecuteArrayInput(t *testing.T) {
 	rawPluginInputs = append(rawPluginInputs, pluginInformation)
 	config.Properties = rawPluginInputs
 
-	result := plugin.execute(contextMock, config, createMockCancelFlag(), runpluginutil.PluginRunner{}, mockPersistPluginInfo)
+	result := plugin.execute(contextMock, config, createMockCancelFlag(), mockPersistPluginInfo)
 
 	assert.Equal(t, 1, result.Code)
 	assert.Contains(t, result.Output, "invalid format in plugin properties")
@@ -398,7 +392,7 @@ func TestConfigurePackage_InvalidAction(t *testing.T) {
 		localRepository:        repoMock,
 		packageServiceSelector: selectMockService(serviceMock),
 	}
-	result := plugin.execute(contextMock, buildConfigSimple(pluginInformation), createMockCancelFlag(), runpluginutil.PluginRunner{}, mockPersistPluginInfo)
+	result := plugin.execute(contextMock, buildConfigSimple(pluginInformation), createMockCancelFlag(), mockPersistPluginInfo)
 
 	assert.Equal(t, 1, result.Code)
 	assert.Contains(t, result.Output, "unsupported action")
@@ -434,7 +428,7 @@ func testS3Prefix(t *testing.T, testCase S3PrefixTestCase) {
 
 	config := buildConfig(pluginInformation, testCase.OrchestrationDir, testCase.BucketName, testCase.PrefixIn, testCase.PluginID)
 	var result contracts.PluginResult
-	result = plugin.execute(contextMock, config, createMockCancelFlag(), runpluginutil.PluginRunner{}, mockPersistPluginInfo)
+	result = plugin.execute(contextMock, config, createMockCancelFlag(), mockPersistPluginInfo)
 
 	assert.Equal(t, result.Code, 0)
 	mockPlugin.AssertExpectations(t)
