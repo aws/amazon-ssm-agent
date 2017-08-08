@@ -20,7 +20,6 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/docmanager/model"
-	"github.com/aws/amazon-ssm-agent/agent/framework/runpluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/executecommand/document"
@@ -31,6 +30,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/plugins/executecommand/ssmdocresource"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/pluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/task"
+	"github.com/aws/amazon-ssm-agent/agent/times"
 
 	"encoding/json"
 	"errors"
@@ -77,20 +77,24 @@ type ExecutePluginInput struct {
 // Plugin is the type for the aws:executeCommand plugin.
 type Plugin struct {
 	pluginutil.DefaultPlugin
-	executeCommandDepth   int
 	remoteResourceCreator func(log log.T, locationType string, locationInfo string) (remoteresource.RemoteResource, error)
 	pluginManager         executePluginManager
 }
 
-// executePlugin is the struct that implements executePluginManager
-type executePlugin struct {
+// ExecutePLuginDepth is the struct that is sent through to the sub-documents to maintain the depth of execution
+type ExecutePluginDepth struct {
+	executeCommandDepth int
+}
+
+// executor is the struct that implements executePluginManager
+type executor struct {
 	filesys filemanager.FileSystem
 	doc     document.ExecCommand
 }
 
 //NewExecutePluginManager returns an object of type executePlugin
-func NewExecutePluginManager() executePlugin {
-	return executePlugin{
+func NewExecutePluginManager() executor {
+	return executor{
 		filesys: filemanager.FileSystemImpl{},
 		doc:     document.ExecCommandImpl{},
 	}
@@ -101,16 +105,16 @@ func NewExecutePluginManager() executePlugin {
 type executePluginManager interface {
 	GetResource(log log.T, input *ExecutePluginInput, config contracts.Configuration, rem remoteresource.RemoteResource) (resourceInfo remoteresource.ResourceInfo, err error)
 	PrepareDocumentForExecution(log log.T, remoteResourceInfo remoteresource.ResourceInfo, config contracts.Configuration, parameters string) (pluginsInfo []model.PluginState, err error)
-	//ExecuteResource()
+	ExecuteResource(context context.T, pluginsInfo []model.PluginState, output *contracts.PluginOutput, config contracts.Configuration)
 }
 
 // Execute runs multiple sets of commands and returns their outputs.
 // res.Output will contain a slice of RunCommandPluginOutput.
-func (p *Plugin) Execute(context context.T, config contracts.Configuration, cancelFlag task.CancelFlag, subDocumentRunner runpluginutil.PluginRunner) (res contracts.PluginResult) {
-	return p.execute(context, config, cancelFlag, subDocumentRunner, filemanager.FileSystemImpl{})
+func (p *Plugin) Execute(context context.T, config contracts.Configuration, cancelFlag task.CancelFlag) (res contracts.PluginResult) {
+	return p.execute(context, config, cancelFlag, filemanager.FileSystemImpl{})
 }
 
-func (p *Plugin) execute(context context.T, config contracts.Configuration, cancelFlag task.CancelFlag, subDocumentRunner runpluginutil.PluginRunner, filesysdep filemanager.FileSystem) (res contracts.PluginResult) {
+func (p *Plugin) execute(context context.T, config contracts.Configuration, cancelFlag task.CancelFlag, filesysdep filemanager.FileSystem) (res contracts.PluginResult) {
 	log := context.Log()
 	log.Info("Plugin aws:execute started with configuration", config)
 
@@ -128,41 +132,8 @@ func (p *Plugin) execute(context context.T, config contracts.Configuration, canc
 		output.MarkAsCancelled()
 	} else if input, err := parseAndValidateInput(config.Properties); err != nil {
 		output.MarkAsFailed(log, err)
-	} else if p.executeCommandDepth > executeCommandMaxDepth {
-		// Error out if the max depth has been exceeded
-		output.MarkAsFailed(log, fmt.Errorf("Maximum depth for document execution exceeded. "+
-			"Maximum depth permitted - %v and current depth - %v", executeCommandMaxDepth, p.executeCommandDepth))
-
 	} else {
-		//Run aws:executeCommand plugin
-		var resourceInfo remoteresource.ResourceInfo
-		var pluginsInfo []model.PluginState
-
-		// remoteResourceCreator makes a call to a function that creates a new remote resource based on the location type
-		log.Debug("Creating resource of type - ", input.LocationType)
-		remoteResource, err := p.remoteResourceCreator(log, input.LocationType, input.LocationInfo)
-		if err != nil {
-			output.MarkAsFailed(log, err)
-			return
-		}
-
-		if resourceInfo, err = p.pluginManager.GetResource(log, input, config, remoteResource); err != nil {
-			output.MarkAsFailed(log, fmt.Errorf("Unable to obtain the remote resource: %v", err.Error()))
-			return
-		}
-
-		if resourceInfo.TypeOfResource == remoteresource.Document {
-			if pluginsInfo, err = p.pluginManager.PrepareDocumentForExecution(log, resourceInfo, config, input.RuntimeParameters); err != nil {
-				output.MarkAsFailed(log, fmt.Errorf("There was an error while preparing documents - %v", err.Error()))
-				return
-			} else {
-				log.Info("Plugin info - ", pluginsInfo)
-			}
-		}
-
-		//ExecuteResource()
-
-		output.MarkAsSucceeded()
+		p.runExecuteCommand(context, input, config, &output)
 	}
 	if config.OrchestrationDirectory != "" {
 		useTemp := false
@@ -204,8 +175,70 @@ func (p *Plugin) execute(context context.T, config contracts.Configuration, canc
 	return res
 }
 
-// GetRemoteResource figures out the type of location, downloads the resource, saves it on disk and returns information required for it
-func (m executePlugin) GetResource(log log.T,
+// runExecuteCommand is a method that runs the actual logic for
+func (p *Plugin) runExecuteCommand(context context.T, input *ExecutePluginInput, config contracts.Configuration, output *contracts.PluginOutput) {
+
+	log := context.Log()
+
+	//Run aws:executeCommand plugin
+	log.Debug("Inside runExecuteCommand function")
+	var resourceInfo remoteresource.ResourceInfo
+	var pluginsInfo []model.PluginState
+
+	//Set the depth of execution to be 1 for the first level execution
+	execDepth := 1
+	// Getting the current depth of execution and checking against maximum depth
+	if config.Settings != nil {
+		log.Info("config settings is not nil")
+		if settings, ok := config.Settings.(*ExecutePluginDepth); !ok {
+			log.Error("Plugin setting is not of the right type")
+			output.MarkAsFailed(log, errors.New("There was an error obtaining the depth of execution"))
+			return
+		} else {
+			execDepth = settings.executeCommandDepth + 1
+			log.Info("Depth of execution is ", execDepth)
+			if execDepth > executeCommandMaxDepth {
+				output.MarkAsFailed(log, fmt.Errorf("Maximum depth for document execution exceeded. "+
+					"Maximum depth permitted - %v and current depth - %v", executeCommandMaxDepth, execDepth))
+				return
+			}
+		}
+	}
+	log.Info("Depth of execution - ", execDepth)
+	// remoteResourceCreator makes a call to a function that creates a new remote resource based on the location type
+	log.Debug("Creating resource of type - ", input.LocationType)
+	remoteResource, err := p.remoteResourceCreator(log, input.LocationType, input.LocationInfo)
+	if err != nil {
+		output.MarkAsFailed(log, err)
+		return
+	}
+	if resourceInfo, err = p.pluginManager.GetResource(log, input, config, remoteResource); err != nil {
+		output.MarkAsFailed(log, fmt.Errorf("Unable to obtain the remote resource: %v", err.Error()))
+		return
+	}
+	if resourceInfo.TypeOfResource == remoteresource.Document {
+		if pluginsInfo, err = p.pluginManager.PrepareDocumentForExecution(log, resourceInfo, config, input.RuntimeParameters); err != nil {
+			output.MarkAsFailed(log, fmt.Errorf("There was an error while preparing documents - %v", err.Error()))
+			return
+		} else {
+			// TODO: add code for script execution
+			log.Info("Plugin info - ", pluginsInfo)
+		}
+	}
+	// Sending execution depth in Configuration.Settings to the sub-documents
+	for i, plugins := range pluginsInfo {
+		plugins.Configuration.Settings = &ExecutePluginDepth{executeCommandDepth: execDepth}
+		pluginsInfo[i] = plugins
+	}
+
+	//TODO: What happens on reboot?
+	p.pluginManager.ExecuteResource(context, pluginsInfo, output, config)
+
+	return
+}
+
+// GetResource figures out the type of location, downloads the resource, saves it on disk and returns information required for it
+func (m executor) GetResource(log log.T,
 	input *ExecutePluginInput,
 	config contracts.Configuration,
 	remoteResource remoteresource.RemoteResource) (resourceInfo remoteresource.ResourceInfo, err error) {
@@ -232,7 +265,7 @@ func (m executePlugin) GetResource(log log.T,
 }
 
 // PrepareDocumentForExecution parses the raw content of the document, validates it and returns a PluginState that can be executed.
-func (m executePlugin) PrepareDocumentForExecution(log log.T, remoteResourceInfo remoteresource.ResourceInfo, config contracts.Configuration, params string) (pluginsInfo []model.PluginState, err error) {
+func (m executor) PrepareDocumentForExecution(log log.T, remoteResourceInfo remoteresource.ResourceInfo, config contracts.Configuration, params string) (pluginsInfo []model.PluginState, err error) {
 	parameters := make(map[string]interface{})
 	if params != "" {
 
@@ -252,7 +285,36 @@ func (m executePlugin) PrepareDocumentForExecution(log log.T, remoteResourceInfo
 	}
 	log.Infof("Sending the document received - %v for parsing", string(rawDocument))
 
-	return m.doc.ParseDocument(log, remoteResourceInfo, rawDocument, config.OrchestrationDirectory, config.OutputS3BucketName, config.OutputS3KeyPrefix, config.MessageId, config.PluginID, config.DefaultWorkingDirectory, parameters)
+	return m.doc.ParseDocument(log, remoteResourceInfo.ResourceExtension, rawDocument, config.OrchestrationDirectory, config.OutputS3BucketName, config.OutputS3KeyPrefix, config.MessageId, config.PluginID, config.DefaultWorkingDirectory, parameters)
+}
+
+// ExecuteResource sends the remote resource (script or document) for execution
+func (m executor) ExecuteResource(context context.T,
+	pluginsInfo []model.PluginState,
+	output *contracts.PluginOutput,
+	config contracts.Configuration) {
+
+	log := context.Log()
+
+	pluginOutput := m.doc.ExecuteDocument(context, pluginsInfo, config.BookKeepingFileName, times.ToIso8601UTC(time.Now()))
+	if pluginOutput == nil {
+		output.MarkAsFailed(log, errors.New("No output obtained from executing document"))
+	}
+	for _, pluginOut := range pluginOutput {
+		if pluginOut.StandardOutput != "" {
+			output.AppendInfof(log, "%v output : %v", pluginOut.PluginName, pluginOut.StandardOutput)
+		}
+		if pluginOut.StandardError != "" {
+			output.AppendErrorf(log, "%v errors: %v", pluginOut.PluginName, pluginOut.StandardError)
+		}
+		if pluginOut.Error != nil {
+			output.MarkAsFailed(log, pluginOut.Error)
+		} else {
+			output.MarkAsSucceeded()
+		}
+		output.Status = contracts.MergeResultStatus(output.Status, pluginOut.Status)
+	}
+	return
 }
 
 // Name returns the plugin name
@@ -281,35 +343,28 @@ func validateInput(input *ExecutePluginInput) (valid bool, err error) {
 	if input.LocationType == "" {
 		return false, errors.New("Location Type must be specified")
 	}
-
 	//ensure all entries are valid
 	if input.LocationType != Github && input.LocationType != S3 && input.LocationType != SSMDocument {
 		return false, errors.New("Unsupported location type")
 	}
-
 	// ensure non-empty location info
 	if input.LocationInfo == "" {
 		return false, errors.New("Location Information must be specified")
 	}
-
 	return true, nil
 }
 
 // newRemoteResource switches between the location type and returns a struct of the location type that implements remoteresource
 func newRemoteResource(log log.T, locationType string, locationInfo string) (resource remoteresource.RemoteResource, err error) {
-
 	switch locationType {
 	case Github:
 		// TODO: meloniam@ Replace nil with auth information once work is done
 		// TODO: meloniam@ Replace string type to map[string]inteface{} type once Runcommand supports string maps
 		return gitresource.NewGitResource(nil, locationInfo)
-
 	case S3:
 		return s3resource.NewS3Resource(log, locationInfo)
-
 	case SSMDocument:
 		return ssmdocresource.NewSSMDocResource(locationInfo)
-
 	default:
 		return nil, fmt.Errorf("Invalid Location type.")
 	}

@@ -24,7 +24,6 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/docmanager/model"
-	"github.com/aws/amazon-ssm-agent/agent/framework/runpluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	docmock "github.com/aws/amazon-ssm-agent/agent/plugins/executecommand/document/mock"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/executecommand/filemanager"
@@ -81,7 +80,7 @@ func TestExecutePlugin_GetResource(t *testing.T) {
 	remoteResourceMock.On("Download", logger, fileMock, false, mock.Anything).Return(nil).Once()
 	remoteResourceMock.On("PopulateResourceInfo", logger, mock.Anything, mock.Anything).Return(resource)
 
-	p := executePlugin{
+	p := executor{
 		filesys: fileMock,
 	}
 
@@ -108,7 +107,7 @@ func TestExecutePlugin_GetResourceBadDirectory(t *testing.T) {
 	remoteResourceMock.On("Download", logger, fileMock, false, mock.Anything).Return(nil).Once()
 	remoteResourceMock.On("PopulateResourceInfo", logger, mock.Anything, mock.Anything).Return(resource)
 
-	p := executePlugin{
+	p := executor{
 		filesys: fileMock,
 	}
 
@@ -129,7 +128,7 @@ func TestExecutePlugin_GetResourceBadLocationInfo(t *testing.T) {
 
 	input := ExecutePluginInput{}
 
-	p := executePlugin{
+	p := executor{
 		filesys: fileMock,
 	}
 
@@ -196,9 +195,9 @@ func TestExecutePlugin_PrepareDocumentForExecution(t *testing.T) {
 	conf := createStubConfiguration("orch", "bucket", "prefix", "1234-1234-1234", "directory")
 
 	fileMock.On("ReadFile", mock.Anything).Return("content", nil)
-	execMock.On("ParseDocument", logger, []byte("content"), conf.OrchestrationDirectory, conf.OutputS3BucketName, conf.OutputS3KeyPrefix, conf.MessageId, conf.PluginID, conf.DefaultWorkingDirectory, parameters).Return(plugins, nil)
+	execMock.On("ParseDocument", logger, ".ps", []byte("content"), conf.OrchestrationDirectory, conf.OutputS3BucketName, conf.OutputS3KeyPrefix, conf.MessageId, conf.PluginID, conf.DefaultWorkingDirectory, parameters).Return(plugins, nil)
 
-	p := executePlugin{
+	p := executor{
 		filesys: fileMock,
 		doc:     execMock,
 	}
@@ -220,7 +219,7 @@ func TestExecutePlugin_PrepareDocumentForExecutionFail(t *testing.T) {
 
 	localFileMock.On("ReadFile", mock.Anything).Return("", fmt.Errorf("File is empty!"))
 
-	p := executePlugin{
+	p := executor{
 		filesys: localFileMock,
 		doc:     execMock,
 	}
@@ -243,19 +242,22 @@ func TestParseAndValidateInput_NoInput(t *testing.T) {
 func TestPlugin_ExecuteScript(t *testing.T) {
 
 	filesysdep := filemanager.FileSystemImpl{}
-	manager := executePlugin{
+	docMock := docmock.NewExecMock()
+	pluginResult := map[string]*contracts.PluginResult{}
+	docMock.On("ExecuteDocument", contextMock, mock.AnythingOfType("[]model.PluginState"), mock.Anything, mock.Anything).Return(pluginResult)
+	manager := executor{
 		filesys: executeFileMock,
-		doc:     docmock.NewExecMock(),
+		doc:     docMock,
 	}
-	plugin := &Plugin{
-		executeCommandDepth:   3,
+	p := &Plugin{
 		remoteResourceCreator: NewRemoteResourceMockScript,
 		pluginManager:         manager,
 	}
-	result := plugin.execute(contextMock, createSimpleConfigWithProperties(createStubPluginInputGithub()), createMockCancelFlag(), runpluginutil.PluginRunner{}, filesysdep)
+	result := p.execute(contextMock, createSimpleConfigWithProperties(createStubPluginInputGithub()), createMockCancelFlag(), filesysdep)
 
 	assert.Equal(t, 0, result.Code)
 	executeResourceMock.AssertExpectations(t)
+	docMock.AssertExpectations(t)
 }
 
 func TestPlugin_ExecuteDocument(t *testing.T) {
@@ -264,35 +266,52 @@ func TestPlugin_ExecuteDocument(t *testing.T) {
 	plugin := model.PluginState{}
 	plugins := []model.PluginState{plugin}
 	filesysdep := filemanager.FileSystemImpl{}
+	pluginResult := map[string]*contracts.PluginResult{}
 	conf := createSimpleConfigWithProperties(createStubPluginInputGithub())
 	parameters := make(map[string]interface{})
 	executeFileMock.On("ReadFile", mock.Anything).Return("content", nil).Once()
-	docMock.On("ParseDocument", contextMock.Log(), []byte("content"), mock.Anything, mock.Anything, mock.Anything, mock.Anything, mock.Anything, mock.Anything, parameters).Return(plugins, nil)
+	docMock.On("ParseDocument", contextMock.Log(), ".json", []byte("content"), mock.Anything, mock.Anything, mock.Anything, mock.Anything, mock.Anything, mock.Anything, parameters).Return(plugins, nil)
+	docMock.On("ExecuteDocument", contextMock, mock.AnythingOfType("[]model.PluginState"), mock.Anything, mock.Anything).Return(pluginResult)
 
-	manager := executePlugin{
+	manager := executor{
 		filesys: executeFileMock,
 		doc:     docMock,
 	}
 	p := &Plugin{
-		executeCommandDepth:   3,
 		remoteResourceCreator: NewRemoteResourceMockDoc,
 		pluginManager:         manager,
 	}
-	result := p.execute(contextMock, conf, createMockCancelFlag(), runpluginutil.PluginRunner{}, filesysdep)
+	result := p.execute(contextMock, conf, createMockCancelFlag(), filesysdep)
 
 	executeFileMock.AssertExpectations(t)
 	executeResourceMock.AssertExpectations(t)
+	docMock.AssertExpectations(t)
 
 	assert.Equal(t, 0, result.Code)
 }
 
 func TestPlugin_ExecuteMaxDepthExceeded(t *testing.T) {
 
-	plugin := &Plugin{
-		executeCommandDepth: 4,
-	}
+	docMock := docmock.NewExecMock()
+
+	config := createSimpleConfigWithProperties(createStubPluginInputGithub())
+	var executionDepth interface{}
+	executionDepth = createStubExecutionDepth(4)
+	config.Settings = executionDepth
+
 	filesysdep := filemanager.FileSystemImpl{}
-	result := plugin.execute(contextMock, createSimpleConfigWithProperties(createStubPluginInputGithub()), createMockCancelFlag(), runpluginutil.PluginRunner{}, filesysdep)
+	manager := executor{
+		filesys: executeFileMock,
+		doc:     docMock,
+	}
+	p := &Plugin{
+		remoteResourceCreator: NewRemoteResourceMockDoc,
+		pluginManager:         manager,
+	}
+
+	result := p.execute(contextMock, config, createMockCancelFlag(), filesysdep)
+
+	executeResourceMock.AssertExpectations(t)
 
 	assert.Equal(t, 1, result.Code)
 	assert.Contains(t, result.Output, "Maximum depth for document execution exceeded.")
@@ -304,6 +323,7 @@ func createStubResourceInfoScript() remoteresource.ResourceInfo {
 		EntireDir:            false,
 		TypeOfResource:       remoteresource.Script,
 		StarterFile:          "file",
+		ResourceExtension:    ".ps",
 	}
 }
 
@@ -313,6 +333,7 @@ func createStubResourceInfoDocument() remoteresource.ResourceInfo {
 		EntireDir:            false,
 		TypeOfResource:       remoteresource.Document,
 		StarterFile:          "file",
+		ResourceExtension:    ".json",
 	}
 }
 
@@ -359,6 +380,13 @@ func createStubPluginInputGithub() *ExecutePluginInput {
 	input.EntireDirectory = "false"
 
 	return &input
+}
+
+func createStubExecutionDepth(depth int) *ExecutePluginDepth {
+	currentDepth := ExecutePluginDepth{}
+	currentDepth.executeCommandDepth = depth
+
+	return &currentDepth
 }
 
 func NewRemoteResourceMockScript(log log.T, locationtype, locationInfo string) (remoteresource.RemoteResource, error) {
