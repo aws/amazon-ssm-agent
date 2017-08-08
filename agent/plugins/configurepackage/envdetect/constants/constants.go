@@ -37,6 +37,9 @@ const PlatformDebian = "debian"
 // PlatformUbuntu uses Ohai identifier for ubuntu platform
 const PlatformUbuntu = "ubuntu"
 
+// PlatformRaspbian uses Ohai identifier for raspbian platform
+const PlatformRaspbian = "raspbian"
+
 // PlatformRedhat uses Ohai identifier for redhat platform
 const PlatformRedhat = "redhat"
 

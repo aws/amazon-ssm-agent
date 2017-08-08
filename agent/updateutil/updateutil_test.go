@@ -353,6 +353,24 @@ func TestIsPlatformUsingSystemDWithInvalidVersionNumber(t *testing.T) {
 	}
 }
 
+func TestIsPlatformUsingSystemDWithPossiblyUsingSystemD(t *testing.T) {
+	testCases := []struct {
+		context InstanceContext
+		result  bool
+	}{
+		{InstanceContext{"us-east-1", PlatformRaspbian, "8", "linux", "amd64", "tar.gz"}, true},
+	}
+
+	// Stub exec.Command
+	execCommand = fakeExecCommand
+
+	for _, test := range testCases {
+		result, err := test.context.IsPlatformUsingSystemD(logger)
+		assert.NoError(t, err)
+		assert.Equal(t, result, test.result)
+	}
+}
+
 func TestIsServiceRunning(t *testing.T) {
 	util := Utility{}
 	testCases := []struct {
