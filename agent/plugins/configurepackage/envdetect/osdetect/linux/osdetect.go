@@ -391,7 +391,7 @@ func scanDistributionReleaseFiles() (string, string, error) {
 
 func platformFamilyForPlatform(platform string) (string, error) {
 	switch platform {
-	case c.PlatformUbuntu, c.PlatformDebian:
+	case c.PlatformUbuntu, c.PlatformDebian, c.PlatformRaspbian:
 		return c.PlatformFamilyDebian, nil
 	case c.PlatformRedhat, c.PlatformCentos, c.PlatformAmazon:
 		return c.PlatformFamilyRhel, nil
