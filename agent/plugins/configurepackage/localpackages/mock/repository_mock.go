@@ -18,7 +18,6 @@ package repository_mock
 import (
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
-	"github.com/aws/amazon-ssm-agent/agent/framework/runpluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/installer"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/localpackages"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/inventory/model"
@@ -71,10 +70,9 @@ func (repoMock *MockedRepository) GetInventoryData(context context.T) []model.Ap
 
 func (repoMock *MockedRepository) GetInstaller(context context.T,
 	configuration contracts.Configuration,
-	runner runpluginutil.PluginRunner,
 	packageName string,
 	version string) installer.Installer {
-	args := repoMock.Called(context, configuration, runner, packageName, version)
+	args := repoMock.Called(context, configuration, packageName, version)
 	return args.Get(0).(installer.Installer)
 }
 

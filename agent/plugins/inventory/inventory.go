@@ -29,7 +29,6 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	docmanagerModel "github.com/aws/amazon-ssm-agent/agent/docmanager/model"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
-	"github.com/aws/amazon-ssm-agent/agent/framework/runpluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/platform"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/inventory/datauploader"
@@ -627,7 +626,7 @@ func (p *Plugin) ParseAssociationIdFromFileName(input string) string {
 // Worker plugin implementation
 
 // Execute runs the inventory plugin
-func (p *Plugin) Execute(context context.T, config contracts.Configuration, cancelFlag task.CancelFlag, subDocumentRunner runpluginutil.PluginRunner) (res contracts.PluginResult) {
+func (p *Plugin) Execute(context context.T, config contracts.Configuration, cancelFlag task.CancelFlag) (res contracts.PluginResult) {
 	log := context.Log()
 	res.StartDateTime = time.Now()
 	defer func() { res.EndDateTime = time.Now() }()

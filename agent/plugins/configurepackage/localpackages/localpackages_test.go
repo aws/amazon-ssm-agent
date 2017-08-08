@@ -26,7 +26,6 @@ import (
 
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
-	"github.com/aws/amazon-ssm-agent/agent/framework/runpluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/inventory/model"
 	"github.com/stretchr/testify/assert"
@@ -42,7 +41,7 @@ var contextMock context.T = context.NewMockDefault()
 
 func TestGetInstaller(t *testing.T) {
 	repo := NewRepository()
-	inst := repo.GetInstaller(contextMock, contracts.Configuration{}, runpluginutil.PluginRunner{}, testPackage, "1.0.0")
+	inst := repo.GetInstaller(contextMock, contracts.Configuration{}, testPackage, "1.0.0")
 	assert.NotNil(t, inst)
 }
 
