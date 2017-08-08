@@ -186,7 +186,7 @@ func TestExtractPackageInfo(t *testing.T) {
 
 	for _, testdata := range data {
 		t.Run(testdata.name, func(t *testing.T) {
-			mockedCollector := CollectorMock{}
+			mockedCollector := envdetect.CollectorMock{}
 
 			mockedCollector.On("CollectData", mock.Anything).Return(&envdetect.Environment{
 				&osdetect.OperatingSystem{platformName, platformVersion, "", architecture, "", ""},
@@ -263,7 +263,7 @@ func TestReportResult(t *testing.T) {
 
 	for _, testdata := range data {
 		t.Run(testdata.name, func(t *testing.T) {
-			mockedCollector := CollectorMock{}
+			mockedCollector := envdetect.CollectorMock{}
 
 			mockedCollector.On("CollectData", mock.Anything).Return(&envdetect.Environment{
 				&osdetect.OperatingSystem{"abc", "567", "", "xyz", "", ""},
@@ -355,7 +355,7 @@ func TestDownloadManifest(t *testing.T) {
 
 	for _, testdata := range data {
 		t.Run(testdata.name, func(t *testing.T) {
-			mockedCollector := CollectorMock{}
+			mockedCollector := envdetect.CollectorMock{}
 			envdata := &envdetect.Environment{
 				&osdetect.OperatingSystem{"abc", "567", "", "xyz", "", ""},
 				&ec2infradetect.Ec2Infrastructure{"instanceIDX", "Reg1", "", "AZ1", "instanceTypeZ"},
@@ -435,7 +435,7 @@ func TestFindFileFromManifest(t *testing.T) {
 
 	for _, testdata := range data {
 		t.Run(testdata.name, func(t *testing.T) {
-			mockedCollector := CollectorMock{}
+			mockedCollector := envdetect.CollectorMock{}
 
 			mockedCollector.On("CollectData", mock.Anything).Return(&envdetect.Environment{
 				&osdetect.OperatingSystem{"platformName", "platformVersion", "", "architecture", "", ""},
@@ -583,7 +583,7 @@ func TestDownloadArtifact(t *testing.T) {
 			cache := packageservice.ManifestCacheMemNew()
 			cache.WriteManifest(testdata.packageName, testdata.packageVersion, []byte(manifestStr))
 
-			mockedCollector := CollectorMock{}
+			mockedCollector := envdetect.CollectorMock{}
 
 			mockedCollector.On("CollectData", mock.Anything).Return(&envdetect.Environment{
 				&osdetect.OperatingSystem{"platformName", "platformVersion", "", "architecture", "", ""},

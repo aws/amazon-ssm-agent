@@ -17,10 +17,8 @@ package birdwatcher
 import (
 	"github.com/aws/amazon-ssm-agent/agent/fileutil/artifact"
 	"github.com/aws/amazon-ssm-agent/agent/log"
-	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/envdetect"
 	"github.com/aws/aws-sdk-go/aws/request"
 	"github.com/aws/aws-sdk-go/service/ssm"
-	"github.com/stretchr/testify/mock"
 )
 
 // facadeMock
@@ -62,13 +60,4 @@ type networkMock struct {
 func (p *networkMock) Download(log log.T, input artifact.DownloadInput) (artifact.DownloadOutput, error) {
 	p.downloadInput = input
 	return p.downloadOutput, p.downloadError
-}
-
-type CollectorMock struct {
-	mock.Mock
-}
-
-func (cd *CollectorMock) CollectData(log log.T) (*envdetect.Environment, error) {
-	args := cd.Called(log)
-	return args.Get(0).(*envdetect.Environment), args.Error(1)
 }

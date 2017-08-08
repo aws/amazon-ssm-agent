@@ -24,6 +24,9 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/docmanager/model"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
+	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/envdetect"
+	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/envdetect/ec2infradetect"
+	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/envdetect/osdetect"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )
@@ -65,12 +68,20 @@ func mockReadAction(t *testing.T, mockFileSys *MockedFileSys, actionPathNoExt st
 	}
 }
 
+var environmentStub = envdetect.Environment{
+	&osdetect.OperatingSystem{"abc", "567", "", "xyz", "", ""},
+	&ec2infradetect.Ec2Infrastructure{"instanceIDX", "Reg1", "", "AZ1", "instanceTypeZ"},
+}
+
 func testReadAction(t *testing.T, actionPathNoExt string, contentSh []byte, contentPs1 []byte, contentJson []byte, expectReads bool) {
 	mockFileSys := MockedFileSys{}
 	mockReadAction(t, &mockFileSys, actionPathNoExt, contentSh, contentPs1, contentJson, expectReads)
 
+	mockEnvdetectCollector := &envdetect.CollectorMock{}
+	mockEnvdetectCollector.On("CollectData", mock.Anything).Return(&environmentStub, nil).Once()
+
 	// Instantiate installer with mock
-	inst := Installer{filesysdep: &mockFileSys, packagePath: testPackagePath}
+	inst := Installer{filesysdep: &mockFileSys, packagePath: testPackagePath, envdetectCollector: mockEnvdetectCollector}
 
 	// Call and validate mock expectations and return value
 	exists, actionDoc, workingDir, err := inst.readAction(contextMock, "Foo")
@@ -85,8 +96,11 @@ func testReadActionInvalid(t *testing.T, actionPathNoExt string, contentSh []byt
 	mockFileSys := MockedFileSys{}
 	mockReadAction(t, &mockFileSys, actionPathNoExt, contentSh, contentPs1, contentJson, expectReads)
 
+	mockEnvdetectCollector := &envdetect.CollectorMock{}
+	mockEnvdetectCollector.On("CollectData", mock.Anything).Return(&environmentStub, nil).Once()
+
 	// Instantiate installer with mock
-	inst := Installer{filesysdep: &mockFileSys, packagePath: testPackagePath}
+	inst := Installer{filesysdep: &mockFileSys, packagePath: testPackagePath, envdetectCollector: mockEnvdetectCollector}
 
 	// Call and validate mock expectations and return value
 	exists, actionDoc, workingDir, err := inst.readAction(contextMock, "Foo")
@@ -114,8 +128,11 @@ func TestReadActionMissing(t *testing.T) {
 	actionPathNoExt := path.Join(testPackagePath, "Foo")
 	mockReadAction(t, &mockFileSys, actionPathNoExt, []byte{}, []byte{}, []byte{}, false)
 
+	mockEnvdetectCollector := &envdetect.CollectorMock{}
+	mockEnvdetectCollector.On("CollectData", mock.Anything).Return(&environmentStub, nil).Once()
+
 	// Instantiate repository with mock
-	repo := Installer{filesysdep: &mockFileSys, packagePath: testPackagePath}
+	repo := Installer{filesysdep: &mockFileSys, packagePath: testPackagePath, envdetectCollector: mockEnvdetectCollector}
 
 	// Call and validate mock expectations and return value
 	exists, actionDoc, workingDir, err := repo.readAction(contextMock, "Foo")
@@ -133,8 +150,11 @@ func testReadActionTooManyActionImplementations(t *testing.T, existSh bool, exis
 	mockFileSys.On("Exists", actionPathNoExt+".ps1").Return(existPs1).Once()
 	mockFileSys.On("Exists", actionPathNoExt+".json").Return(existJson).Once()
 
+	mockEnvdetectCollector := &envdetect.CollectorMock{}
+	mockEnvdetectCollector.On("CollectData", mock.Anything).Return(&environmentStub, nil).Once()
+
 	// Instantiate repository with mock
-	repo := Installer{filesysdep: &mockFileSys, packagePath: testPackagePath}
+	repo := Installer{filesysdep: &mockFileSys, packagePath: testPackagePath, envdetectCollector: mockEnvdetectCollector}
 
 	// Call and validate mock expectations and return value
 	exists, actionDoc, workingDir, err := repo.readAction(contextMock, "Foo")
@@ -161,8 +181,11 @@ func TestInstall_ExecuteError(t *testing.T) {
 	mockExec := MockedExec{}
 	mockExec.On("ExecuteDocument", mock.Anything, mock.Anything, mock.Anything, mock.Anything, mock.Anything).Return(map[string]*contracts.PluginResult{"Foo": {StandardError: "execute error"}}).Once()
 
+	mockEnvdetectCollector := &envdetect.CollectorMock{}
+	mockEnvdetectCollector.On("CollectData", mock.Anything).Return(&environmentStub, nil).Once()
+
 	// Instantiate installer with mock
-	inst := Installer{filesysdep: &mockFileSys, execdep: &mockExec, packagePath: testPackagePath}
+	inst := Installer{filesysdep: &mockFileSys, execdep: &mockExec, packagePath: testPackagePath, envdetectCollector: mockEnvdetectCollector}
 
 	// Call and validate mock expectations and return value
 	output := inst.Install(contextMock)
@@ -179,8 +202,11 @@ func TestValidate_NoAction(t *testing.T) {
 	mockReadAction(t, &mockFileSys, actionPathNoExt, []byte{}, []byte{}, []byte{}, true)
 	mockExec := MockedExec{}
 
+	mockEnvdetectCollector := &envdetect.CollectorMock{}
+	mockEnvdetectCollector.On("CollectData", mock.Anything).Return(&environmentStub, nil).Once()
+
 	// Instantiate installer with mock
-	inst := Installer{filesysdep: &mockFileSys, execdep: &mockExec, packagePath: testPackagePath}
+	inst := Installer{filesysdep: &mockFileSys, execdep: &mockExec, packagePath: testPackagePath, envdetectCollector: mockEnvdetectCollector}
 
 	// Call and validate mock expectations and return value
 	output := inst.Validate(contextMock)
@@ -200,11 +226,15 @@ func TestUninstall_Success(t *testing.T) {
 	mockExec := MockedExec{}
 	mockExec.On("ExecuteDocument", mock.Anything, mock.Anything, mock.Anything, mock.Anything, mock.Anything).Return(map[string]*contracts.PluginResult{"Foo": {Status: contracts.ResultStatusSuccess}}).Once()
 
+	mockEnvdetectCollector := &envdetect.CollectorMock{}
+	mockEnvdetectCollector.On("CollectData", mock.Anything).Return(&environmentStub, nil).Once()
+
 	// Instantiate installer with mock
 	inst := Installer{filesysdep: &mockFileSys,
-		execdep:     &mockExec,
-		packagePath: testPackagePath,
-		config:      contracts.Configuration{OutputS3BucketName: "foo", OutputS3KeyPrefix: "bar"}}
+		execdep:            &mockExec,
+		packagePath:        testPackagePath,
+		config:             contracts.Configuration{OutputS3BucketName: "foo", OutputS3KeyPrefix: "bar"},
+		envdetectCollector: mockEnvdetectCollector}
 
 	// Call and validate mock expectations and return value
 	output := inst.Uninstall(contextMock)
