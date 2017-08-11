@@ -218,7 +218,7 @@ func ListS3Objects(log log.T, amazonS3URL s3util.AmazonS3URL) (folderNames []str
 	s3client := s3.New(session.New(config))
 	obj, err := s3client.ListObjects(params)
 	if err != nil {
-		log.Errorf("ListS3Folders error %v", err.Error())
+		log.Errorf("ListS3Objects error %v", err.Error())
 		return folderNames, err
 	}
 
