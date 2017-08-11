@@ -15,12 +15,14 @@
 package parameterstore
 
 import (
+	"errors"
 	"fmt"
 	"regexp"
 	"strings"
 
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/go-yaml/yaml"
 )
 
 // extractSSMParameters extracts parameters of the format {{ssm:*}} from input
@@ -141,6 +143,22 @@ func replaceSSMParameters(log log.T, input interface{}, ssmParameters map[string
 		}
 		return out, nil
 
+	case map[interface{}]interface{}:
+		var err error
+		out := make(map[string]interface{})
+		for k, v := range input {
+			switch k := k.(type) {
+			case string:
+				out[k], err = replaceSSMParameters(log, v, ssmParameters)
+				if err != nil {
+					return nil, err
+				}
+			default:
+				return nil, errors.New("Unrecognized parameter type")
+			}
+		}
+		return out, nil
+
 	default:
 		// any other type, return as is
 		return input, nil
@@ -176,6 +194,19 @@ func parseStringList(log log.T, input interface{}, ssmParameters map[string]Para
 	if err != nil {
 		log.Debug(err)
 		return nil, fmt.Errorf("%v", ErrorMsg)
+	}
+
+	if len(reformatInput) == 0 {
+		// Parameter may be of yaml type. Try to remarshal using yaml
+		yamlBytes, err := yaml.Marshal(input)
+		if err != nil {
+			log.Debug(err)
+			return nil, fmt.Errorf("%v", ErrorMsg)
+		}
+		if err = yaml.Unmarshal(yamlBytes, &reformatInput); err != nil {
+			log.Debug(err)
+			return nil, fmt.Errorf("%v", ErrorMsg)
+		}
 	}
 
 	out := []string{}

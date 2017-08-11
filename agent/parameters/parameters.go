@@ -17,6 +17,7 @@ package parameters
 import (
 	"encoding/json"
 	"fmt"
+	"reflect"
 	"regexp"
 
 	"github.com/aws/amazon-ssm-agent/agent/log"
@@ -82,8 +83,18 @@ func ReplaceParameters(input interface{}, parameters map[string]interface{}, log
 		}
 		return out
 
+	case map[interface{}]interface{}:
+		out := make(map[string]interface{})
+		for k, v := range input {
+			switch k := k.(type) {
+			case string:
+				out[k] = ReplaceParameters(v, parameters, logger)
+			}
+		}
+		return out
 	default:
 		// any other type, return as is
+		logger.Debugf("Type is - %v which was not found. Returning parameter without replacement", reflect.TypeOf(input))
 		return input
 	}
 }

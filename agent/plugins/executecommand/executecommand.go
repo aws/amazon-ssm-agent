@@ -31,6 +31,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/plugins/pluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 	"github.com/aws/amazon-ssm-agent/agent/times"
+	"github.com/go-yaml/yaml"
 
 	"encoding/json"
 	"errors"
@@ -45,7 +46,8 @@ const (
 	S3          = "S3"           //S3 represents the location type "S3" from where the resource is being downloaded
 	SSMDocument = "SSM Document" //SSMDocument represents the location type as SSM Document
 
-	executeCommandMaxDepth = 3 //Maximum depth of document execution
+	executeCommandMaxDepth = 3            //Maximum depth of document execution
+	artifactsDir           = "_artifacts" //Directory under the orchestration directory where the downloaded resource resides
 )
 
 // NewPlugin returns a new instance of the plugin.
@@ -122,6 +124,7 @@ func (p *Plugin) execute(context context.T, config contracts.Configuration, canc
 	defer func() { res.EndDateTime = time.Now() }()
 
 	var output contracts.PluginOutput
+
 	if cancelFlag.ShutDown() {
 		res.Code = 1
 		res.Status = contracts.ResultStatusFailed
@@ -135,6 +138,7 @@ func (p *Plugin) execute(context context.T, config contracts.Configuration, canc
 	} else {
 		p.runExecuteCommand(context, input, config, &output)
 	}
+
 	if config.OrchestrationDirectory != "" {
 		useTemp := false
 		outFile := filepath.Join(config.OrchestrationDirectory, p.StdoutFileName)
@@ -189,14 +193,12 @@ func (p *Plugin) runExecuteCommand(context context.T, input *ExecutePluginInput,
 	execDepth := 1
 	// Getting the current depth of execution and checking against maximum depth
 	if config.Settings != nil {
-		log.Info("config settings is not nil")
 		if settings, ok := config.Settings.(*ExecutePluginDepth); !ok {
 			log.Error("Plugin setting is not of the right type")
 			output.MarkAsFailed(log, errors.New("There was an error obtaining the depth of execution"))
 			return
 		} else {
 			execDepth = settings.executeCommandDepth + 1
-			log.Info("Depth of execution is ", execDepth)
 			if execDepth > executeCommandMaxDepth {
 				output.MarkAsFailed(log, fmt.Errorf("Maximum depth for document execution exceeded. "+
 					"Maximum depth permitted - %v and current depth - %v", executeCommandMaxDepth, execDepth))
@@ -244,7 +246,7 @@ func (m executor) GetResource(log log.T,
 	remoteResource remoteresource.RemoteResource) (resourceInfo remoteresource.ResourceInfo, err error) {
 
 	var entireDir bool
-	destinationDir := config.OrchestrationDirectory
+	destinationDir := filepath.Join(config.OrchestrationDirectory, artifactsDir)
 	if entireDir, err = strconv.ParseBool(input.EntireDirectory); err != nil {
 		return
 	}
@@ -272,8 +274,18 @@ func (m executor) PrepareDocumentForExecution(log log.T, remoteResourceInfo remo
 		log.Info("Params to be unmarshaled - ", params)
 		//TODO: meloniam@ Remove the Unmarshalling once RC supports StringMaps
 		//TODO: RunTimeParams will be of type map[string]interface{} from the beginning
-		if json.Unmarshal([]byte(params), &parameters); err != nil {
-			return
+		if remoteResourceInfo.ResourceExtension == remoteresource.JSONExtension {
+			if json.Unmarshal([]byte(params), &parameters); err != nil {
+				log.Error("Unmarshalling JSON remote resource parameters failed. Please make sure the document is in the right format")
+				return pluginsInfo, err
+			}
+		} else if remoteResourceInfo.ResourceExtension == remoteresource.YAMLExtension {
+			if yaml.Unmarshal([]byte(params), &parameters); err != nil {
+				log.Error("Unmarshalling YAML remote resource parameters failed. Please make sure the document is in the right format")
+				return pluginsInfo, err
+			}
+		} else {
+			return pluginsInfo, errors.New("Extension type for documents is not supported")
 		}
 
 		log.Info("Parameters passed in are ", parameters)
@@ -283,7 +295,7 @@ func (m executor) PrepareDocumentForExecution(log log.T, remoteResourceInfo remo
 		log.Error("Could not read document from remote resource - ", err)
 		return nil, err
 	}
-	log.Infof("Sending the document received - %v for parsing", string(rawDocument))
+	log.Infof("Sending the document received for parsing - %v", string(rawDocument))
 
 	return m.doc.ParseDocument(log, remoteResourceInfo.ResourceExtension, rawDocument, config.OrchestrationDirectory, config.OutputS3BucketName, config.OutputS3KeyPrefix, config.MessageId, config.PluginID, config.DefaultWorkingDirectory, parameters)
 }
@@ -302,10 +314,14 @@ func (m executor) ExecuteResource(context context.T,
 	}
 	for _, pluginOut := range pluginOutput {
 		if pluginOut.StandardOutput != "" {
-			output.AppendInfof(log, "%v output : %v", pluginOut.PluginName, pluginOut.StandardOutput)
+			// separating the append so that the output is on a new line
+			output.AppendInfof(log, "%v output:", pluginOut.PluginName)
+			output.AppendInfof(log, "%v", pluginOut.StandardOutput)
 		}
 		if pluginOut.StandardError != "" {
-			output.AppendErrorf(log, "%v errors: %v", pluginOut.PluginName, pluginOut.StandardError)
+			// separating the append so that the output is on a new line
+			output.AppendErrorf(log, "%v errors:", pluginOut.PluginName)
+			output.AppendErrorf(log, "%v", pluginOut.StandardError)
 		}
 		if pluginOut.Error != nil {
 			output.MarkAsFailed(log, pluginOut.Error)
