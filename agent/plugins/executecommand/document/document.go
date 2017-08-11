@@ -56,8 +56,7 @@ func (doc ExecCommandImpl) ParseDocument(log log.T, extension string, documentRa
 			return pluginsInfo, err
 		}
 
-	}
-	if extension == remoteresource.JSONExtension {
+	} else if extension == remoteresource.JSONExtension {
 		if err := json.Unmarshal(documentRaw, &docContent); err != nil {
 			log.Error("Unmarshalling JSON remote resource document failed. Please make sure the document is in the right format")
 			return pluginsInfo, err
