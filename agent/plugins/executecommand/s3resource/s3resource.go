@@ -132,18 +132,20 @@ func (s3 *S3Resource) PopulateResourceInfo(log log.T, destinationDir string, ent
 	if destinationDir == "" {
 		destinationDir = appconfig.DownloadRoot
 	}
-	resourceInfo.LocalDestinationPath = fileutil.BuildPath(destinationDir, s3.s3Object.Bucket, s3.s3Object.Key)
-	resourceInfo.StarterFile = filepath.Base(resourceInfo.LocalDestinationPath)
-	resourceInfo.ResourceExtension = filepath.Ext(resourceInfo.StarterFile)
 
 	if entireDir {
+		resourceInfo.StarterFile = filepath.Base(s3.Info.Path)
+		resourceInfo.LocalDestinationPath = fileutil.BuildPath(destinationDir, s3.s3Object.Bucket, s3.s3Object.Key, resourceInfo.StarterFile)
+		resourceInfo.ResourceExtension = filepath.Ext(resourceInfo.StarterFile)
 		resourceInfo.TypeOfResource = remoteresource.Script //Because EntireDirectory option is valid only for scripts
 		resourceInfo.EntireDir = true
 	} else {
-
+		resourceInfo.LocalDestinationPath = fileutil.BuildPath(destinationDir, s3.s3Object.Bucket, s3.s3Object.Key)
+		resourceInfo.StarterFile = filepath.Base(resourceInfo.LocalDestinationPath)
+		resourceInfo.ResourceExtension = filepath.Ext(resourceInfo.StarterFile)
 		if strings.Compare(resourceInfo.ResourceExtension, remoteresource.JSONExtension) == 0 || strings.Compare(resourceInfo.ResourceExtension, remoteresource.YAMLExtension) == 0 {
 			resourceInfo.TypeOfResource = remoteresource.Document
-		} else { // It is assumed that the file is a script if the extension is not JSON. TODO: Add YAML
+		} else { // It is assumed that the file is a script if the extension is not JSON nor YAML
 			resourceInfo.TypeOfResource = remoteresource.Script
 		}
 	}
