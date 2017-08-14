@@ -155,12 +155,13 @@ func TestS3Resource_PopulateResourceInfoEntireDirTrue(t *testing.T) {
 	s3resource, _ := NewS3Resource(logMock, locationInfo)
 
 	s3resource.s3Object.Bucket = "my-bucket"
-	s3resource.s3Object.Key = "mydummyfolder/file.rb"
+	s3resource.s3Object.Key = "mydummyfolder/"
 	resourceInfo = s3resource.PopulateResourceInfo(logMock, "", true)
 
 	assert.True(t, resourceInfo.EntireDir)
 	assert.Equal(t, remoteresource.Script, resourceInfo.TypeOfResource)
 	assert.NotEqual(t, "mydummyfolder/file.rb", resourceInfo.StarterFile)
+	assert.Equal(t, "file.rb", resourceInfo.StarterFile)
 	assert.Equal(t, resourceInfo.LocalDestinationPath, filepath.Join(appconfig.DownloadRoot, "my-bucket/mydummyfolder/file.rb"))
 }
 
@@ -173,7 +174,7 @@ func TestS3Resource_PopulateResourceInfoEntireDirTrueInvalidStarter(t *testing.T
 	s3resource, _ := NewS3Resource(logMock, locationInfo)
 
 	s3resource.s3Object.Bucket = "my-bucket"
-	s3resource.s3Object.Key = "path/to/"
+	s3resource.s3Object.Key = "path/"
 	resourceInfo = s3resource.PopulateResourceInfo(logMock, "", true)
 
 	assert.True(t, resourceInfo.EntireDir)
