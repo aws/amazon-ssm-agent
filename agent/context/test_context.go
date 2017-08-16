@@ -14,6 +14,8 @@
 package context
 
 import (
+	"strings"
+
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/stretchr/testify/mock"
@@ -42,7 +44,7 @@ func NewMockDefault() *Mock {
 // NewMockDefaultWithContext returns an instance of Mock with specified context.
 func NewMockDefaultWithContext(context []string) *Mock {
 	ctx := new(Mock)
-	log := log.NewMockLog()
+	log := log.NewMockLogWithContext(strings.Join(context, ""))
 	config := appconfig.SsmagentConfig{}
 	ctx.On("Log").Return(log)
 	ctx.On("AppConfig").Return(config)
