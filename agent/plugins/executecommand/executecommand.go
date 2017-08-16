@@ -20,9 +20,11 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/docmanager/model"
+	"github.com/aws/amazon-ssm-agent/agent/executers"
+	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/basicexecuter"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
-	"github.com/aws/amazon-ssm-agent/agent/plugins/executecommand/document"
+	"github.com/aws/amazon-ssm-agent/agent/plugins/executecommand/executor"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/executecommand/filemanager"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/executecommand/gitresource"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/executecommand/remoteresource"
@@ -42,9 +44,9 @@ import (
 )
 
 const (
-	Github      = "Github"       //Github represents the location type "Github" from where the resource can be downloaded
-	S3          = "S3"           //S3 represents the location type "S3" from where the resource is being downloaded
-	SSMDocument = "SSM Document" //SSMDocument represents the location type as SSM Document
+	Github      = "Github"      //Github represents the location type "Github" from where the resource can be downloaded
+	S3          = "S3"          //S3 represents the location type "S3" from where the resource is being downloaded
+	SSMDocument = "SSMDocument" //SSMDocument represents the location type as SSM Document
 
 	executeCommandMaxDepth = 3            //Maximum depth of document execution
 	artifactsDir           = "_artifacts" //Directory under the orchestration directory where the downloaded resource resides
@@ -69,11 +71,13 @@ func NewPlugin(pluginConfig pluginutil.PluginConfig) (*Plugin, error) {
 // ExecutePluginInput is a struct that holds the parameters sent through send command
 type ExecutePluginInput struct {
 	contracts.PluginInput
-	LocationType      string `json:"locationType"`
-	LocationInfo      string `json:"locationInfo"`
-	EntireDirectory   string `json:"entireDirectory"`
-	RuntimeParameters string `json:"runtimeParameters"`
-	//TODO: Change the type of locationInfo and runtimeParameters to map[string]interface{} once Runcommand supports StringMaps
+	LocationType       string      `json:"locationType"`
+	LocationInfo       string      `json:"locationInfo"`
+	EntireDirectory    string      `json:"entireDirectory"`
+	DocumentParameters string      `json:"documentParameters"`
+	ScriptArguments    []string    `json:"scriptArguments"`
+	ExecutionTimeout   interface{} `json:"executionTimeout"`
+	//TODO: Change the type of locationInfo and documentParameters to map[string]interface{} once Runcommand supports StringMaps
 }
 
 // Plugin is the type for the aws:executeCommand plugin.
@@ -83,22 +87,25 @@ type Plugin struct {
 	pluginManager         executePluginManager
 }
 
-// ExecutePLuginDepth is the struct that is sent through to the sub-documents to maintain the depth of execution
+// ExecutePluginDepth is the struct that is sent through to the sub-documents to maintain the depth of execution
 type ExecutePluginDepth struct {
 	executeCommandDepth int
 }
 
-// executor is the struct that implements executePluginManager
-type executor struct {
+// executeImpl is the struct that implements executePluginManager
+type executeImpl struct {
 	filesys filemanager.FileSystem
-	doc     document.ExecCommand
+	exec    executor.ExecCommand
 }
 
 //NewExecutePluginManager returns an object of type executePlugin
-func NewExecutePluginManager() executor {
-	return executor{
+func NewExecutePluginManager() executeImpl {
+	return executeImpl{
 		filesys: filemanager.FileSystemImpl{},
-		doc:     document.ExecCommandImpl{},
+		exec: executor.ExecCommandImpl{
+			ScriptExecutor: executers.ShellCommandExecuter{},
+			DocExecutor:    basicexecuter.NewBasicExecuter,
+		},
 	}
 
 }
@@ -107,7 +114,8 @@ func NewExecutePluginManager() executor {
 type executePluginManager interface {
 	GetResource(log log.T, input *ExecutePluginInput, config contracts.Configuration, rem remoteresource.RemoteResource) (resourceInfo remoteresource.ResourceInfo, err error)
 	PrepareDocumentForExecution(log log.T, remoteResourceInfo remoteresource.ResourceInfo, config contracts.Configuration, parameters string) (pluginsInfo []model.PluginState, err error)
-	ExecuteResource(context context.T, pluginsInfo []model.PluginState, output *contracts.PluginOutput, config contracts.Configuration)
+	ExecuteDocument(context context.T, pluginsInfo []model.PluginState, bookkeepingFile string, output *contracts.PluginOutput)
+	ExecuteScript(log log.T, fileName string, arguments []string, executionTimeout int, output *contracts.PluginOutput)
 }
 
 // Execute runs multiple sets of commands and returns their outputs.
@@ -136,39 +144,38 @@ func (p *Plugin) execute(context context.T, config contracts.Configuration, canc
 	} else if input, err := parseAndValidateInput(config.Properties); err != nil {
 		output.MarkAsFailed(log, err)
 	} else {
-		p.runExecuteCommand(context, input, config, &output)
+
+		p.runExecuteCommand(context, input, config, &output, filesysdep)
+	}
+	//TODO: meloniam@ Clean up the downloaded artifacts.
+
+	useTemp := false
+	outFile := filepath.Join(config.OrchestrationDirectory, p.StdoutFileName)
+	// create orchestration dir if needed
+
+	if err := filesysdep.WriteFile(outFile, output.Stdout); err != nil {
+		log.Debugf("Error writing to %v", outFile)
+		output.AppendErrorf(log, "Error saving stdout: %v", err.Error())
+	}
+	errFile := filepath.Join(config.OrchestrationDirectory, p.StderrFileName)
+	if err := filesysdep.WriteFile(errFile, output.Stderr); err != nil {
+		log.Debugf("Error writing to %v", errFile)
+		output.AppendErrorf(log, "Error saving stderr: %v", err.Error())
 	}
 
-	if config.OrchestrationDirectory != "" {
-		useTemp := false
-		outFile := filepath.Join(config.OrchestrationDirectory, p.StdoutFileName)
-		// create orchestration dir if needed
-		if err := filesysdep.MakeDirs(config.OrchestrationDirectory); err != nil {
-			output.AppendError(log, "Failed to create orchestrationDir directory for log files")
-		} else {
-			if err := filesysdep.WriteFile(outFile, output.Stdout); err != nil {
-				log.Debugf("Error writing to %v", outFile)
-				output.AppendErrorf(log, "Error saving stdout: %v", err.Error())
-			}
-			errFile := filepath.Join(config.OrchestrationDirectory, p.StderrFileName)
-			if err := filesysdep.WriteFile(errFile, output.Stderr); err != nil {
-				log.Debugf("Error writing to %v", errFile)
-				output.AppendErrorf(log, "Error saving stderr: %v", err.Error())
-			}
-		}
-		uploadErrs := p.ExecuteUploadOutputToS3Bucket(log,
-			config.PluginID,
-			config.OrchestrationDirectory,
-			config.OutputS3BucketName,
-			config.OutputS3KeyPrefix,
-			useTemp,
-			config.OrchestrationDirectory,
-			output.Stdout,
-			output.Stderr)
-		for _, uploadErr := range uploadErrs {
-			output.AppendError(log, uploadErr)
-		}
+	uploadErrs := p.ExecuteUploadOutputToS3Bucket(log,
+		config.PluginID,
+		config.OrchestrationDirectory,
+		config.OutputS3BucketName,
+		config.OutputS3KeyPrefix,
+		useTemp,
+		config.OrchestrationDirectory,
+		output.Stdout,
+		output.Stderr)
+	for _, uploadErr := range uploadErrs {
+		output.AppendError(log, uploadErr)
 	}
+
 	res.Code = output.ExitCode
 	res.Status = output.Status
 	res.Output = output.String()
@@ -180,14 +187,21 @@ func (p *Plugin) execute(context context.T, config contracts.Configuration, canc
 }
 
 // runExecuteCommand is a method that runs the actual logic for
-func (p *Plugin) runExecuteCommand(context context.T, input *ExecutePluginInput, config contracts.Configuration, output *contracts.PluginOutput) {
+func (p *Plugin) runExecuteCommand(context context.T, input *ExecutePluginInput, config contracts.Configuration, output *contracts.PluginOutput, filesysdep filemanager.FileSystem) {
 
 	log := context.Log()
+
+	if err := filesysdep.MakeDirs(config.OrchestrationDirectory); err != nil {
+		output.AppendError(log, "Failed to create orchestrationDir directory for log files")
+	}
 
 	//Run aws:executeCommand plugin
 	log.Debug("Inside runExecuteCommand function")
 	var resourceInfo remoteresource.ResourceInfo
 	var pluginsInfo []model.PluginState
+
+	// Set execution time
+	executionTimeout := pluginutil.ValidateExecutionTimeout(log, input.ExecutionTimeout)
 
 	//Set the depth of execution to be 1 for the first level execution
 	execDepth := 1
@@ -218,29 +232,37 @@ func (p *Plugin) runExecuteCommand(context context.T, input *ExecutePluginInput,
 		output.MarkAsFailed(log, fmt.Errorf("Unable to obtain the remote resource: %v", err.Error()))
 		return
 	}
-	if resourceInfo.TypeOfResource == remoteresource.Document {
-		if pluginsInfo, err = p.pluginManager.PrepareDocumentForExecution(log, resourceInfo, config, input.RuntimeParameters); err != nil {
-			output.MarkAsFailed(log, fmt.Errorf("There was an error while preparing documents - %v", err.Error()))
-			return
-		} else {
-			// TODO: add code for script execution
-			log.Info("Plugin info - ", pluginsInfo)
-		}
-	}
-	// Sending execution depth in Configuration.Settings to the sub-documents
-	for i, plugins := range pluginsInfo {
-		plugins.Configuration.Settings = &ExecutePluginDepth{executeCommandDepth: execDepth}
-		pluginsInfo[i] = plugins
+
+	// This parameter validation is possible only after the resource type is figured out
+	if valid, err := validateParameters(input, resourceInfo); !valid {
+		output.MarkAsFailed(log, err)
+		return
 	}
 
 	//TODO: What happens on reboot?
-	p.pluginManager.ExecuteResource(context, pluginsInfo, output, config)
+	switch resourceInfo.TypeOfResource {
+	case remoteresource.Document:
+		if pluginsInfo, err = p.pluginManager.PrepareDocumentForExecution(log, resourceInfo, config, input.DocumentParameters); err != nil {
+			output.MarkAsFailed(log, fmt.Errorf("There was an error while preparing documents - %v", err.Error()))
+			return
+		}
+		// Sending execution depth in Configuration.Settings to the sub-documents
+		for i, plugins := range pluginsInfo {
+			plugins.Configuration.Settings = &ExecutePluginDepth{executeCommandDepth: execDepth}
+			pluginsInfo[i] = plugins
+		}
+		p.pluginManager.ExecuteDocument(context, pluginsInfo, config.BookKeepingFileName, output)
 
+	case remoteresource.Script:
+		p.pluginManager.ExecuteScript(log, resourceInfo.LocalDestinationPath, input.ScriptArguments, executionTimeout, output)
+	default:
+		output.MarkAsFailed(log, fmt.Errorf("Type of resource not supported"))
+	}
 	return
 }
 
 // GetResource figures out the type of location, downloads the resource, saves it on disk and returns information required for it
-func (m executor) GetResource(log log.T,
+func (m executeImpl) GetResource(log log.T,
 	input *ExecutePluginInput,
 	config contracts.Configuration,
 	remoteResource remoteresource.RemoteResource) (resourceInfo remoteresource.ResourceInfo, err error) {
@@ -267,7 +289,7 @@ func (m executor) GetResource(log log.T,
 }
 
 // PrepareDocumentForExecution parses the raw content of the document, validates it and returns a PluginState that can be executed.
-func (m executor) PrepareDocumentForExecution(log log.T, remoteResourceInfo remoteresource.ResourceInfo, config contracts.Configuration, params string) (pluginsInfo []model.PluginState, err error) {
+func (m executeImpl) PrepareDocumentForExecution(log log.T, remoteResourceInfo remoteresource.ResourceInfo, config contracts.Configuration, params string) (pluginsInfo []model.PluginState, err error) {
 	parameters := make(map[string]interface{})
 	if params != "" {
 
@@ -297,39 +319,26 @@ func (m executor) PrepareDocumentForExecution(log log.T, remoteResourceInfo remo
 	}
 	log.Infof("Sending the document received for parsing - %v", string(rawDocument))
 
-	return m.doc.ParseDocument(log, remoteResourceInfo.ResourceExtension, rawDocument, config.OrchestrationDirectory, config.OutputS3BucketName, config.OutputS3KeyPrefix, config.MessageId, config.PluginID, config.DefaultWorkingDirectory, parameters)
+	return m.exec.ParseDocument(log, remoteResourceInfo.ResourceExtension, rawDocument, config.OrchestrationDirectory, config.OutputS3BucketName, config.OutputS3KeyPrefix, config.MessageId, config.PluginID, config.DefaultWorkingDirectory, parameters)
 }
 
-// ExecuteResource sends the remote resource (script or document) for execution
-func (m executor) ExecuteResource(context context.T,
+// ExecuteDocument sends the document for execution
+func (m executeImpl) ExecuteDocument(context context.T,
 	pluginsInfo []model.PluginState,
-	output *contracts.PluginOutput,
-	config contracts.Configuration) {
+	bookKeepingFile string,
+	output *contracts.PluginOutput) {
 
-	log := context.Log()
+	m.exec.ExecuteDocument(context, pluginsInfo, bookKeepingFile, times.ToIso8601UTC(time.Now()), output)
+	return
 
-	pluginOutput := m.doc.ExecuteDocument(context, pluginsInfo, config.BookKeepingFileName, times.ToIso8601UTC(time.Now()))
-	if pluginOutput == nil {
-		output.MarkAsFailed(log, errors.New("No output obtained from executing document"))
-	}
-	for _, pluginOut := range pluginOutput {
-		if pluginOut.StandardOutput != "" {
-			// separating the append so that the output is on a new line
-			output.AppendInfof(log, "%v output:", pluginOut.PluginName)
-			output.AppendInfof(log, "%v", pluginOut.StandardOutput)
-		}
-		if pluginOut.StandardError != "" {
-			// separating the append so that the output is on a new line
-			output.AppendErrorf(log, "%v errors:", pluginOut.PluginName)
-			output.AppendErrorf(log, "%v", pluginOut.StandardError)
-		}
-		if pluginOut.Error != nil {
-			output.MarkAsFailed(log, pluginOut.Error)
-		} else {
-			output.MarkAsSucceeded()
-		}
-		output.Status = contracts.MergeResultStatus(output.Status, pluginOut.Status)
-	}
+}
+
+// ExecuteScript sends the script for execution
+func (m executeImpl) ExecuteScript(log log.T, fileName string,
+	arguments []string,
+	executionTimeout int,
+	output *contracts.PluginOutput) {
+	m.exec.ExecuteScript(log, fileName, arguments, executionTimeout, output)
 	return
 }
 
@@ -370,12 +379,29 @@ func validateInput(input *ExecutePluginInput) (valid bool, err error) {
 	return true, nil
 }
 
+// validateParameters ensures that documents do not have scriptArguments
+// and scripts do not have documentParameters
+func validateParameters(input *ExecutePluginInput, resourceInfo remoteresource.ResourceInfo) (valid bool, err error) {
+	if len(input.ScriptArguments) != 0 {
+
+		if remoteresource.Document == resourceInfo.TypeOfResource {
+			return false, errors.New("Document type of resource cannot specify script type parameters")
+		}
+	}
+	//TODO change this when StringMap is available
+	if resourceInfo.TypeOfResource == remoteresource.Script && input.DocumentParameters != "" {
+		return false, errors.New("Script type of resource cannot have document parameters specified")
+	}
+	return true, nil
+}
+
 // newRemoteResource switches between the location type and returns a struct of the location type that implements remoteresource
 func newRemoteResource(log log.T, locationType string, locationInfo string) (resource remoteresource.RemoteResource, err error) {
 	switch locationType {
 	case Github:
 		// TODO: meloniam@ Replace nil with auth information once work is done
 		// TODO: meloniam@ Replace string type to map[string]inteface{} type once Runcommand supports string maps
+
 		return gitresource.NewGitResource(nil, locationInfo)
 	case S3:
 		return s3resource.NewS3Resource(log, locationInfo)
