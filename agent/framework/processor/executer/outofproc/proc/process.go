@@ -1,8 +1,21 @@
+// Copyright 2016 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+//
+// Licensed under the Apache License, Version 2.0 (the "License"). You may not
+// use this file except in compliance with the License. A copy of the
+// License is located at
+//
+// http://aws.amazon.com/apache2.0/
+//
+// or in the "license" file accompanying this file. This file is distributed
+// on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+// either express or implied. See the License for the specific language governing
+// permissions and limitations under the License.
+
+// Package process wraps up the os.Process interface and also provides os-specific process lookup functions
 package proc
 
 import (
 	"os"
-	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/context"
 )
@@ -18,8 +31,8 @@ type ProcessController interface {
 	Release() error
 	//kill the enclosed process, no-op if the process non exists
 	Kill() error
-	//given pid and process create time, return true is the process is still active (no Z)
-	Find(pid int, createTime time.Time) bool
+	//given pid and process create time, return true is the process is still active
+	Find(pid int, createTime string) bool
 }
 
 type OSProcess struct {
@@ -38,8 +51,6 @@ func NewOSProcess(ctx context.T) *OSProcess {
 func (p *OSProcess) StartProcess(name string, argv []string) (pid int, err error) {
 	log := p.context.Log()
 	var procAttr os.ProcAttr
-	//TODO do we need to set env and dir in ProcAttr?
-	//TODO substitute program name
 	if p.process, err = os.StartProcess(name, argv, &procAttr); err != nil {
 		log.Errorf("start process: &v encountered error : %v", name, err)
 		return
@@ -65,4 +76,13 @@ func (p *OSProcess) Kill() error {
 		return p.Kill()
 	}
 	return nil
+}
+
+func (p *OSProcess) Find(pid int, createTime string) bool {
+	found, err := find_process(pid, createTime)
+	if err != nil {
+		p.context.Log().Errorf("error encountered when looking up process info: %v", err)
+		return false
+	}
+	return found
 }
