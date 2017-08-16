@@ -57,7 +57,7 @@ func TestBasicExecuter(t *testing.T) {
 
 	pluginState := docModel.PluginState{
 		Name: "aws:runScript",
-		Id:   "aws:runScript",
+		Id:   "plugin1",
 	}
 	docState := docModel.DocumentState{
 		DocumentInformation:        docInfo,
@@ -66,6 +66,7 @@ func TestBasicExecuter(t *testing.T) {
 	}
 
 	result := contracts.PluginResult{
+		PluginID:   "plugin1",
 		PluginName: "aws:runScript",
 		Status:     contracts.ResultStatusSuccess,
 	}
@@ -128,7 +129,7 @@ func testBasicExecuter(t *testing.T, testCase TestCase) {
 			done = true
 			continue
 		}
-		curPlugin := testCase.DocState.InstancePluginsInformation[nStatusReceived].Name
+		curPlugin := testCase.DocState.InstancePluginsInformation[nStatusReceived].Id
 		//assert plugin execution order
 		assert.Equal(t, curPlugin, res.LastPlugin)
 		//assert message id

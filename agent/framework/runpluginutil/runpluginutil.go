@@ -83,6 +83,7 @@ func RunPlugins(
 		pluginID := pluginState.Id     // the identifier of the plugin
 		pluginName := pluginState.Name // the name of the plugin
 		pluginOutput := pluginState.Result
+		pluginOutput.PluginID = pluginID
 		pluginOutput.PluginName = pluginName
 		pluginOutputs[pluginID] = &pluginOutput
 		switch pluginOutput.Status {
