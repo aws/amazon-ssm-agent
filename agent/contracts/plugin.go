@@ -41,6 +41,7 @@ var (
 
 // PluginResult represents a plugin execution result.
 type PluginResult struct {
+	PluginID           string       `json:"pluginID"`
 	PluginName         string       `json:"pluginName"`
 	Status             ResultStatus `json:"status"`
 	Code               int          `json:"code"`
