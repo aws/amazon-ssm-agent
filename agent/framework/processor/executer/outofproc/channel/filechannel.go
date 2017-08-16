@@ -75,7 +75,7 @@ func (ch *fileWatcherChannel) Open(name string) (err error) {
 	}
 
 	//buffered channel in order not to block listener
-	ch.onMessageChan = make(chan string, defaultReceiveChannelBufferSize)
+	ch.onMessageChan = make(chan string, defaultChannelBufferSize)
 	//signal the message poller to stop
 	ch.closeChan = make(chan bool, 1)
 
@@ -100,6 +100,7 @@ func (ch *fileWatcherChannel) Open(name string) (err error) {
 	sequence id format: {mode}-{command start time}-{counter} , squence id is guaranteed to be ascending order
 
 */
+//TODO make sure the Send function is not blocked
 func (ch *fileWatcherChannel) Send(rawJson string) error {
 	log := ch.logger
 	sequenceID := fmt.Sprintf("%v-%s-%03d", ch.mode, ch.startTime, ch.counter)
