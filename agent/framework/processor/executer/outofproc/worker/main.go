@@ -50,9 +50,15 @@ func main() {
 	ctx = context.Default(log, config).With(name)
 	//initialize PluginRegistry
 	executer.PluginRegistry = plugin.RegisteredWorkerPlugins(ctx)
-	if err := outofproc.Client(ctx, handle, pluginRunner); err != nil {
-		log.Errorf("client encountered error: %v", err)
+	//client connect to the connection object which is already set up by server
+	ipc := channelCreator(channel.ModeWorker)
+	if err = ipc.Open(handle); err != nil {
+		log.Errorf("failed to connect to ")
 		os.Exit(1)
 	}
-
+	pipeline, stopChan := outofproc.NewWorkerBackend(ctx, pluginRunner)
+	if err := outofproc.Messaging(ctx.Log(), ipc, pipeline, stopChan); err != nil {
+		log.Errorf("messaging worker encountered error: %v", err)
+		os.Exit(1)
+	}
 }
