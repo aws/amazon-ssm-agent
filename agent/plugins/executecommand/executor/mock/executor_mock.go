@@ -12,8 +12,8 @@
 // implied. See the License for the specific language governing
 // permissions and limitations under the License.
 
-// Package document_mock has mock functions for document package
-package document_mock
+// Package executor_mock has mock functions for document package
+package executor_mock
 
 import (
 	"github.com/aws/amazon-ssm-agent/agent/context"
@@ -36,7 +36,12 @@ func (e ExecMock) ParseDocument(log log.T, extension string, documentRaw []byte,
 	return args.Get(0).([]model.PluginState), args.Error(1)
 }
 
-func (e ExecMock) ExecuteDocument(context context.T, pluginInput []model.PluginState, documentID string, documentCreatedDate string) (pluginOutputs map[string]*contracts.PluginResult) {
-	args := e.Called(context, pluginInput, documentID, documentCreatedDate)
-	return args.Get(0).(map[string]*contracts.PluginResult)
+func (e ExecMock) ExecuteDocument(context context.T, pluginInput []model.PluginState, documentID string, documentCreatedDate string, out *contracts.PluginOutput) {
+	e.Called(context, pluginInput, documentID, documentCreatedDate, out)
+	return
+}
+
+func (e ExecMock) ExecuteScript(log log.T, fileName string, args []string, executionTimeout int, out *contracts.PluginOutput) {
+	e.Called(log, fileName, args, executionTimeout, out)
+	return
 }
