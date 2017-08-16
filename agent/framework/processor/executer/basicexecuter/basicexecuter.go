@@ -73,13 +73,13 @@ func run(context context.T,
 		}()
 		results := make(map[string]*contracts.PluginResult)
 		for res := range statusChan {
-			results[res.PluginName] = &res
+			results[res.PluginID] = &res
 			//TODO decompose this function to return only Status
 			status, _, _ := docmanager.DocumentResultAggregator(context.Log(), res.PluginName, results)
 			docResult := contracts.DocumentResult{
 				Status:          status,
 				PluginResults:   results,
-				LastPlugin:      res.PluginName,
+				LastPlugin:      res.PluginID,
 				AssociationID:   associationID,
 				MessageID:       messageID,
 				NPlugins:        nPlugins,

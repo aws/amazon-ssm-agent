@@ -90,6 +90,7 @@ func TestRunPluginsWithNewDocument(t *testing.T) {
 		}
 		pluginResults[name] = &contracts.PluginResult{
 			Output:         name,
+			PluginID:       name,
 			PluginName:     name,
 			StartDateTime:  defaultTime,
 			EndDateTime:    defaultTime,
@@ -183,6 +184,7 @@ func TestRunPluginsWithMissingPluginHandler(t *testing.T) {
 
 		pluginResults[name] = &contracts.PluginResult{
 			PluginName:     name,
+			PluginID:       name,
 			StartDateTime:  defaultTime,
 			EndDateTime:    defaultTime,
 			StandardOutput: defaultOutput,
@@ -259,6 +261,7 @@ func TestRunPluginsWithCancelFlagShutdown(t *testing.T) {
 		pluginResults[name] = &contracts.PluginResult{
 			Output:        name,
 			PluginName:    name,
+			PluginID:      name,
 			StartDateTime: defaultTime,
 			EndDateTime:   defaultTime,
 		}
@@ -325,6 +328,7 @@ func TestRunPluginsWithInProgressDocuments(t *testing.T) {
 			Output:        name,
 			Status:        contracts.ResultStatusSuccess,
 			PluginName:    name,
+			PluginID:      name,
 			StartDateTime: defaultTime,
 			EndDateTime:   defaultTime,
 		}
@@ -423,6 +427,7 @@ func TestRunPluginsWithDuplicatePluginType(t *testing.T) {
 
 		pluginResults[name] = &contracts.PluginResult{
 			Output:         name,
+			PluginID:       name,
 			PluginName:     pluginType,
 			StartDateTime:  defaultTime,
 			EndDateTime:    defaultTime,
@@ -518,6 +523,7 @@ func TestRunPluginsWithCompatiblePrecondition(t *testing.T) {
 		pluginResults[name] = &contracts.PluginResult{
 			Output:         name,
 			PluginName:     name,
+			PluginID:       name,
 			StartDateTime:  defaultTime,
 			EndDateTime:    defaultTime,
 			StandardOutput: defaultOutput,
@@ -606,6 +612,7 @@ func TestRunPluginsWithCompatiblePreconditionWithValueFirst(t *testing.T) {
 		}
 		pluginResults[name] = &contracts.PluginResult{
 			Output:         name,
+			PluginID:       name,
 			PluginName:     name,
 			StartDateTime:  defaultTime,
 			EndDateTime:    defaultTime,
@@ -694,6 +701,7 @@ func TestRunPluginsWithIncompatiblePrecondition(t *testing.T) {
 		pluginResults[name] = &contracts.PluginResult{
 			Output:         "Step execution skipped due to incompatible platform. Step name: " + name,
 			PluginName:     name,
+			PluginID:       name,
 			StartDateTime:  defaultTime,
 			EndDateTime:    defaultTime,
 			StandardOutput: defaultOutput,
@@ -780,6 +788,7 @@ func TestRunPluginsWithCompatiblePreconditionButMissingPluginHandler(t *testing.
 		pluginResults[name] = &contracts.PluginResult{
 			Output:         "Step execution skipped due to incompatible platform. Step name: " + name,
 			PluginName:     name,
+			PluginID:       name,
 			StartDateTime:  defaultTime,
 			EndDateTime:    defaultTime,
 			StandardOutput: defaultOutput,
@@ -871,6 +880,7 @@ func TestRunPluginsWithMoreThanOnePrecondition(t *testing.T) {
 
 		pluginResults[name] = &contracts.PluginResult{
 			PluginName:     name,
+			PluginID:       name,
 			StartDateTime:  defaultTime,
 			EndDateTime:    defaultTime,
 			StandardOutput: defaultOutput,
@@ -962,6 +972,7 @@ func TestRunPluginsWithUnrecognizedPreconditionOperator(t *testing.T) {
 
 		pluginResults[name] = &contracts.PluginResult{
 			PluginName:     name,
+			PluginID:       name,
 			StartDateTime:  defaultTime,
 			EndDateTime:    defaultTime,
 			StandardOutput: defaultOutput,
@@ -1054,6 +1065,7 @@ func TestRunPluginsWithUnrecognizedPreconditionOperand(t *testing.T) {
 
 		pluginResults[name] = &contracts.PluginResult{
 			PluginName:     name,
+			PluginID:       name,
 			StartDateTime:  defaultTime,
 			EndDateTime:    defaultTime,
 			StandardOutput: defaultOutput,
@@ -1147,6 +1159,7 @@ func TestRunPluginsWithUnrecognizedPreconditionDuplicateVariable(t *testing.T) {
 
 		pluginResults[name] = &contracts.PluginResult{
 			PluginName:     name,
+			PluginID:       name,
 			StartDateTime:  defaultTime,
 			EndDateTime:    defaultTime,
 			StandardOutput: defaultOutput,
@@ -1239,6 +1252,7 @@ func TestRunPluginsWithMoreThanTwoPreconditionOperands(t *testing.T) {
 
 		pluginResults[name] = &contracts.PluginResult{
 			PluginName:     name,
+			PluginID:       name,
 			StartDateTime:  defaultTime,
 			EndDateTime:    defaultTime,
 			StandardOutput: defaultOutput,
@@ -1335,6 +1349,7 @@ func TestRunPluginsWithUnknownPlugin(t *testing.T) {
 
 			pluginResults[name] = &contracts.PluginResult{
 				PluginName:     name,
+				PluginID:       name,
 				StartDateTime:  defaultTime,
 				EndDateTime:    defaultTime,
 				StandardOutput: defaultOutput,
@@ -1345,6 +1360,7 @@ func TestRunPluginsWithUnknownPlugin(t *testing.T) {
 		} else {
 			pluginResults[name] = &contracts.PluginResult{
 				Output:         name,
+				PluginID:       name,
 				PluginName:     name,
 				StartDateTime:  defaultTime,
 				EndDateTime:    defaultTime,
