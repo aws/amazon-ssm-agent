@@ -1,6 +1,10 @@
 package procmock
 
-import "github.com/stretchr/testify/mock"
+import (
+	"time"
+
+	"github.com/stretchr/testify/mock"
+)
 
 type MockedProcessController struct {
 	mock.Mock
@@ -21,7 +25,7 @@ func (m *MockedProcessController) Kill() error {
 	return args.Error(0)
 }
 
-func (m *MockedProcessController) Find(pid string) bool {
-	args := m.Called(pid)
+func (m *MockedProcessController) Find(pid int, createTime time.Time) bool {
+	args := m.Called(pid, createTime)
 	return args.Get(0).(bool)
 }

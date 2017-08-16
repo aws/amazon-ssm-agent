@@ -1,57 +1,62 @@
 package contracts
 
 //TODO we need to move the DocumentResult model to this package,
-import (
-	"errors"
-
-	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
-)
+import "github.com/aws/amazon-ssm-agent/agent/jsonutil"
 
 type MessageType string
 
 //Message types
 const (
-	MessageTypeStart   = "start"
-	MessageTypeClose   = "close"
-	MessageTypePayload = "payload"
-	MessageTypeControl = "control"
+	MessageTypePluginConfig = "pluginconfig"
+	MessageTypeComplete     = "complete"
+	MessageTypeReply        = "reply"
+	MessageTypeCancel       = "cancel"
 )
 
 var versions = []string{"1.0"}
 
 //TODO Content should be interface{} to be marshalled based off the type
 type Message struct {
-	Version string `json:"version"`
-	Type    string `json:"type"`
-	Content string `json:"content"`
+	Version string      `json:"version"`
+	Type    MessageType `json:"type"`
+	Content string      `json:"content"`
 }
 
-//These 2 type of messages is heavily rely on the version control mechanism
+type MessagingBackend interface {
+	Accept() <-chan string
+	//Process a given datagram, should not be blocked
+	Process(string) error
+	Close()
+}
 
-func GetLastestVersion() string {
+//GetLatestVersion retrieves the current latest message version of the agent build
+func GetLatestVersion() string {
 	return versions[len(versions)-1]
 }
 
-func Marshal(version, t string, obj interface{}) (msg Message, err error) {
-	content, err := jsonutil.Marshal(obj)
+//CreateDatagram marshals a given arbitrary object to raw json string
+//Message schema is determined by the current version, content struct is indicated by type field
+//TODO add version handling
+func CreateDatagram(t MessageType, content interface{}) (string, error) {
+	contentStr, err := jsonutil.Marshal(content)
 	if err != nil {
-		return
+		return "", err
 	}
-	msg.Version = version
-	msg.Type = t
-	msg.Content = content
-	return
+	message := Message{
+		Version: GetLatestVersion(),
+		Type:    t,
+		Content: contentStr,
+	}
+	datagram, err := jsonutil.Marshal(message)
+	if err != nil {
+		return "", err
+	}
+	return datagram, nil
 }
 
-func UnMarshal(msg Message, result interface{}) (err error) {
-	v := msg.Version
-	//The switch cases here, once checked in, should never be changed for backward compatibility
-	switch v {
-	case "1.0":
-		err = jsonutil.Unmarshal(msg.Content, result)
-		return
-	default:
-		err = errors.New("unsupported version")
-		return
-	}
+//TODO add version and error handling
+func ParseDatagram(datagram string) (MessageType, string) {
+	message := Message{}
+	jsonutil.Unmarshal(datagram, &message)
+	return message.Type, message.Content
 }
