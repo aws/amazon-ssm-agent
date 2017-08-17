@@ -81,9 +81,7 @@ func newDocumentInfo(msg ssmmds.Message, parsedMsg messageContracts.SendCommandP
 	documentInfo.RunID = times.ToIsoDashUTC(times.DefaultClock.Now())
 	documentInfo.CreatedDate = *msg.CreatedDate
 	documentInfo.DocumentName = parsedMsg.DocumentName
-	documentInfo.IsCommand = true
 	documentInfo.DocumentStatus = contracts.ResultStatusInProgress
-	documentInfo.DocumentTraceOutput = ""
 
 	return *documentInfo
 }
