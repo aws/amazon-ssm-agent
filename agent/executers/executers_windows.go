@@ -18,9 +18,6 @@ package executers
 import (
 	"os"
 	"os/exec"
-	"strings"
-
-	logger "github.com/aws/amazon-ssm-agent/agent/log"
 )
 
 const (
@@ -40,21 +37,4 @@ func killProcess(process *os.Process, signal *timeoutSignal) error {
 
 // Running powershell on linux required the HOME env variable to be set and to remove the TERM env variable
 func validateEnvironmentVariables(command *exec.Cmd) {
-}
-
-// printCommand is to print the directory and command. For cloudwatch, first exposed credentials are removed
-// from the configuration file before logging
-func printCommand(log logger.T, workingDir string, commandName string, commandArguments []string) {
-	commandArgs := commandArguments
-
-	// TODO: Add logic to make this more generic
-	if strings.Contains(commandName, "AWS.CloudWatch.exe") {
-		if len(commandArguments) > CWConfigIndex {
-			commandArgs[CWConfigIndex] = logger.PrintCWConfig(commandArguments[CWConfigIndex], log)
-		}
-	}
-
-	log.Debug()
-	log.Debugf("Running in directory %v, command: %v %v", workingDir, commandName, commandArgs)
-	log.Debug()
 }
