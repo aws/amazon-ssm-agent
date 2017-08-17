@@ -8,6 +8,8 @@ import (
 	"strings"
 	"time"
 
+	"strconv"
+
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/fsnotify/fsnotify"
 )
@@ -27,6 +29,7 @@ type fileWatcherChannel struct {
 	closeChan     chan bool
 	mode          Mode
 	counter       int
+	recvCounter   int
 	startTime     string
 	watcher       *fsnotify.Watcher
 	sendChan      chan string
@@ -76,8 +79,11 @@ func (ch *fileWatcherChannel) Open(name string) (err error) {
 	//buffered channel in order not to block listener
 	ch.onMessageChan = make(chan string, defaultChannelBufferSize)
 	//signal the message poller to stop
-	ch.closeChan = make(chan bool, 1)
+	ch.closeChan = make(chan bool, defaultChannelBufferSize)
 	ch.sendChan = make(chan string, defaultChannelBufferSize)
+
+	//initialize receiving counter
+	ch.recvCounter = 0
 
 	//start file watcher and monitor the directory
 	if ch.watcher, err = fsnotify.NewWatcher(); err != nil {
@@ -145,6 +151,20 @@ func (ch *fileWatcherChannel) Close() {
 	return
 }
 
+//parse the counter out of the sequence id, return -1 if parsing fails
+func parseSequenceCounter(filepath string) int {
+	_, name := path.Split(filepath)
+	parts := strings.Split(name, "-")
+	if len(parts) != 3 {
+		return -1
+	}
+	counter, err := strconv.ParseInt(parts[2], 10, 64)
+	if err != nil {
+		return -1
+	}
+	return int(counter)
+}
+
 //read all messages in the consuming dir, with order guarantees -- ioutil.ReadDir() sort by name, and name is the lexicographical ascending sequence id.
 //filter out its own sent messages and tmp messages
 func (ch *fileWatcherChannel) consumeAll() {
@@ -177,6 +197,8 @@ func (ch *fileWatcherChannel) consume(filepath string) {
 
 	//remove the consumed file
 	os.Remove(filepath)
+	//update the recvcounter
+	ch.recvCounter = parseSequenceCounter(filepath)
 	//TODO handle buffered channel queue overflow
 	ch.onMessageChan <- string(buf)
 }
@@ -207,7 +229,14 @@ func (ch *fileWatcherChannel) watch() {
 			}
 			log.Debug("received event: ", event.String())
 			if event.Op&fsnotify.Create == fsnotify.Create && ch.isReadable(event.Name) {
-				ch.consume(event.Name)
+				//if the receiving counter is as expected, consume that message
+				//otherwise, read the entire directory in sorted order, sender assures sending order
+				if parseSequenceCounter(event.Name) == ch.recvCounter+1 {
+					log.Debug("received out-of-order file update, polling the dir to reorder")
+					ch.consume(event.Name)
+				} else {
+					ch.consumeAll()
+				}
 			}
 		case err := <-ch.watcher.Errors:
 			log.Errorf("file watcher error:", err)
