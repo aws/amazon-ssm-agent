@@ -32,48 +32,56 @@ var messageSet2 = []string{"r000", "r001", "r002"}
 
 func TestNewFileWatcherChannelDuplexTransmission(t *testing.T) {
 	logger.Info("hello filewatcher channel started")
+	done := make(chan bool)
 
 	agentChannel := NewFileWatcherChannel(log.NewMockLogWithContext("AGENT"), ModeMaster)
-	workerChannel := NewFileWatcherChannel(log.NewMockLogWithContext("WORKER"), ModeWorker)
-	if err := agentChannel.Open(path.Join(defaultRootDir, channelName)); err != nil {
-		logger.Errorf("Error encountered on opening master channel: %v", err)
-		return
-	}
-	if err := workerChannel.Open(path.Join(defaultRootDir, channelName)); err != nil {
-		logger.Errorf("Error encountered on opening slave channel: %v", err)
-		return
-	}
-	logger.Info("channel connected, start message exchange")
-	done := make(chan bool)
+
+	err := agentChannel.Open(path.Join(defaultRootDir, channelName))
+	assert.NoError(t, err)
+	logger.Info("agent channel opened, start transmission")
 	// run all threads in parallel
-	go send(agentChannel, messageSet1, "agent")
-	go verifyReceive(t, workerChannel, messageSet1, "worker", done)
-	go send(workerChannel, messageSet2, "worker")
+	send(agentChannel, messageSet1, "agent")
 	go verifyReceive(t, agentChannel, messageSet2, "agent", done)
+
+	workerChannel := NewFileWatcherChannel(log.NewMockLogWithContext("WORKER"), ModeWorker)
+	err = workerChannel.Open(path.Join(defaultRootDir, channelName))
+	assert.NoError(t, err)
+	logger.Info("worker channel opened, start transmission")
+	send(workerChannel, messageSet2, "worker")
+
+	go verifyReceive(t, workerChannel, messageSet1, "worker", done)
 	<-done
 	<-done
 	workerChannel.Close()
 	agentChannel.Close()
 }
 
-//It is required that each party of the paired connection can open up a channel an write to it without getting blocked by receiver
-func TestChannelSendNonBlock(t *testing.T) {
+//agent channel is reopened, and starts receiving only after re-open
+func TestChannelReopen(t *testing.T) {
+	done := make(chan bool)
 	agentChannel := NewFileWatcherChannel(log.NewMockLogWithContext("AGENT"), ModeMaster)
+	err := agentChannel.Open(path.Join(defaultRootDir, channelName))
+	assert.NoError(t, err)
+	logger.Info("agent channel opened, start transmission")
+	// run all threads in parallel
+	send(agentChannel, messageSet1, "agent")
 	workerChannel := NewFileWatcherChannel(log.NewMockLogWithContext("WORKER"), ModeWorker)
-	if err := agentChannel.Open(path.Join(defaultRootDir, channelName)); err != nil {
-		logger.Errorf("Error encountered on opening master channel: %v", err)
-		return
-	}
 	if err := workerChannel.Open(path.Join(defaultRootDir, channelName)); err != nil {
 		logger.Errorf("Error encountered on opening slave channel: %v", err)
 		return
 	}
-	send(agentChannel, messageSet1, "agent")
+	logger.Info("worker channel opened, start transmission")
 	send(workerChannel, messageSet2, "worker")
-	//close worker first
-	workerChannel.Close()
-	time.Sleep(time.Second)
+
+	logger.Info("re-opening agent channel...")
+	newAgentChannel := NewFileWatcherChannel(log.NewMockLogWithContext("NEWAGENT"), ModeMaster)
+	err = newAgentChannel.Open(path.Join(defaultRootDir, channelName))
+	send(newAgentChannel, messageSet2, "new agent")
+	assert.NoError(t, err)
+	go verifyReceive(t, newAgentChannel, messageSet2, "new agent", done)
+	go verifyReceive(t, workerChannel, append(messageSet1, messageSet2...), "worker", done)
 	agentChannel.Close()
+	workerChannel.Close()
 }
 
 //verify the given set of messages are received
@@ -82,11 +90,10 @@ func verifyReceive(t *testing.T, ch Channel, messages []string, name string, don
 	//timer := time.After(5 * time.Second)
 	onMsgChan := ch.GetMessageChannel()
 	for _, testMsg := range messages {
-		select {
-		case msg := <-onMsgChan:
-			logger.Infof("%v received message: %v", name, msg)
-			assert.Equal(t, testMsg, msg)
-		}
+		msg := <-onMsgChan
+		logger.Infof("%v received message: %v", name, msg)
+		assert.Equal(t, testMsg, msg)
+
 	}
 	done <- true
 }

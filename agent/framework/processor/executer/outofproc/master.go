@@ -99,6 +99,7 @@ func (e *OutOfProcExecuter) prepare() (ipc channel.Channel, err error) {
 	documentID := e.documentID
 	handle, found := channelDiscoverer(documentID)
 	//if channel not exists, create new channel handle and new sub process
+	//TODO race condition here, if process returned results before master's file watcher starts. Need a way to deal with it.
 	if !found {
 		handle = createChannelHandle(e.documentID)
 		log.Debug("channel not found, starting a new process...")
