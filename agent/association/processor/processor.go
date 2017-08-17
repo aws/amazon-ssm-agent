@@ -318,12 +318,12 @@ func (p *Processor) runScheduledAssociation(log log.T) {
 	}
 
 	log = p.context.With("[associationId=" + docState.DocumentInformation.AssociationID + "]").Log()
-
+	instanceID, _ := sys.InstanceID()
 	p.assocSvc.UpdateInstanceAssociationStatus(
 		log,
 		docState.DocumentInformation.AssociationID,
 		docState.DocumentInformation.DocumentName,
-		docState.DocumentInformation.InstanceID,
+		instanceID,
 		contracts.AssociationStatusInProgress,
 		contracts.AssociationErrorCodeNoError,
 		times.ToIso8601UTC(time.Now()),
