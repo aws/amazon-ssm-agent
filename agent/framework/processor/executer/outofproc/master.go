@@ -3,6 +3,7 @@ package outofproc
 import (
 	"time"
 
+	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer"
@@ -21,8 +22,6 @@ const (
 const (
 	stopTypeTerminate = 1
 	stopTypeShutdown  = 2
-	//TODO this is platform specific
-	defaultProcessName = "ssm-document-worker"
 )
 
 type OutOfProcExecuter struct {
@@ -45,8 +44,8 @@ func createChannelHandle(documentID string) string {
 
 func NewOutOfProcExecuter(ctx context.T) *OutOfProcExecuter {
 	return &OutOfProcExecuter{
-		ctx: ctx.With("[OutOfProcExecuter]"),
-		//TODO add procController
+		ctx:            ctx.With("[OutOfProcExecuter]"),
+		procController: proc.NewOSProcess(ctx),
 	}
 }
 
@@ -99,16 +98,16 @@ func (e *OutOfProcExecuter) prepare() (ipc channel.Channel, err error) {
 	documentID := e.documentID
 	handle, found := channelDiscoverer(documentID)
 	//if channel not exists, create new channel handle and new sub process
-	//TODO race condition here, if process returned results before master's file watcher starts. Need a way to deal with it.
 	if !found {
 		handle = createChannelHandle(e.documentID)
 		log.Debug("channel not found, starting a new process...")
 		var pid int
-		if pid, err = e.procController.StartProcess(defaultProcessName, []string{string(handle)}); err != nil {
-			log.Errorf("start process: %v error: %v", defaultProcessName, err)
+		var processName = appconfig.DefaultDocumentWorker
+		if pid, err = e.procController.StartProcess(processName, []string{string(handle)}); err != nil {
+			log.Errorf("start process: %v error: %v", processName, err)
 			return
 		} else {
-			log.Infof("successfully launched new process %v|%v", defaultProcessName, pid)
+			log.Infof("successfully launched new process: %v", pid)
 		}
 		//TODO add pid and process creation time to persistence layer
 		//release the attached process resource

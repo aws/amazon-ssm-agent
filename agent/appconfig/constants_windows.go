@@ -72,6 +72,9 @@ var PowerShellPluginCommandName = filepath.Join(os.Getenv("SystemRoot"), "System
 // Program Folder
 var DefaultProgramFolder string
 
+//Document executable path
+var DefaultDocumentWorker string
+
 // AppConfig Path
 var AppConfigPath string
 
@@ -157,6 +160,7 @@ func init() {
 
 	DefaultProgramFolder = filepath.Join(EnvProgramFiles, SSMFolder)
 	DefaultPluginPath = filepath.Join(EnvProgramFiles, SSMPluginFolder)
+	DefaultDocumentWorker = filepath.Join(DefaultProgramFolder, "ssm-document-worker.exe")
 	ManifestCacheDirectory = filepath.Join(EnvProgramFiles, ManifestCacheFolder)
 	AppConfigPath = filepath.Join(DefaultProgramFolder, AppConfigFileName)
 	DefaultDataStorePath = filepath.Join(SSMDataPath, "InstanceData")
