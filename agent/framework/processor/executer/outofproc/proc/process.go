@@ -44,7 +44,7 @@ type OSProcess struct {
 func NewOSProcess(ctx context.T) *OSProcess {
 	return &OSProcess{
 		attached: false,
-		context:  ctx.With("[OSProcessController]"),
+		context:  ctx.With("[OSProcess]"),
 	}
 }
 
