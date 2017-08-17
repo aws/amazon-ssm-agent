@@ -34,7 +34,7 @@ func TestNewFileWatcherChannelDuplexTransmission(t *testing.T) {
 	logger.Info("hello filewatcher channel started")
 
 	agentChannel := NewFileWatcherChannel(log.NewMockLogWithContext("AGENT"), ModeMaster)
-	workerChannel := NewFileWatcherChannel(log.NewMockLogWithContext("WORKER"), ModeSlave)
+	workerChannel := NewFileWatcherChannel(log.NewMockLogWithContext("WORKER"), ModeWorker)
 	if err := agentChannel.Open(path.Join(defaultRootDir, channelName)); err != nil {
 		logger.Errorf("Error encountered on opening master channel: %v", err)
 		return
@@ -53,6 +53,26 @@ func TestNewFileWatcherChannelDuplexTransmission(t *testing.T) {
 	<-done
 	<-done
 	workerChannel.Close()
+	agentChannel.Close()
+}
+
+//It is required that each party of the paired connection can open up a channel an write to it without getting blocked by receiver
+func TestChannelSendNonBlock(t *testing.T) {
+	agentChannel := NewFileWatcherChannel(log.NewMockLogWithContext("AGENT"), ModeMaster)
+	workerChannel := NewFileWatcherChannel(log.NewMockLogWithContext("WORKER"), ModeWorker)
+	if err := agentChannel.Open(path.Join(defaultRootDir, channelName)); err != nil {
+		logger.Errorf("Error encountered on opening master channel: %v", err)
+		return
+	}
+	if err := workerChannel.Open(path.Join(defaultRootDir, channelName)); err != nil {
+		logger.Errorf("Error encountered on opening slave channel: %v", err)
+		return
+	}
+	send(agentChannel, messageSet1, "agent")
+	send(workerChannel, messageSet2, "worker")
+	//close worker first
+	workerChannel.Close()
+	time.Sleep(time.Second)
 	agentChannel.Close()
 }
 
