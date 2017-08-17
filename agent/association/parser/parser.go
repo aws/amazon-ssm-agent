@@ -114,9 +114,7 @@ func newDocumentInfo(rawData *model.InstanceAssociation, payload *messageContrac
 	documentInfo.CreatedDate = times.ToIso8601UTC(rawData.CreateDate)
 	documentInfo.DocumentName = payload.DocumentName
 	documentInfo.DocumentVersion = *(rawData.Association.DocumentVersion)
-	documentInfo.IsCommand = false
 	documentInfo.DocumentStatus = contracts.ResultStatusInProgress
-	documentInfo.DocumentTraceOutput = ""
 
 	return *documentInfo
 }

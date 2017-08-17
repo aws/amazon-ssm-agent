@@ -47,21 +47,17 @@ type DocumentInfo struct {
 	// DocumentID is a unique name for file system
 	// For Association, DocumentID = AssociationID.RunID
 	// For RunCommand, DocumentID = CommandID
-	DocumentID          string
-	AdditionalInfo      contracts.AdditionalInfo
-	CommandID           string
-	AssociationID       string
-	InstanceID          string
-	MessageID           string
-	RunID               string
-	CreatedDate         string
-	DocumentName        string
-	IsCommand           bool
-	DocumentVersion     string
-	DocumentStatus      contracts.ResultStatus
-	DocumentTraceOutput string
-	RuntimeStatus       map[string]*contracts.PluginRuntimeStatus
-	RunCount            int
+	DocumentID      string
+	CommandID       string
+	AssociationID   string
+	InstanceID      string
+	MessageID       string
+	RunID           string
+	CreatedDate     string
+	DocumentName    string
+	DocumentVersion string
+	DocumentStatus  contracts.ResultStatus
+	RunCount        int
 }
 
 // DocumentState represents information relevant to a command that gets executed by agent
