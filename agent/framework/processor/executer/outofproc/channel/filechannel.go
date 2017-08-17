@@ -6,7 +6,6 @@ import (
 	"os"
 	"path"
 	"strings"
-	"sync"
 	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/log"
@@ -30,7 +29,7 @@ type fileWatcherChannel struct {
 	counter       int
 	startTime     string
 	watcher       *fsnotify.Watcher
-	m             sync.RWMutex
+	sendChan      chan string
 }
 
 /*
@@ -78,9 +77,8 @@ func (ch *fileWatcherChannel) Open(name string) (err error) {
 	ch.onMessageChan = make(chan string, defaultChannelBufferSize)
 	//signal the message poller to stop
 	ch.closeChan = make(chan bool, 1)
+	ch.sendChan = make(chan string, defaultChannelBufferSize)
 
-	//drain all the current messages in the dir
-	ch.consumeAll()
 	//start file watcher and monitor the directory
 	if ch.watcher, err = fsnotify.NewWatcher(); err != nil {
 		log.Errorf("filewatcher listener encountered error when start watcher: %v", err)
@@ -95,19 +93,23 @@ func (ch *fileWatcherChannel) Open(name string) (err error) {
 	return nil
 }
 
+func (ch *fileWatcherChannel) Send(rawJson string) error {
+	//TODO deal with buffer channel overflow
+	ch.sendChan <- rawJson
+	return nil
+}
+
 /*
 	drop a file in the destination path with the file name as sequence id
+	the file is first named as tmp, then quickly renamed to guarantee atomicity
 	sequence id format: {mode}-{command start time}-{counter} , squence id is guaranteed to be ascending order
 
 */
-//TODO make sure the Send function is not blocked
-func (ch *fileWatcherChannel) Send(rawJson string) error {
+func (ch *fileWatcherChannel) send(rawJson string) error {
 	log := ch.logger
 	sequenceID := fmt.Sprintf("%v-%s-%03d", ch.mode, ch.startTime, ch.counter)
 	filepath := path.Join(ch.path, sequenceID)
 	tmp_filepath := path.Join(ch.tmpPath, sequenceID)
-	ch.m.RLock()
-	defer ch.m.RUnlock()
 	//ensure sync exclusive write
 	//TODO sender need to handle the case when connection is closed halfway
 	if err := ioutil.WriteFile(tmp_filepath, []byte(rawJson), defaultFileWriteMode); err != nil {
@@ -138,6 +140,7 @@ func (ch *fileWatcherChannel) Close() {
 		os.RemoveAll(ch.path)
 	}
 	close(ch.closeChan)
+	close(ch.sendChan)
 	close(ch.onMessageChan)
 	return
 }
@@ -161,13 +164,10 @@ func (ch *fileWatcherChannel) isReadable(filename string) bool {
 	return !strings.Contains(filename, string(ch.mode)) && !strings.Contains(filename, "tmp")
 }
 
-//consume a given file
-//in-proc consumers are synced by locking, out-of-proc consumers not exist
+//read and remove a given file
 func (ch *fileWatcherChannel) consume(filepath string) {
 	log := ch.logger
 	log.Debugf("consuming message under path: %v", filepath)
-	ch.m.RLock()
-	defer ch.m.RUnlock()
 	buf, err := ioutil.ReadFile(filepath)
 	if err != nil {
 		log.Errorf("message %v failed to read: %v \n", filepath, err)
@@ -187,8 +187,15 @@ func (ch *fileWatcherChannel) consume(filepath string) {
 func (ch *fileWatcherChannel) watch() {
 	log := ch.logger
 	log.Debugf("%v listener started on path: %v", ch.mode, ch.path)
+	//drain all the current messages in the dir
+	ch.consumeAll()
 	for {
 		select {
+		//TODO implementing onError handling
+		case message := <-ch.sendChan:
+			if err := ch.send(message); err != nil {
+				log.Errorf("failed to send message: %v", err)
+			}
 		case <-ch.closeChan:
 			log.Debug("closing file watcher listener...")
 			ch.watcher.Close()
@@ -199,9 +206,6 @@ func (ch *fileWatcherChannel) watch() {
 				return
 			}
 			log.Debug("received event: ", event.String())
-			if event.Op == fsnotify.Chmod {
-				log.Debug(event)
-			}
 			if event.Op&fsnotify.Create == fsnotify.Create && ch.isReadable(event.Name) {
 				ch.consume(event.Name)
 			}
