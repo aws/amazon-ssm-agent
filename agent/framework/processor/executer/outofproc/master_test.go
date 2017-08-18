@@ -12,6 +12,7 @@ import (
 	channelmock "github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/outofproc/channel/mock"
 	procmock "github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/outofproc/proc/mock"
 
+	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
@@ -55,7 +56,7 @@ func CreateTestCase() *TestCase {
 
 	pluginState := model.PluginState{
 		Name: "aws:runScript",
-		Id:   "aws:runScript",
+		Id:   "plugin1",
 	}
 	docState := model.DocumentState{
 		DocumentInformation:        docInfo,
@@ -65,6 +66,7 @@ func CreateTestCase() *TestCase {
 
 	result := contracts.PluginResult{
 		PluginName:    "aws:runScript",
+		PluginID:      "plugin1",
 		Status:        contracts.ResultStatusSuccess,
 		StartDateTime: testStartDateTime,
 		EndDateTime:   testEndDateTime,
@@ -78,8 +80,7 @@ func CreateTestCase() *TestCase {
 		documentID:     testDocumentID,
 	}
 	return &TestCase{
-		context: contextMock,
-
+		context:        contextMock,
 		docStore:       docStore,
 		docState:       docState,
 		procController: procController,
@@ -96,7 +97,7 @@ func TestPrepareStartNewProcess(t *testing.T) {
 		return "", false
 	}
 	channelMock := new(channelmock.MockedChannel)
-	expectedChannelName := createChannelHandle(testDocumentID)
+	expectedChannelName := testDocumentID
 	channelMock.On("Open", expectedChannelName).Return(nil)
 	channelCreator = func(mode channel.Mode) channel.Channel {
 		assert.Equal(t, mode, channel.ModeMaster)
@@ -105,7 +106,7 @@ func TestPrepareStartNewProcess(t *testing.T) {
 	exe := testCase.executer
 
 	expectedArgList := []string{expectedChannelName}
-	testCase.procController.On("StartProcess", defaultProcessName, expectedArgList).Return(0, nil)
+	testCase.procController.On("StartProcess", appconfig.DefaultDocumentWorker, expectedArgList).Return(0, nil)
 	testCase.procController.On("Release").Return(nil)
 	_, err := exe.prepare()
 	assert.NoError(t, err)
@@ -113,10 +114,9 @@ func TestPrepareStartNewProcess(t *testing.T) {
 	channelMock.AssertExpectations(t)
 }
 
-//TODO downgrade is currently not supported
 func TestPrepareConnectOldWorker(t *testing.T) {
 	testCase := CreateTestCase()
-	expectedChannelName := createChannelHandle(testDocumentID)
+	expectedChannelName := testDocumentID
 	channelDiscoverer = func(documentID string) (string, bool) {
 		return expectedChannelName, true
 	}
