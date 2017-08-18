@@ -17,25 +17,32 @@
 package proc
 
 import (
-	"fmt"
 	"testing"
+
+	"time"
 
 	"src/github.com/stretchr/testify/assert"
 )
 
 //Output format is verified to be identical on RHEL, CENTOS, UBUNTU, AL. However darwin has a different time format
-//TODO add darwin compile once we support darwin
 func TestFindProcess(t *testing.T) {
-	testOutput := "  PID  STARTED\n" +
-		"6611 10:23:32\n" +
-		"20440 14:01:38\n" +
-		"20441 14:01:40\n"
+	testInput := " PID STARTED" + "\n" +
+		"2598 Fri Aug  4 11:39:23 2017" + "\n" +
+		"2600 Fri Aug  4 11:39:23 2017" + "\n" +
+		"16198 Fri Aug 18 15:28:01 2017" + "\n" +
+		"54770 Mon Aug  7 17:39:34 2017" + "\n" +
+		"2608 Fri Aug  4 11:39:33 2017" + "\n" +
+		"2610 Fri Aug  4 11:39:33 2017" + "\n" +
+		"49380 Mon Aug  7 16:29:09 2017" + "\n" +
+		"49382 Mon Aug  7 16:29:10 2017" + "\n" +
+		"16179 Fri Aug 18 15:26:15 2017" + "\n" +
+		"49394 Mon Aug  7 16:29:19 2017"
 	ps = func() ([]byte, error) {
-		return []byte(testOutput), nil
+		return []byte(testInput), nil
 	}
-	testPidExist := 6611
-	testPidExistTime := "10:23:32"
-	fmt.Println(get_current_time())
+	testPidExist := 2598
+	//TODO add time to the overall result
+	testPidExistTime := time.Now()
 	testPidNonExist := 10000
 	exists, err := find_process(testPidExist, testPidExistTime)
 	assert.NoError(t, err)
@@ -43,8 +50,10 @@ func TestFindProcess(t *testing.T) {
 	exists, err = find_process(testPidNonExist, testPidExistTime)
 	assert.NoError(t, err)
 	assert.False(t, exists)
-	exists, err = find_process(testPidExist, "00:00:00")
-	assert.NoError(t, err)
-	assert.False(t, exists)
+}
 
+func TestCompareTime(t *testing.T) {
+	testInput := "Fri Aug  4 11:39:23 2017"
+	testTime := time.Date(2017, 8, 4, 11, 39, 23, 10000, time.UTC)
+	assert.True(t, compareTimes(testTime, testInput))
 }
