@@ -65,7 +65,7 @@ func teardown(t *testing.T) {
 func TestOutOfProcExecuter_Success(t *testing.T) {
 	testCase := setup(t)
 	testDocState := testCase.docState
-	testPlugin := "aws:runScript"
+	testPlugin := "plugin1"
 	resultDocState := testCase.docState
 	resultDocState.DocumentInformation.DocumentStatus = contracts.ResultStatusSuccess
 	outofprocExe := testCase.executer
@@ -87,7 +87,6 @@ func TestOutOfProcExecuter_Success(t *testing.T) {
 	resChan := outofprocExe.Run(cancelFlag, testCase.docStore)
 	//Plugin update
 	res := <-resChan
-	//TODO change plugin id to unique in testcases
 	assertValueEqual(t, testCase.results, res.PluginResults)
 	assert.Equal(t, testPlugin, res.LastPlugin)
 	assert.Equal(t, contracts.ResultStatusInProgress, res.Status)
@@ -117,7 +116,7 @@ func TestOutOfProcExecuter_Success(t *testing.T) {
 func TestOutOfProcExecuter_ShutdownAndReconnect(t *testing.T) {
 	testCase := setup(t)
 	testDocState := testCase.docState
-	testPlugin := "aws:runScript"
+	testPlugin := "plugin1"
 	resultDocState := testCase.docState
 	resultDocState.DocumentInformation.DocumentStatus = contracts.ResultStatusSuccess
 	outofprocExe := testCase.executer
@@ -162,7 +161,6 @@ func TestOutOfProcExecuter_ShutdownAndReconnect(t *testing.T) {
 	newDocStore.On("Save", resultDocState).Return(nil)
 	newResChan := outofprocExe.Run(newCancelFlag, newDocStore)
 	res := <-newResChan
-	//TODO change plugin id to unique in testcases
 	assertValueEqual(t, testCase.results, res.PluginResults)
 	assert.Equal(t, testPlugin, res.LastPlugin)
 	assert.Equal(t, contracts.ResultStatusInProgress, res.Status)
@@ -196,7 +194,7 @@ func TestOutOfProcExecuter_Cancel(t *testing.T) {
 	//test result is canceled
 	testCase.resultStatus = contracts.ResultStatusCancelled
 	testDocState := testCase.docState
-	testPlugin := "aws:runScript"
+	testPlugin := "plugin1"
 	resultDocState := testCase.docState
 	resultDocState.DocumentInformation.DocumentStatus = contracts.ResultStatusCancelled
 	outofprocExe := testCase.executer
@@ -224,7 +222,6 @@ func TestOutOfProcExecuter_Cancel(t *testing.T) {
 	resChan := outofprocExe.Run(masterCancelFlag, testCase.docStore)
 	masterCancelFlag.Set(task.Canceled)
 	res := <-resChan
-	//TODO change plugin id to unique in testcases
 	assert.Equal(t, testPlugin, res.LastPlugin)
 	assert.Equal(t, contracts.ResultStatusInProgress, res.Status)
 	assert.Equal(t, testDocumentName, res.DocumentName)
@@ -306,7 +303,6 @@ func (p *FakeProcController) Release() error {
 	return nil
 }
 
-//TODO this will be useful once we added the test
 func (p *FakeProcController) Find(pid int, t time.Time) bool {
 	return p.live
 }

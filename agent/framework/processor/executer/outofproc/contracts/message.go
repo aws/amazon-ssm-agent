@@ -1,6 +1,5 @@
 package contracts
 
-//TODO we need to move the DocumentResult model to this package,
 import "github.com/aws/amazon-ssm-agent/agent/jsonutil"
 
 type MessageType string
@@ -15,7 +14,6 @@ const (
 
 var versions = []string{"1.0"}
 
-//TODO Content should be interface{} to be marshalled based off the type
 type Message struct {
 	Version string      `json:"version"`
 	Type    MessageType `json:"type"`
