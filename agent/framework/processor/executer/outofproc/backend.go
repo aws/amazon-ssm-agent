@@ -78,7 +78,7 @@ func (p *ExecuterBackend) Accept() <-chan string {
 }
 
 //TODO handle error and logging
-//TODO version handling is not needed at this layer
+//TODO version handling?
 func (p *ExecuterBackend) Process(datagram string) error {
 	t, content := messageContracts.ParseDatagram(datagram)
 	switch t {

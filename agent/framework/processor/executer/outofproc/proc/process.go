@@ -24,9 +24,7 @@ import (
 //fork does not apply in multi-thread scenario, we have to start a new executable
 type ProcessController interface {
 	//start a new process, with its I/O attached to the current parent process
-	//TODO remove the name argument, the path to the executable should be a constant
 	StartProcess(name string, argv []string) (pid int, err error)
-	//TODO we need to make sure not causing resource leak if Wait() is not called
 	//release the attached sub-process; if the sub-process is already detached, this call should be no-op
 	Release() error
 	//kill the enclosed process, no-op if the process non exists
@@ -69,6 +67,7 @@ func (p *OSProcess) Release() error {
 	return nil
 }
 
+//TODO revisit this when os.Process is actually lost during restart
 func (p *OSProcess) Kill() error {
 	if p.attached {
 		p.context.Log().Debug("Killing os process...")
