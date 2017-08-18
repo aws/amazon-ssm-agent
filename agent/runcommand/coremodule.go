@@ -19,10 +19,12 @@ import (
 	"strings"
 	"sync"
 
+	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	asocitscheduler "github.com/aws/amazon-ssm-agent/agent/association/scheduler"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/docmanager/model"
+	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	mdsService "github.com/aws/amazon-ssm-agent/agent/runcommand/mds"
 	"github.com/aws/amazon-ssm-agent/agent/sdkutil"
 	"github.com/aws/aws-sdk-go/service/ssmmds"
@@ -107,6 +109,9 @@ func (s *RunCommandService) listenReply(resultChan chan contracts.DocumentResult
 	log := s.context.Log()
 	//processor guarantees to close this channel upon stop
 	for res := range resultChan {
+
+		s.handleRefreshAssociationPlugin(res.PluginResults)
+
 		if res.LastPlugin != "" {
 			log.Infof("received plugin: %v result from Processor", res.LastPlugin)
 		} else {
@@ -114,6 +119,25 @@ func (s *RunCommandService) listenReply(resultChan chan contracts.DocumentResult
 		}
 		s.sendResponse(res.MessageID, res)
 	}
+}
+
+func (s *RunCommandService) handleRefreshAssociationPlugin(pluginRes map[string]*contracts.PluginResult) {
+	var newRes contracts.PluginResult
+
+	log := s.context.Log()
+
+	for _, pluginRes := range pluginRes {
+		if pluginRes.PluginName == appconfig.PluginNameRefreshAssociation {
+			log.Infof("Found %v to invoke refresh association immediately", pluginRes.PluginName)
+
+			orchestrationDir := fileutil.BuildPath(s.orchestrationRootDir, pluginRes.PluginName)
+
+			s.assocProcessor.ProcessRefreshAssociation(log, pluginRes, orchestrationDir)
+
+			log.Infof("Finished refreshing association immediately - response: %v", newRes)
+		}
+	}
+
 }
 
 func (s *RunCommandService) processMessage(msg *ssmmds.Message) {

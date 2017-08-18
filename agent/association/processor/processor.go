@@ -40,6 +40,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/platform"
+	"github.com/aws/amazon-ssm-agent/agent/plugins/pluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/times"
 	"github.com/carlescere/scheduler"
 )
@@ -62,6 +63,7 @@ type Processor struct {
 	stopSignal         chan bool
 	proc               processor.Processor
 	resChan            chan contracts.DocumentResult
+	defaultPlugin      pluginutil.DefaultPlugin
 }
 
 var lock sync.RWMutex
