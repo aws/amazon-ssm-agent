@@ -16,72 +16,34 @@ package proc
 
 import (
 	"os"
+	"time"
 
-	"github.com/aws/amazon-ssm-agent/agent/context"
+	"github.com/aws/amazon-ssm-agent/agent/log"
 )
 
-//ProcessController encapsulate a os.Process object and provide limited access to the subprocesss
-//fork does not apply in multi-thread scenario, we have to start a new executable
-type ProcessController interface {
-	//start a new process, with its I/O attached to the current parent process
-	StartProcess(name string, argv []string) (pid int, err error)
-	//release the attached sub-process; if the sub-process is already detached, this call should be no-op
-	Release() error
-	//kill the enclosed process, no-op if the process non exists
+//OSProcess is an abstracted interface of os.Process
+type OSProcess interface {
+	//kill the attached child process
 	Kill() error
-	//given pid and process create time, return true is the process is still active
-	Find(pid int, createTime string) bool
+	//wait for the child to finish, if parent dies halfway, the child process is detached and becomes orphan
+	//On Unix system, orphan is not be killed by systemd or upstart by default
+	//On Windows service controller, stop service does not kill orphan by default
+	//TODO confirm MSI Installer does not kill the child process
+	Wait() (*os.ProcessState, error)
 }
 
-type OSProcess struct {
-	process  *os.Process
-	attached bool
-	context  context.T
-}
-
-func NewOSProcess(ctx context.T) *OSProcess {
-	return &OSProcess{
-		attached: false,
-		context:  ctx.With("[OSProcess]"),
-	}
-}
-
-func (p *OSProcess) StartProcess(name string, argv []string) (pid int, err error) {
-	log := p.context.Log()
+//start a child process, with the resources attached to its parent
+func StartProcess(log log.T, name string, argv []string) (OSProcess, error) {
 	var procAttr os.ProcAttr
-	if p.process, err = os.StartProcess(name, argv, &procAttr); err != nil {
-		log.Errorf("start process: &v encountered error : %v", name, err)
-		return
-	}
-	pid = p.process.Pid
-	p.attached = true
-	return
+	return os.StartProcess(name, argv, &procAttr)
 }
 
-func (p *OSProcess) Release() error {
-	if p.attached {
-		p.context.Log().Debug("Releasing os process...")
-		p.attached = false
-		return p.process.Release()
-	}
-	return nil
-}
-
-//TODO revisit this when os.Process is actually lost during restart
-func (p *OSProcess) Kill() error {
-	if p.attached {
-		p.context.Log().Debug("Killing os process...")
-		p.attached = false
-		return p.Kill()
-	}
-	return nil
-}
-
-func (p *OSProcess) Find(pid int, createTime string) bool {
+//os.FindProcess() doesn't work on Linux: https://groups.google.com/forum/#!topic/golang-nuts/hqrp0UHBK9k
+//what we can only do is check whether it exists
+func IsProcessExists(log log.T, pid int, createTime time.Time) bool {
 	found, err := find_process(pid, createTime)
 	if err != nil {
-		p.context.Log().Errorf("error encountered when looking up process info: %v", err)
-		return false
+		log.Errorf("encountered error when finding process: %v", err)
 	}
 	return found
 }

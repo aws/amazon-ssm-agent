@@ -19,15 +19,21 @@ package proc
 import (
 	"errors"
 	"fmt"
-	"strconv"
 	"syscall"
+	"time"
+)
+
+var (
+	//https://msdn.microsoft.com/en-us/library/windows/desktop/ms724290(v=vs.85).aspx
+	windowsBaseTime = time.Date(1601, 1, 1, 0, 0, 0, 0, time.UTC)
 )
 
 //given the pid and the high order filetime, look up the process
-func find_process(pid int, stime string) (bool, error) {
+func find_process(pid int, startTime time.Time) (bool, error) {
 	const da = syscall.STANDARD_RIGHTS_READ |
 		syscall.PROCESS_QUERY_INFORMATION | syscall.SYNCHRONIZE
 	handle, err := syscall.OpenProcess(da, false, uint32(pid))
+	defer syscall.CloseHandle(handle)
 	if err != nil {
 		return false, fmt.Errorf("open process error: ", err)
 	}
@@ -35,21 +41,16 @@ func find_process(pid int, stime string) (bool, error) {
 	var u syscall.Rusage
 	err = syscall.GetProcessTimes(syscall.Handle(handle), &u.CreationTime, &u.ExitTime, &u.KernelTime, &u.UserTime)
 
-	highDateTime, err := strconv.ParseUint(stime, 10, 32)
 	if err != nil {
-		return false, errors.New("unable to parse filetime")
+		return false, errors.New("unable to get process time")
 	}
-	if u.CreationTime.HighDateTime == highDateTime {
-		return true, nil
-	} else {
-		return false, nil
-	}
-
+	//TODO add start time comparison
+	return true, nil
 }
 
-//return the high-order filetime of the current UTC time
-func get_current_time() string {
-	var curtime = syscall.Filetime{}
-	syscall.GetSystemTimeAsFileTime(&curtime)
-	return strconv.FormatUint(curtime.HighDateTime, 10)
+//TODO add date comparison
+//compare the filetime and Date time, whether they are within 1sec range
+func compare(ftime syscall.Filetime, startTime time.Time) bool {
+	parsedTime := windowsBaseTime.Add(time.Duration(ftime.Nanoseconds()))
+	return startTime.Before(parsedTime.Add(time.Second)) && startTime.After(parsedTime.Add(-time.Second))
 }
