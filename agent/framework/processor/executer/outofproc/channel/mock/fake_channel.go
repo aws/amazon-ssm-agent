@@ -9,7 +9,6 @@ import (
 var channelMap = make(map[string]chan string)
 var mu sync.RWMutex
 
-//TODO add channel destroy flag
 type FakeChannel struct {
 	name string
 	mode channel.Mode
