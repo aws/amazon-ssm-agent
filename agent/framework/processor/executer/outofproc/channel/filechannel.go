@@ -20,7 +20,6 @@ const (
 	defaultFileWriteMode = os.ModeExclusive | 0660
 )
 
-//TODO use jsonutil instead of json
 type fileWatcherChannel struct {
 	logger        log.T
 	path          string
@@ -35,16 +34,62 @@ type fileWatcherChannel struct {
 	sendChan      chan string
 }
 
+//TODO make this constructor private
 /*
-	Construct file channel, a file channel is identified by its unique name
- 	At master mode, file && dirs will be destroyed at close time
-	At slave mode, detach from the directory and leave
+	Create a file channel, a file channel is identified by its unique name
+	name is the path where the watcher directory is created
+ 	Only Master channel has the privilege to remove the dir at close time
 */
-func NewFileWatcherChannel(logger log.T, mode Mode) *fileWatcherChannel {
-	return &fileWatcherChannel{
-		logger: logger,
-		mode:   mode,
+func NewFileWatcherChannel(logger log.T, mode Mode, name string) (*fileWatcherChannel, error) {
+
+	tmpPath := path.Join(name, "tmp")
+	curTime := time.Now()
+	//TODO if client is RunAs, server needs to grant client user R/W access respectively
+	if err := createIfNotExist(name); err != nil {
+		logger.Errorf("failed to create directory: %v", err)
+		os.RemoveAll(name)
+		//if err occurs, the channel is not healthy anymore, should return false
+		return nil, err
 	}
+	if err := createIfNotExist(tmpPath); err != nil {
+		logger.Errorf("failed to create directory: %v", err)
+		os.RemoveAll(name)
+		//if err occurs, the channel is not healthy anymore, should return false
+		return nil, err
+	}
+
+	//buffered channel in order not to block listener
+	onMessageChan := make(chan string, defaultChannelBufferSize)
+	//signal the message poller to stop
+	closeChan := make(chan bool, defaultChannelBufferSize)
+	sendChan := make(chan string, defaultChannelBufferSize)
+
+	//start file watcher and monitor the directory
+	watcher, err := fsnotify.NewWatcher()
+	if err != nil {
+		logger.Errorf("filewatcher listener encountered error when start watcher: %v", err)
+		return nil, err
+	}
+
+	if err = watcher.Add(name); err != nil {
+		logger.Errorf("filewatcher listener encountered error when add watch: %v", err)
+		return nil, err
+	}
+
+	ch := &fileWatcherChannel{
+		path:          name,
+		watcher:       watcher,
+		onMessageChan: onMessageChan,
+		closeChan:     closeChan,
+		sendChan:      sendChan,
+		logger:        logger,
+		mode:          mode,
+		counter:       0,
+		recvCounter:   0,
+		startTime:     fmt.Sprintf("%04d%02d%02d%02d%02d%02d", curTime.Year(), curTime.Month(), curTime.Day(), curTime.Hour(), curTime.Minute(), curTime.Second()),
+	}
+	go ch.watch()
+	return ch, nil
 }
 
 func createIfNotExist(dir string) (err error) {
@@ -53,50 +98,6 @@ func createIfNotExist(dir string) (err error) {
 		err = os.MkdirAll(dir, defaultFileCreateMode)
 	}
 	return
-}
-
-func (ch *fileWatcherChannel) Open(name string) (err error) {
-	log := ch.logger
-	ch.path = name
-	ch.tmpPath = path.Join(name, "tmp")
-	ch.counter = 0
-	curTime := time.Now()
-	ch.startTime = fmt.Sprintf("%04d%02d%02d%02d%02d%02d", curTime.Year(), curTime.Month(), curTime.Day(), curTime.Hour(), curTime.Minute(), curTime.Second())
-	//TODO if client is RunAs, server needs to grant client user R/W access respectively
-	if err = createIfNotExist(ch.path); err != nil {
-		log.Errorf("failed to create directory: %v", err)
-		os.RemoveAll(ch.path)
-		//if err occurs, the channel is not healthy anymore, should return false
-		return
-	}
-	if err = createIfNotExist(ch.tmpPath); err != nil {
-		log.Errorf("failed to create directory: %v", err)
-		os.RemoveAll(ch.path)
-		//if err occurs, the channel is not healthy anymore, should return false
-		return
-	}
-
-	//buffered channel in order not to block listener
-	ch.onMessageChan = make(chan string, defaultChannelBufferSize)
-	//signal the message poller to stop
-	ch.closeChan = make(chan bool, defaultChannelBufferSize)
-	ch.sendChan = make(chan string, defaultChannelBufferSize)
-
-	//initialize receiving counter
-	ch.recvCounter = 0
-
-	//start file watcher and monitor the directory
-	if ch.watcher, err = fsnotify.NewWatcher(); err != nil {
-		log.Errorf("filewatcher listener encountered error when start watcher: %v", err)
-		return
-	}
-
-	if err = ch.watcher.Add(ch.path); err != nil {
-		log.Errorf("filewatcher listener encountered error when add watch: %v", err)
-		return
-	}
-	go ch.watch()
-	return nil
 }
 
 func (ch *fileWatcherChannel) Send(rawJson string) error {
@@ -117,7 +118,6 @@ func (ch *fileWatcherChannel) send(rawJson string) error {
 	filepath := path.Join(ch.path, sequenceID)
 	tmp_filepath := path.Join(ch.tmpPath, sequenceID)
 	//ensure sync exclusive write
-	//TODO sender need to handle the case when connection is closed halfway
 	if err := ioutil.WriteFile(tmp_filepath, []byte(rawJson), defaultFileWriteMode); err != nil {
 		log.Errorf("write file %v encountered error: %v \n", tmp_filepath, err)
 		return err
@@ -132,7 +132,6 @@ func (ch *fileWatcherChannel) send(rawJson string) error {
 }
 
 func (ch *fileWatcherChannel) GetMessageChannel() chan string {
-	//TODO check for connected?
 	return ch.onMessageChan
 }
 
@@ -153,7 +152,7 @@ func (ch *fileWatcherChannel) Close() {
 
 //parse the counter out of the sequence id, return -1 if parsing fails
 func parseSequenceCounter(filepath string) int {
-	_, name := path.Split(filepath)
+	_, name := path.Split(path.Base(filepath))
 	parts := strings.Split(name, "-")
 	if len(parts) != 3 {
 		return -1
