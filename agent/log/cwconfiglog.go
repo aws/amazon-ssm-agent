@@ -11,7 +11,7 @@
 // either express or implied. See the License for the specific language governing
 // permissions and limitations under the License.
 
-// Package log is used to initialize the logger.
+// Package ssmlog is used to initialize ssm functional logger
 package log
 
 import (

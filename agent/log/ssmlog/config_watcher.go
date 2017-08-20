@@ -11,19 +11,19 @@
 // either express or implied. See the License for the specific language governing
 // permissions and limitations under the License.
 
-// Package log is used to initialize the logger.
-
-package log
+// Package ssmlog is used to initialize ssm functional logger
+package ssmlog
 
 import (
 	"path/filepath"
 
+	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/fsnotify/fsnotify"
 )
 
 // IFileWatcher interface for FileWatcher with functions to initialize, start and stop the watcher
 type IFileWatcher interface {
-	Init(log T, configFilePath string, replaceLogger func())
+	Init(log log.T, configFilePath string, replaceLogger func())
 	Start()
 	Stop()
 }
@@ -32,12 +32,12 @@ type IFileWatcher interface {
 type FileWatcher struct {
 	configFilePath string
 	replaceLogger  func()
-	log            T
+	log            log.T
 	watcher        *fsnotify.Watcher
 }
 
 // Init initializes the data and channels for the filewatcher
-func (fileWatcher *FileWatcher) Init(log T, configFilePath string, replaceLogger func()) {
+func (fileWatcher *FileWatcher) Init(log log.T, configFilePath string, replaceLogger func()) {
 	fileWatcher.replaceLogger = replaceLogger
 	fileWatcher.configFilePath = configFilePath
 	fileWatcher.log = log

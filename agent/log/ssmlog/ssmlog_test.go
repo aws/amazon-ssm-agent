@@ -11,13 +11,14 @@
 // either express or implied. See the License for the specific language governing
 // permissions and limitations under the License.
 
-package log
+package ssmlog
 
 import (
 	"bytes"
 	"fmt"
 	"testing"
 
+	"github.com/aws/amazon-ssm-agent/agent/log"
 	seelog "github.com/cihub/seelog"
 	"github.com/stretchr/testify/assert"
 )
@@ -114,87 +115,6 @@ func testLoggerWithContext(t *testing.T, testCase TestCase) {
 	assert.Equal(t, testCase.Output, out.String())
 }
 
-func TestPrintCWConfig_RemovesCreds(t *testing.T) {
-
-	config := `{
-	"EngineConfiguration": {
-        "PollInterval": "00:00:01",
-        "Components": [
-            {
-                "Id": "SystemEventLog",
-                "FullName": "AWS.EC2.Windows.CloudWatch.EventLog.EventLogInputComponent,AWS.EC2.Windows.CloudWatch",
-                "Parameters": {
-                    "LogName": "System",
-                    "Levels": "7"
-                }
-            },
-            {
-                "Id": "CloudWatchLogs",
-                "FullName": "AWS.EC2.Windows.CloudWatch.CloudWatchLogsOutput,AWS.EC2.Windows.CloudWatch",
-                "Parameters": {
-                    "AccessKey": "ABCDKEY",
-                    "SecretKey": "test",
-                    "Region": "us-west-2",
-                    "LogGroup": "groupname",
-                    "LogStream": "{instance_id}"
-                }
-            },
-            {
-                "Id": "CloudWatch",
-                "FullName": "AWS.EC2.Windows.CloudWatch.CloudWatch.CloudWatchOutputComponent,AWS.EC2.Windows.CloudWatch",
-                "Parameters":
-                {
-                    "AccessKey": "ABCDKEY",
-                    "SecretKey": "test",
-                    "Region": "us-west-2",
-                    "NameSpace": "Windows/Default25"
-                }
-            }
-        ],
-        "Flows": {
-            "Flows":
-            [
-                "(ApplicationEventLog,SystemEventLog),CloudWatchLogs",
-				"(PerformanceCounter,PerformanceCounter2), CloudWatch"
-            ]
-        }
-    }
-}`
-	log := NewMockLog()
-	newConfig := PrintCWConfig(config, log)
-	assert.Contains(t, config, "ABCDKEY")
-	assert.NotContains(t, newConfig, "ABCDKEY")
-	assert.NotContains(t, newConfig, "test+")
-}
-
-func TestPrintCWConfig_NoEngineConfig(t *testing.T) {
-	config := `{"IsEnabled" = true}`
-	log := NewMockLog()
-	newConfig := PrintCWConfig(config, log)
-
-	assert.Contains(t, newConfig, `"Components": null`)
-}
-
-func TestPrintCWConfig_ComponentsMissing(t *testing.T) {
-
-	config := `{
-	"EngineConfiguration": {
-        "PollInterval": "00:00:01",
-        "Flows": {
-            "Flows":
-            [
-                "(ApplicationEventLog,SystemEventLog),CloudWatchLogs",
-				"(PerformanceCounter,PerformanceCounter2), CloudWatch"
-            ]
-        }
-    }
-}`
-	log := NewMockLog()
-	newConfig := PrintCWConfig(config, log)
-	assert.Contains(t, newConfig, `"Components": null`)
-	assert.Contains(t, newConfig, `"PollInterval": "00:00:01"`)
-}
-
 func TestReplaceLogger(t *testing.T) {
 	var out bytes.Buffer
 	msg := "Some Message"
@@ -221,7 +141,7 @@ func TestReplaceLogger(t *testing.T) {
 	assert.Equal(t, oldOutput, out.String())
 
 	// Check for correct type of logger
-	wrapper, ok := logger.(*Wrapper)
+	wrapper, ok := logger.(*log.Wrapper)
 	assert.True(t, ok, "withContext did not create a logger of type *Wrapper. Conversion not ok")
 
 	// create new (to be replaced with) seelog logger that outputs to buffer
@@ -230,7 +150,7 @@ func TestReplaceLogger(t *testing.T) {
 	setStackDepth(newSeelogger)
 
 	// Replace the underlying base logger in wrapper
-	wrapper.replaceDelegate(newSeelogger)
+	wrapper.ReplaceDelegate(newSeelogger)
 
 	// Use the same original context logger and check difference in logging
 	// Reset test buffer
