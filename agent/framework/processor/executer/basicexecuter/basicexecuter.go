@@ -75,7 +75,7 @@ func run(context context.T,
 		for res := range statusChan {
 			results[res.PluginID] = &res
 			//TODO decompose this function to return only Status
-			status, _, _ := docmanager.DocumentResultAggregator(context.Log(), res.PluginName, results)
+			status, _, _ := docmanager.DocumentResultAggregator(context.Log(), res.PluginID, results)
 			docResult := contracts.DocumentResult{
 				Status:          status,
 				PluginResults:   results,
@@ -118,7 +118,7 @@ func run(context context.T,
 
 // NewBasicExecuter returns a pointer that impl the Executer interface
 // using a pointer so that it can be shared among multiple threads(go-routines)
-func NewBasicExecuter(context context.T) executer.Executer {
+func NewBasicExecuter(context context.T) *BasicExecuter {
 	return &BasicExecuter{
 		ctx: context.With("[BasicExecuter]"),
 	}

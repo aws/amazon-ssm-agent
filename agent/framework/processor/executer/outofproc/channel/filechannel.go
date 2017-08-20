@@ -20,6 +20,7 @@ const (
 	defaultFileWriteMode = os.ModeExclusive | 0660
 )
 
+//TODO add unittest
 type fileWatcherChannel struct {
 	logger        log.T
 	path          string
@@ -238,7 +239,7 @@ func (ch *fileWatcherChannel) watch() {
 				}
 			}
 		case err := <-ch.watcher.Errors:
-			log.Errorf("file watcher error:", err)
+			log.Errorf("file watcher error: %v", err)
 		}
 	}
 

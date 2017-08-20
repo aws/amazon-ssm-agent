@@ -14,7 +14,11 @@
 // Package model provides model definitions for document state
 package model
 
-import "github.com/aws/amazon-ssm-agent/agent/contracts"
+import (
+	"time"
+
+	"github.com/aws/amazon-ssm-agent/agent/contracts"
+)
 
 // DocumentType defines the type of document persists locally.
 type DocumentType string
@@ -42,6 +46,11 @@ type PluginState struct {
 	Id            string
 }
 
+type OSProcInfo struct {
+	Pid       int
+	StartTime time.Time
+}
+
 // DocumentInfo represents information stored as interim state for a document
 type DocumentInfo struct {
 	// DocumentID is a unique name for file system
@@ -58,6 +67,7 @@ type DocumentInfo struct {
 	DocumentVersion string
 	DocumentStatus  contracts.ResultStatus
 	RunCount        int
+	ProcInfo        OSProcInfo
 }
 
 // DocumentState represents information relevant to a command that gets executed by agent

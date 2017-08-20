@@ -23,19 +23,52 @@ import (
 
 //OSProcess is an abstracted interface of os.Process
 type OSProcess interface {
+	//generic ssm visible fields
+	Pid() int
+	StartTime() time.Time
 	//kill the attached child process
 	Kill() error
 	//wait for the child to finish, if parent dies halfway, the child process is detached and becomes orphan
 	//On Unix system, orphan is not be killed by systemd or upstart by default
 	//On Windows service controller, stop service does not kill orphan by default
 	//TODO confirm MSI Installer does not kill the child process
-	Wait() (*os.ProcessState, error)
+	Wait() (ProcessState, error)
+}
+
+//adapter over os.ProcessState
+type ProcessState interface {
+	Success() bool
+}
+
+//impl of OSProcess with os.Process embed
+type WorkerProcess struct {
+	*os.Process
+	startTime time.Time
+}
+
+func (p *WorkerProcess) Pid() int {
+	return p.Process.Pid
+}
+
+func (p *WorkerProcess) StartTime() time.Time {
+	return p.startTime
+}
+
+func (p *WorkerProcess) Wait() (ProcessState, error) {
+	state, err := p.Process.Wait()
+	return ProcessState(state), err
 }
 
 //start a child process, with the resources attached to its parent
-func StartProcess(log log.T, name string, argv []string) (OSProcess, error) {
+func StartProcess(name string, argv []string) (OSProcess, error) {
 	var procAttr os.ProcAttr
-	return os.StartProcess(name, argv, &procAttr)
+	proc, err := os.StartProcess(name, argv, &procAttr)
+	p := WorkerProcess{
+		proc,
+		time.Now().UTC(),
+	}
+
+	return &p, err
 }
 
 //os.FindProcess() doesn't work on Linux: https://groups.google.com/forum/#!topic/golang-nuts/hqrp0UHBK9k
