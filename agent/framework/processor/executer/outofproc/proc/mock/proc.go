@@ -3,29 +3,39 @@ package procmock
 import (
 	"time"
 
+	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/outofproc/proc"
 	"github.com/stretchr/testify/mock"
 )
 
-type MockedProcessController struct {
+type MockedOSProcess struct {
 	mock.Mock
 }
 
-func (m *MockedProcessController) StartProcess(name string, argv []string) (int, error) {
-	args := m.Called(name, argv)
-	return args.Get(0).(int), args.Error(1)
+func (m *MockedOSProcess) Pid() int {
+	args := m.Called()
+	return args.Get(0).(int)
 }
 
-func (m *MockedProcessController) Release() error {
+func (m *MockedOSProcess) StartTime() time.Time {
+	args := m.Called()
+	return args.Get(0).(time.Time)
+}
+
+func (m *MockedOSProcess) Kill() error {
 	args := m.Called()
 	return args.Error(0)
 }
 
-func (m *MockedProcessController) Kill() error {
+func (m *MockedOSProcess) Wait() (proc.ProcessState, error) {
 	args := m.Called()
-	return args.Error(0)
+	return args.Get(0).(proc.ProcessState), args.Error(1)
 }
 
-func (m *MockedProcessController) Find(pid int, createTime time.Time) bool {
-	args := m.Called(pid, createTime)
+type MockedOSProcessState struct {
+	mock.Mock
+}
+
+func (m *MockedOSProcessState) Success() bool {
+	args := m.Called()
 	return args.Get(0).(bool)
 }
