@@ -35,7 +35,7 @@ var DefaultSeelogConfigFilePath = filepath.Join(appconfig.DefaultProgramFolder, 
 func getLogConfigBytes() (logConfigBytes []byte) {
 	var err error
 	if logConfigBytes, err = ioutil.ReadFile(DefaultSeelogConfigFilePath); err != nil {
-		logConfigBytes = defaultConfig()
+		logConfigBytes = DefaultConfig()
 	}
 	return
 }

@@ -2,11 +2,11 @@
 
 package main
 
-import logger "github.com/aws/amazon-ssm-agent/agent/log"
+import logger "github.com/aws/amazon-ssm-agent/agent/log/ssmlog"
 
 func main() {
 	// initialize logger
-	log := logger.Logger()
+	log := logger.SSMLogger()
 	defer log.Close()
 	defer log.Flush()
 
