@@ -36,7 +36,7 @@ func getLogConfigBytes() (logConfigBytes []byte) {
 	var err error
 	if logConfigBytes, err = ioutil.ReadFile(DefaultSeelogConfigFilePath); err != nil {
 		fmt.Println("Error occurred fetching the seelog config file path: ", err)
-		logConfigBytes = defaultConfig()
+		logConfigBytes = DefaultConfig()
 	}
 	return
 }

@@ -173,7 +173,7 @@ func (w *Wrapper) Close() {
 }
 
 // ReplaceDelegate replaces the delegate logger with a new logger
-func (w *Wrapper) replaceDelegate(newLogger T) {
+func (w *Wrapper) ReplaceDelegate(newLogger T) {
 	w.M.Lock()
 	defer w.M.Unlock()
 	w.Delegate.BaseLoggerInstance.Flush()

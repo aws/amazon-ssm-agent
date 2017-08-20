@@ -21,6 +21,7 @@ import (
 
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	logger "github.com/aws/amazon-ssm-agent/agent/log"
+	ssmlog "github.com/aws/amazon-ssm-agent/agent/log/ssmlog"
 	"github.com/aws/amazon-ssm-agent/agent/platform"
 	"github.com/aws/amazon-ssm-agent/agent/update/processor"
 	"github.com/aws/amazon-ssm-agent/agent/updateutil"
@@ -54,7 +55,7 @@ var (
 )
 
 func init() {
-	log = logger.GetUpdaterLogger(logger.DefaultLogDir, defaultLogFileName)
+	log = ssmlog.GetUpdaterLogger(logger.DefaultLogDir, defaultLogFileName)
 
 	// Sleep 2 seconds to allow agent to finishing up it's work
 	time.Sleep(defaultWaitTimeForAgentToFinish * time.Second)

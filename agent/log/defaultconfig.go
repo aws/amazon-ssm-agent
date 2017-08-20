@@ -18,15 +18,11 @@ package log
 
 import "path/filepath"
 
-func defaultConfig() []byte {
-	return loadLog(DefaultLogDir, LogFile)
+func DefaultConfig() []byte {
+	return LoadLog(DefaultLogDir, LogFile)
 }
 
-func defaultUpdaterConfig(logRoot string, logFile string) []byte {
-	return loadLog(logRoot, logFile)
-}
-
-func loadLog(defaultLogDir string, logFile string) []byte {
+func LoadLog(defaultLogDir string, logFile string) []byte {
 	var logFilePath, errorFilePath string
 
 	logFilePath = filepath.Join(defaultLogDir, logFile)
