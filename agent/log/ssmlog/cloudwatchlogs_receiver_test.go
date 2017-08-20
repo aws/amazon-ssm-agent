@@ -12,8 +12,7 @@
 // permissions and limitations under the License.
 
 // cloudwatchlogsqueue queues up agent's context event log, to be consumed by the CloudWatchLogs publisher
-
-package log
+package ssmlog
 
 import (
 	"testing"

@@ -13,7 +13,8 @@
 
 // cloudwatchlogsqueue queues up agent's context event log, to be consumed by the CloudWatchLogs publisher
 
-package log
+// Package ssmlog is used to initialize ssm functional logger
+package ssmlog
 
 import (
 	"time"
