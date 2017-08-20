@@ -11,6 +11,8 @@
 // either express or implied. See the License for the specific language governing
 // permissions and limitations under the License.
 
+// +build integration
+
 //Package channel defines and implements the communication interface between agent and command runner process
 package channel
 
@@ -21,7 +23,7 @@ import (
 	"path"
 
 	"github.com/aws/amazon-ssm-agent/agent/log"
-	"src/github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/assert"
 )
 
 var logger = log.NewMockLog()

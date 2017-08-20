@@ -82,7 +82,7 @@ func (flag *MockCancelFlag) Wait() (state State) {
 }
 
 func (flag *MockCancelFlag) Set(state State) {
-	flag.Called()
+	flag.Called(state)
 }
 
 func (flag *MockCancelFlag) State() State {
