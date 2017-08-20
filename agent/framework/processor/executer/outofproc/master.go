@@ -6,172 +6,170 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
+	"github.com/aws/amazon-ssm-agent/agent/docmanager/model"
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer"
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/basicexecuter"
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/outofproc/channel"
-	messageContracts "github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/outofproc/contracts"
+	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/outofproc/messaging"
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/outofproc/proc"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 )
 
-type Backend messageContracts.MessagingBackend
+type Backend messaging.MessagingBackend
 
+//see differences between zombie and orphan: https://www.gmarik.info/blog/2012/orphan-vs-zombie-vs-daemon-processes/
 const (
-	defaultDrainChannelTimeout = 10 * time.Second
-)
-const (
-	stopTypeTerminate = 1
-	stopTypeShutdown  = 2
+	//TODO prolong this value once we go to production
+	defaultZombieProcessTimeout = 2 * time.Second
+	//command maximum timeout
+	defaultOrphanProcessTimeout = 172800 * time.Second
 )
 
 type OutOfProcExecuter struct {
 	basicexecuter.BasicExecuter
-	documentID     string
-	procController proc.ProcessController
-	ctx            context.T
+	docState *model.DocumentState
+	ctx      context.T
 }
 
-var channelCreator channel.ChannelCreator
+var channelCreator = func(log log.T, mode channel.Mode, documentID string) (channel.Channel, error, bool) {
+	return channel.CreateFileChannel(log, mode, documentID)
+}
 
-//find the ipc channel identified by the document ID
-var channelDiscoverer = func(documentID string) (string, bool) {
-	return channel.FindChannel(documentID)
+var processFinder = func(log log.T, procinfo model.OSProcInfo) bool {
+	//If ProcInfo is not initailized
+	//pid 0 is reserved for kernel on both linux and windows, so the assumption is safe here
+	if procinfo.Pid == 0 {
+		return false
+	}
+
+	return proc.IsProcessExists(log, procinfo.Pid, procinfo.StartTime)
+}
+
+var processCreator = func(name string, argv []string) (proc.OSProcess, error) {
+	return proc.StartProcess(name, argv)
 }
 
 func NewOutOfProcExecuter(ctx context.T) *OutOfProcExecuter {
 	return &OutOfProcExecuter{
-		BasicExecuter:  basicexecuter.NewBasicExecuter(ctx),
-		ctx:            ctx.With("[OutOfProcExecuter]"),
-		procController: proc.NewOSProcess(ctx),
+		BasicExecuter: *basicexecuter.NewBasicExecuter(ctx),
+		ctx:           ctx.With("[OutOfProcExecuter]"),
 	}
 }
 
-//TODO may need to change all info logs to debug once this feature is released
+//TODO use info log for crucial event, i.e. process discovery, found old channel; others should be debug level
 //Run() prepare the ipc channel, create a data processing backend and start messaging with docment worker
 func (e *OutOfProcExecuter) Run(
 	cancelFlag task.CancelFlag,
 	docStore executer.DocumentStore) chan contracts.DocumentResult {
 	docState := docStore.Load()
-
+	e.docState = &docState
 	documentID := docState.DocumentInformation.DocumentID
-	e.documentID = documentID
-	//create reply channel
-	resChan := make(chan contracts.DocumentResult, len(docState.InstancePluginsInformation)+1)
 
 	//update context with the document id
 	e.ctx = e.ctx.With("[" + documentID + "]")
-
 	log := e.ctx.Log()
+
 	//start prepare messaging
 	//if anything fails during the prep stage, use in-proc Runner
-	if ipc, err := e.prepare(); err != nil {
-		log.Errorf("failed to prepare ipc, document run failed")
-		e.procController.Kill()
+	stopTimer := make(chan bool)
+	ipc, err := e.initialize(stopTimer)
+	if err != nil {
+		log.Errorf("failed to prepare outofproc executer, falling back to InProc Executer")
 		return e.BasicExecuter.Run(cancelFlag, docStore)
 	} else {
-		log.Info("launching messaging worker")
-		//handoff reply functionalities to data backend.
-		backend, stopChan := newExecuterBackend(resChan, docStore, cancelFlag)
-		go func() {
-			//handoff the data backend to messaging worker
-			if err := Messaging(log, ipc, backend, stopChan); err != nil {
-				//TODO if this fails in the middle, command lost in InProgress state
-				//the messaging worker encountered error, either ipc run into error or data backend throws error
-				log.Errorf("messaging worker encountered error: %v", err)
-				//close channel
-				ipc.Close()
-				//try to kill the child-process
-				e.procController.Kill()
-			}
-		}()
-	}
+		//create reply channel
+		resChan := make(chan contracts.DocumentResult, len(e.docState.InstancePluginsInformation)+1)
+		//launch the messaging go-routine
+		go func(store executer.DocumentStore) {
+			defer func() {
+				if msg := recover(); msg != nil {
+					log.Errorf("Executer go-routine panic: %v", msg)
+				}
+			}()
+			e.messaging(log, ipc, resChan, cancelFlag, stopTimer)
+			//save the overall result and signal called that Executer is done
+			store.Save(*e.docState)
+			close(resChan)
+			log.Info("Executer closed")
+		}(docStore)
 
-	return resChan
+		return resChan
+	}
 }
 
-//TODO add process discoverer
-//prepare the channel for messaging as well as launching the document worker process, if the channel already exists, re-open it.
-func (e *OutOfProcExecuter) prepare() (ipc channel.Channel, err error) {
-	log := e.ctx.Log()
-	//first, do channel discovery, if channel not found, create new sub-process
-	documentID := e.documentID
-	channelName, found := channelDiscoverer(documentID)
-	//if channel not exists, create new channel handle and new sub process
-	if !found {
-		channelName = documentID
-		log.Debug("channel not found, starting a new process...")
-		var pid int
-		var processName = appconfig.DefaultDocumentWorker
-		if pid, err = e.procController.StartProcess(processName, []string{string(channelName)}); err != nil {
-			log.Errorf("start process: %v error: %v", processName, err)
-			return
-		} else {
-			log.Infof("successfully launched new process: %v", pid)
+//Executer spins up an ipc transmission worker, it creates a Data processing backend and hands off the backend to the ipc worker
+//ipc worker and data backend act as 2 threads exchange raw json messages, and messaging protocol happened in data backend, data backend is self-contained and exit when command finishes accordingly
+//Executer however does hold a timer to the worker to forcefully termniate both of them
+func (e *OutOfProcExecuter) messaging(log log.T, ipc channel.Channel, resChan chan contracts.DocumentResult, cancelFlag task.CancelFlag, stopTimer chan bool) {
+	log.Info("launching messaging worker")
+
+	//handoff reply functionalities to data backend.
+	backend := messaging.NewExecuterBackend(resChan, e.docState, cancelFlag)
+	//handoff the data backend to messaging worker
+	if err := messaging.Messaging(log, ipc, backend, stopTimer); err != nil {
+		//the messaging worker encountered error, either ipc run into error or data backend throws error
+		log.Errorf("messaging worker encountered error: %v", err)
+		if e.docState.DocumentInformation.DocumentStatus == contracts.ResultStatusInProgress {
+			e.docState.DocumentInformation.DocumentStatus = contracts.ResultStatusFailed
+			//TODO send failed documentResult message
 		}
-		//TODO add pid and process creation time to persistence layer
-		//release the attached process resource
-		e.procController.Release()
+		//close channel
+		ipc.Close()
 	}
-	//server create channel, ready to connect
-	ipc = channelCreator(channel.ModeMaster)
-	//At server mode, connect() operation is listening for client connections
-	if err = ipc.Open(channelName); err != nil {
-		log.Error("Not able to connect to IPC channel")
+}
+
+//prepare the channel for messaging as well as launching the document worker process, if the channel already exists, re-open it.
+func (e *OutOfProcExecuter) initialize(stopTimer chan bool) (ipc channel.Channel, err error) {
+	log := e.ctx.Log()
+	documentID := e.docState.DocumentInformation.DocumentID
+	ipc, err, found := channelCreator(log, channel.ModeMaster, documentID)
+
+	if err != nil {
+		log.Errorf("failed to create ipc channel: %v", err)
 		return
 	}
-	return
-}
-
-//TODO implement channel drain timer and command timeout
-// Messaging implements the duplex transmission between master and worker, it send datagram it received to data backend,
-// close the ipc channel once messaging is done.
-func Messaging(log log.T, ipc channel.Channel, backend Backend, stopChan chan int) (err error) {
-
-	defer func() {
-		if msg := recover(); msg != nil {
-			log.Errorf("Executer listener panic: %v", msg)
+	if found {
+		log.Info("discovered old channel object, trying to find detached process...")
+		var stopTime time.Duration
+		procInfo := e.docState.DocumentInformation.ProcInfo
+		if processFinder(log, procInfo) {
+			log.Infof("found orphan process: %v, start time: %v", procInfo.Pid, procInfo.StartTime)
+			stopTime = defaultOrphanProcessTimeout
+		} else {
+			log.Infof("process: %v not found, treat as exited", procInfo.Pid)
+			stopTime = defaultZombieProcessTimeout
 		}
-		//make sure to close the outbound channel when return in order to signal Processor
-		backend.Close()
-	}()
-
-	onMessageChannel := ipc.GetMessageChannel()
-	for {
-		select {
-		case signal := <-stopChan:
-			//soft stop, do not close the channel
-			if signal == stopTypeShutdown {
-				log.Info("requested shutdown, ipc messaging stopped")
-				//do not close channel since server.close() will destroy the channel object
-				//make sure the process handle is properly release
-				return
-			} else if signal == stopTypeTerminate {
-				//hard stop, close the channel
-				log.Info("requested terminate messaging worker, closing the channel")
-				ipc.Close()
-				return
-			} else {
-				log.Errorf("unrecognized stop type: %v", signal)
-				//return?
-			}
-		case datagram := <-backend.Accept():
-			log.Debugf("sending datagram: %v", datagram)
-			if err = ipc.Send(datagram); err != nil {
-				log.Errorf("failed to send message to ipc channel: %v", err)
-				return
-			}
-		case datagram, more := <-onMessageChannel:
-			log.Debugf("received datagram: %v", datagram)
-			if !more {
-				log.Info("channel closed, stop messaging worker")
-				return
-			}
-			if err = backend.Process(datagram); err != nil {
-				log.Errorf("messaging pipeline process datagram encountered error: %v", err)
-				return
-			}
-
+		go func() {
+			<-time.After(stopTime)
+			stopTimer <- true
+		}()
+	} else {
+		log.Debug("channel not found, starting a new process...")
+		var process proc.OSProcess
+		if process, err = processCreator(appconfig.DefaultDocumentWorker, messaging.FormArgv(documentID)); err != nil {
+			log.Errorf("start process: %v error: %v", appconfig.DefaultDocumentWorker, err)
+			//try to kill the child process if still alive
+			process.Kill()
+			return
+		} else {
+			log.Debugf("successfully launched new process: %v", process.Pid())
 		}
+		e.docState.DocumentInformation.ProcInfo = model.OSProcInfo{
+			Pid:       process.Pid(),
+			StartTime: process.StartTime(),
+		}
+		go func() {
+			procState, err := process.Wait()
+			if !procState.Success() {
+				//TODO form error result
+				log.Errorf("process exits unsuccessfully %v", err)
+			}
+			<-time.After(defaultZombieProcessTimeout)
+			stopTimer <- true
+		}()
+
 	}
+
+	return
 }

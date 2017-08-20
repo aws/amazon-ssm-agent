@@ -21,7 +21,7 @@ import (
 
 	"time"
 
-	"src/github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/assert"
 )
 
 //Output format is verified to be identical on RHEL, CENTOS, UBUNTU, AL. However darwin has a different time format

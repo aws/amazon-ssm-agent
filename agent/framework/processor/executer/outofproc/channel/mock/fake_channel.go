@@ -4,6 +4,7 @@ import (
 	"sync"
 
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/outofproc/channel"
+	"github.com/aws/amazon-ssm-agent/agent/log"
 )
 
 var channelMap = make(map[string]chan string)
@@ -14,19 +15,16 @@ type FakeChannel struct {
 	mode channel.Mode
 }
 
-func NewFakeChannel(mode channel.Mode) *FakeChannel {
-	return &FakeChannel{
+func NewFakeChannel(log log.T, mode channel.Mode, name string) *FakeChannel {
+	log.Infof("creating channel: %v|%v", name, mode)
+	f := FakeChannel{
 		mode: mode,
+		name: name,
 	}
-}
-
-//this operation need to be synced since Open() is called by 2 separete go-routines, in file channel, sync is guaranteed by renaming action.
-func (f *FakeChannel) Open(name string) error {
-	f.name = name
 	//if channel already exist, use the old one
-	_, ok := channelMap[name+"-"+string(f.mode)]
+	_, ok := channelMap[name+"-"+string(mode)]
 	if ok {
-		return nil
+		return &f
 	}
 	mu.RLock()
 	defer mu.RUnlock()
@@ -34,7 +32,7 @@ func (f *FakeChannel) Open(name string) error {
 	//either one can open up a channel any time when open is called
 	channelMap[name+"-"+string(channel.ModeMaster)] = make(chan string, 100)
 	channelMap[name+"-"+string(channel.ModeWorker)] = make(chan string, 100)
-	return nil
+	return &f
 }
 
 func (f *FakeChannel) Send(message string) error {
@@ -63,7 +61,7 @@ func (f *FakeChannel) Close() {
 	return
 }
 
-func IsClose(name string) bool {
+func IsExists(name string) bool {
 	_, ok := channelMap[name+"-"+string(channel.ModeMaster)]
-	return !ok
+	return ok
 }

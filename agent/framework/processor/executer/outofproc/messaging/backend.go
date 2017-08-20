@@ -1,4 +1,4 @@
-package outofproc
+package messaging
 
 import (
 	"errors"
@@ -10,8 +10,6 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/docmanager"
 	"github.com/aws/amazon-ssm-agent/agent/docmanager/model"
-	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer"
-	messageContracts "github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/outofproc/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 )
@@ -22,6 +20,7 @@ const (
 	defaultBackendChannelSize = 10
 )
 
+//TODO this should be moved to a common package
 type PluginRunner func(
 	context context.T,
 	plugins []model.PluginState,
@@ -29,6 +28,7 @@ type PluginRunner func(
 	cancelFlag task.CancelFlag,
 )
 
+//worker backend receives request messages from master, controls a pluginRunner based off the request and send reponses to Executer
 type WorkerBackend struct {
 	ctx        context.T
 	input      chan string
@@ -38,25 +38,26 @@ type WorkerBackend struct {
 	stopChan   chan int
 }
 
+//Executer backend formulate the run request to the worker, and collect back the responses from worker
 type ExecuterBackend struct {
-	docState *model.DocumentState
-	input    chan string
-	docStore executer.DocumentStore
-	output   chan contracts.DocumentResult
-	stopChan chan int
+	//the shared state object that Executer hand off to data backend
+	docState   *model.DocumentState
+	input      chan string
+	cancelFlag task.CancelFlag
+	output     chan contracts.DocumentResult
+	stopChan   chan int
 }
 
 //TODO handle error
-func newExecuterBackend(output chan contracts.DocumentResult, docStore executer.DocumentStore, cancelFlag task.CancelFlag) (*ExecuterBackend, chan int) {
+func NewExecuterBackend(output chan contracts.DocumentResult, docState *model.DocumentState, cancelFlag task.CancelFlag) *ExecuterBackend {
 	stopChan := make(chan int, defaultBackendChannelSize)
 	inputChan := make(chan string, defaultBackendChannelSize)
-	docState := docStore.Load()
 	go func(pluginConfigs []model.PluginState) {
-		startDatagram, _ := messageContracts.CreateDatagram(messageContracts.MessageTypePluginConfig, pluginConfigs)
+		startDatagram, _ := CreateDatagram(MessageTypePluginConfig, pluginConfigs)
 		inputChan <- startDatagram
 		cancelFlag.Wait()
 		if cancelFlag.Canceled() {
-			cancelDatagram, _ := messageContracts.CreateDatagram(messageContracts.MessageTypeCancel, "cancel")
+			cancelDatagram, _ := CreateDatagram(MessageTypeCancel, "cancel")
 			inputChan <- cancelDatagram
 		} else if cancelFlag.ShutDown() {
 			stopChan <- stopTypeShutdown
@@ -66,28 +67,31 @@ func newExecuterBackend(output chan contracts.DocumentResult, docStore executer.
 	}(docState.InstancePluginsInformation)
 	return &ExecuterBackend{
 		output:   output,
-		docState: &docState,
-		docStore: docStore,
+		docState: docState,
 		input:    inputChan,
 		stopChan: stopChan,
-	}, stopChan
+	}
 }
 
 func (p *ExecuterBackend) Accept() <-chan string {
 	return p.input
 }
 
+func (p *ExecuterBackend) Stop() <-chan int {
+	return p.stopChan
+}
+
 //TODO handle error and logging
 //TODO version handling?
 func (p *ExecuterBackend) Process(datagram string) error {
-	t, content := messageContracts.ParseDatagram(datagram)
+	t, content := ParseDatagram(datagram)
 	switch t {
-	case messageContracts.MessageTypeReply, messageContracts.MessageTypeComplete:
+	case MessageTypeReply, MessageTypeComplete:
 		var docResult contracts.DocumentResult
 		jsonutil.Unmarshal(content, &docResult)
 		p.formatDocResult(&docResult)
 		p.output <- docResult
-		if t == messageContracts.MessageTypeComplete {
+		if t == MessageTypeComplete {
 			//signal the caller that messaging should stop
 			p.stopChan <- stopTypeTerminate
 		}
@@ -98,10 +102,8 @@ func (p *ExecuterBackend) Process(datagram string) error {
 }
 
 func (p *ExecuterBackend) Close() {
-	//save the docStore object
-	p.docStore.Save(*p.docState)
-	//make sure the executer output channel is closed
-	close(p.output)
+	//TODO once we refactored the cancelFlag structure, send signal to the cancelFlag listener routine
+	close(p.stopChan)
 }
 
 func (p *ExecuterBackend) formatDocResult(docResult *contracts.DocumentResult) {
@@ -115,22 +117,22 @@ func (p *ExecuterBackend) formatDocResult(docResult *contracts.DocumentResult) {
 	p.docState.DocumentInformation.DocumentStatus = docResult.Status
 }
 
-func NewWorkerBackend(ctx context.T, runner PluginRunner) (*WorkerBackend, chan int) {
+func NewWorkerBackend(ctx context.T, runner PluginRunner) *WorkerBackend {
 	stopChan := make(chan int)
 	return &WorkerBackend{
-		ctx:        ctx,
+		ctx:        ctx.With("DataBackend"),
 		input:      make(chan string),
 		cancelFlag: task.NewChanneledCancelFlag(),
 		runner:     runner,
 		stopChan:   stopChan,
-	}, stopChan
+	}
 }
 
 //TODO handle error and log
 func (p *WorkerBackend) Process(datagram string) error {
-	t, content := messageContracts.ParseDatagram(datagram)
+	t, content := ParseDatagram(datagram)
 	switch t {
-	case messageContracts.MessageTypePluginConfig:
+	case MessageTypePluginConfig:
 		var plugins []model.PluginState
 		jsonutil.Unmarshal(content, &plugins)
 		p.once.Do(func() {
@@ -139,7 +141,7 @@ func (p *WorkerBackend) Process(datagram string) error {
 			go p.pluginListener(statusChan)
 		})
 
-	case messageContracts.MessageTypeCancel:
+	case MessageTypeCancel:
 		p.cancelFlag.Set(task.Canceled)
 	default:
 		return errors.New("unsupported message type")
@@ -151,31 +153,31 @@ func (p *WorkerBackend) pluginListener(statusChan chan contracts.PluginResult) {
 	log := p.ctx.Log()
 	results := make(map[string]*contracts.PluginResult)
 	for res := range statusChan {
-		results[res.PluginName] = &res
-		//TODO move the aggregator under executer package and protect it
-		status, _, _ := docmanager.DocumentResultAggregator(log, res.PluginName, results)
+		results[res.PluginID] = &res
+		//TODO move the aggregator under executer package and protect it, there's global lock in this package
+		status, _, _ := docmanager.DocumentResultAggregator(log, res.PluginID, results)
 		docResult := contracts.DocumentResult{
 			Status:        status,
 			PluginResults: results,
-			LastPlugin:    res.PluginName,
+			LastPlugin:    res.PluginID,
 		}
-		replyMessage, _ := messageContracts.CreateDatagram(messageContracts.MessageTypeReply, docResult)
-		log.Info("sending reply message...")
+		replyMessage, _ := CreateDatagram(MessageTypeReply, docResult)
+		log.Debugf("plugin: %v done, sending reply message...", res.PluginID)
 		p.input <- replyMessage
 	}
 
-	log.Info("plugins execution complete, send document complete response...")
+	log.Info("document execution complete, sending complete response...")
 	status, _, _ := docmanager.DocumentResultAggregator(log, "", results)
 	docResult := contracts.DocumentResult{
 		Status:        status,
 		PluginResults: results,
 		LastPlugin:    "",
 	}
-	completeMessage, _ := messageContracts.CreateDatagram(messageContracts.MessageTypeComplete, docResult)
-	log.Info("sending complete message...")
+	completeMessage, _ := CreateDatagram(MessageTypeComplete, docResult)
 	p.input <- completeMessage
 	//sending stop signal
 	p.stopChan <- stopTypeTerminate
+	close(p.stopChan)
 
 }
 
@@ -183,7 +185,12 @@ func (p *WorkerBackend) Accept() <-chan string {
 	return p.input
 }
 
+func (p *WorkerBackend) Stop() <-chan int {
+	return p.stopChan
+}
+
 func (p *WorkerBackend) Close() {
 	//close the cancelFlag in case there're listeners down the call stack
 	p.cancelFlag.Set(task.Completed)
+	//TODO signal plugin listner to stop as well
 }
