@@ -37,7 +37,6 @@ type MessagingBackend interface {
 	Stop() <-chan int
 	//Process a given datagram, should not be blocked
 	Process(string) error
-	Close()
 }
 
 //GetLatestVersion retrieves the current latest message version of the agent build
@@ -80,69 +79,68 @@ func Messaging(log log.T, ipc channel.Channel, backend MessagingBackend, stopTim
 		if msg := recover(); msg != nil {
 			log.Errorf("messaging worker panic: %v", msg)
 		}
-		//make sure to close the outbound channel when return in order to signal Processor
-		backend.Close()
 	}()
-
-	onMessageChannel := ipc.GetMessageChannel()
+	log.Info("inter process communication started")
+	requestedStop := false
+	inboundClosed := false
+	//TODO add timer, if IPC is unresponsive to Close(), force return
 	for {
 		select {
 		case <-stopTimer:
 			log.Error("received timedout signal!")
-			return errors.New("messaging worker timed out")
+			err = errors.New("messaging worker timed out")
+			//messaging already timed out, close ipc and wait for done
+			ipc.Close()
+
 		case signal, more := <-backend.Stop():
 			//stopChannel is closed, stop transmission
 			if !more {
-				log.Info("backend already stopped, stop messaging")
-				return
-			}
-			//soft stop, do not close the channel
-			if signal == stopTypeShutdown {
-				log.Info("requested shutdown, ipc messaging stopped")
-				//do not close channel since server.close() will destroy the channel object
-				//make sure the process handle is properly release
-				return
-			} else if signal == stopTypeTerminate {
-				//hard stop, close the channel
-				log.Info("requested terminate messaging worker, closing the channel")
+				log.Info("backend already closed, stop messaging")
 				ipc.Close()
+				break
+			}
+			//soft stop, safely close IPC
+			if signal == stopTypeShutdown {
+				log.Info("requested shutdown, prepare to stop messaging")
+				requestedStop = true
+				//TODO add timer, and if inbound has not closed within a given period, force return
+				if inboundClosed {
+					ipc.Close()
+				}
+				break
+			} else if signal == stopTypeTerminate {
+				//hard stop, remove the channel and force return
+				log.Info("requested terminate messaging worker, closing the channel")
+				ipc.Destroy()
 				return
-			} else {
-				log.Errorf("unrecognized stop type: %v", signal)
-				//return?
 			}
 		case datagram, more := <-backend.Accept():
 			if !more {
+				inboundClosed = true
+				if requestedStop {
+					ipc.Close()
+				}
 				//if inbound channel from backend breaks, still continue messaging to send outbound messages
 				break
 			}
 			log.Debugf("sending datagram: %v", datagram)
 			if err = ipc.Send(datagram); err != nil {
+				//this is fatal error, force return
 				log.Errorf("failed to send message to ipc channel: %v", err)
 				return
 			}
-		case datagram, more := <-onMessageChannel:
-			log.Debugf("received datagram: %v", datagram)
+		case datagram, more := <-ipc.GetMessage():
 			if !more {
+				//safe close
 				log.Info("ipc channel closed, stop messaging worker")
 				return
 			}
+			log.Debugf("received datagram: %v", datagram)
 			if err = backend.Process(datagram); err != nil {
+				//encountered error in databackend, it's up to the backend to decide whether close or not
 				log.Errorf("messaging pipeline process datagram encountered error: %v", err)
-				return
 			}
 
 		}
 	}
-}
-
-func ParseArgv(argv []string) (string, string, error) {
-	if len(argv) < 2 {
-		return "", "", errors.New("not enough argument input to the executable")
-	}
-	return argv[0], argv[1], nil
-}
-
-func FormArgv(channelName string) []string {
-	return []string{channelName}
 }

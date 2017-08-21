@@ -28,8 +28,9 @@ const (
 
 type OutOfProcExecuter struct {
 	basicexecuter.BasicExecuter
-	docState *model.DocumentState
-	ctx      context.T
+	docState   *model.DocumentState
+	ctx        context.T
+	cancelFlag task.CancelFlag
 }
 
 var channelCreator = func(log log.T, mode channel.Mode, documentID string) (channel.Channel, error, bool) {
@@ -57,22 +58,23 @@ func NewOutOfProcExecuter(ctx context.T) *OutOfProcExecuter {
 	}
 }
 
-//TODO use info log for crucial event, i.e. process discovery, found old channel; others should be debug level
 //Run() prepare the ipc channel, create a data processing backend and start messaging with docment worker
 func (e *OutOfProcExecuter) Run(
 	cancelFlag task.CancelFlag,
 	docStore executer.DocumentStore) chan contracts.DocumentResult {
 	docState := docStore.Load()
 	e.docState = &docState
+	e.cancelFlag = cancelFlag
 	documentID := docState.DocumentInformation.DocumentID
 
 	//update context with the document id
 	e.ctx = e.ctx.With("[" + documentID + "]")
 	log := e.ctx.Log()
 
+	//stopTimer signals messaging routine to stop, it's buffered because it needs to exit if messaging is already stopped and not receiving anymore
+	stopTimer := make(chan bool, 1)
 	//start prepare messaging
 	//if anything fails during the prep stage, use in-proc Runner
-	stopTimer := make(chan bool)
 	ipc, err := e.initialize(stopTimer)
 	if err != nil {
 		log.Errorf("failed to prepare outofproc executer, falling back to InProc Executer")
@@ -102,7 +104,6 @@ func (e *OutOfProcExecuter) Run(
 //ipc worker and data backend act as 2 threads exchange raw json messages, and messaging protocol happened in data backend, data backend is self-contained and exit when command finishes accordingly
 //Executer however does hold a timer to the worker to forcefully termniate both of them
 func (e *OutOfProcExecuter) messaging(log log.T, ipc channel.Channel, resChan chan contracts.DocumentResult, cancelFlag task.CancelFlag, stopTimer chan bool) {
-	log.Info("launching messaging worker")
 
 	//handoff reply functionalities to data backend.
 	backend := messaging.NewExecuterBackend(resChan, e.docState, cancelFlag)
@@ -112,14 +113,32 @@ func (e *OutOfProcExecuter) messaging(log log.T, ipc channel.Channel, resChan ch
 		log.Errorf("messaging worker encountered error: %v", err)
 		if e.docState.DocumentInformation.DocumentStatus == contracts.ResultStatusInProgress {
 			e.docState.DocumentInformation.DocumentStatus = contracts.ResultStatusFailed
-			//TODO send failed documentResult message
+			log.Info("document failed half way, sending fail message...")
+			resChan <- e.generateUnexpectedFailResult()
 		}
-		//close channel
-		ipc.Close()
+		//destroy the channel
+		ipc.Destroy()
 	}
 }
 
+func (e *OutOfProcExecuter) generateUnexpectedFailResult() contracts.DocumentResult {
+	var docResult contracts.DocumentResult
+	docResult.MessageID = e.docState.DocumentInformation.MessageID
+	docResult.AssociationID = e.docState.DocumentInformation.AssociationID
+	docResult.DocumentName = e.docState.DocumentInformation.DocumentName
+	docResult.NPlugins = len(e.docState.InstancePluginsInformation)
+	docResult.DocumentVersion = e.docState.DocumentInformation.DocumentVersion
+	docResult.Status = contracts.ResultStatusFailed
+	docResult.PluginResults = make(map[string]*contracts.PluginResult)
+	res := e.docState.InstancePluginsInformation[0].Result
+	res.Output = "out of process execution failed unexpectedly"
+	res.Status = contracts.ResultStatusFailed
+	docResult.PluginResults[e.docState.InstancePluginsInformation[0].Id] = &res
+	return docResult
+}
+
 //prepare the channel for messaging as well as launching the document worker process, if the channel already exists, re-open it.
+//launch timeout timer based off the discovered process status
 func (e *OutOfProcExecuter) initialize(stopTimer chan bool) (ipc channel.Channel, err error) {
 	log := e.ctx.Log()
 	documentID := e.docState.DocumentInformation.DocumentID
@@ -140,14 +159,11 @@ func (e *OutOfProcExecuter) initialize(stopTimer chan bool) (ipc channel.Channel
 			log.Infof("process: %v not found, treat as exited", procInfo.Pid)
 			stopTime = defaultZombieProcessTimeout
 		}
-		go func() {
-			<-time.After(stopTime)
-			stopTimer <- true
-		}()
+		go timeout(stopTimer, stopTime, e.cancelFlag)
 	} else {
 		log.Debug("channel not found, starting a new process...")
 		var process proc.OSProcess
-		if process, err = processCreator(appconfig.DefaultDocumentWorker, messaging.FormArgv(documentID)); err != nil {
+		if process, err = processCreator(appconfig.DefaultDocumentWorker, proc.FormArgv(documentID)); err != nil {
 			log.Errorf("start process: %v error: %v", appconfig.DefaultDocumentWorker, err)
 			//try to kill the child process if still alive
 			process.Kill()
@@ -159,17 +175,34 @@ func (e *OutOfProcExecuter) initialize(stopTimer chan bool) (ipc channel.Channel
 			Pid:       process.Pid(),
 			StartTime: process.StartTime(),
 		}
-		go func() {
-			procState, err := process.Wait()
-			if !procState.Success() {
-				//TODO form error result
-				log.Errorf("process exits unsuccessfully %v", err)
-			}
-			<-time.After(defaultZombieProcessTimeout)
-			stopTimer <- true
-		}()
+		//TODO add command timeout as well, in case process get stuck
+		go e.WaitForProcess(stopTimer, process)
 
 	}
 
 	return
+}
+
+func (e *OutOfProcExecuter) WaitForProcess(stopTimer chan bool, process proc.OSProcess) {
+	log := e.ctx.Log()
+	procState, _ := process.Wait()
+	if !procState.Success() {
+		log.Errorf("process: %v exits unsuccessfully, system info: %v", process.Pid(), procState.Sys())
+	}
+	timeout(stopTimer, defaultZombieProcessTimeout, e.cancelFlag)
+}
+
+func timeout(stopTimer chan bool, duration time.Duration, cancelFlag task.CancelFlag) {
+	stopChan := make(chan bool)
+	//TODO refactor cancelFlag.Wait() to return channel instead of blocking call
+	go func() {
+		cancelFlag.Wait()
+		stopChan <- true
+	}()
+	select {
+	case <-time.After(duration):
+		stopTimer <- true
+	case <-stopChan:
+	}
+
 }
