@@ -20,7 +20,6 @@ const (
 	defaultBackendChannelSize = 10
 )
 
-//TODO this should be moved to a common package
 type PluginRunner func(
 	context context.T,
 	plugins []model.PluginState,
@@ -48,7 +47,6 @@ type ExecuterBackend struct {
 	stopChan   chan int
 }
 
-//TODO handle error
 func NewExecuterBackend(output chan contracts.DocumentResult, docState *model.DocumentState, cancelFlag task.CancelFlag) *ExecuterBackend {
 	stopChan := make(chan int, defaultBackendChannelSize)
 	inputChan := make(chan string, defaultBackendChannelSize)
@@ -81,7 +79,7 @@ func (p *ExecuterBackend) Stop() <-chan int {
 	return p.stopChan
 }
 
-//TODO handle error and logging
+//TODO handle error and logging, when err, ask messaging to stop
 //TODO version handling?
 func (p *ExecuterBackend) Process(datagram string) error {
 	t, content := ParseDatagram(datagram)
@@ -92,18 +90,13 @@ func (p *ExecuterBackend) Process(datagram string) error {
 		p.formatDocResult(&docResult)
 		p.output <- docResult
 		if t == MessageTypeComplete {
-			//signal the caller that messaging should stop
+			//get document result, force termniate messaging worker
 			p.stopChan <- stopTypeTerminate
 		}
 	default:
 		return errors.New("unsupported message type")
 	}
 	return nil
-}
-
-func (p *ExecuterBackend) Close() {
-	//TODO once we refactored the cancelFlag structure, send signal to the cancelFlag listener routine
-	close(p.stopChan)
 }
 
 func (p *ExecuterBackend) formatDocResult(docResult *contracts.DocumentResult) {
@@ -120,7 +113,7 @@ func (p *ExecuterBackend) formatDocResult(docResult *contracts.DocumentResult) {
 func NewWorkerBackend(ctx context.T, runner PluginRunner) *WorkerBackend {
 	stopChan := make(chan int)
 	return &WorkerBackend{
-		ctx:        ctx.With("DataBackend"),
+		ctx:        ctx.With("[DataBackend]"),
 		input:      make(chan string),
 		cancelFlag: task.NewChanneledCancelFlag(),
 		runner:     runner,
@@ -128,13 +121,18 @@ func NewWorkerBackend(ctx context.T, runner PluginRunner) *WorkerBackend {
 	}
 }
 
-//TODO handle error and log
 func (p *WorkerBackend) Process(datagram string) error {
 	t, content := ParseDatagram(datagram)
+	log := p.ctx.Log()
 	switch t {
 	case MessageTypePluginConfig:
+		log.Info("received plugin config message")
 		var plugins []model.PluginState
-		jsonutil.Unmarshal(content, &plugins)
+		if err := jsonutil.Unmarshal(content, &plugins); err != nil {
+			log.Errorf("failed to unmarshal plugin config: %v", err)
+			//TODO request messaging to stop
+			return err
+		}
 		p.once.Do(func() {
 			statusChan := make(chan contracts.PluginResult)
 			go p.runner(p.ctx, plugins, statusChan, p.cancelFlag)
@@ -144,6 +142,7 @@ func (p *WorkerBackend) Process(datagram string) error {
 	case MessageTypeCancel:
 		p.cancelFlag.Set(task.Canceled)
 	default:
+		//TODO add extra logic to check whether plugin has started, if not, stop IPC, or add timeout
 		return errors.New("unsupported message type")
 	}
 	return nil
@@ -152,6 +151,29 @@ func (p *WorkerBackend) Process(datagram string) error {
 func (p *WorkerBackend) pluginListener(statusChan chan contracts.PluginResult) {
 	log := p.ctx.Log()
 	results := make(map[string]*contracts.PluginResult)
+	var finalStatus contracts.ResultStatus
+	defer func() {
+		//if this routine panics, return failed results
+		if msg := recover(); msg != nil {
+			log.Errorf("plugin listener panic: %v", msg)
+			finalStatus = contracts.ResultStatusFailed
+		}
+
+		docResult := contracts.DocumentResult{
+			Status:        finalStatus,
+			PluginResults: results,
+			LastPlugin:    "",
+		}
+		log.Info("sending document complete response...")
+		completeMessage, _ := CreateDatagram(MessageTypeComplete, docResult)
+		p.input <- completeMessage
+		close(p.input)
+		log.Info("stopping ipc worker...")
+		//sending stop signal
+		p.stopChan <- stopTypeShutdown
+		close(p.stopChan)
+	}()
+
 	for res := range statusChan {
 		results[res.PluginID] = &res
 		//TODO move the aggregator under executer package and protect it, there's global lock in this package
@@ -165,19 +187,8 @@ func (p *WorkerBackend) pluginListener(statusChan chan contracts.PluginResult) {
 		log.Debugf("plugin: %v done, sending reply message...", res.PluginID)
 		p.input <- replyMessage
 	}
-
-	log.Info("document execution complete, sending complete response...")
-	status, _, _ := docmanager.DocumentResultAggregator(log, "", results)
-	docResult := contracts.DocumentResult{
-		Status:        status,
-		PluginResults: results,
-		LastPlugin:    "",
-	}
-	completeMessage, _ := CreateDatagram(MessageTypeComplete, docResult)
-	p.input <- completeMessage
-	//sending stop signal
-	p.stopChan <- stopTypeTerminate
-	close(p.stopChan)
+	log.Info("document execution complete")
+	finalStatus, _, _ = docmanager.DocumentResultAggregator(log, "", results)
 
 }
 
@@ -187,10 +198,4 @@ func (p *WorkerBackend) Accept() <-chan string {
 
 func (p *WorkerBackend) Stop() <-chan int {
 	return p.stopChan
-}
-
-func (p *WorkerBackend) Close() {
-	//close the cancelFlag in case there're listeners down the call stack
-	p.cancelFlag.Set(task.Completed)
-	//TODO signal plugin listner to stop as well
 }
