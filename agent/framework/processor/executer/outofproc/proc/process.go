@@ -18,6 +18,9 @@ import (
 	"os"
 	"time"
 
+	"errors"
+
+	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 )
 
@@ -38,6 +41,7 @@ type OSProcess interface {
 //adapter over os.ProcessState
 type ProcessState interface {
 	Success() bool
+	Sys() interface{}
 }
 
 //impl of OSProcess with os.Process embed
@@ -61,6 +65,7 @@ func (p *WorkerProcess) Wait() (ProcessState, error) {
 
 //start a child process, with the resources attached to its parent
 func StartProcess(name string, argv []string) (OSProcess, error) {
+	//TODO connect stdin and stdout to avoid seelog error
 	var procAttr os.ProcAttr
 	proc, err := os.StartProcess(name, argv, &procAttr)
 	p := WorkerProcess{
@@ -79,4 +84,25 @@ func IsProcessExists(log log.T, pid int, createTime time.Time) bool {
 		log.Errorf("encountered error when finding process: %v", err)
 	}
 	return found
+}
+
+//TODO figure out why sometimes argv does not contain program name
+func ParseArgv(argv []string) (string, string, error) {
+	if len(argv) == 1 {
+		return appconfig.DefaultDocumentWorker, argv[0], nil
+	} else if len(argv) == 2 {
+		return argv[0], argv[1], nil
+	} else {
+		return "", "", errors.New("executable argument number mismatch")
+	}
+	//if argv[0] == appconfig.DefaultDocumentWorker {
+	//	return argv[0], argv[1], nil
+	//} else {
+	//	return appconfig.DefaultDocumentWorker, argv[0], nil
+	//}
+
+}
+
+func FormArgv(channelName string) []string {
+	return []string{channelName}
 }
