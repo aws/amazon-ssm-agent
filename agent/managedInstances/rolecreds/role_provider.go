@@ -21,6 +21,7 @@ import (
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/log/ssmlog"
 	"github.com/aws/amazon-ssm-agent/agent/managedInstances/sharedCredentials"
 	"github.com/aws/amazon-ssm-agent/agent/ssm/rsaauth"
 	"github.com/aws/aws-sdk-go/aws/credentials"
@@ -71,7 +72,7 @@ var (
 func ManagedInstanceCredentialsInstance() *credentials.Credentials {
 	lock.Lock()
 	defer lock.Unlock()
-	logger = log.Logger()
+	logger = ssmlog.SSMLogger()
 	shareCreds = true
 	if config, err := appconfig.Config(false); err == nil {
 		shareCreds = config.Profile.ShareCreds

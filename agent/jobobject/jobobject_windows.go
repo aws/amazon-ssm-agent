@@ -21,7 +21,7 @@ import (
 	"syscall"
 	"unsafe"
 
-	logger "github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/log/ssmlog"
 )
 
 const (
@@ -136,7 +136,7 @@ func AttachProcessToJobObject(Pid uint32) (err error) {
 // launched via the ConfigureDaemon/RunDaemon plugin.
 // The init function is automatically invoked prior to main function being invoked.
 func init() {
-	log := logger.Logger()
+	log := ssmlog.SSMLogger()
 
 	var err error
 	SSMjobObject, err = createJobObject(nil, nil)

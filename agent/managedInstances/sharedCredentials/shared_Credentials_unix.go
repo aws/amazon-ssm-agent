@@ -19,8 +19,6 @@ package sharedCredentials
 import (
 	"os"
 	"os/user"
-
-	"github.com/aws/amazon-ssm-agent/agent/log"
 )
 
 func getPlatformSpecificHomeLocation() string {
@@ -39,7 +37,6 @@ func getPlatformSpecificHomeLocation() string {
 
 	usr, err := user.Current()
 	if err != nil {
-		log.Logger().Errorf("Current user not found. %v", err)
 		return homeDir
 	}
 
