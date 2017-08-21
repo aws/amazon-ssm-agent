@@ -19,7 +19,6 @@ import (
 
 	"github.com/aws/amazon-ssm-agent/agent/association/model"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
-	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/aws-sdk-go/service/ssm"
 )
 
@@ -43,7 +42,6 @@ type AssociationComplianceItem struct {
 // Association compliance status is Unspecified by default
 var associationComplianceItems = []*AssociationComplianceItem{}
 var lock = sync.RWMutex{}
-var logger = log.Logger()
 
 /**
  * Update compliance item based on the executed instance association and update timestamp.
@@ -76,8 +74,6 @@ func UpdateAssociationComplianceItem(associationId string, documentName string, 
 					UNSPECIFIED,
 					compliantStatus,
 				}
-			} else {
-				logger.Debugf("Current timestamp %v is newer than the update timestamp %v", status.ExecutionTime, executionTime)
 			}
 
 			statusFound = true
