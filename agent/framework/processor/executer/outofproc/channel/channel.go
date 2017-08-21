@@ -22,10 +22,12 @@ type Mode string
 
 //Channel is an interface for raw json datagram transmission, it is designed to adopt both file ad named pipe
 type Channel interface {
-	//send a raw json datagram to the channel, should be non-blocked
+	//send a raw json datagram to the channel, return when send is "complete" -- message is dropped to the persistent layer
 	Send(string) error
-	GetMessageChannel() chan string
+	GetMessage() <-chan string
+	//safe close, channel is safely closed only when GetMessage() channel is closed
 	Close()
+	Destroy()
 }
 
 //find the folder named as "documentID" under the default root dir
@@ -45,12 +47,12 @@ func CreateFileChannel(log log.T, mode Mode, filename string) (Channel, error, b
 	}
 	for _, val := range list {
 		if val.Name() == filename {
-			log.Errorf("channel: %v found", filename)
-			f, err := NewFileWatcherChannel(log, ModeMaster, path.Join(appconfig.DefaultDataStorePath, instanceID, defaultFileChannelPath, filename))
+			log.Infof("channel: %v found", filename)
+			f, err := NewFileWatcherChannel(log, mode, path.Join(appconfig.DefaultDataStorePath, instanceID, defaultFileChannelPath, filename))
 			return f, err, true
 		}
 	}
-
+	log.Infof("channel: %v not found, creating a new file channel...", filename)
 	f, err := NewFileWatcherChannel(log, mode, path.Join(appconfig.DefaultDataStorePath, instanceID, defaultFileChannelPath, filename))
 	return f, err, false
 }

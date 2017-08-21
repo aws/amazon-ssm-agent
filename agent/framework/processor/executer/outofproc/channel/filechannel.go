@@ -10,6 +10,12 @@ import (
 
 	"strconv"
 
+	"errors"
+
+	"sync"
+
+	"regexp"
+
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/fsnotify/fsnotify"
 )
@@ -29,10 +35,12 @@ type fileWatcherChannel struct {
 	closeChan     chan bool
 	mode          Mode
 	counter       int
-	recvCounter   int
-	startTime     string
-	watcher       *fsnotify.Watcher
-	sendChan      chan string
+	//the next expected message
+	recvCounter int
+	startTime   string
+	watcher     *fsnotify.Watcher
+	mu          sync.RWMutex
+	closed      bool
 }
 
 //TODO make this constructor private
@@ -63,8 +71,6 @@ func NewFileWatcherChannel(logger log.T, mode Mode, name string) (*fileWatcherCh
 	onMessageChan := make(chan string, defaultChannelBufferSize)
 	//signal the message poller to stop
 	closeChan := make(chan bool, defaultChannelBufferSize)
-	sendChan := make(chan string, defaultChannelBufferSize)
-
 	//start file watcher and monitor the directory
 	watcher, err := fsnotify.NewWatcher()
 	if err != nil {
@@ -79,10 +85,10 @@ func NewFileWatcherChannel(logger log.T, mode Mode, name string) (*fileWatcherCh
 
 	ch := &fileWatcherChannel{
 		path:          name,
+		tmpPath:       tmpPath,
 		watcher:       watcher,
 		onMessageChan: onMessageChan,
 		closeChan:     closeChan,
-		sendChan:      sendChan,
 		logger:        logger,
 		mode:          mode,
 		counter:       0,
@@ -101,20 +107,19 @@ func createIfNotExist(dir string) (err error) {
 	return
 }
 
-func (ch *fileWatcherChannel) Send(rawJson string) error {
-	//TODO deal with buffer channel overflow
-	ch.sendChan <- rawJson
-	return nil
-}
-
 /*
 	drop a file in the destination path with the file name as sequence id
 	the file is first named as tmp, then quickly renamed to guarantee atomicity
 	sequence id format: {mode}-{command start time}-{counter} , squence id is guaranteed to be ascending order
 
 */
-func (ch *fileWatcherChannel) send(rawJson string) error {
+func (ch *fileWatcherChannel) Send(rawJson string) error {
+	if ch.closed {
+		return errors.New("channel already closed")
+	}
 	log := ch.logger
+	ch.mu.RLock()
+	defer ch.mu.RUnlock()
 	sequenceID := fmt.Sprintf("%v-%s-%03d", ch.mode, ch.startTime, ch.counter)
 	filepath := path.Join(ch.path, sequenceID)
 	tmp_filepath := path.Join(ch.tmpPath, sequenceID)
@@ -132,21 +137,32 @@ func (ch *fileWatcherChannel) send(rawJson string) error {
 	return nil
 }
 
-func (ch *fileWatcherChannel) GetMessageChannel() chan string {
+func (ch *fileWatcherChannel) GetMessage() <-chan string {
 	return ch.onMessageChan
 }
 
-func (ch *fileWatcherChannel) Close() {
-	log := ch.logger
-	log.Debugf("channel %v requested close", ch.path)
-	ch.closeChan <- true
-	//master should remove the dir at close
+func (ch *fileWatcherChannel) Destroy() {
+	ch.Close()
+	//only master can remove the dir at close
 	if ch.mode == ModeMaster {
-		log.Debug("master removing directory...")
+		ch.logger.Debug("master removing directory...")
 		os.RemoveAll(ch.path)
 	}
+}
+
+func (ch *fileWatcherChannel) Close() {
+	if ch.closed {
+		return
+	}
+	log := ch.logger
+	log.Debugf("channel %v requested close", ch.path)
+	//terminate Send()
+	ch.closed = true
+	//read all the left over messages
+	ch.consumeAll()
+	//return immediately
+	ch.closeChan <- true
 	close(ch.closeChan)
-	close(ch.sendChan)
 	close(ch.onMessageChan)
 	return
 }
@@ -180,7 +196,12 @@ func (ch *fileWatcherChannel) consumeAll() {
 	}
 }
 
+//TODO add unittest
 func (ch *fileWatcherChannel) isReadable(filename string) bool {
+	matched, err := regexp.MatchString("[a-zA-Z]+-[0-9]+-[0-9]+", filename)
+	if !matched || err != nil {
+		return false
+	}
 	return !strings.Contains(filename, string(ch.mode)) && !strings.Contains(filename, "tmp")
 }
 
@@ -191,6 +212,7 @@ func (ch *fileWatcherChannel) consume(filepath string) {
 	buf, err := ioutil.ReadFile(filepath)
 	if err != nil {
 		log.Errorf("message %v failed to read: %v \n", filepath, err)
+		os.Remove(filepath)
 		return
 
 	}
@@ -198,7 +220,7 @@ func (ch *fileWatcherChannel) consume(filepath string) {
 	//remove the consumed file
 	os.Remove(filepath)
 	//update the recvcounter
-	ch.recvCounter = parseSequenceCounter(filepath)
+	ch.recvCounter = parseSequenceCounter(filepath) + 1
 	//TODO handle buffered channel queue overflow
 	ch.onMessageChan <- string(buf)
 }
@@ -213,14 +235,9 @@ func (ch *fileWatcherChannel) watch() {
 	ch.consumeAll()
 	for {
 		select {
-		//TODO implementing onError handling
-		case message := <-ch.sendChan:
-			if err := ch.send(message); err != nil {
-				log.Errorf("failed to send message: %v", err)
-			}
 		case <-ch.closeChan:
-			log.Debug("closing file watcher listener...")
 			ch.watcher.Close()
+			log.Debug("file watcher listener closed...")
 			return
 		case event, ok := <-ch.watcher.Events:
 			if !ok {
@@ -231,10 +248,10 @@ func (ch *fileWatcherChannel) watch() {
 			if event.Op&fsnotify.Create == fsnotify.Create && ch.isReadable(event.Name) {
 				//if the receiving counter is as expected, consume that message
 				//otherwise, read the entire directory in sorted order, sender assures sending order
-				if parseSequenceCounter(event.Name) == ch.recvCounter+1 {
-					log.Debug("received out-of-order file update, polling the dir to reorder")
+				if parseSequenceCounter(event.Name) == ch.recvCounter {
 					ch.consume(event.Name)
 				} else {
+					log.Debug("received out-of-order file update, polling the dir to reorder")
 					ch.consumeAll()
 				}
 			}
