@@ -39,7 +39,6 @@ func handlerToBeTested(w http.ResponseWriter, req *http.Request) {
 	mt, p, err := conn.ReadMessage()
 
 	if err != nil {
-		log.Logger().Errorf("error: %v", err)
 		return
 	}
 	conn.WriteMessage(mt, []byte("hello "+string(p)))
