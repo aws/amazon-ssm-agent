@@ -32,7 +32,7 @@ var channelName = "testchannel"
 var messageSet1 = []string{"s000", "s001", "s002"}
 var messageSet2 = []string{"r000", "r001", "r002"}
 
-func TestNewFileWatcherChannelDuplexTransmission(t *testing.T) {
+func TestChannelDuplexTransmission(t *testing.T) {
 	logger.Info("hello filewatcher channel started")
 	order := []Mode{ModeMaster, ModeWorker}
 	for i := 0; i < 2; i++ {
@@ -56,6 +56,8 @@ func TestNewFileWatcherChannelDuplexTransmission(t *testing.T) {
 		<-done
 		channelA.Close()
 		channelB.Close()
+		channelA.Destroy()
+		channelB.Destroy()
 	}
 
 }
@@ -68,6 +70,8 @@ func TestChannelReopen(t *testing.T) {
 	logger.Info("agent channel opened, start transmission")
 	// run all threads in parallel
 	send(agentChannel, messageSet1, "agent")
+	agentChannel.Close()
+	logger.Info("agent channel closed")
 	workerChannel, err := NewFileWatcherChannel(log.NewMockLogWithContext("WORKER"), ModeWorker, path.Join(defaultRootDir, channelName))
 	assert.NoError(t, err)
 	logger.Info("worker channel opened, start transmission")
@@ -80,17 +84,17 @@ func TestChannelReopen(t *testing.T) {
 	assert.NoError(t, err)
 	go verifyReceive(t, newAgentChannel, messageSet2, "new agent", done)
 	go verifyReceive(t, workerChannel, append(messageSet1, messageSet2...), "worker", done)
-	agentChannel.Close()
 	workerChannel.Close()
+	logger.Info("destroying the file channel")
+	newAgentChannel.Destroy()
 }
 
 //verify the given set of messages are received
 func verifyReceive(t *testing.T, ch Channel, messages []string, name string, done chan bool) {
 
 	//timer := time.After(5 * time.Second)
-	onMsgChan := ch.GetMessageChannel()
 	for _, testMsg := range messages {
-		msg := <-onMsgChan
+		msg := <-ch.GetMessage()
 		logger.Infof("%v received message: %v", name, msg)
 		assert.Equal(t, testMsg, msg)
 
@@ -104,6 +108,6 @@ func send(ch Channel, messages []string, name string) {
 	for _, testMsg := range messages {
 		logger.Infof("%v sending messages: %v", name, testMsg)
 		ch.Send(testMsg)
-		time.Sleep(500 * time.Millisecond)
+		time.Sleep(200 * time.Millisecond)
 	}
 }

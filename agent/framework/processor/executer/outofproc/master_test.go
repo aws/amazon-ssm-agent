@@ -12,10 +12,14 @@ import (
 	channelmock "github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/outofproc/channel/mock"
 	procmock "github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/outofproc/proc/mock"
 
+	"errors"
+
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/outofproc/proc"
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/task"
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/mock"
 )
 
 type TestCase struct {
@@ -98,25 +102,111 @@ func TestInitializeNewProcess(t *testing.T) {
 		return testCase.processMock, nil
 	}
 	exe := &OutOfProcExecuter{
-		ctx:      testCase.context,
-		docState: &testCase.docState,
+		ctx:        testCase.context,
+		docState:   &testCase.docState,
+		cancelFlag: task.NewChanneledCancelFlag(),
 	}
 	//assert Wait() syscall is called
 	stopTimer := make(chan bool)
-	processStateMock := new(procmock.MockedOSProcessState)
-	processStateMock.On("Success").Return(true)
-	testCase.processMock.On("Wait").Return(processStateMock, nil)
+
+	testCase.processMock.On("Wait").Return(nil)
 	testCase.processMock.On("Pid").Return(testPid)
 	testCase.processMock.On("StartTime").Return(testStartDateTime)
 	_, err := exe.initialize(stopTimer)
 	assert.NoError(t, err)
 	//Wait() returns immediately, block until zombie timeout
 	<-stopTimer
-	processStateMock.AssertExpectations(t)
 	testCase.processMock.AssertExpectations(t)
 	channelMock.AssertExpectations(t)
 	//assert pid is saved
 	assert.Equal(t, testPid, exe.docState.DocumentInformation.ProcInfo.Pid)
+}
+
+func TestCreateProcessFailed(t *testing.T) {
+	testCase := CreateTestCase()
+	channelMock := new(channelmock.MockedChannel)
+	channelMock.On("Destroy").Return(nil)
+	channelCreator = func(log log.T, mode channel.Mode, documentID string) (channel.Channel, error, bool) {
+		assert.Equal(t, mode, channel.ModeMaster)
+		assert.Equal(t, testDocumentID, documentID)
+		return channelMock, nil, false
+	}
+	var err = errors.New("failed to create process")
+	processCreator = func(name string, argv []string) (proc.OSProcess, error) {
+		assert.Equal(t, name, appconfig.DefaultDocumentWorker)
+		assert.Equal(t, argv, []string{testDocumentID})
+		return nil, err
+	}
+	exe := &OutOfProcExecuter{
+		ctx:        testCase.context,
+		docState:   &testCase.docState,
+		cancelFlag: task.NewChanneledCancelFlag(),
+	}
+	//assert Wait() syscall is called
+	stopTimer := make(chan bool)
+	_, err2 := exe.initialize(stopTimer)
+	assert.Error(t, err2)
+	channelMock.AssertExpectations(t)
+}
+func TestInitializeProcessUnexpectedExited(t *testing.T) {
+	testCase := CreateTestCase()
+	channelMock := new(channelmock.MockedChannel)
+	channelMock.On("Destroy").Return(nil)
+	channelCreator = func(log log.T, mode channel.Mode, documentID string) (channel.Channel, error, bool) {
+		assert.Equal(t, mode, channel.ModeMaster)
+		assert.Equal(t, testDocumentID, documentID)
+		return channelMock, nil, false
+	}
+	processCreator = func(name string, argv []string) (proc.OSProcess, error) {
+		assert.Equal(t, name, appconfig.DefaultDocumentWorker)
+		assert.Equal(t, argv, []string{testDocumentID})
+		return testCase.processMock, nil
+	}
+	cancel := task.NewChanneledCancelFlag()
+	var err = errors.New("process exited with status 1")
+	exe := &OutOfProcExecuter{
+		ctx:        testCase.context,
+		docState:   &testCase.docState,
+		cancelFlag: cancel,
+	}
+	testCase.processMock.On("Wait").Return(err)
+	testCase.processMock.On("Pid").Return(testPid)
+	testCase.processMock.On("StartTime").Return(testStartDateTime)
+	//assert Wait() syscall is called
+	stopTimer := make(chan bool)
+	_, err2 := exe.initialize(stopTimer)
+	//initialize should work, but timeout should be triggered
+	assert.NoError(t, err2)
+	<-stopTimer
+	//assert pid is saved
+	assert.Equal(t, testPid, exe.docState.DocumentInformation.ProcInfo.Pid)
+	//set job complete and kill is not called
+	cancel.Set(task.Completed)
+	testCase.processMock.AssertExpectations(t)
+}
+
+func TestTerminateWaitWhenJobComplete(t *testing.T) {
+	testCase := CreateTestCase()
+	cancel := task.NewChanneledCancelFlag()
+	exe := &OutOfProcExecuter{
+		ctx:        testCase.context,
+		docState:   &testCase.docState,
+		cancelFlag: cancel,
+	}
+	killChan := make(chan bool)
+	//wait hangs indefinitely
+	testCase.processMock.On("Pid").Return(testPid)
+	testCase.processMock.On("Wait").Run(func(mock.Arguments) {
+		<-killChan
+	}).Return(errors.New("process received SIGTERM"))
+	testCase.processMock.On("Kill").Run(func(mock.Arguments) {
+		killChan <- true
+	}).Return(nil)
+	stopTimer := make(chan bool)
+	cancel.Set(task.Completed)
+	//in this case, wait should immediately return and kill the process
+	exe.WaitForProcess(stopTimer, testCase.processMock)
+	testCase.processMock.AssertExpectations(t)
 }
 
 func TestInitializeConnectOldOrphan(t *testing.T) {
@@ -139,13 +229,16 @@ func TestInitializeConnectOldOrphan(t *testing.T) {
 		isFinderCalled = true
 		return true
 	}
+	cancel := task.NewChanneledCancelFlag()
 	exe := &OutOfProcExecuter{
-		ctx:      testCase.context,
-		docState: &testCase.docState,
+		ctx:        testCase.context,
+		docState:   &testCase.docState,
+		cancelFlag: cancel,
 	}
 	stopTimer := make(chan bool)
-	//TODO assert timer value different for zombie and orphan
 	_, err := exe.initialize(stopTimer)
+	//make sure timeout returns when cancel is set
+	cancel.Set(task.Completed)
 	assert.NoError(t, err)
 	assert.False(t, isCreateCalled)
 	assert.True(t, isFinderCalled)

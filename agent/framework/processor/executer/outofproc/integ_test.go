@@ -11,8 +11,6 @@
 // either express or implied. See the License for the specific language governing
 // permissions and limitations under the License.
 
-// +build integration
-
 // Package outofproc implements Executer interface with out-of-process plugin running capabilities
 package outofproc
 
@@ -30,7 +28,6 @@ import (
 	channelmock "github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/outofproc/channel/mock"
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/outofproc/messaging"
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/outofproc/proc"
-	procmock "github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/outofproc/proc/mock"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 	"github.com/stretchr/testify/assert"
@@ -284,7 +281,6 @@ type FakeProcess struct {
 	exitChan chan bool
 	live     bool
 	attached bool
-	state    *procmock.MockedOSProcessState
 	t        *testing.T
 }
 
@@ -292,7 +288,6 @@ func NewFakeProcess(t *testing.T) *FakeProcess {
 	return &FakeProcess{
 		t:        t,
 		exitChan: make(chan bool, 10),
-		state:    new(procmock.MockedOSProcessState),
 	}
 }
 
@@ -338,14 +333,12 @@ func (p *FakeProcess) StartTime() time.Time {
 	return testStartDateTime
 }
 
-func (p *FakeProcess) Wait() (proc.ProcessState, error) {
+func (p *FakeProcess) Wait() error {
 	//once the child is detached (controlled by our test engine), Wait() is illegal since the Executer is no longer the direct parent of the child
 	if !p.attached {
-		return nil, errors.New("Wait() called by illegal party")
+		return errors.New("Wait() called by illegal party")
 	}
 	<-p.exitChan
 	p.live = false
-	//TODO test other expectations
-	p.state.On("Success").Return(true)
-	return p.state, nil
+	return nil
 }

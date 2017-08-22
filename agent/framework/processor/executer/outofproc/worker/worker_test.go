@@ -3,8 +3,6 @@ package main
 import (
 	"testing"
 
-	"fmt"
-
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/outofproc/messaging"
 	"github.com/stretchr/testify/assert"
 )
@@ -17,7 +15,9 @@ func TestParseArgs(t *testing.T) {
 	assert.Equal(t, "documentID", channelName)
 }
 
-func TestCreateContextLightWeight(t *testing.T) {
-	ctxLight := createContext("test")
-	fmt.Println(ctxLight)
+func TestWorkerInitializeLightWeight(t *testing.T) {
+	ctxLight, name := initialize([]string{"test", "documentID"})
+	assert.Equal(t, "documentID", name)
+	assert.Equal(t, ctxLight.CurrentContext(), []string{"[test]"})
+
 }
