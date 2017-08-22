@@ -21,6 +21,7 @@ import (
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/association/model"
+	"github.com/aws/amazon-ssm-agent/agent/association/schedulemanager"
 	"github.com/aws/amazon-ssm-agent/agent/association/service"
 	complianceUploader "github.com/aws/amazon-ssm-agent/agent/compliance/uploader"
 	"github.com/aws/amazon-ssm-agent/agent/context"
@@ -232,6 +233,63 @@ func TestProcessAssociationSuccessful(t *testing.T) {
 	assert.True(t, svcMock.AssertNumberOfCalls(t, "LoadAssociationDetail", 1))
 	assert.True(t, svcMock.AssertNumberOfCalls(t, "UpdateInstanceAssociationStatus", 0))
 	assert.True(t, complianceUploader.AssertNumberOfCalls(t, "UpdateAssociationCompliance", 0))
+}
+
+//make sure this operation is thread safe
+func TestUpdatePluginAssociationInstances(t *testing.T) {
+	testAssociationID := "testAssociationID"
+	testName := "testName"
+	testAssociations := []*model.InstanceAssociation{
+		&model.InstanceAssociation{
+			Association: &ssm.InstanceAssociationSummary{
+				AssociationId: &testAssociationID,
+				Name:          &testName,
+			},
+		},
+	}
+	schedulemanager.Refresh(log.NewMockLog(), testAssociations)
+	assert.Equal(t, len(pluginAssociationInstances), 0)
+	testDocState := docModel.DocumentState{
+		InstancePluginsInformation: []docModel.PluginState{
+			docModel.PluginState{
+				Name: "pluginName",
+			},
+		},
+	}
+	updatePluginAssociationInstances("testAssociationID", &testDocState)
+	assert.Equal(t, AssocList{testAssociationID}, testDocState.InstancePluginsInformation[0].Configuration.Settings)
+	resultMap := make(map[string]AssocList)
+	resultMap["pluginName"] = []string{testAssociationID}
+	assert.Equal(t, resultMap, pluginAssociationInstances)
+}
+
+func TestRemovePluginAssociationInstances(t *testing.T) {
+	testAssociationID := "testAssociationID"
+	testRemovedAssociationID := "removedID"
+	testName := "testName"
+	testAssociations := []*model.InstanceAssociation{
+		&model.InstanceAssociation{
+			Association: &ssm.InstanceAssociationSummary{
+				AssociationId: &testAssociationID,
+				Name:          &testName,
+			},
+		},
+	}
+	schedulemanager.Refresh(log.NewMockLog(), testAssociations)
+	pluginAssociationInstances["pluginName"] = AssocList{testAssociationID, testRemovedAssociationID}
+	assert.Equal(t, len(pluginAssociationInstances), 1)
+	testDocState := docModel.DocumentState{
+		InstancePluginsInformation: []docModel.PluginState{
+			docModel.PluginState{
+				Name: "pluginName",
+			},
+		},
+	}
+	updatePluginAssociationInstances("testAssociationID", &testDocState)
+	assert.Equal(t, AssocList{testAssociationID}, testDocState.InstancePluginsInformation[0].Configuration.Settings)
+	resultMap := make(map[string]AssocList)
+	resultMap["pluginName"] = []string{testAssociationID}
+	assert.Equal(t, resultMap, pluginAssociationInstances)
 }
 
 func mockParser(parserMock *parserMock, payload *messageContracts.SendCommandPayload, docState docModel.DocumentState) {
