@@ -290,6 +290,18 @@ func (c *SSM) CreateResourceDataSyncRequest(input *CreateResourceDataSyncInput) 
 	return
 }
 
+// Creates a resource data sync configuration to a single bucket in Amazon S3.
+// This is an asynchronous operation that returns immediately. After a successful
+// initial sync is completed, the system continuously syncs data to the Amazon
+// S3 bucket. To check the status of the sync, use the ListResourceDataSync
+// (API_ListResourceDataSync.html) operation.
+//
+// By default, data is not encrypted in Amazon S3. We strongly recommend that
+// you enable encryption in Amazon S3 to ensure secure data storage. We also
+// recommend that you secure access to the Amazon S3 bucket by creating a restrictive
+// bucket policy. To view an example of a restrictive Amazon S3 bucket policy
+// for Resource Data Sync, see Configuring Resource Data Sync for Inventory
+// (http://docs.aws.amazon.com/systems-manager/latest/userguide/sysman-inventory-configuring.html#sysman-inventory-datasync).
 func (c *SSM) CreateResourceDataSync(input *CreateResourceDataSyncInput) (*CreateResourceDataSyncOutput, error) {
 	req, out := c.CreateResourceDataSyncRequest(input)
 	err := req.Send()
@@ -489,6 +501,8 @@ func (c *SSM) DeleteParametersRequest(input *DeleteParametersInput) (req *reques
 	return
 }
 
+// Delete a list of parameters. This API is used to delete parameters by using
+// the Amazon EC2 console.
 func (c *SSM) DeleteParameters(input *DeleteParametersInput) (*DeleteParametersOutput, error) {
 	req, out := c.DeleteParametersRequest(input)
 	err := req.Send()
@@ -542,6 +556,10 @@ func (c *SSM) DeleteResourceDataSyncRequest(input *DeleteResourceDataSyncInput) 
 	return
 }
 
+// Deletes a Resource Data Sync configuration. After the configuration is deleted,
+// changes to inventory data on managed instances are no longer synced with
+// the target Amazon S3 bucket. Deleting a sync configuration does not delete
+// data in the target Amazon S3 bucket.
 func (c *SSM) DeleteResourceDataSync(input *DeleteResourceDataSyncInput) (*DeleteResourceDataSyncOutput, error) {
 	req, out := c.DeleteResourceDataSyncRequest(input)
 	err := req.Send()
@@ -1081,7 +1099,8 @@ func (c *SSM) DescribeEffectivePatchesForPatchBaselineRequest(input *DescribeEff
 }
 
 // Retrieves the current effective patches (the patch and the approval state)
-// for the specified patch baseline.
+// for the specified patch baseline. Note that this API applies only to Windows
+// patch baselines.
 func (c *SSM) DescribeEffectivePatchesForPatchBaseline(input *DescribeEffectivePatchesForPatchBaselineInput) (*DescribeEffectivePatchesForPatchBaselineOutput, error) {
 	req, out := c.DescribeEffectivePatchesForPatchBaselineRequest(input)
 	err := req.Send()
@@ -1331,9 +1350,9 @@ func (c *SSM) DescribeMaintenanceWindowExecutionsRequest(input *DescribeMaintena
 	return
 }
 
-// Lists the executions of a Maintenance Window (meaning, information about
-// when the Maintenance Window was scheduled to be active and information about
-// tasks registered and run with the Maintenance Window).
+// Lists the executions of a Maintenance Window. This includes information about
+// when the Maintenance Window was scheduled to be active, and information about
+// tasks registered and run with the Maintenance Window.
 func (c *SSM) DescribeMaintenanceWindowExecutions(input *DescribeMaintenanceWindowExecutionsInput) (*DescribeMaintenanceWindowExecutionsOutput, error) {
 	req, out := c.DescribeMaintenanceWindowExecutionsRequest(input)
 	err := req.Send()
@@ -1500,6 +1519,14 @@ func (c *SSM) DescribeParametersRequest(input *DescribeParametersInput) (req *re
 }
 
 // Get information about a parameter.
+//
+// Request results are returned on a best-effort basis. If you specify MaxResults
+// in the request, the response includes information up to the limit specified.
+// The number of items returned, however, can be between zero and the value
+// of MaxResults. If the service reaches an internal limit while processing
+// the results, it stops the operation and returns the matching values up to
+// that point and a NextToken. You can specify the NextToken in a subsequent
+// call to get the next set of results.
 func (c *SSM) DescribeParameters(input *DescribeParametersInput) (*DescribeParametersOutput, error) {
 	req, out := c.DescribeParametersRequest(input)
 	err := req.Send()
@@ -1696,7 +1723,9 @@ func (c *SSM) GetDefaultPatchBaselineRequest(input *GetDefaultPatchBaselineInput
 	return
 }
 
-// Retrieves the default patch baseline.
+// Retrieves the default patch baseline. Note that Systems Manager supports
+// creating multiple default patch baselines. For example, you can create a
+// default patch baseline for each operating system.
 func (c *SSM) GetDefaultPatchBaseline(input *GetDefaultPatchBaselineInput) (*GetDefaultPatchBaselineOutput, error) {
 	req, out := c.GetDefaultPatchBaselineRequest(input)
 	err := req.Send()
@@ -1724,8 +1753,7 @@ func (c *SSM) GetDeployablePatchSnapshotForInstanceRequest(input *GetDeployableP
 }
 
 // Retrieves the current snapshot for the patch baseline the instance uses.
-// This API is primarily used by the AWS-ApplyPatchBaseline Systems Manager
-// document.
+// This API is primarily used by the AWS-RunPatchBaseline Systems Manager document.
 func (c *SSM) GetDeployablePatchSnapshotForInstance(input *GetDeployablePatchSnapshotForInstanceInput) (*GetDeployablePatchSnapshotForInstanceOutput, error) {
 	req, out := c.GetDeployablePatchSnapshotForInstanceRequest(input)
 	err := req.Send()
@@ -1943,6 +1971,8 @@ func (c *SSM) GetMaintenanceWindowExecutionTaskInvocationRequest(input *GetMaint
 	return
 }
 
+// Retrieves a task invocation. A task invocation is a specific task executing
+// on a specific target. Maintenance Windows report status for all invocations.
 func (c *SSM) GetMaintenanceWindowExecutionTaskInvocation(input *GetMaintenanceWindowExecutionTaskInvocationInput) (*GetMaintenanceWindowExecutionTaskInvocationOutput, error) {
 	req, out := c.GetMaintenanceWindowExecutionTaskInvocationRequest(input)
 	err := req.Send()
@@ -1969,6 +1999,7 @@ func (c *SSM) GetMaintenanceWindowTaskRequest(input *GetMaintenanceWindowTaskInp
 	return
 }
 
+// Lists the tasks in a Maintenance Window.
 func (c *SSM) GetMaintenanceWindowTask(input *GetMaintenanceWindowTaskInput) (*GetMaintenanceWindowTaskOutput, error) {
 	req, out := c.GetMaintenanceWindowTaskRequest(input)
 	err := req.Send()
@@ -2021,6 +2052,7 @@ func (c *SSM) GetParameterRequest(input *GetParameterInput) (req *request.Reques
 	return
 }
 
+// Get information about a parameter by using the parameter name.
 func (c *SSM) GetParameter(input *GetParameterInput) (*GetParameterOutput, error) {
 	req, out := c.GetParameterRequest(input)
 	err := req.Send()
@@ -2121,6 +2153,16 @@ func (c *SSM) GetParametersByPathRequest(input *GetParametersByPathInput) (req *
 	return
 }
 
+// Retrieve parameters in a specific hierarchy. For more information, see Working
+// with Systems Manager Parameters (http://docs.aws.amazon.com/systems-manager/latest/userguide/sysman-paramstore-working.html).
+//
+// Request results are returned on a best-effort basis. If you specify MaxResults
+// in the request, the response includes information up to the limit specified.
+// The number of items returned, however, can be between zero and the value
+// of MaxResults. If the service reaches an internal limit while processing
+// the results, it stops the operation and returns the matching values up to
+// that point and a NextToken. You can specify the NextToken in a subsequent
+// call to get the next set of results.
 func (c *SSM) GetParametersByPath(input *GetParametersByPathInput) (*GetParametersByPathOutput, error) {
 	req, out := c.GetParametersByPathRequest(input)
 	err := req.Send()
@@ -2210,6 +2252,7 @@ func (c *SSM) ListAssociationVersionsRequest(input *ListAssociationVersionsInput
 	return
 }
 
+// Retrieves all versions of an association for a specific association ID.
 func (c *SSM) ListAssociationVersions(input *ListAssociationVersionsInput) (*ListAssociationVersionsOutput, error) {
 	req, out := c.ListAssociationVersionsRequest(input)
 	err := req.Send()
@@ -2321,6 +2364,10 @@ func (c *SSM) ListComplianceItemsRequest(input *ListComplianceItemsInput) (req *
 	return
 }
 
+// For a specified resource ID, this API action returns a list of compliance
+// statuses for different resource types. Currently, you can only specify one
+// resource ID per call. List results depend on the criteria specified in the
+// filter.
 func (c *SSM) ListComplianceItems(input *ListComplianceItemsInput) (*ListComplianceItemsOutput, error) {
 	req, out := c.ListComplianceItemsRequest(input)
 	err := req.Send()
@@ -2347,6 +2394,9 @@ func (c *SSM) ListComplianceSummariesRequest(input *ListComplianceSummariesInput
 	return
 }
 
+// Returns a summary count of compliant and non-compliant resources for a compliance
+// type. For example, this call can return State Manager associations, patches,
+// or custom compliance types according to the filter criteria that you specify.
 func (c *SSM) ListComplianceSummaries(input *ListComplianceSummariesInput) (*ListComplianceSummariesOutput, error) {
 	req, out := c.ListComplianceSummariesRequest(input)
 	err := req.Send()
@@ -2480,6 +2530,9 @@ func (c *SSM) ListResourceComplianceSummariesRequest(input *ListResourceComplian
 	return
 }
 
+// Returns a resource-level summary count. The summary includes information
+// about compliant and non-compliant statuses and detailed compliance-item severity
+// counts, according to the filter criteria you specify.
 func (c *SSM) ListResourceComplianceSummaries(input *ListResourceComplianceSummariesInput) (*ListResourceComplianceSummariesOutput, error) {
 	req, out := c.ListResourceComplianceSummariesRequest(input)
 	err := req.Send()
@@ -2506,6 +2559,16 @@ func (c *SSM) ListResourceDataSyncRequest(input *ListResourceDataSyncInput) (req
 	return
 }
 
+// Lists your resource data sync configurations. Includes information about
+// the last time a sync attempted to start, the last sync status, and the last
+// time a sync successfully completed.
+//
+// The number of sync configurations might be too large to return using a single
+// call to ListResourceDataSync. You can limit the number of sync configurations
+// returned by using the MaxResults parameter. To determine whether there are
+// more sync configurations to list, check the value of NextToken in the output.
+// If there are more sync configurations to list, you can request them by specifying
+// the NextToken returned in the call to the parameter of a subsequent call.
 func (c *SSM) ListResourceDataSync(input *ListResourceDataSyncInput) (*ListResourceDataSyncOutput, error) {
 	req, out := c.ListResourceDataSyncRequest(input)
 	err := req.Send()
@@ -2589,6 +2652,11 @@ func (c *SSM) PutComplianceItemsRequest(input *PutComplianceItemsInput) (req *re
 	return
 }
 
+// Registers a compliance type and other compliance details on a designated
+// resource. This action lets you register custom compliance details with a
+// resource. This call overwrites existing compliance information on the resource,
+// so you must provide a full list of compliance items each time that you send
+// the request.
 func (c *SSM) PutComplianceItems(input *PutComplianceItemsInput) (*PutComplianceItemsOutput, error) {
 	req, out := c.PutComplianceItemsRequest(input)
 	err := req.Send()
@@ -2670,7 +2738,7 @@ func (c *SSM) PutParameterRequest(input *PutParameterInput) (req *request.Reques
 	return
 }
 
-// Add one or more paramaters to the system.
+// Add one or more parameters to the system.
 func (c *SSM) PutParameter(input *PutParameterInput) (*PutParameterOutput, error) {
 	req, out := c.PutParameterRequest(input)
 	err := req.Send()
@@ -2936,6 +3004,8 @@ func (c *SSM) SendAutomationSignalRequest(input *SendAutomationSignalInput) (req
 	return
 }
 
+// Sends a signal to an Automation execution to change the current behavior
+// or status of the execution.
 func (c *SSM) SendAutomationSignal(input *SendAutomationSignalInput) (*SendAutomationSignalOutput, error) {
 	req, out := c.SendAutomationSignalRequest(input)
 	err := req.Send()
@@ -2962,7 +3032,7 @@ func (c *SSM) SendCommandRequest(input *SendCommandInput) (req *request.Request,
 	return
 }
 
-// Executes commands on one or more remote instances.
+// Executes commands on one or more managed instances.
 func (c *SSM) SendCommand(input *SendCommandInput) (*SendCommandOutput, error) {
 	req, out := c.SendCommandRequest(input)
 	err := req.Send()
@@ -3069,8 +3139,8 @@ func (c *SSM) UpdateAssociationRequest(input *UpdateAssociationInput) (req *requ
 	return
 }
 
-// Updates an association. You can only update the document version, schedule,
-// parameters, and Amazon S3 output of an association.
+// Updates an association. You can update the association name and version,
+// the document version, schedule, parameters, and Amazon S3 output.
 func (c *SSM) UpdateAssociation(input *UpdateAssociationInput) (*UpdateAssociationOutput, error) {
 	req, out := c.UpdateAssociationRequest(input)
 	err := req.Send()
@@ -3258,6 +3328,23 @@ func (c *SSM) UpdateMaintenanceWindowTargetRequest(input *UpdateMaintenanceWindo
 	return
 }
 
+// Modifies the target of an existing Maintenance Window. You can't change the
+// target type, but you can change the following:
+//
+// The target from being an ID target to a Tag target, or a Tag target to an
+// ID target.
+//
+// IDs for an ID target.
+//
+// Tags for a Tag target.
+//
+// Owner.
+//
+// Name.
+//
+// Description.
+//
+// If a parameter is null, then the corresponding field is not modified.
 func (c *SSM) UpdateMaintenanceWindowTarget(input *UpdateMaintenanceWindowTargetInput) (*UpdateMaintenanceWindowTargetOutput, error) {
 	req, out := c.UpdateMaintenanceWindowTargetRequest(input)
 	err := req.Send()
@@ -3284,6 +3371,26 @@ func (c *SSM) UpdateMaintenanceWindowTaskRequest(input *UpdateMaintenanceWindowT
 	return
 }
 
+// Modifies a task assigned to a Maintenance Window. You can't change the task
+// type, but you can change the following values:
+//
+// Task ARN. For example, you can change a RUN_COMMAND task from AWS-RunPowerShellScript
+// to AWS-RunShellScript.
+//
+// Service role ARN.
+//
+// Task parameters.
+//
+// Task priority.
+//
+// Task MaxConcurrency and MaxErrors.
+//
+// Log location.
+//
+// If a parameter is null, then the corresponding field is not modified. Also,
+// if you set Replace to true, then all fields required by the RegisterTaskWithMaintenanceWindow
+// action are required for this request. Optional fields that aren't specified
+// are set to null.
 func (c *SSM) UpdateMaintenanceWindowTask(input *UpdateMaintenanceWindowTaskInput) (*UpdateMaintenanceWindowTaskOutput, error) {
 	req, out := c.UpdateMaintenanceWindowTaskRequest(input)
 	err := req.Send()
@@ -3494,8 +3601,10 @@ type Association struct {
 	// is a binding between a document and a set of targets with a schedule.
 	AssociationId *string `type:"string"`
 
+	// The association name.
 	AssociationName *string `type:"string"`
 
+	// The association version.
 	AssociationVersion *string `type:"string"`
 
 	// The version of the document used in the association.
@@ -3537,8 +3646,10 @@ type AssociationDescription struct {
 	// The association ID.
 	AssociationId *string `type:"string"`
 
+	// The association name.
 	AssociationName *string `type:"string"`
 
+	// The association version.
 	AssociationVersion *string `type:"string"`
 
 	// The date when the association was made.
@@ -3706,28 +3817,42 @@ func (s *AssociationStatus) Validate() error {
 	return nil
 }
 
+// Information about the association version.
 type AssociationVersionInfo struct {
 	_ struct{} `type:"structure"`
 
+	// The ID created by the system when the association was created.
 	AssociationId *string `type:"string"`
 
+	// The name specified for the association version when the association version
+	// was created.
 	AssociationName *string `type:"string"`
 
+	// The association version.
 	AssociationVersion *string `type:"string"`
 
+	// The date the association version was created.
 	CreatedDate *time.Time `type:"timestamp" timestampFormat:"unix"`
 
+	// The version of an SSM document used when the association version was created.
 	DocumentVersion *string `type:"string"`
 
+	// The name specified when the association was created.
 	Name *string `type:"string"`
 
-	// An Amazon S3 bucket where you want to store the results of this request.
+	// The location in Amazon S3 specified for the association when the association
+	// version was created.
 	OutputLocation *InstanceAssociationOutputLocation `type:"structure"`
 
+	// Parameters specified when the association version was created.
 	Parameters map[string][]*string `type:"map"`
 
+	// The cron or rate schedule specified for the association when the association
+	// version was created.
 	ScheduleExpression *string `min:"1" type:"string"`
 
+	// The targets specified for the association when the association version was
+	// created.
 	Targets []*Target `type:"list"`
 }
 
@@ -3811,6 +3936,8 @@ type AutomationExecution struct {
 	// A message describing why an execution has failed, if the status is set to
 	// Failed.
 	FailureMessage *string `type:"string"`
+
+	Mode *string `type:"string" enum:"ExecutionMode"`
 
 	// The list of execution outputs as defined in the automation document.
 	Outputs map[string][]*string `min:"1" type:"map"`
@@ -4125,10 +4252,10 @@ func (s Command) GoString() string {
 type CommandFilter struct {
 	_ struct{} `type:"structure"`
 
-	// The name of the filter. For example, requested date and time.
+	// The name of the filter.
 	Key *string `locationName:"key" type:"string" required:"true" enum:"CommandFilterKey"`
 
-	// The filter value. For example: June 30, 2015.
+	// The filter value.
 	Value *string `locationName:"value" min:"1" type:"string" required:"true"`
 }
 
@@ -4396,13 +4523,21 @@ func (s CommandPlugin) GoString() string {
 	return s.String()
 }
 
+// A summary of the call execution that includes an execution ID, the type of
+// execution (for example, Command), and the date/time of the execution using
+// a datetime object that is saved in the following format: yyyy-MM-dd'T'HH:mm:ss'Z'.
 type ComplianceExecutionSummary struct {
 	_ struct{} `type:"structure"`
 
+	// An ID created by the system when PutComplianceItems was called. For example,
+	// CommandID is a valid execution ID. You can use this ID in subsequent calls.
 	ExecutionId *string `type:"string"`
 
+	// The time the execution ran as a datetime object that is saved in the following
+	// format: yyyy-MM-dd'T'HH:mm:ss'Z'.
 	ExecutionTime *time.Time `type:"timestamp" timestampFormat:"unix" required:"true"`
 
+	// The type of execution. For example, Command is a valid execution type.
 	ExecutionType *string `type:"string"`
 }
 
@@ -4429,25 +4564,44 @@ func (s *ComplianceExecutionSummary) Validate() error {
 	return nil
 }
 
+// Information about the compliance as defined by the resource type. For example,
+// for a patch resource type, Items includes information about the PatchSeverity,
+// Classification, etc.
 type ComplianceItem struct {
 	_ struct{} `type:"structure"`
 
+	// The compliance type. For example, Association (for a State Manager association),
+	// Patch, or Custom:string are all valid compliance types.
 	ComplianceType *string `min:"1" type:"string"`
 
+	// A "Key": "Value" tag combination for the compliance item.
 	Details map[string]*string `type:"map"`
 
+	// A summary for the compliance item. The summary includes an execution ID,
+	// the execution type (for example, command), and the execution time.
 	ExecutionSummary *ComplianceExecutionSummary `type:"structure"`
 
+	// An ID for the compliance item. For example, if the compliance item is a Windows
+	// patch, the ID could be the number of the KB article. Here's an example: KB4010320.
 	Id *string `min:"1" type:"string"`
 
+	// An ID for the resource. For a managed instance, this is the instance ID.
 	ResourceId *string `min:"1" type:"string"`
 
+	// The type of resource. ManagedInstance is currently the only supported resource
+	// type.
 	ResourceType *string `min:"1" type:"string"`
 
+	// The severity of the compliance status. Severity can be one of the following:
+	// Critical, High, Medium, Low, Informational, Unspecified.
 	Severity *string `type:"string" enum:"ComplianceSeverity"`
 
+	// The status of the compliance item. An item is either COMPLIANT or NON_COMPLIANT.
 	Status *string `type:"string" enum:"ComplianceStatus"`
 
+	// A title for the compliance item. For example, if the compliance item is a
+	// Windows patch, the title could be the title of the KB article for the patch.
+	// Here's an example: Security Update for Active Directory Federation Services.
 	Title *string `type:"string"`
 }
 
@@ -4461,17 +4615,27 @@ func (s ComplianceItem) GoString() string {
 	return s.String()
 }
 
+// Information about a compliance item.
 type ComplianceItemEntry struct {
 	_ struct{} `type:"structure"`
 
+	// A "Key": "Value" tag combination for the compliance item.
 	Details map[string]*string `type:"map"`
 
+	// The compliance item ID. For example, if the compliance item is a Windows
+	// patch, the ID could be the number of the KB article.
 	Id *string `min:"1" type:"string"`
 
+	// The severity of the compliance status. Severity can be one of the following:
+	// Critical, High, Medium, Low, Informational, Unspecified.
 	Severity *string `type:"string" required:"true" enum:"ComplianceSeverity"`
 
+	// The status of the compliance item. An item is either COMPLIANT or NON_COMPLIANT.
 	Status *string `type:"string" required:"true" enum:"ComplianceStatus"`
 
+	// The title of the compliance item. For example, if the compliance item is
+	// a Windows patch, the title could be the title of the KB article for the patch.
+	// Here's an example: Security Update for Active Directory Federation Services.
 	Title *string `type:"string"`
 }
 
@@ -4504,13 +4668,18 @@ func (s *ComplianceItemEntry) Validate() error {
 	return nil
 }
 
+// One or more filters. Use a filter to return a more specific list of results.
 type ComplianceStringFilter struct {
 	_ struct{} `type:"structure"`
 
+	// The name of the filter.
 	Key *string `min:"1" type:"string"`
 
+	// The type of comparison that should be performed for the value: Equal, NotEqual,
+	// BeginWith, LessThan, or GreaterThan.
 	Type *string `type:"string" enum:"ComplianceQueryOperatorType"`
 
+	// The value for which to search.
 	Values []*string `locationNameList:"FilterValue" min:"1" type:"list"`
 }
 
@@ -4540,13 +4709,18 @@ func (s *ComplianceStringFilter) Validate() error {
 	return nil
 }
 
+// A summary of compliance information by compliance type.
 type ComplianceSummaryItem struct {
 	_ struct{} `type:"structure"`
 
+	// The type of compliance item. For example, the compliance type can be Association,
+	// Patch, or Custom:string.
 	ComplianceType *string `min:"1" type:"string"`
 
+	// A list of COMPLIANT items for the specified compliance type.
 	CompliantSummary *CompliantSummary `type:"structure"`
 
+	// A list of NON_COMPLIANT items for the specified compliance type.
 	NonCompliantSummary *NonCompliantSummary `type:"structure"`
 }
 
@@ -4560,11 +4734,15 @@ func (s ComplianceSummaryItem) GoString() string {
 	return s.String()
 }
 
+// A summary of resources that are compliant. The summary is organized according
+// to the resource count for each compliance type.
 type CompliantSummary struct {
 	_ struct{} `type:"structure"`
 
+	// The total number of resources that are compliant.
 	CompliantCount *int64 `type:"integer"`
 
+	// A summary of the compliance severity by compliance type.
 	SeveritySummary *SeveritySummary `type:"structure"`
 }
 
@@ -4576,6 +4754,39 @@ func (s CompliantSummary) String() string {
 // GoString returns the string representation
 func (s CompliantSummary) GoString() string {
 	return s.String()
+}
+
+type ConfigurePackageResultStep struct {
+	_ struct{} `type:"structure"`
+
+	Action *string `min:"1" type:"string"`
+
+	Result *int64 `type:"integer"`
+
+	Timing *int64 `type:"integer"`
+}
+
+// String returns the string representation
+func (s ConfigurePackageResultStep) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ConfigurePackageResultStep) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ConfigurePackageResultStep) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ConfigurePackageResultStep"}
+	if s.Action != nil && len(*s.Action) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Action", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
 }
 
 type CreateActivationInput struct {
@@ -4717,6 +4928,7 @@ func (s CreateAssociationBatchOutput) GoString() string {
 type CreateAssociationBatchRequestEntry struct {
 	_ struct{} `type:"structure"`
 
+	// Specify a descriptive name for the association.
 	AssociationName *string `type:"string"`
 
 	// The document version.
@@ -4785,6 +4997,7 @@ func (s *CreateAssociationBatchRequestEntry) Validate() error {
 type CreateAssociationInput struct {
 	_ struct{} `type:"structure"`
 
+	// Specify a descriptive name for the association.
 	AssociationName *string `type:"string"`
 
 	// The document version you want to associate with the target(s). Can be a specific
@@ -4874,6 +5087,8 @@ type CreateDocumentInput struct {
 	// A valid JSON string.
 	Content *string `min:"1" type:"string" required:"true"`
 
+	DocumentFormat *string `type:"string" enum:"DocumentFormat"`
+
 	// The type of document to create. Valid document types include: Policy, Automation,
 	// and Command.
 	DocumentType *string `type:"string" enum:"DocumentType"`
@@ -4931,8 +5146,13 @@ func (s CreateDocumentOutput) GoString() string {
 type CreateMaintenanceWindowInput struct {
 	_ struct{} `type:"structure"`
 
-	// Whether targets must be registered with the Maintenance Window before tasks
-	// can be defined for those targets.
+	// Enables a Maintenance Window task to execute on managed instances, even if
+	// you have not registered those instances as targets. If enabled, then you
+	// must specify the unregistered instances (by instance ID) when you register
+	// a task with the Maintenance Window
+	//
+	// If you don't enable this option, then you must specify previously-registered
+	// targets when you register a task with the Maintenance Window.
 	AllowUnassociatedTargets *bool `type:"boolean" required:"true"`
 
 	// User-provided idempotency token.
@@ -4942,6 +5162,8 @@ type CreateMaintenanceWindowInput struct {
 	// Manager stops scheduling new tasks for execution.
 	Cutoff *int64 `type:"integer" required:"true"`
 
+	// An optional description for the Maintenance Window. We recommend specifying
+	// a description to help you organize your Maintenance Windows.
 	Description *string `min:"1" type:"string"`
 
 	// The duration of the Maintenance Window in hours.
@@ -5030,6 +5252,10 @@ type CreatePatchBaselineInput struct {
 	// A list of explicitly approved patches for the baseline.
 	ApprovedPatches []*string `type:"list"`
 
+	// Defines the compliance level for approved patches. This means that if an
+	// approved patch is reported as missing, this is the severity of the compliance
+	// violation. Valid compliance severity levels include the following: CRITICAL,
+	// HIGH, MEDIUM, LOW, INFORMATIONAL, UNSPECIFIED. The default value is UNSPECIFIED.
 	ApprovedPatchesComplianceLevel *string `type:"string" enum:"PatchComplianceLevel"`
 
 	// User-provided idempotency token.
@@ -5044,6 +5270,9 @@ type CreatePatchBaselineInput struct {
 	// The name of the patch baseline.
 	Name *string `min:"3" type:"string" required:"true"`
 
+	// Defines the operating system the patch baseline applies to. Supported operating
+	// systems include WINDOWS, AMAZON_LINUX, UBUNTU and REDHAT_ENTERPRISE_LINUX.
+	// The Default value is WINDOWS.
 	OperatingSystem *string `type:"string" enum:"OperatingSystem"`
 
 	// A list of explicitly rejected patches for the baseline.
@@ -5112,8 +5341,10 @@ func (s CreatePatchBaselineOutput) GoString() string {
 type CreateResourceDataSyncInput struct {
 	_ struct{} `type:"structure"`
 
+	// Amazon S3 configuration details for the sync.
 	S3Destination *ResourceDataSyncS3Destination `type:"structure" required:"true"`
 
+	// A name for the configuration.
 	SyncName *string `min:"1" type:"string" required:"true"`
 }
 
@@ -5436,6 +5667,7 @@ func (s DeleteParameterOutput) GoString() string {
 type DeleteParametersInput struct {
 	_ struct{} `type:"structure"`
 
+	// The names of the parameters to delete.
 	Names []*string `min:"1" type:"list" required:"true"`
 }
 
@@ -5468,8 +5700,11 @@ func (s *DeleteParametersInput) Validate() error {
 type DeleteParametersOutput struct {
 	_ struct{} `type:"structure"`
 
+	// The names of the deleted parameters.
 	DeletedParameters []*string `min:"1" type:"list"`
 
+	// The names of parameters that weren't deleted because the parameters are not
+	// valid.
 	InvalidParameters []*string `min:"1" type:"list"`
 }
 
@@ -5536,6 +5771,7 @@ func (s DeletePatchBaselineOutput) GoString() string {
 type DeleteResourceDataSyncInput struct {
 	_ struct{} `type:"structure"`
 
+	// The name of the configuration to delete.
 	SyncName *string `min:"1" type:"string" required:"true"`
 }
 
@@ -5689,6 +5925,9 @@ func (s DeregisterPatchBaselineForPatchGroupOutput) GoString() string {
 type DeregisterTargetFromMaintenanceWindowInput struct {
 	_ struct{} `type:"structure"`
 
+	// The system checks if the target is being referenced by a task. If the target
+	// is being referenced, the system returns an error and does not deregister
+	// the target from the Maintenance Window.
 	Safe *bool `type:"boolean"`
 
 	// The ID of the Maintenance Window the target should be removed from.
@@ -5898,6 +6137,10 @@ type DescribeAssociationInput struct {
 	// The association ID for which you want information.
 	AssociationId *string `type:"string"`
 
+	// Specify the association version to retrieve. To view the latest version,
+	// either specify $LATEST for this parameter, or omit this parameter. To view
+	// a list of all associations for an instance, use ListInstanceAssociations.
+	// To get a list of versions for a specific association, use ListAssociationVersions.
 	AssociationVersion *string `type:"string"`
 
 	// The instance ID.
@@ -6859,7 +7102,7 @@ type DescribeInstancePatchStatesForPatchGroupInput struct {
 	Filters []*InstancePatchStateFilter `type:"list"`
 
 	// The maximum number of patches to return (per page).
-	MaxResults *int64 `min:"10" type:"integer"`
+	MaxResults *int64 `min:"1" type:"integer"`
 
 	// The token for the next set of items to return. (You received this token from
 	// a previous call.)
@@ -6883,8 +7126,8 @@ func (s DescribeInstancePatchStatesForPatchGroupInput) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *DescribeInstancePatchStatesForPatchGroupInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "DescribeInstancePatchStatesForPatchGroupInput"}
-	if s.MaxResults != nil && *s.MaxResults < 10 {
-		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 10))
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
 	}
 	if s.PatchGroup == nil {
 		invalidParams.Add(request.NewErrParamRequired("PatchGroup"))
@@ -6937,7 +7180,7 @@ type DescribeInstancePatchStatesInput struct {
 	InstanceIds []*string `type:"list" required:"true"`
 
 	// The maximum number of instances to return (per page).
-	MaxResults *int64 `min:"10" type:"integer"`
+	MaxResults *int64 `min:"1" type:"integer"`
 
 	// The token for the next set of items to return. (You received this token from
 	// a previous call.)
@@ -6960,8 +7203,8 @@ func (s *DescribeInstancePatchStatesInput) Validate() error {
 	if s.InstanceIds == nil {
 		invalidParams.Add(request.NewErrParamRequired("InstanceIds"))
 	}
-	if s.MaxResults != nil && *s.MaxResults < 10 {
-		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 10))
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
 	}
 
 	if invalidParams.Len() > 0 {
@@ -7005,7 +7248,7 @@ type DescribeInstancePatchesInput struct {
 	InstanceId *string `type:"string" required:"true"`
 
 	// The maximum number of patches to return (per page).
-	MaxResults *int64 `min:"10" type:"integer"`
+	MaxResults *int64 `min:"1" type:"integer"`
 
 	// The token for the next set of items to return. (You received this token from
 	// a previous call.)
@@ -7028,8 +7271,8 @@ func (s *DescribeInstancePatchesInput) Validate() error {
 	if s.InstanceId == nil {
 		invalidParams.Add(request.NewErrParamRequired("InstanceId"))
 	}
-	if s.MaxResults != nil && *s.MaxResults < 10 {
-		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 10))
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
 	}
 	if s.Filters != nil {
 		for i, v := range s.Filters {
@@ -7803,6 +8046,7 @@ type DescribeParametersInput struct {
 	// a previous call.)
 	NextToken *string `type:"string"`
 
+	// Filters to limit the request results.
 	ParameterFilters []*ParameterStringFilter `type:"list"`
 }
 
@@ -8012,6 +8256,7 @@ func (s DescribePatchGroupStateOutput) GoString() string {
 type DescribePatchGroupsInput struct {
 	_ struct{} `type:"structure"`
 
+	// One or more filters. Use a filter to return a more specific list of results.
 	Filters []*PatchOrchestratorFilter `type:"list"`
 
 	// The maximum number of patch groups to return (per page).
@@ -8114,6 +8359,8 @@ type DocumentDescription struct {
 	// A description of the document.
 	Description *string `type:"string"`
 
+	DocumentFormat *string `type:"string" enum:"DocumentFormat"`
+
 	// The type of document.
 	DocumentType *string `type:"string" enum:"DocumentType"`
 
@@ -8209,6 +8456,8 @@ func (s *DocumentFilter) Validate() error {
 type DocumentIdentifier struct {
 	_ struct{} `type:"structure"`
 
+	DocumentFormat *string `type:"string" enum:"DocumentFormat"`
+
 	// The document type.
 	DocumentType *string `type:"string" enum:"DocumentType"`
 
@@ -8274,6 +8523,8 @@ type DocumentVersionInfo struct {
 
 	// The date the document was created.
 	CreatedDate *time.Time `type:"timestamp" timestampFormat:"unix"`
+
+	DocumentFormat *string `type:"string" enum:"DocumentFormat"`
 
 	// The document version.
 	DocumentVersion *string `type:"string"`
@@ -8536,12 +8787,20 @@ type GetCommandInvocationOutput struct {
 	ExecutionElapsedTime *string `type:"string"`
 
 	// The date and time the plugin was finished executing. Date and time are written
-	// in ISO 8601 format. For example, August 28, 2016 is represented as 2016-08-28.
+	// in ISO 8601 format. For example, June 7, 2017 is represented as 2017-06-7.
+	// The following sample AWS CLI command uses the InvokedAfter filter.
+	//
+	//  aws ssm list-commands --filters key=InvokedAfter,value=2017-06-07T00:00:00Z
+	//
 	// If the plugin has not started to execute, the string is empty.
 	ExecutionEndDateTime *string `type:"string"`
 
 	// The date and time the plugin started executing. Date and time are written
-	// in ISO 8601 format. For example, August 28, 2016 is represented as 2016-08-28.
+	// in ISO 8601 format. For example, June 7, 2017 is represented as 2017-06-7.
+	// The following sample AWS CLI command uses the InvokedBefore filter.
+	//
+	//  aws ssm list-commands --filters key=InvokedBefore,value=2017-06-07T00:00:00Z
+	//
 	// If the plugin has not started to execute, the string is empty.
 	ExecutionStartDateTime *string `type:"string"`
 
@@ -8643,6 +8902,7 @@ func (s GetCommandInvocationOutput) GoString() string {
 type GetDefaultPatchBaselineInput struct {
 	_ struct{} `type:"structure"`
 
+	// Returns the default patch baseline for the specified operating system.
 	OperatingSystem *string `type:"string" enum:"OperatingSystem"`
 }
 
@@ -8662,6 +8922,7 @@ type GetDefaultPatchBaselineOutput struct {
 	// The ID of the default patch baseline.
 	BaselineId *string `min:"20" type:"string"`
 
+	// The operating system for the returned patch baseline.
 	OperatingSystem *string `type:"string" enum:"OperatingSystem"`
 }
 
@@ -8721,6 +8982,8 @@ type GetDeployablePatchSnapshotForInstanceOutput struct {
 	// The ID of the instance.
 	InstanceId *string `type:"string"`
 
+	// Returns the specific operating system (for example Windows Server 2012 or
+	// Amazon Linux 2015.09) on the instance for the specified patch snapshot.
 	Product *string `type:"string"`
 
 	// A pre-signed Amazon S3 URL that can be used to download the patch snapshot.
@@ -8742,6 +9005,8 @@ func (s GetDeployablePatchSnapshotForInstanceOutput) GoString() string {
 
 type GetDocumentInput struct {
 	_ struct{} `type:"structure"`
+
+	DocumentFormat *string `type:"string" enum:"DocumentFormat"`
 
 	// The document version for which you want information.
 	DocumentVersion *string `type:"string"`
@@ -8777,6 +9042,8 @@ type GetDocumentInternalInput struct {
 	_ struct{} `type:"structure"`
 
 	CustomerAccountId *string `type:"string" required:"true"`
+
+	DocumentFormat *string `type:"string" enum:"DocumentFormat"`
 
 	DocumentVersion *string `type:"string"`
 
@@ -8816,6 +9083,8 @@ type GetDocumentInternalOutput struct {
 
 	Content *string `min:"1" type:"string"`
 
+	DocumentFormat *string `type:"string" enum:"DocumentFormat"`
+
 	DocumentType *string `type:"string" enum:"DocumentType"`
 
 	DocumentVersion *string `type:"string"`
@@ -8838,6 +9107,8 @@ type GetDocumentOutput struct {
 
 	// The contents of the SSM document.
 	Content *string `min:"1" type:"string"`
+
+	DocumentFormat *string `type:"string" enum:"DocumentFormat"`
 
 	// The document type.
 	DocumentType *string `type:"string" enum:"DocumentType"`
@@ -8981,6 +9252,7 @@ type GetInventorySchemaInput struct {
 
 	ResourceType *string `type:"string" enum:"InventoryResourceType"`
 
+	// Returns the sub-type schema for a specified inventory type.
 	SubType *bool `type:"boolean"`
 
 	// The type of inventory item to return.
@@ -9142,10 +9414,14 @@ func (s *GetMaintenanceWindowExecutionTaskInput) Validate() error {
 type GetMaintenanceWindowExecutionTaskInvocationInput struct {
 	_ struct{} `type:"structure"`
 
+	// The invocation ID to retrieve.
 	InvocationId *string `min:"36" type:"string" required:"true"`
 
+	// The ID of the specific task in the Maintenance Window task that should be
+	// retrieved.
 	TaskId *string `min:"36" type:"string" required:"true"`
 
+	// The ID of the Maintenance Window execution for which the task is a part.
 	WindowExecutionId *string `min:"36" type:"string" required:"true"`
 }
 
@@ -9190,28 +9466,43 @@ func (s *GetMaintenanceWindowExecutionTaskInvocationInput) Validate() error {
 type GetMaintenanceWindowExecutionTaskInvocationOutput struct {
 	_ struct{} `type:"structure"`
 
+	// The time that the task finished executing on the target.
 	EndTime *time.Time `type:"timestamp" timestampFormat:"unix"`
 
+	// The execution ID.
 	ExecutionId *string `type:"string"`
 
+	// The invocation ID.
 	InvocationId *string `min:"36" type:"string"`
 
+	// User-provided value to be included in any CloudWatch events raised while
+	// running tasks for these targets in this Maintenance Window.
 	OwnerInformation *string `min:"1" type:"string"`
 
+	// The parameters used at the time that the task executed.
 	Parameters *string `type:"string"`
 
+	// The time that the task started executing on the target.
 	StartTime *time.Time `type:"timestamp" timestampFormat:"unix"`
 
+	// The task status for an invocation.
 	Status *string `type:"string" enum:"MaintenanceWindowExecutionStatus"`
 
+	// The details explaining the status. Details are only available for certain
+	// status values.
 	StatusDetails *string `type:"string"`
 
+	// The task execution ID.
 	TaskExecutionId *string `min:"36" type:"string"`
 
+	// Retrieves the task type for a Maintenance Window. Task types include the
+	// following: LAMBDA, STEP_FUNCTION, AUTOMATION, RUN_COMMAND.
 	TaskType *string `type:"string" enum:"MaintenanceWindowTaskType"`
 
+	// The Maintenance Window execution ID.
 	WindowExecutionId *string `min:"36" type:"string"`
 
+	// The Maintenance Window target ID.
 	WindowTargetId *string `type:"string"`
 }
 
@@ -9332,6 +9623,7 @@ type GetMaintenanceWindowOutput struct {
 	// Manager stops scheduling new tasks for execution.
 	Cutoff *int64 `type:"integer"`
 
+	// The description of the Maintenance Window.
 	Description *string `min:"1" type:"string"`
 
 	// The duration of the Maintenance Window in hours.
@@ -9366,8 +9658,10 @@ func (s GetMaintenanceWindowOutput) GoString() string {
 type GetMaintenanceWindowTaskInput struct {
 	_ struct{} `type:"structure"`
 
+	// The Maintenance Window ID that includes the task to retrieve.
 	WindowId *string `min:"20" type:"string" required:"true"`
 
+	// The Maintenance Window task ID to retrieve.
 	WindowTaskId *string `min:"36" type:"string" required:"true"`
 }
 
@@ -9406,33 +9700,50 @@ func (s *GetMaintenanceWindowTaskInput) Validate() error {
 type GetMaintenanceWindowTaskOutput struct {
 	_ struct{} `type:"structure"`
 
+	// The retrieved task description.
 	Description *string `min:"1" type:"string"`
 
-	// Information about an Amazon S3 bucket to write instance-level logs to.
+	// The location in Amazon S3 where the task results are logged.
 	LoggingInfo *LoggingInfo `type:"structure"`
 
+	// The maximum number of targets allowed to run this task in parallel.
 	MaxConcurrency *string `min:"1" type:"string"`
 
+	// The maximum number of errors allowed before the task stops being scheduled.
 	MaxErrors *string `min:"1" type:"string"`
 
+	// The retrieved task name.
 	Name *string `min:"3" type:"string"`
 
+	// The priority of the task when it executes. The lower the number, the higher
+	// the priority. Tasks that have the same priority are scheduled in parallel.
 	Priority *int64 `type:"integer"`
 
+	// The IAM service role to assume during task execution.
 	ServiceRoleArn *string `type:"string"`
 
+	// The targets where the task should execute.
 	Targets []*Target `type:"list"`
 
+	// The resource that the task used during execution. For RUN_COMMAND and AUTOMATION
+	// task types, the TaskArn is the SSM Document name/ARN. For LAMBDA tasks, the
+	// value is the function name/ARN. For STEP_FUNCTION tasks, the value is the
+	// state machine ARN.
 	TaskArn *string `min:"1" type:"string"`
 
+	// The parameters to pass to the task when it executes.
 	TaskInvocationParameters *MaintenanceWindowTaskInvocationParameters `type:"structure"`
 
+	// The parameters to pass to the task when it executes.
 	TaskParameters map[string]*MaintenanceWindowTaskParameterValueExpression `type:"map"`
 
+	// The type of task to execute.
 	TaskType *string `type:"string" enum:"MaintenanceWindowTaskType"`
 
+	// The retrieved Maintenance Window ID.
 	WindowId *string `min:"20" type:"string"`
 
+	// The retrieved Maintenance Window task ID.
 	WindowTaskId *string `min:"36" type:"string"`
 }
 
@@ -9449,7 +9760,7 @@ func (s GetMaintenanceWindowTaskOutput) GoString() string {
 type GetManifestInput struct {
 	_ struct{} `type:"structure"`
 
-	PackageName *string `min:"1" type:"string" required:"true"`
+	PackageName *string `type:"string" required:"true"`
 
 	PackageVersion *string `min:"1" type:"string" required:"true"`
 }
@@ -9469,9 +9780,6 @@ func (s *GetManifestInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "GetManifestInput"}
 	if s.PackageName == nil {
 		invalidParams.Add(request.NewErrParamRequired("PackageName"))
-	}
-	if s.PackageName != nil && len(*s.PackageName) < 1 {
-		invalidParams.Add(request.NewErrParamMinLen("PackageName", 1))
 	}
 	if s.PackageVersion == nil {
 		invalidParams.Add(request.NewErrParamRequired("PackageVersion"))
@@ -9575,8 +9883,11 @@ func (s GetParameterHistoryOutput) GoString() string {
 type GetParameterInput struct {
 	_ struct{} `type:"structure"`
 
+	// The name of the parameter you want to query.
 	Name *string `min:"1" type:"string" required:"true"`
 
+	// Return decrypted values for secure string parameters. This flag is ignored
+	// for String and StringList parameter types.
 	WithDecryption *bool `type:"boolean"`
 }
 
@@ -9609,7 +9920,7 @@ func (s *GetParameterInput) Validate() error {
 type GetParameterOutput struct {
 	_ struct{} `type:"structure"`
 
-	// An Amazon EC2 Systems Manager parameter in Parameter Store.
+	// Information about a parameter.
 	Parameter *Parameter `type:"structure"`
 }
 
@@ -9626,16 +9937,28 @@ func (s GetParameterOutput) GoString() string {
 type GetParametersByPathInput struct {
 	_ struct{} `type:"structure"`
 
+	// The maximum number of items to return for this call. The call also returns
+	// a token that you can specify in a subsequent call to get the next set of
+	// results.
 	MaxResults *int64 `min:"1" type:"integer"`
 
+	// A token to start the list. Use this token to get the next set of results.
 	NextToken *string `type:"string"`
 
+	// Filters to limit the request results.
 	ParameterFilters []*ParameterStringFilter `type:"list"`
 
+	// The hierarchy for the parameter. Hierarchies start with a forward slash (/)
+	// and end with the parameter name. A hierarchy can have a maximum of five levels.
+	// Examples: /Environment/Test/DBString003
+	//
+	// /Finance/Prod/IAD/OS/WinServ2016/license15
 	Path *string `min:"1" type:"string" required:"true"`
 
+	// Retrieve all parameters within a hierarchy.
 	Recursive *bool `type:"boolean"`
 
+	// Retrieve all parameters in a hierarchy with their value decrypted.
 	WithDecryption *bool `type:"boolean"`
 }
 
@@ -9681,8 +10004,11 @@ func (s *GetParametersByPathInput) Validate() error {
 type GetParametersByPathOutput struct {
 	_ struct{} `type:"structure"`
 
+	// The token for the next set of items to return. Use this token to get the
+	// next set of results.
 	NextToken *string `type:"string"`
 
+	// A list of parameters found in the specified hierarchy.
 	Parameters []*Parameter `type:"list"`
 }
 
@@ -9758,6 +10084,8 @@ func (s GetParametersOutput) GoString() string {
 type GetPatchBaselineForPatchGroupInput struct {
 	_ struct{} `type:"structure"`
 
+	// Returns he operating system rule specified for patch groups using the patch
+	// baseline.
 	OperatingSystem *string `type:"string" enum:"OperatingSystem"`
 
 	// The name of the patch group whose patch baseline should be retrieved.
@@ -9796,6 +10124,7 @@ type GetPatchBaselineForPatchGroupOutput struct {
 	// The ID of the patch baseline that should be used for the patch group.
 	BaselineId *string `min:"20" type:"string"`
 
+	// The operating system rule specified for patch groups using the patch baseline.
 	OperatingSystem *string `type:"string" enum:"OperatingSystem"`
 
 	// The name of the patch group.
@@ -9854,6 +10183,8 @@ type GetPatchBaselineOutput struct {
 	// A list of explicitly approved patches for the baseline.
 	ApprovedPatches []*string `type:"list"`
 
+	// Returns the specified compliance severity level for approved patches in the
+	// patch baseline.
 	ApprovedPatchesComplianceLevel *string `type:"string" enum:"PatchComplianceLevel"`
 
 	// The ID of the retrieved patch baseline.
@@ -9874,6 +10205,7 @@ type GetPatchBaselineOutput struct {
 	// The name of the patch baseline.
 	Name *string `min:"3" type:"string"`
 
+	// Returns the operating system specified for the patch baseline.
 	OperatingSystem *string `type:"string" enum:"OperatingSystem"`
 
 	// Patch groups included in the patch baseline.
@@ -9921,6 +10253,7 @@ type InstanceAssociation struct {
 	// The association ID.
 	AssociationId *string `type:"string"`
 
+	// Version information for the association on the instance.
 	AssociationVersion *string `type:"string"`
 
 	// The content of the association document for the instance(s).
@@ -10045,8 +10378,10 @@ type InstanceAssociationStatusInfo struct {
 	// The association ID.
 	AssociationId *string `type:"string"`
 
+	// The name of the association applied to the instance.
 	AssociationName *string `type:"string"`
 
+	// The version of the association applied to the instance.
 	AssociationVersion *string `type:"string"`
 
 	// Detailed status information about the instance association.
@@ -10658,6 +10993,9 @@ type InventoryItem struct {
 	// since last update.
 	ContentHash *string `type:"string"`
 
+	// A map of associated properties for a specified inventory type. For example,
+	// with this attribute, you can specify the ExecutionId, ExecutionType, ComplianceType
+	// properties of the AWS:ComplianceItem type.
 	Context map[string]*string `type:"map"`
 
 	// The schema version for the inventory item.
@@ -10815,10 +11153,15 @@ func (s InventoryResultItem) GoString() string {
 type ListAssociationVersionsInput struct {
 	_ struct{} `type:"structure"`
 
+	// The association ID for which you want to view all versions.
 	AssociationId *string `type:"string" required:"true"`
 
+	// The maximum number of items to return for this call. The call also returns
+	// a token that you can specify in a subsequent call to get the next set of
+	// results.
 	MaxResults *int64 `min:"1" type:"integer"`
 
+	// A token to start the list. Use this token to get the next set of results.
 	NextToken *string `type:"string"`
 }
 
@@ -10851,8 +11194,12 @@ func (s *ListAssociationVersionsInput) Validate() error {
 type ListAssociationVersionsOutput struct {
 	_ struct{} `type:"structure"`
 
+	// Information about all versions of the association for the specified association
+	// ID.
 	AssociationVersions []*AssociationVersionInfo `min:"1" type:"list"`
 
+	// The token for the next set of items to return. Use this token to get the
+	// next set of results.
 	NextToken *string `type:"string"`
 }
 
@@ -11112,14 +11459,24 @@ func (s ListCommandsOutput) GoString() string {
 type ListComplianceItemsInput struct {
 	_ struct{} `type:"structure"`
 
+	// One or more compliance filters. Use a filter to return a more specific list
+	// of results.
 	Filters []*ComplianceStringFilter `locationNameList:"ComplianceFilter" type:"list"`
 
+	// The maximum number of items to return for this call. The call also returns
+	// a token that you can specify in a subsequent call to get the next set of
+	// results.
 	MaxResults *int64 `min:"1" type:"integer"`
 
+	// A token to start the list. Use this token to get the next set of results.
 	NextToken *string `type:"string"`
 
+	// The ID for the resources from which to get compliance information. Currently,
+	// you can only specify one resource ID.
 	ResourceIds []*string `min:"1" type:"list"`
 
+	// The type of resource from which to get compliance information. Currently,
+	// the only supported resource type is ManagedInstance.
 	ResourceTypes []*string `min:"1" type:"list"`
 }
 
@@ -11165,8 +11522,11 @@ func (s *ListComplianceItemsInput) Validate() error {
 type ListComplianceItemsOutput struct {
 	_ struct{} `type:"structure"`
 
+	// A list of compliance information for the specified resource ID.
 	ComplianceItems []*ComplianceItem `locationNameList:"Item" type:"list"`
 
+	// The token for the next set of items to return. Use this token to get the
+	// next set of results.
 	NextToken *string `type:"string"`
 }
 
@@ -11183,10 +11543,16 @@ func (s ListComplianceItemsOutput) GoString() string {
 type ListComplianceSummariesInput struct {
 	_ struct{} `type:"structure"`
 
+	// One or more compliance or inventory filters. Use a filter to return a more
+	// specific list of results.
 	Filters []*ComplianceStringFilter `locationNameList:"ComplianceFilter" type:"list"`
 
+	// The maximum number of items to return for this call. Currently, you can specify
+	// null or 50. The call also returns a token that you can specify in a subsequent
+	// call to get the next set of results.
 	MaxResults *int64 `min:"1" type:"integer"`
 
+	// A token to start the list. Use this token to get the next set of results.
 	NextToken *string `type:"string"`
 }
 
@@ -11226,8 +11592,13 @@ func (s *ListComplianceSummariesInput) Validate() error {
 type ListComplianceSummariesOutput struct {
 	_ struct{} `type:"structure"`
 
+	// A list of compliant and non-compliant summary counts based on compliance
+	// types. For example, this call returns State Manager associations, patches,
+	// or custom compliance types according to the filter criteria that you specified.
 	ComplianceSummaryItems []*ComplianceSummaryItem `locationNameList:"Item" type:"list"`
 
+	// The token for the next set of items to return. Use this token to get the
+	// next set of results.
 	NextToken *string `type:"string"`
 }
 
@@ -11534,10 +11905,15 @@ func (s ListInventoryEntriesOutput) GoString() string {
 type ListResourceComplianceSummariesInput struct {
 	_ struct{} `type:"structure"`
 
+	// One or more filters. Use a filter to return a more specific list of results.
 	Filters []*ComplianceStringFilter `locationNameList:"ComplianceFilter" type:"list"`
 
+	// The maximum number of items to return for this call. The call also returns
+	// a token that you can specify in a subsequent call to get the next set of
+	// results.
 	MaxResults *int64 `min:"1" type:"integer"`
 
+	// A token to start the list. Use this token to get the next set of results.
 	NextToken *string `type:"string"`
 }
 
@@ -11577,8 +11953,13 @@ func (s *ListResourceComplianceSummariesInput) Validate() error {
 type ListResourceComplianceSummariesOutput struct {
 	_ struct{} `type:"structure"`
 
+	// The token for the next set of items to return. Use this token to get the
+	// next set of results.
 	NextToken *string `type:"string"`
 
+	// A summary count for specified or targeted managed instances. Summary count
+	// includes information about compliant and non-compliant State Manager associations,
+	// patch status, or custom items according to the filter criteria that you specify.
 	ResourceComplianceSummaryItems []*ResourceComplianceSummaryItem `locationNameList:"Item" type:"list"`
 }
 
@@ -11595,8 +11976,12 @@ func (s ListResourceComplianceSummariesOutput) GoString() string {
 type ListResourceDataSyncInput struct {
 	_ struct{} `type:"structure"`
 
+	// The maximum number of items to return for this call. The call also returns
+	// a token that you can specify in a subsequent call to get the next set of
+	// results.
 	MaxResults *int64 `min:"1" type:"integer"`
 
+	// A token to start the list. Use this token to get the next set of results.
 	NextToken *string `type:"string"`
 }
 
@@ -11626,8 +12011,11 @@ func (s *ListResourceDataSyncInput) Validate() error {
 type ListResourceDataSyncOutput struct {
 	_ struct{} `type:"structure"`
 
+	// The token for the next set of items to return. Use this token to get the
+	// next set of results.
 	NextToken *string `type:"string"`
 
+	// A list of your current Resource Data Sync configurations and their statuses.
 	ResourceDataSyncItems []*ResourceDataSyncItem `type:"list"`
 }
 
@@ -11740,11 +12128,14 @@ func (s *LoggingInfo) Validate() error {
 	return nil
 }
 
+// The parameters for an AUTOMATION task type.
 type MaintenanceWindowAutomationParameters struct {
 	_ struct{} `type:"structure"`
 
+	// The version of an Automation document to use during task execution.
 	DocumentVersion *string `type:"string"`
 
+	// The parameters for the AUTOMATION task.
 	Parameters map[string][]*string `min:"1" type:"map"`
 }
 
@@ -11881,6 +12272,7 @@ type MaintenanceWindowExecutionTaskInvocationIdentity struct {
 	// The ID of the specific task execution in the Maintenance Window execution.
 	TaskExecutionId *string `min:"36" type:"string"`
 
+	// The task type.
 	TaskType *string `type:"string" enum:"MaintenanceWindowTaskType"`
 
 	// The ID of the Maintenance Window execution that ran the task.
@@ -11909,6 +12301,7 @@ type MaintenanceWindowIdentity struct {
 	// Manager stops scheduling new tasks for execution.
 	Cutoff *int64 `type:"integer"`
 
+	// A description of the Maintenance Window.
 	Description *string `min:"1" type:"string"`
 
 	// The duration of the Maintenance Window in hours.
@@ -11934,14 +12327,24 @@ func (s MaintenanceWindowIdentity) GoString() string {
 	return s.String()
 }
 
+// The parameters for a LAMBDA task type.
 type MaintenanceWindowLambdaParameters struct {
 	_ struct{} `type:"structure"`
 
+	// Pass client-specific information to the Lambda function that you are invoking.
+	// You can then process the client information in your Lambda function as you
+	// choose through the context variable.
 	ClientContext *string `min:"1" type:"string"`
 
+	// JSON to provide to your Lambda function as input.
+	//
 	// Payload is automatically base64 encoded/decoded by the SDK.
 	Payload []byte `type:"blob"`
 
+	// (Optional) Specify a Lambda function version or alias name. If you specify
+	// a function version, the action uses the qualified function ARN to invoke
+	// a specific Lambda function. If you specify an alias name, the action uses
+	// the alias ARN to invoke the Lambda function version to which the alias points.
 	Qualifier *string `min:"1" type:"string"`
 }
 
@@ -11971,28 +12374,38 @@ func (s *MaintenanceWindowLambdaParameters) Validate() error {
 	return nil
 }
 
+// The parameters for a RUN_COMMAND task type.
 type MaintenanceWindowRunCommandParameters struct {
 	_ struct{} `type:"structure"`
 
+	// Information about the command(s) to execute.
 	Comment *string `type:"string"`
 
+	// The SHA-256 or SHA-1 hash created by the system when the document was created.
+	// SHA-1 hashes have been deprecated.
 	DocumentHash *string `type:"string"`
 
+	// SHA-256 or SHA-1. SHA-1 hashes have been deprecated.
 	DocumentHashType *string `type:"string" enum:"DocumentHashType"`
 
-	// Configurations for sending notifications.
+	// Configurations for sending notifications about command status changes on
+	// a per-instance basis.
 	NotificationConfig *NotificationConfig `type:"structure"`
 
+	// The name of the Amazon S3 bucket.
 	OutputS3BucketName *string `min:"3" type:"string"`
 
+	// The Amazon S3 bucket subfolder.
 	OutputS3KeyPrefix *string `type:"string"`
 
-	OutputS3Region *string `min:"3" type:"string"`
-
+	// The parameters for the RUN_COMMAND task execution.
 	Parameters map[string][]*string `type:"map"`
 
+	// The IAM service role to assume during task execution.
 	ServiceRoleArn *string `type:"string"`
 
+	// If this time is reached and the command has not already started executing,
+	// it doesn not execute.
 	TimeoutSeconds *int64 `min:"30" type:"integer"`
 }
 
@@ -12012,9 +12425,6 @@ func (s *MaintenanceWindowRunCommandParameters) Validate() error {
 	if s.OutputS3BucketName != nil && len(*s.OutputS3BucketName) < 3 {
 		invalidParams.Add(request.NewErrParamMinLen("OutputS3BucketName", 3))
 	}
-	if s.OutputS3Region != nil && len(*s.OutputS3Region) < 3 {
-		invalidParams.Add(request.NewErrParamMinLen("OutputS3Region", 3))
-	}
 	if s.TimeoutSeconds != nil && *s.TimeoutSeconds < 30 {
 		invalidParams.Add(request.NewErrParamMinValue("TimeoutSeconds", 30))
 	}
@@ -12025,11 +12435,14 @@ func (s *MaintenanceWindowRunCommandParameters) Validate() error {
 	return nil
 }
 
+// The parameters for the STEP_FUNCTION execution.
 type MaintenanceWindowStepFunctionsParameters struct {
 	_ struct{} `type:"structure"`
 
+	// The inputs for the STEP_FUNCTION task.
 	Input *string `type:"string"`
 
+	// The name of the STEP_FUNCTION task.
 	Name *string `min:"1" type:"string"`
 }
 
@@ -12060,8 +12473,10 @@ func (s *MaintenanceWindowStepFunctionsParameters) Validate() error {
 type MaintenanceWindowTarget struct {
 	_ struct{} `type:"structure"`
 
+	// A description of the target.
 	Description *string `min:"1" type:"string"`
 
+	// The target name.
 	Name *string `min:"3" type:"string"`
 
 	// User-provided value that will be included in any CloudWatch events raised
@@ -12122,6 +12537,7 @@ func (s MaintenanceWindowTargetPrivate) GoString() string {
 type MaintenanceWindowTask struct {
 	_ struct{} `type:"structure"`
 
+	// A description of the task.
 	Description *string `min:"1" type:"string"`
 
 	// Information about an Amazon S3 bucket to write task-level logs to.
@@ -12133,11 +12549,12 @@ type MaintenanceWindowTask struct {
 	// The maximum number of errors allowed before this task stops being scheduled.
 	MaxErrors *string `min:"1" type:"string"`
 
+	// The task name.
 	Name *string `min:"3" type:"string"`
 
-	// The priority of the task in the Maintenance Window, the lower the number
-	// the higher the priority. Tasks in a Maintenance Window are scheduled in priority
-	// order with tasks that have the same priority scheduled in parallel.
+	// The priority of the task in the Maintenance Window. The lower the number,
+	// the higher the priority. Tasks that have the same priority are scheduled
+	// in parallel.
 	Priority *int64 `type:"integer"`
 
 	// The role that should be assumed when executing the task
@@ -12147,13 +12564,17 @@ type MaintenanceWindowTask struct {
 	// Tags are specified using Key=<tag name>,Values=<tag value>.
 	Targets []*Target `type:"list"`
 
-	// The ARN of the task to execute.
+	// The resource that the task uses during execution. For RUN_COMMAND and AUTOMATION
+	// task types, TaskArn is the SSM document name or ARN. For LAMBDA tasks, it's
+	// the function name or ARN. For STEP_FUNCTION tasks, it's the state machine
+	// ARN.
 	TaskArn *string `min:"1" type:"string"`
 
 	// The parameters that should be passed to the task when it is executed.
 	TaskParameters map[string]*MaintenanceWindowTaskParameterValueExpression `type:"map"`
 
-	// The type of task.
+	// The type of task. The type can be one of the following: RUN_COMMAND, AUTOMATION,
+	// LAMBDA, or STEP_FUNCTION.
 	Type *string `type:"string" enum:"MaintenanceWindowTaskType"`
 
 	// The Maintenance Window ID where the task is registered.
@@ -12173,15 +12594,20 @@ func (s MaintenanceWindowTask) GoString() string {
 	return s.String()
 }
 
+// The parameters for task execution.
 type MaintenanceWindowTaskInvocationParameters struct {
 	_ struct{} `type:"structure"`
 
+	// The parameters for a AUTOMATION task type.
 	Automation *MaintenanceWindowAutomationParameters `type:"structure"`
 
+	// The parameters for a LAMBDA task type.
 	Lambda *MaintenanceWindowLambdaParameters `type:"structure"`
 
+	// The parameters for a RUN_COMMAND task type.
 	RunCommand *MaintenanceWindowRunCommandParameters `type:"structure"`
 
+	// The parameters for a STEP_FUNCTION task type.
 	StepFunctions *MaintenanceWindowStepFunctionsParameters `type:"structure"`
 }
 
@@ -12359,11 +12785,15 @@ func (s ModifyDocumentPermissionOutput) GoString() string {
 	return s.String()
 }
 
+// A summary of resources that are not compliant. The summary is organized according
+// to resource type.
 type NonCompliantSummary struct {
 	_ struct{} `type:"structure"`
 
+	// The total number of compliance items that are not compliant.
 	NonCompliantCount *int64 `type:"integer"`
 
+	// A summary of the non-compliance severity by compliance type
 	SeveritySummary *SeveritySummary `type:"structure"`
 }
 
@@ -12408,39 +12838,6 @@ func (s NotificationConfig) GoString() string {
 	return s.String()
 }
 
-type PackageResultStep struct {
-	_ struct{} `type:"structure"`
-
-	Action *string `min:"1" type:"string"`
-
-	Result *int64 `type:"integer"`
-
-	Timing *int64 `type:"integer"`
-}
-
-// String returns the string representation
-func (s PackageResultStep) String() string {
-	return awsutil.Prettify(s)
-}
-
-// GoString returns the string representation
-func (s PackageResultStep) GoString() string {
-	return s.String()
-}
-
-// Validate inspects the fields of the type to determine if they are valid.
-func (s *PackageResultStep) Validate() error {
-	invalidParams := request.ErrInvalidParams{Context: "PackageResultStep"}
-	if s.Action != nil && len(*s.Action) < 1 {
-		invalidParams.Add(request.NewErrParamMinLen("Action", 1))
-	}
-
-	if invalidParams.Len() > 0 {
-		return invalidParams
-	}
-	return nil
-}
-
 // An Amazon EC2 Systems Manager parameter in Parameter Store.
 type Parameter struct {
 	_ struct{} `type:"structure"`
@@ -12470,6 +12867,9 @@ func (s Parameter) GoString() string {
 type ParameterHistory struct {
 	_ struct{} `type:"structure"`
 
+	// Parameter names can include the following letters and symbols.
+	//
+	// a-zA-Z0-9_.-
 	AllowedPattern *string `type:"string"`
 
 	// Information about the parameter.
@@ -12486,6 +12886,8 @@ type ParameterHistory struct {
 
 	// The name of the parameter.
 	Name *string `min:"1" type:"string"`
+
+	TimeToLive *int64 `type:"long"`
 
 	// The type of parameter used.
 	Type *string `type:"string" enum:"ParameterType"`
@@ -12509,6 +12911,9 @@ func (s ParameterHistory) GoString() string {
 type ParameterMetadata struct {
 	_ struct{} `type:"structure"`
 
+	// A parameter name can include only the following letters and symbols.
+	//
+	// a-zA-Z0-9_.-
 	AllowedPattern *string `type:"string"`
 
 	// Description of the parameter actions.
@@ -12526,6 +12931,8 @@ type ParameterMetadata struct {
 	// The parameter name.
 	Name *string `min:"1" type:"string"`
 
+	TimeToLive *int64 `type:"long"`
+
 	// The type of parameter. Valid parameter types include the following: String,
 	// String list, Secure string.
 	Type *string `type:"string" enum:"ParameterType"`
@@ -12541,13 +12948,18 @@ func (s ParameterMetadata) GoString() string {
 	return s.String()
 }
 
+// One or more filters. Use a filter to return a more specific list of results.
 type ParameterStringFilter struct {
 	_ struct{} `type:"structure"`
 
+	// The name of the filter.
 	Key *string `min:"1" type:"string" required:"true"`
 
+	// Valid options are Equals and BeginsWith. For Path filter, valid options are
+	// Recursive and OneLevel.
 	Option *string `min:"1" type:"string"`
 
+	// The value you want to search for.
 	Values []*string `min:"1" type:"list"`
 }
 
@@ -12691,9 +13103,14 @@ type PatchBaselineIdentity struct {
 	// The name of the patch baseline.
 	BaselineName *string `min:"3" type:"string"`
 
-	// Whether this is the default baseline.
+	// Whether this is the default baseline. Note that Systems Manager supports
+	// creating multiple default patch baselines. For example, you can create a
+	// default patch baseline for each operating system.
 	DefaultBaseline *bool `type:"boolean"`
 
+	// Defines the operating system the patch baseline applies to. Supported operating
+	// systems include WINDOWS, AMAZON_LINUX, UBUNTU and REDHAT_ENTERPRISE_LINUX.
+	// The Default value is WINDOWS.
 	OperatingSystem *string `type:"string" enum:"OperatingSystem"`
 }
 
@@ -12715,10 +13132,11 @@ type PatchComplianceData struct {
 	// The classification of the patch (for example, SecurityUpdates, Updates, CriticalUpdates).
 	Classification *string `type:"string" required:"true"`
 
-	// The date/time the patch was installed on the instance.
+	// The date/time the patch was installed on the instance. Note that not all
+	// operating systems provide this level of information.
 	InstalledTime *time.Time `type:"timestamp" timestampFormat:"unix" required:"true"`
 
-	// The Microsoft Knowledge Base ID of the patch.
+	// The operating system-specific ID of the patch.
 	KBId *string `type:"string" required:"true"`
 
 	// The severity of the patch (for example, Critical, Important, Moderate).
@@ -12887,6 +13305,9 @@ type PatchRule struct {
 	// the patch is marked as approved in the patch baseline.
 	ApproveAfterDays *int64 `type:"integer" required:"true"`
 
+	// A compliance severity level for all approved patches in a patch baseline.
+	// Valid compliance severity levels include the following: Unspecified, Critical,
+	// High, Medium, Low, and Informational.
 	ComplianceLevel *string `type:"string" enum:"PatchComplianceLevel"`
 
 	// The patch filter group that defines the criteria for the rule.
@@ -12972,6 +13393,7 @@ type PatchStatus struct {
 	// The date the patch was approved (or will be approved if the status is PENDING_APPROVAL).
 	ApprovalDate *time.Time `type:"timestamp" timestampFormat:"unix"`
 
+	// The compliance severity level for a patch.
 	ComplianceLevel *string `type:"string" enum:"PatchComplianceLevel"`
 
 	// The approval status of a patch (APPROVED, PENDING_APPROVAL, EXPLICIT_APPROVED,
@@ -12992,16 +13414,31 @@ func (s PatchStatus) GoString() string {
 type PutComplianceItemsInput struct {
 	_ struct{} `type:"structure"`
 
+	// Specify the compliance type. For example, specify Association (for a State
+	// Manager association), Patch, or Custom:string.
 	ComplianceType *string `min:"1" type:"string" required:"true"`
 
+	// A summary of the call execution that includes an execution ID, the type of
+	// execution (for example, Command), and the date/time of the execution using
+	// a datetime object that is saved in the following format: yyyy-MM-dd'T'HH:mm:ss'Z'.
 	ExecutionSummary *ComplianceExecutionSummary `type:"structure" required:"true"`
 
+	// MD5 or SHA-256 content hash. The content hash is used to determine if existing
+	// information should be overwritten or ignored. If the content hashes match,
+	// the request to put compliance information is ignored.
 	ItemContentHash *string `type:"string"`
 
+	// Information about the compliance as defined by the resource type. For example,
+	// for a patch compliance type, Items includes information about the PatchSeverity,
+	// Classification, etc.
 	Items []*ComplianceItemEntry `type:"list" required:"true"`
 
+	// Specify an ID for this resource. For a managed instance, this is the instance
+	// ID.
 	ResourceId *string `min:"1" type:"string" required:"true"`
 
+	// Specify the type of resource. ManagedInstance is currently the only supported
+	// resource type.
 	ResourceType *string `min:"1" type:"string" required:"true"`
 }
 
@@ -13081,21 +13518,21 @@ func (s PutComplianceItemsOutput) GoString() string {
 type PutConfigurePackageResultInput struct {
 	_ struct{} `type:"structure"`
 
+	Attributes map[string]*string `min:"1" type:"map"`
+
 	Operation *string `type:"string" required:"true"`
 
 	OverallTiming *int64 `type:"integer" required:"true"`
 
-	PackageName *string `min:"1" type:"string" required:"true"`
-
-	PackageResultAttributes map[string]*string `min:"1" type:"map"`
-
-	PackageResultSteps []*PackageResultStep `min:"1" type:"list"`
+	PackageName *string `type:"string" required:"true"`
 
 	PackageVersion *string `min:"1" type:"string" required:"true"`
 
 	PreviousPackageVersion *string `min:"1" type:"string"`
 
 	Result *int64 `type:"integer" required:"true"`
+
+	Steps []*ConfigurePackageResultStep `min:"1" type:"list"`
 }
 
 // String returns the string representation
@@ -13111,6 +13548,9 @@ func (s PutConfigurePackageResultInput) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *PutConfigurePackageResultInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "PutConfigurePackageResultInput"}
+	if s.Attributes != nil && len(s.Attributes) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Attributes", 1))
+	}
 	if s.Operation == nil {
 		invalidParams.Add(request.NewErrParamRequired("Operation"))
 	}
@@ -13119,15 +13559,6 @@ func (s *PutConfigurePackageResultInput) Validate() error {
 	}
 	if s.PackageName == nil {
 		invalidParams.Add(request.NewErrParamRequired("PackageName"))
-	}
-	if s.PackageName != nil && len(*s.PackageName) < 1 {
-		invalidParams.Add(request.NewErrParamMinLen("PackageName", 1))
-	}
-	if s.PackageResultAttributes != nil && len(s.PackageResultAttributes) < 1 {
-		invalidParams.Add(request.NewErrParamMinLen("PackageResultAttributes", 1))
-	}
-	if s.PackageResultSteps != nil && len(s.PackageResultSteps) < 1 {
-		invalidParams.Add(request.NewErrParamMinLen("PackageResultSteps", 1))
 	}
 	if s.PackageVersion == nil {
 		invalidParams.Add(request.NewErrParamRequired("PackageVersion"))
@@ -13141,13 +13572,16 @@ func (s *PutConfigurePackageResultInput) Validate() error {
 	if s.Result == nil {
 		invalidParams.Add(request.NewErrParamRequired("Result"))
 	}
-	if s.PackageResultSteps != nil {
-		for i, v := range s.PackageResultSteps {
+	if s.Steps != nil && len(s.Steps) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Steps", 1))
+	}
+	if s.Steps != nil {
+		for i, v := range s.Steps {
 			if v == nil {
 				continue
 			}
 			if err := v.Validate(); err != nil {
-				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "PackageResultSteps", i), err.(request.ErrInvalidParams))
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "Steps", i), err.(request.ErrInvalidParams))
 			}
 		}
 	}
@@ -13238,12 +13672,17 @@ func (s PutInventoryOutput) GoString() string {
 type PutParameterInput struct {
 	_ struct{} `type:"structure"`
 
+	// A regular expression used to validate the parameter value. For example, for
+	// String types with values restricted to numbers, you can specify the following:
+	// AllowedPattern=^\d+$
 	AllowedPattern *string `type:"string"`
 
 	// Information about the parameter that you want to add to the system
 	Description *string `min:"1" type:"string"`
 
-	// The parameter key ID that you want to add to the system.
+	// The KMS Key ID that you want to use to encrypt a parameter when you choose
+	// the SecureString data type. If you don't specify a key ID, the system uses
+	// the default key associated with your AWS account.
 	KeyId *string `min:"1" type:"string"`
 
 	// The name of the parameter that you want to add to the system.
@@ -13251,6 +13690,8 @@ type PutParameterInput struct {
 
 	// Overwrite an existing parameter. If not specified, will default to "false".
 	Overwrite *bool `type:"boolean"`
+
+	TimeToLive *int64 `type:"long"`
 
 	// The type of parameter that you want to add to the system.
 	Type *string `type:"string" required:"true" enum:"ParameterType"`
@@ -13500,8 +13941,10 @@ type RegisterTargetWithMaintenanceWindowInput struct {
 	// User-provided idempotency token.
 	ClientToken *string `min:"1" type:"string" idempotencyToken:"true"`
 
+	// An optional description for the target.
 	Description *string `min:"1" type:"string"`
 
+	// An optional name for the target.
 	Name *string `min:"3" type:"string"`
 
 	// User-provided value that will be included in any CloudWatch events raised
@@ -13673,6 +14116,7 @@ type RegisterTaskWithMaintenanceWindowInput struct {
 	// User-provided idempotency token.
 	ClientToken *string `min:"1" type:"string" idempotencyToken:"true"`
 
+	// An optional description for the task.
 	Description *string `min:"1" type:"string"`
 
 	// A structure containing information about an Amazon S3 bucket to write instance-level
@@ -13685,6 +14129,7 @@ type RegisterTaskWithMaintenanceWindowInput struct {
 	// The maximum number of errors allowed before this task stops being scheduled.
 	MaxErrors *string `min:"1" type:"string" required:"true"`
 
+	// An optional name for the task.
 	Name *string `min:"3" type:"string"`
 
 	// The priority of the task in the Maintenance Window, the lower the number
@@ -13702,6 +14147,8 @@ type RegisterTaskWithMaintenanceWindowInput struct {
 	// The ARN of the task to execute
 	TaskArn *string `min:"1" type:"string" required:"true"`
 
+	// The parameters that the task should use during execution. Populate only the
+	// fields that match the task type. All other fields should be empty.
 	TaskInvocationParameters *MaintenanceWindowTaskInvocationParameters `type:"structure"`
 
 	// The parameters that should be passed to the task when it is executed.
@@ -14026,23 +14473,33 @@ func (s RequestManagedInstanceRoleTokenOutput) GoString() string {
 	return s.String()
 }
 
+// Compliance summary information for a specific resource.
 type ResourceComplianceSummaryItem struct {
 	_ struct{} `type:"structure"`
 
+	// The compliance type.
 	ComplianceType *string `min:"1" type:"string"`
 
+	// A list of items that are compliant for the resource.
 	CompliantSummary *CompliantSummary `type:"structure"`
 
+	// Information about the execution.
 	ExecutionSummary *ComplianceExecutionSummary `type:"structure"`
 
+	// A list of items that aren't compliant for the resource.
 	NonCompliantSummary *NonCompliantSummary `type:"structure"`
 
+	// The highest severity item found for the resource. The resource is compliant
+	// for this item.
 	OverallSeverity *string `type:"string" enum:"ComplianceSeverity"`
 
+	// The resource ID.
 	ResourceId *string `min:"1" type:"string"`
 
+	// The resource type.
 	ResourceType *string `min:"1" type:"string"`
 
+	// The compliance status for the resource.
 	Status *string `type:"string" enum:"ComplianceStatus"`
 }
 
@@ -14056,19 +14513,27 @@ func (s ResourceComplianceSummaryItem) GoString() string {
 	return s.String()
 }
 
+// Information about a Resource Data Sync configuration, including its current
+// status and last successful sync.
 type ResourceDataSyncItem struct {
 	_ struct{} `type:"structure"`
 
+	// The status reported by the last sync.
 	LastStatus *string `type:"string" enum:"LastResourceDataSyncStatus"`
 
+	// The last time the sync operations returned a status of SUCCESSFUL (UTC).
 	LastSuccessfulSyncTime *time.Time `type:"timestamp" timestampFormat:"unix"`
 
+	// The last time the configuration attempted to sync (UTC).
 	LastSyncTime *time.Time `type:"timestamp" timestampFormat:"unix"`
 
+	// Configuration information for the target Amazon S3 bucket.
 	S3Destination *ResourceDataSyncS3Destination `type:"structure"`
 
+	// The date and time the configuration was created (UTC).
 	SyncCreatedTime *time.Time `type:"timestamp" timestampFormat:"unix"`
 
+	// The name of the Resource Data Sync.
 	SyncName *string `min:"1" type:"string"`
 }
 
@@ -14082,15 +14547,22 @@ func (s ResourceDataSyncItem) GoString() string {
 	return s.String()
 }
 
+// Information about the target Amazon S3 bucket for the Resource Data Sync.
 type ResourceDataSyncS3Destination struct {
 	_ struct{} `type:"structure"`
 
+	AWSKMSKeyARN *string `min:"1" type:"string"`
+
+	// The name of the Amazon S3 bucket where the aggregated data is stored.
 	BucketName *string `min:"1" type:"string" required:"true"`
 
+	// An Amazon S3 prefix for the bucket.
 	Prefix *string `min:"1" type:"string"`
 
+	// The AWS Region with the Amazon S3 bucket targeted by the Resource Data Sync.
 	Region *string `min:"1" type:"string" required:"true"`
 
+	// A supported sync format. The following format is currently supported: JsonSerDe
 	SyncFormat *string `type:"string" required:"true" enum:"ResourceDataSyncS3Format"`
 }
 
@@ -14107,6 +14579,9 @@ func (s ResourceDataSyncS3Destination) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *ResourceDataSyncS3Destination) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "ResourceDataSyncS3Destination"}
+	if s.AWSKMSKeyARN != nil && len(*s.AWSKMSKeyARN) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("AWSKMSKeyARN", 1))
+	}
 	if s.BucketName == nil {
 		invalidParams.Add(request.NewErrParamRequired("BucketName"))
 	}
@@ -14232,10 +14707,16 @@ func (s S3OutputUrl) GoString() string {
 type SendAutomationSignalInput struct {
 	_ struct{} `type:"structure"`
 
+	// The unique identifier for an existing Automation execution that you want
+	// to send the signal to.
 	AutomationExecutionId *string `min:"36" type:"string" required:"true"`
 
+	// The data sent with the signal. The data schema depends on the type of signal
+	// used in the request.
 	Payload map[string][]*string `min:"1" type:"map"`
 
+	// The type of signal. Valid signal types include the following: Approve and
+	// Reject
 	SignalType *string `type:"string" required:"true" enum:"SignalType"`
 }
 
@@ -14309,22 +14790,21 @@ type SendCommandInput struct {
 	// The instance IDs where the command should execute. You can specify a maximum
 	// of 50 IDs. If you prefer not to list individual instance IDs, you can instead
 	// send commands to a fleet of instances using the Targets parameter, which
-	// accepts EC2 tags.
+	// accepts EC2 tags. For more information about how to use Targets, see Sending
+	// Commands to a Fleet (http://docs.aws.amazon.com/systems-manager/latest/userguide/send-commands-multiple.html).
 	InstanceIds []*string `type:"list"`
 
 	// (Optional) The maximum number of instances that are allowed to execute the
 	// command at the same time. You can specify a number such as 10 or a percentage
 	// such as 10%. The default value is 50. For more information about how to use
-	// MaxConcurrency, see Executing a Command Using Systems Manager Run Command
-	// (http://docs.aws.amazon.com/systems-manager/latest/userguide/run-command.html).
+	// MaxConcurrency, see Using Concurrency Controls (http://docs.aws.amazon.com/systems-manager/latest/userguide/send-commands-velocity.html).
 	MaxConcurrency *string `min:"1" type:"string"`
 
 	// The maximum number of errors allowed without the command failing. When the
 	// command fails one more time beyond the value of MaxErrors, the systems stops
 	// sending the command to additional targets. You can specify a number like
 	// 10 or a percentage like 10%. The default value is 50. For more information
-	// about how to use MaxErrors, see Executing a Command Using Systems Manager
-	// Run Command (http://docs.aws.amazon.com/systems-manager/latest/userguide/run-command.html).
+	// about how to use MaxErrors, see Using Error Controls (http://docs.aws.amazon.com/systems-manager/latest/userguide/send-commands-maxerrors.html).
 	MaxErrors *string `min:"1" type:"string"`
 
 	// Configurations for sending notifications.
@@ -14351,7 +14831,7 @@ type SendCommandInput struct {
 	// (Optional) An array of search criteria that targets instances using a Key,Value
 	// combination that you specify. Targets is required if you don't provide one
 	// or more instance IDs in the call. For more information about how to use Targets,
-	// see Executing a Command Using Systems Manager Run Command (http://docs.aws.amazon.com/systems-manager/latest/userguide/run-command.html).
+	// see Sending Commands to a Fleet (http://docs.aws.amazon.com/systems-manager/latest/userguide/send-commands-multiple.html).
 	Targets []*Target `type:"list"`
 
 	// If this time is reached and the command has not already started executing,
@@ -14425,19 +14905,39 @@ func (s SendCommandOutput) GoString() string {
 	return s.String()
 }
 
+// The number of managed instances found for each patch severity level defined
+// in the request filter.
 type SeveritySummary struct {
 	_ struct{} `type:"structure"`
 
+	// The total number of resources or compliance items that have a severity level
+	// of critical. Critical severity is determined by the organization that published
+	// the compliance items.
 	CriticalCount *int64 `type:"integer"`
 
+	// The total number of resources or compliance items that have a severity level
+	// of high. High severity is determined by the organization that published the
+	// compliance items.
 	HighCount *int64 `type:"integer"`
 
+	// The total number of resources or compliance items that have a severity level
+	// of informational. Informational severity is determined by the organization
+	// that published the compliance items.
 	InformationalCount *int64 `type:"integer"`
 
+	// The total number of resources or compliance items that have a severity level
+	// of low. Low severity is determined by the organization that published the
+	// compliance items.
 	LowCount *int64 `type:"integer"`
 
+	// The total number of resources or compliance items that have a severity level
+	// of medium. Medium severity is determined by the organization that published
+	// the compliance items.
 	MediumCount *int64 `type:"integer"`
 
+	// The total number of resources or compliance items that have a severity level
+	// of unspecified. Unspecified severity is determined by the organization that
+	// published the compliance items.
 	UnspecifiedCount *int64 `type:"integer"`
 }
 
@@ -14507,6 +15007,8 @@ type StartAutomationExecutionInput struct {
 
 	// The version of the Automation document to use for this execution.
 	DocumentVersion *string `type:"string"`
+
+	Mode *string `type:"string" enum:"ExecutionMode"`
 
 	// A key-value map of execution parameters, which match the declared parameters
 	// in the Automation document.
@@ -14592,6 +15094,8 @@ type StepExecution struct {
 
 	// The response code returned by the execution of the step.
 	ResponseCode *string `type:"string"`
+
+	StepExecutionId *string `type:"string"`
 
 	// The name of this execution step.
 	StepName *string `type:"string"`
@@ -14712,14 +15216,14 @@ type Target struct {
 	// User-defined criteria for sending commands that target instances that meet
 	// the criteria. Key can be tag:<Amazon EC2 tag> or InstanceIds. For more information
 	// about how to send commands that target instances using Key,Value parameters,
-	// see Executing a Command Using Systems Manager Run Command (http://docs.aws.amazon.com/systems-manager/latest/userguide/run-command.html).
+	// see Executing a Command Using Systems Manager Run Command (http://docs.aws.amazon.com/systems-manager/latest/userguide/send-commands-multiple.html).
 	Key *string `min:"1" type:"string"`
 
 	// User-defined criteria that maps to Key. For example, if you specified tag:ServerRole,
 	// you could specify value:WebServer to execute a command on instances that
 	// include Amazon EC2 tags of ServerRole,WebServer. For more information about
 	// how to send commands that target instances using Key,Value parameters, see
-	// Executing a Command Using Systems Manager Run Command (http://docs.aws.amazon.com/systems-manager/latest/userguide/run-command.html).
+	// Executing a Command Using Systems Manager Run Command (http://docs.aws.amazon.com/systems-manager/latest/userguide/send-commands-multiple.html).
 	Values []*string `type:"list"`
 }
 
@@ -14752,8 +15256,12 @@ type UpdateAssociationInput struct {
 	// The ID of the association you want to update.
 	AssociationId *string `type:"string" required:"true"`
 
+	// The name of the association that you want to update.
 	AssociationName *string `type:"string"`
 
+	// This parameter is provided for concurrency control purposes. You must specify
+	// the latest association version in the service. If you want to ensure that
+	// this request succeeds, either specify $LATEST, or omit this parameter.
 	AssociationVersion *string `type:"string"`
 
 	// The document version you want update for the association.
@@ -14958,6 +15466,8 @@ type UpdateDocumentInput struct {
 	// The content in a document that you want to update.
 	Content *string `min:"1" type:"string" required:"true"`
 
+	DocumentFormat *string `type:"string" enum:"DocumentFormat"`
+
 	// The version of the document that you want to update.
 	DocumentVersion *string `type:"string"`
 
@@ -15153,6 +15663,7 @@ type UpdateMaintenanceWindowInput struct {
 	// Manager stops scheduling new tasks for execution.
 	Cutoff *int64 `type:"integer"`
 
+	// An optional description for the update request.
 	Description *string `min:"1" type:"string"`
 
 	// The duration of the Maintenance Window in hours.
@@ -15164,6 +15675,9 @@ type UpdateMaintenanceWindowInput struct {
 	// The name of the Maintenance Window.
 	Name *string `min:"3" type:"string"`
 
+	// If True, then all fields that are required by the CreateMaintenanceWindow
+	// action are also required for this API request. Optional fields that are not
+	// specified are set to null.
 	Replace *bool `type:"boolean"`
 
 	// The schedule of the Maintenance Window in the form of a cron or rate expression.
@@ -15222,6 +15736,7 @@ type UpdateMaintenanceWindowOutput struct {
 	// Manager stops scheduling new tasks for execution.
 	Cutoff *int64 `type:"integer"`
 
+	// An optional description of the update.
 	Description *string `min:"1" type:"string"`
 
 	// The duration of the Maintenance Window in hours.
@@ -15253,18 +15768,28 @@ func (s UpdateMaintenanceWindowOutput) GoString() string {
 type UpdateMaintenanceWindowTargetInput struct {
 	_ struct{} `type:"structure"`
 
+	// An optional description for the update.
 	Description *string `min:"1" type:"string"`
 
+	// A name for the update.
 	Name *string `min:"3" type:"string"`
 
+	// User-provided value that will be included in any CloudWatch events raised
+	// while running tasks for these targets in this Maintenance Window.
 	OwnerInformation *string `min:"1" type:"string"`
 
+	// If True, then all fields that are required by the RegisterTargetWithMaintenanceWindow
+	// action are also required for this API request. Optional fields that are not
+	// specified are set to null.
 	Replace *bool `type:"boolean"`
 
+	// The targets to add or replace.
 	Targets []*Target `type:"list"`
 
+	// The Maintenance Window ID with which to modify the target.
 	WindowId *string `min:"20" type:"string" required:"true"`
 
+	// The target ID to modify.
 	WindowTargetId *string `min:"36" type:"string" required:"true"`
 }
 
@@ -15322,16 +15847,22 @@ func (s *UpdateMaintenanceWindowTargetInput) Validate() error {
 type UpdateMaintenanceWindowTargetOutput struct {
 	_ struct{} `type:"structure"`
 
+	// The updated description.
 	Description *string `min:"1" type:"string"`
 
+	// The updated name.
 	Name *string `min:"3" type:"string"`
 
+	// The updated owner.
 	OwnerInformation *string `min:"1" type:"string"`
 
+	// The updated targets.
 	Targets []*Target `type:"list"`
 
+	// The Maintenance Window ID specified in the update request.
 	WindowId *string `min:"20" type:"string"`
 
+	// The target ID specified in the update request.
 	WindowTargetId *string `min:"36" type:"string"`
 }
 
@@ -15348,33 +15879,59 @@ func (s UpdateMaintenanceWindowTargetOutput) GoString() string {
 type UpdateMaintenanceWindowTaskInput struct {
 	_ struct{} `type:"structure"`
 
+	// The new task description to specify.
 	Description *string `min:"1" type:"string"`
 
-	// Information about an Amazon S3 bucket to write instance-level logs to.
+	// The new logging location in Amazon S3 to specify.
 	LoggingInfo *LoggingInfo `type:"structure"`
 
+	// The new MaxConcurrency value you want to specify. MaxConcurrency is the number
+	// of targets that are allowed to run this task in parallel.
 	MaxConcurrency *string `min:"1" type:"string"`
 
+	// The new MaxErrors value to specify. MaxErrors is the maximum number of errors
+	// that are allowed before the task stops being scheduled.
 	MaxErrors *string `min:"1" type:"string"`
 
+	// The new task name to specify.
 	Name *string `min:"3" type:"string"`
 
+	// The new task priority to specify. The lower the number, the higher the priority.
+	// Tasks that have the same priority are scheduled in parallel.
 	Priority *int64 `type:"integer"`
 
+	// If True, then all fields that are required by the RegisterTaskWithMaintenanceWndow
+	// action are also required for this API request. Optional fields that are not
+	// specified are set to null.
 	Replace *bool `type:"boolean"`
 
+	// The IAM service role ARN to modify. The system assumes this role during task
+	// execution.
 	ServiceRoleArn *string `type:"string"`
 
+	// The targets (either instances or tags) to modify. Instances are specified
+	// using Key=instanceids,Values=instanceID_1,instanceID_2. Tags are specified
+	// using Key=tag_name,Values=tag_value.
 	Targets []*Target `type:"list"`
 
+	// The task ARN to modify.
 	TaskArn *string `min:"1" type:"string"`
 
+	// The parameters that the task should use during execution. Populate only the
+	// fields that match the task type. All other fields should be empty.
 	TaskInvocationParameters *MaintenanceWindowTaskInvocationParameters `type:"structure"`
 
+	// The parameters to modify. The map has the following format:
+	//
+	// Key: string, between 1 and 255 characters
+	//
+	// Value: an array of strings, each string is between 1 and 255 characters
 	TaskParameters map[string]*MaintenanceWindowTaskParameterValueExpression `type:"map"`
 
+	// The Maintenance Window ID that contains the task to modify.
 	WindowId *string `min:"20" type:"string" required:"true"`
 
+	// The task ID to modify.
 	WindowTaskId *string `min:"36" type:"string" required:"true"`
 }
 
@@ -15448,31 +16005,43 @@ func (s *UpdateMaintenanceWindowTaskInput) Validate() error {
 type UpdateMaintenanceWindowTaskOutput struct {
 	_ struct{} `type:"structure"`
 
+	// The updated task description.
 	Description *string `min:"1" type:"string"`
 
-	// Information about an Amazon S3 bucket to write instance-level logs to.
+	// The updated logging information in Amazon S3.
 	LoggingInfo *LoggingInfo `type:"structure"`
 
+	// The updated MaxConcurrency value.
 	MaxConcurrency *string `min:"1" type:"string"`
 
+	// The updated MaxErrors value.
 	MaxErrors *string `min:"1" type:"string"`
 
+	// The updated task name.
 	Name *string `min:"3" type:"string"`
 
+	// The updated priority value.
 	Priority *int64 `type:"integer"`
 
+	// The updated service role ARN value.
 	ServiceRoleArn *string `type:"string"`
 
+	// The updated target values.
 	Targets []*Target `type:"list"`
 
+	// The updated task ARN value.
 	TaskArn *string `min:"1" type:"string"`
 
+	// The updated parameter values.
 	TaskInvocationParameters *MaintenanceWindowTaskInvocationParameters `type:"structure"`
 
+	// The updated parameter values.
 	TaskParameters map[string]*MaintenanceWindowTaskParameterValueExpression `type:"map"`
 
+	// The ID of the Maintenance Window that was updated.
 	WindowId *string `min:"20" type:"string"`
 
+	// The task ID of the Maintenance Window that was updated.
 	WindowTaskId *string `min:"36" type:"string"`
 }
 
@@ -15596,6 +16165,7 @@ type UpdatePatchBaselineInput struct {
 	// A list of explicitly approved patches for the baseline.
 	ApprovedPatches []*string `type:"list"`
 
+	// Assigns a new compliance severity level to an existing patch baseline.
 	ApprovedPatchesComplianceLevel *string `type:"string" enum:"PatchComplianceLevel"`
 
 	// The ID of the patch baseline to update.
@@ -15665,6 +16235,8 @@ type UpdatePatchBaselineOutput struct {
 	// A list of explicitly approved patches for the baseline.
 	ApprovedPatches []*string `type:"list"`
 
+	// The compliance severity level assigned to the patch baseline after the update
+	// completed.
 	ApprovedPatchesComplianceLevel *string `type:"string" enum:"PatchComplianceLevel"`
 
 	// The ID of the deleted patch baseline.
@@ -15685,6 +16257,7 @@ type UpdatePatchBaselineOutput struct {
 	// The name of the patch baseline.
 	Name *string `min:"3" type:"string"`
 
+	// The operating system rule used by the updated patch baseline.
 	OperatingSystem *string `type:"string" enum:"OperatingSystem"`
 
 	// A list of explicitly rejected patches for the baseline.
@@ -15760,6 +16333,8 @@ const (
 	AutomationExecutionStatusSuccess = "Success"
 	// @enum AutomationExecutionStatus
 	AutomationExecutionStatusTimedOut = "TimedOut"
+	// @enum AutomationExecutionStatus
+	AutomationExecutionStatusCancelling = "Cancelling"
 	// @enum AutomationExecutionStatus
 	AutomationExecutionStatusCancelled = "Cancelled"
 	// @enum AutomationExecutionStatus
@@ -15897,6 +16472,13 @@ const (
 )
 
 const (
+	// @enum DocumentFormat
+	DocumentFormatYaml = "YAML"
+	// @enum DocumentFormat
+	DocumentFormatJson = "JSON"
+)
+
+const (
 	// @enum DocumentHashType
 	DocumentHashTypeSha256 = "Sha256"
 	// @enum DocumentHashType
@@ -15933,6 +16515,13 @@ const (
 	DocumentTypePolicy = "Policy"
 	// @enum DocumentType
 	DocumentTypeAutomation = "Automation"
+)
+
+const (
+	// @enum ExecutionMode
+	ExecutionModeAuto = "Auto"
+	// @enum ExecutionMode
+	ExecutionModeManual = "Manual"
 )
 
 const (
@@ -16256,4 +16845,8 @@ const (
 	SignalTypeApprove = "Approve"
 	// @enum SignalType
 	SignalTypeReject = "Reject"
+	// @enum SignalType
+	SignalTypeStart = "Start"
+	// @enum SignalType
+	SignalTypeStop = "Stop"
 )

@@ -1,6 +1,6 @@
 {
   "version": "2.0",
-  "service": "<fullname>Amazon EC2 Systems Manager</fullname> <p>Amazon EC2 Systems Manager is a collection of capabilities that helps you automate management tasks such as collecting system inventory, applying operating system (OS) patches, automating the creation of Amazon Machine Images (AMIs), and configuring operating systems (OSs) and applications at scale. Systems Manager lets you remotely and securely manage the configuration of your managed instances. A <i>managed instance</i> is any Amazon EC2 instance or on-premises machine in your hybrid environment that has been configured for Systems Manager.</p> <p>This reference is intended to be used with the <a href=\"http://docs.aws.amazon.com/systems-manager/latest/userguide/\">Amazon EC2 Systems Manager User Guide</a>.</p> <p>To get started, verify prerequisites and configure managed instances. For more information, see <a href=\"http://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-prereqs.html\">Systems Manager Prerequisites</a>.</p>",
+  "service": "<fullname>Amazon EC2 Systems Manager</fullname> <p>Amazon EC2 Systems Manager is a collection of capabilities that helps you automate management tasks such as collecting system inventory, applying operating system (OS) patches, automating the creation of Amazon Machine Images (AMIs), and configuring operating systems (OSs) and applications at scale. Systems Manager lets you remotely and securely manage the configuration of your managed instances. A <i>managed instance</i> is any Amazon EC2 instance or on-premises machine in your hybrid environment that has been configured for Systems Manager.</p> <p>This reference is intended to be used with the <a href=\"http://docs.aws.amazon.com/systems-manager/latest/userguide/\">Amazon EC2 Systems Manager User Guide</a>.</p> <p>To get started, verify prerequisites and configure managed instances. For more information, see <a href=\"http://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-setting-up.html\">Systems Manager Prerequisites</a>.</p>",
   "operations": {
     "AddTagsToResource": "<p>Adds or overwrites one or more tags for the specified resource. Tags are metadata that you assign to your managed instances, Maintenance Windows, or Parameter Store parameters. Tags enable you to categorize your resources in different ways, for example, by purpose, owner, or environment. Each tag consists of a key and an optional value, both of which you define. For example, you could define a set of tags for your account's managed instances that helps you track each instance's owner and stack level. For example: Key=Owner and Value=DbAdmin, SysAdmin, or Dev. Or Key=Stack and Value=Production, Pre-Production, or Test.</p> <p>Each resource can have a maximum of 10 tags. </p> <p>We recommend that you devise a set of tag keys that meets your needs for each resource type. Using a consistent set of tag keys makes it easier for you to manage your resources. You can search and filter the resources based on the tags you add. Tags don't have any semantic meaning to Amazon EC2 and are interpreted strictly as a string of characters. </p> <p>For more information about tags, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Using_Tags.html\">Tagging Your Amazon EC2 Resources</a> in the <i>Amazon EC2 User Guide</i>.</p>",
     "CancelCommand": "<p>Attempts to cancel the command specified by the Command ID. There is no guarantee that the command will be terminated and the underlying process stopped.</p>",
@@ -10,16 +10,16 @@
     "CreateDocument": "<p>Creates a Systems Manager document.</p> <p>After you create a document, you can use CreateAssociation to associate it with one or more running instances.</p>",
     "CreateMaintenanceWindow": "<p>Creates a new Maintenance Window.</p>",
     "CreatePatchBaseline": "<p>Creates a patch baseline.</p>",
-    "CreateResourceDataSync": null,
+    "CreateResourceDataSync": "<p>Creates a resource data sync configuration to a single bucket in Amazon S3. This is an asynchronous operation that returns immediately. After a successful initial sync is completed, the system continuously syncs data to the Amazon S3 bucket. To check the status of the sync, use the <a href=\"API_ListResourceDataSync.html\">ListResourceDataSync</a> operation.</p> <p>By default, data is not encrypted in Amazon S3. We strongly recommend that you enable encryption in Amazon S3 to ensure secure data storage. We also recommend that you secure access to the Amazon S3 bucket by creating a restrictive bucket policy. To view an example of a restrictive Amazon S3 bucket policy for Resource Data Sync, see <a href=\"http://docs.aws.amazon.com/systems-manager/latest/userguide/sysman-inventory-configuring.html#sysman-inventory-datasync\">Configuring Resource Data Sync for Inventory</a>.</p>",
     "DeleteActivation": "<p>Deletes an activation. You are not required to delete an activation. If you delete an activation, you can no longer use it to register additional managed instances. Deleting an activation does not de-register managed instances. You must manually de-register managed instances.</p>",
     "DeleteAssociation": "<p>Disassociates the specified Systems Manager document from the specified instance.</p> <p>When you disassociate a document from an instance, it does not change the configuration of the instance. To change the configuration state of an instance after you disassociate a document, you must create a new document with the desired configuration and associate it with the instance.</p>",
     "DeleteCommands": null,
     "DeleteDocument": "<p>Deletes the Systems Manager document and all instance associations to the document.</p> <p>Before you delete the document, we recommend that you use <a>DeleteAssociation</a> to disassociate all instances that are associated with the document.</p>",
     "DeleteMaintenanceWindow": "<p>Deletes a Maintenance Window.</p>",
     "DeleteParameter": "<p>Delete a parameter from the system.</p>",
-    "DeleteParameters": null,
+    "DeleteParameters": "<p>Delete a list of parameters. This API is used to delete parameters by using the Amazon EC2 console.</p>",
     "DeletePatchBaseline": "<p>Deletes a patch baseline.</p>",
-    "DeleteResourceDataSync": null,
+    "DeleteResourceDataSync": "<p>Deletes a Resource Data Sync configuration. After the configuration is deleted, changes to inventory data on managed instances are no longer synced with the target Amazon S3 bucket. Deleting a sync configuration does not delete data in the target Amazon S3 bucket.</p>",
     "DeregisterManagedInstance": "<p>Removes the server or virtual machine from the list of registered servers. You can reregister the instance again at any time. If you don't plan to use Run Command on the server, we suggest uninstalling the SSM Agent first.</p>",
     "DeregisterPatchBaselineForPatchGroup": "<p>Removes a patch group from a patch baseline.</p>",
     "DeregisterTargetFromMaintenanceWindow": "<p>Removes a target from a Maintenance Window.</p>",
@@ -39,7 +39,7 @@
     "DescribeDocumentStepSchema": null,
     "DescribeDocumentSteps": null,
     "DescribeEffectiveInstanceAssociations": "<p>All associations for the instance(s).</p>",
-    "DescribeEffectivePatchesForPatchBaseline": "<p>Retrieves the current effective patches (the patch and the approval state) for the specified patch baseline.</p>",
+    "DescribeEffectivePatchesForPatchBaseline": "<p>Retrieves the current effective patches (the patch and the approval state) for the specified patch baseline. Note that this API applies only to Windows patch baselines.</p>",
     "DescribeInstanceAssociationsStatus": "<p>The status of the associations for the instance(s).</p>",
     "DescribeInstanceInformation": "<p>Describes one or more of your instances. You can use this to get information about instances like the operating system platform, the SSM Agent version (Linux), status etc. If you specify one or more instance IDs, it returns information for those instances. If you do not specify instance IDs, it returns information for all your instances. If you specify an instance ID that is not valid or an instance that you do not own, you receive an error. </p>",
     "DescribeInstancePatchStates": "<p>Retrieves the high-level patch state of one or more instances.</p>",
@@ -48,21 +48,21 @@
     "DescribeInstanceProperties": null,
     "DescribeMaintenanceWindowExecutionTaskInvocations": "<p>Retrieves the individual task executions (one per target) for a particular task executed as part of a Maintenance Window execution.</p>",
     "DescribeMaintenanceWindowExecutionTasks": "<p>For a given Maintenance Window execution, lists the tasks that were executed.</p>",
-    "DescribeMaintenanceWindowExecutions": "<p>Lists the executions of a Maintenance Window (meaning, information about when the Maintenance Window was scheduled to be active and information about tasks registered and run with the Maintenance Window).</p>",
+    "DescribeMaintenanceWindowExecutions": "<p>Lists the executions of a Maintenance Window. This includes information about when the Maintenance Window was scheduled to be active, and information about tasks registered and run with the Maintenance Window.</p>",
     "DescribeMaintenanceWindowTargets": "<p>Lists the targets registered with the Maintenance Window.</p>",
     "DescribeMaintenanceWindowTargetsPrivate": null,
     "DescribeMaintenanceWindowTasks": "<p>Lists the tasks in a Maintenance Window.</p>",
     "DescribeMaintenanceWindowTasksPrivate": null,
     "DescribeMaintenanceWindows": "<p>Retrieves the Maintenance Windows in an AWS account.</p>",
-    "DescribeParameters": "<p>Get information about a parameter.</p>",
+    "DescribeParameters": "<p>Get information about a parameter.</p> <p>Request results are returned on a best-effort basis. If you specify <code>MaxResults</code> in the request, the response includes information up to the limit specified. The number of items returned, however, can be between zero and the value of <code>MaxResults</code>. If the service reaches an internal limit while processing the results, it stops the operation and returns the matching values up to that point and a <code>NextToken</code>. You can specify the <code>NextToken</code> in a subsequent call to get the next set of results.</p>",
     "DescribePatchBaselines": "<p>Lists the patch baselines in your AWS account.</p>",
     "DescribePatchGroupState": "<p>Returns high-level aggregated patch compliance state for a patch group.</p>",
     "DescribePatchGroups": "<p>Lists all patch groups that have been registered with patch baselines.</p>",
     "GetAutomationAction": null,
     "GetAutomationExecution": "<p>Get detailed information about a particular Automation execution.</p>",
     "GetCommandInvocation": "<p>Returns detailed information about command execution for an invocation or plugin. </p>",
-    "GetDefaultPatchBaseline": "<p>Retrieves the default patch baseline.</p>",
-    "GetDeployablePatchSnapshotForInstance": "<p>Retrieves the current snapshot for the patch baseline the instance uses. This API is primarily used by the AWS-ApplyPatchBaseline Systems Manager document. </p>",
+    "GetDefaultPatchBaseline": "<p>Retrieves the default patch baseline. Note that Systems Manager supports creating multiple default patch baselines. For example, you can create a default patch baseline for each operating system.</p>",
+    "GetDeployablePatchSnapshotForInstance": "<p>Retrieves the current snapshot for the patch baseline the instance uses. This API is primarily used by the AWS-RunPatchBaseline Systems Manager document. </p>",
     "GetDocument": "<p>Gets the contents of the specified SSM document.</p>",
     "GetDocumentInternal": null,
     "GetInventory": "<p>Query inventory information.</p>",
@@ -70,33 +70,33 @@
     "GetMaintenanceWindow": "<p>Retrieves a Maintenance Window.</p>",
     "GetMaintenanceWindowExecution": "<p>Retrieves details about a specific task executed as part of a Maintenance Window execution.</p>",
     "GetMaintenanceWindowExecutionTask": "<p>Retrieves the details about a specific task executed as part of a Maintenance Window execution.</p>",
-    "GetMaintenanceWindowExecutionTaskInvocation": null,
-    "GetMaintenanceWindowTask": null,
+    "GetMaintenanceWindowExecutionTaskInvocation": "<p>Retrieves a task invocation. A task invocation is a specific task executing on a specific target. Maintenance Windows report status for all invocations. </p>",
+    "GetMaintenanceWindowTask": "<p>Lists the tasks in a Maintenance Window.</p>",
     "GetManifest": null,
-    "GetParameter": null,
+    "GetParameter": "<p>Get information about a parameter by using the parameter name. </p>",
     "GetParameterHistory": "<p>Query a list of all parameters used by the AWS account.</p>",
     "GetParameters": "<p>Get details of a parameter.</p>",
-    "GetParametersByPath": null,
+    "GetParametersByPath": "<p>Retrieve parameters in a specific hierarchy. For more information, see <a href=\"http://docs.aws.amazon.com/systems-manager/latest/userguide/sysman-paramstore-working.html\">Working with Systems Manager Parameters</a>. </p> <p>Request results are returned on a best-effort basis. If you specify <code>MaxResults</code> in the request, the response includes information up to the limit specified. The number of items returned, however, can be between zero and the value of <code>MaxResults</code>. If the service reaches an internal limit while processing the results, it stops the operation and returns the matching values up to that point and a <code>NextToken</code>. You can specify the <code>NextToken</code> in a subsequent call to get the next set of results.</p>",
     "GetPatchBaseline": "<p>Retrieves information about a patch baseline.</p>",
     "GetPatchBaselineForPatchGroup": "<p>Retrieves the patch baseline that should be used for the specified patch group.</p>",
-    "ListAssociationVersions": null,
+    "ListAssociationVersions": "<p>Retrieves all versions of an association for a specific association ID.</p>",
     "ListAssociations": "<p>Lists the associations for the specified Systems Manager document or instance.</p>",
     "ListCommandInvocations": "<p>An invocation is copy of a command sent to a specific instance. A command can apply to one or more instances. A command invocation applies to one instance. For example, if a user executes SendCommand against three instances, then a command invocation is created for each requested instance ID. ListCommandInvocations provide status about command execution.</p>",
     "ListCommands": "<p>Lists the commands requested by users of the AWS account.</p>",
-    "ListComplianceItems": null,
-    "ListComplianceSummaries": null,
+    "ListComplianceItems": "<p>For a specified resource ID, this API action returns a list of compliance statuses for different resource types. Currently, you can only specify one resource ID per call. List results depend on the criteria specified in the filter. </p>",
+    "ListComplianceSummaries": "<p>Returns a summary count of compliant and non-compliant resources for a compliance type. For example, this call can return State Manager associations, patches, or custom compliance types according to the filter criteria that you specify. </p>",
     "ListDocumentVersions": "<p>List all versions for a document.</p>",
     "ListDocuments": "<p>Describes one or more of your SSM documents.</p>",
     "ListInstanceAssociations": null,
     "ListInventoryEntries": "<p>A list of inventory items returned by the request.</p>",
-    "ListResourceComplianceSummaries": null,
-    "ListResourceDataSync": null,
+    "ListResourceComplianceSummaries": "<p>Returns a resource-level summary count. The summary includes information about compliant and non-compliant statuses and detailed compliance-item severity counts, according to the filter criteria you specify.</p>",
+    "ListResourceDataSync": "<p>Lists your resource data sync configurations. Includes information about the last time a sync attempted to start, the last sync status, and the last time a sync successfully completed.</p> <p>The number of sync configurations might be too large to return using a single call to <code>ListResourceDataSync</code>. You can limit the number of sync configurations returned by using the <code>MaxResults</code> parameter. To determine whether there are more sync configurations to list, check the value of <code>NextToken</code> in the output. If there are more sync configurations to list, you can request them by specifying the <code>NextToken</code> returned in the call to the parameter of a subsequent call. </p>",
     "ListTagsForResource": "<p>Returns a list of the tags assigned to the specified resource.</p>",
     "ModifyDocumentPermission": "<p>Shares a Systems Manager document publicly or privately. If you share a document privately, you must specify the AWS user account IDs for those people who can use the document. If you share a document publicly, you must specify <i>All</i> as the account ID.</p>",
-    "PutComplianceItems": null,
+    "PutComplianceItems": "<p>Registers a compliance type and other compliance details on a designated resource. This action lets you register custom compliance details with a resource. This call overwrites existing compliance information on the resource, so you must provide a full list of compliance items each time that you send the request.</p>",
     "PutConfigurePackageResult": null,
     "PutInventory": "<p>Bulk update custom inventory items on one more instance. The request adds an inventory item, if it doesn't already exist, or updates an inventory item, if it does exist.</p>",
-    "PutParameter": "<p>Add one or more paramaters to the system.</p>",
+    "PutParameter": "<p>Add one or more parameters to the system.</p>",
     "RegisterDefaultPatchBaseline": "<p>Defines the default patch baseline.</p>",
     "RegisterManagedInstance": null,
     "RegisterPatchBaselineForPatchGroup": "<p>Registers a patch baseline for a patch group.</p>",
@@ -106,20 +106,20 @@
     "RegisterTaskWithMaintenanceWindowPrivate": null,
     "RemoveTagsFromResource": "<p>Removes all tags from the specified resource.</p>",
     "RequestManagedInstanceRoleToken": null,
-    "SendAutomationSignal": null,
-    "SendCommand": "<p>Executes commands on one or more remote instances.</p>",
+    "SendAutomationSignal": "<p>Sends a signal to an Automation execution to change the current behavior or status of the execution. </p>",
+    "SendCommand": "<p>Executes commands on one or more managed instances.</p>",
     "StartAssociationsOnce": null,
     "StartAutomationExecution": "<p>Initiates execution of an Automation document.</p>",
     "StopAutomationExecution": "<p>Stop an Automation that is currently executing.</p>",
-    "UpdateAssociation": "<p>Updates an association. You can only update the document version, schedule, parameters, and Amazon S3 output of an association.</p>",
+    "UpdateAssociation": "<p>Updates an association. You can update the association name and version, the document version, schedule, parameters, and Amazon S3 output.</p>",
     "UpdateAssociationStatus": "<p>Updates the status of the Systems Manager document associated with the specified instance.</p>",
     "UpdateDocument": "<p>The document you want to update.</p>",
     "UpdateDocumentDefaultVersion": "<p>Set the default version of a document. </p>",
     "UpdateInstanceAssociationStatus": null,
     "UpdateInstanceInformation": null,
     "UpdateMaintenanceWindow": "<p>Updates an existing Maintenance Window. Only specified parameters are modified.</p>",
-    "UpdateMaintenanceWindowTarget": null,
-    "UpdateMaintenanceWindowTask": null,
+    "UpdateMaintenanceWindowTarget": "<p>Modifies the target of an existing Maintenance Window. You can't change the target type, but you can change the following:</p> <p>The target from being an ID target to a Tag target, or a Tag target to an ID target.</p> <p>IDs for an ID target.</p> <p>Tags for a Tag target.</p> <p>Owner.</p> <p>Name.</p> <p>Description.</p> <p>If a parameter is null, then the corresponding field is not modified.</p>",
+    "UpdateMaintenanceWindowTask": "<p>Modifies a task assigned to a Maintenance Window. You can't change the task type, but you can change the following values:</p> <p>Task ARN. For example, you can change a RUN_COMMAND task from AWS-RunPowerShellScript to AWS-RunShellScript.</p> <p>Service role ARN.</p> <p>Task parameters.</p> <p>Task priority.</p> <p>Task MaxConcurrency and MaxErrors.</p> <p>Log location.</p> <p>If a parameter is null, then the corresponding field is not modified. Also, if you set Replace to true, then all fields required by the RegisterTaskWithMaintenanceWindow action are required for this request. Optional fields that aren't specified are set to null.</p>",
     "UpdateManagedInstancePublicKey": null,
     "UpdateManagedInstanceRole": "<p>Assigns or changes an Amazon Identity and Access Management (IAM) role to the managed instance.</p>",
     "UpdatePatchBaseline": "<p>Modifies an existing patch baseline. Fields not specified in the request are left unchanged.</p>"
@@ -150,7 +150,7 @@
     "Action": {
       "base": null,
       "refs": {
-        "PackageResultStep$Action": null
+        "ConfigurePackageResultStep$Action": null
       }
     },
     "Activation": {
@@ -233,9 +233,9 @@
     "AllowedPattern": {
       "base": null,
       "refs": {
-        "ParameterHistory$AllowedPattern": null,
-        "ParameterMetadata$AllowedPattern": null,
-        "PutParameterRequest$AllowedPattern": null
+        "ParameterHistory$AllowedPattern": "<p>Parameter names can include the following letters and symbols.</p> <p>a-zA-Z0-9_.-</p>",
+        "ParameterMetadata$AllowedPattern": "<p>A parameter name can include only the following letters and symbols.</p> <p>a-zA-Z0-9_.-</p>",
+        "PutParameterRequest$AllowedPattern": "<p>A regular expression used to validate the parameter value. For example, for String types with values restricted to numbers, you can specify the following: AllowedPattern=^\\d+$ </p>"
       }
     },
     "AlreadyExistsException": {
@@ -322,14 +322,14 @@
         "Association$AssociationId": "<p>The ID created by the system when you create an association. An association is a binding between a document and a set of targets with a schedule.</p>",
         "AssociationDescription$AssociationId": "<p>The association ID.</p>",
         "AssociationIdList$member": null,
-        "AssociationVersionInfo$AssociationId": null,
+        "AssociationVersionInfo$AssociationId": "<p>The ID created by the system when the association was created.</p>",
         "DeleteAssociationRequest$AssociationId": "<p>The association ID that you want to delete.</p>",
         "DescribeAssociationRequest$AssociationId": "<p>The association ID for which you want information.</p>",
         "DescribeInstanceAssociationsStatusRequest$AssociationId": null,
         "InstanceAssociation$AssociationId": "<p>The association ID.</p>",
         "InstanceAssociationStatusInfo$AssociationId": "<p>The association ID.</p>",
         "InstanceAssociationSummary$AssociationId": null,
-        "ListAssociationVersionsRequest$AssociationId": null,
+        "ListAssociationVersionsRequest$AssociationId": "<p>The association ID for which you want to view all versions.</p>",
         "UpdateAssociationRequest$AssociationId": "<p>The ID of the association you want to update. </p>",
         "UpdateInstanceAssociationStatusRequest$AssociationId": null
       }
@@ -354,13 +354,13 @@
     "AssociationName": {
       "base": null,
       "refs": {
-        "Association$AssociationName": null,
-        "AssociationDescription$AssociationName": null,
-        "AssociationVersionInfo$AssociationName": null,
-        "CreateAssociationBatchRequestEntry$AssociationName": null,
-        "CreateAssociationRequest$AssociationName": null,
-        "InstanceAssociationStatusInfo$AssociationName": null,
-        "UpdateAssociationRequest$AssociationName": null
+        "Association$AssociationName": "<p>The association name.</p>",
+        "AssociationDescription$AssociationName": "<p>The association name.</p>",
+        "AssociationVersionInfo$AssociationName": "<p>The name specified for the association version when the association version was created.</p>",
+        "CreateAssociationBatchRequestEntry$AssociationName": "<p>Specify a descriptive name for the association.</p>",
+        "CreateAssociationRequest$AssociationName": "<p>Specify a descriptive name for the association.</p>",
+        "InstanceAssociationStatusInfo$AssociationName": "<p>The name of the association applied to the instance.</p>",
+        "UpdateAssociationRequest$AssociationName": "<p>The name of the association that you want to update.</p>"
       }
     },
     "AssociationOverview": {
@@ -392,33 +392,33 @@
     "AssociationVersion": {
       "base": null,
       "refs": {
-        "Association$AssociationVersion": null,
-        "AssociationDescription$AssociationVersion": null,
-        "AssociationVersionInfo$AssociationVersion": null,
-        "DescribeAssociationRequest$AssociationVersion": null,
+        "Association$AssociationVersion": "<p>The association version.</p>",
+        "AssociationDescription$AssociationVersion": "<p>The association version.</p>",
+        "AssociationVersionInfo$AssociationVersion": "<p>The association version.</p>",
+        "DescribeAssociationRequest$AssociationVersion": "<p>Specify the association version to retrieve. To view the latest version, either specify <code>$LATEST</code> for this parameter, or omit this parameter. To view a list of all associations for an instance, use ListInstanceAssociations. To get a list of versions for a specific association, use ListAssociationVersions. </p>",
         "DescribeInstanceAssociationsStatusRequest$AssociationVersion": null,
-        "InstanceAssociation$AssociationVersion": null,
-        "InstanceAssociationStatusInfo$AssociationVersion": null,
+        "InstanceAssociation$AssociationVersion": "<p>Version information for the association on the instance.</p>",
+        "InstanceAssociationStatusInfo$AssociationVersion": "<p>The version of the association applied to the instance.</p>",
         "InstanceAssociationSummary$AssociationVersion": null,
-        "UpdateAssociationRequest$AssociationVersion": null,
+        "UpdateAssociationRequest$AssociationVersion": "<p>This parameter is provided for concurrency control purposes. You must specify the latest association version in the service. If you want to ensure that this request succeeds, either specify <code>$LATEST</code>, or omit this parameter.</p>",
         "UpdateInstanceAssociationStatusRequest$AssociationVersion": null
       }
     },
     "AssociationVersionInfo": {
-      "base": null,
+      "base": "<p>Information about the association version.</p>",
       "refs": {
         "AssociationVersionList$member": null
       }
     },
     "AssociationVersionLimitExceeded": {
-      "base": null,
+      "base": "<p>You have reached the maximum number versions allowed for an association. Each association has a limit of 1,000 versions. </p>",
       "refs": {
       }
     },
     "AssociationVersionList": {
       "base": null,
       "refs": {
-        "ListAssociationVersionsResult$AssociationVersions": null
+        "ListAssociationVersionsResult$AssociationVersions": "<p>Information about all versions of the association for the specified association ID.</p>"
       }
     },
     "AttributeName": {
@@ -541,7 +541,7 @@
         "AutomationExecutionMetadata$AutomationExecutionId": "<p>The execution ID.</p>",
         "DescribeAutomationExecutionParametersRequest$AutomationExecutionId": null,
         "GetAutomationExecutionRequest$AutomationExecutionId": "<p>The unique identifier for an existing automation execution to examine. The execution ID is returned by StartAutomationExecution when the execution of an Automation document is initiated.</p>",
-        "SendAutomationSignalRequest$AutomationExecutionId": null,
+        "SendAutomationSignalRequest$AutomationExecutionId": "<p>The unique identifier for an existing Automation execution that you want to send the signal to.</p>",
         "StartAutomationExecutionResult$AutomationExecutionId": "<p>The unique ID of a newly scheduled automation execution.</p>",
         "StopAutomationExecutionRequest$AutomationExecutionId": "<p>The execution ID of the Automation to stop.</p>"
       }
@@ -602,8 +602,8 @@
         "AutomationExecution$Outputs": "<p>The list of execution outputs as defined in the automation document.</p>",
         "AutomationExecutionMetadata$Outputs": "<p>The list of execution outputs as defined in the Automation document.</p>",
         "FailureDetails$Details": "<p>Detailed information about the Automation step failure.</p>",
-        "MaintenanceWindowAutomationParameters$Parameters": null,
-        "SendAutomationSignalRequest$Payload": null,
+        "MaintenanceWindowAutomationParameters$Parameters": "<p>The parameters for the AUTOMATION task.</p>",
+        "SendAutomationSignalRequest$Payload": "<p>The data sent with the signal. The data schema depends on the type of signal used in the request. </p>",
         "StartAutomationExecutionRequest$Parameters": "<p>A key-value map of execution parameters, which match the declared parameters in the Automation document.</p>",
         "StepExecution$Outputs": "<p>Returned values from the execution of the step.</p>"
       }
@@ -687,19 +687,19 @@
       "refs": {
         "Activation$Expired": "<p>Whether or not the activation is expired.</p>",
         "AutomationArgument$Required": null,
-        "DeregisterTargetFromMaintenanceWindowRequest$Safe": null,
+        "DeregisterTargetFromMaintenanceWindowRequest$Safe": "<p>The system checks if the target is being referenced by a task. If the target is being referenced, the system returns an error and does not deregister the target from the Maintenance Window.</p>",
         "DocumentVersionInfo$IsDefaultVersion": "<p>An identifier for the default version of the document.</p>",
         "GetParameterHistoryRequest$WithDecryption": "<p>Return decrypted values for secure string parameters. This flag is ignored for String and StringList parameter types.</p>",
-        "GetParameterRequest$WithDecryption": null,
-        "GetParametersByPathRequest$Recursive": null,
-        "GetParametersByPathRequest$WithDecryption": null,
+        "GetParameterRequest$WithDecryption": "<p>Return decrypted values for secure string parameters. This flag is ignored for String and StringList parameter types.</p>",
+        "GetParametersByPathRequest$Recursive": "<p>Retrieve all parameters within a hierarchy.</p>",
+        "GetParametersByPathRequest$WithDecryption": "<p>Retrieve all parameters in a hierarchy with their value decrypted.</p>",
         "GetParametersRequest$WithDecryption": "<p>Return decrypted secure string value. Return decrypted values for secure string parameters. This flag is ignored for String and StringList parameter types.</p>",
         "InstanceInformation$IsLatestVersion": "<p>Indicates whether latest version of the SSM Agent is running on your instance. </p>",
         "ListCommandInvocationsRequest$Details": "<p>(Optional) If set this returns the response of the command executions and any command output. By default this is set to False. </p>",
         "PutParameterRequest$Overwrite": "<p>Overwrite an existing parameter. If not specified, will default to \"false\".</p>",
-        "UpdateMaintenanceWindowRequest$Replace": null,
-        "UpdateMaintenanceWindowTargetRequest$Replace": null,
-        "UpdateMaintenanceWindowTaskRequest$Replace": null
+        "UpdateMaintenanceWindowRequest$Replace": "<p>If True, then all fields that are required by the CreateMaintenanceWindow action are also required for this API request. Optional fields that are not specified are set to null. </p>",
+        "UpdateMaintenanceWindowTargetRequest$Replace": "<p>If True, then all fields that are required by the RegisterTargetWithMaintenanceWindow action are also required for this API request. Optional fields that are not specified are set to null.</p>",
+        "UpdateMaintenanceWindowTaskRequest$Replace": "<p>If True, then all fields that are required by the RegisterTaskWithMaintenanceWndow action are also required for this API request. Optional fields that are not specified are set to null.</p>"
       }
     },
     "CancelCommandRequest": {
@@ -745,7 +745,7 @@
     "CommandFilterKey": {
       "base": null,
       "refs": {
-        "CommandFilter$key": "<p>The name of the filter. For example, requested date and time.</p>"
+        "CommandFilter$key": "<p>The name of the filter.</p>"
       }
     },
     "CommandFilterList": {
@@ -758,7 +758,7 @@
     "CommandFilterValue": {
       "base": null,
       "refs": {
-        "CommandFilter$value": "<p>The filter value. For example: June 30, 2015.</p>"
+        "CommandFilter$value": "<p>The filter value. </p>"
       }
     },
     "CommandId": {
@@ -867,7 +867,7 @@
         "Command$Comment": "<p>User-specified information about the command, such as a brief description of what the command should do.</p>",
         "CommandInvocation$Comment": "<p>User-specified information about the command, such as a brief description of what the command should do.</p>",
         "GetCommandInvocationResult$Comment": "<p>The comment text for the command.</p>",
-        "MaintenanceWindowRunCommandParameters$Comment": null,
+        "MaintenanceWindowRunCommandParameters$Comment": "<p>Information about the command(s) to execute.</p>",
         "SendCommandRequest$Comment": "<p>User-specified information about the command, such as a brief description of what the command should do.</p>"
       }
     },
@@ -880,21 +880,21 @@
     "ComplianceExecutionId": {
       "base": null,
       "refs": {
-        "ComplianceExecutionSummary$ExecutionId": null
+        "ComplianceExecutionSummary$ExecutionId": "<p>An ID created by the system when <code>PutComplianceItems</code> was called. For example, <code>CommandID</code> is a valid execution ID. You can use this ID in subsequent calls.</p>"
       }
     },
     "ComplianceExecutionSummary": {
-      "base": null,
+      "base": "<p>A summary of the call execution that includes an execution ID, the type of execution (for example, <code>Command</code>), and the date/time of the execution using a datetime object that is saved in the following format: yyyy-MM-dd'T'HH:mm:ss'Z'.</p>",
       "refs": {
-        "ComplianceItem$ExecutionSummary": null,
-        "PutComplianceItemsRequest$ExecutionSummary": null,
-        "ResourceComplianceSummaryItem$ExecutionSummary": null
+        "ComplianceItem$ExecutionSummary": "<p>A summary for the compliance item. The summary includes an execution ID, the execution type (for example, command), and the execution time.</p>",
+        "PutComplianceItemsRequest$ExecutionSummary": "<p>A summary of the call execution that includes an execution ID, the type of execution (for example, <code>Command</code>), and the date/time of the execution using a datetime object that is saved in the following format: yyyy-MM-dd'T'HH:mm:ss'Z'.</p>",
+        "ResourceComplianceSummaryItem$ExecutionSummary": "<p>Information about the execution.</p>"
       }
     },
     "ComplianceExecutionType": {
       "base": null,
       "refs": {
-        "ComplianceExecutionSummary$ExecutionType": null
+        "ComplianceExecutionSummary$ExecutionType": "<p>The type of execution. For example, <code>Command</code> is a valid execution type.</p>"
       }
     },
     "ComplianceFilterValue": {
@@ -904,7 +904,7 @@
       }
     },
     "ComplianceItem": {
-      "base": null,
+      "base": "<p>Information about the compliance as defined by the resource type. For example, for a patch resource type, <code>Items</code> includes information about the PatchSeverity, Classification, etc.</p>",
       "refs": {
         "ComplianceItemList$member": null
       }
@@ -912,18 +912,18 @@
     "ComplianceItemContentHash": {
       "base": null,
       "refs": {
-        "PutComplianceItemsRequest$ItemContentHash": null
+        "PutComplianceItemsRequest$ItemContentHash": "<p>MD5 or SHA-256 content hash. The content hash is used to determine if existing information should be overwritten or ignored. If the content hashes match, the request to put compliance information is ignored.</p>"
       }
     },
     "ComplianceItemDetails": {
       "base": null,
       "refs": {
-        "ComplianceItem$Details": null,
-        "ComplianceItemEntry$Details": null
+        "ComplianceItem$Details": "<p>A \"Key\": \"Value\" tag combination for the compliance item.</p>",
+        "ComplianceItemEntry$Details": "<p>A \"Key\": \"Value\" tag combination for the compliance item.</p>"
       }
     },
     "ComplianceItemEntry": {
-      "base": null,
+      "base": "<p>Information about a compliance item.</p>",
       "refs": {
         "ComplianceItemEntryList$member": null
       }
@@ -931,83 +931,83 @@
     "ComplianceItemEntryList": {
       "base": null,
       "refs": {
-        "PutComplianceItemsRequest$Items": null
+        "PutComplianceItemsRequest$Items": "<p>Information about the compliance as defined by the resource type. For example, for a patch compliance type, <code>Items</code> includes information about the PatchSeverity, Classification, etc.</p>"
       }
     },
     "ComplianceItemId": {
       "base": null,
       "refs": {
-        "ComplianceItem$Id": null,
-        "ComplianceItemEntry$Id": null
+        "ComplianceItem$Id": "<p>An ID for the compliance item. For example, if the compliance item is a Windows patch, the ID could be the number of the KB article. Here's an example: KB4010320.</p>",
+        "ComplianceItemEntry$Id": "<p>The compliance item ID. For example, if the compliance item is a Windows patch, the ID could be the number of the KB article.</p>"
       }
     },
     "ComplianceItemList": {
       "base": null,
       "refs": {
-        "ListComplianceItemsResult$ComplianceItems": null
+        "ListComplianceItemsResult$ComplianceItems": "<p>A list of compliance information for the specified resource ID. </p>"
       }
     },
     "ComplianceItemTitle": {
       "base": null,
       "refs": {
-        "ComplianceItem$Title": null,
-        "ComplianceItemEntry$Title": null
+        "ComplianceItem$Title": "<p>A title for the compliance item. For example, if the compliance item is a Windows patch, the title could be the title of the KB article for the patch. Here's an example: Security Update for Active Directory Federation Services.</p>",
+        "ComplianceItemEntry$Title": "<p>The title of the compliance item. For example, if the compliance item is a Windows patch, the title could be the title of the KB article for the patch. Here's an example: Security Update for Active Directory Federation Services. </p>"
       }
     },
     "ComplianceQueryOperatorType": {
       "base": null,
       "refs": {
-        "ComplianceStringFilter$Type": null
+        "ComplianceStringFilter$Type": "<p>The type of comparison that should be performed for the value: Equal, NotEqual, BeginWith, LessThan, or GreaterThan.</p>"
       }
     },
     "ComplianceResourceId": {
       "base": null,
       "refs": {
-        "ComplianceItem$ResourceId": null,
+        "ComplianceItem$ResourceId": "<p>An ID for the resource. For a managed instance, this is the instance ID.</p>",
         "ComplianceResourceIdList$member": null,
-        "PutComplianceItemsRequest$ResourceId": null,
-        "ResourceComplianceSummaryItem$ResourceId": null
+        "PutComplianceItemsRequest$ResourceId": "<p>Specify an ID for this resource. For a managed instance, this is the instance ID.</p>",
+        "ResourceComplianceSummaryItem$ResourceId": "<p>The resource ID.</p>"
       }
     },
     "ComplianceResourceIdList": {
       "base": null,
       "refs": {
-        "ListComplianceItemsRequest$ResourceIds": null
+        "ListComplianceItemsRequest$ResourceIds": "<p>The ID for the resources from which to get compliance information. Currently, you can only specify one resource ID.</p>"
       }
     },
     "ComplianceResourceType": {
       "base": null,
       "refs": {
-        "ComplianceItem$ResourceType": null,
+        "ComplianceItem$ResourceType": "<p>The type of resource. <code>ManagedInstance</code> is currently the only supported resource type.</p>",
         "ComplianceResourceTypeList$member": null,
-        "PutComplianceItemsRequest$ResourceType": null,
-        "ResourceComplianceSummaryItem$ResourceType": null
+        "PutComplianceItemsRequest$ResourceType": "<p>Specify the type of resource. <code>ManagedInstance</code> is currently the only supported resource type.</p>",
+        "ResourceComplianceSummaryItem$ResourceType": "<p>The resource type.</p>"
       }
     },
     "ComplianceResourceTypeList": {
       "base": null,
       "refs": {
-        "ListComplianceItemsRequest$ResourceTypes": null
+        "ListComplianceItemsRequest$ResourceTypes": "<p>The type of resource from which to get compliance information. Currently, the only supported resource type is <code>ManagedInstance</code>.</p>"
       }
     },
     "ComplianceSeverity": {
       "base": null,
       "refs": {
-        "ComplianceItem$Severity": null,
-        "ComplianceItemEntry$Severity": null,
-        "ResourceComplianceSummaryItem$OverallSeverity": null
+        "ComplianceItem$Severity": "<p>The severity of the compliance status. Severity can be one of the following: Critical, High, Medium, Low, Informational, Unspecified.</p>",
+        "ComplianceItemEntry$Severity": "<p>The severity of the compliance status. Severity can be one of the following: Critical, High, Medium, Low, Informational, Unspecified.</p>",
+        "ResourceComplianceSummaryItem$OverallSeverity": "<p>The highest severity item found for the resource. The resource is compliant for this item.</p>"
       }
     },
     "ComplianceStatus": {
       "base": null,
       "refs": {
-        "ComplianceItem$Status": null,
-        "ComplianceItemEntry$Status": null,
-        "ResourceComplianceSummaryItem$Status": null
+        "ComplianceItem$Status": "<p>The status of the compliance item. An item is either COMPLIANT or NON_COMPLIANT.</p>",
+        "ComplianceItemEntry$Status": "<p>The status of the compliance item. An item is either COMPLIANT or NON_COMPLIANT.</p>",
+        "ResourceComplianceSummaryItem$Status": "<p>The compliance status for the resource.</p>"
       }
     },
     "ComplianceStringFilter": {
-      "base": null,
+      "base": "<p>One or more filters. Use a filter to return a more specific list of results.</p>",
       "refs": {
         "ComplianceStringFilterList$member": null
       }
@@ -1015,38 +1015,38 @@
     "ComplianceStringFilterKey": {
       "base": null,
       "refs": {
-        "ComplianceStringFilter$Key": null
+        "ComplianceStringFilter$Key": "<p>The name of the filter.</p>"
       }
     },
     "ComplianceStringFilterList": {
       "base": null,
       "refs": {
-        "ListComplianceItemsRequest$Filters": null,
-        "ListComplianceSummariesRequest$Filters": null,
-        "ListResourceComplianceSummariesRequest$Filters": null
+        "ListComplianceItemsRequest$Filters": "<p>One or more compliance filters. Use a filter to return a more specific list of results.</p>",
+        "ListComplianceSummariesRequest$Filters": "<p>One or more compliance or inventory filters. Use a filter to return a more specific list of results.</p>",
+        "ListResourceComplianceSummariesRequest$Filters": "<p>One or more filters. Use a filter to return a more specific list of results.</p>"
       }
     },
     "ComplianceStringFilterValueList": {
       "base": null,
       "refs": {
-        "ComplianceStringFilter$Values": null
+        "ComplianceStringFilter$Values": "<p>The value for which to search.</p>"
       }
     },
     "ComplianceSummaryCount": {
       "base": null,
       "refs": {
-        "CompliantSummary$CompliantCount": null,
-        "NonCompliantSummary$NonCompliantCount": null,
-        "SeveritySummary$CriticalCount": null,
-        "SeveritySummary$HighCount": null,
-        "SeveritySummary$MediumCount": null,
-        "SeveritySummary$LowCount": null,
-        "SeveritySummary$InformationalCount": null,
-        "SeveritySummary$UnspecifiedCount": null
+        "CompliantSummary$CompliantCount": "<p>The total number of resources that are compliant.</p>",
+        "NonCompliantSummary$NonCompliantCount": "<p>The total number of compliance items that are not compliant.</p>",
+        "SeveritySummary$CriticalCount": "<p>The total number of resources or compliance items that have a severity level of critical. Critical severity is determined by the organization that published the compliance items.</p>",
+        "SeveritySummary$HighCount": "<p>The total number of resources or compliance items that have a severity level of high. High severity is determined by the organization that published the compliance items.</p>",
+        "SeveritySummary$MediumCount": "<p>The total number of resources or compliance items that have a severity level of medium. Medium severity is determined by the organization that published the compliance items.</p>",
+        "SeveritySummary$LowCount": "<p>The total number of resources or compliance items that have a severity level of low. Low severity is determined by the organization that published the compliance items.</p>",
+        "SeveritySummary$InformationalCount": "<p>The total number of resources or compliance items that have a severity level of informational. Informational severity is determined by the organization that published the compliance items.</p>",
+        "SeveritySummary$UnspecifiedCount": "<p>The total number of resources or compliance items that have a severity level of unspecified. Unspecified severity is determined by the organization that published the compliance items.</p>"
       }
     },
     "ComplianceSummaryItem": {
-      "base": null,
+      "base": "<p>A summary of compliance information by compliance type.</p>",
       "refs": {
         "ComplianceSummaryItemList$member": null
       }
@@ -1054,28 +1054,28 @@
     "ComplianceSummaryItemList": {
       "base": null,
       "refs": {
-        "ListComplianceSummariesResult$ComplianceSummaryItems": null
+        "ListComplianceSummariesResult$ComplianceSummaryItems": "<p>A list of compliant and non-compliant summary counts based on compliance types. For example, this call returns State Manager associations, patches, or custom compliance types according to the filter criteria that you specified.</p>"
       }
     },
     "ComplianceTypeCountLimitExceededException": {
-      "base": null,
+      "base": "<p>You specified too many custom compliance types. You can specify a maximum of 10 different types. </p>",
       "refs": {
       }
     },
     "ComplianceTypeName": {
       "base": null,
       "refs": {
-        "ComplianceItem$ComplianceType": null,
-        "ComplianceSummaryItem$ComplianceType": null,
-        "PutComplianceItemsRequest$ComplianceType": null,
-        "ResourceComplianceSummaryItem$ComplianceType": null
+        "ComplianceItem$ComplianceType": "<p>The compliance type. For example, Association (for a State Manager association), Patch, or Custom:<code>string</code> are all valid compliance types.</p>",
+        "ComplianceSummaryItem$ComplianceType": "<p>The type of compliance item. For example, the compliance type can be Association, Patch, or Custom:string.</p>",
+        "PutComplianceItemsRequest$ComplianceType": "<p>Specify the compliance type. For example, specify Association (for a State Manager association), Patch, or Custom:<code>string</code>.</p>",
+        "ResourceComplianceSummaryItem$ComplianceType": "<p>The compliance type.</p>"
       }
     },
     "CompliantSummary": {
-      "base": null,
+      "base": "<p>A summary of resources that are compliant. The summary is organized according to the resource count for each compliance type.</p>",
       "refs": {
-        "ComplianceSummaryItem$CompliantSummary": null,
-        "ResourceComplianceSummaryItem$CompliantSummary": null
+        "ComplianceSummaryItem$CompliantSummary": "<p>A list of COMPLIANT items for the specified compliance type.</p>",
+        "ResourceComplianceSummaryItem$CompliantSummary": "<p>A list of items that are compliant for the resource.</p>"
       }
     },
     "ComputerName": {
@@ -1084,6 +1084,24 @@
         "InstanceInformation$ComputerName": "<p>The fully qualified host name of the managed instance.</p>",
         "InstanceProperty$ComputerName": null,
         "UpdateInstanceInformationRequest$ComputerName": null
+      }
+    },
+    "ConfigurePackageResultAttributes": {
+      "base": null,
+      "refs": {
+        "PutConfigurePackageResultRequest$Attributes": null
+      }
+    },
+    "ConfigurePackageResultStep": {
+      "base": null,
+      "refs": {
+        "ConfigurePackageResultSteps$member": null
+      }
+    },
+    "ConfigurePackageResultSteps": {
+      "base": null,
+      "refs": {
+        "PutConfigurePackageResultRequest$Steps": null
       }
     },
     "CreateActivationRequest": {
@@ -1189,7 +1207,7 @@
         "AssociationDescription$LastExecutionDate": "<p>The date on which the association was last run.</p>",
         "AssociationDescription$LastSuccessfulExecutionDate": "<p>The last date on which the association was successfully run.</p>",
         "AssociationStatus$Date": "<p>The date when the status changed.</p>",
-        "AssociationVersionInfo$CreatedDate": null,
+        "AssociationVersionInfo$CreatedDate": "<p>The date the association version was created.</p>",
         "AutomationExecution$ExecutionStartTime": "<p>The time the execution started.</p>",
         "AutomationExecution$ExecutionEndTime": "<p>The time the execution finished.</p>",
         "AutomationExecutionMetadata$ExecutionStartTime": "<p>The time the execution started.&gt;</p>",
@@ -1199,13 +1217,13 @@
         "CommandInvocation$RequestedDateTime": "<p>The time and date the request was sent to this instance.</p>",
         "CommandPlugin$ResponseStartDateTime": "<p>The time the plugin started executing. </p>",
         "CommandPlugin$ResponseFinishDateTime": "<p>The time the plugin stopped executing. Could stop prematurely if, for example, a cancel command was sent. </p>",
-        "ComplianceExecutionSummary$ExecutionTime": null,
+        "ComplianceExecutionSummary$ExecutionTime": "<p>The time the execution ran as a datetime object that is saved in the following format: yyyy-MM-dd'T'HH:mm:ss'Z'.</p>",
         "DocumentDescription$CreatedDate": "<p>The date when the document was created.</p>",
         "DocumentVersionInfo$CreatedDate": "<p>The date the document was created.</p>",
         "GetMaintenanceWindowExecutionResult$StartTime": "<p>The time the Maintenance Window started executing.</p>",
         "GetMaintenanceWindowExecutionResult$EndTime": "<p>The time the Maintenance Window finished executing.</p>",
-        "GetMaintenanceWindowExecutionTaskInvocationResult$StartTime": null,
-        "GetMaintenanceWindowExecutionTaskInvocationResult$EndTime": null,
+        "GetMaintenanceWindowExecutionTaskInvocationResult$StartTime": "<p>The time that the task started executing on the target.</p>",
+        "GetMaintenanceWindowExecutionTaskInvocationResult$EndTime": "<p>The time that the task finished executing on the target.</p>",
         "GetMaintenanceWindowExecutionTaskResult$StartTime": "<p>The time the task execution started.</p>",
         "GetMaintenanceWindowExecutionTaskResult$EndTime": "<p>The time the task execution completed.</p>",
         "GetMaintenanceWindowResult$CreatedDate": "<p>The date the Maintenance Window was created.</p>",
@@ -1235,7 +1253,7 @@
         "ParameterHistory$LastModifiedDate": "<p>Date the parameter was last changed or updated.</p>",
         "ParameterMetadata$LastModifiedDate": "<p>Date the parameter was last changed or updated.</p>",
         "Patch$ReleaseDate": "<p>The date the patch was released.</p>",
-        "PatchComplianceData$InstalledTime": "<p>The date/time the patch was installed on the instance.</p>",
+        "PatchComplianceData$InstalledTime": "<p>The date/time the patch was installed on the instance. Note that not all operating systems provide this level of information.</p>",
         "PatchStatus$ApprovalDate": "<p>The date the patch was approved (or will be approved if the status is PENDING_APPROVAL).</p>",
         "StepExecution$ExecutionStartTime": "<p>If a step has begun execution, this contains the time the step started. If the step is in Pending status, this field is not populated.</p>",
         "StepExecution$ExecutionEndTime": "<p>If a step has finished execution, this contains the time the execution ended. If the step has not yet concluded, this field is not populated.</p>",
@@ -1246,7 +1264,7 @@
     "DefaultBaseline": {
       "base": null,
       "refs": {
-        "PatchBaselineIdentity$DefaultBaseline": "<p>Whether this is the default baseline.</p>"
+        "PatchBaselineIdentity$DefaultBaseline": "<p>Whether this is the default baseline. Note that Systems Manager supports creating multiple default patch baselines. For example, you can create a default patch baseline for each operating system.</p>"
       }
     },
     "DefaultInstanceName": {
@@ -1828,11 +1846,25 @@
         "DocumentFilter$value": "<p>The value of the filter.</p>"
       }
     },
+    "DocumentFormat": {
+      "base": null,
+      "refs": {
+        "CreateDocumentRequest$DocumentFormat": null,
+        "DocumentDescription$DocumentFormat": null,
+        "DocumentIdentifier$DocumentFormat": null,
+        "DocumentVersionInfo$DocumentFormat": null,
+        "GetDocumentInternalRequest$DocumentFormat": null,
+        "GetDocumentInternalResult$DocumentFormat": null,
+        "GetDocumentRequest$DocumentFormat": null,
+        "GetDocumentResult$DocumentFormat": null,
+        "UpdateDocumentRequest$DocumentFormat": null
+      }
+    },
     "DocumentHash": {
       "base": null,
       "refs": {
         "DocumentDescription$Hash": "<p>The Sha256 or Sha1 hash created by the system when the document was created. </p> <note> <p>Sha1 hashes have been deprecated.</p> </note>",
-        "MaintenanceWindowRunCommandParameters$DocumentHash": null,
+        "MaintenanceWindowRunCommandParameters$DocumentHash": "<p>The SHA-256 or SHA-1 hash created by the system when the document was created. SHA-1 hashes have been deprecated.</p>",
         "SendCommandRequest$DocumentHash": "<p>The Sha256 or Sha1 hash created by the system when the document was created. </p> <note> <p>Sha1 hashes have been deprecated.</p> </note>"
       }
     },
@@ -1840,7 +1872,7 @@
       "base": null,
       "refs": {
         "DocumentDescription$HashType": "<p>Sha256 or Sha1.</p> <note> <p>Sha1 hashes have been deprecated.</p> </note>",
-        "MaintenanceWindowRunCommandParameters$DocumentHashType": null,
+        "MaintenanceWindowRunCommandParameters$DocumentHashType": "<p>SHA-256 or SHA-1. SHA-1 hashes have been deprecated.</p>",
         "SendCommandRequest$DocumentHashType": "<p>Sha256 or Sha1.</p> <note> <p>Sha1 hashes have been deprecated.</p> </note>"
       }
     },
@@ -1866,7 +1898,7 @@
       "refs": {
         "Association$Name": "<p>The name of the SSM document.</p>",
         "AssociationDescription$Name": "<p>The name of the SSM document.</p>",
-        "AssociationVersionInfo$Name": null,
+        "AssociationVersionInfo$Name": "<p>The name specified when the association was created.</p>",
         "AutomationExecution$DocumentName": "<p>The name of the Automation document used during the execution.</p>",
         "AutomationExecutionMetadata$DocumentName": "<p>The name of the Automation document used during execution.</p>",
         "CreateAssociationBatchRequestEntry$Name": "<p>The name of the configuration document. </p>",
@@ -1986,7 +2018,7 @@
       "refs": {
         "Association$DocumentVersion": "<p>The version of the document used in the association.</p>",
         "AssociationDescription$DocumentVersion": "<p>The document version.</p>",
-        "AssociationVersionInfo$DocumentVersion": null,
+        "AssociationVersionInfo$DocumentVersion": "<p>The version of an SSM document used when the association version was created.</p>",
         "AutomationExecution$DocumentVersion": "<p>The version of the document to use during execution.</p>",
         "AutomationExecutionMetadata$DocumentVersion": "<p>The document version used during the execution.</p>",
         "CreateAssociationBatchRequestEntry$DocumentVersion": "<p>The document version.</p>",
@@ -2006,7 +2038,7 @@
         "GetDocumentResult$DocumentVersion": "<p>The document version.</p>",
         "InstanceAssociationStatusInfo$DocumentVersion": "<p>The association document verions.</p>",
         "InstanceAssociationSummary$DocumentVersion": null,
-        "MaintenanceWindowAutomationParameters$DocumentVersion": null,
+        "MaintenanceWindowAutomationParameters$DocumentVersion": "<p>The version of an Automation document to use during task execution.</p>",
         "StartAutomationExecutionRequest$DocumentVersion": "<p>The version of the Automation document to use for this execution.</p>",
         "UpdateAssociationRequest$DocumentVersion": "<p>The document version you want update for the association. </p>",
         "UpdateDocumentRequest$DocumentVersion": "<p>The version of the document that you want to update.</p>"
@@ -2087,10 +2119,17 @@
         "Command$ErrorCount": "<p>The number of targets for which the status is Failed or Execution Timed Out.</p>"
       }
     },
+    "ExecutionMode": {
+      "base": null,
+      "refs": {
+        "AutomationExecution$Mode": null,
+        "StartAutomationExecutionRequest$Mode": null
+      }
+    },
     "ExitCode": {
       "base": null,
       "refs": {
-        "PackageResultStep$Result": null,
+        "ConfigurePackageResultStep$Result": null,
         "PutConfigurePackageResultRequest$Result": null
       }
     },
@@ -2126,7 +2165,7 @@
       }
     },
     "FeatureNotAvailableException": {
-      "base": null,
+      "base": "<p>You attempted to register a LAMBDA or STEP_FUNCTION task in a region where the corresponding service is not available. </p>",
       "refs": {
       }
     },
@@ -2316,7 +2355,7 @@
     "GetParametersByPathMaxResults": {
       "base": null,
       "refs": {
-        "GetParametersByPathRequest$MaxResults": null
+        "GetParametersByPathRequest$MaxResults": "<p>The maximum number of items to return for this call. The call also returns a token that you can specify in a subsequent call to get the next set of results.</p>"
       }
     },
     "GetParametersByPathRequest": {
@@ -2360,12 +2399,12 @@
       }
     },
     "HierarchyLevelLimitExceededException": {
-      "base": null,
+      "base": "<p>A hierarchy can have a maximum of five levels. For example:</p> <p>/Finance/Prod/IAD/OS/WinServ2016/license15</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/systems-manager/latest/userguide/sysman-paramstore-working.html\">Working with Systems Manager Parameters</a>. </p>",
       "refs": {
       }
     },
     "HierarchyTypeMismatchException": {
-      "base": null,
+      "base": "<p>Parameter Store does not support changing a parameter type in a hierarchy. For example, you can't change a parameter from a String type to a SecureString type. You must create a new, unique parameter.</p>",
       "refs": {
       }
     },
@@ -2440,7 +2479,7 @@
       "base": "<p>An Amazon S3 bucket where you want to store the results of this request.</p>",
       "refs": {
         "AssociationDescription$OutputLocation": "<p>An Amazon S3 bucket where you want to store the output details of the request.</p>",
-        "AssociationVersionInfo$OutputLocation": null,
+        "AssociationVersionInfo$OutputLocation": "<p>The location in Amazon S3 specified for the association when the association version was created.</p>",
         "CreateAssociationBatchRequestEntry$OutputLocation": "<p>An Amazon S3 bucket where you want to store the results of this request.</p>",
         "CreateAssociationRequest$OutputLocation": "<p>An Amazon S3 bucket where you want to store the output details of the request.</p>",
         "InstanceAssociationSummary$OutputLocation": null,
@@ -2535,7 +2574,7 @@
         "CancelCommandRequest$InstanceIds": "<p>(Optional) A list of instance IDs on which you want to cancel the command. If not provided, the command is canceled on every instance on which it was requested.</p>",
         "Command$InstanceIds": "<p>The instance IDs against which this command was requested.</p>",
         "DescribeInstancePatchStatesRequest$InstanceIds": "<p>The ID of the instance whose patch state information should be retrieved.</p>",
-        "SendCommandRequest$InstanceIds": "<p>The instance IDs where the command should execute. You can specify a maximum of 50 IDs. If you prefer not to list individual instance IDs, you can instead send commands to a fleet of instances using the Targets parameter, which accepts EC2 tags.</p>"
+        "SendCommandRequest$InstanceIds": "<p>The instance IDs where the command should execute. You can specify a maximum of 50 IDs. If you prefer not to list individual instance IDs, you can instead send commands to a fleet of instances using the Targets parameter, which accepts EC2 tags. For more information about how to use Targets, see <a href=\"http://docs.aws.amazon.com/systems-manager/latest/userguide/send-commands-multiple.html\">Sending Commands to a Fleet</a>.</p>"
       }
     },
     "InstanceInformation": {
@@ -2778,7 +2817,7 @@
       }
     },
     "InvalidAllowedPatternException": {
-      "base": null,
+      "base": "<p>The request does not meet the regular expression requirement.</p>",
       "refs": {
       }
     },
@@ -2788,7 +2827,7 @@
       }
     },
     "InvalidAssociationVersion": {
-      "base": null,
+      "base": "<p>The version you specified is not valid. Use ListAssociationVersions to view all versions of an association according to the association ID. Or, use the <code>$LATEST</code> parameter to view the latest version of the association.</p>",
       "refs": {
       }
     },
@@ -2798,7 +2837,7 @@
       }
     },
     "InvalidAutomationSignalException": {
-      "base": null,
+      "base": "<p>The signal is not valid for the current Automation execution.</p>",
       "refs": {
       }
     },
@@ -2848,7 +2887,7 @@
       }
     },
     "InvalidFilterOption": {
-      "base": null,
+      "base": "<p>The specified filter option is not valid. Valid options are Equals and BeginsWith. For Path filter, valid options are Recursive and OneLevel.</p>",
       "refs": {
       }
     },
@@ -2878,7 +2917,7 @@
       }
     },
     "InvalidInventoryItemContextException": {
-      "base": null,
+      "base": "<p>You specified invalid keys or values in the <code>Context</code> attribute for <code>InventoryItem</code>. Verify the keys and values, and try again.</p>",
       "refs": {
       }
     },
@@ -3063,7 +3102,7 @@
     "InventoryItemContentContext": {
       "base": null,
       "refs": {
-        "InventoryItem$Context": null
+        "InventoryItem$Context": "<p>A map of associated properties for a specified inventory type. For example, with this attribute, you can specify the <code>ExecutionId</code>, <code>ExecutionType</code>, <code>ComplianceType</code> properties of the <code>AWS:ComplianceItem</code> type.</p>"
       }
     },
     "InventoryItemContentHash": {
@@ -3209,7 +3248,7 @@
     "IsSubTypeSchema": {
       "base": null,
       "refs": {
-        "GetInventorySchemaRequest$SubType": null
+        "GetInventorySchemaRequest$SubType": "<p>Returns the sub-type schema for a specified inventory type.</p>"
       }
     },
     "ItemContentMismatchException": {
@@ -3237,19 +3276,19 @@
     "LastResourceDataSyncStatus": {
       "base": null,
       "refs": {
-        "ResourceDataSyncItem$LastStatus": null
+        "ResourceDataSyncItem$LastStatus": "<p>The status reported by the last sync.</p>"
       }
     },
     "LastResourceDataSyncTime": {
       "base": null,
       "refs": {
-        "ResourceDataSyncItem$LastSyncTime": null
+        "ResourceDataSyncItem$LastSyncTime": "<p>The last time the configuration attempted to sync (UTC).</p>"
       }
     },
     "LastSuccessfulResourceDataSyncTime": {
       "base": null,
       "refs": {
-        "ResourceDataSyncItem$LastSuccessfulSyncTime": null
+        "ResourceDataSyncItem$LastSuccessfulSyncTime": "<p>The last time the sync operations returned a status of <code>SUCCESSFUL</code> (UTC).</p>"
       }
     },
     "ListAssociationVersionsRequest": {
@@ -3385,13 +3424,13 @@
     "LoggingInfo": {
       "base": "<p>Information about an Amazon S3 bucket to write instance-level logs to.</p>",
       "refs": {
-        "GetMaintenanceWindowTaskResult$LoggingInfo": null,
+        "GetMaintenanceWindowTaskResult$LoggingInfo": "<p>The location in Amazon S3 where the task results are logged.</p>",
         "MaintenanceWindowTask$LoggingInfo": "<p>Information about an Amazon S3 bucket to write task-level logs to.</p>",
         "MaintenanceWindowTaskPrivate$LoggingInfo": null,
         "RegisterTaskWithMaintenanceWindowPrivateRequest$LoggingInfo": null,
         "RegisterTaskWithMaintenanceWindowRequest$LoggingInfo": "<p>A structure containing information about an Amazon S3 bucket to write instance-level logs to. </p>",
-        "UpdateMaintenanceWindowTaskRequest$LoggingInfo": null,
-        "UpdateMaintenanceWindowTaskResult$LoggingInfo": null
+        "UpdateMaintenanceWindowTaskRequest$LoggingInfo": "<p>The new logging location in Amazon S3 to specify.</p>",
+        "UpdateMaintenanceWindowTaskResult$LoggingInfo": "<p>The updated logging information in Amazon S3.</p>"
       }
     },
     "MachineFingerprintDoesNotMatch": {
@@ -3402,16 +3441,16 @@
     "MaintenanceWindowAllowUnassociatedTargets": {
       "base": null,
       "refs": {
-        "CreateMaintenanceWindowRequest$AllowUnassociatedTargets": "<p>Whether targets must be registered with the Maintenance Window before tasks can be defined for those targets.</p>",
+        "CreateMaintenanceWindowRequest$AllowUnassociatedTargets": "<p>Enables a Maintenance Window task to execute on managed instances, even if you have not registered those instances as targets. If enabled, then you must specify the unregistered instances (by instance ID) when you register a task with the Maintenance Window </p> <p>If you don't enable this option, then you must specify previously-registered targets when you register a task with the Maintenance Window. </p>",
         "GetMaintenanceWindowResult$AllowUnassociatedTargets": "<p>Whether targets must be registered with the Maintenance Window before tasks can be defined for those targets.</p>",
         "UpdateMaintenanceWindowRequest$AllowUnassociatedTargets": "<p>Whether targets must be registered with the Maintenance Window before tasks can be defined for those targets.</p>",
         "UpdateMaintenanceWindowResult$AllowUnassociatedTargets": "<p>Whether targets must be registered with the Maintenance Window before tasks can be defined for those targets.</p>"
       }
     },
     "MaintenanceWindowAutomationParameters": {
-      "base": null,
+      "base": "<p>The parameters for an AUTOMATION task type.</p>",
       "refs": {
-        "MaintenanceWindowTaskInvocationParameters$Automation": null
+        "MaintenanceWindowTaskInvocationParameters$Automation": "<p>The parameters for a AUTOMATION task type.</p>"
       }
     },
     "MaintenanceWindowCutoff": {
@@ -3427,20 +3466,20 @@
     "MaintenanceWindowDescription": {
       "base": null,
       "refs": {
-        "CreateMaintenanceWindowRequest$Description": null,
-        "GetMaintenanceWindowResult$Description": null,
-        "GetMaintenanceWindowTaskResult$Description": null,
-        "MaintenanceWindowIdentity$Description": null,
-        "MaintenanceWindowTarget$Description": null,
-        "MaintenanceWindowTask$Description": null,
-        "RegisterTargetWithMaintenanceWindowRequest$Description": null,
-        "RegisterTaskWithMaintenanceWindowRequest$Description": null,
-        "UpdateMaintenanceWindowRequest$Description": null,
-        "UpdateMaintenanceWindowResult$Description": null,
-        "UpdateMaintenanceWindowTargetRequest$Description": null,
-        "UpdateMaintenanceWindowTargetResult$Description": null,
-        "UpdateMaintenanceWindowTaskRequest$Description": null,
-        "UpdateMaintenanceWindowTaskResult$Description": null
+        "CreateMaintenanceWindowRequest$Description": "<p>An optional description for the Maintenance Window. We recommend specifying a description to help you organize your Maintenance Windows. </p>",
+        "GetMaintenanceWindowResult$Description": "<p>The description of the Maintenance Window.</p>",
+        "GetMaintenanceWindowTaskResult$Description": "<p>The retrieved task description.</p>",
+        "MaintenanceWindowIdentity$Description": "<p>A description of the Maintenance Window.</p>",
+        "MaintenanceWindowTarget$Description": "<p>A description of the target.</p>",
+        "MaintenanceWindowTask$Description": "<p>A description of the task.</p>",
+        "RegisterTargetWithMaintenanceWindowRequest$Description": "<p>An optional description for the target.</p>",
+        "RegisterTaskWithMaintenanceWindowRequest$Description": "<p>An optional description for the task.</p>",
+        "UpdateMaintenanceWindowRequest$Description": "<p>An optional description for the update request.</p>",
+        "UpdateMaintenanceWindowResult$Description": "<p>An optional description of the update.</p>",
+        "UpdateMaintenanceWindowTargetRequest$Description": "<p>An optional description for the update.</p>",
+        "UpdateMaintenanceWindowTargetResult$Description": "<p>The updated description.</p>",
+        "UpdateMaintenanceWindowTaskRequest$Description": "<p>The new task description to specify.</p>",
+        "UpdateMaintenanceWindowTaskResult$Description": "<p>The updated task description.</p>"
       }
     },
     "MaintenanceWindowDurationHours": {
@@ -3475,8 +3514,8 @@
         "DescribeMaintenanceWindowExecutionTasksRequest$WindowExecutionId": "<p>The ID of the Maintenance Window execution whose task executions should be retrieved.</p>",
         "GetMaintenanceWindowExecutionRequest$WindowExecutionId": "<p>The ID of the Maintenance Window execution that includes the task.</p>",
         "GetMaintenanceWindowExecutionResult$WindowExecutionId": "<p>The ID of the Maintenance Window execution.</p>",
-        "GetMaintenanceWindowExecutionTaskInvocationRequest$WindowExecutionId": null,
-        "GetMaintenanceWindowExecutionTaskInvocationResult$WindowExecutionId": null,
+        "GetMaintenanceWindowExecutionTaskInvocationRequest$WindowExecutionId": "<p>The ID of the Maintenance Window execution for which the task is a part.</p>",
+        "GetMaintenanceWindowExecutionTaskInvocationResult$WindowExecutionId": "<p>The Maintenance Window execution ID.</p>",
         "GetMaintenanceWindowExecutionTaskRequest$WindowExecutionId": "<p>The ID of the Maintenance Window execution that includes the task.</p>",
         "GetMaintenanceWindowExecutionTaskResult$WindowExecutionId": "<p>The ID of the Maintenance Window execution that includes the task.</p>",
         "MaintenanceWindowExecution$WindowExecutionId": "<p>The ID of the Maintenance Window execution.</p>",
@@ -3494,7 +3533,7 @@
       "base": null,
       "refs": {
         "GetMaintenanceWindowExecutionResult$Status": "<p>The status of the Maintenance Window execution.</p>",
-        "GetMaintenanceWindowExecutionTaskInvocationResult$Status": null,
+        "GetMaintenanceWindowExecutionTaskInvocationResult$Status": "<p>The task status for an invocation.</p>",
         "GetMaintenanceWindowExecutionTaskResult$Status": "<p>The status of the task.</p>",
         "MaintenanceWindowExecution$Status": "<p>The status of the execution.</p>",
         "MaintenanceWindowExecutionTaskIdentity$Status": "<p>The status of the task execution.</p>",
@@ -3505,7 +3544,7 @@
       "base": null,
       "refs": {
         "GetMaintenanceWindowExecutionResult$StatusDetails": "<p>The details explaining the Status. Only available for certain status values.</p>",
-        "GetMaintenanceWindowExecutionTaskInvocationResult$StatusDetails": null,
+        "GetMaintenanceWindowExecutionTaskInvocationResult$StatusDetails": "<p>The details explaining the status. Details are only available for certain status values.</p>",
         "GetMaintenanceWindowExecutionTaskResult$StatusDetails": "<p>The details explaining the Status. Only available for certain status values.</p>",
         "MaintenanceWindowExecution$StatusDetails": "<p>The details explaining the Status. Only available for certain status values.</p>",
         "MaintenanceWindowExecutionTaskIdentity$StatusDetails": "<p>The details explaining the status of the task execution. Only available for certain status values.</p>",
@@ -3515,7 +3554,7 @@
     "MaintenanceWindowExecutionTaskExecutionId": {
       "base": null,
       "refs": {
-        "GetMaintenanceWindowExecutionTaskInvocationResult$ExecutionId": null,
+        "GetMaintenanceWindowExecutionTaskInvocationResult$ExecutionId": "<p>The execution ID.</p>",
         "MaintenanceWindowExecutionTaskInvocationIdentity$ExecutionId": "<p>The ID of the action performed in the service that actually handled the task invocation. If the task type is RUN_COMMAND, this value is the command ID.</p>"
       }
     },
@@ -3523,8 +3562,8 @@
       "base": null,
       "refs": {
         "DescribeMaintenanceWindowExecutionTaskInvocationsRequest$TaskId": "<p>The ID of the specific task in the Maintenance Window task that should be retrieved.</p>",
-        "GetMaintenanceWindowExecutionTaskInvocationRequest$TaskId": null,
-        "GetMaintenanceWindowExecutionTaskInvocationResult$TaskExecutionId": null,
+        "GetMaintenanceWindowExecutionTaskInvocationRequest$TaskId": "<p>The ID of the specific task in the Maintenance Window task that should be retrieved. </p>",
+        "GetMaintenanceWindowExecutionTaskInvocationResult$TaskExecutionId": "<p>The task execution ID.</p>",
         "GetMaintenanceWindowExecutionTaskRequest$TaskId": "<p>The ID of the specific task execution in the Maintenance Window task that should be retrieved.</p>",
         "GetMaintenanceWindowExecutionTaskResult$TaskExecutionId": "<p>The ID of the specific task execution in the Maintenance Window task that was retrieved.</p>",
         "MaintenanceWindowExecutionTaskIdList$member": null,
@@ -3553,8 +3592,8 @@
     "MaintenanceWindowExecutionTaskInvocationId": {
       "base": null,
       "refs": {
-        "GetMaintenanceWindowExecutionTaskInvocationRequest$InvocationId": null,
-        "GetMaintenanceWindowExecutionTaskInvocationResult$InvocationId": null,
+        "GetMaintenanceWindowExecutionTaskInvocationRequest$InvocationId": "<p>The invocation ID to retrieve.</p>",
+        "GetMaintenanceWindowExecutionTaskInvocationResult$InvocationId": "<p>The invocation ID.</p>",
         "MaintenanceWindowExecutionTaskInvocationIdentity$InvocationId": "<p>The ID of the task invocation.</p>"
       }
     },
@@ -3573,7 +3612,7 @@
     "MaintenanceWindowExecutionTaskInvocationParameters": {
       "base": null,
       "refs": {
-        "GetMaintenanceWindowExecutionTaskInvocationResult$Parameters": null,
+        "GetMaintenanceWindowExecutionTaskInvocationResult$Parameters": "<p>The parameters used at the time that the task executed.</p>",
         "MaintenanceWindowExecutionTaskInvocationIdentity$Parameters": "<p>The parameters that were provided for the invocation when it was executed.</p>"
       }
     },
@@ -3594,8 +3633,8 @@
         "DescribeMaintenanceWindowTasksRequest$WindowId": "<p>The ID of the Maintenance Window whose tasks should be retrieved.</p>",
         "GetMaintenanceWindowRequest$WindowId": "<p>The ID of the desired Maintenance Window.</p>",
         "GetMaintenanceWindowResult$WindowId": "<p>The ID of the created Maintenance Window.</p>",
-        "GetMaintenanceWindowTaskRequest$WindowId": null,
-        "GetMaintenanceWindowTaskResult$WindowId": null,
+        "GetMaintenanceWindowTaskRequest$WindowId": "<p>The Maintenance Window ID that includes the task to retrieve.</p>",
+        "GetMaintenanceWindowTaskResult$WindowId": "<p>The retrieved Maintenance Window ID.</p>",
         "MaintenanceWindowExecution$WindowId": "<p>The ID of the Maintenance Window.</p>",
         "MaintenanceWindowIdentity$WindowId": "<p>The ID of the Maintenance Window.</p>",
         "MaintenanceWindowTarget$WindowId": "<p>The Maintenance Window ID where the target is registered.</p>",
@@ -3608,10 +3647,10 @@
         "RegisterTaskWithMaintenanceWindowRequest$WindowId": "<p>The id of the Maintenance Window the task should be added to.</p>",
         "UpdateMaintenanceWindowRequest$WindowId": "<p>The ID of the Maintenance Window to update.</p>",
         "UpdateMaintenanceWindowResult$WindowId": "<p>The ID of the created Maintenance Window.</p>",
-        "UpdateMaintenanceWindowTargetRequest$WindowId": null,
-        "UpdateMaintenanceWindowTargetResult$WindowId": null,
-        "UpdateMaintenanceWindowTaskRequest$WindowId": null,
-        "UpdateMaintenanceWindowTaskResult$WindowId": null
+        "UpdateMaintenanceWindowTargetRequest$WindowId": "<p>The Maintenance Window ID with which to modify the target.</p>",
+        "UpdateMaintenanceWindowTargetResult$WindowId": "<p>The Maintenance Window ID specified in the update request.</p>",
+        "UpdateMaintenanceWindowTaskRequest$WindowId": "<p>The Maintenance Window ID that contains the task to modify.</p>",
+        "UpdateMaintenanceWindowTaskResult$WindowId": "<p>The ID of the Maintenance Window that was updated.</p>"
       }
     },
     "MaintenanceWindowIdentity": {
@@ -3629,25 +3668,25 @@
     "MaintenanceWindowLambdaClientContext": {
       "base": null,
       "refs": {
-        "MaintenanceWindowLambdaParameters$ClientContext": null
+        "MaintenanceWindowLambdaParameters$ClientContext": "<p>Pass client-specific information to the Lambda function that you are invoking. You can then process the client information in your Lambda function as you choose through the context variable.</p>"
       }
     },
     "MaintenanceWindowLambdaParameters": {
-      "base": null,
+      "base": "<p>The parameters for a LAMBDA task type.</p>",
       "refs": {
-        "MaintenanceWindowTaskInvocationParameters$Lambda": null
+        "MaintenanceWindowTaskInvocationParameters$Lambda": "<p>The parameters for a LAMBDA task type.</p>"
       }
     },
     "MaintenanceWindowLambdaPayload": {
       "base": null,
       "refs": {
-        "MaintenanceWindowLambdaParameters$Payload": null
+        "MaintenanceWindowLambdaParameters$Payload": "<p>JSON to provide to your Lambda function as input.</p>"
       }
     },
     "MaintenanceWindowLambdaQualifier": {
       "base": null,
       "refs": {
-        "MaintenanceWindowLambdaParameters$Qualifier": null
+        "MaintenanceWindowLambdaParameters$Qualifier": "<p>(Optional) Specify a Lambda function version or alias name. If you specify a function version, the action uses the qualified function ARN to invoke a specific Lambda function. If you specify an alias name, the action uses the alias ARN to invoke the Lambda function version to which the alias points.</p>"
       }
     },
     "MaintenanceWindowMaxResults": {
@@ -3668,18 +3707,18 @@
       "refs": {
         "CreateMaintenanceWindowRequest$Name": "<p>The name of the Maintenance Window.</p>",
         "GetMaintenanceWindowResult$Name": "<p>The name of the Maintenance Window.</p>",
-        "GetMaintenanceWindowTaskResult$Name": null,
+        "GetMaintenanceWindowTaskResult$Name": "<p>The retrieved task name.</p>",
         "MaintenanceWindowIdentity$Name": "<p>The name of the Maintenance Window.</p>",
-        "MaintenanceWindowTarget$Name": null,
-        "MaintenanceWindowTask$Name": null,
-        "RegisterTargetWithMaintenanceWindowRequest$Name": null,
-        "RegisterTaskWithMaintenanceWindowRequest$Name": null,
+        "MaintenanceWindowTarget$Name": "<p>The target name.</p>",
+        "MaintenanceWindowTask$Name": "<p>The task name.</p>",
+        "RegisterTargetWithMaintenanceWindowRequest$Name": "<p>An optional name for the target.</p>",
+        "RegisterTaskWithMaintenanceWindowRequest$Name": "<p>An optional name for the task.</p>",
         "UpdateMaintenanceWindowRequest$Name": "<p>The name of the Maintenance Window.</p>",
         "UpdateMaintenanceWindowResult$Name": "<p>The name of the Maintenance Window.</p>",
-        "UpdateMaintenanceWindowTargetRequest$Name": null,
-        "UpdateMaintenanceWindowTargetResult$Name": null,
-        "UpdateMaintenanceWindowTaskRequest$Name": null,
-        "UpdateMaintenanceWindowTaskResult$Name": null
+        "UpdateMaintenanceWindowTargetRequest$Name": "<p>A name for the update.</p>",
+        "UpdateMaintenanceWindowTargetResult$Name": "<p>The updated name.</p>",
+        "UpdateMaintenanceWindowTaskRequest$Name": "<p>The new task name to specify.</p>",
+        "UpdateMaintenanceWindowTaskResult$Name": "<p>The updated task name.</p>"
       }
     },
     "MaintenanceWindowResourceType": {
@@ -3690,9 +3729,9 @@
       }
     },
     "MaintenanceWindowRunCommandParameters": {
-      "base": null,
+      "base": "<p>The parameters for a RUN_COMMAND task type.</p>",
       "refs": {
-        "MaintenanceWindowTaskInvocationParameters$RunCommand": null
+        "MaintenanceWindowTaskInvocationParameters$RunCommand": "<p>The parameters for a RUN_COMMAND task type.</p>"
       }
     },
     "MaintenanceWindowSchedule": {
@@ -3707,19 +3746,19 @@
     "MaintenanceWindowStepFunctionsInput": {
       "base": null,
       "refs": {
-        "MaintenanceWindowStepFunctionsParameters$Input": null
+        "MaintenanceWindowStepFunctionsParameters$Input": "<p>The inputs for the STEP_FUNCTION task.</p>"
       }
     },
     "MaintenanceWindowStepFunctionsName": {
       "base": null,
       "refs": {
-        "MaintenanceWindowStepFunctionsParameters$Name": null
+        "MaintenanceWindowStepFunctionsParameters$Name": "<p>The name of the STEP_FUNCTION task.</p>"
       }
     },
     "MaintenanceWindowStepFunctionsParameters": {
-      "base": null,
+      "base": "<p>The parameters for the STEP_FUNCTION execution.</p>",
       "refs": {
-        "MaintenanceWindowTaskInvocationParameters$StepFunctions": null
+        "MaintenanceWindowTaskInvocationParameters$StepFunctions": "<p>The parameters for a STEP_FUNCTION task type.</p>"
       }
     },
     "MaintenanceWindowTarget": {
@@ -3737,8 +3776,8 @@
         "MaintenanceWindowTargetPrivate$WindowTargetId": null,
         "RegisterTargetWithMaintenanceWindowPrivateResult$WindowTargetId": null,
         "RegisterTargetWithMaintenanceWindowResult$WindowTargetId": "<p>The ID of the target definition in this Maintenance Window.</p>",
-        "UpdateMaintenanceWindowTargetRequest$WindowTargetId": null,
-        "UpdateMaintenanceWindowTargetResult$WindowTargetId": null
+        "UpdateMaintenanceWindowTargetRequest$WindowTargetId": "<p>The target ID to modify.</p>",
+        "UpdateMaintenanceWindowTargetResult$WindowTargetId": "<p>The target ID specified in the update request.</p>"
       }
     },
     "MaintenanceWindowTargetIdList": {
@@ -3789,14 +3828,14 @@
       "base": null,
       "refs": {
         "GetMaintenanceWindowExecutionTaskResult$TaskArn": "<p>The ARN of the executed task.</p>",
-        "GetMaintenanceWindowTaskResult$TaskArn": null,
+        "GetMaintenanceWindowTaskResult$TaskArn": "<p>The resource that the task used during execution. For RUN_COMMAND and AUTOMATION task types, the TaskArn is the SSM Document name/ARN. For LAMBDA tasks, the value is the function name/ARN. For STEP_FUNCTION tasks, the value is the state machine ARN.</p>",
         "MaintenanceWindowExecutionTaskIdentity$TaskArn": "<p>The ARN of the executed task.</p>",
-        "MaintenanceWindowTask$TaskArn": "<p>The ARN of the task to execute.</p>",
+        "MaintenanceWindowTask$TaskArn": "<p>The resource that the task uses during execution. For RUN_COMMAND and AUTOMATION task types, <code>TaskArn</code> is the SSM document name or ARN. For LAMBDA tasks, it's the function name or ARN. For STEP_FUNCTION tasks, it's the state machine ARN.</p>",
         "MaintenanceWindowTaskPrivate$TaskArn": null,
         "RegisterTaskWithMaintenanceWindowPrivateRequest$TaskArn": null,
         "RegisterTaskWithMaintenanceWindowRequest$TaskArn": "<p>The ARN of the task to execute </p>",
-        "UpdateMaintenanceWindowTaskRequest$TaskArn": null,
-        "UpdateMaintenanceWindowTaskResult$TaskArn": null
+        "UpdateMaintenanceWindowTaskRequest$TaskArn": "<p>The task ARN to modify.</p>",
+        "UpdateMaintenanceWindowTaskResult$TaskArn": "<p>The updated task ARN value.</p>"
       }
     },
     "MaintenanceWindowTaskId": {
@@ -3804,23 +3843,23 @@
       "refs": {
         "DeregisterTaskFromMaintenanceWindowRequest$WindowTaskId": "<p>The ID of the task to remove from the Maintenance Window.</p>",
         "DeregisterTaskFromMaintenanceWindowResult$WindowTaskId": "<p>The ID of the task removed from the Maintenance Window.</p>",
-        "GetMaintenanceWindowTaskRequest$WindowTaskId": null,
-        "GetMaintenanceWindowTaskResult$WindowTaskId": null,
+        "GetMaintenanceWindowTaskRequest$WindowTaskId": "<p>The Maintenance Window task ID to retrieve.</p>",
+        "GetMaintenanceWindowTaskResult$WindowTaskId": "<p>The retrieved Maintenance Window task ID.</p>",
         "MaintenanceWindowTask$WindowTaskId": "<p>The task ID.</p>",
         "MaintenanceWindowTaskPrivate$WindowTaskId": null,
         "RegisterTaskWithMaintenanceWindowPrivateResult$WindowTaskId": null,
         "RegisterTaskWithMaintenanceWindowResult$WindowTaskId": "<p>The id of the task in the Maintenance Window.</p>",
-        "UpdateMaintenanceWindowTaskRequest$WindowTaskId": null,
-        "UpdateMaintenanceWindowTaskResult$WindowTaskId": null
+        "UpdateMaintenanceWindowTaskRequest$WindowTaskId": "<p>The task ID to modify.</p>",
+        "UpdateMaintenanceWindowTaskResult$WindowTaskId": "<p>The task ID of the Maintenance Window that was updated.</p>"
       }
     },
     "MaintenanceWindowTaskInvocationParameters": {
-      "base": null,
+      "base": "<p>The parameters for task execution.</p>",
       "refs": {
-        "GetMaintenanceWindowTaskResult$TaskInvocationParameters": null,
-        "RegisterTaskWithMaintenanceWindowRequest$TaskInvocationParameters": null,
-        "UpdateMaintenanceWindowTaskRequest$TaskInvocationParameters": null,
-        "UpdateMaintenanceWindowTaskResult$TaskInvocationParameters": null
+        "GetMaintenanceWindowTaskResult$TaskInvocationParameters": "<p>The parameters to pass to the task when it executes.</p>",
+        "RegisterTaskWithMaintenanceWindowRequest$TaskInvocationParameters": "<p>The parameters that the task should use during execution. Populate only the fields that match the task type. All other fields should be empty. </p>",
+        "UpdateMaintenanceWindowTaskRequest$TaskInvocationParameters": "<p>The parameters that the task should use during execution. Populate only the fields that match the task type. All other fields should be empty.</p>",
+        "UpdateMaintenanceWindowTaskResult$TaskInvocationParameters": "<p>The updated parameter values.</p>"
       }
     },
     "MaintenanceWindowTaskList": {
@@ -3862,14 +3901,14 @@
     "MaintenanceWindowTaskParameters": {
       "base": null,
       "refs": {
-        "GetMaintenanceWindowTaskResult$TaskParameters": null,
+        "GetMaintenanceWindowTaskResult$TaskParameters": "<p>The parameters to pass to the task when it executes.</p>",
         "MaintenanceWindowTask$TaskParameters": "<p>The parameters that should be passed to the task when it is executed.</p>",
         "MaintenanceWindowTaskParametersList$member": null,
         "MaintenanceWindowTaskPrivate$TaskParameters": null,
         "RegisterTaskWithMaintenanceWindowPrivateRequest$TaskParameters": null,
         "RegisterTaskWithMaintenanceWindowRequest$TaskParameters": "<p>The parameters that should be passed to the task when it is executed.</p>",
-        "UpdateMaintenanceWindowTaskRequest$TaskParameters": null,
-        "UpdateMaintenanceWindowTaskResult$TaskParameters": null
+        "UpdateMaintenanceWindowTaskRequest$TaskParameters": "<p>The parameters to modify. The map has the following format:</p> <p>Key: string, between 1 and 255 characters</p> <p>Value: an array of strings, each string is between 1 and 255 characters</p>",
+        "UpdateMaintenanceWindowTaskResult$TaskParameters": "<p>The updated parameter values.</p>"
       }
     },
     "MaintenanceWindowTaskParametersList": {
@@ -3882,13 +3921,13 @@
       "base": null,
       "refs": {
         "GetMaintenanceWindowExecutionTaskResult$Priority": "<p>The priority of the task.</p>",
-        "GetMaintenanceWindowTaskResult$Priority": null,
-        "MaintenanceWindowTask$Priority": "<p>The priority of the task in the Maintenance Window, the lower the number the higher the priority. Tasks in a Maintenance Window are scheduled in priority order with tasks that have the same priority scheduled in parallel.</p>",
+        "GetMaintenanceWindowTaskResult$Priority": "<p>The priority of the task when it executes. The lower the number, the higher the priority. Tasks that have the same priority are scheduled in parallel.</p>",
+        "MaintenanceWindowTask$Priority": "<p>The priority of the task in the Maintenance Window. The lower the number, the higher the priority. Tasks that have the same priority are scheduled in parallel.</p>",
         "MaintenanceWindowTaskPrivate$Priority": null,
         "RegisterTaskWithMaintenanceWindowPrivateRequest$Priority": null,
         "RegisterTaskWithMaintenanceWindowRequest$Priority": "<p>The priority of the task in the Maintenance Window, the lower the number the higher the priority. Tasks in a Maintenance Window are scheduled in priority order with tasks that have the same priority scheduled in parallel.</p>",
-        "UpdateMaintenanceWindowTaskRequest$Priority": null,
-        "UpdateMaintenanceWindowTaskResult$Priority": null
+        "UpdateMaintenanceWindowTaskRequest$Priority": "<p>The new task priority to specify. The lower the number, the higher the priority. Tasks that have the same priority are scheduled in parallel.</p>",
+        "UpdateMaintenanceWindowTaskResult$Priority": "<p>The updated priority value.</p>"
       }
     },
     "MaintenanceWindowTaskPrivate": {
@@ -3906,7 +3945,7 @@
     "MaintenanceWindowTaskTargetId": {
       "base": null,
       "refs": {
-        "GetMaintenanceWindowExecutionTaskInvocationResult$WindowTargetId": null,
+        "GetMaintenanceWindowExecutionTaskInvocationResult$WindowTargetId": "<p>The Maintenance Window target ID.</p>",
         "MaintenanceWindowExecutionTaskInvocationIdentity$WindowTargetId": "<p>The ID of the target definition in this Maintenance Window the invocation was performed for.</p>",
         "MaintenanceWindowTaskTarget$TaskTargetId": null
       }
@@ -3927,12 +3966,12 @@
     "MaintenanceWindowTaskType": {
       "base": null,
       "refs": {
-        "GetMaintenanceWindowExecutionTaskInvocationResult$TaskType": null,
+        "GetMaintenanceWindowExecutionTaskInvocationResult$TaskType": "<p>Retrieves the task type for a Maintenance Window. Task types include the following: LAMBDA, STEP_FUNCTION, AUTOMATION, RUN_COMMAND.</p>",
         "GetMaintenanceWindowExecutionTaskResult$Type": "<p>The type of task executed.</p>",
-        "GetMaintenanceWindowTaskResult$TaskType": null,
+        "GetMaintenanceWindowTaskResult$TaskType": "<p>The type of task to execute.</p>",
         "MaintenanceWindowExecutionTaskIdentity$TaskType": "<p>The type of executed task.</p>",
-        "MaintenanceWindowExecutionTaskInvocationIdentity$TaskType": null,
-        "MaintenanceWindowTask$Type": "<p>The type of task.</p>",
+        "MaintenanceWindowExecutionTaskInvocationIdentity$TaskType": "<p>The task type.</p>",
+        "MaintenanceWindowTask$Type": "<p>The type of task. The type can be one of the following: RUN_COMMAND, AUTOMATION, LAMBDA, or STEP_FUNCTION.</p>",
         "MaintenanceWindowTaskPrivate$Type": null,
         "RegisterTaskWithMaintenanceWindowPrivateRequest$TaskType": null,
         "RegisterTaskWithMaintenanceWindowRequest$TaskType": "<p>The type of task being registered.</p>"
@@ -3956,14 +3995,14 @@
       "refs": {
         "Command$MaxConcurrency": "<p>The maximum number of instances that are allowed to execute the command at the same time. You can specify a number of instances, such as 10, or a percentage of instances, such as 10%. The default value is 50. For more information about how to use MaxConcurrency, see <a href=\"http://docs.aws.amazon.com/systems-manager/latest/userguide/run-command.html\">Executing a Command Using Systems Manager Run Command</a>.</p>",
         "GetMaintenanceWindowExecutionTaskResult$MaxConcurrency": "<p>The defined maximum number of task executions that could be run in parallel.</p>",
-        "GetMaintenanceWindowTaskResult$MaxConcurrency": null,
+        "GetMaintenanceWindowTaskResult$MaxConcurrency": "<p>The maximum number of targets allowed to run this task in parallel.</p>",
         "MaintenanceWindowTask$MaxConcurrency": "<p>The maximum number of targets this task can be run for in parallel.</p>",
         "MaintenanceWindowTaskPrivate$MaxConcurrency": null,
         "RegisterTaskWithMaintenanceWindowPrivateRequest$MaxConcurrency": null,
         "RegisterTaskWithMaintenanceWindowRequest$MaxConcurrency": "<p>The maximum number of targets this task can be run for in parallel.</p>",
-        "SendCommandRequest$MaxConcurrency": "<p>(Optional) The maximum number of instances that are allowed to execute the command at the same time. You can specify a number such as 10 or a percentage such as 10%. The default value is 50. For more information about how to use MaxConcurrency, see <a href=\"http://docs.aws.amazon.com/systems-manager/latest/userguide/run-command.html\">Executing a Command Using Systems Manager Run Command</a>.</p>",
-        "UpdateMaintenanceWindowTaskRequest$MaxConcurrency": null,
-        "UpdateMaintenanceWindowTaskResult$MaxConcurrency": null
+        "SendCommandRequest$MaxConcurrency": "<p>(Optional) The maximum number of instances that are allowed to execute the command at the same time. You can specify a number such as 10 or a percentage such as 10%. The default value is 50. For more information about how to use MaxConcurrency, see <a href=\"http://docs.aws.amazon.com/systems-manager/latest/userguide/send-commands-velocity.html\">Using Concurrency Controls</a>.</p>",
+        "UpdateMaintenanceWindowTaskRequest$MaxConcurrency": "<p>The new <code>MaxConcurrency</code> value you want to specify. <code>MaxConcurrency</code> is the number of targets that are allowed to run this task in parallel.</p>",
+        "UpdateMaintenanceWindowTaskResult$MaxConcurrency": "<p>The updated MaxConcurrency value.</p>"
       }
     },
     "MaxDocumentSizeExceeded": {
@@ -3976,14 +4015,14 @@
       "refs": {
         "Command$MaxErrors": "<p>The maximum number of errors allowed before the system stops sending the command to additional targets. You can specify a number of errors, such as 10, or a percentage or errors, such as 10%. The default value is 50. For more information about how to use MaxErrors, see <a href=\"http://docs.aws.amazon.com/systems-manager/latest/userguide/run-command.html\">Executing a Command Using Systems Manager Run Command</a>.</p>",
         "GetMaintenanceWindowExecutionTaskResult$MaxErrors": "<p>The defined maximum number of task execution errors allowed before scheduling of the task execution would have been stopped.</p>",
-        "GetMaintenanceWindowTaskResult$MaxErrors": null,
+        "GetMaintenanceWindowTaskResult$MaxErrors": "<p>The maximum number of errors allowed before the task stops being scheduled.</p>",
         "MaintenanceWindowTask$MaxErrors": "<p>The maximum number of errors allowed before this task stops being scheduled.</p>",
         "MaintenanceWindowTaskPrivate$MaxErrors": null,
         "RegisterTaskWithMaintenanceWindowPrivateRequest$MaxErrors": null,
         "RegisterTaskWithMaintenanceWindowRequest$MaxErrors": "<p>The maximum number of errors allowed before this task stops being scheduled.</p>",
-        "SendCommandRequest$MaxErrors": "<p>The maximum number of errors allowed without the command failing. When the command fails one more time beyond the value of MaxErrors, the systems stops sending the command to additional targets. You can specify a number like 10 or a percentage like 10%. The default value is 50. For more information about how to use MaxErrors, see <a href=\"http://docs.aws.amazon.com/systems-manager/latest/userguide/run-command.html\">Executing a Command Using Systems Manager Run Command</a>.</p>",
-        "UpdateMaintenanceWindowTaskRequest$MaxErrors": null,
-        "UpdateMaintenanceWindowTaskResult$MaxErrors": null
+        "SendCommandRequest$MaxErrors": "<p>The maximum number of errors allowed without the command failing. When the command fails one more time beyond the value of MaxErrors, the systems stops sending the command to additional targets. You can specify a number like 10 or a percentage like 10%. The default value is 50. For more information about how to use MaxErrors, see <a href=\"http://docs.aws.amazon.com/systems-manager/latest/userguide/send-commands-maxerrors.html\">Using Error Controls</a>.</p>",
+        "UpdateMaintenanceWindowTaskRequest$MaxErrors": "<p>The new <code>MaxErrors</code> value to specify. <code>MaxErrors</code> is the maximum number of errors that are allowed before the task stops being scheduled.</p>",
+        "UpdateMaintenanceWindowTaskResult$MaxErrors": "<p>The updated MaxErrors value.</p>"
       }
     },
     "MaxResults": {
@@ -3994,19 +4033,22 @@
         "DescribeAutomationExecutionsRequest$MaxResults": "<p>The maximum number of items to return for this call. The call also returns a token that you can specify in a subsequent call to get the next set of results.</p>",
         "DescribeAutomationStepExecutionsRequest$MaxResults": null,
         "DescribeInstanceAssociationsStatusRequest$MaxResults": "<p>The maximum number of items to return for this call. The call also returns a token that you can specify in a subsequent call to get the next set of results.</p>",
+        "DescribeInstancePatchStatesForPatchGroupRequest$MaxResults": "<p>The maximum number of patches to return (per page).</p>",
+        "DescribeInstancePatchStatesRequest$MaxResults": "<p>The maximum number of instances to return (per page).</p>",
+        "DescribeInstancePatchesRequest$MaxResults": "<p>The maximum number of patches to return (per page).</p>",
         "DescribeParametersRequest$MaxResults": "<p>The maximum number of items to return for this call. The call also returns a token that you can specify in a subsequent call to get the next set of results.</p>",
         "GetInventoryRequest$MaxResults": "<p>The maximum number of items to return for this call. The call also returns a token that you can specify in a subsequent call to get the next set of results.</p>",
         "GetParameterHistoryRequest$MaxResults": "<p>The maximum number of items to return for this call. The call also returns a token that you can specify in a subsequent call to get the next set of results.</p>",
-        "ListAssociationVersionsRequest$MaxResults": null,
+        "ListAssociationVersionsRequest$MaxResults": "<p>The maximum number of items to return for this call. The call also returns a token that you can specify in a subsequent call to get the next set of results.</p>",
         "ListAssociationsRequest$MaxResults": "<p>The maximum number of items to return for this call. The call also returns a token that you can specify in a subsequent call to get the next set of results.</p>",
-        "ListComplianceItemsRequest$MaxResults": null,
-        "ListComplianceSummariesRequest$MaxResults": null,
+        "ListComplianceItemsRequest$MaxResults": "<p>The maximum number of items to return for this call. The call also returns a token that you can specify in a subsequent call to get the next set of results.</p>",
+        "ListComplianceSummariesRequest$MaxResults": "<p>The maximum number of items to return for this call. Currently, you can specify null or 50. The call also returns a token that you can specify in a subsequent call to get the next set of results.</p>",
         "ListDocumentVersionsRequest$MaxResults": "<p>The maximum number of items to return for this call. The call also returns a token that you can specify in a subsequent call to get the next set of results.</p>",
         "ListDocumentsRequest$MaxResults": "<p>The maximum number of items to return for this call. The call also returns a token that you can specify in a subsequent call to get the next set of results.</p>",
         "ListInstanceAssociationsRequest$MaxResults": null,
         "ListInventoryEntriesRequest$MaxResults": "<p>The maximum number of items to return for this call. The call also returns a token that you can specify in a subsequent call to get the next set of results.</p>",
-        "ListResourceComplianceSummariesRequest$MaxResults": null,
-        "ListResourceDataSyncRequest$MaxResults": null
+        "ListResourceComplianceSummariesRequest$MaxResults": "<p>The maximum number of items to return for this call. The call also returns a token that you can specify in a subsequent call to get the next set of results.</p>",
+        "ListResourceDataSyncRequest$MaxResults": "<p>The maximum number of items to return for this call. The call also returns a token that you can specify in a subsequent call to get the next set of results.</p>"
       }
     },
     "MaxResultsEC2Compatible": {
@@ -4028,14 +4070,14 @@
     "Name": {
       "base": null,
       "refs": {
-        "PackageResultAttributes$key": null
+        "ConfigurePackageResultAttributes$key": null
       }
     },
     "NextToken": {
       "base": null,
       "refs": {
         "DescribeActivationsRequest$NextToken": "<p>A token to start the list. Use this token to get the next set of results. </p>",
-        "DescribeActivationsResult$NextToken": "<p> The token for the next set of items to return. Use this token to get the next set of results. </p>",
+        "DescribeActivationsResult$NextToken": "<p>The token for the next set of items to return. Use this token to get the next set of results. </p>",
         "DescribeAutomationExecutionParametersRequest$NextToken": null,
         "DescribeAutomationExecutionParametersResult$NextToken": null,
         "DescribeAutomationExecutionsRequest$NextToken": "<p>The token for the next set of items to return. (You received this token from a previous call.)</p>",
@@ -4088,20 +4130,20 @@
         "GetInventorySchemaResult$NextToken": "<p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>",
         "GetParameterHistoryRequest$NextToken": "<p>The token for the next set of items to return. (You received this token from a previous call.)</p>",
         "GetParameterHistoryResult$NextToken": "<p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>",
-        "GetParametersByPathRequest$NextToken": null,
-        "GetParametersByPathResult$NextToken": null,
-        "ListAssociationVersionsRequest$NextToken": null,
-        "ListAssociationVersionsResult$NextToken": null,
+        "GetParametersByPathRequest$NextToken": "<p>A token to start the list. Use this token to get the next set of results. </p>",
+        "GetParametersByPathResult$NextToken": "<p>The token for the next set of items to return. Use this token to get the next set of results.</p>",
+        "ListAssociationVersionsRequest$NextToken": "<p>A token to start the list. Use this token to get the next set of results. </p>",
+        "ListAssociationVersionsResult$NextToken": "<p>The token for the next set of items to return. Use this token to get the next set of results.</p>",
         "ListAssociationsRequest$NextToken": "<p>The token for the next set of items to return. (You received this token from a previous call.)</p>",
         "ListAssociationsResult$NextToken": "<p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>",
         "ListCommandInvocationsRequest$NextToken": "<p>(Optional) The token for the next set of items to return. (You received this token from a previous call.)</p>",
         "ListCommandInvocationsResult$NextToken": "<p>(Optional) The token for the next set of items to return. (You received this token from a previous call.)</p>",
         "ListCommandsRequest$NextToken": "<p>(Optional) The token for the next set of items to return. (You received this token from a previous call.)</p>",
         "ListCommandsResult$NextToken": "<p>(Optional) The token for the next set of items to return. (You received this token from a previous call.)</p>",
-        "ListComplianceItemsRequest$NextToken": null,
-        "ListComplianceItemsResult$NextToken": null,
-        "ListComplianceSummariesRequest$NextToken": null,
-        "ListComplianceSummariesResult$NextToken": null,
+        "ListComplianceItemsRequest$NextToken": "<p>A token to start the list. Use this token to get the next set of results. </p>",
+        "ListComplianceItemsResult$NextToken": "<p>The token for the next set of items to return. Use this token to get the next set of results.</p>",
+        "ListComplianceSummariesRequest$NextToken": "<p>A token to start the list. Use this token to get the next set of results. </p>",
+        "ListComplianceSummariesResult$NextToken": "<p>The token for the next set of items to return. Use this token to get the next set of results.</p>",
         "ListDocumentVersionsRequest$NextToken": "<p>The token for the next set of items to return. (You received this token from a previous call.)</p>",
         "ListDocumentVersionsResult$NextToken": "<p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>",
         "ListDocumentsRequest$NextToken": "<p>The token for the next set of items to return. (You received this token from a previous call.)</p>",
@@ -4110,17 +4152,17 @@
         "ListInstanceAssociationsResult$NextToken": null,
         "ListInventoryEntriesRequest$NextToken": "<p>The token for the next set of items to return. (You received this token from a previous call.)</p>",
         "ListInventoryEntriesResult$NextToken": "<p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>",
-        "ListResourceComplianceSummariesRequest$NextToken": null,
-        "ListResourceComplianceSummariesResult$NextToken": null,
-        "ListResourceDataSyncRequest$NextToken": null,
-        "ListResourceDataSyncResult$NextToken": null
+        "ListResourceComplianceSummariesRequest$NextToken": "<p>A token to start the list. Use this token to get the next set of results. </p>",
+        "ListResourceComplianceSummariesResult$NextToken": "<p>The token for the next set of items to return. Use this token to get the next set of results.</p>",
+        "ListResourceDataSyncRequest$NextToken": "<p>A token to start the list. Use this token to get the next set of results. </p>",
+        "ListResourceDataSyncResult$NextToken": "<p>The token for the next set of items to return. Use this token to get the next set of results.</p>"
       }
     },
     "NonCompliantSummary": {
-      "base": null,
+      "base": "<p>A summary of resources that are not compliant. The summary is organized according to resource type.</p>",
       "refs": {
-        "ComplianceSummaryItem$NonCompliantSummary": null,
-        "ResourceComplianceSummaryItem$NonCompliantSummary": null
+        "ComplianceSummaryItem$NonCompliantSummary": "<p>A list of NON_COMPLIANT items for the specified compliance type.</p>",
+        "ResourceComplianceSummaryItem$NonCompliantSummary": "<p>A list of items that aren't compliant for the resource.</p>"
       }
     },
     "NormalStringMap": {
@@ -4140,7 +4182,7 @@
       "refs": {
         "Command$NotificationConfig": "<p>Configurations for sending notifications about command status changes. </p>",
         "CommandInvocation$NotificationConfig": "<p>Configurations for sending notifications about command status changes on a per instance basis.</p>",
-        "MaintenanceWindowRunCommandParameters$NotificationConfig": null,
+        "MaintenanceWindowRunCommandParameters$NotificationConfig": "<p>Configurations for sending notifications about command status changes on a per-instance basis.</p>",
         "SendCommandRequest$NotificationConfig": "<p>Configurations for sending notifications.</p>"
       }
     },
@@ -4165,14 +4207,14 @@
     "OperatingSystem": {
       "base": null,
       "refs": {
-        "CreatePatchBaselineRequest$OperatingSystem": null,
-        "GetDefaultPatchBaselineRequest$OperatingSystem": null,
-        "GetDefaultPatchBaselineResult$OperatingSystem": null,
-        "GetPatchBaselineForPatchGroupRequest$OperatingSystem": null,
-        "GetPatchBaselineForPatchGroupResult$OperatingSystem": null,
-        "GetPatchBaselineResult$OperatingSystem": null,
-        "PatchBaselineIdentity$OperatingSystem": null,
-        "UpdatePatchBaselineResult$OperatingSystem": null
+        "CreatePatchBaselineRequest$OperatingSystem": "<p>Defines the operating system the patch baseline applies to. Supported operating systems include WINDOWS, AMAZON_LINUX, UBUNTU and REDHAT_ENTERPRISE_LINUX. The Default value is WINDOWS.</p>",
+        "GetDefaultPatchBaselineRequest$OperatingSystem": "<p>Returns the default patch baseline for the specified operating system.</p>",
+        "GetDefaultPatchBaselineResult$OperatingSystem": "<p>The operating system for the returned patch baseline. </p>",
+        "GetPatchBaselineForPatchGroupRequest$OperatingSystem": "<p>Returns he operating system rule specified for patch groups using the patch baseline.</p>",
+        "GetPatchBaselineForPatchGroupResult$OperatingSystem": "<p>The operating system rule specified for patch groups using the patch baseline.</p>",
+        "GetPatchBaselineResult$OperatingSystem": "<p>Returns the operating system specified for the patch baseline.</p>",
+        "PatchBaselineIdentity$OperatingSystem": "<p>Defines the operating system the patch baseline applies to. Supported operating systems include WINDOWS, AMAZON_LINUX, UBUNTU and REDHAT_ENTERPRISE_LINUX. The Default value is WINDOWS. </p>",
+        "UpdatePatchBaselineResult$OperatingSystem": "<p>The operating system rule used by the updated patch baseline.</p>"
       }
     },
     "Operation": {
@@ -4184,15 +4226,15 @@
     "OwnerInformation": {
       "base": null,
       "refs": {
-        "GetMaintenanceWindowExecutionTaskInvocationResult$OwnerInformation": null,
+        "GetMaintenanceWindowExecutionTaskInvocationResult$OwnerInformation": "<p>User-provided value to be included in any CloudWatch events raised while running tasks for these targets in this Maintenance Window. </p>",
         "InstancePatchState$OwnerInformation": "<p>Placeholder information, this field will always be empty in the current release of the service.</p>",
         "MaintenanceWindowExecutionTaskInvocationIdentity$OwnerInformation": "<p>User-provided value that was specified when the target was registered with the Maintenance Window. This was also included in any CloudWatch events raised during the task invocation.</p>",
         "MaintenanceWindowTarget$OwnerInformation": "<p>User-provided value that will be included in any CloudWatch events raised while running tasks for these targets in this Maintenance Window.</p>",
         "MaintenanceWindowTargetPrivate$OwnerInformation": null,
         "RegisterTargetWithMaintenanceWindowPrivateRequest$OwnerInformation": null,
         "RegisterTargetWithMaintenanceWindowRequest$OwnerInformation": "<p>User-provided value that will be included in any CloudWatch events raised while running tasks for these targets in this Maintenance Window.</p>",
-        "UpdateMaintenanceWindowTargetRequest$OwnerInformation": null,
-        "UpdateMaintenanceWindowTargetResult$OwnerInformation": null
+        "UpdateMaintenanceWindowTargetRequest$OwnerInformation": "<p>User-provided value that will be included in any CloudWatch events raised while running tasks for these targets in this Maintenance Window.</p>",
+        "UpdateMaintenanceWindowTargetResult$OwnerInformation": "<p>The updated owner.</p>"
       }
     },
     "PSParameterName": {
@@ -4200,8 +4242,8 @@
       "refs": {
         "DeleteParameterRequest$Name": "<p>The name of the parameter to delete.</p>",
         "GetParameterHistoryRequest$Name": "<p>The name of a parameter you want to query.</p>",
-        "GetParameterRequest$Name": null,
-        "GetParametersByPathRequest$Path": null,
+        "GetParameterRequest$Name": "<p>The name of the parameter you want to query.</p>",
+        "GetParametersByPathRequest$Path": "<p>The hierarchy for the parameter. Hierarchies start with a forward slash (/) and end with the parameter name. A hierarchy can have a maximum of five levels. Examples: /Environment/Test/DBString003</p> <p>/Finance/Prod/IAD/OS/WinServ2016/license15</p>",
         "Parameter$Name": "<p>The name of the parameter.</p>",
         "ParameterHistory$Name": "<p>The name of the parameter.</p>",
         "ParameterMetadata$Name": "<p>The parameter name.</p>",
@@ -4224,24 +4266,6 @@
         "PutConfigurePackageResultRequest$PackageName": null
       }
     },
-    "PackageResultAttributes": {
-      "base": null,
-      "refs": {
-        "PutConfigurePackageResultRequest$PackageResultAttributes": null
-      }
-    },
-    "PackageResultStep": {
-      "base": null,
-      "refs": {
-        "PackageResultSteps$member": null
-      }
-    },
-    "PackageResultSteps": {
-      "base": null,
-      "refs": {
-        "PutConfigurePackageResultRequest$PackageResultSteps": null
-      }
-    },
     "PackageVersion": {
       "base": null,
       "refs": {
@@ -4253,7 +4277,7 @@
     "Parameter": {
       "base": "<p>An Amazon EC2 Systems Manager parameter in Parameter Store.</p>",
       "refs": {
-        "GetParameterResult$Parameter": null,
+        "GetParameterResult$Parameter": "<p>Information about a parameter.</p>",
         "ParameterList$member": null
       }
     },
@@ -4287,7 +4311,7 @@
       "refs": {
         "ParameterHistory$KeyId": "<p>The ID of the query key used for this parameter.</p>",
         "ParameterMetadata$KeyId": "<p>The ID of the query key used for this parameter.</p>",
-        "PutParameterRequest$KeyId": "<p>The parameter key ID that you want to add to the system.</p>"
+        "PutParameterRequest$KeyId": "<p>The KMS Key ID that you want to use to encrypt a parameter when you choose the SecureString data type. If you don't specify a key ID, the system uses the default key associated with your AWS account.</p>"
       }
     },
     "ParameterLimitExceeded": {
@@ -4298,7 +4322,7 @@
     "ParameterList": {
       "base": null,
       "refs": {
-        "GetParametersByPathResult$Parameters": null,
+        "GetParametersByPathResult$Parameters": "<p>A list of parameters found in the specified hierarchy.</p>",
         "GetParametersResult$Parameters": "<p>A list of details for a parameter.</p>"
       }
     },
@@ -4323,9 +4347,9 @@
     "ParameterNameList": {
       "base": null,
       "refs": {
-        "DeleteParametersRequest$Names": null,
-        "DeleteParametersResult$DeletedParameters": null,
-        "DeleteParametersResult$InvalidParameters": null,
+        "DeleteParametersRequest$Names": "<p>The names of the parameters to delete.</p>",
+        "DeleteParametersResult$DeletedParameters": "<p>The names of the deleted parameters.</p>",
+        "DeleteParametersResult$InvalidParameters": "<p>The names of parameters that weren't deleted because the parameters are not valid.</p>",
         "GetParametersRequest$Names": "<p>Names of the parameters for which you want to query information.</p>",
         "GetParametersResult$InvalidParameters": "<p>A list of parameters that are not formatted correctly or do not run when executed.</p>"
       }
@@ -4336,12 +4360,12 @@
       }
     },
     "ParameterPatternMismatchException": {
-      "base": null,
+      "base": "<p>The parameter name is not valid.</p>",
       "refs": {
       }
     },
     "ParameterStringFilter": {
-      "base": null,
+      "base": "<p>One or more filters. Use a filter to return a more specific list of results.</p>",
       "refs": {
         "ParameterStringFilterList$member": null
       }
@@ -4349,14 +4373,14 @@
     "ParameterStringFilterKey": {
       "base": null,
       "refs": {
-        "ParameterStringFilter$Key": null
+        "ParameterStringFilter$Key": "<p>The name of the filter.</p>"
       }
     },
     "ParameterStringFilterList": {
       "base": null,
       "refs": {
-        "DescribeParametersRequest$ParameterFilters": null,
-        "GetParametersByPathRequest$ParameterFilters": null
+        "DescribeParametersRequest$ParameterFilters": "<p>Filters to limit the request results.</p>",
+        "GetParametersByPathRequest$ParameterFilters": "<p>Filters to limit the request results.</p>"
       }
     },
     "ParameterStringFilterValue": {
@@ -4368,13 +4392,21 @@
     "ParameterStringFilterValueList": {
       "base": null,
       "refs": {
-        "ParameterStringFilter$Values": null
+        "ParameterStringFilter$Values": "<p>The value you want to search for.</p>"
       }
     },
     "ParameterStringQueryOption": {
       "base": null,
       "refs": {
-        "ParameterStringFilter$Option": null
+        "ParameterStringFilter$Option": "<p>Valid options are Equals and BeginsWith. For Path filter, valid options are Recursive and OneLevel.</p>"
+      }
+    },
+    "ParameterTimeToLive": {
+      "base": null,
+      "refs": {
+        "ParameterHistory$TimeToLive": null,
+        "ParameterMetadata$TimeToLive": null,
+        "PutParameterRequest$TimeToLive": null
       }
     },
     "ParameterType": {
@@ -4402,12 +4434,12 @@
       "base": null,
       "refs": {
         "AssociationDescription$Parameters": "<p>A description of the parameters for a document. </p>",
-        "AssociationVersionInfo$Parameters": null,
+        "AssociationVersionInfo$Parameters": "<p>Parameters specified when the association version was created.</p>",
         "Command$Parameters": "<p>The parameter values to be inserted in the document when executing the command.</p>",
         "CreateAssociationBatchRequestEntry$Parameters": "<p>A description of the parameters for a document. </p>",
         "CreateAssociationRequest$Parameters": "<p>The parameters for the documents runtime configuration. </p>",
         "InstanceAssociationSummary$Parameters": null,
-        "MaintenanceWindowRunCommandParameters$Parameters": null,
+        "MaintenanceWindowRunCommandParameters$Parameters": "<p>The parameters for the RUN_COMMAND task execution.</p>",
         "SendCommandRequest$Parameters": "<p>The required and optional parameters specified in the document being executed.</p>",
         "UpdateAssociationRequest$Parameters": "<p>The parameters you want to update for the association. If you create a parameter using Parameter Store, you can reference the parameter using {{ssm:parameter-name}}</p>"
       }
@@ -4499,20 +4531,12 @@
     "PatchComplianceLevel": {
       "base": null,
       "refs": {
-        "CreatePatchBaselineRequest$ApprovedPatchesComplianceLevel": null,
-        "GetPatchBaselineResult$ApprovedPatchesComplianceLevel": null,
-        "PatchRule$ComplianceLevel": null,
-        "PatchStatus$ComplianceLevel": null,
-        "UpdatePatchBaselineRequest$ApprovedPatchesComplianceLevel": null,
-        "UpdatePatchBaselineResult$ApprovedPatchesComplianceLevel": null
-      }
-    },
-    "PatchComplianceMaxResults": {
-      "base": null,
-      "refs": {
-        "DescribeInstancePatchStatesForPatchGroupRequest$MaxResults": "<p>The maximum number of patches to return (per page).</p>",
-        "DescribeInstancePatchStatesRequest$MaxResults": "<p>The maximum number of instances to return (per page).</p>",
-        "DescribeInstancePatchesRequest$MaxResults": "<p>The maximum number of patches to return (per page).</p>"
+        "CreatePatchBaselineRequest$ApprovedPatchesComplianceLevel": "<p>Defines the compliance level for approved patches. This means that if an approved patch is reported as missing, this is the severity of the compliance violation. Valid compliance severity levels include the following: CRITICAL, HIGH, MEDIUM, LOW, INFORMATIONAL, UNSPECIFIED. The default value is UNSPECIFIED.</p>",
+        "GetPatchBaselineResult$ApprovedPatchesComplianceLevel": "<p>Returns the specified compliance severity level for approved patches in the patch baseline.</p>",
+        "PatchRule$ComplianceLevel": "<p>A compliance severity level for all approved patches in a patch baseline. Valid compliance severity levels include the following: Unspecified, Critical, High, Medium, Low, and Informational.</p>",
+        "PatchStatus$ComplianceLevel": "<p>The compliance severity level for a patch.</p>",
+        "UpdatePatchBaselineRequest$ApprovedPatchesComplianceLevel": "<p>Assigns a new compliance severity level to an existing patch baseline.</p>",
+        "UpdatePatchBaselineResult$ApprovedPatchesComplianceLevel": "<p>The compliance severity level assigned to the patch baseline after the update completed.</p>"
       }
     },
     "PatchContentUrl": {
@@ -4649,7 +4673,7 @@
       "base": null,
       "refs": {
         "Patch$KbNumber": "<p>The Microsoft Knowledge Base ID of the patch.</p>",
-        "PatchComplianceData$KBId": "<p>The Microsoft Knowledge Base ID of the patch.</p>"
+        "PatchComplianceData$KBId": "<p>The operating system-specific ID of the patch.</p>"
       }
     },
     "PatchLanguage": {
@@ -4720,7 +4744,7 @@
         "DescribeMaintenanceWindowTasksRequest$Filters": "<p>Optional filters used to narrow down the scope of the returned tasks. The supported filter keys are WindowTaskId, TaskArn, Priority, and TaskType.</p>",
         "DescribeMaintenanceWindowsRequest$Filters": "<p>Optional filters used to narrow down the scope of the returned Maintenance Windows. Supported filter keys are Name and Enabled.</p>",
         "DescribePatchBaselinesRequest$Filters": "<p>Each element in the array is a structure containing: </p> <p>Key: (string, \"NAME_PREFIX\" or \"OWNER\")</p> <p>Value: (array of strings, exactly 1 entry, between 1 and 255 characters)</p>",
-        "DescribePatchGroupsRequest$Filters": null
+        "DescribePatchGroupsRequest$Filters": "<p>One or more filters. Use a filter to return a more specific list of results.</p>"
       }
     },
     "PatchOrchestratorFilterValue": {
@@ -4832,7 +4856,7 @@
     "Product": {
       "base": null,
       "refs": {
-        "GetDeployablePatchSnapshotForInstanceResult$Product": null
+        "GetDeployablePatchSnapshotForInstanceResult$Product": "<p>Returns the specific operating system (for example Windows Server 2012 or Amazon Linux 2015.09) on the instance for the specified patch snapshot.</p>"
       }
     },
     "PublicKey": {
@@ -4998,7 +5022,7 @@
       }
     },
     "ResourceComplianceSummaryItem": {
-      "base": null,
+      "base": "<p>Compliance summary information for a specific resource. </p>",
       "refs": {
         "ResourceComplianceSummaryItemList$member": null
       }
@@ -5006,32 +5030,38 @@
     "ResourceComplianceSummaryItemList": {
       "base": null,
       "refs": {
-        "ListResourceComplianceSummariesResult$ResourceComplianceSummaryItems": null
+        "ListResourceComplianceSummariesResult$ResourceComplianceSummaryItems": "<p>A summary count for specified or targeted managed instances. Summary count includes information about compliant and non-compliant State Manager associations, patch status, or custom items according to the filter criteria that you specify. </p>"
+      }
+    },
+    "ResourceDataSyncAWSKMSKeyARN": {
+      "base": null,
+      "refs": {
+        "ResourceDataSyncS3Destination$AWSKMSKeyARN": null
       }
     },
     "ResourceDataSyncAlreadyExistsException": {
-      "base": null,
+      "base": "<p>A sync configuration with the same name already exists.</p>",
       "refs": {
       }
     },
     "ResourceDataSyncCountExceededException": {
-      "base": null,
+      "base": "<p>You have exceeded the allowed maximum sync configurations.</p>",
       "refs": {
       }
     },
     "ResourceDataSyncCreatedTime": {
       "base": null,
       "refs": {
-        "ResourceDataSyncItem$SyncCreatedTime": null
+        "ResourceDataSyncItem$SyncCreatedTime": "<p>The date and time the configuration was created (UTC).</p>"
       }
     },
     "ResourceDataSyncInvalidConfigurationException": {
-      "base": null,
+      "base": "<p>The specified sync configuration is invalid.</p>",
       "refs": {
       }
     },
     "ResourceDataSyncItem": {
-      "base": null,
+      "base": "<p>Information about a Resource Data Sync configuration, including its current status and last successful sync.</p>",
       "refs": {
         "ResourceDataSyncItemList$member": null
       }
@@ -5039,53 +5069,53 @@
     "ResourceDataSyncItemList": {
       "base": null,
       "refs": {
-        "ListResourceDataSyncResult$ResourceDataSyncItems": null
+        "ListResourceDataSyncResult$ResourceDataSyncItems": "<p>A list of your current Resource Data Sync configurations and their statuses.</p>"
       }
     },
     "ResourceDataSyncName": {
       "base": null,
       "refs": {
-        "CreateResourceDataSyncRequest$SyncName": null,
-        "DeleteResourceDataSyncRequest$SyncName": null,
+        "CreateResourceDataSyncRequest$SyncName": "<p>A name for the configuration.</p>",
+        "DeleteResourceDataSyncRequest$SyncName": "<p>The name of the configuration to delete.</p>",
         "ResourceDataSyncAlreadyExistsException$SyncName": null,
-        "ResourceDataSyncItem$SyncName": null,
+        "ResourceDataSyncItem$SyncName": "<p>The name of the Resource Data Sync.</p>",
         "ResourceDataSyncNotFoundException$SyncName": null
       }
     },
     "ResourceDataSyncNotFoundException": {
-      "base": null,
+      "base": "<p>The specified sync name was not found.</p>",
       "refs": {
       }
     },
     "ResourceDataSyncS3BucketName": {
       "base": null,
       "refs": {
-        "ResourceDataSyncS3Destination$BucketName": null
+        "ResourceDataSyncS3Destination$BucketName": "<p>The name of the Amazon S3 bucket where the aggregated data is stored.</p>"
       }
     },
     "ResourceDataSyncS3Destination": {
-      "base": null,
+      "base": "<p>Information about the target Amazon S3 bucket for the Resource Data Sync.</p>",
       "refs": {
-        "CreateResourceDataSyncRequest$S3Destination": null,
-        "ResourceDataSyncItem$S3Destination": null
+        "CreateResourceDataSyncRequest$S3Destination": "<p>Amazon S3 configuration details for the sync.</p>",
+        "ResourceDataSyncItem$S3Destination": "<p>Configuration information for the target Amazon S3 bucket.</p>"
       }
     },
     "ResourceDataSyncS3Format": {
       "base": null,
       "refs": {
-        "ResourceDataSyncS3Destination$SyncFormat": null
+        "ResourceDataSyncS3Destination$SyncFormat": "<p>A supported sync format. The following format is currently supported: JsonSerDe</p>"
       }
     },
     "ResourceDataSyncS3Prefix": {
       "base": null,
       "refs": {
-        "ResourceDataSyncS3Destination$Prefix": null
+        "ResourceDataSyncS3Destination$Prefix": "<p>An Amazon S3 prefix for the bucket.</p>"
       }
     },
     "ResourceDataSyncS3Region": {
       "base": null,
       "refs": {
-        "ResourceDataSyncS3Destination$Region": null
+        "ResourceDataSyncS3Destination$Region": "<p>The AWS Region with the Amazon S3 bucket targeted by the Resource Data Sync.</p>"
       }
     },
     "ResourceId": {
@@ -5150,7 +5180,7 @@
         "Command$OutputS3BucketName": "<p>The S3 bucket where the responses to the command executions should be stored. This was requested when issuing the command.</p>",
         "CommandPlugin$OutputS3BucketName": "<p>The S3 bucket where the responses to the command executions should be stored. This was requested when issuing the command. For example, in the following response:</p> <p> test_folder/ab19cb99-a030-46dd-9dfc-8eSAMPLEPre-Fix/i-1234567876543/awsrunShellScript </p> <p>test_folder is the name of the Amazon S3 bucket;</p> <p> ab19cb99-a030-46dd-9dfc-8eSAMPLEPre-Fix is the name of the S3 prefix;</p> <p>i-1234567876543 is the instance ID;</p> <p>awsrunShellScript is the name of the plugin.</p>",
         "LoggingInfo$S3BucketName": "<p>The name of an Amazon S3 bucket where execution logs are stored .</p>",
-        "MaintenanceWindowRunCommandParameters$OutputS3BucketName": null,
+        "MaintenanceWindowRunCommandParameters$OutputS3BucketName": "<p>The name of the Amazon S3 bucket.</p>",
         "S3OutputLocation$OutputS3BucketName": "<p>The name of the Amazon S3 bucket.</p>",
         "SendCommandRequest$OutputS3BucketName": "<p>The name of the S3 bucket where command execution responses should be stored.</p>"
       }
@@ -5161,7 +5191,7 @@
         "Command$OutputS3KeyPrefix": "<p>The S3 directory path inside the bucket where the responses to the command executions should be stored. This was requested when issuing the command.</p>",
         "CommandPlugin$OutputS3KeyPrefix": "<p>The S3 directory path inside the bucket where the responses to the command executions should be stored. This was requested when issuing the command. For example, in the following response:</p> <p> test_folder/ab19cb99-a030-46dd-9dfc-8eSAMPLEPre-Fix/i-1234567876543/awsrunShellScript </p> <p>test_folder is the name of the Amazon S3 bucket;</p> <p> ab19cb99-a030-46dd-9dfc-8eSAMPLEPre-Fix is the name of the S3 prefix;</p> <p>i-1234567876543 is the instance ID;</p> <p>awsrunShellScript is the name of the plugin.</p>",
         "LoggingInfo$S3KeyPrefix": "<p>(Optional) The Amazon S3 bucket subfolder. </p>",
-        "MaintenanceWindowRunCommandParameters$OutputS3KeyPrefix": null,
+        "MaintenanceWindowRunCommandParameters$OutputS3KeyPrefix": "<p>The Amazon S3 bucket subfolder.</p>",
         "S3OutputLocation$OutputS3KeyPrefix": "<p>The Amazon S3 bucket subfolder.</p>",
         "SendCommandRequest$OutputS3KeyPrefix": "<p>The directory structure within the S3 bucket where the responses should be stored.</p>"
       }
@@ -5184,7 +5214,6 @@
         "Command$OutputS3Region": "<p>(Deprecated) You can no longer specify this parameter. The system ignores it. Instead, Systems Manager automatically determines the Amazon S3 bucket region.</p>",
         "CommandPlugin$OutputS3Region": "<p>(Deprecated) You can no longer specify this parameter. The system ignores it. Instead, Systems Manager automatically determines the Amazon S3 bucket region.</p>",
         "LoggingInfo$S3Region": "<p>The region where the Amazon S3 bucket is located.</p>",
-        "MaintenanceWindowRunCommandParameters$OutputS3Region": null,
         "S3OutputLocation$OutputS3Region": "<p>(Deprecated) You can no longer specify this parameter. The system ignores it. Instead, Systems Manager automatically determines the Amazon S3 bucket region.</p>",
         "SendCommandRequest$OutputS3Region": "<p>(Deprecated) You can no longer specify this parameter. The system ignores it. Instead, Systems Manager automatically determines the Amazon S3 bucket region.</p>"
       }
@@ -5194,7 +5223,7 @@
       "refs": {
         "Association$ScheduleExpression": "<p>A cron expression that specifies a schedule when the association runs.</p>",
         "AssociationDescription$ScheduleExpression": "<p>A cron expression that specifies a schedule when the association runs.</p>",
-        "AssociationVersionInfo$ScheduleExpression": null,
+        "AssociationVersionInfo$ScheduleExpression": "<p>The cron or rate schedule specified for the association when the association version was created.</p>",
         "CreateAssociationBatchRequestEntry$ScheduleExpression": "<p>A cron expression that specifies a schedule when the association runs.</p>",
         "CreateAssociationRequest$ScheduleExpression": "<p>A cron expression when the association will be applied to the target(s).</p>",
         "InstanceAssociationSummary$ScheduleExpression": null,
@@ -5233,15 +5262,15 @@
         "Command$ServiceRole": "<p>The IAM service role that Run Command uses to act on your behalf when sending notifications about command status changes. </p>",
         "CommandInvocation$ServiceRole": "<p>The IAM service role that Run Command uses to act on your behalf when sending notifications about command status changes on a per instance basis.</p>",
         "GetMaintenanceWindowExecutionTaskResult$ServiceRole": "<p>The role that was assumed when executing the task.</p>",
-        "GetMaintenanceWindowTaskResult$ServiceRoleArn": null,
-        "MaintenanceWindowRunCommandParameters$ServiceRoleArn": null,
+        "GetMaintenanceWindowTaskResult$ServiceRoleArn": "<p>The IAM service role to assume during task execution.</p>",
+        "MaintenanceWindowRunCommandParameters$ServiceRoleArn": "<p>The IAM service role to assume during task execution.</p>",
         "MaintenanceWindowTask$ServiceRoleArn": "<p>The role that should be assumed when executing the task</p>",
         "MaintenanceWindowTaskPrivate$ServiceRoleArn": null,
         "RegisterTaskWithMaintenanceWindowPrivateRequest$ServiceRoleArn": null,
         "RegisterTaskWithMaintenanceWindowRequest$ServiceRoleArn": "<p>The role that should be assumed when executing the task.</p>",
         "SendCommandRequest$ServiceRoleArn": "<p>The IAM role that Systems Manager uses to send notifications. </p>",
-        "UpdateMaintenanceWindowTaskRequest$ServiceRoleArn": null,
-        "UpdateMaintenanceWindowTaskResult$ServiceRoleArn": null
+        "UpdateMaintenanceWindowTaskRequest$ServiceRoleArn": "<p>The IAM service role ARN to modify. The system assumes this role during task execution. </p>",
+        "UpdateMaintenanceWindowTaskResult$ServiceRoleArn": "<p>The updated service role ARN value.</p>"
       }
     },
     "SessionToken": {
@@ -5251,16 +5280,16 @@
       }
     },
     "SeveritySummary": {
-      "base": null,
+      "base": "<p>The number of managed instances found for each patch severity level defined in the request filter.</p>",
       "refs": {
-        "CompliantSummary$SeveritySummary": null,
-        "NonCompliantSummary$SeveritySummary": null
+        "CompliantSummary$SeveritySummary": "<p>A summary of the compliance severity by compliance type.</p>",
+        "NonCompliantSummary$SeveritySummary": "<p>A summary of the non-compliance severity by compliance type</p>"
       }
     },
     "SignalType": {
       "base": null,
       "refs": {
-        "SendAutomationSignalRequest$SignalType": null
+        "SendAutomationSignalRequest$SignalType": "<p>The type of signal. Valid signal types include the following: Approve and Reject </p>"
       }
     },
     "SnapshotDownloadUrl": {
@@ -5407,8 +5436,8 @@
         "FailureDetails$FailureStage": "<p>The stage of the Automation execution when the failure occurred. The stages include the following: InputValidation, PreVerification, Invocation, PostVerification.</p>",
         "FailureDetails$FailureType": "<p>The type of Automation failure. Failure types include the following: Action, Permission, Throttling, Verification, Internal.</p>",
         "FeatureNotAvailableException$Message": null,
-        "HierarchyLevelLimitExceededException$message": null,
-        "HierarchyTypeMismatchException$message": null,
+        "HierarchyLevelLimitExceededException$message": "<p>A hierarchy can have a maximum of five levels. For example:</p> <p>/Finance/Prod/IAD/OS/WinServ2016/license15</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/systems-manager/latest/userguide/sysman-paramstore-working.html\">Working with Systems Manager Parameters</a>. </p>",
+        "HierarchyTypeMismatchException$message": "<p>Parameter Store does not support changing a parameter type in a hierarchy. For example, you can't change a parameter from a String type to a SecureString type. You must create a new, unique parameter.</p>",
         "IdempotentParameterMismatch$Message": null,
         "InstanceInformation$PlatformVersion": "<p>The version of the OS platform running on your instance. </p>",
         "InstanceInformation$Name": "<p>The name of the managed instance.</p>",
@@ -5417,7 +5446,7 @@
         "InvalidActivation$Message": null,
         "InvalidActivationId$Message": null,
         "InvalidAggregatorException$Message": null,
-        "InvalidAllowedPatternException$message": null,
+        "InvalidAllowedPatternException$message": "<p>The request does not meet the regular expression requirement.</p>",
         "InvalidAssociation$Message": null,
         "InvalidAssociationVersion$Message": null,
         "InvalidAutomationExecutionParametersException$Message": null,
@@ -5430,7 +5459,7 @@
         "InvalidDocumentVersion$Message": null,
         "InvalidFilter$Message": null,
         "InvalidFilterKey$Message": null,
-        "InvalidFilterOption$message": null,
+        "InvalidFilterOption$message": "<p>The specified filter option is not valid. Valid options are Equals and BeginsWith. For Path filter, valid options are Recursive and OneLevel.</p>",
         "InvalidFilterValue$Message": null,
         "InvalidInstanceId$Message": null,
         "InvalidInstanceInformationFilterValue$message": null,
@@ -5463,7 +5492,7 @@
         "ParameterLimitExceeded$message": null,
         "ParameterMetadata$LastModifiedUser": "<p>Amazon Resource Name (ARN) of the AWS user who last changed the parameter.</p>",
         "ParameterNotFound$message": null,
-        "ParameterPatternMismatchException$message": null,
+        "ParameterPatternMismatchException$message": "<p>The parameter name is not valid.</p>",
         "RegistrationLimitExceeded$message": null,
         "ResourceDataSyncCountExceededException$Message": null,
         "ResourceDataSyncInvalidConfigurationException$Message": null,
@@ -5474,6 +5503,7 @@
         "StepExecution$ResponseCode": "<p>The response code returned by the execution of the step.</p>",
         "StepExecution$Response": "<p>A message associated with the response code for an execution.</p>",
         "StepExecution$FailureMessage": "<p>If a step failed, this message explains why the execution failed.</p>",
+        "StepExecution$StepExecutionId": null,
         "StringList$member": null,
         "SubTypeCountLimitExceededException$Message": null,
         "TargetInUseException$Message": null,
@@ -5491,9 +5521,9 @@
     "StringDateTime": {
       "base": null,
       "refs": {
-        "GetCommandInvocationResult$ExecutionStartDateTime": "<p>The date and time the plugin started executing. Date and time are written in ISO 8601 format. For example, August 28, 2016 is represented as 2016-08-28. If the plugin has not started to execute, the string is empty.</p>",
+        "GetCommandInvocationResult$ExecutionStartDateTime": "<p>The date and time the plugin started executing. Date and time are written in ISO 8601 format. For example, June 7, 2017 is represented as 2017-06-7. The following sample AWS CLI command uses the <code>InvokedBefore</code> filter.</p> <p> <code>aws ssm list-commands --filters key=InvokedBefore,value=2017-06-07T00:00:00Z</code> </p> <p>If the plugin has not started to execute, the string is empty.</p>",
         "GetCommandInvocationResult$ExecutionElapsedTime": "<p>Duration since ExecutionStartDateTime.</p>",
-        "GetCommandInvocationResult$ExecutionEndDateTime": "<p>The date and time the plugin was finished executing. Date and time are written in ISO 8601 format. For example, August 28, 2016 is represented as 2016-08-28. If the plugin has not started to execute, the string is empty.</p>"
+        "GetCommandInvocationResult$ExecutionEndDateTime": "<p>The date and time the plugin was finished executing. Date and time are written in ISO 8601 format. For example, June 7, 2017 is represented as 2017-06-7. The following sample AWS CLI command uses the <code>InvokedAfter</code> filter.</p> <p> <code>aws ssm list-commands --filters key=InvokedAfter,value=2017-06-07T00:00:00Z</code> </p> <p>If the plugin has not started to execute, the string is empty.</p>"
       }
     },
     "StringList": {
@@ -5503,7 +5533,7 @@
       }
     },
     "SubTypeCountLimitExceededException": {
-      "base": null,
+      "base": "<p>The sub-type count exceeded the limit for the inventory type.</p>",
       "refs": {
       }
     },
@@ -5534,7 +5564,7 @@
       }
     },
     "Target": {
-      "base": "<p>An array of search criteria that targets instances using a Key,Value combination that you specify. Targets is required if you don't provide one or more instance IDs in the call.</p>",
+      "base": "<p>An array of search criteria that targets instances using a Key,Value combination that you specify. <code>Targets</code> is required if you don't provide one or more instance IDs in the call.</p> <p/>",
       "refs": {
         "Targets$member": null
       }
@@ -5546,14 +5576,14 @@
       }
     },
     "TargetInUseException": {
-      "base": null,
+      "base": "<p>You specified the <code>Safe</code> option for the DeregisterTargetFromMaintenanceWindow operation, but the target is still referenced in a task.</p>",
       "refs": {
       }
     },
     "TargetKey": {
       "base": null,
       "refs": {
-        "Target$Key": "<p>User-defined criteria for sending commands that target instances that meet the criteria. Key can be tag:&lt;Amazon EC2 tag&gt; or InstanceIds. For more information about how to send commands that target instances using Key,Value parameters, see <a href=\"http://docs.aws.amazon.com/systems-manager/latest/userguide/run-command.html\">Executing a Command Using Systems Manager Run Command</a>.</p>"
+        "Target$Key": "<p>User-defined criteria for sending commands that target instances that meet the criteria. Key can be tag:&lt;Amazon EC2 tag&gt; or InstanceIds. For more information about how to send commands that target instances using Key,Value parameters, see <a href=\"http://docs.aws.amazon.com/systems-manager/latest/userguide/send-commands-multiple.html\">Executing a Command Using Systems Manager Run Command</a>.</p>"
       }
     },
     "TargetValue": {
@@ -5565,7 +5595,7 @@
     "TargetValues": {
       "base": null,
       "refs": {
-        "Target$Values": "<p>User-defined criteria that maps to Key. For example, if you specified tag:ServerRole, you could specify value:WebServer to execute a command on instances that include Amazon EC2 tags of ServerRole,WebServer. For more information about how to send commands that target instances using Key,Value parameters, see <a href=\"http://docs.aws.amazon.com/systems-manager/latest/userguide/run-command.html\">Executing a Command Using Systems Manager Run Command</a>.</p>"
+        "Target$Values": "<p>User-defined criteria that maps to Key. For example, if you specified tag:ServerRole, you could specify value:WebServer to execute a command on instances that include Amazon EC2 tags of ServerRole,WebServer. For more information about how to send commands that target instances using Key,Value parameters, see <a href=\"http://docs.aws.amazon.com/systems-manager/latest/userguide/send-commands-multiple.html\">Executing a Command Using Systems Manager Run Command</a>.</p>"
       }
     },
     "Targets": {
@@ -5573,11 +5603,11 @@
       "refs": {
         "Association$Targets": "<p>The instances targeted by the request to create an association. </p>",
         "AssociationDescription$Targets": "<p>The instances targeted by the request. </p>",
-        "AssociationVersionInfo$Targets": null,
+        "AssociationVersionInfo$Targets": "<p>The targets specified for the association when the association version was created. </p>",
         "Command$Targets": "<p>An array of search criteria that targets instances using a Key,Value combination that you specify. Targets is required if you don't provide one or more instance IDs in the call.</p>",
         "CreateAssociationBatchRequestEntry$Targets": "<p>The instances targeted by the request.</p>",
         "CreateAssociationRequest$Targets": "<p>The targets (either instances or tags) for the association.</p>",
-        "GetMaintenanceWindowTaskResult$Targets": null,
+        "GetMaintenanceWindowTaskResult$Targets": "<p>The targets where the task should execute.</p>",
         "InstanceAssociationSummary$Targets": null,
         "MaintenanceWindowTarget$Targets": "<p>The targets (either instances or tags). Instances are specified using Key=instanceids,Values=&lt;instanceid1&gt;,&lt;instanceid2&gt;. Tags are specified using Key=&lt;tag name&gt;,Values=&lt;tag value&gt;.</p>",
         "MaintenanceWindowTargetPrivate$TagFilters": null,
@@ -5585,25 +5615,25 @@
         "RegisterTargetWithMaintenanceWindowPrivateRequest$TagFilters": null,
         "RegisterTargetWithMaintenanceWindowRequest$Targets": "<p>The targets (either instances or tags). Instances are specified using Key=instanceids,Values=&lt;instanceid1&gt;,&lt;instanceid2&gt;. Tags are specified using Key=&lt;tag name&gt;,Values=&lt;tag value&gt;.</p>",
         "RegisterTaskWithMaintenanceWindowRequest$Targets": "<p>The targets (either instances or tags). Instances are specified using Key=instanceids,Values=&lt;instanceid1&gt;,&lt;instanceid2&gt;. Tags are specified using Key=&lt;tag name&gt;,Values=&lt;tag value&gt;.</p>",
-        "SendCommandRequest$Targets": "<p>(Optional) An array of search criteria that targets instances using a Key,Value combination that you specify. Targets is required if you don't provide one or more instance IDs in the call. For more information about how to use Targets, see <a href=\"http://docs.aws.amazon.com/systems-manager/latest/userguide/run-command.html\">Executing a Command Using Systems Manager Run Command</a>.</p>",
+        "SendCommandRequest$Targets": "<p>(Optional) An array of search criteria that targets instances using a Key,Value combination that you specify. Targets is required if you don't provide one or more instance IDs in the call. For more information about how to use Targets, see <a href=\"http://docs.aws.amazon.com/systems-manager/latest/userguide/send-commands-multiple.html\">Sending Commands to a Fleet</a>.</p>",
         "UpdateAssociationRequest$Targets": "<p>The targets of the association.</p>",
-        "UpdateMaintenanceWindowTargetRequest$Targets": null,
-        "UpdateMaintenanceWindowTargetResult$Targets": null,
-        "UpdateMaintenanceWindowTaskRequest$Targets": null,
-        "UpdateMaintenanceWindowTaskResult$Targets": null
+        "UpdateMaintenanceWindowTargetRequest$Targets": "<p>The targets to add or replace.</p>",
+        "UpdateMaintenanceWindowTargetResult$Targets": "<p>The updated targets.</p>",
+        "UpdateMaintenanceWindowTaskRequest$Targets": "<p>The targets (either instances or tags) to modify. Instances are specified using Key=instanceids,Values=instanceID_1,instanceID_2. Tags are specified using Key=tag_name,Values=tag_value. </p>",
+        "UpdateMaintenanceWindowTaskResult$Targets": "<p>The updated target values.</p>"
       }
     },
     "TimeoutSeconds": {
       "base": null,
       "refs": {
-        "MaintenanceWindowRunCommandParameters$TimeoutSeconds": null,
+        "MaintenanceWindowRunCommandParameters$TimeoutSeconds": "<p>If this time is reached and the command has not already started executing, it doesn not execute.</p>",
         "SendCommandRequest$TimeoutSeconds": "<p>If this time is reached and the command has not already started executing, it will not execute.</p>"
       }
     },
     "Timing": {
       "base": null,
       "refs": {
-        "PackageResultStep$Timing": null,
+        "ConfigurePackageResultStep$Timing": null,
         "PutConfigurePackageResultRequest$OverallTiming": null
       }
     },
@@ -5629,7 +5659,7 @@
       }
     },
     "UnsupportedInventoryItemContextException": {
-      "base": null,
+      "base": "<p>The <code>Context</code> attribute that you specified for the <code>InventoryItem</code> is not allowed for this inventory type. You can only use the <code>Context</code> attribute with inventory types like <code>AWS:ComplianceItem</code>.</p>",
       "refs": {
       }
     },
@@ -5639,7 +5669,7 @@
       }
     },
     "UnsupportedOperatingSystem": {
-      "base": null,
+      "base": "<p>The operating systems you specified is not supported, or the operation is not supported for the operating system. Valid operating systems include: Windows, AmazonLinux, RedhatEnterpriseLinux, and Ubuntu.</p>",
       "refs": {
       }
     },
@@ -5794,7 +5824,7 @@
     "Value": {
       "base": null,
       "refs": {
-        "PackageResultAttributes$value": null
+        "ConfigurePackageResultAttributes$value": null
       }
     },
     "Version": {
