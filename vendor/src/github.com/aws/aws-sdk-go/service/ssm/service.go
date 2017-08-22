@@ -23,7 +23,7 @@ import (
 // User Guide (http://docs.aws.amazon.com/systems-manager/latest/userguide/).
 //
 // To get started, verify prerequisites and configure managed instances. For
-// more information, see Systems Manager Prerequisites (http://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-prereqs.html).
+// more information, see Systems Manager Prerequisites (http://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-setting-up.html).
 //The service client's operations are safe to be used concurrently.
 // It is not safe to mutate any of the client's properties though.
 type SSM struct {
