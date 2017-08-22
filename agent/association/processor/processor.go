@@ -318,7 +318,7 @@ func (p *Processor) runScheduledAssociation(log log.T) {
 			time.Now().UTC())
 		return
 	}
-
+	updatePluginAssociationInstances(*scheduledAssociation.Association.AssociationId, docState)
 	log = p.context.With("[associationId=" + docState.DocumentInformation.AssociationID + "]").Log()
 	instanceID, _ := sys.InstanceID()
 	p.assocSvc.UpdateInstanceAssociationStatus(
@@ -623,4 +623,30 @@ func filterByStatus(runtimeStatuses map[string]*contracts.PluginRuntimeStatus, p
 		}
 	}
 	return result
+}
+
+//This operation is locked by runScheduledAssociation
+//lazy update, update only when the document is ready to run, update will validate and invalidate current attached association
+func updatePluginAssociationInstances(associationID string, docState *docModel.DocumentState) {
+	currentPluginAssociations := getPluginAssociationInstances()
+	for i := 0; i < len(docState.InstancePluginsInformation); i++ {
+
+		pluginName := docState.InstancePluginsInformation[i].Name
+		//update the associations attached to the given plugin
+		if list, ok := currentPluginAssociations[pluginName]; ok {
+			newList := AssocList{associationID}
+			for _, id := range list {
+				if id != associationID && schedulemanager.AssociationExists(id) {
+					newList = append(newList, id)
+				}
+			}
+			currentPluginAssociations[pluginName] = newList
+
+		} else {
+			currentPluginAssociations[pluginName] = AssocList{associationID}
+		}
+		//assign the field to pluginconfig in place
+		docState.InstancePluginsInformation[i].Configuration.Settings = currentPluginAssociations[pluginName]
+	}
+	return
 }
