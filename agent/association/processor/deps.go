@@ -25,8 +25,17 @@ import (
 	messageContract "github.com/aws/amazon-ssm-agent/agent/runcommand/contracts"
 )
 
+type AssocList []string
+
 var assocParser parserService = &assocParserService{}
 var assocBookkeeping bookkeepingService = &assocBookkeepingService{}
+
+//PluginAssociationInstances cached the number of associations attached to a specific type of plugin
+var pluginAssociationInstances = make(map[string]AssocList)
+
+func getPluginAssociationInstances() map[string]AssocList {
+	return pluginAssociationInstances
+}
 
 //TODO in future, platform calls will be stubbed
 var sys system = &systemImp{}
