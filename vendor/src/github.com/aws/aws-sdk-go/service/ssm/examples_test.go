@@ -191,9 +191,10 @@ func ExampleSSM_CreateDocument() {
 	svc := ssm.New(session.New())
 
 	params := &ssm.CreateDocumentInput{
-		Content:      aws.String("DocumentContent"), // Required
-		Name:         aws.String("DocumentName"),    // Required
-		DocumentType: aws.String("DocumentType"),
+		Content:        aws.String("DocumentContent"), // Required
+		Name:           aws.String("DocumentName"),    // Required
+		DocumentFormat: aws.String("DocumentFormat"),
+		DocumentType:   aws.String("DocumentType"),
 	}
 	resp, err := svc.CreateDocument(params)
 
@@ -302,10 +303,11 @@ func ExampleSSM_CreateResourceDataSync() {
 
 	params := &ssm.CreateResourceDataSyncInput{
 		S3Destination: &ssm.ResourceDataSyncS3Destination{ // Required
-			BucketName: aws.String("ResourceDataSyncS3BucketName"), // Required
-			Region:     aws.String("ResourceDataSyncS3Region"),     // Required
-			SyncFormat: aws.String("ResourceDataSyncS3Format"),     // Required
-			Prefix:     aws.String("ResourceDataSyncS3Prefix"),
+			BucketName:   aws.String("ResourceDataSyncS3BucketName"), // Required
+			Region:       aws.String("ResourceDataSyncS3Region"),     // Required
+			SyncFormat:   aws.String("ResourceDataSyncS3Format"),     // Required
+			AWSKMSKeyARN: aws.String("ResourceDataSyncAWSKMSKeyARN"),
+			Prefix:       aws.String("ResourceDataSyncS3Prefix"),
 		},
 		SyncName: aws.String("ResourceDataSyncName"), // Required
 	}
@@ -1604,6 +1606,7 @@ func ExampleSSM_GetDocument() {
 
 	params := &ssm.GetDocumentInput{
 		Name:            aws.String("DocumentARN"), // Required
+		DocumentFormat:  aws.String("DocumentFormat"),
 		DocumentVersion: aws.String("DocumentVersion"),
 	}
 	resp, err := svc.GetDocument(params)
@@ -1625,6 +1628,7 @@ func ExampleSSM_GetDocumentInternal() {
 	params := &ssm.GetDocumentInternalInput{
 		CustomerAccountId: aws.String("AccountId"),   // Required
 		Name:              aws.String("DocumentARN"), // Required
+		DocumentFormat:    aws.String("DocumentFormat"),
 		DocumentVersion:   aws.String("DocumentVersion"),
 		InstanceId:        aws.String("InstanceId"),
 	}
@@ -2396,11 +2400,12 @@ func ExampleSSM_PutConfigurePackageResult() {
 		PackageName:    aws.String("PackageName"),    // Required
 		PackageVersion: aws.String("PackageVersion"), // Required
 		Result:         aws.Int64(1),                 // Required
-		PackageResultAttributes: map[string]*string{
+		Attributes: map[string]*string{
 			"Key": aws.String("Value"), // Required
 			// More values...
 		},
-		PackageResultSteps: []*ssm.PackageResultStep{
+		PreviousPackageVersion: aws.String("PackageVersion"),
+		Steps: []*ssm.ConfigurePackageResultStep{
 			{ // Required
 				Action: aws.String("Action"),
 				Result: aws.Int64(1),
@@ -2408,7 +2413,6 @@ func ExampleSSM_PutConfigurePackageResult() {
 			},
 			// More values...
 		},
-		PreviousPackageVersion: aws.String("PackageVersion"),
 	}
 	resp, err := svc.PutConfigurePackageResult(params)
 
@@ -2473,6 +2477,7 @@ func ExampleSSM_PutParameter() {
 		Description:    aws.String("ParameterDescription"),
 		KeyId:          aws.String("ParameterKeyId"),
 		Overwrite:      aws.Bool(true),
+		TimeToLive:     aws.Int64(1),
 	}
 	resp, err := svc.PutParameter(params)
 
@@ -2678,7 +2683,6 @@ func ExampleSSM_RegisterTaskWithMaintenanceWindow() {
 				},
 				OutputS3BucketName: aws.String("S3BucketName"),
 				OutputS3KeyPrefix:  aws.String("S3KeyPrefix"),
-				OutputS3Region:     aws.String("S3Region"),
 				Parameters: map[string][]*string{
 					"Key": { // Required
 						aws.String("ParameterValue"), // Required
@@ -2921,6 +2925,7 @@ func ExampleSSM_StartAutomationExecution() {
 		DocumentName:    aws.String("DocumentARN"), // Required
 		ClientToken:     aws.String("IdempotencyToken"),
 		DocumentVersion: aws.String("DocumentVersion"),
+		Mode:            aws.String("ExecutionMode"),
 		Parameters: map[string][]*string{
 			"Key": { // Required
 				aws.String("AutomationParameterValue"), // Required
@@ -3041,6 +3046,7 @@ func ExampleSSM_UpdateDocument() {
 	params := &ssm.UpdateDocumentInput{
 		Content:         aws.String("DocumentContent"), // Required
 		Name:            aws.String("DocumentName"),    // Required
+		DocumentFormat:  aws.String("DocumentFormat"),
 		DocumentVersion: aws.String("DocumentVersion"),
 	}
 	resp, err := svc.UpdateDocument(params)
@@ -3255,7 +3261,6 @@ func ExampleSSM_UpdateMaintenanceWindowTask() {
 				},
 				OutputS3BucketName: aws.String("S3BucketName"),
 				OutputS3KeyPrefix:  aws.String("S3KeyPrefix"),
-				OutputS3Region:     aws.String("S3Region"),
 				Parameters: map[string][]*string{
 					"Key": { // Required
 						aws.String("ParameterValue"), // Required

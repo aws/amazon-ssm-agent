@@ -286,13 +286,13 @@ func TestReportResult(t *testing.T) {
 				}
 				assert.Equal(t, testdata.packageResult.Timing, *testdata.facadeClient.putConfigurePackageResultInput.OverallTiming)
 				assert.Equal(t, testdata.packageResult.Exitcode, *testdata.facadeClient.putConfigurePackageResultInput.Result)
-				assert.Equal(t, "abc", *testdata.facadeClient.putConfigurePackageResultInput.PackageResultAttributes["platformName"])
-				assert.Equal(t, "567", *testdata.facadeClient.putConfigurePackageResultInput.PackageResultAttributes["platformVersion"])
-				assert.Equal(t, "xyz", *testdata.facadeClient.putConfigurePackageResultInput.PackageResultAttributes["architecture"])
-				assert.Equal(t, "instanceIDX", *testdata.facadeClient.putConfigurePackageResultInput.PackageResultAttributes["instanceID"])
-				assert.Equal(t, "instanceTypeZ", *testdata.facadeClient.putConfigurePackageResultInput.PackageResultAttributes["instanceType"])
-				assert.Equal(t, "AZ1", *testdata.facadeClient.putConfigurePackageResultInput.PackageResultAttributes["availabilityZone"])
-				assert.Equal(t, "Reg1", *testdata.facadeClient.putConfigurePackageResultInput.PackageResultAttributes["region"])
+				assert.Equal(t, "abc", *testdata.facadeClient.putConfigurePackageResultInput.Attributes["platformName"])
+				assert.Equal(t, "567", *testdata.facadeClient.putConfigurePackageResultInput.Attributes["platformVersion"])
+				assert.Equal(t, "xyz", *testdata.facadeClient.putConfigurePackageResultInput.Attributes["architecture"])
+				assert.Equal(t, "instanceIDX", *testdata.facadeClient.putConfigurePackageResultInput.Attributes["instanceID"])
+				assert.Equal(t, "instanceTypeZ", *testdata.facadeClient.putConfigurePackageResultInput.Attributes["instanceType"])
+				assert.Equal(t, "AZ1", *testdata.facadeClient.putConfigurePackageResultInput.Attributes["availabilityZone"])
+				assert.Equal(t, "Reg1", *testdata.facadeClient.putConfigurePackageResultInput.Attributes["region"])
 			}
 		})
 	}
