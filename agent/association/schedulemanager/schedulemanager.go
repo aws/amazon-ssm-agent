@@ -181,3 +181,12 @@ func Schedules() []*model.InstanceAssociation {
 	defer lock.RUnlock()
 	return associations
 }
+
+func AssociationExists(associationID string) bool {
+	for _, assoc := range associations {
+		if *assoc.Association.AssociationId == associationID {
+			return true
+		}
+	}
+	return false
+}
