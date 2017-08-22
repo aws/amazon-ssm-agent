@@ -3,7 +3,6 @@ package procmock
 import (
 	"time"
 
-	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/outofproc/proc"
 	"github.com/stretchr/testify/mock"
 )
 
@@ -26,16 +25,7 @@ func (m *MockedOSProcess) Kill() error {
 	return args.Error(0)
 }
 
-func (m *MockedOSProcess) Wait() (proc.ProcessState, error) {
+func (m *MockedOSProcess) Wait() error {
 	args := m.Called()
-	return args.Get(0).(proc.ProcessState), args.Error(1)
-}
-
-type MockedOSProcessState struct {
-	mock.Mock
-}
-
-func (m *MockedOSProcessState) Success() bool {
-	args := m.Called()
-	return args.Get(0).(bool)
+	return args.Error(0)
 }

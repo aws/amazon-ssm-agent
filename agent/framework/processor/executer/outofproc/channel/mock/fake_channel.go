@@ -3,65 +3,130 @@ package channelmock
 import (
 	"sync"
 
+	"errors"
+
+	"time"
+
+	"fmt"
+
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/outofproc/channel"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 )
 
-var channelMap = make(map[string]chan string)
+type queue []string
+
 var mu sync.RWMutex
 
+type ch struct {
+	q0 *queue
+	q1 *queue
+}
+
+var queueMap = make(map[string]ch)
+
+func (q *queue) Enqueue(elem string) {
+	mu.RLock()
+	defer mu.RUnlock()
+	*q = append(*q, elem)
+}
+
+func (q *queue) Dequeue() (string, bool) {
+	if len(*q) == 0 {
+		return "", false
+	}
+	mu.RLock()
+	defer mu.RUnlock()
+	res := (*q)[0]
+	*q = (*q)[1:]
+	return res, true
+}
+
 type FakeChannel struct {
-	name string
-	mode channel.Mode
+	recvChan chan string
+	closed   bool
+	name     string
+	mode     channel.Mode
+}
+
+func getQueue(c ch, mode channel.Mode) (*queue, *queue) {
+	if mode == channel.ModeMaster {
+		return c.q0, c.q1
+	} else {
+		return c.q1, c.q0
+	}
 }
 
 func NewFakeChannel(log log.T, mode channel.Mode, name string) *FakeChannel {
 	log.Infof("creating channel: %v|%v", name, mode)
+	if _, ok := queueMap[name]; !ok {
+		queueMap[name] = ch{
+			q0: &queue{},
+			q1: &queue{},
+		}
+	}
+	recvChan := make(chan string, 100)
+	_, recvQ := getQueue(queueMap[name], mode)
 	f := FakeChannel{
-		mode: mode,
-		name: name,
+		mode:     mode,
+		name:     name,
+		recvChan: recvChan,
 	}
-	//if channel already exist, use the old one
-	_, ok := channelMap[name+"-"+string(mode)]
-	if ok {
-		return &f
-	}
-	mu.RLock()
-	defer mu.RUnlock()
-	//The channel size need to be big enough so that the sender is not blocked
-	//either one can open up a channel any time when open is called
-	channelMap[name+"-"+string(channel.ModeMaster)] = make(chan string, 100)
-	channelMap[name+"-"+string(channel.ModeWorker)] = make(chan string, 100)
+	go f.poll(name, recvQ, recvChan)
 	return &f
 }
 
+func (f *FakeChannel) poll(name string, q *queue, recvChan chan string) {
+	for {
+		if f.closed {
+			return
+		}
+		if _, ok := queueMap[name]; !ok {
+			fmt.Println("fatal: channel " + name + " already destroyed while receiving...")
+			return
+		}
+		if msg, ok := q.Dequeue(); ok {
+			recvChan <- msg
+		}
+		time.Sleep(100 * time.Millisecond)
+	}
+}
+
 func (f *FakeChannel) Send(message string) error {
-	channelMap[f.name+"-"+string(f.mode)] <- message
+
+	if c, ok := queueMap[f.name]; !ok {
+		return errors.New("channel not found")
+	} else {
+		sendQ, _ := getQueue(c, f.mode)
+		sendQ.Enqueue(message)
+	}
 	return nil
 }
 
-func (f *FakeChannel) GetMessageChannel() chan string {
-	if f.mode == channel.ModeMaster {
-		return channelMap[f.name+"-"+string(channel.ModeWorker)]
-	} else {
-		return channelMap[f.name+"-"+string(channel.ModeMaster)]
-	}
+func (f *FakeChannel) GetMessage() <-chan string {
+	return f.recvChan
 }
 
-//close operation also needs to be synced
+//close stops the receiving channel
 func (f *FakeChannel) Close() {
-	//only master will remove the channel object
-	mu.RLock()
-	defer mu.RUnlock()
-	if f.mode == channel.ModeMaster {
-		delete(channelMap, f.name+"-"+string(channel.ModeWorker))
-		delete(channelMap, f.name+"-"+string(channel.ModeMaster))
+	if f.closed {
+		return
 	}
-
+	f.closed = true
+	time.Sleep(120 * time.Millisecond)
+	close(f.recvChan)
 	return
 }
 
+func (f *FakeChannel) Destroy() {
+	//first, close the channel
+	f.Close()
+	//only master will remove the channel object
+	if f.mode == channel.ModeMaster {
+		delete(queueMap, f.name)
+	}
+}
+
 func IsExists(name string) bool {
-	_, ok := channelMap[name+"-"+string(channel.ModeMaster)]
+	_, ok := queueMap[name]
 	return ok
 }

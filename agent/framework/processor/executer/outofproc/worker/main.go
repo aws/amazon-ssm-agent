@@ -27,7 +27,7 @@ var pluginRunner = func(
 	resChan chan contracts.PluginResult,
 	cancelFlag task.CancelFlag,
 ) {
-	runpluginutil.RunPlugins(context, plugins, plugin.RegisteredWorkerPlugins(context), resChan, cancelFlag)
+	runpluginutil.RunPlugins(context, plugins, runpluginutil.SSMPluginRegistry, resChan, cancelFlag)
 	//make sure to signal the client that job complete
 	close(resChan)
 }
@@ -75,6 +75,10 @@ func main() {
 		logger.Errorf("failed to create channel: %v", err)
 		return
 	}
+	//TODO remove this,
+	//initialize PluginRegistry
+	runpluginutil.SSMPluginRegistry = plugin.RegisteredWorkerPlugins(ctx)
+
 	//TODO add command timeout
 	stopTimer := make(chan bool)
 	pipeline := messaging.NewWorkerBackend(ctx, pluginRunner)

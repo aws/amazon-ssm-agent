@@ -11,12 +11,17 @@ func (m *MockedChannel) Send(msg string) error {
 	return args.Error(0)
 }
 
-func (m *MockedChannel) GetMessageChannel() chan string {
+func (m *MockedChannel) GetMessage() <-chan string {
 	args := m.Called()
 	return args.Get(0).(chan string)
 }
 
 func (m *MockedChannel) Close() {
+	m.Called()
+	return
+}
+
+func (m *MockedChannel) Destroy() {
 	m.Called()
 	return
 }
