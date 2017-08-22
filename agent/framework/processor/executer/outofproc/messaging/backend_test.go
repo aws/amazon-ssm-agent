@@ -24,6 +24,8 @@ var testStartDateTime = time.Date(2017, 8, 13, 0, 0, 0, 0, time.UTC)
 var testEndDateTime = time.Date(2017, 8, 13, 0, 0, 1, 0, time.UTC)
 var testPluginReplyRawJSON string
 var testDocumentCompleteRawJSON string
+var testPluginsRawJSON string
+var testCancelRawJSON string
 
 type TestCase struct {
 	context      *context.Mock
@@ -68,7 +70,8 @@ func CreateTestCase() *TestCase {
 	//TODO this is V2 Schema, add V1 schema later
 	testPluginReplyRawJSON = "{\"version\":\"1.0\",\"type\":\"reply\",\"content\":\"{\\\"DocumentName\\\":\\\"\\\",\\\"DocumentVersion\\\":\\\"\\\",\\\"MessageID\\\":\\\"\\\",\\\"AssociationID\\\":\\\"\\\",\\\"PluginResults\\\":{\\\"plugin1\\\":{\\\"pluginName\\\":\\\"aws:runScript\\\",\\\"pluginID\\\":\\\"plugin1\\\",\\\"status\\\":\\\"Success\\\",\\\"code\\\":0,\\\"output\\\":null,\\\"startDateTime\\\":\\\"2017-08-13T00:00:00Z\\\",\\\"endDateTime\\\":\\\"2017-08-13T00:00:01Z\\\",\\\"outputS3BucketName\\\":\\\"\\\",\\\"outputS3KeyPrefix\\\":\\\"\\\",\\\"standardOutput\\\":\\\"\\\",\\\"standardError\\\":\\\"\\\"}},\\\"Status\\\":\\\"InProgress\\\",\\\"LastPlugin\\\":\\\"plugin1\\\",\\\"NPlugins\\\":0}\"}"
 	testDocumentCompleteRawJSON = "{\"version\":\"1.0\",\"type\":\"complete\",\"content\":\"{\\\"DocumentName\\\":\\\"\\\",\\\"DocumentVersion\\\":\\\"\\\",\\\"MessageID\\\":\\\"\\\",\\\"AssociationID\\\":\\\"\\\",\\\"PluginResults\\\":{\\\"plugin1\\\":{\\\"pluginName\\\":\\\"aws:runScript\\\",\\\"pluginID\\\":\\\"plugin1\\\",\\\"status\\\":\\\"Success\\\",\\\"code\\\":0,\\\"output\\\":null,\\\"startDateTime\\\":\\\"2017-08-13T00:00:00Z\\\",\\\"endDateTime\\\":\\\"2017-08-13T00:00:01Z\\\",\\\"outputS3BucketName\\\":\\\"\\\",\\\"outputS3KeyPrefix\\\":\\\"\\\",\\\"standardOutput\\\":\\\"\\\",\\\"standardError\\\":\\\"\\\"}},\\\"Status\\\":\\\"Success\\\",\\\"LastPlugin\\\":\\\"\\\",\\\"NPlugins\\\":0}\"}"
-
+	testPluginsRawJSON = "{\"version\":\"1.0\",\"type\":\"pluginconfig\",\"content\":\"[{\\\"Configuration\\\":{\\\"Settings\\\":null,\\\"Properties\\\":null,\\\"OutputS3KeyPrefix\\\":\\\"\\\",\\\"OutputS3BucketName\\\":\\\"\\\",\\\"OrchestrationDirectory\\\":\\\"\\\",\\\"MessageId\\\":\\\"\\\",\\\"BookKeepingFileName\\\":\\\"\\\",\\\"PluginName\\\":\\\"\\\",\\\"PluginID\\\":\\\"\\\",\\\"DefaultWorkingDirectory\\\":\\\"\\\",\\\"Preconditions\\\":null,\\\"IsPreconditionEnabled\\\":false},\\\"Name\\\":\\\"aws:runScript\\\",\\\"Result\\\":{\\\"pluginName\\\":\\\"\\\",\\\"status\\\":\\\"\\\",\\\"code\\\":0,\\\"output\\\":null,\\\"startDateTime\\\":\\\"0001-01-01T00:00:00Z\\\",\\\"endDateTime\\\":\\\"0001-01-01T00:00:00Z\\\",\\\"outputS3BucketName\\\":\\\"\\\",\\\"outputS3KeyPrefix\\\":\\\"\\\",\\\"standardOutput\\\":\\\"\\\",\\\"standardError\\\":\\\"\\\"},\\\"Id\\\":\\\"aws:runScript\\\"}]\"}"
+	testCancelRawJSON = "{\"version\":\"1.0\",\"type\":\"cancel\",\"content\":\"\"}"
 	return &TestCase{
 		context:      contextMock,
 		docState:     docState,
@@ -77,14 +80,33 @@ func CreateTestCase() *TestCase {
 	}
 }
 
-//backend should close the stopChan at close time
-func TestExecuterBackend_Close(t *testing.T) {
+//TODO test cancel message
+func TestExecuterBackendStart_Shutdown(t *testing.T) {
+	testCase := CreateTestCase()
+	outputChan := make(chan contracts.DocumentResult, 10)
+	stopChan := make(chan int, 1)
+	inputChan := make(chan string)
+	cancel := task.NewChanneledCancelFlag()
 	backend := ExecuterBackend{
-		stopChan: make(chan int),
+		output:     outputChan,
+		input:      inputChan,
+		cancelFlag: cancel,
+		stopChan:   stopChan,
+		docState:   &testCase.docState,
 	}
-	backend.Close()
-	_, more := <-backend.Stop()
-	assert.False(t, more)
+	closed := make(chan bool)
+	go func() {
+		<-inputChan
+		stopType := <-stopChan
+		assert.Equal(t, stopTypeShutdown, stopType)
+		closed <- true
+	}()
+	cancel.Set(task.ShutDown)
+	backend.start(testCase.docState.InstancePluginsInformation)
+	//make sure input is closed
+	<-inputChan
+	//make sure assertion are made
+	<-closed
 }
 
 //test the datagram mashalling v1
@@ -92,10 +114,13 @@ func TestExecuterBackend_ProcessV1(t *testing.T) {
 	testCase := CreateTestCase()
 	outputChan := make(chan contracts.DocumentResult, 10)
 	stopChan := make(chan int, 1)
+	cancel := task.NewMockDefault()
+	cancel.On("Set", task.Completed).Return()
 	backend := ExecuterBackend{
-		output:   outputChan,
-		stopChan: stopChan,
-		docState: &testCase.docState,
+		cancelFlag: cancel,
+		output:     outputChan,
+		stopChan:   stopChan,
+		docState:   &testCase.docState,
 	}
 	err := backend.Process(testPluginReplyRawJSON)
 	assert.NoError(t, err)
@@ -121,12 +146,11 @@ func TestExecuterBackend_ProcessV1(t *testing.T) {
 	assert.Equal(t, testMessageID, res.MessageID)
 	assert.Equal(t, len(testCase.docState.InstancePluginsInformation), res.NPlugins)
 	assert.Equal(t, testDocumentVersion, res.DocumentVersion)
+	cancel.AssertExpectations(t)
 }
 
-func TestWorkerBackend_ProcessV1(t *testing.T) {
+func TestWorkerBackend_ProcessCancelV1(t *testing.T) {
 	//testCase := CreateTestCase()
-	pluginsData := "{\"version\":\"1.0\",\"type\":\"pluginconfig\",\"content\":\"[{\\\"Configuration\\\":{\\\"Settings\\\":null,\\\"Properties\\\":null,\\\"OutputS3KeyPrefix\\\":\\\"\\\",\\\"OutputS3BucketName\\\":\\\"\\\",\\\"OrchestrationDirectory\\\":\\\"\\\",\\\"MessageId\\\":\\\"\\\",\\\"BookKeepingFileName\\\":\\\"\\\",\\\"PluginName\\\":\\\"\\\",\\\"PluginID\\\":\\\"\\\",\\\"DefaultWorkingDirectory\\\":\\\"\\\",\\\"Preconditions\\\":null,\\\"IsPreconditionEnabled\\\":false},\\\"Name\\\":\\\"aws:runScript\\\",\\\"Result\\\":{\\\"pluginName\\\":\\\"\\\",\\\"status\\\":\\\"\\\",\\\"code\\\":0,\\\"output\\\":null,\\\"startDateTime\\\":\\\"0001-01-01T00:00:00Z\\\",\\\"endDateTime\\\":\\\"0001-01-01T00:00:00Z\\\",\\\"outputS3BucketName\\\":\\\"\\\",\\\"outputS3KeyPrefix\\\":\\\"\\\",\\\"standardOutput\\\":\\\"\\\",\\\"standardError\\\":\\\"\\\"},\\\"Id\\\":\\\"aws:runScript\\\"}]\"}"
-	cancelData := "{\"version\":\"1.0\",\"type\":\"cancel\",\"content\":\"\"}"
 	inputChan := make(chan string, 10)
 	cancelFlag := new(task.MockCancelFlag)
 	cancelFlag.On("Set", task.Canceled).Return(nil)
@@ -152,10 +176,10 @@ func TestWorkerBackend_ProcessV1(t *testing.T) {
 		runner:     pluginRunner,
 		stopChan:   stopChan,
 	}
-	backend.Process(pluginsData)
-	backend.Process(cancelData)
-	//assert messaging worker stopped
-	assert.Equal(t, stopTypeTerminate, <-stopChan)
+	backend.Process(testPluginsRawJSON)
+	backend.Process(testCancelRawJSON)
+	//assert soft stop
+	assert.Equal(t, stopTypeShutdown, <-stopChan)
 	//assert plugin runner called
 	assert.True(t, isRunnerCalled)
 	//assert cancel flag set
@@ -163,14 +187,29 @@ func TestWorkerBackend_ProcessV1(t *testing.T) {
 
 }
 
-func TestWorkerBackend_Close(t *testing.T) {
-	cancelFlag := new(task.MockCancelFlag)
-	cancelFlag.On("Set", task.Completed).Return(nil)
+func TestWorkerBackendPluginListener(t *testing.T) {
+	testCase := CreateTestCase()
+	statusChan := make(chan contracts.PluginResult)
+	inputChan := make(chan string)
+	stopChan := make(chan int)
 	backend := WorkerBackend{
-		cancelFlag: cancelFlag,
+		ctx:      contextMock,
+		input:    inputChan,
+		stopChan: stopChan,
 	}
-	backend.Close()
-	cancelFlag.AssertCalled(t, "Set", task.Completed)
+	go backend.pluginListener(statusChan)
+	statusChan <- *testCase.results["plugin1"]
+	data := <-inputChan
+	//cannot assume string equal, unmarshal sometimes switch map's order
+	assert.Equal(t, len(testPluginReplyRawJSON), len(data))
+	close(statusChan)
+	data = <-inputChan
+	assert.Equal(t, len(testDocumentCompleteRawJSON), len(data))
+	assert.Equal(t, stopTypeShutdown, <-stopChan)
+	//make sure input channel is closed
+	_, more := <-inputChan
+	assert.False(t, more)
+
 }
 
 //this is needed, since after marshal-unmarshalling thru the data channel, the pointer value changed

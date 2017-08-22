@@ -21,8 +21,24 @@ import (
 
 	"time"
 
+	"os/exec"
+
+	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/stretchr/testify/assert"
 )
+
+var logger = log.NewMockLog()
+
+//TODO add process start time
+func TestIsProcessExists(t *testing.T) {
+	cmd := exec.Command("sleep", "10")
+	err := cmd.Start()
+	//do not call wait in case the process are recycled
+	assert.NoError(t, err)
+	pid := cmd.Process.Pid
+	logger.Infof("process pid: %v", pid)
+	assert.True(t, IsProcessExists(logger, pid, time.Now()))
+}
 
 //Output format is verified to be identical on RHEL, CENTOS, UBUNTU, AL. However darwin has a different time format
 func TestFindProcess(t *testing.T) {

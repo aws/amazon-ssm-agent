@@ -15,10 +15,11 @@
 package proc
 
 import (
-	"os"
 	"time"
 
 	"errors"
+
+	"os/exec"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/log"
@@ -35,41 +36,39 @@ type OSProcess interface {
 	//On Unix system, orphan is not be killed by systemd or upstart by default
 	//On Windows service controller, stop service does not kill orphan by default
 	//TODO confirm MSI Installer does not kill the child process
-	Wait() (ProcessState, error)
-}
-
-//adapter over os.ProcessState
-type ProcessState interface {
-	Success() bool
-	Sys() interface{}
+	Wait() error
 }
 
 //impl of OSProcess with os.Process embed
 type WorkerProcess struct {
-	*os.Process
+	*exec.Cmd
 	startTime time.Time
 }
 
 func (p *WorkerProcess) Pid() int {
-	return p.Process.Pid
+	return p.Cmd.Process.Pid
 }
 
 func (p *WorkerProcess) StartTime() time.Time {
 	return p.startTime
 }
 
-func (p *WorkerProcess) Wait() (ProcessState, error) {
-	state, err := p.Process.Wait()
-	return ProcessState(state), err
+//TODO use the kill functions provided in executes package
+func (p *WorkerProcess) Kill() error {
+	return p.Cmd.Process.Kill()
+}
+
+func (p *WorkerProcess) Wait() error {
+	return p.Cmd.Wait()
 }
 
 //start a child process, with the resources attached to its parent
 func StartProcess(name string, argv []string) (OSProcess, error) {
 	//TODO connect stdin and stdout to avoid seelog error
-	var procAttr os.ProcAttr
-	proc, err := os.StartProcess(name, argv, &procAttr)
+	cmd := exec.Command(name, argv...)
+	err := cmd.Start()
 	p := WorkerProcess{
-		proc,
+		cmd,
 		time.Now().UTC(),
 	}
 
@@ -95,11 +94,6 @@ func ParseArgv(argv []string) (string, string, error) {
 	} else {
 		return "", "", errors.New("executable argument number mismatch")
 	}
-	//if argv[0] == appconfig.DefaultDocumentWorker {
-	//	return argv[0], argv[1], nil
-	//} else {
-	//	return appconfig.DefaultDocumentWorker, argv[0], nil
-	//}
 
 }
 
