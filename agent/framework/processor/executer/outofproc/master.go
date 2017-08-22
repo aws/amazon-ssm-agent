@@ -88,12 +88,12 @@ func (e *OutOfProcExecuter) Run(
 				if msg := recover(); msg != nil {
 					log.Errorf("Executer go-routine panic: %v", msg)
 				}
+				//save the overall result and signal called that Executer is done
+				store.Save(*e.docState)
+				log.Info("Executer closed")
+				close(resChan)
 			}()
 			e.messaging(log, ipc, resChan, cancelFlag, stopTimer)
-			//save the overall result and signal called that Executer is done
-			store.Save(*e.docState)
-			close(resChan)
-			log.Info("Executer closed")
 		}(docStore)
 
 		return resChan
@@ -111,7 +111,9 @@ func (e *OutOfProcExecuter) messaging(log log.T, ipc channel.Channel, resChan ch
 	if err := messaging.Messaging(log, ipc, backend, stopTimer); err != nil {
 		//the messaging worker encountered error, either ipc run into error or data backend throws error
 		log.Errorf("messaging worker encountered error: %v", err)
-		if e.docState.DocumentInformation.DocumentStatus == contracts.ResultStatusInProgress {
+		if e.docState.DocumentInformation.DocumentStatus == contracts.ResultStatusInProgress ||
+			e.docState.DocumentInformation.DocumentStatus == "" ||
+			e.docState.DocumentInformation.DocumentStatus == contracts.ResultStatusNotStarted {
 			e.docState.DocumentInformation.DocumentStatus = contracts.ResultStatusFailed
 			log.Info("document failed half way, sending fail message...")
 			resChan <- e.generateUnexpectedFailResult()
@@ -141,8 +143,9 @@ func (e *OutOfProcExecuter) generateUnexpectedFailResult() contracts.DocumentRes
 //launch timeout timer based off the discovered process status
 func (e *OutOfProcExecuter) initialize(stopTimer chan bool) (ipc channel.Channel, err error) {
 	log := e.ctx.Log()
+	var found bool
 	documentID := e.docState.DocumentInformation.DocumentID
-	ipc, err, found := channelCreator(log, channel.ModeMaster, documentID)
+	ipc, err, found = channelCreator(log, channel.ModeMaster, documentID)
 
 	if err != nil {
 		log.Errorf("failed to create ipc channel: %v", err)
@@ -165,8 +168,8 @@ func (e *OutOfProcExecuter) initialize(stopTimer chan bool) (ipc channel.Channel
 		var process proc.OSProcess
 		if process, err = processCreator(appconfig.DefaultDocumentWorker, proc.FormArgv(documentID)); err != nil {
 			log.Errorf("start process: %v error: %v", appconfig.DefaultDocumentWorker, err)
-			//try to kill the child process if still alive
-			process.Kill()
+			//make sure close the channel
+			ipc.Destroy()
 			return
 		} else {
 			log.Debugf("successfully launched new process: %v", process.Pid())
@@ -185,10 +188,18 @@ func (e *OutOfProcExecuter) initialize(stopTimer chan bool) (ipc channel.Channel
 
 func (e *OutOfProcExecuter) WaitForProcess(stopTimer chan bool, process proc.OSProcess) {
 	log := e.ctx.Log()
-	procState, _ := process.Wait()
-	if !procState.Success() {
-		log.Errorf("process: %v exits unsuccessfully, system info: %v", process.Pid(), procState.Sys())
+	waitReturned := false
+	go func() {
+		//if job complete but process still hangs, kill it.
+		e.cancelFlag.Wait()
+		if !waitReturned {
+			process.Kill()
+		}
+	}()
+	if err := process.Wait(); err != nil {
+		log.Errorf("process: %v exits unsuccessfully, error message: %v", process.Pid(), err)
 	}
+	waitReturned = true
 	timeout(stopTimer, defaultZombieProcessTimeout, e.cancelFlag)
 }
 

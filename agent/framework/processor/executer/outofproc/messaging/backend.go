@@ -2,7 +2,6 @@ package messaging
 
 import (
 	"errors"
-	"time"
 
 	"sync"
 
@@ -15,7 +14,6 @@ import (
 )
 
 const (
-	defaultWorkerWaitTime = 100 * time.Second
 	//make sure the channel operation in backend is not blocked
 	defaultBackendChannelSize = 10
 )
@@ -50,25 +48,29 @@ type ExecuterBackend struct {
 func NewExecuterBackend(output chan contracts.DocumentResult, docState *model.DocumentState, cancelFlag task.CancelFlag) *ExecuterBackend {
 	stopChan := make(chan int, defaultBackendChannelSize)
 	inputChan := make(chan string, defaultBackendChannelSize)
-	go func(pluginConfigs []model.PluginState) {
-		startDatagram, _ := CreateDatagram(MessageTypePluginConfig, pluginConfigs)
-		inputChan <- startDatagram
-		cancelFlag.Wait()
-		if cancelFlag.Canceled() {
-			cancelDatagram, _ := CreateDatagram(MessageTypeCancel, "cancel")
-			inputChan <- cancelDatagram
-		} else if cancelFlag.ShutDown() {
-			stopChan <- stopTypeShutdown
-		}
-		//cancel state is complete, safe return
-
-	}(docState.InstancePluginsInformation)
-	return &ExecuterBackend{
-		output:   output,
-		docState: docState,
-		input:    inputChan,
-		stopChan: stopChan,
+	p := ExecuterBackend{
+		output:     output,
+		docState:   docState,
+		input:      inputChan,
+		cancelFlag: cancelFlag,
+		stopChan:   stopChan,
 	}
+	go p.start(docState.InstancePluginsInformation)
+	return &p
+}
+
+func (p *ExecuterBackend) start(pluginConfigs []model.PluginState) {
+	startDatagram, _ := CreateDatagram(MessageTypePluginConfig, pluginConfigs)
+	p.input <- startDatagram
+	p.cancelFlag.Wait()
+	if p.cancelFlag.Canceled() {
+		cancelDatagram, _ := CreateDatagram(MessageTypeCancel, "cancel")
+		p.input <- cancelDatagram
+	} else if p.cancelFlag.ShutDown() {
+		p.stopChan <- stopTypeShutdown
+	}
+	//cancel state is complete, safe return
+	close(p.input)
 }
 
 func (p *ExecuterBackend) Accept() <-chan string {
@@ -92,6 +94,8 @@ func (p *ExecuterBackend) Process(datagram string) error {
 		if t == MessageTypeComplete {
 			//get document result, force termniate messaging worker
 			p.stopChan <- stopTypeTerminate
+			//make sure to set cancelFlag to complete to signal to input worker to complete
+			p.cancelFlag.Set(task.Completed)
 		}
 	default:
 		return errors.New("unsupported message type")

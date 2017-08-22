@@ -168,13 +168,12 @@ func (ch *fileWatcherChannel) Close() {
 }
 
 //parse the counter out of the sequence id, return -1 if parsing fails
+//counter is defined as the padding last element of - separated integer
+//On windows, path.Base() does not work
 func parseSequenceCounter(filepath string) int {
-	_, name := path.Split(path.Base(filepath))
+	_, name := path.Split(filepath)
 	parts := strings.Split(name, "-")
-	if len(parts) != 3 {
-		return -1
-	}
-	counter, err := strconv.ParseInt(parts[2], 10, 64)
+	counter, err := strconv.ParseInt(parts[len(parts)-1], 10, 64)
 	if err != nil {
 		return -1
 	}
@@ -210,9 +209,11 @@ func (ch *fileWatcherChannel) consume(filepath string) {
 	log := ch.logger
 	log.Debugf("consuming message under path: %v", filepath)
 	buf, err := ioutil.ReadFile(filepath)
+	//On windows rename does not guarantee atomic access: https://github.com/golang/go/issues/8914
+	//In exclusive mode we have, this read will for sure fail when it's locked by the other end
+	//TODO implement retry
 	if err != nil {
 		log.Errorf("message %v failed to read: %v \n", filepath, err)
-		os.Remove(filepath)
 		return
 
 	}
