@@ -120,7 +120,7 @@ func (ds *PackageService) ReportResult(log log.T, result packageservice.PackageR
 			Operation:              &result.Operation,
 			OverallTiming:          &result.Timing,
 			Result:                 &result.Exitcode,
-			PackageResultAttributes: map[string]*string{
+			Attributes: map[string]*string{
 				"platformName":     &env.OperatingSystem.Platform,
 				"platformVersion":  &env.OperatingSystem.PlatformVersion,
 				"architecture":     &env.OperatingSystem.Architecture,
@@ -129,8 +129,8 @@ func (ds *PackageService) ReportResult(log log.T, result packageservice.PackageR
 				"region":           &env.Ec2Infrastructure.Region,
 				"availabilityZone": &env.Ec2Infrastructure.AvailabilityZone,
 			},
-			PackageResultSteps: []*ssm.PackageResultStep{
-				&ssm.PackageResultStep{
+			Steps: []*ssm.ConfigurePackageResultStep{
+				&ssm.ConfigurePackageResultStep{
 					// FIXME: this is just a copy of the overall execution for now
 					Action: &result.Operation,
 					Result: &result.Exitcode,
