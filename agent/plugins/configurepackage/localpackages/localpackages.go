@@ -59,8 +59,8 @@ const (
 type Repository interface {
 	GetInstalledVersion(context context.T, packageName string) string
 	ValidatePackage(context context.T, packageName string, version string) error
-	RefreshPackage(context context.T, packageName string, version string, downloader DownloadDelegate) error
-	AddPackage(context context.T, packageName string, version string, downloader DownloadDelegate) error
+	RefreshPackage(context context.T, packageName string, version string, packageServiceName string, downloader DownloadDelegate) error
+	AddPackage(context context.T, packageName string, version string, packageServiceName string, downloader DownloadDelegate) error
 	SetInstallState(context context.T, packageName string, version string, state InstallState) error
 	GetInstallState(context context.T, packageName string) (state InstallState, version string)
 	RemovePackage(context context.T, packageName string, version string) error
@@ -151,12 +151,12 @@ func (repo *localRepository) ValidatePackage(context context.T, packageName stri
 }
 
 // RefreshPackage updates the package binaries.  Used if ValidatePackage returns an error, initially same implementation as AddPackage
-func (repo *localRepository) RefreshPackage(context context.T, packageName string, version string, downloader DownloadDelegate) error {
-	return repo.AddPackage(context, packageName, version, downloader)
+func (repo *localRepository) RefreshPackage(context context.T, packageName string, version string, packageServiceName string, downloader DownloadDelegate) error {
+	return repo.AddPackage(context, packageName, version, packageServiceName, downloader)
 }
 
 // AddPackage creates an entry in the repository and downloads artifacts for a package
-func (repo *localRepository) AddPackage(context context.T, packageName string, version string, downloader DownloadDelegate) error {
+func (repo *localRepository) AddPackage(context context.T, packageName string, version string, packageServiceName string, downloader DownloadDelegate) error {
 	packagePath := repo.getPackageVersionPath(packageName, version)
 	if err := repo.filesysdep.MakeDirExecute(packagePath); err != nil {
 		return err
