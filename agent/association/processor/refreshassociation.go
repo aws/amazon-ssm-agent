@@ -39,39 +39,51 @@ import (
 )
 
 // ProcessRefreshAssociation executes one set of commands and returns their output.
-func (p *Processor) ProcessRefreshAssociation(log log.T, pluginRes *contracts.PluginResult, orchestrationDir string) {
+func (p *Processor) ProcessRefreshAssociation(log log.T, pluginRes *contracts.PluginResult, orchestrationDir string, apply bool) {
 	var associationIds []string
 	jsonutil.Remarshal(pluginRes.Output, &associationIds)
-
-	out := p.refreshAssociation(log, associationIds, orchestrationDir, pluginRes.OutputS3BucketName, pluginRes.OutputS3KeyPrefix)
-
-	// Upload output to S3
-	uploadOutputToS3BucketErrors := p.defaultPlugin.UploadOutputToS3Bucket(log, pluginRes.PluginID, orchestrationDir, pluginRes.OutputS3BucketName, pluginRes.OutputS3KeyPrefix, false, "", out.Stdout, out.Stderr)
-	if len(uploadOutputToS3BucketErrors) > 0 {
-		log.Errorf("Unable to upload the logs: %s", uploadOutputToS3BucketErrors)
-	}
-
-	// Return Json indented response
-	responseContent, _ := jsonutil.Marshal(out)
-	log.Debug("Returning response:\n", jsonutil.Indent(responseContent))
-
+	var out contracts.PluginOutput
 	defaultPluginConfig := pluginutil.DefaultPluginConfig()
+	//this is the current plugin run, trigger refresh
+	if apply {
+		out = p.refreshAssociation(log, associationIds, orchestrationDir, pluginRes.OutputS3BucketName, pluginRes.OutputS3KeyPrefix)
 
-	// Create output file paths
-	stdoutFilePath := filepath.Join(orchestrationDir, defaultPluginConfig.StdoutFileName)
-	stderrFilePath := filepath.Join(orchestrationDir, defaultPluginConfig.StderrFileName)
-	log.Debugf("stdout file %v, stderr file %v", stdoutFilePath, stderrFilePath)
+		// Upload output to S3
+		uploadOutputToS3BucketErrors := p.defaultPlugin.UploadOutputToS3Bucket(log, pluginRes.PluginID, orchestrationDir, pluginRes.OutputS3BucketName, pluginRes.OutputS3KeyPrefix, false, "", out.Stdout, out.Stderr)
+		if len(uploadOutputToS3BucketErrors) > 0 {
+			log.Errorf("Unable to upload the logs: %s", uploadOutputToS3BucketErrors)
+		}
 
-	// create orchestration dir if needed
-	if err := fileutil.MakeDirs(orchestrationDir); err != nil {
-		out.AppendError(log, "Failed to create orchestrationDir directory for log files")
-	}
-	if _, err := fileutil.WriteIntoFileWithPermissions(stdoutFilePath, out.Stdout, os.FileMode(int(appconfig.ReadWriteAccess))); err != nil {
-		log.Error(err)
-	}
+		// Return Json indented response
+		responseContent, _ := jsonutil.Marshal(out)
+		log.Debug("Returning response:\n", jsonutil.Indent(responseContent))
 
-	if _, err := fileutil.WriteIntoFileWithPermissions(stderrFilePath, out.Stderr, os.FileMode(int(appconfig.ReadWriteAccess))); err != nil {
-		log.Error(err)
+		// Create output file paths
+		stdoutFilePath := filepath.Join(orchestrationDir, defaultPluginConfig.StdoutFileName)
+		stderrFilePath := filepath.Join(orchestrationDir, defaultPluginConfig.StderrFileName)
+		log.Debugf("stdout file %v, stderr file %v", stdoutFilePath, stderrFilePath)
+
+		// create orchestration dir if needed
+		if err := fileutil.MakeDirs(orchestrationDir); err != nil {
+			out.AppendError(log, "Failed to create orchestrationDir directory for log files")
+		}
+		if _, err := fileutil.WriteIntoFileWithPermissions(stdoutFilePath, out.Stdout, os.FileMode(int(appconfig.ReadWriteAccess))); err != nil {
+			log.Error(err)
+		}
+
+		if _, err := fileutil.WriteIntoFileWithPermissions(stderrFilePath, out.Stderr, os.FileMode(int(appconfig.ReadWriteAccess))); err != nil {
+			log.Error(err)
+		}
+	} else {
+		//operation is already done, fill success result as default
+		out.MarkAsSucceeded()
+		// if user provided empty list or "" in the document, we will run all the associations now
+		applyAll := len(associationIds) == 0 || (len(associationIds) == 1 && associationIds[0] == "")
+		if applyAll {
+			out.AppendInfo(log, "All associations have been requested to execute immediately")
+		} else {
+			out.AppendInfof(log, "Associations %v have been requested to execute immediately", associationIds)
+		}
 	}
 
 	pluginRes.Code = out.ExitCode
