@@ -110,7 +110,7 @@ func (s *RunCommandService) listenReply(resultChan chan contracts.DocumentResult
 	//processor guarantees to close this channel upon stop
 	for res := range resultChan {
 
-		s.handleRefreshAssociationPlugin(res.LastPlugin, res.PluginResults)
+		s.handleRefreshAssociationPlugin(res.LastPlugin, res.MessageID, res.PluginResults)
 
 		if res.LastPlugin != "" {
 			log.Infof("received plugin: %v result from Processor", res.LastPlugin)
@@ -121,7 +121,7 @@ func (s *RunCommandService) listenReply(resultChan chan contracts.DocumentResult
 	}
 }
 
-func (s *RunCommandService) handleRefreshAssociationPlugin(lastPluginID string, pluginRes map[string]*contracts.PluginResult) {
+func (s *RunCommandService) handleRefreshAssociationPlugin(lastPluginID string, messageID string, pluginRes map[string]*contracts.PluginResult) {
 	var newRes contracts.PluginResult
 
 	log := s.context.Log()
@@ -130,7 +130,7 @@ func (s *RunCommandService) handleRefreshAssociationPlugin(lastPluginID string, 
 		if lastPluginID == ID && pluginRes.PluginName == appconfig.PluginNameRefreshAssociation {
 			log.Infof("Found %v to invoke refresh association immediately", pluginRes.PluginName)
 
-			orchestrationDir := fileutil.BuildPath(s.orchestrationRootDir, pluginRes.PluginName)
+			orchestrationDir := fileutil.BuildPath(s.orchestrationRootDir, getCommandID(messageID), pluginRes.PluginName)
 
 			s.assocProcessor.ProcessRefreshAssociation(log, pluginRes, orchestrationDir)
 
