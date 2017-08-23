@@ -275,7 +275,7 @@ func TestAddPackage(t *testing.T) {
 	repo := localRepository{filesysdep: &mockFileSys, repoRoot: testRepoRoot}
 
 	// Call and validate mock expectations and return value
-	err := repo.AddPackage(contextMock, testPackage, version, mockDownload.Download)
+	err := repo.AddPackage(contextMock, testPackage, version, "mock-package-service", mockDownload.Download)
 	mockFileSys.AssertExpectations(t)
 	mockDownload.AssertExpectations(t)
 	assert.Nil(t, err)
@@ -297,7 +297,7 @@ func TestAddNewPackage(t *testing.T) {
 	repo := localRepository{filesysdep: &mockFileSys, repoRoot: testRepoRoot}
 
 	// Call and validate mock expectations and return value
-	err := repo.AddPackage(contextMock, testPackage, version, mockDownload.Download)
+	err := repo.AddPackage(contextMock, testPackage, version, "mock-package-service", mockDownload.Download)
 	mockFileSys.AssertExpectations(t)
 	mockDownload.AssertExpectations(t)
 	assert.Nil(t, err)
@@ -318,7 +318,7 @@ func TestRefreshPackage(t *testing.T) {
 	repo := localRepository{filesysdep: &mockFileSys, repoRoot: testRepoRoot}
 
 	// Call and validate mock expectations and return value
-	err := repo.RefreshPackage(contextMock, testPackage, version, mockDownload.Download)
+	err := repo.RefreshPackage(contextMock, testPackage, version, "mock-package-service", mockDownload.Download)
 	mockFileSys.AssertExpectations(t)
 	mockDownload.AssertExpectations(t)
 	assert.Nil(t, err)

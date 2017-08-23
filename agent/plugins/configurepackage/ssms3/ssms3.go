@@ -107,6 +107,10 @@ func New(repository string, region string) *PackageService {
 	return &PackageService{packageURL: packageURL}
 }
 
+func (ds *PackageService) PackageServiceName() string {
+	return packageservice.PackageServiceName_ssms3
+}
+
 // DownloadManifest looks up the latest version of a given package for this platform/arch in S3 or manifest at source location
 func (ds *PackageService) DownloadManifest(log log.T, packageName string, version string) (string, error) {
 	var targetVersion string
