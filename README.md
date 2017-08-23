@@ -16,7 +16,7 @@ Currently, the SSM Agent and Run Command enable you to quickly run Shell scripts
 
 ### Setup
 
-* [Configuring IAM Roles and Users for SSM Run Command](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ssm-iam.html)
+* [Configuring IAM Roles and Users for SSM Run Command](https://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-access.html)
 * [Configuring the SSM Agent](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/install-ssm-agent.html)
 
 ### Executing Commands
