@@ -33,8 +33,9 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/plugins/pluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/times"
 
-	"github.com/aws/aws-sdk-go/aws"
 	"path/filepath"
+
+	"github.com/aws/aws-sdk-go/aws"
 )
 
 // ProcessRefreshAssociation executes one set of commands and returns their output.

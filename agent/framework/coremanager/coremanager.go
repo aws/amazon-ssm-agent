@@ -25,8 +25,8 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	"github.com/aws/amazon-ssm-agent/agent/framework/coremodules"
-	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer"
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/plugin"
+	"github.com/aws/amazon-ssm-agent/agent/framework/runpluginutil"
 	logger "github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/platform"
 	"github.com/aws/amazon-ssm-agent/agent/rebooter"
@@ -102,7 +102,7 @@ func NewCoreManager(instanceIdPtr *string, regionPtr *string, log logger.T) (cm 
 	coreModules := coremodules.RegisteredCoreModules(context)
 
 	//initialize PluginRegistry
-	executer.PluginRegistry = plugin.RegisteredWorkerPlugins(context)
+	runpluginutil.SSMPluginRegistry = plugin.RegisteredWorkerPlugins(context)
 
 	return &CoreManager{
 		context:             context,
