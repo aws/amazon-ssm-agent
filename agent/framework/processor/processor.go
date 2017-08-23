@@ -30,7 +30,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/docmanager/model"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer"
-	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/basicexecuter"
+	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/outofproc"
 	"github.com/aws/amazon-ssm-agent/agent/longrunning/manager"
 	"github.com/aws/amazon-ssm-agent/agent/platform"
 	"github.com/aws/amazon-ssm-agent/agent/rebooter"
@@ -81,7 +81,7 @@ func NewEngineProcessor(ctx context.T, commandWorkerLimit int, cancelWorkerLimit
 	cancelCommandTaskPool := task.NewPool(log, cancelWorkerLimit, cancelWaitDuration, clock)
 	resChan := make(chan contracts.DocumentResult)
 	executerCreator := func(ctx context.T) executer.Executer {
-		return basicexecuter.NewBasicExecuter(ctx)
+		return outofproc.NewOutOfProcExecuter(ctx)
 	}
 	return &EngineProcessor{
 		context:           ctx.With("[EngineProcessor]"),
@@ -312,6 +312,7 @@ func processCommand(context context.T, executerCreator ExecuterCreator, cancelFl
 	)
 	// Listen for reboot
 	isReboot := false
+	notDone := true
 	for res := range statusChan {
 		if res.LastPlugin == "" {
 			log.Infof("sending document: %v complete response", documentID)
@@ -323,12 +324,16 @@ func processCommand(context context.T, executerCreator ExecuterCreator, cancelFl
 		//hand off the message to Service
 		resChan <- res
 		isReboot = res.Status == contracts.ResultStatusSuccessAndReboot
+		notDone = (res.Status == contracts.ResultStatusInProgress && res.PluginResults[res.LastPlugin].PluginName != appconfig.PluginNameAwsAgentUpdate) || res.Status == contracts.ResultStatusSuccessAndReboot
 	}
 	//TODO since there's a bug in UpdatePlugin that returns InProgress even if the document is completed, we cannot use InProgress to judge here, we need to fix the bug by the time out-of-proc is done
 	// Shutdown/reboot detection
-	if isReboot {
+	if notDone && isReboot {
 		log.Infof("document %v requested reboot, need to resume", messageID)
 		rebooter.RequestPendingReboot(context.Log())
+		return
+	} else if notDone {
+		log.Infof("document %v still in progress, shutting down...", messageID)
 		return
 	}
 
