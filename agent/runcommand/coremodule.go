@@ -25,6 +25,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/docmanager/model"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
+	"github.com/aws/amazon-ssm-agent/agent/longrunning/manager"
 	mdsService "github.com/aws/amazon-ssm-agent/agent/runcommand/mds"
 	"github.com/aws/amazon-ssm-agent/agent/sdkutil"
 	"github.com/aws/aws-sdk-go/service/ssmmds"
@@ -109,8 +110,8 @@ func (s *RunCommandService) listenReply(resultChan chan contracts.DocumentResult
 	log := s.context.Log()
 	//processor guarantees to close this channel upon stop
 	for res := range resultChan {
-
-		s.handleRefreshAssociationPlugin(res.LastPlugin, res.MessageID, res.PluginResults)
+		//cloudwatch and refresh association needs to trigger the in-memory component, adding filter here
+		s.handleSpecialPlugin(res.LastPlugin, res.PluginResults, res.MessageID)
 
 		if res.LastPlugin != "" {
 			log.Infof("received plugin: %v result from Processor", res.LastPlugin)
@@ -121,20 +122,25 @@ func (s *RunCommandService) listenReply(resultChan chan contracts.DocumentResult
 	}
 }
 
-func (s *RunCommandService) handleRefreshAssociationPlugin(lastPluginID string, messageID string, pluginRes map[string]*contracts.PluginResult) {
+//temporary solution on plugins with shared responsibility with agent
+func (s *RunCommandService) handleSpecialPlugin(lastPluginID string, pluginRes map[string]*contracts.PluginResult, messageID string) {
 	var newRes contracts.PluginResult
 
 	log := s.context.Log()
-
+	//TODO once associaiton service switch to use RC and CW goes away, remove this block
 	for ID, pluginRes := range pluginRes {
-		if lastPluginID == ID && pluginRes.PluginName == appconfig.PluginNameRefreshAssociation {
+		if pluginRes.PluginName == appconfig.PluginNameRefreshAssociation {
 			log.Infof("Found %v to invoke refresh association immediately", pluginRes.PluginName)
 
 			orchestrationDir := fileutil.BuildPath(s.orchestrationRootDir, getCommandID(messageID), pluginRes.PluginName)
-
-			s.assocProcessor.ProcessRefreshAssociation(log, pluginRes, orchestrationDir)
+			//apply association only when this is the last plugin run
+			s.assocProcessor.ProcessRefreshAssociation(log, pluginRes, orchestrationDir, lastPluginID == ID)
 
 			log.Infof("Finished refreshing association immediately - response: %v", newRes)
+		} else if pluginRes.PluginName == appconfig.PluginNameCloudWatch {
+			log.Infof("Found %v to invoke lrpm invoker", pluginRes.PluginName)
+			orchestrationDir := fileutil.BuildPath(s.orchestrationRootDir, getCommandID(messageID), pluginRes.PluginName)
+			manager.Invoke(log, ID, pluginRes, orchestrationDir)
 		}
 	}
 
