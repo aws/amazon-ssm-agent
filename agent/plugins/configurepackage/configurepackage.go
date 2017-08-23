@@ -151,7 +151,7 @@ func ensurePackage(context context.T,
 	if err := repository.ValidatePackage(context, packageName, version); err != nil || (currentVersion == version && currentState == localpackages.Failed) {
 		context.Log().Debugf("Current %v Target %v State %v", currentVersion, version, currentState)
 		context.Log().Debugf("Refreshing package content for %v %v %v", packageName, version, err)
-		if err = repository.RefreshPackage(context, packageName, version, buildDownloadDelegate(context, packageService, packageName, version)); err != nil {
+		if err = repository.RefreshPackage(context, packageName, version, packageService.PackageServiceName(), buildDownloadDelegate(context, packageService, packageName, version)); err != nil {
 			return nil, err
 		}
 		if err = repository.ValidatePackage(context, packageName, version); err != nil {

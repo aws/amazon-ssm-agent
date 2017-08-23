@@ -24,6 +24,11 @@ type Mock struct {
 	mock.Mock
 }
 
+func (ds *Mock) PackageServiceName() string {
+	args := ds.Called()
+	return args.String(0)
+}
+
 func (ds *Mock) DownloadManifest(log log.T, packageName string, version string) (string, error) {
 	args := ds.Called(log, packageName, version)
 	return args.String(0), args.Error(1)

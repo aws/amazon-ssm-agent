@@ -38,13 +38,13 @@ func (repoMock *MockedRepository) ValidatePackage(context context.T, packageName
 	return args.Error(0)
 }
 
-func (repoMock *MockedRepository) RefreshPackage(context context.T, packageName string, version string, downloader localpackages.DownloadDelegate) error {
-	args := repoMock.Called(context, packageName, version, downloader)
+func (repoMock *MockedRepository) RefreshPackage(context context.T, packageName string, version string, packageServiceName string, downloader localpackages.DownloadDelegate) error {
+	args := repoMock.Called(context, packageName, version, packageServiceName, downloader)
 	return args.Error(0)
 }
 
-func (repoMock *MockedRepository) AddPackage(context context.T, packageName string, version string, downloader localpackages.DownloadDelegate) error {
-	args := repoMock.Called(context, packageName, version, downloader)
+func (repoMock *MockedRepository) AddPackage(context context.T, packageName string, version string, packageServiceName string, downloader localpackages.DownloadDelegate) error {
+	args := repoMock.Called(context, packageName, version, packageServiceName, downloader)
 	return args.Error(0)
 }
 
