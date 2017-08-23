@@ -192,7 +192,7 @@ func (e *OutOfProcExecuter) WaitForProcess(stopTimer chan bool, process proc.OSP
 	go func() {
 		//if job complete but process still hangs, kill it.
 		e.cancelFlag.Wait()
-		if !waitReturned {
+		if !waitReturned && e.cancelFlag.State() == task.Completed {
 			process.Kill()
 		}
 	}()
