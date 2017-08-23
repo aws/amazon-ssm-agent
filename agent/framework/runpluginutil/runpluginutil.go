@@ -42,6 +42,8 @@ type T interface {
 // PluginRegistry stores a set of plugins (both worker and long running plugins), indexed by ID.
 type PluginRegistry map[string]T
 
+var SSMPluginRegistry PluginRegistry
+
 // allPlugins is the list of all known plugins.
 // This allows us to differentiate between the case where a document asks for a plugin that exists but isn't supported on this platform
 // and the case where a plugin name isn't known at all to this version of the agent (and the user should probably upgrade their agent)

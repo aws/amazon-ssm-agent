@@ -19,7 +19,6 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/docmanager"
 	"github.com/aws/amazon-ssm-agent/agent/docmanager/model"
-	"github.com/aws/amazon-ssm-agent/agent/framework/runpluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 )
 
@@ -37,8 +36,6 @@ type DocumentStore interface {
 	Save(model.DocumentState)
 	Load() model.DocumentState
 }
-
-var PluginRegistry runpluginutil.PluginRegistry
 
 //TODO need to refactor global lock in docmanager, or discard the entire package and impl the file IO here
 //DocumentFileStore dependent on the current file functions in docmanager to provide file save/load operations
