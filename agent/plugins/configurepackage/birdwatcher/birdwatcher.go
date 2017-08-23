@@ -73,6 +73,10 @@ func New(endpoint string, manifestCache packageservice.ManifestCache) packageser
 	}
 }
 
+func (ds *PackageService) PackageServiceName() string {
+	return packageservice.PackageServiceName_birdwatcher
+}
+
 // DownloadManifest downloads the manifest for a given version (or latest) and returns the agent version specified in manifest
 func (ds *PackageService) DownloadManifest(log log.T, packageName string, version string) (string, error) {
 	manifest, err := downloadManifest(ds, packageName, version)
