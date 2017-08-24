@@ -230,7 +230,7 @@ func testExecution(t *testing.T, commandtester CommandTester) {
 	p.MaxStdoutLength = 1000
 	p.MaxStderrLength = 1000
 	p.OutputTruncatedSuffix = "-more-"
-	p.UploadToS3Sync = true
+	p.UploadToS3ASync = false
 	p.ExecuteCommand = pluginutil.CommandExecuter(mockExecuter.Execute)
 	p.ExecuteUploadOutputToS3Bucket = pluginutil.UploadOutputToS3BucketExecuter(mockS3Uploader.UploadOutputToS3Bucket)
 
