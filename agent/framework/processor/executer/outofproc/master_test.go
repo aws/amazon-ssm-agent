@@ -19,7 +19,6 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/mock"
 )
 
 type TestCase struct {
@@ -185,29 +184,30 @@ func TestInitializeProcessUnexpectedExited(t *testing.T) {
 	testCase.processMock.AssertExpectations(t)
 }
 
-func TestTerminateWaitWhenJobComplete(t *testing.T) {
-	testCase := CreateTestCase()
-	cancel := task.NewChanneledCancelFlag()
-	exe := &OutOfProcExecuter{
-		ctx:        testCase.context,
-		docState:   &testCase.docState,
-		cancelFlag: cancel,
-	}
-	killChan := make(chan bool)
-	//wait hangs indefinitely
-	testCase.processMock.On("Pid").Return(testPid)
-	testCase.processMock.On("Wait").Run(func(mock.Arguments) {
-		<-killChan
-	}).Return(errors.New("process received SIGTERM"))
-	testCase.processMock.On("Kill").Run(func(mock.Arguments) {
-		killChan <- true
-	}).Return(nil)
-	stopTimer := make(chan bool)
-	cancel.Set(task.Completed)
-	//in this case, wait should immediately return and kill the process
-	exe.WaitForProcess(stopTimer, testCase.processMock)
-	testCase.processMock.AssertExpectations(t)
-}
+//TODO revisit this feature
+//func TestTerminateWaitWhenJobComplete(t *testing.T) {
+//	testCase := CreateTestCase()
+//	cancel := task.NewChanneledCancelFlag()
+//	exe := &OutOfProcExecuter{
+//		ctx:        testCase.context,
+//		docState:   &testCase.docState,
+//		cancelFlag: cancel,
+//	}
+//	killChan := make(chan bool)
+//	//wait hangs indefinitely
+//	testCase.processMock.On("Pid").Return(testPid)
+//	testCase.processMock.On("Wait").Run(func(mock.Arguments) {
+//		<-killChan
+//	}).Return(errors.New("process received SIGTERM"))
+//	testCase.processMock.On("Kill").Run(func(mock.Arguments) {
+//		killChan <- true
+//	}).Return(nil)
+//	stopTimer := make(chan bool)
+//	cancel.Set(task.Completed)
+//	//in this case, wait should immediately return and kill the process
+//	exe.WaitForProcess(stopTimer, testCase.processMock)
+//	testCase.processMock.AssertExpectations(t)
+//}
 
 func TestInitializeConnectOldOrphan(t *testing.T) {
 	testCase := CreateTestCase()
