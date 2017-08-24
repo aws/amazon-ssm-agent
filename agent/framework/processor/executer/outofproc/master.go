@@ -21,7 +21,7 @@ type Backend messaging.MessagingBackend
 //see differences between zombie and orphan: https://www.gmarik.info/blog/2012/orphan-vs-zombie-vs-daemon-processes/
 const (
 	//TODO prolong this value once we go to production
-	defaultZombieProcessTimeout = 2 * time.Second
+	defaultZombieProcessTimeout = 3 * time.Second
 	//command maximum timeout
 	defaultOrphanProcessTimeout = 172800 * time.Second
 )
@@ -188,18 +188,24 @@ func (e *OutOfProcExecuter) initialize(stopTimer chan bool) (ipc channel.Channel
 
 func (e *OutOfProcExecuter) WaitForProcess(stopTimer chan bool, process proc.OSProcess) {
 	log := e.ctx.Log()
-	waitReturned := false
-	go func() {
-		//if job complete but process still hangs, kill it.
-		e.cancelFlag.Wait()
-		if !waitReturned && e.cancelFlag.State() == task.Completed {
-			process.Kill()
-		}
-	}()
+	//TODO revisit this feature, it has done sides of killing the document worker too fast -- the worker might busy doing s3 upload
+	//waitReturned := false
+	//go func() {
+	//	//if job complete but process still hangs, kill it.
+	//	e.cancelFlag.Wait()
+	//	if !waitReturned && e.cancelFlag.State() == task.Completed {
+	//		//do not kill it immediately, should be grace-period to allow s3 upload to finish
+	//		<-time.After(defaultZombieProcessTimeout)
+	//		log.Info("killing process...")
+	//		process.Kill()
+	//	}
+	//}()
 	if err := process.Wait(); err != nil {
 		log.Errorf("process: %v exits unsuccessfully, error message: %v", process.Pid(), err)
+	} else {
+		log.Debugf("process: %v exits successfully, trying to stop messaging worker", process.Pid())
 	}
-	waitReturned = true
+	//waitReturned = true
 	timeout(stopTimer, defaultZombieProcessTimeout, e.cancelFlag)
 }
 

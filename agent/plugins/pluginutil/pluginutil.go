@@ -51,8 +51,8 @@ type DefaultPlugin struct {
 	// ExecuteUploadOutputToS3Bucket is an object that can upload command outputs to S3 bucket.
 	ExecuteUploadOutputToS3Bucket UploadOutputToS3BucketExecuter
 
-	// UploadToS3Sync is true if uploading to S3 should be done synchronously, false for async.
-	UploadToS3Sync bool
+	// UploadToS3ASync is true if uploading to S3 should be done asynchronously, false for async.
+	UploadToS3ASync bool
 
 	// StdoutFileName is the name of the file that stores standard output.
 	StdoutFileName string
@@ -139,7 +139,7 @@ func (p *DefaultPlugin) UploadOutputToS3Bucket(log log.T, pluginID string, orche
 			if Stdout != "" {
 				localPath := filepath.Join(orchestrationDir, p.StdoutFileName)
 				s3Key := fileutil.BuildS3Path(outputS3KeyPrefix, pluginID, p.StdoutFileName)
-				if err := s3util.NewAmazonS3Util(log, outputS3BucketName).S3Upload(log, outputS3BucketName, s3Key, localPath); err != nil && p.UploadToS3Sync {
+				if err := s3util.NewAmazonS3Util(log, outputS3BucketName).S3Upload(log, outputS3BucketName, s3Key, localPath); err != nil && !p.UploadToS3ASync {
 					// if we are in synchronous mode, we can also return the error
 					uploadOutputToS3BucketErrors = append(uploadOutputToS3BucketErrors, err.Error())
 				}
@@ -147,14 +147,14 @@ func (p *DefaultPlugin) UploadOutputToS3Bucket(log log.T, pluginID string, orche
 			if Stderr != "" {
 				localPath := filepath.Join(orchestrationDir, p.StderrFileName)
 				s3Key := fileutil.BuildS3Path(outputS3KeyPrefix, pluginID, p.StderrFileName)
-				if err := s3util.NewAmazonS3Util(log, outputS3BucketName).S3Upload(log, outputS3BucketName, s3Key, localPath); err != nil && p.UploadToS3Sync {
+				if err := s3util.NewAmazonS3Util(log, outputS3BucketName).S3Upload(log, outputS3BucketName, s3Key, localPath); err != nil && !p.UploadToS3ASync {
 					// if we are in synchronous mode, we can also return the error
 					uploadOutputToS3BucketErrors = append(uploadOutputToS3BucketErrors, err.Error())
 				}
 			}
 		}
 
-		if p.UploadToS3Sync {
+		if !p.UploadToS3ASync {
 			uploadOutputsToS3()
 		} else {
 			go uploadOutputsToS3()

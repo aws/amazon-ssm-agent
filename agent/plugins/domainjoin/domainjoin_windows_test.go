@@ -130,7 +130,7 @@ func testRunCommands(t *testing.T, testCase TestCase, rawInput bool) {
 	p.MaxStdoutLength = 1000
 	p.MaxStderrLength = 1000
 	p.OutputTruncatedSuffix = "-more-"
-	p.UploadToS3Sync = true
+	p.UploadToS3ASync = true
 	p.ExecuteUploadOutputToS3Bucket = func(log log.T, pluginID string, orchestrationDir string, outputS3BucketName string, outputS3KeyPrefix string, useTempDirectory bool, tempDir string, Stdout string, Stderr string) []string {
 		return []string{}
 	}
