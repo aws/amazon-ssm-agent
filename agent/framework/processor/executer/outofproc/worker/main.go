@@ -55,15 +55,6 @@ func main() {
 	args := os.Args
 	ctx, channelName, err := initialize(args)
 	logger = ctx.Log()
-	defer func() {
-		//ensure logs are flushed
-		logger.Flush()
-		logger.Close()
-		time.Sleep(1 * time.Second)
-		if err != nil {
-			os.Exit(1)
-		}
-	}()
 	if err != nil {
 		logger.Errorf("document worker failed to initialize, exit")
 		return
@@ -75,7 +66,6 @@ func main() {
 		logger.Errorf("failed to create channel: %v", err)
 		return
 	}
-	//TODO remove this,
 	//initialize PluginRegistry
 	runpluginutil.SSMPluginRegistry = plugin.RegisteredWorkerPlugins(ctx)
 
@@ -89,4 +79,11 @@ func main() {
 		return
 	}
 	logger.Info("document worker closed")
+	//ensure logs are flushed
+	logger.Close()
+	//TODO figure out s3 aync problem
+	//TODO figure out why defer main doesnt work on windows
+	if err != nil {
+		os.Exit(1)
+	}
 }
