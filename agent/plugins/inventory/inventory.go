@@ -456,7 +456,7 @@ func (p *Plugin) VerifyInventoryDataSize(item model.Item, items []model.Item) bo
 func (p *Plugin) IsMulitpleAssociationPresent(currentAssociationID string, config contracts.Configuration) (status bool, othersfound string) {
 	var currentInventoryAssociations []string
 
-	err := jsonutil.Remarshal(config.Settings, &currentInventoryAssociations)
+	err := jsonutil.Remarshal(config.CurrentAssociations, &currentInventoryAssociations)
 	if err != nil {
 		p.context.Log().Errorf("failed to remarshal plugin settings: %v", err)
 		return false, ""

@@ -25,7 +25,6 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/docmanager/model"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
-	"github.com/aws/amazon-ssm-agent/agent/longrunning/manager"
 	mdsService "github.com/aws/amazon-ssm-agent/agent/runcommand/mds"
 	"github.com/aws/amazon-ssm-agent/agent/sdkutil"
 	"github.com/aws/aws-sdk-go/service/ssmmds"
@@ -137,10 +136,6 @@ func (s *RunCommandService) handleSpecialPlugin(lastPluginID string, pluginRes m
 			s.assocProcessor.ProcessRefreshAssociation(log, pluginRes, orchestrationDir, lastPluginID == ID)
 
 			log.Infof("Finished refreshing association immediately - response: %v", newRes)
-		} else if pluginRes.PluginName == appconfig.PluginNameCloudWatch {
-			log.Infof("Found %v to invoke lrpm invoker", pluginRes.PluginName)
-			orchestrationDir := fileutil.BuildPath(s.orchestrationRootDir, getCommandID(messageID), pluginRes.PluginName)
-			manager.Invoke(log, ID, pluginRes, orchestrationDir)
 		}
 	}
 
