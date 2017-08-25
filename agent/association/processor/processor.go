@@ -646,7 +646,7 @@ func updatePluginAssociationInstances(associationID string, docState *docModel.D
 			currentPluginAssociations[pluginName] = AssocList{associationID}
 		}
 		//assign the field to pluginconfig in place
-		docState.InstancePluginsInformation[i].Configuration.Settings = currentPluginAssociations[pluginName]
+		docState.InstancePluginsInformation[i].Configuration.CurrentAssociations = currentPluginAssociations[pluginName]
 	}
 	return
 }
