@@ -193,7 +193,7 @@ func TestPlugin_IsMulitpleAssociationPresent(t *testing.T) {
 	//mock inventory plugin
 	p, _ := MockInventoryPlugin(gatherers, gatherers)
 	config := contracts.Configuration{
-		Settings: []string{"testAssociationID", "testAssociationID2"},
+		CurrentAssociations: []string{"testAssociationID", "testAssociationID2"},
 	}
 	status, other := p.IsMulitpleAssociationPresent("testAssociationID", config)
 	assert.True(t, status)

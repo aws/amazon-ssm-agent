@@ -21,6 +21,8 @@ import (
 	"sync"
 	"time"
 
+	"path/filepath"
+
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
@@ -29,6 +31,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer"
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/basicexecuter"
+	"github.com/aws/amazon-ssm-agent/agent/longrunning/manager"
 	"github.com/aws/amazon-ssm-agent/agent/platform"
 	"github.com/aws/amazon-ssm-agent/agent/rebooter"
 	"github.com/aws/amazon-ssm-agent/agent/task"
@@ -305,6 +308,7 @@ func processCommand(context context.T, executerCreator ExecuterCreator, cancelFl
 			log.Infof("sending reply for plugin update: %v", res.LastPlugin)
 
 		}
+		handleCloudwatchPlugin(context, res.PluginResults, documentID)
 		//hand off the message to Service
 		resChan <- res
 		isReboot = res.Status == contracts.ResultStatusSuccessAndReboot
@@ -358,5 +362,26 @@ func processCancelCommand(context context.T, sendCommandPool task.Pool, docState
 		docState.DocumentInformation.InstanceID,
 		appconfig.DefaultLocationOfCurrent,
 		appconfig.DefaultLocationOfCompleted)
+
+}
+
+//TODO remove this once CloudWatch plugin is reworked
+//temporary solution on plugins with shared responsibility with agent
+func handleCloudwatchPlugin(context context.T, pluginResults map[string]*contracts.PluginResult, documentID string) {
+	log := context.Log()
+	instanceID, _ := platform.InstanceID()
+	//TODO once associaiton service switch to use RC and CW goes away, remove this block
+	for ID, pluginRes := range pluginResults {
+		if pluginRes.PluginName == appconfig.PluginNameCloudWatch {
+			log.Infof("Found %v to invoke lrpm invoker", pluginRes.PluginName)
+			orchestrationRootDir := filepath.Join(
+				appconfig.DefaultDataStorePath,
+				instanceID,
+				appconfig.DefaultDocumentRootDirName,
+				context.AppConfig().Agent.OrchestrationRootDir)
+			orchestrationDir := fileutil.BuildPath(orchestrationRootDir, documentID, pluginRes.PluginName)
+			manager.Invoke(log, ID, pluginRes, orchestrationDir)
+		}
+	}
 
 }

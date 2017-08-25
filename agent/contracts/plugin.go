@@ -90,6 +90,7 @@ type Configuration struct {
 	DefaultWorkingDirectory string
 	Preconditions           map[string][]string
 	IsPreconditionEnabled   bool
+	CurrentAssociations     []string
 }
 
 // Plugin wraps the plugin configuration and plugin result.

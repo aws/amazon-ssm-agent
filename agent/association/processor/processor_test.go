@@ -257,7 +257,7 @@ func TestUpdatePluginAssociationInstances(t *testing.T) {
 		},
 	}
 	updatePluginAssociationInstances("testAssociationID", &testDocState)
-	assert.Equal(t, AssocList{testAssociationID}, testDocState.InstancePluginsInformation[0].Configuration.Settings)
+	assert.EqualValues(t, AssocList{testAssociationID}, testDocState.InstancePluginsInformation[0].Configuration.CurrentAssociations)
 	resultMap := make(map[string]AssocList)
 	resultMap["pluginName"] = []string{testAssociationID}
 	assert.Equal(t, resultMap, pluginAssociationInstances)
@@ -286,7 +286,7 @@ func TestRemovePluginAssociationInstances(t *testing.T) {
 		},
 	}
 	updatePluginAssociationInstances("testAssociationID", &testDocState)
-	assert.Equal(t, AssocList{testAssociationID}, testDocState.InstancePluginsInformation[0].Configuration.Settings)
+	assert.EqualValues(t, AssocList{testAssociationID}, testDocState.InstancePluginsInformation[0].Configuration.CurrentAssociations)
 	resultMap := make(map[string]AssocList)
 	resultMap["pluginName"] = []string{testAssociationID}
 	assert.Equal(t, resultMap, pluginAssociationInstances)
