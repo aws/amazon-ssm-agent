@@ -222,7 +222,7 @@ func (p *EngineProcessor) processPendingDocuments(instanceID string) {
 
 	//iterate through all pending messages
 	for _, f := range files {
-		log.Debugf("Processing an older document - %v", f.Name())
+		log.Infof("Processing pending document - %v", f.Name())
 		//inspect document state
 		docState := docmanager.GetDocumentInterimState(log, f.Name(), instanceID, appconfig.DefaultLocationOfPending)
 
@@ -256,7 +256,7 @@ func (p *EngineProcessor) processInProgressDocuments(instanceID string) {
 
 	//iterate through all InProgress docs
 	for _, f := range files {
-		log.Debugf("processing previously unexecuted document - %v", f.Name())
+		log.Infof("processing in progress document - %v", f.Name())
 
 		//inspect document state
 		docState := docmanager.GetDocumentInterimState(log, f.Name(), instanceID, appconfig.DefaultLocationOfCurrent)
@@ -338,7 +338,7 @@ func processCommand(context context.T, executerCreator ExecuterCreator, cancelFl
 	}
 
 	//persist : commands execution in completed folder (terminal state folder)
-	log.Debugf("execution of %v is over. Moving interimState file from Current to Completed folder", messageID)
+	log.Infof("execution of %v is over. Moving interimState file from Current to Completed folder", messageID)
 
 	docmanager.MoveDocumentState(log,
 		documentID,

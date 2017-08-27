@@ -43,7 +43,7 @@ func CreateFileChannel(log log.T, mode Mode, filename string) (Channel, error, b
 	}
 	list, err := fileutil.ReadDir(path.Join(appconfig.DefaultDataStorePath, instanceID, defaultFileChannelPath))
 	if err != nil {
-		log.Errorf("failed to read the default channel root directory: %v, creating a new Channel", err)
+		log.Infof("failed to read the default channel root directory: %v, creating a new Channel", err)
 		f, err := NewFileWatcherChannel(log, mode, path.Join(appconfig.DefaultDataStorePath, instanceID, defaultFileChannelPath, filename))
 		return f, err, false
 	}

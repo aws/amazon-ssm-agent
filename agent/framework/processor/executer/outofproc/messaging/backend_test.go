@@ -115,7 +115,6 @@ func TestExecuterBackend_ProcessV1(t *testing.T) {
 	outputChan := make(chan contracts.DocumentResult, 10)
 	stopChan := make(chan int, 1)
 	cancel := task.NewMockDefault()
-	cancel.On("Set", task.Completed).Return()
 	backend := ExecuterBackend{
 		cancelFlag: cancel,
 		output:     outputChan,

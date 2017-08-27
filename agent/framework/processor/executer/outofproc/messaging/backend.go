@@ -94,8 +94,6 @@ func (p *ExecuterBackend) Process(datagram string) error {
 		if t == MessageTypeComplete {
 			//get document result, force termniate messaging worker
 			p.stopChan <- stopTypeTerminate
-			//make sure to set cancelFlag to complete to signal to input worker to complete
-			p.cancelFlag.Set(task.Completed)
 		}
 	default:
 		return errors.New("unsupported message type")
@@ -144,6 +142,7 @@ func (p *WorkerBackend) Process(datagram string) error {
 		})
 
 	case MessageTypeCancel:
+		log.Info("requested cancel the command, setting cancel flag...")
 		p.cancelFlag.Set(task.Canceled)
 	default:
 		//TODO add extra logic to check whether plugin has started, if not, stop IPC, or add timeout

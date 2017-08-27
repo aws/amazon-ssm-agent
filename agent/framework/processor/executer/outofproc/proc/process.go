@@ -21,7 +21,6 @@ import (
 
 	"os/exec"
 
-	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 )
 
@@ -66,6 +65,7 @@ func (p *WorkerProcess) Wait() error {
 func StartProcess(name string, argv []string) (OSProcess, error) {
 	//TODO connect stdin and stdout to avoid seelog error
 	cmd := exec.Command(name, argv...)
+	prepareProcess(cmd)
 	err := cmd.Start()
 	p := WorkerProcess{
 		cmd,
@@ -86,13 +86,13 @@ func IsProcessExists(log log.T, pid int, createTime time.Time) bool {
 }
 
 //TODO figure out why sometimes argv does not contain program name
-func ParseArgv(argv []string) (string, string, error) {
+func ParseArgv(argv []string) (string, error) {
 	if len(argv) == 1 {
-		return appconfig.DefaultDocumentWorker, argv[0], nil
+		return argv[0], nil
 	} else if len(argv) == 2 {
-		return argv[0], argv[1], nil
+		return argv[1], nil
 	} else {
-		return "", "", errors.New("executable argument number mismatch")
+		return "", errors.New("executable argument number mismatch")
 	}
 
 }
