@@ -88,7 +88,7 @@ func Messaging(log log.T, ipc channel.Channel, backend MessagingBackend, stopTim
 		select {
 		case <-stopTimer:
 			log.Error("received timedout signal!")
-			err = errors.New("messaging worker timed out")
+			err = errors.New("document worker timed out")
 			//messaging already timed out, close ipc and wait for done
 			ipc.Close()
 
@@ -110,7 +110,7 @@ func Messaging(log log.T, ipc channel.Channel, backend MessagingBackend, stopTim
 				break
 			} else if signal == stopTypeTerminate {
 				//hard stop, remove the channel and force return
-				log.Info("requested terminate messaging worker, closing the channel")
+				log.Info("requested terminate messaging worker, destroying the channel")
 				ipc.Destroy()
 				return
 			}

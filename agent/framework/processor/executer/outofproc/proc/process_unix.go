@@ -20,6 +20,7 @@ import (
 	"os/exec"
 	"strconv"
 	"strings"
+	"syscall"
 	"time"
 )
 
@@ -28,6 +29,11 @@ import (
 //TODO optimize this, do not print all processes; what we need is the process belongs to a specific user and no tty attached
 var ps = func() ([]byte, error) {
 	return exec.Command("ps", "-e", "-o", "pid,lstart").CombinedOutput()
+}
+
+func prepareProcess(command *exec.Cmd) {
+	// set pgid to new pid, so that the process can survive when upstart/systemd kill the original process group
+	command.SysProcAttr = &syscall.SysProcAttr{Setpgid: true}
 }
 
 //given the pid and the unix process startTime format string, return whether the process is still alive
