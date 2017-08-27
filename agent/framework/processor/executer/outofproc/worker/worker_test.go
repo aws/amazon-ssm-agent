@@ -9,16 +9,15 @@ import (
 
 func TestParseArgs(t *testing.T) {
 	input := []string{"ssm-document-worker", "documentID"}
-	name, channelName, err := proc.ParseArgv(input)
+	channelName, err := proc.ParseArgv(input)
 	assert.NoError(t, err)
-	assert.Equal(t, "ssm-document-worker", name)
 	assert.Equal(t, "documentID", channelName)
 }
 
 func TestWorkerInitializeLightWeight(t *testing.T) {
-	ctxLight, name, err := initialize([]string{"test", "documentID"})
+	ctxLight, name, err := initialize([]string{"test_binary", "documentID"})
 	assert.NoError(t, err)
 	assert.Equal(t, "documentID", name)
-	assert.Equal(t, ctxLight.CurrentContext(), []string{"[test]"})
+	assert.Equal(t, ctxLight.CurrentContext(), []string{defaultWorkerContextName})
 
 }

@@ -144,7 +144,7 @@ func RunPlugins(
 
 		switch operation {
 		case executeStep:
-			context.Log().Infof("%s is a supported plugin", pluginName)
+			context.Log().Infof("Running plugin %s", pluginName)
 			r = runPlugin(context, p, pluginName, configuration, cancelFlag)
 			pluginOutputs[pluginID].Code = r.Code
 			pluginOutputs[pluginID].Status = r.Status
