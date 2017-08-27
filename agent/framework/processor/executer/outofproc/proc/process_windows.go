@@ -19,6 +19,7 @@ package proc
 import (
 	"errors"
 	"fmt"
+	"os/exec"
 	"syscall"
 	"time"
 )
@@ -27,6 +28,10 @@ var (
 	//https://msdn.microsoft.com/en-us/library/windows/desktop/ms724290(v=vs.85).aspx
 	windowsBaseTime = time.Date(1601, 1, 1, 0, 0, 0, 0, time.UTC)
 )
+
+func prepareProcess(command *exec.Cmd) {
+	// nothing to do on windows
+}
 
 //given the pid and the high order filetime, look up the process
 func find_process(pid int, startTime time.Time) (bool, error) {

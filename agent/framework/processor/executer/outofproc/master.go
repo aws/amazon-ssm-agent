@@ -3,6 +3,8 @@ package outofproc
 import (
 	"time"
 
+	"fmt"
+
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
@@ -116,14 +118,14 @@ func (e *OutOfProcExecuter) messaging(log log.T, ipc channel.Channel, resChan ch
 			e.docState.DocumentInformation.DocumentStatus == contracts.ResultStatusNotStarted {
 			e.docState.DocumentInformation.DocumentStatus = contracts.ResultStatusFailed
 			log.Info("document failed half way, sending fail message...")
-			resChan <- e.generateUnexpectedFailResult()
+			resChan <- e.generateUnexpectedFailResult(fmt.Sprintf("out of process execution failed unexpectedly: %s", err))
 		}
 		//destroy the channel
 		ipc.Destroy()
 	}
 }
 
-func (e *OutOfProcExecuter) generateUnexpectedFailResult() contracts.DocumentResult {
+func (e *OutOfProcExecuter) generateUnexpectedFailResult(errMsg string) contracts.DocumentResult {
 	var docResult contracts.DocumentResult
 	docResult.MessageID = e.docState.DocumentInformation.MessageID
 	docResult.AssociationID = e.docState.DocumentInformation.AssociationID
@@ -133,7 +135,7 @@ func (e *OutOfProcExecuter) generateUnexpectedFailResult() contracts.DocumentRes
 	docResult.Status = contracts.ResultStatusFailed
 	docResult.PluginResults = make(map[string]*contracts.PluginResult)
 	res := e.docState.InstancePluginsInformation[0].Result
-	res.Output = "out of process execution failed unexpectedly"
+	res.Output = errMsg
 	res.Status = contracts.ResultStatusFailed
 	docResult.PluginResults[e.docState.InstancePluginsInformation[0].Id] = &res
 	return docResult
@@ -201,9 +203,9 @@ func (e *OutOfProcExecuter) WaitForProcess(stopTimer chan bool, process proc.OSP
 	//	}
 	//}()
 	if err := process.Wait(); err != nil {
-		log.Errorf("process: %v exits unsuccessfully, error message: %v", process.Pid(), err)
+		log.Errorf("process: %v exited unsuccessfully, error message: %v", process.Pid(), err)
 	} else {
-		log.Debugf("process: %v exits successfully, trying to stop messaging worker", process.Pid())
+		log.Debugf("process: %v exited successfully, trying to stop messaging worker", process.Pid())
 	}
 	//waitReturned = true
 	timeout(stopTimer, defaultZombieProcessTimeout, e.cancelFlag)
