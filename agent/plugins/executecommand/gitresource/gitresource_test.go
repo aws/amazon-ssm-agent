@@ -27,6 +27,7 @@ import (
 	"github.com/stretchr/testify/mock"
 
 	"fmt"
+	"net/http"
 	"path/filepath"
 	"testing"
 )
@@ -210,7 +211,8 @@ func TestGitResource_PopulateResourceInfoEntireDirFalseJSON(t *testing.T) {
 	}`
 
 	resourceInfo := remoteresource.ResourceInfo{}
-	gitresource, _ := NewGitResource(nil, locationInfo)
+	token := TokenMock{}
+	gitresource, _ := NewGitResource(logMock, locationInfo, token)
 
 	resourceInfo = gitresource.PopulateResourceInfo(logMock, "", false)
 
@@ -228,13 +230,15 @@ func TestGitResource_PopulateResourceInfoEntireDirTrue(t *testing.T) {
 		"getOptions": ""
 	}`
 
-	gitresource, _ := NewGitResource(nil, locationInfo)
+	token := TokenMock{}
+	gitresource, _ := NewGitResource(logMock, locationInfo, token)
 
 	resourceInfo := gitresource.PopulateResourceInfo(logMock, "", true)
 
 	assert.True(t, resourceInfo.EntireDir)
 	assert.Equal(t, remoteresource.Script, resourceInfo.TypeOfResource)
 	assert.NotEqual(t, "path/to/file.rb", resourceInfo.StarterFile)
+	assert.Equal(t, "file.rb", resourceInfo.StarterFile)
 	assert.Equal(t, resourceInfo.LocalDestinationPath, filepath.Join(appconfig.DownloadRoot, "path/to/file.rb"))
 
 }
@@ -247,7 +251,8 @@ func TestGitResource_PopulateResourceInfoEntireDirTrueInvalidStarter(t *testing.
 		"getOptions": ""
 	}`
 
-	gitresource, _ := NewGitResource(nil, locationInfo)
+	token := TokenMock{}
+	gitresource, _ := NewGitResource(logMock, locationInfo, token)
 
 	resourceInfo := gitresource.PopulateResourceInfo(logMock, "", true)
 
@@ -266,8 +271,9 @@ func TestGitResource_PopulateResourceInfoEntireDirFalseScript(t *testing.T) {
 		"path":"path/to/file.rb",
 		"getOptions": ""
 	}`
+	token := TokenMock{}
 
-	gitresource, _ := NewGitResource(nil, locationInfo)
+	gitresource, _ := NewGitResource(nil, locationInfo, token)
 	resourceInfo := gitresource.PopulateResourceInfo(logMock, "destination", false)
 
 	assert.False(t, resourceInfo.EntireDir)
@@ -284,7 +290,8 @@ func TestGitResource_ValidateLocationInfoOwner(t *testing.T) {
 		"getOptions": ""
 	}`
 
-	gitresource, _ := NewGitResource(nil, locationInfo)
+	token := TokenMock{}
+	gitresource, _ := NewGitResource(logMock, locationInfo, token)
 	_, err := gitresource.ValidateLocationInfo()
 
 	assert.Error(t, err)
@@ -297,7 +304,8 @@ func TestGitResource_ValidateLocationInfoRepo(t *testing.T) {
 		"path":"path/to/file.rb",
 		"getOptions": ""
 	}`
-	gitresource, _ := NewGitResource(nil, locationInfo)
+	token := TokenMock{}
+	gitresource, _ := NewGitResource(logMock, locationInfo, token)
 	_, err := gitresource.ValidateLocationInfo()
 
 	assert.Error(t, err)
@@ -311,7 +319,8 @@ func TestGitResource_ValidateLocationInfoPath(t *testing.T) {
 		"getOptions": ""
 	}`
 
-	gitresource, _ := NewGitResource(nil, locationInfo)
+	token := TokenMock{}
+	gitresource, _ := NewGitResource(logMock, locationInfo, token)
 	_, err := gitresource.ValidateLocationInfo()
 
 	assert.Error(t, err)
@@ -326,8 +335,8 @@ func TestGitResource_ValidateLocationInfo(t *testing.T) {
 		"path":"path/to/file.rb",
 		"getOptions": ""
 	}`
-
-	gitresource, _ := NewGitResource(nil, locationInfo)
+	token := TokenMock{}
+	gitresource, _ := NewGitResource(logMock, locationInfo, token)
 	_, err := gitresource.ValidateLocationInfo()
 
 	assert.NoError(t, err)
@@ -335,8 +344,38 @@ func TestGitResource_ValidateLocationInfo(t *testing.T) {
 
 func TestNewGitResource_parseLocationInfoFail(t *testing.T) {
 
-	_, err := NewGitResource(nil, "")
+	token := TokenMock{}
+	_, err := NewGitResource(nil, "", token)
 
 	assert.Error(t, err)
-	assert.Equal(t, "Location Info could not be unmarshalled for location type Git. Please check JSON format of locationInfo", err.Error())
+	assert.Contains(t, err.Error(), "Location Info could not be unmarshalled for location type Git. Please check JSON format of locationInfo")
+}
+
+func TestNewGitResource_GithubTokenInfo(t *testing.T) {
+	locationInfo := `{
+		"owner": "owner",
+		"repository": "repository",
+		"path" : "path",
+		"tokenInfo" : "ssm:token"
+	}`
+
+	token := TokenMock{}
+	httpclient := http.Client{}
+	token.On("GetOAuthClient", logMock, "ssm:token").Return(&httpclient, nil)
+
+	gitresource, err := NewGitResource(logMock, locationInfo, token)
+	assert.NoError(t, err)
+	assert.Equal(t, "path", gitresource.Info.Path)
+	assert.Equal(t, "repository", gitresource.Info.Repository)
+	assert.Equal(t, "owner", gitresource.Info.Owner)
+	assert.Equal(t, "ssm:token", gitresource.Info.TokenInfo)
+}
+
+type TokenMock struct {
+	mock.Mock
+}
+
+func (m TokenMock) GetOAuthClient(log log.T, tokenInfo string) (*http.Client, error) {
+	args := m.Called(log, tokenInfo)
+	return args.Get(0).(*http.Client), args.Error(1)
 }

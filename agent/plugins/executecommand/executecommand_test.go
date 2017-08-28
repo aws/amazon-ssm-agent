@@ -47,7 +47,7 @@ func TestNewRemoteResource_InvalidLocationType(t *testing.T) {
 
 	assert.Nil(t, remoteresource)
 	assert.Error(t, err)
-	assert.Equal(t, "Invalid Location type.", err.Error())
+	assert.Contains(t, err.Error(), "Invalid Location type")
 
 }
 
@@ -383,6 +383,8 @@ func TestPlugin_ExecuteScript(t *testing.T) {
 	execMock.On("ExecuteScript", contextMock.Log(), resourceInfo.LocalDestinationPath, args, 3600, &pluginResult).Return()
 	filesysmock.On("MakeDirs", mock.Anything).Return(nil)
 	filesysmock.On("WriteFile", mock.Anything, mock.Anything).Return(nil).Twice()
+	filesysmock.On("Walk", mock.Anything, mock.AnythingOfType("filepath.WalkFunc")).Return(nil)
+
 	mockplugin.On("UploadOutputToS3Bucket", contextMock.Log(), conf.PluginID, conf.OrchestrationDirectory,
 		conf.OutputS3BucketName, conf.OutputS3KeyPrefix, false, conf.OrchestrationDirectory,
 		pluginResult.Stdout, pluginResult.Stderr).Return([]string{})
@@ -422,6 +424,7 @@ func TestPlugin_ExecuteDocument(t *testing.T) {
 
 	filesysmock.On("MakeDirs", mock.Anything).Return(nil)
 	filesysmock.On("WriteFile", mock.Anything, mock.Anything).Return(nil).Twice()
+	filesysmock.On("Walk", mock.Anything, mock.AnythingOfType("filepath.WalkFunc")).Return(nil)
 
 	mockplugin.On("UploadOutputToS3Bucket", contextMock.Log(), conf.PluginID, conf.OrchestrationDirectory,
 		conf.OutputS3BucketName, conf.OutputS3KeyPrefix, false, conf.OrchestrationDirectory,

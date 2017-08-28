@@ -20,8 +20,11 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/log"
 
 	"fmt"
+	"os"
 	"path/filepath"
 )
+
+var SetPermission = chmod
 
 // FileSystem implements dependency on filesystem and os utility functions
 type FileSystem interface {
@@ -30,6 +33,9 @@ type FileSystem interface {
 	ReadFile(filename string) (string, error)
 	MoveAndRenameFile(sourcePath, sourceName, destPath, destName string) (result bool, err error)
 	DeleteFile(filename string) (err error)
+	DeleteDirectory(filename string) (err error)
+	Exists(filename string) bool
+	Walk(root string, walkFn filepath.WalkFunc) error
 }
 
 type FileSystemImpl struct{}
@@ -49,6 +55,11 @@ func (f FileSystemImpl) DeleteFile(filename string) (err error) {
 	return fileutil.DeleteFile(filename)
 }
 
+// DeleteDirectory deletes the file
+func (f FileSystemImpl) DeleteDirectory(filename string) (err error) {
+	return fileutil.DeleteDirectory(filename)
+}
+
 // WriteFile writes the content in the file path provided
 func (f FileSystemImpl) WriteFile(filename string, content string) error {
 	return fileutil.WriteAllText(filename, content)
@@ -57,6 +68,14 @@ func (f FileSystemImpl) WriteFile(filename string, content string) error {
 // ReadFile reads the contents of file in path provided
 func (f FileSystemImpl) ReadFile(filename string) (string, error) {
 	return fileutil.ReadAllText(filename)
+}
+
+func (f FileSystemImpl) Walk(root string, walkFn filepath.WalkFunc) error {
+	return filepath.Walk(root, walkFn)
+}
+
+func (f FileSystemImpl) Exists(root string) bool {
+	return fileutil.Exists(root)
 }
 
 // SaveFileContent is a method that returns the content in a file and saves it on disk
@@ -109,4 +128,8 @@ func RenameFile(log log.T, filesys FileSystem, fullSourceName, destName string) 
 		return err
 	}
 	return nil
+}
+
+func chmod(name string, mode os.FileMode) error {
+	return os.Chmod(name, mode)
 }

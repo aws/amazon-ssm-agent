@@ -25,18 +25,19 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/platform"
+	"github.com/aws/amazon-ssm-agent/agent/plugins/executecommand/filemanager"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/executecommand/remoteresource"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/pluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/task"
-	"github.com/go-yaml/yaml"
 
 	"encoding/json"
 	"errors"
 	"fmt"
 	"io/ioutil"
-	"os"
 	"path"
 	"path/filepath"
+
+	"github.com/go-yaml/yaml"
 )
 
 const (
@@ -152,7 +153,7 @@ func (exec ExecCommandImpl) ExecuteScript(log log.T, fileName string, args []str
 	commandName, shellArgs := populateCommand(fileName)
 	cancelFlag := task.NewChanneledCancelFlag()
 	log.Debug("Local destination path - ", fileName)
-	if err := os.Chmod(fileName, appconfig.ReadWriteExecuteAccess); err != nil {
+	if err := filemanager.SetPermission(fileName, appconfig.ReadWriteExecuteAccess); err != nil {
 		out.MarkAsFailed(log, fmt.Errorf("Failed to execute script - %v. Error - %v", path.Base(fileName), err))
 	}
 	commandArgs := appendArgs(shellArgs, args, fileName)
@@ -162,14 +163,13 @@ func (exec ExecCommandImpl) ExecuteScript(log log.T, fileName string, args []str
 
 	// Set output status
 	out.ExitCode = exitCode
-	out.Status = pluginutil.GetStatus(out.ExitCode, cancelFlag)
-	log.Debug("out.Status - ", out.Status)
+	status := pluginutil.GetStatus(out.ExitCode, cancelFlag)
 
 	if len(errs) > 0 {
 		for _, err := range errs {
-			if out.Status != contracts.ResultStatusCancelled &&
-				out.Status != contracts.ResultStatusTimedOut &&
-				out.Status != contracts.ResultStatusSuccessAndReboot {
+			if status != contracts.ResultStatusCancelled &&
+				status != contracts.ResultStatusTimedOut &&
+				status != contracts.ResultStatusSuccessAndReboot {
 				out.MarkAsFailed(log, fmt.Errorf("failed to run commands: %v", err))
 			}
 		}
@@ -183,7 +183,13 @@ func (exec ExecCommandImpl) ExecuteScript(log log.T, fileName string, args []str
 		log.Error(err)
 	} else {
 		out.AppendError(log, string(bytesErr))
+		if string(bytesErr) != "" {
+			out.MarkAsFailed(log, errors.New("Error encountered while running script"))
+		}
 	}
+
+	log.Debug("Status - ", status)
+	out.Status = contracts.MergeResultStatus(out.Status, status)
 	return
 }
 

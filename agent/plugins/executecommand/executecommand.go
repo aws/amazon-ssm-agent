@@ -27,6 +27,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/plugins/executecommand/executor"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/executecommand/filemanager"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/executecommand/gitresource"
+	"github.com/aws/amazon-ssm-agent/agent/plugins/executecommand/gitresource/privategithub"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/executecommand/remoteresource"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/executecommand/s3resource"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/executecommand/ssmdocresource"
@@ -38,6 +39,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"os"
 	"path/filepath"
 	"strconv"
 	"time"
@@ -77,7 +79,8 @@ type ExecutePluginInput struct {
 	DocumentParameters string      `json:"documentParameters"`
 	ScriptArguments    []string    `json:"scriptArguments"`
 	ExecutionTimeout   interface{} `json:"executionTimeout"`
-	//TODO: Change the type of locationInfo and documentParameters to map[string]interface{} once Runcommand supports StringMaps
+	// TODO: 08/25/2017 meloniam@ Change the type of locationInfo and documentParameters to map[string]interface{}
+	// TODO: https://amazon.awsapps.com/workdocs/index.html#/document/7d56a42ea5b040a7c33548d77dc98040f0fb380bbbfb2fd580c861225e2ee1c7
 }
 
 // Plugin is the type for the aws:executeCommand plugin.
@@ -110,12 +113,12 @@ func NewExecutePluginManager() executeImpl {
 
 }
 
-//TODO: Check if this can be replaced with private members
 type executePluginManager interface {
 	GetResource(log log.T, input *ExecutePluginInput, config contracts.Configuration, rem remoteresource.RemoteResource) (resourceInfo remoteresource.ResourceInfo, err error)
 	PrepareDocumentForExecution(log log.T, remoteResourceInfo remoteresource.ResourceInfo, config contracts.Configuration, parameters string) (pluginsInfo []model.PluginState, err error)
 	ExecuteDocument(context context.T, pluginsInfo []model.PluginState, bookkeepingFile string, output *contracts.PluginOutput)
 	ExecuteScript(log log.T, fileName string, arguments []string, executionTimeout int, output *contracts.PluginOutput)
+	CleanUpDownloadedContent(log log.T, orchestrationDir string, filesysdep filemanager.FileSystem) error
 }
 
 // Execute runs multiple sets of commands and returns their outputs.
@@ -147,11 +150,12 @@ func (p *Plugin) execute(context context.T, config contracts.Configuration, canc
 
 		p.runExecuteCommand(context, input, config, &output, filesysdep)
 	}
-	//TODO: meloniam@ Clean up the downloaded artifacts.
+	if err := p.pluginManager.CleanUpDownloadedContent(log, config.OrchestrationDirectory, filesysdep); err != nil {
+		output.AppendErrorf(log, "Error while cleaning up the downloaded resources: %v", err.Error())
+	}
 
 	useTemp := false
 	outFile := filepath.Join(config.OrchestrationDirectory, p.StdoutFileName)
-	// create orchestration dir if needed
 
 	if err := filesysdep.WriteFile(outFile, output.Stdout); err != nil {
 		log.Debugf("Error writing to %v", outFile)
@@ -192,7 +196,8 @@ func (p *Plugin) runExecuteCommand(context context.T, input *ExecutePluginInput,
 	log := context.Log()
 
 	if err := filesysdep.MakeDirs(config.OrchestrationDirectory); err != nil {
-		output.AppendError(log, "Failed to create orchestrationDir directory for log files")
+		output.MarkAsFailed(log, fmt.Errorf("Failed to create orchestrationDir directory for log files - %v", err.Error()))
+		return
 	}
 
 	//Run aws:executeCommand plugin
@@ -239,7 +244,6 @@ func (p *Plugin) runExecuteCommand(context context.T, input *ExecutePluginInput,
 		return
 	}
 
-	//TODO: What happens on reboot?
 	switch resourceInfo.TypeOfResource {
 	case remoteresource.Document:
 		if pluginsInfo, err = p.pluginManager.PrepareDocumentForExecution(log, resourceInfo, config, input.DocumentParameters); err != nil {
@@ -256,7 +260,7 @@ func (p *Plugin) runExecuteCommand(context context.T, input *ExecutePluginInput,
 	case remoteresource.Script:
 		p.pluginManager.ExecuteScript(log, resourceInfo.LocalDestinationPath, input.ScriptArguments, executionTimeout, output)
 	default:
-		output.MarkAsFailed(log, fmt.Errorf("Type of resource not supported"))
+		output.MarkAsFailed(log, fmt.Errorf("Type of resource not supported - %v", resourceInfo.TypeOfResource))
 	}
 	return
 }
@@ -294,8 +298,9 @@ func (m executeImpl) PrepareDocumentForExecution(log log.T, remoteResourceInfo r
 	if params != "" {
 
 		log.Info("Params to be unmarshaled - ", params)
-		//TODO: meloniam@ Remove the Unmarshalling once RC supports StringMaps
-		//TODO: RunTimeParams will be of type map[string]interface{} from the beginning
+		// TODO: meloniam@ 08/24/2017 - https://amazon.awsapps.com/workdocs/index.html#/document/7d56a42ea5b040a7c33548d77dc98040f0fb380bbbfb2fd580c861225e2ee1c7
+		// TODO: Remove the Unmarshalling once RC supports StringMap
+		// TODO: documentParameters will be of type map[string]interface{} from the beginning
 		if remoteResourceInfo.ResourceExtension == remoteresource.JSONExtension {
 			if json.Unmarshal([]byte(params), &parameters); err != nil {
 				log.Error("Unmarshalling JSON remote resource parameters failed. Please make sure the document is in the right format")
@@ -342,6 +347,23 @@ func (m executeImpl) ExecuteScript(log log.T, fileName string,
 	return
 }
 
+// CleanUpDownloadedContent deletes the directories that contain the contents downloaded for executing the command
+func (m executeImpl) CleanUpDownloadedContent(log log.T, orchestrationDir string, filesysdep filemanager.FileSystem) error {
+
+	var artifactsDirWalk = func(path string, info os.FileInfo, e error) (err error) {
+		if filesysdep.Exists(path) && (filepath.Base(path) == artifactsDir) {
+			filesysdep.DeleteDirectory(path)
+		}
+		return err
+	}
+
+	err := filesysdep.Walk(orchestrationDir, artifactsDirWalk)
+	if err != nil {
+		log.Errorf("Error deleting the downloaded artifacts - %v", err.Error())
+	}
+	return err
+}
+
 // Name returns the plugin name
 func Name() string {
 	return appconfig.PluginExecuteCommand
@@ -382,13 +404,14 @@ func validateInput(input *ExecutePluginInput) (valid bool, err error) {
 // validateParameters ensures that documents do not have scriptArguments
 // and scripts do not have documentParameters
 func validateParameters(input *ExecutePluginInput, resourceInfo remoteresource.ResourceInfo) (valid bool, err error) {
-	if len(input.ScriptArguments) != 0 {
-
+	if (len(input.ScriptArguments) == 1 && input.ScriptArguments[0] != "") || len(input.ScriptArguments) > 1 {
 		if remoteresource.Document == resourceInfo.TypeOfResource {
+
 			return false, errors.New("Document type of resource cannot specify script type parameters")
 		}
 	}
-	//TODO change this when StringMap is available
+	// TODO: meloniam@ 08/24/2017 Validation of documentParameters will be done as StringMap type
+	// TODO: https://amazon.awsapps.com/workdocs/index.html#/document/7d56a42ea5b040a7c33548d77dc98040f0fb380bbbfb2fd580c861225e2ee1c7
 	if resourceInfo.TypeOfResource == remoteresource.Script && input.DocumentParameters != "" {
 		return false, errors.New("Script type of resource cannot have document parameters specified")
 	}
@@ -399,15 +422,15 @@ func validateParameters(input *ExecutePluginInput, resourceInfo remoteresource.R
 func newRemoteResource(log log.T, locationType string, locationInfo string) (resource remoteresource.RemoteResource, err error) {
 	switch locationType {
 	case Github:
-		// TODO: meloniam@ Replace nil with auth information once work is done
-		// TODO: meloniam@ Replace string type to map[string]inteface{} type once Runcommand supports string maps
-
-		return gitresource.NewGitResource(nil, locationInfo)
+		// TODO: meloniam@ 08/24/2017 Replace string type to map[string]inteface{} type once Runcommand supports string maps
+		// TODO: https://amazon.awsapps.com/workdocs/index.html#/document/7d56a42ea5b040a7c33548d77dc98040f0fb380bbbfb2fd580c861225e2ee1c7
+		token := privategithub.NewTokenInfoImpl()
+		return gitresource.NewGitResource(log, locationInfo, token)
 	case S3:
 		return s3resource.NewS3Resource(log, locationInfo)
 	case SSMDocument:
 		return ssmdocresource.NewSSMDocResource(locationInfo)
 	default:
-		return nil, fmt.Errorf("Invalid Location type.")
+		return nil, fmt.Errorf("Invalid Location type - %v", locationType)
 	}
 }
