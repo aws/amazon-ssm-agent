@@ -23,6 +23,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer"
 	exec_mock "github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/mock"
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/plugins/executecommand/filemanager"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/executecommand/remoteresource"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 	"github.com/stretchr/testify/assert"
@@ -81,11 +82,15 @@ func TestExecCommandImpl_ExecuteDocumentSuccess(t *testing.T) {
 	doc.ExecuteDocument(contextMock, pluginInput, documentId, "time", &output)
 
 	assert.Equal(t, contracts.ResultStatusSuccess, output.Status)
+	assert.Equal(t, 0, output.ExitCode)
 }
 
 func TestExecCommandImpl_ExecuteScript(t *testing.T) {
 	log := log.NewMockLog()
-	output := contracts.PluginOutput{}
+	output := contracts.PluginOutput{
+		Status: contracts.ResultStatusSuccess,
+	}
+	filemanager.SetPermission = fakeChmod
 	shell_exec := shellExecMock{}
 	args := []string{}
 	stdout := bytes.NewBuffer([]byte("stdout"))
@@ -105,8 +110,10 @@ func TestExecCommandImpl_ExecuteScript(t *testing.T) {
 	}
 	doc.ExecuteScript(log, resourceInfo.LocalDestinationPath, args, 2500, &output)
 
+	assert.Equal(t, 0, output.ExitCode)
 	assert.Equal(t, contracts.ResultStatusSuccess, output.Status)
 
+	shell_exec.AssertExpectations(t)
 }
 
 type instanceInfoStub struct{}
@@ -166,4 +173,8 @@ func (s shellExecMock) StartExe(log log.T,
 	commandArgs []string) (*os.Process, int, []error) {
 	args := s.Called(log, workingDir, stdoutFilePath, stderrFilePath, cancelFlag, commandName, commandArgs)
 	return args.Get(0).(*os.Process), args.Int(1), args.Get(2).([]error)
+}
+
+func fakeChmod(name string, mode os.FileMode) error {
+	return nil
 }

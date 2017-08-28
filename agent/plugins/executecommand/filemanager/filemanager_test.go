@@ -16,12 +16,14 @@
 package filemanager
 
 import (
+	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	filemock "github.com/aws/amazon-ssm-agent/agent/plugins/executecommand/filemanager/mock"
 	"github.com/stretchr/testify/assert"
 
 	"errors"
 	"fmt"
+	"os"
 	"path/filepath"
 	"testing"
 )
@@ -121,4 +123,15 @@ func TestRenameFile_Error(t *testing.T) {
 	assert.Equal(t, "There was an error", err.Error())
 	fileMock.AssertExpectations(t)
 
+}
+
+func Test_SetPermission(t *testing.T) {
+	SetPermission = fakeChmod
+
+	err := SetPermission("fakeName", appconfig.ReadWriteAccess)
+	assert.NoError(t, err)
+}
+
+func fakeChmod(name string, mode os.FileMode) error {
+	return nil
 }
