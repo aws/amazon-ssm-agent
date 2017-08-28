@@ -46,16 +46,16 @@ func (param SecureParamImpl) GetSecureParameter(log log.T, ssmParams string) (ou
 	if err != nil {
 		return out, fmt.Errorf("%v", parameterstore.ErrorMsg)
 	}
-	var paramNames string
+	var paramName string
 	temp := validParam.FindString(ssmParams)
 	if temp == "" {
 		return out, errors.New("Encountered errors while parsing secure parmeter. " +
 			"Parameter format is incorrect")
 	}
 
-	paramNames = temp[1:]
+	paramName = temp[1:]
 
-	if result, err = CallSecureParameters(log, paramNames); err != nil {
+	if result, err = CallSecureParameters(log, paramName); err != nil {
 		return out, err
 	}
 
@@ -72,13 +72,12 @@ func callSecureParameterService(log log.T, paramName string) (*parameterstore.Pa
 	if err != nil {
 		return nil, err
 	}
-
-	var response parameterstore.Parameter
+	var response parameterstore.GetParameterResponse
 	err = jsonutil.Remarshal(result, &response)
 	if err != nil {
 		log.Debug(err)
 		return nil, fmt.Errorf("%v", parameterstore.ErrorMsg)
 	}
 
-	return &response, nil
+	return &response.Response, nil
 }
