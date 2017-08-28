@@ -527,9 +527,8 @@ func (r *Processor) lisenToResponses() {
 
 			} else if res.Status == contracts.ResultStatusSuccess ||
 				res.Status == contracts.AssociationStatusTimedOut ||
-				res.Status == contracts.ResultStatusCancelled ||
 				res.Status == contracts.ResultStatusSkipped {
-				// Association should only update status when it's Failed, Success, TimedOut, Cancelled or Skipped as Final status
+				// Association should only update status when it's Failed, Success, TimedOut, or Skipped as Final status
 				r.associationExecutionReport(
 					log,
 					res.AssociationID,
