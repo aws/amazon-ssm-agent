@@ -20,6 +20,11 @@ type GetParametersResponse struct {
 	InvalidParameters []string
 }
 
+// GetParameterResponse represents the response from GetParameter API
+type GetParameterResponse struct {
+	Response Parameter `json:"Parameter"`
+}
+
 // Parameter contains info about the parameter
 type Parameter struct {
 	Name    string
