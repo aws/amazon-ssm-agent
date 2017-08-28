@@ -23,6 +23,8 @@ import (
 	"fmt"
 	"net/http"
 	"strings"
+
+	"errors"
 )
 
 const (
@@ -66,13 +68,14 @@ func (git *GitClient) GetRepositoryContents(log log.T, owner, repo, path string,
 
 	defer resp.Body.Close()
 	log.Info("Status code - ", resp.StatusCode)
-	// TODO: meloniam@ Check github documentation and add checks for other status codes.
 	if err != nil {
-
+		if resp.StatusCode == http.StatusUnauthorized {
+			log.Error("Unauthorized access attempted. Please specify tokenInfo with correct access information ")
+		}
 		log.Errorf("Error retreiving information from github repository. Error - %v and response - %v", err, resp)
 		return nil, nil, err
 	} else if resp.StatusCode == http.StatusForbidden && resp.Rate.Limit == 0 {
-		return nil, nil, fmt.Errorf("Rate limit exceeded")
+		return nil, nil, errors.New("Rate limit exceeded")
 
 	} else if resp.StatusCode == http.StatusNotFound {
 		return nil, nil, fmt.Errorf("Response is - %v", resp.Status)
@@ -95,21 +98,20 @@ func (git *GitClient) ParseGetOptions(log log.T, getOptions string) (*github.Rep
 	// Ideal input pattern will either be "branch: <name of branch>" or "commitID: <SHA of commit>"
 	// Only one among the above patterns is valid.
 	log.Debug("Splitting getOptions to get the actual option - ", getOptions)
-	// TODO: meloniam@ Will a regex be more reliable here?
 	branchOrSHA := strings.Split(getOptions, ":")
 	if len(branchOrSHA) == 2 {
 		if strings.Compare(branchOrSHA[0], "branch") != 0 && strings.Compare(branchOrSHA[0], "commitID") != 0 {
-			return nil, fmt.Errorf("Type of option is unknown. Please use either 'branch' or 'commitID'.")
+			return nil, errors.New("Type of option is unknown. Please use either 'branch' or 'commitID'.")
 		}
 		//Error if extra option has been specified but is empty
 		// Length must be 2 (key and value)
 		if branchOrSHA[1] == "" {
-			return nil, fmt.Errorf("Option for retreiving git content is empty")
+			return nil, errors.New("Option for retreiving git content is empty")
 		}
 	} else if len(branchOrSHA) > 2 {
-		return nil, fmt.Errorf("Only specify one required option")
+		return nil, errors.New("Only specify one required option")
 	} else {
-		return nil, fmt.Errorf("getOptions is not specified in the right format")
+		return nil, errors.New("getOptions is not specified in the right format")
 	}
 	log.Info("GetOptions value - ", branchOrSHA[1])
 
