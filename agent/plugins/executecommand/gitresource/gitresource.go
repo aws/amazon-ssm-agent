@@ -22,6 +22,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/executecommand/filemanager"
+	"github.com/aws/amazon-ssm-agent/agent/plugins/executecommand/gitresource/privategithub"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/executecommand/remoteresource"
 
 	"errors"
@@ -47,13 +48,22 @@ type GitInfo struct {
 }
 
 // NewGitResource is a constructor of type GitResource
-func NewGitResource(http *http.Client, info string) (git *GitResource, err error) {
+func NewGitResource(log log.T, info string, token privategithub.PrivateGithubAccess) (git *GitResource, err error) {
 	var gitInfo GitInfo
 	if gitInfo, err = parseLocationInfo(info); err != nil {
 		return nil, err
 	}
+	// Get the access token from Parameter store - GetAccessToken
+	// Create https client - https://github.com/google/go-github#authentication
+	var httpClient *http.Client
+
+	if gitInfo.TokenInfo != "" {
+		if httpClient, err = token.GetOAuthClient(log, gitInfo.TokenInfo); err != nil {
+			return nil, err
+		}
+	}
 	return &GitResource{
-		client: githubclient.NewClient(http),
+		client: githubclient.NewClient(httpClient),
 		Info:   gitInfo,
 	}, nil
 }
@@ -62,7 +72,7 @@ func NewGitResource(http *http.Client, info string) (git *GitResource, err error
 func parseLocationInfo(locationInfo string) (gitInfo GitInfo, err error) {
 
 	if err = jsonutil.Unmarshal(locationInfo, &gitInfo); err != nil {
-		return gitInfo, fmt.Errorf("Location Info could not be unmarshalled for location type Git. Please check JSON format of locationInfo")
+		return gitInfo, fmt.Errorf("Location Info could not be unmarshalled for location type Git. Please check JSON format of locationInfo - %v", err.Error())
 	}
 
 	return gitInfo, nil

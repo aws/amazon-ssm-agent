@@ -19,6 +19,8 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/go-github/github"
 	"github.com/stretchr/testify/mock"
+
+	"net/http"
 )
 
 type ClientMock struct {
@@ -38,4 +40,13 @@ func (git_mock *ClientMock) ParseGetOptions(log log.T, getOptions string) (*gith
 func (git_mock *ClientMock) IsFileContentType(content *github.RepositoryContent) bool {
 	args := git_mock.Called(content)
 	return args.Bool(0)
+}
+
+type OAuthClientMock struct {
+	mock.Mock
+}
+
+func (git_mock OAuthClientMock) GetGithubOauthClient(token string) *http.Client {
+	args := git_mock.Called(token)
+	return args.Get(0).(*http.Client)
 }
