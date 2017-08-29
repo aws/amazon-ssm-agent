@@ -91,6 +91,11 @@ func replaceSSMParameters(log log.T, input interface{}, ssmParameters map[string
 		return out, nil
 
 	case []interface{}:
+		// return the original input if it is an empty array.
+		if len(input) == 0 {
+			return input, nil
+		}
+
 		switch input[0].(type) {
 		case string:
 			out, err := parseStringList(log, input, ssmParameters)
