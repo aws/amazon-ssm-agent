@@ -70,6 +70,7 @@ type EngineProcessor struct {
 }
 
 //TODO worker pool should be triggered in the Start() function
+//supported document types indicate the domain of the documentes the Processor with run upon. There'll be race-conditions if there're multiple Processors in a certain domain.
 func NewEngineProcessor(ctx context.T, commandWorkerLimit int, cancelWorkerLimit int, supportedDocs []model.DocumentType) *EngineProcessor {
 	log := ctx.Log()
 	// sendCommand and cancelCommand will be processed by separate worker pools
@@ -112,7 +113,22 @@ func (p *EngineProcessor) Start() (resChan chan contracts.DocumentResult, err er
 	return
 }
 
+//Submit() is the public interface for sending run document request to processor
 func (p *EngineProcessor) Submit(docState model.DocumentState) {
+	log := p.context.Log()
+	//queue up the pending document
+	docmanager.PersistData(log, docState.DocumentInformation.DocumentID, docState.DocumentInformation.InstanceID, appconfig.DefaultLocationOfPending, docState)
+	err := p.submit(&docState)
+	if err != nil {
+		log.Error("Document Submission failed", err)
+		//move the fail-to-submit document to corrupt folder
+		docmanager.MoveDocumentState(log, docState.DocumentInformation.DocumentID, docState.DocumentInformation.InstanceID, appconfig.DefaultLocationOfPending, appconfig.DefaultLocationOfCorrupt)
+		return
+	}
+	return
+}
+
+func (p *EngineProcessor) submit(docState *model.DocumentState) error {
 	log := p.context.Log()
 	//TODO this is a hack, in future jobID should be managed by Processing engine itself, instead of inferring from job's internal field
 	var jobID string
@@ -121,23 +137,15 @@ func (p *EngineProcessor) Submit(docState model.DocumentState) {
 	} else {
 		jobID = docState.DocumentInformation.MessageID
 	}
-	//queue up the pending document
-	docmanager.PersistData(log, docState.DocumentInformation.DocumentID, docState.DocumentInformation.InstanceID, appconfig.DefaultLocationOfPending, docState)
-	err := p.sendCommandPool.Submit(log, jobID, func(cancelFlag task.CancelFlag) {
+	return p.sendCommandPool.Submit(log, jobID, func(cancelFlag task.CancelFlag) {
 		processCommand(
 			p.context,
 			p.executerCreator,
 			cancelFlag,
 			p.resChan,
-			&docState)
+			docState)
 	})
-	if err != nil {
-		log.Error("Document Submission failed", err)
-		//move the fail-to-submit document to corrupt folder
-		docmanager.MoveDocumentState(log, docState.DocumentInformation.DocumentID, docState.DocumentInformation.InstanceID, appconfig.DefaultLocationOfPending, appconfig.DefaultLocationOfCorrupt)
-		return
-	}
-	return
+
 }
 
 func (p *EngineProcessor) Cancel(docState model.DocumentState) {
@@ -226,7 +234,7 @@ func (p *EngineProcessor) processPendingDocuments(instanceID string) {
 	}
 }
 
-// ProcessInProgressDocuments processes InProgress documents that have been persisted in current folder
+// ProcessInProgressDocuments processes InProgress documents that have already dequeued and entered job pool
 func (p *EngineProcessor) processInProgressDocuments(instanceID string) {
 	log := p.context.Log()
 	config := p.context.AppConfig()
@@ -267,7 +275,10 @@ func (p *EngineProcessor) processInProgressDocuments(instanceID string) {
 		if p.isSupportedDocumentType(docState.DocumentType) {
 			log.Debugf("processor processing in-progress document %v", docState.DocumentInformation.DocumentID)
 			//Submit the work to Job Pool so that we don't block for processing of new messages
-			p.Submit(docState)
+			if err := p.submit(&docState); err != nil {
+				log.Errorf("failed to submit in progress document %v : %v", docState.DocumentInformation.DocumentID, err)
+				docmanager.MoveDocumentState(log, f.Name(), instanceID, appconfig.DefaultLocationOfCurrent, appconfig.DefaultLocationOfCorrupt)
+			}
 		}
 	}
 }

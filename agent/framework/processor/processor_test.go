@@ -86,7 +86,7 @@ func TestEngineProcessor_Stop(t *testing.T) {
 	cancelCommandPoolMock.AssertExpectations(t)
 }
 
-//TODO add Shut test
+//TODO add shutdown and reboot test once we encapsulate docmanager
 func TestProcessCommand(t *testing.T) {
 	ctx := context.NewMockDefault()
 	docState := model.DocumentState{}
