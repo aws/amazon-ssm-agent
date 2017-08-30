@@ -19,7 +19,7 @@ import (
 
 const (
 	defaultCommandTimeoutMax = 172800 * time.Second
-	defaultWorkerContextName = "ssm-document-worker"
+	defaultWorkerContextName = "[ssm-document-worker]"
 )
 
 var pluginRunner = func(
@@ -47,7 +47,7 @@ func initialize(args []string) (context.T, string, error) {
 		logger.Errorf("failed to parse argv: %v", err)
 	}
 	//use process as context name
-	return context.Default(logger, config).With(defaultWorkerContextName), channelName, err
+	return context.Default(logger, config).With(defaultWorkerContextName).With("[" + channelName + "]"), channelName, err
 }
 
 func main() {
