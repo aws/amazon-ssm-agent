@@ -18,6 +18,6 @@ func TestWorkerInitializeLightWeight(t *testing.T) {
 	ctxLight, name, err := initialize([]string{"test_binary", "documentID"})
 	assert.NoError(t, err)
 	assert.Equal(t, "documentID", name)
-	assert.Equal(t, ctxLight.CurrentContext(), []string{defaultWorkerContextName})
+	assert.Equal(t, ctxLight.CurrentContext(), []string{defaultWorkerContextName, "[" + name + "]"})
 
 }
