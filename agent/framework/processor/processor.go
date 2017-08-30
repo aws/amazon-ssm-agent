@@ -311,8 +311,7 @@ func processCommand(context context.T, executerCreator ExecuterCreator, cancelFl
 		&docStore,
 	)
 	// Listen for reboot
-	isReboot := false
-	notDone := true
+	var final *contracts.DocumentResult
 	for res := range statusChan {
 		if res.LastPlugin == "" {
 			log.Infof("sending document: %v complete response", documentID)
@@ -323,16 +322,15 @@ func processCommand(context context.T, executerCreator ExecuterCreator, cancelFl
 		handleCloudwatchPlugin(context, res.PluginResults, documentID)
 		//hand off the message to Service
 		resChan <- res
-		isReboot = res.Status == contracts.ResultStatusSuccessAndReboot
-		notDone = (res.Status == contracts.ResultStatusInProgress && res.PluginResults[res.LastPlugin].PluginName != appconfig.PluginNameAwsAgentUpdate) || res.Status == contracts.ResultStatusSuccessAndReboot
+		final = &res
 	}
-	//TODO since there's a bug in UpdatePlugin that returns InProgress even if the document is completed, we cannot use InProgress to judge here, we need to fix the bug by the time out-of-proc is done
+	//TODO add shutdown as API call, move cancelFlag out of task pool; cancelFlag to contracts, nobody else above runplugins needs to create cancelFlag.
 	// Shutdown/reboot detection
-	if notDone && isReboot {
+	if final.Status == contracts.ResultStatusSuccessAndReboot {
 		log.Infof("document %v requested reboot, need to resume", messageID)
 		rebooter.RequestPendingReboot(context.Log())
 		return
-	} else if notDone {
+	} else if final.LastPlugin != "" {
 		log.Infof("document %v still in progress, shutting down...", messageID)
 		return
 	}
