@@ -151,6 +151,16 @@ build-linux-386: checkstyle copy-src pre-build
 	GOOS=linux GOARCH=386 $(GO_BUILD) -ldflags "-s -w" -o $(BGO_SPACE)/bin/linux_386/ssm-cli -v \
         $(BGO_SPACE)/agent/cli-main/cli-main.go
 
+.PHONY: build-linux-arm
+build-linux-arm: checkstyle copy-src pre-build
+	@echo "Build for linux arm agent"
+	GOOS=linux GOARCH=arm $(GO_BUILD) -ldflags "-s -w" -o $(BGO_SPACE)/bin/linux_arm/amazon-ssm-agent -v \
+	$(BGO_SPACE)/agent/agent.go $(BGO_SPACE)/agent/agent_unix.go $(BGO_SPACE)/agent/agent_parser.go
+	GOOS=linux GOARCH=arm $(GO_BUILD) -ldflags "-s -w" -o $(BGO_SPACE)/bin/linux_arm/updater -v \
+	$(BGO_SPACE)/agent/update/updater/updater.go $(BGO_SPACE)/agent/update/updater/updater_unix.go
+	GOOS=linux GOARCH=arm $(GO_BUILD) -ldflags "-s -w" -o $(BGO_SPACE)/bin/linux_arm/ssm-cli -v \
+        $(BGO_SPACE)/agent/cli-main/cli-main.go
+
 .PHONY: build-darwin-386
 build-darwin-386: checkstyle copy-src pre-build
 	@echo "Rebuild for darwin agent"
@@ -233,6 +243,16 @@ prepack-linux-386:
 	$(COPY) $(BGO_SPACE)/bin/amazon-ssm-agent.json.template $(BGO_SPACE)/bin/prepacked/linux_386/amazon-ssm-agent.json.template
 	$(COPY) $(BGO_SPACE)/bin/seelog_unix.xml $(BGO_SPACE)/bin/prepacked/linux_386/seelog.xml
 	$(COPY) $(BGO_SPACE)/bin/LICENSE $(BGO_SPACE)/bin/prepacked/linux_386/LICENSE
+
+.PHONY: prepack-linux-arm
+prepack-linux-arm:
+	mkdir -p $(BGO_SPACE)/bin/prepacked/linux_arm
+	$(COPY) $(BGO_SPACE)/bin/linux_arm/amazon-ssm-agent $(BGO_SPACE)/bin/prepacked/linux_arm/amazon-ssm-agent
+	$(COPY) $(BGO_SPACE)/bin/linux_arm/updater $(BGO_SPACE)/bin/prepacked/linux_arm/updater
+	$(COPY) $(BGO_SPACE)/bin/linux_arm/ssm-cli $(BGO_SPACE)/bin/prepacked/linux_arm/ssm-cli
+	$(COPY) $(BGO_SPACE)/bin/amazon-ssm-agent.json.template $(BGO_SPACE)/bin/prepacked/linux_arm/amazon-ssm-agent.json.template
+	$(COPY) $(BGO_SPACE)/bin/seelog_unix.xml $(BGO_SPACE)/bin/prepacked/linux_arm/seelog.xml
+	$(COPY) $(BGO_SPACE)/bin/LICENSE $(BGO_SPACE)/bin/prepacked/linux_arm/LICENSE
 
 .PHONY: prepack-darwin-386
 prepack-darwin-386:
