@@ -46,7 +46,7 @@ import (
 )
 
 const (
-	Github      = "Github"      //Github represents the location type "Github" from where the resource can be downloaded
+	GitHub      = "GitHub"      //Github represents the location type "GitHub" from where the resource can be downloaded
 	S3          = "S3"          //S3 represents the location type "S3" from where the resource is being downloaded
 	SSMDocument = "SSMDocument" //SSMDocument represents the location type as SSM Document
 
@@ -391,7 +391,7 @@ func validateInput(input *ExecutePluginInput) (valid bool, err error) {
 		return false, errors.New("Location Type must be specified")
 	}
 	//ensure all entries are valid
-	if input.LocationType != Github && input.LocationType != S3 && input.LocationType != SSMDocument {
+	if input.LocationType != GitHub && input.LocationType != S3 && input.LocationType != SSMDocument {
 		return false, errors.New("Unsupported location type")
 	}
 	// ensure non-empty location info
@@ -421,7 +421,7 @@ func validateParameters(input *ExecutePluginInput, resourceInfo remoteresource.R
 // newRemoteResource switches between the location type and returns a struct of the location type that implements remoteresource
 func newRemoteResource(log log.T, locationType string, locationInfo string) (resource remoteresource.RemoteResource, err error) {
 	switch locationType {
-	case Github:
+	case GitHub:
 		// TODO: meloniam@ 08/24/2017 Replace string type to map[string]inteface{} type once Runcommand supports string maps
 		// TODO: https://amazon.awsapps.com/workdocs/index.html#/document/7d56a42ea5b040a7c33548d77dc98040f0fb380bbbfb2fd580c861225e2ee1c7
 		token := privategithub.NewTokenInfoImpl()

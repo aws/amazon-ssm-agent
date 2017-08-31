@@ -33,7 +33,7 @@ func TestTokenInfoImpl_GetOAuthClient(t *testing.T) {
 
 	tokenInfoInput := `{
 		"token-parameter-name": "ssm:dummysecureparam",
-		"oauth-access-type" : "Github"
+		"oauth-access-type" : "GitHub"
 	}`
 	oauthclientmock := gitmock.OAuthClientMock{}
 
@@ -65,7 +65,7 @@ func TestTokenInfoImpl_GetOAuthClientNoTokenParam(t *testing.T) {
 
 	tokenInfoInput := `{
 		"token-parameter": "ssm:dummysecureparam",
-		"oauth-access-type" : "Github"
+		"oauth-access-type" : "GitHub"
 	}`
 	oauthclientmock := gitmock.OAuthClientMock{}
 
@@ -97,7 +97,7 @@ func TestTokenInfoImpl_GetOAuthClientNoOauthAccess(t *testing.T) {
 
 	assert.Error(t, err)
 	assert.Nil(t, httpout)
-	assert.Contains(t, err.Error(), "Oath Access type must by specified to be 'Github'.")
+	assert.Contains(t, err.Error(), "Oath Access type must by specified to be 'GitHub'.")
 }
 
 func TestTokenInfoImpl_GetOAuthClientIncorrectOauthAccess(t *testing.T) {
@@ -117,14 +117,14 @@ func TestTokenInfoImpl_GetOAuthClientIncorrectOauthAccess(t *testing.T) {
 
 	assert.Error(t, err)
 	assert.Nil(t, httpout)
-	assert.Contains(t, err.Error(), "Oath Access type must by specified to be 'Github'.")
+	assert.Contains(t, err.Error(), "Oath Access type must by specified to be 'GitHub'.")
 }
 
 func TestTokenInfoImpl_ValidateTokenParameter(t *testing.T) {
 
 	tokenInfoInput := `{
 		"token-parameter-name": "dummysecureparam",
-		"oauth-access-type" : "Github"
+		"oauth-access-type" : "GitHub"
 	}`
 	oauthclientmock := gitmock.OAuthClientMock{}
 
@@ -145,7 +145,7 @@ func TestTokenInfoImpl_ValidateSecureParameter(t *testing.T) {
 
 	tokenInfoInput := `{
 		"token-parameter-name": "ssm:dummysecureparam",
-		"oauth-access-type" : "Github"
+		"oauth-access-type" : "GitHub"
 	}`
 	oauthclientmock := gitmock.OAuthClientMock{}
 
