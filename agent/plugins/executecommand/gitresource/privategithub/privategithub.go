@@ -99,8 +99,8 @@ func validateTokenInfoJson(tokenInfoJson TokenInfoParamVal) (valid bool, err err
 			"It is the name of the secure string parameter that contains the personal access token.")
 	}
 
-	if tokenInfoJson.OauthAccessType == "" || tokenInfoJson.OauthAccessType != "Github" {
-		return false, errors.New("Oath Access type must by specified to be 'Github'.")
+	if tokenInfoJson.OauthAccessType == "" || tokenInfoJson.OauthAccessType != "GitHub" {
+		return false, errors.New("Oath Access type must by specified to be 'GitHub'.")
 	}
 	return true, nil
 }

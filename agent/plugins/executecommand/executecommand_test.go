@@ -57,7 +57,7 @@ func TestNewRemoteResource_Github(t *testing.T) {
 		"owner" : "test-owner",
 		"repository" :	 "test-repo"
 		}`
-	remoteresource, err := newRemoteResource(logger, "Github", locationInfo)
+	remoteresource, err := newRemoteResource(logger, "GitHub", locationInfo)
 
 	assert.NotNil(t, remoteresource)
 	assert.NoError(t, err)
@@ -123,7 +123,7 @@ func TestExecutePlugin_GetResourceBadLocationInfo(t *testing.T) {
 		"owner" = "test-owner",
 		"repository" = "test-repo"
 		}`
-	remoteResource, err := newRemoteResource(logger, "Github", locationInfo)
+	remoteResource, err := newRemoteResource(logger, "GitHub", locationInfo)
 	config := createStubConfiguration("orch", "bucket", "prefix", "1234-1234-1234", "directory")
 
 	input := ExecutePluginInput{}
@@ -542,7 +542,7 @@ func createMockCancelFlag() task.CancelFlag {
 func createStubPluginInputGithub() *ExecutePluginInput {
 	input := ExecutePluginInput{}
 
-	input.LocationType = "Github"
+	input.LocationType = "GitHub"
 	input.LocationInfo = `{
 		"owner" : "test-owner",
 		"repository" :	 "test-repo",
