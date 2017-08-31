@@ -22,7 +22,6 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/framework/runpluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/application"
-	"github.com/aws/amazon-ssm-agent/agent/plugins/configuredaemon"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/domainjoin"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/pluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/psmodule"
@@ -71,14 +70,14 @@ func loadPlatformDependentPlugins(context context.T) runpluginutil.PluginRegistr
 		workerPlugins[updateEC2AgentPluginName] = updateEC2Agent
 	}
 
-	// registering aws:configureDaemon
-	configureDaemonPluginName := configuredaemon.Name()
-	configureDaemonPlugin, err := configuredaemon.NewPlugin(pluginutil.DefaultPluginConfig())
-	if err != nil {
-		log.Errorf("failed to create plugin %s %v", configureDaemonPluginName, err)
-	} else {
-		workerPlugins[configureDaemonPluginName] = configureDaemonPlugin
-	}
+	//// registering aws:configureDaemon
+	//configureDaemonPluginName := configuredaemon.Name()
+	//configureDaemonPlugin, err := configuredaemon.NewPlugin(pluginutil.DefaultPluginConfig())
+	//if err != nil {
+	//	log.Errorf("failed to create plugin %s %v", configureDaemonPluginName, err)
+	//} else {
+	//	workerPlugins[configureDaemonPluginName] = configureDaemonPlugin
+	//}
 
 	return workerPlugins
 }
