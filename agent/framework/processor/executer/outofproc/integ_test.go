@@ -11,8 +11,6 @@
 // either express or implied. See the License for the specific language governing
 // permissions and limitations under the License.
 
-// +build integration
-
 // Package outofproc implements Executer interface with out-of-process plugin running capabilities
 package outofproc
 
@@ -89,6 +87,7 @@ func TestOutOfProcExecuter_Success(t *testing.T) {
 	testCase := setup(t)
 	testDocState := testCase.docState
 	resultDocState := testCase.docState
+	resultDocState.InstancePluginsInformation[0].Result = *testCase.results["plugin1"]
 	resultDocState.DocumentInformation.DocumentStatus = contracts.ResultStatusSuccess
 	resultDocState.DocumentInformation.ProcInfo.Pid = testPid
 	resultDocState.DocumentInformation.ProcInfo.StartTime = testStartDateTime
@@ -186,6 +185,7 @@ func TestOutOfProcExecuter_ShutdownAndReconnect(t *testing.T) {
 	//assert the process is detached: either in orphan state or zombie
 	resultDocState := docState1
 	//final docstate to be saved
+	resultDocState.InstancePluginsInformation[0].Result = *testCase.results["plugin1"]
 	resultDocState.DocumentInformation.DocumentStatus = contracts.ResultStatusSuccess
 	assert.False(t, fakeProcess.attached)
 	logger.Info("relaunching the out-of-proc Executer...")
@@ -231,6 +231,10 @@ func TestOutOfProcExecuter_Cancel(t *testing.T) {
 	testCase.resultStatus = contracts.ResultStatusCancelled
 	testDocState := testCase.docState
 	resultDocState := testCase.docState
+	testCase.results["plugin1"].Code = 1
+	testCase.results["plugin1"].Status = contracts.ResultStatusCancelled
+	testCase.results["plugin1"].Output = "command has been cancelled"
+	resultDocState.InstancePluginsInformation[0].Result = *testCase.results["plugin1"]
 	resultDocState.DocumentInformation.DocumentStatus = contracts.ResultStatusCancelled
 	resultDocState.DocumentInformation.ProcInfo.Pid = testPid
 	resultDocState.DocumentInformation.ProcInfo.StartTime = testStartDateTime
@@ -249,7 +253,6 @@ func TestOutOfProcExecuter_Cancel(t *testing.T) {
 		//then start to send reply
 		//TODO once we have multi-plugin test case, we can interleave success and cancel here
 		for _, res := range testCase.results {
-			res.Status = contracts.ResultStatusCancelled
 			resChan <- *res
 		}
 		close(resChan)
