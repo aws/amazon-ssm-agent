@@ -46,7 +46,11 @@ func setup(t *testing.T) *TestCase {
 	channelCreator = func(log log.T, mode channel.Mode, documentID string) (channel.Channel, error, bool) {
 		isFound := channelmock.IsExists(documentID)
 		assert.Equal(t, testDocumentID, documentID)
-		return channelmock.NewFakeChannel(logger, mode, documentID), nil, isFound
+		fakeChannel := channelmock.NewFakeChannel(logger, mode, documentID)
+		//stuff some bad messages to the channel
+		fakeChannel.Send("{\"version\":\"1.0\",\"type\":\"some unknown type\",\"content\":\"\"}")
+		fakeChannel.Send("bad message 2")
+		return fakeChannel, nil, isFound
 	}
 	//creating fake process
 	if fakeProcess != nil {
