@@ -99,7 +99,6 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 	res.StandardOutput = pluginutil.StringPrefix(out.Stdout, p.MaxStdoutLength, p.OutputTruncatedSuffix)
 	res.StandardError = pluginutil.StringPrefix(out.Stderr, p.MaxStderrLength, p.OutputTruncatedSuffix)
 
-	pluginutil.PersistPluginInformationToCurrent(log, config.PluginID, config, res)
 	return res
 }
 

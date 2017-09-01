@@ -25,7 +25,6 @@ import (
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
-	command_state_helper "github.com/aws/amazon-ssm-agent/agent/docmanager"
 	"github.com/aws/amazon-ssm-agent/agent/executers"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil/artifact"
@@ -199,37 +198,6 @@ func DefaultPluginConfig() PluginConfig {
 		MaxStderrLength:       8000,
 		OutputTruncatedSuffix: "--output truncated--",
 	}
-}
-
-// PersistPluginInformationToCurrent persists the plugin execution results
-func PersistPluginInformationToCurrent(log log.T, pluginID string, config contracts.Configuration, res contracts.PluginResult) {
-	//Every plugin should persist information inside the execute method.
-	//At this point a plugin knows that an interim state is already stored in Current folder.
-	//Plugin will continue to add data to the same file in Current folder
-	messageIDSplit := strings.Split(config.MessageId, ".")
-	instanceID := messageIDSplit[len(messageIDSplit)-1]
-
-	pluginState := command_state_helper.GetPluginState(log,
-		pluginID,
-		config.BookKeepingFileName,
-		instanceID,
-		appconfig.DefaultLocationOfCurrent)
-
-	if pluginState == nil {
-		log.Errorf("failed to find plugin state with id %v", pluginID)
-		return
-	}
-
-	//set plugin state's execution details
-	pluginState.Configuration = config
-	pluginState.Result = res
-
-	command_state_helper.PersistPluginState(log,
-		*pluginState,
-		pluginID,
-		config.BookKeepingFileName,
-		instanceID,
-		appconfig.DefaultLocationOfCurrent)
 }
 
 // LoadParametersAsList returns properties as a list and appropriate PluginResult if error is encountered
