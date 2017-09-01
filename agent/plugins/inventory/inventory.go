@@ -70,8 +70,6 @@ type PluginInput struct {
 	CustomInventoryDirectory    string
 }
 
-var pluginPersister = pluginutil.PersistPluginInformationToCurrent
-
 // decoupling platform.InstanceID for easy testability
 var machineIDProvider = machineInfoProvider
 
@@ -563,7 +561,6 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 
 		res = setPluginResult(inventoryOutput, res)
 		p.uploadOutputToS3(context, config.PluginID, orchestrationDir, config.OutputS3BucketName, config.OutputS3KeyPrefix, res.StandardOutput, res.StandardError)
-		pluginutil.PersistPluginInformationToCurrent(log, config.PluginID, config, res)
 
 		return
 	}
@@ -591,7 +588,6 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 
 		res = setPluginResult(inventoryOutput, res)
 		p.uploadOutputToS3(context, config.PluginID, orchestrationDir, config.OutputS3BucketName, config.OutputS3KeyPrefix, res.StandardOutput, res.StandardError)
-		pluginutil.PersistPluginInformationToCurrent(log, config.PluginID, config, res)
 
 		return
 	}
@@ -607,7 +603,6 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 
 		res = setPluginResult(inventoryOutput, res)
 		p.uploadOutputToS3(context, config.PluginID, orchestrationDir, config.OutputS3BucketName, config.OutputS3KeyPrefix, res.StandardOutput, res.StandardError)
-		pluginutil.PersistPluginInformationToCurrent(log, config.PluginID, config, res)
 
 		return
 	}
@@ -622,8 +617,6 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 
 		res = setPluginResult(inventoryOutput, res)
 		p.uploadOutputToS3(context, config.PluginID, orchestrationDir, config.OutputS3BucketName, config.OutputS3KeyPrefix, res.StandardOutput, res.StandardError)
-
-		pluginutil.PersistPluginInformationToCurrent(log, config.PluginID, config, res)
 
 		return
 	}

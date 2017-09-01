@@ -14,6 +14,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/plugin"
 	"github.com/aws/amazon-ssm-agent/agent/framework/runpluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/log/ssmlog"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 )
 
@@ -38,7 +39,7 @@ var pluginRunner = func(
 //rule of thumb is, do not trigger extra file operation or other intricate dependencies during this setup, make it light weight
 func initialize(args []string) (context.T, string, error) {
 	// intialize a light weight logger, use the default seelog config logger
-	logger := log.Logger()
+	logger := ssmlog.SSMLogger()
 	// initialize appconfig, use default config
 	config := appconfig.DefaultConfig()
 	logger.Debugf("parsing args: %v", args)

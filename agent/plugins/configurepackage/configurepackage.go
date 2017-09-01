@@ -335,10 +335,10 @@ func selectService(log log.T, serviceEndpoint string, localrepo localpackages.Re
 // Execute runs the plugin operation and returns output
 // res.Output will contain a slice of RunCommandPluginOutput
 func (p *Plugin) Execute(context context.T, config contracts.Configuration, cancelFlag task.CancelFlag) (res contracts.PluginResult) {
-	return p.execute(context, config, cancelFlag, pluginutil.PersistPluginInformationToCurrent)
+	return p.execute(context, config, cancelFlag)
 }
 
-func (p *Plugin) execute(context context.T, config contracts.Configuration, cancelFlag task.CancelFlag, persistPluginInfo func(log log.T, pluginID string, config contracts.Configuration, res contracts.PluginResult)) (res contracts.PluginResult) {
+func (p *Plugin) execute(context context.T, config contracts.Configuration, cancelFlag task.CancelFlag) (res contracts.PluginResult) {
 	log := context.Log()
 	log.Info("RunCommand started with configuration ", config)
 
@@ -436,7 +436,6 @@ func (p *Plugin) execute(context context.T, config contracts.Configuration, canc
 	res.Output = out.String()
 	res.StandardOutput = pluginutil.StringPrefix(out.Stdout, p.MaxStdoutLength, p.OutputTruncatedSuffix)
 	res.StandardError = pluginutil.StringPrefix(out.Stderr, p.MaxStderrLength, p.OutputTruncatedSuffix)
-	persistPluginInfo(log, config.PluginID, config, res)
 
 	return res
 }

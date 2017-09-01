@@ -351,7 +351,7 @@ func TestExecute(t *testing.T) {
 		localRepository:        repoMock,
 		packageServiceSelector: selectMockService(serviceMock),
 	}
-	result := plugin.execute(contextMock, buildConfigSimple(pluginInformation), createMockCancelFlag(), mockPersistPluginInfo)
+	result := plugin.execute(contextMock, buildConfigSimple(pluginInformation), createMockCancelFlag())
 
 	assert.Equal(t, 0, result.Code)
 	repoMock.AssertExpectations(t)
@@ -376,7 +376,7 @@ func TestExecuteArrayInput(t *testing.T) {
 	rawPluginInputs = append(rawPluginInputs, pluginInformation)
 	config.Properties = rawPluginInputs
 
-	result := plugin.execute(contextMock, config, createMockCancelFlag(), mockPersistPluginInfo)
+	result := plugin.execute(contextMock, config, createMockCancelFlag())
 
 	assert.Equal(t, 1, result.Code)
 	assert.Contains(t, result.Output, "invalid format in plugin properties")
@@ -392,7 +392,7 @@ func TestConfigurePackage_InvalidAction(t *testing.T) {
 		localRepository:        repoMock,
 		packageServiceSelector: selectMockService(serviceMock),
 	}
-	result := plugin.execute(contextMock, buildConfigSimple(pluginInformation), createMockCancelFlag(), mockPersistPluginInfo)
+	result := plugin.execute(contextMock, buildConfigSimple(pluginInformation), createMockCancelFlag())
 
 	assert.Equal(t, 1, result.Code)
 	assert.Contains(t, result.Output, "unsupported action")
@@ -428,7 +428,7 @@ func testS3Prefix(t *testing.T, testCase S3PrefixTestCase) {
 
 	config := buildConfig(pluginInformation, testCase.OrchestrationDir, testCase.BucketName, testCase.PrefixIn, testCase.PluginID)
 	var result contracts.PluginResult
-	result = plugin.execute(contextMock, config, createMockCancelFlag(), mockPersistPluginInfo)
+	result = plugin.execute(contextMock, config, createMockCancelFlag())
 
 	assert.Equal(t, result.Code, 0)
 	mockPlugin.AssertExpectations(t)

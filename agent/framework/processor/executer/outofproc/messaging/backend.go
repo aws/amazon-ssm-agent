@@ -109,7 +109,7 @@ func (p *ExecuterBackend) formatDocResult(docResult *contracts.DocumentResult) {
 	docResult.NPlugins = len(p.docState.InstancePluginsInformation)
 	docResult.DocumentVersion = p.docState.DocumentInformation.DocumentVersion
 	//update current document status
-	p.docState.DocumentInformation.DocumentStatus = docResult.Status
+	model.UpdateDocState(docResult, p.docState)
 }
 
 func NewWorkerBackend(ctx context.T, runner PluginRunner) *WorkerBackend {

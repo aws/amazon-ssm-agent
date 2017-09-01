@@ -44,8 +44,6 @@ type InvokerInput struct {
 	Properties interface{} `json:"properties"`
 }
 
-var pluginPersister = pluginutil.PersistPluginInformationToCurrent
-
 //todo: add interfaces & dependencies to simplify testing for all calls from lrpminvoker calls to lrpm
 
 // NewPlugin returns an instance of lrpminvoker for a given long running plugin name
@@ -76,7 +74,6 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 	log.Infof("long running plugin invoker has been invoked")
 
 	var err error
-	pluginID := config.PluginID
 
 	//NOTE: All long running plugins have json node similar to aws:cloudWatch as mentioned in SSM document - AWS-ConfigureCloudWatch
 
@@ -96,7 +93,6 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 		res = p.CreateResult(fmt.Sprintf("Unable to parse Settings for %s", p.lrpName),
 			contracts.ResultStatusFailed)
 
-		pluginPersister(log, pluginID, config, res)
 		return
 	}
 	var property string
@@ -112,7 +108,6 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 		res.Output = property
 		res.StandardOutput = setting.StartType
 	}
-	pluginPersister(log, pluginID, config, res)
 	return
 }
 

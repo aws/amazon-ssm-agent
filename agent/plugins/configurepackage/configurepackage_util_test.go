@@ -193,9 +193,6 @@ func createMockCancelFlag() task.CancelFlag {
 	return mockCancelFlag
 }
 
-func mockPersistPluginInfo(log log.T, pluginID string, config contracts.Configuration, res contracts.PluginResult) {
-}
-
 type ConfigurePackageStubs struct {
 	// individual stub functions or interfaces go here with a temp variable for the original version
 	fileSysDepStub fileSysDep
