@@ -42,8 +42,9 @@ const (
 type PluginState struct {
 	Configuration contracts.Configuration
 	Name          string
-	Result        contracts.PluginResult
-	Id            string
+	//TODO truncate this struct
+	Result contracts.PluginResult
+	Id     string
 }
 
 type OSProcInfo struct {
@@ -96,4 +97,16 @@ type CancelCommandInfo struct {
 	CancelCommandID string
 	Payload         string
 	DebugInfo       string
+}
+
+func UpdateDocState(docResult *contracts.DocumentResult, docState *DocumentState) {
+	docState.DocumentInformation.DocumentStatus = docResult.Status
+	pluginID := docResult.LastPlugin
+	if pluginID != "" {
+		for i := 0; i < len(docState.InstancePluginsInformation); i++ {
+			if docState.InstancePluginsInformation[i].Id == docResult.LastPlugin {
+				docState.InstancePluginsInformation[i].Result = *docResult.PluginResults[pluginID]
+			}
+		}
+	}
 }

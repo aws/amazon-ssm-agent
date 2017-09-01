@@ -134,6 +134,7 @@ func TestExecuterBackend_ProcessV1(t *testing.T) {
 	assert.Equal(t, testDocumentName, res.DocumentName)
 	assert.Equal(t, testAssociationID, res.AssociationID)
 	assert.Equal(t, testMessageID, res.MessageID)
+	assert.EqualValues(t, testCase.docState.InstancePluginsInformation[0].Result, *testCase.results["plugin1"])
 	assert.Equal(t, len(testCase.docState.InstancePluginsInformation), res.NPlugins)
 	assert.Equal(t, testDocumentVersion, res.DocumentVersion)
 	err = backend.Process(testDocumentCompleteRawJSON)

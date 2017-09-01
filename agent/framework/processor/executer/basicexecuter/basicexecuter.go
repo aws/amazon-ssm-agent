@@ -64,7 +64,7 @@ func run(context context.T,
 	var wg sync.WaitGroup
 	wg.Add(1)
 	//The go-routine to listen to individual plugin update
-	go func() {
+	go func(state *docModel.DocumentState) {
 		defer func() {
 			if msg := recover(); msg != nil {
 				context.Log().Errorf("Executer listener panic: %v", msg)
@@ -87,8 +87,9 @@ func run(context context.T,
 				DocumentVersion: documentVersion,
 			}
 			resChan <- docResult
+			docModel.UpdateDocState(&docResult, state)
 		}
-	}()
+	}(&docState)
 
 	outputs := pluginRunner(context, docState.InstancePluginsInformation, statusChan, cancelFlag)
 	close(statusChan)

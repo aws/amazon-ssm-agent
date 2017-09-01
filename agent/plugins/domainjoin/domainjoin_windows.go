@@ -110,7 +110,6 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 	//loading Properties as map since aws:domainJoin uses properties as map
 	var properties map[string]interface{}
 	if properties = pluginutil.LoadParametersAsMap(log, config.Properties, &res); res.Code != 0 {
-		pluginutil.PersistPluginInformationToCurrent(log, config.PluginID, config, res)
 		return res
 	}
 
@@ -137,7 +136,6 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 		res.StandardOutput = pluginutil.StringPrefix(out.Stdout, p.MaxStdoutLength, p.OutputTruncatedSuffix)
 		res.StandardError = pluginutil.StringPrefix(out.Stderr, p.MaxStderrLength, p.OutputTruncatedSuffix)
 	}
-	pluginutil.PersistPluginInformationToCurrent(log, config.PluginID, config, res)
 
 	return res
 }
