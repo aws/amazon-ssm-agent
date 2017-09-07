@@ -49,6 +49,8 @@ package:: create-package-folder package-linux package-windows
 
 release:: clean checkstyle release-test pre-release build prepack package
 
+sources:: create-source-archive
+
 ifneq ($(FINALIZE),)
 	bgo-final
 endif
@@ -300,6 +302,11 @@ package-linux: package-rpm-386 package-deb-386 package-rpm package-deb package-d
 package-windows: package-win-386 package-win
 	$(BGO_SPACE)/Tools/src/create_windows_package.sh
 	$(BGO_SPACE)/Tools/src/create_windows_nano_package.sh
+
+.PHONY: create-source-archive
+create-source-archive:
+	$(eval SOURCE_PACKAGE_NAME := amazon-ssm-agent-`cat $(BGO_SPACE)/VERSION`)
+	git archive --prefix=$(SOURCE_PACKAGE_NAME)/ --format=tar HEAD | gzip -c > $(SOURCE_PACKAGE_NAME).tar.gz
 
 .PHONY: package-rpm
 package-rpm: create-package-folder
