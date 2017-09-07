@@ -337,7 +337,7 @@ func (p *Processor) runScheduledAssociation(log log.T) {
 
 func isAssociationTimedOut(assoc *model.InstanceAssociation) bool {
 	if assoc.Association.LastExecutionDate == nil {
-		return true
+		return false
 	}
 
 	currentTime := time.Now().UTC()
