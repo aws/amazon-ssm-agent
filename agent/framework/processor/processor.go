@@ -326,12 +326,12 @@ func processCommand(context context.T, executerCreator ExecuterCreator, cancelFl
 	}
 	//TODO add shutdown as API call, move cancelFlag out of task pool; cancelFlag to contracts, nobody else above runplugins needs to create cancelFlag.
 	// Shutdown/reboot detection
-	if final.Status == contracts.ResultStatusSuccessAndReboot {
+	if final == nil || final.LastPlugin != "" {
+		log.Infof("document %v still in progress, shutting down...", messageID)
+		return
+	} else if final.Status == contracts.ResultStatusSuccessAndReboot {
 		log.Infof("document %v requested reboot, need to resume", messageID)
 		rebooter.RequestPendingReboot(context.Log())
-		return
-	} else if final.LastPlugin != "" {
-		log.Infof("document %v still in progress, shutting down...", messageID)
 		return
 	}
 
