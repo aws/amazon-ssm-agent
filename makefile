@@ -49,11 +49,11 @@ package:: create-package-folder package-linux package-windows
 
 release:: clean checkstyle release-test pre-release build prepack package
 
-sources:: create-source-archive
-
 ifneq ($(FINALIZE),)
 	bgo-final
 endif
+
+sources:: create-source-archive
 
 clean:: remove-prepacked-folder
 	rm -rf build/* bin/ pkg/ vendor/bin/ vendor/pkg/ .cover/
