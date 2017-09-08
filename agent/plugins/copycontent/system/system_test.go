@@ -12,13 +12,13 @@
 // implied. See the License for the specific language governing
 // permissions and limitations under the License.
 
-// Package file have all the file related dependencies used by the execute package
-package filemanager
+// Package system have all the file related dependencies used by the copy package
+package system
 
 import (
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
+	filemock "github.com/aws/amazon-ssm-agent/agent/filemanager/mock"
 	"github.com/aws/amazon-ssm-agent/agent/log"
-	filemock "github.com/aws/amazon-ssm-agent/agent/plugins/executecommand/filemanager/mock"
 	"github.com/stretchr/testify/assert"
 
 	"errors"

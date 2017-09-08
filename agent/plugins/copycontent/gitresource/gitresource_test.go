@@ -16,19 +16,16 @@
 package gitresource
 
 import (
+	filemock "github.com/aws/amazon-ssm-agent/agent/filemanager/mock"
 	githubclientmock "github.com/aws/amazon-ssm-agent/agent/githubclient/mock"
-	filemock "github.com/aws/amazon-ssm-agent/agent/plugins/executecommand/filemanager/mock"
 
-	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/log"
-	"github.com/aws/amazon-ssm-agent/agent/plugins/executecommand/remoteresource"
 	"github.com/go-github/github"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 
 	"fmt"
 	"net/http"
-	"path/filepath"
 	"testing"
 )
 
@@ -47,7 +44,7 @@ func NewResourceWithMockedClient(mockClient *githubclientmock.ClientMock) *GitRe
 	}
 }
 
-func TestGitResource_Download(t *testing.T) {
+func TestGitResource_DownloadFile(t *testing.T) {
 	clientMock := githubclientmock.ClientMock{}
 
 	gitInfo := GitInfo{
@@ -78,13 +75,57 @@ func TestGitResource_Download(t *testing.T) {
 	fileMock.On("MakeDirs", mock.Anything).Return(nil)
 	fileMock.On("WriteFile", mock.Anything, mock.Anything).Return(nil)
 
-	err := gitResource.Download(logMock, fileMock, false, "")
+	err := gitResource.Download(logMock, fileMock, "")
 	clientMock.AssertExpectations(t)
 	fileMock.AssertExpectations(t)
 	assert.NoError(t, err)
 }
 
-func TestGitResource_DownloadEntireDirFalse(t *testing.T) {
+func TestGitResource_DownloadDirectory(t *testing.T) {
+	clientMock := githubclientmock.ClientMock{}
+
+	gitInfo := GitInfo{
+		Owner:      "owner",
+		Path:       "path/to/dir/",
+		Repository: "repo",
+		GetOptions: "",
+	}
+	opt := &github.RepositoryContentGetOptions{Ref: ""}
+
+	content := "content"
+	file := "file"
+	filepath := "path/to/dir/file.rb"
+	var fileMetadata, nilFileMetadata github.RepositoryContent
+
+	fileMetadata = github.RepositoryContent{
+		Content: &content,
+		Type:    &file,
+		Path:    &filepath,
+	}
+	var dirMetadata, nilDirMetadata []*github.RepositoryContent
+	dirMetadata = append(dirMetadata, &fileMetadata)
+	nilDirMetadata = nil
+
+	gitResource := &GitResource{
+		client: &clientMock,
+		Info:   gitInfo,
+	}
+	clientMock.On("ParseGetOptions", logMock, gitInfo.GetOptions).Return(opt, nil)
+	clientMock.On("GetRepositoryContents", logMock, gitInfo.Owner, gitInfo.Repository, gitInfo.Path, opt).Return(&nilFileMetadata, dirMetadata, nil).Once()
+	clientMock.On("GetRepositoryContents", logMock, gitInfo.Owner, gitInfo.Repository, filepath, opt).Return(&fileMetadata, nilDirMetadata, nil).Once()
+	clientMock.On("IsFileContentType", mock.AnythingOfType("*github.RepositoryContent")).Return(true)
+
+	fileMock := filemock.FileSystemMock{}
+	fileMock.On("MakeDirs", mock.Anything).Return(nil)
+	fileMock.On("WriteFile", mock.Anything, mock.Anything).Return(nil)
+
+	err := gitResource.Download(logMock, fileMock, "")
+	clientMock.AssertExpectations(t)
+	fileMock.AssertExpectations(t)
+	assert.NoError(t, err)
+}
+
+func TestGitResource_DownloadFileMissing(t *testing.T) {
 	clientMock := githubclientmock.ClientMock{}
 
 	gitInfo := GitInfo{
@@ -100,38 +141,6 @@ func TestGitResource_DownloadEntireDirFalse(t *testing.T) {
 
 	var dirMetadata []*github.RepositoryContent
 	dirMetadata = nil
-
-	clientMock.On("ParseGetOptions", logMock, gitInfo.GetOptions).Return(opt, nil)
-	clientMock.On("GetRepositoryContents", logMock, gitInfo.Owner, gitInfo.Repository, gitInfo.Path, opt).Return(fileMetadata, dirMetadata, nil).Once()
-	clientMock.On("IsFileContentType", mock.AnythingOfType("*github.RepositoryContent")).Return(false)
-	fileMock := filemock.FileSystemMock{}
-
-	gitResource := NewResourceWithMockedClient(&clientMock)
-
-	err := gitResource.Download(logMock, fileMock, false, "")
-
-	clientMock.AssertExpectations(t)
-	assert.Error(t, err)
-	assert.Contains(t, err.Error(), "Path specified is a directory. Please specify entireDir as true if it is desired to download the entire directory")
-
-}
-
-func TestGitResource_DownloadFileMissing(t *testing.T) {
-	clientMock := githubclientmock.ClientMock{}
-
-	gitInfo := GitInfo{
-		Owner:      "owner",
-		Path:       "path/to",
-		Repository: "repo",
-		GetOptions: "",
-	}
-	opt := &github.RepositoryContentGetOptions{Ref: ""}
-
-	var fileMetadata *github.RepositoryContent
-	fileMetadata = nil
-
-	var dirMetadata []*github.RepositoryContent
-	dirMetadata = nil
 	fileMock := filemock.FileSystemMock{}
 
 	clientMock.On("ParseGetOptions", logMock, gitInfo.GetOptions).Return(opt, nil)
@@ -140,7 +149,7 @@ func TestGitResource_DownloadFileMissing(t *testing.T) {
 
 	gitResource := NewResourceWithMockedClient(&clientMock)
 
-	err := gitResource.Download(logMock, fileMock, true, "")
+	err := gitResource.Download(logMock, fileMock, "")
 
 	clientMock.AssertExpectations(t)
 	assert.Error(t, err)
@@ -163,7 +172,7 @@ func TestGitResource_DownloadParseGetOptionFail(t *testing.T) {
 	gitResource := NewResourceWithMockedClient(&clientMock)
 
 	fileMock := filemock.FileSystemMock{}
-	err := gitResource.Download(logMock, fileMock, true, "")
+	err := gitResource.Download(logMock, fileMock, "")
 
 	clientMock.AssertExpectations(t)
 	assert.Error(t, err)
@@ -175,7 +184,7 @@ func TestGitResource_DownloadGetRepositoryContentsFail(t *testing.T) {
 
 	gitInfo := GitInfo{
 		Owner:      "owner",
-		Path:       "path/to",
+		Path:       "path/to/file.ext",
 		Repository: "repo",
 		GetOptions: "",
 	}
@@ -195,92 +204,11 @@ func TestGitResource_DownloadGetRepositoryContentsFail(t *testing.T) {
 
 	gitResource := NewResourceWithMockedClient(&clientMock)
 
-	err := gitResource.Download(logMock, fileMock, true, "")
+	err := gitResource.Download(logMock, fileMock, "")
 
 	clientMock.AssertExpectations(t)
 	assert.Error(t, err)
 	assert.Contains(t, err.Error(), "Rate limit exceeded")
-}
-
-func TestGitResource_PopulateResourceInfoEntireDirFalseJSON(t *testing.T) {
-	locationInfo := `{
-		"owner": "owner",
-		"repository": "repo",
-		"path": "path/to/file.json",
-		"getOptions": ""
-	}`
-
-	resourceInfo := remoteresource.ResourceInfo{}
-	token := TokenMock{}
-	gitresource, _ := NewGitResource(logMock, locationInfo, token)
-
-	resourceInfo = gitresource.PopulateResourceInfo(logMock, "", false)
-
-	assert.Equal(t, remoteresource.Document, resourceInfo.TypeOfResource)
-	assert.False(t, resourceInfo.EntireDir)
-	assert.Equal(t, "file.json", resourceInfo.StarterFile)
-	assert.Equal(t, filepath.Join(appconfig.DownloadRoot, "path/to/file.json"), resourceInfo.LocalDestinationPath)
-}
-
-func TestGitResource_PopulateResourceInfoEntireDirTrue(t *testing.T) {
-	locationInfo := `{
-		"owner": "owner",
-		"repository": "repo",
-		"path": "path/to/file.rb",
-		"getOptions": ""
-	}`
-
-	token := TokenMock{}
-	gitresource, _ := NewGitResource(logMock, locationInfo, token)
-
-	resourceInfo := gitresource.PopulateResourceInfo(logMock, "", true)
-
-	assert.True(t, resourceInfo.EntireDir)
-	assert.Equal(t, remoteresource.Script, resourceInfo.TypeOfResource)
-	assert.NotEqual(t, "path/to/file.rb", resourceInfo.StarterFile)
-	assert.Equal(t, "file.rb", resourceInfo.StarterFile)
-	assert.Equal(t, resourceInfo.LocalDestinationPath, filepath.Join(appconfig.DownloadRoot, "path/to/file.rb"))
-
-}
-
-func TestGitResource_PopulateResourceInfoEntireDirTrueInvalidStarter(t *testing.T) {
-	locationInfo := `{
-		"owner": "owner",
-		"repository": "repo",
-		"path": "path/to/",
-		"getOptions": ""
-	}`
-
-	token := TokenMock{}
-	gitresource, _ := NewGitResource(logMock, locationInfo, token)
-
-	resourceInfo := gitresource.PopulateResourceInfo(logMock, "", true)
-
-	assert.True(t, resourceInfo.EntireDir)
-	assert.Equal(t, remoteresource.Script, resourceInfo.TypeOfResource)
-	assert.Equal(t, "to", resourceInfo.StarterFile)
-	assert.Equal(t, resourceInfo.LocalDestinationPath, filepath.Join(appconfig.DownloadRoot, "path/to/"))
-
-}
-
-func TestGitResource_PopulateResourceInfoEntireDirFalseScript(t *testing.T) {
-
-	locationInfo := `{
-		"owner": "owner",
-		"repository": "repo",
-		"path":"path/to/file.rb",
-		"getOptions": ""
-	}`
-	token := TokenMock{}
-
-	gitresource, _ := NewGitResource(nil, locationInfo, token)
-	resourceInfo := gitresource.PopulateResourceInfo(logMock, "destination", false)
-
-	assert.False(t, resourceInfo.EntireDir)
-	assert.Equal(t, remoteresource.Script, resourceInfo.TypeOfResource)
-	assert.Equal(t, "file.rb", resourceInfo.StarterFile)
-	assert.Equal(t, resourceInfo.LocalDestinationPath, filepath.Join("destination", "path/to/file.rb"))
-
 }
 
 func TestGitResource_ValidateLocationInfoOwner(t *testing.T) {
