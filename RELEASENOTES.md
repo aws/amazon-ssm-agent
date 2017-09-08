@@ -1,5 +1,9 @@
 Latest
 ===============
+- Support for command execution out-of-process
+
+2.0.952.0
+===============
 - Various bug fixes
 
 2.0.922.0
