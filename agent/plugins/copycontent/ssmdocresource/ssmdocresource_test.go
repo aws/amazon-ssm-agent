@@ -15,13 +15,14 @@
 package ssmdocresource
 
 import (
+	"github.com/aws/amazon-ssm-agent/agent/appconfig"
+	filemock "github.com/aws/amazon-ssm-agent/agent/filemanager/mock"
 	"github.com/aws/amazon-ssm-agent/agent/log"
-	filemock "github.com/aws/amazon-ssm-agent/agent/plugins/executecommand/filemanager/mock"
-	"github.com/aws/amazon-ssm-agent/agent/plugins/executecommand/remoteresource"
 	"github.com/aws/aws-sdk-go/service/ssm"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 
+	"fmt"
 	"path/filepath"
 	"testing"
 )
@@ -32,7 +33,7 @@ func TestSSMDocResource_ValidateLocationInfo(t *testing.T) {
 
 	locationInfo := `{
 		"name": "AWS-ExecuteCommand",
-		"vßersion": ""
+		"version": ""
 	}`
 
 	ssmresource, _ := NewSSMDocResource(locationInfo)
@@ -55,22 +56,6 @@ func TestSSMDocResource_ValidateLocationInfoNoName(t *testing.T) {
 	assert.Equal(t, "SSM Document name in LocationType must be specified", err.Error())
 }
 
-func TestSSMDocResource_PopulateResourceInfo(t *testing.T) {
-	locationInfo := `{
-		"name": "AWS-ExecuteCommand",
-		"version": "10"
-	}`
-
-	ssmresource, _ := NewSSMDocResource(locationInfo)
-
-	resource := ssmresource.PopulateResourceInfo(logMock, "destination", false)
-
-	assert.False(t, resource.EntireDir)
-	assert.Equal(t, remoteresource.Document, resource.TypeOfResource)
-	assert.Equal(t, "AWS-ExecuteCommand.json", resource.StarterFile)
-	assert.Equal(t, filepath.Join("destination", ssmresource.Info.DocName, ssmresource.Info.DocName+".json"), resource.LocalDestinationPath)
-}
-
 func TestSSMDocResource_Download(t *testing.T) {
 	depMock := new(ssmDocDepMock)
 	fileMock := filemock.FileSystemMock{}
@@ -91,28 +76,38 @@ func TestSSMDocResource_Download(t *testing.T) {
 
 	ssmdocdep = depMock
 
-	err := ssmresource.Download(logMock, fileMock, false, "destination")
+	err := ssmresource.Download(logMock, fileMock, "destination")
 
 	assert.NoError(t, err)
 	depMock.AssertExpectations(t)
 	fileMock.AssertExpectations(t)
 }
 
-func TestSSMDocResource_DownloadEntireDirTrue(t *testing.T) {
+func TestSSMDocResource_DownloadNoDestination(t *testing.T) {
+	depMock := new(ssmDocDepMock)
 	fileMock := filemock.FileSystemMock{}
 
 	locationInfo := `{
-		"name": "AWS-ExecuteCommand",
-		"version": "10"
-	}`
-
+ 		"name": "AWS-ExecuteCommand",
+ 		"version": "10"
+ 	}`
+	content := "content"
+	docOutput := ssm.GetDocumentOutput{
+		Content: &content,
+	}
 	ssmresource, _ := NewSSMDocResource(locationInfo)
+	dir := filepath.Join(appconfig.DownloadRoot, ssmresource.Info.DocName)
+	depMock.On("GetDocument", logMock, ssmresource.Info.DocName, ssmresource.Info.DocVersion).Return(&docOutput, nil)
+	fileMock.On("MakeDirs", dir).Return(nil)
+	fileMock.On("WriteFile", filepath.Join(dir, ssmresource.Info.DocName+".json"), content).Return(fmt.Errorf("Error"))
 
-	err := ssmresource.Download(logMock, fileMock, true, "destination")
+	ssmdocdep = depMock
 
-	assert.Error(t, err)
-	assert.Equal(t, "EntireDirectory option is not supported for SSMDocument location type.", err.Error())
+	err := ssmresource.Download(logMock, fileMock, "")
 
+	assert.Error(t, err, "Error")
+	depMock.AssertExpectations(t)
+	fileMock.AssertExpectations(t)
 }
 
 type ssmDocDepMock struct {

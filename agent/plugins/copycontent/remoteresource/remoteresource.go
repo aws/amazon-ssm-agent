@@ -16,14 +16,8 @@
 package remoteresource
 
 import (
+	"github.com/aws/amazon-ssm-agent/agent/filemanager"
 	"github.com/aws/amazon-ssm-agent/agent/log"
-	"github.com/aws/amazon-ssm-agent/agent/plugins/executecommand/filemanager"
-)
-
-const (
-	Unknown = iota
-	Script
-	Document
 )
 
 const (
@@ -33,16 +27,6 @@ const (
 
 // RemoteResource is an interface for accessing remote resources. Every type of remote resource is expected to implement RemoteResource interface
 type RemoteResource interface {
-	Download(log log.T, filesys filemanager.FileSystem, entireDir bool, destinationDir string) error
-	PopulateResourceInfo(log log.T, destinationDir string, entireDir bool) (resourceInfo ResourceInfo)
+	Download(log log.T, filesys filemanager.FileSystem, destinationDir string) error
 	ValidateLocationInfo() (bool, error)
-}
-
-// ResourceInfo represents the required information after downloading the remote resource
-type ResourceInfo struct {
-	LocalDestinationPath string //Local path to the file to be executed
-	EntireDir            bool
-	TypeOfResource       int    //Valid values are either Unknown, Script or Document
-	StarterFile          string //Name of the file
-	ResourceExtension    string
 }

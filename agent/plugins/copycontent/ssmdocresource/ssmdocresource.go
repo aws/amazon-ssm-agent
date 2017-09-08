@@ -17,11 +17,11 @@ package ssmdocresource
 
 import (
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
-	"github.com/aws/amazon-ssm-agent/agent/fileutil"
+	"github.com/aws/amazon-ssm-agent/agent/filemanager"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
-	"github.com/aws/amazon-ssm-agent/agent/plugins/executecommand/filemanager"
-	"github.com/aws/amazon-ssm-agent/agent/plugins/executecommand/remoteresource"
+	"github.com/aws/amazon-ssm-agent/agent/plugins/copycontent/remoteresource"
+	"github.com/aws/amazon-ssm-agent/agent/plugins/copycontent/system"
 	"github.com/aws/aws-sdk-go/service/ssm"
 
 	"errors"
@@ -44,7 +44,7 @@ type SSMDocInfo struct {
 func NewSSMDocResource(info string) (*SSMDocResource, error) {
 	ssmDocInfo, err := parseLocationInfo(info)
 	if err != nil {
-		return nil, fmt.Errorf("ssmdoc url parsing failed. %v", err)
+		return nil, fmt.Errorf("SSMDocument LocationInfo parsing failed. %v", err)
 	}
 
 	return &SSMDocResource{
@@ -56,18 +56,14 @@ func NewSSMDocResource(info string) (*SSMDocResource, error) {
 func parseLocationInfo(locationInfo string) (ssmdoc SSMDocInfo, err error) {
 
 	if err = jsonutil.Unmarshal(locationInfo, &ssmdoc); err != nil {
-		return ssmdoc, fmt.Errorf("Location Info could not be unmarshalled for location type S3. Please check JSON format of locationInfo")
+		return ssmdoc, errors.New("Location Info could not be unmarshalled for location type S3. Please check JSON format of locationInfo")
 	}
 
 	return ssmdoc, nil
 }
 
 // Download calls download to pull down files or directory from s3
-func (ssmdoc *SSMDocResource) Download(log log.T, filesys filemanager.FileSystem, entireDir bool, destinationDir string) (err error) {
-	if entireDir {
-		return errors.New("EntireDirectory option is not supported for SSMDocument location type.")
-	}
-
+func (ssmdoc *SSMDocResource) Download(log log.T, filesys filemanager.FileSystem, destinationDir string) (err error) {
 	if destinationDir == "" {
 		destinationDir = appconfig.DownloadRoot
 	}
@@ -79,31 +75,13 @@ func (ssmdoc *SSMDocResource) Download(log log.T, filesys filemanager.FileSystem
 		return err
 	}
 
-	destinationFilePath := filepath.Join(ssmdoc.Info.DocName, ssmdoc.Info.DocName+".json")
-	if err = filemanager.SaveFileContent(log, filesys, destinationDir, *docResponse.Content, destinationFilePath); err != nil {
+	destinationFilePath := filepath.Join(ssmdoc.Info.DocName, ssmdoc.Info.DocName+remoteresource.JSONExtension)
+	if err = system.SaveFileContent(log, filesys, destinationDir, *docResponse.Content, destinationFilePath); err != nil {
 		log.Errorf("Error saving file - %v", err)
 		return
 	}
 
 	return
-}
-
-// PopulateResourceInfo set the member variables of ResourceInfo
-func (ssmdoc *SSMDocResource) PopulateResourceInfo(log log.T, destinationDir string, entireDir bool) remoteresource.ResourceInfo {
-	var resourceInfo remoteresource.ResourceInfo
-
-	//if destination directory is not specified, specify the directory
-	if destinationDir == "" {
-		destinationDir = appconfig.DownloadRoot
-	}
-	localDocName := ssmdoc.Info.DocName + ".json"
-	resourceInfo.LocalDestinationPath = fileutil.BuildPath(destinationDir, ssmdoc.Info.DocName, localDocName)
-	resourceInfo.StarterFile = filepath.Base(resourceInfo.LocalDestinationPath)
-	resourceInfo.TypeOfResource = remoteresource.Document
-	resourceInfo.EntireDir = entireDir
-	resourceInfo.ResourceExtension = filepath.Ext(resourceInfo.StarterFile)
-
-	return resourceInfo
 }
 
 // ValidateLocationInfo ensures that the required parameters of Location Info are specified

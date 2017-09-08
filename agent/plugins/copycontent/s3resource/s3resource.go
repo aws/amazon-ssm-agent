@@ -17,12 +17,12 @@ package s3resource
 
 import (
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
+	"github.com/aws/amazon-ssm-agent/agent/filemanager"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil/artifact"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
-	"github.com/aws/amazon-ssm-agent/agent/plugins/executecommand/filemanager"
-	"github.com/aws/amazon-ssm-agent/agent/plugins/executecommand/remoteresource"
+	"github.com/aws/amazon-ssm-agent/agent/plugins/copycontent/system"
 	"github.com/aws/amazon-ssm-agent/agent/s3util"
 
 	"errors"
@@ -69,7 +69,7 @@ func parseLocationInfo(locationInfo string) (s3Info S3Info, err error) {
 }
 
 // Download calls download to pull down files or directory from s3
-func (s3 *S3Resource) Download(log log.T, filesys filemanager.FileSystem, entireDir bool, destinationDir string) (err error) {
+func (s3 *S3Resource) Download(log log.T, filesys filemanager.FileSystem, destinationDir string) (err error) {
 	var fileURL *url.URL
 	var folders []string
 	var localFilePath string
@@ -77,15 +77,16 @@ func (s3 *S3Resource) Download(log log.T, filesys filemanager.FileSystem, entire
 		destinationDir = appconfig.DownloadRoot
 	}
 	log.Info("Downloading S3 artifacts")
-	if fileURL, err = s3.getSourceURL(log, entireDir); err != nil {
+
+	if fileURL, err = url.Parse(s3.Info.Path); err != nil {
 		return err
 	}
 	log.Debug("File URL - ", fileURL.String())
-	// Create an object for the source URL. This can be used to list the objects in the folder
-	// when entireDir is true
+
 	s3.s3Object = s3util.ParseAmazonS3URL(log, fileURL)
 	log.Debug("S3 object - ", s3.s3Object.String())
-	if entireDir {
+	// Create an object for the source URL. This can be used to list the objects in the folder
+	if isPathType(s3.Info.Path) {
 		if folders, err = dep.ListS3Objects(log, s3.s3Object); err != nil {
 			return err
 		}
@@ -115,41 +116,13 @@ func (s3 *S3Resource) Download(log log.T, filesys filemanager.FileSystem, entire
 				return err
 			}
 
-			if err = filemanager.RenameFile(log, filesys, downloadOutput.LocalFilePath, filepath.Base(files)); err != nil {
+			if err = system.RenameFile(log, filesys, downloadOutput.LocalFilePath, filepath.Base(files)); err != nil {
 				return fmt.Errorf("Something went wrong when trying to access downloaded content. It is "+
 					"possible that the content was not downloaded because the path provided is wrong. %v", err)
 			}
 		}
 	}
 	return nil
-}
-
-// PopulateResourceInfo set the member variables of ResourceInfo
-func (s3 *S3Resource) PopulateResourceInfo(log log.T, destinationDir string, entireDir bool) remoteresource.ResourceInfo {
-	var resourceInfo remoteresource.ResourceInfo
-
-	//if destination directory is not specified, specify the directory
-	if destinationDir == "" {
-		destinationDir = appconfig.DownloadRoot
-	}
-
-	if entireDir {
-		resourceInfo.StarterFile = filepath.Base(s3.Info.Path)
-		resourceInfo.LocalDestinationPath = fileutil.BuildPath(destinationDir, s3.s3Object.Bucket, s3.s3Object.Key, resourceInfo.StarterFile)
-		resourceInfo.ResourceExtension = filepath.Ext(resourceInfo.StarterFile)
-		resourceInfo.TypeOfResource = remoteresource.Script //Because EntireDirectory option is valid only for scripts
-		resourceInfo.EntireDir = true
-	} else {
-		resourceInfo.LocalDestinationPath = fileutil.BuildPath(destinationDir, s3.s3Object.Bucket, s3.s3Object.Key)
-		resourceInfo.StarterFile = filepath.Base(resourceInfo.LocalDestinationPath)
-		resourceInfo.ResourceExtension = filepath.Ext(resourceInfo.StarterFile)
-		if strings.Compare(resourceInfo.ResourceExtension, remoteresource.JSONExtension) == 0 || strings.Compare(resourceInfo.ResourceExtension, remoteresource.YAMLExtension) == 0 {
-			resourceInfo.TypeOfResource = remoteresource.Document
-		} else { // It is assumed that the file is a script if the extension is not JSON nor YAML
-			resourceInfo.TypeOfResource = remoteresource.Script
-		}
-	}
-	return resourceInfo
 }
 
 // ValidateLocationInfo ensures that the required parameters of Location Info are specified
@@ -162,34 +135,11 @@ func (s3 *S3Resource) ValidateLocationInfo() (valid bool, err error) {
 	return true, nil
 }
 
-// getDirectoryURLString returns the URL of the directory in which the path lies
-func (s3 *S3Resource) getDirectoryURLString() string {
-	splitSourceURL := strings.SplitAfter(s3.Info.Path, "/")
-	// get all but the last element. This will retain the / after the directory
-	dirSourceURL := splitSourceURL[:len(splitSourceURL)-1]
-	return strings.Join(dirSourceURL, "")
-}
-
 // getS3BucketURLString returns the URL up to the bucket name
 func (s3 *S3Resource) getS3BucketURLString() string {
 	bucketURL := strings.SplitAfter(s3.Info.Path, s3.s3Object.Bucket)
 	URL := bucketURL[0]
 	return URL + "/"
-}
-
-// getSourceURL determines the source URL when entire directory is true or not
-func (s3 *S3Resource) getSourceURL(log log.T, entireDir bool) (*url.URL, error) {
-	var sourceURL string
-	if entireDir {
-		if isPathType(s3.Info.Path) {
-			return nil, errors.New("Could not download from S3. Please provide path to file with extention.")
-		}
-		sourceURL = s3.getDirectoryURLString()
-	} else {
-		sourceURL = s3.Info.Path
-	}
-	log.Info("SourceURL - ", sourceURL)
-	return url.Parse(sourceURL)
 }
 
 // isPathType returns if the URL is of path type
