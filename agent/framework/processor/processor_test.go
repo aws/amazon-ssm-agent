@@ -125,6 +125,37 @@ func TestProcessCommand(t *testing.T) {
 
 }
 
+//TODO add shutdown and reboot test once we encapsulate docmanager
+func TestProcessCommand_Shutdown(t *testing.T) {
+	ctx := context.NewMockDefault()
+	docState := model.DocumentState{}
+	docState.DocumentInformation.MessageID = "messageID"
+	docState.DocumentInformation.InstanceID = "instanceID"
+	docState.DocumentInformation.DocumentID = "documentID"
+	executerMock := executermocks.NewMockExecuter()
+	resChan := make(chan contracts.DocumentResult)
+	statusChan := make(chan contracts.DocumentResult)
+	cancelFlag := task.NewChanneledCancelFlag()
+	executerMock.On("Run", cancelFlag, mock.AnythingOfType("*executer.DocumentFileStore")).Return(statusChan)
+
+	// call method under test
+	//orchestrationRootDir is set to empty such that it can meet the test expectation.
+	creator := func(ctx context.T) executer.Executer {
+		return executerMock
+	}
+	go func() {
+		//executer shutdown
+		close(statusChan)
+	}()
+	processCommand(ctx, creator, cancelFlag, resChan, &docState)
+	executerMock.AssertExpectations(t)
+	close(resChan)
+	//assert channel is not closed, each instance of Processor keeps a distinct copy of channel
+	assert.NotNil(t, resChan)
+	//TODO assert document file is not moved
+
+}
+
 func TestProcessCancelCommand_Success(t *testing.T) {
 	ctx := context.NewMockDefault()
 	sendCommandPoolMock := new(task.MockedPool)
