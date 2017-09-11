@@ -61,7 +61,7 @@ var allPlugins = map[string]struct{}{
 	appconfig.PluginNameDomainJoin:             {},
 	appconfig.PluginEC2ConfigUpdate:            {},
 	appconfig.PluginNameRefreshAssociation:     {},
-	appconfig.PluginExecuteCommand:             {},
+	appconfig.PluginCopyContent:                {},
 }
 
 // Assign method to global variables to allow unittest to override
