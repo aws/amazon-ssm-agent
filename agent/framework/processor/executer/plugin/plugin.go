@@ -23,8 +23,8 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/framework/runpluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurecontainers"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage"
+	"github.com/aws/amazon-ssm-agent/agent/plugins/copycontent"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/dockercontainer"
-	"github.com/aws/amazon-ssm-agent/agent/plugins/executecommand"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/inventory"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/lrpminvoker"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/pluginutil"
@@ -51,7 +51,7 @@ var allPlugins = map[string]struct{}{
 	appconfig.PluginNameDomainJoin:             {},
 	appconfig.PluginEC2ConfigUpdate:            {},
 	appconfig.PluginNameRefreshAssociation:     {},
-	appconfig.PluginExecuteCommand:             {},
+	appconfig.PluginCopyContent:                {},
 }
 
 var once sync.Once
@@ -161,12 +161,13 @@ func loadPlatformIndependentPlugins(context context.T) runpluginutil.PluginRegis
 		workerPlugins[configurePackagePluginName] = configurePackagePlugin
 	}
 
-	executePluginName := executecommand.Name()
-	executePlugin, err := executecommand.NewPlugin(pluginutil.DefaultPluginConfig())
+	copyContentPluginName := copycontent.Name()
+	copyContentPlugin, err := copycontent.NewPlugin(pluginutil.DefaultPluginConfig())
 	if err != nil {
-		log.Errorf("failed to create plugin %s %v", executePluginName, err)
+		log.Errorf("failed to create plugin %s %v", copyContentPluginName, err)
 	} else {
-		workerPlugins[executePluginName] = executePlugin
+		workerPlugins[copyContentPluginName] = copyContentPlugin
 	}
+
 	return workerPlugins
 }
