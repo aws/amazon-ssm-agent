@@ -103,6 +103,31 @@ type Plugin struct {
 type PluginInput struct {
 }
 
+// PluginOutputer defines interface for PluginOutput type
+type PluginOutputer interface {
+	String() string
+	MarkAsFailed(log log.T, err error)
+	MarkAsSucceeded()
+	MarkAsInProgress()
+	MarkAsSuccessWithReboot()
+	MarkAsCancelled()
+	MarkAsShutdown()
+
+	AppendInfo(log log.T, message string)
+	AppendInfof(log log.T, format string, params ...interface{})
+	AppendError(log log.T, message string)
+	AppendErrorf(log log.T, format string, params ...interface{})
+
+	// getters/setters
+	GetStatus() ResultStatus
+	GetStdout() string
+	GetStderr() string
+	GetExitCode() int
+
+	SetStatus(ResultStatus)
+	SetExitCode(int)
+}
+
 // PluginOutput represents the output of the plugin.
 type PluginOutput struct {
 	ExitCode int
@@ -205,6 +230,17 @@ func (out *PluginOutput) AppendErrorf(log log.T, format string, params ...interf
 		out.AppendError(log, message)
 	}
 }
+
+// getters/setters
+func (out *PluginOutput) GetStatus() ResultStatus { return out.Status }
+func (out *PluginOutput) GetStdout() string       { return out.Stdout }
+func (out *PluginOutput) GetStderr() string       { return out.Stderr }
+func (out *PluginOutput) GetExitCode() int        { return out.ExitCode }
+
+func (out *PluginOutput) SetStatus(status ResultStatus) { out.Status = status }
+func (out *PluginOutput) SetStdout(stdout string)       { out.Stdout = stdout }
+func (out *PluginOutput) SetStderr(stderr string)       { out.Stderr = stderr }
+func (out *PluginOutput) SetExitCode(exitCode int)      { out.ExitCode = exitCode }
 
 // TruncateOutput truncates the output
 func TruncateOutput(stdout string, stderr string, capacity int) (response string) {

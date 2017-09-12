@@ -83,7 +83,7 @@ func prepareConfigurePackage(
 	repository localpackages.Repository,
 	packageService packageservice.PackageService,
 	input *ConfigurePackagePluginInput,
-	output *contracts.PluginOutput) (inst installer.Installer, uninst installer.Installer, installState localpackages.InstallState, installedVersion string) {
+	output contracts.PluginOutputer) (inst installer.Installer, uninst installer.Installer, installState localpackages.InstallState, installedVersion string) {
 
 	log := context.Log()
 
@@ -272,7 +272,7 @@ func checkAlreadyInstalled(context context.T,
 	installState localpackages.InstallState,
 	inst installer.Installer,
 	uninst installer.Installer,
-	output *contracts.PluginOutput) bool {
+	output contracts.PluginOutputer) bool {
 	if inst != nil {
 		targetVersion := inst.Version()
 		packageName := inst.PackageName()
@@ -290,7 +290,7 @@ func checkAlreadyInstalled(context context.T,
 		if instToCheck != nil {
 			log := context.Log()
 			validateOutput := instToCheck.Validate(context)
-			if validateOutput.Status == contracts.ResultStatusSuccess {
+			if validateOutput.GetStatus() == contracts.ResultStatusSuccess {
 				if installState == localpackages.Installing {
 					output.AppendInfof(log, "Successfully installed %v %v", packageName, targetVersion)
 					if uninst != nil {
@@ -312,8 +312,8 @@ func checkAlreadyInstalled(context context.T,
 				}
 				return true
 			} else {
-				output.AppendInfo(log, validateOutput.Stdout)
-				output.AppendError(log, validateOutput.Stderr)
+				output.AppendInfo(log, validateOutput.GetStdout())
+				output.AppendError(log, validateOutput.GetStderr())
 			}
 		}
 	}
@@ -373,21 +373,21 @@ func (p *Plugin) execute(context context.T, config contracts.Configuration, canc
 			&out)
 		log.Debugf("HasInst %v, HasUninst %v, InstallState %v, InstalledVersion %v", inst != nil, uninst != nil, installState, installedVersion)
 		// if already failed or already installed and valid, do not execute install
-		if out.Status != contracts.ResultStatusFailed && !checkAlreadyInstalled(context, p.localRepository, installedVersion, installState, inst, uninst, &out) {
-			log.Debugf("Calling execute, current status %v", out.Status)
+		if out.GetStatus() != contracts.ResultStatusFailed && !checkAlreadyInstalled(context, p.localRepository, installedVersion, installState, inst, uninst, &out) {
+			log.Debugf("Calling execute, current status %v", out.GetStatus())
 			executeConfigurePackage(context,
 				p.localRepository,
 				inst,
 				uninst,
 				installState,
 				&out)
-			if !out.Status.IsReboot() {
+			if !out.GetStatus().IsReboot() {
 				version := input.Version
 				if input.Action == InstallAction {
 					version = inst.Version()
 				}
 				err := packageService.ReportResult(context.Log(), packageservice.PackageResult{
-					Exitcode:               int64(out.ExitCode),
+					Exitcode:               int64(out.GetExitCode()),
 					Operation:              input.Action,
 					PackageName:            input.Name,
 					PreviousPackageVersion: installedVersion,
@@ -407,12 +407,12 @@ func (p *Plugin) execute(context context.T, config contracts.Configuration, canc
 			if err := filesysdep.MakeDirExecute(config.OrchestrationDirectory); err != nil {
 				out.AppendError(log, "Failed to create orchestrationDir directory for log files")
 			} else {
-				if err := filesysdep.WriteFile(outFile, out.Stdout); err != nil {
+				if err := filesysdep.WriteFile(outFile, out.GetStdout()); err != nil {
 					log.Debugf("Error writing to %v", outFile)
 					out.AppendErrorf(log, "Error saving stdout: %v", err.Error())
 				}
 				errFile := filepath.Join(config.OrchestrationDirectory, p.StderrFileName)
-				if err := filesysdep.WriteFile(errFile, out.Stderr); err != nil {
+				if err := filesysdep.WriteFile(errFile, out.GetStderr()); err != nil {
 					log.Debugf("Error writing to %v", errFile)
 					out.AppendErrorf(log, "Error saving stderr: %v", err.Error())
 				}
@@ -424,18 +424,18 @@ func (p *Plugin) execute(context context.T, config contracts.Configuration, canc
 				config.OutputS3KeyPrefix,
 				useTemp,
 				config.OrchestrationDirectory,
-				out.Stdout,
-				out.Stderr)
+				out.GetStdout(),
+				out.GetStderr())
 			for _, uploadErr := range uploadErrs {
 				out.AppendError(log, uploadErr)
 			}
 		}
 	}
-	res.Code = out.ExitCode
-	res.Status = out.Status
+	res.Code = out.GetExitCode()
+	res.Status = out.GetStatus()
 	res.Output = out.String()
-	res.StandardOutput = pluginutil.StringPrefix(out.Stdout, p.MaxStdoutLength, p.OutputTruncatedSuffix)
-	res.StandardError = pluginutil.StringPrefix(out.Stderr, p.MaxStderrLength, p.OutputTruncatedSuffix)
+	res.StandardOutput = pluginutil.StringPrefix(out.GetStdout(), p.MaxStdoutLength, p.OutputTruncatedSuffix)
+	res.StandardError = pluginutil.StringPrefix(out.GetStderr(), p.MaxStderrLength, p.OutputTruncatedSuffix)
 
 	return res
 }
