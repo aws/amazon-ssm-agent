@@ -190,8 +190,8 @@ func TestInstall_ExecuteError(t *testing.T) {
 	output := inst.Install(contextMock)
 	mockFileSys.AssertExpectations(t)
 	mockExec.AssertExpectations(t)
-	assert.NotEmpty(t, output.Stderr)
-	assert.Contains(t, output.Stderr, "execute error")
+	assert.NotEmpty(t, output.GetStderr())
+	assert.Contains(t, output.GetStderr(), "execute error")
 }
 
 func TestValidate_NoAction(t *testing.T) {
@@ -211,9 +211,9 @@ func TestValidate_NoAction(t *testing.T) {
 	output := inst.Validate(contextMock)
 	mockFileSys.AssertExpectations(t)
 	mockExec.AssertExpectations(t)
-	assert.Empty(t, output.Stderr)
-	assert.Equal(t, 0, output.ExitCode)
-	assert.Equal(t, contracts.ResultStatusSuccess, output.Status)
+	assert.Empty(t, output.GetStderr())
+	assert.Equal(t, 0, output.GetExitCode())
+	assert.Equal(t, contracts.ResultStatusSuccess, output.GetStatus())
 }
 
 func TestUninstall_Success(t *testing.T) {
@@ -239,9 +239,9 @@ func TestUninstall_Success(t *testing.T) {
 	output := inst.Uninstall(contextMock)
 	mockFileSys.AssertExpectations(t)
 	mockExec.AssertExpectations(t)
-	assert.Empty(t, output.Stderr)
-	assert.Equal(t, 0, output.ExitCode)
-	assert.Equal(t, contracts.ResultStatusSuccess, output.Status)
+	assert.Empty(t, output.GetStderr())
+	assert.Equal(t, 0, output.GetExitCode())
+	assert.Equal(t, contracts.ResultStatusSuccess, output.GetStatus())
 }
 
 // Load specified file from file system

@@ -73,15 +73,15 @@ func New(packageName string,
 	}
 }
 
-func (inst *Installer) Install(context context.T) *contracts.PluginOutput {
+func (inst *Installer) Install(context context.T) contracts.PluginOutputer {
 	return inst.executeAction(context, "install")
 }
 
-func (inst *Installer) Uninstall(context context.T) *contracts.PluginOutput {
+func (inst *Installer) Uninstall(context context.T) contracts.PluginOutputer {
 	return inst.executeAction(context, "uninstall")
 }
 
-func (inst *Installer) Validate(context context.T) *contracts.PluginOutput {
+func (inst *Installer) Validate(context context.T) contracts.PluginOutputer {
 	return inst.executeAction(context, "validate")
 }
 
@@ -93,7 +93,7 @@ func (inst *Installer) PackageName() string {
 	return inst.packageName
 }
 
-func (inst *Installer) executeAction(context context.T, actionName string) *contracts.PluginOutput {
+func (inst *Installer) executeAction(context context.T, actionName string) contracts.PluginOutputer {
 	log := context.Log()
 	output := &contracts.PluginOutput{Status: contracts.ResultStatusSuccess}
 	exists, pluginsInfo, _, err := inst.readAction(context, actionName)
@@ -359,7 +359,7 @@ func (inst *Installer) readAction(context context.T, actionName string) (exists 
 func (inst *Installer) executeDocument(context context.T,
 	actionName string,
 	pluginsInfo []contracts.PluginState,
-	output *contracts.PluginOutput) {
+	output contracts.PluginOutputer) {
 	log := context.Log()
 
 	pluginOutputs := inst.execdep.ExecuteDocument(context, pluginsInfo, inst.config.BookKeepingFileName, times.ToIso8601UTC(time.Now()))
@@ -377,7 +377,7 @@ func (inst *Installer) executeDocument(context context.T,
 		if pluginOut.Error != nil {
 			output.MarkAsFailed(log, pluginOut.Error)
 		}
-		output.Status = contracts.MergeResultStatus(output.Status, pluginOut.Status)
+		output.SetStatus(contracts.MergeResultStatus(output.GetStatus(), pluginOut.Status))
 	}
 
 	return
