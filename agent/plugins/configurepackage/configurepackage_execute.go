@@ -29,7 +29,7 @@ func executeConfigurePackage(context context.T,
 	inst installer.Installer,
 	uninst installer.Installer,
 	initialInstallState localpackages.InstallState,
-	output *contracts.PluginOutput) {
+	output contracts.PluginOutputer) {
 
 	switch initialInstallState {
 	case localpackages.Installing:
@@ -61,7 +61,7 @@ func executeInstall(context context.T,
 	inst installer.Installer,
 	uninst installer.Installer,
 	isRollback bool,
-	output *contracts.PluginOutput) {
+	output contracts.PluginOutputer) {
 
 	if isRollback {
 		setNewInstallState(context, repository, inst, localpackages.RollbackInstall)
@@ -71,20 +71,20 @@ func executeInstall(context context.T,
 
 	log := context.Log()
 	result := inst.Install(context)
-	output.AppendInfo(log, result.Stdout)
-	output.AppendError(log, result.Stderr)
-	if result.Status == contracts.ResultStatusSuccess {
+	output.AppendInfo(log, result.GetStdout())
+	output.AppendError(log, result.GetStderr())
+	if result.GetStatus() == contracts.ResultStatusSuccess {
 		result = inst.Validate(context)
-		output.AppendInfo(log, result.Stdout)
-		output.AppendError(log, result.Stderr)
+		output.AppendInfo(log, result.GetStdout())
+		output.AppendError(log, result.GetStderr())
 	}
-	if result.Status.IsReboot() {
+	if result.GetStatus().IsReboot() {
 		output.AppendInfof(log, "Rebooting to finish installation of %v %v", inst.PackageName(), inst.Version())
 		output.MarkAsSuccessWithReboot()
 		return
 	}
-	if !result.Status.IsSuccess() {
-		output.AppendErrorf(log, "Failed to install package; install status %v", result.Status)
+	if !result.GetStatus().IsSuccess() {
+		output.AppendErrorf(log, "Failed to install package; install status %v", result.GetStatus())
 		if isRollback || uninst == nil {
 			output.MarkAsFailed(context.Log(), nil)
 			// TODO: Remove from repository if this isn't the last successfully installed version?  Run uninstall to clean up?
@@ -116,7 +116,7 @@ func executeUninstall(context context.T,
 	inst installer.Installer,
 	uninst installer.Installer,
 	isRollback bool,
-	output *contracts.PluginOutput) {
+	output contracts.PluginOutputer) {
 
 	if isRollback {
 		setNewInstallState(context, repository, uninst, localpackages.RollbackUninstall)
@@ -130,10 +130,10 @@ func executeUninstall(context context.T,
 
 	log := context.Log()
 	result := uninst.Uninstall(context)
-	output.AppendInfo(log, result.Stdout)
-	output.AppendError(log, result.Stderr)
-	if !result.Status.IsSuccess() {
-		output.AppendErrorf(context.Log(), "Failed to uninstall version %v of package; uninstall status %v", uninst.Version(), result.Status)
+	output.AppendInfo(log, result.GetStdout())
+	output.AppendError(log, result.GetStderr())
+	if !result.GetStatus().IsSuccess() {
+		output.AppendErrorf(context.Log(), "Failed to uninstall version %v of package; uninstall status %v", uninst.Version(), result.GetStatus())
 		if inst != nil {
 			executeInstall(context, repository, inst, uninst, isRollback, output)
 			return
@@ -142,7 +142,7 @@ func executeUninstall(context context.T,
 		output.MarkAsFailed(context.Log(), nil)
 		return
 	}
-	if result.Status.IsReboot() {
+	if result.GetStatus().IsReboot() {
 		output.AppendInfof(context.Log(), "Rebooting to finish uninstall of %v %v", uninst.PackageName(), uninst.Version())
 		output.MarkAsSuccessWithReboot()
 		return
@@ -158,7 +158,7 @@ func executeUninstall(context context.T,
 }
 
 // cleanupAfterUninstall removes packages that are no longer needed in the repository
-func cleanupAfterUninstall(context context.T, repository localpackages.Repository, uninst installer.Installer, output *contracts.PluginOutput) {
+func cleanupAfterUninstall(context context.T, repository localpackages.Repository, uninst installer.Installer, output contracts.PluginOutputer) {
 	if err := repository.RemovePackage(context, uninst.PackageName(), uninst.Version()); err != nil {
 		output.AppendErrorf(context.Log(), "Error cleaning up uninstalled version %v", err)
 	}
