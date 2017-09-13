@@ -20,8 +20,10 @@ import (
 
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
+	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/platform"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/localpackages"
+	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/trace"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/pluginutil"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
@@ -90,9 +92,11 @@ func TestPrepareNewInstall(t *testing.T) {
 	installerMock := installerNotCalledMock()
 	repoMock := repoInstallMock(pluginInformation, installerMock)
 	serviceMock := serviceSuccessMock()
-	output := &contracts.PluginOutput{}
+	tracer := trace.NewTracer(log.NewMockLog())
+	output := &trace.PluginOutputTrace{Tracer: tracer}
 
 	inst, uninst, installState, installedVersion := prepareConfigurePackage(
+		tracer,
 		contextMock,
 		buildConfigSimple(pluginInformation),
 		repoMock,
@@ -104,8 +108,8 @@ func TestPrepareNewInstall(t *testing.T) {
 	assert.Nil(t, uninst)
 	assert.Equal(t, localpackages.None, installState)
 	assert.Empty(t, installedVersion)
-	assert.Equal(t, 0, output.ExitCode)
-	assert.Empty(t, output.Stderr)
+	assert.Equal(t, 0, output.GetExitCode())
+	assert.Empty(t, tracer.ToPluginOutput().GetStderr())
 
 	installerMock.AssertExpectations(t)
 }
@@ -119,9 +123,11 @@ func TestPrepareUpgrade(t *testing.T) {
 	installerMock := installerNotCalledMock()
 	repoMock := repoUpgradeMock(pluginInformation, installerMock)
 	serviceMock := serviceUpgradeMock()
-	output := &contracts.PluginOutput{}
+	tracer := trace.NewTracer(log.NewMockLog())
+	output := &trace.PluginOutputTrace{Tracer: tracer}
 
 	inst, uninst, installState, installedVersion := prepareConfigurePackage(
+		tracer,
 		contextMock,
 		buildConfigSimple(pluginInformation),
 		repoMock,
@@ -133,8 +139,8 @@ func TestPrepareUpgrade(t *testing.T) {
 	assert.NotNil(t, uninst)
 	assert.Equal(t, localpackages.Installed, installState)
 	assert.NotEmpty(t, installedVersion)
-	assert.Equal(t, 0, output.ExitCode)
-	assert.Empty(t, output.Stderr)
+	assert.Equal(t, 0, output.GetExitCode())
+	assert.Empty(t, tracer.ToPluginOutput().GetStderr())
 
 	installerMock.AssertExpectations(t)
 }
@@ -148,9 +154,11 @@ func TestPrepareUninstall(t *testing.T) {
 	installerMock := installerNotCalledMock()
 	repoMock := repoUninstallMock(pluginInformation, installerMock)
 	serviceMock := serviceSuccessMock()
-	output := &contracts.PluginOutput{}
+	tracer := trace.NewTracer(log.NewMockLog())
+	output := &trace.PluginOutputTrace{Tracer: tracer}
 
 	inst, uninst, installState, installedVersion := prepareConfigurePackage(
+		tracer,
 		contextMock,
 		buildConfigSimple(pluginInformation),
 		repoMock,
@@ -162,8 +170,8 @@ func TestPrepareUninstall(t *testing.T) {
 	assert.NotNil(t, uninst)
 	assert.Equal(t, localpackages.Installed, installState)
 	assert.NotEmpty(t, installedVersion)
-	assert.Equal(t, 0, output.ExitCode)
-	assert.Empty(t, output.Stderr)
+	assert.Equal(t, 0, output.GetExitCode())
+	assert.Empty(t, tracer.ToPluginOutput().GetStderr())
 
 	installerMock.AssertExpectations(t)
 }
@@ -177,9 +185,11 @@ func TestPrepareUninstallCurrent(t *testing.T) {
 	installerMock := installerNotCalledMock()
 	repoMock := repoUninstallMock(pluginInformation, installerMock)
 	serviceMock := serviceSuccessMock()
-	output := &contracts.PluginOutput{}
+	tracer := trace.NewTracer(log.NewMockLog())
+	output := &trace.PluginOutputTrace{Tracer: tracer}
 
 	inst, uninst, installState, installedVersion := prepareConfigurePackage(
+		tracer,
 		contextMock,
 		buildConfigSimple(pluginInformation),
 		repoMock,
@@ -191,8 +201,8 @@ func TestPrepareUninstallCurrent(t *testing.T) {
 	assert.NotNil(t, uninst)
 	assert.Equal(t, localpackages.Installed, installState)
 	assert.NotEmpty(t, installedVersion)
-	assert.Equal(t, 0, output.ExitCode)
-	assert.Empty(t, output.Stderr)
+	assert.Equal(t, 0, output.GetExitCode())
+	assert.Empty(t, tracer.ToPluginOutput().GetStderr())
 
 	installerMock.AssertExpectations(t)
 }
@@ -206,9 +216,11 @@ func TestPrepareUninstallWrongVersion(t *testing.T) {
 	installerMock := installerNotCalledMock()
 	repoMock := repoUninstallMock(pluginInformation, installerMock)
 	serviceMock := serviceSuccessMock()
-	output := &contracts.PluginOutput{}
+	tracer := trace.NewTracer(log.NewMockLog())
+	output := &trace.PluginOutputTrace{Tracer: tracer}
 
 	inst, uninst, installState, installedVersion := prepareConfigurePackage(
+		tracer,
 		contextMock,
 		buildConfigSimple(pluginInformation),
 		repoMock,
@@ -220,8 +232,8 @@ func TestPrepareUninstallWrongVersion(t *testing.T) {
 	assert.Nil(t, uninst)
 	assert.Equal(t, localpackages.Installed, installState)
 	assert.NotEmpty(t, installedVersion)
-	assert.Equal(t, 1, output.ExitCode)
-	assert.NotEmpty(t, output.Stderr)
+	assert.Equal(t, 1, output.GetExitCode())
+	assert.NotEmpty(t, tracer.ToPluginOutput().GetStderr())
 
 	installerMock.AssertExpectations(t)
 }
@@ -231,9 +243,11 @@ func TestInstalledValid(t *testing.T) {
 	installerMock := installerSuccessMock(pluginInformation.Name, pluginInformation.Version)
 	uninstallerMock := installerNotCalledMock()
 	repoMock := repoInstallMock(pluginInformation, installerMock)
-	output := &contracts.PluginOutput{}
+	tracer := trace.NewTracer(log.NewMockLog())
+	output := &trace.PluginOutputTrace{Tracer: tracer}
 
 	alreadyInstalled := checkAlreadyInstalled(
+		tracer,
 		contextMock,
 		repoMock,
 		installerMock.Version(),
@@ -249,9 +263,11 @@ func TestNotInstalled(t *testing.T) {
 	installerMock := installerSuccessMock(pluginInformation.Name, pluginInformation.Version)
 	uninstallerMock := installerNotCalledMock()
 	repoMock := repoInstallMock(pluginInformation, installerMock)
-	output := &contracts.PluginOutput{}
+	tracer := trace.NewTracer(log.NewMockLog())
+	output := &trace.PluginOutputTrace{Tracer: tracer}
 
 	alreadyInstalled := checkAlreadyInstalled(
+		tracer,
 		contextMock,
 		repoMock,
 		"",
@@ -267,9 +283,11 @@ func TestOtherVersionInstalled(t *testing.T) {
 	installerMock := installerSuccessMock(pluginInformation.Name, pluginInformation.Version)
 	uninstallerMock := installerNotCalledMock()
 	repoMock := repoInstallMock(pluginInformation, installerMock)
-	output := &contracts.PluginOutput{}
+	tracer := trace.NewTracer(log.NewMockLog())
+	output := &trace.PluginOutputTrace{Tracer: tracer}
 
 	alreadyInstalled := checkAlreadyInstalled(
+		tracer,
 		contextMock,
 		repoMock,
 		"2.3.4",
@@ -286,9 +304,11 @@ func TestInstallingValid(t *testing.T) {
 	uninstallerMock := installerNameVersionOnlyMock(pluginInformation.Name, pluginInformation.Version)
 	repoMock := repoInstallMock(pluginInformation, installerMock)
 	repoMock.On("RemovePackage", mock.Anything, pluginInformation.Name, pluginInformation.Version).Return(nil)
-	output := &contracts.PluginOutput{}
+	tracer := trace.NewTracer(log.NewMockLog())
+	output := &trace.PluginOutputTrace{Tracer: tracer}
 
 	alreadyInstalled := checkAlreadyInstalled(
+		tracer,
 		contextMock,
 		repoMock,
 		installerMock.Version(),
@@ -305,9 +325,11 @@ func TestRollbackValid(t *testing.T) {
 	uninstallerMock := installerSuccessMock(pluginInformation.Name, pluginInformation.Version)
 	repoMock := repoInstallMock(pluginInformation, installerMock)
 	repoMock.On("RemovePackage", mock.Anything, pluginInformation.Name, pluginInformation.Version).Return(nil)
-	output := &contracts.PluginOutput{}
+	tracer := trace.NewTracer(log.NewMockLog())
+	output := &trace.PluginOutputTrace{Tracer: tracer}
 
 	alreadyInstalled := checkAlreadyInstalled(
+		tracer,
 		contextMock,
 		repoMock,
 		installerMock.Version(),
@@ -324,9 +346,11 @@ func TestInstallingNotValid(t *testing.T) {
 	uninstallerMock := installerNotCalledMock()
 	repoMock := repoInstallMock(pluginInformation, installerMock)
 	repoMock.On("RemovePackage", mock.Anything, pluginInformation.Name, pluginInformation.Version).Return(nil)
-	output := &contracts.PluginOutput{}
+	tracer := trace.NewTracer(log.NewMockLog())
+	output := &trace.PluginOutputTrace{Tracer: tracer}
 
 	alreadyInstalled := checkAlreadyInstalled(
+		tracer,
 		contextMock,
 		repoMock,
 		installerMock.Version(),
