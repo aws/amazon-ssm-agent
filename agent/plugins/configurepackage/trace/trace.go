@@ -39,8 +39,8 @@ func (t *TimeImpl) NowUnixNano() int64 {
 }
 
 type Trace struct {
-	tracer Tracer
-	logger log.T
+	Tracer Tracer
+	Logger log.T
 
 	Operation string
 	// results
@@ -87,8 +87,8 @@ func (t *TracerImpl) BeginSection(message string) *Trace {
 	t.logger.Debugf("starting with %s", message)
 
 	trace := &Trace{
-		tracer:    t,
-		logger:    t.logger,
+		Tracer:    t,
+		Logger:    t.logger,
 		Operation: message,
 		Start:     t.timeProvider.NowUnixNano(),
 	}
@@ -275,14 +275,14 @@ func (t *Trace) WithExitcode(exitcode int64) *Trace {
 
 // WithExitcode sets the error of the trace
 func (t *Trace) WithError(err error) *Trace {
-	t.logger.Error(err)
+	t.Logger.Error(err)
 	t.Error = err
 	return t
 }
 
 // End will close the trace. Afterwards no other operation should be called.
 func (t *Trace) End() error {
-	return t.tracer.EndSection(t)
+	return t.Tracer.EndSection(t)
 }
 
 // EndWithError just combines two commonly used methods to be able to use it in
@@ -303,7 +303,7 @@ func (t *Trace) EndWithError(err *error) *Trace {
 
 // AppendInfo adds info to PluginOutput StandardOut.
 func (t *Trace) AppendInfo(message string) *Trace {
-	t.logger.Info(message)
+	t.Logger.Info(message)
 	t.InfoOut.WriteString(message)
 	t.InfoOut.WriteString("\n")
 	return t
@@ -316,7 +316,7 @@ func (t *Trace) AppendInfof(format string, params ...interface{}) *Trace {
 
 // AppendError adds errors to PluginOutput StandardErr.
 func (t *Trace) AppendError(message string) *Trace {
-	t.logger.Error(message)
+	t.Logger.Error(message)
 	t.ErrorOut.WriteString(message)
 	t.ErrorOut.WriteString("\n")
 	return t
