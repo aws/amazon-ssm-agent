@@ -285,17 +285,24 @@ func validateInput(input *ConfigurePackagePluginInput) (valid bool, err error) {
 }
 
 // checkAlreadyInstalled returns true if the version being installed is already in a valid installed state
-func checkAlreadyInstalled(context context.T,
+func checkAlreadyInstalled(
+	tracer trace.Tracer,
+	context context.T,
 	repository localpackages.Repository,
 	installedVersion string,
 	installState localpackages.InstallState,
 	inst installer.Installer,
 	uninst installer.Installer,
 	output contracts.PluginOutputer) bool {
+
+	checkTrace := tracer.BeginSection("check if already installed")
+	defer checkTrace.End()
+
 	if inst != nil {
 		targetVersion := inst.Version()
 		packageName := inst.PackageName()
 		var instToCheck installer.Installer
+
 		// TODO: When existing packages have idempotent installers and no reboot loops, remove this check for installing packages and allow the install to continue until it reports success without reboot
 		if uninst != nil && installState == localpackages.RollbackInstall {
 			// This supports rollback to a version whose installer contains an unconditional reboot
@@ -307,35 +314,43 @@ func checkAlreadyInstalled(context context.T,
 			instToCheck = inst
 		}
 		if instToCheck != nil {
-			log := context.Log()
+			validateTrace := tracer.BeginSection(fmt.Sprintf("run validate for %s/%s", instToCheck.PackageName(), instToCheck.Version()))
+
 			validateOutput := instToCheck.Validate(context)
+			validateTrace.WithExitcode(int64(validateOutput.GetExitCode()))
+
 			if validateOutput.GetStatus() == contracts.ResultStatusSuccess {
 				if installState == localpackages.Installing {
-					output.AppendInfof(log, "Successfully installed %v %v", packageName, targetVersion)
+					validateTrace.AppendInfof("Successfully installed %v %v", packageName, targetVersion)
 					if uninst != nil {
 						cleanupAfterUninstall(context, repository, uninst, output)
 					}
 					// TODO: report result
 					output.MarkAsSucceeded()
 				} else if installState == localpackages.RollbackInstall {
-					output.AppendInfof(context.Log(), "Failed to install %v %v, successfully rolled back to %v %v", uninst.PackageName(), uninst.Version(), inst.PackageName(), inst.Version())
+					validateTrace.AppendInfof("Failed to install %v %v, successfully rolled back to %v %v", uninst.PackageName(), uninst.Version(), inst.PackageName(), inst.Version())
 					cleanupAfterUninstall(context, repository, inst, output)
 					// TODO: report result
-					output.MarkAsFailed(context.Log(), nil)
+					output.MarkAsFailed(nil, nil)
 				} else {
-					output.AppendInfof(log, "%v %v is already installed", packageName, targetVersion)
+					validateTrace.AppendInfof("%v %v is already installed", packageName, targetVersion)
 					output.MarkAsSucceeded()
 				}
 				if installState != localpackages.Installed && installState != localpackages.Unknown {
 					repository.SetInstallState(context, packageName, instToCheck.Version(), localpackages.Installed)
 				}
+
+				validateTrace.End()
 				return true
-			} else {
-				output.AppendInfo(log, validateOutput.GetStdout())
-				output.AppendError(log, validateOutput.GetStderr())
 			}
+
+			validateTrace.AppendInfo(validateOutput.GetStdout())
+			validateTrace.AppendError(validateOutput.GetStderr())
+			validateTrace.End()
 		}
 	}
+
+	checkTrace.WithExitcode(1)
 	return false
 }
 
@@ -369,17 +384,19 @@ func (p *Plugin) execute(context context.T, config contracts.Configuration, canc
 		res.EndDateTime = time.Now()
 	}()
 
-	out := contracts.PluginOutput{}
+	out := trace.PluginOutputTrace{Tracer: tracer}
 	if cancelFlag.ShutDown() {
 		out.MarkAsShutdown()
 	} else if cancelFlag.Canceled() {
 		out.MarkAsCancelled()
 	} else if input, err := parseAndValidateInput(config.Properties); err != nil {
-		out.MarkAsFailed(log, err)
+		tracer.CurrentTrace().WithError(err).End()
+		out.MarkAsFailed(nil, nil)
 	} else if err := lockPackage(input.Name, input.Action); err != nil {
 		// do not allow multiple actions to be performed at the same time for the same package
 		// this is possible with multiple concurrent runcommand documents
-		out.MarkAsFailed(log, err)
+		tracer.CurrentTrace().WithError(err).End()
+		out.MarkAsFailed(nil, nil)
 	} else {
 		defer unlockPackage(input.Name)
 
@@ -396,7 +413,7 @@ func (p *Plugin) execute(context context.T, config contracts.Configuration, canc
 			&out)
 		log.Debugf("HasInst %v, HasUninst %v, InstallState %v, InstalledVersion %v", inst != nil, uninst != nil, installState, installedVersion)
 		// if already failed or already installed and valid, do not execute install
-		if out.GetStatus() != contracts.ResultStatusFailed && !checkAlreadyInstalled(context, p.localRepository, installedVersion, installState, inst, uninst, &out) {
+		if out.GetStatus() != contracts.ResultStatusFailed && !checkAlreadyInstalled(tracer, context, p.localRepository, installedVersion, installState, inst, uninst, &out) {
 			log.Debugf("Calling execute, current status %v", out.GetStatus())
 			executeConfigurePackage(context,
 				p.localRepository,
@@ -456,9 +473,12 @@ func (p *Plugin) execute(context context.T, config contracts.Configuration, canc
 	}
 	res.Code = out.GetExitCode()
 	res.Status = out.GetStatus()
-	res.Output = out.String()
-	res.StandardOutput = pluginutil.StringPrefix(out.GetStdout(), p.MaxStdoutLength, p.OutputTruncatedSuffix)
-	res.StandardError = pluginutil.StringPrefix(out.GetStderr(), p.MaxStderrLength, p.OutputTruncatedSuffix)
+
+	// convert trace
+	traceout := tracer.ToPluginOutput()
+	res.Output = traceout.String()
+	res.StandardOutput = pluginutil.StringPrefix(traceout.GetStdout(), p.MaxStdoutLength, p.OutputTruncatedSuffix)
+	res.StandardError = pluginutil.StringPrefix(traceout.GetStderr(), p.MaxStderrLength, p.OutputTruncatedSuffix)
 
 	return res
 }
