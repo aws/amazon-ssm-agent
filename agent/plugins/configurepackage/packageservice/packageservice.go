@@ -34,7 +34,7 @@ type PackageResult struct {
 	Timing                 int64
 	Exitcode               int64
 	Environment            map[string]string
-	Trace                  map[string]Trace
+	Trace                  []*Trace
 }
 
 // PackageService is used to determine the latest version and to obtain the local repository content for a given version.
