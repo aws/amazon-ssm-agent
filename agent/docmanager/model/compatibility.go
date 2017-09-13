@@ -53,15 +53,15 @@ func RemoveDependencyOnInstanceMetadata(context context.T, docState *DocumentSta
 		if pluginState.Name == appconfig.PluginNameAwsRunPowerShellScript {
 			err := jsonutil.Remarshal(pluginState.Configuration.Properties, &properties)
 			if err != nil {
-				log.Errorf("Invalid format of properties in %v document. error: %v", docState.DocumentInformation.DocumentName, err)
-				return err
+				log.Debugf("properties format unmatch in %v document. error: %v", docState.DocumentInformation.DocumentName, err)
+				return nil
 			}
 
 			// Since 'Properties' is an array and we use only one property block for the above documents, array location '0' of 'Properties' is used.
 			err = jsonutil.Remarshal(properties[0], &parsedDocumentProperties)
 			if err != nil {
-				log.Errorf("Invalid format of properties in %v document. error: %v", docState.DocumentInformation.DocumentName, err)
-				return err
+				log.Debugf("property format unmatch in %v document. error: %v", docState.DocumentInformation.DocumentName, err)
+				return nil
 			}
 
 			region, err := platform.Region()
