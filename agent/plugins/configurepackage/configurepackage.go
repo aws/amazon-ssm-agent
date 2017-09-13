@@ -87,7 +87,6 @@ func prepareConfigurePackage(
 	input *ConfigurePackagePluginInput,
 	output contracts.PluginOutputer) (inst installer.Installer, uninst installer.Installer, installState localpackages.InstallState, installedVersion string) {
 
-	log := context.Log()
 	prepareTrace := tracer.BeginSection(fmt.Sprintf("prepare %s", input.Action))
 	defer prepareTrace.End()
 
@@ -100,7 +99,7 @@ func prepareConfigurePackage(
 		version, installedVersion, installState, err = getVersionToInstall(tracer, context, repository, packageService, input)
 		if err != nil {
 			trace.WithError(err).End()
-			output.MarkAsFailed(log, nil)
+			output.MarkAsFailed(nil, nil)
 			return
 		}
 		trace.AppendInfof("installed: %v in state %v, to install: %v", installedVersion, installState, version).End()
@@ -110,7 +109,7 @@ func prepareConfigurePackage(
 		inst, err = ensurePackage(context, repository, packageService, input.Name, version, config)
 		if err != nil {
 			trace.WithError(err).End()
-			output.MarkAsFailed(log, nil)
+			output.MarkAsFailed(nil, nil)
 			return
 		}
 		trace.End()
@@ -134,7 +133,7 @@ func prepareConfigurePackage(
 		installedVersion = version
 		if err != nil || version == "" {
 			trace.WithError(err).End()
-			output.MarkAsFailed(log, nil)
+			output.MarkAsFailed(nil, nil)
 			return
 		}
 		trace.AppendInfof("installed: %v in state: %v", version, installState).End()
@@ -144,14 +143,14 @@ func prepareConfigurePackage(
 		uninst, err = ensurePackage(context, repository, packageService, input.Name, version, config)
 		if err != nil {
 			trace.WithError(err).End()
-			output.MarkAsFailed(log, nil)
+			output.MarkAsFailed(nil, nil)
 			return
 		}
 		trace.End()
 
 	default:
 		prepareTrace.AppendErrorf("unsupported action: %v", input.Action)
-		output.MarkAsFailed(log, nil)
+		output.MarkAsFailed(nil, nil)
 		return
 	}
 
