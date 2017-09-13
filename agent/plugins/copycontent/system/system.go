@@ -16,11 +16,9 @@
 package system
 
 import (
-	"github.com/aws/amazon-ssm-agent/agent/filemanager"
-	"github.com/aws/amazon-ssm-agent/agent/fileutil"
+	"github.com/aws/amazon-ssm-agent/agent/fileutil/filemanager"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 
-	"fmt"
 	"os"
 	"path/filepath"
 )
@@ -28,42 +26,22 @@ import (
 var SetPermission = chmod
 
 // SaveFileContent is a method that returns the content in a file and saves it on disk
-func SaveFileContent(log log.T, filesysdep filemanager.FileSystem, destDir string, contents string, resourceFilePath string) (err error) {
+func SaveFileContent(log log.T, filesysdep filemanager.FileSystem, destination string, contents string) (err error) {
 
-	filePath := fileutil.BuildPath(destDir, resourceFilePath)
-	destinationDir := filepath.Dir(filePath)
-
-	log.Debugf("Destination dir is %v and the file path is %v ", destinationDir, filePath)
+	log.Debugf("Destination is %v ", destination)
 	// create directory to download github resources
-	if err = filesysdep.MakeDirs(destinationDir); err != nil {
+	if err = filesysdep.MakeDirs(filepath.Dir(destination)); err != nil {
 		log.Error("failed to create directory for github - ", err)
 		return err
 	}
 	log.Debug("Content obtained - ", contents)
 
-	if err = filesysdep.WriteFile(filePath, contents); err != nil {
-		log.Errorf("Error writing to file %v - %v", filePath, err)
+	if err = filesysdep.WriteFile(destination, contents); err != nil {
+		log.Errorf("Error writing to file %v - %v", destination, err)
 		return err
 	}
 
 	return nil
-}
-
-// ReadFileContents is a method to read the contents of a give file path
-func ReadFileContents(log log.T, filesysdep filemanager.FileSystem, destinationPath string) (fileContent []byte, err error) {
-
-	log.Debug("Reading file contents from file - ", destinationPath)
-
-	var rawFile string
-	if rawFile, err = filesysdep.ReadFile(destinationPath); err != nil {
-		log.Error("Error occured while reading file - ", err)
-		return nil, err
-	}
-	if rawFile == "" {
-		return []byte(rawFile), fmt.Errorf("File is empty!")
-	}
-
-	return []byte(rawFile), nil
 }
 
 // RenameFile is a method that renames a file and deletes the original copy

@@ -16,7 +16,7 @@
 package remoteresource_mock
 
 import (
-	"github.com/aws/amazon-ssm-agent/agent/filemanager"
+	"github.com/aws/amazon-ssm-agent/agent/fileutil/filemanager"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/stretchr/testify/mock"
 )

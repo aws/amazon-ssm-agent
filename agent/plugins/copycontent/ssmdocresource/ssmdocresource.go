@@ -17,7 +17,7 @@ package ssmdocresource
 
 import (
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
-	"github.com/aws/amazon-ssm-agent/agent/filemanager"
+	"github.com/aws/amazon-ssm-agent/agent/fileutil/filemanager"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/copycontent/remoteresource"
@@ -56,7 +56,7 @@ func NewSSMDocResource(info string) (*SSMDocResource, error) {
 func parseLocationInfo(locationInfo string) (ssmdoc SSMDocInfo, err error) {
 
 	if err = jsonutil.Unmarshal(locationInfo, &ssmdoc); err != nil {
-		return ssmdoc, errors.New("Location Info could not be unmarshalled for location type S3. Please check JSON format of locationInfo")
+		return ssmdoc, errors.New("Location Info could not be unmarshalled for location type SSMDocument. Please check JSON format of locationInfo")
 	}
 
 	return ssmdoc, nil
@@ -67,7 +67,8 @@ func (ssmdoc *SSMDocResource) Download(log log.T, filesys filemanager.FileSystem
 	if destinationDir == "" {
 		destinationDir = appconfig.DownloadRoot
 	}
-
+	//This gets the document name if the fullARN is provided
+	docName := filepath.Base(ssmdoc.Info.DocName)
 	log.Debug("Making a call to get document", ssmdoc.Info.DocName, ssmdoc.Info.DocVersion)
 	var docResponse *ssm.GetDocumentOutput
 	if docResponse, err = ssmdocdep.GetDocument(log, ssmdoc.Info.DocName, ssmdoc.Info.DocVersion); err != nil {
@@ -75,8 +76,8 @@ func (ssmdoc *SSMDocResource) Download(log log.T, filesys filemanager.FileSystem
 		return err
 	}
 
-	destinationFilePath := filepath.Join(ssmdoc.Info.DocName, ssmdoc.Info.DocName+remoteresource.JSONExtension)
-	if err = system.SaveFileContent(log, filesys, destinationDir, *docResponse.Content, destinationFilePath); err != nil {
+	destinationFilePath := filepath.Join(destinationDir, docName+remoteresource.JSONExtension)
+	if err = system.SaveFileContent(log, filesys, destinationFilePath, *docResponse.Content); err != nil {
 		log.Errorf("Error saving file - %v", err)
 		return
 	}
