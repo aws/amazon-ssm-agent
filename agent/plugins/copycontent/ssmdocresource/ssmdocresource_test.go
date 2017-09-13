@@ -16,7 +16,7 @@ package ssmdocresource
 
 import (
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
-	filemock "github.com/aws/amazon-ssm-agent/agent/filemanager/mock"
+	filemock "github.com/aws/amazon-ssm-agent/agent/fileutil/filemanager/mock"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/aws-sdk-go/service/ssm"
 	"github.com/stretchr/testify/assert"
@@ -24,6 +24,7 @@ import (
 
 	"fmt"
 	"path/filepath"
+	"strings"
 	"testing"
 )
 
@@ -40,6 +41,34 @@ func TestSSMDocResource_ValidateLocationInfo(t *testing.T) {
 	_, err := ssmresource.ValidateLocationInfo()
 
 	assert.NoError(t, err)
+}
+
+func TestSSMDocResource_FullARNNameInput(t *testing.T) {
+	depMock := new(ssmDocDepMock)
+	fileMock := filemock.FileSystemMock{}
+
+	locationInfo := `{
+		"name": "arn:aws:ssm:us-east-1:1234567890:document/mySharedDocument",
+		"version": ""
+	}`
+
+	content := "content"
+	docOutput := ssm.GetDocumentOutput{
+		Content: &content,
+	}
+	ssmresource, _ := NewSSMDocResource(locationInfo)
+	dir := "destination"
+	depMock.On("GetDocument", logMock, ssmresource.Info.DocName, ssmresource.Info.DocVersion).Return(&docOutput, nil)
+	fileMock.On("MakeDirs", dir).Return(nil)
+	fileMock.On("WriteFile", filepath.Join(dir, "mySharedDocument.json"), content).Return(nil)
+
+	ssmdocdep = depMock
+
+	err := ssmresource.Download(logMock, fileMock, "destination")
+
+	assert.NoError(t, err)
+	depMock.AssertExpectations(t)
+	fileMock.AssertExpectations(t)
 }
 
 func TestSSMDocResource_ValidateLocationInfoNoName(t *testing.T) {
@@ -69,7 +98,7 @@ func TestSSMDocResource_Download(t *testing.T) {
 		Content: &content,
 	}
 	ssmresource, _ := NewSSMDocResource(locationInfo)
-	dir := filepath.Join("destination", ssmresource.Info.DocName)
+	dir := "destination"
 	depMock.On("GetDocument", logMock, ssmresource.Info.DocName, ssmresource.Info.DocVersion).Return(&docOutput, nil)
 	fileMock.On("MakeDirs", dir).Return(nil)
 	fileMock.On("WriteFile", filepath.Join(dir, ssmresource.Info.DocName+".json"), content).Return(nil)
@@ -96,9 +125,9 @@ func TestSSMDocResource_DownloadNoDestination(t *testing.T) {
 		Content: &content,
 	}
 	ssmresource, _ := NewSSMDocResource(locationInfo)
-	dir := filepath.Join(appconfig.DownloadRoot, ssmresource.Info.DocName)
+	dir := appconfig.DownloadRoot
 	depMock.On("GetDocument", logMock, ssmresource.Info.DocName, ssmresource.Info.DocVersion).Return(&docOutput, nil)
-	fileMock.On("MakeDirs", dir).Return(nil)
+	fileMock.On("MakeDirs", strings.TrimSuffix(dir, "/")).Return(nil)
 	fileMock.On("WriteFile", filepath.Join(dir, ssmresource.Info.DocName+".json"), content).Return(fmt.Errorf("Error"))
 
 	ssmdocdep = depMock

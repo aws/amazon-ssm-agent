@@ -19,7 +19,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
-	"github.com/aws/amazon-ssm-agent/agent/filemanager"
+	"github.com/aws/amazon-ssm-agent/agent/fileutil/filemanager"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/platform"
@@ -207,6 +207,7 @@ func (p *Plugin) runCopyContent(log log.T, input *CopyContentPlugin, config cont
 	}
 	output.AppendInfof(log, "Content downloaded to %v", destinationDir)
 	output.MarkAsSucceeded()
+
 	return
 }
 

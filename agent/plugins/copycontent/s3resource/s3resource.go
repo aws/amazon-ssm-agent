@@ -17,9 +17,9 @@ package s3resource
 
 import (
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
-	"github.com/aws/amazon-ssm-agent/agent/filemanager"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil/artifact"
+	"github.com/aws/amazon-ssm-agent/agent/fileutil/filemanager"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/copycontent/system"
@@ -62,7 +62,7 @@ func NewS3Resource(log log.T, info string) (s3 *S3Resource, err error) {
 func parseLocationInfo(locationInfo string) (s3Info S3Info, err error) {
 
 	if err = jsonutil.Unmarshal(locationInfo, &s3Info); err != nil {
-		return s3Info, fmt.Errorf("Location Info could not be unmarshalled for location type S3. Please check JSON format of locationInfo")
+		return s3Info, fmt.Errorf("Location Info could not be unmarshalled for location type S3. Please check JSON format of locationInfo - %v", err)
 	}
 
 	return
@@ -86,11 +86,10 @@ func (s3 *S3Resource) Download(log log.T, filesys filemanager.FileSystem, destin
 	s3.s3Object = s3util.ParseAmazonS3URL(log, fileURL)
 	log.Debug("S3 object - ", s3.s3Object.String())
 	// Create an object for the source URL. This can be used to list the objects in the folder
-	if isPathType(s3.Info.Path) {
-		if folders, err = dep.ListS3Objects(log, s3.s3Object); err != nil {
-			return err
-		}
-	} else {
+	if folders, err = dep.ListS3Objects(log, s3.s3Object); err != nil {
+		return err
+	}
+	if len(folders) == 0 {
 		// In case of a file download, append the filename to folders
 		folders = append(folders, s3.s3Object.Key)
 	}
@@ -104,8 +103,10 @@ func (s3 *S3Resource) Download(log log.T, filesys filemanager.FileSystem, destin
 		log.Debug("Name of file - ", files)
 		var input artifact.DownloadInput
 		if !isPathType(files) { //Only download in case the URL is a file
-			localFilePath = fileutil.BuildPath(destinationDir, s3.s3Object.Bucket, filepath.Dir(files))
+			subFolderPath := strings.TrimPrefix(files, s3.s3Object.Key)
 
+			//when thes3 key has subfolders leading to files, those subfolders need to be createdas well
+			localFilePath = fileutil.BuildPath(destinationDir, filepath.Dir(subFolderPath))
 			// Obtain the full URL for the file before download
 			input.DestinationDirectory = localFilePath
 			input.SourceURL = bucketURL + files
