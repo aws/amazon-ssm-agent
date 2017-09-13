@@ -16,150 +16,175 @@
 package configurepackage
 
 import (
+	"fmt"
+
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/installer"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/localpackages"
+	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/trace"
 )
 
 // TODO: consider passing in the timeout and cancel channels - does cancel trigger rollback?
 // executeConfigurePackage performs install and uninstall actions, with rollback support and recovery after reboots
-func executeConfigurePackage(context context.T,
+func executeConfigurePackage(
+	tracer trace.Tracer,
+	context context.T,
 	repository localpackages.Repository,
 	inst installer.Installer,
 	uninst installer.Installer,
 	initialInstallState localpackages.InstallState,
 	output contracts.PluginOutputer) {
 
+	trace := tracer.BeginSection(fmt.Sprintf("execute configure - state: %s", initialInstallState))
+	defer trace.End()
+
 	switch initialInstallState {
 	case localpackages.Installing:
 		// This could be picking up an install after reboot or an upgrade that rebooted during install (after a successful uninstall)
-		executeInstall(context, repository, inst, uninst, false, output)
+		executeInstall(tracer, context, repository, inst, uninst, false, output)
 	case localpackages.RollbackInstall:
-		executeInstall(context, repository, uninst, inst, true, output)
+		executeInstall(tracer, context, repository, uninst, inst, true, output)
 	case localpackages.RollbackUninstall:
-		executeUninstall(context, repository, uninst, inst, true, output)
+		executeUninstall(tracer, context, repository, uninst, inst, true, output)
 	default:
 		if uninst != nil {
-			executeUninstall(context, repository, inst, uninst, false, output)
+			executeUninstall(tracer, context, repository, inst, uninst, false, output)
 		} else {
-			executeInstall(context, repository, inst, uninst, false, output)
+			executeInstall(tracer, context, repository, inst, uninst, false, output)
 		}
 	}
 }
 
 // set package install state and log any error
-func setNewInstallState(context context.T, repository localpackages.Repository, inst installer.Installer, newInstallState localpackages.InstallState) {
+func setNewInstallState(tracer trace.Tracer, context context.T, repository localpackages.Repository, inst installer.Installer, newInstallState localpackages.InstallState) {
+	trace := tracer.BeginSection(fmt.Sprintf("set install state install %s/%s - state: %s", inst.PackageName(), inst.Version(), newInstallState))
+
 	if err := repository.SetInstallState(context, inst.PackageName(), inst.Version(), newInstallState); err != nil {
-		context.Log().Errorf("Failed to set new install state: %v", err)
+		trace.WithError(err)
 	}
+
+	trace.End()
 }
 
 // executeInstall performs install and validation of a package
-func executeInstall(context context.T,
+func executeInstall(
+	tracer trace.Tracer,
+	context context.T,
 	repository localpackages.Repository,
 	inst installer.Installer,
 	uninst installer.Installer,
 	isRollback bool,
 	output contracts.PluginOutputer) {
 
+	installtrace := tracer.BeginSection(fmt.Sprintf("install %s/%s - rollback: %b", inst.PackageName(), inst.Version(), isRollback))
+	defer installtrace.End()
+
 	if isRollback {
-		setNewInstallState(context, repository, inst, localpackages.RollbackInstall)
+		setNewInstallState(tracer, context, repository, inst, localpackages.RollbackInstall)
 	} else {
-		setNewInstallState(context, repository, inst, localpackages.Installing)
+		setNewInstallState(tracer, context, repository, inst, localpackages.Installing)
 	}
 
-	log := context.Log()
 	result := inst.Install(context)
-	output.AppendInfo(log, result.GetStdout())
-	output.AppendError(log, result.GetStderr())
+
+	installtrace.WithExitcode(int64(result.GetExitCode())).AppendInfo(result.GetStdout()).AppendError(result.GetStderr())
+
 	if result.GetStatus() == contracts.ResultStatusSuccess {
+		validatetrace := tracer.BeginSection(fmt.Sprintf("valiate %s/%s - rollback: %b", inst.PackageName(), inst.Version(), isRollback))
 		result = inst.Validate(context)
-		output.AppendInfo(log, result.GetStdout())
-		output.AppendError(log, result.GetStderr())
+		validatetrace.WithExitcode(int64(result.GetExitCode())).AppendInfo(result.GetStdout()).AppendError(result.GetStderr())
 	}
 	if result.GetStatus().IsReboot() {
-		output.AppendInfof(log, "Rebooting to finish installation of %v %v", inst.PackageName(), inst.Version())
+		tracer.BeginSection(fmt.Sprintf("Rebooting to finish installation of %v %v - rollback: %b", inst.PackageName(), inst.Version(), isRollback))
 		output.MarkAsSuccessWithReboot()
 		return
 	}
 	if !result.GetStatus().IsSuccess() {
-		output.AppendErrorf(log, "Failed to install package; install status %v", result.GetStatus())
+		installtrace.AppendErrorf("Failed to install package; install status %v", result.GetStatus())
 		if isRollback || uninst == nil {
-			output.MarkAsFailed(context.Log(), nil)
+			output.MarkAsFailed(nil, nil)
 			// TODO: Remove from repository if this isn't the last successfully installed version?  Run uninstall to clean up?
-			setNewInstallState(context, repository, inst, localpackages.Failed)
+			setNewInstallState(tracer, context, repository, inst, localpackages.Failed)
 			return
 		}
 		// Execute rollback
-		executeUninstall(context, repository, uninst, inst, true, output)
+		executeUninstall(tracer, context, repository, uninst, inst, true, output)
 		return
 	}
 	if uninst != nil {
-		cleanupAfterUninstall(context, repository, uninst, output)
+		cleanupAfterUninstall(tracer, context, repository, uninst, output)
 	}
 	if isRollback {
-		output.AppendInfof(log, "Failed to install %v %v, successfully rolled back to %v %v", uninst.PackageName(), uninst.Version(), inst.PackageName(), inst.Version())
-		setNewInstallState(context, repository, inst, localpackages.Installed)
-		output.MarkAsFailed(context.Log(), nil)
+		installtrace.AppendInfof("Failed to install %v %v, successfully rolled back to %v %v", uninst.PackageName(), uninst.Version(), inst.PackageName(), inst.Version())
+		setNewInstallState(tracer, context, repository, inst, localpackages.Installed)
+		output.MarkAsFailed(nil, nil)
 		return
 	}
-	output.AppendInfof(log, "Successfully installed %v %v", inst.PackageName(), inst.Version())
-	setNewInstallState(context, repository, inst, localpackages.Installed)
+	installtrace.AppendInfof("Successfully installed %v %v", inst.PackageName(), inst.Version())
+	setNewInstallState(tracer, context, repository, inst, localpackages.Installed)
 	output.MarkAsSucceeded()
 	return
 }
 
 // executeUninstall performs uninstall of a package
-func executeUninstall(context context.T,
+func executeUninstall(
+	tracer trace.Tracer,
+	context context.T,
 	repository localpackages.Repository,
 	inst installer.Installer,
 	uninst installer.Installer,
 	isRollback bool,
 	output contracts.PluginOutputer) {
 
+	installtrace := tracer.BeginSection(fmt.Sprintf("uninstall %s/%s - rollback: %b", uninst.PackageName(), uninst.Version(), isRollback))
+	defer installtrace.End()
+
 	if isRollback {
-		setNewInstallState(context, repository, uninst, localpackages.RollbackUninstall)
+		setNewInstallState(tracer, context, repository, uninst, localpackages.RollbackUninstall)
 	} else {
 		if inst != nil {
-			setNewInstallState(context, repository, uninst, localpackages.Upgrading)
+			setNewInstallState(tracer, context, repository, uninst, localpackages.Upgrading)
 		} else {
-			setNewInstallState(context, repository, uninst, localpackages.Uninstalling)
+			setNewInstallState(tracer, context, repository, uninst, localpackages.Uninstalling)
 		}
 	}
 
-	log := context.Log()
 	result := uninst.Uninstall(context)
-	output.AppendInfo(log, result.GetStdout())
-	output.AppendError(log, result.GetStderr())
+	installtrace.WithExitcode(int64(result.GetExitCode())).AppendInfo(result.GetStdout()).AppendError(result.GetStderr())
+
 	if !result.GetStatus().IsSuccess() {
-		output.AppendErrorf(context.Log(), "Failed to uninstall version %v of package; uninstall status %v", uninst.Version(), result.GetStatus())
+		installtrace.AppendErrorf("Failed to uninstall version %v of package; uninstall status %v", uninst.Version(), result.GetStatus())
 		if inst != nil {
-			executeInstall(context, repository, inst, uninst, isRollback, output)
+			executeInstall(tracer, context, repository, inst, uninst, isRollback, output)
 			return
 		}
-		setNewInstallState(context, repository, uninst, localpackages.Failed)
-		output.MarkAsFailed(context.Log(), nil)
+		setNewInstallState(tracer, context, repository, uninst, localpackages.Failed)
+		output.MarkAsFailed(nil, nil)
 		return
 	}
 	if result.GetStatus().IsReboot() {
-		output.AppendInfof(context.Log(), "Rebooting to finish uninstall of %v %v", uninst.PackageName(), uninst.Version())
+		tracer.BeginSection(fmt.Sprintf("Rebooting to finish uninstall of %v %v - rollback: %b", uninst.PackageName(), uninst.Version(), isRollback))
 		output.MarkAsSuccessWithReboot()
 		return
 	}
-	output.AppendInfof(context.Log(), "Successfully uninstalled %v %v", uninst.PackageName(), uninst.Version())
+	installtrace.AppendInfof("Successfully uninstalled %v %v", uninst.PackageName(), uninst.Version())
 	if inst != nil {
-		executeInstall(context, repository, inst, uninst, isRollback, output)
+		executeInstall(tracer, context, repository, inst, uninst, isRollback, output)
 		return
 	}
-	cleanupAfterUninstall(context, repository, uninst, output)
-	setNewInstallState(context, repository, uninst, localpackages.None)
+	cleanupAfterUninstall(tracer, context, repository, uninst, output)
+	setNewInstallState(tracer, context, repository, uninst, localpackages.None)
 	output.MarkAsSucceeded()
 }
 
 // cleanupAfterUninstall removes packages that are no longer needed in the repository
-func cleanupAfterUninstall(context context.T, repository localpackages.Repository, uninst installer.Installer, output contracts.PluginOutputer) {
+func cleanupAfterUninstall(tracer trace.Tracer, context context.T, repository localpackages.Repository, uninst installer.Installer, output contracts.PluginOutputer) {
+	trace := tracer.BeginSection(fmt.Sprintf("cleanup %s/%s", uninst.PackageName(), uninst.Version()))
+
 	if err := repository.RemovePackage(context, uninst.PackageName(), uninst.Version()); err != nil {
-		output.AppendErrorf(context.Log(), "Error cleaning up uninstalled version %v", err)
+		trace.WithError(err)
 	}
+
+	trace.End()
 }
