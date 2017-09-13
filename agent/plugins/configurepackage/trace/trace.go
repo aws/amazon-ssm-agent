@@ -257,6 +257,10 @@ func (t *TracerImpl) ToPluginOutput() *contracts.PluginOutput {
 	for _, trace := range t.Traces() {
 		infoOut.Write(trace.InfoOut.Bytes())
 		errorOut.Write(trace.ErrorOut.Bytes())
+		if trace.Error != nil {
+			errorOut.WriteString(trace.Error.Error())
+			errorOut.WriteString("\n")
+		}
 	}
 
 	out.Stdout = infoOut.String()
