@@ -404,7 +404,7 @@ func (p *Processor) parseAssociation(rawData *model.InstanceAssociation) (*docMo
 		return &docState, fmt.Errorf("%v", errorMsg)
 	}
 
-	if isMI {
+	if isMI && docModel.IsManagedInstanceIncompatibleAWSSSMDocument(docState.DocumentInformation.DocumentName) {
 		log.Debugf("Running incompatible AWS SSM Document %v on managed instance", docState.DocumentInformation.DocumentName)
 		if err = docModel.RemoveDependencyOnInstanceMetadata(context, &docState); err != nil {
 			errorMsg := "Encountered error while parsing input - internal error"
