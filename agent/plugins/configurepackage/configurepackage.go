@@ -323,13 +323,13 @@ func checkAlreadyInstalled(
 				if installState == localpackages.Installing {
 					validateTrace.AppendInfof("Successfully installed %v %v", packageName, targetVersion)
 					if uninst != nil {
-						cleanupAfterUninstall(context, repository, uninst, output)
+						cleanupAfterUninstall(tracer, context, repository, uninst, output)
 					}
 					// TODO: report result
 					output.MarkAsSucceeded()
 				} else if installState == localpackages.RollbackInstall {
 					validateTrace.AppendInfof("Failed to install %v %v, successfully rolled back to %v %v", uninst.PackageName(), uninst.Version(), inst.PackageName(), inst.Version())
-					cleanupAfterUninstall(context, repository, inst, output)
+					cleanupAfterUninstall(tracer, context, repository, inst, output)
 					// TODO: report result
 					output.MarkAsFailed(nil, nil)
 				} else {
@@ -415,7 +415,9 @@ func (p *Plugin) execute(context context.T, config contracts.Configuration, canc
 		// if already failed or already installed and valid, do not execute install
 		if out.GetStatus() != contracts.ResultStatusFailed && !checkAlreadyInstalled(tracer, context, p.localRepository, installedVersion, installState, inst, uninst, &out) {
 			log.Debugf("Calling execute, current status %v", out.GetStatus())
-			executeConfigurePackage(context,
+			executeConfigurePackage(
+				tracer,
+				context,
 				p.localRepository,
 				inst,
 				uninst,
