@@ -33,7 +33,7 @@ func TestInstallNew(t *testing.T) {
 	tracer.BeginSection("test segment root")
 	output := &trace.PluginOutputTrace{Tracer: tracer}
 
-	executeConfigurePackage(contextMock, repoMock, installerMock, nil, localpackages.New, output)
+	executeConfigurePackage(tracer, contextMock, repoMock, installerMock, nil, localpackages.New, output)
 
 	installerMock.AssertExpectations(t)
 	repoMock.AssertExpectations(t)
@@ -51,7 +51,7 @@ func TestUpgrade(t *testing.T) {
 	tracer.BeginSection("test segment root")
 	output := &trace.PluginOutputTrace{Tracer: tracer}
 
-	executeConfigurePackage(contextMock, repoMock, installerMock, uninstallerMock, localpackages.Installed, output)
+	executeConfigurePackage(tracer, contextMock, repoMock, installerMock, uninstallerMock, localpackages.Installed, output)
 
 	installerMock.AssertExpectations(t)
 	uninstallerMock.AssertExpectations(t)
@@ -70,7 +70,7 @@ func TestUpgradeFailedUninstall(t *testing.T) {
 	tracer.BeginSection("test segment root")
 	output := &trace.PluginOutputTrace{Tracer: tracer}
 
-	executeConfigurePackage(contextMock, repoMock, installerMock, uninstallerMock, localpackages.Installed, output)
+	executeConfigurePackage(tracer, contextMock, repoMock, installerMock, uninstallerMock, localpackages.Installed, output)
 
 	installerMock.AssertExpectations(t)
 	uninstallerMock.AssertExpectations(t)
@@ -87,7 +87,7 @@ func TestUninstall(t *testing.T) {
 	tracer.BeginSection("test segment root")
 	output := &trace.PluginOutputTrace{Tracer: tracer}
 
-	executeConfigurePackage(contextMock, repoMock, nil, uninstallerMock, localpackages.Installed, output)
+	executeConfigurePackage(tracer, contextMock, repoMock, nil, uninstallerMock, localpackages.Installed, output)
 
 	uninstallerMock.AssertExpectations(t)
 	repoMock.AssertExpectations(t)
@@ -102,7 +102,7 @@ func TestInstall_FailedInstall(t *testing.T) {
 	tracer.BeginSection("test segment root")
 	output := &trace.PluginOutputTrace{Tracer: tracer}
 
-	executeConfigurePackage(contextMock, repoMock, installerMock, nil, localpackages.New, output)
+	executeConfigurePackage(tracer, contextMock, repoMock, installerMock, nil, localpackages.New, output)
 
 	installerMock.AssertExpectations(t)
 	repoMock.AssertExpectations(t)
@@ -117,7 +117,7 @@ func TestInstall_FailedValidate(t *testing.T) {
 	tracer.BeginSection("test segment root")
 	output := &trace.PluginOutputTrace{Tracer: tracer}
 
-	executeConfigurePackage(contextMock, repoMock, installerMock, nil, localpackages.New, output)
+	executeConfigurePackage(tracer, contextMock, repoMock, installerMock, nil, localpackages.New, output)
 
 	installerMock.AssertExpectations(t)
 	repoMock.AssertExpectations(t)
@@ -132,7 +132,7 @@ func TestUninstall_Failed(t *testing.T) {
 	tracer.BeginSection("test segment root")
 	output := &trace.PluginOutputTrace{Tracer: tracer}
 
-	executeConfigurePackage(contextMock, repoMock, nil, uninstallerMock, localpackages.Installed, output)
+	executeConfigurePackage(tracer, contextMock, repoMock, nil, uninstallerMock, localpackages.Installed, output)
 
 	uninstallerMock.AssertExpectations(t)
 	repoMock.AssertExpectations(t)
@@ -152,7 +152,7 @@ func TestRollback(t *testing.T) {
 	tracer.BeginSection("test segment root")
 	output := &trace.PluginOutputTrace{Tracer: tracer}
 
-	executeConfigurePackage(contextMock, repoMock, installerMock, uninstallerMock, localpackages.Installed, output)
+	executeConfigurePackage(tracer, contextMock, repoMock, installerMock, uninstallerMock, localpackages.Installed, output)
 
 	installerMock.AssertExpectations(t)
 	uninstallerMock.AssertExpectations(t)
@@ -172,7 +172,7 @@ func TestRollbackFailed(t *testing.T) {
 	tracer.BeginSection("test segment root")
 	output := &trace.PluginOutputTrace{Tracer: tracer}
 
-	executeConfigurePackage(contextMock, repoMock, installerMock, uninstallerMock, localpackages.Installed, output)
+	executeConfigurePackage(tracer, contextMock, repoMock, installerMock, uninstallerMock, localpackages.Installed, output)
 
 	installerMock.AssertExpectations(t)
 	uninstallerMock.AssertExpectations(t)
@@ -187,7 +187,7 @@ func TestUninstallReboot(t *testing.T) {
 	tracer.BeginSection("test segment root")
 	output := &trace.PluginOutputTrace{Tracer: tracer}
 
-	executeConfigurePackage(contextMock, repoMock, nil, uninstallerMock, localpackages.Installed, output)
+	executeConfigurePackage(tracer, contextMock, repoMock, nil, uninstallerMock, localpackages.Installed, output)
 
 	uninstallerMock.AssertExpectations(t)
 	repoMock.AssertExpectations(t)
@@ -203,7 +203,7 @@ func TestUninstallAfterReboot(t *testing.T) {
 	tracer.BeginSection("test segment root")
 	output := &trace.PluginOutputTrace{Tracer: tracer}
 
-	executeConfigurePackage(contextMock, repoMock, nil, uninstallerMock, localpackages.Uninstalling, output)
+	executeConfigurePackage(tracer, contextMock, repoMock, nil, uninstallerMock, localpackages.Uninstalling, output)
 
 	uninstallerMock.AssertExpectations(t)
 	repoMock.AssertExpectations(t)
@@ -217,7 +217,7 @@ func TestInstallReboot(t *testing.T) {
 	tracer.BeginSection("test segment root")
 	output := &trace.PluginOutputTrace{Tracer: tracer}
 
-	executeConfigurePackage(contextMock, repoMock, installerMock, nil, localpackages.New, output)
+	executeConfigurePackage(tracer, contextMock, repoMock, installerMock, nil, localpackages.New, output)
 
 	installerMock.AssertExpectations(t)
 	repoMock.AssertExpectations(t)
@@ -232,7 +232,7 @@ func TestInstallAfterReboot(t *testing.T) {
 	tracer.BeginSection("test segment root")
 	output := &trace.PluginOutputTrace{Tracer: tracer}
 
-	executeConfigurePackage(contextMock, repoMock, installerMock, nil, localpackages.Installing, output)
+	executeConfigurePackage(tracer, contextMock, repoMock, installerMock, nil, localpackages.Installing, output)
 
 	installerMock.AssertExpectations(t)
 	repoMock.AssertExpectations(t)
@@ -250,7 +250,7 @@ func TestUpgradeAfterUninstallReboot(t *testing.T) {
 	tracer.BeginSection("test segment root")
 	output := &trace.PluginOutputTrace{Tracer: tracer}
 
-	executeConfigurePackage(contextMock, repoMock, installerMock, uninstallerMock, localpackages.Uninstalling, output)
+	executeConfigurePackage(tracer, contextMock, repoMock, installerMock, uninstallerMock, localpackages.Uninstalling, output)
 
 	installerMock.AssertExpectations(t)
 	uninstallerMock.AssertExpectations(t)
@@ -268,7 +268,7 @@ func TestUpgradeAfterInstallReboot(t *testing.T) {
 	tracer.BeginSection("test segment root")
 	output := &trace.PluginOutputTrace{Tracer: tracer}
 
-	executeConfigurePackage(contextMock, repoMock, installerMock, uninstallerMock, localpackages.Installing, output)
+	executeConfigurePackage(tracer, contextMock, repoMock, installerMock, uninstallerMock, localpackages.Installing, output)
 
 	installerMock.AssertExpectations(t)
 	uninstallerMock.AssertExpectations(t)
@@ -287,7 +287,7 @@ func TestRollbackAfterUninstallReboot(t *testing.T) {
 	tracer.BeginSection("test segment root")
 	output := &trace.PluginOutputTrace{Tracer: tracer}
 
-	executeConfigurePackage(contextMock, repoMock, installerMock, uninstallerMock, localpackages.RollbackUninstall, output)
+	executeConfigurePackage(tracer, contextMock, repoMock, installerMock, uninstallerMock, localpackages.RollbackUninstall, output)
 
 	installerMock.AssertExpectations(t)
 	uninstallerMock.AssertExpectations(t)
@@ -305,7 +305,7 @@ func TestRollbackAfterInstallReboot(t *testing.T) {
 	tracer.BeginSection("test segment root")
 	output := &trace.PluginOutputTrace{Tracer: tracer}
 
-	executeConfigurePackage(contextMock, repoMock, installerMock, uninstallerMock, localpackages.RollbackInstall, output)
+	executeConfigurePackage(tracer, contextMock, repoMock, installerMock, uninstallerMock, localpackages.RollbackInstall, output)
 
 	installerMock.AssertExpectations(t)
 	uninstallerMock.AssertExpectations(t)
