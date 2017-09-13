@@ -16,9 +16,11 @@
 package gitresource
 
 import (
-	filemock "github.com/aws/amazon-ssm-agent/agent/filemanager/mock"
+	filemock "github.com/aws/amazon-ssm-agent/agent/fileutil/filemanager/mock"
 	githubclientmock "github.com/aws/amazon-ssm-agent/agent/githubclient/mock"
 
+	"github.com/aws/amazon-ssm-agent/agent/appconfig"
+	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/go-github/github"
 	"github.com/stretchr/testify/assert"
@@ -26,6 +28,8 @@ import (
 
 	"fmt"
 	"net/http"
+	"path/filepath"
+	"strings"
 	"testing"
 )
 
@@ -57,7 +61,7 @@ func TestGitResource_DownloadFile(t *testing.T) {
 
 	content := "content"
 	file := "file"
-	gitpath := "path/to/file.json"
+	gitpath := "path/to/file.ext"
 	fileMetadata := github.RepositoryContent{
 		Content: &content,
 		Type:    &file,
@@ -72,8 +76,8 @@ func TestGitResource_DownloadFile(t *testing.T) {
 	clientMock.On("IsFileContentType", mock.AnythingOfType("*github.RepositoryContent")).Return(true)
 
 	fileMock := filemock.FileSystemMock{}
-	fileMock.On("MakeDirs", mock.Anything).Return(nil)
-	fileMock.On("WriteFile", mock.Anything, mock.Anything).Return(nil)
+	fileMock.On("MakeDirs", strings.TrimSuffix(appconfig.DownloadRoot, "/")).Return(nil)
+	fileMock.On("WriteFile", filepath.Join(appconfig.DownloadRoot, "file.ext"), mock.Anything).Return(nil)
 
 	err := gitResource.Download(logMock, fileMock, "")
 	clientMock.AssertExpectations(t)
@@ -116,8 +120,8 @@ func TestGitResource_DownloadDirectory(t *testing.T) {
 	clientMock.On("IsFileContentType", mock.AnythingOfType("*github.RepositoryContent")).Return(true)
 
 	fileMock := filemock.FileSystemMock{}
-	fileMock.On("MakeDirs", mock.Anything).Return(nil)
-	fileMock.On("WriteFile", mock.Anything, mock.Anything).Return(nil)
+	fileMock.On("MakeDirs", strings.TrimSuffix(appconfig.DownloadRoot, "/")).Return(nil)
+	fileMock.On("WriteFile", fileutil.BuildPath(appconfig.DownloadRoot, "file.rb"), mock.Anything).Return(nil)
 
 	err := gitResource.Download(logMock, fileMock, "")
 	clientMock.AssertExpectations(t)
@@ -239,22 +243,7 @@ func TestGitResource_ValidateLocationInfoRepo(t *testing.T) {
 	assert.Error(t, err)
 	assert.Equal(t, "Repository for Git LocationType must be specified", err.Error())
 }
-func TestGitResource_ValidateLocationInfoPath(t *testing.T) {
 
-	locationInfo := `{
-		"owner": "owner",
-		"repository": "repo",
-		"getOptions": ""
-	}`
-
-	token := TokenMock{}
-	gitresource, _ := NewGitResource(logMock, locationInfo, token)
-	_, err := gitresource.ValidateLocationInfo()
-
-	assert.Error(t, err)
-	assert.Equal(t, "Path for Git LocationType must be specified", err.Error())
-
-}
 func TestGitResource_ValidateLocationInfo(t *testing.T) {
 
 	locationInfo := `{

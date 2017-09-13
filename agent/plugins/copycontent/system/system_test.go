@@ -17,14 +17,13 @@ package system
 
 import (
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
-	filemock "github.com/aws/amazon-ssm-agent/agent/filemanager/mock"
+	filemock "github.com/aws/amazon-ssm-agent/agent/fileutil/filemanager/mock"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/stretchr/testify/assert"
 
 	"errors"
 	"fmt"
 	"os"
-	"path/filepath"
 	"testing"
 )
 
@@ -32,13 +31,13 @@ var logMock = log.NewMockLog()
 
 func TestSaveFileContent_MakeDirFail(t *testing.T) {
 	var fileMock filemock.FileSystemMock
-	destinationDir := "destinationDir"
+	destination := "destinationDir/file.ps"
 	contents := "contents"
-	resourcePath := "resourcePath"
+	//resourcePath := "resourcePath"
 
-	fileMock.On("MakeDirs", destinationDir).Return(fmt.Errorf("failed to create directory "))
+	fileMock.On("MakeDirs", "destinationDir").Return(fmt.Errorf("failed to create directory "))
 
-	err := SaveFileContent(logMock, fileMock, destinationDir, contents, resourcePath)
+	err := SaveFileContent(logMock, fileMock, destination, contents)
 
 	assert.Error(t, err, "Must return error")
 }
@@ -46,55 +45,30 @@ func TestSaveFileContent_MakeDirFail(t *testing.T) {
 func TestSaveFileContent_WriteFileFail(t *testing.T) {
 	var fileMock filemock.FileSystemMock
 
-	destinationDir := "destinationDir"
+	destinationDir := "destinationDir/filepath.ps"
 	contents := "contents"
-	resourcePath := "resourcePath"
+	//resourcePath := "resourcePath"
 
-	fileMock.On("MakeDirs", destinationDir).Return(nil).Once()
-	fileMock.On("WriteFile", filepath.Join(destinationDir, resourcePath), contents).Return(fmt.Errorf("failed to create directory "))
+	fileMock.On("MakeDirs", "destinationDir").Return(nil).Once()
+	fileMock.On("WriteFile", destinationDir, contents).Return(fmt.Errorf("failed to create directory "))
 
-	err := SaveFileContent(logMock, fileMock, destinationDir, contents, resourcePath)
+	err := SaveFileContent(logMock, fileMock, destinationDir, contents)
 
 	assert.Error(t, err, "Must return error")
 }
 
 func TestSaveFileContent_Pass(t *testing.T) {
 	fileMock := filemock.FileSystemMock{}
-	destinationDir := "destinationDir"
+	destination := "destinationDir/filename.py"
 	contents := "contents"
-	resourcePath := "resourcePath"
+	//resourcePath := "resourcePath"
 
-	fileMock.On("MakeDirs", destinationDir).Return(nil).Once()
-	fileMock.On("WriteFile", filepath.Join(destinationDir, resourcePath), contents).Return(nil).Once()
+	fileMock.On("MakeDirs", "destinationDir").Return(nil).Once()
+	fileMock.On("WriteFile", destination, contents).Return(nil).Once()
 
-	err := SaveFileContent(logMock, fileMock, destinationDir, contents, resourcePath)
-
-	assert.NoError(t, err)
-}
-
-func TestReadFileContents(t *testing.T) {
-	fileMock := filemock.FileSystemMock{}
-	destinationDir := "destination"
-
-	fileMock.On("ReadFile", destinationDir).Return("content", nil)
-
-	rawFile, err := ReadFileContents(logMock, fileMock, destinationDir)
+	err := SaveFileContent(logMock, fileMock, destination, contents)
 
 	assert.NoError(t, err)
-	assert.Equal(t, []byte("content"), rawFile)
-	fileMock.AssertExpectations(t)
-}
-
-func TestReadFileContents_Fail(t *testing.T) {
-	fileMock := filemock.FileSystemMock{}
-	destinationDir := "destination"
-
-	fileMock.On("ReadFile", destinationDir).Return("content", fmt.Errorf("Error"))
-
-	_, err := ReadFileContents(logMock, fileMock, destinationDir)
-
-	assert.Error(t, err)
-	fileMock.AssertExpectations(t)
 }
 
 func TestRenameFile(t *testing.T) {

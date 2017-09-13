@@ -16,7 +16,7 @@
 package remoteresource
 
 import (
-	"github.com/aws/amazon-ssm-agent/agent/filemanager"
+	"github.com/aws/amazon-ssm-agent/agent/fileutil/filemanager"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 )
 
