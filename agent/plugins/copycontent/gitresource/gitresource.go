@@ -17,7 +17,7 @@ package gitresource
 
 import (
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
-	"github.com/aws/amazon-ssm-agent/agent/filemanager"
+	"github.com/aws/amazon-ssm-agent/agent/fileutil/filemanager"
 	"github.com/aws/amazon-ssm-agent/agent/githubclient"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
@@ -27,6 +27,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"path/filepath"
 )
 
 // GitResource is a struct for the remote resource of type git
@@ -110,7 +111,8 @@ func (git *GitResource) download(log log.T, filesys filemanager.FileSystem, info
 				Path:       dirContent.GetPath(),
 				GetOptions: info.GetOptions,
 			}
-			if err = git.download(log, filesys, dirInput, destinationDir); err != nil {
+			destDir := filepath.Join(destinationDir, filepath.Base(dirContent.GetPath()))
+			if err = git.download(log, filesys, dirInput, destDir); err != nil {
 				log.Error("Error retrieving file from directory", destinationDir)
 				return err
 			}
@@ -121,7 +123,10 @@ func (git *GitResource) download(log log.T, filesys filemanager.FileSystem, info
 			log.Error("File content could not be retrieved - ", err)
 			return err
 		}
-		if err = system.SaveFileContent(log, filesys, destinationDir, content, fileMetadata.GetPath()); err != nil {
+		if filepath.Base(destinationDir) != filepath.Base(fileMetadata.GetPath()) {
+			destinationDir = filepath.Join(destinationDir, filepath.Base(fileMetadata.GetPath()))
+		}
+		if err = system.SaveFileContent(log, filesys, destinationDir, content); err != nil {
 			log.Errorf("Error obtaining file content from git file - %v, %v", fileMetadata.GetPath(), err)
 			return err
 		}
@@ -141,10 +146,6 @@ func (git *GitResource) ValidateLocationInfo() (valid bool, err error) {
 
 	if git.Info.Repository == "" {
 		return false, errors.New("Repository for Git LocationType must be specified")
-	}
-
-	if git.Info.Path == "" {
-		return false, errors.New("Path for Git LocationType must be specified")
 	}
 
 	return true, nil

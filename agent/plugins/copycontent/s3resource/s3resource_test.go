@@ -15,17 +15,17 @@
 package s3resource
 
 import (
-	filemock "github.com/aws/amazon-ssm-agent/agent/filemanager/mock"
+	filemock "github.com/aws/amazon-ssm-agent/agent/fileutil/filemanager/mock"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
-	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil/artifact"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/s3util"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 
-	"errors"
+	"path/filepath"
+	"strings"
 	"testing"
 )
 
@@ -104,14 +104,23 @@ func TestS3Resource_Download(t *testing.T) {
 	resource, _ := NewS3Resource(logMock, locationInfo)
 
 	input := artifact.DownloadInput{
-		DestinationDirectory: fileutil.BuildPath("destination", "my-bucket", "mydummyfolder"),
+		DestinationDirectory: "destination",
 		SourceURL:            "https://s3.amazonaws.com/my-bucket/mydummyfolder/file.rb",
 	}
 	output := artifact.DownloadOutput{
 		LocalFilePath: input.DestinationDirectory,
 	}
 
+	s3Object := s3util.AmazonS3URL{
+		IsValidS3URI: true,
+		IsPathStyle:  true,
+		Bucket:       "my-bucket",
+		Key:          "mydummyfolder/file.rb",
+		Region:       "us-east-1",
+	}
+	var folders []string
 	depMock.On("Download", logMock, input).Return(output, nil)
+	depMock.On("ListS3Objects", logMock, s3Object).Return(folders, nil)
 	fileMock.On("MoveAndRenameFile", mock.Anything, mock.Anything, mock.Anything, mock.Anything).Return(true, nil)
 
 	dep = depMock
@@ -122,72 +131,136 @@ func TestS3Resource_Download(t *testing.T) {
 	fileMock.AssertExpectations(t)
 }
 
-func TestS3Resource_DownloadWrongPath(t *testing.T) {
+func TestS3Resource_DownloadDirectory(t *testing.T) {
 	depMock := new(s3DepMock)
 	locationInfo := `{
-		"Path" : "https://s3.amazonaws.com/my-bucket/filename.ps"
+		"Path" : "https://s3.amazonaws.com/my-bucket/foldername"
 	}`
 	fileMock := filemock.FileSystemMock{}
 	resource, _ := NewS3Resource(logMock, locationInfo)
 
+	input1 := artifact.DownloadInput{
+		DestinationDirectory: strings.TrimSuffix(appconfig.DownloadRoot, "/"),
+		SourceURL:            "https://s3.amazonaws.com/my-bucket/foldername/filename.ps",
+	}
+	input2 := artifact.DownloadInput{
+		DestinationDirectory: strings.TrimSuffix(appconfig.DownloadRoot, "/"),
+		SourceURL:            "https://s3.amazonaws.com/my-bucket/foldername/anotherfile.ps",
+	}
+	s3Object := s3util.AmazonS3URL{
+		IsValidS3URI: true,
+		IsPathStyle:  true,
+		Bucket:       "my-bucket",
+		Key:          "foldername",
+		Region:       "us-east-1",
+	}
+	output1 := artifact.DownloadOutput{
+		LocalFilePath: input1.DestinationDirectory,
+	}
+	output2 := artifact.DownloadOutput{
+		LocalFilePath: input2.DestinationDirectory,
+	}
+	var folders []string
+	folders = append(folders, "foldername/filename.ps")
+	folders = append(folders, "foldername/anotherfile.ps")
+	depMock.On("Download", logMock, input1).Return(output1, nil).Once()
+	depMock.On("Download", logMock, input2).Return(output2, nil).Once()
+	depMock.On("ListS3Objects", logMock, s3Object).Return(folders, nil)
+	fileMock.On("MoveAndRenameFile", mock.Anything, mock.Anything, mock.Anything, mock.Anything).Return(true, nil).Twice()
+
+	dep = depMock
+	err := resource.Download(logMock, fileMock, "")
+
+	assert.NoError(t, err)
+	depMock.AssertExpectations(t)
+	fileMock.AssertExpectations(t)
+}
+
+func TestS3Resource_DownloadDirectoryWithSubFolders(t *testing.T) {
+	depMock := new(s3DepMock)
+	locationInfo := `{
+		"Path" : "https://s3.amazonaws.com/my-bucket/foldername"
+	}`
+	fileMock := filemock.FileSystemMock{}
+	resource, _ := NewS3Resource(logMock, locationInfo)
+
+	input1 := artifact.DownloadInput{
+		DestinationDirectory: strings.TrimSuffix(appconfig.DownloadRoot, "/"),
+		SourceURL:            "https://s3.amazonaws.com/my-bucket/foldername/filename.ps",
+	}
+	input2 := artifact.DownloadInput{
+		DestinationDirectory: strings.TrimSuffix(appconfig.DownloadRoot, "/"),
+		SourceURL:            "https://s3.amazonaws.com/my-bucket/foldername/anotherfile.ps",
+	}
+	input3 := artifact.DownloadInput{
+		DestinationDirectory: strings.TrimSuffix(filepath.Join(appconfig.DownloadRoot, "subfolder"), "/"),
+		SourceURL:            "https://s3.amazonaws.com/my-bucket/foldername/subfolder/file.ps",
+	}
+	s3Object := s3util.AmazonS3URL{
+		IsValidS3URI: true,
+		IsPathStyle:  true,
+		Bucket:       "my-bucket",
+		Key:          "foldername",
+		Region:       "us-east-1",
+	}
+	output1 := artifact.DownloadOutput{
+		LocalFilePath: input1.DestinationDirectory,
+	}
+	output2 := artifact.DownloadOutput{
+		LocalFilePath: input2.DestinationDirectory,
+	}
+	output3 := artifact.DownloadOutput{
+		LocalFilePath: input3.DestinationDirectory,
+	}
+
+	var folders []string
+	folders = append(folders, "foldername/filename.ps")
+	folders = append(folders, "foldername/anotherfile.ps")
+	folders = append(folders, "foldername/subfolder/")
+	folders = append(folders, "foldername/subfolder/file.ps")
+	depMock.On("Download", logMock, input1).Return(output1, nil).Once()
+	depMock.On("Download", logMock, input2).Return(output2, nil).Once()
+	depMock.On("Download", logMock, input3).Return(output3, nil).Once()
+	depMock.On("ListS3Objects", logMock, s3Object).Return(folders, nil)
+	fileMock.On("MoveAndRenameFile", mock.Anything, mock.Anything, mock.Anything, mock.Anything).Return(true, nil).Times(3)
+
+	dep = depMock
+	err := resource.Download(logMock, fileMock, "")
+
+	assert.NoError(t, err)
+	depMock.AssertExpectations(t)
+	fileMock.AssertExpectations(t)
+}
+
+func TestS3Resource_DownloadAbsPath(t *testing.T) {
+	depMock := new(s3DepMock)
+	locationInfo := `{
+		"path" : "https://s3.amazonaws.com/my-bucket/mydummyfolder/filename.ps"
+	}`
+	fileMock := filemock.FileSystemMock{}
+	resource, _ := NewS3Resource(logMock, locationInfo)
+	resource.s3Object.Bucket = "my-bucket"
+	resource.s3Object.Key = "mydummyfolder/filename.ps"
+	resource.s3Object.Region = "us-east-1"
+	resource.s3Object.IsPathStyle = true
+	resource.s3Object.IsValidS3URI = true
+
 	input := artifact.DownloadInput{
-		DestinationDirectory: fileutil.BuildPath(appconfig.DownloadRoot, "my-bucket"),
-		SourceURL:            "https://s3.amazonaws.com/my-bucket/filename.ps",
+		DestinationDirectory: "/var/tmp/foldername",
+		SourceURL:            "https://s3.amazonaws.com/my-bucket/mydummyfolder/filename.ps",
 	}
 	output := artifact.DownloadOutput{
 		LocalFilePath: input.DestinationDirectory,
 	}
 
-	depMock.On("Download", logMock, input).Return(output, nil)
-	fileMock.On("MoveAndRenameFile", mock.Anything, mock.Anything, mock.Anything, mock.Anything).Return(true, errors.New("unexpected error encountered while moving the file. Error details -"))
-
-	dep = depMock
-	err := resource.Download(logMock, fileMock, "")
-
-	assert.Error(t, err)
-	depMock.AssertExpectations(t)
-	fileMock.AssertExpectations(t)
-	assert.Contains(t, err.Error(), "Something went wrong when trying to access downloaded content. It is "+
-		"possible that the content was not downloaded because the path provided is wrong.")
-}
-
-func TestS3Resource_DownloadDirectory(t *testing.T) {
-	depMock := new(s3DepMock)
-	locationInfo := `{
-		"path" : "https://s3.amazonaws.com/my-bucket/mydummyfolder/"
-	}`
-	fileMock := filemock.FileSystemMock{}
-	resource, _ := NewS3Resource(logMock, locationInfo)
-	resource.s3Object.Bucket = "my-bucket"
-	resource.s3Object.Key = "mydummyfolder/"
-	resource.s3Object.Region = "us-east-1"
-	resource.s3Object.IsPathStyle = true
-	resource.s3Object.IsValidS3URI = true
-
-	input1 := artifact.DownloadInput{
-		DestinationDirectory: fileutil.BuildPath("destination", "my-bucket/mydummyfolder/newFolder"),
-		SourceURL:            "https://s3.amazonaws.com/my-bucket/mydummyfolder/newFolder/file.ps",
-	}
-	input2 := artifact.DownloadInput{
-		DestinationDirectory: fileutil.BuildPath("destination", "my-bucket/mydummyfolder"),
-		SourceURL:            "https://s3.amazonaws.com/my-bucket/mydummyfolder/filename.ps",
-	}
-	output := artifact.DownloadOutput{
-		LocalFilePath: input1.DestinationDirectory,
-	}
-
 	var folders []string
-	folders = append(folders, "mydummyfolder/newFolder/")
-	folders = append(folders, "mydummyfolder/filename.ps")
-	folders = append(folders, "mydummyfolder/newFolder/file.ps")
 
 	depMock.On("ListS3Objects", logMock, resource.s3Object).Return(folders, nil).Once()
-	depMock.On("Download", logMock, input2).Return(output, nil).Once()
-	depMock.On("Download", logMock, input1).Return(output, nil).Once()
-	fileMock.On("MoveAndRenameFile", mock.Anything, mock.Anything, mock.Anything, mock.Anything).Return(true, nil).Twice()
+	depMock.On("Download", logMock, input).Return(output, nil).Once()
+	fileMock.On("MoveAndRenameFile", mock.Anything, mock.Anything, mock.Anything, mock.Anything).Return(true, nil).Once()
 
 	dep = depMock
-	err := resource.Download(logMock, fileMock, "destination")
+	err := resource.Download(logMock, fileMock, "/var/tmp/foldername")
 
 	assert.NoError(t, err)
 	depMock.AssertExpectations(t)
