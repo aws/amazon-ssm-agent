@@ -19,7 +19,7 @@ import (
 )
 
 type PluginOutputTrace struct {
-	tracer   Tracer
+	Tracer   Tracer
 	exitCode int
 	status   contracts.ResultStatus
 }
@@ -28,8 +28,8 @@ type PluginOutputTrace struct {
 
 func (po *PluginOutputTrace) GetStatus() contracts.ResultStatus { return po.status }
 func (po *PluginOutputTrace) GetExitCode() int                  { return po.exitCode }
-func (po *PluginOutputTrace) GetStdout() string                 { return po.tracer.ToPluginOutput().Stdout }
-func (po *PluginOutputTrace) GetStderr() string                 { return po.tracer.ToPluginOutput().Stderr }
+func (po *PluginOutputTrace) GetStdout() string                 { return po.Tracer.ToPluginOutput().Stdout }
+func (po *PluginOutputTrace) GetStderr() string                 { return po.Tracer.ToPluginOutput().Stderr }
 
 func (po *PluginOutputTrace) SetStatus(status contracts.ResultStatus) { po.status = status }
 func (po *PluginOutputTrace) SetExitCode(exitCode int)                { po.exitCode = exitCode }
@@ -72,24 +72,24 @@ func (out *PluginOutputTrace) MarkAsShutdown() {
 }
 
 func (out *PluginOutputTrace) String() string {
-	p := out.tracer.ToPluginOutput()
+	p := out.Tracer.ToPluginOutput()
 	return contracts.TruncateOutput(p.Stdout, p.Stderr, contracts.MaximumPluginOutputSize)
 }
 
 // Forward to tracer
 
 func (po *PluginOutputTrace) AppendInfo(log log.T, message string) {
-	po.tracer.CurrentTrace().AppendInfo(message)
+	po.Tracer.CurrentTrace().AppendInfo(message)
 }
 
 func (po *PluginOutputTrace) AppendInfof(log log.T, format string, params ...interface{}) {
-	po.tracer.CurrentTrace().AppendInfof(format, params...)
+	po.Tracer.CurrentTrace().AppendInfof(format, params...)
 }
 
 func (po *PluginOutputTrace) AppendError(log log.T, message string) {
-	po.tracer.CurrentTrace().AppendError(message)
+	po.Tracer.CurrentTrace().AppendError(message)
 }
 
 func (po *PluginOutputTrace) AppendErrorf(log log.T, format string, params ...interface{}) {
-	po.tracer.CurrentTrace().AppendErrorf(format, params...)
+	po.Tracer.CurrentTrace().AppendErrorf(format, params...)
 }
