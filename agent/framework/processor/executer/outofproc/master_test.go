@@ -61,10 +61,14 @@ func CreateTestCase() *TestCase {
 		Name: "aws:runScript",
 		Id:   "plugin1",
 	}
+	pluginState2 := model.PluginState{
+		Name: "aws:runPowershellScript",
+		Id:   "plugin2",
+	}
 	docState := model.DocumentState{
 		DocumentInformation:        docInfo,
 		DocumentType:               "SendCommand",
-		InstancePluginsInformation: []model.PluginState{pluginState},
+		InstancePluginsInformation: []model.PluginState{pluginState, pluginState2},
 	}
 
 	result := contracts.PluginResult{
@@ -74,8 +78,16 @@ func CreateTestCase() *TestCase {
 		StartDateTime: testStartDateTime,
 		EndDateTime:   testEndDateTime,
 	}
+	result2 := contracts.PluginResult{
+		PluginName:    "aws:runPowershellScript",
+		PluginID:      "plugin2",
+		Status:        contracts.ResultStatusSuccess,
+		StartDateTime: testStartDateTime,
+		EndDateTime:   testEndDateTime,
+	}
 	results := make(map[string]*contracts.PluginResult)
-	results[pluginState.Id] = &result
+	results["plugin1"] = &result
+	results["plugin2"] = &result2
 
 	return &TestCase{
 		context:      contextMock,
