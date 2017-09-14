@@ -23,6 +23,7 @@ var testDocumentVersion = "testVersion"
 var testStartDateTime = time.Date(2017, 8, 13, 0, 0, 0, 0, time.UTC)
 var testEndDateTime = time.Date(2017, 8, 13, 0, 0, 1, 0, time.UTC)
 var testPluginReplyRawJSON string
+var testPluginReply2RawJSON string
 var testUnknownTypeRawJSON string
 var testUnknownTypeRawJSON2 string
 var testDocumentCompleteRawJSON string
@@ -53,10 +54,15 @@ func CreateTestCase() *TestCase {
 		Name: "aws:runScript",
 		Id:   "plugin1",
 	}
+
+	pluginState2 := model.PluginState{
+		Name: "aws:runPowershellScript",
+		Id:   "plugin2",
+	}
 	docState := model.DocumentState{
 		DocumentInformation:        docInfo,
 		DocumentType:               "SendCommand",
-		InstancePluginsInformation: []model.PluginState{pluginState},
+		InstancePluginsInformation: []model.PluginState{pluginState, pluginState2},
 	}
 
 	result := contracts.PluginResult{
@@ -66,12 +72,21 @@ func CreateTestCase() *TestCase {
 		StartDateTime: testStartDateTime,
 		EndDateTime:   testEndDateTime,
 	}
+	result2 := contracts.PluginResult{
+		PluginName:    "aws:runPowershellScript",
+		PluginID:      "plugin2",
+		Status:        contracts.ResultStatusSuccess,
+		StartDateTime: testStartDateTime,
+		EndDateTime:   testEndDateTime,
+	}
 	results := make(map[string]*contracts.PluginResult)
-	results[pluginState.Id] = &result
+	results["plugin1"] = &result
+	results["plugin2"] = &result2
 	//corresponding rawJSON data
 	//TODO this is V2 Schema, add V1 schema later
 	testPluginReplyRawJSON = "{\"version\":\"1.0\",\"type\":\"reply\",\"content\":\"{\\\"DocumentName\\\":\\\"\\\",\\\"DocumentVersion\\\":\\\"\\\",\\\"MessageID\\\":\\\"\\\",\\\"AssociationID\\\":\\\"\\\",\\\"PluginResults\\\":{\\\"plugin1\\\":{\\\"pluginName\\\":\\\"aws:runScript\\\",\\\"pluginID\\\":\\\"plugin1\\\",\\\"status\\\":\\\"Success\\\",\\\"code\\\":0,\\\"output\\\":null,\\\"startDateTime\\\":\\\"2017-08-13T00:00:00Z\\\",\\\"endDateTime\\\":\\\"2017-08-13T00:00:01Z\\\",\\\"outputS3BucketName\\\":\\\"\\\",\\\"outputS3KeyPrefix\\\":\\\"\\\",\\\"standardOutput\\\":\\\"\\\",\\\"standardError\\\":\\\"\\\"}},\\\"Status\\\":\\\"InProgress\\\",\\\"LastPlugin\\\":\\\"plugin1\\\",\\\"NPlugins\\\":0}\"}"
-	testDocumentCompleteRawJSON = "{\"version\":\"1.0\",\"type\":\"complete\",\"content\":\"{\\\"DocumentName\\\":\\\"\\\",\\\"DocumentVersion\\\":\\\"\\\",\\\"MessageID\\\":\\\"\\\",\\\"AssociationID\\\":\\\"\\\",\\\"PluginResults\\\":{\\\"plugin1\\\":{\\\"pluginName\\\":\\\"aws:runScript\\\",\\\"pluginID\\\":\\\"plugin1\\\",\\\"status\\\":\\\"Success\\\",\\\"code\\\":0,\\\"output\\\":null,\\\"startDateTime\\\":\\\"2017-08-13T00:00:00Z\\\",\\\"endDateTime\\\":\\\"2017-08-13T00:00:01Z\\\",\\\"outputS3BucketName\\\":\\\"\\\",\\\"outputS3KeyPrefix\\\":\\\"\\\",\\\"standardOutput\\\":\\\"\\\",\\\"standardError\\\":\\\"\\\"}},\\\"Status\\\":\\\"Success\\\",\\\"LastPlugin\\\":\\\"\\\",\\\"NPlugins\\\":0}\"}"
+	testPluginReply2RawJSON = "{\"version\":\"1.0\",\"type\":\"reply\",\"content\":\"{\\\"DocumentName\\\":\\\"\\\",\\\"DocumentVersion\\\":\\\"\\\",\\\"MessageID\\\":\\\"\\\",\\\"AssociationID\\\":\\\"\\\",\\\"PluginResults\\\":{\\\"plugin1\\\":{\\\"pluginID\\\":\\\"plugin1\\\",\\\"pluginName\\\":\\\"aws:runScript\\\",\\\"status\\\":\\\"Success\\\",\\\"code\\\":0,\\\"output\\\":null,\\\"startDateTime\\\":\\\"2017-08-13T00:00:00Z\\\",\\\"endDateTime\\\":\\\"2017-08-13T00:00:01Z\\\",\\\"outputS3BucketName\\\":\\\"\\\",\\\"outputS3KeyPrefix\\\":\\\"\\\",\\\"standardOutput\\\":\\\"\\\",\\\"standardError\\\":\\\"\\\"},\\\"plugin2\\\":{\\\"pluginID\\\":\\\"plugin2\\\",\\\"pluginName\\\":\\\"aws:runPowershellScript\\\",\\\"status\\\":\\\"Success\\\",\\\"code\\\":0,\\\"output\\\":null,\\\"startDateTime\\\":\\\"2017-08-13T00:00:00Z\\\",\\\"endDateTime\\\":\\\"2017-08-13T00:00:01Z\\\",\\\"outputS3BucketName\\\":\\\"\\\",\\\"outputS3KeyPrefix\\\":\\\"\\\",\\\"standardOutput\\\":\\\"\\\",\\\"standardError\\\":\\\"\\\"}},\\\"Status\\\":\\\"InProgress\\\",\\\"LastPlugin\\\":\\\"plugin2\\\",\\\"NPlugins\\\":0}\"}"
+	testDocumentCompleteRawJSON = "{\"version\":\"1.0\",\"type\":\"complete\",\"content\":\"{\\\"DocumentName\\\":\\\"\\\",\\\"DocumentVersion\\\":\\\"\\\",\\\"MessageID\\\":\\\"\\\",\\\"AssociationID\\\":\\\"\\\",\\\"PluginResults\\\":{\\\"plugin1\\\":{\\\"pluginID\\\":\\\"plugin1\\\",\\\"pluginName\\\":\\\"aws:runScript\\\",\\\"status\\\":\\\"Success\\\",\\\"code\\\":0,\\\"output\\\":null,\\\"startDateTime\\\":\\\"2017-08-13T00:00:00Z\\\",\\\"endDateTime\\\":\\\"2017-08-13T00:00:01Z\\\",\\\"outputS3BucketName\\\":\\\"\\\",\\\"outputS3KeyPrefix\\\":\\\"\\\",\\\"standardOutput\\\":\\\"\\\",\\\"standardError\\\":\\\"\\\"},\\\"plugin2\\\":{\\\"pluginID\\\":\\\"plugin2\\\",\\\"pluginName\\\":\\\"aws:runPowershellScript\\\",\\\"status\\\":\\\"Success\\\",\\\"code\\\":0,\\\"output\\\":null,\\\"startDateTime\\\":\\\"2017-08-13T00:00:00Z\\\",\\\"endDateTime\\\":\\\"2017-08-13T00:00:01Z\\\",\\\"outputS3BucketName\\\":\\\"\\\",\\\"outputS3KeyPrefix\\\":\\\"\\\",\\\"standardOutput\\\":\\\"\\\",\\\"standardError\\\":\\\"\\\"}},\\\"Status\\\":\\\"Success\\\",\\\"LastPlugin\\\":\\\"\\\",\\\"NPlugins\\\":0}\"}"
 	testPluginsRawJSON = "{\"version\":\"1.0\",\"type\":\"pluginconfig\",\"content\":\"[{\\\"Configuration\\\":{\\\"Settings\\\":null,\\\"Properties\\\":null,\\\"OutputS3KeyPrefix\\\":\\\"\\\",\\\"OutputS3BucketName\\\":\\\"\\\",\\\"OrchestrationDirectory\\\":\\\"\\\",\\\"MessageId\\\":\\\"\\\",\\\"BookKeepingFileName\\\":\\\"\\\",\\\"PluginName\\\":\\\"\\\",\\\"PluginID\\\":\\\"\\\",\\\"DefaultWorkingDirectory\\\":\\\"\\\",\\\"Preconditions\\\":null,\\\"IsPreconditionEnabled\\\":false},\\\"Name\\\":\\\"aws:runScript\\\",\\\"Result\\\":{\\\"pluginName\\\":\\\"\\\",\\\"status\\\":\\\"\\\",\\\"code\\\":0,\\\"output\\\":null,\\\"startDateTime\\\":\\\"0001-01-01T00:00:00Z\\\",\\\"endDateTime\\\":\\\"0001-01-01T00:00:00Z\\\",\\\"outputS3BucketName\\\":\\\"\\\",\\\"outputS3KeyPrefix\\\":\\\"\\\",\\\"standardOutput\\\":\\\"\\\",\\\"standardError\\\":\\\"\\\"},\\\"Id\\\":\\\"aws:runScript\\\"}]\"}"
 	testUnknownTypeRawJSON = "{\"version\":\"1.0\",\"type\":\"some unknown type\",\"content\":\"\"}"
 	testUnknownTypeRawJSON2 = "a very bad string"
@@ -129,7 +144,8 @@ func TestExecuterBackend_ProcessV1(t *testing.T) {
 	assert.NoError(t, err)
 	res := <-outputChan
 	assert.Equal(t, "plugin1", res.LastPlugin)
-	assertValueEqual(t, testCase.results, res.PluginResults)
+	assert.Equal(t, 1, len(res.PluginResults))
+	assert.EqualValues(t, testCase.results["plugin1"], res.PluginResults["plugin1"])
 	assert.Equal(t, contracts.ResultStatusInProgress, res.Status)
 	assert.Equal(t, testDocumentName, res.DocumentName)
 	assert.Equal(t, testAssociationID, res.AssociationID)
@@ -226,8 +242,13 @@ func TestWorkerBackendPluginListener(t *testing.T) {
 	data := <-inputChan
 	//cannot assume string equal, unmarshal sometimes switch map's order
 	assert.Equal(t, len(testPluginReplyRawJSON), len(data))
+	statusChan <- *testCase.results["plugin2"]
+	data = <-inputChan
+	//cannot assume string equal, unmarshal sometimes switch map's order
+	assert.Equal(t, len(testPluginReply2RawJSON), len(data))
 	close(statusChan)
 	data = <-inputChan
+	logger.Info(data)
 	assert.Equal(t, len(testDocumentCompleteRawJSON), len(data))
 	assert.Equal(t, stopTypeShutdown, <-stopChan)
 	//make sure input channel is closed
