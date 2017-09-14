@@ -88,6 +88,7 @@ func TestOutOfProcExecuter_Success(t *testing.T) {
 	testDocState := testCase.docState
 	resultDocState := testCase.docState
 	resultDocState.InstancePluginsInformation[0].Result = *testCase.results["plugin1"]
+	resultDocState.InstancePluginsInformation[1].Result = *testCase.results["plugin2"]
 	resultDocState.DocumentInformation.DocumentStatus = contracts.ResultStatusSuccess
 	resultDocState.DocumentInformation.ProcInfo.Pid = testPid
 	resultDocState.DocumentInformation.ProcInfo.StartTime = testStartDateTime
@@ -101,18 +102,28 @@ func TestOutOfProcExecuter_Success(t *testing.T) {
 		resChan chan contracts.PluginResult,
 		cancelFlag task.CancelFlag,
 	) {
-
-		for _, res := range testCase.results {
-			resChan <- *res
-		}
+		//then start to send reply
+		resChan <- *testCase.results["plugin1"]
+		resChan <- *testCase.results["plugin2"]
 		close(resChan)
 	}
 	cancelFlag := task.NewChanneledCancelFlag()
 	resChan := outofprocExe.Run(cancelFlag, testCase.docStore)
-	//Plugin update
+	//Plugin1 update
 	res := <-resChan
-	assertValueEqual(t, testCase.results, res.PluginResults)
+	assert.Equal(t, 1, len(res.PluginResults))
 	assert.Equal(t, "plugin1", res.LastPlugin)
+	assert.EqualValues(t, testCase.results["plugin1"], res.PluginResults["plugin1"])
+	assert.Equal(t, contracts.ResultStatusInProgress, res.Status)
+	assert.Equal(t, testDocumentName, res.DocumentName)
+	assert.Equal(t, testAssociationID, res.AssociationID)
+	assert.Equal(t, testMessageID, res.MessageID)
+	assert.Equal(t, len(testCase.docState.InstancePluginsInformation), res.NPlugins)
+	assert.Equal(t, testDocumentVersion, res.DocumentVersion)
+	//plugin2 update
+	res = <-resChan
+	assert.Equal(t, "plugin2", res.LastPlugin)
+	assertValueEqual(t, testCase.results, res.PluginResults)
 	assert.Equal(t, contracts.ResultStatusInProgress, res.Status)
 	assert.Equal(t, testDocumentName, res.DocumentName)
 	assert.Equal(t, testAssociationID, res.AssociationID)
@@ -161,9 +172,8 @@ func TestOutOfProcExecuter_ShutdownAndReconnect(t *testing.T) {
 		//wait for master to shutdown
 		<-masterClosed
 		//then start to send reply
-		for _, res := range testCase.results {
-			resChan <- *res
-		}
+		resChan <- *testCase.results["plugin1"]
+		resChan <- *testCase.results["plugin2"]
 		close(resChan)
 	}
 	logger.Info("launching out-of-proc Executer...")
@@ -186,6 +196,7 @@ func TestOutOfProcExecuter_ShutdownAndReconnect(t *testing.T) {
 	resultDocState := docState1
 	//final docstate to be saved
 	resultDocState.InstancePluginsInformation[0].Result = *testCase.results["plugin1"]
+	resultDocState.InstancePluginsInformation[1].Result = *testCase.results["plugin2"]
 	resultDocState.DocumentInformation.DocumentStatus = contracts.ResultStatusSuccess
 	assert.False(t, fakeProcess.attached)
 	logger.Info("relaunching the out-of-proc Executer...")
@@ -196,9 +207,19 @@ func TestOutOfProcExecuter_ShutdownAndReconnect(t *testing.T) {
 	newContext := context.NewMockDefaultWithContext([]string{"NEWMASTER"})
 	newOutofProcExe := NewOutOfProcExecuter(newContext)
 	newResChan := newOutofProcExe.Run(newCancelFlag, newDocStore)
+	//plugin1 update
 	res := <-newResChan
-	assertValueEqual(t, testCase.results, res.PluginResults)
 	assert.Equal(t, "plugin1", res.LastPlugin)
+	assert.Equal(t, contracts.ResultStatusInProgress, res.Status)
+	assert.Equal(t, testDocumentName, res.DocumentName)
+	assert.Equal(t, testAssociationID, res.AssociationID)
+	assert.Equal(t, testMessageID, res.MessageID)
+	assert.Equal(t, len(testCase.docState.InstancePluginsInformation), res.NPlugins)
+	assert.Equal(t, testDocumentVersion, res.DocumentVersion)
+	//plugin2 update
+	res = <-newResChan
+	assert.Equal(t, "plugin2", res.LastPlugin)
+	assertValueEqual(t, testCase.results, res.PluginResults)
 	assert.Equal(t, contracts.ResultStatusInProgress, res.Status)
 	assert.Equal(t, testDocumentName, res.DocumentName)
 	assert.Equal(t, testAssociationID, res.AssociationID)
@@ -231,10 +252,13 @@ func TestOutOfProcExecuter_Cancel(t *testing.T) {
 	testCase.resultStatus = contracts.ResultStatusCancelled
 	testDocState := testCase.docState
 	resultDocState := testCase.docState
-	testCase.results["plugin1"].Code = 1
-	testCase.results["plugin1"].Status = contracts.ResultStatusCancelled
-	testCase.results["plugin1"].Output = "command has been cancelled"
+	for _, res := range testCase.results {
+		res.Code = 1
+		res.Status = contracts.ResultStatusCancelled
+		res.Output = "command has been cancelled"
+	}
 	resultDocState.InstancePluginsInformation[0].Result = *testCase.results["plugin1"]
+	resultDocState.InstancePluginsInformation[1].Result = *testCase.results["plugin2"]
 	resultDocState.DocumentInformation.DocumentStatus = contracts.ResultStatusCancelled
 	resultDocState.DocumentInformation.ProcInfo.Pid = testPid
 	resultDocState.DocumentInformation.ProcInfo.StartTime = testStartDateTime
@@ -251,18 +275,27 @@ func TestOutOfProcExecuter_Cancel(t *testing.T) {
 		cancelFlag.Wait()
 		assert.True(t, cancelFlag.Canceled())
 		//then start to send reply
-		//TODO once we have multi-plugin test case, we can interleave success and cancel here
-		for _, res := range testCase.results {
-			resChan <- *res
-		}
+		resChan <- *testCase.results["plugin1"]
+		resChan <- *testCase.results["plugin2"]
 		close(resChan)
 	}
 	logger.Info("launching out-of-proc Executer...")
 	masterCancelFlag := task.NewChanneledCancelFlag()
 	resChan := outofprocExe.Run(masterCancelFlag, testCase.docStore)
 	masterCancelFlag.Set(task.Canceled)
+	//plugin1 update
 	res := <-resChan
 	assert.Equal(t, "plugin1", res.LastPlugin)
+	assert.Equal(t, contracts.ResultStatusInProgress, res.Status)
+	assert.Equal(t, testDocumentName, res.DocumentName)
+	assert.Equal(t, testAssociationID, res.AssociationID)
+	assert.Equal(t, testMessageID, res.MessageID)
+	assert.Equal(t, len(testCase.docState.InstancePluginsInformation), res.NPlugins)
+	assert.Equal(t, testDocumentVersion, res.DocumentVersion)
+	//plugin2 update
+	res = <-resChan
+	assert.Equal(t, "plugin2", res.LastPlugin)
+	assertValueEqual(t, testCase.results, res.PluginResults)
 	assert.Equal(t, contracts.ResultStatusInProgress, res.Status)
 	assert.Equal(t, testDocumentName, res.DocumentName)
 	assert.Equal(t, testAssociationID, res.AssociationID)

@@ -178,7 +178,8 @@ func (p *WorkerBackend) pluginListener(statusChan chan contracts.PluginResult) {
 	}()
 
 	for res := range statusChan {
-		results[res.PluginID] = &res
+		var result = res
+		results[res.PluginID] = &result
 		//TODO move the aggregator under executer package and protect it, there's global lock in this package
 		status, _, _ := docmanager.DocumentResultAggregator(log, res.PluginID, results)
 		docResult := contracts.DocumentResult{
