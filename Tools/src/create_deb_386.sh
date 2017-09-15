@@ -18,8 +18,9 @@ mkdir -p ${BGO_SPACE}/bin/debian_386/debian/lib/systemd/system/
 echo "Copying application files"
 
 cp ${BGO_SPACE}/bin/linux_386/amazon-ssm-agent ${BGO_SPACE}/bin/debian_386/debian/usr/bin/
+cp ${BGO_SPACE}/bin/linux_386/ssm-cli ${BGO_SPACE}/bin/debian_386/debian/usr/bin/
 cp ${BGO_SPACE}/bin/linux_386/ssm-document-worker ${BGO_SPACE}/bin/debian_386/debian/usr/bin/
-cd ${BGO_SPACE}/bin/debian_386/debian/usr/bin/; strip --strip-unneeded amazon-ssm-agent; strip --strip-unneeded ssm-document-worker;cd ~-
+cd ${BGO_SPACE}/bin/debian_386/debian/usr/bin/; strip --strip-unneeded amazon-ssm-agent; strip --strip-unneeded ssm-cli; strip --strip-unneeded ssm-document-worker;cd ~-
 cp ${BGO_SPACE}/seelog_unix.xml ${BGO_SPACE}/bin/debian_386/debian/etc/amazon/ssm/seelog.xml.template
 cp ${BGO_SPACE}/amazon-ssm-agent.json.template ${BGO_SPACE}/bin/debian_386/debian/etc/amazon/ssm/
 cp ${BGO_SPACE}/packaging/ubuntu/amazon-ssm-agent.conf ${BGO_SPACE}/bin/debian_386/debian/etc/init/
@@ -27,8 +28,8 @@ cp ${BGO_SPACE}/packaging/ubuntu/amazon-ssm-agent.service ${BGO_SPACE}/bin/debia
 
 echo "Copying debian package config files"
 
-cp ${BGO_SPACE}/RELEASENOTES.md ${BGO_SPACE}/bin/debian_amd64/debian/etc/amazon/ssm/RELEASENOTES.md
-cp ${BGO_SPACE}/README.md ${BGO_SPACE}/bin/debian_amd64/debian/etc/amazon/ssm/README.md
+cp ${BGO_SPACE}/RELEASENOTES.md ${BGO_SPACE}/bin/debian_386/debian/etc/amazon/ssm/RELEASENOTES.md
+cp ${BGO_SPACE}/README.md ${BGO_SPACE}/bin/debian_386/debian/etc/amazon/ssm/README.md
 cp ${BGO_SPACE}/Tools/src/LICENSE ${BGO_SPACE}/bin/debian_386/debian/usr/share/doc/amazon-ssm-agent/ssm/copyright
 cp ${BGO_SPACE}/packaging/ubuntu/conffiles ${BGO_SPACE}/bin/debian_386/debian/
 cp ${BGO_SPACE}/packaging/ubuntu/docs ${BGO_SPACE}/bin/debian_386/debian/
