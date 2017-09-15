@@ -1,5 +1,11 @@
 Latest
 ===============
+- Including SSM-CLI in Debian 386 packages
+- Bug fix for multi-step document output
+- Various bug fixes
+
+2.1.4.0
+===============
 - Support for command execution out-of-process
 
 2.0.952.0
