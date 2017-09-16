@@ -15,8 +15,11 @@
 package s3util
 
 import (
-	"net/http"
+	"errors"
+	"fmt"
+	"math"
 	"os"
+	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/log"
@@ -45,7 +48,9 @@ type AmazonS3Util struct {
 }
 
 func NewAmazonS3Util(log log.T, bucketName string) *AmazonS3Util {
-	bucketRegion := GetBucketRegion(log, bucketName)
+
+	httpProvider := HttpProviderImpl{}
+	bucketRegion := GetBucketRegion(log, bucketName, httpProvider)
 
 	config := sdkutil.AwsConfig()
 	var appConfig appconfig.SsmagentConfig
@@ -100,7 +105,7 @@ func (u *AmazonS3Util) S3Upload(log log.T, bucketName string, objectKey string, 
 
 // This function returns the Amazon S3 Bucket region based on its name and the EC2 instance region.
 // It will return the same instance region if it failed to guess the bucket region.
-func GetBucketRegion(log log.T, bucketName string) (region string) {
+func GetBucketRegion(log log.T, bucketName string, httpProvider HttpProvider) (region string) {
 	instanceRegion, err := getRegion()
 	if err != nil {
 		log.Error("Cannot get the current instance region information")
@@ -108,7 +113,7 @@ func GetBucketRegion(log log.T, bucketName string) (region string) {
 	}
 	log.Infof("Instance region is %v", instanceRegion)
 
-	bucketRegion := GetS3Header(log, bucketName, instanceRegion)
+	bucketRegion := GetS3Header(log, bucketName, instanceRegion, httpProvider)
 	if bucketRegion == "" {
 		return instanceRegion // Default
 	} else {
@@ -121,24 +126,49 @@ This function return the S3 bucket region that is returned as a result of a CURL
 The starting endpoint does not need to be the same as the returned region.
 For example, we might query an endpoint in us-east-1 and get a return of us-west-2, if the bucket is actually in us-west-2.
 */
-func GetS3Header(log log.T, bucketName string, instanceRegion string) (region string) {
+func GetS3Header(log log.T, bucketName string, instanceRegion string, httpProvider HttpProvider) string {
+	var err error
+	var region string
+
 	s3Endpoint := GetS3Endpoint(instanceRegion)
-	resp, err := http.Head("http://" + bucketName + "." + s3Endpoint)
-	if err == nil {
-		return resp.Header.Get(s3ResponseRegionHeader)
+
+	if region, err = getRegionFromS3URLWithExponentialBackoff("http://"+bucketName+"."+s3Endpoint, httpProvider); err == nil {
+		return region
 	}
+
 	// Fail over to the generic regional end point, if different from the regional end point
 	genericEndPoint := GetS3GenericEndPoint(instanceRegion)
 	if genericEndPoint != s3Endpoint {
 		log.Infof("Error when querying S3 bucket using address http://%v.%v. Error details: %v. Retrying with the generic regional endpoint %v...",
 			bucketName, s3Endpoint, err, genericEndPoint)
-		resp, err = http.Head("http://" + bucketName + "." + genericEndPoint)
-		if err == nil {
-			return resp.Header.Get(s3ResponseRegionHeader)
+		if region, err = getRegionFromS3URLWithExponentialBackoff("http://"+bucketName+"."+genericEndPoint, httpProvider); err == nil {
+			return region
 		}
 	}
 	// Could not query the bucket region. Log the error.
 	log.Infof("Error when querying S3 bucket using address http://%v.%v. Error details: %v",
 		bucketName, genericEndPoint, err)
 	return ""
+}
+
+func getRegionFromS3URLWithExponentialBackoff(url string, httpProvider HttpProvider) (region string, err error) {
+	// Sleep with exponential backoff strategy if response had unexpected error, 502, 503 or 504 http code
+	// For any other failed cases, we try it without exponential back off.
+	for retryCount := 1; retryCount <= 5; retryCount++ {
+		resp, err := httpProvider.Head(url)
+		if err != nil || resp == nil {
+			continue
+		}
+
+		if resp.StatusCode == 502 || resp.StatusCode == 503 || resp.StatusCode == 504 {
+			time.Sleep(time.Duration(math.Pow(2, float64(retryCount))*100) * time.Millisecond)
+		} else if region = resp.Header.Get(s3ResponseRegionHeader); region != "" {
+			// Region is fetched correctly at this point
+			return region, nil
+		}
+	}
+
+	err = errors.New(fmt.Sprintf("Failed to fetch region from the header - %s", err))
+
+	return
 }
