@@ -19,6 +19,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil/artifact"
@@ -106,10 +107,6 @@ func (ds *PackageService) DownloadArtifact(log log.T, packageName string, versio
 
 // ReportResult sents back the result of the install/upgrade/uninstall run back to Birdwatcher
 func (ds *PackageService) ReportResult(log log.T, result packageservice.PackageResult) error {
-	// TODO: include trace and properties
-	// TODO: collect as much as possible data:
-	// * AZ, instance id, instance type, platform, version, arch, init system, ...
-
 	env, _ := ds.collector.CollectData(log)
 
 	var previousPackageVersion *string
@@ -119,21 +116,23 @@ func (ds *PackageService) ReportResult(log log.T, result packageservice.PackageR
 
 	var steps []*ssm.ConfigurePackageResultStep
 	for _, t := range result.Trace {
+		timing := (t.Timing - result.Timing) / 1000000 // converting nano to miliseconds
 		steps = append(steps,
 			&ssm.ConfigurePackageResultStep{
 				Action: &t.Operation,
 				Result: &t.Exitcode,
-				Timing: &t.Timing,
+				Timing: &timing,
 			})
 	}
 
+	overallTiming := (time.Now().UnixNano() - result.Timing) / 1000000
 	_, err := ds.facadeClient.PutConfigurePackageResult(
 		&ssm.PutConfigurePackageResultInput{
 			PackageName:            &result.PackageName,
 			PackageVersion:         &result.Version,
 			PreviousPackageVersion: previousPackageVersion,
 			Operation:              &result.Operation,
-			OverallTiming:          &result.Timing,
+			OverallTiming:          &overallTiming,
 			Result:                 &result.Exitcode,
 			Attributes: map[string]*string{
 				"platformName":     &env.OperatingSystem.Platform,
