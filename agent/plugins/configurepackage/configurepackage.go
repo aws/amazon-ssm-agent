@@ -435,6 +435,7 @@ func (p *Plugin) execute(context context.T, config contracts.Configuration, canc
 					PreviousPackageVersion: installedVersion,
 					Timing:                 1,
 					Version:                version,
+					Trace:                  tracer.ToPackageServiceTrace(),
 				})
 				if err != nil {
 					out.AppendErrorf(log, "Error reporting results: %v", err.Error())
