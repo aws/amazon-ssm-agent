@@ -18,13 +18,14 @@ package installer
 import (
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
+	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/trace"
 )
 
 // Installer is used to install, uninstall, or upgrade a package that exists in the local repository.
 type Installer interface {
-	Install(context context.T) contracts.PluginOutputer
-	Uninstall(context context.T) contracts.PluginOutputer
-	Validate(context context.T) contracts.PluginOutputer // TODO:MF consider whether we can remove validate in V1 - I think it depends on having truly idempotent installers for anything that reboots
+	Install(tracer trace.Tracer, context context.T) contracts.PluginOutputer
+	Uninstall(tracer trace.Tracer, context context.T) contracts.PluginOutputer
+	Validate(tracer trace.Tracer, context context.T) contracts.PluginOutputer // TODO:MF consider whether we can remove validate in V1 - I think it depends on having truly idempotent installers for anything that reboots
 	PackageName() string
 	Version() string
 }
