@@ -23,9 +23,11 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
+	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/envdetect"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/envdetect/ec2infradetect"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/envdetect/osdetect"
+	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/trace"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )
@@ -79,11 +81,14 @@ func testReadAction(t *testing.T, actionPathNoExt string, contentSh []byte, cont
 	mockEnvdetectCollector := &envdetect.CollectorMock{}
 	mockEnvdetectCollector.On("CollectData", mock.Anything).Return(&environmentStub, nil).Once()
 
+	tracer := trace.NewTracer(log.NewMockLog())
+	tracer.BeginSection("test segment root")
+
 	// Instantiate installer with mock
 	inst := Installer{filesysdep: &mockFileSys, packagePath: testPackagePath, envdetectCollector: mockEnvdetectCollector}
 
 	// Call and validate mock expectations and return value
-	exists, actionDoc, workingDir, err := inst.readAction(contextMock, "Foo")
+	exists, actionDoc, workingDir, err := inst.readAction(tracer, contextMock, "Foo")
 	mockFileSys.AssertExpectations(t)
 	assert.True(t, exists)
 	assert.NotEmpty(t, actionDoc)
@@ -98,11 +103,14 @@ func testReadActionInvalid(t *testing.T, actionPathNoExt string, contentSh []byt
 	mockEnvdetectCollector := &envdetect.CollectorMock{}
 	mockEnvdetectCollector.On("CollectData", mock.Anything).Return(&environmentStub, nil).Once()
 
+	tracer := trace.NewTracer(log.NewMockLog())
+	tracer.BeginSection("test segment root")
+
 	// Instantiate installer with mock
 	inst := Installer{filesysdep: &mockFileSys, packagePath: testPackagePath, envdetectCollector: mockEnvdetectCollector}
 
 	// Call and validate mock expectations and return value
-	exists, actionDoc, workingDir, err := inst.readAction(contextMock, "Foo")
+	exists, actionDoc, workingDir, err := inst.readAction(tracer, contextMock, "Foo")
 	mockFileSys.AssertExpectations(t)
 	assert.True(t, exists)
 	assert.Empty(t, actionDoc)
@@ -130,11 +138,14 @@ func TestReadActionMissing(t *testing.T) {
 	mockEnvdetectCollector := &envdetect.CollectorMock{}
 	mockEnvdetectCollector.On("CollectData", mock.Anything).Return(&environmentStub, nil).Once()
 
+	tracer := trace.NewTracer(log.NewMockLog())
+	tracer.BeginSection("test segment root")
+
 	// Instantiate repository with mock
 	repo := Installer{filesysdep: &mockFileSys, packagePath: testPackagePath, envdetectCollector: mockEnvdetectCollector}
 
 	// Call and validate mock expectations and return value
-	exists, actionDoc, workingDir, err := repo.readAction(contextMock, "Foo")
+	exists, actionDoc, workingDir, err := repo.readAction(tracer, contextMock, "Foo")
 	mockFileSys.AssertExpectations(t)
 	assert.False(t, exists)
 	assert.Empty(t, actionDoc)
@@ -152,11 +163,14 @@ func testReadActionTooManyActionImplementations(t *testing.T, existSh bool, exis
 	mockEnvdetectCollector := &envdetect.CollectorMock{}
 	mockEnvdetectCollector.On("CollectData", mock.Anything).Return(&environmentStub, nil).Once()
 
+	tracer := trace.NewTracer(log.NewMockLog())
+	tracer.BeginSection("test segment root")
+
 	// Instantiate repository with mock
 	repo := Installer{filesysdep: &mockFileSys, packagePath: testPackagePath, envdetectCollector: mockEnvdetectCollector}
 
 	// Call and validate mock expectations and return value
-	exists, actionDoc, workingDir, err := repo.readAction(contextMock, "Foo")
+	exists, actionDoc, workingDir, err := repo.readAction(tracer, contextMock, "Foo")
 	mockFileSys.AssertExpectations(t)
 	assert.True(t, exists)
 	assert.Empty(t, actionDoc)
@@ -183,11 +197,13 @@ func TestInstall_ExecuteError(t *testing.T) {
 	mockEnvdetectCollector := &envdetect.CollectorMock{}
 	mockEnvdetectCollector.On("CollectData", mock.Anything).Return(&environmentStub, nil).Once()
 
+	tracer := trace.NewTracer(log.NewMockLog())
+
 	// Instantiate installer with mock
 	inst := Installer{filesysdep: &mockFileSys, execdep: &mockExec, packagePath: testPackagePath, envdetectCollector: mockEnvdetectCollector}
 
 	// Call and validate mock expectations and return value
-	output := inst.Install(contextMock)
+	output := inst.Install(tracer, contextMock)
 	mockFileSys.AssertExpectations(t)
 	mockExec.AssertExpectations(t)
 	assert.NotEmpty(t, output.GetStderr())
@@ -204,11 +220,13 @@ func TestValidate_NoAction(t *testing.T) {
 	mockEnvdetectCollector := &envdetect.CollectorMock{}
 	mockEnvdetectCollector.On("CollectData", mock.Anything).Return(&environmentStub, nil).Once()
 
+	tracer := trace.NewTracer(log.NewMockLog())
+
 	// Instantiate installer with mock
 	inst := Installer{filesysdep: &mockFileSys, execdep: &mockExec, packagePath: testPackagePath, envdetectCollector: mockEnvdetectCollector}
 
 	// Call and validate mock expectations and return value
-	output := inst.Validate(contextMock)
+	output := inst.Validate(tracer, contextMock)
 	mockFileSys.AssertExpectations(t)
 	mockExec.AssertExpectations(t)
 	assert.Empty(t, output.GetStderr())
@@ -228,6 +246,8 @@ func TestUninstall_Success(t *testing.T) {
 	mockEnvdetectCollector := &envdetect.CollectorMock{}
 	mockEnvdetectCollector.On("CollectData", mock.Anything).Return(&environmentStub, nil).Once()
 
+	tracer := trace.NewTracer(log.NewMockLog())
+
 	// Instantiate installer with mock
 	inst := Installer{filesysdep: &mockFileSys,
 		execdep:            &mockExec,
@@ -236,7 +256,7 @@ func TestUninstall_Success(t *testing.T) {
 		envdetectCollector: mockEnvdetectCollector}
 
 	// Call and validate mock expectations and return value
-	output := inst.Uninstall(contextMock)
+	output := inst.Uninstall(tracer, contextMock)
 	mockFileSys.AssertExpectations(t)
 	mockExec.AssertExpectations(t)
 	assert.Empty(t, output.GetStderr())
