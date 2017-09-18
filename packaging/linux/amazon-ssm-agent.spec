@@ -33,28 +33,15 @@ This package provides Amazon SSM Agent for managing EC2 Instances using SSM APIs
 
 # Examples for the scriptlets are run for clean install, uninstall and upgrade
 
-# Clean install: %posttrans
 # Uninstall:     %preun
-# Upgrade:       %pre, %posttrans
-
-%pre
-# Stop the agent before the upgrade
-if [ $1 -ge 2 ]; then
-    /sbin/init --version &> stdout.txt
-    if [[ `cat stdout.txt` =~ upstart ]]; then
-        /sbin/stop amazon-ssm-agent
-    elif [[ `systemctl` =~ -\.mount ]]; then
-        systemctl stop amazon-ssm-agent
-        systemctl daemon-reload
-    fi
-    rm stdout.txt
-fi
+# Upgrade:       %post
+# Install:       Not starting service by default
 
 %preun
 # Stop the agent after uninstall
 if [ $1 -eq 0 ] ; then
-    /sbin/init --version &> stdout.txt
-    if [[ `cat stdout.txt` =~ upstart ]]; then
+    init_type=$(/sbin/init --version 2>/dev/null)
+    if [[ $init_type =~ upstart ]]; then
         /sbin/stop amazon-ssm-agent
         sleep 1
     elif [[ `systemctl` =~ -\.mount ]]; then
@@ -62,21 +49,23 @@ if [ $1 -eq 0 ] ; then
         systemctl disable amazon-ssm-agent
         systemctl daemon-reload
     fi
-    rm stdout.txt
 fi
 
-%posttrans
-# Start the agent after initial install or upgrade
-if [ $1 -ge 0 ]; then
-    /sbin/init --version &> stdout.txt
-    if [[ `cat stdout.txt` =~ upstart ]]; then
+%post
+# Start the agent after install if the service was running
+if [ $1 -eq 2 ] ; then
+    init_type=$(/sbin/init --version 2>/dev/null)
+    if [[ $init_type =~ upstart && $(/sbin/status amazon-ssm-agent) =~ "amazon-ssm-agent start" ]]; then
+        /sbin/stop amazon-ssm-agent
         /sbin/start amazon-ssm-agent
     elif [[ `systemctl` =~ -\.mount ]]; then
         systemctl enable amazon-ssm-agent
-        systemctl start amazon-ssm-agent
+        if [[ $(systemctl is-active amazon-ssm-agent) = "active" ]]; then
+            systemctl stop amazon-ssm-agent
+            systemctl start amazon-ssm-agent
+        fi
         systemctl daemon-reload
     fi
-    rm stdout.txt
 fi
 
 %clean
