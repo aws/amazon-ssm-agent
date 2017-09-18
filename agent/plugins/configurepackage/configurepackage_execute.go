@@ -86,13 +86,13 @@ func executeInstall(
 		setNewInstallState(tracer, context, repository, inst, localpackages.Installing)
 	}
 
-	result := inst.Install(context)
+	result := inst.Install(tracer, context)
 
 	installtrace.WithExitcode(int64(result.GetExitCode())).AppendInfo(result.GetStdout()).AppendError(result.GetStderr())
 
 	if result.GetStatus() == contracts.ResultStatusSuccess {
 		validatetrace := tracer.BeginSection(fmt.Sprintf("valiate %s/%s - rollback: %b", inst.PackageName(), inst.Version(), isRollback))
-		result = inst.Validate(context)
+		result = inst.Validate(tracer, context)
 		validatetrace.WithExitcode(int64(result.GetExitCode())).AppendInfo(result.GetStdout()).AppendError(result.GetStderr())
 	}
 	if result.GetStatus().IsReboot() {
@@ -150,7 +150,7 @@ func executeUninstall(
 		}
 	}
 
-	result := uninst.Uninstall(context)
+	result := uninst.Uninstall(tracer, context)
 	installtrace.WithExitcode(int64(result.GetExitCode())).AppendInfo(result.GetStdout()).AppendError(result.GetStderr())
 
 	if !result.GetStatus().IsSuccess() {

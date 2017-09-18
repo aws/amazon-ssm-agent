@@ -316,7 +316,7 @@ func checkAlreadyInstalled(
 		if instToCheck != nil {
 			validateTrace := tracer.BeginSection(fmt.Sprintf("run validate for %s/%s", instToCheck.PackageName(), instToCheck.Version()))
 
-			validateOutput := instToCheck.Validate(context)
+			validateOutput := instToCheck.Validate(tracer, context)
 			validateTrace.WithExitcode(int64(validateOutput.GetExitCode()))
 
 			if validateOutput.GetStatus() == contracts.ResultStatusSuccess {
