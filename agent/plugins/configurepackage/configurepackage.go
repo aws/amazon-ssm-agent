@@ -433,7 +433,7 @@ func (p *Plugin) execute(context context.T, config contracts.Configuration, canc
 					Operation:              input.Action,
 					PackageName:            input.Name,
 					PreviousPackageVersion: installedVersion,
-					Timing:                 1,
+					Timing:                 res.StartDateTime.UnixNano(),
 					Version:                version,
 					Trace:                  tracer.ToPackageServiceTrace(),
 				})
