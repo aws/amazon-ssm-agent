@@ -116,6 +116,17 @@ func (ds *PackageService) ReportResult(log log.T, result packageservice.PackageR
 	if result.PreviousPackageVersion != "" {
 		previousPackageVersion = &result.PreviousPackageVersion
 	}
+
+	var steps []*ssm.ConfigurePackageResultStep
+	for _, t := range result.Trace {
+		steps = append(steps,
+			&ssm.ConfigurePackageResultStep{
+				Action: &t.Operation,
+				Result: &t.Exitcode,
+				Timing: &t.Timing,
+			})
+	}
+
 	_, err := ds.facadeClient.PutConfigurePackageResult(
 		&ssm.PutConfigurePackageResultInput{
 			PackageName:            &result.PackageName,
@@ -133,14 +144,7 @@ func (ds *PackageService) ReportResult(log log.T, result packageservice.PackageR
 				"region":           &env.Ec2Infrastructure.Region,
 				"availabilityZone": &env.Ec2Infrastructure.AvailabilityZone,
 			},
-			Steps: []*ssm.ConfigurePackageResultStep{
-				&ssm.ConfigurePackageResultStep{
-					// FIXME: this is just a copy of the overall execution for now
-					Action: &result.Operation,
-					Result: &result.Exitcode,
-					Timing: &result.Timing,
-				},
-			},
+			Steps: steps,
 		},
 	)
 
