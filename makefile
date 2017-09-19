@@ -190,13 +190,13 @@ build-windows-386: checkstyle copy-src pre-build
 .PHONY: build-arm
 build-arm: checkstyle copy-src pre-build
 	@echo "Build for ARM platforms"
-	GOOS=linux GOARCH=arm $(GO_BUILD) -ldflags "-s -w" -o $(BGO_SPACE)/bin/linux_arm/amazon-ssm-agent -v \
+	GOOS=linux GOARCH=arm GOARM=6 $(GO_BUILD)  -ldflags "-s -w" -o $(BGO_SPACE)/bin/linux_arm/amazon-ssm-agent -v \
 		$(BGO_SPACE)/agent/agent.go $(BGO_SPACE)/agent/agent_unix.go $(BGO_SPACE)/agent/agent_parser.go
-	GOOS=linux GOARCH=arm $(GO_BUILD) -ldflags "-s -w" -o $(BGO_SPACE)/bin/linux_arm/updater -v \
+	GOOS=linux GOARCH=arm GOARM=6 $(GO_BUILD) -ldflags "-s -w" -o $(BGO_SPACE)/bin/linux_arm/updater -v \
 		$(BGO_SPACE)/agent/update/updater/updater.go $(BGO_SPACE)/agent/update/updater/updater_unix.go
-	GOOS=linux GOARCH=arm $(GO_BUILD) -ldflags "-s -w" -o $(BGO_SPACE)/bin/linux_arm/ssm-cli -v \
+	GOOS=linux GOARCH=arm GOARM=6 $(GO_BUILD) -ldflags "-s -w" -o $(BGO_SPACE)/bin/linux_arm/ssm-cli -v \
 		$(BGO_SPACE)/agent/cli-main/cli-main.go
-	GOOS=linux GOARCH=arm $(GO_BUILD) -ldflags "-s -w" -o $(BGO_SPACE)/bin/linux_arm/ssm-document-worker -v \
+	GOOS=linux GOARCH=arm GOARM=6 $(GO_BUILD) -ldflags "-s -w" -o $(BGO_SPACE)/bin/linux_arm/ssm-document-worker -v \
 								$(BGO_SPACE)/agent/framework/processor/executer/outofproc/worker/main.go
 
 .PHONY: copy-src
