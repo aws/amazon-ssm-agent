@@ -34,11 +34,24 @@ import (
 	"github.com/aws/aws-sdk-go/service/ssm"
 )
 
+// NanoTime is helper interface for mocking time
+type NanoTime interface {
+	NowUnixNano() int64
+}
+
+type TimeImpl struct {
+}
+
+func (t *TimeImpl) NowUnixNano() int64 {
+	return time.Now().UnixNano()
+}
+
 // PackageService is the concrete type for Birdwatcher PackageService
 type PackageService struct {
 	facadeClient  facade.BirdwatcherFacade
 	manifestCache packageservice.ManifestCache
 	collector     envdetect.Collector
+	timeProvider  NanoTime
 }
 
 // New constructor for PackageService
@@ -71,6 +84,7 @@ func New(endpoint string, manifestCache packageservice.ManifestCache) packageser
 		facadeClient:  ssm.New(facadeClientSession),
 		manifestCache: manifestCache,
 		collector:     &envdetect.CollectorImp{},
+		timeProvider:  &TimeImpl{},
 	}
 }
 
@@ -125,7 +139,7 @@ func (ds *PackageService) ReportResult(log log.T, result packageservice.PackageR
 			})
 	}
 
-	overallTiming := (time.Now().UnixNano() - result.Timing) / 1000000
+	overallTiming := (ds.timeProvider.NowUnixNano() - result.Timing) / 1000000
 	_, err := ds.facadeClient.PutConfigurePackageResult(
 		&ssm.PutConfigurePackageResultInput{
 			PackageName:            &result.PackageName,
