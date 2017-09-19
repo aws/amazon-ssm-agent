@@ -18,11 +18,15 @@ package copycontent
 import (
 	"testing"
 
+	"time"
+
+	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	filemock "github.com/aws/amazon-ssm-agent/agent/fileutil/filemanager/mock"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/copycontent/remoteresource"
 	resourcemock "github.com/aws/amazon-ssm-agent/agent/plugins/copycontent/remoteresource/mock"
+	"github.com/aws/amazon-ssm-agent/agent/task"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )
@@ -30,6 +34,7 @@ import (
 var logger = log.NewMockLog()
 var copyContentFileMock = filemock.FileSystemMock{}
 var copyContentResourceMock = resourcemock.RemoteResourceMock{}
+var contextMock = context.NewMockDefault()
 
 func TestNewRemoteResource_InvalidLocationType(t *testing.T) {
 
@@ -150,7 +155,44 @@ func Test_RunCopyContentBadLocationInfo(t *testing.T) {
 
 	assert.Equal(t, output.Status, contracts.ResultStatusFailed)
 	fileMock.AssertExpectations(t)
+}
 
+func TestPlugin_Execute(t *testing.T) {
+
+	mockplugin := MockDefaultPlugin{}
+
+	pluginResult := contracts.PluginOutput{ExitCode: 0, Status: "", Stdout: "", Stderr: ""}
+	input := CopyContentPlugin{}
+
+	input.LocationType = "GitHub"
+	input.LocationInfo = `{
+		"owner" : "test-owner",
+		"repository" :	 "test-repo",
+		"path" : "path"
+		}`
+	input.DestinationDir = "destination"
+	conf := createSimpleConfigWithProperties(&input)
+	cancelFlag := createMockCancelFlag()
+
+	copyContentFileMock.On("MakeDirs", mock.Anything).Return(nil)
+	copyContentFileMock.On("WriteFile", mock.Anything, mock.Anything).Return(nil).Twice()
+
+	mockplugin.On("UploadOutputToS3Bucket", contextMock.Log(), conf.PluginID, conf.OrchestrationDirectory,
+		conf.OutputS3BucketName, conf.OutputS3KeyPrefix, false, conf.OrchestrationDirectory,
+		pluginResult.Stdout, pluginResult.Stderr).Return([]string{})
+
+	p := &Plugin{
+		remoteResourceCreator: NewRemoteResourceMockDoc,
+		filesys:               copyContentFileMock,
+	}
+	p.ExecuteUploadOutputToS3Bucket = mockplugin.UploadOutputToS3Bucket
+	result := p.execute(contextMock, conf, cancelFlag)
+
+	copyContentFileMock.AssertExpectations(t)
+	mockplugin.AssertExpectations(t)
+
+	assert.Equal(t, 0, result.Code)
+	assert.Equal(t, 0, pluginResult.ExitCode)
 }
 
 func TestValidateInput_UnsupportedLocationType(t *testing.T) {
@@ -230,4 +272,47 @@ func createStubConfiguration(orch, bucket, prefix, message, dir string) contract
 		PluginID:                "aws-copyContent",
 		DefaultWorkingDirectory: dir,
 	}
+}
+
+// MockDefaultPlugin mocks the default plugin.
+type MockDefaultPlugin struct {
+	mock.Mock
+}
+
+// UploadOutputToS3Bucket is a mocked method that just returns what mock tells it to.
+func (m *MockDefaultPlugin) UploadOutputToS3Bucket(log log.T, pluginID string, orchestrationDir string, outputS3BucketName string, outputS3KeyPrefix string, useTempDirectory bool, tempDir string, Stdout string, Stderr string) []string {
+	args := m.Called(log, pluginID, orchestrationDir, outputS3BucketName, outputS3KeyPrefix, useTempDirectory, tempDir, mock.Anything, Stderr)
+	log.Infof("args are %v", args)
+	return args.Get(0).([]string)
+}
+
+func NewRemoteResourceMockDoc(log log.T, locationtype, locationInfo string) (remoteresource.RemoteResource, error) {
+
+	copyContentResourceMock.On("ValidateLocationInfo").Return(true, nil).Once()
+	copyContentResourceMock.On("Download", contextMock.Log(), copyContentFileMock, mock.Anything).Return(nil).Once()
+	return copyContentResourceMock, nil
+}
+
+func createSimpleConfigWithProperties(info *CopyContentPlugin) contracts.Configuration {
+	config := contracts.Configuration{}
+
+	var rawPluginInput interface{}
+	rawPluginInput = info
+	config.Properties = rawPluginInput
+	config.OrchestrationDirectory = "orch"
+	config.PluginID = "plugin"
+	config.OutputS3KeyPrefix = ""
+	config.OutputS3BucketName = ""
+
+	return config
+}
+
+func createMockCancelFlag() task.CancelFlag {
+	mockCancelFlag := new(task.MockCancelFlag)
+	// Setup mocks
+	mockCancelFlag.On("Canceled").Return(false)
+	mockCancelFlag.On("ShutDown").Return(false)
+	mockCancelFlag.On("Wait").Return(false).After(100 * time.Millisecond)
+
+	return mockCancelFlag
 }
