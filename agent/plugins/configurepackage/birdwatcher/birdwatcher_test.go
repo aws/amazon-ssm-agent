@@ -34,6 +34,15 @@ var platformName = "testplatform"
 var platformVersion = "testversion"
 var architecture = "testarch"
 
+type TimeMock struct {
+	mock.Mock
+}
+
+func (t *TimeMock) NowUnixNano() int64 {
+	args := t.Called()
+	return int64(args.Int(0))
+}
+
 type pkgtree map[string]map[string]map[string]*PackageInfo
 type pkgselector struct {
 	platform     string
@@ -211,6 +220,9 @@ func TestExtractPackageInfo(t *testing.T) {
 }
 
 func TestReportResult(t *testing.T) {
+	now := 420000
+	timemock := &TimeMock{}
+	timemock.On("NowUnixNano").Return(now)
 
 	data := []struct {
 		name          string
@@ -269,7 +281,7 @@ func TestReportResult(t *testing.T) {
 				&osdetect.OperatingSystem{"abc", "567", "", "xyz", "", ""},
 				&ec2infradetect.Ec2Infrastructure{"instanceIDX", "Reg1", "", "AZ1", "instanceTypeZ"},
 			}, nil).Once()
-			ds := &PackageService{facadeClient: &testdata.facadeClient, manifestCache: packageservice.ManifestCacheMemNew(), collector: &mockedCollector}
+			ds := &PackageService{facadeClient: &testdata.facadeClient, manifestCache: packageservice.ManifestCacheMemNew(), collector: &mockedCollector, timeProvider: timemock}
 
 			err := ds.ReportResult(loggerMock, testdata.packageResult)
 			if testdata.expectedErr {
@@ -284,7 +296,7 @@ func TestReportResult(t *testing.T) {
 				} else {
 					assert.EqualValues(t, &testdata.packageResult.PreviousPackageVersion, testdata.facadeClient.putConfigurePackageResultInput.PreviousPackageVersion)
 				}
-				assert.Equal(t, testdata.packageResult.Timing, *testdata.facadeClient.putConfigurePackageResultInput.OverallTiming)
+				assert.Equal(t, (int64(now)-testdata.packageResult.Timing)/1000000, *testdata.facadeClient.putConfigurePackageResultInput.OverallTiming)
 				assert.Equal(t, testdata.packageResult.Exitcode, *testdata.facadeClient.putConfigurePackageResultInput.Result)
 				assert.Equal(t, "abc", *testdata.facadeClient.putConfigurePackageResultInput.Attributes["platformName"])
 				assert.Equal(t, "567", *testdata.facadeClient.putConfigurePackageResultInput.Attributes["platformVersion"])
