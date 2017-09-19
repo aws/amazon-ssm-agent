@@ -165,8 +165,6 @@ func (p *Plugin) execute(context context.T, config contracts.Configuration, canc
 	res.Output = output.String()
 	res.StandardOutput = pluginutil.StringPrefix(output.Stdout, p.MaxStdoutLength, p.OutputTruncatedSuffix)
 	res.StandardError = pluginutil.StringPrefix(output.Stderr, p.MaxStderrLength, p.OutputTruncatedSuffix)
-	pluginutil.PersistPluginInformationToCurrent(log, config.PluginID, config, res)
-
 	return res
 }
 
@@ -207,7 +205,6 @@ func (p *Plugin) runCopyContent(log log.T, input *CopyContentPlugin, config cont
 	}
 	output.AppendInfof(log, "Content downloaded to %v", destinationDir)
 	output.MarkAsSucceeded()
-
 	return
 }
 
