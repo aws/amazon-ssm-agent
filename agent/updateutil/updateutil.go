@@ -25,6 +25,9 @@ import (
 	"syscall"
 	"time"
 
+	"errors"
+	"strconv"
+
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
@@ -613,4 +616,71 @@ func setExeOutErr(
 	}
 
 	return stdoutWriter, stderrWriter, nil
+}
+
+func CompareVersion(versionOne string, versionTwo string) (int, error) {
+	majorOne, minorOne, buildOne, patchOne, err := parseVersion(versionOne)
+	if err != nil {
+		return 0, err
+	}
+
+	majorTwo, minorTwo, buildTwo, patchTwo, err := parseVersion(versionTwo)
+	if err != nil {
+		return 0, err
+	}
+
+	if majorOne < majorTwo {
+		return -1, nil
+	} else if majorOne > majorTwo {
+		return 1, nil
+	}
+
+	if minorOne < minorTwo {
+		return -1, nil
+	} else if minorOne > minorTwo {
+		return 1, nil
+	}
+
+	if buildOne < buildTwo {
+		return -1, nil
+	} else if buildOne > buildTwo {
+		return 1, nil
+	}
+
+	if patchOne < patchTwo {
+		return -1, nil
+	} else if patchOne > patchTwo {
+		return 1, nil
+	}
+
+	return 0, nil
+}
+
+func parseVersion(version string) (uint64, uint64, uint64, uint64, error) {
+	parts := strings.SplitN(version, ".", 4)
+	if len(parts) != 4 {
+		return 0, 0, 0, 0, errors.New("No Major.Minor.Build.Patch elements found")
+	}
+
+	major, err := strconv.ParseUint(parts[0], 10, 64)
+	if err != nil {
+		return 0, 0, 0, 0, err
+	}
+
+	minor, err := strconv.ParseUint(parts[1], 10, 64)
+	if err != nil {
+		return 0, 0, 0, 0, err
+	}
+
+	build, err := strconv.ParseUint(parts[2], 10, 64)
+	if err != nil {
+		return 0, 0, 0, 0, err
+	}
+
+	patch, err := strconv.ParseUint(parts[3], 10, 64)
+	if err != nil {
+		return 0, 0, 0, 0, err
+	}
+
+	return major, minor, build, patch, nil
 }

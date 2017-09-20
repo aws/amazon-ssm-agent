@@ -588,3 +588,66 @@ func TestIsDiskSpaceSufficientForUpdateWithDiskSpaceLoadFail(t *testing.T) {
 	assert.Error(t, err)
 	assert.False(t, isSufficient)
 }
+
+func TestCompareVersion(t *testing.T) {
+	var res int
+	var err error
+
+	// major version 1 > major version 2
+	res, err = CompareVersion("2.0.0.0", "1.0.0.0")
+	assert.Nil(t, err)
+	assert.Equal(t, 1, res)
+
+	// major version 1 < major version 2
+	res, err = CompareVersion("1.0.0.0", "2.0.0.0")
+	assert.Nil(t, err)
+	assert.Equal(t, -1, res)
+
+	// minor version 1 > minor version 2
+	res, err = CompareVersion("2.1.0.0", "2.0.0.0")
+	assert.Nil(t, err)
+	assert.Equal(t, 1, res)
+
+	// minor version 1 < minor version 2
+	res, err = CompareVersion("2.0.0.0", "2.1.0.0")
+	assert.Nil(t, err)
+	assert.Equal(t, -1, res)
+
+	// build version 1 > build version 2
+	res, err = CompareVersion("2.1.10.0", "2.1.5.0")
+	assert.Nil(t, err)
+	assert.Equal(t, 1, res)
+
+	// build version 1 < build version 2
+	res, err = CompareVersion("2.1.3.0", "2.1.12.0")
+	assert.Nil(t, err)
+	assert.Equal(t, -1, res)
+
+	// patch version 1 > patch version 2
+	res, err = CompareVersion("2.1.10.100", "2.1.10.50")
+	assert.Nil(t, err)
+	assert.Equal(t, 1, res)
+
+	// patch version 1 < patch version 2
+	res, err = CompareVersion("2.1.10.100", "2.1.10.1000")
+	assert.Nil(t, err)
+	assert.Equal(t, -1, res)
+
+	// version 1 == version 2
+	res, err = CompareVersion("2.5.7.8", "2.5.7.8")
+	assert.Nil(t, err)
+	assert.Equal(t, 0, res)
+
+	// version 1 contains invalid characters
+	res, err = CompareVersion("2.foo.7.8", "2.5.7.8")
+	assert.NotNil(t, err)
+
+	// version 2 contains invalid characters
+	res, err = CompareVersion("2.5.7.8", "2.5.7.bar")
+	assert.NotNil(t, err)
+
+	// versions contains wrong format
+	res, err = CompareVersion("2.5.7.8.9", "2.5.7.8.9")
+	assert.NotNil(t, err)
+
+}
