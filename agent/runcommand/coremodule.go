@@ -19,8 +19,6 @@ import (
 	"strings"
 	"sync"
 
-	"time"
-
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	asocitscheduler "github.com/aws/amazon-ssm-agent/agent/association/scheduler"
 	"github.com/aws/amazon-ssm-agent/agent/context"
@@ -67,24 +65,16 @@ func (s *RunCommandService) ModuleExecute(context context.T) (err error) {
 	if s.messagePollJob, err = scheduler.Every(pollMessageFrequencyMinutes).Minutes().Run(s.loop); err != nil {
 		context.Log().Errorf("unable to schedule message poll job. %v", err)
 	}
-
-	// Sleep for 30 seconds, to allow for health ping by instance and tag expansion after that.
-	// This ensures that when we get associations for first time, all associations are present.
-	// Otherwise, we will have to wait for 10 minutes (AssociationFrequencyMinutes) to
-	// get complete set of associations.
-	log.Info("Sleeping for 30 seconds before starting association polling.")
-	time.Sleep(30 * time.Second)
-
 	//TODO move association polling out in the next CR
 	if s.pollAssociations {
-		associationPollingFrequencyInMinutes := context.AppConfig().Ssm.AssociationFrequencyMinutes
+		associationFrequenceMinutes := context.AppConfig().Ssm.AssociationFrequencyMinutes
 		log.Info("Starting association polling")
-		log.Debugf("Association polling frequency is %v", associationPollingFrequencyInMinutes)
+		log.Debugf("Association polling frequency is %v", associationFrequenceMinutes)
 		var job *scheduler.Job
 		if job, err = asocitscheduler.CreateScheduler(
 			log,
 			s.assocProcessor.ProcessAssociation,
-			associationPollingFrequencyInMinutes); err != nil {
+			associationFrequenceMinutes); err != nil {
 			context.Log().Errorf("unable to schedule association processor. %v", err)
 		}
 		s.assocProcessor.InitializeAssociationProcessor()
