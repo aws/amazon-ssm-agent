@@ -1,5 +1,13 @@
 Latest
 ===============
+- Increment major/minor version to 2.2
+- Bug fix on update to v2.1.10.0
+- Advance Notice: Starting in the next version of SSM Agent, to align with the guidelines for RPM-based distros,
+  the RPM intaller won't start the service by default after initial RPM installation. It will start automatically
+  after RPM update only if the service was running previously. The behavior of the Debian and MSI installer is unchanged.
+
+2.1.10.0
+===============
 - Including SSM-CLI in Debian 386 packages
 - Bug fix for multi-step document output
 - Various bug fixes
