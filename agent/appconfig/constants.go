@@ -118,8 +118,11 @@ const (
 	// PluginEC2ConfigUpdate is the name for ec2 config update plugin
 	PluginEC2ConfigUpdate = "aws:updateAgent"
 
-	// PluginCopyContent is the name for copyContent plugin
-	PluginCopyContent = "aws:copyContent"
+	// PluginDownloadContent is the name for downloadContent plugin
+	PluginDownloadContent = "aws:downloadContent"
+
+	// PluginRunDocument is the name of the run document plugin
+	PluginRunDocument = "aws:runDocument"
 
 	// PluginNameAwsSoftwareInventory is the name for inventory plugin
 	PluginNameAwsSoftwareInventory = "aws:softwareInventory"
