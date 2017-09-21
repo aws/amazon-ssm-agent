@@ -29,6 +29,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/plugins/lrpminvoker"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/pluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/refreshassociation"
+	"github.com/aws/amazon-ssm-agent/agent/plugins/rundocument"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/runscript"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/updatessmagent"
 )
@@ -51,7 +52,8 @@ var allPlugins = map[string]struct{}{
 	appconfig.PluginNameDomainJoin:             {},
 	appconfig.PluginEC2ConfigUpdate:            {},
 	appconfig.PluginNameRefreshAssociation:     {},
-	appconfig.PluginCopyContent:                {},
+	appconfig.PluginDownloadContent:            {},
+	appconfig.PluginRunDocument:                {},
 }
 
 var once sync.Once
@@ -161,12 +163,20 @@ func loadPlatformIndependentPlugins(context context.T) runpluginutil.PluginRegis
 		workerPlugins[configurePackagePluginName] = configurePackagePlugin
 	}
 
-	copyContentPluginName := copycontent.Name()
-	copyContentPlugin, err := copycontent.NewPlugin(pluginutil.DefaultPluginConfig())
+	downloadContentPluginName := copycontent.Name()
+	downloadContentPlugin, err := copycontent.NewPlugin(pluginutil.DefaultPluginConfig())
 	if err != nil {
-		log.Errorf("failed to create plugin %s %v", copyContentPluginName, err)
+		log.Errorf("failed to create plugin %s %v", downloadContentPluginName, err)
 	} else {
-		workerPlugins[copyContentPluginName] = copyContentPlugin
+		workerPlugins[downloadContentPluginName] = downloadContentPlugin
+	}
+
+	runDocumentPluginName := rundocument.Name()
+	runDocumentPlugin, err := rundocument.NewPlugin(pluginutil.DefaultPluginConfig())
+	if err != nil {
+		log.Errorf("failed to create plugin %s %v", runDocumentPluginName, err)
+	} else {
+		workerPlugins[runDocumentPluginName] = runDocumentPlugin
 	}
 
 	return workerPlugins

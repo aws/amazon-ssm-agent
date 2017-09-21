@@ -210,7 +210,7 @@ func (p *Plugin) runCopyContent(log log.T, input *CopyContentPlugin, config cont
 
 // Name returns the plugin name
 func Name() string {
-	return appconfig.PluginCopyContent
+	return appconfig.PluginDownloadContent
 }
 
 // parseAndValidateInput parses the input json file and also validates its inputs
