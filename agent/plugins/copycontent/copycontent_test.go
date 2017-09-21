@@ -237,7 +237,7 @@ func TestValidateInput_NoLocationInfo(t *testing.T) {
 }
 
 func TestName(t *testing.T) {
-	assert.Equal(t, "aws:copyContent", Name())
+	assert.Equal(t, "aws:downloadContent", Name())
 }
 
 func TestParseAndValidateInput_NoInput(t *testing.T) {
