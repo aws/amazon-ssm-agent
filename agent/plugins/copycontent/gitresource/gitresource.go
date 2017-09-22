@@ -27,6 +27,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"os"
 	"path/filepath"
 )
 
@@ -77,13 +78,20 @@ func parseLocationInfo(locationInfo string) (gitInfo GitInfo, err error) {
 }
 
 // Download calls download to pull down files or directory from github
-func (git *GitResource) Download(log log.T, filesys filemanager.FileSystem, destinationDir string) (err error) {
+func (git *GitResource) Download(log log.T, filesys filemanager.FileSystem, destPath string) (err error) {
+	// if destination directory is not specified, specify the directory
+	if destPath == "" {
+		destPath = appconfig.DownloadRoot
+	}
+
+	log.Debug("Destination path from Download to download - ", destPath)
 	// call download that has object of type GitInfo that keeps changing recursively for directory download
-	return git.download(log, filesys, git.Info, destinationDir)
+	// call is made with the assumption that the content is of file type
+	return git.download(log, filesys, git.Info, destPath, false)
 }
 
 //download pulls down either the file or directory specified and stores it on disk
-func (git *GitResource) download(log log.T, filesys filemanager.FileSystem, info GitInfo, destinationDir string) (err error) {
+func (git *GitResource) download(log log.T, filesys filemanager.FileSystem, info GitInfo, destinationDir string, isDirTypeDownload bool) (err error) {
 
 	opt, err := git.client.ParseGetOptions(log, info.GetOptions)
 	if err != nil {
@@ -112,7 +120,7 @@ func (git *GitResource) download(log log.T, filesys filemanager.FileSystem, info
 				GetOptions: info.GetOptions,
 			}
 			destDir := filepath.Join(destinationDir, filepath.Base(dirContent.GetPath()))
-			if err = git.download(log, filesys, dirInput, destDir); err != nil {
+			if err = git.download(log, filesys, dirInput, destDir, true); err != nil {
 				log.Error("Error retrieving file from directory", destinationDir)
 				return err
 			}
@@ -123,9 +131,16 @@ func (git *GitResource) download(log log.T, filesys filemanager.FileSystem, info
 			log.Error("File content could not be retrieved - ", err)
 			return err
 		}
-		if filepath.Base(destinationDir) != filepath.Base(fileMetadata.GetPath()) {
-			destinationDir = filepath.Join(destinationDir, filepath.Base(fileMetadata.GetPath()))
+
+		// all files and sub-directories will be placed under the specified destinationDir when a directory was downloaded
+		if !isDirTypeDownload { // If only a file was downloaded
+			// If the destinationDir has a path separator in the end, then the file should be appended to the directory
+			// also if the folder already exists
+			if (filesys.Exists(destinationDir) && filesys.IsDirectory(destinationDir)) || os.IsPathSeparator(destinationDir[len(destinationDir)-1]) {
+				destinationDir = filepath.Join(destinationDir, filepath.Base(fileMetadata.GetPath()))
+			}
 		}
+
 		if err = system.SaveFileContent(log, filesys, destinationDir, content); err != nil {
 			log.Errorf("Error obtaining file content from git file - %v, %v", fileMetadata.GetPath(), err)
 			return err
