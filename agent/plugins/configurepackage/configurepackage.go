@@ -106,7 +106,7 @@ func prepareConfigurePackage(
 
 		// ensure manifest file and package
 		trace = tracer.BeginSection("ensure package is local available")
-		inst, err = ensurePackage(context, repository, packageService, input.Name, version, config)
+		inst, err = ensurePackage(tracer, context, repository, packageService, input.Name, version, config)
 		if err != nil {
 			trace.WithError(err).End()
 			output.MarkAsFailed(nil, nil)
@@ -117,7 +117,7 @@ func prepareConfigurePackage(
 		// if different version is installed, uninstall
 		trace = tracer.BeginSection("ensure old package is local available")
 		if installedVersion != "" && installedVersion != version {
-			uninst, err = ensurePackage(context, repository, packageService, input.Name, installedVersion, config)
+			uninst, err = ensurePackage(tracer, context, repository, packageService, input.Name, installedVersion, config)
 			if err != nil {
 				trace.WithError(err)
 			}
@@ -129,7 +129,7 @@ func prepareConfigurePackage(
 		var version string
 		var err error
 		trace := tracer.BeginSection("determine version to uninstall")
-		version, installState, err = getVersionToUninstall(context, repository, input)
+		version, installState, err = getVersionToUninstall(tracer, repository, input)
 		installedVersion = version
 		if err != nil || version == "" {
 			trace.WithError(err).End()
@@ -140,7 +140,7 @@ func prepareConfigurePackage(
 
 		// ensure manifest file and package
 		trace = tracer.BeginSection("ensure package is local available")
-		uninst, err = ensurePackage(context, repository, packageService, input.Name, version, config)
+		uninst, err = ensurePackage(tracer, context, repository, packageService, input.Name, version, config)
 		if err != nil {
 			trace.WithError(err).End()
 			output.MarkAsFailed(nil, nil)
@@ -158,26 +158,28 @@ func prepareConfigurePackage(
 }
 
 // ensurePackage validates local copy of the manifest and package and downloads if needed, returning the installer
-func ensurePackage(context context.T,
+func ensurePackage(
+	tracer trace.Tracer,
+	context context.T,
 	repository localpackages.Repository,
 	packageService packageservice.PackageService,
 	packageName string,
 	version string,
 	config contracts.Configuration) (installer.Installer, error) {
 
-	currentState, currentVersion := repository.GetInstallState(context, packageName)
-	if err := repository.ValidatePackage(context, packageName, version); err != nil || (currentVersion == version && currentState == localpackages.Failed) {
+	currentState, currentVersion := repository.GetInstallState(tracer, packageName)
+	if err := repository.ValidatePackage(tracer, packageName, version); err != nil || (currentVersion == version && currentState == localpackages.Failed) {
 		context.Log().Debugf("Current %v Target %v State %v", currentVersion, version, currentState)
 		context.Log().Debugf("Refreshing package content for %v %v %v", packageName, version, err)
-		if err = repository.RefreshPackage(context, packageName, version, packageService.PackageServiceName(), buildDownloadDelegate(context, packageService, packageName, version)); err != nil {
+		if err = repository.RefreshPackage(tracer, packageName, version, packageService.PackageServiceName(), buildDownloadDelegate(context, packageService, packageName, version)); err != nil {
 			return nil, err
 		}
-		if err = repository.ValidatePackage(context, packageName, version); err != nil {
+		if err = repository.ValidatePackage(tracer, packageName, version); err != nil {
 			// TODO: Remove from repository?
 			return nil, err
 		}
 	}
-	return repository.GetInstaller(context, config, packageName, version), nil
+	return repository.GetInstaller(tracer, config, packageName, version), nil
 }
 
 // buildDownloadDelegate constructs the delegate used by the repository to download a package from the service
@@ -204,14 +206,15 @@ func buildDownloadDelegate(context context.T, packageService packageservice.Pack
 }
 
 // getVersionToInstall decides which version to install and whether there is an existing version (that is not in the process of installing)
-func getVersionToInstall(tracer trace.Tracer,
+func getVersionToInstall(
+	tracer trace.Tracer,
 	context context.T,
 	repository localpackages.Repository,
 	packageService packageservice.PackageService,
 	input *ConfigurePackagePluginInput) (version string, installedVersion string, installState localpackages.InstallState, err error) {
 
-	installedVersion = repository.GetInstalledVersion(context, input.Name)
-	currentState, currentVersion := repository.GetInstallState(context, input.Name)
+	installedVersion = repository.GetInstalledVersion(tracer, input.Name)
+	currentState, currentVersion := repository.GetInstallState(tracer, input.Name)
 	if currentState == localpackages.Failed {
 		// This will only happen if install failed with no previous successful install or if rollback failed
 		installedVersion = currentVersion
@@ -229,12 +232,13 @@ func getVersionToInstall(tracer trace.Tracer,
 }
 
 // getVersionToUninstall decides which version to uninstall
-func getVersionToUninstall(context context.T,
+func getVersionToUninstall(
+	tracer trace.Tracer,
 	repository localpackages.Repository,
 	input *ConfigurePackagePluginInput) (string, localpackages.InstallState, error) {
 
-	installedVersion := repository.GetInstalledVersion(context, input.Name)
-	currentState, _ := repository.GetInstallState(context, input.Name)
+	installedVersion := repository.GetInstalledVersion(tracer, input.Name)
+	currentState, _ := repository.GetInstallState(tracer, input.Name)
 
 	if !packageservice.IsLatest(input.Version) {
 		if input.Version != installedVersion {
@@ -323,13 +327,13 @@ func checkAlreadyInstalled(
 				if installState == localpackages.Installing {
 					validateTrace.AppendInfof("Successfully installed %v %v", packageName, targetVersion)
 					if uninst != nil {
-						cleanupAfterUninstall(tracer, context, repository, uninst, output)
+						cleanupAfterUninstall(tracer, repository, uninst, output)
 					}
 					// TODO: report result
 					output.MarkAsSucceeded()
 				} else if installState == localpackages.RollbackInstall {
 					validateTrace.AppendInfof("Failed to install %v %v, successfully rolled back to %v %v", uninst.PackageName(), uninst.Version(), inst.PackageName(), inst.Version())
-					cleanupAfterUninstall(tracer, context, repository, inst, output)
+					cleanupAfterUninstall(tracer, repository, inst, output)
 					// TODO: report result
 					output.MarkAsFailed(nil, nil)
 				} else {
@@ -337,7 +341,7 @@ func checkAlreadyInstalled(
 					output.MarkAsSucceeded()
 				}
 				if installState != localpackages.Installed && installState != localpackages.Unknown {
-					repository.SetInstallState(context, packageName, instToCheck.Version(), localpackages.Installed)
+					repository.SetInstallState(tracer, packageName, instToCheck.Version(), localpackages.Installed)
 				}
 
 				validateTrace.End()

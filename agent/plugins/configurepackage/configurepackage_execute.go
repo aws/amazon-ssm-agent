@@ -57,10 +57,10 @@ func executeConfigurePackage(
 }
 
 // set package install state and log any error
-func setNewInstallState(tracer trace.Tracer, context context.T, repository localpackages.Repository, inst installer.Installer, newInstallState localpackages.InstallState) {
+func setNewInstallState(tracer trace.Tracer, repository localpackages.Repository, inst installer.Installer, newInstallState localpackages.InstallState) {
 	trace := tracer.BeginSection(fmt.Sprintf("set install state install %s/%s - state: %s", inst.PackageName(), inst.Version(), newInstallState))
 
-	if err := repository.SetInstallState(context, inst.PackageName(), inst.Version(), newInstallState); err != nil {
+	if err := repository.SetInstallState(tracer, inst.PackageName(), inst.Version(), newInstallState); err != nil {
 		trace.WithError(err)
 	}
 
@@ -81,9 +81,9 @@ func executeInstall(
 	defer installtrace.End()
 
 	if isRollback {
-		setNewInstallState(tracer, context, repository, inst, localpackages.RollbackInstall)
+		setNewInstallState(tracer, repository, inst, localpackages.RollbackInstall)
 	} else {
-		setNewInstallState(tracer, context, repository, inst, localpackages.Installing)
+		setNewInstallState(tracer, repository, inst, localpackages.Installing)
 	}
 
 	result := inst.Install(tracer, context)
@@ -105,7 +105,7 @@ func executeInstall(
 		if isRollback || uninst == nil {
 			output.MarkAsFailed(nil, nil)
 			// TODO: Remove from repository if this isn't the last successfully installed version?  Run uninstall to clean up?
-			setNewInstallState(tracer, context, repository, inst, localpackages.Failed)
+			setNewInstallState(tracer, repository, inst, localpackages.Failed)
 			return
 		}
 		// Execute rollback
@@ -113,16 +113,16 @@ func executeInstall(
 		return
 	}
 	if uninst != nil {
-		cleanupAfterUninstall(tracer, context, repository, uninst, output)
+		cleanupAfterUninstall(tracer, repository, uninst, output)
 	}
 	if isRollback {
 		installtrace.AppendInfof("Failed to install %v %v, successfully rolled back to %v %v", uninst.PackageName(), uninst.Version(), inst.PackageName(), inst.Version())
-		setNewInstallState(tracer, context, repository, inst, localpackages.Installed)
+		setNewInstallState(tracer, repository, inst, localpackages.Installed)
 		output.MarkAsFailed(nil, nil)
 		return
 	}
 	installtrace.AppendInfof("Successfully installed %v %v", inst.PackageName(), inst.Version())
-	setNewInstallState(tracer, context, repository, inst, localpackages.Installed)
+	setNewInstallState(tracer, repository, inst, localpackages.Installed)
 	output.MarkAsSucceeded()
 	return
 }
@@ -141,12 +141,12 @@ func executeUninstall(
 	defer installtrace.End()
 
 	if isRollback {
-		setNewInstallState(tracer, context, repository, uninst, localpackages.RollbackUninstall)
+		setNewInstallState(tracer, repository, uninst, localpackages.RollbackUninstall)
 	} else {
 		if inst != nil {
-			setNewInstallState(tracer, context, repository, uninst, localpackages.Upgrading)
+			setNewInstallState(tracer, repository, uninst, localpackages.Upgrading)
 		} else {
-			setNewInstallState(tracer, context, repository, uninst, localpackages.Uninstalling)
+			setNewInstallState(tracer, repository, uninst, localpackages.Uninstalling)
 		}
 	}
 
@@ -159,7 +159,7 @@ func executeUninstall(
 			executeInstall(tracer, context, repository, inst, uninst, isRollback, output)
 			return
 		}
-		setNewInstallState(tracer, context, repository, uninst, localpackages.Failed)
+		setNewInstallState(tracer, repository, uninst, localpackages.Failed)
 		output.MarkAsFailed(nil, nil)
 		return
 	}
@@ -173,16 +173,16 @@ func executeUninstall(
 		executeInstall(tracer, context, repository, inst, uninst, isRollback, output)
 		return
 	}
-	cleanupAfterUninstall(tracer, context, repository, uninst, output)
-	setNewInstallState(tracer, context, repository, uninst, localpackages.None)
+	cleanupAfterUninstall(tracer, repository, uninst, output)
+	setNewInstallState(tracer, repository, uninst, localpackages.None)
 	output.MarkAsSucceeded()
 }
 
 // cleanupAfterUninstall removes packages that are no longer needed in the repository
-func cleanupAfterUninstall(tracer trace.Tracer, context context.T, repository localpackages.Repository, uninst installer.Installer, output contracts.PluginOutputer) {
+func cleanupAfterUninstall(tracer trace.Tracer, repository localpackages.Repository, uninst installer.Installer, output contracts.PluginOutputer) {
 	trace := tracer.BeginSection(fmt.Sprintf("cleanup %s/%s", uninst.PackageName(), uninst.Version()))
 
-	if err := repository.RemovePackage(context, uninst.PackageName(), uninst.Version()); err != nil {
+	if err := repository.RemovePackage(tracer, uninst.PackageName(), uninst.Version()); err != nil {
 		trace.WithError(err)
 	}
 
