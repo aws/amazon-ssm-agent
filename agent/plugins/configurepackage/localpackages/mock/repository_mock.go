@@ -16,10 +16,11 @@
 package repository_mock
 
 import (
-	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
+	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/installer"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/localpackages"
+	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/trace"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/inventory/model"
 	"github.com/stretchr/testify/mock"
 )
@@ -28,51 +29,51 @@ type MockedRepository struct {
 	mock.Mock
 }
 
-func (repoMock *MockedRepository) GetInstalledVersion(context context.T, packageName string) string {
-	args := repoMock.Called(context, packageName)
+func (repoMock *MockedRepository) GetInstalledVersion(tracer trace.Tracer, packageName string) string {
+	args := repoMock.Called(tracer, packageName)
 	return args.String(0)
 }
 
-func (repoMock *MockedRepository) ValidatePackage(context context.T, packageName string, version string) error {
-	args := repoMock.Called(context, packageName, version)
+func (repoMock *MockedRepository) ValidatePackage(tracer trace.Tracer, packageName string, version string) error {
+	args := repoMock.Called(tracer, packageName, version)
 	return args.Error(0)
 }
 
-func (repoMock *MockedRepository) RefreshPackage(context context.T, packageName string, version string, packageServiceName string, downloader localpackages.DownloadDelegate) error {
-	args := repoMock.Called(context, packageName, version, packageServiceName, downloader)
+func (repoMock *MockedRepository) RefreshPackage(tracer trace.Tracer, packageName string, version string, packageServiceName string, downloader localpackages.DownloadDelegate) error {
+	args := repoMock.Called(tracer, packageName, version, packageServiceName, downloader)
 	return args.Error(0)
 }
 
-func (repoMock *MockedRepository) AddPackage(context context.T, packageName string, version string, packageServiceName string, downloader localpackages.DownloadDelegate) error {
-	args := repoMock.Called(context, packageName, version, packageServiceName, downloader)
+func (repoMock *MockedRepository) AddPackage(tracer trace.Tracer, packageName string, version string, packageServiceName string, downloader localpackages.DownloadDelegate) error {
+	args := repoMock.Called(tracer, packageName, version, packageServiceName, downloader)
 	return args.Error(0)
 }
 
-func (repoMock *MockedRepository) SetInstallState(context context.T, packageName string, version string, state localpackages.InstallState) error {
-	args := repoMock.Called(context, packageName, version, state)
+func (repoMock *MockedRepository) SetInstallState(tracer trace.Tracer, packageName string, version string, state localpackages.InstallState) error {
+	args := repoMock.Called(tracer, packageName, version, state)
 	return args.Error(0)
 }
 
-func (repoMock *MockedRepository) GetInstallState(context context.T, packageName string) (state localpackages.InstallState, version string) {
-	args := repoMock.Called(context, packageName)
+func (repoMock *MockedRepository) GetInstallState(tracer trace.Tracer, packageName string) (state localpackages.InstallState, version string) {
+	args := repoMock.Called(tracer, packageName)
 	return args.Get(0).(localpackages.InstallState), args.String(1)
 }
 
-func (repoMock *MockedRepository) RemovePackage(context context.T, packageName string, version string) error {
-	args := repoMock.Called(context, packageName, version)
+func (repoMock *MockedRepository) RemovePackage(tracer trace.Tracer, packageName string, version string) error {
+	args := repoMock.Called(tracer, packageName, version)
 	return args.Error(0)
 }
 
-func (repoMock *MockedRepository) GetInventoryData(context context.T) []model.ApplicationData {
-	args := repoMock.Called(context)
+func (repoMock *MockedRepository) GetInventoryData(log log.T) []model.ApplicationData {
+	args := repoMock.Called(log)
 	return args.Get(0).([]model.ApplicationData)
 }
 
-func (repoMock *MockedRepository) GetInstaller(context context.T,
+func (repoMock *MockedRepository) GetInstaller(tracer trace.Tracer,
 	configuration contracts.Configuration,
 	packageName string,
 	version string) installer.Installer {
-	args := repoMock.Called(context, configuration, packageName, version)
+	args := repoMock.Called(tracer, configuration, packageName, version)
 	return args.Get(0).(installer.Installer)
 }
 

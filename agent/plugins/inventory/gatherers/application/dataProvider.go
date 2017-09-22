@@ -60,7 +60,7 @@ func componentType(applicationName string) model.ComponentType {
 // CollectApplicationData collects all application data from the system using platform specific queries and merges in applications installed via configurePackage
 func CollectApplicationData(context context.T) (appData []model.ApplicationData) {
 	platformAppData := collectPlatformDependentApplicationData(context)
-	packageAppData := packageRepository.GetInventoryData(context)
+	packageAppData := packageRepository.GetInventoryData(context.Log())
 
 	//merge packageAppData into appData
 	return model.MergeLists(platformAppData, packageAppData)

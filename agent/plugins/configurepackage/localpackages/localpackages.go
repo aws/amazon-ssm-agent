@@ -23,13 +23,14 @@ import (
 	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
-	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
+	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/envdetect"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/installer"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/ssminstaller"
+	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/trace"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/inventory/model"
 )
 
@@ -57,15 +58,15 @@ const (
 // Repository represents local storage for packages managed by configurePackage
 // Different formats for different versions are managed within the Repository abstraction
 type Repository interface {
-	GetInstalledVersion(context context.T, packageName string) string
-	ValidatePackage(context context.T, packageName string, version string) error
-	RefreshPackage(context context.T, packageName string, version string, packageServiceName string, downloader DownloadDelegate) error
-	AddPackage(context context.T, packageName string, version string, packageServiceName string, downloader DownloadDelegate) error
-	SetInstallState(context context.T, packageName string, version string, state InstallState) error
-	GetInstallState(context context.T, packageName string) (state InstallState, version string)
-	RemovePackage(context context.T, packageName string, version string) error
-	GetInventoryData(context context.T) []model.ApplicationData
-	GetInstaller(context context.T, configuration contracts.Configuration, packageName string, version string) installer.Installer
+	GetInstalledVersion(tracer trace.Tracer, packageName string) string
+	ValidatePackage(tracer trace.Tracer, packageName string, version string) error
+	RefreshPackage(tracer trace.Tracer, packageName string, version string, packageServiceName string, downloader DownloadDelegate) error
+	AddPackage(tracer trace.Tracer, packageName string, version string, packageServiceName string, downloader DownloadDelegate) error
+	SetInstallState(tracer trace.Tracer, packageName string, version string, state InstallState) error
+	GetInstallState(tracer trace.Tracer, packageName string) (state InstallState, version string)
+	RemovePackage(tracer trace.Tracer, packageName string, version string) error
+	GetInventoryData(log log.T) []model.ApplicationData
+	GetInstaller(tracer trace.Tracer, configuration contracts.Configuration, packageName string, version string) installer.Installer
 
 	ReadManifest(packageName string, packageVersion string) ([]byte, error)
 	WriteManifest(packageName string, packageVersion string, content []byte) error
@@ -110,7 +111,7 @@ type localRepository struct {
 
 // GetInstaller returns an Installer appropriate for the package and version
 // The configuration should include the appropriate OutputS3KeyPrefix for documents run by the Installer
-func (repo *localRepository) GetInstaller(context context.T,
+func (repo *localRepository) GetInstaller(tracer trace.Tracer,
 	configuration contracts.Configuration,
 	packageName string,
 	version string) installer.Installer {
@@ -125,8 +126,8 @@ func (repo *localRepository) GetInstaller(context context.T,
 }
 
 // GetInstalledVersion returns the version of the last successfully installed package
-func (repo *localRepository) GetInstalledVersion(context context.T, packageName string) string {
-	packageState := repo.loadInstallState(repo.filesysdep, context, packageName)
+func (repo *localRepository) GetInstalledVersion(tracer trace.Tracer, packageName string) string {
+	packageState := repo.loadInstallState(repo.filesysdep, tracer, packageName)
 	if packageState.State == Installed || (packageState.State == Unknown && packageState.LastInstalledVersion == "") {
 		return packageState.Version
 	} else {
@@ -135,7 +136,7 @@ func (repo *localRepository) GetInstalledVersion(context context.T, packageName 
 }
 
 // ValidatePackage returns an error if the given package version artifacts are missing, incomplete, or corrupt
-func (repo *localRepository) ValidatePackage(context context.T, packageName string, version string) error {
+func (repo *localRepository) ValidatePackage(tracer trace.Tracer, packageName string, version string) error {
 	// Find and parse manifest
 	if _, err := repo.openPackageManifest(repo.filesysdep, packageName, version); err != nil {
 		return fmt.Errorf("Package manifest is invalid: %v", err)
@@ -151,12 +152,12 @@ func (repo *localRepository) ValidatePackage(context context.T, packageName stri
 }
 
 // RefreshPackage updates the package binaries.  Used if ValidatePackage returns an error, initially same implementation as AddPackage
-func (repo *localRepository) RefreshPackage(context context.T, packageName string, version string, packageServiceName string, downloader DownloadDelegate) error {
-	return repo.AddPackage(context, packageName, version, packageServiceName, downloader)
+func (repo *localRepository) RefreshPackage(tracer trace.Tracer, packageName string, version string, packageServiceName string, downloader DownloadDelegate) error {
+	return repo.AddPackage(tracer, packageName, version, packageServiceName, downloader)
 }
 
 // AddPackage creates an entry in the repository and downloads artifacts for a package
-func (repo *localRepository) AddPackage(context context.T, packageName string, version string, packageServiceName string, downloader DownloadDelegate) error {
+func (repo *localRepository) AddPackage(tracer trace.Tracer, packageName string, version string, packageServiceName string, downloader DownloadDelegate) error {
 	packagePath := repo.getPackageVersionPath(packageName, version)
 	if err := repo.filesysdep.MakeDirExecute(packagePath); err != nil {
 		return err
@@ -165,14 +166,14 @@ func (repo *localRepository) AddPackage(context context.T, packageName string, v
 		return err
 	}
 	// if no previous version, set state to new
-	repo.SetInstallState(context, packageName, version, New)
+	repo.SetInstallState(tracer, packageName, version, New)
 
 	return nil
 }
 
 // SetInstallState flags the state of a version of a package downloaded to the repository for installation
-func (repo *localRepository) SetInstallState(context context.T, packageName string, version string, state InstallState) error {
-	var packageState = repo.loadInstallState(repo.filesysdep, context, packageName)
+func (repo *localRepository) SetInstallState(tracer trace.Tracer, packageName string, version string, state InstallState) error {
+	var packageState = repo.loadInstallState(repo.filesysdep, tracer, packageName)
 	if state == New && packageState.State != None {
 		return nil
 	}
@@ -200,31 +201,35 @@ func (repo *localRepository) SetInstallState(context context.T, packageName stri
 }
 
 // GetInstallState returns the current state of a package
-func (repo *localRepository) GetInstallState(context context.T, packageName string) (state InstallState, version string) {
-	installState := repo.loadInstallState(repo.filesysdep, context, packageName)
+func (repo *localRepository) GetInstallState(tracer trace.Tracer, packageName string) (state InstallState, version string) {
+	installState := repo.loadInstallState(repo.filesysdep, tracer, packageName)
 	return installState.State, installState.Version
 }
 
 // RemovePackage deletes an entry in the repository and removes package artifacts
-func (repo *localRepository) RemovePackage(context context.T, packageName string, version string) error {
+func (repo *localRepository) RemovePackage(tracer trace.Tracer, packageName string, version string) error {
 	return repo.filesysdep.RemoveAll(repo.getPackageVersionPath(packageName, version))
 }
 
 // GetInventoryData returns ApplicationData for every successfully and currently installed package in the repository
 // that has inventory fields in its manifest
-func (repo *localRepository) GetInventoryData(context context.T) []model.ApplicationData {
+func (repo *localRepository) GetInventoryData(log log.T) []model.ApplicationData {
 	result := make([]model.ApplicationData, 0)
 
 	// Search package root for packages that are installed and return data from the manifest of the installed version
 	var dirs []string
 	var err error
+
+	tracer := trace.NewTracer(log) // temporarily wrap log into tracer to pass forward to other method calls
+	defer tracer.BeginSection("GetInventoryData").EndWithError(&err)
+
 	if dirs, err = repo.filesysdep.GetDirectoryNames(repo.repoRoot); err != nil {
 		return result
 	}
 
 	for _, packageName := range dirs {
 		var packageState *PackageInstallState
-		if packageState = repo.loadInstallState(repo.filesysdep, context, packageName); packageState.State != Installed {
+		if packageState = repo.loadInstallState(repo.filesysdep, tracer, packageName); packageState.State != Installed {
 			continue
 		}
 		// NOTE: We could put inventory info in the installstate file.  That might be simpler than opening two files in this method.
@@ -308,7 +313,7 @@ func (repo *localRepository) getManifestPath(packageName string, version string,
 }
 
 // loadInstallState loads the existing installstate file or returns an appropriate default state
-func (repo *localRepository) loadInstallState(filesysdep FileSysDep, context context.T, packageName string) *PackageInstallState {
+func (repo *localRepository) loadInstallState(filesysdep FileSysDep, tracer trace.Tracer, packageName string) *PackageInstallState {
 	packageState := PackageInstallState{Name: packageName, State: None}
 	var fileContent []byte
 	var err error
@@ -324,7 +329,7 @@ func (repo *localRepository) loadInstallState(filesysdep FileSysDep, context con
 		return &PackageInstallState{Name: packageName, State: Unknown}
 	}
 	if err = jsonutil.Unmarshal(string(fileContent[:]), &packageState); err != nil {
-		context.Log().Errorf("InstallState file for package %v is invalid: %v", packageName, err)
+		tracer.CurrentTrace().AppendErrorf("InstallState file for package %v is invalid: %v", packageName, err)
 		return &PackageInstallState{Name: packageName, State: Unknown}
 	}
 	return &packageState

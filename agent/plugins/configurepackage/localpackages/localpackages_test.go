@@ -24,9 +24,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
+	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/trace"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/inventory/model"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
@@ -37,11 +38,11 @@ import (
 const testRepoRoot = "testdata"
 const testPackage = "SsmTest"
 
-var contextMock context.T = context.NewMockDefault()
+var tracerMock = trace.NewTracer(log.NewMockLog())
 
 func TestGetInstaller(t *testing.T) {
 	repo := NewRepository()
-	inst := repo.GetInstaller(contextMock, contracts.Configuration{}, testPackage, "1.0.0")
+	inst := repo.GetInstaller(tracerMock, contracts.Configuration{}, testPackage, "1.0.0")
 	assert.NotNil(t, inst)
 }
 
@@ -55,7 +56,7 @@ func TestGetInstallState(t *testing.T) {
 	repo := localRepository{filesysdep: &mockFileSys, repoRoot: testRepoRoot}
 
 	// Call and validate mock expectations and return value
-	state, version := repo.GetInstallState(contextMock, testPackage)
+	state, version := repo.GetInstallState(tracerMock, testPackage)
 	mockFileSys.AssertExpectations(t)
 	assert.Equal(t, Installed, state)
 	assert.Equal(t, version, version)
@@ -71,7 +72,7 @@ func TestGetInstallStateMissing(t *testing.T) {
 	repo := localRepository{filesysdep: &mockFileSys, repoRoot: testRepoRoot}
 
 	// Call and validate mock expectations and return value
-	state, version := repo.GetInstallState(contextMock, testPackage)
+	state, version := repo.GetInstallState(tracerMock, testPackage)
 	mockFileSys.AssertExpectations(t)
 	assert.Equal(t, None, state)
 	assert.Equal(t, "", version)
@@ -87,7 +88,7 @@ func TestGetInstallStateCompat(t *testing.T) {
 	repo := localRepository{filesysdep: &mockFileSys, repoRoot: testRepoRoot}
 
 	// Call and validate mock expectations and return value
-	state, version := repo.GetInstallState(contextMock, testPackage)
+	state, version := repo.GetInstallState(tracerMock, testPackage)
 	mockFileSys.AssertExpectations(t)
 	assert.Equal(t, Unknown, state)
 	assert.Equal(t, version, version)
@@ -99,11 +100,13 @@ func TestGetInstallStateCorrupt(t *testing.T) {
 	mockFileSys.On("Exists", path.Join(testRepoRoot, testPackage, "installstate")).Return(true).Once()
 	mockFileSys.On("ReadFile", path.Join(testRepoRoot, testPackage, "installstate")).Return(loadFile(t, path.Join(testRepoRoot, testPackage, "installstate_corrupt")), nil).Once()
 
+	tracerMock.BeginSection("testtrace")
+
 	// Instantiate repository with mock
 	repo := localRepository{filesysdep: &mockFileSys, repoRoot: testRepoRoot}
 
 	// Call and validate mock expectations and return value
-	state, version := repo.GetInstallState(contextMock, testPackage)
+	state, version := repo.GetInstallState(tracerMock, testPackage)
 	mockFileSys.AssertExpectations(t)
 	assert.Equal(t, Unknown, state)
 	assert.Equal(t, "", version)
@@ -119,7 +122,7 @@ func TestGetInstallStateError(t *testing.T) {
 	repo := localRepository{filesysdep: &mockFileSys, repoRoot: testRepoRoot}
 
 	// Call and validate mock expectations and return value
-	state, version := repo.GetInstallState(contextMock, testPackage)
+	state, version := repo.GetInstallState(tracerMock, testPackage)
 	mockFileSys.AssertExpectations(t)
 	assert.Equal(t, Unknown, state)
 	assert.Equal(t, "", version)
@@ -135,7 +138,7 @@ func TestGetInstalledVersion(t *testing.T) {
 	repo := localRepository{filesysdep: &mockFileSys, repoRoot: testRepoRoot}
 
 	// Call and validate mock expectations and return value
-	version := repo.GetInstalledVersion(contextMock, testPackage)
+	version := repo.GetInstalledVersion(tracerMock, testPackage)
 	mockFileSys.AssertExpectations(t)
 	assert.Equal(t, version, version)
 }
@@ -150,7 +153,7 @@ func TestGetInstalledVersionCompat(t *testing.T) {
 	repo := localRepository{filesysdep: &mockFileSys, repoRoot: testRepoRoot}
 
 	// Call and validate mock expectations and return value
-	version := repo.GetInstalledVersion(contextMock, testPackage)
+	version := repo.GetInstalledVersion(tracerMock, testPackage)
 	mockFileSys.AssertExpectations(t)
 	assert.Equal(t, version, version)
 }
@@ -165,7 +168,7 @@ func TestGetInstalledVersionInstalling(t *testing.T) {
 	repo := localRepository{filesysdep: &mockFileSys, repoRoot: testRepoRoot}
 
 	// Call and validate mock expectations and return value
-	version := repo.GetInstalledVersion(contextMock, testPackage)
+	version := repo.GetInstalledVersion(tracerMock, testPackage)
 	mockFileSys.AssertExpectations(t)
 	assert.Equal(t, version, version)
 }
@@ -182,7 +185,7 @@ func TestValidatePackage(t *testing.T) {
 	repo := localRepository{filesysdep: &mockFileSys, repoRoot: testRepoRoot}
 
 	// Call and validate mock expectations and return value
-	err := repo.ValidatePackage(contextMock, testPackage, version)
+	err := repo.ValidatePackage(tracerMock, testPackage, version)
 	mockFileSys.AssertExpectations(t)
 	assert.Nil(t, err)
 }
@@ -200,7 +203,7 @@ func TestValidatePackage_Manifest(t *testing.T) {
 	repo := localRepository{filesysdep: &mockFileSys, repoRoot: testRepoRoot}
 
 	// Call and validate mock expectations and return value
-	err := repo.ValidatePackage(contextMock, testPackage, version)
+	err := repo.ValidatePackage(tracerMock, testPackage, version)
 	mockFileSys.AssertExpectations(t)
 	assert.Nil(t, err)
 }
@@ -217,7 +220,7 @@ func TestValidatePackage_NoManifest(t *testing.T) {
 	repo := localRepository{filesysdep: &mockFileSys, repoRoot: testRepoRoot}
 
 	// Call and validate mock expectations and return value
-	err := repo.ValidatePackage(contextMock, testPackage, version)
+	err := repo.ValidatePackage(tracerMock, testPackage, version)
 	mockFileSys.AssertExpectations(t)
 	assert.Nil(t, err)
 }
@@ -235,7 +238,7 @@ func TestValidatePackageNoContent(t *testing.T) {
 	repo := localRepository{filesysdep: &mockFileSys, repoRoot: testRepoRoot}
 
 	// Call and validate mock expectations and return value
-	err := repo.ValidatePackage(contextMock, testPackage, version)
+	err := repo.ValidatePackage(tracerMock, testPackage, version)
 	mockFileSys.AssertExpectations(t)
 	assert.NotNil(t, err)
 	assert.True(t, strings.EqualFold(err.Error(), "Package manifest exists, but all other content is missing"))
@@ -252,7 +255,7 @@ func TestValidatePackageCorruptManifest(t *testing.T) {
 	repo := localRepository{filesysdep: &mockFileSys, repoRoot: testRepoRoot}
 
 	// Call and validate mock expectations and return value
-	err := repo.ValidatePackage(contextMock, testPackage, version)
+	err := repo.ValidatePackage(tracerMock, testPackage, version)
 	mockFileSys.AssertExpectations(t)
 	assert.NotNil(t, err)
 	assert.True(t, strings.HasPrefix(err.Error(), "Package manifest is invalid:"))
@@ -275,7 +278,7 @@ func TestAddPackage(t *testing.T) {
 	repo := localRepository{filesysdep: &mockFileSys, repoRoot: testRepoRoot}
 
 	// Call and validate mock expectations and return value
-	err := repo.AddPackage(contextMock, testPackage, version, "mock-package-service", mockDownload.Download)
+	err := repo.AddPackage(tracerMock, testPackage, version, "mock-package-service", mockDownload.Download)
 	mockFileSys.AssertExpectations(t)
 	mockDownload.AssertExpectations(t)
 	assert.Nil(t, err)
@@ -297,7 +300,7 @@ func TestAddNewPackage(t *testing.T) {
 	repo := localRepository{filesysdep: &mockFileSys, repoRoot: testRepoRoot}
 
 	// Call and validate mock expectations and return value
-	err := repo.AddPackage(contextMock, testPackage, version, "mock-package-service", mockDownload.Download)
+	err := repo.AddPackage(tracerMock, testPackage, version, "mock-package-service", mockDownload.Download)
 	mockFileSys.AssertExpectations(t)
 	mockDownload.AssertExpectations(t)
 	assert.Nil(t, err)
@@ -318,7 +321,7 @@ func TestRefreshPackage(t *testing.T) {
 	repo := localRepository{filesysdep: &mockFileSys, repoRoot: testRepoRoot}
 
 	// Call and validate mock expectations and return value
-	err := repo.RefreshPackage(contextMock, testPackage, version, "mock-package-service", mockDownload.Download)
+	err := repo.RefreshPackage(tracerMock, testPackage, version, "mock-package-service", mockDownload.Download)
 	mockFileSys.AssertExpectations(t)
 	mockDownload.AssertExpectations(t)
 	assert.Nil(t, err)
@@ -334,7 +337,7 @@ func TestRemovePackage(t *testing.T) {
 	repo := localRepository{filesysdep: &mockFileSys, repoRoot: testRepoRoot}
 
 	// Call and validate mock expectations and return value
-	err := repo.RemovePackage(contextMock, testPackage, version)
+	err := repo.RemovePackage(tracerMock, testPackage, version)
 	mockFileSys.AssertExpectations(t)
 	assert.Nil(t, err)
 }
@@ -467,7 +470,7 @@ func TestGetInventoryError(t *testing.T) {
 	repo := localRepository{filesysdep: &mockFileSys, repoRoot: testRepoRoot}
 
 	// Call and validate mock expectations and return value
-	inventory := repo.GetInventoryData(contextMock)
+	inventory := repo.GetInventoryData(log.NewMockLog())
 	mockFileSys.AssertExpectations(t)
 
 	assert.True(t, len(inventory) == 0)
@@ -497,7 +500,7 @@ func testInventory(t *testing.T, testData []InventoryTestData, expected []model.
 	repo := localRepository{filesysdep: &mockFileSys, repoRoot: testRepoRoot}
 
 	// Call and validate mock expectations and return value
-	inventory := repo.GetInventoryData(contextMock)
+	inventory := repo.GetInventoryData(log.NewMockLog())
 	mockFileSys.AssertExpectations(t)
 
 	assert.True(t, len(inventory) == len(expected))
@@ -519,7 +522,7 @@ func testSetInstall(t *testing.T, initialState PackageInstallState, newState Ins
 	repo := localRepository{filesysdep: &mockFileSys, repoRoot: testRepoRoot}
 
 	// Call and validate mock expectations and return value
-	err := repo.SetInstallState(contextMock, testPackage, "0.0.1", newState)
+	err := repo.SetInstallState(tracerMock, testPackage, "0.0.1", newState)
 	mockFileSys.AssertExpectations(t)
 	assert.Nil(t, err)
 	var expectedState PackageInstallState
