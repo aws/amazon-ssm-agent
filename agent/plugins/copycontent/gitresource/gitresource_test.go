@@ -76,6 +76,9 @@ func TestGitResource_DownloadFile(t *testing.T) {
 	clientMock.On("IsFileContentType", mock.AnythingOfType("*github.RepositoryContent")).Return(true)
 
 	fileMock := filemock.FileSystemMock{}
+
+	fileMock.On("IsDirectory", appconfig.DownloadRoot).Return(true)
+	fileMock.On("Exists", appconfig.DownloadRoot).Return(true)
 	fileMock.On("MakeDirs", strings.TrimSuffix(appconfig.DownloadRoot, "/")).Return(nil)
 	fileMock.On("WriteFile", filepath.Join(appconfig.DownloadRoot, "file.ext"), mock.Anything).Return(nil)
 
@@ -286,6 +289,47 @@ func TestNewGitResource_GithubTokenInfo(t *testing.T) {
 	assert.Equal(t, "repository", gitresource.Info.Repository)
 	assert.Equal(t, "owner", gitresource.Info.Owner)
 	assert.Equal(t, "ssm:token", gitresource.Info.TokenInfo)
+}
+
+func TestGitResource_DownloadFileToDifferentName(t *testing.T) {
+	clientMock := githubclientmock.ClientMock{}
+
+	gitInfo := GitInfo{
+		Owner:      "owner",
+		Path:       "path/to/file.ext",
+		Repository: "repo",
+		GetOptions: "",
+	}
+	opt := &github.RepositoryContentGetOptions{Ref: ""}
+
+	content := "content"
+	file := "file"
+	gitpath := "path/to/file.ext"
+	fileMetadata := github.RepositoryContent{
+		Content: &content,
+		Type:    &file,
+		Path:    &gitpath,
+	}
+	var dirMetadata []*github.RepositoryContent
+	dirMetadata = nil
+
+	destPath := `/var/temp/my/filename`
+
+	gitResource := NewResourceWithMockedClient(&clientMock)
+	clientMock.On("ParseGetOptions", logMock, gitInfo.GetOptions).Return(opt, nil)
+	clientMock.On("GetRepositoryContents", logMock, gitInfo.Owner, gitInfo.Repository, gitInfo.Path, opt).Return(&fileMetadata, dirMetadata, nil).Once()
+	clientMock.On("IsFileContentType", mock.AnythingOfType("*github.RepositoryContent")).Return(true)
+
+	fileMock := filemock.FileSystemMock{}
+	fileMock.On("IsDirectory", destPath).Return(false)
+	fileMock.On("Exists", destPath).Return(true)
+	fileMock.On("MakeDirs", filepath.Dir(destPath)).Return(nil)
+	fileMock.On("WriteFile", destPath, mock.Anything).Return(nil)
+
+	err := gitResource.Download(logMock, fileMock, destPath)
+	clientMock.AssertExpectations(t)
+	fileMock.AssertExpectations(t)
+	assert.NoError(t, err)
 }
 
 type TokenMock struct {
