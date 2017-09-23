@@ -22,7 +22,7 @@ import (
 	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
-	"github.com/aws/amazon-ssm-agent/agent/docmanager/model"
+	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
@@ -42,8 +42,8 @@ var docLock = make(map[string]*sync.RWMutex)
 
 type DocumentMgr interface {
 	MoveDocumentState(log log.T, fileName, instanceID, srcLocationFolder, dstLocationFolder string)
-	PersistDocumentState(log log.T, fileName, instanceID, locationFolder string, state model.DocumentState)
-	GetDocumentState(log log.T, fileName, instanceID, locationFolder string) model.DocumentState
+	PersistDocumentState(log log.T, fileName, instanceID, locationFolder string, state contracts.DocumentState)
+	GetDocumentState(log log.T, fileName, instanceID, locationFolder string) contracts.DocumentState
 }
 
 //TODO use class lock instead of global lock?
@@ -96,7 +96,7 @@ func (d *DocumentFileMgr) MoveDocumentState(log log.T, fileName, instanceID, src
 	}
 }
 
-func (d *DocumentFileMgr) PersistDocumentState(log log.T, fileName, instanceID, locationFolder string, state model.DocumentState) {
+func (d *DocumentFileMgr) PersistDocumentState(log log.T, fileName, instanceID, locationFolder string, state contracts.DocumentState) {
 	lockDocument(fileName)
 	defer unlockDocument(fileName)
 
@@ -122,7 +122,7 @@ func (d *DocumentFileMgr) PersistDocumentState(log log.T, fileName, instanceID, 
 	}
 }
 
-func (d *DocumentFileMgr) GetDocumentState(log log.T, fileName, instanceID, locationFolder string) model.DocumentState {
+func (d *DocumentFileMgr) GetDocumentState(log log.T, fileName, instanceID, locationFolder string) contracts.DocumentState {
 
 	rLockDocument(fileName)
 	defer rUnlockDocument(fileName)
@@ -133,7 +133,7 @@ func (d *DocumentFileMgr) GetDocumentState(log log.T, fileName, instanceID, loca
 		d.stateLocation,
 		locationFolder), fileName)
 
-	var commandState model.DocumentState
+	var commandState contracts.DocumentState
 	err := jsonutil.UnmarshalFile(absoluteFileName, &commandState)
 	if err != nil {
 		log.Errorf("encountered error with message %v while reading Interim state of command from file - %v", err, fileName)

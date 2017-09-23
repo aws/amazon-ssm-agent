@@ -12,12 +12,11 @@
 // permissions and limitations under the License.
 
 // Package docmanager helps persist documents state to disk
-package docmanager
+package contracts
 
 import (
 	"fmt"
 
-	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/times"
 )
@@ -25,7 +24,7 @@ import (
 //TODO move part of the function to service?
 // prepareRuntimeStatus creates the structure for the runtimeStatus section of the payload of SendReply
 // for a particular plugin.
-func prepareRuntimeStatus(log log.T, pluginResult contracts.PluginResult) contracts.PluginRuntimeStatus {
+func prepareRuntimeStatus(log log.T, pluginResult PluginResult) PluginRuntimeStatus {
 	var resultAsString string
 
 	if err := pluginResult.Error; err == nil {
@@ -34,7 +33,7 @@ func prepareRuntimeStatus(log log.T, pluginResult contracts.PluginResult) contra
 		resultAsString = err.Error()
 	}
 
-	runtimeStatus := contracts.PluginRuntimeStatus{
+	runtimeStatus := PluginRuntimeStatus{
 		Code:           pluginResult.Code,
 		Name:           pluginResult.PluginName,
 		Status:         pluginResult.Status,
@@ -52,7 +51,7 @@ func prepareRuntimeStatus(log log.T, pluginResult contracts.PluginResult) contra
 		}
 	}
 
-	if runtimeStatus.Status == contracts.ResultStatusFailed && runtimeStatus.Code == 0 {
+	if runtimeStatus.Status == ResultStatusFailed && runtimeStatus.Code == 0 {
 		runtimeStatus.Code = 1
 	}
 
@@ -61,15 +60,15 @@ func prepareRuntimeStatus(log log.T, pluginResult contracts.PluginResult) contra
 
 func DocumentResultAggregator(log log.T,
 	pluginID string,
-	pluginOutputs map[string]*contracts.PluginResult) (contracts.ResultStatus, map[string]int, map[string]*contracts.PluginRuntimeStatus) {
+	pluginOutputs map[string]*PluginResult) (ResultStatus, map[string]int, map[string]*PluginRuntimeStatus) {
 
-	runtimeStatuses := make(map[string]*contracts.PluginRuntimeStatus)
+	runtimeStatuses := make(map[string]*PluginRuntimeStatus)
 	for pluginID, pluginResult := range pluginOutputs {
 		rs := prepareRuntimeStatus(log, *pluginResult)
 		runtimeStatuses[pluginID] = &rs
 	}
 	// TODO instance this needs to be revised to be in parity with ec2config
-	documentStatus := contracts.ResultStatusSuccess
+	documentStatus := ResultStatusSuccess
 	var runtimeStatusCounts = map[string]int{}
 	pluginCounts := len(runtimeStatuses)
 
@@ -89,26 +88,26 @@ func DocumentResultAggregator(log log.T,
 		//    TODO : We need to handle above to be able to send document traceoutput in case of document level errors.
 
 		// Skipped is a form of success
-		successCounts := runtimeStatusCounts[string(contracts.ResultStatusSuccess)] + runtimeStatusCounts[string(contracts.ResultStatusSkipped)]
+		successCounts := runtimeStatusCounts[string(ResultStatusSuccess)] + runtimeStatusCounts[string(ResultStatusSkipped)]
 
-		if runtimeStatusCounts[string(contracts.ResultStatusSuccessAndReboot)] > 0 {
-			documentStatus = contracts.ResultStatusSuccessAndReboot
-		} else if runtimeStatusCounts[string(contracts.ResultStatusFailed)] > 0 {
-			documentStatus = contracts.ResultStatusFailed
-		} else if runtimeStatusCounts[string(contracts.ResultStatusTimedOut)] > 0 {
-			documentStatus = contracts.ResultStatusTimedOut
-		} else if runtimeStatusCounts[string(contracts.ResultStatusCancelled)] > 0 {
-			documentStatus = contracts.ResultStatusCancelled
+		if runtimeStatusCounts[string(ResultStatusSuccessAndReboot)] > 0 {
+			documentStatus = ResultStatusSuccessAndReboot
+		} else if runtimeStatusCounts[string(ResultStatusFailed)] > 0 {
+			documentStatus = ResultStatusFailed
+		} else if runtimeStatusCounts[string(ResultStatusTimedOut)] > 0 {
+			documentStatus = ResultStatusTimedOut
+		} else if runtimeStatusCounts[string(ResultStatusCancelled)] > 0 {
+			documentStatus = ResultStatusCancelled
 		} else if successCounts == pluginCounts {
-			documentStatus = contracts.ResultStatusSuccess
+			documentStatus = ResultStatusSuccess
 		} else {
-			documentStatus = contracts.ResultStatusInProgress
+			documentStatus = ResultStatusInProgress
 		}
 	} else {
-		documentStatus = contracts.ResultStatusInProgress
+		documentStatus = ResultStatusInProgress
 	}
 
-	runtimeStatusesFiltered := make(map[string]*contracts.PluginRuntimeStatus)
+	runtimeStatusesFiltered := make(map[string]*PluginRuntimeStatus)
 
 	if pluginID != "" {
 		runtimeStatusesFiltered[pluginID] = runtimeStatuses[pluginID]

@@ -7,7 +7,6 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
-	"github.com/aws/amazon-ssm-agent/agent/docmanager/model"
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/outofproc/channel"
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/outofproc/messaging"
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/outofproc/proc"
@@ -25,7 +24,7 @@ const (
 
 var pluginRunner = func(
 	context context.T,
-	plugins []model.PluginState,
+	plugins []contracts.PluginState,
 	resChan chan contracts.PluginResult,
 	cancelFlag task.CancelFlag,
 ) {
@@ -59,6 +58,7 @@ func main() {
 	logger = ctx.Log()
 	if err != nil {
 		logger.Errorf("document worker failed to initialize, exit")
+		logger.Close()
 		return
 	}
 	logger.Infof("document: %v worker started", channelName)
@@ -66,6 +66,7 @@ func main() {
 	ipc, err, _ := channel.CreateFileChannel(logger, channel.ModeWorker, channelName)
 	if err != nil {
 		logger.Errorf("failed to create channel: %v", err)
+		logger.Close()
 		return
 	}
 	//initialize PluginRegistry
@@ -78,6 +79,7 @@ func main() {
 	if err = messaging.Messaging(ctx.Log(), ipc, pipeline, stopTimer); err != nil {
 		logger.Errorf("messaging worker encountered error: %v", err)
 		//If ipc messaging broke, there's nothing worker process can do, exit immediately
+		logger.Close()
 		return
 	}
 	logger.Info("document worker closed")
