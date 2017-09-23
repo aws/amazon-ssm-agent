@@ -22,7 +22,6 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
-	docModel "github.com/aws/amazon-ssm-agent/agent/docmanager/model"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/platform"
 	"github.com/aws/amazon-ssm-agent/agent/task"
@@ -73,7 +72,7 @@ var isSupportedPlugin = IsPluginSupportedForCurrentPlatform
 // Make this function private in case everybody tries to reference it everywhere, this is a private member of Executer
 func RunPlugins(
 	context context.T,
-	plugins []docModel.PluginState,
+	plugins []contracts.PluginState,
 	pluginRegistry PluginRegistry,
 	resChan chan contracts.PluginResult,
 	cancelFlag task.CancelFlag,

@@ -8,7 +8,6 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
-	"github.com/aws/amazon-ssm-agent/agent/docmanager/model"
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer"
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/basicexecuter"
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/outofproc/channel"
@@ -30,7 +29,7 @@ const (
 
 type OutOfProcExecuter struct {
 	basicexecuter.BasicExecuter
-	docState   *model.DocumentState
+	docState   *contracts.DocumentState
 	ctx        context.T
 	cancelFlag task.CancelFlag
 }
@@ -39,7 +38,7 @@ var channelCreator = func(log log.T, mode channel.Mode, documentID string) (chan
 	return channel.CreateFileChannel(log, mode, documentID)
 }
 
-var processFinder = func(log log.T, procinfo model.OSProcInfo) bool {
+var processFinder = func(log log.T, procinfo contracts.OSProcInfo) bool {
 	//If ProcInfo is not initailized
 	//pid 0 is reserved for kernel on both linux and windows, so the assumption is safe here
 	if procinfo.Pid == 0 {
@@ -176,7 +175,7 @@ func (e *OutOfProcExecuter) initialize(stopTimer chan bool) (ipc channel.Channel
 		} else {
 			log.Debugf("successfully launched new process: %v", process.Pid())
 		}
-		e.docState.DocumentInformation.ProcInfo = model.OSProcInfo{
+		e.docState.DocumentInformation.ProcInfo = contracts.OSProcInfo{
 			Pid:       process.Pid(),
 			StartTime: process.StartTime(),
 		}

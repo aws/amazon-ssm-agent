@@ -12,14 +12,12 @@
 // Package converter converts the plugin information from version 1.0 and 1.2 to version 2.0
 package converter
 
-import (
-	"github.com/aws/amazon-ssm-agent/agent/docmanager/model"
-)
+import "github.com/aws/amazon-ssm-agent/agent/contracts"
 
 // ConvertPluginsInformation converts plugin information from map to array to fit the requirements of document v2 schema
-func ConvertPluginsInformation(pluginsInformation map[string]model.PluginState) []model.PluginState {
+func ConvertPluginsInformation(pluginsInformation map[string]contracts.PluginState) []contracts.PluginState {
 
-	instancePluginsInformation := make([]model.PluginState, len(pluginsInformation))
+	instancePluginsInformation := make([]contracts.PluginState, len(pluginsInformation))
 	index := 0
 	for pluginID, pluginState := range pluginsInformation {
 		pluginState.Name = pluginID

@@ -24,9 +24,8 @@ import (
 	asocitscheduler "github.com/aws/amazon-ssm-agent/agent/association/scheduler"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
-	"github.com/aws/amazon-ssm-agent/agent/docmanager"
-	"github.com/aws/amazon-ssm-agent/agent/docmanager/model"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
+	"github.com/aws/amazon-ssm-agent/agent/framework/docmanager"
 	"github.com/aws/amazon-ssm-agent/agent/platform"
 	mdsService "github.com/aws/amazon-ssm-agent/agent/runcommand/mds"
 	"github.com/aws/amazon-ssm-agent/agent/sdkutil"
@@ -166,7 +165,7 @@ func (s *RunCommandService) handleSpecialPlugin(lastPluginID string, pluginRes m
 
 func (s *RunCommandService) processMessage(msg *ssmmds.Message) {
 	var (
-		docState *model.DocumentState
+		docState *contracts.DocumentState
 		err      error
 	)
 
@@ -214,9 +213,9 @@ func (s *RunCommandService) processMessage(msg *ssmmds.Message) {
 
 	log.Debugf("SendReply done. Received message - messageId - %v", *msg.MessageId)
 	switch docState.DocumentType {
-	case model.SendCommand, model.SendCommandOffline:
+	case contracts.SendCommand, contracts.SendCommandOffline:
 		s.processor.Submit(*docState)
-	case model.CancelCommand, model.CancelCommandOffline:
+	case contracts.CancelCommand, contracts.CancelCommandOffline:
 		s.processor.Cancel(*docState)
 
 	default:

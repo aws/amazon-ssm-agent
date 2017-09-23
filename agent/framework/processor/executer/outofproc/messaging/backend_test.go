@@ -5,7 +5,6 @@ import (
 
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
-	"github.com/aws/amazon-ssm-agent/agent/docmanager/model"
 
 	"time"
 
@@ -32,14 +31,14 @@ var testCancelRawJSON string
 
 type TestCase struct {
 	context      *context.Mock
-	docState     model.DocumentState
+	docState     contracts.DocumentState
 	results      map[string]*contracts.PluginResult
 	resultStatus contracts.ResultStatus
 }
 
 func CreateTestCase() *TestCase {
 	contextMock := context.NewMockDefaultWithContext([]string{"MASTER"})
-	docInfo := model.DocumentInfo{
+	docInfo := contracts.DocumentInfo{
 		CreatedDate:     "2017-06-10T01-23-07.853Z",
 		MessageID:       testMessageID,
 		DocumentName:    testDocumentName,
@@ -50,19 +49,19 @@ func CreateTestCase() *TestCase {
 		RunCount:        0,
 	}
 
-	pluginState := model.PluginState{
+	pluginState := contracts.PluginState{
 		Name: "aws:runScript",
 		Id:   "plugin1",
 	}
 
-	pluginState2 := model.PluginState{
+	pluginState2 := contracts.PluginState{
 		Name: "aws:runPowershellScript",
 		Id:   "plugin2",
 	}
-	docState := model.DocumentState{
+	docState := contracts.DocumentState{
 		DocumentInformation:        docInfo,
 		DocumentType:               "SendCommand",
-		InstancePluginsInformation: []model.PluginState{pluginState, pluginState2},
+		InstancePluginsInformation: []contracts.PluginState{pluginState, pluginState2},
 	}
 
 	result := contracts.PluginResult{
@@ -197,7 +196,7 @@ func TestWorkerBackend_ProcessCancelV1(t *testing.T) {
 	isRunnerCalled := false
 	pluginRunner := func(
 		context context.T,
-		plugins []model.PluginState,
+		plugins []contracts.PluginState,
 		resChan chan contracts.PluginResult,
 		cancelFlag task.CancelFlag,
 	) {

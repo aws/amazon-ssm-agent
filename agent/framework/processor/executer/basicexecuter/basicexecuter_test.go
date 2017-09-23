@@ -19,7 +19,6 @@ import (
 
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
-	docModel "github.com/aws/amazon-ssm-agent/agent/docmanager/model"
 	executermock "github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/mock"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/task"
@@ -33,7 +32,7 @@ type TestCase struct {
 	MsgId string
 
 	// DocState stores parsed Document State
-	DocState docModel.DocumentState
+	DocState contracts.DocumentState
 
 	// PluginResults stores the (unmarshalled) results that the plugins are expected to produce.
 	PluginResults map[string]*contracts.PluginResult
@@ -46,7 +45,7 @@ type TestCase struct {
 // with the correct response.
 func TestBasicExecuter(t *testing.T) {
 
-	docInfo := docModel.DocumentInfo{
+	docInfo := contracts.DocumentInfo{
 		CreatedDate:  "2017-06-10T01-23-07.853Z",
 		CommandID:    "13e8e6ad-e195-4ccb-86ee-328153b0dafe",
 		MessageID:    "MessageID",
@@ -55,14 +54,14 @@ func TestBasicExecuter(t *testing.T) {
 		RunCount:     0,
 	}
 
-	pluginState := docModel.PluginState{
+	pluginState := contracts.PluginState{
 		Name: "aws:runScript",
 		Id:   "plugin1",
 	}
-	docState := docModel.DocumentState{
+	docState := contracts.DocumentState{
 		DocumentInformation:        docInfo,
 		DocumentType:               "SendCommand",
-		InstancePluginsInformation: []docModel.PluginState{pluginState},
+		InstancePluginsInformation: []contracts.PluginState{pluginState},
 	}
 
 	result := contracts.PluginResult{
@@ -102,7 +101,7 @@ func testBasicExecuter(t *testing.T, testCase TestCase) {
 	dataStoreMock.On("Load").Return(state)
 	dataStoreMock.On("Save", resultState).Return()
 	pluginRunner = func(context context.T,
-		plugins []docModel.PluginState,
+		plugins []contracts.PluginState,
 		resChan chan contracts.PluginResult,
 		cancelFlag task.CancelFlag) map[string]*contracts.PluginResult {
 		outputs := make(map[string]*contracts.PluginResult)

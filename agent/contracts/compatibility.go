@@ -12,7 +12,7 @@
 // permissions and limitations under the License.
 
 // Package model provides model definitions for document state
-package model
+package contracts
 
 import (
 	"strings"
@@ -23,6 +23,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/platform"
 )
 
+//TODO deprecate this functionality once we update the windows update document
 type managedInstanceDocumentProperties struct {
 	RunCommand []string
 	ID         string

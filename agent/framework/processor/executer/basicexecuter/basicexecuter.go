@@ -17,8 +17,6 @@ package basicexecuter
 import (
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
-	"github.com/aws/amazon-ssm-agent/agent/docmanager"
-	docModel "github.com/aws/amazon-ssm-agent/agent/docmanager/model"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 
 	"sync"
@@ -36,7 +34,7 @@ type BasicExecuter struct {
 }
 
 var pluginRunner = func(context context.T,
-	plugins []docModel.PluginState,
+	plugins []contracts.PluginState,
 	resChan chan contracts.PluginResult,
 	cancelFlag task.CancelFlag) (pluginOutputs map[string]*contracts.PluginResult) {
 	return runpluginutil.RunPlugins(context, plugins, runpluginutil.SSMPluginRegistry, resChan, cancelFlag)
@@ -64,7 +62,7 @@ func run(context context.T,
 	var wg sync.WaitGroup
 	wg.Add(1)
 	//The go-routine to listen to individual plugin update
-	go func(state *docModel.DocumentState) {
+	go func(state *contracts.DocumentState) {
 		defer func() {
 			if msg := recover(); msg != nil {
 				context.Log().Errorf("Executer listener panic: %v", msg)
@@ -75,7 +73,7 @@ func run(context context.T,
 		for res := range statusChan {
 			results[res.PluginID] = &res
 			//TODO decompose this function to return only Status
-			status, _, _ := docmanager.DocumentResultAggregator(context.Log(), res.PluginID, results)
+			status, _, _ := contracts.DocumentResultAggregator(context.Log(), res.PluginID, results)
 			docResult := contracts.DocumentResult{
 				Status:          status,
 				PluginResults:   results,
@@ -87,7 +85,7 @@ func run(context context.T,
 				DocumentVersion: documentVersion,
 			}
 			resChan <- docResult
-			docModel.UpdateDocState(&docResult, state)
+			contracts.UpdateDocState(&docResult, state)
 		}
 	}(&docState)
 
@@ -98,7 +96,7 @@ func run(context context.T,
 	pluginOutputContent, _ := jsonutil.Marshal(outputs)
 	context.Log().Debugf("Plugin outputs %v", jsonutil.Indent(pluginOutputContent))
 	//send DocLevel response
-	status, _, _ := docmanager.DocumentResultAggregator(context.Log(), "", outputs)
+	status, _, _ := contracts.DocumentResultAggregator(context.Log(), "", outputs)
 	result := contracts.DocumentResult{
 		Status:          status,
 		PluginResults:   outputs,

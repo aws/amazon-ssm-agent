@@ -22,7 +22,6 @@ import (
 
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
-	"github.com/aws/amazon-ssm-agent/agent/docmanager/model"
 	executermocks "github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/mock"
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/outofproc/channel"
 	channelmock "github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/outofproc/channel/mock"
@@ -67,7 +66,7 @@ func setup(t *testing.T) *TestCase {
 		go fakeProcess.fakeWorker(fakeProcess.t, docID)
 		return fakeProcess, nil
 	}
-	processFinder = func(log log.T, procinfo model.OSProcInfo) bool {
+	processFinder = func(log log.T, procinfo contracts.OSProcInfo) bool {
 		assert.Equal(t, testPid, procinfo.Pid)
 		return fakeProcess != nil && fakeProcess.live
 	}
@@ -98,7 +97,7 @@ func TestOutOfProcExecuter_Success(t *testing.T) {
 	testCase.docStore.On("Save", resultDocState).Return(nil)
 	pluginRunner = func(
 		context context.T,
-		plugins []model.PluginState,
+		plugins []contracts.PluginState,
 		resChan chan contracts.PluginResult,
 		cancelFlag task.CancelFlag,
 	) {
@@ -153,7 +152,7 @@ func TestOutOfProcExecuter_ShutdownAndReconnect(t *testing.T) {
 	testCase := setup(t)
 	docState1 := testCase.docState
 	//still inprogress, update the docState saved
-	docState1.DocumentInformation.ProcInfo = model.OSProcInfo{
+	docState1.DocumentInformation.ProcInfo = contracts.OSProcInfo{
 		Pid:       testPid,
 		StartTime: testStartDateTime,
 	}
@@ -165,7 +164,7 @@ func TestOutOfProcExecuter_ShutdownAndReconnect(t *testing.T) {
 	masterClosed := make(chan bool)
 	pluginRunner = func(
 		context context.T,
-		plugins []model.PluginState,
+		plugins []contracts.PluginState,
 		resChan chan contracts.PluginResult,
 		cancelFlag task.CancelFlag,
 	) {
@@ -267,7 +266,7 @@ func TestOutOfProcExecuter_Cancel(t *testing.T) {
 	testCase.docStore.On("Save", resultDocState).Return(nil)
 	pluginRunner = func(
 		context context.T,
-		plugins []model.PluginState,
+		plugins []contracts.PluginState,
 		resChan chan contracts.PluginResult,
 		cancelFlag task.CancelFlag,
 	) {

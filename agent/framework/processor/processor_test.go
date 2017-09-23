@@ -22,7 +22,6 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
-	"github.com/aws/amazon-ssm-agent/agent/docmanager/model"
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer"
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/mock"
 	"github.com/aws/amazon-ssm-agent/agent/log"
@@ -47,7 +46,7 @@ func TestEngineProcessor_Submit(t *testing.T) {
 		context:         ctx,
 		documentMgr:     docMock,
 	}
-	docState := model.DocumentState{}
+	docState := contracts.DocumentState{}
 	docState.DocumentInformation.MessageID = "messageID"
 	docMock.On("PersistDocumentState", mock.Anything, mock.Anything, mock.Anything, appconfig.DefaultLocationOfPending, docState)
 	processor.Submit(docState)
@@ -70,7 +69,7 @@ func TestEngineProcessor_Cancel(t *testing.T) {
 		context:           ctx,
 		documentMgr:       docMock,
 	}
-	docState := model.DocumentState{}
+	docState := contracts.DocumentState{}
 	docState.DocumentInformation.MessageID = "cancelMessageID"
 	docMock.On("PersistDocumentState", mock.Anything, mock.Anything, mock.Anything, appconfig.DefaultLocationOfPending, docState)
 	processor.Cancel(docState)
@@ -98,7 +97,7 @@ func TestEngineProcessor_Stop(t *testing.T) {
 //TODO add shutdown and reboot test once we encapsulate docmanager
 func TestProcessCommand(t *testing.T) {
 	ctx := context.NewMockDefault()
-	docState := model.DocumentState{}
+	docState := contracts.DocumentState{}
 	docState.DocumentInformation.MessageID = "messageID"
 	docState.DocumentInformation.InstanceID = "instanceID"
 	docState.DocumentInformation.DocumentID = "documentID"
@@ -145,7 +144,7 @@ func TestProcessCommand(t *testing.T) {
 //TODO add shutdown and reboot test once we encapsulate docmanager
 func TestProcessCommand_Shutdown(t *testing.T) {
 	ctx := context.NewMockDefault()
-	docState := model.DocumentState{}
+	docState := contracts.DocumentState{}
 	docState.DocumentInformation.MessageID = "messageID"
 	docState.DocumentInformation.InstanceID = "instanceID"
 	docState.DocumentInformation.DocumentID = "documentID"
@@ -179,7 +178,7 @@ func TestProcessCommand_Shutdown(t *testing.T) {
 func TestProcessCancelCommand_Success(t *testing.T) {
 	ctx := context.NewMockDefault()
 	sendCommandPoolMock := new(task.MockedPool)
-	docState := model.DocumentState{}
+	docState := contracts.DocumentState{}
 	docState.CancelInformation.CancelMessageID = "messageID"
 	sendCommandPoolMock.On("Cancel", "messageID").Return(true)
 	docMock := new(DocumentMgrMock)
@@ -201,12 +200,12 @@ func (m *DocumentMgrMock) MoveDocumentState(log log.T, fileName, instanceID, src
 	return
 }
 
-func (m *DocumentMgrMock) PersistDocumentState(log log.T, fileName, instanceID, locationFolder string, state model.DocumentState) {
+func (m *DocumentMgrMock) PersistDocumentState(log log.T, fileName, instanceID, locationFolder string, state contracts.DocumentState) {
 	m.Called(log, fileName, instanceID, locationFolder, state)
 	return
 }
 
-func (m *DocumentMgrMock) GetDocumentState(log log.T, fileName, instanceID, locationFolder string) model.DocumentState {
+func (m *DocumentMgrMock) GetDocumentState(log log.T, fileName, instanceID, locationFolder string) contracts.DocumentState {
 	args := m.Called(log, fileName, instanceID, locationFolder)
-	return args.Get(0).(model.DocumentState)
+	return args.Get(0).(contracts.DocumentState)
 }

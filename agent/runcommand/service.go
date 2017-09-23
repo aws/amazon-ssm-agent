@@ -23,7 +23,6 @@ import (
 	associationProcessor "github.com/aws/amazon-ssm-agent/agent/association/processor"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
-	"github.com/aws/amazon-ssm-agent/agent/docmanager/model"
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor"
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
@@ -68,7 +67,7 @@ const (
 	stopPolicyErrorThreshold = 10
 )
 
-type persistData func(state *model.DocumentState, bookkeeping string)
+type persistData func(state *contracts.DocumentState, bookkeeping string)
 
 type ExecuterCreator func(ctx context.T) executer.Executer
 
@@ -105,7 +104,7 @@ func NewOfflineService(context context.T) (*RunCommandService, error) {
 		return nil, err
 	}
 
-	return NewService(messageContext, offlineName, offlineService, 1, 1, false, []model.DocumentType{model.SendCommandOffline, model.CancelCommandOffline}), nil
+	return NewService(messageContext, offlineName, offlineService, 1, 1, false, []contracts.DocumentType{contracts.SendCommandOffline, contracts.CancelCommandOffline}), nil
 }
 
 // NewMdsProcessor initializes a new mds processor with the given parameters.
@@ -114,11 +113,11 @@ func NewMDSService(context context.T) *RunCommandService {
 	mdsService := newMdsService(context.AppConfig())
 	config := context.AppConfig()
 
-	return NewService(messageContext, mdsName, mdsService, config.Mds.CommandWorkersLimit, CancelWorkersLimit, true, []model.DocumentType{model.SendCommand, model.CancelCommand})
+	return NewService(messageContext, mdsName, mdsService, config.Mds.CommandWorkersLimit, CancelWorkersLimit, true, []contracts.DocumentType{contracts.SendCommand, contracts.CancelCommand})
 }
 
 // NewProcessor performs common initialization for Mds and Offline processors
-func NewService(ctx context.T, serviceName string, service mdsService.Service, commandWorkerLimit int, cancelWorkerLimit int, pollAssoc bool, supportedDocs []model.DocumentType) *RunCommandService {
+func NewService(ctx context.T, serviceName string, service mdsService.Service, commandWorkerLimit int, cancelWorkerLimit int, pollAssoc bool, supportedDocs []contracts.DocumentType) *RunCommandService {
 	log := ctx.Log()
 	config := ctx.AppConfig()
 

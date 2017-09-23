@@ -25,7 +25,6 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/association/model"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
-	docModel "github.com/aws/amazon-ssm-agent/agent/docmanager/model"
 	"github.com/aws/amazon-ssm-agent/agent/docparser"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
@@ -74,7 +73,7 @@ func ParseDocumentForPayload(log log.T,
 // InitializeDocumentState - an interim state that is used around during an execution of a document
 func InitializeDocumentState(context context.T,
 	payload *messageContracts.SendCommandPayload,
-	rawData *model.InstanceAssociation) (docModel.DocumentState, error) {
+	rawData *model.InstanceAssociation) (contracts.DocumentState, error) {
 
 	//initialize document information with relevant values extracted from msg
 	documentInfo := newDocumentInfo(rawData, payload)
@@ -97,13 +96,13 @@ func InitializeDocumentState(context context.T,
 		DocumentId:       documentInfo.DocumentID,
 	}
 
-	return docparser.InitializeDocState(context.Log(), docModel.Association, &payload.DocumentContent, documentInfo, parserInfo, payload.Parameters)
+	return docparser.InitializeDocState(context.Log(), contracts.Association, &payload.DocumentContent, documentInfo, parserInfo, payload.Parameters)
 }
 
 // newDocumentInfo initializes new DocumentInfo object
-func newDocumentInfo(rawData *model.InstanceAssociation, payload *messageContracts.SendCommandPayload) docModel.DocumentInfo {
+func newDocumentInfo(rawData *model.InstanceAssociation, payload *messageContracts.SendCommandPayload) contracts.DocumentInfo {
 
-	documentInfo := new(docModel.DocumentInfo)
+	documentInfo := new(contracts.DocumentInfo)
 
 	documentInfo.AssociationID = *(rawData.Association.AssociationId)
 	documentInfo.InstanceID = *(rawData.Association.InstanceId)

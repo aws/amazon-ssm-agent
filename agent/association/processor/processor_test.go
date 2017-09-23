@@ -26,7 +26,6 @@ import (
 	complianceUploader "github.com/aws/amazon-ssm-agent/agent/compliance/uploader"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
-	docModel "github.com/aws/amazon-ssm-agent/agent/docmanager/model"
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor/mock"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	messageContracts "github.com/aws/amazon-ssm-agent/agent/runcommand/contracts"
@@ -199,7 +198,7 @@ func TestProcessAssociationSuccessful(t *testing.T) {
 	sys = &systemStub{}
 
 	payload := messageContracts.SendCommandPayload{}
-	docState := docModel.DocumentState{}
+	docState := contracts.DocumentState{}
 	parserMock := parserMock{}
 	complianceUploader := complianceUploader.NewMockDefault()
 
@@ -249,9 +248,9 @@ func TestUpdatePluginAssociationInstances(t *testing.T) {
 	}
 	schedulemanager.Refresh(log.NewMockLog(), testAssociations)
 	assert.Equal(t, len(pluginAssociationInstances), 0)
-	testDocState := docModel.DocumentState{
-		InstancePluginsInformation: []docModel.PluginState{
-			docModel.PluginState{
+	testDocState := contracts.DocumentState{
+		InstancePluginsInformation: []contracts.PluginState{
+			contracts.PluginState{
 				Name: "pluginName",
 			},
 		},
@@ -278,9 +277,9 @@ func TestRemovePluginAssociationInstances(t *testing.T) {
 	schedulemanager.Refresh(log.NewMockLog(), testAssociations)
 	pluginAssociationInstances["pluginName"] = AssocList{testAssociationID, testRemovedAssociationID}
 	assert.Equal(t, len(pluginAssociationInstances), 1)
-	testDocState := docModel.DocumentState{
-		InstancePluginsInformation: []docModel.PluginState{
-			docModel.PluginState{
+	testDocState := contracts.DocumentState{
+		InstancePluginsInformation: []contracts.PluginState{
+			contracts.PluginState{
 				Name: "pluginName",
 			},
 		},
@@ -292,11 +291,11 @@ func TestRemovePluginAssociationInstances(t *testing.T) {
 	assert.Equal(t, resultMap, pluginAssociationInstances)
 }
 
-func mockParser(parserMock *parserMock, payload *messageContracts.SendCommandPayload, docState docModel.DocumentState) {
+func mockParser(parserMock *parserMock, payload *messageContracts.SendCommandPayload, docState contracts.DocumentState) {
 	parserMock.On(
 		"InitializeDocumentState",
 		mock.AnythingOfType("*context.Mock"),
-		mock.AnythingOfType("*model.SendCommandPayload"),
+		mock.AnythingOfType("*contracts.SendCommandPayload"),
 		mock.AnythingOfType("*model.InstanceAssociation")).Return(docState)
 }
 

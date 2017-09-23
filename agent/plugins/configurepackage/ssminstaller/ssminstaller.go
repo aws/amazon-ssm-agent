@@ -25,7 +25,6 @@ import (
 
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
-	"github.com/aws/amazon-ssm-agent/agent/docmanager/model"
 	"github.com/aws/amazon-ssm-agent/agent/docparser"
 	"github.com/aws/amazon-ssm-agent/agent/executers"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
@@ -113,8 +112,8 @@ func (inst *Installer) getActionPath(actionName string, extension string) string
 	return filepath.Join(inst.packagePath, fmt.Sprintf("%v.%v", actionName, extension))
 }
 
-func (inst *Installer) readScriptAction(context context.T, action *Action, workingDir string, pluginName string, runCommand []interface{}) (pluginsInfo []model.PluginState, err error) {
-	pluginsInfo = []model.PluginState{}
+func (inst *Installer) readScriptAction(context context.T, action *Action, workingDir string, pluginName string, runCommand []interface{}) (pluginsInfo []contracts.PluginState, err error) {
+	pluginsInfo = []contracts.PluginState{}
 
 	pluginFullName := fmt.Sprintf("aws:%v", pluginName)
 	var s3Prefix string
@@ -142,7 +141,7 @@ func (inst *Installer) readScriptAction(context context.T, action *Action, worki
 		DefaultWorkingDirectory: workingDir,
 	}
 
-	var plugin model.PluginState
+	var plugin contracts.PluginState
 	plugin.Configuration = config
 	plugin.Id = config.PluginID
 	plugin.Name = config.PluginName
@@ -152,7 +151,7 @@ func (inst *Installer) readScriptAction(context context.T, action *Action, worki
 }
 
 // readShAction turns an sh action into a set of SSM Document Plugins to execute
-func (inst *Installer) readShAction(context context.T, action *Action, workingDir string, envVars map[string]string) (pluginsInfo []model.PluginState, err error) {
+func (inst *Installer) readShAction(context context.T, action *Action, workingDir string, envVars map[string]string) (pluginsInfo []contracts.PluginState, err error) {
 	if action.actionType != ACTION_TYPE_SH {
 		return nil, fmt.Errorf("Internal error")
 	}
@@ -171,7 +170,7 @@ func (inst *Installer) readShAction(context context.T, action *Action, workingDi
 }
 
 // readPs1Action turns an ps1 action into a set of SSM Document Plugins to execute
-func (inst *Installer) readPs1Action(context context.T, action *Action, workingDir string, envVars map[string]string) (pluginsInfo []model.PluginState, err error) {
+func (inst *Installer) readPs1Action(context context.T, action *Action, workingDir string, envVars map[string]string) (pluginsInfo []contracts.PluginState, err error) {
 	if action.actionType != ACTION_TYPE_PS1 {
 		return nil, fmt.Errorf("Internal error")
 	}
@@ -190,7 +189,7 @@ func (inst *Installer) readPs1Action(context context.T, action *Action, workingD
 }
 
 // readJsonAction turns an json action into a set of SSM Document Plugins to execute
-func (inst *Installer) readJsonAction(context context.T, action *Action, workingDir string) (pluginsInfo []model.PluginState, err error) {
+func (inst *Installer) readJsonAction(context context.T, action *Action, workingDir string) (pluginsInfo []contracts.PluginState, err error) {
 	if action.actionType != ACTION_TYPE_JSON {
 		return nil, fmt.Errorf("Internal error")
 	}
@@ -312,7 +311,7 @@ func (inst *Installer) getEnvVars(context context.T) (envVars map[string]string,
 
 // readAction returns a JSON document describing a management action and its working directory, or an empty string
 // if there is nothing to do for a given action
-func (inst *Installer) readAction(context context.T, actionName string) (exists bool, pluginsInfo []model.PluginState, workingDir string, err error) {
+func (inst *Installer) readAction(context context.T, actionName string) (exists bool, pluginsInfo []contracts.PluginState, workingDir string, err error) {
 	// TODO: Split into linux and windows
 
 	var action *Action
@@ -359,7 +358,7 @@ func (inst *Installer) readAction(context context.T, actionName string) (exists 
 // executeDocument executes a command document as a sub-document of the current command and returns the result
 func (inst *Installer) executeDocument(context context.T,
 	actionName string,
-	pluginsInfo []model.PluginState,
+	pluginsInfo []contracts.PluginState,
 	output *contracts.PluginOutput) {
 	log := context.Log()
 

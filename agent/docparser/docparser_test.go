@@ -22,7 +22,6 @@ import (
 	"testing"
 
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
-	"github.com/aws/amazon-ssm-agent/agent/docmanager/model"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/stretchr/testify/assert"
@@ -131,12 +130,12 @@ func TestInitializeDocState_Valid(t *testing.T) {
 		assert.Error(t, err, "Error occured when trying to unmarshal validDocument")
 	}
 
-	docState, err := InitializeDocState(mockLog, model.SendCommand, &testDocContent, model.DocumentInfo{}, testParserInfo, nil)
+	docState, err := InitializeDocState(mockLog, contracts.SendCommand, &testDocContent, contracts.DocumentInfo{}, testParserInfo, nil)
 
 	assert.Nil(t, err)
 
 	pluginInfo := docState.InstancePluginsInformation
-	assert.Equal(t, model.SendCommand, docState.DocumentType)
+	assert.Equal(t, contracts.SendCommand, docState.DocumentType)
 	assert.Equal(t, "1.2", docState.SchemaVersion)
 	assert.Equal(t, 1, len(pluginInfo))
 	assert.Equal(t, filepath.Join(testOrchDir, "awsrunShellScript"), pluginInfo[0].Configuration.OrchestrationDirectory)
