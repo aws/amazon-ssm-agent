@@ -34,8 +34,6 @@ import (
 	complianceUploader "github.com/aws/amazon-ssm-agent/agent/compliance/uploader"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
-	"github.com/aws/amazon-ssm-agent/agent/docmanager"
-	docModel "github.com/aws/amazon-ssm-agent/agent/docmanager/model"
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
@@ -88,7 +86,7 @@ func NewAssociationProcessor(context context.T, instanceID string) *Processor {
 
 	//TODO Rename everything to service and move package to framework
 	//association has no cancel worker
-	proc := processor.NewEngineProcessor(assocContext, documentWorkersLimit, documentWorkersLimit, []docModel.DocumentType{docModel.Association})
+	proc := processor.NewEngineProcessor(assocContext, documentWorkersLimit, documentWorkersLimit, []contracts.DocumentType{contracts.Association})
 	return &Processor{
 		context:            assocContext,
 		assocSvc:           assocSvc,
@@ -293,7 +291,7 @@ func (p *Processor) runScheduledAssociation(log log.T) {
 		contracts.AssociationPendingMessage,
 		service.NoOutputUrl)
 
-	var docState *docModel.DocumentState
+	var docState *contracts.DocumentState
 	if docState, err = p.parseAssociation(scheduledAssociation); err != nil {
 		err = fmt.Errorf("Encountered error while parsing association %v, %v",
 			docState.DocumentInformation.AssociationID,
@@ -372,11 +370,11 @@ func (p *Processor) isStopped() bool {
 }
 
 // parseAssociation parses the association to the document state
-func (p *Processor) parseAssociation(rawData *model.InstanceAssociation) (*docModel.DocumentState, error) {
+func (p *Processor) parseAssociation(rawData *model.InstanceAssociation) (*contracts.DocumentState, error) {
 	// create separate logger that includes messageID with every log message
 	context := p.context.With("[associationId=" + *rawData.Association.AssociationId + "]")
 	log := context.Log()
-	docState := docModel.DocumentState{}
+	docState := contracts.DocumentState{}
 
 	log.Info("Executing association")
 
@@ -404,9 +402,9 @@ func (p *Processor) parseAssociation(rawData *model.InstanceAssociation) (*docMo
 		return &docState, fmt.Errorf("%v", errorMsg)
 	}
 
-	if isMI && docModel.IsManagedInstanceIncompatibleAWSSSMDocument(docState.DocumentInformation.DocumentName) {
+	if isMI && contracts.IsManagedInstanceIncompatibleAWSSSMDocument(docState.DocumentInformation.DocumentName) {
 		log.Debugf("Running incompatible AWS SSM Document %v on managed instance", docState.DocumentInformation.DocumentName)
-		if err = docModel.RemoveDependencyOnInstanceMetadata(context, &docState); err != nil {
+		if err = contracts.RemoveDependencyOnInstanceMetadata(context, &docState); err != nil {
 			errorMsg := "Encountered error while parsing input - internal error"
 			log.Debug(err)
 			return &docState, fmt.Errorf("%v", errorMsg)
@@ -424,7 +422,7 @@ func (r *Processor) pluginExecutionReport(
 	outputs map[string]*contracts.PluginResult,
 	totalNumberOfPlugins int) {
 
-	_, _, runtimeStatuses := docmanager.DocumentResultAggregator(log, pluginID, outputs)
+	_, _, runtimeStatuses := contracts.DocumentResultAggregator(log, pluginID, outputs)
 	outputContent, err := jsonutil.Marshal(runtimeStatuses)
 	if err != nil {
 		log.Error("could not marshal plugin outputs! ", err)
@@ -469,7 +467,7 @@ func (r *Processor) associationExecutionReport(
 	errorCode string,
 	associationStatus string) {
 
-	_, _, runtimeStatuses := docmanager.DocumentResultAggregator(log, "", outputs)
+	_, _, runtimeStatuses := contracts.DocumentResultAggregator(log, "", outputs)
 	runtimeStatusesContent, err := jsonutil.Marshal(runtimeStatuses)
 	if err != nil {
 		log.Error("could not marshal plugin outputs ", err)
@@ -626,7 +624,7 @@ func filterByStatus(runtimeStatuses map[string]*contracts.PluginRuntimeStatus, p
 
 //This operation is locked by runScheduledAssociation
 //lazy update, update only when the document is ready to run, update will validate and invalidate current attached association
-func updatePluginAssociationInstances(associationID string, docState *docModel.DocumentState) {
+func updatePluginAssociationInstances(associationID string, docState *contracts.DocumentState) {
 	currentPluginAssociations := getPluginAssociationInstances()
 	for i := 0; i < len(docState.InstancePluginsInformation); i++ {
 

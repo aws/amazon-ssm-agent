@@ -7,8 +7,6 @@ import (
 
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
-	"github.com/aws/amazon-ssm-agent/agent/docmanager"
-	"github.com/aws/amazon-ssm-agent/agent/docmanager/model"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 )
@@ -20,7 +18,7 @@ const (
 
 type PluginRunner func(
 	context context.T,
-	plugins []model.PluginState,
+	plugins []contracts.PluginState,
 	resChan chan contracts.PluginResult,
 	cancelFlag task.CancelFlag,
 )
@@ -38,14 +36,14 @@ type WorkerBackend struct {
 //Executer backend formulate the run request to the worker, and collect back the responses from worker
 type ExecuterBackend struct {
 	//the shared state object that Executer hand off to data backend
-	docState   *model.DocumentState
+	docState   *contracts.DocumentState
 	input      chan string
 	cancelFlag task.CancelFlag
 	output     chan contracts.DocumentResult
 	stopChan   chan int
 }
 
-func NewExecuterBackend(output chan contracts.DocumentResult, docState *model.DocumentState, cancelFlag task.CancelFlag) *ExecuterBackend {
+func NewExecuterBackend(output chan contracts.DocumentResult, docState *contracts.DocumentState, cancelFlag task.CancelFlag) *ExecuterBackend {
 	stopChan := make(chan int, defaultBackendChannelSize)
 	inputChan := make(chan string, defaultBackendChannelSize)
 	p := ExecuterBackend{
@@ -59,7 +57,7 @@ func NewExecuterBackend(output chan contracts.DocumentResult, docState *model.Do
 	return &p
 }
 
-func (p *ExecuterBackend) start(pluginConfigs []model.PluginState) {
+func (p *ExecuterBackend) start(pluginConfigs []contracts.PluginState) {
 	startDatagram, _ := CreateDatagram(MessageTypePluginConfig, pluginConfigs)
 	p.input <- startDatagram
 	p.cancelFlag.Wait()
@@ -109,7 +107,7 @@ func (p *ExecuterBackend) formatDocResult(docResult *contracts.DocumentResult) {
 	docResult.NPlugins = len(p.docState.InstancePluginsInformation)
 	docResult.DocumentVersion = p.docState.DocumentInformation.DocumentVersion
 	//update current document status
-	model.UpdateDocState(docResult, p.docState)
+	contracts.UpdateDocState(docResult, p.docState)
 }
 
 func NewWorkerBackend(ctx context.T, runner PluginRunner) *WorkerBackend {
@@ -129,7 +127,7 @@ func (p *WorkerBackend) Process(datagram string) error {
 	switch t {
 	case MessageTypePluginConfig:
 		log.Info("received plugin config message")
-		var plugins []model.PluginState
+		var plugins []contracts.PluginState
 		if err := jsonutil.Unmarshal(content, &plugins); err != nil {
 			log.Errorf("failed to unmarshal plugin config: %v", err)
 			//TODO request messaging to stop
@@ -181,7 +179,7 @@ func (p *WorkerBackend) pluginListener(statusChan chan contracts.PluginResult) {
 		var result = res
 		results[res.PluginID] = &result
 		//TODO move the aggregator under executer package and protect it, there's global lock in this package
-		status, _, _ := docmanager.DocumentResultAggregator(log, res.PluginID, results)
+		status, _, _ := contracts.DocumentResultAggregator(log, res.PluginID, results)
 		docResult := contracts.DocumentResult{
 			Status:        status,
 			PluginResults: results,
@@ -192,7 +190,7 @@ func (p *WorkerBackend) pluginListener(statusChan chan contracts.PluginResult) {
 		p.input <- replyMessage
 	}
 	log.Info("document execution complete")
-	finalStatus, _, _ = docmanager.DocumentResultAggregator(log, "", results)
+	finalStatus, _, _ = contracts.DocumentResultAggregator(log, "", results)
 
 }
 

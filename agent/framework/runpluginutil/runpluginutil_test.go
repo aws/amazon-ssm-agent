@@ -21,7 +21,6 @@ import (
 
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
-	"github.com/aws/amazon-ssm-agent/agent/docmanager/model"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 	"github.com/stretchr/testify/assert"
@@ -60,7 +59,7 @@ func TestRunPluginsWithNewDocument(t *testing.T) {
 	setIsSupportedMock()
 	defer restoreIsSupported()
 	pluginNames := []string{testPlugin1, testPlugin2}
-	pluginConfigs := make(map[string]model.PluginState)
+	pluginConfigs := make(map[string]contracts.PluginState)
 	pluginResults := make(map[string]*contracts.PluginResult)
 	pluginInstances := make(map[string]*PluginMock)
 	pluginRegistry := PluginRegistry{}
@@ -70,7 +69,7 @@ func TestRunPluginsWithNewDocument(t *testing.T) {
 	ctx := context.NewMockDefault()
 	defaultTime := time.Now()
 	defaultOutput := "output"
-	pluginConfigs2 := make([]model.PluginState, len(pluginNames))
+	pluginConfigs2 := make([]contracts.PluginState, len(pluginNames))
 
 	for index, name := range pluginNames {
 
@@ -83,7 +82,7 @@ func TestRunPluginsWithNewDocument(t *testing.T) {
 		}
 
 		// setup expectations
-		pluginConfigs[name] = model.PluginState{
+		pluginConfigs[name] = contracts.PluginState{
 			Name:          name,
 			Id:            name,
 			Configuration: config,
@@ -151,7 +150,7 @@ func TestRunPluginsWithMissingPluginHandler(t *testing.T) {
 	setIsSupportedMock()
 	defer restoreIsSupported()
 	pluginNames := []string{testPlugin1, testPlugin2}
-	pluginConfigs := make(map[string]model.PluginState)
+	pluginConfigs := make(map[string]contracts.PluginState)
 	pluginResults := make(map[string]*contracts.PluginResult)
 	pluginInstances := make(map[string]*PluginMock)
 	pluginRegistry := PluginRegistry{}
@@ -161,7 +160,7 @@ func TestRunPluginsWithMissingPluginHandler(t *testing.T) {
 	ctx := context.NewMockDefault()
 	defaultTime := time.Now()
 	defaultOutput := ""
-	pluginConfigs2 := make([]model.PluginState, len(pluginNames))
+	pluginConfigs2 := make([]contracts.PluginState, len(pluginNames))
 
 	for index, name := range pluginNames {
 
@@ -174,7 +173,7 @@ func TestRunPluginsWithMissingPluginHandler(t *testing.T) {
 		}
 
 		// setup expectations
-		pluginConfigs[name] = model.PluginState{
+		pluginConfigs[name] = contracts.PluginState{
 			Name:          name,
 			Id:            name,
 			Configuration: config,
@@ -238,7 +237,7 @@ func TestRunPluginsWithCancelFlagShutdown(t *testing.T) {
 	setIsSupportedMock()
 	defer restoreIsSupported()
 	pluginNames := []string{testPlugin1, testPlugin2}
-	pluginStates := make([]model.PluginState, 2)
+	pluginStates := make([]contracts.PluginState, 2)
 	pluginResults := make(map[string]*contracts.PluginResult)
 	plugins := make(map[string]*PluginMock)
 	pluginRegistry := PluginRegistry{}
@@ -252,7 +251,7 @@ func TestRunPluginsWithCancelFlagShutdown(t *testing.T) {
 		config := contracts.Configuration{
 			PluginID: name,
 		}
-		pluginState := model.PluginState{
+		pluginState := contracts.PluginState{
 			Name:          name,
 			Id:            name,
 			Configuration: config,
@@ -304,7 +303,7 @@ func TestRunPluginsWithInProgressDocuments(t *testing.T) {
 	setIsSupportedMock()
 	defer restoreIsSupported()
 	pluginNames := []string{testPlugin1, testPlugin2}
-	pluginStates := make([]model.PluginState, 2)
+	pluginStates := make([]contracts.PluginState, 2)
 	pluginResults := make(map[string]*contracts.PluginResult)
 	plugins := make(map[string]*PluginMock)
 	pluginRegistry := PluginRegistry{}
@@ -318,7 +317,7 @@ func TestRunPluginsWithInProgressDocuments(t *testing.T) {
 		config := contracts.Configuration{
 			PluginID: name,
 		}
-		pluginState := model.PluginState{
+		pluginState := contracts.PluginState{
 			Name:          name,
 			Id:            name,
 			Configuration: config,
@@ -362,7 +361,7 @@ func TestRunPluginsWithInProgressDocuments(t *testing.T) {
 //TODO this test wont work cuz we don't have a good way to mock lib functions
 //func TestEngineUnhandledPlugins(t *testing.T) {
 //	pluginName := "nonexited_plugin"
-//	pluginStates := make([]model.PluginState, 1)
+//	pluginStates := make([]contracts.PluginState, 1)
 //	pluginResults := make(map[string]*contracts.PluginResult)
 //	plugins := make(map[string]*PluginMock)
 //	pluginRegistry := PluginRegistry{}
@@ -378,7 +377,7 @@ func TestRunPluginsWithInProgressDocuments(t *testing.T) {
 //	config := contracts.Configuration{
 //		PluginID: pluginName,
 //	}
-//	pluginState := model.PluginState{
+//	pluginState := contracts.PluginState{
 //		Name:          pluginName,
 //		Id:            pluginName,
 //		Configuration: config,
@@ -399,7 +398,7 @@ func TestRunPluginsWithDuplicatePluginType(t *testing.T) {
 	defer restoreIsSupported()
 	pluginType := "aws:runShellScript"
 	pluginNames := []string{testPlugin1, testPlugin2}
-	pluginConfigs := make(map[string]model.PluginState)
+	pluginConfigs := make(map[string]contracts.PluginState)
 	pluginResults := make(map[string]*contracts.PluginResult)
 	// create an instance of our test object
 	plugin := new(PluginMock)
@@ -409,7 +408,7 @@ func TestRunPluginsWithDuplicatePluginType(t *testing.T) {
 	ctx := context.NewMockDefault()
 	defaultTime := time.Now()
 	defaultOutput := "output"
-	pluginConfigs2 := make([]model.PluginState, len(pluginNames))
+	pluginConfigs2 := make([]contracts.PluginState, len(pluginNames))
 
 	for index, name := range pluginNames {
 
@@ -419,7 +418,7 @@ func TestRunPluginsWithDuplicatePluginType(t *testing.T) {
 		}
 
 		// setup expectations
-		pluginConfigs[name] = model.PluginState{
+		pluginConfigs[name] = contracts.PluginState{
 			Name:          pluginType,
 			Id:            name,
 			Configuration: config,
@@ -488,7 +487,7 @@ func TestRunPluginsWithCompatiblePrecondition(t *testing.T) {
 	setIsSupportedMock()
 	defer restoreIsSupported()
 	pluginNames := []string{testPlugin1, testPlugin2}
-	pluginConfigs := make(map[string]model.PluginState)
+	pluginConfigs := make(map[string]contracts.PluginState)
 	pluginResults := make(map[string]*contracts.PluginResult)
 	pluginInstances := make(map[string]*PluginMock)
 	pluginRegistry := PluginRegistry{}
@@ -498,7 +497,7 @@ func TestRunPluginsWithCompatiblePrecondition(t *testing.T) {
 	ctx := context.NewMockDefault()
 	defaultTime := time.Now()
 	defaultOutput := "output"
-	pluginConfigs2 := make([]model.PluginState, len(pluginNames))
+	pluginConfigs2 := make([]contracts.PluginState, len(pluginNames))
 
 	preconditions := map[string][]string{"StringEquals": []string{"platformType", "Linux"}}
 
@@ -515,7 +514,7 @@ func TestRunPluginsWithCompatiblePrecondition(t *testing.T) {
 		}
 
 		// setup expectations
-		pluginConfigs[name] = model.PluginState{
+		pluginConfigs[name] = contracts.PluginState{
 			Name:          name,
 			Id:            name,
 			Configuration: config,
@@ -578,7 +577,7 @@ func TestRunPluginsWithCompatiblePreconditionWithValueFirst(t *testing.T) {
 	setIsSupportedMock()
 	defer restoreIsSupported()
 	pluginNames := []string{testPlugin1, testPlugin2}
-	pluginConfigs := make(map[string]model.PluginState)
+	pluginConfigs := make(map[string]contracts.PluginState)
 	pluginResults := make(map[string]*contracts.PluginResult)
 	pluginInstances := make(map[string]*PluginMock)
 	pluginRegistry := PluginRegistry{}
@@ -588,7 +587,7 @@ func TestRunPluginsWithCompatiblePreconditionWithValueFirst(t *testing.T) {
 	ctx := context.NewMockDefault()
 	defaultTime := time.Now()
 	defaultOutput := "output"
-	pluginConfigs2 := make([]model.PluginState, len(pluginNames))
+	pluginConfigs2 := make([]contracts.PluginState, len(pluginNames))
 
 	preconditions := map[string][]string{"StringEquals": []string{"Linux", "platformType"}}
 
@@ -605,7 +604,7 @@ func TestRunPluginsWithCompatiblePreconditionWithValueFirst(t *testing.T) {
 		}
 
 		// setup expectations
-		pluginConfigs[name] = model.PluginState{
+		pluginConfigs[name] = contracts.PluginState{
 			Name:          name,
 			Id:            name,
 			Configuration: config,
@@ -666,7 +665,7 @@ func TestRunPluginsWithIncompatiblePrecondition(t *testing.T) {
 	setIsSupportedMock()
 	defer restoreIsSupported()
 	pluginNames := []string{testPlugin1, testPlugin2}
-	pluginConfigs := make(map[string]model.PluginState)
+	pluginConfigs := make(map[string]contracts.PluginState)
 	pluginResults := make(map[string]*contracts.PluginResult)
 	pluginInstances := make(map[string]*PluginMock)
 	pluginRegistry := PluginRegistry{}
@@ -676,7 +675,7 @@ func TestRunPluginsWithIncompatiblePrecondition(t *testing.T) {
 	ctx := context.NewMockDefault()
 	defaultTime := time.Now()
 	defaultOutput := ""
-	pluginConfigs2 := make([]model.PluginState, len(pluginNames))
+	pluginConfigs2 := make([]contracts.PluginState, len(pluginNames))
 
 	preconditions := map[string][]string{"StringEquals": []string{"platformType", "Windows"}}
 
@@ -693,7 +692,7 @@ func TestRunPluginsWithIncompatiblePrecondition(t *testing.T) {
 		}
 
 		// setup expectations
-		pluginConfigs[name] = model.PluginState{
+		pluginConfigs[name] = contracts.PluginState{
 			Name:          name,
 			Id:            name,
 			Configuration: config,
@@ -753,7 +752,7 @@ func TestRunPluginsWithCompatiblePreconditionButMissingPluginHandler(t *testing.
 	setIsSupportedMock()
 	defer restoreIsSupported()
 	pluginNames := []string{testPlugin1, testPlugin2}
-	pluginConfigs := make(map[string]model.PluginState)
+	pluginConfigs := make(map[string]contracts.PluginState)
 	pluginResults := make(map[string]*contracts.PluginResult)
 	pluginInstances := make(map[string]*PluginMock)
 	pluginRegistry := PluginRegistry{}
@@ -763,7 +762,7 @@ func TestRunPluginsWithCompatiblePreconditionButMissingPluginHandler(t *testing.
 	ctx := context.NewMockDefault()
 	defaultTime := time.Now()
 	defaultOutput := ""
-	pluginConfigs2 := make([]model.PluginState, len(pluginNames))
+	pluginConfigs2 := make([]contracts.PluginState, len(pluginNames))
 
 	preconditions := map[string][]string{"StringEquals": []string{"platformType", "Linux"}}
 
@@ -780,7 +779,7 @@ func TestRunPluginsWithCompatiblePreconditionButMissingPluginHandler(t *testing.
 		}
 
 		// setup expectations
-		pluginConfigs[name] = model.PluginState{
+		pluginConfigs[name] = contracts.PluginState{
 			Name:          name,
 			Id:            name,
 			Configuration: config,
@@ -838,7 +837,7 @@ func TestRunPluginsWithMoreThanOnePrecondition(t *testing.T) {
 	setIsSupportedMock()
 	defer restoreIsSupported()
 	pluginNames := []string{testPlugin1, testPlugin2}
-	pluginConfigs := make(map[string]model.PluginState)
+	pluginConfigs := make(map[string]contracts.PluginState)
 	pluginResults := make(map[string]*contracts.PluginResult)
 	pluginInstances := make(map[string]*PluginMock)
 	pluginRegistry := PluginRegistry{}
@@ -848,7 +847,7 @@ func TestRunPluginsWithMoreThanOnePrecondition(t *testing.T) {
 	ctx := context.NewMockDefault()
 	defaultTime := time.Now()
 	defaultOutput := ""
-	pluginConfigs2 := make([]model.PluginState, len(pluginNames))
+	pluginConfigs2 := make([]contracts.PluginState, len(pluginNames))
 
 	preconditions := map[string][]string{
 		"StringEquals": []string{"platformType", "Linux"},
@@ -868,7 +867,7 @@ func TestRunPluginsWithMoreThanOnePrecondition(t *testing.T) {
 		}
 
 		// setup expectations
-		pluginConfigs[name] = model.PluginState{
+		pluginConfigs[name] = contracts.PluginState{
 			Name:          name,
 			Id:            name,
 			Configuration: config,
@@ -933,7 +932,7 @@ func TestRunPluginsWithUnrecognizedPreconditionOperator(t *testing.T) {
 	setIsSupportedMock()
 	defer restoreIsSupported()
 	pluginNames := []string{testPlugin1, testPlugin2}
-	pluginConfigs := make(map[string]model.PluginState)
+	pluginConfigs := make(map[string]contracts.PluginState)
 	pluginResults := make(map[string]*contracts.PluginResult)
 	pluginInstances := make(map[string]*PluginMock)
 	pluginRegistry := PluginRegistry{}
@@ -943,7 +942,7 @@ func TestRunPluginsWithUnrecognizedPreconditionOperator(t *testing.T) {
 	ctx := context.NewMockDefault()
 	defaultTime := time.Now()
 	defaultOutput := ""
-	pluginConfigs2 := make([]model.PluginState, len(pluginNames))
+	pluginConfigs2 := make([]contracts.PluginState, len(pluginNames))
 
 	preconditions := map[string][]string{"foo": []string{"platformType", "Linux"}}
 
@@ -960,7 +959,7 @@ func TestRunPluginsWithUnrecognizedPreconditionOperator(t *testing.T) {
 		}
 
 		// setup expectations
-		pluginConfigs[name] = model.PluginState{
+		pluginConfigs[name] = contracts.PluginState{
 			Name:          name,
 			Id:            name,
 			Configuration: config,
@@ -1026,7 +1025,7 @@ func TestRunPluginsWithUnrecognizedPreconditionOperand(t *testing.T) {
 	setIsSupportedMock()
 	defer restoreIsSupported()
 	pluginNames := []string{testPlugin1, testPlugin2}
-	pluginConfigs := make(map[string]model.PluginState)
+	pluginConfigs := make(map[string]contracts.PluginState)
 	pluginResults := make(map[string]*contracts.PluginResult)
 	pluginInstances := make(map[string]*PluginMock)
 	pluginRegistry := PluginRegistry{}
@@ -1036,7 +1035,7 @@ func TestRunPluginsWithUnrecognizedPreconditionOperand(t *testing.T) {
 	ctx := context.NewMockDefault()
 	defaultTime := time.Now()
 	defaultOutput := ""
-	pluginConfigs2 := make([]model.PluginState, len(pluginNames))
+	pluginConfigs2 := make([]contracts.PluginState, len(pluginNames))
 
 	preconditions := map[string][]string{"StringEquals": []string{"foo", "Linux"}}
 
@@ -1053,7 +1052,7 @@ func TestRunPluginsWithUnrecognizedPreconditionOperand(t *testing.T) {
 		}
 
 		// setup expectations
-		pluginConfigs[name] = model.PluginState{
+		pluginConfigs[name] = contracts.PluginState{
 			Name:          name,
 			Id:            name,
 			Configuration: config,
@@ -1120,7 +1119,7 @@ func TestRunPluginsWithUnrecognizedPreconditionDuplicateVariable(t *testing.T) {
 	setIsSupportedMock()
 	defer restoreIsSupported()
 	pluginNames := []string{testPlugin1, testPlugin2}
-	pluginConfigs := make(map[string]model.PluginState)
+	pluginConfigs := make(map[string]contracts.PluginState)
 	pluginResults := make(map[string]*contracts.PluginResult)
 	pluginInstances := make(map[string]*PluginMock)
 	pluginRegistry := PluginRegistry{}
@@ -1130,7 +1129,7 @@ func TestRunPluginsWithUnrecognizedPreconditionDuplicateVariable(t *testing.T) {
 	ctx := context.NewMockDefault()
 	defaultTime := time.Now()
 	defaultOutput := ""
-	pluginConfigs2 := make([]model.PluginState, len(pluginNames))
+	pluginConfigs2 := make([]contracts.PluginState, len(pluginNames))
 
 	preconditions := map[string][]string{"StringEquals": []string{"platformType", "platformType"}}
 
@@ -1147,7 +1146,7 @@ func TestRunPluginsWithUnrecognizedPreconditionDuplicateVariable(t *testing.T) {
 		}
 
 		// setup expectations
-		pluginConfigs[name] = model.PluginState{
+		pluginConfigs[name] = contracts.PluginState{
 			Name:          name,
 			Id:            name,
 			Configuration: config,
@@ -1213,7 +1212,7 @@ func TestRunPluginsWithMoreThanTwoPreconditionOperands(t *testing.T) {
 	setIsSupportedMock()
 	defer restoreIsSupported()
 	pluginNames := []string{testPlugin1, testPlugin2}
-	pluginConfigs := make(map[string]model.PluginState)
+	pluginConfigs := make(map[string]contracts.PluginState)
 	pluginResults := make(map[string]*contracts.PluginResult)
 	pluginInstances := make(map[string]*PluginMock)
 	pluginRegistry := PluginRegistry{}
@@ -1223,7 +1222,7 @@ func TestRunPluginsWithMoreThanTwoPreconditionOperands(t *testing.T) {
 	ctx := context.NewMockDefault()
 	defaultTime := time.Now()
 	defaultOutput := ""
-	pluginConfigs2 := make([]model.PluginState, len(pluginNames))
+	pluginConfigs2 := make([]contracts.PluginState, len(pluginNames))
 
 	preconditions := map[string][]string{"StringEquals": []string{"platformType", "Linux", "foo"}}
 
@@ -1240,7 +1239,7 @@ func TestRunPluginsWithMoreThanTwoPreconditionOperands(t *testing.T) {
 		}
 
 		// setup expectations
-		pluginConfigs[name] = model.PluginState{
+		pluginConfigs[name] = contracts.PluginState{
 			Name:          name,
 			Id:            name,
 			Configuration: config,
@@ -1306,7 +1305,7 @@ func TestRunPluginsWithUnknownPlugin(t *testing.T) {
 	setIsSupportedMock()
 	defer restoreIsSupported()
 	pluginNames := []string{testPlugin1, testUnknownPlugin, testPlugin2}
-	pluginConfigs := make(map[string]model.PluginState)
+	pluginConfigs := make(map[string]contracts.PluginState)
 	pluginResults := make(map[string]*contracts.PluginResult)
 	pluginInstances := make(map[string]*PluginMock)
 	pluginRegistry := PluginRegistry{}
@@ -1316,7 +1315,7 @@ func TestRunPluginsWithUnknownPlugin(t *testing.T) {
 	ctx := context.NewMockDefault()
 	defaultTime := time.Now()
 	defaultOutput := ""
-	pluginConfigs2 := make([]model.PluginState, len(pluginNames))
+	pluginConfigs2 := make([]contracts.PluginState, len(pluginNames))
 
 	preconditions := map[string][]string{"StringEquals": []string{"platformType", "Linux"}}
 
@@ -1335,7 +1334,7 @@ func TestRunPluginsWithUnknownPlugin(t *testing.T) {
 		}
 
 		// setup expectations
-		pluginConfigs[name] = model.PluginState{
+		pluginConfigs[name] = contracts.PluginState{
 			Name:          name,
 			Id:            name,
 			Configuration: config,

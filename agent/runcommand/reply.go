@@ -18,7 +18,6 @@ import (
 	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
-	"github.com/aws/amazon-ssm-agent/agent/docmanager"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	messageContracts "github.com/aws/amazon-ssm-agent/agent/runcommand/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/times"
@@ -26,7 +25,7 @@ import (
 
 // build SendReply Payload from the internal plugins map
 func FormatPayload(log log.T, pluginID string, agentInfo contracts.AgentInfo, outputs map[string]*contracts.PluginResult) messageContracts.SendReplyPayload {
-	status, statusCount, runtimeStatuses := docmanager.DocumentResultAggregator(log, pluginID, outputs)
+	status, statusCount, runtimeStatuses := contracts.DocumentResultAggregator(log, pluginID, outputs)
 	additionalInfo := contracts.AdditionalInfo{
 		Agent:               agentInfo,
 		DateTime:            times.ToIso8601UTC(time.Now()),

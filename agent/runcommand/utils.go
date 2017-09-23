@@ -25,7 +25,6 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
-	"github.com/aws/amazon-ssm-agent/agent/docmanager/model"
 	"github.com/aws/amazon-ssm-agent/agent/docparser"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	logger "github.com/aws/amazon-ssm-agent/agent/log"
@@ -70,9 +69,9 @@ func validate(msg *ssmmds.Message) error {
 }
 
 // newDocumentInfo initializes new DocumentInfo object
-func newDocumentInfo(msg ssmmds.Message, parsedMsg messageContracts.SendCommandPayload) model.DocumentInfo {
+func newDocumentInfo(msg ssmmds.Message, parsedMsg messageContracts.SendCommandPayload) contracts.DocumentInfo {
 
-	documentInfo := new(model.DocumentInfo)
+	documentInfo := new(contracts.DocumentInfo)
 
 	documentInfo.CommandID = getCommandID(*msg.MessageId)
 	documentInfo.DocumentID = documentInfo.CommandID
@@ -86,7 +85,7 @@ func newDocumentInfo(msg ssmmds.Message, parsedMsg messageContracts.SendCommandP
 	return *documentInfo
 }
 
-func parseCancelCommandMessage(context context.T, msg *ssmmds.Message, messagesOrchestrationRootDir string) (*model.DocumentState, error) {
+func parseCancelCommandMessage(context context.T, msg *ssmmds.Message, messagesOrchestrationRootDir string) (*contracts.DocumentState, error) {
 	log := context.Log()
 
 	log.Debug("Processing cancel command message - ", *msg.MessageId)
@@ -96,8 +95,8 @@ func parseCancelCommandMessage(context context.T, msg *ssmmds.Message, messagesO
 	if err != nil {
 		return nil, err
 	}
-	var docState model.DocumentState
-	documentInfo := model.DocumentInfo{}
+	var docState contracts.DocumentState
+	documentInfo := contracts.DocumentInfo{}
 	documentInfo.InstanceID = *msg.Destination
 	documentInfo.CreatedDate = *msg.CreatedDate
 	documentInfo.MessageID = *msg.MessageId
@@ -106,7 +105,7 @@ func parseCancelCommandMessage(context context.T, msg *ssmmds.Message, messagesO
 	documentInfo.RunID = times.ToIsoDashUTC(times.DefaultClock.Now())
 	documentInfo.DocumentStatus = contracts.ResultStatusInProgress
 
-	cancelCommand := new(model.CancelCommandInfo)
+	cancelCommand := new(contracts.CancelCommandInfo)
 	cancelCommand.Payload = *msg.Payload
 	cancelCommand.CancelMessageID = payload.CancelMessageID
 	commandID := getCommandID(payload.CancelMessageID)
@@ -114,13 +113,13 @@ func parseCancelCommandMessage(context context.T, msg *ssmmds.Message, messagesO
 	cancelCommand.CancelCommandID = commandID
 	cancelCommand.DebugInfo = fmt.Sprintf("Command %v is yet to be cancelled", commandID)
 
-	var documentType model.DocumentType
+	var documentType contracts.DocumentType
 	if strings.HasPrefix(*msg.Topic, string(CancelCommandTopicPrefixOffline)) {
-		documentType = model.CancelCommandOffline
+		documentType = contracts.CancelCommandOffline
 	} else {
-		documentType = model.CancelCommand
+		documentType = contracts.CancelCommand
 	}
-	docState = model.DocumentState{
+	docState = contracts.DocumentState{
 		DocumentInformation: documentInfo,
 		CancelInformation:   *cancelCommand,
 		DocumentType:        documentType,
@@ -128,7 +127,7 @@ func parseCancelCommandMessage(context context.T, msg *ssmmds.Message, messagesO
 	return &docState, nil
 }
 
-func parseSendCommandMessage(context context.T, msg *ssmmds.Message, messagesOrchestrationRootDir string) (*model.DocumentState, error) {
+func parseSendCommandMessage(context context.T, msg *ssmmds.Message, messagesOrchestrationRootDir string) (*contracts.DocumentState, error) {
 	log := context.Log()
 	commandID := getCommandID(*msg.MessageId)
 
@@ -149,11 +148,11 @@ func parseSendCommandMessage(context context.T, msg *ssmmds.Message, messagesOrc
 
 	messageOrchestrationDirectory := filepath.Join(messagesOrchestrationRootDir, commandID)
 
-	var documentType model.DocumentType
+	var documentType contracts.DocumentType
 	if strings.HasPrefix(*msg.Topic, string(SendCommandTopicPrefixOffline)) {
-		documentType = model.SendCommandOffline
+		documentType = contracts.SendCommandOffline
 	} else {
-		documentType = model.SendCommand
+		documentType = contracts.SendCommand
 	}
 	documentInfo := newDocumentInfo(*msg, parsedMessage)
 	parserInfo := docparser.DocumentParserInfo{
@@ -206,9 +205,9 @@ func parseSendCommandMessage(context context.T, msg *ssmmds.Message, messagesOrc
 		log.Errorf("Error determining managed instance. error: %v", err)
 	}
 
-	if isMI && model.IsManagedInstanceIncompatibleAWSSSMDocument(docState.DocumentInformation.DocumentName) {
+	if isMI && contracts.IsManagedInstanceIncompatibleAWSSSMDocument(docState.DocumentInformation.DocumentName) {
 		log.Debugf("Running incompatible AWS SSM Document %v on managed instance", docState.DocumentInformation.DocumentName)
-		if err = model.RemoveDependencyOnInstanceMetadata(context, &docState); err != nil {
+		if err = contracts.RemoveDependencyOnInstanceMetadata(context, &docState); err != nil {
 			return nil, err
 		}
 	}

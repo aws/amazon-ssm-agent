@@ -17,7 +17,6 @@ package ssminstaller
 import (
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
-	"github.com/aws/amazon-ssm-agent/agent/docmanager/model"
 	"github.com/aws/amazon-ssm-agent/agent/docparser"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	"github.com/aws/amazon-ssm-agent/agent/platform"
@@ -26,7 +25,7 @@ import (
 	"io/ioutil"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
-	"github.com/aws/amazon-ssm-agent/agent/docmanager"
+	"github.com/aws/amazon-ssm-agent/agent/framework/docmanager"
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer"
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/basicexecuter"
 	"github.com/aws/amazon-ssm-agent/agent/task"
@@ -34,14 +33,14 @@ import (
 
 // dependency on action execution
 type execDep interface {
-	ParseDocument(context context.T, documentRaw []byte, orchestrationDir string, s3Bucket string, s3KeyPrefix string, messageID string, documentID string, defaultWorkingDirectory string) (pluginsInfo []model.PluginState, err error)
-	ExecuteDocument(context context.T, pluginInput []model.PluginState, documentID string, documentCreatedDate string) (pluginOutputs map[string]*contracts.PluginResult)
+	ParseDocument(context context.T, documentRaw []byte, orchestrationDir string, s3Bucket string, s3KeyPrefix string, messageID string, documentID string, defaultWorkingDirectory string) (pluginsInfo []contracts.PluginState, err error)
+	ExecuteDocument(context context.T, pluginInput []contracts.PluginState, documentID string, documentCreatedDate string) (pluginOutputs map[string]*contracts.PluginResult)
 }
 
 type execDepImp struct {
 }
 
-func (m *execDepImp) ParseDocument(context context.T, documentRaw []byte, orchestrationDir string, s3Bucket string, s3KeyPrefix string, messageID string, documentID string, defaultWorkingDirectory string) (pluginsInfo []model.PluginState, err error) {
+func (m *execDepImp) ParseDocument(context context.T, documentRaw []byte, orchestrationDir string, s3Bucket string, s3KeyPrefix string, messageID string, documentID string, defaultWorkingDirectory string) (pluginsInfo []contracts.PluginState, err error) {
 	log := context.Log()
 	parserInfo := docparser.DocumentParserInfo{
 		OrchestrationDir:  orchestrationDir,
@@ -61,13 +60,13 @@ func (m *execDepImp) ParseDocument(context context.T, documentRaw []byte, orches
 	return docparser.ParseDocument(log, &docContent, parserInfo, nil)
 }
 
-func (m *execDepImp) ExecuteDocument(context context.T, pluginInput []model.PluginState, documentID string, documentCreatedDate string) (pluginOutputs map[string]*contracts.PluginResult) {
+func (m *execDepImp) ExecuteDocument(context context.T, pluginInput []contracts.PluginState, documentID string, documentCreatedDate string) (pluginOutputs map[string]*contracts.PluginResult) {
 	log := context.Log()
 	log.Debugf("Running subcommand")
 	exe := basicexecuter.NewBasicExecuter(context)
 
-	docState := model.DocumentState{
-		DocumentInformation: model.DocumentInfo{
+	docState := contracts.DocumentState{
+		DocumentInformation: contracts.DocumentInfo{
 			DocumentID: documentID,
 		},
 		InstancePluginsInformation: pluginInput,

@@ -18,7 +18,6 @@ package docparser
 import (
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
-	docModel "github.com/aws/amazon-ssm-agent/agent/docmanager/model"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/parameters"
@@ -44,11 +43,11 @@ type DocumentParserInfo struct {
 // InitializeDocState is a method to obtain the state of the document.
 // This method calls into ParseDocument to obtain the InstancePluginInformation
 func InitializeDocState(log log.T,
-	documentType docModel.DocumentType,
+	documentType contracts.DocumentType,
 	docContent *contracts.DocumentContent,
-	docInfo docModel.DocumentInfo,
+	docInfo contracts.DocumentInfo,
 	parserInfo DocumentParserInfo,
-	params map[string]interface{}) (docState docModel.DocumentState, err error) {
+	params map[string]interface{}) (docState contracts.DocumentState, err error) {
 
 	docState.SchemaVersion = docContent.SchemaVersion
 	docState.DocumentType = documentType
@@ -66,7 +65,7 @@ func InitializeDocState(log log.T,
 func ParseDocument(log log.T,
 	docContent *contracts.DocumentContent,
 	parserInfo DocumentParserInfo,
-	params map[string]interface{}) (pluginsInfo []docModel.PluginState, err error) {
+	params map[string]interface{}) (pluginsInfo []contracts.PluginState, err error) {
 
 	if err = validateSchema(docContent.SchemaVersion); err != nil {
 		return
@@ -104,7 +103,7 @@ func ParseParameters(log log.T, params map[string][]*string, paramsDef map[strin
 }
 
 // parseDocumentContent parses an SSM Document and returns the plugin information
-func parseDocumentContent(docContent contracts.DocumentContent, parserInfo DocumentParserInfo) (pluginsInfo []docModel.PluginState, err error) {
+func parseDocumentContent(docContent contracts.DocumentContent, parserInfo DocumentParserInfo) (pluginsInfo []contracts.PluginState, err error) {
 
 	switch docContent.SchemaVersion {
 	case "1.0", "1.2":
@@ -122,13 +121,13 @@ func parseDocumentContent(docContent contracts.DocumentContent, parserInfo Docum
 // parsePluginStateForV10Schema initializes pluginsInfo for the docState. Used for document v1.0 and 1.2
 func parsePluginStateForV10Schema(
 	docContent contracts.DocumentContent,
-	orchestrationDir, s3Bucket, s3Prefix, messageID, documentID, defaultWorkingDir string) (pluginsInfo []docModel.PluginState, err error) {
+	orchestrationDir, s3Bucket, s3Prefix, messageID, documentID, defaultWorkingDir string) (pluginsInfo []contracts.PluginState, err error) {
 
 	if len(docContent.RuntimeConfig) == 0 {
 		return pluginsInfo, fmt.Errorf("Unsupported schema format")
 	}
 	//initialize plugin states as map
-	pluginsInfo = []docModel.PluginState{}
+	pluginsInfo = []contracts.PluginState{}
 	// getPluginConfigurations converts from PluginConfig (structure from the MDS message) to plugin.Configuration (structure expected by the plugin)
 	pluginConfigurations := []*contracts.Configuration{}
 	for pluginName, pluginConfig := range docContent.RuntimeConfig {
@@ -148,7 +147,7 @@ func parsePluginStateForV10Schema(
 	}
 
 	for _, value := range pluginConfigurations {
-		var plugin docModel.PluginState
+		var plugin contracts.PluginState
 		plugin.Configuration = *value
 		plugin.Id = value.PluginID
 		plugin.Name = value.PluginName
@@ -160,13 +159,13 @@ func parsePluginStateForV10Schema(
 // parsePluginStateForV20Schema initializes instancePluginsInfo for the docState. Used by document v2.0.
 func parsePluginStateForV20Schema(
 	docContent contracts.DocumentContent,
-	orchestrationDir, s3Bucket, s3Prefix, messageID, documentID, defaultWorkingDir string) (pluginsInfo []docModel.PluginState, err error) {
+	orchestrationDir, s3Bucket, s3Prefix, messageID, documentID, defaultWorkingDir string) (pluginsInfo []contracts.PluginState, err error) {
 
 	if len(docContent.MainSteps) == 0 {
 		return pluginsInfo, fmt.Errorf("Unsupported schema format")
 	}
 	//initialize plugin states as array
-	pluginsInfo = []docModel.PluginState{}
+	pluginsInfo = []contracts.PluginState{}
 
 	// set precondition flag based on document schema version
 	isPreconditionEnabled := isPreconditionEnabled(docContent.SchemaVersion)
@@ -189,7 +188,7 @@ func parsePluginStateForV20Schema(
 			DefaultWorkingDirectory: defaultWorkingDir,
 		}
 
-		var plugin docModel.PluginState
+		var plugin contracts.PluginState
 		plugin.Configuration = config
 		plugin.Id = config.PluginID
 		plugin.Name = config.PluginName

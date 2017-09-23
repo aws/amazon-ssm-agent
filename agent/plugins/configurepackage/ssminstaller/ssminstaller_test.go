@@ -22,7 +22,6 @@ import (
 
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
-	"github.com/aws/amazon-ssm-agent/agent/docmanager/model"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/envdetect"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/envdetect/ec2infradetect"
@@ -280,14 +279,14 @@ func (execMock *MockedExec) ParseDocument(
 	s3KeyPrefix string,
 	messageID string,
 	documentID string,
-	defaultWorkingDirectory string) (pluginsInfo []model.PluginState, err error) {
+	defaultWorkingDirectory string) (pluginsInfo []contracts.PluginState, err error) {
 	args := execMock.Called(context, documentRaw, orchestrationDir, s3Bucket, s3KeyPrefix, messageID, documentID, defaultWorkingDirectory)
-	return args.Get(0).([]model.PluginState), args.Error(1)
+	return args.Get(0).([]contracts.PluginState), args.Error(1)
 }
 
 func (execMock *MockedExec) ExecuteDocument(
 	context context.T,
-	pluginInput []model.PluginState,
+	pluginInput []contracts.PluginState,
 	documentID string,
 	documentCreatedDate string) (pluginOutputs map[string]*contracts.PluginResult) {
 	args := execMock.Called(context, pluginInput, documentID, documentCreatedDate)
