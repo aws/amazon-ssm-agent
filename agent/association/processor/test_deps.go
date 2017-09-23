@@ -17,7 +17,7 @@ package processor
 import (
 	"github.com/aws/amazon-ssm-agent/agent/association/model"
 	"github.com/aws/amazon-ssm-agent/agent/context"
-	docModel "github.com/aws/amazon-ssm-agent/agent/docmanager/model"
+	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	messageContract "github.com/aws/amazon-ssm-agent/agent/runcommand/contracts"
 	"github.com/stretchr/testify/mock"
@@ -61,9 +61,9 @@ func (m *parserMock) ParseDocumentForPayload(
 func (m *parserMock) InitializeDocumentState(
 	context context.T,
 	payload *messageContract.SendCommandPayload,
-	rawData *model.InstanceAssociation) (docModel.DocumentState, error) {
+	rawData *model.InstanceAssociation) (contracts.DocumentState, error) {
 
 	args := m.Called(context, payload, rawData)
 
-	return args.Get(0).(docModel.DocumentState), args.Error(1)
+	return args.Get(0).(contracts.DocumentState), args.Error(1)
 }

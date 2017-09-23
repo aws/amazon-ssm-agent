@@ -26,9 +26,8 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
-	"github.com/aws/amazon-ssm-agent/agent/docmanager"
-	"github.com/aws/amazon-ssm-agent/agent/docmanager/model"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
+	"github.com/aws/amazon-ssm-agent/agent/framework/docmanager"
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer"
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/outofproc"
 	"github.com/aws/amazon-ssm-agent/agent/longrunning/manager"
@@ -52,9 +51,9 @@ type Processor interface {
 	//Stop the processor, save the current state to resume later
 	Stop(stopType contracts.StopType)
 	//submit to the pool a document in form of docState object, results will be streamed back from the central channel returned by Start()
-	Submit(docState model.DocumentState)
+	Submit(docState contracts.DocumentState)
 	//cancel process the cancel document, with no return value since the command is already tracked in a different thread
-	Cancel(docState model.DocumentState)
+	Cancel(docState contracts.DocumentState)
 	//TODO do we need to implement CancelAll?
 	//CancelAll()
 }
@@ -65,14 +64,14 @@ type EngineProcessor struct {
 	sendCommandPool   task.Pool
 	cancelCommandPool task.Pool
 	//TODO this should be abstract as the Processor's domain
-	supportedDocTypes []model.DocumentType
+	supportedDocTypes []contracts.DocumentType
 	resChan           chan contracts.DocumentResult
 	documentMgr       docmanager.DocumentMgr
 }
 
 //TODO worker pool should be triggered in the Start() function
 //supported document types indicate the domain of the documentes the Processor with run upon. There'll be race-conditions if there're multiple Processors in a certain domain.
-func NewEngineProcessor(ctx context.T, commandWorkerLimit int, cancelWorkerLimit int, supportedDocs []model.DocumentType) *EngineProcessor {
+func NewEngineProcessor(ctx context.T, commandWorkerLimit int, cancelWorkerLimit int, supportedDocs []contracts.DocumentType) *EngineProcessor {
 	log := ctx.Log()
 	// sendCommand and cancelCommand will be processed by separate worker pools
 	// so we can define the number of workers per each
@@ -117,7 +116,7 @@ func (p *EngineProcessor) Start() (resChan chan contracts.DocumentResult, err er
 }
 
 //Submit() is the public interface for sending run document request to processor
-func (p *EngineProcessor) Submit(docState model.DocumentState) {
+func (p *EngineProcessor) Submit(docState contracts.DocumentState) {
 	log := p.context.Log()
 	//queue up the pending document
 	p.documentMgr.PersistDocumentState(log, docState.DocumentInformation.DocumentID, docState.DocumentInformation.InstanceID, appconfig.DefaultLocationOfPending, docState)
@@ -131,7 +130,7 @@ func (p *EngineProcessor) Submit(docState model.DocumentState) {
 	return
 }
 
-func (p *EngineProcessor) submit(docState *model.DocumentState) error {
+func (p *EngineProcessor) submit(docState *contracts.DocumentState) error {
 	log := p.context.Log()
 	//TODO this is a hack, in future jobID should be managed by Processing engine itself, instead of inferring from job's internal field
 	var jobID string
@@ -152,7 +151,7 @@ func (p *EngineProcessor) submit(docState *model.DocumentState) error {
 
 }
 
-func (p *EngineProcessor) Cancel(docState model.DocumentState) {
+func (p *EngineProcessor) Cancel(docState contracts.DocumentState) {
 	log := p.context.Log()
 	//TODO this is a hack, in future jobID should be managed by Processing engine itself, instead of inferring from job's internal field
 	var jobID string
@@ -287,7 +286,7 @@ func (p *EngineProcessor) processInProgressDocuments(instanceID string) {
 	}
 }
 
-func (p *EngineProcessor) isSupportedDocumentType(documentType model.DocumentType) bool {
+func (p *EngineProcessor) isSupportedDocumentType(documentType contracts.DocumentType) bool {
 	for _, d := range p.supportedDocTypes {
 		if documentType == d {
 			return true
@@ -296,7 +295,7 @@ func (p *EngineProcessor) isSupportedDocumentType(documentType model.DocumentTyp
 	return false
 }
 
-func processCommand(context context.T, executerCreator ExecuterCreator, cancelFlag task.CancelFlag, resChan chan contracts.DocumentResult, docState *model.DocumentState, docMgr docmanager.DocumentMgr) {
+func processCommand(context context.T, executerCreator ExecuterCreator, cancelFlag task.CancelFlag, resChan chan contracts.DocumentResult, docState *contracts.DocumentState, docMgr docmanager.DocumentMgr) {
 	log := context.Log()
 	//persist the current running document
 	docMgr.MoveDocumentState(log,
@@ -351,7 +350,7 @@ func processCommand(context context.T, executerCreator ExecuterCreator, cancelFl
 }
 
 //TODO CancelCommand is currently treated as a special type of Command by the Processor, but in general Cancel operation should be seen as a probe to existing commands
-func processCancelCommand(context context.T, sendCommandPool task.Pool, docState *model.DocumentState, docMgr docmanager.DocumentMgr) {
+func processCancelCommand(context context.T, sendCommandPool task.Pool, docState *contracts.DocumentState, docMgr docmanager.DocumentMgr) {
 
 	log := context.Log()
 

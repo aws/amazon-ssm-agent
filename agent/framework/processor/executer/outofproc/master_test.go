@@ -6,7 +6,6 @@ import (
 
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
-	"github.com/aws/amazon-ssm-agent/agent/docmanager/model"
 	executermocks "github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/mock"
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/outofproc/channel"
 	channelmock "github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/outofproc/channel/mock"
@@ -24,7 +23,7 @@ import (
 type TestCase struct {
 	context      *context.Mock
 	docStore     *executermocks.MockDocumentStore
-	docState     model.DocumentState
+	docState     contracts.DocumentState
 	processMock  *procmock.MockedOSProcess
 	results      map[string]*contracts.PluginResult
 	resultStatus contracts.ResultStatus
@@ -46,7 +45,7 @@ func CreateTestCase() *TestCase {
 	contextMock := context.NewMockDefaultWithContext([]string{"MASTER"})
 	docStore := new(executermocks.MockDocumentStore)
 	processMock := new(procmock.MockedOSProcess)
-	docInfo := model.DocumentInfo{
+	docInfo := contracts.DocumentInfo{
 		CreatedDate:     "2017-06-10T01-23-07.853Z",
 		MessageID:       testMessageID,
 		DocumentName:    testDocumentName,
@@ -57,18 +56,18 @@ func CreateTestCase() *TestCase {
 		RunCount:        0,
 	}
 
-	pluginState := model.PluginState{
+	pluginState := contracts.PluginState{
 		Name: "aws:runScript",
 		Id:   "plugin1",
 	}
-	pluginState2 := model.PluginState{
+	pluginState2 := contracts.PluginState{
 		Name: "aws:runPowershellScript",
 		Id:   "plugin2",
 	}
-	docState := model.DocumentState{
+	docState := contracts.DocumentState{
 		DocumentInformation:        docInfo,
 		DocumentType:               "SendCommand",
-		InstancePluginsInformation: []model.PluginState{pluginState, pluginState2},
+		InstancePluginsInformation: []contracts.PluginState{pluginState, pluginState2},
 	}
 
 	result := contracts.PluginResult{
@@ -237,7 +236,7 @@ func TestInitializeConnectOldOrphan(t *testing.T) {
 	}
 	//make sure the finder is called
 	isFinderCalled := false
-	processFinder = func(log log.T, procinfo model.OSProcInfo) bool {
+	processFinder = func(log log.T, procinfo contracts.OSProcInfo) bool {
 		isFinderCalled = true
 		return true
 	}

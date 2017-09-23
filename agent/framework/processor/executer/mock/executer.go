@@ -16,7 +16,6 @@ package executermocks
 
 import (
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
-	"github.com/aws/amazon-ssm-agent/agent/docmanager/model"
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 	"github.com/stretchr/testify/mock"
@@ -41,12 +40,12 @@ type MockDocumentStore struct {
 	mock.Mock
 }
 
-func (m *MockDocumentStore) Save(docState model.DocumentState) {
+func (m *MockDocumentStore) Save(docState contracts.DocumentState) {
 	m.Called(docState)
 	return
 }
 
-func (m *MockDocumentStore) Load() model.DocumentState {
+func (m *MockDocumentStore) Load() contracts.DocumentState {
 	args := m.Called()
-	return args.Get(0).(model.DocumentState)
+	return args.Get(0).(contracts.DocumentState)
 }

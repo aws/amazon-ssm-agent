@@ -27,7 +27,6 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/association/model"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
-	docModel "github.com/aws/amazon-ssm-agent/agent/docmanager/model"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	messageContracts "github.com/aws/amazon-ssm-agent/agent/runcommand/contracts"
 	"github.com/aws/aws-sdk-go/service/ssm"
@@ -71,7 +70,7 @@ func TestParseAssociationWithAssociationVersion1_2(t *testing.T) {
 
 	docState, err := processor.parseAssociation(&assocRawData)
 
-	documentInfo := new(docModel.DocumentInfo)
+	documentInfo := new(contracts.DocumentInfo)
 	documentInfo.AssociationID = assocId
 	documentInfo.InstanceID = instanceID
 	documentInfo.MessageID = fmt.Sprintf("aws.ssm.%v.%v", assocId, instanceID)
@@ -79,16 +78,16 @@ func TestParseAssociationWithAssociationVersion1_2(t *testing.T) {
 	documentInfo.DocumentVersion = documentVersion
 
 	pluginName := "aws:applications"
-	pluginsInfo := make(map[string]docModel.PluginState)
+	pluginsInfo := make(map[string]contracts.PluginState)
 	config := contracts.Configuration{}
-	var plugin docModel.PluginState
+	var plugin contracts.PluginState
 	plugin.Configuration = config
 	plugin.Id = pluginName
 	pluginsInfo[pluginName] = plugin
 
-	expectedDocState := docModel.DocumentState{
+	expectedDocState := contracts.DocumentState{
 		InstancePluginsInformation: converter.ConvertPluginsInformation(pluginsInfo),
-		DocumentType:               docModel.Association,
+		DocumentType:               contracts.Association,
 		SchemaVersion:              "1.2",
 	}
 
@@ -100,7 +99,7 @@ func TestParseAssociationWithAssociationVersion1_2(t *testing.T) {
 	assert.Equal(t, nil, err)
 	assert.Equal(t, nil, err2)
 	assert.Equal(t, expectedDocState.SchemaVersion, docState.SchemaVersion)
-	assert.Equal(t, docModel.Association, docState.DocumentType)
+	assert.Equal(t, contracts.Association, docState.DocumentType)
 
 	pluginInfo := docState.InstancePluginsInformation[0]
 	expectedProp := []interface{}{map[string]interface{}{"source": *source[0], "sourceHash": "", "id": "0.aws:applications", "action": "Install", "parameters": ""}}
@@ -146,18 +145,18 @@ func TestParseAssociationWithAssociationVersion2_0(t *testing.T) {
 	// test the method
 	docState, err := processor.parseAssociation(&assocRawData)
 
-	documentInfo := new(docModel.DocumentInfo)
+	documentInfo := new(contracts.DocumentInfo)
 	documentInfo.AssociationID = assocId
 	documentInfo.InstanceID = instanceID
 	documentInfo.MessageID = fmt.Sprintf("aws.ssm.%v.%v", assocId, instanceID)
 	documentInfo.DocumentName = associationName
 	documentInfo.DocumentVersion = documentVersion
 
-	instancePluginsInfo := make([]docModel.PluginState, 2)
+	instancePluginsInfo := make([]contracts.PluginState, 2)
 
 	action0 := "aws:runPowerShellScript"
 	name0 := "runPowerShellScript1"
-	var plugin0 docModel.PluginState
+	var plugin0 contracts.PluginState
 	plugin0.Configuration = contracts.Configuration{}
 	plugin0.Id = name0
 	plugin0.Name = action0
@@ -165,22 +164,22 @@ func TestParseAssociationWithAssociationVersion2_0(t *testing.T) {
 
 	action1 := "aws:runPowerShellScript"
 	name1 := "runPowerShellScript2"
-	var plugin1 docModel.PluginState
+	var plugin1 contracts.PluginState
 	plugin1.Configuration = contracts.Configuration{}
 	plugin1.Id = name1
 	plugin1.Name = action1
 	instancePluginsInfo[1] = plugin1
 
-	expectedDocState := docModel.DocumentState{
+	expectedDocState := contracts.DocumentState{
 		//DocumentInformation: documentInfo,
 		InstancePluginsInformation: instancePluginsInfo,
-		DocumentType:               docModel.Association,
+		DocumentType:               contracts.Association,
 		SchemaVersion:              "2.0",
 	}
 
 	assert.Equal(t, nil, err)
 	assert.Equal(t, expectedDocState.SchemaVersion, docState.SchemaVersion)
-	assert.Equal(t, docModel.Association, docState.DocumentType)
+	assert.Equal(t, contracts.Association, docState.DocumentType)
 	assert.Equal(t, documentInfo.MessageID, docState.DocumentInformation.MessageID)
 
 	pluginInfo1 := docState.InstancePluginsInformation[0]

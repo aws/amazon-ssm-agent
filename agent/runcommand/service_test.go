@@ -25,7 +25,6 @@ import (
 
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
-	"github.com/aws/amazon-ssm-agent/agent/docmanager/model"
 	"github.com/aws/amazon-ssm-agent/agent/docparser"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor/mock"
@@ -67,8 +66,8 @@ type TestCaseProcessMessage struct {
 func TestProcessMessageWithSendCommandTopicPrefix(t *testing.T) {
 	// SendCommand topic prefix
 	var topic = testTopicSend
-	var fakeDocState = model.DocumentState{
-		DocumentType: model.SendCommand,
+	var fakeDocState = contracts.DocumentState{
+		DocumentType: contracts.SendCommand,
 	}
 	// prepare processor and test case fields
 	svc, tc := prepareTestProcessMessage(topic)
@@ -77,7 +76,7 @@ func TestProcessMessageWithSendCommandTopicPrefix(t *testing.T) {
 	tc.MdsMock.On("AcknowledgeMessage", mock.Anything, *tc.Message.MessageId).Return(nil)
 	loadDocStateFromSendCommand = func(context context.T,
 		msg *ssmmds.Message,
-		messagesOrchestrationRootDir string) (*model.DocumentState, error) {
+		messagesOrchestrationRootDir string) (*contracts.DocumentState, error) {
 		return &fakeDocState, nil
 	}
 
@@ -97,8 +96,8 @@ func TestProcessMessageWithSendCommandTopicPrefix(t *testing.T) {
 func TestProcessMessageWithCancelCommandTopicPrefix(t *testing.T) {
 	// CancelCommand topic prefix
 	var topic = testTopicCancel
-	var fakeCancelDocState = model.DocumentState{
-		DocumentType: model.CancelCommand,
+	var fakeCancelDocState = contracts.DocumentState{
+		DocumentType: contracts.CancelCommand,
 	}
 	//prepare processor and test case fields
 	svc, tc := prepareTestProcessMessage(topic)
@@ -106,7 +105,7 @@ func TestProcessMessageWithCancelCommandTopicPrefix(t *testing.T) {
 	// set the expectations
 	tc.MdsMock.On("AcknowledgeMessage", mock.Anything, *tc.Message.MessageId).Return(nil)
 	tc.ProcessMock.On("Cancel", fakeCancelDocState).Return(nil)
-	loadDocStateFromCancelCommand = func(context context.T, msg *ssmmds.Message, messagesOrchestrationRootDir string) (*model.DocumentState, error) {
+	loadDocStateFromCancelCommand = func(context context.T, msg *ssmmds.Message, messagesOrchestrationRootDir string) (*contracts.DocumentState, error) {
 		return &fakeCancelDocState, nil
 	}
 
@@ -235,14 +234,14 @@ type TestCaseSendCommand struct {
 	Msg ssmmds.Message
 
 	// DocState stores parsed Document State
-	DocState model.DocumentState
+	DocState contracts.DocumentState
 
 	// PluginStates stores the configurations that the plugins require to run.
 	// These configurations hav a slightly different structure from what we receive in the MDS message payload.
-	PluginStates map[string]model.PluginState
+	PluginStates map[string]contracts.PluginState
 
 	// PluginStatesArray stores the configurations that the plugins require to run for document version 2.0
-	PluginStatesArray []model.PluginState
+	PluginStatesArray []contracts.PluginState
 
 	// PluginResults stores the (unmarshalled) results that the plugins are expected to produce.
 	PluginResults map[string]*contracts.PluginResult
@@ -278,7 +277,7 @@ func GenerateDocStateFromFile(t *testing.T, messagePayloadFile string, instanceI
 	orchestrationRootDir := getCommandID(*testCase.Msg.MessageId)
 
 	//configs := make(map[string]*contracts.Configuration)
-	testCase.PluginStates = make(map[string]model.PluginState)
+	testCase.PluginStates = make(map[string]contracts.PluginState)
 
 	// document 1.0 & 1.2
 	if payload.DocumentContent.RuntimeConfig != nil {
@@ -290,7 +289,7 @@ func GenerateDocStateFromFile(t *testing.T, messagePayloadFile string, instanceI
 			*testCase.Msg.MessageId)
 
 		for pluginName, config := range configs {
-			state := model.PluginState{}
+			state := contracts.PluginState{}
 			state.Configuration = *config
 			state.Name = pluginName
 			state.Id = pluginName
@@ -308,9 +307,9 @@ func GenerateDocStateFromFile(t *testing.T, messagePayloadFile string, instanceI
 			*testCase.Msg.MessageId,
 			payload.DocumentContent.SchemaVersion)
 
-		pluginStatesArrays := make([]model.PluginState, len(configs))
+		pluginStatesArrays := make([]contracts.PluginState, len(configs))
 		for index, config := range configs {
-			state := model.PluginState{}
+			state := contracts.PluginState{}
 			state.Configuration = *config
 			state.Name = config.PluginName
 			state.Id = config.PluginID
@@ -318,11 +317,11 @@ func GenerateDocStateFromFile(t *testing.T, messagePayloadFile string, instanceI
 		}
 		testCase.PluginStatesArray = pluginStatesArrays
 	}
-	var documentType model.DocumentType
+	var documentType contracts.DocumentType
 	if strings.HasPrefix(*testCase.Msg.Topic, string(SendCommandTopicPrefixOffline)) {
-		documentType = model.SendCommandOffline
+		documentType = contracts.SendCommandOffline
 	} else {
-		documentType = model.SendCommand
+		documentType = contracts.SendCommand
 	}
 	documentInfo := newDocumentInfo(testCase.Msg, payload)
 	parserInfo := docparser.DocumentParserInfo{
@@ -402,7 +401,7 @@ func createMDSMessage(commandID string, payload string, topic string, instanceID
 		Topic:         aws.String(topic),
 	}
 }
-func GenerateCancelDocState(t *testing.T, testCase TestCaseCancelCommand) (docState *model.DocumentState) {
+func GenerateCancelDocState(t *testing.T, testCase TestCaseCancelCommand) (docState *contracts.DocumentState) {
 	context := context.NewMockDefault()
 	cancelMessagePayload := messageContracts.CancelPayload{
 		CancelMessageID: "aws.ssm" + testCase.MsgToCancelID + "." + testCase.InstanceID,

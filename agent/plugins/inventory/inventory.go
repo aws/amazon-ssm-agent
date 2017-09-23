@@ -24,7 +24,6 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
-	docmanagerModel "github.com/aws/amazon-ssm-agent/agent/docmanager/model"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/platform"
@@ -472,7 +471,7 @@ func (p *Plugin) IsMulitpleAssociationPresent(currentAssociationID string, confi
 // It throws error if the detection itself fails
 func (p *Plugin) IsInventoryBeingInvokedAsAssociation(fileName string) (status bool, err error) {
 	var content string
-	var docState docmanagerModel.DocumentState
+	var docState contracts.DocumentState
 	log := p.context.Log()
 
 	//since the document is still getting executed - it must be in Current folder
