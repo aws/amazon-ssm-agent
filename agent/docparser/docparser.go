@@ -25,6 +25,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/updateutil"
 
 	"fmt"
+	"strings"
 )
 
 const (
@@ -302,4 +303,16 @@ func isPreconditionEnabled(schemaVersion string) (response bool) {
 	}
 
 	return response
+}
+
+func ParseDocumentNameAndVersion(name string) (docName, docVersion string) {
+	if len(name) == 0 {
+		return "", ""
+	}
+	docNameArray := strings.Split(name, ":")
+	docName = docNameArray[0]
+	if len(docNameArray) > 1 {
+		docVersion = docNameArray[1]
+	}
+	return
 }
