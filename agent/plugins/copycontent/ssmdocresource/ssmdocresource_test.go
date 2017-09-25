@@ -33,8 +33,7 @@ var logMock = log.NewMockLog()
 func TestSSMDocResource_ValidateLocationInfo(t *testing.T) {
 
 	locationInfo := `{
-		"name": "AWS-ExecuteCommand",
-		"version": ""
+		"name": "AWS-ExecuteCommand"
 	}`
 
 	ssmresource, _ := NewSSMDocResource(locationInfo)
@@ -48,8 +47,7 @@ func TestSSMDocResource_FullARNNameInput(t *testing.T) {
 	fileMock := filemock.FileSystemMock{}
 
 	locationInfo := `{
-		"name": "arn:aws:ssm:us-east-1:1234567890:document/mySharedDocument",
-		"version": ""
+		"name": "arn:aws:ssm:us-east-1:1234567890:document/mySharedDocument"
 	}`
 
 	content := "content"
@@ -58,7 +56,40 @@ func TestSSMDocResource_FullARNNameInput(t *testing.T) {
 	}
 	ssmresource, _ := NewSSMDocResource(locationInfo)
 	dir := "destination"
-	depMock.On("GetDocument", logMock, ssmresource.Info.DocName, ssmresource.Info.DocVersion).Return(&docOutput, nil)
+	depMock.On("GetDocument", logMock, "mySharedDocument", "").Return(&docOutput, nil)
+
+	fileMock.On("Exists", "destination").Return(true)
+	fileMock.On("IsDirectory", "destination").Return(true)
+	fileMock.On("MakeDirs", dir).Return(nil)
+	fileMock.On("WriteFile", filepath.Join(dir, "mySharedDocument.json"), content).Return(nil)
+
+	ssmdocdep = depMock
+
+	err := ssmresource.Download(logMock, fileMock, "destination")
+
+	assert.NoError(t, err)
+	depMock.AssertExpectations(t)
+	fileMock.AssertExpectations(t)
+}
+
+func TestSSMDocResource_FullARNNameInputWithVersion(t *testing.T) {
+	depMock := new(ssmDocDepMock)
+	fileMock := filemock.FileSystemMock{}
+
+	locationInfo := `{
+		"name": "arn:aws:ssm:us-east-1:1234567890:document/mySharedDocument:10"
+	}`
+
+	content := "content"
+	docOutput := ssm.GetDocumentOutput{
+		Content: &content,
+	}
+	ssmresource, _ := NewSSMDocResource(locationInfo)
+	dir := "destination"
+	depMock.On("GetDocument", logMock, "mySharedDocument", "10").Return(&docOutput, nil)
+
+	fileMock.On("Exists", "destination").Return(true)
+	fileMock.On("IsDirectory", "destination").Return(true)
 	fileMock.On("MakeDirs", dir).Return(nil)
 	fileMock.On("WriteFile", filepath.Join(dir, "mySharedDocument.json"), content).Return(nil)
 
@@ -74,8 +105,7 @@ func TestSSMDocResource_FullARNNameInput(t *testing.T) {
 func TestSSMDocResource_ValidateLocationInfoNoName(t *testing.T) {
 
 	locationInfo := `{
-		"name": "",
-		"version": "10"
+		"name": ""
 	}`
 
 	ssmresource, _ := NewSSMDocResource(locationInfo)
@@ -90,8 +120,7 @@ func TestSSMDocResource_Download(t *testing.T) {
 	fileMock := filemock.FileSystemMock{}
 
 	locationInfo := `{
-		"name": "AWS-ExecuteCommand",
-		"version": "10"
+		"name": "AWS-ExecuteCommand:10"
 	}`
 	content := "content"
 	docOutput := ssm.GetDocumentOutput{
@@ -99,9 +128,12 @@ func TestSSMDocResource_Download(t *testing.T) {
 	}
 	ssmresource, _ := NewSSMDocResource(locationInfo)
 	dir := "destination"
-	depMock.On("GetDocument", logMock, ssmresource.Info.DocName, ssmresource.Info.DocVersion).Return(&docOutput, nil)
+	depMock.On("GetDocument", logMock, "AWS-ExecuteCommand", "10").Return(&docOutput, nil)
+
+	fileMock.On("Exists", "destination").Return(true)
+	fileMock.On("IsDirectory", "destination").Return(true)
 	fileMock.On("MakeDirs", dir).Return(nil)
-	fileMock.On("WriteFile", filepath.Join(dir, ssmresource.Info.DocName+".json"), content).Return(nil)
+	fileMock.On("WriteFile", filepath.Join(dir, "AWS-ExecuteCommand.json"), content).Return(nil)
 
 	ssmdocdep = depMock
 
@@ -117,8 +149,7 @@ func TestSSMDocResource_DownloadNoDestination(t *testing.T) {
 	fileMock := filemock.FileSystemMock{}
 
 	locationInfo := `{
- 		"name": "AWS-ExecuteCommand",
- 		"version": "10"
+ 		"name": "AWS-ExecuteCommand:10"
  	}`
 	content := "content"
 	docOutput := ssm.GetDocumentOutput{
@@ -126,15 +157,45 @@ func TestSSMDocResource_DownloadNoDestination(t *testing.T) {
 	}
 	ssmresource, _ := NewSSMDocResource(locationInfo)
 	dir := appconfig.DownloadRoot
-	depMock.On("GetDocument", logMock, ssmresource.Info.DocName, ssmresource.Info.DocVersion).Return(&docOutput, nil)
+	depMock.On("GetDocument", logMock, "AWS-ExecuteCommand", "10").Return(&docOutput, nil)
+
+	fileMock.On("Exists", "/var/log/amazon/ssm/download/").Return(true)
+	fileMock.On("IsDirectory", "/var/log/amazon/ssm/download/").Return(true)
 	fileMock.On("MakeDirs", strings.TrimSuffix(dir, "/")).Return(nil)
-	fileMock.On("WriteFile", filepath.Join(dir, ssmresource.Info.DocName+".json"), content).Return(fmt.Errorf("Error"))
+	fileMock.On("WriteFile", filepath.Join(dir, "AWS-ExecuteCommand.json"), content).Return(fmt.Errorf("Error"))
 
 	ssmdocdep = depMock
 
 	err := ssmresource.Download(logMock, fileMock, "")
 
 	assert.Error(t, err, "Error")
+	depMock.AssertExpectations(t)
+	fileMock.AssertExpectations(t)
+}
+
+func TestSSMDocResource_DownloadToOtherName(t *testing.T) {
+	depMock := new(ssmDocDepMock)
+	fileMock := filemock.FileSystemMock{}
+
+	locationInfo := `{
+		"name": "AWS-ExecuteCommand:10"
+	}`
+	content := "content"
+	docOutput := ssm.GetDocumentOutput{
+		Content: &content,
+	}
+	ssmresource, _ := NewSSMDocResource(locationInfo)
+	depMock.On("GetDocument", logMock, "AWS-ExecuteCommand", "10").Return(&docOutput, nil)
+
+	fileMock.On("Exists", "destination").Return(false)
+	fileMock.On("MakeDirs", ".").Return(nil)
+	fileMock.On("WriteFile", "destination", content).Return(nil)
+
+	ssmdocdep = depMock
+
+	err := ssmresource.Download(logMock, fileMock, "destination")
+
+	assert.NoError(t, err)
 	depMock.AssertExpectations(t)
 	fileMock.AssertExpectations(t)
 }
