@@ -19,11 +19,8 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/fileutil/filemanager"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 
-	"os"
 	"path/filepath"
 )
-
-var SetPermission = chmod
 
 // SaveFileContent is a method that returns the content in a file and saves it on disk
 func SaveFileContent(log log.T, filesysdep filemanager.FileSystem, destination string, contents string) (err error) {
@@ -55,8 +52,4 @@ func RenameFile(log log.T, filesys filemanager.FileSystem, fullSourceName, destN
 		return err
 	}
 	return nil
-}
-
-func chmod(name string, mode os.FileMode) error {
-	return os.Chmod(name, mode)
 }

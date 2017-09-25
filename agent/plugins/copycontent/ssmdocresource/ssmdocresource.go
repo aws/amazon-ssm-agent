@@ -17,6 +17,7 @@ package ssmdocresource
 
 import (
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
+	"github.com/aws/amazon-ssm-agent/agent/docparser"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil/filemanager"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
@@ -26,6 +27,7 @@ import (
 
 	"errors"
 	"fmt"
+	"os"
 	"path/filepath"
 )
 
@@ -36,8 +38,7 @@ type SSMDocResource struct {
 
 // S3Info represents the locationInfo type sent by runcommand
 type SSMDocInfo struct {
-	DocName    string `json:"name"`
-	DocVersion string `json:"version"`
+	DocName string `json:"name"`
 }
 
 // NewS3Resource is a constructor of type GitResource
@@ -63,20 +64,29 @@ func parseLocationInfo(locationInfo string) (ssmdoc SSMDocInfo, err error) {
 }
 
 // Download calls download to pull down files or directory from s3
-func (ssmdoc *SSMDocResource) Download(log log.T, filesys filemanager.FileSystem, destinationDir string) (err error) {
-	if destinationDir == "" {
-		destinationDir = appconfig.DownloadRoot
+func (ssmdoc *SSMDocResource) Download(log log.T, filesys filemanager.FileSystem, destinationPath string) (err error) {
+
+	if destinationPath == "" {
+		destinationPath = appconfig.DownloadRoot
 	}
+
 	//This gets the document name if the fullARN is provided
-	docName := filepath.Base(ssmdoc.Info.DocName)
-	log.Debug("Making a call to get document", ssmdoc.Info.DocName, ssmdoc.Info.DocVersion)
+	docNameWithVersion := filepath.Base(ssmdoc.Info.DocName)
+	docName, docVersion := docparser.ParseDocumentNameAndVersion(docNameWithVersion)
+	log.Debug("Making a call to get document", docName, docVersion)
 	var docResponse *ssm.GetDocumentOutput
-	if docResponse, err = ssmdocdep.GetDocument(log, ssmdoc.Info.DocName, ssmdoc.Info.DocVersion); err != nil {
+	if docResponse, err = ssmdocdep.GetDocument(log, docName, docVersion); err != nil {
 		log.Errorf("Unable to get ssm document. %v", err)
 		return err
 	}
 
-	destinationFilePath := filepath.Join(destinationDir, docName+remoteresource.JSONExtension)
+	var destinationFilePath string
+	if filesys.Exists(destinationPath) && filesys.IsDirectory(destinationPath) || os.IsPathSeparator(destinationPath[len(destinationPath)-1]) {
+		destinationFilePath = filepath.Join(destinationPath, docName+remoteresource.JSONExtension)
+
+	} else {
+		destinationFilePath = destinationPath
+	}
 	if err = system.SaveFileContent(log, filesys, destinationFilePath, *docResponse.Content); err != nil {
 		log.Errorf("Error saving file - %v", err)
 		return

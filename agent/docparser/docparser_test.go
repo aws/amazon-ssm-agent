@@ -351,6 +351,34 @@ func TestParseMessageWithParams(t *testing.T) {
 	}
 }
 
+func TestParsingDocNameForVersion_Empty(t *testing.T) {
+	docName, docVersion := ParseDocumentNameAndVersion("")
+
+	assert.Equal(t, docVersion, "")
+	assert.Equal(t, docName, "")
+}
+
+func TestParsingDocNameForVersion_NoVersion(t *testing.T) {
+	docName, docVersion := ParseDocumentNameAndVersion("AWS-RunShellScript")
+
+	assert.Equal(t, docVersion, "")
+	assert.Equal(t, docName, "AWS-RunShellScript")
+}
+
+func TestParsingDocNameForVersion_Version(t *testing.T) {
+	docName, docVersion := ParseDocumentNameAndVersion("AWS-RunShellScript:10")
+
+	assert.Equal(t, docVersion, "10")
+	assert.Equal(t, docName, "AWS-RunShellScript")
+}
+
+func TestParsingDocNameForVersion_InvalidVersion(t *testing.T) {
+	docName, docVersion := ParseDocumentNameAndVersion("AWS-RunShellScript:version")
+
+	assert.Equal(t, docVersion, "version")
+	assert.Equal(t, docName, "AWS-RunShellScript")
+}
+
 func loadFile(t *testing.T, fileName string) (result []byte) {
 	result, err := ioutil.ReadFile(fileName)
 	if err != nil {
