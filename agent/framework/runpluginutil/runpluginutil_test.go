@@ -63,7 +63,6 @@ func TestRunPluginsWithNewDocument(t *testing.T) {
 	pluginResults := make(map[string]*contracts.PluginResult)
 	pluginInstances := make(map[string]*PluginMock)
 	pluginRegistry := PluginRegistry{}
-
 	var cancelFlag task.CancelFlag = task.NewChanneledCancelFlag()
 
 	ctx := context.NewMockDefault()
@@ -102,7 +101,9 @@ func TestRunPluginsWithNewDocument(t *testing.T) {
 		}
 
 		pluginInstances[name].On("Execute", ctx, pluginConfigs[name].Configuration, cancelFlag).Return(*pluginResults[name])
-		pluginRegistry[name] = pluginInstances[name]
+		pluginFactory := new(PluginFactoryMock)
+		pluginFactory.On("Create", mock.Anything).Return(pluginInstances[name], nil)
+		pluginRegistry[name] = pluginFactory
 
 		pluginConfigs2[index] = pluginConfigs[name]
 	}
@@ -276,7 +277,9 @@ func TestRunPluginsWithCancelFlagShutdown(t *testing.T) {
 			plugins[name].On("Execute", ctx, pluginState.Configuration, cancelFlag).Return(*pluginResults[name])
 		}
 		pluginStates[index] = pluginState
-		pluginRegistry[name] = plugins[name]
+		pluginFactory := new(PluginFactoryMock)
+		pluginFactory.On("Create", mock.Anything).Return(plugins[name], nil)
+		pluginRegistry[name] = pluginFactory
 	}
 
 	ch := make(chan contracts.PluginResult, 2)
@@ -339,7 +342,9 @@ func TestRunPluginsWithInProgressDocuments(t *testing.T) {
 			plugins[name].On("Execute", ctx, pluginState.Configuration, cancelFlag).Return(*pluginResults[name])
 		}
 		pluginStates[index] = pluginState
-		pluginRegistry[name] = plugins[name]
+		pluginFactory := new(PluginFactoryMock)
+		pluginFactory.On("Create", mock.Anything).Return(plugins[name], nil)
+		pluginRegistry[name] = pluginFactory
 	}
 
 	ch := make(chan contracts.PluginResult, 2)
@@ -366,22 +371,20 @@ func TestRunPluginsWithInProgressDocuments(t *testing.T) {
 //	plugins := make(map[string]*PluginMock)
 //	pluginRegistry := PluginRegistry{}
 //
-//
-//	sendResponse := func(messageID string, pluginID string, results map[string]*contracts.PluginResult) {
-//	}
-//
 //	var cancelFlag task.CancelFlag = task.NewChanneledCancelFlag()
 //	ctx := context.NewMockDefault()
+//	defaultTime := time.Now()
 //
-//	plugins[pluginName] = new(PluginMock)
-//	config := contracts.Configuration{
-//		PluginID: pluginName,
-//	}
-//	pluginState := contracts.PluginState{
-//		Name:          pluginName,
-//		Id:            pluginName,
-//		Configuration: config,
-//	}
+//	for index, name := range pluginNames {
+//		plugins[name] = new(PluginMock)
+//		config := contracts.Configuration{
+//			PluginID: name,
+//		}
+//		pluginState := contracts.PluginState{
+//			Name:          name,
+//			Id:            name,
+//			Configuration: config,
+//		}
 //
 //	pluginResults[pluginName] = &contracts.PluginResult{
 //		Status:     contracts.ResultStatusFailed,
@@ -439,7 +442,9 @@ func TestRunPluginsWithDuplicatePluginType(t *testing.T) {
 		}
 
 		plugin.On("Execute", ctx, pluginConfigs[name].Configuration, cancelFlag).Return(*pluginResults[name])
-		pluginRegistry[pluginType] = plugin
+		pluginFactory := new(PluginFactoryMock)
+		pluginFactory.On("Create", mock.Anything).Return(plugin, nil)
+		pluginRegistry[pluginType] = pluginFactory
 
 		pluginConfigs2[index] = pluginConfigs[name]
 	}
@@ -531,7 +536,9 @@ func TestRunPluginsWithCompatiblePrecondition(t *testing.T) {
 		}
 
 		pluginInstances[name].On("Execute", ctx, pluginConfigs[name].Configuration, cancelFlag).Return(*pluginResults[name])
-		pluginRegistry[name] = pluginInstances[name]
+		pluginFactory := new(PluginFactoryMock)
+		pluginFactory.On("Create", mock.Anything).Return(pluginInstances[name], nil)
+		pluginRegistry[name] = pluginFactory
 
 		pluginConfigs2[index] = pluginConfigs[name]
 	}
@@ -621,7 +628,9 @@ func TestRunPluginsWithCompatiblePreconditionWithValueFirst(t *testing.T) {
 		}
 
 		pluginInstances[name].On("Execute", ctx, pluginConfigs[name].Configuration, cancelFlag).Return(*pluginResults[name])
-		pluginRegistry[name] = pluginInstances[name]
+		pluginFactory := new(PluginFactoryMock)
+		pluginFactory.On("Create", mock.Anything).Return(pluginInstances[name], nil)
+		pluginRegistry[name] = pluginFactory
 
 		pluginConfigs2[index] = pluginConfigs[name]
 	}
@@ -707,9 +716,9 @@ func TestRunPluginsWithIncompatiblePrecondition(t *testing.T) {
 			StandardError:  defaultOutput,
 			Status:         contracts.ResultStatusSkipped,
 		}
-
-		pluginRegistry[name] = pluginInstances[name]
-
+		pluginFactory := new(PluginFactoryMock)
+		pluginFactory.On("Create", mock.Anything).Return(pluginInstances[name], nil)
+		pluginRegistry[name] = pluginFactory
 		pluginConfigs2[index] = pluginConfigs[name]
 	}
 	called := 0
@@ -887,8 +896,9 @@ func TestRunPluginsWithMoreThanOnePrecondition(t *testing.T) {
 			Status:         contracts.ResultStatusFailed,
 			Error:          pluginError,
 		}
-
-		pluginRegistry[name] = pluginInstances[name]
+		pluginFactory := new(PluginFactoryMock)
+		pluginFactory.On("Create", mock.Anything).Return(pluginInstances[name], nil)
+		pluginRegistry[name] = pluginFactory
 
 		pluginConfigs2[index] = pluginConfigs[name]
 	}
@@ -979,8 +989,9 @@ func TestRunPluginsWithUnrecognizedPreconditionOperator(t *testing.T) {
 			Status:         contracts.ResultStatusFailed,
 			Error:          pluginError,
 		}
-
-		pluginRegistry[name] = pluginInstances[name]
+		pluginFactory := new(PluginFactoryMock)
+		pluginFactory.On("Create", mock.Anything).Return(pluginInstances[name], nil)
+		pluginRegistry[name] = pluginFactory
 
 		pluginConfigs2[index] = pluginConfigs[name]
 	}
@@ -1073,8 +1084,9 @@ func TestRunPluginsWithUnrecognizedPreconditionOperand(t *testing.T) {
 			Error:          pluginError,
 		}
 
-		pluginRegistry[name] = pluginInstances[name]
-
+		pluginFactory := new(PluginFactoryMock)
+		pluginFactory.On("Create", mock.Anything).Return(pluginInstances[name], nil)
+		pluginRegistry[name] = pluginFactory
 		pluginConfigs2[index] = pluginConfigs[name]
 	}
 	called := 0
@@ -1167,7 +1179,9 @@ func TestRunPluginsWithUnrecognizedPreconditionDuplicateVariable(t *testing.T) {
 			Error:          pluginError,
 		}
 
-		pluginRegistry[name] = pluginInstances[name]
+		pluginFactory := new(PluginFactoryMock)
+		pluginFactory.On("Create", mock.Anything).Return(pluginInstances[name], nil)
+		pluginRegistry[name] = pluginFactory
 
 		pluginConfigs2[index] = pluginConfigs[name]
 	}
@@ -1260,7 +1274,9 @@ func TestRunPluginsWithMoreThanTwoPreconditionOperands(t *testing.T) {
 			Error:          pluginError,
 		}
 
-		pluginRegistry[name] = pluginInstances[name]
+		pluginFactory := new(PluginFactoryMock)
+		pluginFactory.On("Create", mock.Anything).Return(pluginInstances[name], nil)
+		pluginRegistry[name] = pluginFactory
 
 		pluginConfigs2[index] = pluginConfigs[name]
 	}
@@ -1369,8 +1385,9 @@ func TestRunPluginsWithUnknownPlugin(t *testing.T) {
 			}
 			pluginInstances[name].On("Execute", ctx, pluginConfigs[name].Configuration, cancelFlag).Return(*pluginResults[name])
 		}
-
-		pluginRegistry[name] = pluginInstances[name]
+		pluginFactory := new(PluginFactoryMock)
+		pluginFactory.On("Create", mock.Anything).Return(pluginInstances[name], nil)
+		pluginRegistry[name] = pluginFactory
 
 		pluginConfigs2[index] = pluginConfigs[name]
 	}
