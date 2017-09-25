@@ -33,3 +33,12 @@ func (m *PluginMock) Execute(context context.T, config contracts.Configuration, 
 	args := m.Called(context, config, cancelFlag)
 	return args.Get(0).(contracts.PluginResult)
 }
+
+type PluginFactoryMock struct {
+	mock.Mock
+}
+
+func (m *PluginFactoryMock) Create(context context.T) (T, error) {
+	args := m.Called(context)
+	return args.Get(0).(T), args.Error(1)
+}
