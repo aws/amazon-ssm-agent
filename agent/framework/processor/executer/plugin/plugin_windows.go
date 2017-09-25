@@ -28,47 +28,53 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/plugins/updateec2config"
 )
 
+type PsModuleFactory struct {
+}
+
+func (f PsModuleFactory) Create(context context.T) (runpluginutil.T, error) {
+	return psmodule.NewPlugin(pluginutil.DefaultPluginConfig())
+}
+
+type ApplicationFactory struct {
+}
+
+func (f ApplicationFactory) Create(context context.T) (runpluginutil.T, error) {
+	return application.NewPlugin(pluginutil.DefaultPluginConfig())
+}
+
+type DomainJoinFactory struct {
+}
+
+func (f DomainJoinFactory) Create(context context.T) (runpluginutil.T, error) {
+	return domainjoin.NewPlugin(pluginutil.DefaultPluginConfig())
+}
+
+type UpdateEc2ConfigFactory struct {
+}
+
+func (f UpdateEc2ConfigFactory) Create(context context.T) (runpluginutil.T, error) {
+	return updateec2config.NewPlugin(updateec2config.GetUpdatePluginConfig(context))
+}
+
 // loadPlatformDependentPlugins registers platform dependent plugins
 func loadPlatformDependentPlugins(context context.T) runpluginutil.PluginRegistry {
-	log := context.Log()
 	var workerPlugins = runpluginutil.PluginRegistry{}
 
 	// registering aws:psModule plugin
 	psModulePluginName := psmodule.Name()
-	psModulePlugin, err := psmodule.NewPlugin(pluginutil.DefaultPluginConfig())
-	if err != nil {
-		log.Errorf("failed to create plugin %s %v", psModulePluginName, err)
-	} else {
-		workerPlugins[psModulePluginName] = psModulePlugin
-	}
+	workerPlugins[psModulePluginName] = PsModuleFactory{}
 
 	// registering aws:applications plugin
 	applicationPluginName := application.Name()
-	applicationPlugin, err := application.NewPlugin(pluginutil.DefaultPluginConfig())
-	if err != nil {
-		log.Errorf("failed to create plugin %s %v", applicationPluginName, err)
-	} else {
-		workerPlugins[applicationPluginName] = applicationPlugin
-	}
+	workerPlugins[applicationPluginName] = ApplicationFactory{}
 
 	// registering aws:domainJoin plugin
 	domainJoinPluginName := domainjoin.Name()
-	domainJoinPlugin, err := domainjoin.NewPlugin(pluginutil.DefaultPluginConfig())
-	if err != nil {
-		log.Errorf("failed to create plugin %s %v", domainJoinPluginName, err)
-	} else {
-		workerPlugins[domainJoinPluginName] = domainJoinPlugin
-	}
+	workerPlugins[domainJoinPluginName] = DomainJoinFactory{}
 
 	// registering aws:updateAgent plugin.
 	updateEC2AgentPluginName := updateec2config.Name()
-	log.Debugf("Registering EC2 updateAgent plugin, %s", updateEC2AgentPluginName)
-	updateEC2Agent, err := updateec2config.NewPlugin(updateec2config.GetUpdatePluginConfig(context))
-	if err != nil {
-		log.Errorf("failed to create plugin %s %v", updateEC2AgentPluginName, err)
-	} else {
-		workerPlugins[updateEC2AgentPluginName] = updateEC2Agent
-	}
+	workerPlugins[updateEC2AgentPluginName] = UpdateEc2ConfigFactory{}
 
 	//// registering aws:configureDaemon
 	//configureDaemonPluginName := configuredaemon.Name()

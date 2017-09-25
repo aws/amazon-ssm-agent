@@ -61,6 +61,76 @@ var once sync.Once
 // registeredPlugins stores the registered plugins.
 var registeredPlugins *runpluginutil.PluginRegistry
 
+type CloudWatchFactory struct {
+}
+
+func (f CloudWatchFactory) Create(context context.T) (runpluginutil.T, error) {
+	return lrpminvoker.NewPlugin(pluginutil.DefaultPluginConfig(), appconfig.PluginNameCloudWatch)
+}
+
+type InventoryGathererFactory struct {
+}
+
+func (f InventoryGathererFactory) Create(context context.T) (runpluginutil.T, error) {
+	return inventory.NewPlugin(context, pluginutil.DefaultPluginConfig())
+}
+
+type RunPowerShellFactory struct {
+}
+
+func (f RunPowerShellFactory) Create(context context.T) (runpluginutil.T, error) {
+	return runscript.NewRunPowerShellPlugin(pluginutil.DefaultPluginConfig())
+}
+
+type UpdateAgentFactory struct {
+}
+
+func (f UpdateAgentFactory) Create(context context.T) (runpluginutil.T, error) {
+	return updatessmagent.NewPlugin(updatessmagent.GetUpdatePluginConfig(context))
+}
+
+type ConfigureContainerFactory struct {
+}
+
+func (f ConfigureContainerFactory) Create(context context.T) (runpluginutil.T, error) {
+	return configurecontainers.NewPlugin(pluginutil.DefaultPluginConfig())
+}
+
+type RunDockerFactory struct {
+}
+
+func (f RunDockerFactory) Create(context context.T) (runpluginutil.T, error) {
+	return dockercontainer.NewPlugin(pluginutil.DefaultPluginConfig())
+}
+
+type ConfigurePackageFactory struct {
+}
+
+func (f ConfigurePackageFactory) Create(context context.T) (runpluginutil.T, error) {
+	return configurepackage.NewPlugin(pluginutil.DefaultPluginConfig())
+}
+
+type RefreshAssociationFactory struct {
+}
+
+func (f RefreshAssociationFactory) Create(context context.T) (runpluginutil.T, error) {
+	return refreshassociation.NewPlugin(pluginutil.DefaultPluginConfig())
+}
+
+type DownloadContentFactory struct {
+}
+
+func (d DownloadContentFactory) Create(context context.T) (runpluginutil.T, error) {
+	return downloadcontent.NewPlugin(pluginutil.DefaultPluginConfig())
+}
+
+type RunDocumentFactory struct {
+}
+
+func (r RunDocumentFactory) Create(context context.T) (runpluginutil.T, error) {
+	return rundocument.NewPlugin(pluginutil.DefaultPluginConfig())
+}
+
 // RegisteredWorkerPlugins returns all registered core modules.
 func RegisteredWorkerPlugins(context context.T) runpluginutil.PluginRegistry {
 	once.Do(func() {
@@ -72,19 +142,11 @@ func RegisteredWorkerPlugins(context context.T) runpluginutil.PluginRegistry {
 // loadWorkers loads all worker plugins that are invokers for interacting with long running plugins and
 // then all standard worker plugins (if there are any conflicting names, the standard worker plugin wins)
 func loadWorkers(context context.T) {
-	log := context.Log()
 	plugins := runpluginutil.PluginRegistry{}
 
 	//Long running plugins are handled by lrpm. lrpminvoker is a worker plugin that can communicate with lrpm.
 	//that's why all long running plugins are first handled by lrpminvoker - which then hands off the work to lrpm.
-
-	//NOTE: register all long running plugins here (one instance of lrpminvoker per long running plugin)
-	if handler, err := lrpminvoker.NewPlugin(pluginutil.DefaultPluginConfig(), appconfig.PluginNameCloudWatch); err != nil {
-		log.Errorf("Failed to load lrpminvoker that will handle all long running plugins - %v", err)
-	} else {
-		//registering handler for aws:cloudWatch plugin
-		plugins[appconfig.PluginNameCloudWatch] = handler
-	}
+	plugins[appconfig.PluginNameCloudWatch] = CloudWatchFactory{}
 
 	for key, value := range loadPlatformIndependentPlugins(context) {
 		plugins[key] = value
@@ -99,85 +161,42 @@ func loadWorkers(context context.T) {
 
 // loadPlatformIndependentPlugins registers plugins common to all platforms
 func loadPlatformIndependentPlugins(context context.T) runpluginutil.PluginRegistry {
-	log := context.Log()
 	var workerPlugins = runpluginutil.PluginRegistry{}
 
 	inventoryPluginName := inventory.Name()
-	if inventoryPlugin, err := inventory.NewPlugin(context, pluginutil.DefaultPluginConfig()); err != nil {
-		log.Errorf("failed to create plugin %s %v", inventoryPluginName, err)
-	} else {
-		workerPlugins[inventoryPluginName] = inventoryPlugin
-	}
+	workerPlugins[inventoryPluginName] = InventoryGathererFactory{}
 
 	// registering aws:runPowerShellScript plugin
-	powershellPlugin, err := runscript.NewRunPowerShellPlugin(pluginutil.DefaultPluginConfig())
-	powershellPluginName := powershellPlugin.Name
-	if err != nil {
-		log.Errorf("failed to create plugin %s %v", powershellPluginName, err)
-	} else {
-		workerPlugins[powershellPluginName] = powershellPlugin
-	}
+	workerPlugins[appconfig.PluginNameAwsRunPowerShellScript] = RunPowerShellFactory{}
 
 	// registering aws:updateSsmAgent plugin
 	updateAgentPluginName := updatessmagent.Name()
-	updateAgentPlugin, err := updatessmagent.NewPlugin(updatessmagent.GetUpdatePluginConfig(context))
-	if err != nil {
-		log.Errorf("failed to create plugin %s %v", updateAgentPluginName, err)
-	} else {
-		workerPlugins[updateAgentPluginName] = updateAgentPlugin
-	}
+	workerPlugins[updateAgentPluginName] = UpdateAgentFactory{}
 
 	// registering aws:configureContainers plugin
 	configureContainersPluginName := configurecontainers.Name()
-	configureContainersPlugin, err := configurecontainers.NewPlugin(pluginutil.DefaultPluginConfig())
-	if err != nil {
-		log.Errorf("failed to create plugin %s %v", configureContainersPluginName, err)
-	} else {
-		workerPlugins[configureContainersPluginName] = configureContainersPlugin
-	}
+
+	workerPlugins[configureContainersPluginName] = ConfigureContainerFactory{}
 
 	// registering aws:runDockerAction plugin
 	runDockerPluginName := dockercontainer.Name()
-	runDockerPlugin, err := dockercontainer.NewPlugin(pluginutil.DefaultPluginConfig())
-	if err != nil {
-		log.Errorf("failed to create plugin %s %v", runDockerPluginName, err)
-	} else {
-		workerPlugins[runDockerPluginName] = runDockerPlugin
-	}
+	workerPlugins[runDockerPluginName] = RunDockerFactory{}
 
 	// registering aws:refreshAssociation plugin
 	refreshAssociationPluginName := refreshassociation.Name()
-	refreshAssociationPlugin, err := refreshassociation.NewPlugin(pluginutil.DefaultPluginConfig())
-	if err != nil {
-		log.Errorf("failed to create plugin %s %v", refreshAssociationPluginName, err)
-	} else {
-		workerPlugins[refreshAssociationPluginName] = refreshAssociationPlugin
-	}
+	workerPlugins[refreshAssociationPluginName] = RefreshAssociationFactory{}
 
 	// registering aws:configurePackage
 	configurePackagePluginName := configurepackage.Name()
-	configurePackagePlugin, err := configurepackage.NewPlugin(pluginutil.DefaultPluginConfig())
-	if err != nil {
-		log.Errorf("failed to create plugin %s %v", configurePackagePluginName, err)
-	} else {
-		workerPlugins[configurePackagePluginName] = configurePackagePlugin
-	}
+	workerPlugins[configurePackagePluginName] = ConfigurePackageFactory{}
 
+	//registering aws:downloadContent
 	downloadContentPluginName := downloadcontent.Name()
-	downloadContentPlugin, err := downloadcontent.NewPlugin(pluginutil.DefaultPluginConfig())
-	if err != nil {
-		log.Errorf("failed to create plugin %s %v", downloadContentPluginName, err)
-	} else {
-		workerPlugins[downloadContentPluginName] = downloadContentPlugin
-	}
+	workerPlugins[downloadContentPluginName] = DownloadContentFactory{}
 
+	//registering aws:runDocument
 	runDocumentPluginName := rundocument.Name()
-	runDocumentPlugin, err := rundocument.NewPlugin(pluginutil.DefaultPluginConfig())
-	if err != nil {
-		log.Errorf("failed to create plugin %s %v", runDocumentPluginName, err)
-	} else {
-		workerPlugins[runDocumentPluginName] = runDocumentPlugin
-	}
+	workerPlugins[runDocumentPluginName] = RunDocumentFactory{}
 
 	return workerPlugins
 }
