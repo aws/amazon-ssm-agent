@@ -38,8 +38,12 @@ type T interface {
 	Execute(context context.T, config contracts.Configuration, cancelFlag task.CancelFlag) contracts.PluginResult
 }
 
+type Factory interface {
+	Create(context context.T) (T, error)
+}
+
 // PluginRegistry stores a set of plugins (both worker and long running plugins), indexed by ID.
-type PluginRegistry map[string]T
+type PluginRegistry map[string]Factory
 
 var SSMPluginRegistry PluginRegistry
 
@@ -189,7 +193,7 @@ func RunPlugins(
 
 func runPlugin(
 	context context.T,
-	p T,
+	pluginFactory Factory,
 	pluginID string,
 	config contracts.Configuration,
 	cancelFlag task.CancelFlag) (res contracts.PluginResult) {
@@ -208,6 +212,15 @@ func runPlugin(
 		}
 	}()
 	log.Debugf("Running %s", pluginID)
+	p, err := pluginFactory.Create(context)
+	if err != nil {
+		res.Status = contracts.ResultStatusFailed
+		res.Code = 1
+		res.Error = fmt.Errorf("failed to create plugin %v!", err)
+		log.Error(res.Error)
+		return
+	}
+
 	return p.Execute(context, config, cancelFlag)
 }
 
