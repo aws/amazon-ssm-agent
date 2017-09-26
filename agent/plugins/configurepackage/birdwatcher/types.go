@@ -29,7 +29,7 @@ type PackageInfo struct {
 // Manifest contains references to all SSM packages for a given agent version
 type Manifest struct {
 	SchemaVersion string `json:"schemaVersion"`
-	Name          string `json:"name"`
+	PackageArn    string `json:"packageArn"`
 	Version       string `json:"version"`
 
 	// platform -> version -> arch -> file
