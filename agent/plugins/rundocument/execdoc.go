@@ -17,7 +17,6 @@ package rundocument
 
 import (
 	"encoding/json"
-	"errors"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
@@ -31,11 +30,11 @@ import (
 )
 
 type ExecDocument interface {
-	ParseDocument(log log.T, extension string, documentRaw []byte, orchestrationDir string,
+	ParseDocument(log log.T, documentRaw []byte, orchestrationDir string,
 		s3Bucket string, s3KeyPrefix string, messageID string, documentID string, defaultWorkingDirectory string,
 		params map[string]interface{}) (pluginsInfo []model.PluginState, err error)
 	ExecuteDocument(context context.T, pluginInput []model.PluginState, documentID string,
-		documentCreatedDate string, output *contracts.PluginOutput)
+		documentCreatedDate string) (chan contracts.DocumentResult, error)
 }
 
 type ExecDocumentImpl struct {
@@ -44,23 +43,15 @@ type ExecDocumentImpl struct {
 
 // ParseDocument parses the remote document obtained to a format that the executor can use.
 // This function is also responsible for all the validation of document and replacement of parameters
-func (exec ExecDocumentImpl) ParseDocument(log log.T, extension string, documentRaw []byte, orchestrationDir string,
+func (exec ExecDocumentImpl) ParseDocument(log log.T, documentRaw []byte, orchestrationDir string,
 	s3Bucket string, s3KeyPrefix string, messageID string, documentID string, defaultWorkingDirectory string,
 	params map[string]interface{}) (pluginsInfo []model.PluginState, err error) {
-	var docContent contracts.DocumentContent
-	if extension == yamlExtension {
+	docContent := contracts.DocumentContent{}
+	if err := json.Unmarshal(documentRaw, &docContent); err != nil {
 		if err := yaml.Unmarshal(documentRaw, &docContent); err != nil {
-			log.Error("Unmarshalling YAML remote resource document failed. Please make sure the document is in the right format")
+			log.Error("Unmarshaling remote resource document failed. Please make sure the document is in the correct JSON or YAML formal")
 			return pluginsInfo, err
 		}
-
-	} else if extension == jsonExtension {
-		if err := json.Unmarshal(documentRaw, &docContent); err != nil {
-			log.Error("Unmarshalling JSON remote resource document failed. Please make sure the document is in the right format")
-			return pluginsInfo, err
-		}
-	} else {
-		return pluginsInfo, errors.New("Extension type for documents is not supported")
 	}
 	parserInfo := docparser.DocumentParserInfo{
 		OrchestrationDir:  orchestrationDir,
@@ -79,9 +70,8 @@ func (exec ExecDocumentImpl) ParseDocument(log log.T, extension string, document
 
 // ExecuteDocument is responsible to execute the sub-documents that are created or downloaded by the executeCommand plugin
 func (exec ExecDocumentImpl) ExecuteDocument(context context.T, pluginInput []model.PluginState, documentID string,
-	documentCreatedDate string, output *contracts.PluginOutput) {
+	documentCreatedDate string) (resultChannels chan contracts.DocumentResult, err error) {
 	log := context.Log()
-	var pluginOutput map[string]*contracts.PluginResult
 	log.Info("Running sub-document")
 
 	docState := model.DocumentState{
@@ -94,36 +84,11 @@ func (exec ExecDocumentImpl) ExecuteDocument(context context.T, pluginInput []mo
 	instanceID, err := instance.InstanceID()
 	if err != nil {
 		log.Error("failed to load instance id")
-		return
+		return resultChannels, err
 	}
 	docStore := executer.NewDocumentFileStore(context, documentID, instanceID, appconfig.DefaultLocationOfCurrent, &docState)
 	cancelFlag := task.NewChanneledCancelFlag()
-	resultChannels := exec.DocExecutor.Run(cancelFlag, &docStore)
+	resultChannels = exec.DocExecutor.Run(cancelFlag, &docStore)
 
-	for res := range resultChannels {
-		if res.LastPlugin == "" {
-			pluginOutput = res.PluginResults
-			break
-		}
-	}
-	if pluginOutput == nil {
-		output.MarkAsFailed(log, errors.New("No output obtained from executing document"))
-	}
-	for _, pluginOut := range pluginOutput {
-		if pluginOut.StandardOutput != "" {
-			// separating the append so that the output is on a new line
-			output.AppendInfof(log, "%v", pluginOut.StandardOutput)
-		}
-		if pluginOut.StandardError != "" {
-			// separating the append so that the output is on a new line
-			output.AppendErrorf(log, "%v", pluginOut.StandardError)
-		}
-		if pluginOut.Error != nil {
-			output.MarkAsFailed(log, pluginOut.Error)
-		} else {
-			output.MarkAsSucceeded()
-		}
-		output.Status = contracts.MergeResultStatus(output.Status, pluginOut.Status)
-	}
-	return
+	return resultChannels, nil
 }
