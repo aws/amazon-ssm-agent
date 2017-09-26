@@ -23,10 +23,10 @@ import (
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil/artifact"
-	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/birdwatcher/facade"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/envdetect"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/packageservice"
+	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/trace"
 	"github.com/aws/amazon-ssm-agent/agent/sdkutil"
 	"github.com/aws/amazon-ssm-agent/agent/version"
 	"github.com/aws/aws-sdk-go/aws/request"
@@ -93,7 +93,7 @@ func (ds *PackageService) PackageServiceName() string {
 }
 
 // DownloadManifest downloads the manifest for a given version (or latest) and returns the agent version specified in manifest
-func (ds *PackageService) DownloadManifest(log log.T, packageName string, version string) (string, error) {
+func (ds *PackageService) DownloadManifest(tracer trace.Tracer, packageName string, version string) (string, error) {
 	manifest, err := downloadManifest(ds, packageName, version)
 	if err != nil {
 		return "", err
@@ -102,7 +102,7 @@ func (ds *PackageService) DownloadManifest(log log.T, packageName string, versio
 }
 
 // DownloadArtifact downloads the platform matching artifact specified in the manifest
-func (ds *PackageService) DownloadArtifact(log log.T, packageName string, version string) (string, error) {
+func (ds *PackageService) DownloadArtifact(tracer trace.Tracer, packageName string, version string) (string, error) {
 	manifest, err := readManifestFromCache(ds.manifestCache, packageName, version)
 	if err != nil {
 		manifest, err = downloadManifest(ds, packageName, version)
@@ -111,16 +111,17 @@ func (ds *PackageService) DownloadArtifact(log log.T, packageName string, versio
 		}
 	}
 
-	file, err := ds.findFileFromManifest(log, manifest)
+	file, err := ds.findFileFromManifest(tracer, manifest)
 	if err != nil {
 		return "", err
 	}
 
-	return downloadFile(log, file)
+	return downloadFile(tracer, file)
 }
 
 // ReportResult sents back the result of the install/upgrade/uninstall run back to Birdwatcher
-func (ds *PackageService) ReportResult(log log.T, result packageservice.PackageResult) error {
+func (ds *PackageService) ReportResult(tracer trace.Tracer, result packageservice.PackageResult) error {
+	log := tracer.CurrentTrace().Logger
 	env, _ := ds.collector.CollectData(log)
 
 	var previousPackageVersion *string
@@ -215,10 +216,10 @@ func parseManifest(data *[]byte) (*Manifest, error) {
 	return &manifest, nil
 }
 
-func (ds *PackageService) findFileFromManifest(log log.T, manifest *Manifest) (*File, error) {
+func (ds *PackageService) findFileFromManifest(tracer trace.Tracer, manifest *Manifest) (*File, error) {
 	var file *File
 
-	pkginfo, err := ds.extractPackageInfo(log, manifest)
+	pkginfo, err := ds.extractPackageInfo(tracer, manifest)
 	if err != nil {
 		return nil, fmt.Errorf("failed to find platform: %v", err)
 	}
@@ -237,13 +238,14 @@ func (ds *PackageService) findFileFromManifest(log log.T, manifest *Manifest) (*
 	return file, nil
 }
 
-func downloadFile(log log.T, file *File) (string, error) {
+func downloadFile(tracer trace.Tracer, file *File) (string, error) {
 	downloadInput := artifact.DownloadInput{
 		SourceURL: file.DownloadLocation,
 		// TODO don't hardcode sha256 - use multiple checksums
 		SourceChecksums: file.Checksums,
 	}
 
+	log := tracer.CurrentTrace().Logger
 	downloadOutput, downloadErr := networkdep.Download(log, downloadInput)
 	if downloadErr != nil || downloadOutput.LocalFilePath == "" {
 		errMessage := fmt.Sprintf("failed to download installation package reliably, %v", downloadInput.SourceURL)
@@ -260,7 +262,8 @@ func downloadFile(log log.T, file *File) (string, error) {
 }
 
 // ExtractPackageInfo returns the correct PackageInfo for the current instances platform/version/arch
-func (ds *PackageService) extractPackageInfo(log log.T, manifest *Manifest) (*PackageInfo, error) {
+func (ds *PackageService) extractPackageInfo(tracer trace.Tracer, manifest *Manifest) (*PackageInfo, error) {
+	log := tracer.CurrentTrace().Logger
 	env, err := ds.collector.CollectData(log)
 	if err != nil {
 		return nil, fmt.Errorf("failed to collect data: %v", err)

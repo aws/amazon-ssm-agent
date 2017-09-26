@@ -97,7 +97,6 @@ func TestPrepareNewInstall(t *testing.T) {
 
 	inst, uninst, installState, installedVersion := prepareConfigurePackage(
 		tracer,
-		contextMock,
 		buildConfigSimple(pluginInformation),
 		repoMock,
 		serviceMock,
@@ -128,7 +127,6 @@ func TestPrepareUpgrade(t *testing.T) {
 
 	inst, uninst, installState, installedVersion := prepareConfigurePackage(
 		tracer,
-		contextMock,
 		buildConfigSimple(pluginInformation),
 		repoMock,
 		serviceMock,
@@ -159,7 +157,6 @@ func TestPrepareUninstall(t *testing.T) {
 
 	inst, uninst, installState, installedVersion := prepareConfigurePackage(
 		tracer,
-		contextMock,
 		buildConfigSimple(pluginInformation),
 		repoMock,
 		serviceMock,
@@ -190,7 +187,6 @@ func TestPrepareUninstallCurrent(t *testing.T) {
 
 	inst, uninst, installState, installedVersion := prepareConfigurePackage(
 		tracer,
-		contextMock,
 		buildConfigSimple(pluginInformation),
 		repoMock,
 		serviceMock,
@@ -221,7 +217,6 @@ func TestPrepareUninstallWrongVersion(t *testing.T) {
 
 	inst, uninst, installState, installedVersion := prepareConfigurePackage(
 		tracer,
-		contextMock,
 		buildConfigSimple(pluginInformation),
 		repoMock,
 		serviceMock,

@@ -23,11 +23,10 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil/artifact"
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/trace"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )
-
-var loggerMock = log.NewMockLog()
 
 func TestGetLatestVersion_NumericSort(t *testing.T) {
 	versions := [3]string{"1.0.0", "2.0.0", "10.0.0"}
@@ -129,77 +128,98 @@ func TestGetLatestVersion_NegativeVersionsAreNotValid(t *testing.T) {
 }
 
 func TestSuccessfulDownloadManifest(t *testing.T) {
+	tracer := trace.NewTracer(log.NewMockLog())
+	tracer.BeginSection("test segment root")
+
 	ds := &PackageService{packageURL: "https://abc.s3.mock-region.amazonaws.com/"}
-	result, err := ds.DownloadManifest(loggerMock, "packageName", "1234")
+	result, err := ds.DownloadManifest(tracer, "packageName", "1234")
 
 	assert.Equal(t, "1234", result)
 	assert.NoError(t, err)
 }
 
 func TestDownloadManifestWithLatest(t *testing.T) {
+	tracer := trace.NewTracer(log.NewMockLog())
+	tracer.BeginSection("test segment root")
+
 	mockObj := new(SSMS3Mock)
 	mockObj.On("ListS3Folders", mock.Anything, mock.Anything).Return([]string{"1.0.0", "2.0.0"}, nil)
 
 	networkdep = mockObj
 
 	ds := &PackageService{packageURL: "https://abc.s3.mock-region.amazonaws.com/"}
-	result, err := ds.DownloadManifest(loggerMock, "packageName", "latest")
+	result, err := ds.DownloadManifest(tracer, "packageName", "latest")
 
 	assert.Equal(t, "2.0.0", result)
 	assert.NoError(t, err)
 }
 
 func TestDownloadManifestWithError(t *testing.T) {
+	tracer := trace.NewTracer(log.NewMockLog())
+	tracer.BeginSection("test segment root")
+
 	mockObj := new(SSMS3Mock)
 	mockObj.On("ListS3Folders", mock.Anything, mock.Anything).Return([]string{"1.0.0", "2.0.0"}, errors.New("testerror"))
 
 	networkdep = mockObj
 
 	ds := &PackageService{packageURL: "https://abc.s3.mock-region.amazonaws.com/"}
-	_, err := ds.DownloadManifest(loggerMock, "packageName", "latest")
+	_, err := ds.DownloadManifest(tracer, "packageName", "latest")
 
 	assert.Error(t, err)
 }
 
 func TestSuccessfulDownloadArtifact(t *testing.T) {
+	tracer := trace.NewTracer(log.NewMockLog())
+	tracer.BeginSection("test segment root")
+
 	mockObj := new(SSMS3Mock)
 	mockObj.On("Download", mock.Anything, mock.Anything).Return(artifact.DownloadOutput{"somePath", false, true}, nil)
 
 	networkdep = mockObj
 
 	ds := &PackageService{packageURL: "https://abc.s3.mock-region.amazonaws.com/"}
-	result, err := ds.DownloadArtifact(loggerMock, "packageName", "1234")
+	result, err := ds.DownloadArtifact(tracer, "packageName", "1234")
 
 	assert.Equal(t, "somePath", result)
 	assert.NoError(t, err)
 }
 
 func TestDownloadArtifactWithError(t *testing.T) {
+	tracer := trace.NewTracer(log.NewMockLog())
+	tracer.BeginSection("test segment root")
+
 	mockObj := new(SSMS3Mock)
 	mockObj.On("Download", mock.Anything, mock.Anything).Return(artifact.DownloadOutput{"somePath", false, true}, errors.New("testerror"))
 
 	networkdep = mockObj
 
 	ds := &PackageService{packageURL: "https://abc.s3.mock-region.amazonaws.com/"}
-	_, err := ds.DownloadArtifact(loggerMock, "packageName", "1234")
+	_, err := ds.DownloadArtifact(tracer, "packageName", "1234")
 
 	assert.Error(t, err)
 }
 
 func TestUseSSMS3Service_True(t *testing.T) {
+	tracer := trace.NewTracer(log.NewMockLog())
+	tracer.BeginSection("test segment root")
+
 	mockObj := new(SSMS3Mock)
 	mockObj.On("CanGetS3Object", mock.Anything, mock.Anything).Return(true)
 
 	networkdep = mockObj
 
-	assert.True(t, UseSSMS3Service(loggerMock, "", "eu-central-1"))
+	assert.True(t, UseSSMS3Service(tracer, "", "eu-central-1"))
 }
 
 func TestUseSSMS3Service_False(t *testing.T) {
+	tracer := trace.NewTracer(log.NewMockLog())
+	tracer.BeginSection("test segment root")
+
 	mockObj := new(SSMS3Mock)
 	mockObj.On("CanGetS3Object", mock.Anything, mock.Anything).Return(false)
 
 	networkdep = mockObj
 
-	assert.False(t, UseSSMS3Service(loggerMock, "beta", "eu-central-1"))
+	assert.False(t, UseSSMS3Service(tracer, "beta", "eu-central-1"))
 }

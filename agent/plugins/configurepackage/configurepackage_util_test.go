@@ -168,8 +168,8 @@ func installerNotCalledMock() *installerMock.Mock {
 	return &installerMock.Mock{}
 }
 
-func selectMockService(service packageservice.PackageService) func(log log.T, repository string, localrepo localpackages.Repository) packageservice.PackageService {
-	return func(log log.T, repository string, localrepo localpackages.Repository) packageservice.PackageService {
+func selectMockService(service packageservice.PackageService) func(tracer trace.Tracer, repository string, localrepo localpackages.Repository) packageservice.PackageService {
+	return func(tracer trace.Tracer, repository string, localrepo localpackages.Repository) packageservice.PackageService {
 		return service
 	}
 }
