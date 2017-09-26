@@ -57,3 +57,8 @@ func (fileMock FileSystemMock) Exists(root string) bool {
 	args := fileMock.Called(root)
 	return args.Bool(0)
 }
+
+func (fileMock FileSystemMock) IsDirectory(root string) bool {
+	args := fileMock.Called(root)
+	return args.Bool(0)
+}

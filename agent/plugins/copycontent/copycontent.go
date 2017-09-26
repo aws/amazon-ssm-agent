@@ -22,7 +22,6 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/fileutil/filemanager"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
-	"github.com/aws/amazon-ssm-agent/agent/platform"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/copycontent/gitresource"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/copycontent/gitresource/privategithub"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/copycontent/remoteresource"
@@ -33,7 +32,9 @@ import (
 
 	"errors"
 	"fmt"
+	"os"
 	"path/filepath"
+	"strings"
 	"time"
 )
 
@@ -73,9 +74,9 @@ type Plugin struct {
 // ExecutePluginInput is a struct that holds the parameters sent through send command
 type CopyContentPlugin struct {
 	contracts.PluginInput
-	LocationType   string `json:"locationType"`
-	LocationInfo   string `json:"locationInfo"`
-	DestinationDir string `json:"destinationDirectory"`
+	LocationType    string `json:"locationType"`
+	LocationInfo    string `json:"locationInfo"`
+	DestinationPath string `json:"destinationPath"`
 	// TODO: 08/25/2017 meloniam@ Change the type of locationInfo and documentParameters to map[string]interface{}
 	// TODO: https://amazon.awsapps.com/workdocs/index.html#/document/7d56a42ea5b040a7c33548d77dc98040f0fb380bbbfb2fd580c861225e2ee1c7
 }
@@ -106,7 +107,7 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 
 func (p *Plugin) execute(context context.T, config contracts.Configuration, cancelFlag task.CancelFlag) (res contracts.PluginResult) {
 	log := context.Log()
-	log.Info("Plugin aws:copyContent started with configuration", config)
+	log.Info("Plugin aws:downloadContent started with configuration", config)
 
 	res.StartDateTime = time.Now()
 	defer func() { res.EndDateTime = time.Now() }()
@@ -114,12 +115,8 @@ func (p *Plugin) execute(context context.T, config contracts.Configuration, canc
 	var output contracts.PluginOutput
 
 	if cancelFlag.ShutDown() {
-		res.Code = FailExitCode
-		res.Status = contracts.ResultStatusFailed
 		output.MarkAsShutdown()
 	} else if cancelFlag.Canceled() {
-		res.Code = FailExitCode
-		res.Status = contracts.ResultStatusCancelled
 		output.MarkAsCancelled()
 	} else if input, err := parseAndValidateInput(config.Properties); err != nil {
 		output.MarkAsFailed(log, err)
@@ -145,7 +142,7 @@ func (p *Plugin) execute(context context.T, config contracts.Configuration, canc
 				output.AppendErrorf(log, "Error saving stderr: %v", err.Error())
 			}
 		}
-
+		// TODO: meloniam@ 09/28/2017: Reduce the number of arguments here for all plugins.
 		uploadErrs := p.ExecuteUploadOutputToS3Bucket(log,
 			config.PluginID,
 			config.OrchestrationDirectory,
@@ -181,16 +178,18 @@ func (p *Plugin) runCopyContent(log log.T, input *CopyContentPlugin, config cont
 		output.MarkAsFailed(log, err)
 		return
 	}
-	var destinationDir string
+	var destinationPath string
 
 	// If path is absolute, then download to the path,
-	// else download to <downloads dir>/relative path
-	instanceID, err := platform.InstanceID()
-	if filepath.IsAbs(input.DestinationDir) {
-		destinationDir = input.DestinationDir
+	// else download to orchestrationDir/<downloads dir>/relative path
+	if filepath.IsAbs(input.DestinationPath) {
+		destinationPath = input.DestinationPath
 	} else {
+		log.Debugf("PluginId, plugin name, orch dir  - %v, %v, %v ", config.PluginID, config.PluginName, config.OrchestrationDirectory)
+		orchestrationDir := strings.TrimSuffix(config.OrchestrationDirectory, config.PluginID)
 
-		destinationDir = filepath.Join(appconfig.DefaultDataStorePath, instanceID, appconfig.DefaultDocumentRootDirName, downloadsDir, input.DestinationDir)
+		// The reason for not using Join or Buildpath here is so that the trailing "\" in case of windows is not dropped.
+		destinationPath = filepath.Join(orchestrationDir, downloadsDir) + string(os.PathSeparator) + input.DestinationPath
 	}
 
 	log.Debug("About to validate location info")
@@ -199,11 +198,11 @@ func (p *Plugin) runCopyContent(log log.T, input *CopyContentPlugin, config cont
 		return
 	}
 	log.Debug("Downloading resource")
-	if err = remoteResource.Download(log, p.filesys, destinationDir); err != nil {
+	if err = remoteResource.Download(log, p.filesys, destinationPath); err != nil {
 		output.MarkAsFailed(log, err)
 		return
 	}
-	output.AppendInfof(log, "Content downloaded to %v", destinationDir)
+	output.AppendInfof(log, "Content downloaded to %v", destinationPath)
 	output.MarkAsSucceeded()
 	return
 }

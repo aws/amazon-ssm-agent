@@ -30,6 +30,7 @@ type FileSystem interface {
 	DeleteFile(filename string) (err error)
 	DeleteDirectory(filename string) (err error)
 	Exists(filename string) bool
+	IsDirectory(srcPath string) bool
 }
 
 type FileSystemImpl struct{}
@@ -66,4 +67,8 @@ func (f FileSystemImpl) ReadFile(filename string) (string, error) {
 
 func (f FileSystemImpl) Exists(root string) bool {
 	return fileutil.Exists(root)
+}
+
+func (f FileSystemImpl) IsDirectory(srcPath string) bool {
+	return fileutil.IsDirectory(srcPath)
 }
