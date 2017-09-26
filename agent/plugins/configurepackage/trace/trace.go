@@ -18,12 +18,10 @@ import (
 	"bytes"
 	"errors"
 	"fmt"
-	"sort"
 	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/log"
-	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/packageservice"
 )
 
 // NanoTime is helper interface for mocking time
@@ -63,7 +61,6 @@ type Tracer interface {
 	Traces() []*Trace
 	CurrentTrace() *Trace
 
-	ToPackageServiceTrace() []*packageservice.Trace
 	ToPluginOutput() *contracts.PluginOutput
 }
 
@@ -176,75 +173,6 @@ func (t *TracerImpl) CurrentTrace() *Trace {
 	} else {
 		return nil
 	}
-}
-
-// ByTiming implements sort.Interface for []*packageservice.Trace based on the
-// Timing field.
-type ByTiming []*packageservice.Trace
-
-func (a ByTiming) Len() int           { return len(a) }
-func (a ByTiming) Swap(i, j int)      { a[i], a[j] = a[j], a[i] }
-func (a ByTiming) Less(i, j int) bool { return a[i].Timing < a[j].Timing }
-
-// ToPackageServiceTrace will return traces compatible with PackageService
-func (t *TracerImpl) ToPackageServiceTrace() []*packageservice.Trace {
-	traces := []*packageservice.Trace{}
-
-	for _, trace := range t.Traces() {
-		exitcode := trace.Exitcode
-		if exitcode == 0 && trace.Error != nil {
-			exitcode = 1
-		}
-
-		// single trace - no end time
-		if trace.Start != 0 && trace.Stop == 0 {
-			msg := fmt.Sprintf("= %s", trace.Operation)
-
-			if trace.Error != nil {
-				msg = fmt.Sprintf("%s (err `%s`)", msg, trace.Error.Error())
-			}
-
-			traces = append(traces,
-				&packageservice.Trace{
-					Operation: msg,
-					Exitcode:  exitcode,
-					Timing:    trace.Start,
-				},
-			)
-		}
-
-		// trace - start and end time - start block
-		if trace.Start != 0 && trace.Stop != 0 {
-			msg := fmt.Sprintf("> %s", trace.Operation)
-			traces = append(traces,
-				&packageservice.Trace{
-					Operation: msg,
-					Exitcode:  exitcode,
-					Timing:    trace.Start,
-				},
-			)
-		}
-
-		// trace - start and end time - end block
-		if trace.Start != 0 && trace.Stop != 0 {
-			msg := fmt.Sprintf("< %s", trace.Operation)
-
-			if trace.Error != nil {
-				msg = fmt.Sprintf("%s (err `%s`)", msg, trace.Error.Error())
-			}
-
-			traces = append(traces,
-				&packageservice.Trace{
-					Operation: msg,
-					Exitcode:  exitcode,
-					Timing:    trace.Stop,
-				},
-			)
-		}
-	}
-
-	sort.Sort(ByTiming(traces))
-	return traces
 }
 
 // ToPluginOutput will convert info and error output into a PluginOutput struct

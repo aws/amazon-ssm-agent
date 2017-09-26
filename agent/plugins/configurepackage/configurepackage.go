@@ -439,7 +439,7 @@ func (p *Plugin) execute(context context.T, config contracts.Configuration, canc
 					PreviousPackageVersion: installedVersion,
 					Timing:                 res.StartDateTime.UnixNano(),
 					Version:                version,
-					Trace:                  tracer.ToPackageServiceTrace(),
+					Trace:                  packageservice.ConvertToPackageServiceTrace(tracer.Traces()),
 				})
 				if err != nil {
 					out.AppendErrorf(log, "Error reporting results: %v", err.Error())
