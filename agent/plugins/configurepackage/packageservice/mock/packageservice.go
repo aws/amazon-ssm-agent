@@ -15,8 +15,8 @@
 package packageservice_mock
 
 import (
-	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/packageservice"
+	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/trace"
 	"github.com/stretchr/testify/mock"
 )
 
@@ -29,17 +29,17 @@ func (ds *Mock) PackageServiceName() string {
 	return args.String(0)
 }
 
-func (ds *Mock) DownloadManifest(log log.T, packageName string, version string) (string, error) {
-	args := ds.Called(log, packageName, version)
+func (ds *Mock) DownloadManifest(tracer trace.Tracer, packageName string, version string) (string, error) {
+	args := ds.Called(tracer, packageName, version)
 	return args.String(0), args.Error(1)
 }
 
-func (ds *Mock) DownloadArtifact(log log.T, packageName string, version string) (string, error) {
-	args := ds.Called(log, packageName, version)
+func (ds *Mock) DownloadArtifact(tracer trace.Tracer, packageName string, version string) (string, error) {
+	args := ds.Called(tracer, packageName, version)
 	return args.String(0), args.Error(1)
 }
 
-func (ds *Mock) ReportResult(log log.T, result packageservice.PackageResult) error {
-	args := ds.Called(log, result)
+func (ds *Mock) ReportResult(tracer trace.Tracer, result packageservice.PackageResult) error {
+	args := ds.Called(tracer, result)
 	return args.Error(0)
 }

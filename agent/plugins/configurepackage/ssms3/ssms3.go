@@ -25,8 +25,8 @@ import (
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil/artifact"
-	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/packageservice"
+	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/trace"
 	"github.com/aws/amazon-ssm-agent/agent/s3util"
 	"github.com/aws/amazon-ssm-agent/agent/updateutil"
 )
@@ -74,7 +74,7 @@ type PackageService struct {
 }
 
 // UseSSMS3Service checks for existence of the active service indicator file.  If the file has been removed, it indicates that the new package service should be used
-func UseSSMS3Service(log log.T, repository string, region string) bool {
+func UseSSMS3Service(tracer trace.Tracer, repository string, region string) bool {
 	var checkURL string
 	if repository == "beta" {
 		checkURL = ActiveServiceURLBeta
@@ -87,8 +87,9 @@ func UseSSMS3Service(log log.T, repository string, region string) bool {
 	checkURL = strings.Replace(checkURL, RegionHolder, region, -1)
 
 	parsedURL, _ := url.Parse(checkURL)
-	log.Debugf("Checking if SSMS3 is enabled: %v", checkURL)
-	return networkdep.CanGetS3Object(log, s3util.ParseAmazonS3URL(log, parsedURL))
+	tracer.CurrentTrace().AppendInfof("Checking if SSMS3 is enabled: %v", checkURL)
+	logger := tracer.CurrentTrace().Logger
+	return networkdep.CanGetS3Object(logger, s3util.ParseAmazonS3URL(logger, parsedURL))
 }
 
 func New(repository string, region string) *PackageService {
@@ -112,16 +113,15 @@ func (ds *PackageService) PackageServiceName() string {
 }
 
 // DownloadManifest looks up the latest version of a given package for this platform/arch in S3 or manifest at source location
-func (ds *PackageService) DownloadManifest(log log.T, packageName string, version string) (string, error) {
+func (ds *PackageService) DownloadManifest(tracer trace.Tracer, packageName string, version string) (string, error) {
 	var targetVersion string
 	var err error
 
 	if !packageservice.IsLatest(version) {
 		targetVersion = version
 	} else {
-		var err error
-		targetVersion, err = getLatestS3Version(log, ds.packageURL, packageName)
-		log.Debugf("latest version: %v", targetVersion)
+		targetVersion, err = getLatestS3Version(tracer, ds.packageURL, packageName)
+		tracer.CurrentTrace().AppendInfof("latest version: %v", targetVersion)
 		if err != nil {
 			return "", err
 		}
@@ -134,12 +134,12 @@ func (ds *PackageService) DownloadManifest(log log.T, packageName string, versio
 	return targetVersion, err
 }
 
-func (ds *PackageService) DownloadArtifact(log log.T, packageName string, version string) (string, error) {
+func (ds *PackageService) DownloadArtifact(tracer trace.Tracer, packageName string, version string) (string, error) {
 	s3Location := getS3Location(packageName, version, ds.packageURL)
-	return downloadPackageFromS3(log, s3Location)
+	return downloadPackageFromS3(tracer, s3Location)
 }
 
-func (*PackageService) ReportResult(log log.T, result packageservice.PackageResult) error {
+func (*PackageService) ReportResult(tracer trace.Tracer, result packageservice.PackageResult) error {
 	// NOP
 	return nil
 }
@@ -147,13 +147,15 @@ func (*PackageService) ReportResult(log log.T, result packageservice.PackageResu
 // utils
 
 // downloadPackageFromS3 downloads and uncompresses the installation package from s3 bucket
-func downloadPackageFromS3(log log.T, packageS3Source string) (string, error) {
+func downloadPackageFromS3(tracer trace.Tracer, packageS3Source string) (string, error) {
 	// TODO: deduplicate with birdwatcher download
 	downloadInput := artifact.DownloadInput{
 		SourceURL: packageS3Source,
 	}
 
-	downloadOutput, downloadErr := networkdep.Download(log, downloadInput)
+	logger := tracer.CurrentTrace().Logger
+
+	downloadOutput, downloadErr := networkdep.Download(logger, downloadInput)
 	if downloadErr != nil || downloadOutput.LocalFilePath == "" {
 		errMessage := fmt.Sprintf("failed to download installation package reliably, %v", downloadInput.SourceURL)
 		if downloadErr != nil {
@@ -213,15 +215,22 @@ func getLatestVersion(versions []string, except string) string {
 }
 
 // getLatestS3Version finds the most recent version of a package in S3
-func getLatestS3Version(log log.T, packageURL string, name string) (latestVersion string, err error) {
-	amazonS3URL := s3util.ParseAmazonS3URL(log, getS3Url(packageURL, name))
-	log.Debugf("looking up latest version of %v from %v", name, amazonS3URL.String())
-	folders, err := networkdep.ListS3Folders(log, amazonS3URL)
+func getLatestS3Version(tracer trace.Tracer, packageURL string, name string) (string, error) {
+	logger := tracer.CurrentTrace().Logger
+
+	amazonS3URL := s3util.ParseAmazonS3URL(logger, getS3Url(packageURL, name))
+
+	versiontrace := tracer.BeginSection(fmt.Sprintf("looking up latest version of %v from %v", name, amazonS3URL.String()))
+
+	folders, err := networkdep.ListS3Folders(logger, amazonS3URL)
 	if err != nil {
-		log.Debugf("Error listing S3 folders: %v", err)
-		return
+		versiontrace.WithError(err).End()
+		return "", nil
 	}
-	return getLatestVersion(folders[:], ""), nil
+
+	latestVersion := getLatestVersion(folders[:], "")
+	versiontrace.AppendInfof("latest version: %s", latestVersion).End()
+	return latestVersion, nil
 }
 
 // parseVersion returns the major, minor, and build parts of a valid version string and an error if the string is not valid
