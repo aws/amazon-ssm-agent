@@ -77,7 +77,7 @@ func executeInstall(
 	isRollback bool,
 	output contracts.PluginOutputer) {
 
-	installtrace := tracer.BeginSection(fmt.Sprintf("install %s/%s - rollback: %b", inst.PackageName(), inst.Version(), isRollback))
+	installtrace := tracer.BeginSection(fmt.Sprintf("install %s/%s - rollback: %t", inst.PackageName(), inst.Version(), isRollback))
 	defer installtrace.End()
 
 	if isRollback {
@@ -91,12 +91,12 @@ func executeInstall(
 	installtrace.WithExitcode(int64(result.GetExitCode())).AppendInfo(result.GetStdout()).AppendError(result.GetStderr())
 
 	if result.GetStatus() == contracts.ResultStatusSuccess {
-		validatetrace := tracer.BeginSection(fmt.Sprintf("valiate %s/%s - rollback: %b", inst.PackageName(), inst.Version(), isRollback))
+		validatetrace := tracer.BeginSection(fmt.Sprintf("valiate %s/%s - rollback: %t", inst.PackageName(), inst.Version(), isRollback))
 		result = inst.Validate(tracer, context)
 		validatetrace.WithExitcode(int64(result.GetExitCode())).AppendInfo(result.GetStdout()).AppendError(result.GetStderr())
 	}
 	if result.GetStatus().IsReboot() {
-		tracer.BeginSection(fmt.Sprintf("Rebooting to finish installation of %v %v - rollback: %b", inst.PackageName(), inst.Version(), isRollback))
+		tracer.BeginSection(fmt.Sprintf("Rebooting to finish installation of %v %v - rollback: %t", inst.PackageName(), inst.Version(), isRollback))
 		output.MarkAsSuccessWithReboot()
 		return
 	}
@@ -137,7 +137,7 @@ func executeUninstall(
 	isRollback bool,
 	output contracts.PluginOutputer) {
 
-	installtrace := tracer.BeginSection(fmt.Sprintf("uninstall %s/%s - rollback: %b", uninst.PackageName(), uninst.Version(), isRollback))
+	installtrace := tracer.BeginSection(fmt.Sprintf("uninstall %s/%s - rollback: %t", uninst.PackageName(), uninst.Version(), isRollback))
 	defer installtrace.End()
 
 	if isRollback {
@@ -164,7 +164,7 @@ func executeUninstall(
 		return
 	}
 	if result.GetStatus().IsReboot() {
-		tracer.BeginSection(fmt.Sprintf("Rebooting to finish uninstall of %v %v - rollback: %b", uninst.PackageName(), uninst.Version(), isRollback))
+		tracer.BeginSection(fmt.Sprintf("Rebooting to finish uninstall of %v %v - rollback: %t", uninst.PackageName(), uninst.Version(), isRollback))
 		output.MarkAsSuccessWithReboot()
 		return
 	}
