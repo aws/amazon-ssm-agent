@@ -15,7 +15,11 @@
 package packageservice
 
 import (
+	"fmt"
+	"sort"
+
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/trace"
 )
 
 // Trace contains one specific operation done for the agent install/upgrade/uninstall
@@ -49,3 +53,72 @@ const (
 	PackageServiceName_ssms3       = "ssms3"
 	PackageServiceName_birdwatcher = "birdwatcher"
 )
+
+// ByTiming implements sort.Interface for []*packageservice.Trace based on the
+// Timing field.
+type ByTiming []*Trace
+
+func (a ByTiming) Len() int           { return len(a) }
+func (a ByTiming) Swap(i, j int)      { a[i], a[j] = a[j], a[i] }
+func (a ByTiming) Less(i, j int) bool { return a[i].Timing < a[j].Timing }
+
+// ConvertToPackageServiceTrace will return traces compatible with PackageService
+func ConvertToPackageServiceTrace(traces []*trace.Trace) []*Trace {
+	pkgtraces := []*Trace{}
+
+	for _, trace := range traces {
+		exitcode := trace.Exitcode
+		if exitcode == 0 && trace.Error != nil {
+			exitcode = 1
+		}
+
+		// single trace - no end time
+		if trace.Start != 0 && trace.Stop == 0 {
+			msg := fmt.Sprintf("= %s", trace.Operation)
+
+			if trace.Error != nil {
+				msg = fmt.Sprintf("%s (err `%s`)", msg, trace.Error.Error())
+			}
+
+			pkgtraces = append(pkgtraces,
+				&Trace{
+					Operation: msg,
+					Exitcode:  exitcode,
+					Timing:    trace.Start,
+				},
+			)
+		}
+
+		// trace - start and end time - start block
+		if trace.Start != 0 && trace.Stop != 0 {
+			msg := fmt.Sprintf("> %s", trace.Operation)
+			pkgtraces = append(pkgtraces,
+				&Trace{
+					Operation: msg,
+					Exitcode:  exitcode,
+					Timing:    trace.Start,
+				},
+			)
+		}
+
+		// trace - start and end time - end block
+		if trace.Start != 0 && trace.Stop != 0 {
+			msg := fmt.Sprintf("< %s", trace.Operation)
+
+			if trace.Error != nil {
+				msg = fmt.Sprintf("%s (err `%s`)", msg, trace.Error.Error())
+			}
+
+			pkgtraces = append(pkgtraces,
+				&Trace{
+					Operation: msg,
+					Exitcode:  exitcode,
+					Timing:    trace.Stop,
+				},
+			)
+		}
+	}
+
+	sort.Sort(ByTiming(pkgtraces))
+	return pkgtraces
+}
