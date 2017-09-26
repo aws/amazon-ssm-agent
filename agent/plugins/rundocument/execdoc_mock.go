@@ -31,12 +31,12 @@ type ExecMock struct {
 	mock.Mock
 }
 
-func (e ExecMock) ParseDocument(log log.T, extension string, documentRaw []byte, orchestrationDir string, s3Bucket string, s3KeyPrefix string, messageID string, documentID string, defaultWorkingDirectory string, params map[string]interface{}) (pluginsInfo []model.PluginState, err error) {
-	args := e.Called(log, extension, documentRaw, orchestrationDir, s3Bucket, s3KeyPrefix, messageID, documentID, defaultWorkingDirectory, params)
+func (e ExecMock) ParseDocument(log log.T, documentRaw []byte, orchestrationDir string, s3Bucket string, s3KeyPrefix string, messageID string, documentID string, defaultWorkingDirectory string, params map[string]interface{}) (pluginsInfo []model.PluginState, err error) {
+	args := e.Called(log, documentRaw, orchestrationDir, s3Bucket, s3KeyPrefix, messageID, documentID, defaultWorkingDirectory, params)
 	return args.Get(0).([]model.PluginState), args.Error(1)
 }
 
-func (e ExecMock) ExecuteDocument(context context.T, pluginInput []model.PluginState, documentID string, documentCreatedDate string, out *contracts.PluginOutput) {
-	e.Called(context, pluginInput, documentID, documentCreatedDate, out)
-	return
+func (e ExecMock) ExecuteDocument(context context.T, pluginInput []model.PluginState, documentID string, documentCreatedDate string) (chan contracts.DocumentResult, error) {
+	args := e.Called(context, pluginInput, documentID, documentCreatedDate)
+	return args.Get(0).(chan contracts.DocumentResult), args.Error(1)
 }
