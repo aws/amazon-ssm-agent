@@ -94,7 +94,7 @@ func (inst *Installer) PackageName() string {
 }
 
 func (inst *Installer) executeAction(tracer trace.Tracer, context context.T, actionName string) contracts.PluginOutputer {
-	exectrace := tracer.BeginSection(fmt.Sprintf("execute action: %b", actionName))
+	exectrace := tracer.BeginSection(fmt.Sprintf("execute action: %s", actionName))
 
 	output := &trace.PluginOutputTrace{Tracer: tracer}
 	output.SetStatus(contracts.ResultStatusSuccess)
