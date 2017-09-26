@@ -172,25 +172,6 @@ func TestCorrectEndTime(t *testing.T) {
 	assert.Equal(t, int64(142), tracer.Traces()[0].Stop)
 }
 
-func TestPackageServiceTrace(t *testing.T) {
-	tracer := NewTracer(loggerMock)
-	tracea := tracer.BeginSection("traceA")
-	tracer.BeginSection("traceB").WithError(errors.New("testerror")).End()
-	tracea.WithExitcode(42).End()
-	tracer.AddTrace(&Trace{Operation: "traceC"})
-	tracer.AddTrace(&Trace{Operation: "traceD", Error: errors.New("testerror2")})
-
-	traces := tracer.ToPackageServiceTrace()
-
-	assert.Equal(t, 6, len(traces))
-	assert.Equal(t, "> traceA", traces[0].Operation)
-	assert.Equal(t, "> traceB", traces[1].Operation)
-	assert.Equal(t, "< traceB (err `testerror`)", traces[2].Operation)
-	assert.Equal(t, "< traceA", traces[3].Operation)
-	assert.Equal(t, "= traceC", traces[4].Operation)
-	assert.Equal(t, "= traceD (err `testerror2`)", traces[5].Operation)
-}
-
 func TestToPluginOutput(t *testing.T) {
 	tracer := NewTracer(loggerMock)
 
