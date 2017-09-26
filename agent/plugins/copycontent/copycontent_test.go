@@ -20,6 +20,8 @@ import (
 
 	"time"
 
+	"errors"
+
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	filemock "github.com/aws/amazon-ssm-agent/agent/fileutil/filemanager/mock"
@@ -90,8 +92,8 @@ func TestNewPlugin_RunCopyContent(t *testing.T) {
 	fileMock := filemock.FileSystemMock{}
 
 	input := CopyContentPlugin{
-		LocationType:   "Github",
-		DestinationDir: "destination",
+		LocationType:    "Github",
+		DestinationPath: "destination",
 	}
 	config := createStubConfiguration("orch", "bucket", "prefix", "1234-1234-1234", "directory")
 
@@ -113,13 +115,36 @@ func TestNewPlugin_RunCopyContent_absPathDestinationDir(t *testing.T) {
 	fileMock := filemock.FileSystemMock{}
 
 	input := CopyContentPlugin{
-		LocationType:   "Github",
-		DestinationDir: "/var/temp/fake-dir",
+		LocationType:    "Github",
+		DestinationPath: "/var/temp/fake-dir",
 	}
 	config := createStubConfiguration("orch", "bucket", "prefix", "1234-1234-1234", "directory")
 
 	p := Plugin{
 		remoteResourceCreator: absoluteDestinationDirRemoteResource,
+		filesys:               fileMock,
+	}
+	output := contracts.PluginOutput{}
+
+	p.runCopyContent(logger, &input, config, &output)
+
+	assert.Equal(t, output.Status, contracts.ResultStatusSuccess)
+	copyContentResourceMock.AssertExpectations(t)
+	fileMock.AssertExpectations(t)
+}
+
+func TestNewPlugin_RunCopyContent_relativeDirDestinationPath(t *testing.T) {
+
+	fileMock := filemock.FileSystemMock{}
+
+	input := CopyContentPlugin{
+		LocationType:    "Github",
+		DestinationPath: "temp/fake-dir/",
+	}
+	config := createStubConfiguration("orch/aws-copyContent", "bucket", "prefix", "1234-1234-1234", "directory")
+
+	p := Plugin{
+		remoteResourceCreator: relativeDestinationDirRemoteResource,
 		filesys:               fileMock,
 	}
 	output := contracts.PluginOutput{}
@@ -142,9 +167,9 @@ func Test_RunCopyContentBadLocationInfo(t *testing.T) {
 	config := createStubConfiguration("orch", "bucket", "prefix", "1234-1234-1234", "directory")
 
 	input := CopyContentPlugin{
-		LocationType:   "GitHub",
-		LocationInfo:   locationInfo,
-		DestinationDir: "",
+		LocationType:    "GitHub",
+		LocationInfo:    locationInfo,
+		DestinationPath: "",
 	}
 	p := Plugin{
 		remoteResourceCreator: newRemoteResource,
@@ -157,7 +182,7 @@ func Test_RunCopyContentBadLocationInfo(t *testing.T) {
 	fileMock.AssertExpectations(t)
 }
 
-func TestPlugin_Execute(t *testing.T) {
+func TestPlugin_ExecuteGitHubFile(t *testing.T) {
 
 	mockplugin := MockDefaultPlugin{}
 
@@ -170,29 +195,176 @@ func TestPlugin_Execute(t *testing.T) {
 		"repository" :	 "test-repo",
 		"path" : "path"
 		}`
-	input.DestinationDir = "destination"
+	input.DestinationPath = "destination"
 	conf := createSimpleConfigWithProperties(&input)
-	cancelFlag := createMockCancelFlag()
 
-	copyContentFileMock.On("MakeDirs", mock.Anything).Return(nil)
-	copyContentFileMock.On("WriteFile", mock.Anything, mock.Anything).Return(nil).Twice()
+	var githubcopyContentResourceMock = resourcemock.RemoteResourceMock{}
 
+	var githubCopyContentFileMock = filemock.FileSystemMock{}
+
+	githubCopyContentFileMock.On("MakeDirs", "orch").Return(nil)
+	githubCopyContentFileMock.On("WriteFile", "orch", "Content downloaded to orch/downloads/destination").Return(nil)
+	githubCopyContentFileMock.On("WriteFile", "orch", "").Return(nil)
+
+	githubRemoteresourceMock := func(log log.T, locationtype, locationInfo string) (remoteresource.RemoteResource, error) {
+
+		githubcopyContentResourceMock.On("ValidateLocationInfo").Return(true, nil).Once()
+		githubcopyContentResourceMock.On("Download", contextMock.Log(), githubCopyContentFileMock, "orch/downloads/destination").Return(nil).Once()
+		return githubcopyContentResourceMock, nil
+	}
 	mockplugin.On("UploadOutputToS3Bucket", contextMock.Log(), conf.PluginID, conf.OrchestrationDirectory,
 		conf.OutputS3BucketName, conf.OutputS3KeyPrefix, false, conf.OrchestrationDirectory,
 		pluginResult.Stdout, pluginResult.Stderr).Return([]string{})
 
 	p := &Plugin{
-		remoteResourceCreator: NewRemoteResourceMockDoc,
-		filesys:               copyContentFileMock,
+		remoteResourceCreator: githubRemoteresourceMock,
+		filesys:               githubCopyContentFileMock,
 	}
 	p.ExecuteUploadOutputToS3Bucket = mockplugin.UploadOutputToS3Bucket
-	result := p.execute(contextMock, conf, cancelFlag)
+	result := p.execute(contextMock, conf, createMockCancelFlag())
 
-	copyContentFileMock.AssertExpectations(t)
+	githubCopyContentFileMock.AssertExpectations(t)
+	githubcopyContentResourceMock.AssertExpectations(t)
 	mockplugin.AssertExpectations(t)
 
 	assert.Equal(t, 0, result.Code)
 	assert.Equal(t, 0, pluginResult.ExitCode)
+}
+
+func TestPlugin_ExecuteS3File(t *testing.T) {
+
+	mockplugin := MockDefaultPlugin{}
+
+	pluginResult := contracts.PluginOutput{ExitCode: 0, Status: "", Stdout: "", Stderr: ""}
+	input := CopyContentPlugin{}
+
+	input.LocationType = "S3"
+	input.LocationInfo = `{
+		"path" : "https://s3.amazonaws.com/fake-bucket/fake-key/filename.ps"
+		}`
+	input.DestinationPath = "/var/tmp/destination"
+	conf := createSimpleConfigWithProperties(&input)
+	cancelFlag := createMockCancelFlag()
+	var s3copyContentResourceMock = resourcemock.RemoteResourceMock{}
+
+	var s3CopyContentFileMock = filemock.FileSystemMock{}
+	s3CopyContentFileMock.On("MakeDirs", "orch").Return(nil)
+	s3CopyContentFileMock.On("WriteFile", "orch", "Content downloaded to /var/tmp/destination").Return(nil)
+	s3CopyContentFileMock.On("WriteFile", "orch", "").Return(nil)
+
+	mockplugin.On("UploadOutputToS3Bucket", contextMock.Log(), conf.PluginID, conf.OrchestrationDirectory,
+		conf.OutputS3BucketName, conf.OutputS3KeyPrefix, false, conf.OrchestrationDirectory,
+		pluginResult.Stdout, pluginResult.Stderr).Return([]string{})
+
+	s3MockRemoteResource := func(log log.T, locationtype, locationInfo string) (remoteresource.RemoteResource, error) {
+
+		s3copyContentResourceMock.On("ValidateLocationInfo").Return(true, nil).Once()
+		s3copyContentResourceMock.On("Download", contextMock.Log(), s3CopyContentFileMock, "/var/tmp/destination").Return(nil).Once()
+		return s3copyContentResourceMock, nil
+	}
+	p := &Plugin{
+		remoteResourceCreator: s3MockRemoteResource,
+		filesys:               s3CopyContentFileMock,
+	}
+	p.ExecuteUploadOutputToS3Bucket = mockplugin.UploadOutputToS3Bucket
+	result := p.execute(contextMock, conf, cancelFlag)
+
+	s3CopyContentFileMock.AssertExpectations(t)
+	s3copyContentResourceMock.AssertExpectations(t)
+	mockplugin.AssertExpectations(t)
+
+	assert.Equal(t, 0, result.Code)
+	assert.Equal(t, 0, pluginResult.ExitCode)
+}
+
+func TestPlugin_ExecuteSSMDoc(t *testing.T) {
+
+	mockplugin := MockDefaultPlugin{}
+
+	pluginResult := contracts.PluginOutput{ExitCode: 0, Status: "", Stdout: "", Stderr: ""}
+	input := CopyContentPlugin{}
+
+	input.LocationType = "SSMDocument"
+	input.LocationInfo = `{
+		"name" : "arn:aws:ssm:us-east-1:1234567890:document/mySharedDocument:10"
+		}`
+	input.DestinationPath = "/var/tmp/destination/"
+	conf := createSimpleConfigWithProperties(&input)
+	cancelFlag := createMockCancelFlag()
+
+	var ssmDocCopyContentResourceMock = resourcemock.RemoteResourceMock{}
+	var ssmDocCopyContentFileMock = filemock.FileSystemMock{}
+	ssmDocCopyContentFileMock.On("MakeDirs", "orch").Return(nil)
+	ssmDocCopyContentFileMock.On("WriteFile", "orch", "Content downloaded to /var/tmp/destination/").Return(nil)
+	ssmDocCopyContentFileMock.On("WriteFile", "orch", "").Return(nil)
+
+	mockplugin.On("UploadOutputToS3Bucket", contextMock.Log(), conf.PluginID, conf.OrchestrationDirectory,
+		conf.OutputS3BucketName, conf.OutputS3KeyPrefix, false, conf.OrchestrationDirectory,
+		pluginResult.Stdout, pluginResult.Stderr).Return([]string{})
+
+	ssmDocMockRemoteResource := func(log log.T, locationtype, locationInfo string) (remoteresource.RemoteResource, error) {
+		ssmDocCopyContentResourceMock.On("ValidateLocationInfo").Return(true, nil).Once()
+		ssmDocCopyContentResourceMock.On("Download", contextMock.Log(), ssmDocCopyContentFileMock, "/var/tmp/destination/").Return(nil).Once()
+		return ssmDocCopyContentResourceMock, nil
+	}
+	p := &Plugin{
+		remoteResourceCreator: ssmDocMockRemoteResource,
+		filesys:               ssmDocCopyContentFileMock,
+	}
+	p.ExecuteUploadOutputToS3Bucket = mockplugin.UploadOutputToS3Bucket
+	result := p.execute(contextMock, conf, cancelFlag)
+
+	ssmDocCopyContentFileMock.AssertExpectations(t)
+	ssmDocCopyContentResourceMock.AssertExpectations(t)
+	mockplugin.AssertExpectations(t)
+
+	assert.Equal(t, 0, result.Code)
+	assert.Equal(t, 0, pluginResult.ExitCode)
+}
+
+func TestPlugin_ExecuteSSMDocError(t *testing.T) {
+
+	mockplugin := MockDefaultPlugin{}
+
+	pluginResult := contracts.PluginOutput{ExitCode: 0, Status: "", Stdout: "", Stderr: ""}
+	input := CopyContentPlugin{}
+
+	input.LocationType = "SSMDocument"
+	input.LocationInfo = `{
+	"name" : ":10"
+		}`
+	input.DestinationPath = "/var/tmp/destination/"
+	conf := createSimpleConfigWithProperties(&input)
+	cancelFlag := createMockCancelFlag()
+
+	var ssmDoccopyContentResourceMock = resourcemock.RemoteResourceMock{}
+	var ssmDocCopyContentFileMock = filemock.FileSystemMock{}
+	ssmDocCopyContentFileMock.On("MakeDirs", "orch").Return(nil)
+	ssmDocCopyContentFileMock.On("WriteFile", "orch", "").Return(nil)
+	ssmDocCopyContentFileMock.On("WriteFile", "orch", "Document name must be specified").Return(nil)
+
+	mockplugin.On("UploadOutputToS3Bucket", contextMock.Log(), conf.PluginID, conf.OrchestrationDirectory,
+		conf.OutputS3BucketName, conf.OutputS3KeyPrefix, false, conf.OrchestrationDirectory,
+		pluginResult.Stdout, "Document name must be specified").Return([]string{})
+
+	ssmDocMockRemoteResource := func(log log.T, locationtype, locationInfo string) (remoteresource.RemoteResource, error) {
+		ssmDoccopyContentResourceMock.On("Download", contextMock.Log(), ssmDocCopyContentFileMock, "/var/tmp/destination/").Return(errors.New("Document name must be specified")).Once()
+		ssmDoccopyContentResourceMock.On("ValidateLocationInfo").Return(true, nil).Once()
+		return ssmDoccopyContentResourceMock, nil
+	}
+	p := &Plugin{
+		remoteResourceCreator: ssmDocMockRemoteResource,
+		filesys:               ssmDocCopyContentFileMock,
+	}
+	p.ExecuteUploadOutputToS3Bucket = mockplugin.UploadOutputToS3Bucket
+	result := p.execute(contextMock, conf, cancelFlag)
+
+	ssmDocCopyContentFileMock.AssertExpectations(t)
+	ssmDoccopyContentResourceMock.AssertExpectations(t)
+	mockplugin.AssertExpectations(t)
+
+	assert.Equal(t, 1, result.Code)
+	assert.Equal(t, contracts.ResultStatusFailed, result.Status)
 }
 
 func TestValidateInput_UnsupportedLocationType(t *testing.T) {
@@ -263,6 +435,12 @@ func absoluteDestinationDirRemoteResource(log log.T, locationType string, locati
 	return copyContentResourceMock, nil
 }
 
+func relativeDestinationDirRemoteResource(log log.T, locationType string, locationInfo string) (remoteresource.RemoteResource, error) {
+	copyContentResourceMock.On("ValidateLocationInfo").Return(true, nil).Once()
+	copyContentResourceMock.On("Download", logger, copyContentFileMock, "orch/downloads/temp/fake-dir/").Return(nil).Once()
+	return copyContentResourceMock, nil
+}
+
 func createStubConfiguration(orch, bucket, prefix, message, dir string) contracts.Configuration {
 	return contracts.Configuration{
 		OrchestrationDirectory:  orch,
@@ -284,13 +462,6 @@ func (m *MockDefaultPlugin) UploadOutputToS3Bucket(log log.T, pluginID string, o
 	args := m.Called(log, pluginID, orchestrationDir, outputS3BucketName, outputS3KeyPrefix, useTempDirectory, tempDir, mock.Anything, Stderr)
 	log.Infof("args are %v", args)
 	return args.Get(0).([]string)
-}
-
-func NewRemoteResourceMockDoc(log log.T, locationtype, locationInfo string) (remoteresource.RemoteResource, error) {
-
-	copyContentResourceMock.On("ValidateLocationInfo").Return(true, nil).Once()
-	copyContentResourceMock.On("Download", contextMock.Log(), copyContentFileMock, mock.Anything).Return(nil).Once()
-	return copyContentResourceMock, nil
 }
 
 func createSimpleConfigWithProperties(info *CopyContentPlugin) contracts.Configuration {
