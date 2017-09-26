@@ -18,7 +18,6 @@ import (
 	"fmt"
 	"sort"
 
-	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/trace"
 )
 
@@ -44,9 +43,9 @@ type PackageResult struct {
 // PackageService is used to determine the latest version and to obtain the local repository content for a given version.
 type PackageService interface {
 	PackageServiceName() string
-	DownloadManifest(log log.T, packageName string, version string) (string, error)
-	DownloadArtifact(log log.T, packageName string, version string) (string, error)
-	ReportResult(log log.T, result PackageResult) error
+	DownloadManifest(tracer trace.Tracer, packageName string, version string) (string, error)
+	DownloadArtifact(tracer trace.Tracer, packageName string, version string) (string, error)
+	ReportResult(tracer trace.Tracer, result PackageResult) error
 }
 
 const (

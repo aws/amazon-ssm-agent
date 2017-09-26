@@ -118,8 +118,8 @@ func (inst *Installer) getActionPath(actionName string, extension string) string
 	return filepath.Join(inst.packagePath, fmt.Sprintf("%v.%v", actionName, extension))
 }
 
-func (inst *Installer) readScriptAction(action *Action, workingDir string, pluginName string, runCommand []interface{}) (pluginsInfo []model.PluginState, err error) {
-	pluginsInfo = []model.PluginState{}
+func (inst *Installer) readScriptAction(action *Action, workingDir string, pluginName string, runCommand []interface{}) (pluginsInfo []contracts.PluginState, err error) {
+	pluginsInfo = []contracts.PluginState{}
 
 	pluginFullName := fmt.Sprintf("aws:%v", pluginName)
 	var s3Prefix string
