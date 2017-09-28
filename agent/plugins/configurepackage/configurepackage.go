@@ -432,7 +432,10 @@ func (p *Plugin) execute(context context.T, config contracts.Configuration, canc
 				version := input.Version
 				if input.Action == InstallAction {
 					version = inst.Version()
+				} else if input.Action == UninstallAction {
+					version = uninst.Version()
 				}
+
 				err := packageService.ReportResult(tracer, packageservice.PackageResult{
 					Exitcode:               int64(out.GetExitCode()),
 					Operation:              input.Action,
