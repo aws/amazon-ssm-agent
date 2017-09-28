@@ -88,12 +88,12 @@ func executeInstall(
 
 	result := inst.Install(tracer, context)
 
-	installtrace.WithExitcode(int64(result.GetExitCode())).AppendInfo(result.GetStdout()).AppendError(result.GetStderr())
+	installtrace.WithExitcode(int64(result.GetExitCode()))
 
 	if result.GetStatus() == contracts.ResultStatusSuccess {
 		validatetrace := tracer.BeginSection(fmt.Sprintf("valiate %s/%s - rollback: %t", inst.PackageName(), inst.Version(), isRollback))
 		result = inst.Validate(tracer, context)
-		validatetrace.WithExitcode(int64(result.GetExitCode())).AppendInfo(result.GetStdout()).AppendError(result.GetStderr())
+		validatetrace.WithExitcode(int64(result.GetExitCode()))
 	}
 	if result.GetStatus().IsReboot() {
 		tracer.BeginSection(fmt.Sprintf("Rebooting to finish installation of %v %v - rollback: %t", inst.PackageName(), inst.Version(), isRollback))
@@ -151,7 +151,7 @@ func executeUninstall(
 	}
 
 	result := uninst.Uninstall(tracer, context)
-	installtrace.WithExitcode(int64(result.GetExitCode())).AppendInfo(result.GetStdout()).AppendError(result.GetStderr())
+	installtrace.WithExitcode(int64(result.GetExitCode()))
 
 	if !result.GetStatus().IsSuccess() {
 		installtrace.AppendErrorf("Failed to uninstall version %v of package; uninstall status %v", uninst.Version(), result.GetStatus())
