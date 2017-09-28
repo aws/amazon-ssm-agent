@@ -367,7 +367,6 @@ func (inst *Installer) executeDocument(
 	actionName string,
 	pluginsInfo []contracts.PluginState,
 	output contracts.PluginOutputer) {
-	log := context.Log()
 
 	exectrace := tracer.CurrentTrace()
 
@@ -379,7 +378,8 @@ func (inst *Installer) executeDocument(
 	}
 
 	for _, pluginOut := range pluginOutputs {
-		log.Debugf("Plugin %v ResultStatus %v", pluginOut.PluginName, pluginOut.Status)
+		exectrace.WithExitcode(int64(pluginOut.Code))
+		exectrace.AppendInfof("Plugin %v ResultStatus %v", pluginOut.PluginName, pluginOut.Status)
 		if pluginOut.StandardOutput != "" {
 			exectrace.AppendInfof("%v output: %v", actionName, pluginOut.StandardOutput)
 		}
