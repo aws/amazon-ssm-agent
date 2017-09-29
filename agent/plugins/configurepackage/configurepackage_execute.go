@@ -34,7 +34,7 @@ func executeConfigurePackage(
 	inst installer.Installer,
 	uninst installer.Installer,
 	initialInstallState localpackages.InstallState,
-	output contracts.PluginOutputer) {
+	output contracts.PluginOutputter) {
 
 	trace := tracer.BeginSection(fmt.Sprintf("execute configure - state: %s", initialInstallState))
 	defer trace.End()
@@ -75,7 +75,7 @@ func executeInstall(
 	inst installer.Installer,
 	uninst installer.Installer,
 	isRollback bool,
-	output contracts.PluginOutputer) {
+	output contracts.PluginOutputter) {
 
 	installtrace := tracer.BeginSection(fmt.Sprintf("install %s/%s - rollback: %t", inst.PackageName(), inst.Version(), isRollback))
 	defer installtrace.End()
@@ -135,7 +135,7 @@ func executeUninstall(
 	inst installer.Installer,
 	uninst installer.Installer,
 	isRollback bool,
-	output contracts.PluginOutputer) {
+	output contracts.PluginOutputter) {
 
 	installtrace := tracer.BeginSection(fmt.Sprintf("uninstall %s/%s - rollback: %t", uninst.PackageName(), uninst.Version(), isRollback))
 	defer installtrace.End()
@@ -179,7 +179,7 @@ func executeUninstall(
 }
 
 // cleanupAfterUninstall removes packages that are no longer needed in the repository
-func cleanupAfterUninstall(tracer trace.Tracer, repository localpackages.Repository, uninst installer.Installer, output contracts.PluginOutputer) {
+func cleanupAfterUninstall(tracer trace.Tracer, repository localpackages.Repository, uninst installer.Installer, output contracts.PluginOutputter) {
 	trace := tracer.BeginSection(fmt.Sprintf("cleanup %s/%s", uninst.PackageName(), uninst.Version()))
 
 	if err := repository.RemovePackage(tracer, uninst.PackageName(), uninst.Version()); err != nil {

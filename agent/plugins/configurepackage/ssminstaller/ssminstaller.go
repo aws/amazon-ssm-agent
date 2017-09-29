@@ -73,15 +73,15 @@ func New(packageName string,
 	}
 }
 
-func (inst *Installer) Install(tracer trace.Tracer, context context.T) contracts.PluginOutputer {
+func (inst *Installer) Install(tracer trace.Tracer, context context.T) contracts.PluginOutputter {
 	return inst.executeAction(tracer, context, "install")
 }
 
-func (inst *Installer) Uninstall(tracer trace.Tracer, context context.T) contracts.PluginOutputer {
+func (inst *Installer) Uninstall(tracer trace.Tracer, context context.T) contracts.PluginOutputter {
 	return inst.executeAction(tracer, context, "uninstall")
 }
 
-func (inst *Installer) Validate(tracer trace.Tracer, context context.T) contracts.PluginOutputer {
+func (inst *Installer) Validate(tracer trace.Tracer, context context.T) contracts.PluginOutputter {
 	return inst.executeAction(tracer, context, "validate")
 }
 
@@ -93,7 +93,7 @@ func (inst *Installer) PackageName() string {
 	return inst.packageName
 }
 
-func (inst *Installer) executeAction(tracer trace.Tracer, context context.T, actionName string) contracts.PluginOutputer {
+func (inst *Installer) executeAction(tracer trace.Tracer, context context.T, actionName string) contracts.PluginOutputter {
 	exectrace := tracer.BeginSection(fmt.Sprintf("execute action: %s", actionName))
 
 	output := &trace.PluginOutputTrace{Tracer: tracer}
@@ -366,7 +366,7 @@ func (inst *Installer) executeDocument(
 	context context.T,
 	actionName string,
 	pluginsInfo []contracts.PluginState,
-	output contracts.PluginOutputer) {
+	output contracts.PluginOutputter) {
 
 	exectrace := tracer.CurrentTrace()
 
