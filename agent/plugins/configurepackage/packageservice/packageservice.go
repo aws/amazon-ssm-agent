@@ -118,6 +118,6 @@ func ConvertToPackageServiceTrace(traces []*trace.Trace) []*Trace {
 		}
 	}
 
-	sort.Sort(ByTiming(pkgtraces))
+	sort.Stable(ByTiming(pkgtraces))
 	return pkgtraces
 }
