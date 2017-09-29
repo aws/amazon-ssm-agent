@@ -1,10 +1,17 @@
 Latest
 ===============
+- Added exponential backoff in bucket region check for s3 upload
+- Fixed an issue with orchestration directory cleanup for RunCommand
+- Important Reminder: In an upcoming release, the RPM installer won't start the service by default after initial RPM
+  installation. All customers should update any automation for RPM-based installs to start the agent after install if desired.
+
+2.2.16.0
+===============
 - Increment major/minor version to 2.2
 - Bug fix on update to v2.1.10.0
-- Advance Notice: Starting in the next version of SSM Agent, to align with the guidelines for RPM-based distros,
-  the RPM intaller won't start the service by default after initial RPM installation. It will start automatically
-  after RPM update only if the service was running previously. The behavior of the Debian and MSI installer is unchanged.
+- Advance Notice: In an upcoming release, to align with the guidelines for RPM-based distros, the RPM installer won't
+  start the service by default after initial RPM installation. It will start automatically after RPM update only if the
+  service was running previously. The behavior of the Debian and MSI installer is unchanged.
 
 2.1.10.0
 ===============
