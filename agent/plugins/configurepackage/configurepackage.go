@@ -83,7 +83,7 @@ func prepareConfigurePackage(
 	repository localpackages.Repository,
 	packageService packageservice.PackageService,
 	input *ConfigurePackagePluginInput,
-	output contracts.PluginOutputer) (inst installer.Installer, uninst installer.Installer, installState localpackages.InstallState, installedVersion string) {
+	output contracts.PluginOutputter) (inst installer.Installer, uninst installer.Installer, installState localpackages.InstallState, installedVersion string) {
 
 	prepareTrace := tracer.BeginSection(fmt.Sprintf("prepare %s", input.Action))
 	defer prepareTrace.End()
@@ -299,7 +299,7 @@ func checkAlreadyInstalled(
 	installState localpackages.InstallState,
 	inst installer.Installer,
 	uninst installer.Installer,
-	output contracts.PluginOutputer) bool {
+	output contracts.PluginOutputter) bool {
 
 	checkTrace := tracer.BeginSection("check if already installed")
 	defer checkTrace.End()

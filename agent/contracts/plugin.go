@@ -103,8 +103,8 @@ type Plugin struct {
 type PluginInput struct {
 }
 
-// PluginOutputer defines interface for PluginOutput type
-type PluginOutputer interface {
+// PluginOutputter defines interface for PluginOutput type
+type PluginOutputter interface {
 	String() string
 	MarkAsFailed(log log.T, err error)
 	MarkAsSucceeded()

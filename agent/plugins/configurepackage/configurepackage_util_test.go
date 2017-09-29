@@ -63,7 +63,7 @@ func repoUninstallMock(pluginInformation *ConfigurePackagePluginInput, installer
 	return &mockRepo
 }
 
-func pluginOutputWithStatus(status contracts.ResultStatus) contracts.PluginOutputer {
+func pluginOutputWithStatus(status contracts.ResultStatus) contracts.PluginOutputter {
 	tracer := trace.NewTracer(log.NewMockLog())
 	tracer.BeginSection("test segment root")
 	output := &trace.PluginOutputTrace{Tracer: tracer}
