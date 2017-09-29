@@ -225,7 +225,7 @@ func getLatestS3Version(tracer trace.Tracer, packageURL string, name string) (st
 	folders, err := networkdep.ListS3Folders(logger, amazonS3URL)
 	if err != nil {
 		versiontrace.WithError(err).End()
-		return "", nil
+		return "", err
 	}
 
 	latestVersion := getLatestVersion(folders[:], "")

@@ -91,7 +91,7 @@ func executeInstall(
 	installtrace.WithExitcode(int64(result.GetExitCode()))
 
 	if result.GetStatus() == contracts.ResultStatusSuccess {
-		validatetrace := tracer.BeginSection(fmt.Sprintf("valiate %s/%s - rollback: %t", inst.PackageName(), inst.Version(), isRollback))
+		validatetrace := tracer.BeginSection(fmt.Sprintf("validate %s/%s - rollback: %t", inst.PackageName(), inst.Version(), isRollback))
 		result = inst.Validate(tracer, context)
 		validatetrace.WithExitcode(int64(result.GetExitCode()))
 	}
