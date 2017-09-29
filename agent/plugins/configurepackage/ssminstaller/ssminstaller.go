@@ -390,6 +390,6 @@ func (inst *Installer) executeDocument(
 			exectrace.WithError(pluginOut.Error)
 			output.MarkAsFailed(nil, nil)
 		}
-		output.SetStatus(pluginOut.Status)
+		output.SetStatus(contracts.MergeResultStatus(output.GetStatus(), pluginOut.Status))
 	}
 }
