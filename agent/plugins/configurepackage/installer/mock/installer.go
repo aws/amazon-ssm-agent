@@ -26,19 +26,19 @@ type Mock struct {
 	mock.Mock
 }
 
-func (inst *Mock) Install(tracer trace.Tracer, context context.T) contracts.PluginOutputer {
+func (inst *Mock) Install(tracer trace.Tracer, context context.T) contracts.PluginOutputter {
 	args := inst.Called(context)
-	return args.Get(0).(contracts.PluginOutputer)
+	return args.Get(0).(contracts.PluginOutputter)
 }
 
-func (inst *Mock) Uninstall(tracer trace.Tracer, context context.T) contracts.PluginOutputer {
+func (inst *Mock) Uninstall(tracer trace.Tracer, context context.T) contracts.PluginOutputter {
 	args := inst.Called(context)
-	return args.Get(0).(contracts.PluginOutputer)
+	return args.Get(0).(contracts.PluginOutputter)
 }
 
-func (inst *Mock) Validate(tracer trace.Tracer, context context.T) contracts.PluginOutputer {
+func (inst *Mock) Validate(tracer trace.Tracer, context context.T) contracts.PluginOutputter {
 	args := inst.Called(context)
-	return args.Get(0).(contracts.PluginOutputer)
+	return args.Get(0).(contracts.PluginOutputter)
 }
 
 func (inst *Mock) Version() string {
