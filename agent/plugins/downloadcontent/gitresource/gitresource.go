@@ -21,8 +21,8 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/githubclient"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
-	"github.com/aws/amazon-ssm-agent/agent/plugins/copycontent/gitresource/privategithub"
-	"github.com/aws/amazon-ssm-agent/agent/plugins/copycontent/system"
+	"github.com/aws/amazon-ssm-agent/agent/plugins/downloadcontent/gitresource/privategithub"
+	"github.com/aws/amazon-ssm-agent/agent/plugins/downloadcontent/system"
 
 	"errors"
 	"fmt"

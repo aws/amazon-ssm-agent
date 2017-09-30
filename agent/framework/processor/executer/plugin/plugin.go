@@ -23,8 +23,8 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/framework/runpluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurecontainers"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage"
-	"github.com/aws/amazon-ssm-agent/agent/plugins/copycontent"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/dockercontainer"
+	"github.com/aws/amazon-ssm-agent/agent/plugins/downloadcontent"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/inventory"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/lrpminvoker"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/pluginutil"
@@ -163,8 +163,8 @@ func loadPlatformIndependentPlugins(context context.T) runpluginutil.PluginRegis
 		workerPlugins[configurePackagePluginName] = configurePackagePlugin
 	}
 
-	downloadContentPluginName := copycontent.Name()
-	downloadContentPlugin, err := copycontent.NewPlugin(pluginutil.DefaultPluginConfig())
+	downloadContentPluginName := downloadcontent.Name()
+	downloadContentPlugin, err := downloadcontent.NewPlugin(pluginutil.DefaultPluginConfig())
 	if err != nil {
 		log.Errorf("failed to create plugin %s %v", downloadContentPluginName, err)
 	} else {
