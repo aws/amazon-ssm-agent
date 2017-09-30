@@ -1,0 +1,24 @@
+---
+schemaVersion: '1.2'
+description: This document defines the PowerShell command to run or path to a script
+  which is to be executed.
+runtimeConfig:
+  aws:runScript:
+    properties:
+    - id: 0.aws:runScript
+      runCommand: "{{ commands }}"
+      timeoutSeconds: "{{ timeoutSeconds }}"
+      workingDirectory: "{{ workingDirectory }}"
+parameters:
+  commands:
+    default: ''
+    description: List of commands to run (Required)
+    type: Array
+  timeoutSeconds:
+    default: '1000'
+    description: Timeout in seconds (Optional)
+    type: String
+  workingDirectory:
+    default: ''
+    description: Path to the working directory (Optional)
+    type: String
