@@ -20,6 +20,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/docmanager/model"
+	"github.com/aws/amazon-ssm-agent/agent/docparser"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil/filemanager"
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/basicexecuter"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
@@ -112,12 +113,8 @@ func (p *Plugin) execute(context context.T, config contracts.Configuration, canc
 	var output contracts.PluginOutput
 
 	if cancelFlag.ShutDown() {
-		res.Code = FailExitCode
-		res.Status = contracts.ResultStatusFailed
 		output.MarkAsShutdown()
 	} else if cancelFlag.Canceled() {
-		res.Code = FailExitCode
-		res.Status = contracts.ResultStatusCancelled
 		output.MarkAsCancelled()
 	} else if input, err := parseAndValidateInput(config.Properties); err != nil {
 		output.MarkAsFailed(log, err)
@@ -170,9 +167,9 @@ func (p *Plugin) execute(context context.T, config contracts.Configuration, canc
 func (p *Plugin) runDocument(context context.T, input *RunDocumentPluginInput, config contracts.Configuration, output *contracts.PluginOutput) {
 
 	log := context.Log()
-	//Run aws:copyContent plugin
-	log.Debug("Inside run copyContent function")
-	var destinationDir string
+	//Run aws:runDocument plugin
+	log.Debug("Inside aws:runDocument function")
+	var documentPath string
 	var pluginsInfo []model.PluginState
 	var err error
 	//Set the depth of execution to be 1 for the first level execution
@@ -195,18 +192,19 @@ func (p *Plugin) runDocument(context context.T, input *RunDocumentPluginInput, c
 	log.Info("Depth of execution - ", execDepth)
 
 	if input.DocumentType == SSMDocumentType {
-		if destinationDir, err = p.downloadDocumentFromSSM(log, config, input); err != nil {
+		if documentPath, err = p.downloadDocumentFromSSM(log, config, input); err != nil {
 			output.MarkAsFailed(log, err)
 		}
 	} else {
 		if filepath.IsAbs(input.DocumentPath) {
-			destinationDir = input.DocumentPath
+			documentPath = input.DocumentPath
 		} else {
-
-			destinationDir = filepath.Join(config.OrchestrationDirectory, input.DocumentPath)
+			orchestrationDir := strings.TrimSuffix(config.OrchestrationDirectory, config.PluginID)
+			// The Document path is expected to have the name of the document
+			documentPath = filepath.Join(orchestrationDir, downloadsDir, input.DocumentPath)
 		}
 	}
-	if pluginsInfo, err = p.prepareDocumentForExecution(log, destinationDir, config, input.DocumentParameters); err != nil {
+	if pluginsInfo, err = p.prepareDocumentForExecution(log, documentPath, config, input.DocumentParameters); err != nil {
 		output.MarkAsFailed(log, fmt.Errorf("There was an error while preparing documents - %v", err.Error()))
 		return
 	}
@@ -215,29 +213,47 @@ func (p *Plugin) runDocument(context context.T, input *RunDocumentPluginInput, c
 		plugins.Configuration.Settings = &ExecutePluginDepth{executeCommandDepth: execDepth}
 		pluginsInfo[i] = plugins
 	}
-	p.execDoc.ExecuteDocument(context, pluginsInfo, config.BookKeepingFileName, times.ToIso8601UTC(time.Now()), output)
-}
+	var resultsChannel chan contracts.DocumentResult
+	var pluginOutput map[string]*contracts.PluginResult
+	if resultsChannel, err = p.execDoc.ExecuteDocument(context, pluginsInfo, config.BookKeepingFileName, times.ToIso8601UTC(time.Now())); err != nil {
+		output.MarkAsFailed(log, fmt.Errorf("There was an error while running documents - %v", err.Error()))
+	}
 
-func parseDocumentNameForVersion(name string) (docName, docVersion string) {
-	if len(name) == 0 {
-		return "", ""
+	for res := range resultsChannel {
+		if res.LastPlugin == "" {
+			pluginOutput = res.PluginResults
+			break
+		}
 	}
-	docNameArray := strings.Split(name, ":")
-	docName = docNameArray[0]
-	if len(docNameArray) > 1 {
-		docVersion = docNameArray[1]
+	if pluginOutput == nil {
+		output.MarkAsFailed(log, errors.New("No output obtained from executing document"))
 	}
-	return docName, docVersion
+	for _, pluginOut := range pluginOutput {
+		if pluginOut.StandardOutput != "" {
+			// separating the append so that the output is on a new line
+			output.AppendInfof(log, "%v", pluginOut.StandardOutput)
+		}
+		if pluginOut.StandardError != "" {
+			// separating the append so that the output is on a new line
+			output.AppendErrorf(log, "%v", pluginOut.StandardError)
+		}
+		if pluginOut.Error != nil {
+			output.MarkAsFailed(log, pluginOut.Error)
+		} else {
+			output.MarkAsSucceeded()
+		}
+		output.Status = contracts.MergeResultStatus(output.Status, pluginOut.Status)
+	}
 }
 
 func (p *Plugin) downloadDocumentFromSSM(log log.T, config contracts.Configuration, input *RunDocumentPluginInput) (string, error) {
-	instanceId, err := platform.InstanceID()
+	var err error
 	// Downloads folder for download path
-	destination := filepath.Join(appconfig.DefaultDataStorePath, instanceId, appconfig.DefaultDocumentRootDirName, downloadsDir)
+	destination := filepath.Join(config.OrchestrationDirectory, downloadsDir)
 
 	//This gets the document name if the fullARN is provided
 	docName := filepath.Base(input.DocumentPath)
-	docName, docVersion := parseDocumentNameForVersion(docName)
+	docName, docVersion := docparser.ParseDocumentNameAndVersion(docName)
 	var docResponse *ssm.GetDocumentOutput
 	if docResponse, err = p.ssmSvc.GetDocument(log, docName, docVersion); err != nil {
 		log.Errorf("Unable to get ssm document. %v", err)
@@ -246,7 +262,7 @@ func (p *Plugin) downloadDocumentFromSSM(log log.T, config contracts.Configurati
 
 	log.Debugf("Destination is %v ", destination)
 	// create directory to download github resources
-	if err = p.filesys.MakeDirs(filepath.Dir(destination)); err != nil {
+	if err = p.filesys.MakeDirs(destination); err != nil {
 		log.Error("failed to create directory for github - ", err)
 		return "", err
 	}
@@ -270,18 +286,18 @@ func (p *Plugin) prepareDocumentForExecution(log log.T, pathToFile string, confi
 		// TODO: meloniam@ 08/24/2017 - https://amazon.awsapps.com/workdocs/index.html#/document/7d56a42ea5b040a7c33548d77dc98040f0fb380bbbfb2fd580c861225e2ee1c7
 		// TODO: Remove the Unmarshalling once RC supports StringMap
 		// TODO: documentParameters will be of type map[string]interface{} from the beginning
-		if filepath.Ext(pathToFile) == jsonExtension {
-			if json.Unmarshal([]byte(params), &parameters); err != nil {
-				log.Error("Unmarshalling JSON remote resource parameters failed. Please make sure the document is in the right format")
-				return pluginsInfo, err
-			}
-		} else if filepath.Ext(pathToFile) == yamlExtension {
+
+		if json.Unmarshal([]byte(params), &parameters); err != nil {
+			log.Error("Unmarshalling document parameters failed. Please make sure the parameters are specified in the right format")
+			return pluginsInfo, err
+		}
+		log.Debug("len of parameter - ", len(parameters))
+		if len(parameters) == 0 {
+			log.Debug("Parameters are probably in YAML")
 			if yaml.Unmarshal([]byte(params), &parameters); err != nil {
-				log.Error("Unmarshalling YAML remote resource parameters failed. Please make sure the document is in the right format")
+				log.Error("Unmarshalling document parameters failed. Please make sure the parameters are specified in the right format")
 				return pluginsInfo, err
 			}
-		} else {
-			return pluginsInfo, errors.New("Extension type for documents is not supported")
 		}
 
 		log.Info("Parameters passed in are ", parameters)
@@ -293,7 +309,7 @@ func (p *Plugin) prepareDocumentForExecution(log log.T, pathToFile string, confi
 	}
 	log.Infof("Sending the document received for parsing - %v", string(rawDocument))
 
-	return p.execDoc.ParseDocument(log, filepath.Ext(pathToFile), rawDocument, config.OrchestrationDirectory, config.OutputS3BucketName, config.OutputS3KeyPrefix, config.MessageId, config.PluginID, config.DefaultWorkingDirectory, parameters)
+	return p.execDoc.ParseDocument(log, rawDocument, config.OrchestrationDirectory, config.OutputS3BucketName, config.OutputS3KeyPrefix, config.MessageId, config.PluginID, config.DefaultWorkingDirectory, parameters)
 }
 
 // Name returns the plugin name
@@ -320,13 +336,13 @@ func parseAndValidateInput(rawPluginInput interface{}) (*RunDocumentPluginInput,
 func validateInput(input *RunDocumentPluginInput) (valid bool, err error) {
 	// ensure non-empty location type
 	if input.DocumentType == "" {
-		return false, errors.New("Source location must be specified to either by SSMDocument or LocalPath.")
+		return false, errors.New("Document Type must be specified to either by SSMDocument or LocalPath.")
 	}
 	if input.DocumentType != SSMDocumentType && input.DocumentType != LocalPathType {
-		return false, errors.New("Source type specified in invalid")
+		return false, errors.New("Document type specified in invalid")
 	}
 	if input.DocumentPath == "" {
-		return false, errors.New("Souce Info must be provided")
+		return false, errors.New("Document Path must be provided")
 	}
 	return true, nil
 }
@@ -338,7 +354,7 @@ func readFileContents(log log.T, filesysdep filemanager.FileSystem, destinationP
 
 	var rawFile string
 	if rawFile, err = filesysdep.ReadFile(destinationPath); err != nil {
-		log.Error("Error occured while reading file - ", err)
+		log.Error("Error occurred while reading file - ", err)
 		return nil, err
 	}
 	if rawFile == "" {
