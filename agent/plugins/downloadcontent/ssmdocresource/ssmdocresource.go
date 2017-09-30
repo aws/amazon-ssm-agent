@@ -21,8 +21,8 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/fileutil/filemanager"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
-	"github.com/aws/amazon-ssm-agent/agent/plugins/copycontent/remoteresource"
-	"github.com/aws/amazon-ssm-agent/agent/plugins/copycontent/system"
+	"github.com/aws/amazon-ssm-agent/agent/plugins/downloadcontent/remoteresource"
+	"github.com/aws/amazon-ssm-agent/agent/plugins/downloadcontent/system"
 	"github.com/aws/aws-sdk-go/service/ssm"
 
 	"errors"

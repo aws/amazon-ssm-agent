@@ -12,8 +12,8 @@
 // implied. See the License for the specific language governing
 // permissions and limitations under the License..
 
-// Package copycontent implements the aws:copyContent plugin
-package copycontent
+// Package downloadcontent implements the aws:downloadContent plugin
+package downloadcontent
 
 import (
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
@@ -22,11 +22,11 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/fileutil/filemanager"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
-	"github.com/aws/amazon-ssm-agent/agent/plugins/copycontent/gitresource"
-	"github.com/aws/amazon-ssm-agent/agent/plugins/copycontent/gitresource/privategithub"
-	"github.com/aws/amazon-ssm-agent/agent/plugins/copycontent/remoteresource"
-	"github.com/aws/amazon-ssm-agent/agent/plugins/copycontent/s3resource"
-	"github.com/aws/amazon-ssm-agent/agent/plugins/copycontent/ssmdocresource"
+	"github.com/aws/amazon-ssm-agent/agent/plugins/downloadcontent/gitresource"
+	"github.com/aws/amazon-ssm-agent/agent/plugins/downloadcontent/gitresource/privategithub"
+	"github.com/aws/amazon-ssm-agent/agent/plugins/downloadcontent/remoteresource"
+	"github.com/aws/amazon-ssm-agent/agent/plugins/downloadcontent/s3resource"
+	"github.com/aws/amazon-ssm-agent/agent/plugins/downloadcontent/ssmdocresource"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/pluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 
@@ -64,37 +64,37 @@ func NewPlugin(pluginConfig pluginutil.PluginConfig) (*Plugin, error) {
 	return &plugin, nil
 }
 
-// Plugin is the type for the aws:copyContent plugin.
+// Plugin is the type for the aws:downloadContent plugin.
 type Plugin struct {
 	pluginutil.DefaultPlugin
-	remoteResourceCreator func(log log.T, locationType string, locationInfo string) (remoteresource.RemoteResource, error)
+	remoteResourceCreator func(log log.T, locationType string, SourceInfo string) (remoteresource.RemoteResource, error)
 	filesys               filemanager.FileSystem
 }
 
 // ExecutePluginInput is a struct that holds the parameters sent through send command
-type CopyContentPlugin struct {
+type DownloadContentPlugin struct {
 	contracts.PluginInput
-	LocationType    string `json:"locationType"`
-	LocationInfo    string `json:"locationInfo"`
+	SourceType      string `json:"sourceType"`
+	SourceInfo      string `json:"sourceInfo"`
 	DestinationPath string `json:"destinationPath"`
-	// TODO: 08/25/2017 meloniam@ Change the type of locationInfo and documentParameters to map[string]interface{}
+	// TODO: 08/25/2017 meloniam@ Change the type of SourceInfo and documentParameters to map[string]interface{}
 	// TODO: https://amazon.awsapps.com/workdocs/index.html#/document/7d56a42ea5b040a7c33548d77dc98040f0fb380bbbfb2fd580c861225e2ee1c7
 }
 
 // newRemoteResource switches between the location type and returns a struct of the location type that implements remoteresource
-func newRemoteResource(log log.T, locationType string, locationInfo string) (resource remoteresource.RemoteResource, err error) {
-	switch locationType {
+func newRemoteResource(log log.T, SourceType string, SourceInfo string) (resource remoteresource.RemoteResource, err error) {
+	switch SourceType {
 	case GitHub:
 		// TODO: meloniam@ 08/24/2017 Replace string type to map[string]inteface{} type once Runcommand supports string maps
 		// TODO: https://amazon.awsapps.com/workdocs/index.html#/document/7d56a42ea5b040a7c33548d77dc98040f0fb380bbbfb2fd580c861225e2ee1c7
 		token := privategithub.NewTokenInfoImpl()
-		return gitresource.NewGitResource(log, locationInfo, token)
+		return gitresource.NewGitResource(log, SourceInfo, token)
 	case S3:
-		return s3resource.NewS3Resource(log, locationInfo)
+		return s3resource.NewS3Resource(log, SourceInfo)
 	case SSMDocument:
-		return ssmdocresource.NewSSMDocResource(locationInfo)
+		return ssmdocresource.NewSSMDocResource(SourceInfo)
 	default:
-		return nil, fmt.Errorf("Invalid Location type - %v", locationType)
+		return nil, fmt.Errorf("Invalid Location type - %v", SourceType)
 	}
 }
 
@@ -166,14 +166,14 @@ func (p *Plugin) execute(context context.T, config contracts.Configuration, canc
 }
 
 // runCopyContent figures out the type of location, downloads the resource, saves it on disk and returns information required for it
-func (p *Plugin) runCopyContent(log log.T, input *CopyContentPlugin, config contracts.Configuration, output *contracts.PluginOutput) {
+func (p *Plugin) runCopyContent(log log.T, input *DownloadContentPlugin, config contracts.Configuration, output *contracts.PluginOutput) {
 
-	//Run aws:copyContent plugin
-	log.Debug("Inside run copyContent function")
+	//Run aws:downloadContent plugin
+	log.Debug("Inside run downloadcontent function")
 
 	// remoteResourceCreator makes a call to a function that creates a new remote resource based on the location type
-	log.Debug("Creating resource of type - ", input.LocationType)
-	remoteResource, err := p.remoteResourceCreator(log, input.LocationType, input.LocationInfo)
+	log.Debug("Creating resource of type - ", input.SourceType)
+	remoteResource, err := p.remoteResourceCreator(log, input.SourceType, input.SourceInfo)
 	if err != nil {
 		output.MarkAsFailed(log, err)
 		return
@@ -213,8 +213,8 @@ func Name() string {
 }
 
 // parseAndValidateInput parses the input json file and also validates its inputs
-func parseAndValidateInput(rawPluginInput interface{}) (*CopyContentPlugin, error) {
-	var input CopyContentPlugin
+func parseAndValidateInput(rawPluginInput interface{}) (*DownloadContentPlugin, error) {
+	var input DownloadContentPlugin
 	var err error
 	if err = jsonutil.Remarshal(rawPluginInput, &input); err != nil {
 		return nil, fmt.Errorf("invalid format in plugin properties %v; \nerror %v", rawPluginInput, err)
@@ -228,17 +228,17 @@ func parseAndValidateInput(rawPluginInput interface{}) (*CopyContentPlugin, erro
 }
 
 // validateInput ensures the plugin input matches the defined schema
-func validateInput(input *CopyContentPlugin) (valid bool, err error) {
+func validateInput(input *DownloadContentPlugin) (valid bool, err error) {
 	// ensure non-empty location type
-	if input.LocationType == "" {
+	if input.SourceType == "" {
 		return false, errors.New("Location Type must be specified")
 	}
 	//ensure all entries are valid
-	if input.LocationType != GitHub && input.LocationType != S3 && input.LocationType != SSMDocument {
+	if input.SourceType != GitHub && input.SourceType != S3 && input.SourceType != SSMDocument {
 		return false, errors.New("Unsupported location type")
 	}
 	// ensure non-empty location info
-	if input.LocationInfo == "" {
+	if input.SourceInfo == "" {
 		return false, errors.New("Location Information must be specified")
 	}
 	return true, nil
