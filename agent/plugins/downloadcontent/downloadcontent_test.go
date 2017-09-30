@@ -12,8 +12,8 @@
 // implied. See the License for the specific language governing
 // permissions and limitations under the License.
 
-// Package copycontent implements the aws:copyContent plugin
-package copycontent
+// Package downloadcontent implements the aws:downloadContent plugin
+package downloadcontent
 
 import (
 	"testing"
@@ -26,8 +26,8 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	filemock "github.com/aws/amazon-ssm-agent/agent/fileutil/filemanager/mock"
 	"github.com/aws/amazon-ssm-agent/agent/log"
-	"github.com/aws/amazon-ssm-agent/agent/plugins/copycontent/remoteresource"
-	resourcemock "github.com/aws/amazon-ssm-agent/agent/plugins/copycontent/remoteresource/mock"
+	"github.com/aws/amazon-ssm-agent/agent/plugins/downloadcontent/remoteresource"
+	resourcemock "github.com/aws/amazon-ssm-agent/agent/plugins/downloadcontent/remoteresource/mock"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
@@ -91,8 +91,8 @@ func TestNewPlugin_RunCopyContent(t *testing.T) {
 
 	fileMock := filemock.FileSystemMock{}
 
-	input := CopyContentPlugin{
-		LocationType:    "Github",
+	input := DownloadContentPlugin{
+		SourceType:      "Github",
 		DestinationPath: "destination",
 	}
 	config := createStubConfiguration("orch", "bucket", "prefix", "1234-1234-1234", "directory")
@@ -114,8 +114,8 @@ func TestNewPlugin_RunCopyContent_absPathDestinationDir(t *testing.T) {
 
 	fileMock := filemock.FileSystemMock{}
 
-	input := CopyContentPlugin{
-		LocationType:    "Github",
+	input := DownloadContentPlugin{
+		SourceType:      "Github",
 		DestinationPath: "/var/temp/fake-dir",
 	}
 	config := createStubConfiguration("orch", "bucket", "prefix", "1234-1234-1234", "directory")
@@ -137,8 +137,8 @@ func TestNewPlugin_RunCopyContent_relativeDirDestinationPath(t *testing.T) {
 
 	fileMock := filemock.FileSystemMock{}
 
-	input := CopyContentPlugin{
-		LocationType:    "Github",
+	input := DownloadContentPlugin{
+		SourceType:      "Github",
 		DestinationPath: "temp/fake-dir/",
 	}
 	config := createStubConfiguration("orch/aws-copyContent", "bucket", "prefix", "1234-1234-1234", "directory")
@@ -166,9 +166,9 @@ func Test_RunCopyContentBadLocationInfo(t *testing.T) {
 
 	config := createStubConfiguration("orch", "bucket", "prefix", "1234-1234-1234", "directory")
 
-	input := CopyContentPlugin{
-		LocationType:    "GitHub",
-		LocationInfo:    locationInfo,
+	input := DownloadContentPlugin{
+		SourceType:      "GitHub",
+		SourceInfo:      locationInfo,
 		DestinationPath: "",
 	}
 	p := Plugin{
@@ -187,10 +187,10 @@ func TestPlugin_ExecuteGitHubFile(t *testing.T) {
 	mockplugin := MockDefaultPlugin{}
 
 	pluginResult := contracts.PluginOutput{ExitCode: 0, Status: "", Stdout: "", Stderr: ""}
-	input := CopyContentPlugin{}
+	input := DownloadContentPlugin{}
 
-	input.LocationType = "GitHub"
-	input.LocationInfo = `{
+	input.SourceType = "GitHub"
+	input.SourceInfo = `{
 		"owner" : "test-owner",
 		"repository" :	 "test-repo",
 		"path" : "path"
@@ -236,10 +236,10 @@ func TestPlugin_ExecuteS3File(t *testing.T) {
 	mockplugin := MockDefaultPlugin{}
 
 	pluginResult := contracts.PluginOutput{ExitCode: 0, Status: "", Stdout: "", Stderr: ""}
-	input := CopyContentPlugin{}
+	input := DownloadContentPlugin{}
 
-	input.LocationType = "S3"
-	input.LocationInfo = `{
+	input.SourceType = "S3"
+	input.SourceInfo = `{
 		"path" : "https://s3.amazonaws.com/fake-bucket/fake-key/filename.ps"
 		}`
 	input.DestinationPath = "/var/tmp/destination"
@@ -282,10 +282,10 @@ func TestPlugin_ExecuteSSMDoc(t *testing.T) {
 	mockplugin := MockDefaultPlugin{}
 
 	pluginResult := contracts.PluginOutput{ExitCode: 0, Status: "", Stdout: "", Stderr: ""}
-	input := CopyContentPlugin{}
+	input := DownloadContentPlugin{}
 
-	input.LocationType = "SSMDocument"
-	input.LocationInfo = `{
+	input.SourceType = "SSMDocument"
+	input.SourceInfo = `{
 		"name" : "arn:aws:ssm:us-east-1:1234567890:document/mySharedDocument:10"
 		}`
 	input.DestinationPath = "/var/tmp/destination/"
@@ -327,10 +327,10 @@ func TestPlugin_ExecuteSSMDocError(t *testing.T) {
 	mockplugin := MockDefaultPlugin{}
 
 	pluginResult := contracts.PluginOutput{ExitCode: 0, Status: "", Stdout: "", Stderr: ""}
-	input := CopyContentPlugin{}
+	input := DownloadContentPlugin{}
 
-	input.LocationType = "SSMDocument"
-	input.LocationInfo = `{
+	input.SourceType = "SSMDocument"
+	input.SourceInfo = `{
 	"name" : ":10"
 		}`
 	input.DestinationPath = "/var/tmp/destination/"
@@ -369,8 +369,8 @@ func TestPlugin_ExecuteSSMDocError(t *testing.T) {
 
 func TestValidateInput_UnsupportedLocationType(t *testing.T) {
 
-	input := CopyContentPlugin{}
-	input.LocationType = "unknown"
+	input := DownloadContentPlugin{}
+	input.SourceType = "unknown"
 
 	validateInput(&input)
 
@@ -381,9 +381,9 @@ func TestValidateInput_UnsupportedLocationType(t *testing.T) {
 	assert.Contains(t, err.Error(), "Unsupported location type")
 }
 
-func TestValidateInput_UnknownLocationType(t *testing.T) {
+func TestValidateInput_UnknownSourceType(t *testing.T) {
 
-	input := CopyContentPlugin{}
+	input := DownloadContentPlugin{}
 
 	validateInput(&input)
 
@@ -396,8 +396,8 @@ func TestValidateInput_UnknownLocationType(t *testing.T) {
 
 func TestValidateInput_NoLocationInfo(t *testing.T) {
 
-	input := CopyContentPlugin{}
-	input.LocationType = "S3"
+	input := DownloadContentPlugin{}
+	input.SourceType = "S3"
 
 	validateInput(&input)
 
@@ -464,7 +464,7 @@ func (m *MockDefaultPlugin) UploadOutputToS3Bucket(log log.T, pluginID string, o
 	return args.Get(0).([]string)
 }
 
-func createSimpleConfigWithProperties(info *CopyContentPlugin) contracts.Configuration {
+func createSimpleConfigWithProperties(info *DownloadContentPlugin) contracts.Configuration {
 	config := contracts.Configuration{}
 
 	var rawPluginInput interface{}
