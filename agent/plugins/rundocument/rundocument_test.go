@@ -28,7 +28,6 @@ import (
 
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
-	"github.com/aws/amazon-ssm-agent/agent/docmanager/model"
 	filemock "github.com/aws/amazon-ssm-agent/agent/fileutil/filemanager/mock"
 	executermocks "github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/mock"
 	"github.com/aws/amazon-ssm-agent/agent/log"
@@ -39,7 +38,7 @@ import (
 
 var logMock = log.NewMockLog()
 var contextMock = context.NewMockDefault()
-var plugin = model.PluginState{}
+var plugin = contracts.PluginState{}
 
 func TestReadFileContents(t *testing.T) {
 	fileMock := filemock.FileSystemMock{}
@@ -70,7 +69,7 @@ func TestExecDocumentImpl_ExecuteDocumentFailure(t *testing.T) {
 
 	//Expected out isFail because plugin output is nil
 	documentId := "documentId"
-	var pluginInput []model.PluginState
+	var pluginInput []contracts.PluginState
 	pluginInput = append(pluginInput, plugin)
 
 	execMock := executermocks.NewMockExecuter()
@@ -89,7 +88,7 @@ func TestExecDocumentImpl_ExecuteDocumentFailure(t *testing.T) {
 func TestExecDocumentImpl_ExecuteDocumentSuccess(t *testing.T) {
 
 	documentId := "documentId"
-	var pluginInput []model.PluginState
+	var pluginInput []contracts.PluginState
 	pluginInput = append(pluginInput, plugin)
 	pluginRes := make(map[string]*contracts.PluginResult)
 	pluginResult := contracts.PluginResult{
@@ -117,8 +116,8 @@ func TestExecutePlugin_PrepareDocumentForExecution(t *testing.T) {
 	execMock := NewExecMock()
 	fileMock := filemock.FileSystemMock{}
 
-	plugin := model.PluginState{}
-	plugins := []model.PluginState{plugin}
+	plugin := contracts.PluginState{}
+	plugins := []contracts.PluginState{plugin}
 
 	parameters := make(map[string]interface{})
 	conf := createStubConfiguration("orch", "bucket", "prefix", "1234-1234-1234", "directory")
@@ -164,8 +163,8 @@ func TestExecuteImpl_PrepareDocumentForExecutionParametersYAML(t *testing.T) {
 	execMock := NewExecMock()
 	fileMock := filemock.FileSystemMock{}
 
-	plugin := model.PluginState{}
-	plugins := []model.PluginState{plugin}
+	plugin := contracts.PluginState{}
+	plugins := []contracts.PluginState{plugin}
 
 	params := `
 param1: hello
@@ -196,8 +195,8 @@ func TestExecuteImpl_PrepareDocumentForExecutionParametersJSON(t *testing.T) {
 
 	fileMock := filemock.FileSystemMock{}
 
-	plugin := model.PluginState{}
-	plugins := []model.PluginState{plugin}
+	plugin := contracts.PluginState{}
+	plugins := []contracts.PluginState{plugin}
 
 	params := `{
 		"param1":"hello",
@@ -299,8 +298,8 @@ func TestPlugin_RunDocument(t *testing.T) {
 	parameters := make(map[string]interface{})
 	content := "content"
 
-	plugin := model.PluginState{}
-	plugins := []model.PluginState{plugin}
+	plugin := contracts.PluginState{}
+	plugins := []contracts.PluginState{plugin}
 
 	fileMock.On("ReadFile", "/var/tmp/docLocation/docname.json").Return(content, nil)
 	execMock.On("ParseDocument", contextMock.Log(), []byte(content), conf.OrchestrationDirectory, conf.OutputS3BucketName, conf.OutputS3KeyPrefix, conf.MessageId, conf.PluginID, conf.DefaultWorkingDirectory, parameters).Return(plugins, nil)
@@ -339,8 +338,8 @@ func TestPlugin_RunDocumentFromSSMDocument(t *testing.T) {
 	}
 	conf := createStubConfiguration("orch", "bucket", "prefix", "1234-1234-1234", "directory")
 
-	plugin := model.PluginState{}
-	plugins := []model.PluginState{plugin}
+	plugin := contracts.PluginState{}
+	plugins := []contracts.PluginState{plugin}
 
 	parameters := make(map[string]interface{})
 	output := contracts.PluginOutput{}
@@ -388,8 +387,8 @@ func TestPlugin_RunDocumentFromAbsLocalPath(t *testing.T) {
 	content := "content"
 	conf := createStubConfiguration("orch", "bucket", "prefix", "1234-1234-1234", "directory")
 
-	plugin := model.PluginState{}
-	plugins := []model.PluginState{plugin}
+	plugin := contracts.PluginState{}
+	plugins := []contracts.PluginState{plugin}
 
 	resChan := make(chan contracts.DocumentResult)
 	go func() {
