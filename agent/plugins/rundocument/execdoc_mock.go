@@ -18,7 +18,6 @@ package rundocument
 import (
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
-	"github.com/aws/amazon-ssm-agent/agent/docmanager/model"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/stretchr/testify/mock"
 )
@@ -31,12 +30,12 @@ type ExecMock struct {
 	mock.Mock
 }
 
-func (e ExecMock) ParseDocument(log log.T, documentRaw []byte, orchestrationDir string, s3Bucket string, s3KeyPrefix string, messageID string, documentID string, defaultWorkingDirectory string, params map[string]interface{}) (pluginsInfo []model.PluginState, err error) {
+func (e ExecMock) ParseDocument(log log.T, documentRaw []byte, orchestrationDir string, s3Bucket string, s3KeyPrefix string, messageID string, documentID string, defaultWorkingDirectory string, params map[string]interface{}) (pluginsInfo []contracts.PluginState, err error) {
 	args := e.Called(log, documentRaw, orchestrationDir, s3Bucket, s3KeyPrefix, messageID, documentID, defaultWorkingDirectory, params)
-	return args.Get(0).([]model.PluginState), args.Error(1)
+	return args.Get(0).([]contracts.PluginState), args.Error(1)
 }
 
-func (e ExecMock) ExecuteDocument(context context.T, pluginInput []model.PluginState, documentID string, documentCreatedDate string) (chan contracts.DocumentResult, error) {
+func (e ExecMock) ExecuteDocument(context context.T, pluginInput []contracts.PluginState, documentID string, documentCreatedDate string) (chan contracts.DocumentResult, error) {
 	args := e.Called(context, pluginInput, documentID, documentCreatedDate)
 	return args.Get(0).(chan contracts.DocumentResult), args.Error(1)
 }

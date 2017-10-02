@@ -19,7 +19,6 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
-	"github.com/aws/amazon-ssm-agent/agent/docmanager/model"
 	"github.com/aws/amazon-ssm-agent/agent/docparser"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil/filemanager"
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/basicexecuter"
@@ -170,7 +169,7 @@ func (p *Plugin) runDocument(context context.T, input *RunDocumentPluginInput, c
 	//Run aws:runDocument plugin
 	log.Debug("Inside aws:runDocument function")
 	var documentPath string
-	var pluginsInfo []model.PluginState
+	var pluginsInfo []contracts.PluginState
 	var err error
 	//Set the depth of execution to be 1 for the first level execution
 	execDepth := 1
@@ -213,6 +212,7 @@ func (p *Plugin) runDocument(context context.T, input *RunDocumentPluginInput, c
 		plugins.Configuration.Settings = &ExecutePluginDepth{executeCommandDepth: execDepth}
 		pluginsInfo[i] = plugins
 	}
+
 	var resultsChannel chan contracts.DocumentResult
 	var pluginOutput map[string]*contracts.PluginResult
 	if resultsChannel, err = p.execDoc.ExecuteDocument(context, pluginsInfo, config.BookKeepingFileName, times.ToIso8601UTC(time.Now())); err != nil {
@@ -278,7 +278,7 @@ func (p *Plugin) downloadDocumentFromSSM(log log.T, config contracts.Configurati
 }
 
 // PrepareDocumentForExecution parses the raw content of the document, validates it and returns a PluginState that can be executed.
-func (p *Plugin) prepareDocumentForExecution(log log.T, pathToFile string, config contracts.Configuration, params string) (pluginsInfo []model.PluginState, err error) {
+func (p *Plugin) prepareDocumentForExecution(log log.T, pathToFile string, config contracts.Configuration, params string) (pluginsInfo []contracts.PluginState, err error) {
 	parameters := make(map[string]interface{})
 	if params != "" {
 
