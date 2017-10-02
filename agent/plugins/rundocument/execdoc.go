@@ -21,8 +21,8 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
-	"github.com/aws/amazon-ssm-agent/agent/docmanager/model"
 	"github.com/aws/amazon-ssm-agent/agent/docparser"
+	"github.com/aws/amazon-ssm-agent/agent/framework/docmanager"
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/task"
@@ -32,8 +32,8 @@ import (
 type ExecDocument interface {
 	ParseDocument(log log.T, documentRaw []byte, orchestrationDir string,
 		s3Bucket string, s3KeyPrefix string, messageID string, documentID string, defaultWorkingDirectory string,
-		params map[string]interface{}) (pluginsInfo []model.PluginState, err error)
-	ExecuteDocument(context context.T, pluginInput []model.PluginState, documentID string,
+		params map[string]interface{}) (pluginsInfo []contracts.PluginState, err error)
+	ExecuteDocument(context context.T, pluginInput []contracts.PluginState, documentID string,
 		documentCreatedDate string) (chan contracts.DocumentResult, error)
 }
 
@@ -45,7 +45,7 @@ type ExecDocumentImpl struct {
 // This function is also responsible for all the validation of document and replacement of parameters
 func (exec ExecDocumentImpl) ParseDocument(log log.T, documentRaw []byte, orchestrationDir string,
 	s3Bucket string, s3KeyPrefix string, messageID string, documentID string, defaultWorkingDirectory string,
-	params map[string]interface{}) (pluginsInfo []model.PluginState, err error) {
+	params map[string]interface{}) (pluginsInfo []contracts.PluginState, err error) {
 	docContent := contracts.DocumentContent{}
 	if err := json.Unmarshal(documentRaw, &docContent); err != nil {
 		if err := yaml.Unmarshal(documentRaw, &docContent); err != nil {
@@ -69,13 +69,13 @@ func (exec ExecDocumentImpl) ParseDocument(log log.T, documentRaw []byte, orches
 }
 
 // ExecuteDocument is responsible to execute the sub-documents that are created or downloaded by the executeCommand plugin
-func (exec ExecDocumentImpl) ExecuteDocument(context context.T, pluginInput []model.PluginState, documentID string,
+func (exec ExecDocumentImpl) ExecuteDocument(context context.T, pluginInput []contracts.PluginState, documentID string,
 	documentCreatedDate string) (resultChannels chan contracts.DocumentResult, err error) {
 	log := context.Log()
 	log.Info("Running sub-document")
 
-	docState := model.DocumentState{
-		DocumentInformation: model.DocumentInfo{
+	docState := contracts.DocumentState{
+		DocumentInformation: contracts.DocumentInfo{
 			DocumentID: documentID,
 		},
 		InstancePluginsInformation: pluginInput,
@@ -86,7 +86,8 @@ func (exec ExecDocumentImpl) ExecuteDocument(context context.T, pluginInput []mo
 		log.Error("failed to load instance id")
 		return resultChannels, err
 	}
-	docStore := executer.NewDocumentFileStore(context, documentID, instanceID, appconfig.DefaultLocationOfCurrent, &docState)
+	docStore := executer.NewDocumentFileStore(context, documentID, instanceID, appconfig.DefaultLocationOfCurrent,
+		&docState, docmanager.NewDocumentFileMgr(appconfig.DefaultDataStorePath, appconfig.DefaultDocumentRootDirName, appconfig.DefaultLocationOfState))
 	cancelFlag := task.NewChanneledCancelFlag()
 	resultChannels = exec.DocExecutor.Run(cancelFlag, &docStore)
 
