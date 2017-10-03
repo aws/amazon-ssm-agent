@@ -95,7 +95,7 @@ func TestPrepareNewInstall(t *testing.T) {
 	tracer := trace.NewTracer(log.NewMockLog())
 	output := &trace.PluginOutputTrace{Tracer: tracer}
 
-	inst, uninst, installState, installedVersion := prepareConfigurePackage(
+	inst, uninst, installState, packageArn, installedVersion := prepareConfigurePackage(
 		tracer,
 		buildConfigSimple(pluginInformation),
 		repoMock,
@@ -106,6 +106,7 @@ func TestPrepareNewInstall(t *testing.T) {
 	assert.NotNil(t, inst)
 	assert.Nil(t, uninst)
 	assert.Equal(t, localpackages.None, installState)
+	assert.Equal(t, "packageArn", packageArn)
 	assert.Empty(t, installedVersion)
 	assert.Equal(t, 0, output.GetExitCode())
 	assert.Empty(t, tracer.ToPluginOutput().GetStderr())
@@ -125,7 +126,7 @@ func TestPrepareUpgrade(t *testing.T) {
 	tracer := trace.NewTracer(log.NewMockLog())
 	output := &trace.PluginOutputTrace{Tracer: tracer}
 
-	inst, uninst, installState, installedVersion := prepareConfigurePackage(
+	inst, uninst, installState, packageArn, installedVersion := prepareConfigurePackage(
 		tracer,
 		buildConfigSimple(pluginInformation),
 		repoMock,
@@ -136,6 +137,7 @@ func TestPrepareUpgrade(t *testing.T) {
 	assert.NotNil(t, inst)
 	assert.NotNil(t, uninst)
 	assert.Equal(t, localpackages.Installed, installState)
+	assert.Equal(t, "packageArn", packageArn)
 	assert.NotEmpty(t, installedVersion)
 	assert.Equal(t, 0, output.GetExitCode())
 	assert.Empty(t, tracer.ToPluginOutput().GetStderr())
@@ -155,7 +157,7 @@ func TestPrepareUninstall(t *testing.T) {
 	tracer := trace.NewTracer(log.NewMockLog())
 	output := &trace.PluginOutputTrace{Tracer: tracer}
 
-	inst, uninst, installState, installedVersion := prepareConfigurePackage(
+	inst, uninst, installState, packageArn, installedVersion := prepareConfigurePackage(
 		tracer,
 		buildConfigSimple(pluginInformation),
 		repoMock,
@@ -166,6 +168,7 @@ func TestPrepareUninstall(t *testing.T) {
 	assert.Nil(t, inst)
 	assert.NotNil(t, uninst)
 	assert.Equal(t, localpackages.Installed, installState)
+	assert.Equal(t, "packageArn", packageArn)
 	assert.NotEmpty(t, installedVersion)
 	assert.Equal(t, 0, output.GetExitCode())
 	assert.Empty(t, tracer.ToPluginOutput().GetStderr())
@@ -185,7 +188,7 @@ func TestPrepareUninstallCurrent(t *testing.T) {
 	tracer := trace.NewTracer(log.NewMockLog())
 	output := &trace.PluginOutputTrace{Tracer: tracer}
 
-	inst, uninst, installState, installedVersion := prepareConfigurePackage(
+	inst, uninst, installState, packageArn, installedVersion := prepareConfigurePackage(
 		tracer,
 		buildConfigSimple(pluginInformation),
 		repoMock,
@@ -196,6 +199,7 @@ func TestPrepareUninstallCurrent(t *testing.T) {
 	assert.Nil(t, inst)
 	assert.NotNil(t, uninst)
 	assert.Equal(t, localpackages.Installed, installState)
+	assert.Equal(t, "packageArn", packageArn)
 	assert.NotEmpty(t, installedVersion)
 	assert.Equal(t, 0, output.GetExitCode())
 	assert.Empty(t, tracer.ToPluginOutput().GetStderr())
@@ -215,7 +219,7 @@ func TestPrepareUninstallWrongVersion(t *testing.T) {
 	tracer := trace.NewTracer(log.NewMockLog())
 	output := &trace.PluginOutputTrace{Tracer: tracer}
 
-	inst, uninst, installState, installedVersion := prepareConfigurePackage(
+	inst, uninst, installState, packageArn, installedVersion := prepareConfigurePackage(
 		tracer,
 		buildConfigSimple(pluginInformation),
 		repoMock,
@@ -226,6 +230,7 @@ func TestPrepareUninstallWrongVersion(t *testing.T) {
 	assert.Nil(t, inst)
 	assert.Nil(t, uninst)
 	assert.Equal(t, localpackages.Installed, installState)
+	assert.Equal(t, "packageArn", packageArn)
 	assert.NotEmpty(t, installedVersion)
 	assert.Equal(t, 1, output.GetExitCode())
 	assert.NotEmpty(t, tracer.ToPluginOutput().GetStderr())
