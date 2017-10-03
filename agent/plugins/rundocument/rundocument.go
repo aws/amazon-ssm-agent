@@ -80,9 +80,9 @@ type Plugin struct {
 // RunDocumentPluginInput is a struct that holds the parameters sent through send command
 type RunDocumentPluginInput struct {
 	contracts.PluginInput
-	DocumentType       string `json:"docType"`
-	DocumentPath       string `json:"docPath"`
-	DocumentParameters string `json:"docParameters"`
+	DocumentType       string      `json:"documentType"`
+	DocumentPath       string      `json:"documentPath"`
+	DocumentParameters interface{} `json:"documentParameters"`
 }
 
 // ExecutePluginDepth is the struct that is sent through to the sub-documents to maintain the depth of execution
@@ -278,28 +278,33 @@ func (p *Plugin) downloadDocumentFromSSM(log log.T, config contracts.Configurati
 }
 
 // PrepareDocumentForExecution parses the raw content of the document, validates it and returns a PluginState that can be executed.
-func (p *Plugin) prepareDocumentForExecution(log log.T, pathToFile string, config contracts.Configuration, params string) (pluginsInfo []contracts.PluginState, err error) {
+func (p *Plugin) prepareDocumentForExecution(log log.T, pathToFile string, config contracts.Configuration, params interface{}) (pluginsInfo []contracts.PluginState, err error) {
 	parameters := make(map[string]interface{})
-	if params != "" {
-
-		log.Info("Params to be unmarshaled - ", params)
-		// TODO: meloniam@ 08/24/2017 - https://amazon.awsapps.com/workdocs/index.html#/document/7d56a42ea5b040a7c33548d77dc98040f0fb380bbbfb2fd580c861225e2ee1c7
-		// TODO: Remove the Unmarshalling once RC supports StringMap
-		// TODO: documentParameters will be of type map[string]interface{} from the beginning
-
-		if json.Unmarshal([]byte(params), &parameters); err != nil {
-			log.Error("Unmarshalling document parameters failed. Please make sure the parameters are specified in the right format")
-			return pluginsInfo, err
-		}
-		log.Debug("len of parameter - ", len(parameters))
-		if len(parameters) == 0 {
-			log.Debug("Parameters are probably in YAML")
-			if yaml.Unmarshal([]byte(params), &parameters); err != nil {
+	if params != nil {
+		switch params := params.(type) {
+		case string:
+			log.Debug("Document parameter type is String. Params to be unmarshaled - ", params)
+			if json.Unmarshal([]byte(params), &parameters); err != nil {
 				log.Error("Unmarshalling document parameters failed. Please make sure the parameters are specified in the right format")
 				return pluginsInfo, err
 			}
-		}
+			log.Debug("len of parameter - ", len(parameters))
+			if len(parameters) == 0 {
+				log.Debug("Parameters are probably in YAML")
+				if yaml.Unmarshal([]byte(params), &parameters); err != nil {
+					log.Error("Unmarshalling document parameters failed. Please make sure the parameters are specified in the right format")
+					return pluginsInfo, err
+				}
+			}
+		case map[string]interface{}:
+			log.Debug("Document parameter type is map[string]interface{}")
+			for k, v := range params {
+				parameters[k] = v
+			}
+		default:
+			return pluginsInfo, errors.New("parameter type specified to run document is unknown")
 
+		}
 		log.Info("Parameters passed in are ", parameters)
 	}
 	var rawDocument []byte
