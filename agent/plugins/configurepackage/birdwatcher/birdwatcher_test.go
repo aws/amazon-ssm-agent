@@ -383,7 +383,7 @@ func TestDownloadManifest(t *testing.T) {
 			mockedCollector.On("CollectData", mock.Anything).Return(envdata, nil).Once()
 			ds := &PackageService{facadeClient: &testdata.facadeClient, manifestCache: packageservice.ManifestCacheMemNew(), collector: &mockedCollector}
 
-			result, err := ds.DownloadManifest(tracer, testdata.packageName, testdata.packageVersion)
+			_, result, err := ds.DownloadManifest(tracer, testdata.packageName, testdata.packageVersion)
 
 			if testdata.expectedErr {
 				assert.Error(t, err)

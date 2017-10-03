@@ -132,8 +132,9 @@ func TestSuccessfulDownloadManifest(t *testing.T) {
 	tracer.BeginSection("test segment root")
 
 	ds := &PackageService{packageURL: "https://abc.s3.mock-region.amazonaws.com/"}
-	result, err := ds.DownloadManifest(tracer, "packageName", "1234")
+	packageArn, result, err := ds.DownloadManifest(tracer, "packageName", "1234")
 
+	assert.Equal(t, "packageName", packageArn)
 	assert.Equal(t, "1234", result)
 	assert.NoError(t, err)
 }
@@ -148,8 +149,9 @@ func TestDownloadManifestWithLatest(t *testing.T) {
 	networkdep = mockObj
 
 	ds := &PackageService{packageURL: "https://abc.s3.mock-region.amazonaws.com/"}
-	result, err := ds.DownloadManifest(tracer, "packageName", "latest")
+	packageArn, result, err := ds.DownloadManifest(tracer, "packageName", "latest")
 
+	assert.Equal(t, "packageName", packageArn)
 	assert.Equal(t, "2.0.0", result)
 	assert.NoError(t, err)
 }
@@ -164,7 +166,7 @@ func TestDownloadManifestWithError(t *testing.T) {
 	networkdep = mockObj
 
 	ds := &PackageService{packageURL: "https://abc.s3.mock-region.amazonaws.com/"}
-	_, err := ds.DownloadManifest(tracer, "packageName", "latest")
+	_, _, err := ds.DownloadManifest(tracer, "packageName", "latest")
 
 	assert.Error(t, err)
 }
