@@ -255,7 +255,7 @@ func (r *localRepository) ReadManifest(packageName string, packageVersion string
 	return r.filesysdep.ReadFile(r.filePath(packageName, packageVersion))
 }
 
-// ReadManifest will put the manifest data for a given package name and package version into the cache
+// WriteManifest will put the manifest data for a given package name and package version into the cache
 func (r *localRepository) WriteManifest(packageName string, packageVersion string, content []byte) error {
 	err := fileutil.MakeDirs(r.manifestCachePath)
 	if err != nil {

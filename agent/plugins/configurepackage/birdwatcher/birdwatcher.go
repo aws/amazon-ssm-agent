@@ -101,12 +101,12 @@ func (ds *PackageService) PackageServiceName() string {
 }
 
 // DownloadManifest downloads the manifest for a given version (or latest) and returns the agent version specified in manifest
-func (ds *PackageService) DownloadManifest(tracer trace.Tracer, packageName string, version string) (string, error) {
+func (ds *PackageService) DownloadManifest(tracer trace.Tracer, packageName string, version string) (string, string, error) {
 	manifest, err := downloadManifest(ds, packageName, version)
 	if err != nil {
-		return "", err
+		return "", "", err
 	}
-	return manifest.Version, nil
+	return manifest.PackageArn, manifest.Version, nil
 }
 
 // DownloadArtifact downloads the platform matching artifact specified in the manifest
