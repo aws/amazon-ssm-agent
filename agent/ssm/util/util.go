@@ -20,6 +20,7 @@ import (
 	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
+	"github.com/aws/amazon-ssm-agent/agent/platform"
 	"github.com/aws/amazon-ssm-agent/agent/sdkutil/retryer"
 	"github.com/aws/aws-sdk-go/aws"
 )
@@ -38,6 +39,12 @@ func AwsConfig() *aws.Config {
 	}
 	if appConfig.Ssm.Endpoint != "" {
 		awsConfig.Endpoint = &appConfig.Ssm.Endpoint
+	} else {
+		if region, err := platform.Region(); err == nil {
+			if defaultEndpoint := appconfig.GetDefaultEndPoint(region, "ssm"); defaultEndpoint != "" {
+				awsConfig.Endpoint = &defaultEndpoint
+			}
+		}
 	}
 	if appConfig.Agent.Region != "" {
 		awsConfig.Region = &appConfig.Agent.Region

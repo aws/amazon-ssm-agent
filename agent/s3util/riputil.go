@@ -17,6 +17,7 @@
 package s3util
 
 import "github.com/aws/amazon-ssm-agent/agent/appconfig"
+import "github.com/aws/amazon-ssm-agent/agent/platform"
 
 var awsS3EndpointMap = map[string]string{
 	//AUTOGEN_START
@@ -51,6 +52,12 @@ func GetS3Endpoint(region string) (s3Endpoint string) {
 
 	if s3Endpoint, ok := awsS3EndpointMap[region]; ok {
 		return s3Endpoint
+	}
+
+	if region, err := platform.Region(); err == nil {
+		if defaultEndpoint := appconfig.GetDefaultEndPoint(region, "s3"); defaultEndpoint != "" {
+			return defaultEndpoint
+		}
 	}
 	return "s3.amazonaws.com" // default global endpoint
 }
