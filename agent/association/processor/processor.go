@@ -49,6 +49,7 @@ const (
 	cancelWaitDurationMillisecond           = 10000
 	documentLevelTimeOutDurationHour        = 2
 	outputMessageTemplate            string = "%v out of %v plugin%v processed, %v success, %v failed, %v timedout, %v skipped"
+	defaultRetryWaitOnBootInSeconds         = 30
 )
 
 // Processor contains the logic for processing association
@@ -62,6 +63,7 @@ type Processor struct {
 	proc               processor.Processor
 	resChan            chan contracts.DocumentResult
 	defaultPlugin      pluginutil.DefaultPlugin
+	onBoot             bool
 }
 
 var lock sync.RWMutex
@@ -94,6 +96,7 @@ func NewAssociationProcessor(context context.T, instanceID string) *Processor {
 		agentInfo:          &agentInfo,
 		stopSignal:         make(chan bool),
 		proc:               proc,
+		onBoot:             true,
 	}
 }
 
@@ -140,6 +143,19 @@ func (p *Processor) ProcessAssociation() {
 	if associations, err = p.assocSvc.ListInstanceAssociations(log, instanceID); err != nil {
 		log.Errorf("Unable to load instance associations, %v", err)
 		return
+	}
+
+	// to account for any tag expansion delays on boot, call list associations again
+	if p.onBoot {
+		p.onBoot = false
+		if len(associations) < 1 {
+			log.Info("No associations on boot. Requerying for associations after 30 seconds.")
+			time.Sleep(defaultRetryWaitOnBootInSeconds * time.Second)
+			if associations, err = p.assocSvc.ListInstanceAssociations(log, instanceID); err != nil {
+				log.Errorf("Unable to load instance associations, %v", err)
+				return
+			}
+		}
 	}
 
 	// evict the invalid cache first
