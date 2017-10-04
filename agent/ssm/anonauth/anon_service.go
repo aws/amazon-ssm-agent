@@ -18,6 +18,7 @@ import (
 	"log"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
+	"github.com/aws/amazon-ssm-agent/agent/platform"
 	"github.com/aws/amazon-ssm-agent/agent/ssm/util"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/credentials"
@@ -48,6 +49,12 @@ func NewAnonymousService(region string) AnonymousService {
 	if err == nil {
 		if appConfig.Ssm.Endpoint != "" {
 			awsConfig.Endpoint = &appConfig.Ssm.Endpoint
+		} else {
+			if region, err := platform.Region(); err == nil {
+				if defaultEndpoint := appconfig.GetDefaultEndPoint(region, "ssm"); defaultEndpoint != "" {
+					awsConfig.Endpoint = &defaultEndpoint
+				}
+			}
 		}
 	} else {
 		log.Printf("encountered error while loading appconfig - %s", err)
