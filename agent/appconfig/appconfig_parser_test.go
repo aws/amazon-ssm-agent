@@ -41,6 +41,30 @@ func TestGetStringValue(t *testing.T) {
 	}
 }
 
+//GetDefaultEndpointTests
+
+type GetDefaultEndPointTest struct {
+	Region  string
+	Service string
+	Output  string
+}
+
+var (
+	getDefaultEndPointTests = []GetDefaultEndPointTest{
+		{"", "", ""},
+		{"val", "test", ""},
+		{"us-east-1", "ssm", ""},
+		{"cn-north-1", "ssm", "ssm.cn-north-1.amazonaws.com.cn"},
+	}
+)
+
+func TestGetDefaultEndPoint(t *testing.T) {
+	for _, test := range getDefaultEndPointTests {
+		output := GetDefaultEndPoint(test.Region, test.Service)
+		assert.Equal(t, test.Output, output)
+	}
+}
+
 // getNumericValue Tests
 
 type GetNumericValueTest struct {
