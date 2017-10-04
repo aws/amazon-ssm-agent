@@ -60,6 +60,14 @@ func NewAmazonS3Util(log log.T, bucketName string) *AmazonS3Util {
 	} else {
 		if appConfig.S3.Endpoint != "" {
 			config.Endpoint = &appConfig.S3.Endpoint
+		} else {
+			if region, err := platform.Region(); err == nil {
+				if defaultEndpoint := appconfig.GetDefaultEndPoint(region, "s3"); defaultEndpoint != "" {
+					config.Endpoint = &defaultEndpoint
+				}
+			} else {
+				log.Errorf("error fetching the region, %v", err)
+			}
 		}
 	}
 	config.Region = &bucketRegion

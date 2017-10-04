@@ -30,6 +30,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/platform"
 	"github.com/aws/amazon-ssm-agent/agent/s3util"
 	"github.com/aws/amazon-ssm-agent/agent/sdkutil"
 	"github.com/aws/aws-sdk-go/aws"
@@ -125,6 +126,14 @@ func awsConfig(log log.T, amazonS3URL s3util.AmazonS3URL) (config *aws.Config, e
 	} else {
 		if appConfig.S3.Endpoint != "" {
 			config.Endpoint = &appConfig.S3.Endpoint
+		} else {
+			if region, err := platform.Region(); err == nil {
+				if defaultEndpoint := appconfig.GetDefaultEndPoint(region, "s3"); defaultEndpoint != "" {
+					config.Endpoint = &defaultEndpoint
+				}
+			} else {
+				log.Errorf("error fetching the region, %v", err)
+			}
 		}
 	}
 	config.S3ForcePathStyle = aws.Bool(amazonS3URL.IsPathStyle)

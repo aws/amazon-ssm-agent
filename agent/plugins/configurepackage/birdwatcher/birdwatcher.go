@@ -23,6 +23,7 @@ import (
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil/artifact"
+	"github.com/aws/amazon-ssm-agent/agent/platform"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/birdwatcher/facade"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/envdetect"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/packageservice"
@@ -57,12 +58,19 @@ type PackageService struct {
 // New constructor for PackageService
 func New(endpoint string, manifestCache packageservice.ManifestCache) packageservice.PackageService {
 	// TODO: endpoint vs appconfig
+	// TODO: pass in log var to log errs
 	cfg := sdkutil.AwsConfig()
 
 	// overrides ssm client config from appconfig if applicable
 	if appCfg, err := appconfig.Config(false); err == nil {
 		if appCfg.Ssm.Endpoint != "" {
 			cfg.Endpoint = &appCfg.Ssm.Endpoint
+		} else {
+			if region, err := platform.Region(); err == nil {
+				if defaultEndpoint := appconfig.GetDefaultEndPoint(region, "ssm"); defaultEndpoint != "" {
+					cfg.Endpoint = &defaultEndpoint
+				}
+			}
 		}
 		if appCfg.Agent.Region != "" {
 			cfg.Region = &appCfg.Agent.Region

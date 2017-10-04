@@ -22,7 +22,9 @@ import (
 	"sync"
 	"time"
 
+	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/platform"
 	"github.com/aws/amazon-ssm-agent/agent/sdkutil"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/credentials"
@@ -77,6 +79,12 @@ func NewService(region string, endpoint string, creds *credentials.Credentials, 
 
 	if endpoint != "" {
 		config.Endpoint = &endpoint
+	} else {
+		if region, err := platform.Region(); err == nil {
+			if defaultEndpoint := appconfig.GetDefaultEndPoint(region, "ec2messages"); defaultEndpoint != "" {
+				config.Endpoint = &defaultEndpoint
+			}
+		}
 	}
 
 	if creds != nil {
