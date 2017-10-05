@@ -25,12 +25,10 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
-	"github.com/aws/amazon-ssm-agent/agent/platform"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/birdwatcher"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/installer"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/localpackages"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/packageservice"
-	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/ssms3"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/trace"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/pluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/task"
@@ -353,14 +351,7 @@ func checkAlreadyInstalled(
 
 // selectService chooses the implementation of PackageService to use for a given execution of the plugin
 func selectService(tracer trace.Tracer, serviceEndpoint string, localrepo localpackages.Repository) packageservice.PackageService {
-	region, _ := platform.Region()
-	appCfg, err := appconfig.Config(false)
-
-	if (err == nil && appCfg.Birdwatcher.ForceEnable) || !ssms3.UseSSMS3Service(tracer, serviceEndpoint, region) {
-		tracer.CurrentTrace().AppendInfof("S3 repository is not marked active in %v %v", region, serviceEndpoint)
-		return birdwatcher.New(serviceEndpoint, localrepo)
-	}
-	return ssms3.New(serviceEndpoint, region)
+	return birdwatcher.New(serviceEndpoint, localrepo)
 }
 
 // Execute runs the plugin operation and returns output
