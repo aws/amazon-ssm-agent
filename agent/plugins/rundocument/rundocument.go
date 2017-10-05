@@ -288,7 +288,6 @@ func (p *Plugin) prepareDocumentForExecution(log log.T, pathToFile string, confi
 				log.Error("Unmarshalling document parameters failed. Please make sure the parameters are specified in the right format")
 				return pluginsInfo, err
 			}
-			log.Debug("len of parameter - ", len(parameters))
 			if len(parameters) == 0 {
 				log.Debug("Parameters are probably in YAML")
 				if yaml.Unmarshal([]byte(params), &parameters); err != nil {

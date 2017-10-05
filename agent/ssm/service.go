@@ -68,7 +68,7 @@ type Service interface {
 	DescribeAssociation(log log.T, instanceID string, docName string) (response *ssm.DescribeAssociationOutput, err error)
 	UpdateInstanceInformation(log log.T, agentVersion, agentStatus, agentName string) (response *ssm.UpdateInstanceInformationOutput, err error)
 	GetParameters(log log.T, paramNames []string) (response *ssm.GetParametersOutput, err error)
-	GetSecureParameter(log log.T, paramName string, decrypt bool) (response *ssm.GetParameterOutput, err error)
+	GetDecryptedParameters(log log.T, paramNames []string) (response *ssm.GetParametersOutput, err error)
 }
 
 var ssmStopPolicy *sdkutil.StopPolicy
@@ -468,13 +468,13 @@ func (svc *sdkService) GetParameters(log log.T, paramNames []string) (response *
 	return
 }
 
-func (svc *sdkService) GetSecureParameter(log log.T, paramName string, decrypt bool) (response *ssm.GetParameterOutput, err error) {
-	serviceParam := ssm.GetParameterInput{
-		Name:           &paramName,
-		WithDecryption: aws.Bool(decrypt),
+func (svc *sdkService) GetDecryptedParameters(log log.T, paramNames []string) (response *ssm.GetParametersOutput, err error) {
+	serviceParams := ssm.GetParametersInput{
+		Names:          aws.StringSlice(paramNames),
+		WithDecryption: aws.Bool(true),
 	}
 
-	if response, err = svc.sdk.GetParameter(&serviceParam); err != nil {
+	if response, err = svc.sdk.GetParameters(&serviceParams); err != nil {
 		errorString := fmt.Errorf("Encountered error while calling GetParameters API. Error: %v", err)
 		log.Debug(err)
 		sdkutil.HandleAwsError(log, err, ssmStopPolicy)

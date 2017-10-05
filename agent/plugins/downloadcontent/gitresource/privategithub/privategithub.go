@@ -17,90 +17,100 @@ package privategithub
 
 import (
 	"github.com/aws/amazon-ssm-agent/agent/githubclient"
-	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/parameterstore"
-	"github.com/aws/amazon-ssm-agent/agent/parameterstore/securestringaccess"
+	"github.com/aws/amazon-ssm-agent/agent/ssmparameterresolver"
 
 	"errors"
 	"fmt"
 	"net/http"
+	"regexp"
 	"strings"
 )
 
+const (
+	ssmSecurePrefix = "ssm-secure:"
+)
+
 type PrivateGithubAccess interface {
-	GetOAuthClient(log log.T, tokenInfo string) (*http.Client, error)
+	GetOAuthClient(log log.T, token string) (*http.Client, error)
 }
 
 type TokenInfoImpl struct {
-	tokenInfoVal   TokenInfoParamVal
-	ParamAccess    securestringaccess.SecureStringAccess
+	SsmParameter func(log log.T, paramService ssmparameterresolver.ISsmParameterService, parameterReferences []string,
+		resolverOptions ssmparameterresolver.ResolveOptions) (info map[string]ssmparameterresolver.SsmParameterInfo, err error)
+	paramAccess    ssmparameterresolver.SsmParameterService
 	gitoauthclient githubclient.IOAuthClient
 }
 
-type TokenInfoParamVal struct {
-	TokenParameterName string `json:"token-parameter-name"`
-	OauthAccessType    string `json:"oauth-access-type"`
-}
-
 // GetOAuthClient is the only method from privategithub package that is accessible to gitresource
-func (t TokenInfoImpl) GetOAuthClient(log log.T, tokenInfo string) (*http.Client, error) {
-	// Validate the format of the token info parameter
-	// Validate the information obtained in the JSON file.
+func (t TokenInfoImpl) GetOAuthClient(log log.T, tokenInfo string) (client *http.Client, err error) {
+	// Validate the format of the secure parameter
 	// Make a call to secure string (disable logging) and obtain the token
 	// Create StaticTokenSource and create oauth client and return it
 
-	var err error
-	if err = jsonutil.Unmarshal(tokenInfo, &t.tokenInfoVal); err != nil {
-		log.Error("Unmarshalling token value parameter failed - ", err)
-		return nil, err
-	}
-
-	if valid, err := validateTokenInfoJson(t.tokenInfoVal); !valid {
-		return nil, err
-	}
-
 	// Validate the format of token information
-	if valid, err := validateTokenParameter(t.tokenInfoVal.TokenParameterName); !valid {
+	if valid, err := validateTokenParameter(tokenInfo); !valid {
 		return nil, err
 	}
 
-	tokenValue, err := t.ParamAccess.GetSecureParameter(log, t.tokenInfoVal.TokenParameterName)
-	if err != nil {
-		return nil, err
+	var token ssmparameterresolver.SsmParameterInfo
+	var tokenMap map[string]ssmparameterresolver.SsmParameterInfo
+	var parameterReferences []string
+
+	// Regex to extract the contents of the parameter from within {{ }} to get parameter value
+	// for. e.g. {{ ssm-secure:parameter-name }} will extract ssm-secure:parameter-name
+	subParam := regexp.MustCompile(`\{\{(.*?)\}\}`).FindStringSubmatch(tokenInfo)
+	if len(subParam) > 1 {
+		parameterReferences = []string{subParam[1]}
+	} else {
+		return client, errors.New("Something went wrong when trying to extract ssm-secure parameter")
 	}
-	if tokenValue.Type != parameterstore.ParamTypeSecureString {
-		return nil, fmt.Errorf("token-parameter-name must be of secure string type - %v, %v", tokenValue.Name, tokenValue.Type)
+
+	resolverOptions := ssmparameterresolver.ResolveOptions{
+		IgnoreSecureParameters: false,
 	}
-	return t.gitoauthclient.GetGithubOauthClient(tokenValue.Value), nil
+
+	// Get the parameter value from parameter store.
+	// NOTE: Do not log the parameter value
+	if tokenMap, err = t.SsmParameter(log, &t.paramAccess, parameterReferences, resolverOptions); err != nil {
+		return nil, fmt.Errorf("Could not resolve ssm parameter - %v. Error - %v", parameterReferences, err)
+	}
+
+	//Extracting single value of token contained within tokenMap
+	token = tokenMap[strings.TrimSpace(subParam[1])]
+
+	if token.Type != parameterstore.ParamTypeSecureString {
+		return nil, fmt.Errorf("token-parameter-name %v must be of secure string type, Current type - %v", token.Name, token.Type)
+	}
+	return t.gitoauthclient.GetGithubOauthClient(token.Value), nil
+}
+
+func getSSMParameter(log log.T, paramService ssmparameterresolver.ISsmParameterService, parameterReferences []string,
+	resolverOptions ssmparameterresolver.ResolveOptions) (info map[string]ssmparameterresolver.SsmParameterInfo, err error) {
+
+	return ssmparameterresolver.ResolveParameterReferenceList(paramService, log, parameterReferences, resolverOptions)
 }
 
 // validateTokenParameter validates the format of tokenInfo
 func validateTokenParameter(tokenInfo string) (valid bool, err error) {
 
-	if strings.HasPrefix(tokenInfo, "ssm:") {
+	// Regex to check the pattern of the secure parameter required.
+	// pattern must be equal to {{ ssm-secure:parameter-name }}
+	var ssmSecureStringPattern = regexp.MustCompile("{{\\s*(" + ssmSecurePrefix + "[\\w-/]+)\\s*}}")
+	if ssmSecureStringPattern.Match([]byte(tokenInfo)) {
 		return true, nil
 	}
 	return false, errors.New("Format of specifying ssm parameter used for token-parameter-name is incorrect. " +
-		"Please specify parameter as \"ssm:parameter-name\"")
+		"Please specify parameter as '{{ ssm-secure:parameter-name }}'")
 }
 
 // NewTokenInfoImpl returns an object of type TokenInfoImpl
 func NewTokenInfoImpl() TokenInfoImpl {
+	parameterService := ssmparameterresolver.NewService()
 	return TokenInfoImpl{
-		ParamAccess:    securestringaccess.SecureParamImpl{},
+		SsmParameter:   getSSMParameter,
+		paramAccess:    parameterService,
 		gitoauthclient: githubclient.OAuthClient{},
 	}
-}
-
-func validateTokenInfoJson(tokenInfoJson TokenInfoParamVal) (valid bool, err error) {
-	if tokenInfoJson.TokenParameterName == "" {
-		return false, errors.New("Token parameter name must be specified. " +
-			"It is the name of the secure string parameter that contains the personal access token.")
-	}
-
-	if tokenInfoJson.OauthAccessType == "" || tokenInfoJson.OauthAccessType != "GitHub" {
-		return false, errors.New("Oath Access type must by specified to be 'GitHub'.")
-	}
-	return true, nil
 }
