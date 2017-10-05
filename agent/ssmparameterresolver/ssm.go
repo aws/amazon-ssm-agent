@@ -52,7 +52,7 @@ func (s *SsmParameterService) getParameters(
 		parameterReferences[i] = nameWithoutPrefix
 	}
 
-	parametersOutput, err := s.sdk.GetParameters(log, parameterReferences)
+	parametersOutput, err := s.sdk.GetDecryptedParameters(log, parameterReferences)
 	if err != nil {
 		return nil, err
 	}
