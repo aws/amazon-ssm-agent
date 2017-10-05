@@ -157,20 +157,49 @@ func (repo *localRepository) GetInstalledVersion(tracer trace.Tracer, packageNam
 	}
 }
 
+func (repo *localRepository) checkPackageIsSupported(tracer trace.Tracer, packageName string, version string) error {
+	validatetrace := tracer.BeginSection("isPackageSupported")
+	defer validatetrace.End()
+
+	path := repo.getPackageVersionPath(packageName, version)
+	if repo.filesysdep.Exists(filepath.Join(path, "install.ps1")) {
+		return nil
+	}
+	if repo.filesysdep.Exists(filepath.Join(path, "install.sh")) {
+		return nil
+	}
+
+	err := fmt.Errorf("Package is not supported (package is missing install action)")
+	validatetrace.WithError(err).End()
+	return err
+}
+
 // ValidatePackage returns an error if the given package version artifacts are missing, incomplete, or corrupt
 func (repo *localRepository) ValidatePackage(tracer trace.Tracer, packageName string, version string) error {
 	// Find and parse manifest
 	if _, err := repo.openPackageManifest(repo.filesysdep, packageName, version); err != nil {
 		return fmt.Errorf("Package manifest is invalid: %v", err)
 	}
+
+	hasContent := false
+
 	// Ensure that at least one other file or folder is present
 	if files, err := repo.filesysdep.GetFileNames(repo.getPackageVersionPath(packageName, version)); err == nil && len(files) > 1 {
-		return nil
+		hasContent = true
+	} else if dirs, err := repo.filesysdep.GetDirectoryNames(repo.getPackageVersionPath(packageName, version)); err == nil && len(dirs) > 0 {
+		hasContent = true
 	}
-	if dirs, err := repo.filesysdep.GetDirectoryNames(repo.getPackageVersionPath(packageName, version)); err == nil && len(dirs) > 0 {
-		return nil
+
+	if !hasContent {
+		return fmt.Errorf("Package is incomplete")
 	}
-	return fmt.Errorf("Package manifest exists, but all other content is missing")
+
+	// This is necessary to make sure pre-birdwatcher packages are deemed unsupported, triggering package refresh to birdwatched version of the package.
+	if err := repo.checkPackageIsSupported(tracer, packageName, version); err != nil {
+		return err
+	}
+
+	return nil
 }
 
 // RefreshPackage updates the package binaries.  Used if ValidatePackage returns an error, initially same implementation as AddPackage
@@ -364,12 +393,7 @@ func (repo *localRepository) loadInstallState(filesysdep FileSysDep, tracer trac
 
 // openPackageManifest returns the valid manifest or validation error for a given package version
 func (repo *localRepository) openPackageManifest(filesysdep FileSysDep, packageName string, version string) (manifest *PackageManifest, err error) {
-	manifestPath := repo.getManifestPath(packageName, version, packageName)
-	if filesysdep.Exists(manifestPath) {
-		return parsePackageManifest(filesysdep, manifestPath, packageName, version)
-	}
-
-	manifestPath = repo.getManifestPath(packageName, version, "manifest")
+	manifestPath := repo.getManifestPath(packageName, version, "manifest")
 	if filesysdep.Exists(manifestPath) {
 		return parsePackageManifest(filesysdep, manifestPath, packageName, version)
 	}

@@ -50,11 +50,10 @@ func TestPackageVersion(t *testing.T) {
 	assert.Equal(t, testVersion, inst.version)
 }
 
-func mockReadAction(t *testing.T, mockFileSys *MockedFileSys, actionPathNoExt string, contentSh []byte, contentPs1 []byte, contentJson []byte, expectReads bool) {
+func mockReadAction(t *testing.T, mockFileSys *MockedFileSys, actionPathNoExt string, contentSh []byte, contentPs1 []byte, expectReads bool) {
 	// Setup mock with expectations
 	mockFileSys.On("Exists", actionPathNoExt+".sh").Return(len(contentSh) != 0).Once()
 	mockFileSys.On("Exists", actionPathNoExt+".ps1").Return(len(contentPs1) != 0).Once()
-	mockFileSys.On("Exists", actionPathNoExt+".json").Return(len(contentJson) != 0).Once()
 
 	if expectReads {
 		if len(contentSh) != 0 {
@@ -62,9 +61,6 @@ func mockReadAction(t *testing.T, mockFileSys *MockedFileSys, actionPathNoExt st
 		}
 		if len(contentPs1) != 0 {
 			mockFileSys.On("ReadFile", actionPathNoExt+".ps1").Return(contentPs1, nil).Once()
-		}
-		if len(contentJson) != 0 {
-			mockFileSys.On("ReadFile", actionPathNoExt+".json").Return(contentJson, nil).Once()
 		}
 	}
 }
@@ -74,9 +70,9 @@ var environmentStub = envdetect.Environment{
 	&ec2infradetect.Ec2Infrastructure{"instanceIDX", "Reg1", "", "AZ1", "instanceTypeZ"},
 }
 
-func testReadAction(t *testing.T, actionPathNoExt string, contentSh []byte, contentPs1 []byte, contentJson []byte, expectReads bool) {
+func testReadAction(t *testing.T, actionPathNoExt string, contentSh []byte, contentPs1 []byte, expectReads bool) {
 	mockFileSys := MockedFileSys{}
-	mockReadAction(t, &mockFileSys, actionPathNoExt, contentSh, contentPs1, contentJson, expectReads)
+	mockReadAction(t, &mockFileSys, actionPathNoExt, contentSh, contentPs1, expectReads)
 
 	mockEnvdetectCollector := &envdetect.CollectorMock{}
 	mockEnvdetectCollector.On("CollectData", mock.Anything).Return(&environmentStub, nil).Once()
@@ -96,9 +92,9 @@ func testReadAction(t *testing.T, actionPathNoExt string, contentSh []byte, cont
 	assert.Nil(t, err)
 }
 
-func testReadActionInvalid(t *testing.T, actionPathNoExt string, contentSh []byte, contentPs1 []byte, contentJson []byte, expectReads bool) {
+func testReadActionInvalid(t *testing.T, actionPathNoExt string, contentSh []byte, contentPs1 []byte, expectReads bool) {
 	mockFileSys := MockedFileSys{}
-	mockReadAction(t, &mockFileSys, actionPathNoExt, contentSh, contentPs1, contentJson, expectReads)
+	mockReadAction(t, &mockFileSys, actionPathNoExt, contentSh, contentPs1, expectReads)
 
 	mockEnvdetectCollector := &envdetect.CollectorMock{}
 	mockEnvdetectCollector.On("CollectData", mock.Anything).Return(&environmentStub, nil).Once()
@@ -120,20 +116,14 @@ func testReadActionInvalid(t *testing.T, actionPathNoExt string, contentSh []byt
 
 func TestReadAction(t *testing.T) {
 	actionPathNoExt := path.Join(testPackagePath, "Foo")
-	testReadAction(t, actionPathNoExt, []byte("echo sh"), []byte{}, []byte{}, false)
-	testReadAction(t, actionPathNoExt, []byte{}, append(fileutil.CreateUTF8ByteOrderMark(), []byte("Write-Host ps1 with BOM")...), []byte{}, false)
-	testReadAction(t, actionPathNoExt, []byte{}, []byte{}, loadFile(t, path.Join(testPackagePath, "valid-action.json")), true)
-}
-
-func TestReadActionInvalid(t *testing.T) {
-	actionPathNoExt := path.Join(testPackagePath, "Foo")
-	testReadActionInvalid(t, actionPathNoExt, []byte{}, []byte{}, loadFile(t, path.Join(testPackagePath, "invalid-action.json")), true)
+	testReadAction(t, actionPathNoExt, []byte("echo sh"), []byte{}, false)
+	testReadAction(t, actionPathNoExt, []byte{}, append(fileutil.CreateUTF8ByteOrderMark(), []byte("Write-Host ps1 with BOM")...), false)
 }
 
 func TestReadActionMissing(t *testing.T) {
 	mockFileSys := MockedFileSys{}
 	actionPathNoExt := path.Join(testPackagePath, "Foo")
-	mockReadAction(t, &mockFileSys, actionPathNoExt, []byte{}, []byte{}, []byte{}, false)
+	mockReadAction(t, &mockFileSys, actionPathNoExt, []byte{}, []byte{}, false)
 
 	mockEnvdetectCollector := &envdetect.CollectorMock{}
 	mockEnvdetectCollector.On("CollectData", mock.Anything).Return(&environmentStub, nil).Once()
@@ -153,12 +143,11 @@ func TestReadActionMissing(t *testing.T) {
 	assert.Nil(t, err)
 }
 
-func testReadActionTooManyActionImplementations(t *testing.T, existSh bool, existPs1 bool, existJson bool) {
+func testReadActionTooManyActionImplementations(t *testing.T, existSh bool, existPs1 bool) {
 	mockFileSys := MockedFileSys{}
 	actionPathNoExt := path.Join(testPackagePath, "Foo")
 	mockFileSys.On("Exists", actionPathNoExt+".sh").Return(existSh).Once()
 	mockFileSys.On("Exists", actionPathNoExt+".ps1").Return(existPs1).Once()
-	mockFileSys.On("Exists", actionPathNoExt+".json").Return(existJson).Once()
 
 	mockEnvdetectCollector := &envdetect.CollectorMock{}
 	mockEnvdetectCollector.On("CollectData", mock.Anything).Return(&environmentStub, nil).Once()
@@ -179,17 +168,14 @@ func testReadActionTooManyActionImplementations(t *testing.T, existSh bool, exis
 }
 
 func TestReadActionTooManyActionImplementations(t *testing.T) {
-	testReadActionTooManyActionImplementations(t, false, true, true)
-	testReadActionTooManyActionImplementations(t, true, false, true)
-	testReadActionTooManyActionImplementations(t, true, true, false)
-	testReadActionTooManyActionImplementations(t, true, true, true)
+	testReadActionTooManyActionImplementations(t, true, true)
 }
 
 func TestInstall_ExecuteError(t *testing.T) {
 	// Setup mocks with expectations
 	mockFileSys := MockedFileSys{}
 	actionPathNoExt := path.Join(testPackagePath, "install")
-	mockReadAction(t, &mockFileSys, actionPathNoExt, []byte{}, []byte{}, loadFile(t, path.Join(testPackagePath, "valid-action.json")), true)
+	mockReadAction(t, &mockFileSys, actionPathNoExt, []byte("echo sh"), []byte{}, false)
 
 	mockExec := MockedExec{}
 	mockExec.On("ExecuteDocument", mock.Anything, mock.Anything, mock.Anything, mock.Anything, mock.Anything).Return(map[string]*contracts.PluginResult{"Foo": {StandardError: "execute error"}}).Once()
@@ -214,7 +200,7 @@ func TestValidate_NoAction(t *testing.T) {
 	// Setup mocks with expectations
 	mockFileSys := MockedFileSys{}
 	actionPathNoExt := path.Join(testPackagePath, "validate")
-	mockReadAction(t, &mockFileSys, actionPathNoExt, []byte{}, []byte{}, []byte{}, true)
+	mockReadAction(t, &mockFileSys, actionPathNoExt, []byte{}, []byte{}, false)
 	mockExec := MockedExec{}
 
 	mockEnvdetectCollector := &envdetect.CollectorMock{}
@@ -238,7 +224,7 @@ func TestUninstall_Success(t *testing.T) {
 	// Setup mocks with expectations
 	mockFileSys := MockedFileSys{}
 	actionPathNoExt := path.Join(testPackagePath, "uninstall")
-	mockReadAction(t, &mockFileSys, actionPathNoExt, []byte{}, []byte{}, loadFile(t, path.Join(testPackagePath, "valid-action.json")), true)
+	mockReadAction(t, &mockFileSys, actionPathNoExt, []byte("echo sh"), []byte{}, false)
 
 	mockExec := MockedExec{}
 	mockExec.On("ExecuteDocument", mock.Anything, mock.Anything, mock.Anything, mock.Anything, mock.Anything).Return(map[string]*contracts.PluginResult{"Foo": {Status: contracts.ResultStatusSuccess}}).Once()
