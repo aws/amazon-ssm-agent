@@ -63,6 +63,7 @@ const (
 	//aws-ssm-agent bookkeeping constants for inventory plugin
 	InventoryRootDirName         = "inventory"
 	CustomInventoryRootDirName   = "custom"
+	FileInventoryRootDirName     = "file"
 	InventoryContentHashFileName = "contentHash"
 
 	//aws-ssm-agent bookkeeping constants for compliance
