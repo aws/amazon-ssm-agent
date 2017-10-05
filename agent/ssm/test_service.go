@@ -133,10 +133,10 @@ func (m *Mock) GetParameters(log log.T, paramNames []string) (response *ssm.GetP
 	return args.Get(0).(*ssm.GetParametersOutput), args.Error(1)
 }
 
-// GetSecureParameter mocks the GetSecureParameter function.
-func (m *Mock) GetSecureParameter(log log.T, paramName string, decrypt bool) (response *ssm.GetParameterOutput, err error) {
-	args := m.Called(log, paramName)
-	return args.Get(0).(*ssm.GetParameterOutput), args.Error(1)
+// GetDecryptedParameters mocks the GetDecryptedParameters function.
+func (m *Mock) GetDecryptedParameters(log log.T, paramNames []string) (response *ssm.GetParametersOutput, err error) {
+	args := m.Called(log, paramNames)
+	return args.Get(0).(*ssm.GetParametersOutput), args.Error(1)
 }
 
 // PutComplianceItem mocks the PutComplianceItem function

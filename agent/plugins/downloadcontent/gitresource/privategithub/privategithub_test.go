@@ -17,10 +17,10 @@ package privategithub
 
 import (
 	gitmock "github.com/aws/amazon-ssm-agent/agent/githubclient/mock"
-	securestringmock "github.com/aws/amazon-ssm-agent/agent/parameterstore/securestringaccess/mock"
 
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/parameterstore"
+	"github.com/aws/amazon-ssm-agent/agent/ssmparameterresolver"
 	"github.com/stretchr/testify/assert"
 
 	"net/http"
@@ -31,105 +31,32 @@ var logMock = log.NewMockLog()
 
 func TestTokenInfoImpl_GetOAuthClient(t *testing.T) {
 
-	tokenInfoInput := `{
-		"token-parameter-name": "ssm:dummysecureparam",
-		"oauth-access-type" : "GitHub"
-	}`
+	var tokenInfoInput []string
+	tokenInfoInput = append(tokenInfoInput, `{{ ssm-secure:dummysecureparam }}`)
 	oauthclientmock := gitmock.OAuthClientMock{}
 
 	tokenValue := "lskjksjgshfg1234jdskjhgvs"
-	secureParamOut := parameterstore.Parameter{
-		Name:  "dummysecureparam",
-		Type:  parameterstore.ParamTypeSecureString,
-		Value: tokenValue,
-	}
+
 	var clientVal *http.Client
-	secureStringMock := securestringmock.SecureParamMock{}
-	secureStringMock.On("GetSecureParameter", logMock, "ssm:dummysecureparam").Return(secureParamOut, nil).Once()
 	oauthclientmock.On("GetGithubOauthClient", tokenValue).Return(clientVal)
 	tokenInfo := TokenInfoImpl{
-		ParamAccess:    secureStringMock,
+		SsmParameter:   getMockedSecureParam,
 		gitoauthclient: oauthclientmock,
 	}
 
-	httpout, err := tokenInfo.GetOAuthClient(logMock, tokenInfoInput)
+	httpout, err := tokenInfo.GetOAuthClient(logMock, `{{ ssm-secure:dummysecureparam }}`)
 
 	assert.NoError(t, err)
 	assert.Equal(t, clientVal, httpout)
-	secureStringMock.AssertExpectations(t)
 	oauthclientmock.AssertExpectations(t)
 
-}
-
-func TestTokenInfoImpl_GetOAuthClientNoTokenParam(t *testing.T) {
-
-	tokenInfoInput := `{
-		"token-parameter": "ssm:dummysecureparam",
-		"oauth-access-type" : "GitHub"
-	}`
-	oauthclientmock := gitmock.OAuthClientMock{}
-
-	tokenInfo := TokenInfoImpl{
-		ParamAccess:    securestringmock.SecureParamMock{},
-		gitoauthclient: oauthclientmock,
-	}
-
-	httpout, err := tokenInfo.GetOAuthClient(logMock, tokenInfoInput)
-
-	assert.Error(t, err)
-	assert.Nil(t, httpout)
-	assert.Contains(t, err.Error(), "Token parameter name must be specified. It is the name of the secure string parameter that contains the personal access token.")
-}
-
-func TestTokenInfoImpl_GetOAuthClientNoOauthAccess(t *testing.T) {
-
-	tokenInfoInput := `{
-		"token-parameter-name": "ssm:dummysecureparam"
-	}`
-	oauthclientmock := gitmock.OAuthClientMock{}
-
-	tokenInfo := TokenInfoImpl{
-		ParamAccess:    securestringmock.SecureParamMock{},
-		gitoauthclient: oauthclientmock,
-	}
-
-	httpout, err := tokenInfo.GetOAuthClient(logMock, tokenInfoInput)
-
-	assert.Error(t, err)
-	assert.Nil(t, httpout)
-	assert.Contains(t, err.Error(), "Oath Access type must by specified to be 'GitHub'.")
-}
-
-func TestTokenInfoImpl_GetOAuthClientIncorrectOauthAccess(t *testing.T) {
-
-	tokenInfoInput := `{
-		"token-parameter-name": "ssm:dummysecureparam",
-		"oauth-access-type" : "Facebook"
-	}`
-	oauthclientmock := gitmock.OAuthClientMock{}
-
-	tokenInfo := TokenInfoImpl{
-		ParamAccess:    securestringmock.SecureParamMock{},
-		gitoauthclient: oauthclientmock,
-	}
-
-	httpout, err := tokenInfo.GetOAuthClient(logMock, tokenInfoInput)
-
-	assert.Error(t, err)
-	assert.Nil(t, httpout)
-	assert.Contains(t, err.Error(), "Oath Access type must by specified to be 'GitHub'.")
 }
 
 func TestTokenInfoImpl_ValidateTokenParameter(t *testing.T) {
 
-	tokenInfoInput := `{
-		"token-parameter-name": "dummysecureparam",
-		"oauth-access-type" : "GitHub"
-	}`
+	tokenInfoInput := `{ "dummysecureparam" }`
 	oauthclientmock := gitmock.OAuthClientMock{}
-
 	tokenInfo := TokenInfoImpl{
-		ParamAccess:    securestringmock.SecureParamMock{},
 		gitoauthclient: oauthclientmock,
 	}
 
@@ -137,37 +64,55 @@ func TestTokenInfoImpl_ValidateTokenParameter(t *testing.T) {
 
 	assert.Error(t, err)
 	assert.Nil(t, httpout)
+	oauthclientmock.AssertExpectations(t)
 	assert.Equal(t, err.Error(), "Format of specifying ssm parameter used for token-parameter-name is incorrect. "+
-		"Please specify parameter as \"ssm:parameter-name\"")
+		"Please specify parameter as '{{ ssm-secure:parameter-name }}'")
 }
 
 func TestTokenInfoImpl_ValidateSecureParameter(t *testing.T) {
 
-	tokenInfoInput := `{
-		"token-parameter-name": "ssm:dummysecureparam",
-		"oauth-access-type" : "GitHub"
-	}`
+	tokenInfoInput := `{{ssm-secure:dummysecureparam}}`
 	oauthclientmock := gitmock.OAuthClientMock{}
 
-	tokenValue := "lskjksjgshfg1234jdskjhgvs"
-	secureParamOut := parameterstore.Parameter{
-		Name:  "dummysecureparam",
-		Type:  parameterstore.ParamTypeString,
-		Value: tokenValue,
-	}
 	var clientVal *http.Client
-	secureStringMock := securestringmock.SecureParamMock{}
-	secureStringMock.On("GetSecureParameter", logMock, "ssm:dummysecureparam").Return(secureParamOut, nil).Once()
+
 	tokenInfo := TokenInfoImpl{
-		ParamAccess:    secureStringMock,
+		SsmParameter:   getMockedParam,
 		gitoauthclient: oauthclientmock,
 	}
 
 	httpout, err := tokenInfo.GetOAuthClient(logMock, tokenInfoInput)
 
 	assert.Error(t, err)
-	assert.Contains(t, err.Error(), "token-parameter-name must be of secure string type")
+	assert.Equal(t, err.Error(), "token-parameter-name dummysecureparam must be of secure string type, Current type - String")
 	assert.Equal(t, clientVal, httpout)
-	secureStringMock.AssertExpectations(t)
 	oauthclientmock.AssertExpectations(t)
+}
+
+func getMockedParam(log log.T, paramService ssmparameterresolver.ISsmParameterService, parameterReferences []string,
+	resolverOptions ssmparameterresolver.ResolveOptions) (info map[string]ssmparameterresolver.SsmParameterInfo, err error) {
+	tokenValue := "lskjksjgshfg1234jdskjhgvs"
+	secureParamOut := ssmparameterresolver.SsmParameterInfo{
+		Name:  "dummysecureparam",
+		Type:  parameterstore.ParamTypeString,
+		Value: tokenValue,
+	}
+	info = make(map[string]ssmparameterresolver.SsmParameterInfo)
+	info["ssm-secure:dummysecureparam"] = secureParamOut
+
+	return info, nil
+}
+
+func getMockedSecureParam(log log.T, paramService ssmparameterresolver.ISsmParameterService, parameterReferences []string,
+	resolverOptions ssmparameterresolver.ResolveOptions) (info map[string]ssmparameterresolver.SsmParameterInfo, err error) {
+	tokenValue := "lskjksjgshfg1234jdskjhgvs"
+	secureParamOut := ssmparameterresolver.SsmParameterInfo{
+		Name:  "dummysecureparam",
+		Type:  parameterstore.ParamTypeSecureString,
+		Value: tokenValue,
+	}
+	info = make(map[string]ssmparameterresolver.SsmParameterInfo)
+	info["ssm-secure:dummysecureparam"] = secureParamOut
+
+	return info, nil
 }
