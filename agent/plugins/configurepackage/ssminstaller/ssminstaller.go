@@ -16,7 +16,6 @@
 package ssminstaller
 
 import (
-	"encoding/json"
 	"fmt"
 	"os"
 	"path/filepath"
@@ -24,10 +23,8 @@ import (
 
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
-	"github.com/aws/amazon-ssm-agent/agent/docparser"
 	"github.com/aws/amazon-ssm-agent/agent/executers"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
-	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/envdetect"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/trace"
 	"github.com/aws/amazon-ssm-agent/agent/times"
@@ -46,9 +43,8 @@ type Installer struct {
 type ActionType uint8
 
 const (
-	ACTION_TYPE_JSON ActionType = iota
-	ACTION_TYPE_SH   ActionType = iota
-	ACTION_TYPE_PS1  ActionType = iota
+	ACTION_TYPE_SH  ActionType = iota
+	ACTION_TYPE_PS1 ActionType = iota
 )
 
 type Action struct {
@@ -194,65 +190,12 @@ func (inst *Installer) readPs1Action(context context.T, action *Action, workingD
 	return inst.readScriptAction(action, workingDir, "runPowerShellScript", runCommand)
 }
 
-// readJsonAction turns an json action into a set of SSM Document Plugins to execute
-func (inst *Installer) readJsonAction(context context.T, action *Action, workingDir string) (pluginsInfo []contracts.PluginState, err error) {
-	if action.actionType != ACTION_TYPE_JSON {
-		return nil, fmt.Errorf("Internal error")
-	}
-
-	log := context.Log()
-
-	var actionContent []byte
-	if actionContent, err = inst.filesysdep.ReadFile(action.filepath); err != nil {
-		return nil, err
-	}
-
-	actionJson := string(actionContent[:])
-	var jsonTest interface{}
-	if err = jsonutil.Unmarshal(actionJson, &jsonTest); err != nil {
-		return nil, err
-	}
-
-	var s3Prefix string
-	if inst.config.OutputS3BucketName != "" {
-		s3Prefix = fileutil.BuildS3Path(inst.config.OutputS3KeyPrefix, inst.config.PluginID, action.actionName)
-	}
-	orchestrationDir := filepath.Join(inst.config.OrchestrationDirectory, action.actionName)
-
-	parserInfo := docparser.DocumentParserInfo{
-		OrchestrationDir:  orchestrationDir,
-		S3Bucket:          inst.config.OutputS3BucketName,
-		S3Prefix:          s3Prefix,
-		MessageId:         inst.config.MessageId,
-		DocumentId:        inst.config.BookKeepingFileName,
-		DefaultWorkingDir: workingDir,
-	}
-
-	var docContent contracts.DocumentContent
-	err = json.Unmarshal(actionContent, &docContent)
-	if err != nil {
-		return nil, err
-	}
-
-	pluginsInfo, err = docparser.ParseDocument(log, &docContent, parserInfo, nil)
-
-	if err != nil {
-		return nil, err
-	}
-	if len(pluginsInfo) == 0 {
-		return nil, fmt.Errorf("%v document contained no work and may be malformed", action.actionName)
-	}
-	return pluginsInfo, nil
-}
-
 func (inst *Installer) resolveAction(tracer trace.Tracer, actionName string) (exists bool, action *Action, err error) {
 	actionPathSh := inst.getActionPath(actionName, "sh")
 	actionPathPs1 := inst.getActionPath(actionName, "ps1")
-	actionPathJson := inst.getActionPath(actionName, "json")
 
 	actionPathExistsSh := inst.filesysdep.Exists(actionPathSh)
 	actionPathExistsPs1 := inst.filesysdep.Exists(actionPathPs1)
-	actionPathExistsJson := inst.filesysdep.Exists(actionPathJson)
 	countExists := 0
 
 	actionTemp := &Action{}
@@ -268,12 +211,6 @@ func (inst *Installer) resolveAction(tracer trace.Tracer, actionName string) (ex
 		actionTemp.actionName = actionName
 		actionTemp.actionType = ACTION_TYPE_PS1
 		actionTemp.filepath = actionPathPs1
-	}
-	if actionPathExistsJson {
-		countExists += 1
-		actionTemp.actionName = actionName
-		actionTemp.actionType = ACTION_TYPE_JSON
-		actionTemp.filepath = actionPathJson
 	}
 
 	if countExists > 1 {
@@ -351,12 +288,6 @@ func (inst *Installer) readAction(tracer trace.Tracer, context context.T, action
 		}
 
 		if pluginsInfo, err = inst.readPs1Action(context, action, workingDir, envVars); err != nil {
-			return exists, nil, "", err
-		}
-
-		return exists, pluginsInfo, workingDir, nil
-	} else if action.actionType == ACTION_TYPE_JSON {
-		if pluginsInfo, err = inst.readJsonAction(context, action, workingDir); err != nil {
 			return exists, nil, "", err
 		}
 
