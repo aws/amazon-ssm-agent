@@ -1,5 +1,11 @@
 Latest
 ===============
+- Improved speed of initial association application on boot
+- Various aws:configurePackage service integration changes
+- Improved home directory detection in non-x64 linux platforms to address cases where shared AWS SDK credentials were not available in on-prem instances
+
+2.2.24.0
+===============
 - Added exponential backoff in bucket region check for s3 upload
 - Fixed an issue with orchestration directory cleanup for RunCommand
 - Important Reminder: In an upcoming release, the RPM installer won't start the service by default after initial RPM
