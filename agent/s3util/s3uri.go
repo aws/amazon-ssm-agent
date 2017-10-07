@@ -27,8 +27,8 @@ const (
 	// EndpointPattern is a valid regular expression for s3 url pattern
 	EndpointPattern = "^(.+\\.)?s3[.-]([a-z0-9-]+)\\."
 
-	// RegionBJS represents the BJS region
-	RegionBJS = "cn-north-1"
+	// cn- is a prefix for China region
+	ChinaRegionPrefix = "cn-"
 )
 
 // AmazonS3URL holds interesting pieces after parsing a s3 URL
