@@ -581,7 +581,7 @@ func GetUpdatePluginConfig(context context.T) UpdatePluginConfig {
 	}
 
 	var manifestURL string
-	if region == s3util.RegionBJS {
+	if strings.HasPrefix(region, s3util.ChinaRegionPrefix) {
 		manifestURL = ChinaManifestURL
 	} else {
 		manifestURL = CommonManifestURL
