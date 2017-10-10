@@ -42,13 +42,13 @@ var sys system = &systemImp{}
 
 // bookkeepingService represents the dependency for docmanager
 type bookkeepingService interface {
-	DeleteOldDocumentFolderLogs(log log.T, instanceID, orchestrationRootDirName string, retentionDurationHours int, isIntendedFileNameFormat func(string) bool, formOrchestrationFolderName func(string) string)
+	DeleteOldOrchestrationLogs(log log.T, instanceID, orchestrationRootDirName string, retentionDurationHours int, isIntendedFileNameFormat func(string) bool)
 }
 
 type assocBookkeepingService struct{}
 
-func (assocBookkeepingService) DeleteOldDocumentFolderLogs(log log.T, instanceID, orchestrationRootDirName string, retentionDurationHours int, isIntendedFileNameFormat func(string) bool, formOrchestrationFolderName func(string) string) {
-	docmanager.DeleteOldDocumentFolderLogs(log, instanceID, orchestrationRootDirName, retentionDurationHours, isIntendedFileNameFormat, formOrchestrationFolderName)
+func (assocBookkeepingService) DeleteOldOrchestrationLogs(log log.T, instanceID, orchestrationRootDirName string, retentionDurationHours int, isIntendedFileNameFormat func(string) bool) {
+	docmanager.DeleteOldOrchestrationFolderLogs(log, instanceID, orchestrationRootDirName, retentionDurationHours, isIntendedFileNameFormat)
 }
 
 // system represents the dependency for platform
