@@ -18,7 +18,6 @@ import (
 	"os"
 	"path"
 	"path/filepath"
-	"sync"
 	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
@@ -34,11 +33,6 @@ const (
 
 type validString func(string) bool
 type modifyString func(string) string
-
-//TODO:  Revisit this when making Persistence invasive - i.e failure in file-systems should resort to Agent crash instead of swallowing errors
-
-var lock sync.RWMutex
-var docLock = make(map[string]*sync.RWMutex)
 
 type DocumentMgr interface {
 	MoveDocumentState(log log.T, fileName, instanceID, srcLocationFolder, dstLocationFolder string)
@@ -65,8 +59,6 @@ func NewDocumentFileMgr(dataStorePath, rootDirName, stateLocation string) *Docum
 }
 
 func (d *DocumentFileMgr) MoveDocumentState(log log.T, fileName, instanceID, srcLocationFolder, dstLocationFolder string) {
-	//get a lock for documentID specific lock
-	lockDocument(fileName)
 
 	absoluteSource := path.Join(d.dataStorePath,
 		instanceID,
@@ -86,20 +78,9 @@ func (d *DocumentFileMgr) MoveDocumentState(log log.T, fileName, instanceID, src
 		log.Debugf("moving file %v from %v to %v failed with error %v", fileName, srcLocationFolder, dstLocationFolder, err)
 	}
 
-	//release documentID specific lock - before deleting the entry from the map
-	unlockDocument(fileName)
-
-	//delete documentID specific lock if document has finished executing. This is to avoid documentLock growing too much in memory.
-	//This is done by ensuring that as soon as document finishes executing it is removed from documentLock
-	//Its safe to assume that document has finished executing if it is being moved to appconfig.DefaultLocationOfCompleted
-	if dstLocationFolder == appconfig.DefaultLocationOfCompleted {
-		deleteLock(fileName)
-	}
 }
 
 func (d *DocumentFileMgr) PersistDocumentState(log log.T, fileName, instanceID, locationFolder string, state contracts.DocumentState) {
-	lockDocument(fileName)
-	defer unlockDocument(fileName)
 
 	absoluteFileName := path.Join(path.Join(d.dataStorePath,
 		instanceID,
@@ -124,9 +105,6 @@ func (d *DocumentFileMgr) PersistDocumentState(log log.T, fileName, instanceID, 
 }
 
 func (d *DocumentFileMgr) GetDocumentState(log log.T, fileName, instanceID, locationFolder string) contracts.DocumentState {
-
-	rLockDocument(fileName)
-	defer rUnlockDocument(fileName)
 
 	absoluteFileName := path.Join(path.Join(d.dataStorePath,
 		instanceID,
@@ -249,58 +227,6 @@ func isOlderThan(log log.T, fileFullPath string, retentionDurationHours int) boo
 
 	// Check whether the current time is after modification time plus the retention duration
 	return modificationTime.Add(time.Hour * time.Duration(retentionDurationHours)).Before(time.Now())
-}
-
-// rLockDocument locks id specific RWMutex for reading
-func rLockDocument(id string) {
-	//check if document lock even exists
-	if !doesLockExist(id) {
-		createLock(id)
-	}
-
-	docLock[id].RLock()
-}
-
-// rUnlockDocument releases id specific single RLock
-func rUnlockDocument(id string) {
-	docLock[id].RUnlock()
-}
-
-// lockDocument locks id specific RWMutex for writing
-func lockDocument(id string) {
-	//check if document lock even exists
-	if !doesLockExist(id) {
-		createLock(id)
-	}
-
-	docLock[id].Lock()
-}
-
-// unlockDocument releases id specific Lock for writing
-func unlockDocument(id string) {
-	docLock[id].Unlock()
-}
-
-// doesLockExist returns true if there exists documentLock for given id
-func doesLockExist(id string) bool {
-	lock.RLock()
-	defer lock.RUnlock()
-	_, ok := docLock[id]
-	return ok
-}
-
-// createLock creates id specific lock (RWMutex)
-func createLock(id string) {
-	lock.Lock()
-	defer lock.Unlock()
-	docLock[id] = &sync.RWMutex{}
-}
-
-// deleteLock deletes id specific lock
-func deleteLock(id string) {
-	lock.Lock()
-	defer lock.Unlock()
-	delete(docLock, id)
 }
 
 // docStateFileName returns absolute filename where command states are persisted
