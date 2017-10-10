@@ -153,21 +153,21 @@ type Parameter struct {
 
 // PluginConfig stores plugin configuration
 type PluginConfig struct {
-	Settings    interface{} `json:"settings"`
-	Properties  interface{} `json:"properties"`
-	Description string      `json:"description"`
+	Settings    interface{} `json:"settings" yaml:"settings"`
+	Properties  interface{} `json:"properties" yaml:"properties"`
+	Description string      `json:"description" yaml:"description"`
 }
 
 // InstancePluginConfig stores plugin configuration
 type InstancePluginConfig struct {
-	Action        string              `json:"action"` // plugin name
-	Inputs        interface{}         `json:"inputs"` // Properties
-	MaxAttempts   int                 `json:"maxAttempts"`
-	Name          string              `json:"name"` // unique identifier
-	OnFailure     string              `json:"onFailure"`
-	Settings      interface{}         `json:"settings"`
-	Timeout       int                 `json:"timeoutSeconds"`
-	Preconditions map[string][]string `json:"precondition"`
+	Action        string              `json:"action" yaml:"action"` // plugin name
+	Inputs        interface{}         `json:"inputs" yaml:"inputs"` // Properties
+	MaxAttempts   int                 `json:"maxAttempts" yaml:"maxAttempts"`
+	Name          string              `json:"name" yaml:"name"` // unique identifier
+	OnFailure     string              `json:"onFailure" yaml:"onFailure"`
+	Settings      interface{}         `json:"settings" yaml:"settings"`
+	Timeout       int                 `json:"timeoutSeconds" yaml:"timeoutSeconds"`
+	Preconditions map[string][]string `json:"precondition" yaml:"precondition"`
 }
 
 // DocumentContent object which represents ssm document content.
