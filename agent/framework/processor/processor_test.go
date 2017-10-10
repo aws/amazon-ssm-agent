@@ -131,7 +131,7 @@ func TestProcessCommand(t *testing.T) {
 	}()
 	docMock := new(DocumentMgrMock)
 	docMock.On("MoveDocumentState", mock.Anything, "documentID", "instanceID", appconfig.DefaultLocationOfPending, appconfig.DefaultLocationOfCurrent)
-	docMock.On("MoveDocumentState", mock.Anything, "documentID", "instanceID", appconfig.DefaultLocationOfCurrent, appconfig.DefaultLocationOfCompleted)
+	docMock.On("RemoveDocumentState", mock.Anything, "documentID", "instanceID", appconfig.DefaultLocationOfCurrent)
 	processCommand(ctx, creator, cancelFlag, resChan, &docState, docMock)
 	executerMock.AssertExpectations(t)
 	docMock.AssertExpectations(t)
@@ -182,8 +182,8 @@ func TestProcessCancelCommand_Success(t *testing.T) {
 	docState.CancelInformation.CancelMessageID = "messageID"
 	sendCommandPoolMock.On("Cancel", "messageID").Return(true)
 	docMock := new(DocumentMgrMock)
-	docMock.On("MoveDocumentState", mock.Anything, "", "", appconfig.DefaultLocationOfCurrent, appconfig.DefaultLocationOfCompleted)
-	docMock.On("PersistDocumentState", mock.Anything, "", "", appconfig.DefaultLocationOfCurrent, mock.Anything)
+	docMock.On("MoveDocumentState", mock.Anything, "", "", appconfig.DefaultLocationOfPending, appconfig.DefaultLocationOfCurrent)
+	docMock.On("RemoveDocumentState", mock.Anything, "", "", appconfig.DefaultLocationOfCurrent, mock.Anything)
 	processCancelCommand(ctx, sendCommandPoolMock, &docState, docMock)
 	sendCommandPoolMock.AssertExpectations(t)
 	docMock.AssertExpectations(t)
@@ -208,4 +208,9 @@ func (m *DocumentMgrMock) PersistDocumentState(log log.T, fileName, instanceID, 
 func (m *DocumentMgrMock) GetDocumentState(log log.T, fileName, instanceID, locationFolder string) contracts.DocumentState {
 	args := m.Called(log, fileName, instanceID, locationFolder)
 	return args.Get(0).(contracts.DocumentState)
+}
+
+func (m *DocumentMgrMock) RemoveDocumentState(log log.T, documentID, instanceID, location string) {
+	m.Called(log, documentID, instanceID, location)
+	return
 }

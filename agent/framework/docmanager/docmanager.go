@@ -44,6 +44,7 @@ type DocumentMgr interface {
 	MoveDocumentState(log log.T, fileName, instanceID, srcLocationFolder, dstLocationFolder string)
 	PersistDocumentState(log log.T, fileName, instanceID, locationFolder string, state contracts.DocumentState)
 	GetDocumentState(log log.T, fileName, instanceID, locationFolder string) contracts.DocumentState
+	RemoveDocumentState(log log.T, fileName, instanceID, locationFolder string)
 }
 
 //TODO use class lock instead of global lock?
@@ -151,7 +152,7 @@ func (d *DocumentFileMgr) GetDocumentState(log log.T, fileName, instanceID, loca
 }
 
 // RemoveData deletes the fileName from locationFolder under defaultLogDir/instanceID
-func RemoveData(log log.T, commandID, instanceID, locationFolder string) {
+func (d *DocumentFileMgr) RemoveDocumentState(log log.T, commandID, instanceID, locationFolder string) {
 
 	absoluteFileName := docStateFileName(commandID, instanceID, locationFolder)
 
@@ -181,78 +182,60 @@ func orchestrationDir(instanceID, orchestrationRootDirName string) string {
 		orchestrationRootDirName)
 }
 
-// DeleteOldDocumentFolderLogs deletes the logs from document/state/completed and document/orchestration folders older than retention duration which satisfy the file name format
-func DeleteOldDocumentFolderLogs(log log.T, instanceID, orchestrationRootDirName string, retentionDurationHours int, isIntendedFileNameFormat validString, formOrchestrationFolderName modifyString) {
+// DeleteOldOrchestrationFolderLogs deletes the logs from document/state/completed and document/orchestration folders older than retention duration which satisfy the file name format
+func DeleteOldOrchestrationFolderLogs(log log.T, instanceID, orchestrationRootDirName string, retentionDurationHours int, isIntendedFileNameFormat validString) {
 	defer func() {
 		// recover in case the function panics
 		if msg := recover(); msg != nil {
-			log.Errorf("DeleteOldDocumentFolderLogs failed with message %v", msg)
+			log.Errorf("DeleteOldOrchestrationFolderLogs failed with message %v", msg)
 		}
 	}()
-
-	// Form the path for completed document state dir
-	completedDir := DocumentStateDir(instanceID, appconfig.DefaultLocationOfCompleted)
 
 	// Form the path for orchestration logs dir
 	orchestrationRootDir := orchestrationDir(instanceID, orchestrationRootDirName)
 
-	if !fileutil.Exists(completedDir) {
-		log.Debugf("Completed log directory doesn't exist: %v", completedDir)
+	if !fileutil.Exists(orchestrationRootDir) {
+		log.Debugf("Completed log directory doesn't exist: %v", orchestrationRootDir)
 		return
 	}
 
-	completedFiles, err := fileutil.GetFileNames(completedDir)
+	outputFiles, err := fileutil.GetFileNames(orchestrationRootDir)
 	if err != nil {
 		log.Debugf("Failed to read files under %v", err)
 		return
 	}
 
-	if completedFiles == nil || len(completedFiles) == 0 {
-		log.Debugf("Completed log directory %v is invalid or empty", completedDir)
+	if outputFiles == nil || len(outputFiles) == 0 {
+		log.Debugf("Completed log directory %v is invalid or empty", orchestrationRootDir)
 		return
 	}
 
 	// Go through all log files in the completed logs dir, delete max maxLogFileDeletions files and the corresponding dirs from orchestration folder
 	countOfDeletions := 0
-	for _, completedFile := range completedFiles {
+	for _, completedFile := range outputFiles {
 
-		completedLogFullPath := filepath.Join(completedDir, completedFile)
+		outputLogFullPath := filepath.Join(orchestrationRootDir, completedFile)
 
 		//Checking for the file name format so that the function only deletes the files it is called to do. Also checking whether the file is beyond retention time.
-		if isIntendedFileNameFormat(completedFile) && isOlderThan(log, completedLogFullPath, retentionDurationHours) {
-			//The file name is valid for deletion and is also old. Go ahead for deletion.
-			orchestrationFolder := formOrchestrationFolderName(completedFile)
-			orchestrationDirFullPath := filepath.Join(orchestrationRootDir, orchestrationFolder)
+		if isIntendedFileNameFormat(completedFile) && isOlderThan(log, outputLogFullPath, retentionDurationHours) {
+			log.Debugf("Attempting Deletion of folder : %v", outputLogFullPath)
 
-			log.Debugf("Attempting Deletion of folder : %v", orchestrationDirFullPath)
-
-			err := fileutil.DeleteDirectory(orchestrationDirFullPath)
+			err := fileutil.DeleteDirectory(outputLogFullPath)
 			if err != nil {
-				log.Debugf("Error deleting dir %v: %v", orchestrationDirFullPath, err)
-				continue
-			}
-
-			// Deletion of orchestration dir was successful. Delete the document state file
-			log.Debugf("Attempting Deletion of file : %v", completedLogFullPath)
-
-			err = fileutil.DeleteDirectory(completedLogFullPath)
-
-			if err != nil {
-				log.Debugf("Error deleting file %v: %v", completedLogFullPath, err)
+				log.Debugf("Error deleting dir %v: %v", outputLogFullPath, err)
 				continue
 			}
 
 			// Deletion of both document state and orchestration file was successful
-			countOfDeletions += 2
+			countOfDeletions += 1
 			if countOfDeletions > maxLogFileDeletions {
 				break
 			}
-
 		}
 
 	}
 
-	log.Debugf("Completed DeleteOldDocumentFolderLogs")
+	log.Debugf("Completed DeleteOldOrchestrationFolderLogs")
 }
 
 // isOlderThan checks whether the file is older than the retention duration
