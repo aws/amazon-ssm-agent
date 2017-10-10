@@ -149,7 +149,7 @@ func ValidateSSMParameters(
 func getValidSSMParamRegexCompiler(log log.T, paramName string) (*regexp.Regexp, error) {
 	var validSSMParamRegex string
 	if strings.Compare(paramName, defaultParamName) == 0 {
-		validSSMParamRegex = "\\{\\{ *ssm:[/\\w.-]+ *\\}\\}"
+		validSSMParamRegex = "\\{\\{ *ssm:[/\\w.:-]+ *\\}\\}"
 	} else {
 		//[BUG FIX] escape . in the paramName
 		validSSMParamRegex = "\\{\\{ *ssm:" + strings.Replace(paramName, ".", "\\.", -1) + " *\\}\\}"
@@ -169,7 +169,7 @@ func getSSMParameterValues(log log.T, ssmParams []string) (map[string]Parameter,
 	var result *GetParametersResponse
 	var err error
 
-	validParamRegex := ":([/\\w.-]+)*"
+	validParamRegex := ":([/\\w.:-]+)*"
 	validParam, err := regexp.Compile(validParamRegex)
 	if err != nil {
 		log.Debug(err)
@@ -200,6 +200,7 @@ func getSSMParameterValues(log log.T, ssmParams []string) (map[string]Parameter,
 
 	resolvedParamMap := map[string]Parameter{}
 	secureStringParams := []string{}
+	seen = map[string]bool{}
 	for _, paramObj := range result.Parameters {
 		// Populate all the secure string parameters used in the document
 		if paramObj.Type == ParamTypeSecureString {
@@ -207,15 +208,51 @@ func getSSMParameterValues(log log.T, ssmParams []string) (map[string]Parameter,
 		}
 
 		// get regex compiler
-		validSSMParam, err := getValidSSMParamRegexCompiler(log, paramObj.Name)
+		// Let's try to get an exact match for the ssm parameter with version
+		validSSMParam, err := getValidSSMParamRegexCompiler(log, fmt.Sprintf("%v:%d", paramObj.Name, paramObj.Version))
 		if err != nil {
 			return nil, err
 		}
 
+		found := false
 		for _, value := range ssmParams {
-			if validSSMParam.MatchString(value) {
+			if !seen[value] && validSSMParam.MatchString(value) {
 				resolvedParamMap[value] = paramObj
+				found = true
+				seen[value] = true
 			}
+		}
+
+		// If not found, lets try to search without the version
+		// This is to support the existing use case of referring parameters without versions.
+		//
+		// Example:
+		// SSM Parameter references of type {{ssm:test}} which do not have any versions associated with it
+		// will not match with regex compiler of type 'ssm:test:4' which we do in the previous step.
+		// So, in order to resolve parameters without versions we perform another step of regex match, but
+		// with parameter name only. Once, we find a match, we make sure that the parameter referred
+		// in the document doesn't have any version associated with it before replacing it.
+		if !found {
+			// Recompile the regex without the version for a match
+			validSSMParam, err = getValidSSMParamRegexCompiler(log, paramObj.Name)
+			if err != nil {
+				return nil, err
+			}
+
+			for _, value := range ssmParams {
+				if !seen[value] && validSSMParam.MatchString(value) {
+					// Need to make sure that the ssm parameter referenced in the document doesn't have a version
+					if strings.Count(value, ":") == 1 {
+						resolvedParamMap[value] = paramObj
+						seen[value] = true
+						found = true
+					}
+				}
+			}
+		}
+
+		if !found {
+			return nil, fmt.Errorf("%v", ErrorMsg)
 		}
 	}
 
