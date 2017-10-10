@@ -76,6 +76,10 @@ const PlatformWindows = "windows"
 // PlatformDarwin uses Ohai identifier for darwin platform
 const PlatformDarwin = "mac_os_x"
 
+// OperatingSystemSKUs to denote Windows Nano installations
+const SKUProductDatacenterNanoServer = "143"
+const SKUProductStandardNanoServer = "144"
+
 // Init marks a init system used by the Operating Sysstem
 
 // InitSystemd uses identifier for systemd init system
