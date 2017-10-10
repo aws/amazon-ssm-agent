@@ -22,7 +22,8 @@ type GetParametersResponse struct {
 
 // Parameter contains info about the parameter
 type Parameter struct {
-	Name  string
-	Type  string
-	Value string
+	Name    string
+	Type    string
+	Value   string
+	Version int64
 }
