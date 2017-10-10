@@ -30,9 +30,11 @@ func (*Detector) DetectPlatform() (string, string, string, error) {
 	}
 
 	version, err := parseVersion(output)
+	osSKU, err := parseOperatingSystemSKU(output)
 
-	// TODO: differentiate between normal and nano server? -> SKU
-	// OperatingSystemSKU
+	if isWindowsNano(osSKU) {
+		version = fmt.Sprint(version, "nano")
+	}
 
 	// TODO: get full version
 	// CSDVersion
@@ -43,6 +45,11 @@ func (*Detector) DetectPlatform() (string, string, string, error) {
 	// Caption
 
 	return c.PlatformWindows, version, c.PlatformFamilyWindows, err
+}
+
+func isWindowsNano(operatingSystemSKU string) bool {
+	return operatingSystemSKU == c.SKUProductStandardNanoServer ||
+		operatingSystemSKU == c.SKUProductDatacenterNanoServer
 }
 
 func getWmiOSInfo() (string, error) {
@@ -57,10 +64,15 @@ func getWmiOSInfo() (string, error) {
 }
 
 func parseVersion(wmioutput string) (string, error) {
-	return parseProperty(wmioutput, `(?m)^\s*Version\s*=\s*(.+\S)\s*$`)
+	return parseProperty(wmioutput, "Version")
 }
 
-func parseProperty(wmioutput string, regex string) (string, error) {
+func parseOperatingSystemSKU(wmioutput string) (string, error) {
+	return parseProperty(wmioutput, "OperatingSystemSKU")
+}
+
+func parseProperty(wmioutput string, property string) (string, error) {
+	regex := fmt.Sprintf(`(?m)^\s*%s\s*=\s*(\S+)\s*$`, property)
 	re := regexp.MustCompile(regex)
 	match := re.FindStringSubmatch(wmioutput)
 
@@ -68,5 +80,5 @@ func parseProperty(wmioutput string, regex string) (string, error) {
 		return match[1], nil
 	}
 
-	return "", fmt.Errorf("could not parse windows version")
+	return "", fmt.Errorf("could not parse wmi property '%s'", property)
 }

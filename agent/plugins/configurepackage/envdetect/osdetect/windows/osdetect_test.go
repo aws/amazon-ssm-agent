@@ -81,3 +81,62 @@ func TestParseVersion(t *testing.T) {
 		})
 	}
 }
+
+func TestParseOperatingSystemSKU(t *testing.T) {
+	data := []struct {
+		name        string
+		wmioutput   string
+		expectedSKU string
+		expectError bool
+	}{
+		{
+			"simple single line SKU",
+			"OperatingSystemSKU=7",
+			"7",
+			false,
+		},
+		{
+			"simple multiline line SKU",
+			"OperatingSystemSKU=7\n",
+			"7",
+			false,
+		},
+		{
+			"whitespace SKU",
+			"  \t OperatingSystemSKU  \t  = \t  7  \t",
+			"7",
+			false,
+		},
+		{
+			"multiple SKU",
+			"SomeOtherOperatingSystemSKU=143\nOperatingSystemSKU=7",
+			"7",
+			false,
+		},
+		{
+			"windows newline",
+			"\r\nOperatingSystemSKU=7\r\n",
+			"7",
+			false,
+		},
+		{
+			"empty input",
+			"",
+			"",
+			true,
+		},
+	}
+
+	for _, d := range data {
+		t.Run(d.name, func(t *testing.T) {
+			resultSKU, err := parseOperatingSystemSKU(d.wmioutput)
+
+			if d.expectError {
+				assert.True(t, err != nil, "error expected")
+			} else {
+				assert.NoError(t, err)
+				assert.Equal(t, d.expectedSKU, resultSKU)
+			}
+		})
+	}
+}
