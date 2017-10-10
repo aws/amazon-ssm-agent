@@ -339,13 +339,12 @@ func processCommand(context context.T, executerCreator ExecuterCreator, cancelFl
 	}
 
 	//persist : commands execution in completed folder (terminal state folder)
-	log.Infof("execution of %v is over. Moving interimState file from Current to Completed folder", messageID)
+	log.Infof("execution of %v is over. Removing interimState from current folder", messageID)
 
-	docMgr.MoveDocumentState(log,
+	docMgr.RemoveDocumentState(log,
 		documentID,
 		instanceID,
-		appconfig.DefaultLocationOfCurrent,
-		appconfig.DefaultLocationOfCompleted)
+		appconfig.DefaultLocationOfCurrent)
 
 }
 
@@ -353,7 +352,11 @@ func processCommand(context context.T, executerCreator ExecuterCreator, cancelFl
 func processCancelCommand(context context.T, sendCommandPool task.Pool, docState *contracts.DocumentState, docMgr docmanager.DocumentMgr) {
 
 	log := context.Log()
-
+	//persist the final status of cancel-message in current folder
+	docMgr.MoveDocumentState(log,
+		docState.DocumentInformation.DocumentID,
+		docState.DocumentInformation.InstanceID,
+		appconfig.DefaultLocationOfPending, appconfig.DefaultLocationOfCurrent)
 	log.Debugf("Canceling job with id %v...", docState.CancelInformation.CancelMessageID)
 
 	if found := sendCommandPool.Cancel(docState.CancelInformation.CancelMessageID); !found {
@@ -365,20 +368,13 @@ func processCancelCommand(context context.T, sendCommandPool task.Pool, docState
 		docState.DocumentInformation.DocumentStatus = contracts.ResultStatusSuccess
 	}
 
-	//persist the final status of cancel-message in current folder
-	docMgr.PersistDocumentState(log,
-		docState.DocumentInformation.DocumentID,
-		docState.DocumentInformation.InstanceID,
-		appconfig.DefaultLocationOfCurrent, *docState)
-
 	//persist : commands execution in completed folder (terminal state folder)
-	log.Debugf("Execution of %v is over. Moving interimState file from Current to Completed folder", docState.DocumentInformation.MessageID)
+	log.Debugf("Execution of %v is over. Removing interimState file from Current folder", docState.DocumentInformation.MessageID)
 
-	docMgr.MoveDocumentState(log,
+	docMgr.RemoveDocumentState(log,
 		docState.DocumentInformation.DocumentID,
 		docState.DocumentInformation.InstanceID,
-		appconfig.DefaultLocationOfCurrent,
-		appconfig.DefaultLocationOfCompleted)
+		appconfig.DefaultLocationOfCurrent)
 
 }
 
