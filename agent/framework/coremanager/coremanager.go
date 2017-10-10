@@ -132,7 +132,11 @@ func initializeBookkeepingLocations(log logger.T, instanceID string) bool {
 			appconfig.DefaultDocumentRootDirName,
 			appconfig.DefaultLocationOfState,
 			folder)
-
+		//legacy dir, unused
+		if folder == appconfig.DefaultLocationOfCompleted {
+			log.Info("removing the completed state files")
+			fileutil.DeleteDirectory(directoryName)
+		}
 		err := fileutil.MakeDirs(directoryName)
 		if err != nil {
 			log.Errorf("Encountered error while creating folders for internal state management. %v", err)
