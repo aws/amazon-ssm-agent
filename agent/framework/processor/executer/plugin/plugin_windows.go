@@ -23,7 +23,6 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/framework/runpluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/application"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/domainjoin"
-	"github.com/aws/amazon-ssm-agent/agent/plugins/pluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/psmodule"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/updateec2config"
 )
@@ -32,21 +31,21 @@ type PsModuleFactory struct {
 }
 
 func (f PsModuleFactory) Create(context context.T) (runpluginutil.T, error) {
-	return psmodule.NewPlugin(pluginutil.DefaultPluginConfig())
+	return psmodule.NewPlugin()
 }
 
 type ApplicationFactory struct {
 }
 
 func (f ApplicationFactory) Create(context context.T) (runpluginutil.T, error) {
-	return application.NewPlugin(pluginutil.DefaultPluginConfig())
+	return application.NewPlugin()
 }
 
 type DomainJoinFactory struct {
 }
 
 func (f DomainJoinFactory) Create(context context.T) (runpluginutil.T, error) {
-	return domainjoin.NewPlugin(pluginutil.DefaultPluginConfig())
+	return domainjoin.NewPlugin()
 }
 
 type UpdateEc2ConfigFactory struct {

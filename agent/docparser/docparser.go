@@ -33,6 +33,7 @@ const (
 	preconditionSchemaVersion string = "2.2"
 )
 
+// DocumentParserInfo represents the parsed information from the request
 type DocumentParserInfo struct {
 	OrchestrationDir  string
 	S3Bucket          string
@@ -54,6 +55,11 @@ func InitializeDocState(log log.T,
 	docState.SchemaVersion = docContent.SchemaVersion
 	docState.DocumentType = documentType
 	docState.DocumentInformation = docInfo
+	docState.IOConfig = contracts.IOConfiguration{
+		OrchestrationDirectory: parserInfo.OrchestrationDir,
+		OutputS3BucketName:     parserInfo.S3Bucket,
+		OutputS3KeyPrefix:      parserInfo.S3Prefix,
+	}
 
 	pluginInfo, err := ParseDocument(log, docContent, parserInfo, params)
 	if err != nil {
@@ -211,7 +217,7 @@ func validateSchema(documentSchemaVersion string) error {
 	return nil
 }
 
-// getValidatedParameters validats the parameters and modifies the document content by replacing all ssm parameters with their actual values.
+// getValidatedParameters validates the parameters and modifies the document content by replacing all ssm parameters with their actual values.
 func getValidatedParameters(log log.T, params map[string]interface{}, docContent *contracts.DocumentContent) error {
 
 	//ValidateParameterNames
@@ -230,10 +236,8 @@ func getValidatedParameters(log log.T, params map[string]interface{}, docContent
 		return err
 	}
 
-	if err := replaceValidatedPluginParameters(docContent, validParameters, log); err != nil {
-		return err
-	}
-	return nil
+	err := replaceValidatedPluginParameters(docContent, validParameters, log)
+	return err
 }
 
 // replaceValidatedPluginParameters replaces parameters with their values, within the plugin Properties.
@@ -306,6 +310,7 @@ func isPreconditionEnabled(schemaVersion string) (response bool) {
 	return response
 }
 
+// ParseDocumentNameAndVersion parses the name and version from the document name
 func ParseDocumentNameAndVersion(name string) (docName, docVersion string) {
 	if len(name) == 0 {
 		return "", ""

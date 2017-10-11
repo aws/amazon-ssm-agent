@@ -19,7 +19,6 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/framework/runpluginutil"
-	"github.com/aws/amazon-ssm-agent/agent/plugins/pluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/runscript"
 )
 
@@ -27,7 +26,7 @@ type RunShellScriptFactory struct {
 }
 
 func (f RunShellScriptFactory) Create(context context.T) (runpluginutil.T, error) {
-	return runscript.NewRunShellPlugin(context.Log(), pluginutil.DefaultPluginConfig())
+	return runscript.NewRunShellPlugin(context.Log())
 }
 
 // loadPlatformDependentPlugins registers platform dependent plugins
