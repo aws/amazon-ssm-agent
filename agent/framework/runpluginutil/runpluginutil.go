@@ -19,11 +19,16 @@ import (
 	"strings"
 	"time"
 
+	"path/filepath"
+
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
+	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler"
+	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/platform"
+	"github.com/aws/amazon-ssm-agent/agent/plugins/pluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 )
 
@@ -33,9 +38,8 @@ const (
 	failStep    string = "fail"
 )
 
-// T is the interface type for plugins.
 type T interface {
-	Execute(context context.T, config contracts.Configuration, cancelFlag task.CancelFlag) contracts.PluginResult
+	Execute(context context.T, config contracts.Configuration, cancelFlag task.CancelFlag, output iohandler.IOHandler)
 }
 
 type Factory interface {
@@ -79,6 +83,7 @@ var isSupportedPlugin = IsPluginSupportedForCurrentPlatform
 func RunPlugins(
 	context context.T,
 	plugins []contracts.PluginState,
+	ioConfig contracts.IOConfiguration,
 	pluginRegistry PluginRegistry,
 	resChan chan contracts.PluginResult,
 	cancelFlag task.CancelFlag,
@@ -123,10 +128,10 @@ func RunPlugins(
 		// populate plugin start time and status
 		configuration := pluginState.Configuration
 
-		if configuration.OutputS3BucketName != "" {
-			pluginOutputs[pluginID].OutputS3BucketName = configuration.OutputS3BucketName
-			if configuration.OutputS3KeyPrefix != "" {
-				pluginOutputs[pluginID].OutputS3KeyPrefix = configuration.OutputS3KeyPrefix
+		if ioConfig.OutputS3BucketName != "" {
+			pluginOutputs[pluginID].OutputS3BucketName = ioConfig.OutputS3BucketName
+			if ioConfig.OutputS3KeyPrefix != "" {
+				pluginOutputs[pluginID].OutputS3KeyPrefix = ioConfig.OutputS3KeyPrefix
 
 			}
 		}
@@ -150,7 +155,7 @@ func RunPlugins(
 		switch operation {
 		case executeStep:
 			context.Log().Infof("Running plugin %s", pluginName)
-			r = runPlugin(context, p, pluginName, configuration, cancelFlag)
+			r = runPlugin(context, p, pluginName, configuration, cancelFlag, ioConfig)
 			pluginOutputs[pluginID].Code = r.Code
 			pluginOutputs[pluginID].Status = r.Status
 			pluginOutputs[pluginID].Error = r.Error
@@ -194,11 +199,12 @@ func RunPlugins(
 func runPlugin(
 	context context.T,
 	pluginFactory Factory,
-	pluginID string,
+	pluginName string,
 	config contracts.Configuration,
-	cancelFlag task.CancelFlag) (res contracts.PluginResult) {
+	cancelFlag task.CancelFlag,
+	ioConfig contracts.IOConfiguration) (res contracts.PluginResult) {
 	// create a new context that includes plugin ID
-	context = context.With("[pluginID=" + pluginID + "]")
+	context = context.With("[pluginName=" + pluginName + "]")
 
 	log := context.Log()
 	defer func() {
@@ -211,7 +217,8 @@ func runPlugin(
 			log.Error(res.Error)
 		}
 	}()
-	log.Debugf("Running %s", pluginID)
+
+	log.Debugf("Running %s", pluginName)
 	p, err := pluginFactory.Create(context)
 	if err != nil {
 		res.Status = contracts.ResultStatusFailed
@@ -221,7 +228,77 @@ func runPlugin(
 		return
 	}
 
-	return p.Execute(context, config, cancelFlag)
+	res.StartDateTime = time.Now()
+	defer func() { res.EndDateTime = time.Now() }()
+
+	output := iohandler.NewDefaultIOHandler(log, ioConfig)
+	//check if properties is a list. If true, then unroll
+	switch config.Properties.(type) {
+	case []interface{}:
+		// Load each property as a list.
+		var properties []interface{}
+		if properties = pluginutil.LoadParametersAsList(log, config.Properties, &res); res.Code != 0 {
+			return
+		}
+		for _, prop := range properties {
+			config.Properties = prop
+			propOutput := iohandler.NewDefaultIOHandler(log, ioConfig)
+			executePlugin(context, p, pluginName, config, cancelFlag, propOutput)
+			output.Merge(log, propOutput)
+		}
+
+	default:
+		executePlugin(context, p, pluginName, config, cancelFlag, output)
+	}
+
+	pluginConfig := iohandler.DefaultOutputConfig()
+
+	res.Code = output.GetExitCode()
+	res.Status = output.GetStatus()
+	res.Output = output.GetOutput()
+	res.StandardOutput = pluginutil.StringPrefix(output.GetStdout(), pluginConfig.MaxStdoutLength, pluginConfig.OutputTruncatedSuffix)
+	res.StandardError = pluginutil.StringPrefix(output.GetStderr(), pluginConfig.MaxStderrLength, pluginConfig.OutputTruncatedSuffix)
+	return
+}
+
+func executePlugin(context context.T,
+	p T,
+	pluginName string,
+	config contracts.Configuration,
+	cancelFlag task.CancelFlag,
+	output iohandler.IOHandler) {
+	log := context.Log()
+	// Get the property ID if it exists.
+	var propID string
+	var err error
+	if config.PluginName == config.PluginID {
+		propID, err = GetPropertyName(config.Properties) //V10 Schema
+	} else {
+		propID = config.PluginID //V20 Schema
+	}
+
+	if err != nil {
+		errorString := fmt.Errorf("Invalid format in plugin properties %v;\nerror %v", config.Properties, err)
+		output.MarkAsFailed(errorString)
+	} else {
+		path := pluginName
+		// Add the property id to the file path if present
+		if propID != "" {
+			path = filepath.Join(pluginName, propID)
+		}
+
+		// Create the output object and execute the plugin
+		output.Init(log, path)
+		p.Execute(context, config, cancelFlag, output)
+		output.Close(log)
+	}
+}
+
+func GetPropertyName(rawPluginInput interface{}) (propertyName string, err error) {
+	pluginInput := struct{ ID string }{}
+	err = jsonutil.Remarshal(rawPluginInput, &pluginInput)
+	propertyName = pluginInput.ID
+	return
 }
 
 // Checks plugin compatibility and step precondition and returns if it should be executed, skipped or failed

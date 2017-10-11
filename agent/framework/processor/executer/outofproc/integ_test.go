@@ -99,7 +99,7 @@ func TestOutOfProcExecuter_Success(t *testing.T) {
 	testCase.docStore.On("Save", resultDocState).Return(nil)
 	pluginRunner = func(
 		context context.T,
-		plugins []contracts.PluginState,
+		docState contracts.DocumentState,
 		resChan chan contracts.PluginResult,
 		cancelFlag task.CancelFlag,
 	) {
@@ -166,7 +166,7 @@ func TestOutOfProcExecuter_ShutdownAndReconnect(t *testing.T) {
 	masterClosed := make(chan bool)
 	pluginRunner = func(
 		context context.T,
-		plugins []contracts.PluginState,
+		docState contracts.DocumentState,
 		resChan chan contracts.PluginResult,
 		cancelFlag task.CancelFlag,
 	) {
@@ -268,7 +268,7 @@ func TestOutOfProcExecuter_Cancel(t *testing.T) {
 	testCase.docStore.On("Save", resultDocState).Return(nil)
 	pluginRunner = func(
 		context context.T,
-		plugins []contracts.PluginState,
+		docState contracts.DocumentState,
 		resChan chan contracts.PluginResult,
 		cancelFlag task.CancelFlag,
 	) {
