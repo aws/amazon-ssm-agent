@@ -11,7 +11,7 @@
 // either express or implied. See the License for the specific language governing
 // permissions and limitations under the License.
 
-// Package executer provides interfaces as document execution logic
+// Package basicexecuter provides interfaces as document execution logic
 package basicexecuter
 
 import (
@@ -34,10 +34,10 @@ type BasicExecuter struct {
 }
 
 var pluginRunner = func(context context.T,
-	plugins []contracts.PluginState,
+	docState contracts.DocumentState,
 	resChan chan contracts.PluginResult,
 	cancelFlag task.CancelFlag) (pluginOutputs map[string]*contracts.PluginResult) {
-	return runpluginutil.RunPlugins(context, plugins, runpluginutil.SSMPluginRegistry, resChan, cancelFlag)
+	return runpluginutil.RunPlugins(context, docState.InstancePluginsInformation, docState.IOConfig, runpluginutil.SSMPluginRegistry, resChan, cancelFlag)
 
 }
 
@@ -89,7 +89,7 @@ func run(context context.T,
 		}
 	}(&docState)
 
-	outputs := pluginRunner(context, docState.InstancePluginsInformation, statusChan, cancelFlag)
+	outputs := pluginRunner(context, docState, statusChan, cancelFlag)
 	close(statusChan)
 	//make sure the launched go routine has finshed before sending the final response
 	wg.Wait()

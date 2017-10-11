@@ -16,6 +16,7 @@ package runpluginutil
 import (
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
+	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 	"github.com/stretchr/testify/mock"
 )
@@ -28,10 +29,9 @@ type PluginMock struct {
 	mock.Mock
 }
 
-// Execute mocks a plugin execution.
-func (m *PluginMock) Execute(context context.T, config contracts.Configuration, cancelFlag task.CancelFlag) (res contracts.PluginResult) {
-	args := m.Called(context, config, cancelFlag)
-	return args.Get(0).(contracts.PluginResult)
+func (m *PluginMock) Execute(context context.T, config contracts.Configuration, cancelFlag task.CancelFlag, output iohandler.IOHandler) {
+	_ = m.Called(context, config, cancelFlag, output)
+	return
 }
 
 type PluginFactoryMock struct {

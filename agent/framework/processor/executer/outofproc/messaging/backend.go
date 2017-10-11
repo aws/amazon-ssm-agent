@@ -18,7 +18,7 @@ const (
 
 type PluginRunner func(
 	context context.T,
-	plugins []contracts.PluginState,
+	docState contracts.DocumentState,
 	resChan chan contracts.PluginResult,
 	cancelFlag task.CancelFlag,
 )
@@ -53,12 +53,12 @@ func NewExecuterBackend(output chan contracts.DocumentResult, docState *contract
 		cancelFlag: cancelFlag,
 		stopChan:   stopChan,
 	}
-	go p.start(docState.InstancePluginsInformation)
+	go p.start(*docState)
 	return &p
 }
 
-func (p *ExecuterBackend) start(pluginConfigs []contracts.PluginState) {
-	startDatagram, _ := CreateDatagram(MessageTypePluginConfig, pluginConfigs)
+func (p *ExecuterBackend) start(docState contracts.DocumentState) {
+	startDatagram, _ := CreateDatagram(MessageTypePluginConfig, docState)
 	p.input <- startDatagram
 	p.cancelFlag.Wait()
 	if p.cancelFlag.Canceled() {
@@ -127,15 +127,16 @@ func (p *WorkerBackend) Process(datagram string) error {
 	switch t {
 	case MessageTypePluginConfig:
 		log.Info("received plugin config message")
-		var plugins []contracts.PluginState
-		if err := jsonutil.Unmarshal(content, &plugins); err != nil {
+		var docState contracts.DocumentState
+		log.Info(content)
+		if err := jsonutil.Unmarshal(content, &docState); err != nil {
 			log.Errorf("failed to unmarshal plugin config: %v", err)
 			//TODO request messaging to stop
 			return err
 		}
 		p.once.Do(func() {
 			statusChan := make(chan contracts.PluginResult)
-			go p.runner(p.ctx, plugins, statusChan, p.cancelFlag)
+			go p.runner(p.ctx, docState, statusChan, p.cancelFlag)
 			go p.pluginListener(statusChan)
 		})
 

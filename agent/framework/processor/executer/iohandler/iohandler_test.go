@@ -11,14 +11,18 @@
 // either express or implied. See the License for the specific language governing
 // permissions and limitations under the License.
 
-package contracts
+package iohandler
 
 import (
 	"fmt"
 	"testing"
 
+	"github.com/aws/amazon-ssm-agent/agent/contracts"
+	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler/iomodule/mock"
+	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler/multiwriter/mock"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/mock"
 )
 
 type truncateOutputTest struct {
@@ -63,74 +67,91 @@ func TestTruncateOutput(t *testing.T) {
 
 var logger = log.NewMockLog()
 
+func TestRegisterOutputSource(t *testing.T) {
+	mockDocumentIOMultiWriter := new(multiwritermock.MockDocumentIOMultiWriter)
+
+	mockDocumentIOMultiWriter.On("AddWriter", mock.Anything).Times(2)
+	streamClosed := make(chan bool)
+	mockDocumentIOMultiWriter.On("GetStreamClosedChannel").Return(streamClosed).Times(2)
+
+	// Create multiple test IOModules
+	testModule1 := new(iomodulemock.MockIOModule)
+	testModule1.On("Read", logger, mock.Anything, streamClosed).Return()
+	testModule2 := new(iomodulemock.MockIOModule)
+	testModule2.On("Read", logger, mock.Anything, streamClosed).Return()
+
+	output := DefaultIOHandler{}
+	output.RegisterOutputSource(logger, mockDocumentIOMultiWriter, testModule1, testModule2)
+}
+
 func TestSucceeded(t *testing.T) {
-	output := PluginOutput{}
+	output := DefaultIOHandler{}
 
 	output.MarkAsSucceeded()
 
 	assert.Equal(t, output.ExitCode, 0)
-	assert.Equal(t, output.Status, ResultStatusSuccess)
+	assert.Equal(t, output.Status, contracts.ResultStatusSuccess)
 	assert.True(t, output.Status.IsSuccess())
 	assert.False(t, output.Status.IsReboot())
 }
 
 func TestFailed(t *testing.T) {
-	output := PluginOutput{}
+	output := DefaultIOHandler{}
 
-	output.MarkAsFailed(logger, fmt.Errorf("Error message"))
+	output.MarkAsFailed(fmt.Errorf("Error message"))
 
 	assert.Equal(t, output.ExitCode, 1)
-	assert.Equal(t, output.Status, ResultStatusFailed)
-	assert.Contains(t, output.Stderr, "Error message")
+	assert.Equal(t, output.Status, contracts.ResultStatusFailed)
+	assert.Contains(t, output.GetStderr(), "Error message")
 	assert.False(t, output.Status.IsSuccess())
 	assert.False(t, output.Status.IsReboot())
 }
 
-func TestPending(t *testing.T) {
-	output := PluginOutput{}
+func TestMarkAsInProgress(t *testing.T) {
+	output := DefaultIOHandler{}
 
 	output.MarkAsInProgress()
 
 	assert.Equal(t, output.ExitCode, 0)
-	assert.Equal(t, output.Status, ResultStatusInProgress)
+	assert.Equal(t, output.Status, contracts.ResultStatusInProgress)
 	assert.False(t, output.Status.IsSuccess())
 	assert.False(t, output.Status.IsReboot())
 }
 
-func TestReboot(t *testing.T) {
-	output := PluginOutput{}
+func TestMarkAsSuccessWithReboot(t *testing.T) {
+	output := DefaultIOHandler{}
 
 	output.MarkAsSuccessWithReboot()
 
 	assert.Equal(t, output.ExitCode, 0)
-	assert.Equal(t, output.Status, ResultStatusSuccessAndReboot)
+	assert.Equal(t, output.Status, contracts.ResultStatusSuccessAndReboot)
 	assert.True(t, output.Status.IsSuccess())
 	assert.True(t, output.Status.IsReboot())
 }
 
 func TestAppendInfo(t *testing.T) {
-	output := PluginOutput{}
+	output := DefaultIOHandler{}
 
-	output.AppendInfo(logger, "Info message")
-	output.AppendInfo(logger, "Second entry")
+	output.AppendInfo("Info message")
+	output.AppendInfo("Second entry")
 
-	assert.Contains(t, output.Stdout, "Info message")
-	assert.Contains(t, output.Stdout, "Second entry")
+	assert.Contains(t, output.GetStdout(), "Info message")
+	assert.Contains(t, output.GetStdout(), "Second entry")
 }
 
 func TestAppendSpecialChars(t *testing.T) {
-	output := PluginOutput{}
+	output := DefaultIOHandler{}
 
 	var testString = "%v`~!@#$%^&*()-_=+[{]}|\\;:'\",<.>/?"
-	output.AppendInfo(logger, testString)
-	output.AppendError(logger, testString)
+	output.AppendInfo(testString)
+	output.AppendError(testString)
 
-	assert.Contains(t, output.Stdout, testString)
-	assert.Contains(t, output.Stderr, testString)
+	assert.Contains(t, output.GetStdout(), testString)
+	assert.Contains(t, output.GetStderr(), testString)
 }
 
 func TestAppendFormat(t *testing.T) {
-	output := PluginOutput{}
+	output := DefaultIOHandler{}
 
 	var testString = "%v`~!@#$%^&*()-_=+[{]}|\\;:'\",<.>/?%%"
 
@@ -138,9 +159,9 @@ func TestAppendFormat(t *testing.T) {
 	// The second % isn't escaped and is treated as a fmt parameter, but no value is provided for it.
 	// The double %% is an escaped single literal %.
 	var testStringFormatted = "foo`~!@#$%!^(MISSING)&*()-_=+[{]}|\\;:'\",<.>/?%"
-	output.AppendInfof(logger, testString, "foo")
-	output.AppendErrorf(logger, testString, "foo")
+	output.AppendInfof(testString, "foo")
+	output.AppendErrorf(testString, "foo")
 
-	assert.Contains(t, output.Stdout, testStringFormatted)
-	assert.Contains(t, output.Stderr, testStringFormatted)
+	assert.Contains(t, output.GetStdout(), testStringFormatted)
+	assert.Contains(t, output.GetStderr(), testStringFormatted)
 }

@@ -86,7 +86,7 @@ func CreateTestCase() *TestCase {
 	testPluginReplyRawJSON = "{\"version\":\"1.0\",\"type\":\"reply\",\"content\":\"{\\\"DocumentName\\\":\\\"\\\",\\\"DocumentVersion\\\":\\\"\\\",\\\"MessageID\\\":\\\"\\\",\\\"AssociationID\\\":\\\"\\\",\\\"PluginResults\\\":{\\\"plugin1\\\":{\\\"pluginName\\\":\\\"aws:runScript\\\",\\\"pluginID\\\":\\\"plugin1\\\",\\\"status\\\":\\\"Success\\\",\\\"code\\\":0,\\\"output\\\":null,\\\"startDateTime\\\":\\\"2017-08-13T00:00:00Z\\\",\\\"endDateTime\\\":\\\"2017-08-13T00:00:01Z\\\",\\\"outputS3BucketName\\\":\\\"\\\",\\\"outputS3KeyPrefix\\\":\\\"\\\",\\\"standardOutput\\\":\\\"\\\",\\\"standardError\\\":\\\"\\\"}},\\\"Status\\\":\\\"InProgress\\\",\\\"LastPlugin\\\":\\\"plugin1\\\",\\\"NPlugins\\\":0}\"}"
 	testPluginReply2RawJSON = "{\"version\":\"1.0\",\"type\":\"reply\",\"content\":\"{\\\"DocumentName\\\":\\\"\\\",\\\"DocumentVersion\\\":\\\"\\\",\\\"MessageID\\\":\\\"\\\",\\\"AssociationID\\\":\\\"\\\",\\\"PluginResults\\\":{\\\"plugin1\\\":{\\\"pluginID\\\":\\\"plugin1\\\",\\\"pluginName\\\":\\\"aws:runScript\\\",\\\"status\\\":\\\"Success\\\",\\\"code\\\":0,\\\"output\\\":null,\\\"startDateTime\\\":\\\"2017-08-13T00:00:00Z\\\",\\\"endDateTime\\\":\\\"2017-08-13T00:00:01Z\\\",\\\"outputS3BucketName\\\":\\\"\\\",\\\"outputS3KeyPrefix\\\":\\\"\\\",\\\"standardOutput\\\":\\\"\\\",\\\"standardError\\\":\\\"\\\"},\\\"plugin2\\\":{\\\"pluginID\\\":\\\"plugin2\\\",\\\"pluginName\\\":\\\"aws:runPowershellScript\\\",\\\"status\\\":\\\"Success\\\",\\\"code\\\":0,\\\"output\\\":null,\\\"startDateTime\\\":\\\"2017-08-13T00:00:00Z\\\",\\\"endDateTime\\\":\\\"2017-08-13T00:00:01Z\\\",\\\"outputS3BucketName\\\":\\\"\\\",\\\"outputS3KeyPrefix\\\":\\\"\\\",\\\"standardOutput\\\":\\\"\\\",\\\"standardError\\\":\\\"\\\"}},\\\"Status\\\":\\\"InProgress\\\",\\\"LastPlugin\\\":\\\"plugin2\\\",\\\"NPlugins\\\":0}\"}"
 	testDocumentCompleteRawJSON = "{\"version\":\"1.0\",\"type\":\"complete\",\"content\":\"{\\\"DocumentName\\\":\\\"\\\",\\\"DocumentVersion\\\":\\\"\\\",\\\"MessageID\\\":\\\"\\\",\\\"AssociationID\\\":\\\"\\\",\\\"PluginResults\\\":{\\\"plugin1\\\":{\\\"pluginID\\\":\\\"plugin1\\\",\\\"pluginName\\\":\\\"aws:runScript\\\",\\\"status\\\":\\\"Success\\\",\\\"code\\\":0,\\\"output\\\":null,\\\"startDateTime\\\":\\\"2017-08-13T00:00:00Z\\\",\\\"endDateTime\\\":\\\"2017-08-13T00:00:01Z\\\",\\\"outputS3BucketName\\\":\\\"\\\",\\\"outputS3KeyPrefix\\\":\\\"\\\",\\\"standardOutput\\\":\\\"\\\",\\\"standardError\\\":\\\"\\\"},\\\"plugin2\\\":{\\\"pluginID\\\":\\\"plugin2\\\",\\\"pluginName\\\":\\\"aws:runPowershellScript\\\",\\\"status\\\":\\\"Success\\\",\\\"code\\\":0,\\\"output\\\":null,\\\"startDateTime\\\":\\\"2017-08-13T00:00:00Z\\\",\\\"endDateTime\\\":\\\"2017-08-13T00:00:01Z\\\",\\\"outputS3BucketName\\\":\\\"\\\",\\\"outputS3KeyPrefix\\\":\\\"\\\",\\\"standardOutput\\\":\\\"\\\",\\\"standardError\\\":\\\"\\\"}},\\\"Status\\\":\\\"Success\\\",\\\"LastPlugin\\\":\\\"\\\",\\\"NPlugins\\\":0}\"}"
-	testPluginsRawJSON = "{\"version\":\"1.0\",\"type\":\"pluginconfig\",\"content\":\"[{\\\"Configuration\\\":{\\\"Settings\\\":null,\\\"Properties\\\":null,\\\"OutputS3KeyPrefix\\\":\\\"\\\",\\\"OutputS3BucketName\\\":\\\"\\\",\\\"OrchestrationDirectory\\\":\\\"\\\",\\\"MessageId\\\":\\\"\\\",\\\"BookKeepingFileName\\\":\\\"\\\",\\\"PluginName\\\":\\\"\\\",\\\"PluginID\\\":\\\"\\\",\\\"DefaultWorkingDirectory\\\":\\\"\\\",\\\"Preconditions\\\":null,\\\"IsPreconditionEnabled\\\":false},\\\"Name\\\":\\\"aws:runScript\\\",\\\"Result\\\":{\\\"pluginName\\\":\\\"\\\",\\\"status\\\":\\\"\\\",\\\"code\\\":0,\\\"output\\\":null,\\\"startDateTime\\\":\\\"0001-01-01T00:00:00Z\\\",\\\"endDateTime\\\":\\\"0001-01-01T00:00:00Z\\\",\\\"outputS3BucketName\\\":\\\"\\\",\\\"outputS3KeyPrefix\\\":\\\"\\\",\\\"standardOutput\\\":\\\"\\\",\\\"standardError\\\":\\\"\\\"},\\\"Id\\\":\\\"aws:runScript\\\"}]\"}"
+	testPluginsRawJSON = "{\"version\":\"1.0\",\"type\":\"pluginconfig\",\"content\":\"{\\\"DocumentInformation\\\":{\\\"DocumentID\\\":\\\"\\\",\\\"CommandID\\\":\\\"\\\",\\\"AssociationID\\\":\\\"\\\",\\\"InstanceID\\\":\\\"\\\",\\\"MessageID\\\":\\\"\\\",\\\"RunID\\\":\\\"\\\",\\\"CreatedDate\\\":\\\"\\\",\\\"DocumentName\\\":\\\"\\\",\\\"DocumentVersion\\\":\\\"\\\",\\\"DocumentStatus\\\":\\\"\\\",\\\"RunCount\\\":0,\\\"ProcInfo\\\":{\\\"Pid\\\":0,\\\"StartTime\\\":\\\"2006-01-02T15:04:05Z\\\"}},\\\"DocumentType\\\":\\\"SendCommand\\\",\\\"SchemaVersion\\\":\\\"\\\",\\\"InstancePluginsInformation\\\":[{\\\"Configuration\\\":{\\\"Settings\\\":null,\\\"Properties\\\":null,\\\"OutputS3KeyPrefix\\\":\\\"\\\",\\\"OutputS3BucketName\\\":\\\"\\\",\\\"OrchestrationDirectory\\\":\\\"\\\",\\\"MessageId\\\":\\\"\\\",\\\"BookKeepingFileName\\\":\\\"\\\",\\\"PluginName\\\":\\\"\\\",\\\"PluginID\\\":\\\"\\\",\\\"DefaultWorkingDirectory\\\":\\\"\\\",\\\"Preconditions\\\":null,\\\"IsPreconditionEnabled\\\":false},\\\"Name\\\":\\\"aws:runScript\\\",\\\"Result\\\":{\\\"pluginName\\\":\\\"\\\",\\\"status\\\":\\\"\\\",\\\"code\\\":0,\\\"output\\\":null,\\\"startDateTime\\\":\\\"2017-08-13T00:00:00Z\\\",\\\"endDateTime\\\":\\\"2017-08-13T00:00:00Z\\\",\\\"outputS3BucketName\\\":\\\"\\\",\\\"outputS3KeyPrefix\\\":\\\"\\\",\\\"standardOutput\\\":\\\"\\\",\\\"standardError\\\":\\\"\\\"},\\\"Id\\\":\\\"aws:runScript\\\"}],\\\"CancelInformation\\\":{\\\"CancelMessageID\\\":\\\"\\\",\\\"CancelCommandID\\\":\\\"\\\",\\\"Payload\\\":\\\"\\\",\\\"DebugInfo\\\":\\\"\\\"},\\\"IOConfig\\\":{\\\"OrchestrationDirectory\\\":\\\"\\\",\\\"OutputS3BucketName\\\":\\\"\\\",\\\"OutputS3KeyPrefix\\\":\\\"\\\"}}\"}"
 	testUnknownTypeRawJSON = "{\"version\":\"1.0\",\"type\":\"some unknown type\",\"content\":\"\"}"
 	testUnknownTypeRawJSON2 = "a very bad string"
 	testCancelRawJSON = "{\"version\":\"1.0\",\"type\":\"cancel\",\"content\":\"\"}"
@@ -120,7 +120,7 @@ func TestExecuterBackendStart_Shutdown(t *testing.T) {
 		closed <- true
 	}()
 	cancel.Set(task.ShutDown)
-	backend.start(testCase.docState.InstancePluginsInformation)
+	backend.start(testCase.docState)
 	//make sure input is closed
 	<-inputChan
 	//make sure assertion are made
@@ -189,14 +189,14 @@ func TestExecuterBackend_ProcessUnsupportedVersion(t *testing.T) {
 }
 
 func TestWorkerBackend_ProcessCancelV1(t *testing.T) {
-	//testCase := CreateTestCase()
+	_ = CreateTestCase()
 	inputChan := make(chan string, 10)
 	cancelFlag := new(task.MockCancelFlag)
 	cancelFlag.On("Set", task.Canceled).Return(nil)
 	isRunnerCalled := false
 	pluginRunner := func(
 		context context.T,
-		plugins []contracts.PluginState,
+		docState contracts.DocumentState,
 		resChan chan contracts.PluginResult,
 		cancelFlag task.CancelFlag,
 	) {

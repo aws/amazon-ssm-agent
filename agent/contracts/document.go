@@ -11,7 +11,7 @@
 // either express or implied. See the License for the specific language governing
 // permissions and limitations under the License.
 
-// Package model provides model definitions for document state
+// Package contracts provides model definitions for document state
 package contracts
 
 import (
@@ -45,6 +45,7 @@ type PluginState struct {
 	Id     string
 }
 
+// OSProcInfo represents information about the new process for outofproc
 type OSProcInfo struct {
 	Pid       int
 	StartTime time.Time
@@ -69,6 +70,13 @@ type DocumentInfo struct {
 	ProcInfo        OSProcInfo
 }
 
+// IOConfiguration represents information relevant to the output sources of a command
+type IOConfiguration struct {
+	OrchestrationDirectory string
+	OutputS3BucketName     string
+	OutputS3KeyPrefix      string
+}
+
 // DocumentState represents information relevant to a command that gets executed by agent
 type DocumentState struct {
 	DocumentInformation        DocumentInfo
@@ -76,6 +84,7 @@ type DocumentState struct {
 	SchemaVersion              string
 	InstancePluginsInformation []PluginState
 	CancelInformation          CancelCommandInfo
+	IOConfig                   IOConfiguration
 }
 
 // IsRebootRequired returns if reboot is needed
@@ -97,6 +106,7 @@ type CancelCommandInfo struct {
 	DebugInfo       string
 }
 
+// UpdateDocState updates the current document state
 func UpdateDocState(docResult *DocumentResult, docState *DocumentState) {
 	docState.DocumentInformation.DocumentStatus = docResult.Status
 	pluginID := docResult.LastPlugin
