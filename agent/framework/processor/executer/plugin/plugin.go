@@ -27,7 +27,6 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/plugins/downloadcontent"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/inventory"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/lrpminvoker"
-	"github.com/aws/amazon-ssm-agent/agent/plugins/pluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/refreshassociation"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/rundocument"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/runscript"
@@ -65,21 +64,21 @@ type CloudWatchFactory struct {
 }
 
 func (f CloudWatchFactory) Create(context context.T) (runpluginutil.T, error) {
-	return lrpminvoker.NewPlugin(pluginutil.DefaultPluginConfig(), appconfig.PluginNameCloudWatch)
+	return lrpminvoker.NewPlugin(appconfig.PluginNameCloudWatch)
 }
 
 type InventoryGathererFactory struct {
 }
 
 func (f InventoryGathererFactory) Create(context context.T) (runpluginutil.T, error) {
-	return inventory.NewPlugin(context, pluginutil.DefaultPluginConfig())
+	return inventory.NewPlugin(context)
 }
 
 type RunPowerShellFactory struct {
 }
 
 func (f RunPowerShellFactory) Create(context context.T) (runpluginutil.T, error) {
-	return runscript.NewRunPowerShellPlugin(pluginutil.DefaultPluginConfig())
+	return runscript.NewRunPowerShellPlugin()
 }
 
 type UpdateAgentFactory struct {
@@ -93,42 +92,42 @@ type ConfigureContainerFactory struct {
 }
 
 func (f ConfigureContainerFactory) Create(context context.T) (runpluginutil.T, error) {
-	return configurecontainers.NewPlugin(pluginutil.DefaultPluginConfig())
+	return configurecontainers.NewPlugin()
 }
 
 type RunDockerFactory struct {
 }
 
 func (f RunDockerFactory) Create(context context.T) (runpluginutil.T, error) {
-	return dockercontainer.NewPlugin(pluginutil.DefaultPluginConfig())
+	return dockercontainer.NewPlugin()
 }
 
 type ConfigurePackageFactory struct {
 }
 
 func (f ConfigurePackageFactory) Create(context context.T) (runpluginutil.T, error) {
-	return configurepackage.NewPlugin(pluginutil.DefaultPluginConfig())
+	return configurepackage.NewPlugin()
 }
 
 type RefreshAssociationFactory struct {
 }
 
 func (f RefreshAssociationFactory) Create(context context.T) (runpluginutil.T, error) {
-	return refreshassociation.NewPlugin(pluginutil.DefaultPluginConfig())
+	return refreshassociation.NewPlugin()
 }
 
 type DownloadContentFactory struct {
 }
 
 func (d DownloadContentFactory) Create(context context.T) (runpluginutil.T, error) {
-	return downloadcontent.NewPlugin(pluginutil.DefaultPluginConfig())
+	return downloadcontent.NewPlugin()
 }
 
 type RunDocumentFactory struct {
 }
 
 func (r RunDocumentFactory) Create(context context.T) (runpluginutil.T, error) {
-	return rundocument.NewPlugin(pluginutil.DefaultPluginConfig())
+	return rundocument.NewPlugin()
 }
 
 // RegisteredWorkerPlugins returns all registered core modules.

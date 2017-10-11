@@ -101,7 +101,7 @@ func testBasicExecuter(t *testing.T, testCase TestCase) {
 	dataStoreMock.On("Load").Return(state)
 	dataStoreMock.On("Save", resultState).Return()
 	pluginRunner = func(context context.T,
-		plugins []contracts.PluginState,
+		docState contracts.DocumentState,
 		resChan chan contracts.PluginResult,
 		cancelFlag task.CancelFlag) map[string]*contracts.PluginResult {
 		outputs := make(map[string]*contracts.PluginResult)

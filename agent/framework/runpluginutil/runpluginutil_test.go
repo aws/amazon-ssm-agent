@@ -67,8 +67,8 @@ func TestRunPluginsWithNewDocument(t *testing.T) {
 
 	ctx := context.NewMockDefault()
 	defaultTime := time.Now()
-	defaultOutput := "output"
 	pluginConfigs2 := make([]contracts.PluginState, len(pluginNames))
+	ioConfig := contracts.IOConfiguration{}
 
 	for index, name := range pluginNames {
 
@@ -77,7 +77,8 @@ func TestRunPluginsWithNewDocument(t *testing.T) {
 
 		// create configuration for execution
 		config := contracts.Configuration{
-			PluginID: name,
+			PluginID:   name,
+			PluginName: name,
 		}
 
 		// setup expectations
@@ -87,20 +88,15 @@ func TestRunPluginsWithNewDocument(t *testing.T) {
 			Configuration: config,
 		}
 		pluginResults[name] = &contracts.PluginResult{
-			Output:         name,
-			PluginID:       name,
-			PluginName:     name,
-			StartDateTime:  defaultTime,
-			EndDateTime:    defaultTime,
-			StandardOutput: defaultOutput,
-			StandardError:  defaultOutput,
+			PluginID:      name,
+			PluginName:    name,
+			StartDateTime: defaultTime,
+			EndDateTime:   defaultTime,
+			Output:        "",
 		}
 
-		if name == testPlugin2 {
-			pluginResults[name].Status = contracts.ResultStatusSuccessAndReboot
-		}
+		pluginInstances[name].On("Execute", ctx, pluginConfigs[name].Configuration, cancelFlag, mock.Anything).Return()
 
-		pluginInstances[name].On("Execute", ctx, pluginConfigs[name].Configuration, cancelFlag).Return(*pluginResults[name])
 		pluginFactory := new(PluginFactoryMock)
 		pluginFactory.On("Create", mock.Anything).Return(pluginInstances[name], nil)
 		pluginRegistry[name] = pluginFactory
@@ -125,7 +121,7 @@ func TestRunPluginsWithNewDocument(t *testing.T) {
 		}
 	}()
 	// call the code we are testing
-	outputs := RunPlugins(ctx, pluginConfigs2, pluginRegistry, ch, cancelFlag)
+	outputs := RunPlugins(ctx, pluginConfigs2, ioConfig, pluginRegistry, ch, cancelFlag)
 	close(ch)
 
 	// fix the times expectation.
@@ -162,6 +158,7 @@ func TestRunPluginsWithMissingPluginHandler(t *testing.T) {
 	defaultTime := time.Now()
 	defaultOutput := ""
 	pluginConfigs2 := make([]contracts.PluginState, len(pluginNames))
+	ioConfig := contracts.IOConfiguration{}
 
 	for index, name := range pluginNames {
 
@@ -170,7 +167,8 @@ func TestRunPluginsWithMissingPluginHandler(t *testing.T) {
 
 		// create configuration for execution
 		config := contracts.Configuration{
-			PluginID: name,
+			PluginID:   name,
+			PluginName: name,
 		}
 
 		// setup expectations
@@ -213,7 +211,7 @@ func TestRunPluginsWithMissingPluginHandler(t *testing.T) {
 		}
 	}()
 	// call the code we are testing
-	outputs := RunPlugins(ctx, pluginConfigs2, pluginRegistry, ch, cancelFlag)
+	outputs := RunPlugins(ctx, pluginConfigs2, ioConfig, pluginRegistry, ch, cancelFlag)
 
 	// fix the times expectation.
 	for _, result := range outputs {
@@ -246,11 +244,13 @@ func TestRunPluginsWithCancelFlagShutdown(t *testing.T) {
 	var cancelFlag task.CancelFlag = task.NewChanneledCancelFlag()
 	ctx := context.NewMockDefault()
 	defaultTime := time.Now()
+	ioConfig := contracts.IOConfiguration{}
 
 	for index, name := range pluginNames {
 		plugins[name] = new(PluginMock)
 		config := contracts.Configuration{
-			PluginID: name,
+			PluginID:   name,
+			PluginName: name,
 		}
 		pluginState := contracts.PluginState{
 			Name:          name,
@@ -259,22 +259,20 @@ func TestRunPluginsWithCancelFlagShutdown(t *testing.T) {
 		}
 
 		pluginResults[name] = &contracts.PluginResult{
-			Output:        name,
+			Output:        "",
 			PluginName:    name,
 			PluginID:      name,
 			StartDateTime: defaultTime,
 			EndDateTime:   defaultTime,
 		}
 		if name == testPlugin1 {
-			pluginResults[name].Status = contracts.ResultStatusSuccess
-			plugins[name].On("Execute", ctx, pluginState.Configuration, cancelFlag).Run(func(args mock.Arguments) {
+			plugins[name].On("Execute", ctx, pluginState.Configuration, cancelFlag, mock.Anything).Run(func(args mock.Arguments) {
 				flag := args.Get(2).(task.CancelFlag)
 				flag.Set(task.ShutDown)
-			}).Return(*pluginResults[name])
+			}).Return()
 
 		} else {
-			pluginResults[name].Status = contracts.ResultStatusFailed
-			plugins[name].On("Execute", ctx, pluginState.Configuration, cancelFlag).Return(*pluginResults[name])
+			plugins[name].On("Execute", ctx, pluginState.Configuration, cancelFlag, mock.Anything).Return()
 		}
 		pluginStates[index] = pluginState
 		pluginFactory := new(PluginFactoryMock)
@@ -284,7 +282,7 @@ func TestRunPluginsWithCancelFlagShutdown(t *testing.T) {
 
 	ch := make(chan contracts.PluginResult, 2)
 
-	outputs := RunPlugins(ctx, pluginStates, pluginRegistry, ch, cancelFlag)
+	outputs := RunPlugins(ctx, pluginStates, ioConfig, pluginRegistry, ch, cancelFlag)
 
 	close(ch)
 
@@ -310,6 +308,7 @@ func TestRunPluginsWithInProgressDocuments(t *testing.T) {
 	pluginResults := make(map[string]*contracts.PluginResult)
 	plugins := make(map[string]*PluginMock)
 	pluginRegistry := PluginRegistry{}
+	ioConfig := contracts.IOConfiguration{}
 
 	var cancelFlag task.CancelFlag = task.NewChanneledCancelFlag()
 	ctx := context.NewMockDefault()
@@ -318,7 +317,8 @@ func TestRunPluginsWithInProgressDocuments(t *testing.T) {
 	for index, name := range pluginNames {
 		plugins[name] = new(PluginMock)
 		config := contracts.Configuration{
-			PluginID: name,
+			PluginID:   name,
+			PluginName: name,
 		}
 		pluginState := contracts.PluginState{
 			Name:          name,
@@ -327,7 +327,7 @@ func TestRunPluginsWithInProgressDocuments(t *testing.T) {
 		}
 
 		pluginResults[name] = &contracts.PluginResult{
-			Output:        name,
+			Output:        "",
 			Status:        contracts.ResultStatusSuccess,
 			PluginName:    name,
 			PluginID:      name,
@@ -339,7 +339,7 @@ func TestRunPluginsWithInProgressDocuments(t *testing.T) {
 			pluginState.Result = *pluginResults[name]
 		} else {
 			pluginState.Result.Status = contracts.ResultStatusNotStarted
-			plugins[name].On("Execute", ctx, pluginState.Configuration, cancelFlag).Return(*pluginResults[name])
+			plugins[name].On("Execute", ctx, pluginState.Configuration, cancelFlag, mock.Anything).Return()
 		}
 		pluginStates[index] = pluginState
 		pluginFactory := new(PluginFactoryMock)
@@ -348,7 +348,7 @@ func TestRunPluginsWithInProgressDocuments(t *testing.T) {
 	}
 
 	ch := make(chan contracts.PluginResult, 2)
-	outputs := RunPlugins(ctx, pluginStates, pluginRegistry, ch, cancelFlag)
+	outputs := RunPlugins(ctx, pluginStates, ioConfig, pluginRegistry, ch, cancelFlag)
 	close(ch)
 	// fix the times expectation.
 	for _, result := range outputs {
@@ -358,9 +358,9 @@ func TestRunPluginsWithInProgressDocuments(t *testing.T) {
 	for _, mockPlugin := range plugins {
 		mockPlugin.AssertExpectations(t)
 	}
+	pluginResults[testPlugin2].Status = ""
 	assert.Equal(t, pluginResults[testPlugin1], outputs[testPlugin1])
 	assert.Equal(t, pluginResults[testPlugin2], outputs[testPlugin2])
-
 }
 
 //TODO this test wont work cuz we don't have a good way to mock lib functions
@@ -406,18 +406,19 @@ func TestRunPluginsWithDuplicatePluginType(t *testing.T) {
 	// create an instance of our test object
 	plugin := new(PluginMock)
 	pluginRegistry := PluginRegistry{}
+	ioConfig := contracts.IOConfiguration{}
 
 	var cancelFlag task.CancelFlag
 	ctx := context.NewMockDefault()
 	defaultTime := time.Now()
-	defaultOutput := "output"
 	pluginConfigs2 := make([]contracts.PluginState, len(pluginNames))
 
 	for index, name := range pluginNames {
 
 		// create configuration for execution
 		config := contracts.Configuration{
-			PluginID: name,
+			PluginID:   name,
+			PluginName: name,
 		}
 
 		// setup expectations
@@ -428,22 +429,16 @@ func TestRunPluginsWithDuplicatePluginType(t *testing.T) {
 		}
 
 		pluginResults[name] = &contracts.PluginResult{
-			Output:         name,
-			PluginID:       name,
-			PluginName:     pluginType,
-			StartDateTime:  defaultTime,
-			EndDateTime:    defaultTime,
-			StandardOutput: defaultOutput,
-			StandardError:  defaultOutput,
+			Output:        "",
+			PluginID:      name,
+			PluginName:    pluginType,
+			StartDateTime: defaultTime,
+			EndDateTime:   defaultTime,
 		}
 
-		if name == testPlugin2 {
-			pluginResults[name].Status = contracts.ResultStatusSuccessAndReboot
-		}
-
-		plugin.On("Execute", ctx, pluginConfigs[name].Configuration, cancelFlag).Return(*pluginResults[name])
 		pluginFactory := new(PluginFactoryMock)
 		pluginFactory.On("Create", mock.Anything).Return(plugin, nil)
+		plugin.On("Execute", ctx, pluginConfigs[name].Configuration, cancelFlag, mock.Anything).Return(*pluginResults[name])
 		pluginRegistry[pluginType] = pluginFactory
 
 		pluginConfigs2[index] = pluginConfigs[name]
@@ -465,7 +460,7 @@ func TestRunPluginsWithDuplicatePluginType(t *testing.T) {
 		}
 	}()
 	// call the code we are testing
-	outputs := RunPlugins(ctx, pluginConfigs2, pluginRegistry, ch, cancelFlag)
+	outputs := RunPlugins(ctx, pluginConfigs2, ioConfig, pluginRegistry, ch, cancelFlag)
 
 	// fix the times expectation.
 	for _, result := range outputs {
@@ -496,12 +491,12 @@ func TestRunPluginsWithCompatiblePrecondition(t *testing.T) {
 	pluginResults := make(map[string]*contracts.PluginResult)
 	pluginInstances := make(map[string]*PluginMock)
 	pluginRegistry := PluginRegistry{}
+	ioConfig := contracts.IOConfiguration{}
 
 	var cancelFlag task.CancelFlag = task.NewChanneledCancelFlag()
 
 	ctx := context.NewMockDefault()
 	defaultTime := time.Now()
-	defaultOutput := "output"
 	pluginConfigs2 := make([]contracts.PluginState, len(pluginNames))
 
 	preconditions := map[string][]string{"StringEquals": []string{"platformType", "Linux"}}
@@ -514,6 +509,7 @@ func TestRunPluginsWithCompatiblePrecondition(t *testing.T) {
 		// create configuration for execution
 		config := contracts.Configuration{
 			PluginID:              name,
+			PluginName:            name,
 			IsPreconditionEnabled: true,
 			Preconditions:         preconditions,
 		}
@@ -525,20 +521,17 @@ func TestRunPluginsWithCompatiblePrecondition(t *testing.T) {
 			Configuration: config,
 		}
 		pluginResults[name] = &contracts.PluginResult{
-			Output:         name,
-			PluginName:     name,
-			PluginID:       name,
-			StartDateTime:  defaultTime,
-			EndDateTime:    defaultTime,
-			StandardOutput: defaultOutput,
-			StandardError:  defaultOutput,
-			Status:         contracts.ResultStatusSuccess,
+			Output:        "",
+			PluginName:    name,
+			PluginID:      name,
+			StartDateTime: defaultTime,
+			EndDateTime:   defaultTime,
 		}
 
-		pluginInstances[name].On("Execute", ctx, pluginConfigs[name].Configuration, cancelFlag).Return(*pluginResults[name])
 		pluginFactory := new(PluginFactoryMock)
 		pluginFactory.On("Create", mock.Anything).Return(pluginInstances[name], nil)
 		pluginRegistry[name] = pluginFactory
+		pluginInstances[name].On("Execute", ctx, pluginConfigs[name].Configuration, cancelFlag, mock.Anything).Return()
 
 		pluginConfigs2[index] = pluginConfigs[name]
 	}
@@ -559,7 +552,7 @@ func TestRunPluginsWithCompatiblePrecondition(t *testing.T) {
 		}
 	}()
 	// call the code we are testing
-	outputs := RunPlugins(ctx, pluginConfigs2, pluginRegistry, ch, cancelFlag)
+	outputs := RunPlugins(ctx, pluginConfigs2, ioConfig, pluginRegistry, ch, cancelFlag)
 
 	// fix the times expectation.
 	for _, result := range outputs {
@@ -588,12 +581,12 @@ func TestRunPluginsWithCompatiblePreconditionWithValueFirst(t *testing.T) {
 	pluginResults := make(map[string]*contracts.PluginResult)
 	pluginInstances := make(map[string]*PluginMock)
 	pluginRegistry := PluginRegistry{}
+	ioConfig := contracts.IOConfiguration{}
 
 	var cancelFlag task.CancelFlag = task.NewChanneledCancelFlag()
 
 	ctx := context.NewMockDefault()
 	defaultTime := time.Now()
-	defaultOutput := "output"
 	pluginConfigs2 := make([]contracts.PluginState, len(pluginNames))
 
 	preconditions := map[string][]string{"StringEquals": []string{"Linux", "platformType"}}
@@ -606,6 +599,7 @@ func TestRunPluginsWithCompatiblePreconditionWithValueFirst(t *testing.T) {
 		// create configuration for execution
 		config := contracts.Configuration{
 			PluginID:              name,
+			PluginName:            name,
 			IsPreconditionEnabled: true,
 			Preconditions:         preconditions,
 		}
@@ -617,20 +611,17 @@ func TestRunPluginsWithCompatiblePreconditionWithValueFirst(t *testing.T) {
 			Configuration: config,
 		}
 		pluginResults[name] = &contracts.PluginResult{
-			Output:         name,
-			PluginID:       name,
-			PluginName:     name,
-			StartDateTime:  defaultTime,
-			EndDateTime:    defaultTime,
-			StandardOutput: defaultOutput,
-			StandardError:  defaultOutput,
-			Status:         contracts.ResultStatusSuccess,
+			Output:        "",
+			PluginID:      name,
+			PluginName:    name,
+			StartDateTime: defaultTime,
+			EndDateTime:   defaultTime,
 		}
 
-		pluginInstances[name].On("Execute", ctx, pluginConfigs[name].Configuration, cancelFlag).Return(*pluginResults[name])
 		pluginFactory := new(PluginFactoryMock)
 		pluginFactory.On("Create", mock.Anything).Return(pluginInstances[name], nil)
 		pluginRegistry[name] = pluginFactory
+		pluginInstances[name].On("Execute", ctx, pluginConfigs[name].Configuration, cancelFlag, mock.Anything).Return()
 
 		pluginConfigs2[index] = pluginConfigs[name]
 	}
@@ -651,7 +642,7 @@ func TestRunPluginsWithCompatiblePreconditionWithValueFirst(t *testing.T) {
 		}
 	}()
 	// call the code we are testing
-	outputs := RunPlugins(ctx, pluginConfigs2, pluginRegistry, ch, cancelFlag)
+	outputs := RunPlugins(ctx, pluginConfigs2, ioConfig, pluginRegistry, ch, cancelFlag)
 	// fix the times expectation.
 	for _, result := range outputs {
 		result.EndDateTime = defaultTime
@@ -678,6 +669,7 @@ func TestRunPluginsWithIncompatiblePrecondition(t *testing.T) {
 	pluginResults := make(map[string]*contracts.PluginResult)
 	pluginInstances := make(map[string]*PluginMock)
 	pluginRegistry := PluginRegistry{}
+	ioConfig := contracts.IOConfiguration{}
 
 	var cancelFlag task.CancelFlag = task.NewChanneledCancelFlag()
 
@@ -696,6 +688,7 @@ func TestRunPluginsWithIncompatiblePrecondition(t *testing.T) {
 		// create configuration for execution
 		config := contracts.Configuration{
 			PluginID:              name,
+			PluginName:            name,
 			IsPreconditionEnabled: true,
 			Preconditions:         preconditions,
 		}
@@ -738,7 +731,7 @@ func TestRunPluginsWithIncompatiblePrecondition(t *testing.T) {
 		}
 	}()
 	// call the code we are testing
-	outputs := RunPlugins(ctx, pluginConfigs2, pluginRegistry, ch, cancelFlag)
+	outputs := RunPlugins(ctx, pluginConfigs2, ioConfig, pluginRegistry, ch, cancelFlag)
 	// fix the times expectation.
 	for _, result := range outputs {
 		result.EndDateTime = defaultTime
@@ -765,6 +758,7 @@ func TestRunPluginsWithCompatiblePreconditionButMissingPluginHandler(t *testing.
 	pluginResults := make(map[string]*contracts.PluginResult)
 	pluginInstances := make(map[string]*PluginMock)
 	pluginRegistry := PluginRegistry{}
+	ioConfig := contracts.IOConfiguration{}
 
 	var cancelFlag task.CancelFlag = task.NewChanneledCancelFlag()
 
@@ -783,6 +777,7 @@ func TestRunPluginsWithCompatiblePreconditionButMissingPluginHandler(t *testing.
 		// create configuration for execution
 		config := contracts.Configuration{
 			PluginID:              name,
+			PluginName:            name,
 			IsPreconditionEnabled: true,
 			Preconditions:         preconditions,
 		}
@@ -823,7 +818,7 @@ func TestRunPluginsWithCompatiblePreconditionButMissingPluginHandler(t *testing.
 		}
 	}()
 	// call the code we are testing
-	outputs := RunPlugins(ctx, pluginConfigs2, pluginRegistry, ch, cancelFlag)
+	outputs := RunPlugins(ctx, pluginConfigs2, ioConfig, pluginRegistry, ch, cancelFlag)
 	// fix the times expectation.
 	for _, result := range outputs {
 		result.EndDateTime = defaultTime
@@ -850,6 +845,7 @@ func TestRunPluginsWithMoreThanOnePrecondition(t *testing.T) {
 	pluginResults := make(map[string]*contracts.PluginResult)
 	pluginInstances := make(map[string]*PluginMock)
 	pluginRegistry := PluginRegistry{}
+	ioConfig := contracts.IOConfiguration{}
 
 	var cancelFlag task.CancelFlag = task.NewChanneledCancelFlag()
 
@@ -871,6 +867,7 @@ func TestRunPluginsWithMoreThanOnePrecondition(t *testing.T) {
 		// create configuration for execution
 		config := contracts.Configuration{
 			PluginID:              name,
+			PluginName:            name,
 			IsPreconditionEnabled: true,
 			Preconditions:         preconditions,
 		}
@@ -919,7 +916,7 @@ func TestRunPluginsWithMoreThanOnePrecondition(t *testing.T) {
 		}
 	}()
 	// call the code we are testing
-	outputs := RunPlugins(ctx, pluginConfigs2, pluginRegistry, ch, cancelFlag)
+	outputs := RunPlugins(ctx, pluginConfigs2, ioConfig, pluginRegistry, ch, cancelFlag)
 	// fix the times expectation.
 	for _, result := range outputs {
 		result.EndDateTime = defaultTime
@@ -946,6 +943,7 @@ func TestRunPluginsWithUnrecognizedPreconditionOperator(t *testing.T) {
 	pluginResults := make(map[string]*contracts.PluginResult)
 	pluginInstances := make(map[string]*PluginMock)
 	pluginRegistry := PluginRegistry{}
+	ioConfig := contracts.IOConfiguration{}
 
 	var cancelFlag task.CancelFlag = task.NewChanneledCancelFlag()
 
@@ -964,6 +962,7 @@ func TestRunPluginsWithUnrecognizedPreconditionOperator(t *testing.T) {
 		// create configuration for execution
 		config := contracts.Configuration{
 			PluginID:              name,
+			PluginName:            name,
 			IsPreconditionEnabled: true,
 			Preconditions:         preconditions,
 		}
@@ -1012,7 +1011,7 @@ func TestRunPluginsWithUnrecognizedPreconditionOperator(t *testing.T) {
 		}
 	}()
 	// call the code we are testing
-	outputs := RunPlugins(ctx, pluginConfigs2, pluginRegistry, ch, cancelFlag)
+	outputs := RunPlugins(ctx, pluginConfigs2, ioConfig, pluginRegistry, ch, cancelFlag)
 
 	// fix the times expectation.
 	for _, result := range outputs {
@@ -1040,6 +1039,7 @@ func TestRunPluginsWithUnrecognizedPreconditionOperand(t *testing.T) {
 	pluginResults := make(map[string]*contracts.PluginResult)
 	pluginInstances := make(map[string]*PluginMock)
 	pluginRegistry := PluginRegistry{}
+	ioConfig := contracts.IOConfiguration{}
 
 	var cancelFlag task.CancelFlag = task.NewChanneledCancelFlag()
 
@@ -1058,6 +1058,7 @@ func TestRunPluginsWithUnrecognizedPreconditionOperand(t *testing.T) {
 		// create configuration for execution
 		config := contracts.Configuration{
 			PluginID:              name,
+			PluginName:            name,
 			IsPreconditionEnabled: true,
 			Preconditions:         preconditions,
 		}
@@ -1106,7 +1107,7 @@ func TestRunPluginsWithUnrecognizedPreconditionOperand(t *testing.T) {
 		}
 	}()
 	// call the code we are testing
-	outputs := RunPlugins(ctx, pluginConfigs2, pluginRegistry, ch, cancelFlag)
+	outputs := RunPlugins(ctx, pluginConfigs2, ioConfig, pluginRegistry, ch, cancelFlag)
 
 	// fix the times expectation.
 	for _, result := range outputs {
@@ -1135,6 +1136,7 @@ func TestRunPluginsWithUnrecognizedPreconditionDuplicateVariable(t *testing.T) {
 	pluginResults := make(map[string]*contracts.PluginResult)
 	pluginInstances := make(map[string]*PluginMock)
 	pluginRegistry := PluginRegistry{}
+	ioConfig := contracts.IOConfiguration{}
 
 	var cancelFlag task.CancelFlag = task.NewChanneledCancelFlag()
 
@@ -1153,6 +1155,7 @@ func TestRunPluginsWithUnrecognizedPreconditionDuplicateVariable(t *testing.T) {
 		// create configuration for execution
 		config := contracts.Configuration{
 			PluginID:              name,
+			PluginName:            name,
 			IsPreconditionEnabled: true,
 			Preconditions:         preconditions,
 		}
@@ -1202,7 +1205,7 @@ func TestRunPluginsWithUnrecognizedPreconditionDuplicateVariable(t *testing.T) {
 		}
 	}()
 	// call the code we are testing
-	outputs := RunPlugins(ctx, pluginConfigs2, pluginRegistry, ch, cancelFlag)
+	outputs := RunPlugins(ctx, pluginConfigs2, ioConfig, pluginRegistry, ch, cancelFlag)
 
 	// fix the times expectation.
 	for _, result := range outputs {
@@ -1230,6 +1233,7 @@ func TestRunPluginsWithMoreThanTwoPreconditionOperands(t *testing.T) {
 	pluginResults := make(map[string]*contracts.PluginResult)
 	pluginInstances := make(map[string]*PluginMock)
 	pluginRegistry := PluginRegistry{}
+	ioConfig := contracts.IOConfiguration{}
 
 	var cancelFlag task.CancelFlag = task.NewChanneledCancelFlag()
 
@@ -1248,6 +1252,7 @@ func TestRunPluginsWithMoreThanTwoPreconditionOperands(t *testing.T) {
 		// create configuration for execution
 		config := contracts.Configuration{
 			PluginID:              name,
+			PluginName:            name,
 			IsPreconditionEnabled: true,
 			Preconditions:         preconditions,
 		}
@@ -1297,7 +1302,7 @@ func TestRunPluginsWithMoreThanTwoPreconditionOperands(t *testing.T) {
 		}
 	}()
 	// call the code we are testing
-	outputs := RunPlugins(ctx, pluginConfigs2, pluginRegistry, ch, cancelFlag)
+	outputs := RunPlugins(ctx, pluginConfigs2, ioConfig, pluginRegistry, ch, cancelFlag)
 
 	// fix the times expectation.
 	for _, result := range outputs {
@@ -1325,6 +1330,7 @@ func TestRunPluginsWithUnknownPlugin(t *testing.T) {
 	pluginResults := make(map[string]*contracts.PluginResult)
 	pluginInstances := make(map[string]*PluginMock)
 	pluginRegistry := PluginRegistry{}
+	ioConfig := contracts.IOConfiguration{}
 
 	var cancelFlag task.CancelFlag = task.NewChanneledCancelFlag()
 
@@ -1345,6 +1351,7 @@ func TestRunPluginsWithUnknownPlugin(t *testing.T) {
 		// create configuration for execution
 		config := contracts.Configuration{
 			PluginID:              name,
+			PluginName:            name,
 			IsPreconditionEnabled: true,
 			Preconditions:         preconditions,
 		}
@@ -1374,16 +1381,13 @@ func TestRunPluginsWithUnknownPlugin(t *testing.T) {
 			}
 		} else {
 			pluginResults[name] = &contracts.PluginResult{
-				Output:         name,
-				PluginID:       name,
-				PluginName:     name,
-				StartDateTime:  defaultTime,
-				EndDateTime:    defaultTime,
-				StandardOutput: defaultOutput,
-				StandardError:  defaultOutput,
-				Status:         contracts.ResultStatusSuccess,
+				Output:        "",
+				PluginID:      name,
+				PluginName:    name,
+				StartDateTime: defaultTime,
+				EndDateTime:   defaultTime,
 			}
-			pluginInstances[name].On("Execute", ctx, pluginConfigs[name].Configuration, cancelFlag).Return(*pluginResults[name])
+			pluginInstances[name].On("Execute", ctx, pluginConfigs[name].Configuration, cancelFlag, mock.Anything).Return(*pluginResults[name])
 		}
 		pluginFactory := new(PluginFactoryMock)
 		pluginFactory.On("Create", mock.Anything).Return(pluginInstances[name], nil)
@@ -1404,7 +1408,7 @@ func TestRunPluginsWithUnknownPlugin(t *testing.T) {
 		}
 	}()
 	// call the code we are testing
-	outputs := RunPlugins(ctx, pluginConfigs2, pluginRegistry, ch, cancelFlag)
+	outputs := RunPlugins(ctx, pluginConfigs2, ioConfig, pluginRegistry, ch, cancelFlag)
 
 	// fix the times expectation.
 	for _, result := range outputs {
