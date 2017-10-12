@@ -75,6 +75,8 @@ func (t TokenInfoImpl) GetOAuthClient(log log.T, tokenInfo string) (client *http
 	if tokenMap, err = t.SsmParameter(log, &t.paramAccess, parameterReferences, resolverOptions); err != nil {
 		return nil, fmt.Errorf("Could not resolve ssm parameter - %v. Error - %v", parameterReferences, err)
 	}
+
+	// Parameter output must be of size 1. Any other number of tokens returned can lead to undesired behavior
 	if len(tokenMap) != 1 {
 		return nil, fmt.Errorf("Invalid number of tokens returned - %v", len(tokenMap))
 	}
@@ -84,6 +86,7 @@ func (t TokenInfoImpl) GetOAuthClient(log log.T, tokenInfo string) (client *http
 		tokenVal = token
 	}
 
+	// Validating to check if the parameter obtained is a secure string
 	if tokenVal.Type != parameterstore.ParamTypeSecureString {
 		return nil, fmt.Errorf("token-parameter-name %v must be of secure string type, Current type - %v", tokenVal.Name, tokenVal.Type)
 	}
