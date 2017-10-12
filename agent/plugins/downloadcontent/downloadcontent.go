@@ -49,6 +49,8 @@ const (
 	PassExitCode = 0
 )
 
+var SetPermission = SetFilePermissions
+
 // NewPlugin returns a new instance of the plugin.
 func NewPlugin(pluginConfig pluginutil.PluginConfig) (*Plugin, error) {
 	var plugin Plugin
@@ -202,6 +204,11 @@ func (p *Plugin) runCopyContent(log log.T, input *DownloadContentPlugin, config 
 		output.MarkAsFailed(log, err)
 		return
 	}
+
+	if err := SetPermission(log, destinationPath); err != nil {
+		output.MarkAsFailed(log, fmt.Errorf("Failed to set right permissions to the content. Error - %v", err))
+	}
+
 	output.AppendInfof(log, "Content downloaded to %v", destinationPath)
 	output.MarkAsSucceeded()
 	return
@@ -242,4 +249,19 @@ func validateInput(input *DownloadContentPlugin) (valid bool, err error) {
 		return false, errors.New("Location Information must be specified")
 	}
 	return true, nil
+}
+
+// SetFilePermissions applies execute permissions to the folder
+func SetFilePermissions(log log.T, workingDir string) error {
+
+	var permissionsWalk = func(path string, info os.FileInfo, e error) (err error) {
+		log.Info("Changing permissions for ", path)
+		return os.Chmod(path, appconfig.ReadWriteExecuteAccess)
+	}
+
+	err := filepath.Walk(workingDir, permissionsWalk)
+	if err != nil {
+		log.Errorf("Error while changing the permissions of files - %v", err.Error())
+	}
+	return err
 }
