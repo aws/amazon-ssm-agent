@@ -29,12 +29,13 @@ import (
 
 var logMock = log.NewMockLog()
 
-func TestTokenInfoImpl_GetOAuthClient(t *testing.T) {
+func TestTokenInfoImpl_GetOAuthClient_Success(t *testing.T) {
 
 	var tokenInfoInput []string
 	tokenInfoInput = append(tokenInfoInput, `{{ ssm-secure:dummysecureparam }}`)
 	oauthclientmock := gitmock.OAuthClientMock{}
 
+	// tokenValue to validate correct output
 	tokenValue := "lskjksjgshfg1234jdskjhgvs"
 
 	var clientVal *http.Client
@@ -49,11 +50,12 @@ func TestTokenInfoImpl_GetOAuthClient(t *testing.T) {
 	assert.NoError(t, err)
 	assert.Equal(t, clientVal, httpout)
 	oauthclientmock.AssertExpectations(t)
-
 }
 
-func TestTokenInfoImpl_ValidateTokenParameter(t *testing.T) {
+func TestTokenInfoImpl_ValidateTokenParameter_Failure(t *testing.T) {
 
+	// tokenInfoInput has a format that is unsupported for token information.
+	// The token must be of secuse string type and must hole the prefix - ssm-secure:
 	tokenInfoInput := `{ "dummysecureparam" }`
 	oauthclientmock := gitmock.OAuthClientMock{}
 	tokenInfo := TokenInfoImpl{
@@ -76,6 +78,8 @@ func TestTokenInfoImpl_ValidateSecureParameter(t *testing.T) {
 
 	var clientVal *http.Client
 
+	// getMockParam contains a parameter of String type which is not permitted.
+	// token info must be a parameter of SecureString type
 	tokenInfo := TokenInfoImpl{
 		SsmParameter:   getMockedParam,
 		gitoauthclient: oauthclientmock,
@@ -89,6 +93,7 @@ func TestTokenInfoImpl_ValidateSecureParameter(t *testing.T) {
 	oauthclientmock.AssertExpectations(t)
 }
 
+// getMockedParam returns a parameter of type String
 func getMockedParam(log log.T, paramService ssmparameterresolver.ISsmParameterService, parameterReferences []string,
 	resolverOptions ssmparameterresolver.ResolveOptions) (info map[string]ssmparameterresolver.SsmParameterInfo, err error) {
 	tokenValue := "lskjksjgshfg1234jdskjhgvs"
@@ -103,6 +108,7 @@ func getMockedParam(log log.T, paramService ssmparameterresolver.ISsmParameterSe
 	return info, nil
 }
 
+// getMockedSecureParam returns a parameter of type SecureString
 func getMockedSecureParam(log log.T, paramService ssmparameterresolver.ISsmParameterService, parameterReferences []string,
 	resolverOptions ssmparameterresolver.ResolveOptions) (info map[string]ssmparameterresolver.SsmParameterInfo, err error) {
 	tokenValue := "lskjksjgshfg1234jdskjhgvs"
