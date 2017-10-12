@@ -68,7 +68,7 @@ func generateTestCaseOk(id string) TestCase {
 	input := RunScriptPluginInput{
 		RunCommand:       []string{"echo " + id},
 		ID:               id + ".aws:runScript",
-		WorkingDirectory: "Dir" + id,
+		WorkingDirectory: "/Dir" + id,
 		TimeoutSeconds:   "1",
 	}
 	testCase := TestCase{
