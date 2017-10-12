@@ -20,6 +20,8 @@ import (
 	"path/filepath"
 	"time"
 
+	"strings"
+
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
@@ -29,6 +31,10 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/pluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/task"
+)
+
+const (
+	downloadsDir = "downloads" //Directory under the orchestration directory where the downloaded resource resides
 )
 
 // Plugin is the type for the runscript plugin.
@@ -119,10 +125,17 @@ func (p *Plugin) runCommandsRawInput(log log.T, pluginID string, rawPluginInput 
 // runCommands executes one set of commands and returns their output.
 func (p *Plugin) runCommands(log log.T, pluginID string, pluginInput RunScriptPluginInput, orchestrationDirectory string, cancelFlag task.CancelFlag, outputS3BucketName string, outputS3KeyPrefix string) (out contracts.PluginOutput) {
 	var err error
+	var workingDir string
 
-	workingDir := pluginInput.WorkingDirectory
-	if workingDir == "" {
-		workingDir = p.defaultWorkingDirectory
+	if filepath.IsAbs(pluginInput.WorkingDirectory) {
+		workingDir = pluginInput.WorkingDirectory
+	} else {
+		orchestrationDir := strings.TrimSuffix(orchestrationDirectory, pluginID)
+		// The Document path is expected to have the name of the document
+		workingDir = filepath.Join(orchestrationDir, downloadsDir, pluginInput.WorkingDirectory)
+		if !fileutil.Exists(workingDir) {
+			workingDir = p.defaultWorkingDirectory
+		}
 	}
 
 	// TODO:MF: This subdirectory is only needed because we could be running multiple sets of properties for the same plugin - otherwise the orchestration directory would already be unique
