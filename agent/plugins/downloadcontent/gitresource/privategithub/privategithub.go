@@ -25,7 +25,6 @@ import (
 	"fmt"
 	"net/http"
 	"regexp"
-	"strings"
 )
 
 const (
@@ -54,7 +53,7 @@ func (t TokenInfoImpl) GetOAuthClient(log log.T, tokenInfo string) (client *http
 		return nil, err
 	}
 
-	var token ssmparameterresolver.SsmParameterInfo
+	var tokenVal ssmparameterresolver.SsmParameterInfo
 	var tokenMap map[string]ssmparameterresolver.SsmParameterInfo
 	var parameterReferences []string
 
@@ -76,14 +75,19 @@ func (t TokenInfoImpl) GetOAuthClient(log log.T, tokenInfo string) (client *http
 	if tokenMap, err = t.SsmParameter(log, &t.paramAccess, parameterReferences, resolverOptions); err != nil {
 		return nil, fmt.Errorf("Could not resolve ssm parameter - %v. Error - %v", parameterReferences, err)
 	}
+	if len(tokenMap) != 1 {
+		return nil, fmt.Errorf("Invalid number of tokens returned - %v", len(tokenMap))
+	}
 
 	//Extracting single value of token contained within tokenMap
-	token = tokenMap[strings.TrimSpace(subParam[1])]
-
-	if token.Type != parameterstore.ParamTypeSecureString {
-		return nil, fmt.Errorf("token-parameter-name %v must be of secure string type, Current type - %v", token.Name, token.Type)
+	for _, token := range tokenMap {
+		tokenVal = token
 	}
-	return t.gitoauthclient.GetGithubOauthClient(token.Value), nil
+
+	if tokenVal.Type != parameterstore.ParamTypeSecureString {
+		return nil, fmt.Errorf("token-parameter-name %v must be of secure string type, Current type - %v", tokenVal.Name, tokenVal.Type)
+	}
+	return t.gitoauthclient.GetGithubOauthClient(tokenVal.Value), nil
 }
 
 func getSSMParameter(log log.T, paramService ssmparameterresolver.ISsmParameterService, parameterReferences []string,
