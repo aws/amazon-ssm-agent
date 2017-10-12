@@ -294,10 +294,10 @@ func (inst *Installer) getEnvVars(actionName string, context context.T) (envVars
 
 	envVars["BWS_ACTION_NAME"] = actionName
 
-	// Set proxy settings from the environment
-	envVars["BWS_HTTPS_PROXY"] = os.Getenv("https_proxy")
-	envVars["BWS_HTTP_PROXY"] = os.Getenv("http_proxy")
-	envVars["BWS_NO_PROXY"] = os.Getenv("no_proxy")
+	// Copy proxy settings from the environment
+	envVars["https_proxy"] = os.Getenv("https_proxy")
+	envVars["http_proxy"] = os.Getenv("http_proxy")
+	envVars["no_proxy"] = os.Getenv("no_proxy")
 
 	env, err := inst.envdetectCollector.CollectData(log)
 	if err != nil {
