@@ -221,6 +221,7 @@ func TestPlugin_ExecuteGitHubFile(t *testing.T) {
 		filesys:               githubCopyContentFileMock,
 	}
 	p.ExecuteUploadOutputToS3Bucket = mockplugin.UploadOutputToS3Bucket
+	SetPermission = stubChmod
 	result := p.execute(contextMock, conf, createMockCancelFlag())
 
 	githubCopyContentFileMock.AssertExpectations(t)
@@ -267,6 +268,7 @@ func TestPlugin_ExecuteS3File(t *testing.T) {
 		filesys:               s3CopyContentFileMock,
 	}
 	p.ExecuteUploadOutputToS3Bucket = mockplugin.UploadOutputToS3Bucket
+	SetPermission = stubChmod
 	result := p.execute(contextMock, conf, cancelFlag)
 
 	s3CopyContentFileMock.AssertExpectations(t)
@@ -312,6 +314,7 @@ func TestPlugin_ExecuteSSMDoc(t *testing.T) {
 		filesys:               ssmDocCopyContentFileMock,
 	}
 	p.ExecuteUploadOutputToS3Bucket = mockplugin.UploadOutputToS3Bucket
+	SetPermission = stubChmod
 	result := p.execute(contextMock, conf, cancelFlag)
 
 	ssmDocCopyContentFileMock.AssertExpectations(t)
@@ -357,6 +360,7 @@ func TestPlugin_ExecuteSSMDocError(t *testing.T) {
 		filesys:               ssmDocCopyContentFileMock,
 	}
 	p.ExecuteUploadOutputToS3Bucket = mockplugin.UploadOutputToS3Bucket
+	SetPermission = stubChmod
 	result := p.execute(contextMock, conf, cancelFlag)
 
 	ssmDocCopyContentFileMock.AssertExpectations(t)
@@ -486,4 +490,8 @@ func createMockCancelFlag() task.CancelFlag {
 	mockCancelFlag.On("Wait").Return(false).After(100 * time.Millisecond)
 
 	return mockCancelFlag
+}
+
+func stubChmod(log log.T, workingDir string) error {
+	return nil
 }
