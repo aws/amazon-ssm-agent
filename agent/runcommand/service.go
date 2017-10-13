@@ -79,7 +79,6 @@ type SendResponse func(messageID string, res contracts.DocumentResult)
 type RunCommandService struct {
 	context              context.T
 	name                 string
-	stopSignal           chan bool
 	config               contracts.AgentConfiguration
 	service              mdsService.Service
 	sendDocLevelResponse SendDocumentLevelResponse
@@ -167,7 +166,6 @@ func NewService(ctx context.T, serviceName string, service mdsService.Service, c
 	return &RunCommandService{
 		context:              ctx,
 		name:                 serviceName,
-		stopSignal:           make(chan bool),
 		config:               agentConfig,
 		service:              service,
 		sendDocLevelResponse: sendDocLevelResponse,
