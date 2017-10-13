@@ -58,7 +58,6 @@ type Processor struct {
 	complianceUploader complianceUploader.T
 	context            context.T
 	agentInfo          *contracts.AgentInfo
-	stopSignal         chan bool
 	proc               processor.Processor
 	resChan            chan contracts.DocumentResult
 	defaultPlugin      pluginutil.DefaultPlugin
@@ -93,10 +92,32 @@ func NewAssociationProcessor(context context.T, instanceID string) *Processor {
 		assocSvc:           assocSvc,
 		complianceUploader: uploader,
 		agentInfo:          &agentInfo,
-		stopSignal:         make(chan bool),
 		proc:               proc,
 		onBoot:             true,
 	}
+}
+
+func (p *Processor) ModuleExecute(context context.T) {
+	log := context.Log()
+	associationFrequenceMinutes := context.AppConfig().Ssm.AssociationFrequencyMinutes
+	log.Info("Starting association polling")
+	log.Debugf("Association polling frequency is %v", associationFrequenceMinutes)
+	var job *scheduler.Job
+	var err error
+	if job, err = assocScheduler.CreateScheduler(
+		log,
+		p.ProcessAssociation,
+		associationFrequenceMinutes); err != nil {
+		context.Log().Errorf("unable to schedule association processor. %v", err)
+	}
+	p.InitializeAssociationProcessor()
+	p.SetPollJob(job)
+}
+func (p *Processor) ModuleRequestStop(stopType contracts.StopType) (err error) {
+	assocScheduler.Stop(p.pollJob)
+	signal.Stop()
+	p.proc.Stop(stopType)
+	return nil
 }
 
 // StartAssociationWorker starts worker to process scheduled association
@@ -124,11 +145,6 @@ func (p *Processor) SetPollJob(job *scheduler.Job) {
 func (p *Processor) ProcessAssociation() {
 	log := p.context.Log()
 	associations := []*model.InstanceAssociation{}
-
-	if p.isStopped() {
-		log.Debug("Stopping association processor...")
-		return
-	}
 
 	instanceID, err := sys.InstanceID()
 	if err != nil {
@@ -355,33 +371,6 @@ func isAssociationTimedOut(assoc *model.InstanceAssociation) bool {
 
 	currentTime := time.Now().UTC()
 	return (*assoc.Association.LastExecutionDate).Add(documentLevelTimeOutDurationHour * time.Hour).UTC().Before(currentTime)
-}
-
-// ShutdownAndWait Stops the contained processor
-func (p *Processor) ShutdownAndWait(stopType contracts.StopType) {
-	p.proc.Stop(stopType)
-}
-
-// Stop stops the association processor and stops the poll job
-func (p *Processor) Stop() {
-	// close channel; subsequent calls to isDone will return true
-	if !p.isStopped() {
-		close(p.stopSignal)
-	}
-
-	assocScheduler.Stop(p.pollJob)
-	signal.Stop()
-}
-
-// isStopped returns if the association processor has been stopped
-func (p *Processor) isStopped() bool {
-	select {
-	case <-p.stopSignal:
-		// received signal or channel already closed
-		return true
-	default:
-		return false
-	}
 }
 
 // parseAssociation parses the association to the document state
