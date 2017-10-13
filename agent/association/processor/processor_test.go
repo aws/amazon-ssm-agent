@@ -302,7 +302,6 @@ func mockParser(parserMock *parserMock, payload *messageContracts.SendCommandPay
 func createProcessor() *Processor {
 	processor := Processor{}
 	processor.context = context.NewMockDefault()
-	processor.stopSignal = make(chan bool)
 	return &processor
 }
 
