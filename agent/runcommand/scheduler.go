@@ -48,40 +48,39 @@ func (s *RunCommandService) loop() {
 	updateLastPollTime(s.name, pollStartTime)
 
 	log := s.context.Log()
-	if !s.isDone() {
-		if s.processorStopPolicy != nil {
-			if s.name == mdsName {
-				log.Debugf("%v's stoppolicy before polling is %v", s.name, s.processorStopPolicy)
-			}
-			if s.processorStopPolicy.IsHealthy() == false {
-				log.Errorf("%v stopped temporarily due to internal failure. We will retry automatically after %v minutes", s.name, pollMessageFrequencyMinutes)
-				s.reset()
-				return
-			}
-		} else {
-			log.Debugf("creating new stop-policy.")
-			s.processorStopPolicy = newStopPolicy(s.name)
-		}
-
-		s.pollOnce()
+	if s.processorStopPolicy != nil {
 		if s.name == mdsName {
-			log.Debugf("%v's stoppolicy after polling is %v", s.name, s.processorStopPolicy)
+			log.Debugf("%v's stoppolicy before polling is %v", s.name, s.processorStopPolicy)
 		}
-
-		// Slow down a bit in case GetMessages returns
-		// without blocking, which may cause us to
-		// flood the service with requests.
-		if time.Since(pollStartTime) < 1*time.Second {
-			time.Sleep(time.Duration(2000+rand.Intn(500)) * time.Millisecond)
+		if s.processorStopPolicy.IsHealthy() == false {
+			log.Errorf("%v stopped temporarily due to internal failure. We will retry automatically after %v minutes", s.name, pollMessageFrequencyMinutes)
+			s.reset()
+			return
 		}
-
-		// check if any other poll loop has started in the meantime
-		// to prevent any possible race condition due to the scheduler
-		if getLastPollTime(s.name) == pollStartTime {
-			// skip waiting for the next scheduler polling event and start polling immediately
-			scheduleNextRun(s.messagePollJob)
-		}
+	} else {
+		log.Debugf("creating new stop-policy.")
+		s.processorStopPolicy = newStopPolicy(s.name)
 	}
+
+	s.pollOnce()
+	if s.name == mdsName {
+		log.Debugf("%v's stoppolicy after polling is %v", s.name, s.processorStopPolicy)
+	}
+
+	// Slow down a bit in case GetMessages returns
+	// without blocking, which may cause us to
+	// flood the service with requests.
+	if time.Since(pollStartTime) < 1*time.Second {
+		time.Sleep(time.Duration(2000+rand.Intn(500)) * time.Millisecond)
+	}
+
+	// check if any other poll loop has started in the meantime
+	// to prevent any possible race condition due to the scheduler
+	if getLastPollTime(s.name) == pollStartTime {
+		// skip waiting for the next scheduler polling event and start polling immediately
+		scheduleNextRun(s.messagePollJob)
+	}
+
 }
 
 var scheduleNextRun = func(j *scheduler.Job) {
@@ -108,28 +107,8 @@ func (s *RunCommandService) stop() {
 	log.Debugf("Stopping processor:%v", s.name)
 	s.service.Stop()
 
-	// close channel; subsequent calls to isDone will return true
-	if !s.isDone() {
-		close(s.stopSignal)
-	}
-
 	if s.messagePollJob != nil {
 		s.messagePollJob.Quit <- true
-	}
-
-	if s.assocProcessor != nil {
-		s.assocProcessor.Stop()
-	}
-}
-
-// isDone returns true if a stop has been requested, false otherwise.
-func (s *RunCommandService) isDone() bool {
-	select {
-	case <-s.stopSignal:
-		// received signal or channel already closed
-		return true
-	default:
-		return false
 	}
 }
 
