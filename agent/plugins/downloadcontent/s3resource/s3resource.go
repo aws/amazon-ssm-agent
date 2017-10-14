@@ -72,6 +72,7 @@ func parseLocationInfo(locationInfo string) (s3Info S3Info, err error) {
 // Download calls download to pull down files or directory from s3
 func (s3 *S3Resource) Download(log log.T, filesys filemanager.FileSystem, destPath string) (err error) {
 	var fileURL *url.URL
+	var unescapedURL string
 	var folders []string
 	var localFilePath string
 
@@ -79,7 +80,7 @@ func (s3 *S3Resource) Download(log log.T, filesys filemanager.FileSystem, destPa
 	if destPath == "" {
 		destPath = appconfig.DownloadRoot
 	}
-	log.Info("Downloading S3 artifacts")
+	log.Info("Downloading S3 artifacts from path - ", s3.Info.Path)
 
 	if fileURL, err = url.Parse(s3.Info.Path); err != nil {
 		return err
@@ -100,20 +101,36 @@ func (s3 *S3Resource) Download(log log.T, filesys filemanager.FileSystem, destPa
 
 	// The URL till the bucket name will be concatenated with the prefix in the loop
 	// responsible for download
-	bucketURL := s3.getS3BucketURLString()
-	log.Debug("S3 bucket URL -", bucketURL)
-
 	for _, files := range folders {
 		log.Debug("Name of file - ", files)
-		destinationFile := filepath.Base(files)
-		var input artifact.DownloadInput
+
 		if !isPathType(files) { //Only download in case the URL is a file
 			subFolderPath := strings.TrimPrefix(files, s3.s3Object.Key)
+			var bucketURL *url.URL
+			if bucketURL, err = s3.getS3BucketURLString(log); err != nil {
+				return fmt.Errorf("Error while obtaining URL parsing - %v", bucketURL)
+			}
+			if bucketURL == nil {
+				return errors.New("URL obtained is nil")
+			}
+			log.Debug("S3 bucket URL -", bucketURL.String())
+			var input artifact.DownloadInput
 
-			//when the s3 key has subfolders leading to files, those subfolders need to be created as well
+			// Obtain the full URL for the file before download
+
+			bucketURL.Path += "/" + files
+			input.SourceURL = bucketURL.String()
+			log.Debug("SourceURL ", input.SourceURL)
+			if unescapedURL, err = url.QueryUnescape(input.SourceURL); err != nil {
+				return err
+			}
+			log.Debug("UnescapedURL ", unescapedURL)
+			destinationFile := filepath.Base(unescapedURL)
+
+			//when the s3 key has sub-folders leading to files, those sub-folders need to be created as well
 			localFilePath = fileutil.BuildPath(destPath, filepath.Dir(subFolderPath))
 			if !isDirTypeDownloaded {
-				// if the filepath provided exists as a directory or if it is in the format,
+				// if the file path provided exists as a directory or if it is in the format,
 				// that would be the localFilePath
 				if filesys.Exists(destPath) && filesys.IsDirectory(destPath) || isPathType(destPath) {
 					localFilePath = destPath
@@ -122,11 +139,7 @@ func (s3 *S3Resource) Download(log log.T, filesys filemanager.FileSystem, destPa
 					destinationFile = filepath.Base(destPath)
 				}
 			}
-			// Obtain the full URL for the file before download
 			input.DestinationDirectory = localFilePath
-			input.SourceURL = bucketURL + files
-
-			log.Debug("SourceURL ", input.SourceURL)
 			downloadOutput, err := dep.Download(log, input)
 			if err != nil {
 				return err
@@ -152,10 +165,11 @@ func (s3 *S3Resource) ValidateLocationInfo() (valid bool, err error) {
 }
 
 // getS3BucketURLString returns the URL up to the bucket name
-func (s3 *S3Resource) getS3BucketURLString() string {
+func (s3 *S3Resource) getS3BucketURLString(log log.T) (Url *url.URL, err error) {
+
 	bucketURL := strings.SplitAfter(s3.Info.Path, s3.s3Object.Bucket)
-	URL := bucketURL[0]
-	return URL + "/"
+	log.Debug("Bucket URL is - ", bucketURL[0])
+	return url.Parse(bucketURL[0])
 }
 
 // isPathType returns if the URL is of path type
