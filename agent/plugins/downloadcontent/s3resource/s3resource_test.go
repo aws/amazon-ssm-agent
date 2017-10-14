@@ -75,9 +75,10 @@ func TestS3Resource_GetS3BucketURLString(t *testing.T) {
 		},
 	}
 
-	res := resource.getS3BucketURLString()
+	res, err := resource.getS3BucketURLString(logMock)
 
-	assert.Equal(t, "https://s3.amazonaws.com/my-bucket/", res)
+	assert.Equal(t, "https://s3.amazonaws.com/my-bucket", res.String())
+	assert.NoError(t, err)
 }
 
 func TestS3Resource_GetS3BucketURLString_sameBucketNameFile(t *testing.T) {
@@ -88,9 +89,10 @@ func TestS3Resource_GetS3BucketURLString_sameBucketNameFile(t *testing.T) {
 		},
 	}
 
-	res := resource.getS3BucketURLString()
+	res, err := resource.getS3BucketURLString(logMock)
 
-	assert.Equal(t, "https://s3.amazonaws.com/my-bucket/", res)
+	assert.Equal(t, "https://s3.amazonaws.com/my-bucket", res.String())
+	assert.NoError(t, err)
 }
 
 func TestS3Resource_Download(t *testing.T) {
