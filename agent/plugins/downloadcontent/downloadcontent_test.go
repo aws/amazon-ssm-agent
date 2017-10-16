@@ -45,7 +45,7 @@ func TestNewRemoteResource_InvalidLocationType(t *testing.T) {
 
 	assert.Nil(t, remoteresource)
 	assert.Error(t, err)
-	assert.Contains(t, err.Error(), "Invalid Location type")
+	assert.Contains(t, err.Error(), "Invalid SourceType")
 
 }
 
@@ -382,7 +382,7 @@ func TestValidateInput_UnsupportedLocationType(t *testing.T) {
 
 	assert.False(t, result)
 	assert.Error(t, err)
-	assert.Contains(t, err.Error(), "Unsupported location type")
+	assert.Contains(t, err.Error(), "Unsupported source type")
 }
 
 func TestValidateInput_UnknownSourceType(t *testing.T) {
@@ -395,7 +395,7 @@ func TestValidateInput_UnknownSourceType(t *testing.T) {
 
 	assert.False(t, result)
 	assert.Error(t, err)
-	assert.Contains(t, err.Error(), "Location Type must be specified")
+	assert.Contains(t, err.Error(), "SourceType must be specified")
 }
 
 func TestValidateInput_NoLocationInfo(t *testing.T) {
@@ -409,7 +409,7 @@ func TestValidateInput_NoLocationInfo(t *testing.T) {
 
 	assert.False(t, result)
 	assert.Error(t, err)
-	assert.Contains(t, err.Error(), "Location Information must be specified")
+	assert.Contains(t, err.Error(), "SourceInfo must be specified")
 }
 
 func TestName(t *testing.T) {

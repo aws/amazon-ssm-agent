@@ -37,7 +37,7 @@ type GitResource struct {
 	Info   GitInfo
 }
 
-// GitInfo represents the locationInfo type sent by runcommand
+// GitInfo represents the sourceInfo type sent by runcommand
 type GitInfo struct {
 	Owner      string `json:"owner"`
 	Repository string `json:"repository"`
@@ -49,7 +49,7 @@ type GitInfo struct {
 // NewGitResource is a constructor of type GitResource
 func NewGitResource(log log.T, info string, token privategithub.PrivateGithubAccess) (git *GitResource, err error) {
 	var gitInfo GitInfo
-	if gitInfo, err = parseLocationInfo(info); err != nil {
+	if gitInfo, err = parseSourceInfo(info); err != nil {
 		return nil, err
 	}
 	// Get the access token from Parameter store - GetAccessToken
@@ -67,11 +67,11 @@ func NewGitResource(log log.T, info string, token privategithub.PrivateGithubAcc
 	}, nil
 }
 
-// parseLocationInfo unmarshals the information in locationInfo of type GitInfo and returns it
-func parseLocationInfo(locationInfo string) (gitInfo GitInfo, err error) {
+// parseSourceInfo unmarshals the information in sourceInfo of type GitInfo and returns it
+func parseSourceInfo(sourceInfo string) (gitInfo GitInfo, err error) {
 
-	if err = jsonutil.Unmarshal(locationInfo, &gitInfo); err != nil {
-		return gitInfo, fmt.Errorf("Location Info could not be unmarshalled for location type Git. Please check JSON format of locationInfo - %v", err.Error())
+	if err = jsonutil.Unmarshal(sourceInfo, &gitInfo); err != nil {
+		return gitInfo, fmt.Errorf("Source Info could not be unmarshalled for source type GitHub. Please check JSON format of sourceInfo - %v", err.Error())
 	}
 
 	return gitInfo, nil
@@ -142,25 +142,25 @@ func (git *GitResource) download(log log.T, filesys filemanager.FileSystem, info
 		}
 
 		if err = system.SaveFileContent(log, filesys, destinationDir, content); err != nil {
-			log.Errorf("Error obtaining file content from git file - %v, %v", fileMetadata.GetPath(), err)
+			log.Errorf("Error obtaining file content from GitHub file - %v, %v", fileMetadata.GetPath(), err)
 			return err
 		}
 	} else {
-		return fmt.Errorf("Could not download from github repository")
+		return fmt.Errorf("Could not download from GitHub repository")
 	}
 
 	return err
 }
 
-// ValidateLocationInfo ensures that the required parameters of Location Info are specified
+// ValidateLocationInfo ensures that the required parameters of SourceInfo are specified
 func (git *GitResource) ValidateLocationInfo() (valid bool, err error) {
 	// source not yet supported
 	if git.Info.Owner == "" {
-		return false, errors.New("Owner for Git LocationType must be specified")
+		return false, errors.New("Owner for GitHub SourceType must be specified")
 	}
 
 	if git.Info.Repository == "" {
-		return false, errors.New("Repository for Git LocationType must be specified")
+		return false, errors.New("Repository for GitHub SourceType must be specified")
 	}
 
 	return true, nil

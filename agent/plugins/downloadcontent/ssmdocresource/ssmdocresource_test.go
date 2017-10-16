@@ -112,7 +112,7 @@ func TestSSMDocResource_ValidateLocationInfoNoName(t *testing.T) {
 	_, err := ssmresource.ValidateLocationInfo()
 
 	assert.Error(t, err)
-	assert.Equal(t, "SSM Document name in LocationType must be specified", err.Error())
+	assert.Equal(t, "SSM Document name in SourceType must be specified", err.Error())
 }
 
 func TestSSMDocResource_Download(t *testing.T) {

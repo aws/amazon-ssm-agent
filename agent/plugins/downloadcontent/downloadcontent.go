@@ -39,9 +39,9 @@ import (
 )
 
 const (
-	GitHub      = "GitHub"      //Github represents the location type "GitHub" from where the resource can be downloaded
-	S3          = "S3"          //S3 represents the location type "S3" from where the resource is being downloaded
-	SSMDocument = "SSMDocument" //SSMDocument represents the location type as SSM Document
+	GitHub      = "GitHub"      //Github represents the source type "GitHub" from where the resource can be downloaded
+	S3          = "S3"          //S3 represents the source type "S3" from where the resource is being downloaded
+	SSMDocument = "SSMDocument" //SSMDocument represents the source type as SSM Document
 
 	downloadsDir = "downloads" //Directory under the orchestration directory where the downloaded resource resides
 
@@ -69,7 +69,7 @@ func NewPlugin(pluginConfig pluginutil.PluginConfig) (*Plugin, error) {
 // Plugin is the type for the aws:downloadContent plugin.
 type Plugin struct {
 	pluginutil.DefaultPlugin
-	remoteResourceCreator func(log log.T, locationType string, SourceInfo string) (remoteresource.RemoteResource, error)
+	remoteResourceCreator func(log log.T, sourceType string, SourceInfo string) (remoteresource.RemoteResource, error)
 	filesys               filemanager.FileSystem
 }
 
@@ -83,7 +83,7 @@ type DownloadContentPlugin struct {
 	// TODO: https://amazon.awsapps.com/workdocs/index.html#/document/7d56a42ea5b040a7c33548d77dc98040f0fb380bbbfb2fd580c861225e2ee1c7
 }
 
-// newRemoteResource switches between the location type and returns a struct of the location type that implements remoteresource
+// newRemoteResource switches between the source type and returns a struct of the source type that implements remoteresource
 func newRemoteResource(log log.T, SourceType string, SourceInfo string) (resource remoteresource.RemoteResource, err error) {
 	switch SourceType {
 	case GitHub:
@@ -96,7 +96,7 @@ func newRemoteResource(log log.T, SourceType string, SourceInfo string) (resourc
 	case SSMDocument:
 		return ssmdocresource.NewSSMDocResource(SourceInfo)
 	default:
-		return nil, fmt.Errorf("Invalid Location type - %v", SourceType)
+		return nil, fmt.Errorf("Invalid SourceType - %v", SourceType)
 	}
 }
 
@@ -167,13 +167,13 @@ func (p *Plugin) execute(context context.T, config contracts.Configuration, canc
 	return res
 }
 
-// runCopyContent figures out the type of location, downloads the resource, saves it on disk and returns information required for it
+// runCopyContent figures out the type of source, downloads the resource, saves it on disk and returns information required for it
 func (p *Plugin) runCopyContent(log log.T, input *DownloadContentPlugin, config contracts.Configuration, output *contracts.PluginOutput) {
 
 	//Run aws:downloadContent plugin
 	log.Debug("Inside run downloadcontent function")
 
-	// remoteResourceCreator makes a call to a function that creates a new remote resource based on the location type
+	// remoteResourceCreator makes a call to a function that creates a new remote resource based on the source type
 	log.Debug("Creating resource of type - ", input.SourceType)
 	remoteResource, err := p.remoteResourceCreator(log, input.SourceType, input.SourceInfo)
 	if err != nil {
@@ -194,7 +194,7 @@ func (p *Plugin) runCopyContent(log log.T, input *DownloadContentPlugin, config 
 		destinationPath = filepath.Join(orchestrationDir, downloadsDir) + string(os.PathSeparator) + input.DestinationPath
 	}
 
-	log.Debug("About to validate location info")
+	log.Debug("About to validate source info")
 	if valid, err := remoteResource.ValidateLocationInfo(); !valid {
 		output.MarkAsFailed(log, err)
 		return
@@ -236,17 +236,17 @@ func parseAndValidateInput(rawPluginInput interface{}) (*DownloadContentPlugin, 
 
 // validateInput ensures the plugin input matches the defined schema
 func validateInput(input *DownloadContentPlugin) (valid bool, err error) {
-	// ensure non-empty location type
+	// ensure non-empty source type
 	if input.SourceType == "" {
-		return false, errors.New("Location Type must be specified")
+		return false, errors.New("SourceType must be specified")
 	}
 	//ensure all entries are valid
 	if input.SourceType != GitHub && input.SourceType != S3 && input.SourceType != SSMDocument {
-		return false, errors.New("Unsupported location type")
+		return false, errors.New("Unsupported source type")
 	}
-	// ensure non-empty location info
+	// ensure non-empty source info
 	if input.SourceInfo == "" {
-		return false, errors.New("Location Information must be specified")
+		return false, errors.New("SourceInfo must be specified")
 	}
 	return true, nil
 }
