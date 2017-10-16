@@ -83,42 +83,22 @@ func prepareConfigurePackage(
 	repository localpackages.Repository,
 	packageService packageservice.PackageService,
 	input *ConfigurePackagePluginInput,
-	output contracts.PluginOutputter) (inst installer.Installer, uninst installer.Installer, installState localpackages.InstallState, packageArn string, installedVersion string) {
+	packageArn string,
+	version string,
+	output contracts.PluginOutputter) (inst installer.Installer, uninst installer.Installer, installState localpackages.InstallState, installedVersion string) {
 
 	prepareTrace := tracer.BeginSection(fmt.Sprintf("prepare %s", input.Action))
 	defer prepareTrace.End()
 
-	//TODO: DownloadManifest
-	//TODO: Translate the short name to package_arn from the manifest
-	//get info from the manifest
-	var err error
-	var version string
-	//always download the manifest before acting upon the request
-	trace := tracer.BeginSection("download manifest")
-
-	if input.Version != "" && !packageservice.IsLatest(input.Version) {
-		version = input.Version
-	} else {
-		version = packageservice.Latest
-	}
-
-	packageArn, version, err = packageService.DownloadManifest(tracer, input.Name, version)
-
-	if err != nil {
-		trace.WithError(err).End()
-		output.MarkAsFailed(nil, nil)
-		return
-	}
-	trace.End()
-
 	switch input.Action {
 	case InstallAction:
 		// get version information
-		trace = tracer.BeginSection("determine version to install")
+		trace := tracer.BeginSection("determine version to install")
 		installedVersion, installState = getVersionToInstall(tracer, repository, input, packageArn)
 		trace.AppendInfof("installed: %v in state %v, to install: %v", installedVersion, installState, version).End()
 
 		// ensure manifest file and package
+		var err error
 		trace = tracer.BeginSection("ensure package is locally available")
 		inst, err = ensurePackage(tracer, repository, packageService, packageArn, version, config)
 		if err != nil {
@@ -145,20 +125,19 @@ func prepareConfigurePackage(
 
 	case UninstallAction:
 		// get version information
-		var version string
-		trace = tracer.BeginSection("determine version to uninstall")
-		version, installState, err = getVersionToUninstall(tracer, repository, input, packageArn)
-		installedVersion = version
-		if err != nil || version == "" {
+		var err error
+		trace := tracer.BeginSection("determine version to uninstall")
+		installedVersion, installState, err = getVersionToUninstall(tracer, repository, input, packageArn)
+		if err != nil || installedVersion == "" {
 			trace.WithError(err).End()
 			output.MarkAsFailed(nil, nil)
 			return
 		}
-		trace.AppendInfof("installed: %v in state: %v", version, installState).End()
+		trace.AppendInfof("installed: %v in state: %v", installedVersion, installState).End()
 
 		// ensure manifest file and package
 		trace = tracer.BeginSection("ensure package is locally available")
-		uninst, err = ensurePackage(tracer, repository, packageService, packageArn, version, config)
+		uninst, err = ensurePackage(tracer, repository, packageService, packageArn, installedVersion, config)
 		if err != nil {
 			trace.WithError(err).End()
 			output.MarkAsFailed(nil, nil)
@@ -172,7 +151,7 @@ func prepareConfigurePackage(
 		return
 	}
 
-	return inst, uninst, installState, packageArn, installedVersion
+	return inst, uninst, installState, installedVersion
 }
 
 // ensurePackage validates local copy of the manifest and package and downloads if needed, returning the installer
@@ -403,6 +382,7 @@ func (p *Plugin) execute(context context.T, config contracts.Configuration, canc
 	}()
 
 	out := trace.PluginOutputTrace{Tracer: tracer}
+
 	if cancelFlag.ShutDown() {
 		out.MarkAsShutdown()
 	} else if cancelFlag.Canceled() {
@@ -410,87 +390,92 @@ func (p *Plugin) execute(context context.T, config contracts.Configuration, canc
 	} else if input, err := parseAndValidateInput(config.Properties); err != nil {
 		tracer.CurrentTrace().WithError(err).End()
 		out.MarkAsFailed(nil, nil)
-	} else if err := lockPackage(input.Name, input.Action); err != nil {
-		// do not allow multiple actions to be performed at the same time for the same package
-		// this is possible with multiple concurrent runcommand documents
-		tracer.CurrentTrace().WithError(err).End()
-		out.MarkAsFailed(nil, nil)
 	} else {
-		defer unlockPackage(input.Name)
-
 		packageService := p.packageServiceSelector(tracer, input.Repository, p.localRepository)
+		packageArn, manifestVersion := getPackageArnAndVersion(tracer, packageService, input, &out)
 
-		log.Debugf("Prepare for %v %v %v", input.Action, input.Name, input.Version)
-		inst, uninst, installState, packageArn, installedVersion := prepareConfigurePackage(
-			tracer,
-			config,
-			p.localRepository,
-			packageService,
-			input,
-			&out)
-		log.Debugf("HasInst %v, HasUninst %v, InstallState %v, PackageArn %v, InstalledVersion %v", inst != nil, uninst != nil, installState, packageArn, installedVersion)
-		// if already failed or already installed and valid, do not execute install
-		if out.GetStatus() != contracts.ResultStatusFailed && !checkAlreadyInstalled(tracer, context, p.localRepository, installedVersion, installState, inst, uninst, &out) {
-			log.Debugf("Calling execute, current status %v", out.GetStatus())
-			executeConfigurePackage(
+		if err := lockPackage(packageArn, input.Action); err != nil {
+			// do not allow multiple actions to be performed at the same time for the same package
+			// this is possible with multiple concurrent runcommand documents
+			tracer.CurrentTrace().WithError(err).End()
+			out.MarkAsFailed(nil, nil)
+		} else {
+			defer unlockPackage(packageArn)
+
+			log.Debugf("Prepare for %v %v %v", input.Action, input.Name, input.Version)
+			inst, uninst, installState, installedVersion := prepareConfigurePackage(
 				tracer,
-				context,
+				config,
 				p.localRepository,
-				inst,
-				uninst,
-				installState,
+				packageService,
+				input,
+				packageArn,
+				manifestVersion,
 				&out)
-			if !out.GetStatus().IsReboot() {
-				version := input.Version
-				if input.Action == InstallAction {
-					version = inst.Version()
-				} else if input.Action == UninstallAction {
-					version = uninst.Version()
-				}
+			log.Debugf("HasInst %v, HasUninst %v, InstallState %v, PackageArn %v, InstalledVersion %v", inst != nil, uninst != nil, installState, packageArn, installedVersion)
+			// if already failed or already installed and valid, do not execute install
+			if out.GetStatus() != contracts.ResultStatusFailed && !checkAlreadyInstalled(tracer, context, p.localRepository, installedVersion, installState, inst, uninst, &out) {
+				log.Debugf("Calling execute, current status %v", out.GetStatus())
+				executeConfigurePackage(
+					tracer,
+					context,
+					p.localRepository,
+					inst,
+					uninst,
+					installState,
+					&out)
+				if !out.GetStatus().IsReboot() {
+					version := manifestVersion
+					if input.Action == InstallAction {
+						version = inst.Version()
+					} else if input.Action == UninstallAction {
+						version = uninst.Version()
+					}
 
-				err := packageService.ReportResult(tracer, packageservice.PackageResult{
-					Exitcode:               int64(out.GetExitCode()),
-					Operation:              input.Action,
-					PackageName:            packageArn,
-					PreviousPackageVersion: installedVersion,
-					Timing:                 res.StartDateTime.UnixNano(),
-					Version:                version,
-					Trace:                  packageservice.ConvertToPackageServiceTrace(tracer.Traces()),
-				})
-				if err != nil {
-					out.AppendErrorf(log, "Error reporting results: %v", err.Error())
+					err := packageService.ReportResult(tracer, packageservice.PackageResult{
+						Exitcode:               int64(out.GetExitCode()),
+						Operation:              input.Action,
+						PackageName:            packageArn,
+						PreviousPackageVersion: installedVersion,
+						Timing:                 res.StartDateTime.UnixNano(),
+						Version:                version,
+						Trace:                  packageservice.ConvertToPackageServiceTrace(tracer.Traces()),
+					})
+					if err != nil {
+						out.AppendErrorf(log, "Error reporting results: %v", err.Error())
+					}
 				}
 			}
-		}
 
-		if config.OrchestrationDirectory != "" {
-			useTemp := false
-			outFile := filepath.Join(config.OrchestrationDirectory, p.StdoutFileName)
-			// create orchestration dir if needed
-			if err := filesysdep.MakeDirExecute(config.OrchestrationDirectory); err != nil {
-				out.AppendError(log, "Failed to create orchestrationDir directory for log files")
-			} else {
-				if err := filesysdep.WriteFile(outFile, out.GetStdout()); err != nil {
-					log.Debugf("Error writing to %v", outFile)
-					out.AppendErrorf(log, "Error saving stdout: %v", err.Error())
+			if config.OrchestrationDirectory != "" {
+				useTemp := false
+				outFile := filepath.Join(config.OrchestrationDirectory, p.StdoutFileName)
+				// create orchestration dir if needed
+				if err := filesysdep.MakeDirExecute(config.OrchestrationDirectory); err != nil {
+					out.AppendError(log, "Failed to create orchestrationDir directory for log files")
+				} else {
+					if err := filesysdep.WriteFile(outFile, out.GetStdout()); err != nil {
+						log.Debugf("Error writing to %v", outFile)
+						out.AppendErrorf(log, "Error saving stdout: %v", err.Error())
+					}
+					errFile := filepath.Join(config.OrchestrationDirectory, p.StderrFileName)
+					if err := filesysdep.WriteFile(errFile, out.GetStderr()); err != nil {
+						log.Debugf("Error writing to %v", errFile)
+						out.AppendErrorf(log, "Error saving stderr: %v", err.Error())
+					}
 				}
-				errFile := filepath.Join(config.OrchestrationDirectory, p.StderrFileName)
-				if err := filesysdep.WriteFile(errFile, out.GetStderr()); err != nil {
-					log.Debugf("Error writing to %v", errFile)
-					out.AppendErrorf(log, "Error saving stderr: %v", err.Error())
+				uploadErrs := p.ExecuteUploadOutputToS3Bucket(log,
+					config.PluginID,
+					config.OrchestrationDirectory,
+					config.OutputS3BucketName,
+					config.OutputS3KeyPrefix,
+					useTemp,
+					config.OrchestrationDirectory,
+					out.GetStdout(),
+					out.GetStderr())
+				for _, uploadErr := range uploadErrs {
+					out.AppendError(log, uploadErr)
 				}
-			}
-			uploadErrs := p.ExecuteUploadOutputToS3Bucket(log,
-				config.PluginID,
-				config.OrchestrationDirectory,
-				config.OutputS3BucketName,
-				config.OutputS3KeyPrefix,
-				useTemp,
-				config.OrchestrationDirectory,
-				out.GetStdout(),
-				out.GetStderr())
-			for _, uploadErr := range uploadErrs {
-				out.AppendError(log, uploadErr)
 			}
 		}
 	}
@@ -509,4 +494,32 @@ func (p *Plugin) execute(context context.T, config contracts.Configuration, canc
 // Name returns the name of the plugin.
 func Name() string {
 	return appconfig.PluginNameAwsConfigurePackage
+}
+
+func getPackageArnAndVersion(
+	tracer trace.Tracer,
+	packageService packageservice.PackageService,
+	input *ConfigurePackagePluginInput,
+	output contracts.PluginOutputter) (packageArn string, version string) {
+	//get info from the manifest
+	var err error
+	//always download the manifest before acting upon the request
+	trace := tracer.BeginSection("download manifest")
+
+	if input.Version != "" && !packageservice.IsLatest(input.Version) {
+		version = input.Version
+	} else {
+		version = packageservice.Latest
+	}
+
+	packageArn, version, err = packageService.DownloadManifest(tracer, input.Name, version)
+
+	if err != nil {
+		trace.WithError(err).End()
+		output.MarkAsFailed(nil, nil)
+		return "", ""
+	}
+	trace.End()
+
+	return packageArn, version
 }

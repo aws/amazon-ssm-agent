@@ -17,6 +17,7 @@
 package configurepackage
 
 import (
+	"errors"
 	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
@@ -178,6 +179,12 @@ func serviceSuccessMock() *serviceMock.Mock {
 	mockService := serviceMock.Mock{}
 	mockService.On("DownloadManifest", mock.Anything, mock.Anything, mock.Anything).Return("packageArn", "0.0.1", nil)
 	mockService.On("ReportResult", mock.Anything, mock.Anything).Return(nil)
+	return &mockService
+}
+
+func serviceFailedMock() *serviceMock.Mock {
+	mockService := serviceMock.Mock{}
+	mockService.On("DownloadManifest", mock.Anything, mock.Anything, mock.Anything).Return("", "", errors.New("testerror"))
 	return &mockService
 }
 
