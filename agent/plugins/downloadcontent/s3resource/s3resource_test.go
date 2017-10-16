@@ -52,7 +52,7 @@ func TestS3Resource_ValidateLocationInfoNoPath(t *testing.T) {
 	_, err := s3resource.ValidateLocationInfo()
 
 	assert.Error(t, err)
-	assert.Equal(t, err.Error(), "S3 source path in LocationType must be specified")
+	assert.Equal(t, err.Error(), "S3 source path in SourceInfo must be specified")
 }
 
 func TestIsFolder_JSON(t *testing.T) {

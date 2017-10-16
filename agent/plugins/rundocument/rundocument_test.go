@@ -122,8 +122,11 @@ func TestExecutePlugin_PrepareDocumentForExecution(t *testing.T) {
 	parameters := make(map[string]interface{})
 	conf := createStubConfiguration("orch", "bucket", "prefix", "1234-1234-1234", "directory")
 
-	fileMock.On("ReadFile", "document/name.json").Return("content", nil)
-	execMock.On("ParseDocument", logMock, []byte("content"), conf.OrchestrationDirectory, conf.OutputS3BucketName, conf.OutputS3KeyPrefix, conf.MessageId, conf.PluginID, conf.DefaultWorkingDirectory, parameters).Return(plugins, nil)
+	content := `{
+		"key" : "value"
+	}`
+	fileMock.On("ReadFile", "document/name.json").Return(content, nil)
+	execMock.On("ParseDocument", logMock, []byte(content), conf.OrchestrationDirectory, conf.OutputS3BucketName, conf.OutputS3KeyPrefix, conf.MessageId, conf.PluginID, conf.DefaultWorkingDirectory, parameters).Return(plugins, nil)
 
 	p := Plugin{
 		filesys: fileMock,
@@ -224,6 +227,7 @@ func TestExecuteImpl_PrepareDocumentForExecutionParametersJSON(t *testing.T) {
 
 func TestPlugin_RunDocumentMaxDepthExceeded(t *testing.T) {
 
+	// Test to check if the max depth code works in the fail case
 	execMock := NewExecMock()
 	fileMock := filemock.FileSystemMock{}
 	fileMock.On("MakeDirs", "orch").Return(nil)
