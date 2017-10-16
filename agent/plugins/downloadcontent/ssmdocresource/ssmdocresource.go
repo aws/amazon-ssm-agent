@@ -36,16 +36,16 @@ type SSMDocResource struct {
 	Info SSMDocInfo
 }
 
-// S3Info represents the locationInfo type sent by runcommand
+// S3Info represents the sourceInfo type sent by runcommand
 type SSMDocInfo struct {
 	DocName string `json:"name"`
 }
 
 // NewS3Resource is a constructor of type GitResource
 func NewSSMDocResource(info string) (*SSMDocResource, error) {
-	ssmDocInfo, err := parseLocationInfo(info)
+	ssmDocInfo, err := parseSourceInfo(info)
 	if err != nil {
-		return nil, fmt.Errorf("SSMDocument LocationInfo parsing failed. %v", err)
+		return nil, fmt.Errorf("SSMDocument SourceInfo parsing failed. %v", err)
 	}
 
 	return &SSMDocResource{
@@ -53,11 +53,11 @@ func NewSSMDocResource(info string) (*SSMDocResource, error) {
 	}, nil
 }
 
-// parseLocationInfo unmarshals the information in locationInfo of type GitInfo and returns it
-func parseLocationInfo(locationInfo string) (ssmdoc SSMDocInfo, err error) {
+// parseSourceInfo unmarshals the information in sourceInfo of type GitInfo and returns it
+func parseSourceInfo(sourceInfo string) (ssmdoc SSMDocInfo, err error) {
 
-	if err = jsonutil.Unmarshal(locationInfo, &ssmdoc); err != nil {
-		return ssmdoc, errors.New("Location Info could not be unmarshalled for location type SSMDocument. Please check JSON format of locationInfo")
+	if err = jsonutil.Unmarshal(sourceInfo, &ssmdoc); err != nil {
+		return ssmdoc, errors.New("SourceInfo could not be unmarshalled for SourceType SSMDocument. Please check JSON format of SourceInfo")
 	}
 
 	return ssmdoc, nil
@@ -95,10 +95,10 @@ func (ssmdoc *SSMDocResource) Download(log log.T, filesys filemanager.FileSystem
 	return
 }
 
-// ValidateLocationInfo ensures that the required parameters of Location Info are specified
+// ValidateLocationInfo ensures that the required parameters of SourceInfo are specified
 func (s3 *SSMDocResource) ValidateLocationInfo() (valid bool, err error) {
 	if s3.Info.DocName == "" {
-		return false, errors.New("SSM Document name in LocationType must be specified")
+		return false, errors.New("SSM Document name in SourceType must be specified")
 	}
 	return true, nil
 }

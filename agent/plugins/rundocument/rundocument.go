@@ -284,15 +284,11 @@ func (p *Plugin) prepareDocumentForExecution(log log.T, pathToFile string, confi
 		switch params := params.(type) {
 		case string:
 			log.Debug("Document parameter type is String. Params to be unmarshaled - ", params)
-			if json.Unmarshal([]byte(params), &parameters); err != nil {
-				log.Error("Unmarshalling document parameters failed. Please make sure the parameters are specified in the right format")
-				return pluginsInfo, err
-			}
-			if len(parameters) == 0 {
-				log.Debug("Parameters are probably in YAML")
-				if yaml.Unmarshal([]byte(params), &parameters); err != nil {
-					log.Error("Unmarshalling document parameters failed. Please make sure the parameters are specified in the right format")
-					return pluginsInfo, err
+			if err = json.Unmarshal([]byte(params), &parameters); err != nil {
+				if erryaml := yaml.Unmarshal([]byte(params), &parameters); erryaml != nil {
+					errs := fmt.Errorf("Unmarshalling document parameters failed. Please make sure the parameters are specified in the right format"+
+						"JSON format error - %v, YAML format error - %v.", err, erryaml)
+					return pluginsInfo, errs
 				}
 			}
 		case map[string]interface{}:

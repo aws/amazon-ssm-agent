@@ -160,7 +160,7 @@ func TestGitResource_DownloadFileMissing(t *testing.T) {
 
 	clientMock.AssertExpectations(t)
 	assert.Error(t, err)
-	assert.Contains(t, err.Error(), "Could not download from github repository")
+	assert.Contains(t, err.Error(), "Could not download from GitHub repository")
 }
 
 func TestGitResource_DownloadParseGetOptionFail(t *testing.T) {
@@ -174,7 +174,7 @@ func TestGitResource_DownloadParseGetOptionFail(t *testing.T) {
 	}
 	opt := &github.RepositoryContentGetOptions{Ref: ""}
 
-	clientMock.On("ParseGetOptions", logMock, gitInfo.GetOptions).Return(opt, fmt.Errorf("Option for retreiving git content is empty")).Once()
+	clientMock.On("ParseGetOptions", logMock, gitInfo.GetOptions).Return(opt, fmt.Errorf("Option for retrieving GitHub content is empty")).Once()
 
 	gitResource := NewResourceWithMockedClient(&clientMock)
 
@@ -183,7 +183,7 @@ func TestGitResource_DownloadParseGetOptionFail(t *testing.T) {
 
 	clientMock.AssertExpectations(t)
 	assert.Error(t, err)
-	assert.Contains(t, err.Error(), "Option for retreiving git content is empty")
+	assert.Contains(t, err.Error(), "Option for retrieving GitHub content is empty")
 }
 
 func TestGitResource_DownloadGetRepositoryContentsFail(t *testing.T) {
@@ -230,7 +230,7 @@ func TestGitResource_ValidateLocationInfoOwner(t *testing.T) {
 	_, err := gitresource.ValidateLocationInfo()
 
 	assert.Error(t, err)
-	assert.Equal(t, "Owner for Git LocationType must be specified", err.Error())
+	assert.Equal(t, "Owner for GitHub SourceType must be specified", err.Error())
 }
 
 func TestGitResource_ValidateLocationInfoRepo(t *testing.T) {
@@ -244,7 +244,7 @@ func TestGitResource_ValidateLocationInfoRepo(t *testing.T) {
 	_, err := gitresource.ValidateLocationInfo()
 
 	assert.Error(t, err)
-	assert.Equal(t, "Repository for Git LocationType must be specified", err.Error())
+	assert.Equal(t, "Repository for GitHub SourceType must be specified", err.Error())
 }
 
 func TestGitResource_ValidateLocationInfo(t *testing.T) {
@@ -268,7 +268,7 @@ func TestNewGitResource_parseLocationInfoFail(t *testing.T) {
 	_, err := NewGitResource(nil, "", token)
 
 	assert.Error(t, err)
-	assert.Contains(t, err.Error(), "Location Info could not be unmarshalled for location type Git. Please check JSON format of locationInfo")
+	assert.Contains(t, err.Error(), "Source Info could not be unmarshalled for source type GitHub. Please check JSON format of sourceInfo")
 }
 
 func TestNewGitResource_GithubTokenInfo(t *testing.T) {
