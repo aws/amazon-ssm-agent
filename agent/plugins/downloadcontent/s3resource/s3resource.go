@@ -39,7 +39,7 @@ type S3Resource struct {
 	s3Object s3util.AmazonS3URL
 }
 
-// S3Info represents the locationInfo type sent by runcommand
+// S3Info represents the sourceInfo type sent by runcommand
 type S3Info struct {
 	Path string `json:"path"`
 }
@@ -49,7 +49,7 @@ func NewS3Resource(log log.T, info string) (s3 *S3Resource, err error) {
 	var s3Info S3Info
 	var input artifact.DownloadInput
 
-	if s3Info, err = parseLocationInfo(info); err != nil {
+	if s3Info, err = parseSourceInfo(info); err != nil {
 		return nil, fmt.Errorf("s3 url parsing failed. %v", err)
 	}
 
@@ -59,12 +59,15 @@ func NewS3Resource(log log.T, info string) (s3 *S3Resource, err error) {
 	}, nil
 }
 
-// parseLocationInfo unmarshals the information in locationInfo of type GitInfo and returns it
-func parseLocationInfo(locationInfo string) (s3Info S3Info, err error) {
+// parseSourceInfo unmarshals the information in sourceInfo of type GitInfo and returns it
+func parseSourceInfo(sourceInfo string) (s3Info S3Info, err error) {
 
-	if err = jsonutil.Unmarshal(locationInfo, &s3Info); err != nil {
-		return s3Info, fmt.Errorf("Location Info could not be unmarshalled for location type S3. Please check JSON format of locationInfo - %v", err)
+	if err = jsonutil.Unmarshal(sourceInfo, &s3Info); err != nil {
+		return s3Info, fmt.Errorf("Source Info could not be unmarshalled for source type S3. Please check JSON format of SourceInfo - %v", err)
 	}
+
+	// Trimming the path in URL to remove any unnecessary spaces
+	s3Info.Path = strings.TrimSpace(s3Info.Path)
 
 	return
 }
@@ -154,11 +157,11 @@ func (s3 *S3Resource) Download(log log.T, filesys filemanager.FileSystem, destPa
 	return nil
 }
 
-// ValidateLocationInfo ensures that the required parameters of Location Info are specified
+// ValidateLocationInfo ensures that the required parameters of SourceInfo are specified
 func (s3 *S3Resource) ValidateLocationInfo() (valid bool, err error) {
 	// Path is a mandatory input
 	if s3.Info.Path == "" {
-		return false, errors.New("S3 source path in LocationType must be specified")
+		return false, errors.New("S3 source path in SourceInfo must be specified")
 	}
 
 	return true, nil
