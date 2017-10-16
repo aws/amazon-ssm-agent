@@ -24,7 +24,7 @@ import (
 
 const (
 	// GathererName captures name of Service gatherer
-	GathererName = "AWS:WindowsService"
+	GathererName = "AWS:Service"
 	// SchemaVersionOfServiceGatherer represents schema version of Service gatherer
 	SchemaVersionOfServiceGatherer = "1.0"
 )
