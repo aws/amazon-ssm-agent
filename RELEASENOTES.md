@@ -1,5 +1,12 @@
 Latest
 ===============
+- Adding versioning support for Parameter Store.
+- Added additional gatherers for inventory, including windows service gatherer, windows registry gatherer, file metadata gatherer, windows role gatherer.
+- Added support for aws:downloadContent plugin to download content from GitHub, S3 and documents from SSM documents.
+- Added support for aws:runDocument plugin to execute SSM documents.
+
+2.2.30.0
+===============
 - Improved speed of initial association application on boot
 - Various aws:configurePackage service integration changes
 - Improved home directory detection in non-x64 linux platforms to address cases where shared AWS SDK credentials were not available in on-prem instances
