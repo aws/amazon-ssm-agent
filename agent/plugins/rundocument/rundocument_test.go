@@ -36,6 +36,16 @@ import (
 	"github.com/aws/aws-sdk-go/service/ssm"
 )
 
+// instanceMock
+type InstanceMock struct {
+	mock.Mock
+}
+
+// InstanceID mocks implementation for InstanceID
+func (m *InstanceMock) InstanceID() (string, error) {
+	return "", nil
+}
+
 var logMock = log.NewMockLog()
 var contextMock = context.NewMockDefault()
 var plugin = contracts.PluginState{}
@@ -74,6 +84,10 @@ func TestExecDocumentImpl_ExecuteDocumentFailure(t *testing.T) {
 
 	execMock := executermocks.NewMockExecuter()
 	docResultChan := make(chan contracts.DocumentResult)
+	mockObj := new(InstanceMock)
+	mockObj.On("InstanceID", mock.Anything, mock.Anything).Return("instanceID", nil)
+
+	instance = mockObj
 
 	execMock.On("Run", mock.AnythingOfType("*task.ChanneledCancelFlag"), mock.AnythingOfType("*executer.DocumentFileStore")).Return(docResultChan)
 
@@ -100,6 +114,10 @@ func TestExecDocumentImpl_ExecuteDocumentSuccess(t *testing.T) {
 
 	execMock := executermocks.NewMockExecuter()
 	docResultChan := make(chan contracts.DocumentResult)
+	mockObj := new(InstanceMock)
+	mockObj.On("InstanceID", mock.Anything, mock.Anything).Return("instanceID", nil)
+
+	instance = mockObj
 
 	execMock.On("Run", mock.AnythingOfType("*task.ChanneledCancelFlag"), mock.AnythingOfType("*executer.DocumentFileStore")).Return(docResultChan)
 
