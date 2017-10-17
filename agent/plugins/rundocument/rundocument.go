@@ -159,6 +159,8 @@ func (p *Plugin) execute(context context.T, config contracts.Configuration, canc
 	res.StandardOutput = pluginutil.StringPrefix(output.Stdout, p.MaxStdoutLength, p.OutputTruncatedSuffix)
 	res.StandardError = pluginutil.StringPrefix(output.Stderr, p.MaxStderrLength, p.OutputTruncatedSuffix)
 
+	log.Debug("Result value is - ", res)
+
 	return res
 }
 
@@ -239,8 +241,6 @@ func (p *Plugin) runDocument(context context.T, input *RunDocumentPluginInput, c
 		}
 		if pluginOut.Error != nil {
 			output.MarkAsFailed(log, pluginOut.Error)
-		} else {
-			output.MarkAsSucceeded()
 		}
 		output.Status = contracts.MergeResultStatus(output.Status, pluginOut.Status)
 	}
