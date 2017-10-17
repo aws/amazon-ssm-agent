@@ -85,6 +85,13 @@ func (s3 *S3Resource) Download(log log.T, filesys filemanager.FileSystem, destPa
 	}
 	log.Info("Downloading S3 artifacts from path - ", s3.Info.Path)
 
+	// Change from '+' to '%20' is made as a  workaround because s3 uses + for spaces in its URL instead of %20
+	// This makes the differentiation between '+' and ' ' impossible when we try to manipulate the path of files to download
+	// Since %20 is the universal escaping for ' ', s3 accepts that as well.
+	// https://s3.amazonaws.com/aws-executecommand-test/scripts/hello%2Bworld/spaces+file.sh
+	// new path - https://s3.amazonaws.com/aws-executecommand-test/scripts/hello%2Bworld/spaces%20file.sh
+	s3.Info.Path = strings.Replace(s3.Info.Path, "+", "%20", -1)
+
 	if fileURL, err = url.Parse(s3.Info.Path); err != nil {
 		return err
 	}
@@ -123,6 +130,14 @@ func (s3 *S3Resource) Download(log log.T, filesys filemanager.FileSystem, destPa
 
 			bucketURL.Path += "/" + files
 			input.SourceURL = bucketURL.String()
+
+			// When s3 object returns the Path, it has + for '+', and %20 for ' ', because of the workaround above.
+			// Since we are sending this URL for download, S3 manipulates the + to be a space.
+			// Change from '+' to '%2B' which is the encoding for '+' so that s3 has to interpret %20 to be a space and %2B
+			// to be a '+'
+			// https://s3.amazonaws.com/aws-executecommand-test/scripts/hello+world/spaces%20file.sh
+			// https://s3.amazonaws.com/aws-executecommand-test/scripts/hello%2Bworld/spaces%20file.sh
+			input.SourceURL = strings.Replace(input.SourceURL, "+", "%2B", -1)
 			log.Debug("SourceURL ", input.SourceURL)
 			if unescapedURL, err = url.QueryUnescape(input.SourceURL); err != nil {
 				return err
