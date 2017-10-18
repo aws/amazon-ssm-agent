@@ -390,9 +390,11 @@ func VerifyHash(log log.T, input DownloadInput, output DownloadOutput) (bool, er
 
 	//backwards compatibility for empty HashValues and HashTypes
 	if len(checksums) == 1 {
-		hashValue, ok := checksums[""]
-		if ok && hashValue == "" {
-			return true, nil
+		for hashAlgorithm, hashValue := range checksums {
+			// this is the only pair in the map
+			if hashAlgorithm == "" || hashValue == "" {
+				return true, nil
+			}
 		}
 	}
 

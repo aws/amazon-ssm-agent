@@ -158,6 +158,18 @@ var (
 				true},
 		},
 		{
+			// ensure empty value is valid; this is important for the agent updater itself
+			DownloadInput{
+				localPathExist,
+				downloadFolder,
+				map[string]string{"sha256": ""},
+			},
+			DownloadOutput{
+				localPathExist,
+				false,
+				true},
+		},
+		{
 			// first checksum fails, the second one succeeds
 			DownloadInput{
 				localPathExist,
