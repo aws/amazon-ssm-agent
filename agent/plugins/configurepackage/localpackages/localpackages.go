@@ -374,7 +374,7 @@ func validatePackageManifest(parsedManifest *PackageManifest, packageName string
 		return fmt.Errorf("empty package name")
 	} else {
 		manifestName := parsedManifest.Name
-		if !strings.EqualFold(manifestName, packageName) {
+		if !strings.EqualFold(manifestName, packageName) && !strings.HasSuffix(packageName, manifestName) {
 			return fmt.Errorf("manifest name (%v) does not match expected package name (%v)", manifestName, packageName)
 		}
 	}
