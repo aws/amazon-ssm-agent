@@ -148,7 +148,7 @@ func (GetOfflineCommand) validateGetCommandInput(subcommands []string, parameter
 func (c *GetOfflineCommand) getCommandStatus(commandID string, showDetails bool) (error, string) {
 	// Look for file with commandID as name in each orchestration folder
 	// If found, return status (or lots of details if showDetails is set)
-	if c.isCommandInState(appconfig.DefaultLocationOfCompleted, commandID) {
+	if c.isCommandCompleted(commandID) {
 		return nil, "Complete"
 	}
 	if c.isCommandInState(appconfig.DefaultLocationOfPending, commandID) {
@@ -163,6 +163,10 @@ func (c *GetOfflineCommand) getCommandStatus(commandID string, showDetails bool)
 
 	// If not found, return error
 	return fmt.Errorf("No status found for command ID %v", commandID), ""
+}
+
+func (c *GetOfflineCommand) isCommandCompleted(commandID string) bool {
+	return fileutil.Exists(path.Join(appconfig.LocalCommandRootCompleted, commandID))
 }
 
 func (GetOfflineCommand) isCommandInState(stateFolder string, commandID string) bool {

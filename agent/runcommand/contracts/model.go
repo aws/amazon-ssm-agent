@@ -14,7 +14,13 @@
 // Package model contains message struct for MDS/SSM messages.
 package model
 
-import "github.com/aws/amazon-ssm-agent/agent/contracts"
+import (
+	"fmt"
+	"regexp"
+	"strings"
+
+	"github.com/aws/amazon-ssm-agent/agent/contracts"
+)
 
 // CancelPayload represents the json structure of a cancel command MDS message payload.
 type CancelPayload struct {
@@ -37,4 +43,21 @@ type SendReplyPayload struct {
 	DocumentStatus      contracts.ResultStatus                    `json:"documentStatus"`
 	DocumentTraceOutput string                                    `json:"documentTraceOutput"`
 	RuntimeStatus       map[string]*contracts.PluginRuntimeStatus `json:"runtimeStatus"`
+}
+
+//getCommandID gets CommandID from given MessageID
+func getCommandID(messageID string) string {
+	// MdsMessageID is in the format of : aws.ssm.CommandId.InstanceId
+	// E.g (aws.ssm.2b196342-d7d4-436e-8f09-3883a1116ac3.i-57c0a7be)
+	mdsMessageIDSplit := strings.Split(messageID, ".")
+	return mdsMessageIDSplit[len(mdsMessageIDSplit)-2]
+}
+
+func GetCommandID(messageID string) (string, error) {
+	//messageID format: E.g (aws.ssm.2b196342-d7d4-436e-8f09-3883a1116ac3.i-57c0a7be)
+	if match, err := regexp.MatchString("aws\\.ssm\\..+\\.+", messageID); !match {
+		return messageID, fmt.Errorf("invalid messageID format: %v | %v", messageID, err)
+	}
+
+	return getCommandID(messageID), nil
 }
