@@ -93,6 +93,7 @@ var LocalCommandRoot string
 // LocalCommandRootSubmitted is the directory where locally submitted command documents
 // are moved when they have been picked up
 var LocalCommandRootSubmitted string
+var LocalCommandRootCompleted string
 
 // LocalCommandRootInvalid is the directory where locally submitted command documents
 // are moved if the service cannot validate the document (generally impossible via cli)
@@ -168,6 +169,7 @@ func init() {
 	DaemonRoot = filepath.Join(SSMDataPath, "Daemons")
 	LocalCommandRoot = filepath.Join(SSMDataPath, "LocalCommands")
 	LocalCommandRootSubmitted = filepath.Join(LocalCommandRoot, "Submitted")
+	LocalCommandRootCompleted = filepath.Join(LocalCommandRoot, "Completed")
 	LocalCommandRootInvalid = filepath.Join(LocalCommandRoot, "Invalid")
 	DownloadRoot = filepath.Join(temp, SSMFolder, "Download")
 	UpdaterArtifactsRoot = filepath.Join(temp, SSMFolder, "Update")

@@ -26,6 +26,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	"github.com/aws/amazon-ssm-agent/agent/framework/docmanager"
 	"github.com/aws/amazon-ssm-agent/agent/platform"
+	messageContracts "github.com/aws/amazon-ssm-agent/agent/runcommand/contracts"
 	mdsService "github.com/aws/amazon-ssm-agent/agent/runcommand/mds"
 	"github.com/aws/amazon-ssm-agent/agent/sdkutil"
 	"github.com/aws/aws-sdk-go/service/ssmmds"
@@ -125,8 +126,8 @@ func (s *RunCommandService) handleSpecialPlugin(lastPluginID string, pluginRes m
 	for ID, pluginRes := range pluginRes {
 		if pluginRes.PluginName == appconfig.PluginNameRefreshAssociation {
 			log.Infof("Found %v to invoke refresh association immediately", pluginRes.PluginName)
-
-			orchestrationDir := fileutil.BuildPath(s.orchestrationRootDir, getCommandID(messageID), pluginRes.PluginName)
+			commandID, _ := messageContracts.GetCommandID(messageID)
+			orchestrationDir := fileutil.BuildPath(s.orchestrationRootDir, commandID, pluginRes.PluginName)
 			//apply association only when this is the last plugin run
 			s.assocProcessor.ProcessRefreshAssociation(log, pluginRes, orchestrationDir, lastPluginID == ID)
 
