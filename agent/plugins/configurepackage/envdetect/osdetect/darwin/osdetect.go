@@ -4,6 +4,8 @@ import (
 	"os/exec"
 	"strings"
 
+	"github.com/aws/amazon-ssm-agent/agent/log"
+
 	c "github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/envdetect/constants"
 )
 
@@ -18,7 +20,7 @@ func (*Detector) DetectInitSystem() (string, error) {
 	return c.InitLaunchd, nil
 }
 
-func (*Detector) DetectPlatform() (string, string, string, error) {
+func (*Detector) DetectPlatform(_ log.T) (string, string, string, error) {
 	cmdOut, err := exec.Command("/usr/bin/sw_vers", "-productVersion").Output()
 	if err != nil {
 		return "", "", "", err
