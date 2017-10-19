@@ -261,7 +261,84 @@ func TestValidatePackageCorruptManifest(t *testing.T) {
 	assert.True(t, strings.HasPrefix(err.Error(), "Package manifest is invalid:"))
 }
 
-// TODO:MF: Unit test validatePackageManifest
+func TestValidatePackageManifest(t *testing.T) {
+	data := []struct {
+		name        string
+		manifest    *PackageManifest
+		arn         string
+		version     string
+		expectedErr bool
+	}{
+		{
+			"empty manifest",
+			&PackageManifest{},
+			"arn",
+			"version",
+			true,
+		},
+		{
+			"empty manifest name",
+			&PackageManifest{Name: ""},
+			"arn",
+			"version",
+			true,
+		},
+		{
+			"empty manifest version",
+			&PackageManifest{Name: "", Version: ""},
+			"arn",
+			"version",
+			true,
+		},
+		{
+			"non matching manifest name",
+			&PackageManifest{Name: "not-arn", Version: "version"},
+			"arn",
+			"version",
+			true,
+		},
+		{
+			"non matching manifest name",
+			&PackageManifest{Name: "arn", Version: "not-version"},
+			"arn",
+			"version",
+			true,
+		},
+		{
+			"full arn",
+			&PackageManifest{Name: "arn:aws:ssm:us-east-1:401613528637:package/HzsqFmONmi", Version: "version"},
+			"arn:aws:ssm:us-east-1:401613528637:package/HzsqFmONmi",
+			"version",
+			false,
+		},
+		{
+			"short arn",
+			&PackageManifest{Name: "arn:aws:ssm:::package/HzsqFmONmi", Version: "version"},
+			"arn:aws:ssm:::package/HzsqFmONmi",
+			"version",
+			false,
+		},
+		{
+			"package name",
+			&PackageManifest{Name: "HzsqFmONmi", Version: "version"},
+			"HzsqFmONmi",
+			"version",
+			false,
+		},
+	}
+
+	for _, testdata := range data {
+		t.Run(testdata.name, func(t *testing.T) {
+			err := validatePackageManifest(testdata.manifest, testdata.arn, testdata.version)
+
+			if testdata.expectedErr {
+				assert.Error(t, err)
+			} else {
+				assert.NoError(t, err)
+			}
+		})
+	}
+}
 
 func TestAddPackage(t *testing.T) {
 	version := "0.0.1"
