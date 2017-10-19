@@ -8,6 +8,8 @@ import (
 	"regexp"
 	"strings"
 
+	"github.com/aws/amazon-ssm-agent/agent/log"
+
 	c "github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/envdetect/constants"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/envdetect/utils"
 )
@@ -98,7 +100,7 @@ func (*Detector) DetectInitSystem() (string, error) {
 	return "", errors.New("could not determine init system")
 }
 
-func (*Detector) DetectPlatform() (string, string, string, error) {
+func (*Detector) DetectPlatform(_ log.T) (string, string, string, error) {
 	var platform, version, platformFamily string
 	var err error
 

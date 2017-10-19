@@ -23,7 +23,7 @@ type CollectorImp struct {
 
 // CollectData queries operating system and infrastructure data
 func (cd *CollectorImp) CollectData(log log.T) (*Environment, error) {
-	os, err := osdetect.CollectOSData()
+	os, err := osdetect.CollectOSData(log)
 	if err != nil {
 		return nil, err
 	}

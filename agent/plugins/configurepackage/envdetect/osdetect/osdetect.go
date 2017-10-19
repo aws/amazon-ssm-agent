@@ -4,13 +4,15 @@ import (
 	"fmt"
 	"runtime"
 
+	"github.com/aws/amazon-ssm-agent/agent/log"
+
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/envdetect/osdetect/darwin"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/envdetect/osdetect/linux"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/envdetect/osdetect/windows"
 )
 
 type OsDetector interface {
-	DetectPlatform() (string, string, string, error)
+	DetectPlatform(log.T) (string, string, string, error)
 	DetectInitSystem() (string, error)
 	DetectPkgManager(string, string, string) (string, error)
 }
@@ -27,7 +29,7 @@ type OperatingSystem struct {
 }
 
 // CollectOSData quires the operating system for type and capabilities
-func CollectOSData() (*OperatingSystem, error) {
+func CollectOSData(log log.T) (*OperatingSystem, error) {
 	var d OsDetector
 	switch runtime.GOOS {
 	case "darwin":
@@ -40,7 +42,7 @@ func CollectOSData() (*OperatingSystem, error) {
 		return nil, fmt.Errorf("unknown platform: %s", runtime.GOOS)
 	}
 
-	platform, platformVersion, platformFamily, err := d.DetectPlatform()
+	platform, platformVersion, platformFamily, err := d.DetectPlatform(log)
 	if err != nil {
 		return nil, err
 	}

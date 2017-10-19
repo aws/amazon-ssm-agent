@@ -7,6 +7,8 @@ import (
 	"path/filepath"
 	"regexp"
 
+	"github.com/aws/amazon-ssm-agent/agent/log"
+
 	c "github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/envdetect/constants"
 )
 
@@ -23,15 +25,19 @@ func (*Detector) DetectInitSystem() (string, error) {
 	return c.InitWindows, nil
 }
 
-func (*Detector) DetectPlatform() (string, string, string, error) {
+func (*Detector) DetectPlatform(log log.T) (string, string, string, error) {
 	output, err := getWmiOSInfo()
 	if err != nil {
+		log.Infof("Could not retrieve WmiOSInfo, proceeding without 'Version' - %v", err)
 		return c.PlatformWindows, "", c.PlatformFamilyWindows, nil
 	}
 
-	version, err := parseVersion(output)
-	osSKU, err := parseOperatingSystemSKU(output)
+	osSKU, nonFatalErr := parseOperatingSystemSKU(output)
+	if nonFatalErr != nil {
+		log.Infof("Proceeding without knowing OperatingSystemSKU - %v", nonFatalErr)
+	}
 
+	version, err := parseVersion(output)
 	if isWindowsNano(osSKU) {
 		version = fmt.Sprint(version, "nano")
 	}
