@@ -29,7 +29,7 @@ import (
 var (
 	startMarker       = "<start" + randomString(8) + ">"
 	endMarker         = "<end" + randomString(8) + ">"
-	serviceInfoScript = `$serviceInfo = Get-Service | Select-Object Name, DisplayName, Status, DependentServices, ServicesDependedOn, ServiceType
+	serviceInfoScript = `$serviceInfo = Get-Service | Select-Object Name, DisplayName, Status, DependentServices, ServicesDependedOn, ServiceType, StartType
 $jsonObj = @()
 foreach($s in $serviceInfo) {
 $Name = $s.Name

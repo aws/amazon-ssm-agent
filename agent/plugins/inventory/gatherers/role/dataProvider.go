@@ -29,14 +29,14 @@ var (
 	startMarker    = "<start" + randomString(8) + ">"
 	endMarker      = "<end" + randomString(8) + ">"
 	roleInfoScript = `import-module ServerManager
-$roleInfo = Get-WindowsFeature | Select-Object Name, DisplayName, Description, Installed, InstalledState, FeatureType, Path, SubFeatures, ServerComponentDescriptor, DependsOn, Parent
+$roleInfo = Get-WindowsFeature | Select-Object Name, DisplayName, Description, Installed, InstallState, FeatureType, Path, SubFeatures, ServerComponentDescriptor, DependsOn, Parent
 $jsonObj = @()
 foreach($r in $roleInfo) {
 $Name = $r.Name
 $DisplayName = $r.DisplayName
 $Description = $r.Description
 $Installed = $r.Installed
-$InstalledState = $r.InstalledState
+$InstalledState = $r.InstallState
 $FeatureType = $r.FeatureType
 $Path = $r.Path
 $SubFeatures = $r.SubFeatures
