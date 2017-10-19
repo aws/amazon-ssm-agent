@@ -321,7 +321,7 @@ func TestValidatePackageManifest(t *testing.T) {
 		{
 			"package name",
 			&PackageManifest{Name: "HzsqFmONmi", Version: "version"},
-			"HzsqFmONmi",
+			"arn:aws:ssm:::package/HzsqFmONmi",
 			"version",
 			false,
 		},
