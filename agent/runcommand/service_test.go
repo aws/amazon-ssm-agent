@@ -274,7 +274,7 @@ func GenerateDocStateFromFile(t *testing.T, messagePayloadFile string, instanceI
 	s3KeyPrefix := path.Join(payload.OutputS3KeyPrefix, payload.CommandID, *testCase.Msg.Destination)
 
 	//orchestrationRootDir is set to CommandID considering that orchestration root directory name will be empty in the test case.
-	orchestrationRootDir := getCommandID(*testCase.Msg.MessageId)
+	orchestrationRootDir, _ := messageContracts.GetCommandID(*testCase.Msg.MessageId)
 
 	//configs := make(map[string]*contracts.Configuration)
 	testCase.PluginStates = make(map[string]contracts.PluginState)
@@ -343,6 +343,7 @@ func GenerateDocStateFromFile(t *testing.T, messagePayloadFile string, instanceI
 
 func getPluginConfigurationsFromRuntimeConfig(runtimeConfig map[string]*contracts.PluginConfig, orchestrationDir, s3BucketName, s3KeyPrefix, messageID string) (res map[string]*contracts.Configuration) {
 	res = make(map[string]*contracts.Configuration)
+	commandID, _ := messageContracts.GetCommandID(messageID)
 	for pluginName, pluginConfig := range runtimeConfig {
 		res[pluginName] = &contracts.Configuration{
 			Settings:               pluginConfig.Settings,
@@ -351,7 +352,7 @@ func getPluginConfigurationsFromRuntimeConfig(runtimeConfig map[string]*contract
 			OutputS3KeyPrefix:      fileutil.BuildS3Path(s3KeyPrefix, pluginName),
 			OrchestrationDirectory: fileutil.BuildPath(orchestrationDir, pluginName),
 			MessageId:              messageID,
-			BookKeepingFileName:    getCommandID(messageID),
+			BookKeepingFileName:    commandID,
 			PluginName:             pluginName,
 			PluginID:               pluginName,
 		}
@@ -364,7 +365,7 @@ func getPluginConfigurationsFromMainStep(mainSteps []*contracts.InstancePluginCo
 
 	// set precondition flag based on document schema version
 	isPreconditionEnabled := contracts.IsPreconditionEnabled(schemaVersion)
-
+	commandID, _ := messageContracts.GetCommandID(messageID)
 	for index, instancePluginConfig := range mainSteps {
 		pluginId := instancePluginConfig.Name
 		pluginName := instancePluginConfig.Action
@@ -375,7 +376,7 @@ func getPluginConfigurationsFromMainStep(mainSteps []*contracts.InstancePluginCo
 			OutputS3KeyPrefix:      fileutil.BuildS3Path(s3KeyPrefix, pluginName),
 			OrchestrationDirectory: fileutil.BuildPath(orchestrationDir, pluginId),
 			MessageId:              messageID,
-			BookKeepingFileName:    getCommandID(messageID),
+			BookKeepingFileName:    commandID,
 			PluginName:             pluginName,
 			PluginID:               pluginId,
 			Preconditions:          instancePluginConfig.Preconditions,

@@ -38,6 +38,7 @@ const (
 	// LocalCommandRootSubmitted is the directory where locally submitted command documents
 	// are moved when they have been picked up
 	LocalCommandRootSubmitted = "/var/lib/amazon/ssm/localcommands/submitted"
+	LocalCommandRootCompleted = "/var/lib/amazon/ssm/localcommands/completed"
 
 	// LocalCommandRootInvalid is the directory where locally submitted command documents
 	// are moved if the service cannot validate the document (generally impossible via cli)

@@ -29,6 +29,7 @@ const (
 	newCommands       = "testdata/new"
 	submittedCommands = "testdata/new/submitted"
 	invalidCommands   = "testdata/new/invalid"
+	completeDir       = "testdata/new/completed"
 )
 
 func TestValid(t *testing.T) {
@@ -79,6 +80,13 @@ func TestBothVersions(t *testing.T) {
 	assert.Equal(t, 2, FileCount(submittedCommands))
 }
 
+func TestOfflineService_SendReply(t *testing.T) {
+	service := GetTestService()
+	defer CleanTestDirs()
+	service.SendReply(logger, "aws.ssm.testCommandID.testInstanceID", "payload")
+	assert.Equal(t, 1, FileCount(completeDir))
+}
+
 func GetTestService() Service {
 	CleanTestDirs()
 	return &offlineService{
@@ -86,6 +94,7 @@ func GetTestService() Service {
 		newCommandDir:       newCommands,
 		submittedCommandDir: submittedCommands,
 		invalidCommandDir:   invalidCommands,
+		commandResultDir:    completeDir,
 	}
 }
 
@@ -110,6 +119,10 @@ func CleanTestDirs() {
 	files, _ = fileutil.GetFileNames(newCommands)
 	for _, file := range files {
 		fileutil.DeleteFile(filepath.Join(newCommands, file))
+	}
+	files, _ = fileutil.GetFileNames(completeDir)
+	for _, file := range files {
+		fileutil.DeleteFile(filepath.Join(completeDir, file))
 	}
 }
 
