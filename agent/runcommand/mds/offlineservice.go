@@ -37,6 +37,7 @@ type offlineService struct {
 	TopicPrefix         string
 	newCommandDir       string
 	submittedCommandDir string
+	commandResultDir    string
 	invalidCommandDir   string
 }
 
@@ -49,12 +50,14 @@ func NewOfflineService(log log.T, topicPrefix string) (Service, error) {
 		log.Errorf("Failed to create local command directory %v : %v", appconfig.LocalCommandRoot, err.Error())
 		return nil, err
 	}
+	err = fileutil.MakeDirs(appconfig.LocalCommandRootCompleted)
 	return &offlineService{
 		TopicPrefix:         topicPrefix,
 		newCommandDir:       appconfig.LocalCommandRoot,
 		submittedCommandDir: appconfig.LocalCommandRootSubmitted,
 		invalidCommandDir:   appconfig.LocalCommandRootInvalid,
-	}, nil
+		commandResultDir:    appconfig.LocalCommandRootCompleted,
+	}, err
 }
 
 // GetMessages looks for new local command documents on the filesystem and parses them into messages
@@ -151,7 +154,16 @@ func (ols *offlineService) AcknowledgeMessage(log log.T, messageID string) error
 	return nil
 }
 
+//offline service bookkeeps the command output to specified disk location
 func (ols *offlineService) SendReply(log log.T, messageID string, payload string) error {
+	commandID, err := messageContracts.GetCommandID(messageID)
+	if err != nil {
+		log.Errorf("failed to parse messageID: %v", err)
+		return nil
+	}
+	if err := fileutil.WriteAllText(filepath.Join(ols.commandResultDir, commandID), payload); err != nil {
+		log.Errorf("failed to write command %v result: %v", commandID, err)
+	}
 	return nil
 }
 

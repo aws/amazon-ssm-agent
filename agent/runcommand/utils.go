@@ -40,14 +40,6 @@ func empty(s *string) bool {
 	return s == nil || *s == ""
 }
 
-//getCommandID gets CommandID from given MessageID
-func getCommandID(messageID string) string {
-	// MdsMessageID is in the format of : aws.ssm.CommandId.InstanceId
-	// E.g (aws.ssm.2b196342-d7d4-436e-8f09-3883a1116ac3.i-57c0a7be)
-	mdsMessageIDSplit := strings.Split(messageID, ".")
-	return mdsMessageIDSplit[len(mdsMessageIDSplit)-2]
-}
-
 // validate returns error if the message is invalid
 func validate(msg *ssmmds.Message) error {
 	if msg == nil {
@@ -73,7 +65,7 @@ func newDocumentInfo(msg ssmmds.Message, parsedMsg messageContracts.SendCommandP
 
 	documentInfo := new(contracts.DocumentInfo)
 
-	documentInfo.CommandID = getCommandID(*msg.MessageId)
+	documentInfo.CommandID, _ = messageContracts.GetCommandID(*msg.MessageId)
 	documentInfo.DocumentID = documentInfo.CommandID
 	documentInfo.InstanceID = *msg.Destination
 	documentInfo.MessageID = *msg.MessageId
@@ -100,7 +92,7 @@ func parseCancelCommandMessage(context context.T, msg *ssmmds.Message, messagesO
 	documentInfo.InstanceID = *msg.Destination
 	documentInfo.CreatedDate = *msg.CreatedDate
 	documentInfo.MessageID = *msg.MessageId
-	documentInfo.CommandID = getCommandID(*msg.MessageId)
+	documentInfo.CommandID, _ = messageContracts.GetCommandID(*msg.MessageId)
 	documentInfo.DocumentID = documentInfo.CommandID
 	documentInfo.RunID = times.ToIsoDashUTC(times.DefaultClock.Now())
 	documentInfo.DocumentStatus = contracts.ResultStatusInProgress
@@ -108,7 +100,7 @@ func parseCancelCommandMessage(context context.T, msg *ssmmds.Message, messagesO
 	cancelCommand := new(contracts.CancelCommandInfo)
 	cancelCommand.Payload = *msg.Payload
 	cancelCommand.CancelMessageID = payload.CancelMessageID
-	commandID := getCommandID(payload.CancelMessageID)
+	commandID, _ := messageContracts.GetCommandID(payload.CancelMessageID)
 
 	cancelCommand.CancelCommandID = commandID
 	cancelCommand.DebugInfo = fmt.Sprintf("Command %v is yet to be cancelled", commandID)
@@ -129,7 +121,7 @@ func parseCancelCommandMessage(context context.T, msg *ssmmds.Message, messagesO
 
 func parseSendCommandMessage(context context.T, msg *ssmmds.Message, messagesOrchestrationRootDir string) (*contracts.DocumentState, error) {
 	log := context.Log()
-	commandID := getCommandID(*msg.MessageId)
+	commandID, _ := messageContracts.GetCommandID(*msg.MessageId)
 
 	log.Debug("Processing send command message ", *msg.MessageId)
 	log.Trace("Processing send command message ", jsonutil.Indent(*msg.Payload))
