@@ -51,12 +51,12 @@ var (
 			$Version = $p.VersionInfo.FileVersion
 			$InstalledDate = $p.CreationTime
 			$LastAccesstime = $p.LastAccessTime
-			$ProductName = $p.VersionInfo.Product
+			$ProductName = $p.VersionInfo.ProductName
 			$ProductVersion = $p.VersionInfo.ProductVersion
 			$ProductLanguage = $p.VersionInfo.Language
 			$CompanyName = $p.VersionInfo.CompanyName
 			$InstalledDir = $p.DirectoryName
-			$ModtTime = $p.LastWriteTime
+			$ModTime = $p.LastWriteTime
 			$jsonObj += @"
 {"CompanyName": "` + mark(`$CompanyName`) + `", "ProductName": "` + mark(`$ProductName`) + `", "ProductVersion": "$ProductVersion", "ProductLanguage": "$ProductLanguage", "Name":"$Name", "Size":"$Length",
 "Description":"` + mark(`$Description`) + `" ,"FileVersion":"$Version","InstalledDate":"$InstalledDate","LastAccessTime":"$LastAccessTime","InstalledDir":"` + mark(`$InstalledDir`) + `","ModificationTime":"$ModTime"}
