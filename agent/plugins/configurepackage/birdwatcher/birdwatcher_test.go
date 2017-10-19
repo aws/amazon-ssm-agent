@@ -381,7 +381,8 @@ func TestDownloadManifest(t *testing.T) {
 			}
 
 			mockedCollector.On("CollectData", mock.Anything).Return(envdata, nil).Once()
-			ds := &PackageService{facadeClient: &testdata.facadeClient, manifestCache: packageservice.ManifestCacheMemNew(), collector: &mockedCollector}
+			cache := packageservice.ManifestCacheMemNew()
+			ds := &PackageService{facadeClient: &testdata.facadeClient, manifestCache: cache, collector: &mockedCollector}
 
 			_, result, err := ds.DownloadManifest(tracer, testdata.packageName, testdata.packageVersion)
 
@@ -394,6 +395,10 @@ func TestDownloadManifest(t *testing.T) {
 				// verify result
 				assert.Equal(t, "1234", result)
 				assert.NoError(t, err)
+				// verify cache
+				cachedManifest, cacheErr := cache.ReadManifest(testdata.packageName, "1234")
+				assert.Equal(t, []byte(manifestStr), cachedManifest)
+				assert.NoError(t, cacheErr)
 			}
 		})
 	}
