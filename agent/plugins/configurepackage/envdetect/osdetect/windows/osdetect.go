@@ -31,13 +31,16 @@ func (*Detector) DetectPlatform(log log.T) (string, string, string, error) {
 		log.Infof("Could not retrieve WmiOSInfo, proceeding without 'Version' - %v", err)
 		return c.PlatformWindows, "", c.PlatformFamilyWindows, nil
 	}
+	return detectPlatformDetails(log, output)
+}
 
-	osSKU, nonFatalErr := parseOperatingSystemSKU(output)
+func detectPlatformDetails(log log.T, wmioutput string) (string, string, string, error) {
+	osSKU, nonFatalErr := parseOperatingSystemSKU(wmioutput)
 	if nonFatalErr != nil {
 		log.Infof("Proceeding without knowing OperatingSystemSKU - %v", nonFatalErr)
 	}
 
-	version, err := parseVersion(output)
+	version, err := parseVersion(wmioutput)
 	if isWindowsNano(osSKU) {
 		version = fmt.Sprint(version, "nano")
 	}
