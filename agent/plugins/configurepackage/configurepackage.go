@@ -392,9 +392,12 @@ func (p *Plugin) execute(context context.T, config contracts.Configuration, canc
 		out.MarkAsFailed(nil, nil)
 	} else {
 		packageService := p.packageServiceSelector(tracer, input.Repository, p.localRepository)
-		packageArn, manifestVersion := getPackageArnAndVersion(tracer, packageService, input, &out)
+		packageArn, manifestVersion, err := getPackageArnAndVersion(tracer, packageService, input)
 
-		if err := lockPackage(packageArn, input.Action); err != nil {
+		if err != nil {
+			tracer.CurrentTrace().WithError(err).End()
+			out.MarkAsFailed(nil, nil)
+		} else if err := lockPackage(packageArn, input.Action); err != nil {
 			// do not allow multiple actions to be performed at the same time for the same package
 			// this is possible with multiple concurrent runcommand documents
 			tracer.CurrentTrace().WithError(err).End()
@@ -499,27 +502,23 @@ func Name() string {
 func getPackageArnAndVersion(
 	tracer trace.Tracer,
 	packageService packageservice.PackageService,
-	input *ConfigurePackagePluginInput,
-	output contracts.PluginOutputter) (packageArn string, version string) {
-	//get info from the manifest
-	var err error
+	input *ConfigurePackagePluginInput) (string, string, error) {
+
 	//always download the manifest before acting upon the request
 	trace := tracer.BeginSection("download manifest")
 
-	if input.Version != "" && !packageservice.IsLatest(input.Version) {
-		version = input.Version
-	} else {
+	version := input.Version
+	if packageservice.IsLatest(input.Version) {
 		version = packageservice.Latest
 	}
 
-	packageArn, version, err = packageService.DownloadManifest(tracer, input.Name, version)
+	packageArn, version, err := packageService.DownloadManifest(tracer, input.Name, version)
 
 	if err != nil {
 		trace.WithError(err).End()
-		output.MarkAsFailed(nil, nil)
-		return "", ""
+		return "", "", err
 	}
 	trace.End()
 
-	return packageArn, version
+	return packageArn, version, nil
 }
