@@ -617,17 +617,15 @@ func TestGetShortNameAndNoVersion(t *testing.T) {
 	pluginInformation := createStubPluginInputInstallLatest()
 	serviceMock := serviceSuccessMock()
 	tracer := trace.NewTracer(log.NewMockLog())
-	output := &trace.PluginOutputTrace{Tracer: tracer}
 
-	packageArn, version := getPackageArnAndVersion(
+	packageArn, version, err := getPackageArnAndVersion(
 		tracer,
 		serviceMock,
-		pluginInformation,
-		output)
+		pluginInformation)
 
 	assert.Equal(t, "packageArn", packageArn)
 	assert.Equal(t, "0.0.1", version)
-	assert.Equal(t, 0, output.GetExitCode())
+	assert.NoError(t, err)
 	assert.Empty(t, tracer.ToPluginOutput().GetStderr())
 }
 
@@ -635,17 +633,15 @@ func TestGetShortNameAndLatestVersion(t *testing.T) {
 	pluginInformation := createStubPluginInputUninstall("latest")
 	serviceMock := serviceUpgradeMock()
 	tracer := trace.NewTracer(log.NewMockLog())
-	output := &trace.PluginOutputTrace{Tracer: tracer}
 
-	packageArn, version := getPackageArnAndVersion(
+	packageArn, version, err := getPackageArnAndVersion(
 		tracer,
 		serviceMock,
-		pluginInformation,
-		output)
+		pluginInformation)
 
 	assert.Equal(t, "packageArn", packageArn)
 	assert.Equal(t, "0.0.2", version)
-	assert.Equal(t, 0, output.GetExitCode())
+	assert.NoError(t, err)
 	assert.Empty(t, tracer.ToPluginOutput().GetStderr())
 }
 
@@ -653,17 +649,15 @@ func TestGetShortNameAndVersion(t *testing.T) {
 	pluginInformation := createStubPluginInputInstall()
 	serviceMock := serviceSuccessMock()
 	tracer := trace.NewTracer(log.NewMockLog())
-	output := &trace.PluginOutputTrace{Tracer: tracer}
 
-	packageArn, version := getPackageArnAndVersion(
+	packageArn, version, err := getPackageArnAndVersion(
 		tracer,
 		serviceMock,
-		pluginInformation,
-		output)
+		pluginInformation)
 
 	assert.Equal(t, "packageArn", packageArn)
 	assert.Equal(t, "0.0.1", version)
-	assert.Equal(t, 0, output.GetExitCode())
+	assert.NoError(t, err)
 	assert.Empty(t, tracer.ToPluginOutput().GetStderr())
 }
 
@@ -671,16 +665,14 @@ func TestGetShortArnAndVersionFailed(t *testing.T) {
 	pluginInformation := createStubPluginInputInstall()
 	serviceMock := serviceFailedMock()
 	tracer := trace.NewTracer(log.NewMockLog())
-	output := &trace.PluginOutputTrace{Tracer: tracer}
 
-	packageArn, version := getPackageArnAndVersion(
+	packageArn, version, err := getPackageArnAndVersion(
 		tracer,
 		serviceMock,
-		pluginInformation,
-		output)
+		pluginInformation)
 
 	assert.Empty(t, packageArn)
 	assert.Empty(t, version)
-	assert.Equal(t, 1, output.GetExitCode())
+	assert.Error(t, err)
 	assert.Equal(t, "testerror\n", tracer.ToPluginOutput().GetStderr())
 }
