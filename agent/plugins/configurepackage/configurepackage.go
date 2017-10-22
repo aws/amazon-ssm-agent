@@ -397,13 +397,13 @@ func (p *Plugin) execute(context context.T, config contracts.Configuration, canc
 		if err != nil {
 			tracer.CurrentTrace().WithError(err).End()
 			out.MarkAsFailed(nil, nil)
-		} else if err := lockPackage(packageArn, input.Action); err != nil {
+		} else if err := p.localRepository.LockPackage(tracer, packageArn, input.Action); err != nil {
 			// do not allow multiple actions to be performed at the same time for the same package
 			// this is possible with multiple concurrent runcommand documents
 			tracer.CurrentTrace().WithError(err).End()
 			out.MarkAsFailed(nil, nil)
 		} else {
-			defer unlockPackage(packageArn)
+			defer p.localRepository.UnlockPackage(tracer, packageArn)
 
 			log.Debugf("Prepare for %v %v %v", input.Action, input.Name, input.Version)
 			inst, uninst, installState, installedVersion := prepareConfigurePackage(

@@ -12,8 +12,7 @@
 // implied. See the License for the specific language governing
 // permissions and limitations under the License.
 
-// Package configurepackage implements the ConfigurePackage plugin.
-package configurepackage
+package localpackages
 
 import (
 	"errors"
@@ -29,6 +28,7 @@ var mapPackageAction = make(map[string]string)
 func lockPackage(packageName string, action string) error {
 	lockPackageAction.Lock()
 	defer lockPackageAction.Unlock()
+
 	if val, ok := mapPackageAction[packageName]; ok {
 		return errors.New(fmt.Sprintf(`Package "%v" is already in the process of action "%v"`, packageName, val))
 	}
@@ -41,6 +41,7 @@ func lockPackage(packageName string, action string) error {
 func unlockPackage(packageName string) {
 	lockPackageAction.Lock()
 	defer lockPackageAction.Unlock()
+
 	if _, ok := mapPackageAction[packageName]; ok {
 		delete(mapPackageAction, packageName)
 	}
