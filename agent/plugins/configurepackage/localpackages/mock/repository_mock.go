@@ -29,6 +29,16 @@ type MockedRepository struct {
 	mock.Mock
 }
 
+func (repoMock *MockedRepository) LockPackage(tracer trace.Tracer, packageName string, action string) error {
+	args := repoMock.Called(tracer, packageName, action)
+	return args.Error(0)
+}
+
+func (repoMock *MockedRepository) UnlockPackage(tracer trace.Tracer, packageName string) {
+	repoMock.Called(tracer, packageName)
+	return
+}
+
 func (repoMock *MockedRepository) GetInstalledVersion(tracer trace.Tracer, packageName string) string {
 	args := repoMock.Called(tracer, packageName)
 	return args.String(0)
