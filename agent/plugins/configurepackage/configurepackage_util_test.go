@@ -40,6 +40,8 @@ func repoInstallMock(pluginInformation *ConfigurePackagePluginInput, installerMo
 	mockRepo.On("ValidatePackage", mock.Anything, mock.Anything, pluginInformation.Version).Return(nil)
 	mockRepo.On("SetInstallState", mock.Anything, mock.Anything, pluginInformation.Version, mock.Anything).Return(nil)
 	mockRepo.On("GetInstaller", mock.Anything, mock.Anything, mock.Anything, pluginInformation.Version).Return(installerMock)
+	mockRepo.On("LockPackage", mock.Anything, mock.Anything, mock.Anything).Return(nil)
+	mockRepo.On("UnlockPackage", mock.Anything, mock.Anything).Return()
 	return &mockRepo
 }
 
@@ -52,6 +54,8 @@ func repoUpgradeMock(pluginInformation *ConfigurePackagePluginInput, installerMo
 	mockRepo.On("SetInstallState", mock.Anything, mock.Anything, "0.0.2", mock.Anything).Return(nil)
 	mockRepo.On("GetInstaller", mock.Anything, mock.Anything, mock.Anything, "0.0.1").Return(installerMock)
 	mockRepo.On("GetInstaller", mock.Anything, mock.Anything, mock.Anything, "0.0.2").Return(installerMock)
+	mockRepo.On("LockPackage", mock.Anything, mock.Anything, mock.Anything).Return(nil)
+	mockRepo.On("UnlockPackage", mock.Anything, mock.Anything).Return()
 	return &mockRepo
 }
 
@@ -61,6 +65,8 @@ func repoUninstallMock(pluginInformation *ConfigurePackagePluginInput, installer
 	mockRepo.On("GetInstallState", mock.Anything, mock.Anything).Return(localpackages.Installed, "")
 	mockRepo.On("ValidatePackage", mock.Anything, mock.Anything, "0.0.1").Return(nil)
 	mockRepo.On("GetInstaller", mock.Anything, mock.Anything, mock.Anything, "0.0.1").Return(installerMock)
+	mockRepo.On("LockPackage", mock.Anything, mock.Anything, mock.Anything).Return(nil)
+	mockRepo.On("UnlockPackage", mock.Anything, mock.Anything).Return()
 	return &mockRepo
 }
 

@@ -68,6 +68,9 @@ type Repository interface {
 	GetInventoryData(log log.T) []model.ApplicationData
 	GetInstaller(tracer trace.Tracer, configuration contracts.Configuration, packageName string, version string) installer.Installer
 
+	LockPackage(tracer trace.Tracer, packageName string, action string) error
+	UnlockPackage(tracer trace.Tracer, packageName string)
+
 	ReadManifest(packageName string, packageVersion string) ([]byte, error)
 	WriteManifest(packageName string, packageVersion string, content []byte) error
 }
@@ -107,6 +110,14 @@ type localRepository struct {
 	filesysdep        FileSysDep
 	repoRoot          string
 	manifestCachePath string
+}
+
+func (repo *localRepository) LockPackage(tracer trace.Tracer, packageName string, action string) error {
+	return lockPackage(packageName, action)
+}
+
+func (repo *localRepository) UnlockPackage(tracer trace.Tracer, packageName string) {
+	unlockPackage(packageName)
 }
 
 // GetInstaller returns an Installer appropriate for the package and version
