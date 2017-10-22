@@ -25,6 +25,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
+	"github.com/aws/amazon-ssm-agent/agent/fileutil/filelock"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/envdetect"
@@ -80,7 +81,9 @@ func NewRepository() Repository {
 	return &localRepository{
 		filesysdep:        &fileSysDepImp{},
 		repoRoot:          appconfig.PackageRoot,
+		lockRoot:          appconfig.PackageLockRoot,
 		manifestCachePath: appconfig.ManifestCacheDirectory,
+		fileLocker:        filelock.NewFileLocker(),
 	}
 }
 
@@ -109,15 +112,23 @@ type PackageManifest struct {
 type localRepository struct {
 	filesysdep        FileSysDep
 	repoRoot          string
+	lockRoot          string
 	manifestCachePath string
+	fileLocker        filelock.FileLocker
 }
 
 func (repo *localRepository) LockPackage(tracer trace.Tracer, packageName string, action string) error {
-	return lockPackage(packageName, action)
+	err := fileutil.MakeDirs(repo.lockRoot)
+	if err != nil {
+		return err
+	}
+	lockPath := repo.getLockPath(packageName)
+	return lockPackage(repo.fileLocker, lockPath, packageName, action)
 }
 
 func (repo *localRepository) UnlockPackage(tracer trace.Tracer, packageName string) {
-	unlockPackage(packageName)
+	lockPath := repo.getLockPath(packageName)
+	unlockPackage(repo.fileLocker, lockPath, packageName)
 }
 
 // GetInstaller returns an Installer appropriate for the package and version
@@ -306,6 +317,11 @@ func createApplicationData(manifest *PackageManifest, packageState *PackageInsta
 // getPackageRoot is a helper function that returns the path to the folder containing all versions of a package
 func (repo *localRepository) getPackageRoot(packageName string) string {
 	return filepath.Join(repo.repoRoot, normalizeDirectory(packageName))
+}
+
+// getLockPath is a helper function that builds the path to the install state file
+func (repo *localRepository) getLockPath(packageName string) string {
+	return filepath.Join(repo.lockRoot, normalizeDirectory(packageName)+".lockfile")
 }
 
 // getInstallStatePath is a helper function that builds the path to the install state file

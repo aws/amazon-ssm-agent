@@ -84,6 +84,9 @@ var DefaultDataStorePath string
 // PackageRoot specifies the directory under which packages will be downloaded and installed
 var PackageRoot string
 
+// PackageLockRoot specifies the directory under which package lock files will reside
+var PackageLockRoot string
+
 // DaemonRoot specifies the directory where daemon registration information is stored
 var DaemonRoot string
 
@@ -166,6 +169,7 @@ func init() {
 	AppConfigPath = filepath.Join(DefaultProgramFolder, AppConfigFileName)
 	DefaultDataStorePath = filepath.Join(SSMDataPath, "InstanceData")
 	PackageRoot = filepath.Join(SSMDataPath, "Packages")
+	PackageLockRoot = filepath.Join(SSMDataPath, "Locks\\Packages")
 	DaemonRoot = filepath.Join(SSMDataPath, "Daemons")
 	LocalCommandRoot = filepath.Join(SSMDataPath, "LocalCommands")
 	LocalCommandRootSubmitted = filepath.Join(LocalCommandRoot, "Submitted")
