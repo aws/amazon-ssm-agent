@@ -15,60 +15,68 @@
 package localpackages
 
 import (
+	"os"
 	"testing"
 
+	"github.com/aws/amazon-ssm-agent/agent/fileutil/filelock"
 	"github.com/stretchr/testify/assert"
 )
 
+var fileLocker = filelock.NewFileLocker()
+
+// var fileLocker = &filelock.FileLockerNoop{}
+
 func TestPackageLock(t *testing.T) {
+	os.Remove("lockpath")
+
 	// lock Foo for Install
-	err := lockPackage("Foo", "Install")
+	err := lockPackage(fileLocker, "lockpath-Foo", "Foo", "Install")
 	assert.Nil(t, err)
-	defer unlockPackage("Foo")
+	defer unlockPackage(fileLocker, "lockpath-Foo", "Foo")
 
 	// shouldn't be able to lock Foo, even for a different action
-	err = lockPackage("Foo", "Uninstall")
+	err = lockPackage(fileLocker, "lockpath-Foo", "Foo", "Uninstall")
 	assert.NotNil(t, err)
 
 	// lock and unlock Bar (with defer)
-	err = lockAndUnlock("Bar")
+	err = lockAndUnlock("lockpath-Bar", "Bar")
 	assert.Nil(t, err)
 
 	// should be able to lock and then unlock Bar
-	err = lockPackage("Bar", "Uninstall")
+	err = lockPackage(fileLocker, "lockpath-Bar", "Bar", "Uninstall")
 	assert.Nil(t, err)
-	unlockPackage("Bar")
+	unlockPackage(fileLocker, "lockpath-Bar", "Bar")
 
 	// should be able to lock Bar
-	err = lockPackage("Bar", "Uninstall")
+	err = lockPackage(fileLocker, "lockpath-Bar", "Bar", "Uninstall")
 	assert.Nil(t, err)
-	defer unlockPackage("Bar")
+	defer unlockPackage(fileLocker, "lockpath-Bar", "Bar")
 
 	// lock in a goroutine with a 10ms sleep
 	errorChan := make(chan error)
-	go lockAndUnlockGo("Foobar", errorChan)
+	go lockAndUnlockGo("lockpath-Foobar", "Foobar", errorChan)
 	err = <-errorChan // wait until the goroutine has acquired the lock
 	assert.Nil(t, err)
-	err = lockPackage("Foobar", "Install")
+	err = lockPackage(fileLocker, "lockpath-Foobar", "Foobar", "Install")
 	errorChan <- err // signal the goroutine to exit
 	assert.NotNil(t, err)
 }
 
-func lockAndUnlockGo(packageName string, channel chan error) {
-	err := lockPackage(packageName, "Install")
+func lockAndUnlockGo(lockpath string, packageName string, channel chan error) {
+	err := lockPackage(fileLocker, lockpath, packageName, "Install")
 	channel <- err
 	_ = <-channel
 	if err == nil {
-		defer unlockPackage(packageName)
+		defer unlockPackage(fileLocker, lockpath, packageName)
 	}
 	return
 }
 
-func lockAndUnlock(packageName string) (err error) {
-	if err = lockPackage(packageName, "Install"); err != nil {
+func lockAndUnlock(lockpath string, packageName string) (err error) {
+	if err = lockPackage(fileLocker, lockpath, packageName, "Install"); err != nil {
 		return
 	}
-	defer unlockPackage(packageName)
+	defer unlockPackage(fileLocker, lockpath, packageName)
 	return
 }
 
