@@ -26,6 +26,9 @@ const (
 	// PackageRoot specifies the directory under which packages will be downloaded and installed
 	PackageRoot = "/var/lib/amazon/ssm/packages"
 
+	// PackageLockRoot specifies the directory under which package lock files will reside
+	PackageLockRoot = "/var/lib/amazon/ssm/locks/packages"
+
 	// PackagePlatform is the platform name to use when looking for packages
 	PackagePlatform = "linux"
 
