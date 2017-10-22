@@ -18,6 +18,12 @@ import (
 	"errors"
 	"fmt"
 	"sync"
+
+	"github.com/aws/amazon-ssm-agent/agent/fileutil/filelock"
+)
+
+const (
+	lockTimeoutInSeconds = 30 * 60 // 30 minutes
 )
 
 // Prevent multiple actions for the same package at the same time
@@ -25,24 +31,38 @@ var lockPackageAction = &sync.Mutex{}
 var mapPackageAction = make(map[string]string)
 
 // lockPackage adds the package name to the list of packages currently being acted on in a threadsafe way
-func lockPackage(packageName string, action string) error {
+func lockPackage(filelocker filelock.FileLocker, lockPath string, packageName string, action string) error {
 	lockPackageAction.Lock()
 	defer lockPackageAction.Unlock()
 
 	if val, ok := mapPackageAction[packageName]; ok {
 		return errors.New(fmt.Sprintf(`Package "%v" is already in the process of action "%v"`, packageName, val))
 	}
-	mapPackageAction[packageName] = action
 
+	ownerId := filelock.GetOwnerIdForProcess()
+	locked, err := filelocker.Lock(lockPath, ownerId, lockTimeoutInSeconds)
+	if err != nil {
+		return errors.New(fmt.Sprintf(`Error locking package "%v": "%v"`, packageName, err))
+	}
+
+	if !locked {
+		return errors.New(fmt.Sprintf(`Package "%v" is already in the process of other action`, packageName))
+	}
+
+	mapPackageAction[packageName] = action
 	return nil
 }
 
 // unlockPackage removes the package name from the list of packages currently being acted on in a threadsafe way
-func unlockPackage(packageName string) {
+func unlockPackage(filelocker filelock.FileLocker, lockPath string, packageName string) error {
 	lockPackageAction.Lock()
 	defer lockPackageAction.Unlock()
 
 	if _, ok := mapPackageAction[packageName]; ok {
 		delete(mapPackageAction, packageName)
 	}
+
+	ownerId := filelock.GetOwnerIdForProcess()
+	_, err := filelocker.Unlock(lockPath, ownerId)
+	return err
 }
