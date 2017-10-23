@@ -25,7 +25,6 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/platform"
-	"github.com/aws/amazon-ssm-agent/agent/plugins/pluginutil"
 	ssmsvc "github.com/aws/amazon-ssm-agent/agent/ssm"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 	"github.com/aws/amazon-ssm-agent/agent/times"
@@ -39,6 +38,7 @@ import (
 
 	"strings"
 
+	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler"
 	"github.com/go-yaml/yaml"
 )
 
@@ -57,21 +57,14 @@ const (
 )
 
 // NewPlugin returns a new instance of the plugin.
-func NewPlugin(pluginConfig pluginutil.PluginConfig) (*Plugin, error) {
+func NewPlugin() (*Plugin, error) {
 	var plugin Plugin
-	plugin.MaxStdoutLength = pluginConfig.MaxStdoutLength
-	plugin.MaxStderrLength = pluginConfig.MaxStderrLength
-	plugin.StdoutFileName = pluginConfig.StdoutFileName
-	plugin.StderrFileName = pluginConfig.StderrFileName
-	plugin.OutputTruncatedSuffix = pluginConfig.OutputTruncatedSuffix
-	plugin.ExecuteUploadOutputToS3Bucket = pluginutil.UploadOutputToS3BucketExecuter(plugin.UploadOutputToS3Bucket)
 
 	return &plugin, nil
 }
 
 // Plugin is the type for the aws:copyContent plugin.
 type Plugin struct {
-	pluginutil.DefaultPlugin
 	filesys filemanager.FileSystem
 	ssmSvc  ssmsvc.Service
 	execDoc ExecDocument
@@ -92,80 +85,33 @@ type ExecutePluginDepth struct {
 
 // Execute runs multiple sets of commands and returns their outputs.
 // res.Output will contain a slice of RunCommandPluginOutput.
-func (p *Plugin) Execute(context context.T, config contracts.Configuration, cancelFlag task.CancelFlag) (res contracts.PluginResult) {
+func (p *Plugin) Execute(context context.T, config contracts.Configuration, cancelFlag task.CancelFlag, output iohandler.IOHandler) {
 	p.filesys = filemanager.FileSystemImpl{}
 	p.ssmSvc = ssmsvc.NewService()
 	exec := basicexecuter.NewBasicExecuter(context)
 	p.execDoc = ExecDocumentImpl{
 		DocExecutor: exec,
 	}
-	return p.execute(context, config, cancelFlag)
+	p.execute(context, config, cancelFlag, output)
 }
 
-func (p *Plugin) execute(context context.T, config contracts.Configuration, cancelFlag task.CancelFlag) (res contracts.PluginResult) {
+func (p *Plugin) execute(context context.T, config contracts.Configuration, cancelFlag task.CancelFlag, output iohandler.IOHandler) {
 	log := context.Log()
 	log.Info("Plugin aws:runDocument started with configuration", config)
-
-	res.StartDateTime = time.Now()
-	defer func() { res.EndDateTime = time.Now() }()
-
-	var output contracts.PluginOutput
 
 	if cancelFlag.ShutDown() {
 		output.MarkAsShutdown()
 	} else if cancelFlag.Canceled() {
 		output.MarkAsCancelled()
 	} else if input, err := parseAndValidateInput(config.Properties); err != nil {
-		output.MarkAsFailed(log, err)
+		output.MarkAsFailed(err)
 	} else {
-		p.runDocument(context, input, config, &output)
+		p.runDocument(context, input, config, output)
 	}
-
-	if config.OrchestrationDirectory != "" {
-		useTemp := false
-		outFile := filepath.Join(config.OrchestrationDirectory, p.StdoutFileName)
-
-		if err := p.filesys.MakeDirs(config.OrchestrationDirectory); err != nil {
-			output.AppendError(log, "Failed to create orchestrationDir directory for log files")
-		} else {
-			if err := p.filesys.WriteFile(outFile, output.Stdout); err != nil {
-				log.Debugf("Error writing to %v", outFile)
-				output.AppendErrorf(log, "Error saving stdout: %v", err.Error())
-			}
-			errFile := filepath.Join(config.OrchestrationDirectory, p.StderrFileName)
-			if err := p.filesys.WriteFile(errFile, output.Stderr); err != nil {
-				log.Debugf("Error writing to %v", errFile)
-				output.AppendErrorf(log, "Error saving stderr: %v", err.Error())
-			}
-		}
-
-		uploadErrs := p.ExecuteUploadOutputToS3Bucket(log,
-			config.PluginID,
-			config.OrchestrationDirectory,
-			config.OutputS3BucketName,
-			config.OutputS3KeyPrefix,
-			useTemp,
-			config.OrchestrationDirectory,
-			output.Stdout,
-			output.Stderr)
-		for _, uploadErr := range uploadErrs {
-			output.AppendError(log, uploadErr)
-		}
-	}
-
-	res.Code = output.ExitCode
-	res.Status = output.Status
-	res.Output = output.String()
-	res.StandardOutput = pluginutil.StringPrefix(output.Stdout, p.MaxStdoutLength, p.OutputTruncatedSuffix)
-	res.StandardError = pluginutil.StringPrefix(output.Stderr, p.MaxStderrLength, p.OutputTruncatedSuffix)
-
-	log.Debug("Result value is - ", res)
-
-	return res
 }
 
 // runCopyContent figures out the type of location, downloads the resource, saves it on disk and returns information required for it
-func (p *Plugin) runDocument(context context.T, input *RunDocumentPluginInput, config contracts.Configuration, output *contracts.PluginOutput) {
+func (p *Plugin) runDocument(context context.T, input *RunDocumentPluginInput, config contracts.Configuration, output iohandler.IOHandler) {
 
 	log := context.Log()
 	//Run aws:runDocument plugin
@@ -179,12 +125,12 @@ func (p *Plugin) runDocument(context context.T, input *RunDocumentPluginInput, c
 	if config.Settings != nil {
 		if settings, ok := config.Settings.(*ExecutePluginDepth); !ok {
 			log.Error("Plugin setting is not of the right type")
-			output.MarkAsFailed(log, errors.New("There was an error obtaining the depth of execution"))
+			output.MarkAsFailed(errors.New("There was an error obtaining the depth of execution"))
 			return
 		} else {
 			execDepth = settings.executeCommandDepth + 1
 			if execDepth > executeCommandMaxDepth {
-				output.MarkAsFailed(log, fmt.Errorf("Maximum depth for document execution exceeded. "+
+				output.MarkAsFailed(fmt.Errorf("Maximum depth for document execution exceeded. "+
 					"Maximum depth permitted - %v and current depth - %v", executeCommandMaxDepth, execDepth))
 				return
 			}
@@ -194,7 +140,7 @@ func (p *Plugin) runDocument(context context.T, input *RunDocumentPluginInput, c
 
 	if input.DocumentType == SSMDocumentType {
 		if documentPath, err = p.downloadDocumentFromSSM(log, config, input); err != nil {
-			output.MarkAsFailed(log, err)
+			output.MarkAsFailed(err)
 		}
 	} else {
 		if filepath.IsAbs(input.DocumentPath) {
@@ -206,7 +152,7 @@ func (p *Plugin) runDocument(context context.T, input *RunDocumentPluginInput, c
 		}
 	}
 	if pluginsInfo, err = p.prepareDocumentForExecution(log, documentPath, config, input.DocumentParameters); err != nil {
-		output.MarkAsFailed(log, fmt.Errorf("There was an error while preparing documents - %v", err.Error()))
+		output.MarkAsFailed(fmt.Errorf("There was an error while preparing documents - %v", err.Error()))
 		return
 	}
 	// Sending execution depth in Configuration.Settings to the sub-documents
@@ -218,7 +164,7 @@ func (p *Plugin) runDocument(context context.T, input *RunDocumentPluginInput, c
 	var resultsChannel chan contracts.DocumentResult
 	var pluginOutput map[string]*contracts.PluginResult
 	if resultsChannel, err = p.execDoc.ExecuteDocument(context, pluginsInfo, config.BookKeepingFileName, times.ToIso8601UTC(time.Now())); err != nil {
-		output.MarkAsFailed(log, fmt.Errorf("There was an error while running documents - %v", err.Error()))
+		output.MarkAsFailed(fmt.Errorf("There was an error while running documents - %v", err.Error()))
 	}
 
 	for res := range resultsChannel {
@@ -228,21 +174,21 @@ func (p *Plugin) runDocument(context context.T, input *RunDocumentPluginInput, c
 		}
 	}
 	if pluginOutput == nil {
-		output.MarkAsFailed(log, errors.New("No output obtained from executing document"))
+		output.MarkAsFailed(errors.New("No output obtained from executing document"))
 	}
 	for _, pluginOut := range pluginOutput {
 		if pluginOut.StandardOutput != "" {
 			// separating the append so that the output is on a new line
-			output.AppendInfof(log, "%v", pluginOut.StandardOutput)
+			output.AppendInfof("%v", pluginOut.StandardOutput)
 		}
 		if pluginOut.StandardError != "" {
 			// separating the append so that the output is on a new line
-			output.AppendErrorf(log, "%v", pluginOut.StandardError)
+			output.AppendErrorf("%v", pluginOut.StandardError)
 		}
 		if pluginOut.Error != nil {
-			output.MarkAsFailed(log, pluginOut.Error)
+			output.MarkAsFailed(pluginOut.Error)
 		}
-		output.Status = contracts.MergeResultStatus(output.Status, pluginOut.Status)
+		output.SetStatus(contracts.MergeResultStatus(output.GetStatus(), pluginOut.Status))
 	}
 }
 
