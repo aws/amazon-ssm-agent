@@ -10,7 +10,7 @@
 // on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
 // either express or implied. See the License for the specific language governing
 // permissions and limitations under the License.
-//
+
 // Package rundaemon implements rundaemon plugin and its configuration
 package rundaemon
 
@@ -31,6 +31,7 @@ type ConfigureDaemonPluginInput struct {
 	Command         string `json:"command"`
 }
 
+// ValidateDaemonInput validates the input given to configure daemon
 func ValidateDaemonInput(input ConfigureDaemonPluginInput) error {
 	if input.Name == "" {
 		return errors.New("daemon name is missing")

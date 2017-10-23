@@ -17,8 +17,15 @@ package manager
 import (
 	"sync"
 
+	"path/filepath"
+
+	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
+	"github.com/aws/amazon-ssm-agent/agent/contracts"
+	"github.com/aws/amazon-ssm-agent/agent/fileutil"
+	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler"
 	"github.com/aws/amazon-ssm-agent/agent/longrunning/plugin"
+	"github.com/aws/amazon-ssm-agent/agent/platform"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 )
 
@@ -41,8 +48,23 @@ func (m *Manager) ensurePluginsAreRunning() {
 				log.Infof("Starting %s since it wasn't running before")
 				//todo: we arent using task pools anymore -> change the following implementation
 				m.startPlugin.Submit(m.context.Log(), n, func(cancelFlag task.CancelFlag) {
-					//todo: setup orchestrationDir accordingly - 3rd parameter
-					p.Handler.Start(m.context, p.Info.Configuration, "", cancelFlag)
+					instanceID, _ := platform.InstanceID()
+					orchestrationRootDir := filepath.Join(
+						appconfig.DefaultDataStorePath,
+						instanceID,
+						appconfig.DefaultDocumentRootDirName,
+						m.context.AppConfig().Agent.OrchestrationRootDir)
+					orchestrationDir := fileutil.BuildPath(orchestrationRootDir)
+
+					ioConfig := contracts.IOConfiguration{
+						OrchestrationDirectory: orchestrationDir,
+						OutputS3BucketName:     "",
+						OutputS3KeyPrefix:      "",
+					}
+					out := iohandler.NewDefaultIOHandler(log, ioConfig)
+					out.Init(log, p.Info.Name)
+					p.Handler.Start(m.context, p.Info.Configuration, "", cancelFlag, out)
+					out.Close(log)
 				})
 			}
 		}

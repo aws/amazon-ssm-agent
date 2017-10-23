@@ -29,6 +29,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/executers"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
+	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	logger "github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/platform"
@@ -38,7 +39,7 @@ import (
 
 // Plugin is the type for the Cloudwatch plugin.
 type Plugin struct {
-	pluginutil.DefaultPlugin
+	CommandExecuter                    executers.T
 	Process                            os.Process
 	WorkingDir                         string
 	ExeLocation                        string
@@ -78,17 +79,11 @@ var exec = executers.ShellCommandExecuter{}
 //todo: honor cancel flag for Stop
 //todo: Start,Stop -> should return plugin.result or error as well -> so that caller can report the results/errors accordingly.
 // NewPlugin returns a new instance of Cloudwatch plugin
-func NewPlugin(pluginConfig pluginutil.PluginConfig) (*Plugin, error) {
+func NewPlugin(pluginConfig iohandler.PluginConfig) (*Plugin, error) {
 
 	//Note: This is a wrapper on top of cloudwatch.exe - basically this executes the exe in a separate process.
 
 	var plugin Plugin
-	plugin.MaxStdoutLength = pluginConfig.MaxStdoutLength
-	plugin.MaxStderrLength = pluginConfig.MaxStderrLength
-	plugin.StdoutFileName = pluginConfig.StdoutFileName
-	plugin.StderrFileName = pluginConfig.StderrFileName
-	plugin.OutputTruncatedSuffix = pluginConfig.OutputTruncatedSuffix
-	plugin.ExecuteUploadOutputToS3Bucket = pluginutil.UploadOutputToS3BucketExecuter(plugin.UploadOutputToS3Bucket)
 	plugin.WorkingDir = fileutil.BuildPath(appconfig.DefaultPluginPath, CloudWatchFolderName)
 	plugin.ExeLocation = filepath.Join(plugin.WorkingDir, CloudWatchExeName)
 
@@ -122,7 +117,7 @@ func (p *Plugin) IsRunning(context context.T) bool {
 }
 
 // Start starts the executable file and returns encountered errors
-func (p *Plugin) Start(context context.T, configuration string, orchestrationDir string, cancelFlag task.CancelFlag) (err error) {
+func (p *Plugin) Start(context context.T, configuration string, orchestrationDir string, cancelFlag task.CancelFlag, out iohandler.IOHandler) (err error) {
 	log := context.Log()
 	logFormatConfig := logger.PrintCWConfig(configuration, log)
 	log.Infof("CloudWatch Configuration to be applied - %s ", logFormatConfig)
@@ -212,19 +207,16 @@ func (p *Plugin) Start(context context.T, configuration string, orchestrationDir
 	log.Debugf("arguments passed: %s", commandArguments)
 
 	//start the new process
-	stdoutFilePath := filepath.Join(orchestrationDir, p.StdoutFileName)
-	stderrFilePath := filepath.Join(orchestrationDir, p.StderrFileName)
+	stdoutFilePath := filepath.Join(orchestrationDir, "stdout")
+	stderrFilePath := filepath.Join(orchestrationDir, "stderr")
 
 	//remove previous output log files if they are present
 	fileutil.DeleteFile(stdoutFilePath)
 	fileutil.DeleteFile(stderrFilePath)
 
-	process, exitCode, errs := p.CommandExecuter.StartExe(log, p.WorkingDir, stdoutFilePath, stderrFilePath, cancelFlag, commandName, commandArguments)
-	if len(errs) > 0 || exitCode != 0 {
-		for _, err := range errs {
-			log.Error(err)
-		}
-		return fmt.Errorf("Errors occurred while starting Cloudwatch exit code %v, error count %v", exitCode, len(errs))
+	process, exitCode, err := p.CommandExecuter.StartExe(log, p.WorkingDir, out.GetStdoutWriter(), out.GetStderrWriter(), cancelFlag, commandName, commandArguments)
+	if err != nil || exitCode != 0 {
+		return fmt.Errorf("Errors occurred while starting Cloudwatch exit code %v, error %v", exitCode, err)
 	}
 
 	// Cloudwatch process details

@@ -19,6 +19,7 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler"
 	"github.com/aws/amazon-ssm-agent/agent/longrunning/plugin"
 	"github.com/aws/amazon-ssm-agent/agent/longrunning/plugin/cloudwatch"
 	"github.com/aws/amazon-ssm-agent/agent/task"
@@ -70,7 +71,7 @@ func (m *Manager) StopPlugin(name string, cancelFlag task.CancelFlag) (err error
 }
 
 //StartPlugin starts the given plugin with the given configuration
-func (m *Manager) StartPlugin(name, configuration string, orchestrationDir string, cancelFlag task.CancelFlag) (err error) {
+func (m *Manager) StartPlugin(name, configuration string, orchestrationDir string, cancelFlag task.CancelFlag, out iohandler.IOHandler) (err error) {
 	lock.Lock()
 	defer lock.Unlock()
 
@@ -87,7 +88,7 @@ func (m *Manager) StartPlugin(name, configuration string, orchestrationDir strin
 
 	//set the config path of the long running plugin
 	p.Info.Configuration = configuration
-	if err = p.Handler.Start(m.context, p.Info.Configuration, orchestrationDir, cancelFlag); err != nil {
+	if err = p.Handler.Start(m.context, p.Info.Configuration, orchestrationDir, cancelFlag, out); err != nil {
 		log.Errorf("Failed to start long running plugin - %s because of %s", name, err)
 		return
 	}
