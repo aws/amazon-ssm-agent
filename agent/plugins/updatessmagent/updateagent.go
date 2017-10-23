@@ -26,10 +26,10 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil/artifact"
+	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/platform"
-	"github.com/aws/amazon-ssm-agent/agent/plugins/pluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/s3util"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 	"github.com/aws/amazon-ssm-agent/agent/updateutil"
@@ -38,8 +38,6 @@ import (
 
 // Plugin is the type for the RunCommand plugin.
 type Plugin struct {
-	pluginutil.DefaultPlugin
-
 	// Manifest location
 	ManifestLocation string
 }
@@ -56,7 +54,6 @@ type UpdatePluginInput struct {
 
 // UpdatePluginConfig is used for initializing update agent plugin with default values
 type UpdatePluginConfig struct {
-	pluginutil.PluginConfig
 	ManifestLocation string
 }
 
@@ -78,20 +75,20 @@ type pluginHelper interface {
 		util updateutil.T,
 		pluginInput *UpdatePluginInput,
 		context *updateutil.InstanceContext,
-		out *contracts.PluginOutput) (manifest *Manifest, err error)
+		out iohandler.IOHandler) (manifest *Manifest, err error)
 
 	downloadUpdater(log log.T,
 		util updateutil.T,
 		updaterPackageName string,
 		manifest *Manifest,
-		out *contracts.PluginOutput,
+		out iohandler.IOHandler,
 		context *updateutil.InstanceContext) (version string, err error)
 
 	validateUpdate(log log.T,
 		pluginInput *UpdatePluginInput,
 		context *updateutil.InstanceContext,
 		manifest *Manifest,
-		out *contracts.PluginOutput) (noNeedToUpdate bool, err error)
+		out iohandler.IOHandler) (noNeedToUpdate bool, err error)
 }
 
 // Assign method to global variables to allow unittest to override
@@ -104,11 +101,6 @@ var updateAgent = runUpdateAgent
 func NewPlugin(updatePluginConfig UpdatePluginConfig) (*Plugin, error) {
 	var plugin Plugin
 	plugin.ManifestLocation = updatePluginConfig.ManifestLocation
-	plugin.MaxStdoutLength = updatePluginConfig.MaxStdoutLength
-	plugin.MaxStderrLength = updatePluginConfig.MaxStderrLength
-	plugin.StdoutFileName = updatePluginConfig.StdoutFileName
-	plugin.StderrFileName = updatePluginConfig.StderrFileName
-	plugin.OutputTruncatedSuffix = updatePluginConfig.OutputTruncatedSuffix
 	return &plugin, nil
 }
 
@@ -121,21 +113,21 @@ func runUpdateAgent(
 	util updateutil.T,
 	rawPluginInput interface{},
 	cancelFlag task.CancelFlag,
-	outputS3BucketName string,
-	outputS3KeyPrefix string,
-	startTime time.Time) (out contracts.PluginOutput) {
+	output iohandler.IOHandler,
+	startTime time.Time) {
 	var pluginInput UpdatePluginInput
 	var err error
 	var context *updateutil.InstanceContext
 
+	pluginConfig := iohandler.DefaultOutputConfig()
+
 	if err = jsonutil.Remarshal(rawPluginInput, &pluginInput); err != nil {
-		out.MarkAsFailed(log,
-			fmt.Errorf("invalid format in plugin properties %v;\nerror %v", rawPluginInput, err))
+		output.MarkAsFailed(fmt.Errorf("invalid format in plugin properties %v;\nerror %v", rawPluginInput, err))
 		return
 	}
 
 	if context, err = util.CreateInstanceContext(log); err != nil {
-		out.MarkAsFailed(log, err)
+		output.MarkAsFailed(err)
 		return
 	}
 
@@ -152,23 +144,23 @@ func runUpdateAgent(
 	if len(targetVersion) == 0 {
 		targetVersion = "latest"
 	}
-	out.AppendInfof(log, "Updating %v from %v to %v",
+	output.AppendInfof("Updating %v from %v to %v",
 		pluginInput.AgentName,
 		version.Version,
 		targetVersion)
 
 	//Download manifest file
-	manifest, downloadErr := manager.downloadManifest(log, util, &pluginInput, context, &out)
+	manifest, downloadErr := manager.downloadManifest(log, util, &pluginInput, context, output)
 	if downloadErr != nil {
-		out.MarkAsFailed(log, downloadErr)
+		output.MarkAsFailed(downloadErr)
 		return
 	}
 
 	//Validate update details
 	noNeedToUpdate := false
-	if noNeedToUpdate, err = manager.validateUpdate(log, &pluginInput, context, manifest, &out); noNeedToUpdate {
+	if noNeedToUpdate, err = manager.validateUpdate(log, &pluginInput, context, manifest, output); noNeedToUpdate {
 		if err != nil {
-			out.MarkAsFailed(log, err)
+			output.MarkAsFailed(err)
 		}
 		return
 	}
@@ -176,8 +168,8 @@ func runUpdateAgent(
 	//Download updater and retrieve the version number
 	updaterVersion := ""
 	if updaterVersion, err = manager.downloadUpdater(
-		log, util, pluginInput.UpdaterName, manifest, &out, context); err != nil {
-		out.MarkAsFailed(log, err)
+		log, util, pluginInput.UpdaterName, manifest, output, context); err != nil {
+		output.MarkAsFailed(err)
 		return
 	}
 
@@ -189,22 +181,22 @@ func runUpdateAgent(
 		context,
 		updateutil.UpdaterFilePath(appconfig.UpdaterArtifactsRoot, pluginInput.UpdaterName, updaterVersion),
 		config.MessageId,
-		p.StdoutFileName,
-		p.StderrFileName,
-		fileutil.BuildS3Path(outputS3KeyPrefix, config.PluginID),
-		outputS3BucketName); err != nil {
-		out.MarkAsFailed(log, err)
+		pluginConfig.StdoutFileName,
+		pluginConfig.StderrFileName,
+		fileutil.BuildS3Path(output.GetIOConfig().OutputS3KeyPrefix, config.PluginID),
+		output.GetIOConfig().OutputS3BucketName); err != nil {
+		output.MarkAsFailed(err)
 		return
 	}
 	log.Debugf("Update command %v", cmd)
 
 	//Save update plugin result to local file, updater will read it during agent update
 	updatePluginResult := &updateutil.UpdatePluginResult{
-		StandOut:      out.Stdout,
+		StandOut:      output.GetStdout(),
 		StartDateTime: startTime,
 	}
 	if err = util.SaveUpdatePluginResult(log, appconfig.UpdaterArtifactsRoot, updatePluginResult); err != nil {
-		out.MarkAsFailed(log, err)
+		output.MarkAsFailed(err)
 		return
 	}
 
@@ -212,7 +204,7 @@ func runUpdateAgent(
 	// If loading disk space fails, continue to update (agent update is backed by rollback handler)
 	log.Infof("Checking available disk space ...")
 	if isDiskSpaceSufficient, err := util.IsDiskSpaceSufficientForUpdate(log); err == nil && !isDiskSpaceSufficient {
-		out.MarkAsFailed(log, errors.New("Insufficient available disk space"))
+		output.MarkAsFailed(errors.New("Insufficient available disk space"))
 		return
 	}
 
@@ -227,14 +219,14 @@ func runUpdateAgent(
 		cmd,
 		workDir,
 		appconfig.UpdaterArtifactsRoot,
-		p.StdoutFileName,
-		p.StderrFileName,
+		pluginConfig.StdoutFileName,
+		pluginConfig.StderrFileName,
 		true); err != nil {
-		out.MarkAsFailed(log, err)
+		output.MarkAsFailed(err)
 		return
 	}
 
-	out.MarkAsInProgress()
+	output.MarkAsInProgress()
 	return
 }
 
@@ -288,7 +280,7 @@ func (m *updateManager) downloadManifest(log log.T,
 	util updateutil.T,
 	pluginInput *UpdatePluginInput,
 	context *updateutil.InstanceContext,
-	out *contracts.PluginOutput) (manifest *Manifest, err error) {
+	out iohandler.IOHandler) (manifest *Manifest, err error) {
 	//Download source
 	var updateDownload = ""
 	updateDownload, err = util.CreateUpdateDownloadFolder()
@@ -307,7 +299,7 @@ func (m *updateManager) downloadManifest(log log.T,
 		downloadOutput.LocalFilePath == "" {
 		return nil, downloadErr
 	}
-	out.AppendInfof(log, "Successfully downloaded %v", downloadInput.SourceURL)
+	out.AppendInfof("Successfully downloaded %v", downloadInput.SourceURL)
 	return ParseManifest(log, downloadOutput.LocalFilePath, context, pluginInput.AgentName)
 }
 
@@ -316,7 +308,7 @@ func (m *updateManager) downloadUpdater(log log.T,
 	util updateutil.T,
 	updaterPackageName string,
 	manifest *Manifest,
-	out *contracts.PluginOutput,
+	out iohandler.IOHandler,
 	context *updateutil.InstanceContext) (version string, err error) {
 	var hash = ""
 	var source = ""
@@ -350,7 +342,7 @@ func (m *updateManager) downloadUpdater(log log.T,
 		}
 		return version, errors.New(errMessage)
 	}
-	out.AppendInfof(log, "Successfully downloaded %v", downloadInput.SourceURL)
+	out.AppendInfof("Successfully downloaded %v", downloadInput.SourceURL)
 	if uncompressErr := fileUncompress(
 		downloadOutput.LocalFilePath,
 		updateutil.UpdateArtifactFolder(appconfig.UpdaterArtifactsRoot, updaterPackageName, version)); uncompressErr != nil {
@@ -367,7 +359,7 @@ func (m *updateManager) validateUpdate(log log.T,
 	pluginInput *UpdatePluginInput,
 	context *updateutil.InstanceContext,
 	manifest *Manifest,
-	out *contracts.PluginOutput) (noNeedToUpdate bool, err error) {
+	out iohandler.IOHandler) (noNeedToUpdate bool, err error) {
 	currentVersion := version.Version
 	var allowDowngrade = false
 	if len(pluginInput.TargetVersion) == 0 {
@@ -386,7 +378,7 @@ func (m *updateManager) validateUpdate(log log.T,
 	}
 
 	if res == 0 {
-		out.AppendInfof(log, "%v %v has already been installed, update skipped",
+		out.AppendInfof("%v %v has already been installed, update skipped",
 			pluginInput.AgentName,
 			currentVersion)
 		out.MarkAsSucceeded()
@@ -418,52 +410,27 @@ func (m *updateManager) validateUpdate(log log.T,
 	return false, nil
 }
 
-// Execute runs multiple sets of commands and returns their outputs.
-// res.Output will contain a slice of RunCommandPluginOutput.
-func (p *Plugin) Execute(context context.T, config contracts.Configuration, cancelFlag task.CancelFlag) (res contracts.PluginResult) {
+func (p *Plugin) Execute(context context.T, config contracts.Configuration, cancelFlag task.CancelFlag, output iohandler.IOHandler) {
 	log := context.Log()
 	log.Info("RunCommand started with configuration ", config)
 	util := new(updateutil.Utility)
 	manager := new(updateManager)
 
-	res.StartDateTime = time.Now()
-	defer func() { res.EndDateTime = time.Now() }()
-
-	//loading Properties as list since aws:updateSsmAgent uses properties as list
-	var properties []interface{}
-	if properties = pluginutil.LoadParametersAsList(log, config.Properties, &res); res.Code != 0 {
-		return res
-	}
-
-	out := contracts.PluginOutput{}
-	for _, prop := range properties {
-		if cancelFlag.ShutDown() {
-			out.MarkAsShutdown()
-			break
-		}
-
-		if cancelFlag.Canceled() {
-			out.MarkAsCancelled()
-			break
-		}
-
-		out.Merge(log, updateAgent(p,
+	if cancelFlag.ShutDown() {
+		output.MarkAsShutdown()
+	} else if cancelFlag.Canceled() {
+		output.MarkAsCancelled()
+	} else {
+		updateAgent(p,
 			config,
 			log,
 			manager,
 			util,
-			prop,
+			config.Properties,
 			cancelFlag,
-			config.OutputS3BucketName,
-			config.OutputS3KeyPrefix,
-			res.StartDateTime))
+			output,
+			time.Now())
 	}
-	res.Code = out.ExitCode
-	res.Status = out.Status
-	res.Output = out.String()
-	res.StandardOutput = pluginutil.StringPrefix(out.Stdout, p.MaxStdoutLength, p.OutputTruncatedSuffix)
-	res.StandardError = pluginutil.StringPrefix(out.Stderr, p.MaxStderrLength, p.OutputTruncatedSuffix)
-
 	return
 }
 
@@ -488,7 +455,6 @@ func GetUpdatePluginConfig(context context.T) UpdatePluginConfig {
 	}
 
 	return UpdatePluginConfig{
-		PluginConfig:     pluginutil.DefaultPluginConfig(),
 		ManifestLocation: manifestUrl,
 	}
 }
