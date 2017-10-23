@@ -29,6 +29,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	filemock "github.com/aws/amazon-ssm-agent/agent/fileutil/filemanager/mock"
+	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler/mock"
 	executermocks "github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/mock"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	ssmsvc "github.com/aws/amazon-ssm-agent/agent/ssm"
@@ -248,14 +249,8 @@ func TestPlugin_RunDocumentMaxDepthExceeded(t *testing.T) {
 	// Test to check if the max depth code works in the fail case
 	execMock := NewExecMock()
 	fileMock := filemock.FileSystemMock{}
-	fileMock.On("MakeDirs", "orch").Return(nil)
-	fileMock.On("WriteFile", "orch", "").Return(nil)
-	fileMock.On("WriteFile", "orch", "Maximum depth for document execution exceeded. Maximum depth permitted - 3 and current depth - 5").Return(nil)
-
+	mockIOHandler := new(iohandlermocks.MockIOHandler)
 	mockplugin := MockDefaultPlugin{}
-	mockplugin.On("UploadOutputToS3Bucket", contextMock.Log(), mock.Anything, mock.Anything,
-		mock.Anything, mock.Anything, false, mock.Anything,
-		mock.Anything, mock.Anything).Return([]string{})
 
 	conf := createStubConfiguration("orch", "bucket", "prefix", "1234-1234-1234", "directory")
 
@@ -267,27 +262,25 @@ func TestPlugin_RunDocumentMaxDepthExceeded(t *testing.T) {
 	executionDepth = createStubExecutionDepth(4)
 	conf.Settings = executionDepth
 
+	mockIOHandler.On("MarkAsFailed", fmt.Errorf("Maximum depth for document execution exceeded. Maximum depth permitted - 3 and current depth - 5")).Return()
+
 	p := Plugin{
 		filesys: fileMock,
 		execDoc: execMock,
 	}
-
-	p.ExecuteUploadOutputToS3Bucket = mockplugin.UploadOutputToS3Bucket
-
-	result := p.execute(contextMock, conf, createMockCancelFlag())
+	p.execute(contextMock, conf, createMockCancelFlag(), mockIOHandler)
 
 	execMock.AssertExpectations(t)
 	mockplugin.AssertExpectations(t)
 	fileMock.AssertExpectations(t)
-
-	assert.Equal(t, 1, result.Code)
-	assert.Contains(t, result.Output, "Maximum depth for document execution exceeded. Maximum depth permitted - 3 and current depth - 5")
+	mockIOHandler.AssertExpectations(t)
 }
 
 func TestPlugin_RunDocument(t *testing.T) {
 
 	execMock := NewExecMock()
 	fileMock := filemock.FileSystemMock{}
+	mockIOHandler := new(iohandlermocks.MockIOHandler)
 	mockplugin := MockDefaultPlugin{}
 
 	conf := createStubConfiguration("orch", "bucket", "prefix", "1234-1234-1234", "directory")
@@ -326,32 +319,27 @@ func TestPlugin_RunDocument(t *testing.T) {
 	fileMock.On("ReadFile", "/var/tmp/docLocation/docname.json").Return(content, nil)
 	execMock.On("ParseDocument", contextMock.Log(), []byte(content), conf.OrchestrationDirectory, conf.OutputS3BucketName, conf.OutputS3KeyPrefix, conf.MessageId, conf.PluginID, conf.DefaultWorkingDirectory, parameters).Return(plugins, nil)
 	execMock.On("ExecuteDocument", contextMock, plugins, conf.BookKeepingFileName, mock.Anything).Return(resChan, nil)
-
-	fileMock.On("MakeDirs", "orch").Return(nil)
-	fileMock.On("WriteFile", "orch", "").Return(nil).Twice()
-
-	mockplugin.On("UploadOutputToS3Bucket", contextMock.Log(), mock.Anything, mock.Anything,
-		mock.Anything, mock.Anything, false, mock.Anything,
-		mock.Anything, mock.Anything).Return([]string{})
+	mockIOHandler.On("GetStatus").Return(contracts.ResultStatusSuccess)
+	mockIOHandler.On("SetStatus", contracts.ResultStatusSuccess).Return()
 
 	p := Plugin{
 		filesys: fileMock,
 		execDoc: execMock,
 	}
-	p.ExecuteUploadOutputToS3Bucket = mockplugin.UploadOutputToS3Bucket
-	result := p.execute(contextMock, conf, createMockCancelFlag())
+
+	p.execute(contextMock, conf, createMockCancelFlag(), mockIOHandler)
 
 	execMock.AssertExpectations(t)
 	mockplugin.AssertExpectations(t)
 	fileMock.AssertExpectations(t)
-
-	assert.Equal(t, 0, result.Code)
+	mockIOHandler.AssertExpectations(t)
 }
 
 func TestPlugin_RunDocumentFromSSMDocument(t *testing.T) {
 
 	execMock := NewExecMock()
 	fileMock := filemock.FileSystemMock{}
+	mockIOHandler := new(iohandlermocks.MockIOHandler)
 	ssmMock := ssmsvc.NewMockDefault()
 
 	content := "content"
@@ -364,12 +352,21 @@ func TestPlugin_RunDocumentFromSSMDocument(t *testing.T) {
 	plugins := []contracts.PluginState{plugin}
 
 	parameters := make(map[string]interface{})
-	output := contracts.PluginOutput{}
 	resChan := make(chan contracts.DocumentResult)
+
+	pluginRes := contracts.PluginResult{
+		PluginID:   "aws:runDocument",
+		PluginName: "aws:runDocument",
+		Status:     contracts.ResultStatusSuccess,
+		Code:       0,
+	}
+	pluginResults := make(map[string]*contracts.PluginResult)
+	pluginResults[pluginRes.PluginID] = &pluginRes
 	go func() {
 		res := contracts.DocumentResult{
-			LastPlugin: "",
-			Status:     contracts.ResultStatusSuccess,
+			LastPlugin:    "",
+			Status:        contracts.ResultStatusSuccess,
+			PluginResults: pluginResults,
 		}
 
 		resChan <- res
@@ -382,6 +379,8 @@ func TestPlugin_RunDocumentFromSSMDocument(t *testing.T) {
 	fileMock.On("ReadFile", "orch/downloads/RunShellScript.json").Return(content, nil)
 	execMock.On("ParseDocument", contextMock.Log(), []byte(content), conf.OrchestrationDirectory, conf.OutputS3BucketName, conf.OutputS3KeyPrefix, conf.MessageId, conf.PluginID, conf.DefaultWorkingDirectory, parameters).Return(plugins, nil)
 	execMock.On("ExecuteDocument", contextMock, plugins, conf.BookKeepingFileName, mock.Anything).Return(resChan, nil)
+	mockIOHandler.On("GetStatus").Return(contracts.ResultStatusSuccess)
+	mockIOHandler.On("SetStatus", contracts.ResultStatusSuccess).Return()
 
 	var input RunDocumentPluginInput
 	input.DocumentType = "SSMDocument"
@@ -394,10 +393,11 @@ func TestPlugin_RunDocumentFromSSMDocument(t *testing.T) {
 		execDoc: execMock,
 	}
 
-	p.runDocument(contextMock, &input, conf, &output)
+	p.runDocument(contextMock, &input, conf, mockIOHandler)
 
 	execMock.AssertExpectations(t)
 	fileMock.AssertExpectations(t)
+	mockIOHandler.AssertExpectations(t)
 	ssmMock.AssertExpectations(t)
 }
 
@@ -405,29 +405,40 @@ func TestPlugin_RunDocumentFromAbsLocalPath(t *testing.T) {
 
 	execMock := NewExecMock()
 	fileMock := filemock.FileSystemMock{}
+	mockIOHandler := new(iohandlermocks.MockIOHandler)
 
 	content := "content"
 	conf := createStubConfiguration("orch", "bucket", "prefix", "1234-1234-1234", "directory")
 
 	plugin := contracts.PluginState{}
 	plugins := []contracts.PluginState{plugin}
+	pluginRes := contracts.PluginResult{
+		PluginID:   "aws:runDocument",
+		PluginName: "aws:runDocument",
+		Status:     contracts.ResultStatusSuccess,
+		Code:       0,
+	}
+	pluginResults := make(map[string]*contracts.PluginResult)
+	pluginResults[pluginRes.PluginID] = &pluginRes
 
 	resChan := make(chan contracts.DocumentResult)
 	go func() {
 		res := contracts.DocumentResult{
-			LastPlugin: "",
-			Status:     contracts.ResultStatusSuccess,
+			LastPlugin:    "",
+			Status:        contracts.ResultStatusSuccess,
+			PluginResults: pluginResults,
 		}
 
 		resChan <- res
 		close(resChan)
 	}()
 	parameters := make(map[string]interface{})
-	output := contracts.PluginOutput{}
 
 	fileMock.On("ReadFile", "/var/tmp/document/docName.json").Return(content, nil)
 	execMock.On("ParseDocument", contextMock.Log(), []byte(content), conf.OrchestrationDirectory, conf.OutputS3BucketName, conf.OutputS3KeyPrefix, conf.MessageId, conf.PluginID, conf.DefaultWorkingDirectory, parameters).Return(plugins, nil)
 	execMock.On("ExecuteDocument", contextMock, plugins, conf.BookKeepingFileName, mock.Anything).Return(resChan, nil)
+	mockIOHandler.On("GetStatus").Return(contracts.ResultStatusSuccess)
+	mockIOHandler.On("SetStatus", contracts.ResultStatusSuccess).Return()
 
 	var input RunDocumentPluginInput
 	input.DocumentType = "LocalPath"
@@ -439,10 +450,11 @@ func TestPlugin_RunDocumentFromAbsLocalPath(t *testing.T) {
 		execDoc: execMock,
 	}
 
-	p.runDocument(contextMock, &input, conf, &output)
+	p.runDocument(contextMock, &input, conf, mockIOHandler)
 
 	execMock.AssertExpectations(t)
 	fileMock.AssertExpectations(t)
+	mockIOHandler.AssertExpectations(t)
 }
 
 func TestName(t *testing.T) {
@@ -596,12 +608,6 @@ type MockDefaultPlugin struct {
 	mock.Mock
 }
 
-// UploadOutputToS3Bucket is a mocked method that just returns what mock tells it to.
-func (m *MockDefaultPlugin) UploadOutputToS3Bucket(log log.T, pluginID string, orchestrationDir string, outputS3BucketName string, outputS3KeyPrefix string, useTempDirectory bool, tempDir string, Stdout string, Stderr string) []string {
-	args := m.Called(log, pluginID, orchestrationDir, outputS3BucketName, outputS3KeyPrefix, useTempDirectory, tempDir, mock.Anything, Stderr)
-	log.Infof("args are %v", args)
-	return args.Get(0).([]string)
-}
 func createMockCancelFlag() task.CancelFlag {
 	mockCancelFlag := new(task.MockCancelFlag)
 	// Setup mocks
