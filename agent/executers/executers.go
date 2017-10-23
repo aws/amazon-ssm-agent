@@ -34,14 +34,16 @@ import (
 
 const (
 	// envVar* constants are names of environment variables set for processes executed by ssm agent and should start with AWS_SSM_
-	envVarInstanceId = "AWS_SSM_INSTANCE_ID"
+	envVarInstanceID = "AWS_SSM_INSTANCE_ID"
 	envVarRegionName = "AWS_SSM_REGION_NAME"
 )
 
 // T is the interface type for ShellCommandExecuter.
 type T interface {
+	//TODO: Remove Execute and rename NewExecute to Execute.
 	Execute(log.T, string, string, string, task.CancelFlag, int, string, []string) (io.Reader, io.Reader, int, []error)
-	StartExe(log.T, string, string, string, task.CancelFlag, string, []string) (*os.Process, int, []error)
+	NewExecute(log.T, string, io.Writer, io.Writer, task.CancelFlag, int, string, []string) (int, error)
+	StartExe(log.T, string, io.Writer, io.Writer, task.CancelFlag, string, []string) (*os.Process, int, error)
 }
 
 // ShellCommandExecuter is specially added for testing purposes
@@ -156,6 +158,21 @@ func (ShellCommandExecuter) Execute(
 	return
 }
 
+// NewExecute executes a list of shell commands in the given working directory and provides the stdout and stderr writers.
+func (ShellCommandExecuter) NewExecute(
+	log log.T,
+	workingDir string,
+	stdoutWriter io.Writer,
+	stderrWriter io.Writer,
+	cancelFlag task.CancelFlag,
+	executionTimeout int,
+	commandName string,
+	commandArguments []string,
+) (exitCode int, err error) {
+	exitCode, err = ExecuteCommand(log, cancelFlag, workingDir, stdoutWriter, stderrWriter, executionTimeout, commandName, commandArguments)
+	return
+}
+
 // StartExe starts a list of shell commands in the given working directory.
 // Returns process started, an exit code (0 if successfully launch, 1 if error launching process), and a set of errors.
 // The errors need not be fatal - the output streams may still have data
@@ -165,47 +182,13 @@ func (ShellCommandExecuter) Execute(
 func (ShellCommandExecuter) StartExe(
 	log log.T,
 	workingDir string,
-	stdoutFilePath string,
-	stderrFilePath string,
+	stdoutWriter io.Writer,
+	stderrWriter io.Writer,
 	cancelFlag task.CancelFlag,
 	commandName string,
 	commandArguments []string,
-) (process *os.Process, exitCode int, errs []error) {
-
-	var stdoutWriter, stderrWriter *os.File
-	if stdoutFilePath != "" {
-		// create stdout file
-		// fix the permissions appropriately
-		// Allow append so that if arrays of run command write to the same file, we keep appending to the file.
-		stdoutWriter, err := os.OpenFile(stdoutFilePath, appconfig.FileFlagsCreateOrAppend, appconfig.ReadWriteAccess)
-		if err != nil {
-			return
-		}
-		defer stdoutWriter.Close() // Closing our instance of the file handle - the child process has its own copy
-	}
-
-	if stderrFilePath != "" {
-		// create stderr file
-		// fix the permissions appropriately
-		// Allow append so that if arrays of run command write to the same file, we keep appending to the file.
-		stderrWriter, err := os.OpenFile(stderrFilePath, appconfig.FileFlagsCreateOrAppend, appconfig.ReadWriteAccess)
-		if err != nil {
-			return
-		}
-		defer stderrWriter.Close() // Closing our instance of the file handle - the child process has its own copy
-	}
-
-	// NOTE: Regarding the defer close of the file writers.
-	// The defer will close these file handles before the asynchronous process uses them.
-	// In this case, it doesn't cause a problem because the child process inherits copies of the file handles and does
-	// the actual writing to the files. So, when using files, it does not matter when we close our copies of the file writers.
-
-	var err error
+) (process *os.Process, exitCode int, err error) {
 	process, exitCode, err = StartCommand(log, cancelFlag, workingDir, stdoutWriter, stderrWriter, commandName, commandArguments)
-	if err != nil {
-		errs = append(errs, err)
-	}
-
 	return
 }
 
@@ -466,7 +449,7 @@ func killProcessOnCancel(log log.T, command *exec.Cmd, cancelStdout chan bool, c
 func prepareEnvironment(command *exec.Cmd) {
 	env := os.Environ()
 	if instance, err := instance.InstanceID(); err == nil {
-		env = append(env, fmtEnvVariable(envVarInstanceId, instance))
+		env = append(env, fmtEnvVariable(envVarInstanceID, instance))
 	}
 	if region, err := instance.Region(); err == nil {
 		env = append(env, fmtEnvVariable(envVarRegionName, region))
@@ -482,11 +465,13 @@ func fmtEnvVariable(name string, val string) string {
 	return fmt.Sprintf("%s=%s", name, val)
 }
 
+// QuoteShString replaces the quote
 func QuoteShString(str string) (result string) {
 	// Simple quote replacement for now
 	return fmt.Sprintf("'%v'", strings.Replace(str, "'", "'\\''", -1))
 }
 
+// QuotePsString replaces the quote
 func QuotePsString(str string) (result string) {
 	// Simple quote replacement for now
 	str = strings.Replace(str, "`", "``", -1)
