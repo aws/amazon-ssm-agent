@@ -20,17 +20,27 @@ package contracts
 type ResultStatus string
 
 const (
-	ResultStatusNotStarted       ResultStatus = "NotStarted"
-	ResultStatusInProgress       ResultStatus = "InProgress"
-	ResultStatusSuccess          ResultStatus = "Success"
+	// ResultStatusNotStarted represents NotStarted status
+	ResultStatusNotStarted ResultStatus = "NotStarted"
+	// ResultStatusInProgress represents InProgress status
+	ResultStatusInProgress ResultStatus = "InProgress"
+	// ResultStatusSuccess represents Success status
+	ResultStatusSuccess ResultStatus = "Success"
+	// ResultStatusSuccessAndReboot represents SuccessAndReboot status
 	ResultStatusSuccessAndReboot ResultStatus = "SuccessAndReboot"
-	ResultStatusPassedAndReboot  ResultStatus = "PassedAndReboot"
-	ResultStatusFailed           ResultStatus = "Failed"
-	ResultStatusCancelled        ResultStatus = "Cancelled"
-	ResultStatusTimedOut         ResultStatus = "TimedOut"
-	ResultStatusSkipped          ResultStatus = "Skipped"
+	// ResultStatusPassedAndReboot represents PassedAndReboot status
+	ResultStatusPassedAndReboot ResultStatus = "PassedAndReboot"
+	// ResultStatusFailed represents Failed status
+	ResultStatusFailed ResultStatus = "Failed"
+	// ResultStatusCancelled represents Cancelled status
+	ResultStatusCancelled ResultStatus = "Cancelled"
+	// ResultStatusTimedOut represents TimedOut status
+	ResultStatusTimedOut ResultStatus = "TimedOut"
+	// ResultStatusSkipped represents Skipped status
+	ResultStatusSkipped ResultStatus = "Skipped"
 )
 
+// IsSuccess checks whether the result is success or not
 func (rs ResultStatus) IsSuccess() bool {
 	switch rs {
 	case ResultStatusSuccess, ResultStatusPassedAndReboot, ResultStatusSuccessAndReboot:
@@ -40,6 +50,7 @@ func (rs ResultStatus) IsSuccess() bool {
 	}
 }
 
+// IsReboot checks whether the result is reboot or not
 func (rs ResultStatus) IsReboot() bool {
 	switch rs {
 	case ResultStatusPassedAndReboot, ResultStatusSuccessAndReboot:
@@ -210,12 +221,13 @@ type PluginRuntimeStatus struct {
 	StandardError      string       `json:"standardError"`
 }
 
-// AgentConfiguration is a struct that stores information about the agent and instance.
+// AgentConfiguration is a struct that stores information about the agent and instance
 type AgentConfiguration struct {
 	AgentInfo  AgentInfo
 	InstanceID string
 }
 
+// DocumentResult is a struct that stores information about the result of the document
 type DocumentResult struct {
 	DocumentName    string
 	DocumentVersion string

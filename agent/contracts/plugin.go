@@ -15,7 +15,6 @@
 package contracts
 
 import (
-	"fmt"
 	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/context"
@@ -24,19 +23,7 @@ import (
 )
 
 const (
-	//MaximumPluginOutputSize represents the maximum output size that agent supports
-	MaximumPluginOutputSize = 2400
-	truncOut                = "\n---Output truncated---"
-	truncError              = "\n---Error truncated----"
-)
-
-const (
 	preconditionSchemaVersion string = "2.2"
-)
-
-var (
-	lenTruncOut   = len(truncOut)
-	lenTruncError = len(truncError)
 )
 
 // PluginResult represents a plugin execution result.
@@ -128,159 +115,7 @@ type PluginOutputter interface {
 	SetExitCode(int)
 }
 
-// PluginOutput represents the output of the plugin.
-type PluginOutput struct {
-	ExitCode int
-	Status   ResultStatus
-	Stdout   string
-	Stderr   string
-}
-
-func (p *PluginOutput) Merge(log log.T, mergeOutput PluginOutput) {
-	p.AppendInfo(log, mergeOutput.Stdout)
-	p.AppendError(log, mergeOutput.Stderr)
-	if p.ExitCode == 0 {
-		p.ExitCode = mergeOutput.ExitCode
-	}
-	p.Status = MergeResultStatus(p.Status, mergeOutput.Status)
-}
-
-func (p *PluginOutput) String() (response string) {
-	return TruncateOutput(p.Stdout, p.Stderr, MaximumPluginOutputSize)
-}
-
-// MarkAsFailed Failed marks plugin as Failed
-func (out *PluginOutput) MarkAsFailed(log log.T, err error) {
-	// Update the error exit code
-	if out.ExitCode == 0 {
-		out.ExitCode = 1
-	}
-	out.Status = ResultStatusFailed
-	if err != nil {
-		out.AppendError(log, err.Error())
-	}
-}
-
-// MarkAsSucceeded marks plugin as Successful.
-func (out *PluginOutput) MarkAsSucceeded() {
-	out.ExitCode = 0
-	out.Status = ResultStatusSuccess
-}
-
-// MarkAsInProgress marks plugin as In Progress.
-func (out *PluginOutput) MarkAsInProgress() {
-	out.ExitCode = 0
-	out.Status = ResultStatusInProgress
-}
-
-// MarkAsSuccessWithReboot marks plugin as Successful and requests a reboot.
-func (out *PluginOutput) MarkAsSuccessWithReboot() {
-	out.ExitCode = 0
-	out.Status = ResultStatusSuccessAndReboot
-}
-
-// MarkAsCancelled marks a plugin as Cancelled.
-func (out *PluginOutput) MarkAsCancelled() {
-	out.ExitCode = 1
-	out.Status = ResultStatusCancelled
-}
-
-// MarkAsShutdown marks a plugin as Failed in the case of interruption due to shutdown signal.
-func (out *PluginOutput) MarkAsShutdown() {
-	out.ExitCode = 1
-	out.Status = ResultStatusCancelled
-}
-
-// AppendInfo adds info to PluginOutput StandardOut.
-func (out *PluginOutput) AppendInfo(log log.T, message string) {
-	if len(message) > 0 {
-		log.Info(message)
-		if len(out.Stdout) > 0 {
-			out.Stdout = fmt.Sprintf("%v\n%v", out.Stdout, message)
-		} else {
-			out.Stdout = message
-		}
-	}
-}
-
-// AppendInfof adds info to PluginOutput StandardOut with formatting parameters.
-func (out *PluginOutput) AppendInfof(log log.T, format string, params ...interface{}) {
-	if len(format) > 0 {
-		message := fmt.Sprintf(format, params...)
-		out.AppendInfo(log, message)
-	}
-}
-
-// AppendError adds errors to PluginOutput StandardErr.
-func (out *PluginOutput) AppendError(log log.T, message string) {
-	if len(message) > 0 {
-		log.Error(message)
-		if len(out.Stderr) > 0 {
-			out.Stderr = fmt.Sprintf("%v\n%v", out.Stderr, message)
-		} else {
-			out.Stderr = message
-		}
-	}
-}
-
-// AppendErrorf adds errors to PluginOutput StandardErr with formatting parameters.
-func (out *PluginOutput) AppendErrorf(log log.T, format string, params ...interface{}) {
-	if len(format) > 0 {
-		message := fmt.Sprintf(format, params...)
-		out.AppendError(log, message)
-	}
-}
-
-// getters/setters
-func (out *PluginOutput) GetStatus() ResultStatus { return out.Status }
-func (out *PluginOutput) GetStdout() string       { return out.Stdout }
-func (out *PluginOutput) GetStderr() string       { return out.Stderr }
-func (out *PluginOutput) GetExitCode() int        { return out.ExitCode }
-
-func (out *PluginOutput) SetStatus(status ResultStatus) { out.Status = status }
-func (out *PluginOutput) SetStdout(stdout string)       { out.Stdout = stdout }
-func (out *PluginOutput) SetStderr(stderr string)       { out.Stderr = stderr }
-func (out *PluginOutput) SetExitCode(exitCode int)      { out.ExitCode = exitCode }
-
-// TruncateOutput truncates the output
-func TruncateOutput(stdout string, stderr string, capacity int) (response string) {
-	outputSize := len(stdout)
-	errorSize := len(stderr)
-
-	// prepare error title
-	errorTitle := ""
-	lenErrorTitle := 0
-	if errorSize > 0 {
-		errorTitle = "\n----------ERROR-------\n"
-		lenErrorTitle = len(errorTitle)
-	}
-
-	// calculate available space
-	availableSpace := capacity - lenErrorTitle
-
-	// all fits within availableSpace
-	if (outputSize + errorSize) < availableSpace {
-		return fmt.Sprint(stdout, errorTitle, stderr)
-	}
-
-	// trunc out and error when both exceed the size
-	if outputSize > availableSpace/2 && errorSize > availableSpace/2 {
-		truncSize := availableSpace - lenTruncError - lenTruncOut
-		return fmt.Sprint(stdout[:truncSize/2], truncOut, errorTitle, stderr[:truncSize/2], truncError)
-	}
-
-	// trunc error when output is short
-	if outputSize < availableSpace/2 {
-		truncSize := availableSpace - lenTruncError
-		return fmt.Sprint(stdout, errorTitle, stderr[:truncSize-outputSize], truncError)
-	}
-
-	// trunc output when error is short
-	truncSize := availableSpace - lenTruncOut
-	return fmt.Sprint(stdout[:truncSize-errorSize], truncOut, errorTitle, stderr)
-}
-
-// Check if precondition support is enabled by checking document schema version
+// IsPreconditionEnabled checks if precondition support is enabled by checking document schema version
 func IsPreconditionEnabled(schemaVersion string) (response bool) {
 	response = false
 

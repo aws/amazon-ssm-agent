@@ -127,7 +127,7 @@ func (s *RunCommandService) handleSpecialPlugin(lastPluginID string, pluginRes m
 		if pluginRes.PluginName == appconfig.PluginNameRefreshAssociation {
 			log.Infof("Found %v to invoke refresh association immediately", pluginRes.PluginName)
 			commandID, _ := messageContracts.GetCommandID(messageID)
-			orchestrationDir := fileutil.BuildPath(s.orchestrationRootDir, commandID, pluginRes.PluginName)
+			orchestrationDir := fileutil.BuildPath(s.orchestrationRootDir, commandID)
 			//apply association only when this is the last plugin run
 			s.assocProcessor.ProcessRefreshAssociation(log, pluginRes, orchestrationDir, lastPluginID == ID)
 
