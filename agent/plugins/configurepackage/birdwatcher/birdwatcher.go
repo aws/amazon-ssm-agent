@@ -205,7 +205,7 @@ func downloadManifest(ds *PackageService, packageName string, version string) (*
 		return nil, err
 	}
 
-	err = ds.manifestCache.WriteManifest(packageName, manifest.Version, byteManifest)
+	err = ds.manifestCache.WriteManifest(manifest.PackageArn, manifest.Version, byteManifest)
 	if err != nil {
 		return nil, fmt.Errorf("failed to write manifest to file: %v", err)
 	}
