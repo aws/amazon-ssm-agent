@@ -1,6 +1,8 @@
 package dockercontainer
 
 import (
+	"io"
+
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/stretchr/testify/mock"
 )
@@ -16,8 +18,8 @@ func (m *DepMock) UpdateUtilExeCommandOutput(
 	parameters []string,
 	workingDir string,
 	outputRoot string,
-	stdOut string,
-	stdErr string,
+	stdOut io.Writer,
+	stdErr io.Writer,
 	usePlatformSpecificCommand bool) (output string, err error) {
 	args := m.Called(log, cmd, parameters, workingDir, outputRoot, stdOut, stdErr, usePlatformSpecificCommand)
 	return args.String(0), args.Error(1)
