@@ -16,6 +16,7 @@ import (
 	"runtime"
 	"testing"
 
+	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/updateutil"
 	"github.com/stretchr/testify/assert"
@@ -68,10 +69,11 @@ func TestInstall(t *testing.T) {
 	dep = containerMock
 	defer func() { dep = depOrig }()
 
-	output := RunInstallCommands(loggerMock, "")
+	output := iohandler.DefaultIOHandler{}
+	RunInstallCommands(loggerMock, "", &output)
 
-	assert.Equal(t, output.ExitCode, 0)
-	assert.Contains(t, output.Stdout, "Installation complete")
+	assert.Equal(t, output.GetExitCode(), 0)
+	assert.Contains(t, output.GetStdout(), "Installation complete")
 	containerMock.AssertCalled(t, "GetInstanceContext", mock.Anything)
 	containerMock.AssertNumberOfCalls(t, "UpdateUtilExeCommandOutput", 3)
 }
@@ -82,11 +84,12 @@ func TestInstallUnsupportedPlatform(t *testing.T) {
 	dep = containerMock
 	defer func() { dep = depOrig }()
 
-	output := RunInstallCommands(loggerMock, "")
+	output := iohandler.DefaultIOHandler{}
+	RunInstallCommands(loggerMock, "", &output)
 
-	assert.Equal(t, output.ExitCode, 1)
-	assert.NotEqual(t, output.Stderr, "")
-	assert.Equal(t, output.Stdout, "")
+	assert.Equal(t, output.GetExitCode(), 1)
+	assert.Equal(t, output.GetStdout(), "")
+	assert.NotEqual(t, output.GetStderr(), "")
 	containerMock.AssertCalled(t, "GetInstanceContext", mock.Anything)
 	containerMock.AssertNumberOfCalls(t, "UpdateUtilExeCommandOutput", 0)
 }
@@ -97,11 +100,12 @@ func TestUnInstall(t *testing.T) {
 	dep = containerMock
 	defer func() { dep = depOrig }()
 
-	output := RunUninstallCommands(loggerMock, "")
+	output := iohandler.DefaultIOHandler{}
+	RunUninstallCommands(loggerMock, "", &output)
 
-	assert.Equal(t, output.ExitCode, 0)
-	assert.Contains(t, output.Stderr, "")
-	assert.Contains(t, output.Stdout, "Uninstall complete")
+	assert.Equal(t, output.GetExitCode(), 0)
+	assert.Contains(t, output.GetStderr(), "")
+	assert.Contains(t, output.GetStdout(), "Uninstall complete")
 	containerMock.AssertCalled(t, "GetInstanceContext", mock.Anything)
 	containerMock.AssertNumberOfCalls(t, "UpdateUtilExeCommandOutput", 1)
 }

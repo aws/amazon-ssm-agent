@@ -24,6 +24,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil/artifact"
+	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 )
 
@@ -33,7 +34,7 @@ const (
 	DOCKER_INSTALLED_DIRECTORY  = DOCKER_UNCOMPRESS_DIRECTORY + "\\docker"
 )
 
-func RunInstallCommands(log log.T, orchestrationDirectory string) (out contracts.PluginOutput) {
+func RunInstallCommands(log log.T, orchestrationDirectory string, out iohandler.IOHandler) {
 	var err error
 	var command string
 	var platformVersion string
@@ -46,20 +47,20 @@ func RunInstallCommands(log log.T, orchestrationDirectory string) (out contracts
 	platformVersion, err = dep.PlatformVersion(log)
 	if err != nil {
 		log.Error("Error detecting platform version", err)
-		out.MarkAsFailed(log, fmt.Errorf("Error detecting platform version: %v", err))
-		return out
+		out.MarkAsFailed(fmt.Errorf("Error detecting platform version: %v", err))
+		return
 	}
 	log.Debug("Platform Version:", platformVersion)
 	if !strings.HasPrefix(platformVersion, "10") {
-		out.MarkAsFailed(log, errors.New("ConfigureDocker is only supported on Microsoft Windows Server 2016."))
-		return out
+		out.MarkAsFailed(errors.New("ConfigureDocker is only supported on Microsoft Windows Server 2016."))
+		return
 	}
 
 	isNanoServer, err = dep.IsPlatformNanoServer(log)
 	if err != nil {
 		log.Error("Error detecting if Nano Server", err)
-		out.MarkAsFailed(log, fmt.Errorf("Error detecting if Nano Server: %v", err))
-		return out
+		out.MarkAsFailed(fmt.Errorf("Error detecting if Nano Server: %v", err))
+		return
 	}
 	if isNanoServer {
 		command = "(Get-PackageProvider -ListAvailable).Name"
@@ -67,21 +68,21 @@ func RunInstallCommands(log log.T, orchestrationDirectory string) (out contracts
 		output, err = dep.UpdateUtilExeCommandOutput(120, log, command, parameters, "", "", "", "", true)
 		if err != nil {
 			log.Error("Error getting package providers", err)
-			out.MarkAsFailed(log, fmt.Errorf("Error getting package providers: %v", err))
-			return out
+			out.MarkAsFailed(fmt.Errorf("Error getting package providers: %v", err))
+			return
 		}
 		log.Debug("Get-PackageProvider output:", output)
 		packageInstalled := strings.Contains(output, "NanoServerPackage")
 
 		if !packageInstalled {
-			out.Stdout += "Installing Nano Server package provider\n"
+			out.AppendInfo("Installing Nano Server package provider.")
 			command = `Install-PackageProvider -Name Nuget -MinimumVersion 2.8.5.201 -Force`
 			parameters = make([]string, 0)
 			output, err = dep.UpdateUtilExeCommandOutput(60, log, command, parameters, "", "", "", "", true)
 			if err != nil {
 				log.Error("Error installing Nuget package provider", err)
-				out.MarkAsFailed(log, fmt.Errorf("Error installing Nuget package provider: %v", err))
-				return out
+				out.MarkAsFailed(fmt.Errorf("Error installing Nuget package provider: %v", err))
+				return
 			}
 			log.Debug("Install Package provider output:", output)
 
@@ -90,8 +91,8 @@ func RunInstallCommands(log log.T, orchestrationDirectory string) (out contracts
 			output, err = dep.UpdateUtilExeCommandOutput(60, log, command, parameters, "", "", "", "", true)
 			if err != nil {
 				log.Error("Error saving module", err)
-				out.MarkAsFailed(log, fmt.Errorf("Error saving Nano server package: %v", err))
-				return out
+				out.MarkAsFailed(fmt.Errorf("Error saving Nano server package: %v", err))
+				return
 			}
 			log.Debug("Save-Module output:", output)
 
@@ -100,8 +101,8 @@ func RunInstallCommands(log log.T, orchestrationDirectory string) (out contracts
 			output, err = dep.UpdateUtilExeCommandOutput(30, log, command, parameters, "", "", "", "", true)
 			if err != nil {
 				log.Error("Error importing package", err)
-				out.MarkAsFailed(log, fmt.Errorf("Error importing package: %v", err))
-				return out
+				out.MarkAsFailed(fmt.Errorf("Error importing package: %v", err))
+				return
 			}
 			log.Debug("Import-PackageProvider output:", output)
 		}
@@ -112,21 +113,21 @@ func RunInstallCommands(log log.T, orchestrationDirectory string) (out contracts
 		output, err = dep.UpdateUtilExeCommandOutput(30, log, command, parameters, "", "", "", "", true)
 		if err != nil {
 			log.Error("Error getting microsoft-nanoserver-containers-package", err)
-			out.MarkAsFailed(log, fmt.Errorf("Error getting microsoft-nanoserver-containers-package: %v", err))
-			return out
+			out.MarkAsFailed(fmt.Errorf("Error getting microsoft-nanoserver-containers-package: %v", err))
+			return
 		}
 		log.Debug("Get-Package output:", output)
 		packageInstalled = strings.Contains(output, "Microsoft-NanoServer-Containers-Package")
 
 		if !packageInstalled {
-			out.Stdout += "Installing containers package\n"
+			out.AppendInfo("Installing containers package.")
 			command = "Install-NanoServerPackage microsoft-nanoserver-containers-package"
 			parameters = make([]string, 0)
 			output, err = dep.UpdateUtilExeCommandOutput(30, log, command, parameters, "", "", "", "", true)
 			if err != nil {
 				log.Error("Error installing microsoft-nanoserver-containers-package", err)
-				out.MarkAsFailed(log, fmt.Errorf("Error installing microsoft-nanoserver-containers-package: %v", err))
-				return out
+				out.MarkAsFailed(fmt.Errorf("Error installing microsoft-nanoserver-containers-package: %v", err))
+				return
 			}
 			log.Debug("Install-NanoServerPackage output:", output)
 			requireReboot = true
@@ -138,21 +139,21 @@ func RunInstallCommands(log log.T, orchestrationDirectory string) (out contracts
 		output, err = dep.UpdateUtilExeCommandOutput(30, log, command, parameters, "", "", "", "", true)
 		if err != nil {
 			log.Error("Error getting containers feature", err)
-			out.MarkAsFailed(log, fmt.Errorf("Error getting containers feature: %v", err))
-			return out
+			out.MarkAsFailed(fmt.Errorf("Error getting containers feature: %v", err))
+			return
 		}
 		log.Debug("Get-WindowsFeature output:", output)
 		packageInstalled := strings.Contains(output, "True")
 
 		if !packageInstalled {
-			out.Stdout += "Installing Windows containers feature\n"
+			out.AppendInfo("Installing Windows containers feature.")
 			command = "(Install-WindowsFeature -Name containers).RestartNeeded"
 			parameters = make([]string, 0)
 			output, err = dep.UpdateUtilExeCommandOutput(30, log, command, parameters, "", "", "", "", true)
 			if err != nil {
 				log.Error("Error installing Windows containers feature", err)
-				out.MarkAsFailed(log, fmt.Errorf("Error installing Windows containers feature: %v", err))
-				return out
+				out.MarkAsFailed(fmt.Errorf("Error installing Windows containers feature: %v", err))
+				return
 			}
 			log.Debug("Install-WindowsFeature output:", output)
 			requireReboot = strings.Contains(output, "Yes")
@@ -169,8 +170,8 @@ func RunInstallCommands(log log.T, orchestrationDirectory string) (out contracts
 
 	if err := dep.SetDaemonConfig(daemonConfigPath, daemonConfigContent); err != nil {
 		log.Error("Error writing Docker daemon config file", err)
-		out.MarkAsFailed(log, fmt.Errorf("Error writing Docker daemon config file: %v", err))
-		return out
+		out.MarkAsFailed(fmt.Errorf("Error writing Docker daemon config file: %v", err))
+		return
 	}
 
 	//Download docker
@@ -178,7 +179,7 @@ func RunInstallCommands(log log.T, orchestrationDirectory string) (out contracts
 	downloadOutput, err = dep.ArtifactDownload(log, artifact.DownloadInput{SourceURL: DOCKER_DOWNLOAD_URL, DestinationDirectory: os.TempDir()})
 	_, installedErr := os.Stat(DOCKER_INSTALLED_DIRECTORY)
 	if downloadOutput.IsUpdated || installedErr != nil {
-		out.Stdout += "Unzipping Docker to program files directory\n"
+		out.AppendInfo("Unzipping Docker to program files directory.")
 		//uncompress docker zip
 		fileutil.Uncompress(downloadOutput.LocalFilePath, DOCKER_UNCOMPRESS_DIRECTORY)
 	}
@@ -186,7 +187,7 @@ func RunInstallCommands(log log.T, orchestrationDirectory string) (out contracts
 
 	//Set this process's path environment variable to include Docker
 	if !strings.Contains(strings.ToLower(os.Getenv("path")), strings.ToLower(DOCKER_INSTALLED_DIRECTORY)) {
-		out.Stdout += "Setting process path variable to include docker directory\n"
+		out.AppendInfo("Setting process path variable to include docker directory")
 		//set envvariable for this process
 		os.Setenv("path", DOCKER_INSTALLED_DIRECTORY+";"+os.Getenv("path"))
 
@@ -198,30 +199,30 @@ func RunInstallCommands(log log.T, orchestrationDirectory string) (out contracts
 	currentSystemPathValue, _, err = dep.LocalRegistryKeyGetStringValue(`System\CurrentControlSet\Control\Session Manager\Environment`, "Path")
 	if err != nil {
 		log.Error("Error getting current machine registry key value", err)
-		out.MarkAsFailed(log, fmt.Errorf("Error getting current machine registry key value: %v", err))
-		return out
+		out.MarkAsFailed(fmt.Errorf("Error getting current machine registry key value: %v", err))
+		return
 	}
 	log.Debug("System Path set to ", currentSystemPathValue)
 	if !strings.Contains(strings.ToLower(currentSystemPathValue), strings.ToLower(DOCKER_INSTALLED_DIRECTORY)) {
-		out.Stdout += "Setting machine path variable to include docker directory\n"
+		out.AppendInfo("Setting machine path variable to include docker directory")
 		command = "setx"
 		parameters = []string{"-m", "path", os.Getenv("path")}
 		var setPathOutput string
 		setPathOutput, err = dep.UpdateUtilExeCommandOutput(10, log, command, parameters, "", "", "", "", false)
 		if err != nil {
 			log.Error("Error setting machine path environment variable", err)
-			out.MarkAsFailed(log, fmt.Errorf("Error setting machine path environment variable: %v", err))
-			return out
+			out.MarkAsFailed(fmt.Errorf("Error setting machine path environment variable: %v", err))
+			return
 		}
 		log.Debug("setx path output:", setPathOutput)
 	}
 
 	//reboot if needed
 	if requireReboot {
-		out.Stdout += "Rebooting machine to complete install\n"
+		out.AppendInfo("Rebooting machine to complete install")
 		log.Debug("require reboot is true")
-		out.Status = contracts.ResultStatusSuccessAndReboot
-		return out
+		out.SetStatus(contracts.ResultStatusSuccessAndReboot)
+		return
 	}
 
 	//Check if docker daemon registered
@@ -231,8 +232,8 @@ func RunInstallCommands(log log.T, orchestrationDirectory string) (out contracts
 	dockerServiceStatusOutput, err = dep.UpdateUtilExeCommandOutput(120, log, command, parameters, "", "", "", "", true)
 	if err != nil {
 		log.Error("Error getting Docker service status", err)
-		out.MarkAsFailed(log, fmt.Errorf("Error getting Docker service status: %v", err))
-		return out
+		out.MarkAsFailed(fmt.Errorf("Error getting Docker service status: %v", err))
+		return
 	}
 	log.Debug("Get-Service output:", dockerServiceStatusOutput)
 
@@ -240,7 +241,7 @@ func RunInstallCommands(log log.T, orchestrationDirectory string) (out contracts
 
 	//Register Service
 	if len(strings.TrimSpace(dockerServiceStatusOutput)) == 0 {
-		out.Stdout += "Registering dockerd.\n"
+		out.AppendInfo("Registering dockerd.")
 
 		command = `dockerd`
 		log.Debug("dockerd cmd:", command)
@@ -248,19 +249,19 @@ func RunInstallCommands(log log.T, orchestrationDirectory string) (out contracts
 		dockerServiceStatusOutput, err = dep.UpdateUtilExeCommandOutput(120, log, command, parameters, DOCKER_INSTALLED_DIRECTORY, "", "", "", false)
 		if err != nil {
 			log.Error("Error registering Docker service", err)
-			out.MarkAsFailed(log, fmt.Errorf("Error registering Docker service: %v", err))
-			return out
+			out.MarkAsFailed(fmt.Errorf("Error registering Docker service: %v", err))
+			return
 		}
 		log.Debug("dockerd output:", dockerServiceStatusOutput)
 		//set service to delayed start
-		out.Stdout += "set dockerd service configuration.\n"
+		out.AppendInfo("set dockerd service configuration.")
 		command = "sc.exe"
 		parameters = []string{"config", "docker", "start=delayed-auto"}
 		dockerServiceStatusOutput, err = dep.UpdateUtilExeCommandOutput(10, log, command, parameters, "", "", "", "", false)
 		if err != nil {
 			log.Error("Error setting delayed start for Docker service", err)
-			out.MarkAsFailed(log, fmt.Errorf("Error setting delayed start for Docker service: %v", err))
-			return out
+			out.MarkAsFailed(fmt.Errorf("Error setting delayed start for Docker service: %v", err))
+			return
 		}
 		log.Debug("sc output:", dockerServiceStatusOutput)
 		//sleep 10 sec after registering
@@ -269,31 +270,31 @@ func RunInstallCommands(log log.T, orchestrationDirectory string) (out contracts
 	err = dep.LocalRegistryKeySetDWordValue(`SYSTEM\CurrentControlSet\services\docker`, "AutoStartDelay", 240)
 	if err != nil {
 		log.Error("Error opening registry key to set Docker delayed start", err)
-		out.MarkAsFailed(log, fmt.Errorf("Error opening registry key to set Docker delayed start: %v", err))
-		return out
+		out.MarkAsFailed(fmt.Errorf("Error opening registry key to set Docker delayed start: %v", err))
+		return
 	}
 
 	//Start service
 	if !ServiceRunning {
-		out.Stdout += "Starting Docker service\n"
+		out.AppendInfo("Starting Docker service.")
 		command = "Start-Service docker"
 		parameters = make([]string, 0)
 		dockerServiceStatusOutput, err = dep.UpdateUtilExeCommandOutput(300, log, command, parameters, "", "", "", "", true)
 		if err != nil {
 
 			log.Error("Error starting Docker service", err)
-			out.MarkAsFailed(log, fmt.Errorf("Error starting Docker service: %v", err))
-			return out
+			out.MarkAsFailed(fmt.Errorf("Error starting Docker service: %v", err))
+			return
 		}
 		log.Debug("start-service output:", dockerServiceStatusOutput)
 	}
-	out.Stdout += "Installation complete\n"
+	out.AppendInfo("Installation complete")
 	log.Debug("require reboot:", requireReboot)
-	out.Status = contracts.ResultStatusSuccess
-	return out
+	out.SetStatus(contracts.ResultStatusSuccess)
+	return
 }
 
-func RunUninstallCommands(log log.T, orchestrationDirectory string) (out contracts.PluginOutput) {
+func RunUninstallCommands(log log.T, orchestrationDirectory string, out iohandler.IOHandler) {
 	var err error
 	var command string
 	var parameters []string
@@ -306,13 +307,13 @@ func RunUninstallCommands(log log.T, orchestrationDirectory string) (out contrac
 	platformVersion, err = dep.PlatformVersion(log)
 	if err != nil {
 		log.Error("Error detecting platform version", err)
-		out.MarkAsFailed(log, fmt.Errorf("Error detecting platform version: %v", err))
-		return out
+		out.MarkAsFailed(fmt.Errorf("Error detecting platform version: %v", err))
+		return
 	}
 	log.Debug("Platform Version:", platformVersion)
 	if !strings.HasPrefix(platformVersion, "10") {
-		out.MarkAsFailed(log, errors.New("ConfigureDocker is only supported on Microsoft Windows Server 2016."))
-		return out
+		out.MarkAsFailed(errors.New("ConfigureDocker is only supported on Microsoft Windows Server 2016."))
+		return
 	}
 
 	//Check if docker daemon registered and running
@@ -322,8 +323,8 @@ func RunUninstallCommands(log log.T, orchestrationDirectory string) (out contrac
 	dockerServiceStatusOutput, err = dep.UpdateUtilExeCommandOutput(120, log, command, parameters, "", "", "", "", true)
 	if err != nil {
 		log.Error("Error getting Docker service status", err)
-		out.MarkAsFailed(log, fmt.Errorf("Error getting Docker service status: %v", err))
-		return out
+		out.MarkAsFailed(fmt.Errorf("Error getting Docker service status: %v", err))
+		return
 	}
 	log.Debug("Get-Service output:", dockerServiceStatusOutput)
 
@@ -331,29 +332,29 @@ func RunUninstallCommands(log log.T, orchestrationDirectory string) (out contrac
 
 	//Stop service
 	if ServiceRunning {
-		out.Stdout += "Stopping Docker Service.\n"
+		out.AppendInfo("Stopping Docker Service.")
 		command = "Stop-Service docker"
 		parameters = make([]string, 0)
 		dockerServiceStatusOutput, err = dep.UpdateUtilExeCommandOutput(180, log, command, parameters, "", "", "", "", true)
 		if err != nil {
 			log.Error("Error stopping Docker service", err)
-			out.MarkAsFailed(log, fmt.Errorf("Error stopping Docker service: %v", err))
-			return out
+			out.MarkAsFailed(fmt.Errorf("Error stopping Docker service: %v", err))
+			return
 		}
 		log.Debug("stop-service output:", dockerServiceStatusOutput)
 	}
 
 	//Unregister Service
 	if len(strings.TrimSpace(dockerServiceStatusOutput)) > 0 {
-		out.Stdout += "Unregistering dockerd service.\n"
+		out.AppendInfo("Unregistering dockerd service.")
 		command = "(Get-WmiObject -Class Win32_Service -Filter \"Name='docker'\").delete()"
 
 		parameters = make([]string, 0)
 		dockerServiceStatusOutput, err = dep.UpdateUtilExeCommandOutput(120, log, command, parameters, DOCKER_INSTALLED_DIRECTORY, "", "", "", true)
 		if err != nil {
 			log.Error("Error unregistering Docker service", err)
-			out.MarkAsFailed(log, fmt.Errorf("Error unregistering Docker service: %v", err))
-			return out
+			out.MarkAsFailed(fmt.Errorf("Error unregistering Docker service: %v", err))
+			return
 		}
 		log.Debug("dockerd output:", dockerServiceStatusOutput)
 
@@ -361,7 +362,7 @@ func RunUninstallCommands(log log.T, orchestrationDirectory string) (out contrac
 
 	//Remove docker directory
 	if _, err := os.Stat(DOCKER_INSTALLED_DIRECTORY); err == nil {
-		out.Stdout += "Removing Docker directory.\n"
+		out.AppendInfo("Removing Docker directory.")
 		os.RemoveAll(DOCKER_INSTALLED_DIRECTORY)
 	}
 
@@ -369,12 +370,12 @@ func RunUninstallCommands(log log.T, orchestrationDirectory string) (out contrac
 	isNanoServer, err = dep.IsPlatformNanoServer(log)
 	if err != nil {
 		log.Error("Error detecting if Nano Server", err)
-		out.MarkAsFailed(log, fmt.Errorf("Error detecting if Nano Server: %v", err))
-		return out
+		out.MarkAsFailed(fmt.Errorf("Error detecting if Nano Server: %v", err))
+		return
 	}
 
 	if isNanoServer {
-		out.Stdout += "Removing packages from Nano server not currently supported.\n"
+		out.AppendInfo("Removing packages from Nano server not currently supported.")
 	} else {
 		//uninstall windows containers feature
 		command = "(Get-WindowsFeature -Name containers).Installed"
@@ -382,21 +383,21 @@ func RunUninstallCommands(log log.T, orchestrationDirectory string) (out contrac
 		output, err = dep.UpdateUtilExeCommandOutput(50, log, command, parameters, "", "", "", "", true)
 		if err != nil {
 			log.Error("Error getting containers feature", err)
-			out.MarkAsFailed(log, fmt.Errorf("Error getting containers feature: %v", err))
-			return out
+			out.MarkAsFailed(fmt.Errorf("Error getting containers feature: %v", err))
+			return
 		}
 		log.Debug("Get-WindowsFeature output:", output)
 		packageInstalled := strings.Contains(output, "True")
 
 		if packageInstalled {
-			out.Stdout += "Uninstalling containers Windows feature\n"
+			out.AppendInfo("Uninstalling containers Windows feature.")
 			command = "(Uninstall-WindowsFeature -Name containers).RestartNeeded"
 			parameters = make([]string, 0)
 			output, err = dep.UpdateUtilExeCommandOutput(300, log, command, parameters, "", "", "", "", true)
 			if err != nil {
 				log.Error("Error uninstalling containers Windows feature", err)
-				out.MarkAsFailed(log, fmt.Errorf("Error uninstalling containers Windows feature: %v", err))
-				return out
+				out.MarkAsFailed(fmt.Errorf("Error uninstalling containers Windows feature: %v", err))
+				return
 			}
 			log.Debug("Uninstall-WindowsFeature output:", output)
 			requireReboot = strings.Contains(output, "Yes")
@@ -404,15 +405,15 @@ func RunUninstallCommands(log log.T, orchestrationDirectory string) (out contrac
 		}
 		//reboot if needed
 		if requireReboot {
-			out.Stdout += "Rebooting machine to complete install\n"
+			out.AppendInfo("Rebooting machine to complete install")
 			log.Debug("require reboot is true", requireReboot)
-			out.Status = contracts.ResultStatusSuccessAndReboot
-			return out
+			out.SetStatus(contracts.ResultStatusSuccessAndReboot)
+			return
 		}
 	}
-	out.Stdout += "Uninstallation complete\n"
+	out.AppendInfo("Uninstallation complete.")
 	log.Debug("Uninstallation complete")
-	out.Status = contracts.ResultStatusSuccess
+	out.SetStatus(contracts.ResultStatusSuccess)
 
-	return out
+	return
 }
