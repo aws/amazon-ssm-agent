@@ -109,7 +109,7 @@ func calculateCheckSum(data []byte) (checkSum string) {
 /**
  * Update association compliance status, it only report status back when status is either SUCCESS / FAILED / TIMEDOUT
  */
-func (u *ComplianceUploader) UpdateAssociationCompliance(associationId string, instanceId string, documentName string, documentVersion string, associationStatus string, executionTime time.Time) error {
+func (u *ComplianceUploader) UpdateAssociationCompliance(associationID string, instanceID string, documentName string, documentVersion string, associationStatus string, executionTime time.Time) error {
 	if contracts.AssociationStatusTimedOut != associationStatus &&
 		contracts.AssociationStatusSuccess != associationStatus &&
 		contracts.AssociationStatusFailed != associationStatus {
@@ -118,7 +118,7 @@ func (u *ComplianceUploader) UpdateAssociationCompliance(associationId string, i
 
 	log := u.context.Log()
 
-	model.UpdateAssociationComplianceItem(associationId, documentName, documentVersion, associationStatus, executionTime)
+	model.UpdateAssociationComplianceItem(associationID, documentName, documentVersion, associationStatus, executionTime)
 	var associationComplianceEntries = model.GetAssociationComplianceEntries()
 
 	oldHash := u.optimizer.GetContentHash(AssociationComplianceItemName)
@@ -131,7 +131,7 @@ func (u *ComplianceUploader) UpdateAssociationCompliance(associationId string, i
 		&executionTime,
 		"",
 		"",
-		instanceId,
+		instanceID,
 		associationComplianceType,
 		itemContentHash,
 		newComplianceItems)
@@ -149,7 +149,7 @@ func (u *ComplianceUploader) UpdateAssociationCompliance(associationId string, i
 	return nil
 }
 
-// ConvertToSsmComplianceItems converts given array of complianceItem into an array of *ssm.ComplianceItemEntry. It returns 2 such arrays - one is optimized array
+// ConvertToSsmAssociationComplianceItems converts given array of complianceItem into an array of *ssm.ComplianceItemEntry. It returns 2 such arrays - one is optimized array
 // which contains only contentHash for those compliance types where the dataset hasn't changed from previous collection. The other array is non-optimized array
 // which contains both contentHash & content. This is done to avoid iterating over the compliance data twice. It throws error when it encounters error during
 // conversion process.
@@ -174,22 +174,22 @@ func (u *ComplianceUploader) ConvertToSsmAssociationComplianceItems(log log.T, a
 		log.Debugf("Compliance data for %v is same as before - we can just send content hash", AssociationComplianceItemName)
 		return []*ssm.ComplianceItemEntry{}, newHash, nil
 
-	} else {
-		log.Debugf("Compliance data for %v is NOT same as before - we send the whole content", AssociationComplianceItemName)
-
-		for _, item := range associationComplianceEntries {
-			var complianceItem = &ssm.ComplianceItemEntry{
-				Id:       aws.String(item.AssociationId),
-				Status:   aws.String(item.ComplianceStatus),
-				Severity: aws.String(item.ComplianceSeverity),
-				Title:    aws.String(item.Title),
-				Details: map[string]*string{
-					"DocumentName":    aws.String(item.DocumentName),
-					"DocumentVersion": aws.String(item.DocumentVersion),
-				},
-			}
-			associationComplianceItems = append(associationComplianceItems, complianceItem)
-		}
-		return associationComplianceItems, newHash, nil
 	}
+	log.Debugf("Compliance data for %v is NOT same as before - we send the whole content", AssociationComplianceItemName)
+
+	for _, item := range associationComplianceEntries {
+		var complianceItem = &ssm.ComplianceItemEntry{
+			Id:       aws.String(item.AssociationId),
+			Status:   aws.String(item.ComplianceStatus),
+			Severity: aws.String(item.ComplianceSeverity),
+			Title:    aws.String(item.Title),
+			Details: map[string]*string{
+				"DocumentName":    aws.String(item.DocumentName),
+				"DocumentVersion": aws.String(item.DocumentVersion),
+			},
+		}
+		associationComplianceItems = append(associationComplianceItems, complianceItem)
+	}
+	return associationComplianceItems, newHash, nil
+
 }

@@ -11,7 +11,7 @@
 // either express or implied. See the License for the specific language governing
 // permissions and limitations under the License.
 
-// Package docmanager helps persist documents state to disk
+// Package contracts helps persist documents state to disk
 package contracts
 
 import (
@@ -58,6 +58,7 @@ func prepareRuntimeStatus(log log.T, pluginResult PluginResult) PluginRuntimeSta
 	return runtimeStatus
 }
 
+// DocumentResultAggregator aggregates the result from the plugins to construct the agent response
 func DocumentResultAggregator(log log.T,
 	pluginID string,
 	pluginOutputs map[string]*PluginResult) (ResultStatus, map[string]int, map[string]*PluginRuntimeStatus) {
