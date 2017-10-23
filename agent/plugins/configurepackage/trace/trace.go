@@ -20,7 +20,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/aws/amazon-ssm-agent/agent/contracts"
+	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 )
 
@@ -61,7 +61,7 @@ type Tracer interface {
 	Traces() []*Trace
 	CurrentTrace() *Trace
 
-	ToPluginOutput() *contracts.PluginOutput
+	ToPluginOutput() iohandler.IOHandler
 }
 
 // TracerImpl implements the Tracer interface for collecting traces
@@ -175,10 +175,10 @@ func (t *TracerImpl) CurrentTrace() *Trace {
 	}
 }
 
-// ToPluginOutput will convert info and error output into a PluginOutput struct
+// ToPluginOutput will convert info and error output into a IOHandler struct
 // It will sort the output by trace end time
-func (t *TracerImpl) ToPluginOutput() *contracts.PluginOutput {
-	var out contracts.PluginOutput
+func (t *TracerImpl) ToPluginOutput() iohandler.IOHandler {
+	var out iohandler.DefaultIOHandler
 	var infoOut bytes.Buffer
 	var errorOut bytes.Buffer
 
@@ -191,8 +191,8 @@ func (t *TracerImpl) ToPluginOutput() *contracts.PluginOutput {
 		}
 	}
 
-	out.Stdout = infoOut.String()
-	out.Stderr = errorOut.String()
+	out.SetStdout(infoOut.String())
+	out.SetStderr(errorOut.String())
 
 	return &out
 }
