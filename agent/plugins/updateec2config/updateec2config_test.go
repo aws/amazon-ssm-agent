@@ -19,7 +19,7 @@ package updateec2config
 import (
 	"testing"
 
-	"github.com/aws/amazon-ssm-agent/agent/contracts"
+	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/updateutil"
 	"github.com/stretchr/testify/assert"
@@ -46,7 +46,7 @@ func TestValidateUpdate(t *testing.T) {
 	manifest := createStubManifest()
 
 	manager := updateManager{}
-	out := contracts.PluginOutput{}
+	out := iohandler.DefaultIOHandler{}
 	fakeVersion := "1.0.0"
 
 	result, err := manager.validateUpdate(logger, plugin, context, manifest, &out, fakeVersion)
@@ -64,7 +64,7 @@ func TestValidateUpdate_GetLatestTargetVersionWhenTargetVersionIsEmpty(t *testin
 	manager := updateManager{}
 	// Setup, update target version to empty string
 	plugin.TargetVersion = ""
-	out := contracts.PluginOutput{}
+	out := iohandler.DefaultIOHandler{}
 	fakeVersion := "1.0.0"
 
 	result, err := manager.validateUpdate(logger, plugin, context, manifest, &out, fakeVersion)
@@ -83,7 +83,7 @@ func TestValidateUpdate_DowngradeVersion(t *testing.T) {
 	manifest := createStubManifest()
 
 	manager := updateManager{}
-	out := contracts.PluginOutput{}
+	out := iohandler.DefaultIOHandler{}
 
 	noNeedToUpdate, err := manager.validateUpdate(logger, plugin, context, manifest, &out, fakeVersion)
 
@@ -101,7 +101,7 @@ func TestValidateUpdate_UnsupportedTargetVersion(t *testing.T) {
 	manifest := createStubManifest()
 
 	manager := updateManager{}
-	out := contracts.PluginOutput{}
+	out := iohandler.DefaultIOHandler{}
 
 	result, err := manager.validateUpdate(logger, plugin, context, manifest, &out, fakeVersion)
 
@@ -118,13 +118,13 @@ func TestValidateUpdate_TargetVersionSameAsCurrentVersion(t *testing.T) {
 	manifest := createStubManifest()
 
 	manager := updateManager{}
-	out := contracts.PluginOutput{}
+	out := iohandler.DefaultIOHandler{}
 
 	noNeedToUpdate, err := manager.validateUpdate(logger, plugin, context, manifest, &out, plugin.TargetVersion)
 
 	assert.True(t, noNeedToUpdate)
 	assert.NoError(t, err)
-	assert.Contains(t, out.Stdout, "already been installed, update skipped")
+	assert.Contains(t, out.GetStdout(), "already been installed, update skipped")
 }
 
 //TestValidateUpdate_UnsupportedCurrentVersion tests negative case
@@ -134,7 +134,7 @@ func TestValidateUpdate_UnsupportedCurrentVersion(t *testing.T) {
 	manifest := createStubManifest()
 
 	manager := updateManager{}
-	out := contracts.PluginOutput{}
+	out := iohandler.DefaultIOHandler{}
 	result, err := manager.validateUpdate(logger, plugin, context, manifest, &out, "1.2.3.4")
 
 	assert.True(t, result)
