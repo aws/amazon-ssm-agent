@@ -344,7 +344,11 @@ func createApplicationData(manifest *PackageManifest, packageState *PackageInsta
 }
 
 // getPackageRoot is a helper function that returns the path to the folder containing all versions of a package
-func (repo *localRepository) getPackageRoot(packageName string) string {
+func (repo *localRepository) getPackageRoot(packageArn string) string {
+
+	//extract the package name if the input is a global package arn
+	packageName := getPackageNameFromGlobalPackageArn(packageArn)
+
 	return filepath.Join(repo.repoRoot, normalizeDirectory(packageName))
 }
 
@@ -439,4 +443,10 @@ func validatePackageManifest(parsedManifest *PackageManifest, packageName string
 	}
 
 	return nil
+}
+
+// get the package name form a global package Arn for consistency with ssm S3 installer
+func getPackageNameFromGlobalPackageArn(packageArn string) string {
+
+	return strings.TrimPrefix(packageArn, "arn:aws:ssm:::package/")
 }
