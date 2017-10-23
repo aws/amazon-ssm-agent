@@ -45,16 +45,32 @@ func (m *MockCommandExecuter) Execute(log log.T,
 	return args.Get(0).(io.Reader), args.Get(1).(io.Reader), args.Get(2).(int), args.Get(3).([]error)
 }
 
+// NewExecute is a mocked method that just returns what mock tells it to.
+func (m *MockCommandExecuter) NewExecute(
+	log log.T,
+	workingDir string,
+	stdoutWriter io.Writer,
+	stderrWriter io.Writer,
+	cancelFlag task.CancelFlag,
+	executionTimeout int,
+	commandName string,
+	commandArguments []string,
+) (exitCode int, err error) {
+	args := m.Called(log, workingDir, stdoutWriter, stderrWriter, cancelFlag, executionTimeout, commandName, commandArguments)
+	log.Infof("args are %v", args)
+	return args.Get(0).(int), args.Error(1)
+}
+
 // StartExe is a mocked method that just returns what mock tells it to.
 func (m *MockCommandExecuter) StartExe(log log.T,
 	workingDir string,
-	stdoutFilePath string,
-	stderrFilePath string,
+	stdoutWriter io.Writer,
+	stderrWriter io.Writer,
 	cancelFlag task.CancelFlag,
 	commandName string,
 	commandArguments []string,
-) (process *os.Process, exitCode int, errs []error) {
-	args := m.Called(log, workingDir, stdoutFilePath, stderrFilePath, cancelFlag, commandName, commandArguments)
+) (process *os.Process, exitCode int, errs error) {
+	args := m.Called(log, workingDir, stdoutWriter, stderrWriter, cancelFlag, commandName, commandArguments)
 	log.Infof("args are %v", args)
-	return args.Get(0).(*os.Process), args.Get(1).(int), args.Get(2).([]error)
+	return args.Get(0).(*os.Process), args.Get(1).(int), args.Error(2)
 }
