@@ -25,6 +25,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/updateutil"
 
 	"fmt"
+	"path/filepath"
 	"strings"
 )
 
@@ -309,10 +310,20 @@ func ParseDocumentNameAndVersion(name string) (docName, docVersion string) {
 	if len(name) == 0 {
 		return "", ""
 	}
-	docNameArray := strings.Split(name, ":")
-	docName = docNameArray[0]
+
+	//This gets the document name and version if the fullARN is provided
+	//if arn:aws:ssm:us-east-1:1234567890:document/NameOfDoc:2 is provided
+	//docNameWithVersion will be NameOfDoc:2
+	docNameWithVersion := filepath.Base(name)
+	docNameArray := strings.Split(docNameWithVersion, ":")
 	if len(docNameArray) > 1 {
+		// docVersion will be 2
 		docVersion = docNameArray[1]
 	}
-	return
+
+	//This gets the document name if the fullARN is provided
+	//docName will be arn:aws:ssm:us-east-1:1234567890:document/NameOfDoc
+	docName = strings.TrimSuffix(name, ":"+docVersion)
+
+	return docName, docVersion
 }
