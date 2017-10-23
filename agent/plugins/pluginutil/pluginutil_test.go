@@ -16,11 +16,9 @@ package pluginutil
 
 import (
 	"bytes"
-	"fmt"
 	"strings"
 	"testing"
 
-	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
@@ -70,19 +68,6 @@ func testTruncatedString(t *testing.T, original string, truncated string, trunca
 		// suffix doesn't fir, expect a prefix of the suffix
 		assert.Equal(t, truncated, truncatedSuffix[:truncatedLength])
 	}
-}
-
-func TestOutputTruncation(t *testing.T) {
-	out := contracts.PluginOutput{
-		Stdout:   "standard output of test case",
-		Stderr:   "standard error of test case",
-		ExitCode: 0,
-		Status:   "Success",
-	}
-	response := contracts.TruncateOutput(out.Stdout, out.Stderr, 200)
-	fmt.Printf("response=\n%v\n", response)
-	assert.Equal(t, out.String(), response)
-
 }
 
 func TestValidateExecutionTimeout(t *testing.T) {

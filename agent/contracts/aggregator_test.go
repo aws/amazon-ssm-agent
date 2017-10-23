@@ -4,9 +4,12 @@ import (
 	"fmt"
 	"testing"
 
+	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/times"
 	"github.com/stretchr/testify/assert"
 )
+
+var logger = log.NewMockLog()
 
 func TestPrepareRuntimeStatus(t *testing.T) {
 	type testCase struct {

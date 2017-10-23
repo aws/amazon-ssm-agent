@@ -392,7 +392,7 @@ func handleCloudwatchPlugin(context context.T, pluginResults map[string]*contrac
 				instanceID,
 				appconfig.DefaultDocumentRootDirName,
 				context.AppConfig().Agent.OrchestrationRootDir)
-			orchestrationDir := fileutil.BuildPath(orchestrationRootDir, documentID, pluginRes.PluginName)
+			orchestrationDir := fileutil.BuildPath(orchestrationRootDir, documentID)
 			manager.Invoke(log, ID, pluginRes, orchestrationDir)
 		}
 	}
