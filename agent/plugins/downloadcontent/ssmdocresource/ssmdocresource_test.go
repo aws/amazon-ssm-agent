@@ -56,7 +56,7 @@ func TestSSMDocResource_FullARNNameInput(t *testing.T) {
 	}
 	ssmresource, _ := NewSSMDocResource(locationInfo)
 	dir := "destination"
-	depMock.On("GetDocument", logMock, "mySharedDocument", "").Return(&docOutput, nil)
+	depMock.On("GetDocument", logMock, "arn:aws:ssm:us-east-1:1234567890:document/mySharedDocument", "").Return(&docOutput, nil)
 
 	fileMock.On("Exists", "destination").Return(true)
 	fileMock.On("IsDirectory", "destination").Return(true)
@@ -86,7 +86,7 @@ func TestSSMDocResource_FullARNNameInputWithVersion(t *testing.T) {
 	}
 	ssmresource, _ := NewSSMDocResource(locationInfo)
 	dir := "destination"
-	depMock.On("GetDocument", logMock, "mySharedDocument", "10").Return(&docOutput, nil)
+	depMock.On("GetDocument", logMock, "arn:aws:ssm:us-east-1:1234567890:document/mySharedDocument", "10").Return(&docOutput, nil)
 
 	fileMock.On("Exists", "destination").Return(true)
 	fileMock.On("IsDirectory", "destination").Return(true)

@@ -251,9 +251,7 @@ func (p *Plugin) downloadDocumentFromSSM(log log.T, config contracts.Configurati
 	// Downloads folder for download path
 	destination := filepath.Join(config.OrchestrationDirectory, downloadsDir)
 
-	//This gets the document name if the fullARN is provided
-	docName := filepath.Base(input.DocumentPath)
-	docName, docVersion := docparser.ParseDocumentNameAndVersion(docName)
+	docName, docVersion := docparser.ParseDocumentNameAndVersion(input.DocumentPath)
 	var docResponse *ssm.GetDocumentOutput
 	if docResponse, err = p.ssmSvc.GetDocument(log, docName, docVersion); err != nil {
 		log.Errorf("Unable to get ssm document. %v", err)
@@ -267,7 +265,7 @@ func (p *Plugin) downloadDocumentFromSSM(log log.T, config contracts.Configurati
 		return "", err
 	}
 
-	pathToFile := filepath.Join(destination, docName+jsonExtension)
+	pathToFile := filepath.Join(destination, filepath.Base(docName)+jsonExtension)
 
 	if err = p.filesys.WriteFile(pathToFile, *docResponse.Content); err != nil {
 		log.Errorf("Error writing to file %v - %v", pathToFile, err)
