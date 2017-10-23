@@ -22,10 +22,13 @@ import (
 	"sync"
 	"time"
 
+	"path/filepath"
+
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
+	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/longrunning"
 	managerContracts "github.com/aws/amazon-ssm-agent/agent/longrunning/plugin"
@@ -64,7 +67,7 @@ type T interface {
 	contracts.ICoreModule
 	GetRegisteredPlugins() map[string]managerContracts.Plugin
 	StopPlugin(name string, cancelFlag task.CancelFlag) (err error)
-	StartPlugin(name, configuration string, orchestrationDir string, cancelFlag task.CancelFlag) (err error)
+	StartPlugin(name, configuration string, orchestrationDir string, cancelFlag task.CancelFlag, out iohandler.IOHandler) (err error)
 	EnsurePluginRegistered(name string, plugin managerContracts.Plugin) (err error)
 }
 
@@ -201,7 +204,23 @@ func (m *Manager) ModuleExecute(context context.T) (err error) {
 				This is in sync with our task-pool - which rejects jobs with duplicate jobIds.
 			*/
 			//todo: orchestrationDir should be set accordingly - 3rd parameter for Start
-			p.Handler.Start(m.context, p.Info.Configuration, "", task.NewChanneledCancelFlag())
+			instanceID, _ := platform.InstanceID()
+			orchestrationRootDir := filepath.Join(
+				appconfig.DefaultDataStorePath,
+				instanceID,
+				appconfig.DefaultDocumentRootDirName,
+				m.context.AppConfig().Agent.OrchestrationRootDir)
+			orchestrationDir := fileutil.BuildPath(orchestrationRootDir)
+
+			ioConfig := contracts.IOConfiguration{
+				OrchestrationDirectory: orchestrationDir,
+				OutputS3BucketName:     "",
+				OutputS3KeyPrefix:      "",
+			}
+			out := iohandler.NewDefaultIOHandler(log, ioConfig)
+			out.Init(log, p.Info.Name)
+			p.Handler.Start(m.context, p.Info.Configuration, "", task.NewChanneledCancelFlag(), out)
+			out.Close(log)
 			m.registeredPlugins[pluginName] = p
 		}
 	} else {
@@ -339,20 +358,27 @@ func (m *Manager) configCloudWatch(log log.T) {
 		orchestrationDir := fileutil.BuildPath(
 			appconfig.DefaultDataStorePath,
 			instanceId,
-			appconfig.DefaultDocumentRootDirName,
-			appconfig.PluginNameCloudWatch)
+			appconfig.DefaultDocumentRootDirName)
 		var config string
 		if config, err = cloudwatch.Instance().ParseEngineConfiguration(); err != nil {
 			log.Debug("Cannot parse EngineConfiguration to string format")
 		}
 
+		ioConfig := contracts.IOConfiguration{
+			OrchestrationDirectory: orchestrationDir,
+			OutputS3BucketName:     "",
+			OutputS3KeyPrefix:      "",
+		}
+		out := iohandler.NewDefaultIOHandler(log, ioConfig)
+		out.Init(log, appconfig.PluginNameCloudWatch)
 		if err = m.StartPlugin(
 			appconfig.PluginNameCloudWatch,
 			config,
 			orchestrationDir,
-			task.NewChanneledCancelFlag()); err != nil {
+			task.NewChanneledCancelFlag(), out); err != nil {
 			log.Errorf("Failed to start the cloud watch plugin bacause: %s", err)
 		}
+		out.Close(log)
 
 		// check if configure cloudwatch successfully
 		stderrFilePath := fileutil.BuildPath(orchestrationDir, appconfig.PluginNameCloudWatch, "stderr")

@@ -24,11 +24,11 @@ import (
 	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/context"
-	"github.com/aws/amazon-ssm-agent/agent/plugins/pluginutil"
+	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 )
 
-var pluginConfig = pluginutil.PluginConfig{
+var pluginConfig = iohandler.PluginConfig{
 	StdoutFileName:        "stdout",
 	StderrFileName:        "stderr",
 	MaxStdoutLength:       2500,
@@ -36,7 +36,7 @@ var pluginConfig = pluginutil.PluginConfig{
 	OutputTruncatedSuffix: "cw",
 }
 
-func NewPlugin(pluginConfig pluginutil.PluginConfig) (*Plugin, error) {
+func NewPlugin(pluginConfig iohandler.PluginConfig) (*Plugin, error) {
 	var plugin Plugin
 	plugin.MaxStdoutLength = pluginConfig.MaxStdoutLength
 	plugin.MaxStderrLength = pluginConfig.MaxStderrLength

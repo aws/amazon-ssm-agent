@@ -16,6 +16,7 @@ package cloudwatch
 
 import (
 	"github.com/aws/amazon-ssm-agent/agent/context"
+	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 	"github.com/stretchr/testify/mock"
@@ -51,8 +52,8 @@ func (m *Mock) IsRunning(context context.T) bool {
 }
 
 // Start starts the executable file and returns encountered errors - returns nil for testing
-func (m *Mock) Start(context context.T, configuration string, orchestrationDir string, cancelFlag task.CancelFlag) (err error) {
-	args := m.Called(context, configuration, orchestrationDir, cancelFlag)
+func (m *Mock) Start(context context.T, configuration string, orchestrationDir string, cancelFlag task.CancelFlag, out iohandler.IOHandler) (err error) {
+	args := m.Called(context, configuration, orchestrationDir, cancelFlag, out)
 	return args.Get(0).(error)
 }
 

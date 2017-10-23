@@ -2,15 +2,12 @@ package manager
 
 import (
 	"fmt"
-	"io/ioutil"
-	"path/filepath"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
-	"github.com/aws/amazon-ssm-agent/agent/fileutil"
+	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	logger "github.com/aws/amazon-ssm-agent/agent/log"
-	"github.com/aws/amazon-ssm-agent/agent/plugins/pluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 )
 
@@ -92,32 +89,30 @@ func enablePlugin(log logger.T, orchestrationDirectory string, pluginID string, 
 			contracts.ResultStatusFailed, res)
 		return
 	}
-	outputPath := fileutil.BuildPath(orchestrationDirectory, appconfig.PluginNameCloudWatch)
-	stdoutFilePath := filepath.Join(outputPath, "stdout")
-	stderrFilePath := filepath.Join(outputPath, "stderr")
+	ioConfig := contracts.IOConfiguration{
+		OrchestrationDirectory: orchestrationDirectory,
+		OutputS3BucketName:     res.OutputS3BucketName,
+		OutputS3KeyPrefix:      res.OutputS3KeyPrefix,
+	}
+	out := iohandler.NewDefaultIOHandler(log, ioConfig)
+	out.Init(log, appconfig.PluginNameCloudWatch)
 
 	//start the plugin with the new configuration
-	if err := lrpm.StartPlugin(lrpName, property, orchestrationDirectory, cancelFlag); err != nil {
+	if err := lrpm.StartPlugin(lrpName, property, orchestrationDirectory, cancelFlag, out); err != nil {
 		log.Errorf("Unable to start the plugin - %s: %s", lrpName, err.Error())
 		CreateResult(fmt.Sprintf("Encountered error while starting the plugin: %s", err.Error()),
 			contracts.ResultStatusFailed, res)
 	} else {
-		var errData []byte
-		var errorReadingFile error
-		if errData, errorReadingFile = ioutil.ReadFile(stderrFilePath); errorReadingFile != nil {
-			log.Errorf("Unable to read the stderr file - %s: %s", stderrFilePath, errorReadingFile.Error())
-		}
-		serr := string(errData)
 
-		if len(serr) > 0 {
-			log.Errorf("Unable to start the plugin - %s: %s", lrpName, serr)
+		if len(out.GetStderr()) > 0 {
+			log.Errorf("Unable to start the plugin - %s: %s", lrpName, out.GetStderr())
 
 			// Stop the plugin if configuration failed.
 			if err := lrpm.StopPlugin(lrpName, cancelFlag); err != nil {
 				log.Errorf("Unable to start the plugin - %s: %s", lrpName, err.Error())
 			}
 
-			CreateResult(fmt.Sprintf("Encountered error while starting the plugin: %s", serr),
+			CreateResult(fmt.Sprintf("Encountered error while starting the plugin: %s", out.GetStderr()),
 				contracts.ResultStatusFailed, res)
 
 		} else {
@@ -125,11 +120,6 @@ func enablePlugin(log logger.T, orchestrationDirectory string, pluginID string, 
 			CreateResult("success", contracts.ResultStatusSuccess, res)
 		}
 	}
-	defaultPlugin := pluginutil.DefaultPlugin{}
-	// Upload output to S3
-	uploadOutputToS3BucketErrors := defaultPlugin.UploadOutputToS3Bucket(log, pluginID, outputPath, res.OutputS3BucketName, res.OutputS3KeyPrefix, false, "", stdoutFilePath, stderrFilePath)
-	if len(uploadOutputToS3BucketErrors) > 0 {
-		log.Errorf("Unable to upload the logs - %s: %s", pluginID, uploadOutputToS3BucketErrors)
-	}
+	out.Close(log)
 	return
 }
