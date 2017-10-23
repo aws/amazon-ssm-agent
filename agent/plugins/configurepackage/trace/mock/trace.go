@@ -15,7 +15,7 @@
 package trace_mock
 
 import (
-	"github.com/aws/amazon-ssm-agent/agent/contracts"
+	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/packageservice"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/trace"
 	"github.com/stretchr/testify/mock"
@@ -54,7 +54,7 @@ func (m *Mock) ToPackageServiceTrace() []*packageservice.Trace {
 	return args.Get(0).([]*packageservice.Trace)
 }
 
-func (m *Mock) ToPluginOutput() *contracts.PluginOutput {
+func (m *Mock) ToPluginOutput() iohandler.IOHandler {
 	args := m.Called()
-	return args.Get(0).(*contracts.PluginOutput)
+	return args.Get(0).(iohandler.IOHandler)
 }

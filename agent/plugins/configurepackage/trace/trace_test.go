@@ -187,7 +187,7 @@ func TestToPluginOutput(t *testing.T) {
 
 	out := tracer.ToPluginOutput()
 
-	assert.Equal(t, "traceBinfo\ntraceAinfo\ntraceCinfo\n", out.Stdout)
+	assert.Equal(t, "traceBinfo\ntraceAinfo\ntraceCinfo\n", out.GetStdout())
 }
 
 func TestAppendWithSubtraces(t *testing.T) {
