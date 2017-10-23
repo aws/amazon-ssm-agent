@@ -22,6 +22,7 @@ import (
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
+	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 )
@@ -55,33 +56,32 @@ func getMsiApplicationMode(log log.T, pluginInput ApplicationPluginInput) (strin
 }
 
 // setMsiExecStatus sets the exit status and output to be returned to the user based on exit code
-func setMsiExecStatus(log log.T, pluginInput ApplicationPluginInput, cancelFlag task.CancelFlag, out *contracts.PluginOutput) {
-	out.Stdout = pluginInput.Source
-	out.Stderr = ""
-	out.Status = contracts.ResultStatusFailed
+func setMsiExecStatus(log log.T, pluginInput ApplicationPluginInput, cancelFlag task.CancelFlag, out iohandler.IOHandler) {
+	out.AppendInfo(pluginInput.Source)
+	out.SetStatus(contracts.ResultStatusFailed)
 	isUnKnownError := false
 
-	switch out.ExitCode {
+	switch out.GetExitCode() {
 	case appconfig.SuccessExitCode:
-		out.Status = contracts.ResultStatusSuccess
+		out.SetStatus(contracts.ResultStatusSuccess)
 	case ErrorUnknownProduct:
 		if pluginInput.Action == UNINSTALL {
 			// Uninstall will skip, if product is not currently installed.
 			// This is needed to support idempotent behavior.
-			out.Status = contracts.ResultStatusSuccess
+			out.SetStatus(contracts.ResultStatusSuccess)
 		}
 	case ErrorSuccessRebootInitiated:
 		fallthrough
 	case appconfig.RebootExitCode:
-		out.Status = contracts.ResultStatusSuccessAndReboot
+		out.SetStatus(contracts.ResultStatusSuccessAndReboot)
 	case appconfig.CommandStoppedPreemptivelyExitCode:
 		if cancelFlag.ShutDown() {
-			out.Status = contracts.ResultStatusFailed
+			out.SetStatus(contracts.ResultStatusFailed)
 		}
 		if cancelFlag.Canceled() {
-			out.Status = contracts.ResultStatusCancelled
+			out.SetStatus(contracts.ResultStatusCancelled)
 		}
-		out.Status = contracts.ResultStatusTimedOut
+		out.SetStatus(contracts.ResultStatusTimedOut)
 	default:
 		isUnKnownError = true
 	}
@@ -94,14 +94,15 @@ func setMsiExecStatus(log log.T, pluginInput ApplicationPluginInput, cancelFlag 
 		// Source:{https:///}
 
 		// Construct stderr in above format using StandardMsiErrorCodes
-		out.Stderr = fmt.Sprintf("Action:{%v}; Status:{%v}; ErrorCode:{%v}; %v Source:{%v};", pluginInput.Action, out.Status, out.ExitCode, getExitCodeDescription(out.ExitCode), pluginInput.Source)
+		out.AppendErrorf("Action:{%v}; Status:{%v}; ErrorCode:{%v}; %v Source:{%v};", pluginInput.Action, out.GetStatus(), out.GetExitCode(), getExitCodeDescription(out.GetExitCode()), pluginInput.Source)
 	}
 
 	// Logging msiexec.Result
 	log.Debug("logging stdouts & errors after setting final status for msiexec")
-	log.Debugf("resultCode: %v", out.ExitCode)
-	log.Debugf("stdout: %v", out.Stdout)
-	log.Debugf("stderr: %v", out.Stderr)
+	log.Debugf("resultCode: %v", out.GetExitCode())
+	log.Debugf("resultCode: %v", out.GetExitCode())
+	log.Debugf("stdout: %v", out.GetStdout())
+	log.Debugf("stderr: %v", out.GetStderr())
 }
 
 // processParams smartly divides the input parameter string into valid string blocks
