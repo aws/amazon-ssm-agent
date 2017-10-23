@@ -27,8 +27,8 @@ import (
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
+	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler"
 	"github.com/aws/amazon-ssm-agent/agent/jobobject"
-	"github.com/aws/amazon-ssm-agent/agent/plugins/pluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 )
 
@@ -57,7 +57,7 @@ const (
 
 // Plugin is the type for the configureDaemon plugin.
 type Plugin struct {
-	pluginutil.DefaultPlugin
+	iohandler.PluginConfig
 	// ExeLocation is the directory for a particular daemon package
 	ExeLocation string
 	// Name is name of the daemon
@@ -230,7 +230,7 @@ func StartDaemon(p *Plugin, context context.T, configuration string) (err error)
 	}
 }
 
-func (p *Plugin) Start(context context.T, configuration string, orchestrationDir string, cancelFlag task.CancelFlag) error {
+func (p *Plugin) Start(context context.T, configuration string, orchestrationDir string, cancelFlag task.CancelFlag, out iohandler.IOHandler) error {
 	log := context.Log()
 	log.Infof(" Package location - %s", p.ExeLocation)
 	log.Infof(" Command/Script/Executable to be run - %s", configuration)

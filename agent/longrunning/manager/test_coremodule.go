@@ -17,6 +17,7 @@ package manager
 import (
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
+	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler"
 	managerContracts "github.com/aws/amazon-ssm-agent/agent/longrunning/plugin"
 	"github.com/aws/amazon-ssm-agent/agent/longrunning/plugin/cloudwatch"
 	"github.com/aws/amazon-ssm-agent/agent/task"
@@ -81,7 +82,7 @@ func (m *Mock) StopPlugin(name string, cancelFlag task.CancelFlag) (err error) {
 }
 
 // StartPlugin starts the given plugin with the given configuration and returns encountered error - returns nil here for testing
-func (m *Mock) StartPlugin(name, configuration, orchestrationDir string, cancelFlag task.CancelFlag) (err error) {
+func (m *Mock) StartPlugin(name, configuration, orchestrationDir string, cancelFlag task.CancelFlag, out iohandler.IOHandler) (err error) {
 	return nil
 }
 

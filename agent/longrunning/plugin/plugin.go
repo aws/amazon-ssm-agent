@@ -21,6 +21,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
+	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/longrunning/plugin/rundaemon"
 	"github.com/aws/amazon-ssm-agent/agent/task"
@@ -49,7 +50,7 @@ type Plugin struct {
 //LongRunningPlugin is the interface that must be implemented by all long running plugins
 type LongRunningPlugin interface {
 	IsRunning(context context.T) bool
-	Start(context context.T, configuration string, orchestrationDir string, cancelFlag task.CancelFlag) error
+	Start(context context.T, configuration string, orchestrationDir string, cancelFlag task.CancelFlag, out iohandler.IOHandler) error
 	Stop(context context.T, cancelFlag task.CancelFlag) error
 }
 
