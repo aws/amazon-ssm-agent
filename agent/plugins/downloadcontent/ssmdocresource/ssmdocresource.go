@@ -70,9 +70,7 @@ func (ssmdoc *SSMDocResource) Download(log log.T, filesys filemanager.FileSystem
 		destinationPath = appconfig.DownloadRoot
 	}
 
-	//This gets the document name if the fullARN is provided
-	docNameWithVersion := filepath.Base(ssmdoc.Info.DocName)
-	docName, docVersion := docparser.ParseDocumentNameAndVersion(docNameWithVersion)
+	docName, docVersion := docparser.ParseDocumentNameAndVersion(ssmdoc.Info.DocName)
 	log.Debug("Making a call to get document", docName, docVersion)
 	var docResponse *ssm.GetDocumentOutput
 	if docResponse, err = ssmdocdep.GetDocument(log, docName, docVersion); err != nil {
@@ -82,7 +80,7 @@ func (ssmdoc *SSMDocResource) Download(log log.T, filesys filemanager.FileSystem
 
 	var destinationFilePath string
 	if filesys.Exists(destinationPath) && filesys.IsDirectory(destinationPath) || os.IsPathSeparator(destinationPath[len(destinationPath)-1]) {
-		destinationFilePath = filepath.Join(destinationPath, docName+remoteresource.JSONExtension)
+		destinationFilePath = filepath.Join(destinationPath, filepath.Base(docName)+remoteresource.JSONExtension)
 
 	} else {
 		destinationFilePath = destinationPath

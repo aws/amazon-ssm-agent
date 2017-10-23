@@ -554,7 +554,7 @@ func TestDownloadDocumentFromSSM_ARNName(t *testing.T) {
 		Content: &content,
 	}
 
-	ssmMock.On("GetDocument", contextMock.Log(), "mySharedDocument", "10").Return(&docResponse, nil)
+	ssmMock.On("GetDocument", contextMock.Log(), "arn:aws:ssm:us-east-1:1234567890:document/mySharedDocument", "10").Return(&docResponse, nil)
 	fileMock.On("MakeDirs", "orch/downloads").Return(nil)
 	fileMock.On("WriteFile", "orch/downloads/mySharedDocument.json", content).Return(nil)
 	p := Plugin{
