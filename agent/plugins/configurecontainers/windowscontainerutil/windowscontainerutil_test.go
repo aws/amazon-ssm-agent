@@ -17,6 +17,7 @@ import (
 	"testing"
 
 	"github.com/aws/amazon-ssm-agent/agent/fileutil/artifact"
+	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
@@ -46,10 +47,11 @@ func TestInstall(t *testing.T) {
 	dep = containerMock
 	defer func() { dep = depOrig }()
 
-	output := RunInstallCommands(loggerMock, "")
+	output := iohandler.DefaultIOHandler{}
+	RunInstallCommands(loggerMock, "", &output)
 
-	assert.Equal(t, output.ExitCode, 0)
-	assert.Contains(t, output.Stdout, "Installation complete")
+	assert.Equal(t, output.GetExitCode(), 0)
+	assert.Contains(t, output.GetStdout(), "Installation complete")
 	containerMock.AssertCalled(t, "PlatformVersion", mock.Anything)
 	containerMock.AssertCalled(t, "IsPlatformNanoServer", mock.Anything)
 	containerMock.AssertNumberOfCalls(t, "UpdateUtilExeCommandOutput", 4)
