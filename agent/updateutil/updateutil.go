@@ -28,6 +28,8 @@ import (
 	"errors"
 	"strconv"
 
+	"io"
+
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
@@ -374,6 +376,44 @@ func (util *Utility) ExeCommandOutput(
 	}
 	defer stdoutWriter.Close()
 	defer stderrWriter.Close()
+
+	// Don't set command.Stdout - we're going to return it instead of writing it
+	command.Stderr = stderrWriter
+
+	// Run the command and return its output
+	var out []byte
+	out, err = cmdOutput(command)
+	// Write the returned output so that we can upload it if needed
+	stdoutWriter.Write(out)
+	if err != nil {
+		return
+	}
+
+	return string(out), err
+}
+
+// TODO move to commandUtil
+// ExeCommandOutput executes shell command and returns the stdout
+func (util *Utility) NewExeCommandOutput(
+	log log.T,
+	cmd string,
+	parameters []string,
+	workingDir string,
+	outputRoot string,
+	stdoutWriter io.Writer,
+	stderrWriter io.Writer,
+	usePlatformSpecificCommand bool) (output string, err error) {
+
+	parts := append([]string{cmd}, parameters...) //strings.Fields(cmd)
+	var tempCmd []string
+	if usePlatformSpecificCommand {
+		tempCmd = setPlatformSpecificCommand(parts)
+	} else {
+		tempCmd = parts
+	}
+
+	command := execCommand(tempCmd[0], tempCmd[1:]...)
+	command.Dir = workingDir
 
 	// Don't set command.Stdout - we're going to return it instead of writing it
 	command.Stderr = stderrWriter
