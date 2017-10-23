@@ -19,14 +19,14 @@ package domainjoin
 import (
 	"bytes"
 	"fmt"
-	"path/filepath"
+	"io"
 	"strings"
-	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
+	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/platform"
@@ -67,7 +67,6 @@ var utilExe convert
 
 // Plugin is the type for the domain join plugin.
 type Plugin struct {
-	pluginutil.DefaultPlugin
 }
 
 // DomainJoinPluginInput represents one set of commands executed by the Domain join plugin.
@@ -80,15 +79,8 @@ type DomainJoinPluginInput struct {
 }
 
 // NewPlugin returns a new instance of the plugin.
-func NewPlugin(pluginConfig pluginutil.PluginConfig) (*Plugin, error) {
+func NewPlugin() (*Plugin, error) {
 	var plugin Plugin
-	plugin.MaxStdoutLength = pluginConfig.MaxStdoutLength
-	plugin.MaxStderrLength = pluginConfig.MaxStderrLength
-	plugin.StdoutFileName = pluginConfig.StdoutFileName
-	plugin.StderrFileName = pluginConfig.StderrFileName
-	plugin.OutputTruncatedSuffix = pluginConfig.OutputTruncatedSuffix
-	plugin.ExecuteUploadOutputToS3Bucket = pluginutil.UploadOutputToS3BucketExecuter(plugin.UploadOutputToS3Bucket)
-
 	return &plugin, nil
 }
 
@@ -97,114 +89,88 @@ func Name() string {
 	return appconfig.PluginNameDomainJoin
 }
 
-type convert func(log.T, string, []string, string, string, string, string, bool) (string, error)
+type convert func(log.T, string, []string, string, string, io.Writer, io.Writer, bool) (string, error)
 
-// Execute runs multiple sets of commands and returns their outputs.
-// res.Output will contain a slice of RunCommandPluginOutput.
-func (p *Plugin) Execute(context context.T, config contracts.Configuration, cancelFlag task.CancelFlag) (res contracts.PluginResult) {
+func (p *Plugin) Execute(context context.T, config contracts.Configuration, cancelFlag task.CancelFlag, output iohandler.IOHandler) {
 	log := context.Log()
 	log.Infof("%v started with configuration %v", Name(), config)
-	res.StartDateTime = time.Now()
-	defer func() { res.EndDateTime = time.Now() }()
 
-	//loading Properties as map since aws:domainJoin uses properties as map
 	var properties map[string]interface{}
-	if properties = pluginutil.LoadParametersAsMap(log, config.Properties, &res); res.Code != 0 {
-		return res
+	if properties = pluginutil.LoadParametersAsMap(log, config.Properties, output); output.GetExitCode() != 0 {
+		return
 	}
-
-	var out contracts.PluginOutput
 
 	if cancelFlag.ShutDown() {
-		out.MarkAsShutdown()
+		output.MarkAsShutdown()
 	} else if cancelFlag.Canceled() {
-		out.MarkAsCancelled()
+		output.MarkAsCancelled()
 	} else {
 		util := updateutil.Utility{CustomUpdateExecutionTimeoutInSeconds: UpdateExecutionTimeoutInSeconds}
-		utilExe = util.ExeCommandOutput
-		out = p.runCommandsRawInput(log, config.PluginID, properties, config.OrchestrationDirectory, cancelFlag, config.OutputS3BucketName, config.OutputS3KeyPrefix, utilExe)
+		utilExe = util.NewExeCommandOutput
+		p.runCommandsRawInput(log, config.PluginID, properties, config.OrchestrationDirectory, cancelFlag, output, utilExe)
 
-		if out.Status == contracts.ResultStatusFailed {
-			out.AppendInfo(log, "Domain join failed.")
-		} else if out.Status == contracts.ResultStatusSuccess {
-			out.AppendInfo(log, "Domain join succeeded.")
+		if output.GetStatus() == contracts.ResultStatusFailed {
+			output.AppendInfo("Domain join failed.")
+		} else if output.GetStatus() == contracts.ResultStatusSuccess {
+			output.AppendInfo("Domain join succeeded.")
 		}
-
-		res.Code = out.ExitCode
-		res.Status = out.Status
-		res.Output = out.String()
-		res.StandardOutput = pluginutil.StringPrefix(out.Stdout, p.MaxStdoutLength, p.OutputTruncatedSuffix)
-		res.StandardError = pluginutil.StringPrefix(out.Stderr, p.MaxStderrLength, p.OutputTruncatedSuffix)
 	}
 
-	return res
+	return
 }
 
 // runCommandsRawInput executes one set of commands and returns their output.
 // The input is in the default json unmarshal format (e.g. map[string]interface{}).
-func (p *Plugin) runCommandsRawInput(log log.T, pluginID string, rawPluginInput map[string]interface{}, orchestrationDirectory string, cancelFlag task.CancelFlag, outputS3BucketName string, outputS3KeyPrefix string, utilExe convert) (out contracts.PluginOutput) {
+func (p *Plugin) runCommandsRawInput(log log.T, pluginID string, rawPluginInput map[string]interface{}, orchestrationDirectory string, cancelFlag task.CancelFlag, output iohandler.IOHandler, utilExe convert) {
 	var pluginInput DomainJoinPluginInput
 	err := jsonutil.Remarshal(rawPluginInput, &pluginInput)
 	log.Debugf("Plugin input %v", pluginInput)
 
 	if err != nil {
 		errorString := fmt.Errorf("Invalid format in plugin properties %v;\nerror %v", rawPluginInput, err)
-		out.MarkAsFailed(log, errorString)
+		output.MarkAsFailed(errorString)
 		return
 	}
-	return p.runCommands(log, pluginID, pluginInput, orchestrationDirectory, cancelFlag, outputS3BucketName, outputS3KeyPrefix, utilExe)
+	p.runCommands(log, pluginID, pluginInput, orchestrationDirectory, cancelFlag, output, utilExe)
 }
 
 // runCommands executes the command and returns the output.
-func (p *Plugin) runCommands(log log.T, pluginID string, pluginInput DomainJoinPluginInput, orchestrationDirectory string, cancelFlag task.CancelFlag, outputS3BucketName string, outputS3KeyPrefix string, utilExe convert) (out contracts.PluginOutput) {
+func (p *Plugin) runCommands(log log.T, pluginID string, pluginInput DomainJoinPluginInput, orchestrationDirectory string, cancelFlag task.CancelFlag, out iohandler.IOHandler, utilExe convert) {
 	var err error
 
 	// create orchestration dir if needed
 	if err = makeDir(orchestrationDirectory); err != nil {
 		log.Debug("failed to create orchestration directory", orchestrationDirectory, err)
-		out.MarkAsFailed(log, err)
+		out.MarkAsFailed(err)
 		return
 	}
 
 	// Construct Command line with executable file name and parameters
 	var command string
 	if command, err = makeArgs(log, pluginInput); err != nil {
-		out.MarkAsFailed(log, fmt.Errorf("Failed to build domain join command because : %v", err.Error()))
+		out.MarkAsFailed(fmt.Errorf("Failed to build domain join command because : %v", err.Error()))
 		return
 	}
 
 	log.Debugf("command line is : %v", command)
 	workingDir := fileutil.BuildPath(appconfig.DefaultPluginPath, DomainJoinFolderName)
 	commandParts := strings.Fields(command)
-	out.Status = contracts.ResultStatusInProgress
+	out.SetStatus(contracts.ResultStatusInProgress)
 	var output string
 	output, err = utilExe(log,
 		commandParts[0],
 		commandParts[1:],
 		workingDir,
 		orchestrationDirectory,
-		p.StdoutFileName,
-		p.StderrFileName,
+		out.GetStdoutWriter(),
+		out.GetStderrWriter(),
 		true)
 
 	log.Debugf("code is: %v", output)
 	log.Debugf("err is: %v", err)
 
-	// Expected output file paths for debugging (UpdateUtil saves output files from running a command in a subdirectory of the orchestration directory named output)
-	log.Debugf("stdoutFilePath file %v, stderrFilePath file %v",
-		filepath.Join(orchestrationDirectory, updateutil.DefaultOutputFolder, p.StderrFileName),
-		filepath.Join(orchestrationDirectory, updateutil.DefaultOutputFolder, p.StdoutFileName)) //check if this is log path
-
-	// Upload output to S3
-	outputPath := filepath.Join(orchestrationDirectory, updateutil.DefaultOutputFolder)
-	// TODO: We don't have the stdout and stderr from the command execution which are the files we'd be uploading - and the out.Stdout and Stderr are likely empty - force upload by sending a non-empty string "TODO"
-	uploadOutputToS3BucketErrors := p.ExecuteUploadOutputToS3Bucket(log, pluginID, outputPath, outputS3BucketName, outputS3KeyPrefix, false, "", "TODO", "TODO")
-	if len(uploadOutputToS3BucketErrors) > 0 {
-		log.Errorf("Unable to upload the logs: %s", uploadOutputToS3BucketErrors)
-	}
-
 	if err != nil {
-		out.MarkAsFailed(log, err)
+		out.MarkAsFailed(err)
 		return
 	}
 
