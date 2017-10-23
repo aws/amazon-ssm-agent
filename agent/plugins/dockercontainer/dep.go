@@ -1,6 +1,8 @@
 package dockercontainer
 
 import (
+	"io"
+
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/updateutil"
 )
@@ -15,8 +17,8 @@ type dependencies interface {
 		parameters []string,
 		workingDir string,
 		outputRoot string,
-		stdOut string,
-		stdErr string,
+		stdOut io.Writer,
+		stdErr io.Writer,
 		usePlatformSpecificCommand bool) (output string, err error)
 }
 
@@ -29,9 +31,9 @@ func (deps) UpdateUtilExeCommandOutput(
 	parameters []string,
 	workingDir string,
 	outputRoot string,
-	stdOut string,
-	stdErr string,
+	stdOut io.Writer,
+	stdErr io.Writer,
 	usePlatformSpecificCommand bool) (output string, err error) {
 	util := updateutil.Utility{CustomUpdateExecutionTimeoutInSeconds: customUpdateExecutionTimeoutInSeconds}
-	return util.ExeCommandOutput(log, cmd, parameters, workingDir, outputRoot, stdOut, stdErr, usePlatformSpecificCommand)
+	return util.NewExeCommandOutput(log, cmd, parameters, workingDir, outputRoot, stdOut, stdErr, usePlatformSpecificCommand)
 }

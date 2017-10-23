@@ -16,8 +16,6 @@ package dockercontainer
 import (
 	"errors"
 	"fmt"
-	"io/ioutil"
-	"path/filepath"
 	"regexp"
 	"strconv"
 	"time"
@@ -27,6 +25,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/executers"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
+	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/pluginutil"
@@ -58,7 +57,8 @@ var duration_Seconds time.Duration = 30 * time.Second
 
 // Plugin is the type for the plugin.
 type Plugin struct {
-	pluginutil.DefaultPlugin
+	// ExecuteCommand is an object that can execute commands.
+	CommandExecuter executers.T
 }
 
 // DockerContainerPluginInput represents one set of commands executed by the RunCommand plugin.
@@ -80,18 +80,11 @@ type DockerContainerPluginInput struct {
 }
 
 // NewPlugin returns a new instance of the plugin.
-func NewPlugin(pluginConfig pluginutil.PluginConfig) (*Plugin, error) {
+func NewPlugin() (*Plugin, error) {
 	var plugin Plugin
-	var err error
-	plugin.MaxStdoutLength = pluginConfig.MaxStdoutLength
-	plugin.MaxStderrLength = pluginConfig.MaxStderrLength
-	plugin.StdoutFileName = pluginConfig.StdoutFileName
-	plugin.StderrFileName = pluginConfig.StderrFileName
-	plugin.OutputTruncatedSuffix = pluginConfig.OutputTruncatedSuffix
-	plugin.ExecuteUploadOutputToS3Bucket = pluginutil.UploadOutputToS3BucketExecuter(plugin.UploadOutputToS3Bucket)
 	plugin.CommandExecuter = executers.ShellCommandExecuter{}
 
-	return &plugin, err
+	return &plugin, nil
 }
 
 // Name returns the name of the plugin
@@ -99,65 +92,36 @@ func Name() string {
 	return appconfig.PluginNameDockerContainer
 }
 
-// Execute runs multiple sets of commands and returns their outputs.
-// res.Output will contain a slice of DockerContainerPluginOutput.
-func (p *Plugin) Execute(context context.T, config contracts.Configuration, cancelFlag task.CancelFlag) (res contracts.PluginResult) {
+func (p *Plugin) Execute(context context.T, config contracts.Configuration, cancelFlag task.CancelFlag, output iohandler.IOHandler) {
 	log := context.Log()
 	log.Infof("%v started with configuration %v", Name(), config)
-	res.StartDateTime = time.Now()
-	defer func() {
-		res.EndDateTime = time.Now()
-	}()
-
-	//loading Properties as list since aws:psModule uses properties as list
-	var properties []interface{}
-	if properties = pluginutil.LoadParametersAsList(log, config.Properties, &res); res.Code != 0 {
-
-		return res
+	if cancelFlag.ShutDown() {
+		output.MarkAsShutdown()
+	} else if cancelFlag.Canceled() {
+		output.MarkAsCancelled()
+	} else {
+		p.runCommandsRawInput(log, config.PluginID, config.Properties, config.OrchestrationDirectory, cancelFlag, output)
 	}
-
-	out := contracts.PluginOutput{}
-	for _, prop := range properties {
-
-		if cancelFlag.ShutDown() {
-			out.MarkAsShutdown()
-			break
-		}
-
-		if cancelFlag.Canceled() {
-			out.MarkAsCancelled()
-			break
-		}
-
-		out.Merge(log, p.runCommandsRawInput(log, config.PluginID, prop, config.OrchestrationDirectory, cancelFlag, config.OutputS3BucketName, config.OutputS3KeyPrefix))
-	}
-
-	res.Code = out.ExitCode
-	res.Status = out.Status
-	res.Output = out.String()
-	res.StandardOutput = pluginutil.StringPrefix(out.Stdout, p.MaxStdoutLength, p.OutputTruncatedSuffix)
-	res.StandardError = pluginutil.StringPrefix(out.Stderr, p.MaxStderrLength, p.OutputTruncatedSuffix)
-
-	return res
+	return
 }
 
 // runCommandsRawInput executes one set of commands and returns their output.
 // The input is in the default json unmarshal format (e.g. map[string]interface{}).
-func (p *Plugin) runCommandsRawInput(log log.T, pluginID string, rawPluginInput interface{}, orchestrationDirectory string, cancelFlag task.CancelFlag, outputS3BucketName string, outputS3KeyPrefix string) (out contracts.PluginOutput) {
+func (p *Plugin) runCommandsRawInput(log log.T, pluginID string, rawPluginInput interface{}, orchestrationDirectory string, cancelFlag task.CancelFlag, output iohandler.IOHandler) {
 	var pluginInput DockerContainerPluginInput
 	err := jsonutil.Remarshal(rawPluginInput, &pluginInput)
 	log.Debugf("Plugin input %v", pluginInput)
 	if err != nil {
 		errorString := fmt.Errorf("Invalid format in plugin properties %v;\nerror %v", rawPluginInput, err)
-		out.MarkAsFailed(log, errorString)
+		output.MarkAsFailed(errorString)
 		return
 	}
 
-	return p.runCommands(log, pluginID, pluginInput, orchestrationDirectory, cancelFlag, outputS3BucketName, outputS3KeyPrefix)
+	p.runCommands(log, pluginID, pluginInput, orchestrationDirectory, cancelFlag, output)
 }
 
 // runCommands executes one set of commands and returns their output.
-func (p *Plugin) runCommands(log log.T, pluginID string, pluginInput DockerContainerPluginInput, orchestrationDirectory string, cancelFlag task.CancelFlag, outputS3BucketName string, outputS3KeyPrefix string) (out contracts.PluginOutput) {
+func (p *Plugin) runCommands(log log.T, pluginID string, pluginInput DockerContainerPluginInput, orchestrationDirectory string, cancelFlag task.CancelFlag, output iohandler.IOHandler) {
 	var err error
 
 	// TODO:MF: This subdirectory is only needed because we could be running multiple sets of properties for the same plugin - otherwise the orchestration directory would already be unique
@@ -165,14 +129,14 @@ func (p *Plugin) runCommands(log log.T, pluginID string, pluginInput DockerConta
 	log.Debugf("OrchestrationDir %v ", orchestrationDir)
 
 	if err = validateInputs(pluginInput); err != nil {
-		out.MarkAsFailed(log, fmt.Errorf("Validation error, %v", err))
-		return out
+		output.MarkAsFailed(fmt.Errorf("Validation error, %v", err))
+		return
 	}
 
 	// create orchestration dir if needed
 	if err = fileutil.MakeDirs(orchestrationDir); err != nil {
 		log.Debug("failed to create orchestrationDir directory", orchestrationDir, err)
-		out.MarkAsFailed(log, err)
+		output.MarkAsFailed(err)
 		return
 	}
 	var commandName string = "docker"
@@ -181,9 +145,8 @@ func (p *Plugin) runCommands(log log.T, pluginID string, pluginInput DockerConta
 	case CREATE, RUN:
 		if len(pluginInput.Image) == 0 {
 			log.Errorf(ACTION_REQUIRES_PARAMETER, pluginInput.Action, "image")
-			out.MarkAsFailed(log, fmt.Errorf(ACTION_REQUIRES_PARAMETER, pluginInput.Action, "image"))
-
-			return out
+			output.MarkAsFailed(fmt.Errorf(ACTION_REQUIRES_PARAMETER, pluginInput.Action, "image"))
+			return
 		}
 		commandArguments = make([]string, 0)
 		if pluginInput.Action == RUN {
@@ -192,7 +155,7 @@ func (p *Plugin) runCommands(log log.T, pluginID string, pluginInput DockerConta
 			commandArguments = append(commandArguments, "create")
 		}
 		if len(pluginInput.Volume) > 0 && len(pluginInput.Volume[0]) > 0 {
-			out.Stdout += "pluginInput.Volume:" + strconv.Itoa(len(pluginInput.Volume))
+			output.AppendInfo("pluginInput.Volume:" + strconv.Itoa(len(pluginInput.Volume)))
 
 			log.Info("pluginInput.Volume", len(pluginInput.Volume))
 			commandArguments = append(commandArguments, "--volume")
@@ -232,8 +195,8 @@ func (p *Plugin) runCommands(log log.T, pluginID string, pluginInput DockerConta
 		commandArguments = append(commandArguments, "start")
 		if len(pluginInput.Container) == 0 {
 			log.Errorf(ACTION_REQUIRES_PARAMETER, pluginInput.Action, "container")
-			out.MarkAsFailed(log, fmt.Errorf(ACTION_REQUIRES_PARAMETER, pluginInput.Action, "container"))
-			return out
+			output.MarkAsFailed(fmt.Errorf(ACTION_REQUIRES_PARAMETER, pluginInput.Action, "container"))
+			return
 		}
 		commandArguments = append(commandArguments, pluginInput.Container)
 
@@ -241,8 +204,8 @@ func (p *Plugin) runCommands(log log.T, pluginID string, pluginInput DockerConta
 		commandArguments = append(commandArguments, "rm")
 		if len(pluginInput.Container) == 0 {
 			log.Errorf(ACTION_REQUIRES_PARAMETER, pluginInput.Action, "container")
-			out.MarkAsFailed(log, fmt.Errorf(ACTION_REQUIRES_PARAMETER, pluginInput.Action, "container"))
-			return out
+			output.MarkAsFailed(fmt.Errorf(ACTION_REQUIRES_PARAMETER, pluginInput.Action, "container"))
+			return
 		}
 		commandArguments = append(commandArguments, pluginInput.Container)
 
@@ -250,8 +213,8 @@ func (p *Plugin) runCommands(log log.T, pluginID string, pluginInput DockerConta
 		commandArguments = append(commandArguments, "stop")
 		if len(pluginInput.Container) == 0 {
 			log.Errorf(ACTION_REQUIRES_PARAMETER, pluginInput.Action, "container")
-			out.MarkAsFailed(log, fmt.Errorf(ACTION_REQUIRES_PARAMETER, pluginInput.Action, "container"))
-			return out
+			output.MarkAsFailed(fmt.Errorf(ACTION_REQUIRES_PARAMETER, pluginInput.Action, "container"))
+			return
 		}
 		commandArguments = append(commandArguments, pluginInput.Container)
 
@@ -259,13 +222,13 @@ func (p *Plugin) runCommands(log log.T, pluginID string, pluginInput DockerConta
 		commandArguments = append(commandArguments, "exec")
 		if len(pluginInput.Container) == 0 {
 			log.Errorf(ACTION_REQUIRES_PARAMETER, pluginInput.Action, "container")
-			out.MarkAsFailed(log, fmt.Errorf(ACTION_REQUIRES_PARAMETER, pluginInput.Action, "container"))
-			return out
+			output.MarkAsFailed(fmt.Errorf(ACTION_REQUIRES_PARAMETER, pluginInput.Action, "container"))
+			return
 		}
 		if len(pluginInput.Cmd) == 0 {
 			log.Errorf(ACTION_REQUIRES_PARAMETER, pluginInput.Action, "cmd")
-			out.MarkAsFailed(log, fmt.Errorf(ACTION_REQUIRES_PARAMETER, pluginInput.Action, "cmd"))
-			return out
+			output.MarkAsFailed(fmt.Errorf(ACTION_REQUIRES_PARAMETER, pluginInput.Action, "cmd"))
+			return
 		}
 		if len(pluginInput.User) > 0 {
 			commandArguments = append(commandArguments, "--user")
@@ -277,8 +240,8 @@ func (p *Plugin) runCommands(log log.T, pluginID string, pluginInput DockerConta
 		commandArguments = append(commandArguments, "inspect")
 		if len(pluginInput.Container) == 0 && len(pluginInput.Image) == 0 {
 			log.Errorf(ACTION_REQUIRES_PARAMETER, pluginInput.Action, "container or image")
-			out.MarkAsFailed(log, fmt.Errorf(ACTION_REQUIRES_PARAMETER, pluginInput.Action, "container or image"))
-			return out
+			output.MarkAsFailed(fmt.Errorf(ACTION_REQUIRES_PARAMETER, pluginInput.Action, "container or image"))
+			return
 		}
 		commandArguments = append(commandArguments, pluginInput.Container)
 		commandArguments = append(commandArguments, pluginInput.Image)
@@ -292,16 +255,16 @@ func (p *Plugin) runCommands(log log.T, pluginID string, pluginInput DockerConta
 		commandArguments = append(commandArguments, "logs")
 		if len(pluginInput.Container) == 0 {
 			log.Errorf(ACTION_REQUIRES_PARAMETER, pluginInput.Action, "container")
-			out.MarkAsFailed(log, fmt.Errorf(ACTION_REQUIRES_PARAMETER, pluginInput.Action, "container"))
-			return out
+			output.MarkAsFailed(fmt.Errorf(ACTION_REQUIRES_PARAMETER, pluginInput.Action, "container"))
+			return
 		}
 		commandArguments = append(commandArguments, pluginInput.Container)
 	case PULL:
 		commandArguments = append(commandArguments, "pull")
 		if len(pluginInput.Image) == 0 {
 			log.Errorf(ACTION_REQUIRES_PARAMETER, pluginInput.Action, "image")
-			out.MarkAsFailed(log, fmt.Errorf(ACTION_REQUIRES_PARAMETER, pluginInput.Action, "image"))
-			return out
+			output.MarkAsFailed(fmt.Errorf(ACTION_REQUIRES_PARAMETER, pluginInput.Action, "image"))
+			return
 		}
 		commandArguments = append(commandArguments, pluginInput.Image)
 	case IMAGES:
@@ -310,68 +273,36 @@ func (p *Plugin) runCommands(log log.T, pluginID string, pluginInput DockerConta
 		commandArguments = append(commandArguments, "rmi")
 		if len(pluginInput.Image) == 0 {
 			log.Errorf(ACTION_REQUIRES_PARAMETER, pluginInput.Action, "image")
-			out.MarkAsFailed(log, fmt.Errorf(ACTION_REQUIRES_PARAMETER, pluginInput.Action, "image"))
-			return out
+			output.MarkAsFailed(fmt.Errorf(ACTION_REQUIRES_PARAMETER, pluginInput.Action, "image"))
+			return
 		}
 		commandArguments = append(commandArguments, pluginInput.Image)
 
 	case PS:
 		commandArguments = append(commandArguments, "ps", "--all")
 	default:
-		out.MarkAsFailed(log, fmt.Errorf("Docker Action is set to unsupported value: %v", pluginInput.Action))
-		return out
+		output.MarkAsFailed(fmt.Errorf("Docker Action is set to unsupported value: %v", pluginInput.Action))
+		return
 	}
 
 	executionTimeout := pluginutil.ValidateExecutionTimeout(log, pluginInput.TimeoutSeconds)
-	// Create output file paths
-	stdoutFilePath := filepath.Join(orchestrationDir, p.StdoutFileName)
-	stderrFilePath := filepath.Join(orchestrationDir, p.StderrFileName)
-	log.Debugf("stdout file %v, stderr file %v", stdoutFilePath, stderrFilePath)
 
 	// Execute Command
-	stdout, stderr, exitCode, errs := p.CommandExecuter.Execute(log, pluginInput.WorkingDirectory, stdoutFilePath, stderrFilePath, cancelFlag, executionTimeout, commandName, commandArguments)
+	exitCode, err := p.CommandExecuter.NewExecute(log, pluginInput.WorkingDirectory, output.GetStdoutWriter(), output.GetStderrWriter(), cancelFlag, executionTimeout, commandName, commandArguments)
 
 	// Set output status
-	out.ExitCode = exitCode
-	out.Status = pluginutil.GetStatus(out.ExitCode, cancelFlag)
+	output.SetExitCode(exitCode)
+	output.SetStatus(pluginutil.GetStatus(exitCode, cancelFlag))
 
-	if len(errs) > 0 {
-		for _, err := range errs {
-			if out.Status != contracts.ResultStatusCancelled &&
-				out.Status != contracts.ResultStatusTimedOut &&
-				out.Status != contracts.ResultStatusSuccessAndReboot {
-				out.MarkAsFailed(log, fmt.Errorf("failed to run commands: %v", err))
-				out.Status = contracts.ResultStatusFailed
-			}
+	if err != nil {
+		status := output.GetStatus()
+		if status != contracts.ResultStatusCancelled &&
+			status != contracts.ResultStatusTimedOut &&
+			status != contracts.ResultStatusSuccessAndReboot {
+			output.MarkAsFailed(fmt.Errorf("failed to run commands: %v", err))
 		}
 	}
-
-	// read all standard output/error
-	if bytesOut, err := ioutil.ReadAll(stdout); err != nil {
-		log.Error(err)
-	} else {
-		out.AppendInfo(log, string(bytesOut))
-	}
-	if bytesErr, err := ioutil.ReadAll(stderr); err != nil {
-		log.Error(err)
-	} else {
-		out.AppendError(log, string(bytesErr))
-	}
-
-	// Upload output to S3
-	s3PluginID := pluginInput.ID
-	if s3PluginID == "" {
-		s3PluginID = pluginID
-	}
-	uploadOutputToS3BucketErrors := p.ExecuteUploadOutputToS3Bucket(log, s3PluginID, orchestrationDir, outputS3BucketName, outputS3KeyPrefix, false, "", out.Stdout, out.Stderr)
-	if len(uploadOutputToS3BucketErrors) > 0 {
-		log.Errorf("Unable to upload the logs: %s", uploadOutputToS3BucketErrors)
-	}
-
-	// Return Json indented response
-	responseContent, _ := jsonutil.Marshal(out)
-	log.Debug("Returning response:\n", jsonutil.Indent(responseContent))
-	return out
+	return
 }
 
 func validateInputs(pluginInput DockerContainerPluginInput) (err error) {
