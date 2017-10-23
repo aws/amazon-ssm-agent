@@ -27,7 +27,6 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/plugins/downloadcontent/remoteresource"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/downloadcontent/s3resource"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/downloadcontent/ssmdocresource"
-	"github.com/aws/amazon-ssm-agent/agent/plugins/pluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 
 	"errors"
@@ -35,7 +34,8 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
-	"time"
+
+	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler"
 )
 
 const (
@@ -52,23 +52,14 @@ const (
 var SetPermission = SetFilePermissions
 
 // NewPlugin returns a new instance of the plugin.
-func NewPlugin(pluginConfig pluginutil.PluginConfig) (*Plugin, error) {
+func NewPlugin() (*Plugin, error) {
 	var plugin Plugin
-	plugin.MaxStdoutLength = pluginConfig.MaxStdoutLength
-	plugin.MaxStderrLength = pluginConfig.MaxStderrLength
-	plugin.StdoutFileName = pluginConfig.StdoutFileName
-	plugin.StderrFileName = pluginConfig.StderrFileName
-	plugin.OutputTruncatedSuffix = pluginConfig.OutputTruncatedSuffix
-	plugin.ExecuteUploadOutputToS3Bucket = pluginutil.UploadOutputToS3BucketExecuter(plugin.UploadOutputToS3Bucket)
-
 	plugin.remoteResourceCreator = newRemoteResource
-
 	return &plugin, nil
 }
 
 // Plugin is the type for the aws:downloadContent plugin.
 type Plugin struct {
-	pluginutil.DefaultPlugin
 	remoteResourceCreator func(log log.T, sourceType string, SourceInfo string) (remoteresource.RemoteResource, error)
 	filesys               filemanager.FileSystem
 }
@@ -102,73 +93,28 @@ func newRemoteResource(log log.T, SourceType string, SourceInfo string) (resourc
 
 // Execute runs multiple sets of commands and returns their outputs.
 // res.Output will contain a slice of RunCommandPluginOutput.
-func (p *Plugin) Execute(context context.T, config contracts.Configuration, cancelFlag task.CancelFlag) (res contracts.PluginResult) {
+func (p *Plugin) Execute(context context.T, config contracts.Configuration, cancelFlag task.CancelFlag, output iohandler.IOHandler) {
 	p.filesys = filemanager.FileSystemImpl{}
-	return p.execute(context, config, cancelFlag)
+	p.execute(context, config, cancelFlag, output)
 }
 
-func (p *Plugin) execute(context context.T, config contracts.Configuration, cancelFlag task.CancelFlag) (res contracts.PluginResult) {
+func (p *Plugin) execute(context context.T, config contracts.Configuration, cancelFlag task.CancelFlag, output iohandler.IOHandler) {
 	log := context.Log()
 	log.Info("Plugin aws:downloadContent started with configuration", config)
-
-	res.StartDateTime = time.Now()
-	defer func() { res.EndDateTime = time.Now() }()
-
-	var output contracts.PluginOutput
 
 	if cancelFlag.ShutDown() {
 		output.MarkAsShutdown()
 	} else if cancelFlag.Canceled() {
 		output.MarkAsCancelled()
 	} else if input, err := parseAndValidateInput(config.Properties); err != nil {
-		output.MarkAsFailed(log, err)
+		output.MarkAsFailed(err)
 	} else {
-
-		p.runCopyContent(log, input, config, &output)
+		p.runCopyContent(log, input, config, output)
 	}
-
-	if config.OrchestrationDirectory != "" {
-		useTemp := false
-		outFile := filepath.Join(config.OrchestrationDirectory, p.StdoutFileName)
-
-		if err := p.filesys.MakeDirs(config.OrchestrationDirectory); err != nil {
-			output.AppendError(log, "Failed to create orchestrationDir directory for log files")
-		} else {
-			if err := p.filesys.WriteFile(outFile, output.Stdout); err != nil {
-				log.Debugf("Error writing to %v", outFile)
-				output.AppendErrorf(log, "Error saving stdout: %v", err.Error())
-			}
-			errFile := filepath.Join(config.OrchestrationDirectory, p.StderrFileName)
-			if err := p.filesys.WriteFile(errFile, output.Stderr); err != nil {
-				log.Debugf("Error writing to %v", errFile)
-				output.AppendErrorf(log, "Error saving stderr: %v", err.Error())
-			}
-		}
-		// TODO: meloniam@ 09/28/2017: Reduce the number of arguments here for all plugins.
-		uploadErrs := p.ExecuteUploadOutputToS3Bucket(log,
-			config.PluginID,
-			config.OrchestrationDirectory,
-			config.OutputS3BucketName,
-			config.OutputS3KeyPrefix,
-			useTemp,
-			config.OrchestrationDirectory,
-			output.Stdout,
-			output.Stderr)
-		for _, uploadErr := range uploadErrs {
-			output.AppendError(log, uploadErr)
-		}
-	}
-
-	res.Code = output.ExitCode
-	res.Status = output.Status
-	res.Output = output.String()
-	res.StandardOutput = pluginutil.StringPrefix(output.Stdout, p.MaxStdoutLength, p.OutputTruncatedSuffix)
-	res.StandardError = pluginutil.StringPrefix(output.Stderr, p.MaxStderrLength, p.OutputTruncatedSuffix)
-	return res
 }
 
 // runCopyContent figures out the type of source, downloads the resource, saves it on disk and returns information required for it
-func (p *Plugin) runCopyContent(log log.T, input *DownloadContentPlugin, config contracts.Configuration, output *contracts.PluginOutput) {
+func (p *Plugin) runCopyContent(log log.T, input *DownloadContentPlugin, config contracts.Configuration, output iohandler.IOHandler) {
 
 	//Run aws:downloadContent plugin
 	log.Debug("Inside run downloadcontent function")
@@ -177,7 +123,7 @@ func (p *Plugin) runCopyContent(log log.T, input *DownloadContentPlugin, config 
 	log.Debug("Creating resource of type - ", input.SourceType)
 	remoteResource, err := p.remoteResourceCreator(log, input.SourceType, input.SourceInfo)
 	if err != nil {
-		output.MarkAsFailed(log, err)
+		output.MarkAsFailed(err)
 		return
 	}
 	var destinationPath string
@@ -196,20 +142,21 @@ func (p *Plugin) runCopyContent(log log.T, input *DownloadContentPlugin, config 
 
 	log.Debug("About to validate source info")
 	if valid, err := remoteResource.ValidateLocationInfo(); !valid {
-		output.MarkAsFailed(log, err)
+		output.MarkAsFailed(err)
 		return
 	}
 	log.Debug("Downloading resource")
 	if err = remoteResource.Download(log, p.filesys, destinationPath); err != nil {
-		output.MarkAsFailed(log, err)
+		output.MarkAsFailed(err)
 		return
 	}
 
 	if err := SetPermission(log, destinationPath); err != nil {
-		output.MarkAsFailed(log, fmt.Errorf("Failed to set right permissions to the content. Error - %v", err))
+		output.MarkAsFailed(fmt.Errorf("Failed to set right permissions to the content. Error - %v", err))
+		return
 	}
 
-	output.AppendInfof(log, "Content downloaded to %v", destinationPath)
+	output.AppendInfof("Content downloaded to %v", destinationPath)
 	output.MarkAsSucceeded()
 	return
 }
