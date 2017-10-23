@@ -26,7 +26,7 @@ import (
 
 const (
 	// Environment variables set for processes executed by ssm agent should have names that start with AWS_SSM_
-	testInstanceId = "i-f00f00f00f00f00ba"
+	testInstanceID = "i-f00f00f00f00f00ba"
 	testRegionName = "foo-bar-3"
 	testError      = "FooBar"
 )
@@ -60,7 +60,7 @@ func getEnvVariableValue(env []string, envVarName string) string {
 
 func getTestCommand(t *testing.T) *exec.Cmd {
 	command := exec.Command("test")
-	assert.Empty(t, getEnvVariableValue(command.Env, envVarInstanceId), fmt.Sprintf("%s is already defined", envVarInstanceId))
+	assert.Empty(t, getEnvVariableValue(command.Env, envVarInstanceID), fmt.Sprintf("%s is already defined", envVarInstanceID))
 	assert.Empty(t, getEnvVariableValue(command.Env, envVarRegionName), fmt.Sprintf("%s is already defined", envVarRegionName))
 
 	return command
@@ -68,13 +68,13 @@ func getTestCommand(t *testing.T) *exec.Cmd {
 
 func TestEnvironmentVariables_All(t *testing.T) {
 	instanceTemp := instance
-	instance = &instanceInfoStub{instanceID: testInstanceId, regionName: testRegionName}
+	instance = &instanceInfoStub{instanceID: testInstanceID, regionName: testRegionName}
 	defer func() { instance = instanceTemp }()
 
 	command := getTestCommand(t)
 	prepareEnvironment(command)
 
-	assert.Equal(t, getEnvVariableValue(command.Env, envVarInstanceId), testInstanceId)
+	assert.Equal(t, getEnvVariableValue(command.Env, envVarInstanceID), testInstanceID)
 	assert.Equal(t, getEnvVariableValue(command.Env, envVarRegionName), testRegionName)
 }
 
@@ -86,7 +86,7 @@ func TestEnvironmentVariables_None(t *testing.T) {
 	command := getTestCommand(t)
 	prepareEnvironment(command)
 
-	assert.Empty(t, getEnvVariableValue(command.Env, envVarInstanceId))
+	assert.Empty(t, getEnvVariableValue(command.Env, envVarInstanceID))
 	assert.Empty(t, getEnvVariableValue(command.Env, envVarRegionName))
 }
 
