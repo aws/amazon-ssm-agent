@@ -22,6 +22,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil/artifact"
+	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 	"github.com/aws/amazon-ssm-agent/agent/updateutil"
@@ -55,7 +56,7 @@ func TestDownloadManifest(t *testing.T) {
 
 	manager := updateManager{}
 	util := fakeUtility{}
-	out := contracts.PluginOutput{}
+	out := iohandler.DefaultIOHandler{}
 
 	fileDownload = func(log log.T, input artifact.DownloadInput) (output artifact.DownloadOutput, err error) {
 		result := artifact.DownloadOutput{}
@@ -77,7 +78,7 @@ func TestDownloadUpdater(t *testing.T) {
 
 	manager := updateManager{}
 	util := fakeUtility{}
-	out := contracts.PluginOutput{}
+	out := iohandler.DefaultIOHandler{}
 
 	fileDownload = func(log log.T, input artifact.DownloadInput) (output artifact.DownloadOutput, err error) {
 		result := artifact.DownloadOutput{}
@@ -102,7 +103,7 @@ func TestDownloadUpdater_HashDoesNotMatch(t *testing.T) {
 
 	manager := updateManager{}
 	util := fakeUtility{}
-	out := contracts.PluginOutput{}
+	out := iohandler.DefaultIOHandler{}
 
 	// file download failed
 	fileDownload = func(log log.T, input artifact.DownloadInput) (output artifact.DownloadOutput, err error) {
@@ -126,7 +127,7 @@ func TestDownloadUpdater_FailedDuringUnCompress(t *testing.T) {
 
 	manager := updateManager{}
 	util := fakeUtility{}
-	out := contracts.PluginOutput{}
+	out := iohandler.DefaultIOHandler{}
 
 	fileDownload = func(log log.T, input artifact.DownloadInput) (output artifact.DownloadOutput, err error) {
 		result := artifact.DownloadOutput{}
@@ -150,7 +151,7 @@ func TestValidateUpdate(t *testing.T) {
 	manifest := createStubManifest(plugin, context, true, true)
 
 	manager := updateManager{}
-	out := contracts.PluginOutput{}
+	out := iohandler.DefaultIOHandler{}
 
 	result, err := manager.validateUpdate(logger, plugin, context, manifest, &out)
 
@@ -166,7 +167,7 @@ func TestValidateUpdate_GetLatestTargetVersionWhenTargetVersionIsEmpty(t *testin
 	manager := updateManager{}
 	// Setup, update target version to empty string
 	plugin.TargetVersion = ""
-	out := contracts.PluginOutput{}
+	out := iohandler.DefaultIOHandler{}
 
 	result, err := manager.validateUpdate(logger, plugin, context, manifest, &out)
 
@@ -181,13 +182,13 @@ func TestValidateUpdate_TargetVersionSameAsCurrentVersion(t *testing.T) {
 	manifest := createStubManifest(plugin, context, true, true)
 
 	manager := updateManager{}
-	out := contracts.PluginOutput{}
+	out := iohandler.DefaultIOHandler{}
 
 	noNeedToUpdate, err := manager.validateUpdate(logger, plugin, context, manifest, &out)
 
 	assert.True(t, noNeedToUpdate)
 	assert.NoError(t, err)
-	assert.Contains(t, out.Stdout, "already been installed, update skipped")
+	assert.Contains(t, out.GetStdout(), "already been installed, update skipped")
 }
 
 func TestValidateUpdate_DowngradeVersion(t *testing.T) {
@@ -198,7 +199,7 @@ func TestValidateUpdate_DowngradeVersion(t *testing.T) {
 	manifest := createStubManifest(plugin, context, true, true)
 
 	manager := updateManager{}
-	out := contracts.PluginOutput{}
+	out := iohandler.DefaultIOHandler{}
 
 	noNeedToUpdate, err := manager.validateUpdate(logger, plugin, context, manifest, &out)
 
@@ -214,7 +215,7 @@ func TestValidateUpdate_TargetVersionNotSupport(t *testing.T) {
 	manifest := createStubManifest(plugin, context, true, false)
 
 	manager := updateManager{}
-	out := contracts.PluginOutput{}
+	out := iohandler.DefaultIOHandler{}
 
 	result, err := manager.validateUpdate(logger, plugin, context, manifest, &out)
 
@@ -229,7 +230,7 @@ func TestValidateUpdate_UnsupportedCurrentVersion(t *testing.T) {
 	manifest := createStubManifest(plugin, context, false, true)
 
 	manager := updateManager{}
-	out := contracts.PluginOutput{}
+	out := iohandler.DefaultIOHandler{}
 	result, err := manager.validateUpdate(logger, plugin, context, manifest, &out)
 
 	if version.Version != updateutil.PipelineTestVersion {
@@ -248,9 +249,10 @@ func TestUpdateAgent_InvalidPluginRaw(t *testing.T) {
 	manager := &updateManager{}
 	util := &fakeUtility{}
 	rawPluginInput := "invalid value" // string value will failed the Remarshal as it's not PluginInput
-	out := updateAgent(plugin, config, logger, manager, util, rawPluginInput, mockCancelFlag, "", "", time.Now())
+	out := iohandler.DefaultIOHandler{}
+	updateAgent(plugin, config, logger, manager, util, rawPluginInput, mockCancelFlag, &out, time.Now())
 
-	assert.Contains(t, out.Stderr, "invalid format in plugin properties")
+	assert.Contains(t, out.GetStderr(), "invalid format in plugin properties")
 }
 
 func TestUpdateAgent(t *testing.T) {
@@ -279,8 +281,9 @@ func TestUpdateAgent(t *testing.T) {
 	util := fakeUtility{}
 
 	for _, manager := range testCases {
-		out := updateAgent(plugin, config, logger, &manager, &util, pluginInput, mockCancelFlag, "", "", time.Now())
-		assert.Empty(t, out.Stderr)
+		out := iohandler.DefaultIOHandler{}
+		updateAgent(plugin, config, logger, &manager, &util, pluginInput, mockCancelFlag, &out, time.Now())
+		assert.Empty(t, out.GetStderr())
 	}
 }
 
@@ -328,8 +331,9 @@ func TestUpdateAgent_NegativeTestCases(t *testing.T) {
 	util := fakeUtility{}
 
 	for _, manager := range testCases {
-		out := updateAgent(plugin, config, logger, &manager, &util, pluginInput, mockCancelFlag, "", "", time.Now())
-		assert.NotEmpty(t, out.Stderr)
+		out := iohandler.DefaultIOHandler{}
+		updateAgent(plugin, config, logger, &manager, &util, pluginInput, mockCancelFlag, &out, time.Now())
+		assert.NotEmpty(t, out.GetStderr())
 	}
 }
 
@@ -345,6 +349,7 @@ func TestExecute(t *testing.T) {
 	pluginInput.TargetVersion = ""
 	mockCancelFlag := new(task.MockCancelFlag)
 	mockContext := context.NewMockDefault()
+	mockIOHandler := iohandler.DefaultIOHandler{}
 
 	// Create stub
 	updateAgent = func(
@@ -355,14 +360,9 @@ func TestExecute(t *testing.T) {
 		util updateutil.T,
 		rawPluginInput interface{},
 		cancelFlag task.CancelFlag,
-		outputS3BucketName string,
-		outputS3KeyPrefix string,
-		startTime time.Time) (out contracts.PluginOutput) {
-		out = contracts.PluginOutput{}
-		out.ExitCode = 1
-		out.Stderr = "error"
-
-		return out
+		output iohandler.IOHandler,
+		startTime time.Time) {
+		return
 	}
 
 	// Setup mocks
@@ -370,12 +370,7 @@ func TestExecute(t *testing.T) {
 	mockCancelFlag.On("ShutDown").Return(false)
 	mockCancelFlag.On("Wait").Return(false).After(100 * time.Millisecond)
 
-	result := plugin.Execute(mockContext, config, mockCancelFlag)
-
-	assert.NotEmpty(t, result.StartDateTime)
-	assert.NotEmpty(t, result.EndDateTime)
-	assert.Equal(t, result.Code, 1)
-	assert.Contains(t, result.Output, "error")
+	plugin.Execute(mockContext, config, mockCancelFlag, &mockIOHandler)
 }
 
 func createStubPluginInput() *UpdatePluginInput {
@@ -489,7 +484,7 @@ func (u *fakeUpdateManager) downloadManifest(log log.T,
 	util updateutil.T,
 	pluginInput *UpdatePluginInput,
 	context *updateutil.InstanceContext,
-	out *contracts.PluginOutput) (manifest *Manifest, err error) {
+	out iohandler.IOHandler) (manifest *Manifest, err error) {
 	return u.downloadManifestResult, u.downloadManifestError
 }
 
@@ -497,7 +492,7 @@ func (u *fakeUpdateManager) downloadUpdater(log log.T,
 	util updateutil.T,
 	updaterPackageName string,
 	manifest *Manifest,
-	out *contracts.PluginOutput,
+	out iohandler.IOHandler,
 	context *updateutil.InstanceContext) (version string, err error) {
 	return u.downloadUpdaterResult, u.downloadUpdaterError
 }
@@ -506,6 +501,6 @@ func (u *fakeUpdateManager) validateUpdate(log log.T,
 	pluginInput *UpdatePluginInput,
 	context *updateutil.InstanceContext,
 	manifest *Manifest,
-	out *contracts.PluginOutput) (noNeedToUpdate bool, err error) {
+	out iohandler.IOHandler) (noNeedToUpdate bool, err error) {
 	return u.validateUpdateResult, u.validateUpdateError
 }
