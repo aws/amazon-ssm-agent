@@ -16,9 +16,7 @@ package runscript
 
 import (
 	"fmt"
-	"io/ioutil"
 	"path/filepath"
-	"time"
 
 	"strings"
 
@@ -27,6 +25,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/executers"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
+	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/pluginutil"
@@ -39,9 +38,8 @@ const (
 
 // Plugin is the type for the runscript plugin.
 type Plugin struct {
-	pluginutil.DefaultPlugin
-	defaultWorkingDirectory string
-
+	// ExecuteCommand is an object that can execute commands.
+	CommandExecuter executers.T
 	// Name is the plugin name (PowerShellScript or ShellScript)
 	Name           string
 	ScriptName     string
@@ -59,71 +57,37 @@ type RunScriptPluginInput struct {
 	TimeoutSeconds   interface{}
 }
 
-func (p *Plugin) AssignPluginConfigs(pluginConfig pluginutil.PluginConfig) {
-	p.MaxStdoutLength = pluginConfig.MaxStdoutLength
-	p.MaxStderrLength = pluginConfig.MaxStderrLength
-	p.OutputTruncatedSuffix = pluginConfig.OutputTruncatedSuffix
-	p.StdoutFileName = pluginConfig.StdoutFileName
-	p.StderrFileName = pluginConfig.StderrFileName
-	p.ExecuteUploadOutputToS3Bucket = pluginutil.UploadOutputToS3BucketExecuter(p.UploadOutputToS3Bucket)
-	p.CommandExecuter = executers.ShellCommandExecuter{}
-}
-
 // Execute runs multiple sets of commands and returns their outputs.
 // res.Output will contain a slice of RunScriptPluginOutput.
-func (p *Plugin) Execute(context context.T, config contracts.Configuration, cancelFlag task.CancelFlag) (res contracts.PluginResult) {
+func (p *Plugin) Execute(context context.T, config contracts.Configuration, cancelFlag task.CancelFlag, output iohandler.IOHandler) {
 	log := context.Log()
 	log.Infof("%v started with configuration %v", p.Name, config)
-	res.StartDateTime = time.Now()
-	defer func() { res.EndDateTime = time.Now() }()
 	log.Debugf("DefaultWorkingDirectory %v", config.DefaultWorkingDirectory)
-	p.defaultWorkingDirectory = config.DefaultWorkingDirectory
 
-	//loading Properties as list since aws:runPowershellScript & aws:runShellScript uses properties as list
-	var properties []interface{}
-	if properties = pluginutil.LoadParametersAsList(log, config.Properties, &res); res.Code != 0 {
-		return res
+	if cancelFlag.ShutDown() {
+		output.MarkAsShutdown()
+	} else if cancelFlag.Canceled() {
+		output.MarkAsCancelled()
+	} else {
+		p.runCommandsRawInput(log, config.PluginID, config.Properties, config.OrchestrationDirectory, config.DefaultWorkingDirectory, cancelFlag, output)
 	}
-
-	out := contracts.PluginOutput{}
-	for _, prop := range properties {
-
-		if cancelFlag.ShutDown() {
-			out.MarkAsShutdown()
-			break
-		}
-
-		if cancelFlag.Canceled() {
-			out.MarkAsCancelled()
-			break
-		}
-
-		out.Merge(log, p.runCommandsRawInput(log, config.PluginID, prop, config.OrchestrationDirectory, cancelFlag, config.OutputS3BucketName, config.OutputS3KeyPrefix))
-	}
-	res.Code = out.ExitCode
-	res.Status = out.Status
-	res.Output = out.String()
-	res.StandardOutput = pluginutil.StringPrefix(out.Stdout, p.MaxStdoutLength, p.OutputTruncatedSuffix)
-	res.StandardError = pluginutil.StringPrefix(out.Stderr, p.MaxStderrLength, p.OutputTruncatedSuffix)
-
-	return res
 }
 
 // runCommandsRawInput executes one set of commands and returns their output.
 // The input is in the default json unmarshal format (e.g. map[string]interface{}).
-func (p *Plugin) runCommandsRawInput(log log.T, pluginID string, rawPluginInput interface{}, orchestrationDirectory string, cancelFlag task.CancelFlag, outputS3BucketName string, outputS3KeyPrefix string) (out contracts.PluginOutput) {
+func (p *Plugin) runCommandsRawInput(log log.T, pluginID string, rawPluginInput interface{}, orchestrationDirectory string, defaultWorkingDirectory string, cancelFlag task.CancelFlag, output iohandler.IOHandler) {
 	var pluginInput RunScriptPluginInput
 	err := jsonutil.Remarshal(rawPluginInput, &pluginInput)
 	if err != nil {
 		errorString := fmt.Errorf("Invalid format in plugin properties %v;\nerror %v", rawPluginInput, err)
-		out.MarkAsFailed(log, errorString)
+		output.MarkAsFailed(errorString)
 		return
 	}
-	return p.runCommands(log, pluginID, pluginInput, orchestrationDirectory, cancelFlag, outputS3BucketName, outputS3KeyPrefix)
+	p.runCommands(log, pluginID, pluginInput, orchestrationDirectory, defaultWorkingDirectory, cancelFlag, output)
 }
 
 // runCommands executes one set of commands and returns their output.
-func (p *Plugin) runCommands(log log.T, pluginID string, pluginInput RunScriptPluginInput, orchestrationDirectory string, cancelFlag task.CancelFlag, outputS3BucketName string, outputS3KeyPrefix string) (out contracts.PluginOutput) {
+func (p *Plugin) runCommands(log log.T, pluginID string, pluginInput RunScriptPluginInput, orchestrationDirectory string, defaultWorkingDirectory string, cancelFlag task.CancelFlag, output iohandler.IOHandler) {
 	var err error
 	var workingDir string
 
@@ -134,7 +98,7 @@ func (p *Plugin) runCommands(log log.T, pluginID string, pluginInput RunScriptPl
 		// The Document path is expected to have the name of the document
 		workingDir = filepath.Join(orchestrationDir, downloadsDir, pluginInput.WorkingDirectory)
 		if !fileutil.Exists(workingDir) {
-			workingDir = p.defaultWorkingDirectory
+			workingDir = defaultWorkingDirectory
 		}
 	}
 
@@ -144,7 +108,7 @@ func (p *Plugin) runCommands(log log.T, pluginID string, pluginInput RunScriptPl
 
 	// create orchestration dir if needed
 	if err = fileutil.MakeDirsWithExecuteAccess(orchestrationDir); err != nil {
-		out.MarkAsFailed(log, fmt.Errorf("failed to create orchestrationDir directory, %v", orchestrationDir))
+		output.MarkAsFailed(fmt.Errorf("failed to create orchestrationDir directory, %v", orchestrationDir))
 		return
 	}
 
@@ -154,61 +118,30 @@ func (p *Plugin) runCommands(log log.T, pluginID string, pluginInput RunScriptPl
 
 	// Create script file
 	if err = pluginutil.CreateScriptFile(log, scriptPath, pluginInput.RunCommand, p.ByteOrderMark); err != nil {
-		out.MarkAsFailed(log, fmt.Errorf("failed to create script file. %v", err))
+		output.MarkAsFailed(fmt.Errorf("failed to create script file. %v", err))
 		return
 	}
 
 	// Set execution time
 	executionTimeout := pluginutil.ValidateExecutionTimeout(log, pluginInput.TimeoutSeconds)
 
-	// Create output file paths
-	stdoutFilePath := filepath.Join(orchestrationDir, p.StdoutFileName)
-	stderrFilePath := filepath.Join(orchestrationDir, p.StderrFileName)
-	log.Debugf("stdout file %v, stderr file %v", stdoutFilePath, stderrFilePath)
-
 	// Construct Command Name and Arguments
 	commandName := p.ShellCommand
 	commandArguments := append(p.ShellArguments, scriptPath, appconfig.ExitCodeTrap)
 
 	// Execute Command
-	stdout, stderr, exitCode, errs := p.CommandExecuter.Execute(log, workingDir, stdoutFilePath, stderrFilePath, cancelFlag, executionTimeout, commandName, commandArguments)
+	exitCode, err := p.CommandExecuter.NewExecute(log, workingDir, output.GetStdoutWriter(), output.GetStderrWriter(), cancelFlag, executionTimeout, commandName, commandArguments)
 
 	// Set output status
-	out.ExitCode = exitCode
-	out.Status = pluginutil.GetStatus(out.ExitCode, cancelFlag)
+	output.SetExitCode(exitCode)
+	output.SetStatus(pluginutil.GetStatus(exitCode, cancelFlag))
 
-	if len(errs) > 0 {
-		for _, err := range errs {
-			if out.Status != contracts.ResultStatusCancelled &&
-				out.Status != contracts.ResultStatusTimedOut &&
-				out.Status != contracts.ResultStatusSuccessAndReboot {
-				out.MarkAsFailed(log, fmt.Errorf("failed to run commands: %v", err))
-			}
+	if err != nil {
+		status := output.GetStatus()
+		if status != contracts.ResultStatusCancelled &&
+			status != contracts.ResultStatusTimedOut &&
+			status != contracts.ResultStatusSuccessAndReboot {
+			output.MarkAsFailed(fmt.Errorf("failed to run commands: %v", err))
 		}
 	}
-	if bytesOut, err := ioutil.ReadAll(stdout); err != nil {
-		log.Error(err)
-	} else {
-		out.AppendInfo(log, string(bytesOut))
-	}
-	if bytesErr, err := ioutil.ReadAll(stderr); err != nil {
-		log.Error(err)
-	} else {
-		out.AppendError(log, string(bytesErr))
-	}
-
-	// Upload output to S3
-	s3PluginID := pluginInput.ID
-	if s3PluginID == "" {
-		s3PluginID = pluginID
-	}
-	uploadOutputToS3BucketErrors := p.ExecuteUploadOutputToS3Bucket(log, s3PluginID, orchestrationDir, outputS3BucketName, outputS3KeyPrefix, false, "", out.Stdout, out.Stderr)
-	if len(uploadOutputToS3BucketErrors) > 0 {
-		log.Errorf("Unable to upload the logs: %s", uploadOutputToS3BucketErrors)
-	}
-
-	// Return Json indented response
-	responseContent, _ := jsonutil.Marshal(out)
-	log.Debug("Returning response:\n", jsonutil.Indent(responseContent))
-	return
 }

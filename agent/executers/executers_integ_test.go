@@ -81,8 +81,8 @@ var RunCommandTestCases = []TestCase{
 	},
 	// instance id environment variable is set
 	{
-		Commands:         []string{"sh", "-c", fmt.Sprintf("echo $%v", envVarInstanceId)},
-		ExpectedStdout:   testInstanceId + "\n",
+		Commands:         []string{"sh", "-c", fmt.Sprintf("echo $%v", envVarInstanceID)},
+		ExpectedStdout:   testInstanceID + "\n",
 		ExpectedStderr:   "",
 		ExpectedExitCode: successExitCode,
 	},
@@ -169,7 +169,7 @@ var logger = log.NewMockLog()
 // TestRunCommand tests that RunCommand (in memory call, no local script or output files) works correctly.
 func TestRunCommand(t *testing.T) {
 	instanceTemp := instance
-	instance = &instanceInfoStub{instanceID: testInstanceId, regionName: testRegionName}
+	instance = &instanceInfoStub{instanceID: testInstanceID, regionName: testRegionName}
 	defer func() { instance = instanceTemp }()
 
 	for _, testCase := range RunCommandTestCases {
@@ -181,7 +181,7 @@ func TestRunCommand(t *testing.T) {
 // TestRunCommand_cancel tests that RunCommand (in memory call, no local script or output files) is canceled correctly.
 func TestRunCommand_cancel(t *testing.T) {
 	instanceTemp := instance
-	instance = &instanceInfoStub{instanceID: testInstanceId, regionName: testRegionName}
+	instance = &instanceInfoStub{instanceID: testInstanceID, regionName: testRegionName}
 	defer func() { instance = instanceTemp }()
 
 	for _, testCase := range RunCommandCancelTestCases {
@@ -193,7 +193,7 @@ func TestRunCommand_cancel(t *testing.T) {
 // TestRunCommand_cancel tests that RunCommand (in memory call, no local script or output files) is canceled correctly.
 func TestRunCommand_async(t *testing.T) {
 	instanceTemp := instance
-	instance = &instanceInfoStub{instanceID: testInstanceId, regionName: testRegionName}
+	instance = &instanceInfoStub{instanceID: testInstanceID, regionName: testRegionName}
 	defer func() { instance = instanceTemp }()
 
 	for _, testCase := range RunCommandAsyncTestCases {
@@ -225,7 +225,7 @@ func TestShellCommandExecuter(t *testing.T) {
 // TestShellCommandExecuter_cancel tests that ShellCommandExecuter (creates local script, redirects outputs to files) is canceled correctly
 func TestShellCommandExecuter_cancel(t *testing.T) {
 	instanceTemp := instance
-	instance = &instanceInfoStub{instanceID: testInstanceId, regionName: testRegionName}
+	instance = &instanceInfoStub{instanceID: testInstanceID, regionName: testRegionName}
 	defer func() { instance = instanceTemp }()
 
 	runTest := func(testCase TestCase) {

@@ -59,7 +59,7 @@ func validateEnvironmentVariables(command *exec.Cmd) {
 				}
 				break
 			}
-			i += 1
+			i++
 		}
 		command.Env = env
 	}
