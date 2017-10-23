@@ -16,15 +16,17 @@
 package configurecontainers
 
 import (
-	"github.com/aws/amazon-ssm-agent/agent/contracts"
+	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurecontainers/linuxcontainerutil"
 )
 
-func runInstallCommands(log log.T, pluginInput ConfigureContainerPluginInput, orchestrationDirectory string) (out contracts.PluginOutput) {
-	return linuxcontainerutil.RunInstallCommands(log, orchestrationDirectory)
+func runInstallCommands(log log.T, pluginInput ConfigureContainerPluginInput, orchestrationDirectory string, out iohandler.IOHandler) {
+	linuxcontainerutil.RunInstallCommands(log, orchestrationDirectory, out)
+	return
 }
 
-func runUninstallCommands(log log.T, pluginInput ConfigureContainerPluginInput, orchestrationDirectory string) (out contracts.PluginOutput) {
-	return linuxcontainerutil.RunUninstallCommands(log, orchestrationDirectory)
+func runUninstallCommands(log log.T, pluginInput ConfigureContainerPluginInput, orchestrationDirectory string, out iohandler.IOHandler) {
+	linuxcontainerutil.RunUninstallCommands(log, orchestrationDirectory, out)
+	return
 }
