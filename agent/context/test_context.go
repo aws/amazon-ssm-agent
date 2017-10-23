@@ -71,7 +71,7 @@ func (m *Mock) With(ctx string) T {
 	return args.Get(0).(T)
 }
 
-// With mocks the With function.
+// CurrentContext mocks the CurrentContext function.
 func (m *Mock) CurrentContext() []string {
 	args := m.Called()
 	return args.Get(0).([]string)

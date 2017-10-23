@@ -17,7 +17,6 @@ package pluginutil
 import (
 	"io"
 	"io/ioutil"
-	"path/filepath"
 	"strconv"
 	"strings"
 
@@ -25,12 +24,11 @@ import (
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
-	"github.com/aws/amazon-ssm-agent/agent/executers"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil/artifact"
+	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
-	"github.com/aws/amazon-ssm-agent/agent/s3util"
 )
 
 const (
@@ -38,46 +36,6 @@ const (
 	maxExecutionTimeoutInSeconds     = 172800
 	minExecutionTimeoutInSeconds     = 5
 )
-
-// UploadOutputToS3BucketExecuter is a function that can upload outputs to S3 bucket.
-type UploadOutputToS3BucketExecuter func(log log.T, pluginID string, orchestrationDir string, outputS3BucketName string, outputS3KeyPrefix string, useTempDirectory bool, tempDir string, Stdout string, Stderr string) []string
-
-// DefaultPlugin is the type for the default plugin.
-type DefaultPlugin struct {
-	// ExecuteCommand is an object that can execute commands.
-	CommandExecuter executers.T
-
-	// ExecuteUploadOutputToS3Bucket is an object that can upload command outputs to S3 bucket.
-	ExecuteUploadOutputToS3Bucket UploadOutputToS3BucketExecuter
-
-	// UploadToS3ASync is true if uploading to S3 should be done asynchronously, false for async.
-	UploadToS3ASync bool
-
-	// StdoutFileName is the name of the file that stores standard output.
-	StdoutFileName string
-
-	// StderrFileName is the name of the file that stores standard error.
-	StderrFileName string
-
-	// MaxStdoutLength is the maximum length of the standard output returned in the plugin result.
-	// If the output is longer, it will be truncated. The full output will be uploaded to s3.
-	MaxStdoutLength int
-
-	// MaxStderrLength is the maximum length of the standard error returned in the plugin result.
-	MaxStderrLength int
-
-	// OutputTruncatedSuffix is an optional suffix that is inserted at the end of the truncated stdout/stderr.
-	OutputTruncatedSuffix string
-}
-
-// PluginConfig is used for initializing plugins with default values
-type PluginConfig struct {
-	StdoutFileName        string
-	StderrFileName        string
-	MaxStdoutLength       int
-	MaxStderrLength       int
-	OutputTruncatedSuffix string
-}
 
 // StringPrefix returns the beginning part of a string, truncated to the given limit.
 func StringPrefix(input string, maxLength int, truncatedSuffix string) string {
@@ -119,51 +77,6 @@ func ReadAll(input io.Reader, maxLength int, truncatedSuffix string) (out string
 	return string(data), nil
 }
 
-// UploadOutputToS3Bucket uploads outputs (if any) to s3
-func (p *DefaultPlugin) UploadOutputToS3Bucket(log log.T, pluginID string, orchestrationDir string,
-	outputS3BucketName string, outputS3KeyPrefix string, useTempDirectory bool, tempDir string,
-	Stdout string, Stderr string) []string {
-	var uploadOutputToS3BucketErrors []string
-	if outputS3BucketName != "" {
-
-		uploadOutputsToS3 := func() {
-			if useTempDirectory {
-				// delete temp directory once we're done
-				defer func() {
-					if err := fileutil.DeleteDirectory(tempDir); err != nil {
-						log.Error("Error deleting directory", err)
-					}
-				}()
-			}
-			if Stdout != "" {
-				localPath := filepath.Join(orchestrationDir, p.StdoutFileName)
-				s3Key := fileutil.BuildS3Path(outputS3KeyPrefix, pluginID, p.StdoutFileName)
-				if err := s3util.NewAmazonS3Util(log, outputS3BucketName).S3Upload(log, outputS3BucketName, s3Key, localPath); err != nil && !p.UploadToS3ASync {
-					// if we are in synchronous mode, we can also return the error
-					uploadOutputToS3BucketErrors = append(uploadOutputToS3BucketErrors, err.Error())
-				}
-			}
-			if Stderr != "" {
-				localPath := filepath.Join(orchestrationDir, p.StderrFileName)
-				s3Key := fileutil.BuildS3Path(outputS3KeyPrefix, pluginID, p.StderrFileName)
-				if err := s3util.NewAmazonS3Util(log, outputS3BucketName).S3Upload(log, outputS3BucketName, s3Key, localPath); err != nil && !p.UploadToS3ASync {
-					// if we are in synchronous mode, we can also return the error
-					uploadOutputToS3BucketErrors = append(uploadOutputToS3BucketErrors, err.Error())
-				}
-			}
-		}
-
-		if !p.UploadToS3ASync {
-			uploadOutputsToS3()
-		} else {
-			go uploadOutputsToS3()
-		}
-	}
-
-	//return out.Errors
-	return uploadOutputToS3BucketErrors
-}
-
 // CreateScriptFile creates a script containing the given commands.
 func CreateScriptFile(log log.T, scriptPath string, runCommand []string, byteOrderMark fileutil.ByteOrderMark) (err error) {
 	// write source commands to file
@@ -189,17 +102,6 @@ func DownloadFileFromSource(log log.T, source string, sourceHash string, sourceH
 	return artifact.Download(log, downloadInput)
 }
 
-// DefaultPluginConfig returns the default values for the plugin
-func DefaultPluginConfig() PluginConfig {
-	return PluginConfig{
-		StdoutFileName:        "stdout",
-		StderrFileName:        "stderr",
-		MaxStdoutLength:       24000,
-		MaxStderrLength:       8000,
-		OutputTruncatedSuffix: "--output truncated--",
-	}
-}
-
 // LoadParametersAsList returns properties as a list and appropriate PluginResult if error is encountered
 func LoadParametersAsList(log log.T, prop interface{}, res *contracts.PluginResult) (properties []interface{}) {
 
@@ -218,13 +120,13 @@ func LoadParametersAsList(log log.T, prop interface{}, res *contracts.PluginResu
 }
 
 // LoadParametersAsMap returns properties as a map and appropriate PluginResult if error is encountered
-func LoadParametersAsMap(log log.T, prop interface{}, res *contracts.PluginResult) (properties map[string]interface{}) {
+func LoadParametersAsMap(log log.T, prop interface{}, out iohandler.IOHandler) (properties map[string]interface{}) {
 
 	if err := jsonutil.Remarshal(prop, &properties); err != nil {
 		log.Errorf("unable to parse plugin configuration")
-		res.Output = "Execution failed because agent is unable to parse plugin configuration"
-		res.Code = 1
-		res.Status = contracts.ResultStatusFailed
+		out.AppendError("Execution failed because agent is unable to parse plugin configuration")
+		out.SetExitCode(1)
+		out.SetStatus(contracts.ResultStatusFailed)
 	}
 	return
 }
