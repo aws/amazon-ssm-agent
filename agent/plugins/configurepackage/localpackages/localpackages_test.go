@@ -681,3 +681,10 @@ func (fileMock *MockedFileSys) WriteFile(filename string, content string) error 
 	fileMock.ContentWritten += content
 	return args.Error(0)
 }
+
+func TestGlobalPackageNames(t *testing.T) {
+	assert.Equal(t, "", getPackageNameFromGlobalPackageArn("arn:aws:ssm:::package/"))
+	assert.Equal(t, "packageName", getPackageNameFromGlobalPackageArn("arn:aws:ssm:::package/packageName"))
+	assert.Equal(t, "arn:aws:ssm:abcacb:abcd:package/packageName", getPackageNameFromGlobalPackageArn("arn:aws:ssm:abcacb:abcd:package/packageName"))
+	assert.Equal(t, "packageName", getPackageNameFromGlobalPackageArn("packageName"))
+}
