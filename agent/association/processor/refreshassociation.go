@@ -16,25 +16,21 @@ package processor
 
 import (
 	"fmt"
-	"os"
 	"time"
 
-	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/association/cache"
 	"github.com/aws/amazon-ssm-agent/agent/association/model"
 	"github.com/aws/amazon-ssm-agent/agent/association/schedulemanager"
 	"github.com/aws/amazon-ssm-agent/agent/association/schedulemanager/signal"
 	"github.com/aws/amazon-ssm-agent/agent/association/service"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
-	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/platform"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/pluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/times"
 
-	"path/filepath"
-
+	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler"
 	"github.com/aws/aws-sdk-go/aws"
 )
 
@@ -42,71 +38,52 @@ import (
 func (p *Processor) ProcessRefreshAssociation(log log.T, pluginRes *contracts.PluginResult, orchestrationDir string, apply bool) {
 	var associationIds []string
 	jsonutil.Remarshal(pluginRes.Output, &associationIds)
-	var out contracts.PluginOutput
-	defaultPluginConfig := pluginutil.DefaultPluginConfig()
+
+	ioConfig := contracts.IOConfiguration{
+		OrchestrationDirectory: orchestrationDir,
+		OutputS3BucketName:     pluginRes.OutputS3BucketName,
+		OutputS3KeyPrefix:      pluginRes.OutputS3KeyPrefix,
+	}
+	out := iohandler.NewDefaultIOHandler(log, ioConfig)
+	out.Init(log, pluginRes.PluginName)
 	//this is the current plugin run, trigger refresh
 	if apply {
-		out = p.refreshAssociation(log, associationIds, orchestrationDir, pluginRes.OutputS3BucketName, pluginRes.OutputS3KeyPrefix)
-
-		// Upload output to S3
-		uploadOutputToS3BucketErrors := p.defaultPlugin.UploadOutputToS3Bucket(log, pluginRes.PluginID, orchestrationDir, pluginRes.OutputS3BucketName, pluginRes.OutputS3KeyPrefix, false, "", out.Stdout, out.Stderr)
-		if len(uploadOutputToS3BucketErrors) > 0 {
-			log.Errorf("Unable to upload the logs: %s", uploadOutputToS3BucketErrors)
-		}
-
-		// Return Json indented response
-		responseContent, _ := jsonutil.Marshal(out)
-		log.Debug("Returning response:\n", jsonutil.Indent(responseContent))
-
-		// Create output file paths
-		stdoutFilePath := filepath.Join(orchestrationDir, defaultPluginConfig.StdoutFileName)
-		stderrFilePath := filepath.Join(orchestrationDir, defaultPluginConfig.StderrFileName)
-		log.Debugf("stdout file %v, stderr file %v", stdoutFilePath, stderrFilePath)
-
-		// create orchestration dir if needed
-		if err := fileutil.MakeDirs(orchestrationDir); err != nil {
-			out.AppendError(log, "Failed to create orchestrationDir directory for log files")
-		}
-		if _, err := fileutil.WriteIntoFileWithPermissions(stdoutFilePath, out.Stdout, os.FileMode(int(appconfig.ReadWriteAccess))); err != nil {
-			log.Error(err)
-		}
-
-		if _, err := fileutil.WriteIntoFileWithPermissions(stderrFilePath, out.Stderr, os.FileMode(int(appconfig.ReadWriteAccess))); err != nil {
-			log.Error(err)
-		}
+		p.refreshAssociation(log, associationIds, orchestrationDir, pluginRes.OutputS3BucketName, pluginRes.OutputS3KeyPrefix, out)
 	} else {
 		//operation is already done, fill success result as default
 		out.MarkAsSucceeded()
 		// if user provided empty list or "" in the document, we will run all the associations now
 		applyAll := len(associationIds) == 0 || (len(associationIds) == 1 && associationIds[0] == "")
 		if applyAll {
-			out.AppendInfo(log, "All associations have been requested to execute immediately")
+			out.AppendInfo("All associations have been requested to execute immediately")
 		} else {
-			out.AppendInfof(log, "Associations %v have been requested to execute immediately", associationIds)
+			out.AppendInfof("Associations %v have been requested to execute immediately", associationIds)
 		}
 	}
+	out.Close(log)
+	pluginConfig := iohandler.DefaultOutputConfig()
 
-	pluginRes.Code = out.ExitCode
+	pluginRes.Code = out.GetExitCode()
 	pluginRes.Status = contracts.ResultStatusSuccess
-	pluginRes.Output = out.String()
-	pluginRes.StandardOutput = pluginutil.StringPrefix(out.Stdout, defaultPluginConfig.MaxStdoutLength, defaultPluginConfig.OutputTruncatedSuffix)
-	pluginRes.StandardError = pluginutil.StringPrefix(out.Stderr, defaultPluginConfig.MaxStderrLength, defaultPluginConfig.OutputTruncatedSuffix)
+	pluginRes.Output = out.GetOutput()
+	pluginRes.StandardOutput = pluginutil.StringPrefix(out.GetStdout(), pluginConfig.MaxStdoutLength, pluginConfig.OutputTruncatedSuffix)
+	pluginRes.StandardError = pluginutil.StringPrefix(out.GetStderr(), pluginConfig.MaxStderrLength, pluginConfig.OutputTruncatedSuffix)
 }
 
 // refreshAssociation executes one the command and returns their output.
-func (p *Processor) refreshAssociation(log log.T, associationIds []string, orchestrationDirectory string, outputS3BucketName string, outputS3KeyPrefix string) (out contracts.PluginOutput) {
+func (p *Processor) refreshAssociation(log log.T, associationIds []string, orchestrationDirectory string, outputS3BucketName string, outputS3KeyPrefix string, out iohandler.IOHandler) {
 	var err error
 	var instanceID string
 	associations := []*model.InstanceAssociation{}
 
 	if instanceID, err = platform.InstanceID(); err != nil {
-		out.MarkAsFailed(log, fmt.Errorf("failed to load instance ID, %v", err))
+		out.MarkAsFailed(fmt.Errorf("failed to load instance ID, %v", err))
 		return
 	}
 
 	// Get associations
 	if associations, err = p.assocSvc.ListInstanceAssociations(log, instanceID); err != nil {
-		out.MarkAsFailed(log, fmt.Errorf("failed to list instance associations, %v", err))
+		out.MarkAsFailed(fmt.Errorf("failed to list instance associations, %v", err))
 		return
 	}
 
@@ -138,7 +115,7 @@ func (p *Processor) refreshAssociation(log log.T, associationIds []string, orche
 				times.ToIso8601UTC(time.Now()),
 				err.Error(),
 				service.NoOutputUrl)
-			out.MarkAsFailed(log, err)
+			out.MarkAsFailed(err)
 			continue
 		}
 
@@ -159,7 +136,7 @@ func (p *Processor) refreshAssociation(log log.T, associationIds []string, orche
 					times.ToIso8601UTC(time.Now()),
 					message,
 					service.NoOutputUrl)
-				out.MarkAsFailed(log, err)
+				out.MarkAsFailed(err)
 				continue
 			}
 		}
@@ -187,9 +164,9 @@ func (p *Processor) refreshAssociation(log log.T, associationIds []string, orche
 	schedulemanager.Refresh(log, associations)
 
 	if applyAll {
-		out.AppendInfo(log, "All associations have been requested to execute immediately")
+		out.AppendInfo("All associations have been requested to execute immediately")
 	} else {
-		out.AppendInfof(log, "Associations %v have been requested to execute immediately", associationIds)
+		out.AppendInfof("Associations %v have been requested to execute immediately", associationIds)
 	}
 
 	signal.ExecuteAssociation(log)

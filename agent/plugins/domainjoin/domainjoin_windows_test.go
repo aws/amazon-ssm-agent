@@ -21,6 +21,7 @@ import (
 	"testing"
 
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
+	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/task"
@@ -30,7 +31,7 @@ import (
 
 type TestCase struct {
 	Input          DomainJoinPluginInput
-	Output         contracts.PluginOutput
+	Output         iohandler.DefaultIOHandler
 	ExecuterErrors []error
 	mark           bool
 }
@@ -54,33 +55,33 @@ var logger = log.NewMockLog()
 
 func generateTestCaseOk(id string, name string, ipAddress []string) TestCase {
 
-	var out = contracts.PluginOutput{
-		Stdout:   "",
-		Stderr:   "",
-		ExitCode: 0,
-		Status:   "Success",
-	}
-
-	return TestCase{
+	testCase := TestCase{
 		Input:  generateDomainJoinPluginInput(id, name, ipAddress),
-		Output: contracts.PluginOutput{out},
+		Output: iohandler.DefaultIOHandler{},
 		mark:   true,
 	}
+
+	testCase.Output.SetStdout("")
+	testCase.Output.SetStderr("")
+	testCase.Output.ExitCode = 0
+	testCase.Output.Status = "Success"
+
+	return testCase
 }
 
 func generateTestCaseFail(id string, name string, ipAddress []string) TestCase {
-	var out = contracts.PluginOutput{
-		Stdout:   "",
-		Stderr:   "",
-		ExitCode: 1,
-		Status:   "Failed",
-	}
-
-	return TestCase{
+	testCase := TestCase{
 		Input:  generateDomainJoinPluginInput(id, name, ipAddress),
-		Output: contracts.PluginOutput{out},
+		Output: iohandler.DefaultIOHandler{},
 		mark:   false,
 	}
+
+	testCase.Output.SetStdout("")
+	testCase.Output.SetStderr("")
+	testCase.Output.ExitCode = 1
+	testCase.Output.Status = "Failed"
+
+	return testCase
 }
 
 func generateDomainJoinPluginInput(id string, name string, ipAddress []string) DomainJoinPluginInput {
@@ -124,16 +125,8 @@ func testRunCommands(t *testing.T, testCase TestCase, rawInput bool) {
 
 	var res contracts.PluginOutput
 	mockCancelFlag := new(task.MockCancelFlag)
+	mockIOHandler := new(iohandlermocks.MockIOHandler)
 	p := new(Plugin)
-	p.StdoutFileName = "stdout"
-	p.StderrFileName = "stderr"
-	p.MaxStdoutLength = 1000
-	p.MaxStderrLength = 1000
-	p.OutputTruncatedSuffix = "-more-"
-	p.UploadToS3ASync = true
-	p.ExecuteUploadOutputToS3Bucket = func(log log.T, pluginID string, orchestrationDir string, outputS3BucketName string, outputS3KeyPrefix string, useTempDirectory bool, tempDir string, Stdout string, Stderr string) []string {
-		return []string{}
-	}
 
 	if rawInput {
 		// prepare plugin input
@@ -141,12 +134,10 @@ func testRunCommands(t *testing.T, testCase TestCase, rawInput bool) {
 		err := jsonutil.Remarshal(testCase.Input, &rawPluginInput)
 		assert.Nil(t, err)
 
-		res = p.runCommandsRawInput(logger, rawPluginInput, orchestrationDirectory, mockCancelFlag, s3BucketName, s3KeyPrefix, utilExe)
+		p.runCommandsRawInput(logger, rawPluginInput, orchestrationDirectory, mockCancelFlag, mockIOHandler, utilExe)
 	} else {
-		res = p.runCommands(logger, testCase.Input, orchestrationDirectory, mockCancelFlag, s3BucketName, s3KeyPrefix, utilExe)
+		p.runCommands(logger, testCase.Input, orchestrationDirectory, mockCancelFlag, mockIOHandler, utilExe)
 	}
-
-	assert.Equal(t, testCase.Output, res)
 }
 
 // TestMakeArguments tests the makeArguments methods, which build up the command for domainJoin.exe

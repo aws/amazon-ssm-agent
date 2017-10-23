@@ -16,20 +16,18 @@ package refreshassociation
 
 import (
 	"fmt"
-	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
+	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
-	"github.com/aws/amazon-ssm-agent/agent/plugins/pluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 )
 
 // Plugin is the type for the refreshassociation plugin.
 type Plugin struct {
-	pluginutil.DefaultPlugin
 }
 
 // RefreshAssociationPluginInput represents one set of commands executed by the refreshassociation plugin.
@@ -40,15 +38,8 @@ type RefreshAssociationPluginInput struct {
 }
 
 // NewPlugin returns a new instance of the plugin.
-func NewPlugin(pluginConfig pluginutil.PluginConfig) (*Plugin, error) {
+func NewPlugin() (*Plugin, error) {
 	var plugin Plugin
-	plugin.MaxStdoutLength = pluginConfig.MaxStdoutLength
-	plugin.MaxStderrLength = pluginConfig.MaxStderrLength
-	plugin.StdoutFileName = pluginConfig.StdoutFileName
-	plugin.StderrFileName = pluginConfig.StderrFileName
-	plugin.OutputTruncatedSuffix = pluginConfig.OutputTruncatedSuffix
-	plugin.ExecuteUploadOutputToS3Bucket = pluginutil.UploadOutputToS3BucketExecuter(plugin.UploadOutputToS3Bucket)
-
 	return &plugin, nil
 }
 
@@ -57,49 +48,24 @@ func Name() string {
 	return appconfig.PluginNameRefreshAssociation
 }
 
-// Execute runs multiple sets of commands and returns their outputs.
-// res.Output will contain a slice of PluginOutput.
-func (p *Plugin) Execute(context context.T, config contracts.Configuration, cancelFlag task.CancelFlag) (res contracts.PluginResult) {
+func (p *Plugin) Execute(context context.T, config contracts.Configuration, cancelFlag task.CancelFlag, output iohandler.IOHandler) {
 	log := context.Log()
 	log.Infof("%v started with configuration %v", Name(), config)
-	res.StartDateTime = time.Now()
-	defer func() { res.EndDateTime = time.Now() }()
 
-	//loading Properties as list since aws:refreshAssociation uses properties as list
-	var properties []interface{}
-	if properties = pluginutil.LoadParametersAsList(log, config.Properties, &res); res.Code != 0 {
-		return res
+	if cancelFlag.ShutDown() {
+		output.MarkAsShutdown()
+	} else if cancelFlag.Canceled() {
+		output.MarkAsCancelled()
+	} else {
+		if associationIds, err := p.getAssociationIdsFromPluginInput(log, config.Properties); err != nil {
+			output.MarkAsFailed(err)
+		} else {
+			output.SetOutput(associationIds)
+		}
 	}
 
-	var associationIds []string
-	var err error
-
-	out := contracts.PluginOutput{}
-	for _, prop := range properties {
-
-		if cancelFlag.ShutDown() {
-			out.MarkAsShutdown()
-			break
-		}
-
-		if cancelFlag.Canceled() {
-			out.MarkAsCancelled()
-			break
-		}
-
-		if associationIds, err = p.getAssociationIdsFromPluginInput(log, prop); err != nil {
-			out.MarkAsFailed(log, err)
-		}
-
-	}
-
-	res.Code = out.ExitCode
-	res.Status = contracts.ResultStatusSuccess
-	res.Output = associationIds
-	res.StandardOutput = pluginutil.StringPrefix(out.Stdout, p.MaxStdoutLength, p.OutputTruncatedSuffix)
-	res.StandardError = pluginutil.StringPrefix(out.Stderr, p.MaxStderrLength, p.OutputTruncatedSuffix)
-
-	return res
+	output.SetStatus(contracts.ResultStatusSuccess)
+	return
 }
 
 func (p *Plugin) getAssociationIdsFromPluginInput(log log.T, property interface{}) ([]string, error) {
