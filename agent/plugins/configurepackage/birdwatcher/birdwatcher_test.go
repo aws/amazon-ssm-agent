@@ -318,7 +318,7 @@ func TestReportResult(t *testing.T) {
 
 func TestDownloadManifest(t *testing.T) {
 	manifestStrErr := "xkj]{}["
-	manifestStr := "{\"version\": \"1234\"}"
+	manifestStr := "{\"version\": \"1234\",\"packageArn\":\"packagearn\"}"
 	tracer := trace.NewTracer(log.NewMockLog())
 
 	data := []struct {
@@ -396,7 +396,7 @@ func TestDownloadManifest(t *testing.T) {
 				assert.Equal(t, "1234", result)
 				assert.NoError(t, err)
 				// verify cache
-				cachedManifest, cacheErr := cache.ReadManifest(testdata.packageName, "1234")
+				cachedManifest, cacheErr := cache.ReadManifest("packagearn", "1234")
 				assert.Equal(t, []byte(manifestStr), cachedManifest)
 				assert.NoError(t, cacheErr)
 			}
