@@ -1,5 +1,10 @@
 Latest
 ===============
+- Various bug fixes.
+- Switching to use Birdwatcher distribution service for AWS packages.
+
+2.2.45.0
+===============
 - Adding versioning support for Parameter Store.
 - Added additional gatherers for inventory, including windows service gatherer, windows registry gatherer, file metadata gatherer, windows role gatherer.
 - Added support for aws:downloadContent plugin to download content from GitHub, S3 and documents from SSM documents.
