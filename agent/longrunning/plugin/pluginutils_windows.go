@@ -21,10 +21,10 @@ import (
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
+	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/longrunning/plugin/cloudwatch"
 	"github.com/aws/amazon-ssm-agent/agent/platform"
-	"github.com/aws/amazon-ssm-agent/agent/plugins/pluginutil"
 )
 
 // loadPlatformDepedentPlugins loads all registered long running plugins in memory
@@ -42,7 +42,7 @@ func loadPlatformDependentPlugins(context context.T) map[string]Plugin {
 	cwInfo.Configuration = ""
 	cwInfo.State = PluginState{}
 
-	if handler, err := cloudwatch.NewPlugin(pluginutil.DefaultPluginConfig()); err == nil {
+	if handler, err := cloudwatch.NewPlugin(iohandler.DefaultOutputConfig()); err == nil {
 		cw.Info = cwInfo
 		cw.Handler = handler
 
