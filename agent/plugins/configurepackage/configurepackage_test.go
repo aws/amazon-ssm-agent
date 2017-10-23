@@ -21,10 +21,8 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/log"
-	"github.com/aws/amazon-ssm-agent/agent/platform"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/localpackages"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/trace"
-	"github.com/aws/amazon-ssm-agent/agent/plugins/pluginutil"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )
@@ -380,9 +378,8 @@ func TestExecute(t *testing.T) {
 		localRepository:        repoMock,
 		packageServiceSelector: selectMockService(serviceMock),
 	}
-	result := plugin.execute(contextMock, buildConfigSimple(pluginInformation), createMockCancelFlag())
+	plugin.execute(contextMock, buildConfigSimple(pluginInformation), createMockCancelFlag(), createMockIOHandler())
 
-	assert.Equal(t, 0, result.Code)
 	repoMock.AssertExpectations(t)
 	installerMock.AssertExpectations(t)
 	serviceMock.AssertExpectations(t)
@@ -405,10 +402,7 @@ func TestExecuteArrayInput(t *testing.T) {
 	rawPluginInputs = append(rawPluginInputs, pluginInformation)
 	config.Properties = rawPluginInputs
 
-	result := plugin.execute(contextMock, config, createMockCancelFlag())
-
-	assert.Equal(t, 1, result.Code)
-	assert.Contains(t, result.Output, "invalid format in plugin properties")
+	plugin.execute(contextMock, config, createMockCancelFlag(), createMockIOHandler())
 }
 
 func TestConfigurePackage_InvalidAction(t *testing.T) {
@@ -421,46 +415,7 @@ func TestConfigurePackage_InvalidAction(t *testing.T) {
 		localRepository:        repoMock,
 		packageServiceSelector: selectMockService(serviceMock),
 	}
-	result := plugin.execute(contextMock, buildConfigSimple(pluginInformation), createMockCancelFlag())
-
-	assert.Equal(t, 1, result.Code)
-	assert.Contains(t, result.Output, "unsupported action")
-}
-
-type S3PrefixTestCase struct {
-	PluginID         string
-	OrchestrationDir string
-	BucketName       string
-	PrefixIn         string
-}
-
-func testS3Prefix(t *testing.T, testCase S3PrefixTestCase) {
-	// file stubs are needed for ensurePackage since it is responsible for unzip
-	// and S3 upload because it writes to file before it uploads
-	stubs := setSuccessStubs()
-	defer stubs.Clear()
-
-	var mockPlugin pluginutil.MockDefaultPlugin
-	mockPlugin = pluginutil.MockDefaultPlugin{}
-	mockPlugin.On("UploadOutputToS3Bucket", mock.Anything, testCase.PluginID, testCase.OrchestrationDir, testCase.BucketName, testCase.PrefixIn, false, mock.Anything, mock.Anything, mock.Anything).Return([]string{})
-
-	// set region in cache to prevent test delay because of detecion failures
-	platform.SetRegion("testregion")
-
-	pluginInformation := createStubPluginInputInstall()
-
-	plugin := &Plugin{
-		localRepository:        repoInstallMock(pluginInformation, installerSuccessMock(pluginInformation.Name, pluginInformation.Version)),
-		packageServiceSelector: selectMockService(serviceSuccessMock()),
-	}
-	plugin.ExecuteUploadOutputToS3Bucket = mockPlugin.UploadOutputToS3Bucket
-
-	config := buildConfig(pluginInformation, testCase.OrchestrationDir, testCase.BucketName, testCase.PrefixIn, testCase.PluginID)
-	var result contracts.PluginResult
-	result = plugin.execute(contextMock, config, createMockCancelFlag())
-
-	assert.Equal(t, result.Code, 0)
-	mockPlugin.AssertExpectations(t)
+	plugin.execute(contextMock, buildConfigSimple(pluginInformation), createMockCancelFlag(), createMockIOHandler())
 }
 
 func buildConfigSimple(pluginInformation *ConfigurePackagePluginInput) contracts.Configuration {
@@ -485,26 +440,6 @@ func buildConfig(pluginInformation *ConfigurePackagePluginInput, orchestrationDi
 	config.Properties = rawPluginInput
 
 	return config
-}
-
-func TestS3PrefixSchema1_2(t *testing.T) {
-	testCase := S3PrefixTestCase{
-		PluginID:         "aws:configurePackage",
-		OrchestrationDir: "OrchestrationDir",
-		BucketName:       "Bucket",
-		PrefixIn:         "Prefix",
-	}
-	testS3Prefix(t, testCase)
-}
-
-func TestS3PrefixSchema2_0(t *testing.T) {
-	testCase := S3PrefixTestCase{
-		PluginID:         "configure:Package",
-		OrchestrationDir: "OrchestrationDir",
-		BucketName:       "Bucket",
-		PrefixIn:         "Prefix",
-	}
-	testS3Prefix(t, testCase)
 }
 
 func TestValidateInput(t *testing.T) {

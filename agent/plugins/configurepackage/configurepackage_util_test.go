@@ -21,6 +21,8 @@ import (
 	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
+	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler"
+	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler/mock"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/installer"
 	installerMock "github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/installer/mock"
@@ -214,6 +216,17 @@ func createMockCancelFlag() task.CancelFlag {
 	mockCancelFlag.On("Wait").Return(false).After(100 * time.Millisecond)
 
 	return mockCancelFlag
+}
+
+func createMockIOHandler() iohandler.IOHandler {
+	mockIOHandler := new(iohandlermocks.MockIOHandler)
+
+	mockIOHandler.On("SetExitCode", mock.Anything).Return()
+	mockIOHandler.On("SetStatus", mock.Anything).Return()
+	mockIOHandler.On("AppendInfo", mock.Anything).Return()
+	mockIOHandler.On("AppendError", mock.Anything).Return()
+
+	return mockIOHandler
 }
 
 type ConfigurePackageStubs struct {

@@ -15,6 +15,7 @@ package trace
 
 import (
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
+	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 )
 
@@ -28,8 +29,8 @@ type PluginOutputTrace struct {
 
 func (po *PluginOutputTrace) GetStatus() contracts.ResultStatus { return po.status }
 func (po *PluginOutputTrace) GetExitCode() int                  { return po.exitCode }
-func (po *PluginOutputTrace) GetStdout() string                 { return po.Tracer.ToPluginOutput().Stdout }
-func (po *PluginOutputTrace) GetStderr() string                 { return po.Tracer.ToPluginOutput().Stderr }
+func (po *PluginOutputTrace) GetStdout() string                 { return po.Tracer.ToPluginOutput().GetStdout() }
+func (po *PluginOutputTrace) GetStderr() string                 { return po.Tracer.ToPluginOutput().GetStderr() }
 
 func (po *PluginOutputTrace) SetStatus(status contracts.ResultStatus) { po.status = status }
 func (po *PluginOutputTrace) SetExitCode(exitCode int)                { po.exitCode = exitCode }
@@ -75,7 +76,7 @@ func (out *PluginOutputTrace) MarkAsShutdown() {
 
 func (out *PluginOutputTrace) String() string {
 	p := out.Tracer.ToPluginOutput()
-	return contracts.TruncateOutput(p.Stdout, p.Stderr, contracts.MaximumPluginOutputSize)
+	return iohandler.TruncateOutput(p.GetStdout(), p.GetStderr(), iohandler.MaximumPluginOutputSize)
 }
 
 // Forward to tracer

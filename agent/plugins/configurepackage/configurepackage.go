@@ -18,12 +18,13 @@ package configurepackage
 import (
 	"errors"
 	"fmt"
-	"path/filepath"
+
 	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
+	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/platform"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/birdwatcher"
@@ -32,7 +33,6 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/packageservice"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/ssms3"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/trace"
-	"github.com/aws/amazon-ssm-agent/agent/plugins/pluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 )
 
@@ -45,7 +45,6 @@ const (
 
 // Plugin is the type for the configurepackage plugin.
 type Plugin struct {
-	pluginutil.DefaultPlugin
 	packageServiceSelector func(tracer trace.Tracer, serviceEndpoint string, localrepo localpackages.Repository) packageservice.PackageService
 	localRepository        localpackages.Repository
 }
@@ -61,14 +60,8 @@ type ConfigurePackagePluginInput struct {
 }
 
 // NewPlugin returns a new instance of the plugin.
-func NewPlugin(pluginConfig pluginutil.PluginConfig) (*Plugin, error) {
+func NewPlugin() (*Plugin, error) {
 	var plugin Plugin
-	plugin.MaxStdoutLength = pluginConfig.MaxStdoutLength
-	plugin.MaxStderrLength = pluginConfig.MaxStderrLength
-	plugin.StdoutFileName = pluginConfig.StdoutFileName
-	plugin.StderrFileName = pluginConfig.StderrFileName
-	plugin.OutputTruncatedSuffix = pluginConfig.OutputTruncatedSuffix
-	plugin.ExecuteUploadOutputToS3Bucket = pluginutil.UploadOutputToS3BucketExecuter(plugin.UploadOutputToS3Bucket)
 
 	plugin.localRepository = localpackages.NewRepository()
 	plugin.packageServiceSelector = selectService
@@ -366,22 +359,17 @@ func selectService(tracer trace.Tracer, serviceEndpoint string, localrepo localp
 }
 
 // Execute runs the plugin operation and returns output
-// res.Output will contain a slice of RunCommandPluginOutput
-func (p *Plugin) Execute(context context.T, config contracts.Configuration, cancelFlag task.CancelFlag) (res contracts.PluginResult) {
-	return p.execute(context, config, cancelFlag)
+func (p *Plugin) Execute(context context.T, config contracts.Configuration, cancelFlag task.CancelFlag, output iohandler.IOHandler) {
+	p.execute(context, config, cancelFlag, output)
+	return
 }
 
-func (p *Plugin) execute(context context.T, config contracts.Configuration, cancelFlag task.CancelFlag) (res contracts.PluginResult) {
+func (p *Plugin) execute(context context.T, config contracts.Configuration, cancelFlag task.CancelFlag, output iohandler.IOHandler) {
 	log := context.Log()
 	log.Info("RunCommand started with configuration ", config)
 
 	tracer := trace.NewTracer(log)
 	defer tracer.BeginSection("configurePackage").End()
-
-	res.StartDateTime = time.Now()
-	defer func() {
-		res.EndDateTime = time.Now()
-	}()
 
 	out := trace.PluginOutputTrace{Tracer: tracer}
 
@@ -440,9 +428,9 @@ func (p *Plugin) execute(context context.T, config contracts.Configuration, canc
 					err := packageService.ReportResult(tracer, packageservice.PackageResult{
 						Exitcode:               int64(out.GetExitCode()),
 						Operation:              input.Action,
-						PackageName:            packageArn,
+						PackageName:            input.Name,
 						PreviousPackageVersion: installedVersion,
-						Timing:                 res.StartDateTime.UnixNano(),
+						Timing:                 time.Now().UnixNano(),
 						Version:                version,
 						Trace:                  packageservice.ConvertToPackageServiceTrace(tracer.Traces()),
 					})
@@ -451,49 +439,17 @@ func (p *Plugin) execute(context context.T, config contracts.Configuration, canc
 					}
 				}
 			}
-
-			if config.OrchestrationDirectory != "" {
-				useTemp := false
-				outFile := filepath.Join(config.OrchestrationDirectory, p.StdoutFileName)
-				// create orchestration dir if needed
-				if err := filesysdep.MakeDirExecute(config.OrchestrationDirectory); err != nil {
-					out.AppendError(log, "Failed to create orchestrationDir directory for log files")
-				} else {
-					if err := filesysdep.WriteFile(outFile, out.GetStdout()); err != nil {
-						log.Debugf("Error writing to %v", outFile)
-						out.AppendErrorf(log, "Error saving stdout: %v", err.Error())
-					}
-					errFile := filepath.Join(config.OrchestrationDirectory, p.StderrFileName)
-					if err := filesysdep.WriteFile(errFile, out.GetStderr()); err != nil {
-						log.Debugf("Error writing to %v", errFile)
-						out.AppendErrorf(log, "Error saving stderr: %v", err.Error())
-					}
-				}
-				uploadErrs := p.ExecuteUploadOutputToS3Bucket(log,
-					config.PluginID,
-					config.OrchestrationDirectory,
-					config.OutputS3BucketName,
-					config.OutputS3KeyPrefix,
-					useTemp,
-					config.OrchestrationDirectory,
-					out.GetStdout(),
-					out.GetStderr())
-				for _, uploadErr := range uploadErrs {
-					out.AppendError(log, uploadErr)
-				}
-			}
 		}
 	}
-	res.Code = out.GetExitCode()
-	res.Status = out.GetStatus()
+	output.SetExitCode(out.GetExitCode())
+	output.SetStatus(out.GetStatus())
 
 	// convert trace
 	traceout := tracer.ToPluginOutput()
-	res.Output = traceout.String()
-	res.StandardOutput = pluginutil.StringPrefix(traceout.GetStdout(), p.MaxStdoutLength, p.OutputTruncatedSuffix)
-	res.StandardError = pluginutil.StringPrefix(traceout.GetStderr(), p.MaxStderrLength, p.OutputTruncatedSuffix)
+	output.AppendInfo(traceout.GetStdout())
+	output.AppendError(traceout.GetStderr())
 
-	return res
+	return
 }
 
 // Name returns the name of the plugin.
