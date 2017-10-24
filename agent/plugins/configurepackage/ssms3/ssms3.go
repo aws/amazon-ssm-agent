@@ -49,13 +49,13 @@ const (
 
 	// PackageURLStandard represents the s3 folder where all versions of a package live
 	// the url to a specific package has a format like https://s3.us-east-1.amazonaws.com/amazon-ssm-packages-us-east-1/Packages/Test/windows/amd64/1.0.0/Test.zip
-	PackageURLStandard = "https://{Endpoint}/amazon-ssm-packages-{Region}/Packages/{PackageName}/{Platform}/{Arch}"
+	PackageURLStandard = "https://{Endpoint}/amazon-ssm-packages-{Region}/BirdwatcherPackages/{PackageName}/{Platform}/{Arch}"
 
 	// PackageURLBeta is the s3 location for ad-hoc testing by package developers
-	PackageURLBeta = "https://s3.amazonaws.com/amazon-ssm-packages-beta/Packages/{PackageName}/{Platform}/{Arch}"
+	PackageURLBeta = "https://s3.amazonaws.com/amazon-ssm-packages-beta/BirdwatcherPackages/{PackageName}/{Platform}/{Arch}"
 
 	// PackageURLGamma is the s3 location for internal pre-production testing
-	PackageURLGamma = "https://s3.amazonaws.com/amazon-ssm-packages-us-east-1-gamma/Packages/{PackageName}/{Platform}/{Arch}"
+	PackageURLGamma = "https://s3.amazonaws.com/amazon-ssm-packages-us-east-1-gamma/BirdwatcherPackages/{PackageName}/{Platform}/{Arch}"
 
 	// PackageNameSuffix represents (when concatenated with the correct package url) the s3 location of a specific version of a package
 	PackageNameSuffix = "/{PackageVersion}/" + PackageNameFormat
@@ -64,9 +64,9 @@ const (
 	PatternVersion = "^(?:(\\d+)\\.)(?:(\\d+)\\.)(\\d+)$"
 
 	// ActiveServiceURL is the s3 object whose presence indicates the SSMS3 service implementation should be used
-	ActiveServiceURL      = "https://{Endpoint}/amazon-ssm-packages-{Region}/active"
-	ActiveServiceURLBeta  = "https://s3.amazonaws.com/amazon-ssm-packages-beta/active"
-	ActiveServiceURLGamma = "https://s3.amazonaws.com/amazon-ssm-packages-us-east-1-gamma/active"
+	ActiveServiceURL      = "https://{Endpoint}/amazon-ssm-packages-{Region}/active-birdwatcher-fallback"
+	ActiveServiceURLBeta  = "https://s3.amazonaws.com/amazon-ssm-packages-beta/active-birdwatcher-fallback"
+	ActiveServiceURLGamma = "https://s3.amazonaws.com/amazon-ssm-packages-us-east-1-gamma/active-birdwatcher-fallback"
 )
 
 type PackageService struct {
