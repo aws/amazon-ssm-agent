@@ -201,6 +201,17 @@ func initializeBookkeepingLocations(log logger.T, instanceID string) bool {
 		initStatus = false
 	}
 
+	log.Infof("Initializing default location for role inventory")
+	roleInventoryLocation := filepath.Join(appconfig.DefaultDataStorePath,
+		instanceID,
+		appconfig.InventoryRootDirName,
+		appconfig.RoleInventoryRootDirName)
+
+	if err := fileutil.MakeDirs(roleInventoryLocation); err != nil {
+		log.Error("encountered error while creating folders for role inventory", err)
+		initStatus = false
+	}
+
 	return initStatus
 }
 

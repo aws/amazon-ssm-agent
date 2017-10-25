@@ -51,7 +51,15 @@ func MockReadDir(dirname string) (files []os.FileInfo, err error) {
 		modTime: time.Now(),
 		isDir:   false,
 	}
+	mfi2 := MockFileInfo{
+		name:    "abc2.json",
+		size:    1024,
+		mode:    0,
+		modTime: time.Now(),
+		isDir:   false,
+	}
 	files = append(files, mfi)
+	files = append(files, mfi2)
 	return
 }
 

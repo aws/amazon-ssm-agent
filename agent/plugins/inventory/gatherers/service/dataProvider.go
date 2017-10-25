@@ -99,15 +99,15 @@ func collectDataFromPowershell(log log.T, powershellCommand string, serviceInfo 
 		return
 	}
 	log.Debugf("Command output before clean up: %v", string(output))
-	cleanOutput, err = pluginutil.ReplaceMarkedFields(string(output), startMarker, endMarker, pluginutil.CleanupJSONField)
+
+	cleanOutput, err = pluginutil.ReplaceMarkedFields(pluginutil.CleanupNewLines(string(output)), startMarker, endMarker, pluginutil.CleanupJSONField)
 	if err != nil {
 		LogError(log, err)
 		return
 	}
-	output = []byte(pluginutil.CleanupNewLines(cleanOutput))
-	log.Debugf("Command output: %v", string(output))
+	log.Debugf("Command output: %v", string(cleanOutput))
 
-	if err = json.Unmarshal([]byte(output), serviceInfo); err != nil {
+	if err = json.Unmarshal([]byte(cleanOutput), serviceInfo); err != nil {
 		err = fmt.Errorf("Unable to parse command output - %v", err.Error())
 		log.Error(err.Error())
 		log.Infof("Error parsing command output - no data to return")

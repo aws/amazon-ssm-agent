@@ -15,11 +15,17 @@ package role
 
 import (
 	"encoding/json"
+	"encoding/xml"
 	"fmt"
 	"os/exec"
+	"path/filepath"
+	"strings"
 
+	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
+	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/platform"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/inventory/model"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/pluginutil"
 	"github.com/twinj/uuid"
@@ -52,12 +58,65 @@ $result = $jsonObj -join ","
 $result = "[" + $result + "]"
 Write-Output $result
 `
+	roleInfoScriptUsingRegistry = `
+	$keyExists = Test-Path "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Setup\OC Manager\Subcomponents"
+	$jsonObj = @()
+	if ($keyExists) {
+		$key = Get-Item "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Setup\OC Manager\Subcomponents"
+		$valueNames = $key.GetValueNames();
+		foreach ($valueName in $valueNames) {
+			$value = $key.GetValue($valueName);
+			if ($value -gt 0) {
+				$installed = "True"
+			} else {
+				$installed = "False"
+			}
+			$jsonObj += @"
+{"Name": "$valueName", "Installed": "$installed"}
+"@
+
+		}
+	}
+	$result = $jsonObj -join ","
+	$result = "[" + $result + "]"
+	Write-Output $result
+`
 )
 
 const (
 	// Use powershell to get role info
 	PowershellCmd = "powershell"
+	QueryFileName = "roleInfo.xml"
 )
+
+type RoleService struct {
+	RoleService []RoleService
+	DisplayName string `xml:"DisplayName,attr"`
+	Installed   string `xml:"Installed,attr"`
+	Id          string `xml:"Id,attr"`
+	Default     string `xml:"Default,attr"`
+}
+
+type Role struct {
+	RoleService []RoleService
+	DisplayName string `xml:"DisplayName,attr"`
+	Installed   string `xml:"Installed,attr"`
+	Id          string `xml:"Id,attr"`
+	Default     string `xml:"Default,attr"`
+}
+
+type Feature struct {
+	Feature     []Feature
+	DisplayName string `xml:"DisplayName,attr"`
+	Installed   string `xml:"Installed,attr"`
+	Id          string `xml:"Id,attr"`
+	Default     string `xml:"Default,attr"`
+}
+
+type Result struct {
+	Role    []Role
+	Feature []Feature
+}
 
 func randomString(length int) string {
 	return uuid.NewV4().String()[:length]
@@ -75,9 +134,87 @@ func LogError(log log.T, err error) {
 }
 
 var cmdExecutor = executeCommand
+var readFile = readAllText
+var resultPath = getResultFilePath
 
 func executeCommand(command string, args ...string) ([]byte, error) {
 	return exec.Command(command, args...).CombinedOutput()
+}
+
+func readAllText(path string) (xmlData string, err error) {
+	xmlData, err = fileutil.ReadAllText(path)
+	return
+}
+
+func getResultFilePath(log log.T) (path string, err error) {
+	var machineID string
+	machineID, err = platform.InstanceID()
+
+	if err != nil {
+		log.Errorf("Error getting machineID")
+		return
+	}
+	path = filepath.Join(appconfig.DefaultDataStorePath,
+		machineID,
+		appconfig.InventoryRootDirName,
+		appconfig.RoleInventoryRootDirName,
+		QueryFileName)
+	return
+}
+
+func readServiceData(roleService RoleService, roleInfo *[]model.RoleData) {
+	roleData := model.RoleData{
+		Name:        roleService.Id,
+		DisplayName: roleService.DisplayName,
+		Installed:   strings.Title(roleService.Installed),
+		FeatureType: "Role Service",
+	}
+	*roleInfo = append(*roleInfo, roleData)
+	for i := 0; i < len(roleService.RoleService); i++ {
+		readServiceData(roleService.RoleService[i], roleInfo)
+	}
+}
+
+func readRoleData(role Role, roleInfo *[]model.RoleData) {
+	roleData := model.RoleData{
+		Name:        role.Id,
+		DisplayName: role.DisplayName,
+		Installed:   strings.Title(role.Installed),
+		FeatureType: "Role",
+	}
+	*roleInfo = append(*roleInfo, roleData)
+
+	for i := 0; i < len(role.RoleService); i++ {
+		readServiceData(role.RoleService[i], roleInfo)
+	}
+}
+
+func readFeatureData(feature Feature, roleInfo *[]model.RoleData) {
+
+	roleData := model.RoleData{
+		Name:        feature.Id,
+		DisplayName: feature.DisplayName,
+		Installed:   strings.Title(feature.Installed),
+		FeatureType: "Feature",
+	}
+	*roleInfo = append(*roleInfo, roleData)
+
+	for i := 0; i < len(feature.Feature); i++ {
+		readFeatureData(feature.Feature[i], roleInfo)
+	}
+}
+
+func readAllData(result Result, roleInfo *[]model.RoleData) {
+	roles := result.Role
+	features := result.Feature
+
+	for i := 0; i < len(roles); i++ {
+		readRoleData(roles[i], roleInfo)
+	}
+
+	for i := 0; i < len(features); i++ {
+		readFeatureData(features[i], roleInfo)
+	}
 }
 
 // executePowershellCommands executes commands in Powershell to get all windows processes.
@@ -104,15 +241,15 @@ func collectDataFromPowershell(log log.T, powershellCommand string, roleInfo *[]
 		return
 	}
 	log.Debugf("Command output before clean up: %v", string(output))
-	cleanOutput, err = pluginutil.ReplaceMarkedFields(string(output), startMarker, endMarker, pluginutil.CleanupJSONField)
+
+	cleanOutput, err = pluginutil.ReplaceMarkedFields(pluginutil.CleanupNewLines(string(output)), startMarker, endMarker, pluginutil.CleanupJSONField)
 	if err != nil {
 		LogError(log, err)
 		return
 	}
-	output = []byte(pluginutil.CleanupNewLines(cleanOutput))
-	log.Debugf("Command output: %v", string(output))
+	log.Debugf("Command output: %v", string(cleanOutput))
 
-	if err = json.Unmarshal([]byte(output), roleInfo); err != nil {
+	if err = json.Unmarshal([]byte(cleanOutput), roleInfo); err != nil {
 		err = fmt.Errorf("Unable to parse command output - %v", err.Error())
 		log.Error(err.Error())
 		log.Infof("Error parsing command output - no data to return")
@@ -120,9 +257,62 @@ func collectDataFromPowershell(log log.T, powershellCommand string, roleInfo *[]
 	return
 }
 
+// Some early 2008 versions use ServerManager for role management, so use that for collecting data.
+func collectDataUsingServerManager(log log.T, roleInfo *[]model.RoleData) (err error) {
+	var xmlData, path string
+	var output []byte
+
+	path, err = resultPath(log)
+
+	if err != nil {
+		log.Errorf("Error getting path of file")
+		return
+	}
+
+	powershellCommand := "Servermanagercmd.exe -q " + path
+	output, err = executePowershellCommands(log, powershellCommand, "")
+	log.Debugf("Command output: %v", string(output))
+
+	if err != nil {
+		log.Errorf("Error executing command - %v", err.Error())
+		return
+	}
+
+	xmlData, err = readFile(path)
+	if err != nil {
+		log.Errorf("Error reading role info file - %v", err.Error())
+		return
+	}
+
+	v := Result{}
+	err = xml.Unmarshal([]byte(xmlData), &v)
+	if err != nil {
+		log.Errorf("Error unmarshalling xml: %v", err.Error())
+		return
+	}
+
+	readAllData(v, roleInfo)
+	fileutil.DeleteFile(path)
+	return
+}
+
 func collectRoleData(context context.T, config model.Config) (data []model.RoleData, err error) {
 	log := context.Log()
 	log.Infof("collectRoleData called")
+
 	err = collectDataFromPowershell(log, roleInfoScript, &data)
+	// Some early 2008 releases uses server manager for getting role information
+	if err != nil {
+		log.Infof("Trying collecting role data using server manager")
+		err = collectDataUsingServerManager(log, &data)
+	}
+	// In some versions of 2003, roles information is stored as subcomponents in registry.
+	if err != nil {
+		log.Infof("Trying collecting role data using registry")
+		err = collectDataFromPowershell(log, roleInfoScriptUsingRegistry, &data)
+	}
+	if err != nil {
+		log.Errorf("Failed to collect role data using possible mechanisms")
+	}
 	return
 }
