@@ -51,13 +51,6 @@ func LogError(log log.T, err error) {
 	log.Error(err)
 }
 
-func min(a, b int) int {
-	if a < b {
-		return a
-	}
-	return b
-}
-
 func randomString(length int) string {
 	return uuid.NewV4().String()[:length]
 }
@@ -92,20 +85,19 @@ func collectDataFromPowershell(log log.T, powershellCommand string, registryInfo
 		return
 	}
 	log.Debugf("Before cleanup %v", string(output))
-	cleanOutput, err = pluginutil.ReplaceMarkedFields(string(output), startMarker, endMarker, pluginutil.CleanupJSONField)
+	cleanOutput, err = pluginutil.ReplaceMarkedFields(pluginutil.CleanupNewLines(string(output)), startMarker, endMarker, pluginutil.CleanupJSONField)
 	if err != nil {
 		LogError(log, err)
 		return
 	}
-	output = []byte(pluginutil.CleanupNewLines(cleanOutput))
-	log.Debugf("Command output: %v", string(output))
 
-	if string(output) == ValueLimitExceeded {
+	log.Debugf("Command output: %v", string(cleanOutput))
+	if cleanOutput == ValueLimitExceeded {
 		log.Error("Number of values collected exceeded limit")
 		err = ValueCountLimitExceeded
 		return
 	}
-	if err = json.Unmarshal([]byte(output), registryInfo); err != nil {
+	if err = json.Unmarshal([]byte(cleanOutput), registryInfo); err != nil {
 		err = fmt.Errorf("Unable to parse command output - %v", err.Error())
 		log.Error(err.Error())
 		log.Infof("Error parsing command output - no data to return")
@@ -131,7 +123,7 @@ func collectRegistryData(context context.T, config model.Config) (data []model.R
 		valueNames := filter.ValueNames
 		log.Infof("valueNames %v", valueNames)
 		registryPath := "Registry::" + path
-		execScript := registryInfoScript + "-Path " + registryPath + " -ValueLimit " + fmt.Sprint(valueScanLimit)
+		execScript := registryInfoScript + "-Path \"" + registryPath + "\" -ValueLimit " + fmt.Sprint(valueScanLimit)
 		if recursive == true {
 			execScript += " -Recursive"
 		}

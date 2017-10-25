@@ -15,6 +15,7 @@
 package service
 
 import (
+	"errors"
 	"testing"
 
 	"github.com/aws/amazon-ssm-agent/agent/context"
@@ -23,6 +24,7 @@ import (
 )
 
 var testServiceOutput = "[{\"Name\": \"AJRouter\", \"DisplayName\": \"AllJoyn Router Service\", \"Status\": \"Stopped\", \"DependentServices\": \"\", \"ServicesDependedOn\": \"\", \"ServiceType\": \"Win32ShareProcess\", \"StartType\": \"\"},{\"Name\": \"ALG\", \"DisplayName\": \"Application Layer Gateway Service\", \"Status\": \"Stopped\", \"DependentServices\": \"\", \"ServicesDependedOn\": \"BrokerInfrastructure\", \"ServiceType\": \"Win32OwnProcess\", \"StartType\": \"\"}]"
+var testServiceOutputIncorrect = "[{\"Name\": \"<start123>AJRouter\", \"DisplayName\": \"AllJoyn Router Service\", \"Status\": \"Stopped\", \"DependentServices\": \"\", \"ServicesDependedOn\": \"\", \"ServiceType\": \"Win32ShareProcess\", \"StartType\": \"\"},{\"Name\": \"ALG\", \"DisplayName\": \"Application Layer Gateway Service\", \"Status\": \"Stopped\", \"DependentServices\": \"\", \"ServicesDependedOn\": \"BrokerInfrastructure\", \"ServiceType\": \"Win32OwnProcess\", \"StartType\": \"\"}]"
 
 var testServiceOutputData = []model.ServiceData{
 	{
@@ -45,17 +47,54 @@ var testServiceOutputData = []model.ServiceData{
 	},
 }
 
-func testExecuteCommand(command string, args ...string) ([]byte, error) {
-	return []byte(testServiceOutput), nil
+func createMockTestExecuteCommand(output string, err error) func(string, ...string) ([]byte, error) {
+
+	return func(string, ...string) ([]byte, error) {
+		return []byte(output), err
+	}
 }
 
 func TestServiceData(t *testing.T) {
 
 	contextMock := context.NewMockDefault()
-	cmdExecutor = testExecuteCommand
+	cmdExecutor = createMockTestExecuteCommand(testServiceOutput, nil)
 
 	data, err := collectServiceData(contextMock, model.Config{})
 
 	assert.Nil(t, err)
 	assert.Equal(t, data, testServiceOutputData)
+}
+
+func TestServiceDataCmdErr(t *testing.T) {
+
+	contextMock := context.NewMockDefault()
+	cmdExecutor = createMockTestExecuteCommand("", errors.New("error"))
+
+	data, err := collectServiceData(contextMock, model.Config{})
+
+	assert.NotNil(t, err)
+	assert.Nil(t, data)
+}
+
+func TestServiceDataInvalidOutput(t *testing.T) {
+
+	contextMock := context.NewMockDefault()
+	cmdExecutor = createMockTestExecuteCommand("Invalid", nil)
+
+	data, err := collectServiceData(contextMock, model.Config{})
+
+	assert.NotNil(t, err)
+	assert.Nil(t, data)
+}
+
+func TestServiceDataInvalidMarker(t *testing.T) {
+	startMarker = "<start123>"
+	endMarker = "<test>"
+	contextMock := context.NewMockDefault()
+	cmdExecutor = createMockTestExecuteCommand(testServiceOutputIncorrect, nil)
+
+	data, err := collectServiceData(contextMock, model.Config{})
+
+	assert.NotNil(t, err)
+	assert.Nil(t, data)
 }
