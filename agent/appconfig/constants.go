@@ -64,6 +64,7 @@ const (
 	InventoryRootDirName         = "inventory"
 	CustomInventoryRootDirName   = "custom"
 	FileInventoryRootDirName     = "file"
+	RoleInventoryRootDirName     = "role"
 	InventoryContentHashFileName = "contentHash"
 
 	//aws-ssm-agent bookkeeping constants for compliance
