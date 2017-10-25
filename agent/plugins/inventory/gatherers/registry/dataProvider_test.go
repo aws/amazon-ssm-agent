@@ -14,6 +14,7 @@
 package registry
 
 import (
+	"errors"
 	"testing"
 
 	"github.com/aws/amazon-ssm-agent/agent/context"
@@ -22,6 +23,7 @@ import (
 )
 
 var testRegistryOutput = "[{\"ValueName\":\"AMIName\",\"ValueType\":\"REG_SZ\",\"KeyPath\":\"<start1234>HKEY_LOCAL_MACHINE\\SOFTWARE\\Amazon\\MachineImage.Name<end1234>\", \"Value\":\"Windows_Server-2016-English-Full-Base\"},{\"ValueName\": \"AMIVersion\", \"ValueType\": \"REG_SZ\", \"KeyPath\":  \"<start1234>HKEY_LOCAL_MACHINE\\SOFTWARE\\Amazon\\MachineImage.Name<end1234>\",\"Value\": \"2017.08.09\"}]"
+var testRegistryOutputInvalid = "[{\"ValueName\":\"<start1234>AMIName\",\"ValueType\":\"REG_SZ\",\"KeyPath\":\"<start1234>HKEY_LOCAL_MACHINE\\SOFTWARE\\Amazon\\MachineImage.Name<end1234>\", \"Value\":\"Windows_Server-2016-English-Full-Base\"},{\"ValueName\": \"AMIVersion\", \"ValueType\": \"REG_SZ\", \"KeyPath\":  \"<start1234>HKEY_LOCAL_MACHINE\\SOFTWARE\\Amazon\\MachineImage.Name\",\"Value\": \"2017.08.09\"}]"
 
 var testRegistryOutputData = []model.RegistryData{
 	{
@@ -50,18 +52,35 @@ var testRegistryOutputData = []model.RegistryData{
 	},
 }
 
-func testExecuteCommand(command string, args ...string) ([]byte, error) {
-	return []byte(testRegistryOutput), nil
+var testRegistryOutputDataSingleCall = []model.RegistryData{
+	{
+		ValueName: "AMIName",
+		ValueType: "REG_SZ",
+		KeyPath:   "HKEY_LOCAL_MACHINE\\SOFTWARE\\Amazon\\MachineImage.Name",
+		Value:     "Windows_Server-2016-English-Full-Base",
+	},
+	{
+		ValueName: "AMIVersion",
+		ValueType: "REG_SZ",
+		KeyPath:   "HKEY_LOCAL_MACHINE\\SOFTWARE\\Amazon\\MachineImage.Name",
+		Value:     "2017.08.09",
+	},
 }
 
-func testExecuteCommandValueLimit(command string, args ...string) ([]byte, error) {
-	return []byte(ValueLimitExceeded), nil
+func createMockExecutor(output []string, err []error) func(string, ...string) ([]byte, error) {
+	var index = 0
+	return func(string, ...string) ([]byte, error) {
+		if index < len(output) {
+			index += 1
+		}
+		return []byte(output[index-1]), err[index-1]
+	}
 }
 
 func TestGetRegistryData(t *testing.T) {
 
 	contextMock := context.NewMockDefault()
-	cmdExecutor = testExecuteCommand
+	cmdExecutor = createMockExecutor([]string{testRegistryOutput}, []error{nil})
 	startMarker = "<start1234>"
 	endMarker = "<end1234>"
 	mockFilters := `[{"Path": "HKEY_LOCAL_MACHINE\\SOFTWARE\\Amazon","Recursive": true}, {"Path": "HKEY_LOCAL_MACHINE\\SOFTWARE\\Amazon","Recursive": true, "RegScanLimit": 100}]`
@@ -75,7 +94,7 @@ func TestGetRegistryData(t *testing.T) {
 func TestGetRegistryDataValueError(t *testing.T) {
 
 	contextMock := context.NewMockDefault()
-	cmdExecutor = testExecuteCommandValueLimit
+	cmdExecutor = createMockExecutor([]string{testRegistryOutput, ValueLimitExceeded}, []error{nil, nil})
 	startMarker = "<start1234>"
 	endMarker = "<end1234>"
 	mockFilters := `[{"Path": "HKEY_LOCAL_MACHINE\\SOFTWARE\\Amazon","Recursive": true}, {"Path": "HKEY_LOCAL_MACHINE\\SOFTWARE\\Amazon","Recursive": true, "RegScanLimit": 100}]`
@@ -83,5 +102,47 @@ func TestGetRegistryDataValueError(t *testing.T) {
 	data, err := collectRegistryData(contextMock, mockConfig)
 
 	assert.NotNil(t, err)
-	assert.Nil(t, data)
+	assert.Equal(t, testRegistryOutputDataSingleCall, data)
+}
+
+func TestGetRegistryDataCmdErr(t *testing.T) {
+
+	contextMock := context.NewMockDefault()
+	cmdExecutor = createMockExecutor([]string{testRegistryOutput, ""}, []error{nil, errors.New("error")})
+	startMarker = "<start1234>"
+	endMarker = "<end1234>"
+	mockFilters := `[{"Path": "HKEY_LOCAL_MACHINE\\SOFTWARE\\Amazon","Recursive": true}, {"Path": "HKEY_LOCAL_MACHINE\\SOFTWARE\\Amazon","Recursive": true, "RegScanLimit": 100}]`
+	mockConfig := model.Config{Collection: "Enabled", Filters: mockFilters, Location: ""}
+	data, err := collectRegistryData(contextMock, mockConfig)
+
+	assert.Nil(t, err)
+	assert.Equal(t, testRegistryOutputDataSingleCall, data)
+}
+
+func TestGetRegistryDataInvalidOutput(t *testing.T) {
+
+	contextMock := context.NewMockDefault()
+	cmdExecutor = createMockExecutor([]string{testRegistryOutput, "InvalidOutput"}, []error{nil, nil})
+	startMarker = "<start1234>"
+	endMarker = "<end1234>"
+	mockFilters := `[{"Path": "HKEY_LOCAL_MACHINE\\SOFTWARE\\Amazon","Recursive": true}, {"Path": "HKEY_LOCAL_MACHINE\\SOFTWARE\\Amazon","Recursive": true, "RegScanLimit": 100}]`
+	mockConfig := model.Config{Collection: "Enabled", Filters: mockFilters, Location: ""}
+	data, err := collectRegistryData(contextMock, mockConfig)
+
+	assert.Nil(t, err)
+	assert.Equal(t, testRegistryOutputDataSingleCall, data)
+}
+
+func TestGetRegistryDataInvalidMarker(t *testing.T) {
+
+	contextMock := context.NewMockDefault()
+	cmdExecutor = createMockExecutor([]string{testRegistryOutput, testRegistryOutputInvalid}, []error{nil, nil})
+	startMarker = "<start1234>"
+	endMarker = "<end1234>"
+	mockFilters := `[{"Path": "HKEY_LOCAL_MACHINE\\SOFTWARE\\Amazon","Recursive": true}, {"Path": "HKEY_LOCAL_MACHINE\\SOFTWARE\\Amazon","Recursive": true, "RegScanLimit": 100}]`
+	mockConfig := model.Config{Collection: "Enabled", Filters: mockFilters, Location: ""}
+	data, err := collectRegistryData(contextMock, mockConfig)
+
+	assert.Nil(t, err)
+	assert.Equal(t, testRegistryOutputDataSingleCall, data)
 }
