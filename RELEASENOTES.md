@@ -1,7 +1,11 @@
 Latest
 ===============
 - Various bug fixes.
+
+2.2.58.0
+===============
 - Switching to use Birdwatcher distribution service for AWS packages.
+- Various bug fixes.
 
 2.2.45.0
 ===============
