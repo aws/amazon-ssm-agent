@@ -63,14 +63,12 @@ func main() {
 	}
 
 	packageVersionValue := os.Getenv(string(packageVersionString))
-	versionContentValue := strings.TrimSpace(string(versionContent))
 	versionStr := ""
 	if packageVersionValue == "" {
-		versionStr = versionContentValue
+		versionStr = strings.TrimSpace(string(versionContent))
 	} else {
 		packageVersionNum := strings.Split(packageVersionValue, ".")
-		agentVersionNum := strings.Split(versionContentValue, ".")
-		versionStr = agentVersionNum[0] + "." + agentVersionNum[1] + "." + packageVersionNum[2] + "." + packageVersionNum[3]
+		versionStr = packageVersionNum[0] + "." + packageVersionNum[1] + "." + packageVersionNum[2] + "." + packageVersionNum[3]
 	}
 	fmt.Printf("Agent Version: %v", versionStr)
 	if err := ioutil.WriteFile(filepath.Join("VERSION"), []byte(versionStr), appconfig.ReadWriteAccess); err != nil {
