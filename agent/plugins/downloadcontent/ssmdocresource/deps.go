@@ -29,10 +29,6 @@ type ssmDocDepImpl struct {
 	ssmSvc ssmsvc.Service
 }
 
-var ssmdocdep ssmdeps = &ssmDocDepImpl{
-	ssmSvc: ssmsvc.NewService(),
-}
-
 func (s ssmDocDepImpl) GetDocument(log log.T, docName string, docVersion string) (response *ssm.GetDocumentOutput, err error) {
 	return s.ssmSvc.GetDocument(log, docName, docVersion)
 }
