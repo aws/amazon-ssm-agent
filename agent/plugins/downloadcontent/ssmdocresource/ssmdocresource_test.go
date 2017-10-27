@@ -63,7 +63,7 @@ func TestSSMDocResource_FullARNNameInput(t *testing.T) {
 	fileMock.On("MakeDirs", dir).Return(nil)
 	fileMock.On("WriteFile", filepath.Join(dir, "mySharedDocument.json"), content).Return(nil)
 
-	ssmdocdep = depMock
+	ssmresource.ssmdocdep = depMock
 
 	err := ssmresource.Download(logMock, fileMock, "destination")
 
@@ -93,7 +93,7 @@ func TestSSMDocResource_FullARNNameInputWithVersion(t *testing.T) {
 	fileMock.On("MakeDirs", dir).Return(nil)
 	fileMock.On("WriteFile", filepath.Join(dir, "mySharedDocument.json"), content).Return(nil)
 
-	ssmdocdep = depMock
+	ssmresource.ssmdocdep = depMock
 
 	err := ssmresource.Download(logMock, fileMock, "destination")
 
@@ -135,7 +135,7 @@ func TestSSMDocResource_Download(t *testing.T) {
 	fileMock.On("MakeDirs", dir).Return(nil)
 	fileMock.On("WriteFile", filepath.Join(dir, "AWS-ExecuteCommand.json"), content).Return(nil)
 
-	ssmdocdep = depMock
+	ssmresource.ssmdocdep = depMock
 
 	err := ssmresource.Download(logMock, fileMock, "destination")
 
@@ -164,7 +164,7 @@ func TestSSMDocResource_DownloadNoDestination(t *testing.T) {
 	fileMock.On("MakeDirs", strings.TrimSuffix(dir, "/")).Return(nil)
 	fileMock.On("WriteFile", filepath.Join(dir, "AWS-ExecuteCommand.json"), content).Return(fmt.Errorf("Error"))
 
-	ssmdocdep = depMock
+	ssmresource.ssmdocdep = depMock
 
 	err := ssmresource.Download(logMock, fileMock, "")
 
@@ -191,7 +191,7 @@ func TestSSMDocResource_DownloadToOtherName(t *testing.T) {
 	fileMock.On("MakeDirs", ".").Return(nil)
 	fileMock.On("WriteFile", "destination", content).Return(nil)
 
-	ssmdocdep = depMock
+	ssmresource.ssmdocdep = depMock
 
 	err := ssmresource.Download(logMock, fileMock, "destination")
 
