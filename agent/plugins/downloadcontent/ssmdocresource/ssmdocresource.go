@@ -23,6 +23,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/downloadcontent/remoteresource"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/downloadcontent/system"
+	ssmsvc "github.com/aws/amazon-ssm-agent/agent/ssm"
 	"github.com/aws/aws-sdk-go/service/ssm"
 
 	"errors"
@@ -33,7 +34,8 @@ import (
 
 // S3Resource is a struct for the remote resource of type git
 type SSMDocResource struct {
-	Info SSMDocInfo
+	Info      SSMDocInfo
+	ssmdocdep ssmdeps
 }
 
 // S3Info represents the sourceInfo type sent by runcommand
@@ -50,6 +52,9 @@ func NewSSMDocResource(info string) (*SSMDocResource, error) {
 
 	return &SSMDocResource{
 		Info: ssmDocInfo,
+		ssmdocdep: &ssmDocDepImpl{
+			ssmSvc: ssmsvc.NewService(),
+		},
 	}, nil
 }
 
@@ -73,7 +78,7 @@ func (ssmdoc *SSMDocResource) Download(log log.T, filesys filemanager.FileSystem
 	docName, docVersion := docparser.ParseDocumentNameAndVersion(ssmdoc.Info.DocName)
 	log.Debug("Making a call to get document", docName, docVersion)
 	var docResponse *ssm.GetDocumentOutput
-	if docResponse, err = ssmdocdep.GetDocument(log, docName, docVersion); err != nil {
+	if docResponse, err = ssmdoc.ssmdocdep.GetDocument(log, docName, docVersion); err != nil {
 		log.Errorf("Unable to get ssm document. %v", err)
 		return err
 	}
