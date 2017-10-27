@@ -288,9 +288,9 @@ func executePlugin(context context.T,
 		}
 
 		// Create the output object and execute the plugin
+		defer output.Close(log)
 		output.Init(log, path)
 		p.Execute(context, config, cancelFlag, output)
-		output.Close(log)
 	}
 }
 

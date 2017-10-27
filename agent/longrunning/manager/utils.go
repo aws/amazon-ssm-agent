@@ -62,6 +62,7 @@ func (m *Manager) ensurePluginsAreRunning() {
 						OutputS3KeyPrefix:      "",
 					}
 					out := iohandler.NewDefaultIOHandler(log, ioConfig)
+					defer out.Close(log)
 					out.Init(log, p.Info.Name)
 					p.Handler.Start(m.context, p.Info.Configuration, "", cancelFlag, out)
 					out.Close(log)
