@@ -5,6 +5,8 @@ import (
 
 	"io"
 
+	"sync"
+
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/stretchr/testify/assert"
 )
@@ -29,7 +31,7 @@ var logger = log.NewMockLog()
 
 func testCommandOuput(testCase string, limit int) string {
 	r, w := io.Pipe()
-	readerClosed := make(chan bool)
+	wg := new(sync.WaitGroup)
 	var stdout string
 
 	// Initialize console output module
@@ -37,11 +39,16 @@ func testCommandOuput(testCase string, limit int) string {
 		OutputLimit:  limit,
 		OutputString: &stdout,
 	}
+	wg.Add(1)
 
-	go stdoutConsole.Read(logger, r, readerClosed)
+	go func() {
+		defer wg.Done()
+		stdoutConsole.Read(logger, r)
+	}()
+
 	w.Write([]byte(testCase))
 	w.Close()
-	<-readerClosed
+	wg.Wait()
 	return stdout
 }
 

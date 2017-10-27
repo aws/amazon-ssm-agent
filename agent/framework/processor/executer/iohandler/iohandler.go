@@ -164,13 +164,17 @@ func (out *DefaultIOHandler) RegisterOutputSource(log log.T, multiWriter multiwr
 		return
 	}
 
+	wg := multiWriter.GetWaitGroup()
 	// Create a Pipe for each IO Module and add it to the multi-writer.
 	for _, module := range IOModules {
 		r, w := io.Pipe()
 		multiWriter.AddWriter(w)
 		// Run the reader for each module
 		log.Debug("Starting a new stream reader go routing")
-		go module.Read(log, r, multiWriter.GetStreamClosedChannel())
+		go func(module iomodule.IOModule, r *io.PipeReader) {
+			defer wg.Done()
+			module.Read(log, r)
+		}(module, r)
 	}
 
 	return
@@ -179,8 +183,13 @@ func (out *DefaultIOHandler) RegisterOutputSource(log log.T, multiWriter multiwr
 // Close closes all the attached writers.
 func (out *DefaultIOHandler) Close(log log.T) {
 	log.Debug("IOHandler closing all subscribed writers.")
-	out.StdoutWriter.Close()
-	out.StderrWriter.Close()
+	if out.StdoutWriter != nil {
+		out.StdoutWriter.Close()
+	}
+
+	if out.StderrWriter != nil {
+		out.StderrWriter.Close()
+	}
 }
 
 // String returns the output by concatenating stdout and stderr

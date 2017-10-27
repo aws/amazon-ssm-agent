@@ -218,6 +218,7 @@ func (m *Manager) ModuleExecute(context context.T) (err error) {
 				OutputS3KeyPrefix:      "",
 			}
 			out := iohandler.NewDefaultIOHandler(log, ioConfig)
+			defer out.Close(log)
 			out.Init(log, p.Info.Name)
 			p.Handler.Start(m.context, p.Info.Configuration, "", task.NewChanneledCancelFlag(), out)
 			out.Close(log)
@@ -370,6 +371,7 @@ func (m *Manager) configCloudWatch(log log.T) {
 			OutputS3KeyPrefix:      "",
 		}
 		out := iohandler.NewDefaultIOHandler(log, ioConfig)
+		defer out.Close(log)
 		out.Init(log, appconfig.PluginNameCloudWatch)
 		if err = m.StartPlugin(
 			appconfig.PluginNameCloudWatch,
