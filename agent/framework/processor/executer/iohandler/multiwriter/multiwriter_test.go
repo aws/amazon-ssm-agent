@@ -20,6 +20,8 @@ import (
 	"io/ioutil"
 	"testing"
 
+	"sync"
+
 	"github.com/stretchr/testify/assert"
 )
 
@@ -39,14 +41,14 @@ var TestInputCases = [...]string{
 }
 
 // testReadBulk runs to read the stream in bulk and check if the output matches the source string
-func testReadBulk(t *testing.T, stream *io.PipeReader, sourceString string, streamClosed chan bool) {
+func testReadBulk(t *testing.T, stream *io.PipeReader, sourceString string, wg *sync.WaitGroup) {
 	stdoutString, _ := ioutil.ReadAll(stream)
 	assert.Equal(t, string(stdoutString), sourceString)
-	streamClosed <- true
+	wg.Done()
 }
 
 // testReadStream runs to read the stream and check if the output matches the source string
-func testReadStream(t *testing.T, stream *io.PipeReader, sourceString string, streamClosed chan bool) {
+func testReadStream(t *testing.T, stream *io.PipeReader, sourceString string, wg *sync.WaitGroup) {
 	// Read byte by byte
 	scanner := bufio.NewScanner(stream)
 	scanner.Split(bufio.ScanBytes)
@@ -55,7 +57,7 @@ func testReadStream(t *testing.T, stream *io.PipeReader, sourceString string, st
 		buffer.WriteString(scanner.Text())
 	}
 	assert.Equal(t, buffer.String(), sourceString)
-	streamClosed <- true
+	wg.Done()
 }
 
 // testBulkWrite runs to see if the input from the stream matches the string written to multi-writer.
@@ -64,7 +66,7 @@ func testBulkWrite(t *testing.T, sourceString string, listeners int) {
 	for i := 0; i < listeners; i++ {
 		r, w := io.Pipe()
 		mw.AddWriter(w)
-		go testReadBulk(t, r, sourceString, mw.streamClosed)
+		go testReadBulk(t, r, sourceString, mw.wg)
 	}
 
 	bytesWritten, err := mw.Write([]byte(sourceString))
@@ -79,7 +81,7 @@ func testStreamWrite(t *testing.T, sourceString string, listeners int) {
 	for i := 0; i < listeners; i++ {
 		r, w := io.Pipe()
 		mw.AddWriter(w)
-		go testReadStream(t, r, sourceString, mw.streamClosed)
+		go testReadStream(t, r, sourceString, mw.wg)
 	}
 
 	totalbytesWritten := 0
@@ -99,7 +101,7 @@ func testBulkWriteString(t *testing.T, sourceString string, listeners int) {
 	for i := 0; i < listeners; i++ {
 		r, w := io.Pipe()
 		mw.AddWriter(w)
-		go testReadBulk(t, r, sourceString, mw.streamClosed)
+		go testReadBulk(t, r, sourceString, mw.wg)
 	}
 
 	bytesWritten, err := mw.WriteString(sourceString)
@@ -142,12 +144,12 @@ func TestCloseWriter(t *testing.T) {
 	for i := 0; i < listeners; i++ {
 		r, w := io.Pipe()
 		mw.AddWriter(w)
-		go testReadBulk(t, r, "", mw.streamClosed)
+		go testReadBulk(t, r, "", mw.wg)
 	}
 	mw.Close()
 
 	bytesWritten, err := mw.WriteString("")
 	assert.Equal(t, bytesWritten, 0)
-	assert.NotNil(t, err)
+	assert.Nil(t, err)
 
 }

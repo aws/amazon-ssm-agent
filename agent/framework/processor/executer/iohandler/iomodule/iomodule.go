@@ -22,5 +22,5 @@ import (
 
 // IOModule is an interface for output modules
 type IOModule interface {
-	Read(log.T, *io.PipeReader, chan bool)
+	Read(log.T, *io.PipeReader)
 }

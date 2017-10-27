@@ -30,8 +30,8 @@ type CommandOutput struct {
 }
 
 // Read reads from the stream and writes to the output string
-func (c CommandOutput) Read(log log.T, reader *io.PipeReader, readerClosed chan bool) {
-	defer func() { readerClosed <- true }()
+func (c CommandOutput) Read(log log.T, reader *io.PipeReader) {
+	defer func() { reader.Close() }()
 
 	// Read byte by byte
 	scanner := bufio.NewScanner(reader)
@@ -47,6 +47,7 @@ func (c CommandOutput) Read(log log.T, reader *io.PipeReader, readerClosed chan 
 		}
 		buffer.WriteString(scanner.Text())
 	}
+	log.Debugf("Number of bytes written to console output: %v", outputLimit)
 	*c.OutputString = fmt.Sprintf("%v%v", *c.OutputString, buffer.String())
 
 	if err := scanner.Err(); err != nil {

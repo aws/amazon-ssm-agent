@@ -15,7 +15,9 @@
 package multiwriter
 
 import (
+	"fmt"
 	"io"
+	"sync"
 )
 
 // DocumentIOMultiWriter is a multi-writer with support for close channel.
@@ -23,7 +25,7 @@ import (
 // the writes to all the provided writers.
 type DocumentIOMultiWriter interface {
 	AddWriter(*io.PipeWriter)
-	GetStreamClosedChannel() chan bool
+	GetWaitGroup() *sync.WaitGroup
 	Write([]byte) (int, error)
 	WriteString(string) (int, error)
 	Close() error
@@ -31,37 +33,44 @@ type DocumentIOMultiWriter interface {
 
 // DefaultDocumentIOMultiWriter is the default implementation of multi-writer.
 type DefaultDocumentIOMultiWriter struct {
-	writers      []*io.PipeWriter
-	streamClosed chan bool
+	writers []*io.PipeWriter
+	wg      *sync.WaitGroup
 }
 
 // NewDocumentIOMultiWriter creates a new document multi-writer
 func NewDocumentIOMultiWriter() (b *DefaultDocumentIOMultiWriter) {
 	var w []*io.PipeWriter
-	b = &DefaultDocumentIOMultiWriter{w, make(chan bool)}
+	b = &DefaultDocumentIOMultiWriter{w, new(sync.WaitGroup)}
 	return
 }
 
 // AddWriter adds a new writer to an existing multi-writer
 func (b *DefaultDocumentIOMultiWriter) AddWriter(writer *io.PipeWriter) {
 	b.writers = append(b.writers, writer)
+	b.wg.Add(1)
 }
 
 // GetStreamClosedChannel adds a new writer to an existing multi-writer
-func (b *DefaultDocumentIOMultiWriter) GetStreamClosedChannel() chan bool {
-	return b.streamClosed
+func (b *DefaultDocumentIOMultiWriter) GetWaitGroup() *sync.WaitGroup {
+	return b.wg
 }
 
 // Write is responsible for writing a byte to all the attached pipes.
 func (b *DefaultDocumentIOMultiWriter) Write(p []byte) (n int, err error) {
-	for _, w := range b.writers {
-		n, err = w.Write(p)
-		if err != nil {
-			return
+	if len(b.writers) == 0 {
+		return 0, fmt.Errorf("No writers present.")
+	}
+
+	for i := 0; i < len(b.writers); i++ {
+		n, err = b.writers[i].Write(p)
+		// TODO: Handler other error types and close the writers after a fixed number of retries
+		if err == io.ErrClosedPipe {
+			// remove the writer as the reader is closed
+			b.writers = append(b.writers[:i], b.writers[i+1:]...)
+			i--
 		}
 		if n != len(p) {
 			err = io.ErrShortWrite
-			return
 		}
 	}
 	return len(p), nil
@@ -69,31 +78,23 @@ func (b *DefaultDocumentIOMultiWriter) Write(p []byte) (n int, err error) {
 
 // WriteString is responsible for writing a string to all the attached pipes.
 func (b *DefaultDocumentIOMultiWriter) WriteString(message string) (n int, err error) {
+	if len(b.writers) == 0 {
+		return 0, fmt.Errorf("No writers present.")
+	}
+
 	for _, w := range b.writers {
 		p := []byte(message)
 		n, err = w.Write(p)
-		if err != nil {
-			return
-		}
-		if n != len(message) {
-			err = io.ErrShortWrite
-			return
-		}
 	}
 	return len(message), nil
 }
 
 // Close waits for all the writers to be closed.
 func (b *DefaultDocumentIOMultiWriter) Close() (err error) {
-	for _, w := range b.writers {
-		err = w.Close()
-		if err != nil {
-			return
-		}
+	for i := 0; i < len(b.writers); i++ {
+		err = b.writers[i].Close()
 	}
 
-	for i := 0; i < len(b.writers); i++ {
-		<-b.streamClosed
-	}
+	b.wg.Wait()
 	return
 }

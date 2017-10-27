@@ -95,6 +95,7 @@ func enablePlugin(log logger.T, orchestrationDirectory string, pluginID string, 
 		OutputS3KeyPrefix:      res.OutputS3KeyPrefix,
 	}
 	out := iohandler.NewDefaultIOHandler(log, ioConfig)
+	defer out.Close(log)
 	out.Init(log, appconfig.PluginNameCloudWatch)
 
 	//start the plugin with the new configuration
