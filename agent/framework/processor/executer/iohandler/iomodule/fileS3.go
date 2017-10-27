@@ -35,8 +35,8 @@ type File struct {
 }
 
 // Read reads from the stream and writes to the output file and s3.
-func (file File) Read(log log.T, reader *io.PipeReader, readerClosed chan bool) {
-	defer func() { readerClosed <- true }()
+func (file File) Read(log log.T, reader *io.PipeReader) {
+	defer func() { reader.Close() }()
 
 	orchestrationDir := fileutil.BuildPath(file.OrchestrationDirectory, file.Path)
 	log.Debugf("OrchestrationDir %v ", orchestrationDir)

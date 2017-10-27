@@ -17,6 +17,8 @@ import (
 	"fmt"
 	"testing"
 
+	"sync"
+
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler/iomodule/mock"
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler/multiwriter/mock"
@@ -71,14 +73,14 @@ func TestRegisterOutputSource(t *testing.T) {
 	mockDocumentIOMultiWriter := new(multiwritermock.MockDocumentIOMultiWriter)
 
 	mockDocumentIOMultiWriter.On("AddWriter", mock.Anything).Times(2)
-	streamClosed := make(chan bool)
-	mockDocumentIOMultiWriter.On("GetStreamClosedChannel").Return(streamClosed).Times(2)
+	wg := new(sync.WaitGroup)
+	mockDocumentIOMultiWriter.On("GetWaitGroup").Return(wg)
 
 	// Create multiple test IOModules
 	testModule1 := new(iomodulemock.MockIOModule)
-	testModule1.On("Read", logger, mock.Anything, streamClosed).Return()
+	testModule1.On("Read", logger, mock.Anything).Return()
 	testModule2 := new(iomodulemock.MockIOModule)
-	testModule2.On("Read", logger, mock.Anything, streamClosed).Return()
+	testModule2.On("Read", logger, mock.Anything).Return()
 
 	output := DefaultIOHandler{}
 	output.RegisterOutputSource(logger, mockDocumentIOMultiWriter, testModule1, testModule2)

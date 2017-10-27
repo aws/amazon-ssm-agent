@@ -45,7 +45,9 @@ func (p *Processor) ProcessRefreshAssociation(log log.T, pluginRes *contracts.Pl
 		OutputS3KeyPrefix:      pluginRes.OutputS3KeyPrefix,
 	}
 	out := iohandler.NewDefaultIOHandler(log, ioConfig)
+	defer out.Close(log)
 	out.Init(log, pluginRes.PluginName)
+
 	//this is the current plugin run, trigger refresh
 	if apply {
 		p.refreshAssociation(log, associationIds, orchestrationDir, pluginRes.OutputS3BucketName, pluginRes.OutputS3KeyPrefix, out)

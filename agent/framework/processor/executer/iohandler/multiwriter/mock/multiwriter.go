@@ -17,6 +17,8 @@ package multiwritermock
 import (
 	"io"
 
+	"sync"
+
 	"github.com/stretchr/testify/mock"
 )
 
@@ -31,9 +33,9 @@ func (m *MockDocumentIOMultiWriter) AddWriter(writer *io.PipeWriter) {
 }
 
 // GetStreamClosedChannel is a mocked method that just returns what mock tells it to.
-func (m *MockDocumentIOMultiWriter) GetStreamClosedChannel() (streamClosed chan bool) {
+func (m *MockDocumentIOMultiWriter) GetWaitGroup() (wg *sync.WaitGroup) {
 	args := m.Called()
-	return args.Get(0).(chan bool)
+	return args.Get(0).(*sync.WaitGroup)
 }
 
 // Write is a mocked method that just returns what mock tells it to.
