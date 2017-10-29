@@ -31,23 +31,21 @@ type File struct {
 	OrchestrationDirectory string
 	OutputS3BucketName     string
 	OutputS3KeyPrefix      string
-	Path                   string
 }
 
 // Read reads from the stream and writes to the output file and s3.
 func (file File) Read(log log.T, reader *io.PipeReader) {
 	defer func() { reader.Close() }()
 
-	orchestrationDir := fileutil.BuildPath(file.OrchestrationDirectory, file.Path)
-	log.Debugf("OrchestrationDir %v ", orchestrationDir)
+	log.Debugf("OrchestrationDir %v ", file.OrchestrationDirectory)
 
 	// create orchestration dir if needed
-	if err := fileutil.MakeDirs(orchestrationDir); err != nil {
-		log.Errorf("failed to create orchestrationDir directory at %v: %v", orchestrationDir, err)
+	if err := fileutil.MakeDirs(file.OrchestrationDirectory); err != nil {
+		log.Errorf("failed to create orchestrationDir directory at %v: %v", file.OrchestrationDirectory, err)
 		return
 	}
 
-	filePath := filepath.Join(orchestrationDir, file.FileName)
+	filePath := filepath.Join(file.OrchestrationDirectory, file.FileName)
 	fileWriter, err := os.OpenFile(filePath, appconfig.FileFlagsCreateOrAppend, appconfig.ReadWriteAccess)
 
 	if err != nil {
@@ -79,7 +77,7 @@ func (file File) Read(log log.T, reader *io.PipeReader) {
 
 	// Upload output file to S3
 	if file.OutputS3BucketName != "" && fi.Size() > 0 {
-		s3Key := fileutil.BuildS3Path(file.OutputS3KeyPrefix, file.Path, file.FileName)
+		s3Key := fileutil.BuildS3Path(file.OutputS3KeyPrefix, file.FileName)
 		if err := s3util.NewAmazonS3Util(log, file.OutputS3BucketName).S3Upload(log, file.OutputS3BucketName, s3Key, filePath); err != nil {
 			log.Errorf("Failed to upload the output to s3: %v", err)
 		}

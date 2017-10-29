@@ -20,6 +20,7 @@ import (
 	"io"
 
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
+	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler/iomodule"
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler/multiwriter"
 	"github.com/aws/amazon-ssm-agent/agent/log"
@@ -56,7 +57,7 @@ func DefaultOutputConfig() PluginConfig {
 
 // IOHandler Interface defines interface for IOHandler type
 type IOHandler interface {
-	Init(log.T, string)
+	Init(log.T, ...string)
 	RegisterOutputSource(log.T, multiwriter.DocumentIOMultiWriter, ...iomodule.IOModule)
 	Close(log.T)
 	String() string
@@ -114,16 +115,23 @@ func NewDefaultIOHandler(log log.T, ioConfig contracts.IOConfiguration) *Default
 }
 
 // Init initializes the plugin output object by creating the necessary writers
-func (out *DefaultIOHandler) Init(log log.T, filePath string) {
+func (out *DefaultIOHandler) Init(log log.T, filePath ...string) {
 
 	pluginConfig := DefaultOutputConfig()
+	// Create path to output location for file and s3
+	fullPath := out.ioConfig.OrchestrationDirectory
+	s3KeyPrefix := out.ioConfig.OutputS3KeyPrefix
+	for _, element := range filePath {
+		fullPath = fileutil.BuildPath(fullPath, element)
+		s3KeyPrefix = fileutil.BuildS3Path(s3KeyPrefix, element)
+	}
+
 	// Initialize file output module
 	stdoutFile := iomodule.File{
 		FileName:               pluginConfig.StdoutFileName,
-		OrchestrationDirectory: out.ioConfig.OrchestrationDirectory,
+		OrchestrationDirectory: fullPath,
 		OutputS3BucketName:     out.ioConfig.OutputS3BucketName,
-		OutputS3KeyPrefix:      out.ioConfig.OutputS3KeyPrefix,
-		Path:                   filePath,
+		OutputS3KeyPrefix:      s3KeyPrefix,
 	}
 
 	// Initialize console output module
@@ -140,10 +148,9 @@ func (out *DefaultIOHandler) Init(log log.T, filePath string) {
 	// Initialize file error module
 	stderrFile := iomodule.File{
 		FileName:               pluginConfig.StderrFileName,
-		OrchestrationDirectory: out.ioConfig.OrchestrationDirectory,
+		OrchestrationDirectory: fullPath,
 		OutputS3BucketName:     out.ioConfig.OutputS3BucketName,
-		OutputS3KeyPrefix:      out.ioConfig.OutputS3KeyPrefix,
-		Path:                   filePath,
+		OutputS3KeyPrefix:      s3KeyPrefix,
 	}
 
 	// Initialize console error module

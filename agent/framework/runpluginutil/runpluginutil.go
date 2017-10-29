@@ -19,8 +19,6 @@ import (
 	"strings"
 	"time"
 
-	"path/filepath"
-
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
@@ -281,15 +279,9 @@ func executePlugin(context context.T,
 		errorString := fmt.Errorf("Invalid format in plugin properties %v;\nerror %v", config.Properties, err)
 		output.MarkAsFailed(errorString)
 	} else {
-		path := pluginName
-		// Add the property id to the file path if present
-		if propID != "" {
-			path = filepath.Join(pluginName, propID)
-		}
-
 		// Create the output object and execute the plugin
 		defer output.Close(log)
-		output.Init(log, path)
+		output.Init(log, pluginName, propID)
 		p.Execute(context, config, cancelFlag, output)
 	}
 }
