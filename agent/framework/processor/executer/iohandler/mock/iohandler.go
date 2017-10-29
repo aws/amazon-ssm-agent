@@ -28,7 +28,7 @@ type MockIOHandler struct {
 }
 
 // Init is a mocked method that acknowledges that the function has been called.
-func (m *MockIOHandler) Init(log log.T, filePath string) {
+func (m *MockIOHandler) Init(log log.T, filePath ...string) {
 	m.Called(log, filePath)
 }
 
