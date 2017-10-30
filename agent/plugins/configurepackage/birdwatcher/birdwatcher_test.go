@@ -384,7 +384,7 @@ func TestDownloadManifest(t *testing.T) {
 			cache := packageservice.ManifestCacheMemNew()
 			ds := &PackageService{facadeClient: &testdata.facadeClient, manifestCache: cache, collector: &mockedCollector}
 
-			_, result, err := ds.DownloadManifest(tracer, testdata.packageName, testdata.packageVersion)
+			_, result, isSameAsCache, err := ds.DownloadManifest(tracer, testdata.packageName, testdata.packageVersion)
 
 			if testdata.expectedErr {
 				assert.Error(t, err)
@@ -395,6 +395,7 @@ func TestDownloadManifest(t *testing.T) {
 				// verify result
 				assert.Equal(t, "1234", result)
 				assert.NoError(t, err)
+				assert.False(t, isSameAsCache)
 				// verify cache
 				cachedManifest, cacheErr := cache.ReadManifest("packagearn", "1234")
 				assert.Equal(t, []byte(manifestStr), cachedManifest)
@@ -402,6 +403,59 @@ func TestDownloadManifest(t *testing.T) {
 			}
 		})
 	}
+}
+
+func TestDownloadManifestSameAsCacheManifest(t *testing.T) {
+	manifestStr := "{\"version\": \"1234\",\"packageArn\":\"packagearn\"}"
+	tracer := trace.NewTracer(log.NewMockLog())
+
+	testdata := struct {
+		name           string
+		packageName    string
+		packageVersion string
+		facadeClient   facadeMock
+		expectedErr    bool
+	}{
+		"successful getManifest same as cache",
+		"packagearn",
+		"1234",
+		facadeMock{
+			getManifestOutput: &ssm.GetManifestOutput{
+				Manifest: &manifestStr,
+			},
+		},
+		false,
+	}
+
+	tracer.BeginSection("test successful getManifest same as cache")
+
+	mockedCollector := envdetect.CollectorMock{}
+	envdata := &envdetect.Environment{
+		&osdetect.OperatingSystem{"abc", "567", "", "xyz", "", ""},
+		&ec2infradetect.Ec2Infrastructure{"instanceIDX", "Reg1", "", "AZ1", "instanceTypeZ"},
+	}
+
+	mockedCollector.On("CollectData", mock.Anything).Return(envdata, nil).Once()
+
+	cache := packageservice.ManifestCacheMemNew()
+	err := cache.WriteManifest("packagearn", "1234", []byte(manifestStr))
+	assert.NoError(t, err)
+
+	ds := &PackageService{facadeClient: &testdata.facadeClient, manifestCache: cache, collector: &mockedCollector}
+
+	_, result, isSameAsCache, err := ds.DownloadManifest(tracer, testdata.packageName, testdata.packageVersion)
+
+	// verify parameter for api call
+	assert.Equal(t, testdata.packageName, *testdata.facadeClient.getManifestInput.PackageName)
+	assert.Equal(t, testdata.packageVersion, *testdata.facadeClient.getManifestInput.PackageVersion)
+	// verify result
+	assert.Equal(t, "1234", result)
+	assert.NoError(t, err)
+	assert.True(t, isSameAsCache)
+	// verify cache
+	cachedManifest, cacheErr := cache.ReadManifest("packagearn", "1234")
+	assert.Equal(t, []byte(manifestStr), cachedManifest)
+	assert.NoError(t, cacheErr)
 }
 
 func TestFindFileFromManifest(t *testing.T) {
