@@ -29,9 +29,9 @@ func (ds *Mock) PackageServiceName() string {
 	return args.String(0)
 }
 
-func (ds *Mock) DownloadManifest(tracer trace.Tracer, packageName string, version string) (string, string, error) {
+func (ds *Mock) DownloadManifest(tracer trace.Tracer, packageName string, version string) (string, string, bool, error) {
 	args := ds.Called(tracer, packageName, version)
-	return args.String(0), args.String(1), args.Error(2)
+	return args.String(0), args.String(1), args.Bool(2), args.Error(3)
 }
 
 func (ds *Mock) DownloadArtifact(tracer trace.Tracer, packageName string, version string) (string, error) {

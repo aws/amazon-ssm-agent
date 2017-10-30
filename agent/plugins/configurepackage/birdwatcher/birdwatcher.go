@@ -19,6 +19,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"reflect"
 	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
@@ -101,29 +102,34 @@ func (ds *PackageService) PackageServiceName() string {
 }
 
 // DownloadManifest downloads the manifest for a given version (or latest) and returns the agent version specified in manifest
-func (ds *PackageService) DownloadManifest(tracer trace.Tracer, packageName string, version string) (string, string, error) {
-	manifest, err := downloadManifest(ds, packageName, version)
+func (ds *PackageService) DownloadManifest(tracer trace.Tracer, packageName string, version string) (string, string, bool, error) {
+	manifest, isSameAsCache, err := downloadManifest(ds, packageName, version)
 	if err != nil {
-		return "", "", err
+		return "", "", isSameAsCache, err
 	}
-	return manifest.PackageArn, manifest.Version, nil
+	return manifest.PackageArn, manifest.Version, isSameAsCache, nil
 }
 
 // DownloadArtifact downloads the platform matching artifact specified in the manifest
 func (ds *PackageService) DownloadArtifact(tracer trace.Tracer, packageName string, version string) (string, error) {
+	trace := tracer.BeginSection("download artifact")
 	manifest, err := readManifestFromCache(ds.manifestCache, packageName, version)
 	if err != nil {
-		manifest, err = downloadManifest(ds, packageName, version)
+		trace.AppendInfof("error when reading the manifest from cache %v", err).End()
+		manifest, _, err = downloadManifest(ds, packageName, version)
 		if err != nil {
-			return "", fmt.Errorf("failed to read manifest from file system: %v", err)
+			trace.WithError(err).End()
+			return "", fmt.Errorf("failed to download the manifest: %v", err)
 		}
 	}
 
 	file, err := ds.findFileFromManifest(tracer, manifest)
 	if err != nil {
+		trace.WithError(err).End()
 		return "", err
 	}
 
+	trace.End()
 	return downloadFile(tracer, file)
 }
 
@@ -187,7 +193,8 @@ func readManifestFromCache(cache packageservice.ManifestCache, packageName strin
 	return parseManifest(&data)
 }
 
-func downloadManifest(ds *PackageService, packageName string, version string) (*Manifest, error) {
+func downloadManifest(ds *PackageService, packageName string, version string) (*Manifest, bool, error) {
+	isSameAsCache := false
 	resp, err := ds.facadeClient.GetManifest(
 		&ssm.GetManifestInput{
 			PackageName:    &packageName,
@@ -195,22 +202,28 @@ func downloadManifest(ds *PackageService, packageName string, version string) (*
 		},
 	)
 	if err != nil {
-		return nil, fmt.Errorf("failed to retrieve manifest: %v", err)
+		return nil, isSameAsCache, fmt.Errorf("failed to retrieve manifest: %v", err)
 	}
 
 	byteManifest := []byte(*resp.Manifest)
 
 	manifest, err := parseManifest(&byteManifest)
 	if err != nil {
-		return nil, err
+		return nil, isSameAsCache, err
+	}
+
+	cachedManifest, err := readManifestFromCache(ds.manifestCache, packageName, version)
+
+	if reflect.DeepEqual(manifest, cachedManifest) {
+		isSameAsCache = true
 	}
 
 	err = ds.manifestCache.WriteManifest(manifest.PackageArn, manifest.Version, byteManifest)
 	if err != nil {
-		return nil, fmt.Errorf("failed to write manifest to file: %v", err)
+		return nil, isSameAsCache, fmt.Errorf("failed to write manifest to file: %v", err)
 	}
 
-	return manifest, nil
+	return manifest, isSameAsCache, nil
 }
 
 func parseManifest(data *[]byte) (*Manifest, error) {
