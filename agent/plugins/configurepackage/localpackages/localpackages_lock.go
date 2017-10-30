@@ -31,35 +31,35 @@ var lockPackageAction = &sync.Mutex{}
 var mapPackageAction = make(map[string]string)
 
 // lockPackage adds the package name to the list of packages currently being acted on in a threadsafe way
-func lockPackage(filelocker filelock.FileLocker, lockPath string, packageName string, action string) error {
+func lockPackage(filelocker filelock.FileLocker, lockPath string, packageArn string, action string) error {
 	lockPackageAction.Lock()
 	defer lockPackageAction.Unlock()
 
-	if val, ok := mapPackageAction[packageName]; ok {
-		return errors.New(fmt.Sprintf(`Package "%v" is already in the process of action "%v"`, packageName, val))
+	if val, ok := mapPackageAction[packageArn]; ok {
+		return errors.New(fmt.Sprintf(`Package "%v" is already in the process of action "%v"`, packageArn, val))
 	}
 
 	ownerId := filelock.GetOwnerIdForProcess()
 	locked, err := filelocker.Lock(lockPath, ownerId, lockTimeoutInSeconds)
 	if err != nil {
-		return errors.New(fmt.Sprintf(`Error locking package "%v": "%v"`, packageName, err))
+		return errors.New(fmt.Sprintf(`Error locking package "%v": "%v"`, packageArn, err))
 	}
 
 	if !locked {
-		return errors.New(fmt.Sprintf(`Package "%v" is already in the process of other action`, packageName))
+		return errors.New(fmt.Sprintf(`Package "%v" is already in the process of other action`, packageArn))
 	}
 
-	mapPackageAction[packageName] = action
+	mapPackageAction[packageArn] = action
 	return nil
 }
 
 // unlockPackage removes the package name from the list of packages currently being acted on in a threadsafe way
-func unlockPackage(filelocker filelock.FileLocker, lockPath string, packageName string) error {
+func unlockPackage(filelocker filelock.FileLocker, lockPath string, packageArn string) error {
 	lockPackageAction.Lock()
 	defer lockPackageAction.Unlock()
 
-	if _, ok := mapPackageAction[packageName]; ok {
-		delete(mapPackageAction, packageName)
+	if _, ok := mapPackageAction[packageArn]; ok {
+		delete(mapPackageAction, packageArn)
 	}
 
 	ownerId := filelock.GetOwnerIdForProcess()

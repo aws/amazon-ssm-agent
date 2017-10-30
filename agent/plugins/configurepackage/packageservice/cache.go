@@ -20,8 +20,8 @@ import (
 
 // ManifestCache caches manifests locally
 type ManifestCache interface {
-	ReadManifest(packageName string, packageVersion string) ([]byte, error)
-	WriteManifest(packageName string, packageVersion string, content []byte) error
+	ReadManifest(packageArn string, packageVersion string) ([]byte, error)
+	WriteManifest(packageArn string, packageVersion string, content []byte) error
 }
 
 // ManifestCacheMem stores cache in memory
@@ -33,15 +33,15 @@ func ManifestCacheMemNew() *ManifestCacheMem {
 	return &ManifestCacheMem{cache: map[string][]byte{}}
 }
 
-func (c ManifestCacheMem) CacheKey(packageName string, packageVersion string) string {
-	return fmt.Sprintf("%s_%s", packageName, packageVersion)
+func (c ManifestCacheMem) CacheKey(packageArn string, packageVersion string) string {
+	return fmt.Sprintf("%s_%s", packageArn, packageVersion)
 }
 
-func (c ManifestCacheMem) ReadManifest(packageName string, packageVersion string) ([]byte, error) {
-	return c.cache[c.CacheKey(packageName, packageVersion)], nil
+func (c ManifestCacheMem) ReadManifest(packageArn string, packageVersion string) ([]byte, error) {
+	return c.cache[c.CacheKey(packageArn, packageVersion)], nil
 }
 
-func (c ManifestCacheMem) WriteManifest(packageName string, packageVersion string, content []byte) error {
-	c.cache[c.CacheKey(packageName, packageVersion)] = content
+func (c ManifestCacheMem) WriteManifest(packageArn string, packageVersion string, content []byte) error {
+	c.cache[c.CacheKey(packageArn, packageVersion)] = content
 	return nil
 }
