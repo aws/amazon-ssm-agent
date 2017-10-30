@@ -43,7 +43,7 @@ type PackageResult struct {
 // PackageService is used to determine the latest version and to obtain the local repository content for a given version.
 type PackageService interface {
 	PackageServiceName() string
-	DownloadManifest(tracer trace.Tracer, packageName string, version string) (string, string, error)
+	DownloadManifest(tracer trace.Tracer, packageName string, version string) (string, string, bool, error)
 	DownloadArtifact(tracer trace.Tracer, packageName string, version string) (string, error)
 	ReportResult(tracer trace.Tracer, result PackageResult) error
 }
