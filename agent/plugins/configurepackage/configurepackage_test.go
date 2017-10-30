@@ -101,12 +101,46 @@ func TestPrepareNewInstall(t *testing.T) {
 		pluginInformation,
 		"packageArn",
 		"0.0.1",
+		false,
 		output)
 
 	assert.NotNil(t, inst)
 	assert.Nil(t, uninst)
 	assert.Equal(t, localpackages.None, installState)
 	assert.Empty(t, installedVersion)
+	assert.Equal(t, 0, output.GetExitCode())
+	assert.Empty(t, tracer.ToPluginOutput().GetStderr())
+
+	installerMock.AssertExpectations(t)
+}
+
+func TestAlreadyInstalled(t *testing.T) {
+	// file stubs are needed for ensurePackage because it handles the unzip
+	stubs := setSuccessStubs()
+	defer stubs.Clear()
+
+	pluginInformation := createStubPluginInputInstall()
+	installerMock := installerNotCalledMock()
+	repoMock := repoAlreadyInstalledMock(pluginInformation, installerMock)
+	serviceMock := serviceSameManifestCacheMock()
+	tracer := trace.NewTracer(log.NewMockLog())
+	output := &trace.PluginOutputTrace{Tracer: tracer}
+
+	inst, uninst, installState, installedVersion := prepareConfigurePackage(
+		tracer,
+		buildConfigSimple(pluginInformation),
+		repoMock,
+		serviceMock,
+		pluginInformation,
+		"packageArn",
+		"0.0.1",
+		true,
+		output)
+
+	assert.NotNil(t, inst)
+	assert.Nil(t, uninst)
+	assert.Equal(t, localpackages.Installed, installState)
+	assert.Equal(t, "0.0.1", installedVersion)
 	assert.Equal(t, 0, output.GetExitCode())
 	assert.Empty(t, tracer.ToPluginOutput().GetStderr())
 
@@ -133,6 +167,7 @@ func TestPrepareUpgrade(t *testing.T) {
 		pluginInformation,
 		"packageArn",
 		"0.0.2",
+		false,
 		output)
 
 	assert.NotNil(t, inst)
@@ -165,6 +200,7 @@ func TestPrepareUninstall(t *testing.T) {
 		pluginInformation,
 		"packageArn",
 		"0.0.1",
+		false,
 		output)
 
 	assert.Nil(t, inst)
@@ -197,6 +233,40 @@ func TestPrepareUninstallCurrent(t *testing.T) {
 		pluginInformation,
 		"packageArn",
 		"0.0.1",
+		false,
+		output)
+
+	assert.Nil(t, inst)
+	assert.NotNil(t, uninst)
+	assert.Equal(t, localpackages.Installed, installState)
+	assert.NotEmpty(t, installedVersion)
+	assert.Equal(t, 0, output.GetExitCode())
+	assert.Empty(t, tracer.ToPluginOutput().GetStderr())
+
+	installerMock.AssertExpectations(t)
+}
+
+func TestPrepareUninstallCurrentWithLatest(t *testing.T) {
+	// file stubs are needed for ensurePackage because it handles the unzip
+	stubs := setSuccessStubs()
+	defer stubs.Clear()
+
+	pluginInformation := createStubPluginInputUninstall("latest")
+	installerMock := installerNotCalledMock()
+	repoMock := repoUninstallMock(pluginInformation, installerMock)
+	serviceMock := serviceSuccessMock()
+	tracer := trace.NewTracer(log.NewMockLog())
+	output := &trace.PluginOutputTrace{Tracer: tracer}
+
+	inst, uninst, installState, installedVersion := prepareConfigurePackage(
+		tracer,
+		buildConfigSimple(pluginInformation),
+		repoMock,
+		serviceMock,
+		pluginInformation,
+		"packageArn",
+		"0.0.1",
+		false,
 		output)
 
 	assert.Nil(t, inst)
@@ -228,15 +298,16 @@ func TestPrepareUninstallWrongVersion(t *testing.T) {
 		serviceMock,
 		pluginInformation,
 		"packageArn",
-		"0.0.1",
+		"2.3.4",
+		false,
 		output)
 
 	assert.Nil(t, inst)
 	assert.Nil(t, uninst)
-	assert.Equal(t, localpackages.Installed, installState)
+	assert.Equal(t, localpackages.None, installState)
 	assert.NotEmpty(t, installedVersion)
-	assert.Equal(t, 1, output.GetExitCode())
-	assert.NotEmpty(t, tracer.ToPluginOutput().GetStderr())
+	assert.Equal(t, 0, output.GetExitCode())
+	assert.Empty(t, tracer.ToPluginOutput().GetStderr())
 
 	installerMock.AssertExpectations(t)
 }
@@ -553,13 +624,14 @@ func TestGetShortNameAndNoVersion(t *testing.T) {
 	serviceMock := serviceSuccessMock()
 	tracer := trace.NewTracer(log.NewMockLog())
 
-	packageArn, version, err := getPackageArnAndVersion(
+	packageArn, version, isSameAsCache, err := getPackageArnAndVersion(
 		tracer,
 		serviceMock,
 		pluginInformation)
 
 	assert.Equal(t, "packageArn", packageArn)
 	assert.Equal(t, "0.0.1", version)
+	assert.False(t, isSameAsCache)
 	assert.NoError(t, err)
 	assert.Empty(t, tracer.ToPluginOutput().GetStderr())
 }
@@ -569,13 +641,14 @@ func TestGetShortNameAndLatestVersion(t *testing.T) {
 	serviceMock := serviceUpgradeMock()
 	tracer := trace.NewTracer(log.NewMockLog())
 
-	packageArn, version, err := getPackageArnAndVersion(
+	packageArn, version, isSameAsCache, err := getPackageArnAndVersion(
 		tracer,
 		serviceMock,
 		pluginInformation)
 
 	assert.Equal(t, "packageArn", packageArn)
 	assert.Equal(t, "0.0.2", version)
+	assert.False(t, isSameAsCache)
 	assert.NoError(t, err)
 	assert.Empty(t, tracer.ToPluginOutput().GetStderr())
 }
@@ -585,13 +658,14 @@ func TestGetShortNameAndVersion(t *testing.T) {
 	serviceMock := serviceSuccessMock()
 	tracer := trace.NewTracer(log.NewMockLog())
 
-	packageArn, version, err := getPackageArnAndVersion(
+	packageArn, version, isSameAsCache, err := getPackageArnAndVersion(
 		tracer,
 		serviceMock,
 		pluginInformation)
 
 	assert.Equal(t, "packageArn", packageArn)
 	assert.Equal(t, "0.0.1", version)
+	assert.False(t, isSameAsCache)
 	assert.NoError(t, err)
 	assert.Empty(t, tracer.ToPluginOutput().GetStderr())
 }
@@ -601,13 +675,31 @@ func TestGetShortArnAndVersionFailed(t *testing.T) {
 	serviceMock := serviceFailedMock()
 	tracer := trace.NewTracer(log.NewMockLog())
 
-	packageArn, version, err := getPackageArnAndVersion(
+	packageArn, version, isSameAsCache, err := getPackageArnAndVersion(
 		tracer,
 		serviceMock,
 		pluginInformation)
 
 	assert.Empty(t, packageArn)
 	assert.Empty(t, version)
+	assert.False(t, isSameAsCache)
 	assert.Error(t, err)
 	assert.Equal(t, "testerror\n", tracer.ToPluginOutput().GetStderr())
+}
+
+func TestGetShortNameAndNoVersionAlreadyInstalled(t *testing.T) {
+	pluginInformation := createStubPluginInputInstallLatest()
+	serviceMock := serviceSameManifestCacheMock()
+	tracer := trace.NewTracer(log.NewMockLog())
+
+	packageArn, version, isSameAsCache, err := getPackageArnAndVersion(
+		tracer,
+		serviceMock,
+		pluginInformation)
+
+	assert.Equal(t, "packageArn", packageArn)
+	assert.Equal(t, "0.0.1", version)
+	assert.True(t, isSameAsCache)
+	assert.NoError(t, err)
+	assert.Empty(t, tracer.ToPluginOutput().GetStderr())
 }
