@@ -11,7 +11,7 @@ an issue to discuss it.
 
 ### Making the request
 
-Development takes place against the `dev` branch of this repository and pull
+Development takes place against the `master` branch of this repository and pull
 requests should be opened against that branch.
 
 ### Testing
@@ -19,15 +19,14 @@ requests should be opened against that branch.
 Any contributions should pass all tests, including those not run by our
 current CI system.
 
-To execute all the tests simply run with
-`go test -gcflags "-N -l" github.com/aws/amazon-ssm-agent/agent/...`
+To execute all the tests simply run with `make quick-test`.
 
 Alternatively you can run specific tests by specifying a package, sample below
 `go test -v -gcflags "-N -l" github.com/aws/amazon-ssm-agent/agent/fileutil/...`
 
 To execute all the integration tests simply run with `make quick-integtest`.
 
-Alternatively you can run specific tests by specifying a package, sample below
+Alternatively you can run specific integration tests by specifying a package, sample below
 `go test -v -gcflags "-N -l" -tags=integration github.com/aws/amazon-ssm-agent/agent/fileutil/...`
 
 ### Licensing
