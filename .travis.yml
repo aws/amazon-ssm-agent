@@ -1,5 +1,5 @@
 language: go
 sudo: false
 go:
-  - 1.7.4
+  - 1.9.0
 script: make coverage
