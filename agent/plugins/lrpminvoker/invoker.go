@@ -103,7 +103,6 @@ func (p *Plugin) CreateResult(log logger.T, msg string, status contracts.ResultS
 		out.AppendError(msg)
 		out.SetExitCode(1)
 	} else {
-		out.AppendInfo(msg)
 		out.SetExitCode(0)
 	}
 
