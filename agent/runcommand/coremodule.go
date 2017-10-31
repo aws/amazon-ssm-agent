@@ -122,7 +122,7 @@ func (s *RunCommandService) handleSpecialPlugin(lastPluginID string, pluginRes m
 	var newRes contracts.PluginResult
 
 	log := s.context.Log()
-	//TODO once associaiton service switch to use RC and CW goes away, remove this block
+	//TODO once association service switch to use RC and CW goes away, remove this block
 	for ID, pluginRes := range pluginRes {
 		if pluginRes.PluginName == appconfig.PluginNameRefreshAssociation {
 			log.Infof("Found %v to invoke refresh association immediately", pluginRes.PluginName)

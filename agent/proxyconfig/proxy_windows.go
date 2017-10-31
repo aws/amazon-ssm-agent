@@ -162,7 +162,7 @@ func SetProxySettings(log log.T) {
 	}
 
 	// Parse no_proxy settings allowing only valid URL or host[:port] values
-	// The proxy bypass string conatins multiple addresses and host names, separate
+	// The proxy bypass string contains multiple addresses and host names, separate
 	// with blank spaces or semicolons
 	var bypassList = []string{}
 	for _, f := range strings.Fields(bypass) {

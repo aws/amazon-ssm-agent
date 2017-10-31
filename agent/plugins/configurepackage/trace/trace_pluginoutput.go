@@ -35,7 +35,7 @@ func (po *PluginOutputTrace) GetStderr() string                 { return po.Trac
 func (po *PluginOutputTrace) SetStatus(status contracts.ResultStatus) { po.status = status }
 func (po *PluginOutputTrace) SetExitCode(exitCode int)                { po.exitCode = exitCode }
 
-// Compatibilty functions with Plugin Output
+// Compatibility functions with Plugin Output
 
 func (po *PluginOutputTrace) MarkAsFailed(log log.T, err error) {
 	// Update the error exit code

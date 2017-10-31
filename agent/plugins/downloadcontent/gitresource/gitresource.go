@@ -99,7 +99,7 @@ func (git *GitResource) download(log log.T, filesys filemanager.FileSystem, info
 	}
 	fileMetadata, directoryMetadata, err := git.client.GetRepositoryContents(log, info.Owner, info.Repository, info.Path, opt)
 	if err != nil {
-		log.Error("Error occured when trying to get repository contents - ", err)
+		log.Error("Error occurred when trying to get repository contents - ", err)
 		return err
 	}
 

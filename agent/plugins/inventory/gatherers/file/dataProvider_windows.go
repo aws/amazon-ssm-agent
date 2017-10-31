@@ -227,7 +227,7 @@ func createAndRunScript(log log.T, paths []string) (fileInfo []model.FileData, e
 	return
 }
 
-// Its is more efficent to run using script. So try to run command using script.
+// Its is more efficient to run using script. So try to run command using script.
 // If there is an error we should try fallback method.
 func getMetaData(log log.T, paths []string) (fileInfo []model.FileData, err error) {
 	var batchPaths []string
