@@ -40,7 +40,7 @@ var pluginRunner messaging.PluginRunner
 var fakeProcess *FakeProcess
 
 func setup(t *testing.T) *TestCase {
-	logger.Info("initalizing dependencies for integration testing...")
+	logger.Info("initializing dependencies for integration testing...")
 	testCase := CreateTestCase()
 	channelCreator = func(log log.T, mode channel.Mode, documentID string) (channel.Channel, error, bool) {
 		isFound := channelmock.IsExists(documentID)
@@ -356,7 +356,7 @@ func (p *FakeProcess) fakeWorker(t *testing.T, handle string) {
 }
 
 //Make the process to become an orphan when parent dies
-//In reality, Wait() is transfered to OS daemon. In our test cases, Wait() is held by the old Executer so we need to fail the new Executer's Wait() call
+//In reality, Wait() is transferred to OS daemon. In our test cases, Wait() is held by the old Executer so we need to fail the new Executer's Wait() call
 func (p *FakeProcess) detach() {
 	p.attached = false
 }

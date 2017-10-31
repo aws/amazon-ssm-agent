@@ -61,7 +61,7 @@ func TestParseDocument_ValidRuntimeConfig(t *testing.T) {
 	var testDocContent contracts.DocumentContent
 	err := json.Unmarshal(validdocumentruntimeconfig, &testDocContent)
 	if err != nil {
-		assert.Error(t, err, "Error occured when trying to unmarshal validDocument")
+		assert.Error(t, err, "Error occurred when trying to unmarshal valid document")
 	}
 	pluginsInfo, err := ParseDocument(mockLog, &testDocContent, testParserInfo, nil)
 
@@ -94,7 +94,7 @@ func TestParseDocument_ValidMainSteps(t *testing.T) {
 	validdocumentmainsteps := loadFile(t, "../runcommand/mds/testdata/validcommand20.json")
 	err := json.Unmarshal(validdocumentmainsteps, &testDocContent)
 	if err != nil {
-		assert.Error(t, err, "Error occured when trying to unmarshal validDocument")
+		assert.Error(t, err, "Error occurred when trying to unmarshal valid document")
 	}
 	pluginsInfo, err := ParseDocument(mockLog, &testDocContent, testParserInfo, nil)
 
@@ -127,7 +127,7 @@ func TestInitializeDocState_Valid(t *testing.T) {
 	validdocumentruntimeconfig := loadFile(t, "../runcommand/mds/testdata/validcommand12.json")
 	err := json.Unmarshal(validdocumentruntimeconfig, &testDocContent)
 	if err != nil {
-		assert.Error(t, err, "Error occured when trying to unmarshal validDocument")
+		assert.Error(t, err, "Error occurred when trying to unmarshal valid document")
 	}
 
 	docState, err := InitializeDocState(mockLog, contracts.SendCommand, &testDocContent, contracts.DocumentInfo{}, testParserInfo, nil)
@@ -180,7 +180,7 @@ func TestParseDocument_Invalid(t *testing.T) {
 	var testDocContent contracts.DocumentContent
 	err := json.Unmarshal([]byte(invaliddocument), &testDocContent)
 	assert.Nil(t, err)
-	assert.NoError(t, err, "Error occured when trying to unmarshal invalidDocument")
+	assert.NoError(t, err, "Error occurred when trying to unmarshal invalid document")
 	_, err = ParseDocument(mockLog, &testDocContent, testParserInfo, nil)
 
 	assert.NotNil(t, err)
@@ -203,7 +203,7 @@ func TestParseDocument_InvalidSchema(t *testing.T) {
 
 	err := json.Unmarshal([]byte(invalidschema), &testDocContent)
 	assert.Nil(t, err)
-	assert.NoError(t, err, "Error occured when trying to unmarshal invalidschema")
+	assert.NoError(t, err, "Error occurred when trying to unmarshal invalid schema")
 
 	_, err = ParseDocument(mockLog, &testDocContent, testParserInfo, nil)
 
@@ -226,12 +226,12 @@ func TestParseDocument_ValidParameters(t *testing.T) {
 	var testDocContent contracts.DocumentContent
 	err := json.Unmarshal([]byte(parameterdocument), &testDocContent)
 	assert.Nil(t, err)
-	assert.NoError(t, err, "Error occured when trying to unmarshal validDocument")
+	assert.NoError(t, err, "Error occurred when trying to unmarshal valid document")
 
 	var testParams map[string]interface{}
 	err = json.Unmarshal([]byte(testparameters), &testParams)
 	assert.Nil(t, err)
-	assert.NoError(t, err, "Error occured when trying to unmarshal testparameters")
+	assert.NoError(t, err, "Error occurred when trying to unmarshal test parameters")
 	originalMessage, _ := jsonutil.Marshal(testDocContent)
 
 	pluginsInfo, err := ParseDocument(mockLog, &testDocContent, testParserInfo, testParams)
@@ -268,7 +268,7 @@ func TestParseDocument_ReplaceDefaultParameters(t *testing.T) {
 
 	err := json.Unmarshal([]byte(defaultParamatersDoc), &testDocContent)
 	assert.Nil(t, err)
-	assert.NoError(t, err, "Error occured when trying to unmarshal testparameters")
+	assert.NoError(t, err, "Error occurred when trying to unmarshal test parameters")
 	originalMessage, _ := jsonutil.Marshal(testDocContent)
 
 	pluginsInfo, err := ParseDocument(mockLog, &testDocContent, testParserInfo, nil)

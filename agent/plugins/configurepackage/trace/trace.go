@@ -79,7 +79,7 @@ func NewTracer(logger log.T) Tracer {
 	}
 }
 
-// BeginSection will create a new trace and registeres with the tracer
+// BeginSection will create a new trace and registers with the tracer
 func (t *TracerImpl) BeginSection(message string) *Trace {
 	t.logger.Debugf("starting with %s", message)
 
