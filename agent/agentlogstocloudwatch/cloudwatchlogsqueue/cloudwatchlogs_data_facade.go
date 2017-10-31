@@ -106,7 +106,7 @@ func setLogDestination(initArgs seelog.CustomReceiverInitArgs) {
 	// Signal the publisher that there has been a change in destination in non-blocking way
 	select {
 	case CloudWatchLogsEventsChannel <- LoggingDestinationChanged:
-		fmt.Println("Logging Destination Change. Signalled Publisher Succesfully")
+		fmt.Println("Logging Destination Change. Signalled Publisher Successfully")
 	default:
 		fmt.Println("Logging Destination Change. Publisher not active")
 	}
@@ -220,7 +220,7 @@ func DestroyCloudWatchDataInstance() {
 	// Signal the publisher that there has been a change in destination in non-blocking way
 	select {
 	case CloudWatchLogsEventsChannel <- QueueDeactivated:
-		fmt.Println("Queue Deactivated. Signalled Publisher Succesfully")
+		fmt.Println("Queue Deactivated. Signalled Publisher Successfully")
 	default:
 		fmt.Println("Queue Deactivated. Publisher not active")
 	}

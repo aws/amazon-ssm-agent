@@ -181,7 +181,7 @@ func RunPlugins(
 		// set end time.
 		pluginOutputs[pluginID].EndDateTime = time.Now()
 		context.Log().Infof("Sending plugin %v completion message", pluginID)
-		// send to buffer channel, guranteed not block since buffer size is plugin number
+		// send to buffer channel, guaranteed to not block since buffer size is plugin number
 		resChan <- *pluginOutputs[pluginID]
 
 		//TODO handle cancelFlag here

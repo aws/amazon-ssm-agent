@@ -128,7 +128,7 @@ func TestProcessMessageWithInvalidCommandTopicPrefix(t *testing.T) {
 	//prepare processor and test case fields
 	svc, tc := prepareTestProcessMessage(topic)
 
-	// set the expectations, do not call Submit() since commmand parsing failed at the first place
+	// set the expectations, do not call Submit() since command parsing failed in the first place
 	tc.MdsMock.On("FailMessage", mock.Anything, *tc.Message.MessageId, mock.Anything).Return(nil)
 
 	// execute processMessage
