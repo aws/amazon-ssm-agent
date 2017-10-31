@@ -22,6 +22,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
+	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
@@ -129,7 +130,7 @@ func RunPlugins(
 		if ioConfig.OutputS3BucketName != "" {
 			pluginOutputs[pluginID].OutputS3BucketName = ioConfig.OutputS3BucketName
 			if ioConfig.OutputS3KeyPrefix != "" {
-				pluginOutputs[pluginID].OutputS3KeyPrefix = ioConfig.OutputS3KeyPrefix
+				pluginOutputs[pluginID].OutputS3KeyPrefix = fileutil.BuildS3Path(ioConfig.OutputS3KeyPrefix, pluginName)
 
 			}
 		}
