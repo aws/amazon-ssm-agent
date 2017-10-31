@@ -168,7 +168,7 @@ func (u *ComplianceUploader) ConvertToSsmAssociationComplianceItems(log log.T, a
 
 	newHash = calculateCheckSum(dataB)
 
-	log.Debugf("Associaiton compliance item being convertedx with data - %v with checksum - %v", string(dataB), newHash)
+	log.Debugf("Association compliance item being converted with data - %v with checksum - %v", string(dataB), newHash)
 
 	if newHash == oldHash {
 		log.Debugf("Compliance data for %v is same as before - we can just send content hash", AssociationComplianceItemName)

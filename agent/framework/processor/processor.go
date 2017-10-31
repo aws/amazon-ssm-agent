@@ -383,7 +383,7 @@ func processCancelCommand(context context.T, sendCommandPool task.Pool, docState
 func handleCloudwatchPlugin(context context.T, pluginResults map[string]*contracts.PluginResult, documentID string) {
 	log := context.Log()
 	instanceID, _ := platform.InstanceID()
-	//TODO once associaiton service switch to use RC and CW goes away, remove this block
+	//TODO once association service switches to use RC and CW goes away, remove this block
 	for ID, pluginRes := range pluginResults {
 		if pluginRes.PluginName == appconfig.PluginNameCloudWatch {
 			log.Infof("Found %v to invoke lrpm invoker", pluginRes.PluginName)
