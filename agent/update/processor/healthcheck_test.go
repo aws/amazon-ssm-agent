@@ -20,6 +20,7 @@ import (
 
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/ssm"
+	"github.com/aws/amazon-ssm-agent/agent/version"
 	ssmService "github.com/aws/aws-sdk-go/service/ssm"
 	"github.com/stretchr/testify/assert"
 )
@@ -63,7 +64,7 @@ func TestUpdateHealthCheck(t *testing.T) {
 	mockObj.On(
 		"UpdateInstanceInformation",
 		logger,
-		context.Current.SourceVersion,
+		version.Version,
 		updateInProgress).Return(&ssmService.UpdateInstanceInformationOutput{}, nil)
 
 	// setup
