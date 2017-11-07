@@ -101,6 +101,8 @@ func ParseParameters(log log.T, params map[string][]*string, paramsDef map[strin
 					newParam = append(newParam, *value)
 				}
 				result[name] = newParam
+			case contracts.ParamTypeStringMap:
+				result[name] = *(param[0])
 			default:
 				log.Debug("unknown parameter type ", definition.ParamType)
 			}
