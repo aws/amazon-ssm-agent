@@ -144,6 +144,8 @@ const (
 	ParamTypeString = "String"
 	// ParamTypeStringList represents the Param Type is StringList
 	ParamTypeStringList = "StringList"
+	// ParamTypeStringMap represents the param type is StringMap
+	ParamTypeStringMap = "StringMap"
 )
 
 type StopType string
