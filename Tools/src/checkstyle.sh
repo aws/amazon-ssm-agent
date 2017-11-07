@@ -28,12 +28,5 @@ if [[ -n $unformatted ]]; then
 	exit 1
 fi
 
-# run golint
-echo "Try update 'golint'"
-GOPATH=`pwd`/Tools go get -u github.com/golang/lint/golint
-
-echo "Run 'golint'"
-Tools/bin/golint `pwd`/agent/...
-
 echo "Run 'go vet'"
 go tool vet `pwd`/agent
