@@ -1,0 +1,38 @@
+{
+  "schemaVersion": "2.0",
+  "$schema": "http://amazonaws.com/schemas/ec2/v3-0/runcommand#",
+  "description": "Sample version 2.0 document",
+  "parameters": {
+    "sourceInfo": {
+      "type": "StringMap",
+      "default": "{}",
+      "description": "Put any PowerShell Command here"
+    },
+    "runCommand1": {
+      "type": "String",
+      "default": "ls",
+      "description": "Put any PowerShell Command here"
+    }
+  },
+  "mainSteps": [
+    {
+      "action":"aws:downloadContent",
+      "name":"downloadContent",
+      "inputs":
+      {
+        "id": "0.aws.downloadContent",
+        "sourceType": "SSMDocument",
+        "sourceInfo": "{{ sourceInfo }}"
+      }
+    },
+    {
+      "action":"aws:runPowerShellScript",
+      "name":"runPowerShellScript2",
+      "inputs":
+      {
+        "id": "1.aws:psModule",
+        "runCommand": "{{ runCommand1 }}"
+      }
+    }
+  ]
+}
