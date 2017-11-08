@@ -16,6 +16,7 @@ package datauploader
 
 import (
 	"encoding/json"
+	"errors"
 	"testing"
 
 	"github.com/aws/amazon-ssm-agent/agent/context"
@@ -125,4 +126,69 @@ func TestConvertExcludedAndEmptyToSsmInventoryItems(t *testing.T) {
 	assert.Nil(t, err, "Error shouldn't be thrown when marshalling content")
 	// CompType not present even though it has value.  Version should be present even though it doesn't.  InstallTime and Url should not be present because they have no value.
 	assert.Equal(t, "{\"Name\":\"Test1\",\"Publisher\":\"Pub1\",\"Version\":\"\",\"ApplicationType\":\"Foo\",\"Architecture\":\"Brutalism\"}", string(bytes[:]))
+}
+
+// Mock stands for a mocked service.
+type MockSSMCaller struct {
+	mock.Mock
+}
+
+func NewMockSSMCaller() *MockSSMCaller {
+	service := new(MockSSMCaller)
+	return service
+}
+
+func (m *MockSSMCaller) PutInventory(input *ssm.PutInventoryInput) (output *ssm.PutInventoryOutput, err error) {
+	args := m.Called(input)
+	return args.Get(0).(*ssm.PutInventoryOutput), args.Error(1)
+}
+
+func TestSendDataToSSM(t *testing.T) {
+	testSendData(t, true)
+	testSendData(t, false)
+}
+
+func testSendData(t *testing.T, putInventorySucceeds bool) {
+
+	var items []model.Item
+	var inventoryItems []*ssm.InventoryItem
+
+	//setting up inventory.Item
+	item := ApplicationInventoryItem()[0]
+	items = append(items, item)
+
+	inventoryItem, _ := ConvertToSSMInventoryItem(item)
+	hash := "aHash"
+	inventoryItem.ContentHash = &hash
+	inventoryItems = append(inventoryItems, inventoryItem)
+
+	// create mocks and setup expectations
+	mockSSM := NewMockSSMCaller()
+	output := &ssm.PutInventoryOutput{}
+	if putInventorySucceeds {
+		mockSSM.On("PutInventory", mock.AnythingOfType("*ssm.PutInventoryInput")).Return(output, nil)
+	} else {
+		err := errors.New("some error")
+		mockSSM.On("PutInventory", mock.AnythingOfType("*ssm.PutInventoryInput")).Return(output, err)
+	}
+
+	mockOptimizer := NewMockDefault()
+	if putInventorySucceeds {
+		for _, item := range inventoryItems {
+			mockOptimizer.On("UpdateContentHash", *item.TypeName, hash).Return(nil)
+		}
+	}
+
+	c := context.NewMockDefault()
+
+	// call method
+	u := &InventoryUploader{
+		ssm:       mockSSM,
+		optimizer: mockOptimizer,
+	}
+	u.SendDataToSSM(c, inventoryItems)
+
+	// assert that the expectations were met
+	mockSSM.AssertExpectations(t)
+	mockOptimizer.AssertExpectations(t)
 }

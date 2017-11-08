@@ -40,9 +40,13 @@ type T interface {
 	ConvertToSsmInventoryItems(context context.T, items []model.Item) (optimizedInventoryItems, nonOptimizedInventoryItems []*ssm.InventoryItem, err error)
 }
 
+type SSMCaller interface {
+	PutInventory(input *ssm.PutInventoryInput) (output *ssm.PutInventoryOutput, err error)
+}
+
 // InventoryUploader implements functionality to upload data to SSM Inventory.
 type InventoryUploader struct {
-	ssm       *ssm.SSM
+	ssm       SSMCaller
 	optimizer Optimizer //helps inventory plugin to optimize PutInventory calls
 }
 
@@ -117,10 +121,22 @@ func (u *InventoryUploader) SendDataToSSM(context context.T, items []*ssm.Invent
 			log.Errorf("Encountered error while calling PutInventory API %v", err)
 		} else {
 			log.Debugf("PutInventory was called successfully with response - %v", resp)
+			u.updateContentHash(context, items)
 		}
 	}
 
 	return
+}
+
+func (u *InventoryUploader) updateContentHash(context context.T, items []*ssm.InventoryItem) {
+	log := context.Log()
+	log.Debugf("Updating cache")
+	for _, item := range items {
+		if err := u.optimizer.UpdateContentHash(*item.TypeName, *item.ContentHash); err != nil {
+			err = fmt.Errorf("failed to update content hash cache because of - %v", err.Error())
+			log.Error(err.Error())
+		}
+	}
 }
 
 func calculateCheckSum(data []byte) (checkSum string) {
@@ -201,14 +217,6 @@ func (u *InventoryUploader) ConvertToSsmInventoryItems(context context.T, items 
 			log.Debugf("Adding item - %v to the optimizedItems (since its new data)", nonOptimizedItem)
 
 			optimizedInventoryItems = append(optimizedInventoryItems, nonOptimizedItem)
-
-			log.Debugf("Updating cache")
-
-			if err = u.optimizer.UpdateContentHash(itemName, newHash); err != nil {
-				err = fmt.Errorf("failed to update content hash cache because of - %v", err.Error())
-				log.Error(err.Error())
-				return
-			}
 		}
 	}
 
