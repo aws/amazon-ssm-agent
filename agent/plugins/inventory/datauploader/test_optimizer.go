@@ -19,21 +19,21 @@ import (
 )
 
 // Mock stands for a mocked plugin.
-type MockOptinizer struct {
+type MockOptimizer struct {
 	mock.Mock
 }
 
-func NewMockDefault() *MockOptinizer {
-	opt := new(MockOptinizer)
+func NewMockDefault() *MockOptimizer {
+	opt := new(MockOptimizer)
 	return opt
 }
 
-func (m *MockOptinizer) UpdateContentHash(inventoryItemName, hash string) (err error) {
+func (m *MockOptimizer) UpdateContentHash(inventoryItemName, hash string) (err error) {
 	args := m.Called(inventoryItemName, hash)
 	return args.Error(0)
 }
 
-func (m *MockOptinizer) GetContentHash(inventoryItemName string) (hash string) {
+func (m *MockOptimizer) GetContentHash(inventoryItemName string) (hash string) {
 	args := m.Called(inventoryItemName)
 	return args.String(0)
 }
