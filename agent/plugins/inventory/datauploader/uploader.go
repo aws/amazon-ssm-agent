@@ -101,7 +101,7 @@ func (u *InventoryUploader) SendDataToSSM(context context.T, items []*ssm.Invent
 	log.Debugf("Inventory Items: %v", items)
 	log.Infof("Number of Inventory Items: %v", len(items))
 
-	if instanceID, err = platform.InstanceID(); err != nil {
+	if instanceID, err = machineIDProvider(); err != nil {
 		log.Errorf("Unable to fetch InstanceId, instance information will not be sent to Inventory")
 		return
 	}
