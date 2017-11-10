@@ -7,7 +7,8 @@
     "protocol":"json",
     "serviceFullName":"Amazon Route 53 Domains",
     "signatureVersion":"v4",
-    "targetPrefix":"Route53Domains_v20140515"
+    "targetPrefix":"Route53Domains_v20140515",
+    "uid":"route53domains-2014-05-15"
   },
   "operations":{
     "CheckDomainAvailability":{
@@ -18,6 +19,19 @@
       },
       "input":{"shape":"CheckDomainAvailabilityRequest"},
       "output":{"shape":"CheckDomainAvailabilityResponse"},
+      "errors":[
+        {"shape":"InvalidInput"},
+        {"shape":"UnsupportedTLD"}
+      ]
+    },
+    "CheckDomainTransferability":{
+      "name":"CheckDomainTransferability",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"CheckDomainTransferabilityRequest"},
+      "output":{"shape":"CheckDomainTransferabilityResponse"},
       "errors":[
         {"shape":"InvalidInput"},
         {"shape":"UnsupportedTLD"}
@@ -123,6 +137,19 @@
         {"shape":"UnsupportedTLD"}
       ]
     },
+    "GetDomainSuggestions":{
+      "name":"GetDomainSuggestions",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"GetDomainSuggestionsRequest"},
+      "output":{"shape":"GetDomainSuggestionsResponse"},
+      "errors":[
+        {"shape":"InvalidInput"},
+        {"shape":"UnsupportedTLD"}
+      ]
+    },
     "GetOperationDetail":{
       "name":"GetOperationDetail",
       "http":{
@@ -187,6 +214,22 @@
         {"shape":"DuplicateRequest"},
         {"shape":"TLDRulesViolation"},
         {"shape":"DomainLimitExceeded"},
+        {"shape":"OperationLimitExceeded"}
+      ]
+    },
+    "RenewDomain":{
+      "name":"RenewDomain",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"RenewDomainRequest"},
+      "output":{"shape":"RenewDomainResponse"},
+      "errors":[
+        {"shape":"InvalidInput"},
+        {"shape":"UnsupportedTLD"},
+        {"shape":"DuplicateRequest"},
+        {"shape":"TLDRulesViolation"},
         {"shape":"OperationLimitExceeded"}
       ]
     },
@@ -295,12 +338,38 @@
         {"shape":"OperationLimitExceeded"},
         {"shape":"UnsupportedTLD"}
       ]
+    },
+    "ViewBilling":{
+      "name":"ViewBilling",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"ViewBillingRequest"},
+      "output":{"shape":"ViewBillingResponse"},
+      "errors":[
+        {"shape":"InvalidInput"}
+      ]
     }
   },
   "shapes":{
     "AddressLine":{
       "type":"string",
       "max":255
+    },
+    "BillingRecord":{
+      "type":"structure",
+      "members":{
+        "DomainName":{"shape":"DomainName"},
+        "Operation":{"shape":"OperationType"},
+        "InvoiceId":{"shape":"InvoiceId"},
+        "BillDate":{"shape":"Timestamp"},
+        "Price":{"shape":"Price"}
+      }
+    },
+    "BillingRecords":{
+      "type":"list",
+      "member":{"shape":"BillingRecord"}
     },
     "Boolean":{"type":"boolean"},
     "CheckDomainAvailabilityRequest":{
@@ -316,6 +385,21 @@
       "required":["Availability"],
       "members":{
         "Availability":{"shape":"DomainAvailability"}
+      }
+    },
+    "CheckDomainTransferabilityRequest":{
+      "type":"structure",
+      "required":["DomainName"],
+      "members":{
+        "DomainName":{"shape":"DomainName"},
+        "AuthCode":{"shape":"DomainAuthCode"}
+      }
+    },
+    "CheckDomainTransferabilityResponse":{
+      "type":"structure",
+      "required":["Transferability"],
+      "members":{
+        "Transferability":{"shape":"DomainTransferability"}
       }
     },
     "City":{
@@ -594,6 +678,7 @@
         "ZW"
       ]
     },
+    "CurrentExpiryYear":{"type":"integer"},
     "DNSSec":{"type":"string"},
     "DeleteTagsForDomainRequest":{
       "type":"structure",
@@ -664,13 +749,23 @@
     },
     "DomainName":{
       "type":"string",
-      "max":255,
-      "pattern":"[a-zA-Z0-9_\\-.]*"
+      "max":255
     },
     "DomainStatus":{"type":"string"},
     "DomainStatusList":{
       "type":"list",
       "member":{"shape":"DomainStatus"}
+    },
+    "DomainSuggestion":{
+      "type":"structure",
+      "members":{
+        "DomainName":{"shape":"DomainName"},
+        "Availability":{"shape":"String"}
+      }
+    },
+    "DomainSuggestionsList":{
+      "type":"list",
+      "member":{"shape":"DomainSuggestion"}
     },
     "DomainSummary":{
       "type":"structure",
@@ -685,6 +780,12 @@
     "DomainSummaryList":{
       "type":"list",
       "member":{"shape":"DomainSummary"}
+    },
+    "DomainTransferability":{
+      "type":"structure",
+      "members":{
+        "Transferable":{"shape":"Transferable"}
+      }
     },
     "DuplicateRequest":{
       "type":"structure",
@@ -763,11 +864,16 @@
         "ES_LEGAL_FORM",
         "FI_BUSINESS_NUMBER",
         "FI_ID_NUMBER",
+        "FI_NATIONALITY",
+        "FI_ORGANIZATION_TYPE",
         "IT_PIN",
+        "IT_REGISTRANT_ENTITY_TYPE",
         "RU_PASSPORT_DATA",
         "SE_ID_NUMBER",
         "SG_ID_NUMBER",
-        "VAT_NUMBER"
+        "VAT_NUMBER",
+        "UK_CONTACT_TYPE",
+        "UK_COMPANY_NUMBER"
       ]
     },
     "ExtraParamValue":{
@@ -828,6 +934,25 @@
         "StatusList":{"shape":"DomainStatusList"}
       }
     },
+    "GetDomainSuggestionsRequest":{
+      "type":"structure",
+      "required":[
+        "DomainName",
+        "SuggestionCount",
+        "OnlyAvailable"
+      ],
+      "members":{
+        "DomainName":{"shape":"DomainName"},
+        "SuggestionCount":{"shape":"Integer"},
+        "OnlyAvailable":{"shape":"Boolean"}
+      }
+    },
+    "GetDomainSuggestionsResponse":{
+      "type":"structure",
+      "members":{
+        "SuggestionsList":{"shape":"DomainSuggestionsList"}
+      }
+    },
     "GetOperationDetailRequest":{
       "type":"structure",
       "required":["OperationId"],
@@ -859,6 +984,7 @@
       "max":255,
       "pattern":"[a-zA-Z0-9_\\-.]*"
     },
+    "Integer":{"type":"integer"},
     "InvalidInput":{
       "type":"structure",
       "members":{
@@ -866,6 +992,7 @@
       },
       "exception":true
     },
+    "InvoiceId":{"type":"string"},
     "LangCode":{
       "type":"string",
       "max":3
@@ -975,7 +1102,16 @@
         "UPDATE_DOMAIN_CONTACT",
         "UPDATE_NAMESERVER",
         "CHANGE_PRIVACY_PROTECTION",
-        "DOMAIN_LOCK"
+        "DOMAIN_LOCK",
+        "ENABLE_AUTORENEW",
+        "DISABLE_AUTORENEW",
+        "ADD_DNSSEC",
+        "REMOVE_DNSSEC",
+        "EXPIRE_DOMAIN",
+        "TRANSFER_OUT_DOMAIN",
+        "CHANGE_DOMAIN_OWNER",
+        "RENEW_DOMAIN",
+        "PUSH_DOMAIN"
       ]
     },
     "PageMarker":{
@@ -986,6 +1122,7 @@
       "type":"integer",
       "max":100
     },
+    "Price":{"type":"double"},
     "ReachabilityStatus":{
       "type":"string",
       "enum":[
@@ -1027,6 +1164,25 @@
     "RegistrarUrl":{"type":"string"},
     "RegistrarWhoIsServer":{"type":"string"},
     "RegistryDomainId":{"type":"string"},
+    "RenewDomainRequest":{
+      "type":"structure",
+      "required":[
+        "DomainName",
+        "CurrentExpiryYear"
+      ],
+      "members":{
+        "DomainName":{"shape":"DomainName"},
+        "DurationInYears":{"shape":"DurationInYears"},
+        "CurrentExpiryYear":{"shape":"CurrentExpiryYear"}
+      }
+    },
+    "RenewDomainResponse":{
+      "type":"structure",
+      "required":["OperationId"],
+      "members":{
+        "OperationId":{"shape":"OperationId"}
+      }
+    },
     "Reseller":{"type":"string"},
     "ResendContactReachabilityEmailRequest":{
       "type":"structure",
@@ -1060,6 +1216,7 @@
       "type":"string",
       "max":255
     },
+    "String":{"type":"string"},
     "TLDRulesViolation":{
       "type":"structure",
       "members":{
@@ -1116,6 +1273,14 @@
         "OperationId":{"shape":"OperationId"}
       }
     },
+    "Transferable":{
+      "type":"string",
+      "enum":[
+        "TRANSFERABLE",
+        "UNTRANSFERABLE",
+        "DONT_KNOW"
+      ]
+    },
     "UnsupportedTLD":{
       "type":"structure",
       "members":{
@@ -1165,7 +1330,10 @@
       ],
       "members":{
         "DomainName":{"shape":"DomainName"},
-        "FIAuthKey":{"shape":"FIAuthKey"},
+        "FIAuthKey":{
+          "shape":"FIAuthKey",
+          "deprecated":true
+        },
         "Nameservers":{"shape":"NameserverList"}
       }
     },
@@ -1187,6 +1355,22 @@
     "UpdateTagsForDomainResponse":{
       "type":"structure",
       "members":{
+      }
+    },
+    "ViewBillingRequest":{
+      "type":"structure",
+      "members":{
+        "Start":{"shape":"Timestamp"},
+        "End":{"shape":"Timestamp"},
+        "Marker":{"shape":"PageMarker"},
+        "MaxItems":{"shape":"PageMaxItems"}
+      }
+    },
+    "ViewBillingResponse":{
+      "type":"structure",
+      "members":{
+        "NextPageMarker":{"shape":"PageMarker"},
+        "BillingRecords":{"shape":"BillingRecords"}
       }
     },
     "ZipCode":{

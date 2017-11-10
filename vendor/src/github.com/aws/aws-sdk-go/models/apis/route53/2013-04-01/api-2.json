@@ -7,7 +7,8 @@
     "protocol":"rest-xml",
     "serviceAbbreviation":"Route 53",
     "serviceFullName":"Amazon Route 53",
-    "signatureVersion":"v4"
+    "signatureVersion":"v4",
+    "uid":"route53-2013-04-01"
   },
   "operations":{
     "AssociateVPCWithHostedZone":{
@@ -24,6 +25,7 @@
       "output":{"shape":"AssociateVPCWithHostedZoneResponse"},
       "errors":[
         {"shape":"NoSuchHostedZone"},
+        {"shape":"NotAuthorizedException"},
         {"shape":"InvalidVPCId"},
         {"shape":"InvalidInput"},
         {"shape":"PublicZoneVPCAssociation"},
@@ -115,6 +117,28 @@
         {"shape":"DelegationSetNotReusable"}
       ]
     },
+    "CreateQueryLoggingConfig":{
+      "name":"CreateQueryLoggingConfig",
+      "http":{
+        "method":"POST",
+        "requestUri":"/2013-04-01/queryloggingconfig",
+        "responseCode":201
+      },
+      "input":{
+        "shape":"CreateQueryLoggingConfigRequest",
+        "locationName":"CreateQueryLoggingConfigRequest",
+        "xmlNamespace":{"uri":"https://route53.amazonaws.com/doc/2013-04-01/"}
+      },
+      "output":{"shape":"CreateQueryLoggingConfigResponse"},
+      "errors":[
+        {"shape":"ConcurrentModification"},
+        {"shape":"NoSuchHostedZone"},
+        {"shape":"NoSuchCloudWatchLogsLogGroup"},
+        {"shape":"InvalidInput"},
+        {"shape":"QueryLoggingConfigAlreadyExists"},
+        {"shape":"InsufficientCloudWatchLogsResourcePolicy"}
+      ]
+    },
     "CreateReusableDelegationSet":{
       "name":"CreateReusableDelegationSet",
       "http":{
@@ -199,6 +223,26 @@
         {"shape":"InvalidTrafficPolicyDocument"}
       ]
     },
+    "CreateVPCAssociationAuthorization":{
+      "name":"CreateVPCAssociationAuthorization",
+      "http":{
+        "method":"POST",
+        "requestUri":"/2013-04-01/hostedzone/{Id}/authorizevpcassociation"
+      },
+      "input":{
+        "shape":"CreateVPCAssociationAuthorizationRequest",
+        "locationName":"CreateVPCAssociationAuthorizationRequest",
+        "xmlNamespace":{"uri":"https://route53.amazonaws.com/doc/2013-04-01/"}
+      },
+      "output":{"shape":"CreateVPCAssociationAuthorizationResponse"},
+      "errors":[
+        {"shape":"ConcurrentModification"},
+        {"shape":"TooManyVPCAssociationAuthorizations"},
+        {"shape":"NoSuchHostedZone"},
+        {"shape":"InvalidVPCId"},
+        {"shape":"InvalidInput"}
+      ]
+    },
     "DeleteHealthCheck":{
       "name":"DeleteHealthCheck",
       "http":{
@@ -225,6 +269,21 @@
         {"shape":"NoSuchHostedZone"},
         {"shape":"HostedZoneNotEmpty"},
         {"shape":"PriorRequestNotComplete"},
+        {"shape":"InvalidInput"},
+        {"shape":"InvalidDomainName"}
+      ]
+    },
+    "DeleteQueryLoggingConfig":{
+      "name":"DeleteQueryLoggingConfig",
+      "http":{
+        "method":"DELETE",
+        "requestUri":"/2013-04-01/queryloggingconfig/{Id}"
+      },
+      "input":{"shape":"DeleteQueryLoggingConfigRequest"},
+      "output":{"shape":"DeleteQueryLoggingConfigResponse"},
+      "errors":[
+        {"shape":"ConcurrentModification"},
+        {"shape":"NoSuchQueryLoggingConfig"},
         {"shape":"InvalidInput"}
       ]
     },
@@ -272,6 +331,26 @@
         {"shape":"PriorRequestNotComplete"}
       ]
     },
+    "DeleteVPCAssociationAuthorization":{
+      "name":"DeleteVPCAssociationAuthorization",
+      "http":{
+        "method":"POST",
+        "requestUri":"/2013-04-01/hostedzone/{Id}/deauthorizevpcassociation"
+      },
+      "input":{
+        "shape":"DeleteVPCAssociationAuthorizationRequest",
+        "locationName":"DeleteVPCAssociationAuthorizationRequest",
+        "xmlNamespace":{"uri":"https://route53.amazonaws.com/doc/2013-04-01/"}
+      },
+      "output":{"shape":"DeleteVPCAssociationAuthorizationResponse"},
+      "errors":[
+        {"shape":"ConcurrentModification"},
+        {"shape":"VPCAssociationAuthorizationNotFound"},
+        {"shape":"NoSuchHostedZone"},
+        {"shape":"InvalidVPCId"},
+        {"shape":"InvalidInput"}
+      ]
+    },
     "DisassociateVPCFromHostedZone":{
       "name":"DisassociateVPCFromHostedZone",
       "http":{
@@ -304,20 +383,6 @@
         {"shape":"NoSuchChange"},
         {"shape":"InvalidInput"}
       ]
-    },
-    "GetChangeDetails":{
-      "name":"GetChangeDetails",
-      "http":{
-        "method":"GET",
-        "requestUri":"/2013-04-01/changedetails/{Id}"
-      },
-      "input":{"shape":"GetChangeDetailsRequest"},
-      "output":{"shape":"GetChangeDetailsResponse"},
-      "errors":[
-        {"shape":"NoSuchChange"},
-        {"shape":"InvalidInput"}
-      ],
-      "deprecated":true
     },
     "GetCheckerIpRanges":{
       "name":"GetCheckerIpRanges",
@@ -415,6 +480,19 @@
         {"shape":"InvalidInput"}
       ]
     },
+    "GetQueryLoggingConfig":{
+      "name":"GetQueryLoggingConfig",
+      "http":{
+        "method":"GET",
+        "requestUri":"/2013-04-01/queryloggingconfig/{Id}"
+      },
+      "input":{"shape":"GetQueryLoggingConfigRequest"},
+      "output":{"shape":"GetQueryLoggingConfigResponse"},
+      "errors":[
+        {"shape":"NoSuchQueryLoggingConfig"},
+        {"shape":"InvalidInput"}
+      ]
+    },
     "GetReusableDelegationSet":{
       "name":"GetReusableDelegationSet",
       "http":{
@@ -463,34 +541,6 @@
       },
       "input":{"shape":"GetTrafficPolicyInstanceCountRequest"},
       "output":{"shape":"GetTrafficPolicyInstanceCountResponse"}
-    },
-    "ListChangeBatchesByHostedZone":{
-      "name":"ListChangeBatchesByHostedZone",
-      "http":{
-        "method":"GET",
-        "requestUri":"/2013-04-01/hostedzone/{Id}/changes"
-      },
-      "input":{"shape":"ListChangeBatchesByHostedZoneRequest"},
-      "output":{"shape":"ListChangeBatchesByHostedZoneResponse"},
-      "errors":[
-        {"shape":"NoSuchHostedZone"},
-        {"shape":"InvalidInput"}
-      ],
-      "deprecated":true
-    },
-    "ListChangeBatchesByRRSet":{
-      "name":"ListChangeBatchesByRRSet",
-      "http":{
-        "method":"GET",
-        "requestUri":"/2013-04-01/hostedzone/{Id}/rrsChanges"
-      },
-      "input":{"shape":"ListChangeBatchesByRRSetRequest"},
-      "output":{"shape":"ListChangeBatchesByRRSetResponse"},
-      "errors":[
-        {"shape":"NoSuchHostedZone"},
-        {"shape":"InvalidInput"}
-      ],
-      "deprecated":true
     },
     "ListGeoLocations":{
       "name":"ListGeoLocations",
@@ -542,6 +592,20 @@
       "errors":[
         {"shape":"InvalidInput"},
         {"shape":"InvalidDomainName"}
+      ]
+    },
+    "ListQueryLoggingConfigs":{
+      "name":"ListQueryLoggingConfigs",
+      "http":{
+        "method":"GET",
+        "requestUri":"/2013-04-01/queryloggingconfig"
+      },
+      "input":{"shape":"ListQueryLoggingConfigsRequest"},
+      "output":{"shape":"ListQueryLoggingConfigsResponse"},
+      "errors":[
+        {"shape":"InvalidInput"},
+        {"shape":"InvalidPaginationToken"},
+        {"shape":"NoSuchHostedZone"}
       ]
     },
     "ListResourceRecordSets":{
@@ -671,6 +735,33 @@
         {"shape":"NoSuchTrafficPolicy"}
       ]
     },
+    "ListVPCAssociationAuthorizations":{
+      "name":"ListVPCAssociationAuthorizations",
+      "http":{
+        "method":"GET",
+        "requestUri":"/2013-04-01/hostedzone/{Id}/authorizevpcassociation"
+      },
+      "input":{"shape":"ListVPCAssociationAuthorizationsRequest"},
+      "output":{"shape":"ListVPCAssociationAuthorizationsResponse"},
+      "errors":[
+        {"shape":"NoSuchHostedZone"},
+        {"shape":"InvalidInput"},
+        {"shape":"InvalidPaginationToken"}
+      ]
+    },
+    "TestDNSAnswer":{
+      "name":"TestDNSAnswer",
+      "http":{
+        "method":"GET",
+        "requestUri":"/2013-04-01/testdnsanswer"
+      },
+      "input":{"shape":"TestDNSAnswerRequest"},
+      "output":{"shape":"TestDNSAnswerResponse"},
+      "errors":[
+        {"shape":"NoSuchHostedZone"},
+        {"shape":"InvalidInput"}
+      ]
+    },
     "UpdateHealthCheck":{
       "name":"UpdateHealthCheck",
       "http":{
@@ -746,7 +837,6 @@
     }
   },
   "shapes":{
-    "AWSAccountID":{"type":"string"},
     "AlarmIdentifier":{
       "type":"structure",
       "required":[
@@ -827,31 +917,6 @@
         "Comment":{"shape":"ResourceDescription"},
         "Changes":{"shape":"Changes"}
       }
-    },
-    "ChangeBatchRecord":{
-      "type":"structure",
-      "required":[
-        "Id",
-        "Status"
-      ],
-      "members":{
-        "Id":{"shape":"ResourceId"},
-        "SubmittedAt":{"shape":"TimeStamp"},
-        "Status":{"shape":"ChangeStatus"},
-        "Comment":{"shape":"ResourceDescription"},
-        "Submitter":{"shape":"AWSAccountID"},
-        "Changes":{"shape":"Changes"}
-      },
-      "deprecated":true
-    },
-    "ChangeBatchRecords":{
-      "type":"list",
-      "member":{
-        "shape":"ChangeBatchRecord",
-        "locationName":"ChangeBatchRecord"
-      },
-      "deprecated":true,
-      "min":1
     },
     "ChangeInfo":{
       "type":"structure",
@@ -964,14 +1029,19 @@
         "Dimensions":{"shape":"DimensionList"}
       }
     },
+    "CloudWatchLogsLogGroupArn":{"type":"string"},
     "CloudWatchRegion":{
       "type":"string",
       "enum":[
         "us-east-1",
+        "us-east-2",
         "us-west-1",
         "us-west-2",
+        "ca-central-1",
         "eu-central-1",
         "eu-west-1",
+        "eu-west-2",
+        "ap-south-1",
         "ap-southeast-1",
         "ap-southeast-2",
         "ap-northeast-1",
@@ -1066,6 +1136,32 @@
         "ChangeInfo":{"shape":"ChangeInfo"},
         "DelegationSet":{"shape":"DelegationSet"},
         "VPC":{"shape":"VPC"},
+        "Location":{
+          "shape":"ResourceURI",
+          "location":"header",
+          "locationName":"Location"
+        }
+      }
+    },
+    "CreateQueryLoggingConfigRequest":{
+      "type":"structure",
+      "required":[
+        "HostedZoneId",
+        "CloudWatchLogsLogGroupArn"
+      ],
+      "members":{
+        "HostedZoneId":{"shape":"ResourceId"},
+        "CloudWatchLogsLogGroupArn":{"shape":"CloudWatchLogsLogGroupArn"}
+      }
+    },
+    "CreateQueryLoggingConfigResponse":{
+      "type":"structure",
+      "required":[
+        "QueryLoggingConfig",
+        "Location"
+      ],
+      "members":{
+        "QueryLoggingConfig":{"shape":"QueryLoggingConfig"},
         "Location":{
           "shape":"ResourceURI",
           "location":"header",
@@ -1186,15 +1282,37 @@
         }
       }
     },
+    "CreateVPCAssociationAuthorizationRequest":{
+      "type":"structure",
+      "required":[
+        "HostedZoneId",
+        "VPC"
+      ],
+      "members":{
+        "HostedZoneId":{
+          "shape":"ResourceId",
+          "location":"uri",
+          "locationName":"Id"
+        },
+        "VPC":{"shape":"VPC"}
+      }
+    },
+    "CreateVPCAssociationAuthorizationResponse":{
+      "type":"structure",
+      "required":[
+        "HostedZoneId",
+        "VPC"
+      ],
+      "members":{
+        "HostedZoneId":{"shape":"ResourceId"},
+        "VPC":{"shape":"VPC"}
+      }
+    },
     "DNSName":{
       "type":"string",
       "max":1024
     },
-    "Date":{
-      "type":"string",
-      "deprecated":true,
-      "max":256
-    },
+    "DNSRCode":{"type":"string"},
     "DelegationSet":{
       "type":"structure",
       "required":["NameServers"],
@@ -1288,6 +1406,22 @@
         "ChangeInfo":{"shape":"ChangeInfo"}
       }
     },
+    "DeleteQueryLoggingConfigRequest":{
+      "type":"structure",
+      "required":["Id"],
+      "members":{
+        "Id":{
+          "shape":"QueryLoggingConfigId",
+          "location":"uri",
+          "locationName":"Id"
+        }
+      }
+    },
+    "DeleteQueryLoggingConfigResponse":{
+      "type":"structure",
+      "members":{
+      }
+    },
     "DeleteReusableDelegationSetRequest":{
       "type":"structure",
       "required":["Id"],
@@ -1340,6 +1474,26 @@
       }
     },
     "DeleteTrafficPolicyResponse":{
+      "type":"structure",
+      "members":{
+      }
+    },
+    "DeleteVPCAssociationAuthorizationRequest":{
+      "type":"structure",
+      "required":[
+        "HostedZoneId",
+        "VPC"
+      ],
+      "members":{
+        "HostedZoneId":{
+          "shape":"ResourceId",
+          "location":"uri",
+          "locationName":"Id"
+        },
+        "VPC":{"shape":"VPC"}
+      }
+    },
+    "DeleteVPCAssociationAuthorizationResponse":{
       "type":"structure",
       "members":{
       }
@@ -1469,26 +1623,6 @@
       "type":"string",
       "max":64,
       "min":1
-    },
-    "GetChangeDetailsRequest":{
-      "type":"structure",
-      "required":["Id"],
-      "members":{
-        "Id":{
-          "shape":"ResourceId",
-          "location":"uri",
-          "locationName":"Id"
-        }
-      },
-      "deprecated":true
-    },
-    "GetChangeDetailsResponse":{
-      "type":"structure",
-      "required":["ChangeBatchRecord"],
-      "members":{
-        "ChangeBatchRecord":{"shape":"ChangeBatchRecord"}
-      },
-      "deprecated":true
     },
     "GetChangeRequest":{
       "type":"structure",
@@ -1645,6 +1779,24 @@
         "VPCs":{"shape":"VPCs"}
       }
     },
+    "GetQueryLoggingConfigRequest":{
+      "type":"structure",
+      "required":["Id"],
+      "members":{
+        "Id":{
+          "shape":"QueryLoggingConfigId",
+          "location":"uri",
+          "locationName":"Id"
+        }
+      }
+    },
+    "GetQueryLoggingConfigResponse":{
+      "type":"structure",
+      "required":["QueryLoggingConfig"],
+      "members":{
+        "QueryLoggingConfig":{"shape":"QueryLoggingConfig"}
+      }
+    },
     "GetReusableDelegationSetRequest":{
       "type":"structure",
       "required":["Id"],
@@ -1775,6 +1927,7 @@
       "members":{
         "message":{"shape":"ErrorMessage"}
       },
+      "deprecated":true,
       "error":{"httpStatusCode":400},
       "exception":true
     },
@@ -1820,7 +1973,7 @@
         "locationName":"Region"
       },
       "max":64,
-      "min":1
+      "min":3
     },
     "HealthCheckType":{
       "type":"string",
@@ -1914,11 +2067,19 @@
     },
     "IPAddress":{
       "type":"string",
-      "max":15,
-      "pattern":"^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$"
+      "max":45,
+      "pattern":"(^((([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5]))$|^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$)"
     },
     "IPAddressCidr":{"type":"string"},
     "IncompatibleVersion":{
+      "type":"structure",
+      "members":{
+        "message":{"shape":"ErrorMessage"}
+      },
+      "error":{"httpStatusCode":400},
+      "exception":true
+    },
+    "InsufficientCloudWatchLogsResourcePolicy":{
       "type":"structure",
       "members":{
         "message":{"shape":"ErrorMessage"}
@@ -1944,7 +2105,8 @@
     "InvalidChangeBatch":{
       "type":"structure",
       "members":{
-        "messages":{"shape":"ErrorMessages"}
+        "messages":{"shape":"ErrorMessages"},
+        "message":{"shape":"ErrorMessage"}
       },
       "exception":true
     },
@@ -1957,6 +2119,14 @@
       "exception":true
     },
     "InvalidInput":{
+      "type":"structure",
+      "members":{
+        "message":{"shape":"ErrorMessage"}
+      },
+      "error":{"httpStatusCode":400},
+      "exception":true
+    },
+    "InvalidPaginationToken":{
       "type":"structure",
       "members":{
         "message":{"shape":"ErrorMessage"}
@@ -1996,127 +2166,6 @@
         "message":{"shape":"ErrorMessage"}
       },
       "exception":true
-    },
-    "ListChangeBatchesByHostedZoneRequest":{
-      "type":"structure",
-      "required":[
-        "HostedZoneId",
-        "StartDate",
-        "EndDate"
-      ],
-      "members":{
-        "HostedZoneId":{
-          "shape":"ResourceId",
-          "location":"uri",
-          "locationName":"Id"
-        },
-        "StartDate":{
-          "shape":"Date",
-          "location":"querystring",
-          "locationName":"startDate"
-        },
-        "EndDate":{
-          "shape":"Date",
-          "location":"querystring",
-          "locationName":"endDate"
-        },
-        "MaxItems":{
-          "shape":"PageMaxItems",
-          "location":"querystring",
-          "locationName":"maxItems"
-        },
-        "Marker":{
-          "shape":"PageMarker",
-          "location":"querystring",
-          "locationName":"marker"
-        }
-      },
-      "deprecated":true
-    },
-    "ListChangeBatchesByHostedZoneResponse":{
-      "type":"structure",
-      "required":[
-        "MaxItems",
-        "Marker",
-        "ChangeBatchRecords"
-      ],
-      "members":{
-        "MaxItems":{"shape":"PageMaxItems"},
-        "Marker":{"shape":"PageMarker"},
-        "IsTruncated":{"shape":"PageTruncated"},
-        "ChangeBatchRecords":{"shape":"ChangeBatchRecords"},
-        "NextMarker":{"shape":"PageMarker"}
-      },
-      "deprecated":true
-    },
-    "ListChangeBatchesByRRSetRequest":{
-      "type":"structure",
-      "required":[
-        "HostedZoneId",
-        "Name",
-        "Type",
-        "StartDate",
-        "EndDate"
-      ],
-      "members":{
-        "HostedZoneId":{
-          "shape":"ResourceId",
-          "location":"uri",
-          "locationName":"Id"
-        },
-        "Name":{
-          "shape":"DNSName",
-          "location":"querystring",
-          "locationName":"rrSet_name"
-        },
-        "Type":{
-          "shape":"RRType",
-          "location":"querystring",
-          "locationName":"type"
-        },
-        "SetIdentifier":{
-          "shape":"ResourceRecordSetIdentifier",
-          "location":"querystring",
-          "locationName":"identifier"
-        },
-        "StartDate":{
-          "shape":"Date",
-          "location":"querystring",
-          "locationName":"startDate"
-        },
-        "EndDate":{
-          "shape":"Date",
-          "location":"querystring",
-          "locationName":"endDate"
-        },
-        "MaxItems":{
-          "shape":"PageMaxItems",
-          "location":"querystring",
-          "locationName":"maxItems"
-        },
-        "Marker":{
-          "shape":"PageMarker",
-          "location":"querystring",
-          "locationName":"marker"
-        }
-      },
-      "deprecated":true
-    },
-    "ListChangeBatchesByRRSetResponse":{
-      "type":"structure",
-      "required":[
-        "MaxItems",
-        "Marker",
-        "ChangeBatchRecords"
-      ],
-      "members":{
-        "MaxItems":{"shape":"PageMaxItems"},
-        "Marker":{"shape":"PageMarker"},
-        "IsTruncated":{"shape":"PageTruncated"},
-        "ChangeBatchRecords":{"shape":"ChangeBatchRecords"},
-        "NextMarker":{"shape":"PageMarker"}
-      },
-      "deprecated":true
     },
     "ListGeoLocationsRequest":{
       "type":"structure",
@@ -2261,6 +2310,34 @@
         "IsTruncated":{"shape":"PageTruncated"},
         "NextMarker":{"shape":"PageMarker"},
         "MaxItems":{"shape":"PageMaxItems"}
+      }
+    },
+    "ListQueryLoggingConfigsRequest":{
+      "type":"structure",
+      "members":{
+        "HostedZoneId":{
+          "shape":"ResourceId",
+          "location":"querystring",
+          "locationName":"hostedzoneid"
+        },
+        "NextToken":{
+          "shape":"PaginationToken",
+          "location":"querystring",
+          "locationName":"nexttoken"
+        },
+        "MaxResults":{
+          "shape":"MaxResults",
+          "location":"querystring",
+          "locationName":"maxresults"
+        }
+      }
+    },
+    "ListQueryLoggingConfigsResponse":{
+      "type":"structure",
+      "required":["QueryLoggingConfigs"],
+      "members":{
+        "QueryLoggingConfigs":{"shape":"QueryLoggingConfigs"},
+        "NextToken":{"shape":"PaginationToken"}
       }
     },
     "ListResourceRecordSetsRequest":{
@@ -2592,6 +2669,40 @@
         "MaxItems":{"shape":"PageMaxItems"}
       }
     },
+    "ListVPCAssociationAuthorizationsRequest":{
+      "type":"structure",
+      "required":["HostedZoneId"],
+      "members":{
+        "HostedZoneId":{
+          "shape":"ResourceId",
+          "location":"uri",
+          "locationName":"Id"
+        },
+        "NextToken":{
+          "shape":"PaginationToken",
+          "location":"querystring",
+          "locationName":"nexttoken"
+        },
+        "MaxResults":{
+          "shape":"MaxResults",
+          "location":"querystring",
+          "locationName":"maxresults"
+        }
+      }
+    },
+    "ListVPCAssociationAuthorizationsResponse":{
+      "type":"structure",
+      "required":[
+        "HostedZoneId",
+        "VPCs"
+      ],
+      "members":{
+        "HostedZoneId":{"shape":"ResourceId"},
+        "NextToken":{"shape":"PaginationToken"},
+        "VPCs":{"shape":"VPCs"}
+      }
+    },
+    "MaxResults":{"type":"string"},
     "MeasureLatency":{"type":"boolean"},
     "Message":{
       "type":"string",
@@ -2602,12 +2713,25 @@
       "max":255,
       "min":1
     },
+    "Nameserver":{
+      "type":"string",
+      "max":255,
+      "min":0
+    },
     "Namespace":{
       "type":"string",
       "max":255,
       "min":1
     },
     "NoSuchChange":{
+      "type":"structure",
+      "members":{
+        "message":{"shape":"ErrorMessage"}
+      },
+      "error":{"httpStatusCode":404},
+      "exception":true
+    },
+    "NoSuchCloudWatchLogsLogGroup":{
       "type":"structure",
       "members":{
         "message":{"shape":"ErrorMessage"}
@@ -2646,6 +2770,14 @@
       "error":{"httpStatusCode":404},
       "exception":true
     },
+    "NoSuchQueryLoggingConfig":{
+      "type":"structure",
+      "members":{
+        "message":{"shape":"ErrorMessage"}
+      },
+      "error":{"httpStatusCode":404},
+      "exception":true
+    },
     "NoSuchTrafficPolicy":{
       "type":"structure",
       "members":{
@@ -2667,12 +2799,24 @@
       "max":128,
       "min":1
     },
+    "NotAuthorizedException":{
+      "type":"structure",
+      "members":{
+        "message":{"shape":"ErrorMessage"}
+      },
+      "error":{"httpStatusCode":401},
+      "exception":true
+    },
     "PageMarker":{
       "type":"string",
       "max":64
     },
     "PageMaxItems":{"type":"string"},
     "PageTruncated":{"type":"boolean"},
+    "PaginationToken":{
+      "type":"string",
+      "max":256
+    },
     "Period":{
       "type":"integer",
       "min":60
@@ -2698,6 +2842,39 @@
       "error":{"httpStatusCode":400},
       "exception":true
     },
+    "QueryLoggingConfig":{
+      "type":"structure",
+      "required":[
+        "Id",
+        "HostedZoneId",
+        "CloudWatchLogsLogGroupArn"
+      ],
+      "members":{
+        "Id":{"shape":"QueryLoggingConfigId"},
+        "HostedZoneId":{"shape":"ResourceId"},
+        "CloudWatchLogsLogGroupArn":{"shape":"CloudWatchLogsLogGroupArn"}
+      }
+    },
+    "QueryLoggingConfigAlreadyExists":{
+      "type":"structure",
+      "members":{
+        "message":{"shape":"ErrorMessage"}
+      },
+      "error":{"httpStatusCode":409},
+      "exception":true
+    },
+    "QueryLoggingConfigId":{
+      "type":"string",
+      "max":36,
+      "min":1
+    },
+    "QueryLoggingConfigs":{
+      "type":"list",
+      "member":{
+        "shape":"QueryLoggingConfig",
+        "locationName":"QueryLoggingConfig"
+      }
+    },
     "RData":{
       "type":"string",
       "max":4000
@@ -2711,16 +2888,49 @@
         "NS",
         "CNAME",
         "MX",
+        "NAPTR",
         "PTR",
         "SRV",
         "SPF",
-        "AAAA"
+        "AAAA",
+        "CAA"
       ]
+    },
+    "RecordData":{
+      "type":"list",
+      "member":{
+        "shape":"RecordDataEntry",
+        "locationName":"RecordDataEntry"
+      }
+    },
+    "RecordDataEntry":{
+      "type":"string",
+      "max":512,
+      "min":0
     },
     "RequestInterval":{
       "type":"integer",
       "max":30,
       "min":10
+    },
+    "ResettableElementName":{
+      "type":"string",
+      "enum":[
+        "FullyQualifiedDomainName",
+        "Regions",
+        "ResourcePath",
+        "ChildHealthChecks"
+      ],
+      "max":64,
+      "min":1
+    },
+    "ResettableElementNameList":{
+      "type":"list",
+      "member":{
+        "shape":"ResettableElementName",
+        "locationName":"ResettableElementName"
+      },
+      "max":64
     },
     "ResourceDescription":{
       "type":"string",
@@ -2755,6 +2965,7 @@
         "Region":{"shape":"ResourceRecordSetRegion"},
         "GeoLocation":{"shape":"GeoLocation"},
         "Failover":{"shape":"ResourceRecordSetFailover"},
+        "MultiValueAnswer":{"shape":"ResourceRecordSetMultiValueAnswer"},
         "TTL":{"shape":"TTL"},
         "ResourceRecords":{"shape":"ResourceRecords"},
         "AliasTarget":{"shape":"AliasTarget"},
@@ -2774,20 +2985,25 @@
       "max":128,
       "min":1
     },
+    "ResourceRecordSetMultiValueAnswer":{"type":"boolean"},
     "ResourceRecordSetRegion":{
       "type":"string",
       "enum":[
         "us-east-1",
+        "us-east-2",
         "us-west-1",
         "us-west-2",
+        "ca-central-1",
         "eu-west-1",
+        "eu-west-2",
         "eu-central-1",
         "ap-southeast-1",
         "ap-southeast-2",
         "ap-northeast-1",
         "ap-northeast-2",
         "sa-east-1",
-        "cn-north-1"
+        "cn-north-1",
+        "ap-south-1"
       ],
       "max":64,
       "min":1
@@ -2853,6 +3069,11 @@
         "CheckedTime":{"shape":"TimeStamp"}
       }
     },
+    "SubnetMask":{
+      "type":"string",
+      "max":3,
+      "min":0
+    },
     "TTL":{
       "type":"long",
       "max":2147483647,
@@ -2911,6 +3132,65 @@
       "type":"string",
       "max":256
     },
+    "TestDNSAnswerRequest":{
+      "type":"structure",
+      "required":[
+        "HostedZoneId",
+        "RecordName",
+        "RecordType"
+      ],
+      "members":{
+        "HostedZoneId":{
+          "shape":"ResourceId",
+          "location":"querystring",
+          "locationName":"hostedzoneid"
+        },
+        "RecordName":{
+          "shape":"DNSName",
+          "location":"querystring",
+          "locationName":"recordname"
+        },
+        "RecordType":{
+          "shape":"RRType",
+          "location":"querystring",
+          "locationName":"recordtype"
+        },
+        "ResolverIP":{
+          "shape":"IPAddress",
+          "location":"querystring",
+          "locationName":"resolverip"
+        },
+        "EDNS0ClientSubnetIP":{
+          "shape":"IPAddress",
+          "location":"querystring",
+          "locationName":"edns0clientsubnetip"
+        },
+        "EDNS0ClientSubnetMask":{
+          "shape":"SubnetMask",
+          "location":"querystring",
+          "locationName":"edns0clientsubnetmask"
+        }
+      }
+    },
+    "TestDNSAnswerResponse":{
+      "type":"structure",
+      "required":[
+        "Nameserver",
+        "RecordName",
+        "RecordType",
+        "RecordData",
+        "ResponseCode",
+        "Protocol"
+      ],
+      "members":{
+        "Nameserver":{"shape":"Nameserver"},
+        "RecordName":{"shape":"DNSName"},
+        "RecordType":{"shape":"RRType"},
+        "RecordData":{"shape":"RecordData"},
+        "ResponseCode":{"shape":"DNSRCode"},
+        "Protocol":{"shape":"TransportProtocol"}
+      }
+    },
     "Threshold":{"type":"double"},
     "ThrottlingException":{
       "type":"structure",
@@ -2945,6 +3225,14 @@
       "exception":true
     },
     "TooManyTrafficPolicyInstances":{
+      "type":"structure",
+      "members":{
+        "message":{"shape":"ErrorMessage"}
+      },
+      "error":{"httpStatusCode":400},
+      "exception":true
+    },
+    "TooManyVPCAssociationAuthorizations":{
       "type":"structure",
       "members":{
         "message":{"shape":"ErrorMessage"}
@@ -2995,7 +3283,8 @@
     },
     "TrafficPolicyId":{
       "type":"string",
-      "max":36
+      "max":36,
+      "min":1
     },
     "TrafficPolicyInUse":{
       "type":"structure",
@@ -3041,7 +3330,8 @@
     "TrafficPolicyInstanceCount":{"type":"integer"},
     "TrafficPolicyInstanceId":{
       "type":"string",
-      "max":36
+      "max":36,
+      "min":1
     },
     "TrafficPolicyInstanceState":{"type":"string"},
     "TrafficPolicyInstances":{
@@ -3088,6 +3378,7 @@
       "type":"string",
       "max":4
     },
+    "TransportProtocol":{"type":"string"},
     "UpdateHealthCheckRequest":{
       "type":"structure",
       "required":["HealthCheckId"],
@@ -3110,7 +3401,8 @@
         "EnableSNI":{"shape":"EnableSNI"},
         "Regions":{"shape":"HealthCheckRegionList"},
         "AlarmIdentifier":{"shape":"AlarmIdentifier"},
-        "InsufficientDataHealthStatus":{"shape":"InsufficientDataHealthStatus"}
+        "InsufficientDataHealthStatus":{"shape":"InsufficientDataHealthStatus"},
+        "ResetElements":{"shape":"ResettableElementNameList"}
       }
     },
     "UpdateHealthCheckResponse":{
@@ -3200,6 +3492,14 @@
         "VPCId":{"shape":"VPCId"}
       }
     },
+    "VPCAssociationAuthorizationNotFound":{
+      "type":"structure",
+      "members":{
+        "message":{"shape":"ErrorMessage"}
+      },
+      "error":{"httpStatusCode":404},
+      "exception":true
+    },
     "VPCAssociationNotFound":{
       "type":"structure",
       "members":{
@@ -3216,15 +3516,19 @@
       "type":"string",
       "enum":[
         "us-east-1",
+        "us-east-2",
         "us-west-1",
         "us-west-2",
         "eu-west-1",
+        "eu-west-2",
         "eu-central-1",
         "ap-southeast-1",
         "ap-southeast-2",
+        "ap-south-1",
         "ap-northeast-1",
         "ap-northeast-2",
         "sa-east-1",
+        "ca-central-1",
         "cn-north-1"
       ],
       "max":64,

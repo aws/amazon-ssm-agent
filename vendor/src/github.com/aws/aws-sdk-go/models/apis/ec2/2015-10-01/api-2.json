@@ -1,6 +1,7 @@
 {
   "version":"2.0",
   "metadata":{
+    "uid":"ec2-2015-10-01",
     "apiVersion":"2015-10-01",
     "endpointPrefix":"ec2",
     "protocol":"ec2",
@@ -1346,6 +1347,15 @@
       },
       "input":{"shape":"GetConsoleOutputRequest"},
       "output":{"shape":"GetConsoleOutputResult"}
+    },
+    "GetConsoleScreenshot":{
+      "name":"GetConsoleScreenshot",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"GetConsoleScreenshotRequest"},
+      "output":{"shape":"GetConsoleScreenshotResult"}
     },
     "GetPasswordData":{
       "name":"GetPasswordData",
@@ -6670,6 +6680,13 @@
         "locationName":"Filter"
       }
     },
+    "FleetType":{
+      "type":"string",
+      "enum":[
+        "request",
+        "maintain"
+      ]
+    },
     "Float":{"type":"float"},
     "FlowLog":{
       "type":"structure",
@@ -6756,6 +6773,28 @@
         "Output":{
           "shape":"String",
           "locationName":"output"
+        }
+      }
+    },
+    "GetConsoleScreenshotRequest":{
+      "type":"structure",
+      "required":["InstanceId"],
+      "members":{
+        "DryRun":{"shape":"Boolean"},
+        "InstanceId":{"shape":"String"},
+        "WakeUp":{"shape":"Boolean"}
+      }
+    },
+    "GetConsoleScreenshotResult":{
+      "type":"structure",
+      "members":{
+        "InstanceId":{
+          "shape":"String",
+          "locationName":"instanceId"
+        },
+        "ImageData":{
+          "shape":"String",
+          "locationName":"imageData"
         }
       }
     },
@@ -9208,6 +9247,10 @@
         "FailureMessage":{
           "shape":"String",
           "locationName":"failureMessage"
+        },
+        "ProvisionedBandwidth":{
+          "shape":"ProvisionedBandwidth",
+          "locationName":"provisionedBandwidth"
         }
       }
     },
@@ -9956,6 +9999,31 @@
       "member":{
         "shape":"PropagatingVgw",
         "locationName":"item"
+      }
+    },
+    "ProvisionedBandwidth":{
+      "type":"structure",
+      "members":{
+        "Provisioned":{
+          "shape":"String",
+          "locationName":"provisioned"
+        },
+        "Requested":{
+          "shape":"String",
+          "locationName":"requested"
+        },
+        "RequestTime":{
+          "shape":"DateTime",
+          "locationName":"requestTime"
+        },
+        "ProvisionTime":{
+          "shape":"DateTime",
+          "locationName":"provisionTime"
+        },
+        "Status":{
+          "shape":"String",
+          "locationName":"status"
+        }
       }
     },
     "PublicIpStringList":{
@@ -12224,6 +12292,14 @@
         "AllocationStrategy":{
           "shape":"AllocationStrategy",
           "locationName":"allocationStrategy"
+        },
+        "FulfilledCapacity":{
+          "shape":"Double",
+          "locationName":"fulfilledCapacity"
+        },
+        "Type":{
+          "shape":"FleetType",
+          "locationName":"type"
         }
       }
     },
@@ -12804,13 +12880,13 @@
       "type":"structure",
       "required":["Error"],
       "members":{
-        "ResourceId":{
-          "shape":"String",
-          "locationName":"resourceId"
-        },
         "Error":{
           "shape":"UnsuccessfulItemError",
           "locationName":"error"
+        },
+        "ResourceId":{
+          "shape":"String",
+          "locationName":"resourceId"
         }
       }
     },

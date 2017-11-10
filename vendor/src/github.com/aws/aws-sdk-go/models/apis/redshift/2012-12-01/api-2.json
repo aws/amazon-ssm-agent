@@ -6,6 +6,7 @@
     "protocol":"query",
     "serviceFullName":"Amazon Redshift",
     "signatureVersion":"v4",
+    "uid":"redshift-2012-12-01",
     "xmlNamespace":"http://redshift.amazonaws.com/doc/2012-12-01/"
   },
   "operations":{
@@ -544,7 +545,8 @@
         "resultWrapper":"DescribeEventSubscriptionsResult"
       },
       "errors":[
-        {"shape":"SubscriptionNotFoundFault"}
+        {"shape":"SubscriptionNotFoundFault"},
+        {"shape":"InvalidTagFault"}
       ]
     },
     "DescribeEvents":{
@@ -631,7 +633,8 @@
       },
       "errors":[
         {"shape":"ReservedNodeOfferingNotFoundFault"},
-        {"shape":"UnsupportedOperationFault"}
+        {"shape":"UnsupportedOperationFault"},
+        {"shape":"DependentServiceUnavailableFault"}
       ]
     },
     "DescribeReservedNodes":{
@@ -646,7 +649,8 @@
         "resultWrapper":"DescribeReservedNodesResult"
       },
       "errors":[
-        {"shape":"ReservedNodeNotFoundFault"}
+        {"shape":"ReservedNodeNotFoundFault"},
+        {"shape":"DependentServiceUnavailableFault"}
       ]
     },
     "DescribeResize":{
@@ -789,6 +793,22 @@
         {"shape":"DependentServiceRequestThrottlingFault"}
       ]
     },
+    "GetClusterCredentials":{
+      "name":"GetClusterCredentials",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"GetClusterCredentialsMessage"},
+      "output":{
+        "shape":"ClusterCredentials",
+        "resultWrapper":"GetClusterCredentialsResult"
+      },
+      "errors":[
+        {"shape":"ClusterNotFoundFault"},
+        {"shape":"UnsupportedOperationFault"}
+      ]
+    },
     "ModifyCluster":{
       "name":"ModifyCluster",
       "http":{
@@ -805,6 +825,7 @@
         {"shape":"InvalidClusterSecurityGroupStateFault"},
         {"shape":"ClusterNotFoundFault"},
         {"shape":"NumberOfNodesQuotaExceededFault"},
+        {"shape":"NumberOfNodesPerClusterLimitExceededFault"},
         {"shape":"ClusterSecurityGroupNotFoundFault"},
         {"shape":"ClusterParameterGroupNotFoundFault"},
         {"shape":"InsufficientClusterCapacityFault"},
@@ -1084,7 +1105,8 @@
     "AccountWithRestoreAccess":{
       "type":"structure",
       "members":{
-        "AccountId":{"shape":"String"}
+        "AccountId":{"shape":"String"},
+        "AccountAlias":{"shape":"String"}
       }
     },
     "AccountsWithRestoreAccessList":{
@@ -1222,6 +1244,7 @@
         "ClusterRevisionNumber":{"shape":"String"},
         "Tags":{"shape":"TagList"},
         "KmsKeyId":{"shape":"String"},
+        "EnhancedVpcRouting":{"shape":"Boolean"},
         "IamRoles":{"shape":"ClusterIamRoleList"}
       },
       "wrapper":true
@@ -1236,6 +1259,14 @@
         "senderFault":true
       },
       "exception":true
+    },
+    "ClusterCredentials":{
+      "type":"structure",
+      "members":{
+        "DbUser":{"shape":"String"},
+        "DbPassword":{"shape":"SensitiveString"},
+        "Expiration":{"shape":"TStamp"}
+      }
     },
     "ClusterIamRole":{
       "type":"structure",
@@ -1664,6 +1695,7 @@
         "ElasticIp":{"shape":"String"},
         "Tags":{"shape":"TagList"},
         "KmsKeyId":{"shape":"String"},
+        "EnhancedVpcRouting":{"shape":"BooleanOptional"},
         "AdditionalInfo":{"shape":"String"},
         "IamRoles":{"shape":"IamRoleArnList"}
       }
@@ -1839,6 +1871,13 @@
         "Tags":{"shape":"TagList"}
       }
     },
+    "DbGroupList":{
+      "type":"list",
+      "member":{
+        "shape":"String",
+        "locationName":"DbGroup"
+      }
+    },
     "DefaultClusterParameters":{
       "type":"structure",
       "members":{
@@ -1948,6 +1987,17 @@
       },
       "exception":true
     },
+    "DependentServiceUnavailableFault":{
+      "type":"structure",
+      "members":{
+      },
+      "error":{
+        "code":"DependentServiceUnavailableFault",
+        "httpStatusCode":400,
+        "senderFault":true
+      },
+      "exception":true
+    },
     "DescribeClusterParameterGroupsMessage":{
       "type":"structure",
       "members":{
@@ -2048,7 +2098,9 @@
       "members":{
         "SubscriptionName":{"shape":"String"},
         "MaxRecords":{"shape":"IntegerOptional"},
-        "Marker":{"shape":"String"}
+        "Marker":{"shape":"String"},
+        "TagKeys":{"shape":"TagKeyList"},
+        "TagValues":{"shape":"TagValueList"}
       }
     },
     "DescribeEventsMessage":{
@@ -2346,6 +2398,21 @@
       "members":{
         "Marker":{"shape":"String"},
         "Events":{"shape":"EventList"}
+      }
+    },
+    "GetClusterCredentialsMessage":{
+      "type":"structure",
+      "required":[
+        "DbUser",
+        "ClusterIdentifier"
+      ],
+      "members":{
+        "DbUser":{"shape":"String"},
+        "DbName":{"shape":"String"},
+        "ClusterIdentifier":{"shape":"String"},
+        "DurationSeconds":{"shape":"IntegerOptional"},
+        "AutoCreate":{"shape":"BooleanOptional"},
+        "DbGroups":{"shape":"DbGroupList"}
       }
     },
     "HsmClientCertificate":{
@@ -2807,7 +2874,8 @@
         "HsmConfigurationIdentifier":{"shape":"String"},
         "NewClusterIdentifier":{"shape":"String"},
         "PubliclyAccessible":{"shape":"BooleanOptional"},
-        "ElasticIp":{"shape":"String"}
+        "ElasticIp":{"shape":"String"},
+        "EnhancedVpcRouting":{"shape":"BooleanOptional"}
       }
     },
     "ModifyClusterParameterGroupMessage":{
@@ -2972,7 +3040,8 @@
         "ClusterVersion":{"shape":"String"},
         "AutomatedSnapshotRetentionPeriod":{"shape":"IntegerOptional"},
         "ClusterIdentifier":{"shape":"String"},
-        "PubliclyAccessible":{"shape":"BooleanOptional"}
+        "PubliclyAccessible":{"shape":"BooleanOptional"},
+        "EnhancedVpcRouting":{"shape":"BooleanOptional"}
       }
     },
     "PurchaseReservedNodeOfferingMessage":{
@@ -3202,6 +3271,7 @@
         "AutomatedSnapshotRetentionPeriod":{"shape":"IntegerOptional"},
         "KmsKeyId":{"shape":"String"},
         "NodeType":{"shape":"String"},
+        "EnhancedVpcRouting":{"shape":"BooleanOptional"},
         "AdditionalInfo":{"shape":"String"},
         "IamRoles":{"shape":"IamRoleArnList"}
       }
@@ -3329,6 +3399,10 @@
       },
       "exception":true
     },
+    "SensitiveString":{
+      "type":"string",
+      "sensitive":true
+    },
     "Snapshot":{
       "type":"structure",
       "members":{
@@ -3359,7 +3433,8 @@
         "ElapsedTimeInSeconds":{"shape":"Long"},
         "SourceRegion":{"shape":"String"},
         "Tags":{"shape":"TagList"},
-        "RestorableNodeTypes":{"shape":"RestorableNodeTypeList"}
+        "RestorableNodeTypes":{"shape":"RestorableNodeTypeList"},
+        "EnhancedVpcRouting":{"shape":"Boolean"}
       },
       "wrapper":true
     },
