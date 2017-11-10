@@ -8,7 +8,8 @@
     "serviceAbbreviation":"Kinesis",
     "serviceFullName":"Amazon Kinesis",
     "signatureVersion":"v4",
-    "targetPrefix":"Kinesis_20131202"
+    "targetPrefix":"Kinesis_20131202",
+    "uid":"kinesis-2013-12-02"
   },
   "operations":{
     "AddTagsToStream":{
@@ -48,7 +49,6 @@
       "errors":[
         {"shape":"ResourceInUseException"},
         {"shape":"ResourceNotFoundException"},
-        {"shape":"LimitExceededException"},
         {"shape":"InvalidArgumentException"}
       ]
     },
@@ -61,6 +61,18 @@
       "input":{"shape":"DeleteStreamInput"},
       "errors":[
         {"shape":"ResourceNotFoundException"},
+        {"shape":"LimitExceededException"}
+      ]
+    },
+    "DescribeLimits":{
+      "name":"DescribeLimits",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"DescribeLimitsInput"},
+      "output":{"shape":"DescribeLimitsOutput"},
+      "errors":[
         {"shape":"LimitExceededException"}
       ]
     },
@@ -119,7 +131,13 @@
         {"shape":"ResourceNotFoundException"},
         {"shape":"InvalidArgumentException"},
         {"shape":"ProvisionedThroughputExceededException"},
-        {"shape":"ExpiredIteratorException"}
+        {"shape":"ExpiredIteratorException"},
+        {"shape":"KMSDisabledException"},
+        {"shape":"KMSInvalidStateException"},
+        {"shape":"KMSAccessDeniedException"},
+        {"shape":"KMSNotFoundException"},
+        {"shape":"KMSOptInRequired"},
+        {"shape":"KMSThrottlingException"}
       ]
     },
     "GetShardIterator":{
@@ -146,7 +164,6 @@
       "errors":[
         {"shape":"ResourceInUseException"},
         {"shape":"ResourceNotFoundException"},
-        {"shape":"LimitExceededException"},
         {"shape":"InvalidArgumentException"}
       ]
     },
@@ -201,7 +218,13 @@
       "errors":[
         {"shape":"ResourceNotFoundException"},
         {"shape":"InvalidArgumentException"},
-        {"shape":"ProvisionedThroughputExceededException"}
+        {"shape":"ProvisionedThroughputExceededException"},
+        {"shape":"KMSDisabledException"},
+        {"shape":"KMSInvalidStateException"},
+        {"shape":"KMSAccessDeniedException"},
+        {"shape":"KMSNotFoundException"},
+        {"shape":"KMSOptInRequired"},
+        {"shape":"KMSThrottlingException"}
       ]
     },
     "PutRecords":{
@@ -215,7 +238,13 @@
       "errors":[
         {"shape":"ResourceNotFoundException"},
         {"shape":"InvalidArgumentException"},
-        {"shape":"ProvisionedThroughputExceededException"}
+        {"shape":"ProvisionedThroughputExceededException"},
+        {"shape":"KMSDisabledException"},
+        {"shape":"KMSInvalidStateException"},
+        {"shape":"KMSAccessDeniedException"},
+        {"shape":"KMSNotFoundException"},
+        {"shape":"KMSOptInRequired"},
+        {"shape":"KMSThrottlingException"}
       ]
     },
     "RemoveTagsFromStream":{
@@ -245,6 +274,55 @@
         {"shape":"InvalidArgumentException"},
         {"shape":"LimitExceededException"}
       ]
+    },
+    "StartStreamEncryption":{
+      "name":"StartStreamEncryption",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"StartStreamEncryptionInput"},
+      "errors":[
+        {"shape":"InvalidArgumentException"},
+        {"shape":"LimitExceededException"},
+        {"shape":"ResourceInUseException"},
+        {"shape":"ResourceNotFoundException"},
+        {"shape":"KMSDisabledException"},
+        {"shape":"KMSInvalidStateException"},
+        {"shape":"KMSAccessDeniedException"},
+        {"shape":"KMSNotFoundException"},
+        {"shape":"KMSOptInRequired"},
+        {"shape":"KMSThrottlingException"}
+      ]
+    },
+    "StopStreamEncryption":{
+      "name":"StopStreamEncryption",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"StopStreamEncryptionInput"},
+      "errors":[
+        {"shape":"InvalidArgumentException"},
+        {"shape":"LimitExceededException"},
+        {"shape":"ResourceInUseException"},
+        {"shape":"ResourceNotFoundException"}
+      ]
+    },
+    "UpdateShardCount":{
+      "name":"UpdateShardCount",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"UpdateShardCountInput"},
+      "output":{"shape":"UpdateShardCountOutput"},
+      "errors":[
+        {"shape":"InvalidArgumentException"},
+        {"shape":"LimitExceededException"},
+        {"shape":"ResourceInUseException"},
+        {"shape":"ResourceNotFoundException"}
+      ]
     }
   },
   "shapes":{
@@ -259,7 +337,6 @@
         "Tags":{"shape":"TagMap"}
       }
     },
-    "ApproximateArrivalTimestamp":{"type":"timestamp"},
     "BooleanObject":{"type":"boolean"},
     "CreateStreamInput":{
       "type":"structure",
@@ -285,7 +362,7 @@
       ],
       "members":{
         "StreamName":{"shape":"StreamName"},
-        "RetentionPeriodHours":{"shape":"RetentionPeriodHours"}
+        "RetentionPeriodHours":{"shape":"PositiveIntegerObject"}
       }
     },
     "DeleteStreamInput":{
@@ -293,6 +370,22 @@
       "required":["StreamName"],
       "members":{
         "StreamName":{"shape":"StreamName"}
+      }
+    },
+    "DescribeLimitsInput":{
+      "type":"structure",
+      "members":{
+      }
+    },
+    "DescribeLimitsOutput":{
+      "type":"structure",
+      "required":[
+        "ShardLimit",
+        "OpenShardCount"
+      ],
+      "members":{
+        "ShardLimit":{"shape":"ShardCountObject"},
+        "OpenShardCount":{"shape":"ShardCountObject"}
       }
     },
     "DescribeStreamInput":{
@@ -337,6 +430,13 @@
         "StreamName":{"shape":"StreamName"},
         "ShardLevelMetrics":{"shape":"MetricsNameList"}
       }
+    },
+    "EncryptionType":{
+      "type":"string",
+      "enum":[
+        "NONE",
+        "KMS"
+      ]
     },
     "EnhancedMetrics":{
       "type":"structure",
@@ -431,7 +531,7 @@
       ],
       "members":{
         "StreamName":{"shape":"StreamName"},
-        "RetentionPeriodHours":{"shape":"RetentionPeriodHours"}
+        "RetentionPeriodHours":{"shape":"PositiveIntegerObject"}
       }
     },
     "InvalidArgumentException":{
@@ -440,6 +540,53 @@
         "message":{"shape":"ErrorMessage"}
       },
       "exception":true
+    },
+    "KMSAccessDeniedException":{
+      "type":"structure",
+      "members":{
+        "message":{"shape":"ErrorMessage"}
+      },
+      "exception":true
+    },
+    "KMSDisabledException":{
+      "type":"structure",
+      "members":{
+        "message":{"shape":"ErrorMessage"}
+      },
+      "exception":true
+    },
+    "KMSInvalidStateException":{
+      "type":"structure",
+      "members":{
+        "message":{"shape":"ErrorMessage"}
+      },
+      "exception":true
+    },
+    "KMSNotFoundException":{
+      "type":"structure",
+      "members":{
+        "message":{"shape":"ErrorMessage"}
+      },
+      "exception":true
+    },
+    "KMSOptInRequired":{
+      "type":"structure",
+      "members":{
+        "message":{"shape":"ErrorMessage"}
+      },
+      "exception":true
+    },
+    "KMSThrottlingException":{
+      "type":"structure",
+      "members":{
+        "message":{"shape":"ErrorMessage"}
+      },
+      "exception":true
+    },
+    "KeyId":{
+      "type":"string",
+      "max":2048,
+      "min":1
     },
     "LimitExceededException":{
       "type":"structure",
@@ -572,7 +719,8 @@
       ],
       "members":{
         "ShardId":{"shape":"ShardId"},
-        "SequenceNumber":{"shape":"SequenceNumber"}
+        "SequenceNumber":{"shape":"SequenceNumber"},
+        "EncryptionType":{"shape":"EncryptionType"}
       }
     },
     "PutRecordsInput":{
@@ -591,7 +739,8 @@
       "required":["Records"],
       "members":{
         "FailedRecordCount":{"shape":"PositiveIntegerObject"},
-        "Records":{"shape":"PutRecordsResultEntryList"}
+        "Records":{"shape":"PutRecordsResultEntryList"},
+        "EncryptionType":{"shape":"EncryptionType"}
       }
     },
     "PutRecordsRequestEntry":{
@@ -636,9 +785,10 @@
       ],
       "members":{
         "SequenceNumber":{"shape":"SequenceNumber"},
-        "ApproximateArrivalTimestamp":{"shape":"ApproximateArrivalTimestamp"},
+        "ApproximateArrivalTimestamp":{"shape":"Timestamp"},
         "Data":{"shape":"Data"},
-        "PartitionKey":{"shape":"PartitionKey"}
+        "PartitionKey":{"shape":"PartitionKey"},
+        "EncryptionType":{"shape":"EncryptionType"}
       }
     },
     "RecordList":{
@@ -670,10 +820,9 @@
       },
       "exception":true
     },
-    "RetentionPeriodHours":{
-      "type":"integer",
-      "max":168,
-      "min":24
+    "ScalingType":{
+      "type":"string",
+      "enum":["UNIFORM_SCALING"]
     },
     "SequenceNumber":{
       "type":"string",
@@ -701,6 +850,11 @@
         "HashKeyRange":{"shape":"HashKeyRange"},
         "SequenceNumberRange":{"shape":"SequenceNumberRange"}
       }
+    },
+    "ShardCountObject":{
+      "type":"integer",
+      "max":1000000,
+      "min":0
     },
     "ShardId":{
       "type":"string",
@@ -740,6 +894,32 @@
         "NewStartingHashKey":{"shape":"HashKey"}
       }
     },
+    "StartStreamEncryptionInput":{
+      "type":"structure",
+      "required":[
+        "StreamName",
+        "EncryptionType",
+        "KeyId"
+      ],
+      "members":{
+        "StreamName":{"shape":"StreamName"},
+        "EncryptionType":{"shape":"EncryptionType"},
+        "KeyId":{"shape":"KeyId"}
+      }
+    },
+    "StopStreamEncryptionInput":{
+      "type":"structure",
+      "required":[
+        "StreamName",
+        "EncryptionType",
+        "KeyId"
+      ],
+      "members":{
+        "StreamName":{"shape":"StreamName"},
+        "EncryptionType":{"shape":"EncryptionType"},
+        "KeyId":{"shape":"KeyId"}
+      }
+    },
     "StreamARN":{"type":"string"},
     "StreamDescription":{
       "type":"structure",
@@ -750,6 +930,7 @@
         "Shards",
         "HasMoreShards",
         "RetentionPeriodHours",
+        "StreamCreationTimestamp",
         "EnhancedMonitoring"
       ],
       "members":{
@@ -758,8 +939,11 @@
         "StreamStatus":{"shape":"StreamStatus"},
         "Shards":{"shape":"ShardList"},
         "HasMoreShards":{"shape":"BooleanObject"},
-        "RetentionPeriodHours":{"shape":"RetentionPeriodHours"},
-        "EnhancedMonitoring":{"shape":"EnhancedMonitoringList"}
+        "RetentionPeriodHours":{"shape":"PositiveIntegerObject"},
+        "StreamCreationTimestamp":{"shape":"Timestamp"},
+        "EnhancedMonitoring":{"shape":"EnhancedMonitoringList"},
+        "EncryptionType":{"shape":"EncryptionType"},
+        "KeyId":{"shape":"KeyId"}
       }
     },
     "StreamName":{
@@ -817,6 +1001,27 @@
       "max":256,
       "min":0
     },
-    "Timestamp":{"type":"timestamp"}
+    "Timestamp":{"type":"timestamp"},
+    "UpdateShardCountInput":{
+      "type":"structure",
+      "required":[
+        "StreamName",
+        "TargetShardCount",
+        "ScalingType"
+      ],
+      "members":{
+        "StreamName":{"shape":"StreamName"},
+        "TargetShardCount":{"shape":"PositiveIntegerObject"},
+        "ScalingType":{"shape":"ScalingType"}
+      }
+    },
+    "UpdateShardCountOutput":{
+      "type":"structure",
+      "members":{
+        "StreamName":{"shape":"StreamName"},
+        "CurrentShardCount":{"shape":"PositiveIntegerObject"},
+        "TargetShardCount":{"shape":"PositiveIntegerObject"}
+      }
+    }
   }
 }

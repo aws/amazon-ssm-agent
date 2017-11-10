@@ -3,8 +3,6 @@ package dynamodbattribute
 import (
 	"reflect"
 	"testing"
-
-	"github.com/stretchr/testify/assert"
 )
 
 func TestTagParse(t *testing.T) {
@@ -30,6 +28,8 @@ func TestTagParse(t *testing.T) {
 		{`dynamodbav:",binaryset"`, false, true, tag{AsBinSet: true}},
 		{`dynamodbav:",numberset"`, false, true, tag{AsNumSet: true}},
 		{`dynamodbav:",stringset"`, false, true, tag{AsStrSet: true}},
+		{`dynamodbav:",stringset,omitemptyelem"`, false, true, tag{AsStrSet: true, OmitEmptyElem: true}},
+		{`dynamodbav:"name,stringset,omitemptyelem"`, false, true, tag{Name: "name", AsStrSet: true, OmitEmptyElem: true}},
 	}
 
 	for i, c := range cases {
@@ -40,6 +40,8 @@ func TestTagParse(t *testing.T) {
 		if c.av {
 			actual.parseAVTag(c.in)
 		}
-		assert.Equal(t, c.expect, actual, "case %d", i+1)
+		if e, a := c.expect, actual; !reflect.DeepEqual(e, a) {
+			t.Errorf("case %d, expect %v, got %v", i, e, a)
+		}
 	}
 }

@@ -1,0 +1,528 @@
+{
+  "version": "1.0",
+  "type": "json",
+  "json_version": "1.1",
+  "signature_version": "v4",
+  "service_full_name": "Amazon Simple Systems Management Message Delivery Service",
+  "service_abbreviation": "Amazon SSM MDS",
+  "endpoint_prefix": "ec2messages",
+  "uid": "mds-2015-06-19",
+  "api_version": "2015-06-19",
+  "target_prefix": "EC2WindowsMessageDeliveryService",
+  "documentation": null,
+  "operations": {
+    "GetMessages": {
+      "name": "GetMessages",
+      "input": {
+        "type": "structure",
+        "members": {
+          "Destination": {
+            "type": "string",
+            "required": true,
+            "shape_name": "Destination",
+            "documentation": null,
+            "min_length": 10,
+            "max_length": 80
+          },
+          "MessagesRequestId": {
+            "type": "string",
+            "required": true,
+            "shape_name": "MessagesRequestId",
+            "documentation": null,
+            "min_length": 16,
+            "max_length": 64
+          },
+          "VisibilityTimeoutInSeconds": {
+            "type": "integer",
+            "shape_name": "VisibilityTimeoutInSeconds",
+            "documentation": null,
+            "min_length": 0,
+            "max_length": 43200
+          },
+          "NextToken": {
+            "type": "string",
+            "shape_name": "NextToken",
+            "documentation": null,
+            "min_length": 0,
+            "max_length": 80
+          }
+        },
+        "shape_name": "GetMessagesRequest",
+        "documentation": null
+      },
+      "output": {
+        "type": "structure",
+        "members": {
+          "Destination": {
+            "type": "string",
+            "shape_name": "Destination",
+            "documentation": null,
+            "min_length": 10,
+            "max_length": 80
+          },
+          "MessagesRequestId": {
+            "type": "string",
+            "shape_name": "MessagesRequestId",
+            "documentation": null,
+            "min_length": 16,
+            "max_length": 64
+          },
+          "Messages": {
+            "type": "list",
+            "shape_name": "Messages",
+            "documentation": null,
+            "members": {
+              "type": "structure",
+              "members": {
+                "Destination": {
+                  "type": "string",
+                  "shape_name": "Destination",
+                  "documentation": null,
+                  "min_length": 10,
+                  "max_length": 80
+                },
+                "MessageId": {
+                  "type": "string",
+                  "shape_name": "MessageId",
+                  "documentation": null,
+                  "min_length": 16,
+                  "max_length": 80
+                },
+                "Topic": {
+                  "type": "string",
+                  "shape_name": "Topic",
+                  "documentation": null,
+                  "min_length": 1,
+                  "max_length": 256
+                },
+                "CreatedDate": {
+                  "type": "string",
+                  "pattern": "",
+                  "shape_name": "CreatedDate",
+                  "documentation": null,
+                  "min_length": 24,
+                  "max_length": 24
+                },
+                "PayloadDigest": {
+                  "type": "string",
+                  "shape_name": "PayloadDigest",
+                  "documentation": null,
+                  "max_length": 512
+                },
+                "Payload": {
+                  "type": "string",
+                  "shape_name": "Payload",
+                  "documentation": null,
+                  "min_length": 0,
+                  "max_length": 65536
+                },
+                "NextToken": {
+                  "type": "string",
+                  "shape_name": "NextToken",
+                  "documentation": null,
+                  "min_length": 0,
+                  "max_length": 80
+                }
+              },
+              "shape_name": "Message",
+              "documentation": null
+            }
+          }
+        },
+        "shape_name": "GetMessagesResponse",
+        "documentation": null
+      },
+      "errors": [
+        {
+          "type": "structure",
+          "members": {
+          },
+          "shape_name": "InvalidDestinationException",
+          "documentation": null
+        },
+        {
+          "type": "structure",
+          "members": {
+          },
+          "shape_name": "RequestTimeoutException",
+          "documentation": null
+        },
+        {
+          "type": "structure",
+          "members": {
+          },
+          "shape_name": "InternalServerException",
+          "documentation": null
+        },
+        {
+          "type": "structure",
+          "members": {
+          },
+          "shape_name": "TooManyRequestsException",
+          "documentation": null
+        },
+        {
+          "type": "structure",
+          "members": {
+          },
+          "shape_name": "AuthorizationFailureException",
+          "documentation": null
+        }
+      ],
+      "documentation": null
+    },
+    "SendReply": {
+      "name": "SendReply",
+      "input": {
+        "type": "structure",
+        "members": {
+          "MessageId": {
+            "type": "string",
+            "required": true,
+            "shape_name": "MessageId",
+            "documentation": null,
+            "min_length": 16,
+            "max_length": 80
+          },
+          "ReplyId": {
+            "type": "string",
+            "required": true,
+            "shape_name": "ReplyId",
+            "documentation": null,
+            "min_length": 16,
+            "max_length": 80
+          },
+          "Payload": {
+            "type": "string",
+            "required": true,
+            "shape_name": "Payload",
+            "documentation": null,
+            "min_length": 0,
+            "max_length": 65536
+          },
+          "DeliveryOptions": {
+            "type": "structure",
+            "members": {
+              "ExpiresAfter": {
+                "type": "string",
+                "pattern": "^([\\+-]?\\d{4}(?!\\d{2}\\b))((-?)((0[1-9]|1[0-2])(\\3([12]\\d|0[1-9]|3[01]))?|W([0-4]\\d|5[0-2])(-?[1-7])?|(00[1-9]|0[1-9]\\d|[12]\\d{2}|3([0-5]\\d|6[1-6])))([T\\s]((([01]\\d|2[0-3])((:?)[0-5]\\d)?|24\\:?00)([\\.,]\\d+(?!:))?)?(\\17[0-5]\\d([\\.,]\\d+)?)?([zZ]|([\\+-])([01]\\d|2[0-3]):?([0-5]\\d)?)?)?)?$",
+                "shape_name": "ExpiresAfter",
+                "documentation": null
+              },
+              "ReplacementKey": {
+                "type": "string",
+                "shape_name": "ReplacementKey",
+                "documentation": null,
+                "max_length": 80
+              },
+              "SchedulePush": {
+                "type": "string",
+                "enum": [
+                  "EVENTUALLY",
+                  "ASAP"
+                ],
+                "shape_name": "SchedulePush",
+                "documentation": null
+              }
+            },
+            "shape_name": "DeliveryOptions",
+            "documentation": null
+          }
+        },
+        "shape_name": "SendReplyRequest",
+        "documentation": null
+      },
+      "output": {
+        "type": "structure",
+        "members": {
+          "MessageId": {
+            "type": "string",
+            "shape_name": "MessageId",
+            "documentation": null,
+            "min_length": 16,
+            "max_length": 80
+          },
+          "ReplyId": {
+            "type": "string",
+            "shape_name": "ReplyId",
+            "documentation": null,
+            "min_length": 16,
+            "max_length": 80
+          },
+          "ReplyStatus": {
+            "type": "string",
+            "enum": [
+              "Created",
+              "Queued",
+              "Acknowledged",
+              "NoActionTaken"
+            ],
+            "shape_name": "ReplyStatus",
+            "documentation": null
+          },
+          "Description": {
+            "type": "string",
+            "shape_name": "Description",
+            "documentation": null,
+            "max_length": 8192
+          }
+        },
+        "shape_name": "SendReplyResponse",
+        "documentation": null
+      },
+      "errors": [
+        {
+          "type": "structure",
+          "members": {
+          },
+          "shape_name": "UnsupportedMessageOperationException",
+          "documentation": null
+        },
+        {
+          "type": "structure",
+          "members": {
+          },
+          "shape_name": "InvalidMessageIdException",
+          "documentation": null
+        },
+        {
+          "type": "structure",
+          "members": {
+          },
+          "shape_name": "TooManyRequestsException",
+          "documentation": null
+        },
+        {
+          "type": "structure",
+          "members": {
+          },
+          "shape_name": "AuthorizationFailureException",
+          "documentation": null
+        },
+        {
+          "type": "structure",
+          "members": {
+          },
+          "shape_name": "InternalServerException",
+          "documentation": null
+        }
+      ],
+      "documentation": null
+    },
+    "DeleteMessage": {
+      "name": "DeleteMessage",
+      "input": {
+        "type": "structure",
+        "members": {
+          "MessageId": {
+            "type": "string",
+            "required": true,
+            "shape_name": "MessageId",
+            "documentation": null,
+            "min_length": 16,
+            "max_length": 80
+          }
+        },
+        "shape_name": "DeleteMessageRequest",
+        "documentation": null
+      },
+      "output": null,
+      "errors": [
+        {
+          "type": "structure",
+          "members": {
+          },
+          "shape_name": "InvalidMessageIdException",
+          "documentation": null
+        },
+        {
+          "type": "structure",
+          "members": {
+          },
+          "shape_name": "UnsupportedMessageOperationException",
+          "documentation": null
+        },
+        {
+          "type": "structure",
+          "members": {
+          },
+          "shape_name": "AuthorizationFailureException",
+          "documentation": null
+        },
+        {
+          "type": "structure",
+          "members": {
+          },
+          "shape_name": "InternalServerException",
+          "documentation": null
+        }
+      ],
+      "documentation": null
+    },
+    "AcknowledgeMessage": {
+      "name": "AcknowledgeMessage",
+      "input": {
+        "type": "structure",
+        "members": {
+          "MessageId": {
+            "type": "string",
+            "required": true,
+            "shape_name": "MessageId",
+            "documentation": null,
+            "min_length": 16,
+            "max_length": 80
+          }
+        },
+        "shape_name": "AcknowledgeMessageRequest",
+        "documentation": null
+      },
+      "output": null,
+      "errors": [
+        {
+          "type": "structure",
+          "members": {
+          },
+          "shape_name": "InvalidMessageIdException",
+          "documentation": null
+        },
+        {
+          "type": "structure",
+          "members": {
+          },
+          "shape_name": "UnsupportedMessageOperationException",
+          "documentation": null
+        },
+        {
+          "type": "structure",
+          "members": {
+          },
+          "shape_name": "AuthorizationFailureException",
+          "documentation": null
+        },
+        {
+          "type": "structure",
+          "members": {
+          },
+          "shape_name": "InternalServerException",
+          "documentation": null
+        }
+      ],
+      "documentation": null
+    },
+    "FailMessage": {
+      "name": "FailMessage",
+      "input": {
+        "type": "structure",
+        "members": {
+          "MessageId": {
+            "type": "string",
+            "required": true,
+            "shape_name": "MessageId",
+            "documentation": null,
+            "min_length": 16,
+            "max_length": 80
+          },
+          "FailureType": {
+            "type": "string",
+            "enum": [
+              "NoHandlerExists",
+              "InternalHandlerException"
+            ],
+            "required": true,
+            "shape_name": "FailureType",
+            "documentation": null
+          }
+        },
+        "shape_name": "FailMessageRequest",
+        "documentation": null
+      },
+      "output": null,
+      "errors": [
+        {
+          "type": "structure",
+          "members": {
+          },
+          "shape_name": "InvalidMessageIdException",
+          "documentation": null
+        },
+        {
+          "type": "structure",
+          "members": {
+          },
+          "shape_name": "UnsupportedMessageOperationException",
+          "documentation": null
+        },
+        {
+          "type": "structure",
+          "members": {
+          },
+          "shape_name": "AuthorizationFailureException",
+          "documentation": null
+        },
+        {
+          "type": "structure",
+          "members": {
+          },
+          "shape_name": "InternalServerException",
+          "documentation": null
+        }
+      ],
+      "documentation": null
+    },
+    "GetEndpoint": {
+      "name": "GetEndpoint",
+      "input": {
+        "type": "structure",
+        "members": {
+          "Destination": {
+            "type": "string",
+            "required": true,
+            "shape_name": "Destination",
+            "documentation": null,
+            "min_length": 10,
+            "max_length": 80
+          }
+        },
+        "shape_name": "GetEndpointRequest",
+        "documentation": null
+      },
+      "output": {
+        "type": "structure",
+        "members": {
+          "Endpoint": {
+            "type": "string",
+            "shape_name": "Endpoint",
+            "documentation": null,
+            "max_length": 512
+          }
+        },
+        "shape_name": "GetEndpointResponse",
+        "documentation": null
+      },
+      "errors": [
+        {
+          "type": "structure",
+          "members": {
+          },
+          "shape_name": "TooManyRequestsException",
+          "documentation": null
+        },
+        {
+          "type": "structure",
+          "members": {
+          },
+          "shape_name": "AuthorizationFailureException",
+          "documentation": null
+        },
+        {
+          "type": "structure",
+          "members": {
+          },
+          "shape_name": "InternalServerException",
+          "documentation": null
+        }
+      ],
+      "documentation": null
+    }
+  }
+}

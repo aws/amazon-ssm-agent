@@ -8,7 +8,8 @@
     "serviceAbbreviation":"KMS",
     "serviceFullName":"AWS Key Management Service",
     "signatureVersion":"v4",
-    "targetPrefix":"TrentService"
+    "targetPrefix":"TrentService",
+    "uid":"kms-2014-11-01"
   },
   "operations":{
     "CancelKeyDeletion":{
@@ -77,7 +78,8 @@
         {"shape":"InvalidArnException"},
         {"shape":"UnsupportedOperationException"},
         {"shape":"KMSInternalException"},
-        {"shape":"LimitExceededException"}
+        {"shape":"LimitExceededException"},
+        {"shape":"TagException"}
       ]
     },
     "Decrypt":{
@@ -107,6 +109,22 @@
       },
       "input":{"shape":"DeleteAliasRequest"},
       "errors":[
+        {"shape":"DependencyTimeoutException"},
+        {"shape":"NotFoundException"},
+        {"shape":"KMSInternalException"},
+        {"shape":"KMSInvalidStateException"}
+      ]
+    },
+    "DeleteImportedKeyMaterial":{
+      "name":"DeleteImportedKeyMaterial",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"DeleteImportedKeyMaterialRequest"},
+      "errors":[
+        {"shape":"InvalidArnException"},
+        {"shape":"UnsupportedOperationException"},
         {"shape":"DependencyTimeoutException"},
         {"shape":"NotFoundException"},
         {"shape":"KMSInternalException"},
@@ -156,7 +174,8 @@
         {"shape":"InvalidArnException"},
         {"shape":"DependencyTimeoutException"},
         {"shape":"KMSInternalException"},
-        {"shape":"KMSInvalidStateException"}
+        {"shape":"KMSInvalidStateException"},
+        {"shape":"UnsupportedOperationException"}
       ]
     },
     "EnableKey":{
@@ -188,7 +207,8 @@
         {"shape":"InvalidArnException"},
         {"shape":"DependencyTimeoutException"},
         {"shape":"KMSInternalException"},
-        {"shape":"KMSInvalidStateException"}
+        {"shape":"KMSInvalidStateException"},
+        {"shape":"UnsupportedOperationException"}
       ]
     },
     "Encrypt":{
@@ -290,7 +310,46 @@
         {"shape":"InvalidArnException"},
         {"shape":"DependencyTimeoutException"},
         {"shape":"KMSInternalException"},
+        {"shape":"KMSInvalidStateException"},
+        {"shape":"UnsupportedOperationException"}
+      ]
+    },
+    "GetParametersForImport":{
+      "name":"GetParametersForImport",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"GetParametersForImportRequest"},
+      "output":{"shape":"GetParametersForImportResponse"},
+      "errors":[
+        {"shape":"InvalidArnException"},
+        {"shape":"UnsupportedOperationException"},
+        {"shape":"DependencyTimeoutException"},
+        {"shape":"NotFoundException"},
+        {"shape":"KMSInternalException"},
         {"shape":"KMSInvalidStateException"}
+      ]
+    },
+    "ImportKeyMaterial":{
+      "name":"ImportKeyMaterial",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"ImportKeyMaterialRequest"},
+      "output":{"shape":"ImportKeyMaterialResponse"},
+      "errors":[
+        {"shape":"InvalidArnException"},
+        {"shape":"UnsupportedOperationException"},
+        {"shape":"DependencyTimeoutException"},
+        {"shape":"NotFoundException"},
+        {"shape":"KMSInternalException"},
+        {"shape":"KMSInvalidStateException"},
+        {"shape":"InvalidCiphertextException"},
+        {"shape":"IncorrectKeyMaterialException"},
+        {"shape":"ExpiredImportTokenException"},
+        {"shape":"InvalidImportTokenException"}
       ]
     },
     "ListAliases":{
@@ -350,7 +409,23 @@
       "output":{"shape":"ListKeysResponse"},
       "errors":[
         {"shape":"DependencyTimeoutException"},
-        {"shape":"KMSInternalException"}
+        {"shape":"KMSInternalException"},
+        {"shape":"InvalidMarkerException"}
+      ]
+    },
+    "ListResourceTags":{
+      "name":"ListResourceTags",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"ListResourceTagsRequest"},
+      "output":{"shape":"ListResourceTagsResponse"},
+      "errors":[
+        {"shape":"KMSInternalException"},
+        {"shape":"NotFoundException"},
+        {"shape":"InvalidArnException"},
+        {"shape":"InvalidMarkerException"}
       ]
     },
     "ListRetirableGrants":{
@@ -455,6 +530,37 @@
         {"shape":"KMSInvalidStateException"}
       ]
     },
+    "TagResource":{
+      "name":"TagResource",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"TagResourceRequest"},
+      "errors":[
+        {"shape":"KMSInternalException"},
+        {"shape":"NotFoundException"},
+        {"shape":"InvalidArnException"},
+        {"shape":"KMSInvalidStateException"},
+        {"shape":"LimitExceededException"},
+        {"shape":"TagException"}
+      ]
+    },
+    "UntagResource":{
+      "name":"UntagResource",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"UntagResourceRequest"},
+      "errors":[
+        {"shape":"KMSInternalException"},
+        {"shape":"NotFoundException"},
+        {"shape":"InvalidArnException"},
+        {"shape":"KMSInvalidStateException"},
+        {"shape":"TagException"}
+      ]
+    },
     "UpdateAlias":{
       "name":"UpdateAlias",
       "http":{
@@ -487,6 +593,14 @@
   },
   "shapes":{
     "AWSAccountIdType":{"type":"string"},
+    "AlgorithmSpec":{
+      "type":"string",
+      "enum":[
+        "RSAES_PKCS1_V1_5",
+        "RSAES_OAEP_SHA_1",
+        "RSAES_OAEP_SHA_256"
+      ]
+    },
     "AliasList":{
       "type":"list",
       "member":{"shape":"AliasListEntry"}
@@ -576,7 +690,9 @@
         "Policy":{"shape":"PolicyType"},
         "Description":{"shape":"DescriptionType"},
         "KeyUsage":{"shape":"KeyUsageType"},
-        "BypassPolicyLockoutSafetyCheck":{"shape":"BooleanType"}
+        "Origin":{"shape":"OriginType"},
+        "BypassPolicyLockoutSafetyCheck":{"shape":"BooleanType"},
+        "Tags":{"shape":"TagList"}
       }
     },
     "CreateKeyResponse":{
@@ -614,6 +730,13 @@
       "required":["AliasName"],
       "members":{
         "AliasName":{"shape":"AliasNameType"}
+      }
+    },
+    "DeleteImportedKeyMaterialRequest":{
+      "type":"structure",
+      "required":["KeyId"],
+      "members":{
+        "KeyId":{"shape":"KeyIdType"}
       }
     },
     "DependencyTimeoutException":{
@@ -706,6 +829,20 @@
     },
     "EncryptionContextValue":{"type":"string"},
     "ErrorMessageType":{"type":"string"},
+    "ExpirationModelType":{
+      "type":"string",
+      "enum":[
+        "KEY_MATERIAL_EXPIRES",
+        "KEY_MATERIAL_DOES_NOT_EXPIRE"
+      ]
+    },
+    "ExpiredImportTokenException":{
+      "type":"structure",
+      "members":{
+        "message":{"shape":"ErrorMessageType"}
+      },
+      "exception":true
+    },
     "GenerateDataKeyRequest":{
       "type":"structure",
       "required":["KeyId"],
@@ -785,6 +922,28 @@
         "KeyRotationEnabled":{"shape":"BooleanType"}
       }
     },
+    "GetParametersForImportRequest":{
+      "type":"structure",
+      "required":[
+        "KeyId",
+        "WrappingAlgorithm",
+        "WrappingKeySpec"
+      ],
+      "members":{
+        "KeyId":{"shape":"KeyIdType"},
+        "WrappingAlgorithm":{"shape":"AlgorithmSpec"},
+        "WrappingKeySpec":{"shape":"WrappingKeySpec"}
+      }
+    },
+    "GetParametersForImportResponse":{
+      "type":"structure",
+      "members":{
+        "KeyId":{"shape":"KeyIdType"},
+        "ImportToken":{"shape":"CiphertextType"},
+        "PublicKey":{"shape":"PlaintextType"},
+        "ParametersValidTo":{"shape":"DateType"}
+      }
+    },
     "GrantConstraints":{
       "type":"structure",
       "members":{
@@ -850,6 +1009,33 @@
       "max":8192,
       "min":1
     },
+    "ImportKeyMaterialRequest":{
+      "type":"structure",
+      "required":[
+        "KeyId",
+        "ImportToken",
+        "EncryptedKeyMaterial"
+      ],
+      "members":{
+        "KeyId":{"shape":"KeyIdType"},
+        "ImportToken":{"shape":"CiphertextType"},
+        "EncryptedKeyMaterial":{"shape":"CiphertextType"},
+        "ValidTo":{"shape":"DateType"},
+        "ExpirationModel":{"shape":"ExpirationModelType"}
+      }
+    },
+    "ImportKeyMaterialResponse":{
+      "type":"structure",
+      "members":{
+      }
+    },
+    "IncorrectKeyMaterialException":{
+      "type":"structure",
+      "members":{
+        "message":{"shape":"ErrorMessageType"}
+      },
+      "exception":true
+    },
     "InvalidAliasNameException":{
       "type":"structure",
       "members":{
@@ -879,6 +1065,13 @@
       "exception":true
     },
     "InvalidGrantTokenException":{
+      "type":"structure",
+      "members":{
+        "message":{"shape":"ErrorMessageType"}
+      },
+      "exception":true
+    },
+    "InvalidImportTokenException":{
       "type":"structure",
       "members":{
         "message":{"shape":"ErrorMessageType"}
@@ -915,7 +1108,7 @@
     },
     "KeyIdType":{
       "type":"string",
-      "max":256,
+      "max":2048,
       "min":1
     },
     "KeyList":{
@@ -929,6 +1122,13 @@
         "KeyArn":{"shape":"ArnType"}
       }
     },
+    "KeyManagerType":{
+      "type":"string",
+      "enum":[
+        "AWS",
+        "CUSTOMER"
+      ]
+    },
     "KeyMetadata":{
       "type":"structure",
       "required":["KeyId"],
@@ -941,7 +1141,11 @@
         "Description":{"shape":"DescriptionType"},
         "KeyUsage":{"shape":"KeyUsageType"},
         "KeyState":{"shape":"KeyState"},
-        "DeletionDate":{"shape":"DateType"}
+        "DeletionDate":{"shape":"DateType"},
+        "ValidTo":{"shape":"DateType"},
+        "Origin":{"shape":"OriginType"},
+        "ExpirationModel":{"shape":"ExpirationModelType"},
+        "KeyManager":{"shape":"KeyManagerType"}
       }
     },
     "KeyState":{
@@ -949,7 +1153,8 @@
       "enum":[
         "Enabled",
         "Disabled",
-        "PendingDeletion"
+        "PendingDeletion",
+        "PendingImport"
       ]
     },
     "KeyUnavailableException":{
@@ -1040,6 +1245,23 @@
         "Truncated":{"shape":"BooleanType"}
       }
     },
+    "ListResourceTagsRequest":{
+      "type":"structure",
+      "required":["KeyId"],
+      "members":{
+        "KeyId":{"shape":"KeyIdType"},
+        "Limit":{"shape":"LimitType"},
+        "Marker":{"shape":"MarkerType"}
+      }
+    },
+    "ListResourceTagsResponse":{
+      "type":"structure",
+      "members":{
+        "Tags":{"shape":"TagList"},
+        "NextMarker":{"shape":"MarkerType"},
+        "Truncated":{"shape":"BooleanType"}
+      }
+    },
     "ListRetirableGrantsRequest":{
       "type":"structure",
       "required":["RetiringPrincipal"],
@@ -1073,6 +1295,13 @@
       "type":"integer",
       "max":1024,
       "min":1
+    },
+    "OriginType":{
+      "type":"string",
+      "enum":[
+        "AWS_KMS",
+        "EXTERNAL"
+      ]
     },
     "PendingWindowInDaysType":{
       "type":"integer",
@@ -1176,12 +1405,70 @@
         "DeletionDate":{"shape":"DateType"}
       }
     },
+    "Tag":{
+      "type":"structure",
+      "required":[
+        "TagKey",
+        "TagValue"
+      ],
+      "members":{
+        "TagKey":{"shape":"TagKeyType"},
+        "TagValue":{"shape":"TagValueType"}
+      }
+    },
+    "TagException":{
+      "type":"structure",
+      "members":{
+        "message":{"shape":"ErrorMessageType"}
+      },
+      "exception":true
+    },
+    "TagKeyList":{
+      "type":"list",
+      "member":{"shape":"TagKeyType"}
+    },
+    "TagKeyType":{
+      "type":"string",
+      "max":128,
+      "min":1
+    },
+    "TagList":{
+      "type":"list",
+      "member":{"shape":"Tag"}
+    },
+    "TagResourceRequest":{
+      "type":"structure",
+      "required":[
+        "KeyId",
+        "Tags"
+      ],
+      "members":{
+        "KeyId":{"shape":"KeyIdType"},
+        "Tags":{"shape":"TagList"}
+      }
+    },
+    "TagValueType":{
+      "type":"string",
+      "max":256,
+      "min":0
+    },
     "UnsupportedOperationException":{
       "type":"structure",
       "members":{
         "message":{"shape":"ErrorMessageType"}
       },
       "exception":true
+    },
+    "UntagResourceRequest":{
+      "type":"structure",
+      "required":[
+        "KeyId",
+        "TagKeys"
+      ],
+      "members":{
+        "KeyId":{"shape":"KeyIdType"},
+        "TagKeys":{"shape":"TagKeyList"}
+      }
     },
     "UpdateAliasRequest":{
       "type":"structure",
@@ -1204,6 +1491,10 @@
         "KeyId":{"shape":"KeyIdType"},
         "Description":{"shape":"DescriptionType"}
       }
+    },
+    "WrappingKeySpec":{
+      "type":"string",
+      "enum":["RSA_2048"]
     }
   }
 }
