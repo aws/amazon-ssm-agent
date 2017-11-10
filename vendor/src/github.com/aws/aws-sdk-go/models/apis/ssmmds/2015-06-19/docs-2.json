@@ -1,0 +1,226 @@
+{
+  "version": "2.0",
+  "service": null,
+  "operations": {
+    "AcknowledgeMessage": null,
+    "DeleteMessage": null,
+    "FailMessage": null,
+    "GetEndpoint": null,
+    "GetMessages": null,
+    "SendReply": null
+  },
+  "shapes": {
+    "AcknowledgeMessageRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "AuthorizationFailureException": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "CreatedDate": {
+      "base": null,
+      "refs": {
+        "Message$CreatedDate": null
+      }
+    },
+    "DeleteMessageRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "DeliveryOptions": {
+      "base": null,
+      "refs": {
+        "SendReplyRequest$DeliveryOptions": null
+      }
+    },
+    "Description": {
+      "base": null,
+      "refs": {
+        "SendReplyResponse$Description": null
+      }
+    },
+    "Destination": {
+      "base": null,
+      "refs": {
+        "GetEndpointRequest$Destination": null,
+        "GetMessagesRequest$Destination": null,
+        "GetMessagesResponse$Destination": null,
+        "Message$Destination": null
+      }
+    },
+    "Endpoint": {
+      "base": null,
+      "refs": {
+        "GetEndpointResponse$Endpoint": null
+      }
+    },
+    "ExpiresAfter": {
+      "base": null,
+      "refs": {
+        "DeliveryOptions$ExpiresAfter": null
+      }
+    },
+    "FailMessageRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "FailureType": {
+      "base": null,
+      "refs": {
+        "FailMessageRequest$FailureType": null
+      }
+    },
+    "GetEndpointRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "GetEndpointResponse": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "GetMessagesRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "GetMessagesResponse": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "InternalServerException": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "InvalidDestinationException": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "InvalidMessageIdException": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "Message": {
+      "base": null,
+      "refs": {
+        "Messages$member": null
+      }
+    },
+    "MessageId": {
+      "base": null,
+      "refs": {
+        "AcknowledgeMessageRequest$MessageId": null,
+        "DeleteMessageRequest$MessageId": null,
+        "FailMessageRequest$MessageId": null,
+        "Message$MessageId": null,
+        "SendReplyRequest$MessageId": null,
+        "SendReplyResponse$MessageId": null
+      }
+    },
+    "Messages": {
+      "base": null,
+      "refs": {
+        "GetMessagesResponse$Messages": null
+      }
+    },
+    "MessagesRequestId": {
+      "base": null,
+      "refs": {
+        "GetMessagesRequest$MessagesRequestId": null,
+        "GetMessagesResponse$MessagesRequestId": null
+      }
+    },
+    "NextToken": {
+      "base": null,
+      "refs": {
+        "GetMessagesRequest$NextToken": null,
+        "Message$NextToken": null
+      }
+    },
+    "Payload": {
+      "base": null,
+      "refs": {
+        "Message$Payload": null,
+        "SendReplyRequest$Payload": null
+      }
+    },
+    "PayloadDigest": {
+      "base": null,
+      "refs": {
+        "Message$PayloadDigest": null
+      }
+    },
+    "ReplacementKey": {
+      "base": null,
+      "refs": {
+        "DeliveryOptions$ReplacementKey": null
+      }
+    },
+    "ReplyId": {
+      "base": null,
+      "refs": {
+        "SendReplyRequest$ReplyId": null,
+        "SendReplyResponse$ReplyId": null
+      }
+    },
+    "ReplyStatus": {
+      "base": null,
+      "refs": {
+        "SendReplyResponse$ReplyStatus": null
+      }
+    },
+    "RequestTimeoutException": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "SchedulePush": {
+      "base": null,
+      "refs": {
+        "DeliveryOptions$SchedulePush": null
+      }
+    },
+    "SendReplyRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "SendReplyResponse": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "TooManyRequestsException": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "Topic": {
+      "base": null,
+      "refs": {
+        "Message$Topic": null
+      }
+    },
+    "UnsupportedMessageOperationException": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "VisibilityTimeoutInSeconds": {
+      "base": null,
+      "refs": {
+        "GetMessagesRequest$VisibilityTimeoutInSeconds": null
+      }
+    }
+  }
+}
