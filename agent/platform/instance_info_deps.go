@@ -39,7 +39,7 @@ func (instanceInfo) Region() string { return registration.Region() }
 
 // dependency for metadata
 var metadata metadataClient = instanceMetadata{
-	Client: ec2metadata.New(session.New(aws.NewConfig().WithMaxRetries(5))),
+	Client: ec2metadata.New(session.New(aws.NewConfig().WithMaxRetries(10).WithEC2MetadataDisableTimeoutOverride(false))),
 }
 
 type metadataClient interface {
