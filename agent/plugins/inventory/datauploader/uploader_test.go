@@ -163,6 +163,7 @@ func testSendData(t *testing.T, putInventorySucceeds bool) {
 	inventoryItems = append(inventoryItems, inventoryItem)
 
 	// create mocks and setup expectations
+	machineIDProvider = func() (string, error) { return "i-12345678", nil }
 	mockSSM := NewMockSSMCaller()
 	output := &ssm.PutInventoryOutput{}
 	if putInventorySucceeds {
