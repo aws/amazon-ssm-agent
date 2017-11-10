@@ -1,8 +1,8 @@
 {
   "version": "2.0",
-  "service": "<fullname>Amazon EC2 Systems Manager</fullname> <p>Amazon EC2 Systems Manager is a collection of capabilities that helps you automate management tasks such as collecting system inventory, applying operating system (OS) patches, automating the creation of Amazon Machine Images (AMIs), and configuring operating systems (OSs) and applications at scale. Systems Manager lets you remotely and securely manage the configuration of your managed instances. A <i>managed instance</i> is any Amazon EC2 instance or on-premises machine in your hybrid environment that has been configured for Systems Manager.</p> <p>This reference is intended to be used with the <a href=\"http://docs.aws.amazon.com/systems-manager/latest/userguide/\">Amazon EC2 Systems Manager User Guide</a>.</p> <p>To get started, verify prerequisites and configure managed instances. For more information, see <a href=\"http://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-setting-up.html\">Systems Manager Prerequisites</a>.</p>",
+  "service": "<fullname>Amazon EC2 Systems Manager</fullname> <p>Amazon EC2 Systems Manager is a collection of capabilities that helps you automate management tasks such as collecting system inventory, applying operating system (OS) patches, automating the creation of Amazon Machine Images (AMIs), and configuring operating systems (OSs) and applications at scale. Systems Manager lets you remotely and securely manage the configuration of your managed instances. A <i>managed instance</i> is any Amazon EC2 instance or on-premises machine in your hybrid environment that has been configured for Systems Manager.</p> <p>This reference is intended to be used with the <a href=\"http://docs.aws.amazon.com/systems-manager/latest/userguide/\">Amazon EC2 Systems Manager User Guide</a>.</p> <p>To get started, verify prerequisites and configure managed instances. For more information, see <a href=\"http://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-setting-up.html\">Systems Manager Prerequisites</a>.</p> <p>For information about other API actions you can perform on Amazon EC2 instances, see the <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/APIReference/\">Amazon EC2 API Reference</a>. For information about how to use a Query API, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/APIReference/making-api-requests.html\">Making API Requests</a>. </p>",
   "operations": {
-    "AddTagsToResource": "<p>Adds or overwrites one or more tags for the specified resource. Tags are metadata that you assign to your managed instances, Maintenance Windows, or Parameter Store parameters. Tags enable you to categorize your resources in different ways, for example, by purpose, owner, or environment. Each tag consists of a key and an optional value, both of which you define. For example, you could define a set of tags for your account's managed instances that helps you track each instance's owner and stack level. For example: Key=Owner and Value=DbAdmin, SysAdmin, or Dev. Or Key=Stack and Value=Production, Pre-Production, or Test.</p> <p>Each resource can have a maximum of 10 tags. </p> <p>We recommend that you devise a set of tag keys that meets your needs for each resource type. Using a consistent set of tag keys makes it easier for you to manage your resources. You can search and filter the resources based on the tags you add. Tags don't have any semantic meaning to Amazon EC2 and are interpreted strictly as a string of characters. </p> <p>For more information about tags, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Using_Tags.html\">Tagging Your Amazon EC2 Resources</a> in the <i>Amazon EC2 User Guide</i>.</p>",
+    "AddTagsToResource": "<p>Adds or overwrites one or more tags for the specified resource. Tags are metadata that you can assign to your documents, managed instances, Maintenance Windows, Parameter Store parameters, and patch baselines. Tags enable you to categorize your resources in different ways, for example, by purpose, owner, or environment. Each tag consists of a key and an optional value, both of which you define. For example, you could define a set of tags for your account's managed instances that helps you track each instance's owner and stack level. For example: Key=Owner and Value=DbAdmin, SysAdmin, or Dev. Or Key=Stack and Value=Production, Pre-Production, or Test.</p> <p>Each resource can have a maximum of 10 tags. </p> <p>We recommend that you devise a set of tag keys that meets your needs for each resource type. Using a consistent set of tag keys makes it easier for you to manage your resources. You can search and filter the resources based on the tags you add. Tags don't have any semantic meaning to Amazon EC2 and are interpreted strictly as a string of characters. </p> <p>For more information about tags, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Using_Tags.html\">Tagging Your Amazon EC2 Resources</a> in the <i>Amazon EC2 User Guide</i>.</p>",
     "CancelCommand": "<p>Attempts to cancel the command specified by the Command ID. There is no guarantee that the command will be terminated and the underlying process stopped.</p>",
     "CreateActivation": "<p>Registers your on-premises server or virtual machine with Amazon EC2 so that you can manage these resources using Run Command. An on-premises server or virtual machine that has been registered with EC2 is called a managed instance. For more information about activations, see <a href=\"http://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-managedinstances.html\">Setting Up Systems Manager in Hybrid Environments</a>.</p>",
     "CreateAssociation": "<p>Associates the specified Systems Manager document with the specified instances or targets.</p> <p>When you associate a document with one or more instances using instance IDs or tags, the SSM Agent running on the instance processes the document and configures the instance as specified.</p> <p>If you associate a document with an instance that already has an associated document, the system throws the AssociationAlreadyExists exception.</p>",
@@ -13,7 +13,6 @@
     "CreateResourceDataSync": "<p>Creates a resource data sync configuration to a single bucket in Amazon S3. This is an asynchronous operation that returns immediately. After a successful initial sync is completed, the system continuously syncs data to the Amazon S3 bucket. To check the status of the sync, use the <a href=\"API_ListResourceDataSync.html\">ListResourceDataSync</a> operation.</p> <p>By default, data is not encrypted in Amazon S3. We strongly recommend that you enable encryption in Amazon S3 to ensure secure data storage. We also recommend that you secure access to the Amazon S3 bucket by creating a restrictive bucket policy. To view an example of a restrictive Amazon S3 bucket policy for Resource Data Sync, see <a href=\"http://docs.aws.amazon.com/systems-manager/latest/userguide/sysman-inventory-configuring.html#sysman-inventory-datasync\">Configuring Resource Data Sync for Inventory</a>.</p>",
     "DeleteActivation": "<p>Deletes an activation. You are not required to delete an activation. If you delete an activation, you can no longer use it to register additional managed instances. Deleting an activation does not de-register managed instances. You must manually de-register managed instances.</p>",
     "DeleteAssociation": "<p>Disassociates the specified Systems Manager document from the specified instance.</p> <p>When you disassociate a document from an instance, it does not change the configuration of the instance. To change the configuration state of an instance after you disassociate a document, you must create a new document with the desired configuration and associate it with the instance.</p>",
-    "DeleteCommands": null,
     "DeleteDocument": "<p>Deletes the Systems Manager document and all instance associations to the document.</p> <p>Before you delete the document, we recommend that you use <a>DeleteAssociation</a> to disassociate all instances that are associated with the document.</p>",
     "DeleteMaintenanceWindow": "<p>Deletes a Maintenance Window.</p>",
     "DeleteParameter": "<p>Delete a parameter from the system.</p>",
@@ -26,18 +25,10 @@
     "DeregisterTaskFromMaintenanceWindow": "<p>Removes a task from a Maintenance Window.</p>",
     "DescribeActivations": "<p>Details about the activation, including: the date and time the activation was created, the expiration date, the IAM role assigned to the instances in the activation, and the number of instances activated by this registration.</p>",
     "DescribeAssociation": "<p>Describes the associations for the specified Systems Manager document or instance.</p>",
-    "DescribeAutomationActions": null,
-    "DescribeAutomationExecutionParameters": null,
     "DescribeAutomationExecutions": "<p>Provides details about all active and terminated Automation executions.</p>",
-    "DescribeAutomationStepExecutions": null,
     "DescribeAvailablePatches": "<p>Lists all patches that could possibly be included in a patch baseline.</p>",
-    "DescribeDocument": "<p>Describes the specified SSM document.</p>",
-    "DescribeDocumentInternal": null,
-    "DescribeDocumentParameters": null,
+    "DescribeDocument": "<p>Describes the specified Systems Manager document.</p>",
     "DescribeDocumentPermission": "<p>Describes the permissions for a Systems Manager document. If you created the document, you are the owner. If a document is shared, it can either be shared privately (by specifying a user's AWS account ID) or publicly (<i>All</i>). </p>",
-    "DescribeDocumentSchema": null,
-    "DescribeDocumentStepSchema": null,
-    "DescribeDocumentSteps": null,
     "DescribeEffectiveInstanceAssociations": "<p>All associations for the instance(s).</p>",
     "DescribeEffectivePatchesForPatchBaseline": "<p>Retrieves the current effective patches (the patch and the approval state) for the specified patch baseline. Note that this API applies only to Windows patch baselines.</p>",
     "DescribeInstanceAssociationsStatus": "<p>The status of the associations for the instance(s).</p>",
@@ -45,26 +36,21 @@
     "DescribeInstancePatchStates": "<p>Retrieves the high-level patch state of one or more instances.</p>",
     "DescribeInstancePatchStatesForPatchGroup": "<p>Retrieves the high-level patch state for the instances in the specified patch group.</p>",
     "DescribeInstancePatches": "<p>Retrieves information about the patches on the specified instance and their state relative to the patch baseline being used for the instance.</p>",
-    "DescribeInstanceProperties": null,
     "DescribeMaintenanceWindowExecutionTaskInvocations": "<p>Retrieves the individual task executions (one per target) for a particular task executed as part of a Maintenance Window execution.</p>",
     "DescribeMaintenanceWindowExecutionTasks": "<p>For a given Maintenance Window execution, lists the tasks that were executed.</p>",
     "DescribeMaintenanceWindowExecutions": "<p>Lists the executions of a Maintenance Window. This includes information about when the Maintenance Window was scheduled to be active, and information about tasks registered and run with the Maintenance Window.</p>",
     "DescribeMaintenanceWindowTargets": "<p>Lists the targets registered with the Maintenance Window.</p>",
-    "DescribeMaintenanceWindowTargetsPrivate": null,
     "DescribeMaintenanceWindowTasks": "<p>Lists the tasks in a Maintenance Window.</p>",
-    "DescribeMaintenanceWindowTasksPrivate": null,
     "DescribeMaintenanceWindows": "<p>Retrieves the Maintenance Windows in an AWS account.</p>",
     "DescribeParameters": "<p>Get information about a parameter.</p> <p>Request results are returned on a best-effort basis. If you specify <code>MaxResults</code> in the request, the response includes information up to the limit specified. The number of items returned, however, can be between zero and the value of <code>MaxResults</code>. If the service reaches an internal limit while processing the results, it stops the operation and returns the matching values up to that point and a <code>NextToken</code>. You can specify the <code>NextToken</code> in a subsequent call to get the next set of results.</p>",
     "DescribePatchBaselines": "<p>Lists the patch baselines in your AWS account.</p>",
     "DescribePatchGroupState": "<p>Returns high-level aggregated patch compliance state for a patch group.</p>",
     "DescribePatchGroups": "<p>Lists all patch groups that have been registered with patch baselines.</p>",
-    "GetAutomationAction": null,
     "GetAutomationExecution": "<p>Get detailed information about a particular Automation execution.</p>",
     "GetCommandInvocation": "<p>Returns detailed information about command execution for an invocation or plugin. </p>",
     "GetDefaultPatchBaseline": "<p>Retrieves the default patch baseline. Note that Systems Manager supports creating multiple default patch baselines. For example, you can create a default patch baseline for each operating system.</p>",
     "GetDeployablePatchSnapshotForInstance": "<p>Retrieves the current snapshot for the patch baseline the instance uses. This API is primarily used by the AWS-RunPatchBaseline Systems Manager document. </p>",
-    "GetDocument": "<p>Gets the contents of the specified SSM document.</p>",
-    "GetDocumentInternal": null,
+    "GetDocument": "<p>Gets the contents of the specified Systems Manager document.</p>",
     "GetInventory": "<p>Query inventory information.</p>",
     "GetInventorySchema": "<p>Return a list of inventory type names for the account, or return a list of attribute names for a specific Inventory item type. </p>",
     "GetMaintenanceWindow": "<p>Retrieves a Maintenance Window.</p>",
@@ -72,7 +58,6 @@
     "GetMaintenanceWindowExecutionTask": "<p>Retrieves the details about a specific task executed as part of a Maintenance Window execution.</p>",
     "GetMaintenanceWindowExecutionTaskInvocation": "<p>Retrieves a task invocation. A task invocation is a specific task executing on a specific target. Maintenance Windows report status for all invocations. </p>",
     "GetMaintenanceWindowTask": "<p>Lists the tasks in a Maintenance Window.</p>",
-    "GetManifest": null,
     "GetParameter": "<p>Get information about a parameter by using the parameter name. </p>",
     "GetParameterHistory": "<p>Query a list of all parameters used by the AWS account.</p>",
     "GetParameters": "<p>Get details of a parameter.</p>",
@@ -86,57 +71,39 @@
     "ListComplianceItems": "<p>For a specified resource ID, this API action returns a list of compliance statuses for different resource types. Currently, you can only specify one resource ID per call. List results depend on the criteria specified in the filter. </p>",
     "ListComplianceSummaries": "<p>Returns a summary count of compliant and non-compliant resources for a compliance type. For example, this call can return State Manager associations, patches, or custom compliance types according to the filter criteria that you specify. </p>",
     "ListDocumentVersions": "<p>List all versions for a document.</p>",
-    "ListDocuments": "<p>Describes one or more of your SSM documents.</p>",
-    "ListInstanceAssociations": null,
+    "ListDocuments": "<p>Describes one or more of your Systems Manager documents.</p>",
     "ListInventoryEntries": "<p>A list of inventory items returned by the request.</p>",
     "ListResourceComplianceSummaries": "<p>Returns a resource-level summary count. The summary includes information about compliant and non-compliant statuses and detailed compliance-item severity counts, according to the filter criteria you specify.</p>",
     "ListResourceDataSync": "<p>Lists your resource data sync configurations. Includes information about the last time a sync attempted to start, the last sync status, and the last time a sync successfully completed.</p> <p>The number of sync configurations might be too large to return using a single call to <code>ListResourceDataSync</code>. You can limit the number of sync configurations returned by using the <code>MaxResults</code> parameter. To determine whether there are more sync configurations to list, check the value of <code>NextToken</code> in the output. If there are more sync configurations to list, you can request them by specifying the <code>NextToken</code> returned in the call to the parameter of a subsequent call. </p>",
     "ListTagsForResource": "<p>Returns a list of the tags assigned to the specified resource.</p>",
     "ModifyDocumentPermission": "<p>Shares a Systems Manager document publicly or privately. If you share a document privately, you must specify the AWS user account IDs for those people who can use the document. If you share a document publicly, you must specify <i>All</i> as the account ID.</p>",
     "PutComplianceItems": "<p>Registers a compliance type and other compliance details on a designated resource. This action lets you register custom compliance details with a resource. This call overwrites existing compliance information on the resource, so you must provide a full list of compliance items each time that you send the request.</p>",
-    "PutConfigurePackageResult": null,
     "PutInventory": "<p>Bulk update custom inventory items on one more instance. The request adds an inventory item, if it doesn't already exist, or updates an inventory item, if it does exist.</p>",
     "PutParameter": "<p>Add one or more parameters to the system.</p>",
     "RegisterDefaultPatchBaseline": "<p>Defines the default patch baseline.</p>",
-    "RegisterManagedInstance": null,
     "RegisterPatchBaselineForPatchGroup": "<p>Registers a patch baseline for a patch group.</p>",
     "RegisterTargetWithMaintenanceWindow": "<p>Registers a target with a Maintenance Window.</p>",
-    "RegisterTargetWithMaintenanceWindowPrivate": null,
     "RegisterTaskWithMaintenanceWindow": "<p>Adds a new task to a Maintenance Window.</p>",
-    "RegisterTaskWithMaintenanceWindowPrivate": null,
     "RemoveTagsFromResource": "<p>Removes all tags from the specified resource.</p>",
-    "RequestManagedInstanceRoleToken": null,
     "SendAutomationSignal": "<p>Sends a signal to an Automation execution to change the current behavior or status of the execution. </p>",
     "SendCommand": "<p>Executes commands on one or more managed instances.</p>",
-    "StartAssociationsOnce": null,
     "StartAutomationExecution": "<p>Initiates execution of an Automation document.</p>",
     "StopAutomationExecution": "<p>Stop an Automation that is currently executing.</p>",
     "UpdateAssociation": "<p>Updates an association. You can update the association name and version, the document version, schedule, parameters, and Amazon S3 output.</p>",
     "UpdateAssociationStatus": "<p>Updates the status of the Systems Manager document associated with the specified instance.</p>",
     "UpdateDocument": "<p>The document you want to update.</p>",
     "UpdateDocumentDefaultVersion": "<p>Set the default version of a document. </p>",
-    "UpdateInstanceAssociationStatus": null,
-    "UpdateInstanceInformation": null,
     "UpdateMaintenanceWindow": "<p>Updates an existing Maintenance Window. Only specified parameters are modified.</p>",
     "UpdateMaintenanceWindowTarget": "<p>Modifies the target of an existing Maintenance Window. You can't change the target type, but you can change the following:</p> <p>The target from being an ID target to a Tag target, or a Tag target to an ID target.</p> <p>IDs for an ID target.</p> <p>Tags for a Tag target.</p> <p>Owner.</p> <p>Name.</p> <p>Description.</p> <p>If a parameter is null, then the corresponding field is not modified.</p>",
     "UpdateMaintenanceWindowTask": "<p>Modifies a task assigned to a Maintenance Window. You can't change the task type, but you can change the following values:</p> <p>Task ARN. For example, you can change a RUN_COMMAND task from AWS-RunPowerShellScript to AWS-RunShellScript.</p> <p>Service role ARN.</p> <p>Task parameters.</p> <p>Task priority.</p> <p>Task MaxConcurrency and MaxErrors.</p> <p>Log location.</p> <p>If a parameter is null, then the corresponding field is not modified. Also, if you set Replace to true, then all fields required by the RegisterTaskWithMaintenanceWindow action are required for this request. Optional fields that aren't specified are set to null.</p>",
-    "UpdateManagedInstancePublicKey": null,
     "UpdateManagedInstanceRole": "<p>Assigns or changes an Amazon Identity and Access Management (IAM) role to the managed instance.</p>",
     "UpdatePatchBaseline": "<p>Modifies an existing patch baseline. Fields not specified in the request are left unchanged.</p>"
   },
   "shapes": {
-    "AccessKeyId": {
-      "base": null,
-      "refs": {
-        "RequestManagedInstanceRoleTokenResult$AccessKeyId": null
-      }
-    },
     "AccountId": {
       "base": null,
       "refs": {
-        "AccountIdList$member": null,
-        "DescribeDocumentInternalRequest$CustomerAccountId": null,
-        "GetDocumentInternalRequest$CustomerAccountId": null
+        "AccountIdList$member": null
       }
     },
     "AccountIdList": {
@@ -145,12 +112,6 @@
         "DescribeDocumentPermissionResponse$AccountIds": "<p>The account IDs that have permission to use this document. The ID can be either an AWS account or <i>All</i>.</p>",
         "ModifyDocumentPermissionRequest$AccountIdsToAdd": "<p>The AWS user accounts that should have access to the document. The account IDs can either be a group of account IDs or <i>All</i>.</p>",
         "ModifyDocumentPermissionRequest$AccountIdsToRemove": "<p>The AWS user accounts that should no longer have access to the document. The AWS user account can either be a group of account IDs or <i>All</i>. This action has a higher priority than <i>AccountIdsToAdd</i>. If you specify an account ID to add and the same ID to remove, the system removes access to the document.</p>"
-      }
-    },
-    "Action": {
-      "base": null,
-      "refs": {
-        "ConfigurePackageResultStep$Action": null
       }
     },
     "Activation": {
@@ -162,8 +123,7 @@
     "ActivationCode": {
       "base": null,
       "refs": {
-        "CreateActivationResult$ActivationCode": "<p>The code the system generates when it processes the activation. The activation code functions like a password to validate the activation ID. </p>",
-        "RegisterManagedInstanceRequest$ActivationCode": null
+        "CreateActivationResult$ActivationCode": "<p>The code the system generates when it processes the activation. The activation code functions like a password to validate the activation ID. </p>"
       }
     },
     "ActivationDescription": {
@@ -173,20 +133,13 @@
         "CreateActivationRequest$Description": "<p>A userdefined description of the resource that you want to register with Amazon EC2. </p>"
       }
     },
-    "ActivationExpired": {
-      "base": null,
-      "refs": {
-      }
-    },
     "ActivationId": {
       "base": null,
       "refs": {
         "Activation$ActivationId": "<p>The ID created by Systems Manager when you submitted the activation.</p>",
         "CreateActivationResult$ActivationId": "<p>The ID number generated by the system when it processed the activation. The activation ID functions like a user name.</p>",
         "DeleteActivationRequest$ActivationId": "<p>The ID of the activation that you want to delete.</p>",
-        "InstanceInformation$ActivationId": "<p>The activation ID created by Systems Manager when the server or VM was registered.</p>",
-        "InstanceProperty$ActivationId": null,
-        "RegisterManagedInstanceRequest$ActivationId": null
+        "InstanceInformation$ActivationId": "<p>The activation ID created by Systems Manager when the server or VM was registered.</p>"
       }
     },
     "ActivationList": {
@@ -208,26 +161,7 @@
     "AgentErrorCode": {
       "base": null,
       "refs": {
-        "InstanceAssociationExecutionResult$ErrorCode": null,
         "InstanceAssociationStatusInfo$ErrorCode": "<p>An error code returned by the request to create the association.</p>"
-      }
-    },
-    "AgentName": {
-      "base": null,
-      "refs": {
-        "UpdateInstanceInformationRequest$AgentName": null
-      }
-    },
-    "AgentStatus": {
-      "base": null,
-      "refs": {
-        "UpdateInstanceInformationRequest$AgentStatus": null
-      }
-    },
-    "AggregatorSchemaOnly": {
-      "base": null,
-      "refs": {
-        "GetInventorySchemaRequest$Aggregator": null
       }
     },
     "AllowedPattern": {
@@ -247,12 +181,6 @@
       "base": null,
       "refs": {
         "PatchRule$ApproveAfterDays": "<p>The number of days after the release date of each patch matched by the rule the patch is marked as approved in the patch baseline.</p>"
-      }
-    },
-    "Architecture": {
-      "base": null,
-      "refs": {
-        "InstanceProperty$Architecture": null
       }
     },
     "AssociatedInstances": {
@@ -321,23 +249,13 @@
       "refs": {
         "Association$AssociationId": "<p>The ID created by the system when you create an association. An association is a binding between a document and a set of targets with a schedule.</p>",
         "AssociationDescription$AssociationId": "<p>The association ID.</p>",
-        "AssociationIdList$member": null,
         "AssociationVersionInfo$AssociationId": "<p>The ID created by the system when the association was created.</p>",
         "DeleteAssociationRequest$AssociationId": "<p>The association ID that you want to delete.</p>",
         "DescribeAssociationRequest$AssociationId": "<p>The association ID for which you want information.</p>",
-        "DescribeInstanceAssociationsStatusRequest$AssociationId": null,
         "InstanceAssociation$AssociationId": "<p>The association ID.</p>",
         "InstanceAssociationStatusInfo$AssociationId": "<p>The association ID.</p>",
-        "InstanceAssociationSummary$AssociationId": null,
         "ListAssociationVersionsRequest$AssociationId": "<p>The association ID for which you want to view all versions.</p>",
-        "UpdateAssociationRequest$AssociationId": "<p>The ID of the association you want to update. </p>",
-        "UpdateInstanceAssociationStatusRequest$AssociationId": null
-      }
-    },
-    "AssociationIdList": {
-      "base": null,
-      "refs": {
-        "StartAssociationsOnceRequest$AssociationIds": null
+        "UpdateAssociationRequest$AssociationId": "<p>The ID of the association you want to update. </p>"
       }
     },
     "AssociationLimitExceeded": {
@@ -396,12 +314,9 @@
         "AssociationDescription$AssociationVersion": "<p>The association version.</p>",
         "AssociationVersionInfo$AssociationVersion": "<p>The association version.</p>",
         "DescribeAssociationRequest$AssociationVersion": "<p>Specify the association version to retrieve. To view the latest version, either specify <code>$LATEST</code> for this parameter, or omit this parameter. To view a list of all associations for an instance, use ListInstanceAssociations. To get a list of versions for a specific association, use ListAssociationVersions. </p>",
-        "DescribeInstanceAssociationsStatusRequest$AssociationVersion": null,
         "InstanceAssociation$AssociationVersion": "<p>Version information for the association on the instance.</p>",
         "InstanceAssociationStatusInfo$AssociationVersion": "<p>The version of the association applied to the instance.</p>",
-        "InstanceAssociationSummary$AssociationVersion": null,
-        "UpdateAssociationRequest$AssociationVersion": "<p>This parameter is provided for concurrency control purposes. You must specify the latest association version in the service. If you want to ensure that this request succeeds, either specify <code>$LATEST</code>, or omit this parameter.</p>",
-        "UpdateInstanceAssociationStatusRequest$AssociationVersion": null
+        "UpdateAssociationRequest$AssociationVersion": "<p>This parameter is provided for concurrency control purposes. You must specify the latest association version in the service. If you want to ensure that this request succeeds, either specify <code>$LATEST</code>, or omit this parameter.</p>"
       }
     },
     "AssociationVersionInfo": {
@@ -437,54 +352,10 @@
         "InventoryItemEntry$value": null
       }
     },
-    "AutomationAction": {
-      "base": null,
-      "refs": {
-        "GetAutomationActionResult$ActionDetail": null
-      }
-    },
-    "AutomationActionDescription": {
-      "base": null,
-      "refs": {
-        "AutomationAction$Description": null
-      }
-    },
-    "AutomationActionIOList": {
-      "base": null,
-      "refs": {
-        "AutomationAction$Inputs": null,
-        "AutomationAction$Outputs": null
-      }
-    },
-    "AutomationActionList": {
-      "base": null,
-      "refs": {
-        "DescribeAutomationActionsResult$ActionList": null
-      }
-    },
     "AutomationActionName": {
       "base": null,
       "refs": {
-        "AutomationAction$Name": null,
-        "GetAutomationActionRequest$Name": null,
         "StepExecution$Action": "<p>The action this step performs. The action determines the behavior of the step.</p>"
-      }
-    },
-    "AutomationActionNotFoundException": {
-      "base": null,
-      "refs": {
-      }
-    },
-    "AutomationArgument": {
-      "base": null,
-      "refs": {
-        "AutomationActionIOList$member": null
-      }
-    },
-    "AutomationArgumentType": {
-      "base": null,
-      "refs": {
-        "AutomationArgument$Type": null
       }
     },
     "AutomationDefinitionNotFoundException": {
@@ -518,8 +389,7 @@
     "AutomationExecutionFilterList": {
       "base": null,
       "refs": {
-        "DescribeAutomationExecutionsRequest$Filters": "<p>Filters used to limit the scope of executions that are requested.</p>",
-        "DescribeAutomationStepExecutionsRequest$Filters": null
+        "DescribeAutomationExecutionsRequest$Filters": "<p>Filters used to limit the scope of executions that are requested.</p>"
       }
     },
     "AutomationExecutionFilterValue": {
@@ -539,7 +409,6 @@
       "refs": {
         "AutomationExecution$AutomationExecutionId": "<p>The execution ID.</p>",
         "AutomationExecutionMetadata$AutomationExecutionId": "<p>The execution ID.</p>",
-        "DescribeAutomationExecutionParametersRequest$AutomationExecutionId": null,
         "GetAutomationExecutionRequest$AutomationExecutionId": "<p>The unique identifier for an existing automation execution to examine. The execution ID is returned by StartAutomationExecution when the execution of an Automation document is initiated.</p>",
         "SendAutomationSignalRequest$AutomationExecutionId": "<p>The unique identifier for an existing Automation execution that you want to send the signal to.</p>",
         "StartAutomationExecutionResult$AutomationExecutionId": "<p>The unique ID of a newly scheduled automation execution.</p>",
@@ -576,23 +445,10 @@
         "StepExecution$StepStatus": "<p>The execution status for this step. Valid values include: Pending, InProgress, Success, Cancelled, Failed, and TimedOut.</p>"
       }
     },
-    "AutomationParameter": {
-      "base": null,
-      "refs": {
-        "AutomationParameterList$member": null
-      }
-    },
     "AutomationParameterKey": {
       "base": null,
       "refs": {
-        "AutomationParameter$Name": null,
         "AutomationParameterMap$key": null
-      }
-    },
-    "AutomationParameterList": {
-      "base": null,
-      "refs": {
-        "DescribeAutomationExecutionParametersResult$Parameters": null
       }
     },
     "AutomationParameterMap": {
@@ -608,12 +464,6 @@
         "StepExecution$Outputs": "<p>Returned values from the execution of the step.</p>"
       }
     },
-    "AutomationParameterType": {
-      "base": null,
-      "refs": {
-        "AutomationParameter$Type": null
-      }
-    },
     "AutomationParameterValue": {
       "base": null,
       "refs": {
@@ -623,14 +473,7 @@
     "AutomationParameterValueList": {
       "base": null,
       "refs": {
-        "AutomationParameter$Values": null,
         "AutomationParameterMap$value": null
-      }
-    },
-    "AvailabilityZone": {
-      "base": null,
-      "refs": {
-        "InstanceProperty$AvailabilityZone": null
       }
     },
     "BaselineDescription": {
@@ -686,7 +529,6 @@
       "base": null,
       "refs": {
         "Activation$Expired": "<p>Whether or not the activation is expired.</p>",
-        "AutomationArgument$Required": null,
         "DeregisterTargetFromMaintenanceWindowRequest$Safe": "<p>The system checks if the target is being referenced by a task. If the target is being referenced, the system returns an error and does not deregister the target from the Maintenance Window.</p>",
         "DocumentVersionInfo$IsDefaultVersion": "<p>An identifier for the default version of the document.</p>",
         "GetParameterHistoryRequest$WithDecryption": "<p>Return decrypted values for secure string parameters. This flag is ignored for String and StringList parameter types.</p>",
@@ -712,20 +554,12 @@
       "refs": {
       }
     },
-    "Checksum": {
-      "base": null,
-      "refs": {
-        "InstanceAssociationSummary$Checksum": null
-      }
-    },
     "ClientToken": {
       "base": null,
       "refs": {
         "CreateMaintenanceWindowRequest$ClientToken": "<p>User-provided idempotency token.</p>",
         "CreatePatchBaselineRequest$ClientToken": "<p>User-provided idempotency token.</p>",
-        "RegisterTargetWithMaintenanceWindowPrivateRequest$ClientToken": null,
         "RegisterTargetWithMaintenanceWindowRequest$ClientToken": "<p>User-provided idempotency token.</p>",
-        "RegisterTaskWithMaintenanceWindowPrivateRequest$ClientToken": null,
         "RegisterTaskWithMaintenanceWindowRequest$ClientToken": "<p>User-provided idempotency token.</p>"
       }
     },
@@ -766,18 +600,11 @@
       "refs": {
         "CancelCommandRequest$CommandId": "<p>The ID of the command you want to cancel.</p>",
         "Command$CommandId": "<p>A unique identifier for this command.</p>",
-        "CommandIdList$member": null,
         "CommandInvocation$CommandId": "<p>The command against which this invocation was requested.</p>",
         "GetCommandInvocationRequest$CommandId": "<p>(Required) The parent command ID of the invocation plugin.</p>",
         "GetCommandInvocationResult$CommandId": "<p>The parent command ID of the invocation plugin.</p>",
         "ListCommandInvocationsRequest$CommandId": "<p>(Optional) The invocations for a specific command ID.</p>",
         "ListCommandsRequest$CommandId": "<p>(Optional) If provided, lists only the specified command.</p>"
-      }
-    },
-    "CommandIdList": {
-      "base": null,
-      "refs": {
-        "DeleteCommandsRequest$CommandIds": null
       }
     },
     "CommandInvocation": {
@@ -812,16 +639,6 @@
         "ListCommandsRequest$MaxResults": "<p>(Optional) The maximum number of items to return for this call. The call also returns a token that you can specify in a subsequent call to get the next set of results.</p>"
       }
     },
-    "CommandNotFound": {
-      "base": null,
-      "refs": {
-      }
-    },
-    "CommandNotInTerminalState": {
-      "base": null,
-      "refs": {
-      }
-    },
     "CommandPlugin": {
       "base": "<p>Describes plugin details.</p>",
       "refs": {
@@ -838,7 +655,6 @@
       "base": null,
       "refs": {
         "CommandPlugin$Name": "<p>The name of the plugin. Must be one of the following: aws:updateAgent, aws:domainjoin, aws:applications, aws:runPowerShellScript, aws:psmodule, aws:cloudWatch, aws:runShellScript, or aws:updateSSMAgent. </p>",
-        "DescribeDocumentStepSchemaRequest$StepName": null,
         "GetCommandInvocationRequest$PluginName": "<p>(Optional) The name of the plugin for which you want detailed results. If the document contains only one plugin, the name can be omitted and the details will be returned.</p>",
         "GetCommandInvocationResult$PluginName": "<p>The name of the plugin for which you want detailed results. For example, aws:RunShellScript is a plugin.</p>"
       }
@@ -1081,27 +897,7 @@
     "ComputerName": {
       "base": null,
       "refs": {
-        "InstanceInformation$ComputerName": "<p>The fully qualified host name of the managed instance.</p>",
-        "InstanceProperty$ComputerName": null,
-        "UpdateInstanceInformationRequest$ComputerName": null
-      }
-    },
-    "ConfigurePackageResultAttributes": {
-      "base": null,
-      "refs": {
-        "PutConfigurePackageResultRequest$Attributes": null
-      }
-    },
-    "ConfigurePackageResultStep": {
-      "base": null,
-      "refs": {
-        "ConfigurePackageResultSteps$member": null
-      }
-    },
-    "ConfigurePackageResultSteps": {
-      "base": null,
-      "refs": {
-        "PutConfigurePackageResultRequest$Steps": null
+        "InstanceInformation$ComputerName": "<p>The fully qualified host name of the managed instance.</p>"
       }
     },
     "CreateActivationRequest": {
@@ -1230,20 +1026,13 @@
         "GetMaintenanceWindowResult$ModifiedDate": "<p>The date the Maintenance Window was last modified.</p>",
         "GetPatchBaselineResult$CreatedDate": "<p>The date the patch baseline was created.</p>",
         "GetPatchBaselineResult$ModifiedDate": "<p>The date the patch baseline was last modified.</p>",
-        "InstanceAssociationExecutionResult$ExecutionDate": null,
         "InstanceAssociationStatusInfo$ExecutionDate": "<p>The date the instance association executed. </p>",
-        "InstanceAssociationSummary$LastExecutionDate": null,
         "InstanceInformation$LastPingDateTime": "<p>The date and time when agent last pinged Systems Manager service. </p>",
         "InstanceInformation$RegistrationDate": "<p>The date the server or VM was registered with AWS as a managed instance.</p>",
         "InstanceInformation$LastAssociationExecutionDate": "<p>The date the association was last executed.</p>",
         "InstanceInformation$LastSuccessfulAssociationExecutionDate": "<p>The last date the association was successfully run.</p>",
         "InstancePatchState$OperationStartTime": "<p>The time the most recent patching operation was started on the instance.</p>",
         "InstancePatchState$OperationEndTime": "<p>The time the most recent patching operation completed on the instance.</p>",
-        "InstanceProperty$LaunchTime": null,
-        "InstanceProperty$LastPingDateTime": null,
-        "InstanceProperty$RegistrationDate": null,
-        "InstanceProperty$LastAssociationExecutionDate": null,
-        "InstanceProperty$LastSuccessfulAssociationExecutionDate": null,
         "MaintenanceWindowExecution$StartTime": "<p>The time the execution started.</p>",
         "MaintenanceWindowExecution$EndTime": "<p>The time the execution finished.</p>",
         "MaintenanceWindowExecutionTaskIdentity$StartTime": "<p>The time the task execution started.</p>",
@@ -1290,16 +1079,6 @@
       }
     },
     "DeleteAssociationResult": {
-      "base": null,
-      "refs": {
-      }
-    },
-    "DeleteCommandsRequest": {
-      "base": null,
-      "refs": {
-      }
-    },
-    "DeleteCommandsResult": {
       "base": null,
       "refs": {
       }
@@ -1442,26 +1221,6 @@
       "refs": {
       }
     },
-    "DescribeAutomationActionsRequest": {
-      "base": null,
-      "refs": {
-      }
-    },
-    "DescribeAutomationActionsResult": {
-      "base": null,
-      "refs": {
-      }
-    },
-    "DescribeAutomationExecutionParametersRequest": {
-      "base": null,
-      "refs": {
-      }
-    },
-    "DescribeAutomationExecutionParametersResult": {
-      "base": null,
-      "refs": {
-      }
-    },
     "DescribeAutomationExecutionsRequest": {
       "base": null,
       "refs": {
@@ -1472,42 +1231,12 @@
       "refs": {
       }
     },
-    "DescribeAutomationStepExecutionsRequest": {
-      "base": null,
-      "refs": {
-      }
-    },
-    "DescribeAutomationStepExecutionsResult": {
-      "base": null,
-      "refs": {
-      }
-    },
     "DescribeAvailablePatchesRequest": {
       "base": null,
       "refs": {
       }
     },
     "DescribeAvailablePatchesResult": {
-      "base": null,
-      "refs": {
-      }
-    },
-    "DescribeDocumentInternalRequest": {
-      "base": null,
-      "refs": {
-      }
-    },
-    "DescribeDocumentInternalResult": {
-      "base": null,
-      "refs": {
-      }
-    },
-    "DescribeDocumentParametersRequest": {
-      "base": null,
-      "refs": {
-      }
-    },
-    "DescribeDocumentParametersResult": {
       "base": null,
       "refs": {
       }
@@ -1528,36 +1257,6 @@
       }
     },
     "DescribeDocumentResult": {
-      "base": null,
-      "refs": {
-      }
-    },
-    "DescribeDocumentSchemaRequest": {
-      "base": null,
-      "refs": {
-      }
-    },
-    "DescribeDocumentSchemaResult": {
-      "base": null,
-      "refs": {
-      }
-    },
-    "DescribeDocumentStepSchemaRequest": {
-      "base": null,
-      "refs": {
-      }
-    },
-    "DescribeDocumentStepSchemaResult": {
-      "base": null,
-      "refs": {
-      }
-    },
-    "DescribeDocumentStepsRequest": {
-      "base": null,
-      "refs": {
-      }
-    },
-    "DescribeDocumentStepsResult": {
       "base": null,
       "refs": {
       }
@@ -1632,22 +1331,6 @@
       "refs": {
       }
     },
-    "DescribeInstancePropertiesMaxResults": {
-      "base": null,
-      "refs": {
-        "DescribeInstancePropertiesRequest$MaxResults": null
-      }
-    },
-    "DescribeInstancePropertiesRequest": {
-      "base": null,
-      "refs": {
-      }
-    },
-    "DescribeInstancePropertiesResult": {
-      "base": null,
-      "refs": {
-      }
-    },
     "DescribeMaintenanceWindowExecutionTaskInvocationsRequest": {
       "base": null,
       "refs": {
@@ -1678,32 +1361,12 @@
       "refs": {
       }
     },
-    "DescribeMaintenanceWindowTargetsPrivateRequest": {
-      "base": null,
-      "refs": {
-      }
-    },
-    "DescribeMaintenanceWindowTargetsPrivateResult": {
-      "base": null,
-      "refs": {
-      }
-    },
     "DescribeMaintenanceWindowTargetsRequest": {
       "base": null,
       "refs": {
       }
     },
     "DescribeMaintenanceWindowTargetsResult": {
-      "base": null,
-      "refs": {
-      }
-    },
-    "DescribeMaintenanceWindowTasksPrivateRequest": {
-      "base": null,
-      "refs": {
-      }
-    },
-    "DescribeMaintenanceWindowTasksPrivateResult": {
       "base": null,
       "refs": {
       }
@@ -1777,17 +1440,11 @@
     "DocumentARN": {
       "base": null,
       "refs": {
-        "Command$DocumentName": "<p>The name of the document requested for execution.</p>",
-        "CommandInvocation$DocumentName": "<p>The document name that was requested for execution.</p>",
-        "DescribeDocumentInternalRequest$Name": null,
-        "DescribeDocumentParametersRequest$DocumentName": null,
-        "DescribeDocumentRequest$Name": "<p>The name of the SSM document.</p>",
-        "DocumentDescription$Name": "<p>The name of the SSM document.</p>",
-        "DocumentIdentifier$Name": "<p>The name of the SSM document.</p>",
-        "GetDocumentInternalRequest$Name": null,
-        "GetDocumentInternalResult$Name": null,
-        "GetDocumentRequest$Name": "<p>The name of the SSM document.</p>",
-        "GetDocumentResult$Name": "<p>The name of the SSM document.</p>",
+        "DescribeDocumentRequest$Name": "<p>The name of the Systems Manager document.</p>",
+        "DocumentDescription$Name": "<p>The name of the Systems Manager document.</p>",
+        "DocumentIdentifier$Name": "<p>The name of the Systems Manager document.</p>",
+        "GetDocumentRequest$Name": "<p>The name of the Systems Manager document.</p>",
+        "GetDocumentResult$Name": "<p>The name of the Systems Manager document.</p>",
         "SendCommandRequest$DocumentName": "<p>Required. The name of the Systems Manager document to execute. This can be a public document or a custom document.</p>",
         "StartAutomationExecutionRequest$DocumentName": "<p>The name of the Automation document to use for this execution.</p>"
       }
@@ -1801,8 +1458,7 @@
       "base": null,
       "refs": {
         "CreateDocumentRequest$Content": "<p>A valid JSON string.</p>",
-        "GetDocumentInternalResult$Content": null,
-        "GetDocumentResult$Content": "<p>The contents of the SSM document.</p>",
+        "GetDocumentResult$Content": "<p>The contents of the Systems Manager document.</p>",
         "InstanceAssociation$Content": "<p>The content of the association document for the instance(s).</p>",
         "UpdateDocumentRequest$Content": "<p>The content in a document that you want to update.</p>"
       }
@@ -1814,11 +1470,10 @@
       }
     },
     "DocumentDescription": {
-      "base": "<p>Describes an SSM document. </p>",
+      "base": "<p>Describes a Systems Manager document. </p>",
       "refs": {
         "CreateDocumentResult$DocumentDescription": "<p>Information about the Systems Manager document.</p>",
-        "DescribeDocumentInternalResult$Document": null,
-        "DescribeDocumentResult$Document": "<p>Information about the SSM document.</p>",
+        "DescribeDocumentResult$Document": "<p>Information about the Systems Manager document.</p>",
         "UpdateDocumentResult$DocumentDescription": "<p>A description of the document that was updated.</p>"
       }
     },
@@ -1846,20 +1501,6 @@
         "DocumentFilter$value": "<p>The value of the filter.</p>"
       }
     },
-    "DocumentFormat": {
-      "base": null,
-      "refs": {
-        "CreateDocumentRequest$DocumentFormat": null,
-        "DocumentDescription$DocumentFormat": null,
-        "DocumentIdentifier$DocumentFormat": null,
-        "DocumentVersionInfo$DocumentFormat": null,
-        "GetDocumentInternalRequest$DocumentFormat": null,
-        "GetDocumentInternalResult$DocumentFormat": null,
-        "GetDocumentRequest$DocumentFormat": null,
-        "GetDocumentResult$DocumentFormat": null,
-        "UpdateDocumentRequest$DocumentFormat": null
-      }
-    },
     "DocumentHash": {
       "base": null,
       "refs": {
@@ -1877,7 +1518,7 @@
       }
     },
     "DocumentIdentifier": {
-      "base": "<p>Describes the name of an SSM document.</p>",
+      "base": "<p>Describes the name of a Systems Manager document.</p>",
       "refs": {
         "DocumentIdentifierList$member": null
       }
@@ -1885,38 +1526,69 @@
     "DocumentIdentifierList": {
       "base": null,
       "refs": {
-        "ListDocumentsResult$DocumentIdentifiers": "<p>The names of the SSM documents.</p>"
+        "ListDocumentsResult$DocumentIdentifiers": "<p>The names of the Systems Manager documents.</p>"
+      }
+    },
+    "DocumentKeyValuesFilter": {
+      "base": "<p>One or more filters. Use a filter to return a more specific list of documents.</p> <p>For keys, you can specify one or more tags that have been applied to a document. </p> <p>Other valid values include Owner, Name, PlatformTypes, and DocumentType.</p> <p>Note that only one Owner can be specified in a request. For example: <code>Key=Owner,Values=Self</code>.</p> <p>If you use Name as a key, you can use a name prefix to return a list of documents. For example, in the AWS CLI, to return a list of all documents that begin with <code>Te</code>, run the following command:</p> <p> <code>aws ssm list-documents --filters Key=Name,Values=Te</code> </p> <p>If you specify more than two keys, only documents that are identified by all the tags are returned in the results. If you specify more than two values for a key, documents that are identified by any of the values are returned in the results.</p> <p>To specify a custom key and value pair, use the format <code>Key=tag:[tagName],Values=[valueName]</code>.</p> <p>For example, if you created a Key called region and are using the AWS CLI to call the <code>list-documents</code> command: </p> <p> <code>aws ssm list-documents --filters Key=tag:region,Values=east,west Key=Owner,Values=Self</code> </p>",
+      "refs": {
+        "DocumentKeyValuesFilterList$member": null
+      }
+    },
+    "DocumentKeyValuesFilterKey": {
+      "base": null,
+      "refs": {
+        "DocumentKeyValuesFilter$Key": "<p>The name of the filter key.</p>"
+      }
+    },
+    "DocumentKeyValuesFilterList": {
+      "base": null,
+      "refs": {
+        "ListDocumentsRequest$Filters": "<p>One or more filters. Use a filter to return a more specific list of results.</p>"
+      }
+    },
+    "DocumentKeyValuesFilterValue": {
+      "base": null,
+      "refs": {
+        "DocumentKeyValuesFilterValues$member": null
+      }
+    },
+    "DocumentKeyValuesFilterValues": {
+      "base": null,
+      "refs": {
+        "DocumentKeyValuesFilter$Values": "<p>The value for the filter key.</p>"
       }
     },
     "DocumentLimitExceeded": {
-      "base": "<p>You can have at most 200 active SSM documents.</p>",
+      "base": "<p>You can have at most 200 active Systems Manager documents.</p>",
       "refs": {
       }
     },
     "DocumentName": {
       "base": null,
       "refs": {
-        "Association$Name": "<p>The name of the SSM document.</p>",
-        "AssociationDescription$Name": "<p>The name of the SSM document.</p>",
+        "Association$Name": "<p>The name of the Systems Manager document.</p>",
+        "AssociationDescription$Name": "<p>The name of the Systems Manager document.</p>",
         "AssociationVersionInfo$Name": "<p>The name specified when the association was created.</p>",
         "AutomationExecution$DocumentName": "<p>The name of the Automation document used during the execution.</p>",
         "AutomationExecutionMetadata$DocumentName": "<p>The name of the Automation document used during execution.</p>",
+        "Command$DocumentName": "<p>The name of the document requested for execution.</p>",
+        "CommandInvocation$DocumentName": "<p>The document name that was requested for execution.</p>",
         "CreateAssociationBatchRequestEntry$Name": "<p>The name of the configuration document. </p>",
         "CreateAssociationRequest$Name": "<p>The name of the Systems Manager document.</p>",
         "CreateDocumentRequest$Name": "<p>A name for the Systems Manager document.</p>",
         "DeleteAssociationRequest$Name": "<p>The name of the Systems Manager document.</p>",
         "DeleteDocumentRequest$Name": "<p>The name of the document.</p>",
-        "DescribeAssociationRequest$Name": "<p>The name of the SSM document.</p>",
+        "DescribeAssociationRequest$Name": "<p>The name of the Systems Manager document.</p>",
         "DescribeDocumentPermissionRequest$Name": "<p>The name of the document for which you are the owner.</p>",
         "DocumentDefaultVersionDescription$Name": "<p>The name of the document.</p>",
         "DocumentVersionInfo$Name": "<p>The document name.</p>",
         "GetCommandInvocationResult$DocumentName": "<p>The name of the document that was executed. For example, AWS-RunShellScript.</p>",
         "InstanceAssociationStatusInfo$Name": "<p>The name of the association.</p>",
-        "InstanceAssociationSummary$Name": null,
         "ListDocumentVersionsRequest$Name": "<p>The name of the document about which you want version information.</p>",
         "ModifyDocumentPermissionRequest$Name": "<p>The name of the document that you want to share.</p>",
         "UpdateAssociationRequest$Name": "<p>The name of the association document.</p>",
-        "UpdateAssociationStatusRequest$Name": "<p>The name of the SSM document.</p>",
+        "UpdateAssociationStatusRequest$Name": "<p>The name of the Systems Manager document.</p>",
         "UpdateDocumentDefaultVersionRequest$Name": "<p>The name of a custom document that you want to set as the default version.</p>",
         "UpdateDocumentRequest$Name": "<p>The name of the document that you want to update.</p>"
       }
@@ -1924,8 +1596,8 @@
     "DocumentOwner": {
       "base": null,
       "refs": {
-        "DocumentDescription$Owner": "<p>The AWS user account of the person who created the document.</p>",
-        "DocumentIdentifier$Owner": "<p>The AWS user account of the person who created the document.</p>"
+        "DocumentDescription$Owner": "<p>The AWS user account that created the document.</p>",
+        "DocumentIdentifier$Owner": "<p>The AWS user account that created the document.</p>"
       }
     },
     "DocumentParameter": {
@@ -1986,30 +1658,21 @@
     "DocumentSha1": {
       "base": null,
       "refs": {
-        "DocumentDescription$Sha1": "<p>The SHA1 hash of the document, which you can use for verification purposes.</p>"
+        "DocumentDescription$Sha1": "<p>The SHA1 hash of the document, which you can use for verification.</p>"
       }
     },
     "DocumentStatus": {
       "base": null,
       "refs": {
-        "DocumentDescription$Status": "<p>The status of the SSM document.</p>"
-      }
-    },
-    "DocumentStepList": {
-      "base": null,
-      "refs": {
-        "DescribeDocumentStepsResult$StepList": null
+        "DocumentDescription$Status": "<p>The status of the Systems Manager document.</p>"
       }
     },
     "DocumentType": {
       "base": null,
       "refs": {
         "CreateDocumentRequest$DocumentType": "<p>The type of document to create. Valid document types include: Policy, Automation, and Command.</p>",
-        "DescribeDocumentSchemaRequest$DocumentType": null,
-        "DescribeDocumentStepsRequest$DocumentType": null,
         "DocumentDescription$DocumentType": "<p>The type of document. </p>",
         "DocumentIdentifier$DocumentType": "<p>The document type.</p>",
-        "GetDocumentInternalResult$DocumentType": null,
         "GetDocumentResult$DocumentType": "<p>The document type.</p>"
       }
     },
@@ -2018,13 +1681,11 @@
       "refs": {
         "Association$DocumentVersion": "<p>The version of the document used in the association.</p>",
         "AssociationDescription$DocumentVersion": "<p>The document version.</p>",
-        "AssociationVersionInfo$DocumentVersion": "<p>The version of an SSM document used when the association version was created.</p>",
+        "AssociationVersionInfo$DocumentVersion": "<p>The version of a Systems Manager document used when the association version was created.</p>",
         "AutomationExecution$DocumentVersion": "<p>The version of the document to use during execution.</p>",
         "AutomationExecutionMetadata$DocumentVersion": "<p>The document version used during the execution.</p>",
         "CreateAssociationBatchRequestEntry$DocumentVersion": "<p>The document version.</p>",
         "CreateAssociationRequest$DocumentVersion": "<p>The document version you want to associate with the target(s). Can be a specific version or the default version.</p>",
-        "DescribeDocumentInternalRequest$DocumentVersion": null,
-        "DescribeDocumentParametersRequest$DocumentVersion": null,
         "DescribeDocumentRequest$DocumentVersion": "<p>The document version for which you want information. Can be a specific version or the default version.</p>",
         "DocumentDefaultVersionDescription$DefaultVersion": "<p>The default version of the document.</p>",
         "DocumentDescription$DocumentVersion": "<p>The document version.</p>",
@@ -2032,12 +1693,9 @@
         "DocumentDescription$DefaultVersion": "<p>The default version.</p>",
         "DocumentIdentifier$DocumentVersion": "<p>The document version.</p>",
         "DocumentVersionInfo$DocumentVersion": "<p>The document version.</p>",
-        "GetDocumentInternalRequest$DocumentVersion": null,
-        "GetDocumentInternalResult$DocumentVersion": null,
         "GetDocumentRequest$DocumentVersion": "<p>The document version for which you want information.</p>",
         "GetDocumentResult$DocumentVersion": "<p>The document version.</p>",
         "InstanceAssociationStatusInfo$DocumentVersion": "<p>The association document verions.</p>",
-        "InstanceAssociationSummary$DocumentVersion": null,
         "MaintenanceWindowAutomationParameters$DocumentVersion": "<p>The version of an Automation document to use during task execution.</p>",
         "StartAutomationExecutionRequest$DocumentVersion": "<p>The version of the Automation document to use for this execution.</p>",
         "UpdateAssociationRequest$DocumentVersion": "<p>The document version you want update for the association. </p>",
@@ -2072,11 +1730,6 @@
       "refs": {
       }
     },
-    "DuplicateCommandId": {
-      "base": null,
-      "refs": {
-      }
-    },
     "DuplicateDocumentContent": {
       "base": "<p>The content of the association document matches another document. Change the content of the document and try again.</p>",
       "refs": {
@@ -2085,14 +1738,6 @@
     "DuplicateInstanceId": {
       "base": "<p>You cannot specify an instance ID in more than one association.</p>",
       "refs": {
-      }
-    },
-    "DynamicConfigParameters": {
-      "base": null,
-      "refs": {
-        "DescribeDocumentParametersResult$Config": null,
-        "DescribeDocumentSchemaResult$Config": null,
-        "DescribeDocumentStepSchemaResult$Config": null
       }
     },
     "EffectiveInstanceAssociationMaxResults": {
@@ -2117,20 +1762,6 @@
       "base": null,
       "refs": {
         "Command$ErrorCount": "<p>The number of targets for which the status is Failed or Execution Timed Out.</p>"
-      }
-    },
-    "ExecutionMode": {
-      "base": null,
-      "refs": {
-        "AutomationExecution$Mode": null,
-        "StartAutomationExecutionRequest$Mode": null
-      }
-    },
-    "ExitCode": {
-      "base": null,
-      "refs": {
-        "ConfigurePackageResultStep$Result": null,
-        "PutConfigurePackageResultRequest$Result": null
       }
     },
     "ExpirationDate": {
@@ -2166,23 +1797,6 @@
     },
     "FeatureNotAvailableException": {
       "base": "<p>You attempted to register a LAMBDA or STEP_FUNCTION task in a region where the corresponding service is not available. </p>",
-      "refs": {
-      }
-    },
-    "Fingerprint": {
-      "base": null,
-      "refs": {
-        "RegisterManagedInstanceRequest$Fingerprint": null,
-        "RequestManagedInstanceRoleTokenRequest$Fingerprint": null
-      }
-    },
-    "GetAutomationActionRequest": {
-      "base": null,
-      "refs": {
-      }
-    },
-    "GetAutomationActionResult": {
-      "base": null,
       "refs": {
       }
     },
@@ -2222,16 +1836,6 @@
       }
     },
     "GetDeployablePatchSnapshotForInstanceResult": {
-      "base": null,
-      "refs": {
-      }
-    },
-    "GetDocumentInternalRequest": {
-      "base": null,
-      "refs": {
-      }
-    },
-    "GetDocumentInternalResult": {
       "base": null,
       "refs": {
       }
@@ -2322,16 +1926,6 @@
       "refs": {
       }
     },
-    "GetManifestRequest": {
-      "base": null,
-      "refs": {
-      }
-    },
-    "GetManifestResponse": {
-      "base": null,
-      "refs": {
-      }
-    },
     "GetParameterHistoryRequest": {
       "base": null,
       "refs": {
@@ -2411,9 +2005,7 @@
     "IPAddress": {
       "base": null,
       "refs": {
-        "InstanceInformation$IPAddress": "<p>The IP address of the managed instance.</p>",
-        "InstanceProperty$IPAddress": null,
-        "UpdateInstanceInformationRequest$IPAddress": null
+        "InstanceInformation$IPAddress": "<p>The IP address of the managed instance.</p>"
       }
     },
     "IamRole": {
@@ -2422,14 +2014,13 @@
         "Activation$IamRole": "<p>The Amazon Identity and Access Management (IAM) role to assign to the managed instance.</p>",
         "CreateActivationRequest$IamRole": "<p>The Amazon Identity and Access Management (IAM) role that you want to assign to the managed instance. </p>",
         "InstanceInformation$IamRole": "<p>The Amazon Identity and Access Management (IAM) role assigned to EC2 instances or managed instances. </p>",
-        "InstanceProperty$IamRole": null,
         "UpdateManagedInstanceRoleRequest$IamRole": "<p>The IAM role you want to assign or change.</p>"
       }
     },
     "IdempotencyToken": {
       "base": null,
       "refs": {
-        "StartAutomationExecutionRequest$ClientToken": null
+        "StartAutomationExecutionRequest$ClientToken": "<p>User-provided idempotency token. The token must be unique, is case insensitive, enforces the UUID format, and can't be reused.</p>"
       }
     },
     "IdempotentParameterMismatch": {
@@ -2440,8 +2031,7 @@
     "InstanceAggregatedAssociationOverview": {
       "base": "<p>Status information about the aggregated associations.</p>",
       "refs": {
-        "InstanceInformation$AssociationOverview": "<p>Information about the association.</p>",
-        "InstanceProperty$AssociationOverview": null
+        "InstanceInformation$AssociationOverview": "<p>Information about the association.</p>"
       }
     },
     "InstanceAssociation": {
@@ -2450,22 +2040,9 @@
         "InstanceAssociationList$member": null
       }
     },
-    "InstanceAssociationExecutionResult": {
-      "base": null,
-      "refs": {
-        "UpdateInstanceAssociationStatusRequest$ExecutionResult": null
-      }
-    },
-    "InstanceAssociationExecutionStatusName": {
-      "base": null,
-      "refs": {
-        "InstanceAssociationExecutionResult$Status": null
-      }
-    },
     "InstanceAssociationExecutionSummary": {
       "base": null,
       "refs": {
-        "InstanceAssociationExecutionResult$ExecutionSummary": null,
         "InstanceAssociationStatusInfo$ExecutionSummary": "<p>Summary information about association execution.</p>"
       }
     },
@@ -2482,14 +2059,12 @@
         "AssociationVersionInfo$OutputLocation": "<p>The location in Amazon S3 specified for the association when the association version was created.</p>",
         "CreateAssociationBatchRequestEntry$OutputLocation": "<p>An Amazon S3 bucket where you want to store the results of this request.</p>",
         "CreateAssociationRequest$OutputLocation": "<p>An Amazon S3 bucket where you want to store the output details of the request.</p>",
-        "InstanceAssociationSummary$OutputLocation": null,
         "UpdateAssociationRequest$OutputLocation": "<p>An Amazon S3 bucket where you want to store the results of this request.</p>"
       }
     },
     "InstanceAssociationOutputUrl": {
       "base": "<p>The URL of Amazon S3 bucket where you want to store the results of this request.</p>",
       "refs": {
-        "InstanceAssociationExecutionResult$OutputUrl": null,
         "InstanceAssociationStatusInfo$OutputUrl": "<p>A URL for an Amazon S3 bucket where you want to store the results of this request.</p>"
       }
     },
@@ -2511,18 +2086,6 @@
         "DescribeInstanceAssociationsStatusResult$InstanceAssociationStatusInfos": "<p>Status information about the association.</p>"
       }
     },
-    "InstanceAssociationSummary": {
-      "base": null,
-      "refs": {
-        "InstanceAssociationSummaryList$member": null
-      }
-    },
-    "InstanceAssociationSummaryList": {
-      "base": null,
-      "refs": {
-        "ListInstanceAssociationsResult$Associations": null
-      }
-    },
     "InstanceCount": {
       "base": null,
       "refs": {
@@ -2540,7 +2103,6 @@
         "CreateAssociationRequest$InstanceId": "<p>The instance ID.</p>",
         "DeleteAssociationRequest$InstanceId": "<p>The ID of the instance.</p>",
         "DescribeAssociationRequest$InstanceId": "<p>The instance ID.</p>",
-        "DescribeDocumentInternalRequest$InstanceId": null,
         "DescribeEffectiveInstanceAssociationsRequest$InstanceId": "<p>The instance ID for which you want to view all associations.</p>",
         "DescribeInstanceAssociationsStatusRequest$InstanceId": "<p>The instance IDs for which you want association status information.</p>",
         "DescribeInstancePatchesRequest$InstanceId": "<p>The ID of the instance whose patch state information should be retrieved.</p>",
@@ -2548,24 +2110,17 @@
         "GetCommandInvocationResult$InstanceId": "<p>The ID of the managed instance targeted by the command. A managed instance can be an Amazon EC2 instance or an instance in your hybrid environment that is configured for Systems Manager.</p>",
         "GetDeployablePatchSnapshotForInstanceRequest$InstanceId": "<p>The ID of the instance for which the appropriate patch snapshot should be retrieved.</p>",
         "GetDeployablePatchSnapshotForInstanceResult$InstanceId": "<p>The ID of the instance.</p>",
-        "GetDocumentInternalRequest$InstanceId": null,
         "InstanceAssociation$InstanceId": "<p>The instance ID.</p>",
         "InstanceAssociationStatusInfo$InstanceId": "<p>The instance ID where the association was created.</p>",
-        "InstanceAssociationSummary$InstanceId": null,
         "InstanceIdList$member": null,
         "InstanceInformation$InstanceId": "<p>The instance ID. </p>",
         "InstancePatchState$InstanceId": "<p>The ID of the managed instance the high-level patch compliance information was collected for.</p>",
-        "InstanceProperty$InstanceId": null,
         "ListCommandInvocationsRequest$InstanceId": "<p>(Optional) The command execution details for a specific instance ID.</p>",
         "ListCommandsRequest$InstanceId": "<p>(Optional) Lists commands issued against this instance ID.</p>",
-        "ListInstanceAssociationsRequest$InstanceId": null,
         "ListInventoryEntriesRequest$InstanceId": "<p>The instance ID for which you want inventory information.</p>",
         "ListInventoryEntriesResult$InstanceId": "<p>The instance ID targeted by the request to query inventory information.</p>",
         "PutInventoryRequest$InstanceId": "<p>One or more instance IDs where you want to add or update inventory items.</p>",
-        "RegisterManagedInstanceResult$InstanceId": null,
-        "UpdateAssociationStatusRequest$InstanceId": "<p>The ID of the instance.</p>",
-        "UpdateInstanceAssociationStatusRequest$InstanceId": null,
-        "UpdateInstanceInformationRequest$InstanceId": null
+        "UpdateAssociationStatusRequest$InstanceId": "<p>The ID of the instance.</p>"
       }
     },
     "InstanceIdList": {
@@ -2638,13 +2193,6 @@
         "DescribeInstanceInformationRequest$Filters": "<p>One or more filters. Use a filter to return a more specific list of instances.</p>"
       }
     },
-    "InstanceName": {
-      "base": null,
-      "refs": {
-        "CommandInvocation$InstanceName": "<p>The name of the invocation target. For Amazon EC2 instances this is the value for the aws:Name tag. For on-premises instances, this is the name of the instance.</p>",
-        "InstanceProperty$Name": null
-      }
-    },
     "InstancePatchState": {
       "base": "<p>Defines the high-level patch compliance state for a managed instance, providing information about the number of installed, missing, not applicable, and failed patches along with metadata about the operation when this information was gathered for the instance.</p>",
       "refs": {
@@ -2700,89 +2248,10 @@
         "DescribeInstancePatchStatesForPatchGroupResult$InstancePatchStates": "<p>The high-level patch state for the requested instances. </p>"
       }
     },
-    "InstanceProperties": {
+    "InstanceTagName": {
       "base": null,
       "refs": {
-        "DescribeInstancePropertiesResult$InstanceProperties": null
-      }
-    },
-    "InstanceProperty": {
-      "base": null,
-      "refs": {
-        "InstanceProperties$member": null
-      }
-    },
-    "InstancePropertyFilter": {
-      "base": null,
-      "refs": {
-        "InstancePropertyFilterList$member": null
-      }
-    },
-    "InstancePropertyFilterKey": {
-      "base": null,
-      "refs": {
-        "InstancePropertyFilter$key": null
-      }
-    },
-    "InstancePropertyFilterList": {
-      "base": null,
-      "refs": {
-        "DescribeInstancePropertiesRequest$InstancePropertyFilterList": null
-      }
-    },
-    "InstancePropertyFilterOperator": {
-      "base": null,
-      "refs": {
-        "InstancePropertyStringFilter$Operator": null
-      }
-    },
-    "InstancePropertyFilterValue": {
-      "base": null,
-      "refs": {
-        "InstancePropertyFilterValueSet$member": null
-      }
-    },
-    "InstancePropertyFilterValueSet": {
-      "base": null,
-      "refs": {
-        "InstancePropertyFilter$valueSet": null,
-        "InstancePropertyStringFilter$Values": null
-      }
-    },
-    "InstancePropertyStringFilter": {
-      "base": null,
-      "refs": {
-        "InstancePropertyStringFilterList$member": null
-      }
-    },
-    "InstancePropertyStringFilterKey": {
-      "base": null,
-      "refs": {
-        "InstancePropertyStringFilter$Key": null
-      }
-    },
-    "InstancePropertyStringFilterList": {
-      "base": null,
-      "refs": {
-        "DescribeInstancePropertiesRequest$FiltersWithOperator": null
-      }
-    },
-    "InstanceRole": {
-      "base": null,
-      "refs": {
-        "InstanceProperty$InstanceRole": null
-      }
-    },
-    "InstanceState": {
-      "base": null,
-      "refs": {
-        "InstanceProperty$InstanceState": null
-      }
-    },
-    "InstanceType": {
-      "base": null,
-      "refs": {
-        "InstanceProperty$InstanceType": null
+        "CommandInvocation$InstanceName": "<p>The name of the invocation target. For Amazon EC2 instances this is the value for the aws:Name tag. For on-premises instances, this is the name of the instance.</p>"
       }
     },
     "Integer": {
@@ -2811,18 +2280,8 @@
       "refs": {
       }
     },
-    "InvalidAggregatorException": {
-      "base": null,
-      "refs": {
-      }
-    },
     "InvalidAllowedPatternException": {
       "base": "<p>The request does not meet the regular expression requirement.</p>",
-      "refs": {
-      }
-    },
-    "InvalidAssociation": {
-      "base": "<p>The association is not valid or does not exist. </p>",
       "refs": {
       }
     },
@@ -2866,11 +2325,6 @@
       "refs": {
       }
     },
-    "InvalidDocumentType": {
-      "base": null,
-      "refs": {
-      }
-    },
     "InvalidDocumentVersion": {
       "base": "<p>The document version is not valid or does not exist.</p>",
       "refs": {
@@ -2906,23 +2360,8 @@
       "refs": {
       }
     },
-    "InvalidInstanceInformationValue": {
-      "base": null,
-      "refs": {
-      }
-    },
-    "InvalidInstancePropertyFilterValue": {
-      "base": null,
-      "refs": {
-      }
-    },
     "InvalidInventoryItemContextException": {
       "base": "<p>You specified invalid keys or values in the <code>Context</code> attribute for <code>InventoryItem</code>. Verify the keys and values, and try again.</p>",
-      "refs": {
-      }
-    },
-    "InvalidInventoryResourceIdException": {
-      "base": null,
       "refs": {
       }
     },
@@ -2957,7 +2396,7 @@
       }
     },
     "InvalidParameters": {
-      "base": "<p>You must specify values for all required parameters in the SSM document. You can only supply values to parameters defined in the SSM document.</p>",
+      "base": "<p>You must specify values for all required parameters in the Systems Manager document. You can only supply values to parameters defined in the Systems Manager document.</p>",
       "refs": {
       }
     },
@@ -2977,7 +2416,7 @@
       }
     },
     "InvalidResourceType": {
-      "base": "<p>The resource type is not valid. If you are attempting to tag an instance, the instance must be a registered, managed instance.</p>",
+      "base": "<p>The resource type is not valid. For example, if you are attempting to tag an instance, the instance must be a registered, managed instance.</p>",
       "refs": {
       }
     },
@@ -3009,25 +2448,6 @@
     "InvalidUpdate": {
       "base": "<p>The update is not valid.</p>",
       "refs": {
-      }
-    },
-    "InventoryAggregator": {
-      "base": null,
-      "refs": {
-        "InventoryAggregatorList$member": null
-      }
-    },
-    "InventoryAggregatorExpression": {
-      "base": null,
-      "refs": {
-        "InventoryAggregator$Expression": null
-      }
-    },
-    "InventoryAggregatorList": {
-      "base": null,
-      "refs": {
-        "GetInventoryRequest$Aggregators": null,
-        "InventoryAggregator$Aggregators": null
       }
     },
     "InventoryAttributeDataType": {
@@ -3180,18 +2600,6 @@
         "InventoryFilter$Type": "<p>The type of filter. Valid values include the following: \"Equal\"|\"NotEqual\"|\"BeginWith\"|\"LessThan\"|\"GreaterThan\"</p>"
       }
     },
-    "InventoryResourceId": {
-      "base": null,
-      "refs": {
-        "GetInventorySchemaRequest$ResourceId": null
-      }
-    },
-    "InventoryResourceType": {
-      "base": null,
-      "refs": {
-        "GetInventorySchemaRequest$ResourceType": null
-      }
-    },
     "InventoryResultEntity": {
       "base": "<p>Inventory query results.</p>",
       "refs": {
@@ -3228,12 +2636,6 @@
         "InventoryResultEntity$Data": "<p>The data section in the inventory result entity json.</p>"
       }
     },
-    "InventoryTypeDisplayName": {
-      "base": null,
-      "refs": {
-        "InventoryItemSchema$DisplayName": null
-      }
-    },
     "InvocationDoesNotExist": {
       "base": "<p>The command ID and instance ID you specified did not match any invocations. Verify the command ID adn the instance ID and try again. </p>",
       "refs": {
@@ -3265,12 +2667,6 @@
       "base": null,
       "refs": {
         "RemoveTagsFromResourceRequest$TagKeys": "<p>Tag keys that you want to remove from the specified resource.</p>"
-      }
-    },
-    "KeyName": {
-      "base": null,
-      "refs": {
-        "InstanceProperty$KeyName": null
       }
     },
     "LastResourceDataSyncStatus": {
@@ -3371,16 +2767,6 @@
       "refs": {
       }
     },
-    "ListInstanceAssociationsRequest": {
-      "base": null,
-      "refs": {
-      }
-    },
-    "ListInstanceAssociationsResult": {
-      "base": null,
-      "refs": {
-      }
-    },
     "ListInventoryEntriesRequest": {
       "base": null,
       "refs": {
@@ -3426,16 +2812,9 @@
       "refs": {
         "GetMaintenanceWindowTaskResult$LoggingInfo": "<p>The location in Amazon S3 where the task results are logged.</p>",
         "MaintenanceWindowTask$LoggingInfo": "<p>Information about an Amazon S3 bucket to write task-level logs to.</p>",
-        "MaintenanceWindowTaskPrivate$LoggingInfo": null,
-        "RegisterTaskWithMaintenanceWindowPrivateRequest$LoggingInfo": null,
         "RegisterTaskWithMaintenanceWindowRequest$LoggingInfo": "<p>A structure containing information about an Amazon S3 bucket to write instance-level logs to. </p>",
         "UpdateMaintenanceWindowTaskRequest$LoggingInfo": "<p>The new logging location in Amazon S3 to specify.</p>",
         "UpdateMaintenanceWindowTaskResult$LoggingInfo": "<p>The updated logging information in Amazon S3.</p>"
-      }
-    },
-    "MachineFingerprintDoesNotMatch": {
-      "base": null,
-      "refs": {
       }
     },
     "MaintenanceWindowAllowUnassociatedTargets": {
@@ -3616,6 +2995,41 @@
         "MaintenanceWindowExecutionTaskInvocationIdentity$Parameters": "<p>The parameters that were provided for the invocation when it was executed.</p>"
       }
     },
+    "MaintenanceWindowFilter": {
+      "base": "<p>Filter used in the request.</p>",
+      "refs": {
+        "MaintenanceWindowFilterList$member": null
+      }
+    },
+    "MaintenanceWindowFilterKey": {
+      "base": null,
+      "refs": {
+        "MaintenanceWindowFilter$Key": "<p>The name of the filter.</p>"
+      }
+    },
+    "MaintenanceWindowFilterList": {
+      "base": null,
+      "refs": {
+        "DescribeMaintenanceWindowExecutionTaskInvocationsRequest$Filters": "<p>Optional filters used to scope down the returned task invocations. The supported filter key is STATUS with the corresponding values PENDING, IN_PROGRESS, SUCCESS, FAILED, TIMED_OUT, CANCELLING, and CANCELLED.</p>",
+        "DescribeMaintenanceWindowExecutionTasksRequest$Filters": "<p>Optional filters used to scope down the returned tasks. The supported filter key is STATUS with the corresponding values PENDING, IN_PROGRESS, SUCCESS, FAILED, TIMED_OUT, CANCELLING, and CANCELLED. </p>",
+        "DescribeMaintenanceWindowExecutionsRequest$Filters": "<p>Each entry in the array is a structure containing:</p> <p>Key (string, between 1 and 128 characters)</p> <p>Values (array of strings, each string is between 1 and 256 characters)</p> <p>The supported Keys are ExecutedBefore and ExecutedAfter with the value being a date/time string such as 2016-11-04T05:00:00Z.</p>",
+        "DescribeMaintenanceWindowTargetsRequest$Filters": "<p>Optional filters that can be used to narrow down the scope of the returned window targets. The supported filter keys are Type, WindowTargetId and OwnerInformation.</p>",
+        "DescribeMaintenanceWindowTasksRequest$Filters": "<p>Optional filters used to narrow down the scope of the returned tasks. The supported filter keys are WindowTaskId, TaskArn, Priority, and TaskType.</p>",
+        "DescribeMaintenanceWindowsRequest$Filters": "<p>Optional filters used to narrow down the scope of the returned Maintenance Windows. Supported filter keys are Name and Enabled.</p>"
+      }
+    },
+    "MaintenanceWindowFilterValue": {
+      "base": null,
+      "refs": {
+        "MaintenanceWindowFilterValues$member": null
+      }
+    },
+    "MaintenanceWindowFilterValues": {
+      "base": null,
+      "refs": {
+        "MaintenanceWindowFilter$Values": "<p>The filter values.</p>"
+      }
+    },
     "MaintenanceWindowId": {
       "base": null,
       "refs": {
@@ -3627,9 +3041,7 @@
         "DeregisterTaskFromMaintenanceWindowRequest$WindowId": "<p>The ID of the Maintenance Window the task should be removed from.</p>",
         "DeregisterTaskFromMaintenanceWindowResult$WindowId": "<p>The ID of the Maintenance Window the task was removed from.</p>",
         "DescribeMaintenanceWindowExecutionsRequest$WindowId": "<p>The ID of the Maintenance Window whose executions should be retrieved.</p>",
-        "DescribeMaintenanceWindowTargetsPrivateRequest$WindowId": null,
         "DescribeMaintenanceWindowTargetsRequest$WindowId": "<p>The ID of the Maintenance Window whose targets should be retrieved.</p>",
-        "DescribeMaintenanceWindowTasksPrivateRequest$WindowId": null,
         "DescribeMaintenanceWindowTasksRequest$WindowId": "<p>The ID of the Maintenance Window whose tasks should be retrieved.</p>",
         "GetMaintenanceWindowRequest$WindowId": "<p>The ID of the desired Maintenance Window.</p>",
         "GetMaintenanceWindowResult$WindowId": "<p>The ID of the created Maintenance Window.</p>",
@@ -3638,12 +3050,8 @@
         "MaintenanceWindowExecution$WindowId": "<p>The ID of the Maintenance Window.</p>",
         "MaintenanceWindowIdentity$WindowId": "<p>The ID of the Maintenance Window.</p>",
         "MaintenanceWindowTarget$WindowId": "<p>The Maintenance Window ID where the target is registered.</p>",
-        "MaintenanceWindowTargetPrivate$WindowId": null,
         "MaintenanceWindowTask$WindowId": "<p>The Maintenance Window ID where the task is registered.</p>",
-        "MaintenanceWindowTaskPrivate$WindowId": null,
-        "RegisterTargetWithMaintenanceWindowPrivateRequest$WindowId": null,
         "RegisterTargetWithMaintenanceWindowRequest$WindowId": "<p>The ID of the Maintenance Window the target should be registered with.</p>",
-        "RegisterTaskWithMaintenanceWindowPrivateRequest$WindowId": null,
         "RegisterTaskWithMaintenanceWindowRequest$WindowId": "<p>The id of the Maintenance Window the task should be added to.</p>",
         "UpdateMaintenanceWindowRequest$WindowId": "<p>The ID of the Maintenance Window to update.</p>",
         "UpdateMaintenanceWindowResult$WindowId": "<p>The ID of the created Maintenance Window.</p>",
@@ -3695,9 +3103,7 @@
         "DescribeMaintenanceWindowExecutionTaskInvocationsRequest$MaxResults": "<p>The maximum number of items to return for this call. The call also returns a token that you can specify in a subsequent call to get the next set of results.</p>",
         "DescribeMaintenanceWindowExecutionTasksRequest$MaxResults": "<p>The maximum number of items to return for this call. The call also returns a token that you can specify in a subsequent call to get the next set of results.</p>",
         "DescribeMaintenanceWindowExecutionsRequest$MaxResults": "<p>The maximum number of items to return for this call. The call also returns a token that you can specify in a subsequent call to get the next set of results.</p>",
-        "DescribeMaintenanceWindowTargetsPrivateRequest$MaxResults": null,
         "DescribeMaintenanceWindowTargetsRequest$MaxResults": "<p>The maximum number of items to return for this call. The call also returns a token that you can specify in a subsequent call to get the next set of results.</p>",
-        "DescribeMaintenanceWindowTasksPrivateRequest$MaxResults": null,
         "DescribeMaintenanceWindowTasksRequest$MaxResults": "<p>The maximum number of items to return for this call. The call also returns a token that you can specify in a subsequent call to get the next set of results.</p>",
         "DescribeMaintenanceWindowsRequest$MaxResults": "<p>The maximum number of items to return for this call. The call also returns a token that you can specify in a subsequent call to get the next set of results.</p>"
       }
@@ -3773,49 +3179,15 @@
         "DeregisterTargetFromMaintenanceWindowRequest$WindowTargetId": "<p>The ID of the target definition to remove.</p>",
         "DeregisterTargetFromMaintenanceWindowResult$WindowTargetId": "<p>The ID of the removed target definition.</p>",
         "MaintenanceWindowTarget$WindowTargetId": "<p>The ID of the target.</p>",
-        "MaintenanceWindowTargetPrivate$WindowTargetId": null,
-        "RegisterTargetWithMaintenanceWindowPrivateResult$WindowTargetId": null,
         "RegisterTargetWithMaintenanceWindowResult$WindowTargetId": "<p>The ID of the target definition in this Maintenance Window.</p>",
         "UpdateMaintenanceWindowTargetRequest$WindowTargetId": "<p>The target ID to modify.</p>",
         "UpdateMaintenanceWindowTargetResult$WindowTargetId": "<p>The target ID specified in the update request.</p>"
-      }
-    },
-    "MaintenanceWindowTargetIdList": {
-      "base": null,
-      "refs": {
-        "MaintenanceWindowTargetPrivate$TargetIds": null,
-        "RegisterTargetWithMaintenanceWindowPrivateRequest$TargetIds": null
       }
     },
     "MaintenanceWindowTargetList": {
       "base": null,
       "refs": {
         "DescribeMaintenanceWindowTargetsResult$Targets": "<p>Information about the targets in the Maintenance Window.</p>"
-      }
-    },
-    "MaintenanceWindowTargetListPrivate": {
-      "base": null,
-      "refs": {
-        "DescribeMaintenanceWindowTargetsPrivateResult$Targets": null
-      }
-    },
-    "MaintenanceWindowTargetPrivate": {
-      "base": null,
-      "refs": {
-        "MaintenanceWindowTargetListPrivate$member": null
-      }
-    },
-    "MaintenanceWindowTargetResourceId": {
-      "base": null,
-      "refs": {
-        "MaintenanceWindowTargetIdList$member": null
-      }
-    },
-    "MaintenanceWindowTargetType": {
-      "base": null,
-      "refs": {
-        "MaintenanceWindowTargetPrivate$TargetType": null,
-        "RegisterTargetWithMaintenanceWindowPrivateRequest$TargetType": null
       }
     },
     "MaintenanceWindowTask": {
@@ -3828,11 +3200,9 @@
       "base": null,
       "refs": {
         "GetMaintenanceWindowExecutionTaskResult$TaskArn": "<p>The ARN of the executed task.</p>",
-        "GetMaintenanceWindowTaskResult$TaskArn": "<p>The resource that the task used during execution. For RUN_COMMAND and AUTOMATION task types, the TaskArn is the SSM Document name/ARN. For LAMBDA tasks, the value is the function name/ARN. For STEP_FUNCTION tasks, the value is the state machine ARN.</p>",
+        "GetMaintenanceWindowTaskResult$TaskArn": "<p>The resource that the task used during execution. For RUN_COMMAND and AUTOMATION task types, the TaskArn is the Systems Manager Document name/ARN. For LAMBDA tasks, the value is the function name/ARN. For STEP_FUNCTION tasks, the value is the state machine ARN.</p>",
         "MaintenanceWindowExecutionTaskIdentity$TaskArn": "<p>The ARN of the executed task.</p>",
-        "MaintenanceWindowTask$TaskArn": "<p>The resource that the task uses during execution. For RUN_COMMAND and AUTOMATION task types, <code>TaskArn</code> is the SSM document name or ARN. For LAMBDA tasks, it's the function name or ARN. For STEP_FUNCTION tasks, it's the state machine ARN.</p>",
-        "MaintenanceWindowTaskPrivate$TaskArn": null,
-        "RegisterTaskWithMaintenanceWindowPrivateRequest$TaskArn": null,
+        "MaintenanceWindowTask$TaskArn": "<p>The resource that the task uses during execution. For RUN_COMMAND and AUTOMATION task types, <code>TaskArn</code> is the Systems Manager document name or ARN. For LAMBDA tasks, it's the function name or ARN. For STEP_FUNCTION tasks, it's the state machine ARN.</p>",
         "RegisterTaskWithMaintenanceWindowRequest$TaskArn": "<p>The ARN of the task to execute </p>",
         "UpdateMaintenanceWindowTaskRequest$TaskArn": "<p>The task ARN to modify.</p>",
         "UpdateMaintenanceWindowTaskResult$TaskArn": "<p>The updated task ARN value.</p>"
@@ -3846,8 +3216,6 @@
         "GetMaintenanceWindowTaskRequest$WindowTaskId": "<p>The Maintenance Window task ID to retrieve.</p>",
         "GetMaintenanceWindowTaskResult$WindowTaskId": "<p>The retrieved Maintenance Window task ID.</p>",
         "MaintenanceWindowTask$WindowTaskId": "<p>The task ID.</p>",
-        "MaintenanceWindowTaskPrivate$WindowTaskId": null,
-        "RegisterTaskWithMaintenanceWindowPrivateResult$WindowTaskId": null,
         "RegisterTaskWithMaintenanceWindowResult$WindowTaskId": "<p>The id of the task in the Maintenance Window.</p>",
         "UpdateMaintenanceWindowTaskRequest$WindowTaskId": "<p>The task ID to modify.</p>",
         "UpdateMaintenanceWindowTaskResult$WindowTaskId": "<p>The task ID of the Maintenance Window that was updated.</p>"
@@ -3866,12 +3234,6 @@
       "base": null,
       "refs": {
         "DescribeMaintenanceWindowTasksResult$Tasks": "<p>Information about the tasks in the Maintenance Window.</p>"
-      }
-    },
-    "MaintenanceWindowTaskListPrivate": {
-      "base": null,
-      "refs": {
-        "DescribeMaintenanceWindowTasksPrivateResult$Tasks": null
       }
     },
     "MaintenanceWindowTaskParameterName": {
@@ -3904,8 +3266,6 @@
         "GetMaintenanceWindowTaskResult$TaskParameters": "<p>The parameters to pass to the task when it executes.</p>",
         "MaintenanceWindowTask$TaskParameters": "<p>The parameters that should be passed to the task when it is executed.</p>",
         "MaintenanceWindowTaskParametersList$member": null,
-        "MaintenanceWindowTaskPrivate$TaskParameters": null,
-        "RegisterTaskWithMaintenanceWindowPrivateRequest$TaskParameters": null,
         "RegisterTaskWithMaintenanceWindowRequest$TaskParameters": "<p>The parameters that should be passed to the task when it is executed.</p>",
         "UpdateMaintenanceWindowTaskRequest$TaskParameters": "<p>The parameters to modify. The map has the following format:</p> <p>Key: string, between 1 and 255 characters</p> <p>Value: an array of strings, each string is between 1 and 255 characters</p>",
         "UpdateMaintenanceWindowTaskResult$TaskParameters": "<p>The updated parameter values.</p>"
@@ -3923,44 +3283,16 @@
         "GetMaintenanceWindowExecutionTaskResult$Priority": "<p>The priority of the task.</p>",
         "GetMaintenanceWindowTaskResult$Priority": "<p>The priority of the task when it executes. The lower the number, the higher the priority. Tasks that have the same priority are scheduled in parallel.</p>",
         "MaintenanceWindowTask$Priority": "<p>The priority of the task in the Maintenance Window. The lower the number, the higher the priority. Tasks that have the same priority are scheduled in parallel.</p>",
-        "MaintenanceWindowTaskPrivate$Priority": null,
-        "RegisterTaskWithMaintenanceWindowPrivateRequest$Priority": null,
         "RegisterTaskWithMaintenanceWindowRequest$Priority": "<p>The priority of the task in the Maintenance Window, the lower the number the higher the priority. Tasks in a Maintenance Window are scheduled in priority order with tasks that have the same priority scheduled in parallel.</p>",
         "UpdateMaintenanceWindowTaskRequest$Priority": "<p>The new task priority to specify. The lower the number, the higher the priority. Tasks that have the same priority are scheduled in parallel.</p>",
         "UpdateMaintenanceWindowTaskResult$Priority": "<p>The updated priority value.</p>"
-      }
-    },
-    "MaintenanceWindowTaskPrivate": {
-      "base": null,
-      "refs": {
-        "MaintenanceWindowTaskListPrivate$member": null
-      }
-    },
-    "MaintenanceWindowTaskTarget": {
-      "base": null,
-      "refs": {
-        "MaintenanceWindowTaskTargetList$member": null
       }
     },
     "MaintenanceWindowTaskTargetId": {
       "base": null,
       "refs": {
         "GetMaintenanceWindowExecutionTaskInvocationResult$WindowTargetId": "<p>The Maintenance Window target ID.</p>",
-        "MaintenanceWindowExecutionTaskInvocationIdentity$WindowTargetId": "<p>The ID of the target definition in this Maintenance Window the invocation was performed for.</p>",
-        "MaintenanceWindowTaskTarget$TaskTargetId": null
-      }
-    },
-    "MaintenanceWindowTaskTargetList": {
-      "base": null,
-      "refs": {
-        "MaintenanceWindowTaskPrivate$Targets": null,
-        "RegisterTaskWithMaintenanceWindowPrivateRequest$Targets": null
-      }
-    },
-    "MaintenanceWindowTaskTargetType": {
-      "base": null,
-      "refs": {
-        "MaintenanceWindowTaskTarget$TaskTargetType": null
+        "MaintenanceWindowExecutionTaskInvocationIdentity$WindowTargetId": "<p>The ID of the target definition in this Maintenance Window the invocation was performed for.</p>"
       }
     },
     "MaintenanceWindowTaskType": {
@@ -3972,8 +3304,6 @@
         "MaintenanceWindowExecutionTaskIdentity$TaskType": "<p>The type of executed task.</p>",
         "MaintenanceWindowExecutionTaskInvocationIdentity$TaskType": "<p>The task type.</p>",
         "MaintenanceWindowTask$Type": "<p>The type of task. The type can be one of the following: RUN_COMMAND, AUTOMATION, LAMBDA, or STEP_FUNCTION.</p>",
-        "MaintenanceWindowTaskPrivate$Type": null,
-        "RegisterTaskWithMaintenanceWindowPrivateRequest$TaskType": null,
         "RegisterTaskWithMaintenanceWindowRequest$TaskType": "<p>The type of task being registered.</p>"
       }
     },
@@ -3984,12 +3314,6 @@
         "UpdateManagedInstanceRoleRequest$InstanceId": "<p>The ID of the managed instance where you want to update the role.</p>"
       }
     },
-    "Manifest": {
-      "base": null,
-      "refs": {
-        "GetManifestResponse$Manifest": null
-      }
-    },
     "MaxConcurrency": {
       "base": null,
       "refs": {
@@ -3997,8 +3321,6 @@
         "GetMaintenanceWindowExecutionTaskResult$MaxConcurrency": "<p>The defined maximum number of task executions that could be run in parallel.</p>",
         "GetMaintenanceWindowTaskResult$MaxConcurrency": "<p>The maximum number of targets allowed to run this task in parallel.</p>",
         "MaintenanceWindowTask$MaxConcurrency": "<p>The maximum number of targets this task can be run for in parallel.</p>",
-        "MaintenanceWindowTaskPrivate$MaxConcurrency": null,
-        "RegisterTaskWithMaintenanceWindowPrivateRequest$MaxConcurrency": null,
         "RegisterTaskWithMaintenanceWindowRequest$MaxConcurrency": "<p>The maximum number of targets this task can be run for in parallel.</p>",
         "SendCommandRequest$MaxConcurrency": "<p>(Optional) The maximum number of instances that are allowed to execute the command at the same time. You can specify a number such as 10 or a percentage such as 10%. The default value is 50. For more information about how to use MaxConcurrency, see <a href=\"http://docs.aws.amazon.com/systems-manager/latest/userguide/send-commands-velocity.html\">Using Concurrency Controls</a>.</p>",
         "UpdateMaintenanceWindowTaskRequest$MaxConcurrency": "<p>The new <code>MaxConcurrency</code> value you want to specify. <code>MaxConcurrency</code> is the number of targets that are allowed to run this task in parallel.</p>",
@@ -4017,8 +3339,6 @@
         "GetMaintenanceWindowExecutionTaskResult$MaxErrors": "<p>The defined maximum number of task execution errors allowed before scheduling of the task execution would have been stopped.</p>",
         "GetMaintenanceWindowTaskResult$MaxErrors": "<p>The maximum number of errors allowed before the task stops being scheduled.</p>",
         "MaintenanceWindowTask$MaxErrors": "<p>The maximum number of errors allowed before this task stops being scheduled.</p>",
-        "MaintenanceWindowTaskPrivate$MaxErrors": null,
-        "RegisterTaskWithMaintenanceWindowPrivateRequest$MaxErrors": null,
         "RegisterTaskWithMaintenanceWindowRequest$MaxErrors": "<p>The maximum number of errors allowed before this task stops being scheduled.</p>",
         "SendCommandRequest$MaxErrors": "<p>The maximum number of errors allowed without the command failing. When the command fails one more time beyond the value of MaxErrors, the systems stops sending the command to additional targets. You can specify a number like 10 or a percentage like 10%. The default value is 50. For more information about how to use MaxErrors, see <a href=\"http://docs.aws.amazon.com/systems-manager/latest/userguide/send-commands-maxerrors.html\">Using Error Controls</a>.</p>",
         "UpdateMaintenanceWindowTaskRequest$MaxErrors": "<p>The new <code>MaxErrors</code> value to specify. <code>MaxErrors</code> is the maximum number of errors that are allowed before the task stops being scheduled.</p>",
@@ -4029,13 +3349,8 @@
       "base": null,
       "refs": {
         "DescribeActivationsRequest$MaxResults": "<p>The maximum number of items to return for this call. The call also returns a token that you can specify in a subsequent call to get the next set of results.</p>",
-        "DescribeAutomationExecutionParametersRequest$MaxResults": null,
         "DescribeAutomationExecutionsRequest$MaxResults": "<p>The maximum number of items to return for this call. The call also returns a token that you can specify in a subsequent call to get the next set of results.</p>",
-        "DescribeAutomationStepExecutionsRequest$MaxResults": null,
         "DescribeInstanceAssociationsStatusRequest$MaxResults": "<p>The maximum number of items to return for this call. The call also returns a token that you can specify in a subsequent call to get the next set of results.</p>",
-        "DescribeInstancePatchStatesForPatchGroupRequest$MaxResults": "<p>The maximum number of patches to return (per page).</p>",
-        "DescribeInstancePatchStatesRequest$MaxResults": "<p>The maximum number of instances to return (per page).</p>",
-        "DescribeInstancePatchesRequest$MaxResults": "<p>The maximum number of patches to return (per page).</p>",
         "DescribeParametersRequest$MaxResults": "<p>The maximum number of items to return for this call. The call also returns a token that you can specify in a subsequent call to get the next set of results.</p>",
         "GetInventoryRequest$MaxResults": "<p>The maximum number of items to return for this call. The call also returns a token that you can specify in a subsequent call to get the next set of results.</p>",
         "GetParameterHistoryRequest$MaxResults": "<p>The maximum number of items to return for this call. The call also returns a token that you can specify in a subsequent call to get the next set of results.</p>",
@@ -4045,7 +3360,6 @@
         "ListComplianceSummariesRequest$MaxResults": "<p>The maximum number of items to return for this call. Currently, you can specify null or 50. The call also returns a token that you can specify in a subsequent call to get the next set of results.</p>",
         "ListDocumentVersionsRequest$MaxResults": "<p>The maximum number of items to return for this call. The call also returns a token that you can specify in a subsequent call to get the next set of results.</p>",
         "ListDocumentsRequest$MaxResults": "<p>The maximum number of items to return for this call. The call also returns a token that you can specify in a subsequent call to get the next set of results.</p>",
-        "ListInstanceAssociationsRequest$MaxResults": null,
         "ListInventoryEntriesRequest$MaxResults": "<p>The maximum number of items to return for this call. The call also returns a token that you can specify in a subsequent call to get the next set of results.</p>",
         "ListResourceComplianceSummariesRequest$MaxResults": "<p>The maximum number of items to return for this call. The call also returns a token that you can specify in a subsequent call to get the next set of results.</p>",
         "ListResourceDataSyncRequest$MaxResults": "<p>The maximum number of items to return for this call. The call also returns a token that you can specify in a subsequent call to get the next set of results.</p>"
@@ -4067,23 +3381,13 @@
       "refs": {
       }
     },
-    "Name": {
-      "base": null,
-      "refs": {
-        "ConfigurePackageResultAttributes$key": null
-      }
-    },
     "NextToken": {
       "base": null,
       "refs": {
         "DescribeActivationsRequest$NextToken": "<p>A token to start the list. Use this token to get the next set of results. </p>",
         "DescribeActivationsResult$NextToken": "<p>The token for the next set of items to return. Use this token to get the next set of results. </p>",
-        "DescribeAutomationExecutionParametersRequest$NextToken": null,
-        "DescribeAutomationExecutionParametersResult$NextToken": null,
         "DescribeAutomationExecutionsRequest$NextToken": "<p>The token for the next set of items to return. (You received this token from a previous call.)</p>",
         "DescribeAutomationExecutionsResult$NextToken": "<p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>",
-        "DescribeAutomationStepExecutionsRequest$NextToken": null,
-        "DescribeAutomationStepExecutionsResult$NextToken": null,
         "DescribeAvailablePatchesRequest$NextToken": "<p>The token for the next set of items to return. (You received this token from a previous call.)</p>",
         "DescribeAvailablePatchesResult$NextToken": "<p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>",
         "DescribeEffectiveInstanceAssociationsRequest$NextToken": "<p>The token for the next set of items to return. (You received this token from a previous call.)</p>",
@@ -4100,20 +3404,14 @@
         "DescribeInstancePatchStatesResult$NextToken": "<p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>",
         "DescribeInstancePatchesRequest$NextToken": "<p>The token for the next set of items to return. (You received this token from a previous call.)</p>",
         "DescribeInstancePatchesResult$NextToken": "<p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>",
-        "DescribeInstancePropertiesRequest$NextToken": null,
-        "DescribeInstancePropertiesResult$NextToken": null,
         "DescribeMaintenanceWindowExecutionTaskInvocationsRequest$NextToken": "<p>The token for the next set of items to return. (You received this token from a previous call.)</p>",
         "DescribeMaintenanceWindowExecutionTaskInvocationsResult$NextToken": "<p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>",
         "DescribeMaintenanceWindowExecutionTasksRequest$NextToken": "<p>The token for the next set of items to return. (You received this token from a previous call.)</p>",
         "DescribeMaintenanceWindowExecutionTasksResult$NextToken": "<p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>",
         "DescribeMaintenanceWindowExecutionsRequest$NextToken": "<p>The token for the next set of items to return. (You received this token from a previous call.)</p>",
         "DescribeMaintenanceWindowExecutionsResult$NextToken": "<p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>",
-        "DescribeMaintenanceWindowTargetsPrivateRequest$NextToken": null,
-        "DescribeMaintenanceWindowTargetsPrivateResult$NextToken": null,
         "DescribeMaintenanceWindowTargetsRequest$NextToken": "<p>The token for the next set of items to return. (You received this token from a previous call.)</p>",
         "DescribeMaintenanceWindowTargetsResult$NextToken": "<p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>",
-        "DescribeMaintenanceWindowTasksPrivateRequest$NextToken": null,
-        "DescribeMaintenanceWindowTasksPrivateResult$NextToken": null,
         "DescribeMaintenanceWindowTasksRequest$NextToken": "<p>The token for the next set of items to return. (You received this token from a previous call.)</p>",
         "DescribeMaintenanceWindowTasksResult$NextToken": "<p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>",
         "DescribeMaintenanceWindowsRequest$NextToken": "<p>The token for the next set of items to return. (You received this token from a previous call.)</p>",
@@ -4148,8 +3446,6 @@
         "ListDocumentVersionsResult$NextToken": "<p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>",
         "ListDocumentsRequest$NextToken": "<p>The token for the next set of items to return. (You received this token from a previous call.)</p>",
         "ListDocumentsResult$NextToken": "<p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>",
-        "ListInstanceAssociationsRequest$NextToken": null,
-        "ListInstanceAssociationsResult$NextToken": null,
         "ListInventoryEntriesRequest$NextToken": "<p>The token for the next set of items to return. (You received this token from a previous call.)</p>",
         "ListInventoryEntriesResult$NextToken": "<p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>",
         "ListResourceComplianceSummariesRequest$NextToken": "<p>A token to start the list. Use this token to get the next set of results. </p>",
@@ -4217,12 +3513,6 @@
         "UpdatePatchBaselineResult$OperatingSystem": "<p>The operating system rule used by the updated patch baseline.</p>"
       }
     },
-    "Operation": {
-      "base": null,
-      "refs": {
-        "PutConfigurePackageResultRequest$Operation": null
-      }
-    },
     "OwnerInformation": {
       "base": null,
       "refs": {
@@ -4230,8 +3520,6 @@
         "InstancePatchState$OwnerInformation": "<p>Placeholder information, this field will always be empty in the current release of the service.</p>",
         "MaintenanceWindowExecutionTaskInvocationIdentity$OwnerInformation": "<p>User-provided value that was specified when the target was registered with the Maintenance Window. This was also included in any CloudWatch events raised during the task invocation.</p>",
         "MaintenanceWindowTarget$OwnerInformation": "<p>User-provided value that will be included in any CloudWatch events raised while running tasks for these targets in this Maintenance Window.</p>",
-        "MaintenanceWindowTargetPrivate$OwnerInformation": null,
-        "RegisterTargetWithMaintenanceWindowPrivateRequest$OwnerInformation": null,
         "RegisterTargetWithMaintenanceWindowRequest$OwnerInformation": "<p>User-provided value that will be included in any CloudWatch events raised while running tasks for these targets in this Maintenance Window.</p>",
         "UpdateMaintenanceWindowTargetRequest$OwnerInformation": "<p>User-provided value that will be included in any CloudWatch events raised while running tasks for these targets in this Maintenance Window.</p>",
         "UpdateMaintenanceWindowTargetResult$OwnerInformation": "<p>The updated owner.</p>"
@@ -4259,19 +3547,13 @@
         "PutParameterRequest$Value": "<p>The parameter value that you want to add to the system.</p>"
       }
     },
-    "PackageName": {
+    "PSParameterVersion": {
       "base": null,
       "refs": {
-        "GetManifestRequest$PackageName": null,
-        "PutConfigurePackageResultRequest$PackageName": null
-      }
-    },
-    "PackageVersion": {
-      "base": null,
-      "refs": {
-        "GetManifestRequest$PackageVersion": null,
-        "PutConfigurePackageResultRequest$PackageVersion": null,
-        "PutConfigurePackageResultRequest$PreviousPackageVersion": null
+        "Parameter$Version": "<p>The parameter version.</p>",
+        "ParameterHistory$Version": "<p>The parameter version.</p>",
+        "ParameterMetadata$Version": "<p>The parameter version.</p>",
+        "PutParameterResult$Version": "<p>The new version number of a parameter. If you edit a parameter value, Parameter Store automatically creates a new version and assigns this new version a unique ID. You can reference a parameter version ID in API actions or in Systems Manager documents (SSM documents). By default, if you don't specify a specific version, the system returns the latest parameter value when a parameter is called.</p>"
       }
     },
     "Parameter": {
@@ -4324,6 +3606,11 @@
       "refs": {
         "GetParametersByPathResult$Parameters": "<p>A list of parameters found in the specified hierarchy.</p>",
         "GetParametersResult$Parameters": "<p>A list of details for a parameter.</p>"
+      }
+    },
+    "ParameterMaxVersionLimitExceeded": {
+      "base": "<p>The parameter exceeded the maximum number of allowed versions.</p>",
+      "refs": {
       }
     },
     "ParameterMetadata": {
@@ -4401,14 +3688,6 @@
         "ParameterStringFilter$Option": "<p>Valid options are Equals and BeginsWith. For Path filter, valid options are Recursive and OneLevel.</p>"
       }
     },
-    "ParameterTimeToLive": {
-      "base": null,
-      "refs": {
-        "ParameterHistory$TimeToLive": null,
-        "ParameterMetadata$TimeToLive": null,
-        "PutParameterRequest$TimeToLive": null
-      }
-    },
     "ParameterType": {
       "base": null,
       "refs": {
@@ -4430,6 +3709,11 @@
         "Parameters$value": null
       }
     },
+    "ParameterVersionNotFound": {
+      "base": "<p>The specified parameter version was not found. Verify the parameter name and version, and try again.</p>",
+      "refs": {
+      }
+    },
     "Parameters": {
       "base": null,
       "refs": {
@@ -4438,7 +3722,6 @@
         "Command$Parameters": "<p>The parameter values to be inserted in the document when executing the command.</p>",
         "CreateAssociationBatchRequestEntry$Parameters": "<p>A description of the parameters for a document. </p>",
         "CreateAssociationRequest$Parameters": "<p>The parameters for the documents runtime configuration. </p>",
-        "InstanceAssociationSummary$Parameters": null,
         "MaintenanceWindowRunCommandParameters$Parameters": "<p>The parameters for the RUN_COMMAND task execution.</p>",
         "SendCommandRequest$Parameters": "<p>The required and optional parameters specified in the document being executed.</p>",
         "UpdateAssociationRequest$Parameters": "<p>The parameters you want to update for the association. If you create a parameter using Parameter Store, you can reference the parameter using {{ssm:parameter-name}}</p>"
@@ -4537,6 +3820,14 @@
         "PatchStatus$ComplianceLevel": "<p>The compliance severity level for a patch.</p>",
         "UpdatePatchBaselineRequest$ApprovedPatchesComplianceLevel": "<p>Assigns a new compliance severity level to an existing patch baseline.</p>",
         "UpdatePatchBaselineResult$ApprovedPatchesComplianceLevel": "<p>The compliance severity level assigned to the patch baseline after the update completed.</p>"
+      }
+    },
+    "PatchComplianceMaxResults": {
+      "base": null,
+      "refs": {
+        "DescribeInstancePatchStatesForPatchGroupRequest$MaxResults": "<p>The maximum number of patches to return (per page).</p>",
+        "DescribeInstancePatchStatesRequest$MaxResults": "<p>The maximum number of instances to return (per page).</p>",
+        "DescribeInstancePatchesRequest$MaxResults": "<p>The maximum number of patches to return (per page).</p>"
       }
     },
     "PatchContentUrl": {
@@ -4735,14 +4026,6 @@
       "refs": {
         "DescribeAvailablePatchesRequest$Filters": "<p>Filters used to scope down the returned patches.</p>",
         "DescribeInstancePatchesRequest$Filters": "<p>Each entry in the array is a structure containing:</p> <p>Key (string, between 1 and 128 characters)</p> <p>Values (array of strings, each string between 1 and 256 characters)</p>",
-        "DescribeMaintenanceWindowExecutionTaskInvocationsRequest$Filters": "<p>Optional filters used to scope down the returned task invocations. The supported filter key is STATUS with the corresponding values PENDING, IN_PROGRESS, SUCCESS, FAILED, TIMED_OUT, CANCELLING, and CANCELLED.</p>",
-        "DescribeMaintenanceWindowExecutionTasksRequest$Filters": "<p>Optional filters used to scope down the returned tasks. The supported filter key is STATUS with the corresponding values PENDING, IN_PROGRESS, SUCCESS, FAILED, TIMED_OUT, CANCELLING, and CANCELLED. </p>",
-        "DescribeMaintenanceWindowExecutionsRequest$Filters": "<p>Each entry in the array is a structure containing:</p> <p>Key (string, between 1 and 128 characters)</p> <p>Values (array of strings, each string is between 1 and 256 characters)</p> <p>The supported Keys are ExecutedBefore and ExecutedAfter with the value being a date/time string such as 2016-11-04T05:00:00Z.</p>",
-        "DescribeMaintenanceWindowTargetsPrivateRequest$Filters": null,
-        "DescribeMaintenanceWindowTargetsRequest$Filters": "<p>Optional filters that can be used to narrow down the scope of the returned window targets. The supported filter keys are Type, WindowTargetId and OwnerInformation.</p>",
-        "DescribeMaintenanceWindowTasksPrivateRequest$Filters": null,
-        "DescribeMaintenanceWindowTasksRequest$Filters": "<p>Optional filters used to narrow down the scope of the returned tasks. The supported filter keys are WindowTaskId, TaskArn, Priority, and TaskType.</p>",
-        "DescribeMaintenanceWindowsRequest$Filters": "<p>Optional filters used to narrow down the scope of the returned Maintenance Windows. Supported filter keys are Name and Enabled.</p>",
         "DescribePatchBaselinesRequest$Filters": "<p>Each element in the array is a structure containing: </p> <p>Key: (string, \"NAME_PREFIX\" or \"OWNER\")</p> <p>Value: (array of strings, exactly 1 entry, between 1 and 255 characters)</p>",
         "DescribePatchGroupsRequest$Filters": "<p>One or more filters. Use a filter to return a more specific list of results.</p>"
       }
@@ -4820,37 +4103,21 @@
     "PingStatus": {
       "base": null,
       "refs": {
-        "InstanceInformation$PingStatus": "<p>Connection status of the SSM Agent. </p>",
-        "InstanceProperty$PingStatus": null
-      }
-    },
-    "PlatformName": {
-      "base": null,
-      "refs": {
-        "InstanceInformation$PlatformName": "<p>The name of the operating system platform running on your instance. </p>",
-        "InstanceProperty$PlatformName": null
+        "InstanceInformation$PingStatus": "<p>Connection status of the SSM Agent. </p>"
       }
     },
     "PlatformType": {
       "base": null,
       "refs": {
         "InstanceInformation$PlatformType": "<p>The operating system platform type. </p>",
-        "InstanceProperty$PlatformType": null,
-        "PlatformTypeList$member": null,
-        "UpdateInstanceInformationRequest$PlatformType": null
+        "PlatformTypeList$member": null
       }
     },
     "PlatformTypeList": {
       "base": null,
       "refs": {
-        "DocumentDescription$PlatformTypes": "<p>The list of OS platforms compatible with this SSM document. </p>",
+        "DocumentDescription$PlatformTypes": "<p>The list of OS platforms compatible with this Systems Manager document. </p>",
         "DocumentIdentifier$PlatformTypes": "<p>The operating system platform. </p>"
-      }
-    },
-    "PlatformVersion": {
-      "base": null,
-      "refs": {
-        "InstanceProperty$PlatformVersion": null
       }
     },
     "Product": {
@@ -4859,36 +4126,12 @@
         "GetDeployablePatchSnapshotForInstanceResult$Product": "<p>Returns the specific operating system (for example Windows Server 2012 or Amazon Linux 2015.09) on the instance for the specified patch snapshot.</p>"
       }
     },
-    "PublicKey": {
-      "base": null,
-      "refs": {
-        "RegisterManagedInstanceRequest$PublicKey": null,
-        "UpdateManagedInstancePublicKeyRequest$NewPublicKey": null
-      }
-    },
-    "PublicKeyType": {
-      "base": null,
-      "refs": {
-        "RegisterManagedInstanceRequest$PublicKeyType": null,
-        "UpdateManagedInstancePublicKeyRequest$NewPublicKeyType": null
-      }
-    },
     "PutComplianceItemsRequest": {
       "base": null,
       "refs": {
       }
     },
     "PutComplianceItemsResult": {
-      "base": null,
-      "refs": {
-      }
-    },
-    "PutConfigurePackageResultRequest": {
-      "base": null,
-      "refs": {
-      }
-    },
-    "PutConfigurePackageResultResponse": {
       "base": null,
       "refs": {
       }
@@ -4923,16 +4166,6 @@
       "refs": {
       }
     },
-    "RegisterManagedInstanceRequest": {
-      "base": null,
-      "refs": {
-      }
-    },
-    "RegisterManagedInstanceResult": {
-      "base": null,
-      "refs": {
-      }
-    },
     "RegisterPatchBaselineForPatchGroupRequest": {
       "base": null,
       "refs": {
@@ -4943,32 +4176,12 @@
       "refs": {
       }
     },
-    "RegisterTargetWithMaintenanceWindowPrivateRequest": {
-      "base": null,
-      "refs": {
-      }
-    },
-    "RegisterTargetWithMaintenanceWindowPrivateResult": {
-      "base": null,
-      "refs": {
-      }
-    },
     "RegisterTargetWithMaintenanceWindowRequest": {
       "base": null,
       "refs": {
       }
     },
     "RegisterTargetWithMaintenanceWindowResult": {
-      "base": null,
-      "refs": {
-      }
-    },
-    "RegisterTaskWithMaintenanceWindowPrivateRequest": {
-      "base": null,
-      "refs": {
-      }
-    },
-    "RegisterTaskWithMaintenanceWindowPrivateResult": {
       "base": null,
       "refs": {
       }
@@ -4990,11 +4203,6 @@
         "CreateActivationRequest$RegistrationLimit": "<p>Specify the maximum number of managed instances you want to register. The default value is 1 instance.</p>"
       }
     },
-    "RegistrationLimitExceeded": {
-      "base": null,
-      "refs": {
-      }
-    },
     "RegistrationsCount": {
       "base": null,
       "refs": {
@@ -5007,16 +4215,6 @@
       }
     },
     "RemoveTagsFromResourceResult": {
-      "base": null,
-      "refs": {
-      }
-    },
-    "RequestManagedInstanceRoleTokenRequest": {
-      "base": null,
-      "refs": {
-      }
-    },
-    "RequestManagedInstanceRoleTokenResult": {
       "base": null,
       "refs": {
       }
@@ -5036,7 +4234,7 @@
     "ResourceDataSyncAWSKMSKeyARN": {
       "base": null,
       "refs": {
-        "ResourceDataSyncS3Destination$AWSKMSKeyARN": null
+        "ResourceDataSyncS3Destination$AWSKMSKeyARN": "<p>The ARN of an encryption key for a destination in Amazon S3. Must belong to the same region as the destination Amazon S3 bucket.</p>"
       }
     },
     "ResourceDataSyncAlreadyExistsException": {
@@ -5121,7 +4319,7 @@
     "ResourceId": {
       "base": null,
       "refs": {
-        "AddTagsToResourceRequest$ResourceId": "<p>The resource ID you want to tag.</p>",
+        "AddTagsToResourceRequest$ResourceId": "<p>The resource ID you want to tag.</p> <p>For the ManagedInstance, MaintenanceWindow, and PatchBaseline values, use the ID of the resource, such as mw-01234361858c9b57b for a Maintenance Window.</p> <p>For the Document and Parameter values, use the name of the resource.</p>",
         "ListTagsForResourceRequest$ResourceId": "<p>The resource ID for which you want to see a list of tags.</p>",
         "RemoveTagsFromResourceRequest$ResourceId": "<p>The resource ID for which you want to remove tags.</p>"
       }
@@ -5133,11 +4331,6 @@
     },
     "ResourceLimitExceededException": {
       "base": "<p>Error returned when the caller has exceeded the default resource limits (e.g. too many Maintenance Windows have been created).</p>",
-      "refs": {
-      }
-    },
-    "ResourceNotFoundException": {
-      "base": null,
       "refs": {
       }
     },
@@ -5226,14 +4419,7 @@
         "AssociationVersionInfo$ScheduleExpression": "<p>The cron or rate schedule specified for the association when the association version was created.</p>",
         "CreateAssociationBatchRequestEntry$ScheduleExpression": "<p>A cron expression that specifies a schedule when the association runs.</p>",
         "CreateAssociationRequest$ScheduleExpression": "<p>A cron expression when the association will be applied to the target(s).</p>",
-        "InstanceAssociationSummary$ScheduleExpression": null,
         "UpdateAssociationRequest$ScheduleExpression": "<p>The cron expression used to schedule the association that you want to update.</p>"
-      }
-    },
-    "SecretAccessKey": {
-      "base": null,
-      "refs": {
-        "RequestManagedInstanceRoleTokenResult$SecretAccessKey": null
       }
     },
     "SendAutomationSignalRequest": {
@@ -5265,18 +4451,10 @@
         "GetMaintenanceWindowTaskResult$ServiceRoleArn": "<p>The IAM service role to assume during task execution.</p>",
         "MaintenanceWindowRunCommandParameters$ServiceRoleArn": "<p>The IAM service role to assume during task execution.</p>",
         "MaintenanceWindowTask$ServiceRoleArn": "<p>The role that should be assumed when executing the task</p>",
-        "MaintenanceWindowTaskPrivate$ServiceRoleArn": null,
-        "RegisterTaskWithMaintenanceWindowPrivateRequest$ServiceRoleArn": null,
         "RegisterTaskWithMaintenanceWindowRequest$ServiceRoleArn": "<p>The role that should be assumed when executing the task.</p>",
         "SendCommandRequest$ServiceRoleArn": "<p>The IAM role that Systems Manager uses to send notifications. </p>",
         "UpdateMaintenanceWindowTaskRequest$ServiceRoleArn": "<p>The IAM service role ARN to modify. The system assumes this role during task execution. </p>",
         "UpdateMaintenanceWindowTaskResult$ServiceRoleArn": "<p>The updated service role ARN value.</p>"
-      }
-    },
-    "SessionToken": {
-      "base": null,
-      "refs": {
-        "RequestManagedInstanceRoleTokenResult$SessionToken": null
       }
     },
     "SeveritySummary": {
@@ -5316,16 +4494,6 @@
       "base": null,
       "refs": {
         "GetCommandInvocationResult$StandardOutputContent": "<p>The first 24,000 characters written by the plugin to stdout. If the command has not finished executing, if ExecutionStatus is neither Succeeded nor Failed, then this string is empty.</p>"
-      }
-    },
-    "StartAssociationsOnceRequest": {
-      "base": null,
-      "refs": {
-      }
-    },
-    "StartAssociationsOnceResult": {
-      "base": null,
-      "refs": {
       }
     },
     "StartAutomationExecutionRequest": {
@@ -5369,10 +4537,7 @@
         "InstanceAssociationStatusAggregatedCount$key": null,
         "InstanceAssociationStatusInfo$Status": "<p>Status information about the instance association.</p>",
         "InstanceAssociationStatusInfo$DetailedStatus": "<p>Detailed status information about the instance association.</p>",
-        "InstanceAssociationSummary$Status": null,
-        "InstanceAssociationSummary$DetailedStatus": null,
-        "InstanceInformation$AssociationStatus": "<p>The status of the association.</p>",
-        "InstanceProperty$AssociationStatus": null
+        "InstanceInformation$AssociationStatus": "<p>The status of the association.</p>"
       }
     },
     "StatusUnchanged": {
@@ -5389,8 +4554,7 @@
     "StepExecutionList": {
       "base": null,
       "refs": {
-        "AutomationExecution$StepExecutions": "<p>A list of details about the current state of all steps that comprise an execution. An Automation document contains a list of steps that are executed in order.</p>",
-        "DescribeAutomationStepExecutionsResult$StepExecutions": null
+        "AutomationExecution$StepExecutions": "<p>A list of details about the current state of all steps that comprise an execution. An Automation document contains a list of steps that are executed in order.</p>"
       }
     },
     "StopAutomationExecutionRequest": {
@@ -5406,15 +4570,9 @@
     "String": {
       "base": null,
       "refs": {
-        "ActivationExpired$message": null,
         "AlreadyExistsException$Message": null,
-        "AssociationAlreadyExists$Message": null,
         "AssociationDoesNotExist$Message": null,
         "AssociationVersionLimitExceeded$Message": null,
-        "AutomationActionList$member": null,
-        "AutomationActionNotFoundException$Message": null,
-        "AutomationArgument$Name": null,
-        "AutomationArgument$Regex": null,
         "AutomationDefinitionNotFoundException$Message": null,
         "AutomationDefinitionVersionNotFoundException$Message": null,
         "AutomationExecution$FailureMessage": "<p>A message describing why an execution has failed, if the status is set to Failed.</p>",
@@ -5422,14 +4580,11 @@
         "AutomationExecutionMetadata$ExecutedBy": "<p>The IAM role ARN of the user who executed the Automation.</p>",
         "AutomationExecutionMetadata$LogFile": "<p>An Amazon S3 bucket where execution information is stored.</p>",
         "AutomationExecutionNotFoundException$Message": null,
-        "CommandNotFound$Message": null,
-        "CommandNotInTerminalState$Message": null,
         "ComplianceTypeCountLimitExceededException$Message": null,
         "CustomSchemaCountLimitExceededException$Message": null,
         "DocumentAlreadyExists$Message": null,
         "DocumentLimitExceeded$Message": null,
         "DocumentPermissionLimit$Message": null,
-        "DocumentStepList$member": null,
         "DocumentVersionLimitExceeded$Message": null,
         "DoesNotExistException$Message": null,
         "DuplicateDocumentContent$Message": null,
@@ -5439,15 +4594,13 @@
         "HierarchyLevelLimitExceededException$message": "<p>A hierarchy can have a maximum of five levels. For example:</p> <p>/Finance/Prod/IAD/OS/WinServ2016/license15</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/systems-manager/latest/userguide/sysman-paramstore-working.html\">Working with Systems Manager Parameters</a>. </p>",
         "HierarchyTypeMismatchException$message": "<p>Parameter Store does not support changing a parameter type in a hierarchy. For example, you can't change a parameter from a String type to a SecureString type. You must create a new, unique parameter.</p>",
         "IdempotentParameterMismatch$Message": null,
+        "InstanceInformation$PlatformName": "<p>The name of the operating system platform running on your instance. </p>",
         "InstanceInformation$PlatformVersion": "<p>The version of the OS platform running on your instance. </p>",
         "InstanceInformation$Name": "<p>The name of the managed instance.</p>",
-        "InstanceProperty$ResourceType": null,
         "InternalServerError$Message": null,
         "InvalidActivation$Message": null,
         "InvalidActivationId$Message": null,
-        "InvalidAggregatorException$Message": null,
         "InvalidAllowedPatternException$message": "<p>The request does not meet the regular expression requirement.</p>",
-        "InvalidAssociation$Message": null,
         "InvalidAssociationVersion$Message": null,
         "InvalidAutomationExecutionParametersException$Message": null,
         "InvalidAutomationSignalException$Message": null,
@@ -5455,26 +4608,19 @@
         "InvalidDocumentContent$Message": "<p>A description of the validation error.</p>",
         "InvalidDocumentOperation$Message": null,
         "InvalidDocumentSchemaVersion$Message": null,
-        "InvalidDocumentType$Message": null,
         "InvalidDocumentVersion$Message": null,
         "InvalidFilter$Message": null,
-        "InvalidFilterKey$Message": null,
         "InvalidFilterOption$message": "<p>The specified filter option is not valid. Valid options are Equals and BeginsWith. For Path filter, valid options are Recursive and OneLevel.</p>",
         "InvalidFilterValue$Message": null,
         "InvalidInstanceId$Message": null,
         "InvalidInstanceInformationFilterValue$message": null,
-        "InvalidInstanceInformationValue$message": null,
-        "InvalidInstancePropertyFilterValue$message": null,
         "InvalidInventoryItemContextException$Message": null,
-        "InvalidInventoryResourceIdException$Message": null,
         "InvalidItemContentException$Message": null,
         "InvalidKeyId$message": null,
         "InvalidNextToken$Message": null,
         "InvalidNotificationConfig$Message": null,
         "InvalidParameters$Message": null,
         "InvalidPermissionType$Message": null,
-        "InvalidResourceId$Message": null,
-        "InvalidResourceType$Message": null,
         "InvalidResultAttributeException$Message": null,
         "InvalidRole$Message": null,
         "InvalidSchedule$Message": null,
@@ -5483,27 +4629,25 @@
         "InvalidUpdate$Message": null,
         "ItemContentMismatchException$Message": null,
         "ItemSizeLimitExceededException$Message": null,
-        "MachineFingerprintDoesNotMatch$message": null,
         "MaxDocumentSizeExceeded$Message": null,
         "NormalStringMap$key": null,
         "NormalStringMap$value": null,
         "ParameterAlreadyExists$message": null,
         "ParameterHistory$LastModifiedUser": "<p>Amazon Resource Name (ARN) of the AWS user who last changed the parameter.</p>",
         "ParameterLimitExceeded$message": null,
+        "ParameterMaxVersionLimitExceeded$message": null,
         "ParameterMetadata$LastModifiedUser": "<p>Amazon Resource Name (ARN) of the AWS user who last changed the parameter.</p>",
         "ParameterNotFound$message": null,
         "ParameterPatternMismatchException$message": "<p>The parameter name is not valid.</p>",
-        "RegistrationLimitExceeded$message": null,
+        "ParameterVersionNotFound$message": null,
         "ResourceDataSyncCountExceededException$Message": null,
         "ResourceDataSyncInvalidConfigurationException$Message": null,
         "ResourceInUseException$Message": null,
         "ResourceLimitExceededException$Message": null,
-        "ResourceNotFoundException$Message": null,
         "StepExecution$StepName": "<p>The name of this execution step.</p>",
         "StepExecution$ResponseCode": "<p>The response code returned by the execution of the step.</p>",
         "StepExecution$Response": "<p>A message associated with the response code for an execution.</p>",
         "StepExecution$FailureMessage": "<p>If a step failed, this message explains why the execution failed.</p>",
-        "StepExecution$StepExecutionId": null,
         "StringList$member": null,
         "SubTypeCountLimitExceededException$Message": null,
         "TargetInUseException$Message": null,
@@ -5513,9 +4657,7 @@
         "UnsupportedInventorySchemaVersionException$Message": null,
         "UnsupportedOperatingSystem$Message": null,
         "UnsupportedParameterType$message": null,
-        "UnsupportedPlatformType$Message": null,
-        "UpdateInstanceInformationRequest$PlatformName": null,
-        "UpdateInstanceInformationRequest$PlatformVersion": null
+        "UnsupportedPlatformType$Message": null
       }
     },
     "StringDateTime": {
@@ -5538,7 +4680,7 @@
       }
     },
     "Tag": {
-      "base": "<p>Metadata that you assign to your managed instances. Tags enable you to categorize your managed instances in different ways, for example, by purpose, owner, or environment.</p>",
+      "base": "<p>Metadata that you assign to your AWS resources. Tags enable you to categorize your resources in different ways, for example, by purpose, owner, or environment. In Systems Manager, you can apply tags to documents, managed instances, Maintenance Windows, Parameter Store parameters, and patch baselines.</p>",
       "refs": {
         "TagList$member": null
       }
@@ -5554,6 +4696,8 @@
       "base": null,
       "refs": {
         "AddTagsToResourceRequest$Tags": "<p> One or more tags. The value parameter is required, but if you don't want the tag to have a value, specify the parameter with no value, and we set the value to an empty string. </p>",
+        "DocumentDescription$Tags": "<p>The tags, or metadata, that have been applied to the document.</p>",
+        "DocumentIdentifier$Tags": "<p>The tags, or metadata, that have been applied to the document.</p>",
         "ListTagsForResourceResult$TagList": "<p>A list of tags.</p>"
       }
     },
@@ -5608,11 +4752,8 @@
         "CreateAssociationBatchRequestEntry$Targets": "<p>The instances targeted by the request.</p>",
         "CreateAssociationRequest$Targets": "<p>The targets (either instances or tags) for the association.</p>",
         "GetMaintenanceWindowTaskResult$Targets": "<p>The targets where the task should execute.</p>",
-        "InstanceAssociationSummary$Targets": null,
         "MaintenanceWindowTarget$Targets": "<p>The targets (either instances or tags). Instances are specified using Key=instanceids,Values=&lt;instanceid1&gt;,&lt;instanceid2&gt;. Tags are specified using Key=&lt;tag name&gt;,Values=&lt;tag value&gt;.</p>",
-        "MaintenanceWindowTargetPrivate$TagFilters": null,
         "MaintenanceWindowTask$Targets": "<p>The targets (either instances or tags). Instances are specified using Key=instanceids,Values=&lt;instanceid1&gt;,&lt;instanceid2&gt;. Tags are specified using Key=&lt;tag name&gt;,Values=&lt;tag value&gt;.</p>",
-        "RegisterTargetWithMaintenanceWindowPrivateRequest$TagFilters": null,
         "RegisterTargetWithMaintenanceWindowRequest$Targets": "<p>The targets (either instances or tags). Instances are specified using Key=instanceids,Values=&lt;instanceid1&gt;,&lt;instanceid2&gt;. Tags are specified using Key=&lt;tag name&gt;,Values=&lt;tag value&gt;.</p>",
         "RegisterTaskWithMaintenanceWindowRequest$Targets": "<p>The targets (either instances or tags). Instances are specified using Key=instanceids,Values=&lt;instanceid1&gt;,&lt;instanceid2&gt;. Tags are specified using Key=&lt;tag name&gt;,Values=&lt;tag value&gt;.</p>",
         "SendCommandRequest$Targets": "<p>(Optional) An array of search criteria that targets instances using a Key,Value combination that you specify. Targets is required if you don't provide one or more instance IDs in the call. For more information about how to use Targets, see <a href=\"http://docs.aws.amazon.com/systems-manager/latest/userguide/send-commands-multiple.html\">Sending Commands to a Fleet</a>.</p>",
@@ -5628,19 +4769,6 @@
       "refs": {
         "MaintenanceWindowRunCommandParameters$TimeoutSeconds": "<p>If this time is reached and the command has not already started executing, it doesn not execute.</p>",
         "SendCommandRequest$TimeoutSeconds": "<p>If this time is reached and the command has not already started executing, it will not execute.</p>"
-      }
-    },
-    "Timing": {
-      "base": null,
-      "refs": {
-        "ConfigurePackageResultStep$Timing": null,
-        "PutConfigurePackageResultRequest$OverallTiming": null
-      }
-    },
-    "TokenExpirationDate": {
-      "base": null,
-      "refs": {
-        "RequestManagedInstanceRoleTokenResult$TokenExpirationDate": null
       }
     },
     "TooManyTagsError": {
@@ -5723,32 +4851,6 @@
       "refs": {
       }
     },
-    "UpdateInstanceAssociationStatusRequest": {
-      "base": null,
-      "refs": {
-      }
-    },
-    "UpdateInstanceAssociationStatusResult": {
-      "base": null,
-      "refs": {
-      }
-    },
-    "UpdateInstanceInformationRequest": {
-      "base": null,
-      "refs": {
-      }
-    },
-    "UpdateInstanceInformationResult": {
-      "base": null,
-      "refs": {
-      }
-    },
-    "UpdateKeyPair": {
-      "base": null,
-      "refs": {
-        "RequestManagedInstanceRoleTokenResult$UpdateKeyPair": null
-      }
-    },
     "UpdateMaintenanceWindowRequest": {
       "base": null,
       "refs": {
@@ -5775,16 +4877,6 @@
       }
     },
     "UpdateMaintenanceWindowTaskResult": {
-      "base": null,
-      "refs": {
-      }
-    },
-    "UpdateManagedInstancePublicKeyRequest": {
-      "base": null,
-      "refs": {
-      }
-    },
-    "UpdateManagedInstancePublicKeyResult": {
       "base": null,
       "refs": {
       }
@@ -5821,18 +4913,10 @@
         "S3OutputUrl$OutputUrl": "<p>A URL for an Amazon S3 bucket where you want to store the results of this request.</p>"
       }
     },
-    "Value": {
-      "base": null,
-      "refs": {
-        "ConfigurePackageResultAttributes$value": null
-      }
-    },
     "Version": {
       "base": null,
       "refs": {
-        "InstanceInformation$AgentVersion": "<p>The version of the SSM Agent running on your Linux instance. </p>",
-        "InstanceProperty$AgentVersion": null,
-        "UpdateInstanceInformationRequest$AgentVersion": null
+        "InstanceInformation$AgentVersion": "<p>The version of the SSM Agent running on your Linux instance. </p>"
       }
     }
   }

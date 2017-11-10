@@ -1,3 +1,5 @@
+// +build codegen
+
 package api
 
 import (
@@ -5,7 +7,6 @@ import (
 	"reflect"
 	"strings"
 
-	"github.com/aws/aws-sdk-go/awstesting"
 	"github.com/aws/aws-sdk-go/private/util"
 )
 
@@ -54,7 +55,7 @@ func (f paramFiller) paramsStructAny(value interface{}, shape *Shape) string {
 	case "blob":
 		v := reflect.Indirect(reflect.ValueOf(value))
 		if v.IsValid() && shape.Streaming {
-			return fmt.Sprintf("aws.ReadSeekCloser(bytes.NewBufferString(%#v))", v.Interface())
+			return fmt.Sprintf("bytes.NewReader([]byte(%#v))", v.Interface())
 		} else if v.IsValid() {
 			return fmt.Sprintf("[]byte(%#v)", v.Interface())
 		}
@@ -102,7 +103,7 @@ func (f paramFiller) paramsStructStruct(value map[string]interface{}, shape *Sha
 // paramsStructMap returns the string representation of a map of values
 func (f paramFiller) paramsStructMap(value map[string]interface{}, shape *Shape) string {
 	out := f.typeName(shape) + "{\n"
-	keys := awstesting.SortedKeys(value)
+	keys := util.SortedKeys(value)
 	for _, k := range keys {
 		v := value[k]
 		out += fmt.Sprintf("%q: %s,\n", k, f.paramsStructAny(v, shape.ValueRef.Shape))

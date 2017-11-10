@@ -8,7 +8,8 @@
     "serviceAbbreviation":"CodeCommit",
     "serviceFullName":"AWS CodeCommit",
     "signatureVersion":"v4",
-    "targetPrefix":"CodeCommit_20150413"
+    "targetPrefix":"CodeCommit_20150413",
+    "uid":"codecommit-2015-04-13"
   },
   "operations":{
     "BatchGetRepositories":{
@@ -75,6 +76,28 @@
         {"shape":"EncryptionKeyUnavailableException"}
       ]
     },
+    "DeleteBranch":{
+      "name":"DeleteBranch",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"DeleteBranchInput"},
+      "output":{"shape":"DeleteBranchOutput"},
+      "errors":[
+        {"shape":"RepositoryNameRequiredException"},
+        {"shape":"RepositoryDoesNotExistException"},
+        {"shape":"InvalidRepositoryNameException"},
+        {"shape":"BranchNameRequiredException"},
+        {"shape":"InvalidBranchNameException"},
+        {"shape":"DefaultBranchCannotBeDeletedException"},
+        {"shape":"EncryptionIntegrityChecksFailedException"},
+        {"shape":"EncryptionKeyAccessDeniedException"},
+        {"shape":"EncryptionKeyDisabledException"},
+        {"shape":"EncryptionKeyNotFoundException"},
+        {"shape":"EncryptionKeyUnavailableException"}
+      ]
+    },
     "DeleteRepository":{
       "name":"DeleteRepository",
       "http":{
@@ -91,6 +114,29 @@
         {"shape":"EncryptionKeyDisabledException"},
         {"shape":"EncryptionKeyNotFoundException"},
         {"shape":"EncryptionKeyUnavailableException"}
+      ]
+    },
+    "GetBlob":{
+      "name":"GetBlob",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"GetBlobInput"},
+      "output":{"shape":"GetBlobOutput"},
+      "errors":[
+        {"shape":"RepositoryNameRequiredException"},
+        {"shape":"InvalidRepositoryNameException"},
+        {"shape":"RepositoryDoesNotExistException"},
+        {"shape":"BlobIdRequiredException"},
+        {"shape":"InvalidBlobIdException"},
+        {"shape":"BlobIdDoesNotExistException"},
+        {"shape":"EncryptionIntegrityChecksFailedException"},
+        {"shape":"EncryptionKeyAccessDeniedException"},
+        {"shape":"EncryptionKeyDisabledException"},
+        {"shape":"EncryptionKeyNotFoundException"},
+        {"shape":"EncryptionKeyUnavailableException"},
+        {"shape":"FileTooLargeException"}
       ]
     },
     "GetBranch":{
@@ -130,6 +176,33 @@
         {"shape":"CommitIdRequiredException"},
         {"shape":"InvalidCommitIdException"},
         {"shape":"CommitIdDoesNotExistException"},
+        {"shape":"EncryptionIntegrityChecksFailedException"},
+        {"shape":"EncryptionKeyAccessDeniedException"},
+        {"shape":"EncryptionKeyDisabledException"},
+        {"shape":"EncryptionKeyNotFoundException"},
+        {"shape":"EncryptionKeyUnavailableException"}
+      ]
+    },
+    "GetDifferences":{
+      "name":"GetDifferences",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"GetDifferencesInput"},
+      "output":{"shape":"GetDifferencesOutput"},
+      "errors":[
+        {"shape":"RepositoryNameRequiredException"},
+        {"shape":"RepositoryDoesNotExistException"},
+        {"shape":"InvalidRepositoryNameException"},
+        {"shape":"InvalidContinuationTokenException"},
+        {"shape":"InvalidMaxResultsException"},
+        {"shape":"InvalidCommitIdException"},
+        {"shape":"CommitRequiredException"},
+        {"shape":"InvalidCommitException"},
+        {"shape":"CommitDoesNotExistException"},
+        {"shape":"InvalidPathException"},
+        {"shape":"PathDoesNotExistException"},
         {"shape":"EncryptionIntegrityChecksFailedException"},
         {"shape":"EncryptionKeyAccessDeniedException"},
         {"shape":"EncryptionKeyDisabledException"},
@@ -346,6 +419,26 @@
         "repositoriesNotFound":{"shape":"RepositoryNotFoundList"}
       }
     },
+    "BlobIdDoesNotExistException":{
+      "type":"structure",
+      "members":{
+      },
+      "exception":true
+    },
+    "BlobIdRequiredException":{
+      "type":"structure",
+      "members":{
+      },
+      "exception":true
+    },
+    "BlobMetadata":{
+      "type":"structure",
+      "members":{
+        "blobId":{"shape":"ObjectId"},
+        "path":{"shape":"Path"},
+        "mode":{"shape":"Mode"}
+      }
+    },
     "BranchDoesNotExistException":{
       "type":"structure",
       "members":{
@@ -380,11 +473,20 @@
       },
       "exception":true
     },
+    "ChangeTypeEnum":{
+      "type":"string",
+      "enum":[
+        "A",
+        "M",
+        "D"
+      ]
+    },
     "CloneUrlHttp":{"type":"string"},
     "CloneUrlSsh":{"type":"string"},
     "Commit":{
       "type":"structure",
       "members":{
+        "commitId":{"shape":"ObjectId"},
         "treeId":{"shape":"ObjectId"},
         "parents":{"shape":"ParentList"},
         "message":{"shape":"Message"},
@@ -407,6 +509,13 @@
       "exception":true
     },
     "CommitIdRequiredException":{
+      "type":"structure",
+      "members":{
+      },
+      "exception":true
+    },
+    "CommitName":{"type":"string"},
+    "CommitRequiredException":{
       "type":"structure",
       "members":{
       },
@@ -441,6 +550,29 @@
     },
     "CreationDate":{"type":"timestamp"},
     "Date":{"type":"string"},
+    "DefaultBranchCannotBeDeletedException":{
+      "type":"structure",
+      "members":{
+      },
+      "exception":true
+    },
+    "DeleteBranchInput":{
+      "type":"structure",
+      "required":[
+        "repositoryName",
+        "branchName"
+      ],
+      "members":{
+        "repositoryName":{"shape":"RepositoryName"},
+        "branchName":{"shape":"BranchName"}
+      }
+    },
+    "DeleteBranchOutput":{
+      "type":"structure",
+      "members":{
+        "deletedBranch":{"shape":"BranchInfo"}
+      }
+    },
     "DeleteRepositoryInput":{
       "type":"structure",
       "required":["repositoryName"],
@@ -453,6 +585,18 @@
       "members":{
         "repositoryId":{"shape":"RepositoryId"}
       }
+    },
+    "Difference":{
+      "type":"structure",
+      "members":{
+        "beforeBlob":{"shape":"BlobMetadata"},
+        "afterBlob":{"shape":"BlobMetadata"},
+        "changeType":{"shape":"ChangeTypeEnum"}
+      }
+    },
+    "DifferenceList":{
+      "type":"list",
+      "member":{"shape":"Difference"}
     },
     "Email":{"type":"string"},
     "EncryptionIntegrityChecksFailedException":{
@@ -486,6 +630,30 @@
       },
       "exception":true
     },
+    "FileTooLargeException":{
+      "type":"structure",
+      "members":{
+      },
+      "exception":true
+    },
+    "GetBlobInput":{
+      "type":"structure",
+      "required":[
+        "repositoryName",
+        "blobId"
+      ],
+      "members":{
+        "repositoryName":{"shape":"RepositoryName"},
+        "blobId":{"shape":"ObjectId"}
+      }
+    },
+    "GetBlobOutput":{
+      "type":"structure",
+      "required":["content"],
+      "members":{
+        "content":{"shape":"blob"}
+      }
+    },
     "GetBranchInput":{
       "type":"structure",
       "members":{
@@ -517,6 +685,29 @@
         "commit":{"shape":"Commit"}
       }
     },
+    "GetDifferencesInput":{
+      "type":"structure",
+      "required":[
+        "repositoryName",
+        "afterCommitSpecifier"
+      ],
+      "members":{
+        "repositoryName":{"shape":"RepositoryName"},
+        "beforeCommitSpecifier":{"shape":"CommitName"},
+        "afterCommitSpecifier":{"shape":"CommitName"},
+        "beforePath":{"shape":"Path"},
+        "afterPath":{"shape":"Path"},
+        "MaxResults":{"shape":"Limit"},
+        "NextToken":{"shape":"NextToken"}
+      }
+    },
+    "GetDifferencesOutput":{
+      "type":"structure",
+      "members":{
+        "differences":{"shape":"DifferenceList"},
+        "NextToken":{"shape":"NextToken"}
+      }
+    },
     "GetRepositoryInput":{
       "type":"structure",
       "required":["repositoryName"],
@@ -532,6 +723,7 @@
     },
     "GetRepositoryTriggersInput":{
       "type":"structure",
+      "required":["repositoryName"],
       "members":{
         "repositoryName":{"shape":"RepositoryName"}
       }
@@ -543,7 +735,19 @@
         "triggers":{"shape":"RepositoryTriggersList"}
       }
     },
+    "InvalidBlobIdException":{
+      "type":"structure",
+      "members":{
+      },
+      "exception":true
+    },
     "InvalidBranchNameException":{
+      "type":"structure",
+      "members":{
+      },
+      "exception":true
+    },
+    "InvalidCommitException":{
       "type":"structure",
       "members":{
       },
@@ -561,7 +765,19 @@
       },
       "exception":true
     },
+    "InvalidMaxResultsException":{
+      "type":"structure",
+      "members":{
+      },
+      "exception":true
+    },
     "InvalidOrderException":{
+      "type":"structure",
+      "members":{
+      },
+      "exception":true
+    },
+    "InvalidPathException":{
       "type":"structure",
       "members":{
       },
@@ -622,6 +838,10 @@
       "exception":true
     },
     "LastModifiedDate":{"type":"timestamp"},
+    "Limit":{
+      "type":"integer",
+      "box":true
+    },
     "ListBranchesInput":{
       "type":"structure",
       "required":["repositoryName"],
@@ -671,6 +891,7 @@
       "exception":true
     },
     "Message":{"type":"string"},
+    "Mode":{"type":"string"},
     "Name":{"type":"string"},
     "NextToken":{"type":"string"},
     "ObjectId":{"type":"string"},
@@ -685,8 +906,19 @@
       "type":"list",
       "member":{"shape":"ObjectId"}
     },
+    "Path":{"type":"string"},
+    "PathDoesNotExistException":{
+      "type":"structure",
+      "members":{
+      },
+      "exception":true
+    },
     "PutRepositoryTriggersInput":{
       "type":"structure",
+      "required":[
+        "repositoryName",
+        "triggers"
+      ],
       "members":{
         "repositoryName":{"shape":"RepositoryName"},
         "triggers":{"shape":"RepositoryTriggersList"}
@@ -738,7 +970,7 @@
       "type":"string",
       "max":100,
       "min":1,
-      "pattern":"[\\\\w\\\\.-]+"
+      "pattern":"[\\w\\.-]+"
     },
     "RepositoryNameExistsException":{
       "type":"structure",
@@ -779,6 +1011,11 @@
     },
     "RepositoryTrigger":{
       "type":"structure",
+      "required":[
+        "name",
+        "destinationArn",
+        "events"
+      ],
       "members":{
         "name":{"shape":"RepositoryTriggerName"},
         "destinationArn":{"shape":"Arn"},
@@ -862,6 +1099,10 @@
     },
     "TestRepositoryTriggersInput":{
       "type":"structure",
+      "required":[
+        "repositoryName",
+        "triggers"
+      ],
       "members":{
         "repositoryName":{"shape":"RepositoryName"},
         "triggers":{"shape":"RepositoryTriggersList"}
@@ -911,6 +1152,7 @@
         "email":{"shape":"Email"},
         "date":{"shape":"Date"}
       }
-    }
+    },
+    "blob":{"type":"blob"}
   }
 }

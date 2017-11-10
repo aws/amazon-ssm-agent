@@ -1,3 +1,5 @@
+// +build example
+
 package main
 
 import (
@@ -11,9 +13,14 @@ import (
 // Lists all objects in a bucket using pagination
 //
 // Usage:
-// go run listObjects.go <bucket>
+// listObjects <bucket>
 func main() {
-	sess := session.New()
+	if len(os.Args) < 2 {
+		fmt.Println("you must specify a bucket")
+		return
+	}
+
+	sess := session.Must(session.NewSession())
 
 	svc := s3.New(sess)
 

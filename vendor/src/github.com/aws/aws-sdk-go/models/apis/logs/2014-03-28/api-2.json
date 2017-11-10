@@ -7,9 +7,24 @@
     "protocol":"json",
     "serviceFullName":"Amazon CloudWatch Logs",
     "signatureVersion":"v4",
-    "targetPrefix":"Logs_20140328"
+    "targetPrefix":"Logs_20140328",
+    "uid":"logs-2014-03-28"
   },
   "operations":{
+    "AssociateKmsKey":{
+      "name":"AssociateKmsKey",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"AssociateKmsKeyRequest"},
+      "errors":[
+        {"shape":"InvalidParameterException"},
+        {"shape":"ResourceNotFoundException"},
+        {"shape":"OperationAbortedException"},
+        {"shape":"ServiceUnavailableException"}
+      ]
+    },
     "CancelExportTask":{
       "name":"CancelExportTask",
       "http":{
@@ -126,6 +141,19 @@
         {"shape":"ServiceUnavailableException"}
       ]
     },
+    "DeleteResourcePolicy":{
+      "name":"DeleteResourcePolicy",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"DeleteResourcePolicyRequest"},
+      "errors":[
+        {"shape":"InvalidParameterException"},
+        {"shape":"ResourceNotFoundException"},
+        {"shape":"ServiceUnavailableException"}
+      ]
+    },
     "DeleteRetentionPolicy":{
       "name":"DeleteRetentionPolicy",
       "http":{
@@ -221,6 +249,19 @@
         {"shape":"ServiceUnavailableException"}
       ]
     },
+    "DescribeResourcePolicies":{
+      "name":"DescribeResourcePolicies",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"DescribeResourcePoliciesRequest"},
+      "output":{"shape":"DescribeResourcePoliciesResponse"},
+      "errors":[
+        {"shape":"InvalidParameterException"},
+        {"shape":"ServiceUnavailableException"}
+      ]
+    },
     "DescribeSubscriptionFilters":{
       "name":"DescribeSubscriptionFilters",
       "http":{
@@ -232,6 +273,20 @@
       "errors":[
         {"shape":"InvalidParameterException"},
         {"shape":"ResourceNotFoundException"},
+        {"shape":"ServiceUnavailableException"}
+      ]
+    },
+    "DisassociateKmsKey":{
+      "name":"DisassociateKmsKey",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"DisassociateKmsKeyRequest"},
+      "errors":[
+        {"shape":"InvalidParameterException"},
+        {"shape":"ResourceNotFoundException"},
+        {"shape":"OperationAbortedException"},
         {"shape":"ServiceUnavailableException"}
       ]
     },
@@ -259,6 +314,19 @@
       "output":{"shape":"GetLogEventsResponse"},
       "errors":[
         {"shape":"InvalidParameterException"},
+        {"shape":"ResourceNotFoundException"},
+        {"shape":"ServiceUnavailableException"}
+      ]
+    },
+    "ListTagsLogGroup":{
+      "name":"ListTagsLogGroup",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"ListTagsLogGroupRequest"},
+      "output":{"shape":"ListTagsLogGroupResponse"},
+      "errors":[
         {"shape":"ResourceNotFoundException"},
         {"shape":"ServiceUnavailableException"}
       ]
@@ -303,7 +371,6 @@
         {"shape":"InvalidSequenceTokenException"},
         {"shape":"DataAlreadyAcceptedException"},
         {"shape":"ResourceNotFoundException"},
-        {"shape":"OperationAbortedException"},
         {"shape":"ServiceUnavailableException"}
       ]
     },
@@ -318,6 +385,20 @@
         {"shape":"InvalidParameterException"},
         {"shape":"ResourceNotFoundException"},
         {"shape":"OperationAbortedException"},
+        {"shape":"LimitExceededException"},
+        {"shape":"ServiceUnavailableException"}
+      ]
+    },
+    "PutResourcePolicy":{
+      "name":"PutResourcePolicy",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"PutResourcePolicyRequest"},
+      "output":{"shape":"PutResourcePolicyResponse"},
+      "errors":[
+        {"shape":"InvalidParameterException"},
         {"shape":"LimitExceededException"},
         {"shape":"ServiceUnavailableException"}
       ]
@@ -351,6 +432,18 @@
         {"shape":"ServiceUnavailableException"}
       ]
     },
+    "TagLogGroup":{
+      "name":"TagLogGroup",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"TagLogGroupRequest"},
+      "errors":[
+        {"shape":"ResourceNotFoundException"},
+        {"shape":"InvalidParameterException"}
+      ]
+    },
     "TestMetricFilter":{
       "name":"TestMetricFilter",
       "http":{
@@ -363,6 +456,17 @@
         {"shape":"InvalidParameterException"},
         {"shape":"ServiceUnavailableException"}
       ]
+    },
+    "UntagLogGroup":{
+      "name":"UntagLogGroup",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"UntagLogGroupRequest"},
+      "errors":[
+        {"shape":"ResourceNotFoundException"}
+      ]
     }
   },
   "shapes":{
@@ -371,6 +475,17 @@
       "min":1
     },
     "Arn":{"type":"string"},
+    "AssociateKmsKeyRequest":{
+      "type":"structure",
+      "required":[
+        "logGroupName",
+        "kmsKeyId"
+      ],
+      "members":{
+        "logGroupName":{"shape":"LogGroupName"},
+        "kmsKeyId":{"shape":"KmsKeyId"}
+      }
+    },
     "CancelExportTaskRequest":{
       "type":"structure",
       "required":["taskId"],
@@ -406,7 +521,9 @@
       "type":"structure",
       "required":["logGroupName"],
       "members":{
-        "logGroupName":{"shape":"LogGroupName"}
+        "logGroupName":{"shape":"LogGroupName"},
+        "kmsKeyId":{"shape":"KmsKeyId"},
+        "tags":{"shape":"Tags"}
       }
     },
     "CreateLogStreamRequest":{
@@ -428,6 +545,7 @@
       "exception":true
     },
     "Days":{"type":"integer"},
+    "DefaultValue":{"type":"double"},
     "DeleteDestinationRequest":{
       "type":"structure",
       "required":["destinationName"],
@@ -462,6 +580,12 @@
       "members":{
         "logGroupName":{"shape":"LogGroupName"},
         "filterName":{"shape":"FilterName"}
+      }
+    },
+    "DeleteResourcePolicyRequest":{
+      "type":"structure",
+      "members":{
+        "policyName":{"shape":"PolicyName"}
       }
     },
     "DeleteRetentionPolicyRequest":{
@@ -555,18 +679,33 @@
     },
     "DescribeMetricFiltersRequest":{
       "type":"structure",
-      "required":["logGroupName"],
       "members":{
         "logGroupName":{"shape":"LogGroupName"},
         "filterNamePrefix":{"shape":"FilterName"},
         "nextToken":{"shape":"NextToken"},
-        "limit":{"shape":"DescribeLimit"}
+        "limit":{"shape":"DescribeLimit"},
+        "metricName":{"shape":"MetricName"},
+        "metricNamespace":{"shape":"MetricNamespace"}
       }
     },
     "DescribeMetricFiltersResponse":{
       "type":"structure",
       "members":{
         "metricFilters":{"shape":"MetricFilters"},
+        "nextToken":{"shape":"NextToken"}
+      }
+    },
+    "DescribeResourcePoliciesRequest":{
+      "type":"structure",
+      "members":{
+        "nextToken":{"shape":"NextToken"},
+        "limit":{"shape":"DescribeLimit"}
+      }
+    },
+    "DescribeResourcePoliciesResponse":{
+      "type":"structure",
+      "members":{
+        "resourcePolicies":{"shape":"ResourcePolicies"},
         "nextToken":{"shape":"NextToken"}
       }
     },
@@ -611,6 +750,20 @@
     "Destinations":{
       "type":"list",
       "member":{"shape":"Destination"}
+    },
+    "DisassociateKmsKeyRequest":{
+      "type":"structure",
+      "required":["logGroupName"],
+      "members":{
+        "logGroupName":{"shape":"LogGroupName"}
+      }
+    },
+    "Distribution":{
+      "type":"string",
+      "enum":[
+        "Random",
+        "ByLogStream"
+      ]
     },
     "EventId":{"type":"string"},
     "EventMessage":{
@@ -803,11 +956,28 @@
       },
       "exception":true
     },
+    "KmsKeyId":{
+      "type":"string",
+      "max":256
+    },
     "LimitExceededException":{
       "type":"structure",
       "members":{
       },
       "exception":true
+    },
+    "ListTagsLogGroupRequest":{
+      "type":"structure",
+      "required":["logGroupName"],
+      "members":{
+        "logGroupName":{"shape":"LogGroupName"}
+      }
+    },
+    "ListTagsLogGroupResponse":{
+      "type":"structure",
+      "members":{
+        "tags":{"shape":"Tags"}
+      }
     },
     "LogEventIndex":{"type":"integer"},
     "LogGroup":{
@@ -818,7 +988,8 @@
         "retentionInDays":{"shape":"Days"},
         "metricFilterCount":{"shape":"FilterCount"},
         "arn":{"shape":"Arn"},
-        "storedBytes":{"shape":"StoredBytes"}
+        "storedBytes":{"shape":"StoredBytes"},
+        "kmsKeyId":{"shape":"KmsKeyId"}
       }
     },
     "LogGroupName":{
@@ -861,7 +1032,8 @@
         "filterName":{"shape":"FilterName"},
         "filterPattern":{"shape":"FilterPattern"},
         "metricTransformations":{"shape":"MetricTransformations"},
-        "creationTime":{"shape":"Timestamp"}
+        "creationTime":{"shape":"Timestamp"},
+        "logGroupName":{"shape":"LogGroupName"}
       }
     },
     "MetricFilterMatchRecord":{
@@ -900,7 +1072,8 @@
       "members":{
         "metricName":{"shape":"MetricName"},
         "metricNamespace":{"shape":"MetricNamespace"},
-        "metricValue":{"shape":"MetricValue"}
+        "metricValue":{"shape":"MetricValue"},
+        "defaultValue":{"shape":"DefaultValue"}
       }
     },
     "MetricTransformations":{
@@ -942,6 +1115,12 @@
       "type":"list",
       "member":{"shape":"OutputLogEvent"}
     },
+    "PolicyDocument":{
+      "type":"string",
+      "max":5120,
+      "min":1
+    },
+    "PolicyName":{"type":"string"},
     "PutDestinationPolicyRequest":{
       "type":"structure",
       "required":[
@@ -1008,6 +1187,19 @@
         "metricTransformations":{"shape":"MetricTransformations"}
       }
     },
+    "PutResourcePolicyRequest":{
+      "type":"structure",
+      "members":{
+        "policyName":{"shape":"PolicyName"},
+        "policyDocument":{"shape":"PolicyDocument"}
+      }
+    },
+    "PutResourcePolicyResponse":{
+      "type":"structure",
+      "members":{
+        "resourcePolicy":{"shape":"ResourcePolicy"}
+      }
+    },
     "PutRetentionPolicyRequest":{
       "type":"structure",
       "required":[
@@ -1032,7 +1224,8 @@
         "filterName":{"shape":"FilterName"},
         "filterPattern":{"shape":"FilterPattern"},
         "destinationArn":{"shape":"DestinationArn"},
-        "roleArn":{"shape":"RoleArn"}
+        "roleArn":{"shape":"RoleArn"},
+        "distribution":{"shape":"Distribution"}
       }
     },
     "RejectedLogEventsInfo":{
@@ -1054,6 +1247,18 @@
       "members":{
       },
       "exception":true
+    },
+    "ResourcePolicies":{
+      "type":"list",
+      "member":{"shape":"ResourcePolicy"}
+    },
+    "ResourcePolicy":{
+      "type":"structure",
+      "members":{
+        "policyName":{"shape":"PolicyName"},
+        "policyDocument":{"shape":"PolicyDocument"},
+        "lastUpdatedTime":{"shape":"Timestamp"}
+      }
     },
     "RoleArn":{
       "type":"string",
@@ -1094,12 +1299,47 @@
         "filterPattern":{"shape":"FilterPattern"},
         "destinationArn":{"shape":"DestinationArn"},
         "roleArn":{"shape":"RoleArn"},
+        "distribution":{"shape":"Distribution"},
         "creationTime":{"shape":"Timestamp"}
       }
     },
     "SubscriptionFilters":{
       "type":"list",
       "member":{"shape":"SubscriptionFilter"}
+    },
+    "TagKey":{
+      "type":"string",
+      "max":128,
+      "min":1,
+      "pattern":"^([\\p{L}\\p{Z}\\p{N}_.:/=+\\-@]+)$"
+    },
+    "TagList":{
+      "type":"list",
+      "member":{"shape":"TagKey"},
+      "min":1
+    },
+    "TagLogGroupRequest":{
+      "type":"structure",
+      "required":[
+        "logGroupName",
+        "tags"
+      ],
+      "members":{
+        "logGroupName":{"shape":"LogGroupName"},
+        "tags":{"shape":"Tags"}
+      }
+    },
+    "TagValue":{
+      "type":"string",
+      "max":256,
+      "pattern":"^([\\p{L}\\p{Z}\\p{N}_.:/=+\\-@]*)$"
+    },
+    "Tags":{
+      "type":"map",
+      "key":{"shape":"TagKey"},
+      "value":{"shape":"TagValue"},
+      "max":50,
+      "min":1
     },
     "TargetArn":{
       "type":"string",
@@ -1133,6 +1373,17 @@
       "min":0
     },
     "Token":{"type":"string"},
+    "UntagLogGroupRequest":{
+      "type":"structure",
+      "required":[
+        "logGroupName",
+        "tags"
+      ],
+      "members":{
+        "logGroupName":{"shape":"LogGroupName"},
+        "tags":{"shape":"TagList"}
+      }
+    },
     "Value":{"type":"string"}
   }
 }
