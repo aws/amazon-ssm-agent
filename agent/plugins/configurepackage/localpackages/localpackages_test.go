@@ -182,6 +182,7 @@ func TestValidatePackage(t *testing.T) {
 	mockFileSys.On("Exists", path.Join(testRepoRoot, testPackage, version, "install.ps1")).Return(true).Once()
 	mockFileSys.On("ReadFile", path.Join(testRepoRoot, testPackage, version, "manifest.json")).Return(loadFile(t, path.Join(testRepoRoot, testPackage, version, "manifest.json")), nil).Once()
 	mockFileSys.On("GetFileNames", path.Join(testRepoRoot, testPackage, version)).Return([]string{"manifest.json", "install.json"}, nil)
+	mockFileSys.On("GetDirectoryNames", path.Join(testRepoRoot, testPackage, version)).Return([]string{}, nil)
 
 	// Instantiate repository with mock
 	repo := localRepository{filesysdep: &mockFileSys, repoRoot: testRepoRoot, lockRoot: testLockRoot, fileLocker: &filelock.FileLockerNoop{}}
@@ -200,6 +201,7 @@ func TestValidatePackage_Manifest(t *testing.T) {
 	mockFileSys.On("Exists", path.Join(testRepoRoot, testPackage, version, "install.ps1")).Return(true).Once()
 	mockFileSys.On("ReadFile", path.Join(testRepoRoot, testPackage, version, "manifest.json")).Return(loadFile(t, path.Join(testRepoRoot, testPackage, version, "manifest.json")), nil).Once()
 	mockFileSys.On("GetFileNames", path.Join(testRepoRoot, testPackage, version)).Return([]string{"manifest.json", "install.json"}, nil)
+	mockFileSys.On("GetDirectoryNames", path.Join(testRepoRoot, testPackage, version)).Return([]string{}, nil)
 
 	// Instantiate repository with mock
 	repo := localRepository{filesysdep: &mockFileSys, repoRoot: testRepoRoot, lockRoot: testLockRoot, fileLocker: &filelock.FileLockerNoop{}}
@@ -217,6 +219,7 @@ func TestValidatePackage_NoManifest(t *testing.T) {
 	mockFileSys.On("Exists", path.Join(testRepoRoot, testPackage, version, "manifest.json")).Return(false).Once()
 	mockFileSys.On("Exists", path.Join(testRepoRoot, testPackage, version, "install.ps1")).Return(true).Once()
 	mockFileSys.On("GetFileNames", path.Join(testRepoRoot, testPackage, version)).Return([]string{"install.json", "uninstall.json"}, nil)
+	mockFileSys.On("GetDirectoryNames", path.Join(testRepoRoot, testPackage, version)).Return([]string{}, nil)
 
 	// Instantiate repository with mock
 	repo := localRepository{filesysdep: &mockFileSys, repoRoot: testRepoRoot, lockRoot: testLockRoot, fileLocker: &filelock.FileLockerNoop{}}
@@ -351,7 +354,7 @@ func TestAddPackage(t *testing.T) {
 	mockFileSys.On("ReadFile", path.Join(testRepoRoot, testPackage, "installstate")).Return(loadFile(t, path.Join(testRepoRoot, testPackage, "installstate_success")), nil).Once()
 
 	mockDownload := MockedDownloader{}
-	mockDownload.On("Download", path.Join(testRepoRoot, testPackage, version)).Return(nil).Once()
+	mockDownload.On("Download", tracerMock, path.Join(testRepoRoot, testPackage, version)).Return(nil).Once()
 
 	// Instantiate repository with mock
 	repo := localRepository{filesysdep: &mockFileSys, repoRoot: testRepoRoot, lockRoot: testLockRoot, fileLocker: &filelock.FileLockerNoop{}}
@@ -373,7 +376,7 @@ func TestAddNewPackage(t *testing.T) {
 	mockFileSys.On("WriteFile", path.Join(testRepoRoot, testPackage, "installstate"), mock.Anything).Return(nil).Once()
 
 	mockDownload := MockedDownloader{}
-	mockDownload.On("Download", path.Join(testRepoRoot, testPackage, version)).Return(nil).Once()
+	mockDownload.On("Download", tracerMock, path.Join(testRepoRoot, testPackage, version)).Return(nil).Once()
 
 	// Instantiate repository with mock
 	repo := localRepository{filesysdep: &mockFileSys, repoRoot: testRepoRoot, lockRoot: testLockRoot, fileLocker: &filelock.FileLockerNoop{}}
@@ -394,7 +397,7 @@ func TestRefreshPackage(t *testing.T) {
 	mockFileSys.On("ReadFile", path.Join(testRepoRoot, testPackage, "installstate")).Return(loadFile(t, path.Join(testRepoRoot, testPackage, "installstate_success")), nil).Once()
 
 	mockDownload := MockedDownloader{}
-	mockDownload.On("Download", path.Join(testRepoRoot, testPackage, version)).Return(nil).Once()
+	mockDownload.On("Download", tracerMock, path.Join(testRepoRoot, testPackage, version)).Return(nil).Once()
 
 	// Instantiate repository with mock
 	repo := localRepository{filesysdep: &mockFileSys, repoRoot: testRepoRoot, lockRoot: testLockRoot, fileLocker: &filelock.FileLockerNoop{}}
@@ -636,8 +639,8 @@ type MockedDownloader struct {
 	mock.Mock
 }
 
-func (downloadMock *MockedDownloader) Download(targetDirectory string) error {
-	args := downloadMock.Called(targetDirectory)
+func (downloadMock *MockedDownloader) Download(tracer trace.Tracer, targetDirectory string) error {
+	args := downloadMock.Called(tracer, targetDirectory)
 	return args.Error(0)
 }
 
