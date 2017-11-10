@@ -144,7 +144,7 @@ func TestParallelLocking(t *testing.T) {
 	// First, clean up
 	os.Remove(lockPath)
 
-	N := 10000
+	N := 1000
 	var wg sync.WaitGroup
 	wg.Add(N)
 
