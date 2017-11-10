@@ -188,24 +188,29 @@ func ensurePackage(
 }
 
 // buildDownloadDelegate constructs the delegate used by the repository to download a package from the service
-func buildDownloadDelegate(tracer trace.Tracer, packageService packageservice.PackageService, packageName string, version string) func(string) error {
-	return func(targetDirectory string) error {
+func buildDownloadDelegate(tracer trace.Tracer, packageService packageservice.PackageService, packageName string, version string) func(trace.Tracer, string) error {
+	return func(tracer trace.Tracer, targetDirectory string) error {
+		trace := tracer.BeginSection("download artifact")
 		filePath, err := packageService.DownloadArtifact(tracer, packageName, version)
 		if err != nil {
+			trace.WithError(err).End()
 			return err
 		}
 
 		// TODO: Consider putting uncompress into the ssminstaller new and not deleting it (since the zip is the repository-validatable artifact)
 		if uncompressErr := filesysdep.Uncompress(filePath, targetDirectory); uncompressErr != nil {
+			trace.WithError(uncompressErr).End()
 			return fmt.Errorf("failed to extract package installer package %v from %v, %v", filePath, targetDirectory, uncompressErr.Error())
 		}
 
 		// NOTE: this could be considered a warning - it likely points to a real problem, but if uncompress succeeded, we could continue
 		// delete compressed package after using
 		if cleanupErr := filesysdep.RemoveAll(filePath); cleanupErr != nil {
+			trace.WithError(cleanupErr).End()
 			return fmt.Errorf("failed to delete compressed package %v, %v", filePath, cleanupErr.Error())
 		}
 
+		trace.End()
 		return nil
 	}
 }

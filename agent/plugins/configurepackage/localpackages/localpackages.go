@@ -36,7 +36,7 @@ import (
 )
 
 // DownloadDelegate is a function that downloads a package to a directory provided by the repository
-type DownloadDelegate func(targetDirectory string) error
+type DownloadDelegate func(tracer trace.Tracer, targetDirectory string) error
 
 // InstallState is an enum describing the installation state of a package
 type InstallState uint
@@ -142,7 +142,7 @@ func (repo *localRepository) GetInstaller(tracer trace.Tracer,
 	configuration.OrchestrationDirectory = filepath.Join(configuration.OrchestrationDirectory, normalizeDirectory(version))
 	return ssminstaller.New(packageArn,
 		version,
-		repo.getPackageVersionPath(packageArn, version),
+		repo.getPackageVersionPath(tracer, packageArn, version),
 		configuration,
 		&envdetect.CollectorImp{})
 }
@@ -161,7 +161,7 @@ func (repo *localRepository) checkPackageIsSupported(tracer trace.Tracer, packag
 	validatetrace := tracer.BeginSection("isPackageSupported")
 	defer validatetrace.End()
 
-	path := repo.getPackageVersionPath(packageArn, version)
+	path := repo.getPackageVersionPath(tracer, packageArn, version)
 	if repo.filesysdep.Exists(filepath.Join(path, "install.ps1")) {
 		return nil
 	}
@@ -177,16 +177,36 @@ func (repo *localRepository) checkPackageIsSupported(tracer trace.Tracer, packag
 // ValidatePackage returns an error if the given package version artifacts are missing, incomplete, or corrupt
 func (repo *localRepository) ValidatePackage(tracer trace.Tracer, packageArn string, version string) error {
 	// Find and parse manifest
-	if _, err := repo.openPackageManifest(repo.filesysdep, packageArn, version); err != nil {
+	trace := tracer.BeginSection("Validate Package")
+
+	if _, err := repo.openPackageManifest(tracer, repo.filesysdep, packageArn, version); err != nil {
+		trace.WithError(err).End()
 		return fmt.Errorf("Package manifest is invalid: %v", err)
 	}
 
 	hasContent := false
 
+	packageVersionPath := repo.getPackageVersionPath(tracer, packageArn, version)
+	trace.AppendInfof("package version path for package %v version %v is %v", packageArn, version, packageVersionPath)
+
+	files, errFiles := repo.filesysdep.GetFileNames(packageVersionPath)
+	if errFiles != nil {
+		trace.WithError(errFiles)
+	} else {
+		trace.AppendInfof("%v files exist in %v ", len(files), packageVersionPath)
+	}
+
+	dirs, errDirs := repo.filesysdep.GetDirectoryNames(packageVersionPath)
+	if errDirs != nil {
+		trace.WithError(errDirs)
+	} else {
+		trace.AppendInfof("%v folders exist in %v", len(dirs), packageVersionPath)
+	}
+
 	// Ensure that at least one other file or folder is present
-	if files, err := repo.filesysdep.GetFileNames(repo.getPackageVersionPath(packageArn, version)); err == nil && len(files) > 1 {
+	if errFiles == nil && len(files) > 1 {
 		hasContent = true
-	} else if dirs, err := repo.filesysdep.GetDirectoryNames(repo.getPackageVersionPath(packageArn, version)); err == nil && len(dirs) > 0 {
+	} else if errDirs == nil && len(dirs) > 0 {
 		hasContent = true
 	}
 
@@ -196,9 +216,11 @@ func (repo *localRepository) ValidatePackage(tracer trace.Tracer, packageArn str
 
 	// This is necessary to make sure pre-birdwatcher packages are deemed unsupported, triggering package refresh to birdwatched version of the package.
 	if err := repo.checkPackageIsSupported(tracer, packageArn, version); err != nil {
+		trace.WithError(err).End()
 		return err
 	}
 
+	trace.End()
 	return nil
 }
 
@@ -209,11 +231,11 @@ func (repo *localRepository) RefreshPackage(tracer trace.Tracer, packageArn stri
 
 // AddPackage creates an entry in the repository and downloads artifacts for a package
 func (repo *localRepository) AddPackage(tracer trace.Tracer, packageArn string, version string, packageServiceName string, downloader DownloadDelegate) error {
-	packagePath := repo.getPackageVersionPath(packageArn, version)
+	packagePath := repo.getPackageVersionPath(tracer, packageArn, version)
 	if err := repo.filesysdep.MakeDirExecute(packagePath); err != nil {
 		return err
 	}
-	if err := downloader(packagePath); err != nil {
+	if err := downloader(tracer, packagePath); err != nil {
 		return err
 	}
 	// if no previous version, set state to new
@@ -259,7 +281,7 @@ func (repo *localRepository) GetInstallState(tracer trace.Tracer, packageArn str
 
 // RemovePackage deletes an entry in the repository and removes package artifacts
 func (repo *localRepository) RemovePackage(tracer trace.Tracer, packageArn string, version string) error {
-	return repo.filesysdep.RemoveAll(repo.getPackageVersionPath(packageArn, version))
+	return repo.filesysdep.RemoveAll(repo.getPackageVersionPath(tracer, packageArn, version))
 }
 
 // GetInventoryData returns ApplicationData for every successfully and currently installed package in the repository
@@ -285,7 +307,7 @@ func (repo *localRepository) GetInventoryData(log log.T) []model.ApplicationData
 		}
 		// NOTE: We could put inventory info in the installstate file.  That might be simpler than opening two files in this method.
 		var manifest *PackageManifest
-		manifest, err = repo.openPackageManifest(repo.filesysdep, packageArn, packageState.Version)
+		manifest, err = repo.openPackageManifest(tracer, repo.filesysdep, packageArn, packageState.Version)
 		if hasInventoryData(manifest) {
 			result = append(result, createApplicationData(manifest, packageState))
 		}
@@ -359,13 +381,13 @@ func (repo *localRepository) getInstallStatePath(packageArn string) string {
 }
 
 // getPackageVersionPath is a helper function that builds a path to the directory containing the given version of a package
-func (repo *localRepository) getPackageVersionPath(packageArn string, version string) string {
+func (repo *localRepository) getPackageVersionPath(tracer trace.Tracer, packageArn string, version string) string {
 	return filepath.Join(repo.getPackageRoot(packageArn), normalizeDirectory(version))
 }
 
 // getManifestPath is a helper function that builds the path to the manifest file for a given version of a package
-func (repo *localRepository) getManifestPath(packageArn string, version string, manifestName string) string {
-	return filepath.Join(repo.getPackageVersionPath(packageArn, version), fmt.Sprintf("%v.json", manifestName))
+func (repo *localRepository) getManifestPath(tracer trace.Tracer, packageArn string, version string, manifestName string) string {
+	return filepath.Join(repo.getPackageVersionPath(tracer, packageArn, version), fmt.Sprintf("%v.json", manifestName))
 }
 
 // loadInstallState loads the existing installstate file or returns an appropriate default state
@@ -392,30 +414,43 @@ func (repo *localRepository) loadInstallState(filesysdep FileSysDep, tracer trac
 }
 
 // openPackageManifest returns the valid manifest or validation error for a given package version
-func (repo *localRepository) openPackageManifest(filesysdep FileSysDep, packageArn string, version string) (manifest *PackageManifest, err error) {
-	manifestPath := repo.getManifestPath(packageArn, version, "manifest")
+func (repo *localRepository) openPackageManifest(tracer trace.Tracer, filesysdep FileSysDep, packageArn string, version string) (manifest *PackageManifest, err error) {
+	trace := tracer.BeginSection("Validate Package")
+	manifestPath := repo.getManifestPath(tracer, packageArn, version, "manifest")
+
 	if filesysdep.Exists(manifestPath) {
-		return parsePackageManifest(filesysdep, manifestPath, packageArn, version)
+		return parsePackageManifest(tracer, filesysdep, manifestPath, packageArn, version)
 	}
 
+	trace.End()
 	return &PackageManifest{}, nil
 }
 
 // parsePackageManifest parses the manifest to ensure it is valid.
-func parsePackageManifest(filesysdep FileSysDep, filePath string, packageArn string, version string) (parsedManifest *PackageManifest, err error) {
+func parsePackageManifest(tracer trace.Tracer, filesysdep FileSysDep, filePath string, packageArn string, version string) (parsedManifest *PackageManifest, err error) {
 	// load specified file from file system
+	trace := tracer.BeginSection("Parse Package Manifest")
 	var result = []byte{}
+
 	if result, err = filesysdep.ReadFile(filePath); err != nil {
+		trace.WithError(err).End()
 		return nil, err
 	}
 
 	// parse package's JSON configuration file
 	if err = json.Unmarshal(result, &parsedManifest); err != nil {
+		trace.WithError(err).End()
 		return nil, err
 	}
 
 	// ensure manifest conforms to defined schema
-	return parsedManifest, validatePackageManifest(parsedManifest, packageArn, version)
+	if err = validatePackageManifest(parsedManifest, packageArn, version); err != nil {
+		trace.WithError(err).End()
+		return parsedManifest, err
+	}
+
+	trace.End()
+	return parsedManifest, nil
 }
 
 // validatePackageManifest ensures all the fields are provided.
