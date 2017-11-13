@@ -72,7 +72,7 @@ var (
 func ManagedInstanceCredentialsInstance() *credentials.Credentials {
 	lock.Lock()
 	defer lock.Unlock()
-	logger = ssmlog.SSMLogger()
+	logger = ssmlog.SSMLogger(true)
 	shareCreds = true
 	if config, err := appconfig.Config(false); err == nil {
 		shareCreds = config.Profile.ShareCreds

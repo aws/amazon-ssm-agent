@@ -6,7 +6,7 @@ import logger "github.com/aws/amazon-ssm-agent/agent/log/ssmlog"
 
 func main() {
 	// initialize logger
-	log := logger.SSMLogger()
+	log := logger.SSMLogger(true)
 	defer log.Close()
 	defer log.Flush()
 

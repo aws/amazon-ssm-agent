@@ -36,24 +36,26 @@ var pkgMutex = new(sync.Mutex)
 // loggerInstance is the delegate logger in the wrapper
 var loggerInstance = &log.DelegateLogger{}
 
-func SSMLogger() log.T {
+func SSMLogger(useWatcher bool) log.T {
 	if !isLoaded() {
-		logger := initLogger()
+		logger := initLogger(useWatcher)
 		cache(logger)
 	}
 	return getCached()
 }
 
 // initLogger initializes a new logger based on current configurations and starts file watcher on the configurations file
-func initLogger() (logger log.T) {
+func initLogger(useWatcher bool) (logger log.T) {
 	// Read the current configurations or get the default configurations
 	logConfigBytes := log.GetLogConfigBytes()
 	// Initialize the base seelog logger
 	baseLogger, _ := initBaseLoggerFromBytes(logConfigBytes)
 	// Create the wrapper logger
 	logger = withContext(baseLogger)
-	// Start the config file watcher
-	startWatcher(logger)
+	if useWatcher {
+		// Start the config file watcher
+		startWatcher(logger)
+	}
 	return
 }
 
