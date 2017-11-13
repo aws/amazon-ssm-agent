@@ -136,7 +136,7 @@ func AttachProcessToJobObject(Pid uint32) (err error) {
 // launched via the ConfigureDaemon/RunDaemon plugin.
 // The init function is automatically invoked prior to main function being invoked.
 func init() {
-	log := ssmlog.SSMLogger()
+	log := ssmlog.SSMLogger(true)
 
 	var err error
 	SSMjobObject, err = createJobObject(nil, nil)
