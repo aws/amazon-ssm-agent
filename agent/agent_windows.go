@@ -47,7 +47,7 @@ func getServiceStartType(service *mgr.Service) (starttype uint32, err error) {
 
 func main() {
 	// initialize logger
-	log := ssmlog.SSMLogger()
+	log := ssmlog.SSMLogger(true)
 	defer log.Close()
 	defer log.Flush()
 
@@ -161,7 +161,7 @@ func waitForSysPrep(log logger.T) (bool, uint32) {
 
 // Execute agent as Windows service.  Implement golang.org/x/sys/windows/svc#Handler.
 func (a *amazonSSMAgentService) Execute(args []string, r <-chan svc.ChangeRequest, s chan<- svc.Status) (bool, uint32) {
-	log := ssmlog.SSMLogger()
+	log := a.log
 
 	isSysPrepEC, erro := waitForSysPrep(log)
 	if !(isSysPrepEC && erro == appconfig.SuccessExitCode) { //returnCode true with success exit code means we can continue to start the agent
