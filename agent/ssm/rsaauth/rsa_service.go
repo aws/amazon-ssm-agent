@@ -42,14 +42,14 @@ func NewRsaService(serverId string, region string, encodedPrivateKey string) Rsa
 	awsConfig.Credentials = credentials.NewStaticCredentials(serverId, encodedPrivateKey, "")
 
 	// Create a session to share service client config and handlers with
-	ssmSess := session.New(awsConfig)
-
-	// Clear existing singers
-	ssmSess.Handlers.Sign.Clear()
-	// Add custom signer to session, will be used by any service created with this session
-	ssmSess.Handlers.Sign.PushBack(v4.SignRsa)
+	ssmSess, _ := session.NewSession(awsConfig)
 
 	ssmService := ssm.New(ssmSess)
+
+	// use Beagle's RSA signer override
+	// whenever we update sdk, we need to make sure it's using Beagle's RSA signing protocol
+	ssmService.Handlers.Sign.Clear()
+	ssmService.Handlers.Sign.PushBack(v4.SignRsa)
 	return &sdkService{sdk: ssmService}
 }
 
