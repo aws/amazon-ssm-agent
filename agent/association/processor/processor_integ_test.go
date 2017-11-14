@@ -43,7 +43,9 @@ const (
 func TestParseAssociationWithAssociationVersion1_2(t *testing.T) {
 	log := log.Logger()
 	context := context.Default(log, appconfig.SsmagentConfig{})
-	processor := NewAssociationProcessor(context, "i-test")
+	processor := Processor{
+		context: context,
+	}
 	sys = &systemStub{}
 
 	sampleFile := readFile(FILE_VERSION_1_2)
@@ -114,7 +116,9 @@ func TestParseAssociationWithAssociationVersion2_0(t *testing.T) {
 
 	log := log.Logger()
 	context := context.Default(log, appconfig.SsmagentConfig{})
-	processor := NewAssociationProcessor(context, "i-test")
+	processor := Processor{
+		context: context,
+	}
 	sys = &systemStub{}
 
 	sampleFile := readFile(FILE_VERSION_2_0)
@@ -202,7 +206,9 @@ func TestParseAssociationWithAssociationVersion2_0_StringMapParams(t *testing.T)
 
 	log := log.Logger()
 	context := context.Default(log, appconfig.SsmagentConfig{})
-	processor := NewAssociationProcessor(context, "i-test")
+	processor := Processor{
+		context: context,
+	}
 	sys = &systemStub{}
 
 	sampleFile := readFile(FILE_PARAM_2_0)

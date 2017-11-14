@@ -65,7 +65,7 @@ type Processor struct {
 var lock sync.RWMutex
 
 // NewAssociationProcessor returns a new Processor with the given context.
-func NewAssociationProcessor(context context.T, instanceID string) *Processor {
+func NewAssociationProcessor(context context.T) *Processor {
 	assocContext := context.With("[" + name + "]")
 
 	config := assocContext.AppConfig()

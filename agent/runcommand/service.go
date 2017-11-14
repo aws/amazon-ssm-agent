@@ -159,7 +159,7 @@ func NewService(ctx context.T, serviceName string, service mdsService.Service, c
 
 	var assocProc *associationProcessor.Processor
 	if pollAssoc {
-		assocProc = associationProcessor.NewAssociationProcessor(ctx, instanceID)
+		assocProc = associationProcessor.NewAssociationProcessor(ctx)
 	}
 
 	processor := processor.NewEngineProcessor(ctx, commandWorkerLimit, cancelWorkerLimit, supportedDocs)
