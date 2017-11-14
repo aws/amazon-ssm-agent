@@ -1,5 +1,10 @@
 Latest
 ===============
+- Update to latest AWS SDK.
+- Various bug fixes.
+
+2.2.82.0
+===============
 - Bug fix for proxy environment variables in Windows.
 
 2.2.64.0
