@@ -68,7 +68,7 @@ cpy-plugins:
 	$(BGO_SPACE)/Tools/src/copy_plugin_binaries.sh $(BRAZIL_BUILD)
 
 .PHONY: release-test
-release-test: copy-src pre-build pre-release quick-test
+release-test: copy-src pre-build pre-release quick-integtest
 
 .PHONY: pre-release
 pre-release:
