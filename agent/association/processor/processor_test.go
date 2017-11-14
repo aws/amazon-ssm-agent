@@ -19,7 +19,6 @@ import (
 	"testing"
 	"time"
 
-	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/association/model"
 	"github.com/aws/amazon-ssm-agent/agent/association/schedulemanager"
 	"github.com/aws/amazon-ssm-agent/agent/association/service"
@@ -35,14 +34,6 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )
-
-func TestNewAssociationProcessor(t *testing.T) {
-	log := log.Logger()
-	context := context.Default(log, appconfig.SsmagentConfig{})
-	process := NewAssociationProcessor(context, "i-test")
-
-	assert.NotNil(t, process)
-}
 
 func TestSetJob(t *testing.T) {
 	processor := Processor{}

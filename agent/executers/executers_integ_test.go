@@ -205,6 +205,9 @@ func TestRunCommand_async(t *testing.T) {
 
 // TestShellCommandExecuter tests that ShellCommandExecuter (creates local script, redirects outputs to files) works
 func TestShellCommandExecuter(t *testing.T) {
+	instanceTemp := instance
+	instance = &instanceInfoStub{instanceID: testInstanceID, regionName: testRegionName}
+	defer func() { instance = instanceTemp }()
 	runTest := func(testCase TestCase) {
 		orchestrationDir, shCommandExecuterInvoker, _ := prepareTestShellCommandExecuter(t)
 		defer fileutil.DeleteDirectory(orchestrationDir)
