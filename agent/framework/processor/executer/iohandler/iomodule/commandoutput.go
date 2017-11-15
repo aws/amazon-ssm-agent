@@ -15,7 +15,6 @@ package iomodule
 
 import (
 	"bufio"
-	"bytes"
 	"fmt"
 	"io"
 
@@ -38,17 +37,15 @@ func (c CommandOutput) Read(log log.T, reader *io.PipeReader) {
 	scanner.Split(bufio.ScanBytes)
 
 	outputLimit := 0
-	var buffer bytes.Buffer
 	for scanner.Scan() {
 		// Check if size of output is greater than the output limit
 		outputLimit++
 		if outputLimit > c.OutputLimit {
 			break
 		}
-		buffer.WriteString(scanner.Text())
+		*c.OutputString = fmt.Sprintf("%v%v", *c.OutputString, scanner.Text())
 	}
 	log.Debugf("Number of bytes written to console output: %v", outputLimit)
-	*c.OutputString = fmt.Sprintf("%v%v", *c.OutputString, buffer.String())
 
 	if err := scanner.Err(); err != nil {
 		log.Error("Error with the scanner while reading the stream")
