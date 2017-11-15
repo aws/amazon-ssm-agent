@@ -90,7 +90,7 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 	} else {
 		property := p.prepareForStart(log, config, cancelFlag, output)
 		output.SetOutput(property)
-		output.SetStdout(setting.StartType)
+		output.AppendInfo(setting.StartType)
 	}
 
 	return

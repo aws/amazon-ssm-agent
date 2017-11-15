@@ -249,7 +249,6 @@ func runPlugin(
 	default:
 		executePlugin(context, p, pluginName, config, cancelFlag, output)
 	}
-
 	pluginConfig := iohandler.DefaultOutputConfig()
 
 	res.Code = output.GetExitCode()
@@ -271,7 +270,11 @@ func executePlugin(context context.T,
 	var propID string
 	var err error
 	if config.PluginName == config.PluginID {
-		propID, err = GetPropertyName(config.Properties) //V10 Schema
+		if pluginName == appconfig.PluginNameCloudWatch {
+			propID = appconfig.PluginNameCloudWatch
+		} else {
+			propID, err = GetPropertyName(config.Properties) //V10 Schema
+		}
 	} else {
 		propID = config.PluginID //V20 Schema
 	}
