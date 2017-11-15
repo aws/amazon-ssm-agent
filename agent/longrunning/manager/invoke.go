@@ -67,7 +67,7 @@ func Invoke(log logger.T, pluginID string, res *contracts.PluginResult, orchestr
 		}
 
 	default:
-		log.Errorf("Allowed Values of StartType: Enabled | Disabled")
+		log.Errorf("Allowed Values of StartType: Enabled | Disabled but provided value is: %s", startType)
 		CreateResult("Allowed Values of StartType: Enabled | Disabled",
 			contracts.ResultStatusFailed, res)
 	}
