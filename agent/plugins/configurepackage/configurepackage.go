@@ -370,7 +370,7 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 func (p *Plugin) execute(context context.T, config contracts.Configuration, cancelFlag task.CancelFlag, output iohandler.IOHandler) {
 	log := context.Log()
 	log.Info("RunCommand started with configuration ", config)
-
+	startTime := time.Now().UnixNano()
 	tracer := trace.NewTracer(log)
 	defer tracer.BeginSection("configurePackage").End()
 
@@ -439,7 +439,7 @@ func (p *Plugin) execute(context context.T, config contracts.Configuration, canc
 							Operation:              input.Action,
 							PackageName:            input.Name,
 							PreviousPackageVersion: installedVersion,
-							Timing:                 time.Now().UnixNano(),
+							Timing:                 startTime,
 							Version:                version,
 							Trace:                  packageservice.ConvertToPackageServiceTrace(tracer.Traces()),
 						})
