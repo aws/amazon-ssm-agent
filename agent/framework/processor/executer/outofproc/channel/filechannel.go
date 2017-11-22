@@ -70,16 +70,18 @@ func NewFileWatcherChannel(logger log.T, mode Mode, name string) (*fileWatcherCh
 	//buffered channel in order not to block listener
 	onMessageChan := make(chan string, defaultChannelBufferSize)
 	//signal the message poller to stop
-	closeChan := make(chan bool, defaultChannelBufferSize)
+	closeChan := make(chan bool)
 	//start file watcher and monitor the directory
 	watcher, err := fsnotify.NewWatcher()
 	if err != nil {
 		logger.Errorf("filewatcher listener encountered error when start watcher: %v", err)
+		os.RemoveAll(name)
 		return nil, err
 	}
 
 	if err = watcher.Add(name); err != nil {
 		logger.Errorf("filewatcher listener encountered error when add watch: %v", err)
+		os.RemoveAll(name)
 		return nil, err
 	}
 
@@ -150,20 +152,27 @@ func (ch *fileWatcherChannel) Destroy() {
 	}
 }
 
+// Close a filechannel
+// non-blocking call, drain the buffered messages and clear file watcher resources
 func (ch *fileWatcherChannel) Close() {
 	if ch.closed {
 		return
 	}
 	log := ch.logger
-	log.Debugf("channel %v requested close", ch.path)
-	//terminate Send()
+	log.Infof("channel %v requested close", ch.path)
+	//block other threads to call Send()
 	ch.closed = true
 	//read all the left over messages
 	ch.consumeAll()
-	//return immediately
+	//close the watch go-routine
 	ch.closeChan <- true
 	close(ch.closeChan)
+	//make sure the file watcher closed as well as the watch list is removed, otherwise can cause leak in ubuntu kernel
+	ch.watcher.Remove(ch.path)
+	ch.watcher.Close()
+
 	close(ch.onMessageChan)
+	log.Infof("channel %v closed", ch.path)
 	return
 }
 
@@ -237,12 +246,11 @@ func (ch *fileWatcherChannel) watch() {
 	for {
 		select {
 		case <-ch.closeChan:
-			ch.watcher.Close()
-			log.Debug("file watcher listener closed...")
+			log.Debug("file watch listener closed")
 			return
 		case event, ok := <-ch.watcher.Events:
 			if !ok {
-				log.Debug("fileWatcher closed")
+				log.Debug("fileWatcher already closed")
 				return
 			}
 			log.Debug("received event: ", event.String())
