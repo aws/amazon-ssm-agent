@@ -171,7 +171,7 @@ func ensurePackage(
 	if err := repository.ValidatePackage(tracer, packageName, version); err != nil ||
 		(currentVersion == version && (currentState == localpackages.Failed || !isSameAsCache)) {
 		pkgTrace.AppendInfof("Current %v Target %v State %v", currentVersion, version, currentState)
-		pkgTrace.AppendInfof("Refreshing package content for %v %v %v", packageName, version, err)
+		pkgTrace.AppendInfof("Refreshing package content for %v %v", packageName, version)
 		if err = repository.RefreshPackage(tracer, packageName, version, packageService.PackageServiceName(), buildDownloadDelegate(tracer, packageService, packageName, version)); err != nil {
 			pkgTrace.WithError(err).End()
 			return nil, err
