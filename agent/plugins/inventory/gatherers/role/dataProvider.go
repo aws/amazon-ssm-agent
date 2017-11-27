@@ -34,7 +34,9 @@ import (
 var (
 	startMarker    = "<start" + randomString(8) + ">"
 	endMarker      = "<end" + randomString(8) + ">"
-	roleInfoScript = `import-module ServerManager
+	roleInfoScript = `
+[Console]::OutputEncoding = [System.Text.Encoding]::UTF8
+import-module ServerManager
 $roleInfo = Get-WindowsFeature | Select-Object Name, DisplayName, Description, Installed, InstallState, FeatureType, Path, SubFeatures, ServerComponentDescriptor, DependsOn, Parent
 $jsonObj = @()
 foreach($r in $roleInfo) {
@@ -56,9 +58,10 @@ $jsonObj += @"
 }
 $result = $jsonObj -join ","
 $result = "[" + $result + "]"
-Write-Output $result
+[Console]::WriteLine($result)
 `
 	roleInfoScriptUsingRegistry = `
+  [Console]::OutputEncoding = [System.Text.Encoding]::UTF8
 	$keyExists = Test-Path "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Setup\OC Manager\Subcomponents"
 	$jsonObj = @()
 	if ($keyExists) {
@@ -79,7 +82,7 @@ Write-Output $result
 	}
 	$result = $jsonObj -join ","
 	$result = "[" + $result + "]"
-	Write-Output $result
+	[Console]::WriteLine($result)
 `
 )
 
