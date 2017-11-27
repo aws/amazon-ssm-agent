@@ -17,7 +17,7 @@ var (
 	startMarker        = "<start" + randomString(8) + ">"
 	endMarker          = "<end" + randomString(8) + ">"
 	registryInfoScript = `
-
+  [Console]::OutputEncoding = [System.Text.Encoding]::UTF8
 	$global:count = 0
 	$global:valueCount = 0
 	$global:registryKeys = @()
@@ -117,7 +117,7 @@ var (
 				} else {
 	                $result = $global:registryKeys -join ","
 			        $result = "[" + $result + "]"
-			        Write-Output $result
+			        [Console]::WriteLine($result)
 				}
             } else {
                 Write-Output "[]"

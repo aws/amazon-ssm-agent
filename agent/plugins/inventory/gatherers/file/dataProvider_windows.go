@@ -37,7 +37,9 @@ var (
 	startMarker       = "<start" + randomString(8) + ">"
 	endMarker         = "<end" + randomString(8) + ">"
 	FileInfoBatchSize = 100
-	fileInfoScript    = `function getjson($Paths){
+	fileInfoScript    = `
+  [Console]::OutputEncoding = [System.Text.Encoding]::UTF8
+  function getjson($Paths){
 	try {
 		$a = Get-ItemProperty -Path $Paths -EA SilentlyContinue |
 		SELECT-OBJECT Name,Length,VersionInfo,@{n="LastWriteTime";e={[datetime]::ParseExact($_."LastWriteTime","MM/dd/yyyy HH:mm:ss",$null).ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ssZ")}},
@@ -64,7 +66,7 @@ var (
 		}
 		$result = $jsonObj -join ","
 		$result = "[" + $result + "]"
-		Write-Output $result
+		[Console]::WriteLine($result)
 	} catch {
 		Write-Error $_.Exception.Message
 	}
