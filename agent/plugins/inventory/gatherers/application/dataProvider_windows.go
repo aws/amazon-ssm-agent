@@ -79,7 +79,9 @@ const (
 				     `
 	RegistryPathCurrentVersionUninstall            = `HKLM:\Software\Microsoft\Windows\CurrentVersion\Uninstall\*`
 	RegistryPathWow6432NodeCurrentVersionUninstall = `HKLM:\Software\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\*`
-	ArgsToReadRegistryApplications                 = `Get-ItemProperty %v |
+	ArgsToReadRegistryApplications                 = `
+[Console]::OutputEncoding = [System.Text.Encoding]::UTF8
+Get-ItemProperty %v |
 Where-Object {($_.DisplayName -ne $null -and $_DisplayName -ne '' -and $_.DisplayName -notmatch '^KB[000000-999999]') -and
 	($_.UninstallString -ne $null -and $_.UninstallString -ne '') -and
 	($_.SystemComponent -eq $null -or ($_.SystemComponent -ne $null -and $_.SystemComponent -eq '0'))  -and
@@ -92,9 +94,9 @@ Where-Object {($_.DisplayName -ne $null -and $_DisplayName -ne '' -and $_.Displa
 } |
 Select-Object @{n="Name";e={$_."DisplayName"}},
 	@{n="PackageId";e={$_."PSChildName"}}, @{n="Version";e={$_."DisplayVersion"}}, Publisher,
-	@{n="InstalledTime";e={[datetime]::ParseExact($_."InstallDate","yyyyMMdd",$null).ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ssZ")}} | %% { Write-Output @"
+	@{n="InstalledTime";e={[datetime]::ParseExact($_."InstallDate","yyyyMMdd",$null).ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ssZ")}} | %% { [Console]::WriteLine(@"
 {"Name":"$($_.Name)","PackageId":"$($_.PackageId)","Version":"$($_.Version)","Publisher":"$($_.Publisher)","InstalledTime":"$($_.InstalledTime)"},
-"@} `
+"@)} `
 )
 
 var ArgsToReadRegistryFromWindowsCurrentVersionUninstall = fmt.Sprintf(ArgsToReadRegistryApplications, RegistryPathCurrentVersionUninstall)
