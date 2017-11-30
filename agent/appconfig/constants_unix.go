@@ -19,11 +19,6 @@ package appconfig
 import "os"
 
 const (
-	// DefaultProgramFolder is the default folder for SSM
-	DefaultProgramFolder = "/etc/amazon/ssm/"
-
-	// AppConfigPath is the path of the AppConfig
-	AppConfigPath = DefaultProgramFolder + AppConfigFileName
 
 	// PackageRoot specifies the directory under which packages will be downloaded and installed
 	PackageRoot = "/var/lib/amazon/ssm/packages"
@@ -78,8 +73,6 @@ const (
 	// Default Custom Inventory Inventory Folder
 	DefaultCustomInventoryFolder = DefaultDataStorePath + "inventory/custom"
 
-	DefaultDocumentWorker = "/usr/bin/ssm-document-worker"
-
 	// Used to capture and return exit code for windows powershell script execution - empty for unix shell script case
 	ExitCodeTrap = ""
 
@@ -96,6 +89,13 @@ const (
 // PowerShellPluginCommandName is the path of the powershell.exe to be used by the runPowerShellScript plugin
 var PowerShellPluginCommandName string
 
+// DefaultProgramFolder is the default folder for SSM
+var DefaultProgramFolder = "/etc/amazon/ssm/"
+var DefaultDocumentWorker = "/usr/bin/ssm-document-worker"
+
+// AppConfigPath is the path of the AppConfig
+var AppConfigPath = DefaultProgramFolder + AppConfigFileName
+
 func init() {
 	/*
 	   Powershell command used to be poweshell in alpha versions, now it's pwsh in prod versions
@@ -103,5 +103,13 @@ func init() {
 	PowerShellPluginCommandName = "/usr/bin/powershell"
 	if _, err := os.Stat(PowerShellPluginCommandName); err != nil {
 		PowerShellPluginCommandName = "/usr/bin/pwsh"
+	}
+	// if document-worker is not in the default location, try using the snap installed location
+	if _, err := os.Stat(DefaultDocumentWorker); err != nil {
+		if _, err := os.Stat("/snap/amazon-ssm-agent/current/ssm-document-worker"); err == nil {
+			DefaultProgramFolder = "/snap/amazon-ssm-agent/current"
+			DefaultDocumentWorker = "/snap/amazon-ssm-agent/current/ssm-document-worker"
+
+		}
 	}
 }

@@ -445,7 +445,10 @@ func (util *Utility) IsServiceRunning(log log.T, i *InstanceContext) (result boo
 	if isSystemD {
 		expectedOutput = "Active: active (running)"
 		if commandOutput, err = execCommand("systemctl", "status", "amazon-ssm-agent.service").Output(); err != nil {
-			return false, err
+			//test snap service enabled
+			if commandOutput, err = execCommand("systemctl", "status", "snap.amazon-ssm-agent.amazon-ssm-agent.service").Output(); err != nil {
+				return false, err
+			}
 		}
 	} else {
 		expectedOutput = agentExpectedStatus()
