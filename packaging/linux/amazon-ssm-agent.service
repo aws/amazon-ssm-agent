@@ -9,6 +9,8 @@ ExecStart=/usr/bin/amazon-ssm-agent
 KillMode=process
 Restart=on-failure
 RestartSec=15min
+StandardOutput=null
+StandardError=inherit 
 
 [Install]
 WantedBy=multi-user.target
