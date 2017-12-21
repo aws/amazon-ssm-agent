@@ -2,6 +2,10 @@ Latest
 ===============
 - Various bug fixes.
 
+2.2.103.0
+===============
+- Various bug fixes
+
 2.2.93.0
 ===============
 - Update to latest AWS SDK.
