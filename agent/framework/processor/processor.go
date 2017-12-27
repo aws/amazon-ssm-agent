@@ -259,7 +259,6 @@ func (p *EngineProcessor) processInProgressDocuments(instanceID string) {
 
 	//iterate through all InProgress docs
 	for _, f := range files {
-		log.Infof("processing in progress document - %v", f.Name())
 
 		//inspect document state
 		docState := p.documentMgr.GetDocumentState(log, f.Name(), instanceID, appconfig.DefaultLocationOfCurrent)
@@ -276,7 +275,7 @@ func (p *EngineProcessor) processInProgressDocuments(instanceID string) {
 		p.documentMgr.PersistDocumentState(log, docState.DocumentInformation.DocumentID, instanceID, appconfig.DefaultLocationOfCurrent, docState)
 
 		if p.isSupportedDocumentType(docState.DocumentType) {
-			log.Debugf("processor processing in-progress document %v", docState.DocumentInformation.DocumentID)
+			log.Infof("processor processing in-progress document %v", docState.DocumentInformation.DocumentID)
 			//Submit the work to Job Pool so that we don't block for processing of new messages
 			if err := p.submit(&docState); err != nil {
 				log.Errorf("failed to submit in progress document %v : %v", docState.DocumentInformation.DocumentID, err)
