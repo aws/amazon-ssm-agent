@@ -148,7 +148,9 @@ func (ch *fileWatcherChannel) Destroy() {
 	//only master can remove the dir at close
 	if ch.mode == ModeMaster {
 		ch.logger.Debug("master removing directory...")
-		os.RemoveAll(ch.path)
+		if err := os.RemoveAll(ch.path); err != nil {
+			ch.logger.Errorf("failed to remove directory %v : %v", ch.path, err)
+		}
 	}
 }
 
