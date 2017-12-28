@@ -20,7 +20,7 @@ import (
 	"sync"
 )
 
-var cachedRegion, cachedAvailabilityZone, cachedInstanceType string
+var cachedRegion, cachedAvailabilityZone, cachedInstanceType, cachedInstanceID string
 var lock sync.RWMutex
 
 const errorMessage = "Failed to fetch %s. Data from vault is empty. %v"
@@ -29,8 +29,13 @@ const errorMessage = "Failed to fetch %s. Data from vault is empty. %v"
 func InstanceID() (string, error) {
 	lock.RLock()
 	defer lock.RUnlock()
-
-	return fetchInstanceID()
+	if cachedInstanceID != "" {
+		return cachedInstanceID, nil
+	} else {
+		var err error
+		cachedInstanceID, err = fetchInstanceID()
+		return cachedInstanceID, err
+	}
 }
 
 // SetInstanceID overrides the platform instanceID
@@ -40,6 +45,7 @@ func SetInstanceID(instanceID string) error {
 	if instanceID == "" {
 		return fmt.Errorf("invalid instanceID")
 	}
+	cachedInstanceID = instanceID
 	return nil
 }
 
@@ -47,8 +53,13 @@ func SetInstanceID(instanceID string) error {
 func InstanceType() (string, error) {
 	lock.RLock()
 	defer lock.RUnlock()
-
-	return fetchInstanceType()
+	if cachedInstanceType != "" {
+		return cachedInstanceType, nil
+	} else {
+		var err error
+		cachedInstanceType, err = fetchInstanceType()
+		return cachedInstanceType, err
+	}
 }
 
 // SetInstanceType overrides the platform instance type

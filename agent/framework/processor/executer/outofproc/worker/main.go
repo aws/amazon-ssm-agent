@@ -14,6 +14,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/framework/runpluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/log/ssmlog"
+	"github.com/aws/amazon-ssm-agent/agent/platform"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 )
 
@@ -42,7 +43,9 @@ func initialize(args []string) (context.T, string, error) {
 	// initialize appconfig, use default config
 	config := appconfig.DefaultConfig()
 	logger.Debugf("parsing args: %v", args)
-	channelName, err := proc.ParseArgv(args)
+	channelName, instanceID, err := proc.ParseArgv(args)
+	//cache the instanceID here in order to avoid throttle by metadata endpoint.
+	platform.SetInstanceID(instanceID)
 	if err != nil {
 		logger.Errorf("failed to parse argv: %v", err)
 	}
