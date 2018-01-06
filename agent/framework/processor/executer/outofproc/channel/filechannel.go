@@ -169,9 +169,6 @@ func (ch *fileWatcherChannel) Close() {
 	//close the watch go-routine
 	ch.closeChan <- true
 	close(ch.closeChan)
-	//make sure the file watcher closed as well as the watch list is removed, otherwise can cause leak in ubuntu kernel
-	ch.watcher.Remove(ch.path)
-	ch.watcher.Close()
 
 	close(ch.onMessageChan)
 	log.Infof("channel %v closed", ch.path)
@@ -248,6 +245,9 @@ func (ch *fileWatcherChannel) watch() {
 	for {
 		select {
 		case <-ch.closeChan:
+			//make sure the file watcher closed as well as the watch list is removed, otherwise can cause leak in ubuntu kernel
+			ch.watcher.Remove(ch.path)
+			ch.watcher.Close()
 			log.Debug("file watch listener closed")
 			return
 		case event, ok := <-ch.watcher.Events:
