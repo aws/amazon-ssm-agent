@@ -214,6 +214,7 @@ var once sync.Once
 
 var possiblyUsingSystemD = map[string]bool{
 	PlatformRaspbian: true,
+	PlatformLinux:    true,
 }
 
 // CreateInstanceContext create instance related information such as region, platform and arch
