@@ -16,6 +16,8 @@
 // Package appconfig manages the configuration of the agent.
 package appconfig
 
+import "os"
+
 const (
 	// DefaultProgramFolder is the default folder for SSM
 	DefaultProgramFolder = "/etc/amazon/ssm/"
@@ -78,9 +80,6 @@ const (
 
 	DefaultDocumentWorker = "/usr/bin/ssm-document-worker"
 
-	// PowerShellPluginCommandName is the path of the powershell.exe to be used by the runPowerShellScript plugin
-	PowerShellPluginCommandName = "/usr/bin/powershell"
-
 	// Used to capture and return exit code for windows powershell script execution - empty for unix shell script case
 	ExitCodeTrap = ""
 
@@ -93,3 +92,16 @@ const (
 	// RunCommandScriptName is the script name where all downloaded or provided commands will be stored
 	RunCommandScriptName = "_script.sh"
 )
+
+// PowerShellPluginCommandName is the path of the powershell.exe to be used by the runPowerShellScript plugin
+var PowerShellPluginCommandName string
+
+func init() {
+	/*
+	   Powershell command used to be poweshell in alpha versions, now it's pwsh in prod versions
+	*/
+	PowerShellPluginCommandName = "/usr/bin/powershell"
+	if _, err := os.Stat(PowerShellPluginCommandName); err != nil {
+		PowerShellPluginCommandName = "/usr/bin/pwsh"
+	}
+}
