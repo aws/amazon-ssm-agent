@@ -538,6 +538,18 @@ func (r *Processor) lisenToResponses() {
 					res.NPlugins,
 					contracts.AssociationErrorCodeNoError,
 					string(res.Status))
+			} else if res.Status == contracts.ResultStatusInProgress {
+				// reset the association to pending if it's still in progress after the command finish
+				r.associationExecutionReport(
+					log,
+					res.AssociationID,
+					res.DocumentName,
+					res.DocumentVersion,
+					res.PluginResults,
+					res.NPlugins,
+					contracts.AssociationErrorCodeNoError,
+					contracts.AssociationStatusPending,
+				)
 			}
 			instanceID, _ := sys.InstanceID()
 			//clean association logs once the document state is moved to completed
