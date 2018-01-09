@@ -1,10 +1,14 @@
 Latest
 ===============
 - Various bug fixes.
- 
+
+2.2.120.0
+===============
+- Various bug fixes.
+
 2.2.103.0
 ===============
-- Various bug fixes
+- Various bug fixes.
 
 2.2.93.0
 ===============
