@@ -95,7 +95,6 @@ func Messaging(log log.T, ipc channel.Channel, backend MessagingBackend, stopTim
 		case signal, more := <-backend.Stop():
 			//stopChannel is closed, stop transmission
 			if !more {
-				log.Info("backend already closed, stop messaging")
 				ipc.Close()
 				break
 			}
