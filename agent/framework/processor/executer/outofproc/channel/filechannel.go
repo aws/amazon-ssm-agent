@@ -32,7 +32,6 @@ type fileWatcherChannel struct {
 	path          string
 	tmpPath       string
 	onMessageChan chan string
-	closeChan     chan bool
 	mode          Mode
 	counter       int
 	//the next expected message
@@ -69,8 +68,7 @@ func NewFileWatcherChannel(logger log.T, mode Mode, name string) (*fileWatcherCh
 
 	//buffered channel in order not to block listener
 	onMessageChan := make(chan string, defaultChannelBufferSize)
-	//signal the message poller to stop
-	closeChan := make(chan bool)
+
 	//start file watcher and monitor the directory
 	watcher, err := fsnotify.NewWatcher()
 	if err != nil {
@@ -90,7 +88,6 @@ func NewFileWatcherChannel(logger log.T, mode Mode, name string) (*fileWatcherCh
 		tmpPath:       tmpPath,
 		watcher:       watcher,
 		onMessageChan: onMessageChan,
-		closeChan:     closeChan,
 		logger:        logger,
 		mode:          mode,
 		counter:       0,
@@ -166,12 +163,20 @@ func (ch *fileWatcherChannel) Close() {
 	ch.closed = true
 	//read all the left over messages
 	ch.consumeAll()
-	//close the watch go-routine
-	ch.closeChan <- true
-	close(ch.closeChan)
+	// fsnotify.watch.close() could be a blocking call, we should offload them to a different go-routine
+	go func() {
+		defer func() {
+			if msg := recover(); msg != nil {
+				log.Errorf("closing file watcher panics: %v", msg)
+			}
+			close(ch.onMessageChan)
+			log.Infof("channel %v closed", ch.path)
+		}()
+		//make sure the file watcher closed as well as the watch list is removed, otherwise can cause leak in ubuntu kernel
+		ch.watcher.Remove(ch.path)
+		ch.watcher.Close()
+	}()
 
-	close(ch.onMessageChan)
-	log.Infof("channel %v closed", ch.path)
 	return
 }
 
@@ -244,12 +249,6 @@ func (ch *fileWatcherChannel) watch() {
 	ch.consumeAll()
 	for {
 		select {
-		case <-ch.closeChan:
-			//make sure the file watcher closed as well as the watch list is removed, otherwise can cause leak in ubuntu kernel
-			ch.watcher.Remove(ch.path)
-			ch.watcher.Close()
-			log.Debug("file watch listener closed")
-			return
 		case event, ok := <-ch.watcher.Events:
 			if !ok {
 				log.Debug("fileWatcher already closed")
