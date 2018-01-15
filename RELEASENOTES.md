@@ -1,13 +1,21 @@
 Latest
+==============
+- Fix bug on windows agent (v2.2.103, v2.2.120.0) running into hung state with high volume of associations/runcommands
+- Execute "pwsh" on linux when using runPowershellScript plugin
+
+2.2.136.0
 ===============
+NOTE: There is a known issue in this build that can cause Windows instances to stop processing commands and associations. The issue is resolved in build versions>2.2.136.0
 - Various bug fixes.
 
 2.2.120.0
 ===============
+NOTE: There is a known issue in this build that can cause Windows instances to stop processing commands and associations. The issue is resolved in build versions>2.2.136.0   
 - Various bug fixes.
 
 2.2.103.0
 ===============
+NOTE: There is a known issue in this build that can cause Windows instances to stop processing commands and associations. The issue is resolved in build versions>2.2.136.0
 - Various bug fixes.
 
 2.2.93.0
