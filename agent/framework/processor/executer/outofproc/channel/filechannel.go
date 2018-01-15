@@ -266,7 +266,9 @@ func (ch *fileWatcherChannel) watch() {
 				}
 			}
 		case err := <-ch.watcher.Errors:
-			log.Errorf("file watcher error: %v", err)
+			if err != nil {
+				log.Errorf("file watcher error: %v", err)				
+			}
 		}
 	}
 
