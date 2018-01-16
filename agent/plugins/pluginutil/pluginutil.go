@@ -145,7 +145,7 @@ func ValidateExecutionTimeout(log log.T, input interface{}) int {
 		num = int(f)
 		log.Infof("Unexpected 'TimeoutSeconds' float value %v received. Applying 'TimeoutSeconds' as %v", f, num)
 	default:
-		log.Errorf("Unexpected 'TimeoutSeconds' value %v received. Setting 'TimeoutSeconds' to default value %v", input, defaultExecutionTimeoutInSeconds)
+		log.Infof("Unexpected 'TimeoutSeconds' value %v received. Setting 'TimeoutSeconds' to default value %v", input, defaultExecutionTimeoutInSeconds)
 	}
 
 	if num < minExecutionTimeoutInSeconds || num > maxExecutionTimeoutInSeconds {
