@@ -187,20 +187,20 @@ func (repo *localRepository) ValidatePackage(tracer trace.Tracer, packageArn str
 	hasContent := false
 
 	packageVersionPath := repo.getPackageVersionPath(tracer, packageArn, version)
-	trace.AppendInfof("package version path for package %v version %v is %v", packageArn, version, packageVersionPath)
+	trace.AppendDebugf("package version path for package %v version %v is %v", packageArn, version, packageVersionPath)
 
 	files, errFiles := repo.filesysdep.GetFileNames(packageVersionPath)
 	if errFiles != nil {
 		trace.WithError(errFiles)
 	} else {
-		trace.AppendInfof("%v files exist in %v ", len(files), packageVersionPath)
+		trace.AppendDebugf("%v files exist in %v ", len(files), packageVersionPath)
 	}
 
 	dirs, errDirs := repo.filesysdep.GetDirectoryNames(packageVersionPath)
 	if errDirs != nil {
 		trace.WithError(errDirs)
 	} else {
-		trace.AppendInfof("%v folders exist in %v", len(dirs), packageVersionPath)
+		trace.AppendDebugf("%v folders exist in %v", len(dirs), packageVersionPath)
 	}
 
 	// Ensure that at least one other file or folder is present
