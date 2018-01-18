@@ -96,3 +96,11 @@ func (po *PluginOutputTrace) AppendError(log log.T, message string) {
 func (po *PluginOutputTrace) AppendErrorf(log log.T, format string, params ...interface{}) {
 	po.Tracer.CurrentTrace().AppendErrorf(format, params...)
 }
+
+func (po *PluginOutputTrace) AppendDebug(log log.T, message string) {
+	po.Tracer.CurrentTrace().AppendDebug(message)
+}
+
+func (po *PluginOutputTrace) AppendDebugf(log log.T, format string, params ...interface{}) {
+	po.Tracer.CurrentTrace().AppendDebugf(format, params...)
+}

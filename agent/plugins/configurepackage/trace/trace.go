@@ -246,6 +246,18 @@ func (t *Trace) AppendInfof(format string, params ...interface{}) *Trace {
 	return t.AppendInfo(fmt.Sprintf(format, params...))
 }
 
+// AppendDebug adds debug info to the trace
+func (t *Trace) AppendDebug(message string) *Trace {
+	t.Logger.Debugf(message)
+	return t
+}
+
+// AppendDebugf adds debug info to the trace
+func (t *Trace) AppendDebugf(format string, params ...interface{}) *Trace {
+	t.Logger.Debugf(format, params...)
+	return t
+}
+
 // AppendError adds errors to PluginOutput StandardErr.
 func (t *Trace) AppendError(message string) *Trace {
 	t.Logger.Error(message)
