@@ -107,7 +107,7 @@ func prepareConfigurePackage(
 		// * If the version exists, but the local manifest is different, reinstall the package
 		// * Return success if the package is already installed
 		trace = tracer.BeginSection("ensure old package is locally available")
-		if installedVersion != "" && (installedVersion != version || !isSameAsCache) {
+		if !(installedVersion == "" || installState == localpackages.None) && (installedVersion != version || !isSameAsCache) {
 			uninst, err = ensurePackage(tracer, repository, packageService, packageArn, installedVersion, isSameAsCache, config)
 			if err != nil {
 				trace.WithError(err)
@@ -127,14 +127,16 @@ func prepareConfigurePackage(
 		}
 
 		//return success if the version is already uninstalled
-		if installedVersion == "" || version != installedVersion {
-			trace.AppendInfof("version: %v already uninstalled", version).End()
+		//return success if the installState is None or Uninstalled
+		if (installedVersion == "" || version != installedVersion) ||
+			(installState == localpackages.None || installState == localpackages.Uninstalled) {
+			trace.AppendDebug("version: %v is not installed", version).End()
 			installState = localpackages.None
 			output.MarkAsSucceeded()
 			return
 		}
 
-		trace.AppendInfof("installed: %v in state: %v", installedVersion, installState).End()
+		trace.AppendDebug("installed: %v in state: %v", installedVersion, installState).End()
 
 		// ensure manifest file and package
 		trace = tracer.BeginSection("ensure package is locally available")
@@ -417,7 +419,9 @@ func (p *Plugin) execute(context context.T, config contracts.Configuration, canc
 				isSameAsCache,
 				&out)
 			log.Debugf("HasInst %v, HasUninst %v, InstallState %v, PackageArn %v, InstalledVersion %v", inst != nil, uninst != nil, installState, packageArn, installedVersion)
-			if out.GetStatus() != contracts.ResultStatusFailed {
+
+			//if the status is already decided as failed or succeeded, do not execute anything
+			if out.GetStatus() != contracts.ResultStatusFailed && out.GetStatus() != contracts.ResultStatusSuccess {
 				alreadyInstalled := checkAlreadyInstalled(tracer, context, p.localRepository, installedVersion, installState, inst, uninst, &out)
 				// if already failed or already installed and valid, do not execute install
 				// if it is already installed and the cache is the same, do not execute install
