@@ -38,14 +38,15 @@ var (
 
     function Get-RegistryValue($key, $valueName) {
         $value = $key.GetValue($valueName)
-        if ($value) {
+        if ($value -ne $null) {
 	        $valueType = $key.GetValueKind($valueName)
 	        if ($valueType.toString() -eq "Binary") {
 	            $value = "BinaryValue"
 	        }
 	        $valueTypeName = Get-Type-Name $valueType
+	        $keyName = $key.Name
 	        $regJson =  @"
-{"KeyPath":"` + mark(`$key.Name`) + `","Value":"` + mark(`$value`) + `","ValueName":"` + mark(`$valueName`) + `","ValueType":"$valueTypeName"}
+{"KeyPath":"` + mark(`$keyName`) + `","Value":"` + mark(`$value`) + `","ValueName":"` + mark(`$valueName`) + `","ValueType":"$valueTypeName"}
 "@
 	        $global:registryKeys += $regJson
 		    $global:valueCount = $global:valueCount + 1
