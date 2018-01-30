@@ -19,8 +19,6 @@ import (
 	"errors"
 	"fmt"
 
-	"time"
-
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
@@ -325,12 +323,10 @@ func checkAlreadyInstalled(
 					if uninst != nil {
 						cleanupAfterUninstall(tracer, repository, uninst, output)
 					}
-					// TODO: report result
 					output.MarkAsSucceeded()
 				} else if installState == localpackages.RollbackInstall {
 					validateTrace.AppendInfof("Failed to install %v %v, successfully rolled back to %v %v", uninst.PackageName(), uninst.Version(), inst.PackageName(), inst.Version())
 					cleanupAfterUninstall(tracer, repository, inst, output)
-					// TODO: report result
 					output.MarkAsFailed(nil, nil)
 				} else {
 					validateTrace.AppendDebugf("%v %v is already installed", packageName, targetVersion).End()
@@ -377,7 +373,6 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 func (p *Plugin) execute(context context.T, config contracts.Configuration, cancelFlag task.CancelFlag, output iohandler.IOHandler) {
 	log := context.Log()
 	log.Info("RunCommand started with configuration ", config)
-	startTime := time.Now().UnixNano()
 	tracer := trace.NewTracer(log)
 	defer tracer.BeginSection("configurePackage").End()
 
@@ -435,31 +430,48 @@ func (p *Plugin) execute(context context.T, config contracts.Configuration, canc
 						uninst,
 						installState,
 						&out)
-					if !out.GetStatus().IsReboot() {
-						version := manifestVersion
-						if input.Action == InstallAction {
-							version = inst.Version()
-						} else if input.Action == UninstallAction {
-							version = uninst.Version()
-						}
+				}
+			}
 
-						err := packageService.ReportResult(tracer, packageservice.PackageResult{
-							Exitcode:               int64(out.GetExitCode()),
-							Operation:              input.Action,
-							PackageName:            input.Name,
-							PreviousPackageVersion: installedVersion,
-							Timing:                 startTime,
-							Version:                version,
-							Trace:                  packageservice.ConvertToPackageServiceTrace(tracer.Traces()),
-						})
-						if err != nil {
-							out.AppendErrorf(log, "Error reporting results: %v", err.Error())
-						}
+			if err := p.localRepository.LoadTraces(tracer, packageArn); err != nil {
+				log.Errorf("Error loading prior traces: %v", err.Error())
+			}
+			if out.GetStatus().IsReboot() {
+				err := p.localRepository.PersistTraces(tracer, packageArn)
+				if err != nil {
+					log.Errorf("Error persisting traces: %v", err.Error())
+				}
+			} else {
+				version := manifestVersion
+				if input.Action == InstallAction {
+					version = inst.Version()
+				} else if input.Action == UninstallAction {
+					version = uninst.Version()
+				}
+
+				startTime := tracer.Traces()[0].Start
+				for _, trace := range tracer.Traces() {
+					if trace.Start < startTime {
+						startTime = trace.Start
 					}
+				}
+
+				err := packageService.ReportResult(tracer, packageservice.PackageResult{
+					Exitcode:               int64(out.GetExitCode()),
+					Operation:              input.Action,
+					PackageName:            input.Name,
+					PreviousPackageVersion: installedVersion,
+					Timing:                 startTime,
+					Version:                version,
+					Trace:                  packageservice.ConvertToPackageServiceTrace(tracer.Traces()),
+				})
+				if err != nil {
+					out.AppendErrorf(log, "Error reporting results: %v", err.Error())
 				}
 			}
 		}
 	}
+
 	output.SetExitCode(out.GetExitCode())
 	output.SetStatus(out.GetStatus())
 

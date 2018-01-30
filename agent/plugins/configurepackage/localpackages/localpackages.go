@@ -74,6 +74,9 @@ type Repository interface {
 
 	ReadManifest(packageArn string, packageVersion string) ([]byte, error)
 	WriteManifest(packageArn string, packageVersion string, content []byte) error
+
+	LoadTraces(tracer trace.Tracer, packageArn string) error
+	PersistTraces(tracer trace.Tracer, packageArn string) error
 }
 
 // NewRepository is the factory method for the package repository with default file system dependencies
@@ -390,6 +393,10 @@ func (repo *localRepository) getManifestPath(tracer trace.Tracer, packageArn str
 	return filepath.Join(repo.getPackageVersionPath(tracer, packageArn, version), fmt.Sprintf("%v.json", manifestName))
 }
 
+func (repo *localRepository) getTracesPath(packageArn string) string {
+	return filepath.Join(repo.getPackageRoot(packageArn), "traces")
+}
+
 // loadInstallState loads the existing installstate file or returns an appropriate default state
 func (repo *localRepository) loadInstallState(filesysdep FileSysDep, tracer trace.Tracer, packageArn string) *PackageInstallState {
 	packageState := PackageInstallState{Name: packageArn, State: None}
@@ -424,6 +431,33 @@ func (repo *localRepository) openPackageManifest(tracer trace.Tracer, filesysdep
 
 	trace.End()
 	return &PackageManifest{}, nil
+}
+
+func (repo *localRepository) LoadTraces(tracer trace.Tracer, packageArn string) error {
+	tracesPath := repo.getTracesPath(packageArn)
+	if !repo.filesysdep.Exists(tracesPath) {
+		return nil
+	}
+	serialized, err := repo.filesysdep.ReadFile(tracesPath)
+	_ = repo.filesysdep.RemoveAll(tracesPath) // always remove the file, even if it is corrupted
+	if err != nil {
+		return err
+	}
+	var traces []*trace.Trace
+	if err = json.Unmarshal([]byte(serialized), &traces); err != nil {
+		return err
+	}
+
+	tracer.PrependTraces(traces)
+	return nil
+}
+
+func (repo *localRepository) PersistTraces(tracer trace.Tracer, packageArn string) error {
+	serialized, err := json.Marshal(tracer.Traces())
+	if err != nil {
+		return err
+	}
+	return repo.filesysdep.WriteFile(repo.getTracesPath(packageArn), string(serialized))
 }
 
 // parsePackageManifest parses the manifest to ensure it is valid.

@@ -612,6 +612,75 @@ func testSetInstall(t *testing.T, initialState PackageInstallState, newState Ins
 	assertStateEqual(t, finalState, expectedState)
 }
 
+func TestLoadTraces(t *testing.T) {
+	mockFileSys := MockedFileSys{}
+	mockFileSys.On("Exists", path.Join(testRepoRoot, testPackage, "traces")).Return(true)
+	mockFileSys.On("ReadFile", path.Join(testRepoRoot, testPackage, "traces")).Return([]byte(
+		`[{"Operation": "foo", "Exitcode": 1, "Start": 123, "Stop": 456}]`), nil)
+	mockFileSys.On("RemoveAll", path.Join(testRepoRoot, testPackage, "traces")).Return(nil)
+
+	repo := localRepository{filesysdep: &mockFileSys, repoRoot: testRepoRoot, lockRoot: testLockRoot, fileLocker: &filelock.FileLockerNoop{}}
+
+	err := repo.LoadTraces(tracerMock, testPackage)
+	assert.Nil(t, err)
+	mockFileSys.AssertExpectations(t)
+
+	assert.Equal(t, int64(123), tracerMock.Traces()[0].Start)
+}
+
+func TestLoadTracesNoneExist(t *testing.T) {
+	mockFileSys := MockedFileSys{}
+	mockFileSys.On("Exists", path.Join(testRepoRoot, testPackage, "traces")).Return(false)
+
+	repo := localRepository{filesysdep: &mockFileSys, repoRoot: testRepoRoot, lockRoot: testLockRoot, fileLocker: &filelock.FileLockerNoop{}}
+
+	err := repo.LoadTraces(tracerMock, testPackage)
+	assert.Nil(t, err)
+	mockFileSys.AssertExpectations(t)
+}
+
+func TestLoadTracesCorrupted(t *testing.T) {
+	mockFileSys := MockedFileSys{}
+	mockFileSys.On("Exists", path.Join(testRepoRoot, testPackage, "traces")).Return(true)
+	mockFileSys.On("ReadFile", path.Join(testRepoRoot, testPackage, "traces")).Return([]byte("/!"), nil)
+	mockFileSys.On("RemoveAll", path.Join(testRepoRoot, testPackage, "traces")).Return(nil)
+
+	repo := localRepository{filesysdep: &mockFileSys, repoRoot: testRepoRoot, lockRoot: testLockRoot, fileLocker: &filelock.FileLockerNoop{}}
+
+	err := repo.LoadTraces(tracerMock, testPackage)
+	assert.Error(t, err)
+	mockFileSys.AssertExpectations(t)
+}
+
+func TestPersistTraces(t *testing.T) {
+	mockFileSys := MockedFileSys{}
+	mockFileSys.On("WriteFile", path.Join(testRepoRoot, testPackage, "traces"), mock.Anything).Return(nil)
+
+	repo := localRepository{filesysdep: &mockFileSys, repoRoot: testRepoRoot, lockRoot: testLockRoot, fileLocker: &filelock.FileLockerNoop{}}
+
+	err := repo.PersistTraces(tracerMock, testPackage)
+	assert.NoError(t, err)
+	mockFileSys.AssertExpectations(t)
+}
+
+func TestPersistLoadTracesRoundtrip(t *testing.T) {
+	mockFileSys := MockedFileSys{}
+	repo := localRepository{filesysdep: &mockFileSys, repoRoot: testRepoRoot, lockRoot: testLockRoot, fileLocker: &filelock.FileLockerNoop{}}
+
+	var file string
+	mockFileSys.On("WriteFile", path.Join(testRepoRoot, testPackage, "traces"), mock.Anything).Return(nil).Run(func(args mock.Arguments) { file = args.Get(1).(string) })
+	err := repo.PersistTraces(tracerMock, testPackage)
+	assert.NoError(t, err)
+
+	mockFileSys.On("Exists", path.Join(testRepoRoot, testPackage, "traces")).Return(true)
+	mockFileSys.On("ReadFile", path.Join(testRepoRoot, testPackage, "traces")).Return([]byte(file), nil)
+	mockFileSys.On("RemoveAll", path.Join(testRepoRoot, testPackage, "traces")).Return(nil)
+	err = repo.LoadTraces(tracerMock, testPackage)
+	assert.NoError(t, err)
+
+	mockFileSys.AssertExpectations(t)
+}
+
 // assertStateEqual compares two PackageInstallState and makes sure they are the same (ignoring the time field)
 func assertStateEqual(t *testing.T, expected PackageInstallState, actual PackageInstallState) {
 	assert.Equal(t, expected.Name, actual.Name)

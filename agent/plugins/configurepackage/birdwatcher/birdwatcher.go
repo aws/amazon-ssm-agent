@@ -155,26 +155,27 @@ func (ds *PackageService) ReportResult(tracer trace.Tracer, result packageservic
 	}
 
 	overallTiming := (ds.timeProvider.NowUnixNano() - result.Timing) / 1000000
-	_, err := ds.facadeClient.PutConfigurePackageResult(
-		&ssm.PutConfigurePackageResultInput{
-			PackageName:            &result.PackageName,
-			PackageVersion:         &result.Version,
-			PreviousPackageVersion: previousPackageVersion,
-			Operation:              &result.Operation,
-			OverallTiming:          &overallTiming,
-			Result:                 &result.Exitcode,
-			Attributes: map[string]*string{
-				"platformName":     &env.OperatingSystem.Platform,
-				"platformVersion":  &env.OperatingSystem.PlatformVersion,
-				"architecture":     &env.OperatingSystem.Architecture,
-				"instanceID":       &env.Ec2Infrastructure.InstanceID,
-				"instanceType":     &env.Ec2Infrastructure.InstanceType,
-				"region":           &env.Ec2Infrastructure.Region,
-				"availabilityZone": &env.Ec2Infrastructure.AvailabilityZone,
-			},
-			Steps: steps,
+
+	input := &ssm.PutConfigurePackageResultInput{
+		PackageName:            &result.PackageName,
+		PackageVersion:         &result.Version,
+		PreviousPackageVersion: previousPackageVersion,
+		Operation:              &result.Operation,
+		OverallTiming:          &overallTiming,
+		Result:                 &result.Exitcode,
+		Attributes: map[string]*string{
+			"platformName":     &env.OperatingSystem.Platform,
+			"platformVersion":  &env.OperatingSystem.PlatformVersion,
+			"architecture":     &env.OperatingSystem.Architecture,
+			"instanceID":       &env.Ec2Infrastructure.InstanceID,
+			"instanceType":     &env.Ec2Infrastructure.InstanceType,
+			"region":           &env.Ec2Infrastructure.Region,
+			"availabilityZone": &env.Ec2Infrastructure.AvailabilityZone,
 		},
-	)
+		Steps: steps,
+	}
+
+	_, err := ds.facadeClient.PutConfigurePackageResult(input)
 
 	if err != nil {
 		return fmt.Errorf("failed to report results: %v", err)

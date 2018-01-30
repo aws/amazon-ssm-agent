@@ -32,7 +32,7 @@ func TestPackageServiceTrace(t *testing.T) {
 	tracer.BeginSection("traceB").WithError(errors.New("testerror")).End()
 	tracea.WithExitcode(42).End()
 	tracer.AddTrace(&trace.Trace{Operation: "traceC"})
-	tracer.AddTrace(&trace.Trace{Operation: "traceD", Error: errors.New("testerror2")})
+	tracer.AddTrace(&trace.Trace{Operation: "traceD", Error: "testerror2"})
 
 	traces := ConvertToPackageServiceTrace(tracer.Traces())
 
