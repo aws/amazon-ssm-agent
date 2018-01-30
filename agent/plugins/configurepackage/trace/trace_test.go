@@ -65,7 +65,7 @@ func TestDefer(t *testing.T) {
 	assert.Equal(t, 1, len(tracer.Traces()))
 	trace := tracer.Traces()[0]
 	assert.Equal(t, "testtracemsg", trace.Operation)
-	assert.Equal(t, expectedErr, trace.Error)
+	assert.Equal(t, expectedErr.Error(), trace.Error)
 	assert.NotNil(t, trace.Start)
 	assert.NotNil(t, trace.Stop)
 	assert.True(t, trace.Start < trace.Stop)
@@ -198,4 +198,20 @@ func TestAppendWithSubtraces(t *testing.T) {
 	traceA.AppendWithSubtraces("traceAinfo")
 
 	assert.Equal(t, "traceAinfo\n", tracer.CurrentTrace().InfoOut.String())
+}
+
+func TestPrependTraces(t *testing.T) {
+	tracer := NewTracer(loggerMock)
+	tracer.BeginSection("foo").End()
+	tracer.PrependTraces([]*Trace{&Trace{
+		Operation: "foo",
+		Start:     123,
+	}})
+
+	traces := tracer.Traces()
+	assert.Len(t, traces, 2)
+	assert.Equal(t, "foo", traces[0].Operation)
+	assert.Equal(t, int64(123), traces[0].Start)
+	assert.Equal(t, traces[1].Tracer, traces[0].Tracer)
+	assert.Equal(t, traces[1].Logger, traces[0].Logger)
 }

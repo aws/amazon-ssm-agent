@@ -44,6 +44,7 @@ func repoInstallMock(pluginInformation *ConfigurePackagePluginInput, installerMo
 	mockRepo.On("GetInstaller", mock.Anything, mock.Anything, mock.Anything, pluginInformation.Version).Return(installerMock)
 	mockRepo.On("LockPackage", mock.Anything, mock.Anything, mock.Anything).Return(nil)
 	mockRepo.On("UnlockPackage", mock.Anything, mock.Anything).Return()
+	mockRepo.On("LoadTraces", mock.Anything, mock.Anything).Return(nil)
 	return &mockRepo
 }
 

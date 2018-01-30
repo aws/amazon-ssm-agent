@@ -45,7 +45,7 @@ func (po *PluginOutputTrace) MarkAsFailed(log log.T, err error) {
 	po.status = contracts.ResultStatusFailed
 
 	if err != nil {
-		po.Tracer.CurrentTrace().Error = err
+		po.Tracer.CurrentTrace().Error = err.Error()
 	}
 }
 

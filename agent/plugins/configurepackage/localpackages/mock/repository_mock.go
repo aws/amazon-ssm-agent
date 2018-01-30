@@ -96,3 +96,13 @@ func (repoMock *MockedRepository) WriteManifest(packageName string, packageVersi
 	args := repoMock.Called(packageName, packageVersion, content)
 	return args.Error(0)
 }
+
+func (repoMock *MockedRepository) LoadTraces(tracer trace.Tracer, packageArn string) error {
+	args := repoMock.Called(tracer, packageArn)
+	return args.Error(0)
+}
+
+func (repoMock *MockedRepository) PersistTraces(tracer trace.Tracer, packageArn string) error {
+	args := repoMock.Called(tracer, packageArn)
+	return args.Error(0)
+}
