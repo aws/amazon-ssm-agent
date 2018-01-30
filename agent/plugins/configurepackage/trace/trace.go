@@ -37,19 +37,19 @@ func (t *TimeImpl) NowUnixNano() int64 {
 }
 
 type Trace struct {
-	Tracer Tracer
-	Logger log.T
+	Tracer Tracer `json:"-"`
+	Logger log.T  `json:"-"`
 
 	Operation string
 	// results
 	Exitcode int64
-	Error    error
+	Error    string `json:",omitempty"`
 	// timing
 	Start int64
-	Stop  int64
+	Stop  int64 `json:",omitempty"`
 	// output
-	InfoOut  bytes.Buffer
-	ErrorOut bytes.Buffer
+	InfoOut  bytes.Buffer `json:"-"`
+	ErrorOut bytes.Buffer `json:"-"`
 }
 
 // Tracer is used for collecting traces during a package installation
@@ -59,6 +59,7 @@ type Tracer interface {
 	AddTrace(trace *Trace)
 
 	Traces() []*Trace
+	PrependTraces([]*Trace)
 	CurrentTrace() *Trace
 
 	ToPluginOutput() iohandler.IOHandler
@@ -95,8 +96,8 @@ func (t *TracerImpl) BeginSection(message string) *Trace {
 }
 
 func logTraceDone(logger log.T, trace *Trace) {
-	if trace.Error != nil {
-		logger.Errorf("done with %s - error: %s", trace.Operation, trace.Error.Error())
+	if trace.Error != "" {
+		logger.Errorf("done with %s - error: %s", trace.Operation, trace.Error)
 	} else if trace.Exitcode != 0 {
 		logger.Errorf("done with %s - exitcode: %d", trace.Operation, trace.Exitcode)
 	} else {
@@ -165,6 +166,16 @@ func (t *TracerImpl) Traces() []*Trace {
 	return t.traces
 }
 
+// PrependTraces takes existing traces and add them at the beginning
+// while also setting their Tracer and Logger
+func (t *TracerImpl) PrependTraces(traces []*Trace) {
+	for _, trace := range traces {
+		trace.Tracer = t
+		trace.Logger = t.logger
+	}
+	t.traces = append(traces, t.traces...)
+}
+
 // CurrentTrace will return the last unclosed trace
 // If no trace is open it will return nil
 func (t *TracerImpl) CurrentTrace() *Trace {
@@ -185,8 +196,8 @@ func (t *TracerImpl) ToPluginOutput() iohandler.IOHandler {
 	for _, trace := range t.Traces() {
 		infoOut.Write(trace.InfoOut.Bytes())
 		errorOut.Write(trace.ErrorOut.Bytes())
-		if trace.Error != nil {
-			errorOut.WriteString(trace.Error.Error())
+		if trace.Error != "" {
+			errorOut.WriteString(trace.Error)
 			errorOut.WriteString("\n")
 		}
 	}
@@ -205,10 +216,14 @@ func (t *Trace) WithExitcode(exitcode int64) *Trace {
 	return t
 }
 
-// WithExitcode sets the error of the trace
+// WithError sets the error of the trace
 func (t *Trace) WithError(err error) *Trace {
 	t.Logger.Error(err)
-	t.Error = err
+	if err != nil {
+		t.Error = err.Error()
+	} else {
+		t.Error = ""
+	}
 	return t
 }
 

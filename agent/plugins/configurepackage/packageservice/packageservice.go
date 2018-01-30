@@ -67,7 +67,7 @@ func ConvertToPackageServiceTrace(traces []*trace.Trace) []*Trace {
 
 	for _, trace := range traces {
 		exitcode := trace.Exitcode
-		if exitcode == 0 && trace.Error != nil {
+		if exitcode == 0 && trace.Error != "" {
 			exitcode = 1
 		}
 
@@ -75,8 +75,8 @@ func ConvertToPackageServiceTrace(traces []*trace.Trace) []*Trace {
 		if trace.Start != 0 && trace.Stop == 0 {
 			msg := fmt.Sprintf("= %s", trace.Operation)
 
-			if trace.Error != nil {
-				msg = fmt.Sprintf("%s (err `%s`)", msg, trace.Error.Error())
+			if trace.Error != "" {
+				msg = fmt.Sprintf("%s (err `%s`)", msg, trace.Error)
 			}
 
 			pkgtraces = append(pkgtraces,
@@ -104,8 +104,8 @@ func ConvertToPackageServiceTrace(traces []*trace.Trace) []*Trace {
 		if trace.Start != 0 && trace.Stop != 0 {
 			msg := fmt.Sprintf("< %s", trace.Operation)
 
-			if trace.Error != nil {
-				msg = fmt.Sprintf("%s (err `%s`)", msg, trace.Error.Error())
+			if trace.Error != "" {
+				msg = fmt.Sprintf("%s (err `%s`)", msg, trace.Error)
 			}
 
 			pkgtraces = append(pkgtraces,
