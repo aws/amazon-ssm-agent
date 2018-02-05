@@ -1,5 +1,9 @@
 Latest
 ==============
+- Various bug fixes.
+
+2.2.160.0
+=========
 - Fix bug on windows agent (v2.2.103, v2.2.120.0) running into hung state with high volume of associations/runcommands
 - Execute "pwsh" on linux when using runPowershellScript plugin
 
