@@ -62,7 +62,14 @@ func (s *RunCommandService) ModuleExecute(context context.T) (err error) {
 		log.Errorf("unable to start document processor: %v", err)
 		return
 	}
+
 	go s.listenReply(resultChan)
+
+	if err = s.processor.InitialProcessing(); err != nil {
+		log.Errorf("initial processing in EngineProcessor encountered error: %v", err)
+		return
+	}
+
 	log.Info("Starting message polling")
 	if s.messagePollJob, err = scheduler.Every(pollMessageFrequencyMinutes).Minutes().Run(s.loop); err != nil {
 		context.Log().Errorf("unable to schedule message poll job. %v", err)

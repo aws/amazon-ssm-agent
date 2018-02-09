@@ -14,6 +14,11 @@ func (m *MockedProcessor) Start() (chan contracts.DocumentResult, error) {
 	return args.Get(0).(chan contracts.DocumentResult), args.Error(1)
 }
 
+func (m *MockedProcessor) InitialProcessing() (err error) {
+	args := m.Called()
+	return args.Error(0)
+}
+
 func (m *MockedProcessor) Stop(stopType contracts.StopType) {
 	m.Called(stopType)
 	return
