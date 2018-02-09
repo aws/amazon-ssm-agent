@@ -127,11 +127,18 @@ func (p *Processor) InitializeAssociationProcessor() {
 	} else {
 		p.resChan = resChan
 	}
+
+	log.Info("Launching response handler")
+	go p.listenToResponses()
+
+	if err := p.proc.InitialProcessing(); err != nil {
+		log.Errorf("initial processing in EngineProcessor encountered error: %v", err)
+		return
+	}
+
 	log.Info("Initializing association scheduling service")
 	signal.InitializeAssociationSignalService(log, p.runScheduledAssociation)
 	log.Info("Association scheduling service initialized")
-	log.Info("Launching response handler")
-	go p.lisenToResponses()
 }
 
 // SetPollJob represents setter for PollJob
@@ -143,6 +150,8 @@ func (p *Processor) SetPollJob(job *scheduler.Job) {
 func (p *Processor) ProcessAssociation() {
 	log := p.context.Log()
 	associations := []*model.InstanceAssociation{}
+
+	log.Debug("running ProcessAssociation")
 
 	instanceID, err := sys.InstanceID()
 	if err != nil {
@@ -182,6 +191,7 @@ func (p *Processor) ProcessAssociation() {
 		if assocContent, err = jsonutil.Marshal(assoc); err != nil {
 			return
 		}
+
 		log.Debug("Association content is \n", jsonutil.Indent(assocContent))
 
 		//TODO: add retry for load association detail
@@ -241,11 +251,18 @@ func (p *Processor) ProcessAssociation() {
 	}
 
 	schedulemanager.Refresh(log, associations)
+
+	log.Debug("ProcessAssociation is triggering execution")
+
 	signal.ExecuteAssociation(log)
+
+	log.Debug("ProcessAssociation completed")
 }
 
 // runScheduledAssociation runs the next scheduled association
 func (p *Processor) runScheduledAssociation(log log.T) {
+	log.Debug("runScheduledAssociation starting")
+
 	lock.Lock()
 	defer lock.Unlock()
 
@@ -281,6 +298,7 @@ func (p *Processor) runScheduledAssociation(log log.T) {
 	signal.StopWaitTimerForNextScheduledAssociation()
 
 	if schedulemanager.IsAssociationInProgress(*scheduledAssociation.Association.AssociationId) {
+		log.Debug("runScheduledAssociation is InProgress")
 		if isAssociationTimedOut(scheduledAssociation) {
 			err = fmt.Errorf("Association stuck at InProgress for longer than %v hours", documentLevelTimeOutDurationHour)
 			log.Error(err)
@@ -345,6 +363,7 @@ func (p *Processor) runScheduledAssociation(log log.T) {
 			time.Now().UTC())
 		return
 	}
+
 	updatePluginAssociationInstances(*scheduledAssociation.Association.AssociationId, docState)
 	log = p.context.With("[associationId=" + docState.DocumentInformation.AssociationID + "]").Log()
 	instanceID, _ := sys.InstanceID()
@@ -359,7 +378,11 @@ func (p *Processor) runScheduledAssociation(log log.T) {
 		contracts.AssociationInProgressMessage,
 		service.NoOutputUrl)
 
+	log.Debug("runScheduledAssociation submitting document")
+
 	p.proc.Submit(*docState)
+
+	log.Debug("runScheduledAssociation submitted document")
 }
 
 func isAssociationTimedOut(assoc *model.InstanceAssociation) bool {
@@ -499,7 +522,7 @@ func (r *Processor) associationExecutionReport(
 		time.Now().UTC())
 }
 
-func (r *Processor) lisenToResponses() {
+func (r *Processor) listenToResponses() {
 	log := r.context.Log()
 	for res := range r.resChan {
 		if res.LastPlugin != "" {

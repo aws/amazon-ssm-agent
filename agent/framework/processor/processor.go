@@ -48,6 +48,8 @@ const (
 type Processor interface {
 	//Start activate the Processor and pick up the left over document in the last run, it returns a channel to caller to gather DocumentResult
 	Start() (chan contracts.DocumentResult, error)
+	//Process any initial documents loaded from file directory. This should be run after Start().
+	InitialProcessing() error
 	//Stop the processor, save the current state to resume later
 	Stop(stopType contracts.StopType)
 	//submit to the pool a document in form of docState object, results will be streamed back from the central channel returned by Start()
@@ -101,14 +103,28 @@ func (p *EngineProcessor) Start() (resChan chan contracts.DocumentResult, err er
 		return nil, fmt.Errorf("EngineProcessor is not initialized")
 	}
 	log := context.Log()
+	log.Info("Starting")
+
+	resChan = p.resChan
+	return
+}
+
+func (p *EngineProcessor) InitialProcessing() (err error) {
+	context := p.context
+	if context == nil {
+		return fmt.Errorf("EngineProcessor is not initialized")
+	}
+	log := context.Log()
+
 	//process the older jobs from Current & Pending folder
 	instanceID, err := platform.InstanceID()
 	if err != nil {
 		log.Errorf("no instanceID provided, %v", err)
 		return
 	}
-	resChan = p.resChan
-	//prioritie the ongoing document first
+
+	log.Info("Initial processing")
+	//prioritize the ongoing document first
 	p.processInProgressDocuments(instanceID)
 	//deal with the pending jobs that haven't picked up by worker yet
 	p.processPendingDocuments(instanceID)
@@ -127,6 +143,7 @@ func (p *EngineProcessor) Submit(docState contracts.DocumentState) {
 		p.documentMgr.MoveDocumentState(log, docState.DocumentInformation.DocumentID, docState.DocumentInformation.InstanceID, appconfig.DefaultLocationOfPending, appconfig.DefaultLocationOfCorrupt)
 		return
 	}
+	log.Debug("EngineProcessor submit succeeded")
 	return
 }
 
@@ -213,7 +230,7 @@ func (p *EngineProcessor) processPendingDocuments(instanceID string) {
 	pendingDocsLocation := docmanager.DocumentStateDir(instanceID, appconfig.DefaultLocationOfPending)
 
 	if isDirectoryEmpty, _ := fileutil.IsDirEmpty(pendingDocsLocation); isDirectoryEmpty {
-		log.Debugf("No documents to process from %v", pendingDocsLocation)
+		log.Debugf("No pending documents to process from %v", pendingDocsLocation)
 		return
 	}
 
@@ -225,12 +242,12 @@ func (p *EngineProcessor) processPendingDocuments(instanceID string) {
 
 	//iterate through all pending messages
 	for _, f := range files {
-		log.Infof("Processing pending document - %v", f.Name())
+		log.Infof("Found pending document - %v", f.Name())
 		//inspect document state
 		docState := p.documentMgr.GetDocumentState(log, f.Name(), instanceID, appconfig.DefaultLocationOfPending)
 
 		if p.isSupportedDocumentType(docState.DocumentType) {
-			log.Debugf("processor processing pending document %v", docState.DocumentInformation.DocumentID)
+			log.Infof("Processing pending document %v", docState.DocumentInformation.DocumentID)
 			p.Submit(docState)
 		}
 
@@ -246,7 +263,7 @@ func (p *EngineProcessor) processInProgressDocuments(instanceID string) {
 	pendingDocsLocation := docmanager.DocumentStateDir(instanceID, appconfig.DefaultLocationOfCurrent)
 
 	if isDirectoryEmpty, _ := fileutil.IsDirEmpty(pendingDocsLocation); isDirectoryEmpty {
-		log.Debugf("no older document to process from %v", pendingDocsLocation)
+		log.Debugf("No in-progress document to process from %v", pendingDocsLocation)
 		return
 
 	}
@@ -259,6 +276,7 @@ func (p *EngineProcessor) processInProgressDocuments(instanceID string) {
 
 	//iterate through all InProgress docs
 	for _, f := range files {
+		log.Infof("Found in-progress document - %v", f.Name())
 
 		//inspect document state
 		docState := p.documentMgr.GetDocumentState(log, f.Name(), instanceID, appconfig.DefaultLocationOfCurrent)
@@ -275,7 +293,7 @@ func (p *EngineProcessor) processInProgressDocuments(instanceID string) {
 		p.documentMgr.PersistDocumentState(log, docState.DocumentInformation.DocumentID, instanceID, appconfig.DefaultLocationOfCurrent, docState)
 
 		if p.isSupportedDocumentType(docState.DocumentType) {
-			log.Infof("processor processing in-progress document %v", docState.DocumentInformation.DocumentID)
+			log.Infof("Processing in-progress document %v", docState.DocumentInformation.DocumentID)
 			//Submit the work to Job Pool so that we don't block for processing of new messages
 			if err := p.submit(&docState); err != nil {
 				log.Errorf("failed to submit in progress document %v : %v", docState.DocumentInformation.DocumentID, err)
