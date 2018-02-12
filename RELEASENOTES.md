@@ -1,4 +1,8 @@
 Latest
+=========
+- Bug fix to address an issue that can prevent the agent from processing associations after a restart.
+
+2.2.191.0
 ==============
 - Various bug fixes.
 
