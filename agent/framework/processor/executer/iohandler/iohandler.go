@@ -136,8 +136,10 @@ func (out *DefaultIOHandler) Init(log log.T, filePath ...string) {
 
 	// Initialize console output module
 	stdoutConsole := iomodule.CommandOutput{
-		OutputLimit:  pluginConfig.MaxStdoutLength,
-		OutputString: &out.stdout,
+		OutputLimit:            pluginConfig.MaxStdoutLength,
+		OutputString:           &out.stdout,
+		FileName:               pluginConfig.StdoutFileName,
+		OrchestrationDirectory: fullPath,
 	}
 
 	log.Debug("Initializing the Stdout Multi-writer with file and console listeners")
@@ -155,8 +157,10 @@ func (out *DefaultIOHandler) Init(log log.T, filePath ...string) {
 
 	// Initialize console error module
 	stderrConsole := iomodule.CommandOutput{
-		OutputLimit:  pluginConfig.MaxStderrLength,
-		OutputString: &out.stderr,
+		OutputLimit:            pluginConfig.MaxStderrLength,
+		OutputString:           &out.stderr,
+		FileName:               pluginConfig.StderrFileName,
+		OrchestrationDirectory: fullPath,
 	}
 
 	log.Debug("Initializing the Stderr Multi-writer with file and console listeners")

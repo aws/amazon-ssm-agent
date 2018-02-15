@@ -15,37 +15,67 @@ package iomodule
 
 import (
 	"bufio"
-	"fmt"
+	"bytes"
 	"io"
 
+	"path/filepath"
+
+	"fmt"
+
+	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 )
 
 // CommandOutput handles writing output to a string.
 type CommandOutput struct {
 	// limit to the number of bytes to be written to the output string
-	OutputLimit  int
-	OutputString *string
+	OutputLimit            int
+	OutputString           *string
+	FileName               string
+	OrchestrationDirectory string
 }
 
-// Read reads from the stream and writes to the output string
 func (c CommandOutput) Read(log log.T, reader *io.PipeReader) {
 	defer func() { reader.Close() }()
+	filePath := filepath.Join(c.OrchestrationDirectory, c.FileName)
+	var buf string
+	var err error
+	var buffer bytes.Buffer
+	buf, err = fileutil.ReadAllText(filePath)
 
+	if buf != "" {
+		if len(buf) > c.OutputLimit {
+			buffer.WriteString(buf[:c.OutputLimit])
+		} else {
+			buffer.WriteString(buf)
+		}
+	}
+	if err != nil {
+		log.Errorf("Error reading %v at path %v", c.FileName, filePath)
+	}
+	c.ReadPipeAndFile(log, reader, buffer)
+}
+
+func (c CommandOutput) ReadPipeAndFile(log log.T, reader *io.PipeReader, buffer bytes.Buffer) {
+	log.Debugf("buffer %v", buffer.String())
+	defer func() { reader.Close() }()
 	// Read byte by byte
 	scanner := bufio.NewScanner(reader)
 	scanner.Split(bufio.ScanBytes)
 
-	outputLimit := 0
+	outputLimit := buffer.Len()
 	for scanner.Scan() {
 		// Check if size of output is greater than the output limit
 		outputLimit++
 		if outputLimit > c.OutputLimit {
 			break
 		}
-		*c.OutputString = fmt.Sprintf("%v%v", *c.OutputString, scanner.Text())
+		buffer.WriteString(scanner.Text())
 	}
-	log.Debugf("Number of bytes written to console output: %v", outputLimit)
+	// Clear contents of string to avoid duplicate output
+	*c.OutputString = ""
+	*c.OutputString = fmt.Sprintf("%v%v", *c.OutputString, buffer.String())
+	log.Debugf("Number of bytes written to console output: %v", outputLimit-1)
 
 	if err := scanner.Err(); err != nil {
 		log.Error("Error with the scanner while reading the stream")
