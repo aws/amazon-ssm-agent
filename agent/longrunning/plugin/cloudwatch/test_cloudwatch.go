@@ -35,7 +35,7 @@ func NewMockDefault() *Mock {
 	cw := new(Mock)
 	log := log.NewMockLog()
 	context := context.NewMockDefault()
-	cancelFlag := task.MockCancelFlag{}
+	//cancelFlag := task.MockCancelFlag{}
 
 	cw.On("IsRunning", context).Return(true)
 	cw.On("Start", mock.AnythingOfType("context.T"), mock.AnythingOfType("string"), mock.AnythingOfType("string"), mock.AnythingOfType("task.CancelFlag")).Return(nil)
