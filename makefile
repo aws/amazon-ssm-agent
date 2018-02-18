@@ -339,9 +339,9 @@ package-deb-arm: create-package-folder
 .PHONY: get-tools
 get-tools:
 	go get -u github.com/nsf/gocode
-	go get -u golang.org/x/tools/cmd/oracle
+	go get -u golang.org/x/tools/cmd/guru
 	go get -u golang.org/x/tools/go/loader
-	go get -u golang.org/x/tools/go/types
+	go get -u golang.org/x/tools/go/types/typeutil
 
 .PHONY: quick-integtest
 quick-integtest:
