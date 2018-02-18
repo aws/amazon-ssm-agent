@@ -29,4 +29,4 @@ if [[ -n $unformatted ]]; then
 fi
 
 echo "Run 'go vet'"
-go tool vet -composites=false `pwd`/agent
+go tool vet -composites=false -copylocks=false `pwd`/agent
