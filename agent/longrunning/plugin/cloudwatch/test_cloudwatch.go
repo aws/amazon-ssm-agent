@@ -39,9 +39,9 @@ func NewMockDefault() *Mock {
 
 	cw.On("IsRunning", context).Return(true)
 	cw.On("Start", mock.AnythingOfType("context.T"), mock.AnythingOfType("string"), mock.AnythingOfType("string"), mock.AnythingOfType("task.CancelFlag")).Return(nil)
-	cw.On("Stop", context, cancelFlag).Return(nil)
-	cw.On("IsCloudWatchExeRunning", log, mock.AnythingOfType("string"), mock.AnythingOfType("string"), cancelFlag).Return(nil)
-	cw.On("GetPidOfCloudWatchExe", log, mock.AnythingOfType("string"), mock.AnythingOfType("string"), cancelFlag).Return(1234, nil)
+	cw.On("Stop", context, mock.AnythingOfType("task.CancelFlag")).Return(nil)
+	cw.On("IsCloudWatchExeRunning", log, mock.AnythingOfType("string"), mock.AnythingOfType("string"), mock.AnythingOfType("task.CancelFlag")).Return(nil)
+	cw.On("GetPidOfCloudWatchExe", log, mock.AnythingOfType("string"), mock.AnythingOfType("string"), mock.AnythingOfType("task.CancelFlag")).Return(1234, nil)
 	return cw
 }
 
