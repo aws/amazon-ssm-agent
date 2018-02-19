@@ -28,7 +28,7 @@ import (
 
 const (
 	// maximumPluginOutputSize represents the maximum output size that agent supports
-	MaximumPluginOutputSize = 2400
+	MaximumPluginOutputSize = 2500
 	// truncateOut represents the string appended when output is truncated
 	truncateOut = "\n---Output truncated---"
 	// truncateError represents the string appended when error is truncated
