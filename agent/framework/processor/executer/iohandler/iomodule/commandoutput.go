@@ -57,8 +57,6 @@ func (c CommandOutput) Read(log log.T, reader *io.PipeReader) {
 }
 
 func (c CommandOutput) ReadPipeAndFile(log log.T, reader *io.PipeReader, buffer bytes.Buffer) {
-	log.Debugf("buffer %v", buffer.String())
-	defer func() { reader.Close() }()
 	// Read byte by byte
 	scanner := bufio.NewScanner(reader)
 	scanner.Split(bufio.ScanBytes)

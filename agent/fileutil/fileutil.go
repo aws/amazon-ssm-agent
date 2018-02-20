@@ -67,30 +67,14 @@ func ReadAllText(filePath string) (text string, err error) {
 	}
 
 	buf := bytes.NewBuffer(nil)
-	var empty = false
-	empty = LocalFileEmpty(filePath)
-	if !empty {
-		f, _ := os.Open(filePath)
-		defer f.Close()
-		_, err = io.Copy(buf, f)
-		if err != nil {
-			return
-		}
-		text = string(buf.Bytes())
-	}
-	return
-}
-
-// LocalFileEmpty checks if file is empty, to avoid reading an empty file
-func LocalFileEmpty(filePath string) bool {
-	fi, err := fs.Stat(filePath)
-	if fi.Size() == 0 {
-		return true
-	}
+	f, _ := os.Open(filePath)
+	defer f.Close()
+	_, err = io.Copy(buf, f)
 	if err != nil {
-		return false
+		return
 	}
-	return false
+	text = string(buf.Bytes())
+	return
 }
 
 // WriteAllText writes all text content to the specified file
