@@ -409,22 +409,46 @@ func TestDownloadManifestSameAsCacheManifest(t *testing.T) {
 	manifestStr := "{\"version\": \"1234\",\"packageArn\":\"packagearn\"}"
 	tracer := trace.NewTracer(log.NewMockLog())
 
-	testdata := struct {
+	data := []struct {
 		name           string
 		packageName    string
 		packageVersion string
 		facadeClient   facadeMock
 		expectedErr    bool
 	}{
-		"successful getManifest same as cache",
-		"packagearn",
-		"1234",
-		facadeMock{
-			getManifestOutput: &ssm.GetManifestOutput{
-				Manifest: &manifestStr,
+		{
+			"successful getManifest same as cache",
+			"packagearn",
+			"1234",
+			facadeMock{
+				getManifestOutput: &ssm.GetManifestOutput{
+					Manifest: &manifestStr,
+				},
 			},
+			false,
 		},
-		false,
+		{
+			"successful getManifest same as cache for latest version",
+			"packagearn",
+			packageservice.Latest,
+			facadeMock{
+				getManifestOutput: &ssm.GetManifestOutput{
+					Manifest: &manifestStr,
+				},
+			},
+			false,
+		},
+		{
+			"successful getManifest same as cache if name != returned arn",
+			"packagename",
+			packageservice.Latest,
+			facadeMock{
+				getManifestOutput: &ssm.GetManifestOutput{
+					Manifest: &manifestStr,
+				},
+			},
+			false,
+		},
 	}
 
 	tracer.BeginSection("test successful getManifest same as cache")
@@ -437,8 +461,68 @@ func TestDownloadManifestSameAsCacheManifest(t *testing.T) {
 
 	mockedCollector.On("CollectData", mock.Anything).Return(envdata, nil).Once()
 
+	for _, testdata := range data {
+		cache := packageservice.ManifestCacheMemNew()
+
+		ds := &PackageService{facadeClient: &testdata.facadeClient, manifestCache: cache, collector: &mockedCollector}
+
+		// first call has empty cache and is expected to come back with isSameAsCache == false
+		_, result, isSameAsCache, err := ds.DownloadManifest(tracer, testdata.packageName, testdata.packageVersion)
+		assert.NoError(t, err)
+		assert.False(t, isSameAsCache)
+
+		// second call has the cache already populated by the first call
+		_, result, isSameAsCache, err = ds.DownloadManifest(tracer, testdata.packageName, testdata.packageVersion)
+
+		// verify parameter for api call
+		assert.Equal(t, testdata.packageName, *testdata.facadeClient.getManifestInput.PackageName)
+		assert.Equal(t, testdata.packageVersion, *testdata.facadeClient.getManifestInput.PackageVersion)
+		// verify result
+		assert.Equal(t, "1234", result)
+		assert.NoError(t, err)
+		assert.True(t, isSameAsCache)
+		// verify cache
+		cachedManifest, cacheErr := cache.ReadManifest("packagearn", "1234")
+		assert.Equal(t, []byte(manifestStr), cachedManifest)
+		assert.NoError(t, cacheErr)
+	}
+}
+
+func TestDownloadManifestDifferentFromCacheManifest(t *testing.T) {
+	cachedManifestStr := "{\"version\": \"123\",\"packageArn\":\"packagearn\"}"
+	manifestStr := "{\"version\": \"1234\",\"packageArn\":\"packagearn\"}"
+	tracer := trace.NewTracer(log.NewMockLog())
+
+	testdata := struct {
+		name           string
+		packageName    string
+		packageVersion string
+		facadeClient   facadeMock
+		expectedErr    bool
+	}{
+		"successful getManifest different from cache",
+		"packagenameorarndoesnotmatter",
+		"packageversiondoesnotmatter",
+		facadeMock{
+			getManifestOutput: &ssm.GetManifestOutput{
+				Manifest: &manifestStr,
+			},
+		},
+		false,
+	}
+
+	tracer.BeginSection("test successful getManifest different from cache")
+
+	mockedCollector := envdetect.CollectorMock{}
+	envdata := &envdetect.Environment{
+		&osdetect.OperatingSystem{"abc", "567", "", "xyz", "", ""},
+		&ec2infradetect.Ec2Infrastructure{"instanceIDX", "Reg1", "", "AZ1", "instanceTypeZ"},
+	}
+
+	mockedCollector.On("CollectData", mock.Anything).Return(envdata, nil).Once()
+
 	cache := packageservice.ManifestCacheMemNew()
-	err := cache.WriteManifest("packagearn", "1234", []byte(manifestStr))
+	err := cache.WriteManifest("packagearn", "1234", []byte(cachedManifestStr))
 	assert.NoError(t, err)
 
 	ds := &PackageService{facadeClient: &testdata.facadeClient, manifestCache: cache, collector: &mockedCollector}
@@ -451,7 +535,7 @@ func TestDownloadManifestSameAsCacheManifest(t *testing.T) {
 	// verify result
 	assert.Equal(t, "1234", result)
 	assert.NoError(t, err)
-	assert.True(t, isSameAsCache)
+	assert.False(t, isSameAsCache)
 	// verify cache
 	cachedManifest, cacheErr := cache.ReadManifest("packagearn", "1234")
 	assert.Equal(t, []byte(manifestStr), cachedManifest)

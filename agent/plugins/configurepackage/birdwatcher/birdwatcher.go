@@ -213,7 +213,7 @@ func downloadManifest(ds *PackageService, packageName string, version string) (*
 		return nil, isSameAsCache, err
 	}
 
-	cachedManifest, err := readManifestFromCache(ds.manifestCache, packageName, version)
+	cachedManifest, err := readManifestFromCache(ds.manifestCache, manifest.PackageArn, manifest.Version)
 
 	if reflect.DeepEqual(manifest, cachedManifest) {
 		isSameAsCache = true
