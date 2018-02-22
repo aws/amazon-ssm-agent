@@ -303,14 +303,14 @@ func (repo *localRepository) GetInventoryData(log log.T) []model.ApplicationData
 		return result
 	}
 
-	for _, packageArn := range dirs {
+	for _, packageDirectoryName := range dirs {
 		var packageState *PackageInstallState
-		if packageState = repo.loadInstallState(repo.filesysdep, tracer, packageArn); packageState.State != Installed {
+		if packageState = repo.loadInstallStateByDirectoryName(repo.filesysdep, tracer, packageDirectoryName); packageState == nil || packageState.State != Installed {
 			continue
 		}
 		// NOTE: We could put inventory info in the installstate file.  That might be simpler than opening two files in this method.
 		var manifest *PackageManifest
-		manifest, err = repo.openPackageManifest(tracer, repo.filesysdep, packageArn, packageState.Version)
+		manifest, err = repo.openPackageManifest(tracer, repo.filesysdep, packageState.Name, packageState.Version)
 		if hasInventoryData(manifest) {
 			result = append(result, createApplicationData(manifest, packageState))
 		}
@@ -368,9 +368,14 @@ func createApplicationData(manifest *PackageManifest, packageState *PackageInsta
 	}
 }
 
-// getPackageRoot is a helper function that returns the path to the folder containing all versions of a package
+// getPackageRoot is a helper function that given a package's directory name returns the path to the folder containing all versions of a package
+func (repo *localRepository) getPackageRootByDirectoryName(directoryName string) string {
+	return filepath.Join(repo.repoRoot, directoryName)
+}
+
+// getPackageRoot is a helper function that given a packageArn returns the path to the folder containing all versions of a package
 func (repo *localRepository) getPackageRoot(packageArn string) string {
-	return filepath.Join(repo.repoRoot, normalizeDirectory(packageArn))
+	return repo.getPackageRootByDirectoryName(normalizeDirectory(packageArn))
 }
 
 // getLockPath is a helper function that builds the path to the install state file
@@ -378,9 +383,14 @@ func (repo *localRepository) getLockPath(packageArn string) string {
 	return filepath.Join(repo.lockRoot, normalizeDirectory(packageArn)+".lockfile")
 }
 
-// getInstallStatePath is a helper function that builds the path to the install state file
+// getInstallStatePath is a helper function that given a packagearn builds the path to the install state file
 func (repo *localRepository) getInstallStatePath(packageArn string) string {
 	return filepath.Join(repo.getPackageRoot(packageArn), "installstate")
+}
+
+// getInstallStatePath is a helper function that given a package directory name builds the path to the install state file
+func (repo *localRepository) getInstallStatePathByDirectoryName(directoryName string) string {
+	return filepath.Join(repo.getPackageRootByDirectoryName(directoryName), "installstate")
 }
 
 // getPackageVersionPath is a helper function that builds a path to the directory containing the given version of a package
@@ -399,10 +409,21 @@ func (repo *localRepository) getTracesPath(packageArn string) string {
 
 // loadInstallState loads the existing installstate file or returns an appropriate default state
 func (repo *localRepository) loadInstallState(filesysdep FileSysDep, tracer trace.Tracer, packageArn string) *PackageInstallState {
+	var filePath = repo.getInstallStatePath(packageArn)
+	return repo.parseInstallState(tracer, filesysdep, filePath, packageArn)
+}
+
+// loadInstallState loads the existing installstate file given a package folder name or returns an appropriate default state
+func (repo *localRepository) loadInstallStateByDirectoryName(filesysdep FileSysDep, tracer trace.Tracer, packageDirectoryName string) *PackageInstallState {
+	var filePath = repo.getInstallStatePathByDirectoryName(packageDirectoryName)
+	return repo.parseInstallState(tracer, filesysdep, filePath, "")
+}
+
+// parseInstallState parses the installState file
+func (repo *localRepository) parseInstallState(tracer trace.Tracer, filesysdep FileSysDep, filePath string, packageArn string) *PackageInstallState {
 	packageState := PackageInstallState{Name: packageArn, State: None}
 	var fileContent []byte
 	var err error
-	var filePath = repo.getInstallStatePath(packageArn)
 	if !filesysdep.Exists(filePath) {
 		if dirs, err := filesysdep.GetDirectoryNames(repo.getPackageRoot(packageArn)); err == nil && len(dirs) > 0 {
 			// For pre-repository packages, this will be the case, they should be updated and validated
