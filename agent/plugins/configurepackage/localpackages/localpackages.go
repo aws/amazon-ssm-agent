@@ -343,7 +343,7 @@ func (r *localRepository) WriteManifest(packageArn string, packageVersion string
 // hasInventoryData determines if a package should be reported to inventory by the repository
 // if false, it is assumed that the package used an installer type that is already collected by inventory
 func hasInventoryData(manifest *PackageManifest) bool {
-	return manifest != nil && (manifest.AppName != "" || manifest.AppPublisher != "" || manifest.AppType != "" || manifest.AppReferenceURL != "")
+	return manifest != nil && (manifest.Name != "" || manifest.AppName != "" || manifest.AppPublisher != "" || manifest.AppType != "" || manifest.AppReferenceURL != "")
 }
 
 // createApplicationData creates an ApplicationData item from a package manifest
