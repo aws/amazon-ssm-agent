@@ -529,7 +529,7 @@ func TestGetInventoryDataComplex(t *testing.T) {
 	testData3 := InventoryTestData{
 		Name:     "SsmTest2",
 		Version:  "0.1.2",
-		State:    PackageInstallState{Name: "SsmTest", Version: "0.1.2", State: Installed, Time: installTime},
+		State:    PackageInstallState{Name: "SsmTest2", Version: "0.1.2", State: Installed, Time: installTime},
 		Manifest: PackageManifest{Name: "SsmTest", Version: "0.1.2", Platform: "windows", Architecture: "386"},
 	}
 	expectedInventory := model.ApplicationData{
@@ -541,6 +541,27 @@ func TestGetInventoryDataComplex(t *testing.T) {
 	}
 
 	testInventory(t, []InventoryTestData{testData1, testData2, testData3}, []model.ApplicationData{expectedInventory})
+}
+
+func TestGetInventoryBirdwatcherPackageData(t *testing.T) {
+	installTime := time.Now()
+	testData := []InventoryTestData{
+		{ // manifest defined with only the Name
+			Name:     "_arnawsssmpackagetestbirdwatcherpackagename_30_MDYHMZE2S4YZLHSTLR4EQ6BT4ZSCW4BDXEV5C2SMMOVWDQZKUHPQ====",
+			Version:  "0.0.1",
+			State:    PackageInstallState{Name: "arn:aws:ssm:::package/TestBirdwatcherPackageName", Version: "0.0.1", State: Installed, Time: installTime},
+			Manifest: PackageManifest{Name: "TestBirdwatcherPackageName", Version: "0.0.1", Platform: "windows", Architecture: "386", AppPublisher: "Test"},
+		},
+	}
+	expectedInventory := model.ApplicationData{
+		Name:          "TestBirdwatcherPackageName",
+		Version:       "0.0.1",
+		Architecture:  "i386",
+		Publisher:     "Test",
+		InstalledTime: installTime.Format(time.RFC3339),
+	}
+
+	testInventory(t, testData, []model.ApplicationData{expectedInventory})
 }
 
 func TestGetInventoryError(t *testing.T) {
@@ -571,9 +592,9 @@ func testInventory(t *testing.T, testData []InventoryTestData, expected []model.
 		mockFileSys.On("ReadFile", path.Join(testRepoRoot, testItem.Name, "installstate")).Return([]byte(stateContent), nil).Once()
 
 		if (testItem.Manifest != PackageManifest{}) {
-			mockFileSys.On("Exists", path.Join(testRepoRoot, testItem.Name, testItem.Version, "manifest.json")).Return(true).Once()
+			mockFileSys.On("Exists", path.Join(testRepoRoot, normalizeDirectory(testItem.State.Name), testItem.Version, "manifest.json")).Return(true).Once()
 			manifestContent, _ := jsonutil.Marshal(testItem.Manifest)
-			mockFileSys.On("ReadFile", path.Join(testRepoRoot, testItem.Name, testItem.Version, "manifest.json")).Return([]byte(manifestContent), nil).Once()
+			mockFileSys.On("ReadFile", path.Join(testRepoRoot, normalizeDirectory(testItem.State.Name), testItem.Version, "manifest.json")).Return([]byte(manifestContent), nil).Once()
 		}
 	}
 	mockFileSys.On("GetDirectoryNames", path.Join(testRepoRoot)).Return(mockPackages, nil).Once()
