@@ -1,13 +1,17 @@
 Latest
-=========
+===============
+- Various bug fixes
+
+2.2.257.0
+===============
 - Bug fix to address an issue that can prevent the agent from processing associations after a restart
 
 2.2.191.0
-==============
+===============
 - Various bug fixes.
 
 2.2.160.0
-=========
+===============
 - Fix bug on windows agent (v2.2.103, v2.2.120.0) running into hung state with high volume of associations/runcommands
 - Execute "pwsh" on linux when using runPowershellScript plugin
 
