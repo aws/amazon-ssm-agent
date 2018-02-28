@@ -34,6 +34,9 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/task"
 )
 
+// SourceHashType is set as default sha256.
+const Sha256SourceHashType = "sha256"
+
 // PowerShellModulesDirectory is the directory where PowerShell Modules are installed
 var PowerShellModulesDirectory = filepath.Join(os.Getenv("SystemRoot"), "System32", "WindowsPowerShell", "v1.0", "Modules")
 
@@ -124,6 +127,8 @@ func (p *Plugin) runCommands(log log.T, pluginID string, pluginInput PSModulePlu
 	}
 
 	if pluginInput.Source != "" {
+		//change hash type to be default sha256
+		pluginInput.SourceHashType = Sha256SourceHashType
 		// Download file from source if available
 		downloadOutput, err := pluginutil.DownloadFileFromSource(log, pluginInput.Source, pluginInput.SourceHash, pluginInput.SourceHashType)
 		if err != nil || downloadOutput.IsHashMatched == false || downloadOutput.LocalFilePath == "" {
