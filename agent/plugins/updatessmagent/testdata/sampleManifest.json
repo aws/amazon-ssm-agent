@@ -132,5 +132,5 @@
       "Name": "amazon-ssm-agent-updater"
     }
   ],
-  "UriFormat": "https://s3.amazonaws.com/ssmagent-alpha/mainline/ssmagent/updates/{PackageName}/{PackageVersion}/{FileName}"
+  "UriFormat": "https://s3.amazonaws.com/ssm-agent-alpha/{PackageName}/{PackageVersion}/{FileName}"
 }
