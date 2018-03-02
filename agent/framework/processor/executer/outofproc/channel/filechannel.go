@@ -24,6 +24,9 @@ const (
 	defaultFileCreateMode = 0750
 	//exclusive flag works on windows, while 660 blocks others access to the file
 	defaultFileWriteMode = os.ModeExclusive | 0660
+
+	consumeAttemptCount                = 3
+	consumeRetryIntervalInMilliseconds = 10
 )
 
 //TODO add unittest
@@ -221,10 +224,22 @@ func (ch *fileWatcherChannel) isReadable(filename string) bool {
 func (ch *fileWatcherChannel) consume(filepath string) {
 	log := ch.logger
 	log.Debugf("consuming message under path: %v", filepath)
-	buf, err := ioutil.ReadFile(filepath)
-	//On windows rename does not guarantee atomic access: https://github.com/golang/go/issues/8914
-	//In exclusive mode we have, this read will for sure fail when it's locked by the other end
-	//TODO implement retry
+
+	var buf []byte
+	var err error
+
+	for attempt := 0; attempt < consumeAttemptCount; attempt++ {
+		//On windows rename does not guarantee atomic access: https://github.com/golang/go/issues/8914
+		//In exclusive mode we have, this read will for sure fail when it's locked by the other end
+		buf, err = ioutil.ReadFile(filepath)
+		if err != nil {
+			log.Debugf("message %v failed to read (attempt %v): %v \n", filepath, attempt+1, err)
+			time.Sleep(time.Duration(consumeRetryIntervalInMilliseconds) * time.Millisecond)
+		} else {
+			break
+		}
+	}
+
 	if err != nil {
 		log.Errorf("message %v failed to read: %v \n", filepath, err)
 		return
