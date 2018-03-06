@@ -1,5 +1,6 @@
 Latest
 ===============
+- Bug fix to change sourceHashType to be default sha256 on psmodule.
 - Various bug fixes
 
 2.2.257.0
