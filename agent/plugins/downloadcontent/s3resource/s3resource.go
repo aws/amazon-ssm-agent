@@ -99,6 +99,8 @@ func (s3 *S3Resource) Download(log log.T, filesys filemanager.FileSystem, destPa
 
 	s3.s3Object = s3util.ParseAmazonS3URL(log, fileURL)
 	log.Debug("S3 object - ", s3.s3Object.String())
+
+	s3.s3Object.Region = s3util.GetBucketRegion(log, s3.s3Object.Bucket, s3util.HttpProviderImpl{})
 	// Create an object for the source URL. This can be used to list the objects in the folder
 	if folders, err = dep.ListS3Objects(log, s3.s3Object); err != nil {
 		return err
@@ -185,9 +187,9 @@ func (s3 *S3Resource) ValidateLocationInfo() (valid bool, err error) {
 // getS3BucketURLString returns the URL up to the bucket name
 func (s3 *S3Resource) getS3BucketURLString(log log.T) (Url *url.URL, err error) {
 
-	bucketURL := strings.SplitAfter(s3.Info.Path, s3.s3Object.Bucket)
-	log.Debug("Bucket URL is - ", bucketURL[0])
-	return url.Parse(bucketURL[0])
+	endpoint := s3util.GetS3Endpoint(s3.s3Object.Region)
+	bucketURL := "https://" + endpoint + "/" + s3.s3Object.Bucket
+	return url.Parse(bucketURL)
 }
 
 // isPathType returns if the URL is of path type

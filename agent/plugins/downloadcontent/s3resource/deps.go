@@ -30,6 +30,7 @@ type s3DepImpl struct{}
 
 var dep s3deps = &s3DepImpl{}
 
+//TODO: Refactor the code to merge the s3 capabilities to one package
 func (s3DepImpl) ListS3Objects(log log.T, amazonS3URL s3util.AmazonS3URL) (folderNames []string, err error) {
 	return artifact.ListS3Objects(log, amazonS3URL)
 }

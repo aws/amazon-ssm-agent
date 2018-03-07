@@ -95,6 +95,34 @@ func TestS3Resource_GetS3BucketURLString_sameBucketNameFile(t *testing.T) {
 	assert.NoError(t, err)
 }
 
+func TestS3Resource_GetS3BucketURLString_hyphenatedEndpoint(t *testing.T) {
+	resource := &S3Resource{
+		Info: S3Info{Path: "https://s3-us-east-1.amazonaws.com/my-bucket/mydummyfolder/my-bucket.ps"},
+		s3Object: s3util.AmazonS3URL{
+			Bucket: "my-bucket",
+		},
+	}
+
+	res, err := resource.getS3BucketURLString(logMock)
+
+	assert.Equal(t, "https://s3.amazonaws.com/my-bucket", res.String())
+	assert.NoError(t, err)
+}
+
+func TestS3Resource_GetS3BucketURLString_bucketNameInS3URL(t *testing.T) {
+	resource := &S3Resource{
+		Info: S3Info{Path: "https://my-bucket.s3.amazonaws.com/mydummyfolder/my-bucket.ps"},
+		s3Object: s3util.AmazonS3URL{
+			Bucket: "my-bucket",
+		},
+	}
+
+	res, err := resource.getS3BucketURLString(logMock)
+
+	assert.Equal(t, "https://s3.amazonaws.com/my-bucket", res.String())
+	assert.NoError(t, err)
+}
+
 func TestS3Resource_Download(t *testing.T) {
 
 	depMock := new(s3DepMock)
