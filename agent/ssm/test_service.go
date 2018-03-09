@@ -127,6 +127,11 @@ func (m *Mock) UpdateInstanceInformation(log log.T, agentVersion, agentStatus, a
 	return args.Get(0).(*ssm.UpdateInstanceInformationOutput), args.Error(1)
 }
 
+func (m *Mock) UpdateEmptyInstanceInformation(log log.T, agentName string) (response *ssm.UpdateInstanceInformationOutput, err error) {
+	args := m.Called(log, agentName)
+	return args.Get(0).(*ssm.UpdateInstanceInformationOutput), args.Error(1)
+}
+
 // GetParameters mocks the GetParameters function.
 func (m *Mock) GetParameters(log log.T, paramNames []string) (response *ssm.GetParametersOutput, err error) {
 	args := m.Called(log, paramNames)

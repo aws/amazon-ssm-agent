@@ -22,7 +22,10 @@ import (
 	"syscall"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
+	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/framework/coremanager"
+	"github.com/aws/amazon-ssm-agent/agent/health"
+	"github.com/aws/amazon-ssm-agent/agent/hibernation"
 	logger "github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/version"
 )
@@ -92,6 +95,28 @@ func stop(log logger.T, cpm *coremanager.CoreManager) {
 
 // Run as a single process. Used by Unix systems and when running agent from console.
 func run(log logger.T) {
+	// Do a health check before starting the agent.
+	// Health check would include creating a health module and sending empty health pings to the service.
+	// If response is positive, start the agent, else retry and eventually back off (hibernate/passive mode).
+
+	config, err := appconfig.Config(true)
+	if err != nil {
+		log.Errorf("appconfig could not be loaded - %v", err)
+		return
+	}
+	context := context.Default(log, config) // Add instanceID to context
+	//Initializing the health module to send empty health pings to the service.
+	healthModule := health.NewHealthCheck(context)
+
+	if health.GetAgentState(healthModule) == health.Passive {
+		log.Debug("Health ping failed with error ")
+
+		//Starting hibernate mode
+		hibernateState := hibernation.NewHibernateMode(healthModule, context)
+		hibernation.ExecuteHibernation(hibernateState)
+	}
+	// The instance has SSM policy if we reach this part of the code.
+
 	// run core manager
 	cpm, err := start(log, instanceIDPtr, regionPtr)
 	if err != nil {

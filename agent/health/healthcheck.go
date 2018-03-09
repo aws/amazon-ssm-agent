@@ -35,21 +35,40 @@ type HealthCheck struct {
 }
 
 const (
-	name      = "HealthCheck"
+	name = "HealthCheck"
+	// AgentName is the name of the current agent.
 	AgentName = "amazon-ssm-agent"
 )
 
+var healthModule *HealthCheck
+
+// AgentState enumerates active and passive agentMode
+type AgentState int32
+
+const (
+	//Active would suggest the agent is going to start with full capacity since SSM can be reached
+	Active AgentState = 1
+	//Passive would suggest that the agent is in Backoff and the health will be checked based on current capacity
+	Passive AgentState = 0
+)
+
 // NewHealthCheck creates a new health check core module.
+// Only one health core module must exist at a time
 func NewHealthCheck(context context.T) *HealthCheck {
+	if healthModule != nil {
+		context.Log().Debug("Health process has already been initialized.")
+		return healthModule
+	}
 	healthContext := context.With("[" + name + "]")
 	healthCheckStopPolicy := sdkutil.NewStopPolicy(name, 10)
 	svc := ssm.NewService()
 
-	return &HealthCheck{
+	healthModule = &HealthCheck{
 		context:               healthContext,
 		healthCheckStopPolicy: healthCheckStopPolicy,
 		service:               svc,
 	}
+	return healthModule
 }
 
 // schedules recurrent updateHealth calls
@@ -75,7 +94,7 @@ func (h *HealthCheck) updateHealth() {
 	return
 }
 
-// CoreModule Run Schedule In Minutes
+// scheduleInMinutes Run Schedule In Minutes
 func (h *HealthCheck) scheduleInMinutes() int {
 	updateHealthFrequencyMins := 5
 	config := h.context.AppConfig()
@@ -93,12 +112,12 @@ func (h *HealthCheck) scheduleInMinutes() int {
 
 // ICoreModule implementation
 
-// Name returns the module name
+// ModuleName returns the module name
 func (h *HealthCheck) ModuleName() string {
 	return name
 }
 
-// Execute starts the scheduling of the health check module
+// ModuleExecute starts the scheduling of the health check module
 func (h *HealthCheck) ModuleExecute(context context.T) (err error) {
 	rand.Seed(time.Now().UTC().UnixNano())
 	scheduleInMinutes := h.scheduleInMinutes()
@@ -120,11 +139,30 @@ func (h *HealthCheck) ModuleExecute(context context.T) (err error) {
 	return
 }
 
-// RequestStop handles the termination of the health check module job
+// ModuleRequestStop handles the termination of the health check module job
 func (h *HealthCheck) ModuleRequestStop(stopType contracts.StopType) (err error) {
 	if h.healthJob != nil {
 		h.context.Log().Info("stopping update instance health job.")
 		h.healthJob.Quit <- true
 	}
 	return nil
+}
+
+//ping sends an empty ping to the health service to identify if the service exists
+func (h *HealthCheck) ping() (err error) {
+	log := h.context.Log()
+	log.Debugf("%s checking if Systems Manager permissions exist.", name)
+
+	if _, err = h.service.UpdateEmptyInstanceInformation(log, AgentName); err != nil {
+		sdkutil.HandleAwsError(log, err, h.healthCheckStopPolicy)
+	}
+	return err
+}
+
+// GetAgentState returns the state of the agent
+func GetAgentState(h *HealthCheck) AgentState {
+	if err := h.ping(); err != nil {
+		return Passive
+	}
+	return Active
 }
