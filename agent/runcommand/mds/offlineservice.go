@@ -123,8 +123,6 @@ func (ols *offlineService) GetMessages(log log.T, instanceID string) (messages *
 		messages.Messages = append(messages.Messages, message)
 	}
 
-	debugMessages, _ := jsonutil.Marshal(messages)
-	log.Debugf("Local messages:\n%v", debugMessages)
 	return messages, nil
 }
 
