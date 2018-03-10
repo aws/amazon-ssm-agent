@@ -1,5 +1,10 @@
 Latest
 ===============
+- Fix S3Download to download from cross regions.
+- Various bug fixes
+
+2.2.325.0
+===============
 - Bug fix to change sourceHashType to be default sha256 on psmodule.
 - Various bug fixes
 
