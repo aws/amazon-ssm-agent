@@ -97,7 +97,7 @@ NOTE: There is a known issue in this build that can cause Windows instances to s
 - Various bug fixes
 
 2.0.913.0
-=============
+===============
 - Updated golang/sys dependency to the latest
 - Increased run command document maximum execution timeout to 48 hours
 - Various bug fixes
