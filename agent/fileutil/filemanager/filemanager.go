@@ -31,6 +31,7 @@ type FileSystem interface {
 	DeleteDirectory(filename string) (err error)
 	Exists(filename string) bool
 	IsDirectory(srcPath string) bool
+	AppendToFile(fileDirectory string, filename string, content string) (filePath string, err error)
 }
 
 type FileSystemImpl struct{}
@@ -71,4 +72,9 @@ func (f FileSystemImpl) Exists(root string) bool {
 
 func (f FileSystemImpl) IsDirectory(srcPath string) bool {
 	return fileutil.IsDirectory(srcPath)
+}
+
+// AppendToFile appends contents to file
+func (f FileSystemImpl) AppendToFile(fileDirectory string, filename string, content string) (filePath string, err error) {
+	return fileutil.AppendToFile(fileDirectory, filename, content)
 }

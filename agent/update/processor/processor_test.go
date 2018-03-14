@@ -50,7 +50,7 @@ func (c *contextMgrStub) saveUpdateContext(log log.T, context *UpdateContext, co
 	return nil
 }
 
-func (c *contextMgrStub) uploadOutput(log log.T, context *UpdateContext) error {
+func (c *contextMgrStub) uploadOutput(log log.T, context *UpdateContext, orchestrationDir string) error {
 	return nil
 }
 

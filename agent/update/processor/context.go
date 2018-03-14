@@ -23,10 +23,14 @@ import (
 	"path"
 	"time"
 
+	"regexp"
+	"strings"
+
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/platform"
 	"github.com/aws/amazon-ssm-agent/agent/s3util"
 	"github.com/aws/amazon-ssm-agent/agent/updateutil"
 )
@@ -64,7 +68,7 @@ const (
 
 // ContextMgr reprents context management logics
 type ContextMgr interface {
-	uploadOutput(log log.T, context *UpdateContext) error
+	uploadOutput(log log.T, context *UpdateContext, orchestrationDir string) error
 	saveUpdateContext(log log.T, context *UpdateContext, contextLocation string) error
 }
 
@@ -168,6 +172,45 @@ func LoadUpdateContext(log log.T, source string) (context *UpdateContext, err er
 	return context, nil
 }
 
+// processMessageID splits the messageID and returns the commandID part of it.
+func processMessageID(messageID string) string {
+	// MdsMessageID is in the format of : aws.ssm.CommandId.InstanceId
+	// E.g (aws.ssm.2b196342-d7d4-436e-8f09-3883a1116ac3.i-57c0a7be)
+	mdsMessageIDSplit := strings.Split(messageID, ".")
+	return mdsMessageIDSplit[len(mdsMessageIDSplit)-2]
+}
+
+// GetCommandID verifies the regex of messageID and returns the commandID by calling processMessageID
+func getCommandID(messageID string) (string, error) {
+	//messageID format: E.g (aws.ssm.2b196342-d7d4-436e-8f09-3883a1116ac3.i-57c0a7be)
+	if match, err := regexp.MatchString("aws\\.ssm\\..+\\.+", messageID); !match {
+		return messageID, fmt.Errorf("invalid messageID format: %v | %v", messageID, err)
+	}
+
+	return processMessageID(messageID), nil
+}
+
+// getOrchestrationDir returns the orchestration directory
+func getOrchestrationDir(log log.T, update *UpdateDetail) string {
+	var err error
+	var instanceId string
+	if instanceId, err = platform.InstanceID(); err != nil {
+		log.Errorf("Cannot get instance id.")
+	}
+	orchestrationDir := fileutil.BuildPath(
+		appconfig.DefaultDataStorePath,
+		instanceId,
+		appconfig.DefaultDocumentRootDirName,
+		"orchestration")
+	var commandID string
+	if update.HasMessageID() {
+		commandID, _ = getCommandID(update.MessageID)
+	}
+
+	orchestrationDirectory := fileutil.BuildPath(orchestrationDir, commandID, updateutil.DefaultOutputFolder)
+	return orchestrationDirectory
+}
+
 func (context *UpdateContext) cleanUpdate() {
 	context.Histories = append(context.Histories, context.Current)
 	context.Current = &UpdateDetail{}
@@ -205,7 +248,7 @@ func parseContext(log log.T, fileName string) (context *UpdateContext, err error
 }
 
 // uploadOutput uploads the stdout and stderr file to S3
-func (c *contextManager) uploadOutput(log log.T, context *UpdateContext) (err error) {
+func (c *contextManager) uploadOutput(log log.T, context *UpdateContext, orchestrationDirectory string) (err error) {
 
 	// upload outputs (if any) to s3
 	uploadOutputsToS3 := func() {
@@ -217,7 +260,7 @@ func (c *contextManager) uploadOutput(log log.T, context *UpdateContext) (err er
 		}()
 
 		// get stdout file path
-		stdoutPath := updateutil.UpdateStdOutPath(context.Current.UpdateRoot, context.Current.StdoutFileName)
+		stdoutPath := updateutil.UpdateStdOutPath(orchestrationDirectory, context.Current.StdoutFileName)
 		s3Key := path.Join(context.Current.OutputS3KeyPrefix, context.Current.StdoutFileName)
 		log.Debugf("Uploading %v to s3://%v/%v", stdoutPath, context.Current.OutputS3BucketName, s3Key)
 		err = s3util.NewAmazonS3Util(log, context.Current.OutputS3BucketName).S3Upload(log, context.Current.OutputS3BucketName, s3Key, stdoutPath)
@@ -230,7 +273,7 @@ func (c *contextManager) uploadOutput(log log.T, context *UpdateContext) (err er
 		}
 
 		// get stderr file path
-		stderrPath := updateutil.UpdateStdOutPath(context.Current.UpdateRoot, context.Current.StderrFileName)
+		stderrPath := updateutil.UpdateStdErrPath(orchestrationDirectory, context.Current.StderrFileName)
 		s3Key = path.Join(context.Current.OutputS3KeyPrefix, context.Current.StderrFileName)
 		log.Debugf("Uploading %v to s3://%v/%v", stderrPath, context.Current.OutputS3BucketName, s3Key)
 		err = s3util.NewAmazonS3Util(log, context.Current.OutputS3BucketName).S3Upload(log, context.Current.OutputS3BucketName, s3Key, stderrPath)

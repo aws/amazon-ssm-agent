@@ -144,7 +144,7 @@ func runUpdateAgent(
 	if len(targetVersion) == 0 {
 		targetVersion = "latest"
 	}
-	output.AppendInfof("Updating %v from %v to %v",
+	output.AppendInfof("Updating %v from %v to %v\n",
 		pluginInput.AgentName,
 		version.Version,
 		targetVersion)
@@ -299,7 +299,7 @@ func (m *updateManager) downloadManifest(log log.T,
 		downloadOutput.LocalFilePath == "" {
 		return nil, downloadErr
 	}
-	out.AppendInfof("Successfully downloaded %v", downloadInput.SourceURL)
+	out.AppendInfof("Successfully downloaded %v\n", downloadInput.SourceURL)
 	return ParseManifest(log, downloadOutput.LocalFilePath, context, pluginInput.AgentName)
 }
 
@@ -336,17 +336,17 @@ func (m *updateManager) downloadUpdater(log log.T,
 		downloadOutput.IsHashMatched == false ||
 		downloadOutput.LocalFilePath == "" {
 
-		errMessage := fmt.Sprintf("failed to download file reliably, %v", downloadInput.SourceURL)
+		errMessage := fmt.Sprintf("failed to download file reliably, %v\n", downloadInput.SourceURL)
 		if downloadErr != nil {
 			errMessage = fmt.Sprintf("%v, %v", errMessage, downloadErr.Error())
 		}
 		return version, errors.New(errMessage)
 	}
-	out.AppendInfof("Successfully downloaded %v", downloadInput.SourceURL)
+	out.AppendInfof("Successfully downloaded %v\n", downloadInput.SourceURL)
 	if uncompressErr := fileUncompress(
 		downloadOutput.LocalFilePath,
 		updateutil.UpdateArtifactFolder(appconfig.UpdaterArtifactsRoot, updaterPackageName, version)); uncompressErr != nil {
-		return version, fmt.Errorf("failed to uncompress updater package, %v, %v",
+		return version, fmt.Errorf("failed to uncompress updater package, %v, %v\n",
 			downloadOutput.LocalFilePath,
 			uncompressErr.Error())
 	}
@@ -378,7 +378,7 @@ func (m *updateManager) validateUpdate(log log.T,
 	}
 
 	if res == 0 {
-		out.AppendInfof("%v %v has already been installed, update skipped",
+		out.AppendInfof("%v %v has already been installed, update skipped\n",
 			pluginInput.AgentName,
 			currentVersion)
 		out.MarkAsSucceeded()
@@ -388,21 +388,21 @@ func (m *updateManager) validateUpdate(log log.T,
 	if res == -1 && !allowDowngrade {
 		return true,
 			fmt.Errorf(
-				"updating %v to an older version, please enable allow downgrade to proceed",
+				"updating %v to an older version, please enable allow downgrade to proceed\n",
 				pluginInput.AgentName)
 
 	}
 	if !manifest.HasVersion(context, pluginInput.AgentName, pluginInput.TargetVersion) {
 		return true,
 			fmt.Errorf(
-				"%v version %v is unsupported",
+				"%v version %v is unsupported\n",
 				pluginInput.AgentName,
 				pluginInput.TargetVersion)
 	}
 	if !manifest.HasVersion(context, pluginInput.AgentName, currentVersion) {
 		return true,
 			fmt.Errorf(
-				"%v current version %v is unsupported on current platform",
+				"%v current version %v is unsupported on current platform\n",
 				pluginInput.AgentName,
 				currentVersion)
 	}
@@ -444,7 +444,7 @@ func GetUpdatePluginConfig(context context.T) UpdatePluginConfig {
 	log := context.Log()
 	region, err := platform.Region()
 	if err != nil {
-		log.Errorf("Error retrieving agent region in update plugin config. error: %v", err)
+		log.Errorf("Error retrieving agent region in update plugin config. error: %v\n", err)
 	}
 
 	var manifestUrl string
