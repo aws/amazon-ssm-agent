@@ -18,6 +18,7 @@ import (
 	"testing"
 
 	"sync"
+	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler/iomodule/mock"
@@ -76,6 +77,9 @@ func TestRegisterOutputSource(t *testing.T) {
 	wg := new(sync.WaitGroup)
 	mockDocumentIOMultiWriter.On("GetWaitGroup").Return(wg)
 
+	// Add 2 to WaitGroup to simulate two AddWriter calls
+	wg.Add(2)
+
 	// Create multiple test IOModules
 	testModule1 := new(iomodulemock.MockIOModule)
 	testModule1.On("Read", logger, mock.Anything).Return()
@@ -84,6 +88,9 @@ func TestRegisterOutputSource(t *testing.T) {
 
 	output := DefaultIOHandler{}
 	output.RegisterOutputSource(logger, mockDocumentIOMultiWriter, testModule1, testModule2)
+
+	// Sleep a bit to allow threads to finish in RegisterOutputSource to check WaitGroup
+	time.Sleep(250 * time.Millisecond)
 }
 
 func TestSucceeded(t *testing.T) {
