@@ -77,6 +77,21 @@ func ReadAllText(filePath string) (text string, err error) {
 	return
 }
 
+// AppendToFile appends content to file
+func AppendToFile(fileDirectory string, filename string, content string) (filePath string, err error) {
+	filePath = filepath.Join(fileDirectory, filename)
+	fileWriter, err := os.OpenFile(filePath, os.O_APPEND|os.O_WRONLY, appconfig.ReadWriteAccess)
+	if err != nil {
+		err = fmt.Errorf("failed to open the file at %v: %v", filePath, err)
+	}
+
+	if fileWriter.WriteString(content); err != nil {
+		err = fmt.Errorf("failed to write contents to file")
+	}
+	defer fileWriter.Close()
+	return filePath, err
+}
+
 // WriteAllText writes all text content to the specified file
 func WriteAllText(filePath string, text string) (err error) {
 	f, _ := os.Create(filePath)

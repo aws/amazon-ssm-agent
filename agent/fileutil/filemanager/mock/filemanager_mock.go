@@ -62,3 +62,8 @@ func (fileMock FileSystemMock) IsDirectory(root string) bool {
 	args := fileMock.Called(root)
 	return args.Bool(0)
 }
+
+func (fileMock FileSystemMock) AppendToFile(fileDirectory string, filename string, content string) (filePath string, err error) {
+	args := fileMock.Called(fileDirectory, filename, content)
+	return args.Get(0).(string), args.Error(1)
+}

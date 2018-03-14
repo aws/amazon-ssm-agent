@@ -260,3 +260,12 @@ type ioUtilStub struct {
 func (a ioUtilStub) ReadFile(filename string) ([]byte, error) {
 	return a.b, a.err
 }
+
+func TestAppendToFile(t *testing.T) {
+	// Valid file
+	var file = "testdata/file.txt"
+	// call method
+	filePath, err := AppendToFile("", file, " This is a sample text")
+	assert.NoError(t, err, "expected no error")
+	fmt.Println(filePath)
+}

@@ -53,7 +53,7 @@ const (
 	UpdatePluginResultFileName = "updatepluginresult.json"
 
 	// DefaultOutputFolder represents default location for storing output files
-	DefaultOutputFolder = "output"
+	DefaultOutputFolder = "awsupdateSsmAgent"
 
 	// DefaultStandOut represents the default file name for update stand output
 	DefaultStandOut = "stdout"
@@ -587,7 +587,7 @@ func UpdateStdOutPath(updateRoot string, fileName string) string {
 	if fileName == "" {
 		fileName = DefaultStandOut
 	}
-	return filepath.Join(UpdateOutputDirectory(updateRoot), fileName)
+	return filepath.Join(updateRoot, fileName)
 }
 
 // UpdateStdErrPath returns stand error file path
@@ -595,7 +595,7 @@ func UpdateStdErrPath(updateRoot string, fileName string) string {
 	if fileName == "" {
 		fileName = DefaultStandErr
 	}
-	return filepath.Join(UpdateOutputDirectory(updateRoot), fileName)
+	return filepath.Join(updateRoot, fileName)
 }
 
 // UpdatePluginResultFilePath returns update plugin result file path
