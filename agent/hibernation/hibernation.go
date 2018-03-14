@@ -29,19 +29,24 @@ type Hibernate struct {
 	currentMode  health.AgentState
 	healthModule *health.HealthCheck
 	context      context.T
-	//TODO: Add backoff object here. Will scheduler still be needed?
 	hibernateJob *scheduler.Job
 
-	scheduleHealthPing func(pingInterval int, m *Hibernate)
+	currentPingInterval int
+	maxInterval         int
+
+	scheduleBackOff func(m *Hibernate)
+	schedulePing    func(m *Hibernate)
 }
 
 // modeChan is a channel that tracks the status of the agent
 var modeChan = make(chan health.AgentState, 10)
-var pingInterval = 5 * 60 // TODO Change when backoff is implemented
+var backOffRate = 3
 
 const (
-	hibernateMode  = "AgentHibernate"
-	backoffSeconds = 5 //TODO change once backoff is implemented
+	hibernateMode      = "AgentHibernate"
+	maxBackOffInterval = 60 * 60 //Minute conversion
+	multiplier         = 2
+	initialPingRate    = 5 * 60 //Seconds
 )
 
 // NewHibernateMode creates an object of type NewHibernateMode
@@ -50,19 +55,22 @@ func NewHibernateMode(healthModule *health.HealthCheck, context context.T) *Hibe
 	hibernationContext := context.With("[" + hibernateMode + "]")
 
 	return &Hibernate{
-		healthModule:       healthModule,
-		currentMode:        health.Passive,
-		context:            hibernationContext,
-		scheduleHealthPing: scheduleEmptyHealthPing,
+		healthModule:        healthModule,
+		currentMode:         health.Passive,
+		context:             hibernationContext,
+		currentPingInterval: initialPingRate,
+		maxInterval:         maxBackOffInterval,
+		scheduleBackOff:     scheduleBackOffStrategy,
+		schedulePing:        scheduleEmptyHealthPing,
 	}
 }
 
 // ExecuteHibernation Starts the hibernate mode by blocking agent start and by scheduling health pings
 func ExecuteHibernation(m *Hibernate) health.AgentState {
-	next := time.Duration(backoffSeconds) * time.Second
+	next := time.Duration(initialPingRate) * time.Second
 	// Wait backoff time and then schedule health pings
 	<-time.After(next)
-	m.scheduleHealthPing(pingInterval, m)
+	m.scheduleBackOff(m)
 
 loop:
 	// using an infinite loop to block the agent from starting
@@ -86,17 +94,43 @@ func (m *Hibernate) healthCheck() {
 	modeChan <- health.GetAgentState(m.healthModule)
 }
 
-func scheduleEmptyHealthPing(pingInterval int, m *Hibernate) {
+func (m *Hibernate) stopEmptyPing() {
+	if m.hibernateJob != nil {
+		m.hibernateJob.Quit <- true
+	}
+}
+
+func scheduleEmptyHealthPing(m *Hibernate) {
 	var err error
-	if m.hibernateJob, err = scheduler.Every(pingInterval).Seconds().Run(m.healthCheck); err != nil {
-		m.context.Log().Errorf("unable to schedule health update. %v", err)
+	if m.hibernateJob, err = scheduler.Every(m.currentPingInterval).Seconds().Run(m.healthCheck); err != nil {
+		m.context.Log().Errorf("Unable to schedule health update. %v", err)
 	}
 	return
 }
 
-func (m *Hibernate) stopEmptyPing() {
-	//TODO: Must this be called from elsewhere as well? where?
-	if m.hibernateJob != nil {
-		m.hibernateJob.Quit <- true
+func scheduleBackOffStrategy(m *Hibernate) {
+	// Scheduler to calculate backoffInterval and call this function in that time every backoff return time.
+	// Also stop the current ping scheduler
+	if m.currentPingInterval == m.maxInterval {
+		return
 	}
+	m.stopEmptyPing()
+	m.currentPingInterval = multiplier * m.currentPingInterval
+	if m.currentPingInterval > m.maxInterval {
+		m.currentPingInterval = m.maxInterval
+
+	}
+	m.schedulePing(m)
+	backoffInterval := m.currentPingInterval * backOffRate
+
+	next := time.Duration(backoffInterval) * time.Second
+	go func(m *Hibernate) {
+		select {
+		case <-time.After(next):
+			// recall scheduleEmptyHealthPing to form a timed loop.
+			// loop is broken when currentPingInterval reaches maxInterval
+			go m.scheduleBackOff(m)
+		}
+	}(m)
+	return
 }

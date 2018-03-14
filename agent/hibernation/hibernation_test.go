@@ -18,6 +18,7 @@ package hibernation
 
 import (
 	"testing"
+	"time"
 
 	"github.com/stretchr/testify/assert"
 
@@ -30,7 +31,7 @@ func TestHibernation_ExecuteHibernation_AgentTurnsActive(t *testing.T) {
 	healthMock := health.NewHealthCheck(ctx)
 
 	hibernate := NewHibernateMode(healthMock, ctx)
-	hibernate.scheduleHealthPing = fakeScheduler
+	hibernate.scheduleBackOff = fakeScheduler
 	for i := 0; i < 4; i++ {
 		modeChan <- health.Passive
 	}
@@ -42,6 +43,30 @@ func TestHibernation_ExecuteHibernation_AgentTurnsActive(t *testing.T) {
 	modeChan <- health.Active
 }
 
-func fakeScheduler(int, *Hibernate) {
+func TestHibernation_scheduleBackOffStrategy(t *testing.T) {
+	ctx := context.NewMockDefault()
+	healthMock := health.NewHealthCheck(ctx)
+
+	hibernate := NewHibernateMode(healthMock, ctx)
+	hibernate.schedulePing = fakeScheduler
+	hibernate.currentPingInterval = 1 //second
+	hibernate.maxInterval = 4         //second
+
+	backOffRate = 2 // reducing time for testing
+
+	go func(h *Hibernate) {
+		scheduleBackOffStrategy(h)
+	}(hibernate)
+
+	assert.Equal(t, 1, hibernate.currentPingInterval)
+	time.Sleep(time.Duration(2) * time.Second)        //backoff rate is 2 in test
+	assert.Equal(t, 2, hibernate.currentPingInterval) // multiplier is 2
+	time.Sleep(time.Duration(4) * time.Second)
+	assert.Equal(t, 4, hibernate.currentPingInterval)
+	time.Sleep(time.Duration(8) * time.Second)
+	assert.Equal(t, 4, hibernate.currentPingInterval) // maxInterval is 4
+}
+
+func fakeScheduler(*Hibernate) {
 	//Do nothing
 }
