@@ -67,7 +67,7 @@ type Service interface {
 	DeleteDocument(log log.T, instanceID string) (response *ssm.DeleteDocumentOutput, err error)
 	DescribeAssociation(log log.T, instanceID string, docName string) (response *ssm.DescribeAssociationOutput, err error)
 	UpdateInstanceInformation(log log.T, agentVersion, agentStatus, agentName string) (response *ssm.UpdateInstanceInformationOutput, err error)
-	UpdateEmptyInstanceInformation(log log.T, agentName string) (response *ssm.UpdateInstanceInformationOutput, err error)
+	UpdateEmptyInstanceInformation(agentName string) (response *ssm.UpdateInstanceInformationOutput, err error)
 	GetParameters(log log.T, paramNames []string) (response *ssm.GetParametersOutput, err error)
 	GetDecryptedParameters(log log.T, paramNames []string) (response *ssm.GetParametersOutput, err error)
 }
@@ -303,7 +303,7 @@ func (svc *sdkService) UpdateInstanceInformation(
 }
 
 //UpdateEmptyInstanceInformation calls the UpdateInstanceInformation SSM API with an empty ping.
-func (svc *sdkService) UpdateEmptyInstanceInformation(log log.T, agentName string) (response *ssm.UpdateInstanceInformationOutput, err error) {
+func (svc *sdkService) UpdateEmptyInstanceInformation(agentName string) (response *ssm.UpdateInstanceInformationOutput, err error) {
 	//TODO: combine this with UpdateInstanceInfo
 	params := ssm.UpdateInstanceInformationInput{
 		AgentName: aws.String(agentName),
@@ -313,16 +313,9 @@ func (svc *sdkService) UpdateEmptyInstanceInformation(log log.T, agentName strin
 	if instID, err := platform.InstanceID(); err == nil {
 		params.InstanceId = aws.String(instID)
 	} else {
-		log.Warn(err)
+		return nil, err
 	}
-
-	log.Debug("Calling UpdateInstanceInformation with minimal information", params)
 	response, err = svc.sdk.UpdateInstanceInformation(&params)
-	if err != nil {
-		sdkutil.HandleAwsError(log, err, ssmStopPolicy)
-		return
-	}
-	log.Debug("UpdateInstanceInformation Response", response)
 	return
 }
 

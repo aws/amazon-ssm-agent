@@ -101,16 +101,14 @@ func run(log logger.T) {
 
 	config, err := appconfig.Config(true)
 	if err != nil {
-		log.Errorf("appconfig could not be loaded - %v", err)
+		log.Debugf("appconfig could not be loaded - %v", err)
 		return
 	}
 	context := context.Default(log, config) // Add instanceID to context
 	//Initializing the health module to send empty health pings to the service.
 	healthModule := health.NewHealthCheck(context)
 
-	if health.GetAgentState(healthModule) == health.Passive {
-		log.Debug("Health ping failed with error ")
-
+	if status, _ := health.GetAgentState(healthModule); status == health.Passive {
 		//Starting hibernate mode
 		hibernateState := hibernation.NewHibernateMode(healthModule, context)
 		hibernation.ExecuteHibernation(hibernateState)

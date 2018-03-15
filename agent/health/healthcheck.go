@@ -150,19 +150,14 @@ func (h *HealthCheck) ModuleRequestStop(stopType contracts.StopType) (err error)
 
 //ping sends an empty ping to the health service to identify if the service exists
 func (h *HealthCheck) ping() (err error) {
-	log := h.context.Log()
-	log.Debugf("%s checking if Systems Manager permissions exist.", name)
-
-	if _, err = h.service.UpdateEmptyInstanceInformation(log, AgentName); err != nil {
-		sdkutil.HandleAwsError(log, err, h.healthCheckStopPolicy)
-	}
+	_, err = h.service.UpdateEmptyInstanceInformation(AgentName)
 	return err
 }
 
-// GetAgentState returns the state of the agent
-func GetAgentState(h *HealthCheck) AgentState {
-	if err := h.ping(); err != nil {
-		return Passive
+// GetAgentState returns the state of the agent. It is the caller's responsibility to log the error
+func GetAgentState(h *HealthCheck) (a AgentState, err error) {
+	if err = h.ping(); err != nil {
+		return Passive, err
 	}
-	return Active
+	return Active, err
 }
