@@ -21,21 +21,24 @@ import (
 
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/health"
+	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/carlescere/scheduler"
+	"github.com/cihub/seelog"
 )
 
 // Hibernate holds information about the current agent state
 type Hibernate struct {
 	currentMode  health.AgentState
 	healthModule *health.HealthCheck
-	context      context.T
 	hibernateJob *scheduler.Job
 
 	currentPingInterval int
 	maxInterval         int
+	scheduleBackOff     func(m *Hibernate)
+	schedulePing        func(m *Hibernate)
 
-	scheduleBackOff func(m *Hibernate)
-	schedulePing    func(m *Hibernate)
+	seelogger seelog.LoggerInterface
+	isLogged  bool
 }
 
 // modeChan is a channel that tracks the status of the agent
@@ -52,12 +55,15 @@ const (
 // NewHibernateMode creates an object of type NewHibernateMode
 func NewHibernateMode(healthModule *health.HealthCheck, context context.T) *Hibernate {
 
-	hibernationContext := context.With("[" + hibernateMode + "]")
+	context.Log().Debug("Starting agent hibernate mode. Switching log to minimal logging...")
+	logger := log.GetLogger(context.Log(), seelogConfig)
+	logger.Info("Agent enters hibernate mode. Reducing logging...")
 
 	return &Hibernate{
 		healthModule:        healthModule,
 		currentMode:         health.Passive,
-		context:             hibernationContext,
+		seelogger:           logger,
+		isLogged:            false,
 		currentPingInterval: initialPingRate,
 		maxInterval:         maxBackOffInterval,
 		scheduleBackOff:     scheduleBackOffStrategy,
@@ -81,6 +87,7 @@ loop:
 		case health.Active:
 			//Agent mode is now active. Agent can start. Exit loop
 			m.stopEmptyPing()
+			m.seelogger.Flush()
 			return status //returning status for testing purposes.
 		case health.Passive:
 			continue loop
@@ -91,7 +98,12 @@ loop:
 }
 
 func (m *Hibernate) healthCheck() {
-	modeChan <- health.GetAgentState(m.healthModule)
+	status, err := health.GetAgentState(m.healthModule)
+	if err != nil && !m.isLogged {
+		m.seelogger.Errorf("Health ping failed with error - %v", err.Error())
+		m.isLogged = true
+	}
+	modeChan <- status
 }
 
 func (m *Hibernate) stopEmptyPing() {
@@ -103,7 +115,7 @@ func (m *Hibernate) stopEmptyPing() {
 func scheduleEmptyHealthPing(m *Hibernate) {
 	var err error
 	if m.hibernateJob, err = scheduler.Every(m.currentPingInterval).Seconds().Run(m.healthCheck); err != nil {
-		m.context.Log().Errorf("Unable to schedule health update. %v", err)
+		m.seelogger.Errorf("Unable to schedule health update. %v", err)
 	}
 	return
 }
@@ -125,10 +137,12 @@ func scheduleBackOffStrategy(m *Hibernate) {
 
 	next := time.Duration(backoffInterval) * time.Second
 	go func(m *Hibernate) {
+		m.seelogger.Infof("Backing off health check to every %v minutes for %v minutes. Logging will be reduced to one log per backoff period", m.currentPingInterval, backoffInterval)
 		select {
 		case <-time.After(next):
 			// recall scheduleEmptyHealthPing to form a timed loop.
 			// loop is broken when currentPingInterval reaches maxInterval
+			m.isLogged = false
 			go m.scheduleBackOff(m)
 		}
 	}(m)

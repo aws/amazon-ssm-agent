@@ -46,7 +46,7 @@ func (fileWatcher *FileWatcher) Init(log log.T, configFilePath string, replaceLo
 // Start creates and starts the go routines for filewatcher
 func (fileWatcher *FileWatcher) Start() {
 
-	fileWatcher.log.Infof("Start File Watcher On: %v", fileWatcher.configFilePath)
+	fileWatcher.log.Debugf("Start File Watcher On: %v", fileWatcher.configFilePath)
 
 	// Since the filewatcher fails if the file does not exist, need to watch the parent directory for any changes
 	dirPath := filepath.Dir(fileWatcher.configFilePath)
