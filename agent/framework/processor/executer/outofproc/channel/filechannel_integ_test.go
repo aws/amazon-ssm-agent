@@ -31,6 +31,7 @@ var defaultRootDir = "."
 var channelName = "testchannel"
 var messageSet1 = []string{"s000", "s001", "s002"}
 var messageSet2 = []string{"r000", "r001", "r002"}
+var messageSet3 = []string{"n000", "n001", "n002"}
 
 func TestChannelDuplexTransmission(t *testing.T) {
 	logger.Info("hello filewatcher channel started")
@@ -49,9 +50,9 @@ func TestChannelDuplexTransmission(t *testing.T) {
 		channelB, err := NewFileWatcherChannel(log.NewMockLogWithContext(string(roleB)), roleB, path.Join(defaultRootDir, channelName))
 		assert.NoError(t, err)
 		logger.Info("worker channel opened, start transmission")
-		send(channelB, messageSet2, "worker")
+		send(channelB, messageSet2, string(roleB))
 
-		go verifyReceive(t, channelB, messageSet1, string(roleA), done)
+		go verifyReceive(t, channelB, messageSet1, string(roleB), done)
 		<-done
 		<-done
 		channelA.Close()
@@ -71,18 +72,22 @@ func TestChannelReopen(t *testing.T) {
 	// run all threads in parallel
 	send(agentChannel, messageSet1, "agent")
 	agentChannel.Close()
+
+	// Sleep a bit to allow agentChannel.Close() to finish closing file watcher.
+	time.Sleep(250 * time.Millisecond)
+
 	logger.Info("agent channel closed")
 	workerChannel, err := NewFileWatcherChannel(log.NewMockLogWithContext("WORKER"), ModeWorker, path.Join(defaultRootDir, channelName))
 	assert.NoError(t, err)
 	logger.Info("worker channel opened, start transmission")
-	send(workerChannel, messageSet2, "worker")
+	send(workerChannel, messageSet3, "worker")
 
 	logger.Info("re-opening agent channel...")
 	newAgentChannel, err := NewFileWatcherChannel(log.NewMockLogWithContext("NEWAGENT"), ModeMaster, path.Join(defaultRootDir, channelName))
 	assert.NoError(t, err)
 	send(newAgentChannel, messageSet2, "new agent")
 	assert.NoError(t, err)
-	go verifyReceive(t, newAgentChannel, messageSet2, "new agent", done)
+	go verifyReceive(t, newAgentChannel, messageSet3, "new agent", done)
 	go verifyReceive(t, workerChannel, append(messageSet1, messageSet2...), "worker", done)
 	workerChannel.Close()
 	logger.Info("destroying the file channel")
