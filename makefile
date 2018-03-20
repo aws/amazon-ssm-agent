@@ -43,7 +43,7 @@ coverage:: build-linux
 
 build:: build-linux build-freebsd build-windows build-linux-386 build-windows-386 build-arm
 
-prepack:: cpy-plugins prepack-linux prepack-linux-386 prepack-windows prepack-windows-386 prepack-arm
+prepack:: cpy-plugins prepack-linux prepack-linux-386 prepack-windows prepack-windows-386
 
 package:: create-package-folder package-linux package-windows
 
@@ -220,19 +220,8 @@ prepack-linux:
 	$(COPY) $(BGO_SPACE)/bin/linux_amd64/ssm-cli $(BGO_SPACE)/bin/prepacked/linux_amd64/ssm-cli
 	$(COPY) $(BGO_SPACE)/bin/linux_amd64/ssm-document-worker $(BGO_SPACE)/bin/prepacked/linux_amd64/ssm-document-worker
 	$(COPY) $(BGO_SPACE)/bin/amazon-ssm-agent.json.template $(BGO_SPACE)/bin/prepacked/linux_amd64/amazon-ssm-agent.json.template
-	$(COPY) $(BGO_SPACE)/bin/seelog_unix.xml $(BGO_SPACE)/bin/prepacked/linux_amd64/seelog.xml
+	$(COPY) $(BGO_SPACE)/bin/seelog_unix.xml $(BGO_SPACE)/bin/prepacked/linux_amd64/seelog.xml.template
 	$(COPY) $(BGO_SPACE)/bin/LICENSE $(BGO_SPACE)/bin/prepacked/linux_amd64/LICENSE
-
-.PHONY: prepack-darwin
-prepack-darwin:
-	mkdir -p $(BGO_SPACE)/bin/prepacked/darwin_amd64
-	$(COPY) $(BGO_SPACE)/bin/darwin_amd64/amazon-ssm-agent $(BGO_SPACE)/bin/prepacked/darwin_amd64/amazon-ssm-agent
-	$(COPY) $(BGO_SPACE)/bin/darwin_amd64/updater $(BGO_SPACE)/bin/prepacked/darwin_amd64/updater
-	$(COPY) $(BGO_SPACE)/bin/darwin_amd64/ssm-cli $(BGO_SPACE)/bin/prepacked/darwin_amd64/ssm-cli
-	$(COPY) $(BGO_SPACE)/bin/darwin_amd64/ssm-document-worker $(BGO_SPACE)/bin/prepacked/darwin_amd64/ssm-document-worker
-	$(COPY) $(BGO_SPACE)/bin/amazon-ssm-agent.json.template $(BGO_SPACE)/bin/prepacked/darwin_amd64/amazon-ssm-agent.json.template
-	$(COPY) $(BGO_SPACE)/bin/seelog_unix.xml $(BGO_SPACE)/bin/prepacked/darwin_amd64/seelog.xml
-	$(COPY) $(BGO_SPACE)/bin/LICENSE $(BGO_SPACE)/bin/prepacked/darwin_amd64/LICENSE
 
 .PHONY: prepack-windows
 prepack-windows:
@@ -253,19 +242,8 @@ prepack-linux-386:
 	$(COPY) $(BGO_SPACE)/bin/linux_386/ssm-cli $(BGO_SPACE)/bin/prepacked/linux_386/ssm-cli
 	$(COPY) $(BGO_SPACE)/bin/linux_386/ssm-document-worker $(BGO_SPACE)/bin/prepacked/linux_386/ssm-document-worker
 	$(COPY) $(BGO_SPACE)/bin/amazon-ssm-agent.json.template $(BGO_SPACE)/bin/prepacked/linux_386/amazon-ssm-agent.json.template
-	$(COPY) $(BGO_SPACE)/bin/seelog_unix.xml $(BGO_SPACE)/bin/prepacked/linux_386/seelog.xml
+	$(COPY) $(BGO_SPACE)/bin/seelog_unix.xml $(BGO_SPACE)/bin/prepacked/linux_386/seelog.xml.template
 	$(COPY) $(BGO_SPACE)/bin/LICENSE $(BGO_SPACE)/bin/prepacked/linux_386/LICENSE
-
-.PHONY: prepack-darwin-386
-prepack-darwin-386:
-	mkdir -p $(BGO_SPACE)/bin/prepacked/darwin_386
-	$(COPY) $(BGO_SPACE)/bin/darwin_386/amazon-ssm-agent $(BGO_SPACE)/bin/prepacked/darwin_386/amazon-ssm-agent
-	$(COPY) $(BGO_SPACE)/bin/darwin_386/updater $(BGO_SPACE)/bin/prepacked/darwin_386/updater
-	$(COPY) $(BGO_SPACE)/bin/darwin_386/ssm-cli $(BGO_SPACE)/bin/prepacked/darwin_386/ssm-cli
-	$(COPY) $(BGO_SPACE)/bin/darwin_386/ssm-document-worker $(BGO_SPACE)/bin/prepacked/darwin_386/ssm-document-worker
-	$(COPY) $(BGO_SPACE)/bin/amazon-ssm-agent.json.template $(BGO_SPACE)/bin/prepacked/darwin_386/amazon-ssm-agent.json.template
-	$(COPY) $(BGO_SPACE)/bin/seelog_unix.xml $(BGO_SPACE)/bin/prepacked/darwin_386/seelog.xml
-	$(COPY) $(BGO_SPACE)/bin/LICENSE $(BGO_SPACE)/bin/prepacked/darwin_386/LICENSE
 
 .PHONY: prepack-windows-386
 prepack-windows-386:
@@ -277,17 +255,6 @@ prepack-windows-386:
 	$(COPY) $(BGO_SPACE)/bin/amazon-ssm-agent.json.template $(BGO_SPACE)/bin/prepacked/windows_386/amazon-ssm-agent.json.template
 	$(COPY) $(BGO_SPACE)/bin/seelog_windows.xml.template $(BGO_SPACE)/bin/prepacked/windows_386/seelog.xml.template
 	$(COPY) $(BGO_SPACE)/bin/LICENSE $(BGO_SPACE)/bin/prepacked/windows_386/LICENSE
-
-.PHONY: prepack-arm
-prepack-arm:
-	mkdir -p $(BGO_SPACE)/bin/prepacked/linux_arm
-	$(COPY) $(BGO_SPACE)/bin/linux_arm/amazon-ssm-agent $(BGO_SPACE)/bin/prepacked/linux_arm/amazon-ssm-agent
-	$(COPY) $(BGO_SPACE)/bin/linux_arm/updater $(BGO_SPACE)/bin/prepacked/linux_arm/updater
-	$(COPY) $(BGO_SPACE)/bin/linux_arm/ssm-cli $(BGO_SPACE)/bin/prepacked/linux_arm/ssm-cli
-	$(COPY) $(BGO_SPACE)/bin/linux_arm/ssm-document-worker $(BGO_SPACE)/bin/prepacked/linux_arm/ssm-document-worker
-	$(COPY) $(BGO_SPACE)/bin/amazon-ssm-agent.json.template $(BGO_SPACE)/bin/prepacked/linux_arm/amazon-ssm-agent.json.template
-	$(COPY) $(BGO_SPACE)/bin/seelog_unix.xml $(BGO_SPACE)/bin/prepacked/linux_arm/seelog.xml
-	$(COPY) $(BGO_SPACE)/bin/LICENSE $(BGO_SPACE)/bin/prepacked/linux_arm/LICENSE
 
 .PHONY: create-package-folder
 create-package-folder:
