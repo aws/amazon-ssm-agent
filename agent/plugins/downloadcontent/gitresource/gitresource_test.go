@@ -82,7 +82,7 @@ func TestGitResource_DownloadFile(t *testing.T) {
 	fileMock.On("MakeDirs", strings.TrimSuffix(appconfig.DownloadRoot, "/")).Return(nil)
 	fileMock.On("WriteFile", filepath.Join(appconfig.DownloadRoot, "file.ext"), mock.Anything).Return(nil)
 
-	err := gitResource.Download(logMock, fileMock, "")
+	err, _ := gitResource.DownloadRemoteResource(logMock, fileMock, "")
 	clientMock.AssertExpectations(t)
 	fileMock.AssertExpectations(t)
 	assert.NoError(t, err)
@@ -126,7 +126,7 @@ func TestGitResource_DownloadDirectory(t *testing.T) {
 	fileMock.On("MakeDirs", strings.TrimSuffix(appconfig.DownloadRoot, "/")).Return(nil)
 	fileMock.On("WriteFile", fileutil.BuildPath(appconfig.DownloadRoot, "file.rb"), mock.Anything).Return(nil)
 
-	err := gitResource.Download(logMock, fileMock, "")
+	err, _ := gitResource.DownloadRemoteResource(logMock, fileMock, "")
 	clientMock.AssertExpectations(t)
 	fileMock.AssertExpectations(t)
 	assert.NoError(t, err)
@@ -156,7 +156,7 @@ func TestGitResource_DownloadFileMissing(t *testing.T) {
 
 	gitResource := NewResourceWithMockedClient(&clientMock)
 
-	err := gitResource.Download(logMock, fileMock, "")
+	err, _ := gitResource.DownloadRemoteResource(logMock, fileMock, "")
 
 	clientMock.AssertExpectations(t)
 	assert.Error(t, err)
@@ -179,7 +179,7 @@ func TestGitResource_DownloadParseGetOptionFail(t *testing.T) {
 	gitResource := NewResourceWithMockedClient(&clientMock)
 
 	fileMock := filemock.FileSystemMock{}
-	err := gitResource.Download(logMock, fileMock, "")
+	err, _ := gitResource.DownloadRemoteResource(logMock, fileMock, "")
 
 	clientMock.AssertExpectations(t)
 	assert.Error(t, err)
@@ -211,7 +211,7 @@ func TestGitResource_DownloadGetRepositoryContentsFail(t *testing.T) {
 
 	gitResource := NewResourceWithMockedClient(&clientMock)
 
-	err := gitResource.Download(logMock, fileMock, "")
+	err, _ := gitResource.DownloadRemoteResource(logMock, fileMock, "")
 
 	clientMock.AssertExpectations(t)
 	assert.Error(t, err)
@@ -326,7 +326,7 @@ func TestGitResource_DownloadFileToDifferentName(t *testing.T) {
 	fileMock.On("MakeDirs", filepath.Dir(destPath)).Return(nil)
 	fileMock.On("WriteFile", destPath, mock.Anything).Return(nil)
 
-	err := gitResource.Download(logMock, fileMock, destPath)
+	err, _ := gitResource.DownloadRemoteResource(logMock, fileMock, destPath)
 	clientMock.AssertExpectations(t)
 	fileMock.AssertExpectations(t)
 	assert.NoError(t, err)

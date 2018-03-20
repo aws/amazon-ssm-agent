@@ -146,7 +146,7 @@ func (p *Plugin) runCopyContent(log log.T, input *DownloadContentPlugin, config 
 		return
 	}
 	log.Debug("Downloading resource")
-	if err = remoteResource.Download(log, p.filesys, destinationPath); err != nil {
+	if err, _ = remoteResource.DownloadRemoteResource(log, p.filesys, destinationPath); err != nil {
 		output.MarkAsFailed(err)
 		return
 	}

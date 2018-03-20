@@ -68,19 +68,20 @@ func parseSourceInfo(sourceInfo string) (ssmdoc SSMDocInfo, err error) {
 	return ssmdoc, nil
 }
 
-// Download calls download to pull down files or directory from s3
-func (ssmdoc *SSMDocResource) Download(log log.T, filesys filemanager.FileSystem, destinationPath string) (err error) {
-
+// DownloadRemoteResource calls download to pull down files or directory from s3
+func (ssmdoc *SSMDocResource) DownloadRemoteResource(log log.T, filesys filemanager.FileSystem, destinationPath string) (err error, result *remoteresource.DownloadResult) {
 	if destinationPath == "" {
 		destinationPath = appconfig.DownloadRoot
 	}
+
+	result = &remoteresource.DownloadResult{}
 
 	docName, docVersion := docparser.ParseDocumentNameAndVersion(ssmdoc.Info.DocName)
 	log.Debug("Making a call to get document", docName, docVersion)
 	var docResponse *ssm.GetDocumentOutput
 	if docResponse, err = ssmdoc.ssmdocdep.GetDocument(log, docName, docVersion); err != nil {
 		log.Errorf("Unable to get ssm document. %v", err)
-		return err
+		return err, nil
 	}
 
 	var destinationFilePath string
@@ -92,10 +93,10 @@ func (ssmdoc *SSMDocResource) Download(log log.T, filesys filemanager.FileSystem
 	}
 	if err = system.SaveFileContent(log, filesys, destinationFilePath, *docResponse.Content); err != nil {
 		log.Errorf("Error saving file - %v", err)
-		return
+		return err, nil
 	}
 
-	return
+	return nil, result
 }
 
 // ValidateLocationInfo ensures that the required parameters of SourceInfo are specified

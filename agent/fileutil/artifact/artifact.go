@@ -193,9 +193,9 @@ func ListS3Folders(log log.T, amazonS3URL s3util.AmazonS3URL) (folderNames []str
 	return folders, nil
 }
 
-// ListS3Objects returns all the objects (files nad folders) under a given S3 URL where folders are keys whose prefix
+// ListS3Directory returns all the objects (files and folders) under a given S3 URL where folders are keys whose prefix
 // is the URL key and contain a / after the prefix.
-func ListS3Objects(log log.T, amazonS3URL s3util.AmazonS3URL) (folderNames []string, err error) {
+func ListS3Directory(log log.T, amazonS3URL s3util.AmazonS3URL) (folderNames []string, err error) {
 	config, _ := awsConfig(log, amazonS3URL)
 	var params *s3.ListObjectsInput
 	prefix := amazonS3URL.Key
@@ -218,14 +218,14 @@ func ListS3Objects(log log.T, amazonS3URL s3util.AmazonS3URL) (folderNames []str
 	s3client := s3.New(session.New(config))
 	obj, err := s3client.ListObjects(params)
 	if err != nil {
-		log.Errorf("ListS3Objects error %v", err.Error())
+		log.Errorf("ListS3Directory error %v", err.Error())
 		return folderNames, err
 	}
 
 	log.Debugf("Contents %v ", obj.Contents)
 	for i, contents := range obj.Contents {
 		folderNames = append(folderNames, *contents.Key)
-		log.Debug("Name of folder - ", folderNames[i])
+		log.Debug("Name of file/folder - ", folderNames[i])
 	}
 	return
 }
