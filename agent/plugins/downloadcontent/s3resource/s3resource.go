@@ -22,6 +22,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/fileutil/filemanager"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/plugins/downloadcontent/remoteresource"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/downloadcontent/system"
 	"github.com/aws/amazon-ssm-agent/agent/s3util"
 
@@ -72,12 +73,14 @@ func parseSourceInfo(sourceInfo string) (s3Info S3Info, err error) {
 	return
 }
 
-// Download calls download to pull down files or directory from s3
-func (s3 *S3Resource) Download(log log.T, filesys filemanager.FileSystem, destPath string) (err error) {
+// DownloadRemoteResource calls download to pull down files or directory from s3
+func (s3 *S3Resource) DownloadRemoteResource(log log.T, filesys filemanager.FileSystem, destPath string) (err error, result *remoteresource.DownloadResult) {
 	var fileURL *url.URL
 	var unescapedURL string
 	var folders []string
 	var localFilePath string
+
+	result = &remoteresource.DownloadResult{}
 
 	isDirTypeDownloaded := true
 	if destPath == "" {
@@ -93,7 +96,7 @@ func (s3 *S3Resource) Download(log log.T, filesys filemanager.FileSystem, destPa
 	s3.Info.Path = strings.Replace(s3.Info.Path, "+", "%20", -1)
 
 	if fileURL, err = url.Parse(s3.Info.Path); err != nil {
-		return err
+		return err, nil
 	}
 	log.Debug("File URL - ", fileURL.String())
 
@@ -102,8 +105,8 @@ func (s3 *S3Resource) Download(log log.T, filesys filemanager.FileSystem, destPa
 
 	s3.s3Object.Region = s3util.GetBucketRegion(log, s3.s3Object.Bucket, s3util.HttpProviderImpl{})
 	// Create an object for the source URL. This can be used to list the objects in the folder
-	if folders, err = dep.ListS3Objects(log, s3.s3Object); err != nil {
-		return err
+	if folders, err = dep.ListS3Directory(log, s3.s3Object); err != nil {
+		return err, nil
 	}
 	if len(folders) == 0 {
 		// In case of a file download, append the filename to folders
@@ -120,10 +123,10 @@ func (s3 *S3Resource) Download(log log.T, filesys filemanager.FileSystem, destPa
 			subFolderPath := strings.TrimPrefix(files, s3.s3Object.Key)
 			var bucketURL *url.URL
 			if bucketURL, err = s3.getS3BucketURLString(log); err != nil {
-				return fmt.Errorf("Error while obtaining URL parsing - %v", bucketURL)
+				return fmt.Errorf("Error while obtaining URL parsing - %v", bucketURL), nil
 			}
 			if bucketURL == nil {
-				return errors.New("URL obtained is nil")
+				return errors.New("URL obtained is nil"), nil
 			}
 			log.Debug("S3 bucket URL -", bucketURL.String())
 			var input artifact.DownloadInput
@@ -142,7 +145,7 @@ func (s3 *S3Resource) Download(log log.T, filesys filemanager.FileSystem, destPa
 			input.SourceURL = strings.Replace(input.SourceURL, "+", "%2B", -1)
 			log.Debug("SourceURL ", input.SourceURL)
 			if unescapedURL, err = url.QueryUnescape(input.SourceURL); err != nil {
-				return err
+				return err, nil
 			}
 			log.Debug("UnescapedURL ", unescapedURL)
 			destinationFile := filepath.Base(unescapedURL)
@@ -162,16 +165,17 @@ func (s3 *S3Resource) Download(log log.T, filesys filemanager.FileSystem, destPa
 			input.DestinationDirectory = localFilePath
 			downloadOutput, err := dep.Download(log, input)
 			if err != nil {
-				return err
+				return err, nil
 			}
 
 			if err = system.RenameFile(log, filesys, downloadOutput.LocalFilePath, destinationFile); err != nil {
 				return fmt.Errorf("Something went wrong when trying to access downloaded content. It is "+
-					"possible that the content was not downloaded because the path provided is wrong. %v", err)
+						"possible that the content was not downloaded because the path provided is wrong. %v", err),
+					nil
 			}
 		}
 	}
-	return nil
+	return nil, result
 }
 
 // ValidateLocationInfo ensures that the required parameters of SourceInfo are specified

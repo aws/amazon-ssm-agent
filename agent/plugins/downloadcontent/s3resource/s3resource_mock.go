@@ -26,7 +26,7 @@ type s3DepMock struct {
 	mock.Mock
 }
 
-func (s3 s3DepMock) ListS3Objects(log log.T, amazonS3URL s3util.AmazonS3URL) (folderNames []string, err error) {
+func (s3 s3DepMock) ListS3Directory(log log.T, amazonS3URL s3util.AmazonS3URL) (folderNames []string, err error) {
 	args := s3.Called(log, amazonS3URL)
 	return args.Get(0).([]string), args.Error(1)
 }

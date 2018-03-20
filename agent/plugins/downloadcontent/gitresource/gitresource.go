@@ -22,6 +22,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/downloadcontent/gitresource/privategithub"
+	"github.com/aws/amazon-ssm-agent/agent/plugins/downloadcontent/remoteresource"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/downloadcontent/system"
 
 	"errors"
@@ -77,21 +78,22 @@ func parseSourceInfo(sourceInfo string) (gitInfo GitInfo, err error) {
 	return gitInfo, nil
 }
 
-// Download calls download to pull down files or directory from github
-func (git *GitResource) Download(log log.T, filesys filemanager.FileSystem, destPath string) (err error) {
-	// if destination directory is not specified, specify the directory
+// DownloadRemoteResource calls download to pull down files or directory from github
+func (git *GitResource) DownloadRemoteResource(log log.T, filesys filemanager.FileSystem, destPath string) (err error, result *remoteresource.DownloadResult) {
 	if destPath == "" {
 		destPath = appconfig.DownloadRoot
 	}
 
+	result = &remoteresource.DownloadResult{}
+
 	log.Debug("Destination path from Download to download - ", destPath)
 	// call download that has object of type GitInfo that keeps changing recursively for directory download
 	// call is made with the assumption that the content is of file type
-	return git.download(log, filesys, git.Info, destPath, false)
+	return git.download(log, filesys, git.Info, destPath, false, result), result
 }
 
 //download pulls down either the file or directory specified and stores it on disk
-func (git *GitResource) download(log log.T, filesys filemanager.FileSystem, info GitInfo, destinationDir string, isDirTypeDownload bool) (err error) {
+func (git *GitResource) download(log log.T, filesys filemanager.FileSystem, info GitInfo, destinationDir string, isDirTypeDownload bool, result *remoteresource.DownloadResult) (err error) {
 
 	opt, err := git.client.ParseGetOptions(log, info.GetOptions)
 	if err != nil {
@@ -120,7 +122,7 @@ func (git *GitResource) download(log log.T, filesys filemanager.FileSystem, info
 				GetOptions: info.GetOptions,
 			}
 			destDir := filepath.Join(destinationDir, filepath.Base(dirContent.GetPath()))
-			if err = git.download(log, filesys, dirInput, destDir, true); err != nil {
+			if err = git.download(log, filesys, dirInput, destDir, true, result); err != nil {
 				log.Error("Error retrieving file from directory", destinationDir)
 				return err
 			}

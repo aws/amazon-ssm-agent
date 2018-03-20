@@ -71,7 +71,7 @@ func TestSSMDocResource_FullARNNameInput(t *testing.T) {
 
 	ssmresource.ssmdocdep = depMock
 
-	err = ssmresource.Download(logMock, fileMock, "destination")
+	err, _ = ssmresource.DownloadRemoteResource(logMock, fileMock, "destination")
 
 	assert.NoError(t, err)
 	depMock.AssertExpectations(t)
@@ -105,7 +105,7 @@ func TestSSMDocResource_FullARNNameInputWithVersion(t *testing.T) {
 
 	ssmresource.ssmdocdep = depMock
 
-	err = ssmresource.Download(logMock, fileMock, "destination")
+	err, _ = ssmresource.DownloadRemoteResource(logMock, fileMock, "destination")
 
 	assert.NoError(t, err)
 	depMock.AssertExpectations(t)
@@ -153,7 +153,7 @@ func TestSSMDocResource_Download(t *testing.T) {
 
 	ssmresource.ssmdocdep = depMock
 
-	err = ssmresource.Download(logMock, fileMock, "destination")
+	err, _ = ssmresource.DownloadRemoteResource(logMock, fileMock, "destination")
 
 	assert.NoError(t, err)
 	depMock.AssertExpectations(t)
@@ -185,7 +185,7 @@ func TestSSMDocResource_DownloadNoDestination(t *testing.T) {
 
 	ssmresource.ssmdocdep = depMock
 
-	err = ssmresource.Download(logMock, fileMock, "")
+	err, _ = ssmresource.DownloadRemoteResource(logMock, fileMock, "")
 
 	assert.Error(t, err, "Error")
 	depMock.AssertExpectations(t)
@@ -215,7 +215,7 @@ func TestSSMDocResource_DownloadToOtherName(t *testing.T) {
 
 	ssmresource.ssmdocdep = depMock
 
-	err = ssmresource.Download(logMock, fileMock, "destination")
+	err, _ = ssmresource.DownloadRemoteResource(logMock, fileMock, "destination")
 
 	assert.NoError(t, err)
 	depMock.AssertExpectations(t)

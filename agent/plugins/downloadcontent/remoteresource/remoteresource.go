@@ -25,8 +25,13 @@ const (
 	YAMLExtension = ".yaml"
 )
 
+type DownloadResult struct {
+	Directories []string
+	Files       []string
+}
+
 // RemoteResource is an interface for accessing remote resources. Every type of remote resource is expected to implement RemoteResource interface
 type RemoteResource interface {
-	Download(log log.T, filesys filemanager.FileSystem, destinationDir string) error
+	DownloadRemoteResource(log log.T, filesys filemanager.FileSystem, destinationDir string) (err error, result *DownloadResult)
 	ValidateLocationInfo() (bool, error)
 }

@@ -152,12 +152,12 @@ func TestS3Resource_Download(t *testing.T) {
 	}
 	var folders []string
 	depMock.On("Download", logMock, input).Return(output, nil)
-	depMock.On("ListS3Objects", logMock, s3Object).Return(folders, nil)
+	depMock.On("ListS3Directory", logMock, s3Object).Return(folders, nil)
 
 	fileMock.On("MoveAndRenameFile", ".", "destination", ".", "file.rb").Return(true, nil)
 
 	dep = depMock
-	err := resource.Download(logMock, fileMock, "destination")
+	err, _ := resource.DownloadRemoteResource(logMock, fileMock, "destination")
 
 	assert.NoError(t, err)
 	depMock.AssertExpectations(t)
@@ -198,13 +198,13 @@ func TestS3Resource_DownloadDirectory(t *testing.T) {
 	folders = append(folders, "foldername/anotherfile.ps")
 	depMock.On("Download", logMock, input1).Return(output1, nil).Once()
 	depMock.On("Download", logMock, input2).Return(output2, nil).Once()
-	depMock.On("ListS3Objects", logMock, s3Object).Return(folders, nil)
+	depMock.On("ListS3Directory", logMock, s3Object).Return(folders, nil)
 
 	fileMock.On("MoveAndRenameFile", "/var/log/amazon/ssm/download", "randomfilename", "/var/log/amazon/ssm/download", "filename.ps").Return(true, nil)
 	fileMock.On("MoveAndRenameFile", "/var/log/amazon/ssm/download", "anotherrandomfile", "/var/log/amazon/ssm/download", "anotherfile.ps").Return(true, nil)
 
 	dep = depMock
-	err := resource.Download(logMock, fileMock, "")
+	err, _ := resource.DownloadRemoteResource(logMock, fileMock, "")
 
 	assert.NoError(t, err)
 	depMock.AssertExpectations(t)
@@ -256,13 +256,13 @@ func TestS3Resource_DownloadDirectoryWithSubFolders(t *testing.T) {
 	depMock.On("Download", logMock, input1).Return(output1, nil).Once()
 	depMock.On("Download", logMock, input2).Return(output2, nil).Once()
 	depMock.On("Download", logMock, input3).Return(output3, nil).Once()
-	depMock.On("ListS3Objects", logMock, s3Object).Return(folders, nil)
+	depMock.On("ListS3Directory", logMock, s3Object).Return(folders, nil)
 	fileMock.On("MoveAndRenameFile", "/var/log/amazon/ssm/download", "randomfilename", "/var/log/amazon/ssm/download", "filename.ps").Return(true, nil)
 	fileMock.On("MoveAndRenameFile", "/var/log/amazon/ssm/download", "anotherrandomfile", "/var/log/amazon/ssm/download", "anotherfile.ps").Return(true, nil)
 	fileMock.On("MoveAndRenameFile", "/var/log/amazon/ssm/download/subfolder", "justanumber", "/var/log/amazon/ssm/download/subfolder", "file.ps").Return(true, nil)
 
 	dep = depMock
-	err := resource.Download(logMock, fileMock, "")
+	err, _ := resource.DownloadRemoteResource(logMock, fileMock, "")
 
 	assert.NoError(t, err)
 	depMock.AssertExpectations(t)
@@ -295,13 +295,13 @@ func TestS3Resource_DownloadAbsPath(t *testing.T) {
 
 	var folders []string
 
-	depMock.On("ListS3Objects", logMock, resource.s3Object).Return(folders, nil).Once()
+	depMock.On("ListS3Directory", logMock, resource.s3Object).Return(folders, nil).Once()
 	depMock.On("Download", logMock, input).Return(output, nil).Once()
 
 	fileMock.On("MoveAndRenameFile", "/var/tmp/foldername", "justanumber", "/var/tmp/foldername", "filename.ps").Return(true, nil)
 
 	dep = depMock
-	err := resource.Download(logMock, fileMock, "/var/tmp/foldername")
+	err, _ := resource.DownloadRemoteResource(logMock, fileMock, "/var/tmp/foldername")
 
 	assert.NoError(t, err)
 	depMock.AssertExpectations(t)
@@ -336,12 +336,12 @@ func TestS3Resource_DownloadRelativePathNameChange(t *testing.T) {
 	}
 	var folders []string
 	depMock.On("Download", logMock, input).Return(output, nil)
-	depMock.On("ListS3Objects", logMock, s3Object).Return(folders, nil)
+	depMock.On("ListS3Directory", logMock, s3Object).Return(folders, nil)
 
 	fileMock.On("MoveAndRenameFile", ".", "random", ".", "destination").Return(true, nil)
 
 	dep = depMock
-	err := resource.Download(logMock, fileMock, "destination")
+	err, _ := resource.DownloadRemoteResource(logMock, fileMock, "destination")
 
 	assert.NoError(t, err)
 	depMock.AssertExpectations(t)

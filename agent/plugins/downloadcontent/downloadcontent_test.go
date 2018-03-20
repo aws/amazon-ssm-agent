@@ -220,7 +220,7 @@ func TestPlugin_ExecuteGitHubFile(t *testing.T) {
 	githubRemoteresourceMock := func(log log.T, locationtype, locationInfo string) (remoteresource.RemoteResource, error) {
 
 		githubcopyContentResourceMock.On("ValidateLocationInfo").Return(true, nil).Once()
-		githubcopyContentResourceMock.On("Download", contextMock.Log(), githubCopyContentFileMock, "orch/downloads/destination").Return(nil).Once()
+		githubcopyContentResourceMock.On("DownloadRemoteResource", contextMock.Log(), githubCopyContentFileMock, "orch/downloads/destination").Return(nil, resourcemock.NewEmptyDownloadResult()).Once()
 		return githubcopyContentResourceMock, nil
 	}
 
@@ -260,7 +260,7 @@ func TestPlugin_ExecuteS3File(t *testing.T) {
 	s3MockRemoteResource := func(log log.T, locationtype, locationInfo string) (remoteresource.RemoteResource, error) {
 
 		s3copyContentResourceMock.On("ValidateLocationInfo").Return(true, nil).Once()
-		s3copyContentResourceMock.On("Download", contextMock.Log(), s3CopyContentFileMock, "/var/tmp/destination").Return(nil).Once()
+		s3copyContentResourceMock.On("DownloadRemoteResource", contextMock.Log(), s3CopyContentFileMock, "/var/tmp/destination").Return(nil, resourcemock.NewEmptyDownloadResult()).Once()
 		return s3copyContentResourceMock, nil
 	}
 	p := &Plugin{
@@ -298,7 +298,7 @@ func TestPlugin_ExecuteSSMDoc(t *testing.T) {
 
 	ssmDocMockRemoteResource := func(log log.T, locationtype, locationInfo string) (remoteresource.RemoteResource, error) {
 		ssmDocCopyContentResourceMock.On("ValidateLocationInfo").Return(true, nil).Once()
-		ssmDocCopyContentResourceMock.On("Download", contextMock.Log(), ssmDocCopyContentFileMock, "/var/tmp/destination/").Return(nil).Once()
+		ssmDocCopyContentResourceMock.On("DownloadRemoteResource", contextMock.Log(), ssmDocCopyContentFileMock, "/var/tmp/destination/").Return(nil, resourcemock.NewEmptyDownloadResult()).Once()
 		return ssmDocCopyContentResourceMock, nil
 	}
 	p := &Plugin{
@@ -334,7 +334,7 @@ func TestPlugin_ExecuteSSMDocError(t *testing.T) {
 	mockIOHandler.On("MarkAsFailed", mock.Anything).Return()
 
 	ssmDocMockRemoteResource := func(log log.T, locationtype, locationInfo string) (remoteresource.RemoteResource, error) {
-		ssmDoccopyContentResourceMock.On("Download", contextMock.Log(), ssmDocCopyContentFileMock, "/var/tmp/destination/").Return(errors.New("Document name must be specified")).Once()
+		ssmDoccopyContentResourceMock.On("DownloadRemoteResource", contextMock.Log(), ssmDocCopyContentFileMock, "/var/tmp/destination/").Return(errors.New("Document name must be specified"), (*remoteresource.DownloadResult)(nil)).Once()
 		ssmDoccopyContentResourceMock.On("ValidateLocationInfo").Return(true, nil).Once()
 		return ssmDoccopyContentResourceMock, nil
 	}
@@ -408,20 +408,20 @@ func TestParseAndValidateInput_NoInput(t *testing.T) {
 func fakeRemoteResource(log log.T, locationType string, locationInfo string) (remoteresource.RemoteResource, error) {
 
 	copyContentResourceMock.On("ValidateLocationInfo").Return(true, nil).Once()
-	copyContentResourceMock.On("Download", logger, copyContentFileMock, mock.Anything).Return(nil).Once()
+	copyContentResourceMock.On("DownloadRemoteResource", logger, copyContentFileMock, mock.Anything).Return(nil, resourcemock.NewEmptyDownloadResult()).Once()
 	return copyContentResourceMock, nil
 }
 
 func absoluteDestinationDirRemoteResource(log log.T, locationType string, locationInfo string) (remoteresource.RemoteResource, error) {
 
 	copyContentResourceMock.On("ValidateLocationInfo").Return(true, nil).Once()
-	copyContentResourceMock.On("Download", logger, copyContentFileMock, "/var/temp/fake-dir").Return(nil).Once()
+	copyContentResourceMock.On("DownloadRemoteResource", logger, copyContentFileMock, "/var/temp/fake-dir").Return(nil, resourcemock.NewEmptyDownloadResult()).Once()
 	return copyContentResourceMock, nil
 }
 
 func relativeDestinationDirRemoteResource(log log.T, locationType string, locationInfo string) (remoteresource.RemoteResource, error) {
 	copyContentResourceMock.On("ValidateLocationInfo").Return(true, nil).Once()
-	copyContentResourceMock.On("Download", logger, copyContentFileMock, "orch/downloads/temp/fake-dir/").Return(nil).Once()
+	copyContentResourceMock.On("DownloadRemoteResource", logger, copyContentFileMock, "orch/downloads/temp/fake-dir/").Return(nil, resourcemock.NewEmptyDownloadResult()).Once()
 	return copyContentResourceMock, nil
 }
 
