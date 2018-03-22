@@ -36,7 +36,7 @@ func executeConfigurePackage(
 	initialInstallState localpackages.InstallState,
 	output contracts.PluginOutputter) {
 
-	trace := tracer.BeginSection(fmt.Sprintf("execute configure - state: %s", initialInstallState))
+	trace := tracer.BeginSection(fmt.Sprintf("execute configure - state: %v", initialInstallState))
 	defer trace.End()
 
 	switch initialInstallState {
@@ -58,7 +58,7 @@ func executeConfigurePackage(
 
 // set package install state and log any error
 func setNewInstallState(tracer trace.Tracer, repository localpackages.Repository, inst installer.Installer, newInstallState localpackages.InstallState) {
-	trace := tracer.BeginSection(fmt.Sprintf("set install state install %s/%s - state: %s", inst.PackageName(), inst.Version(), newInstallState))
+	trace := tracer.BeginSection(fmt.Sprintf("set install state install %s/%s - state: %v", inst.PackageName(), inst.Version(), newInstallState))
 
 	if err := repository.SetInstallState(tracer, inst.PackageName(), inst.Version(), newInstallState); err != nil {
 		trace.WithError(err)

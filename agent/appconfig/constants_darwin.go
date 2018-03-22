@@ -1,4 +1,4 @@
-// Copyright 2016 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+// Copyright 2018 Amazon.com, Inc. or its affiliates. All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License"). You may not
 // use this file except in compliance with the License. A copy of the
@@ -18,13 +18,16 @@ package appconfig
 
 const (
 	// DefaultProgramFolder is the default folder for SSM
-	DefaultProgramFolder = "/opt/ssm/"
+	DefaultProgramFolder = "/opt/aws/ssm/"
 
 	// AppConfigPath is the path of the AppConfig
 	AppConfigPath = DefaultProgramFolder + AppConfigFileName
 
 	// PackageRoot specifies the directory under which packages will be downloaded and installed
 	PackageRoot = DefaultProgramFolder + "packages"
+
+	// PackageLockRoot specifies the directory under which package lock files will reside
+	PackageLockRoot = DefaultProgramFolder + "locks/packages"
 
 	// PackagePlatform is the platform name to use when looking for packages
 	PackagePlatform = "darwin"
@@ -38,6 +41,7 @@ const (
 	// LocalCommandRootSubmitted is the directory where locally submitted command documents
 	// are moved when they have been picked up
 	LocalCommandRootSubmitted = DefaultProgramFolder + "localcommands/submitted"
+	LocalCommandRootCompleted = DefaultProgramFolder + "localcommands/completed"
 
 	// LocalCommandRootInvalid is the directory where locally submitted command documents
 	// are moved if the service cannot validate the document (generally impossible via cli)
@@ -61,6 +65,9 @@ const (
 	// DefaultPluginPath represents the directory for storing plugins in SSM
 	DefaultPluginPath = DefaultProgramFolder + "plugins"
 
+	// ManifestCacheDirectory represents the directory for storing all downloaded manifest files
+	ManifestCacheDirectory = DefaultProgramFolder + "manifests"
+
 	// List all plugin names, unfortunately golang doesn't support const arrays of strings
 
 	// RebootExitCode that would trigger a Soft Reboot
@@ -68,6 +75,8 @@ const (
 
 	// Default Custom Inventory Inventory Folder
 	DefaultCustomInventoryFolder = DefaultDataStorePath + "inventory/custom"
+
+	DefaultDocumentWorker = DefaultProgramFolder + "bin/ssm-document-worker"
 
 	// PowerShellPluginCommandName is the path of the powershell.exe to be used by the runPowerShellScript plugin
 	PowerShellPluginCommandName = "/usr/bin/powershell"
