@@ -1,5 +1,10 @@
 Latest
 ===============
+- Added support for agent hibernation so that Agent backs off or enters hibernation mode if it does not have access to the service
+- Various bug fixes
+
+2.2.355.0
+===============
 - Fix S3Download to download from cross regions.
 - Various bug fixes
 
