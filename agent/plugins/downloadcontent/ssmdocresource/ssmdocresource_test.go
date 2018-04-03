@@ -71,11 +71,14 @@ func TestSSMDocResource_FullARNNameInput(t *testing.T) {
 
 	ssmresource.ssmdocdep = depMock
 
-	err, _ = ssmresource.DownloadRemoteResource(logMock, fileMock, "destination")
+	err, result := ssmresource.DownloadRemoteResource(logMock, fileMock, "destination")
 
 	assert.NoError(t, err)
 	depMock.AssertExpectations(t)
 	fileMock.AssertExpectations(t)
+	assert.NotNil(t, result)
+	assert.Equal(t, 1, len(result.Files))
+	assert.Equal(t, filepath.Join(dir, "mySharedDocument.json"), result.Files[0])
 }
 
 func TestSSMDocResource_FullARNNameInputWithVersion(t *testing.T) {
@@ -105,11 +108,14 @@ func TestSSMDocResource_FullARNNameInputWithVersion(t *testing.T) {
 
 	ssmresource.ssmdocdep = depMock
 
-	err, _ = ssmresource.DownloadRemoteResource(logMock, fileMock, "destination")
+	err, result := ssmresource.DownloadRemoteResource(logMock, fileMock, "destination")
 
 	assert.NoError(t, err)
 	depMock.AssertExpectations(t)
 	fileMock.AssertExpectations(t)
+	assert.NotNil(t, result)
+	assert.Equal(t, 1, len(result.Files))
+	assert.Equal(t, filepath.Join(dir, "mySharedDocument.json"), result.Files[0])
 }
 
 func TestSSMDocResource_ValidateLocationInfoNoName(t *testing.T) {
@@ -153,11 +159,14 @@ func TestSSMDocResource_Download(t *testing.T) {
 
 	ssmresource.ssmdocdep = depMock
 
-	err, _ = ssmresource.DownloadRemoteResource(logMock, fileMock, "destination")
+	err, result := ssmresource.DownloadRemoteResource(logMock, fileMock, "destination")
 
 	assert.NoError(t, err)
 	depMock.AssertExpectations(t)
 	fileMock.AssertExpectations(t)
+	assert.NotNil(t, result)
+	assert.Equal(t, 1, len(result.Files))
+	assert.Equal(t, filepath.Join(dir, "AWS-ExecuteCommand.json"), result.Files[0])
 }
 
 func TestSSMDocResource_DownloadNoDestination(t *testing.T) {
@@ -185,11 +194,12 @@ func TestSSMDocResource_DownloadNoDestination(t *testing.T) {
 
 	ssmresource.ssmdocdep = depMock
 
-	err, _ = ssmresource.DownloadRemoteResource(logMock, fileMock, "")
+	err, result := ssmresource.DownloadRemoteResource(logMock, fileMock, "")
 
 	assert.Error(t, err, "Error")
 	depMock.AssertExpectations(t)
 	fileMock.AssertExpectations(t)
+	assert.Nil(t, result)
 }
 
 func TestSSMDocResource_DownloadToOtherName(t *testing.T) {
@@ -215,11 +225,14 @@ func TestSSMDocResource_DownloadToOtherName(t *testing.T) {
 
 	ssmresource.ssmdocdep = depMock
 
-	err, _ = ssmresource.DownloadRemoteResource(logMock, fileMock, "destination")
+	err, result := ssmresource.DownloadRemoteResource(logMock, fileMock, "destination")
 
 	assert.NoError(t, err)
 	depMock.AssertExpectations(t)
 	fileMock.AssertExpectations(t)
+	assert.NotNil(t, result)
+	assert.Equal(t, 1, len(result.Files))
+	assert.Equal(t, "destination", result.Files[0])
 }
 
 type ssmDocDepMock struct {

@@ -89,7 +89,11 @@ func (git *GitResource) DownloadRemoteResource(log log.T, filesys filemanager.Fi
 	log.Debug("Destination path from Download to download - ", destPath)
 	// call download that has object of type GitInfo that keeps changing recursively for directory download
 	// call is made with the assumption that the content is of file type
-	return git.download(log, filesys, git.Info, destPath, false, result), result
+	if err := git.download(log, filesys, git.Info, destPath, false, result); err != nil {
+		return err, nil
+	}
+
+	return nil, result
 }
 
 //download pulls down either the file or directory specified and stores it on disk
@@ -147,6 +151,8 @@ func (git *GitResource) download(log log.T, filesys filemanager.FileSystem, info
 			log.Errorf("Error obtaining file content from GitHub file - %v, %v", fileMetadata.GetPath(), err)
 			return err
 		}
+
+		result.Files = append(result.Files, destinationDir)
 	} else {
 		return fmt.Errorf("Could not download from GitHub repository")
 	}

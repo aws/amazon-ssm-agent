@@ -19,6 +19,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
+	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil/filemanager"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
@@ -145,13 +146,15 @@ func (p *Plugin) runCopyContent(log log.T, input *DownloadContentPlugin, config 
 		output.MarkAsFailed(err)
 		return
 	}
+
+	var result *remoteresource.DownloadResult
 	log.Debug("Downloading resource")
-	if err, _ = remoteResource.DownloadRemoteResource(log, p.filesys, destinationPath); err != nil {
+	if err, result = remoteResource.DownloadRemoteResource(log, p.filesys, destinationPath); err != nil {
 		output.MarkAsFailed(err)
 		return
 	}
 
-	if err := SetPermission(log, destinationPath); err != nil {
+	if err := setPermissions(log, result); err != nil {
 		output.MarkAsFailed(fmt.Errorf("Failed to set right permissions to the content. Error - %v", err))
 		return
 	}
@@ -159,6 +162,20 @@ func (p *Plugin) runCopyContent(log log.T, input *DownloadContentPlugin, config 
 	output.AppendInfof("Content downloaded to %v", destinationPath)
 	output.MarkAsSucceeded()
 	return
+}
+
+func setPermissions(log log.T, result *remoteresource.DownloadResult) error {
+	for _, path := range result.Files {
+		log.Infof("Setting permission for file %v", path)
+		if fileutil.IsDirectory(path) {
+			return fmt.Errorf("Internal error - file is expected, but found directory - %v", path)
+		}
+		if err := SetPermission(log, path); err != nil {
+			return fmt.Errorf("Failed to set right permissions to the content. Error - %v", err)
+		}
+	}
+
+	return nil
 }
 
 // Name returns the plugin name

@@ -26,8 +26,7 @@ const (
 )
 
 type DownloadResult struct {
-	Directories []string
-	Files       []string
+	Files []string
 }
 
 // RemoteResource is an interface for accessing remote resources. Every type of remote resource is expected to implement RemoteResource interface

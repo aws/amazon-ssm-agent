@@ -96,6 +96,8 @@ func (ssmdoc *SSMDocResource) DownloadRemoteResource(log log.T, filesys filemana
 		return err, nil
 	}
 
+	result.Files = append(result.Files, destinationFilePath)
+
 	return nil, result
 }
 

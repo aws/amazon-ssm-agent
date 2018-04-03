@@ -173,6 +173,8 @@ func (s3 *S3Resource) DownloadRemoteResource(log log.T, filesys filemanager.File
 						"possible that the content was not downloaded because the path provided is wrong. %v", err),
 					nil
 			}
+
+			result.Files = append(result.Files, filepath.Join(input.DestinationDirectory, destinationFile))
 		}
 	}
 	return nil, result
