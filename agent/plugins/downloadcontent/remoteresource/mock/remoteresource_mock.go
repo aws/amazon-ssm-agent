@@ -37,9 +37,9 @@ func (resourceMock RemoteResourceMock) ValidateLocationInfo() (bool, error) {
 }
 
 func NewEmptyDownloadResult() *remoteresource.DownloadResult {
-	return &remoteresource.DownloadResult{Directories: []string{}, Files: []string{}}
+	return &remoteresource.DownloadResult{Files: []string{}}
 }
 
-func NewDownloadResult(directories []string, files []string) *remoteresource.DownloadResult {
-	return &remoteresource.DownloadResult{Directories: directories, Files: files}
+func NewDownloadResult(files []string) *remoteresource.DownloadResult {
+	return &remoteresource.DownloadResult{Files: files}
 }

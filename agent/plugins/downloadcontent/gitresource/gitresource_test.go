@@ -82,10 +82,13 @@ func TestGitResource_DownloadFile(t *testing.T) {
 	fileMock.On("MakeDirs", strings.TrimSuffix(appconfig.DownloadRoot, "/")).Return(nil)
 	fileMock.On("WriteFile", filepath.Join(appconfig.DownloadRoot, "file.ext"), mock.Anything).Return(nil)
 
-	err, _ := gitResource.DownloadRemoteResource(logMock, fileMock, "")
+	err, result := gitResource.DownloadRemoteResource(logMock, fileMock, "")
 	clientMock.AssertExpectations(t)
 	fileMock.AssertExpectations(t)
 	assert.NoError(t, err)
+	assert.NotNil(t, result)
+	assert.Equal(t, 1, len(result.Files))
+	assert.Equal(t, fileutil.BuildPath(appconfig.DownloadRoot, "file.ext"), result.Files[0])
 }
 
 func TestGitResource_DownloadDirectory(t *testing.T) {
@@ -126,10 +129,13 @@ func TestGitResource_DownloadDirectory(t *testing.T) {
 	fileMock.On("MakeDirs", strings.TrimSuffix(appconfig.DownloadRoot, "/")).Return(nil)
 	fileMock.On("WriteFile", fileutil.BuildPath(appconfig.DownloadRoot, "file.rb"), mock.Anything).Return(nil)
 
-	err, _ := gitResource.DownloadRemoteResource(logMock, fileMock, "")
+	err, result := gitResource.DownloadRemoteResource(logMock, fileMock, "")
 	clientMock.AssertExpectations(t)
 	fileMock.AssertExpectations(t)
 	assert.NoError(t, err)
+	assert.NotNil(t, result)
+	assert.Equal(t, 1, len(result.Files))
+	assert.Equal(t, fileutil.BuildPath(appconfig.DownloadRoot, "file.rb"), result.Files[0])
 }
 
 func TestGitResource_DownloadFileMissing(t *testing.T) {
@@ -156,11 +162,12 @@ func TestGitResource_DownloadFileMissing(t *testing.T) {
 
 	gitResource := NewResourceWithMockedClient(&clientMock)
 
-	err, _ := gitResource.DownloadRemoteResource(logMock, fileMock, "")
+	err, result := gitResource.DownloadRemoteResource(logMock, fileMock, "")
 
 	clientMock.AssertExpectations(t)
 	assert.Error(t, err)
 	assert.Contains(t, err.Error(), "Could not download from GitHub repository")
+	assert.Nil(t, result)
 }
 
 func TestGitResource_DownloadParseGetOptionFail(t *testing.T) {
@@ -179,11 +186,12 @@ func TestGitResource_DownloadParseGetOptionFail(t *testing.T) {
 	gitResource := NewResourceWithMockedClient(&clientMock)
 
 	fileMock := filemock.FileSystemMock{}
-	err, _ := gitResource.DownloadRemoteResource(logMock, fileMock, "")
+	err, result := gitResource.DownloadRemoteResource(logMock, fileMock, "")
 
 	clientMock.AssertExpectations(t)
 	assert.Error(t, err)
 	assert.Contains(t, err.Error(), "Option for retrieving GitHub content is empty")
+	assert.Nil(t, result)
 }
 
 func TestGitResource_DownloadGetRepositoryContentsFail(t *testing.T) {
@@ -211,11 +219,12 @@ func TestGitResource_DownloadGetRepositoryContentsFail(t *testing.T) {
 
 	gitResource := NewResourceWithMockedClient(&clientMock)
 
-	err, _ := gitResource.DownloadRemoteResource(logMock, fileMock, "")
+	err, result := gitResource.DownloadRemoteResource(logMock, fileMock, "")
 
 	clientMock.AssertExpectations(t)
 	assert.Error(t, err)
 	assert.Contains(t, err.Error(), "Rate limit exceeded")
+	assert.Nil(t, result)
 }
 
 func TestGitResource_ValidateLocationInfoOwner(t *testing.T) {
@@ -326,10 +335,13 @@ func TestGitResource_DownloadFileToDifferentName(t *testing.T) {
 	fileMock.On("MakeDirs", filepath.Dir(destPath)).Return(nil)
 	fileMock.On("WriteFile", destPath, mock.Anything).Return(nil)
 
-	err, _ := gitResource.DownloadRemoteResource(logMock, fileMock, destPath)
+	err, result := gitResource.DownloadRemoteResource(logMock, fileMock, destPath)
 	clientMock.AssertExpectations(t)
 	fileMock.AssertExpectations(t)
 	assert.NoError(t, err)
+	assert.NotNil(t, result)
+	assert.Equal(t, 1, len(result.Files))
+	assert.Equal(t, destPath, result.Files[0])
 }
 
 type TokenMock struct {
