@@ -145,6 +145,8 @@ func assertEqualApps(t *testing.T, a model.ApplicationData, b model.ApplicationD
 	assert.Equal(t, a.Name, b.Name)
 	assert.Equal(t, a.Publisher, b.Publisher)
 	assert.Equal(t, a.Version, b.Version)
+	assert.Equal(t, a.Release, b.Release)
+	assert.Equal(t, a.Epoch, b.Epoch)
 	assert.Equal(t, a.InstalledTime, b.InstalledTime)
 	assert.Equal(t, a.ApplicationType, b.ApplicationType)
 	assert.Equal(t, a.Architecture, b.Architecture)

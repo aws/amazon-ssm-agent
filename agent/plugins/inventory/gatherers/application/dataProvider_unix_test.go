@@ -27,13 +27,14 @@ import (
 
 var (
 	sampleData = `{"Name":"` + mark(`amazon-ssm-agent`) + `","Version":"` + mark(`1.2.0.0-1`) +
+		`","Release":"` + mark(`1`) + `","Epoch":"` + mark(`(none)`) +
 		`","Publisher":"` + mark(`Amazon.com, Inc. "<ec2-ssm-feedback@amazon.com>"`) +
 		`","ApplicationType":"` + mark(`admin`) + `","Architecture":"` + mark(`amd64`) + `","Url":"","Summary":"` +
 		mark(`Description with "quotes" 'and' `+"tabs\t"+` and
 		new lines`) + `","PackageId":"` + mark(`amazon-ssm-agent_1.2_amd64.rpm`) + `"},` +
 
 		`{"Name":"` + mark(`adduser`) + `","Version":"` + mark(`3.113+nmu3ubuntu3`) + `","Publisher":"` +
-		mark(`Ubuntu Core Developers <ubuntu-devel-discuss@lists.ubuntu.com>`) +
+		mark(`Ubuntu Core Developers <ubuntu-devel-discuss@lists.ubuntu.com>`) + `","Release":"` + mark(`9.amzn2`) + `","Epoch":"` + mark(`14`) +
 		`","ApplicationType":"` + mark(`admin`) + `","Architecture":"` + mark(`all`) +
 		`","Url":"` + mark(`http://alioth.debian.org/projects/adduser/`) + `",` +
 		`"Summary":"` + mark(`add and remove users and groups
@@ -52,13 +53,21 @@ var (
 sed reads the specified files or the standard input if no
 files are specified, makes editing changes according to a
 list of commands, and writes the results to the standard
-output.`) + `","PackageId":"` + mark(`sed_4.2.2-7_amd64.deb`) + `"},`
+output.`) + `","PackageId":"` + mark(`sed_4.2.2-7_amd64.deb`) + `"},` +
+
+		`{"Name":"` + mark(`vim-filesystem`) + `","Version":"` + mark(`8.0.0503`) + `","Publisher":"` +
+		mark(`Amazon.com`) + `","Release":"` + mark(`1.45.amzn1`) + `","Epoch":"` + mark(`(none)`) +
+		`","ApplicationType":"` + mark(`Applications/Editors`) + `","Architecture":"` + mark(`x86_64`) +
+		`","Url":"` + mark(`http://www.vim.org/`) + `",` +
+		`"Summary":"` + mark(`VIM filesystem layout`) + `","PackageId":"` + mark(`vim-6:8.0.0503-1.45.amzn1.src.rpm`) + `"},`
 )
 
 var sampleDataParsed = []model.ApplicationData{
 	{
 		Name:            "amazon-ssm-agent",
 		Version:         "1.2.0.0-1",
+		Release:         "1",
+		Epoch:           "",
 		Publisher:       "Amazon.com, Inc. \"<ec2-ssm-feedback@amazon.com>\"",
 		ApplicationType: "admin",
 		Architecture:    "x86_64",
@@ -69,6 +78,8 @@ var sampleDataParsed = []model.ApplicationData{
 	{
 		Name:            "adduser",
 		Version:         "3.113+nmu3ubuntu3",
+		Release:         "9.amzn2",
+		Epoch:           "14",
 		Publisher:       "Ubuntu Core Developers <ubuntu-devel-discuss@lists.ubuntu.com>",
 		ApplicationType: "admin",
 		Architecture:    "all",
@@ -79,6 +90,8 @@ var sampleDataParsed = []model.ApplicationData{
 	{
 		Name:            "\"sed\"",
 		Version:         "\"4.2.1\"",
+		Release:         "",
+		Epoch:           "",
 		Publisher:       "\"Amazon.com\"",
 		InstalledTime:   "2016-02-01T17:11:16Z",
 		ApplicationType: "\"Applications/Text\"",
@@ -90,12 +103,26 @@ var sampleDataParsed = []model.ApplicationData{
 	{
 		Name:            "sed",
 		Version:         "4.2.2-7",
+		Release:         "",
+		Epoch:           "",
 		Publisher:       "Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>",
 		ApplicationType: "utils",
 		Architecture:    "x86_64",
 		URL:             "http://www.gnu.org/software/sed/",
 		Summary:         "The GNU sed stream editor",
 		PackageId:       "sed_4.2.2-7_amd64.deb",
+	},
+	{
+		Name:            "vim-filesystem",
+		Version:         "8.0.0503",
+		Release:         "1.45.amzn1",
+		Epoch:           "6",
+		Publisher:       "Amazon.com",
+		ApplicationType: "Applications/Editors",
+		Architecture:    "x86_64",
+		URL:             "http://www.vim.org/",
+		Summary:         "VIM filesystem layout",
+		PackageId:       "vim-6:8.0.0503-1.45.amzn1.src.rpm",
 	},
 }
 

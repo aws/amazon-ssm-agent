@@ -79,6 +79,8 @@ type ApplicationData struct {
 	Name            string
 	Publisher       string
 	Version         string
+	Release         string `json:",omitempty"`
+	Epoch           string `json:",omitempty"`
 	InstalledTime   string `json:",omitempty"`
 	ApplicationType string `json:",omitempty"`
 	Architecture    string

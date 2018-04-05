@@ -21,6 +21,7 @@ import (
 	"fmt"
 	"os/exec"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/context"
@@ -38,7 +39,7 @@ var (
 	rpmCmd                        = "rpm"
 	rpmCmdArgToGetAllApplications = "-qa"
 	rpmQueryFormat                = "--queryformat"
-	rpmQueryFormatArgs            = `\{"Name":"` + mark(`%{NAME}`) + `","Publisher":"` + mark(`%{VENDOR}`) + `","Version":"` + mark(`%{VERSION}`) + `","InstalledTime":"` + mark(`%{INSTALLTIME}`) +
+	rpmQueryFormatArgs            = `\{"Name":"` + mark(`%{NAME}`) + `","Publisher":"` + mark(`%{VENDOR}`) + `","Version":"` + mark(`%{VERSION}`) + `","Release":"` + mark(`%{RELEASE}`) + `","Epoch":"` + mark(`%{EPOCH}`) + `","InstalledTime":"` + mark(`%{INSTALLTIME}`) +
 		`","ApplicationType":"` + mark(`%{GROUP}`) + `","Architecture":"` + mark(`%{ARCH}`) + `","Url":"` + mark(`%{URL}`) + `",` +
 		`"Summary":"` + mark(`%{Summary}`) + `","PackageId":"` + mark(`%{SourceRPM}`) + `"\},`
 
@@ -165,6 +166,8 @@ func getApplicationData(context context.T, command string, args []string) (data 
 		Following fields are relevant for inventory type AWS:Application
 		- Name
 		- Version
+	    - Release
+		- Epoch
 		- Publisher
 		- Architecture
 		- Url
@@ -270,6 +273,22 @@ func convertToApplicationData(input string) (data []model.ApplicationData, err e
 				64bit & 32bit applications across all platforms.
 			*/
 			item.Architecture = model.FormatArchitecture(item.Architecture)
+
+			/*
+					Especially for rpm packages:
+					Package Id should be like: n-e:v-r.a or n-v-r.a (n: name; e: epoch; v: version, r: release; a: architecture)
+					If there is a : in the package Id string, everything before it is the epoch. If not, omit the epoch.
+				    Refer to: https://www.redhat.com/archives/rpm-list/2000-October/msg00075.html
+			*/
+			if item.Epoch == "(none)" {
+				if strings.Contains(item.PackageId, ":") {
+					//nameEpoch: name-epoch
+					var nameEpoch string = strings.Split(item.PackageId, ":")[0]
+					item.Epoch = strings.Split(nameEpoch, "-")[1]
+				} else {
+					item.Epoch = ""
+				}
+			}
 
 			data[i] = item
 		}

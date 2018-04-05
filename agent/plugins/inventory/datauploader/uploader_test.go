@@ -55,13 +55,14 @@ func FakeInventoryItems(count int) (items []model.Item) {
 
 func ApplicationInventoryItem() (items []model.Item) {
 	// Omit Version which is not omitempty
-	// Omit InstalledTime and URL which are omitempty
+	// Omit Epoch, InstalledTime and URL which are omitempty
 	// Include CompType which should be omitted in all cases
 	items = append(items, model.Item{
 		Name: "RandomInventoryItem",
 		Content: model.ApplicationData{
 			Name:            "Test1",
 			Publisher:       "Pub1",
+			Release:         "1",
 			ApplicationType: "Foo",
 			Architecture:    "Brutalism",
 			CompType:        model.AWSComponent,
@@ -125,7 +126,7 @@ func TestConvertExcludedAndEmptyToSsmInventoryItems(t *testing.T) {
 	bytes, err := json.Marshal(items[0].Content)
 	assert.Nil(t, err, "Error shouldn't be thrown when marshalling content")
 	// CompType not present even though it has value.  Version should be present even though it doesn't.  InstallTime and Url should not be present because they have no value.
-	assert.Equal(t, "{\"Name\":\"Test1\",\"Publisher\":\"Pub1\",\"Version\":\"\",\"ApplicationType\":\"Foo\",\"Architecture\":\"Brutalism\"}", string(bytes[:]))
+	assert.Equal(t, "{\"Name\":\"Test1\",\"Publisher\":\"Pub1\",\"Version\":\"\",\"Release\":\"1\",\"ApplicationType\":\"Foo\",\"Architecture\":\"Brutalism\"}", string(bytes[:]))
 }
 
 // Mock stands for a mocked service.
