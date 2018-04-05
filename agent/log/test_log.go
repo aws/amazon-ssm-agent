@@ -57,6 +57,13 @@ func NewMockLogWithContext(ctx string) *Mock {
 	return log
 }
 
+func (_m *Mock) WithContext(context ...string) (contextLogger T) {
+	fmt.Print(_m.context)
+	fmt.Printf("WithContext: %v", context)
+	ret := _m.Called(context)
+	return ret.Get(0).(T)
+}
+
 // Tracef mocks the Tracef function.
 func (_m *Mock) Tracef(format string, params ...interface{}) {
 	fmt.Print(_m.context)

@@ -41,7 +41,7 @@ const (
 )
 
 func TestParseAssociationWithAssociationVersion1_2(t *testing.T) {
-	log := log.Logger()
+	log := log.DefaultLogger()
 	context := context.Default(log, appconfig.SsmagentConfig{})
 	processor := Processor{
 		context: context,
@@ -114,7 +114,7 @@ func TestParseAssociationWithAssociationVersion1_2(t *testing.T) {
 
 func TestParseAssociationWithAssociationVersion2_0(t *testing.T) {
 
-	log := log.Logger()
+	log := log.DefaultLogger()
 	context := context.Default(log, appconfig.SsmagentConfig{})
 	processor := Processor{
 		context: context,
@@ -204,7 +204,7 @@ func TestParseAssociationWithAssociationVersion2_0(t *testing.T) {
 
 func TestParseAssociationWithAssociationVersion2_0_StringMapParams(t *testing.T) {
 
-	log := log.Logger()
+	log := log.DefaultLogger()
 	context := context.Default(log, appconfig.SsmagentConfig{})
 	processor := Processor{
 		context: context,

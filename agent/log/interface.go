@@ -13,8 +13,9 @@
 
 package log
 
-// T represents structs capable of logging messages.
-type T interface {
+// BasicT represents structs capable of logging messages.
+// This interface matches seelog.LoggerInterface.
+type BasicT interface {
 	// Tracef formats message according to format specifier
 	// and writes to log with level Trace.
 	Tracef(format string, params ...interface{})
@@ -68,4 +69,10 @@ type T interface {
 
 	// Close flushes all the messages in the logger and closes it. The logger cannot be used after this operation.
 	Close()
+}
+
+// T represents structs capable of logging messages, and context management.
+type T interface {
+	BasicT
+	WithContext(context ...string) (contextLogger T)
 }

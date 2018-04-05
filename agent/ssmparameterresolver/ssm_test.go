@@ -70,7 +70,7 @@ func TestGetParametersFromSsmParameterStoreWithAllResolvedNoPaging(t *testing.T)
 
 	serviceObject := newServiceMockedObjectWithExtraRecords(expectedValues)
 
-	log := log.Logger()
+	log := log.DefaultLogger()
 	t.Log("Testing getParametersFromSsmParameterStore API for all parameters present without paging...")
 	retrievedValues, err := getParametersFromSsmParameterStore(&serviceObject, log, parametersList)
 	assert.Nil(t, err)
@@ -95,7 +95,7 @@ func TestGetParametersFromSsmParameterStoreWithAllResolvedWithPaging(t *testing.
 
 	serviceObject := newServiceMockedObjectWithExtraRecords(expectedValues)
 
-	log := log.Logger()
+	log := log.DefaultLogger()
 
 	t.Log("Testing getParametersFromSsmParameterStore API for all parameters present with paging...")
 	retrievedValues, err := getParametersFromSsmParameterStore(&serviceObject, log, parametersList)
@@ -112,7 +112,7 @@ func TestGetParametersFromSsmParameterStoreWithUnresolvedIgnoreNoPaging(t *testi
 
 	serviceObject := newServiceMockedObjectWithExtraRecords(map[string]SsmParameterInfo{})
 
-	log := log.Logger()
+	log := log.DefaultLogger()
 
 	t.Log("Testing getParametersFromSsmParameterStore API for all unresolved parameters...")
 	_, err := getParametersFromSsmParameterStore(&serviceObject, log, parametersList)

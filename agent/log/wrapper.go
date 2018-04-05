@@ -19,7 +19,7 @@ import (
 
 // DelegateLogger holds the base logger for logging
 type DelegateLogger struct {
-	BaseLoggerInstance T
+	BaseLoggerInstance BasicT
 }
 
 // Wrapper is a logger that can modify the format of a log message before delegating to another logger.
@@ -37,6 +37,13 @@ type FormatFilter interface {
 
 	// Filter modifies format and/or parameter strings that will be passed to log.Debugf, log.Infof, etc.
 	Filterf(format string, params ...interface{}) (newFormat string, newParams []interface{})
+}
+
+// WithContext creates a wrapper logger with context
+func (w *Wrapper) WithContext(context ...string) (contextLogger T) {
+	formatFilter := &ContextFormatFilter{Context: context}
+	contextLogger = &Wrapper{Format: formatFilter, M: w.M, Delegate: w.Delegate}
+	return contextLogger
 }
 
 // Tracef formats message according to format specifier
@@ -173,7 +180,7 @@ func (w *Wrapper) Close() {
 }
 
 // ReplaceDelegate replaces the delegate logger with a new logger
-func (w *Wrapper) ReplaceDelegate(newLogger T) {
+func (w *Wrapper) ReplaceDelegate(newLogger BasicT) {
 	w.M.Lock()
 	defer w.M.Unlock()
 	w.Delegate.BaseLoggerInstance.Flush()
