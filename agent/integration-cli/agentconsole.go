@@ -33,7 +33,7 @@ import (
 var log logger.T
 
 func init() {
-	log = logger.Logger()
+	log = logger.DefaultLogger()
 	defer log.Flush()
 }
 

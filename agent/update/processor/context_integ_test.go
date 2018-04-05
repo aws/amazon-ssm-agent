@@ -70,7 +70,7 @@ func TestParseContext(t *testing.T) {
 	// run tests
 	for _, tst := range testCases {
 		// call method
-		parsedContext, err := parseContext(log.Logger(), tst.FileName)
+		parsedContext, err := parseContext(log.DefaultLogger(), tst.FileName)
 
 		// check results
 		assert.Nil(t, err)

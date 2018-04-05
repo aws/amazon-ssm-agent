@@ -27,9 +27,6 @@ import (
 var loadedLogger *log.T
 var lock sync.RWMutex
 
-// seelogDefault is the underlying seelog logger.
-var seelogDefault seelog.LoggerInterface
-
 // pkgMutex is the lock used to serialize calls to the logger.
 var pkgMutex = new(sync.Mutex)
 
@@ -66,10 +63,6 @@ func withContext(logger seelog.LoggerInterface, context ...string) (contextLogge
 	contextLogger = &log.Wrapper{Format: formatFilter, M: pkgMutex, Delegate: loggerInstance}
 
 	setStackDepth(logger)
-	//override the default log module
-	log.SeelogDefault = seelogDefault
-	log.LoggerInstance = loggerInstance
-	log.PkgMutex = pkgMutex
 	return contextLogger
 }
 
@@ -184,6 +177,5 @@ func initBaseLoggerFromBytes(seelogConfig []byte) (seelogger seelog.LoggerInterf
 	}
 
 	fmt.Println("New Seelog Logger Creation Complete")
-	seelogDefault = seelogger
 	return
 }

@@ -46,7 +46,7 @@ func (c *defaultContext) With(logContext string) T {
 	contextSlice := append(c.context, logContext)
 	newContext := &defaultContext{
 		context:   contextSlice,
-		log:       log.WithContext(contextSlice...),
+		log:       c.log.WithContext(contextSlice...),
 		appconfig: c.appconfig,
 	}
 	return newContext

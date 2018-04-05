@@ -26,7 +26,7 @@ import (
 func TestRateExpressionIsParsedSuccessfullyWhenItIsValid(t *testing.T) {
 
 	// Assemble
-	logger := log.Logger()
+	logger := log.DefaultLogger()
 
 	assocRawData := InstanceAssociation{
 		CreateDate: time.Now(),
@@ -47,7 +47,7 @@ func TestRateExpressionIsParsedSuccessfullyWhenItIsValid(t *testing.T) {
 func TestUpperCasedRateExpressionIsParsedSuccessfullyWhenItIsValid(t *testing.T) {
 
 	// Assemble
-	logger := log.Logger()
+	logger := log.DefaultLogger()
 
 	assocRawData := InstanceAssociation{
 		CreateDate: time.Now(),
@@ -68,7 +68,7 @@ func TestUpperCasedRateExpressionIsParsedSuccessfullyWhenItIsValid(t *testing.T)
 func TestCronExpressionIsParsedSuccessfullyWhenItIsValid(t *testing.T) {
 
 	// Assemble
-	logger := log.Logger()
+	logger := log.DefaultLogger()
 
 	assocRawData := InstanceAssociation{
 		CreateDate: time.Now(),
@@ -90,7 +90,7 @@ func TestCronExpressionIsParsedSuccessfullyWhenItIsValid(t *testing.T) {
 func TestParseExpressionReturnsErrorWhenCronExpressionIsInvalid(t *testing.T) {
 
 	// Assemble
-	logger := log.Logger()
+	logger := log.DefaultLogger()
 
 	assocRawData := InstanceAssociation{
 		CreateDate: time.Now(),
@@ -111,7 +111,7 @@ func TestParseExpressionReturnsErrorWhenCronExpressionIsInvalid(t *testing.T) {
 func TestNextScheduledDateIsCorrectWhenParsedExpressionIsValidCronExpression(t *testing.T) {
 
 	// Assemble
-	logger := log.Logger()
+	logger := log.DefaultLogger()
 
 	assocRawData := InstanceAssociation{}
 
@@ -146,7 +146,7 @@ func TestNextScheduledDateIsCorrectWhenParsedExpressionIsValidCronExpression(t *
 func TestNextScheduledDateIsCorrectWhenParsedExpressionIsValidUpperCasedCronExpression(t *testing.T) {
 
 	// Assemble
-	logger := log.Logger()
+	logger := log.DefaultLogger()
 
 	assocRawData := InstanceAssociation{}
 
@@ -181,7 +181,7 @@ func TestNextScheduledDateIsCorrectWhenParsedExpressionIsValidUpperCasedCronExpr
 func TestNextScheduledDateIsCorrectWhenExpressionIsValidCronAndHasNotBeenParsedBefore(t *testing.T) {
 
 	// Assemble
-	logger := log.Logger()
+	logger := log.DefaultLogger()
 
 	assocRawData := InstanceAssociation{}
 
@@ -213,7 +213,7 @@ func TestNextScheduledDateIsCorrectWhenExpressionIsValidCronAndHasNotBeenParsedB
 func TestNextScheduledDateIsNilWhenCronExpressionIsInvalid(t *testing.T) {
 
 	// Assemble
-	logger := log.Logger()
+	logger := log.DefaultLogger()
 
 	assocRawData := InstanceAssociation{}
 
@@ -241,7 +241,7 @@ func TestNextScheduledDateIsNilWhenCronExpressionIsInvalid(t *testing.T) {
 
 func TestNextScheduledDateIsCorrectWhenParsedExpressionIsValidRateExpression(t *testing.T) {
 	// Assemble
-	logger := log.Logger()
+	logger := log.DefaultLogger()
 
 	testInstanceAssociation := InstanceAssociation{}
 
@@ -272,7 +272,7 @@ func TestNextScheduledDateIsCorrectWhenParsedExpressionIsValidRateExpression(t *
 
 func TestNextScheduledDateIsCorrectWhenExpressionIsValidRateAndHasNoteBeenParsedBefore(t *testing.T) {
 	// Assemble
-	logger := log.Logger()
+	logger := log.DefaultLogger()
 
 	testInstanceAssociation := InstanceAssociation{}
 
@@ -302,7 +302,7 @@ func TestNextScheduledDateIsCorrectWhenExpressionIsValidRateAndHasNoteBeenParsed
 func TestNextScheduleDateIsNilWhenRateExpressionIsInvalid(t *testing.T) {
 
 	// Assemble
-	logger := log.Logger()
+	logger := log.DefaultLogger()
 
 	assocRawData := InstanceAssociation{}
 
@@ -330,7 +330,7 @@ func TestNextScheduleDateIsNilWhenRateExpressionIsInvalid(t *testing.T) {
 func TestNextScheduleDateIsNilWhenExpressionTypeIsUnknownAndAssociationHasPreviouslyBeenExecuted(t *testing.T) {
 
 	// Assemble
-	logger := log.Logger()
+	logger := log.DefaultLogger()
 
 	assocRawData := InstanceAssociation{}
 
@@ -359,7 +359,7 @@ func TestNextScheduleDateIsNilWhenExpressionTypeIsUnknownAndAssociationHasPrevio
 func TestNextScheduledDateIsNilWhenAssociationExpressionTypeIsUnknown(t *testing.T) {
 
 	// Assemble
-	logger := log.Logger()
+	logger := log.DefaultLogger()
 
 	assocRawData := InstanceAssociation{}
 

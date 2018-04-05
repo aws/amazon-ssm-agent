@@ -15,9 +15,8 @@
 package log
 
 import (
-	"sync"
-
 	"fmt"
+	"sync"
 
 	"github.com/cihub/seelog"
 )
@@ -27,34 +26,23 @@ const (
 	ErrorFile = "errors.log"
 )
 
-var SeelogDefault seelog.LoggerInterface
-var LoggerInstance = &DelegateLogger{}
+var loadedLogger T
 var PkgMutex = new(sync.Mutex)
 
-func Logger() T {
-	// Read the current configurations or get the default configurations
-	if SeelogDefault != nil {
-		return withContext(SeelogDefault)
+func DefaultLogger() T {
+	if loadedLogger == nil {
+		fmt.Println("Initializing new default seelog logger")
+		seelogger, _ := seelog.LoggerFromConfigAsBytes(DefaultConfig())
+		seelogger.SetAdditionalStackDepth(1)
+
+		loggerInstance := &DelegateLogger{}
+		loggerInstance.BaseLoggerInstance = seelogger
+
+		formatFilter := &ContextFormatFilter{Context: []string{}}
+		loadedLogger = &Wrapper{Format: formatFilter, M: PkgMutex, Delegate: loggerInstance}
+		fmt.Println("Initialized new default seelog logger")
 	}
-	fmt.Println("Initializing new seelog logger")
-	seelogger, _ := seelog.LoggerFromConfigAsBytes(DefaultConfig())
-	fmt.Println("New Seelog Logger Creation Complete")
-	SeelogDefault = seelogger
-	return withContext(seelogger)
-}
-
-func WithContext(context ...string) T {
-	return withContext(SeelogDefault, context...)
-}
-
-// withContext creates a wrapper logger on the base logger passed with context is passed
-func withContext(logger seelog.LoggerInterface, context ...string) (contextLogger T) {
-	LoggerInstance.BaseLoggerInstance = logger
-	formatFilter := &ContextFormatFilter{Context: context}
-	contextLogger = &Wrapper{Format: formatFilter, M: PkgMutex, Delegate: LoggerInstance}
-
-	logger.SetAdditionalStackDepth(1)
-	return contextLogger
+	return loadedLogger
 }
 
 // ContextFormatFilter is a filter that can add a context to the parameters of a log message.
