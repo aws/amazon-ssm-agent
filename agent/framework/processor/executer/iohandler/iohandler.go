@@ -39,6 +39,8 @@ const (
 type PluginConfig struct {
 	StdoutFileName        string
 	StderrFileName        string
+	StdoutConsoleFileName string
+	StderrConsoleFileName string
 	MaxStdoutLength       int
 	MaxStderrLength       int
 	OutputTruncatedSuffix string
@@ -49,6 +51,8 @@ func DefaultOutputConfig() PluginConfig {
 	return PluginConfig{
 		StdoutFileName:        "stdout",
 		StderrFileName:        "stderr",
+		StdoutConsoleFileName: "stdoutConsole",
+		StderrConsoleFileName: "stderrConsole",
 		MaxStdoutLength:       24000,
 		MaxStderrLength:       8000,
 		OutputTruncatedSuffix: "--output truncated--",
@@ -138,7 +142,7 @@ func (out *DefaultIOHandler) Init(log log.T, filePath ...string) {
 	stdoutConsole := iomodule.CommandOutput{
 		OutputLimit:            pluginConfig.MaxStdoutLength,
 		OutputString:           &out.stdout,
-		FileName:               pluginConfig.StdoutFileName,
+		FileName:               pluginConfig.StdoutConsoleFileName,
 		OrchestrationDirectory: fullPath,
 	}
 
@@ -159,7 +163,7 @@ func (out *DefaultIOHandler) Init(log log.T, filePath ...string) {
 	stderrConsole := iomodule.CommandOutput{
 		OutputLimit:            pluginConfig.MaxStderrLength,
 		OutputString:           &out.stderr,
-		FileName:               pluginConfig.StderrFileName,
+		FileName:               pluginConfig.StderrConsoleFileName,
 		OrchestrationDirectory: fullPath,
 	}
 

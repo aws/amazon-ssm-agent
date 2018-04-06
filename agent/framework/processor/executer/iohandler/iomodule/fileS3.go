@@ -71,7 +71,7 @@ func (file File) Read(log log.T, reader *io.PipeReader) {
 
 	fi, err := fileWriter.Stat()
 	if err != nil {
-		log.Errorf("Failed to get file size: %v", err)
+		log.Errorf("Failed to get file stat: %v", err)
 		return
 	}
 
