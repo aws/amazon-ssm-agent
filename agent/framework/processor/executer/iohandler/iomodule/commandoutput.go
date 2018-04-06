@@ -15,13 +15,13 @@ package iomodule
 
 import (
 	"bufio"
-	"bytes"
 	"io"
 
 	"path/filepath"
 
-	"fmt"
+	"os"
 
+	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 )
@@ -37,45 +37,52 @@ type CommandOutput struct {
 
 func (c CommandOutput) Read(log log.T, reader *io.PipeReader) {
 	defer func() { reader.Close() }()
+
+	if err := fileutil.MakeDirs(c.OrchestrationDirectory); err != nil {
+		log.Errorf("failed to create orchestrationDir directory at %v: %v", c.OrchestrationDirectory, err)
+		return
+	}
 	filePath := filepath.Join(c.OrchestrationDirectory, c.FileName)
-	var buf string
-	var err error
-	var buffer bytes.Buffer
-	buf, err = fileutil.ReadAllText(filePath)
+	fileWriter, err := os.OpenFile(filePath, appconfig.FileFlagsCreateOrAppend, appconfig.ReadWriteAccess)
 
-	if buf != "" {
-		if len(buf) > c.OutputLimit {
-			buffer.WriteString(buf[:c.OutputLimit])
-		} else {
-			buffer.WriteString(buf)
-		}
-	}
 	if err != nil {
-		log.Errorf("Error reading %v at path %v", c.FileName, filePath)
+		log.Errorf("Failed to open the file at %v: %v", filePath, err)
+		return
 	}
-	c.ReadPipeAndFile(log, reader, buffer)
-}
 
-func (c CommandOutput) ReadPipeAndFile(log log.T, reader *io.PipeReader, buffer bytes.Buffer) {
-	// Read byte by byte
+	defer fileWriter.Close()
+
+	// Read byte by byte and write to file
 	scanner := bufio.NewScanner(reader)
 	scanner.Split(bufio.ScanBytes)
-
-	outputLimit := buffer.Len()
+	outputLimit := 0
 	for scanner.Scan() {
 		// Check if size of output is greater than the output limit
 		outputLimit++
 		if outputLimit > c.OutputLimit {
 			break
 		}
-		buffer.WriteString(scanner.Text())
+		if _, err = fileWriter.Write([]byte(scanner.Text())); err != nil {
+			log.Errorf("Failed to write the message to stdoutConsoleFile: %v", err)
+		}
 	}
-	// Clear contents of string to avoid duplicate output
-	*c.OutputString = ""
-	*c.OutputString = fmt.Sprintf("%v%v", *c.OutputString, buffer.String())
-	log.Debugf("Number of bytes written to console output: %v", outputLimit-1)
 
+	// Check if scanner exited because of an error
 	if err := scanner.Err(); err != nil {
 		log.Error("Error with the scanner while reading the stream")
+	}
+
+	fi, err := fileWriter.Stat()
+	if err != nil {
+		log.Errorf("Failed to get file stat: %v", err)
+		return
+	}
+
+	// Write output to console
+	if fi.Size() > 0 {
+		*c.OutputString, err = fileutil.ReadAllText(filePath)
+		if err != nil {
+			log.Errorf("Error reading %v at path %v", c.FileName, filePath)
+		}
 	}
 }
