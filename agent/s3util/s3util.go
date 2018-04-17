@@ -117,7 +117,7 @@ func GetBucketRegion(log log.T, bucketName string, httpProvider HttpProvider) (r
 	instanceRegion, err := getRegion()
 	if err != nil {
 		log.Error(fmt.Errorf("Cannot get the current instance region information: %v", err))
-		return instanceRegion // Default
+		return "us-east-1" // Default
 	}
 	log.Infof("Instance region is %v", instanceRegion)
 
