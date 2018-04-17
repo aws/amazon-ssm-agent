@@ -20,6 +20,7 @@ import (
 	"path/filepath"
 
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
+	"github.com/aws/amazon-ssm-agent/agent/managedInstances/registration"
 	"github.com/aws/aws-sdk-go/aws/awserr"
 	"github.com/go-ini/ini"
 )
@@ -29,6 +30,7 @@ const (
 	awsAccessKeyID     = "aws_access_key_id"
 	awsSecretAccessKey = "aws_secret_access_key"
 	awsSessionToken    = "aws_session_token"
+	awsRegion          = "region"
 )
 
 // filename returns the filename to use to read AWS shared credentials.
@@ -97,6 +99,15 @@ func Store(accessKeyID, secretAccessKey, sessionToken, profile string) error {
 	iniProfile.Key(awsSecretAccessKey).SetValue(secretAccessKey)
 
 	iniProfile.Key(awsSessionToken).SetValue(sessionToken)
+
+	// Save the instance's region to the profile so that the FallbackRegionFactory can find it.
+	// Scripts that use the .NET Cmdlets and aws command line tools will automatically detect
+	// the AWS Region from the EC2 instance profile, however, this is not the case for on-prem
+	// servers, since they don't have the EC2 Metadata service. By adding the Region to the
+	// shared credentials file, the SDK will be able to discover the region automatically.
+	// This will ensure that scripts that run on on-prem servers will run the same way as
+	// they would on EC2 instances, without any modification.
+	iniProfile.Key(awsRegion).SetValue(registration.Region())
 
 	err = config.SaveTo(credPath)
 	if err != nil {
