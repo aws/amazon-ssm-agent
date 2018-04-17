@@ -116,7 +116,7 @@ func (u *AmazonS3Util) S3Upload(log log.T, bucketName string, objectKey string, 
 func GetBucketRegion(log log.T, bucketName string, httpProvider HttpProvider) (region string) {
 	instanceRegion, err := getRegion()
 	if err != nil {
-		log.Error("Cannot get the current instance region information")
+		log.Error(fmt.Errorf("Cannot get the current instance region information: %v", err))
 		return instanceRegion // Default
 	}
 	log.Infof("Instance region is %v", instanceRegion)

@@ -33,10 +33,9 @@ const (
 	awsRegion          = "region"
 )
 
-// filename returns the filename to use to read AWS shared credentials.
-//
+// Filename returns the filename to use to read AWS shared credentials.
 // Will return an error if the user's home directory path cannot be found.
-func filename() (string, error) {
+func Filename() (string, error) {
 	if credPath := os.Getenv("AWS_SHARED_CREDENTIALS_FILE"); credPath != "" {
 		return credPath, nil
 	}
@@ -70,7 +69,7 @@ func Store(accessKeyID, secretAccessKey, sessionToken, profile string) error {
 		profile = defaultProfile
 	}
 
-	credPath, err := filename()
+	credPath, err := Filename()
 	if err != nil {
 		return err
 	}

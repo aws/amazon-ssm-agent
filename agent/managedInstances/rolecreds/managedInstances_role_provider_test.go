@@ -21,6 +21,8 @@ import (
 	"testing"
 	"time"
 
+	"github.com/aws/amazon-ssm-agent/agent/fileutil"
+	"github.com/aws/amazon-ssm-agent/agent/managedInstances/sharedCredentials"
 	"github.com/aws/aws-sdk-go/service/ssm"
 	"github.com/stretchr/testify/assert"
 )
@@ -31,6 +33,14 @@ var (
 	sessionToken    = "sessionToken"
 	region          = "us-east-1"
 )
+
+func cleanupCredFile() {
+	if credPath, err := sharedCredentials.Filename(); err == nil {
+		if credPath != "" && fileutil.Exists(credPath) {
+			fileutil.DeleteFile(credPath)
+		}
+	}
+}
 
 func TestRetrieve_ShouldReturnValidToken(t *testing.T) {
 	updateKeyPair := false
@@ -52,6 +62,8 @@ func TestRetrieve_ShouldReturnValidToken(t *testing.T) {
 	assert.Equal(t, accessKeyID, cred.AccessKeyID)
 	assert.Equal(t, secretAccessKey, cred.SecretAccessKey)
 	assert.Equal(t, sessionToken, cred.SessionToken)
+
+	cleanupCredFile()
 }
 
 func TestRetrieve_ShouldUpdateKeyPair(t *testing.T) {
@@ -78,6 +90,7 @@ func TestRetrieve_ShouldUpdateKeyPair(t *testing.T) {
 	_, err := testProvider.Retrieve()
 	assert.NoError(t, err)
 	assert.True(t, client.updateCalled)
+	cleanupCredFile()
 }
 
 func TestRetrieve_ShouldFailOnError(t *testing.T) {
