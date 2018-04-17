@@ -29,6 +29,7 @@ var (
 	accessKeyID     = "accessKeyID"
 	secretAccessKey = "secretAccessKey"
 	sessionToken    = "sessionToken"
+	region          = "us-east-1"
 )
 
 func TestRetrieve_ShouldReturnValidToken(t *testing.T) {
@@ -60,6 +61,7 @@ func TestRetrieve_ShouldUpdateKeyPair(t *testing.T) {
 		publicKey:  "publicKey",
 		privateKey: "privateKey",
 		keyType:    "Rsa",
+		region:     "us-east-1",
 	}
 	client := &RsaSignedServiceStub{
 		roleResponse: ssm.RequestManagedInstanceRoleTokenOutput{
