@@ -40,7 +40,7 @@ Thank you for helping us to improve SSM and Run Command. Please send your questi
 sudo yum install -y rpmdevtools rpm-build
 ```
 
-* [Cross Complile SSM Agent](http://www.goinggo.net/2013/10/cross-compile-your-go-programs.html)
+* [Cross Compile SSM Agent](http://www.goinggo.net/2013/10/cross-compile-your-go-programs.html)
 
 * Run `make build` to build the SSM Agent for Linux, Debian, Windows environment.
 
