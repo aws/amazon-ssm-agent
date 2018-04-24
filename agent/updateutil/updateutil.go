@@ -212,6 +212,24 @@ var cmdOutput = (*exec.Cmd).Output
 var isUsingSystemD map[string]string
 var once sync.Once
 
+// Installer represents Install shell script for linux
+var Installer string
+
+// UnInstaller represents Uninstall shell script for linux
+var UnInstaller string
+
+const (
+	// installer script for debian
+	DebInstaller = "install.sh"
+	// uninstaller script for debian
+	DebUnInstaller = "uninstall.sh"
+
+	// installer script for snap
+	SnapInstaller = "snap-install.sh"
+	// uninstaller script for snap
+	SnapUnInstaller = "snap-uninstall.sh"
+)
+
 var possiblyUsingSystemD = map[string]bool{
 	PlatformRaspbian: true,
 	PlatformLinux:    true,
@@ -229,32 +247,48 @@ func (util *Utility) CreateInstanceContext(log log.T) (context *InstanceContext,
 	if platformName, err = getPlatformName(log); err != nil {
 		return
 	}
+	// TODO: Change this structure to a switch and inject the platform name from another method.
 	platformName = strings.ToLower(platformName)
 	if strings.Contains(platformName, PlatformAmazonLinux) {
 		platformName = PlatformLinux
 		installerName = PlatformLinux
+		Installer = InstallScript
+		UnInstaller = UninstallScript
 	} else if strings.Contains(platformName, PlatformRedHat) {
 		platformName = PlatformRedHat
 		installerName = PlatformLinux
+		Installer = InstallScript
+		UnInstaller = UninstallScript
 	} else if strings.Contains(platformName, PlatformUbuntu) {
 		platformName = PlatformUbuntu
 		installerName = PlatformUbuntu
+		Installer, UnInstaller = getUbuntuInstallScript()
 	} else if strings.Contains(platformName, PlatformCentOS) {
 		platformName = PlatformCentOS
 		installerName = PlatformLinux
+		Installer = InstallScript
+		UnInstaller = UninstallScript
 	} else if strings.Contains(platformName, PlatformSuseOS) {
 		platformName = PlatformSuseOS
 		installerName = PlatformLinux
+		Installer = InstallScript
+		UnInstaller = UninstallScript
 	} else if strings.Contains(platformName, PlatformRaspbian) {
 		platformName = PlatformRaspbian
 		installerName = PlatformUbuntu
+		Installer = InstallScript
+		UnInstaller = UninstallScript
 	} else if isNano, _ := platform.IsPlatformNanoServer(log); isNano {
 		//TODO move this logic to instance context
 		platformName = PlatformWindowsNano
 		installerName = PlatformWindowsNano
+		Installer = InstallScript
+		UnInstaller = UninstallScript
 	} else {
 		platformName = PlatformWindows
 		installerName = PlatformWindows
+		Installer = InstallScript
+		UnInstaller = UninstallScript
 	}
 
 	if platformVersion, err = getPlatformVersion(log); err != nil {
@@ -270,6 +304,38 @@ func (util *Utility) CreateInstanceContext(log log.T) (context *InstanceContext,
 	}
 
 	return context, nil
+}
+
+func getUbuntuInstallScript() (string, string) {
+	if script, err := isAgentInstalledUsingSnap(); (err == nil) && script {
+		return SnapInstaller, SnapUnInstaller
+	}
+	return DebInstaller, DebUnInstaller
+}
+
+// isAgentInstalledUsingSnap returns if snap is used to install the snap
+func isAgentInstalledUsingSnap() (result bool, err error) {
+
+	var commandOut []byte
+	var commandErr error
+	// check if current platform has snap installed
+	if commandOut, commandErr = execCommand("which", "snap").Output(); commandErr != nil {
+		err = fmt.Errorf("Error checking 'which snap' - %v", commandErr)
+		return false, err
+	}
+	if string(commandOut) == "" {
+		// Since which snap was empty return that snap is not installed
+		return false, nil
+	}
+	if commandOut, commandErr = execCommand("snap", "services", "amazon-ssm-agent").Output(); commandErr != nil {
+		err = fmt.Errorf("Error checking 'snap services amazon-ssm-agent' - %v", commandErr)
+		return false, err
+	}
+	if strings.Contains(string(commandOut), "enabled") {
+		return true, nil
+	}
+	return false, nil
+
 }
 
 // CreateUpdateDownloadFolder creates folder for storing update downloads
@@ -316,6 +382,7 @@ func (util *Utility) ExeCommand(
 
 		command.Stdout = stdoutWriter
 		command.Stderr = stderrWriter
+
 		err = cmdStart(command)
 		if err != nil {
 			return

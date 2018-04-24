@@ -40,10 +40,6 @@ elif [[ "$(cat /proc/1/comm)" == "systemd" ]]; then
 		# echo "Agent stopped"
 		systemctl daemon-reload
 		# echo "Reload daemon"
-	# if agent is running under snap, no need to uninstall, exit, as snap will take care of service rotation at installation
-	elif [[ "$(systemctl is-active snap.amazon-ssm-agent.amazon-ssm-agent)" == "active" ]]; then
-	    echo "detected snap amazon-ssm-agent running on the system"
-	    exit 0
 	else
 		echo "-> Agent is not running in the instance"
 	fi

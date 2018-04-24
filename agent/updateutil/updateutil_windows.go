@@ -73,10 +73,10 @@ const (
 
 const (
 	// Installer represents Install PowerShell script
-	Installer = "install.ps1"
+	InstallScript = "install.ps1"
 
 	// UnInstaller represents Uninstall PowerShell script
-	UnInstaller = "uninstall.ps1"
+	UninstallScript = "uninstall.ps1"
 )
 
 var getPlatformSku = platform.PlatformSku

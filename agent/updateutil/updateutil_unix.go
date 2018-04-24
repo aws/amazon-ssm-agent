@@ -66,13 +66,11 @@ const (
 	// CompressFormat represents the compress format for linux platform
 	CompressFormat = "tar.gz"
 )
-
 const (
-	// Installer represents Install shell script
-	Installer = "install.sh"
-
-	// UnInstaller represents Uninstall shell script
-	UnInstaller = "uninstall.sh"
+	// installer script for linux
+	InstallScript = "install.sh"
+	// uninstaller script for linux
+	UninstallScript = "uninstall.sh"
 )
 
 func prepareProcess(command *exec.Cmd) {

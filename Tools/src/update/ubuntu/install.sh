@@ -40,7 +40,6 @@ if [[ "$(cat /proc/1/comm)" == "init" ]]; then
     # echo "Installing agent"
     dpkg -i amazon-ssm-agent.deb
 
-
     if [ "$DO_REGISTER" = true ]; then
 	    /sbin/stop amazon-ssm-agent
 	    amazon-ssm-agent -register -code "$RMI_CODE" -id "$RMI_ID" -region "$RMI_REGION"
@@ -57,52 +56,25 @@ elif [[ "$(cat /proc/1/comm)" == "systemd" ]]; then
 		systemctl stop amazon-ssm-agent
 		# echo "Agent stopped"
 		systemctl daemon-reload
-		# echo "Reload daemon"
+		# echo "Reload daemon" 
 			# echo "Installing agent"
+	else
+		echo "-> Agent is not running on the instance."
+
+	fi
+	
+	# echo "Installing agent"
+	dpkg -i amazon-ssm-agent.deb
+
+	if [ "$DO_REGISTER" = true ]; then
+		systemctl stop amazon-ssm-agent
+		amazon-ssm-agent -register -code "$RMI_CODE" -id "$RMI_ID" -region "$RMI_REGION"
 	fi
 
-	if [[ "$(systemctl is-active snap.amazon-ssm-agent.amazon-ssm-agent)" == "active" ]]; then
-	    echo "detected snap amazon-ssm-agent running on the system, installing new snaps..."
-        if [[ ! -f amazon-ssm-agent.snap || ! -f amazon-ssm-agent.assert ]]; then
-            echo 'snap is not available for this version, installing deb pkg instead...'
-            snap remove amazon-ssm-agent
-            echo 'removed original snap'
-            dpkg -i amazon-ssm-agent.deb
-
-            if [ "$DO_REGISTER" = true ]; then
-                systemctl stop amazon-ssm-agent
-                amazon-ssm-agent -register -code "$RMI_CODE" -id "$RMI_ID" -region "$RMI_REGION"
-            fi
-            echo "Starting agent..."
-            systemctl daemon-reload
-            systemctl start amazon-ssm-agent
-    
-        else
-            # acknowledge the signature pulled from the s3 distro
-            snap ack amazon-ssm-agent.assert
-            # install, snap will take care of swap blabla
-            snap install --classic amazon-ssm-agent.snap
-            # register onprem instance
-            if [ "$DO_REGISTER" = true ]; then
-                snap stop amazon-ssm-agent
-                SNAP_BIN=/snap/amazon-ssm-agent/current
-                "$SNAP_BIN"/amazon-ssm-agent -register -code "$RMI_CODE" -id "$RMI_ID" -region "$RMI_REGION"
-            fi
-        fi
-	else
-		echo "-> Agent is not running in the instance"
-		# echo "Installing agent"
-	 	dpkg -i amazon-ssm-agent.deb
-
-	 	if [ "$DO_REGISTER" = true ]; then
-	 		systemctl stop amazon-ssm-agent
-	 		amazon-ssm-agent -register -code "$RMI_CODE" -id "$RMI_ID" -region "$RMI_REGION"
-	 	fi
-
-	 	# echo "Starting agent"
-	 	systemctl daemon-reload
-	 	systemctl start amazon-ssm-agent
-	 	systemctl status amazon-ssm-agent
+	# echo "Starting agent"
+	systemctl daemon-reload
+	systemctl start amazon-ssm-agent
+	systemctl status amazon-ssm-agent
 	fi
 
 else
