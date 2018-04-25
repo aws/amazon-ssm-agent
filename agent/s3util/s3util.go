@@ -140,7 +140,7 @@ func GetS3Header(log log.T, bucketName string, instanceRegion string, httpProvid
 
 	s3Endpoint := GetS3Endpoint(instanceRegion)
 
-	if region, err = getRegionFromS3URLWithExponentialBackoff("http://"+bucketName+"."+s3Endpoint, httpProvider); err == nil {
+	if region, err = getRegionFromS3URLWithExponentialBackoff("https://"+bucketName+"."+s3Endpoint, httpProvider); err == nil {
 		return region
 	}
 
