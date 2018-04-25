@@ -1,5 +1,11 @@
 Latest
 ===============
+- Added support for Ubuntu Snap packaging
+- Bug fix so that aws:downloadContent does not change permissions of directories
+- Bug fix to Cloudwatch plugin where StartType has duplicated Enabled value
+
+2.2.392.0
+===============
 - Added support for agent hibernation so that Agent backs off or enters hibernation mode if it does not have access to the service
 - Various bug fixes
 
