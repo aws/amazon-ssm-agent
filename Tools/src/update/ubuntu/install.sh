@@ -75,7 +75,6 @@ elif [[ "$(cat /proc/1/comm)" == "systemd" ]]; then
 	systemctl daemon-reload
 	systemctl start amazon-ssm-agent
 	systemctl status amazon-ssm-agent
-	fi
 
 else
 
