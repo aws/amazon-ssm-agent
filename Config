@@ -32,10 +32,6 @@ package.Amazon-ssm-agent = {
     };
 
     runtime-dependencies = {
-        2.2 = {
-            GoLang = 1.0;
-            BrazilMakeGo = 1.0;
-        };
     };
 
 };
