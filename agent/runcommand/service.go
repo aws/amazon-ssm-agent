@@ -63,6 +63,9 @@ const (
 	// note: the connection timeout for MDSPoll should be less than this.
 	pollMessageFrequencyMinutes = 15
 
+	// sendReplyFrequencyMinutes is the frequency at which to send failed reply requests back to MDS
+	sendReplyFrequencyMinutes = 10
+
 	// the default stoppolicy error threshold. After 10 consecutive errors the plugin will stop for 15 minutes.
 	stopPolicyErrorThreshold = 10
 )
@@ -85,6 +88,7 @@ type RunCommandService struct {
 	sendResponse         SendResponse
 	orchestrationRootDir string
 	messagePollJob       *scheduler.Job
+	sendReplyJob         *scheduler.Job
 	//TODO move association poller out, we surely have to
 	assocProcessor      *associationProcessor.Processor
 	processorStopPolicy *sdkutil.StopPolicy

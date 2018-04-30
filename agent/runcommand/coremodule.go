@@ -71,9 +71,15 @@ func (s *RunCommandService) ModuleExecute(context context.T) (err error) {
 	}
 
 	log.Info("Starting message polling")
-	if s.messagePollJob, err = scheduler.Every(pollMessageFrequencyMinutes).Minutes().Run(s.loop); err != nil {
+	if s.messagePollJob, err = scheduler.Every(pollMessageFrequencyMinutes).Minutes().Run(s.messagePollLoop); err != nil {
 		context.Log().Errorf("unable to schedule message poll job. %v", err)
 	}
+
+	log.Info("Starting send replies to MDS")
+	if s.sendReplyJob, err = scheduler.Every(sendReplyFrequencyMinutes).Minutes().Run(s.sendReplyLoop); err != nil {
+		context.Log().Errorf("unable to schedule send reply job. %v", err)
+	}
+
 	//TODO move association polling out in the next CR
 	if s.pollAssociations {
 		s.assocProcessor.ModuleExecute(context)
@@ -82,7 +88,7 @@ func (s *RunCommandService) ModuleExecute(context context.T) (err error) {
 }
 
 func (s *RunCommandService) ModuleRequestStop(stopType contracts.StopType) (err error) {
-	//first stop the message poller
+	//first stop sending failed replies to the service and the message poller
 	s.stop()
 	//second stop the message processor
 	s.processor.Stop(stopType)
@@ -203,4 +209,35 @@ func (s *RunCommandService) processMessage(msg *ssmmds.Message) {
 		log.Error("unexpected document type ", docState.DocumentType)
 	}
 
+}
+
+// sendFailedReplies loads replies from local disk and send it again to the service, if it fails no action is needed
+func (s *RunCommandService) sendFailedReplies() {
+	log := s.context.Log()
+
+	log.Debug("Checking if there are document replies that failed to reach the service, and retry sending them")
+	replies := s.service.LoadFailedReplies(log)
+
+	if len(replies) != 0 {
+		log.Infof("Found document replies that need to be sent to the service")
+		for _, reply := range replies {
+			log.Debug("Loading reply ", reply)
+			sendReplyRequest, err := s.service.GetFailedReply(log, reply)
+			if err != nil {
+				log.Error("Couldn't load the reply from desk ", err)
+				return
+			}
+
+			log.Info("Sending reply ", reply)
+			if err = s.service.SendReplyWithInput(log, sendReplyRequest); err != nil {
+				sdkutil.HandleAwsError(log, err, s.processorStopPolicy)
+				break
+			} else {
+				log.Infof("Sending reply %v succeeded, deleting the reply file from desk", reply)
+				s.service.DeleteFailedReply(log, reply)
+			}
+		}
+	} else {
+		log.Debugf("No failed document replies found")
+	}
 }

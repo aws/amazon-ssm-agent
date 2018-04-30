@@ -15,10 +15,12 @@
 package runcommand
 
 import (
+	"fmt"
 	"math/rand"
 	"sync"
 	"time"
 
+	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/sdkutil"
 	"github.com/carlescere/scheduler"
 )
@@ -40,26 +42,30 @@ func getLastPollTime(processorType string) time.Time {
 	return lastPollTimeMap[processorType]
 }
 
+// loop sends replies to MDS
+func (s *RunCommandService) sendReplyLoop() {
+	log := s.context.Log()
+	if err := s.checkStopPolicy(log); err != nil {
+		return
+	}
+
+	s.sendFailedReplies()
+
+	if s.name == mdsName {
+		log.Debugf("%v's stoppolicy after polling is %v", s.name, s.processorStopPolicy)
+	}
+}
+
 // loop reads messages from MDS then processes them.
-func (s *RunCommandService) loop() {
+func (s *RunCommandService) messagePollLoop() {
 	// time lock to only have one loop active anytime.
 	// this is extra insurance to prevent any race condition
 	pollStartTime := time.Now()
 	updateLastPollTime(s.name, pollStartTime)
 
 	log := s.context.Log()
-	if s.processorStopPolicy != nil {
-		if s.name == mdsName {
-			log.Debugf("%v's stoppolicy before polling is %v", s.name, s.processorStopPolicy)
-		}
-		if s.processorStopPolicy.IsHealthy() == false {
-			log.Errorf("%v stopped temporarily due to internal failure. We will retry automatically after %v minutes", s.name, pollMessageFrequencyMinutes)
-			s.reset()
-			return
-		}
-	} else {
-		log.Debugf("creating new stop-policy.")
-		s.processorStopPolicy = newStopPolicy(s.name)
+	if err := s.checkStopPolicy(log); err != nil {
+		return
 	}
 
 	s.pollOnce()
@@ -80,7 +86,24 @@ func (s *RunCommandService) loop() {
 		// skip waiting for the next scheduler polling event and start polling immediately
 		scheduleNextRun(s.messagePollJob)
 	}
+}
 
+func (s *RunCommandService) checkStopPolicy(log log.T) error {
+	if s.processorStopPolicy != nil {
+		if s.name == mdsName {
+			log.Debugf("%v's stoppolicy before polling is %v", s.name, s.processorStopPolicy)
+		}
+		if s.processorStopPolicy.IsHealthy() == false {
+			err := fmt.Errorf("%v stopped temporarily due to internal failure. We will retry automatically after %v minutes", s.name, pollMessageFrequencyMinutes)
+			log.Errorf("%v", err)
+			s.reset()
+			return err
+		}
+	} else {
+		log.Debugf("creating new stop-policy.")
+		s.processorStopPolicy = newStopPolicy(s.name)
+	}
+	return nil
 }
 
 var scheduleNextRun = func(j *scheduler.Job) {
@@ -109,6 +132,9 @@ func (s *RunCommandService) stop() {
 
 	if s.messagePollJob != nil {
 		s.messagePollJob.Quit <- true
+	}
+	if s.sendReplyJob != nil {
+		s.sendReplyJob.Quit <- true
 	}
 }
 

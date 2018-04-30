@@ -82,7 +82,7 @@ func TestLoop_Once(t *testing.T) {
 		processorStopPolicy: sdkutil.NewStopPolicy(mdsName, stopPolicyThreshold),
 	}
 
-	proc.loop()
+	proc.messagePollLoop()
 
 	time.Sleep(1 * time.Second)
 	assert.Equal(t, 1, called)
@@ -116,7 +116,7 @@ func TestLoop_Multiple_Serial(t *testing.T) {
 	start := time.Now()
 
 	for i := 0; i < multipleRetryCount; i++ {
-		proc.loop()
+		proc.messagePollLoop()
 	}
 
 	// elapsed should be greater than number of polls in seconds as we force a 1 second delay
@@ -154,7 +154,7 @@ func TestLoop_Multiple_Parallel(t *testing.T) {
 	}
 
 	for i := 0; i < multipleRetryCount; i++ {
-		go proc.loop()
+		go proc.messagePollLoop()
 	}
 
 	time.Sleep(4 * time.Second)
@@ -186,7 +186,7 @@ func TestLoop_Once_Error(t *testing.T) {
 		processorStopPolicy: sdkutil.NewStopPolicy(mdsName, stopPolicyThreshold),
 	}
 
-	proc.loop()
+	proc.messagePollLoop()
 
 	time.Sleep(1 * time.Second)
 	assert.Equal(t, 1, called)
@@ -220,7 +220,7 @@ func TestLoop_Multiple_Serial_Error(t *testing.T) {
 	start := time.Now()
 
 	for i := 0; i < multipleRetryCount; i++ {
-		proc.loop()
+		proc.messagePollLoop()
 	}
 
 	// elapsed should be greater than number of polls in seconds as we force a 1 second delay
@@ -231,6 +231,36 @@ func TestLoop_Multiple_Serial_Error(t *testing.T) {
 	// number of tries should be the same as stop threshold +1
 	assert.Equal(t, stopPolicyThreshold+1, called)
 	assert.True(t, stopPolicyThreshold+1 < elapsed.Seconds())
+}
+func TestSendReplyLoop_Multiple_Serial_Error(t *testing.T) {
+	// Test send reply loop multiple times with simple error
+	contextMock := MockContext()
+	//log := contextMock.Log()
+	replies := []string{"reply1", "reply2", "reply3"}
+
+	// create mocked service and set expectations
+	mdsMock := new(runcommandmock.MockedMDS)
+	mdsMock.On("SendReplyWithInput", mock.AnythingOfType("*log.Mock"), &ssmmds.SendReplyInput{}).Return(errSample)
+	mdsMock.On("LoadFailedReplies", mock.AnythingOfType("*log.Mock")).Return(replies)
+	mdsMock.On("GetFailedReply", mock.AnythingOfType("*log.Mock"), mock.AnythingOfType("string")).Return(&ssmmds.SendReplyInput{}, nil)
+	newMdsService = func(appconfig.SsmagentConfig) mds.Service {
+		return mdsMock
+	}
+	proc := RunCommandService{
+		name:                mdsName,
+		context:             contextMock,
+		service:             mdsMock,
+		processorStopPolicy: sdkutil.NewStopPolicy(mdsName, stopPolicyThreshold),
+	}
+
+	for i := 0; i < multipleRetryCount; i++ {
+		proc.sendReplyLoop()
+	}
+
+	time.Sleep(1 * time.Second)
+
+	// number of tries should be the same as stop threshold
+	mdsMock.AssertNumberOfCalls(t, "SendReplyWithInput", stopPolicyThreshold+1)
 }
 
 func TestLoop_Multiple_Parallel_Error(t *testing.T) {
@@ -259,7 +289,7 @@ func TestLoop_Multiple_Parallel_Error(t *testing.T) {
 	}
 
 	for i := 0; i < multipleRetryCount; i++ {
-		go proc.loop()
+		go proc.messagePollLoop()
 	}
 
 	time.Sleep(5 * time.Second)

@@ -174,3 +174,21 @@ func (ols *offlineService) DeleteMessage(log log.T, messageID string) error {
 }
 
 func (ols *offlineService) Stop() {}
+
+func (ols *offlineService) LoadFailedReplies(log log.T) []string {
+	return nil
+}
+
+func (ols *offlineService) DeleteFailedReply(log log.T, replyId string) {}
+
+func (ols *offlineService) PersistFailedReply(log log.T, sendReply ssmmds.SendReplyInput) error {
+	return nil
+}
+
+func (ols *offlineService) GetFailedReply(log log.T, replyId string) (*ssmmds.SendReplyInput, error) {
+	return nil, nil
+}
+
+func (ols *offlineService) SendReplyWithInput(log log.T, sendReply *ssmmds.SendReplyInput) error {
+	return nil
+}

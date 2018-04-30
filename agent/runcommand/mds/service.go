@@ -18,11 +18,15 @@ import (
 	"fmt"
 	"net"
 	"net/http"
+	"os"
+	"path"
 	"strings"
 	"sync"
 	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
+	"github.com/aws/amazon-ssm-agent/agent/fileutil"
+	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/platform"
 	"github.com/aws/amazon-ssm-agent/agent/sdkutil"
@@ -53,8 +57,13 @@ type Service interface {
 	GetMessages(log log.T, instanceID string) (messages *ssmmds.GetMessagesOutput, err error)
 	AcknowledgeMessage(log log.T, messageID string) error
 	SendReply(log log.T, messageID string, payload string) error
+	SendReplyWithInput(log log.T, sendReply *ssmmds.SendReplyInput) error
 	FailMessage(log log.T, messageID string, failureType FailureType) error
 	DeleteMessage(log log.T, messageID string) error
+	LoadFailedReplies(log log.T) []string
+	DeleteFailedReply(log log.T, replyId string)
+	PersistFailedReply(log log.T, sendReply ssmmds.SendReplyInput) error
+	GetFailedReply(log log.T, replyId string) (*ssmmds.SendReplyInput, error)
 	Stop()
 }
 
@@ -201,22 +210,31 @@ func (mds *sdkService) AcknowledgeMessage(log log.T, messageID string) (err erro
 	return
 }
 
-// SendReply calls the SendReply MDS API.
-func (mds *sdkService) SendReply(log log.T, messageID string, payload string) (err error) {
-	uuid.SwitchFormat(uuid.CleanHyphen)
-	replyID := uuid.NewV4().String()
-	params := &ssmmds.SendReplyInput{
-		MessageId: aws.String(messageID), // Required
-		Payload:   aws.String(payload),   // Required
-		ReplyId:   aws.String(replyID),   // Required
-	}
-	log.Debug("Calling SendReply with params", params)
-	req, resp := mds.sdk.SendReplyRequest(params)
+// SendReplyWithInput calls SendReply MDS API given SendReplyInput object
+func (mds *sdkService) SendReplyWithInput(log log.T, sendReply *ssmmds.SendReplyInput) (err error) {
+	log.Debug("Calling SendReply with params", sendReply)
+	req, resp := mds.sdk.SendReplyRequest(sendReply)
 	if err = mds.sendRequest(req); err != nil {
 		err = fmt.Errorf("SendReply Error: %v", err)
 		log.Debug(err)
 	} else {
 		log.Info("SendReply Response", resp)
+	}
+	return
+}
+
+// SendReply transforms payload into SendReplyInput object and calls SendReplyWithInput.
+func (mds *sdkService) SendReply(log log.T, messageID string, payload string) (err error) {
+	uuid.SwitchFormat(uuid.CleanHyphen)
+	replyID := uuid.NewV4().String()
+	replyInput := ssmmds.SendReplyInput{
+		MessageId: aws.String(messageID), // Required
+		Payload:   aws.String(payload),   // Required
+		ReplyId:   aws.String(replyID),   // Required
+	}
+	if err = mds.SendReplyWithInput(log, &replyInput); err != nil {
+		log.Infof("Saving reply %v to local disk", replyID)
+		mds.PersistFailedReply(log, replyInput)
 	}
 	return
 }
@@ -254,6 +272,76 @@ func (mds *sdkService) DeleteMessage(log log.T, messageID string) (err error) {
 	return
 }
 
+// LoadFailedReplies loads SendReplyInput objects from local replies folder on disk
+func (mds *sdkService) LoadFailedReplies(log log.T) []string {
+	log.Debug("Checking Replies folder for failed sent replies")
+	instanceID, _ := platform.InstanceID()
+	absoluteDirPath := path.Join(appconfig.DefaultDataStorePath,
+		instanceID,
+		appconfig.RepliesRootDirName)
+
+	files, err := fileutil.GetFileNames(absoluteDirPath)
+	if err != nil {
+		log.Errorf("encountered error %v while listing replies in %v", err, absoluteDirPath)
+	}
+	return files
+}
+
+// DeleteFailedReply deletes failed reply from local replies folder on disk
+func (mds *sdkService) DeleteFailedReply(log log.T, replyId string) {
+	absoluteFileName := mds.getFailedReplyLocation(replyId)
+	if fileutil.Exists(absoluteFileName) {
+		err := fileutil.DeleteFile(absoluteFileName)
+		if err != nil {
+			log.Errorf("encountered error %v while deleting file %v", err, absoluteFileName)
+		} else {
+			log.Debugf("successfully deleted file %v", absoluteFileName)
+		}
+	}
+}
+
+// PersistFailedReply saves SendReplyInput object to local replies folder on disk
+func (mds *sdkService) PersistFailedReply(log log.T, sendReply ssmmds.SendReplyInput) (err error) {
+	absoluteFileName := mds.getFailedReplyLocation(*sendReply.ReplyId)
+
+	content, err := jsonutil.Marshal(sendReply)
+	if err != nil {
+		log.Errorf("encountered error with message %v while marshalling %v to string", err, sendReply)
+	} else {
+		if fileutil.Exists(absoluteFileName) {
+			log.Debugf("Reply %v already saved in file %v, skipping", sendReply.ReplyId, absoluteFileName)
+			return
+		}
+		log.Tracef("persisting reply %v in file %v", jsonutil.Indent(content), absoluteFileName)
+		if s, err := fileutil.WriteIntoFileWithPermissions(absoluteFileName, jsonutil.Indent(content), os.FileMode(int(appconfig.ReadWriteAccess))); s && err == nil {
+			log.Debugf("successfully persisted reply in %v", absoluteFileName)
+		} else {
+			log.Debugf("persisting reply in %v failed with error %v", absoluteFileName, err)
+		}
+	}
+	return err
+}
+
+// GetFailedReply load SendReplyInput object from replies folder given the reply id of the object
+func (mds *sdkService) GetFailedReply(log log.T, replyId string) (*ssmmds.SendReplyInput, error) {
+	absoluteFileName := mds.getFailedReplyLocation(replyId)
+
+	var sendReply ssmmds.SendReplyInput
+	err := jsonutil.UnmarshalFile(absoluteFileName, &sendReply)
+	if err != nil {
+		log.Errorf("encountered error with message %v while reading reply input from file - %v", err, absoluteFileName)
+	} else {
+		//logging reply as read from the file
+		jsonString, err := jsonutil.Marshal(sendReply)
+		if err != nil {
+			log.Errorf("encountered error with message %v while marshalling %v to string", err, sendReply)
+		} else {
+			log.Tracef("Send reply input read from file-system - %v", jsonutil.Indent(jsonString))
+		}
+	}
+	return &sendReply, err
+}
+
 // Stop stops this service so that any blocked calls wake up.
 func (mds *sdkService) Stop() {
 	mds.m.Lock()
@@ -279,4 +367,13 @@ func (mds *sdkService) storeRequest(req *request.Request) {
 
 func (mds *sdkService) clearRequest() {
 	mds.storeRequest(nil)
+}
+
+// getFailedReplyLocation returns path to replies folder
+func (mds *sdkService) getFailedReplyLocation(replyId string) string {
+	instanceID, _ := platform.InstanceID()
+	return path.Join(appconfig.DefaultDataStorePath,
+		instanceID,
+		appconfig.RepliesRootDirName,
+		replyId)
 }

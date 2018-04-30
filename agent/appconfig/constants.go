@@ -67,6 +67,9 @@ const (
 	RoleInventoryRootDirName     = "role"
 	InventoryContentHashFileName = "contentHash"
 
+	//aws-ssm-agent bookkeeping constants for failed sent replies
+	RepliesRootDirName = "replies"
+
 	//aws-ssm-agent bookkeeping constants for compliance
 	ComplianceRootDirName         = "compliance"
 	ComplianceContentHashFileName = "contentHash"

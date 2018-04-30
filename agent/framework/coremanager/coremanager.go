@@ -155,6 +155,16 @@ func initializeBookkeepingLocations(log logger.T, instanceID string) bool {
 		initStatus = false
 	}
 
+	log.Infof("Initializing replies folder for MDS reply requests that couldn't reach the service")
+	replies := filepath.Join(appconfig.DefaultDataStorePath,
+		instanceID,
+		appconfig.RepliesRootDirName)
+
+	if err := fileutil.MakeDirs(replies); err != nil {
+		log.Error("encountered error while creating folders for MDS replies", err)
+		initStatus = false
+	}
+
 	log.Infof("Initializing healthcheck folders for long running plugins")
 	f := filepath.Join(appconfig.DefaultDataStorePath,
 		instanceID,

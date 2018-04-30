@@ -58,3 +58,25 @@ func (mdsMock *MockedMDS) DeleteMessage(log log.T, messageID string) error {
 func (mdsMock *MockedMDS) Stop() {
 	mdsMock.Called()
 }
+
+func (mdsMock *MockedMDS) LoadFailedReplies(log log.T) []string {
+	args := mdsMock.Called(log)
+	return args.Get(0).([]string)
+}
+
+func (mdsMock *MockedMDS) DeleteFailedReply(log log.T, replyId string) {
+	mdsMock.Called(log, replyId)
+}
+
+func (mdsMock *MockedMDS) PersistFailedReply(log log.T, sendReply ssmmds.SendReplyInput) error {
+	return mdsMock.Called(log, sendReply).Error(0)
+}
+
+func (mdsMock *MockedMDS) GetFailedReply(log log.T, replyId string) (*ssmmds.SendReplyInput, error) {
+	args := mdsMock.Called(log, replyId)
+	return args.Get(0).(*ssmmds.SendReplyInput), args.Error(1)
+}
+
+func (mdsMock *MockedMDS) SendReplyWithInput(log log.T, sendReply *ssmmds.SendReplyInput) error {
+	return mdsMock.Called(log, sendReply).Error(0)
+}

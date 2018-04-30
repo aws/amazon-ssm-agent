@@ -52,6 +52,24 @@ func (s *stubSdkService) DeleteMessage(log log.T, messageID string) error {
 
 func (s *stubSdkService) Stop() {}
 
+func (s *stubSdkService) LoadFailedReplies(log log.T) []string {
+	return nil
+}
+
+func (s *stubSdkService) DeleteFailedReply(log log.T, replyId string) {}
+
+func (s *stubSdkService) PersistFailedReply(log log.T, sendReply ssmmds.SendReplyInput) error {
+	return nil
+}
+
+func (s *stubSdkService) GetFailedReply(log log.T, replyId string) (*ssmmds.SendReplyInput, error) {
+	return nil, nil
+}
+
+func (s *stubSdkService) SendReplyWithInput(log log.T, sendReply *ssmmds.SendReplyInput) error {
+	return nil
+}
+
 func stubNewMsgSvc(region string, endpoint string, creds *credentials.Credentials, connectionTimeout time.Duration) messageService.Service {
 	return &stubSdkService{}
 }
