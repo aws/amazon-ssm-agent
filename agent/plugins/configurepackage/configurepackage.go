@@ -134,7 +134,7 @@ func prepareConfigurePackage(
 			return
 		}
 
-		trace.AppendDebugf("installed: %v in state: %v", installedVersion, installState).End()
+		trace.AppendDebugf("installed: %v in state: %s", installedVersion, installState).End()
 
 		// ensure manifest file and package
 		trace = tracer.BeginSection("ensure package is locally available")

@@ -56,6 +56,28 @@ const (
 	RollbackInstall   InstallState = iota // Installing as part of rollback
 )
 
+// String returns the string representation of the InstallState
+func (state InstallState) String() string {
+	stateNames := [...]string{
+		"None",
+		"Unknown",
+		"Failed",
+		"Uninstalling",
+		"Uninstalled",
+		"New",
+		"Upgrading",
+		"Installing",
+		"Installed",
+		"RollbackUninstall",
+		"RollbackInstall"}
+
+	if state < None || state > RollbackInstall {
+		return "StateNotFound"
+	}
+
+	return stateNames[state]
+}
+
 // Repository represents local storage for packages managed by configurePackage
 // Different formats for different versions are managed within the Repository abstraction
 type Repository interface {
