@@ -94,6 +94,9 @@ const (
 	// PlatformUbuntu represents Ubuntu
 	PlatformUbuntu = "ubuntu"
 
+	// PlatformUbuntuSnap represents Ubuntu
+	PlatformUbuntuSnap = "snap"
+
 	// PlatformCentOS represents CentOS
 	PlatformCentOS = "centos"
 
@@ -261,8 +264,15 @@ func (util *Utility) CreateInstanceContext(log log.T) (context *InstanceContext,
 		UnInstaller = UninstallScript
 	} else if strings.Contains(platformName, PlatformUbuntu) {
 		platformName = PlatformUbuntu
-		installerName = PlatformUbuntu
-		Installer, UnInstaller = getUbuntuInstallScript()
+		if isSnap, err := isAgentInstalledUsingSnap(log); err == nil && isSnap {
+			installerName = PlatformUbuntuSnap
+			Installer = SnapInstaller
+			UnInstaller = SnapUnInstaller
+		} else {
+			installerName = PlatformUbuntu
+			Installer = DebInstaller
+			UnInstaller = DebUnInstaller
+		}
 	} else if strings.Contains(platformName, PlatformCentOS) {
 		platformName = PlatformCentOS
 		installerName = PlatformLinux
@@ -306,32 +316,26 @@ func (util *Utility) CreateInstanceContext(log log.T) (context *InstanceContext,
 	return context, nil
 }
 
-func getUbuntuInstallScript() (string, string) {
-	if script, err := isAgentInstalledUsingSnap(); (err == nil) && script {
-		return SnapInstaller, SnapUnInstaller
-	}
-	return DebInstaller, DebUnInstaller
-}
-
 // isAgentInstalledUsingSnap returns if snap is used to install the snap
-func isAgentInstalledUsingSnap() (result bool, err error) {
+func isAgentInstalledUsingSnap(log log.T) (result bool, err error) {
 
 	var commandOut []byte
 	var commandErr error
 	// check if current platform has snap installed
 	if commandOut, commandErr = execCommand("which", "snap").Output(); commandErr != nil {
-		err = fmt.Errorf("Error checking 'which snap' - %v", commandErr)
-		return false, err
+		log.Errorf("Error checking 'which snap' - %v", commandErr)
+		return false, commandErr
 	}
 	if string(commandOut) == "" {
 		// Since which snap was empty return that snap is not installed
 		return false, nil
 	}
 	if commandOut, commandErr = execCommand("snap", "services", "amazon-ssm-agent").Output(); commandErr != nil {
-		err = fmt.Errorf("Error checking 'snap services amazon-ssm-agent' - %v", commandErr)
-		return false, err
+		log.Errorf("Error checking 'snap services amazon-ssm-agent' - %v", commandErr)
+		return false, commandErr
 	}
 	if strings.Contains(string(commandOut), "enabled") {
+		log.Debug("Snap is installed")
 		return true, nil
 	}
 	return false, nil
