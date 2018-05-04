@@ -1,5 +1,10 @@
 Latest
 ===============
+- Bug fix to retry sending document results if they couldn't reach the service
+
+2.2.493.0
+===============
+NOTE: Downgrade to this version using AWS-UpdateSSMAgent is not permitted for agent installed using snap
 - Added support for Ubuntu Snap packaging
 - Bug fix so that aws:downloadContent does not change permissions of directories
 - Bug fix to Cloudwatch plugin where StartType has duplicated Enabled value
