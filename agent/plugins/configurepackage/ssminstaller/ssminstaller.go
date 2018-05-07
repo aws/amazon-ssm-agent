@@ -95,14 +95,14 @@ func (inst *Installer) executeAction(tracer trace.Tracer, context context.T, act
 	output := &trace.PluginOutputTrace{Tracer: tracer}
 	output.SetStatus(contracts.ResultStatusSuccess)
 
-	exists, pluginsInfo, _, err := inst.readAction(tracer, context, actionName)
+	exists, pluginsInfo, _, orchestrationDir, err := inst.readAction(tracer, context, actionName)
 	if exists {
 		if err != nil {
 			exectrace.WithError(err)
 			output.MarkAsFailed(nil, nil)
 		}
 		exectrace.AppendInfof("Initiating %v %v %v", inst.packageName, inst.version, actionName)
-		inst.executeDocument(tracer, context, actionName, pluginsInfo, output)
+		inst.executeDocument(tracer, context, actionName, orchestrationDir, pluginsInfo, output)
 	}
 
 	exectrace.End()
@@ -114,7 +114,7 @@ func (inst *Installer) getActionPath(actionName string, extension string) string
 	return filepath.Join(inst.packagePath, fmt.Sprintf("%v.%v", actionName, extension))
 }
 
-func (inst *Installer) readScriptAction(action *Action, workingDir string, pluginName string, runCommand []interface{}) (pluginsInfo []contracts.PluginState, err error) {
+func (inst *Installer) readScriptAction(action *Action, workingDir string, orchestrationDir string, pluginName string, runCommand []interface{}) (pluginsInfo []contracts.PluginState, err error) {
 	pluginsInfo = []contracts.PluginState{}
 
 	pluginFullName := fmt.Sprintf("aws:%v", pluginName)
@@ -122,7 +122,6 @@ func (inst *Installer) readScriptAction(action *Action, workingDir string, plugi
 	if inst.config.OutputS3BucketName != "" {
 		s3Prefix = fileutil.BuildS3Path(inst.config.OutputS3KeyPrefix, inst.config.PluginID, action.actionName, pluginFullName)
 	}
-	orchestrationDir := filepath.Join(inst.config.OrchestrationDirectory, action.actionName)
 
 	inputs := make(map[string]interface{})
 	inputs["workingDirectory"] = workingDir
@@ -153,7 +152,7 @@ func (inst *Installer) readScriptAction(action *Action, workingDir string, plugi
 }
 
 // readShAction turns an sh action into a set of SSM Document Plugins to execute
-func (inst *Installer) readShAction(context context.T, action *Action, workingDir string, envVars map[string]string) (pluginsInfo []contracts.PluginState, err error) {
+func (inst *Installer) readShAction(context context.T, action *Action, workingDir string, orchestrationDir string, envVars map[string]string) (pluginsInfo []contracts.PluginState, err error) {
 	if action.actionType != ACTION_TYPE_SH {
 		return nil, fmt.Errorf("Internal error")
 	}
@@ -168,11 +167,11 @@ func (inst *Installer) readShAction(context context.T, action *Action, workingDi
 
 	runCommand = append(runCommand, fmt.Sprintf("sh %v.sh", action.actionName))
 
-	return inst.readScriptAction(action, workingDir, "runShellScript", runCommand)
+	return inst.readScriptAction(action, workingDir, orchestrationDir, "runShellScript", runCommand)
 }
 
 // readPs1Action turns an ps1 action into a set of SSM Document Plugins to execute
-func (inst *Installer) readPs1Action(context context.T, action *Action, workingDir string, envVars map[string]string) (pluginsInfo []contracts.PluginState, err error) {
+func (inst *Installer) readPs1Action(context context.T, action *Action, workingDir string, orchestrationDir string, envVars map[string]string) (pluginsInfo []contracts.PluginState, err error) {
 	if action.actionType != ACTION_TYPE_PS1 {
 		return nil, fmt.Errorf("Internal error")
 	}
@@ -187,7 +186,7 @@ func (inst *Installer) readPs1Action(context context.T, action *Action, workingD
 
 	runCommand = append(runCommand, fmt.Sprintf(".\\%v.ps1; exit $LASTEXITCODE", action.actionName))
 
-	return inst.readScriptAction(action, workingDir, "runPowerShellScript", runCommand)
+	return inst.readScriptAction(action, workingDir, orchestrationDir, "runPowerShellScript", runCommand)
 }
 
 func (inst *Installer) resolveAction(tracer trace.Tracer, actionName string) (exists bool, action *Action, err error) {
@@ -259,41 +258,42 @@ func (inst *Installer) getEnvVars(actionName string, context context.T) (envVars
 
 // readAction returns a JSON document describing a management action and its working directory, or an empty string
 // if there is nothing to do for a given action
-func (inst *Installer) readAction(tracer trace.Tracer, context context.T, actionName string) (exists bool, pluginsInfo []contracts.PluginState, workingDir string, err error) {
+func (inst *Installer) readAction(tracer trace.Tracer, context context.T, actionName string) (exists bool, pluginsInfo []contracts.PluginState, workingDir string, orchestrationDir string, err error) {
 	// TODO: Split into linux and windows
 
 	var action *Action
 
 	if exists, action, err = inst.resolveAction(tracer, actionName); !exists || action == nil || err != nil {
-		return exists, nil, "", err
+		return exists, nil, "", "", err
 	}
 
 	workingDir = inst.packagePath
+	orchestrationDir = filepath.Join(inst.config.OrchestrationDirectory, actionName)
 
 	if action.actionType == ACTION_TYPE_SH {
 		var envVars map[string]string
 		if envVars, err = inst.getEnvVars(actionName, context); err != nil {
-			return exists, nil, "", err
+			return exists, nil, "", "", err
 		}
 
-		if pluginsInfo, err = inst.readShAction(context, action, workingDir, envVars); err != nil {
-			return exists, nil, "", err
+		if pluginsInfo, err = inst.readShAction(context, action, workingDir, orchestrationDir, envVars); err != nil {
+			return exists, nil, "", "", err
 		}
 
-		return exists, pluginsInfo, workingDir, nil
+		return exists, pluginsInfo, workingDir, orchestrationDir, nil
 	} else if action.actionType == ACTION_TYPE_PS1 {
 		var envVars map[string]string
 		if envVars, err = inst.getEnvVars(actionName, context); err != nil {
-			return exists, nil, "", err
+			return exists, nil, "", "", err
 		}
 
-		if pluginsInfo, err = inst.readPs1Action(context, action, workingDir, envVars); err != nil {
-			return exists, nil, "", err
+		if pluginsInfo, err = inst.readPs1Action(context, action, workingDir, orchestrationDir, envVars); err != nil {
+			return exists, nil, "", "", err
 		}
 
-		return exists, pluginsInfo, workingDir, nil
+		return exists, pluginsInfo, workingDir, orchestrationDir, nil
 	} else {
-		return exists, nil, "", fmt.Errorf("Internal error. Unknown actionType %v", action.actionType)
+		return exists, nil, "", "", fmt.Errorf("Internal error. Unknown actionType %v", action.actionType)
 	}
 }
 
@@ -302,12 +302,13 @@ func (inst *Installer) executeDocument(
 	tracer trace.Tracer,
 	context context.T,
 	actionName string,
+	orchestrationDir string,
 	pluginsInfo []contracts.PluginState,
 	output contracts.PluginOutputter) {
 
 	exectrace := tracer.CurrentTrace()
 
-	pluginOutputs := inst.execdep.ExecuteDocument(context, pluginsInfo, inst.config.BookKeepingFileName, times.ToIso8601UTC(time.Now()))
+	pluginOutputs := inst.execdep.ExecuteDocument(context, pluginsInfo, inst.config.BookKeepingFileName, times.ToIso8601UTC(time.Now()), orchestrationDir)
 	if pluginOutputs == nil {
 		exectrace.WithError(fmt.Errorf("No output from executing %s document", actionName))
 		output.MarkAsFailed(nil, nil)

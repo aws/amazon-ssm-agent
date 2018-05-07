@@ -34,7 +34,7 @@ import (
 // dependency on action execution
 type execDep interface {
 	ParseDocument(context context.T, documentRaw []byte, orchestrationDir string, s3Bucket string, s3KeyPrefix string, messageID string, documentID string, defaultWorkingDirectory string) (pluginsInfo []contracts.PluginState, err error)
-	ExecuteDocument(context context.T, pluginInput []contracts.PluginState, documentID string, documentCreatedDate string) (pluginOutputs map[string]*contracts.PluginResult)
+	ExecuteDocument(context context.T, pluginInput []contracts.PluginState, documentID string, documentCreatedDate string, orchestrationDirectory string) (pluginOutputs map[string]*contracts.PluginResult)
 }
 
 type execDepImp struct {
@@ -60,7 +60,7 @@ func (m *execDepImp) ParseDocument(context context.T, documentRaw []byte, orches
 	return docparser.ParseDocument(log, &docContent, parserInfo, nil)
 }
 
-func (m *execDepImp) ExecuteDocument(context context.T, pluginInput []contracts.PluginState, documentID string, documentCreatedDate string) (pluginOutputs map[string]*contracts.PluginResult) {
+func (m *execDepImp) ExecuteDocument(context context.T, pluginInput []contracts.PluginState, documentID string, documentCreatedDate string, orchestrationDirectory string) (pluginOutputs map[string]*contracts.PluginResult) {
 	log := context.Log()
 	log.Debugf("Running subcommand")
 	exe := basicexecuter.NewBasicExecuter(context)
@@ -69,12 +69,15 @@ func (m *execDepImp) ExecuteDocument(context context.T, pluginInput []contracts.
 		DocumentInformation: contracts.DocumentInfo{
 			DocumentID: documentID,
 		},
+		IOConfig: contracts.IOConfiguration{
+			OrchestrationDirectory: orchestrationDirectory,
+		},
 		InstancePluginsInformation: pluginInput,
 	}
 	//specify the subdocument's bookkeeping location
 	instanceID, err := instance.InstanceID()
 	if err != nil {
-		log.Error("faile to load instance id")
+		log.Error("failed to load instance id")
 		return
 	}
 	docStore := executer.NewDocumentFileStore(context, documentID, instanceID, appconfig.DefaultLocationOfCurrent, &docState, docmanager.NewDocumentFileMgr(appconfig.DefaultDataStorePath, appconfig.DefaultDocumentRootDirName, appconfig.DefaultLocationOfState))

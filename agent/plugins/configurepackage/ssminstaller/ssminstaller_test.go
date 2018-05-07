@@ -84,11 +84,12 @@ func testReadAction(t *testing.T, actionPathNoExt string, contentSh []byte, cont
 	inst := Installer{filesysdep: &mockFileSys, packagePath: testPackagePath, envdetectCollector: mockEnvdetectCollector}
 
 	// Call and validate mock expectations and return value
-	exists, actionDoc, workingDir, err := inst.readAction(tracer, contextMock, "Foo")
+	exists, actionDoc, workingDir, orchestrationDir, err := inst.readAction(tracer, contextMock, "Foo")
 	mockFileSys.AssertExpectations(t)
 	assert.True(t, exists)
 	assert.NotEmpty(t, actionDoc)
 	assert.Equal(t, workingDir, testPackagePath)
+	assert.Equal(t, orchestrationDir, "Foo")
 	assert.Nil(t, err)
 }
 
@@ -106,11 +107,12 @@ func testReadActionInvalid(t *testing.T, actionPathNoExt string, contentSh []byt
 	inst := Installer{filesysdep: &mockFileSys, packagePath: testPackagePath, envdetectCollector: mockEnvdetectCollector}
 
 	// Call and validate mock expectations and return value
-	exists, actionDoc, workingDir, err := inst.readAction(tracer, contextMock, "Foo")
+	exists, actionDoc, workingDir, orchestrationDir, err := inst.readAction(tracer, contextMock, "Foo")
 	mockFileSys.AssertExpectations(t)
 	assert.True(t, exists)
 	assert.Empty(t, actionDoc)
 	assert.Empty(t, workingDir)
+	assert.Empty(t, orchestrationDir)
 	assert.NotNil(t, err)
 }
 
@@ -135,11 +137,12 @@ func TestReadActionMissing(t *testing.T) {
 	repo := Installer{filesysdep: &mockFileSys, packagePath: testPackagePath, envdetectCollector: mockEnvdetectCollector}
 
 	// Call and validate mock expectations and return value
-	exists, actionDoc, workingDir, err := repo.readAction(tracer, contextMock, "Foo")
+	exists, actionDoc, workingDir, orchestrationDir, err := repo.readAction(tracer, contextMock, "Foo")
 	mockFileSys.AssertExpectations(t)
 	assert.False(t, exists)
 	assert.Empty(t, actionDoc)
 	assert.Empty(t, workingDir)
+	assert.Empty(t, orchestrationDir)
 	assert.Nil(t, err)
 }
 
@@ -159,11 +162,12 @@ func testReadActionTooManyActionImplementations(t *testing.T, existSh bool, exis
 	repo := Installer{filesysdep: &mockFileSys, packagePath: testPackagePath, envdetectCollector: mockEnvdetectCollector}
 
 	// Call and validate mock expectations and return value
-	exists, actionDoc, workingDir, err := repo.readAction(tracer, contextMock, "Foo")
+	exists, actionDoc, workingDir, orchestrationDir, err := repo.readAction(tracer, contextMock, "Foo")
 	mockFileSys.AssertExpectations(t)
 	assert.True(t, exists)
 	assert.Empty(t, actionDoc)
 	assert.Empty(t, workingDir)
+	assert.Empty(t, orchestrationDir)
 	assert.NotNil(t, err)
 }
 
@@ -178,7 +182,7 @@ func TestInstall_ExecuteError(t *testing.T) {
 	mockReadAction(t, &mockFileSys, actionPathNoExt, []byte("echo sh"), []byte{}, false)
 
 	mockExec := MockedExec{}
-	mockExec.On("ExecuteDocument", mock.Anything, mock.Anything, mock.Anything, mock.Anything, mock.Anything).Return(map[string]*contracts.PluginResult{"Foo": {StandardError: "execute error"}}).Once()
+	mockExec.On("ExecuteDocument", mock.Anything, mock.Anything, mock.Anything, mock.Anything, mock.Anything, mock.Anything).Return(map[string]*contracts.PluginResult{"Foo": {StandardError: "execute error"}}).Once()
 
 	mockEnvdetectCollector := &envdetect.CollectorMock{}
 	mockEnvdetectCollector.On("CollectData", mock.Anything).Return(&environmentStub, nil).Once()
@@ -294,7 +298,8 @@ func (execMock *MockedExec) ExecuteDocument(
 	context context.T,
 	pluginInput []contracts.PluginState,
 	documentID string,
-	documentCreatedDate string) (pluginOutputs map[string]*contracts.PluginResult) {
+	documentCreatedDate string,
+	orchestrationDirectory string) (pluginOutputs map[string]*contracts.PluginResult) {
 	args := execMock.Called(context, pluginInput, documentID, documentCreatedDate)
 	return args.Get(0).(map[string]*contracts.PluginResult)
 }
