@@ -18,6 +18,8 @@ package rundocument
 import (
 	"encoding/json"
 
+	"path/filepath"
+
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
@@ -33,7 +35,7 @@ type ExecDocument interface {
 	ParseDocument(log log.T, documentRaw []byte, orchestrationDir string,
 		s3Bucket string, s3KeyPrefix string, messageID string, documentID string, defaultWorkingDirectory string,
 		params map[string]interface{}) (pluginsInfo []contracts.PluginState, err error)
-	ExecuteDocument(context context.T, pluginInput []contracts.PluginState, documentID string,
+	ExecuteDocument(config contracts.Configuration, context context.T, pluginInput []contracts.PluginState, documentID string,
 		documentCreatedDate string) (chan contracts.DocumentResult, error)
 }
 
@@ -61,22 +63,32 @@ func (exec ExecDocumentImpl) ParseDocument(log log.T, documentRaw []byte, orches
 		DocumentId:        documentID,
 		DefaultWorkingDir: defaultWorkingDirectory,
 	}
-	pluginsInfo, err = docparser.ParseDocument(log, &docContent, parserInfo, params)
 
+	pluginsInfo, err = docparser.ParseDocument(log, &docContent, parserInfo, params)
 	log.Debug("Parsed document - ", docContent)
 	log.Debug("Plugins Info - ", pluginsInfo)
 	return
 }
 
 // ExecuteDocument is responsible to execute the sub-documents that are created or downloaded by the executeCommand plugin
-func (exec ExecDocumentImpl) ExecuteDocument(context context.T, pluginInput []contracts.PluginState, documentID string,
+func (exec ExecDocumentImpl) ExecuteDocument(config contracts.Configuration, context context.T, pluginInput []contracts.PluginState, documentID string,
 	documentCreatedDate string) (resultChannels chan contracts.DocumentResult, err error) {
 	log := context.Log()
 	log.Info("Running sub-document")
 
+	// The full path of orchestrationDir should look like:
+	// Linux: /var/lib/amazon/ssm/instance-id/document/orchestration/command-id/plugin-id
+	// Windows: %PROGRAMDATA%\Amazon\SSM\InstanceData\instance-id\document\orchestration\command-id\plugin-id
+	orchestrationDir := filepath.Join(config.OrchestrationDirectory, config.PluginID)
+
 	docState := contracts.DocumentState{
 		DocumentInformation: contracts.DocumentInfo{
 			DocumentID: documentID,
+		},
+		IOConfig: contracts.IOConfiguration{
+			OrchestrationDirectory: orchestrationDir,
+			OutputS3BucketName:     "",
+			OutputS3KeyPrefix:      "",
 		},
 		InstancePluginsInformation: pluginInput,
 	}

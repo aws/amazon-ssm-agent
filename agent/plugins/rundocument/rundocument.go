@@ -163,10 +163,9 @@ func (p *Plugin) runDocument(context context.T, input *RunDocumentPluginInput, c
 
 	var resultsChannel chan contracts.DocumentResult
 	var pluginOutput map[string]*contracts.PluginResult
-	if resultsChannel, err = p.execDoc.ExecuteDocument(context, pluginsInfo, config.BookKeepingFileName, times.ToIso8601UTC(time.Now())); err != nil {
+	if resultsChannel, err = p.execDoc.ExecuteDocument(config, context, pluginsInfo, config.BookKeepingFileName, times.ToIso8601UTC(time.Now())); err != nil {
 		output.MarkAsFailed(fmt.Errorf("There was an error while running documents - %v", err.Error()))
 	}
-
 	for res := range resultsChannel {
 		if res.LastPlugin == "" {
 			pluginOutput = res.PluginResults

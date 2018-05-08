@@ -95,7 +95,8 @@ func TestExecDocumentImpl_ExecuteDocumentFailure(t *testing.T) {
 	exec := ExecDocumentImpl{
 		DocExecutor: execMock,
 	}
-	_, err := exec.ExecuteDocument(contextMock, pluginInput, documentId, "time")
+	conf := createStubConfiguration("orch", "bucket", "prefix", "1234-1234-1234", "directory")
+	_, err := exec.ExecuteDocument(conf, contextMock, pluginInput, documentId, "time")
 
 	assert.NoError(t, err)
 }
@@ -119,13 +120,38 @@ func TestExecDocumentImpl_ExecuteDocumentSuccess(t *testing.T) {
 	mockObj.On("InstanceID", mock.Anything, mock.Anything).Return("instanceID", nil)
 
 	instance = mockObj
-
 	execMock.On("Run", mock.AnythingOfType("*task.ChanneledCancelFlag"), mock.AnythingOfType("*executer.DocumentFileStore")).Return(docResultChan)
-
 	exec := ExecDocumentImpl{
 		DocExecutor: execMock,
 	}
-	_, err := exec.ExecuteDocument(contextMock, pluginInput, documentId, "time")
+	conf := createStubConfiguration("orch", "bucket", "prefix", "1234-1234-1234", "directory")
+	_, err := exec.ExecuteDocument(conf, contextMock, pluginInput, documentId, "time")
+
+	assert.NoError(t, err)
+}
+
+func TestExecDocumentImpl_ExecuteDocumentWithMultiplePlugin(t *testing.T) {
+
+	documentId := "documentId"
+	conf := contracts.Configuration{
+		OrchestrationDirectory:  "orch",
+		OutputS3BucketName:      "bucket",
+		OutputS3KeyPrefix:       "prefix",
+		MessageId:               "1234567890",
+		PluginID:                "aws:runShellScript",
+		DefaultWorkingDirectory: "directory",
+		PluginName:              "aws:runShellScript",
+	}
+	var pluginInput []contracts.PluginState
+	pluginInput = append(pluginInput, plugin)
+	execMock := executermocks.NewMockExecuter()
+	docResultChan := make(chan contracts.DocumentResult)
+
+	execMock.On("Run", mock.AnythingOfType("*task.ChanneledCancelFlag"), mock.AnythingOfType("*executer.DocumentFileStore")).Return(docResultChan)
+	exec := ExecDocumentImpl{
+		DocExecutor: execMock,
+	}
+	_, err := exec.ExecuteDocument(conf, contextMock, pluginInput, documentId, "time")
 
 	assert.NoError(t, err)
 }
