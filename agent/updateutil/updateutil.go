@@ -319,26 +319,12 @@ func (util *Utility) CreateInstanceContext(log log.T) (context *InstanceContext,
 // isAgentInstalledUsingSnap returns if snap is used to install the snap
 func isAgentInstalledUsingSnap(log log.T) (result bool, err error) {
 
-	var commandOut []byte
-	var commandErr error
-	// check if current platform has snap installed
-	if commandOut, commandErr = execCommand("which", "snap").Output(); commandErr != nil {
-		log.Errorf("Error checking 'which snap' - %v", commandErr)
-		return false, commandErr
-	}
-	if string(commandOut) == "" {
-		// Since which snap was empty return that snap is not installed
-		return false, nil
-	}
-	if commandOut, commandErr = execCommand("snap", "services", "amazon-ssm-agent").Output(); commandErr != nil {
+	if _, commandErr := execCommand("snap", "services", "amazon-ssm-agent").Output(); commandErr != nil {
 		log.Errorf("Error checking 'snap services amazon-ssm-agent' - %v", commandErr)
 		return false, commandErr
 	}
-	if strings.Contains(string(commandOut), "enabled") {
-		log.Debug("Snap is installed")
-		return true, nil
-	}
-	return false, nil
+	log.Debug("Agent is installed using snap")
+	return true, nil
 
 }
 
