@@ -41,13 +41,21 @@ checkstyle::
 coverage:: build-linux
 	$(BGO_SPACE)/Tools/src/coverage.sh github.com/aws/amazon-ssm-agent/agent/...
 
-build:: build-linux build-freebsd build-windows build-linux-386 build-windows-386 build-arm
+build-all:: build-linux build-freebsd build-windows build-linux-386 build-windows-386 build-arm
 
-prepack:: cpy-plugins prepack-linux prepack-linux-386 prepack-windows prepack-windows-386
+prepack-all:: cpy-plugins prepack-linux prepack-linux-386 prepack-windows prepack-windows-386
 
-package:: create-package-folder package-linux package-windows
+package-all:: create-package-folder package-linux package-windows
 
-release:: clean checkstyle release-test pre-release build prepack package
+release:: clean quick-integtest checkstyle pre-release build-all prepack-all package-all
+
+# This is used to quickly test and build for specific target.
+dev-build-linux:: clean quick-integtest checkstyle pre-release build-linux
+dev-build-freebsd:: clean quick-integtest checkstyle pre-release build-freebsd
+dev-build-windows:: clean quick-integtest checkstyle pre-release build-windows
+dev-build-linux-386:: clean quick-integtest checkstyle pre-release build-linux-386
+dev-build-windows-386:: clean quick-integtest checkstyle pre-release build-windows-386
+dev-build-arm:: clean quick-integtest checkstyle pre-release build-arm
 
 ifneq ($(FINALIZE),)
 	bgo-final
@@ -67,8 +75,11 @@ update-plugins-binaries:
 cpy-plugins:
 	$(BGO_SPACE)/Tools/src/copy_plugin_binaries.sh $(BRAZIL_BUILD)
 
-.PHONY: release-test
-release-test: copy-src pre-build pre-release quick-integtest
+.PHONY: quick-integtest
+quick-integtest: copy-src pre-build pre-release --quick-integtest
+
+.PHONY: all-tests
+all-tests: copy-src pre-build pre-release --all-tests
 
 .PHONY: pre-release
 pre-release:
@@ -310,14 +321,14 @@ get-tools:
 	go get -u golang.org/x/tools/go/loader
 	go get -u golang.org/x/tools/go/types
 
-.PHONY: quick-integtest
-quick-integtest:
+.PHONY: --quick-integtest
+--quick-integtest:
 	# if you want to restrict to some specific package, sample below
 	# go test -v -gcflags "-N -l" -tags=integration github.com/aws/amazon-ssm-agent/agent/fileutil/...
 	go test -gcflags "-N -l" -tags=integration github.com/aws/amazon-ssm-agent/agent/...
 
-.PHONY: quick-test
-quick-test:
+.PHONY: --all-tests
+--all-tests:
 	# if you want to test a specific package, you can add the package name instead of the dots. Sample below
 	# go test -gcflags "-N -l" github.com/aws/amazon-ssm-agent/agent/task
 	go test -gcflags "-N -l" github.com/aws/amazon-ssm-agent/agent/...
