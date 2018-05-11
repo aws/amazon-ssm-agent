@@ -99,6 +99,7 @@ func NewCoreManager(instanceIdPtr *string, regionPtr *string, log logger.T) (cm 
 	cloudwatchPublisher := initializeClientDiagnostics(log)
 
 	context := context.Default(log, config).With("[instanceID=" + instanceId + "]")
+
 	coreModules := coremodules.RegisteredCoreModules(context)
 	runpluginutil.SSMPluginRegistry = plugin.RegisteredWorkerPlugins(context)
 

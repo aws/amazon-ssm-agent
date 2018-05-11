@@ -18,6 +18,7 @@ import (
 	"os"
 	"path"
 	"path/filepath"
+	"regexp"
 	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
@@ -28,7 +29,7 @@ import (
 )
 
 const (
-	maxLogFileDeletions int = 100
+	maxOrchestrationDirectoryDeletions int = 100
 )
 
 type validString func(string) bool
@@ -160,60 +161,134 @@ func orchestrationDir(instanceID, orchestrationRootDirName string) string {
 		orchestrationRootDirName)
 }
 
-// DeleteOldOrchestrationFolderLogs deletes the logs from document/state/completed and document/orchestration folders older than retention duration which satisfy the file name format
-func DeleteOldOrchestrationFolderLogs(log log.T, instanceID, orchestrationRootDirName string, retentionDurationHours int, isIntendedFileNameFormat validString) {
-	defer func() {
-		// recover in case the function panics
-		if msg := recover(); msg != nil {
-			log.Errorf("DeleteOldOrchestrationFolderLogs failed with message %v", msg)
-		}
-	}()
-
+// getOrchestrationDirectoryNames returns list of orchestration directories.
+func getOrchestrationDirectoryNames(log log.T, instanceID, orchestrationRootDirName string, isIntendedFileNameFormat validString) (orchestrationRootDir string, dirNames []string, err error) {
 	// Form the path for orchestration logs dir
-	orchestrationRootDir := orchestrationDir(instanceID, orchestrationRootDirName)
+	orchestrationRootDir = orchestrationDir(instanceID, orchestrationRootDirName)
 
 	if !fileutil.Exists(orchestrationRootDir) {
-		log.Debugf("Completed log directory doesn't exist: %v", orchestrationRootDir)
-		return
+		log.Debugf("Orchestration root directory doesn't exist: %v", orchestrationRootDir)
+		return orchestrationRootDir, []string{}, nil
 	}
 
-	outputFiles, err := fileutil.GetFileNames(orchestrationRootDir)
+	dirNames, err = fileutil.GetDirectoryNames(orchestrationRootDir)
+	return orchestrationRootDir, dirNames, err
+}
+
+// isRunCommandDirName checks whether the file name format satisfies the format for RunCommand generated log files
+func isRunCommandDirName(dirName string) (matched bool) {
+	matched, _ = regexp.MatchString("^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$", dirName)
+	return
+}
+
+// isAssociationLogFile checks whether the file name passed is of the format of Association Files
+func isAssociationRunDirName(dirName string) (matched bool) {
+	matched, _ = regexp.MatchString("^[0-9]{4}-[0-9]{2}-[0-9]{2}.*$", dirName)
+	return
+}
+
+// cleanupAssociationDirectory cleans up association directory by deleting expired association run directories from it.
+func cleanupAssociationDirectory(log log.T, deletedCount int, commandOrchestrationPath string, retentionDurationHours int) (canDeleteDirectory bool, deletedCountAfter int) {
+	subdirNames, err := fileutil.GetDirectoryNames(commandOrchestrationPath)
 	if err != nil {
-		log.Debugf("Failed to read files under %v", err)
+		log.Debugf("Error reading association orchestration directory %v: %v", commandOrchestrationPath, err)
+		return false, deletedCount
+	}
+
+	canDeleteDirectory = true
+
+	for _, subdirName := range subdirNames {
+		if deletedCount >= maxOrchestrationDirectoryDeletions {
+			log.Infof("Reached max number of deletions for orchestration directories: %v", deletedCount)
+			canDeleteDirectory = false
+			break
+		}
+
+		if !isAssociationRunDirName(subdirName) {
+			continue
+		}
+
+		subdirpath := filepath.Join(commandOrchestrationPath, subdirName)
+		log.Debugf("Checking association-run orchestration directory: %v", subdirpath)
+		if expiredDir := isOlderThan(log, subdirpath, retentionDurationHours); !expiredDir {
+			canDeleteDirectory = false
+			continue
+		}
+
+		log.Debugf("Attempting deletion of association-run orchestration directory %v", subdirpath)
+		if err := fileutil.DeleteDirectory(subdirpath); err != nil {
+			log.Debugf("Error deleting directory %v: %v", subdirpath, err)
+			canDeleteDirectory = false
+			continue
+		}
+
+		deletedCount += 1
+	}
+
+	return canDeleteDirectory, deletedCount
+}
+
+// isLegacyAssociationDirectory checks whether orchestration directory is a legacy association directory.
+func isLegacyAssociationDirectory(log log.T, commandOrchestrationPath string) (bool, error) {
+	subdirNames, err := fileutil.GetDirectoryNames(commandOrchestrationPath)
+	if err != nil {
+		log.Debugf("Error reading orchestration directory %v: %v", commandOrchestrationPath, err)
+		return false, err
+	}
+
+	// If run sub-directory exists, then it is legacy association orchestration directory
+	for _, subdirName := range subdirNames {
+		if isAssociationRunDirName(subdirName) {
+			return true, nil
+		}
+	}
+	return false, nil
+}
+
+// DeleteOldOrchestrationDirectories deletes expired orchestration directories based on retentionDurationHours and associationRetentionDurationHours.
+func DeleteOldOrchestrationDirectories(log log.T, instanceID, orchestrationRootDirName string, retentionDurationHours int, associationRetentionDurationHours int) {
+	orchestrationRootDir, dirNames, err := getOrchestrationDirectoryNames(log, instanceID, orchestrationRootDirName, isRunCommandDirName)
+	if err != nil {
+		log.Debugf("Failed to get orchestration directories under %v", err)
 		return
 	}
 
-	if outputFiles == nil || len(outputFiles) == 0 {
-		log.Debugf("Completed log directory %v is invalid or empty", orchestrationRootDir)
-		return
-	}
+	log.Debugf("Cleaning up orchestration directories: %v", orchestrationRootDir)
 
-	// Go through all log files in the completed logs dir, delete max maxLogFileDeletions files and the corresponding dirs from orchestration folder
-	countOfDeletions := 0
-	for _, completedFile := range outputFiles {
+	deletedCount := 0
+	for _, dirName := range dirNames {
+		if deletedCount >= maxOrchestrationDirectoryDeletions {
+			log.Infof("Reached max number of deletions for orchestration directories: %v", deletedCount)
+			break
+		}
 
-		outputLogFullPath := filepath.Join(orchestrationRootDir, completedFile)
+		commandOrchestrationPath := filepath.Join(orchestrationRootDir, dirName)
 
-		//Checking for the file name format so that the function only deletes the files it is called to do. Also checking whether the file is beyond retention time.
-		if isIntendedFileNameFormat(completedFile) && isOlderThan(log, outputLogFullPath, retentionDurationHours) {
-			log.Debugf("Attempting Deletion of folder : %v", outputLogFullPath)
+		if isAssoc, err := isLegacyAssociationDirectory(log, commandOrchestrationPath); isAssoc && err == nil {
+			var canDeleteDirectory bool
+			canDeleteDirectory, deletedCount = cleanupAssociationDirectory(log, deletedCount, commandOrchestrationPath, associationRetentionDurationHours)
+			if !canDeleteDirectory {
+				continue
+			}
+		}
 
-			err := fileutil.DeleteDirectory(outputLogFullPath)
+		log.Debugf("Checking command orchestration directory: %v", commandOrchestrationPath)
+		if isOlderThan(log, commandOrchestrationPath, retentionDurationHours) {
+			log.Debugf("Attempting deletion of command orchestration directory: %v", commandOrchestrationPath)
+
+			err := fileutil.DeleteDirectory(commandOrchestrationPath)
 			if err != nil {
-				log.Debugf("Error deleting dir %v: %v", outputLogFullPath, err)
+				log.Debugf("Error deleting directory %v: %v", commandOrchestrationPath, err)
 				continue
 			}
 
 			// Deletion of both document state and orchestration file was successful
-			countOfDeletions += 1
-			if countOfDeletions > maxLogFileDeletions {
-				break
-			}
+			deletedCount += 1
 		}
 
 	}
 
-	log.Debugf("Completed DeleteOldOrchestrationFolderLogs")
+	log.Debugf("Completed orchestration directory clean up")
 }
 
 // isOlderThan checks whether the file is older than the retention duration
