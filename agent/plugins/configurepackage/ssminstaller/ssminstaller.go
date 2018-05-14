@@ -177,7 +177,7 @@ func (inst *Installer) readPs1Action(context context.T, action *Action, workingD
 	}
 
 	runCommand := []interface{}{}
-	runCommand = append(runCommand, fmt.Sprintf("echo Running %v.ps1", action.actionName))
+	runCommand = append(runCommand, fmt.Sprintf("echo 'Running %v.ps1'", action.actionName))
 
 	for k, v := range envVars {
 		v = executers.QuotePsString(v)
