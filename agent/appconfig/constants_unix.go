@@ -117,5 +117,9 @@ func init() {
 			DefaultSessionWorker = "/snap/amazon-ssm-agent/current/ssm-session-worker"
 			DefaultSessionLogger = "/snap/amazon-ssm-agent/current/ssm-session-logger"
 		}
+		ssmDefaultDocumentWorkerFromEnv := os.Getenv("AWS_SSM_DEFAULT_DOCUMENT_WORKER")
+		if ssmDefaultDocumentWorkerFromEnv != "" {
+			DefaultDocumentWorker = ssmDefaultDocumentWorkerFromEnv
+		}
 	}
 }
