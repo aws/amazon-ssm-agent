@@ -1427,3 +1427,79 @@ func TestRunPluginsWithUnknownPlugin(t *testing.T) {
 
 	assert.Equal(t, pluginResults, outputs)
 }
+
+func TestRunPluginSuccessWithNonTruncatedResult(t *testing.T) {
+	setIsSupportedMock()
+	defer restoreIsSupported()
+	pluginNames := []string{testPlugin1, testPlugin2}
+	pluginConfigs := make(map[string]contracts.PluginState)
+	pluginResults := make(map[string]*contracts.PluginResult)
+	pluginInstances := make(map[string]*PluginMock)
+	pluginRegistry := PluginRegistry{}
+	var cancelFlag task.CancelFlag = task.NewChanneledCancelFlag()
+
+	ctx := context.NewMockDefault()
+	defaultTime := time.Now()
+	pluginConfigs2 := make([]contracts.PluginState, len(pluginNames))
+	ioConfig := contracts.IOConfiguration{}
+
+	for index, name := range pluginNames {
+
+		// create mock plugin instance for testing
+		pluginInstances[name] = new(PluginMock)
+
+		// create configuration for execution
+		config := contracts.Configuration{
+			PluginID:   name,
+			PluginName: name,
+		}
+
+		// setup expectations
+		pluginConfigs[name] = contracts.PluginState{
+			Name:          name,
+			Id:            name,
+			Configuration: config,
+		}
+		pluginResults[name] = &contracts.PluginResult{
+			PluginID:       name,
+			PluginName:     name,
+			StartDateTime:  defaultTime,
+			EndDateTime:    defaultTime,
+			StandardOutput: "",
+		}
+
+		pluginInstances[name].On("Execute", ctx, pluginConfigs[name].Configuration, cancelFlag, mock.Anything).Return()
+
+		pluginFactory := new(PluginFactoryMock)
+		pluginFactory.On("Create", mock.Anything).Return(pluginInstances[name], nil)
+		pluginRegistry[name] = pluginFactory
+
+		pluginConfigs2[index] = pluginConfigs[name]
+	}
+
+	ch := make(chan contracts.PluginResult)
+	defer func() {
+		close(ch)
+	}()
+	go func() {
+		for result := range ch {
+			result.EndDateTime = defaultTime
+			result.StartDateTime = defaultTime
+		}
+	}()
+	// call the code we are testing
+	outputs := RunPlugins(ctx, pluginConfigs2, ioConfig, pluginRegistry, ch, cancelFlag)
+
+	for _, result := range outputs {
+		result.EndDateTime = defaultTime
+		result.StartDateTime = defaultTime
+	}
+
+	// assert that the expectations were met
+	for _, mockPlugin := range pluginInstances {
+		mockPlugin.AssertExpectations(t)
+	}
+	for pluginID, output := range outputs {
+		assert.Equal(t, pluginResults[pluginID].StandardOutput, output.StandardOutput)
+	}
+}

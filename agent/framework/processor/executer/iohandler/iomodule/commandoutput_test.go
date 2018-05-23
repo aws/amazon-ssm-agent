@@ -36,22 +36,17 @@ func TestCommandOuput(t *testing.T) {
 
 	i := 0
 	for _, testCase := range TestInputCases {
-		stdout := testFileCommandOutput(testCase, 30, i)
-		if len(testCase) > 30 {
-			assert.Equal(t, testCase[:30], stdout)
-		} else {
-			assert.Equal(t, testCase, stdout)
-		}
+		stdout := testFileCommandOutput(testCase, i)
+		assert.Equal(t, testCase, stdout)
 		i++
 	}
 }
 
-func testFileCommandOutput(pipeTestCase string, limit int, i int) string {
+func testFileCommandOutput(pipeTestCase string, i int) string {
 	r, w := io.Pipe()
 	wg := new(sync.WaitGroup)
 	var stdout string
 	stdoutConsole := CommandOutput{
-		OutputLimit:            limit,
 		OutputString:           &stdout,
 		FileName:               "file" + strconv.Itoa(i),
 		OrchestrationDirectory: "testdata",

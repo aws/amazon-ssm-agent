@@ -28,8 +28,6 @@ import (
 
 // CommandOutput handles writing output to a string.
 type CommandOutput struct {
-	// limit to the number of bytes to be written to the output string
-	OutputLimit            int
 	OutputString           *string
 	FileName               string
 	OrchestrationDirectory string
@@ -55,13 +53,7 @@ func (c CommandOutput) Read(log log.T, reader *io.PipeReader) {
 	// Read byte by byte and write to file
 	scanner := bufio.NewScanner(reader)
 	scanner.Split(bufio.ScanBytes)
-	outputLimit := 0
 	for scanner.Scan() {
-		// Check if size of output is greater than the output limit
-		outputLimit++
-		if outputLimit > c.OutputLimit {
-			break
-		}
 		if _, err = fileWriter.Write([]byte(scanner.Text())); err != nil {
 			log.Errorf("Failed to write the message to stdoutConsoleFile: %v", err)
 		}

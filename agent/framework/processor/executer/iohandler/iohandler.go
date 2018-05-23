@@ -140,7 +140,6 @@ func (out *DefaultIOHandler) Init(log log.T, filePath ...string) {
 
 	// Initialize console output module
 	stdoutConsole := iomodule.CommandOutput{
-		OutputLimit:            pluginConfig.MaxStdoutLength,
 		OutputString:           &out.stdout,
 		FileName:               pluginConfig.StdoutConsoleFileName,
 		OrchestrationDirectory: fullPath,
@@ -161,7 +160,6 @@ func (out *DefaultIOHandler) Init(log log.T, filePath ...string) {
 
 	// Initialize console error module
 	stderrConsole := iomodule.CommandOutput{
-		OutputLimit:            pluginConfig.MaxStderrLength,
 		OutputString:           &out.stderr,
 		FileName:               pluginConfig.StderrConsoleFileName,
 		OrchestrationDirectory: fullPath,

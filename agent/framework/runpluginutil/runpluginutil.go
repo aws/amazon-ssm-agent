@@ -182,8 +182,14 @@ func RunPlugins(
 		// set end time.
 		pluginOutputs[pluginID].EndDateTime = time.Now()
 		context.Log().Infof("Sending plugin %v completion message", pluginID)
+
+		// truncate the result and send it back to buffer channel.
+		result := *pluginOutputs[pluginID]
+		pluginConfig := iohandler.DefaultOutputConfig()
+		result.StandardOutput = pluginutil.StringPrefix(result.StandardOutput, pluginConfig.MaxStdoutLength, pluginConfig.OutputTruncatedSuffix)
+		result.StandardError = pluginutil.StringPrefix(result.StandardError, pluginConfig.MaxStdoutLength, pluginConfig.OutputTruncatedSuffix)
 		// send to buffer channel, guaranteed to not block since buffer size is plugin number
-		resChan <- *pluginOutputs[pluginID]
+		resChan <- result
 
 		//TODO handle cancelFlag here
 		if pluginHandlerFound && r.Status == contracts.ResultStatusSuccessAndReboot {
@@ -249,13 +255,13 @@ func runPlugin(
 	default:
 		executePlugin(context, p, pluginName, config, cancelFlag, output)
 	}
-	pluginConfig := iohandler.DefaultOutputConfig()
 
 	res.Code = output.GetExitCode()
 	res.Status = output.GetStatus()
 	res.Output = output.GetOutput()
-	res.StandardOutput = pluginutil.StringPrefix(output.GetStdout(), pluginConfig.MaxStdoutLength, pluginConfig.OutputTruncatedSuffix)
-	res.StandardError = pluginutil.StringPrefix(output.GetStderr(), pluginConfig.MaxStderrLength, pluginConfig.OutputTruncatedSuffix)
+	res.StandardOutput = output.GetStdout()
+	res.StandardError = output.GetStderr()
+
 	return
 }
 
