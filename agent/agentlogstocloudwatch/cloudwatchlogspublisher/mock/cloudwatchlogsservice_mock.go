@@ -151,3 +151,14 @@ func (m *CloudWatchLogsServiceMock) retryPutWithNewSequenceToken(log log.T, mess
 	args := m.Called(log, messages, logGroupName, logStreamName)
 	return args.Get(0).(*string), args.Error(1)
 }
+
+// IsLogGroupEncryptedWithKMS mocks CloudWatchLogsService IsLogGroupEncryptedWithKMS method
+func (m *CloudWatchLogsServiceMock) IsLogGroupEncryptedWithKMS(log log.T, logGroupName string) bool {
+	args := m.Called(log, logGroupName)
+	return args.Get(0).(bool)
+}
+
+// StreamData mocks CloudWatchLogsService StreamData method
+func (m *CloudWatchLogsServiceMock) StreamData(log log.T, logGroupName string, logStreamName string, absoluteFilePath string, isFileComplete bool) {
+	m.Called(log, logGroupName, logStreamName, absoluteFilePath, isFileComplete)
+}

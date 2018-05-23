@@ -16,6 +16,8 @@
 package cloudwatchlogspublisher
 
 import (
+	"os"
+	"strings"
 	"testing"
 
 	"github.com/aws/amazon-ssm-agent/agent/agentlogstocloudwatch/cloudwatchlogspublisher/mock"
@@ -28,6 +30,19 @@ import (
 
 var logMock = log.NewMockLog()
 var cwLogsClientMock = cloudwatchlogspublisher_mock.NewClientMockDefault()
+var input = []string{
+	"Test input text.",
+	"\b5Ὂg̀9! ℃ᾭG",
+	"Lorem ipsum dolor sit amet, consectetur adipiscing elit. In fermentum cursus mi, sed placerat tellus condimentum non.",
+	"Pellentesque vel volutpat velit. Sed eget varius nibh. Sed quis nisl enim. Nulla faucibus nisl a massa fermentum porttitor. ",
+	"Integer at massa blandit, congue ligula ut, vulputate lacus. Morbi tempor tellus a tempus sodales. Nam at placerat odio, ",
+	"ut placerat purus. Donec imperdiet venenatis orci eu mollis. Phasellus rhoncus bibendum lacus sit amet cursus. Aliquam erat",
+	" volutpat. Phasellus auctor ipsum vel efficitur interdum. Duis sed elit tempor, convallis lacus sed, accumsan mi. Integer",
+	" porttitor a nunc in porttitor. Vestibulum felis enim, pretium vel nulla vel, commodo mollis ex. Sed placerat mollis leo, ",
+	"at varius eros elementum vitae. Nunc aliquet velit quis dui facilisis elementum. Etiam interdum lobortis nisi, vitae ",
+	"convallis libero tincidunt at. Nam eu velit et velit dignissim aliquet facilisis id ipsum. Vestibulum hendrerit, arcu ",
+	"id gravida facilisis, felis leo malesuada eros, non dignissim quam turpis a massa. ",
+}
 
 // TODO: Adding more tests including negative tests by date: 7/7/2017
 
@@ -136,4 +151,81 @@ func TestCloudWatchLogsService_CreateNewServiceIfUnHealthy(t *testing.T) {
 
 	assert.True(t, service.stopPolicy.IsHealthy(), "Service should be healthy")
 
+}
+
+func TestCloudWatchLogsService_getNextMessage(t *testing.T) {
+	service := CloudWatchLogsService{
+		cloudWatchLogsClient: cwLogsClientMock,
+		stopPolicy:           sdkutil.NewStopPolicy("Test", 0),
+		IsFileComplete:       true,
+	}
+
+	fileName := "cwl_util_test_file"
+	file, err := os.Create(fileName)
+	assert.Nil(t, err, "Failed to create test file")
+	file.Write([]byte(strings.Join(input, NewLineCharacter)))
+	file.Close()
+
+	// Deleting file
+	defer func() {
+		err = os.Remove(fileName)
+		assert.Nil(t, err)
+	}()
+
+	// First Run
+	// Get expected result
+	var lengthCount = 0
+	var expectedLastKnownLineUploadedToCWL int64 = 0
+	var expectedCurrentLineNumber int64 = 0
+	for _, v := range input {
+		if lengthCount == 0 {
+			lengthCount = len(v)
+		} else {
+			lengthCount = lengthCount + len(v) + len(NewLineCharacter)
+		}
+		expectedCurrentLineNumber++
+		if lengthCount > MessageLengthThresholdInBytes {
+			break
+		}
+	}
+
+	// Get actual result
+	var actualLastKnownLineUploadedToCWL int64 = 0
+	var actualCurrentLineNumber int64 = 0
+	message, eof := service.getNextMessage(logMock, fileName, &actualLastKnownLineUploadedToCWL, &actualCurrentLineNumber)
+
+	// Compare results
+	assert.Equal(t, expectedLastKnownLineUploadedToCWL, actualLastKnownLineUploadedToCWL)
+	assert.Equal(t, expectedCurrentLineNumber, actualCurrentLineNumber)
+	assert.Equal(t, lengthCount, len(message))
+	assert.False(t, eof)
+	assert.Equal(t, strings.Join(input[:actualCurrentLineNumber], NewLineCharacter), string(message))
+
+	// Final Run
+	// Get expected result
+	expectedLastKnownLineUploadedToCWL = expectedCurrentLineNumber
+
+	// Get actual result
+	actualLastKnownLineUploadedToCWL = actualCurrentLineNumber
+	message, eof = service.getNextMessage(logMock, fileName, &actualLastKnownLineUploadedToCWL, &actualCurrentLineNumber)
+
+	// Compare results
+	assert.Equal(t, expectedLastKnownLineUploadedToCWL, actualLastKnownLineUploadedToCWL)
+	assert.Equal(t, expectedCurrentLineNumber, actualCurrentLineNumber)
+	assert.Equal(t, 0, len(message))
+	assert.True(t, eof)
+	assert.Nil(t, message)
+}
+
+func TestCloudWatchLogsService_IsLogGroupEncryptedWithKMS(t *testing.T) {
+	service := CloudWatchLogsService{
+		cloudWatchLogsClient: cwLogsClientMock,
+		stopPolicy:           sdkutil.NewStopPolicy("Test", 0),
+	}
+
+	output := cloudwatchlogs.DescribeLogGroupsOutput{}
+
+	cwLogsClientMock.On("DescribeLogGroups", mock.AnythingOfType("*cloudwatchlogs.DescribeLogGroupsInput")).Return(&output, nil)
+	encrypted := service.IsLogGroupEncryptedWithKMS(logMock, "LogGroup")
+	assert.False(t, encrypted)
 }

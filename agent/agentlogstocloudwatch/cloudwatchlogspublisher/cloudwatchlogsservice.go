@@ -16,7 +16,10 @@
 package cloudwatchlogspublisher
 
 import (
+	"bufio"
 	"errors"
+	"os"
+	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/agentlogstocloudwatch/cloudwatchlogspublisher/cloudwatchlogsinterface"
 	"github.com/aws/amazon-ssm-agent/agent/log"
@@ -30,15 +33,20 @@ import (
 )
 
 const (
-	stopPolicyErrorThreshold = 10
-	stopPolicyName           = "CloudWatchLogsService"
-	maxRetries               = 5
+	stopPolicyErrorThreshold      = 10
+	stopPolicyName                = "CloudWatchLogsService"
+	maxRetries                    = 5
+	UploadFrequency               = 30 * time.Second
+	MessageLengthThresholdInBytes = 500 * 1000
+	NewLineCharacter              = "\n"
 )
 
 // CloudWatchLogsService encapsulates the client and stop policy as a wrapper to call the cloudwatchlogs API
 type CloudWatchLogsService struct {
 	cloudWatchLogsClient cloudwatchlogsinterface.CloudWatchLogsClient
 	stopPolicy           *sdkutil.StopPolicy
+	IsFileComplete       bool
+	IsUploadComplete     bool
 }
 
 // createCloudWatchStopPolicy creates a new policy for cloudwatchlogs
@@ -75,6 +83,8 @@ func NewCloudWatchLogsService() *CloudWatchLogsService {
 	cloudWatchLogsService := CloudWatchLogsService{
 		cloudWatchLogsClient: createCloudWatchClient(),
 		stopPolicy:           createCloudWatchStopPolicy(),
+		IsFileComplete:       false,
+		IsUploadComplete:     false,
 	}
 	return &cloudWatchLogsService
 }
@@ -84,6 +94,8 @@ func NewCloudWatchLogsServiceWithCredentials(id, secret string) *CloudWatchLogsS
 	cloudWatchLogsService := CloudWatchLogsService{
 		cloudWatchLogsClient: createCloudWatchClientWithCredentials(id, secret),
 		stopPolicy:           createCloudWatchStopPolicy(),
+		IsFileComplete:       false,
+		IsUploadComplete:     false,
 	}
 	return &cloudWatchLogsService
 }
@@ -392,4 +404,119 @@ func (service *CloudWatchLogsService) retryPutWithNewSequenceToken(log log.T, me
 
 	// Successfully got the new sequence token. Retry the PutLogEvents API
 	return service.PutLogEvents(log, messages, logGroupName, logStreamName, sequenceToken)
+}
+
+//IsLogGroupEncryptedWithKMS return true if the log group is encrypted with KMS key.
+func (service *CloudWatchLogsService) IsLogGroupEncryptedWithKMS(log log.T, logGroupName string) bool {
+	logGroup := service.getLogGroupDetails(log, logGroupName)
+	if logGroup == nil {
+		return false
+	}
+
+	if logGroup.KmsKeyId != nil {
+		return true
+	}
+
+	log.Errorf("CloudWatch log group %s is not encrypted with KMS", logGroupName)
+	return false
+}
+
+//StreamData streams data from the absoluteFilePath file to cloudwatch logs.
+func (service *CloudWatchLogsService) StreamData(log log.T, logGroupName string, logStreamName string, absoluteFilePath string, isFileComplete bool) {
+	log.Debugf("Uploading logs at %s to CloudWatch", absoluteFilePath)
+
+	service.IsFileComplete = isFileComplete
+
+	// Keeps track of the last known line number that was successfully uploaded to CloudWatch.
+	var lastKnownLineUploadedToCWL int64 = 0
+
+	// Keeps track of the next line number upto which the logs will be uploaded to CloudWatch.
+	var currentLineNumber int64 = 0
+
+	// Initialize timer and set upload frequency.
+	ticker := time.NewTicker(UploadFrequency)
+
+	for range ticker.C {
+		// Get next message to be uploaded.
+		message, eof := service.getNextMessage(log, absoluteFilePath, &lastKnownLineUploadedToCWL, &currentLineNumber)
+
+		// Exit case determining that the file is complete and has been scanned till EOF.
+		if eof {
+			ticker.Stop()
+			service.IsUploadComplete = true
+			break
+		}
+
+		// If no new messages found then skip uploading.
+		if len(message) == 0 {
+			log.Debug("No messages to upload to CloudWatch")
+			continue
+		}
+
+		log.Debugf("Uploading message %s to CloudWatch", message)
+		sequenceToken := service.GetSequenceTokenForStream(log, logGroupName, logStreamName)
+
+		event := &cloudwatchlogs.InputLogEvent{
+			Message:   aws.String(string(message)),
+			Timestamp: aws.Int64(time.Now().UnixNano() / int64(time.Millisecond)),
+		}
+		_, err := service.PutLogEvents(log, []*cloudwatchlogs.InputLogEvent{event}, logGroupName, logStreamName, sequenceToken)
+		if err == nil {
+			// Set the last known line to current since the upload was successful.
+			lastKnownLineUploadedToCWL = currentLineNumber
+			log.Debug("Successfully uploaded message to CloudWatch")
+		} else {
+			// Reset the current line to last known line since the upload failed and retry again in the next iteration.
+			currentLineNumber = lastKnownLineUploadedToCWL
+			log.Debug("Failed to upload message to CloudWatch")
+		}
+	}
+}
+
+//getNextMessage gets the next message to be uploaded to cloudwatch.
+func (service *CloudWatchLogsService) getNextMessage(log log.T, absoluteFilePath string, lastKnownLineUploadedToCWL *int64, currentLineNumber *int64) (message []byte, eof bool) {
+	// Open file to read.
+	file, err := os.Open(absoluteFilePath)
+	if err != nil {
+		log.Debugf("Error opening file: %v", err)
+		return
+	}
+	defer file.Close()
+
+	// Initialize scanner.
+	scanner := bufio.NewScanner(file)
+	scanner.Split(bufio.ScanLines)
+
+	// Skip to the last uploaded line.
+	if *lastKnownLineUploadedToCWL > 0 {
+		var lastLine int64 = 0
+		for scanner.Scan() {
+			lastLine++
+			if lastLine == *lastKnownLineUploadedToCWL {
+				break
+			}
+		}
+	}
+
+	// Scan the next set of lines to upload.
+	for scanner.Scan() {
+		if len(message) == 0 {
+			message = scanner.Bytes()
+		} else {
+			message = append(append(message, []byte(NewLineCharacter)...), scanner.Bytes()...)
+		}
+
+		*currentLineNumber++
+
+		if len(message) >= MessageLengthThresholdInBytes {
+			break
+		}
+	}
+
+	// This determines the end of session.
+	if len(message) == 0 && scanner.Err() == nil && service.IsFileComplete {
+		eof = true
+	}
+
+	return
 }
