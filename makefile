@@ -47,12 +47,25 @@ prepack:: cpy-plugins prepack-linux prepack-linux-386 prepack-windows prepack-wi
 
 package:: create-package-folder package-linux package-windows
 
-release:: clean checkstyle release-test pre-release build prepack package
+release:: clean quick-integtest checkstyle pre-release build prepack package
 
 ifneq ($(FINALIZE),)
 	bgo-final
 endif
 
+.PHONY: dev-build-linux
+dev-build-linux: clean quick-integtest checkstyle pre-release build-linux
+.PHONY: dev-build-freebsd
+dev-build-freebsd: clean quick-integtest checkstyle pre-release build-freebsd
+.PHONY: dev-build-windows
+dev-build-windows: clean quick-integtest checkstyle pre-release build-windows
+.PHONY: dev-build-linux-386
+dev-build-linux-386: clean quick-integtest checkstyle pre-release build-linux-386
+.PHONY: dev-build-windows-386
+dev-build-windows-386: clean quick-integtest checkstyle pre-release build-windows-386
+.PHONY: dev-build-arm
+dev-build-arm: clean quick-integtest checkstyle pre-release build-arm
+	
 sources:: create-source-archive
 
 clean:: remove-prepacked-folder
@@ -67,8 +80,11 @@ update-plugins-binaries:
 cpy-plugins:
 	$(BGO_SPACE)/Tools/src/copy_plugin_binaries.sh $(BRAZIL_BUILD)
 
-.PHONY: release-test
-release-test: copy-src pre-build pre-release quick-integtest
+.PHONY: quick-integtest
+quick-integtest: copy-src pre-build pre-release --quick-integtest
+
+.PHONY: quick-test
+quick-test: copy-src pre-build pre-release --quick-test
 
 .PHONY: pre-release
 pre-release:
@@ -310,14 +326,14 @@ get-tools:
 	go get -u golang.org/x/tools/go/loader
 	go get -u golang.org/x/tools/go/types
 
-.PHONY: quick-integtest
-quick-integtest:
+.PHONY: --quick-integtest
+--quick-integtest:
 	# if you want to restrict to some specific package, sample below
 	# go test -v -gcflags "-N -l" -tags=integration github.com/aws/amazon-ssm-agent/agent/fileutil/...
 	go test -gcflags "-N -l" -tags=integration github.com/aws/amazon-ssm-agent/agent/...
 
-.PHONY: quick-test
-quick-test:
+.PHONY: --quick-test
+--quick-test:
 	# if you want to test a specific package, you can add the package name instead of the dots. Sample below
 	# go test -gcflags "-N -l" github.com/aws/amazon-ssm-agent/agent/task
 	go test -gcflags "-N -l" github.com/aws/amazon-ssm-agent/agent/...
