@@ -2,6 +2,10 @@ Latest
 ===============
 - Various bug fixes
 
+2.2.607.0
+===============
+- Various bug fixes
+
 2.2.546.0
 ===============
 - Bug fix to retry sending document results if they couldn't reach the service
