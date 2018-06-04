@@ -56,7 +56,7 @@ var (
 		{"ssmagent", "https://s3.amazonaws.com/ssmagent/test1%20test2%20test3/stderr.txt", AmazonS3URL{true, true, "ssmagent", "test1 test2 test3/stderr.txt", "us-east-1"}},
 	}
 
-	inValidTests = []s3BucketTest{
+	invalidTests = []s3BucketTest{
 		{"abc", "https://abcd/pqr/xyz.txt", AmazonS3URL{false, false, "", "", ""}},
 	}
 )
@@ -83,5 +83,5 @@ func TestPathStyleBucketBuild(t *testing.T) {
 }
 
 func TestInValidS3PathStyle(t *testing.T) {
-	runTests(t, inValidTests)
+	runTests(t, invalidTests)
 }

@@ -112,11 +112,11 @@ type instanceInfoTest struct {
 
 var (
 	validMetadata       = &metadataStub{instanceID: sampleInstanceID, region: sampleInstanceRegion, err: nil, message: "valid metadata"}
-	inValidMetadata     = &metadataStub{err: errors.New(sampleInstanceError), message: "invalid metadata"}
+	invalidMetadata     = &metadataStub{err: errors.New(sampleInstanceError), message: "invalid metadata"}
 	validRegistration   = registrationStub{instanceID: sampleManagedInstID, region: sampleManagedInstRegion, err: nil, message: "valid registration"}
-	inValidRegistration = registrationStub{message: "invalid registration"}
+	invalidRegistration = registrationStub{message: "invalid registration"}
 	validDynamicData    = &dynamicDataStub{region: sampleDynamicDataRegion, err: nil, message: "valid dynamic data"}
-	inValidDynamicData  = &dynamicDataStub{err: errors.New(sampleDynamicDataError), message: "invalid dynamic data"}
+	invalidDynamicData  = &dynamicDataStub{err: errors.New(sampleDynamicDataError), message: "invalid dynamic data"}
 
 	instanceIDTests = []instanceInfoTest{
 		{
@@ -124,15 +124,15 @@ var (
 			expectedID: sampleManagedInstID, expectedIDError: nil,
 		},
 		{
-			inputMetadata: validMetadata, inputRegistration: inValidRegistration,
+			inputMetadata: validMetadata, inputRegistration: invalidRegistration,
 			expectedID: sampleInstanceID, expectedIDError: nil,
 		},
 		{
-			inputMetadata: inValidMetadata, inputRegistration: validRegistration,
+			inputMetadata: invalidMetadata, inputRegistration: validRegistration,
 			expectedID: sampleManagedInstID, expectedIDError: nil,
 		},
 		{
-			inputMetadata: inValidMetadata, inputRegistration: inValidRegistration,
+			inputMetadata: invalidMetadata, inputRegistration: invalidRegistration,
 			expectedID:      "",
 			expectedIDError: fmt.Errorf(errorMessage, "instance ID", sampleInstanceError),
 		},
@@ -144,19 +144,19 @@ var (
 			expectedRegion: sampleManagedInstRegion, expectedRegionError: nil,
 		},
 		{
-			inputMetadata: validMetadata, inputRegistration: inValidRegistration, inputDynamicData: inValidDynamicData,
+			inputMetadata: validMetadata, inputRegistration: invalidRegistration, inputDynamicData: invalidDynamicData,
 			expectedRegion: sampleInstanceRegion, expectedRegionError: nil,
 		},
 		{
-			inputMetadata: inValidMetadata, inputRegistration: validRegistration, inputDynamicData: inValidDynamicData,
+			inputMetadata: invalidMetadata, inputRegistration: validRegistration, inputDynamicData: invalidDynamicData,
 			expectedRegion: sampleManagedInstRegion, expectedRegionError: nil,
 		},
 		{
-			inputMetadata: inValidMetadata, inputRegistration: inValidRegistration, inputDynamicData: validDynamicData,
+			inputMetadata: invalidMetadata, inputRegistration: invalidRegistration, inputDynamicData: validDynamicData,
 			expectedRegion: sampleDynamicDataRegion, expectedRegionError: nil,
 		},
 		{
-			inputMetadata: inValidMetadata, inputRegistration: inValidRegistration, inputDynamicData: inValidDynamicData,
+			inputMetadata: invalidMetadata, inputRegistration: invalidRegistration, inputDynamicData: invalidDynamicData,
 			expectedRegion:      "",
 			expectedRegionError: fmt.Errorf(errorMessage, "region", sampleDynamicDataError),
 		},
