@@ -121,18 +121,24 @@ func (r *RsaSignedServiceStub) UpdateManagedInstancePublicKey(publicKey, publicK
 
 // registration stub
 type registrationStub struct {
-	instanceID  string
-	region      string
-	fingerprint string
-	publicKey   string
-	privateKey  string
-	keyType     string
-	err         error
+	instanceID       string
+	region           string
+	instanceType     string
+	availabilityZone string
+	fingerprint      string
+	publicKey        string
+	privateKey       string
+	keyType          string
+	err              error
 }
 
 func (r registrationStub) InstanceID() string { return r.instanceID }
 
 func (r registrationStub) Region() string { return r.region }
+
+func (r registrationStub) InstanceType() string { return r.instanceType }
+
+func (r registrationStub) AvailabilityZone() string { return r.availabilityZone }
 
 func (r registrationStub) Fingerprint() (string, error) { return r.fingerprint, r.err }
 

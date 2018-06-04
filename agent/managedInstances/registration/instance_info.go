@@ -25,10 +25,12 @@ import (
 )
 
 type instanceInfo struct {
-	InstanceID     string `json:"instanceID"`
-	Region         string `json:"region"`
-	PrivateKey     string `json:"privateKey"`
-	PrivateKeyType string `json:"privateKeyType"`
+	InstanceID       string `json:"instanceID"`
+	Region           string `json:"region"`
+	InstanceType     string `json:"instanceType"`
+	AvailabilityZone string `json:"availabilityZone"`
+	PrivateKey       string `json:"privateKey"`
+	PrivateKeyType   string `json:"privateKeyType"`
 }
 
 var (
@@ -56,6 +58,26 @@ func InstanceID() string {
 func Region() string {
 	instance := getInstanceInfo()
 	return instance.Region
+}
+
+// InstanceType of the managed instance.
+func InstanceType() string {
+	instance := getInstanceInfo()
+	if instance.InstanceID != "" {
+		return "on-premises"
+	}
+
+	return ""
+}
+
+// AvailabilityZone of the managed instance.
+func AvailabilityZone() string {
+	instance := getInstanceInfo()
+	if instance.InstanceID != "" {
+		return "on-premises"
+	}
+
+	return ""
 }
 
 // PrivateKey of the managed instance.

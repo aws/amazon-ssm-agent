@@ -157,11 +157,16 @@ func fetchInstanceID() (string, error) {
 }
 
 // fetchInstanceType fetches the instance type with the following preference order.
-// 1. EC2 Instance Metadata
-// Ignoring the on prem case for now
+// 1. managed instance registration
+// 2. EC2 Instance Metadata
 func fetchInstanceType() (string, error) {
 	var err error
 	var instanceType string
+
+	// trying to get region from managed instance registration
+	if instanceType = managedInstance.InstanceType(); instanceType != "" {
+		return instanceType, nil
+	}
 
 	// trying to get instance id from ec2 metadata
 	if instanceType, err = metadata.GetMetadata("instance-type"); instanceType != "" && err == nil {
@@ -200,12 +205,17 @@ func fetchRegion() (string, error) {
 }
 
 // fetchAvailabilityZone fetches the  availability zone with the following preference order.
-// 1. EC2 Instance Metadata
-// 2. EC2 Instance Dynamic Data
-// Ignoring the on prem case for now
+// 1. managed instance registration
+// 2. EC2 Instance Metadata
+// 3. EC2 Instance Dynamic Data
 func fetchAvailabilityZone() (string, error) {
 	var err error
 	var availabilityZone string
+
+	// trying to get region from managed instance registration
+	if availabilityZone = managedInstance.AvailabilityZone(); availabilityZone != "" {
+		return availabilityZone, nil
+	}
 
 	// trying to get instance id from ec2 metadata
 	if availabilityZone, err = metadata.GetMetadata("placement/availability-zone"); availabilityZone != "" && err == nil {

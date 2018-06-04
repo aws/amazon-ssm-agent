@@ -27,6 +27,8 @@ var managedInstance instanceRegistration = instanceInfo{}
 type instanceRegistration interface {
 	InstanceID() string
 	Region() string
+	InstanceType() string
+	AvailabilityZone() string
 }
 
 type instanceInfo struct{}
@@ -36,6 +38,12 @@ func (instanceInfo) InstanceID() string { return registration.InstanceID() }
 
 // Region returns the managed instance region
 func (instanceInfo) Region() string { return registration.Region() }
+
+// InstanceType returns the managed instance instanceType
+func (instanceInfo) InstanceType() string { return registration.InstanceType() }
+
+// AvailabilityZone returns the managed instance availabilityZone
+func (instanceInfo) AvailabilityZone() string { return registration.AvailabilityZone() }
 
 // dependency for metadata
 var metadata metadataClient = instanceMetadata{

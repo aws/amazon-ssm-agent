@@ -35,15 +35,21 @@ func (c metadataStub) Region() (string, error) { return c.region, c.err }
 
 // registration stub
 type registrationStub struct {
-	instanceID string
-	region     string
-	err        error
-	message    string
+	instanceID       string
+	region           string
+	instanceType     string
+	availabilityZone string
+	err              error
+	message          string
 }
 
 func (r registrationStub) InstanceID() string { return r.instanceID }
 
 func (r registrationStub) Region() string { return r.region }
+
+func (r registrationStub) InstanceType() string { return r.instanceType }
+
+func (r registrationStub) AvailabilityZone() string { return r.availabilityZone }
 
 // dynamicData stub
 type dynamicDataStub struct {
@@ -113,7 +119,7 @@ type instanceInfoTest struct {
 var (
 	validMetadata       = &metadataStub{instanceID: sampleInstanceID, region: sampleInstanceRegion, err: nil, message: "valid metadata"}
 	invalidMetadata     = &metadataStub{err: errors.New(sampleInstanceError), message: "invalid metadata"}
-	validRegistration   = registrationStub{instanceID: sampleManagedInstID, region: sampleManagedInstRegion, err: nil, message: "valid registration"}
+	validRegistration   = registrationStub{instanceID: sampleManagedInstID, region: sampleManagedInstRegion, instanceType: "on-premises", availabilityZone: "on-premises", err: nil, message: "valid registration"}
 	invalidRegistration = registrationStub{message: "invalid registration"}
 	validDynamicData    = &dynamicDataStub{region: sampleDynamicDataRegion, err: nil, message: "valid dynamic data"}
 	invalidDynamicData  = &dynamicDataStub{err: errors.New(sampleDynamicDataError), message: "invalid dynamic data"}
@@ -182,4 +188,56 @@ func TestFetchRegion(t *testing.T) {
 		assert.Equal(t, test.expectedRegion, actualOutput, "%s %s, %s", test.inputMetadata.message, test.inputRegistration.message, test.inputDynamicData.message)
 		assert.Equal(t, test.expectedRegionError, actualError, "%s %s, %s", test.inputMetadata.message, test.inputRegistration.message, test.inputDynamicData.message)
 	}
+}
+
+func TestFetchInstanceTypeForOnPremisesInstance(t *testing.T) {
+	// this tests that validRegistration is used to retrieve the value and
+	// no attempt is made to get it from invalidMetadata or invalidDynamicData
+	metadata = invalidMetadata
+	managedInstance = validRegistration
+	dynamicData = invalidDynamicData
+	actualOutput, actualError := fetchInstanceType()
+	assert.Equal(t, validRegistration.InstanceType(), actualOutput)
+	assert.Equal(t, nil, actualError)
+}
+
+func TestFetchAvailabilityZoneForOnPremisesInstance(t *testing.T) {
+	// this tests that validRegistration is used to retrieve the value and
+	// no attempt is made to get it from invalidMetadata or invalidDynamicData
+	metadata = invalidMetadata
+	managedInstance = validRegistration
+	dynamicData = invalidDynamicData
+	actualOutput, actualError := fetchAvailabilityZone()
+	assert.Equal(t, validRegistration.AvailabilityZone(), actualOutput)
+	assert.Equal(t, nil, actualError)
+}
+
+func TestFetchInstanceTypeForEc2Instance(t *testing.T) {
+	// this tests that the metadata instanceType is returned, because there
+	// is no valid managedInstance data
+	metadata = validMetadata
+	managedInstance = invalidRegistration
+	dynamicData = invalidDynamicData
+	actualOutput, actualError := fetchInstanceType()
+	// GetMetadata() actually is stubbed out trivially, always returning the
+	// same string, but for this test we only care that that is the string
+	// returned by fetchInstanceType()
+	var value, _ = metadata.GetMetadata("instance-type")
+	assert.Equal(t, value, actualOutput)
+	assert.Equal(t, nil, actualError)
+}
+
+func TestFetchAvailabilityZoneForEc2Instance(t *testing.T) {
+	// this tests that the metadata AZ is returned, because there
+	// is no valid managedInstance data
+	metadata = validMetadata
+	managedInstance = invalidRegistration
+	dynamicData = invalidDynamicData
+	actualOutput, actualError := fetchAvailabilityZone()
+	// GetMetadata() actually is stubbed out trivially, always returning the
+	// same string, but for this test we only care that that is the string
+	// returned by fetchAvailabilityZone()
+	var value, _ = metadata.GetMetadata("placement/availability-zone")
+	assert.Equal(t, value, actualOutput)
+	assert.Equal(t, nil, actualError)
 }
