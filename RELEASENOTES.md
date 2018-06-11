@@ -1,5 +1,9 @@
 Latest
 ===============
+- Bug fix to clean the orchestration directory
+
+2.2.619.0
+===============
 - Various bug fixes
 
 2.2.607.0
