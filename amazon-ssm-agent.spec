@@ -58,6 +58,7 @@ mkdir -p %{buildroot}%{_sysconfdir}/amazon/ssm/ \
 cp {README.md,RELEASENOTES.md} %{buildroot}%{_sysconfdir}/amazon/ssm/
 cp bin/{amazon-ssm-agent,ssm-document-worker,ssm-cli} %{buildroot}%{_prefix}/bin/
 %if 0%{?amzn} >= 2
+mkdir -p %{buildroot}%{_unitdir}/
 cp packaging/linux/amazon-ssm-agent.service %{buildroot}%{_unitdir}/
 %else 
 cp packaging/linux/amazon-ssm-agent.conf %{buildroot}%{_sysconfdir}/init/
