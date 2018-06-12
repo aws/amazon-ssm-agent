@@ -20,6 +20,7 @@ import (
 	"fmt"
 	"path"
 	"path/filepath"
+	"strconv"
 	"strings"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
@@ -119,6 +120,34 @@ func parseCancelCommandMessage(context context.T, msg *ssmmds.Message, messagesO
 	return &docState, nil
 }
 
+//generateCloudWatchLogStreamPrefix creates the LogStreamPrefix for cloudWatch output. LogStreamPrefix = <CommandID>/<InstanceID>
+func generateCloudWatchLogStreamPrefix(commandID string) (string, error) {
+
+	instanceID, err := systemInfo.InstanceID()
+	if err != nil {
+		return "", err
+	}
+	return fmt.Sprintf("%s/%s", commandID, instanceID), nil
+}
+
+func generateCloudWatchConfigFromPayload(parsedMessage messageContracts.SendCommandPayload) (contracts.CloudWatchConfiguration, error) {
+	cloudWatchOutputEnabled, err := strconv.ParseBool(parsedMessage.CloudWatchOutputEnabled)
+	cloudWatchConfig := contracts.CloudWatchConfiguration{}
+	if err != nil || !cloudWatchOutputEnabled {
+		return cloudWatchConfig, err
+	}
+	cloudWatchConfig.LogStreamPrefix, err = generateCloudWatchLogStreamPrefix(parsedMessage.CommandID)
+	if err != nil {
+		return cloudWatchConfig, err
+	}
+	if parsedMessage.CloudWatchLogGroupName != "" {
+		cloudWatchConfig.LogGroupName = parsedMessage.CloudWatchLogGroupName
+	} else {
+		cloudWatchConfig.LogGroupName = fmt.Sprintf("%s%s", CloudWatchLogGroupNamePrefix, parsedMessage.DocumentName)
+	}
+	return cloudWatchConfig, nil
+}
+
 func parseSendCommandMessage(context context.T, msg *ssmmds.Message, messagesOrchestrationRootDir string) (*contracts.DocumentState, error) {
 	log := context.Log()
 	commandID, _ := messageContracts.GetCommandID(*msg.MessageId)
@@ -138,6 +167,11 @@ func parseSendCommandMessage(context context.T, msg *ssmmds.Message, messagesOrc
 	// adapt plugin configuration format from MDS to plugin expected format
 	s3KeyPrefix := path.Join(parsedMessage.OutputS3KeyPrefix, parsedMessage.CommandID, *msg.Destination)
 
+	cloudWatchConfig, err := generateCloudWatchConfigFromPayload(parsedMessage)
+	if err != nil {
+		log.Errorf("Encountered error while generating cloudWatch config from send command payload, err: %s", err)
+	}
+
 	messageOrchestrationDirectory := filepath.Join(messagesOrchestrationRootDir, commandID)
 
 	var documentType contracts.DocumentType
@@ -153,6 +187,7 @@ func parseSendCommandMessage(context context.T, msg *ssmmds.Message, messagesOrc
 		S3Prefix:         s3KeyPrefix,
 		MessageId:        documentInfo.MessageID,
 		DocumentId:       documentInfo.DocumentID,
+		CloudWatchConfig: cloudWatchConfig,
 	}
 
 	//Data format persisted in Current Folder is defined by the struct - CommandState

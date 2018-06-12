@@ -19,6 +19,7 @@ import (
 	"fmt"
 	"io"
 
+	"github.com/aws/amazon-ssm-agent/agent/agentlogstocloudwatch/cloudwatchlogspublisher"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler/iomodule"
@@ -130,12 +131,29 @@ func (out *DefaultIOHandler) Init(log log.T, filePath ...string) {
 		s3KeyPrefix = fileutil.BuildS3Path(s3KeyPrefix, element)
 	}
 
+	stdOutLogStreamName := ""
+	stdErrLogStreamName := ""
+	if out.ioConfig.CloudWatchConfig.LogGroupName != "" {
+		cwl := cloudwatchlogspublisher.NewCloudWatchLogsService()
+		if !cwl.IsLogGroupPresent(log, out.ioConfig.CloudWatchConfig.LogGroupName) {
+			if err := cwl.CreateLogGroup(log, out.ioConfig.CloudWatchConfig.LogGroupName); err != nil {
+				log.Errorf("Error Creating Log Group for CloudWatchLogs output: %v", err)
+				//Stop CloudWatch Streaming on Error
+				out.ioConfig.CloudWatchConfig.LogGroupName = ""
+			}
+		}
+		stdOutLogStreamName = fmt.Sprintf("%s/%s", out.ioConfig.CloudWatchConfig.LogStreamPrefix, pluginConfig.StdoutFileName)
+		stdErrLogStreamName = fmt.Sprintf("%s/%s", out.ioConfig.CloudWatchConfig.LogStreamPrefix, pluginConfig.StderrFileName)
+	}
+
 	// Initialize file output module
 	stdoutFile := iomodule.File{
 		FileName:               pluginConfig.StdoutFileName,
 		OrchestrationDirectory: fullPath,
 		OutputS3BucketName:     out.ioConfig.OutputS3BucketName,
 		OutputS3KeyPrefix:      s3KeyPrefix,
+		LogGroupName:           out.ioConfig.CloudWatchConfig.LogGroupName,
+		LogStreamName:          stdOutLogStreamName,
 	}
 
 	// Initialize console output module
@@ -156,6 +174,8 @@ func (out *DefaultIOHandler) Init(log log.T, filePath ...string) {
 		OrchestrationDirectory: fullPath,
 		OutputS3BucketName:     out.ioConfig.OutputS3BucketName,
 		OutputS3KeyPrefix:      s3KeyPrefix,
+		LogGroupName:           out.ioConfig.CloudWatchConfig.LogGroupName,
+		LogStreamName:          stdErrLogStreamName,
 	}
 
 	// Initialize console error module

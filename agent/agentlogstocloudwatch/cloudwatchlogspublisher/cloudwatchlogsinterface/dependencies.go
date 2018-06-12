@@ -41,5 +41,5 @@ type ICloudWatchLogsService interface {
 	GetSequenceTokenForStream(log log.T, logGroupName, logStreamName string) (sequenceToken *string)
 	PutLogEvents(log log.T, messages []*cloudwatchlogs.InputLogEvent, logGroup, logStream string, sequenceToken *string) (nextSequenceToken *string, err error)
 	IsLogGroupEncryptedWithKMS(log log.T, logGroupName string) bool
-	StreamData(log log.T, logGroupName string, logStreamName string, absoluteFilePath string, isFileComplete bool)
+	StreamData(log log.T, logGroupName string, logStreamName string, absoluteFilePath string, isFileComplete bool, isLogStreamCreated bool)
 }

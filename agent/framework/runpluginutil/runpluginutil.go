@@ -90,6 +90,9 @@ func RunPlugins(
 
 	pluginOutputs = make(map[string]*contracts.PluginResult)
 
+	//Contains the logStreamPrefix without the pluginID
+	logStreamPrefix := ioConfig.CloudWatchConfig.LogStreamPrefix
+
 	for _, pluginState := range plugins {
 		pluginID := pluginState.Id     // the identifier of the plugin
 		pluginName := pluginState.Name // the name of the plugin
@@ -134,6 +137,13 @@ func RunPlugins(
 
 			}
 		}
+		//Append pluginID to logStreamPrefix. Replace ':' or '*' with '-' since LogStreamNames cannot have those characters
+		if ioConfig.CloudWatchConfig.LogGroupName != "" {
+			ioConfig.CloudWatchConfig.LogStreamPrefix = fmt.Sprintf("%s/%s", logStreamPrefix, pluginID)
+			ioConfig.CloudWatchConfig.LogStreamPrefix = strings.Replace(ioConfig.CloudWatchConfig.LogStreamPrefix, ":", "-", -1)
+			ioConfig.CloudWatchConfig.LogStreamPrefix = strings.Replace(ioConfig.CloudWatchConfig.LogStreamPrefix, "*", "-", -1)
+		}
+
 		var r contracts.PluginResult
 		pluginHandlerFound := false
 

@@ -159,6 +159,6 @@ func (m *CloudWatchLogsServiceMock) IsLogGroupEncryptedWithKMS(log log.T, logGro
 }
 
 // StreamData mocks CloudWatchLogsService StreamData method
-func (m *CloudWatchLogsServiceMock) StreamData(log log.T, logGroupName string, logStreamName string, absoluteFilePath string, isFileComplete bool) {
-	m.Called(log, logGroupName, logStreamName, absoluteFilePath, isFileComplete)
+func (m *CloudWatchLogsServiceMock) StreamData(log log.T, logGroupName string, logStreamName string, absoluteFilePath string, isFileComplete bool, isLogStreamCreated bool) {
+	m.Called(log, logGroupName, logStreamName, absoluteFilePath, isFileComplete, isLogStreamCreated)
 }

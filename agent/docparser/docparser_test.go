@@ -28,12 +28,14 @@ import (
 )
 
 const (
-	testOrchDir    = "test-orchestrationDir"
-	testS3Bucket   = "test-s3Bucket"
-	testS3Prefix   = "test-s3KeyPrefix"
-	testMessageID  = "test-messageID"
-	testDocumentID = "test-documentID"
-	testWorkingDir = "test-defaultWorkingDirectory"
+	testOrchDir         = "test-orchestrationDir"
+	testS3Bucket        = "test-s3Bucket"
+	testS3Prefix        = "test-s3KeyPrefix"
+	testMessageID       = "test-messageID"
+	testDocumentID      = "test-documentID"
+	testWorkingDir      = "test-defaultWorkingDirectory"
+	testLogGroupName    = "test-logGroupName"
+	testLogStreamPrefix = "test-logStreamName"
 )
 const parameterdocument = `{"schemaVersion":"1.2","description":"","parameters":{"commands":{"type":"StringList"}},"runtimeConfig":{"aws:runPowerShellScript":{"properties":[{"id":"0.aws:runPowerShellScript","runCommand":"{{ commands }}"}]}}}`
 const invaliddocument = `{"schemaVersion":"1.2","description":"PowerShell.","FOO":"bar"}`
@@ -114,6 +116,11 @@ func TestParseDocument_ValidMainSteps(t *testing.T) {
 func TestInitializeDocState_Valid(t *testing.T) {
 	mockLog := log.NewMockLog()
 
+	cloudWatchConfig := contracts.CloudWatchConfiguration{
+		LogGroupName:    testLogGroupName,
+		LogStreamPrefix: testLogStreamPrefix,
+	}
+
 	testParserInfo := DocumentParserInfo{
 		OrchestrationDir:  testOrchDir,
 		S3Bucket:          testS3Bucket,
@@ -121,6 +128,7 @@ func TestInitializeDocState_Valid(t *testing.T) {
 		MessageId:         testMessageID,
 		DocumentId:        testDocumentID,
 		DefaultWorkingDir: testWorkingDir,
+		CloudWatchConfig:  cloudWatchConfig,
 	}
 
 	var testDocContent contracts.DocumentContent
@@ -144,6 +152,8 @@ func TestInitializeDocState_Valid(t *testing.T) {
 	assert.Equal(t, testMessageID, pluginInfo[0].Configuration.MessageId)
 	assert.Equal(t, testDocumentID, pluginInfo[0].Configuration.BookKeepingFileName)
 	assert.Equal(t, testWorkingDir, pluginInfo[0].Configuration.DefaultWorkingDirectory)
+	assert.Equal(t, testLogGroupName, docState.IOConfig.CloudWatchConfig.LogGroupName)
+	assert.Equal(t, testLogStreamPrefix, docState.IOConfig.CloudWatchConfig.LogStreamPrefix)
 }
 
 func TestParseDocument_EmptyDocContent(t *testing.T) {

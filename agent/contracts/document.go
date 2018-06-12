@@ -70,11 +70,18 @@ type DocumentInfo struct {
 	ProcInfo        OSProcInfo
 }
 
+//CloudWatchConfiguration represents information relevant to command output in cloudWatch
+type CloudWatchConfiguration struct {
+	LogGroupName    string
+	LogStreamPrefix string
+}
+
 // IOConfiguration represents information relevant to the output sources of a command
 type IOConfiguration struct {
 	OrchestrationDirectory string
 	OutputS3BucketName     string
 	OutputS3KeyPrefix      string
+	CloudWatchConfig       CloudWatchConfiguration
 }
 
 // DocumentState represents information relevant to a command that gets executed by agent

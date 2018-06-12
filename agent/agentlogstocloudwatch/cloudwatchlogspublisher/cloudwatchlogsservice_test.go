@@ -174,19 +174,28 @@ func TestCloudWatchLogsService_getNextMessage(t *testing.T) {
 
 	// First Run
 	// Get expected result
+	var totalMessages []int64
 	var lengthCount = 0
 	var expectedLastKnownLineUploadedToCWL int64 = 0
 	var expectedCurrentLineNumber int64 = 0
 	for _, v := range input {
 		if lengthCount == 0 {
 			lengthCount = len(v)
+		} else if (lengthCount + len(v)) > MessageLengthThresholdInBytes {
+			totalMessages = append(totalMessages, expectedCurrentLineNumber)
+			if len(totalMessages) >= maxNumberOfEventsPerCall {
+				break
+			}
+
+			lengthCount = len(v)
 		} else {
 			lengthCount = lengthCount + len(v) + len(NewLineCharacter)
 		}
 		expectedCurrentLineNumber++
-		if lengthCount > MessageLengthThresholdInBytes {
-			break
-		}
+	}
+
+	if lengthCount != 0 {
+		totalMessages = append(totalMessages, expectedCurrentLineNumber)
 	}
 
 	// Get actual result
@@ -197,9 +206,12 @@ func TestCloudWatchLogsService_getNextMessage(t *testing.T) {
 	// Compare results
 	assert.Equal(t, expectedLastKnownLineUploadedToCWL, actualLastKnownLineUploadedToCWL)
 	assert.Equal(t, expectedCurrentLineNumber, actualCurrentLineNumber)
-	assert.Equal(t, lengthCount, len(message))
+	assert.Equal(t, len(totalMessages), len(message))
 	assert.False(t, eof)
-	assert.Equal(t, strings.Join(input[:actualCurrentLineNumber], NewLineCharacter), string(message))
+
+	for i, v := range totalMessages {
+		assert.Equal(t, strings.Join(input[:v], NewLineCharacter), *message[i].Message)
+	}
 
 	// Final Run
 	// Get expected result

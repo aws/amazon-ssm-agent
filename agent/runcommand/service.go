@@ -68,6 +68,9 @@ const (
 
 	// the default stoppolicy error threshold. After 10 consecutive errors the plugin will stop for 15 minutes.
 	stopPolicyErrorThreshold = 10
+
+	// CloudWatch output's log group name prefix
+	CloudWatchLogGroupNamePrefix = "/aws/ssm/"
 )
 
 type persistData func(state *contracts.DocumentState, bookkeeping string)

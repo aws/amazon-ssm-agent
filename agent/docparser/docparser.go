@@ -41,6 +41,7 @@ type DocumentParserInfo struct {
 	MessageId         string
 	DocumentId        string
 	DefaultWorkingDir string
+	CloudWatchConfig  contracts.CloudWatchConfiguration
 }
 
 // InitializeDocState is a method to obtain the state of the document.
@@ -59,6 +60,7 @@ func InitializeDocState(log log.T,
 		OrchestrationDirectory: parserInfo.OrchestrationDir,
 		OutputS3BucketName:     parserInfo.S3Bucket,
 		OutputS3KeyPrefix:      parserInfo.S3Prefix,
+		CloudWatchConfig:       parserInfo.CloudWatchConfig,
 	}
 
 	pluginInfo, err := ParseDocument(log, docContent, parserInfo, params)

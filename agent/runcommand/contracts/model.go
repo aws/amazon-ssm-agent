@@ -29,12 +29,14 @@ type CancelPayload struct {
 
 // SendCommandPayload parallels the structure of a send command MDS message payload.
 type SendCommandPayload struct {
-	Parameters         map[string]interface{}    `json:"Parameters"`
-	DocumentContent    contracts.DocumentContent `json:"DocumentContent"`
-	CommandID          string                    `json:"CommandId"`
-	DocumentName       string                    `json:"DocumentName"`
-	OutputS3KeyPrefix  string                    `json:"OutputS3KeyPrefix"`
-	OutputS3BucketName string                    `json:"OutputS3BucketName"`
+	Parameters              map[string]interface{}    `json:"Parameters"`
+	DocumentContent         contracts.DocumentContent `json:"DocumentContent"`
+	CommandID               string                    `json:"CommandId"`
+	DocumentName            string                    `json:"DocumentName"`
+	OutputS3KeyPrefix       string                    `json:"OutputS3KeyPrefix"`
+	OutputS3BucketName      string                    `json:"OutputS3BucketName"`
+	CloudWatchLogGroupName  string                    `json:"CloudWatchLogGroupName"`
+	CloudWatchOutputEnabled string                    `json:"CloudWatchOutputEnabled"`
 }
 
 // SendReplyPayload represents the json structure of a reply sent to MDS.

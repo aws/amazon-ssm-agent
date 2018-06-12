@@ -33,12 +33,15 @@ import (
 )
 
 const (
-	stopPolicyErrorThreshold      = 10
-	stopPolicyName                = "CloudWatchLogsService"
-	maxRetries                    = 5
-	UploadFrequency               = 30 * time.Second
-	MessageLengthThresholdInBytes = 500 * 1000
-	NewLineCharacter              = "\n"
+	stopPolicyErrorThreshold = 10
+	stopPolicyName           = "CloudWatchLogsService"
+	maxRetries               = 5
+	UploadFrequency          = 3 * time.Second
+	NewLineCharacter         = "\n"
+	maxNumberOfEventsPerCall = 4
+
+	// Event size - https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/cloudwatch_limits_cwl.html
+	MessageLengthThresholdInBytes = 200 * 1000
 )
 
 // CloudWatchLogsService encapsulates the client and stop policy as a wrapper to call the cloudwatchlogs API
@@ -422,7 +425,7 @@ func (service *CloudWatchLogsService) IsLogGroupEncryptedWithKMS(log log.T, logG
 }
 
 //StreamData streams data from the absoluteFilePath file to cloudwatch logs.
-func (service *CloudWatchLogsService) StreamData(log log.T, logGroupName string, logStreamName string, absoluteFilePath string, isFileComplete bool) {
+func (service *CloudWatchLogsService) StreamData(log log.T, logGroupName string, logStreamName string, absoluteFilePath string, isFileComplete bool, isLogStreamCreated bool) {
 	log.Debugf("Uploading logs at %s to CloudWatch", absoluteFilePath)
 
 	service.IsFileComplete = isFileComplete
@@ -433,12 +436,14 @@ func (service *CloudWatchLogsService) StreamData(log log.T, logGroupName string,
 	// Keeps track of the next line number upto which the logs will be uploaded to CloudWatch.
 	var currentLineNumber int64 = 0
 
+	IsLogStreamCreated := isLogStreamCreated
+
 	// Initialize timer and set upload frequency.
 	ticker := time.NewTicker(UploadFrequency)
 
 	for range ticker.C {
 		// Get next message to be uploaded.
-		message, eof := service.getNextMessage(log, absoluteFilePath, &lastKnownLineUploadedToCWL, &currentLineNumber)
+		events, eof := service.getNextMessage(log, absoluteFilePath, &lastKnownLineUploadedToCWL, &currentLineNumber)
 
 		// Exit case determining that the file is complete and has been scanned till EOF.
 		if eof {
@@ -448,19 +453,27 @@ func (service *CloudWatchLogsService) StreamData(log log.T, logGroupName string,
 		}
 
 		// If no new messages found then skip uploading.
-		if len(message) == 0 {
-			log.Debug("No messages to upload to CloudWatch")
+		if len(events) == 0 {
+			log.Debug("No events to upload to CloudWatch")
 			continue
 		}
 
-		log.Debugf("Uploading message %s to CloudWatch", message)
+		log.Debugf("Uploading message %v to CloudWatch", events)
+
+		if !IsLogStreamCreated {
+			if err := service.CreateLogStream(log, logGroupName, logStreamName); err != nil {
+				log.Errorf("Error Creating Log Stream for CloudWatchLogs output: %v", err)
+				currentLineNumber = lastKnownLineUploadedToCWL
+				log.Debug("Failed to upload message to CloudWatch")
+				continue
+			} else {
+				IsLogStreamCreated = true
+			}
+		}
+
 		sequenceToken := service.GetSequenceTokenForStream(log, logGroupName, logStreamName)
 
-		event := &cloudwatchlogs.InputLogEvent{
-			Message:   aws.String(string(message)),
-			Timestamp: aws.Int64(time.Now().UnixNano() / int64(time.Millisecond)),
-		}
-		_, err := service.PutLogEvents(log, []*cloudwatchlogs.InputLogEvent{event}, logGroupName, logStreamName, sequenceToken)
+		_, err := service.PutLogEvents(log, events, logGroupName, logStreamName, sequenceToken)
 		if err == nil {
 			// Set the last known line to current since the upload was successful.
 			lastKnownLineUploadedToCWL = currentLineNumber
@@ -474,7 +487,7 @@ func (service *CloudWatchLogsService) StreamData(log log.T, logGroupName string,
 }
 
 //getNextMessage gets the next message to be uploaded to cloudwatch.
-func (service *CloudWatchLogsService) getNextMessage(log log.T, absoluteFilePath string, lastKnownLineUploadedToCWL *int64, currentLineNumber *int64) (message []byte, eof bool) {
+func (service *CloudWatchLogsService) getNextMessage(log log.T, absoluteFilePath string, lastKnownLineUploadedToCWL *int64, currentLineNumber *int64) (allEvents []*cloudwatchlogs.InputLogEvent, eof bool) {
 	// Open file to read.
 	file, err := os.Open(absoluteFilePath)
 	if err != nil {
@@ -498,19 +511,37 @@ func (service *CloudWatchLogsService) getNextMessage(log log.T, absoluteFilePath
 		}
 	}
 
+	var message []byte
 	// Scan the next set of lines to upload.
 	for scanner.Scan() {
 		if len(message) == 0 {
+			message = scanner.Bytes()
+		} else if (len(message) + len(scanner.Bytes())) > MessageLengthThresholdInBytes {
+			event := &cloudwatchlogs.InputLogEvent{
+				Message:   aws.String(string(message)),
+				Timestamp: aws.Int64(time.Now().UnixNano() / int64(time.Millisecond)),
+			}
+			allEvents = append(allEvents, event)
+			if len(allEvents) >= maxNumberOfEventsPerCall {
+				return
+			}
+
 			message = scanner.Bytes()
 		} else {
 			message = append(append(message, []byte(NewLineCharacter)...), scanner.Bytes()...)
 		}
 
 		*currentLineNumber++
+	}
 
-		if len(message) >= MessageLengthThresholdInBytes {
-			break
+	if len(message) > 0 {
+		event := &cloudwatchlogs.InputLogEvent{
+			Message:   aws.String(string(message)),
+			Timestamp: aws.Int64(time.Now().UnixNano() / int64(time.Millisecond)),
 		}
+
+		allEvents = append(allEvents, event)
+		return
 	}
 
 	// This determines the end of session.
