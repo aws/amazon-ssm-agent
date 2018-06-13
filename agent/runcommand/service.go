@@ -158,20 +158,7 @@ func NewService(ctx context.T, serviceName string, service mdsService.Service, c
 
 	sendResponse := func(messageID string, res contracts.DocumentResult) {
 		pluginID := res.LastPlugin
-		payload := FormatPayload(log, pluginID, agentInfo, res.PluginResults)
-		// Add this validation for changing the last message sent back for runCommand service. Solve the problem about output exceed maximum limit
-		// for runCommand service.
-		if payload.DocumentStatus != contracts.ResultStatusInProgress {
-			statusCount := 0
-			for _, v := range payload.AdditionalInfo.RuntimeStatusCounts {
-				statusCount += v
-			}
-			if len(payload.RuntimeStatus) == statusCount {
-				// Send back an empty map after execution for all plugins finish.
-				payload.RuntimeStatus = make(map[string]*contracts.PluginRuntimeStatus)
-			}
-		}
-		processSendReply(log, messageID, service, payload, stopPolicy)
+		processSendReply(log, messageID, service, FormatPayload(log, pluginID, agentInfo, res.PluginResults), stopPolicy)
 	}
 
 	var assocProc *associationProcessor.Processor
@@ -205,7 +192,7 @@ func prepareReplyPayloadToUpdateDocumentStatus(agentInfo contracts.AgentInfo, do
 		},
 		DocumentStatus:      documentStatus,
 		DocumentTraceOutput: documentTraceOutput,
-		RuntimeStatus:       make(map[string]*contracts.PluginRuntimeStatus),
+		RuntimeStatus:       nil,
 	}
 	return
 }

@@ -17,14 +17,12 @@ package runcommand
 import (
 	"crypto/sha256"
 	"strings"
-	"sync"
 	"testing"
 	"time"
 
 	"encoding/json"
 	"path"
 
-	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/docparser"
@@ -163,106 +161,6 @@ func TestProcessMessageWithInvalidMessage(t *testing.T) {
 	tc.ContextMock.AssertCalled(t, "Log")
 	tc.MdsMock.AssertNotCalled(t, "AcknowledgeMessage", mock.AnythingOfType("logger.T"))
 	assert.False(t, *tc.IsDocLevelResponseSent)
-}
-
-func TestListenReplyWithNonEmptyRuntimeStatus(t *testing.T) {
-	// prepare processor and test case fields
-	svc, tc := prepareTestListenReply(testTopicSend)
-
-	//execute the ListenReply
-	ch := make(chan contracts.DocumentResult)
-
-	pluginResults := make(map[string]*contracts.PluginResult)
-	documentResult := contracts.DocumentResult{
-		DocumentName:    "testDocument",
-		DocumentVersion: "2.2",
-		MessageID:       "123456",
-		AssociationID:   "associationId",
-		PluginResults:   pluginResults,
-		Status:          "InProgress",
-		LastPlugin:      "testPlugin",
-		NPlugins:        len(pluginResults),
-	}
-	tc.MdsMock.On("SendReply", mock.Anything, *tc.Message.MessageId).Return(nil)
-	wg := new(sync.WaitGroup)
-	wg.Add(1)
-
-	go func(chan contracts.DocumentResult) {
-		defer wg.Done()
-		svc.listenReply(ch)
-	}(ch)
-	ch <- documentResult
-	close(ch)
-	wg.Wait()
-
-	assert.Equal(t, *tc.IsDocLevelResponseSent, false)
-}
-
-func prepareTestListenReply(testTopic string) (svc RunCommandService, testCase TestCaseProcessMessage) {
-	// create mock context and log
-	contextMock := context.NewMockDefault()
-
-	contextAppConfig := appconfig.SsmagentConfig{
-		Ssm: appconfig.SsmCfg{
-			RunCommandLogsRetentionDurationHours:  0,
-			AssociationLogsRetentionDurationHours: 0,
-		},
-		Agent: appconfig.AgentInfo{
-			OrchestrationRootDir: "",
-		},
-	}
-	contextMock.On("AppConfig", mock.AnythingOfType("")).Return(contextAppConfig)
-	// create dummy message that would be passed processMessage
-	message := ssmmds.Message{
-		CreatedDate: &testCreatedDate,
-		Destination: &testDestination,
-		MessageId:   &testMessageId,
-		Topic:       &testTopic,
-	}
-
-	// create a agentConfig with dummy instanceID and agentInfo
-	agentConfig := contracts.AgentConfiguration{
-		AgentInfo:  contracts.AgentInfo{},
-		InstanceID: *message.Destination,
-	}
-
-	// create mocked service and set expectations
-	mdsMock := new(runcommandmock.MockedMDS)
-
-	isResponseSetEmpty := false
-	sendResponse := func(messageID string, res contracts.DocumentResult) {
-		pluginID := res.LastPlugin
-		payload := FormatPayload(loggers, pluginID, agentConfig.AgentInfo, res.PluginResults)
-		if payload.DocumentStatus != contracts.ResultStatusInProgress {
-			statusCount := 0
-			for _, v := range payload.AdditionalInfo.RuntimeStatusCounts {
-				statusCount += v
-			}
-			if len(payload.RuntimeStatus) == statusCount {
-				payload.RuntimeStatus = make(map[string]*contracts.PluginRuntimeStatus)
-				isResponseSetEmpty = true
-			}
-		}
-	}
-
-	processorMock := new(processormock.MockedProcessor)
-	svc = RunCommandService{
-		context:      contextMock,
-		config:       agentConfig,
-		service:      mdsMock,
-		sendResponse: sendResponse,
-		processor:    processorMock,
-	}
-
-	testCase = TestCaseProcessMessage{
-		ContextMock:            contextMock,
-		Message:                message,
-		MdsMock:                mdsMock,
-		ProcessMock:            processorMock,
-		IsDocLevelResponseSent: &isResponseSetEmpty,
-	}
-
-	return
 }
 
 func prepareTestProcessMessage(testTopic string) (svc RunCommandService, testCase TestCaseProcessMessage) {
