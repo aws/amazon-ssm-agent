@@ -37,10 +37,10 @@ import (
 
 const (
 	// Retry max count for opening serial port
-	serialPortRetryMaxCount = 10
+	serialPortRetryMaxCount = 2
 
 	// Wait time before retrying to open serial port
-	serialPortRetryWaitTime = 5
+	serialPortRetryWaitTime = 1
 
 	// OS installation options
 	fullServer = "Full"
