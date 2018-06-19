@@ -22,6 +22,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/ssm/util"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/credentials"
+	"github.com/aws/aws-sdk-go/aws/request"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/ssm"
 )
@@ -62,6 +63,7 @@ func NewAnonymousService(region string) AnonymousService {
 
 	// Create a session to share service client config and handlers with
 	ssmSess := session.New(awsConfig)
+	ssmSess.Handlers.Build.PushBack(request.MakeAddToUserAgentHandler(appConfig.Agent.Name, appConfig.Agent.Version))
 
 	ssmService := ssm.New(ssmSess)
 	return &sdkService{sdk: ssmService}

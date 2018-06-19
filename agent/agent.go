@@ -19,6 +19,7 @@ import (
 	"os/signal"
 	"path/filepath"
 	"runtime"
+	"runtime/debug"
 	"syscall"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
@@ -57,6 +58,7 @@ func start(log logger.T, instanceIDPtr *string, regionPtr *string) (cpm *coreman
 		// this should handle some kind of seg fault errors.
 		if msg := recover(); msg != nil {
 			log.Errorf("Agent crashed with message %v!", msg)
+			log.Errorf("%s: %s", msg, debug.Stack())
 		}
 	}()
 

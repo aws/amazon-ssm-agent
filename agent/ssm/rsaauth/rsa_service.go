@@ -15,9 +15,11 @@
 package rsaauth
 
 import (
+	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/ssm/util"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/credentials"
+	"github.com/aws/aws-sdk-go/aws/request"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/private/signer/v4"
 	"github.com/aws/aws-sdk-go/service/ssm"
@@ -41,8 +43,10 @@ func NewRsaService(serverId string, region string, encodedPrivateKey string) Rsa
 	awsConfig.Region = &region
 	awsConfig.Credentials = credentials.NewStaticCredentials(serverId, encodedPrivateKey, "")
 
+	appConfig, _ := appconfig.Config(false)
 	// Create a session to share service client config and handlers with
 	ssmSess, _ := session.NewSession(awsConfig)
+	ssmSess.Handlers.Build.PushBack(request.MakeAddToUserAgentHandler(appConfig.Agent.Name, appConfig.Agent.Version))
 
 	ssmService := ssm.New(ssmSess)
 

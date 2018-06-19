@@ -22,6 +22,7 @@ import (
 	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/agentlogstocloudwatch/cloudwatchlogspublisher/cloudwatchlogsinterface"
+	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/sdkutil"
 	"github.com/aws/aws-sdk-go/aws"
@@ -60,24 +61,25 @@ func createCloudWatchStopPolicy() *sdkutil.StopPolicy {
 // createCloudWatchClient creates a client to call CloudWatchLogs APIs
 func createCloudWatchClient() cloudwatchlogsinterface.CloudWatchLogsClient {
 	config := sdkutil.AwsConfig()
-	//Adding the AWS SDK Retrier with Exponential Backoff
-	config = request.WithRetryer(config, client.DefaultRetryer{
-		NumMaxRetries: maxRetries,
-	})
-
-	sess := session.New(config)
-	return cloudwatchlogs.New(sess)
+	return createCloudWatchClientWithConfig(config)
 }
 
 // createCloudWatchClientWithCredentials creates a client to call CloudWatchLogs APIs using credentials from the id and secret passed
 func createCloudWatchClientWithCredentials(id, secret string) cloudwatchlogsinterface.CloudWatchLogsClient {
 	config := sdkutil.AwsConfig().WithCredentials(credentials.NewStaticCredentials(id, secret, ""))
+	return createCloudWatchClientWithConfig(config)
+}
+
+// createCloudWatchClientWithConfig creates a client to call CloudWatchLogs APIs using the passed aws config
+func createCloudWatchClientWithConfig(config *aws.Config) cloudwatchlogsinterface.CloudWatchLogsClient {
 	//Adding the AWS SDK Retrier with Exponential Backoff
 	config = request.WithRetryer(config, client.DefaultRetryer{
 		NumMaxRetries: maxRetries,
 	})
 
+	appConfig, _ := appconfig.Config(false)
 	sess := session.New(config)
+	sess.Handlers.Build.PushBack(request.MakeAddToUserAgentHandler(appConfig.Agent.Name, appConfig.Agent.Version))
 	return cloudwatchlogs.New(sess)
 }
 

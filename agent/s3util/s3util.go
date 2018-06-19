@@ -26,6 +26,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/platform"
 	"github.com/aws/amazon-ssm-agent/agent/sdkutil"
 	"github.com/aws/aws-sdk-go/aws"
+	"github.com/aws/aws-sdk-go/aws/request"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/s3"
 	"github.com/aws/aws-sdk-go/service/s3/s3manager"
@@ -72,8 +73,11 @@ func NewAmazonS3Util(log log.T, bucketName string) *AmazonS3Util {
 	}
 	config.Region = &bucketRegion
 
+	sess := session.New(config)
+	sess.Handlers.Build.PushBack(request.MakeAddToUserAgentHandler(appConfig.Agent.Name, appConfig.Agent.Version))
+
 	return &AmazonS3Util{
-		myUploader: s3manager.NewUploader(session.New(config)),
+		myUploader: s3manager.NewUploader(sess),
 	}
 }
 

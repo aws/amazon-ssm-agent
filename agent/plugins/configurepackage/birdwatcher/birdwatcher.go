@@ -61,7 +61,6 @@ func New(endpoint string, manifestCache packageservice.ManifestCache) packageser
 	// TODO: endpoint vs appconfig
 	// TODO: pass in log var to log errs
 	cfg := sdkutil.AwsConfig()
-
 	// overrides ssm client config from appconfig if applicable
 	if appCfg, err := appconfig.Config(false); err == nil {
 		if appCfg.Ssm.Endpoint != "" {
@@ -77,7 +76,6 @@ func New(endpoint string, manifestCache packageservice.ManifestCache) packageser
 			cfg.Region = &appCfg.Agent.Region
 		}
 	}
-
 	facadeClientSession := session.New(cfg)
 
 	// Define a request handler with current agentName and version

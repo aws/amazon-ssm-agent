@@ -25,6 +25,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/platform"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/inventory/model"
 	"github.com/aws/amazon-ssm-agent/agent/sdkutil"
+	"github.com/aws/aws-sdk-go/aws/request"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/ssm"
 )
@@ -80,8 +81,10 @@ func NewInventoryUploader(context context.T) (*InventoryUploader, error) {
 			cfg.Region = &appCfg.Agent.Region
 		}
 	}
+	sess := session.New(cfg)
+	sess.Handlers.Build.PushBack(request.MakeAddToUserAgentHandler(appCfg.Agent.Name, appCfg.Agent.Version))
 
-	uploader.ssm = ssm.New(session.New(cfg))
+	uploader.ssm = ssm.New(sess)
 
 	if uploader.optimizer, err = NewOptimizerImpl(context); err != nil {
 		log.Errorf("Unable to load optimizer for inventory uploader because - %v", err.Error())

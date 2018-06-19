@@ -25,6 +25,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/platform"
 	"github.com/aws/amazon-ssm-agent/agent/sdkutil"
 	"github.com/aws/aws-sdk-go/aws"
+	"github.com/aws/aws-sdk-go/aws/request"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/ssm"
 )
@@ -112,8 +113,10 @@ func NewService() Service {
 			awsConfig.HTTPClient = &http.Client{Transport: tr}
 		}
 	}
+	sess := session.New(awsConfig)
+	sess.Handlers.Build.PushBack(request.MakeAddToUserAgentHandler(appConfig.Agent.Name, appConfig.Agent.Version))
 
-	ssmService := ssm.New(session.New(awsConfig))
+	ssmService := ssm.New(sess)
 	return &sdkService{sdk: ssmService}
 }
 

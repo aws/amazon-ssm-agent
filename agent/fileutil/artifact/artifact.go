@@ -34,6 +34,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/s3util"
 	"github.com/aws/amazon-ssm-agent/agent/sdkutil"
 	"github.com/aws/aws-sdk-go/aws"
+	"github.com/aws/aws-sdk-go/aws/request"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/s3"
 )
@@ -152,7 +153,11 @@ func CanGetS3Object(log log.T, amazonS3URL s3util.AmazonS3URL) bool {
 		Key:    aws.String(objectKey),
 	}
 
-	s3client := s3.New(session.New(config))
+	appConfig, _ := appconfig.Config(false)
+	sess := session.New(config)
+	sess.Handlers.Build.PushBack(request.MakeAddToUserAgentHandler(appConfig.Agent.Name, appConfig.Agent.Version))
+
+	s3client := s3.New(sess)
 	var res *s3.HeadObjectOutput
 	var err error
 	if res, err = s3client.HeadObject(params); err != nil {
@@ -176,7 +181,11 @@ func ListS3Folders(log log.T, amazonS3URL s3util.AmazonS3URL) (folderNames []str
 		Prefix:    &prefix,
 		Delimiter: aws.String("/"),
 	}
-	s3client := s3.New(session.New(config))
+	appConfig, _ := appconfig.Config(false)
+	sess := session.New(config)
+	sess.Handlers.Build.PushBack(request.MakeAddToUserAgentHandler(appConfig.Agent.Name, appConfig.Agent.Version))
+
+	s3client := s3.New(sess)
 	req, resp := s3client.ListObjectsRequest(params)
 	err = req.Send()
 	log.Debugf("ListS3Folders Bucket: %v, Prefix: %v, RequestID: %v", params.Bucket, params.Prefix, req.RequestID)
@@ -215,7 +224,11 @@ func ListS3Directory(log log.T, amazonS3URL s3util.AmazonS3URL) (folderNames []s
 	}
 	log.Debugf("ListS3Object Bucket: %v, Prefix: %v", params.Bucket, params.Prefix)
 
-	s3client := s3.New(session.New(config))
+	appConfig, _ := appconfig.Config(false)
+	sess := session.New(config)
+	sess.Handlers.Build.PushBack(request.MakeAddToUserAgentHandler(appConfig.Agent.Name, appConfig.Agent.Version))
+
+	s3client := s3.New(sess)
 	obj, err := s3client.ListObjects(params)
 	if err != nil {
 		log.Errorf("ListS3Directory error %v", err.Error())
@@ -250,8 +263,11 @@ func s3Download(log log.T, amazonS3URL s3util.AmazonS3URL, destFile string) (out
 		}
 		params.IfNoneMatch = aws.String(existingETag)
 	}
+	appConfig, _ := appconfig.Config(false)
+	sess := session.New(config)
+	sess.Handlers.Build.PushBack(request.MakeAddToUserAgentHandler(appConfig.Agent.Name, appConfig.Agent.Version))
 
-	s3client := s3.New(session.New(config))
+	s3client := s3.New(sess)
 
 	req, resp := s3client.GetObjectRequest(params)
 	err = req.Send()

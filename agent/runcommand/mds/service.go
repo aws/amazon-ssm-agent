@@ -111,7 +111,11 @@ func NewService(region string, endpoint string, creds *credentials.Credentials, 
 	}
 	config.HTTPClient = &http.Client{Transport: tr, Timeout: connectionTimeout}
 
-	msgSvc := ssmmds.New(session.New(config))
+	appConfig, _ := appconfig.Config(false)
+	sess := session.New(config)
+	sess.Handlers.Build.PushBack(request.MakeAddToUserAgentHandler(appConfig.Agent.Name, appConfig.Agent.Version))
+
+	msgSvc := ssmmds.New(sess)
 
 	//adding server based expected error messages
 	serverBasedErrorMessages = make([]string, 2)
