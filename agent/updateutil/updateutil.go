@@ -320,7 +320,7 @@ func (util *Utility) CreateInstanceContext(log log.T) (context *InstanceContext,
 func isAgentInstalledUsingSnap(log log.T) (result bool, err error) {
 
 	if _, commandErr := execCommand("snap", "services", "amazon-ssm-agent").Output(); commandErr != nil {
-		log.Errorf("Error checking 'snap services amazon-ssm-agent' - %v", commandErr)
+		log.Debugf("Error checking 'snap services amazon-ssm-agent' - %v", commandErr)
 		return false, commandErr
 	}
 	log.Debug("Agent is installed using snap")
