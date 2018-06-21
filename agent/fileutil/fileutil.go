@@ -163,6 +163,16 @@ func MakeDirsWithExecuteAccess(destinationDir string) (err error) {
 	return
 }
 
+func GetFileMode(path string) (mode os.FileMode) {
+	fileInfo, err := fs.Stat(path)
+	if err != nil {
+		err = fmt.Errorf("error looking up path information Path: %v, Error: %v", path, err)
+		return 0
+	}
+
+	return fileInfo.Mode()
+}
+
 // IsDirectory returns true or false depending
 // if given srcPath is directory or not
 func IsDirectory(srcPath string) bool {

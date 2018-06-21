@@ -42,8 +42,8 @@ func (m *DepMock) SetDaemonConfig(daemonConfigPath string, daemonConfigContent s
 	return args.Error(0)
 }
 
-func (m *DepMock) FileutilUncompress(src, dest string) error {
-	args := m.Called(src, dest)
+func (m *DepMock) FileutilUncompress(log log.T, src, dest string) error {
+	args := m.Called(log, src, dest)
 	return args.Error(0)
 }
 

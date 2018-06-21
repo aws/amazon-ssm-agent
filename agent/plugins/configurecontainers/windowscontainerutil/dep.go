@@ -39,5 +39,5 @@ type dependencies interface {
 	ArtifactDownload(log log.T, input artifact.DownloadInput) (output artifact.DownloadOutput, err error)
 	LocalRegistryKeySetDWordValue(path string, name string, value uint32) error
 	LocalRegistryKeyGetStringValue(path string, name string) (val string, valtype uint32, err error)
-	FileutilUncompress(src, dest string) error
+	FileutilUncompress(log log.T, src, dest string) error
 }

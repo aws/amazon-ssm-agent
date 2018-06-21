@@ -37,7 +37,7 @@ func successMock() *DepMock {
 	depmock.On("ArtifactDownload", mock.Anything, mock.Anything).Return(artifact.DownloadOutput{}, nil)
 	depmock.On("LocalRegistryKeySetDWordValue", mock.Anything, mock.Anything, mock.Anything).Return(nil)
 	depmock.On("LocalRegistryKeyGetStringValue", mock.Anything, mock.Anything).Return("", 0, nil)
-	depmock.On("FileutilUncompress", mock.Anything, mock.Anything).Return(nil)
+	depmock.On("FileutilUncompress", mock.Anything, mock.Anything, mock.Anything).Return(nil)
 	return &depmock
 }
 

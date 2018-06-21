@@ -588,7 +588,7 @@ func TestDownloadAndUnzipArtifact(t *testing.T) {
 	downloadArtifact = func(log log.T, input artifact.DownloadInput) (output artifact.DownloadOutput, err error) {
 		return downloadOutput, nil
 	}
-	uncompress = func(src, dest string) error {
+	uncompress = func(log log.T, src, dest string) error {
 		return nil
 	}
 

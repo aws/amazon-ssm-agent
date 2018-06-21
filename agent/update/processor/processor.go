@@ -436,6 +436,7 @@ func downloadAndUnzipArtifact(
 
 	// uncompress installation package
 	if err = uncompress(
+		log,
 		downloadOutput.LocalFilePath,
 		updateutil.UpdateArtifactFolder(context.Current.UpdateRoot, context.Current.PackageName, version)); err != nil {
 		return fmt.Errorf("failed to uncompress installation package, %v", err.Error())

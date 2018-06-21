@@ -136,7 +136,7 @@ func (p *Plugin) runCommands(log log.T, pluginID string, pluginInput PSModulePlu
 			return
 		} else {
 			// Uncompress the zip file received
-			if err = fileutil.Uncompress(downloadOutput.LocalFilePath, PowerShellModulesDirectory); err != nil {
+			if err = fileutil.Uncompress(log, downloadOutput.LocalFilePath, PowerShellModulesDirectory); err != nil {
 				output.MarkAsFailed(fmt.Errorf("Failed to uncompress %v to %v: %v", downloadOutput.LocalFilePath, PowerShellModulesDirectory, err.Error()))
 				return
 			}

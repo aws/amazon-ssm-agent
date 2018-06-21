@@ -87,7 +87,7 @@ func TestDownloadUpdater(t *testing.T) {
 		return result, nil
 	}
 
-	fileUncompress = func(src, dest string) error {
+	fileUncompress = func(log log.T, src, dest string) error {
 		return nil
 	}
 
@@ -136,7 +136,7 @@ func TestDownloadUpdater_FailedDuringUnCompress(t *testing.T) {
 		return result, nil
 	}
 
-	fileUncompress = func(src, dest string) error {
+	fileUncompress = func(log log.T, src, dest string) error {
 		return fmt.Errorf("Failed with uncompress")
 	}
 

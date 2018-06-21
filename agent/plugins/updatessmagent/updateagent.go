@@ -344,6 +344,7 @@ func (m *updateManager) downloadUpdater(log log.T,
 	}
 	out.AppendInfof("Successfully downloaded %v\n", downloadInput.SourceURL)
 	if uncompressErr := fileUncompress(
+		log,
 		downloadOutput.LocalFilePath,
 		updateutil.UpdateArtifactFolder(appconfig.UpdaterArtifactsRoot, updaterPackageName, version)); uncompressErr != nil {
 		return version, fmt.Errorf("failed to uncompress updater package, %v, %v\n",

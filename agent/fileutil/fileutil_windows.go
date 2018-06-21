@@ -22,10 +22,11 @@ import (
 	"unsafe"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
+	"github.com/aws/amazon-ssm-agent/agent/log"
 )
 
 // Uncompress unzips the installation package
-func Uncompress(src, dest string) error {
+func Uncompress(log log.T, src, dest string) error {
 	return Unzip(src, dest)
 }
 

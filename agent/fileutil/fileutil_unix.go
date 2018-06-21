@@ -25,10 +25,11 @@ import (
 	"syscall"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
+	"github.com/aws/amazon-ssm-agent/agent/log"
 )
 
 // Uncompress untar the installation package
-func Uncompress(src, dest string) error {
+func Uncompress(log log.T, src, dest string) error {
 	file, err := os.Open(src)
 	if err != nil {
 		return err
@@ -58,15 +59,23 @@ func Uncompress(src, dest string) error {
 		if hdr.FileInfo().IsDir() {
 			os.MkdirAll(itemPath, hdr.FileInfo().Mode())
 		} else {
-			fw, err := os.OpenFile(itemPath, appconfig.FileFlagsCreateOrTruncate, hdr.FileInfo().Mode())
+			mode := hdr.FileInfo().Mode()
+			log.Debugf("Uncompressing file %v with %v mode", itemPath, mode.Perm().String())
+			fw, err := os.OpenFile(itemPath, appconfig.FileFlagsCreateOrTruncate, mode)
 			if err != nil {
 				return err
 			}
 			defer fw.Close()
+
 			_, err = io.Copy(fw, tr)
 			if err != nil {
 				return err
 			}
+
+			if err = os.Chmod(itemPath, mode); err != nil {
+				return err
+			}
+			log.Debugf("Uncompressed file mode is %v", GetFileMode(itemPath).Perm().String())
 		}
 	}
 	return nil

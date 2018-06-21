@@ -100,6 +100,6 @@ func (DepWindows) LocalRegistryKeyGetStringValue(path string, name string) (val 
 	return key.GetStringValue(name)
 }
 
-func (DepWindows) FileutilUncompress(src, dest string) error {
-	return fileutil.Uncompress(src, dest)
+func (DepWindows) FileutilUncompress(log log.T, src, dest string) error {
+	return fileutil.Uncompress(log, src, dest)
 }

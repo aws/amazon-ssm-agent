@@ -181,7 +181,7 @@ func RunInstallCommands(log log.T, orchestrationDirectory string, out iohandler.
 	if downloadOutput.IsUpdated || installedErr != nil {
 		out.AppendInfo("Unzipping Docker to program files directory.")
 		//uncompress docker zip
-		fileutil.Uncompress(downloadOutput.LocalFilePath, DOCKER_UNCOMPRESS_DIRECTORY)
+		fileutil.Uncompress(log, downloadOutput.LocalFilePath, DOCKER_UNCOMPRESS_DIRECTORY)
 	}
 	log.Debug("Zip file downloaded to %v", downloadOutput.LocalFilePath)
 
