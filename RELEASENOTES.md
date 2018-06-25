@@ -2,7 +2,7 @@ Latest
 ===============
 - Bug fix to clean the orchestration directory
 - Streaming AWS Systems Manager Run Command output to CloudWatch Logs
-- Reducing number of retries for serial port opening
+- Reducing number of retries for serial port opening 
 - Add retry logic to installation verification
 
 2.2.619.0
