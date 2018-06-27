@@ -51,10 +51,17 @@ func NewAnonymousService(region string) AnonymousService {
 		if appConfig.Ssm.Endpoint != "" {
 			awsConfig.Endpoint = &appConfig.Ssm.Endpoint
 		} else {
-			if region, err := platform.Region(); err == nil {
-				if defaultEndpoint := appconfig.GetDefaultEndPoint(region, "ssm"); defaultEndpoint != "" {
-					awsConfig.Endpoint = &defaultEndpoint
+			// If we either were passed a blank region, try to figure it out based on platform services
+			if region == "" {
+				region, err = platform.Region()
+				if err != nil {
+					log.Printf("encountered error while determining region - %s", err)
 				}
+			}
+
+			// Get the default ssm endpoint for this region
+			if defaultEndpoint := appconfig.GetDefaultEndPoint(region, "ssm"); defaultEndpoint != "" {
+				awsConfig.Endpoint = &defaultEndpoint
 			}
 		}
 	} else {
