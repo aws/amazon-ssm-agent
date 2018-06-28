@@ -178,6 +178,11 @@ const (
 // MinimumDiskSpaceForUpdate represents 100 Mb in bytes
 const MinimumDiskSpaceForUpdate int64 = 104857600
 
+const (
+	verifyAttemptCount              = 36
+	verifyRetryIntervalMilliseconds = 5000
+)
+
 // InstanceContext holds information for the instance
 type InstanceContext struct {
 	Region          string
@@ -194,6 +199,7 @@ type T interface {
 	CreateUpdateDownloadFolder() (folder string, err error)
 	ExeCommand(log log.T, cmd string, workingDir string, updaterRoot string, stdOut string, stdErr string, isAsync bool) (err error)
 	IsServiceRunning(log log.T, i *InstanceContext) (result bool, err error)
+	WaitForServiceToStart(log log.T, i *InstanceContext) (result bool, err error)
 	SaveUpdatePluginResult(log log.T, updaterRoot string, updateResult *UpdatePluginResult) (err error)
 	IsDiskSpaceSufficientForUpdate(log log.T) (bool, error)
 }
@@ -520,6 +526,21 @@ func (util *Utility) IsServiceRunning(log log.T, i *InstanceContext) (result boo
 	}
 
 	return false, nil
+}
+
+// WaitForServiceToStart wait for service to start and returns is service started
+func (util *Utility) WaitForServiceToStart(log log.T, i *InstanceContext) (result bool, err error) {
+	isRunning := false
+	for attempt := 0; attempt < verifyAttemptCount; attempt++ {
+		if attempt > 0 {
+			log.Infof("Retrying update health check %v out of %v", attempt+1, verifyAttemptCount)
+			time.Sleep(time.Duration(verifyRetryIntervalMilliseconds) * time.Millisecond)
+		}
+		if isRunning, err = util.IsServiceRunning(log, i); err == nil && isRunning {
+			return true, nil
+		}
+	}
+	return false, err
 }
 
 // IsDiskSpaceSufficientForUpdate loads disk space info and checks the available bytes
