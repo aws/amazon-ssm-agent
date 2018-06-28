@@ -429,6 +429,10 @@ func (u *fakeUtility) IsServiceRunning(log log.T, i *updateutil.InstanceContext)
 	return true, nil
 }
 
+func (u *fakeUtility) WaitForServiceToStart(log log.T, i *updateutil.InstanceContext) (result bool, err error) {
+	return true, nil
+}
+
 func (u *fakeUtility) CreateUpdateDownloadFolder() (folder string, err error) {
 	return "", nil
 }

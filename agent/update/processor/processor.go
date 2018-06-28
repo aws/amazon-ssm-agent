@@ -30,11 +30,6 @@ import (
 var minimumSupportedVersions map[string]string
 var once sync.Once
 
-const (
-	verifyAttemptCount              = 36
-	verifyRetryIntervalMilliseconds = 5000
-)
-
 var (
 	downloadArtifact = artifact.Download
 	uncompress       = fileutil.Uncompress
@@ -270,17 +265,7 @@ func verifyInstallation(mgr *updateManager, log log.T, context *UpdateContext, i
 	}
 
 	log.Infof("Initiating update health check")
-	for attempt := 0; attempt < verifyAttemptCount; attempt++ {
-		if attempt > 0 {
-			log.Infof("Retrying update health check %v out of %v", attempt+1, verifyAttemptCount)
-			time.Sleep(time.Duration(verifyRetryIntervalMilliseconds) * time.Millisecond)
-		}
-		if isRunning, err = mgr.util.IsServiceRunning(log, instanceContext); err == nil && isRunning {
-			break
-		}
-	}
-
-	if err != nil || !isRunning {
+	if isRunning, err = mgr.util.WaitForServiceToStart(log, instanceContext); err != nil || !isRunning {
 		if !isRollback {
 			message := updateutil.BuildMessage(err,
 				"failed to update %v to %v, %v",

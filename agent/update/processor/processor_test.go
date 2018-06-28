@@ -684,3 +684,10 @@ func (u *utilityStub) IsServiceRunning(log log.T, i *updateutil.InstanceContext)
 	}
 	return false, nil
 }
+
+func (u *utilityStub) WaitForServiceToStart(log log.T, i *updateutil.InstanceContext) (result bool, err error) {
+	if u.controller.serviceIsRunning {
+		return true, nil
+	}
+	return false, nil
+}
