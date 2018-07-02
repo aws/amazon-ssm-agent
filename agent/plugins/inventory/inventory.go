@@ -27,6 +27,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
+	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/platform"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/inventory/datauploader"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/inventory/gatherers"
@@ -50,11 +51,11 @@ import (
 // TODO: add more unit tests.
 
 const (
-	errorMsgForMultipleAssociations           = "%v detected multiple inventory configurations associated to one instance. You can’t associate multiple inventory configurations to an instance. The association IDs are: %v and %v."
-	errorMsgForInvalidInventoryInput          = "Unrecognized input for %v plugin"
+	errorMsgForMultipleAssociations           = "%v detected multiple inventory configurations associated with one instance. Each instance can be associated with just one inventory configuration. Conflicting inventory configuration IDs: %v and %v"
+	errorMsgForInvalidInventoryInput          = "invalid or unrecognized input was received for %v plugin"
 	errorMsgForExecutingInventoryViaAssociate = "%v plugin can only be invoked via ssm-associate"
-	errorMsgForUnableToDetectInvocationType   = "Unable to detect if %v plugin was invoked via ssm-associate because - %v"
-	errorMsgForInabilityToSendDataToSSM       = "Unable to upload inventory data to SSM"
+	errorMsgForUnableToDetectInvocationType   = "it could not be detected if %v plugin was invoked via ssm-associate because - %v"
+	errorMsgForInabilityToSendDataToSSM       = "inventory data could not be uploaded to Systems Manager. Additional troubleshooting information - %v"
 	msgWhenNoDataToReturnForInventoryPlugin   = "Inventory policy has been successfully applied but there is no inventory data to upload to SSM"
 	successfulMsgForInventoryPlugin           = "Inventory policy has been successfully applied and collected inventory data has been uploaded to SSM"
 )
@@ -138,7 +139,6 @@ func NewPlugin(context context.T) (*Plugin, error) {
 func (p *Plugin) ApplyInventoryPolicy(context context.T, inventoryInput PluginInput, output iohandler.IOHandler) {
 	log := p.context.Log()
 	var optimizedInventoryItems, nonOptimizedInventoryItems []*ssm.InventoryItem
-	var status, retryWithNonOptimized bool
 	var items []model.Item
 	var err error
 
@@ -186,22 +186,18 @@ func (p *Plugin) ApplyInventoryPolicy(context context.T, inventoryInput PluginIn
 		nonOptimizedInventoryItems)
 
 	//first send data in optimized fashion
-	if status, retryWithNonOptimized = p.SendDataToInventory(context, optimizedInventoryItems); !status {
+	if err = p.uploader.SendDataToSSM(context, optimizedInventoryItems); err != nil {
 
-		if retryWithNonOptimized {
+		if shouldRetryWithNonOptimizedData(err, log) {
 			//call putinventory again with non-optimized dataset
-			if status, _ = p.SendDataToInventory(context, nonOptimizedInventoryItems); !status {
+			if err = p.uploader.SendDataToSSM(context, nonOptimizedInventoryItems); err != nil {
 				//sending non-optimized data also failed
-				log.Info(errorMsgForInabilityToSendDataToSSM)
-				output.SetExitCode(1)
-				output.AppendError(errorMsgForInabilityToSendDataToSSM)
+				propagateSSMError(output, err, log)
 				return
 			}
 		} else {
 			//some other error happened for which there is no need to retry - upload failed
-			log.Info(errorMsgForInabilityToSendDataToSSM)
-			output.SetExitCode(1)
-			output.AppendError(errorMsgForInabilityToSendDataToSSM)
+			propagateSSMError(output, err, log)
 			return
 		}
 	}
@@ -213,28 +209,26 @@ func (p *Plugin) ApplyInventoryPolicy(context context.T, inventoryInput PluginIn
 	return
 }
 
-// SendDataToInventory sends data to SSM and returns if data was sent successfully or not. If data is not uploaded successfully,
-// it parses the error message and determines if it should be sent again.
-func (p *Plugin) SendDataToInventory(context context.T, items []*ssm.InventoryItem) (status, retryWithFullData bool) {
-	var err error
-	log := context.Log()
-
-	if err = p.uploader.SendDataToSSM(context, items); err != nil {
-		status = false
-		if aerr, ok := err.(awserr.Error); ok {
-			//NOTE: awserr.Code -> is not the error code but the exception name itself!!!!
-			if aerr.Code() == "ItemContentMismatchException" || aerr.Code() == "InvalidItemContentException" {
-				log.Debugf("%v encountered - inventory plugin will try sending data again", aerr.Code())
-				retryWithFullData = true
-			} else {
-				log.Debugf("Unexpected error encountered - %v. No point trying to send data again", aerr.Code())
-			}
+// shouldRetryWithNonOptimizedData will return true if the Exception occurred is one of ItemContentMismatchException
+// or InvalidItemContentException and will retry sending data to SSM. It will return false, if any other error occurs.
+func shouldRetryWithNonOptimizedData(err error, log log.T) bool {
+	awsErr, isAwsError := err.(awserr.Error)
+	if isAwsError {
+		//NOTE: awsErr.Code -> is not the error code but the exception name itself!!!!
+		if awsErr.Code() == "ItemContentMismatchException" || awsErr.Code() == "InvalidItemContentException" {
+			log.Debugf("%v encountered - inventory plugin will try sending data again", awsErr.Code())
+			return true
 		}
-	} else {
-		status = true
 	}
+	log.Debugf("Unexpected error encountered - %v. No point trying to send data again", err.Error())
+	return false
+}
 
-	return
+func propagateSSMError(output iohandler.IOHandler, err error, log log.T) {
+	message := fmt.Sprintf(errorMsgForInabilityToSendDataToSSM, err.Error())
+	log.Info(message)
+	output.SetExitCode(1)
+	output.AppendError(message)
 }
 
 // CanGathererRun returns true if the gatherer can run on given OS, else it returns false. It throws error if the
@@ -249,7 +243,7 @@ func (p *Plugin) CanGathererRun(context context.T, name string) (status bool, ga
 			log.Infof("%v inventory gatherer is installed but not supported to run on this platform", name)
 			status = false
 		} else {
-			err = fmt.Errorf("Unrecognized inventory gatherer - %v ", name)
+			err = fmt.Errorf("inventory gatherer - %v is not installed", name)
 		}
 	} else {
 		log.Infof("%v inventory gatherer is supported to run on this platform", name)
@@ -399,7 +393,7 @@ func (p *Plugin) RunGatherers(gatherers map[gatherers.T]model.Config) (items []m
 			//return error if collected data breaches size limit
 			for _, v := range gItems {
 				if !p.VerifyInventoryDataSize(v, items) {
-					err = log.Errorf("Size limit exceeded for collected data.")
+					err = log.Errorf("the size of the collected data exceeded the maximum allowable size")
 					break
 				}
 			}
@@ -483,7 +477,7 @@ func (p *Plugin) IsInventoryBeingInvokedAsAssociation(fileName string) (status b
 		}
 
 	} else {
-		err = fmt.Errorf("Inventory plugin can't locate the execution document which invoked it. The doc should have been in the location - %v", absPathOfDoc)
+		err = fmt.Errorf("Inventory plugin could not locate the execution document which invoked it. The document is expected to be in the location - %v", absPathOfDoc)
 	}
 
 	return
