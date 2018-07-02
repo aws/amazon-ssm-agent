@@ -21,8 +21,10 @@ import (
 
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
+	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/inventory/gatherers"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/inventory/model"
+	"github.com/aws/aws-sdk-go/aws/awserr"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -198,4 +200,22 @@ func TestPlugin_IsMulitpleAssociationPresent(t *testing.T) {
 	status, other := p.IsMulitpleAssociationPresent("testAssociationID", config)
 	assert.True(t, status)
 	assert.Equal(t, "testAssociationID2", other)
+}
+
+func TestShouldRetryWithNonOptimizedData(t *testing.T) {
+	type testCase struct {
+		err         error
+		shouldRetry bool
+	}
+	var testCases = []testCase{
+		{awserr.New("ItemContentMismatchException", "content hash does not match", nil), true},
+		{awserr.New("InvalidItemContentException", "invalid content", nil), true},
+		{awserr.New("ItemSizeLimitExceededException", "size limit exceeded", nil), false},
+		{fmt.Errorf("SomeOtherError"), false},
+	}
+
+	log := log.NewMockLog()
+	for _, testCase := range testCases {
+		assert.Equal(t, testCase.shouldRetry, shouldRetryWithNonOptimizedData(testCase.err, log))
+	}
 }
