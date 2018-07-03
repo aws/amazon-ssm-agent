@@ -174,7 +174,7 @@ func (a *amazonSSMAgentService) Execute(args []string, r <-chan svc.ChangeReques
 
 	// start service, without specifying instance id or region
 	var emptyString string
-	cpm, err := start(a.log, &emptyString, &emptyString)
+	agent, err := start(a.log, &emptyString, &emptyString)
 	if err != nil {
 		log.Errorf("Failed to start agent. %v", err)
 		return true, appconfig.ErrorExitCode
@@ -204,6 +204,6 @@ loop:
 		}
 	}
 	s <- svc.Status{State: svc.StopPending}
-	stop(a.log, cpm)
+	agent.Stop()
 	return false, appconfig.SuccessExitCode
 }

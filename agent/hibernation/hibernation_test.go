@@ -37,7 +37,7 @@ func TestHibernation_ExecuteHibernation_AgentTurnsActive(t *testing.T) {
 	}
 	var status health.AgentState
 	go func(h *Hibernate) {
-		status = ExecuteHibernation(h)
+		status = h.ExecuteHibernation()
 		assert.Equal(t, health.Active, status)
 	}(hibernate)
 	modeChan <- health.Active
