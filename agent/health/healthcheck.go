@@ -26,6 +26,13 @@ import (
 	"github.com/carlescere/scheduler"
 )
 
+type IHealthCheck interface {
+	ModuleName() string
+	ModuleExecute(context context.T) (err error)
+	ModuleRequestStop(stopType contracts.StopType) (err error)
+	GetAgentState() (a AgentState, err error)
+}
+
 // HealthCheck encapsulates the logic on configuring, starting and stopping core modules
 type HealthCheck struct {
 	context               context.T
@@ -155,7 +162,7 @@ func (h *HealthCheck) ping() (err error) {
 }
 
 // GetAgentState returns the state of the agent. It is the caller's responsibility to log the error
-func GetAgentState(h *HealthCheck) (a AgentState, err error) {
+func (h *HealthCheck) GetAgentState() (a AgentState, err error) {
 	if err = h.ping(); err != nil {
 		return Passive, err
 	}

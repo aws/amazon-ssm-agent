@@ -14,7 +14,7 @@
 package runcommandmock
 
 import (
-	"github.com/aws/amazon-ssm-agent/agent/log"
+	log "github.com/aws/amazon-ssm-agent/agent/log"
 	mdsService "github.com/aws/amazon-ssm-agent/agent/runcommand/mds"
 	"github.com/aws/aws-sdk-go/service/ssmmds"
 	"github.com/stretchr/testify/mock"
@@ -29,9 +29,26 @@ type MockedMDS struct {
 }
 
 // GetMessages mocks the service function with the same name.
-func (mdsMock *MockedMDS) GetMessages(log log.T, instanceID string) (messages *ssmmds.GetMessagesOutput, err error) {
-	args := mdsMock.Called(log, instanceID)
-	return args.Get(0).(*ssmmds.GetMessagesOutput), args.Error(1)
+func (_m *MockedMDS) GetMessages(_a0 log.T, instanceID string) (*ssmmds.GetMessagesOutput, error) {
+	ret := _m.Called(_a0, instanceID)
+
+	var r0 *ssmmds.GetMessagesOutput
+	if rf, ok := ret.Get(0).(func(log log.T, instanceID string) *ssmmds.GetMessagesOutput); ok {
+		r0 = rf(_a0, instanceID)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*ssmmds.GetMessagesOutput)
+		}
+	}
+
+	var r1 error
+	if rf, ok := ret.Get(1).(func(log log.T, instanceID string) error); ok {
+		r1 = rf(_a0, instanceID)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
 }
 
 // AcknowledgeMessage mocks the service function with the same name.
@@ -40,8 +57,17 @@ func (mdsMock *MockedMDS) AcknowledgeMessage(log log.T, messageID string) error 
 }
 
 // SendReply mocks the service function with the same name.
-func (mdsMock *MockedMDS) SendReply(log log.T, messageID string, payload string) error {
-	return mdsMock.Called(log, messageID, payload).Error(0)
+func (mdsMock *MockedMDS) SendReply(_a0 log.T, messageID string, payload string) error {
+	ret := mdsMock.Called(_a0, messageID, payload)
+
+	var r0 error
+	if rf, ok := ret.Get(0).(func(log log.T, messageID string, payload string) error); ok {
+		r0 = rf(_a0, messageID, payload)
+	} else {
+		r0 = ret.Error(0)
+	}
+
+	return r0
 }
 
 // FailMessage mocks the service function with the same name.

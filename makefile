@@ -47,18 +47,21 @@ prepack:: cpy-plugins prepack-linux prepack-linux-386 prepack-windows prepack-wi
 
 package:: create-package-folder package-linux package-windows
 
-release:: clean quick-integtest checkstyle pre-release build prepack package
+release:: clean quick-integtest checkstyle pre-release build prepack package build-tests
 
 ifneq ($(FINALIZE),)
 	bgo-final
 endif
 
+.PHONY: build-tests
+build-tests: build-tests-linux build-tests-windows
+
 .PHONY: dev-build-linux
-dev-build-linux: clean quick-integtest checkstyle pre-release build-linux
+dev-build-linux: clean quick-integtest checkstyle pre-release build-linux build-tests-linux
 .PHONY: dev-build-freebsd
 dev-build-freebsd: clean quick-integtest checkstyle pre-release build-freebsd
 .PHONY: dev-build-windows
-dev-build-windows: clean quick-integtest checkstyle pre-release build-windows
+dev-build-windows: clean quick-integtest checkstyle pre-release build-windows build-tests-windows
 .PHONY: dev-build-linux-386
 dev-build-linux-386: clean quick-integtest checkstyle pre-release build-linux-386
 .PHONY: dev-build-windows-386
@@ -222,6 +225,25 @@ ifeq ($(BRAZIL_BUILD), true)
 	mkdir -p $(GOTEMPCOPYPATH)
 	@echo "copying files to $(GOTEMPCOPYPATH)"
 	$(COPY) -r $(BGO_SPACE)/agent $(GOTEMPCOPYPATH)
+endif
+
+.PHONY: build-tests-linux
+build-tests-linux: copy-src copy-tests-src pre-build
+	GOOS=linux GOARCH=amd64 go test -c -gcflags "-N -l" -tags=tests \
+		github.com/aws/amazon-ssm-agent/internal/tests \
+		-o bin/agent-tests/linux_amd64/agent-tests.test
+
+.PHONY: build-tests-windows
+build-tests-windows: copy-src copy-tests-src pre-build
+	GOOS=windows GOARCH=amd64 go test -c -gcflags "-N -l" -tags=tests \
+		github.com/aws/amazon-ssm-agent/internal/tests \
+		-o bin/agent-tests/windows_amd64/agent-tests.test
+
+.PHONY: copy-tests-src
+copy-tests-src:
+ifeq ($(BRAZIL_BUILD), true)
+	@echo "copying test files to $(GOTEMPCOPYPATH)"
+	$(COPY) -r $(BGO_SPACE)/internal $(GOTEMPCOPYPATH)
 endif
 
 .PHONY: remove-prepacked-folder

@@ -37,6 +37,13 @@ const (
 	hardStopTimeout       = time.Second * 5
 )
 
+type ICoreManager interface {
+	// Start executes the registered core modules
+	Start()
+	// Stop requests the core modules to stop executing
+	Stop()
+}
+
 // CoreManager encapsulates the logic for configuring, starting and stopping core modules
 type CoreManager struct {
 	context             context.T
@@ -45,14 +52,7 @@ type CoreManager struct {
 }
 
 // NewCoreManager creates a new core module manager.
-func NewCoreManager(instanceIdPtr *string, regionPtr *string, log logger.T) (cm *CoreManager, err error) {
-
-	// initialize appconfig
-	var config appconfig.SsmagentConfig
-	if config, err = appconfig.Config(false); err != nil {
-		log.Errorf("Could not load config file: %v", err)
-		return
-	}
+func NewCoreManager(context context.T, mr coremodules.ModuleRegistry, cwp *cloudwatchlogspublisher.CloudWatchPublisher, instanceIdPtr *string, regionPtr *string, log logger.T) (cm *CoreManager, err error) {
 
 	// initialize region
 	if *regionPtr != "" {
@@ -96,17 +96,14 @@ func NewCoreManager(instanceIdPtr *string, regionPtr *string, log logger.T) (cm 
 	}
 
 	// Initialize the client diagnostics
-	cloudwatchPublisher := initializeClientDiagnostics(log)
-
-	context := context.Default(log, config).With("[instanceID=" + instanceId + "]")
-
-	coreModules := coremodules.RegisteredCoreModules(context)
+	cwp.Init(log)
+	context = context.With("[instanceID=" + instanceId + "]")
 	runpluginutil.SSMPluginRegistry = plugin.RegisteredWorkerPlugins(context)
 
 	return &CoreManager{
 		context:             context,
-		coreModules:         *coreModules,
-		cloudwatchPublisher: cloudwatchPublisher,
+		coreModules:         mr,
+		cloudwatchPublisher: cwp,
 	}, nil
 }
 
@@ -222,13 +219,6 @@ func initializeBookkeepingLocations(log logger.T, instanceID string) bool {
 	}
 
 	return initStatus
-}
-
-// initializeClientDiagnostics initializes the cloudwatchlogs publisher once the agent configurations are setup so that it can connect to cloudwatch services
-func initializeClientDiagnostics(log logger.T) *cloudwatchlogspublisher.CloudWatchPublisher {
-	cloudwatchPublisher := &cloudwatchlogspublisher.CloudWatchPublisher{}
-	cloudwatchPublisher.Init(log)
-	return cloudwatchPublisher
 }
 
 // Start executes the registered core modules while watching for reboot request

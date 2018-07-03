@@ -27,6 +27,10 @@ import (
 )
 
 // Hibernate holds information about the current agent state
+type IHibernate interface {
+	ExecuteHibernation() health.AgentState
+}
+
 type Hibernate struct {
 	currentMode  health.AgentState
 	healthModule *health.HealthCheck
@@ -72,7 +76,7 @@ func NewHibernateMode(healthModule *health.HealthCheck, context context.T) *Hibe
 }
 
 // ExecuteHibernation Starts the hibernate mode by blocking agent start and by scheduling health pings
-func ExecuteHibernation(m *Hibernate) health.AgentState {
+func (m *Hibernate) ExecuteHibernation() health.AgentState {
 	next := time.Duration(initialPingRate) * time.Second
 	// Wait backoff time and then schedule health pings
 	<-time.After(next)
@@ -98,7 +102,7 @@ loop:
 }
 
 func (m *Hibernate) healthCheck() {
-	status, err := health.GetAgentState(m.healthModule)
+	status, err := m.healthModule.GetAgentState()
 	if err != nil && !m.isLogged {
 		m.seelogger.Errorf("Health ping failed with error - %v", err.Error())
 		m.isLogged = true

@@ -18,17 +18,19 @@ import (
 	"os"
 	"os/signal"
 	"path/filepath"
-	"runtime"
 	"runtime/debug"
 	"syscall"
 
+	"github.com/aws/amazon-ssm-agent/agent/agent"
+
+	"github.com/aws/amazon-ssm-agent/agent/agentlogstocloudwatch/cloudwatchlogspublisher"
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/framework/coremanager"
+	"github.com/aws/amazon-ssm-agent/agent/framework/coremodules"
 	"github.com/aws/amazon-ssm-agent/agent/health"
 	"github.com/aws/amazon-ssm-agent/agent/hibernation"
 	logger "github.com/aws/amazon-ssm-agent/agent/log"
-	"github.com/aws/amazon-ssm-agent/agent/version"
 )
 
 const (
@@ -48,25 +50,37 @@ var (
 	registrationFile                     = filepath.Join(appconfig.DefaultDataStorePath, "registration")
 )
 
-func start(log logger.T, instanceIDPtr *string, regionPtr *string) (cpm *coremanager.CoreManager, err error) {
-	log.Infof("Starting Agent: %v", version.String())
-	log.Infof("OS: %s, Arch: %s", runtime.GOOS, runtime.GOARCH)
-	log.Flush()
+func start(log logger.T, instanceIDPtr *string, regionPtr *string) (ssmAgent agent.ISSMAgent, err error) {
+	config, err := appconfig.Config(true)
+	if err != nil {
+		log.Debugf("appconfig could not be loaded - %v", err)
+		return
+	}
+	context := context.Default(log, config)
 
-	defer func() {
-		// recover in case the agent panics
-		// this should handle some kind of seg fault errors.
-		if msg := recover(); msg != nil {
-			log.Errorf("Agent crashed with message %v!", msg)
-			log.Errorf("%s: %s", msg, debug.Stack())
-		}
-	}()
+	//Initializing the health module to send empty health pings to the service.
+	healthModule := health.NewHealthCheck(context)
+	hibernateState := hibernation.NewHibernateMode(healthModule, context)
 
-	if cpm, err = coremanager.NewCoreManager(instanceIDPtr, regionPtr, log); err != nil {
+	ssmAgent = agent.NewSSMAgent(context, healthModule, hibernateState)
+
+	// Do a health check before starting the agent.
+	// Health check would include creating a health module and sending empty health pings to the service.
+	// If response is positive, start the agent, else retry and eventually back off (hibernate/passive mode).
+	ssmAgent.Hibernate()
+	// The instance has SSM policy if we reach this part of the code.
+
+	cloudwatchPublisher := &cloudwatchlogspublisher.CloudWatchPublisher{}
+	coreModules := coremodules.RegisteredCoreModules(context)
+
+	var cpm *coremanager.CoreManager
+	if cpm, err = coremanager.NewCoreManager(context, *coreModules, cloudwatchPublisher, instanceIDPtr, regionPtr, log); err != nil {
 		log.Errorf("error occurred when starting core manager: %v", err)
 		return
 	}
-	cpm.Start()
+	ssmAgent.SetCoreManager(cpm)
+
+	ssmAgent.Start()
 	return
 }
 
@@ -87,42 +101,23 @@ func blockUntilSignaled(log logger.T) {
 	log.Info("Got signal:", s, " value:", s.Signal)
 }
 
-func stop(log logger.T, cpm *coremanager.CoreManager) {
-	log.Info("Stopping agent")
-	log.Flush()
-	cpm.Stop()
-	log.Info("Bye.")
-	log.Flush()
-}
-
 // Run as a single process. Used by Unix systems and when running agent from console.
 func run(log logger.T) {
-	// Do a health check before starting the agent.
-	// Health check would include creating a health module and sending empty health pings to the service.
-	// If response is positive, start the agent, else retry and eventually back off (hibernate/passive mode).
+	defer func() {
+		// recover in case the agent panics
+		// this should handle some kind of seg fault errors.
+		if msg := recover(); msg != nil {
+			log.Errorf("Agent crashed with message %v!", msg)
+			log.Errorf("%s: %s", msg, debug.Stack())
+		}
+	}()
 
-	config, err := appconfig.Config(true)
-	if err != nil {
-		log.Debugf("appconfig could not be loaded - %v", err)
-		return
-	}
-	context := context.Default(log, config) // Add instanceID to context
-	//Initializing the health module to send empty health pings to the service.
-	healthModule := health.NewHealthCheck(context)
-
-	if status, _ := health.GetAgentState(healthModule); status == health.Passive {
-		//Starting hibernate mode
-		hibernateState := hibernation.NewHibernateMode(healthModule, context)
-		hibernation.ExecuteHibernation(hibernateState)
-	}
-	// The instance has SSM policy if we reach this part of the code.
-
-	// run core manager
-	cpm, err := start(log, instanceIDPtr, regionPtr)
+	// run ssm agent
+	agent, err := start(log, instanceIDPtr, regionPtr)
 	if err != nil {
 		log.Errorf("error occurred when starting amazon-ssm-agent: %v", err)
 		return
 	}
 	blockUntilSignaled(log)
-	stop(log, cpm)
+	agent.Stop()
 }
