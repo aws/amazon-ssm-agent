@@ -19,7 +19,6 @@ import (
 	"sync"
 	"time"
 
-	"bytes"
 	"path"
 	"strings"
 
@@ -45,7 +44,7 @@ const (
 	documentWorkersLimit                    = 1
 	cancelWaitDurationMillisecond           = 10000
 	documentLevelTimeOutDurationHour        = 2
-	outputMessageTemplate            string = "%v out of %v plugin%v processed, %v success, %v failed, %v timedout, %v skipped. %v"
+	outputMessageTemplate            string = "%v out of %v plugin%v processed, %v success, %v failed, %v timedout, %v skipped"
 	defaultRetryWaitOnBootInSeconds         = 30
 )
 
@@ -607,28 +606,15 @@ func buildOutput(runtimeStatuses map[string]*contracts.PluginRuntimeStatus, tota
 			status == contracts.ResultStatusSuccessAndReboot ||
 			status == contracts.ResultStatusSuccess
 	}))
-
+	failed := len(filterByStatus(runtimeStatuses, func(status contracts.ResultStatus) bool {
+		return status == contracts.ResultStatusFailed
+	}))
 	timedOut := len(filterByStatus(runtimeStatuses, func(status contracts.ResultStatus) bool {
 		return status == contracts.ResultStatusTimedOut
 	}))
-
 	skipped := len(filterByStatus(runtimeStatuses, func(status contracts.ResultStatus) bool {
 		return status == contracts.ResultStatusSkipped
 	}))
-
-	failedPluginReportMap := filterByStatus(runtimeStatuses, func(status contracts.ResultStatus) bool {
-		return status == contracts.ResultStatusFailed
-	})
-
-	failed := len(failedPluginReportMap)
-
-	var buffer bytes.Buffer
-
-	for pluginId := range failedPluginReportMap {
-		buffer.WriteString(fmt.Sprintf("\nThe operation %v failed because %v.", pluginId, failedPluginReportMap[pluginId].StandardError))
-	}
-
-	failedPluginReport := buffer.String()
 
 	for _, value := range runtimeStatuses {
 		paths := strings.Split(value.OutputS3KeyPrefix, "/")
@@ -639,7 +625,7 @@ func buildOutput(runtimeStatuses map[string]*contracts.PluginRuntimeStatus, tota
 		break
 	}
 
-	return fmt.Sprintf(outputMessageTemplate, completed, totalNumberOfPlugins, plural, success, failed, timedOut, skipped, failedPluginReport), outputUrl
+	return fmt.Sprintf(outputMessageTemplate, completed, totalNumberOfPlugins, plural, success, failed, timedOut, skipped), outputUrl
 }
 
 // filterByStatus represents the helper method that filter pluginResults base on ResultStatus
