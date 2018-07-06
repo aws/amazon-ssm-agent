@@ -121,7 +121,7 @@ func (u *InventoryUploader) SendDataToSSM(context context.T, items []*ssm.Invent
 		resp, err = u.ssm.PutInventory(params)
 
 		if err != nil {
-			log.Errorf("the following error occured while calling PutInventory API: %v", err)
+			log.Errorf("Encountered error while calling PutInventory API %v", err)
 		} else {
 			log.Debugf("PutInventory was called successfully with response - %v", resp)
 			u.updateContentHash(context, items)
@@ -200,6 +200,7 @@ func (u *InventoryUploader) ConvertToSsmInventoryItems(context context.T, items 
 		log.Debugf("old hash - %v, new hash - %v for the inventory type - %v", oldHash, newHash, itemName)
 
 		if newHash == oldHash {
+
 			log.Debugf("Inventory data for %v is same as before - we can just send content hash", itemName)
 
 			//set the inventory item accordingly
