@@ -48,22 +48,17 @@ type DocumentParserInfo struct {
 // This method calls into ParseDocument to obtain the InstancePluginInformation
 func InitializeDocState(log log.T,
 	documentType contracts.DocumentType,
-	docContent *contracts.DocumentContent,
+	docContent IDocumentContent,
 	docInfo contracts.DocumentInfo,
 	parserInfo DocumentParserInfo,
 	params map[string]interface{}) (docState contracts.DocumentState, err error) {
 
-	docState.SchemaVersion = docContent.SchemaVersion
+	docState.SchemaVersion = docContent.GetSchemaVersion()
 	docState.DocumentType = documentType
 	docState.DocumentInformation = docInfo
-	docState.IOConfig = contracts.IOConfiguration{
-		OrchestrationDirectory: parserInfo.OrchestrationDir,
-		OutputS3BucketName:     parserInfo.S3Bucket,
-		OutputS3KeyPrefix:      parserInfo.S3Prefix,
-		CloudWatchConfig:       parserInfo.CloudWatchConfig,
-	}
+	docState.IOConfig = docContent.GetIOConfiguration(parserInfo)
 
-	pluginInfo, err := ParseDocument(log, docContent, parserInfo, params)
+	pluginInfo, err := docContent.ParseDocument(log, docInfo, parserInfo, params)
 	if err != nil {
 		return
 	}
@@ -71,9 +66,34 @@ func InitializeDocState(log log.T,
 	return docState, nil
 }
 
+type IDocumentContent interface {
+	GetSchemaVersion() string
+	GetIOConfiguration(parserInfo DocumentParserInfo) contracts.IOConfiguration
+	ParseDocument(log log.T, docInfo contracts.DocumentInfo, parserInfo DocumentParserInfo, params map[string]interface{}) (pluginsInfo []contracts.PluginState, err error)
+}
+
+// TODO: move DocumentContent/SessionDocumentContent from contracts to docparser.
+type DocContent contracts.DocumentContent
+type SessionDocContent contracts.SessionDocumentContent
+
+// GetSchemaVersion is a method used to get document schema version
+func (docContent *DocContent) GetSchemaVersion() string {
+	return docContent.SchemaVersion
+}
+
+// GetIOConfiguration is a method used to get IO config from the document
+func (docContent *DocContent) GetIOConfiguration(parserInfo DocumentParserInfo) contracts.IOConfiguration {
+	return contracts.IOConfiguration{
+		OrchestrationDirectory: parserInfo.OrchestrationDir,
+		OutputS3BucketName:     parserInfo.S3Bucket,
+		OutputS3KeyPrefix:      parserInfo.S3Prefix,
+		CloudWatchConfig:       parserInfo.CloudWatchConfig,
+	}
+}
+
 // ParseDocument is a method used to parse documents that are not received by any service (MDS or State manager)
-func ParseDocument(log log.T,
-	docContent *contracts.DocumentContent,
+func (docContent *DocContent) ParseDocument(log log.T,
+	docInfo contracts.DocumentInfo,
 	parserInfo DocumentParserInfo,
 	params map[string]interface{}) (pluginsInfo []contracts.PluginState, err error) {
 
@@ -85,6 +105,29 @@ func ParseDocument(log log.T,
 	}
 
 	return parseDocumentContent(*docContent, parserInfo)
+}
+
+// GetSchemaVersion is a method used to get document schema version
+func (sessionDocContent *SessionDocContent) GetSchemaVersion() string {
+	return sessionDocContent.SchemaVersion
+}
+
+// GetIOConfiguration is a method used to get IO config from the document
+func (sessionDocContent *SessionDocContent) GetIOConfiguration(parserInfo DocumentParserInfo) contracts.IOConfiguration {
+	return contracts.IOConfiguration{
+		OrchestrationDirectory: parserInfo.OrchestrationDir,
+		OutputS3BucketName:     parserInfo.S3Bucket,
+		OutputS3KeyPrefix:      parserInfo.S3Prefix,
+	}
+}
+
+// ParseDocument is a method used to parse documents that are not received by any service (MDS or State manager)
+func (sessionDocContent *SessionDocContent) ParseDocument(log log.T,
+	docInfo contracts.DocumentInfo,
+	parserInfo DocumentParserInfo,
+	params map[string]interface{}) (pluginsInfo []contracts.PluginState, err error) {
+
+	return parsePluginStateForStartSession(parserInfo, docInfo.DocumentID, docInfo.ClientId)
 }
 
 // ParseParameters is a method to parse the ssm parameters into a string map interface
@@ -115,7 +158,7 @@ func ParseParameters(log log.T, params map[string][]*string, paramsDef map[strin
 }
 
 // parseDocumentContent parses an SSM Document and returns the plugin information
-func parseDocumentContent(docContent contracts.DocumentContent, parserInfo DocumentParserInfo) (pluginsInfo []contracts.PluginState, err error) {
+func parseDocumentContent(docContent DocContent, parserInfo DocumentParserInfo) (pluginsInfo []contracts.PluginState, err error) {
 
 	switch docContent.SchemaVersion {
 	case "1.0", "1.2":
@@ -132,7 +175,7 @@ func parseDocumentContent(docContent contracts.DocumentContent, parserInfo Docum
 
 // parsePluginStateForV10Schema initializes pluginsInfo for the docState. Used for document v1.0 and 1.2
 func parsePluginStateForV10Schema(
-	docContent contracts.DocumentContent,
+	docContent DocContent,
 	orchestrationDir, s3Bucket, s3Prefix, messageID, documentID, defaultWorkingDir string) (pluginsInfo []contracts.PluginState, err error) {
 
 	if len(docContent.RuntimeConfig) == 0 {
@@ -170,7 +213,7 @@ func parsePluginStateForV10Schema(
 
 // parsePluginStateForV20Schema initializes instancePluginsInfo for the docState. Used by document v2.0.
 func parsePluginStateForV20Schema(
-	docContent contracts.DocumentContent,
+	docContent DocContent,
 	orchestrationDir, s3Bucket, s3Prefix, messageID, documentID, defaultWorkingDir string) (pluginsInfo []contracts.PluginState, err error) {
 
 	if len(docContent.MainSteps) == 0 {
@@ -209,6 +252,37 @@ func parsePluginStateForV20Schema(
 	return
 }
 
+// parsePluginStateForStartSession initializes instancePluginsInfo for the docState. Used by startSession.
+func parsePluginStateForStartSession(
+	parserInfo DocumentParserInfo,
+	sessionId string,
+	clientId string) (pluginsInfo []contracts.PluginState, err error) {
+
+	// getPluginConfigurations converts from PluginConfig (structure from the MGS message) to plugin.Configuration (structure expected by the plugin)
+	pluginName := appconfig.PluginNameSessionStandardStream
+	config := contracts.Configuration{
+		MessageId:               parserInfo.MessageId,
+		BookKeepingFileName:     parserInfo.DocumentId,
+		PluginName:              pluginName,
+		PluginID:                pluginName,
+		DefaultWorkingDirectory: parserInfo.DefaultWorkingDir,
+		SessionId:               sessionId,
+		OutputS3KeyPrefix:       fileutil.BuildS3Path(parserInfo.S3Prefix, pluginName),
+		OutputS3BucketName:      parserInfo.S3Bucket,
+		OrchestrationDirectory:  fileutil.BuildPath(parserInfo.OrchestrationDir, pluginName),
+		ClientId:                clientId,
+		CloudWatchLogGroup:      parserInfo.CloudWatchConfig.LogGroupName,
+	}
+
+	var plugin contracts.PluginState
+	plugin.Configuration = config
+	plugin.Id = config.PluginID
+	plugin.Name = config.PluginName
+	pluginsInfo = append(pluginsInfo, plugin)
+
+	return
+}
+
 // validateSchema checks if the document schema version is supported by this agent version
 func validateSchema(documentSchemaVersion string) error {
 	// Check if the document version is supported by this agent version
@@ -222,7 +296,7 @@ func validateSchema(documentSchemaVersion string) error {
 }
 
 // getValidatedParameters validates the parameters and modifies the document content by replacing all ssm parameters with their actual values.
-func getValidatedParameters(log log.T, params map[string]interface{}, docContent *contracts.DocumentContent) error {
+func getValidatedParameters(log log.T, params map[string]interface{}, docContent *DocContent) error {
 
 	//ValidateParameterNames
 	validParameters := parameters.ValidParameters(log, params)
@@ -246,7 +320,7 @@ func getValidatedParameters(log log.T, params map[string]interface{}, docContent
 
 // replaceValidatedPluginParameters replaces parameters with their values, within the plugin Properties.
 func replaceValidatedPluginParameters(
-	docContent *contracts.DocumentContent,
+	docContent *DocContent,
 	params map[string]interface{},
 	logger log.T) error {
 	var err error

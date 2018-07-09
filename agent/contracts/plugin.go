@@ -69,6 +69,7 @@ type Configuration struct {
 	Properties              interface{}
 	OutputS3KeyPrefix       string
 	OutputS3BucketName      string
+	CloudWatchLogGroup      string
 	OrchestrationDirectory  string
 	MessageId               string
 	BookKeepingFileName     string
@@ -78,6 +79,8 @@ type Configuration struct {
 	Preconditions           map[string][]string
 	IsPreconditionEnabled   bool
 	CurrentAssociations     []string
+	SessionId               string
+	ClientId                string
 }
 
 // Plugin wraps the plugin configuration and plugin result.

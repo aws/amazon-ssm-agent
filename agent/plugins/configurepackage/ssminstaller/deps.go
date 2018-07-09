@@ -51,13 +51,13 @@ func (m *execDepImp) ParseDocument(context context.T, documentRaw []byte, orches
 		DefaultWorkingDir: defaultWorkingDirectory,
 	}
 
-	var docContent contracts.DocumentContent
+	var docContent docparser.DocContent
 	err = json.Unmarshal(documentRaw, &docContent)
 	if err != nil {
 		return
 	}
 	// TODO Add parameters
-	return docparser.ParseDocument(log, &docContent, parserInfo, nil)
+	return docContent.ParseDocument(log, contracts.DocumentInfo{}, parserInfo, nil)
 }
 
 func (m *execDepImp) ExecuteDocument(context context.T, pluginInput []contracts.PluginState, documentID string, documentCreatedDate string, orchestrationDirectory string) (pluginOutputs map[string]*contracts.PluginResult) {

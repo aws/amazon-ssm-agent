@@ -190,8 +190,14 @@ func parseSendCommandMessage(context context.T, msg *ssmmds.Message, messagesOrc
 		CloudWatchConfig: cloudWatchConfig,
 	}
 
+	docContent := &docparser.DocContent{
+		SchemaVersion: parsedMessage.DocumentContent.SchemaVersion,
+		Description:   parsedMessage.DocumentContent.Description,
+		RuntimeConfig: parsedMessage.DocumentContent.RuntimeConfig,
+		MainSteps:     parsedMessage.DocumentContent.MainSteps,
+		Parameters:    parsedMessage.DocumentContent.Parameters}
 	//Data format persisted in Current Folder is defined by the struct - CommandState
-	docState, err := docparser.InitializeDocState(log, documentType, &parsedMessage.DocumentContent, documentInfo, parserInfo, parsedMessage.Parameters)
+	docState, err := docparser.InitializeDocState(log, documentType, docContent, documentInfo, parserInfo, parsedMessage.Parameters)
 	if err != nil {
 		return nil, err
 	}

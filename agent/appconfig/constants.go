@@ -152,6 +152,9 @@ const (
 	// PluginNameAwsApplications is the name of the Applications plugin
 	PluginNameAwsApplications = "aws:applications"
 
+	// PluginNameSessionStandardStream is the name for session standard stream plugin
+	PluginNameSessionStandardStream = "aws:standardStream"
+
 	AppConfigFileName    = "amazon-ssm-agent.json"
 	SeelogConfigFileName = "seelog.xml"
 

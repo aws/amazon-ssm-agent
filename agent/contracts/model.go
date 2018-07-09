@@ -192,6 +192,22 @@ type DocumentContent struct {
 	Parameters    map[string]*Parameter    `json:"parameters" yaml:"parameters"`
 }
 
+// SessionInputs stores session configuration
+type SessionInputs struct {
+	S3BucketName           string `json:"s3BucketName" yaml:"s3BucketName"`
+	S3KeyPrefix            string `json:"s3KeyPrefix" yaml:"s3KeyPrefix"`
+	CloudWatchLogGroupName string `json:"cloudWatchLogGroupName" yaml:"cloudWatchLogGroupName"`
+}
+
+// SessionDocumentContent object which represents ssm session content.
+type SessionDocumentContent struct {
+	SchemaVersion string                `json:"schemaVersion" yaml:"schemaVersion"`
+	Description   string                `json:"description" yaml:"description"`
+	SessionType   string                `json:"sessionType" yaml:"sessionType"`
+	Inputs        SessionInputs         `json:"inputs" yaml:"inputs"`
+	Parameters    map[string]*Parameter `json:"parameters" yaml:"parameters"`
+}
+
 // AdditionalInfo section in agent response
 type AdditionalInfo struct {
 	Agent               AgentInfo      `json:"agent"`

@@ -48,7 +48,7 @@ type ExecDocumentImpl struct {
 func (exec ExecDocumentImpl) ParseDocument(log log.T, documentRaw []byte, orchestrationDir string,
 	s3Bucket string, s3KeyPrefix string, messageID string, documentID string, defaultWorkingDirectory string,
 	params map[string]interface{}) (pluginsInfo []contracts.PluginState, err error) {
-	docContent := contracts.DocumentContent{}
+	docContent := docparser.DocContent{}
 	if err := json.Unmarshal(documentRaw, &docContent); err != nil {
 		if err := yaml.Unmarshal(documentRaw, &docContent); err != nil {
 			log.Error("Unmarshaling remote resource document failed. Please make sure the document is in the correct JSON or YAML formal")
@@ -64,7 +64,7 @@ func (exec ExecDocumentImpl) ParseDocument(log log.T, documentRaw []byte, orches
 		DefaultWorkingDir: defaultWorkingDirectory,
 	}
 
-	pluginsInfo, err = docparser.ParseDocument(log, &docContent, parserInfo, params)
+	pluginsInfo, err = docContent.ParseDocument(log, contracts.DocumentInfo{}, parserInfo, params)
 	log.Debug("Parsed document - ", docContent)
 	log.Debug("Plugins Info - ", pluginsInfo)
 	return

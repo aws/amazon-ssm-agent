@@ -332,8 +332,15 @@ func GenerateDocStateFromFile(t *testing.T, messagePayloadFile string, instanceI
 		DocumentId:       documentInfo.DocumentID,
 	}
 
+	docContent := &docparser.DocContent{
+		SchemaVersion: payload.DocumentContent.SchemaVersion,
+		Description:   payload.DocumentContent.Description,
+		RuntimeConfig: payload.DocumentContent.RuntimeConfig,
+		MainSteps:     payload.DocumentContent.MainSteps,
+		Parameters:    payload.DocumentContent.Parameters,
+	}
 	//Data format persisted in Current Folder is defined by the struct - CommandState
-	testCase.DocState, err = docparser.InitializeDocState(loggers, documentType, &payload.DocumentContent, documentInfo, parserInfo, payload.Parameters)
+	testCase.DocState, err = docparser.InitializeDocState(loggers, documentType, docContent, documentInfo, parserInfo, payload.Parameters)
 	if err != nil {
 		t.Fatal(err)
 	}

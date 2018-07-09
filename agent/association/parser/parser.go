@@ -96,7 +96,14 @@ func InitializeDocumentState(context context.T,
 		DocumentId:       documentInfo.DocumentID,
 	}
 
-	return docparser.InitializeDocState(context.Log(), contracts.Association, &payload.DocumentContent, documentInfo, parserInfo, payload.Parameters)
+	docContent := &docparser.DocContent{
+		SchemaVersion: payload.DocumentContent.SchemaVersion,
+		Description:   payload.DocumentContent.Description,
+		RuntimeConfig: payload.DocumentContent.RuntimeConfig,
+		MainSteps:     payload.DocumentContent.MainSteps,
+		Parameters:    payload.DocumentContent.Parameters,
+	}
+	return docparser.InitializeDocState(context.Log(), contracts.Association, docContent, documentInfo, parserInfo, payload.Parameters)
 }
 
 // newDocumentInfo initializes new DocumentInfo object
