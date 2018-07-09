@@ -19,6 +19,7 @@ import (
 	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
+	"github.com/aws/amazon-ssm-agent/agent/platform"
 	messageContracts "github.com/aws/amazon-ssm-agent/agent/runcommand/contracts"
 	mdsmock "github.com/aws/amazon-ssm-agent/agent/runcommand/mock"
 	"github.com/aws/amazon-ssm-agent/agent/times"
@@ -39,12 +40,12 @@ func NewMDSMock() *mdsmock.MockedMDS {
 }
 
 func GenerateEmptyMessage() (*ssmmds.GetMessagesOutput, error) {
-	var testDestination = TestInstanceId
+	instanceID, _ := platform.InstanceID()
 	uuid.SwitchFormat(uuid.CleanHyphen)
 	var testMessageId = uuid.NewV4().String()
 	msgs := make([]*ssmmds.Message, 0)
 	messagesOutput := ssmmds.GetMessagesOutput{
-		Destination:       &testDestination,
+		Destination:       &instanceID,
 		Messages:          msgs,
 		MessagesRequestId: &testMessageId,
 	}
@@ -54,14 +55,14 @@ func GenerateEmptyMessage() (*ssmmds.GetMessagesOutput, error) {
 
 func GenerateMessages(messageContent string) (*ssmmds.GetMessagesOutput, error) {
 	uuid.SwitchFormat(uuid.CleanHyphen)
+	instanceID, _ := platform.InstanceID()
 	// mock GetMessagesOutput to return one message
-	var testDestination = TestInstanceId
 	var testMessageId = uuid.NewV4().String()
 	msgs := make([]*ssmmds.Message, 1)
-	mdsMessage, err := createMDSMessage(messageContent, testDestination)
+	mdsMessage, err := createMDSMessage(messageContent, instanceID)
 	msgs[0] = mdsMessage
 	messagesOutput := ssmmds.GetMessagesOutput{
-		Destination:       &testDestination,
+		Destination:       &instanceID,
 		Messages:          msgs,
 		MessagesRequestId: &testMessageId,
 	}

@@ -16,7 +16,6 @@ package testutils
 
 const (
 	// Test defaults
-	TestInstanceId = "amazon-ssm-agent"
 
 	TestRegion = "us-west-1"
 )
