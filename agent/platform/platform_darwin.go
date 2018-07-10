@@ -17,7 +17,9 @@
 package platform
 
 import (
+	"os"
 	"os/exec"
+	"path/filepath"
 	"strings"
 
 	"github.com/aws/amazon-ssm-agent/agent/log"
@@ -62,10 +64,30 @@ func getPlatformDetail(log log.T, param string) (value string, err error) {
 	return
 }
 
+var hostNameCommand = filepath.Join("bin", "hostname")
+
 // fullyQualifiedDomainName returns the Fully Qualified Domain Name of the instance, otherwise the hostname
 func fullyQualifiedDomainName() string {
-	//todo: throw an error / panic here - since darwin is not supported yet.
-	return ""
+	var hostName, fqdn string
+	var err error
+
+	if hostName, err = os.Hostname(); err != nil {
+		return ""
+	}
+
+	var contentBytes []byte
+	if contentBytes, err = exec.Command(hostNameCommand, "-f").Output(); err == nil {
+		fqdn = string(contentBytes)
+		//trim whitespaces - since by default above command appends '\n' at the end.
+		//e.g: 'ip-172-31-7-113.ec2.internal\n'
+		fqdn = strings.TrimSpace(fqdn)
+	}
+
+	if fqdn != "" {
+		return fqdn
+	}
+
+	return strings.TrimSpace(hostName)
 }
 
 func isPlatformNanoServer(log log.T) (bool, error) {
