@@ -18,7 +18,6 @@ package appconfig
 
 import (
 	"os"
-	"path/filepath"
 )
 
 const (
@@ -107,11 +106,7 @@ func init() {
 	if _, err := os.Stat(PowerShellPluginCommandName); err != nil {
 		PowerShellPluginCommandName = "/usr/bin/pwsh"
 	}
-	if appConfig, err := Config(true); err == nil {
-		if appConfig.Agent.DefaultDocumentWorkerDir != "" {
-			DefaultDocumentWorker = filepath.Join(appConfig.Agent.DefaultDocumentWorkerDir, "ssm-document-worker")
-		}
-	}
+
 	// if document-worker is not in the default location, try using the snap installed location
 	if _, err := os.Stat(DefaultDocumentWorker); err != nil {
 		if _, err := os.Stat("/snap/amazon-ssm-agent/current/ssm-document-worker"); err == nil {

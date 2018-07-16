@@ -46,12 +46,11 @@ type SsmCfg struct {
 
 // AgentInfo represents metadata for amazon-ssm-agent
 type AgentInfo struct {
-	Name                     string
-	Version                  string
-	Region                   string
-	OrchestrationRootDir     string
-	DownloadRootDir          string
-	DefaultDocumentWorkerDir string
+	Name                 string
+	Version              string
+	Region               string
+	OrchestrationRootDir string
+	DownloadRootDir      string
 }
 
 // MfsCfg represents configuration for HummingBird service (MFS)
