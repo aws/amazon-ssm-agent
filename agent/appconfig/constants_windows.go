@@ -187,10 +187,4 @@ func init() {
 	UpdateContextFilePath = filepath.Join(programData, EC2ConfigAppDataFolder, "Update\\UpdateContext.json")
 	EC2ConfigSettingPath = filepath.Join(EnvProgramFiles, EC2ConfigServiceFolder, "Settings")
 
-	// Adding customized default document worker directory load
-	if appConfig, err := Config(true); err == nil {
-		if appConfig.Agent.DefaultDocumentWorkerDir != "" {
-			DefaultDocumentWorker = filepath.Join(appConfig.Agent.DefaultDocumentWorkerDir, "ssm-document-worker.exe")
-		}
-	}
 }

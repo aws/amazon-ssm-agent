@@ -16,7 +16,6 @@ package appconfig
 import (
 	"testing"
 
-	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -90,13 +89,6 @@ func TestGetNumericValue(t *testing.T) {
 		output := getNumericValue(test.Input, test.MinValue, test.MaxValue, test.DefaultValue)
 		assert.Equal(t, test.Output, output)
 	}
-}
-
-func TestParserCustomizeDefaultDocument(t *testing.T) {
-	agentConfig := DefaultConfig()
-	jsonutil.UnmarshalFile("testdata/amazon-ssm-agent.json", &agentConfig)
-	parser(&agentConfig)
-	assert.Equal(t, agentConfig.Agent.DefaultDocumentWorkerDir, "/testpath")
 }
 
 // getNumeric64Value Tests
