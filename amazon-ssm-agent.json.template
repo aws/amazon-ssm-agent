@@ -18,6 +18,12 @@
         "AssociationLogsRetentionDurationHours" : 24,
         "RunCommandLogsRetentionDurationHours" : 336
     },
+    "Mgs": {
+        "Region": "",
+        "Endpoint": "",
+        "StopTimeoutMillis" : 20000,
+        "SessionWorkersLimit" : 1000,
+    },
     "Agent": {
         "Region": "",
         "OrchestrationRootDir": ""

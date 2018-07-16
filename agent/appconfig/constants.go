@@ -161,6 +161,10 @@ const (
 	// Output truncation limits
 	MaxStdoutLength = 24000
 	MaxStderrLength = 8000
+
+	// Session worker defaults
+	DefaultSessionWorkersLimit    = 1000
+	DefaultSessionWorkersLimitMin = 1
 )
 
 // Document versions that are supported by this Agent version.
