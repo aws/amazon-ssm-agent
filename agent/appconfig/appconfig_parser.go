@@ -28,6 +28,7 @@ func parser(config *SsmagentConfig) {
 	config.Agent.Name = getStringValue(config.Agent.Name, DefaultAgentName)
 	config.Agent.OrchestrationRootDir = getStringValue(config.Agent.OrchestrationRootDir, defaultOrchestrationRootDirName)
 	config.Agent.Region = getStringValue(config.Agent.Region, "")
+	config.Agent.DefaultDocumentWorkerDir = getStringValue(config.Agent.DefaultDocumentWorkerDir, "")
 
 	// MDS config
 	config.Mds.CommandWorkersLimit = getNumericValue(
