@@ -20,7 +20,8 @@
     },
     "Agent": {
         "Region": "",
-        "OrchestrationRootDir": ""
+        "OrchestrationRootDir": "",
+        "DefaultDocumentWorkerDir": ""
     },
     "Os": {
         "Lang": "en-US",

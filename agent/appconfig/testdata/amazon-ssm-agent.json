@@ -1,0 +1,37 @@
+{
+  "Profile":{
+    "ProfilePath" : "",
+    "ProfileName" : "",
+    "ShareCreds" : true,
+    "ShareProfile" : ""
+  },
+  "Mds": {
+    "CommandWorkersLimit" : 5,
+    "StopTimeoutMillis" : 20000,
+    "Endpoint": "",
+    "CommandRetryLimit": 15
+  },
+  "Ssm": {
+    "Endpoint": "",
+    "HealthFrequencyMinutes": 5,
+    "CustomInventoryDefaultLocation" : "",
+    "AssociationLogsRetentionDurationHours" : 24,
+    "RunCommandLogsRetentionDurationHours" : 336
+  },
+  "Agent": {
+    "Region": "",
+    "OrchestrationRootDir": "",
+    "DefaultDocumentWorkerDir": "/testpath"
+  },
+  "Os": {
+    "Lang": "en-US",
+    "Name": "",
+    "Version": "1"
+  },
+  "S3": {
+    "Endpoint": "",
+    "Region": "",
+    "LogBucket":"",
+    "LogKey":""
+  }
+}

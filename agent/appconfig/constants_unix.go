@@ -16,7 +16,10 @@
 // Package appconfig manages the configuration of the agent.
 package appconfig
 
-import "os"
+import (
+	"os"
+	"path/filepath"
+)
 
 const (
 
@@ -103,6 +106,11 @@ func init() {
 	PowerShellPluginCommandName = "/usr/bin/powershell"
 	if _, err := os.Stat(PowerShellPluginCommandName); err != nil {
 		PowerShellPluginCommandName = "/usr/bin/pwsh"
+	}
+	if appConfig, err := Config(true); err == nil {
+		if appConfig.Agent.DefaultDocumentWorkerDir != "" {
+			DefaultDocumentWorker = filepath.Join(appConfig.Agent.DefaultDocumentWorkerDir, "ssm-document-worker")
+		}
 	}
 	// if document-worker is not in the default location, try using the snap installed location
 	if _, err := os.Stat(DefaultDocumentWorker); err != nil {
