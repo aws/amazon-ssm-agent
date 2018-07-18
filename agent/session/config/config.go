@@ -43,3 +43,9 @@ const (
 	ClockGranularity       = 10 * time.Millisecond
 	MaxTransmissionTimeout = 1 * time.Second
 )
+
+// TODO: use RIP to get hostname.
+// GetHostName gets the host name. e.g. ssmmessages.{region}.amazonaws.com(.cn)
+func GetHostName() (string, error) {
+	return "ssmmessages.us-east-1.amazonaws.com", nil
+}
