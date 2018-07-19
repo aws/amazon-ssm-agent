@@ -21,6 +21,7 @@ import (
 
 	"github.com/aws/amazon-ssm-agent/agent/runcommand/mock"
 	"github.com/aws/aws-sdk-go/service/ssmmds"
+	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )
 
@@ -30,7 +31,7 @@ func TestSendFailedReplies(t *testing.T) {
 
 	// create mocked service and set expectations
 	mdsMock := new(runcommandmock.MockedMDS)
-	replies := []string{"reply1", "reply2", "reply3"}
+	replies := GetTestFailedReplies()
 	mdsMock.On("LoadFailedReplies", mock.AnythingOfType("*log.Mock")).Return(replies)
 	mdsMock.On("GetFailedReply", mock.AnythingOfType("*log.Mock"), mock.AnythingOfType("string")).Return(&ssmmds.SendReplyInput{}, nil)
 	mdsMock.On("SendReplyWithInput", mock.AnythingOfType("*log.Mock"), &ssmmds.SendReplyInput{}).Return(nil)
@@ -77,7 +78,7 @@ func TestSendFailedRepliesWithSendReplyReturnError(t *testing.T) {
 
 	// create mocked service and set expectations
 	mdsMock := new(runcommandmock.MockedMDS)
-	replies := []string{"reply1", "reply2", "reply3"}
+	replies := GetTestFailedReplies()
 	mdsMock.On("LoadFailedReplies", mock.AnythingOfType("*log.Mock")).Return(replies)
 	mdsMock.On("SendReplyWithInput", mock.AnythingOfType("*log.Mock"), &ssmmds.SendReplyInput{}).Return(fmt.Errorf("some error"))
 	mdsMock.On("GetFailedReply", mock.AnythingOfType("*log.Mock"), mock.AnythingOfType("string")).Return(&ssmmds.SendReplyInput{}, nil)
@@ -94,4 +95,19 @@ func TestSendFailedRepliesWithSendReplyReturnError(t *testing.T) {
 
 	mdsMock.AssertNumberOfCalls(t, "SendReplyWithInput", 1)
 	mdsMock.AssertNumberOfCalls(t, "DeleteFailedReply", 0)
+}
+
+func TestValidFailedReply(t *testing.T) {
+	curT := time.Now().UTC()
+	replyFileName := fmt.Sprintf("reply_%v", curT.Format("2006-01-02T15-04-05"))
+	valid := isValidReplyRequest(replyFileName)
+	assert.Equal(t, valid, true)
+
+	replyFileName = "reply_2006-01-02T15-04-05"
+	valid = isValidReplyRequest(replyFileName)
+	assert.Equal(t, valid, false)
+
+	replyFileName = "reply"
+	valid = isValidReplyRequest(replyFileName)
+	assert.Equal(t, valid, false)
 }
