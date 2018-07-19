@@ -49,10 +49,11 @@ type CoreManager struct {
 	context             context.T
 	coreModules         coremodules.ModuleRegistry
 	cloudwatchPublisher *cloudwatchlogspublisher.CloudWatchPublisher
+	rebooter            rebooter.IRebootType
 }
 
 // NewCoreManager creates a new core module manager.
-func NewCoreManager(context context.T, mr coremodules.ModuleRegistry, cwp *cloudwatchlogspublisher.CloudWatchPublisher, instanceIdPtr *string, regionPtr *string, log logger.T) (cm *CoreManager, err error) {
+func NewCoreManager(context context.T, mr coremodules.ModuleRegistry, cwp *cloudwatchlogspublisher.CloudWatchPublisher, instanceIdPtr *string, regionPtr *string, log logger.T, rbt rebooter.IRebootType) (cm *CoreManager, err error) {
 
 	// initialize region
 	if *regionPtr != "" {
@@ -104,6 +105,7 @@ func NewCoreManager(context context.T, mr coremodules.ModuleRegistry, cwp *cloud
 		context:             context,
 		coreModules:         mr,
 		cloudwatchPublisher: cwp,
+		rebooter:            rbt,
 	}, nil
 }
 
@@ -292,14 +294,14 @@ func (c *CoreManager) stopCoreModules(stopType contracts.StopType) {
 func (c *CoreManager) watchForReboot() {
 	log := c.context.Log()
 
-	ch := rebooter.GetChannel()
+	ch := c.rebooter.GetChannel()
 	// blocking receive
 	val := <-ch
 	log.Info("A plugin has requested a reboot.")
 	if val == rebooter.RebootRequestTypeReboot {
 		log.Info("Processing reboot request...")
 		c.stopCoreModules(contracts.StopTypeSoftStop)
-		rebooter.RebootMachine(log)
+		c.rebooter.RebootMachine(log)
 	} else {
 		log.Error("reboot type not supported yet")
 	}

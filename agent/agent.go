@@ -31,6 +31,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/health"
 	"github.com/aws/amazon-ssm-agent/agent/hibernation"
 	logger "github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/rebooter"
 )
 
 const (
@@ -72,9 +73,10 @@ func start(log logger.T, instanceIDPtr *string, regionPtr *string) (ssmAgent age
 
 	cloudwatchPublisher := &cloudwatchlogspublisher.CloudWatchPublisher{}
 	coreModules := coremodules.RegisteredCoreModules(context)
+	reboot := &rebooter.SSMRebooter{}
 
 	var cpm *coremanager.CoreManager
-	if cpm, err = coremanager.NewCoreManager(context, *coreModules, cloudwatchPublisher, instanceIDPtr, regionPtr, log); err != nil {
+	if cpm, err = coremanager.NewCoreManager(context, *coreModules, cloudwatchPublisher, instanceIDPtr, regionPtr, log, reboot); err != nil {
 		log.Errorf("error occurred when starting core manager: %v", err)
 		return
 	}
