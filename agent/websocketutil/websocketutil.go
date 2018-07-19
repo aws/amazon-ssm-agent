@@ -16,6 +16,7 @@ package websocketutil
 
 import (
 	"errors"
+	"net/http"
 
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/gorilla/websocket"
@@ -23,8 +24,8 @@ import (
 
 // IWebsocketUtil is the interface for the websocketutil.
 type IWebsocketUtil interface {
-	OpenConnection(log log.T, url string) (*websocket.Conn, error)
-	CloseConnection(log log.T, ws websocket.Conn) error
+	OpenConnection(url string, requestHeader http.Header) (*websocket.Conn, error)
+	CloseConnection(ws *websocket.Conn) error
 }
 
 // WebsocketUtil struct provides functionality around creating and maintaining websockets.
@@ -53,9 +54,12 @@ func NewWebsocketUtil(logger log.T, dialerInput *websocket.Dialer) *WebsocketUti
 	return websocketUtil
 }
 
-// OpenConnection opens a websocket connection provided an input url.
-func (u *WebsocketUtil) OpenConnection(url string) (*websocket.Conn, error) {
-	conn, _, err := u.dialer.Dial(url, nil)
+// OpenConnection opens a websocket connection provided an input url and request header.
+func (u *WebsocketUtil) OpenConnection(url string, requestHeader http.Header) (*websocket.Conn, error) {
+
+	u.log.Infof("Opening websocket connection to: ", url)
+
+	conn, _, err := u.dialer.Dial(url, requestHeader)
 	if err != nil {
 		u.log.Errorf("Failed to dial websocket: %s", err.Error())
 		return nil, err
@@ -71,6 +75,8 @@ func (u *WebsocketUtil) CloseConnection(ws *websocket.Conn) error {
 	if ws == nil {
 		return errors.New("websocket conn object is nil")
 	}
+
+	u.log.Debugf("Closing websocket connection to:", ws.RemoteAddr().String())
 
 	err := ws.Close()
 	if err != nil {

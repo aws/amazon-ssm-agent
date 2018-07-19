@@ -11,15 +11,15 @@
 // either express or implied. See the License for the specific language governing
 // permissions and limitations under the License.
 
+// Package websocketutil contains methods for interacting with websocket connections.
 package websocketutil
 
 import (
-	"testing"
-
 	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"net/url"
+	"testing"
 
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/gorilla/websocket"
@@ -50,7 +50,7 @@ func TestWebsocketUtilOpenCloseConnection(t *testing.T) {
 	u.Scheme = "ws"
 	var log = log.NewMockLog()
 	var ws = NewWebsocketUtil(log, nil)
-	conn, _ := ws.OpenConnection(u.String())
+	conn, _ := ws.OpenConnection(u.String(), http.Header{})
 	assert.NotNil(t, conn, "Open connection failed.")
 
 	err := ws.CloseConnection(conn)
@@ -63,6 +63,18 @@ func TestWebsocketUtilOpenConnectionInvalidUrl(t *testing.T) {
 	u.Scheme = "ws"
 	var log = log.NewMockLog()
 	var ws = NewWebsocketUtil(log, nil)
-	conn, _ := ws.OpenConnection("InvalidUrl")
+	conn, _ := ws.OpenConnection("InvalidUrl", http.Header{})
 	assert.Nil(t, conn, "Open connection failed.")
+}
+
+func TestSendMessage(t *testing.T) {
+	srv := httptest.NewServer(http.HandlerFunc(handlerToBeTested))
+	u, _ := url.Parse(srv.URL)
+	u.Scheme = "ws"
+	var log = log.NewMockLog()
+	var ws = NewWebsocketUtil(log, nil)
+	conn, _ := ws.OpenConnection(u.String(), http.Header{})
+	assert.NotNil(t, conn, "Open connection failed.")
+	err := conn.WriteMessage(websocket.TextMessage, []byte("testing testing"))
+	assert.Nil(t, err)
 }
