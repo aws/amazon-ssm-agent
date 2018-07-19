@@ -27,10 +27,11 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	logger "github.com/aws/amazon-ssm-agent/agent/log/ssmlog"
 	messageContracts "github.com/aws/amazon-ssm-agent/agent/runcommand/contracts"
-	mdsmock "github.com/aws/amazon-ssm-agent/agent/runcommand/mock"
 	"github.com/aws/amazon-ssm-agent/internal/tests/testdata"
 	"github.com/aws/amazon-ssm-agent/internal/tests/testutils"
+	"github.com/aws/aws-sdk-go/aws/request"
 	"github.com/aws/aws-sdk-go/service/ssmmds"
+	mdssdkmock "github.com/aws/aws-sdk-go/service/ssmmds/ssmmdsiface/mocks"
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/suite"
 )
@@ -40,9 +41,9 @@ import (
 // returns the current testing context
 type AgentStressTestSuite struct {
 	suite.Suite
-	ssmAgent       agent.ISSMAgent
-	mockMDSService *mdsmock.MockedMDS
-	log            log.T
+	ssmAgent   agent.ISSMAgent
+	mdsSdkMock *mdssdkmock.SSMMDSAPI
+	log        log.T
 }
 
 // SetupTest makes sure that all the components referenced in the test case are initialized
@@ -56,11 +57,16 @@ func (suite *AgentStressTestSuite) SetupTest() {
 		log.Debugf("appconfig could not be loaded - %v", err)
 		return
 	}
-	context := context.Default(log, config) // Add instanceID to context
+	context := context.Default(log, config)
 
 	// Mock MDS service to remove dependency on external service
-	mdsService := testutils.NewMDSMock()
-	suite.mockMDSService = mdsService
+	sendMdsSdkRequest := func(req *request.Request) error {
+		return nil
+	}
+	mdsSdkMock := testutils.NewMdsSdkMock()
+	mdsService := testutils.NewMdsService(mdsSdkMock, sendMdsSdkRequest)
+
+	suite.mdsSdkMock = mdsSdkMock
 
 	// The actual runcommand core module with mocked MDS service injected
 	runcommandService := testutils.NewRuncommandService(context, mdsService)
@@ -87,12 +93,12 @@ func (suite *AgentStressTestSuite) TestCoreAgent() {
 
 	// Mock MDs service so it returns only the desired number of messages, it'll return empty messages after that.
 	// That's because the agent is a loop and it keeps polling messages
-	suite.mockMDSService.On("GetMessages", mock.AnythingOfType("*log.Wrapper"), mock.AnythingOfType("string")).Return(func(log log.T, instanceID string) *ssmmds.GetMessagesOutput {
+	suite.mdsSdkMock.On("GetMessagesRequest", mock.AnythingOfType("*ssmmds.GetMessagesInput")).Return(&request.Request{}, func(input *ssmmds.GetMessagesInput) *ssmmds.GetMessagesOutput {
 		messageOutput, _ := testutils.GenerateMessages(testdata.EchoMDSMessage)
 		return messageOutput
 	}, nil).Times(numberOfMessages)
 
-	suite.mockMDSService.On("GetMessages", mock.AnythingOfType("*log.Wrapper"), mock.AnythingOfType("string")).Return(func(log log.T, instanceID string) *ssmmds.GetMessagesOutput {
+	suite.mdsSdkMock.On("GetMessagesRequest", mock.AnythingOfType("*ssmmds.GetMessagesInput")).Return(&request.Request{}, func(input *ssmmds.GetMessagesInput) *ssmmds.GetMessagesOutput {
 		emptyMessage, _ := testutils.GenerateEmptyMessage()
 		return emptyMessage
 	}, nil)
@@ -103,6 +109,7 @@ func (suite *AgentStressTestSuite) TestCoreAgent() {
 		if msg := recover(); msg != nil {
 			suite.log.Errorf("Agent crashed with message %v!", msg)
 			suite.log.Errorf("%s: %s", msg, debug.Stack())
+			suite.T().Fail()
 		}
 		// close the log to get full logs after the test is done
 		suite.log.Flush()
@@ -111,25 +118,27 @@ func (suite *AgentStressTestSuite) TestCoreAgent() {
 
 	// a channel to block test execution untill the agent is done processing the required number of messages
 	c := make(chan int)
-	suite.mockMDSService.On("SendReply", mock.AnythingOfType("*log.Wrapper"), mock.AnythingOfType("string"), mock.AnythingOfType("string")).Return(func(log log.T, messageID string, payload string) error {
+	suite.mdsSdkMock.On("SendReplyRequest", mock.AnythingOfType("*ssmmds.SendReplyInput")).Return(&request.Request{}, func(input *ssmmds.SendReplyInput) *ssmmds.SendReplyOutput {
+		payload := input.Payload
 		// unmarshal the reply sent back to MDS, verify that the document has succeed
 		// If one document failed, it'll mark the test as failed. If we got reply for all the required messages
 		// we end the test and it will be marked as passed.
 		var sendReplyPayload messageContracts.SendReplyPayload
-		json.Unmarshal([]byte(payload), &sendReplyPayload)
+		json.Unmarshal([]byte(*payload), &sendReplyPayload)
 
 		if sendReplyPayload.DocumentStatus == contracts.ResultStatusFailed || sendReplyPayload.DocumentStatus == contracts.ResultStatusTimedOut {
 			suite.T().Errorf("Document execution %v", sendReplyPayload.DocumentStatus)
+			suite.T().Fail()
 			c <- 1
-			suite.T().FailNow()
 		} else if sendReplyPayload.DocumentStatus == contracts.ResultStatusSuccess {
 			numberOfMessages--
 			if numberOfMessages == 0 {
 				c <- 1
 			}
 		}
-		return nil
-	}, nil)
+		return &ssmmds.SendReplyOutput{}
+	})
+
 	// start the agent and block test until it finishes executing documents
 	suite.ssmAgent.Start()
 	<-c
