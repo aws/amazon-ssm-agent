@@ -107,7 +107,7 @@ func (h *HealthCheck) scheduleInMinutes() int {
 	config := h.context.AppConfig()
 	log := h.context.Log()
 
-	if 4 < config.Ssm.HealthFrequencyMinutes || config.Ssm.HealthFrequencyMinutes < 61 {
+	if 4 < config.Ssm.HealthFrequencyMinutes && config.Ssm.HealthFrequencyMinutes < 61 {
 		updateHealthFrequencyMins = config.Ssm.HealthFrequencyMinutes
 	} else {
 		log.Debug("HealthFrequencyMinutes is outside allowable limits. Limiting to 5 minutes default.")

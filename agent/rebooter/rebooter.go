@@ -18,6 +18,16 @@ import "github.com/aws/amazon-ssm-agent/agent/log"
 
 type RebootType string
 
+// Add the interface about reboot type
+type IRebootType interface {
+	GetChannel() chan RebootType
+
+	RebootMachine(log log.T)
+}
+
+type SSMRebooter struct {
+}
+
 const (
 	RebootRequestTypeReboot RebootType = "reboot"
 	RebootRequestTypeUpdate RebootType = "update"
@@ -25,13 +35,12 @@ const (
 
 var ch = make(chan RebootType)
 
-func GetChannel() chan RebootType {
+func (r *SSMRebooter) GetChannel() chan RebootType {
 	return ch
 }
 
 //RebootMachine reboots the machine
-func RebootMachine(log log.T) {
-
+func (r *SSMRebooter) RebootMachine(log log.T) {
 	if err := reboot(log); err != nil {
 		log.Error("error in rebooting the machine", err)
 		return
@@ -39,7 +48,6 @@ func RebootMachine(log log.T) {
 }
 
 func RequestPendingReboot(log log.T) bool {
-
 	//non-blocking send
 	select {
 	case ch <- RebootRequestTypeReboot:
@@ -49,5 +57,4 @@ func RequestPendingReboot(log log.T) bool {
 		log.Info("reboot has already been requested...")
 		return false
 	}
-
 }
