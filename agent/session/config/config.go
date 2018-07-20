@@ -27,6 +27,7 @@ const (
 	RoleQueryParameter            = "role"
 	APIVersion                    = "v1"
 	RolePublishSubscribe          = "publish_subscribe"
+	RoleSubscribe                 = "subscribe"
 	MessageSchemaVersion          = "1.0"
 	RetryAttempt                  = 5
 	DefaultTransmissionTimeout    = 200 * time.Millisecond

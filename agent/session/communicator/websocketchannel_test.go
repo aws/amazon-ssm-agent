@@ -22,9 +22,26 @@ import (
 	"sync"
 	"testing"
 
+	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	mgsConfig "github.com/aws/amazon-ssm-agent/agent/session/config"
+	"github.com/aws/aws-sdk-go/aws/credentials"
+	"github.com/aws/aws-sdk-go/aws/signer/v4"
 	"github.com/gorilla/websocket"
 	"github.com/stretchr/testify/assert"
+)
+
+var (
+	onMessageHandler = func([]byte) {
+	}
+	onErrorHandler = func(error) {
+	}
+	channelId = "i-1234"
+	sessionId = "s-1234"
+	role      = "subscribe"
+	token     = "token"
+	region    = "us-east-1"
+	signer    = &v4.Signer{Credentials: credentials.NewStaticCredentials("AKID", "SECRET", "SESSION")}
 )
 
 var upgrader = websocket.Upgrader{
@@ -51,6 +68,43 @@ func handlerToBeTested(w http.ResponseWriter, req *http.Request) {
 		//echo back the same sent string from the client while adding "echo" at the beginning
 		conn.WriteMessage(mt, []byte("echo "+string(p)))
 	}
+}
+
+func TestInitialize(t *testing.T) {
+	host, err := mgsConfig.GetHostName()
+	assert.Nil(t, err)
+
+	webControlChannel := &WebSocketChannel{}
+	webControlChannel.Initialize(context.NewMockDefault(), channelId, mgsConfig.ControlChannel, role, token, region, signer, onMessageHandler, onErrorHandler)
+
+	assert.Equal(t, "wss://"+host+"/v1/control-channel/"+channelId+"?role=subscribe&stream=input", webControlChannel.Url)
+	assert.Equal(t, region, webControlChannel.Region)
+	assert.Equal(t, token, webControlChannel.ChannelToken)
+	assert.Equal(t, signer, webControlChannel.Signer)
+
+	webDataChannel := &WebSocketChannel{}
+	webDataChannel.Initialize(context.NewMockDefault(), sessionId, mgsConfig.DataChannel, role, token, region, signer, onMessageHandler, onErrorHandler)
+
+	assert.Equal(t, "wss://"+host+"/v1/data-channel/"+sessionId+"?role="+role, webDataChannel.Url)
+	assert.Equal(t, region, webDataChannel.Region)
+	assert.Equal(t, token, webDataChannel.ChannelToken)
+	assert.Equal(t, signer, webDataChannel.Signer)
+}
+
+func TestGetChannelToken(t *testing.T) {
+	webControlChannel := &WebSocketChannel{ChannelToken: token}
+
+	result := webControlChannel.GetChannelToken()
+
+	assert.Equal(t, token, result)
+}
+
+func TestSetChannelToken(t *testing.T) {
+	webControlChannel := &WebSocketChannel{}
+
+	webControlChannel.SetChannelToken(token)
+
+	assert.Equal(t, token, webControlChannel.ChannelToken)
 }
 
 func TestOpenCloseWebSocketChannel(t *testing.T) {

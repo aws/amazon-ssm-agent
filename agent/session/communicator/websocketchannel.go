@@ -17,6 +17,8 @@ package communicator
 import (
 	"errors"
 	"net/http"
+	"net/url"
+	"path"
 	"runtime/debug"
 	"sync"
 	"time"
@@ -31,8 +33,19 @@ import (
 
 // IWebSocketChannel is the interface for ControlChannel and DataChannel.
 type IWebSocketChannel interface {
+	Initialize(context context.T,
+		channelId string,
+		channelType string,
+		channelRole string,
+		channelToken string,
+		region string,
+		signer *v4.Signer,
+		onMessageHandler func([]byte),
+		onErrorHandler func(error)) error
 	Open(log log.T) error
 	Close(log log.T) error
+	GetChannelToken() string
+	SetChannelToken(token string)
 	StartPings(log log.T, pingInterval time.Duration)
 	SendMessage(log log.T, input []byte, inputType int) error
 	SetUrl(url string)
@@ -54,6 +67,52 @@ type WebSocketChannel struct {
 	writeLock    *sync.Mutex
 }
 
+// Initialize a WebSocketChannel object.
+func (webSocketChannel *WebSocketChannel) Initialize(context context.T,
+	channelId string,
+	channelType string,
+	channelRole string,
+	channelToken string,
+	region string,
+	signer *v4.Signer,
+	onMessageHandler func([]byte),
+	onErrorHandler func(error)) error {
+
+	hostName, err := mgsconfig.GetHostName()
+	if err != nil {
+		return err
+	}
+
+	channelUrl, err := url.Parse(mgsconfig.WebSocketPrefix + hostName)
+	if err != nil {
+		return err
+	}
+
+	channelUrl.Path = path.Join(channelUrl.Path, mgsconfig.APIVersion)
+	channelUrl.Path = path.Join(channelUrl.Path, channelType)
+	channelUrl.Path = path.Join(channelUrl.Path, channelId)
+
+	query := channelUrl.Query()
+	if channelType == mgsconfig.ControlChannel {
+		query.Set(mgsconfig.StreamQueryParameter, "input")
+		query.Add(mgsconfig.RoleQueryParameter, channelRole)
+	} else if channelType == mgsconfig.DataChannel {
+		query.Set(mgsconfig.RoleQueryParameter, channelRole)
+	}
+
+	channelUrl.RawQuery = query.Encode()
+
+	webSocketChannel.Url = channelUrl.String()
+	webSocketChannel.Context = context
+	webSocketChannel.Region = region
+	webSocketChannel.Signer = signer
+	webSocketChannel.ChannelToken = channelToken
+	webSocketChannel.OnError = onErrorHandler
+	webSocketChannel.OnMessage = onMessageHandler
+
+	return nil
+}
+
 // SetUrl sets the url for the WebSocketChannel.
 func (webSocketChannel *WebSocketChannel) SetUrl(url string) {
 	webSocketChannel.Url = url
@@ -73,6 +132,16 @@ func (webSocketChannel *WebSocketChannel) getV4SignatureHeader(log log.T, Url st
 		_, err = webSocketChannel.Signer.Sign(request, nil, mgsconfig.ServiceName, webSocketChannel.Region, time.Now())
 	}
 	return request.Header, err
+}
+
+// GetChannelToken returns channelToken field.
+func (webSocketChannel *WebSocketChannel) GetChannelToken() string {
+	return webSocketChannel.ChannelToken
+}
+
+// SetChannelToken updates the token field.
+func (webSocketChannel *WebSocketChannel) SetChannelToken(token string) {
+	webSocketChannel.ChannelToken = token
 }
 
 // Open upgrades the http connection to a websocket connection.

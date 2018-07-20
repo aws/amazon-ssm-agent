@@ -192,8 +192,6 @@ type AgentTaskReplyPayload struct {
 	InstanceId          string `json:"InstanceId"`
 }
 
-type ChannelType string
-
 type PayloadType uint32
 
 const (
