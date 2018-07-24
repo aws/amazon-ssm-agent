@@ -22,7 +22,7 @@
         "Region": "",
         "Endpoint": "",
         "StopTimeoutMillis" : 20000,
-        "SessionWorkersLimit" : 1000,
+        "SessionWorkersLimit" : 1000
     },
     "Agent": {
         "Region": "",

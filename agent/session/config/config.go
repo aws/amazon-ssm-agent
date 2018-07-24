@@ -17,6 +17,7 @@ package config
 import "time"
 
 const (
+	SessionServiceName            = "MessageGatewayService"
 	DotDelimiter                  = "."
 	ServiceName                   = "ssmmessages"
 	HttpsPrefix                   = "https://"

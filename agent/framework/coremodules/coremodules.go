@@ -20,6 +20,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/health"
 	"github.com/aws/amazon-ssm-agent/agent/longrunning/manager"
 	"github.com/aws/amazon-ssm-agent/agent/runcommand"
+	"github.com/aws/amazon-ssm-agent/agent/session"
 	"github.com/aws/amazon-ssm-agent/agent/startup"
 )
 
@@ -41,6 +42,7 @@ func RegisteredCoreModules(context context.T) *ModuleRegistry {
 func loadCoreModules(context context.T) {
 	registeredCoreModules = append(registeredCoreModules, health.NewHealthCheck(context))
 	registeredCoreModules = append(registeredCoreModules, runcommand.NewMDSService(context))
+	registeredCoreModules = append(registeredCoreModules, session.NewSession(context))
 
 	if offlineProcessor, err := runcommand.NewOfflineService(context); err == nil {
 		registeredCoreModules = append(registeredCoreModules, offlineProcessor)
