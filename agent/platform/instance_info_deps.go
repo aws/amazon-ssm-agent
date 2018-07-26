@@ -15,6 +15,8 @@
 package platform
 
 import (
+	"runtime"
+
 	"github.com/aws/amazon-ssm-agent/agent/managedInstances/registration"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/ec2metadata"
@@ -53,6 +55,18 @@ var metadata metadataClient = instanceMetadata{
 type metadataClient interface {
 	GetMetadata(p string) (string, error)
 	Region() (string, error)
+}
+
+// Alter our behavior based on where we're running.
+func init() {
+
+	// Set our retries to just one and make sure we're using the shorter overrides
+	// Macs don't have instance metadata
+	if runtime.GOOS == "darwin" {
+		metadata = instanceMetadata{
+			Client: ec2metadata.New(session.New(aws.NewConfig().WithMaxRetries(0).WithEC2MetadataDisableTimeoutOverride(true))),
+		}
+	}
 }
 
 type instanceMetadata struct {

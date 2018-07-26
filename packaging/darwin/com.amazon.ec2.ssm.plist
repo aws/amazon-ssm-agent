@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.amazon.ec2.ssm</string>
+    <key>UserName</key>
+    <string>root</string>
+    <key>RunAtLoad</key>
+    <true/>
+    <key>ProgramArguments</key>
+    <array>
+      <string>/opt/aws/ssm/bin/amazon-ssm-agent</string>
+    </array>
+    <key>KeepAlive</key>
+    <true/>
+    <!--
+        The `AWS_SHARED_CREDENTIALS_FILE` environment variable can be used to override
+        the location of the shared credentials file that SSM generates. The default location
+        for it is `$HOME/.aws/credentials` which is expanded to `/var/root/.aws.credentials`
+        when running under root. This location is not readable by non-root users which might
+        be desirable depending on your use-case.
+    -->
+    <!--
+    <key>EnvironmentVariables</key>
+    <dict>
+        <key>AWS_SHARED_CREDENTIALS_FILE</key>
+        <string>/etc/aws_credentials</string>
+    </dict>
+    -->
+</dict>
+</plist>

@@ -47,11 +47,11 @@ checkstyle::
 coverage:: build-linux
 	$(BGO_SPACE)/Tools/src/coverage.sh github.com/aws/amazon-ssm-agent/agent/...
 
-build:: build-linux build-freebsd build-windows build-linux-386 build-windows-386 build-arm
+build:: build-linux build-freebsd build-windows build-linux-386 build-windows-386 build-arm build-darwin
 
 prepack:: cpy-plugins prepack-linux prepack-linux-386 prepack-windows prepack-windows-386
 
-package:: create-package-folder package-linux package-windows
+package:: create-package-folder package-linux package-windows package-darwin
 
 release:: clean quick-integtest checkstyle pre-release build prepack package build-tests
 
@@ -157,7 +157,7 @@ build-freebsd: checkstyle copy-src pre-build
 
 .PHONY: build-darwin
 build-darwin: checkstyle copy-src pre-build
-	@echo "Rebuild for darwin agent"
+	@echo "Build for darwin agent"
 	GOOS=darwin GOARCH=amd64 $(GO_BUILD) -ldflags "-s -w" -o $(BGO_SPACE)/bin/darwin_amd64/amazon-ssm-agent -v \
 	$(BGO_SPACE)/agent/agent.go $(BGO_SPACE)/agent/agent_unix.go $(BGO_SPACE)/agent/agent_parser.go
 	GOOS=darwin GOARCH=amd64 $(GO_BUILD) -ldflags "-s -w" -o $(BGO_SPACE)/bin/darwin_amd64/updater -v \
@@ -165,7 +165,7 @@ build-darwin: checkstyle copy-src pre-build
 	GOOS=darwin GOARCH=amd64 $(GO_BUILD) -ldflags "-s -w" -o $(BGO_SPACE)/bin/darwin_amd64/ssm-cli -v \
 		$(BGO_SPACE)/agent/cli-main/cli-main.go
 	GOOS=darwin GOARCH=amd64 $(GO_BUILD) -ldflags "-s -w" -o $(BGO_SPACE)/bin/darwin_amd64/ssm-document-worker -v \
-								$(BGO_SPACE)/agent/framework/processor/executer/outofproc/worker/main.go
+							$(BGO_SPACE)/agent/framework/processor/executer/outofproc/worker/main.go
 
 .PHONY: build-windows
 build-windows: checkstyle copy-src pre-build
@@ -193,7 +193,7 @@ build-linux-386: checkstyle copy-src pre-build
 
 .PHONY: build-darwin-386
 build-darwin-386: checkstyle copy-src pre-build
-	@echo "Rebuild for darwin agent"
+	@echo "Build for darwin agent"
 	GOOS=darwin GOARCH=386 $(GO_BUILD) -ldflags "-s -w" -o $(BGO_SPACE)/bin/darwin_386/amazon-ssm-agent -v \
 	$(BGO_SPACE)/agent/agent.go $(BGO_SPACE)/agent/agent_unix.go $(BGO_SPACE)/agent/agent_parser.go
 	GOOS=darwin GOARCH=386 $(GO_BUILD) -ldflags "-s -w" -o $(BGO_SPACE)/bin/darwin_386/updater -v \
@@ -333,6 +333,10 @@ package-deb: create-package-folder
 .PHONY: package-win
 package-win: create-package-folder
 	$(BGO_SPACE)/Tools/src/create_win.sh
+
+.PHONY: package-darwin
+package-darwin:
+	$(BGO_SPACE)/Tools/src/create_darwin.sh
 
 .PHONY: package-rpm-386
 package-rpm-386: create-package-folder
