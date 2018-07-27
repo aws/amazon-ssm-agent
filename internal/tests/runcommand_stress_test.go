@@ -128,7 +128,6 @@ func (suite *AgentStressTestSuite) TestCoreAgent() {
 
 		if sendReplyPayload.DocumentStatus == contracts.ResultStatusFailed || sendReplyPayload.DocumentStatus == contracts.ResultStatusTimedOut {
 			suite.T().Errorf("Document execution %v", sendReplyPayload.DocumentStatus)
-			suite.T().Fail()
 			c <- 1
 		} else if sendReplyPayload.DocumentStatus == contracts.ResultStatusSuccess {
 			numberOfMessages--
