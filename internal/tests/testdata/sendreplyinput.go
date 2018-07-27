@@ -11,14 +11,14 @@
 // either express or implied. See the License for the specific language governing
 // permissions and limitations under the License.
 
-// Package testutils represents the common logic needed for agent tests
+// Package testdata represents the static data needed by agent tests
 package testdata
 
 var TestSendReplyInput = `{
-		"DeliveryOptions": null,
-		"MessageId": "1487aa02-68c6-4b00-9004-98dab2adec74",
-		"Payload": "",
-		"ReplyId": "a0202029-8399-4918-a31f-f5a9d85a404a"
-	}`
+    "DeliveryOptions": null,
+    "MessageId": "1487aa02-68c6-4b00-9004-98dab2adec74",
+    "Payload": "",
+    "ReplyId": "a0202029-8399-4918-a31f-f5a9d85a404a"
+  }`
 
 var TestReplyId = "a0202029-8399-4918-a31f-f5a9d85a404a"
