@@ -37,6 +37,10 @@ const (
 	OutputStreamDataMessage string = "output_stream_data"
 	// InputStreamDataMessage represents message type for incoming stream data
 	InputStreamDataMessage string = "input_stream_data"
+	// PausePublicationMessage message type for pause sending data packages.
+	PausePublicationMessage string = "pause_publication"
+	// StartPublicationMessage message type for start sending data packages.
+	StartPublicationMessage string = "start_publication"
 )
 
 type IMessage interface {
@@ -195,9 +199,10 @@ type AgentTaskReplyPayload struct {
 type PayloadType uint32
 
 const (
-	Output PayloadType = 1
-	Error  PayloadType = 2
-	Size   PayloadType = 3
+	Output    PayloadType = 1
+	Error     PayloadType = 2
+	Size      PayloadType = 3
+	Parameter PayloadType = 4
 )
 
 type SizeData struct {

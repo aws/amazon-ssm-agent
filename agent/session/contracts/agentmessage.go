@@ -533,13 +533,13 @@ func getLong(log logger.T, byteArray []byte, offset int) (result int64, err erro
 func putLong(log logger.T, byteArray []byte, offset int, value int64) (err error) {
 	byteArrayLength := len(byteArray)
 	if offset > byteArrayLength-1 || offset+8 > byteArrayLength-1 || offset < 0 {
-		log.Error("putInteger failed: Offset is invalid.")
+		log.Error("putLong failed: Offset is invalid.")
 		return errors.New("Offset is outside the byte array.")
 	}
 
 	mbytes, err := longToBytes(log, value)
 	if err != nil {
-		log.Error("putInteger failed: getBytesFromInteger Failed.")
+		log.Error("putLong failed: getBytesFromInteger Failed.")
 		return err
 	}
 
