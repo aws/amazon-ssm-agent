@@ -1,5 +1,11 @@
 Latest
 ===============
+- Initial support for developer builds on macOS
+- Retry sending Run Command execution results for up to 2 hours
+- More detailed error messages are returned for inventory plugin failures during State Manager association executions
+
+2.2.800.0
+===============
 - Bug fix to clean the orchestration directory
 - Streaming AWS Systems Manager Run Command output to CloudWatch Logs
 - Reducing number of retries for serial port opening 
