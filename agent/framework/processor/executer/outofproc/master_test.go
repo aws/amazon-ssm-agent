@@ -35,6 +35,7 @@ var testMessageID = "MessageID"
 var testAssociationID = "AssociationID"
 var testDocumentName = "AWS-RunPowerShellScript"
 var testDocumentVersion = "testVersion"
+var testDocumentCreatedDate = "2017-06-10T01-23-07.853Z"
 var testStartDateTime = time.Date(2017, 8, 13, 0, 0, 0, 0, time.UTC)
 var testEndDateTime = time.Date(2017, 8, 13, 0, 0, 1, 0, time.UTC)
 var testPid = 100
@@ -130,6 +131,75 @@ func TestInitializeNewProcess(t *testing.T) {
 	channelMock.AssertExpectations(t)
 	//assert pid is saved
 	assert.Equal(t, testPid, exe.docState.DocumentInformation.ProcInfo.Pid)
+}
+
+func TestInitializeNewProcessForSession(t *testing.T) {
+	testCase := createTestCaseForStartSession()
+	channelMock := new(channelmock.MockedChannel)
+	channelCreator = func(log log.T, mode channel.Mode, documentID string) (channel.Channel, error, bool) {
+		assert.Equal(t, mode, channel.ModeMaster)
+		assert.Equal(t, testDocumentID, documentID)
+		return channelMock, nil, false
+	}
+	processCreator = func(name string, argv []string) (proc.OSProcess, error) {
+		assert.Equal(t, name, appconfig.DefaultSessionWorker)
+		assert.Equal(t, argv, []string{testDocumentID})
+		return testCase.processMock, nil
+	}
+	exe := &OutOfProcExecuter{
+		ctx:        testCase.context,
+		docState:   &testCase.docState,
+		cancelFlag: task.NewChanneledCancelFlag(),
+	}
+	//assert Wait() syscall is called
+	stopTimer := make(chan bool)
+
+	testCase.processMock.On("Wait").Return(nil)
+	testCase.processMock.On("Pid").Return(testPid)
+	testCase.processMock.On("StartTime").Return(testStartDateTime)
+	_, err := exe.initialize(stopTimer)
+	assert.NoError(t, err)
+	//Wait() returns immediately, block until zombie timeout
+	<-stopTimer
+	testCase.processMock.AssertExpectations(t)
+	channelMock.AssertExpectations(t)
+	//assert pid is saved
+	assert.Equal(t, testPid, exe.docState.DocumentInformation.ProcInfo.Pid)
+}
+
+func createTestCaseForStartSession() *TestCase {
+	contextMock := context.NewMockDefaultWithContext([]string{"MASTER"})
+	docStore := new(executermocks.MockDocumentStore)
+	processMock := new(procmock.MockedOSProcess)
+	docInfo := contracts.DocumentInfo{
+		CreatedDate:     testDocumentCreatedDate,
+		MessageID:       testMessageID,
+		DocumentName:    testDocumentName,
+		DocumentID:      testDocumentID,
+		InstanceID:      testInstanceID,
+		DocumentVersion: testDocumentVersion,
+		RunCount:        0,
+	}
+
+	pluginState := contracts.PluginState{
+		Name: "Standard_Stream",
+		Id:   "plugin1",
+	}
+	docState := contracts.DocumentState{
+		DocumentInformation:        docInfo,
+		DocumentType:               "StartSession",
+		InstancePluginsInformation: []contracts.PluginState{pluginState},
+	}
+
+	results := make(map[string]*contracts.PluginResult)
+	return &TestCase{
+		context:      contextMock,
+		docStore:     docStore,
+		docState:     docState,
+		processMock:  processMock,
+		results:      results,
+		resultStatus: contracts.ResultStatusSuccess,
+	}
 }
 
 func TestCreateProcessFailed(t *testing.T) {

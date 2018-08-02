@@ -152,9 +152,6 @@ const (
 	// PluginNameAwsApplications is the name of the Applications plugin
 	PluginNameAwsApplications = "aws:applications"
 
-	// PluginNameSessionStandardStream is the name for session standard stream plugin
-	PluginNameSessionStandardStream = "aws:standardStream"
-
 	AppConfigFileName    = "amazon-ssm-agent.json"
 	SeelogConfigFileName = "seelog.xml"
 
@@ -165,6 +162,9 @@ const (
 	// Session worker defaults
 	DefaultSessionWorkersLimit    = 1000
 	DefaultSessionWorkersLimitMin = 1
+
+	// PluginNameStandardStream is the name for session manager standard stream plugin aka shell.
+	PluginNameStandardStream = "Standard_Stream"
 )
 
 // Document versions that are supported by this Agent version.

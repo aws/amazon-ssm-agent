@@ -44,6 +44,15 @@ const (
 	RTTVConstant           = 1.0 / 4.0
 	ClockGranularity       = 10 * time.Millisecond
 	MaxTransmissionTimeout = 1 * time.Second
+
+	RetryGeometricRatio                   = 2
+	ControlChannelNumMaxRetries           = -1 //forever retries for control channel
+	ControlChannelRetryInitialDelayMillis = 5000
+	ControlChannelRetryMaxIntervalMillis  = 5000
+
+	DataChannelNumMaxAttempts          = 5
+	DataChannelRetryInitialDelayMillis = 100
+	DataChannelRetryMaxIntervalMillis  = 5000
 )
 
 // TODO: use RIP to get hostname.

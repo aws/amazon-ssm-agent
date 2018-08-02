@@ -259,7 +259,7 @@ func parsePluginStateForStartSession(
 	clientId string) (pluginsInfo []contracts.PluginState, err error) {
 
 	// getPluginConfigurations converts from PluginConfig (structure from the MGS message) to plugin.Configuration (structure expected by the plugin)
-	pluginName := appconfig.PluginNameSessionStandardStream
+	pluginName := appconfig.PluginNameStandardStream
 	config := contracts.Configuration{
 		MessageId:               parserInfo.MessageId,
 		BookKeepingFileName:     parserInfo.DocumentId,

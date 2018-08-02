@@ -31,6 +31,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/plugins/rundocument"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/runscript"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/updatessmagent"
+	"github.com/aws/amazon-ssm-agent/agent/session/plugins/shell"
 )
 
 // allPlugins is the list of all known plugins.
@@ -59,6 +60,9 @@ var once sync.Once
 
 // registeredPlugins stores the registered plugins.
 var registeredPlugins *runpluginutil.PluginRegistry
+
+// registeredSessionPlugins stores the registered session plugins.
+var registeredSessionPlugins *runpluginutil.SessionPluginRegistry
 
 type CloudWatchFactory struct {
 }
@@ -130,12 +134,27 @@ func (r RunDocumentFactory) Create(context context.T) (runpluginutil.T, error) {
 	return rundocument.NewPlugin()
 }
 
+type SessionShellFactory struct {
+}
+
+func (f SessionShellFactory) Create(context context.T) (runpluginutil.SessionPlugin, error) {
+	return shell.NewPlugin()
+}
+
 // RegisteredWorkerPlugins returns all registered core modules.
 func RegisteredWorkerPlugins(context context.T) runpluginutil.PluginRegistry {
 	once.Do(func() {
 		loadWorkers(context)
 	})
 	return *registeredPlugins
+}
+
+// RegisteredSessionWorkerPlugins returns all registered session plugins.
+func RegisteredSessionWorkerPlugins() runpluginutil.SessionPluginRegistry {
+	once.Do(func() {
+		loadSessionPlugins()
+	})
+	return *registeredSessionPlugins
 }
 
 // loadWorkers loads all worker plugins that are invokers for interacting with long running plugins and
@@ -156,6 +175,16 @@ func loadWorkers(context context.T) {
 	}
 
 	registeredPlugins = &plugins
+}
+
+// loadSessionPlugins loads all session plugins
+func loadSessionPlugins() {
+	var sessionPlugins = runpluginutil.SessionPluginRegistry{}
+
+	shellPluginName := appconfig.PluginNameStandardStream
+	sessionPlugins[shellPluginName] = SessionShellFactory{}
+
+	registeredSessionPlugins = &sessionPlugins
 }
 
 // loadPlatformIndependentPlugins registers plugins common to all platforms

@@ -166,9 +166,15 @@ func (e *OutOfProcExecuter) initialize(stopTimer chan bool) (ipc channel.Channel
 		go timeout(stopTimer, stopTime, e.cancelFlag)
 	} else {
 		log.Debug("channel not found, starting a new process...")
+		var workerName string
+		if e.docState.DocumentType == contracts.StartSession {
+			workerName = appconfig.DefaultSessionWorker
+		} else {
+			workerName = appconfig.DefaultDocumentWorker
+		}
 		var process proc.OSProcess
-		if process, err = processCreator(appconfig.DefaultDocumentWorker, proc.FormArgv(documentID)); err != nil {
-			log.Errorf("start process: %v error: %v", appconfig.DefaultDocumentWorker, err)
+		if process, err = processCreator(workerName, proc.FormArgv(documentID)); err != nil {
+			log.Errorf("start process: %v error: %v", workerName, err)
 			//make sure close the channel
 			ipc.Destroy()
 			return

@@ -197,7 +197,7 @@ func TestInitializeDocStateForStartSessionDocument_Valid(t *testing.T) {
 	assert.Equal(t, testSessionId, pluginInfo[0].Configuration.SessionId)
 	assert.Equal(t, testClientId, pluginInfo[0].Configuration.ClientId)
 	assert.Equal(t, testLogGroupName, pluginInfo[0].Configuration.CloudWatchLogGroup)
-	assert.Equal(t, fileutil.BuildPath(testOrchDir, appconfig.PluginNameSessionStandardStream), pluginInfo[0].Configuration.OrchestrationDirectory)
+	assert.Equal(t, fileutil.BuildPath(testOrchDir, appconfig.PluginNameStandardStream), pluginInfo[0].Configuration.OrchestrationDirectory)
 }
 
 func TestParseDocument_EmptyDocContent(t *testing.T) {

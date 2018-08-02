@@ -19,8 +19,9 @@ echo "Copying application files"
 
 cp ${BGO_SPACE}/bin/linux_arm/amazon-ssm-agent ${BGO_SPACE}/bin/debian_arm/debian/usr/bin/
 cp ${BGO_SPACE}/bin/linux_arm/ssm-document-worker ${BGO_SPACE}/bin/debian_arm/debian/usr/bin/
+cp ${BGO_SPACE}/bin/linux_arm/ssm-session-worker ${BGO_SPACE}/bin/debian_arm/debian/usr/bin/
 cp ${BGO_SPACE}/bin/linux_arm/ssm-cli ${BGO_SPACE}/bin/debian_arm/debian/usr/bin/
-cd ${BGO_SPACE}/bin/debian_arm/debian/usr/bin/; strip --strip-unneeded amazon-ssm-agent; strip --strip-unneeded ssm-cli; strip --strip-unneeded ssm-document-worker; cd ~-
+cd ${BGO_SPACE}/bin/debian_arm/debian/usr/bin/; strip --strip-unneeded amazon-ssm-agent; strip --strip-unneeded ssm-cli; strip --strip-unneeded ssm-document-worker; strip --strip-unneeded ssm-session-worker; cd ~-
 cp ${BGO_SPACE}/seelog_unix.xml ${BGO_SPACE}/bin/debian_arm/debian/etc/amazon/ssm/seelog.xml.template
 cp ${BGO_SPACE}/amazon-ssm-agent.json.template ${BGO_SPACE}/bin/debian_arm/debian/etc/amazon/ssm/
 cp ${BGO_SPACE}/packaging/ubuntu/amazon-ssm-agent.conf ${BGO_SPACE}/bin/debian_arm/debian/etc/init/

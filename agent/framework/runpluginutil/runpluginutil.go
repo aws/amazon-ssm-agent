@@ -15,10 +15,13 @@
 package runpluginutil
 
 import (
+	"errors"
 	"fmt"
+	"math/rand"
 	"strings"
 	"time"
 
+	"github.com/aws/amazon-ssm-agent/agent/agentlogstocloudwatch/cloudwatchlogspublisher/cloudwatchlogsinterface"
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
@@ -28,6 +31,10 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/platform"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/pluginutil"
+	"github.com/aws/amazon-ssm-agent/agent/s3util"
+	mgsConfig "github.com/aws/amazon-ssm-agent/agent/session/config"
+	"github.com/aws/amazon-ssm-agent/agent/session/datachannel"
+	"github.com/aws/amazon-ssm-agent/agent/session/retry"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 )
 
@@ -37,18 +44,36 @@ const (
 	failStep    string = "fail"
 )
 
+// TODO: rename to RCPlugin, this represents RCPlugin interface.
 type T interface {
 	Execute(context context.T, config contracts.Configuration, cancelFlag task.CancelFlag, output iohandler.IOHandler)
 }
 
-type Factory interface {
+type RCPluginFactory interface {
 	Create(context context.T) (T, error)
 }
 
 // PluginRegistry stores a set of plugins (both worker and long running plugins), indexed by ID.
-type PluginRegistry map[string]Factory
+type PluginRegistry map[string]RCPluginFactory
 
 var SSMPluginRegistry PluginRegistry
+
+// SessionPlugin defines the session related plugins behaviors.
+type SessionPlugin interface {
+	Name() string
+	Execute(context context.T, config contracts.Configuration, cancelFlag task.CancelFlag, output iohandler.IOHandler, dataChannel datachannel.IDataChannel)
+	GetOnMessageHandler(log log.T, cancelFlag task.CancelFlag) func(input []byte)
+	Validate(context context.T, config contracts.Configuration, cwl cloudwatchlogsinterface.ICloudWatchLogsService, s3UploaderUtil s3util.IAmazonS3Util) error
+}
+
+type SessionPluginFactory interface {
+	Create(context context.T) (SessionPlugin, error)
+}
+
+// SessionPluginRegistry stores a set of session plugins indexed by ID.
+type SessionPluginRegistry map[string]SessionPluginFactory
+
+var SSMSessionPluginRegistry SessionPluginRegistry
 
 // allPlugins is the list of all known plugins.
 // This allows us to differentiate between the case where a document asks for a plugin that exists but isn't supported on this platform
@@ -72,10 +97,16 @@ var allPlugins = map[string]struct{}{
 	appconfig.PluginRunDocument:                {},
 }
 
+// allSessionPlugins is the list of all known session plugins.
+var allSessionPlugins = map[string]struct{}{
+	appconfig.PluginNameStandardStream: {},
+}
+
 // Assign method to global variables to allow unittest to override
 var isSupportedPlugin = IsPluginSupportedForCurrentPlatform
 
-//TODO remove executionID and creation date
+// TODO find a way to avoid switch cases between document and session worker code paths
+// TODO remove executionID and creation date
 // RunPlugins executes a set of plugins. The plugin configurations are given in a map with pluginId as key.
 // Outputs the results of running the plugins, indexed by pluginId.
 // Make this function private in case everybody tries to reference it everywhere, this is a private member of Executer
@@ -83,7 +114,7 @@ func RunPlugins(
 	context context.T,
 	plugins []contracts.PluginState,
 	ioConfig contracts.IOConfiguration,
-	pluginRegistry PluginRegistry,
+	registry interface{},
 	resChan chan contracts.PluginResult,
 	cancelFlag task.CancelFlag,
 ) (pluginOutputs map[string]*contracts.PluginResult) {
@@ -144,13 +175,36 @@ func RunPlugins(
 			ioConfig.CloudWatchConfig.LogStreamPrefix = strings.Replace(ioConfig.CloudWatchConfig.LogStreamPrefix, "*", "-", -1)
 		}
 
-		var r contracts.PluginResult
-		pluginHandlerFound := false
+		var (
+			r                  contracts.PluginResult
+			pluginFactory      interface{}
+			pluginHandlerFound bool
+			isKnown            bool
+			isSupported        bool
+		)
 
-		//check if the said plugin is a worker plugin
-		p, pluginHandlerFound := pluginRegistry[pluginName]
+		//check if the said plugin is a document worker plugin or session plugin and fetch plugin factory
+		switch registry.(type) {
+		case PluginRegistry:
+			context.Log().Debugf("Fetching plugin factory for %v from document worker PluginRegistry", pluginName)
+			var pluginRegistry = registry.(PluginRegistry)
+			pluginFactory, pluginHandlerFound = pluginRegistry[pluginName]
+			isKnown, isSupported, _ = isSupportedPlugin(context.Log(), pluginName)
 
-		isKnown, isSupported, _ := isSupportedPlugin(context.Log(), pluginName)
+		case SessionPluginRegistry:
+			context.Log().Debugf("Fetching plugin factory for %v from SessionPluginRegistry", pluginName)
+			var sessionPluginRegistry = registry.(SessionPluginRegistry)
+			pluginFactory, pluginHandlerFound = sessionPluginRegistry[pluginName]
+			isKnown, isSupported, _ = isSupportedSessionPlugin(context.Log(), pluginName)
+
+		default:
+			pluginOutputs[pluginID].Status = contracts.ResultStatusFailed
+			pluginOutputs[pluginID].Code = 1
+			pluginOutputs[pluginID].Error = errors.New("Invalid registry type. Must be either worker PluginRegistry or SessionPluginRegistry")
+			context.Log().Error(pluginOutputs[pluginID].Error)
+			resChan <- *pluginOutputs[pluginID]
+		}
+
 		operation, logMessage := getStepExecutionOperation(
 			context.Log(),
 			pluginName,
@@ -164,7 +218,7 @@ func RunPlugins(
 		switch operation {
 		case executeStep:
 			context.Log().Infof("Running plugin %s", pluginName)
-			r = runPlugin(context, p, pluginName, configuration, cancelFlag, ioConfig)
+			r = runPlugin(context, pluginFactory, pluginName, configuration, cancelFlag, ioConfig)
 			pluginOutputs[pluginID].Code = r.Code
 			pluginOutputs[pluginID].Status = r.Status
 			pluginOutputs[pluginID].Error = r.Error
@@ -213,7 +267,7 @@ func RunPlugins(
 
 func runPlugin(
 	context context.T,
-	pluginFactory Factory,
+	factory interface{},
 	pluginName string,
 	config contracts.Configuration,
 	cancelFlag task.CancelFlag,
@@ -234,7 +288,21 @@ func runPlugin(
 	}()
 
 	log.Debugf("Running %s", pluginName)
-	p, err := pluginFactory.Create(context)
+	var err error
+
+	// Check if it's a RCPluginFactory or SessionPluginFactory.
+	var plugin interface{}
+	switch factory.(type) {
+	case RCPluginFactory:
+		var pluginFactory = factory.(RCPluginFactory)
+		plugin, err = pluginFactory.Create(context)
+	case SessionPluginFactory:
+		var sessionPluginFactory = factory.(SessionPluginFactory)
+		plugin, err = sessionPluginFactory.Create(context)
+
+	default:
+		err = errors.New("Invalid factory type. Must be either RCPluginFactory or SessionPluginFactory")
+	}
 	if err != nil {
 		res.Status = contracts.ResultStatusFailed
 		res.Code = 1
@@ -258,12 +326,12 @@ func runPlugin(
 		for _, prop := range properties {
 			config.Properties = prop
 			propOutput := iohandler.NewDefaultIOHandler(log, ioConfig)
-			executePlugin(context, p, pluginName, config, cancelFlag, propOutput)
+			executePlugin(context, plugin, pluginName, config, cancelFlag, propOutput)
 			output.Merge(log, propOutput)
 		}
 
 	default:
-		executePlugin(context, p, pluginName, config, cancelFlag, output)
+		executePlugin(context, plugin, pluginName, config, cancelFlag, output)
 	}
 
 	res.Code = output.GetExitCode()
@@ -275,8 +343,31 @@ func runPlugin(
 	return
 }
 
+var getDataChannelForSessionPlugin = func(context context.T, sessionId string, clientId string, onMessageHandler func(input []byte)) (datachannel.IDataChannel, error) {
+	retryer := retry.RepeatableExponentialRetryer{
+		CallableFunc: func() (channel interface{}, err error) {
+			return datachannel.NewDataChannel(
+				context,
+				sessionId,
+				clientId,
+				onMessageHandler)
+		},
+		GeometricRatio:      mgsConfig.RetryGeometricRatio,
+		InitialDelayInMilli: rand.Intn(mgsConfig.DataChannelRetryInitialDelayMillis) + mgsConfig.DataChannelRetryInitialDelayMillis,
+		MaxDelayInMilli:     mgsConfig.DataChannelRetryMaxIntervalMillis,
+		MaxAttempts:         mgsConfig.DataChannelNumMaxAttempts,
+	}
+	channel, err := retryer.Call()
+	if err != nil {
+		return nil, err
+	}
+	dataChannel := channel.(*datachannel.DataChannel)
+
+	return dataChannel, nil
+}
+
 func executePlugin(context context.T,
-	p T,
+	plugin interface{},
 	pluginName string,
 	config contracts.Configuration,
 	cancelFlag task.CancelFlag,
@@ -302,7 +393,28 @@ func executePlugin(context context.T,
 		// Create the output object and execute the plugin
 		defer output.Close(log)
 		output.Init(log, pluginName, propID)
-		p.Execute(context, config, cancelFlag, output)
+
+		// Check if it's a RCPlugin or SessionPlugin.
+		switch plugin.(type) {
+		case T:
+			var tPlugin = plugin.(T)
+			tPlugin.Execute(context, config, cancelFlag, output)
+		case SessionPlugin:
+			var sessionPlugin = plugin.(SessionPlugin)
+			dataChannel, err := getDataChannelForSessionPlugin(context, config.SessionId, config.ClientId, sessionPlugin.GetOnMessageHandler(log, cancelFlag))
+			if err != nil {
+				errorString := fmt.Errorf("Setting up data channel with id %s failed: %s", config.SessionId, err)
+				output.MarkAsFailed(errorString)
+				log.Error(errorString)
+				return
+			}
+			sessionPlugin.Execute(context, config, cancelFlag, output, dataChannel)
+			dataChannel.Close(log)
+		default:
+			errorString := errors.New("Invalid plugin type. Must be either type RCPlugin or SessionPlugin")
+			log.Error(errorString)
+			output.MarkAsFailed(errorString)
+		}
 	}
 }
 
@@ -442,4 +554,13 @@ func evaluatePreconditions(
 	}
 
 	return isAllowed, unrecognizedPreconditionList
+}
+
+// isSupportedSessionPlugin returns isKnown as true if given session plugin exists,
+func isSupportedSessionPlugin(log log.T, pluginName string) (isKnown bool, isSupported bool, message string) {
+	_, known := allSessionPlugins[pluginName]
+	platformName, _ := platform.PlatformName(log)
+	platformVersion, _ := platform.PlatformVersion(log)
+
+	return known, true, fmt.Sprintf("%s v%s", platformName, platformVersion)
 }

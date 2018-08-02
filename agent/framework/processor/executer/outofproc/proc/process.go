@@ -89,12 +89,12 @@ func IsProcessExists(log log.T, pid int, createTime time.Time) bool {
 //TODO figure out why sometimes argv does not contain program name
 func ParseArgv(argv []string) (string, string, error) {
 	if len(argv) == 1 {
-		if argv[0] == appconfig.DefaultDocumentWorker {
+		if argv[0] == appconfig.DefaultDocumentWorker || argv[0] == appconfig.DefaultSessionWorker {
 			return "", "", errors.New("insufficient argument number")
 		}
 		return argv[0], "", nil
 	} else if len(argv) == 2 {
-		if argv[0] == appconfig.DefaultDocumentWorker {
+		if argv[0] == appconfig.DefaultDocumentWorker || argv[0] == appconfig.DefaultSessionWorker {
 			return argv[1], "", nil
 		}
 		return argv[0], argv[1], nil
