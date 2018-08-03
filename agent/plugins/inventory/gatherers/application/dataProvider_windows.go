@@ -271,7 +271,8 @@ func executePowershellCommands(context context.T, command, args, arch string) (d
 		log.Error(err.Error())
 		log.Infof("No application data to return")
 	} else {
-		cmdOutput := string(output)
+		// Clean up all invisible codes in byte array
+		cmdOutput := stripCtlFromUTF8(string(output))
 		log.Debugf("Command output: %v", cmdOutput)
 
 		if data, err = convertToApplicationData(cmdOutput, arch); err != nil {
