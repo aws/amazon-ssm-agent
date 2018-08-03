@@ -136,20 +136,3 @@ func convertEntriesToJsonArray(entries string) string {
 func cleanupNewLines(s string) string {
 	return strings.Replace(strings.Replace(s, "\n", "", -1), "\r", "", -1)
 }
-
-// Clean all Ctrl code from UTF-8 string
-// -- Check https://rosettacode.org/wiki/Strip_control_codes_and_extended_characters_from_a_string for more details
-//    about this method
-// -- This method will remove all C0 control code from string and not the C1 control code. The reason is UTF-8 still
-//    allows you to use C1 control characters such as CSI, even though UTF-8 also uses bytes in the range 0x80-0x9F.
-// -- For C0 and C1 control code details you can check http://www.cl.cam.ac.uk/~mgk25/unicode.html and
-//    https://en.wikipedia.org/wiki/C0_and_C1_control_codes
-
-func stripCtlFromUTF8(str string) string {
-	return strings.Map(func(r rune) rune {
-		if r >= 32 && r != 127 {
-			return r
-		}
-		return -1
-	}, str)
-}
