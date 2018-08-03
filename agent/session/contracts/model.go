@@ -172,28 +172,7 @@ type AgentTaskCompletePayload struct {
 	IsRoutingFailure bool   `json:"IsRoutingFailure"`
 	AwsAccountId     string `json:"AwsAccountId"`
 	InstanceId       string `json:"InstanceId"`
-}
-
-// AgentTaskReplyPayload represents the json structure of a reply sent to MDS.
-type AgentTaskReplyPayload struct {
-	SchemaVersion       int    `json:"SchemaVersion"`
-	TaskId              string `json:"TaskId"`
-	Topic               string `json:"Topic"`
-	StepName            string `json:"StepName"`
-	StepResultCode      string `json:"StepResultCode"`
-	StepStatus          string `json:"StepStatus"`
-	StepOutput          string `json:"StepOutput"`
-	StandardOutput      string `json:"StandardOutput"`
-	StandardError       string `json:"StandardError"`
-	TraceOutput         string `json:"TraceOutput"`
-	StartDateTime       string `json:"StartDateTime"`
-	EndDateTime         string `json:"EndDateTime"`
-	OutputS3BucketName  string `json:"OutputS3BucketName"`
-	OutputS3KeyPrefix   string `json:"OutputS3KeyPrefix"`
-	StandardOutputS3Url string `json:"StandardOutputS3Url"`
-	StandardErrorS3Url  string `json:"StandardErrorS3Url"`
-	AwsAccountId        string `json:"AwsAccountId"`
-	InstanceId          string `json:"InstanceId"`
+	Output           string `json:"Output"`
 }
 
 type PayloadType uint32
