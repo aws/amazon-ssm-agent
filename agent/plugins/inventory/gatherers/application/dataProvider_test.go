@@ -133,6 +133,11 @@ func TestCleanupNewLines(t *testing.T) {
 	}
 }
 
+func TestStripCtlFromUTF8(t *testing.T) {
+	input := []byte{65, 108, 116, 101, 114, 121, 120, 50, 48, 49, 0, 56, 46, 49, 12, 120, 54, 52, 83, 101, 114, 118, 101, 114}
+	assert.Equal(t, stripCtlFromUTF8(string(input)), "Alteryx2018.1x64Server")
+}
+
 func assertEqual(t *testing.T, expected []model.ApplicationData, found []model.ApplicationData) {
 	assert.Equal(t, len(expected), len(found))
 	for i, expectedApp := range expected {
