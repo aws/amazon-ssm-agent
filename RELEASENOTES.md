@@ -1,5 +1,16 @@
 Latest
 ===============
+- Bug fix for missing cloudwatch.exe seen in SSM Agent version 2.2.902.0
+
+2.2.902.0
+===============
+NOTE: This build should not be installed for Windows since you might see the error - "Encountered error while starting the plugin: Unable to locate cloudwatch.exe" for Cloudwatch plugin. This bug has been fixed in SSM Agent version 2.2.916.0
+- Initial support for developer builds on macOS
+- Retry sending Run Command execution results for up to 2 hours
+- More detailed error messages are returned for inventory plugin failures during State Manager association executions
+
+2.2.800.0
+===============
 - Bug fix to clean the orchestration directory
 - Streaming AWS Systems Manager Run Command output to CloudWatch Logs
 - Reducing number of retries for serial port opening 

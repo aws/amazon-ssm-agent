@@ -18,6 +18,7 @@ package runcommand
 
 import (
 	"errors"
+	"fmt"
 	"testing"
 	"time"
 
@@ -55,6 +56,12 @@ func MockContext() *context.Mock {
 	ctx.On("AppConfig").Return(config)
 	ctx.On("With", mock.AnythingOfType("string")).Return(ctx)
 	return ctx
+}
+
+func GetTestFailedReplies() []string {
+	t := time.Now().UTC()
+	replyFileName := fmt.Sprintf("reply_%v", t.Format("2006-01-02T15-04-05"))
+	return []string{"1" + replyFileName, "2" + replyFileName, "3" + replyFileName}
 }
 
 func TestLoop_Once(t *testing.T) {
@@ -235,8 +242,7 @@ func TestLoop_Multiple_Serial_Error(t *testing.T) {
 func TestSendReplyLoop_Multiple_Serial_Error(t *testing.T) {
 	// Test send reply loop multiple times with simple error
 	contextMock := MockContext()
-	//log := contextMock.Log()
-	replies := []string{"reply1", "reply2", "reply3"}
+	replies := GetTestFailedReplies()
 
 	// create mocked service and set expectations
 	mdsMock := new(runcommandmock.MockedMDS)

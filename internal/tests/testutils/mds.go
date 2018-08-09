@@ -16,27 +16,34 @@ package testutils
 
 import (
 	"crypto/sha256"
+	"net/http"
 	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/platform"
 	messageContracts "github.com/aws/amazon-ssm-agent/agent/runcommand/contracts"
-	mdsmock "github.com/aws/amazon-ssm-agent/agent/runcommand/mock"
+	mdsService "github.com/aws/amazon-ssm-agent/agent/runcommand/mds"
 	"github.com/aws/amazon-ssm-agent/agent/times"
 	"github.com/aws/aws-sdk-go/aws"
+	"github.com/aws/aws-sdk-go/aws/request"
 	"github.com/aws/aws-sdk-go/service/ssmmds"
+	"github.com/aws/aws-sdk-go/service/ssmmds/ssmmdsiface"
+	mdssdkmock "github.com/aws/aws-sdk-go/service/ssmmds/ssmmdsiface/mocks"
 	"github.com/stretchr/testify/mock"
 	"github.com/twinj/uuid"
 )
 
-func NewMDSMock() *mdsmock.MockedMDS {
-	mdsService := new(mdsmock.MockedMDS)
+func NewMdsSdkMock() *mdssdkmock.SSMMDSAPI {
+	sdkMock := new(mdssdkmock.SSMMDSAPI)
+	sdkMock.On("AcknowledgeMessageRequest", mock.AnythingOfType("*ssmmds.AcknowledgeMessageInput")).Return(&request.Request{}, &ssmmds.AcknowledgeMessageOutput{})
+	return sdkMock
+}
 
-	replies := []string{}
-	mdsService.On("LoadFailedReplies", mock.AnythingOfType("*log.Wrapper")).Return(replies)
-	mdsService.On("AcknowledgeMessage", mock.Anything, mock.AnythingOfType("string")).Return(nil)
-	mdsService.On("Stop").Return()
-	return mdsService
+func NewMdsService(msgSvc ssmmdsiface.SSMMDSAPI, sendMdsSdkRequest mdsService.SendSdkRequest) mdsService.Service {
+	cancelMdsSDKRequest := func(trans *http.Transport, req *request.Request) {
+		return
+	}
+	return mdsService.NewMdsSdkService(msgSvc, &http.Transport{}, sendMdsSdkRequest, cancelMdsSDKRequest)
 }
 
 func GenerateEmptyMessage() (*ssmmds.GetMessagesOutput, error) {

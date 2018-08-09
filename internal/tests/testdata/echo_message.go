@@ -11,62 +11,61 @@
 // either express or implied. See the License for the specific language governing
 // permissions and limitations under the License.
 
-// Package testutils represents the common logic needed for agent tests
+// Package testdata represents the static data needed by agent tests
 package testdata
 
 var EchoMDSMessage = `{
-		"CommandId": "12345c50-d2b4-4380-acac-213fb7c12345",
-		"Parameters": {
-			"commands": [
-				"echo ship_it"
-			]
-		},
-		"DocumentContent": {
-			"schemaVersion": "2.2",
-			"description": "Cross-platform document",
-			"mainSteps": [
-				{
-					"action": "aws:runShellScript",
-					"precondition": {
-						"StringEquals": ["platformType", "Linux"]
-					},
-					"inputs": {
-						"commands": "date"
-					},
-					"maxAttempts": 0,
-					"name": "runShellScript1",
-					"onFailure": "",
-					"settings": null,
-					"timeoutSeconds": 0
-				},
-				{
-					"action": "aws:runShellScript",
-					"precondition": {
-						"StringEquals": ["platformType", "Linux"]
-					},
-					"inputs": {
-						"commands": "echo ship_it"
-					},
-					"maxAttempts": 0,
-					"name": "runShellScript2",
-					"onFailure": "",
-					"settings": null,
-					"timeoutSeconds": 0
-				}
-			],
-			"parameters": {
-				"commands": {
-					"allowedPattern": "",
-					"allowedValues": null,
-					"default": null,
-					"description": "(Required) Specify a shell script or a command to run.",
-					"type": "StringList"
-				}
-			}
-		},
-		"DocumentName": "ship-it",
-		"OutputS3BucketName": "",
-		"OutputS3KeyPrefix": "",
-		"CloudWatchLogGroupName": "",
-		"CloudWatchOutputEnabled": "false"
-	}`
+  "Parameters": null,
+  "DocumentContent": {
+    "schemaVersion": "2.2",
+    "description": "doc",
+    "runtimeConfig": null,
+    "mainSteps": [
+      {
+        "action": "aws:runShellScript",
+        "inputs": {
+          "runCommand": [
+            "echo ship_it"
+          ]
+        },
+        "maxAttempts": 0,
+        "name": "pluginLinux",
+        "onFailure": "",
+        "settings": null,
+        "timeoutSeconds": 0,
+        "precondition": {
+          "StringEquals": [
+            "platformType",
+            "Linux"
+          ]
+        }
+      },
+      {
+        "action": "aws:runPowerShellScript",
+        "inputs": {
+          "runCommand": [
+            "echo ship_it"
+          ]
+        },
+        "maxAttempts": 0,
+        "name": "pluginWindows",
+        "onFailure": "",
+        "settings": null,
+        "timeoutSeconds": 0,
+        "precondition": {
+          "StringEquals": [
+            "platformType",
+            "Windows"
+          ]
+        }
+      }
+    ],
+    "parameters": null
+  },
+  "CommandId": "be8d9d4b-da53-4d2f-a96b-60aec17739af",
+  "DocumentName": "test",
+  "OutputS3KeyPrefix": "",
+  "OutputS3BucketName": "",
+  "CloudWatchLogGroupName": "",
+  "CloudWatchOutputEnabled": "false"
+  }`

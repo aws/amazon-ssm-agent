@@ -11,7 +11,7 @@
 // either express or implied. See the License for the specific language governing
 // permissions and limitations under the License.
 
-// +build freebsd linux netbsd openbsd
+// +build darwin
 
 package log
 
@@ -24,7 +24,7 @@ const (
 	// DefaultSeelogConfigFilePath specifies the default seelog location
 	// The underlying logger is based of https://github.com/cihub/seelog
 	// See Seelog documentation to customize the logger
-	DefaultSeelogConfigFilePath = "/etc/amazon/ssm/seelog.xml"
+	DefaultSeelogConfigFilePath = "/opt/aws/ssm/seelog.xml"
 
 	DefaultLogDir = "/var/log/amazon/ssm"
 )

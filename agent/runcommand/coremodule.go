@@ -18,6 +18,7 @@ import (
 	"fmt"
 	"strings"
 	"sync"
+	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
@@ -38,6 +39,8 @@ const (
 	cloudwatchPlugin = "aws:cloudWatch"
 	properties       = "properties"
 	parameters       = "Parameters"
+	// MDS service will mark document as timeout if it didn't recieve any responce from the agent after 2 hours
+	documentLevelTimeOutDurationHour = 2
 )
 
 var singletonMapOfUnsupportedSSMDocs map[string]bool
@@ -215,10 +218,15 @@ func (s *RunCommandService) sendFailedReplies() {
 		log.Infof("Found document replies that need to be sent to the service")
 		for _, reply := range replies {
 			log.Debug("Loading reply ", reply)
+			if isValidReplyRequest(reply) == false {
+				log.Debug("Reply is old, document execution must have timed out. Deleting the reply")
+				s.service.DeleteFailedReply(log, reply)
+				continue
+			}
 			sendReplyRequest, err := s.service.GetFailedReply(log, reply)
 			if err != nil {
-				log.Error("Couldn't load the reply from desk ", err)
-				return
+				log.Error("Couldn't load the reply from disk ", err)
+				continue
 			}
 
 			log.Info("Sending reply ", reply)
@@ -226,11 +234,28 @@ func (s *RunCommandService) sendFailedReplies() {
 				sdkutil.HandleAwsError(log, err, s.processorStopPolicy)
 				break
 			} else {
-				log.Infof("Sending reply %v succeeded, deleting the reply file from desk", reply)
+				log.Infof("Sending reply %v succeeded, deleting the reply file from disk", reply)
 				s.service.DeleteFailedReply(log, reply)
 			}
 		}
 	} else {
 		log.Debugf("No failed document replies found")
+	}
+}
+
+// isValidReplyRequest checks if the sendReply request is older than 2 hours
+// If so it is considered as not valid anymore as the document must have timed out
+func isValidReplyRequest(filename string) bool {
+	splitFileName := strings.Split(filename, "_")
+	if len(splitFileName) < 2 {
+		return false
+	}
+	t, _ := time.Parse("2006-01-02T15-04-05", splitFileName[1])
+	curTime := time.Now().UTC()
+	delta := curTime.Sub(t).Hours()
+	if delta > documentLevelTimeOutDurationHour {
+		return false
+	} else {
+		return true
 	}
 }

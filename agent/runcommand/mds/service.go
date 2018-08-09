@@ -35,6 +35,7 @@ import (
 	"github.com/aws/aws-sdk-go/aws/request"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/ssmmds"
+	"github.com/aws/aws-sdk-go/service/ssmmds/ssmmdsiface"
 	"github.com/twinj/uuid"
 )
 
@@ -67,12 +68,17 @@ type Service interface {
 	Stop()
 }
 
+type SendSdkRequest func(req *request.Request) error
+type CancelSdkRequest func(trans *http.Transport, req *request.Request)
+
 // sdkService is an service wrapper that delegates to the ssm sdk.
 type sdkService struct {
-	sdk         *ssmmds.SSMMDS
-	tr          *http.Transport
-	lastRequest *request.Request
-	m           sync.Mutex
+	sdk              ssmmdsiface.SSMMDSAPI
+	tr               *http.Transport
+	lastRequest      *request.Request
+	m                sync.Mutex
+	sendSdkRequest   SendSdkRequest
+	cancelSdkRequest CancelSdkRequest
 }
 
 var clientBasedErrorMessages, serverBasedErrorMessages []string
@@ -126,7 +132,18 @@ func NewService(region string, endpoint string, creds *credentials.Credentials, 
 	clientBasedErrorMessages = make([]string, 1)
 	clientBasedErrorMessages = append(clientBasedErrorMessages, "Client.Timeout exceeded while awaiting headers")
 
-	return &sdkService{sdk: msgSvc, tr: tr}
+	sendMdsSdkRequest := func(req *request.Request) error {
+		return req.Send()
+	}
+	cancelMdsSDKRequest := func(trans *http.Transport, req *request.Request) {
+		trans.CancelRequest(req.HTTPRequest)
+	}
+
+	return NewMdsSdkService(msgSvc, tr, sendMdsSdkRequest, cancelMdsSDKRequest)
+}
+
+func NewMdsSdkService(msgSvc ssmmdsiface.SSMMDSAPI, tr *http.Transport, sendMdsSdkRequest SendSdkRequest, cancelMdsSDKRequest CancelSdkRequest) Service {
+	return &sdkService{sdk: msgSvc, tr: tr, sendSdkRequest: sendMdsSdkRequest, cancelSdkRequest: cancelMdsSDKRequest}
 }
 
 // GetMessages calls the GetMessages MDS API.
@@ -292,8 +309,8 @@ func (mds *sdkService) LoadFailedReplies(log log.T) []string {
 }
 
 // DeleteFailedReply deletes failed reply from local replies folder on disk
-func (mds *sdkService) DeleteFailedReply(log log.T, replyId string) {
-	absoluteFileName := mds.getFailedReplyLocation(replyId)
+func (mds *sdkService) DeleteFailedReply(log log.T, fileName string) {
+	absoluteFileName := getFailedReplyLocation(fileName)
 	if fileutil.Exists(absoluteFileName) {
 		err := fileutil.DeleteFile(absoluteFileName)
 		if err != nil {
@@ -306,16 +323,21 @@ func (mds *sdkService) DeleteFailedReply(log log.T, replyId string) {
 
 // PersistFailedReply saves SendReplyInput object to local replies folder on disk
 func (mds *sdkService) PersistFailedReply(log log.T, sendReply ssmmds.SendReplyInput) (err error) {
-	absoluteFileName := mds.getFailedReplyLocation(*sendReply.ReplyId)
-
 	content, err := jsonutil.Marshal(sendReply)
 	if err != nil {
 		log.Errorf("encountered error with message %v while marshalling %v to string", err, sendReply)
 	} else {
-		if fileutil.Exists(absoluteFileName) {
-			log.Debugf("Reply %v already saved in file %v, skipping", sendReply.ReplyId, absoluteFileName)
-			return
+		files, _ := fileutil.GetFileNames(GetFailedReplyDirectory())
+		for _, file := range files {
+			if strings.HasPrefix(file, *sendReply.ReplyId) {
+				log.Debugf("Reply %v already saved in file %v, skipping", *sendReply.ReplyId, file)
+				return
+			}
 		}
+		t := time.Now().UTC()
+		fileName := fmt.Sprintf("%v_%v", *sendReply.ReplyId, t.Format("2006-01-02T15-04-05"))
+		absoluteFileName := getFailedReplyLocation(fileName)
+
 		log.Tracef("persisting reply %v in file %v", jsonutil.Indent(content), absoluteFileName)
 		if s, err := fileutil.WriteIntoFileWithPermissions(absoluteFileName, jsonutil.Indent(content), os.FileMode(int(appconfig.ReadWriteAccess))); s && err == nil {
 			log.Debugf("successfully persisted reply in %v", absoluteFileName)
@@ -327,8 +349,8 @@ func (mds *sdkService) PersistFailedReply(log log.T, sendReply ssmmds.SendReplyI
 }
 
 // GetFailedReply load SendReplyInput object from replies folder given the reply id of the object
-func (mds *sdkService) GetFailedReply(log log.T, replyId string) (*ssmmds.SendReplyInput, error) {
-	absoluteFileName := mds.getFailedReplyLocation(replyId)
+func (mds *sdkService) GetFailedReply(log log.T, fileName string) (*ssmmds.SendReplyInput, error) {
+	absoluteFileName := getFailedReplyLocation(fileName)
 
 	var sendReply ssmmds.SendReplyInput
 	err := jsonutil.UnmarshalFile(absoluteFileName, &sendReply)
@@ -352,7 +374,7 @@ func (mds *sdkService) Stop() {
 	defer mds.m.Unlock()
 	if mds.lastRequest != nil {
 		// cancel the underlying http request to wake up the last call
-		mds.tr.CancelRequest(mds.lastRequest.HTTPRequest)
+		mds.cancelSdkRequest(mds.tr, mds.lastRequest)
 	}
 }
 
@@ -360,7 +382,7 @@ func (mds *sdkService) Stop() {
 func (mds *sdkService) sendRequest(req *request.Request) error {
 	mds.storeRequest(req)
 	defer mds.clearRequest()
-	return req.Send()
+	return mds.sendSdkRequest(req)
 }
 
 func (mds *sdkService) storeRequest(req *request.Request) {
@@ -373,11 +395,15 @@ func (mds *sdkService) clearRequest() {
 	mds.storeRequest(nil)
 }
 
-// getFailedReplyLocation returns path to replies folder
-func (mds *sdkService) getFailedReplyLocation(replyId string) string {
+// getFailedReplyLocation returns path to reply file
+func getFailedReplyLocation(fileName string) string {
+	return path.Join(GetFailedReplyDirectory(), fileName)
+}
+
+// getFailedReplyDirectory returns path to replies folder
+func GetFailedReplyDirectory() string {
 	instanceID, _ := platform.InstanceID()
 	return path.Join(appconfig.DefaultDataStorePath,
 		instanceID,
-		appconfig.RepliesRootDirName,
-		replyId)
+		appconfig.RepliesRootDirName)
 }

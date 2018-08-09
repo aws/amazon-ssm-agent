@@ -16,7 +16,7 @@ package.Amazon-ssm-agent = {
     build-tools = {
         2.2 = {
             GoLang = 1.0;
-            BrazilMakeGo = 1.0;
+            BrazilMakeGo = 1.1;
             RIPStaticConfig = 1.4;
             Go3p-Github-Vektra-Mockery = 1.x;
         };
@@ -31,8 +31,4 @@ package.Amazon-ssm-agent = {
             EC2-Windows-EC2ConfigService = 1.0
         };
     };
-
-    runtime-dependencies = {
-    };
-
 };
