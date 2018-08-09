@@ -288,6 +288,6 @@ func (suite *SendFailedReplyTestSuite) TestDeleteOldFailedReply() {
 	suite.ssmAgent.Stop()
 }
 
-func TestSendFailedReplyTestSuite(t *testing.T) {
+func TestSendFailedReplyIntegTestSuite(t *testing.T) {
 	suite.Run(t, new(SendFailedReplyTestSuite))
 }

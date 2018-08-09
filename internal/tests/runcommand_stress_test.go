@@ -89,7 +89,7 @@ func (suite *AgentStressTestSuite) SetupTest() {
 //TestCoreAgent tests the agent by mocking MDS to send N messages to the agent and start the execution of those messages
 func (suite *AgentStressTestSuite) TestCoreAgent() {
 	// This is the number of MDS messages that should be sent to the core agent
-	numberOfMessages := 5
+	numberOfMessages := 100
 
 	// Mock MDs service so it returns only the desired number of messages, it'll return empty messages after that.
 	// That's because the agent is a loop and it keeps polling messages
