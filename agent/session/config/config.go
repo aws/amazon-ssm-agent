@@ -35,9 +35,14 @@ const (
 	DefaultRoundTripTime          = 100 * time.Millisecond
 	DefaultRoundTripTimeVariation = 0
 	ResendSleepInterval           = 100 * time.Millisecond
+	WebSocketPingInterval         = 5 * time.Minute
+
+	// Buffer capacity of 100000 items with each buffer item of 1024 bytes leads to max usage of 100MB (100000 * 1024 bytes = 100MB) of instance memory.
+	// When changing StreamDataPayloadSize, make corresponding change to buffer capacity to ensure no more than 100MB of instance memory is used.
 	StreamDataPayloadSize         = 1024
-	OutgoingMessageBufferCapacity = 10000
-	IncomingMessageBufferCapacity = 10000
+	OutgoingMessageBufferCapacity = 100000
+	IncomingMessageBufferCapacity = 100000
+
 	// Round trip time constant
 	RTTConstant = 1.0 / 8.0
 	// Round trip time variation constant

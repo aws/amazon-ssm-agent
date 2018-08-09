@@ -165,7 +165,7 @@ func (webSocketChannel *WebSocketChannel) Open(log log.T) error {
 
 	webSocketChannel.Connection = ws
 	webSocketChannel.IsOpen = true
-	webSocketChannel.StartPings(log, time.Minute)
+	webSocketChannel.StartPings(log, mgsconfig.WebSocketPingInterval)
 
 	// spin up a different routine to listen to the incoming traffic
 	go func() {

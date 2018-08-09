@@ -240,9 +240,9 @@ func TestAddDataToOutgoingMessageBuffer(t *testing.T) {
 	dataChannel.AddDataToOutgoingMessageBuffer(streamingMessages[2])
 	assert.Equal(t, 2, dataChannel.OutgoingMessageBuffer.Messages.Len())
 	bufferedStreamMessage = dataChannel.OutgoingMessageBuffer.Messages.Front().Value.(StreamingMessage)
-	assert.Equal(t, int64(1), bufferedStreamMessage.SequenceNumber)
+	assert.Equal(t, int64(0), bufferedStreamMessage.SequenceNumber)
 	bufferedStreamMessage = dataChannel.OutgoingMessageBuffer.Messages.Back().Value.(StreamingMessage)
-	assert.Equal(t, int64(2), bufferedStreamMessage.SequenceNumber)
+	assert.Equal(t, int64(1), bufferedStreamMessage.SequenceNumber)
 }
 
 func TestRemoveDataFromOutgoingMessageBuffer(t *testing.T) {

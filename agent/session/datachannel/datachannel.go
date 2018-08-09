@@ -388,6 +388,7 @@ func (dataChannel *DataChannel) ResendStreamDataMessageScheduler(log log.T) erro
 					log.Errorf("Unable to send stream data message: %s", err)
 				}
 				streamMessage.LastSentTime = time.Now()
+				streamMessageElement.Value = streamMessage
 			}
 		}
 	}()
@@ -454,10 +455,10 @@ func (dataChannel *DataChannel) SendAcknowledgeMessage(log log.T, streamDataMess
 	return nil
 }
 
-// AddDataToOutgoingMessageBuffer removes first message from OutgoingMessageBuffer if capacity is full and adds given message at the end.
+// AddDataToOutgoingMessageBuffer adds given message at the end of OutputMessageBuffer if it has capacity.
 func (dataChannel *DataChannel) AddDataToOutgoingMessageBuffer(streamMessage StreamingMessage) {
 	if dataChannel.OutgoingMessageBuffer.Messages.Len() == dataChannel.OutgoingMessageBuffer.Capacity {
-		dataChannel.RemoveDataFromOutgoingMessageBuffer(dataChannel.OutgoingMessageBuffer.Messages.Front())
+		return
 	}
 	dataChannel.OutgoingMessageBuffer.Mutex.Lock()
 	dataChannel.OutgoingMessageBuffer.Messages.PushBack(streamMessage)
