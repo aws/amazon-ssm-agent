@@ -184,6 +184,17 @@ func (suite *SessionTestSuite) TestBuildAgentTaskCompleteWhenPluginIdIsEmpty() {
 	assert.Nil(suite.T(), msg)
 }
 
+func (suite *SessionTestSuite) TestGetMgsEndpoint() {
+	host, err := getMgsEndpoint("us-east-1")
+
+	assert.Nil(suite.T(), err)
+	assert.Equal(suite.T(), "https://ssmmessages.us-east-1.amazonaws.com", host)
+
+	bjsHost, err := getMgsEndpoint("cn-north-1")
+	assert.Nil(suite.T(), err)
+	assert.Equal(suite.T(), "https://ssmmessages.cn-north-1.amazonaws.com.cn", bjsHost)
+}
+
 //Execute the test suite
 func TestSessionTestSuite(t *testing.T) {
 	suite.Run(t, new(SessionTestSuite))

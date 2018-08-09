@@ -19,6 +19,7 @@ import (
 	"testing"
 
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/rip"
 	mgsConfig "github.com/aws/amazon-ssm-agent/agent/session/config"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/credentials"
@@ -131,15 +132,15 @@ func TestDeleteDataChannel(t *testing.T) {
 
 func TestGetBaseUrl(t *testing.T) {
 	// data channel url test
-	dataChannelUrlResult, err := getMGSBaseUrl(log.NewMockLog(), mgsConfig.DataChannel, sessionId)
+	dataChannelUrlResult, err := getMGSBaseUrl(log.NewMockLog(), mgsConfig.DataChannel, sessionId, region)
 
-	host, _ := mgsConfig.GetHostName()
+	host := rip.GetMgsEndpoint(region)
 	expectedDataChannelUrl := "https://" + host + "/v1/data-channel/" + sessionId
 	assert.Nil(t, err)
 	assert.Equal(t, expectedDataChannelUrl, dataChannelUrlResult)
 
 	// control channel url test
-	controlChannelUrlResult, err := getMGSBaseUrl(log.NewMockLog(), mgsConfig.ControlChannel, instanceId)
+	controlChannelUrlResult, err := getMGSBaseUrl(log.NewMockLog(), mgsConfig.ControlChannel, instanceId, region)
 
 	expectedControlChannelUrl := "https://" + host + "/v1/control-channel/" + instanceId
 	assert.Nil(t, err)

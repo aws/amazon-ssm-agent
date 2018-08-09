@@ -27,6 +27,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/platform"
+	"github.com/aws/amazon-ssm-agent/agent/rip"
 	"github.com/aws/amazon-ssm-agent/agent/session/communicator"
 	mgsConfig "github.com/aws/amazon-ssm-agent/agent/session/config"
 	mgsContracts "github.com/aws/amazon-ssm-agent/agent/session/contracts"
@@ -126,7 +127,7 @@ func NewDataChannel(context context.T,
 	}
 
 	if messageGatewayServiceConfig.Endpoint == "" {
-		fetchedEndpoint, err := getMgsEndpoint()
+		fetchedEndpoint, err := getMgsEndpoint(messageGatewayServiceConfig.Region)
 		if err != nil {
 			return nil, fmt.Errorf("failed to get MessageGatewayService endpoint with error: %s", err)
 		}
@@ -695,13 +696,13 @@ func getDataChannelToken(log log.T,
 }
 
 // getMgsEndpoint builds mgs endpoint.
-func getMgsEndpoint() (string, error) {
-	hostName, err := mgsConfig.GetHostName()
-	if err != nil {
-		return "", err
+func getMgsEndpoint(region string) (string, error) {
+	hostName := rip.GetMgsEndpoint(region)
+	if hostName == "" {
+		return "", fmt.Errorf("no MGS endpoint found in region %s", region)
 	}
 	var endpointBuilder bytes.Buffer
 	endpointBuilder.WriteString(mgsConfig.HttpsPrefix)
 	endpointBuilder.WriteString(hostName)
-	return endpointBuilder.String(), err
+	return endpointBuilder.String(), nil
 }

@@ -24,6 +24,7 @@ import (
 
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/rip"
 	mgsConfig "github.com/aws/amazon-ssm-agent/agent/session/config"
 	"github.com/aws/aws-sdk-go/aws/credentials"
 	"github.com/aws/aws-sdk-go/aws/signer/v4"
@@ -71,8 +72,7 @@ func handlerToBeTested(w http.ResponseWriter, req *http.Request) {
 }
 
 func TestInitialize(t *testing.T) {
-	host, err := mgsConfig.GetHostName()
-	assert.Nil(t, err)
+	host := rip.GetMgsEndpoint(region)
 
 	webControlChannel := &WebSocketChannel{}
 	webControlChannel.Initialize(context.NewMockDefault(), channelId, mgsConfig.ControlChannel, role, token, region, signer, onMessageHandler, onErrorHandler)

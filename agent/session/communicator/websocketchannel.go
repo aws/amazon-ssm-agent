@@ -23,8 +23,11 @@ import (
 	"sync"
 	"time"
 
+	"fmt"
+
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/rip"
 	mgsconfig "github.com/aws/amazon-ssm-agent/agent/session/config"
 	"github.com/aws/amazon-ssm-agent/agent/websocketutil"
 	"github.com/aws/aws-sdk-go/aws/signer/v4"
@@ -78,9 +81,9 @@ func (webSocketChannel *WebSocketChannel) Initialize(context context.T,
 	onMessageHandler func([]byte),
 	onErrorHandler func(error)) error {
 
-	hostName, err := mgsconfig.GetHostName()
-	if err != nil {
-		return err
+	hostName := rip.GetMgsEndpoint(region)
+	if hostName == "" {
+		return fmt.Errorf("no MGS endpoint found")
 	}
 
 	channelUrl, err := url.Parse(mgsconfig.WebSocketPrefix + hostName)

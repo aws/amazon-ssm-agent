@@ -31,6 +31,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/managedInstances/registration"
 	"github.com/aws/amazon-ssm-agent/agent/managedInstances/rolecreds"
 	"github.com/aws/amazon-ssm-agent/agent/platform"
+	"github.com/aws/amazon-ssm-agent/agent/rip"
 	mgsconfig "github.com/aws/amazon-ssm-agent/agent/session/config"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/credentials"
@@ -133,10 +134,10 @@ var makeRestcall = func(request []byte, methodType string, url string, region st
 // control-channel: https://ssm-messages.{region}.amazonaws.com/v1/control-channel/{channel_id}
 // data-channel: https://ssm-messages.{region}.amazonaws.com/v1/data-channel/{session_id}
 // channelType can be control-channel or data-channel
-func getMGSBaseUrl(log log.T, channelType string, channelId string) (output string, err error) {
+func getMGSBaseUrl(log log.T, channelType string, channelId string, region string) (output string, err error) {
 	// build url for CreateControlChannel or CreateDataChannel
-	hostName, err := mgsconfig.GetHostName()
-	if err != nil {
+	hostName := rip.GetMgsEndpoint(region)
+	if hostName == "" {
 		return "", fmt.Errorf("failed to get host name with error: %s", err)
 	}
 
@@ -182,7 +183,7 @@ func (mgsService *MessageGatewayService) GetRegion() string {
 // CreateControlChannel calls the CreateControlChannel MGS API
 func (mgsService *MessageGatewayService) CreateControlChannel(log log.T, createControlChannelInput *CreateControlChannelInput, channelId string) (createControlChannelOutput *CreateControlChannelOutput, err error) {
 
-	url, err := getMGSBaseUrl(log, mgsconfig.ControlChannel, channelId)
+	url, err := getMGSBaseUrl(log, mgsconfig.ControlChannel, channelId, mgsService.region)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get the mgs base url with error: %s", err)
 	}
@@ -215,7 +216,7 @@ func (mgsService *MessageGatewayService) CreateControlChannel(log log.T, createC
 // DeleteControlChannel calls the DeleteControlChannel MGS API
 func (mgsService *MessageGatewayService) DeleteControlChannel(log log.T, deleteControlChannelInput *DeleteChannelInput, channelId string) (deleteControlChannelOutput *DeleteChannelOutput, err error) {
 
-	url, err := getMGSBaseUrl(log, mgsconfig.ControlChannel, channelId)
+	url, err := getMGSBaseUrl(log, mgsconfig.ControlChannel, channelId, mgsService.region)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get the mgs base url with error: %s", err)
 	}
@@ -248,7 +249,7 @@ func (mgsService *MessageGatewayService) DeleteControlChannel(log log.T, deleteC
 // CreateDataChannel calls the CreateDataChannel MGS API
 func (mgsService *MessageGatewayService) CreateDataChannel(log log.T, createDataChannelInput *CreateDataChannelInput, sessionId string) (createDataChannelOutput *CreateDataChannelOutput, err error) {
 
-	url, err := getMGSBaseUrl(log, mgsconfig.DataChannel, sessionId)
+	url, err := getMGSBaseUrl(log, mgsconfig.DataChannel, sessionId, mgsService.region)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get the mgs base url with error: %s", err)
 	}
@@ -281,7 +282,7 @@ func (mgsService *MessageGatewayService) CreateDataChannel(log log.T, createData
 // DeleteDataChannel calls the DeleteDataChannel MGS API
 func (mgsService *MessageGatewayService) DeleteDataChannel(log log.T, deleteDataChannelInput *DeleteChannelInput, channelId string) (deleteDataChannelOutput *DeleteChannelOutput, err error) {
 
-	url, err := getMGSBaseUrl(log, mgsconfig.DataChannel, channelId)
+	url, err := getMGSBaseUrl(log, mgsconfig.DataChannel, channelId, mgsService.region)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get the mgs base url with error: %s", err)
 	}

@@ -59,9 +59,3 @@ const (
 	DataChannelRetryInitialDelayMillis = 100
 	DataChannelRetryMaxIntervalMillis  = 5000
 )
-
-// TODO: use RIP to get hostname.
-// GetHostName gets the host name. e.g. ssmmessages.{region}.amazonaws.com(.cn)
-func GetHostName() (string, error) {
-	return "ssmmessages.us-east-1.amazonaws.com", nil
-}
