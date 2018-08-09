@@ -180,6 +180,6 @@ func (suite *RunCommandOutputTestSuite) TestV1DocumentOutputNonZeroExitCode() {
 	}
 	verifyRunCommandOutput(suite, content, testdata.CommandStdout, testdata.CommandStderr, testdata.NonZeroExitCode, contracts.ResultStatusFailed, contracts.ResultStatusSuccess)
 }
-func TestRunCommandOutputTestSuite(t *testing.T) {
+func TestRunCommandOutputIntegTestSuite(t *testing.T) {
 	suite.Run(t, new(RunCommandOutputTestSuite))
 }
