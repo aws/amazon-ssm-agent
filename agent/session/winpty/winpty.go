@@ -45,11 +45,11 @@ type WinPTY struct {
 }
 
 //Start launches winpty agent as a separate process
-func Start(dllPath, dllName, cmdLine string, window_size_cols, window_size_rows uint32, winptyFlag int32) (*WinPTY, error) {
+func Start(winptyDllFilePath, cmdLine string, window_size_cols, window_size_rows uint32, winptyFlag int32) (*WinPTY, error) {
 
 	var winpty WinPTY = WinPTY{}
 
-	loadDll(dllPath, dllName)
+	loadDll(winptyDllFilePath)
 	defineProcedures()
 
 	if err := winpty.configureAgent(window_size_cols, window_size_rows, winptyFlag); err != nil {

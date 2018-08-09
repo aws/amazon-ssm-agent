@@ -56,8 +56,8 @@ var (
 var winptyModule *syscall.LazyDLL
 
 //loadDll gets lazydll for winpty.dll which gets loaded once it's procedures are called
-func loadDll(winptyDllPath, winptyDllName string) {
-	winptyModule = syscall.NewLazyDLL(winptyDllPath + winptyDllName)
+func loadDll(winptyDllFilePath string) {
+	winptyModule = syscall.NewLazyDLL(winptyDllFilePath)
 }
 
 //defineProcedures gets lazyproc for winpty.dll procedures

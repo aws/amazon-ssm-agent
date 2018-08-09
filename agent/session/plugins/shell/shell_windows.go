@@ -20,12 +20,14 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
+	"path/filepath"
 	"runtime"
 	"sync"
 	"syscall"
 	"unsafe"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
+	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/session/utility"
 	"github.com/aws/amazon-ssm-agent/agent/session/winpty"
@@ -37,8 +39,8 @@ var u = &utility.SessionUtil{}
 const (
 	defaultConsoleCol      = 200
 	defaultConsoleRow      = 60
-	winptyDllName          = "winpty"
-	winptyDllPath          = ""
+	winptyDllName          = "winpty.dll"
+	winptyDllFolderName    = "SessionManagerShell"
 	winptyCmd              = "powershell"
 	startRecordSessionCmd  = "Start-Transcript"
 	newLineCharacter       = "\r"
@@ -48,15 +50,20 @@ const (
 )
 
 var (
-	advapi32        = syscall.NewLazyDLL("advapi32.dll")
-	logonProc       = advapi32.NewProc("LogonUserW")
-	impersonateProc = advapi32.NewProc("ImpersonateLoggedOnUser")
-	revertSelfProc  = advapi32.NewProc("RevertToSelf")
+	advapi32          = syscall.NewLazyDLL("advapi32.dll")
+	logonProc         = advapi32.NewProc("LogonUserW")
+	impersonateProc   = advapi32.NewProc("ImpersonateLoggedOnUser")
+	revertSelfProc    = advapi32.NewProc("RevertToSelf")
+	winptyDllDir      = fileutil.BuildPath(appconfig.DefaultPluginPath, winptyDllFolderName)
+	winptyDllFilePath = filepath.Join(winptyDllDir, winptyDllName)
 )
 
 //StartPty starts winpty agent and provides handles to stdin and stdout.
 func StartPty(log log.T, isSessionShell bool) (stdin *os.File, stdout *os.File, err error) {
 	log.Info("Starting winpty")
+	if _, err := os.Stat(winptyDllFilePath); os.IsNotExist(err) {
+		return nil, nil, fmt.Errorf("Missing %s file.", winptyDllFilePath)
+	}
 
 	if isSessionShell {
 		// Reset password for default ssm user
@@ -81,14 +88,14 @@ func StartPty(log log.T, isSessionShell bool) (stdin *os.File, stdout *os.File, 
 		}()
 		wg.Wait()
 	} else {
-		pty, err = winpty.Start(winptyDllPath, winptyDllName, winptyCmd, defaultConsoleCol, defaultConsoleRow, winpty.DEFAULT_WINPTY_FLAGS)
+		pty, err = winpty.Start(winptyDllFilePath, winptyCmd, defaultConsoleCol, defaultConsoleRow, winpty.DEFAULT_WINPTY_FLAGS)
 	}
 
 	if err != nil {
-		return nil, nil, fmt.Errorf("Start winpty failed: %s", err)
+		return nil, nil, err
 	}
 
-	return pty.StdIn, pty.StdOut, nil
+	return pty.StdIn, pty.StdOut, err
 }
 
 //Stop closes winpty process handle and stdin/stdout.
@@ -122,7 +129,7 @@ func startPtyAsUser(log log.T, user string, pass string) (err error) {
 	}
 
 	// Start Winpty under the user context thread.
-	if pty, err = winpty.Start(winptyDllPath, winptyDllName, winptyCmd, defaultConsoleCol, defaultConsoleRow, winpty.WINPTY_FLAG_IMPERSONATE_THREAD); err != nil {
+	if pty, err = winpty.Start(winptyDllFilePath, winptyCmd, defaultConsoleCol, defaultConsoleRow, winpty.WINPTY_FLAG_IMPERSONATE_THREAD); err != nil {
 		log.Error(err)
 		return
 	}

@@ -6,6 +6,7 @@ echo "****************************************"
 BIN_FOLDER="$BGO_SPACE/bin/"
 
 CLOUDWATCH_FOLDER="$BIN_FOLDER/awsCloudwatch/"
+SESSION_MANAGER_SHELL_FOLDER="$BIN_FOLDER/SessionManagerShell/"
 
 brazil_build=$1
 
@@ -57,3 +58,10 @@ cp $PLUGIN_BINARIES/Newtonsoft.Json.dll $CLOUDWATCH_FOLDER
 cp $PLUGIN_BINARIES/Quartz.dll $CLOUDWATCH_FOLDER
 cp $PLUGIN_BINARIES/SmartThreadPool.dll $CLOUDWATCH_FOLDER
 cp $PLUGIN_BINARIES/System.Threading.dll $CLOUDWATCH_FOLDER
+
+if [[ -d "$SESSION_MANAGER_SHELL_FOLDER" ]]; then
+    rmdir "$SESSION_MANAGER_SHELL_FOLDER"
+fi
+mkdir "$SESSION_MANAGER_SHELL_FOLDER"
+cp $PLUGIN_BINARIES/winpty64/winpty.dll $SESSION_MANAGER_SHELL_FOLDER
+cp $PLUGIN_BINARIES/winpty64/winpty-agent.exe $SESSION_MANAGER_SHELL_FOLDER
