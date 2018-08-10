@@ -165,6 +165,9 @@ const (
 
 	// PluginNameStandardStream is the name for session manager standard stream plugin aka shell.
 	PluginNameStandardStream = "Standard_Stream"
+
+	// Session default RunAs user name
+	DefaultRunAsUserName = "ssm-user"
 )
 
 // Document versions that are supported by this Agent version.

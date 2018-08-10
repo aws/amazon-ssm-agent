@@ -40,6 +40,9 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/task"
 )
 
+var ShellPluginCommandName = "sh"
+var ShellPluginCommandArgs = []string{"-c"}
+
 // Plugin is the type for the plugin.
 type ShellPlugin struct {
 	stdin       *os.File
@@ -126,6 +129,10 @@ func (p *ShellPlugin) GetOnMessageHandler(log log.T, cancelFlag task.CancelFlag)
 	}
 }
 
+var startPty = func(log log.T, isSessionShell bool) (stdin *os.File, stdout *os.File, err error) {
+	return StartPty(log, isSessionShell)
+}
+
 // execute starts pseudo terminal.
 // It reads incoming message from data channel and writes to pty.stdin.
 // It reads message from pty.stdout and writes to data channel
@@ -153,7 +160,7 @@ func (p *ShellPlugin) execute(context context.T,
 		return
 	}
 
-	p.stdin, p.stdout, err = StartPty(log)
+	p.stdin, p.stdout, err = startPty(log, true)
 	if err != nil {
 		errorString := fmt.Errorf("unable to start pty: %s", err)
 		log.Error(errorString)
@@ -243,7 +250,7 @@ func (p *ShellPlugin) uploadShellSessionLogsToS3(log log.T, s3UploaderUtil s3uti
 
 // generateLogData generates a log file with the executed commands.
 func (p *ShellPlugin) generateLogData(log log.T) error {
-	shadowShellInput, _, err := StartPty(log)
+	shadowShellInput, _, err := StartPty(log, false)
 	if err != nil {
 		return err
 	}

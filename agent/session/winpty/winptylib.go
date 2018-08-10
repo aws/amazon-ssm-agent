@@ -24,6 +24,7 @@ const (
 	WINPTY_SPAWN_FLAG_AUTO_SHUTDOWN                 = 1
 	NIL_POINTER_VALUE                               = 0
 	DEFAULT_WINPTY_FLAGS                            = 0
+	WINPTY_FLAG_IMPERSONATE_THREAD                  = 0x10
 	CREATE_FILE_CREATE_MODE                         = syscall.OPEN_EXISTING
 	CREATE_FILE_MODE                                = 0
 	CREATE_FILE_ATTRS                               = 0

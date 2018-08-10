@@ -45,14 +45,14 @@ type WinPTY struct {
 }
 
 //Start launches winpty agent as a separate process
-func Start(dllPath, dllName, cmdLine string, window_size_cols, window_size_rows uint32) (*WinPTY, error) {
+func Start(dllPath, dllName, cmdLine string, window_size_cols, window_size_rows uint32, winptyFlag int32) (*WinPTY, error) {
 
 	var winpty WinPTY = WinPTY{}
 
 	loadDll(dllPath, dllName)
 	defineProcedures()
 
-	if err := winpty.configureAgent(window_size_cols, window_size_rows); err != nil {
+	if err := winpty.configureAgent(window_size_cols, window_size_rows, winptyFlag); err != nil {
 		return nil, err
 	}
 
@@ -72,12 +72,12 @@ func Start(dllPath, dllName, cmdLine string, window_size_cols, window_size_rows 
 }
 
 //configureAgent configures agent and sets initial window size.
-func (winpty *WinPTY) configureAgent(window_size_cols, window_size_rows uint32) (err error) {
+func (winpty *WinPTY) configureAgent(window_size_cols, window_size_rows uint32, winptyFlag int32) (err error) {
 	var errorPtr uintptr
 	defer winpty_error_free.Call(errorPtr)
 
 	var lastErr error
-	winpty.agentConfig, _, lastErr = winpty_config_new.Call(uintptr(DEFAULT_WINPTY_FLAGS), uintptr(unsafe.Pointer(&errorPtr)))
+	winpty.agentConfig, _, lastErr = winpty_config_new.Call(uintptr(winptyFlag), uintptr(unsafe.Pointer(&errorPtr)))
 	if winpty.agentConfig == uintptr(NIL_POINTER_VALUE) {
 		return winpty.getFormattedErrorMessage(
 			"Unable to configure winpty agent.",

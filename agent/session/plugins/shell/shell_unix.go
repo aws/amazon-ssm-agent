@@ -20,7 +20,11 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
+	"strconv"
+	"strings"
+	"syscall"
 
+	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/kr/pty"
 )
@@ -32,10 +36,15 @@ const (
 	startRecordSessionCmd = "script"
 	newLineCharacter      = "\n"
 	screenBufferSizeCmd   = "screen -h %d%s"
+	homeEnvVariable       = "HOME=/home/" + appconfig.DefaultRunAsUserName
 )
 
+var getUserAndGroupIdCall = func(log log.T) (uid int, gid int, err error) {
+	return getUserAndGroupId(log)
+}
+
 //StartPty starts pty and provides handles to stdin and stdout
-func StartPty(log log.T) (stdin *os.File, stdout *os.File, err error) {
+func StartPty(log log.T, isSessionShell bool) (stdin *os.File, stdout *os.File, err error) {
 	log.Info("Starting pty")
 	//Start the command with a pty
 	cmd := exec.Command("sh")
@@ -44,10 +53,23 @@ func StartPty(log log.T) (stdin *os.File, stdout *os.File, err error) {
 	//Setting TERM as xterm-256color as used by standard terminals to fix this issue
 	cmd.Env = append(os.Environ(),
 		termEnvVariable,
+		homeEnvVariable,
 	)
+
+	// Get the uid and gid of the runas user.
+	if isSessionShell {
+		log.Info("Starting pty")
+		uid, gid, err := getUserAndGroupIdCall(log)
+		if err != nil {
+			return nil, nil, err
+		}
+		cmd.SysProcAttr = &syscall.SysProcAttr{}
+		cmd.SysProcAttr.Credential = &syscall.Credential{Uid: uint32(uid), Gid: uint32(gid)}
+	}
 
 	ptyFile, err = pty.Start(cmd)
 	if err != nil {
+		log.Errorf("Failed to start pty: %s\n", err)
 		return nil, nil, fmt.Errorf("Failed to start pty: %s\n", err)
 	}
 
@@ -74,4 +96,39 @@ func SetSize(log log.T, ws_col, ws_row uint32) (err error) {
 		return fmt.Errorf("set pty size failed: %s", err)
 	}
 	return nil
+}
+
+//getUserAndGroupId returns the uid and gid of the runas user.
+func getUserAndGroupId(log log.T) (uid int, gid int, err error) {
+	shellCmdArgs := append(ShellPluginCommandArgs, fmt.Sprintf("id -u %s", appconfig.DefaultRunAsUserName))
+	cmd := exec.Command(ShellPluginCommandName, shellCmdArgs...)
+	out, err := cmd.Output()
+	if err != nil {
+		log.Errorf("Failed retrieve uid for %s: %v", appconfig.DefaultRunAsUserName, err)
+		return
+	}
+
+	u, err := strconv.Atoi(strings.TrimSpace(string(out)))
+	if err != nil {
+		log.Errorf("%s not found: %v", appconfig.DefaultRunAsUserName, err)
+	}
+
+	shellCmdArgs = append(ShellPluginCommandArgs, fmt.Sprintf("id -g %s", appconfig.DefaultRunAsUserName))
+	cmd = exec.Command(ShellPluginCommandName, shellCmdArgs...)
+	out, err = cmd.Output()
+	if err != nil {
+		log.Errorf("Failed retrieve gid for %s: %v", appconfig.DefaultRunAsUserName, err)
+		return
+	}
+
+	g, err := strconv.Atoi(strings.TrimSpace(string(out)))
+	if err != nil {
+		log.Errorf("%s not found: %v", appconfig.DefaultRunAsUserName, err)
+	}
+
+	// Make sure they are non-zero valid positive ids
+	if u > 0 && g > 0 {
+		return u, g, nil
+	}
+	return
 }

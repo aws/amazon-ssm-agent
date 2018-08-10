@@ -133,7 +133,17 @@ func (suite *ShellTestSuite) TestExecute() {
 	suite.mockIohandler.On("SetExitCode", 0).Return(nil)
 	suite.mockIohandler.On("SetStatus", contracts.ResultStatusSuccess).Return()
 
-	suite.plugin.Execute(suite.mockContext,
+	stdout, stdin, _ := os.Pipe()
+	stdin.Write(payload)
+	startPty = func(log log.T, isSessionShell bool) (stdin *os.File, stdout *os.File, err error) {
+		return stdin, stdout, nil
+	}
+	plugin := &ShellPlugin{
+		stdout:      stdout,
+		dataChannel: suite.mockDataChannel,
+	}
+
+	plugin.Execute(suite.mockContext,
 		contracts.Configuration{},
 		suite.mockCancelFlag,
 		suite.mockIohandler,
@@ -141,6 +151,9 @@ func (suite *ShellTestSuite) TestExecute() {
 
 	suite.mockCancelFlag.AssertExpectations(suite.T())
 	suite.mockIohandler.AssertExpectations(suite.T())
+
+	stdin.Close()
+	stdout.Close()
 }
 
 // Testing writepump separately
@@ -171,12 +184,7 @@ func (suite *ShellTestSuite) TestWritePump() {
 	suite.mockDataChannel.AssertExpectations(suite.T())
 }
 
-//Execute the test suite
-func TestShellTestSuite(t *testing.T) {
-	suite.Run(t, new(ShellTestSuite))
-}
-
-func TestProcessStreamMessage(t *testing.T) {
+func (suite *ShellTestSuite) TestProcessStreamMessage() {
 	stdinFile, _ := ioutil.TempFile("/tmp", "stdin")
 	stdoutFile, _ := ioutil.TempFile("/tmp", "stdout")
 	defer os.Remove(stdinFile.Name())
@@ -189,7 +197,12 @@ func TestProcessStreamMessage(t *testing.T) {
 	plugin.processStreamMessage(mockLog, *agentMessage)
 
 	stdinFileContent, _ := ioutil.ReadFile(stdinFile.Name())
-	assert.Equal(t, "testPayload", string(stdinFileContent))
+	assert.Equal(suite.T(), "testPayload", string(stdinFileContent))
+}
+
+//Execute the test suite
+func TestShellTestSuite(t *testing.T) {
+	suite.Run(t, new(ShellTestSuite))
 }
 
 // getAgentMessage constructs and returns AgentMessage with given sequenceNumber, messageType & payload
