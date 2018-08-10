@@ -19,6 +19,7 @@ echo "Copying application files"
 cp ${BUILD_FOLDER}/amazon-ssm-agent.exe ${PACKAGE_FOLDER}/amazon-ssm-agent.exe
 cp ${BUILD_FOLDER}/ssm-document-worker.exe ${PACKAGE_FOLDER}/ssm-document-worker.exe
 cp ${BUILD_FOLDER}/ssm-session-worker.exe ${PACKAGE_FOLDER}/ssm-session-worker.exe
+cp ${BUILD_FOLDER}/ssm-session-logger.exe ${PACKAGE_FOLDER}/ssm-session-logger.exe
 cp ${BUILD_FOLDER}/ssm-cli.exe ${PACKAGE_FOLDER}/ssm-cli.exe
 cp ${BGO_SPACE}/seelog_windows.xml.template ${PACKAGE_FOLDER}/seelog.xml.template
 cp ${BGO_SPACE}/amazon-ssm-agent.json.template ${PACKAGE_FOLDER}/amazon-ssm-agent.json.template

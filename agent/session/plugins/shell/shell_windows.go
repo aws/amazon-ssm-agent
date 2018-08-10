@@ -32,6 +32,10 @@ const (
 	winptyDllName     = "winpty"
 	winptyDllPath     = ""
 	winptyCmd         = "powershell"
+
+	startRecordSessionCmd = "Start-Transcript"
+	newLineCharacter      = "\r"
+	screenBufferSizeCmd   = "$host.UI.RawUI.BufferSize = New-Object System.Management.Automation.Host.Size($host.UI.RawUI.BufferSize.Width,%d)%s"
 )
 
 //StartPty starts winpty agent and provides handles to stdin and stdout.

@@ -78,6 +78,7 @@ const (
 
 	DefaultDocumentWorker = DefaultProgramFolder + "bin/ssm-document-worker"
 	DefaultSessionWorker  = DefaultProgramFolder + "bin/ssm-session-worker"
+	DefaultSessionLogger  = DefaultProgramFolder + "bin/ssm-session-logger"
 
 	// PowerShellPluginCommandName is the path of the powershell.exe to be used by the runPowerShellScript plugin
 	PowerShellPluginCommandName = "/usr/bin/powershell"

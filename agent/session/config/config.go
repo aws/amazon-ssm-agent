@@ -58,4 +58,9 @@ const (
 	DataChannelNumMaxAttempts          = 5
 	DataChannelRetryInitialDelayMillis = 100
 	DataChannelRetryMaxIntervalMillis  = 5000
+
+	IpcFileName      = "ipcTempFile"
+	LogFileExtension = ".log"
+	ScreenBufferSize = 30000
+	Exit             = "exit"
 )

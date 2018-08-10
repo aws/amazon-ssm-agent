@@ -28,7 +28,10 @@ import (
 var ptyFile *os.File
 
 const (
-	termEnvVariable = "TERM=xterm-256color"
+	termEnvVariable       = "TERM=xterm-256color"
+	startRecordSessionCmd = "script"
+	newLineCharacter      = "\n"
+	screenBufferSizeCmd   = "screen -h %d%s"
 )
 
 //StartPty starts pty and provides handles to stdin and stdout

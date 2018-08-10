@@ -45,6 +45,7 @@ ln -s `pwd` vendor/src/github.com/aws/amazon-ssm-agent
 go build -ldflags "-s -w" -o bin/amazon-ssm-agent -v agent/agent.go agent/agent_unix.go agent/agent_parser.go
 go build -ldflags "-s -w" -o bin/ssm-document-worker -v agent/framework/processor/executer/outofproc/worker/main.go
 go build -ldflags "-s -w" -o bin/ssm-session-worker -v agent/framework/processor/executer/outofproc/sessionworker/main.go
+go build -ldflags "-s -w" -o bin/ssm-session-logger -v agent/session/logging/main.go
 go build -ldflags "-s -w" -o bin/ssm-cli -v agent/cli-main/cli-main.go
 
 %install
@@ -57,7 +58,7 @@ mkdir -p %{buildroot}%{_sysconfdir}/amazon/ssm/ \
          %{buildroot}%{_localstatedir}/log/amazon/ssm/
 
 cp {README.md,RELEASENOTES.md} %{buildroot}%{_sysconfdir}/amazon/ssm/
-cp bin/{amazon-ssm-agent,ssm-document-worker,ssm-session-worker,ssm-cli} %{buildroot}%{_prefix}/bin/
+cp bin/{amazon-ssm-agent,ssm-document-worker,ssm-session-worker,ssm-session-logger,ssm-cli} %{buildroot}%{_prefix}/bin/
 %if 0%{?amzn} >= 2
 mkdir -p %{buildroot}%{_unitdir}/
 cp packaging/linux/amazon-ssm-agent.service %{buildroot}%{_unitdir}/
@@ -67,7 +68,7 @@ cp packaging/linux/amazon-ssm-agent.conf %{buildroot}%{_sysconfdir}/init/
 cp amazon-ssm-agent.json.template %{buildroot}%{_sysconfdir}/amazon/ssm/amazon-ssm-agent.json.template
 cp seelog_unix.xml %{buildroot}%{_sysconfdir}/amazon/ssm/seelog.xml.template
 
-strip --strip-unneeded %{buildroot}%{_prefix}/bin/{amazon-ssm-agent,ssm-document-worker,ssm-session-worker,ssm-cli}
+strip --strip-unneeded %{buildroot}%{_prefix}/bin/{amazon-ssm-agent,ssm-document-worker,ssm-session-worker,ssm-session-logger,ssm-cli}
 
 %files
 %defattr(-,root,root,-)
@@ -83,6 +84,7 @@ strip --strip-unneeded %{buildroot}%{_prefix}/bin/{amazon-ssm-agent,ssm-document
 %{_prefix}/bin/amazon-ssm-agent
 %{_prefix}/bin/ssm-document-worker
 %{_prefix}/bin/ssm-session-worker
+%{_prefix}/bin/ssm-session-logger
 %{_prefix}/bin/ssm-cli
 %{_localstatedir}/lib/amazon/ssm/
 

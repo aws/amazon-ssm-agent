@@ -152,6 +152,7 @@ func (suite *ShellTestSuite) TestWritePump() {
 
 	plugin := &ShellPlugin{
 		stdout:      stdout,
+		ipcFilePath: "test.log",
 		dataChannel: suite.mockDataChannel,
 	}
 

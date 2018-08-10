@@ -20,6 +20,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
+	"path/filepath"
 	"time"
 	"unicode/utf8"
 
@@ -40,6 +41,7 @@ import (
 type ShellPlugin struct {
 	stdin       *os.File
 	stdout      *os.File
+	ipcFilePath string
 	logFilePath string
 	dataChannel datachannel.IDataChannel
 }
@@ -130,6 +132,13 @@ func (p *ShellPlugin) execute(context context.T,
 		return
 	}
 
+	// Generate ipc file path
+	p.ipcFilePath = filepath.Join(config.OrchestrationDirectory, mgsConfig.IpcFileName+mgsConfig.LogFileExtension)
+
+	// Generate final log file path
+	logFileName := config.SessionId + mgsConfig.LogFileExtension
+	p.logFilePath = filepath.Join(config.OrchestrationDirectory, logFileName)
+
 	cancelled := make(chan bool, 1)
 	go func() {
 		cancelState := cancelFlag.Wait()
@@ -169,7 +178,53 @@ func (p *ShellPlugin) execute(context context.T,
 		}
 	}
 
+	log.Debugf("Creating log file for shell session id %s at %s", config.SessionId, p.logFilePath)
+	if err = p.generateLogData(log); err != nil {
+		errorString := fmt.Errorf("unable to generate log data: %s", err)
+		log.Error(errorString)
+		output.MarkAsFailed(errorString)
+		return
+	}
+
 	log.Debug("Shell session execution complete")
+}
+
+// generateLogData generates a log file with the executed commands.
+func (p *ShellPlugin) generateLogData(log log.T) error {
+	shadowShellInput, _, err := StartPty(log)
+	if err != nil {
+		return err
+	}
+
+	time.Sleep(5 * time.Second)
+
+	// Increase buffer size
+	screenBufferSizeCmdInput := fmt.Sprintf(screenBufferSizeCmd, mgsConfig.ScreenBufferSize, newLineCharacter)
+	shadowShellInput.Write([]byte(screenBufferSizeCmdInput))
+
+	time.Sleep(5 * time.Second)
+
+	// Start shell recording
+	recordCmdInput := fmt.Sprintf("%s %s%s", startRecordSessionCmd, p.logFilePath, newLineCharacter)
+	shadowShellInput.Write([]byte(recordCmdInput))
+
+	time.Sleep(5 * time.Second)
+
+	// Start shell logger
+	loggerCmdInput := fmt.Sprintf("%s %s%s", appconfig.DefaultSessionLogger, p.ipcFilePath, newLineCharacter)
+	shadowShellInput.Write([]byte(loggerCmdInput))
+
+	// Sleep till the logger completes execution
+	time.Sleep(time.Minute)
+
+	// Exit shell
+	exitCmdInput := fmt.Sprintf("%s%s", mgsConfig.Exit, newLineCharacter)
+	shadowShellInput.Write([]byte(exitCmdInput))
+
+	// Sleep till the shell successfully exits before uploading
+	time.Sleep(5 * time.Second)
+
+	return nil
 }
 
 // writePump reads from pty stdout and writes to data channel.
@@ -183,6 +238,14 @@ func (p *ShellPlugin) writePump(log log.T) (errorCode int) {
 
 	buf := make([]byte, mgsConfig.StreamDataPayloadSize)
 	reader := bufio.NewReader(p.stdout)
+
+	// Create ipc file
+	file, err := os.Create(p.ipcFilePath)
+	if err != nil {
+		log.Errorf("Encountered an error while creating file: %s", err)
+		return appconfig.ErrorExitCode
+	}
+	defer file.Close()
 
 	// Wait for all input commands to run.
 	time.Sleep(time.Second)
@@ -217,6 +280,11 @@ func (p *ShellPlugin) writePump(log log.T) (errorCode int) {
 
 		if err = p.dataChannel.SendStreamDataMessage(log, mgsContracts.Output, buffer.Bytes()); err != nil {
 			log.Errorf("Unable to send stream data message: %s", err)
+			return appconfig.ErrorExitCode
+		}
+
+		if _, err = file.Write(buffer.Bytes()); err != nil {
+			log.Errorf("Encountered an error while writing to file: %s", err)
 			return appconfig.ErrorExitCode
 		}
 
