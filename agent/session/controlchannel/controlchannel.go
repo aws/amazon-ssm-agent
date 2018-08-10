@@ -139,20 +139,9 @@ func (controlChannel *ControlChannel) Reconnect(log log.T) error {
 	return nil
 }
 
-// Close closes controlchannel and its web socket connection.
+// Close closes controlchannel - its web socket connection.
 func (controlChannel *ControlChannel) Close(log log.T) error {
 	log.Infof("Closing controlchannel with channel Id %s", controlChannel.ChannelId)
-
-	uuid.SwitchFormat(uuid.CleanHyphen)
-	uid := uuid.NewV4().String()
-
-	deleteControlChannelInput := &service.DeleteChannelInput{
-		MessageSchemaVersion: aws.String(mgsConfig.MessageSchemaVersion),
-		RequestId:            aws.String(uid),
-	}
-	if _, err := controlChannel.Service.DeleteControlChannel(log, deleteControlChannelInput, controlChannel.ChannelId); err != nil {
-		log.Errorf("Failed to call DeleteControlChannel, channelId: %s, error: %s", controlChannel.ChannelId, err)
-	}
 	return controlChannel.wsChannel.Close(log)
 }
 

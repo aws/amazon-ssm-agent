@@ -70,52 +70,6 @@ func (_m *Service) CreateDataChannel(_a0 log.T, createDataChannelInput *service.
 	return r0, r1
 }
 
-// DeleteControlChannel provides a mock function with given fields: _a0, deleteControlChannelInput, channelId
-func (_m *Service) DeleteControlChannel(_a0 log.T, deleteControlChannelInput *service.DeleteChannelInput, channelId string) (*service.DeleteChannelOutput, error) {
-	ret := _m.Called(_a0, deleteControlChannelInput, channelId)
-
-	var r0 *service.DeleteChannelOutput
-	if rf, ok := ret.Get(0).(func(log.T, *service.DeleteChannelInput, string) *service.DeleteChannelOutput); ok {
-		r0 = rf(_a0, deleteControlChannelInput, channelId)
-	} else {
-		if ret.Get(0) != nil {
-			r0 = ret.Get(0).(*service.DeleteChannelOutput)
-		}
-	}
-
-	var r1 error
-	if rf, ok := ret.Get(1).(func(log.T, *service.DeleteChannelInput, string) error); ok {
-		r1 = rf(_a0, deleteControlChannelInput, channelId)
-	} else {
-		r1 = ret.Error(1)
-	}
-
-	return r0, r1
-}
-
-// DeleteDataChannel provides a mock function with given fields: _a0, deleteDataChannelInput, channelId
-func (_m *Service) DeleteDataChannel(_a0 log.T, deleteDataChannelInput *service.DeleteChannelInput, channelId string) (*service.DeleteChannelOutput, error) {
-	ret := _m.Called(_a0, deleteDataChannelInput, channelId)
-
-	var r0 *service.DeleteChannelOutput
-	if rf, ok := ret.Get(0).(func(log.T, *service.DeleteChannelInput, string) *service.DeleteChannelOutput); ok {
-		r0 = rf(_a0, deleteDataChannelInput, channelId)
-	} else {
-		if ret.Get(0) != nil {
-			r0 = ret.Get(0).(*service.DeleteChannelOutput)
-		}
-	}
-
-	var r1 error
-	if rf, ok := ret.Get(1).(func(log.T, *service.DeleteChannelInput, string) error); ok {
-		r1 = rf(_a0, deleteDataChannelInput, channelId)
-	} else {
-		r1 = ret.Error(1)
-	}
-
-	return r0, r1
-}
-
 // GetRegion provides a mock function with given fields:
 func (_m *Service) GetRegion() string {
 	ret := _m.Called()

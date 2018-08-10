@@ -43,9 +43,7 @@ import (
 // Service is an interface to the message gateway service operation v1.
 type Service interface {
 	CreateControlChannel(log log.T, createControlChannelInput *CreateControlChannelInput, channelId string) (createControlChannelOutput *CreateControlChannelOutput, err error)
-	DeleteControlChannel(log log.T, deleteControlChannelInput *DeleteChannelInput, channelId string) (deleteControlChannelOutput *DeleteChannelOutput, err error)
 	CreateDataChannel(log log.T, createDataChannelInput *CreateDataChannelInput, sessionId string) (createDataChannelOutput *CreateDataChannelOutput, err error)
-	DeleteDataChannel(log log.T, deleteDataChannelInput *DeleteChannelInput, channelId string) (deleteDataChannelOutput *DeleteChannelOutput, err error)
 	GetV4Signer() *v4.Signer
 	GetRegion() string
 }
@@ -213,39 +211,6 @@ func (mgsService *MessageGatewayService) CreateControlChannel(log log.T, createC
 	return &output, err
 }
 
-// DeleteControlChannel calls the DeleteControlChannel MGS API
-func (mgsService *MessageGatewayService) DeleteControlChannel(log log.T, deleteControlChannelInput *DeleteChannelInput, channelId string) (deleteControlChannelOutput *DeleteChannelOutput, err error) {
-
-	url, err := getMGSBaseUrl(log, mgsconfig.ControlChannel, channelId, mgsService.region)
-	if err != nil {
-		return nil, fmt.Errorf("failed to get the mgs base url with error: %s", err)
-	}
-
-	if mgsService.signer == nil {
-		return nil, errors.New("MGS service signer is nil")
-	}
-
-	jsonValue, err := json.Marshal(deleteControlChannelInput)
-	if err != nil {
-		return nil, errors.New("unable to marshal the deleteControlChannelInput")
-	}
-
-	resp, err := makeRestcall(jsonValue, "POST", url, mgsService.region, mgsService.signer)
-	if err != nil {
-		return nil, fmt.Errorf("deleteControlChannel request failed: %s", err)
-	}
-
-	var output DeleteChannelOutput
-	if resp != nil {
-		err = xml.Unmarshal(resp, &output)
-		if err != nil {
-			return nil, fmt.Errorf("failed to unmarshal deleteControlChannel response: %s", err)
-		}
-	}
-
-	return &output, err
-}
-
 // CreateDataChannel calls the CreateDataChannel MGS API
 func (mgsService *MessageGatewayService) CreateDataChannel(log log.T, createDataChannelInput *CreateDataChannelInput, sessionId string) (createDataChannelOutput *CreateDataChannelOutput, err error) {
 
@@ -273,36 +238,6 @@ func (mgsService *MessageGatewayService) CreateDataChannel(log log.T, createData
 		err = xml.Unmarshal(resp, &output)
 		if err != nil {
 			return nil, fmt.Errorf("failed to unmarshal createDataChannel response: %s", err)
-		}
-	}
-
-	return &output, err
-}
-
-// DeleteDataChannel calls the DeleteDataChannel MGS API
-func (mgsService *MessageGatewayService) DeleteDataChannel(log log.T, deleteDataChannelInput *DeleteChannelInput, channelId string) (deleteDataChannelOutput *DeleteChannelOutput, err error) {
-
-	url, err := getMGSBaseUrl(log, mgsconfig.DataChannel, channelId, mgsService.region)
-	if err != nil {
-		return nil, fmt.Errorf("failed to get the mgs base url with error: %s", err)
-	}
-
-	if mgsService.signer == nil {
-		return nil, errors.New("MGS service signer is nil")
-	}
-
-	jsonValue, err := json.Marshal(deleteDataChannelInput)
-	if err != nil {
-		return nil, errors.New("unable to marshal the deleteDataChannelInput")
-	}
-
-	resp, err := makeRestcall(jsonValue, "DELETE", url, mgsService.region, mgsService.signer)
-
-	var output DeleteChannelOutput
-	if resp != nil {
-		err = xml.Unmarshal(resp, &output)
-		if err != nil {
-			return nil, fmt.Errorf("failed to unmarshal deleteControlChannel response: %s", err)
 		}
 	}
 

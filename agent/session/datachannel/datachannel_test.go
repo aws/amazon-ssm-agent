@@ -138,14 +138,12 @@ func TestReconnect(t *testing.T) {
 func TestClose(t *testing.T) {
 	dataChannel := getDataChannel()
 
-	mockService.On("DeleteDataChannel", mock.Anything, mock.Anything, mock.AnythingOfType("string")).Return(nil, nil)
 	mockWsChannel.On("Close", mock.Anything).Return(nil)
 
 	// test close
 	err := dataChannel.Close(mockLog)
 
 	assert.Nil(t, err)
-	mockService.AssertExpectations(t)
 	mockWsChannel.AssertExpectations(t)
 }
 

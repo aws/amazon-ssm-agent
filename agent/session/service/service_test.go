@@ -92,44 +92,6 @@ func TestCreateDataChannel(t *testing.T) {
 	assert.Equal(t, token, *output.TokenValue)
 }
 
-func TestDeleteControlChannel(t *testing.T) {
-	service := getService()
-	deleteControlChannelInput := &DeleteChannelInput{
-		MessageSchemaVersion: aws.String(mgsConfig.MessageSchemaVersion),
-		RequestId:            aws.String(uuid.NewV4().String()),
-	}
-	makeRestcall = func(request []byte, methodType string, url string, region string, signer *v4.Signer) ([]byte, error) {
-		output := &DeleteChannelOutput{
-			ChannelId:            aws.String(instanceId),
-			MessageSchemaVersion: aws.String(mgsConfig.MessageSchemaVersion),
-		}
-		return xml.Marshal(output)
-	}
-	output, err := service.DeleteControlChannel(log.NewMockLog(), deleteControlChannelInput, instanceId)
-
-	assert.Nil(t, err)
-	assert.Equal(t, instanceId, *output.ChannelId)
-}
-
-func TestDeleteDataChannel(t *testing.T) {
-	service := getService()
-	deleteDataChannelInput := &DeleteChannelInput{
-		MessageSchemaVersion: aws.String(mgsConfig.MessageSchemaVersion),
-		RequestId:            aws.String(uuid.NewV4().String()),
-	}
-	makeRestcall = func(request []byte, methodType string, url string, region string, signer *v4.Signer) ([]byte, error) {
-		output := &DeleteChannelOutput{
-			ChannelId:            aws.String(sessionId),
-			MessageSchemaVersion: aws.String(mgsConfig.MessageSchemaVersion),
-		}
-		return xml.Marshal(output)
-	}
-	output, err := service.DeleteControlChannel(log.NewMockLog(), deleteDataChannelInput, instanceId)
-
-	assert.Nil(t, err)
-	assert.Equal(t, sessionId, *output.ChannelId)
-}
-
 func TestGetBaseUrl(t *testing.T) {
 	// data channel url test
 	dataChannelUrlResult, err := getMGSBaseUrl(log.NewMockLog(), mgsConfig.DataChannel, sessionId, region)

@@ -91,25 +91,3 @@ type OpenDataChannelInput struct {
 	// ClientId is a required field
 	ClientId *string `json:"ClientId" min:"1" type:"string" required:"true"`
 }
-
-// DeleteChannelInput works for both data and control channels since they are similar
-type DeleteChannelInput struct {
-	_ struct{} `type:"structure"`
-
-	// MessageSchemaVersion is a required field
-	MessageSchemaVersion *string `json:"MessageSchemaVersion" min:"1" type:"string" required:"true"`
-
-	// RequestId is a required field
-	RequestId *string `json:"RequestId" min:"16" type:"string" required:"true"`
-}
-
-// DeleteChannelOutput works for both data and control channels since they are similar
-type DeleteChannelOutput struct {
-	_ struct{} `type:"structure"`
-
-	// MessageSchemaVersion is a required field
-	MessageSchemaVersion *string `json:"MessageSchemaVersion" min:"1" type:"string" required:"true"`
-
-	// RequestId is a required field
-	ChannelId *string `json:"ChannelId" type:"string" required:"true"`
-}

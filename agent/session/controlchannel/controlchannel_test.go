@@ -117,7 +117,6 @@ func TestReconnect(t *testing.T) {
 }
 
 func TestClose(t *testing.T) {
-	mockService.On("DeleteControlChannel", mock.Anything, mock.Anything, mock.AnythingOfType("string")).Return(nil, nil)
 	controlChannel := getControlChannel()
 	mockWsChannel.On("Close", mock.Anything).Return(nil)
 
@@ -125,7 +124,6 @@ func TestClose(t *testing.T) {
 	err := controlChannel.Close(mockLog)
 
 	assert.Nil(t, err)
-	mockService.AssertExpectations(t)
 	mockWsChannel.AssertExpectations(t)
 }
 
