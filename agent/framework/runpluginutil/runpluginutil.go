@@ -345,7 +345,7 @@ func runPlugin(
 }
 
 var getDataChannelForSessionPlugin = func(context context.T, sessionId string, clientId string, onMessageHandler func(input []byte)) (datachannel.IDataChannel, error) {
-	retryer := retry.RepeatableExponentialRetryer{
+	retryer := retry.ExponentialRetryer{
 		CallableFunc: func() (channel interface{}, err error) {
 			return datachannel.NewDataChannel(
 				context,

@@ -53,7 +53,7 @@ const (
 	RetryGeometricRatio                   = 2
 	ControlChannelNumMaxRetries           = -1 //forever retries for control channel
 	ControlChannelRetryInitialDelayMillis = 5000
-	ControlChannelRetryMaxIntervalMillis  = 5000
+	ControlChannelRetryMaxIntervalMillis  = 1000 * 60 * 60 // 1 hour
 
 	DataChannelNumMaxAttempts          = 5
 	DataChannelRetryInitialDelayMillis = 100

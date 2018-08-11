@@ -219,7 +219,7 @@ func (dataChannel *DataChannel) SetWebSocket(context context.T,
 			}
 			return dataChannel, nil
 		}
-		retryer := retry.RepeatableExponentialRetryer{
+		retryer := retry.ExponentialRetryer{
 			CallableFunc:        callable,
 			GeometricRatio:      mgsConfig.RetryGeometricRatio,
 			InitialDelayInMilli: rand.Intn(mgsConfig.DataChannelRetryInitialDelayMillis) + mgsConfig.DataChannelRetryInitialDelayMillis,
@@ -229,14 +229,6 @@ func (dataChannel *DataChannel) SetWebSocket(context context.T,
 		if _, err := retryer.Call(); err != nil {
 			log.Error(err)
 		}
-
-		tokenValue, err := getDataChannelToken(log, mgsService, sessionId, requestId, clientId)
-		if err != nil {
-			log.Errorf("failed to get token, err: %s", err)
-			return
-		}
-		dataChannel.wsChannel.SetChannelToken(tokenValue)
-		dataChannel.Reconnect(log)
 	}
 
 	if err := dataChannel.wsChannel.Initialize(context,

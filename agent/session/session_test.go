@@ -21,11 +21,14 @@ import (
 
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
+	"github.com/aws/amazon-ssm-agent/agent/framework/processor"
 	processorMock "github.com/aws/amazon-ssm-agent/agent/framework/processor/mock"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	mgsConfig "github.com/aws/amazon-ssm-agent/agent/session/config"
 	mgsContracts "github.com/aws/amazon-ssm-agent/agent/session/contracts"
+	"github.com/aws/amazon-ssm-agent/agent/session/controlchannel"
 	controlChannelMock "github.com/aws/amazon-ssm-agent/agent/session/controlchannel/mocks"
+	"github.com/aws/amazon-ssm-agent/agent/session/service"
 	serviceMock "github.com/aws/amazon-ssm-agent/agent/session/service/mocks"
 	"github.com/gorilla/websocket"
 	"github.com/stretchr/testify/assert"
@@ -81,10 +84,11 @@ func (suite *SessionTestSuite) TestModuleExecute() {
 	resChan := make(chan contracts.DocumentResult)
 	suite.mockProcessor.On("InitialProcessing").Return(nil)
 	suite.mockProcessor.On("Start").Return(resChan, nil)
-	suite.mockControlChannel.On("Initialize", mock.Anything, mock.Anything, mock.Anything, mock.Anything).Return(nil)
-	suite.mockControlChannel.On("SetWebSocket", mock.Anything, mock.Anything, mock.Anything, mock.Anything).Return(nil)
-	suite.mockControlChannel.On("Open", mock.Anything).Return(nil)
 	suite.mockControlChannel.On("SendMessage", mock.Anything, mock.Anything, websocket.BinaryMessage).Return(nil)
+
+	setupControlChannel = func(context context.T, service service.Service, processor processor.Processor, instanceId string) (controlchannel.IControlChannel, error) {
+		return suite.mockControlChannel, nil
+	}
 
 	suite.session.ModuleExecute(suite.mockContext)
 

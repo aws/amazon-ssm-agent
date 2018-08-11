@@ -18,6 +18,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"math/rand"
 	"runtime/debug"
 	"time"
 
@@ -32,6 +33,7 @@ import (
 	mgsConfig "github.com/aws/amazon-ssm-agent/agent/session/config"
 	mgsContracts "github.com/aws/amazon-ssm-agent/agent/session/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/session/controlchannel"
+	"github.com/aws/amazon-ssm-agent/agent/session/retry"
 	"github.com/aws/amazon-ssm-agent/agent/session/service"
 	"github.com/gorilla/websocket"
 	"github.com/twinj/uuid"
@@ -121,6 +123,36 @@ func (s *Session) ModuleName() string {
 	return s.name
 }
 
+var setupControlChannel = func(context context.T, service service.Service, processor processor.Processor, instanceId string) (controlchannel.IControlChannel, error) {
+	retryer := retry.ExponentialRetryer{
+		CallableFunc: func() (channel interface{}, err error) {
+			controlChannel := &controlchannel.ControlChannel{}
+			controlChannel.Initialize(context, service, processor, instanceId)
+			if err := controlChannel.SetWebSocket(context, service, processor, instanceId); err != nil {
+				return nil, err
+			}
+
+			if err := controlChannel.Open(context.Log()); err != nil {
+				return nil, err
+			}
+
+			return controlChannel, nil
+		},
+		GeometricRatio:      mgsConfig.RetryGeometricRatio,
+		InitialDelayInMilli: rand.Intn(mgsConfig.ControlChannelRetryInitialDelayMillis) + mgsConfig.ControlChannelRetryInitialDelayMillis,
+		MaxDelayInMilli:     mgsConfig.ControlChannelRetryMaxIntervalMillis,
+		MaxAttempts:         mgsConfig.ControlChannelNumMaxRetries,
+	}
+
+	channel, err := retryer.Call()
+	if err != nil {
+		// should never happen
+		return nil, err
+	}
+	controlChannel := channel.(*controlchannel.ControlChannel)
+	return controlChannel, nil
+}
+
 // ModuleExecute starts the scheduling of the session module
 func (s *Session) ModuleExecute(context context.T) (err error) {
 	log := s.context.Log()
@@ -148,13 +180,9 @@ func (s *Session) ModuleExecute(context context.T) (err error) {
 		return
 	}
 
-	// TODO: add retry for create/open controlchannel
-	s.controlChannel.Initialize(s.context, s.service, s.processor, instanceId)
-	if s.controlChannel.SetWebSocket(s.context, s.service, s.processor, instanceId); err != nil {
-		log.Errorf("failed to populate websocket for controlchannel, error %s", err)
-	}
-	if err := s.controlChannel.Open(s.context.Log()); err != nil {
-		log.Errorf("failed to open controlchannel, error %s", err)
+	s.controlChannel, err = setupControlChannel(s.context, s.service, s.processor, instanceId)
+	if err != nil {
+		log.Error("Failed to setup control channel, err: %v", err)
 	}
 
 	log.Info("Starting receiving message from control channel")

@@ -38,7 +38,7 @@ var (
 )
 
 func TestRepeatableExponentialRetryerRetriesForGivenNumberOfMaxAttempts(t *testing.T) {
-	retryer := RepeatableExponentialRetryer{
+	retryer := ExponentialRetryer{
 		callableFunc,
 		retryGeometricRatio,
 		initialDelayInMilli,

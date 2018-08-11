@@ -24,7 +24,8 @@ type Retryer interface {
 	NextSleepTime(int32) time.Duration
 }
 
-type RepeatableExponentialRetryer struct {
+// TODO Move to a common package for retry and merge with HibernateRetryStrategy
+type ExponentialRetryer struct {
 	CallableFunc        func() (interface{}, error)
 	GeometricRatio      float64
 	InitialDelayInMilli int
@@ -33,12 +34,12 @@ type RepeatableExponentialRetryer struct {
 }
 
 // NextSleepTime calculates the next delay of retry.
-func (retryer *RepeatableExponentialRetryer) NextSleepTime(attempt int) time.Duration {
+func (retryer *ExponentialRetryer) NextSleepTime(attempt int) time.Duration {
 	return time.Duration(float64(retryer.InitialDelayInMilli)*math.Pow(retryer.GeometricRatio, float64(attempt))) * time.Millisecond
 }
 
 // Call calls the operation and does exponential retry if error happens until it reaches MaxAttempts if specified.
-func (retryer *RepeatableExponentialRetryer) Call() (channel interface{}, err error) {
+func (retryer *ExponentialRetryer) Call() (channel interface{}, err error) {
 	attempt := 0
 	failedAttemptsSoFar := 0
 	for {
@@ -48,8 +49,7 @@ func (retryer *RepeatableExponentialRetryer) Call() (channel interface{}, err er
 		}
 		sleep := retryer.NextSleepTime(attempt)
 		if int(sleep/time.Millisecond) > retryer.MaxDelayInMilli {
-			attempt = 0
-			sleep = retryer.NextSleepTime(attempt)
+			sleep = time.Duration(retryer.MaxDelayInMilli) * time.Millisecond
 		}
 		time.Sleep(sleep)
 		attempt++
