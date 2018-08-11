@@ -82,8 +82,9 @@ func (agent *SSMAgent) Start() {
 
 // Hibernate checks if the agent should hibernate when it can't reach the service
 func (agent *SSMAgent) Hibernate() {
-	if status, _ := agent.healthModule.GetAgentState(); status == health.Passive {
+	if status, err := agent.healthModule.GetAgentState(); status == health.Passive {
 		//Starting hibernate mode
+		agent.context.Log().Info("Entering SSM Agent hibernate - ", err)
 		agent.hibernateState.ExecuteHibernation()
 	}
 }

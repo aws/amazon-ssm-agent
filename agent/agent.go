@@ -64,7 +64,6 @@ func start(log logger.T, instanceIDPtr *string, regionPtr *string) (ssmAgent age
 	hibernateState := hibernation.NewHibernateMode(healthModule, context)
 
 	ssmAgent = agent.NewSSMAgent(context, healthModule, hibernateState)
-
 	// Do a health check before starting the agent.
 	// Health check would include creating a health module and sending empty health pings to the service.
 	// If response is positive, start the agent, else retry and eventually back off (hibernate/passive mode).
