@@ -61,7 +61,6 @@ func NewHibernateMode(healthModule *health.HealthCheck, context context.T) *Hibe
 
 	context.Log().Debug("Starting agent hibernate mode. Switching log to minimal logging...")
 	logger := log.GetLogger(context.Log(), seelogConfig)
-	logger.Info("Agent enters hibernate mode. Reducing logging...")
 
 	return &Hibernate{
 		healthModule:        healthModule,
@@ -78,6 +77,7 @@ func NewHibernateMode(healthModule *health.HealthCheck, context context.T) *Hibe
 // ExecuteHibernation Starts the hibernate mode by blocking agent start and by scheduling health pings
 func (m *Hibernate) ExecuteHibernation() health.AgentState {
 	next := time.Duration(initialPingRate) * time.Second
+	m.seelogger.Info("Agent is in hibernate mode. Reducing logging. Logging will be reduced to one log per backoff period")
 	// Wait backoff time and then schedule health pings
 	<-time.After(next)
 	m.scheduleBackOff(m)
@@ -141,7 +141,7 @@ func scheduleBackOffStrategy(m *Hibernate) {
 
 	next := time.Duration(backoffInterval) * time.Second
 	go func(m *Hibernate) {
-		m.seelogger.Infof("Backing off health check to every %v minutes for %v minutes. Logging will be reduced to one log per backoff period", m.currentPingInterval, backoffInterval)
+		m.seelogger.Infof("Backing off health check to every %v seconds for %v seconds.", m.currentPingInterval, backoffInterval)
 		select {
 		case <-time.After(next):
 			// recall scheduleEmptyHealthPing to form a timed loop.

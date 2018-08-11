@@ -7,6 +7,7 @@ import (
 	"os"
 	"time"
 
+	"github.com/aws/amazon-ssm-agent/agent/agent"
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	logger "github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/log/ssmlog"
@@ -174,12 +175,21 @@ func (a *amazonSSMAgentService) Execute(args []string, r <-chan svc.ChangeReques
 
 	// start service, without specifying instance id or region
 	var emptyString string
-	agent, err := start(a.log, &emptyString, &emptyString)
-	if err != nil {
-		log.Errorf("Failed to start agent. %v", err)
+	var agent agent.ISSMAgent
+	exitCode := 0
+	// Moving the start of the agent into go routine so that, in case of hibernation,
+	// the agent service still returns to SCM and the service can move to "Running" state. 
+	go func() {
+		var err error
+		agent, err = start(a.log, &emptyString, &emptyString)
+		if err != nil {
+			log.Errorf("Failed to start agent. %v", err)
+			exitCode = appconfig.ErrorExitCode
+		}
+	}()
+	if exitCode == appconfig.ErrorExitCode {
 		return true, appconfig.ErrorExitCode
 	}
-
 	// update service status to Running
 	const acceptCmds = svc.AcceptStop | svc.AcceptShutdown
 	s <- svc.Status{State: svc.Running, Accepts: acceptCmds}
