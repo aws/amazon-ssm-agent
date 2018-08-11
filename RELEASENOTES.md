@@ -1,10 +1,15 @@
 Latest
 ===============
+- Bug fix for the SSM Agent service remaining in "Starting" state on Windows when unable to authenticate to the Systems Manager service. 
+
+2.2.916.0
+===============
+NOTE: This build should not be installed for Windows since the SSM Agent service may remain in starting status if unable to authenticate to the Systems Manager service, which is fixed in the latest release.
 - Bug fix for missing cloudwatch.exe seen in SSM Agent version 2.2.902.0
 
 2.2.902.0
 ===============
-NOTE: This build should not be installed for Windows since you might see the error - "Encountered error while starting the plugin: Unable to locate cloudwatch.exe" for Cloudwatch plugin. This bug has been fixed in SSM Agent version 2.2.916.0
+NOTE: This build should not be installed for Windows since you might see the error - "Encountered error while starting the plugin: Unable to locate cloudwatch.exe" for Cloudwatch plugin. This bug has been fixed in SSM Agent version 2.2.916.0. Also SSM Agent service may remain in starting status if unable to authenticate to the Systems Manager service, which is fixed in the latest release.
 - Initial support for developer builds on macOS
 - Retry sending Run Command execution results for up to 2 hours
 - More detailed error messages are returned for inventory plugin failures during State Manager association executions
