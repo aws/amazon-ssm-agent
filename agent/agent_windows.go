@@ -178,7 +178,7 @@ func (a *amazonSSMAgentService) Execute(args []string, r <-chan svc.ChangeReques
 	var agent agent.ISSMAgent
 	exitCode := 0
 	// Moving the start of the agent into go routine so that, in case of hibernation,
-	// the agent service still returns to SCM and the service can move to "Running" state. 
+	// the agent service still returns to SCM and the service can move to "Running" state.
 	go func() {
 		var err error
 		agent, err = start(a.log, &emptyString, &emptyString)
