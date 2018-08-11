@@ -40,8 +40,7 @@ var getRegion = platform.Region
 
 type IAmazonS3Util interface {
 	S3Upload(log log.T, bucketName string, objectKey string, filePath string) error
-	GetBucketRegion(log log.T, bucketName string) string
-	GetS3Header(log log.T, bucketName string, instanceRegion string) string
+	IsBucketEncryptedWithKMS(log log.T, bucketName string) bool
 }
 
 type AmazonS3Util struct {
@@ -131,6 +130,28 @@ func GetBucketRegion(log log.T, bucketName string, httpProvider HttpProvider) (r
 	} else {
 		return bucketRegion
 	}
+}
+
+//IsBucketEncryptedWithKMS checks if the bucket is encrypted with KMS key
+func (u *AmazonS3Util) IsBucketEncryptedWithKMS(log log.T, bucketName string) bool {
+	input := &s3.GetBucketEncryptionInput{
+		Bucket: aws.String(bucketName),
+	}
+
+	output, err := u.myUploader.S3.GetBucketEncryption(input)
+	if err != nil {
+		log.Errorf("Encountered an error while calling S3 API GetBucketEncryption %s", err)
+		return false
+	}
+
+	bucketEncryption := *output.ServerSideEncryptionConfiguration.Rules[0].ApplyServerSideEncryptionByDefault.SSEAlgorithm
+
+	if bucketEncryption == s3.ServerSideEncryptionAwsKms {
+		return true
+	}
+
+	log.Errorf("S3 bucket %s is not encrypted with AWS KMS key", bucketName)
+	return false
 }
 
 /*

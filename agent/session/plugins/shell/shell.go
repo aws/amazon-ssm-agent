@@ -18,16 +18,19 @@ import (
 	"bufio"
 	"bytes"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"os"
 	"path/filepath"
 	"time"
 	"unicode/utf8"
 
+	"github.com/aws/amazon-ssm-agent/agent/agentlogstocloudwatch/cloudwatchlogspublisher"
 	"github.com/aws/amazon-ssm-agent/agent/agentlogstocloudwatch/cloudwatchlogspublisher/cloudwatchlogsinterface"
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	agentContracts "github.com/aws/amazon-ssm-agent/agent/contracts"
+	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/s3util"
@@ -57,13 +60,23 @@ func (p *ShellPlugin) Name() string {
 	return appconfig.PluginNameStandardStream
 }
 
-// Validate validates the cloudwatch and s3 configuration.
+// Validate validates the cloudwatch and s3 encryption configuration.
 func (p *ShellPlugin) Validate(context context.T,
 	config agentContracts.Configuration,
 	cwl cloudwatchlogsinterface.ICloudWatchLogsService,
 	s3Util s3util.IAmazonS3Util) error {
 
-	// TODO add implementation
+	if config.CloudWatchLogGroup != "" && config.CloudWatchEncryptionEnabled {
+		if encrypted := cwl.IsLogGroupEncryptedWithKMS(context.Log(), config.CloudWatchLogGroup); !encrypted {
+			return errors.New(mgsConfig.CloudWatchEncryptionErrorMsg)
+		}
+	}
+
+	if config.OutputS3BucketName != "" && config.S3EncryptionEnabled {
+		if encrypted := s3Util.IsBucketEncryptedWithKMS(context.Log(), config.OutputS3BucketName); !encrypted {
+			return errors.New(mgsConfig.S3EncryptionErrorMsg)
+		}
+	}
 	return nil
 }
 
@@ -124,6 +137,23 @@ func (p *ShellPlugin) execute(context context.T,
 
 	log := context.Log()
 	var err error
+
+	var cwl cloudwatchlogsinterface.ICloudWatchLogsService
+	var s3Util s3util.IAmazonS3Util
+	if config.OutputS3BucketName != "" {
+		s3Util = s3util.NewAmazonS3Util(log, config.OutputS3BucketName)
+	}
+	if config.CloudWatchLogGroup != "" {
+		cwl = cloudwatchlogspublisher.NewCloudWatchLogsService()
+	}
+	if err = p.Validate(context, config, cwl, s3Util); err != nil {
+		output.SetExitCode(appconfig.ErrorExitCode)
+		output.SetStatus(agentContracts.ResultStatusFailed)
+		output.SetOutput(err.Error())
+		log.Errorf("Encryption validation failed, err: %s", err)
+		return
+	}
+
 	p.stdin, p.stdout, err = StartPty(log)
 	if err != nil {
 		errorString := fmt.Errorf("unable to start pty: %s", err)
@@ -178,15 +208,38 @@ func (p *ShellPlugin) execute(context context.T,
 		}
 	}
 
-	log.Debugf("Creating log file for shell session id %s at %s", config.SessionId, p.logFilePath)
-	if err = p.generateLogData(log); err != nil {
-		errorString := fmt.Errorf("unable to generate log data: %s", err)
-		log.Error(errorString)
-		output.MarkAsFailed(errorString)
-		return
+	// Generate log data only if customer has enabled logging.
+	if config.OutputS3BucketName != "" || config.CloudWatchLogGroup != "" {
+		log.Debugf("Creating log file for shell session id %s at %s", config.SessionId, p.logFilePath)
+		if err = p.generateLogData(log); err != nil {
+			errorString := fmt.Errorf("unable to generate log data: %s", err)
+			log.Error(errorString)
+			output.MarkAsFailed(errorString)
+			return
+		}
+
+		log.Debug("Starting S3 logging")
+		if config.OutputS3BucketName != "" {
+			p.uploadShellSessionLogsToS3(log, s3Util, config, logFileName)
+		}
+
+		log.Debug("Starting CloudWatch logging")
+		if config.CloudWatchLogGroup != "" {
+			cwl.StreamData(log, config.CloudWatchLogGroup, config.SessionId, p.logFilePath, true, false)
+		}
 	}
 
 	log.Debug("Shell session execution complete")
+}
+
+// uploadShellSessionLogsToS3 uploads shell session logs to S3 bucket specified.
+func (p *ShellPlugin) uploadShellSessionLogsToS3(log log.T, s3UploaderUtil s3util.IAmazonS3Util, config agentContracts.Configuration, s3FileName string) {
+	s3KeyPrefix := fileutil.BuildS3Path(config.OutputS3KeyPrefix, mgsConfig.S3ObjectPrefix, s3FileName)
+	log.Debugf("Preparing to upload session logs to S3 bucket %s and prefix %s", config.OutputS3BucketName, s3KeyPrefix)
+
+	if err := s3UploaderUtil.S3Upload(log, config.OutputS3BucketName, s3KeyPrefix, p.logFilePath); err != nil {
+		log.Errorf("Failed to upload shell session logs to S3: %s", err)
+	}
 }
 
 // generateLogData generates a log file with the executed commands.

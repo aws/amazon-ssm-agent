@@ -1699,6 +1699,64 @@ func (c *S3) GetBucketCorsWithContext(ctx aws.Context, input *GetBucketCorsInput
 	return out, req.Send()
 }
 
+const opGetBucketEncryption = "GetBucketEncryption"
+
+// GetBucketEncryptionRequest generates a "aws/request.Request" representing the
+// client's request for the GetBucketEncryption operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfuly.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See GetBucketEncryption for more information on using the GetBucketEncryption
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the GetBucketEncryptionRequest method.
+//    req, resp := client.GetBucketEncryptionRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/s3-2006-03-01/GetBucketEncryption
+func (c *S3) GetBucketEncryptionRequest(input *GetBucketEncryptionInput) (req *request.Request, output *GetBucketEncryptionOutput) {
+	op := &request.Operation{
+		Name:       opGetBucketEncryption,
+		HTTPMethod: "GET",
+		HTTPPath:   "/{Bucket}?encryption",
+	}
+
+	if input == nil {
+		input = &GetBucketEncryptionInput{}
+	}
+
+	output = &GetBucketEncryptionOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// GetBucketEncryption API operation for Amazon Simple Storage Service.
+//
+// Returns the server-side encryption configuration of a bucket.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Simple Storage Service's
+// API operation GetBucketEncryption for usage and error information.
+// See also, https://docs.aws.amazon.com/goto/WebAPI/s3-2006-03-01/GetBucketEncryption
+func (c *S3) GetBucketEncryption(input *GetBucketEncryptionInput) (*GetBucketEncryptionOutput, error) {
+	req, out := c.GetBucketEncryptionRequest(input)
+	return out, req.Send()
+}
+
 const opGetBucketInventoryConfiguration = "GetBucketInventoryConfiguration"
 
 // GetBucketInventoryConfigurationRequest generates a "aws/request.Request" representing the
@@ -9820,6 +9878,63 @@ func (s GetBucketCorsOutput) GoString() string {
 func (s *GetBucketCorsOutput) SetCORSRules(v []*CORSRule) *GetBucketCorsOutput {
 	s.CORSRules = v
 	return s
+}
+
+type GetBucketEncryptionInput struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the bucket from which the server-side encryption configuration
+	// is retrieved.
+	//
+	// Bucket is a required field
+	Bucket *string `location:"uri" locationName:"Bucket" type:"string" required:"true"`
+}
+
+type GetBucketEncryptionOutput struct {
+	_ struct{} `type:"structure" payload:"ServerSideEncryptionConfiguration"`
+
+	// Container for server-side encryption configuration rules. Currently S3 supports
+	// one rule only.
+	ServerSideEncryptionConfiguration *ServerSideEncryptionConfiguration `type:"structure"`
+}
+
+// Container for server-side encryption configuration rules. Currently S3 supports
+// one rule only.
+type ServerSideEncryptionConfiguration struct {
+	_ struct{} `type:"structure"`
+
+	// Container for information about a particular server-side encryption configuration
+	// rule.
+	//
+	// Rules is a required field
+	Rules []*ServerSideEncryptionRule `locationName:"Rule" type:"list" flattened:"true" required:"true"`
+}
+
+// Container for information about a particular server-side encryption configuration
+// rule.
+type ServerSideEncryptionRule struct {
+	_ struct{} `type:"structure"`
+
+	// Describes the default server-side encryption to apply to new objects in the
+	// bucket. If Put Object request does not specify any server-side encryption,
+	// this default encryption will be applied.
+	ApplyServerSideEncryptionByDefault *ServerSideEncryptionByDefault `type:"structure"`
+}
+
+// Describes the default server-side encryption to apply to new objects in the
+// bucket. If Put Object request does not specify any server-side encryption,
+// this default encryption will be applied.
+type ServerSideEncryptionByDefault struct {
+	_ struct{} `type:"structure"`
+
+	// KMS master key ID to use for the default encryption. This parameter is allowed
+	// if SSEAlgorithm is aws:kms.
+	KMSMasterKeyID *string `type:"string"`
+
+	// Server-side encryption algorithm to use for the default encryption.
+	//
+	// SSEAlgorithm is a required field
+	SSEAlgorithm *string `type:"string" required:"true" enum:"ServerSideEncryption"`
 }
 
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/s3-2006-03-01/GetBucketInventoryConfigurationRequest

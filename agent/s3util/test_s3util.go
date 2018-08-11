@@ -81,3 +81,11 @@ func (uploader *MockS3Uploader) UploadS3TestFile(log log.T, bucketName, key stri
 
 	return args.Error(0)
 }
+
+// IsBucketEncryptedWithKMS mocks the method with the same name.
+func (uploader *MockS3Uploader) IsBucketEncryptedWithKMS(log log.T, bucketName string) bool {
+	args := uploader.Called(log, bucketName)
+	logger.Debugf("===========MockIsBucketEncryptedWithKMS Determining if the given s3 bucket has been encrypted - %v returns %v", bucketName, args.Bool(0))
+
+	return args.Bool(0)
+}

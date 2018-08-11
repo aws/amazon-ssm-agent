@@ -35,13 +35,14 @@ const (
 
 // DocumentParserInfo represents the parsed information from the request
 type DocumentParserInfo struct {
-	OrchestrationDir  string
-	S3Bucket          string
-	S3Prefix          string
-	MessageId         string
-	DocumentId        string
-	DefaultWorkingDir string
-	CloudWatchConfig  contracts.CloudWatchConfiguration
+	OrchestrationDir    string
+	S3Bucket            string
+	S3Prefix            string
+	S3EncryptionEnabled bool
+	MessageId           string
+	DocumentId          string
+	DefaultWorkingDir   string
+	CloudWatchConfig    contracts.CloudWatchConfiguration
 }
 
 // InitializeDocState is a method to obtain the state of the document.
@@ -261,17 +262,19 @@ func parsePluginStateForStartSession(
 	// getPluginConfigurations converts from PluginConfig (structure from the MGS message) to plugin.Configuration (structure expected by the plugin)
 	pluginName := appconfig.PluginNameStandardStream
 	config := contracts.Configuration{
-		MessageId:               parserInfo.MessageId,
-		BookKeepingFileName:     parserInfo.DocumentId,
-		PluginName:              pluginName,
-		PluginID:                pluginName,
-		DefaultWorkingDirectory: parserInfo.DefaultWorkingDir,
-		SessionId:               sessionId,
-		OutputS3KeyPrefix:       fileutil.BuildS3Path(parserInfo.S3Prefix, pluginName),
-		OutputS3BucketName:      parserInfo.S3Bucket,
-		OrchestrationDirectory:  fileutil.BuildPath(parserInfo.OrchestrationDir, pluginName),
-		ClientId:                clientId,
-		CloudWatchLogGroup:      parserInfo.CloudWatchConfig.LogGroupName,
+		MessageId:                   parserInfo.MessageId,
+		BookKeepingFileName:         parserInfo.DocumentId,
+		PluginName:                  pluginName,
+		PluginID:                    pluginName,
+		DefaultWorkingDirectory:     parserInfo.DefaultWorkingDir,
+		SessionId:                   sessionId,
+		OutputS3KeyPrefix:           fileutil.BuildS3Path(parserInfo.S3Prefix, pluginName),
+		OutputS3BucketName:          parserInfo.S3Bucket,
+		S3EncryptionEnabled:         parserInfo.S3EncryptionEnabled,
+		OrchestrationDirectory:      fileutil.BuildPath(parserInfo.OrchestrationDir, pluginName),
+		ClientId:                    clientId,
+		CloudWatchLogGroup:          parserInfo.CloudWatchConfig.LogGroupName,
+		CloudWatchEncryptionEnabled: parserInfo.CloudWatchConfig.LogGroupEncryptionEnabled,
 	}
 
 	var plugin contracts.PluginState

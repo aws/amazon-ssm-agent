@@ -63,4 +63,8 @@ const (
 	LogFileExtension = ".log"
 	ScreenBufferSize = 30000
 	Exit             = "exit"
+
+	S3ObjectPrefix               = "session-manager"
+	CloudWatchEncryptionErrorMsg = "We couldn't start the session because encryption is not set up on the selected CloudWatch Logs log group. Either encrypt the log group or choose an option to enable logging without encryption."
+	S3EncryptionErrorMsg         = "We couldn't start the session because encryption is not set up on the selected Amazon S3 bucket. Either encrypt the bucket or choose an option to enable logging without encryption."
 )

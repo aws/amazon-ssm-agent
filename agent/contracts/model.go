@@ -194,9 +194,11 @@ type DocumentContent struct {
 
 // SessionInputs stores session configuration
 type SessionInputs struct {
-	S3BucketName           string `json:"s3BucketName" yaml:"s3BucketName"`
-	S3KeyPrefix            string `json:"s3KeyPrefix" yaml:"s3KeyPrefix"`
-	CloudWatchLogGroupName string `json:"cloudWatchLogGroupName" yaml:"cloudWatchLogGroupName"`
+	S3BucketName                string `json:"s3BucketName" yaml:"s3BucketName"`
+	S3KeyPrefix                 string `json:"s3KeyPrefix" yaml:"s3KeyPrefix"`
+	S3EncryptionEnabled         bool   `json:"s3EncryptionEnabled" yaml:"s3EncryptionEnabled"`
+	CloudWatchLogGroupName      string `json:"cloudWatchLogGroupName" yaml:"cloudWatchLogGroupName"`
+	CloudWatchEncryptionEnabled bool   `json:"cloudWatchEncryptionEnabled" yaml:"cloudWatchEncryptionEnabled"`
 }
 
 // SessionDocumentContent object which represents ssm session content.

@@ -285,12 +285,13 @@ func (agentMessage *AgentMessage) ParseAgentMessage(context context.T,
 
 	sessionInputs := parsedMessagePayload.DocumentContent.Inputs
 	parserInfo := docparser.DocumentParserInfo{
-		OrchestrationDir: messageOrchestrationDirectory,
-		MessageId:        documentInfo.MessageID,
-		DocumentId:       documentInfo.DocumentID,
-		S3Bucket:         sessionInputs.S3BucketName,
-		S3Prefix:         sessionInputs.S3KeyPrefix,
-		CloudWatchConfig: contracts.CloudWatchConfiguration{LogGroupName: sessionInputs.CloudWatchLogGroupName},
+		OrchestrationDir:    messageOrchestrationDirectory,
+		MessageId:           documentInfo.MessageID,
+		DocumentId:          documentInfo.DocumentID,
+		S3Bucket:            sessionInputs.S3BucketName,
+		S3Prefix:            sessionInputs.S3KeyPrefix,
+		S3EncryptionEnabled: sessionInputs.S3EncryptionEnabled,
+		CloudWatchConfig:    contracts.CloudWatchConfiguration{LogGroupName: sessionInputs.CloudWatchLogGroupName, LogGroupEncryptionEnabled: sessionInputs.CloudWatchEncryptionEnabled},
 	}
 	docContent := &docparser.SessionDocContent{
 		SchemaVersion: parsedMessagePayload.DocumentContent.SchemaVersion,

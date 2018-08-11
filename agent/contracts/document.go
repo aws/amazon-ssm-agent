@@ -78,8 +78,9 @@ type DocumentInfo struct {
 
 //CloudWatchConfiguration represents information relevant to command output in cloudWatch
 type CloudWatchConfiguration struct {
-	LogGroupName    string
-	LogStreamPrefix string
+	LogGroupName              string
+	LogStreamPrefix           string
+	LogGroupEncryptionEnabled bool
 }
 
 // IOConfiguration represents information relevant to the output sources of a command

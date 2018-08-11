@@ -15,18 +15,19 @@
 package shell
 
 import (
+	"io/ioutil"
 	"os"
 	"testing"
 	"time"
 
-	"io/ioutil"
-
+	"github.com/aws/amazon-ssm-agent/agent/agentlogstocloudwatch/cloudwatchlogspublisher/mock"
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler/mock"
 	"github.com/aws/amazon-ssm-agent/agent/framework/runpluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/s3util"
 	mgsContracts "github.com/aws/amazon-ssm-agent/agent/session/contracts"
 	dataChannelMock "github.com/aws/amazon-ssm-agent/agent/session/datachannel/mocks"
 	"github.com/aws/amazon-ssm-agent/agent/task"
@@ -204,4 +205,110 @@ func getAgentMessage(payloadType uint32, payload []byte) *mgsContracts.AgentMess
 		Payload:        payload,
 	}
 	return &agentMessage
+}
+
+func (suite *ShellTestSuite) TestValidateCWLogGroupNotEncrypted() {
+	cwMock := new(cloudwatchlogspublisher_mock.CloudWatchLogsServiceMock)
+	s3Mock := new(s3util.MockS3Uploader)
+
+	testCwLogGroupName := "testCW"
+	configuration := contracts.Configuration{
+		OutputS3BucketName:          "",
+		S3EncryptionEnabled:         false,
+		CloudWatchLogGroup:          testCwLogGroupName,
+		CloudWatchEncryptionEnabled: true,
+	}
+
+	// When cw log group is not encrypted, Validate returns error
+	cwMock.On("IsLogGroupEncryptedWithKMS", mock.Anything, testCwLogGroupName).Return(false)
+	err := suite.plugin.Validate(suite.mockContext, configuration, cwMock, s3Mock)
+	assert.NotNil(suite.T(), err)
+}
+
+func (suite *ShellTestSuite) TestValidateCWLogGroupEncrypted() {
+	cwMock := new(cloudwatchlogspublisher_mock.CloudWatchLogsServiceMock)
+	s3Mock := new(s3util.MockS3Uploader)
+
+	testCwLogGroupName := "testCW"
+	configuration := contracts.Configuration{
+		OutputS3BucketName:          "",
+		CloudWatchLogGroup:          testCwLogGroupName,
+		CloudWatchEncryptionEnabled: true,
+	}
+
+	// When cw log group is encrypted and CreateLogStream succeed, Validate returns nil
+	cwMock.On("IsLogGroupEncryptedWithKMS", mock.Anything, testCwLogGroupName).Return(true)
+	cwMock.On("CreateLogStream", mock.Anything, testCwLogGroupName, mock.Anything).Return(nil)
+	err := suite.plugin.Validate(suite.mockContext, configuration, cwMock, s3Mock)
+	assert.Nil(suite.T(), err)
+}
+
+func (suite *ShellTestSuite) TestValidateBypassCWLogGroupEncryptionCheck() {
+	cwMock := new(cloudwatchlogspublisher_mock.CloudWatchLogsServiceMock)
+	s3Mock := new(s3util.MockS3Uploader)
+
+	testCwLogGroupName := "testCW"
+	configuration := contracts.Configuration{
+		OutputS3BucketName:          "",
+		S3EncryptionEnabled:         false,
+		CloudWatchLogGroup:          testCwLogGroupName,
+		CloudWatchEncryptionEnabled: false,
+	}
+
+	// When cw log group is not encrypted but we choose to bypass encryption check, Validate returns true
+	cwMock.On("IsLogGroupEncryptedWithKMS", mock.Anything, testCwLogGroupName).Return(false)
+	cwMock.On("CreateLogStream", mock.Anything, testCwLogGroupName, mock.Anything).Return(nil)
+	err := suite.plugin.Validate(suite.mockContext, configuration, cwMock, s3Mock)
+	assert.Nil(suite.T(), err)
+}
+
+func (suite *ShellTestSuite) TestValidateS3BucketNotEncrypted() {
+	cwMock := new(cloudwatchlogspublisher_mock.CloudWatchLogsServiceMock)
+	s3Mock := new(s3util.MockS3Uploader)
+
+	testS3BucketName := "testS3"
+	configuration := contracts.Configuration{
+		OutputS3BucketName:  testS3BucketName,
+		CloudWatchLogGroup:  "",
+		S3EncryptionEnabled: true,
+	}
+
+	// When s3 bucket is not encrypted, Validate returns error
+	s3Mock.On("IsBucketEncryptedWithKMS", mock.Anything, testS3BucketName).Return(false)
+	err := suite.plugin.Validate(suite.mockContext, configuration, cwMock, s3Mock)
+	assert.NotNil(suite.T(), err)
+}
+
+func (suite *ShellTestSuite) TestValidateS3BucketEncrypted() {
+	cwMock := new(cloudwatchlogspublisher_mock.CloudWatchLogsServiceMock)
+	s3Mock := new(s3util.MockS3Uploader)
+
+	testS3BucketName := "testS3"
+	configuration := contracts.Configuration{
+		OutputS3BucketName:  testS3BucketName,
+		CloudWatchLogGroup:  "",
+		S3EncryptionEnabled: true,
+	}
+
+	// When s3 bucket is encrypted, Validate returns nil
+	s3Mock.On("IsBucketEncryptedWithKMS", mock.Anything, testS3BucketName).Return(true)
+	err := suite.plugin.Validate(suite.mockContext, configuration, cwMock, s3Mock)
+	assert.Nil(suite.T(), err)
+}
+
+func (suite *ShellTestSuite) TestValidateBypassS3BucketEncryptionCheck() {
+	cwMock := new(cloudwatchlogspublisher_mock.CloudWatchLogsServiceMock)
+	s3Mock := new(s3util.MockS3Uploader)
+
+	testS3BucketName := "testS3"
+	configuration := contracts.Configuration{
+		OutputS3BucketName:  testS3BucketName,
+		CloudWatchLogGroup:  "",
+		S3EncryptionEnabled: false,
+	}
+
+	// When s3 bucket is not encrypted but choose to bypass encryption check, Validate returns nil
+	s3Mock.On("IsBucketEncryptedWithKMS", mock.Anything, testS3BucketName).Return(false)
+	err := suite.plugin.Validate(suite.mockContext, configuration, cwMock, s3Mock)
+	assert.Nil(suite.T(), err)
 }
