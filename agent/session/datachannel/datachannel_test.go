@@ -42,7 +42,6 @@ var (
 	mockWsChannel                              = &communicatorMocks.IWebSocketChannel{}
 	mockCancelFlag                             = &task.MockCancelFlag{}
 	clientId                                   = "dd01e56b-ff48-483e-a508-b5f073f31b16"
-	schemaVersion                              = uint32(1)
 	createdDate                                = uint64(1503434274948)
 	sessionId                                  = "2b196342-d7d4-436e-8f09-3883a1116ac3"
 	instanceId                                 = "i-1234"
@@ -215,6 +214,15 @@ func TestSendAcknowledgeMessage(t *testing.T) {
 	agentMessage := getAgentMessage(int64(1), mgsContracts.InputStreamDataMessage, uint32(mgsContracts.Output), []byte(""))
 
 	dataChannel.SendAcknowledgeMessage(mockLog, *agentMessage)
+
+	mockWsChannel.AssertExpectations(t)
+}
+
+func TestSendAgentSessionStateMessage(t *testing.T) {
+	dataChannel := getDataChannel()
+
+	mockWsChannel.On("SendMessage", mock.Anything, mock.Anything, mock.Anything).Return(nil)
+	dataChannel.SendAgentSessionStateMessage(mockLog, mgsContracts.Connected)
 
 	mockWsChannel.AssertExpectations(t)
 }

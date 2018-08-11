@@ -22,6 +22,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	mgsContracts "github.com/aws/amazon-ssm-agent/agent/session/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/session/datachannel"
 	datachannelMock "github.com/aws/amazon-ssm-agent/agent/session/datachannel/mocks"
 	"github.com/aws/amazon-ssm-agent/agent/task"
@@ -165,6 +166,7 @@ func TestRunPluginsForSessionPluginsWithNewDocument(t *testing.T) {
 		return mockDataChannel, nil
 	}
 	mockDataChannel.On("Close", mock.Anything).Return(nil)
+	mockDataChannel.On("SendAgentSessionStateMessage", mock.Anything, mgsContracts.Connected).Return(nil)
 
 	// create an instance of our test object
 	pluginInstances[pluginName] = new(ISessionPlugin)

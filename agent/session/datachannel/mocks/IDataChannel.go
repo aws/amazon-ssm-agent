@@ -142,6 +142,20 @@ func (_m *IDataChannel) SendAcknowledgeMessage(_a0 log.T, agentMessage contracts
 	return r0
 }
 
+// SendAgentSessionStateMessage provides a mock function with given fields: _a0, sessionStatus
+func (_m *IDataChannel) SendAgentSessionStateMessage(_a0 log.T, sessionStatus contracts.SessionStatus) error {
+	ret := _m.Called(_a0, sessionStatus)
+
+	var r0 error
+	if rf, ok := ret.Get(0).(func(log.T, contracts.SessionStatus) error); ok {
+		r0 = rf(_a0, sessionStatus)
+	} else {
+		r0 = ret.Error(0)
+	}
+
+	return r0
+}
+
 // SendMessage provides a mock function with given fields: _a0, input, inputType
 func (_m *IDataChannel) SendMessage(_a0 log.T, input []byte, inputType int) error {
 	ret := _m.Called(_a0, input, inputType)

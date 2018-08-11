@@ -33,6 +33,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/plugins/pluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/s3util"
 	mgsConfig "github.com/aws/amazon-ssm-agent/agent/session/config"
+	mgsContracts "github.com/aws/amazon-ssm-agent/agent/session/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/session/datachannel"
 	"github.com/aws/amazon-ssm-agent/agent/session/retry"
 	"github.com/aws/amazon-ssm-agent/agent/task"
@@ -362,7 +363,6 @@ var getDataChannelForSessionPlugin = func(context context.T, sessionId string, c
 		return nil, err
 	}
 	dataChannel := channel.(*datachannel.DataChannel)
-
 	return dataChannel, nil
 }
 
@@ -407,6 +407,9 @@ func executePlugin(context context.T,
 				output.MarkAsFailed(errorString)
 				log.Error(errorString)
 				return
+			}
+			if err = dataChannel.SendAgentSessionStateMessage(context.Log(), mgsContracts.Connected); err != nil {
+				log.Errorf("Unable to send AgentSessionState message with session status %s. %v", mgsContracts.Connected, err)
 			}
 			sessionPlugin.Execute(context, config, cancelFlag, output, dataChannel)
 			dataChannel.Close(log)

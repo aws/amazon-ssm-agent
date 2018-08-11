@@ -31,6 +31,8 @@ const (
 	TaskCompleteMessage string = "agent_task_complete"
 	// AcknowledgeMessage represents message type for acknowledge
 	AcknowledgeMessage string = "acknowledge"
+	// AgentSessionState represents status of session
+	AgentSessionState string = "agent_session_state"
 	// ChannelClosedMessage represents message type for ChannelClosed
 	ChannelClosedMessage string = "channel_closed"
 	// OutputStreamDataMessage represents message type for outgoing stream data
@@ -101,6 +103,13 @@ type AcknowledgeContent struct {
 	MessageId           string `json:"AcknowledgedMessageId"`
 	SequenceNumber      int64  `json:"AcknowledgedMessageSequenceNumber"`
 	IsSequentialMessage bool   `json:"IsSequentialMessage"`
+}
+
+// AgentSessionState is used to inform the sender of agent's session state.
+type AgentSessionStateContent struct {
+	SchemaVersion int    `json:"SchemaVersion"`
+	SessionState  string `json:"SessionState"`
+	SessionId     string `json:"SessionId"`
 }
 
 // Deserialize parses AcknowledgeContent message from payload of AgentMessage.
@@ -182,6 +191,13 @@ const (
 	Error     PayloadType = 2
 	Size      PayloadType = 3
 	Parameter PayloadType = 4
+)
+
+type SessionStatus string
+
+const (
+	Connected   SessionStatus = "Connected"
+	Terminating SessionStatus = "Terminating"
 )
 
 type SizeData struct {

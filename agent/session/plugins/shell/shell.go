@@ -113,7 +113,6 @@ func (p *ShellPlugin) Execute(context context.T,
 // GetOnMessageHandler returns Shell Plugin's handler function for when a message is received
 func (p *ShellPlugin) GetOnMessageHandler(log log.T, cancelFlag task.CancelFlag) func(input []byte) {
 	return func(input []byte) {
-		log.Debugf("Message received on data channel: %s", input)
 		if p.stdin == nil || p.stdout == nil {
 			// This is to handle scenario when cli/console starts sending size data but pty has not been started yet
 			// Since packets are rejected, cli/console will resend these packets until pty starts successfully in separate thread
@@ -309,6 +308,9 @@ func (p *ShellPlugin) writePump(log log.T) (errorCode int) {
 		if err != nil {
 			// Terminating session
 			log.Debugf("Failed to read from pty master: %s", err)
+			if err = p.dataChannel.SendAgentSessionStateMessage(log, mgsContracts.Terminating); err != nil {
+				log.Errorf("Unable to send AgentSessionState message with session status %s. %v", mgsContracts.Terminating, err)
+			}
 			return appconfig.SuccessExitCode
 		}
 
@@ -352,7 +354,7 @@ func (p *ShellPlugin) writePump(log log.T) (errorCode int) {
 func (p *ShellPlugin) processStreamMessage(log log.T, streamDataMessage mgsContracts.AgentMessage) error {
 	switch mgsContracts.PayloadType(streamDataMessage.PayloadType) {
 	case mgsContracts.Output:
-		log.Tracef("Output message received: %s", string(streamDataMessage.Payload))
+		log.Tracef("Output message received: %d", streamDataMessage.SequenceNumber)
 		if _, err := p.stdin.Write(streamDataMessage.Payload); err != nil {
 			log.Errorf("Unable to write to stdin, err: %v.", err)
 			return err

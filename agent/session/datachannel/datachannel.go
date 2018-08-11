@@ -40,9 +40,9 @@ import (
 )
 
 const (
-	acknowledgeMessageSchemaVersion  = 1
-	acknowledgeMessageSequenceNumber = 0
-	acknowledgeMessageFlags          = 3
+	schemaVersion  = 1
+	sequenceNumber = 0
+	messageFlags   = 3
 )
 
 type IDataChannel interface {
@@ -56,6 +56,7 @@ type IDataChannel interface {
 	ResendStreamDataMessageScheduler(log log.T) error
 	ProcessAcknowledgedMessage(log log.T, acknowledgeMessageContent mgsContracts.AcknowledgeContent)
 	SendAcknowledgeMessage(log log.T, agentMessage mgsContracts.AgentMessage) error
+	SendAgentSessionStateMessage(log log.T, sessionStatus mgsContracts.SessionStatus) error
 	AddDataToOutgoingMessageBuffer(streamMessage StreamingMessage)
 	RemoveDataFromOutgoingMessageBuffer(streamMessageElement *list.Element)
 	AddDataToIncomingMessageBuffer(streamMessage StreamingMessage)
@@ -339,7 +340,7 @@ func (dataChannel *DataChannel) SendStreamDataMessage(log log.T, payloadType mgs
 	if dataChannel.Pause {
 		log.Tracef("Sending stream data message has been paused, saving stream data message sequence %d to local map: ", dataChannel.StreamDataSequenceNumber)
 	} else {
-		log.Tracef("Send stream data message %d with msg %s", dataChannel.StreamDataSequenceNumber, string(inputData))
+		log.Tracef("Send stream data message sequence number %d", dataChannel.StreamDataSequenceNumber)
 		if err = dataChannel.SendMessage(log, msg, websocket.BinaryMessage); err != nil {
 			log.Errorf("Error sending stream data message %v", err)
 		}
@@ -418,28 +419,58 @@ func (dataChannel *DataChannel) SendAcknowledgeMessage(log log.T, streamDataMess
 		return err
 	}
 
+	log.Tracef("Send %s message for stream data: %d", mgsContracts.AcknowledgeMessage, streamDataMessage.SequenceNumber)
+	if err := dataChannel.sendAgentMessage(log, mgsContracts.AcknowledgeMessage, acknowledgeContentBytes); err != nil {
+		return err
+	}
+	return nil
+}
+
+// SendAgentSessionStateMessage sends agent session state to MGS
+func (dataChannel *DataChannel) SendAgentSessionStateMessage(log log.T, sessionStatus mgsContracts.SessionStatus) error {
+	agentSessionStateContent := &mgsContracts.AgentSessionStateContent{
+		SchemaVersion: schemaVersion,
+		SessionState:  string(sessionStatus),
+		SessionId:     dataChannel.ChannelId,
+	}
+
+	var agentSessionStateContentBytes []byte
+	var err error
+	if agentSessionStateContentBytes, err = json.Marshal(agentSessionStateContent); err != nil {
+		log.Errorf("Cannot serialize AgentSessionState message err: %v", err)
+		return err
+	}
+
+	log.Tracef("Send %s message with session status %s", mgsContracts.AgentSessionState, string(sessionStatus))
+	if err := dataChannel.sendAgentMessage(log, mgsContracts.AgentSessionState, agentSessionStateContentBytes); err != nil {
+		return err
+	}
+	return nil
+}
+
+// sendAgentMessage sends agent message for given messageType and content
+func (dataChannel *DataChannel) sendAgentMessage(log log.T, messageType string, messageContent []byte) error {
 	uuid.SwitchFormat(uuid.CleanHyphen)
 	messageId := uuid.NewV4()
 	agentMessage := &mgsContracts.AgentMessage{
-		MessageType:    mgsContracts.AcknowledgeMessage,
-		SchemaVersion:  acknowledgeMessageSchemaVersion,
+		MessageType:    messageType,
+		SchemaVersion:  schemaVersion,
 		CreatedDate:    uint64(time.Now().UnixNano() / 1000000),
-		SequenceNumber: acknowledgeMessageSequenceNumber,
-		Flags:          acknowledgeMessageFlags,
+		SequenceNumber: sequenceNumber,
+		Flags:          messageFlags,
 		MessageId:      messageId,
-		Payload:        acknowledgeContentBytes,
+		Payload:        messageContent,
 	}
 
 	msg, err := agentMessage.Serialize(log)
 	if err != nil {
-		log.Errorf("Cannot serialize Acknowledge message err: %v", err)
+		log.Errorf("Cannot serialize agent message err: %v", err)
 		return err
 	}
 
-	log.Tracef("Send Acknowledge message for stream data: %d", streamDataMessage.SequenceNumber)
 	err = dataChannel.SendMessage(log, msg, websocket.BinaryMessage)
 	if err != nil {
-		log.Errorf("Error sending acknowledge message %v", err)
+		log.Errorf("Error sending %s message %v", messageType, err)
 		return err
 	}
 	return nil
@@ -490,12 +521,12 @@ func (dataChannel *DataChannel) DataChannelIncomingMessageHandler(log log.T,
 
 	streamDataMessage := &mgsContracts.AgentMessage{}
 	if err := streamDataMessage.Deserialize(log, rawMessage); err != nil {
-		log.Errorf("Cannot deserialize raw message: %s, err: %v.", string(rawMessage), err)
+		log.Errorf("Cannot deserialize raw message, err: %v.", err)
 		return err
 	}
 
 	if err := streamDataMessage.Validate(); err != nil {
-		log.Errorf("Invalid StreamDataMessage: %v, err: %v.", streamDataMessage, err)
+		log.Errorf("Invalid StreamDataMessage, err: %v.", err)
 		return err
 	}
 
@@ -559,7 +590,7 @@ func (dataChannel *DataChannel) handleStreamDataMessage(log log.T,
 			return err
 		}
 
-		log.Infof("Process new incoming stream data message. Sequence Number: %d", streamDataMessage.SequenceNumber)
+		log.Tracef("Process new incoming stream data message. Sequence Number: %d", streamDataMessage.SequenceNumber)
 		if err = streamMessageHandler(log, streamDataMessage); err != nil {
 			log.Errorf("Unable to process stream data payload, err: %v.", err)
 			return err
@@ -644,7 +675,7 @@ func (dataChannel *DataChannel) processIncomingMessageBufferItems(log log.T, str
 
 			streamDataMessage := &mgsContracts.AgentMessage{}
 			if err = streamDataMessage.Deserialize(log, bufferedStreamMessage.Content); err != nil {
-				log.Errorf("Cannot deserialize raw message: %s, err: %v.", string(bufferedStreamMessage.Content), err)
+				log.Errorf("Cannot deserialize raw message: %d, err: %v.", bufferedStreamMessage.SequenceNumber, err)
 				return err
 			}
 			if err = streamMessageHandler(log, *streamDataMessage); err != nil {
@@ -680,7 +711,7 @@ func getDataChannelToken(log log.T,
 		return "", fmt.Errorf("CreateDataChannel failed with no output or error: %s", err)
 	}
 
-	log.Debugf("Successfully get datachannel token %s", *createDataChannelOutput.TokenValue)
+	log.Debugf("Successfully get datachannel token")
 	return *createDataChannelOutput.TokenValue, nil
 }
 

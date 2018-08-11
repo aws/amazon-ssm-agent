@@ -150,6 +150,7 @@ func (suite *ShellTestSuite) TestWritePump() {
 
 	//suite.mockDataChannel := &dataChannelMock.IDataChannel{}
 	suite.mockDataChannel.On("SendStreamDataMessage", mock.Anything, mock.Anything, mock.Anything).Return(nil)
+	suite.mockDataChannel.On("SendAgentSessionStateMessage", mock.Anything, mgsContracts.Terminating).Return(nil)
 
 	plugin := &ShellPlugin{
 		stdout:      stdout,
