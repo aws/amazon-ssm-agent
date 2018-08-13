@@ -67,9 +67,20 @@ func start(log logger.T, instanceIDPtr *string, regionPtr *string) (ssmAgent age
 	// Do a health check before starting the agent.
 	// Health check would include creating a health module and sending empty health pings to the service.
 	// If response is positive, start the agent, else retry and eventually back off (hibernate/passive mode).
-	ssmAgent.Hibernate()
-	// The instance has SSM policy if we reach this part of the code.
+	if status, err := healthModule.GetAgentState(); status == health.Passive {
+		//Starting hibernate mode
+		context.Log().Info("Entering SSM Agent hibernate - ", err)
+		go func() {
+			hibernateState.ExecuteHibernation()
+			err = startAgent(ssmAgent, context, log, instanceIDPtr, regionPtr)
+		}()
+	} else {
+		err = startAgent(ssmAgent, context, log, instanceIDPtr, regionPtr)
+	}
+	return
+}
 
+func startAgent(ssmAgent agent.ISSMAgent, context context.T, log logger.T, instanceIDPtr *string, regionPtr *string) (err error) {
 	cloudwatchPublisher := &cloudwatchlogspublisher.CloudWatchPublisher{}
 	coreModules := coremodules.RegisteredCoreModules(context)
 	reboot := &rebooter.SSMRebooter{}
