@@ -37,6 +37,8 @@ type MessagingBackend interface {
 	Stop() <-chan int
 	//Process a given datagram, should not be blocked
 	Process(string) error
+	//Sets input channel to nil.
+	Close()
 }
 
 //GetLatestVersion retrieves the current latest message version of the agent build
@@ -119,6 +121,9 @@ func Messaging(log log.T, ipc channel.Channel, backend MessagingBackend, stopTim
 				if requestedStop {
 					ipc.Close()
 				}
+				// Set channel to nil by calling Close function. Receive on closed channel is non blocking
+				// and leads to endless loop causing cpu usage spike
+				backend.Close()
 				//if inbound channel from backend breaks, still continue messaging to send outbound messages
 				break
 			}

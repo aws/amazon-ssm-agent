@@ -79,6 +79,10 @@ func (p *ExecuterBackend) Stop() <-chan int {
 	return p.stopChan
 }
 
+func (p *ExecuterBackend) Close() {
+	p.input = nil
+}
+
 //TODO handle error and logging, when err, ask messaging to stop
 //TODO version handling?
 func (p *ExecuterBackend) Process(datagram string) error {
@@ -201,4 +205,8 @@ func (p *WorkerBackend) Accept() <-chan string {
 
 func (p *WorkerBackend) Stop() <-chan int {
 	return p.stopChan
+}
+
+func (p *WorkerBackend) Close() {
+	p.input = nil
 }

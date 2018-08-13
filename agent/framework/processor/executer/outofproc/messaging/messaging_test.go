@@ -90,3 +90,7 @@ func (m *BackendMock) Stop() <-chan int {
 	args := m.Called()
 	return args.Get(0).(chan int)
 }
+
+func (m *BackendMock) Close() {
+	m.Called()
+}
