@@ -28,6 +28,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
+	"github.com/aws/amazon-ssm-agent/agent/framework/docmanager"
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
@@ -254,6 +255,13 @@ func (s *Session) listenReply(resultChan chan contracts.DocumentResult, instance
 			log.Infof("received plugin: %s result from Processor", res.LastPlugin)
 		} else {
 			log.Infof("session: %s complete", res.MessageID)
+
+			//Deleting Old Log Files
+			instanceID, _ := platform.InstanceID()
+			go docmanager.DeleteSessionOrchestrationDirectories(log,
+				instanceID,
+				s.context.AppConfig().Agent.OrchestrationRootDir,
+				s.context.AppConfig().Ssm.SessionLogsRetentionDurationHours)
 		}
 
 		msg, err := buildAgentTaskComplete(log, res, instanceId)

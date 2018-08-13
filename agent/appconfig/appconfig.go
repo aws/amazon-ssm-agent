@@ -120,6 +120,7 @@ func DefaultConfig() SsmagentConfig {
 		CustomInventoryDefaultLocation:        DefaultCustomInventoryFolder,
 		AssociationLogsRetentionDurationHours: DefaultAssociationLogsRetentionDurationHours,
 		RunCommandLogsRetentionDurationHours:  DefaultRunCommandLogsRetentionDurationHours,
+		SessionLogsRetentionDurationHours:     DefaultSessionLogsRetentionDurationHours,
 	}
 	var agent = AgentInfo{
 		Name:                 "amazon-ssm-agent",

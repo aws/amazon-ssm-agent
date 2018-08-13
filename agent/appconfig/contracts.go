@@ -42,6 +42,7 @@ type SsmCfg struct {
 	CustomInventoryDefaultLocation        string
 	AssociationLogsRetentionDurationHours int
 	RunCommandLogsRetentionDurationHours  int
+	SessionLogsRetentionDurationHours     int
 }
 
 // AgentInfo represents metadata for amazon-ssm-agent

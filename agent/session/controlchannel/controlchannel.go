@@ -87,7 +87,7 @@ func (controlChannel *ControlChannel) SetWebSocket(context context.T,
 	}
 
 	config := context.AppConfig()
-	orchestrationRootDir := filepath.Join(appconfig.DefaultDataStorePath, instanceId, appconfig.DefaultDocumentRootDirName, config.Agent.OrchestrationRootDir)
+	orchestrationRootDir := filepath.Join(appconfig.DefaultDataStorePath, instanceId, appconfig.DefaultSessionRootDirName, config.Agent.OrchestrationRootDir)
 	onMessageHandler := func(input []byte) {
 		controlChannelIncomingMessageHandler(context, processor, input, orchestrationRootDir, instanceId)
 	}

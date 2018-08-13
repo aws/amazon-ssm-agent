@@ -240,7 +240,7 @@ func (p *ShellPlugin) execute(context context.T,
 
 // uploadShellSessionLogsToS3 uploads shell session logs to S3 bucket specified.
 func (p *ShellPlugin) uploadShellSessionLogsToS3(log log.T, s3UploaderUtil s3util.IAmazonS3Util, config agentContracts.Configuration, s3FileName string) {
-	s3KeyPrefix := fileutil.BuildS3Path(config.OutputS3KeyPrefix, mgsConfig.S3ObjectPrefix, s3FileName)
+	s3KeyPrefix := fileutil.BuildS3Path(config.OutputS3KeyPrefix, s3FileName)
 	log.Debugf("Preparing to upload session logs to S3 bucket %s and prefix %s", config.OutputS3BucketName, s3KeyPrefix)
 
 	if err := s3UploaderUtil.S3Upload(log, config.OutputS3BucketName, s3KeyPrefix, p.logFilePath); err != nil {

@@ -268,7 +268,7 @@ func parsePluginStateForStartSession(
 		PluginID:                    pluginName,
 		DefaultWorkingDirectory:     parserInfo.DefaultWorkingDir,
 		SessionId:                   sessionId,
-		OutputS3KeyPrefix:           fileutil.BuildS3Path(parserInfo.S3Prefix, pluginName),
+		OutputS3KeyPrefix:           parserInfo.S3Prefix,
 		OutputS3BucketName:          parserInfo.S3Bucket,
 		S3EncryptionEnabled:         parserInfo.S3EncryptionEnabled,
 		OrchestrationDirectory:      fileutil.BuildPath(parserInfo.OrchestrationDir, pluginName),

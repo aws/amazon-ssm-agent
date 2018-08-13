@@ -51,6 +51,7 @@ const (
 	//aws-ssm-agent state and orchestration logs duration for Run Command and Association
 	DefaultAssociationLogsRetentionDurationHours           = 24  // 1 day default retention
 	DefaultRunCommandLogsRetentionDurationHours            = 336 // 14 days default retention
+	DefaultSessionLogsRetentionDurationHours               = 336 // 14 days default retention
 	DefaultStateOrchestrationLogsRetentionDurationHoursMin = 8   // Min retention of 8hrs as some processes may not timeout before this and don't want logs to be deleted before the process completes
 
 	//aws-ssm-agent bookkeeping constants for long running plugins
@@ -76,6 +77,9 @@ const (
 
 	// DefaultDocumentRootDirName is the root directory for storing command states
 	DefaultDocumentRootDirName = "document"
+
+	// DefaultSessionRootDirName is the root directory for storing session manager data
+	DefaultSessionRootDirName = "session"
 
 	// Orchestration Root Dir
 	defaultOrchestrationRootDirName = "orchestration"

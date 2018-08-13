@@ -154,17 +154,26 @@ func DocumentStateDir(instanceID, locationFolder string) string {
 }
 
 // orchestrationDir returns the absolute path of the orchestration directory
-func orchestrationDir(instanceID, orchestrationRootDirName string) string {
-	return path.Join(appconfig.DefaultDataStorePath,
-		instanceID,
-		appconfig.DefaultDocumentRootDirName,
-		orchestrationRootDirName)
+func orchestrationDir(instanceID, orchestrationRootDirName string, folderType string) string {
+	switch folderType {
+	case appconfig.DefaultSessionRootDirName:
+		return path.Join(appconfig.DefaultDataStorePath,
+			instanceID,
+			appconfig.DefaultSessionRootDirName,
+			orchestrationRootDirName)
+	default:
+		return path.Join(appconfig.DefaultDataStorePath,
+			instanceID,
+			appconfig.DefaultDocumentRootDirName,
+			orchestrationRootDirName)
+
+	}
 }
 
 // getOrchestrationDirectoryNames returns list of orchestration directories.
-func getOrchestrationDirectoryNames(log log.T, instanceID, orchestrationRootDirName string, isIntendedFileNameFormat validString) (orchestrationRootDir string, dirNames []string, err error) {
+func getOrchestrationDirectoryNames(log log.T, instanceID, orchestrationRootDirName string, folderType string) (orchestrationRootDir string, dirNames []string, err error) {
 	// Form the path for orchestration logs dir
-	orchestrationRootDir = orchestrationDir(instanceID, orchestrationRootDirName)
+	orchestrationRootDir = orchestrationDir(instanceID, orchestrationRootDirName, folderType)
 
 	if !fileutil.Exists(orchestrationRootDir) {
 		log.Debugf("Orchestration root directory doesn't exist: %v", orchestrationRootDir)
@@ -247,7 +256,7 @@ func isLegacyAssociationDirectory(log log.T, commandOrchestrationPath string) (b
 
 // DeleteOldOrchestrationDirectories deletes expired orchestration directories based on retentionDurationHours and associationRetentionDurationHours.
 func DeleteOldOrchestrationDirectories(log log.T, instanceID, orchestrationRootDirName string, retentionDurationHours int, associationRetentionDurationHours int) {
-	orchestrationRootDir, dirNames, err := getOrchestrationDirectoryNames(log, instanceID, orchestrationRootDirName, isRunCommandDirName)
+	orchestrationRootDir, dirNames, err := getOrchestrationDirectoryNames(log, instanceID, orchestrationRootDirName, appconfig.DefaultDocumentRootDirName)
 	if err != nil {
 		log.Debugf("Failed to get orchestration directories under %v", err)
 		return
@@ -279,6 +288,44 @@ func DeleteOldOrchestrationDirectories(log log.T, instanceID, orchestrationRootD
 			err := fileutil.DeleteDirectory(commandOrchestrationPath)
 			if err != nil {
 				log.Debugf("Error deleting directory %v: %v", commandOrchestrationPath, err)
+				continue
+			}
+
+			// Deletion of both document state and orchestration file was successful
+			deletedCount += 1
+		}
+
+	}
+
+	log.Debugf("Completed orchestration directory clean up")
+}
+
+// DeleteSessionOrchestrationDirectories deletes expired orchestration directories based on session retentionDurationHours.
+func DeleteSessionOrchestrationDirectories(log log.T, instanceID, orchestrationRootDirName string, retentionDurationHours int) {
+	orchestrationRootDir, dirNames, err := getOrchestrationDirectoryNames(log, instanceID, orchestrationRootDirName, appconfig.DefaultSessionRootDirName)
+	if err != nil {
+		log.Debugf("Failed to get orchestration directories under %v", err)
+		return
+	}
+
+	log.Debugf("Cleaning up orchestration directories: %v", orchestrationRootDir)
+
+	deletedCount := 0
+	for _, dirName := range dirNames {
+		if deletedCount >= maxOrchestrationDirectoryDeletions {
+			log.Infof("Reached max number of deletions for orchestration directories: %v", deletedCount)
+			break
+		}
+
+		sessionOrchestrationPath := filepath.Join(orchestrationRootDir, dirName)
+
+		log.Debugf("Checking session orchestration directory: %v", sessionOrchestrationPath)
+		if isOlderThan(log, sessionOrchestrationPath, retentionDurationHours) {
+			log.Debugf("Attempting deletion of session orchestration directory: %v", sessionOrchestrationPath)
+
+			err := fileutil.DeleteDirectory(sessionOrchestrationPath)
+			if err != nil {
+				log.Debugf("Error deleting directory %v: %v", sessionOrchestrationPath, err)
 				continue
 			}
 
