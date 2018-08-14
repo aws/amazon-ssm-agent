@@ -76,7 +76,7 @@ func (p *ShellPlugin) Validate(context context.T,
 	}
 
 	if config.OutputS3BucketName != "" && config.S3EncryptionEnabled {
-		if encrypted := s3Util.IsBucketEncryptedWithKMS(context.Log(), config.OutputS3BucketName); !encrypted {
+		if encrypted := s3Util.IsBucketEncrypted(context.Log(), config.OutputS3BucketName); !encrypted {
 			return errors.New(mgsConfig.S3EncryptionErrorMsg)
 		}
 	}

@@ -196,7 +196,7 @@ func RunPlugins(
 			context.Log().Debugf("Fetching plugin factory for %v from SessionPluginRegistry", pluginName)
 			var sessionPluginRegistry = registry.(SessionPluginRegistry)
 			pluginFactory, pluginHandlerFound = sessionPluginRegistry[pluginName]
-			isKnown, isSupported, _ = isSupportedSessionPlugin(context.Log(), pluginName)
+			isKnown, isSupported = isSupportedSessionPlugin(context.Log(), pluginName)
 
 		default:
 			pluginOutputs[pluginID].Status = contracts.ResultStatusFailed
@@ -557,13 +557,4 @@ func evaluatePreconditions(
 	}
 
 	return isAllowed, unrecognizedPreconditionList
-}
-
-// isSupportedSessionPlugin returns isKnown as true if given session plugin exists,
-func isSupportedSessionPlugin(log log.T, pluginName string) (isKnown bool, isSupported bool, message string) {
-	_, known := allSessionPlugins[pluginName]
-	platformName, _ := platform.PlatformName(log)
-	platformVersion, _ := platform.PlatformVersion(log)
-
-	return known, true, fmt.Sprintf("%s v%s", platformName, platformVersion)
 }

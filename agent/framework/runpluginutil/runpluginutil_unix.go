@@ -32,3 +32,10 @@ func IsPluginSupportedForCurrentPlatform(log log.T, pluginName string) (isKnown 
 
 	return known, true, fmt.Sprintf("%s v%s", platformName, platformVersion)
 }
+
+// isSupportedSessionPlugin returns isKnown as true if given session plugin exists,
+func isSupportedSessionPlugin(log log.T, pluginName string) (isKnown bool, isSupported bool) {
+	_, known := allSessionPlugins[pluginName]
+
+	return known, true
+}

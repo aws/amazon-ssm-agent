@@ -21,6 +21,8 @@ package runpluginutil
 
 import (
 	"fmt"
+	"strconv"
+	"strings"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/log"
@@ -41,4 +43,37 @@ func IsPluginSupportedForCurrentPlatform(log log.T, pluginName string) (isKnown 
 		}
 	}
 	return known, true, fmt.Sprintf("%s v%s", platformName, platformVersion)
+}
+
+// isSupportedSessionPlugin returns isKnown as true if given session plugin exists,
+func isSupportedSessionPlugin(log log.T, pluginName string) (isKnown bool, isSupported bool) {
+	_, known := allSessionPlugins[pluginName]
+	platformVersion, _ := platform.PlatformVersion(log)
+
+	osVersionSplit := strings.Split(platformVersion, ".")
+	if osVersionSplit == nil || len(osVersionSplit) < 2 {
+		log.Error("Error occurred while parsing OS version")
+		return known, false
+	}
+
+	// check if the OS version is 6.1 or higher
+	osMajorVersion, err := strconv.Atoi(osVersionSplit[0])
+	if err != nil {
+		return known, false
+	}
+
+	osMinorVersion, err := strconv.Atoi(osVersionSplit[1])
+	if err != nil {
+		return known, false
+	}
+
+	if osMajorVersion < 6 {
+		return known, false
+	}
+
+	if osMajorVersion == 6 && osMinorVersion < 1 {
+		return known, false
+	}
+
+	return known, true
 }

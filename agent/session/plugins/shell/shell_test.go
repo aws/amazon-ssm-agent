@@ -288,7 +288,7 @@ func (suite *ShellTestSuite) TestValidateS3BucketNotEncrypted() {
 	}
 
 	// When s3 bucket is not encrypted, Validate returns error
-	s3Mock.On("IsBucketEncryptedWithKMS", mock.Anything, testS3BucketName).Return(false)
+	s3Mock.On("IsBucketEncrypted", mock.Anything, testS3BucketName).Return(false)
 	err := suite.plugin.Validate(suite.mockContext, configuration, cwMock, s3Mock)
 	assert.NotNil(suite.T(), err)
 }
@@ -305,7 +305,7 @@ func (suite *ShellTestSuite) TestValidateS3BucketEncrypted() {
 	}
 
 	// When s3 bucket is encrypted, Validate returns nil
-	s3Mock.On("IsBucketEncryptedWithKMS", mock.Anything, testS3BucketName).Return(true)
+	s3Mock.On("IsBucketEncrypted", mock.Anything, testS3BucketName).Return(true)
 	err := suite.plugin.Validate(suite.mockContext, configuration, cwMock, s3Mock)
 	assert.Nil(suite.T(), err)
 }
@@ -322,7 +322,7 @@ func (suite *ShellTestSuite) TestValidateBypassS3BucketEncryptionCheck() {
 	}
 
 	// When s3 bucket is not encrypted but choose to bypass encryption check, Validate returns nil
-	s3Mock.On("IsBucketEncryptedWithKMS", mock.Anything, testS3BucketName).Return(false)
+	s3Mock.On("IsBucketEncrypted", mock.Anything, testS3BucketName).Return(false)
 	err := suite.plugin.Validate(suite.mockContext, configuration, cwMock, s3Mock)
 	assert.Nil(suite.T(), err)
 }

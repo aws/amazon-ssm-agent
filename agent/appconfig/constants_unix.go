@@ -114,7 +114,8 @@ func init() {
 		if _, err := os.Stat("/snap/amazon-ssm-agent/current/ssm-document-worker"); err == nil {
 			DefaultProgramFolder = "/snap/amazon-ssm-agent/current"
 			DefaultDocumentWorker = "/snap/amazon-ssm-agent/current/ssm-document-worker"
-
+			DefaultSessionWorker = "/snap/amazon-ssm-agent/current/ssm-session-worker"
+			DefaultSessionLogger = "/snap/amazon-ssm-agent/current/ssm-session-logger"
 		}
 	}
 }
