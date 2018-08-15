@@ -1,7 +1,7 @@
 # -*-perl-*-
 
 package.Amazon-ssm-agent = {
-    interfaces = (2.2);
+    interfaces = (2.3);
 
     deploy = {
         generic = true;
@@ -14,7 +14,7 @@ package.Amazon-ssm-agent = {
 
     build-system = bgo-wrap-make;
     build-tools = {
-        2.2 = {
+        2.3 = {
             GoLang = 1.0;
             BrazilMakeGo = 1.1;
             RIPStaticConfig = 1.4;
@@ -27,7 +27,7 @@ package.Amazon-ssm-agent = {
     # Use dependencies instead if you intend for these dependencies to
     # be exported to other packages that build against you.
     dependencies = {
-        2.2 = {
+        2.3 = {
             EC2-Windows-EC2ConfigService = 1.0
         };
     };
