@@ -320,38 +320,46 @@ func buildAgentTaskComplete(log log.T, res contracts.DocumentResult, instanceId 
 // formatAgentTaskCompletePayload builds AgentTaskComplete message Payload from the total task result.
 func formatAgentTaskCompletePayload(log log.T,
 	pluginId string,
-	outputs map[string]*contracts.PluginResult,
+	pluginResults map[string]*contracts.PluginResult,
 	sessionId string,
 	instanceId string,
 	topic string) mgsContracts.AgentTaskCompletePayload {
 
-	if len(outputs) < 1 {
+	if len(pluginResults) < 1 {
 		log.Error("Error in FormatAgentTaskCompletePayload, the outputs map is empty!")
 		return mgsContracts.AgentTaskCompletePayload{}
 	}
 
-	// get plugin output
-	pluginOutput := outputs[pluginId]
+	// get plugin result
+	pluginResult := pluginResults[pluginId]
 
-	if pluginOutput == nil {
+	if pluginResult == nil {
 		log.Error("Error in FormatAgentTaskCompletePayload, the pluginOutput is nil!")
 		return mgsContracts.AgentTaskCompletePayload{}
 	}
 
-	output := ""
-	if pluginOutput.Output != nil {
-		output = pluginOutput.Output.(string)
+	sessionPluginResultOutput := mgsContracts.SessionPluginResultOutput{}
+	if err := pluginResult.Error; err != nil {
+		sessionPluginResultOutput.Output = err.Error()
+	} else if pluginResult.Output != nil {
+		if err = jsonutil.Remarshal(pluginResult.Output, &sessionPluginResultOutput); err != nil {
+			sessionPluginResultOutput.Output = fmt.Sprintf("%v", pluginResult.Output)
+		}
 	}
 
 	payload := mgsContracts.AgentTaskCompletePayload{
 		SchemaVersion:    1,
 		TaskId:           sessionId,
 		Topic:            topic,
-		FinalTaskStatus:  string(pluginOutput.Status),
+		FinalTaskStatus:  string(pluginResult.Status),
 		IsRoutingFailure: false,
 		AwsAccountId:     "",
 		InstanceId:       instanceId,
-		Output:           output,
+		Output:           sessionPluginResultOutput.Output,
+		S3Bucket:         sessionPluginResultOutput.S3Bucket,
+		S3UrlSuffix:      sessionPluginResultOutput.S3UrlSuffix,
+		CwlGroup:         sessionPluginResultOutput.CwlGroup,
+		CwlStream:        sessionPluginResultOutput.CwlStream,
 	}
 	return payload
 }

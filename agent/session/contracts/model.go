@@ -182,6 +182,19 @@ type AgentTaskCompletePayload struct {
 	AwsAccountId     string `json:"AwsAccountId"`
 	InstanceId       string `json:"InstanceId"`
 	Output           string `json:"Output"`
+	S3Bucket         string `json:"S3Bucket"`
+	S3UrlSuffix      string `json:"S3UrlSuffix"`
+	CwlGroup         string `json:"CwlGroup"`
+	CwlStream        string `json:"CwlStream"`
+}
+
+// SessionPluginResultOutput represents PluginResult output sent to MGS as part of AgentTaskComplete message
+type SessionPluginResultOutput struct {
+	Output      string
+	S3Bucket    string
+	S3UrlSuffix string
+	CwlGroup    string
+	CwlStream   string
 }
 
 type PayloadType uint32

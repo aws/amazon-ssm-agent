@@ -37,9 +37,14 @@ import (
 )
 
 var (
-	instanceId = "i-1234"
-	messageId  = "2b196342-d7d4-436e-8f09-3883a1116ac3"
-	status     = contracts.ResultStatusInProgress
+	instanceId  = "i-1234"
+	messageId   = "2b196342-d7d4-436e-8f09-3883a1116ac3"
+	status      = contracts.ResultStatusInProgress
+	errorMsg    = "plugin failed"
+	s3Bucket    = "s3Bucket"
+	s3UrlSuffix = "s3UrlSuffix"
+	cwlGroup    = "cwlGroup"
+	cwlStream   = "cwlStream"
 )
 
 type SessionTestSuite struct {
@@ -162,6 +167,98 @@ func (suite *SessionTestSuite) TestBuildAgentTaskComplete() {
 	assert.Equal(suite.T(), instanceId, payload.InstanceId)
 	assert.Equal(suite.T(), string(status), payload.FinalTaskStatus)
 	assert.Equal(suite.T(), messageId, payload.TaskId)
+	assert.Equal(suite.T(), "", payload.Output)
+	assert.Equal(suite.T(), "", payload.S3Bucket)
+	assert.Equal(suite.T(), "", payload.S3UrlSuffix)
+	assert.Equal(suite.T(), "", payload.CwlGroup)
+	assert.Equal(suite.T(), "", payload.CwlStream)
+}
+
+// Testing buildAgentTaskComplete.
+func (suite *SessionTestSuite) TestBuildAgentTaskCompleteWhenPluginResultOutputHasError() {
+	log := log.NewMockLog()
+	pluginResults := make(map[string]*contracts.PluginResult)
+	pluginResult := contracts.PluginResult{
+		PluginName: "Standard_Stream",
+		Status:     contracts.ResultStatusFailed,
+		Output:     errorMsg,
+	}
+	pluginResults["Standard_Stream"] = &pluginResult
+
+	result := contracts.DocumentResult{
+		Status:          status,
+		PluginResults:   pluginResults,
+		LastPlugin:      "Standard_Stream",
+		MessageID:       messageId,
+		AssociationID:   "",
+		NPlugins:        1,
+		DocumentName:    "documentName",
+		DocumentVersion: "1",
+	}
+	msg, err := buildAgentTaskComplete(log, result, instanceId)
+	assert.Nil(suite.T(), err)
+
+	agentMessage := &mgsContracts.AgentMessage{}
+	agentMessage.Deserialize(log, msg)
+	assert.Equal(suite.T(), mgsContracts.TaskCompleteMessage, agentMessage.MessageType)
+
+	payload := &mgsContracts.AgentTaskCompletePayload{}
+	json.Unmarshal(agentMessage.Payload, payload)
+	assert.Equal(suite.T(), instanceId, payload.InstanceId)
+	assert.Equal(suite.T(), string(contracts.ResultStatusFailed), payload.FinalTaskStatus)
+	assert.Equal(suite.T(), messageId, payload.TaskId)
+	assert.Equal(suite.T(), errorMsg, payload.Output)
+	assert.Equal(suite.T(), "", payload.S3Bucket)
+	assert.Equal(suite.T(), "", payload.S3UrlSuffix)
+	assert.Equal(suite.T(), "", payload.CwlGroup)
+	assert.Equal(suite.T(), "", payload.CwlStream)
+}
+
+// Testing buildAgentTaskComplete.
+func (suite *SessionTestSuite) TestBuildAgentTaskCompleteWhenPluginResultOutputHasS3AndCWInfo() {
+	log := log.NewMockLog()
+	sessionPluginResultOutput := mgsContracts.SessionPluginResultOutput{
+		Output:      errorMsg,
+		S3Bucket:    s3Bucket,
+		S3UrlSuffix: s3UrlSuffix,
+		CwlGroup:    cwlGroup,
+		CwlStream:   cwlStream,
+	}
+	pluginResults := make(map[string]*contracts.PluginResult)
+	pluginResult := contracts.PluginResult{
+		PluginName: "Standard_Stream",
+		Status:     contracts.ResultStatusSuccess,
+		Output:     sessionPluginResultOutput,
+	}
+	pluginResults["Standard_Stream"] = &pluginResult
+
+	result := contracts.DocumentResult{
+		Status:          status,
+		PluginResults:   pluginResults,
+		LastPlugin:      "Standard_Stream",
+		MessageID:       messageId,
+		AssociationID:   "",
+		NPlugins:        1,
+		DocumentName:    "documentName",
+		DocumentVersion: "1",
+	}
+	msg, err := buildAgentTaskComplete(log, result, instanceId)
+	assert.Nil(suite.T(), err)
+
+	agentMessage := &mgsContracts.AgentMessage{}
+	agentMessage.Deserialize(log, msg)
+	assert.Equal(suite.T(), mgsContracts.TaskCompleteMessage, agentMessage.MessageType)
+
+	payload := &mgsContracts.AgentTaskCompletePayload{}
+	json.Unmarshal(agentMessage.Payload, payload)
+	assert.Equal(suite.T(), instanceId, payload.InstanceId)
+	assert.Equal(suite.T(), string(contracts.ResultStatusSuccess), payload.FinalTaskStatus)
+	assert.Equal(suite.T(), messageId, payload.TaskId)
+	assert.Equal(suite.T(), errorMsg, payload.Output)
+	assert.Equal(suite.T(), s3Bucket, payload.S3Bucket)
+	assert.Equal(suite.T(), s3UrlSuffix, payload.S3UrlSuffix)
+	assert.Equal(suite.T(), cwlGroup, payload.CwlGroup)
+	assert.Equal(suite.T(), cwlStream, payload.CwlStream)
 }
 
 func (suite *SessionTestSuite) TestBuildAgentTaskCompleteWhenPluginIdIsEmpty() {

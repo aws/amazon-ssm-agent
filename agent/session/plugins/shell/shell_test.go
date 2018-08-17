@@ -52,6 +52,8 @@ type ShellTestSuite struct {
 	mockCancelFlag  *task.MockCancelFlag
 	mockDataChannel *dataChannelMock.IDataChannel
 	mockIohandler   *iohandlermocks.MockIOHandler
+	mockCWL         *cloudwatchlogspublisher_mock.CloudWatchLogsServiceMock
+	mockS3          *s3util.MockS3Uploader
 	stdin           *os.File
 	stdout          *os.File
 	plugin          runpluginutil.SessionPlugin
@@ -61,12 +63,17 @@ func (suite *ShellTestSuite) SetupTest() {
 	mockContext := context.NewMockDefault()
 	mockCancelFlag := &task.MockCancelFlag{}
 	mockDataChannel := &dataChannelMock.IDataChannel{}
+	mockCWL := new(cloudwatchlogspublisher_mock.CloudWatchLogsServiceMock)
+	mockS3 := new(s3util.MockS3Uploader)
+	mockIohandler := new(iohandlermocks.MockIOHandler)
 
 	suite.mockContext = mockContext
 	suite.mockCancelFlag = mockCancelFlag
 	suite.mockLog = mockLog
 	suite.mockDataChannel = mockDataChannel
-	suite.mockIohandler = new(iohandlermocks.MockIOHandler)
+	suite.mockIohandler = mockIohandler
+	suite.mockCWL = mockCWL
+	suite.mockS3 = mockS3
 	stdout, stdin, _ := os.Pipe()
 	suite.stdin = stdin
 	suite.stdout = stdout
@@ -132,6 +139,7 @@ func (suite *ShellTestSuite) TestExecute() {
 	suite.mockCancelFlag.On("Wait").Return(task.Completed)
 	suite.mockIohandler.On("SetExitCode", 0).Return(nil)
 	suite.mockIohandler.On("SetStatus", contracts.ResultStatusSuccess).Return()
+	suite.mockIohandler.On("SetOutput", mock.Anything).Return()
 
 	stdout, stdin, _ := os.Pipe()
 	stdin.Write(payload)
@@ -222,9 +230,6 @@ func getAgentMessage(payloadType uint32, payload []byte) *mgsContracts.AgentMess
 }
 
 func (suite *ShellTestSuite) TestValidateCWLogGroupNotEncrypted() {
-	cwMock := new(cloudwatchlogspublisher_mock.CloudWatchLogsServiceMock)
-	s3Mock := new(s3util.MockS3Uploader)
-
 	testCwLogGroupName := "testCW"
 	configuration := contracts.Configuration{
 		OutputS3BucketName:          "",
@@ -234,8 +239,8 @@ func (suite *ShellTestSuite) TestValidateCWLogGroupNotEncrypted() {
 	}
 
 	// When cw log group is not encrypted, Validate returns error
-	cwMock.On("IsLogGroupEncryptedWithKMS", mock.Anything, testCwLogGroupName).Return(false)
-	err := suite.plugin.Validate(suite.mockContext, configuration, cwMock, s3Mock)
+	suite.mockCWL.On("IsLogGroupEncryptedWithKMS", mock.Anything, testCwLogGroupName).Return(false)
+	err := suite.plugin.Validate(suite.mockContext, configuration, suite.mockCWL, suite.mockS3)
 	assert.NotNil(suite.T(), err)
 }
 
@@ -258,9 +263,6 @@ func (suite *ShellTestSuite) TestValidateCWLogGroupEncrypted() {
 }
 
 func (suite *ShellTestSuite) TestValidateBypassCWLogGroupEncryptionCheck() {
-	cwMock := new(cloudwatchlogspublisher_mock.CloudWatchLogsServiceMock)
-	s3Mock := new(s3util.MockS3Uploader)
-
 	testCwLogGroupName := "testCW"
 	configuration := contracts.Configuration{
 		OutputS3BucketName:          "",
@@ -270,16 +272,13 @@ func (suite *ShellTestSuite) TestValidateBypassCWLogGroupEncryptionCheck() {
 	}
 
 	// When cw log group is not encrypted but we choose to bypass encryption check, Validate returns true
-	cwMock.On("IsLogGroupEncryptedWithKMS", mock.Anything, testCwLogGroupName).Return(false)
-	cwMock.On("CreateLogStream", mock.Anything, testCwLogGroupName, mock.Anything).Return(nil)
-	err := suite.plugin.Validate(suite.mockContext, configuration, cwMock, s3Mock)
+	suite.mockCWL.On("IsLogGroupEncryptedWithKMS", mock.Anything, testCwLogGroupName).Return(false)
+	suite.mockCWL.On("CreateLogStream", mock.Anything, testCwLogGroupName, mock.Anything).Return(nil)
+	err := suite.plugin.Validate(suite.mockContext, configuration, suite.mockCWL, suite.mockS3)
 	assert.Nil(suite.T(), err)
 }
 
 func (suite *ShellTestSuite) TestValidateS3BucketNotEncrypted() {
-	cwMock := new(cloudwatchlogspublisher_mock.CloudWatchLogsServiceMock)
-	s3Mock := new(s3util.MockS3Uploader)
-
 	testS3BucketName := "testS3"
 	configuration := contracts.Configuration{
 		OutputS3BucketName:  testS3BucketName,
@@ -288,15 +287,12 @@ func (suite *ShellTestSuite) TestValidateS3BucketNotEncrypted() {
 	}
 
 	// When s3 bucket is not encrypted, Validate returns error
-	s3Mock.On("IsBucketEncrypted", mock.Anything, testS3BucketName).Return(false)
-	err := suite.plugin.Validate(suite.mockContext, configuration, cwMock, s3Mock)
+	suite.mockS3.On("IsBucketEncrypted", mock.Anything, testS3BucketName).Return(false)
+	err := suite.plugin.Validate(suite.mockContext, configuration, suite.mockCWL, suite.mockS3)
 	assert.NotNil(suite.T(), err)
 }
 
 func (suite *ShellTestSuite) TestValidateS3BucketEncrypted() {
-	cwMock := new(cloudwatchlogspublisher_mock.CloudWatchLogsServiceMock)
-	s3Mock := new(s3util.MockS3Uploader)
-
 	testS3BucketName := "testS3"
 	configuration := contracts.Configuration{
 		OutputS3BucketName:  testS3BucketName,
@@ -305,15 +301,12 @@ func (suite *ShellTestSuite) TestValidateS3BucketEncrypted() {
 	}
 
 	// When s3 bucket is encrypted, Validate returns nil
-	s3Mock.On("IsBucketEncrypted", mock.Anything, testS3BucketName).Return(true)
-	err := suite.plugin.Validate(suite.mockContext, configuration, cwMock, s3Mock)
+	suite.mockS3.On("IsBucketEncrypted", mock.Anything, testS3BucketName).Return(true)
+	err := suite.plugin.Validate(suite.mockContext, configuration, suite.mockCWL, suite.mockS3)
 	assert.Nil(suite.T(), err)
 }
 
 func (suite *ShellTestSuite) TestValidateBypassS3BucketEncryptionCheck() {
-	cwMock := new(cloudwatchlogspublisher_mock.CloudWatchLogsServiceMock)
-	s3Mock := new(s3util.MockS3Uploader)
-
 	testS3BucketName := "testS3"
 	configuration := contracts.Configuration{
 		OutputS3BucketName:  testS3BucketName,
@@ -322,7 +315,7 @@ func (suite *ShellTestSuite) TestValidateBypassS3BucketEncryptionCheck() {
 	}
 
 	// When s3 bucket is not encrypted but choose to bypass encryption check, Validate returns nil
-	s3Mock.On("IsBucketEncrypted", mock.Anything, testS3BucketName).Return(false)
-	err := suite.plugin.Validate(suite.mockContext, configuration, cwMock, s3Mock)
+	suite.mockS3.On("IsBucketEncrypted", mock.Anything, testS3BucketName).Return(false)
+	err := suite.plugin.Validate(suite.mockContext, configuration, suite.mockCWL, suite.mockS3)
 	assert.Nil(suite.T(), err)
 }

@@ -143,6 +143,7 @@ func (p *ShellPlugin) execute(context context.T,
 
 	log := context.Log()
 	var err error
+	sessionPluginResultOutput := mgsContracts.SessionPluginResultOutput{}
 
 	var cwl cloudwatchlogsinterface.ICloudWatchLogsService
 	var s3Util s3util.IAmazonS3Util
@@ -155,14 +156,15 @@ func (p *ShellPlugin) execute(context context.T,
 	if err = p.Validate(context, config, cwl, s3Util); err != nil {
 		output.SetExitCode(appconfig.ErrorExitCode)
 		output.SetStatus(agentContracts.ResultStatusFailed)
-		output.SetOutput(err.Error())
+		sessionPluginResultOutput.Output = err.Error()
+		output.SetOutput(sessionPluginResultOutput)
 		log.Errorf("Encryption validation failed, err: %s", err)
 		return
 	}
 
 	p.stdin, p.stdout, err = startPty(log, true)
 	if err != nil {
-		errorString := fmt.Errorf("unable to start pty: %s", err)
+		errorString := fmt.Errorf("Unable to start shell: %s", err)
 		log.Error(errorString)
 		output.MarkAsFailed(errorString)
 		return
@@ -215,6 +217,7 @@ func (p *ShellPlugin) execute(context context.T,
 	}
 
 	// Generate log data only if customer has enabled logging.
+	// TODO: Move below logic of uploading logs to S3 and cloudwatch to IOHandler
 	if config.OutputS3BucketName != "" || config.CloudWatchLogGroup != "" {
 		log.Debugf("Creating log file for shell session id %s at %s", config.SessionId, p.logFilePath)
 		if err = p.generateLogData(log); err != nil {
@@ -226,21 +229,26 @@ func (p *ShellPlugin) execute(context context.T,
 
 		log.Debug("Starting S3 logging")
 		if config.OutputS3BucketName != "" {
-			p.uploadShellSessionLogsToS3(log, s3Util, config, logFileName)
+			s3KeyPrefix := fileutil.BuildS3Path(config.OutputS3KeyPrefix, logFileName)
+			p.uploadShellSessionLogsToS3(log, s3Util, config, s3KeyPrefix)
+			sessionPluginResultOutput.S3Bucket = config.OutputS3BucketName
+			sessionPluginResultOutput.S3UrlSuffix = s3KeyPrefix
 		}
 
 		log.Debug("Starting CloudWatch logging")
 		if config.CloudWatchLogGroup != "" {
 			cwl.StreamData(log, config.CloudWatchLogGroup, config.SessionId, p.logFilePath, true, false)
+			sessionPluginResultOutput.CwlGroup = config.CloudWatchLogGroup
+			sessionPluginResultOutput.CwlStream = config.SessionId
 		}
 	}
+	output.SetOutput(sessionPluginResultOutput)
 
 	log.Debug("Shell session execution complete")
 }
 
 // uploadShellSessionLogsToS3 uploads shell session logs to S3 bucket specified.
-func (p *ShellPlugin) uploadShellSessionLogsToS3(log log.T, s3UploaderUtil s3util.IAmazonS3Util, config agentContracts.Configuration, s3FileName string) {
-	s3KeyPrefix := fileutil.BuildS3Path(config.OutputS3KeyPrefix, s3FileName)
+func (p *ShellPlugin) uploadShellSessionLogsToS3(log log.T, s3UploaderUtil s3util.IAmazonS3Util, config agentContracts.Configuration, s3KeyPrefix string) {
 	log.Debugf("Preparing to upload session logs to S3 bucket %s and prefix %s", config.OutputS3BucketName, s3KeyPrefix)
 
 	if err := s3UploaderUtil.S3Upload(log, config.OutputS3BucketName, s3KeyPrefix, p.logFilePath); err != nil {
