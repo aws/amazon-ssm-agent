@@ -68,7 +68,7 @@ func Refresh(log log.T, assocs []*model.InstanceAssociation) {
 
 	complianceModel.RefreshAssociationComplianceItems(associations)
 
-	log.Infof("Schedule manager refreshed with %v associations, %v new assocations associated", len(associations), numberOfNewAssoc)
+	log.Infof("Schedule manager refreshed with %v associations, %v new associations associated", len(associations), numberOfNewAssoc)
 }
 
 // LoadNextScheduledAssociation returns next scheduled association
