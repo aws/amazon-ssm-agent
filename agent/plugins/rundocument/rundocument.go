@@ -184,8 +184,8 @@ func (p *Plugin) runDocument(context context.T, input *RunDocumentPluginInput, c
 			// separating the append so that the output is on a new line
 			output.AppendErrorf("%v", pluginOut.StandardError)
 		}
-		if pluginOut.Error != nil {
-			output.MarkAsFailed(pluginOut.Error)
+		if pluginOut.Error != "" {
+			output.MarkAsFailed(errors.New(pluginOut.Error))
 		}
 		output.SetStatus(contracts.MergeResultStatus(output.GetStatus(), pluginOut.Status))
 	}

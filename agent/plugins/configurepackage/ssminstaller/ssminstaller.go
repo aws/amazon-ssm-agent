@@ -16,6 +16,7 @@
 package ssminstaller
 
 import (
+	"errors"
 	"fmt"
 	"os"
 	"path/filepath"
@@ -324,8 +325,8 @@ func (inst *Installer) executeDocument(
 		if pluginOut.StandardError != "" {
 			exectrace.AppendErrorf("%v errors: %v", actionName, pluginOut.StandardError)
 		}
-		if pluginOut.Error != nil {
-			exectrace.WithError(pluginOut.Error)
+		if pluginOut.Error != "" {
+			exectrace.WithError(errors.New(pluginOut.Error))
 			output.MarkAsFailed(nil, nil)
 		}
 		output.SetStatus(contracts.MergeResultStatus(output.GetStatus(), pluginOut.Status))

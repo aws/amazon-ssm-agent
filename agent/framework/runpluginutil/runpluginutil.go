@@ -201,7 +201,7 @@ func RunPlugins(
 		default:
 			pluginOutputs[pluginID].Status = contracts.ResultStatusFailed
 			pluginOutputs[pluginID].Code = 1
-			pluginOutputs[pluginID].Error = errors.New("Invalid registry type. Must be either worker PluginRegistry or SessionPluginRegistry")
+			pluginOutputs[pluginID].Error = "Invalid registry type. Must be either worker PluginRegistry or SessionPluginRegistry"
 			context.Log().Error(pluginOutputs[pluginID].Error)
 			resChan <- *pluginOutputs[pluginID]
 		}
@@ -235,12 +235,12 @@ func RunPlugins(
 		case failStep:
 			err := fmt.Errorf(logMessage)
 			pluginOutputs[pluginID].Status = contracts.ResultStatusFailed
-			pluginOutputs[pluginID].Error = err
+			pluginOutputs[pluginID].Error = err.Error()
 			context.Log().Error(err)
 		default:
 			err := fmt.Errorf("Unknown error, Operation: %s, Plugin name: %s", operation, pluginName)
 			pluginOutputs[pluginID].Status = contracts.ResultStatusFailed
-			pluginOutputs[pluginID].Error = err
+			pluginOutputs[pluginID].Error = err.Error()
 			context.Log().Error(err)
 		}
 
@@ -283,7 +283,7 @@ func runPlugin(
 		if err := recover(); err != nil {
 			res.Status = contracts.ResultStatusFailed
 			res.Code = 1
-			res.Error = fmt.Errorf("Plugin crashed with message %v!", err)
+			res.Error = fmt.Errorf("Plugin crashed with message %v!", err).Error()
 			log.Error(res.Error)
 		}
 	}()
@@ -307,7 +307,7 @@ func runPlugin(
 	if err != nil {
 		res.Status = contracts.ResultStatusFailed
 		res.Code = 1
-		res.Error = fmt.Errorf("failed to create plugin %v!", err)
+		res.Error = fmt.Errorf("failed to create plugin %v!", err).Error()
 		log.Error(res.Error)
 		return
 	}

@@ -339,10 +339,10 @@ func formatAgentTaskCompletePayload(log log.T,
 	}
 
 	sessionPluginResultOutput := mgsContracts.SessionPluginResultOutput{}
-	if err := pluginResult.Error; err != nil {
-		sessionPluginResultOutput.Output = err.Error()
+	if pluginResult.Error != "" {
+		sessionPluginResultOutput.Output = pluginResult.Error
 	} else if pluginResult.Output != nil {
-		if err = jsonutil.Remarshal(pluginResult.Output, &sessionPluginResultOutput); err != nil {
+		if err := jsonutil.Remarshal(pluginResult.Output, &sessionPluginResultOutput); err != nil {
 			sessionPluginResultOutput.Output = fmt.Sprintf("%v", pluginResult.Output)
 		}
 	}

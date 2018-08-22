@@ -75,7 +75,7 @@ func TestParseDocument_ValidRuntimeConfig(t *testing.T) {
 	assert.Equal(t, 1, len(pluginsInfo))
 
 	pluginInfoTest := pluginsInfo[0]
-	assert.Nil(t, pluginInfoTest.Result.Error)
+	assert.Equal(t, "", pluginInfoTest.Result.Error)
 	assert.Equal(t, filepath.Join(testOrchDir, "awsrunShellScript"), pluginInfoTest.Configuration.OrchestrationDirectory)
 	assert.Equal(t, testS3Bucket, pluginInfoTest.Configuration.OutputS3BucketName)
 	assert.Equal(t, filepath.Join(testS3Prefix, "awsrunShellScript"), pluginInfoTest.Configuration.OutputS3KeyPrefix)
@@ -108,7 +108,7 @@ func TestParseDocument_ValidMainSteps(t *testing.T) {
 	assert.Equal(t, 1, len(pluginsInfo))
 
 	pluginInfoTest := pluginsInfo[0]
-	assert.Nil(t, pluginInfoTest.Result.Error)
+	assert.Equal(t, "", pluginInfoTest.Result.Error)
 	assert.Equal(t, filepath.Join(testOrchDir, "test"), pluginInfoTest.Configuration.OrchestrationDirectory)
 	assert.Equal(t, testS3Bucket, pluginInfoTest.Configuration.OutputS3BucketName)
 	assert.Equal(t, filepath.Join(testS3Prefix, "awsrunShellScript"), pluginInfoTest.Configuration.OutputS3KeyPrefix)
@@ -295,7 +295,7 @@ func TestParseDocument_ValidParameters(t *testing.T) {
 	assert.Equal(t, 1, len(pluginsInfo))
 
 	pluginInfoTest := pluginsInfo[0]
-	assert.Nil(t, pluginInfoTest.Result.Error)
+	assert.Equal(t, "", pluginInfoTest.Result.Error)
 	assert.Equal(t, filepath.Join(testOrchDir, "awsrunPowerShellScript"), pluginInfoTest.Configuration.OrchestrationDirectory)
 	assert.Equal(t, testS3Bucket, pluginInfoTest.Configuration.OutputS3BucketName)
 	assert.Equal(t, filepath.Join(testS3Prefix, "awsrunPowerShellScript"), pluginInfoTest.Configuration.OutputS3KeyPrefix)
@@ -332,7 +332,7 @@ func TestParseDocument_ReplaceDefaultParameters(t *testing.T) {
 	assert.Equal(t, 1, len(pluginsInfo))
 
 	pluginInfoTest := pluginsInfo[0]
-	assert.Nil(t, pluginInfoTest.Result.Error)
+	assert.Equal(t, "", pluginInfoTest.Result.Error)
 	assert.Equal(t, filepath.Join(testOrchDir, "example"), pluginInfoTest.Configuration.OrchestrationDirectory)
 	assert.Equal(t, testS3Bucket, pluginInfoTest.Configuration.OutputS3BucketName)
 	assert.Equal(t, filepath.Join(testS3Prefix, "awsrunPowerShellScript"), pluginInfoTest.Configuration.OutputS3KeyPrefix)

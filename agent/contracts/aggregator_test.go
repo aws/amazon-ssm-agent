@@ -52,9 +52,9 @@ func TestPrepareRuntimeStatus(t *testing.T) {
 	}
 
 	// test that there is a runtime status on error
-	pluginResult := PluginResult{Error: fmt.Errorf("Plugin failed with error code 1")}
+	pluginResult := PluginResult{Error: fmt.Sprintf("Plugin failed with error code 1")}
 	runtimeStatus := prepareRuntimeStatus(logger, pluginResult)
-	assert.NotNil(t, runtimeStatus.Output)
+	assert.Equal(t, pluginResult.Error, runtimeStatus.Output)
 	return
 }
 

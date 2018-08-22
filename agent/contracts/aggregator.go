@@ -27,10 +27,10 @@ import (
 func prepareRuntimeStatus(log log.T, pluginResult PluginResult) PluginRuntimeStatus {
 	var resultAsString string
 
-	if err := pluginResult.Error; err == nil {
+	if pluginResult.Error == "" {
 		resultAsString = fmt.Sprintf("%v", pluginResult.Output)
 	} else {
-		resultAsString = err.Error()
+		resultAsString = pluginResult.Error
 	}
 
 	runtimeStatus := PluginRuntimeStatus{

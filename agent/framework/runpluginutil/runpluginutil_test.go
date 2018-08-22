@@ -267,7 +267,7 @@ func TestRunPluginsWithMissingPluginHandler(t *testing.T) {
 			Configuration: config,
 		}
 
-		pluginError := fmt.Errorf("Plugin with name %s not found. Step name: %s", name, name)
+		pluginError := fmt.Sprintf("Plugin with name %s not found. Step name: %s", name, name)
 
 		pluginResults[name] = &contracts.PluginResult{
 			PluginName:     name,
@@ -968,7 +968,7 @@ func TestRunPluginsWithMoreThanOnePrecondition(t *testing.T) {
 			Configuration: config,
 		}
 
-		pluginError := fmt.Errorf(
+		pluginError := fmt.Sprintf(
 			"Unrecognized precondition(s): '\"foo\": [operand1 operand2]', please update agent to latest version. Step name: %s",
 			name)
 
@@ -1063,7 +1063,7 @@ func TestRunPluginsWithUnrecognizedPreconditionOperator(t *testing.T) {
 			Configuration: config,
 		}
 
-		pluginError := fmt.Errorf(
+		pluginError := fmt.Sprintf(
 			"Unrecognized precondition(s): '\"foo\": [platformType Linux]', please update agent to latest version. Step name: %s",
 			name)
 
@@ -1159,7 +1159,7 @@ func TestRunPluginsWithUnrecognizedPreconditionOperand(t *testing.T) {
 			Configuration: config,
 		}
 
-		pluginError := fmt.Errorf(
+		pluginError := fmt.Sprintf(
 			"Unrecognized precondition(s): '\"StringEquals\": [foo Linux]', please update agent to latest version. Step name: %s",
 			name)
 
@@ -1256,7 +1256,7 @@ func TestRunPluginsWithUnrecognizedPreconditionDuplicateVariable(t *testing.T) {
 			Configuration: config,
 		}
 
-		pluginError := fmt.Errorf(
+		pluginError := fmt.Sprintf(
 			"Unrecognized precondition(s): '\"StringEquals\": [platformType platformType]', please update agent to latest version. Step name: %s",
 			name)
 
@@ -1353,7 +1353,7 @@ func TestRunPluginsWithMoreThanTwoPreconditionOperands(t *testing.T) {
 			Configuration: config,
 		}
 
-		pluginError := fmt.Errorf(
+		pluginError := fmt.Sprintf(
 			"Unrecognized precondition(s): '\"StringEquals\": [platformType Linux foo]', please update agent to latest version. Step name: %s",
 			name)
 
@@ -1453,7 +1453,7 @@ func TestRunPluginsWithUnknownPlugin(t *testing.T) {
 		}
 
 		if name == testUnknownPlugin {
-			pluginError := fmt.Errorf(
+			pluginError := fmt.Sprintf(
 				"Plugin with name %s is not supported by this version of ssm agent, please update to latest version. Step name: %s",
 				name,
 				name)
