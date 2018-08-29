@@ -517,7 +517,7 @@ func (service *CloudWatchLogsService) getNextMessage(log log.T, absoluteFilePath
 	// Scan the next set of lines to upload.
 	for scanner.Scan() {
 		if len(message) == 0 {
-			message = scanner.Bytes()
+			message = append(message, scanner.Bytes()...)
 		} else if (len(message) + len(scanner.Bytes())) > MessageLengthThresholdInBytes {
 			event := &cloudwatchlogs.InputLogEvent{
 				Message:   aws.String(string(message)),
@@ -528,7 +528,8 @@ func (service *CloudWatchLogsService) getNextMessage(log log.T, absoluteFilePath
 				return
 			}
 
-			message = scanner.Bytes()
+			message = nil
+			message = append(message, scanner.Bytes()...)
 		} else {
 			message = append(append(message, []byte(NewLineCharacter)...), scanner.Bytes()...)
 		}
