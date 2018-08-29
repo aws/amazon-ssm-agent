@@ -32,6 +32,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/hibernation"
 	logger "github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/rebooter"
+	"github.com/aws/amazon-ssm-agent/agent/ssm"
 )
 
 const (
@@ -60,7 +61,7 @@ func start(log logger.T, instanceIDPtr *string, regionPtr *string) (ssmAgent age
 	context := context.Default(log, config)
 
 	//Initializing the health module to send empty health pings to the service.
-	healthModule := health.NewHealthCheck(context)
+	healthModule := health.NewHealthCheck(context, ssm.NewService())
 	hibernateState := hibernation.NewHibernateMode(healthModule, context)
 
 	ssmAgent = agent.NewSSMAgent(context, healthModule, hibernateState)
