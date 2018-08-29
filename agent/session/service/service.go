@@ -20,6 +20,7 @@ import (
 	"encoding/xml"
 	"errors"
 	"fmt"
+	"io/ioutil"
 	"net"
 	"net/http"
 	"net/url"
@@ -38,6 +39,11 @@ import (
 	"github.com/aws/aws-sdk-go/aws/credentials/ec2rolecreds"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/aws/signer/v4"
+)
+
+const (
+	mgsClientTimeout      = time.Second * 15
+	httpStatusCodeCreated = 201
 )
 
 // Service is an interface to the message gateway service operation v1.
@@ -111,21 +117,30 @@ var makeRestcall = func(request []byte, methodType string, url string, region st
 	}
 
 	httpRequest.Header.Set("Content-Type", "application/json")
-	signer.Sign(httpRequest, bytes.NewReader(request), mgsconfig.ServiceName, region, time.Now())
+	_, err = signer.Sign(httpRequest, bytes.NewReader(request), mgsconfig.ServiceName, region, time.Now())
+	if err != nil {
+		return nil, fmt.Errorf("failed to sign the request: %s", err)
+	}
 
-	client := &http.Client{}
+	client := &http.Client{
+		Timeout: mgsClientTimeout,
+	}
 
 	resp, err := client.Do(httpRequest)
-	if resp != nil {
-		buf := new(bytes.Buffer)
-		_, err = buf.ReadFrom(resp.Body)
-		if err != nil {
-			return nil, fmt.Errorf("failed to read bytes from http response: %s", err)
-		}
-
-		return buf.Bytes(), nil
+	if err != nil {
+		return nil, fmt.Errorf("failed to make http client call: %s", err)
 	}
-	return nil, nil
+
+	defer resp.Body.Close()
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return nil, fmt.Errorf("failed to read bytes from http response: %s", err)
+	}
+	if resp.StatusCode == httpStatusCodeCreated {
+		return body, nil
+	} else {
+		return nil, fmt.Errorf("unexpected response from the service %s", body)
+	}
 }
 
 // getMGSBaseUrl gets the base url of mgs:
@@ -202,13 +217,12 @@ func (mgsService *MessageGatewayService) CreateControlChannel(log log.T, createC
 
 	var output CreateControlChannelOutput
 	if resp != nil {
-		err = xml.Unmarshal(resp, &output)
-		if err != nil {
+		if err = xml.Unmarshal(resp, &output); err != nil {
 			return nil, fmt.Errorf("failed to unmarshal createControlChannel response: %s", err)
 		}
+		return &output, err
 	}
-
-	return &output, err
+	return nil, err
 }
 
 // CreateDataChannel calls the CreateDataChannel MGS API
@@ -235,11 +249,11 @@ func (mgsService *MessageGatewayService) CreateDataChannel(log log.T, createData
 
 	var output CreateDataChannelOutput
 	if resp != nil {
-		err = xml.Unmarshal(resp, &output)
-		if err != nil {
+		if err = xml.Unmarshal(resp, &output); err != nil {
 			return nil, fmt.Errorf("failed to unmarshal createDataChannel response: %s", err)
 		}
+		return &output, err
 	}
 
-	return &output, err
+	return nil, err
 }
