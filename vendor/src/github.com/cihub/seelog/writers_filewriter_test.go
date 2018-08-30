@@ -41,30 +41,33 @@ var bytesFileTest = []byte(strings.Repeat("A", messageLen))
 
 func TestSimpleFileWriter(t *testing.T) {
 	t.Logf("Starting file writer tests")
-	newFileWriterTester(simplefileWriterTests, simplefileWriterGetter, t).test()
+	NewFileWriterTester(simplefileWriterTests, simplefileWriterGetter, t).test()
 }
 
 //===============================================================
 
 func simplefileWriterGetter(testCase *fileWriterTestCase) (io.WriteCloser, error) {
-	return newFileWriter(testCase.fileName)
+	return NewFileWriter(testCase.fileName)
 }
 
 //===============================================================
 type fileWriterTestCase struct {
-	files       []string
-	fileName    string
-	rollingType rollingType
-	fileSize    int64
-	maxRolls    int
-	datePattern string
-	writeCount  int
-	resFiles    []string
-	nameMode    rollingNameMode
+	files           []string
+	fileName        string
+	rollingType     rollingType
+	fileSize        int64
+	maxRolls        int
+	datePattern     string
+	writeCount      int
+	resFiles        []string
+	nameMode        rollingNameMode
+	archiveType     rollingArchiveType
+	archiveExploded bool
+	archivePath     string
 }
 
 func createSimplefileWriterTestCase(fileName string, writeCount int) *fileWriterTestCase {
-	return &fileWriterTestCase{[]string{}, fileName, rollingTypeSize, 0, 0, "", writeCount, []string{fileName}, 0}
+	return &fileWriterTestCase{[]string{}, fileName, rollingTypeSize, 0, 0, "", writeCount, []string{fileName}, 0, rollingArchiveNone, false, ""}
 }
 
 var simplefileWriterTests = []*fileWriterTestCase{
@@ -81,7 +84,7 @@ type fileWriterTester struct {
 	t            *testing.T
 }
 
-func newFileWriterTester(
+func NewFileWriterTester(
 	testCases []*fileWriterTestCase,
 	writerGetter func(*fileWriterTestCase) (io.WriteCloser, error),
 	t *testing.T) *fileWriterTester {
@@ -90,7 +93,7 @@ func newFileWriterTester(
 }
 
 func isWriterTestFile(fn string) bool {
-	return strings.Contains(fn, ".testlog")
+	return strings.Contains(fn, ".testlog") || strings.Contains(fn, ".zip") || strings.Contains(fn, ".gz")
 }
 
 func cleanupWriterTest(t *testing.T) {

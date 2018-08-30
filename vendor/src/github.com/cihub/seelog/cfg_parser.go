@@ -83,6 +83,8 @@ const (
 	rollingFileDataPatternAttr       = "datepattern"
 	rollingFileArchiveAttr           = "archivetype"
 	rollingFileArchivePathAttr       = "archivepath"
+	rollingFileArchiveExplodedAttr   = "archiveexploded"
+	rollingFileFullNameAttr          = "fullname"
 	bufferedWriterID                 = "buffered"
 	bufferedSizeAttr                 = "size"
 	bufferedFlushPeriodAttr          = "flushperiod"
@@ -180,7 +182,7 @@ func fillPredefinedFormats() error {
 	predefinedFormats = make(map[string]*formatter)
 
 	for formatKey, format := range predefinedFormatsWithoutPrefix {
-		formatter, err := newFormatter(format)
+		formatter, err := NewFormatter(format)
 		if err != nil {
 			return err
 		}
@@ -194,14 +196,14 @@ func fillPredefinedFormats() error {
 // configFromXMLDecoder parses data from a given XML decoder.
 // Returns parsed config which can be used to create logger in case no errors occured.
 // Returns error if format is incorrect or anything happened.
-func configFromXMLDecoder(xmlParser *xml.Decoder, rootNode xml.Token) (*logConfig, error) {
+func configFromXMLDecoder(xmlParser *xml.Decoder, rootNode xml.Token) (*configForParsing, error) {
 	return configFromXMLDecoderWithConfig(xmlParser, rootNode, nil)
 }
 
 // configFromXMLDecoderWithConfig parses data from a given XML decoder.
 // Returns parsed config which can be used to create logger in case no errors occured.
 // Returns error if format is incorrect or anything happened.
-func configFromXMLDecoderWithConfig(xmlParser *xml.Decoder, rootNode xml.Token, cfg *CfgParseParams) (*logConfig, error) {
+func configFromXMLDecoderWithConfig(xmlParser *xml.Decoder, rootNode xml.Token, cfg *CfgParseParams) (*configForParsing, error) {
 	_, ok := rootNode.(xml.StartElement)
 	if !ok {
 		return nil, errors.New("rootNode must be XML startElement")
@@ -221,14 +223,14 @@ func configFromXMLDecoderWithConfig(xmlParser *xml.Decoder, rootNode xml.Token, 
 // configFromReader parses data from a given reader.
 // Returns parsed config which can be used to create logger in case no errors occured.
 // Returns error if format is incorrect or anything happened.
-func configFromReader(reader io.Reader) (*logConfig, error) {
+func configFromReader(reader io.Reader) (*configForParsing, error) {
 	return configFromReaderWithConfig(reader, nil)
 }
 
 // configFromReaderWithConfig parses data from a given reader.
 // Returns parsed config which can be used to create logger in case no errors occured.
 // Returns error if format is incorrect or anything happened.
-func configFromReaderWithConfig(reader io.Reader, cfg *CfgParseParams) (*logConfig, error) {
+func configFromReaderWithConfig(reader io.Reader, cfg *CfgParseParams) (*configForParsing, error) {
 	config, err := unmarshalConfig(reader)
 	if err != nil {
 		return nil, err
@@ -241,7 +243,7 @@ func configFromReaderWithConfig(reader io.Reader, cfg *CfgParseParams) (*logConf
 	return configFromXMLNodeWithConfig(config, cfg)
 }
 
-func configFromXMLNodeWithConfig(config *xmlNode, cfg *CfgParseParams) (*logConfig, error) {
+func configFromXMLNodeWithConfig(config *xmlNode, cfg *CfgParseParams) (*configForParsing, error) {
 	err := checkUnexpectedAttribute(
 		config,
 		minLevelID,
@@ -297,7 +299,7 @@ func configFromXMLNodeWithConfig(config *xmlNode, cfg *CfgParseParams) (*logConf
 		return nil, err
 	}
 
-	return newConfig(constraints, exceptions, dispatcher, loggerType, logData, cfg)
+	return newFullLoggerConfig(constraints, exceptions, dispatcher, loggerType, logData, cfg)
 }
 
 func getConstraints(node *xmlNode) (logLevelConstraints, error) {
@@ -315,7 +317,7 @@ func getConstraints(node *xmlNode) (logLevelConstraints, error) {
 	if (isLevels && strings.TrimSpace(levelsStr) == offString) ||
 		(isMinLevel && !isMaxLevel && minLevelStr == offString) {
 
-		return newOffConstraints()
+		return NewOffConstraints()
 	}
 
 	if isLevels {
@@ -323,7 +325,7 @@ func getConstraints(node *xmlNode) (logLevelConstraints, error) {
 		if err != nil {
 			return nil, err
 		}
-		return newListConstraints(levels)
+		return NewListConstraints(levels)
 	}
 
 	var minLevel = LogLevel(TraceLvl)
@@ -344,7 +346,7 @@ func getConstraints(node *xmlNode) (logLevelConstraints, error) {
 		}
 	}
 
-	return newMinMaxConstraints(minLevel, maxLevel)
+	return NewMinMaxConstraints(minLevel, maxLevel)
 }
 
 func parseLevels(str string) ([]LogLevel, error) {
@@ -362,8 +364,8 @@ func parseLevels(str string) ([]LogLevel, error) {
 	return levels, nil
 }
 
-func getExceptions(config *xmlNode) ([]*logLevelException, error) {
-	var exceptions []*logLevelException
+func getExceptions(config *xmlNode) ([]*LogLevelException, error) {
+	var exceptions []*LogLevelException
 
 	var exceptionsNode *xmlNode
 	for _, child := range config.children {
@@ -411,7 +413,7 @@ func getExceptions(config *xmlNode) ([]*logLevelException, error) {
 			filePattern = "*"
 		}
 
-		exception, err := newLogLevelException(funcPattern, filePattern, constraints)
+		exception, err := NewLogLevelException(funcPattern, filePattern, constraints)
 		if err != nil {
 			return nil, errors.New("incorrect exception node: " + err.Error())
 		}
@@ -422,7 +424,7 @@ func getExceptions(config *xmlNode) ([]*logLevelException, error) {
 	return exceptions, nil
 }
 
-func checkDistinctExceptions(exceptions []*logLevelException) error {
+func checkDistinctExceptions(exceptions []*LogLevelException) error {
 	for i, exception := range exceptions {
 		for j, exception1 := range exceptions {
 			if i == j {
@@ -485,7 +487,7 @@ func getFormats(config *xmlNode) (map[string]*formatter, error) {
 			return nil, errors.New("format[" + id + "] has no '" + formatAttrID + "' attribute")
 		}
 
-		formatter, err := newFormatter(formatStr)
+		formatter, err := NewFormatter(formatStr)
 		if err != nil {
 			return nil, err
 		}
@@ -574,7 +576,7 @@ func getOutputsTree(config *xmlNode, formats map[string]*formatter, cfg *CfgPars
 			return nil, err
 		}
 
-		formatter, err := getCurrentFormat(outputsNode, defaultformatter, formats)
+		formatter, err := getCurrentFormat(outputsNode, DefaultFormatter, formats)
 		if err != nil {
 			return nil, err
 		}
@@ -590,11 +592,11 @@ func getOutputsTree(config *xmlNode, formats map[string]*formatter, cfg *CfgPars
 		}
 	}
 
-	console, err := newConsoleWriter()
+	console, err := NewConsoleWriter()
 	if err != nil {
 		return nil, err
 	}
-	return newSplitDispatcher(defaultformatter, []interface{}{console})
+	return NewSplitDispatcher(DefaultFormatter, []interface{}{console})
 }
 
 func getCurrentFormat(node *xmlNode, formatFromParent *formatter, formats map[string]*formatter) (*formatter, error) {
@@ -657,7 +659,7 @@ func createSplitter(node *xmlNode, formatFromParent *formatter, formats map[stri
 		return nil, err
 	}
 
-	return newSplitDispatcher(currentFormat, receivers)
+	return NewSplitDispatcher(currentFormat, receivers)
 }
 
 func createCustomReceiver(node *xmlNode, formatFromParent *formatter, formats map[string]*formatter, cfg *CfgParseParams) (interface{}, error) {
@@ -699,7 +701,7 @@ func createCustomReceiver(node *xmlNode, formatFromParent *formatter, formats ma
 			if err != nil {
 				return nil, err
 			}
-			creceiver, err := newCustomReceiverDispatcherByValue(currentFormat, rec, customName, args)
+			creceiver, err := NewCustomReceiverDispatcherByValue(currentFormat, rec, customName, args)
 			if err != nil {
 				return nil, err
 			}
@@ -711,7 +713,7 @@ func createCustomReceiver(node *xmlNode, formatFromParent *formatter, formats ma
 		}
 	}
 
-	return newCustomReceiverDispatcher(currentFormat, customName, args)
+	return NewCustomReceiverDispatcher(currentFormat, customName, args)
 }
 
 func createFilter(node *xmlNode, formatFromParent *formatter, formats map[string]*formatter, cfg *CfgParseParams) (interface{}, error) {
@@ -744,7 +746,7 @@ func createFilter(node *xmlNode, formatFromParent *formatter, formats map[string
 		return nil, err
 	}
 
-	return newFilterDispatcher(currentFormat, receivers, levels...)
+	return NewFilterDispatcher(currentFormat, receivers, levels...)
 }
 
 func createfileWriter(node *xmlNode, formatFromParent *formatter, formats map[string]*formatter, cfg *CfgParseParams) (interface{}, error) {
@@ -767,12 +769,12 @@ func createfileWriter(node *xmlNode, formatFromParent *formatter, formats map[st
 		return nil, newMissingArgumentError(node.name, pathID)
 	}
 
-	fileWriter, err := newFileWriter(path)
+	fileWriter, err := NewFileWriter(path)
 	if err != nil {
 		return nil, err
 	}
 
-	return newFormattedWriter(fileWriter, currentFormat)
+	return NewFormattedWriter(fileWriter, currentFormat)
 }
 
 // Creates new SMTP writer if encountered in the config file.
@@ -870,7 +872,7 @@ func createSMTPWriter(node *xmlNode, formatFromParent *formatter, formats map[st
 		subjectPhrase = subject
 	}
 
-	smtpWriter := newSMTPWriter(
+	smtpWriter := NewSMTPWriter(
 		senderAddress,
 		senderName,
 		recipientAddresses,
@@ -883,7 +885,7 @@ func createSMTPWriter(node *xmlNode, formatFromParent *formatter, formats map[st
 		mailHeaders,
 	)
 
-	return newFormattedWriter(smtpWriter, currentFormat)
+	return NewFormattedWriter(smtpWriter, currentFormat)
 }
 
 func createConsoleWriter(node *xmlNode, formatFromParent *formatter, formats map[string]*formatter, cfg *CfgParseParams) (interface{}, error) {
@@ -901,12 +903,12 @@ func createConsoleWriter(node *xmlNode, formatFromParent *formatter, formats map
 		return nil, err
 	}
 
-	consoleWriter, err := newConsoleWriter()
+	consoleWriter, err := NewConsoleWriter()
 	if err != nil {
 		return nil, err
 	}
 
-	return newFormattedWriter(consoleWriter, currentFormat)
+	return NewFormattedWriter(consoleWriter, currentFormat)
 }
 
 func createconnWriter(node *xmlNode, formatFromParent *formatter, formats map[string]*formatter, cfg *CfgParseParams) (interface{}, error) {
@@ -970,13 +972,13 @@ func createconnWriter(node *xmlNode, formatFromParent *formatter, formats map[st
 			}
 			config := tls.Config{InsecureSkipVerify: insecureSkipVerify}
 			connWriter := newTLSWriter(net, addr, reconnectOnMsg, &config)
-			return newFormattedWriter(connWriter, currentFormat)
+			return NewFormattedWriter(connWriter, currentFormat)
 		}
 	}
 
-	connWriter := newConnWriter(net, addr, reconnectOnMsg)
+	connWriter := NewConnWriter(net, addr, reconnectOnMsg)
 
-	return newFormattedWriter(connWriter, currentFormat)
+	return NewFormattedWriter(connWriter, currentFormat)
 }
 
 func createRollingFileWriter(node *xmlNode, formatFromParent *formatter, formats map[string]*formatter, cfg *CfgParseParams) (interface{}, error) {
@@ -1008,6 +1010,7 @@ func createRollingFileWriter(node *xmlNode, formatFromParent *formatter, formats
 
 	var rArchiveType rollingArchiveType
 	var rArchivePath string
+	var rArchiveExploded bool = false
 	if !archiveAttrExists {
 		rArchiveType = rollingArchiveNone
 		rArchivePath = ""
@@ -1020,12 +1023,27 @@ func createRollingFileWriter(node *xmlNode, formatFromParent *formatter, formats
 		if rArchiveType == rollingArchiveNone {
 			rArchivePath = ""
 		} else {
+			if rArchiveExplodedAttr, ok := node.attributes[rollingFileArchiveExplodedAttr]; ok {
+				if rArchiveExploded, err = strconv.ParseBool(rArchiveExplodedAttr); err != nil {
+					return nil, fmt.Errorf("archive exploded should be true or false, but was %v",
+						rArchiveExploded)
+				}
+			}
+
 			rArchivePath, ok = node.attributes[rollingFileArchivePathAttr]
-			if !ok {
-				rArchivePath, ok = rollingArchiveTypesDefaultNames[rArchiveType]
-				if !ok {
-					return nil, fmt.Errorf("cannot get default filename for archive type = %v",
-						rArchiveType)
+			if ok {
+				if rArchivePath == "" {
+					return nil, fmt.Errorf("empty archive path is not supported")
+				}
+			} else {
+				if rArchiveExploded {
+					rArchivePath = rollingArchiveDefaultExplodedName
+
+				} else {
+					rArchivePath, err = rollingArchiveTypeDefaultName(rArchiveType, false)
+					if err != nil {
+						return nil, err
+					}
 				}
 			}
 		}
@@ -1045,7 +1063,7 @@ func createRollingFileWriter(node *xmlNode, formatFromParent *formatter, formats
 	if rollingType == rollingTypeSize {
 		err := checkUnexpectedAttribute(node, outputFormatID, rollingFileTypeAttr, rollingFilePathAttr,
 			rollingFileMaxSizeAttr, rollingFileMaxRollsAttr, rollingFileArchiveAttr,
-			rollingFileArchivePathAttr, rollingFileNameModeAttr)
+			rollingFileArchivePathAttr, rollingFileArchiveExplodedAttr, rollingFileNameModeAttr)
 		if err != nil {
 			return nil, err
 		}
@@ -1069,17 +1087,18 @@ func createRollingFileWriter(node *xmlNode, formatFromParent *formatter, formats
 			}
 		}
 
-		rollingWriter, err := newRollingFileWriterSize(path, rArchiveType, rArchivePath, maxSize, maxRolls, nameMode)
+		rollingWriter, err := NewRollingFileWriterSize(path, rArchiveType, rArchivePath, maxSize, maxRolls, nameMode, rArchiveExploded)
 		if err != nil {
 			return nil, err
 		}
 
-		return newFormattedWriter(rollingWriter, currentFormat)
+		return NewFormattedWriter(rollingWriter, currentFormat)
 
 	} else if rollingType == rollingTypeTime {
 		err := checkUnexpectedAttribute(node, outputFormatID, rollingFileTypeAttr, rollingFilePathAttr,
 			rollingFileDataPatternAttr, rollingFileArchiveAttr, rollingFileMaxRollsAttr,
-			rollingFileArchivePathAttr, rollingFileNameModeAttr)
+			rollingFileArchivePathAttr, rollingFileArchiveExplodedAttr, rollingFileNameModeAttr,
+			rollingFileFullNameAttr)
 		if err != nil {
 			return nil, err
 		}
@@ -1093,17 +1112,29 @@ func createRollingFileWriter(node *xmlNode, formatFromParent *formatter, formats
 			}
 		}
 
+		fullName := false
+		fn, ok := node.attributes[rollingFileFullNameAttr]
+		if ok {
+			if fn == "true" {
+				fullName = true
+			} else if fn == "false" {
+				fullName = false
+			} else {
+				return nil, errors.New("node '" + node.name + "' has incorrect '" + rollingFileFullNameAttr + "' attribute value")
+			}
+		}
+
 		dataPattern, ok := node.attributes[rollingFileDataPatternAttr]
 		if !ok {
 			return nil, newMissingArgumentError(node.name, rollingFileDataPatternAttr)
 		}
 
-		rollingWriter, err := newRollingFileWriterTime(path, rArchiveType, rArchivePath, maxRolls, dataPattern, rollingIntervalAny, nameMode)
+		rollingWriter, err := NewRollingFileWriterTime(path, rArchiveType, rArchivePath, maxRolls, dataPattern, nameMode, rArchiveExploded, fullName)
 		if err != nil {
 			return nil, err
 		}
 
-		return newFormattedWriter(rollingWriter, currentFormat)
+		return NewFormattedWriter(rollingWriter, currentFormat)
 	}
 
 	return nil, errors.New("incorrect rolling writer type " + rollingTypeStr)
@@ -1159,12 +1190,12 @@ func createbufferedWriter(node *xmlNode, formatFromParent *formatter, formats ma
 		return nil, errors.New("inner writer cannot have his own format")
 	}
 
-	bufferedWriter, err := newBufferedWriter(formattedWriter.Writer(), size, time.Duration(flushPeriod))
+	bufferedWriter, err := NewBufferedWriter(formattedWriter.Writer(), size, time.Duration(flushPeriod))
 	if err != nil {
 		return nil, err
 	}
 
-	return newFormattedWriter(bufferedWriter, currentFormat)
+	return NewFormattedWriter(bufferedWriter, currentFormat)
 }
 
 // Returns an error if node has any attributes not listed in expectedAttrs.

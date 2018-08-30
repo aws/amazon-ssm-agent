@@ -121,13 +121,14 @@ var formatTests = []formatTest{
 	{"[%Level]%MsgX[%Level]", "test", ErrorLvl, "[Error]testX[Error]", false},
 	{"%Levell%Msgl", "Test", CriticalLvl, "CriticallTestl", false},
 	{"%Lev%Msg%LEVEL%LEV%l%Msg", "Test", InfoLvl, "InfTestINFOINFiTest", false},
+	{"%r", "", CriticalLvl, "\r", false},
 	{"%n", "", CriticalLvl, "\n", false},
 	{"%t", "", CriticalLvl, "\t", false},
 }
 
 func TestFormats(t *testing.T) {
 
-	context, conErr := currentContext()
+	context, conErr := currentContext(nil)
 	if conErr != nil {
 		t.Fatal("Cannot get current context:" + conErr.Error())
 		return
@@ -135,7 +136,7 @@ func TestFormats(t *testing.T) {
 
 	for _, test := range formatTests {
 
-		form, err := newFormatter(test.formatString)
+		form, err := NewFormatter(test.formatString)
 
 		if (err != nil) != test.errorExpected {
 			t.Errorf("input: %s \nInput LL: %s\n* Expected error:%t Got error: %t\n",
@@ -158,7 +159,7 @@ func TestFormats(t *testing.T) {
 }
 
 func TestDateFormat(t *testing.T) {
-	_, err := newFormatter("%Date")
+	_, err := NewFormatter("%Date")
 	if err != nil {
 		t.Error("Unexpected error: " + err.Error())
 	}
@@ -168,13 +169,13 @@ func TestDateParameterizedFormat(t *testing.T) {
 	testFormat := "Mon Jan 02 2006 15:04:05"
 	preciseForamt := "Mon Jan 02 2006 15:04:05.000"
 
-	context, conErr := currentContext()
+	context, conErr := currentContext(nil)
 	if conErr != nil {
 		t.Fatal("Cannot get current context:" + conErr.Error())
 		return
 	}
 
-	form, err := newFormatter("%Date(" + preciseForamt + ")")
+	form, err := NewFormatter("%Date(" + preciseForamt + ")")
 	if err != nil {
 		t.Error("Unexpected error: " + err.Error())
 	}
@@ -187,7 +188,7 @@ func TestDateParameterizedFormat(t *testing.T) {
 		t.Errorf("incorrect message: %v. Expected %v or %v", msg, dateBefore, dateAfter)
 	}
 
-	_, err = newFormatter("%Date(" + preciseForamt)
+	_, err = NewFormatter("%Date(" + preciseForamt)
 	if err == nil {
 		t.Error("Expected error for invalid format")
 	}
@@ -217,13 +218,13 @@ func TestCustomFormatterRegistration(t *testing.T) {
 		t.Errorf("expected an error when trying to register a custom formatter with duplicate name")
 	}
 
-	context, conErr := currentContext()
+	context, conErr := currentContext(nil)
 	if conErr != nil {
 		t.Fatal("Cannot get current context:" + conErr.Error())
 		return
 	}
 
-	form, err := newFormatter("%Msg %TEST 123")
+	form, err := NewFormatter("%Msg %TEST 123")
 	if err != nil {
 		t.Fatalf("%s\n", err.Error())
 	}
