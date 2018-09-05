@@ -66,6 +66,13 @@ func NewSession(context context.T) *Session {
 		return nil
 	}
 
+	// If the current os is Nano server, SSM Agent doesn't support the Session Manager.
+	isNanoServer, _ := platform.IsPlatformNanoServer(log)
+	if isNanoServer {
+		log.Info("Session core module is not supported on Windows Nano server.")
+		return nil
+	}
+
 	agentInfo := contracts.AgentInfo{
 		Lang:      appConfig.Os.Lang,
 		Name:      appConfig.Agent.Name,
