@@ -1,6 +1,7 @@
 package fileutil
 
 import (
+	"fmt"
 	"io/ioutil"
 	"os"
 	"path/filepath"
@@ -17,7 +18,11 @@ func HardenedWriteFile(filename string, data []byte) (err error) {
 
 	if _, err = os.Stat(filename); err != nil {
 		if os.IsNotExist(err) {
-			os.Create(filename)
+			f, err := os.Create(filename)
+			if err != nil {
+				return fmt.Errorf("Failed to create the file, %s", err)
+			}
+			defer f.Close()
 		} else {
 			return
 		}
