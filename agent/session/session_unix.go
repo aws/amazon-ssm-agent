@@ -27,7 +27,7 @@ import (
 const sudoersFile = "/etc/sudoers.d/ssm-agent-users"
 
 var commandName = shell.ShellPluginCommandName
-var commandArgs = append(shell.ShellPluginCommandArgs, fmt.Sprintf("sudo useradd -m %s", appconfig.DefaultRunAsUserName))
+var commandArgs = append(shell.ShellPluginCommandArgs, fmt.Sprintf("useradd -m %s", appconfig.DefaultRunAsUserName))
 
 // createLocalAdminUser creates a local OS user on the instance with admin permissions.
 func (s *Session) createLocalAdminUser() {
