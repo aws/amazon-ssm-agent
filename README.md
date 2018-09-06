@@ -8,28 +8,37 @@ The Amazon EC2 Simple Systems Manager (SSM) Agent is software developed for the 
 ## Overview
 
 The SSM Agent runs on EC2 instances and enables you to quickly and easily execute remote commands or scripts against one or more instances. The agent uses SSM [documents](http://docs.aws.amazon.com/ssm/latest/APIReference/aws-ssm-document.html). When you execute a command, the agent on the instance processes the document and configures the instance as specified.
-Currently, the SSM Agent and Run Command enable you to quickly run Shell scripts on an instance using the AWS-RunShellScript SSM document.
+Currently, the agent and Run Command enable you to quickly run Shell scripts on an instance using the AWS-RunShellScript SSM document. 
+SSM Agent also enables the Session Manager capability that lets you manage your Amazon EC2 instance through an interactive one-click browser-based shell or through the AWS CLI. When the agent starts, it will create a user called "ssm-user" with sudo or administrator privilege. Session Manager sessions will be launched in context of this user.
 
 ### Verify Requirements
 
 [SSM Run Command Prerequisites](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/remote-commands-prereq.html)
+[SSM Session Manager Prerequisites and supported Operating Systems](http://docs.aws.amazon.com/systems-manager/latest/userguide/session-manager-prerequisites.html)
 
 ### Setup
 
 * [Configuring IAM Roles and Users for SSM Run Command](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ssm-iam.html)
 * [Configuring the SSM Agent](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/install-ssm-agent.html)
+* [Configuring IAM Roles for Session Manager](http://docs.aws.amazon.com/systems-manager/latest/userguide/session-manager-getting-started-instance-profile.html)
+* [Configuring Users for Session Manager](http://docs.aws.amazon.com/systems-manager/latest/userguide/session-manager-getting-started-restrict-access.html)
 
 ### Executing Commands
 
 [SSM Run Command Walkthrough Using the AWS CLI](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/walkthrough-cli.html)
 
+### Starting Sessions
+
+[Session Manager Walkthrough Using the AWS Console and CLI](http://docs.aws.amazon.com/systems-manager/latest/userguide/session-manager-working-with-sessions-start.html)
+
 ### Troubleshooting
 
 [Troubleshooting SSM Run Command](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/troubleshooting-remote-commands.html)
+[Troubleshooting SSM Session Manager](http://docs.aws.amazon.com/systems-manager/latest/userguide/session-manager-troubleshooting.html)
 
 ## Feedback
 
-Thank you for helping us to improve SSM and Run Command. Please send your questions or comments to: ec2-ssm-feedback@amazon.com
+Thank you for helping us to improve Systems Manager, Run Command and Session Manager. Please send your questions or comments to: ec2-ssm-feedback@amazon.com
   
 ## Building and Running from source
 
@@ -55,6 +64,12 @@ bin/linux_amd64
 bin/windows_386
 bin/windows_amd64
 ```
+* To enable the Agent for Session Manager scenario on Windows instances
+    * Clone the repo from https://github.com/masatma/winpty.git
+    * Follow instructions on https://github.com/rprichard/winpty to build winpty 64-bit binaries
+    * Copy the winpty.dll and winpty-agent.exe to the bin/SessionManagerShell folder
+For the Windows Operating System, Session Manager is only supported on Windows Server 2008 R2 through Windows Server 2016 64-bit versions.
+
 Please follow the user guide to [copy and install the SSM Agent](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/install-ssm-agent.html)
 
 ### Code Layout
