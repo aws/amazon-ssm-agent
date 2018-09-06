@@ -17,6 +17,7 @@ package controlchannel
 import (
 	"encoding/json"
 	"fmt"
+	"math/rand"
 	"path/filepath"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
@@ -27,6 +28,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/session/communicator"
 	mgsConfig "github.com/aws/amazon-ssm-agent/agent/session/config"
 	mgsContracts "github.com/aws/amazon-ssm-agent/agent/session/contracts"
+	"github.com/aws/amazon-ssm-agent/agent/session/retry"
 	"github.com/aws/amazon-ssm-agent/agent/session/service"
 	"github.com/aws/amazon-ssm-agent/agent/times"
 	"github.com/aws/aws-sdk-go/aws"
@@ -92,15 +94,31 @@ func (controlChannel *ControlChannel) SetWebSocket(context context.T,
 		controlChannelIncomingMessageHandler(context, processor, input, orchestrationRootDir, instanceId)
 	}
 	onErrorHandler := func(err error) {
-		uuid.SwitchFormat(uuid.CleanHyphen)
-		requestId := uuid.NewV4().String()
-		tokenValue, err := getControlChannelToken(log, mgsService, instanceId, requestId)
-		if err != nil {
-			log.Errorf("failed to get token, err: %s", err)
-			return
+		callable := func() (channel interface{}, err error) {
+			uuid.SwitchFormat(uuid.CleanHyphen)
+			requestId := uuid.NewV4().String()
+			tokenValue, err := getControlChannelToken(log, mgsService, instanceId, requestId)
+			if err != nil {
+				return controlChannel, err
+			}
+			controlChannel.wsChannel.SetChannelToken(tokenValue)
+			if err := controlChannel.Reconnect(log); err != nil {
+				return controlChannel, err
+			}
+			return controlChannel, nil
 		}
-		controlChannel.wsChannel.SetChannelToken(tokenValue)
-		controlChannel.Reconnect(log)
+		retryer := retry.ExponentialRetryer{
+			CallableFunc:        callable,
+			GeometricRatio:      mgsConfig.RetryGeometricRatio,
+			InitialDelayInMilli: rand.Intn(mgsConfig.ControlChannelRetryInitialDelayMillis) + mgsConfig.ControlChannelRetryInitialDelayMillis,
+			MaxDelayInMilli:     mgsConfig.ControlChannelRetryMaxIntervalMillis,
+			MaxAttempts:         mgsConfig.ControlChannelNumMaxRetries,
+		}
+
+		if _, err := retryer.Call(); err != nil {
+			// should never happen
+			log.Errorf("failed to reconnect to the controlchannel with error: %v", err)
+		}
 	}
 
 	if err := controlChannel.wsChannel.Initialize(context,
