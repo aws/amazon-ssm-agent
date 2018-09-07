@@ -23,9 +23,12 @@ import (
 	"strconv"
 	"strings"
 	"syscall"
+	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
+	agentContracts "github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	mgsConfig "github.com/aws/amazon-ssm-agent/agent/session/config"
 	"github.com/kr/pty"
 )
 
@@ -131,4 +134,69 @@ func getUserAndGroupId(log log.T) (uid int, gid int, err error) {
 		return u, g, nil
 	}
 	return
+}
+
+// generateLogData generates a log file with the executed commands.
+func (p *ShellPlugin) generateLogData(log log.T, config agentContracts.Configuration) error {
+	shadowShellInput, _, err := StartPty(log, false)
+	if err != nil {
+		return err
+	}
+
+	defer func() {
+		if err := recover(); err != nil {
+			if err = Stop(log); err != nil {
+				log.Errorf("Error occured while closing pty: %v", err)
+			}
+		}
+	}()
+
+	time.Sleep(5 * time.Second)
+
+	// Increase buffer size
+	screenBufferSizeCmdInput := fmt.Sprintf(screenBufferSizeCmd, mgsConfig.ScreenBufferSize, newLineCharacter)
+	shadowShellInput.Write([]byte(screenBufferSizeCmdInput))
+
+	time.Sleep(5 * time.Second)
+
+	// Start shell recording
+	recordCmdInput := fmt.Sprintf("%s %s%s", startRecordSessionCmd, p.logFilePath, newLineCharacter)
+	shadowShellInput.Write([]byte(recordCmdInput))
+
+	time.Sleep(5 * time.Second)
+
+	// Start shell logger
+	loggerCmdInput := fmt.Sprintf("%s %s%s", appconfig.DefaultSessionLogger, p.ipcFilePath, newLineCharacter)
+	shadowShellInput.Write([]byte(loggerCmdInput))
+
+	// Sleep till the logger completes execution
+	time.Sleep(time.Minute)
+
+	exitCmdInput := fmt.Sprintf("%s%s", mgsConfig.Exit, newLineCharacter)
+
+	// Exit start record command
+	shadowShellInput.Write([]byte(exitCmdInput))
+
+	// Sleep until start record command is exited successfully
+	time.Sleep(30 * time.Second)
+
+	// Exit screen buffer command
+	shadowShellInput.Write([]byte(exitCmdInput))
+
+	// Sleep till screen buffer command is exited successfully
+	time.Sleep(5 * time.Second)
+
+	// Exit shell
+	shadowShellInput.Write([]byte(exitCmdInput))
+
+	// Sleep till shell is exited successfully
+	time.Sleep(5 * time.Second)
+
+	// Close pty
+	shadowShellInput.Close()
+
+	// Sleep till the shell successfully exits before uploading
+	time.Sleep(15 * time.Second)
+
+	return nil
 }

@@ -17,18 +17,26 @@
 package shell
 
 import (
+	"bufio"
 	"fmt"
 	"os"
 	"os/exec"
 	"path/filepath"
+	"regexp"
 	"runtime"
+	"strconv"
+	"strings"
 	"sync"
 	"syscall"
+	"time"
 	"unsafe"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
+	agentContracts "github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/platform"
+	mgsConfig "github.com/aws/amazon-ssm-agent/agent/session/config"
 	"github.com/aws/amazon-ssm-agent/agent/session/utility"
 	"github.com/aws/amazon-ssm-agent/agent/session/winpty"
 )
@@ -195,4 +203,134 @@ func mustCloseHandle(log log.T, handle syscall.Handle) {
 	if err := syscall.CloseHandle(handle); err != nil {
 		log.Error(err)
 	}
+}
+
+// generateLogData generates a log file with the executed commands.
+func (p *ShellPlugin) generateLogData(log log.T, config agentContracts.Configuration) error {
+	platformVersion, _ := platform.PlatformVersion(log)
+
+	osVersionSplit := strings.Split(platformVersion, ".")
+	if osVersionSplit == nil || len(osVersionSplit) < 2 {
+		return fmt.Errorf("error occurred while parsing OS version: %s", platformVersion)
+	}
+
+	// check if the OS version is 6.1 or higher
+	osMajorVersion, err := strconv.Atoi(osVersionSplit[0])
+	if err != nil {
+		return err
+	}
+
+	osMinorVersion, err := strconv.Atoi(osVersionSplit[1])
+	if err != nil {
+		return err
+	}
+
+	// Generate logs based on the OS version number
+	// https://docs.microsoft.com/en-us/windows/desktop/SysInfo/operating-system-version
+	if osMajorVersion >= 10 {
+		if err = generateTranscriptFile(log, p.logFilePath, p.ipcFilePath); err != nil {
+			return err
+		}
+	} else if osMajorVersion >= 6 && osMinorVersion >= 3 {
+		transcriptFile := filepath.Join(config.OrchestrationDirectory, "transcriptFile"+mgsConfig.LogFileExtension)
+		if err = generateTranscriptFile(log, transcriptFile, p.ipcFilePath); err != nil {
+			return err
+		}
+		cleanControlCharacters(transcriptFile, p.logFilePath)
+	} else {
+		cleanControlCharacters(p.ipcFilePath, p.logFilePath)
+	}
+
+	return nil
+}
+
+// generateTranscriptFile generates a transcript file using PowerShell
+func generateTranscriptFile(log log.T, transcriptFile string, loggerFile string) error {
+	shadowShellInput, _, err := StartPty(log, false)
+	if err != nil {
+		return err
+	}
+
+	defer func() {
+		if err := recover(); err != nil {
+			if err = Stop(log); err != nil {
+				log.Errorf("Error occured while closing pty: %v", err)
+			}
+		}
+	}()
+
+	time.Sleep(5 * time.Second)
+
+	// Increase buffer size
+	screenBufferSizeCmdInput := fmt.Sprintf(screenBufferSizeCmd, mgsConfig.ScreenBufferSize, newLineCharacter)
+	shadowShellInput.Write([]byte(screenBufferSizeCmdInput))
+
+	time.Sleep(5 * time.Second)
+
+	// Start shell recording
+	recordCmdInput := fmt.Sprintf("%s %s%s", startRecordSessionCmd, transcriptFile, newLineCharacter)
+	shadowShellInput.Write([]byte(recordCmdInput))
+
+	time.Sleep(5 * time.Second)
+
+	// Start shell logger
+	loggerCmdInput := fmt.Sprintf("%s %s%s", appconfig.DefaultSessionLogger, loggerFile, newLineCharacter)
+	shadowShellInput.Write([]byte(loggerCmdInput))
+
+	// Sleep till the logger completes execution
+	time.Sleep(time.Minute)
+
+	// Exit shell
+	exitCmdInput := fmt.Sprintf("%s%s", mgsConfig.Exit, newLineCharacter)
+	shadowShellInput.Write([]byte(exitCmdInput))
+
+	// Sleep till the shell successfully exits before uploading
+	time.Sleep(5 * time.Second)
+
+	return nil
+}
+
+// cleanControlCharacters cleans up control characters from the log file
+func cleanControlCharacters(sourceFileName, destinationFileName string) error {
+	sourceFile, err := os.Open(sourceFileName)
+	if err != nil {
+		return err
+	}
+	defer sourceFile.Close()
+
+	destinationFile, err := os.Create(destinationFileName)
+	if err != nil {
+		return err
+	}
+	defer destinationFile.Close()
+
+	escapeCharRegEx := regexp.MustCompile(`←`)
+	specialChar1RegEx := regexp.MustCompile(`\[\?[0-9]+[a-zA-Z]`)
+	specialChar2RegEx := regexp.MustCompile(`\[[0-9]+[A-Z]`)
+	newLineCharRegEx := regexp.MustCompile(`\[0K`)
+
+	emptyString := []byte("")
+	scanner := bufio.NewScanner(sourceFile)
+	scanner.Split(bufio.ScanLines)
+	for scanner.Scan() {
+		var line []byte
+		line = append(line, scanner.Bytes()...)
+		line = escapeCharRegEx.ReplaceAll(line, emptyString)
+		line = specialChar1RegEx.ReplaceAll(line, emptyString)
+		line = specialChar2RegEx.ReplaceAll(line, emptyString)
+		line = newLineCharRegEx.ReplaceAll(line, emptyString)
+
+		// clean up pending escape characters if any
+		var output []byte
+		for _, v := range line {
+			if v == 27 {
+				output = append(output, emptyString...)
+			} else {
+				output = append(output, v)
+			}
+		}
+
+		destinationFile.Write(append(output, []byte(newLineCharacter)...))
+	}
+	return nil
 }

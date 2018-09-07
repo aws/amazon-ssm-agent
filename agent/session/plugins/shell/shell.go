@@ -220,7 +220,7 @@ func (p *ShellPlugin) execute(context context.T,
 	// TODO: Move below logic of uploading logs to S3 and cloudwatch to IOHandler
 	if config.OutputS3BucketName != "" || config.CloudWatchLogGroup != "" {
 		log.Debugf("Creating log file for shell session id %s at %s", config.SessionId, p.logFilePath)
-		if err = p.generateLogData(log); err != nil {
+		if err = p.generateLogData(log, config); err != nil {
 			errorString := fmt.Errorf("unable to generate log data: %s", err)
 			log.Error(errorString)
 			output.MarkAsFailed(errorString)
@@ -254,44 +254,6 @@ func (p *ShellPlugin) uploadShellSessionLogsToS3(log log.T, s3UploaderUtil s3uti
 	if err := s3UploaderUtil.S3Upload(log, config.OutputS3BucketName, s3KeyPrefix, p.logFilePath); err != nil {
 		log.Errorf("Failed to upload shell session logs to S3: %s", err)
 	}
-}
-
-// generateLogData generates a log file with the executed commands.
-func (p *ShellPlugin) generateLogData(log log.T) error {
-	shadowShellInput, _, err := StartPty(log, false)
-	if err != nil {
-		return err
-	}
-
-	time.Sleep(5 * time.Second)
-
-	// Increase buffer size
-	screenBufferSizeCmdInput := fmt.Sprintf(screenBufferSizeCmd, mgsConfig.ScreenBufferSize, newLineCharacter)
-	shadowShellInput.Write([]byte(screenBufferSizeCmdInput))
-
-	time.Sleep(5 * time.Second)
-
-	// Start shell recording
-	recordCmdInput := fmt.Sprintf("%s %s%s", startRecordSessionCmd, p.logFilePath, newLineCharacter)
-	shadowShellInput.Write([]byte(recordCmdInput))
-
-	time.Sleep(5 * time.Second)
-
-	// Start shell logger
-	loggerCmdInput := fmt.Sprintf("%s %s%s", appconfig.DefaultSessionLogger, p.ipcFilePath, newLineCharacter)
-	shadowShellInput.Write([]byte(loggerCmdInput))
-
-	// Sleep till the logger completes execution
-	time.Sleep(time.Minute)
-
-	// Exit shell
-	exitCmdInput := fmt.Sprintf("%s%s", mgsConfig.Exit, newLineCharacter)
-	shadowShellInput.Write([]byte(exitCmdInput))
-
-	// Sleep till the shell successfully exits before uploading
-	time.Sleep(5 * time.Second)
-
-	return nil
 }
 
 // writePump reads from pty stdout and writes to data channel.

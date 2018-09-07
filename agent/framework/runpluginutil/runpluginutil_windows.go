@@ -57,6 +57,7 @@ func isSupportedSessionPlugin(log log.T, pluginName string) (isKnown bool, isSup
 	}
 
 	// check if the OS version is 6.1 or higher
+	// https://docs.microsoft.com/en-us/windows/desktop/SysInfo/operating-system-version
 	osMajorVersion, err := strconv.Atoi(osVersionSplit[0])
 	if err != nil {
 		return known, false
