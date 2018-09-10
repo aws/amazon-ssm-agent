@@ -51,7 +51,7 @@ const (
 	winptyDllFolderName    = "SessionManagerShell"
 	winptyCmd              = "powershell"
 	startRecordSessionCmd  = "Start-Transcript"
-	newLineCharacter       = "\r"
+	newLineCharacter       = "\r\n"
 	screenBufferSizeCmd    = "$host.UI.RawUI.BufferSize = New-Object System.Management.Automation.Host.Size($host.UI.RawUI.BufferSize.Width,%d)%s"
 	logon32LogonNetwork    = uintptr(3)
 	logon32ProviderDefault = uintptr(0)
