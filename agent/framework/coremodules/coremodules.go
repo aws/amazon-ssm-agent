@@ -43,7 +43,10 @@ func RegisteredCoreModules(context context.T) *ModuleRegistry {
 func loadCoreModules(context context.T) {
 	registeredCoreModules = append(registeredCoreModules, health.NewHealthCheck(context, ssm.NewService()))
 	registeredCoreModules = append(registeredCoreModules, runcommand.NewMDSService(context))
-	registeredCoreModules = append(registeredCoreModules, session.NewSession(context))
+	sessionCoreModule := session.NewSession(context)
+	if sessionCoreModule != nil {
+		registeredCoreModules = append(registeredCoreModules, sessionCoreModule)
+	}
 
 	if offlineProcessor, err := runcommand.NewOfflineService(context); err == nil {
 		registeredCoreModules = append(registeredCoreModules, offlineProcessor)
