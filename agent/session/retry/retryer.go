@@ -50,9 +50,10 @@ func (retryer *ExponentialRetryer) Call() (channel interface{}, err error) {
 		sleep := retryer.NextSleepTime(attempt)
 		if int(sleep/time.Millisecond) > retryer.MaxDelayInMilli {
 			sleep = time.Duration(retryer.MaxDelayInMilli) * time.Millisecond
+		} else {
+			attempt++
 		}
 		time.Sleep(sleep)
-		attempt++
 		failedAttemptsSoFar++
 	}
 }
