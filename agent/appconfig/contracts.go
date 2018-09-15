@@ -93,3 +93,10 @@ type SsmagentConfig struct {
 	S3          S3Cfg
 	Birdwatcher BirdwatcherCfg
 }
+
+// AppConstants represents some run time constant variable for various module.
+// Currently it only contains HealthCheck module constants for health ping frequency
+type AppConstants struct {
+	MinHealthFrequencyMinutes int
+	MaxHealthFrequencyMinutes int
+}

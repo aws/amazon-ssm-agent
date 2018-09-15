@@ -28,6 +28,7 @@ import (
 	"github.com/aws/aws-sdk-go/aws/request"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/ssm"
+	"github.com/aws/aws-sdk-go/service/ssm/ssmiface"
 )
 
 // Service is an interface to the SSM service.
@@ -77,7 +78,7 @@ var ssmStopPolicy *sdkutil.StopPolicy
 
 // sdkService is an service wrapper that delegates to the ssm sdk.
 type sdkService struct {
-	sdk *ssm.SSM
+	sdk ssmiface.SSMAPI
 }
 
 // NewService creates a new SSM service instance.
@@ -117,6 +118,10 @@ func NewService() Service {
 	sess.Handlers.Build.PushBack(request.MakeAddToUserAgentHandler(appConfig.Agent.Name, appConfig.Agent.Version))
 
 	ssmService := ssm.New(sess)
+	return NewSSMService(ssmService)
+}
+
+func NewSSMService(ssmService ssmiface.SSMAPI) Service {
 	return &sdkService{sdk: ssmService}
 }
 

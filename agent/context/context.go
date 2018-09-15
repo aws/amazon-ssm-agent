@@ -28,11 +28,17 @@ type T interface {
 	AppConfig() appconfig.SsmagentConfig
 	With(context string) T
 	CurrentContext() []string
+	AppConstants() *appconfig.AppConstants
 }
 
 // Default returns an empty context that use the default logger and appconfig.
-func Default(logger log.T, appconfig appconfig.SsmagentConfig) T {
-	ctx := &defaultContext{log: logger, appconfig: appconfig}
+func Default(logger log.T, ssmAppconfig appconfig.SsmagentConfig) T {
+	// Loading the maximum & minimum frequency minutes for healthcheck
+	appconst := appconfig.AppConstants{
+		MinHealthFrequencyMinutes: appconfig.DefaultSsmHealthFrequencyMinutesMin,
+		MaxHealthFrequencyMinutes: appconfig.DefaultSsmHealthFrequencyMinutesMax,
+	}
+	ctx := &defaultContext{log: logger, appconfig: ssmAppconfig, appconst: appconst}
 	return ctx
 }
 
@@ -40,6 +46,7 @@ type defaultContext struct {
 	context   []string
 	log       log.T
 	appconfig appconfig.SsmagentConfig
+	appconst  appconfig.AppConstants
 }
 
 func (c *defaultContext) With(logContext string) T {
@@ -48,6 +55,7 @@ func (c *defaultContext) With(logContext string) T {
 		context:   contextSlice,
 		log:       c.log.WithContext(contextSlice...),
 		appconfig: c.appconfig,
+		appconst:  c.appconst,
 	}
 	return newContext
 }
@@ -62,4 +70,8 @@ func (c *defaultContext) AppConfig() appconfig.SsmagentConfig {
 
 func (c *defaultContext) CurrentContext() []string {
 	return c.context
+}
+
+func (c *defaultContext) AppConstants() *appconfig.AppConstants {
+	return &c.appconst
 }

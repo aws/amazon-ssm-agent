@@ -34,10 +34,15 @@ func NewMockDefault() *Mock {
 	ctx := new(Mock)
 	log := log.NewMockLog()
 	config := appconfig.SsmagentConfig{}
+	appconst := appconfig.AppConstants{
+		MinHealthFrequencyMinutes: appconfig.DefaultSsmHealthFrequencyMinutesMin,
+		MaxHealthFrequencyMinutes: appconfig.DefaultSsmHealthFrequencyMinutesMax,
+	}
 	ctx.On("Log").Return(log)
 	ctx.On("AppConfig").Return(config)
 	ctx.On("With", mock.AnythingOfType("string")).Return(ctx)
 	ctx.On("CurrentContext").Return([]string{})
+	ctx.On("AppConstants").Return(&appconst)
 	return ctx
 }
 
@@ -46,10 +51,15 @@ func NewMockDefaultWithContext(context []string) *Mock {
 	ctx := new(Mock)
 	log := log.NewMockLogWithContext(strings.Join(context, ""))
 	config := appconfig.SsmagentConfig{}
+	appconst := appconfig.AppConstants{
+		MinHealthFrequencyMinutes: appconfig.DefaultSsmHealthFrequencyMinutesMin,
+		MaxHealthFrequencyMinutes: appconfig.DefaultSsmHealthFrequencyMinutesMax,
+	}
 	ctx.On("Log").Return(log)
 	ctx.On("AppConfig").Return(config)
 	ctx.On("With", mock.AnythingOfType("string")).Return(ctx)
 	ctx.On("CurrentContext").Return(context)
+	ctx.On("AppConstants").Return(&appconst)
 	return ctx
 }
 
@@ -75,4 +85,10 @@ func (m *Mock) With(ctx string) T {
 func (m *Mock) CurrentContext() []string {
 	args := m.Called()
 	return args.Get(0).([]string)
+}
+
+// AppConstants mocks the AppConstatns function.
+func (m *Mock) AppConstants() *appconfig.AppConstants {
+	args := m.Called()
+	return args.Get(0).(*appconfig.AppConstants)
 }

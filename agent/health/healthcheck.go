@@ -61,14 +61,13 @@ const (
 
 // NewHealthCheck creates a new health check core module.
 // Only one health core module must exist at a time
-func NewHealthCheck(context context.T) *HealthCheck {
+func NewHealthCheck(context context.T, svc ssm.Service) *HealthCheck {
 	if healthModule != nil {
 		context.Log().Debug("Health process has already been initialized.")
 		return healthModule
 	}
 	healthContext := context.With("[" + name + "]")
 	healthCheckStopPolicy := sdkutil.NewStopPolicy(name, 10)
-	svc := ssm.NewService()
 
 	healthModule = &HealthCheck{
 		context:               healthContext,
@@ -106,8 +105,10 @@ func (h *HealthCheck) scheduleInMinutes() int {
 	updateHealthFrequencyMins := 5
 	config := h.context.AppConfig()
 	log := h.context.Log()
+	// Appconstants contain default run-time constants
+	constants := h.context.AppConstants()
 
-	if 4 < config.Ssm.HealthFrequencyMinutes && config.Ssm.HealthFrequencyMinutes < 61 {
+	if constants.MinHealthFrequencyMinutes <= config.Ssm.HealthFrequencyMinutes && config.Ssm.HealthFrequencyMinutes <= constants.MaxHealthFrequencyMinutes {
 		updateHealthFrequencyMins = config.Ssm.HealthFrequencyMinutes
 	} else {
 		log.Debug("HealthFrequencyMinutes is outside allowable limits. Limiting to 5 minutes default.")

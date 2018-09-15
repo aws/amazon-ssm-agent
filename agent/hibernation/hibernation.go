@@ -33,7 +33,7 @@ type IHibernate interface {
 
 type Hibernate struct {
 	currentMode  health.AgentState
-	healthModule *health.HealthCheck
+	healthModule health.IHealthCheck
 	hibernateJob *scheduler.Job
 
 	currentPingInterval int
@@ -57,7 +57,7 @@ const (
 )
 
 // NewHibernateMode creates an object of type NewHibernateMode
-func NewHibernateMode(healthModule *health.HealthCheck, context context.T) *Hibernate {
+func NewHibernateMode(healthModule health.IHealthCheck, context context.T) *Hibernate {
 
 	context.Log().Debug("Starting agent hibernate mode. Switching log to minimal logging...")
 	logger := log.GetLogger(context.Log(), seelogConfig)

@@ -20,15 +20,15 @@ import (
 	"testing"
 	"time"
 
-	"github.com/stretchr/testify/assert"
-
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/health"
+	"github.com/aws/amazon-ssm-agent/agent/ssm"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestHibernation_ExecuteHibernation_AgentTurnsActive(t *testing.T) {
 	ctx := context.NewMockDefault()
-	healthMock := health.NewHealthCheck(ctx)
+	healthMock := health.NewHealthCheck(ctx, ssm.NewService())
 
 	hibernate := NewHibernateMode(healthMock, ctx)
 	hibernate.scheduleBackOff = fakeScheduler
@@ -45,7 +45,7 @@ func TestHibernation_ExecuteHibernation_AgentTurnsActive(t *testing.T) {
 
 func TestHibernation_scheduleBackOffStrategy(t *testing.T) {
 	ctx := context.NewMockDefault()
-	healthMock := health.NewHealthCheck(ctx)
+	healthMock := health.NewHealthCheck(ctx, ssm.NewService())
 
 	hibernate := NewHibernateMode(healthMock, ctx)
 	hibernate.schedulePing = fakeScheduler
