@@ -27,7 +27,7 @@ const (
 
 	// https://docs.microsoft.com/en-us/previous-versions/windows/it-pro/windows-server-2008-R2-and-2008/hh994562(v=ws.10)
 	// https://docs.microsoft.com/en-us/windows/security/threat-protection/security-policy-settings/password-must-meet-complexity-requirements
-	symbols = "!#$%"
+	symbols = "!#%"
 
 	defaultMinPasswordLength = 30
 	defaultMaxPasswordLength = 63

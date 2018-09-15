@@ -85,9 +85,6 @@ func StartPty(log log.T, isSessionShell bool) (stdin *os.File, stdout *os.File, 
 			return
 		}
 
-		// TODO: check for logon user token after changing the password
-		time.Sleep(8 * time.Second)
-
 		var wg sync.WaitGroup
 		wg.Add(1)
 		go func() {
