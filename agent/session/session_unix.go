@@ -52,6 +52,11 @@ func (s *Session) addUserToOSAdminGroup() {
 		return
 	}
 	defer file.Close()
+	// Set permissions for sudoers file
+	if chmod, err := os.Chmod(sudoersFile, 0440); err == nil {
+		log.Infof("Updated permissions for %s ", sudoersFile)
+		return
+	}
 
 	file.WriteString(fmt.Sprintf("# User rules for %s\n", appconfig.DefaultRunAsUserName))
 	file.WriteString(fmt.Sprintf("%s ALL=(ALL) NOPASSWD:ALL\n", appconfig.DefaultRunAsUserName))
