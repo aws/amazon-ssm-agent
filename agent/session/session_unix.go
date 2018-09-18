@@ -53,7 +53,7 @@ func (s *Session) addUserToOSAdminGroup() {
 	}
 	defer file.Close()
 	// Set permissions for sudoers file
-	if err := os.Chmod(sudoersFile, 0440)
+	err = os.Chmod(sudoersFile, 0440)
 	if err != nil {
 		log.Errorf("Failed for update permissions for sudoers file")
 	}
