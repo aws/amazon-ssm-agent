@@ -51,11 +51,11 @@ func (s *Session) addUserToOSAdminGroup() {
 		log.Errorf("Failed to add %s to sudoers file: %v", appconfig.DefaultRunAsUserName, err)
 		return
 	}
-	defer file.Close()
+	defer file.Close();
 	// Set permissions for sudoers file
-	err = os.Chmod(sudoersFile, 0440)
+	chmod, err := os.Chmod(sudoersFile, 0440)
 	if err != nil {
-		log.Errorf("Failed for update permissions for sudoers file")
+		log.Errorf("Failed for update permissions for sudoers file: %v", err)
 	}
 
 	file.WriteString(fmt.Sprintf("# User rules for %s\n", appconfig.DefaultRunAsUserName))
