@@ -52,7 +52,7 @@ var (
 	registrationFile                     = filepath.Join(appconfig.DefaultDataStorePath, "registration")
 )
 
-func start(log logger.T, instanceIDPtr *string, regionPtr *string) (ssmAgent agent.ISSMAgent, err error) {
+func start(log logger.T, instanceIDPtr *string, regionPtr *string, shouldCheckHibernation bool) (ssmAgent agent.ISSMAgent, err error) {
 	config, err := appconfig.Config(true)
 	if err != nil {
 		log.Debugf("appconfig could not be loaded - %v", err)
@@ -68,7 +68,8 @@ func start(log logger.T, instanceIDPtr *string, regionPtr *string) (ssmAgent age
 	// Do a health check before starting the agent.
 	// Health check would include creating a health module and sending empty health pings to the service.
 	// If response is positive, start the agent, else retry and eventually back off (hibernate/passive mode).
-	if status, err := healthModule.GetAgentState(); status == health.Passive {
+	status, err := healthModule.GetAgentState()
+	if shouldCheckHibernation && status == health.Passive {
 		//Starting hibernate mode
 		context.Log().Info("Entering SSM Agent hibernate - ", err)
 		go func() {
@@ -126,7 +127,7 @@ func run(log logger.T) {
 	}()
 
 	// run ssm agent
-	agent, err := start(log, instanceIDPtr, regionPtr)
+	agent, err := start(log, instanceIDPtr, regionPtr, true)
 	if err != nil {
 		log.Errorf("error occurred when starting amazon-ssm-agent: %v", err)
 		return

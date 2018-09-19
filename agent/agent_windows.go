@@ -10,6 +10,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	logger "github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/log/ssmlog"
+	"github.com/aws/amazon-ssm-agent/agent/longrunning/plugin/cloudwatch"
 	"github.com/aws/amazon-ssm-agent/agent/proxyconfig"
 	"golang.org/x/sys/windows/registry"
 	"golang.org/x/sys/windows/svc"
@@ -172,9 +173,16 @@ func (a *amazonSSMAgentService) Execute(args []string, r <-chan svc.ChangeReques
 	// notify service controller status is now StartPending
 	s <- svc.Status{State: svc.StartPending}
 
+	//Check if there's cloudwatch json config file, and skip hibernation check if configure CW is enabled
+	shouldCheckHibernation := true
+	err := cloudwatch.Instance().Update(log)
+	if err == nil && cloudwatch.Instance().GetIsEnabled() {
+		shouldCheckHibernation = false
+	}
+
 	// start service, without specifying instance id or region
 	var emptyString string
-	agent, err := start(a.log, &emptyString, &emptyString)
+	agent, err := start(a.log, &emptyString, &emptyString, shouldCheckHibernation)
 	if err != nil {
 		log.Errorf("Failed to start agent. %v", err)
 		return true, appconfig.ErrorExitCode
