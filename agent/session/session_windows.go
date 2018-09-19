@@ -72,6 +72,10 @@ func (s *Session) addUserToOSAdminGroup() {
 	for scanner.Scan() {
 		if strings.Contains(scanner.Text(), "account name is already a member of the group") {
 			log.Infof("%s is already a member of %s group.", appconfig.DefaultRunAsUserName, administrators)
+
+			// Release all resources
+			cmd.Wait()
+
 			return
 		}
 	}

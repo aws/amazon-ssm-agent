@@ -238,6 +238,10 @@ func (s *Session) createLocalUser() (err error) {
 	for scanner.Scan() {
 		if strings.Contains(scanner.Text(), "already exists") {
 			log.Infof("%s already exists.", appconfig.DefaultRunAsUserName)
+
+			// Release all resources
+			cmd.Wait()
+
 			return fmt.Errorf("%s already exists", appconfig.DefaultRunAsUserName)
 		}
 	}
