@@ -25,6 +25,7 @@ import (
 )
 
 const sudoersFile = "/etc/sudoers.d/ssm-agent-users"
+const sudoersFileMode = 0440
 
 var commandName = shell.ShellPluginCommandName
 var commandArgs = append(shell.ShellPluginCommandArgs, fmt.Sprintf("useradd -m %s", appconfig.DefaultRunAsUserName))
@@ -42,6 +43,7 @@ func (s *Session) addUserToOSAdminGroup() {
 	// Return if the file exists
 	if _, err := os.Stat(sudoersFile); err == nil {
 		log.Infof("File %s already exists", sudoersFile)
+		s.changeModeOfSudoersFile()
 		return
 	}
 
@@ -56,4 +58,17 @@ func (s *Session) addUserToOSAdminGroup() {
 	file.WriteString(fmt.Sprintf("# User rules for %s\n", appconfig.DefaultRunAsUserName))
 	file.WriteString(fmt.Sprintf("%s ALL=(ALL) NOPASSWD:ALL\n", appconfig.DefaultRunAsUserName))
 	log.Infof("Successfully created file %s", sudoersFile)
+	s.changeModeOfSudoersFile()
+}
+
+// changeModeOfSudoersFile will change the sudoersFile mode to 0440 (read only).
+// This file is created with mode 0666 using os.Create() so needs to be updated to read only with chmod.
+func (s *Session) changeModeOfSudoersFile() {
+	log := s.context.Log()
+	fileMode := os.FileMode(sudoersFileMode)
+	if err := os.Chmod(sudoersFile, fileMode); err != nil {
+		log.Errorf("Failed to change mode of %s to %d: %v", sudoersFile, sudoersFileMode, err)
+		return
+	}
+	log.Infof("Successfully changed mode of %s to %d", sudoersFile, sudoersFileMode)
 }
