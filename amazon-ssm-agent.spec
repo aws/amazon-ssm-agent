@@ -5,7 +5,6 @@ Summary      : Manage EC2 Instances using SSM APIs
 
 Group        : Amazon/Tools
 License      : ASL 2.0
-BuildArch    : x86_64
 BuildRoot    : %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 URL          : http://docs.aws.amazon.com/ssm/latest/APIReference/Welcome.html
 Source0      : https://github.com/aws/amazon-ssm-agent/%{name}-%{version}.tar.gz
