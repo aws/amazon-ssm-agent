@@ -25,7 +25,9 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/platform"
-	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/birdwatcher"
+	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/birdwatcher/archive"
+	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/birdwatcher/birdwatcherservice"
+	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/birdwatcher/facade"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/installer"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/localpackages"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/packageservice"
@@ -43,7 +45,7 @@ const (
 
 // Plugin is the type for the configurepackage plugin.
 type Plugin struct {
-	packageServiceSelector func(tracer trace.Tracer, serviceEndpoint string, localrepo localpackages.Repository) packageservice.PackageService
+	packageServiceSelector func(tracer trace.Tracer, input *ConfigurePackagePluginInput, localrepo localpackages.Repository) packageservice.PackageService
 	localRepository        localpackages.Repository
 }
 
@@ -351,13 +353,15 @@ func checkAlreadyInstalled(
 }
 
 // selectService chooses the implementation of PackageService to use for a given execution of the plugin
-func selectService(tracer trace.Tracer, serviceEndpoint string, localrepo localpackages.Repository) packageservice.PackageService {
+func selectService(tracer trace.Tracer, input *ConfigurePackagePluginInput, localrepo localpackages.Repository) packageservice.PackageService {
 	region, _ := platform.Region()
 	appCfg, err := appconfig.Config(false)
+	serviceEndpoint := input.Repository
 
 	if (err == nil && appCfg.Birdwatcher.ForceEnable) || !ssms3.UseSSMS3Service(tracer, serviceEndpoint, region) {
 		tracer.CurrentTrace().AppendInfof("S3 repository is not marked active in %v %v", region, serviceEndpoint)
-		return birdwatcher.New(serviceEndpoint, localrepo)
+		birdwatcherFacade := facade.NewBirdwatcherFacade()
+		return birdwatcherservice.New(birdwatcherFacade, localrepo, archive.PackageArchiveBirdwatcher)
 	}
 
 	tracer.CurrentTrace().AppendInfof("S3 repository is marked active")
@@ -386,10 +390,17 @@ func (p *Plugin) execute(context context.T, config contracts.Configuration, canc
 		tracer.CurrentTrace().WithError(err).End()
 		out.MarkAsFailed(nil, nil)
 	} else {
-		packageService := p.packageServiceSelector(tracer, input.Repository, p.localRepository)
+		packageService := p.packageServiceSelector(tracer, input, p.localRepository)
 		//Return failure if the manifest cannot be accessed
 		//Return failure if the package version is installed, but the manifest is no longer available
-		packageArn, manifestVersion, isSameAsCache, err := getPackageArnAndVersion(tracer, packageService, input)
+		packageNames, packageVersions := packageService.GetPackageArnAndVersion(input.Name, input.Version)
+
+		//always download the manifest before acting upon the request
+		trace := tracer.BeginSection("download manifest")
+		packageArn, manifestVersion, isSameAsCache, err := packageService.DownloadManifest(tracer, packageNames[0], packageVersions[0])
+		trace.AppendDebugf("got manifest for package %v version %v isSameAsCache %v", packageArn, manifestVersion, isSameAsCache)
+
+		trace.End()
 
 		if err != nil {
 			tracer.CurrentTrace().WithError(err).End()
@@ -486,29 +497,4 @@ func (p *Plugin) execute(context context.T, config contracts.Configuration, canc
 // Name returns the name of the plugin.
 func Name() string {
 	return appconfig.PluginNameAwsConfigurePackage
-}
-
-func getPackageArnAndVersion(
-	tracer trace.Tracer,
-	packageService packageservice.PackageService,
-	input *ConfigurePackagePluginInput) (string, string, bool, error) {
-
-	//always download the manifest before acting upon the request
-	trace := tracer.BeginSection("download manifest")
-
-	version := input.Version
-	if packageservice.IsLatest(input.Version) {
-		version = packageservice.Latest
-	}
-
-	packageArn, version, isSameAsCache, err := packageService.DownloadManifest(tracer, input.Name, version)
-	trace.AppendDebugf("got manifest for package %v version %v isSameAsCache %v", packageArn, version, isSameAsCache)
-
-	if err != nil {
-		trace.WithError(err).End()
-		return "", "", false, err
-	}
-	trace.End()
-
-	return packageArn, version, isSameAsCache, nil
 }

@@ -12,7 +12,7 @@
 // implied. See the License for the specific language governing
 // permissions and limitations under the License.
 
-package birdwatcher
+package birdwatcherservice
 
 import (
 	"bytes"
@@ -22,17 +22,14 @@ import (
 	"reflect"
 	"time"
 
-	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil/artifact"
-	"github.com/aws/amazon-ssm-agent/agent/platform"
+	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/birdwatcher"
+	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/birdwatcher/archive"
+	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/birdwatcher/birdwatcherarchive"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/birdwatcher/facade"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/envdetect"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/packageservice"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/trace"
-	"github.com/aws/amazon-ssm-agent/agent/sdkutil"
-	"github.com/aws/amazon-ssm-agent/agent/version"
-	"github.com/aws/aws-sdk-go/aws/request"
-	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/ssm"
 )
 
@@ -54,49 +51,30 @@ type PackageService struct {
 	manifestCache packageservice.ManifestCache
 	collector     envdetect.Collector
 	timeProvider  NanoTime
+	archive       archive.IPackageArchive
 }
 
 // New constructor for PackageService
-func New(endpoint string, manifestCache packageservice.ManifestCache) packageservice.PackageService {
-	// TODO: endpoint vs appconfig
-	// TODO: pass in log var to log errs
-	cfg := sdkutil.AwsConfig()
-	// overrides ssm client config from appconfig if applicable
-	if appCfg, err := appconfig.Config(false); err == nil {
-		if appCfg.Ssm.Endpoint != "" {
-			cfg.Endpoint = &appCfg.Ssm.Endpoint
-		} else {
-			if region, err := platform.Region(); err == nil {
-				if defaultEndpoint := appconfig.GetDefaultEndPoint(region, "ssm"); defaultEndpoint != "" {
-					cfg.Endpoint = &defaultEndpoint
-				}
-			}
-		}
-		if appCfg.Agent.Region != "" {
-			cfg.Region = &appCfg.Agent.Region
-		}
-	}
-	facadeClientSession := session.New(cfg)
-
-	// Define a request handler with current agentName and version
-	SSMAgentVersionUserAgentHandler := request.NamedHandler{
-		Name: "ssm.SSMAgentVersionUserAgentHandler",
-		Fn:   request.MakeAddToUserAgentHandler(appconfig.DefaultConfig().Agent.Name, version.Version),
-	}
-
-	// Add the handler to each request to the BirdwatcherStationService
-	facadeClientSession.Handlers.Build.PushBackNamed(SSMAgentVersionUserAgentHandler)
+func New(facadeClient facade.BirdwatcherFacade, manifestCache packageservice.ManifestCache, packageArchiveType string) packageservice.PackageService {
+	var pkgArchive archive.IPackageArchive
+	// create birdwatcher type archive
+	pkgArchive = birdwatcherarchive.New(facadeClient)
 
 	return &PackageService{
-		facadeClient:  ssm.New(facadeClientSession),
+		facadeClient:  facadeClient,
 		manifestCache: manifestCache,
 		collector:     &envdetect.CollectorImp{},
 		timeProvider:  &TimeImpl{},
+		archive:       pkgArchive,
 	}
 }
 
 func (ds *PackageService) PackageServiceName() string {
 	return packageservice.PackageServiceName_birdwatcher
+}
+
+func (ds *PackageService) GetPackageArnAndVersion(packageName string, version string) (names []string, versions []string) {
+	return ds.archive.GetResourceVersion(packageName, version)
 }
 
 // DownloadManifest downloads the manifest for a given version (or latest) and returns the agent version specified in manifest
@@ -183,7 +161,7 @@ func (ds *PackageService) ReportResult(tracer trace.Tracer, result packageservic
 }
 
 // utils
-func readManifestFromCache(cache packageservice.ManifestCache, packageName string, version string) (*Manifest, error) {
+func readManifestFromCache(cache packageservice.ManifestCache, packageName string, version string) (*birdwatcher.Manifest, error) {
 	data, err := cache.ReadManifest(packageName, version)
 	if err != nil {
 		return nil, err
@@ -192,41 +170,36 @@ func readManifestFromCache(cache packageservice.ManifestCache, packageName strin
 	return parseManifest(&data)
 }
 
-func downloadManifest(ds *PackageService, packageName string, version string) (*Manifest, bool, error) {
+func downloadManifest(ds *PackageService, packageName string, version string) (*birdwatcher.Manifest, bool, error) {
 	isSameAsCache := false
-	resp, err := ds.facadeClient.GetManifest(
-		&ssm.GetManifestInput{
-			PackageName:    &packageName,
-			PackageVersion: &version,
-		},
-	)
+	manifest, err := ds.archive.DownloadArchiveInfo(packageName, version)
 	if err != nil {
-		return nil, isSameAsCache, fmt.Errorf("failed to retrieve manifest: %v", err)
+		return nil, isSameAsCache, fmt.Errorf("failed to download manifest - %v", err)
 	}
 
-	byteManifest := []byte(*resp.Manifest)
+	byteManifest := []byte(manifest)
 
-	manifest, err := parseManifest(&byteManifest)
+	parsedManifest, err := parseManifest(&byteManifest)
 	if err != nil {
 		return nil, isSameAsCache, err
 	}
 
-	cachedManifest, err := readManifestFromCache(ds.manifestCache, manifest.PackageArn, manifest.Version)
+	cachedManifest, err := readManifestFromCache(ds.manifestCache, parsedManifest.PackageArn, parsedManifest.Version)
 
-	if reflect.DeepEqual(manifest, cachedManifest) {
+	if reflect.DeepEqual(parsedManifest, cachedManifest) {
 		isSameAsCache = true
 	}
 
-	err = ds.manifestCache.WriteManifest(manifest.PackageArn, manifest.Version, byteManifest)
+	err = ds.manifestCache.WriteManifest(parsedManifest.PackageArn, parsedManifest.Version, byteManifest)
 	if err != nil {
 		return nil, isSameAsCache, fmt.Errorf("failed to write manifest to file: %v", err)
 	}
 
-	return manifest, isSameAsCache, nil
+	return parsedManifest, isSameAsCache, nil
 }
 
-func parseManifest(data *[]byte) (*Manifest, error) {
-	var manifest Manifest
+func parseManifest(data *[]byte) (*birdwatcher.Manifest, error) {
+	var manifest birdwatcher.Manifest
 
 	// TODO: additional validation
 	if err := json.NewDecoder(bytes.NewReader(*data)).Decode(&manifest); err != nil {
@@ -236,8 +209,8 @@ func parseManifest(data *[]byte) (*Manifest, error) {
 	return &manifest, nil
 }
 
-func (ds *PackageService) findFileFromManifest(tracer trace.Tracer, manifest *Manifest) (*File, error) {
-	var file *File
+func (ds *PackageService) findFileFromManifest(tracer trace.Tracer, manifest *birdwatcher.Manifest) (*birdwatcher.File, error) {
+	var file *birdwatcher.File
 
 	pkginfo, err := ds.extractPackageInfo(tracer, manifest)
 	if err != nil {
@@ -258,7 +231,7 @@ func (ds *PackageService) findFileFromManifest(tracer trace.Tracer, manifest *Ma
 	return file, nil
 }
 
-func downloadFile(tracer trace.Tracer, file *File) (string, error) {
+func downloadFile(tracer trace.Tracer, file *birdwatcher.File) (string, error) {
 	downloadInput := artifact.DownloadInput{
 		SourceURL: file.DownloadLocation,
 		// TODO don't hardcode sha256 - use multiple checksums
@@ -266,7 +239,7 @@ func downloadFile(tracer trace.Tracer, file *File) (string, error) {
 	}
 
 	log := tracer.CurrentTrace().Logger
-	downloadOutput, downloadErr := networkdep.Download(log, downloadInput)
+	downloadOutput, downloadErr := birdwatcher.Networkdep.Download(log, downloadInput)
 	if downloadErr != nil || downloadOutput.LocalFilePath == "" {
 		errMessage := fmt.Sprintf("failed to download installation package reliably, %v", downloadInput.SourceURL)
 		if downloadErr != nil {
@@ -282,7 +255,7 @@ func downloadFile(tracer trace.Tracer, file *File) (string, error) {
 }
 
 // ExtractPackageInfo returns the correct PackageInfo for the current instances platform/version/arch
-func (ds *PackageService) extractPackageInfo(tracer trace.Tracer, manifest *Manifest) (*PackageInfo, error) {
+func (ds *PackageService) extractPackageInfo(tracer trace.Tracer, manifest *birdwatcher.Manifest) (*birdwatcher.PackageInfo, error) {
 	log := tracer.CurrentTrace().Logger
 	env, err := ds.collector.CollectData(log)
 	if err != nil {
@@ -301,7 +274,7 @@ func (ds *PackageService) extractPackageInfo(tracer trace.Tracer, manifest *Mani
 		env.OperatingSystem.Platform, env.OperatingSystem.PlatformVersion, env.OperatingSystem.Architecture)
 }
 
-func matchPackageSelectorPlatform(key string, dict map[string]map[string]map[string]*PackageInfo) (string, bool) {
+func matchPackageSelectorPlatform(key string, dict map[string]map[string]map[string]*birdwatcher.PackageInfo) (string, bool) {
 	if _, ok := dict[key]; ok {
 		return key, true
 	} else if _, ok := dict["_any"]; ok {
@@ -311,7 +284,7 @@ func matchPackageSelectorPlatform(key string, dict map[string]map[string]map[str
 	return "", false
 }
 
-func matchPackageSelectorVersion(key string, dict map[string]map[string]*PackageInfo) (string, bool) {
+func matchPackageSelectorVersion(key string, dict map[string]map[string]*birdwatcher.PackageInfo) (string, bool) {
 	if _, ok := dict[key]; ok {
 		return key, true
 	} else if _, ok := dict["_any"]; ok {
@@ -321,7 +294,7 @@ func matchPackageSelectorVersion(key string, dict map[string]map[string]*Package
 	return "", false
 }
 
-func matchPackageSelectorArch(key string, dict map[string]*PackageInfo) (string, bool) {
+func matchPackageSelectorArch(key string, dict map[string]*birdwatcher.PackageInfo) (string, bool) {
 	if _, ok := dict[key]; ok {
 		return key, true
 	} else if _, ok := dict["_any"]; ok {

@@ -190,14 +190,15 @@ func installerNotCalledMock() *installerMock.Mock {
 	return &installerMock.Mock{}
 }
 
-func selectMockService(service packageservice.PackageService) func(tracer trace.Tracer, repository string, localrepo localpackages.Repository) packageservice.PackageService {
-	return func(tracer trace.Tracer, repository string, localrepo localpackages.Repository) packageservice.PackageService {
+func selectMockService(service packageservice.PackageService) func(tracer trace.Tracer, input *ConfigurePackagePluginInput, localrepo localpackages.Repository) packageservice.PackageService {
+	return func(tracer trace.Tracer, input *ConfigurePackagePluginInput, localrepo localpackages.Repository) packageservice.PackageService {
 		return service
 	}
 }
 
 func serviceSuccessMock() *serviceMock.Mock {
 	mockService := serviceMock.Mock{}
+	mockService.On("GetPackageArnAndVersion", mock.Anything, mock.Anything).Return([]string{"packageArn"}, []string{"0.0.1"})
 	mockService.On("DownloadManifest", mock.Anything, mock.Anything, mock.Anything).Return("packageArn", "0.0.1", false, nil)
 	mockService.On("ReportResult", mock.Anything, mock.Anything).Return(nil)
 	return &mockService
@@ -205,6 +206,7 @@ func serviceSuccessMock() *serviceMock.Mock {
 
 func serviceSameManifestCacheMock() *serviceMock.Mock {
 	mockService := serviceMock.Mock{}
+	mockService.On("GetPackageArnAndVersion", mock.Anything, mock.Anything).Return([]string{"packageArn"}, []string{"0.0.1"})
 	mockService.On("DownloadManifest", mock.Anything, mock.Anything, mock.Anything).Return("packageArn", "0.0.1", true, nil)
 	mockService.On("ReportResult", mock.Anything, mock.Anything).Return(nil)
 	return &mockService
@@ -212,6 +214,7 @@ func serviceSameManifestCacheMock() *serviceMock.Mock {
 
 func serviceFailedMock() *serviceMock.Mock {
 	mockService := serviceMock.Mock{}
+	mockService.On("GetPackageArnAndVersion", mock.Anything, mock.Anything).Return([]string{"packageArn"}, []string{"0.0.1"})
 	mockService.On("DownloadManifest", mock.Anything, mock.Anything, mock.Anything).Return("", "", false, errors.New("testerror"))
 	return &mockService
 }
@@ -222,6 +225,7 @@ func serviceRebootMock() *serviceMock.Mock {
 
 func serviceUpgradeMock() *serviceMock.Mock {
 	mockService := serviceMock.Mock{}
+	mockService.On("GetPackageArnAndVersion", mock.Anything, mock.Anything).Return([]string{"packageArn"}, []string{"0.0.1"})
 	mockService.On("DownloadManifest", mock.Anything, mock.Anything, "latest").Return("packageArn", "0.0.2", false, nil)
 	mockService.On("DownloadArtifact", mock.Anything, mock.Anything, "0.0.2").Return("/temp/0.0.2", nil)
 	mockService.On("ReportResult", mock.Anything, mock.Anything).Return(nil)
