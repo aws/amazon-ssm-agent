@@ -12,7 +12,7 @@
 // implied. See the License for the specific language governing
 // permissions and limitations under the License.
 
-package birdwatcher
+package birdwatcherservice
 
 import (
 	"errors"
@@ -20,6 +20,9 @@ import (
 
 	"github.com/aws/amazon-ssm-agent/agent/fileutil/artifact"
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/birdwatcher"
+	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/birdwatcher/birdwatcherarchive"
+	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/birdwatcher/facade"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/envdetect"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/envdetect/ec2infradetect"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/envdetect/osdetect"
@@ -43,23 +46,23 @@ func (t *TimeMock) NowUnixNano() int64 {
 	return int64(args.Int(0))
 }
 
-type pkgtree map[string]map[string]map[string]*PackageInfo
+type pkgtree map[string]map[string]map[string]*birdwatcher.PackageInfo
 type pkgselector struct {
 	platform     string
 	version      string
 	architecture string
-	pkginfo      *PackageInfo
+	pkginfo      *birdwatcher.PackageInfo
 }
 
 func manifestPackageGen(sel *[]pkgselector) pkgtree {
 	result := pkgtree{}
 	for _, s := range *sel {
 		if _, ok := result[s.platform]; !ok {
-			result[s.platform] = map[string]map[string]*PackageInfo{}
+			result[s.platform] = map[string]map[string]*birdwatcher.PackageInfo{}
 		}
 
 		if _, ok := result[s.platform][s.version]; !ok {
-			result[s.platform][s.version] = map[string]*PackageInfo{}
+			result[s.platform][s.version] = map[string]*birdwatcher.PackageInfo{}
 		}
 
 		if _, ok := result[s.platform][s.version][s.architecture]; !ok {
@@ -77,25 +80,25 @@ func TestExtractPackageInfo(t *testing.T) {
 
 	data := []struct {
 		name        string
-		manifest    *Manifest
-		expected    *PackageInfo
+		manifest    *birdwatcher.Manifest
+		expected    *birdwatcher.PackageInfo
 		expectedErr bool
 	}{
 		{
 			"single entry, matching manifest",
-			&Manifest{
+			&birdwatcher.Manifest{
 				Packages: manifestPackageGen(&[]pkgselector{
-					{platformName, platformVersion, architecture, &PackageInfo{File: "filename"}},
+					{platformName, platformVersion, architecture, &birdwatcher.PackageInfo{File: "filename"}},
 				}),
 			},
-			&PackageInfo{File: "filename"},
+			&birdwatcher.PackageInfo{File: "filename"},
 			false,
 		},
 		{
 			"non-matching name in manifest",
-			&Manifest{
+			&birdwatcher.Manifest{
 				Packages: manifestPackageGen(&[]pkgselector{
-					{"nonexistname", platformVersion, architecture, &PackageInfo{File: "filename"}},
+					{"nonexistname", platformVersion, architecture, &birdwatcher.PackageInfo{File: "filename"}},
 				}),
 			},
 			nil,
@@ -103,9 +106,9 @@ func TestExtractPackageInfo(t *testing.T) {
 		},
 		{
 			"non-matching version in manifest",
-			&Manifest{
+			&birdwatcher.Manifest{
 				Packages: manifestPackageGen(&[]pkgselector{
-					{platformName, "nonexistversion", architecture, &PackageInfo{File: "filename"}},
+					{platformName, "nonexistversion", architecture, &birdwatcher.PackageInfo{File: "filename"}},
 				}),
 			},
 			nil,
@@ -113,9 +116,9 @@ func TestExtractPackageInfo(t *testing.T) {
 		},
 		{
 			"non-matching arch in manifest",
-			&Manifest{
+			&birdwatcher.Manifest{
 				Packages: manifestPackageGen(&[]pkgselector{
-					{platformName, platformVersion, "nonexistarch", &PackageInfo{File: "filename"}},
+					{platformName, platformVersion, "nonexistarch", &birdwatcher.PackageInfo{File: "filename"}},
 				}),
 			},
 			nil,
@@ -123,72 +126,72 @@ func TestExtractPackageInfo(t *testing.T) {
 		},
 		{
 			"multiple entry, matching manifest",
-			&Manifest{
+			&birdwatcher.Manifest{
 				Packages: manifestPackageGen(&[]pkgselector{
-					{platformName, platformVersion, "nonexistarch", &PackageInfo{File: "wrongfilename"}},
-					{platformName, platformVersion, architecture, &PackageInfo{File: "filename"}},
+					{platformName, platformVersion, "nonexistarch", &birdwatcher.PackageInfo{File: "wrongfilename"}},
+					{platformName, platformVersion, architecture, &birdwatcher.PackageInfo{File: "filename"}},
 				}),
 			},
-			&PackageInfo{File: "filename"},
+			&birdwatcher.PackageInfo{File: "filename"},
 			false,
 		},
 		{
 			"`_any` platform entry, matching manifest",
-			&Manifest{
+			&birdwatcher.Manifest{
 				Packages: manifestPackageGen(&[]pkgselector{
-					{"_any", platformVersion, architecture, &PackageInfo{File: "filename"}},
+					{"_any", platformVersion, architecture, &birdwatcher.PackageInfo{File: "filename"}},
 				}),
 			},
-			&PackageInfo{File: "filename"},
+			&birdwatcher.PackageInfo{File: "filename"},
 			false,
 		},
 		{
 			"`_any` version entry, matching manifest",
-			&Manifest{
+			&birdwatcher.Manifest{
 				Packages: manifestPackageGen(&[]pkgselector{
-					{platformName, "_any", architecture, &PackageInfo{File: "filename"}},
+					{platformName, "_any", architecture, &birdwatcher.PackageInfo{File: "filename"}},
 				}),
 			},
-			&PackageInfo{File: "filename"},
+			&birdwatcher.PackageInfo{File: "filename"},
 			false,
 		},
 		{
 			"`_any` arch entry, matching manifest",
-			&Manifest{
+			&birdwatcher.Manifest{
 				Packages: manifestPackageGen(&[]pkgselector{
-					{platformName, platformVersion, "_any", &PackageInfo{File: "filename"}},
+					{platformName, platformVersion, "_any", &birdwatcher.PackageInfo{File: "filename"}},
 				}),
 			},
-			&PackageInfo{File: "filename"},
+			&birdwatcher.PackageInfo{File: "filename"},
 			false,
 		},
 		{
 			"`_any` entry and concrete entry, matching manifest",
-			&Manifest{
+			&birdwatcher.Manifest{
 				Packages: manifestPackageGen(&[]pkgselector{
-					{platformName, platformVersion, "_any", &PackageInfo{File: "wrongfilename"}},
-					{platformName, platformVersion, architecture, &PackageInfo{File: "filename"}},
+					{platformName, platformVersion, "_any", &birdwatcher.PackageInfo{File: "wrongfilename"}},
+					{platformName, platformVersion, architecture, &birdwatcher.PackageInfo{File: "filename"}},
 				}),
 			},
-			&PackageInfo{File: "filename"},
+			&birdwatcher.PackageInfo{File: "filename"},
 			false,
 		},
 		{
 			"multi-level`_any` entry, matching manifest",
-			&Manifest{
+			&birdwatcher.Manifest{
 				Packages: manifestPackageGen(&[]pkgselector{
-					{"_any", "_any", "_any", &PackageInfo{File: "filename"}},
+					{"_any", "_any", "_any", &birdwatcher.PackageInfo{File: "filename"}},
 				}),
 			},
-			&PackageInfo{File: "filename"},
+			&birdwatcher.PackageInfo{File: "filename"},
 			false,
 		},
 		{
 			"`_any` entry and non-matching entry, non-matching manifest",
-			&Manifest{
+			&birdwatcher.Manifest{
 				Packages: manifestPackageGen(&[]pkgselector{
-					{"_any", platformVersion, architecture, &PackageInfo{File: "wrongfilename"}},
-					{platformName, platformVersion, "nonexistarch", &PackageInfo{File: "alsowrongfilename"}},
+					{"_any", platformVersion, architecture, &birdwatcher.PackageInfo{File: "wrongfilename"}},
+					{platformName, platformVersion, "nonexistarch", &birdwatcher.PackageInfo{File: "alsowrongfilename"}},
 				}),
 			},
 			nil,
@@ -205,8 +208,8 @@ func TestExtractPackageInfo(t *testing.T) {
 				nil,
 			}, nil).Once()
 
-			facadeClientMock := facadeMock{
-				putConfigurePackageResultOutput: &ssm.PutConfigurePackageResultOutput{},
+			facadeClientMock := facade.FacadeMock{
+				PutConfigurePackageResultOutput: &ssm.PutConfigurePackageResultOutput{},
 			}
 
 			ds := &PackageService{facadeClient: &facadeClientMock, manifestCache: packageservice.ManifestCacheMemNew(), collector: &mockedCollector}
@@ -232,14 +235,14 @@ func TestReportResult(t *testing.T) {
 
 	data := []struct {
 		name          string
-		facadeClient  facadeMock
+		facadeClient  facade.FacadeMock
 		expectedErr   bool
 		packageResult packageservice.PackageResult
 	}{
 		{
 			"successful api call",
-			facadeMock{
-				putConfigurePackageResultOutput: &ssm.PutConfigurePackageResultOutput{},
+			facade.FacadeMock{
+				PutConfigurePackageResultOutput: &ssm.PutConfigurePackageResultOutput{},
 			},
 			false,
 			packageservice.PackageResult{
@@ -252,8 +255,8 @@ func TestReportResult(t *testing.T) {
 		},
 		{
 			"successful api call without previous version",
-			facadeMock{
-				putConfigurePackageResultOutput: &ssm.PutConfigurePackageResultOutput{},
+			facade.FacadeMock{
+				PutConfigurePackageResultOutput: &ssm.PutConfigurePackageResultOutput{},
 			},
 			false,
 			packageservice.PackageResult{
@@ -265,8 +268,8 @@ func TestReportResult(t *testing.T) {
 		},
 		{
 			"failing api call",
-			facadeMock{
-				putConfigurePackageResultError: errors.New("testerror"),
+			facade.FacadeMock{
+				PutConfigurePackageResultError: errors.New("testerror"),
 			},
 			true,
 			packageservice.PackageResult{
@@ -294,23 +297,23 @@ func TestReportResult(t *testing.T) {
 				assert.Error(t, err)
 			} else {
 				assert.NoError(t, err)
-				assert.Equal(t, testdata.packageResult.PackageName, *testdata.facadeClient.putConfigurePackageResultInput.PackageName)
-				assert.Equal(t, testdata.packageResult.Version, *testdata.facadeClient.putConfigurePackageResultInput.PackageVersion)
-				assert.Equal(t, testdata.packageResult.Operation, *testdata.facadeClient.putConfigurePackageResultInput.Operation)
+				assert.Equal(t, testdata.packageResult.PackageName, *testdata.facadeClient.PutConfigurePackageResultInput.PackageName)
+				assert.Equal(t, testdata.packageResult.Version, *testdata.facadeClient.PutConfigurePackageResultInput.PackageVersion)
+				assert.Equal(t, testdata.packageResult.Operation, *testdata.facadeClient.PutConfigurePackageResultInput.Operation)
 				if testdata.packageResult.PreviousPackageVersion == "" {
-					assert.Nil(t, testdata.facadeClient.putConfigurePackageResultInput.PreviousPackageVersion)
+					assert.Nil(t, testdata.facadeClient.PutConfigurePackageResultInput.PreviousPackageVersion)
 				} else {
-					assert.EqualValues(t, &testdata.packageResult.PreviousPackageVersion, testdata.facadeClient.putConfigurePackageResultInput.PreviousPackageVersion)
+					assert.EqualValues(t, &testdata.packageResult.PreviousPackageVersion, testdata.facadeClient.PutConfigurePackageResultInput.PreviousPackageVersion)
 				}
-				assert.Equal(t, (int64(now)-testdata.packageResult.Timing)/1000000, *testdata.facadeClient.putConfigurePackageResultInput.OverallTiming)
-				assert.Equal(t, testdata.packageResult.Exitcode, *testdata.facadeClient.putConfigurePackageResultInput.Result)
-				assert.Equal(t, "abc", *testdata.facadeClient.putConfigurePackageResultInput.Attributes["platformName"])
-				assert.Equal(t, "567", *testdata.facadeClient.putConfigurePackageResultInput.Attributes["platformVersion"])
-				assert.Equal(t, "xyz", *testdata.facadeClient.putConfigurePackageResultInput.Attributes["architecture"])
-				assert.Equal(t, "instanceIDX", *testdata.facadeClient.putConfigurePackageResultInput.Attributes["instanceID"])
-				assert.Equal(t, "instanceTypeZ", *testdata.facadeClient.putConfigurePackageResultInput.Attributes["instanceType"])
-				assert.Equal(t, "AZ1", *testdata.facadeClient.putConfigurePackageResultInput.Attributes["availabilityZone"])
-				assert.Equal(t, "Reg1", *testdata.facadeClient.putConfigurePackageResultInput.Attributes["region"])
+				assert.Equal(t, (int64(now)-testdata.packageResult.Timing)/1000000, *testdata.facadeClient.PutConfigurePackageResultInput.OverallTiming)
+				assert.Equal(t, testdata.packageResult.Exitcode, *testdata.facadeClient.PutConfigurePackageResultInput.Result)
+				assert.Equal(t, "abc", *testdata.facadeClient.PutConfigurePackageResultInput.Attributes["platformName"])
+				assert.Equal(t, "567", *testdata.facadeClient.PutConfigurePackageResultInput.Attributes["platformVersion"])
+				assert.Equal(t, "xyz", *testdata.facadeClient.PutConfigurePackageResultInput.Attributes["architecture"])
+				assert.Equal(t, "instanceIDX", *testdata.facadeClient.PutConfigurePackageResultInput.Attributes["instanceID"])
+				assert.Equal(t, "instanceTypeZ", *testdata.facadeClient.PutConfigurePackageResultInput.Attributes["instanceType"])
+				assert.Equal(t, "AZ1", *testdata.facadeClient.PutConfigurePackageResultInput.Attributes["availabilityZone"])
+				assert.Equal(t, "Reg1", *testdata.facadeClient.PutConfigurePackageResultInput.Attributes["region"])
 			}
 		})
 	}
@@ -325,15 +328,15 @@ func TestDownloadManifest(t *testing.T) {
 		name           string
 		packageName    string
 		packageVersion string
-		facadeClient   facadeMock
+		facadeClient   facade.FacadeMock
 		expectedErr    bool
 	}{
 		{
 			"successful getManifest with concrete version",
 			"packagename",
 			"1234",
-			facadeMock{
-				getManifestOutput: &ssm.GetManifestOutput{
+			facade.FacadeMock{
+				GetManifestOutput: &ssm.GetManifestOutput{
 					Manifest: &manifestStr,
 				},
 			},
@@ -343,8 +346,8 @@ func TestDownloadManifest(t *testing.T) {
 			"successful getManifest with latest",
 			"packagename",
 			packageservice.Latest,
-			facadeMock{
-				getManifestOutput: &ssm.GetManifestOutput{
+			facade.FacadeMock{
+				GetManifestOutput: &ssm.GetManifestOutput{
 					Manifest: &manifestStr,
 				},
 			},
@@ -354,8 +357,8 @@ func TestDownloadManifest(t *testing.T) {
 			"error in getManifest",
 			"packagename",
 			packageservice.Latest,
-			facadeMock{
-				getManifestError: errors.New("testerror"),
+			facade.FacadeMock{
+				GetManifestError: errors.New("testerror"),
 			},
 			true,
 		},
@@ -363,8 +366,8 @@ func TestDownloadManifest(t *testing.T) {
 			"error in parsing manifest",
 			"packagename",
 			packageservice.Latest,
-			facadeMock{
-				getManifestOutput: &ssm.GetManifestOutput{
+			facade.FacadeMock{
+				GetManifestOutput: &ssm.GetManifestOutput{
 					Manifest: &manifestStrErr,
 				},
 			},
@@ -374,6 +377,7 @@ func TestDownloadManifest(t *testing.T) {
 
 	for _, testdata := range data {
 		t.Run(testdata.name, func(t *testing.T) {
+			testArchive := birdwatcherarchive.New(&testdata.facadeClient)
 			mockedCollector := envdetect.CollectorMock{}
 			envdata := &envdetect.Environment{
 				&osdetect.OperatingSystem{"abc", "567", "", "xyz", "", ""},
@@ -382,7 +386,7 @@ func TestDownloadManifest(t *testing.T) {
 
 			mockedCollector.On("CollectData", mock.Anything).Return(envdata, nil).Once()
 			cache := packageservice.ManifestCacheMemNew()
-			ds := &PackageService{facadeClient: &testdata.facadeClient, manifestCache: cache, collector: &mockedCollector}
+			ds := &PackageService{facadeClient: &testdata.facadeClient, manifestCache: cache, collector: &mockedCollector, archive: testArchive}
 
 			_, result, isSameAsCache, err := ds.DownloadManifest(tracer, testdata.packageName, testdata.packageVersion)
 
@@ -390,8 +394,8 @@ func TestDownloadManifest(t *testing.T) {
 				assert.Error(t, err)
 			} else {
 				// verify parameter for api call
-				assert.Equal(t, testdata.packageName, *testdata.facadeClient.getManifestInput.PackageName)
-				assert.Equal(t, testdata.packageVersion, *testdata.facadeClient.getManifestInput.PackageVersion)
+				assert.Equal(t, testdata.packageName, *testdata.facadeClient.GetManifestInput.PackageName)
+				assert.Equal(t, testdata.packageVersion, *testdata.facadeClient.GetManifestInput.PackageVersion)
 				// verify result
 				assert.Equal(t, "1234", result)
 				assert.NoError(t, err)
@@ -408,20 +412,19 @@ func TestDownloadManifest(t *testing.T) {
 func TestDownloadManifestSameAsCacheManifest(t *testing.T) {
 	manifestStr := "{\"version\": \"1234\",\"packageArn\":\"packagearn\"}"
 	tracer := trace.NewTracer(log.NewMockLog())
-
 	data := []struct {
 		name           string
 		packageName    string
 		packageVersion string
-		facadeClient   facadeMock
+		facadeClient   facade.FacadeMock
 		expectedErr    bool
 	}{
 		{
 			"successful getManifest same as cache",
 			"packagearn",
 			"1234",
-			facadeMock{
-				getManifestOutput: &ssm.GetManifestOutput{
+			facade.FacadeMock{
+				GetManifestOutput: &ssm.GetManifestOutput{
 					Manifest: &manifestStr,
 				},
 			},
@@ -431,8 +434,8 @@ func TestDownloadManifestSameAsCacheManifest(t *testing.T) {
 			"successful getManifest same as cache for latest version",
 			"packagearn",
 			packageservice.Latest,
-			facadeMock{
-				getManifestOutput: &ssm.GetManifestOutput{
+			facade.FacadeMock{
+				GetManifestOutput: &ssm.GetManifestOutput{
 					Manifest: &manifestStr,
 				},
 			},
@@ -442,8 +445,8 @@ func TestDownloadManifestSameAsCacheManifest(t *testing.T) {
 			"successful getManifest same as cache if name != returned arn",
 			"packagename",
 			packageservice.Latest,
-			facadeMock{
-				getManifestOutput: &ssm.GetManifestOutput{
+			facade.FacadeMock{
+				GetManifestOutput: &ssm.GetManifestOutput{
 					Manifest: &manifestStr,
 				},
 			},
@@ -454,17 +457,12 @@ func TestDownloadManifestSameAsCacheManifest(t *testing.T) {
 	tracer.BeginSection("test successful getManifest same as cache")
 
 	mockedCollector := envdetect.CollectorMock{}
-	envdata := &envdetect.Environment{
-		&osdetect.OperatingSystem{"abc", "567", "", "xyz", "", ""},
-		&ec2infradetect.Ec2Infrastructure{"instanceIDX", "Reg1", "", "AZ1", "instanceTypeZ"},
-	}
-
-	mockedCollector.On("CollectData", mock.Anything).Return(envdata, nil).Once()
 
 	for _, testdata := range data {
+		testArchive := birdwatcherarchive.New(&testdata.facadeClient)
 		cache := packageservice.ManifestCacheMemNew()
 
-		ds := &PackageService{facadeClient: &testdata.facadeClient, manifestCache: cache, collector: &mockedCollector}
+		ds := &PackageService{facadeClient: &testdata.facadeClient, manifestCache: cache, collector: &mockedCollector, archive: testArchive}
 
 		// first call has empty cache and is expected to come back with isSameAsCache == false
 		_, result, isSameAsCache, err := ds.DownloadManifest(tracer, testdata.packageName, testdata.packageVersion)
@@ -475,8 +473,8 @@ func TestDownloadManifestSameAsCacheManifest(t *testing.T) {
 		_, result, isSameAsCache, err = ds.DownloadManifest(tracer, testdata.packageName, testdata.packageVersion)
 
 		// verify parameter for api call
-		assert.Equal(t, testdata.packageName, *testdata.facadeClient.getManifestInput.PackageName)
-		assert.Equal(t, testdata.packageVersion, *testdata.facadeClient.getManifestInput.PackageVersion)
+		assert.Equal(t, testdata.packageName, *testdata.facadeClient.GetManifestInput.PackageName)
+		assert.Equal(t, testdata.packageVersion, *testdata.facadeClient.GetManifestInput.PackageVersion)
 		// verify result
 		assert.Equal(t, "1234", result)
 		assert.NoError(t, err)
@@ -497,14 +495,14 @@ func TestDownloadManifestDifferentFromCacheManifest(t *testing.T) {
 		name           string
 		packageName    string
 		packageVersion string
-		facadeClient   facadeMock
+		facadeClient   facade.FacadeMock
 		expectedErr    bool
 	}{
 		"successful getManifest different from cache",
 		"packagenameorarndoesnotmatter",
 		"packageversiondoesnotmatter",
-		facadeMock{
-			getManifestOutput: &ssm.GetManifestOutput{
+		facade.FacadeMock{
+			GetManifestOutput: &ssm.GetManifestOutput{
 				Manifest: &manifestStr,
 			},
 		},
@@ -513,6 +511,7 @@ func TestDownloadManifestDifferentFromCacheManifest(t *testing.T) {
 
 	tracer.BeginSection("test successful getManifest different from cache")
 
+	testArchive := birdwatcherarchive.New(&testdata.facadeClient)
 	mockedCollector := envdetect.CollectorMock{}
 	envdata := &envdetect.Environment{
 		&osdetect.OperatingSystem{"abc", "567", "", "xyz", "", ""},
@@ -525,13 +524,13 @@ func TestDownloadManifestDifferentFromCacheManifest(t *testing.T) {
 	err := cache.WriteManifest("packagearn", "1234", []byte(cachedManifestStr))
 	assert.NoError(t, err)
 
-	ds := &PackageService{facadeClient: &testdata.facadeClient, manifestCache: cache, collector: &mockedCollector}
+	ds := &PackageService{facadeClient: &testdata.facadeClient, manifestCache: cache, collector: &mockedCollector, archive: testArchive}
 
 	_, result, isSameAsCache, err := ds.DownloadManifest(tracer, testdata.packageName, testdata.packageVersion)
 
 	// verify parameter for api call
-	assert.Equal(t, testdata.packageName, *testdata.facadeClient.getManifestInput.PackageName)
-	assert.Equal(t, testdata.packageVersion, *testdata.facadeClient.getManifestInput.PackageVersion)
+	assert.Equal(t, testdata.packageName, *testdata.facadeClient.GetManifestInput.PackageName)
+	assert.Equal(t, testdata.packageVersion, *testdata.facadeClient.GetManifestInput.PackageVersion)
 	// verify result
 	assert.Equal(t, "1234", result)
 	assert.NoError(t, err)
@@ -548,52 +547,52 @@ func TestFindFileFromManifest(t *testing.T) {
 
 	data := []struct {
 		name        string
-		manifest    *Manifest
-		file        File
+		manifest    *birdwatcher.Manifest
+		file        birdwatcher.File
 		expectedErr bool
 	}{
 		{
 			"successful file read",
-			&Manifest{
+			&birdwatcher.Manifest{
 				Packages: manifestPackageGen(&[]pkgselector{
-					{"platformName", "platformVersion", "architecture", &PackageInfo{File: "test.zip"}},
+					{"platformName", "platformVersion", "architecture", &birdwatcher.PackageInfo{File: "test.zip"}},
 				}),
-				Files: map[string]*File{"test.zip": &File{DownloadLocation: "https://example.com/agent"}},
+				Files: map[string]*birdwatcher.File{"test.zip": &birdwatcher.File{DownloadLocation: "https://example.com/agent"}},
 			},
-			File{
+			birdwatcher.File{
 				DownloadLocation: "https://example.com/agent",
 			},
 			false,
 		},
 		{
 			"fail to find match in file",
-			&Manifest{
+			&birdwatcher.Manifest{
 				Packages: manifestPackageGen(&[]pkgselector{}),
-				Files:    map[string]*File{},
+				Files:    map[string]*birdwatcher.File{},
 			},
-			File{},
+			birdwatcher.File{},
 			true,
 		},
 		{
 			"fail to find file name",
-			&Manifest{
+			&birdwatcher.Manifest{
 				Packages: manifestPackageGen(&[]pkgselector{
-					{"platformName", "platformVersion", "architecture", &PackageInfo{File: "test.zip"}},
+					{"platformName", "platformVersion", "architecture", &birdwatcher.PackageInfo{File: "test.zip"}},
 				}),
-				Files: map[string]*File{},
+				Files: map[string]*birdwatcher.File{},
 			},
-			File{},
+			birdwatcher.File{},
 			true,
 		},
 		{
 			"fail to find matching file name",
-			&Manifest{
+			&birdwatcher.Manifest{
 				Packages: manifestPackageGen(&[]pkgselector{
-					{"platformName", "platformVersion", "architecture", &PackageInfo{File: "test.zip"}},
+					{"platformName", "platformVersion", "architecture", &birdwatcher.PackageInfo{File: "test.zip"}},
 				}),
-				Files: map[string]*File{"nomatch": &File{DownloadLocation: "https://example.com/agent"}},
+				Files: map[string]*birdwatcher.File{"nomatch": &birdwatcher.File{DownloadLocation: "https://example.com/agent"}},
 			},
-			File{},
+			birdwatcher.File{},
 			true,
 		},
 	}
@@ -607,8 +606,8 @@ func TestFindFileFromManifest(t *testing.T) {
 				&ec2infradetect.Ec2Infrastructure{"instanceID", "region", "", "availabilityZone", "instanceType"},
 			}, nil).Once()
 
-			facadeClientMock := facadeMock{
-				putConfigurePackageResultOutput: &ssm.PutConfigurePackageResultOutput{},
+			facadeClientMock := facade.FacadeMock{
+				PutConfigurePackageResultOutput: &ssm.PutConfigurePackageResultOutput{},
 			}
 			ds := &PackageService{facadeClient: &facadeClientMock, manifestCache: packageservice.ManifestCacheMemNew(), collector: &mockedCollector}
 
@@ -631,7 +630,7 @@ func TestDownloadFile(t *testing.T) {
 	data := []struct {
 		name        string
 		network     networkMock
-		file        *File
+		file        *birdwatcher.File
 		expectedErr bool
 	}{
 		{
@@ -641,7 +640,7 @@ func TestDownloadFile(t *testing.T) {
 					LocalFilePath: "agent.zip",
 				},
 			},
-			&File{
+			&birdwatcher.File{
 				DownloadLocation: "https://example.com/agent",
 				Checksums: map[string]string{
 					"sha256": "asdf",
@@ -656,7 +655,7 @@ func TestDownloadFile(t *testing.T) {
 					LocalFilePath: "",
 				},
 			},
-			&File{
+			&birdwatcher.File{
 				DownloadLocation: "https://example.com/agent",
 				Checksums: map[string]string{
 					"sha256": "asdf",
@@ -669,7 +668,7 @@ func TestDownloadFile(t *testing.T) {
 			networkMock{
 				downloadError: errors.New("testerror"),
 			},
-			&File{
+			&birdwatcher.File{
 				DownloadLocation: "https://example.com/agent",
 				Checksums: map[string]string{
 					"sha256": "asdf",
@@ -680,7 +679,7 @@ func TestDownloadFile(t *testing.T) {
 	}
 	for _, testdata := range data {
 		t.Run(testdata.name, func(t *testing.T) {
-			networkdep = &testdata.network
+			birdwatcher.Networkdep = &testdata.network
 
 			result, err := downloadFile(tracer, testdata.file)
 			if testdata.expectedErr {
@@ -761,7 +760,7 @@ func TestDownloadArtifact(t *testing.T) {
 			}, nil).Once()
 
 			ds := &PackageService{manifestCache: cache, collector: &mockedCollector}
-			networkdep = &testdata.network
+			birdwatcher.Networkdep = &testdata.network
 
 			result, err := ds.DownloadArtifact(tracer, testdata.packageName, testdata.packageVersion)
 

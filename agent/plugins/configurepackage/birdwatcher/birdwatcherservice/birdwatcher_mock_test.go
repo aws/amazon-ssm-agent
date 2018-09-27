@@ -12,22 +12,21 @@
 // implied. See the License for the specific language governing
 // permissions and limitations under the License.
 
-package birdwatcher
+package birdwatcherservice
 
 import (
 	"github.com/aws/amazon-ssm-agent/agent/fileutil/artifact"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 )
 
-// dependency on S3 and downloaded artifacts
-type networkDep interface {
-	Download(log log.T, input artifact.DownloadInput) (artifact.DownloadOutput, error)
+// networkMock
+type networkMock struct {
+	downloadInput  artifact.DownloadInput
+	downloadOutput artifact.DownloadOutput
+	downloadError  error
 }
 
-var Networkdep networkDep = &networkDepImp{}
-
-type networkDepImp struct{}
-
-func (networkDepImp) Download(log log.T, input artifact.DownloadInput) (artifact.DownloadOutput, error) {
-	return artifact.Download(log, input)
+func (p *networkMock) Download(log log.T, input artifact.DownloadInput) (artifact.DownloadOutput, error) {
+	p.downloadInput = input
+	return p.downloadOutput, p.downloadError
 }

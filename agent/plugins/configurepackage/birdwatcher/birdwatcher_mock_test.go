@@ -17,38 +17,7 @@ package birdwatcher
 import (
 	"github.com/aws/amazon-ssm-agent/agent/fileutil/artifact"
 	"github.com/aws/amazon-ssm-agent/agent/log"
-	"github.com/aws/aws-sdk-go/aws/request"
-	"github.com/aws/aws-sdk-go/service/ssm"
 )
-
-// facadeMock
-type facadeMock struct {
-	getManifestInput  *ssm.GetManifestInput
-	getManifestOutput *ssm.GetManifestOutput
-	getManifestError  error
-
-	putConfigurePackageResultInput  *ssm.PutConfigurePackageResultInput
-	putConfigurePackageResultOutput *ssm.PutConfigurePackageResultOutput
-	putConfigurePackageResultError  error
-}
-
-func (*facadeMock) GetManifestRequest(*ssm.GetManifestInput) (*request.Request, *ssm.GetManifestOutput) {
-	panic("not implemented")
-}
-
-func (m *facadeMock) GetManifest(input *ssm.GetManifestInput) (*ssm.GetManifestOutput, error) {
-	m.getManifestInput = input
-	return m.getManifestOutput, m.getManifestError
-}
-
-func (*facadeMock) PutConfigurePackageResultRequest(*ssm.PutConfigurePackageResultInput) (*request.Request, *ssm.PutConfigurePackageResultOutput) {
-	panic("not implemented")
-}
-
-func (m *facadeMock) PutConfigurePackageResult(input *ssm.PutConfigurePackageResultInput) (*ssm.PutConfigurePackageResultOutput, error) {
-	m.putConfigurePackageResultInput = input
-	return m.putConfigurePackageResultOutput, m.putConfigurePackageResultError
-}
 
 // networkMock
 type networkMock struct {
