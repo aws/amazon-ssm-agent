@@ -205,10 +205,17 @@ func (s *Session) ModuleExecute(context context.T) (err error) {
 func (s *Session) ModuleRequestStop(stopType contracts.StopType) (err error) {
 	log := s.context.Log()
 	log.Infof("Stopping %s.", s.name)
+	defer func() {
+		if msg := recover(); msg != nil {
+			log.Errorf("MessageGatewayService ModuleRequestStop run panic: %v", msg)
+			log.Errorf("%s: %s", msg, debug.Stack())
+		}
+	}()
 
 	if s.controlChannel != nil {
-		err = s.controlChannel.Close(log)
-		log.Errorf("stopping controlchannel with error, %s", err)
+		if err = s.controlChannel.Close(log); err != nil {
+			log.Errorf("stopping controlchannel with error, %s", err)
+		}
 	}
 
 	s.processor.Stop(stopType)

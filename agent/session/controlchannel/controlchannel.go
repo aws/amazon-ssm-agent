@@ -160,7 +160,10 @@ func (controlChannel *ControlChannel) Reconnect(log log.T) error {
 // Close closes controlchannel - its web socket connection.
 func (controlChannel *ControlChannel) Close(log log.T) error {
 	log.Infof("Closing controlchannel with channel Id %s", controlChannel.ChannelId)
-	return controlChannel.wsChannel.Close(log)
+	if controlChannel.wsChannel != nil {
+		return controlChannel.wsChannel.Close(log)
+	}
+	return nil
 }
 
 // Open opens a websocket connection and sends the token for service to acknowledge the connection.

@@ -127,6 +127,17 @@ func TestClose(t *testing.T) {
 	mockWsChannel.AssertExpectations(t)
 }
 
+func TestCloseWhenControlChannelDoesNotExist(t *testing.T) {
+	controlChannel := &ControlChannel{}
+	mockWsChannel.On("Close", mock.Anything).Times(0)
+
+	// test close
+	err := controlChannel.Close(mockLog)
+
+	assert.Nil(t, err)
+	mockWsChannel.AssertExpectations(t)
+}
+
 func TestControlChannelIncomingMessageHandlerForStartSessionMessage(t *testing.T) {
 	u, _ := uuid.Parse(messageId)
 	agentJson := "{\"DataChannelId\":\"44da928d-1200-4501-a38a-f10d72e38cc4\",\"documentContent\":{\"schemaVersion\":\"1.0\"," +
