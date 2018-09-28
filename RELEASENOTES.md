@@ -1,5 +1,9 @@
 Latest
 ===============
+- Bug fix for issues during process termination on instances where IAM policy does not grant ssmmessages permissions.
+
+2.3.101.0
+===============
 - Bug fix to prevent defunct processes when creating the local user ssm-user.
 - Bug fix for sudoersFile permission to avoid "sudo" command warnings in Session Manager.
 - Disable hibernation on Windows platform if Cloudwatch configuration is present.
