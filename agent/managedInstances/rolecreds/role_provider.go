@@ -136,6 +136,13 @@ func (m *managedInstancesRoleProvider) Retrieve() (credentials.Value, error) {
 		}
 	}
 
+	// Set the expiration window to be half of the token's lifetime. This allows credential refreshes to survive transient
+	// network issues more easily. Expiring at half the lifetime also follows the behavior of other protocols such as DHCP
+	// https://tools.ietf.org/html/rfc2131#section-4.4.5. Note that not all of the behavior specified in that RFC is
+	// implemented, just the suggestion to start renewals at 50% of token validity.
+	m.ExpiryWindow = time.Until(*roleCreds.TokenExpirationDate) / 2
+
+	// Set the expiration of our credentials
 	m.SetExpiration(*roleCreds.TokenExpirationDate, m.ExpiryWindow)
 
 	// check to see if the agent should publish the credentials to the account aws credentials
