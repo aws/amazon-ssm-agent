@@ -144,6 +144,17 @@ func (m *MockSSMCaller) PutInventory(input *ssm.PutInventoryInput) (output *ssm.
 	return args.Get(0).(*ssm.PutInventoryOutput), args.Error(1)
 }
 
+func TestGetRandomBackOffTime(t *testing.T) {
+	c := context.NewMockDefault()
+	instanceID := "i-12345678"
+	backoffTime := getRandomBackOffTime(c, instanceID)
+	assert.Equal(t, backoffTime <= Max_Time_TO_Back_Off, true)
+
+	instanceID = "i-MockID"
+	backoffTime = getRandomBackOffTime(c, instanceID)
+	assert.Equal(t, backoffTime <= Max_Time_TO_Back_Off, true)
+}
+
 func TestSendDataToSSM(t *testing.T) {
 	testSendData(t, true)
 	testSendData(t, false)

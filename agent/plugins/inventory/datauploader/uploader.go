@@ -19,6 +19,9 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
+	"hash/fnv"
+	"math/rand"
+	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
@@ -33,6 +36,8 @@ import (
 const (
 	// Name represents name of this component that uploads data to SSM
 	Name = "InventoryUploader"
+	// The maximum time window range for random back off before call PutInventory API
+	Max_Time_TO_Back_Off = 30
 )
 
 // T represents contracts for SSM Inventory data uploader
@@ -116,6 +121,8 @@ func (u *InventoryUploader) SendDataToSSM(context context.T, items []*ssm.Invent
 	}
 	var resp *ssm.PutInventoryOutput
 
+	// random back off before call PutInventory API
+	time.Sleep(time.Duration(getRandomBackOffTime(context, instanceID)) * time.Second)
 	log.Debugf("Calling PutInventory API with parameters - %v", params)
 	if u.ssm != nil {
 		resp, err = u.ssm.PutInventory(params)
@@ -129,6 +136,21 @@ func (u *InventoryUploader) SendDataToSSM(context context.T, items []*ssm.Invent
 	}
 
 	return
+}
+
+// Get one random jitter time before calling PutInventory API to prevent huge number of request come to
+// the backend service in the same time.
+// Use current Time stamp + Hashcode of instance ID as random key
+// The jitter window is in 0-30 seconds.
+func getRandomBackOffTime(context context.T, instanceID string) (sleepTime int) {
+	log := context.Log()
+
+	hash := fnv.New32a()
+	hash.Write([]byte(instanceID))
+	rand.Seed(time.Now().Unix() + int64(hash.Sum32()))
+	sleepTime = rand.Intn(Max_Time_TO_Back_Off)
+	log.Debugf("Random back off: %v seconds before call put inventory", sleepTime)
+	return sleepTime
 }
 
 func (u *InventoryUploader) updateContentHash(context context.T, items []*ssm.InventoryItem) {
