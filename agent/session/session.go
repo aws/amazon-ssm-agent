@@ -308,7 +308,8 @@ func buildAgentTaskComplete(log log.T, res contracts.DocumentResult, instanceId 
 
 	// For SessionManager plugins, there is only one plugin in a document.
 	// Send AgentTaskComplete when we get the plugin level result, and ignore this document level result.
-	if pluginId == "" {
+	// For instance reboot scenarios, it only has document level result with "Failed" status, this result can't be ignored.
+	if pluginId == "" && res.Status != contracts.ResultStatusFailed {
 		return nil, nil
 	}
 
@@ -349,6 +350,13 @@ func formatAgentTaskCompletePayload(log log.T,
 	}
 
 	// get plugin result
+	if pluginId == "" {
+		// for instance reboot scenarios, it only contains document level result which does not contain pluginId.
+		for key := range pluginResults {
+			pluginId = key
+			break
+		}
+	}
 	pluginResult := pluginResults[pluginId]
 
 	if pluginResult == nil {

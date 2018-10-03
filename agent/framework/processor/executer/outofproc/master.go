@@ -117,7 +117,7 @@ func (e *OutOfProcExecuter) messaging(log log.T, ipc channel.Channel, resChan ch
 			e.docState.DocumentInformation.DocumentStatus == contracts.ResultStatusNotStarted {
 			e.docState.DocumentInformation.DocumentStatus = contracts.ResultStatusFailed
 			log.Info("document failed half way, sending fail message...")
-			resChan <- e.generateUnexpectedFailResult(fmt.Sprintf("document process failed unexpectedly: %s , check [ssm-document-worker] log for crash reason", err))
+			resChan <- e.generateUnexpectedFailResult(fmt.Sprintf("document process failed unexpectedly: %s , check [ssm-document-worker]/[ssm-session-worker] log for crash reason", err))
 		}
 		//destroy the channel
 		ipc.Destroy()
