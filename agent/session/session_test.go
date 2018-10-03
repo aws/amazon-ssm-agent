@@ -285,6 +285,48 @@ func (suite *SessionTestSuite) TestBuildAgentTaskCompleteWhenPluginIdIsEmpty() {
 	assert.Nil(suite.T(), msg)
 }
 
+// test case for document result when instance reboot happens.
+func (suite *SessionTestSuite) TestBuildAgentTaskCompleteWhenPluginIdIsEmptyAndStatusIsFailed() {
+	log := log.NewMockLog()
+	sessionPluginResultOutput := mgsContracts.SessionPluginResultOutput{
+		Output:      errorMsg,
+		S3Bucket:    s3Bucket,
+		S3UrlSuffix: s3UrlSuffix,
+		CwlGroup:    cwlGroup,
+		CwlStream:   cwlStream,
+	}
+	pluginResults := make(map[string]*contracts.PluginResult)
+	pluginResult := contracts.PluginResult{
+		PluginName: "Standard_Stream",
+		Status:     contracts.ResultStatusFailed,
+		Output:     sessionPluginResultOutput,
+	}
+	pluginResults["Standard_Stream"] = &pluginResult
+
+	result := contracts.DocumentResult{
+		Status:          contracts.ResultStatusFailed,
+		PluginResults:   pluginResults,
+		LastPlugin:      "",
+		MessageID:       messageId,
+		AssociationID:   "",
+		NPlugins:        1,
+		DocumentName:    "documentName",
+		DocumentVersion: "1",
+	}
+	msg, err := buildAgentTaskComplete(log, result, instanceId)
+	assert.Nil(suite.T(), err)
+	agentMessage := &mgsContracts.AgentMessage{}
+	agentMessage.Deserialize(log, msg)
+	assert.Equal(suite.T(), mgsContracts.TaskCompleteMessage, agentMessage.MessageType)
+
+	payload := &mgsContracts.AgentTaskCompletePayload{}
+	json.Unmarshal(agentMessage.Payload, payload)
+	assert.Equal(suite.T(), instanceId, payload.InstanceId)
+	assert.Equal(suite.T(), string(contracts.ResultStatusFailed), payload.FinalTaskStatus)
+	assert.Equal(suite.T(), messageId, payload.TaskId)
+	assert.Equal(suite.T(), errorMsg, payload.Output)
+}
+
 func (suite *SessionTestSuite) TestGetMgsEndpoint() {
 	host, err := getMgsEndpoint("us-east-1")
 
