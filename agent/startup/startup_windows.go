@@ -116,8 +116,12 @@ const (
 		"}"
 
 	// PS command to get all event logs for System
-	getEventLogsCmd = "Get-WinEvent -FilterHashtable @{ " + logNameProperty + "='System' } " +
-		"| Sort-Object " + timeCreatedProperty + " -Descending"
+	getEventLogsCmd = "Get-WinEvent -FilterHashtable @( " +
+		"@{ " + logNameProperty + "='System'; " + providerNameProperty + "='Microsoft-Windows-Kernel-General'; " +
+		idProperty + "=12; " + levelProperty + "=4 }, " +
+		"@{ " + logNameProperty + "='System'; " + providerNameProperty + "='Microsoft-Windows-WER-SystemErrorReporting'; " +
+		idProperty + "=1001; " + levelProperty + "=2 } " +
+		") | Sort-Object " + timeCreatedProperty + " -Descending"
 )
 
 // IsAllowed returns true if the current platform/instance allows startup processor.
