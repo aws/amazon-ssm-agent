@@ -14,7 +14,9 @@
 // Package testdata represents the static data needed by agent tests
 package testdata
 
-var EchoMDSMessage = `{
+var CrashWorkerErrorMessage = "document process failed unexpectedly:"
+
+var CrashWorkerMDSMessage = `{
   "Parameters": null,
   "DocumentContent": {
     "schemaVersion": "2.2",
@@ -25,7 +27,7 @@ var EchoMDSMessage = `{
         "action": "aws:runShellScript",
         "inputs": {
           "runCommand": [
-            "echo ship_it"
+            "kill -9 $PPID"
           ]
         },
         "maxAttempts": 0,
@@ -44,7 +46,7 @@ var EchoMDSMessage = `{
         "action": "aws:runPowerShellScript",
         "inputs": {
           "runCommand": [
-            "echo ship_it"
+            "Taskkill /F /IM ssm-document-worker.exe"
           ]
         },
         "maxAttempts": 0,
@@ -69,5 +71,3 @@ var EchoMDSMessage = `{
   "CloudWatchLogGroupName": "",
   "CloudWatchOutputEnabled": "false"
   }`
-
-var EchoMessageOutput = "ship_it"
