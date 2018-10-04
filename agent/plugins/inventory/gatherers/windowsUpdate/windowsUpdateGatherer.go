@@ -57,7 +57,10 @@ func (t *T) Run(context context.T, configuration model.Config) (items []model.It
 	var data []model.WindowsUpdateData
 	out, err := cmdExecutor(cmd, windowsUpdateQueryCmd)
 	if err == nil {
-		err = json.Unmarshal(out, &data)
+		//If there is no windows update in instance, will return empty result instead of throwing error
+		if len(out) != 0 {
+			err = json.Unmarshal(out, &data)
+		}
 		//CaptureTime must comply with format: 2016-07-30T18:15:37Z or else it will throw error
 		currentTime := time.Now().UTC()
 		captureTime := currentTime.Format(time.RFC3339)

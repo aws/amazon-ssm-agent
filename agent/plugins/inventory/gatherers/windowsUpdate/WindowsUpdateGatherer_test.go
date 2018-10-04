@@ -43,6 +43,11 @@ func testExecuteCommand(command string, args ...string) ([]byte, error) {
 	return output, nil
 }
 
+func testExecuteCommandEmpty(command string, args ...string) ([]byte, error) {
+
+	return make([]byte, 0), nil
+}
+
 func TestGatherer(t *testing.T) {
 	contextMock := context.NewMockDefault()
 	gatherer := Gatherer(contextMock)
@@ -53,4 +58,17 @@ func TestGatherer(t *testing.T) {
 	assert.Equal(t, GathererName, item[0].Name)
 	assert.Equal(t, schemaVersionOfWindowsUpdate, item[0].SchemaVersion)
 	assert.Equal(t, testUpdate, item[0].Content)
+}
+
+func TestGathererEmpty(t *testing.T) {
+	contextMock := context.NewMockDefault()
+	gatherer := Gatherer(contextMock)
+	cmdExecutor = testExecuteCommandEmpty
+	var expectContent []model.WindowsUpdateData
+	item, err := gatherer.Run(contextMock, model.Config{})
+	assert.Nil(t, err)
+	assert.Equal(t, 1, len(item))
+	assert.Equal(t, GathererName, item[0].Name)
+	assert.Equal(t, schemaVersionOfWindowsUpdate, item[0].SchemaVersion)
+	assert.Equal(t, expectContent, item[0].Content)
 }
