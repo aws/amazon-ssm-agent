@@ -1,5 +1,11 @@
 Latest
 ===============
+- Bug fix for issue that GatherInventory throw out error when there is no Windows Update in instance
+- Add more filters when getting the Windows event logs at startup to improve performance
+- Add random jitter before call PutInventory in inventory datauploader
+
+2.3.117.0
+===============
 - Bug fix for issues during process termination on instances where IAM policy does not grant ssmmessages permissions.
 
 2.3.101.0
