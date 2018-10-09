@@ -96,7 +96,6 @@ func (agent *SSMAgent) Stop() {
 	log.Flush()
 
 	if agent.coreManager == nil {
-		log.Errorf("Agent's core manager can't be nil")
 		return
 	}
 
