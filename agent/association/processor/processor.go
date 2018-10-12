@@ -15,15 +15,15 @@
 package processor
 
 import (
+	"bytes"
 	"fmt"
+	"path"
+	"strings"
 	"sync"
 	"time"
 
-	"bytes"
-	"path"
-	"strings"
-
 	"github.com/aws/amazon-ssm-agent/agent/association/cache"
+	"github.com/aws/amazon-ssm-agent/agent/association/frequentcollector"
 	"github.com/aws/amazon-ssm-agent/agent/association/model"
 	"github.com/aws/amazon-ssm-agent/agent/association/schedulemanager"
 	"github.com/aws/amazon-ssm-agent/agent/association/schedulemanager/signal"
@@ -382,6 +382,16 @@ func (p *Processor) runScheduledAssociation(log log.T) {
 	p.proc.Submit(*docState)
 
 	log.Debug("runScheduledAssociation submitted document")
+
+	frequentCollector := frequentcollector.GetFrequentCollector()
+	if frequentCollector.IsSoftwareInventoryAssociation(docState) {
+		// Start the frequent collector if the association enabled it
+		frequentCollector.ClearTicker()
+		if frequentCollector.IsFrequentCollectorEnabled(docState, scheduledAssociation) {
+			log.Infof("This software inventory association enabled frequent collector")
+			frequentCollector.StartFrequentCollector(p.context, docState, scheduledAssociation)
+		}
+	}
 }
 
 func isAssociationTimedOut(assoc *model.InstanceAssociation) bool {

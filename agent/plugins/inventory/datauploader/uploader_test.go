@@ -129,6 +129,37 @@ func TestConvertExcludedAndEmptyToSsmInventoryItems(t *testing.T) {
 	assert.Equal(t, "{\"Name\":\"Test1\",\"Publisher\":\"Pub1\",\"Version\":\"\",\"Release\":\"1\",\"ApplicationType\":\"Foo\",\"Architecture\":\"Brutalism\"}", string(bytes[:]))
 }
 
+func TestGetDirtySsmInventoryItems_empty(t *testing.T) {
+	var items []model.Item
+	var dirtyInventoryItems []*ssm.InventoryItem
+	var err error
+
+	c := context.NewMockDefault()
+	u := MockInventoryUploader()
+
+	//setting up inventory.Item
+	dirtyInventoryItems, err = u.GetDirtySsmInventoryItems(c, items)
+
+	assert.Nil(t, err, "Error shouldn't be thrown if there's no inventory items are given to check")
+	assert.Equal(t, len(dirtyInventoryItems), 0, "Dirty inventory items should be empty when no inventory items are given to check")
+}
+
+func TestGetDirtySsmInventoryItems_dirtyItemFound(t *testing.T) {
+	var items []model.Item
+	var dirtyInventoryItems []*ssm.InventoryItem
+	var err error
+
+	c := context.NewMockDefault()
+	u := MockInventoryUploader()
+
+	//setting up inventory.Item
+	items = append(items, ApplicationInventoryItem()...)
+	dirtyInventoryItems, err = u.GetDirtySsmInventoryItems(c, items)
+
+	assert.Nil(t, err, "Error shouldn't be thrown if there's an dirty inventory item found")
+	assert.Equal(t, len(dirtyInventoryItems), 1, "Dirty inventory item found")
+}
+
 // Mock stands for a mocked service.
 type MockSSMCaller struct {
 	mock.Mock
