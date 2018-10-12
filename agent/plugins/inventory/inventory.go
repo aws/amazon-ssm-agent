@@ -209,6 +209,61 @@ func (p *Plugin) ApplyInventoryPolicy(context context.T, inventoryInput PluginIn
 	return
 }
 
+// ApplyInventoryFrequentCollector applies frequent collector regarding which gatherers to run
+func (p Plugin) ApplyInventoryFrequentCollector(context context.T, gatherers map[gatherers.T]model.Config, output iohandler.IOHandler) {
+	log := p.context.Log()
+
+	var dirtyItems []*ssm.InventoryItem
+	var items []model.Item
+	var err error
+
+	//execute all specified gatherers with their respective config
+	if items, err = p.RunGatherers(gatherers); err != nil {
+		log.Debugf("failed at RunGatherers, error : %#v", err)
+		log.Info(err.Error())
+		output.SetExitCode(1)
+		output.AppendError(err.Error())
+		return
+	}
+
+	//check if there is data to send to SSM
+	if len(items) == 0 {
+		//no data to send to ssm - no need to call PutInventory API
+		log.Info(msgWhenNoDataToReturnForInventoryPlugin)
+		output.SetExitCode(0)
+		output.AppendInfo(msgWhenNoDataToReturnForInventoryPlugin)
+		return
+	}
+
+	if dirtyItems, err = p.uploader.GetDirtySsmInventoryItems(context, items); err != nil {
+		log.Debugf("Encountered error in collecting dirty Inventory items - %#v. Skipping upload to SSM", err.Error())
+		output.SetExitCode(1)
+		output.AppendError(err.Error())
+		return
+	}
+
+	if len(dirtyItems) == 0 {
+		log.Debugf("No dirty inventory items found, skipping uploading")
+		log.Info(msgWhenNoDataToReturnForInventoryPlugin)
+		output.SetExitCode(0)
+		output.AppendInfo(msgWhenNoDataToReturnForInventoryPlugin)
+		return
+	}
+
+	if err = p.uploader.SendDataToSSM(context, dirtyItems); err != nil {
+		//some other error happened for which there is no need to retry - upload failed
+		log.Debugf(" Error happened while p.uploader.SendDataToSSM")
+		propagateSSMError(output, err, log)
+		return
+	}
+
+	log.Infof("%v uploaded inventory data from frequent collector to SSM", Name())
+	output.SetExitCode(0)
+	output.AppendInfo(successfulMsgForInventoryPlugin)
+
+	return
+}
+
 // shouldRetryWithNonOptimizedData will return true if the Exception occurred is one of ItemContentMismatchException
 // or InvalidItemContentException and will retry sending data to SSM. It will return false, if any other error occurs.
 func shouldRetryWithNonOptimizedData(err error, log log.T) bool {
@@ -229,6 +284,13 @@ func propagateSSMError(output iohandler.IOHandler, err error, log log.T) {
 	log.Info(message)
 	output.SetExitCode(1)
 	output.AppendError(message)
+}
+
+func (p *Plugin) GetSupportedGatherer(gatherName string) (gatherers.T, bool) {
+	if gatherer, gathererPresent := p.supportedGatherers[gatherName]; gathererPresent {
+		return gatherer, true
+	}
+	return nil, false
 }
 
 // CanGathererRun returns true if the gatherer can run on given OS, else it returns false. It throws error if the

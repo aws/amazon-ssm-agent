@@ -21,6 +21,7 @@ import (
 	"fmt"
 	"hash/fnv"
 	"math/rand"
+	"strings"
 	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
@@ -44,6 +45,7 @@ const (
 type T interface {
 	SendDataToSSM(context context.T, items []*ssm.InventoryItem) (err error)
 	ConvertToSsmInventoryItems(context context.T, items []model.Item) (optimizedInventoryItems, nonOptimizedInventoryItems []*ssm.InventoryItem, err error)
+	GetDirtySsmInventoryItems(context context.T, items []model.Item) (dirtyInventoryItems []*ssm.InventoryItem, err error)
 }
 
 type SSMCaller interface {
@@ -241,6 +243,57 @@ func (u *InventoryUploader) ConvertToSsmInventoryItems(context context.T, items 
 			log.Debugf("Adding item - %v to the optimizedItems (since its new data)", nonOptimizedItem)
 
 			optimizedInventoryItems = append(optimizedInventoryItems, nonOptimizedItem)
+		}
+	}
+
+	return
+}
+
+// GetDirtySsmInventoryItems get the inventory item data for items that have changes since last successful report to SSM.
+func (u InventoryUploader) GetDirtySsmInventoryItems(context context.T, items []model.Item) (dirtyInventoryItems []*ssm.InventoryItem, err error) {
+	log := context.Log()
+
+	//NOTE: There can be multiple inventory type data.
+	//Each inventory type data => 1 inventory Item. Each inventory type, can contain multiple items
+
+	//iterating over multiple inventory data types.
+	for _, item := range items {
+		var dataB []byte
+		var rawItem *ssm.InventoryItem
+
+		newHash := ""
+		oldHash := ""
+		itemName := item.Name
+
+		//we should only calculate checksum using content & not include capture time - because that field will always change causing
+		//the checksum to change again & again even if content remains same.
+
+		if dataB, err = json.Marshal(item.Content); err != nil {
+			return
+		}
+
+		newHash = calculateCheckSum(dataB)
+		log.Debugf("Item being converted - %v with data - %v with checksum - %v", itemName, string(dataB), newHash)
+
+		//construct non-optimized inventory item
+		if rawItem, err = ConvertToSSMInventoryItem(item); err != nil {
+			err = fmt.Errorf("Formatting inventory data of %v failed due to %v, rawItem : %#v", itemName, err.Error(), rawItem)
+			return
+		}
+
+		//add contentHash too
+		rawItem.ContentHash = &newHash
+
+		//populate optimized item - if content hash matches with earlier collected data.
+		oldHash = u.optimizer.GetContentHash(itemName)
+
+		log.Infof("Get Dirty inventory items, old hash - %v, new hash - %v for the inventory type - %v", oldHash, newHash, itemName)
+
+		if strings.Compare(newHash, oldHash) != 0 {
+			log.Infof("Dirty inventory type found. Change has been detected for inventory type: %v", itemName)
+			dirtyInventoryItems = append(dirtyInventoryItems, rawItem)
+		} else {
+			log.Infof("Content hash is the same with the old for %v", itemName)
 		}
 	}
 
