@@ -21,7 +21,9 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/fileutil/artifact"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/birdwatcher"
+	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/birdwatcher/archive"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/birdwatcher/birdwatcherarchive"
+	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/birdwatcher/documentarchive"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/birdwatcher/facade"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/envdetect"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/envdetect/ec2infradetect"
@@ -88,17 +90,17 @@ func TestExtractPackageInfo(t *testing.T) {
 			"single entry, matching manifest",
 			&birdwatcher.Manifest{
 				Packages: manifestPackageGen(&[]pkgselector{
-					{platformName, platformVersion, architecture, &birdwatcher.PackageInfo{File: "filename"}},
+					{platformName, platformVersion, architecture, &birdwatcher.PackageInfo{FileName: "filename"}},
 				}),
 			},
-			&birdwatcher.PackageInfo{File: "filename"},
+			&birdwatcher.PackageInfo{FileName: "filename"},
 			false,
 		},
 		{
 			"non-matching name in manifest",
 			&birdwatcher.Manifest{
 				Packages: manifestPackageGen(&[]pkgselector{
-					{"nonexistname", platformVersion, architecture, &birdwatcher.PackageInfo{File: "filename"}},
+					{"nonexistname", platformVersion, architecture, &birdwatcher.PackageInfo{FileName: "filename"}},
 				}),
 			},
 			nil,
@@ -108,7 +110,7 @@ func TestExtractPackageInfo(t *testing.T) {
 			"non-matching version in manifest",
 			&birdwatcher.Manifest{
 				Packages: manifestPackageGen(&[]pkgselector{
-					{platformName, "nonexistversion", architecture, &birdwatcher.PackageInfo{File: "filename"}},
+					{platformName, "nonexistversion", architecture, &birdwatcher.PackageInfo{FileName: "filename"}},
 				}),
 			},
 			nil,
@@ -118,7 +120,7 @@ func TestExtractPackageInfo(t *testing.T) {
 			"non-matching arch in manifest",
 			&birdwatcher.Manifest{
 				Packages: manifestPackageGen(&[]pkgselector{
-					{platformName, platformVersion, "nonexistarch", &birdwatcher.PackageInfo{File: "filename"}},
+					{platformName, platformVersion, "nonexistarch", &birdwatcher.PackageInfo{FileName: "filename"}},
 				}),
 			},
 			nil,
@@ -128,70 +130,70 @@ func TestExtractPackageInfo(t *testing.T) {
 			"multiple entry, matching manifest",
 			&birdwatcher.Manifest{
 				Packages: manifestPackageGen(&[]pkgselector{
-					{platformName, platformVersion, "nonexistarch", &birdwatcher.PackageInfo{File: "wrongfilename"}},
-					{platformName, platformVersion, architecture, &birdwatcher.PackageInfo{File: "filename"}},
+					{platformName, platformVersion, "nonexistarch", &birdwatcher.PackageInfo{FileName: "wrongfilename"}},
+					{platformName, platformVersion, architecture, &birdwatcher.PackageInfo{FileName: "filename"}},
 				}),
 			},
-			&birdwatcher.PackageInfo{File: "filename"},
+			&birdwatcher.PackageInfo{FileName: "filename"},
 			false,
 		},
 		{
 			"`_any` platform entry, matching manifest",
 			&birdwatcher.Manifest{
 				Packages: manifestPackageGen(&[]pkgselector{
-					{"_any", platformVersion, architecture, &birdwatcher.PackageInfo{File: "filename"}},
+					{"_any", platformVersion, architecture, &birdwatcher.PackageInfo{FileName: "filename"}},
 				}),
 			},
-			&birdwatcher.PackageInfo{File: "filename"},
+			&birdwatcher.PackageInfo{FileName: "filename"},
 			false,
 		},
 		{
 			"`_any` version entry, matching manifest",
 			&birdwatcher.Manifest{
 				Packages: manifestPackageGen(&[]pkgselector{
-					{platformName, "_any", architecture, &birdwatcher.PackageInfo{File: "filename"}},
+					{platformName, "_any", architecture, &birdwatcher.PackageInfo{FileName: "filename"}},
 				}),
 			},
-			&birdwatcher.PackageInfo{File: "filename"},
+			&birdwatcher.PackageInfo{FileName: "filename"},
 			false,
 		},
 		{
 			"`_any` arch entry, matching manifest",
 			&birdwatcher.Manifest{
 				Packages: manifestPackageGen(&[]pkgselector{
-					{platformName, platformVersion, "_any", &birdwatcher.PackageInfo{File: "filename"}},
+					{platformName, platformVersion, "_any", &birdwatcher.PackageInfo{FileName: "filename"}},
 				}),
 			},
-			&birdwatcher.PackageInfo{File: "filename"},
+			&birdwatcher.PackageInfo{FileName: "filename"},
 			false,
 		},
 		{
 			"`_any` entry and concrete entry, matching manifest",
 			&birdwatcher.Manifest{
 				Packages: manifestPackageGen(&[]pkgselector{
-					{platformName, platformVersion, "_any", &birdwatcher.PackageInfo{File: "wrongfilename"}},
-					{platformName, platformVersion, architecture, &birdwatcher.PackageInfo{File: "filename"}},
+					{platformName, platformVersion, "_any", &birdwatcher.PackageInfo{FileName: "wrongfilename"}},
+					{platformName, platformVersion, architecture, &birdwatcher.PackageInfo{FileName: "filename"}},
 				}),
 			},
-			&birdwatcher.PackageInfo{File: "filename"},
+			&birdwatcher.PackageInfo{FileName: "filename"},
 			false,
 		},
 		{
 			"multi-level`_any` entry, matching manifest",
 			&birdwatcher.Manifest{
 				Packages: manifestPackageGen(&[]pkgselector{
-					{"_any", "_any", "_any", &birdwatcher.PackageInfo{File: "filename"}},
+					{"_any", "_any", "_any", &birdwatcher.PackageInfo{FileName: "filename"}},
 				}),
 			},
-			&birdwatcher.PackageInfo{File: "filename"},
+			&birdwatcher.PackageInfo{FileName: "filename"},
 			false,
 		},
 		{
 			"`_any` entry and non-matching entry, non-matching manifest",
 			&birdwatcher.Manifest{
 				Packages: manifestPackageGen(&[]pkgselector{
-					{"_any", platformVersion, architecture, &birdwatcher.PackageInfo{File: "wrongfilename"}},
-					{platformName, platformVersion, "nonexistarch", &birdwatcher.PackageInfo{File: "alsowrongfilename"}},
+					{"_any", platformVersion, architecture, &birdwatcher.PackageInfo{FileName: "wrongfilename"}},
+					{platformName, platformVersion, "nonexistarch", &birdwatcher.PackageInfo{FileName: "alsowrongfilename"}},
 				}),
 			},
 			nil,
@@ -544,23 +546,27 @@ func TestDownloadManifestDifferentFromCacheManifest(t *testing.T) {
 func TestFindFileFromManifest(t *testing.T) {
 	tracer := trace.NewTracer(log.NewMockLog())
 	tracer.BeginSection("test segment root")
+	fileName := "test.zip"
 
 	data := []struct {
 		name        string
 		manifest    *birdwatcher.Manifest
-		file        birdwatcher.File
+		file        archive.File
 		expectedErr bool
 	}{
 		{
 			"successful file read",
 			&birdwatcher.Manifest{
 				Packages: manifestPackageGen(&[]pkgselector{
-					{"platformName", "platformVersion", "architecture", &birdwatcher.PackageInfo{File: "test.zip"}},
+					{"platformName", "platformVersion", "architecture", &birdwatcher.PackageInfo{FileName: fileName}},
 				}),
-				Files: map[string]*birdwatcher.File{"test.zip": &birdwatcher.File{DownloadLocation: "https://example.com/agent"}},
+				Files: map[string]*birdwatcher.FileInfo{"test.zip": &birdwatcher.FileInfo{DownloadLocation: "https://example.com/agent"}},
 			},
-			birdwatcher.File{
-				DownloadLocation: "https://example.com/agent",
+			archive.File{
+				fileName,
+				birdwatcher.FileInfo{
+					DownloadLocation: "https://example.com/agent",
+				},
 			},
 			false,
 		},
@@ -568,31 +574,31 @@ func TestFindFileFromManifest(t *testing.T) {
 			"fail to find match in file",
 			&birdwatcher.Manifest{
 				Packages: manifestPackageGen(&[]pkgselector{}),
-				Files:    map[string]*birdwatcher.File{},
+				Files:    map[string]*birdwatcher.FileInfo{},
 			},
-			birdwatcher.File{},
+			archive.File{},
 			true,
 		},
 		{
 			"fail to find file name",
 			&birdwatcher.Manifest{
 				Packages: manifestPackageGen(&[]pkgselector{
-					{"platformName", "platformVersion", "architecture", &birdwatcher.PackageInfo{File: "test.zip"}},
+					{"platformName", "platformVersion", "architecture", &birdwatcher.PackageInfo{FileName: "test.zip"}},
 				}),
-				Files: map[string]*birdwatcher.File{},
+				Files: map[string]*birdwatcher.FileInfo{},
 			},
-			birdwatcher.File{},
+			archive.File{},
 			true,
 		},
 		{
 			"fail to find matching file name",
 			&birdwatcher.Manifest{
 				Packages: manifestPackageGen(&[]pkgselector{
-					{"platformName", "platformVersion", "architecture", &birdwatcher.PackageInfo{File: "test.zip"}},
+					{"platformName", "platformVersion", "architecture", &birdwatcher.PackageInfo{FileName: "test.zip"}},
 				}),
-				Files: map[string]*birdwatcher.File{"nomatch": &birdwatcher.File{DownloadLocation: "https://example.com/agent"}},
+				Files: map[string]*birdwatcher.FileInfo{"nomatch": &birdwatcher.FileInfo{DownloadLocation: "https://example.com/agent"}},
 			},
-			birdwatcher.File{},
+			archive.File{},
 			true,
 		},
 	}
@@ -626,11 +632,14 @@ func TestFindFileFromManifest(t *testing.T) {
 func TestDownloadFile(t *testing.T) {
 	tracer := trace.NewTracer(log.NewMockLog())
 	tracer.BeginSection("test segment root")
+	packagename := "packagename"
+	version := "version"
+	fileName := "fileName.zip"
 
 	data := []struct {
 		name        string
 		network     networkMock
-		file        *birdwatcher.File
+		file        *archive.File
 		expectedErr bool
 	}{
 		{
@@ -640,10 +649,13 @@ func TestDownloadFile(t *testing.T) {
 					LocalFilePath: "agent.zip",
 				},
 			},
-			&birdwatcher.File{
-				DownloadLocation: "https://example.com/agent",
-				Checksums: map[string]string{
-					"sha256": "asdf",
+			&archive.File{
+				fileName,
+				birdwatcher.FileInfo{
+					DownloadLocation: "https://example.com/agent",
+					Checksums: map[string]string{
+						"sha256": "asdf",
+					},
 				},
 			},
 			false,
@@ -655,10 +667,13 @@ func TestDownloadFile(t *testing.T) {
 					LocalFilePath: "",
 				},
 			},
-			&birdwatcher.File{
-				DownloadLocation: "https://example.com/agent",
-				Checksums: map[string]string{
-					"sha256": "asdf",
+			&archive.File{
+				fileName,
+				birdwatcher.FileInfo{
+					DownloadLocation: "https://example.com/agent",
+					Checksums: map[string]string{
+						"sha256": "asdf",
+					},
 				},
 			},
 			true,
@@ -668,10 +683,13 @@ func TestDownloadFile(t *testing.T) {
 			networkMock{
 				downloadError: errors.New("testerror"),
 			},
-			&birdwatcher.File{
-				DownloadLocation: "https://example.com/agent",
-				Checksums: map[string]string{
-					"sha256": "asdf",
+			&archive.File{
+				fileName,
+				birdwatcher.FileInfo{
+					DownloadLocation: "https://example.com/agent",
+					Checksums: map[string]string{
+						"sha256": "asdf",
+					},
 				},
 			},
 			true,
@@ -680,8 +698,13 @@ func TestDownloadFile(t *testing.T) {
 	for _, testdata := range data {
 		t.Run(testdata.name, func(t *testing.T) {
 			birdwatcher.Networkdep = &testdata.network
+			cache := packageservice.ManifestCacheMemNew()
+			testArchive := birdwatcherarchive.New(&facade.FacadeMock{})
 
-			result, err := downloadFile(tracer, testdata.file)
+			mockedCollector := envdetect.CollectorMock{}
+			ds := &PackageService{manifestCache: cache, collector: &mockedCollector, archive: testArchive}
+
+			result, err := downloadFile(ds, tracer, testdata.file, packagename, version)
 			if testdata.expectedErr {
 				assert.Error(t, err)
 			} else {
@@ -689,10 +712,94 @@ func TestDownloadFile(t *testing.T) {
 				assert.Equal(t, "agent.zip", result)
 				// verify download input
 				input := artifact.DownloadInput{
-					SourceURL:       testdata.file.DownloadLocation,
+					SourceURL:       testdata.file.Info.DownloadLocation,
 					SourceChecksums: map[string]string{"sha256": "asdf"},
 				}
 				assert.Equal(t, input, testdata.network.downloadInput)
+			}
+		})
+	}
+}
+
+func TestDownloadFileFromDocumentArchive(t *testing.T) {
+	tracer := trace.NewTracer(log.NewMockLog())
+	tracer.BeginSection("test segment root")
+	packagename := "packagename"
+	version := "version"
+	fileName := "fileName.zip"
+	url := "url"
+	documentActive := ssm.DocumentStatusActive
+	data := []struct {
+		name        string
+		network     networkMock
+		file        *archive.File
+		expectedErr bool
+	}{
+		{
+			"working file download",
+			networkMock{
+				downloadOutput: artifact.DownloadOutput{
+					LocalFilePath: "agent.zip",
+				},
+			},
+			&archive.File{
+				fileName,
+				birdwatcher.FileInfo{},
+			},
+			false,
+		},
+		{
+			"empty local file location",
+			networkMock{
+				downloadOutput: artifact.DownloadOutput{
+					LocalFilePath: "",
+				},
+			},
+			&archive.File{
+				fileName,
+				birdwatcher.FileInfo{},
+			},
+			true,
+		},
+		{
+			"error during file download",
+			networkMock{
+				downloadError: errors.New("testerror"),
+			},
+			&archive.File{
+				fileName,
+				birdwatcher.FileInfo{},
+			},
+			true,
+		},
+	}
+	for _, testdata := range data {
+		t.Run(testdata.name, func(t *testing.T) {
+			birdwatcher.Networkdep = &testdata.network
+			cache := packageservice.ManifestCacheMemNew()
+			facadeClient := facade.FacadeMock{
+				GetDocumentOutput: &ssm.GetDocumentOutput{
+					Status: &documentActive,
+					Name:   &packagename,
+					AttachmentsContent: []*ssm.AttachmentContent{
+						{
+							Name: &fileName,
+							Url:  &url,
+						},
+					},
+				},
+			}
+			testArchive := documentarchive.New(&facadeClient)
+
+			mockedCollector := envdetect.CollectorMock{}
+			ds := &PackageService{manifestCache: cache, collector: &mockedCollector, archive: testArchive}
+
+			result, err := downloadFile(ds, tracer, testdata.file, packagename, version)
+			if testdata.expectedErr {
+				assert.Error(t, err)
+			} else {
+				assert.NoError(t, err)
+				assert.Equal(t, "agent.zip", result)
 			}
 		})
 	}
@@ -751,7 +858,7 @@ func TestDownloadArtifact(t *testing.T) {
 		t.Run(testdata.name, func(t *testing.T) {
 			cache := packageservice.ManifestCacheMemNew()
 			cache.WriteManifest(testdata.packageName, testdata.packageVersion, []byte(manifestStr))
-
+			testArchive := birdwatcherarchive.New(&facade.FacadeMock{})
 			mockedCollector := envdetect.CollectorMock{}
 
 			mockedCollector.On("CollectData", mock.Anything).Return(&envdetect.Environment{
@@ -759,7 +866,7 @@ func TestDownloadArtifact(t *testing.T) {
 				&ec2infradetect.Ec2Infrastructure{"instanceID", "region", "", "availabilityZone", "instanceType"},
 			}, nil).Once()
 
-			ds := &PackageService{manifestCache: cache, collector: &mockedCollector}
+			ds := &PackageService{manifestCache: cache, collector: &mockedCollector, archive: testArchive}
 			birdwatcher.Networkdep = &testdata.network
 
 			result, err := ds.DownloadArtifact(tracer, testdata.packageName, testdata.packageVersion)

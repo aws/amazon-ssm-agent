@@ -29,6 +29,10 @@ type FacadeMock struct {
 	PutConfigurePackageResultInput  *ssm.PutConfigurePackageResultInput
 	PutConfigurePackageResultOutput *ssm.PutConfigurePackageResultOutput
 	PutConfigurePackageResultError  error
+
+	GetDocumentInput  *ssm.GetDocumentInput
+	GetDocumentOutput *ssm.GetDocumentOutput
+	GetDocumentError  error
 }
 
 func (m *FacadeMock) GetManifestRequest(*ssm.GetManifestInput) (*request.Request, *ssm.GetManifestOutput) {
@@ -47,4 +51,13 @@ func (m *FacadeMock) PutConfigurePackageResultRequest(*ssm.PutConfigurePackageRe
 func (m *FacadeMock) PutConfigurePackageResult(input *ssm.PutConfigurePackageResultInput) (*ssm.PutConfigurePackageResultOutput, error) {
 	m.PutConfigurePackageResultInput = input
 	return m.PutConfigurePackageResultOutput, m.PutConfigurePackageResultError
+}
+
+func (m *FacadeMock) GetDocumentRequest(*ssm.GetDocumentInput) (*request.Request, *ssm.GetDocumentOutput) {
+	panic("not implemented")
+}
+
+func (m *FacadeMock) GetDocument(input *ssm.GetDocumentInput) (*ssm.GetDocumentOutput, error) {
+	m.GetDocumentInput = input
+	return m.GetDocumentOutput, m.GetDocumentError
 }

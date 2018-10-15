@@ -44,7 +44,7 @@ func (ba *PackageArchive) GetResourceVersion(packageName string, version string)
 	return packageName, packageVersion
 }
 
-// // DownloadArtifactInfo downloads the manifest for the original birwatcher service
+// DownloadArtifactInfo downloads the manifest for the original birwatcher service
 func (ba *PackageArchive) DownloadArchiveInfo(packageName string, version string) (string, error) {
 
 	resp, err := ba.facadeClient.GetManifest(
@@ -58,4 +58,12 @@ func (ba *PackageArchive) DownloadArchiveInfo(packageName string, version string
 		return "", fmt.Errorf("failed to retrieve manifest: %v", err)
 	}
 	return *resp.Manifest, nil
+}
+
+// GetFileDownloadLocation obtains the location of the file in the archive
+func (ba *PackageArchive) GetFileDownloadLocation(file *archive.File, packageName string, version string) (string, error) {
+	if file == nil {
+		return "", fmt.Errorf("file is empty")
+	}
+	return file.Info.DownloadLocation, nil
 }

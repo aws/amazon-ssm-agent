@@ -114,7 +114,7 @@ func (ds *PackageService) DownloadArtifact(tracer trace.Tracer, packageName stri
 	}
 
 	trace.End()
-	return downloadFile(tracer, file)
+	return downloadFile(ds, tracer, file, packageName, version)
 }
 
 // ReportResult sents back the result of the install/upgrade/uninstall run back to Birdwatcher
@@ -180,6 +180,9 @@ func readManifestFromCache(cache packageservice.ManifestCache, packageName strin
 
 func downloadManifest(ds *PackageService, packageName string, version string) (*birdwatcher.Manifest, bool, error) {
 	isSameAsCache := false
+	if ds == nil {
+		return nil, isSameAsCache, fmt.Errorf("PackageService doesn't exist")
+	}
 	manifest, err := ds.archive.DownloadArchiveInfo(packageName, version)
 	if err != nil {
 		return nil, isSameAsCache, fmt.Errorf("failed to download manifest - %v", err)
@@ -217,8 +220,10 @@ func parseManifest(data *[]byte) (*birdwatcher.Manifest, error) {
 	return &manifest, nil
 }
 
-func (ds *PackageService) findFileFromManifest(tracer trace.Tracer, manifest *birdwatcher.Manifest) (*birdwatcher.File, error) {
-	var file *birdwatcher.File
+func (ds *PackageService) findFileFromManifest(tracer trace.Tracer, manifest *birdwatcher.Manifest) (*archive.File, error) {
+	var fileInfo *birdwatcher.FileInfo
+	var file archive.File
+	var filename string
 
 	pkginfo, err := ds.extractPackageInfo(tracer, manifest)
 	if err != nil {
@@ -226,24 +231,34 @@ func (ds *PackageService) findFileFromManifest(tracer trace.Tracer, manifest *bi
 	}
 
 	for name, f := range manifest.Files {
-		if name == pkginfo.File {
-			file = f
+		if name == pkginfo.FileName {
+			fileInfo = f
+			filename = name
 			break
 		}
 	}
 
-	if file == nil {
+	if fileInfo == nil {
 		return nil, fmt.Errorf("failed to find file for %+v", pkginfo)
 	}
+	file.Info = *fileInfo
+	file.Name = filename
 
-	return file, nil
+	return &file, nil
 }
 
-func downloadFile(tracer trace.Tracer, file *birdwatcher.File) (string, error) {
+func downloadFile(ds *PackageService, tracer trace.Tracer, file *archive.File, packagename string, version string) (string, error) {
+	if ds == nil || ds.archive == nil || file == nil {
+		return "", fmt.Errorf("Either package service does not exist or does not have archive information or the file information does not exist")
+	}
+	sourceUrl, err := ds.archive.GetFileDownloadLocation(file, packagename, version)
+	if err != nil {
+		return "", err
+	}
 	downloadInput := artifact.DownloadInput{
-		SourceURL: file.DownloadLocation,
+		SourceURL: sourceUrl,
 		// TODO don't hardcode sha256 - use multiple checksums
-		SourceChecksums: file.Checksums,
+		SourceChecksums: file.Info.Checksums,
 	}
 
 	log := tracer.CurrentTrace().Logger
