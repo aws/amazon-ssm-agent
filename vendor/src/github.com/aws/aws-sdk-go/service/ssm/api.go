@@ -14661,7 +14661,7 @@ type CreateDocumentInput struct {
 
 	DocumentFormat *string `type:"string" enum:"DocumentFormat"`
 
-	// The type of document to create. Valid document types include: Policy, Automation,
+	// The type of document to create. Valid document types include: Policy, Automation, Package
 	// and Command.
 	DocumentType *string `type:"string" enum:"DocumentType"`
 
@@ -20797,6 +20797,9 @@ type GetDocumentInput struct {
 	// The document version for which you want information.
 	DocumentVersion *string `type:"string"`
 
+	// The version name is the user friendly version of the document
+	VersionName *string `type:"string"`
+
 	// The name of the Systems Manager document.
 	//
 	// Name is a required field
@@ -20835,6 +20838,12 @@ func (s *GetDocumentInput) SetDocumentFormat(v string) *GetDocumentInput {
 // SetDocumentVersion sets the DocumentVersion field's value.
 func (s *GetDocumentInput) SetDocumentVersion(v string) *GetDocumentInput {
 	s.DocumentVersion = &v
+	return s
+}
+
+// SetVersionName sets the VersionName field's value.
+func (s *GetDocumentInput) SetVersionName(v string) *GetDocumentInput {
+	s.VersionName = &v
 	return s
 }
 
@@ -20976,6 +20985,9 @@ func (s *GetDocumentInternalOutput) SetName(v string) *GetDocumentInternalOutput
 type GetDocumentOutput struct {
 	_ struct{} `type:"structure"`
 
+	// The optional attachments if the document type supports it
+	AttachmentsContent []*AttachmentContent `locationNameList:"AttachmentContent" type:"list"`
+
 	// The contents of the Systems Manager document.
 	Content *string `min:"1" type:"string"`
 
@@ -20989,6 +21001,15 @@ type GetDocumentOutput struct {
 
 	// The name of the Systems Manager document.
 	Name *string `type:"string"`
+
+	// The status of the document
+	Status *string `type:"string"`
+
+	// The information of the Status field
+	StatusInformation *string `type:"string"`
+
+	// The user friendly document version
+	VersionName *string `type:"string"`
 }
 
 // String returns the string representation
@@ -20999,6 +21020,12 @@ func (s GetDocumentOutput) String() string {
 // GoString returns the string representation
 func (s GetDocumentOutput) GoString() string {
 	return s.String()
+}
+
+// SetAttachmentsContent sets the AttachmentsContent field's value.
+func (s *GetDocumentOutput) SetAttachmentsContent(v []*AttachmentContent) *GetDocumentOutput {
+	s.AttachmentsContent = v
+	return s
 }
 
 // SetContent sets the Content field's value.
@@ -21028,6 +21055,72 @@ func (s *GetDocumentOutput) SetDocumentVersion(v string) *GetDocumentOutput {
 // SetName sets the Name field's value.
 func (s *GetDocumentOutput) SetName(v string) *GetDocumentOutput {
 	s.Name = &v
+	return s
+}
+
+// SetVersionName sets the VersionName field's value.
+func (s *GetDocumentOutput) SetVersionName(v string) *GetDocumentOutput {
+	s.VersionName = &v
+	return s
+}
+
+// AttachmentsContent specified in a System Manager document
+type AttachmentContent struct {
+	_ struct{} `type:"structure"`
+
+	// hash of the attachment
+	Hash *string `type:"string"`
+
+	// type of the hash
+	HashType *string `type:"string"`
+
+	// The name of the parameter.
+	Name *string `type:"string"`
+
+	// The urlfor the attachment
+	Size *int64 `type:"integer"`
+
+	// The urlfor the attachment
+	Url *string `type:"string"`
+}
+
+// String returns the string representation
+func (s AttachmentContent) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s AttachmentContent) GoString() string {
+	return s.String()
+}
+
+// SetDefaultValue sets the DefaultValue field's value.
+func (s *AttachmentContent) SetHash(v string) *AttachmentContent {
+	s.Hash = &v
+	return s
+}
+
+// SetDescription sets the Description field's value.
+func (s *AttachmentContent) SetHashType(v string) *AttachmentContent {
+	s.HashType = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *AttachmentContent) SetName(v string) *AttachmentContent {
+	s.Name = &v
+	return s
+}
+
+// SetType sets the Type field's value.
+func (s *AttachmentContent) SetUrl(v string) *AttachmentContent {
+	s.Url = &v
+	return s
+}
+
+// SetType sets the Type field's value.
+func (s *AttachmentContent) SetSize(v int64) *AttachmentContent {
+	s.Size = &v
 	return s
 }
 
@@ -33925,6 +34018,9 @@ const (
 
 	// DocumentStatusDeleting is a DocumentStatus enum value
 	DocumentStatusDeleting = "Deleting"
+
+	// DocumentStatusFailed is a DocumentStatus enum value
+	DocumentStatusFailed = "Failed"
 )
 
 const (
@@ -33936,6 +34032,9 @@ const (
 
 	// DocumentTypeAutomation is a DocumentType enum value
 	DocumentTypeAutomation = "Automation"
+
+	// DocumentTypePackage us a DocumentType enum value
+	DocumentTypePackage = "Package"
 )
 
 const (

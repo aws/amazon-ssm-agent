@@ -29,6 +29,10 @@ type BirdwatcherFacade interface {
 	PutConfigurePackageResultRequest(*ssm.PutConfigurePackageResultInput) (*request.Request, *ssm.PutConfigurePackageResultOutput)
 
 	PutConfigurePackageResult(*ssm.PutConfigurePackageResultInput) (*ssm.PutConfigurePackageResultOutput, error)
+
+	GetDocumentRequest(*ssm.GetDocumentInput) (*request.Request, *ssm.GetDocumentOutput)
+
+	GetDocument(*ssm.GetDocumentInput) (*ssm.GetDocumentOutput, error)
 }
 
 var _ BirdwatcherFacade = (*ssm.SSM)(nil)

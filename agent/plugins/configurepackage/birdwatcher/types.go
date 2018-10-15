@@ -14,8 +14,8 @@
 
 package birdwatcher
 
-// File contains data for one SSM package
-type File struct {
+// FileInfo contains data for one SSM package
+type FileInfo struct {
 	Checksums        map[string]string `json:"checksums"`
 	DownloadLocation string            `json:"downloadLocation"`
 	Size             int               `json:"size"`
@@ -23,7 +23,7 @@ type File struct {
 
 // PackageInfo contains references to Files matching the current platform/version/arch
 type PackageInfo struct {
-	File string `json:"file"`
+	FileName string `json:"file"`
 }
 
 // Manifest contains references to all SSM packages for a given agent version
@@ -34,5 +34,5 @@ type Manifest struct {
 
 	// platform -> version -> arch -> file
 	Packages map[string]map[string]map[string]*PackageInfo `json:"packages"`
-	Files    map[string]*File                              `json:"files"`
+	Files    map[string]*FileInfo                          `json:"files"`
 }
