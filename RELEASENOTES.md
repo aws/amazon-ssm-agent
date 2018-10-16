@@ -1,5 +1,9 @@
 Latest
 ===============
+- Update managed instance role token more frequently
+
+2.3.136.0
+===============
 - Bug fix for issue that GatherInventory throw out error when there is no Windows Update in instance
 - Add more filters when getting the Windows event logs at startup to improve performance
 - Add random jitter before call PutInventory in inventory datauploader
