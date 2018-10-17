@@ -265,7 +265,9 @@ func (svc *sdkService) UpdateInstanceInformation(
 	switch goOS {
 	case "windows":
 		params.PlatformType = aws.String(ssm.PlatformTypeWindows)
-	case "linux", "freebsd":
+	case "linux", "freebsd", "darwin":
+		// darwin masquerades as Linux to bypass OS validation on
+		// the backend until official support can be added.
 		params.PlatformType = aws.String(ssm.PlatformTypeLinux)
 	default:
 		return nil, fmt.Errorf("Cannot report platform type of unrecognized OS. %v", goOS)
