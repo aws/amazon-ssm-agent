@@ -30,6 +30,7 @@ type File struct {
 }
 
 type IPackageArchive interface {
+	Name() string
 	GetResourceVersion(packageName string, packageVersion string) (name string, version string)
 	DownloadArchiveInfo(packageName string, version string) (string, error)
 	GetFileDownloadLocation(file *File, packageName string, version string) (string, error)

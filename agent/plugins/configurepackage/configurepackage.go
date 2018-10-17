@@ -44,9 +44,11 @@ const (
 	UninstallAction = "Uninstall"
 )
 
+const resourceNotFoundException = "ResourceNotFoundException"
+
 // Plugin is the type for the configurepackage plugin.
 type Plugin struct {
-	packageServiceSelector func(tracer trace.Tracer, input *ConfigurePackagePluginInput, localrepo localpackages.Repository) packageservice.PackageService
+	packageServiceSelector func(tracer trace.Tracer, input *ConfigurePackagePluginInput, localrepo localpackages.Repository, appCfg *appconfig.SsmagentConfig, bwfacade facade.BirdwatcherFacade) packageservice.PackageService
 	localRepository        localpackages.Repository
 }
 
@@ -354,36 +356,33 @@ func checkAlreadyInstalled(
 }
 
 // selectService chooses the implementation of PackageService to use for a given execution of the plugin
-func selectService(tracer trace.Tracer, input *ConfigurePackagePluginInput, localrepo localpackages.Repository) packageservice.PackageService {
+func selectService(tracer trace.Tracer, input *ConfigurePackagePluginInput, localrepo localpackages.Repository, appCfg *appconfig.SsmagentConfig, birdwatcherFacade facade.BirdwatcherFacade) packageservice.PackageService {
 	region, _ := platform.Region()
-	appCfg, err := appconfig.Config(false)
 	serviceEndpoint := input.Repository
 
-	if (err == nil && appCfg.Birdwatcher.ForceEnable) || !ssms3.UseSSMS3Service(tracer, serviceEndpoint, region) {
+	if (appCfg != nil && appCfg.Birdwatcher.ForceEnable) || !ssms3.UseSSMS3Service(tracer, serviceEndpoint, region) {
 		tracer.CurrentTrace().AppendInfof("S3 repository is not marked active in %v %v", region, serviceEndpoint)
 		// This indicates that it would be the birdwatcher service.
 		// Before creating an object of type birdwatcher here, make a call to get manifest and try to figure out if it is birdwatcher or document archive.
 
-		birdwatcherFacade := facade.NewBirdwatcherFacade()
-		getManifest, err := birdwatcherFacade.GetManifest(
+		_, err := birdwatcherFacade.GetManifest(
 			&ssm.GetManifestInput{
 				PackageName:    &input.Name,
 				PackageVersion: &input.Version,
 			},
 		)
 
-		// If the manifest is empty, or the response does not exist, the package could be of type document,
-		// If manifest exists, the package is of type birdwatcher
-		// TODO: Add test coverage, improve the error here to indicate if manifest is unavailable.
-		if getManifest == nil || getManifest.Manifest == nil && err != nil {
-			// return a new object of type document
-			// TODO meloniam@ Let this call the archive doc directly to avoid creating new package birdwatcherservice
-			return birdwatcherservice.NewDocumentArchive(birdwatcherFacade, localrepo)
-		} else {
-			// return a new object of type birdwatcher
-			return birdwatcherservice.NewBirdwatcherArchive(birdwatcherFacade, localrepo)
+		// If the error returned is the "ResourceNotFoundException", create a service with document archive
+		// if any other response, create a service of birdwatcher type
+		// TODO: should we ask customer to try again later if error is throttling exception or just create birdwatcher type service?
+		if err != nil {
+			if err.Error() == resourceNotFoundException {
+				// return a new object of type document
+				return birdwatcherservice.NewDocumentArchive(birdwatcherFacade, localrepo)
+			}
 		}
-
+		// return a new object of type birdwatcher
+		return birdwatcherservice.NewBirdwatcherArchive(birdwatcherFacade, localrepo)
 	}
 
 	tracer.CurrentTrace().AppendInfof("S3 repository is marked active")
@@ -412,14 +411,22 @@ func (p *Plugin) execute(context context.T, config contracts.Configuration, canc
 		tracer.CurrentTrace().WithError(err).End()
 		out.MarkAsFailed(nil, nil)
 	} else {
-		packageService := p.packageServiceSelector(tracer, input, p.localRepository)
+		appCfg, err := appconfig.Config(false)
+		var appConfig *appconfig.SsmagentConfig
+		if err != nil {
+			appConfig = nil
+		} else {
+			appConfig = &appCfg
+		}
+		birdwatcherFacade := facade.NewBirdwatcherFacade()
+		packageService := p.packageServiceSelector(tracer, input, p.localRepository, appConfig, birdwatcherFacade)
 		//Return failure if the manifest cannot be accessed
 		//Return failure if the package version is installed, but the manifest is no longer available
-		packageNames, packageVersions := packageService.GetPackageArnAndVersion(input.Name, input.Version)
+		packageName, packageVersion := packageService.GetPackageArnAndVersion(input.Name, input.Version)
 
 		//always download the manifest before acting upon the request
 		trace := tracer.BeginSection("download manifest")
-		packageArn, manifestVersion, isSameAsCache, err := packageService.DownloadManifest(tracer, packageNames, packageVersions)
+		packageArn, manifestVersion, isSameAsCache, err := packageService.DownloadManifest(tracer, packageName, packageVersion)
 		trace.AppendDebugf("got manifest for package %v version %v isSameAsCache %v", packageArn, manifestVersion, isSameAsCache)
 
 		trace.End()

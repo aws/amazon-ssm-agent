@@ -51,7 +51,8 @@ type PackageService interface {
 
 const (
 	PackageServiceName_ssms3       = "ssms3"
-	PackageServiceName_birdwatcher = "birdwatcher"
+	PackageServiceName_birdwatcher = "birdwatcherUsingBirdwatcherArchive"
+	PackageServiceName_document    = "birdwatcherUsingDocumentArchive"
 )
 
 // ByTiming implements sort.Interface for []*packageservice.Trace based on the

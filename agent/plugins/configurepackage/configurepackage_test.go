@@ -16,13 +16,19 @@
 package configurepackage
 
 import (
+	"errors"
 	"testing"
 
+	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/birdwatcher/facade"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/localpackages"
+	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/packageservice"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/trace"
+
+	"github.com/aws/aws-sdk-go/service/ssm"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )
@@ -617,4 +623,61 @@ func TestValidateInput_EmptyVersionWithUninstall(t *testing.T) {
 
 	assert.True(t, result)
 	assert.NoError(t, err)
+}
+
+func TestSelectService(t *testing.T) {
+	manifest := "manifest"
+	data := []struct {
+		name         string
+		bwfacade     facade.BirdwatcherFacade
+		expectedType string
+	}{
+		{
+			"get manifest works",
+			&facade.FacadeMock{
+				GetManifestOutput: &ssm.GetManifestOutput{
+					Manifest: &manifest,
+				},
+			},
+			packageservice.PackageServiceName_birdwatcher,
+		},
+		{
+			"no getManifest",
+			&facade.FacadeMock{
+				GetManifestError: errors.New(resourceNotFoundException),
+			},
+			packageservice.PackageServiceName_document,
+		},
+		{
+			"error in getManifest",
+			&facade.FacadeMock{
+				GetManifestError: errors.New("testError"),
+			},
+			packageservice.PackageServiceName_birdwatcher,
+		},
+	}
+
+	for _, testdata := range data {
+		t.Run(testdata.name, func(t *testing.T) {
+			tracer := trace.NewTracer(contextMock.Log())
+			defer tracer.BeginSection("test").End()
+
+			appConfig := appconfig.SsmagentConfig{
+				Birdwatcher: appconfig.BirdwatcherCfg{
+					ForceEnable: true,
+				},
+			}
+			localRepo := localpackages.NewRepository()
+			input := &ConfigurePackagePluginInput{
+				Name:       "package",
+				Version:    "1.2.3.4",
+				Repository: "",
+			}
+
+			result := selectService(tracer, input, localRepo, &appConfig, testdata.bwfacade)
+
+			assert.Equal(t, testdata.expectedType, result.PackageServiceName())
+
+		})
+	}
 }
