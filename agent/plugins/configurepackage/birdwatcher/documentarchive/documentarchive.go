@@ -29,13 +29,20 @@ type PackageArchive struct {
 	facadeClient facade.BirdwatcherFacade
 	attachments  []*ssm.AttachmentContent
 	manifest     string
+	archiveType  string
 }
 
 // New is a constructor for PackageArchive struct
 func New(facadeClientSession facade.BirdwatcherFacade) archive.IPackageArchive {
 	return &PackageArchive{
 		facadeClient: facadeClientSession,
+		archiveType:  archive.PackageArchiveDocument,
 	}
+}
+
+// Name of archive type
+func (da *PackageArchive) Name() string {
+	return da.archiveType
 }
 
 // New is a constructor for PackageArchive struct with attachments. This method is mainly used for testing

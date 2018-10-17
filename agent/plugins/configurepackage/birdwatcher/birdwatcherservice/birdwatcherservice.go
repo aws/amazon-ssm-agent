@@ -48,6 +48,7 @@ func (t *TimeImpl) NowUnixNano() int64 {
 
 // PackageService is the concrete type for Birdwatcher PackageService
 type PackageService struct {
+	pkgSvcName    string
 	facadeClient  facade.BirdwatcherFacade
 	manifestCache packageservice.ManifestCache
 	collector     envdetect.Collector
@@ -57,18 +58,19 @@ type PackageService struct {
 
 func NewBirdwatcherArchive(facadeClient facade.BirdwatcherFacade, manifestCache packageservice.ManifestCache) packageservice.PackageService {
 	pkgArchive := birdwatcherarchive.New(facadeClient)
-	return New(pkgArchive, facadeClient, manifestCache)
+	return New(pkgArchive, facadeClient, manifestCache, packageservice.PackageServiceName_birdwatcher)
 }
 
 func NewDocumentArchive(facadeClient facade.BirdwatcherFacade, manifestCache packageservice.ManifestCache) packageservice.PackageService {
 	pkgArchive := documentarchive.New(facadeClient)
-	return New(pkgArchive, facadeClient, manifestCache)
+	return New(pkgArchive, facadeClient, manifestCache, packageservice.PackageServiceName_document)
 }
 
 // New constructor for PackageService
-func New(pkgArchive archive.IPackageArchive, facadeClient facade.BirdwatcherFacade, manifestCache packageservice.ManifestCache) packageservice.PackageService {
+func New(pkgArchive archive.IPackageArchive, facadeClient facade.BirdwatcherFacade, manifestCache packageservice.ManifestCache, name string) packageservice.PackageService {
 
 	return &PackageService{
+		pkgSvcName:    name,
 		facadeClient:  facadeClient,
 		manifestCache: manifestCache,
 		collector:     &envdetect.CollectorImp{},
@@ -78,7 +80,7 @@ func New(pkgArchive archive.IPackageArchive, facadeClient facade.BirdwatcherFaca
 }
 
 func (ds *PackageService) PackageServiceName() string {
-	return packageservice.PackageServiceName_birdwatcher
+	return ds.pkgSvcName
 }
 
 func (ds *PackageService) GetPackageArnAndVersion(packageName string, packageVersion string) (name string, version string) {

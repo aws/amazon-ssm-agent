@@ -26,22 +26,29 @@ import (
 
 type PackageArchive struct {
 	facadeClient facade.BirdwatcherFacade
+	archiveType  string
 }
 
 // New is a constructor for PackageArchive struct
 func New(facadeClientSession facade.BirdwatcherFacade) archive.IPackageArchive {
 	return &PackageArchive{
 		facadeClient: facadeClientSession,
+		archiveType:  archive.PackageArchiveDocument,
 	}
 }
 
-func (ba *PackageArchive) GetResourceVersion(packageName string, version string) (string, string) {
-	packageVersion := version
-	if packageservice.IsLatest(version) {
-		packageVersion = packageservice.Latest
+// Name of archive type
+func (ba *PackageArchive) Name() string {
+	return ba.archiveType
+}
+
+func (ba *PackageArchive) GetResourceVersion(packageName string, packageVersion string) (name string, version string) {
+	pkgVersion := packageVersion
+	if packageservice.IsLatest(packageVersion) {
+		pkgVersion = packageservice.Latest
 	}
 
-	return packageName, packageVersion
+	return packageName, pkgVersion
 }
 
 // DownloadArtifactInfo downloads the manifest for the original birwatcher service
