@@ -25,7 +25,7 @@ cp ${BGO_SPACE}/bin/darwin_amd64/ssm-cli ${PROGRAM_FOLDER}/bin/
 
 cp ${BGO_SPACE}/seelog_unix.xml ${PROGRAM_FOLDER}/seelog.xml
 cp ${BGO_SPACE}/amazon-ssm-agent.json.template ${PROGRAM_FOLDER}/
-cp ${BGO_SPACE}/packaging/darwin/com.amazon.ec2.ssm.plist ${ROOTFS}/Library/LaunchDaemons/
+cp ${BGO_SPACE}/packaging/darwin/com.amazon.aws.ssm.plist ${ROOTFS}/Library/LaunchDaemons/
 
 echo "Setting permissions as required by launchd"
 

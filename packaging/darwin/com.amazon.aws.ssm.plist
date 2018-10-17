@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
     <key>Label</key>
-    <string>com.amazon.ec2.ssm</string>
+    <string>com.amazon.aws.ssm</string>
     <key>UserName</key>
     <string>root</string>
     <key>RunAtLoad</key>
