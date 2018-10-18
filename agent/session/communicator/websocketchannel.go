@@ -205,7 +205,7 @@ func (webSocketChannel *WebSocketChannel) Open(log log.T) error {
 
 			} else if messageType != websocket.TextMessage && messageType != websocket.BinaryMessage {
 				// We only accept text messages which are interpreted as UTF-8 or binary encoded text.
-				log.Errorf("Invalid message type %s. We only accept UTF-8 or binary encoded text", messageType)
+				log.Errorf("Invalid message type %d. We only accept UTF-8 or binary encoded text", messageType)
 
 			} else {
 				retryCount = 0

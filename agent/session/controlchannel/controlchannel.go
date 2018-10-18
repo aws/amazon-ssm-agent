@@ -234,7 +234,7 @@ func sendStartSessionMessageToProcessor(
 
 	docState, err := agentMessage.ParseAgentMessage(context, orchestrationRootDir, instanceId, clientId)
 	if err != nil {
-		log.Errorf("Cannot parse AgentTask message to documentState: %s, err: %v.", agentMessage, err)
+		log.Errorf("Cannot parse AgentTask message to documentState: %v, err: %v.", agentMessage, err)
 		return err
 	}
 
