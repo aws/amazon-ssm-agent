@@ -194,7 +194,7 @@ func (s *Session) ModuleExecute(context context.T) (err error) {
 
 	s.controlChannel, err = setupControlChannel(s.context, s.service, s.processor, instanceId)
 	if err != nil {
-		log.Error("Failed to setup control channel, err: %v", err)
+		log.Errorf("Failed to setup control channel, err: %v", err)
 	}
 
 	log.Info("Starting receiving message from control channel")
