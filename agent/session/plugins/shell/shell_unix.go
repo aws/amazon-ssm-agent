@@ -166,7 +166,7 @@ func (p *ShellPlugin) generateLogData(log log.T, config agentContracts.Configura
 	time.Sleep(5 * time.Second)
 
 	// Start shell logger
-	loggerCmdInput := fmt.Sprintf("%s %s%s", appconfig.DefaultSessionLogger, p.ipcFilePath, newLineCharacter)
+	loggerCmdInput := fmt.Sprintf("%s %s %t%s", appconfig.DefaultSessionLogger, p.ipcFilePath, false, newLineCharacter)
 	shadowShellInput.Write([]byte(loggerCmdInput))
 
 	// Sleep till the logger completes execution

@@ -225,12 +225,12 @@ func (p *ShellPlugin) generateLogData(log log.T, config agentContracts.Configura
 	// Generate logs based on the OS version number
 	// https://docs.microsoft.com/en-us/windows/desktop/SysInfo/operating-system-version
 	if osMajorVersion >= 10 {
-		if err = generateTranscriptFile(log, p.logFilePath, p.ipcFilePath); err != nil {
+		if err = generateTranscriptFile(log, p.logFilePath, p.ipcFilePath, true); err != nil {
 			return err
 		}
 	} else if osMajorVersion >= 6 && osMinorVersion >= 3 {
 		transcriptFile := filepath.Join(config.OrchestrationDirectory, "transcriptFile"+mgsConfig.LogFileExtension)
-		if err = generateTranscriptFile(log, transcriptFile, p.ipcFilePath); err != nil {
+		if err = generateTranscriptFile(log, transcriptFile, p.ipcFilePath, false); err != nil {
 			return err
 		}
 		cleanControlCharacters(transcriptFile, p.logFilePath)
@@ -242,7 +242,7 @@ func (p *ShellPlugin) generateLogData(log log.T, config agentContracts.Configura
 }
 
 // generateTranscriptFile generates a transcript file using PowerShell
-func generateTranscriptFile(log log.T, transcriptFile string, loggerFile string) error {
+func generateTranscriptFile(log log.T, transcriptFile string, loggerFile string, enableVirtualTerminalProcessingForWindows bool) error {
 	shadowShellInput, _, err := StartPty(log, false)
 	if err != nil {
 		return err
@@ -271,7 +271,7 @@ func generateTranscriptFile(log log.T, transcriptFile string, loggerFile string)
 	time.Sleep(5 * time.Second)
 
 	// Start shell logger
-	loggerCmdInput := fmt.Sprintf("%s %s%s", appconfig.DefaultSessionLogger, loggerFile, newLineCharacter)
+	loggerCmdInput := fmt.Sprintf("%s %s %t%s", appconfig.DefaultSessionLogger, loggerFile, enableVirtualTerminalProcessingForWindows, newLineCharacter)
 	shadowShellInput.Write([]byte(loggerCmdInput))
 
 	// Sleep till the logger completes execution
