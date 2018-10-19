@@ -19,11 +19,14 @@ import (
 	"errors"
 	"testing"
 
+	"io/ioutil"
+
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/birdwatcher/facade"
+	facadeMock "github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/birdwatcher/facade/mocks"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/localpackages"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/packageservice"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/trace"
@@ -81,6 +84,30 @@ func createStubPluginInputFoo() *ConfigurePackagePluginInput {
 	input.Action = "Foo"
 
 	return &input
+}
+
+func buildConfigSimple(pluginInformation *ConfigurePackagePluginInput) contracts.Configuration {
+	config := contracts.Configuration{}
+
+	var rawPluginInput interface{}
+	rawPluginInput = pluginInformation
+	config.Properties = rawPluginInput
+
+	return config
+}
+
+func buildConfig(pluginInformation *ConfigurePackagePluginInput, orchestrationDir string, bucketName string, prefix string, pluginID string) contracts.Configuration {
+	config := contracts.Configuration{}
+	config.OrchestrationDirectory = orchestrationDir
+	config.OutputS3BucketName = bucketName
+	config.OutputS3KeyPrefix = prefix
+	config.PluginID = pluginID
+
+	var rawPluginInput interface{}
+	rawPluginInput = pluginInformation
+	config.Properties = rawPluginInput
+
+	return config
 }
 
 func TestName(t *testing.T) {
@@ -441,6 +468,7 @@ func TestInstallingNotValid(t *testing.T) {
 	assert.False(t, alreadyInstalled)
 }
 
+// Testing Execute module unit tests
 func TestExecute(t *testing.T) {
 	// file stubs are needed for ensurePackage because it handles the unzip
 	stubs := setSuccessStubs()
@@ -493,30 +521,6 @@ func TestConfigurePackage_InvalidAction(t *testing.T) {
 		packageServiceSelector: selectMockService(serviceMock),
 	}
 	plugin.execute(contextMock, buildConfigSimple(pluginInformation), createMockCancelFlag(), createMockIOHandler())
-}
-
-func buildConfigSimple(pluginInformation *ConfigurePackagePluginInput) contracts.Configuration {
-	config := contracts.Configuration{}
-
-	var rawPluginInput interface{}
-	rawPluginInput = pluginInformation
-	config.Properties = rawPluginInput
-
-	return config
-}
-
-func buildConfig(pluginInformation *ConfigurePackagePluginInput, orchestrationDir string, bucketName string, prefix string, pluginID string) contracts.Configuration {
-	config := contracts.Configuration{}
-	config.OrchestrationDirectory = orchestrationDir
-	config.OutputS3BucketName = bucketName
-	config.OutputS3KeyPrefix = prefix
-	config.PluginID = pluginID
-
-	var rawPluginInput interface{}
-	rawPluginInput = pluginInformation
-	config.Properties = rawPluginInput
-
-	return config
 }
 
 func TestValidateInput(t *testing.T) {
@@ -626,6 +630,7 @@ func TestValidateInput_EmptyVersionWithUninstall(t *testing.T) {
 }
 
 func TestSelectService(t *testing.T) {
+	isDocumentArchive := false
 	manifest := "manifest"
 	data := []struct {
 		name         string
@@ -634,7 +639,7 @@ func TestSelectService(t *testing.T) {
 	}{
 		{
 			"get manifest works",
-			&facade.FacadeMock{
+			&facade.FacadeStub{
 				GetManifestOutput: &ssm.GetManifestOutput{
 					Manifest: &manifest,
 				},
@@ -643,14 +648,14 @@ func TestSelectService(t *testing.T) {
 		},
 		{
 			"no getManifest",
-			&facade.FacadeMock{
+			&facade.FacadeStub{
 				GetManifestError: errors.New(resourceNotFoundException),
 			},
 			packageservice.PackageServiceName_document,
 		},
 		{
 			"error in getManifest",
-			&facade.FacadeMock{
+			&facade.FacadeStub{
 				GetManifestError: errors.New("testError"),
 			},
 			packageservice.PackageServiceName_birdwatcher,
@@ -674,9 +679,177 @@ func TestSelectService(t *testing.T) {
 				Repository: "",
 			}
 
-			result := selectService(tracer, input, localRepo, &appConfig, testdata.bwfacade)
+			result := selectService(tracer, input, localRepo, &appConfig, testdata.bwfacade, &isDocumentArchive)
 
 			assert.Equal(t, testdata.expectedType, result.PackageServiceName())
+
+		})
+	}
+}
+
+// Integration tests
+func loadFile(t *testing.T, fileName string) (result []byte) {
+	result, err := ioutil.ReadFile(fileName)
+	if err != nil {
+		t.Fatal(err)
+	}
+	return
+}
+
+// Test that checks the agent for calls made to GetManifest
+func TestExecuteConfigurePackagePlugin_BirdwatcherService(t *testing.T) {
+
+	// file stubs are needed for ensurePackage because it handles the unzip
+	stubs := setSuccessStubs()
+	defer stubs.Clear()
+	manifest := string(loadFile(t, "testdata/sampleManifest.json"))
+
+	pluginInformation := createStubPluginInputInstall()
+	installerMock := installerSuccessMock(pluginInformation.Name, pluginInformation.Version)
+	repoMock := repoInstallMock_ReadWriteManifest(pluginInformation, installerMock, pluginInformation.Version)
+	bwFacade := facadeMock.BirdwatcherFacade{}
+	getManifestInput := &ssm.GetManifestInput{
+		PackageName:    &pluginInformation.Name,
+		PackageVersion: &pluginInformation.Version,
+	}
+	getManifestOutput := &ssm.GetManifestOutput{
+		Manifest: &manifest,
+	}
+	bwFacade.On("GetManifest", getManifestInput).Return(getManifestOutput, nil).Twice()
+	bwFacade.On("PutConfigurePackageResult", mock.Anything).Return(&ssm.PutConfigurePackageResultOutput{}, nil).Once()
+
+	plugin := &Plugin{
+		birdwatcherfacade:      &bwFacade,
+		localRepository:        repoMock,
+		packageServiceSelector: selectService,
+	}
+	plugin.execute(contextMock, buildConfigSimple(pluginInformation), createMockCancelFlag(), createMockIOHandler())
+
+	repoMock.AssertExpectations(t)
+	installerMock.AssertExpectations(t)
+	bwFacade.AssertExpectations(t)
+	assert.Equal(t, false, plugin.isDocumentArchive)
+
+}
+
+// Test that checks the agent for calls made to GetDocument
+func TestExecuteConfigurePackagePlugin_DocumentService(t *testing.T) {
+
+	// file stubs are needed for ensurePackage because it handles the unzip
+	stubs := setSuccessStubs()
+	defer stubs.Clear()
+	manifest := string(loadFile(t, "testdata/sampleManifest.json"))
+	documentFormat := ssm.DocumentFormatJson
+	documentType := ssm.DocumentTypePackage
+	documentStatus := ssm.DocumentStatusActive
+	packageUrl_linux64bit := "https://s3.amazon.com/testPackage/testAgent-amd64-linux-rpm.zip"
+	packageUrl_linux32bit := "https://s3.amazon.com/testPackage/testAgent-386-linux-rpm.zip"
+	packageUrl_windows := "https://s3.amazon.com/testPackage/testAgent-windows.zip"
+	sha256 := "sha256"
+	fakeHash_linux64bit := "76edf2d951825650dc0960e9e5df7c9c16d570e380248b68ac19d4cf3013ff7d"
+	fakeHash_linux32bit := "7b8818d4db10a6b01ec261afe4a0b0c8178e97c33976f9aba34ac7529655e350"
+	fakeHash_windows := "d05804e5065ea5286ae4a1a45ff6eef299cddd1a78f7430672655c4c75a2fe9b"
+	pluginVersion := "0.0.1"
+	var getDocumentOutput *ssm.GetDocumentOutput
+	var getDocumentError error
+
+	data := []struct {
+		name                    string
+		mockVersion             string
+		getDocumentReturnsError bool
+		pluginInformation       *ConfigurePackagePluginInput
+		errorResponse           string
+	}{
+		{
+			"no version provided",
+			"",
+			false,
+			createStubPluginInputInstallLatest(),
+			"",
+		},
+		{
+			"version provided",
+			"0.0.1",
+			false,
+			createStubPluginInputInstall(),
+			"",
+		},
+		{
+			"package not found in documents",
+			"",
+			true,
+			createStubPluginInputInstallLatest(),
+			"failed to download manifest - failed to retrieve package document: ResourceNotFoundException\n",
+		},
+	}
+	for _, testdata := range data {
+		t.Run(testdata.name, func(t *testing.T) {
+			pluginInformation := testdata.pluginInformation
+			installerMock := installerSuccessMock(pluginInformation.Name, pluginVersion)
+			repoMock := repoInstallMock_ReadWriteManifest(pluginInformation, installerMock, pluginVersion)
+			bwFacade := facadeMock.BirdwatcherFacade{}
+			mockIOHandler := createMockIOHandlerStruct(testdata.errorResponse)
+			getManifestInput := &ssm.GetManifestInput{
+				PackageName:    &pluginInformation.Name,
+				PackageVersion: &pluginInformation.Version,
+			}
+			getDocumentInput := &ssm.GetDocumentInput{
+				Name:        &pluginInformation.Name,
+				VersionName: &testdata.mockVersion,
+			}
+			if !testdata.getDocumentReturnsError {
+				getDocumentOutput = &ssm.GetDocumentOutput{
+					Content: &manifest,
+					AttachmentsContent: []*ssm.AttachmentContent{
+						{
+							Name:     &pluginInformation.Name,
+							Url:      &packageUrl_linux32bit,
+							HashType: &sha256,
+							Hash:     &fakeHash_linux32bit,
+						},
+						{
+							Name:     &pluginInformation.Name,
+							Url:      &packageUrl_linux64bit,
+							HashType: &sha256,
+							Hash:     &fakeHash_linux64bit,
+						},
+						{
+							Name:     &pluginInformation.Name,
+							Url:      &packageUrl_windows,
+							HashType: &sha256,
+							Hash:     &fakeHash_windows,
+						},
+					},
+					DocumentFormat:  &documentFormat,
+					DocumentType:    &documentType,
+					DocumentVersion: &pluginInformation.Version,
+					Name:            &pluginInformation.Name,
+					Status:          &documentStatus,
+					VersionName:     &pluginInformation.Version,
+				}
+				getDocumentError = nil
+			} else {
+				getDocumentOutput = nil
+				getDocumentError = errors.New(resourceNotFoundException)
+			}
+			bwFacade.On("GetManifest", getManifestInput).Return(nil, errors.New(resourceNotFoundException)).Once()
+			bwFacade.On("GetDocument", getDocumentInput).Return(getDocumentOutput, getDocumentError).Once()
+
+			plugin := &Plugin{
+				birdwatcherfacade:      &bwFacade,
+				localRepository:        repoMock,
+				packageServiceSelector: selectService,
+			}
+
+			plugin.execute(contextMock, buildConfigSimple(pluginInformation), createMockCancelFlag(), mockIOHandler)
+
+			if !testdata.getDocumentReturnsError {
+				repoMock.AssertExpectations(t)
+				installerMock.AssertExpectations(t)
+				bwFacade.AssertExpectations(t)
+				mockIOHandler.AssertExpectations(t)
+			}
+			assert.Equal(t, true, plugin.isDocumentArchive)
 
 		})
 	}

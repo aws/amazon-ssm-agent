@@ -1,6 +1,47 @@
 {
-  "name": "PVDriver",
-  "platform": "Windows",
-  "architecture": "amd64",
-  "version": "1.0.0"
+  "schemaVersion": "1.0",
+  "packageArn": "PVDriver",
+  "version": "0.0.1",
+  "packages": {
+    "amazon": {
+      "2017.03.1": {
+        "x86": {
+          "file": "testAgent-386-linux-rpm.zip"
+        },
+        "x86_64": {
+          "file": "testAgent-amd64-linux-rpm.zip"
+        }
+      }
+    },
+    "windows": {
+      "_any": {
+        "x86_64": {
+          "file": "testAgent-windows.zip"
+        }
+      }
+    }
+  },
+  "files": {
+    "testAgent-386-linux-rpm.zip": {
+      "checksums": {
+        "sha256": "7b8818d4db10a6b01ec261afe4a0b0c8178e97c33976f9aba34ac7529655e350"
+      },
+      "downloadLocation": "https://testBucket-birdwatcher.s3.amazonaws.com/401613528637%2F939fbff3-2777-4f8e-8019-f43397e0a970",
+      "size": 533797
+    },
+    "testAgent-amd64-linux-rpm.zip": {
+      "checksums": {
+        "sha256": "76edf2d951825650dc0960e9e5df7c9c16d570e380248b68ac19d4cf3013ff7d"
+      },
+      "downloadLocation": "https://testBucket-birdwatcher.s3.amazonaws.com/401613528637%2F00e54418-ee90-4335-87ac-902775b76c91",
+      "size": 565818
+    },
+    "testAgent-windows.zip": {
+      "checksums": {
+        "sha256": "d05804e5065ea5286ae4a1a45ff6eef299cddd1a78f7430672655c4c75a2fe9b"
+      },
+      "size": 6222408,
+      "downloadLocation": "https://testBucket-birdwatcher.s3.amazonaws.com/401613528637%2F00e54418-ee90-4d35-87ac-902775b76c93"
+    }
+  }
 }

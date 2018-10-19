@@ -20,8 +20,8 @@ import (
 	"github.com/aws/aws-sdk-go/service/ssm"
 )
 
-// FacadeMock
-type FacadeMock struct {
+// FacadeStub
+type FacadeStub struct {
 	GetManifestInput  *ssm.GetManifestInput
 	GetManifestOutput *ssm.GetManifestOutput
 	GetManifestError  error
@@ -35,29 +35,29 @@ type FacadeMock struct {
 	GetDocumentError  error
 }
 
-func (m *FacadeMock) GetManifestRequest(*ssm.GetManifestInput) (*request.Request, *ssm.GetManifestOutput) {
+func (m *FacadeStub) GetManifestRequest(*ssm.GetManifestInput) (*request.Request, *ssm.GetManifestOutput) {
 	panic("not implemented")
 }
 
-func (m *FacadeMock) GetManifest(input *ssm.GetManifestInput) (*ssm.GetManifestOutput, error) {
+func (m *FacadeStub) GetManifest(input *ssm.GetManifestInput) (*ssm.GetManifestOutput, error) {
 	m.GetManifestInput = input
 	return m.GetManifestOutput, m.GetManifestError
 }
 
-func (m *FacadeMock) PutConfigurePackageResultRequest(*ssm.PutConfigurePackageResultInput) (*request.Request, *ssm.PutConfigurePackageResultOutput) {
+func (m *FacadeStub) PutConfigurePackageResultRequest(*ssm.PutConfigurePackageResultInput) (*request.Request, *ssm.PutConfigurePackageResultOutput) {
 	panic("not implemented")
 }
 
-func (m *FacadeMock) PutConfigurePackageResult(input *ssm.PutConfigurePackageResultInput) (*ssm.PutConfigurePackageResultOutput, error) {
+func (m *FacadeStub) PutConfigurePackageResult(input *ssm.PutConfigurePackageResultInput) (*ssm.PutConfigurePackageResultOutput, error) {
 	m.PutConfigurePackageResultInput = input
 	return m.PutConfigurePackageResultOutput, m.PutConfigurePackageResultError
 }
 
-func (m *FacadeMock) GetDocumentRequest(*ssm.GetDocumentInput) (*request.Request, *ssm.GetDocumentOutput) {
+func (m *FacadeStub) GetDocumentRequest(*ssm.GetDocumentInput) (*request.Request, *ssm.GetDocumentOutput) {
 	panic("not implemented")
 }
 
-func (m *FacadeMock) GetDocument(input *ssm.GetDocumentInput) (*ssm.GetDocumentOutput, error) {
+func (m *FacadeStub) GetDocument(input *ssm.GetDocumentInput) (*ssm.GetDocumentOutput, error) {
 	m.GetDocumentInput = input
 	return m.GetDocumentOutput, m.GetDocumentError
 }

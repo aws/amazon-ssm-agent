@@ -39,26 +39,26 @@ func TestGetResourceVersion(t *testing.T) {
 		name         string
 		packagename  string
 		version      string
-		facadeClient facade.FacadeMock
+		facadeClient facade.FacadeStub
 	}{
 		{
 			"ValidDistributionRule",
 			packageName,
 			latest,
-			facade.FacadeMock{},
+			facade.FacadeStub{},
 		},
 		{
 			"ValidDistributionRule_2",
 			packageName,
 			version1,
-			facade.FacadeMock{},
+			facade.FacadeStub{},
 		},
 		{
 
 			"ValidDistributionRule_3",
 			packageName,
 			version2,
-			facade.FacadeMock{},
+			facade.FacadeStub{},
 		},
 	}
 
@@ -85,12 +85,12 @@ func TestDownloadArchiveInfo(t *testing.T) {
 	data := []struct {
 		name         string
 		isError      bool
-		facadeClient facade.FacadeMock
+		facadeClient facade.FacadeStub
 	}{
 		{
 			"successful api call",
 			false,
-			facade.FacadeMock{
+			facade.FacadeStub{
 				GetDocumentOutput: &ssm.GetDocumentOutput{
 					Content:         &manifest,
 					Status:          &documentActive,
@@ -103,14 +103,14 @@ func TestDownloadArchiveInfo(t *testing.T) {
 		{
 			"api call returns error",
 			true,
-			facade.FacadeMock{
+			facade.FacadeStub{
 				GetDocumentError: errors.New("testerror"),
 			},
 		},
 		{
 			"manifest is nil",
 			true,
-			facade.FacadeMock{
+			facade.FacadeStub{
 				GetDocumentOutput: &ssm.GetDocumentOutput{
 					Content:         nil,
 					Status:          &documentActive,
@@ -123,7 +123,7 @@ func TestDownloadArchiveInfo(t *testing.T) {
 		{
 			"manifest is empty",
 			true,
-			facade.FacadeMock{
+			facade.FacadeStub{
 				GetDocumentOutput: &ssm.GetDocumentOutput{
 					Content:         &emptystring,
 					Status:          &documentActive,
@@ -136,7 +136,7 @@ func TestDownloadArchiveInfo(t *testing.T) {
 		{
 			"document status is not active",
 			true,
-			facade.FacadeMock{
+			facade.FacadeStub{
 				GetDocumentOutput: &ssm.GetDocumentOutput{
 					Content:         &emptystring,
 					Status:          &documentInactive,
@@ -179,7 +179,7 @@ func TestGetFileDownloadLocation(t *testing.T) {
 		name         string
 		isError      bool
 		file         *archive.File
-		facadeClient facade.FacadeMock
+		facadeClient facade.FacadeStub
 		attachments  []*ssm.AttachmentContent
 		err          string
 	}{
@@ -190,7 +190,7 @@ func TestGetFileDownloadLocation(t *testing.T) {
 				filename,
 				birdwatcher.FileInfo{},
 			},
-			facade.FacadeMock{},
+			facade.FacadeStub{},
 			[]*ssm.AttachmentContent{
 				{
 					Name:     &filename,
@@ -208,7 +208,7 @@ func TestGetFileDownloadLocation(t *testing.T) {
 				filename,
 				birdwatcher.FileInfo{},
 			},
-			facade.FacadeMock{},
+			facade.FacadeStub{},
 			[]*ssm.AttachmentContent{
 				{
 					Name:     &filename2,
@@ -238,7 +238,7 @@ func TestGetFileDownloadLocation(t *testing.T) {
 				filename,
 				birdwatcher.FileInfo{},
 			},
-			facade.FacadeMock{
+			facade.FacadeStub{
 				GetDocumentOutput: &ssm.GetDocumentOutput{
 					Content: &manifest,
 					Status:  &documentActive,
@@ -272,7 +272,7 @@ func TestGetFileDownloadLocation(t *testing.T) {
 			"unsuccessful call because file is nil ",
 			true,
 			nil,
-			facade.FacadeMock{},
+			facade.FacadeStub{},
 			[]*ssm.AttachmentContent{},
 			"Could not obtain the file from manifest",
 		},
@@ -283,7 +283,7 @@ func TestGetFileDownloadLocation(t *testing.T) {
 				filename,
 				birdwatcher.FileInfo{},
 			},
-			facade.FacadeMock{
+			facade.FacadeStub{
 				GetDocumentError: errors.New("testerror"),
 			},
 			nil,
@@ -296,7 +296,7 @@ func TestGetFileDownloadLocation(t *testing.T) {
 				filename,
 				birdwatcher.FileInfo{},
 			},
-			facade.FacadeMock{},
+			facade.FacadeStub{},
 			nil,
 			"Failed to retreive document for package installation",
 		},
@@ -307,7 +307,7 @@ func TestGetFileDownloadLocation(t *testing.T) {
 				filename,
 				birdwatcher.FileInfo{},
 			},
-			facade.FacadeMock{},
+			facade.FacadeStub{},
 			[]*ssm.AttachmentContent{},
 			"Install attachments for package does not exist",
 		},

@@ -46,7 +46,7 @@ func TestGetResourceVersion(t *testing.T) {
 	for _, testdata := range data {
 		t.Run(testdata.name, func(t *testing.T) {
 
-			mockBWFacade := facade.FacadeMock{}
+			mockBWFacade := facade.FacadeStub{}
 
 			bwArchive := New(&mockBWFacade)
 

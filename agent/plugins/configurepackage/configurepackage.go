@@ -18,6 +18,7 @@ package configurepackage
 import (
 	"errors"
 	"fmt"
+	"strings"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
@@ -48,8 +49,10 @@ const resourceNotFoundException = "ResourceNotFoundException"
 
 // Plugin is the type for the configurepackage plugin.
 type Plugin struct {
-	packageServiceSelector func(tracer trace.Tracer, input *ConfigurePackagePluginInput, localrepo localpackages.Repository, appCfg *appconfig.SsmagentConfig, bwfacade facade.BirdwatcherFacade) packageservice.PackageService
+	packageServiceSelector func(tracer trace.Tracer, input *ConfigurePackagePluginInput, localrepo localpackages.Repository, appCfg *appconfig.SsmagentConfig, bwfacade facade.BirdwatcherFacade, isDocumentArchive *bool) packageservice.PackageService
 	localRepository        localpackages.Repository
+	birdwatcherfacade      facade.BirdwatcherFacade
+	isDocumentArchive      bool
 }
 
 // ConfigurePackagePluginInput represents one set of commands executed by the ConfigurePackage plugin.
@@ -66,8 +69,10 @@ type ConfigurePackagePluginInput struct {
 func NewPlugin() (*Plugin, error) {
 	var plugin Plugin
 
+	plugin.birdwatcherfacade = facade.NewBirdwatcherFacade()
 	plugin.localRepository = localpackages.NewRepository()
 	plugin.packageServiceSelector = selectService
+	plugin.isDocumentArchive = false
 
 	return &plugin, nil
 }
@@ -356,7 +361,7 @@ func checkAlreadyInstalled(
 }
 
 // selectService chooses the implementation of PackageService to use for a given execution of the plugin
-func selectService(tracer trace.Tracer, input *ConfigurePackagePluginInput, localrepo localpackages.Repository, appCfg *appconfig.SsmagentConfig, birdwatcherFacade facade.BirdwatcherFacade) packageservice.PackageService {
+func selectService(tracer trace.Tracer, input *ConfigurePackagePluginInput, localrepo localpackages.Repository, appCfg *appconfig.SsmagentConfig, birdwatcherFacade facade.BirdwatcherFacade, isDocumentArchive *bool) packageservice.PackageService {
 	region, _ := platform.Region()
 	serviceEndpoint := input.Repository
 
@@ -376,9 +381,12 @@ func selectService(tracer trace.Tracer, input *ConfigurePackagePluginInput, loca
 		// if any other response, create a service of birdwatcher type
 		// TODO: should we ask customer to try again later if error is throttling exception or just create birdwatcher type service?
 		if err != nil {
-			if err.Error() == resourceNotFoundException {
+			if strings.Contains(err.Error(), resourceNotFoundException) {
+				*isDocumentArchive = true
 				// return a new object of type document
 				return birdwatcherservice.NewDocumentArchive(birdwatcherFacade, localrepo)
+			} else {
+				tracer.CurrentTrace().AppendInfof("Error returned for GetManifest is not ResourceNotFoundException. It is %v.", err.Error())
 			}
 		}
 		// return a new object of type birdwatcher
@@ -418,8 +426,7 @@ func (p *Plugin) execute(context context.T, config contracts.Configuration, canc
 		} else {
 			appConfig = &appCfg
 		}
-		birdwatcherFacade := facade.NewBirdwatcherFacade()
-		packageService := p.packageServiceSelector(tracer, input, p.localRepository, appConfig, birdwatcherFacade)
+		packageService := p.packageServiceSelector(tracer, input, p.localRepository, appConfig, p.birdwatcherfacade, &p.isDocumentArchive)
 		//Return failure if the manifest cannot be accessed
 		//Return failure if the package version is installed, but the manifest is no longer available
 		packageName, packageVersion := packageService.GetPackageArnAndVersion(input.Name, input.Version)
@@ -495,18 +502,19 @@ func (p *Plugin) execute(context context.T, config contracts.Configuration, canc
 						startTime = trace.Start
 					}
 				}
-
-				err := packageService.ReportResult(tracer, packageservice.PackageResult{
-					Exitcode:               int64(out.GetExitCode()),
-					Operation:              input.Action,
-					PackageName:            input.Name,
-					PreviousPackageVersion: installedVersion,
-					Timing:                 startTime,
-					Version:                version,
-					Trace:                  packageservice.ConvertToPackageServiceTrace(tracer.Traces()),
-				})
-				if err != nil {
-					out.AppendErrorf(log, "Error reporting results: %v", err.Error())
+				if !p.isDocumentArchive {
+					err := packageService.ReportResult(tracer, packageservice.PackageResult{
+						Exitcode:               int64(out.GetExitCode()),
+						Operation:              input.Action,
+						PackageName:            input.Name,
+						PreviousPackageVersion: installedVersion,
+						Timing:                 startTime,
+						Version:                version,
+						Trace:                  packageservice.ConvertToPackageServiceTrace(tracer.Traces()),
+					})
+					if err != nil {
+						out.AppendErrorf(log, "Error reporting results: %v", err.Error())
+					}
 				}
 			}
 		}
