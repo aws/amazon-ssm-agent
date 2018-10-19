@@ -210,7 +210,7 @@ func TestExtractPackageInfo(t *testing.T) {
 				nil,
 			}, nil).Once()
 
-			facadeClientMock := facade.FacadeMock{
+			facadeClientMock := facade.FacadeStub{
 				PutConfigurePackageResultOutput: &ssm.PutConfigurePackageResultOutput{},
 			}
 
@@ -237,13 +237,13 @@ func TestReportResult(t *testing.T) {
 
 	data := []struct {
 		name          string
-		facadeClient  facade.FacadeMock
+		facadeClient  facade.FacadeStub
 		expectedErr   bool
 		packageResult packageservice.PackageResult
 	}{
 		{
 			"successful api call",
-			facade.FacadeMock{
+			facade.FacadeStub{
 				PutConfigurePackageResultOutput: &ssm.PutConfigurePackageResultOutput{},
 			},
 			false,
@@ -257,7 +257,7 @@ func TestReportResult(t *testing.T) {
 		},
 		{
 			"successful api call without previous version",
-			facade.FacadeMock{
+			facade.FacadeStub{
 				PutConfigurePackageResultOutput: &ssm.PutConfigurePackageResultOutput{},
 			},
 			false,
@@ -270,7 +270,7 @@ func TestReportResult(t *testing.T) {
 		},
 		{
 			"failing api call",
-			facade.FacadeMock{
+			facade.FacadeStub{
 				PutConfigurePackageResultError: errors.New("testerror"),
 			},
 			true,
@@ -330,14 +330,14 @@ func TestDownloadManifest(t *testing.T) {
 		name           string
 		packageName    string
 		packageVersion string
-		facadeClient   facade.FacadeMock
+		facadeClient   facade.FacadeStub
 		expectedErr    bool
 	}{
 		{
 			"successful getManifest with concrete version",
 			"packagename",
 			"1234",
-			facade.FacadeMock{
+			facade.FacadeStub{
 				GetManifestOutput: &ssm.GetManifestOutput{
 					Manifest: &manifestStr,
 				},
@@ -348,7 +348,7 @@ func TestDownloadManifest(t *testing.T) {
 			"successful getManifest with latest",
 			"packagename",
 			packageservice.Latest,
-			facade.FacadeMock{
+			facade.FacadeStub{
 				GetManifestOutput: &ssm.GetManifestOutput{
 					Manifest: &manifestStr,
 				},
@@ -359,7 +359,7 @@ func TestDownloadManifest(t *testing.T) {
 			"error in getManifest",
 			"packagename",
 			packageservice.Latest,
-			facade.FacadeMock{
+			facade.FacadeStub{
 				GetManifestError: errors.New("testerror"),
 			},
 			true,
@@ -368,7 +368,7 @@ func TestDownloadManifest(t *testing.T) {
 			"error in parsing manifest",
 			"packagename",
 			packageservice.Latest,
-			facade.FacadeMock{
+			facade.FacadeStub{
 				GetManifestOutput: &ssm.GetManifestOutput{
 					Manifest: &manifestStrErr,
 				},
@@ -418,14 +418,14 @@ func TestDownloadManifestSameAsCacheManifest(t *testing.T) {
 		name           string
 		packageName    string
 		packageVersion string
-		facadeClient   facade.FacadeMock
+		facadeClient   facade.FacadeStub
 		expectedErr    bool
 	}{
 		{
 			"successful getManifest same as cache",
 			"packagearn",
 			"1234",
-			facade.FacadeMock{
+			facade.FacadeStub{
 				GetManifestOutput: &ssm.GetManifestOutput{
 					Manifest: &manifestStr,
 				},
@@ -436,7 +436,7 @@ func TestDownloadManifestSameAsCacheManifest(t *testing.T) {
 			"successful getManifest same as cache for latest version",
 			"packagearn",
 			packageservice.Latest,
-			facade.FacadeMock{
+			facade.FacadeStub{
 				GetManifestOutput: &ssm.GetManifestOutput{
 					Manifest: &manifestStr,
 				},
@@ -447,7 +447,7 @@ func TestDownloadManifestSameAsCacheManifest(t *testing.T) {
 			"successful getManifest same as cache if name != returned arn",
 			"packagename",
 			packageservice.Latest,
-			facade.FacadeMock{
+			facade.FacadeStub{
 				GetManifestOutput: &ssm.GetManifestOutput{
 					Manifest: &manifestStr,
 				},
@@ -497,13 +497,13 @@ func TestDownloadManifestDifferentFromCacheManifest(t *testing.T) {
 		name           string
 		packageName    string
 		packageVersion string
-		facadeClient   facade.FacadeMock
+		facadeClient   facade.FacadeStub
 		expectedErr    bool
 	}{
 		"successful getManifest different from cache",
 		"packagenameorarndoesnotmatter",
 		"packageversiondoesnotmatter",
-		facade.FacadeMock{
+		facade.FacadeStub{
 			GetManifestOutput: &ssm.GetManifestOutput{
 				Manifest: &manifestStr,
 			},
@@ -612,7 +612,7 @@ func TestFindFileFromManifest(t *testing.T) {
 				&ec2infradetect.Ec2Infrastructure{"instanceID", "region", "", "availabilityZone", "instanceType"},
 			}, nil).Once()
 
-			facadeClientMock := facade.FacadeMock{
+			facadeClientMock := facade.FacadeStub{
 				PutConfigurePackageResultOutput: &ssm.PutConfigurePackageResultOutput{},
 			}
 			ds := &PackageService{facadeClient: &facadeClientMock, manifestCache: packageservice.ManifestCacheMemNew(), collector: &mockedCollector}
@@ -699,7 +699,7 @@ func TestDownloadFile(t *testing.T) {
 		t.Run(testdata.name, func(t *testing.T) {
 			birdwatcher.Networkdep = &testdata.network
 			cache := packageservice.ManifestCacheMemNew()
-			testArchive := birdwatcherarchive.New(&facade.FacadeMock{})
+			testArchive := birdwatcherarchive.New(&facade.FacadeStub{})
 
 			mockedCollector := envdetect.CollectorMock{}
 			ds := &PackageService{manifestCache: cache, collector: &mockedCollector, archive: testArchive}
@@ -777,7 +777,7 @@ func TestDownloadFileFromDocumentArchive(t *testing.T) {
 		t.Run(testdata.name, func(t *testing.T) {
 			birdwatcher.Networkdep = &testdata.network
 			cache := packageservice.ManifestCacheMemNew()
-			facadeClient := facade.FacadeMock{
+			facadeClient := facade.FacadeStub{
 				GetDocumentOutput: &ssm.GetDocumentOutput{
 					Status: &documentActive,
 					Name:   &packagename,
@@ -858,7 +858,7 @@ func TestDownloadArtifact(t *testing.T) {
 		t.Run(testdata.name, func(t *testing.T) {
 			cache := packageservice.ManifestCacheMemNew()
 			cache.WriteManifest(testdata.packageName, testdata.packageVersion, []byte(manifestStr))
-			testArchive := birdwatcherarchive.New(&facade.FacadeMock{})
+			testArchive := birdwatcherarchive.New(&facade.FacadeStub{})
 			mockedCollector := envdetect.CollectorMock{}
 
 			mockedCollector.On("CollectData", mock.Anything).Return(&envdetect.Environment{

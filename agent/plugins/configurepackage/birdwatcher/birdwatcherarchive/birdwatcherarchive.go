@@ -43,12 +43,12 @@ func (ba *PackageArchive) Name() string {
 }
 
 func (ba *PackageArchive) GetResourceVersion(packageName string, packageVersion string) (name string, version string) {
-	pkgVersion := packageVersion
+	version = packageVersion
 	if packageservice.IsLatest(packageVersion) {
-		pkgVersion = packageservice.Latest
+		version = packageservice.Latest
 	}
 
-	return packageName, pkgVersion
+	return packageName, version
 }
 
 // DownloadArtifactInfo downloads the manifest for the original birwatcher service

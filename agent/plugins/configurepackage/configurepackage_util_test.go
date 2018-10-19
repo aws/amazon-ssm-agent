@@ -80,10 +80,26 @@ func repoUninstallMock(pluginInformation *ConfigurePackagePluginInput, installer
 	mockRepo := repoMock.MockedRepository{}
 	mockRepo.On("GetInstalledVersion", mock.Anything, mock.Anything).Return("0.0.1")
 	mockRepo.On("GetInstallState", mock.Anything, mock.Anything).Return(localpackages.Installed, "")
-	mockRepo.On("ValidatePackage", mock.Anything, mock.Anything, "0.0.1").Return(nil)
+	mockRepo.On("ValidatePackage", mock.Anything, mock.Anything, "0.0.1").Return(nil).Once()
 	mockRepo.On("GetInstaller", mock.Anything, mock.Anything, mock.Anything, "0.0.1").Return(installerMock)
 	mockRepo.On("LockPackage", mock.Anything, mock.Anything, mock.Anything).Return(nil)
 	mockRepo.On("UnlockPackage", mock.Anything, mock.Anything).Return()
+	return &mockRepo
+}
+
+func repoInstallMock_ReadWriteManifest(pluginInformation *ConfigurePackagePluginInput, installerMock installer.Installer, version string) *repoMock.MockedRepository {
+	mockRepo := repoMock.MockedRepository{}
+	mockRepo.On("ReadManifest", pluginInformation.Name, version).Return([]byte(""), nil)
+	mockRepo.On("WriteManifest", pluginInformation.Name, version, mock.Anything).Return(nil)
+	mockRepo.On("LockPackage", mock.Anything, pluginInformation.Name, "Install").Return(nil).Once()
+	mockRepo.On("GetInstalledVersion", mock.Anything, pluginInformation.Name).Return("")
+	mockRepo.On("GetInstallState", mock.Anything, pluginInformation.Name).Return(localpackages.None, "")
+	mockRepo.On("ValidatePackage", mock.Anything, pluginInformation.Name, version).Return(nil)
+	mockRepo.On("GetInstaller", mock.Anything, mock.Anything, pluginInformation.Name, version).Return(installerMock)
+
+	mockRepo.On("SetInstallState", mock.Anything, pluginInformation.Name, version, mock.Anything).Return(nil)
+	mockRepo.On("LoadTraces", mock.Anything, mock.Anything).Return(nil)
+	mockRepo.On("UnlockPackage", mock.Anything, mock.Anything).Return().Once()
 	return &mockRepo
 }
 
@@ -192,8 +208,8 @@ func installerNotCalledMock() *installerMock.Mock {
 	return &installerMock.Mock{}
 }
 
-func selectMockService(service packageservice.PackageService) func(tracer trace.Tracer, input *ConfigurePackagePluginInput, localrepo localpackages.Repository, appCfg *appconfig.SsmagentConfig, bwfacade facade.BirdwatcherFacade) packageservice.PackageService {
-	return func(tracer trace.Tracer, input *ConfigurePackagePluginInput, localrepo localpackages.Repository, appCfg *appconfig.SsmagentConfig, bwfacade facade.BirdwatcherFacade) packageservice.PackageService {
+func selectMockService(service packageservice.PackageService) func(tracer trace.Tracer, input *ConfigurePackagePluginInput, localrepo localpackages.Repository, appCfg *appconfig.SsmagentConfig, bwfacade facade.BirdwatcherFacade, isDocumentService *bool) packageservice.PackageService {
+	return func(tracer trace.Tracer, input *ConfigurePackagePluginInput, localrepo localpackages.Repository, appCfg *appconfig.SsmagentConfig, bwfacade facade.BirdwatcherFacade, isDocumentService *bool) packageservice.PackageService {
 		return service
 	}
 }
@@ -253,6 +269,17 @@ func createMockIOHandler() iohandler.IOHandler {
 	mockIOHandler.On("AppendError", mock.Anything).Return()
 
 	return mockIOHandler
+}
+
+func createMockIOHandlerStruct(errorResponse string) *iohandlermocks.MockIOHandler {
+	mockIOHandler := iohandlermocks.MockIOHandler{}
+
+	mockIOHandler.On("SetExitCode", mock.Anything).Return()
+	mockIOHandler.On("SetStatus", mock.Anything).Return()
+	mockIOHandler.On("AppendInfo", mock.Anything).Return()
+	mockIOHandler.On("AppendError", errorResponse).Return()
+
+	return &mockIOHandler
 }
 
 type ConfigurePackageStubs struct {
