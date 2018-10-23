@@ -24,7 +24,6 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
-	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
@@ -231,22 +230,6 @@ func (p *Plugin) Start(context context.T, configuration string, orchestrationDir
 func (p *Plugin) Stop(context context.T, cancelFlag task.CancelFlag) (err error) {
 	log := context.Log()
 
-	processKillError := killCloudWatchExe(log)
-	timeAtStart := time.Now().UTC()
-	for (p.IsRunning(context) || processKillError != nil) && time.Since(timeAtStart).Seconds <= 60 {
-		log.Errorf("There was an error while killing Cloudwatch, will try again.")
-		processKillError = killCloudWatchExe(log)
-	}
-	if p.IsRunning(context) || processKillError != nil {
-		log.Errorf("There was an error while killing Cloudwatch.")
-		return processKillError
-	} else {
-		log.Infof("All existing Cloudwatch processes killed successfully.")
-	}
-	return nil
-}
-
-func (p *Plugin) killCloudWatchExe(log log.T) error {
 	var cwProcInfo []CloudwatchProcessInfo
 	if cwProcInfo, err = p.GetProcInfoOfCloudWatchExe(log,
 		p.DefaultHealthCheckOrchestrationDir,
@@ -273,8 +256,14 @@ func (p *Plugin) killCloudWatchExe(log log.T) error {
 		} else {
 			log.Infof("Successfully killed the process %v", p.Process.Pid)
 		}
-		return processKillError
 	}
+	if p.IsRunning(context) || processKillError != nil {
+		log.Errorf("There was an error while killing Cloudwatch.")
+		return processKillError
+	} else {
+		log.Infof("All existing Cloudwatch processes killed successfully.")
+	}
+	return nil
 }
 
 // IsCloudWatchExeRunning runs a powershell script to determine if the given process is running
