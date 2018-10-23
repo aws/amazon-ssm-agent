@@ -1,5 +1,10 @@
 Latest
 ===============
+- Bug fix for past sessions occiasionally stuck in terminating state
+- Darwin masquerades as Linux to bypass OS validation on the backend until official support can be added
+
+2.3.169.0
+===============
 - Update managed instance role token more frequently
 
 2.3.136.0
