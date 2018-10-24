@@ -84,7 +84,7 @@ func (ds *PackageService) PackageServiceName() string {
 }
 
 func (ds *PackageService) GetPackageArnAndVersion(packageName string, packageVersion string) (name string, version string) {
-	return ds.archive.GetResourceVersion(packageName, version)
+	return ds.archive.GetResourceVersion(packageName, packageVersion)
 }
 
 // DownloadManifest downloads the manifest for a given version (or latest) and returns the agent version specified in manifest
