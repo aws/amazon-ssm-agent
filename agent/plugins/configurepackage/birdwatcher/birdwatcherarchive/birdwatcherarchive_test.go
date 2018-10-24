@@ -50,12 +50,12 @@ func TestGetResourceVersion(t *testing.T) {
 
 			bwArchive := New(&mockBWFacade)
 
-			names, versions := bwArchive.GetResourceVersion(testdata.name, testdata.version)
-			assert.Equal(t, names, testdata.name)
+			name, version := bwArchive.GetResourceVersion(testdata.name, testdata.version)
+			assert.Equal(t, name, testdata.name)
 			if testdata.version == "" {
-				assert.Equal(t, versions, "latest")
+				assert.Equal(t, version, "latest")
 			} else {
-				assert.Equal(t, versions, testdata.version)
+				assert.Equal(t, version, testdata.version)
 			}
 
 		})
