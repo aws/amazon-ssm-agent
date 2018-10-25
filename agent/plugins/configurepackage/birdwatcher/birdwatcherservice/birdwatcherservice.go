@@ -26,6 +26,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/birdwatcher"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/birdwatcher/archive"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/birdwatcher/birdwatcherarchive"
+	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/birdwatcher/documentarchive"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/birdwatcher/facade"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/envdetect"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/packageservice"
@@ -54,11 +55,18 @@ type PackageService struct {
 	archive       archive.IPackageArchive
 }
 
+func NewBirdwatcherArchive(facadeClient facade.BirdwatcherFacade, manifestCache packageservice.ManifestCache) packageservice.PackageService {
+	pkgArchive := birdwatcherarchive.New(facadeClient)
+	return New(pkgArchive, facadeClient, manifestCache)
+}
+
+func NewDocumentArchive(facadeClient facade.BirdwatcherFacade, manifestCache packageservice.ManifestCache) packageservice.PackageService {
+	pkgArchive := documentarchive.New(facadeClient)
+	return New(pkgArchive, facadeClient, manifestCache)
+}
+
 // New constructor for PackageService
-func New(facadeClient facade.BirdwatcherFacade, manifestCache packageservice.ManifestCache, packageArchiveType string) packageservice.PackageService {
-	var pkgArchive archive.IPackageArchive
-	// create birdwatcher type archive
-	pkgArchive = birdwatcherarchive.New(facadeClient)
+func New(pkgArchive archive.IPackageArchive, facadeClient facade.BirdwatcherFacade, manifestCache packageservice.ManifestCache) packageservice.PackageService {
 
 	return &PackageService{
 		facadeClient:  facadeClient,
@@ -73,7 +81,7 @@ func (ds *PackageService) PackageServiceName() string {
 	return packageservice.PackageServiceName_birdwatcher
 }
 
-func (ds *PackageService) GetPackageArnAndVersion(packageName string, version string) (names []string, versions []string) {
+func (ds *PackageService) GetPackageArnAndVersion(packageName string, packageVersion string) (name string, version string) {
 	return ds.archive.GetResourceVersion(packageName, version)
 }
 

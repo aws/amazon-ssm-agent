@@ -112,17 +112,12 @@ func (ds *PackageService) PackageServiceName() string {
 	return packageservice.PackageServiceName_ssms3
 }
 
-func (ds *PackageService) GetPackageArnAndVersion(packageName string, version string) (names []string, versions []string) {
+func (ds *PackageService) GetPackageArnAndVersion(packageName string, version string) (names string, versions string) {
 	packageVersion := version
 	if packageservice.IsLatest(version) {
 		packageVersion = packageservice.Latest
 	}
-	names = make([]string, 1)
-	versions = make([]string, 1)
-	names[0] = packageName
-	versions[0] = packageVersion
-
-	return
+	return packageName, packageVersion
 }
 
 // DownloadManifest looks up the latest version of a given package for this platform/arch in S3 or manifest at source location
