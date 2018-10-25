@@ -25,7 +25,6 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/platform"
-	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/birdwatcher/archive"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/birdwatcher/birdwatcherservice"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/birdwatcher/facade"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/installer"
@@ -34,6 +33,8 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/ssms3"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/trace"
 	"github.com/aws/amazon-ssm-agent/agent/task"
+
+	"github.com/aws/aws-sdk-go/service/ssm"
 )
 
 const (
@@ -360,8 +361,29 @@ func selectService(tracer trace.Tracer, input *ConfigurePackagePluginInput, loca
 
 	if (err == nil && appCfg.Birdwatcher.ForceEnable) || !ssms3.UseSSMS3Service(tracer, serviceEndpoint, region) {
 		tracer.CurrentTrace().AppendInfof("S3 repository is not marked active in %v %v", region, serviceEndpoint)
+		// This indicates that it would be the birdwatcher service.
+		// Before creating an object of type birdwatcher here, make a call to get manifest and try to figure out if it is birdwatcher or document archive.
+
 		birdwatcherFacade := facade.NewBirdwatcherFacade()
-		return birdwatcherservice.New(birdwatcherFacade, localrepo, archive.PackageArchiveBirdwatcher)
+		getManifest, err := birdwatcherFacade.GetManifest(
+			&ssm.GetManifestInput{
+				PackageName:    &input.Name,
+				PackageVersion: &input.Version,
+			},
+		)
+
+		// If the manifest is empty, or the response does not exist, the package could be of type document,
+		// If manifest exists, the package is of type birdwatcher
+		// TODO: Add test coverage, improve the error here to indicate if manifest is unavailable.
+		if getManifest == nil || getManifest.Manifest == nil && err != nil {
+			// return a new object of type document
+			// TODO meloniam@ Let this call the archive doc directly to avoid creating new package birdwatcherservice
+			return birdwatcherservice.NewDocumentArchive(birdwatcherFacade, localrepo)
+		} else {
+			// return a new object of type birdwatcher
+			return birdwatcherservice.NewBirdwatcherArchive(birdwatcherFacade, localrepo)
+		}
+
 	}
 
 	tracer.CurrentTrace().AppendInfof("S3 repository is marked active")
@@ -397,7 +419,7 @@ func (p *Plugin) execute(context context.T, config contracts.Configuration, canc
 
 		//always download the manifest before acting upon the request
 		trace := tracer.BeginSection("download manifest")
-		packageArn, manifestVersion, isSameAsCache, err := packageService.DownloadManifest(tracer, packageNames[0], packageVersions[0])
+		packageArn, manifestVersion, isSameAsCache, err := packageService.DownloadManifest(tracer, packageNames, packageVersions)
 		trace.AppendDebugf("got manifest for package %v version %v isSameAsCache %v", packageArn, manifestVersion, isSameAsCache)
 
 		trace.End()

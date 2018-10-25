@@ -12,16 +12,12 @@
 // implied. See the License for the specific language governing
 // permissions and limitations under the License.
 
-// Package birdwatcherarchive contains the struct that is called when the package information is stored in birdwatcher
-package birdwatcherarchive
+// Package documentarchive contains the struct that is called when the package information is stored in birdwatcher
+package documentarchive
 
 import (
-	"fmt"
-
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/birdwatcher/archive"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/birdwatcher/facade"
-	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/packageservice"
-	"github.com/aws/aws-sdk-go/service/ssm"
 )
 
 type PackageArchive struct {
@@ -35,27 +31,15 @@ func New(facadeClientSession facade.BirdwatcherFacade) archive.IPackageArchive {
 	}
 }
 
-func (ba *PackageArchive) GetResourceVersion(packageName string, version string) (string, string) {
-	packageVersion := version
-	if packageservice.IsLatest(version) {
-		packageVersion = packageservice.Latest
-	}
-
+// GetResourceVersion makes a call to birdwatcher API to figure the right version of the resource that needs to be installed
+func (da *PackageArchive) GetResourceVersion(packageName string, packageVersion string) (name string, version string) {
+	// Return the packageVersion as "" if empty and return version if specified.
 	return packageName, packageVersion
 }
 
-// // DownloadArtifactInfo downloads the manifest for the original birwatcher service
-func (ba *PackageArchive) DownloadArchiveInfo(packageName string, version string) (string, error) {
+// DownloadArtifactInfo downloads the document using GetDocument and eventually gets the manifest from that
+func (da *PackageArchive) DownloadArchiveInfo(packageName string, version string) (string, error) {
 
-	resp, err := ba.facadeClient.GetManifest(
-		&ssm.GetManifestInput{
-			PackageName:    &packageName,
-			PackageVersion: &version,
-		},
-	)
-
-	if err != nil {
-		return "", fmt.Errorf("failed to retrieve manifest: %v", err)
-	}
-	return *resp.Manifest, nil
+	// TODO: Add implementation
+	return "", nil
 }

@@ -12,8 +12,8 @@
 // implied. See the License for the specific language governing
 // permissions and limitations under the License.
 
-// Package birdwatcherarchive contains the struct that is called when the package information is stored in birdwatcher
-package birdwatcherarchive
+// Package documentarchive contains the struct that is called when the package information is stored in birdwatcher
+package documentarchive
 
 import (
 	"testing"
@@ -25,39 +25,46 @@ import (
 
 func TestGetResourceVersion(t *testing.T) {
 
+	packageName := "Test Package"
+	version1 := ""
+	version2 := "1.2.3.4"
+	latest := "latest"
+
 	data := []struct {
-		name    string
-		version string
+		name         string
+		packagename  string
+		version      string
+		facadeClient facade.FacadeMock
 	}{
 		{
-			"PVDriver",
-			"latest",
+			"ValidDistributionRule",
+			packageName,
+			latest,
+			facade.FacadeMock{},
 		},
 		{
-			"PVDriver",
-			"",
+			"ValidDistributionRule_2",
+			packageName,
+			version1,
+			facade.FacadeMock{},
 		},
 		{
-			"PVDriver",
-			"1.2.3.4",
+
+			"ValidDistributionRule_3",
+			packageName,
+			version2,
+			facade.FacadeMock{},
 		},
 	}
 
 	for _, testdata := range data {
 		t.Run(testdata.name, func(t *testing.T) {
 
-			mockBWFacade := facade.FacadeMock{}
+			bwArchive := New(&testdata.facadeClient)
 
-			bwArchive := New(&mockBWFacade)
-
-			names, versions := bwArchive.GetResourceVersion(testdata.name, testdata.version)
-			assert.Equal(t, names, testdata.name)
-			if testdata.version == "" {
-				assert.Equal(t, versions, "latest")
-			} else {
-				assert.Equal(t, versions, testdata.version)
-			}
-
+			names, versions := bwArchive.GetResourceVersion(testdata.packagename, testdata.version)
+			assert.Equal(t, names, testdata.packagename)
+			assert.Equal(t, versions, testdata.version)
 		})
 	}
 }

@@ -1,4 +1,4 @@
-// Copyright 2017 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+// Copyright 2018 Amazon.com, Inc. or its affiliates. All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License"). You may not
 // use this file except in compliance with the License. A copy of the
@@ -16,9 +16,10 @@ package archive
 
 const (
 	PackageArchiveBirdwatcher = "birdwatcher"
+	PackageArchiveDocument    = "document"
 )
 
 type IPackageArchive interface {
-	GetResourceVersion(packageName string, version string) (names []string, versions []string)
+	GetResourceVersion(packageName string, packageVersion string) (name string, version string)
 	DownloadArchiveInfo(packageName string, version string) (string, error)
 }

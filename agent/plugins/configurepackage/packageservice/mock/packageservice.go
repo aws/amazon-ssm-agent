@@ -29,9 +29,9 @@ func (ds *Mock) PackageServiceName() string {
 	return args.String(0)
 }
 
-func (ds *Mock) GetPackageArnAndVersion(packageName string, version string) (names []string, versions []string) {
-	args := ds.Called(packageName, version)
-	return args.Get(0).([]string), args.Get(1).([]string)
+func (ds *Mock) GetPackageArnAndVersion(packageName string, packageVersion string) (name string, version string) {
+	args := ds.Called(packageName, packageVersion)
+	return args.String(0), args.String(1)
 }
 
 func (ds *Mock) DownloadManifest(tracer trace.Tracer, packageName string, version string) (string, string, bool, error) {
