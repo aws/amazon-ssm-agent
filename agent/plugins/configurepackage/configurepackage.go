@@ -370,10 +370,14 @@ func selectService(tracer trace.Tracer, input *ConfigurePackagePluginInput, loca
 		// This indicates that it would be the birdwatcher service.
 		// Before creating an object of type birdwatcher here, make a call to get manifest and try to figure out if it is birdwatcher or document archive.
 
+		version := input.Version
+		if packageservice.IsLatest(version) {
+			version = packageservice.Latest
+		}
 		_, err := birdwatcherFacade.GetManifest(
 			&ssm.GetManifestInput{
 				PackageName:    &input.Name,
-				PackageVersion: &input.Version,
+				PackageVersion: &version,
 			},
 		)
 
