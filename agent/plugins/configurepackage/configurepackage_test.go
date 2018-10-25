@@ -785,13 +785,17 @@ func TestExecuteConfigurePackagePlugin_DocumentService(t *testing.T) {
 	for _, testdata := range data {
 		t.Run(testdata.name, func(t *testing.T) {
 			pluginInformation := testdata.pluginInformation
+			version := pluginInformation.Version
+			if packageservice.IsLatest(version) {
+				version = packageservice.Latest
+			}
 			installerMock := installerSuccessMock(pluginInformation.Name, pluginVersion)
 			repoMock := repoInstallMock_ReadWriteManifest(pluginInformation, installerMock, pluginVersion)
 			bwFacade := facadeMock.BirdwatcherFacade{}
 			mockIOHandler := createMockIOHandlerStruct(testdata.errorResponse)
 			getManifestInput := &ssm.GetManifestInput{
 				PackageName:    &pluginInformation.Name,
-				PackageVersion: &pluginInformation.Version,
+				PackageVersion: &version,
 			}
 			getDocumentInput := &ssm.GetDocumentInput{
 				Name:        &pluginInformation.Name,
