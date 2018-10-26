@@ -193,7 +193,7 @@ func (webSocketChannel *WebSocketChannel) Open(log log.T) error {
 			if err != nil {
 				retryCount++
 				if retryCount >= mgsconfig.RetryAttempt {
-					log.Errorf("Reach the retry limit %v for receive messages. Error: %v", mgsconfig.RetryAttempt, err.Error())
+					log.Warnf("Reach the retry limit %v for receive messages. Error: %v", mgsconfig.RetryAttempt, err.Error())
 					webSocketChannel.OnError(err)
 					break
 				}
@@ -233,7 +233,7 @@ func (webSocketChannel *WebSocketChannel) StartPings(log log.T, pingInterval tim
 			err := webSocketChannel.Connection.WriteMessage(websocket.PingMessage, []byte("keepalive"))
 			webSocketChannel.writeLock.Unlock()
 			if err != nil {
-				log.Errorf("Error while sending websocket ping: %v", err)
+				log.Warnf("Error while sending websocket ping: %v", err)
 				return
 			}
 			time.Sleep(pingInterval)

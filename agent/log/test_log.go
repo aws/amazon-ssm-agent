@@ -36,6 +36,7 @@ func NewMockLog() *Mock {
 	log.On("Info", mock.Anything).Return()
 	log.On("Debugf", mock.Anything, mock.Anything).Return()
 	log.On("Errorf", mock.Anything, mock.Anything).Return(nil)
+	log.On("Warnf", mock.Anything, mock.Anything).Return(nil)
 	log.On("Tracef", mock.Anything, mock.Anything).Return()
 	log.On("Infof", mock.Anything, mock.Anything).Return()
 	return log
