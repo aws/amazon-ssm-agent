@@ -146,7 +146,7 @@ func (controlChannel *ControlChannel) Reconnect(log log.T) error {
 	log.Debugf("Reconnecting with controlchannel %s, token %s", controlChannel.ChannelId, controlChannel.wsChannel.GetChannelToken())
 
 	if err := controlChannel.wsChannel.Close(log); err != nil {
-		log.Errorf("closing controlchannel failed with error: %s", err)
+		log.Warnf("closing controlchannel failed with error: %s", err)
 	}
 
 	if err := controlChannel.Open(log); err != nil {
