@@ -32,7 +32,6 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/managedInstances/registration"
 	"github.com/aws/amazon-ssm-agent/agent/managedInstances/rolecreds"
 	"github.com/aws/amazon-ssm-agent/agent/platform"
-	"github.com/aws/amazon-ssm-agent/agent/rip"
 	mgsconfig "github.com/aws/amazon-ssm-agent/agent/session/config"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/credentials"
@@ -149,7 +148,7 @@ var makeRestcall = func(request []byte, methodType string, url string, region st
 // channelType can be control-channel or data-channel
 func getMGSBaseUrl(log log.T, channelType string, channelId string, region string) (output string, err error) {
 	// build url for CreateControlChannel or CreateDataChannel
-	hostName := rip.GetMgsEndpoint(region)
+	hostName := mgsconfig.GetMgsEndpointFromRip(region)
 	if hostName == "" {
 		return "", fmt.Errorf("failed to get host name with error: %s", err)
 	}
