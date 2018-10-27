@@ -24,7 +24,6 @@ import (
 
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/log"
-	"github.com/aws/amazon-ssm-agent/agent/rip"
 	mgsConfig "github.com/aws/amazon-ssm-agent/agent/session/config"
 	"github.com/aws/aws-sdk-go/aws/credentials"
 	"github.com/aws/aws-sdk-go/aws/signer/v4"
@@ -42,6 +41,7 @@ var (
 	role      = "subscribe"
 	token     = "token"
 	region    = "us-east-1"
+	mgsHost   = "ssmmessages.us-east-1.amazonaws.com"
 	signer    = &v4.Signer{Credentials: credentials.NewStaticCredentials("AKID", "SECRET", "SESSION")}
 )
 
@@ -72,12 +72,14 @@ func handlerToBeTested(w http.ResponseWriter, req *http.Request) {
 }
 
 func TestInitialize(t *testing.T) {
-	host := rip.GetMgsEndpoint(region)
+	mgsConfig.GetMgsEndpointFromRip = func(region string) string {
+		return mgsHost
+	}
 
 	webControlChannel := &WebSocketChannel{}
 	webControlChannel.Initialize(context.NewMockDefault(), channelId, mgsConfig.ControlChannel, role, token, region, signer, onMessageHandler, onErrorHandler)
 
-	assert.Equal(t, "wss://"+host+"/v1/control-channel/"+channelId+"?role=subscribe&stream=input", webControlChannel.Url)
+	assert.Equal(t, "wss://"+mgsHost+"/v1/control-channel/"+channelId+"?role=subscribe&stream=input", webControlChannel.Url)
 	assert.Equal(t, region, webControlChannel.Region)
 	assert.Equal(t, token, webControlChannel.ChannelToken)
 	assert.Equal(t, signer, webControlChannel.Signer)
@@ -85,7 +87,7 @@ func TestInitialize(t *testing.T) {
 	webDataChannel := &WebSocketChannel{}
 	webDataChannel.Initialize(context.NewMockDefault(), sessionId, mgsConfig.DataChannel, role, token, region, signer, onMessageHandler, onErrorHandler)
 
-	assert.Equal(t, "wss://"+host+"/v1/data-channel/"+sessionId+"?role="+role, webDataChannel.Url)
+	assert.Equal(t, "wss://"+mgsHost+"/v1/data-channel/"+sessionId+"?role="+role, webDataChannel.Url)
 	assert.Equal(t, region, webDataChannel.Region)
 	assert.Equal(t, token, webDataChannel.ChannelToken)
 	assert.Equal(t, signer, webDataChannel.Signer)

@@ -19,7 +19,6 @@ import (
 	"testing"
 
 	"github.com/aws/amazon-ssm-agent/agent/log"
-	"github.com/aws/amazon-ssm-agent/agent/rip"
 	mgsConfig "github.com/aws/amazon-ssm-agent/agent/session/config"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/credentials"
@@ -35,6 +34,7 @@ var (
 	instanceId = "i-12345678"
 	sessionId  = "s-12345678"
 	token      = "abcdefg"
+	mgsHost    = "ssmmessages.us-east-1.amazonaws.com"
 )
 
 func TestGetRegion(t *testing.T) {
@@ -59,6 +59,9 @@ func TestCreateControlChannel(t *testing.T) {
 		MessageSchemaVersion: aws.String(mgsConfig.MessageSchemaVersion),
 		RequestId:            aws.String(uuid.NewV4().String()),
 	}
+	mgsConfig.GetMgsEndpointFromRip = func(region string) string {
+		return mgsHost
+	}
 	makeRestcall = func(request []byte, methodType string, url string, region string, signer *v4.Signer) ([]byte, error) {
 		output := &CreateControlChannelOutput{
 			TokenValue:           aws.String(token),
@@ -79,6 +82,9 @@ func TestCreateDataChannel(t *testing.T) {
 		RequestId:            aws.String(uuid.NewV4().String()),
 		ClientId:             aws.String(uuid.NewV4().String()),
 	}
+	mgsConfig.GetMgsEndpointFromRip = func(region string) string {
+		return mgsHost
+	}
 	makeRestcall = func(request []byte, methodType string, url string, region string, signer *v4.Signer) ([]byte, error) {
 		output := &CreateDataChannelOutput{
 			TokenValue:           aws.String(token),
@@ -93,18 +99,21 @@ func TestCreateDataChannel(t *testing.T) {
 }
 
 func TestGetBaseUrl(t *testing.T) {
+	mgsConfig.GetMgsEndpointFromRip = func(region string) string {
+		return mgsHost
+	}
+
 	// data channel url test
 	dataChannelUrlResult, err := getMGSBaseUrl(log.NewMockLog(), mgsConfig.DataChannel, sessionId, region)
 
-	host := rip.GetMgsEndpoint(region)
-	expectedDataChannelUrl := "https://" + host + "/v1/data-channel/" + sessionId
+	expectedDataChannelUrl := "https://" + mgsHost + "/v1/data-channel/" + sessionId
 	assert.Nil(t, err)
 	assert.Equal(t, expectedDataChannelUrl, dataChannelUrlResult)
 
 	// control channel url test
 	controlChannelUrlResult, err := getMGSBaseUrl(log.NewMockLog(), mgsConfig.ControlChannel, instanceId, region)
 
-	expectedControlChannelUrl := "https://" + host + "/v1/control-channel/" + instanceId
+	expectedControlChannelUrl := "https://" + mgsHost + "/v1/control-channel/" + instanceId
 	assert.Nil(t, err)
 	assert.Equal(t, expectedControlChannelUrl, controlChannelUrlResult)
 }

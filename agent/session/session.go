@@ -33,7 +33,6 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/platform"
-	"github.com/aws/amazon-ssm-agent/agent/rip"
 	mgsConfig "github.com/aws/amazon-ssm-agent/agent/session/config"
 	mgsContracts "github.com/aws/amazon-ssm-agent/agent/session/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/session/controlchannel"
@@ -392,7 +391,7 @@ func formatAgentTaskCompletePayload(log log.T,
 
 // getMgsEndpoint builds mgs endpoint.
 func getMgsEndpoint(region string) (string, error) {
-	hostName := rip.GetMgsEndpoint(region)
+	hostName := mgsConfig.GetMgsEndpointFromRip(region)
 	if hostName == "" {
 		return "", fmt.Errorf("no MGS endpoint found for region %s", region)
 	}

@@ -328,6 +328,16 @@ func (suite *SessionTestSuite) TestBuildAgentTaskCompleteWhenPluginIdIsEmptyAndS
 }
 
 func (suite *SessionTestSuite) TestGetMgsEndpoint() {
+	mgsConfig.GetMgsEndpointFromRip = func(region string) string {
+		if region == "us-east-1" {
+			return "ssmmessages.us-east-1.amazonaws.com"
+		} else if region == "cn-north-1" {
+			return "ssmmessages.cn-north-1.amazonaws.com.cn"
+		} else {
+			return ""
+		}
+	}
+
 	host, err := getMgsEndpoint("us-east-1")
 
 	assert.Nil(suite.T(), err)
