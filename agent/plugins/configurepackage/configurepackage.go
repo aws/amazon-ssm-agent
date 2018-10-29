@@ -464,7 +464,7 @@ func (p *Plugin) execute(context context.T, config contracts.Configuration, canc
 				manifestVersion,
 				isSameAsCache,
 				&out)
-			log.Debugf("HasInst %v, HasUninst %v, InstallState %v, PackageArn %v, InstalledVersion %v", inst != nil, uninst != nil, installState, packageArn, installedVersion)
+			log.Debugf("HasInst %v, HasUninst %v, InstallState %v, PackageName %v, InstalledVersion %v", inst != nil, uninst != nil, installState, packageArn, installedVersion)
 
 			//if the status is already decided as failed or succeeded, do not execute anything
 			if out.GetStatus() != contracts.ResultStatusFailed && out.GetStatus() != contracts.ResultStatusSuccess {

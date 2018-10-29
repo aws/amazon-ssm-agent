@@ -5,7 +5,7 @@
   "packages": {
     "amazon": {
       "2017.03.1": {
-        "x86": {
+        "386": {
           "file": "testAgent-386-linux-rpm.zip"
         },
         "x86_64": {

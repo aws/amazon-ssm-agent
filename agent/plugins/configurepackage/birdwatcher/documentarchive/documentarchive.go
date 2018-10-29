@@ -19,6 +19,7 @@ import (
 	"errors"
 	"fmt"
 
+	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/birdwatcher"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/birdwatcher/archive"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/birdwatcher/facade"
 
@@ -30,6 +31,7 @@ type PackageArchive struct {
 	attachments  []*ssm.AttachmentContent
 	manifest     string
 	archiveType  string
+	documentArn  string
 }
 
 // New is a constructor for PackageArchive struct
@@ -90,6 +92,13 @@ func (da *PackageArchive) DownloadArchiveInfo(packageName string, version string
 	// try get document again during download
 	da.attachments = resp.AttachmentsContent
 
+	// GetDocument returns the Name of the document if it belongs to the account of the instance.
+	// If it is a shared document, GetDocument returns the document ARN as Name
+	if resp.Name == nil || *resp.Name == "" {
+		return "", fmt.Errorf("document name cannot be empty")
+	}
+	da.documentArn = *resp.Name
+
 	return da.manifest, nil
 }
 
@@ -121,8 +130,12 @@ func (da *PackageArchive) GetFileDownloadLocation(file *archive.File, packageNam
 		if *resp.Status != ssm.DocumentStatusActive {
 			return "", fmt.Errorf("package document is not currently active, kindly retry when the status is active. Current document status - %v", *resp.Status)
 		}
+		if resp.Name == nil || *resp.Name == "" {
+			return "", fmt.Errorf("document name cannot be empty")
+		}
 
 		da.attachments = resp.AttachmentsContent
+		da.documentArn = *resp.Name
 	}
 
 	// if the attachments are still nil, return error
@@ -132,11 +145,17 @@ func (da *PackageArchive) GetFileDownloadLocation(file *archive.File, packageNam
 
 	for _, attachmentContent := range da.attachments {
 		if *attachmentContent.Name == fileName {
-			// TODO: Add a confirmation of the hashcode along with the checksum available in the fileinfo
 			return *attachmentContent.Url, nil
 		}
 	}
 
 	return "", fmt.Errorf("Install attachments for package does not exist")
 
+}
+
+// GetResourceArn returns the document Arn required for storing the file. This is found in the response of GetDocument.
+func (da *PackageArchive) GetResourceArn(manifest *birdwatcher.Manifest) string {
+	// GetDocument returns the Name of the document if it belongs to the account of the instance.
+	// If it is a shared document, GetDocument returns the document ARN as Name
+	return da.documentArn
 }

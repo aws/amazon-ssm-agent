@@ -93,7 +93,7 @@ func (ds *PackageService) DownloadManifest(tracer trace.Tracer, packageName stri
 	if err != nil {
 		return "", "", isSameAsCache, err
 	}
-	return manifest.PackageArn, manifest.Version, isSameAsCache, nil
+	return ds.archive.GetResourceArn(manifest), manifest.Version, isSameAsCache, nil
 }
 
 // DownloadArtifact downloads the platform matching artifact specified in the manifest
@@ -197,13 +197,13 @@ func downloadManifest(ds *PackageService, packageName string, version string) (*
 		return nil, isSameAsCache, err
 	}
 
-	cachedManifest, err := readManifestFromCache(ds.manifestCache, parsedManifest.PackageArn, parsedManifest.Version)
+	cachedManifest, err := readManifestFromCache(ds.manifestCache, ds.archive.GetResourceArn(parsedManifest), parsedManifest.Version)
 
 	if reflect.DeepEqual(parsedManifest, cachedManifest) {
 		isSameAsCache = true
 	}
 
-	err = ds.manifestCache.WriteManifest(parsedManifest.PackageArn, parsedManifest.Version, byteManifest)
+	err = ds.manifestCache.WriteManifest(ds.archive.GetResourceArn(parsedManifest), parsedManifest.Version, byteManifest)
 	if err != nil {
 		return nil, isSameAsCache, fmt.Errorf("failed to write manifest to file: %v", err)
 	}

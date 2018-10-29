@@ -34,4 +34,5 @@ type IPackageArchive interface {
 	GetResourceVersion(packageName string, packageVersion string) (name string, version string)
 	DownloadArchiveInfo(packageName string, version string) (string, error)
 	GetFileDownloadLocation(file *File, packageName string, version string) (string, error)
+	GetResourceArn(manifest *birdwatcher.Manifest) string
 }
