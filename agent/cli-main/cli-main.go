@@ -22,5 +22,5 @@ import (
 )
 
 func main() {
-	cli.RunCommand(os.Args, os.Stdout)
+	os.Exit(cli.RunCommand(os.Args, os.Stdout))
 }

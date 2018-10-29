@@ -26,17 +26,17 @@ import (
 
 // TODO:MF: make errors more like ssm-cli: error: <arg type>: <error>?
 // RunCommand parses and executes a single command line
-func RunCommand(args []string, out io.Writer) {
+func RunCommand(args []string, out io.Writer) int {
 	uuid.SwitchFormat(uuid.CleanHyphen)
 	if len(args) < 2 {
 		displayUsage(out)
-		return
+		return 1
 	}
 	err, _, command, subcommands, parameters := parseCommand(args)
 	if err != nil {
 		displayUsage(out)
 		fmt.Fprintln(out, err.Error())
-		return
+		return 1
 	}
 	if cmd, exists := cliutil.CliCommands[command]; exists {
 		if cliutil.IsHelp(subcommands, parameters) {
@@ -46,6 +46,7 @@ func RunCommand(args []string, out io.Writer) {
 			if cmdErr != nil {
 				displayUsage(out)
 				fmt.Fprintln(out, cmdErr.Error())
+				return 1
 			} else {
 				fmt.Fprintln(out, result)
 			}
@@ -56,7 +57,9 @@ func RunCommand(args []string, out io.Writer) {
 		displayUsage(out)
 		fmt.Fprintf(out, "\nInvalid command %v.  The following commands are supported:\n\n", command)
 		displayValidCommands(out)
+		return 1
 	}
+	return 0
 }
 
 // parseCommand turns the command line arguments into a command name and a map of flag names and values

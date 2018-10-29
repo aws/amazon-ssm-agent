@@ -24,6 +24,7 @@ import (
 func TestCliUsage(t *testing.T) {
 	var buffer bytes.Buffer
 	args := []string{"ssm-cli"}
-	RunCommand(args, &buffer)
+	res := RunCommand(args, &buffer)
 	assert.Contains(t, buffer.String(), "usage")
+	assert.Equal(t, 1, res)
 }
