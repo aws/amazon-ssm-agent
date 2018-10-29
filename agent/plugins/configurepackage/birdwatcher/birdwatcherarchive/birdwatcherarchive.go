@@ -18,6 +18,7 @@ package birdwatcherarchive
 import (
 	"fmt"
 
+	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/birdwatcher"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/birdwatcher/archive"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/birdwatcher/facade"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/packageservice"
@@ -73,4 +74,9 @@ func (ba *PackageArchive) GetFileDownloadLocation(file *archive.File, packageNam
 		return "", fmt.Errorf("file is empty")
 	}
 	return file.Info.DownloadLocation, nil
+}
+
+// GetResourceArn returns the packageArn that is found i nthe manifest file
+func (ba *PackageArchive) GetResourceArn(manifest *birdwatcher.Manifest) string {
+	return manifest.PackageArn
 }

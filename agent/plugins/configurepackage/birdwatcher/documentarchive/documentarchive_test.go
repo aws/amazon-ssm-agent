@@ -76,6 +76,7 @@ func TestGetResourceVersion(t *testing.T) {
 
 func TestDownloadArchiveInfo(t *testing.T) {
 	packageName := "ABC_package"
+	documentArn := "arn:aws:ssm:us-east-1:1234567890:document/NameOfDoc"
 	versionName := "NewVersion"
 	manifest := "manifest"
 	docVersion := "1"
@@ -97,6 +98,19 @@ func TestDownloadArchiveInfo(t *testing.T) {
 					VersionName:     &versionName,
 					DocumentVersion: &docVersion,
 					Name:            &packageName,
+				},
+			},
+		},
+		{
+			"successful api call returning the document ARN",
+			false,
+			facade.FacadeStub{
+				GetDocumentOutput: &ssm.GetDocumentOutput{
+					Content:         &manifest,
+					Status:          &documentActive,
+					VersionName:     &versionName,
+					DocumentVersion: &docVersion,
+					Name:            &documentArn,
 				},
 			},
 		},

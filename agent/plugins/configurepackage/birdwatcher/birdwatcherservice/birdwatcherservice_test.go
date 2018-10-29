@@ -411,6 +411,70 @@ func TestDownloadManifest(t *testing.T) {
 	}
 }
 
+func TestDownloadDocument(t *testing.T) {
+	manifestStr := "{\"version\": \"1234\"}"
+	documentActive := ssm.DocumentStatusActive
+	tracer := trace.NewTracer(log.NewMockLog())
+	packageName := "documentarn"
+	packageVersion := "1234"
+
+	data := []struct {
+		name           string
+		packageName    string
+		packageVersion string
+		facadeClient   facade.FacadeStub
+		expectedErr    bool
+	}{
+		{
+			"successful getDocument with concrete version",
+			packageName,
+			packageVersion,
+			facade.FacadeStub{
+				GetDocumentOutput: &ssm.GetDocumentOutput{
+					Content:     &manifestStr,
+					Status:      &documentActive,
+					Name:        &packageName,
+					VersionName: &packageVersion,
+				},
+			},
+			false,
+		},
+	}
+
+	for _, testdata := range data {
+		t.Run(testdata.name, func(t *testing.T) {
+			testArchive := documentarchive.New(&testdata.facadeClient)
+			mockedCollector := envdetect.CollectorMock{}
+			envdata := &envdetect.Environment{
+				&osdetect.OperatingSystem{"abc", "567", "", "xyz", "", ""},
+				&ec2infradetect.Ec2Infrastructure{"instanceIDX", "Reg1", "", "AZ1", "instanceTypeZ"},
+			}
+
+			mockedCollector.On("CollectData", mock.Anything).Return(envdata, nil).Once()
+			cache := packageservice.ManifestCacheMemNew()
+			ds := &PackageService{facadeClient: &testdata.facadeClient, manifestCache: cache, collector: &mockedCollector, archive: testArchive}
+
+			_, result, isSameAsCache, err := ds.DownloadManifest(tracer, testdata.packageName, testdata.packageVersion)
+
+			if testdata.expectedErr {
+				assert.Error(t, err)
+			} else {
+				// verify parameter for api call
+				assert.Equal(t, testdata.packageName, *testdata.facadeClient.GetDocumentInput.Name)
+				assert.Equal(t, testdata.packageVersion, *testdata.facadeClient.GetDocumentInput.VersionName)
+				// verify result
+				assert.Equal(t, "1234", result)
+				assert.NoError(t, err)
+				assert.False(t, isSameAsCache)
+				// verify cache
+				cachedManifest, cacheErr := cache.ReadManifest("documentarn", "1234")
+				assert.Equal(t, []byte(manifestStr), cachedManifest)
+				assert.NoError(t, cacheErr)
+			}
+		})
+	}
+}
+
 func TestDownloadManifestSameAsCacheManifest(t *testing.T) {
 	manifestStr := "{\"version\": \"1234\",\"packageArn\":\"packagearn\"}"
 	tracer := trace.NewTracer(log.NewMockLog())
