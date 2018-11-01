@@ -156,11 +156,7 @@ func (p *Plugin) Start(context context.T, configuration string, orchestrationDir
 	//check if cloudwatch.exe is already running or not
 	if p.IsCloudWatchExeRunning(log, p.DefaultHealthCheckOrchestrationDir, p.DefaultHealthCheckOrchestrationDir, cancelFlag) {
 		log.Debug("Cloudwatch executable is already running. Starting to terminate the process")
-		if err = p.Stop(context, cancelFlag); err != nil {
-			// not stopped successfully
-			log.Errorf("Unable to disable current running cloudwatch. error: %s", err.Error())
-			return
-		}
+		p.Stop(context, cancelFlag)
 	}
 
 	/*
@@ -235,7 +231,7 @@ func (p *Plugin) Stop(context context.T, cancelFlag task.CancelFlag) (err error)
 		p.DefaultHealthCheckOrchestrationDir,
 		p.DefaultHealthCheckOrchestrationDir,
 		task.NewChanneledCancelFlag()); err != nil {
-		log.Errorf("Can't stop cloudwatch because unable to find Pid of cloudwatch.exe.")
+		log.Errorf("Can't stop cloudwatch because unable to find Pid of cloudwatch.exe : %s", err)
 		return err
 	}
 	log.Info("The number of cloudwatch processes running are ", len(cwProcInfo))
@@ -258,7 +254,7 @@ func (p *Plugin) Stop(context context.T, cancelFlag task.CancelFlag) (err error)
 		}
 	}
 	if p.IsRunning(context) || processKillError != nil {
-		log.Errorf("There was an error while killing Cloudwatch.")
+		log.Errorf("There was an error while killing Cloudwatch: %s", processKillError)
 		return processKillError
 	} else {
 		log.Infof("All existing Cloudwatch processes killed successfully.")
