@@ -85,9 +85,6 @@ func enablePlugin(log logger.T, orchestrationDirectory string, pluginID string, 
 	log.Debugf("Stopping %s - before applying new configuration", lrpName)
 	if err := lrpm.StopPlugin(lrpName, cancelFlag); err != nil {
 		log.Errorf("Unable to stop the plugin - %s: %s", lrpName, err.Error())
-		CreateResult(fmt.Sprintf("Encountered error while stopping the plugin: %s", err.Error()),
-			contracts.ResultStatusFailed, res)
-		return
 	}
 	ioConfig := contracts.IOConfiguration{
 		OrchestrationDirectory: orchestrationDirectory,
