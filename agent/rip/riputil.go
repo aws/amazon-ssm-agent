@@ -23,6 +23,10 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/platform"
 )
 
+const (
+	MgsServiceName = "ssmmessages"
+)
+
 // TODO: remove rip-gen from s3util and use this shared file.
 var awsMessageGatewayServiceEndpointMap = map[string]string{
 	//AUTOGEN_START_MessageGatewayService
@@ -65,10 +69,20 @@ func GetMgsEndpoint(region string) (mgsEndpoint string) {
 		return mgsEndpoint
 	}
 
+	mgsEndpoint = ""
 	if region, err := platform.Region(); err == nil {
-		if defaultEndpoint := appconfig.GetDefaultEndPoint(region, "ssmmessages"); defaultEndpoint != "" {
-			return defaultEndpoint
-		}
+		mgsEndpoint = GetDefaultServiceEndpoint(region, MgsServiceName)
 	}
-	return ""
+	return mgsEndpoint
+}
+
+// GetDefaultServiceEndpoint returns the default endpoint for a service, it should not be empty.
+func GetDefaultServiceEndpoint(region string, service string) (endpoint string) {
+	defaultEndpoint := appconfig.GetDefaultEndPoint(region, service)
+	if defaultEndpoint != "" {
+		endpoint = defaultEndpoint
+	} else {
+		endpoint = service + "." + region + ".amazonaws.com"
+	}
+	return endpoint
 }

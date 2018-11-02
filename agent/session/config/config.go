@@ -23,7 +23,7 @@ import (
 const (
 	SessionServiceName            = "MessageGatewayService"
 	DotDelimiter                  = "."
-	ServiceName                   = "ssmmessages"
+	ServiceName                   = rip.MgsServiceName
 	HttpsPrefix                   = "https://"
 	WebSocketPrefix               = "wss://"
 	ControlChannel                = "control-channel"
