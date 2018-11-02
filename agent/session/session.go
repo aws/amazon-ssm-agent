@@ -191,12 +191,15 @@ func (s *Session) ModuleExecute(context context.T) (err error) {
 		return
 	}
 
-	s.controlChannel, err = setupControlChannel(s.context, s.service, s.processor, instanceId)
-	if err != nil {
-		log.Errorf("Failed to setup control channel, err: %v", err)
-	}
+	log.Info("SSM Agent is trying to setup control channel for Session Manager module.")
+	go func() {
+		s.controlChannel, err = setupControlChannel(s.context, s.service, s.processor, instanceId)
+		if err != nil {
+			log.Errorf("Failed to setup control channel, err: %v", err)
+		}
+		log.Info("Starting receiving message from control channel")
+	}()
 
-	log.Info("Starting receiving message from control channel")
 	return nil
 }
 
