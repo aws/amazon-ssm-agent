@@ -85,11 +85,13 @@ func TestDownloadArchiveInfo(t *testing.T) {
 	documentInactive := ssm.DocumentStatusCreating
 	data := []struct {
 		name         string
+		version      string
 		isError      bool
 		facadeClient facade.FacadeStub
 	}{
 		{
 			"successful api call",
+			versionName,
 			false,
 			facade.FacadeStub{
 				GetDocumentOutput: &ssm.GetDocumentOutput{
@@ -103,6 +105,7 @@ func TestDownloadArchiveInfo(t *testing.T) {
 		},
 		{
 			"successful api call returning the document ARN",
+			versionName,
 			false,
 			facade.FacadeStub{
 				GetDocumentOutput: &ssm.GetDocumentOutput{
@@ -116,6 +119,7 @@ func TestDownloadArchiveInfo(t *testing.T) {
 		},
 		{
 			"api call returns error",
+			versionName,
 			true,
 			facade.FacadeStub{
 				GetDocumentError: errors.New("testerror"),
@@ -123,6 +127,7 @@ func TestDownloadArchiveInfo(t *testing.T) {
 		},
 		{
 			"manifest is nil",
+			versionName,
 			true,
 			facade.FacadeStub{
 				GetDocumentOutput: &ssm.GetDocumentOutput{
@@ -136,6 +141,7 @@ func TestDownloadArchiveInfo(t *testing.T) {
 		},
 		{
 			"manifest is empty",
+			versionName,
 			true,
 			facade.FacadeStub{
 				GetDocumentOutput: &ssm.GetDocumentOutput{
@@ -149,10 +155,25 @@ func TestDownloadArchiveInfo(t *testing.T) {
 		},
 		{
 			"document status is not active",
+			versionName,
 			true,
 			facade.FacadeStub{
 				GetDocumentOutput: &ssm.GetDocumentOutput{
 					Content:         &emptystring,
+					Status:          &documentInactive,
+					VersionName:     &versionName,
+					DocumentVersion: &docVersion,
+					Name:            &packageName,
+				},
+			},
+		},
+		{
+			"version is empty",
+			emptystring,
+			true,
+			facade.FacadeStub{
+				GetDocumentOutput: &ssm.GetDocumentOutput{
+					Content:         &manifest,
 					Status:          &documentInactive,
 					VersionName:     &versionName,
 					DocumentVersion: &docVersion,
@@ -166,7 +187,7 @@ func TestDownloadArchiveInfo(t *testing.T) {
 
 			docArchive := New(&testdata.facadeClient)
 
-			document, err := docArchive.DownloadArchiveInfo(packageName, versionName)
+			document, err := docArchive.DownloadArchiveInfo(packageName, testdata.version)
 			if testdata.isError {
 				assert.Error(t, err)
 			} else {
