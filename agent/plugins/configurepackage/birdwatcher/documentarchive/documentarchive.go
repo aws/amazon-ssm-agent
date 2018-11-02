@@ -64,10 +64,14 @@ func (da *PackageArchive) GetResourceVersion(packageName string, packageVersion 
 // DownloadArtifactInfo downloads the document using GetDocument and eventually gets the manifest from that and returns it
 func (da *PackageArchive) DownloadArchiveInfo(packageName string, version string) (string, error) {
 	// return manifest and error
+	versionName := &version
+	if version == "" {
+		versionName = nil
+	}
 	resp, err := da.facadeClient.GetDocument(
 		&ssm.GetDocumentInput{
 			Name:        &packageName,
-			VersionName: &version,
+			VersionName: versionName,
 		},
 	)
 

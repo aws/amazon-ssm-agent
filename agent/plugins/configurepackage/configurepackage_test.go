@@ -797,9 +797,13 @@ func TestExecuteConfigurePackagePlugin_DocumentService(t *testing.T) {
 				PackageName:    &pluginInformation.Name,
 				PackageVersion: &version,
 			}
+			versionName := &testdata.mockVersion
+			if testdata.mockVersion == "" {
+				versionName = nil
+			}
 			getDocumentInput := &ssm.GetDocumentInput{
 				Name:        &pluginInformation.Name,
-				VersionName: &testdata.mockVersion,
+				VersionName: versionName,
 			}
 			if !testdata.getDocumentReturnsError {
 				getDocumentOutput = &ssm.GetDocumentOutput{
