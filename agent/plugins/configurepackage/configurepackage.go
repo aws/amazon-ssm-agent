@@ -483,30 +483,30 @@ func (p *Plugin) execute(context context.T, config contracts.Configuration, canc
 						&out)
 				}
 			}
-
-			if err := p.localRepository.LoadTraces(tracer, packageArn); err != nil {
-				log.Errorf("Error loading prior traces: %v", err.Error())
-			}
-			if out.GetStatus().IsReboot() {
-				err := p.localRepository.PersistTraces(tracer, packageArn)
-				if err != nil {
-					log.Errorf("Error persisting traces: %v", err.Error())
+			if !p.isDocumentArchive {
+				if err := p.localRepository.LoadTraces(tracer, packageArn); err != nil {
+					log.Errorf("Error loading prior traces: %v", err.Error())
 				}
-			} else {
-				version := manifestVersion
-				if input.Action == InstallAction {
-					version = inst.Version()
-				} else if input.Action == UninstallAction {
-					version = uninst.Version()
-				}
-
-				startTime := tracer.Traces()[0].Start
-				for _, trace := range tracer.Traces() {
-					if trace.Start < startTime {
-						startTime = trace.Start
+				if out.GetStatus().IsReboot() {
+					err := p.localRepository.PersistTraces(tracer, packageArn)
+					if err != nil {
+						log.Errorf("Error persisting traces: %v", err.Error())
 					}
-				}
-				if !p.isDocumentArchive {
+				} else {
+					version := manifestVersion
+					if out.GetStatus() != contracts.ResultStatusFailed || out.GetStatus() != contracts.ResultStatusSuccess {
+						if input.Action == InstallAction {
+							version = inst.Version()
+						} else if input.Action == UninstallAction {
+							version = uninst.Version()
+						}
+					}
+					startTime := tracer.Traces()[0].Start
+					for _, trace := range tracer.Traces() {
+						if trace.Start < startTime {
+							startTime = trace.Start
+						}
+					}
 					err := packageService.ReportResult(tracer, packageservice.PackageResult{
 						Exitcode:               int64(out.GetExitCode()),
 						Operation:              input.Action,

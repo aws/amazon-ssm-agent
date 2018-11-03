@@ -96,9 +96,7 @@ func repoInstallMock_ReadWriteManifest(pluginInformation *ConfigurePackagePlugin
 	mockRepo.On("GetInstallState", mock.Anything, pluginInformation.Name).Return(localpackages.None, "")
 	mockRepo.On("ValidatePackage", mock.Anything, pluginInformation.Name, version).Return(nil)
 	mockRepo.On("GetInstaller", mock.Anything, mock.Anything, pluginInformation.Name, version).Return(installerMock)
-
 	mockRepo.On("SetInstallState", mock.Anything, pluginInformation.Name, version, mock.Anything).Return(nil)
-	mockRepo.On("LoadTraces", mock.Anything, mock.Anything).Return(nil)
 	mockRepo.On("UnlockPackage", mock.Anything, mock.Anything).Return().Once()
 	return &mockRepo
 }
