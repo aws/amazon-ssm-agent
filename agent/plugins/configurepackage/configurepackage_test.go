@@ -717,6 +717,7 @@ func TestExecuteConfigurePackagePlugin_BirdwatcherService(t *testing.T) {
 	}
 	bwFacade.On("GetManifest", getManifestInput).Return(getManifestOutput, nil).Twice()
 	bwFacade.On("PutConfigurePackageResult", mock.Anything).Return(&ssm.PutConfigurePackageResultOutput{}, nil).Once()
+	repoMock.On("LoadTraces", mock.Anything, mock.Anything).Return(nil)
 
 	plugin := &Plugin{
 		birdwatcherfacade:      &bwFacade,
