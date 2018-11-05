@@ -1,6 +1,12 @@
 Latest
 ===============
-- Bug fix for past sessions occiasionally stuck in terminating state
+- Bug fix for session manager logging on Windows
+- Bug fix for ConfigureCloudWatch plugin
+- Bug fix for update SSM agent occasionally failing due to SSM agent service stuck in starting state
+
+2.3.193.0
+===============
+- Bug fix for past sessions occasionally stuck in terminating state
 - Darwin masquerades as Linux to bypass OS validation on the backend until official support can be added
 
 2.3.169.0
