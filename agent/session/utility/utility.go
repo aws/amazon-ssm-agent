@@ -36,6 +36,7 @@ const (
 type ISessionUtil interface {
 	GeneratePasswordForDefaultUser() (string, error)
 	MustGeneratePasswordForDefaultUser() string
+	ChangePassword(username string, password string) error
 }
 
 type SessionUtil struct {

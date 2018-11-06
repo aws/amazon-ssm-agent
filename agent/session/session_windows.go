@@ -30,7 +30,7 @@ const administrators = "administrators"
 var u = &utility.SessionUtil{}
 
 var commandName = appconfig.PowerShellPluginCommandName
-var commandArgs = []string{"net", "user", "/add", appconfig.DefaultRunAsUserName, u.MustGeneratePasswordForDefaultUser(), "/Y"}
+var commandArgs = []string{"net", "user", "/add", appconfig.DefaultRunAsUserName}
 
 // createLocalAdminUser creates a local OS user on the instance with admin permissions.
 func (s *Session) createLocalAdminUser() {
@@ -40,7 +40,7 @@ func (s *Session) createLocalAdminUser() {
 		if strings.Contains(err.Error(), "already exists") {
 			log := s.context.Log()
 			log.Infof("Resetting password for %s", appconfig.DefaultRunAsUserName)
-			if err = exec.Command(appconfig.PowerShellPluginCommandName, "net", "user", appconfig.DefaultRunAsUserName, u.MustGeneratePasswordForDefaultUser()).Run(); err != nil {
+			if err = u.ChangePassword(appconfig.DefaultRunAsUserName, u.MustGeneratePasswordForDefaultUser()); err != nil {
 				panic(err)
 			}
 		}
