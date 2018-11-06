@@ -20,7 +20,6 @@ import (
 	"bufio"
 	"fmt"
 	"os"
-	"os/exec"
 	"path/filepath"
 	"regexp"
 	"runtime"
@@ -80,7 +79,7 @@ func StartPty(log log.T, isSessionShell bool) (stdin *os.File, stdout *os.File, 
 		if err != nil {
 			return nil, nil, err
 		}
-		if err = exec.Command(appconfig.PowerShellPluginCommandName, "net", "user", appconfig.DefaultRunAsUserName, newPassword).Run(); err != nil {
+		if err = u.ChangePassword(appconfig.DefaultRunAsUserName, newPassword); err != nil {
 			log.Errorf("Failed to generate new password for %s: %v", appconfig.DefaultRunAsUserName, err)
 			return
 		}
