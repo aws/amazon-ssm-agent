@@ -636,6 +636,7 @@ func TestSelectService(t *testing.T) {
 		name         string
 		bwfacade     facade.BirdwatcherFacade
 		expectedType string
+		packageName  string
 	}{
 		{
 			"get manifest works",
@@ -645,6 +646,7 @@ func TestSelectService(t *testing.T) {
 				},
 			},
 			packageservice.PackageServiceName_birdwatcher,
+			"package",
 		},
 		{
 			"no getManifest",
@@ -652,6 +654,13 @@ func TestSelectService(t *testing.T) {
 				GetManifestError: errors.New(resourceNotFoundException),
 			},
 			packageservice.PackageServiceName_document,
+			"package",
+		},
+		{
+			"documentArn type package doing getManifest",
+			&facade.FacadeStub{},
+			packageservice.PackageServiceName_document,
+			"arn:aws:ssm:us-west-1:1234567890:document/package",
 		},
 		{
 			"error in getManifest",
@@ -659,6 +668,7 @@ func TestSelectService(t *testing.T) {
 				GetManifestError: errors.New("testError"),
 			},
 			packageservice.PackageServiceName_birdwatcher,
+			"package",
 		},
 	}
 
@@ -674,7 +684,7 @@ func TestSelectService(t *testing.T) {
 			}
 			localRepo := localpackages.NewRepository()
 			input := &ConfigurePackagePluginInput{
-				Name:       "package",
+				Name:       testdata.packageName,
 				Version:    "1.2.3.4",
 				Repository: "",
 			}

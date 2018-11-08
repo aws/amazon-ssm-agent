@@ -18,6 +18,7 @@ package configurepackage
 import (
 	"errors"
 	"fmt"
+	"regexp"
 	"strings"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
@@ -46,6 +47,7 @@ const (
 )
 
 const resourceNotFoundException = "ResourceNotFoundException"
+const documentArnPattern = "^arn:[a-z0-9][-.a-z0-9]{0,62}:[a-z0-9][-.a-z0-9]{0,62}:([a-z0-9][-.a-z0-9]{0,62})?:([a-z0-9][-.a-z0-9]{0,62})?:document\\/[a-zA-Z][a-zA-Z0-9-\\_]{0,39}$"
 
 // Plugin is the type for the configurepackage plugin.
 type Plugin struct {
@@ -368,8 +370,13 @@ func selectService(tracer trace.Tracer, input *ConfigurePackagePluginInput, loca
 	if (appCfg != nil && appCfg.Birdwatcher.ForceEnable) || !ssms3.UseSSMS3Service(tracer, serviceEndpoint, region) {
 		tracer.CurrentTrace().AppendInfof("S3 repository is not marked active in %v %v", region, serviceEndpoint)
 		// This indicates that it would be the birdwatcher service.
-		// Before creating an object of type birdwatcher here, make a call to get manifest and try to figure out if it is birdwatcher or document archive.
-
+		// Before creating an object of type birdwatcher here, check if the name is of document arn. If it is, return with a Document type service
+		if regexp.MustCompile(documentArnPattern).MatchString(input.Name) {
+			*isDocumentArchive = true
+			// return a new object of type document
+			return birdwatcherservice.NewDocumentArchive(birdwatcherFacade, localrepo)
+		}
+		// If not, make a call to GetManifest and try to figure out if it is birdwatcher or document archive.
 		version := input.Version
 		if packageservice.IsLatest(version) {
 			version = packageservice.Latest
@@ -381,7 +388,7 @@ func selectService(tracer trace.Tracer, input *ConfigurePackagePluginInput, loca
 			},
 		)
 
-		// If the error returned is the "ResourceNotFoundException", create a service with document archive
+		// If the error returned is the "ResourceNotFoundException", or if it is ValidationException and the arn is document type, create a service with document archive
 		// if any other response, create a service of birdwatcher type
 		// TODO: should we ask customer to try again later if error is throttling exception or just create birdwatcher type service?
 		if err != nil {

@@ -117,10 +117,15 @@ func (da *PackageArchive) GetFileDownloadLocation(file *archive.File, packageNam
 
 	//If the attachments are nil, try to get document again.
 	if da.attachments == nil {
+		// return manifest and error
+		versionName := &version
+		if version == "" {
+			versionName = nil
+		}
 		resp, err := da.facadeClient.GetDocument(
 			&ssm.GetDocumentInput{
 				Name:        &packageName,
-				VersionName: &version,
+				VersionName: versionName,
 			},
 		)
 
