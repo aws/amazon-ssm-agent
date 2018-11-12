@@ -364,3 +364,11 @@ func TestGetFileDownloadLocation(t *testing.T) {
 
 	}
 }
+
+func TestArchiveName(t *testing.T) {
+	facadeSession := facade.FacadeStub{}
+	testArchive := New(&facadeSession)
+
+	assert.Equal(t, archive.PackageArchiveDocument, testArchive.Name())
+
+}

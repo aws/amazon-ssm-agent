@@ -206,9 +206,9 @@ func installerNotCalledMock() *installerMock.Mock {
 	return &installerMock.Mock{}
 }
 
-func selectMockService(service packageservice.PackageService) func(tracer trace.Tracer, input *ConfigurePackagePluginInput, localrepo localpackages.Repository, appCfg *appconfig.SsmagentConfig, bwfacade facade.BirdwatcherFacade, isDocumentService *bool) packageservice.PackageService {
-	return func(tracer trace.Tracer, input *ConfigurePackagePluginInput, localrepo localpackages.Repository, appCfg *appconfig.SsmagentConfig, bwfacade facade.BirdwatcherFacade, isDocumentService *bool) packageservice.PackageService {
-		return service
+func selectMockService(service packageservice.PackageService) func(tracer trace.Tracer, input *ConfigurePackagePluginInput, localrepo localpackages.Repository, appCfg *appconfig.SsmagentConfig, bwfacade facade.BirdwatcherFacade, isDocumentService *bool) (packageservice.PackageService, error) {
+	return func(tracer trace.Tracer, input *ConfigurePackagePluginInput, localrepo localpackages.Repository, appCfg *appconfig.SsmagentConfig, bwfacade facade.BirdwatcherFacade, isDocumentService *bool) (packageservice.PackageService, error) {
+		return service, nil
 	}
 }
 

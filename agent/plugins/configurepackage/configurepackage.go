@@ -51,7 +51,7 @@ const documentArnPattern = "^arn:[a-z0-9][-.a-z0-9]{0,62}:[a-z0-9][-.a-z0-9]{0,6
 
 // Plugin is the type for the configurepackage plugin.
 type Plugin struct {
-	packageServiceSelector func(tracer trace.Tracer, input *ConfigurePackagePluginInput, localrepo localpackages.Repository, appCfg *appconfig.SsmagentConfig, bwfacade facade.BirdwatcherFacade, isDocumentArchive *bool) packageservice.PackageService
+	packageServiceSelector func(tracer trace.Tracer, input *ConfigurePackagePluginInput, localrepo localpackages.Repository, appCfg *appconfig.SsmagentConfig, bwfacade facade.BirdwatcherFacade, isDocumentArchive *bool) (packageservice.PackageService, error)
 	localRepository        localpackages.Repository
 	birdwatcherfacade      facade.BirdwatcherFacade
 	isDocumentArchive      bool
@@ -363,9 +363,11 @@ func checkAlreadyInstalled(
 }
 
 // selectService chooses the implementation of PackageService to use for a given execution of the plugin
-func selectService(tracer trace.Tracer, input *ConfigurePackagePluginInput, localrepo localpackages.Repository, appCfg *appconfig.SsmagentConfig, birdwatcherFacade facade.BirdwatcherFacade, isDocumentArchive *bool) packageservice.PackageService {
+func selectService(tracer trace.Tracer, input *ConfigurePackagePluginInput, localrepo localpackages.Repository, appCfg *appconfig.SsmagentConfig, birdwatcherFacade facade.BirdwatcherFacade, isDocumentArchive *bool) (packageservice.PackageService, error) {
 	region, _ := platform.Region()
 	serviceEndpoint := input.Repository
+	response := &ssm.GetManifestOutput{}
+	var err error
 
 	if (appCfg != nil && appCfg.Birdwatcher.ForceEnable) || !ssms3.UseSSMS3Service(tracer, serviceEndpoint, region) {
 		tracer.CurrentTrace().AppendInfof("S3 repository is not marked active in %v %v", region, serviceEndpoint)
@@ -374,14 +376,14 @@ func selectService(tracer trace.Tracer, input *ConfigurePackagePluginInput, loca
 		if regexp.MustCompile(documentArnPattern).MatchString(input.Name) {
 			*isDocumentArchive = true
 			// return a new object of type document
-			return birdwatcherservice.NewDocumentArchive(birdwatcherFacade, localrepo)
+			return birdwatcherservice.NewDocumentArchive(birdwatcherFacade, localrepo), nil
 		}
 		// If not, make a call to GetManifest and try to figure out if it is birdwatcher or document archive.
 		version := input.Version
 		if packageservice.IsLatest(version) {
 			version = packageservice.Latest
 		}
-		_, err := birdwatcherFacade.GetManifest(
+		response, err = birdwatcherFacade.GetManifest(
 			&ssm.GetManifestInput{
 				PackageName:    &input.Name,
 				PackageVersion: &version,
@@ -390,22 +392,25 @@ func selectService(tracer trace.Tracer, input *ConfigurePackagePluginInput, loca
 
 		// If the error returned is the "ResourceNotFoundException", or if it is ValidationException and the arn is document type, create a service with document archive
 		// if any other response, create a service of birdwatcher type
-		// TODO: should we ask customer to try again later if error is throttling exception or just create birdwatcher type service?
 		if err != nil {
 			if strings.Contains(err.Error(), resourceNotFoundException) {
 				*isDocumentArchive = true
 				// return a new object of type document
-				return birdwatcherservice.NewDocumentArchive(birdwatcherFacade, localrepo)
+				return birdwatcherservice.NewDocumentArchive(birdwatcherFacade, localrepo), nil
 			} else {
-				tracer.CurrentTrace().AppendInfof("Error returned for GetManifest is not ResourceNotFoundException. It is %v.", err.Error())
+				tracer.CurrentTrace().AppendErrorf("Error returned for GetManifest - %v.", err.Error())
+				return nil, err
 			}
 		}
+
+		*isDocumentArchive = false
 		// return a new object of type birdwatcher
-		return birdwatcherservice.NewBirdwatcherArchive(birdwatcherFacade, localrepo)
+		return birdwatcherservice.NewBirdwatcherArchive(birdwatcherFacade, localrepo, *response.Manifest), nil
+
 	}
 
 	tracer.CurrentTrace().AppendInfof("S3 repository is marked active")
-	return ssms3.New(serviceEndpoint, region)
+	return ssms3.New(serviceEndpoint, region), nil
 }
 
 // Execute runs the plugin operation and returns output
@@ -437,94 +442,100 @@ func (p *Plugin) execute(context context.T, config contracts.Configuration, canc
 		} else {
 			appConfig = &appCfg
 		}
-		packageService := p.packageServiceSelector(tracer, input, p.localRepository, appConfig, p.birdwatcherfacade, &p.isDocumentArchive)
-		//Return failure if the manifest cannot be accessed
-		//Return failure if the package version is installed, but the manifest is no longer available
-		packageName, packageVersion := packageService.GetPackageArnAndVersion(input.Name, input.Version)
-
-		//always download the manifest before acting upon the request
-		trace := tracer.BeginSection("download manifest")
-		packageArn, manifestVersion, isSameAsCache, err := packageService.DownloadManifest(tracer, packageName, packageVersion)
-		trace.AppendDebugf("got manifest for package %v version %v isSameAsCache %v", packageArn, manifestVersion, isSameAsCache)
-
-		trace.End()
-
+		packageService, err := p.packageServiceSelector(tracer, input, p.localRepository, appConfig, p.birdwatcherfacade, &p.isDocumentArchive)
 		if err != nil {
 			tracer.CurrentTrace().WithError(err).End()
 			out.MarkAsFailed(nil, nil)
-		} else if err := p.localRepository.LockPackage(tracer, packageArn, input.Action); err != nil {
-			// do not allow multiple actions to be performed at the same time for the same package
-			// this is possible with multiple concurrent runcommand documents
-			tracer.CurrentTrace().WithError(err).End()
-			out.MarkAsFailed(nil, nil)
-		} else {
-			defer p.localRepository.UnlockPackage(tracer, packageArn)
+		}
+		if out.GetStatus() != contracts.ResultStatusFailed {
+			//Return failure if the manifest cannot be accessed
+			//Return failure if the package version is installed, but the manifest is no longer available
+			packageName, packageVersion := packageService.GetPackageArnAndVersion(input.Name, input.Version)
 
-			log.Debugf("Prepare for %v %v %v", input.Action, input.Name, input.Version)
-			inst, uninst, installState, installedVersion := prepareConfigurePackage(
-				tracer,
-				config,
-				p.localRepository,
-				packageService,
-				input,
-				packageArn,
-				manifestVersion,
-				isSameAsCache,
-				&out)
-			log.Debugf("HasInst %v, HasUninst %v, InstallState %v, PackageName %v, InstalledVersion %v", inst != nil, uninst != nil, installState, packageArn, installedVersion)
+			//always download the manifest before acting upon the request
+			trace := tracer.BeginSection("download manifest")
+			packageArn, manifestVersion, isSameAsCache, err := packageService.DownloadManifest(tracer, packageName, packageVersion)
+			trace.AppendDebugf("got manifest for package %v version %v isSameAsCache %v", packageArn, manifestVersion, isSameAsCache)
 
-			//if the status is already decided as failed or succeeded, do not execute anything
-			if out.GetStatus() != contracts.ResultStatusFailed && out.GetStatus() != contracts.ResultStatusSuccess {
-				alreadyInstalled := checkAlreadyInstalled(tracer, context, p.localRepository, installedVersion, installState, inst, uninst, &out)
-				// if already failed or already installed and valid, do not execute install
-				// if it is already installed and the cache is the same, do not execute install
-				if !alreadyInstalled || !isSameAsCache {
-					log.Debugf("Calling execute, current status %v", out.GetStatus())
-					executeConfigurePackage(
-						tracer,
-						context,
-						p.localRepository,
-						inst,
-						uninst,
-						installState,
-						&out)
+			trace.End()
+
+			if err != nil {
+				tracer.CurrentTrace().WithError(err).End()
+				out.MarkAsFailed(nil, nil)
+			} else if err := p.localRepository.LockPackage(tracer, packageArn, input.Action); err != nil {
+				// do not allow multiple actions to be performed at the same time for the same package
+				// this is possible with multiple concurrent runcommand documents
+				tracer.CurrentTrace().WithError(err).End()
+				out.MarkAsFailed(nil, nil)
+			} else {
+				defer p.localRepository.UnlockPackage(tracer, packageArn)
+
+				log.Debugf("Prepare for %v %v %v", input.Action, input.Name, input.Version)
+				inst, uninst, installState, installedVersion := prepareConfigurePackage(
+					tracer,
+					config,
+					p.localRepository,
+					packageService,
+					input,
+					packageArn,
+					manifestVersion,
+					isSameAsCache,
+					&out)
+				log.Debugf("HasInst %v, HasUninst %v, InstallState %v, PackageName %v, InstalledVersion %v", inst != nil, uninst != nil, installState, packageArn, installedVersion)
+
+				//if the status is already decided as failed or succeeded, do not execute anything
+				if out.GetStatus() != contracts.ResultStatusFailed && out.GetStatus() != contracts.ResultStatusSuccess {
+					alreadyInstalled := checkAlreadyInstalled(tracer, context, p.localRepository, installedVersion, installState, inst, uninst, &out)
+					// if already failed or already installed and valid, do not execute install
+					// if it is already installed and the cache is the same, do not execute install
+					if !alreadyInstalled || !isSameAsCache {
+						log.Debugf("Calling execute, current status %v", out.GetStatus())
+						executeConfigurePackage(
+							tracer,
+							context,
+							p.localRepository,
+							inst,
+							uninst,
+							installState,
+							&out)
+					}
 				}
-			}
-			if !p.isDocumentArchive {
-				if err := p.localRepository.LoadTraces(tracer, packageArn); err != nil {
-					log.Errorf("Error loading prior traces: %v", err.Error())
-				}
-				if out.GetStatus().IsReboot() {
-					err := p.localRepository.PersistTraces(tracer, packageArn)
-					if err != nil {
-						log.Errorf("Error persisting traces: %v", err.Error())
+				if !p.isDocumentArchive {
+					if err := p.localRepository.LoadTraces(tracer, packageArn); err != nil {
+						log.Errorf("Error loading prior traces: %v", err.Error())
 					}
-				} else {
-					version := manifestVersion
-					if out.GetStatus() != contracts.ResultStatusFailed || out.GetStatus() != contracts.ResultStatusSuccess {
-						if input.Action == InstallAction {
-							version = inst.Version()
-						} else if input.Action == UninstallAction {
-							version = uninst.Version()
+					if out.GetStatus().IsReboot() {
+						err := p.localRepository.PersistTraces(tracer, packageArn)
+						if err != nil {
+							log.Errorf("Error persisting traces: %v", err.Error())
 						}
-					}
-					startTime := tracer.Traces()[0].Start
-					for _, trace := range tracer.Traces() {
-						if trace.Start < startTime {
-							startTime = trace.Start
+					} else {
+						version := manifestVersion
+						if out.GetStatus() != contracts.ResultStatusFailed || out.GetStatus() != contracts.ResultStatusSuccess {
+							if input.Action == InstallAction {
+								version = inst.Version()
+							} else if input.Action == UninstallAction {
+								version = uninst.Version()
+							}
 						}
-					}
-					err := packageService.ReportResult(tracer, packageservice.PackageResult{
-						Exitcode:               int64(out.GetExitCode()),
-						Operation:              input.Action,
-						PackageName:            input.Name,
-						PreviousPackageVersion: installedVersion,
-						Timing:                 startTime,
-						Version:                version,
-						Trace:                  packageservice.ConvertToPackageServiceTrace(tracer.Traces()),
-					})
-					if err != nil {
-						out.AppendErrorf(log, "Error reporting results: %v", err.Error())
+						startTime := tracer.Traces()[0].Start
+						for _, trace := range tracer.Traces() {
+							if trace.Start < startTime {
+								startTime = trace.Start
+							}
+						}
+						err := packageService.ReportResult(tracer, packageservice.PackageResult{
+							Exitcode:               int64(out.GetExitCode()),
+							Operation:              input.Action,
+							PackageName:            input.Name,
+							PreviousPackageVersion: installedVersion,
+							Timing:                 startTime,
+							Version:                version,
+							Trace:                  packageservice.ConvertToPackageServiceTrace(tracer.Traces()),
+						})
+						if err != nil {
+							out.AppendErrorf(log, "Error reporting results: %v", err.Error())
+						}
 					}
 				}
 			}
