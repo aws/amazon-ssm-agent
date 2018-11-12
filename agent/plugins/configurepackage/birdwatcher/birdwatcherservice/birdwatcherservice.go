@@ -56,8 +56,8 @@ type PackageService struct {
 	archive       archive.IPackageArchive
 }
 
-func NewBirdwatcherArchive(facadeClient facade.BirdwatcherFacade, manifestCache packageservice.ManifestCache) packageservice.PackageService {
-	pkgArchive := birdwatcherarchive.New(facadeClient)
+func NewBirdwatcherArchive(facadeClient facade.BirdwatcherFacade, manifestCache packageservice.ManifestCache, birdwatcherManifest string) packageservice.PackageService {
+	pkgArchive := birdwatcherarchive.New(facadeClient, birdwatcherManifest)
 	return New(pkgArchive, facadeClient, manifestCache, packageservice.PackageServiceName_birdwatcher)
 }
 

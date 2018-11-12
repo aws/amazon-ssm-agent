@@ -331,6 +331,7 @@ func TestDownloadManifest(t *testing.T) {
 		packageName    string
 		packageVersion string
 		facadeClient   facade.FacadeStub
+		manifest       string
 		expectedErr    bool
 	}{
 		{
@@ -342,6 +343,7 @@ func TestDownloadManifest(t *testing.T) {
 					Manifest: &manifestStr,
 				},
 			},
+			"",
 			false,
 		},
 		{
@@ -353,6 +355,7 @@ func TestDownloadManifest(t *testing.T) {
 					Manifest: &manifestStr,
 				},
 			},
+			"",
 			false,
 		},
 		{
@@ -362,6 +365,7 @@ func TestDownloadManifest(t *testing.T) {
 			facade.FacadeStub{
 				GetManifestError: errors.New("testerror"),
 			},
+			"",
 			true,
 		},
 		{
@@ -373,13 +377,22 @@ func TestDownloadManifest(t *testing.T) {
 					Manifest: &manifestStrErr,
 				},
 			},
+			"",
 			true,
+		},
+		{
+			"Manifest already stored in package service",
+			"packagename",
+			packageservice.Latest,
+			facade.FacadeStub{},
+			manifestStr,
+			false,
 		},
 	}
 
 	for _, testdata := range data {
 		t.Run(testdata.name, func(t *testing.T) {
-			testArchive := birdwatcherarchive.New(&testdata.facadeClient)
+			testArchive := birdwatcherarchive.New(&testdata.facadeClient, testdata.manifest)
 			mockedCollector := envdetect.CollectorMock{}
 			envdata := &envdetect.Environment{
 				&osdetect.OperatingSystem{"abc", "567", "", "xyz", "", ""},
@@ -395,9 +408,11 @@ func TestDownloadManifest(t *testing.T) {
 			if testdata.expectedErr {
 				assert.Error(t, err)
 			} else {
-				// verify parameter for api call
-				assert.Equal(t, testdata.packageName, *testdata.facadeClient.GetManifestInput.PackageName)
-				assert.Equal(t, testdata.packageVersion, *testdata.facadeClient.GetManifestInput.PackageVersion)
+				if testdata.manifest == "" {
+					// verify parameter for api call
+					assert.Equal(t, testdata.packageName, *testdata.facadeClient.GetManifestInput.PackageName)
+					assert.Equal(t, testdata.packageVersion, *testdata.facadeClient.GetManifestInput.PackageVersion)
+				}
 				// verify result
 				assert.Equal(t, "1234", result)
 				assert.NoError(t, err)
@@ -525,7 +540,7 @@ func TestDownloadManifestSameAsCacheManifest(t *testing.T) {
 	mockedCollector := envdetect.CollectorMock{}
 
 	for _, testdata := range data {
-		testArchive := birdwatcherarchive.New(&testdata.facadeClient)
+		testArchive := birdwatcherarchive.New(&testdata.facadeClient, "")
 		cache := packageservice.ManifestCacheMemNew()
 
 		ds := &PackageService{facadeClient: &testdata.facadeClient, manifestCache: cache, collector: &mockedCollector, archive: testArchive}
@@ -577,7 +592,7 @@ func TestDownloadManifestDifferentFromCacheManifest(t *testing.T) {
 
 	tracer.BeginSection("test successful getManifest different from cache")
 
-	testArchive := birdwatcherarchive.New(&testdata.facadeClient)
+	testArchive := birdwatcherarchive.New(&testdata.facadeClient, "")
 	mockedCollector := envdetect.CollectorMock{}
 	envdata := &envdetect.Environment{
 		&osdetect.OperatingSystem{"abc", "567", "", "xyz", "", ""},
@@ -763,7 +778,7 @@ func TestDownloadFile(t *testing.T) {
 		t.Run(testdata.name, func(t *testing.T) {
 			birdwatcher.Networkdep = &testdata.network
 			cache := packageservice.ManifestCacheMemNew()
-			testArchive := birdwatcherarchive.New(&facade.FacadeStub{})
+			testArchive := birdwatcherarchive.New(&facade.FacadeStub{}, "manifest")
 
 			mockedCollector := envdetect.CollectorMock{}
 			ds := &PackageService{manifestCache: cache, collector: &mockedCollector, archive: testArchive}
@@ -922,7 +937,7 @@ func TestDownloadArtifact(t *testing.T) {
 		t.Run(testdata.name, func(t *testing.T) {
 			cache := packageservice.ManifestCacheMemNew()
 			cache.WriteManifest(testdata.packageName, testdata.packageVersion, []byte(manifestStr))
-			testArchive := birdwatcherarchive.New(&facade.FacadeStub{})
+			testArchive := birdwatcherarchive.New(&facade.FacadeStub{}, manifestStr)
 			mockedCollector := envdetect.CollectorMock{}
 
 			mockedCollector.On("CollectData", mock.Anything).Return(&envdetect.Environment{

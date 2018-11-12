@@ -27,14 +27,16 @@ import (
 
 type PackageArchive struct {
 	facadeClient facade.BirdwatcherFacade
+	manifest     string
 	archiveType  string
 }
 
 // New is a constructor for PackageArchive struct
-func New(facadeClientSession facade.BirdwatcherFacade) archive.IPackageArchive {
+func New(facadeClientSession facade.BirdwatcherFacade, birdwatcherManifest string) archive.IPackageArchive {
 	return &PackageArchive{
 		facadeClient: facadeClientSession,
-		archiveType:  archive.PackageArchiveDocument,
+		manifest:     birdwatcherManifest,
+		archiveType:  archive.PackageArchiveBirdwatcher,
 	}
 }
 
@@ -55,17 +57,20 @@ func (ba *PackageArchive) GetResourceVersion(packageName string, packageVersion 
 // DownloadArtifactInfo downloads the manifest for the original birwatcher service
 func (ba *PackageArchive) DownloadArchiveInfo(packageName string, version string) (string, error) {
 
-	resp, err := ba.facadeClient.GetManifest(
-		&ssm.GetManifestInput{
-			PackageName:    &packageName,
-			PackageVersion: &version,
-		},
-	)
+	if ba.manifest == "" {
+		resp, err := ba.facadeClient.GetManifest(
+			&ssm.GetManifestInput{
+				PackageName:    &packageName,
+				PackageVersion: &version,
+			},
+		)
 
-	if err != nil {
-		return "", fmt.Errorf("failed to retrieve manifest: %v", err)
+		if err != nil {
+			return "", fmt.Errorf("failed to retrieve manifest: %v", err)
+		}
+		ba.manifest = *resp.Manifest
 	}
-	return *resp.Manifest, nil
+	return ba.manifest, nil
 }
 
 // GetFileDownloadLocation obtains the location of the file in the archive

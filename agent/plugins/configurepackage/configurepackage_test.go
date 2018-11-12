@@ -633,10 +633,11 @@ func TestSelectService(t *testing.T) {
 	isDocumentArchive := false
 	manifest := "manifest"
 	data := []struct {
-		name         string
-		bwfacade     facade.BirdwatcherFacade
-		expectedType string
-		packageName  string
+		name          string
+		bwfacade      facade.BirdwatcherFacade
+		expectedType  string
+		packageName   string
+		errorExpected bool
 	}{
 		{
 			"get manifest works",
@@ -647,6 +648,7 @@ func TestSelectService(t *testing.T) {
 			},
 			packageservice.PackageServiceName_birdwatcher,
 			"package",
+			false,
 		},
 		{
 			"no getManifest",
@@ -655,12 +657,14 @@ func TestSelectService(t *testing.T) {
 			},
 			packageservice.PackageServiceName_document,
 			"package",
+			false,
 		},
 		{
 			"documentArn type package doing getManifest",
 			&facade.FacadeStub{},
 			packageservice.PackageServiceName_document,
 			"arn:aws:ssm:us-west-1:1234567890:document/package",
+			false,
 		},
 		{
 			"error in getManifest",
@@ -669,6 +673,7 @@ func TestSelectService(t *testing.T) {
 			},
 			packageservice.PackageServiceName_birdwatcher,
 			"package",
+			true,
 		},
 	}
 
@@ -689,9 +694,14 @@ func TestSelectService(t *testing.T) {
 				Repository: "",
 			}
 
-			result := selectService(tracer, input, localRepo, &appConfig, testdata.bwfacade, &isDocumentArchive)
+			result, err := selectService(tracer, input, localRepo, &appConfig, testdata.bwfacade, &isDocumentArchive)
 
-			assert.Equal(t, testdata.expectedType, result.PackageServiceName())
+			if !testdata.errorExpected {
+				assert.Equal(t, testdata.expectedType, result.PackageServiceName())
+				assert.NoError(t, err)
+			} else {
+				assert.Error(t, err)
+			}
 
 		})
 	}
@@ -725,7 +735,7 @@ func TestExecuteConfigurePackagePlugin_BirdwatcherService(t *testing.T) {
 	getManifestOutput := &ssm.GetManifestOutput{
 		Manifest: &manifest,
 	}
-	bwFacade.On("GetManifest", getManifestInput).Return(getManifestOutput, nil).Twice()
+	bwFacade.On("GetManifest", getManifestInput).Return(getManifestOutput, nil).Once()
 	bwFacade.On("PutConfigurePackageResult", mock.Anything).Return(&ssm.PutConfigurePackageResultOutput{}, nil).Once()
 	repoMock.On("LoadTraces", mock.Anything, mock.Anything).Return(nil)
 

@@ -18,6 +18,7 @@ package birdwatcherarchive
 import (
 	"testing"
 
+	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/birdwatcher/archive"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/birdwatcher/facade"
 
 	"github.com/stretchr/testify/assert"
@@ -48,7 +49,7 @@ func TestGetResourceVersion(t *testing.T) {
 
 			mockBWFacade := facade.FacadeStub{}
 
-			bwArchive := New(&mockBWFacade)
+			bwArchive := New(&mockBWFacade, "manifest")
 
 			name, version := bwArchive.GetResourceVersion(testdata.name, testdata.version)
 			assert.Equal(t, name, testdata.name)
@@ -60,4 +61,13 @@ func TestGetResourceVersion(t *testing.T) {
 
 		})
 	}
+}
+
+func TestArchiveName(t *testing.T) {
+	facadeSession := facade.FacadeStub{}
+	manifest := "manifest"
+	testArchive := New(&facadeSession, manifest)
+
+	assert.Equal(t, archive.PackageArchiveBirdwatcher, testArchive.Name())
+
 }
