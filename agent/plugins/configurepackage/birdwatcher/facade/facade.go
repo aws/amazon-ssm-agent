@@ -18,16 +18,31 @@ package facade
 import (
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/platform"
+	retry "github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/birdwatcher/facade/retryer"
 	"github.com/aws/amazon-ssm-agent/agent/sdkutil"
 	"github.com/aws/amazon-ssm-agent/agent/version"
 
+	"github.com/aws/aws-sdk-go/aws/client"
 	"github.com/aws/aws-sdk-go/aws/request"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/ssm"
 )
 
+const (
+	maxRetries = 3
+)
+
 func NewBirdwatcherFacade() BirdwatcherFacade {
-	cfg := sdkutil.AwsConfig()
+	awsConfig := sdkutil.AwsConfig()
+	// overriding the retry strategy
+	retryer := retry.BirdwatcherRetryer{
+		DefaultRetryer: client.DefaultRetryer{
+			NumMaxRetries: maxRetries,
+		},
+	}
+
+	cfg := request.WithRetryer(awsConfig, retryer)
+
 	// overrides ssm client config from appconfig if applicable
 	if appCfg, err := appconfig.Config(false); err == nil {
 		if appCfg.Ssm.Endpoint != "" {
