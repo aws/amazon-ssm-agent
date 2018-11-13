@@ -143,7 +143,7 @@ func (controlChannel *ControlChannel) SendMessage(log log.T, input []byte, input
 
 // Reconnect reconnects a controlchannel.
 func (controlChannel *ControlChannel) Reconnect(log log.T) error {
-	log.Debugf("Reconnecting with controlchannel %s, token %s", controlChannel.ChannelId, controlChannel.wsChannel.GetChannelToken())
+	log.Debugf("Reconnecting controlchannel %s", controlChannel.ChannelId)
 
 	if err := controlChannel.wsChannel.Close(log); err != nil {
 		log.Warnf("closing controlchannel failed with error: %s", err)
@@ -200,12 +200,12 @@ func controlChannelIncomingMessageHandler(context context.T,
 
 	agentMessage := &mgsContracts.AgentMessage{}
 	if err := agentMessage.Deserialize(log, rawMessage); err != nil {
-		log.Debugf("Cannot deserialize raw message: %s, err: %v.", string(rawMessage), err)
+		log.Debugf("Cannot deserialize raw message, err: %v.", err)
 		return err
 	}
 
 	if err := agentMessage.Validate(); err != nil {
-		log.Debugf("Invalid AgentMessage: %v, err: %v.", agentMessage, err)
+		log.Debugf("Invalid AgentMessage: %s, err: %v.", agentMessage.MessageId, err)
 		return err
 	}
 
@@ -234,7 +234,7 @@ func sendStartSessionMessageToProcessor(
 
 	docState, err := agentMessage.ParseAgentMessage(context, orchestrationRootDir, instanceId, clientId)
 	if err != nil {
-		log.Errorf("Cannot parse AgentTask message to documentState: %v, err: %v.", agentMessage, err)
+		log.Errorf("Cannot parse AgentTask message to documentState: %s, err: %v.", agentMessage.MessageId, err)
 		return err
 	}
 
@@ -304,6 +304,6 @@ func getControlChannelToken(log log.T,
 		return "", fmt.Errorf("CreateControlChannel failed with error: %s", err)
 	}
 
-	log.Debugf("Successfully get controlchannel token %v", *createControlChannelOutput.TokenValue)
+	log.Debug("Successfully get controlchannel token")
 	return *createControlChannelOutput.TokenValue, nil
 }

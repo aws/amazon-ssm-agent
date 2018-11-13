@@ -279,7 +279,7 @@ func (dataChannel *DataChannel) SendMessage(log log.T, input []byte, inputType i
 
 // Reconnect reconnects datachannel to service endpoint.
 func (dataChannel *DataChannel) Reconnect(log log.T) error {
-	log.Debugf("Reconnecting with datachannel: %s, token: %t", dataChannel.ChannelId, dataChannel.wsChannel.GetChannelToken())
+	log.Debugf("Reconnecting datachannel: %s", dataChannel.ChannelId)
 
 	if err := dataChannel.wsChannel.Close(log); err != nil {
 		log.Debugf("Closing datachannel failed with error: %s", err)
