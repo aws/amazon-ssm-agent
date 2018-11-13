@@ -183,7 +183,6 @@ func (s *Session) ModuleExecute(context context.T) (err error) {
 		return err
 	}
 
-	s.createLocalAdminUser()
 	go s.listenReply(resultChan, instanceId)
 
 	if err = s.processor.InitialProcessing(); err != nil {
@@ -196,8 +195,13 @@ func (s *Session) ModuleExecute(context context.T) (err error) {
 		s.controlChannel, err = setupControlChannel(s.context, s.service, s.processor, instanceId)
 		if err != nil {
 			log.Errorf("Failed to setup control channel, err: %v", err)
+			return
 		}
+
 		log.Info("Starting receiving message from control channel")
+
+		// Create ssm-user since control channel has been successfully created.
+		s.createLocalAdminUser()
 	}()
 
 	return nil
