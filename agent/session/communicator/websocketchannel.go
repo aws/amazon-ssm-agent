@@ -157,9 +157,6 @@ func (webSocketChannel *WebSocketChannel) Open(log log.T) error {
 		log.Errorf("Failed to get the v4 signature, %v", err)
 	}
 
-	headerString := header.Get("Authorization")
-	log.Debug(headerString)
-
 	ws, err := websocketutil.NewWebsocketUtil(log, nil).OpenConnection(webSocketChannel.Url, header)
 	if err != nil {
 		return err
@@ -181,7 +178,6 @@ func (webSocketChannel *WebSocketChannel) Open(log log.T) error {
 
 		retryCount := 0
 		for {
-			log.Tracef("Receiving message from websocket channel %s", webSocketChannel.ChannelToken)
 
 			if webSocketChannel.IsOpen == false {
 				log.Info("Ending the channel listening routine since the channel is closed")
@@ -208,7 +204,6 @@ func (webSocketChannel *WebSocketChannel) Open(log log.T) error {
 
 			} else {
 				retryCount = 0
-				log.Tracef("Message %s received.", string(rawMessage))
 
 				webSocketChannel.OnMessage(rawMessage)
 			}
