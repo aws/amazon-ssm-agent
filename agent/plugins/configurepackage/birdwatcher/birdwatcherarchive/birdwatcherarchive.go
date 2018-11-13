@@ -33,6 +33,7 @@ type PackageArchive struct {
 
 // New is a constructor for PackageArchive struct
 func New(facadeClientSession facade.BirdwatcherFacade, birdwatcherManifest string) archive.IPackageArchive {
+	// TODO: Add a SetManifest method for PackageArchive to avoid the birdwatcherManifest in the constructor.
 	return &PackageArchive{
 		facadeClient: facadeClientSession,
 		manifest:     birdwatcherManifest,
