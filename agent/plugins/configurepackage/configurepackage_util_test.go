@@ -87,17 +87,24 @@ func repoUninstallMock(pluginInformation *ConfigurePackagePluginInput, installer
 	return &mockRepo
 }
 
-func repoInstallMock_ReadWriteManifest(pluginInformation *ConfigurePackagePluginInput, installerMock installer.Installer, version string) *repoMock.MockedRepository {
+func repoInstallMock_ReadWriteManifest(pluginInformation *ConfigurePackagePluginInput, installerMock installer.Installer, version string, action string) *repoMock.MockedRepository {
 	mockRepo := repoMock.MockedRepository{}
 	mockRepo.On("ReadManifest", pluginInformation.Name, version).Return([]byte(""), nil)
 	mockRepo.On("WriteManifest", pluginInformation.Name, version, mock.Anything).Return(nil)
-	mockRepo.On("LockPackage", mock.Anything, pluginInformation.Name, "Install").Return(nil).Once()
 	mockRepo.On("GetInstalledVersion", mock.Anything, pluginInformation.Name).Return("")
 	mockRepo.On("GetInstallState", mock.Anything, pluginInformation.Name).Return(localpackages.None, "")
-	mockRepo.On("ValidatePackage", mock.Anything, pluginInformation.Name, version).Return(nil)
-	mockRepo.On("GetInstaller", mock.Anything, mock.Anything, pluginInformation.Name, version).Return(installerMock)
-	mockRepo.On("SetInstallState", mock.Anything, pluginInformation.Name, version, mock.Anything).Return(nil)
 	mockRepo.On("UnlockPackage", mock.Anything, mock.Anything).Return().Once()
+	mockRepo.On("LoadTraces", mock.Anything, mock.Anything).Return(nil)
+
+	if action == InstallAction {
+		mockRepo.On("LockPackage", mock.Anything, pluginInformation.Name, "Install").Return(nil).Once()
+		mockRepo.On("ValidatePackage", mock.Anything, pluginInformation.Name, version).Return(nil)
+		mockRepo.On("GetInstaller", mock.Anything, mock.Anything, pluginInformation.Name, version).Return(installerMock)
+		mockRepo.On("SetInstallState", mock.Anything, pluginInformation.Name, version, mock.Anything).Return(nil)
+	} else {
+		mockRepo.On("LockPackage", mock.Anything, pluginInformation.Name, "Uninstall").Return(nil).Once()
+
+	}
 	return &mockRepo
 }
 
@@ -115,6 +122,17 @@ func installerSuccessMock(packageName string, version string) *installerMock.Moc
 	mockInst.On("Validate", mock.Anything).Return(pluginOutputWithStatus(contracts.ResultStatusSuccess)).Once()
 	mockInst.On("PackageName").Return(packageName)
 	mockInst.On("Version").Return(version)
+	return &mockInst
+}
+
+func installerSuccessMock_Install(packageName string, version string, action string) *installerMock.Mock {
+	mockInst := installerMock.Mock{}
+	if action == InstallAction {
+		mockInst.On("Install", mock.Anything).Return(pluginOutputWithStatus(contracts.ResultStatusSuccess)).Once()
+		mockInst.On("Validate", mock.Anything).Return(pluginOutputWithStatus(contracts.ResultStatusSuccess)).Once()
+		mockInst.On("PackageName").Return(packageName)
+		mockInst.On("Version").Return(version)
+	}
 	return &mockInst
 }
 

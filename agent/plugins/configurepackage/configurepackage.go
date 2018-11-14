@@ -129,6 +129,7 @@ func prepareConfigurePackage(
 		// get version information
 		var err error
 		trace := tracer.BeginSection("determine version to uninstall")
+		defer trace.End()
 		installedVersion, installState = getVersionToUninstall(tracer, repository, packageArn)
 
 		// if the input.Version is not specified, or is "latest", uninstall the installedVersion
@@ -140,9 +141,10 @@ func prepareConfigurePackage(
 		//return success if the installState is None or Uninstalled
 		if (installedVersion == "" || version != installedVersion) ||
 			(installState == localpackages.None || installState == localpackages.Uninstalled) {
-			trace.AppendDebugf("version: %v is not installed", version).End()
+			trace.AppendInfof("version: %v is not installed", version)
 			installState = localpackages.None
 			output.MarkAsSucceeded()
+			trace.WithExitcode(1)
 			return
 		}
 
@@ -152,11 +154,10 @@ func prepareConfigurePackage(
 		trace = tracer.BeginSection("ensure package is locally available")
 		uninst, err = ensurePackage(tracer, repository, packageService, packageArn, installedVersion, isSameAsCache, config)
 		if err != nil {
-			trace.WithError(err).End()
+			trace.WithError(err)
 			output.MarkAsFailed(nil, nil)
 			return
 		}
-		trace.End()
 
 	default:
 		prepareTrace.AppendErrorf("unsupported action: %v", input.Action)
@@ -295,6 +296,8 @@ func validateInput(input *ConfigurePackagePluginInput) (valid bool, err error) {
 }
 
 // checkAlreadyInstalled returns true if the version being installed is already in a valid installed state
+// To do this, it uses the inst and uninst objects retreived from previous step and validates them
+// and compares them with the installState.
 func checkAlreadyInstalled(
 	tracer trace.Tracer,
 	context context.T,
@@ -341,7 +344,7 @@ func checkAlreadyInstalled(
 					cleanupAfterUninstall(tracer, repository, inst, output)
 					output.MarkAsFailed(nil, nil)
 				} else {
-					validateTrace.AppendDebugf("%v %v is already installed", packageName, targetVersion).End()
+					validateTrace.AppendInfof("%v %v is already installed", packageName, targetVersion).End()
 					output.MarkAsSucceeded()
 				}
 				if installState != localpackages.Installed && installState != localpackages.Unknown {
@@ -370,7 +373,6 @@ func selectService(tracer trace.Tracer, input *ConfigurePackagePluginInput, loca
 	var err error
 
 	if (appCfg != nil && appCfg.Birdwatcher.ForceEnable) || !ssms3.UseSSMS3Service(tracer, serviceEndpoint, region) {
-		tracer.CurrentTrace().AppendInfof("S3 repository is not marked active in %v %v", region, serviceEndpoint)
 		// This indicates that it would be the birdwatcher service.
 		// Before creating an object of type birdwatcher here, check if the name is of document arn. If it is, return with a Document type service
 		if regexp.MustCompile(documentArnPattern).MatchString(input.Name) {
@@ -500,30 +502,30 @@ func (p *Plugin) execute(context context.T, config contracts.Configuration, canc
 							&out)
 					}
 				}
-				if !p.isDocumentArchive {
-					if err := p.localRepository.LoadTraces(tracer, packageArn); err != nil {
-						log.Errorf("Error loading prior traces: %v", err.Error())
+				if err := p.localRepository.LoadTraces(tracer, packageArn); err != nil {
+					log.Errorf("Error loading prior traces: %v", err.Error())
+				}
+				if out.GetStatus().IsReboot() {
+					err := p.localRepository.PersistTraces(tracer, packageArn)
+					if err != nil {
+						log.Errorf("Error persisting traces: %v", err.Error())
 					}
-					if out.GetStatus().IsReboot() {
-						err := p.localRepository.PersistTraces(tracer, packageArn)
-						if err != nil {
-							log.Errorf("Error persisting traces: %v", err.Error())
+				} else {
+					version := manifestVersion
+					if out.GetStatus() != contracts.ResultStatusFailed && out.GetStatus() != contracts.ResultStatusSuccess {
+						if input.Action == InstallAction {
+							version = inst.Version()
+						} else if input.Action == UninstallAction {
+							version = uninst.Version()
 						}
-					} else {
-						version := manifestVersion
-						if out.GetStatus() != contracts.ResultStatusFailed || out.GetStatus() != contracts.ResultStatusSuccess {
-							if input.Action == InstallAction {
-								version = inst.Version()
-							} else if input.Action == UninstallAction {
-								version = uninst.Version()
-							}
+					}
+					startTime := tracer.Traces()[0].Start
+					for _, trace := range tracer.Traces() {
+						if trace.Start < startTime {
+							startTime = trace.Start
 						}
-						startTime := tracer.Traces()[0].Start
-						for _, trace := range tracer.Traces() {
-							if trace.Start < startTime {
-								startTime = trace.Start
-							}
-						}
+					}
+					if !p.isDocumentArchive {
 						err := packageService.ReportResult(tracer, packageservice.PackageResult{
 							Exitcode:               int64(out.GetExitCode()),
 							Operation:              input.Action,

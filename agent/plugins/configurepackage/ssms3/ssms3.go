@@ -87,7 +87,6 @@ func UseSSMS3Service(tracer trace.Tracer, repository string, region string) bool
 	checkURL = strings.Replace(checkURL, RegionHolder, region, -1)
 
 	parsedURL, _ := url.Parse(checkURL)
-	tracer.CurrentTrace().AppendInfof("Checking if SSMS3 is enabled: %v", checkURL)
 	logger := tracer.CurrentTrace().Logger
 	return networkdep.CanGetS3Object(logger, s3util.ParseAmazonS3URL(logger, parsedURL))
 }
