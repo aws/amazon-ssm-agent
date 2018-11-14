@@ -68,6 +68,10 @@ type SSMAPI interface {
 	CancelCommandWithContext(aws.Context, *ssm.CancelCommandInput, ...request.Option) (*ssm.CancelCommandOutput, error)
 	CancelCommandRequest(*ssm.CancelCommandInput) (*request.Request, *ssm.CancelCommandOutput)
 
+	CancelMaintenanceWindowExecution(*ssm.CancelMaintenanceWindowExecutionInput) (*ssm.CancelMaintenanceWindowExecutionOutput, error)
+	CancelMaintenanceWindowExecutionWithContext(aws.Context, *ssm.CancelMaintenanceWindowExecutionInput, ...request.Option) (*ssm.CancelMaintenanceWindowExecutionOutput, error)
+	CancelMaintenanceWindowExecutionRequest(*ssm.CancelMaintenanceWindowExecutionInput) (*request.Request, *ssm.CancelMaintenanceWindowExecutionOutput)
+
 	CreateActivation(*ssm.CreateActivationInput) (*ssm.CreateActivationOutput, error)
 	CreateActivationWithContext(aws.Context, *ssm.CreateActivationInput, ...request.Option) (*ssm.CreateActivationOutput, error)
 	CreateActivationRequest(*ssm.CreateActivationInput) (*request.Request, *ssm.CreateActivationOutput)
@@ -96,6 +100,10 @@ type SSMAPI interface {
 	CreateResourceDataSyncWithContext(aws.Context, *ssm.CreateResourceDataSyncInput, ...request.Option) (*ssm.CreateResourceDataSyncOutput, error)
 	CreateResourceDataSyncRequest(*ssm.CreateResourceDataSyncInput) (*request.Request, *ssm.CreateResourceDataSyncOutput)
 
+	CreateTask(*ssm.CreateTaskInput) (*ssm.CreateTaskOutput, error)
+	CreateTaskWithContext(aws.Context, *ssm.CreateTaskInput, ...request.Option) (*ssm.CreateTaskOutput, error)
+	CreateTaskRequest(*ssm.CreateTaskInput) (*request.Request, *ssm.CreateTaskOutput)
+
 	DeleteActivation(*ssm.DeleteActivationInput) (*ssm.DeleteActivationOutput, error)
 	DeleteActivationWithContext(aws.Context, *ssm.DeleteActivationInput, ...request.Option) (*ssm.DeleteActivationOutput, error)
 	DeleteActivationRequest(*ssm.DeleteActivationInput) (*request.Request, *ssm.DeleteActivationOutput)
@@ -111,6 +119,10 @@ type SSMAPI interface {
 	DeleteDocument(*ssm.DeleteDocumentInput) (*ssm.DeleteDocumentOutput, error)
 	DeleteDocumentWithContext(aws.Context, *ssm.DeleteDocumentInput, ...request.Option) (*ssm.DeleteDocumentOutput, error)
 	DeleteDocumentRequest(*ssm.DeleteDocumentInput) (*request.Request, *ssm.DeleteDocumentOutput)
+
+	DeleteInventory(*ssm.DeleteInventoryInput) (*ssm.DeleteInventoryOutput, error)
+	DeleteInventoryWithContext(aws.Context, *ssm.DeleteInventoryInput, ...request.Option) (*ssm.DeleteInventoryOutput, error)
+	DeleteInventoryRequest(*ssm.DeleteInventoryInput) (*request.Request, *ssm.DeleteInventoryOutput)
 
 	DeleteMaintenanceWindow(*ssm.DeleteMaintenanceWindowInput) (*ssm.DeleteMaintenanceWindowOutput, error)
 	DeleteMaintenanceWindowWithContext(aws.Context, *ssm.DeleteMaintenanceWindowInput, ...request.Option) (*ssm.DeleteMaintenanceWindowOutput, error)
@@ -158,6 +170,14 @@ type SSMAPI interface {
 	DescribeAssociation(*ssm.DescribeAssociationInput) (*ssm.DescribeAssociationOutput, error)
 	DescribeAssociationWithContext(aws.Context, *ssm.DescribeAssociationInput, ...request.Option) (*ssm.DescribeAssociationOutput, error)
 	DescribeAssociationRequest(*ssm.DescribeAssociationInput) (*request.Request, *ssm.DescribeAssociationOutput)
+
+	DescribeAssociationExecutionTargets(*ssm.DescribeAssociationExecutionTargetsInput) (*ssm.DescribeAssociationExecutionTargetsOutput, error)
+	DescribeAssociationExecutionTargetsWithContext(aws.Context, *ssm.DescribeAssociationExecutionTargetsInput, ...request.Option) (*ssm.DescribeAssociationExecutionTargetsOutput, error)
+	DescribeAssociationExecutionTargetsRequest(*ssm.DescribeAssociationExecutionTargetsInput) (*request.Request, *ssm.DescribeAssociationExecutionTargetsOutput)
+
+	DescribeAssociationExecutions(*ssm.DescribeAssociationExecutionsInput) (*ssm.DescribeAssociationExecutionsOutput, error)
+	DescribeAssociationExecutionsWithContext(aws.Context, *ssm.DescribeAssociationExecutionsInput, ...request.Option) (*ssm.DescribeAssociationExecutionsOutput, error)
+	DescribeAssociationExecutionsRequest(*ssm.DescribeAssociationExecutionsInput) (*request.Request, *ssm.DescribeAssociationExecutionsOutput)
 
 	DescribeAutomationActions(*ssm.DescribeAutomationActionsInput) (*ssm.DescribeAutomationActionsOutput, error)
 	DescribeAutomationActionsWithContext(aws.Context, *ssm.DescribeAutomationActionsInput, ...request.Option) (*ssm.DescribeAutomationActionsOutput, error)
@@ -242,6 +262,10 @@ type SSMAPI interface {
 	DescribeInstancePropertiesWithContext(aws.Context, *ssm.DescribeInstancePropertiesInput, ...request.Option) (*ssm.DescribeInstancePropertiesOutput, error)
 	DescribeInstancePropertiesRequest(*ssm.DescribeInstancePropertiesInput) (*request.Request, *ssm.DescribeInstancePropertiesOutput)
 
+	DescribeInventoryDeletions(*ssm.DescribeInventoryDeletionsInput) (*ssm.DescribeInventoryDeletionsOutput, error)
+	DescribeInventoryDeletionsWithContext(aws.Context, *ssm.DescribeInventoryDeletionsInput, ...request.Option) (*ssm.DescribeInventoryDeletionsOutput, error)
+	DescribeInventoryDeletionsRequest(*ssm.DescribeInventoryDeletionsInput) (*request.Request, *ssm.DescribeInventoryDeletionsOutput)
+
 	DescribeMaintenanceWindowExecutionTaskInvocations(*ssm.DescribeMaintenanceWindowExecutionTaskInvocationsInput) (*ssm.DescribeMaintenanceWindowExecutionTaskInvocationsOutput, error)
 	DescribeMaintenanceWindowExecutionTaskInvocationsWithContext(aws.Context, *ssm.DescribeMaintenanceWindowExecutionTaskInvocationsInput, ...request.Option) (*ssm.DescribeMaintenanceWindowExecutionTaskInvocationsOutput, error)
 	DescribeMaintenanceWindowExecutionTaskInvocationsRequest(*ssm.DescribeMaintenanceWindowExecutionTaskInvocationsInput) (*request.Request, *ssm.DescribeMaintenanceWindowExecutionTaskInvocationsOutput)
@@ -254,25 +278,25 @@ type SSMAPI interface {
 	DescribeMaintenanceWindowExecutionsWithContext(aws.Context, *ssm.DescribeMaintenanceWindowExecutionsInput, ...request.Option) (*ssm.DescribeMaintenanceWindowExecutionsOutput, error)
 	DescribeMaintenanceWindowExecutionsRequest(*ssm.DescribeMaintenanceWindowExecutionsInput) (*request.Request, *ssm.DescribeMaintenanceWindowExecutionsOutput)
 
+	DescribeMaintenanceWindowSchedule(*ssm.DescribeMaintenanceWindowScheduleInput) (*ssm.DescribeMaintenanceWindowScheduleOutput, error)
+	DescribeMaintenanceWindowScheduleWithContext(aws.Context, *ssm.DescribeMaintenanceWindowScheduleInput, ...request.Option) (*ssm.DescribeMaintenanceWindowScheduleOutput, error)
+	DescribeMaintenanceWindowScheduleRequest(*ssm.DescribeMaintenanceWindowScheduleInput) (*request.Request, *ssm.DescribeMaintenanceWindowScheduleOutput)
+
 	DescribeMaintenanceWindowTargets(*ssm.DescribeMaintenanceWindowTargetsInput) (*ssm.DescribeMaintenanceWindowTargetsOutput, error)
 	DescribeMaintenanceWindowTargetsWithContext(aws.Context, *ssm.DescribeMaintenanceWindowTargetsInput, ...request.Option) (*ssm.DescribeMaintenanceWindowTargetsOutput, error)
 	DescribeMaintenanceWindowTargetsRequest(*ssm.DescribeMaintenanceWindowTargetsInput) (*request.Request, *ssm.DescribeMaintenanceWindowTargetsOutput)
-
-	DescribeMaintenanceWindowTargetsPrivate(*ssm.DescribeMaintenanceWindowTargetsPrivateInput) (*ssm.DescribeMaintenanceWindowTargetsPrivateOutput, error)
-	DescribeMaintenanceWindowTargetsPrivateWithContext(aws.Context, *ssm.DescribeMaintenanceWindowTargetsPrivateInput, ...request.Option) (*ssm.DescribeMaintenanceWindowTargetsPrivateOutput, error)
-	DescribeMaintenanceWindowTargetsPrivateRequest(*ssm.DescribeMaintenanceWindowTargetsPrivateInput) (*request.Request, *ssm.DescribeMaintenanceWindowTargetsPrivateOutput)
 
 	DescribeMaintenanceWindowTasks(*ssm.DescribeMaintenanceWindowTasksInput) (*ssm.DescribeMaintenanceWindowTasksOutput, error)
 	DescribeMaintenanceWindowTasksWithContext(aws.Context, *ssm.DescribeMaintenanceWindowTasksInput, ...request.Option) (*ssm.DescribeMaintenanceWindowTasksOutput, error)
 	DescribeMaintenanceWindowTasksRequest(*ssm.DescribeMaintenanceWindowTasksInput) (*request.Request, *ssm.DescribeMaintenanceWindowTasksOutput)
 
-	DescribeMaintenanceWindowTasksPrivate(*ssm.DescribeMaintenanceWindowTasksPrivateInput) (*ssm.DescribeMaintenanceWindowTasksPrivateOutput, error)
-	DescribeMaintenanceWindowTasksPrivateWithContext(aws.Context, *ssm.DescribeMaintenanceWindowTasksPrivateInput, ...request.Option) (*ssm.DescribeMaintenanceWindowTasksPrivateOutput, error)
-	DescribeMaintenanceWindowTasksPrivateRequest(*ssm.DescribeMaintenanceWindowTasksPrivateInput) (*request.Request, *ssm.DescribeMaintenanceWindowTasksPrivateOutput)
-
 	DescribeMaintenanceWindows(*ssm.DescribeMaintenanceWindowsInput) (*ssm.DescribeMaintenanceWindowsOutput, error)
 	DescribeMaintenanceWindowsWithContext(aws.Context, *ssm.DescribeMaintenanceWindowsInput, ...request.Option) (*ssm.DescribeMaintenanceWindowsOutput, error)
 	DescribeMaintenanceWindowsRequest(*ssm.DescribeMaintenanceWindowsInput) (*request.Request, *ssm.DescribeMaintenanceWindowsOutput)
+
+	DescribeMaintenanceWindowsForTarget(*ssm.DescribeMaintenanceWindowsForTargetInput) (*ssm.DescribeMaintenanceWindowsForTargetOutput, error)
+	DescribeMaintenanceWindowsForTargetWithContext(aws.Context, *ssm.DescribeMaintenanceWindowsForTargetInput, ...request.Option) (*ssm.DescribeMaintenanceWindowsForTargetOutput, error)
+	DescribeMaintenanceWindowsForTargetRequest(*ssm.DescribeMaintenanceWindowsForTargetInput) (*request.Request, *ssm.DescribeMaintenanceWindowsForTargetOutput)
 
 	DescribeParameters(*ssm.DescribeParametersInput) (*ssm.DescribeParametersOutput, error)
 	DescribeParametersWithContext(aws.Context, *ssm.DescribeParametersInput, ...request.Option) (*ssm.DescribeParametersOutput, error)
@@ -293,6 +317,10 @@ type SSMAPI interface {
 	DescribePatchGroupsWithContext(aws.Context, *ssm.DescribePatchGroupsInput, ...request.Option) (*ssm.DescribePatchGroupsOutput, error)
 	DescribePatchGroupsRequest(*ssm.DescribePatchGroupsInput) (*request.Request, *ssm.DescribePatchGroupsOutput)
 
+	DescribeSessions(*ssm.DescribeSessionsInput) (*ssm.DescribeSessionsOutput, error)
+	DescribeSessionsWithContext(aws.Context, *ssm.DescribeSessionsInput, ...request.Option) (*ssm.DescribeSessionsOutput, error)
+	DescribeSessionsRequest(*ssm.DescribeSessionsInput) (*request.Request, *ssm.DescribeSessionsOutput)
+
 	GetAutomationAction(*ssm.GetAutomationActionInput) (*ssm.GetAutomationActionOutput, error)
 	GetAutomationActionWithContext(aws.Context, *ssm.GetAutomationActionInput, ...request.Option) (*ssm.GetAutomationActionOutput, error)
 	GetAutomationActionRequest(*ssm.GetAutomationActionInput) (*request.Request, *ssm.GetAutomationActionOutput)
@@ -308,6 +336,10 @@ type SSMAPI interface {
 	GetCommandInvocation(*ssm.GetCommandInvocationInput) (*ssm.GetCommandInvocationOutput, error)
 	GetCommandInvocationWithContext(aws.Context, *ssm.GetCommandInvocationInput, ...request.Option) (*ssm.GetCommandInvocationOutput, error)
 	GetCommandInvocationRequest(*ssm.GetCommandInvocationInput) (*request.Request, *ssm.GetCommandInvocationOutput)
+
+	GetConnectionStatus(*ssm.GetConnectionStatusInput) (*ssm.GetConnectionStatusOutput, error)
+	GetConnectionStatusWithContext(aws.Context, *ssm.GetConnectionStatusInput, ...request.Option) (*ssm.GetConnectionStatusOutput, error)
+	GetConnectionStatusRequest(*ssm.GetConnectionStatusInput) (*request.Request, *ssm.GetConnectionStatusOutput)
 
 	GetDefaultPatchBaseline(*ssm.GetDefaultPatchBaselineInput) (*ssm.GetDefaultPatchBaselineOutput, error)
 	GetDefaultPatchBaselineWithContext(aws.Context, *ssm.GetDefaultPatchBaselineInput, ...request.Option) (*ssm.GetDefaultPatchBaselineOutput, error)
@@ -387,6 +419,18 @@ type SSMAPI interface {
 	GetPatchBaselineForPatchGroupWithContext(aws.Context, *ssm.GetPatchBaselineForPatchGroupInput, ...request.Option) (*ssm.GetPatchBaselineForPatchGroupOutput, error)
 	GetPatchBaselineForPatchGroupRequest(*ssm.GetPatchBaselineForPatchGroupInput) (*request.Request, *ssm.GetPatchBaselineForPatchGroupOutput)
 
+	GetTask(*ssm.GetTaskInput) (*ssm.GetTaskOutput, error)
+	GetTaskWithContext(aws.Context, *ssm.GetTaskInput, ...request.Option) (*ssm.GetTaskOutput, error)
+	GetTaskRequest(*ssm.GetTaskInput) (*request.Request, *ssm.GetTaskOutput)
+
+	GetTaskMetadata(*ssm.GetTaskMetadataInput) (*ssm.GetTaskMetadataOutput, error)
+	GetTaskMetadataWithContext(aws.Context, *ssm.GetTaskMetadataInput, ...request.Option) (*ssm.GetTaskMetadataOutput, error)
+	GetTaskMetadataRequest(*ssm.GetTaskMetadataInput) (*request.Request, *ssm.GetTaskMetadataOutput)
+
+	LabelParameterVersion(*ssm.LabelParameterVersionInput) (*ssm.LabelParameterVersionOutput, error)
+	LabelParameterVersionWithContext(aws.Context, *ssm.LabelParameterVersionInput, ...request.Option) (*ssm.LabelParameterVersionOutput, error)
+	LabelParameterVersionRequest(*ssm.LabelParameterVersionInput) (*request.Request, *ssm.LabelParameterVersionOutput)
+
 	ListAssociationVersions(*ssm.ListAssociationVersionsInput) (*ssm.ListAssociationVersionsOutput, error)
 	ListAssociationVersionsWithContext(aws.Context, *ssm.ListAssociationVersionsInput, ...request.Option) (*ssm.ListAssociationVersionsOutput, error)
 	ListAssociationVersionsRequest(*ssm.ListAssociationVersionsInput) (*request.Request, *ssm.ListAssociationVersionsOutput)
@@ -451,6 +495,14 @@ type SSMAPI interface {
 	ListTagsForResourceWithContext(aws.Context, *ssm.ListTagsForResourceInput, ...request.Option) (*ssm.ListTagsForResourceOutput, error)
 	ListTagsForResourceRequest(*ssm.ListTagsForResourceInput) (*request.Request, *ssm.ListTagsForResourceOutput)
 
+	ListTasks(*ssm.ListTasksInput) (*ssm.ListTasksOutput, error)
+	ListTasksWithContext(aws.Context, *ssm.ListTasksInput, ...request.Option) (*ssm.ListTasksOutput, error)
+	ListTasksRequest(*ssm.ListTasksInput) (*request.Request, *ssm.ListTasksOutput)
+
+	LockServiceLinkedRole(*ssm.LockServiceLinkedRoleInput) (*ssm.LockServiceLinkedRoleOutput, error)
+	LockServiceLinkedRoleWithContext(aws.Context, *ssm.LockServiceLinkedRoleInput, ...request.Option) (*ssm.LockServiceLinkedRoleOutput, error)
+	LockServiceLinkedRoleRequest(*ssm.LockServiceLinkedRoleInput) (*request.Request, *ssm.LockServiceLinkedRoleOutput)
+
 	ModifyDocumentPermission(*ssm.ModifyDocumentPermissionInput) (*ssm.ModifyDocumentPermissionOutput, error)
 	ModifyDocumentPermissionWithContext(aws.Context, *ssm.ModifyDocumentPermissionInput, ...request.Option) (*ssm.ModifyDocumentPermissionOutput, error)
 	ModifyDocumentPermissionRequest(*ssm.ModifyDocumentPermissionInput) (*request.Request, *ssm.ModifyDocumentPermissionOutput)
@@ -487,17 +539,9 @@ type SSMAPI interface {
 	RegisterTargetWithMaintenanceWindowWithContext(aws.Context, *ssm.RegisterTargetWithMaintenanceWindowInput, ...request.Option) (*ssm.RegisterTargetWithMaintenanceWindowOutput, error)
 	RegisterTargetWithMaintenanceWindowRequest(*ssm.RegisterTargetWithMaintenanceWindowInput) (*request.Request, *ssm.RegisterTargetWithMaintenanceWindowOutput)
 
-	RegisterTargetWithMaintenanceWindowPrivate(*ssm.RegisterTargetWithMaintenanceWindowPrivateInput) (*ssm.RegisterTargetWithMaintenanceWindowPrivateOutput, error)
-	RegisterTargetWithMaintenanceWindowPrivateWithContext(aws.Context, *ssm.RegisterTargetWithMaintenanceWindowPrivateInput, ...request.Option) (*ssm.RegisterTargetWithMaintenanceWindowPrivateOutput, error)
-	RegisterTargetWithMaintenanceWindowPrivateRequest(*ssm.RegisterTargetWithMaintenanceWindowPrivateInput) (*request.Request, *ssm.RegisterTargetWithMaintenanceWindowPrivateOutput)
-
 	RegisterTaskWithMaintenanceWindow(*ssm.RegisterTaskWithMaintenanceWindowInput) (*ssm.RegisterTaskWithMaintenanceWindowOutput, error)
 	RegisterTaskWithMaintenanceWindowWithContext(aws.Context, *ssm.RegisterTaskWithMaintenanceWindowInput, ...request.Option) (*ssm.RegisterTaskWithMaintenanceWindowOutput, error)
 	RegisterTaskWithMaintenanceWindowRequest(*ssm.RegisterTaskWithMaintenanceWindowInput) (*request.Request, *ssm.RegisterTaskWithMaintenanceWindowOutput)
-
-	RegisterTaskWithMaintenanceWindowPrivate(*ssm.RegisterTaskWithMaintenanceWindowPrivateInput) (*ssm.RegisterTaskWithMaintenanceWindowPrivateOutput, error)
-	RegisterTaskWithMaintenanceWindowPrivateWithContext(aws.Context, *ssm.RegisterTaskWithMaintenanceWindowPrivateInput, ...request.Option) (*ssm.RegisterTaskWithMaintenanceWindowPrivateOutput, error)
-	RegisterTaskWithMaintenanceWindowPrivateRequest(*ssm.RegisterTaskWithMaintenanceWindowPrivateInput) (*request.Request, *ssm.RegisterTaskWithMaintenanceWindowPrivateOutput)
 
 	RemoveTagsFromResource(*ssm.RemoveTagsFromResourceInput) (*ssm.RemoveTagsFromResourceOutput, error)
 	RemoveTagsFromResourceWithContext(aws.Context, *ssm.RemoveTagsFromResourceInput, ...request.Option) (*ssm.RemoveTagsFromResourceOutput, error)
@@ -506,6 +550,10 @@ type SSMAPI interface {
 	RequestManagedInstanceRoleToken(*ssm.RequestManagedInstanceRoleTokenInput) (*ssm.RequestManagedInstanceRoleTokenOutput, error)
 	RequestManagedInstanceRoleTokenWithContext(aws.Context, *ssm.RequestManagedInstanceRoleTokenInput, ...request.Option) (*ssm.RequestManagedInstanceRoleTokenOutput, error)
 	RequestManagedInstanceRoleTokenRequest(*ssm.RequestManagedInstanceRoleTokenInput) (*request.Request, *ssm.RequestManagedInstanceRoleTokenOutput)
+
+	ResumeSession(*ssm.ResumeSessionInput) (*ssm.ResumeSessionOutput, error)
+	ResumeSessionWithContext(aws.Context, *ssm.ResumeSessionInput, ...request.Option) (*ssm.ResumeSessionOutput, error)
+	ResumeSessionRequest(*ssm.ResumeSessionInput) (*request.Request, *ssm.ResumeSessionOutput)
 
 	SendAutomationSignal(*ssm.SendAutomationSignalInput) (*ssm.SendAutomationSignalOutput, error)
 	SendAutomationSignalWithContext(aws.Context, *ssm.SendAutomationSignalInput, ...request.Option) (*ssm.SendAutomationSignalOutput, error)
@@ -523,9 +571,21 @@ type SSMAPI interface {
 	StartAutomationExecutionWithContext(aws.Context, *ssm.StartAutomationExecutionInput, ...request.Option) (*ssm.StartAutomationExecutionOutput, error)
 	StartAutomationExecutionRequest(*ssm.StartAutomationExecutionInput) (*request.Request, *ssm.StartAutomationExecutionOutput)
 
+	StartSession(*ssm.StartSessionInput) (*ssm.StartSessionOutput, error)
+	StartSessionWithContext(aws.Context, *ssm.StartSessionInput, ...request.Option) (*ssm.StartSessionOutput, error)
+	StartSessionRequest(*ssm.StartSessionInput) (*request.Request, *ssm.StartSessionOutput)
+
 	StopAutomationExecution(*ssm.StopAutomationExecutionInput) (*ssm.StopAutomationExecutionOutput, error)
 	StopAutomationExecutionWithContext(aws.Context, *ssm.StopAutomationExecutionInput, ...request.Option) (*ssm.StopAutomationExecutionOutput, error)
 	StopAutomationExecutionRequest(*ssm.StopAutomationExecutionInput) (*request.Request, *ssm.StopAutomationExecutionOutput)
+
+	TerminateSession(*ssm.TerminateSessionInput) (*ssm.TerminateSessionOutput, error)
+	TerminateSessionWithContext(aws.Context, *ssm.TerminateSessionInput, ...request.Option) (*ssm.TerminateSessionOutput, error)
+	TerminateSessionRequest(*ssm.TerminateSessionInput) (*request.Request, *ssm.TerminateSessionOutput)
+
+	UnlockServiceLinkedRole(*ssm.UnlockServiceLinkedRoleInput) (*ssm.UnlockServiceLinkedRoleOutput, error)
+	UnlockServiceLinkedRoleWithContext(aws.Context, *ssm.UnlockServiceLinkedRoleInput, ...request.Option) (*ssm.UnlockServiceLinkedRoleOutput, error)
+	UnlockServiceLinkedRoleRequest(*ssm.UnlockServiceLinkedRoleInput) (*request.Request, *ssm.UnlockServiceLinkedRoleOutput)
 
 	UpdateAssociation(*ssm.UpdateAssociationInput) (*ssm.UpdateAssociationOutput, error)
 	UpdateAssociationWithContext(aws.Context, *ssm.UpdateAssociationInput, ...request.Option) (*ssm.UpdateAssociationOutput, error)
@@ -574,6 +634,10 @@ type SSMAPI interface {
 	UpdatePatchBaseline(*ssm.UpdatePatchBaselineInput) (*ssm.UpdatePatchBaselineOutput, error)
 	UpdatePatchBaselineWithContext(aws.Context, *ssm.UpdatePatchBaselineInput, ...request.Option) (*ssm.UpdatePatchBaselineOutput, error)
 	UpdatePatchBaselineRequest(*ssm.UpdatePatchBaselineInput) (*request.Request, *ssm.UpdatePatchBaselineOutput)
+
+	UpdateTask(*ssm.UpdateTaskInput) (*ssm.UpdateTaskOutput, error)
+	UpdateTaskWithContext(aws.Context, *ssm.UpdateTaskInput, ...request.Option) (*ssm.UpdateTaskOutput, error)
+	UpdateTaskRequest(*ssm.UpdateTaskInput) (*request.Request, *ssm.UpdateTaskOutput)
 }
 
 var _ SSMAPI = (*ssm.SSM)(nil)
