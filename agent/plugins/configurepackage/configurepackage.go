@@ -47,6 +47,7 @@ const (
 )
 
 const resourceNotFoundException = "ResourceNotFoundException"
+const birdwatcherVersionPattern = "[A-Za-z0-9.]+"
 const documentArnPattern = "^arn:[a-z0-9][-.a-z0-9]{0,62}:[a-z0-9][-.a-z0-9]{0,62}:([a-z0-9][-.a-z0-9]{0,62})?:([a-z0-9][-.a-z0-9]{0,62})?:document\\/[a-zA-Z][a-zA-Z0-9-\\_]{0,39}$"
 
 // Plugin is the type for the configurepackage plugin.
@@ -380,6 +381,15 @@ func selectService(tracer trace.Tracer, input *ConfigurePackagePluginInput, loca
 			// return a new object of type document
 			return birdwatcherservice.NewDocumentArchive(birdwatcherFacade, localrepo), nil
 		}
+		if input.Version != "" {
+			// This could happen if there is a typo or if the version matches the document requirement
+			// Create document type to check if document type of package before erroring out
+			if regexp.MustCompile(birdwatcherVersionPattern).MatchString(input.Version) {
+				*isDocumentArchive = true
+				// return a new object of type document
+			}
+		}
+
 		// If not, make a call to GetManifest and try to figure out if it is birdwatcher or document archive.
 		version := input.Version
 		if packageservice.IsLatest(version) {

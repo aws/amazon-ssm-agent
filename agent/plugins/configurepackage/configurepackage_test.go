@@ -642,11 +642,12 @@ func TestSelectService(t *testing.T) {
 	isDocumentArchive := false
 	manifest := "manifest"
 	data := []struct {
-		name          string
-		bwfacade      facade.BirdwatcherFacade
-		expectedType  string
-		packageName   string
-		errorExpected bool
+		name           string
+		bwfacade       facade.BirdwatcherFacade
+		expectedType   string
+		packageName    string
+		packageVersion string
+		errorExpected  bool
 	}{
 		{
 			"get manifest works",
@@ -657,6 +658,7 @@ func TestSelectService(t *testing.T) {
 			},
 			packageservice.PackageServiceName_birdwatcher,
 			"package",
+			"1.2.3.4",
 			false,
 		},
 		{
@@ -666,13 +668,47 @@ func TestSelectService(t *testing.T) {
 			},
 			packageservice.PackageServiceName_document,
 			"package",
+			"1.2.3.4",
 			false,
 		},
 		{
-			"documentArn type package doing getManifest",
+			"documentArn type packaget",
 			&facade.FacadeStub{},
 			packageservice.PackageServiceName_document,
 			"arn:aws:ssm:us-west-1:1234567890:document/package",
+			"1.2.3.4",
+			false,
+		},
+		{
+			"incorrect version type document package",
+			&facade.FacadeStub{},
+			packageservice.PackageServiceName_document,
+			"arn:aws:ssm:us-west-1:1234567890:document/package",
+			"package_latest",
+			false,
+		},
+		{
+			"correct version type document package",
+			&facade.FacadeStub{
+				GetManifestOutput: &ssm.GetManifestOutput{
+					Manifest: &manifest,
+				},
+			},
+			packageservice.PackageServiceName_document,
+			"arn:aws:ssm:us-west-1:1234567890:document/package",
+			"packageLatest1.2",
+			false,
+		},
+		{
+			"correct version type birdwatcher package",
+			&facade.FacadeStub{
+				GetManifestOutput: &ssm.GetManifestOutput{
+					Manifest: &manifest,
+				},
+			},
+			packageservice.PackageServiceName_birdwatcher,
+			"package",
+			"packageLatest1.2",
 			false,
 		},
 		{
@@ -682,6 +718,7 @@ func TestSelectService(t *testing.T) {
 			},
 			packageservice.PackageServiceName_birdwatcher,
 			"package",
+			"1.2.3.4",
 			true,
 		},
 	}
@@ -699,7 +736,7 @@ func TestSelectService(t *testing.T) {
 			localRepo := localpackages.NewRepository()
 			input := &ConfigurePackagePluginInput{
 				Name:       testdata.packageName,
-				Version:    "1.2.3.4",
+				Version:    testdata.packageVersion,
 				Repository: "",
 			}
 
