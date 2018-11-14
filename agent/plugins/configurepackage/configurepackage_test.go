@@ -57,6 +57,15 @@ func createStubPluginInputInstallLatest() *ConfigurePackagePluginInput {
 	return &input
 }
 
+func createStubPluginInputUninstallLatest() *ConfigurePackagePluginInput {
+	input := ConfigurePackagePluginInput{}
+
+	input.Name = "PVDriver"
+	input.Action = "Uninstall"
+
+	return &input
+}
+
 func createStubPluginInputUninstall(version string) *ConfigurePackagePluginInput {
 	input := ConfigurePackagePluginInput{}
 
@@ -726,7 +735,7 @@ func TestExecuteConfigurePackagePlugin_BirdwatcherService(t *testing.T) {
 
 	pluginInformation := createStubPluginInputInstall()
 	installerMock := installerSuccessMock(pluginInformation.Name, pluginInformation.Version)
-	repoMock := repoInstallMock_ReadWriteManifest(pluginInformation, installerMock, pluginInformation.Version)
+	repoMock := repoInstallMock_ReadWriteManifest(pluginInformation, installerMock, pluginInformation.Version, InstallAction)
 	bwFacade := facadeMock.BirdwatcherFacade{}
 	getManifestInput := &ssm.GetManifestInput{
 		PackageName:    &pluginInformation.Name,
@@ -780,27 +789,39 @@ func TestExecuteConfigurePackagePlugin_DocumentService(t *testing.T) {
 		getDocumentReturnsError bool
 		pluginInformation       *ConfigurePackagePluginInput
 		errorResponse           string
+		action                  string
 	}{
 		{
-			"no version provided",
+			"install package no version provided",
 			"",
 			false,
 			createStubPluginInputInstallLatest(),
 			"",
+			InstallAction,
 		},
 		{
-			"version provided",
+			"install package version provided",
 			"0.0.1",
 			false,
 			createStubPluginInputInstall(),
 			"",
+			InstallAction,
 		},
 		{
-			"package not found in documents",
+			"install package not found in documents",
 			"",
 			true,
 			createStubPluginInputInstallLatest(),
 			"failed to download manifest - failed to retrieve package document: ResourceNotFoundException\n",
+			InstallAction,
+		},
+		{
+			"uninstall package not installed",
+			"",
+			false,
+			createStubPluginInputUninstallLatest(),
+			"",
+			UninstallAction,
 		},
 	}
 	for _, testdata := range data {
@@ -810,8 +831,9 @@ func TestExecuteConfigurePackagePlugin_DocumentService(t *testing.T) {
 			if packageservice.IsLatest(version) {
 				version = packageservice.Latest
 			}
-			installerMock := installerSuccessMock(pluginInformation.Name, pluginVersion)
-			repoMock := repoInstallMock_ReadWriteManifest(pluginInformation, installerMock, pluginVersion)
+
+			installerMock := installerSuccessMock_Install(pluginInformation.Name, pluginVersion, testdata.action)
+			repoMock := repoInstallMock_ReadWriteManifest(pluginInformation, installerMock, pluginVersion, testdata.action)
 			bwFacade := facadeMock.BirdwatcherFacade{}
 			mockIOHandler := createMockIOHandlerStruct(testdata.errorResponse)
 			getManifestInput := &ssm.GetManifestInput{

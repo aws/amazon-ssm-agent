@@ -90,6 +90,7 @@ func (inst *Installer) PackageName() string {
 	return inst.packageName
 }
 
+// executeAction will execute the installer scripts if they exist.
 func (inst *Installer) executeAction(tracer trace.Tracer, context context.T, actionName string) contracts.PluginOutputter {
 	exectrace := tracer.BeginSection(fmt.Sprintf("execute action: %s", actionName))
 
@@ -190,6 +191,8 @@ func (inst *Installer) readPs1Action(context context.T, action *Action, workingD
 	return inst.readScriptAction(action, workingDir, orchestrationDir, "runPowerShellScript", runCommand)
 }
 
+// resolveAction checks if there are multiple installer files for the same action type
+// and returns false and nil error if the file does not exist.
 func (inst *Installer) resolveAction(tracer trace.Tracer, actionName string) (exists bool, action *Action, err error) {
 	actionPathSh := inst.getActionPath(actionName, "sh")
 	actionPathPs1 := inst.getActionPath(actionName, "ps1")
@@ -265,6 +268,8 @@ func (inst *Installer) readAction(tracer trace.Tracer, context context.T, action
 	var action *Action
 
 	if exists, action, err = inst.resolveAction(tracer, actionName); !exists || action == nil || err != nil {
+		// If the action file does not exist (for eg validate) then this method will return here, with no error.
+		// It could also return if there is an error
 		return exists, nil, "", "", err
 	}
 
