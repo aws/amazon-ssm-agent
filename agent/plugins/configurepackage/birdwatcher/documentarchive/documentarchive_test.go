@@ -372,3 +372,12 @@ func TestArchiveName(t *testing.T) {
 	assert.Equal(t, archive.PackageArchiveDocument, testArchive.Name())
 
 }
+
+func TestGetRandomBackOffTime(t *testing.T) {
+	delay := getRandomBackOffTime(15)
+	errorInDuration := false
+	if delay > 15 && delay < 1 {
+		errorInDuration = true
+	}
+	assert.False(t, errorInDuration)
+}

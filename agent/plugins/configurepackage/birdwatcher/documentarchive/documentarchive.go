@@ -18,6 +18,8 @@ package documentarchive
 import (
 	"errors"
 	"fmt"
+	"math/rand"
+	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/birdwatcher"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/birdwatcher/archive"
@@ -68,6 +70,9 @@ func (da *PackageArchive) DownloadArchiveInfo(packageName string, version string
 	if version == "" {
 		versionName = nil
 	}
+	MaxDelayBeforeCall := 15 //seconds
+	// random back off before GetDocument call
+	time.Sleep(time.Duration(getRandomBackOffTime(MaxDelayBeforeCall)) * time.Second)
 	resp, err := da.facadeClient.GetDocument(
 		&ssm.GetDocumentInput{
 			Name:        &packageName,
@@ -167,4 +172,11 @@ func (da *PackageArchive) GetResourceArn(manifest *birdwatcher.Manifest) string 
 	// GetDocument returns the Name of the document if it belongs to the account of the instance.
 	// If it is a shared document, GetDocument returns the document ARN as Name
 	return da.documentArn
+}
+
+func getRandomBackOffTime(timeInSeconds int) int {
+	rand.Seed(time.Now().UnixNano())
+	delay := rand.Intn(timeInSeconds)
+
+	return delay
 }
