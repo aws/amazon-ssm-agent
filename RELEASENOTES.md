@@ -1,5 +1,9 @@
 Latest
 ===============
+- Added mechanism to download packages from document service
+
+2.3.235.0
+===============
 - Bug fix for session manager logging on Windows
 - Bug fix for ConfigureCloudWatch plugin
 - Bug fix for update SSM agent occasionally failing due to SSM agent service stuck in starting state
