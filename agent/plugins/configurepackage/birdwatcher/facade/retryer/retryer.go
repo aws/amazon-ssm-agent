@@ -27,6 +27,8 @@ type BirdwatcherRetryer struct {
 	client.DefaultRetryer
 }
 
+var timeUnit = 1000
+
 // RetryRules returns the delay duration before retrying this request again
 func (s BirdwatcherRetryer) RetryRules(r *request.Request) time.Duration {
 	// retry after a > 1 sec timeout, increasing exponentially with each retry
@@ -34,7 +36,7 @@ func (s BirdwatcherRetryer) RetryRules(r *request.Request) time.Duration {
 	// attempt 2: 4s - 1.4min
 	// attempt 3: 9s - 5.48min
 	rand.Seed(time.Now().UnixNano())
-	throttleDelay := int(math.Pow(4, float64(r.RetryCount)))*rand.Intn(5000) + 1000*int(math.Pow(float64(r.RetryCount+1), 2))
+	throttleDelay := (int(math.Pow(4, float64(r.RetryCount)))*rand.Intn(5) + int(math.Pow(float64(r.RetryCount+1), 2))) * timeUnit //for seconds
 
 	// Handle GetManifest, GetDocument and DescribeDocument Throttled calls error
 	if (r.Operation.Name == "GetManifest" || r.Operation.Name == "GetDocument" || r.Operation.Name == "DescribeDocument") && r.IsErrorThrottle() {
@@ -46,6 +48,6 @@ func (s BirdwatcherRetryer) RetryRules(r *request.Request) time.Duration {
 	// attempt 1: 1 - 5 sec
 	// attempt 2: 1 - 9 sec
 	// attempt 3: 1 - 17 sec
-	delay := int(math.Pow(2, float64(r.RetryCount)))*rand.Intn(2000) + 1000
+	delay := (int(math.Pow(2, float64(r.RetryCount)))*rand.Intn(2) + 1) * timeUnit
 	return time.Duration(delay) * time.Millisecond
 }

@@ -33,6 +33,10 @@ type BirdwatcherFacade interface {
 	GetDocumentRequest(*ssm.GetDocumentInput) (*request.Request, *ssm.GetDocumentOutput)
 
 	GetDocument(*ssm.GetDocumentInput) (*ssm.GetDocumentOutput, error)
+
+	DescribeDocumentRequest(*ssm.DescribeDocumentInput) (*request.Request, *ssm.DescribeDocumentOutput)
+
+	DescribeDocument(*ssm.DescribeDocumentInput) (*ssm.DescribeDocumentOutput, error)
 }
 
 var _ BirdwatcherFacade = (*ssm.SSM)(nil)

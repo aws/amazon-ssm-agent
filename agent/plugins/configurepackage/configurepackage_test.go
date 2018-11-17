@@ -700,7 +700,7 @@ func TestSelectService(t *testing.T) {
 			false,
 		},
 		{
-			"correct version type birdwatcher package",
+			"correct version type birdwatcher package doing getManifest",
 			&facade.FacadeStub{
 				GetManifestOutput: &ssm.GetManifestOutput{
 					Manifest: &manifest,
@@ -816,9 +816,12 @@ func TestExecuteConfigurePackagePlugin_DocumentService(t *testing.T) {
 	fakeHash_linux64bit := "76edf2d951825650dc0960e9e5df7c9c16d570e380248b68ac19d4cf3013ff7d"
 	fakeHash_linux32bit := "7b8818d4db10a6b01ec261afe4a0b0c8178e97c33976f9aba34ac7529655e350"
 	fakeHash_windows := "d05804e5065ea5286ae4a1a45ff6eef299cddd1a78f7430672655c4c75a2fe9b"
-	pluginVersion := "0.0.1"
+	manifestVersion := "0.0.1"
 	var getDocumentOutput *ssm.GetDocumentOutput
 	var getDocumentError error
+	docVersion := "1"
+	getDocument_DocVersion := "2"
+	fakeHash := "djfhsfdse3498234bbar8821344bncdklsr023445fskdsgg"
 
 	data := []struct {
 		name                    string
@@ -868,9 +871,15 @@ func TestExecuteConfigurePackagePlugin_DocumentService(t *testing.T) {
 			if packageservice.IsLatest(version) {
 				version = packageservice.Latest
 			}
-
-			installerMock := installerSuccessMock_Install(pluginInformation.Name, pluginVersion, testdata.action)
-			repoMock := repoInstallMock_ReadWriteManifest(pluginInformation, installerMock, pluginVersion, testdata.action)
+			docDescription := ssm.DocumentDescription{
+				Name:            &pluginInformation.Name,
+				DocumentVersion: &docVersion,
+				VersionName:     &pluginInformation.Version,
+				Hash:            &fakeHash,
+				Status:          &documentStatus,
+			}
+			installerMock := installerSuccessMock_Install(pluginInformation.Name, manifestVersion, testdata.action)
+			repoMock := repoInstallMock_ReadWriteManifestHash(pluginInformation, installerMock, manifestVersion, docVersion, getDocument_DocVersion, testdata.action)
 			bwFacade := facadeMock.BirdwatcherFacade{}
 			mockIOHandler := createMockIOHandlerStruct(testdata.errorResponse)
 			getManifestInput := &ssm.GetManifestInput{
@@ -880,6 +889,13 @@ func TestExecuteConfigurePackagePlugin_DocumentService(t *testing.T) {
 			versionName := &testdata.mockVersion
 			if testdata.mockVersion == "" {
 				versionName = nil
+			}
+			describeDocumentInput := &ssm.DescribeDocumentInput{
+				Name:        &pluginInformation.Name,
+				VersionName: versionName,
+			}
+			describeDocumentOutput := &ssm.DescribeDocumentOutput{
+				Document: &docDescription,
 			}
 			getDocumentInput := &ssm.GetDocumentInput{
 				Name:        &pluginInformation.Name,
@@ -910,7 +926,7 @@ func TestExecuteConfigurePackagePlugin_DocumentService(t *testing.T) {
 					},
 					DocumentFormat:  &documentFormat,
 					DocumentType:    &documentType,
-					DocumentVersion: &pluginInformation.Version,
+					DocumentVersion: &getDocument_DocVersion,
 					Name:            &pluginInformation.Name,
 					Status:          &documentStatus,
 					VersionName:     &pluginInformation.Version,
@@ -921,6 +937,7 @@ func TestExecuteConfigurePackagePlugin_DocumentService(t *testing.T) {
 				getDocumentError = errors.New(resourceNotFoundException)
 			}
 			bwFacade.On("GetManifest", getManifestInput).Return(nil, errors.New(resourceNotFoundException)).Once()
+			bwFacade.On("DescribeDocument", describeDocumentInput).Return(describeDocumentOutput, nil)
 			bwFacade.On("GetDocument", getDocumentInput).Return(getDocumentOutput, getDocumentError).Once()
 
 			plugin := &Plugin{

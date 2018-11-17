@@ -33,6 +33,10 @@ type FacadeStub struct {
 	GetDocumentInput  *ssm.GetDocumentInput
 	GetDocumentOutput *ssm.GetDocumentOutput
 	GetDocumentError  error
+
+	DescribeDocumentInput  *ssm.DescribeDocumentInput
+	DescribeDocumentOutput *ssm.DescribeDocumentOutput
+	DescribeDocumentError  error
 }
 
 func (m *FacadeStub) GetManifestRequest(*ssm.GetManifestInput) (*request.Request, *ssm.GetManifestOutput) {
@@ -60,4 +64,13 @@ func (m *FacadeStub) GetDocumentRequest(*ssm.GetDocumentInput) (*request.Request
 func (m *FacadeStub) GetDocument(input *ssm.GetDocumentInput) (*ssm.GetDocumentOutput, error) {
 	m.GetDocumentInput = input
 	return m.GetDocumentOutput, m.GetDocumentError
+}
+
+func (m *FacadeStub) DescribeDocumentRequest(*ssm.DescribeDocumentInput) (*request.Request, *ssm.DescribeDocumentOutput) {
+	panic("not implemented")
+}
+
+func (m *FacadeStub) DescribeDocument(input *ssm.DescribeDocumentInput) (*ssm.DescribeDocumentOutput, error) {
+	m.DescribeDocumentInput = input
+	return m.DescribeDocumentOutput, m.DescribeDocumentError
 }

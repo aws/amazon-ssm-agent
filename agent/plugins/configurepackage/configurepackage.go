@@ -383,7 +383,7 @@ func selectService(tracer trace.Tracer, input *ConfigurePackagePluginInput, loca
 		}
 		if input.Version != "" {
 			// This could happen if there is a typo or if the version matches the document requirement
-			// Create document type to check if document type of package before erroring out
+			// Create document type archive to check if document type of package, before erroring out
 			if regexp.MustCompile(birdwatcherVersionPattern).MatchString(input.Version) {
 				*isDocumentArchive = true
 				// return a new object of type document

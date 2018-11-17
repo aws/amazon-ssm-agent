@@ -25,10 +25,12 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/birdwatcher/birdwatcherarchive"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/birdwatcher/documentarchive"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/birdwatcher/facade"
+	facade_mock "github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/birdwatcher/facade/mocks"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/envdetect"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/envdetect/ec2infradetect"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/envdetect/osdetect"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/packageservice"
+	cache_mock "github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/packageservice/mock"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/trace"
 	"github.com/aws/aws-sdk-go/service/ssm"
 	"github.com/stretchr/testify/assert"
@@ -401,7 +403,8 @@ func TestDownloadManifest(t *testing.T) {
 
 			mockedCollector.On("CollectData", mock.Anything).Return(envdata, nil).Once()
 			cache := packageservice.ManifestCacheMemNew()
-			ds := &PackageService{facadeClient: &testdata.facadeClient, manifestCache: cache, collector: &mockedCollector, archive: testArchive}
+			testArchive.SetManifestCache(cache)
+			ds := &PackageService{facadeClient: &testdata.facadeClient, manifestCache: cache, collector: &mockedCollector, packageArchive: testArchive}
 
 			_, result, isSameAsCache, err := ds.DownloadManifest(tracer, testdata.packageName, testdata.packageVersion)
 
@@ -428,64 +431,105 @@ func TestDownloadManifest(t *testing.T) {
 
 func TestDownloadDocument(t *testing.T) {
 	manifestStr := "{\"version\": \"1234\"}"
+	manifest := "{\"version\": \"123\"}"
 	documentActive := ssm.DocumentStatusActive
 	tracer := trace.NewTracer(log.NewMockLog())
 	packageName := "documentarn"
 	packageVersion := "1234"
+	docVersionForGetDoc := "2"
+	docVersion := "1"
+	hash := "hash"
+	documentDescription := ssm.DocumentDescription{
+		Name:            &packageName,
+		DocumentVersion: &docVersion,
+		VersionName:     &packageVersion,
+		Hash:            &hash,
+		Status:          &documentActive,
+	}
 
 	data := []struct {
-		name           string
-		packageName    string
-		packageVersion string
-		facadeClient   facade.FacadeStub
-		expectedErr    bool
+		name                string
+		packageName         string
+		packageVersion      string
+		getDocumentExpected bool
+		hashVal             string
 	}{
 		{
-			"successful getDocument with concrete version",
+			"successful describeDocument with concrete version",
 			packageName,
 			packageVersion,
-			facade.FacadeStub{
-				GetDocumentOutput: &ssm.GetDocumentOutput{
-					Content:     &manifestStr,
-					Status:      &documentActive,
-					Name:        &packageName,
-					VersionName: &packageVersion,
-				},
-			},
 			false,
+			hash,
+		},
+		{
+			"unsuccessful describeDocument followed by successful get document with concrete version",
+			packageName,
+			packageVersion,
+			true,
+			"different_hash",
 		},
 	}
 
 	for _, testdata := range data {
 		t.Run(testdata.name, func(t *testing.T) {
-			testArchive := documentarchive.New(&testdata.facadeClient)
 			mockedCollector := envdetect.CollectorMock{}
 			envdata := &envdetect.Environment{
 				&osdetect.OperatingSystem{"abc", "567", "", "xyz", "", ""},
 				&ec2infradetect.Ec2Infrastructure{"instanceIDX", "Reg1", "", "AZ1", "instanceTypeZ"},
 			}
 
-			mockedCollector.On("CollectData", mock.Anything).Return(envdata, nil).Once()
-			cache := packageservice.ManifestCacheMemNew()
-			ds := &PackageService{facadeClient: &testdata.facadeClient, manifestCache: cache, collector: &mockedCollector, archive: testArchive}
-
-			_, result, isSameAsCache, err := ds.DownloadManifest(tracer, testdata.packageName, testdata.packageVersion)
-
-			if testdata.expectedErr {
-				assert.Error(t, err)
-			} else {
-				// verify parameter for api call
-				assert.Equal(t, testdata.packageName, *testdata.facadeClient.GetDocumentInput.Name)
-				assert.Equal(t, testdata.packageVersion, *testdata.facadeClient.GetDocumentInput.VersionName)
-				// verify result
-				assert.Equal(t, "1234", result)
-				assert.NoError(t, err)
-				assert.False(t, isSameAsCache)
-				// verify cache
-				cachedManifest, cacheErr := cache.ReadManifest("documentarn", "1234")
-				assert.Equal(t, []byte(manifestStr), cachedManifest)
-				assert.NoError(t, cacheErr)
+			getDocumentOutput := &ssm.GetDocumentOutput{
+				Content:         &manifestStr,
+				Status:          &documentActive,
+				Name:            &packageName,
+				VersionName:     &packageVersion,
+				DocumentVersion: &docVersionForGetDoc,
 			}
+			getDocumentInput := &ssm.GetDocumentInput{
+				Name:        &packageName,
+				VersionName: &packageVersion,
+			}
+			describeDocumentInput := &ssm.DescribeDocumentInput{
+				Name:        &packageName,
+				VersionName: &packageVersion,
+			}
+			describeDocumentOutput := &ssm.DescribeDocumentOutput{
+				Document: &documentDescription,
+			}
+			mockedCollector.On("CollectData", mock.Anything).Return(envdata, nil).Once()
+			cache := cache_mock.ManifestCache{}
+			facadeMock := facade_mock.BirdwatcherFacade{}
+
+			facadeMock.On("DescribeDocument", describeDocumentInput).Return(describeDocumentOutput, nil)
+			if testdata.getDocumentExpected {
+				facadeMock.On("GetDocument", getDocumentInput).Return(getDocumentOutput, nil)
+			}
+			cache.On("ReadManifestHash", packageName, docVersion).Return([]byte(testdata.hashVal), nil)
+			if !testdata.getDocumentExpected {
+				cache.On("ReadManifest", packageName, docVersion).Return([]byte(manifestStr), nil).Twice()
+				cache.On("WriteManifest", packageName, docVersion, []byte(manifestStr)).Return(nil)
+			} else {
+
+				cache.On("WriteManifestHash", packageName, docVersionForGetDoc, mock.Anything).Return(nil)
+				cache.On("ReadManifest", packageName, docVersionForGetDoc).Return([]byte(manifest), nil)
+				cache.On("WriteManifest", packageName, docVersionForGetDoc, []byte(manifestStr)).Return(nil)
+			}
+
+			testArchive := documentarchive.NewDocumentArchive(&facadeMock, nil, &documentDescription, cache, manifestStr)
+			ds := &PackageService{facadeClient: &facadeMock, manifestCache: cache, collector: &mockedCollector, packageArchive: testArchive}
+
+			_, manifestVersion, isSameAsCache, err := ds.DownloadManifest(tracer, testdata.packageName, testdata.packageVersion)
+
+			// verify manifestVersion
+			assert.Equal(t, "1234", manifestVersion)
+			assert.NoError(t, err)
+			if !testdata.getDocumentExpected {
+				assert.True(t, isSameAsCache)
+			} else {
+				assert.False(t, isSameAsCache)
+			}
+			cache.AssertExpectations(t)
+			facadeMock.AssertExpectations(t)
 		})
 	}
 }
@@ -543,7 +587,8 @@ func TestDownloadManifestSameAsCacheManifest(t *testing.T) {
 		testArchive := birdwatcherarchive.New(&testdata.facadeClient, "")
 		cache := packageservice.ManifestCacheMemNew()
 
-		ds := &PackageService{facadeClient: &testdata.facadeClient, manifestCache: cache, collector: &mockedCollector, archive: testArchive}
+		testArchive.SetManifestCache(cache)
+		ds := &PackageService{facadeClient: &testdata.facadeClient, manifestCache: cache, collector: &mockedCollector, packageArchive: testArchive}
 
 		// first call has empty cache and is expected to come back with isSameAsCache == false
 		_, result, isSameAsCache, err := ds.DownloadManifest(tracer, testdata.packageName, testdata.packageVersion)
@@ -602,10 +647,11 @@ func TestDownloadManifestDifferentFromCacheManifest(t *testing.T) {
 	mockedCollector.On("CollectData", mock.Anything).Return(envdata, nil).Once()
 
 	cache := packageservice.ManifestCacheMemNew()
+	testArchive.SetManifestCache(cache)
 	err := cache.WriteManifest("packagearn", "1234", []byte(cachedManifestStr))
 	assert.NoError(t, err)
 
-	ds := &PackageService{facadeClient: &testdata.facadeClient, manifestCache: cache, collector: &mockedCollector, archive: testArchive}
+	ds := &PackageService{facadeClient: &testdata.facadeClient, manifestCache: cache, collector: &mockedCollector, packageArchive: testArchive}
 
 	_, result, isSameAsCache, err := ds.DownloadManifest(tracer, testdata.packageName, testdata.packageVersion)
 
@@ -781,7 +827,7 @@ func TestDownloadFile(t *testing.T) {
 			testArchive := birdwatcherarchive.New(&facade.FacadeStub{}, "manifest")
 
 			mockedCollector := envdetect.CollectorMock{}
-			ds := &PackageService{manifestCache: cache, collector: &mockedCollector, archive: testArchive}
+			ds := &PackageService{manifestCache: cache, collector: &mockedCollector, packageArchive: testArchive}
 
 			result, err := downloadFile(ds, tracer, testdata.file, packagename, version)
 			if testdata.expectedErr {
@@ -808,10 +854,21 @@ func TestDownloadFileFromDocumentArchive(t *testing.T) {
 	fileName := "fileName.zip"
 	url := "url"
 	documentActive := ssm.DocumentStatusActive
+	hash := "hash"
+	hashtype := "sha256"
+	docVersion := "2"
+	documentDescription := ssm.DocumentDescription{
+		Name:            &packagename,
+		DocumentVersion: &docVersion,
+		VersionName:     &version,
+		Hash:            &hash,
+		Status:          &documentActive,
+	}
 	data := []struct {
 		name        string
 		network     networkMock
 		file        *archive.File
+		attachments []*ssm.AttachmentContent
 		expectedErr bool
 	}{
 		{
@@ -824,6 +881,14 @@ func TestDownloadFileFromDocumentArchive(t *testing.T) {
 			&archive.File{
 				fileName,
 				birdwatcher.FileInfo{},
+			},
+			[]*ssm.AttachmentContent{
+				{
+					Name:     &fileName,
+					Url:      &url,
+					Hash:     &hash,
+					HashType: &hashtype,
+				},
 			},
 			false,
 		},
@@ -838,6 +903,14 @@ func TestDownloadFileFromDocumentArchive(t *testing.T) {
 				fileName,
 				birdwatcher.FileInfo{},
 			},
+			[]*ssm.AttachmentContent{
+				{
+					Name:     &fileName,
+					Url:      &url,
+					Hash:     &hash,
+					HashType: &hashtype,
+				},
+			},
 			true,
 		},
 		{
@@ -848,6 +921,14 @@ func TestDownloadFileFromDocumentArchive(t *testing.T) {
 			&archive.File{
 				fileName,
 				birdwatcher.FileInfo{},
+			},
+			[]*ssm.AttachmentContent{
+				{
+					Name:     &fileName,
+					Url:      &url,
+					Hash:     &hash,
+					HashType: &hashtype,
+				},
 			},
 			true,
 		},
@@ -868,10 +949,10 @@ func TestDownloadFileFromDocumentArchive(t *testing.T) {
 					},
 				},
 			}
-			testArchive := documentarchive.New(&facadeClient)
+			testArchive := documentarchive.NewDocumentArchive(&facadeClient, testdata.attachments, &documentDescription, cache, "manifestStr")
 
 			mockedCollector := envdetect.CollectorMock{}
-			ds := &PackageService{manifestCache: cache, collector: &mockedCollector, archive: testArchive}
+			ds := &PackageService{manifestCache: cache, collector: &mockedCollector, packageArchive: testArchive}
 
 			result, err := downloadFile(ds, tracer, testdata.file, packagename, version)
 			if testdata.expectedErr {
@@ -944,8 +1025,8 @@ func TestDownloadArtifact(t *testing.T) {
 				&osdetect.OperatingSystem{"platformName", "platformVersion", "", "architecture", "", ""},
 				&ec2infradetect.Ec2Infrastructure{"instanceID", "region", "", "availabilityZone", "instanceType"},
 			}, nil).Once()
-
-			ds := &PackageService{manifestCache: cache, collector: &mockedCollector, archive: testArchive}
+			testArchive.SetManifestCache(cache)
+			ds := &PackageService{manifestCache: cache, collector: &mockedCollector, packageArchive: testArchive}
 			birdwatcher.Networkdep = &testdata.network
 
 			result, err := ds.DownloadArtifact(tracer, testdata.packageName, testdata.packageVersion)

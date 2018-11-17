@@ -89,6 +89,7 @@ func TestRetryRulesThrottled1stAttempt(t *testing.T) {
 		{StatusCode: 200, Body: body(`{"data":"valid"}`)},
 	}
 	retryer := BirdwatcherRetryer{}
+	timeUnit = 1
 	retryer.NumMaxRetries = 1
 	s := awstesting.NewClient(&aws.Config{Retryer: &retryer})
 
@@ -107,7 +108,7 @@ func TestRetryRulesThrottled1stAttempt(t *testing.T) {
 	duration := retryer.RetryRules(r)
 	assert.Error(t, err)
 	durationVal := false
-	if duration < 1*time.Second && duration > 21*time.Second {
+	if duration < 1*time.Millisecond || duration > 21*time.Millisecond {
 		durationVal = true
 	}
 	assert.False(t, durationVal)
@@ -122,6 +123,7 @@ func TestRetryRulesThrottled2ndAttempt(t *testing.T) {
 		{StatusCode: 400, Body: body(`{"__type":"Throttling","message":"Rate exceeded."}`)},
 	}
 	retryer := BirdwatcherRetryer{}
+	timeUnit = 1
 	retryer.NumMaxRetries = 2
 	s := awstesting.NewClient(&aws.Config{Retryer: &retryer})
 
@@ -140,45 +142,45 @@ func TestRetryRulesThrottled2ndAttempt(t *testing.T) {
 	assert.Equal(t, 2, int(r.RetryCount))
 	assert.Error(t, err)
 	durationVal := false
-	if duration < 4*time.Second && duration > 84*time.Second {
+	if duration < 4*time.Millisecond || duration > 84*time.Millisecond {
 		durationVal = true
 	}
 	assert.False(t, durationVal)
 }
 
-// This test can go on for 5 minutes. Uncomment once build is fixed
-// func TestRetryRulesThrottled3rdAttempt(t *testing.T) {
-// 	reqNum := 0
-// 	reqs := []http.Response{
-// 		{StatusCode: 400, Body: body(`{"__type":"Throttling","message":"Rate exceeded."}`)},
-// 		{StatusCode: 429, Body: body(`{"__type":"ProvisionedThroughputExceededException","message":"Rate exceeded."}`)},
-// 		{StatusCode: 400, Body: body(`{"__type":"Throttling","message":"Rate exceeded."}`)},
-// 		{StatusCode: 400, Body: body(`{"__type":"Throttling","message":"Rate exceeded."}`)},
-// 	}
-// 	retryer := BirdwatcherRetryer{}
-// 	retryer.NumMaxRetries = 3
-// 	s := awstesting.NewClient(&aws.Config{Retryer: &retryer})
+func TestRetryRulesThrottled3rdAttempt(t *testing.T) {
+	reqNum := 0
+	reqs := []http.Response{
+		{StatusCode: 400, Body: body(`{"__type":"Throttling","message":"Rate exceeded."}`)},
+		{StatusCode: 429, Body: body(`{"__type":"ProvisionedThroughputExceededException","message":"Rate exceeded."}`)},
+		{StatusCode: 400, Body: body(`{"__type":"Throttling","message":"Rate exceeded."}`)},
+		{StatusCode: 400, Body: body(`{"__type":"Throttling","message":"Rate exceeded."}`)},
+	}
+	retryer := BirdwatcherRetryer{}
+	timeUnit = 1
+	retryer.NumMaxRetries = 3
+	s := awstesting.NewClient(&aws.Config{Retryer: &retryer})
 
-// 	s.Handlers.Validate.Clear()
-// 	s.Handlers.Unmarshal.PushBack(unmarshal)
-// 	s.Handlers.UnmarshalError.PushBack(unmarshalError)
-// 	s.Handlers.Send.Clear() // mock sending
-// 	s.Handlers.Send.PushBack(func(r *request.Request) {
-// 		r.HTTPResponse = &reqs[reqNum]
-// 		reqNum++
-// 	})
-// 	out := &testData{}
-// 	r := s.NewRequest(&request.Operation{Name: "DescribeDocument"}, nil, out)
-// 	err := r.Send()
-// 	duration := retryer.RetryRules(r)
-// 	assert.Equal(t, 3, int(r.RetryCount))
-// 	assert.Error(t, err)
-// 	durationVal := false
-// 	if duration < 9*time.Second && duration > 329*time.Second {
-// 		durationVal = true
-// 	}
-// 	assert.False(t, durationVal)
-// }
+	s.Handlers.Validate.Clear()
+	s.Handlers.Unmarshal.PushBack(unmarshal)
+	s.Handlers.UnmarshalError.PushBack(unmarshalError)
+	s.Handlers.Send.Clear() // mock sending
+	s.Handlers.Send.PushBack(func(r *request.Request) {
+		r.HTTPResponse = &reqs[reqNum]
+		reqNum++
+	})
+	out := &testData{}
+	r := s.NewRequest(&request.Operation{Name: "DescribeDocument"}, nil, out)
+	err := r.Send()
+	duration := retryer.RetryRules(r)
+	assert.Equal(t, 3, int(r.RetryCount))
+	assert.Error(t, err)
+	durationVal := false
+	if duration < 9*time.Millisecond || duration > 329*time.Millisecond {
+		durationVal = true
+	}
+	assert.False(t, durationVal)
+}
 
 func TestRetryRulesNoThrottle1stAttempt(t *testing.T) {
 	reqNum := 0
@@ -189,6 +191,7 @@ func TestRetryRulesNoThrottle1stAttempt(t *testing.T) {
 		{StatusCode: 500, Body: body(`{"__type":"UnknownError","message":"An error occurred."}`)},
 	}
 	retryer := BirdwatcherRetryer{}
+	timeUnit = 1
 	retryer.NumMaxRetries = 1
 	s := awstesting.NewClient(&aws.Config{Retryer: &retryer})
 
@@ -208,7 +211,7 @@ func TestRetryRulesNoThrottle1stAttempt(t *testing.T) {
 	assert.Equal(t, 1, int(r.RetryCount))
 	assert.Error(t, err)
 	durationVal := false
-	if duration < 1*time.Second && duration > 5*time.Second {
+	if duration < 1*time.Millisecond || duration > 5*time.Millisecond {
 		durationVal = true
 	}
 	assert.False(t, durationVal)
@@ -223,6 +226,7 @@ func TestRetryRulesNoThrottle2ndAttempt(t *testing.T) {
 		{StatusCode: 500, Body: body(`{"__type":"UnknownError","message":"An error occurred."}`)},
 	}
 	retryer := BirdwatcherRetryer{}
+	timeUnit = 1
 	retryer.NumMaxRetries = 2
 	s := awstesting.NewClient(&aws.Config{Retryer: &retryer})
 
@@ -242,7 +246,7 @@ func TestRetryRulesNoThrottle2ndAttempt(t *testing.T) {
 	assert.Equal(t, 2, int(r.RetryCount))
 	assert.Error(t, err)
 	durationVal := false
-	if duration < 1*time.Second && duration > 9*time.Second {
+	if duration < 1*time.Millisecond || duration > 9*time.Millisecond {
 		durationVal = true
 	}
 	assert.False(t, durationVal)
@@ -257,6 +261,7 @@ func TestRetryRulesNoThrottle3rdAttempt(t *testing.T) {
 		{StatusCode: 500, Body: body(`{"__type":"UnknownError","message":"An error occurred."}`)},
 	}
 	retryer := BirdwatcherRetryer{}
+	timeUnit = 1
 	retryer.NumMaxRetries = 3
 	s := awstesting.NewClient(&aws.Config{Retryer: &retryer})
 
@@ -275,7 +280,7 @@ func TestRetryRulesNoThrottle3rdAttempt(t *testing.T) {
 	assert.Equal(t, 3, int(r.RetryCount))
 	assert.Error(t, err)
 	durationVal := false
-	if duration < 1*time.Second && duration > 17*time.Second {
+	if duration < 1*time.Millisecond || duration > 17*time.Millisecond {
 		durationVal = true
 	}
 	assert.False(t, durationVal)

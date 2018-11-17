@@ -22,6 +22,8 @@ import (
 type ManifestCache interface {
 	ReadManifest(packageArn string, packageVersion string) ([]byte, error)
 	WriteManifest(packageArn string, packageVersion string, content []byte) error
+	ReadManifestHash(packageArn string, documentVersion string) ([]byte, error)
+	WriteManifestHash(packageArn string, documentVersion string, content []byte) error
 }
 
 // ManifestCacheMem stores cache in memory
@@ -43,5 +45,14 @@ func (c ManifestCacheMem) ReadManifest(packageArn string, packageVersion string)
 
 func (c ManifestCacheMem) WriteManifest(packageArn string, packageVersion string, content []byte) error {
 	c.cache[c.CacheKey(packageArn, packageVersion)] = content
+	return nil
+}
+
+func (c ManifestCacheMem) ReadManifestHash(packageArn string, documentVersion string) ([]byte, error) {
+	return c.cache[c.CacheKey(packageArn, documentVersion)], nil
+}
+
+func (c ManifestCacheMem) WriteManifestHash(packageArn string, documentVersion string, content []byte) error {
+	c.cache[c.CacheKey(packageArn, documentVersion)] = content
 	return nil
 }

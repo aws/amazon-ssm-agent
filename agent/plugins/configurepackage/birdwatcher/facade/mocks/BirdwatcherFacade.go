@@ -10,6 +10,54 @@ type BirdwatcherFacade struct {
 	mock.Mock
 }
 
+// DescribeDocument provides a mock function with given fields: _a0
+func (_m *BirdwatcherFacade) DescribeDocument(_a0 *ssm.DescribeDocumentInput) (*ssm.DescribeDocumentOutput, error) {
+	ret := _m.Called(_a0)
+
+	var r0 *ssm.DescribeDocumentOutput
+	if rf, ok := ret.Get(0).(func(*ssm.DescribeDocumentInput) *ssm.DescribeDocumentOutput); ok {
+		r0 = rf(_a0)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*ssm.DescribeDocumentOutput)
+		}
+	}
+
+	var r1 error
+	if rf, ok := ret.Get(1).(func(*ssm.DescribeDocumentInput) error); ok {
+		r1 = rf(_a0)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
+// DescribeDocumentRequest provides a mock function with given fields: _a0
+func (_m *BirdwatcherFacade) DescribeDocumentRequest(_a0 *ssm.DescribeDocumentInput) (*request.Request, *ssm.DescribeDocumentOutput) {
+	ret := _m.Called(_a0)
+
+	var r0 *request.Request
+	if rf, ok := ret.Get(0).(func(*ssm.DescribeDocumentInput) *request.Request); ok {
+		r0 = rf(_a0)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*request.Request)
+		}
+	}
+
+	var r1 *ssm.DescribeDocumentOutput
+	if rf, ok := ret.Get(1).(func(*ssm.DescribeDocumentInput) *ssm.DescribeDocumentOutput); ok {
+		r1 = rf(_a0)
+	} else {
+		if ret.Get(1) != nil {
+			r1 = ret.Get(1).(*ssm.DescribeDocumentOutput)
+		}
+	}
+
+	return r0, r1
+}
+
 // GetDocument provides a mock function with given fields: _a0
 func (_m *BirdwatcherFacade) GetDocument(_a0 *ssm.GetDocumentInput) (*ssm.GetDocumentOutput, error) {
 	ret := _m.Called(_a0)

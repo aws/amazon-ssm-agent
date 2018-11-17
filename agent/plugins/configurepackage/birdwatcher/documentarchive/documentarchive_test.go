@@ -22,11 +22,31 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/birdwatcher"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/birdwatcher/archive"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/birdwatcher/facade"
+	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/packageservice"
+	cache_mock "github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/packageservice/mock"
 
 	"github.com/aws/aws-sdk-go/service/ssm"
 
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/mock"
 )
+
+func TestGetRandomBackOffTime(t *testing.T) {
+	delay := getRandomBackOffTime(15)
+	errorInDuration := false
+	if delay > 15 || delay < 1 {
+		errorInDuration = true
+	}
+	assert.False(t, errorInDuration)
+}
+
+func TestArchiveName(t *testing.T) {
+	facadeSession := facade.FacadeStub{}
+	testArchive := New(&facadeSession)
+
+	assert.Equal(t, archive.PackageArchiveDocument, testArchive.Name())
+
+}
 
 func TestGetResourceVersion(t *testing.T) {
 
@@ -74,128 +94,22 @@ func TestGetResourceVersion(t *testing.T) {
 	}
 }
 
-func TestDownloadArchiveInfo(t *testing.T) {
-	packageName := "ABC_package"
-	documentArn := "arn:aws:ssm:us-east-1:1234567890:document/NameOfDoc"
-	versionName := "NewVersion"
-	manifest := "manifest"
-	docVersion := "1"
-	emptystring := ""
-	documentActive := ssm.DocumentStatusActive
-	documentInactive := ssm.DocumentStatusCreating
-	data := []struct {
-		name         string
-		version      string
-		isError      bool
-		facadeClient facade.FacadeStub
-	}{
-		{
-			"successful api call",
-			versionName,
-			false,
-			facade.FacadeStub{
-				GetDocumentOutput: &ssm.GetDocumentOutput{
-					Content:         &manifest,
-					Status:          &documentActive,
-					VersionName:     &versionName,
-					DocumentVersion: &docVersion,
-					Name:            &packageName,
-				},
-			},
-		},
-		{
-			"successful api call returning the document ARN",
-			versionName,
-			false,
-			facade.FacadeStub{
-				GetDocumentOutput: &ssm.GetDocumentOutput{
-					Content:         &manifest,
-					Status:          &documentActive,
-					VersionName:     &versionName,
-					DocumentVersion: &docVersion,
-					Name:            &documentArn,
-				},
-			},
-		},
-		{
-			"api call returns error",
-			versionName,
-			true,
-			facade.FacadeStub{
-				GetDocumentError: errors.New("testerror"),
-			},
-		},
-		{
-			"manifest is nil",
-			versionName,
-			true,
-			facade.FacadeStub{
-				GetDocumentOutput: &ssm.GetDocumentOutput{
-					Content:         nil,
-					Status:          &documentActive,
-					VersionName:     &versionName,
-					DocumentVersion: &docVersion,
-					Name:            &packageName,
-				},
-			},
-		},
-		{
-			"manifest is empty",
-			versionName,
-			true,
-			facade.FacadeStub{
-				GetDocumentOutput: &ssm.GetDocumentOutput{
-					Content:         &emptystring,
-					Status:          &documentActive,
-					VersionName:     &versionName,
-					DocumentVersion: &docVersion,
-					Name:            &packageName,
-				},
-			},
-		},
-		{
-			"document status is not active",
-			versionName,
-			true,
-			facade.FacadeStub{
-				GetDocumentOutput: &ssm.GetDocumentOutput{
-					Content:         &emptystring,
-					Status:          &documentInactive,
-					VersionName:     &versionName,
-					DocumentVersion: &docVersion,
-					Name:            &packageName,
-				},
-			},
-		},
-		{
-			"version is empty",
-			emptystring,
-			true,
-			facade.FacadeStub{
-				GetDocumentOutput: &ssm.GetDocumentOutput{
-					Content:         &manifest,
-					Status:          &documentInactive,
-					VersionName:     &versionName,
-					DocumentVersion: &docVersion,
-					Name:            &packageName,
-				},
-			},
-		},
+func TestSetAndGetResources(t *testing.T) {
+	manifest := birdwatcher.Manifest{}
+	packageName := "packagename"
+	docDescription := createDefaultDocumentDescription(packageName, "hash", ssm.DocumentStatusActive)
+	packageArchive := PackageArchive{
+		documentDesc: &docDescription,
+		docVersion:   "abc",
+		documentArn:  packageName,
 	}
-	for _, testdata := range data {
-		t.Run(testdata.name, func(t *testing.T) {
 
-			docArchive := New(&testdata.facadeClient)
+	packageArchive.SetResource(&manifest)
+	arn := packageArchive.GetResourceArn()
 
-			document, err := docArchive.DownloadArchiveInfo(packageName, testdata.version)
-			if testdata.isError {
-				assert.Error(t, err)
-			} else {
-				assert.NoError(t, err)
-				assert.Equal(t, document, manifest)
-			}
-		})
-	}
+	assert.Equal(t, arn, *docDescription.Name)
+	assert.Equal(t, packageArchive.docVersion, *docDescription.DocumentVersion)
+	assert.Equal(t, packageArchive.documentArn, *docDescription.Name)
 }
 
 func TestGetFileDownloadLocation(t *testing.T) {
@@ -209,6 +123,9 @@ func TestGetFileDownloadLocation(t *testing.T) {
 	hashtype := "sha256"
 	manifest := "manifest"
 	documentActive := ssm.DocumentStatusActive
+	documentDescription := createDefaultDocumentDescription(packagename, "hash", documentActive)
+	memcache := createMemCache("hash", manifest)
+	docVersion := "2"
 
 	data := []struct {
 		name         string
@@ -275,9 +192,10 @@ func TestGetFileDownloadLocation(t *testing.T) {
 			},
 			facade.FacadeStub{
 				GetDocumentOutput: &ssm.GetDocumentOutput{
-					Content: &manifest,
-					Status:  &documentActive,
-					Name:    &packagename,
+					Content:         &manifest,
+					Status:          &documentActive,
+					Name:            &packagename,
+					DocumentVersion: &docVersion,
 					AttachmentsContent: []*ssm.AttachmentContent{
 						{
 							Name:     &filename2,
@@ -350,7 +268,7 @@ func TestGetFileDownloadLocation(t *testing.T) {
 	for _, testdata := range data {
 		t.Run(testdata.name, func(t *testing.T) {
 
-			docArchive := NewWithAttachments(&testdata.facadeClient, testdata.attachments)
+			docArchive := NewDocumentArchive(&testdata.facadeClient, testdata.attachments, &documentDescription, memcache, manifest)
 
 			location, err := docArchive.GetFileDownloadLocation(testdata.file, packagename, version)
 			if testdata.isError {
@@ -365,19 +283,179 @@ func TestGetFileDownloadLocation(t *testing.T) {
 	}
 }
 
-func TestArchiveName(t *testing.T) {
-	facadeSession := facade.FacadeStub{}
-	testArchive := New(&facadeSession)
+func TestDownloadArchiveInfo(t *testing.T) {
+	packageName := "ABC_package"
+	documentArn := "arn:aws:ssm:us-east-1:1234567890:document/NameOfDoc"
+	versionName := "NewVersion"
+	manifest := "manifest"
+	docVersion := "1"
+	emptystring := ""
+	documentActive := ssm.DocumentStatusActive
+	documentInactive := ssm.DocumentStatusCreating
+	myPrettyHash := "myPrettHash"
+	data := []struct {
+		name                string
+		version             string
+		isError             bool
+		facadeClient        facade.FacadeStub
+		documentDescription ssm.DocumentDescription
+		manifestCache       packageservice.ManifestCache
+	}{
+		{
+			"successful api call, Document already exists, no GetDocument happy case",
+			versionName,
+			false,
+			facade.FacadeStub{},
+			createDefaultDocumentDescription(packageName, myPrettyHash, documentActive),
+			createMemCache(myPrettyHash, manifest),
+		},
+		{
+			"successful api call returning the document ARN, no GetDocument happy case",
+			versionName,
+			false,
+			facade.FacadeStub{},
+			createDefaultDocumentDescription(documentArn, myPrettyHash, documentActive),
+			createMemCache(myPrettyHash, manifest),
+		},
+		{
+			"describe document call returns error",
+			versionName,
+			true,
+			facade.FacadeStub{
+				DescribeDocumentError: errors.New("testerror"),
+			},
+			createDefaultDocumentDescription(packageName, myPrettyHash, documentActive),
+			createMemCache(myPrettyHash, manifest),
+		},
+		{
+			"hash mismatch, get manifest happy path",
+			versionName,
+			false,
+			facade.FacadeStub{
+				GetDocumentOutput: &ssm.GetDocumentOutput{
+					Content:         &manifest,
+					Status:          &documentActive,
+					VersionName:     &versionName,
+					DocumentVersion: &docVersion,
+					Name:            &packageName,
+				},
+			},
+			createDefaultDocumentDescription(packageName, "hash123", documentActive),
+			createMemCache(myPrettyHash, manifest),
+		},
+		{
+			"hash mismatch, get document, manifest is nil",
+			versionName,
+			true,
+			facade.FacadeStub{
+				GetDocumentOutput: &ssm.GetDocumentOutput{
+					Content:         nil,
+					Status:          &documentActive,
+					VersionName:     &versionName,
+					DocumentVersion: &docVersion,
+					Name:            &packageName,
+				},
+			},
+			createDefaultDocumentDescription(packageName, "hash123", documentActive),
+			createMemCache(myPrettyHash, manifest),
+		},
+		{
+			"hash mismatch, get document call returns empty manifest",
+			versionName,
+			true,
+			facade.FacadeStub{
+				GetDocumentOutput: &ssm.GetDocumentOutput{
+					Content:         &emptystring,
+					Status:          &documentActive,
+					VersionName:     &versionName,
+					DocumentVersion: &docVersion,
+					Name:            &packageName,
+				},
+			},
+			createDefaultDocumentDescription(packageName, "hash123", documentActive),
+			createMemCache(myPrettyHash, manifest),
+		},
+		{
+			"hash mismatch, get document status inactive",
+			versionName,
+			true,
+			facade.FacadeStub{
+				GetDocumentOutput: &ssm.GetDocumentOutput{
+					Content:         &emptystring,
+					Status:          &documentInactive,
+					VersionName:     &versionName,
+					DocumentVersion: &docVersion,
+					Name:            &packageName,
+				},
+			},
+			createDefaultDocumentDescription(packageName, "hash123", documentActive),
+			createMemCache(myPrettyHash, manifest),
+		},
+		{
+			"describe document returns document status not active",
+			versionName,
+			true,
+			facade.FacadeStub{},
+			createDefaultDocumentDescription(packageName, myPrettyHash, documentInactive),
+			createMemCache(myPrettyHash, manifest),
+		},
+		{
+			"version is empty",
+			emptystring,
+			false,
+			facade.FacadeStub{
+				GetDocumentOutput: &ssm.GetDocumentOutput{
+					Content:         &manifest,
+					Status:          &documentInactive,
+					VersionName:     &versionName,
+					DocumentVersion: &docVersion,
+					Name:            &packageName,
+				},
+			},
+			createDefaultDocumentDescription(packageName, myPrettyHash, documentActive),
+			createMemCache(myPrettyHash, manifest),
+		},
+	}
+	for _, testdata := range data {
+		t.Run(testdata.name, func(t *testing.T) {
+			testdata.facadeClient.DescribeDocumentOutput = &ssm.DescribeDocumentOutput{
+				Document: &testdata.documentDescription,
+			}
+			docArchive := NewDocumentArchive(&testdata.facadeClient, nil, &testdata.documentDescription, testdata.manifestCache, manifest)
 
-	assert.Equal(t, archive.PackageArchiveDocument, testArchive.Name())
+			document, err := docArchive.DownloadArchiveInfo(packageName, testdata.version)
+			if testdata.isError {
+				assert.Error(t, err)
+			} else {
+				assert.NoError(t, err)
+				assert.Equal(t, document, manifest)
+			}
+		})
+	}
+}
+
+// helpers
+func createDefaultDocumentDescription(packageName string, hash string, docStatus string) ssm.DocumentDescription {
+	docVersion := "2"
+	versionName := "version-name"
+	latest := "3"
+	defaultVersion := "1"
+	return ssm.DocumentDescription{
+		Name:            &packageName,
+		DocumentVersion: &docVersion,
+		VersionName:     &versionName,
+		LatestVersion:   &latest,
+		DefaultVersion:  &defaultVersion,
+		Hash:            &hash,
+		Status:          &docStatus,
+	}
 
 }
 
-func TestGetRandomBackOffTime(t *testing.T) {
-	delay := getRandomBackOffTime(15)
-	errorInDuration := false
-	if delay > 15 && delay < 1 {
-		errorInDuration = true
-	}
-	assert.False(t, errorInDuration)
+func createMemCache(hash string, manifest string) cache_mock.ManifestCache {
+	cache := cache_mock.ManifestCache{}
+	cache.On("ReadManifestHash", mock.Anything, mock.Anything).Return([]byte(hash), nil)
+	cache.On("ReadManifest", mock.Anything, mock.Anything).Return([]byte(manifest), nil)
+	cache.On("WriteManifestHash", mock.Anything, mock.Anything, mock.Anything).Return(nil)
+	return cache
 }
