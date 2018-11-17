@@ -96,6 +96,8 @@ type Repository interface {
 
 	ReadManifest(packageArn string, packageVersion string) ([]byte, error)
 	WriteManifest(packageArn string, packageVersion string, content []byte) error
+	ReadManifestHash(packageArn string, documentVersion string) ([]byte, error)
+	WriteManifestHash(packageArn string, documentVersion string, content []byte) error
 
 	LoadTraces(tracer trace.Tracer, packageArn string) error
 	PersistTraces(tracer trace.Tracer, packageArn string) error
@@ -360,6 +362,26 @@ func (r *localRepository) WriteManifest(packageArn string, packageVersion string
 		return err
 	}
 	return r.filesysdep.WriteFile(r.filePath(packageArn, packageVersion), string(content))
+}
+
+// manifest cache hash
+// textPath will return the manifest file path for a package name and package version
+func (r *localRepository) textPath(packageArn string, documentVersion string) string {
+	return filepath.Join(r.manifestCachePath, fmt.Sprintf("%s_%s.txt", normalizeDirectory(packageArn), documentVersion))
+}
+
+// ReadManifestHash will return the manifest data for a given package name and package version from the cache
+func (r *localRepository) ReadManifestHash(packageArn string, documentVersion string) ([]byte, error) {
+	return r.filesysdep.ReadFile(r.textPath(packageArn, documentVersion))
+}
+
+// WriteManifestHash will put the manifest data for a given package name and package version into the cache
+func (r *localRepository) WriteManifestHash(packageArn string, documentVersion string, content []byte) error {
+	err := fileutil.MakeDirs(r.manifestCachePath)
+	if err != nil {
+		return err
+	}
+	return r.filesysdep.WriteFile(r.textPath(packageArn, documentVersion), string(content))
 }
 
 // hasInventoryData determines if a package should be reported to inventory by the repository

@@ -16,7 +16,12 @@
 package archive
 
 import (
+	"bytes"
+	"encoding/json"
+	"fmt"
+
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/birdwatcher"
+	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/packageservice"
 )
 
 const (
@@ -31,8 +36,24 @@ type File struct {
 
 type IPackageArchive interface {
 	Name() string
+	//TODO: Send this by address or reference
+	SetManifestCache(cache packageservice.ManifestCache)
+	SetResource(*birdwatcher.Manifest)
 	GetResourceVersion(packageName string, packageVersion string) (name string, version string)
-	DownloadArchiveInfo(packageName string, version string) (string, error)
+	GetResourceArn() string
 	GetFileDownloadLocation(file *File, packageName string, version string) (string, error)
-	GetResourceArn(manifest *birdwatcher.Manifest) string
+	DownloadArchiveInfo(packageName string, version string) (string, error)
+	ReadManifestFromCache() (*birdwatcher.Manifest, error)
+	WriteManifestToCache(manifest []byte) error
+}
+
+func ParseManifest(data *[]byte) (*birdwatcher.Manifest, error) {
+	var manifest birdwatcher.Manifest
+
+	// TODO: additional validation
+	if err := json.NewDecoder(bytes.NewReader(*data)).Decode(&manifest); err != nil {
+		return nil, fmt.Errorf("failed to decode manifest: %v", err)
+	}
+
+	return &manifest, nil
 }

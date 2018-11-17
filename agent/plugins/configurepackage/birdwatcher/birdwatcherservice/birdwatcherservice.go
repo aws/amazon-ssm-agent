@@ -15,8 +15,6 @@
 package birdwatcherservice
 
 import (
-	"bytes"
-	"encoding/json"
 	"errors"
 	"fmt"
 	"reflect"
@@ -48,21 +46,23 @@ func (t *TimeImpl) NowUnixNano() int64 {
 
 // PackageService is the concrete type for Birdwatcher PackageService
 type PackageService struct {
-	pkgSvcName    string
-	facadeClient  facade.BirdwatcherFacade
-	manifestCache packageservice.ManifestCache
-	collector     envdetect.Collector
-	timeProvider  NanoTime
-	archive       archive.IPackageArchive
+	pkgSvcName     string
+	facadeClient   facade.BirdwatcherFacade
+	manifestCache  packageservice.ManifestCache
+	collector      envdetect.Collector
+	timeProvider   NanoTime
+	packageArchive archive.IPackageArchive
 }
 
 func NewBirdwatcherArchive(facadeClient facade.BirdwatcherFacade, manifestCache packageservice.ManifestCache, birdwatcherManifest string) packageservice.PackageService {
 	pkgArchive := birdwatcherarchive.New(facadeClient, birdwatcherManifest)
+	pkgArchive.SetManifestCache(manifestCache)
 	return New(pkgArchive, facadeClient, manifestCache, packageservice.PackageServiceName_birdwatcher)
 }
 
 func NewDocumentArchive(facadeClient facade.BirdwatcherFacade, manifestCache packageservice.ManifestCache) packageservice.PackageService {
 	pkgArchive := documentarchive.New(facadeClient)
+	pkgArchive.SetManifestCache(manifestCache)
 	return New(pkgArchive, facadeClient, manifestCache, packageservice.PackageServiceName_document)
 }
 
@@ -70,12 +70,12 @@ func NewDocumentArchive(facadeClient facade.BirdwatcherFacade, manifestCache pac
 func New(pkgArchive archive.IPackageArchive, facadeClient facade.BirdwatcherFacade, manifestCache packageservice.ManifestCache, name string) packageservice.PackageService {
 
 	return &PackageService{
-		pkgSvcName:    name,
-		facadeClient:  facadeClient,
-		manifestCache: manifestCache,
-		collector:     &envdetect.CollectorImp{},
-		timeProvider:  &TimeImpl{},
-		archive:       pkgArchive,
+		pkgSvcName:     name,
+		facadeClient:   facadeClient,
+		manifestCache:  manifestCache,
+		collector:      &envdetect.CollectorImp{},
+		timeProvider:   &TimeImpl{},
+		packageArchive: pkgArchive,
 	}
 }
 
@@ -84,7 +84,7 @@ func (ds *PackageService) PackageServiceName() string {
 }
 
 func (ds *PackageService) GetPackageArnAndVersion(packageName string, packageVersion string) (name string, version string) {
-	return ds.archive.GetResourceVersion(packageName, packageVersion)
+	return ds.packageArchive.GetResourceVersion(packageName, packageVersion)
 }
 
 // DownloadManifest downloads the manifest for a given version (or latest) and returns the agent version specified in manifest
@@ -93,13 +93,13 @@ func (ds *PackageService) DownloadManifest(tracer trace.Tracer, packageName stri
 	if err != nil {
 		return "", "", isSameAsCache, err
 	}
-	return ds.archive.GetResourceArn(manifest), manifest.Version, isSameAsCache, nil
+	return ds.packageArchive.GetResourceArn(), manifest.Version, isSameAsCache, nil
 }
 
 // DownloadArtifact downloads the platform matching artifact specified in the manifest
 func (ds *PackageService) DownloadArtifact(tracer trace.Tracer, packageName string, version string) (string, error) {
 	trace := tracer.BeginSection("download artifact")
-	manifest, err := readManifestFromCache(ds.manifestCache, packageName, version)
+	manifest, err := ds.packageArchive.ReadManifestFromCache()
 	if err != nil {
 		trace.AppendInfof("error when reading the manifest from cache %v", err).End()
 		manifest, _, err = downloadManifest(ds, packageName, version)
@@ -170,56 +170,37 @@ func (ds *PackageService) ReportResult(tracer trace.Tracer, result packageservic
 	return nil
 }
 
-// utils
-func readManifestFromCache(cache packageservice.ManifestCache, packageName string, version string) (*birdwatcher.Manifest, error) {
-	data, err := cache.ReadManifest(packageName, version)
-	if err != nil {
-		return nil, err
-	}
-
-	return parseManifest(&data)
-}
-
+//utils
 func downloadManifest(ds *PackageService, packageName string, version string) (*birdwatcher.Manifest, bool, error) {
 	isSameAsCache := false
 	if ds == nil {
 		return nil, isSameAsCache, fmt.Errorf("PackageService doesn't exist")
 	}
-	manifest, err := ds.archive.DownloadArchiveInfo(packageName, version)
+	manifest, err := ds.packageArchive.DownloadArchiveInfo(packageName, version)
 	if err != nil {
 		return nil, isSameAsCache, fmt.Errorf("failed to download manifest - %v", err)
 	}
 
 	byteManifest := []byte(manifest)
 
-	parsedManifest, err := parseManifest(&byteManifest)
+	parsedManifest, err := archive.ParseManifest(&byteManifest)
 	if err != nil {
 		return nil, isSameAsCache, err
 	}
+	ds.packageArchive.SetResource(parsedManifest)
 
-	cachedManifest, err := readManifestFromCache(ds.manifestCache, ds.archive.GetResourceArn(parsedManifest), parsedManifest.Version)
+	cachedManifest, err := ds.packageArchive.ReadManifestFromCache()
 
 	if reflect.DeepEqual(parsedManifest, cachedManifest) {
 		isSameAsCache = true
 	}
 
-	err = ds.manifestCache.WriteManifest(ds.archive.GetResourceArn(parsedManifest), parsedManifest.Version, byteManifest)
+	err = ds.packageArchive.WriteManifestToCache(byteManifest)
 	if err != nil {
 		return nil, isSameAsCache, fmt.Errorf("failed to write manifest to file: %v", err)
 	}
 
 	return parsedManifest, isSameAsCache, nil
-}
-
-func parseManifest(data *[]byte) (*birdwatcher.Manifest, error) {
-	var manifest birdwatcher.Manifest
-
-	// TODO: additional validation
-	if err := json.NewDecoder(bytes.NewReader(*data)).Decode(&manifest); err != nil {
-		return nil, fmt.Errorf("failed to decode manifest: %v", err)
-	}
-
-	return &manifest, nil
 }
 
 func (ds *PackageService) findFileFromManifest(tracer trace.Tracer, manifest *birdwatcher.Manifest) (*archive.File, error) {
@@ -250,10 +231,10 @@ func (ds *PackageService) findFileFromManifest(tracer trace.Tracer, manifest *bi
 }
 
 func downloadFile(ds *PackageService, tracer trace.Tracer, file *archive.File, packagename string, version string) (string, error) {
-	if ds == nil || ds.archive == nil || file == nil {
+	if ds == nil || ds.packageArchive == nil || file == nil {
 		return "", fmt.Errorf("Either package service does not exist or does not have archive information or the file information does not exist")
 	}
-	sourceUrl, err := ds.archive.GetFileDownloadLocation(file, packagename, version)
+	sourceUrl, err := ds.packageArchive.GetFileDownloadLocation(file, packagename, version)
 	if err != nil {
 		return "", err
 	}

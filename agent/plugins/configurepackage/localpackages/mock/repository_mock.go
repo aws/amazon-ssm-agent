@@ -97,6 +97,16 @@ func (repoMock *MockedRepository) WriteManifest(packageName string, packageVersi
 	return args.Error(0)
 }
 
+func (repoMock *MockedRepository) ReadManifestHash(packageName string, documentVersion string) ([]byte, error) {
+	args := repoMock.Called(packageName, documentVersion)
+	return args.Get(0).([]byte), args.Error(1)
+}
+
+func (repoMock *MockedRepository) WriteManifestHash(packageName string, documentVersion string, content []byte) error {
+	args := repoMock.Called(packageName, documentVersion, content)
+	return args.Error(0)
+}
+
 func (repoMock *MockedRepository) LoadTraces(tracer trace.Tracer, packageArn string) error {
 	args := repoMock.Called(tracer, packageArn)
 	return args.Error(0)

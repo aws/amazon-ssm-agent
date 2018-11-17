@@ -26,9 +26,12 @@ import (
 )
 
 type PackageArchive struct {
-	facadeClient facade.BirdwatcherFacade
-	manifest     string
-	archiveType  string
+	facadeClient    facade.BirdwatcherFacade
+	manifest        string
+	archiveType     string
+	cache           packageservice.ManifestCache
+	manifestVersion string
+	packageArn      string
 }
 
 // New is a constructor for PackageArchive struct
@@ -46,6 +49,23 @@ func (ba *PackageArchive) Name() string {
 	return ba.archiveType
 }
 
+// SetManifestCache sets the manifest cache
+func (ba *PackageArchive) SetManifestCache(manifestCache packageservice.ManifestCache) {
+	ba.cache = manifestCache
+}
+
+// SetResource sets the package name and the manifest version
+func (ba *PackageArchive) SetResource(manifest *birdwatcher.Manifest) {
+	ba.packageArn = manifest.PackageArn
+	ba.manifestVersion = manifest.Version
+}
+
+// GetResourceArn returns the packageArn that is found i nthe manifest file
+func (ba *PackageArchive) GetResourceArn() string {
+	return ba.packageArn
+}
+
+// GetResourceVersion returns the version
 func (ba *PackageArchive) GetResourceVersion(packageName string, packageVersion string) (name string, version string) {
 	version = packageVersion
 	if packageservice.IsLatest(packageVersion) {
@@ -53,6 +73,14 @@ func (ba *PackageArchive) GetResourceVersion(packageName string, packageVersion 
 	}
 
 	return packageName, version
+}
+
+// GetFileDownloadLocation obtains the location of the file in the archive
+func (ba *PackageArchive) GetFileDownloadLocation(file *archive.File, packageName string, version string) (string, error) {
+	if file == nil {
+		return "", fmt.Errorf("file is empty")
+	}
+	return file.Info.DownloadLocation, nil
 }
 
 // DownloadArtifactInfo downloads the manifest for the original birwatcher service
@@ -74,15 +102,18 @@ func (ba *PackageArchive) DownloadArchiveInfo(packageName string, version string
 	return ba.manifest, nil
 }
 
-// GetFileDownloadLocation obtains the location of the file in the archive
-func (ba *PackageArchive) GetFileDownloadLocation(file *archive.File, packageName string, version string) (string, error) {
-	if file == nil {
-		return "", fmt.Errorf("file is empty")
+// ReadManifestFromCache to read the manifest from cache
+// Birdwatcher packages store the manifest with the package version
+func (ba *PackageArchive) ReadManifestFromCache() (*birdwatcher.Manifest, error) {
+	data, err := ba.cache.ReadManifest(ba.packageArn, ba.manifestVersion)
+	if err != nil {
+		return nil, err
 	}
-	return file.Info.DownloadLocation, nil
+
+	return archive.ParseManifest(&data)
 }
 
-// GetResourceArn returns the packageArn that is found i nthe manifest file
-func (ba *PackageArchive) GetResourceArn(manifest *birdwatcher.Manifest) string {
-	return manifest.PackageArn
+// WriteManifestToCache stores the manifest in cache
+func (ba *PackageArchive) WriteManifestToCache(manifest []byte) error {
+	return ba.cache.WriteManifest(ba.packageArn, ba.manifestVersion, manifest)
 }

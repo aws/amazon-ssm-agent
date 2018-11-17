@@ -108,6 +108,29 @@ func repoInstallMock_ReadWriteManifest(pluginInformation *ConfigurePackagePlugin
 	return &mockRepo
 }
 
+func repoInstallMock_ReadWriteManifestHash(pluginInformation *ConfigurePackagePluginInput, installerMock installer.Installer, version string, installedDocVersion string, newpkgDocVersion string, action string) *repoMock.MockedRepository {
+	mockRepo := repoMock.MockedRepository{}
+	fakeHash_returned := "fwiu49283410rnjkfnksmncsogu0dh7834b1jbnmslg87bjdeb8g7e"
+	mockRepo.On("ReadManifestHash", pluginInformation.Name, installedDocVersion).Return([]byte(fakeHash_returned), nil)
+	mockRepo.On("WriteManifestHash", pluginInformation.Name, newpkgDocVersion, mock.Anything).Return(nil)
+	mockRepo.On("ReadManifest", pluginInformation.Name, newpkgDocVersion).Return([]byte(""), nil)
+	mockRepo.On("WriteManifest", pluginInformation.Name, newpkgDocVersion, mock.Anything).Return(nil)
+	mockRepo.On("GetInstalledVersion", mock.Anything, pluginInformation.Name).Return("")
+	mockRepo.On("GetInstallState", mock.Anything, pluginInformation.Name).Return(localpackages.None, "")
+	mockRepo.On("UnlockPackage", mock.Anything, mock.Anything).Return().Once()
+	mockRepo.On("LoadTraces", mock.Anything, mock.Anything).Return(nil)
+
+	if action == InstallAction {
+		mockRepo.On("LockPackage", mock.Anything, pluginInformation.Name, "Install").Return(nil).Once()
+		mockRepo.On("ValidatePackage", mock.Anything, pluginInformation.Name, version).Return(nil)
+		mockRepo.On("GetInstaller", mock.Anything, mock.Anything, pluginInformation.Name, version).Return(installerMock)
+		mockRepo.On("SetInstallState", mock.Anything, pluginInformation.Name, version, mock.Anything).Return(nil)
+	} else {
+		mockRepo.On("LockPackage", mock.Anything, pluginInformation.Name, "Uninstall").Return(nil).Once()
+
+	}
+	return &mockRepo
+}
 func pluginOutputWithStatus(status contracts.ResultStatus) contracts.PluginOutputter {
 	tracer := trace.NewTracer(log.NewMockLog())
 	tracer.BeginSection("test segment root")
