@@ -1,6 +1,6 @@
 Latest
 ===============
-- Added mechanism to download packages from document service
+- Enabled AWS Systems Manager Distributor that lets you securely distribute and install software packages.
 
 2.3.235.0
 ===============
