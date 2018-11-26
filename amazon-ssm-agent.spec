@@ -22,11 +22,6 @@ Requires(preun): systemd-units
 Requires(postun): systemd-units
 %endif
 
-%if 0%{?amzn}
-%global go_platform linux
-%global go_arch amd64
-%endif
-
 %description
 This package provides Amazon SSM Agent for managing EC2 Instances using SSM APIs
 
@@ -38,8 +33,6 @@ sed -i -e 's#const[ \s]*Version.*#const Version = "%{version}"#g' agent/version/
 %build
 
 export GOPATH=`pwd`/vendor:`pwd`
-export GOOS=%{go_platform}
-export GOARCH=%{go_arch}
 
 ln -s `pwd` vendor/src/github.com/aws/amazon-ssm-agent
 go build -ldflags "-s -w" -o bin/amazon-ssm-agent -v agent/agent.go agent/agent_unix.go agent/agent_parser.go
