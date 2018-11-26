@@ -22,8 +22,11 @@ import (
 )
 
 const (
-	HelpFlag   = "help"
-	SsmCliName = "ssm-cli"
+	HelpFlag                  = "help"
+	SsmCliName                = "ssm-cli"
+	CLI_PARSE_FAIL_EXITCODE   = 2
+	CLI_COMMAND_FAIL_EXITCODE = 255
+	CLI_SUCCESS_EXITCODE      = 0
 )
 
 const (

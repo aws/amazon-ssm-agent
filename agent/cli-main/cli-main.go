@@ -22,5 +22,6 @@ import (
 )
 
 func main() {
-	cli.RunCommand(os.Args, os.Stdout)
+	exitCode := cli.RunCommand(os.Args, os.Stdout)
+	os.Exit(exitCode)
 }

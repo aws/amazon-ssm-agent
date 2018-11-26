@@ -25,18 +25,22 @@ import (
 )
 
 // TODO:MF: make errors more like ssm-cli: error: <arg type>: <error>?
-// RunCommand parses and executes a single command line
-func RunCommand(args []string, out io.Writer) {
+// RunCommand parses and executes a single command line, please refer the aws cli exit code
+// https://docs.aws.amazon.com/cli/latest/topic/return-codes.html
+func RunCommand(args []string, out io.Writer) (exitCode int) {
+
 	uuid.SwitchFormat(uuid.CleanHyphen)
 	if len(args) < 2 {
 		displayUsage(out)
-		return
+		// Customer doesn't provide enough arguments
+		return cliutil.CLI_PARSE_FAIL_EXITCODE
 	}
 	err, _, command, subcommands, parameters := parseCommand(args)
 	if err != nil {
 		displayUsage(out)
 		fmt.Fprintln(out, err.Error())
-		return
+		// Exit with 2 if parseCommand error occurs
+		return cliutil.CLI_PARSE_FAIL_EXITCODE
 	}
 	if cmd, exists := cliutil.CliCommands[command]; exists {
 		if cliutil.IsHelp(subcommands, parameters) {
@@ -46,6 +50,8 @@ func RunCommand(args []string, out io.Writer) {
 			if cmdErr != nil {
 				displayUsage(out)
 				fmt.Fprintln(out, cmdErr.Error())
+				// Exit 255 if command failed
+				return cliutil.CLI_COMMAND_FAIL_EXITCODE
 			} else {
 				fmt.Fprintln(out, result)
 			}
@@ -56,7 +62,10 @@ func RunCommand(args []string, out io.Writer) {
 		displayUsage(out)
 		fmt.Fprintf(out, "\nInvalid command %v.  The following commands are supported:\n\n", command)
 		displayValidCommands(out)
+		// Customer input command is invalid
+		return cliutil.CLI_PARSE_FAIL_EXITCODE
 	}
+	return cliutil.CLI_SUCCESS_EXITCODE
 }
 
 // parseCommand turns the command line arguments into a command name and a map of flag names and values
