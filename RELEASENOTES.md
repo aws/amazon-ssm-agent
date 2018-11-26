@@ -1,6 +1,7 @@
 Latest
 ===============
 - Enabled AWS Systems Manager Distributor that lets you securely distribute and install software packages.
+- Add support for the arm64 architecture on Amazon Linux 2, Ubuntu 16.04/18.04, and RHEL 7.6 to support EC2 A1 instances.
 
 2.3.235.0
 ===============
