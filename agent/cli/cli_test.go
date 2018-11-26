@@ -1,4 +1,4 @@
-// Copyright 2016 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+// Copyright 2018 Amazon.com, Inc. or its affiliates. All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License"). You may not
 // use this file except in compliance with the License. A copy of the
@@ -18,12 +18,53 @@ import (
 	"bytes"
 	"testing"
 
+	"github.com/aws/amazon-ssm-agent/agent/cli/clicommand"
+	"github.com/aws/amazon-ssm-agent/agent/cli/cliutil"
+	CliCommandMock "github.com/aws/amazon-ssm-agent/agent/cli/cliutil/mocks"
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/mock"
 )
 
 func TestCliUsage(t *testing.T) {
 	var buffer bytes.Buffer
 	args := []string{"ssm-cli"}
-	RunCommand(args, &buffer)
+	exitCode := RunCommand(args, &buffer)
 	assert.Contains(t, buffer.String(), "usage")
+	assert.Equal(t, cliutil.CLI_PARSE_FAIL_EXITCODE, exitCode, "Command without enough arguments should return exit code 2")
+}
+
+func TestCliInvalidCommand(t *testing.T) {
+	var buffer bytes.Buffer
+	args := []string{"ssm-cli", "testCommand"}
+	exitCode := RunCommand(args, &buffer)
+	assert.Equal(t, cliutil.CLI_PARSE_FAIL_EXITCODE, exitCode, "Invalid command should return exit code 2")
+
+}
+
+func TestCliHelp(t *testing.T) {
+	var buffer bytes.Buffer
+	args := []string{"ssm-cli", "help"}
+	exitCode := RunCommand(args, &buffer)
+	assert.Equal(t, cliutil.CLI_SUCCESS_EXITCODE, exitCode, "help command should return exit code 0")
+}
+
+func TestCliCmdExecError(t *testing.T) {
+	var buffer bytes.Buffer
+	cliutil.Register(&clicommand.GetOfflineCommand{})
+	args := []string{"ssm-cli", "get-offline-command-invocation", "--command-id", "d24d687d", "--details", "true"}
+	exitCode := RunCommand(args, &buffer)
+	assert.Equal(t, cliutil.CLI_COMMAND_FAIL_EXITCODE, exitCode, "command execution error return exit code 255")
+}
+
+func TestCliCmdExecSuccess(t *testing.T) {
+	var buffer bytes.Buffer
+	cliCmdMock := &CliCommandMock.CliCommand{}
+	cliCmdMock.On("Name").Return("cli-command-mock").Once()
+	cliCmdMock.On("Execute", mock.AnythingOfType("[]string"), mock.AnythingOfType("map[string][]string")).Return(nil, "success").Once()
+	cliutil.Register(cliCmdMock)
+
+	args := []string{"ssm-cli", "cli-command-mock", "--content", "fakefile.json"}
+	exitCode := RunCommand(args, &buffer)
+	assert.Equal(t, cliutil.CLI_SUCCESS_EXITCODE, exitCode, "command execution success return exit code 0")
+	cliCmdMock.AssertExpectations(t)
 }
