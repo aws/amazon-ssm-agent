@@ -26,7 +26,11 @@ type ManifestCache interface {
 	WriteManifestHash(packageArn string, documentVersion string, content []byte) error
 }
 
-// ManifestCacheMem stores cache in memory
+// NOTE: The ManifestCacheMem struct is used in unit tests. It is not the code that birdwatcherservice uses.
+// birdwatcherservice gets the ManifestCache which is actually part of the localpackages.Repository interface
+// and uses the methods from there.
+
+// ManifestCacheMem stores cache in memory and is used for unit testing ManifestCache
 type ManifestCacheMem struct {
 	cache map[string][]byte
 }
