@@ -48,6 +48,7 @@ func New(facadeClientSession facade.BirdwatcherFacade) archive.IPackageArchive {
 	return &PackageArchive{
 		facadeClient: facadeClientSession,
 		archiveType:  archive.PackageArchiveDocument,
+		docVersion:   "",
 		timeUnit:     1000, //Adding here to be able to change for testing, 1000 millisecond to make a second
 	}
 }
@@ -88,7 +89,7 @@ func (da *PackageArchive) SetManifestCache(manifestCache packageservice.Manifest
 	da.manifestCache = manifestCache
 }
 
-//getters
+// getters
 // GetResourceVersion makes a call to birdwatcher API to figure the right version of the resource that needs to be installed
 func (da *PackageArchive) GetResourceVersion(packageName string, packageVersion string) (name string, version string) {
 	// Return the packageVersion as "" if empty and return version if specified.
@@ -111,7 +112,7 @@ func (da *PackageArchive) GetFileDownloadLocation(file *archive.File, packageNam
 	}
 	fileName := file.Name
 	if da.attachments == nil {
-		if _, err := da.getDocument(packageName, version); err != nil {
+		if _, err := da.getDocument(packageName, da.docVersion); err != nil {
 			return "", err
 		}
 	}
@@ -128,7 +129,6 @@ func (da *PackageArchive) GetFileDownloadLocation(file *archive.File, packageNam
 	}
 
 	return "", fmt.Errorf("Install attachments for package does not exist")
-
 }
 
 // DownloadArtifactInfo downloads the document using GetDocument and eventually gets the manifest from that and returns it
@@ -176,20 +176,20 @@ func (da *PackageArchive) DownloadArchiveInfo(packageName string, version string
 	hashData, err := da.manifestCache.ReadManifestHash(packageName, da.docVersion)
 	if err != nil {
 		// if manifest hash does not exist, getDocument to download the manifest
-		return da.getDocument(packageName, *da.documentDesc.VersionName)
+		return da.getDocument(packageName, da.docVersion)
 	}
 	// if no error, proceed to describe document
 	cachedDocumentHash = string(hashData)
 
 	if cachedDocumentHash != *da.documentDesc.Hash {
 		// If the hash value of the cached hash and the document hash isn't the same, then getDocument to download the content
-		return da.getDocument(packageName, *da.documentDesc.VersionName)
+		return da.getDocument(packageName, da.docVersion)
 	} else {
 		// If the hash matches, read the cached manifest. If there is an error reading the manifest, because
 		// it does not exist or is corrupted, getDocument to download the manifest
 		manifestData, err := da.manifestCache.ReadManifest(*da.documentDesc.Name, *da.documentDesc.DocumentVersion)
 		if err != nil || string(manifestData) == "" {
-			return da.getDocument(packageName, *da.documentDesc.VersionName)
+			return da.getDocument(packageName, da.docVersion)
 		}
 
 		// if hash of stored anifest is the same
@@ -222,15 +222,17 @@ func (da *PackageArchive) generateAndSaveManifestHash(name, manifest, documentVe
 	return da.manifestCache.WriteManifestHash(name, documentVersion, <-hashChannel)
 }
 
-func (da *PackageArchive) getDocument(packageName, version string) (manifest string, err error) {
-	versionPtr := &version
-	if version == "" {
-		versionPtr = nil
+// getDocument takes the packageName and the document version to Get a document.
+// If document version is empty, then the gets the default version
+func (da *PackageArchive) getDocument(packageName, documentVersion string) (manifest string, err error) {
+	docVersionPtr := &documentVersion
+	if documentVersion == "" {
+		docVersionPtr = nil
 	}
 	getDocResponse, err := da.facadeClient.GetDocument(
 		&ssm.GetDocumentInput{
-			Name:        &packageName,
-			VersionName: versionPtr,
+			Name:            &packageName,
+			DocumentVersion: docVersionPtr,
 		},
 	)
 	if err != nil {
