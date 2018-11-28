@@ -52,13 +52,13 @@ func (_m *IDataChannel) Close(_a0 log.T) error {
 	return r0
 }
 
-// DataChannelIncomingMessageHandler provides a mock function with given fields: _a0, streamMessageHandler, rawMessage, cancelFlag
-func (_m *IDataChannel) DataChannelIncomingMessageHandler(_a0 log.T, streamMessageHandler datachannel.StreamMessageHandler, rawMessage []byte, cancelFlag task.CancelFlag) error {
-	ret := _m.Called(_a0, streamMessageHandler, rawMessage, cancelFlag)
+// DataChannelIncomingMessageHandler provides a mock function with given fields: _a0, rawMessage
+func (_m *IDataChannel) DataChannelIncomingMessageHandler(_a0 log.T, rawMessage []byte) error {
+	ret := _m.Called(_a0, rawMessage)
 
 	var r0 error
-	if rf, ok := ret.Get(0).(func(log.T, datachannel.StreamMessageHandler, []byte, task.CancelFlag) error); ok {
-		r0 = rf(_a0, streamMessageHandler, rawMessage, cancelFlag)
+	if rf, ok := ret.Get(0).(func(log.T, []byte) error); ok {
+		r0 = rf(_a0, rawMessage)
 	} else {
 		r0 = ret.Error(0)
 	}
@@ -66,9 +66,9 @@ func (_m *IDataChannel) DataChannelIncomingMessageHandler(_a0 log.T, streamMessa
 	return r0
 }
 
-// Initialize provides a mock function with given fields: _a0, mgsService, sessionId, clientId, instanceId, role
-func (_m *IDataChannel) Initialize(_a0 context.T, mgsService service.Service, sessionId string, clientId string, instanceId string, role string) {
-	_m.Called(_a0, mgsService, sessionId, clientId, instanceId, role)
+// Initialize provides a mock function with given fields: _a0, mgsService, sessionId, clientId, instanceId, role, cancelFlag, inputStreamMessageHandler
+func (_m *IDataChannel) Initialize(_a0 context.T, mgsService service.Service, sessionId string, clientId string, instanceId string, role string, cancelFlag task.CancelFlag, inputStreamMessageHandler datachannel.InputStreamMessageHandler) {
+	_m.Called(_a0, mgsService, sessionId, clientId, instanceId, role, cancelFlag, inputStreamMessageHandler)
 }
 
 // Open provides a mock function with given fields: _a0

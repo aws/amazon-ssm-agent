@@ -46,7 +46,7 @@ const (
 )
 
 type IDataChannel interface {
-	Initialize(context context.T, mgsService service.Service, sessionId string, clientId string, instanceId string, role string)
+	Initialize(context context.T, mgsService service.Service, sessionId string, clientId string, instanceId string, role string, cancelFlag task.CancelFlag, inputStreamMessageHandler InputStreamMessageHandler)
 	SetWebSocket(context context.T, mgsService service.Service, sessionId string, clientId string, onMessageHandler func(input []byte)) error
 	Open(log log.T) error
 	Close(log log.T) error
@@ -61,12 +61,13 @@ type IDataChannel interface {
 	RemoveDataFromOutgoingMessageBuffer(streamMessageElement *list.Element)
 	AddDataToIncomingMessageBuffer(streamMessage StreamingMessage)
 	RemoveDataFromIncomingMessageBuffer(sequenceNumber int64)
-	DataChannelIncomingMessageHandler(log log.T, streamMessageHandler StreamMessageHandler, rawMessage []byte, cancelFlag task.CancelFlag) error
+	DataChannelIncomingMessageHandler(log log.T, rawMessage []byte) error
 }
 
 // DataChannel used for session communication between the message gateway service and the agent.
 type DataChannel struct {
 	wsChannel  communicator.IWebSocketChannel
+	context    context.T
 	Service    service.Service
 	ChannelId  string
 	ClientId   string
@@ -89,6 +90,10 @@ type DataChannel struct {
 	RoundTripTimeVariation float64
 	//timeout used for resending unacknowledged message
 	RetransmissionTimeout time.Duration
+	//cancelFlag is used for passing cancel signal to plugin in when channel_closed message is received over data channel
+	cancelFlag task.CancelFlag
+	//inputStreamMessageHandler is responsible for handling plugin specific input_stream_data message
+	inputStreamMessageHandler func(log log.T, streamDataMessage mgsContracts.AgentMessage) error
 }
 
 type ListMessageBuffer struct {
@@ -109,11 +114,14 @@ type StreamingMessage struct {
 	LastSentTime   time.Time
 }
 
+type InputStreamMessageHandler func(log log.T, streamDataMessage mgsContracts.AgentMessage) error
+
 // NewDataChannel constructs datachannel objects.
 func NewDataChannel(context context.T,
 	channelId string,
 	clientId string,
-	onMessageHandler func(input []byte)) (*DataChannel, error) {
+	inputStreamMessageHandler InputStreamMessageHandler,
+	cancelFlag task.CancelFlag) (*DataChannel, error) {
 
 	log := context.Log()
 	appConfig := context.AppConfig()
@@ -144,8 +152,22 @@ func NewDataChannel(context context.T,
 	}
 
 	dataChannel := &DataChannel{}
-	dataChannel.Initialize(context, mgsService, channelId, clientId, instanceID, mgsConfig.RolePublishSubscribe)
-	if err := dataChannel.SetWebSocket(context, mgsService, channelId, clientId, onMessageHandler); err != nil {
+	dataChannel.Initialize(
+		context,
+		mgsService,
+		channelId,
+		clientId,
+		instanceID,
+		mgsConfig.RolePublishSubscribe,
+		cancelFlag,
+		inputStreamMessageHandler)
+
+	streamMessageHandler := func(input []byte) {
+		if err := dataChannel.DataChannelIncomingMessageHandler(log, input); err != nil {
+			log.Errorf("Invalid message %s\n", err)
+		}
+	}
+	if err := dataChannel.SetWebSocket(context, mgsService, channelId, clientId, streamMessageHandler); err != nil {
 		return nil, fmt.Errorf("failed to create websocket for datachannel with error: %s", err)
 	}
 	if err := dataChannel.Open(log); err != nil {
@@ -161,8 +183,11 @@ func (dataChannel *DataChannel) Initialize(context context.T,
 	sessionId string,
 	clientId string,
 	instanceId string,
-	role string) {
+	role string,
+	cancelFlag task.CancelFlag,
+	inputStreamMessageHandler InputStreamMessageHandler) {
 
+	dataChannel.context = context
 	dataChannel.Service = mgsService
 	dataChannel.ChannelId = sessionId
 	dataChannel.ClientId = clientId
@@ -185,6 +210,8 @@ func (dataChannel *DataChannel) Initialize(context context.T,
 	dataChannel.RoundTripTimeVariation = mgsConfig.DefaultRoundTripTimeVariation
 	dataChannel.RetransmissionTimeout = mgsConfig.DefaultTransmissionTimeout
 	dataChannel.wsChannel = &communicator.WebSocketChannel{}
+	dataChannel.cancelFlag = cancelFlag
+	dataChannel.inputStreamMessageHandler = inputStreamMessageHandler
 }
 
 // SetWebSocket populates webchannel object.
@@ -502,14 +529,9 @@ func (dataChannel *DataChannel) RemoveDataFromIncomingMessageBuffer(sequenceNumb
 	dataChannel.IncomingMessageBuffer.Mutex.Unlock()
 }
 
-type StreamMessageHandler func(log log.T, streamDataMessage mgsContracts.AgentMessage) error
-
 // DataChannelIncomingMessageHandler deserialize incoming message and
-// processes that data with respective ProcessStreamMessagePayloadHandler that is passed in.
-func (dataChannel *DataChannel) DataChannelIncomingMessageHandler(log log.T,
-	streamMessageHandler StreamMessageHandler,
-	rawMessage []byte,
-	cancelFlag task.CancelFlag) error {
+// processes that data based on MessageType.
+func (dataChannel *DataChannel) DataChannelIncomingMessageHandler(log log.T, rawMessage []byte) error {
 
 	streamDataMessage := &mgsContracts.AgentMessage{}
 	if err := streamDataMessage.Deserialize(log, rawMessage); err != nil {
@@ -524,16 +546,16 @@ func (dataChannel *DataChannel) DataChannelIncomingMessageHandler(log log.T,
 
 	switch streamDataMessage.MessageType {
 	case mgsContracts.InputStreamDataMessage:
-		return dataChannel.handleStreamDataMessage(log, streamMessageHandler, *streamDataMessage, rawMessage)
+		return dataChannel.handleStreamDataMessage(log, *streamDataMessage, rawMessage)
 	case mgsContracts.AcknowledgeMessage:
 		return dataChannel.handleAcknowledgeMessage(log, *streamDataMessage)
 	case mgsContracts.ChannelClosedMessage:
-		return dataChannel.handleChannelClosedMessage(log, *streamDataMessage, cancelFlag)
+		return dataChannel.handleChannelClosedMessage(log, *streamDataMessage)
 	case mgsContracts.PausePublicationMessage:
-		dataChannel.handlePausePublicationMessage(log, *streamDataMessage, cancelFlag)
+		dataChannel.handlePausePublicationMessage(log, *streamDataMessage)
 		return nil
 	case mgsContracts.StartPublicationMessage:
-		dataChannel.handleStartPublicationMessage(log, *streamDataMessage, cancelFlag)
+		dataChannel.handleStartPublicationMessage(log, *streamDataMessage)
 		return nil
 	default:
 		log.Warn("Invalid message type received: %s", streamDataMessage.MessageType)
@@ -570,7 +592,6 @@ func (dataChannel *DataChannel) calculateRetransmissionTimeout(log log.T, stream
 
 // handleStreamDataMessage handles incoming stream data messages by processing the payload and updating expectedSequenceNumber.
 func (dataChannel *DataChannel) handleStreamDataMessage(log log.T,
-	streamMessageHandler StreamMessageHandler,
 	streamDataMessage mgsContracts.AgentMessage,
 	rawMessage []byte) (err error) {
 
@@ -583,13 +604,13 @@ func (dataChannel *DataChannel) handleStreamDataMessage(log log.T,
 		}
 
 		log.Tracef("Process new incoming stream data message. Sequence Number: %d", streamDataMessage.SequenceNumber)
-		if err = streamMessageHandler(log, streamDataMessage); err != nil {
+		if err = dataChannel.inputStreamMessageHandler(log, streamDataMessage); err != nil {
 			log.Errorf("Unable to process stream data payload, err: %v.", err)
 			return err
 		}
 
 		dataChannel.ExpectedSequenceNumber = dataChannel.ExpectedSequenceNumber + 1
-		return dataChannel.processIncomingMessageBufferItems(log, streamMessageHandler)
+		return dataChannel.processIncomingMessageBufferItems(log)
 
 		// If incoming message sequence number is greater than expected sequence number and IncomingMessageBuffer has capacity,
 		// add message to IncomingMessageBuffer and send acknowledgement
@@ -612,6 +633,9 @@ func (dataChannel *DataChannel) handleStreamDataMessage(log log.T,
 			log.Debugf("Add stream data to IncomingMessageBuffer. Sequence Number: %d", streamDataMessage.SequenceNumber)
 			dataChannel.AddDataToIncomingMessageBuffer(streamingMessage)
 		}
+	} else {
+		log.Tracef("Discarding already processed message. Received Sequence Number: %s. Expected Sequence Number: %s",
+			streamDataMessage.SequenceNumber, dataChannel.ExpectedSequenceNumber)
 	}
 	return nil
 }
@@ -630,7 +654,7 @@ func (dataChannel *DataChannel) handleAcknowledgeMessage(log log.T, streamDataMe
 }
 
 // handleChannelClosedMessage deserialize channel_closed message content and terminate the session.
-func (dataChannel *DataChannel) handleChannelClosedMessage(log log.T, streamDataMessage mgsContracts.AgentMessage, cancelFlag task.CancelFlag) (err error) {
+func (dataChannel *DataChannel) handleChannelClosedMessage(log log.T, streamDataMessage mgsContracts.AgentMessage) (err error) {
 	channelClosedMessage := &mgsContracts.ChannelClosed{}
 	if err = channelClosedMessage.Deserialize(log, streamDataMessage); err != nil {
 		log.Errorf("Cannot deserialize payload to ChannelClosed message: %s, err: %v.", string(streamDataMessage.Payload), err)
@@ -638,19 +662,19 @@ func (dataChannel *DataChannel) handleChannelClosedMessage(log log.T, streamData
 	}
 
 	log.Debugf("Processing terminate session request: messageId %s, sessionId %s", channelClosedMessage.MessageId, channelClosedMessage.SessionId)
-	cancelFlag.Set(task.Canceled)
+	dataChannel.cancelFlag.Set(task.Canceled)
 
 	return nil
 }
 
 // handlePausePublicationMessage sets pause status of datachannel to true.
-func (dataChannel *DataChannel) handlePausePublicationMessage(log log.T, streamDataMessage mgsContracts.AgentMessage, cancelFlag task.CancelFlag) {
+func (dataChannel *DataChannel) handlePausePublicationMessage(log log.T, streamDataMessage mgsContracts.AgentMessage) {
 	dataChannel.Pause = true
 	log.Debugf("Processed %s message. Datachannel pause status set to %s", streamDataMessage.MessageType, dataChannel.Pause)
 }
 
 // handleStartPublicationMessage sets pause status of datachannel to false.
-func (dataChannel *DataChannel) handleStartPublicationMessage(log log.T, streamDataMessage mgsContracts.AgentMessage, cancelFlag task.CancelFlag) {
+func (dataChannel *DataChannel) handleStartPublicationMessage(log log.T, streamDataMessage mgsContracts.AgentMessage) {
 	dataChannel.Pause = false
 	log.Debugf("Processed %s message. Datachannel pause status set to %s", streamDataMessage.MessageType, dataChannel.Pause)
 }
@@ -658,7 +682,7 @@ func (dataChannel *DataChannel) handleStartPublicationMessage(log log.T, streamD
 // processIncomingMessageBufferItems checks if new expected sequence stream data is present in IncomingMessageBuffer.
 // If so process it and increment expected sequence number.
 // Repeat until expected sequence stream data is not found in IncomingMessageBuffer.
-func (dataChannel *DataChannel) processIncomingMessageBufferItems(log log.T, streamMessageHandler StreamMessageHandler) (err error) {
+func (dataChannel *DataChannel) processIncomingMessageBufferItems(log log.T) (err error) {
 	for {
 		bufferedStreamMessage := dataChannel.IncomingMessageBuffer.Messages[dataChannel.ExpectedSequenceNumber]
 		if bufferedStreamMessage.Content != nil {
@@ -670,7 +694,7 @@ func (dataChannel *DataChannel) processIncomingMessageBufferItems(log log.T, str
 				log.Errorf("Cannot deserialize raw message: %d, err: %v.", bufferedStreamMessage.SequenceNumber, err)
 				return err
 			}
-			if err = streamMessageHandler(log, *streamDataMessage); err != nil {
+			if err = dataChannel.inputStreamMessageHandler(log, *streamDataMessage); err != nil {
 				log.Errorf("Unable to process stream data payload, err: %v.", err)
 				return err
 			}
