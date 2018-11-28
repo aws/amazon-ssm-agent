@@ -31,10 +31,14 @@ import (
 
 // IsPluginSupportedForCurrentPlatform returns true if current platform supports the plugin with given name.
 func IsPluginSupportedForCurrentPlatform(log log.T, pluginName string) (isKnown bool, isSupported bool, message string) {
-	_, known := allPlugins[pluginName]
 	platformName, _ := platform.PlatformName(log)
 	platformVersion, _ := platform.PlatformVersion(log)
 
+	if _, known := allSessionPlugins[pluginName]; known == true {
+		return known, isSupportedSessionPlugin(log, pluginName), fmt.Sprintf("%s v%s", platformName, platformVersion)
+	}
+
+	_, known := allPlugins[pluginName]
 	if isPlatformNanoServer, err := platform.IsPlatformNanoServer(log); err == nil && isPlatformNanoServer {
 		//if the current OS is Nano server, SSM Agent doesn't support the following plugins.
 		if pluginName == appconfig.PluginNameDomainJoin ||
@@ -45,36 +49,35 @@ func IsPluginSupportedForCurrentPlatform(log log.T, pluginName string) (isKnown 
 	return known, true, fmt.Sprintf("%s v%s", platformName, platformVersion)
 }
 
-// isSupportedSessionPlugin returns isKnown as true if given session plugin exists,
-func isSupportedSessionPlugin(log log.T, pluginName string) (isKnown bool, isSupported bool) {
-	_, known := allSessionPlugins[pluginName]
+// isSupportedSessionPlugin returns  true if given session plugin is supported for current platform, false otherwise
+func isSupportedSessionPlugin(log log.T, pluginName string) (isSupported bool) {
 	platformVersion, _ := platform.PlatformVersion(log)
 
 	osVersionSplit := strings.Split(platformVersion, ".")
 	if osVersionSplit == nil || len(osVersionSplit) < 2 {
 		log.Error("Error occurred while parsing OS version")
-		return known, false
+		return false
 	}
 
 	// check if the OS version is 6.1 or higher
 	// https://docs.microsoft.com/en-us/windows/desktop/SysInfo/operating-system-version
 	osMajorVersion, err := strconv.Atoi(osVersionSplit[0])
 	if err != nil {
-		return known, false
+		return false
 	}
 
 	osMinorVersion, err := strconv.Atoi(osVersionSplit[1])
 	if err != nil {
-		return known, false
+		return false
 	}
 
 	if osMajorVersion < 6 {
-		return known, false
+		return false
 	}
 
 	if osMajorVersion == 6 && osMinorVersion < 1 {
-		return known, false
+		return false
 	}
 
-	return known, true
+	return true
 }

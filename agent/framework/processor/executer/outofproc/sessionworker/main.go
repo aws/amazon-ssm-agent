@@ -42,7 +42,7 @@ var sessionPluginRunner = func(
 	runpluginutil.RunPlugins(context,
 		docState.InstancePluginsInformation,
 		docState.IOConfig,
-		runpluginutil.SSMSessionPluginRegistry,
+		runpluginutil.SSMPluginRegistry,
 		resChan,
 		cancelFlag)
 
@@ -102,7 +102,7 @@ func createFileChannelAndExecutePlugin(context context.T, channelName string) {
 	}
 
 	//initialize SessionPluginRegistry
-	runpluginutil.SSMSessionPluginRegistry = plugin.RegisteredSessionWorkerPlugins()
+	runpluginutil.SSMPluginRegistry = plugin.RegisteredSessionWorkerPlugins()
 
 	//TODO add command timeout
 	stopTimer := make(chan bool)

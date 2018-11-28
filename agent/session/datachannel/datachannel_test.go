@@ -54,14 +54,22 @@ var (
 	streamDataSequenceNumber                   = int64(0)
 	expectedSequenceNumber                     = int64(0)
 	serializedAgentMessages, streamingMessages = getAgentAndStreamingMessageList(7)
-	streamMessageHandler                       = func(log log.T, streamDataMessage mgsContracts.AgentMessage) error {
+	inputStreamMessageHandler                  = func(log log.T, streamDataMessage mgsContracts.AgentMessage) error {
 		return nil
 	}
 )
 
 func TestInitialize(t *testing.T) {
 	dataChannel := getDataChannel()
-	dataChannel.Initialize(mockContext, mockService, sessionId, clientId, instanceId, mgsConfig.RolePublishSubscribe)
+	dataChannel.Initialize(
+		mockContext,
+		mockService,
+		sessionId,
+		clientId,
+		instanceId,
+		mgsConfig.RolePublishSubscribe,
+		mockCancelFlag,
+		inputStreamMessageHandler)
 
 	assert.Equal(t, instanceId, dataChannel.InstanceId)
 	assert.Equal(t, sessionId, dataChannel.ChannelId)
@@ -307,7 +315,7 @@ func TestDataChannelIncomingMessageHandlerForExpectedInputStreamDataMessage(t *t
 
 	// First scenario is to test when incoming message sequence number matches with expected sequence number
 	// and no message found in IncomingMessageBuffer
-	err := dataChannel.DataChannelIncomingMessageHandler(mockLog, streamMessageHandler, serializedAgentMessages[0], mockCancelFlag)
+	err := dataChannel.DataChannelIncomingMessageHandler(mockLog, serializedAgentMessages[0])
 	assert.Nil(t, err)
 	assert.Equal(t, int64(1), dataChannel.ExpectedSequenceNumber)
 	assert.Equal(t, 0, len(dataChannel.IncomingMessageBuffer.Messages))
@@ -321,7 +329,7 @@ func TestDataChannelIncomingMessageHandlerForExpectedInputStreamDataMessage(t *t
 	dataChannel.AddDataToIncomingMessageBuffer(streamingMessages[4])
 	dataChannel.AddDataToIncomingMessageBuffer(streamingMessages[3])
 
-	err = dataChannel.DataChannelIncomingMessageHandler(mockLog, streamMessageHandler, serializedAgentMessages[1], mockCancelFlag)
+	err = dataChannel.DataChannelIncomingMessageHandler(mockLog, serializedAgentMessages[1])
 	assert.Nil(t, err)
 	assert.Equal(t, int64(5), dataChannel.ExpectedSequenceNumber)
 	assert.Equal(t, 1, len(dataChannel.IncomingMessageBuffer.Messages))
@@ -341,13 +349,13 @@ func TestDataChannelIncomingMessageHandlerForUnexpectedInputStreamDataMessage(t 
 
 	mockChannel.On("SendMessage", mock.Anything, mock.Anything, mock.Anything).Return(nil)
 
-	err := dataChannel.DataChannelIncomingMessageHandler(mockLog, streamMessageHandler, serializedAgentMessages[1], mockCancelFlag)
+	err := dataChannel.DataChannelIncomingMessageHandler(mockLog, serializedAgentMessages[1])
 	assert.Nil(t, err)
 
-	err = dataChannel.DataChannelIncomingMessageHandler(mockLog, streamMessageHandler, serializedAgentMessages[2], mockCancelFlag)
+	err = dataChannel.DataChannelIncomingMessageHandler(mockLog, serializedAgentMessages[2])
 	assert.Nil(t, err)
 
-	err = dataChannel.DataChannelIncomingMessageHandler(mockLog, streamMessageHandler, serializedAgentMessages[3], mockCancelFlag)
+	err = dataChannel.DataChannelIncomingMessageHandler(mockLog, serializedAgentMessages[3])
 	assert.Nil(t, err)
 
 	assert.Equal(t, expectedSequenceNumber, dataChannel.ExpectedSequenceNumber)
@@ -382,7 +390,7 @@ func TestDataChannelIncomingMessageHandlerForAcknowledgeMessage(t *testing.T) {
 	agentMessage := getAgentMessage(0, mgsContracts.AcknowledgeMessage, uint32(0), payload)
 	serializedAgentMessage, _ := agentMessage.Serialize(mockLog)
 
-	err := dataChannel.DataChannelIncomingMessageHandler(mockLog, streamMessageHandler, serializedAgentMessage, mockCancelFlag)
+	err := dataChannel.DataChannelIncomingMessageHandler(mockLog, serializedAgentMessage)
 
 	assert.Nil(t, err)
 	assert.Equal(t, 2, dataChannel.OutgoingMessageBuffer.Messages.Len())
@@ -408,7 +416,7 @@ func TestDataChannelIncomingMessageHandlerForChannelClosedMessage(t *testing.T) 
 	agentMessage := getAgentMessage(0, mgsContracts.ChannelClosedMessage, uint32(0), payload)
 	serializedAgentMessage, _ := agentMessage.Serialize(mockLog)
 
-	err := dataChannel.DataChannelIncomingMessageHandler(mockLog, streamMessageHandler, serializedAgentMessage, mockCancelFlag)
+	err := dataChannel.DataChannelIncomingMessageHandler(mockLog, serializedAgentMessage)
 
 	assert.Nil(t, err)
 	assert.Equal(t, 0, dataChannel.OutgoingMessageBuffer.Messages.Len())
@@ -421,7 +429,7 @@ func TestDataChannelIncomingMessageHandlerForPausePublicationMessage(t *testing.
 	agentMessage := getAgentMessage(0, mgsContracts.PausePublicationMessage, uint32(0), payload)
 	serializedAgentMessage, _ := agentMessage.Serialize(mockLog)
 
-	err := dataChannel.DataChannelIncomingMessageHandler(mockLog, streamMessageHandler, serializedAgentMessage, mockCancelFlag)
+	err := dataChannel.DataChannelIncomingMessageHandler(mockLog, serializedAgentMessage)
 
 	assert.Nil(t, err)
 	assert.Equal(t, true, dataChannel.Pause)
@@ -433,7 +441,7 @@ func TestDataChannelIncomingMessageHandlerForStartPublicationMessage(t *testing.
 	agentMessage := getAgentMessage(0, mgsContracts.StartPublicationMessage, uint32(0), payload)
 	serializedAgentMessage, _ := agentMessage.Serialize(mockLog)
 
-	err := dataChannel.DataChannelIncomingMessageHandler(mockLog, streamMessageHandler, serializedAgentMessage, mockCancelFlag)
+	err := dataChannel.DataChannelIncomingMessageHandler(mockLog, serializedAgentMessage)
 
 	assert.Nil(t, err)
 	assert.Equal(t, false, dataChannel.Pause)
@@ -446,7 +454,9 @@ func getDataChannel() *DataChannel {
 		sessionId,
 		clientId,
 		instanceId,
-		mgsConfig.RolePublishSubscribe)
+		mgsConfig.RolePublishSubscribe,
+		mockCancelFlag,
+		inputStreamMessageHandler)
 	dataChannel.wsChannel = mockWsChannel
 	return dataChannel
 }

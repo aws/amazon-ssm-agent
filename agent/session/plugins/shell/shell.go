@@ -37,6 +37,7 @@ import (
 	mgsConfig "github.com/aws/amazon-ssm-agent/agent/session/config"
 	mgsContracts "github.com/aws/amazon-ssm-agent/agent/session/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/session/datachannel"
+	"github.com/aws/amazon-ssm-agent/agent/session/plugins/sessionplugin"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 )
 
@@ -53,18 +54,18 @@ type ShellPlugin struct {
 }
 
 // NewPlugin returns a new instance of the Shell Plugin
-func NewPlugin() (*ShellPlugin, error) {
+func NewPlugin() (sessionplugin.ISessionPlugin, error) {
 	var plugin = ShellPlugin{}
 	return &plugin, nil
 }
 
-// Name returns the name of Shell Plugin
-func (p *ShellPlugin) Name() string {
+// name returns the name of Shell Plugin
+func (p *ShellPlugin) name() string {
 	return appconfig.PluginNameStandardStream
 }
 
-// Validate validates the cloudwatch and s3 encryption configuration.
-func (p *ShellPlugin) Validate(context context.T,
+// validate validates the cloudwatch and s3 encryption configuration.
+func (p *ShellPlugin) validate(context context.T,
 	config agentContracts.Configuration,
 	cwl cloudwatchlogsinterface.ICloudWatchLogsService,
 	s3Util s3util.IAmazonS3Util) error {
@@ -99,7 +100,8 @@ func (p *ShellPlugin) Execute(context context.T,
 			log.Errorf("Error occured while closing pty: %v", err)
 		}
 		if err := recover(); err != nil {
-			log.Errorf("Error occurred while executing plugin %s: \n%v", p.Name(), err)
+			log.Errorf("Error occurred while executing plugin %s: \n%v", p.name(), err)
+			log.Flush()
 			os.Exit(1)
 		}
 	}()
@@ -110,22 +112,6 @@ func (p *ShellPlugin) Execute(context context.T,
 		output.MarkAsCancelled()
 	} else {
 		p.execute(context, config, cancelFlag, output)
-	}
-}
-
-// GetOnMessageHandler returns Shell Plugin's handler function for when a message is received
-func (p *ShellPlugin) GetOnMessageHandler(log log.T, cancelFlag task.CancelFlag) func(input []byte) {
-	return func(input []byte) {
-		if p.stdin == nil || p.stdout == nil {
-			// This is to handle scenario when cli/console starts sending size data but pty has not been started yet
-			// Since packets are rejected, cli/console will resend these packets until pty starts successfully in separate thread
-			log.Debugf("Pty unavailable. Reject incoming message packet")
-			return
-		}
-
-		if err := p.dataChannel.DataChannelIncomingMessageHandler(log, p.processStreamMessage, input, cancelFlag); err != nil {
-			log.Errorf("Invalid message %s\n", err)
-		}
 	}
 }
 
@@ -153,7 +139,7 @@ func (p *ShellPlugin) execute(context context.T,
 	if config.CloudWatchLogGroup != "" {
 		cwl = cloudwatchlogspublisher.NewCloudWatchLogsService()
 	}
-	if err = p.Validate(context, config, cwl, s3Util); err != nil {
+	if err = p.validate(context, config, cwl, s3Util); err != nil {
 		output.SetExitCode(appconfig.ErrorExitCode)
 		output.SetStatus(agentContracts.ResultStatusFailed)
 		sessionPluginResultOutput.Output = err.Error()
@@ -193,7 +179,7 @@ func (p *ShellPlugin) execute(context context.T,
 		done <- p.writePump(log)
 	}()
 
-	log.Infof("Plugin %s started", p.Name())
+	log.Infof("Plugin %s started", p.name())
 
 	select {
 	case <-cancelled:
@@ -327,8 +313,15 @@ func (p *ShellPlugin) writePump(log log.T) (errorCode int) {
 	}
 }
 
-// processStreamMessage passes payload byte stream to shell stdin
-func (p *ShellPlugin) processStreamMessage(log log.T, streamDataMessage mgsContracts.AgentMessage) error {
+// InputStreamMessageHandler passes payload byte stream to shell stdin
+func (p *ShellPlugin) InputStreamMessageHandler(log log.T, streamDataMessage mgsContracts.AgentMessage) error {
+	if p.stdin == nil || p.stdout == nil {
+		// This is to handle scenario when cli/console starts sending size data but pty has not been started yet
+		// Since packets are rejected, cli/console will resend these packets until pty starts successfully in separate thread
+		log.Tracef("Pty unavailable. Reject incoming message packet")
+		return nil
+	}
+
 	switch mgsContracts.PayloadType(streamDataMessage.PayloadType) {
 	case mgsContracts.Output:
 		log.Tracef("Output message received: %d", streamDataMessage.SequenceNumber)

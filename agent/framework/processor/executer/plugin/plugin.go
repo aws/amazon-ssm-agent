@@ -31,6 +31,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/plugins/rundocument"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/runscript"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/updatessmagent"
+	"github.com/aws/amazon-ssm-agent/agent/session/plugins/sessionplugin"
 	"github.com/aws/amazon-ssm-agent/agent/session/plugins/shell"
 )
 
@@ -60,9 +61,6 @@ var once sync.Once
 
 // registeredPlugins stores the registered plugins.
 var registeredPlugins *runpluginutil.PluginRegistry
-
-// registeredSessionPlugins stores the registered session plugins.
-var registeredSessionPlugins *runpluginutil.SessionPluginRegistry
 
 type CloudWatchFactory struct {
 }
@@ -134,11 +132,12 @@ func (r RunDocumentFactory) Create(context context.T) (runpluginutil.T, error) {
 	return rundocument.NewPlugin()
 }
 
-type SessionShellFactory struct {
+type SessionPluginFactory struct {
+	newPluginFunc sessionplugin.NewPluginFunc
 }
 
-func (f SessionShellFactory) Create(context context.T) (runpluginutil.SessionPlugin, error) {
-	return shell.NewPlugin()
+func (f SessionPluginFactory) Create(context context.T) (runpluginutil.T, error) {
+	return sessionplugin.NewPlugin(f.newPluginFunc)
 }
 
 // RegisteredWorkerPlugins returns all registered core modules.
@@ -150,11 +149,11 @@ func RegisteredWorkerPlugins(context context.T) runpluginutil.PluginRegistry {
 }
 
 // RegisteredSessionWorkerPlugins returns all registered session plugins.
-func RegisteredSessionWorkerPlugins() runpluginutil.SessionPluginRegistry {
+func RegisteredSessionWorkerPlugins() runpluginutil.PluginRegistry {
 	once.Do(func() {
 		loadSessionPlugins()
 	})
-	return *registeredSessionPlugins
+	return *registeredPlugins
 }
 
 // loadWorkers loads all worker plugins that are invokers for interacting with long running plugins and
@@ -179,12 +178,12 @@ func loadWorkers(context context.T) {
 
 // loadSessionPlugins loads all session plugins
 func loadSessionPlugins() {
-	var sessionPlugins = runpluginutil.SessionPluginRegistry{}
+	var sessionPlugins = runpluginutil.PluginRegistry{}
 
 	shellPluginName := appconfig.PluginNameStandardStream
-	sessionPlugins[shellPluginName] = SessionShellFactory{}
+	sessionPlugins[shellPluginName] = SessionPluginFactory{shell.NewPlugin}
 
-	registeredSessionPlugins = &sessionPlugins
+	registeredPlugins = &sessionPlugins
 }
 
 // loadPlatformIndependentPlugins registers plugins common to all platforms

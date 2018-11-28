@@ -26,16 +26,12 @@ import (
 // IsPluginSupportedForCurrentPlatform always returns true for plugins that exist for linux because currently there
 // are no plugins that are supported on only one distribution or version of linux.
 func IsPluginSupportedForCurrentPlatform(log log.T, pluginName string) (isKnown bool, isSupported bool, message string) {
-	_, known := allPlugins[pluginName]
 	platformName, _ := platform.PlatformName(log)
 	platformVersion, _ := platform.PlatformVersion(log)
 
+	if _, known := allSessionPlugins[pluginName]; known == true {
+		return known, true, fmt.Sprintf("%s v%s", platformName, platformVersion)
+	}
+	_, known := allPlugins[pluginName]
 	return known, true, fmt.Sprintf("%s v%s", platformName, platformVersion)
-}
-
-// isSupportedSessionPlugin returns isKnown as true if given session plugin exists,
-func isSupportedSessionPlugin(log log.T, pluginName string) (isKnown bool, isSupported bool) {
-	_, known := allSessionPlugins[pluginName]
-
-	return known, true
 }
