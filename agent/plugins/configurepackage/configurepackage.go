@@ -344,6 +344,18 @@ func checkAlreadyInstalled(
 					validateTrace.AppendInfof("Failed to install %v %v, successfully rolled back to %v %v", uninst.PackageName(), uninst.Version(), inst.PackageName(), inst.Version())
 					cleanupAfterUninstall(tracer, repository, inst, output)
 					output.MarkAsFailed(nil, nil)
+				} else if installState == localpackages.Unknown {
+					validateTrace.AppendInfof("The package install state is Unknown. Continue to check if there are package files already downloaded.")
+					if err := repository.ValidatePackage(tracer, packageName, targetVersion); err != nil {
+						// If the install state is Unkown and there's no package files downloaded previously, need to return false here so that the package can be downloaded and installed again.
+						// This scenario happens when the installation of a package fails because package download fails due to lack of permissions (s3 bucket policy etc.)
+						validateTrace.AppendInfof("There are no package files downloaded.")
+						validateTrace.End()
+						checkTrace.WithExitcode(1)
+						return false
+					} else {
+						validateTrace.AppendInfof("There are package files already downloaded. Considering the package has already been installed.")
+					}
 				} else {
 					validateTrace.AppendInfof("%v %v is already installed", packageName, targetVersion).End()
 					output.MarkAsSucceeded()

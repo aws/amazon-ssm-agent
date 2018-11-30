@@ -263,6 +263,13 @@ func (repo *localRepository) AddPackage(tracer trace.Tracer, packageArn string, 
 		return err
 	}
 	if err := downloader(tracer, packagePath); err != nil {
+		// If the downloader delegate execution has any errors, we should clear up the newly made directory.
+		cleanupTrace := tracer.BeginSection(fmt.Sprintf("cleaning up package version path: %s", packagePath))
+		if cleanupErr := repo.filesysdep.RemoveAll(packagePath); cleanupErr != nil {
+			cleanupTrace.WithError(cleanupErr)
+		}
+		cleanupTrace.End()
+
 		return err
 	}
 	// if no previous version, set state to new
