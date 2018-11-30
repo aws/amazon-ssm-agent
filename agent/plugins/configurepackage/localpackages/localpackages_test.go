@@ -388,6 +388,27 @@ func TestAddNewPackage(t *testing.T) {
 	assert.Nil(t, err)
 }
 
+func TestAddPackageWithDownloadFailure(t *testing.T) {
+	version := "0.0.1"
+	// Setup mock with expectations
+	mockFileSys := MockedFileSys{}
+	mockFileSys.On("MakeDirExecute", path.Join(testRepoRoot, testPackage, version)).Return(nil).Once()
+	mockFileSys.On("RemoveAll", path.Join(testRepoRoot, testPackage, version)).Return(nil).Once()
+	
+	mockDownload := MockedDownloader{}
+	mockDownload.On("Download", tracerMock, path.Join(testRepoRoot, testPackage, version)).Return(errors.New("Download error.")).Once()
+
+	// Instantiate repository with mock
+	repo := localRepository{filesysdep: &mockFileSys, repoRoot: testRepoRoot, lockRoot: testLockRoot, fileLocker: &filelock.FileLockerNoop{}}
+
+	// Call and validate mock expectations and return value
+	err := repo.AddPackage(tracerMock, testPackage, version, "mock-package-service", mockDownload.Download)
+	mockFileSys.AssertExpectations(t)
+	mockDownload.AssertExpectations(t)
+	assert.NotNil(t, err)
+	assert.Equal(t, err.Error(), "Download error.")
+}
+
 func TestRefreshPackage(t *testing.T) {
 	version := "0.0.1"
 	// Setup mock with expectations

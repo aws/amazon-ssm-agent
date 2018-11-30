@@ -50,6 +50,19 @@ func repoInstallMock(pluginInformation *ConfigurePackagePluginInput, installerMo
 	return &mockRepo
 }
 
+func repoInstallMock_WithValidatePackageError(pluginInformation *ConfigurePackagePluginInput, installerMock installer.Installer) *repoMock.MockedRepository {
+	mockRepo := repoMock.MockedRepository{}
+	mockRepo.On("GetInstalledVersion", mock.Anything, mock.Anything).Return("")
+	mockRepo.On("GetInstallState", mock.Anything, mock.Anything).Return(localpackages.None, "")
+	mockRepo.On("ValidatePackage", mock.Anything, mock.Anything, pluginInformation.Version).Return(errors.New("There's an error"))
+	mockRepo.On("SetInstallState", mock.Anything, mock.Anything, pluginInformation.Version, mock.Anything).Return(nil)
+	mockRepo.On("GetInstaller", mock.Anything, mock.Anything, mock.Anything, pluginInformation.Version).Return(installerMock)
+	mockRepo.On("LockPackage", mock.Anything, mock.Anything, mock.Anything).Return(nil)
+	mockRepo.On("UnlockPackage", mock.Anything, mock.Anything).Return()
+	mockRepo.On("LoadTraces", mock.Anything, mock.Anything).Return(nil)
+	return &mockRepo
+}
+
 func repoAlreadyInstalledMock(pluginInformation *ConfigurePackagePluginInput, installerMock installer.Installer) *repoMock.MockedRepository {
 	mockRepo := repoMock.MockedRepository{}
 	mockRepo.On("GetInstalledVersion", mock.Anything, mock.Anything).Return("0.0.1")

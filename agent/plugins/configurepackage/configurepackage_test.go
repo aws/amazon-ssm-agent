@@ -477,6 +477,46 @@ func TestInstallingNotValid(t *testing.T) {
 	assert.False(t, alreadyInstalled)
 }
 
+func TestUnknownValid(t *testing.T) {
+	pluginInformation := createStubPluginInputInstall()
+	installerMock := installerSuccessMock(pluginInformation.Name, pluginInformation.Version)
+	uninstallerMock := installerNotCalledMock()
+	repoMock := repoInstallMock(pluginInformation, installerMock)
+	tracer := trace.NewTracer(log.NewMockLog())
+	output := &trace.PluginOutputTrace{Tracer: tracer}
+
+	alreadyInstalled := checkAlreadyInstalled(
+		tracer,
+		contextMock,
+		repoMock,
+		installerMock.Version(),
+		localpackages.Unknown,
+		installerMock,
+		uninstallerMock,
+		output)
+	assert.True(t, alreadyInstalled)
+}
+
+func TestUnknownNotValid(t *testing.T) {
+	pluginInformation := createStubPluginInputInstall()
+	installerMock := installerSuccessMock(pluginInformation.Name, pluginInformation.Version)
+	uninstallerMock := installerNotCalledMock()
+	repoMock := repoInstallMock_WithValidatePackageError(pluginInformation, installerMock)
+	tracer := trace.NewTracer(log.NewMockLog())
+	output := &trace.PluginOutputTrace{Tracer: tracer}
+
+	alreadyInstalled := checkAlreadyInstalled(
+		tracer,
+		contextMock,
+		repoMock,
+		installerMock.Version(),
+		localpackages.Unknown,
+		installerMock,
+		uninstallerMock,
+		output)
+	assert.False(t, alreadyInstalled)
+}
+
 // Testing Execute module unit tests
 func TestExecute(t *testing.T) {
 	// file stubs are needed for ensurePackage because it handles the unzip
