@@ -394,7 +394,7 @@ func TestAddPackageWithDownloadFailure(t *testing.T) {
 	mockFileSys := MockedFileSys{}
 	mockFileSys.On("MakeDirExecute", path.Join(testRepoRoot, testPackage, version)).Return(nil).Once()
 	mockFileSys.On("RemoveAll", path.Join(testRepoRoot, testPackage, version)).Return(nil).Once()
-	
+
 	mockDownload := MockedDownloader{}
 	mockDownload.On("Download", tracerMock, path.Join(testRepoRoot, testPackage, version)).Return(errors.New("Download error.")).Once()
 
