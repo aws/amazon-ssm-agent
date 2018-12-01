@@ -486,8 +486,8 @@ func TestDownloadDocument(t *testing.T) {
 				DocumentVersion: &docVersionForGetDoc,
 			}
 			getDocumentInput := &ssm.GetDocumentInput{
-				Name:            &packageName,
-				DocumentVersion: documentDescription.DocumentVersion,
+				Name:        &packageName,
+				VersionName: &packageVersion,
 			}
 			describeDocumentInput := &ssm.DescribeDocumentInput{
 				Name:        &packageName,
