@@ -938,8 +938,8 @@ func TestExecuteConfigurePackagePlugin_DocumentService(t *testing.T) {
 				Document: &docDescription,
 			}
 			getDocumentInput := &ssm.GetDocumentInput{
-				Name:            &pluginInformation.Name,
-				DocumentVersion: docDescription.DocumentVersion,
+				Name:        &pluginInformation.Name,
+				VersionName: versionName,
 			}
 			if !testdata.getDocumentReturnsError {
 				getDocumentOutput = &ssm.GetDocumentOutput{

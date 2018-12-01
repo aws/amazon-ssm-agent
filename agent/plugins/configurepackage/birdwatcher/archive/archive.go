@@ -36,6 +36,7 @@ type File struct {
 
 type IPackageArchive interface {
 	Name() string
+	//TODO: Send this by address or reference
 	SetManifestCache(cache packageservice.ManifestCache)
 	SetResource(*birdwatcher.Manifest)
 	GetResourceVersion(packageName string, packageVersion string) (name string, version string)
