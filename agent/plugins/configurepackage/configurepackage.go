@@ -47,7 +47,7 @@ const (
 )
 
 const resourceNotFoundException = "ResourceNotFoundException"
-const birdwatcherVersionPattern = "[A-Za-z0-9.]+"
+const birdwatcherVersionPattern = "^[A-Za-z0-9.]+$"
 const documentArnPattern = "^arn:[a-z0-9][-.a-z0-9]{0,62}:[a-z0-9][-.a-z0-9]{0,62}:([a-z0-9][-.a-z0-9]{0,62})?:([a-z0-9][-.a-z0-9]{0,62})?:document\\/[a-zA-Z][a-zA-Z0-9-\\_]{0,39}$"
 
 // Plugin is the type for the configurepackage plugin.
@@ -394,11 +394,13 @@ func selectService(tracer trace.Tracer, input *ConfigurePackagePluginInput, loca
 			return birdwatcherservice.NewDocumentArchive(birdwatcherFacade, localrepo), nil
 		}
 		if input.Version != "" {
-			// This could happen if there is a typo or if the version matches the document requirement
-			// Create document type archive to check if document type of package, before erroring out
-			if regexp.MustCompile(birdwatcherVersionPattern).MatchString(input.Version) {
+			// Birdwatcher version pattern and document version name pattern is different. If the pattern doesn't match Birdwatcher,
+			// we assume document and continue, since birdwatcher will error out with ValidationException.
+			// This could also happen if there is a typo in the birdwatcher version, but we assume Document and continue.
+			if !regexp.MustCompile(birdwatcherVersionPattern).MatchString(input.Version) {
 				*isDocumentArchive = true
 				// return a new object of type document
+				return birdwatcherservice.NewDocumentArchive(birdwatcherFacade, localrepo), nil
 			}
 		}
 
@@ -414,7 +416,7 @@ func selectService(tracer trace.Tracer, input *ConfigurePackagePluginInput, loca
 			},
 		)
 
-		// If the error returned is the "ResourceNotFoundException", or if it is ValidationException and the arn is document type, create a service with document archive
+		// If the error returned is the "ResourceNotFoundException", create a service with document archive
 		// if any other response, create a service of birdwatcher type
 		if err != nil {
 			if strings.Contains(err.Error(), resourceNotFoundException) {

@@ -723,20 +723,8 @@ func TestSelectService(t *testing.T) {
 			"incorrect version type document package",
 			&facade.FacadeStub{},
 			packageservice.PackageServiceName_document,
-			"arn:aws:ssm:us-west-1:1234567890:document/package",
+			"package",
 			"package_latest",
-			false,
-		},
-		{
-			"correct version type document package",
-			&facade.FacadeStub{
-				GetManifestOutput: &ssm.GetManifestOutput{
-					Manifest: &manifest,
-				},
-			},
-			packageservice.PackageServiceName_document,
-			"arn:aws:ssm:us-west-1:1234567890:document/package",
-			"packageLatest1.2",
 			false,
 		},
 		{
