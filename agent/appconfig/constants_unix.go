@@ -18,7 +18,6 @@ package appconfig
 
 import (
 	"os"
-	"path/filepath"
 )
 
 const (
@@ -110,18 +109,13 @@ func init() {
 		PowerShellPluginCommandName = "/usr/bin/pwsh"
 	}
 
-	// Find current directory path for amazon-ssm-agent, DefaultDocumentWorker should exist in same directory
-	// if document-worker is not in the default location, try finding it in the same directory as amazon-ssm-agent
+	// if document-worker is not in the default location, try using the snap installed location
 	if _, err := os.Stat(DefaultDocumentWorker); err != nil {
-		// curdir is amazon-ssm-agent current directory path
-		if curdir, err := filepath.Abs(filepath.Dir(os.Args[0])); err == nil {
-			if _, err = os.Stat(filepath.Join(curdir, "ssm-document-worker")); err == nil {
-				DefaultDocumentWorker = filepath.Join(curdir, "ssm-document-worker")
-				DefaultSessionWorker = filepath.Join(curdir, "ssm-session-worker")
-				DefaultSessionLogger = filepath.Join(curdir, "ssm-session-logger")
-				// for snap, DefaultProgramFolder is the snap installed location
-				DefaultProgramFolder = curdir
-			}
+		if _, err := os.Stat("/snap/amazon-ssm-agent/current/ssm-document-worker"); err == nil {
+			DefaultProgramFolder = "/snap/amazon-ssm-agent/current"
+			DefaultDocumentWorker = "/snap/amazon-ssm-agent/current/ssm-document-worker"
+			DefaultSessionWorker = "/snap/amazon-ssm-agent/current/ssm-session-worker"
+			DefaultSessionLogger = "/snap/amazon-ssm-agent/current/ssm-session-logger"
 		}
 	}
 }
