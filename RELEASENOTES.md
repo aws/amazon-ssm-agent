@@ -1,5 +1,12 @@
 Latest
 ===============
+- Add frequent collector to detect changed inventory types and upload it to SSM service between two scheduled collections.
+- Change AWS Systems Manager Distributor to reduce calls to GetDocument by calling DescribeDocument.
+- Add exit code when ssm-cli execution fails.
+- Create ssm-user only  after the control channel has been successfully created.
+
+2.3.274.0
+===============
 - Enabled AWS Systems Manager Distributor that lets you securely distribute and install software packages.
 - Add support for the arm64 architecture on Amazon Linux 2, Ubuntu 16.04/18.04, and RHEL 7.6 to support EC2 A1 instances.
 
