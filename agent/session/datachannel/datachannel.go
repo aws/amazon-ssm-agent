@@ -615,7 +615,7 @@ func (dataChannel *DataChannel) handleStreamDataMessage(log log.T,
 		// If incoming message sequence number is greater than expected sequence number and IncomingMessageBuffer has capacity,
 		// add message to IncomingMessageBuffer and send acknowledgement
 	} else if streamDataMessage.SequenceNumber > dataChannel.ExpectedSequenceNumber {
-		log.Infof("Unexpected sequence message received. Received Sequence Number: %s. Expected Sequence Number: %s",
+		log.Debugf("Unexpected sequence message received. Received Sequence Number: %d. Expected Sequence Number: %d",
 			streamDataMessage.SequenceNumber, dataChannel.ExpectedSequenceNumber)
 
 		if len(dataChannel.IncomingMessageBuffer.Messages) < dataChannel.IncomingMessageBuffer.Capacity {
@@ -634,7 +634,7 @@ func (dataChannel *DataChannel) handleStreamDataMessage(log log.T,
 			dataChannel.AddDataToIncomingMessageBuffer(streamingMessage)
 		}
 	} else {
-		log.Tracef("Discarding already processed message. Received Sequence Number: %s. Expected Sequence Number: %s",
+		log.Tracef("Discarding already processed message. Received Sequence Number: %d. Expected Sequence Number: %d",
 			streamDataMessage.SequenceNumber, dataChannel.ExpectedSequenceNumber)
 	}
 	return nil
