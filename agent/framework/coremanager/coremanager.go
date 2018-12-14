@@ -237,13 +237,9 @@ func (c *CoreManager) Stop() {
 
 // executeCoreModules launches all the core modules
 func (c *CoreManager) executeCoreModules() {
-	var wg sync.WaitGroup
 	l := len(c.coreModules)
 	for i := 0; i < l; i++ {
-		go func(wgc *sync.WaitGroup, i int) {
-			wgc.Add(1)
-			defer wgc.Done()
-
+		go func(i int) {
 			module := c.coreModules[i]
 			var err error
 			if err = module.ModuleExecute(c.context); err != nil {
@@ -251,9 +247,8 @@ func (c *CoreManager) executeCoreModules() {
 					module.ModuleName(),
 					err)
 			}
-		}(&wg, i)
+		}(i)
 	}
-	wg.Wait()
 }
 
 // stopCoreModules requests the core modules to stop
