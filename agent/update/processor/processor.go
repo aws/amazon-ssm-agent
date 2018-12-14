@@ -411,9 +411,9 @@ func downloadAndUnzipArtifact(
 		downloadOutput.IsHashMatched == false ||
 		downloadOutput.LocalFilePath == "" {
 		if err != nil {
-			return fmt.Errorf("failed to download file reliably, %v", err.Error())
+			return fmt.Errorf("failed to download file reliably, %v, %v", downloadInput.SourceURL, err.Error())
 		}
-		return fmt.Errorf("failed to download file reliably")
+		return fmt.Errorf("failed to download file reliably, %v", downloadInput.SourceURL)
 	}
 
 	// downloaded successfully, append message
