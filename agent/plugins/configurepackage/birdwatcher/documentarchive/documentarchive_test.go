@@ -35,6 +35,7 @@ func TestGetRandomBackOffTime(t *testing.T) {
 	delay := getRandomBackOffTime(15)
 	errorInDuration := false
 	if delay > 15 || delay < 1 {
+		t.Log("Value of delay is ", delay)
 		errorInDuration = true
 	}
 	assert.False(t, errorInDuration)
@@ -408,6 +409,22 @@ func TestDownloadArchiveInfo(t *testing.T) {
 					Content:         &manifest,
 					Status:          &documentInactive,
 					VersionName:     &versionName,
+					DocumentVersion: &docVersion,
+					Name:            &packageName,
+				},
+			},
+			createDefaultDocumentDescription(packageName, myPrettyHash, documentActive),
+			createMemCache(myPrettyHash, manifest),
+		},
+		{
+			"version name is not provided",
+			emptystring,
+			false,
+			facade.FacadeStub{
+				GetDocumentOutput: &ssm.GetDocumentOutput{
+					Content:         &manifest,
+					Status:          &documentInactive,
+					VersionName:     nil,
 					DocumentVersion: &docVersion,
 					Name:            &packageName,
 				},

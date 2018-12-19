@@ -164,10 +164,11 @@ func (da *PackageArchive) DownloadArchiveInfo(packageName string, version string
 	if descDocResponse.Document.Name == nil || *descDocResponse.Document.Name == "" {
 		return "", fmt.Errorf("document name cannot be empty")
 	}
-	if descDocResponse.Document.DocumentVersion == nil || descDocResponse.Document.VersionName == nil {
+	if descDocResponse.Document.DocumentVersion == nil {
 		return "", fmt.Errorf("document version cannot be nil")
 	}
 	da.documentDesc = descDocResponse.Document
+
 	// DescribeDocument returns the Name of the document if it belongs to the account of the instance.
 	// If it is a shared document, DescribeDocument returns the document ARN as Name
 	da.documentArn = *da.documentDesc.Name
@@ -176,20 +177,20 @@ func (da *PackageArchive) DownloadArchiveInfo(packageName string, version string
 	hashData, err := da.manifestCache.ReadManifestHash(packageName, da.docVersion)
 	if err != nil {
 		// if manifest hash does not exist, getDocument to download the manifest
-		return da.getDocument(packageName, *da.documentDesc.VersionName)
+		return da.getDocument(packageName, version)
 	}
 	// if no error, proceed to describe document
 	cachedDocumentHash = string(hashData)
 
 	if cachedDocumentHash != *da.documentDesc.Hash {
 		// If the hash value of the cached hash and the document hash isn't the same, then getDocument to download the content
-		return da.getDocument(packageName, *da.documentDesc.VersionName)
+		return da.getDocument(packageName, version)
 	} else {
 		// If the hash matches, read the cached manifest. If there is an error reading the manifest, because
 		// it does not exist or is corrupted, getDocument to download the manifest
-		manifestData, err := da.manifestCache.ReadManifest(*da.documentDesc.Name, *da.documentDesc.DocumentVersion)
+		manifestData, err := da.manifestCache.ReadManifest(*da.documentDesc.Name, da.docVersion)
 		if err != nil || string(manifestData) == "" {
-			return da.getDocument(packageName, *da.documentDesc.VersionName)
+			return da.getDocument(packageName, version)
 		}
 
 		// if hash of stored anifest is the same
