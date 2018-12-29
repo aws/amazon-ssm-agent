@@ -122,6 +122,8 @@ const (
 		"@{ " + logNameProperty + "='System'; " + providerNameProperty + "='Microsoft-Windows-WER-SystemErrorReporting'; " +
 		idProperty + "=1001; " + levelProperty + "=2 } " +
 		") | Sort-Object " + timeCreatedProperty + " -Descending"
+
+	defaultComPort = "\\\\.\\COM1"
 )
 
 // IsAllowed returns true if the current platform/instance allows startup processor.
@@ -167,11 +169,15 @@ func (p *Processor) IsAllowed() bool {
 	return true
 }
 
+func discoverPort(log log.T, windowsInfo model.WindowsInfo) (port string, err error) {
+	// TODO: Discover correct port to use.
+	return defaultComPort, nil
+}
+
 // ExecuteTasks opens serial port, write agent verion, AWS driver info and bugchecks in console log.
 func (p *Processor) ExecuteTasks() (err error) {
 	var sp *serialport.SerialPort
-	var windowsInfo model.WindowsInfo
-	var osInfo model.OperatingSystemInfo
+
 	var driverInfo []model.DriverInfo
 	var bugChecks []string
 
@@ -179,12 +185,23 @@ func (p *Processor) ExecuteTasks() (err error) {
 
 	log.Info("Executing startup processor tasks")
 
+	windowsInfo, osInfo, windowsInfoError := getSystemInfo(log)
+
+	port := defaultComPort
+	if windowsInfoError == nil {
+		if port, err = discoverPort(log, windowsInfo); err != nil || port == "" {
+			log.Infof("Could not discover port, %v. Setting to default port: %s", err, defaultComPort)
+			port = defaultComPort
+		}
+	}
+	log.Infof("Opening serial port: %s", port)
+
 	// attempt to initialize and open the serial port.
 	// since only three minute is allowed to write logs to console during boot,
 	// it attempts to open serial port for approximately three minutes.
 	retryCount := 0
 	for retryCount < serialPortRetryMaxCount {
-		sp = serialport.NewSerialPort(log)
+		sp = serialport.NewSerialPort(log, port)
 		if err = sp.OpenPort(); err != nil {
 			log.Errorf("%v. Retrying in %v seconds...", err.Error(), serialPortRetryWaitTime)
 			time.Sleep(serialPortRetryWaitTime * time.Second)
@@ -210,7 +227,7 @@ func (p *Processor) ExecuteTasks() (err error) {
 	// write the agent version to serial port.
 	sp.WritePort(fmt.Sprintf("Amazon SSM Agent v%v is running", version.Version))
 
-	if windowsInfo, osInfo, err = getSystemInfo(log); err == nil {
+	if windowsInfoError == nil {
 		sp.WritePort(fmt.Sprintf("OsProductName: %v", windowsInfo.ProductName))
 		sp.WritePort(fmt.Sprintf("OsInstallOption: %v", getInstallationOptionBySKU(osInfo.OperatingSystemSKU)))
 		sp.WritePort(fmt.Sprintf("OsVersion: %v", osInfo.Version))

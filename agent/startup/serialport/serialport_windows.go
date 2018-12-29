@@ -29,7 +29,6 @@ import (
 
 const (
 	kernel32 = "kernel32.dll"
-	comport  = "\\\\.\\COM1"
 )
 
 type SerialPort struct {
@@ -38,10 +37,11 @@ type SerialPort struct {
 	dcb        model.Dcb
 	handle     syscall.Handle
 	fileHandle *os.File
+	port       string
 }
 
 // NewSerialPort creates a serial port object with predefined parameters.
-func NewSerialPort(log log.T) (sp *SerialPort) {
+func NewSerialPort(log log.T, port string) (sp *SerialPort) {
 	var dcb model.Dcb
 	dcb.DCBlength = uint32(unsafe.Sizeof(dcb))
 	dcb.BaudRate = uint32(115200)
@@ -57,13 +57,14 @@ func NewSerialPort(log log.T) (sp *SerialPort) {
 		dcb:        dcb,
 		handle:     0,
 		fileHandle: nil,
+		port:       port,
 	}
 }
 
 // OpenPort opens the serial port which MUST be done before WritePort is called.
 func (sp *SerialPort) OpenPort() (err error) {
 	var comPortName *uint16
-	comPortName, err = syscall.UTF16PtrFromString(comport)
+	comPortName, err = syscall.UTF16PtrFromString(sp.port)
 	if err != nil {
 		sp.log.Errorf("Error occurred while opening serial port: %v", err.Error())
 		return err
@@ -83,7 +84,7 @@ func (sp *SerialPort) OpenPort() (err error) {
 		return
 	}
 
-	sp.fileHandle = os.NewFile(uintptr(sp.handle), comport)
+	sp.fileHandle = os.NewFile(uintptr(sp.handle), sp.port)
 
 	// set communication state with default values.
 	var r uintptr
