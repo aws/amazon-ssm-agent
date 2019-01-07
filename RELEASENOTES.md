@@ -1,5 +1,10 @@
 Latest
 ===============
+- Bug fix to allow installation of Distributor packages that do not have a version name.
+- Bug fix for agent crash with message "WaitGroup is reused before previous Wait has returned".
+
+2.3.344.0
+===============
 - Add frequent collector to detect changed inventory types and upload it to SSM service between two scheduled collections.
 - Change AWS Systems Manager Distributor to reduce calls to GetDocument by calling DescribeDocument.
 - Add exit code when ssm-cli execution fails.
