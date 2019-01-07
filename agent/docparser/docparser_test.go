@@ -40,6 +40,8 @@ const (
 	testLogStreamPrefix = "test-logStreamName"
 	testSessionId       = "test-sessionId"
 	testClientId        = "test-clientId"
+	testCommands        = "date"
+	testKmsKeyId        = "test-kmskeyid"
 )
 const parameterdocument = `{"schemaVersion":"1.2","description":"","parameters":{"commands":{"type":"StringList"}},"runtimeConfig":{"aws:runPowerShellScript":{"properties":[{"id":"0.aws:runPowerShellScript","runCommand":"{{ commands }}"}]}}}`
 const invaliddocument = `{"schemaVersion":"1.2","description":"PowerShell.","FOO":"bar"}`
@@ -167,12 +169,24 @@ func TestInitializeDocStateForStartSessionDocument_Valid(t *testing.T) {
 		MessageId:        testMessageID,
 		DocumentId:       testDocumentID,
 		OrchestrationDir: testOrchDir,
-		S3Bucket:         testS3Bucket,
-		S3Prefix:         testS3Prefix,
-		CloudWatchConfig: contracts.CloudWatchConfiguration{LogGroupName: testLogGroupName},
 	}
+
+	sessionInputs := contracts.SessionInputs{
+		S3BucketName:           testS3Bucket,
+		S3KeyPrefix:            testS3Prefix,
+		KmsKeyId:               testKmsKeyId,
+		CloudWatchLogGroupName: testLogGroupName,
+	}
+
+	sessionCommand := contracts.SessionCommand{
+		Commands:      testCommands,
+		RunAsElevated: true,
+	}
+
 	sessionDocContent := &SessionDocContent{
-		SchemaVersion: "1.0",
+		SchemaVersion:   "1.0",
+		SessionCommands: []*contracts.SessionCommand{&sessionCommand},
+		Inputs:          sessionInputs,
 	}
 
 	docState, err := InitializeDocState(mockLog,
@@ -188,8 +202,8 @@ func TestInitializeDocStateForStartSessionDocument_Valid(t *testing.T) {
 	assert.Equal(t, contracts.StartSession, docState.DocumentType)
 	assert.Equal(t, "1.0", docState.SchemaVersion)
 	assert.Equal(t, testOrchDir, docState.IOConfig.OrchestrationDirectory)
-	assert.Equal(t, testS3Prefix, docState.IOConfig.OutputS3KeyPrefix)
-	assert.Equal(t, testS3Bucket, docState.IOConfig.OutputS3BucketName)
+	assert.Equal(t, testS3Prefix, pluginInfo[0].Configuration.OutputS3KeyPrefix)
+	assert.Equal(t, testS3Bucket, pluginInfo[0].Configuration.OutputS3BucketName)
 	assert.Equal(t, 1, len(pluginInfo))
 	assert.Equal(t, testMessageID, pluginInfo[0].Configuration.MessageId)
 	assert.Equal(t, testDocumentID, pluginInfo[0].Configuration.BookKeepingFileName)
@@ -198,6 +212,129 @@ func TestInitializeDocStateForStartSessionDocument_Valid(t *testing.T) {
 	assert.Equal(t, testClientId, pluginInfo[0].Configuration.ClientId)
 	assert.Equal(t, testLogGroupName, pluginInfo[0].Configuration.CloudWatchLogGroup)
 	assert.Equal(t, fileutil.BuildPath(testOrchDir, appconfig.PluginNameStandardStream), pluginInfo[0].Configuration.OrchestrationDirectory)
+	assert.Equal(t, testCommands, pluginInfo[0].Configuration.Commands)
+	assert.Equal(t, testKmsKeyId, pluginInfo[0].Configuration.KmsKeyId)
+	assert.True(t, pluginInfo[0].Configuration.RunAsElevated)
+}
+
+func TestInitializeDocStateForStartSessionDocumentWithoutSessionCommands_Valid(t *testing.T) {
+	mockLog := log.NewMockLog()
+
+	testParserInfo := DocumentParserInfo{
+		MessageId:        testMessageID,
+		DocumentId:       testDocumentID,
+		OrchestrationDir: testOrchDir,
+	}
+
+	sessionInputs := contracts.SessionInputs{
+		S3BucketName:           testS3Bucket,
+		S3KeyPrefix:            testS3Prefix,
+		KmsKeyId:               testKmsKeyId,
+		CloudWatchLogGroupName: testLogGroupName,
+	}
+
+	sessionDocContent := &SessionDocContent{
+		SchemaVersion: "1.0",
+		Inputs:        sessionInputs,
+	}
+
+	docState, err := InitializeDocState(mockLog,
+		contracts.StartSession,
+		sessionDocContent,
+		contracts.DocumentInfo{DocumentID: testSessionId, ClientId: testClientId},
+		testParserInfo,
+		nil)
+
+	assert.Nil(t, err)
+
+	pluginInfo := docState.InstancePluginsInformation
+	assert.Equal(t, contracts.StartSession, docState.DocumentType)
+	assert.Equal(t, "1.0", docState.SchemaVersion)
+	assert.Equal(t, testOrchDir, docState.IOConfig.OrchestrationDirectory)
+	assert.Equal(t, testS3Prefix, pluginInfo[0].Configuration.OutputS3KeyPrefix)
+	assert.Equal(t, testS3Bucket, pluginInfo[0].Configuration.OutputS3BucketName)
+	assert.Equal(t, 1, len(pluginInfo))
+	assert.Equal(t, testMessageID, pluginInfo[0].Configuration.MessageId)
+	assert.Equal(t, testDocumentID, pluginInfo[0].Configuration.BookKeepingFileName)
+	assert.Equal(t, "", pluginInfo[0].Configuration.DefaultWorkingDirectory)
+	assert.Equal(t, testSessionId, pluginInfo[0].Configuration.SessionId)
+	assert.Equal(t, testClientId, pluginInfo[0].Configuration.ClientId)
+	assert.Equal(t, testLogGroupName, pluginInfo[0].Configuration.CloudWatchLogGroup)
+	assert.Equal(t, fileutil.BuildPath(testOrchDir, appconfig.PluginNameStandardStream), pluginInfo[0].Configuration.OrchestrationDirectory)
+	assert.Empty(t, pluginInfo[0].Configuration.Commands)
+	assert.Equal(t, testKmsKeyId, pluginInfo[0].Configuration.KmsKeyId)
+	assert.False(t, pluginInfo[0].Configuration.RunAsElevated)
+}
+
+func TestInitializeDocStateForStartSessionDocumentWithParameters_Valid(t *testing.T) {
+	mockLog := log.NewMockLog()
+
+	testParserInfo := DocumentParserInfo{
+		MessageId:        testMessageID,
+		DocumentId:       testDocumentID,
+		OrchestrationDir: testOrchDir,
+	}
+
+	s3BucketName := contracts.Parameter{
+		DefaultVal: testS3Bucket,
+		ParamType:  "String",
+	}
+
+	command := contracts.Parameter{
+		DefaultVal: testCommands,
+		ParamType:  "String",
+	}
+
+	parameters := map[string]*contracts.Parameter{
+		"s3BucketName": &s3BucketName,
+		"command":      &command,
+	}
+
+	sessionCommand := contracts.SessionCommand{
+		Commands:      "{{command}}",
+		RunAsElevated: true,
+	}
+
+	sessionInputs := contracts.SessionInputs{
+		S3BucketName:           "{{s3BucketName}}",
+		S3KeyPrefix:            testS3Prefix,
+		KmsKeyId:               testKmsKeyId,
+		CloudWatchLogGroupName: testLogGroupName,
+	}
+
+	sessionDocContent := &SessionDocContent{
+		SchemaVersion:   "1.0",
+		SessionCommands: []*contracts.SessionCommand{&sessionCommand},
+		Inputs:          sessionInputs,
+		Parameters:      parameters,
+	}
+
+	docState, err := InitializeDocState(mockLog,
+		contracts.StartSession,
+		sessionDocContent,
+		contracts.DocumentInfo{DocumentID: testSessionId, ClientId: testClientId},
+		testParserInfo,
+		nil)
+
+	assert.Nil(t, err)
+
+	pluginInfo := docState.InstancePluginsInformation
+	assert.Equal(t, contracts.StartSession, docState.DocumentType)
+	assert.Equal(t, "1.0", docState.SchemaVersion)
+	assert.Equal(t, testOrchDir, docState.IOConfig.OrchestrationDirectory)
+	assert.Equal(t, testS3Prefix, pluginInfo[0].Configuration.OutputS3KeyPrefix)
+	assert.Equal(t, testS3Bucket, pluginInfo[0].Configuration.OutputS3BucketName)
+	assert.Equal(t, 1, len(pluginInfo))
+	assert.Equal(t, testMessageID, pluginInfo[0].Configuration.MessageId)
+	assert.Equal(t, testDocumentID, pluginInfo[0].Configuration.BookKeepingFileName)
+	assert.Equal(t, "", pluginInfo[0].Configuration.DefaultWorkingDirectory)
+	assert.Equal(t, testSessionId, pluginInfo[0].Configuration.SessionId)
+	assert.Equal(t, testClientId, pluginInfo[0].Configuration.ClientId)
+	assert.Equal(t, testLogGroupName, pluginInfo[0].Configuration.CloudWatchLogGroup)
+	assert.Equal(t, fileutil.BuildPath(testOrchDir, appconfig.PluginNameStandardStream), pluginInfo[0].Configuration.OrchestrationDirectory)
+	assert.Equal(t, testCommands, pluginInfo[0].Configuration.Commands)
+	assert.Equal(t, testKmsKeyId, pluginInfo[0].Configuration.KmsKeyId)
+	assert.True(t, pluginInfo[0].Configuration.RunAsElevated)
 }
 
 func TestParseDocument_EmptyDocContent(t *testing.T) {

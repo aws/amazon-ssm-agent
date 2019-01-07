@@ -66,13 +66,20 @@ var (
 )
 
 //StartPty starts winpty agent and provides handles to stdin and stdout.
-func StartPty(log log.T, isSessionShell bool) (stdin *os.File, stdout *os.File, err error) {
+func StartPty(log log.T, runAsSsmUser bool, shellCmd string) (stdin *os.File, stdout *os.File, err error) {
 	log.Info("Starting winpty")
 	if _, err := os.Stat(winptyDllFilePath); os.IsNotExist(err) {
 		return nil, nil, fmt.Errorf("Missing %s file.", winptyDllFilePath)
 	}
 
-	if isSessionShell {
+	var finalCmd string
+	if strings.TrimSpace(shellCmd) == "" {
+		finalCmd = winptyCmd
+	} else {
+		finalCmd = winptyCmd + " " + shellCmd
+	}
+
+	if runAsSsmUser {
 		// Reset password for default ssm user
 		var newPassword string
 		newPassword, err = u.GeneratePasswordForDefaultUser()
@@ -88,11 +95,11 @@ func StartPty(log log.T, isSessionShell bool) (stdin *os.File, stdout *os.File, 
 		wg.Add(1)
 		go func() {
 			defer wg.Done()
-			err = startPtyAsUser(log, appconfig.DefaultRunAsUserName, newPassword)
+			err = startPtyAsUser(log, appconfig.DefaultRunAsUserName, newPassword, finalCmd)
 		}()
 		wg.Wait()
 	} else {
-		pty, err = winpty.Start(winptyDllFilePath, winptyCmd, defaultConsoleCol, defaultConsoleRow, winpty.DEFAULT_WINPTY_FLAGS)
+		pty, err = winpty.Start(winptyDllFilePath, finalCmd, defaultConsoleCol, defaultConsoleRow, winpty.DEFAULT_WINPTY_FLAGS)
 	}
 
 	if err != nil {
@@ -122,7 +129,7 @@ func SetSize(log log.T, ws_col, ws_row uint32) (err error) {
 }
 
 //startPtyAsUser starts a winpty process in runas user context.
-func startPtyAsUser(log log.T, user string, pass string) (err error) {
+func startPtyAsUser(log log.T, user string, pass string, shellCmd string) (err error) {
 	runtime.LockOSThread()
 	defer runtime.UnlockOSThread()
 
@@ -133,7 +140,7 @@ func startPtyAsUser(log log.T, user string, pass string) (err error) {
 	}
 
 	// Start Winpty under the user context thread.
-	if pty, err = winpty.Start(winptyDllFilePath, winptyCmd, defaultConsoleCol, defaultConsoleRow, winpty.WINPTY_FLAG_IMPERSONATE_THREAD); err != nil {
+	if pty, err = winpty.Start(winptyDllFilePath, shellCmd, defaultConsoleCol, defaultConsoleRow, winpty.WINPTY_FLAG_IMPERSONATE_THREAD); err != nil {
 		log.Error(err)
 		return
 	}
@@ -242,7 +249,7 @@ func (p *ShellPlugin) generateLogData(log log.T, config agentContracts.Configura
 
 // generateTranscriptFile generates a transcript file using PowerShell
 func generateTranscriptFile(log log.T, transcriptFile string, loggerFile string, enableVirtualTerminalProcessingForWindows bool) error {
-	shadowShellInput, _, err := StartPty(log, false)
+	shadowShellInput, _, err := StartPty(log, false, "")
 	if err != nil {
 		return err
 	}

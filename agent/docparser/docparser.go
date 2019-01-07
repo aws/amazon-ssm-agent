@@ -19,6 +19,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
+	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/parameters"
 	"github.com/aws/amazon-ssm-agent/agent/parameterstore"
@@ -35,14 +36,13 @@ const (
 
 // DocumentParserInfo represents the parsed information from the request
 type DocumentParserInfo struct {
-	OrchestrationDir    string
-	S3Bucket            string
-	S3Prefix            string
-	S3EncryptionEnabled bool
-	MessageId           string
-	DocumentId          string
-	DefaultWorkingDir   string
-	CloudWatchConfig    contracts.CloudWatchConfiguration
+	OrchestrationDir  string
+	S3Bucket          string
+	S3Prefix          string
+	MessageId         string
+	DocumentId        string
+	DefaultWorkingDir string
+	CloudWatchConfig  contracts.CloudWatchConfiguration
 }
 
 // InitializeDocState is a method to obtain the state of the document.
@@ -117,8 +117,8 @@ func (sessionDocContent *SessionDocContent) GetSchemaVersion() string {
 func (sessionDocContent *SessionDocContent) GetIOConfiguration(parserInfo DocumentParserInfo) contracts.IOConfiguration {
 	return contracts.IOConfiguration{
 		OrchestrationDirectory: parserInfo.OrchestrationDir,
-		OutputS3BucketName:     parserInfo.S3Bucket,
-		OutputS3KeyPrefix:      parserInfo.S3Prefix,
+		OutputS3BucketName:     sessionDocContent.Inputs.S3BucketName,
+		OutputS3KeyPrefix:      sessionDocContent.Inputs.S3KeyPrefix,
 	}
 }
 
@@ -128,7 +128,96 @@ func (sessionDocContent *SessionDocContent) ParseDocument(log log.T,
 	parserInfo DocumentParserInfo,
 	params map[string]interface{}) (pluginsInfo []contracts.PluginState, err error) {
 
-	return parsePluginStateForStartSession(parserInfo, docInfo.DocumentID, docInfo.ClientId)
+	if err = validateSessionDocumentSchema(sessionDocContent.SchemaVersion); err != nil {
+		return
+	}
+	if err = validateAndReplaceSessionDocumentParameters(log, params, sessionDocContent); err != nil {
+		return
+	}
+
+	resolvedDocContent, _ := jsonutil.MarshalIndent(*sessionDocContent)
+	log.Debugf("Resolved session document content %s", resolvedDocContent)
+
+	return sessionDocContent.parsePluginStateForStartSession(parserInfo, docInfo.DocumentID, docInfo.ClientId)
+}
+
+// validateAndReplaceSessionDocumentParameters validates the parameters and modifies the document content by replacing all parameters with their actual values.
+func validateAndReplaceSessionDocumentParameters(log log.T, params map[string]interface{}, docContent *SessionDocContent) error {
+
+	//ValidateParameterNames
+	validParameters := parameters.ValidParameters(log, params)
+
+	// add default values for missing parameters
+	for k, v := range docContent.Parameters {
+		if _, ok := validParameters[k]; !ok {
+			validParameters[k] = v.DefaultVal
+		}
+	}
+
+	log.Info("Validating SSM parameters")
+	// Validates SSM parameters
+	if err := parameterstore.ValidateSSMParameters(log, docContent.Parameters, validParameters); err != nil {
+		return err
+	}
+
+	err := replaceValidatedSessionParameters(docContent, validParameters, log)
+	return err
+}
+
+// replaceValidatedSessionParameters replaces parameters with their values.
+func replaceValidatedSessionParameters(
+	docContent *SessionDocContent,
+	params map[string]interface{},
+	logger log.T) error {
+	var err error
+
+	sessionCommands := docContent.SessionCommands
+	if sessionCommands != nil && len(sessionCommands) != 0 {
+		resolvedSessionCommands := make([]*contracts.SessionCommand, len(sessionCommands))
+		for i, sessionCommandsConfig := range sessionCommands {
+			var rawData map[string]interface{}
+			if err = jsonutil.Remarshal(*sessionCommandsConfig, &rawData); err != nil {
+				logger.Errorf("Encountered an error while parsing document: %v", err)
+				return err
+			}
+			resolvedRawData := parameters.ReplaceParameters(rawData, params, logger)
+
+			// Resolve SSM Parameters
+			if resolvedRawData, err = parameterstore.Resolve(logger, resolvedRawData); err != nil {
+				return err
+			}
+
+			var resolvedSessionCommandsConfig contracts.SessionCommand
+			if err = jsonutil.Remarshal(resolvedRawData, &resolvedSessionCommandsConfig); err != nil {
+				logger.Errorf("Encountered an error while parsing document: %v", err)
+				return err
+			}
+			resolvedSessionCommands[i] = &resolvedSessionCommandsConfig
+		}
+		docContent.SessionCommands = resolvedSessionCommands
+	}
+
+	inputs := docContent.Inputs
+	var rawData map[string]interface{}
+	if err = jsonutil.Remarshal(inputs, &rawData); err != nil {
+		logger.Errorf("Encountered an error while parsing document: %v", err)
+		return err
+	}
+	resolvedRawData := parameters.ReplaceParameters(rawData, params, logger)
+
+	// Resolve SSM Parameters
+	if resolvedRawData, err = parameterstore.Resolve(logger, resolvedRawData); err != nil {
+		return err
+	}
+
+	var resolvedInputs contracts.SessionInputs
+	if err = jsonutil.Remarshal(resolvedRawData, &resolvedInputs); err != nil {
+		logger.Errorf("Encountered an error while resolving document content: %v", err)
+		return err
+	}
+	docContent.Inputs = resolvedInputs
+
+	return nil
 }
 
 // ParseParameters is a method to parse the ssm parameters into a string map interface
@@ -254,36 +343,80 @@ func parsePluginStateForV20Schema(
 }
 
 // parsePluginStateForStartSession initializes instancePluginsInfo for the docState. Used by startSession.
-func parsePluginStateForStartSession(
+func (sessionDocContent *SessionDocContent) parsePluginStateForStartSession(
 	parserInfo DocumentParserInfo,
 	sessionId string,
 	clientId string) (pluginsInfo []contracts.PluginState, err error) {
 
 	// getPluginConfigurations converts from PluginConfig (structure from the MGS message) to plugin.Configuration (structure expected by the plugin)
 	pluginName := appconfig.PluginNameStandardStream
-	config := contracts.Configuration{
-		MessageId:                   parserInfo.MessageId,
-		BookKeepingFileName:         parserInfo.DocumentId,
-		PluginName:                  pluginName,
-		PluginID:                    pluginName,
-		DefaultWorkingDirectory:     parserInfo.DefaultWorkingDir,
-		SessionId:                   sessionId,
-		OutputS3KeyPrefix:           parserInfo.S3Prefix,
-		OutputS3BucketName:          parserInfo.S3Bucket,
-		S3EncryptionEnabled:         parserInfo.S3EncryptionEnabled,
-		OrchestrationDirectory:      fileutil.BuildPath(parserInfo.OrchestrationDir, pluginName),
-		ClientId:                    clientId,
-		CloudWatchLogGroup:          parserInfo.CloudWatchConfig.LogGroupName,
-		CloudWatchEncryptionEnabled: parserInfo.CloudWatchConfig.LogGroupEncryptionEnabled,
+	if len(sessionDocContent.SessionCommands) > 0 {
+		for _, sessionCommandConfig := range sessionDocContent.SessionCommands {
+			config := contracts.Configuration{
+				MessageId:                   parserInfo.MessageId,
+				BookKeepingFileName:         parserInfo.DocumentId,
+				PluginName:                  pluginName,
+				PluginID:                    pluginName,
+				DefaultWorkingDirectory:     parserInfo.DefaultWorkingDir,
+				SessionId:                   sessionId,
+				OutputS3KeyPrefix:           sessionDocContent.Inputs.S3KeyPrefix,
+				OutputS3BucketName:          sessionDocContent.Inputs.S3BucketName,
+				S3EncryptionEnabled:         sessionDocContent.Inputs.S3EncryptionEnabled,
+				OrchestrationDirectory:      fileutil.BuildPath(parserInfo.OrchestrationDir, pluginName),
+				ClientId:                    clientId,
+				CloudWatchLogGroup:          sessionDocContent.Inputs.CloudWatchLogGroupName,
+				CloudWatchEncryptionEnabled: sessionDocContent.Inputs.CloudWatchEncryptionEnabled,
+				KmsKeyId:                    sessionDocContent.Inputs.KmsKeyId,
+				Commands:                    sessionCommandConfig.Commands,
+				IsPreconditionEnabled:       true,
+				Preconditions:               sessionCommandConfig.Preconditions,
+				RunAsElevated:               sessionCommandConfig.RunAsElevated,
+			}
+
+			var plugin contracts.PluginState
+			plugin.Configuration = config
+			plugin.Id = config.PluginID
+			plugin.Name = config.PluginName
+			pluginsInfo = append(pluginsInfo, plugin)
+		}
+	} else {
+		config := contracts.Configuration{
+			MessageId:                   parserInfo.MessageId,
+			BookKeepingFileName:         parserInfo.DocumentId,
+			PluginName:                  pluginName,
+			PluginID:                    pluginName,
+			DefaultWorkingDirectory:     parserInfo.DefaultWorkingDir,
+			SessionId:                   sessionId,
+			OutputS3KeyPrefix:           sessionDocContent.Inputs.S3KeyPrefix,
+			OutputS3BucketName:          sessionDocContent.Inputs.S3BucketName,
+			S3EncryptionEnabled:         sessionDocContent.Inputs.S3EncryptionEnabled,
+			OrchestrationDirectory:      fileutil.BuildPath(parserInfo.OrchestrationDir, pluginName),
+			ClientId:                    clientId,
+			CloudWatchLogGroup:          sessionDocContent.Inputs.CloudWatchLogGroupName,
+			CloudWatchEncryptionEnabled: sessionDocContent.Inputs.CloudWatchEncryptionEnabled,
+			KmsKeyId:                    sessionDocContent.Inputs.KmsKeyId,
+		}
+
+		var plugin contracts.PluginState
+		plugin.Configuration = config
+		plugin.Id = config.PluginID
+		plugin.Name = config.PluginName
+		pluginsInfo = append(pluginsInfo, plugin)
 	}
 
-	var plugin contracts.PluginState
-	plugin.Configuration = config
-	plugin.Id = config.PluginID
-	plugin.Name = config.PluginName
-	pluginsInfo = append(pluginsInfo, plugin)
-
 	return
+}
+
+// validateSessionDocumentSchema checks if the session manager document schema version is supported by this agent version
+func validateSessionDocumentSchema(documentSchemaVersion string) error {
+	// Check if the document version is supported by this agent version
+	if _, isDocumentVersionSupport := appconfig.SupportedSessionDocumentVersions[documentSchemaVersion]; !isDocumentVersionSupport {
+		errorMsg := fmt.Sprintf(
+			"Document with schema version %s is not supported by this version of ssm agent, please update to latest version",
+			documentSchemaVersion)
+		return fmt.Errorf("%v", errorMsg)
+	}
+	return nil
 }
 
 // validateSchema checks if the document schema version is supported by this agent version

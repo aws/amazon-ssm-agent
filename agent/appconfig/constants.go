@@ -187,3 +187,8 @@ var SupportedDocumentVersions = map[string]struct{}{
 	"2.0.3": {},
 	"2.2":   {},
 }
+
+// Session Manager Document versions that are supported by this Agent version.
+var SupportedSessionDocumentVersions = map[string]struct{}{
+	"1.0": {},
+}

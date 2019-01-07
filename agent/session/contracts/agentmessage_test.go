@@ -187,8 +187,9 @@ func TestParseAgentMessage(t *testing.T) {
 	u, _ := uuid.Parse(messageId)
 
 	agentJson := "{\"DataChannelId\":\"44da928d-1200-4501-a38a-f10d72e38cc4\",\"documentContent\":{\"schemaVersion\":\"1.0\"," +
-		"\"inputs\":{\"cloudWatchLogGroup\":\"\",\"s3BucketName\":\"\",\"s3KeyPrefix\":\"\"},\"description\":\"Document to hold " +
-		"regional settings for Session Manager\",\"sessionType\":\"Standard_Stream\",\"parameters\":{}},\"sessionId\":\"44da928d-1200-4501-a38a-f10d72e38cc4\"," +
+		"\"inputs\":{\"cloudWatchLogGroup\":\"\",\"s3BucketName\":\"\",\"s3KeyPrefix\":\"\",\"kmsKeyId\":\"\"},\"description\":\"Document to hold " +
+		"regional settings for Session Manager\",\"sessionType\":\"Standard_Stream\",\"parameters\":{},\"sessionCommands\":" +
+		"[{\"commands\":\"date\",\"runAsElevated\":true,\"precondition\":{\"StringEquals\":[\"platformType\",\"Linux\"]}}]},\"sessionId\":\"44da928d-1200-4501-a38a-f10d72e38cc4\"," +
 		"\"DataChannelToken\":\"AAEAAdDZESkS1C2/AWLlDccG608LYJUJZJLkxcjxl0x1T70kAAAAAFrozgJYbJT2fY6yQPDqQZhygozZ83LhsoYdP7VWmuo\"}"
 	mgsPayload := MGSPayload{
 		Payload:       string(agentJson),

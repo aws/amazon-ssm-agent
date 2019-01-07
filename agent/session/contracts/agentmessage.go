@@ -283,22 +283,18 @@ func (agentMessage *AgentMessage) ParseAgentMessage(context context.T,
 	documentInfo := buildDocumentInfo(*agentMessage, parsedMessagePayload.SessionId, parsedMessagePayload, instanceId)
 	messageOrchestrationDirectory := filepath.Join(messagesOrchestrationRootDir, parsedMessagePayload.SessionId)
 
-	sessionInputs := parsedMessagePayload.DocumentContent.Inputs
 	parserInfo := docparser.DocumentParserInfo{
-		OrchestrationDir:    messageOrchestrationDirectory,
-		MessageId:           documentInfo.MessageID,
-		DocumentId:          documentInfo.DocumentID,
-		S3Bucket:            sessionInputs.S3BucketName,
-		S3Prefix:            sessionInputs.S3KeyPrefix,
-		S3EncryptionEnabled: sessionInputs.S3EncryptionEnabled,
-		CloudWatchConfig:    contracts.CloudWatchConfiguration{LogGroupName: sessionInputs.CloudWatchLogGroupName, LogGroupEncryptionEnabled: sessionInputs.CloudWatchEncryptionEnabled},
+		OrchestrationDir: messageOrchestrationDirectory,
+		MessageId:        documentInfo.MessageID,
+		DocumentId:       documentInfo.DocumentID,
 	}
 	docContent := &docparser.SessionDocContent{
-		SchemaVersion: parsedMessagePayload.DocumentContent.SchemaVersion,
-		Description:   parsedMessagePayload.DocumentContent.Description,
-		SessionType:   parsedMessagePayload.DocumentContent.SessionType,
-		Inputs:        parsedMessagePayload.DocumentContent.Inputs,
-		Parameters:    parsedMessagePayload.DocumentContent.Parameters,
+		SchemaVersion:   parsedMessagePayload.DocumentContent.SchemaVersion,
+		Description:     parsedMessagePayload.DocumentContent.Description,
+		SessionType:     parsedMessagePayload.DocumentContent.SessionType,
+		Inputs:          parsedMessagePayload.DocumentContent.Inputs,
+		Parameters:      parsedMessagePayload.DocumentContent.Parameters,
+		SessionCommands: parsedMessagePayload.DocumentContent.SessionCommands,
 	}
 
 	docState, err := docparser.InitializeDocState(
@@ -307,7 +303,7 @@ func (agentMessage *AgentMessage) ParseAgentMessage(context context.T,
 		docContent,
 		documentInfo,
 		parserInfo,
-		nil)
+		parsedMessagePayload.Parameters)
 	if err != nil {
 		return nil, fmt.Errorf("error initialing document state: %s", err)
 	}

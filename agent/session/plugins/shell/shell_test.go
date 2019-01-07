@@ -136,7 +136,7 @@ func (suite *ShellTestSuite) TestExecute() {
 
 	stdout, stdin, _ := os.Pipe()
 	stdin.Write(payload)
-	startPty = func(log log.T, isSessionShell bool) (stdin *os.File, stdout *os.File, err error) {
+	startPty = func(log log.T, runAsSsmUser bool, shellCmd string) (stdin *os.File, stdout *os.File, err error) {
 		return stdin, stdout, nil
 	}
 	plugin := &ShellPlugin{

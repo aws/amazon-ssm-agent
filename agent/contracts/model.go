@@ -199,15 +199,24 @@ type SessionInputs struct {
 	S3EncryptionEnabled         bool   `json:"s3EncryptionEnabled" yaml:"s3EncryptionEnabled"`
 	CloudWatchLogGroupName      string `json:"cloudWatchLogGroupName" yaml:"cloudWatchLogGroupName"`
 	CloudWatchEncryptionEnabled bool   `json:"cloudWatchEncryptionEnabled" yaml:"cloudWatchEncryptionEnabled"`
+	KmsKeyId                    string `json:"kmsKeyId" yaml:"kmsKeyId"`
 }
 
 // SessionDocumentContent object which represents ssm session content.
 type SessionDocumentContent struct {
-	SchemaVersion string                `json:"schemaVersion" yaml:"schemaVersion"`
-	Description   string                `json:"description" yaml:"description"`
-	SessionType   string                `json:"sessionType" yaml:"sessionType"`
-	Inputs        SessionInputs         `json:"inputs" yaml:"inputs"`
-	Parameters    map[string]*Parameter `json:"parameters" yaml:"parameters"`
+	SchemaVersion   string                `json:"schemaVersion" yaml:"schemaVersion"`
+	Description     string                `json:"description" yaml:"description"`
+	SessionType     string                `json:"sessionType" yaml:"sessionType"`
+	Inputs          SessionInputs         `json:"inputs" yaml:"inputs"`
+	Parameters      map[string]*Parameter `json:"parameters" yaml:"parameters"`
+	SessionCommands []*SessionCommand     `json:"sessionCommands" yaml:"sessionCommands"`
+}
+
+// SessionCommand object represents session manager commands with cross-platform preconditions.
+type SessionCommand struct {
+	Commands      string              `json:"commands" yaml:"commands"`
+	Preconditions map[string][]string `json:"precondition" yaml:"precondition"`
+	RunAsElevated bool                `json:"runAsElevated" yaml:"runAsElevated"`
 }
 
 // AdditionalInfo section in agent response

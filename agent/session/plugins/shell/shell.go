@@ -115,8 +115,8 @@ func (p *ShellPlugin) Execute(context context.T,
 	}
 }
 
-var startPty = func(log log.T, isSessionShell bool) (stdin *os.File, stdout *os.File, err error) {
-	return StartPty(log, isSessionShell)
+var startPty = func(log log.T, runAsSsmUser bool, shellCmd string) (stdin *os.File, stdout *os.File, err error) {
+	return StartPty(log, runAsSsmUser, shellCmd)
 }
 
 // execute starts pseudo terminal.
@@ -148,7 +148,7 @@ func (p *ShellPlugin) execute(context context.T,
 		return
 	}
 
-	p.stdin, p.stdout, err = startPty(log, true)
+	p.stdin, p.stdout, err = startPty(log, !config.RunAsElevated, config.Commands)
 	if err != nil {
 		errorString := fmt.Errorf("Unable to start shell: %s", err)
 		log.Error(errorString)
