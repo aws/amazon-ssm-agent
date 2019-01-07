@@ -83,6 +83,9 @@ type Configuration struct {
 	CurrentAssociations         []string
 	SessionId                   string
 	ClientId                    string
+	KmsKeyId                    string
+	Commands                    string
+	RunAsElevated               bool
 }
 
 // Plugin wraps the plugin configuration and plugin result.

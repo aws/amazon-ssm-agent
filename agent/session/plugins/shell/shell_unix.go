@@ -47,10 +47,16 @@ var getUserAndGroupIdCall = func(log log.T) (uid int, gid int, err error) {
 }
 
 //StartPty starts pty and provides handles to stdin and stdout
-func StartPty(log log.T, isSessionShell bool) (stdin *os.File, stdout *os.File, err error) {
+func StartPty(log log.T, runAsSsmUser bool, shellCmd string) (stdin *os.File, stdout *os.File, err error) {
 	log.Info("Starting pty")
 	//Start the command with a pty
-	cmd := exec.Command("sh")
+	var cmd *exec.Cmd
+	if strings.TrimSpace(shellCmd) == "" {
+		cmd = exec.Command("sh")
+	} else {
+		commandArgs := append(ShellPluginCommandArgs, shellCmd)
+		cmd = exec.Command("sh", commandArgs...)
+	}
 
 	//TERM is set as linux by pty which has an issue where vi editor screen does not get cleared.
 	//Setting TERM as xterm-256color as used by standard terminals to fix this issue
@@ -60,8 +66,7 @@ func StartPty(log log.T, isSessionShell bool) (stdin *os.File, stdout *os.File, 
 	)
 
 	// Get the uid and gid of the runas user.
-	if isSessionShell {
-		log.Info("Starting pty")
+	if runAsSsmUser {
 		uid, gid, err := getUserAndGroupIdCall(log)
 		if err != nil {
 			return nil, nil, err
@@ -138,7 +143,7 @@ func getUserAndGroupId(log log.T) (uid int, gid int, err error) {
 
 // generateLogData generates a log file with the executed commands.
 func (p *ShellPlugin) generateLogData(log log.T, config agentContracts.Configuration) error {
-	shadowShellInput, _, err := StartPty(log, false)
+	shadowShellInput, _, err := StartPty(log, false, "")
 	if err != nil {
 		return err
 	}
