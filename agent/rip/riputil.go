@@ -57,11 +57,16 @@ If the user didn't specify one, it will return the Amazon MGS endpoint in a cert
 func GetMgsEndpoint(region string) (mgsEndpoint string) {
 	if appConfig, err := appconfig.Config(false); err == nil {
 		if appConfig.Mgs.Endpoint != "" {
+			// use net/url package to parse endpoint, if endpoint doesn't contain protocol,
+			// fullUrl.Host is empty, should return fullUrl.Path. For backwards compatible, return the non-empty one.
 			fullUrl, err := url.Parse(appConfig.Mgs.Endpoint)
 			if err != nil {
 				return ""
 			}
-			return fullUrl.Host
+			if fullUrl.Host != "" {
+				return fullUrl.Host
+			}
+			return fullUrl.Path
 		}
 	}
 
