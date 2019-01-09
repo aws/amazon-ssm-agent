@@ -62,6 +62,11 @@ type MgsConfig struct {
 	SessionWorkersLimit int
 }
 
+// KmsConfig represents configuration for Key Management Service
+type KmsConfig struct {
+	Endpoint string
+}
+
 // OsInfo represents os related information
 type OsInfo struct {
 	Lang    string
@@ -92,6 +97,7 @@ type SsmagentConfig struct {
 	Os          OsInfo
 	S3          S3Cfg
 	Birdwatcher BirdwatcherCfg
+	Kms         KmsConfig
 }
 
 // AppConstants represents some run time constant variable for various module.

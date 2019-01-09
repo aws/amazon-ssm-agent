@@ -40,6 +40,8 @@ func Config(reload bool) (SsmagentConfig, error) {
 		if pathErr != nil {
 			return agentConfig, nil
 		}
+		agentConfig.Os.Name = runtime.GOOS
+		agentConfig.Agent.Version = version.Version
 
 		// Process config override
 		fmt.Printf("Applying config override from %s.\n", path)
@@ -48,8 +50,6 @@ func Config(reload bool) (SsmagentConfig, error) {
 			fmt.Println("Failed to unmarshal config override. Fall back to default.")
 			return agentConfig, err
 		}
-		agentConfig.Os.Name = runtime.GOOS
-		agentConfig.Agent.Version = version.Version
 		parser(&agentConfig)
 		cache(agentConfig)
 	}
@@ -131,6 +131,7 @@ func DefaultConfig() SsmagentConfig {
 		Version: "1",
 	}
 	var birdwatcher BirdwatcherCfg
+	var kms KmsConfig
 
 	var ssmagentCfg = SsmagentConfig{
 		Profile:     credsProfile,
@@ -141,6 +142,7 @@ func DefaultConfig() SsmagentConfig {
 		Os:          os,
 		S3:          s3,
 		Birdwatcher: birdwatcher,
+		Kms:         kms,
 	}
 
 	return ssmagentCfg
