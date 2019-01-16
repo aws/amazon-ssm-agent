@@ -25,7 +25,7 @@ import (
 	complianceUploader "github.com/aws/amazon-ssm-agent/agent/compliance/uploader"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
-	"github.com/aws/amazon-ssm-agent/agent/framework/processor/mock"
+	processormock "github.com/aws/amazon-ssm-agent/agent/framework/processor/mock"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	messageContracts "github.com/aws/amazon-ssm-agent/agent/runcommand/contracts"
 	"github.com/aws/aws-sdk-go/aws"

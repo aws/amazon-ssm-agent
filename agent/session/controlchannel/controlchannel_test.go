@@ -27,7 +27,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/session/service"
 	serviceMock "github.com/aws/amazon-ssm-agent/agent/session/service/mocks"
 	"github.com/aws/aws-sdk-go/aws/credentials"
-	"github.com/aws/aws-sdk-go/aws/signer/v4"
+	v4 "github.com/aws/aws-sdk-go/aws/signer/v4"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 	"github.com/twinj/uuid"

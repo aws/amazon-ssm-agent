@@ -21,7 +21,7 @@ import (
 	"github.com/aws/aws-sdk-go/aws/credentials"
 	"github.com/aws/aws-sdk-go/aws/request"
 	"github.com/aws/aws-sdk-go/aws/session"
-	"github.com/aws/aws-sdk-go/private/signer/v4"
+	v4 "github.com/aws/aws-sdk-go/private/signer/v4"
 	"github.com/aws/aws-sdk-go/service/ssm"
 )
 

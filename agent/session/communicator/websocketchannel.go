@@ -29,7 +29,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	mgsconfig "github.com/aws/amazon-ssm-agent/agent/session/config"
 	"github.com/aws/amazon-ssm-agent/agent/websocketutil"
-	"github.com/aws/aws-sdk-go/aws/signer/v4"
+	v4 "github.com/aws/aws-sdk-go/aws/signer/v4"
 	"github.com/gorilla/websocket"
 )
 

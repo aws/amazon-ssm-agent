@@ -19,7 +19,7 @@ import (
 
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/localpackages"
-	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/localpackages/mock"
+	repository_mock "github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/localpackages/mock"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/trace"
 	"github.com/stretchr/testify/mock"
 )
