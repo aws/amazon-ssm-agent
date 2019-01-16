@@ -29,7 +29,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	filemock "github.com/aws/amazon-ssm-agent/agent/fileutil/filemanager/mock"
-	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler/mock"
+	iohandlermocks "github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler/mock"
 	executermocks "github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/mock"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	ssmsvc "github.com/aws/amazon-ssm-agent/agent/ssm"

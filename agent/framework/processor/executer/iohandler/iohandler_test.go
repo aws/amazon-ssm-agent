@@ -21,8 +21,8 @@ import (
 	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
-	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler/iomodule/mock"
-	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler/multiwriter/mock"
+	iomodulemock "github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler/iomodule/mock"
+	multiwritermock "github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler/multiwriter/mock"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"

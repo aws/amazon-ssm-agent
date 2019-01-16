@@ -3,7 +3,7 @@ package messaging
 import (
 	"testing"
 
-	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/outofproc/channel/mock"
+	channelmock "github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/outofproc/channel/mock"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/stretchr/testify/mock"
 )

@@ -19,7 +19,7 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/aws/amazon-ssm-agent/agent/agentlogstocloudwatch/cloudwatchlogspublisher/mock"
+	cloudwatchlogspublisher_mock "github.com/aws/amazon-ssm-agent/agent/agentlogstocloudwatch/cloudwatchlogspublisher/mock"
 	"github.com/aws/amazon-ssm-agent/agent/agentlogstocloudwatch/cloudwatchlogsqueue"
 	"github.com/cihub/seelog"
 	"github.com/stretchr/testify/assert"

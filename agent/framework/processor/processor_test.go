@@ -23,7 +23,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer"
-	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/mock"
+	executermocks "github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/mock"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 	"github.com/stretchr/testify/assert"
