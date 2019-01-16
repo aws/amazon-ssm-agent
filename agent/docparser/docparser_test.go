@@ -187,6 +187,7 @@ func TestInitializeDocStateForStartSessionDocument_Valid(t *testing.T) {
 		SchemaVersion:   "1.0",
 		SessionCommands: []*contracts.SessionCommand{&sessionCommand},
 		Inputs:          sessionInputs,
+		SessionType:     appconfig.PluginNameStandardStream,
 	}
 
 	docState, err := InitializeDocState(mockLog,
@@ -236,6 +237,7 @@ func TestInitializeDocStateForStartSessionDocumentWithoutSessionCommands_Valid(t
 	sessionDocContent := &SessionDocContent{
 		SchemaVersion: "1.0",
 		Inputs:        sessionInputs,
+		SessionType:   appconfig.PluginNameStandardStream,
 	}
 
 	docState, err := InitializeDocState(mockLog,
@@ -307,6 +309,7 @@ func TestInitializeDocStateForStartSessionDocumentWithParameters_Valid(t *testin
 		SessionCommands: []*contracts.SessionCommand{&sessionCommand},
 		Inputs:          sessionInputs,
 		Parameters:      parameters,
+		SessionType:     appconfig.PluginNameStandardStream,
 	}
 
 	docState, err := InitializeDocState(mockLog,
