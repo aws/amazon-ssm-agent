@@ -349,7 +349,7 @@ func (sessionDocContent *SessionDocContent) parsePluginStateForStartSession(
 	clientId string) (pluginsInfo []contracts.PluginState, err error) {
 
 	// getPluginConfigurations converts from PluginConfig (structure from the MGS message) to plugin.Configuration (structure expected by the plugin)
-	pluginName := appconfig.PluginNameStandardStream
+	pluginName := sessionDocContent.SessionType
 	if len(sessionDocContent.SessionCommands) > 0 {
 		for _, sessionCommandConfig := range sessionDocContent.SessionCommands {
 			config := contracts.Configuration{
