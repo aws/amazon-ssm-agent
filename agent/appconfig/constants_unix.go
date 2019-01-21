@@ -18,6 +18,8 @@ package appconfig
 
 import (
 	"os"
+	"path/filepath"
+	"strings"
 )
 
 const (
@@ -109,13 +111,23 @@ func init() {
 		PowerShellPluginCommandName = "/usr/bin/pwsh"
 	}
 
-	// if document-worker is not in the default location, try using the snap installed location
+	/*
+		All binaries live in the same directory
+		Locate relatively in the case of Snap packages, CoreOS, etc.
+		Do not use this logic if default paths exist
+	*/
 	if _, err := os.Stat(DefaultDocumentWorker); err != nil {
-		if _, err := os.Stat("/snap/amazon-ssm-agent/current/ssm-document-worker"); err == nil {
-			DefaultProgramFolder = "/snap/amazon-ssm-agent/current"
-			DefaultDocumentWorker = "/snap/amazon-ssm-agent/current/ssm-document-worker"
-			DefaultSessionWorker = "/snap/amazon-ssm-agent/current/ssm-session-worker"
-			DefaultSessionLogger = "/snap/amazon-ssm-agent/current/ssm-session-logger"
+		// Find the Binary Directory
+		if bin, err := os.Executable(); err == nil {
+			if bindir, err := filepath.Abs(filepath.Dir(bin)); err == nil {
+				DefaultDocumentWorker = filepath.Join(bindir, "ssm-document-worker")
+				DefaultSessionWorker = filepath.Join(bindir, "ssm-session-worker")
+				DefaultSessionLogger = filepath.Join(bindir, "ssm-session-logger")
+				// for snap, DefaultProgramFolder is the snap's binary directory
+				if strings.HasPrefix(DefaultDocumentWorker, "/snap") {
+					DefaultProgramFolder = bindir
+				}
+			}
 		}
 	}
 }
