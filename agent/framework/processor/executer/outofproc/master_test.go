@@ -109,7 +109,7 @@ func TestInitializeNewProcess(t *testing.T) {
 	}
 	processCreator = func(name string, argv []string) (proc.OSProcess, error) {
 		assert.Equal(t, name, appconfig.DefaultDocumentWorker)
-		assert.Equal(t, argv, []string{testDocumentID})
+		assert.Equal(t, argv, []string{testDocumentID, testInstanceID})
 		return testCase.processMock, nil
 	}
 	exe := &OutOfProcExecuter{
@@ -143,7 +143,7 @@ func TestInitializeNewProcessForSession(t *testing.T) {
 	}
 	processCreator = func(name string, argv []string) (proc.OSProcess, error) {
 		assert.Equal(t, name, appconfig.DefaultSessionWorker)
-		assert.Equal(t, argv, []string{testDocumentID})
+		assert.Equal(t, argv, []string{testDocumentID, testInstanceID})
 		return testCase.processMock, nil
 	}
 	exe := &OutOfProcExecuter{
@@ -214,7 +214,7 @@ func TestCreateProcessFailed(t *testing.T) {
 	var err = errors.New("failed to create process")
 	processCreator = func(name string, argv []string) (proc.OSProcess, error) {
 		assert.Equal(t, name, appconfig.DefaultDocumentWorker)
-		assert.Equal(t, argv, []string{testDocumentID})
+		assert.Equal(t, argv, []string{testDocumentID, testInstanceID})
 		return nil, err
 	}
 	exe := &OutOfProcExecuter{
@@ -239,7 +239,7 @@ func TestInitializeProcessUnexpectedExited(t *testing.T) {
 	}
 	processCreator = func(name string, argv []string) (proc.OSProcess, error) {
 		assert.Equal(t, name, appconfig.DefaultDocumentWorker)
-		assert.Equal(t, argv, []string{testDocumentID})
+		assert.Equal(t, argv, []string{testDocumentID, testInstanceID})
 		return testCase.processMock, nil
 	}
 	cancel := task.NewChanneledCancelFlag()

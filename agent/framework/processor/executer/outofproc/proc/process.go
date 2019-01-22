@@ -87,7 +87,7 @@ func IsProcessExists(log log.T, pid int, createTime time.Time) bool {
 }
 
 //TODO figure out why sometimes argv does not contain program name
-func ParseArgv(argv []string) (string, string, error) {
+func ParseArgv(argv []string) (channelName string, instanceID string, err error) {
 	if len(argv) == 1 {
 		if argv[0] == appconfig.DefaultDocumentWorker || argv[0] == appconfig.DefaultSessionWorker {
 			return "", "", errors.New("insufficient argument number")
@@ -107,6 +107,6 @@ func ParseArgv(argv []string) (string, string, error) {
 
 }
 
-func FormArgv(channelName string) []string {
-	return []string{channelName}
+func FormArgv(channelName string, instanceID string) []string {
+	return []string{channelName, instanceID}
 }

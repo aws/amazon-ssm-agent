@@ -42,8 +42,9 @@ func initialize(args []string) (context.T, string, error) {
 	logger := ssmlog.SSMLogger(false)
 	// initialize appconfig, use default config
 	config := appconfig.DefaultConfig()
-	logger.Debugf("parsing args: %v", args)
+	logger.Infof("parsing args: %v", args)
 	channelName, instanceID, err := proc.ParseArgv(args)
+	logger.Infof("using channelName %v, instanceID: %v", channelName, instanceID)
 	//cache the instanceID here in order to avoid throttle by metadata endpoint.
 	platform.SetInstanceID(instanceID)
 	if err != nil {
