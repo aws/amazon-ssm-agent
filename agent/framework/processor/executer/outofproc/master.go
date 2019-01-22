@@ -146,6 +146,7 @@ func (e *OutOfProcExecuter) initialize(stopTimer chan bool) (ipc channel.Channel
 	log := e.ctx.Log()
 	var found bool
 	documentID := e.docState.DocumentInformation.DocumentID
+	instanceID := e.docState.DocumentInformation.InstanceID
 	ipc, err, found = channelCreator(log, channel.ModeMaster, documentID)
 
 	if err != nil {
@@ -173,7 +174,7 @@ func (e *OutOfProcExecuter) initialize(stopTimer chan bool) (ipc channel.Channel
 			workerName = appconfig.DefaultDocumentWorker
 		}
 		var process proc.OSProcess
-		if process, err = processCreator(workerName, proc.FormArgv(documentID)); err != nil {
+		if process, err = processCreator(workerName, proc.FormArgv(documentID, instanceID)); err != nil {
 			log.Errorf("start process: %v error: %v", workerName, err)
 			//make sure close the channel
 			ipc.Destroy()
