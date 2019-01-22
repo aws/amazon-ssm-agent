@@ -32,6 +32,7 @@ type BlockCipherTestSuite struct {
 	plainTextData  []byte
 	cipherTextKey  []byte
 	plainTextKey   []byte
+	sessionId      string
 }
 
 func (suite *BlockCipherTestSuite) SetupTest() {
@@ -42,7 +43,7 @@ func (suite *BlockCipherTestSuite) SetupTest() {
 	suite.plainTextData = []byte("plainTextDataToBeEncrypted")
 	suite.cipherTextKey = []byte("cipherTextKey")
 	suite.plainTextKey, _ = hex.DecodeString("7775626261206c756262612064756220647562207775626261206c756262612064756220647562207775626261206c7562626120647562206475622077756262")
-
+	suite.sessionId = "some-session-id"
 }
 
 //Execute the test suite
@@ -52,10 +53,10 @@ func TestBlockCipherTestSuite(t *testing.T) {
 
 // Testing Encrypt and Decrypt functions
 func (suite *BlockCipherTestSuite) TestEncryptDecrypt() {
+	var encryptionContext = map[string]*string{"SessionId": &suite.sessionId}
+	suite.mockKMSService.On("GenerateDataKey", suite.kmsKeyId, encryptionContext).Return(suite.cipherTextKey, suite.plainTextKey, nil)
 
-	suite.mockKMSService.On("GenerateDataKey", suite.kmsKeyId).Return(suite.cipherTextKey, suite.plainTextKey, nil)
-
-	blockCipher, err := NewBlockCipherKMS(suite.mockLog, suite.kmsKeyId, &suite.mockKMSService)
+	blockCipher, err := NewBlockCipherKMS(suite.mockLog, suite.kmsKeyId, suite.sessionId, &suite.mockKMSService)
 	assert.Nil(suite.T(), err)
 	// Create another cipher with flipped encryption/decryption keys
 	blockCipherReversed := BlockCipher(BlockCipher{})

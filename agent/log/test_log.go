@@ -14,6 +14,7 @@
 package log
 
 import (
+	"errors"
 	"fmt"
 
 	"github.com/stretchr/testify/mock"
@@ -31,12 +32,12 @@ func NewMockLog() *Mock {
 	log.On("Close").Return()
 	log.On("Flush").Return()
 	log.On("Debug", mock.Anything).Return()
-	log.On("Error", mock.Anything).Return(nil)
+	log.On("Error", mock.Anything).Return(mock.AnythingOfType("error"))
 	log.On("Trace", mock.Anything).Return()
 	log.On("Info", mock.Anything).Return()
 	log.On("Debugf", mock.Anything, mock.Anything).Return()
-	log.On("Errorf", mock.Anything, mock.Anything).Return(nil)
-	log.On("Warnf", mock.Anything, mock.Anything).Return(nil)
+	log.On("Errorf", mock.AnythingOfType("string"), mock.Anything).Return(mock.AnythingOfType("error"))
+	log.On("Warnf", mock.AnythingOfType("string"), mock.Anything).Return(mock.AnythingOfType("error"))
 	log.On("Tracef", mock.Anything, mock.Anything).Return()
 	log.On("Infof", mock.Anything, mock.Anything).Return()
 	return log
@@ -48,11 +49,11 @@ func NewMockLogWithContext(ctx string) *Mock {
 	log.On("Close").Return()
 	log.On("Flush").Return()
 	log.On("Debug", mock.Anything).Return()
-	log.On("Error", mock.Anything).Return(nil)
+	log.On("Error", mock.Anything).Return(mock.AnythingOfType("error"))
 	log.On("Trace", mock.Anything).Return()
 	log.On("Info", mock.Anything).Return()
 	log.On("Debugf", mock.Anything, mock.Anything).Return()
-	log.On("Errorf", mock.Anything, mock.Anything).Return(nil)
+	log.On("Errorf", mock.AnythingOfType("string"), mock.Anything).Return(mock.AnythingOfType("error"))
 	log.On("Tracef", mock.Anything, mock.Anything).Return()
 	log.On("Infof", mock.Anything, mock.Anything).Return()
 	return log
@@ -91,28 +92,31 @@ func (_m *Mock) Infof(format string, params ...interface{}) {
 // Warnf mocks the Warnf function.
 func (_m *Mock) Warnf(format string, params ...interface{}) error {
 	fmt.Print(_m.context)
-	fmt.Printf("Warnf: "+format, params...)
+	msg := fmt.Sprintf("Warnf: "+format, params...)
+	fmt.Printf(msg)
 	fmt.Println()
-	ret := _m.Called(format, params)
-	return ret.Error(0)
+	_m.Called(format, params)
+	return errors.New(msg)
 }
 
 // Errorf mocks the Errorf function.
 func (_m *Mock) Errorf(format string, params ...interface{}) error {
 	fmt.Print(_m.context)
-	fmt.Printf("Errorf: "+format, params...)
+	msg := fmt.Sprintf("Errorf: "+format, params...)
+	fmt.Printf(msg)
 	fmt.Println()
-	ret := _m.Called(format, params)
-	return ret.Error(0)
+	_m.Called(format, params)
+	return errors.New(msg)
 }
 
 // Criticalf mocks the Criticalf function.
 func (_m *Mock) Criticalf(format string, params ...interface{}) error {
 	fmt.Print(_m.context)
-	fmt.Printf("Criticalf: "+format, params...)
+	msg := fmt.Sprintf("Criticalf: "+format, params...)
+	fmt.Printf(msg)
 	fmt.Println()
-	ret := _m.Called(format, params)
-	return ret.Error(0)
+	_m.Called(format, params)
+	return errors.New(msg)
 }
 
 // Trace mocks the Trace function.
@@ -151,10 +155,11 @@ func (_m *Mock) Warn(v ...interface{}) error {
 // Error mocks the Error function.
 func (_m *Mock) Error(v ...interface{}) error {
 	fmt.Print(_m.context)
-	fmt.Print("Error: ")
-	fmt.Println(v...)
-	ret := _m.Called(v)
-	return ret.Error(0)
+	msg := fmt.Sprint("Error: ") + fmt.Sprint(v...)
+	fmt.Printf(msg)
+	fmt.Println()
+	_m.Called(v)
+	return errors.New(msg)
 }
 
 // Critical mocks the Critical function.
