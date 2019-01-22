@@ -170,6 +170,9 @@ const (
 	// PluginNameStandardStream is the name for session manager standard stream plugin aka shell.
 	PluginNameStandardStream = "Standard_Stream"
 
+	// PluginNameRestrictedStandardStream is the name for session manager restricted standard stream plugin.
+	PluginNameRestrictedStandardStream = "Restricted_Standard_Stream"
+
 	// Session default RunAs user name
 	DefaultRunAsUserName = "ssm-user"
 )
