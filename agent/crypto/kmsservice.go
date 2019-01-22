@@ -16,6 +16,7 @@ package crypto
 
 import (
 	"fmt"
+
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/sdkutil"
@@ -31,7 +32,7 @@ import (
 const KMSKeySizeInBytes int64 = 64
 
 type IKMSService interface {
-	GenerateDataKey(kmsKeyId string) (cipherTextKey []byte, plainTextKey []byte, err error)
+	GenerateDataKey(kmsKeyId string, context map[string]*string) (cipherTextKey []byte, plainTextKey []byte, err error)
 }
 
 type KMSService struct {
@@ -67,11 +68,12 @@ func NewKMSService(log log.T) (kmsService *KMSService, err error) {
 }
 
 // GenerateDataKey gets cipher text and plain text keys from KMS service
-func (kmsService *KMSService) GenerateDataKey(kmsKeyId string) (cipherTextKey []byte, plainTextKey []byte, err error) {
+func (kmsService *KMSService) GenerateDataKey(kmsKeyId string, context map[string]*string) (cipherTextKey []byte, plainTextKey []byte, err error) {
 	kmsKeySize := KMSKeySizeInBytes
 	generateDataKeyInput := kms.GenerateDataKeyInput{
-		KeyId:         &kmsKeyId,
-		NumberOfBytes: &kmsKeySize,
+		KeyId:             &kmsKeyId,
+		NumberOfBytes:     &kmsKeySize,
+		EncryptionContext: context,
 	}
 
 	var generateDataKeyOutput *kms.GenerateDataKeyOutput

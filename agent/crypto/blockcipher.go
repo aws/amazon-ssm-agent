@@ -40,21 +40,24 @@ type BlockCipher struct {
 	decryptionKey []byte
 }
 
-func NewBlockCipher(log log.T, kmsKeyId string) (blockCipher *BlockCipher, err error) {
+// Creates a new block cipher. Calls KMS key id as kmsKeyId and sessionId in the encryption context
+func NewBlockCipher(log log.T, kmsKeyId string, sessionId string) (blockCipher *BlockCipher, err error) {
 	var kmsService *KMSService
 	if kmsService, err = NewKMSService(log); err != nil {
 		return nil, fmt.Errorf("Unable to get new KMSService, %v", err)
 	}
-	return NewBlockCipherKMS(log, kmsKeyId, kmsService)
+	return NewBlockCipherKMS(log, kmsKeyId, sessionId, kmsService)
 }
 
-func NewBlockCipherKMS(log log.T, kmsKeyId string, kmsService IKMSService) (blockCipher *BlockCipher, err error) {
+func NewBlockCipherKMS(log log.T, kmsKeyId string, sessionId string, kmsService IKMSService) (blockCipher *BlockCipher, err error) {
 	// NewBlockCipher creates a new instance of BlockCipher
 	var (
 		cipherTextKey []byte
 		plainTextKey  []byte
 	)
-	if cipherTextKey, plainTextKey, err = kmsService.GenerateDataKey(kmsKeyId); err != nil {
+	var encryptionContext = make(map[string]*string)
+	encryptionContext["SessionId"] = &sessionId
+	if cipherTextKey, plainTextKey, err = kmsService.GenerateDataKey(kmsKeyId, encryptionContext); err != nil {
 		return nil, fmt.Errorf("Unable to generate data key, %v", err)
 	}
 	log.Debug("Successfully generated plain and cipher text keys")

@@ -21,13 +21,13 @@ type IKMSService struct {
 	mock.Mock
 }
 
-// GenerateDataKey provides a mock function with given fields: kmsKeyId
-func (_m *IKMSService) GenerateDataKey(kmsKeyId string) ([]byte, []byte, error) {
-	ret := _m.Called(kmsKeyId)
+// GenerateDataKey provides a mock function with given fields: kmsKeyId, context
+func (_m *IKMSService) GenerateDataKey(kmsKeyId string, context map[string]*string) ([]byte, []byte, error) {
+	ret := _m.Called(kmsKeyId, context)
 
 	var r0 []byte
-	if rf, ok := ret.Get(0).(func(string) []byte); ok {
-		r0 = rf(kmsKeyId)
+	if rf, ok := ret.Get(0).(func(string, map[string]*string) []byte); ok {
+		r0 = rf(kmsKeyId, context)
 	} else {
 		if ret.Get(0) != nil {
 			r0 = ret.Get(0).([]byte)
@@ -35,8 +35,8 @@ func (_m *IKMSService) GenerateDataKey(kmsKeyId string) ([]byte, []byte, error) 
 	}
 
 	var r1 []byte
-	if rf, ok := ret.Get(1).(func(string) []byte); ok {
-		r1 = rf(kmsKeyId)
+	if rf, ok := ret.Get(1).(func(string, map[string]*string) []byte); ok {
+		r1 = rf(kmsKeyId, context)
 	} else {
 		if ret.Get(1) != nil {
 			r1 = ret.Get(1).([]byte)
@@ -44,8 +44,8 @@ func (_m *IKMSService) GenerateDataKey(kmsKeyId string) ([]byte, []byte, error) 
 	}
 
 	var r2 error
-	if rf, ok := ret.Get(2).(func(string) error); ok {
-		r2 = rf(kmsKeyId)
+	if rf, ok := ret.Get(2).(func(string, map[string]*string) error); ok {
+		r2 = rf(kmsKeyId, context)
 	} else {
 		r2 = ret.Error(2)
 	}
