@@ -15,11 +15,13 @@
 package restrictedshell
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
+	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler"
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler/mock"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	mgsContracts "github.com/aws/amazon-ssm-agent/agent/session/contracts"
@@ -75,7 +77,7 @@ func (suite *RestrictedShellTestSuite) TestExecuteWhenCancelFlagIsShutDown() {
 	suite.plugin.shell, _ = shell.NewPlugin()
 
 	suite.plugin.Execute(suite.mockContext,
-		contracts.Configuration{},
+		contracts.Configuration{Commands: "test"},
 		suite.mockCancelFlag,
 		suite.mockIohandler,
 		suite.mockDataChannel)
@@ -92,7 +94,7 @@ func (suite *RestrictedShellTestSuite) TestExecuteWhenCancelFlagIsCancelled() {
 	suite.plugin.shell, _ = shell.NewPlugin()
 
 	suite.plugin.Execute(suite.mockContext,
-		contracts.Configuration{},
+		contracts.Configuration{Commands: "test"},
 		suite.mockCancelFlag,
 		suite.mockIohandler,
 		suite.mockDataChannel)
@@ -103,9 +105,29 @@ func (suite *RestrictedShellTestSuite) TestExecuteWhenCancelFlagIsCancelled() {
 
 // Testing Execute
 func (suite *RestrictedShellTestSuite) TestExecute() {
+	newIOHandler := iohandler.NewDefaultIOHandler(suite.mockLog, contracts.IOConfiguration{})
 	mockShellPlugin := new(mocks.ISessionPlugin)
-	mockShellPlugin.On("Execute", suite.mockContext, mock.Anything, suite.mockCancelFlag, suite.mockIohandler, suite.mockDataChannel).Return()
+	mockShellPlugin.On("Execute", suite.mockContext, mock.Anything, suite.mockCancelFlag, newIOHandler, suite.mockDataChannel).Return()
 	suite.plugin.shell = mockShellPlugin
+
+	suite.plugin.Execute(suite.mockContext,
+		contracts.Configuration{Commands: "test"},
+		suite.mockCancelFlag,
+		newIOHandler,
+		suite.mockDataChannel)
+
+	mockShellPlugin.AssertExpectations(suite.T())
+	assert.Equal(suite.T(), 0, newIOHandler.GetExitCode())
+}
+
+// Testing Execute
+func (suite *RestrictedShellTestSuite) TestExecuteWithoutCommands() {
+	suite.mockIohandler.On("SetExitCode", 1).Return(nil)
+	suite.mockIohandler.On("SetStatus", contracts.ResultStatusFailed).Return()
+
+	sessionPluginResultOutput := mgsContracts.SessionPluginResultOutput{}
+	sessionPluginResultOutput.Output = fmt.Sprintf("Commands cannot be empty for session type %s", suite.plugin.name())
+	suite.mockIohandler.On("SetOutput", sessionPluginResultOutput).Return()
 
 	suite.plugin.Execute(suite.mockContext,
 		contracts.Configuration{},
@@ -113,7 +135,7 @@ func (suite *RestrictedShellTestSuite) TestExecute() {
 		suite.mockIohandler,
 		suite.mockDataChannel)
 
-	mockShellPlugin.AssertExpectations(suite.T())
+	suite.mockIohandler.AssertExpectations(suite.T())
 }
 
 // Testing InputStreamMessageHandler

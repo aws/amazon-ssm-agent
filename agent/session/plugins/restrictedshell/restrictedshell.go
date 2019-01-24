@@ -15,6 +15,9 @@
 package restrictedshell
 
 import (
+	"fmt"
+	"strings"
+
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	agentContracts "github.com/aws/amazon-ssm-agent/agent/contracts"
@@ -59,7 +62,18 @@ func (p *RestrictedShellPlugin) Execute(context context.T,
 	output iohandler.IOHandler,
 	dataChannel datachannel.IDataChannel) {
 
-	p.shell.Execute(context, config, cancelFlag, output, dataChannel)
+	if strings.TrimSpace(config.Commands) != "" {
+		p.shell.Execute(context, config, cancelFlag, output, dataChannel)
+	} else {
+		logger := context.Log()
+		sessionPluginResultOutput := mgsContracts.SessionPluginResultOutput{}
+		output.SetExitCode(appconfig.ErrorExitCode)
+		output.SetStatus(agentContracts.ResultStatusFailed)
+		sessionPluginResultOutput.Output = fmt.Sprintf("Commands cannot be empty for session type %s", p.name())
+		output.SetOutput(sessionPluginResultOutput)
+		logger.Error(sessionPluginResultOutput.Output)
+		return
+	}
 }
 
 // InputStreamMessageHandler passes payload byte stream to shell stdin
