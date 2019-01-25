@@ -75,7 +75,7 @@ func (da *PackageArchive) Name() string {
 }
 
 //setters
-// SetPackageName sets the document arn. The manifest is not required
+// SetPackageName sets the document arn. The manifest and version is not required
 // since we use the document name and document version
 func (da *PackageArchive) SetResource(packageName string, version string, manifest *birdwatcher.Manifest) {
 	if da.documentDesc != nil {
