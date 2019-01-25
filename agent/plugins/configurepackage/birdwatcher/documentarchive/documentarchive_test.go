@@ -19,11 +19,13 @@ import (
 	"errors"
 	"testing"
 
+	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/birdwatcher"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/birdwatcher/archive"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/birdwatcher/facade"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/packageservice"
 	cache_mock "github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/packageservice/mock"
+	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/trace"
 
 	"github.com/aws/aws-sdk-go/service/ssm"
 
@@ -98,19 +100,25 @@ func TestGetResourceVersion(t *testing.T) {
 func TestSetAndGetResources(t *testing.T) {
 	manifest := birdwatcher.Manifest{}
 	packageName := "packagename"
+	version := "version"
 	docDescription := createDefaultDocumentDescription(packageName, "hash", ssm.DocumentStatusActive)
-	packageArchive := PackageArchive{
-		documentDesc: &docDescription,
-		docVersion:   "abc",
-		documentArn:  packageName,
+
+	localDocuments := make(map[string]*localDocument)
+	key := archive.FormKey(packageName, version)
+	localDocuments[key] = &localDocument{
+		documentArn: *docDescription.Name,
+		docVersion:  *docDescription.DocumentVersion,
+		docHash:     *docDescription.Hash,
 	}
 
-	packageArchive.SetResource(&manifest)
-	arn := packageArchive.GetResourceArn()
+	packageArchive := PackageArchive{
+		localDocuments: localDocuments,
+	}
+
+	packageArchive.SetResource(packageName, version, &manifest)
+	arn := packageArchive.GetResourceArn(packageName, version)
 
 	assert.Equal(t, arn, *docDescription.Name)
-	assert.Equal(t, packageArchive.docVersion, *docDescription.DocumentVersion)
-	assert.Equal(t, packageArchive.documentArn, *docDescription.Name)
 }
 
 func TestGetFileDownloadLocation(t *testing.T) {
@@ -269,7 +277,7 @@ func TestGetFileDownloadLocation(t *testing.T) {
 	for _, testdata := range data {
 		t.Run(testdata.name, func(t *testing.T) {
 
-			docArchive := NewDocumentArchive(&testdata.facadeClient, testdata.attachments, &documentDescription, memcache, manifest)
+			docArchive := NewDocumentArchive(&testdata.facadeClient, testdata.attachments, &documentDescription, memcache, packagename, version, manifest)
 
 			location, err := docArchive.GetFileDownloadLocation(testdata.file, packagename, version)
 			if testdata.isError {
@@ -285,6 +293,7 @@ func TestGetFileDownloadLocation(t *testing.T) {
 }
 
 func TestDownloadArchiveInfo(t *testing.T) {
+	tracer := trace.NewTracer(log.NewMockLog())
 	packageName := "ABC_package"
 	documentArn := "arn:aws:ssm:us-east-1:1234567890:document/NameOfDoc"
 	versionName := "NewVersion"
@@ -438,9 +447,9 @@ func TestDownloadArchiveInfo(t *testing.T) {
 			testdata.facadeClient.DescribeDocumentOutput = &ssm.DescribeDocumentOutput{
 				Document: &testdata.documentDescription,
 			}
-			docArchive := NewDocumentArchive(&testdata.facadeClient, nil, &testdata.documentDescription, testdata.manifestCache, manifest)
+			docArchive := NewDocumentArchive(&testdata.facadeClient, nil, &testdata.documentDescription, testdata.manifestCache, packageName, testdata.version, manifest)
 
-			document, err := docArchive.DownloadArchiveInfo(packageName, testdata.version)
+			document, err := docArchive.DownloadArchiveInfo(tracer, packageName, testdata.version)
 			if testdata.isError {
 				assert.Error(t, err)
 			} else {

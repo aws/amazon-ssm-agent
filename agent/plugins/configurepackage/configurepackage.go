@@ -430,9 +430,13 @@ func selectService(tracer trace.Tracer, input *ConfigurePackagePluginInput, loca
 		}
 
 		*isDocumentArchive = false
-		// return a new object of type birdwatcher
-		return birdwatcherservice.NewBirdwatcherArchive(birdwatcherFacade, localrepo, *response.Manifest), nil
 
+		// return a new object of type birdwatcher
+		birdWatcherArchiveContext := make(map[string]string)
+		birdWatcherArchiveContext["packageName"] = input.Name
+		birdWatcherArchiveContext["packageVersion"] = input.Version
+		birdWatcherArchiveContext["manifest"] = *response.Manifest
+		return birdwatcherservice.NewBirdwatcherArchive(birdwatcherFacade, localrepo, birdWatcherArchiveContext), nil
 	}
 
 	tracer.CurrentTrace().AppendInfof("S3 repository is marked active")

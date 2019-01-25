@@ -49,7 +49,11 @@ func TestGetResourceVersion(t *testing.T) {
 
 			mockBWFacade := facade.FacadeStub{}
 
-			bwArchive := New(&mockBWFacade, "manifest")
+			context := make(map[string]string)
+			context["packageName"] = testdata.name
+			context["packageVersion"] = testdata.version
+			context["manifest"] = "manifest"
+			bwArchive := New(&mockBWFacade, context)
 
 			name, version := bwArchive.GetResourceVersion(testdata.name, testdata.version)
 			assert.Equal(t, name, testdata.name)
@@ -65,8 +69,11 @@ func TestGetResourceVersion(t *testing.T) {
 
 func TestArchiveName(t *testing.T) {
 	facadeSession := facade.FacadeStub{}
-	manifest := "manifest"
-	testArchive := New(&facadeSession, manifest)
+	context := make(map[string]string)
+	context["packageName"] = "name"
+	context["packageVersion"] = "version"
+	context["manifest"] = "manifest"
+	testArchive := New(&facadeSession, context)
 
 	assert.Equal(t, archive.PackageArchiveBirdwatcher, testArchive.Name())
 

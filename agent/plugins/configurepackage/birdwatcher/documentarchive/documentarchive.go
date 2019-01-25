@@ -26,45 +26,55 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/birdwatcher/archive"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/birdwatcher/facade"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/packageservice"
+	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/trace"
 
 	"github.com/aws/aws-sdk-go/service/ssm"
 )
 
 type PackageArchive struct {
-	facadeClient  facade.BirdwatcherFacade
-	manifestCache packageservice.ManifestCache
-	archiveType   string
-	documentDesc  *ssm.DocumentDescription
-	documentArn   string
-	manifest      string
-	docVersion    string
-	attachments   []*ssm.AttachmentContent
-	timeUnit      int
+	facadeClient   facade.BirdwatcherFacade
+	manifestCache  packageservice.ManifestCache
+	archiveType    string
+	timeUnit       int
+	localDocuments map[string]*localDocument
+}
+
+type localDocument struct {
+	documentArn string
+	docVersion  string
+	docHash     string
+	attachments []*ssm.AttachmentContent
 }
 
 //constructors
 // New is a constructor for PackageArchive struct
 func New(facadeClientSession facade.BirdwatcherFacade) archive.IPackageArchive {
+	localDocuments := make(map[string]*localDocument)
 	return &PackageArchive{
-		facadeClient: facadeClientSession,
-		archiveType:  archive.PackageArchiveDocument,
-		timeUnit:     1000, //Adding here to be able to change for testing, 1000 millisecond to make a second
+		facadeClient:   facadeClientSession,
+		archiveType:    archive.PackageArchiveDocument,
+		timeUnit:       1000, //Adding here to be able to change for testing, 1000 millisecond to make a second
+		localDocuments: localDocuments,
 	}
 }
 
 // NewDocumentArchive is a constructor for PackageArchive struct (meant for testing)
-func NewDocumentArchive(facadeClientSession facade.BirdwatcherFacade, attachmentsContent []*ssm.AttachmentContent, docDescription *ssm.DocumentDescription, cache packageservice.ManifestCache, manifestStr string) archive.IPackageArchive {
+func NewDocumentArchive(facadeClientSession facade.BirdwatcherFacade, attachmentsContent []*ssm.AttachmentContent, docDescription *ssm.DocumentDescription, cache packageservice.ManifestCache, packageName string, version string, manifestStr string) archive.IPackageArchive {
+	localDocuments := make(map[string]*localDocument)
+	key := archive.FormKey(packageName, version)
+	localDocuments[key] = &localDocument{
+		documentArn: *docDescription.Name,
+		docVersion:  *docDescription.DocumentVersion,
+		docHash:     *docDescription.Hash,
+		attachments: attachmentsContent,
+	}
 
 	return &PackageArchive{
-		facadeClient:  facadeClientSession,
-		archiveType:   archive.PackageArchiveDocument,
-		attachments:   attachmentsContent,
-		documentDesc:  docDescription,
-		docVersion:    *docDescription.DocumentVersion,
-		manifestCache: cache,
-		manifest:      manifestStr,
-		documentArn:   *docDescription.Name,
-		timeUnit:      0, //No sleep for testing
+		facadeClient:   facadeClientSession,
+		archiveType:    archive.PackageArchiveDocument,
+		manifestCache:  cache,
+		timeUnit:       0, //No sleep for testing
+		localDocuments: localDocuments,
 	}
 }
 
@@ -76,11 +86,9 @@ func (da *PackageArchive) Name() string {
 //setters
 // SetPackageName sets the document arn. The manifest is not required
 // since we use the document name and document version
-func (da *PackageArchive) SetResource(manifest *birdwatcher.Manifest) {
-	if da.documentDesc != nil {
-		da.documentArn = *da.documentDesc.Name
-		da.docVersion = *da.documentDesc.DocumentVersion
-	}
+func (da *PackageArchive) SetResource(packageName string, version string, manifest *birdwatcher.Manifest) {
+	// No need to do anything since it's already set during the. TODO: Refactor this.
+	return
 }
 
 // SetManifestCache sets the manifest Cache
@@ -96,10 +104,15 @@ func (da *PackageArchive) GetResourceVersion(packageName string, packageVersion 
 }
 
 // GetResourceArn returns the document Arn required for storing the file. This is found in the response of GetDocument.
-func (da *PackageArchive) GetResourceArn() string {
+func (da *PackageArchive) GetResourceArn(packageName string, version string) string {
 	// GetDocument returns the Name of the document if it belongs to the account of the instance.
 	// If it is a shared document, GetDocument returns the document ARN as Name
-	return da.documentArn
+	key := archive.FormKey(packageName, version)
+	if _, ok := da.localDocuments[key]; !ok {
+		return ""
+	}
+
+	return da.localDocuments[key].documentArn
 }
 
 // GetFileDownloadLocation obtains the location of the file in the archive
@@ -110,18 +123,21 @@ func (da *PackageArchive) GetFileDownloadLocation(file *archive.File, packageNam
 		return "", errors.New("Could not obtain the file from manifest")
 	}
 	fileName := file.Name
-	if da.attachments == nil {
+
+	key := archive.FormKey(packageName, version)
+	_, ok := da.localDocuments[key]
+	if !ok || da.localDocuments[key].attachments == nil {
 		if _, err := da.getDocument(packageName, version); err != nil {
 			return "", err
 		}
 	}
 
 	// if the attachments are still nil, return error
-	if da.attachments == nil {
+	if da.localDocuments[key].attachments == nil {
 		return "", fmt.Errorf("Could not retreive the attachments for installation")
 	}
 
-	for _, attachmentContent := range da.attachments {
+	for _, attachmentContent := range da.localDocuments[key].attachments {
 		if *attachmentContent.Name == fileName {
 			return *attachmentContent.Url, nil
 		}
@@ -132,7 +148,16 @@ func (da *PackageArchive) GetFileDownloadLocation(file *archive.File, packageNam
 }
 
 // DownloadArtifactInfo downloads the document using GetDocument and eventually gets the manifest from that and returns it
-func (da *PackageArchive) DownloadArchiveInfo(packageName string, version string) (string, error) {
+func (da *PackageArchive) DownloadArchiveInfo(tracer trace.Tracer, packageName string, version string) (string, error) {
+	trace := tracer.BeginSection("Downloading document archive info")
+	defer trace.End()
+
+	key := archive.FormKey(packageName, version)
+	trace.AppendInfof("Key: %v", key)
+	if da.localDocuments[key] == nil {
+		da.localDocuments[key] = &localDocument{}
+	}
+
 	var cachedDocumentHash string
 	var err error
 	versionPtr := &version
@@ -167,14 +192,17 @@ func (da *PackageArchive) DownloadArchiveInfo(packageName string, version string
 	if descDocResponse.Document.DocumentVersion == nil {
 		return "", fmt.Errorf("document version cannot be nil")
 	}
-	da.documentDesc = descDocResponse.Document
+
+	documentDesc := descDocResponse.Document
+	da.localDocuments[key].docHash = *documentDesc.Hash
 
 	// DescribeDocument returns the Name of the document if it belongs to the account of the instance.
 	// If it is a shared document, DescribeDocument returns the document ARN as Name
-	da.documentArn = *da.documentDesc.Name
-	da.docVersion = *da.documentDesc.DocumentVersion
+	da.localDocuments[key].documentArn = *documentDesc.Name
+	da.localDocuments[key].docVersion = *documentDesc.DocumentVersion
+
 	// Read the cached manifest hash file
-	hashData, err := da.manifestCache.ReadManifestHash(packageName, da.docVersion)
+	hashData, err := da.manifestCache.ReadManifestHash(packageName, da.localDocuments[key].docVersion)
 	if err != nil {
 		// if manifest hash does not exist, getDocument to download the manifest
 		return da.getDocument(packageName, version)
@@ -182,37 +210,47 @@ func (da *PackageArchive) DownloadArchiveInfo(packageName string, version string
 	// if no error, proceed to describe document
 	cachedDocumentHash = string(hashData)
 
-	if cachedDocumentHash != *da.documentDesc.Hash {
+	if cachedDocumentHash != da.localDocuments[key].docHash {
 		// If the hash value of the cached hash and the document hash isn't the same, then getDocument to download the content
 		return da.getDocument(packageName, version)
 	} else {
 		// If the hash matches, read the cached manifest. If there is an error reading the manifest, because
 		// it does not exist or is corrupted, getDocument to download the manifest
-		manifestData, err := da.manifestCache.ReadManifest(*da.documentDesc.Name, da.docVersion)
+		manifestData, err := da.manifestCache.ReadManifest(da.localDocuments[key].documentArn, da.localDocuments[key].docVersion)
 		if err != nil || string(manifestData) == "" {
 			return da.getDocument(packageName, version)
 		}
 
 		// if hash of stored anifest is the same
 		// Store manifests separately for document type packages
-		da.manifest = string(manifestData)
+		return string(manifestData), nil
 	}
-	return da.manifest, nil
 }
 
 // ReadManifestFromCache reads the manifest that was stored in manifestCache, if present
 // Document packages store the manifest with the document version
-func (da *PackageArchive) ReadManifestFromCache() (*birdwatcher.Manifest, error) {
-	data, err := da.manifestCache.ReadManifest(da.documentArn, da.docVersion)
+func (da *PackageArchive) ReadManifestFromCache(packageName string, version string) (*birdwatcher.Manifest, error) {
+	key := archive.FormKey(packageName, version)
+	if _, ok := da.localDocuments[key]; !ok {
+		return nil, fmt.Errorf("Cannot find local document mapping. package name: %v, version: %v", packageName, version)
+	}
+
+	data, err := da.manifestCache.ReadManifest(da.localDocuments[key].documentArn, da.localDocuments[key].docVersion)
 	if err != nil {
 		return nil, err
 	}
+
 	return archive.ParseManifest(&data)
 }
 
 // WriteManifestToCache stores the manifest in manifestCache
-func (da *PackageArchive) WriteManifestToCache(manifest []byte) error {
-	return da.manifestCache.WriteManifest(da.documentArn, da.docVersion, manifest)
+func (da *PackageArchive) WriteManifestToCache(packageName string, version string, manifest []byte) error {
+	key := archive.FormKey(packageName, version)
+	if _, ok := da.localDocuments[key]; !ok {
+		return fmt.Errorf("Cannot find local document mapping. package name: %v, version: %v", packageName, version)
+	}
+
+	return da.manifestCache.WriteManifest(da.localDocuments[key].documentArn, da.localDocuments[key].docVersion, manifest)
 }
 
 // helpers
@@ -224,6 +262,11 @@ func (da *PackageArchive) generateAndSaveManifestHash(name, manifest, documentVe
 }
 
 func (da *PackageArchive) getDocument(packageName, version string) (manifest string, err error) {
+	key := archive.FormKey(packageName, version)
+	if _, ok := da.localDocuments[key]; !ok {
+		return "", fmt.Errorf("Cannot find local document mapping. package name: %v, version: %v", packageName, version)
+	}
+
 	versionPtr := &version
 	if version == "" {
 		versionPtr = nil
@@ -250,22 +293,21 @@ func (da *PackageArchive) getDocument(packageName, version string) (manifest str
 	if getDocResponse.Name == nil || *getDocResponse.Name == "" {
 		return "", fmt.Errorf("document name cannot be empty")
 	}
-	da.documentArn = *getDocResponse.Name
+
 	if getDocResponse.Content == nil || *getDocResponse.Content == "" {
 		return "", fmt.Errorf("failed to retrieve manifest from package document")
 	}
+
 	if getDocResponse.DocumentVersion == nil {
 		return "", fmt.Errorf("document version cannot be nil")
 	}
 	//TODO: add check for docVersion
-	da.manifest = *getDocResponse.Content
-	da.attachments = getDocResponse.AttachmentsContent
-	da.docVersion = *getDocResponse.DocumentVersion
+	da.localDocuments[key].attachments = getDocResponse.AttachmentsContent
+	da.localDocuments[key].docVersion = *getDocResponse.DocumentVersion
+	da.localDocuments[key].documentArn = *getDocResponse.Name
 
-	// Set the document description to nil since it doesn't apply anymore
-	da.documentDesc = nil
-	err = da.generateAndSaveManifestHash(packageName, da.manifest, da.docVersion)
-	return da.manifest, err
+	err = da.generateAndSaveManifestHash(packageName, *getDocResponse.Content, da.localDocuments[key].docVersion)
+	return *getDocResponse.Content, err
 }
 
 func getRandomBackOffTime(timeInSeconds int) int {
