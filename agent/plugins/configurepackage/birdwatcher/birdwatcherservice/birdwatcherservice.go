@@ -54,8 +54,8 @@ type PackageService struct {
 	packageArchive archive.IPackageArchive
 }
 
-func NewBirdwatcherArchive(facadeClient facade.BirdwatcherFacade, manifestCache packageservice.ManifestCache, birdwatcherManifest string) packageservice.PackageService {
-	pkgArchive := birdwatcherarchive.New(facadeClient, birdwatcherManifest)
+func NewBirdwatcherArchive(facadeClient facade.BirdwatcherFacade, manifestCache packageservice.ManifestCache, context map[string]string) packageservice.PackageService {
+	pkgArchive := birdwatcherarchive.New(facadeClient, context)
 	pkgArchive.SetManifestCache(manifestCache)
 	return New(pkgArchive, facadeClient, manifestCache, packageservice.PackageServiceName_birdwatcher)
 }
@@ -89,20 +89,20 @@ func (ds *PackageService) GetPackageArnAndVersion(packageName string, packageVer
 
 // DownloadManifest downloads the manifest for a given version (or latest) and returns the agent version specified in manifest
 func (ds *PackageService) DownloadManifest(tracer trace.Tracer, packageName string, version string) (string, string, bool, error) {
-	manifest, isSameAsCache, err := downloadManifest(ds, packageName, version)
+	manifest, isSameAsCache, err := downloadManifest(tracer, ds, packageName, version)
 	if err != nil {
 		return "", "", isSameAsCache, err
 	}
-	return ds.packageArchive.GetResourceArn(), manifest.Version, isSameAsCache, nil
+	return ds.packageArchive.GetResourceArn(packageName, version), manifest.Version, isSameAsCache, nil
 }
 
 // DownloadArtifact downloads the platform matching artifact specified in the manifest
 func (ds *PackageService) DownloadArtifact(tracer trace.Tracer, packageName string, version string) (string, error) {
 	trace := tracer.BeginSection("download artifact")
-	manifest, err := ds.packageArchive.ReadManifestFromCache()
+	manifest, err := ds.packageArchive.ReadManifestFromCache(packageName, version)
 	if err != nil {
 		trace.AppendInfof("error when reading the manifest from cache %v", err).End()
-		manifest, _, err = downloadManifest(ds, packageName, version)
+		manifest, _, err = downloadManifest(tracer, ds, packageName, version)
 		if err != nil {
 			trace.WithError(err).End()
 			return "", fmt.Errorf("failed to download the manifest: %v", err)
@@ -171,12 +171,12 @@ func (ds *PackageService) ReportResult(tracer trace.Tracer, result packageservic
 }
 
 //utils
-func downloadManifest(ds *PackageService, packageName string, version string) (*birdwatcher.Manifest, bool, error) {
+func downloadManifest(tracer trace.Tracer, ds *PackageService, packageName string, version string) (*birdwatcher.Manifest, bool, error) {
 	isSameAsCache := false
 	if ds == nil {
 		return nil, isSameAsCache, fmt.Errorf("PackageService doesn't exist")
 	}
-	manifest, err := ds.packageArchive.DownloadArchiveInfo(packageName, version)
+	manifest, err := ds.packageArchive.DownloadArchiveInfo(tracer, packageName, version)
 	if err != nil {
 		return nil, isSameAsCache, fmt.Errorf("failed to download manifest - %v", err)
 	}
@@ -187,15 +187,15 @@ func downloadManifest(ds *PackageService, packageName string, version string) (*
 	if err != nil {
 		return nil, isSameAsCache, err
 	}
-	ds.packageArchive.SetResource(parsedManifest)
+	ds.packageArchive.SetResource(packageName, version, parsedManifest)
 
-	cachedManifest, err := ds.packageArchive.ReadManifestFromCache()
+	cachedManifest, err := ds.packageArchive.ReadManifestFromCache(packageName, version)
 
 	if reflect.DeepEqual(parsedManifest, cachedManifest) {
 		isSameAsCache = true
 	}
 
-	err = ds.packageArchive.WriteManifestToCache(byteManifest)
+	err = ds.packageArchive.WriteManifestToCache(packageName, version, byteManifest)
 	if err != nil {
 		return nil, isSameAsCache, fmt.Errorf("failed to write manifest to file: %v", err)
 	}

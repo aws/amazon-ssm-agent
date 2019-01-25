@@ -22,6 +22,7 @@ import (
 
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/birdwatcher"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/packageservice"
+	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/trace"
 )
 
 const (
@@ -38,13 +39,13 @@ type IPackageArchive interface {
 	Name() string
 	//TODO: Send this by address or reference
 	SetManifestCache(cache packageservice.ManifestCache)
-	SetResource(*birdwatcher.Manifest)
+	SetResource(packageName string, version string, manifest *birdwatcher.Manifest)
 	GetResourceVersion(packageName string, packageVersion string) (name string, version string)
-	GetResourceArn() string
+	GetResourceArn(packageName string, version string) string
 	GetFileDownloadLocation(file *File, packageName string, version string) (string, error)
-	DownloadArchiveInfo(packageName string, version string) (string, error)
-	ReadManifestFromCache() (*birdwatcher.Manifest, error)
-	WriteManifestToCache(manifest []byte) error
+	DownloadArchiveInfo(tracer trace.Tracer, packageName string, version string) (string, error)
+	ReadManifestFromCache(packageName string, version string) (*birdwatcher.Manifest, error)
+	WriteManifestToCache(packageName string, version string, manifest []byte) error
 }
 
 func ParseManifest(data *[]byte) (*birdwatcher.Manifest, error) {
@@ -56,4 +57,8 @@ func ParseManifest(data *[]byte) (*birdwatcher.Manifest, error) {
 	}
 
 	return &manifest, nil
+}
+
+func FormKey(packageName string, packageVersion string) string {
+	return fmt.Sprintf("%s_%s", packageName, packageVersion)
 }

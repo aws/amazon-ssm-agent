@@ -22,25 +22,32 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/birdwatcher/archive"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/birdwatcher/facade"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/packageservice"
+	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/trace"
 	"github.com/aws/aws-sdk-go/service/ssm"
 )
 
 type PackageArchive struct {
-	facadeClient    facade.BirdwatcherFacade
-	manifest        string
-	archiveType     string
-	cache           packageservice.ManifestCache
-	manifestVersion string
+	facadeClient   facade.BirdwatcherFacade
+	archiveType    string
+	cache          packageservice.ManifestCache
+	localManifests map[string]*localManifest
+}
+
+type localManifest struct {
+	manifestString  string
 	packageArn      string
+	manifestVersion string
 }
 
 // New is a constructor for PackageArchive struct
-func New(facadeClientSession facade.BirdwatcherFacade, birdwatcherManifest string) archive.IPackageArchive {
+func New(facadeClientSession facade.BirdwatcherFacade, context map[string]string) archive.IPackageArchive {
 	// TODO: Add a SetManifest method for PackageArchive to avoid the birdwatcherManifest in the constructor.
+	manifests := make(map[string]*localManifest)
+	setLocalManifestString(manifests, context)
 	return &PackageArchive{
-		facadeClient: facadeClientSession,
-		manifest:     birdwatcherManifest,
-		archiveType:  archive.PackageArchiveBirdwatcher,
+		facadeClient:   facadeClientSession,
+		archiveType:    archive.PackageArchiveBirdwatcher,
+		localManifests: manifests,
 	}
 }
 
@@ -55,14 +62,24 @@ func (ba *PackageArchive) SetManifestCache(manifestCache packageservice.Manifest
 }
 
 // SetResource sets the package name and the manifest version
-func (ba *PackageArchive) SetResource(manifest *birdwatcher.Manifest) {
-	ba.packageArn = manifest.PackageArn
-	ba.manifestVersion = manifest.Version
+func (ba *PackageArchive) SetResource(packageName string, version string, manifest *birdwatcher.Manifest) {
+	key := archive.FormKey(packageName, version)
+	if _, ok := ba.localManifests[key]; !ok {
+		ba.localManifests[key] = &localManifest{}
+	}
+
+	ba.localManifests[key].packageArn = manifest.PackageArn
+	ba.localManifests[key].manifestVersion = manifest.Version
 }
 
 // GetResourceArn returns the packageArn that is found i nthe manifest file
-func (ba *PackageArchive) GetResourceArn() string {
-	return ba.packageArn
+func (ba *PackageArchive) GetResourceArn(packageName string, version string) string {
+	key := archive.FormKey(packageName, version)
+	if _, ok := ba.localManifests[key]; !ok {
+		return ""
+	}
+
+	return ba.localManifests[key].packageArn
 }
 
 // GetResourceVersion returns the version
@@ -84,9 +101,17 @@ func (ba *PackageArchive) GetFileDownloadLocation(file *archive.File, packageNam
 }
 
 // DownloadArtifactInfo downloads the manifest for the original birwatcher service
-func (ba *PackageArchive) DownloadArchiveInfo(packageName string, version string) (string, error) {
+func (ba *PackageArchive) DownloadArchiveInfo(tracer trace.Tracer, packageName string, version string) (string, error) {
+	trace := tracer.BeginSection("Downloading birdwatcher archive info")
+	defer trace.End()
 
-	if ba.manifest == "" {
+	key := archive.FormKey(packageName, version)
+	if _, ok := ba.localManifests[key]; !ok {
+		ba.localManifests[key] = &localManifest{}
+	}
+
+	if ba.localManifests[key].manifestString == "" {
+		trace.AppendInfof("Cannot find manifest with key: %v in localManifests, downloading from remote.", key)
 		resp, err := ba.facadeClient.GetManifest(
 			&ssm.GetManifestInput{
 				PackageName:    &packageName,
@@ -97,15 +122,22 @@ func (ba *PackageArchive) DownloadArchiveInfo(packageName string, version string
 		if err != nil {
 			return "", fmt.Errorf("failed to retrieve manifest: %v", err)
 		}
-		ba.manifest = *resp.Manifest
+
+		ba.localManifests[key].manifestString = *resp.Manifest
 	}
-	return ba.manifest, nil
+
+	return ba.localManifests[key].manifestString, nil
 }
 
 // ReadManifestFromCache to read the manifest from cache
 // Birdwatcher packages store the manifest with the package version
-func (ba *PackageArchive) ReadManifestFromCache() (*birdwatcher.Manifest, error) {
-	data, err := ba.cache.ReadManifest(ba.packageArn, ba.manifestVersion)
+func (ba *PackageArchive) ReadManifestFromCache(packageName string, version string) (*birdwatcher.Manifest, error) {
+	key := archive.FormKey(packageName, version)
+	if _, ok := ba.localManifests[key]; !ok {
+		return nil, fmt.Errorf("Cannot find local manifest mapping. package name: %v, version: %v", packageName, version)
+	}
+
+	data, err := ba.cache.ReadManifest(ba.localManifests[key].packageArn, ba.localManifests[key].manifestVersion)
 	if err != nil {
 		return nil, err
 	}
@@ -114,6 +146,27 @@ func (ba *PackageArchive) ReadManifestFromCache() (*birdwatcher.Manifest, error)
 }
 
 // WriteManifestToCache stores the manifest in cache
-func (ba *PackageArchive) WriteManifestToCache(manifest []byte) error {
-	return ba.cache.WriteManifest(ba.packageArn, ba.manifestVersion, manifest)
+func (ba *PackageArchive) WriteManifestToCache(packageName string, version string, manifest []byte) error {
+	key := archive.FormKey(packageName, version)
+	if _, ok := ba.localManifests[key]; !ok {
+		return fmt.Errorf("Cannot find local manifest mapping. package name: %v, version: %v", packageName, version)
+	}
+
+	return ba.cache.WriteManifest(ba.localManifests[key].packageArn, ba.localManifests[key].manifestVersion, manifest)
+}
+
+// Sets the manifest string in the localManifest
+func setLocalManifestString(localManifests map[string]*localManifest, context map[string]string) {
+	if name, nOk := context["packageName"]; nOk {
+		if version, vOk := context["packageVersion"]; vOk {
+			if manifest, mOk := context["manifest"]; mOk {
+				key := archive.FormKey(name, version)
+				if _, ok := localManifests[key]; !ok {
+					localManifests[key] = &localManifest{}
+				}
+
+				localManifests[key].manifestString = manifest
+			}
+		}
+	}
 }
