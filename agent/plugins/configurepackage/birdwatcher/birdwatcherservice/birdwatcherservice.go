@@ -101,7 +101,7 @@ func (ds *PackageService) DownloadArtifact(tracer trace.Tracer, packageName stri
 	trace := tracer.BeginSection("download artifact")
 	manifest, err := ds.packageArchive.ReadManifestFromCache(packageName, version)
 	if err != nil {
-		trace.AppendInfof("error when reading the manifest from cache %v", err).End()
+		trace.AppendInfof("error when reading the manifest from cache %v", err)
 		manifest, _, err = downloadManifest(tracer, ds, packageName, version)
 		if err != nil {
 			trace.WithError(err).End()
@@ -189,13 +189,13 @@ func downloadManifest(tracer trace.Tracer, ds *PackageService, packageName strin
 	}
 	ds.packageArchive.SetResource(packageName, version, parsedManifest)
 
-	cachedManifest, err := ds.packageArchive.ReadManifestFromCache(packageName, version)
+	cachedManifest, err := ds.packageArchive.ReadManifestFromCache(parsedManifest.PackageArn, parsedManifest.Version)
 
 	if reflect.DeepEqual(parsedManifest, cachedManifest) {
 		isSameAsCache = true
 	}
 
-	err = ds.packageArchive.WriteManifestToCache(packageName, version, byteManifest)
+	err = ds.packageArchive.WriteManifestToCache(parsedManifest.PackageArn, parsedManifest.Version, byteManifest)
 	if err != nil {
 		return nil, isSameAsCache, fmt.Errorf("failed to write manifest to file: %v", err)
 	}
