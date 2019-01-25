@@ -107,8 +107,9 @@ func TestSetAndGetResources(t *testing.T) {
 		documentArn:  packageName,
 	}
 
-	packageArchive.SetResource(packageName, version, &manifest)
-	arn := packageArchive.GetResourceArn(packageName, version)
+	// TODO: Fix this - For document archive, the value of version that is given to Set and Get resource is "don't care"
+	packageArchive.SetResource(packageName, "version", &manifest)
+	arn := packageArchive.GetResourceArn(packageName, "version")
 
 	assert.Equal(t, arn, *docDescription.Name)
 	assert.Equal(t, packageArchive.docVersion, *docDescription.DocumentVersion)
@@ -271,7 +272,7 @@ func TestGetFileDownloadLocation(t *testing.T) {
 	for _, testdata := range data {
 		t.Run(testdata.name, func(t *testing.T) {
 
-			docArchive := NewDocumentArchive(&testdata.facadeClient, testdata.attachments, &documentDescription, memcache, packagename, version, manifest)
+			docArchive := NewDocumentArchive(&testdata.facadeClient, testdata.attachments, &documentDescription, memcache, manifest)
 
 			location, err := docArchive.GetFileDownloadLocation(testdata.file, packagename, version)
 			if testdata.isError {
@@ -441,7 +442,7 @@ func TestDownloadArchiveInfo(t *testing.T) {
 			testdata.facadeClient.DescribeDocumentOutput = &ssm.DescribeDocumentOutput{
 				Document: &testdata.documentDescription,
 			}
-			docArchive := NewDocumentArchive(&testdata.facadeClient, nil, &testdata.documentDescription, testdata.manifestCache, packageName, testdata.version, manifest)
+			docArchive := NewDocumentArchive(&testdata.facadeClient, nil, &testdata.documentDescription, testdata.manifestCache, manifest)
 
 			document, err := docArchive.DownloadArchiveInfo(tracer, packageName, testdata.version)
 			if testdata.isError {

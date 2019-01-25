@@ -519,7 +519,7 @@ func TestDownloadDocument(t *testing.T) {
 				cache.On("WriteManifest", packageName, docVersionForGetDoc, []byte(manifestStr)).Return(nil)
 			}
 
-			testArchive := documentarchive.NewDocumentArchive(&facadeMock, nil, &documentDescription, cache, packageName, packageVersion, manifestStr)
+			testArchive := documentarchive.NewDocumentArchive(&facadeMock, nil, &documentDescription, cache, manifestStr)
 			ds := &PackageService{facadeClient: &facadeMock, manifestCache: cache, collector: &mockedCollector, packageArchive: testArchive}
 
 			_, manifestVersion, isSameAsCache, err := ds.DownloadManifest(tracer, testdata.packageName, testdata.packageVersion)
@@ -965,7 +965,7 @@ func TestDownloadFileFromDocumentArchive(t *testing.T) {
 					},
 				},
 			}
-			testArchive := documentarchive.NewDocumentArchive(&facadeClient, testdata.attachments, &documentDescription, cache, packagename, version, "manifestStr")
+			testArchive := documentarchive.NewDocumentArchive(&facadeClient, testdata.attachments, &documentDescription, cache, "manifestStr")
 
 			mockedCollector := envdetect.CollectorMock{}
 			ds := &PackageService{manifestCache: cache, collector: &mockedCollector, packageArchive: testArchive}
