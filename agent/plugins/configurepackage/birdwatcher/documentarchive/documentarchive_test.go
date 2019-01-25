@@ -100,25 +100,19 @@ func TestGetResourceVersion(t *testing.T) {
 func TestSetAndGetResources(t *testing.T) {
 	manifest := birdwatcher.Manifest{}
 	packageName := "packagename"
-	version := "version"
 	docDescription := createDefaultDocumentDescription(packageName, "hash", ssm.DocumentStatusActive)
-
-	localDocuments := make(map[string]*localDocument)
-	key := archive.FormKey(packageName, version)
-	localDocuments[key] = &localDocument{
-		documentArn: *docDescription.Name,
-		docVersion:  *docDescription.DocumentVersion,
-		docHash:     *docDescription.Hash,
-	}
-
 	packageArchive := PackageArchive{
-		localDocuments: localDocuments,
+		documentDesc: &docDescription,
+		docVersion:   "abc",
+		documentArn:  packageName,
 	}
 
 	packageArchive.SetResource(packageName, version, &manifest)
 	arn := packageArchive.GetResourceArn(packageName, version)
 
 	assert.Equal(t, arn, *docDescription.Name)
+	assert.Equal(t, packageArchive.docVersion, *docDescription.DocumentVersion)
+	assert.Equal(t, packageArchive.documentArn, *docDescription.Name)
 }
 
 func TestGetFileDownloadLocation(t *testing.T) {

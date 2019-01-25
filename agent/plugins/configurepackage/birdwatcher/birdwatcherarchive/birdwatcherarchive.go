@@ -111,7 +111,7 @@ func (ba *PackageArchive) DownloadArchiveInfo(tracer trace.Tracer, packageName s
 	}
 
 	if ba.localManifests[key].manifestString == "" {
-		trace.AppendInfof("Cannot find manifest with key: %v in localManifests, downloading from remote.", key)
+		trace.AppendDebugf("Cannot find manifest with key: %v in localManifests, downloading from remote.", key)
 		resp, err := ba.facadeClient.GetManifest(
 			&ssm.GetManifestInput{
 				PackageName:    &packageName,
@@ -124,6 +124,8 @@ func (ba *PackageArchive) DownloadArchiveInfo(tracer trace.Tracer, packageName s
 		}
 
 		ba.localManifests[key].manifestString = *resp.Manifest
+	} else {
+		trace.AppendDebugf("Found manifest with key: %v in localManifests", key)
 	}
 
 	return ba.localManifests[key].manifestString, nil
@@ -131,13 +133,8 @@ func (ba *PackageArchive) DownloadArchiveInfo(tracer trace.Tracer, packageName s
 
 // ReadManifestFromCache to read the manifest from cache
 // Birdwatcher packages store the manifest with the package version
-func (ba *PackageArchive) ReadManifestFromCache(packageName string, version string) (*birdwatcher.Manifest, error) {
-	key := archive.FormKey(packageName, version)
-	if _, ok := ba.localManifests[key]; !ok {
-		return nil, fmt.Errorf("Cannot find local manifest mapping. package name: %v, version: %v", packageName, version)
-	}
-
-	data, err := ba.cache.ReadManifest(ba.localManifests[key].packageArn, ba.localManifests[key].manifestVersion)
+func (ba *PackageArchive) ReadManifestFromCache(packageArn string, version string) (*birdwatcher.Manifest, error) {
+	data, err := ba.cache.ReadManifest(packageArn, version)
 	if err != nil {
 		return nil, err
 	}
@@ -146,13 +143,8 @@ func (ba *PackageArchive) ReadManifestFromCache(packageName string, version stri
 }
 
 // WriteManifestToCache stores the manifest in cache
-func (ba *PackageArchive) WriteManifestToCache(packageName string, version string, manifest []byte) error {
-	key := archive.FormKey(packageName, version)
-	if _, ok := ba.localManifests[key]; !ok {
-		return fmt.Errorf("Cannot find local manifest mapping. package name: %v, version: %v", packageName, version)
-	}
-
-	return ba.cache.WriteManifest(ba.localManifests[key].packageArn, ba.localManifests[key].manifestVersion, manifest)
+func (ba *PackageArchive) WriteManifestToCache(packageArn string, version string, manifest []byte) error {
+	return ba.cache.WriteManifest(packageArn, version, manifest)
 }
 
 // Sets the manifest string in the localManifest
