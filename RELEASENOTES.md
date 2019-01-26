@@ -1,5 +1,9 @@
 Latest
 ===============
+- Bug fix addressing issues in Distributor package upgrade
+
+2.3.372.0
+===============
 - Bug fix to allow installation of Distributor packages that do not have a version name.
 - Bug fix for agent crash with message "WaitGroup is reused before previous Wait has returned".
 
