@@ -75,9 +75,6 @@ const (
 	// Default Custom Inventory Inventory Folder
 	DefaultCustomInventoryFolder = DefaultDataStorePath + "inventory/custom"
 
-	// Used to capture and return exit code for windows powershell script execution - empty for unix shell script case
-	ExitCodeTrap = ""
-
 	// PowerShellPluginCommandArgs is the arguments of powershell.exe to be used by the runPowerShellScript plugin
 	PowerShellPluginCommandArgs = ""
 
