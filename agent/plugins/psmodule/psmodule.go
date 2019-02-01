@@ -148,7 +148,7 @@ func (p *Plugin) runCommands(log log.T, pluginID string, pluginInput PSModulePlu
 
 	// Construct Command Name and Arguments
 	commandName := pluginutil.GetShellCommand()
-	commandArguments := append(pluginutil.GetShellArguments(), scriptPath, appconfig.ExitCodeTrap)
+	commandArguments := append(pluginutil.GetShellArguments(), scriptPath)
 
 	// Execute Command
 	exitCode, err := p.CommandExecuter.NewExecute(log, pluginInput.WorkingDirectory, output.GetStdoutWriter(), output.GetStderrWriter(), cancelFlag, executionTimeout, commandName, commandArguments)

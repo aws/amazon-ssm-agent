@@ -49,11 +49,6 @@ const (
 	// https://technet.microsoft.com/en-us/library/hh847748.aspx
 	PowerShellPluginCommandArgs = "-InputFormat None -Noninteractive -NoProfile -ExecutionPolicy unrestricted -f"
 
-	// Currently we run powershell as powershell.exe [arguments], with this approach we are not able to get the $LASTEXITCODE value
-	// if we want to run multiple commands then we need to run them via shell and not directly the command.
-	// https://groups.google.com/forum/#!topic/golang-nuts/ggd3ww3ZKcI
-	ExitCodeTrap = " ; exit $LASTEXITCODE"
-
 	// Exit Code for a command that exits before completion (generally due to timeout or cancel)
 	CommandStoppedPreemptivelyExitCode = -1
 

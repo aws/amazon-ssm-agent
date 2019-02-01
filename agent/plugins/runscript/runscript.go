@@ -20,7 +20,6 @@ import (
 
 	"strings"
 
-	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/executers"
@@ -127,7 +126,7 @@ func (p *Plugin) runCommands(log log.T, pluginID string, pluginInput RunScriptPl
 
 	// Construct Command Name and Arguments
 	commandName := p.ShellCommand
-	commandArguments := append(p.ShellArguments, scriptPath, appconfig.ExitCodeTrap)
+	commandArguments := append(p.ShellArguments, scriptPath)
 
 	// Execute Command
 	exitCode, err := p.CommandExecuter.NewExecute(log, workingDir, output.GetStdoutWriter(), output.GetStderrWriter(), cancelFlag, executionTimeout, commandName, commandArguments)
