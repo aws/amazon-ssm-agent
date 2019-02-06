@@ -11,8 +11,8 @@
 // either express or implied. See the License for the specific language governing
 // permissions and limitations under the License.
 
-// Package restrictedshell implements session shell plugin with restricted commands.
-package restrictedshell
+// Package interactivecommands implements session shell plugin with interactive commands.
+package interactivecommands
 
 import (
 	"fmt"
@@ -30,33 +30,33 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/task"
 )
 
-// RestrictedShellPlugin is the type for the plugin.
-type RestrictedShellPlugin struct {
+// InteractiveCommandsPlugin is the type for the plugin.
+type InteractiveCommandsPlugin struct {
 	shell sessionplugin.ISessionPlugin
 }
 
-// NewPlugin returns a new instance of the Restricted Shell Plugin
+// NewPlugin returns a new instance of the Interactive Commands Plugin
 func NewPlugin() (sessionplugin.ISessionPlugin, error) {
 	shellPlugin, err := shell.NewPlugin()
 	if err != nil {
 		return nil, err
 	}
 
-	var plugin = RestrictedShellPlugin{
+	var plugin = InteractiveCommandsPlugin{
 		shell: shellPlugin,
 	}
 	return &plugin, nil
 }
 
 // name returns the name of Restricted Shell Plugin
-func (p *RestrictedShellPlugin) name() string {
-	return appconfig.PluginNameRestrictedStandardStream
+func (p *InteractiveCommandsPlugin) name() string {
+	return appconfig.PluginNameInteractiveCommands
 }
 
 // Execute starts pseudo terminal.
 // It reads incoming message from data channel and writes to pty.stdin.
 // It reads message from pty.stdout and writes to data channel
-func (p *RestrictedShellPlugin) Execute(context context.T,
+func (p *InteractiveCommandsPlugin) Execute(context context.T,
 	config agentContracts.Configuration,
 	cancelFlag task.CancelFlag,
 	output iohandler.IOHandler,
@@ -77,6 +77,6 @@ func (p *RestrictedShellPlugin) Execute(context context.T,
 }
 
 // InputStreamMessageHandler passes payload byte stream to shell stdin
-func (p *RestrictedShellPlugin) InputStreamMessageHandler(log log.T, streamDataMessage mgsContracts.AgentMessage) error {
+func (p *InteractiveCommandsPlugin) InputStreamMessageHandler(log log.T, streamDataMessage mgsContracts.AgentMessage) error {
 	return p.shell.InputStreamMessageHandler(log, streamDataMessage)
 }
