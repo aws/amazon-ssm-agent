@@ -11,8 +11,8 @@
 // either express or implied. See the License for the specific language governing
 // permissions and limitations under the License.
 
-// Package restrictedshell implements session shell plugin with restricted commands.
-package restrictedshell
+// Package interactivecommands implements session shell plugin with interactive commands.
+package interactivecommands
 
 import (
 	"fmt"
@@ -34,17 +34,17 @@ import (
 	"github.com/stretchr/testify/suite"
 )
 
-type RestrictedShellTestSuite struct {
+type InteractiveCommandsTestSuite struct {
 	suite.Suite
 	mockContext     *context.Mock
 	mockLog         log.T
 	mockCancelFlag  *task.MockCancelFlag
 	mockDataChannel *dataChannelMock.IDataChannel
 	mockIohandler   *iohandlermocks.MockIOHandler
-	plugin          *RestrictedShellPlugin
+	plugin          *InteractiveCommandsPlugin
 }
 
-func (suite *RestrictedShellTestSuite) SetupTest() {
+func (suite *InteractiveCommandsTestSuite) SetupTest() {
 	mockContext := context.NewMockDefault()
 	mockCancelFlag := &task.MockCancelFlag{}
 	mockDataChannel := &dataChannelMock.IDataChannel{}
@@ -56,22 +56,22 @@ func (suite *RestrictedShellTestSuite) SetupTest() {
 	suite.mockCancelFlag = mockCancelFlag
 	suite.mockDataChannel = mockDataChannel
 	suite.mockIohandler = mockIohandler
-	suite.plugin = &RestrictedShellPlugin{}
+	suite.plugin = &InteractiveCommandsPlugin{}
 }
 
 //Execute the test suite
 func TestRestrictedShellTestSuite(t *testing.T) {
-	suite.Run(t, new(RestrictedShellTestSuite))
+	suite.Run(t, new(InteractiveCommandsTestSuite))
 }
 
 // Testing Name
-func (suite *RestrictedShellTestSuite) TestName() {
+func (suite *InteractiveCommandsTestSuite) TestName() {
 	rst := suite.plugin.name()
-	assert.Equal(suite.T(), rst, appconfig.PluginNameRestrictedStandardStream)
+	assert.Equal(suite.T(), rst, appconfig.PluginNameInteractiveCommands)
 }
 
 // Testing Execute
-func (suite *RestrictedShellTestSuite) TestExecuteWhenCancelFlagIsShutDown() {
+func (suite *InteractiveCommandsTestSuite) TestExecuteWhenCancelFlagIsShutDown() {
 	suite.mockCancelFlag.On("ShutDown").Return(true)
 	suite.mockIohandler.On("MarkAsShutdown").Return(nil)
 	suite.plugin.shell, _ = shell.NewPlugin()
@@ -87,7 +87,7 @@ func (suite *RestrictedShellTestSuite) TestExecuteWhenCancelFlagIsShutDown() {
 }
 
 // Testing Execute
-func (suite *RestrictedShellTestSuite) TestExecuteWhenCancelFlagIsCancelled() {
+func (suite *InteractiveCommandsTestSuite) TestExecuteWhenCancelFlagIsCancelled() {
 	suite.mockCancelFlag.On("Canceled").Return(true)
 	suite.mockCancelFlag.On("ShutDown").Return(false)
 	suite.mockIohandler.On("MarkAsCancelled").Return(nil)
@@ -104,7 +104,7 @@ func (suite *RestrictedShellTestSuite) TestExecuteWhenCancelFlagIsCancelled() {
 }
 
 // Testing Execute
-func (suite *RestrictedShellTestSuite) TestExecute() {
+func (suite *InteractiveCommandsTestSuite) TestExecute() {
 	newIOHandler := iohandler.NewDefaultIOHandler(suite.mockLog, contracts.IOConfiguration{})
 	mockShellPlugin := new(mocks.ISessionPlugin)
 	mockShellPlugin.On("Execute", suite.mockContext, mock.Anything, suite.mockCancelFlag, newIOHandler, suite.mockDataChannel).Return()
@@ -121,7 +121,7 @@ func (suite *RestrictedShellTestSuite) TestExecute() {
 }
 
 // Testing Execute
-func (suite *RestrictedShellTestSuite) TestExecuteWithoutCommands() {
+func (suite *InteractiveCommandsTestSuite) TestExecuteWithoutCommands() {
 	suite.mockIohandler.On("SetExitCode", 1).Return(nil)
 	suite.mockIohandler.On("SetStatus", contracts.ResultStatusFailed).Return()
 
@@ -139,7 +139,7 @@ func (suite *RestrictedShellTestSuite) TestExecuteWithoutCommands() {
 }
 
 // Testing InputStreamMessageHandler
-func (suite *RestrictedShellTestSuite) TestInputStreamMessageHandler() {
+func (suite *InteractiveCommandsTestSuite) TestInputStreamMessageHandler() {
 	mockShellPlugin := new(mocks.ISessionPlugin)
 	mockShellPlugin.On("InputStreamMessageHandler", suite.mockLog, mock.Anything).Return(nil)
 	suite.plugin.shell = mockShellPlugin
