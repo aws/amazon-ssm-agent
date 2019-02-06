@@ -48,6 +48,9 @@ type OpenControlChannelInput struct {
 
 	// TokenValue is a required field
 	TokenValue *string `json:"TokenValue" min:"1" type:"string" required:"true"`
+
+	// AgentVersion is a required field
+	AgentVersion *string `json:"AgentVersion" min:"1" type:"string" required:"true"`
 }
 
 type CreateDataChannelInput struct {

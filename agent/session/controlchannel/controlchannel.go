@@ -31,6 +31,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/session/retry"
 	"github.com/aws/amazon-ssm-agent/agent/session/service"
 	"github.com/aws/amazon-ssm-agent/agent/times"
+	"github.com/aws/amazon-ssm-agent/agent/version"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/gorilla/websocket"
 	"github.com/twinj/uuid"
@@ -179,6 +180,7 @@ func (controlChannel *ControlChannel) Open(log log.T) error {
 		MessageSchemaVersion: aws.String(mgsConfig.MessageSchemaVersion),
 		RequestId:            aws.String(uid),
 		TokenValue:           aws.String(controlChannel.wsChannel.GetChannelToken()),
+		AgentVersion:         aws.String(version.Version),
 	}
 
 	jsonValue, err := json.Marshal(openControlChannelInput)
