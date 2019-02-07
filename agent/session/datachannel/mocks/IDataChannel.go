@@ -52,23 +52,23 @@ func (_m *IDataChannel) Close(_a0 log.T) error {
 	return r0
 }
 
-// DataChannelIncomingMessageHandler provides a mock function with given fields: _a0, rawMessage
-func (_m *IDataChannel) DataChannelIncomingMessageHandler(_a0 log.T, rawMessage []byte) error {
-	ret := _m.Called(_a0, rawMessage)
+// Initialize provides a mock function with given fields: _a0, mgsService, sessionId, clientId, instanceId, role, cancelFlag, inputStreamMessageHandler
+func (_m *IDataChannel) Initialize(_a0 context.T, mgsService service.Service, sessionId string, clientId string, instanceId string, role string, cancelFlag task.CancelFlag, inputStreamMessageHandler datachannel.InputStreamMessageHandler) {
+	_m.Called(_a0, mgsService, sessionId, clientId, instanceId, role, cancelFlag, inputStreamMessageHandler)
+}
+
+// PerformHandshake provides a mock function with given fields: _a0, kmsKeyId
+func (_m *IDataChannel) PerformHandshake(_a0 log.T, kmsKeyId string) error {
+	ret := _m.Called(_a0, kmsKeyId)
 
 	var r0 error
-	if rf, ok := ret.Get(0).(func(log.T, []byte) error); ok {
-		r0 = rf(_a0, rawMessage)
+	if rf, ok := ret.Get(0).(func(log.T, string) error); ok {
+		r0 = rf(_a0, kmsKeyId)
 	} else {
 		r0 = ret.Error(0)
 	}
 
 	return r0
-}
-
-// Initialize provides a mock function with given fields: _a0, mgsService, sessionId, clientId, instanceId, role, cancelFlag, inputStreamMessageHandler
-func (_m *IDataChannel) Initialize(_a0 context.T, mgsService service.Service, sessionId string, clientId string, instanceId string, role string, cancelFlag task.CancelFlag, inputStreamMessageHandler datachannel.InputStreamMessageHandler) {
-	_m.Called(_a0, mgsService, sessionId, clientId, instanceId, role, cancelFlag, inputStreamMessageHandler)
 }
 
 // Open provides a mock function with given fields: _a0
@@ -196,4 +196,9 @@ func (_m *IDataChannel) SetWebSocket(_a0 context.T, mgsService service.Service, 
 	}
 
 	return r0
+}
+
+// SkipHandshake provides a mock function with given fields: _a0
+func (_m *IDataChannel) SkipHandshake(_a0 log.T) {
+	_m.Called(_a0)
 }

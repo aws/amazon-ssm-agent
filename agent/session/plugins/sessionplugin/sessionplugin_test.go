@@ -15,6 +15,7 @@
 package sessionplugin
 
 import (
+	"errors"
 	"testing"
 
 	"github.com/aws/amazon-ssm-agent/agent/context"
@@ -68,8 +69,50 @@ func (suite *SessionPluginTestSuite) TestExecute() {
 	suite.mockDataChannel.On("Close", suite.mockContext.Log()).Return(nil)
 	suite.mockSessionPlugin.On("Execute", suite.mockContext, mock.Anything, suite.mockCancelFlag, suite.mockIohandler, suite.mockDataChannel).Return()
 
+	suite.mockDataChannel.On("SkipHandshake", suite.mockContext.Log()).Return()
 	suite.sessionPlugin.Execute(suite.mockContext,
 		contracts.Configuration{},
+		suite.mockCancelFlag,
+		suite.mockIohandler)
+
+	suite.mockDataChannel.AssertExpectations(suite.T())
+	suite.mockSessionPlugin.AssertExpectations(suite.T())
+}
+
+func (suite *SessionPluginTestSuite) TestExecuteEncryptionHandshakeSuccess() {
+	getDataChannelForSessionPlugin =
+		func(context context.T, sessionId string, clientId string, cancelFlag task.CancelFlag, inputStreamMessageHandler datachannel.InputStreamMessageHandler) (datachannel.IDataChannel, error) {
+			return suite.mockDataChannel, nil
+		}
+	suite.mockDataChannel.On("SendAgentSessionStateMessage", suite.mockContext.Log(), mgsContracts.Connected).Return(nil)
+	suite.mockDataChannel.On("Close", suite.mockContext.Log()).Return(nil)
+	suite.mockSessionPlugin.On("Execute", suite.mockContext, mock.Anything, suite.mockCancelFlag, suite.mockIohandler, suite.mockDataChannel).Return()
+
+	kmsKey := "some-key"
+	suite.mockDataChannel.On("PerformHandshake", suite.mockContext.Log(), kmsKey).Return(nil)
+	suite.sessionPlugin.Execute(suite.mockContext,
+		contracts.Configuration{KmsKeyId: kmsKey},
+		suite.mockCancelFlag,
+		suite.mockIohandler)
+
+	suite.mockDataChannel.AssertExpectations(suite.T())
+	suite.mockSessionPlugin.AssertExpectations(suite.T())
+}
+
+func (suite *SessionPluginTestSuite) TestExecuteEncryptionHandshakeFailed() {
+	getDataChannelForSessionPlugin =
+		func(context context.T, sessionId string, clientId string, cancelFlag task.CancelFlag, inputStreamMessageHandler datachannel.InputStreamMessageHandler) (datachannel.IDataChannel, error) {
+			return suite.mockDataChannel, nil
+		}
+	suite.mockDataChannel.On("SendAgentSessionStateMessage", suite.mockContext.Log(), mgsContracts.Connected).Return(nil)
+	suite.mockDataChannel.On("Close", suite.mockContext.Log()).Return(nil)
+
+	kmsKey := "some-key"
+	error := errors.New("handshake failure")
+	suite.mockDataChannel.On("PerformHandshake", suite.mockContext.Log(), kmsKey).Return(error)
+	suite.mockIohandler.On("MarkAsFailed", mock.Anything).Return()
+	suite.sessionPlugin.Execute(suite.mockContext,
+		contracts.Configuration{KmsKeyId: kmsKey},
 		suite.mockCancelFlag,
 		suite.mockIohandler)
 

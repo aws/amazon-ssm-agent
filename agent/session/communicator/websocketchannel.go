@@ -16,14 +16,13 @@ package communicator
 
 import (
 	"errors"
+	"fmt"
 	"net/http"
 	"net/url"
 	"path"
 	"runtime/debug"
 	"sync"
 	"time"
-
-	"fmt"
 
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/log"

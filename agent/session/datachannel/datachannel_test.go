@@ -15,12 +15,17 @@
 package datachannel
 
 import (
+	"bytes"
+	"encoding/json"
+	"errors"
 	"strconv"
 	"sync"
 	"testing"
 	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/context"
+	"github.com/aws/amazon-ssm-agent/agent/crypto"
+	cryptoMocks "github.com/aws/amazon-ssm-agent/agent/crypto/mocks"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	communicatorMocks "github.com/aws/amazon-ssm-agent/agent/session/communicator/mocks"
 	mgsConfig "github.com/aws/amazon-ssm-agent/agent/session/config"
@@ -40,17 +45,21 @@ var (
 	mockLog                                    = log.NewMockLog()
 	mockService                                = &serviceMock.Service{}
 	mockWsChannel                              = &communicatorMocks.IWebSocketChannel{}
+	mockCipher                                 = &cryptoMocks.IBlockCipher{}
 	mockCancelFlag                             = &task.MockCancelFlag{}
 	clientId                                   = "dd01e56b-ff48-483e-a508-b5f073f31b16"
 	createdDate                                = uint64(1503434274948)
 	sessionId                                  = "2b196342-d7d4-436e-8f09-3883a1116ac3"
 	instanceId                                 = "i-1234"
 	messageId                                  = "dd01e56b-ff48-483e-a508-b5f073f31b16"
+	kmskey                                     = "key"
+	datakey                                    = []byte("datakey")
 	token                                      = "token"
 	region                                     = "us-east-1"
 	signer                                     = &v4.Signer{Credentials: credentials.NewStaticCredentials("AKID", "SECRET", "SESSION")}
 	onMessageHandler                           = func(input []byte) {}
 	payload                                    = []byte("testPayload")
+	versionString                              = "1.1.1.1.1"
 	streamDataSequenceNumber                   = int64(0)
 	expectedSequenceNumber                     = int64(0)
 	serializedAgentMessages, streamingMessages = getAgentAndStreamingMessageList(7)
@@ -315,7 +324,7 @@ func TestDataChannelIncomingMessageHandlerForExpectedInputStreamDataMessage(t *t
 
 	// First scenario is to test when incoming message sequence number matches with expected sequence number
 	// and no message found in IncomingMessageBuffer
-	err := dataChannel.DataChannelIncomingMessageHandler(mockLog, serializedAgentMessages[0])
+	err := dataChannel.dataChannelIncomingMessageHandler(mockLog, serializedAgentMessages[0])
 	assert.Nil(t, err)
 	assert.Equal(t, int64(1), dataChannel.ExpectedSequenceNumber)
 	assert.Equal(t, 0, len(dataChannel.IncomingMessageBuffer.Messages))
@@ -329,7 +338,7 @@ func TestDataChannelIncomingMessageHandlerForExpectedInputStreamDataMessage(t *t
 	dataChannel.AddDataToIncomingMessageBuffer(streamingMessages[4])
 	dataChannel.AddDataToIncomingMessageBuffer(streamingMessages[3])
 
-	err = dataChannel.DataChannelIncomingMessageHandler(mockLog, serializedAgentMessages[1])
+	err = dataChannel.dataChannelIncomingMessageHandler(mockLog, serializedAgentMessages[1])
 	assert.Nil(t, err)
 	assert.Equal(t, int64(5), dataChannel.ExpectedSequenceNumber)
 	assert.Equal(t, 1, len(dataChannel.IncomingMessageBuffer.Messages))
@@ -349,13 +358,13 @@ func TestDataChannelIncomingMessageHandlerForUnexpectedInputStreamDataMessage(t 
 
 	mockChannel.On("SendMessage", mock.Anything, mock.Anything, mock.Anything).Return(nil)
 
-	err := dataChannel.DataChannelIncomingMessageHandler(mockLog, serializedAgentMessages[1])
+	err := dataChannel.dataChannelIncomingMessageHandler(mockLog, serializedAgentMessages[1])
 	assert.Nil(t, err)
 
-	err = dataChannel.DataChannelIncomingMessageHandler(mockLog, serializedAgentMessages[2])
+	err = dataChannel.dataChannelIncomingMessageHandler(mockLog, serializedAgentMessages[2])
 	assert.Nil(t, err)
 
-	err = dataChannel.DataChannelIncomingMessageHandler(mockLog, serializedAgentMessages[3])
+	err = dataChannel.dataChannelIncomingMessageHandler(mockLog, serializedAgentMessages[3])
 	assert.Nil(t, err)
 
 	assert.Equal(t, expectedSequenceNumber, dataChannel.ExpectedSequenceNumber)
@@ -390,7 +399,7 @@ func TestDataChannelIncomingMessageHandlerForAcknowledgeMessage(t *testing.T) {
 	agentMessage := getAgentMessage(0, mgsContracts.AcknowledgeMessage, uint32(0), payload)
 	serializedAgentMessage, _ := agentMessage.Serialize(mockLog)
 
-	err := dataChannel.DataChannelIncomingMessageHandler(mockLog, serializedAgentMessage)
+	err := dataChannel.dataChannelIncomingMessageHandler(mockLog, serializedAgentMessage)
 
 	assert.Nil(t, err)
 	assert.Equal(t, 2, dataChannel.OutgoingMessageBuffer.Messages.Len())
@@ -416,7 +425,7 @@ func TestDataChannelIncomingMessageHandlerForChannelClosedMessage(t *testing.T) 
 	agentMessage := getAgentMessage(0, mgsContracts.ChannelClosedMessage, uint32(0), payload)
 	serializedAgentMessage, _ := agentMessage.Serialize(mockLog)
 
-	err := dataChannel.DataChannelIncomingMessageHandler(mockLog, serializedAgentMessage)
+	err := dataChannel.dataChannelIncomingMessageHandler(mockLog, serializedAgentMessage)
 
 	assert.Nil(t, err)
 	assert.Equal(t, 0, dataChannel.OutgoingMessageBuffer.Messages.Len())
@@ -429,7 +438,7 @@ func TestDataChannelIncomingMessageHandlerForPausePublicationMessage(t *testing.
 	agentMessage := getAgentMessage(0, mgsContracts.PausePublicationMessage, uint32(0), payload)
 	serializedAgentMessage, _ := agentMessage.Serialize(mockLog)
 
-	err := dataChannel.DataChannelIncomingMessageHandler(mockLog, serializedAgentMessage)
+	err := dataChannel.dataChannelIncomingMessageHandler(mockLog, serializedAgentMessage)
 
 	assert.Nil(t, err)
 	assert.Equal(t, true, dataChannel.Pause)
@@ -441,10 +450,160 @@ func TestDataChannelIncomingMessageHandlerForStartPublicationMessage(t *testing.
 	agentMessage := getAgentMessage(0, mgsContracts.StartPublicationMessage, uint32(0), payload)
 	serializedAgentMessage, _ := agentMessage.Serialize(mockLog)
 
-	err := dataChannel.DataChannelIncomingMessageHandler(mockLog, serializedAgentMessage)
+	err := dataChannel.dataChannelIncomingMessageHandler(mockLog, serializedAgentMessage)
 
 	assert.Nil(t, err)
 	assert.Equal(t, false, dataChannel.Pause)
+}
+
+func TestDataChannelHandshakeResponse(t *testing.T) {
+	dataChannel := getDataChannel()
+
+	mockChannel := &communicatorMocks.IWebSocketChannel{}
+	dataChannel.wsChannel = mockChannel
+	mockCipher := &cryptoMocks.IBlockCipher{}
+	dataChannel.blockCipher = mockCipher
+	// Default channel is not buffered, this causes a deadlock. Make the channel buffered.
+	dataChannel.handshake.responseChan = make(chan bool, 1)
+	dataChannel.encryptionEnabled = false
+
+	handshakeResponsePayload, _ := json.Marshal(buildHandshakeResponse())
+	agentMessageBytes, _ := getAgentMessage(int64(0), mgsContracts.InputStreamDataMessage,
+		uint32(mgsContracts.HandshakeResponse), handshakeResponsePayload).Serialize(mockLog)
+
+	mockChannel.On("SendMessage", mock.Anything, mock.Anything, mock.Anything).Return(nil)
+	mockCipher.On("UpdateEncryptionKey", mockLog, datakey, sessionId).Return(nil)
+
+	err := dataChannel.dataChannelIncomingMessageHandler(mockLog, agentMessageBytes)
+	assert.Nil(t, err)
+	assert.True(t, dataChannel.encryptionEnabled)
+	assert.True(t, <-dataChannel.handshake.responseChan)
+
+	mockChannel.AssertExpectations(t)
+	mockCipher.AssertExpectations(t)
+	mockCancelFlag.AssertExpectations(t)
+}
+
+func TestDataChannelHandshakeResponseEncryptionClientFailure(t *testing.T) {
+	dataChannel := getDataChannel()
+
+	mockChannel := &communicatorMocks.IWebSocketChannel{}
+	dataChannel.wsChannel = mockChannel
+	mockCipher := &cryptoMocks.IBlockCipher{}
+	dataChannel.blockCipher = mockCipher
+	// Default channel is not buffered, this causes a deadlock. Make the channel buffered for test.
+	dataChannel.handshake.responseChan = make(chan bool, 1)
+	dataChannel.encryptionEnabled = false
+
+	handshakeResponsePayload, _ := json.Marshal(buildHandshakeResponseEncryptionFailed())
+	agentMessageBytes, _ := getAgentMessage(int64(0), mgsContracts.InputStreamDataMessage,
+		uint32(mgsContracts.HandshakeResponse), handshakeResponsePayload).Serialize(mockLog)
+	mockChannel.On("SendMessage", mock.Anything, mock.Anything, mock.Anything).Return(nil)
+	mockCancelFlag.On("Set", task.Canceled).Return()
+
+	err := dataChannel.dataChannelIncomingMessageHandler(mockLog, agentMessageBytes)
+
+	assert.Nil(t, err)
+	assert.False(t, dataChannel.encryptionEnabled)
+	assert.NotNil(t, dataChannel.handshake.error)
+	assert.True(t, <-dataChannel.handshake.responseChan)
+	mockChannel.AssertExpectations(t)
+	mockCancelFlag.AssertExpectations(t)
+}
+
+func TestDataChannelHandshakeResponseEncryptionAgentFailure(t *testing.T) {
+	dataChannel := getDataChannel()
+
+	mockChannel := &communicatorMocks.IWebSocketChannel{}
+	dataChannel.wsChannel = mockChannel
+	mockCipher := &cryptoMocks.IBlockCipher{}
+	dataChannel.blockCipher = mockCipher
+	// Default channel is not buffered, this causes a deadlock. Make the channel buffered for test.
+	dataChannel.handshake.responseChan = make(chan bool, 1)
+	dataChannel.encryptionEnabled = false
+
+	handshakeResponsePayload, _ := json.Marshal(buildHandshakeResponse())
+	agentMessageBytes, _ := getAgentMessage(int64(0), mgsContracts.InputStreamDataMessage,
+		uint32(mgsContracts.HandshakeResponse), handshakeResponsePayload).Serialize(mockLog)
+
+	// Account for acknowledgements being sent
+	mockChannel.On("SendMessage", mock.Anything, mock.Anything, mock.Anything).Return(nil)
+	// Throw error when processing handshake response
+	errorString := "Failed to update encryption key. Something bad happened."
+	mockCipher.On("UpdateEncryptionKey", mockLog, datakey, sessionId).Return(errors.New(errorString))
+
+	mockCancelFlag.On("Set", task.Canceled).Return()
+
+	err := dataChannel.dataChannelIncomingMessageHandler(mockLog, agentMessageBytes)
+
+	assert.Nil(t, err)
+	assert.False(t, dataChannel.encryptionEnabled)
+	assert.Contains(t, dataChannel.handshake.error.Error(), errorString)
+	assert.True(t, <-dataChannel.handshake.responseChan)
+	mockChannel.AssertExpectations(t)
+	mockCancelFlag.AssertExpectations(t)
+}
+
+func TestDataCHannelHandshakeInitiate(t *testing.T) {
+	dataChannel := getDataChannel()
+	mockChannel := &communicatorMocks.IWebSocketChannel{}
+	dataChannel.wsChannel = mockChannel
+
+	// Set up block cipher
+	mockCipher.On("GetKMSKeyId").Return(kmskey)
+	dataChannel.blockCipher = mockCipher
+	dataChannel.encryptionEnabled = true
+
+	// Mocking sending of handshake request
+	handshakeRequestPayload, _ := json.Marshal(dataChannel.buildHandshakeRequestPayload(mockLog, true))
+	handshakeRequestMatcher := func(sentData []byte) bool {
+		agentMessage := mgsContracts.AgentMessage{}
+		agentMessage.Deserialize(mockLog, sentData)
+		return bytes.Equal(agentMessage.Payload, handshakeRequestPayload)
+	}
+	mockChannel.On("SendMessage", mockLog, mock.MatchedBy(handshakeRequestMatcher), mock.Anything).Return(nil)
+
+	// Mock sending of encryption challenge
+	encChallengeRequestMatcher := func(sentData []byte) bool {
+		agentMessage := mgsContracts.AgentMessage{}
+		agentMessage.Deserialize(mockLog, sentData)
+		var encChallengeReq = mgsContracts.EncryptionChallengeRequest{}
+		json.Unmarshal(agentMessage.Payload, &encChallengeReq)
+		return len(encChallengeReq.Challenge) == 64 && agentMessage.PayloadType == uint32(mgsContracts.EncChallengeRequest)
+	}
+	mockCipher.On("EncryptWithAESGCM", mock.AnythingOfType("[]uint8")).Return(func(s []byte) []byte { return s }, nil)
+	mockChannel.On("SendMessage", mockLog, mock.MatchedBy(encChallengeRequestMatcher), mock.Anything).Return(nil)
+
+	// Mock sending of handshake complete
+	handshakeCompleteMatcher := func(sentData []uint8) bool {
+		agentMessage := mgsContracts.AgentMessage{}
+		agentMessage.Deserialize(mockLog, sentData)
+		var sentHandshakeComplete = mgsContracts.HandshakeCompletePayload{}
+		json.Unmarshal(agentMessage.Payload, &sentHandshakeComplete)
+		handshakeComplete := dataChannel.buildHandshakeCompletePayload(mockLog)
+		return sentHandshakeComplete.CustomerMessage == handshakeComplete.CustomerMessage &&
+			agentMessage.PayloadType == uint32(mgsContracts.HandshakeComplete)
+	}
+	mockChannel.On("SendMessage", mockLog, mock.MatchedBy(handshakeCompleteMatcher), mock.Anything).Return(nil)
+
+	// Default channel is not buffered, this causes a deadlock. Make the channel buffered for test.
+	dataChannel.handshake.responseChan = make(chan bool, 1)
+	dataChannel.handshake.responseChan <- true
+	dataChannel.handshake.encryptionConfirmedChan = make(chan bool, 1)
+	dataChannel.handshake.encryptionConfirmedChan <- true
+
+	// This is necessary because PerformHandshake initializes the cipher
+	newBlockCipher = func(log log.T, kmsKeyId string) (blockCipher crypto.IBlockCipher, err error) {
+		return mockCipher, nil
+	}
+
+	err := dataChannel.PerformHandshake(mockLog, kmskey)
+
+	assert.Nil(t, err)
+	assert.True(t, dataChannel.handshake.complete)
+	assert.Nil(t, dataChannel.handshake.error)
+	mockCipher.AssertExpectations(t)
+	mockChannel.AssertExpectations(t)
 }
 
 func getDataChannel() *DataChannel {
@@ -482,15 +641,52 @@ func getAgentAndStreamingMessageList(size int) (serializedAgentMessage [][]byte,
 // getAgentMessage constructs and returns AgentMessage with given sequenceNumber, messageType & payload
 func getAgentMessage(sequenceNumber int64, messageType string, payloadType uint32, payload []byte) *mgsContracts.AgentMessage {
 	messageUUID, _ := uuid.Parse(messageId)
+
+	var flag uint64 = 2 // Default: Bit 1 is set when this message is the final message in the sequence.
+
+	if sequenceNumber == 0 {
+		flag = 1
+	}
 	agentMessage := mgsContracts.AgentMessage{
 		MessageType:    messageType,
 		SchemaVersion:  schemaVersion,
 		CreatedDate:    createdDate,
 		SequenceNumber: sequenceNumber,
-		Flags:          2,
+		Flags:          flag,
 		MessageId:      messageUUID,
 		PayloadType:    payloadType,
 		Payload:        payload,
 	}
 	return &agentMessage
+}
+
+func buildHandshakeResponse() mgsContracts.HandshakeResponsePayload {
+	handshakeResponse := mgsContracts.HandshakeResponsePayload{}
+	handshakeResponse.ClientVersion = versionString
+	handshakeResponse.ProcessedClientActions = []mgsContracts.ProcessedClientAction{}
+
+	processedAction := mgsContracts.ProcessedClientAction{}
+	processedAction.ActionType = mgsContracts.KMSEncryption
+	processedAction.ActionStatus = mgsContracts.Success
+	processedAction.ActionResult, _ = json.Marshal(mgsContracts.KMSEncryptionResponse{KMSCipherTextKey: datakey})
+	handshakeResponse.ProcessedClientActions = append(handshakeResponse.ProcessedClientActions, processedAction)
+
+	processedAction = mgsContracts.ProcessedClientAction{}
+	processedAction.ActionType = mgsContracts.SessionType
+	processedAction.ActionStatus = mgsContracts.Success
+	handshakeResponse.ProcessedClientActions = append(handshakeResponse.ProcessedClientActions, processedAction)
+	return handshakeResponse
+}
+
+func buildHandshakeResponseEncryptionFailed() mgsContracts.HandshakeResponsePayload {
+	handshakeResponse := mgsContracts.HandshakeResponsePayload{}
+	handshakeResponse.ClientVersion = versionString
+	handshakeResponse.ProcessedClientActions = []mgsContracts.ProcessedClientAction{}
+
+	processedAction := mgsContracts.ProcessedClientAction{}
+	processedAction.ActionType = mgsContracts.KMSEncryption
+	processedAction.ActionStatus = mgsContracts.Failed
+	processedAction.Error = "KMSError"
+	handshakeResponse.ProcessedClientActions = append(handshakeResponse.ProcessedClientActions, processedAction)
+	return handshakeResponse
 }
