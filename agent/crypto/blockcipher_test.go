@@ -54,9 +54,10 @@ func TestBlockCipherTestSuite(t *testing.T) {
 // Testing Encrypt and Decrypt functions
 func (suite *BlockCipherTestSuite) TestEncryptDecrypt() {
 	var encryptionContext = map[string]*string{"SessionId": &suite.sessionId}
-	suite.mockKMSService.On("GenerateDataKey", suite.kmsKeyId, encryptionContext).Return(suite.cipherTextKey, suite.plainTextKey, nil)
+	suite.mockKMSService.On("Decrypt", suite.cipherTextKey, encryptionContext).Return(suite.plainTextKey, nil)
 
-	blockCipher, err := NewBlockCipherKMS(suite.mockLog, suite.kmsKeyId, suite.sessionId, &suite.mockKMSService)
+	blockCipher, err := NewBlockCipherKMS(suite.mockLog, suite.kmsKeyId, &suite.mockKMSService)
+	blockCipher.UpdateEncryptionKey(suite.mockLog, suite.cipherTextKey, suite.sessionId)
 	assert.Nil(suite.T(), err)
 	// Create another cipher with flipped encryption/decryption keys
 	blockCipherReversed := BlockCipher(BlockCipher{})

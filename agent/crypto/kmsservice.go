@@ -32,7 +32,7 @@ import (
 const KMSKeySizeInBytes int64 = 64
 
 type IKMSService interface {
-	GenerateDataKey(kmsKeyId string, context map[string]*string) (cipherTextKey []byte, plainTextKey []byte, err error)
+	Decrypt(cipherTextBlob []byte, encryptionContext map[string]*string) (plainText []byte, err error)
 }
 
 type KMSService struct {
@@ -67,19 +67,13 @@ func NewKMSService(log log.T) (kmsService *KMSService, err error) {
 	return kmsService, nil
 }
 
-// GenerateDataKey gets cipher text and plain text keys from KMS service
-func (kmsService *KMSService) GenerateDataKey(kmsKeyId string, context map[string]*string) (cipherTextKey []byte, plainTextKey []byte, err error) {
-	kmsKeySize := KMSKeySizeInBytes
-	generateDataKeyInput := kms.GenerateDataKeyInput{
-		KeyId:             &kmsKeyId,
-		NumberOfBytes:     &kmsKeySize,
-		EncryptionContext: context,
+// Decrypt will get the plaintext key from KMS service
+func (kmsService *KMSService) Decrypt(cipherTextBlob []byte, encryptionContext map[string]*string) (plainText []byte, err error) {
+	output, err := kmsService.client.Decrypt(&kms.DecryptInput{
+		CiphertextBlob:    cipherTextBlob,
+		EncryptionContext: encryptionContext})
+	if err != nil {
+		return nil, fmt.Errorf("Error when decrypting data key %s", err)
 	}
-
-	var generateDataKeyOutput *kms.GenerateDataKeyOutput
-	if generateDataKeyOutput, err = kmsService.client.GenerateDataKey(&generateDataKeyInput); err != nil {
-		return nil, nil, fmt.Errorf("Error calling KMS GenerateDataKey API: %s", err)
-	}
-
-	return generateDataKeyOutput.CiphertextBlob, generateDataKeyOutput.Plaintext, nil
+	return output.Plaintext, nil
 }

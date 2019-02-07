@@ -11,7 +11,7 @@
 // either express or implied. See the License for the specific language governing
 // permissions and limitations under the License.
 
-// Package sessionplugin implements functionalities common to all session manager plugins
+// Package sessionplugin implements functionality common to all session manager plugins
 package sessionplugin
 
 import (
@@ -55,6 +55,7 @@ func (p *SessionPlugin) Execute(context context.T,
 	output iohandler.IOHandler) {
 
 	log := context.Log()
+	kmsKeyId := config.KmsKeyId
 
 	dataChannel, err := getDataChannelForSessionPlugin(context, config.SessionId, config.ClientId, cancelFlag, p.sessionPlugin.InputStreamMessageHandler)
 	if err != nil {
@@ -66,10 +67,26 @@ func (p *SessionPlugin) Execute(context context.T,
 	defer dataChannel.Close(log)
 
 	if err = dataChannel.SendAgentSessionStateMessage(context.Log(), mgsContracts.Connected); err != nil {
-		log.Errorf("Unable to send AgentSessionState message with session status %s. %v", mgsContracts.Connected, err)
+		log.Errorf("Unable to send AgentSessionState message with session status %s. %s", mgsContracts.Connected, err)
+	}
+
+	if p.isEncryptionEnabled(kmsKeyId) {
+		if err = dataChannel.PerformHandshake(log, kmsKeyId); err != nil {
+			errorString := fmt.Errorf("Encountered error while initiating handshake. %s", err)
+			output.MarkAsFailed(errorString)
+			log.Error(errorString)
+			return
+		}
+	} else {
+		dataChannel.SkipHandshake(log)
 	}
 
 	p.sessionPlugin.Execute(context, config, cancelFlag, output, dataChannel)
+}
+
+// isEncryptionEnabled checks kmsKeyId to determine if encryption is enabled for this session
+func (p *SessionPlugin) isEncryptionEnabled(kmsKeyId string) bool {
+	return kmsKeyId != ""
 }
 
 // getDataChannelForSessionPlugin opens new data channel to MGS service

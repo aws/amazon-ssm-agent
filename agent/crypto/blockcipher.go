@@ -27,6 +27,7 @@ import (
 const nonceSize = 12
 
 type IBlockCipher interface {
+	UpdateEncryptionKey(log log.T, cipherTextKey []byte, sessionId string) error
 	EncryptWithAESGCM(plainText []byte) (cipherText []byte, err error)
 	DecryptWithAESGCM(cipherText []byte) (plainText []byte, err error)
 	GetCipherTextKey() (cipherTextKey []byte)
@@ -35,43 +36,51 @@ type IBlockCipher interface {
 
 type BlockCipher struct {
 	kmsKeyId      string
+	kmsService    IKMSService
 	cipherTextKey []byte
 	encryptionKey []byte
 	decryptionKey []byte
 }
 
-// Creates a new block cipher. Calls KMS key id as kmsKeyId and sessionId in the encryption context
-func NewBlockCipher(log log.T, kmsKeyId string, sessionId string) (blockCipher *BlockCipher, err error) {
+// NewBlockCipher creates a new block cipher
+func NewBlockCipher(log log.T, kmsKeyId string) (blockCipher *BlockCipher, err error) {
 	var kmsService *KMSService
 	if kmsService, err = NewKMSService(log); err != nil {
 		return nil, fmt.Errorf("Unable to get new KMSService, %v", err)
 	}
-	return NewBlockCipherKMS(log, kmsKeyId, sessionId, kmsService)
+	return NewBlockCipherKMS(log, kmsKeyId, kmsService)
 }
 
-func NewBlockCipherKMS(log log.T, kmsKeyId string, sessionId string, kmsService IKMSService) (blockCipher *BlockCipher, err error) {
+// NewBlockCipherKMS creates a new block cipher with a provided IKMService instance
+func NewBlockCipherKMS(log log.T, kmsKeyId string, kmsService IKMSService) (blockCipher *BlockCipher, err error) {
+	// NewBlockCipher creates a new instance of BlockCipher
+	blockCipher = &BlockCipher{
+		kmsKeyId:   kmsKeyId,
+		kmsService: kmsService,
+	}
+	return blockCipher, nil
+}
+
+// UpdateEncryptionKey receives cipherTextBlob and calls kms::Decrypt to receive the encryption data key
+func (blockCipher *BlockCipher) UpdateEncryptionKey(log log.T, cipherTextBlob []byte, sessionId string) error {
 	// NewBlockCipher creates a new instance of BlockCipher
 	var (
-		cipherTextKey []byte
-		plainTextKey  []byte
+		plainTextKey []byte
+		err          error
 	)
 	var encryptionContext = make(map[string]*string)
-	encryptionContext["SessionId"] = &sessionId
-	if cipherTextKey, plainTextKey, err = kmsService.GenerateDataKey(kmsKeyId, encryptionContext); err != nil {
-		return nil, fmt.Errorf("Unable to generate data key, %v", err)
+	const encryptionContextKey = "SessionId"
+	encryptionContext[encryptionContextKey] = &sessionId
+	if plainTextKey, err = blockCipher.kmsService.Decrypt(cipherTextBlob, encryptionContext); err != nil {
+		return fmt.Errorf("Unable to retrieve data key, %v", err)
 	}
-	log.Debug("Successfully generated plain and cipher text keys")
-
 	// cryptoKeySizeInBytes is half of PlainTextKey size fetched from KMS. PlainTextKey is split in two two halves of cryptoKeySizeInBytes
 	// First half will be used by agent for encryption and second half by clients like cli/console for encryption
 	cryptoKeySizeInBytes := KMSKeySizeInBytes / 2
-	blockCipher = &BlockCipher{
-		kmsKeyId:      kmsKeyId,
-		cipherTextKey: cipherTextKey,
-		encryptionKey: plainTextKey[:cryptoKeySizeInBytes],
-		decryptionKey: plainTextKey[cryptoKeySizeInBytes:],
-	}
-	return blockCipher, nil
+	blockCipher.cipherTextKey = cipherTextBlob
+	blockCipher.encryptionKey = plainTextKey[:cryptoKeySizeInBytes]
+	blockCipher.decryptionKey = plainTextKey[cryptoKeySizeInBytes:]
+	return nil
 }
 
 // getAEAD gets AEAD which is a GCM cipher mode providing authenticated encryption with associated data

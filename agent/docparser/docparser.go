@@ -403,7 +403,6 @@ func (sessionDocContent *SessionDocContent) parsePluginStateForStartSession(
 		plugin.Name = config.PluginName
 		pluginsInfo = append(pluginsInfo, plugin)
 	}
-
 	return
 }
 
