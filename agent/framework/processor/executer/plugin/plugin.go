@@ -16,6 +16,7 @@
 package plugin
 
 import (
+	"runtime/debug"
 	"sync"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
@@ -142,6 +143,14 @@ func (f SessionPluginFactory) Create(context context.T) (runpluginutil.T, error)
 
 // RegisteredWorkerPlugins returns all registered core modules.
 func RegisteredWorkerPlugins(context context.T) runpluginutil.PluginRegistry {
+
+	defer func() {
+		if msg := recover(); msg != nil {
+			context.Log().Errorf("Agent failed while getting registered worker plugins %v!", msg)
+			context.Log().Errorf("%s: %s", msg, debug.Stack())
+		}
+	}()
+
 	once.Do(func() {
 		loadWorkers(context)
 	})
@@ -167,10 +176,12 @@ func loadWorkers(context context.T) {
 
 	for key, value := range loadPlatformIndependentPlugins(context) {
 		plugins[key] = value
+		context.Log().Infof("Successfully loaded platform independent plugin %v", key)
 	}
 
 	for key, value := range loadPlatformDependentPlugins(context) {
 		plugins[key] = value
+		context.Log().Infof("Successfully loaded platform dependent plugin %v", key)
 	}
 
 	registeredPlugins = &plugins
