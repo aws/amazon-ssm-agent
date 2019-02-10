@@ -32,6 +32,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/hibernation"
 	logger "github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/rebooter"
+	"github.com/aws/amazon-ssm-agent/agent/session/utility"
 	"github.com/aws/amazon-ssm-agent/agent/ssm"
 )
 
@@ -59,6 +60,14 @@ func start(log logger.T, instanceIDPtr *string, regionPtr *string, shouldCheckHi
 		return
 	}
 	context := context.Default(log, config)
+
+	//Reset password for default RunAs user if already exists
+	sessionUtil := &utility.SessionUtil{
+		Context: context,
+	}
+	if err := sessionUtil.ResetPasswordIfDefaultUserExists(); err != nil {
+		log.Warnf("Reset password failed, %v", err)
+	}
 
 	//Initializing the health module to send empty health pings to the service.
 	healthModule := health.NewHealthCheck(context, ssm.NewService())

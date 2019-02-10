@@ -20,6 +20,8 @@ import (
 	"fmt"
 	"syscall"
 	"unsafe"
+
+	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 )
 
 type USER_INFO_1003 struct {
@@ -27,17 +29,25 @@ type USER_INFO_1003 struct {
 }
 
 const (
-	// Success code for NetUserSetInfo function call
-	NET_USER_SET_INFO_STATUS_SUCCESS = 0
+	// Success code for NetUser function calls
+	NERR_SUCCESS = 0
+	// Nil is a zero value for pointer types
+	NIL_POINTER_VALUE = 0
+	// Windows error code for user not found
+	USER_NAME_NOT_FOUND_ERROR_CODE = 2221
 	// Information level for password data
 	INFO_LEVEL_PASSWORD = 1003
+	// Level for fetching USER_INFO_1 structure data
+	LEVEL_USER_INFO_1 = 1
 	// Sever name for local machine
 	SERVER_NAME_LOCAL_MACHINE = 0
 )
 
 var (
-	modNetapi32       = syscall.NewLazyDLL("netapi32.dll")
-	usrNetUserSetInfo = modNetapi32.NewProc("NetUserSetInfo")
+	modNetapi32         = syscall.NewLazyDLL("netapi32.dll")
+	usrNetUserSetInfo   = modNetapi32.NewProc("NetUserSetInfo")
+	usrNetUserGetInfo   = modNetapi32.NewProc("NetUserGetInfo")
+	usrNetApiBufferFree = modNetapi32.NewProc("NetApiBufferFree")
 )
 
 // ChangePassword changes password for given user using NetUserSetInfo function of netapi32.dll on local machine
@@ -65,8 +75,62 @@ func (u *SessionUtil) ChangePassword(username string, password string) error {
 		uintptr(unsafe.Pointer(&errParam)),
 	)
 
-	if ret != NET_USER_SET_INFO_STATUS_SUCCESS {
+	if ret != NERR_SUCCESS {
 		return fmt.Errorf("NetUserSetInfo call failed. %d", ret)
 	}
 	return nil
+}
+
+// ResetPasswordIfDefaultUserExists resets default RunAs user password if user exists
+func (u *SessionUtil) ResetPasswordIfDefaultUserExists() (err error) {
+	var userExists bool
+	if userExists, err = u.doesUserAlreadyExists(appconfig.DefaultRunAsUserName); err != nil {
+		return fmt.Errorf("Error occured while checking if %s user exists, %v", appconfig.DefaultRunAsUserName, err)
+	}
+
+	if userExists {
+		log := u.Context.Log()
+		log.Infof("%s already exists. Resetting password.", appconfig.DefaultRunAsUserName)
+		if err = u.ChangePassword(appconfig.DefaultRunAsUserName, u.MustGeneratePasswordForDefaultUser()); err != nil {
+			return fmt.Errorf("Error occured while changing password for %s, %v", appconfig.DefaultRunAsUserName, err)
+		}
+	}
+
+	return nil
+}
+
+// doesUserAlreadyExists checks if given user already exists using NetUserGetInfo function of netapi32.dll on local machine
+func (u *SessionUtil) doesUserAlreadyExists(username string) (bool, error) {
+	var (
+		uPointer         *uint16
+		userInfo1Pointer uintptr
+		err              error
+		userExists       bool
+	)
+
+	if uPointer, err = syscall.UTF16PtrFromString(username); err != nil {
+		return false, fmt.Errorf("Unable to encode username to UTF16")
+	}
+
+	ret, _, _ := usrNetUserGetInfo.Call(
+		uintptr(SERVER_NAME_LOCAL_MACHINE),
+		uintptr(unsafe.Pointer(uPointer)),
+		uintptr(uint32(LEVEL_USER_INFO_1)),
+		uintptr(unsafe.Pointer(&userInfo1Pointer)),
+	)
+
+	if userInfo1Pointer != NIL_POINTER_VALUE {
+		defer usrNetApiBufferFree.Call(uintptr(unsafe.Pointer(userInfo1Pointer)))
+	}
+
+	if ret == NERR_SUCCESS {
+		userExists = true
+	} else if uint(ret) == USER_NAME_NOT_FOUND_ERROR_CODE {
+		userExists = false
+	} else {
+		userExists = false
+		err = fmt.Errorf("NetUserGetInfo call failed. %d", ret)
+	}
+
+	return userExists, err
 }
