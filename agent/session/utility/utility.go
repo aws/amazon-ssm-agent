@@ -18,6 +18,8 @@ import (
 	"crypto/rand"
 	"errors"
 	"math/big"
+
+	"github.com/aws/amazon-ssm-agent/agent/context"
 )
 
 const (
@@ -37,9 +39,11 @@ type ISessionUtil interface {
 	GeneratePasswordForDefaultUser() (string, error)
 	MustGeneratePasswordForDefaultUser() string
 	ChangePassword(username string, password string) error
+	ResetPasswordIfDefaultUserExists() (err error)
 }
 
 type SessionUtil struct {
+	Context           context.T
 	MinPasswordLength int
 	MaxPasswordLength int
 }

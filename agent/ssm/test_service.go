@@ -128,8 +128,8 @@ func (m *Mock) UpdateInstanceInformation(log log.T, agentVersion, agentStatus, a
 }
 
 // UpdateEmptyInstanceInformation mocks the UpdateEmptyInstanceInformation function.
-func (m *Mock) UpdateEmptyInstanceInformation(agentName string) (response *ssm.UpdateInstanceInformationOutput, err error) {
-	args := m.Called(agentName)
+func (m *Mock) UpdateEmptyInstanceInformation(log log.T, agentVersion, agentName string) (response *ssm.UpdateInstanceInformationOutput, err error) {
+	args := m.Called(log, agentVersion, agentName)
 	return args.Get(0).(*ssm.UpdateInstanceInformationOutput), args.Error(1)
 }
 

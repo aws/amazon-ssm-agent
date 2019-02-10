@@ -158,7 +158,7 @@ func (h *HealthCheck) ModuleRequestStop(stopType contracts.StopType) (err error)
 
 //ping sends an empty ping to the health service to identify if the service exists
 func (h *HealthCheck) ping() (err error) {
-	_, err = h.service.UpdateEmptyInstanceInformation(AgentName)
+	_, err = h.service.UpdateEmptyInstanceInformation(h.context.Log(), version.Version, AgentName)
 	return err
 }
 

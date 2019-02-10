@@ -349,12 +349,12 @@ func (_m *Service) UpdateAssociationStatus(_a0 log.T, instanceID string, name st
 }
 
 // UpdateEmptyInstanceInformation provides a mock function with given fields: agentName
-func (_m *Service) UpdateEmptyInstanceInformation(agentName string) (*ssm.UpdateInstanceInformationOutput, error) {
-	ret := _m.Called(agentName)
+func (_m *Service) UpdateEmptyInstanceInformation(_a0 log.T, agentVersion string, agentName string) (*ssm.UpdateInstanceInformationOutput, error) {
+	ret := _m.Called(_a0, agentVersion, agentName)
 
 	var r0 *ssm.UpdateInstanceInformationOutput
-	if rf, ok := ret.Get(0).(func(string) *ssm.UpdateInstanceInformationOutput); ok {
-		r0 = rf(agentName)
+	if rf, ok := ret.Get(0).(func(log.T, string, string) *ssm.UpdateInstanceInformationOutput); ok {
+		r0 = rf(_a0, agentVersion, agentName)
 	} else {
 		if ret.Get(0) != nil {
 			r0 = ret.Get(0).(*ssm.UpdateInstanceInformationOutput)
@@ -362,8 +362,8 @@ func (_m *Service) UpdateEmptyInstanceInformation(agentName string) (*ssm.Update
 	}
 
 	var r1 error
-	if rf, ok := ret.Get(1).(func(string) error); ok {
-		r1 = rf(agentName)
+	if rf, ok := ret.Get(1).(func(log.T, string, string) error); ok {
+		r1 = rf(_a0, agentVersion, agentName)
 	} else {
 		r1 = ret.Error(1)
 	}

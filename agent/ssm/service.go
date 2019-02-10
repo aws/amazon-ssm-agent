@@ -69,7 +69,7 @@ type Service interface {
 	DeleteDocument(log log.T, instanceID string) (response *ssm.DeleteDocumentOutput, err error)
 	DescribeAssociation(log log.T, instanceID string, docName string) (response *ssm.DescribeAssociationOutput, err error)
 	UpdateInstanceInformation(log log.T, agentVersion, agentStatus, agentName string) (response *ssm.UpdateInstanceInformationOutput, err error)
-	UpdateEmptyInstanceInformation(agentName string) (response *ssm.UpdateInstanceInformationOutput, err error)
+	UpdateEmptyInstanceInformation(log log.T, agentVersion, agentName string) (response *ssm.UpdateInstanceInformationOutput, err error)
 	GetParameters(log log.T, paramNames []string) (response *ssm.GetParametersOutput, err error)
 	GetDecryptedParameters(log log.T, paramNames []string) (response *ssm.GetParametersOutput, err error)
 }
@@ -313,10 +313,25 @@ func (svc *sdkService) UpdateInstanceInformation(
 }
 
 //UpdateEmptyInstanceInformation calls the UpdateInstanceInformation SSM API with an empty ping.
-func (svc *sdkService) UpdateEmptyInstanceInformation(agentName string) (response *ssm.UpdateInstanceInformationOutput, err error) {
+func (svc *sdkService) UpdateEmptyInstanceInformation(
+	log log.T,
+	agentVersion,
+	agentName string,
+) (response *ssm.UpdateInstanceInformationOutput, err error) {
 	//TODO: combine this with UpdateInstanceInfo
 	params := ssm.UpdateInstanceInformationInput{
-		AgentName: aws.String(agentName),
+		AgentName:    aws.String(agentName),
+		AgentVersion: aws.String(agentVersion),
+	}
+
+	goOS := runtime.GOOS
+	switch goOS {
+	case "windows":
+		params.PlatformType = aws.String(ssm.PlatformTypeWindows)
+	case "linux", "freebsd", "darwin":
+		// darwin masquerades as Linux to bypass OS validation on
+		// the backend until official support can be added.
+		params.PlatformType = aws.String(ssm.PlatformTypeLinux)
 	}
 
 	// InstanceId is a required parameter for UpdateInstanceInformation
@@ -325,7 +340,12 @@ func (svc *sdkService) UpdateEmptyInstanceInformation(agentName string) (respons
 	} else {
 		return nil, err
 	}
+
+	log.Debug("Calling UpdateInstanceInformation with params", params)
 	response, err = svc.sdk.UpdateInstanceInformation(&params)
+	if err == nil {
+		log.Debug("UpdateInstanceInformation Response", response)
+	}
 	return
 }
 

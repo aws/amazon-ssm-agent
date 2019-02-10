@@ -77,7 +77,7 @@ func (suite *SsmServiceTestSuite) TestUpdateInstanceAssociationStatus() {
 // This function only update the agent name, but not update agent version and agent status
 func (suite *SsmServiceTestSuite) TestUpdateEmptyInstanceInformation() {
 	// Test the UpdateEmptyInstanceInformation, assert error is nil
-	response, err := suite.sdkService.UpdateEmptyInstanceInformation("Amazon-ssm-agent")
+	response, err := suite.sdkService.UpdateEmptyInstanceInformation(suite.logMock, "2.2.3.2", "Amazon-ssm-agent")
 	assert.Nil(suite.T(), err, "Err should be nil")
 	assert.NotNil(suite.T(), response, "response shouldn't be nil")
 }

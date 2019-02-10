@@ -123,7 +123,7 @@ func (suite *HealthCheckTestSuite) TestModuleRequestStopWithoutHealthJob() {
 // Testing the GetAgentState method which should return Active status
 func (suite *HealthCheckTestSuite) TestGetAgentStateActive() {
 	// UpdateEmptyInstanceInformation will return active in the h.ping() function.
-	suite.serviceMock.On("UpdateEmptyInstanceInformation", AgentName).Return(nil, nil)
+	suite.serviceMock.On("UpdateEmptyInstanceInformation", mock.Anything, version.Version, AgentName).Return(nil, nil)
 	agentState, err := suite.healthCheck.GetAgentState()
 	// Assert the status is Active and the error is nil.
 	assert.Equal(suite.T(), agentState, Active, "agent state should be active")
@@ -133,7 +133,7 @@ func (suite *HealthCheckTestSuite) TestGetAgentStateActive() {
 // Testing the GetAgentState method which should return Passive status
 func (suite *HealthCheckTestSuite) TestGetAgentStatePassive() {
 	// Turn on mock method in UpdateEmptyInstanceInformation, return an error if this function get called.
-	suite.serviceMock.On("UpdateEmptyInstanceInformation", AgentName).Return(nil, errors.New("UpdatesWithError"))
+	suite.serviceMock.On("UpdateEmptyInstanceInformation", mock.Anything, version.Version, AgentName).Return(nil, errors.New("UpdatesWithError"))
 	agentState, err := suite.healthCheck.GetAgentState()
 	// Assert the status is Passive and h.ping() function return an error.
 	assert.Equal(suite.T(), agentState, Passive, "agent state should be Passive")
