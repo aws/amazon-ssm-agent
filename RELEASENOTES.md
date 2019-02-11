@@ -1,5 +1,9 @@
 Latest
 ===============
+- Updates to UpdateInstanceInformation call, Windows initialization
+
+2.3.415.0
+===============
 - Bug fix addressing issues in Distributor package upgrade
 
 2.3.372.0
