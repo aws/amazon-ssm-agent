@@ -18,6 +18,7 @@ package shell
 
 import (
 	"bufio"
+	"encoding/json"
 	"fmt"
 	"os"
 	"path/filepath"
@@ -36,6 +37,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/platform"
 	mgsConfig "github.com/aws/amazon-ssm-agent/agent/session/config"
+	mgsContracts "github.com/aws/amazon-ssm-agent/agent/session/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/session/utility"
 	"github.com/aws/amazon-ssm-agent/agent/session/winpty"
 )
@@ -349,6 +351,48 @@ func cleanControlCharacters(sourceFileName, destinationFileName string) error {
 		}
 
 		destinationFile.Write(append(output, []byte(newLineCharacter)...))
+	}
+	return nil
+}
+
+// InputStreamMessageHandler passes payload byte stream to shell stdin
+func (p *ShellPlugin) InputStreamMessageHandler(log log.T, streamDataMessage mgsContracts.AgentMessage) error {
+	if p.stdin == nil || p.stdout == nil {
+		// This is to handle scenario when cli/console starts sending size data but pty has not been started yet
+		// Since packets are rejected, cli/console will resend these packets until pty starts successfully in separate thread
+		log.Tracef("Pty unavailable. Reject incoming message packet")
+		return nil
+	}
+
+	switch mgsContracts.PayloadType(streamDataMessage.PayloadType) {
+	case mgsContracts.Output:
+		log.Tracef("Output message received: %d", streamDataMessage.SequenceNumber)
+
+		// deal with powershell nextline issue https://github.com/lzybkr/PSReadLine/issues/579
+		payloadString := string(streamDataMessage.Payload)
+		if strings.Contains(payloadString, "\r\n") {
+			// From windows machine, do nothing
+		} else if strings.Contains(payloadString, "\n") {
+			// From linux machine, replace \n with \r
+			num := strings.Index(payloadString, "\n")
+			payloadString = strings.Replace(payloadString, "\n", "\r", num-1)
+		}
+
+		if _, err := p.stdin.Write([]byte(payloadString)); err != nil {
+			log.Errorf("Unable to write to stdin, err: %v.", err)
+			return err
+		}
+	case mgsContracts.Size:
+		var size mgsContracts.SizeData
+		if err := json.Unmarshal(streamDataMessage.Payload, &size); err != nil {
+			log.Errorf("Invalid size message: %s", err)
+			return err
+		}
+		log.Tracef("Resize data received: cols: %d, rows: %d", size.Cols, size.Rows)
+		if err := SetSize(log, size.Cols, size.Rows); err != nil {
+			log.Errorf("Unable to set pty size: %s", err)
+			return err
+		}
 	}
 	return nil
 }
