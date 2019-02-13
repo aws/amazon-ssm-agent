@@ -17,6 +17,7 @@
 package shell
 
 import (
+	"encoding/json"
 	"errors"
 	"fmt"
 	"os"
@@ -30,6 +31,7 @@ import (
 	agentContracts "github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	mgsConfig "github.com/aws/amazon-ssm-agent/agent/session/config"
+	mgsContracts "github.com/aws/amazon-ssm-agent/agent/session/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/session/utility"
 	"github.com/kr/pty"
 )
@@ -251,5 +253,36 @@ func (p *ShellPlugin) generateLogData(log log.T, config agentContracts.Configura
 	// Sleep till the shell successfully exits before uploading
 	time.Sleep(15 * time.Second)
 
+	return nil
+}
+
+// InputStreamMessageHandler passes payload byte stream to shell stdin
+func (p *ShellPlugin) InputStreamMessageHandler(log log.T, streamDataMessage mgsContracts.AgentMessage) error {
+	if p.stdin == nil || p.stdout == nil {
+		// This is to handle scenario when cli/console starts sending size data but pty has not been started yet
+		// Since packets are rejected, cli/console will resend these packets until pty starts successfully in separate thread
+		log.Tracef("Pty unavailable. Reject incoming message packet")
+		return nil
+	}
+
+	switch mgsContracts.PayloadType(streamDataMessage.PayloadType) {
+	case mgsContracts.Output:
+		log.Tracef("Output message received: %d", streamDataMessage.SequenceNumber)
+		if _, err := p.stdin.Write(streamDataMessage.Payload); err != nil {
+			log.Errorf("Unable to write to stdin, err: %v.", err)
+			return err
+		}
+	case mgsContracts.Size:
+		var size mgsContracts.SizeData
+		if err := json.Unmarshal(streamDataMessage.Payload, &size); err != nil {
+			log.Errorf("Invalid size message: %s", err)
+			return err
+		}
+		log.Tracef("Resize data received: cols: %d, rows: %d", size.Cols, size.Rows)
+		if err := SetSize(log, size.Cols, size.Rows); err != nil {
+			log.Errorf("Unable to set pty size: %s", err)
+			return err
+		}
+	}
 	return nil
 }
