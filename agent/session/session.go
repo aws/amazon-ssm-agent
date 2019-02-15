@@ -182,24 +182,21 @@ func (s *Session) ModuleExecute(context context.T) (err error) {
 
 	go s.listenReply(resultChan, instanceId)
 
+	log.Info("SSM Agent is trying to setup control channel for Session Manager module.")
+	s.controlChannel, err = setupControlChannel(s.context, s.service, s.processor, instanceId)
+	if err != nil {
+		log.Errorf("Failed to setup control channel, err: %v", err)
+		return
+	}
+
+	log.Info("Starting receiving message from control channel")
+	// Create ssm-user since control channel has been successfully created.
+	s.createLocalAdminUser()
+
 	if err = s.processor.InitialProcessing(); err != nil {
 		log.Errorf("initial processing in EngineProcessor encountered error: %v", err)
 		return
 	}
-
-	log.Info("SSM Agent is trying to setup control channel for Session Manager module.")
-	go func() {
-		s.controlChannel, err = setupControlChannel(s.context, s.service, s.processor, instanceId)
-		if err != nil {
-			log.Errorf("Failed to setup control channel, err: %v", err)
-			return
-		}
-
-		log.Info("Starting receiving message from control channel")
-
-		// Create ssm-user since control channel has been successfully created.
-		s.createLocalAdminUser()
-	}()
 
 	return nil
 }
