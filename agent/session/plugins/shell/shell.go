@@ -251,7 +251,7 @@ func (p *ShellPlugin) writePump(log log.T) (errorCode int) {
 		}
 	}()
 
-	buf := make([]byte, mgsConfig.StreamDataPayloadSize)
+	stdoutBytes := make([]byte, mgsConfig.StreamDataPayloadSize)
 	reader := bufio.NewReader(p.stdout)
 
 	// Create ipc file
@@ -265,9 +265,9 @@ func (p *ShellPlugin) writePump(log log.T) (errorCode int) {
 	// Wait for all input commands to run.
 	time.Sleep(time.Second)
 
-	var buffer bytes.Buffer
+	var unprocessedBuf bytes.Buffer
 	for {
-		n, err := reader.Read(buf)
+		stdoutBytesLen, err := reader.Read(stdoutBytes)
 		if err != nil {
 			// Terminating session
 			log.Debugf("Failed to read from pty master: %s", err)
@@ -277,40 +277,58 @@ func (p *ShellPlugin) writePump(log log.T) (errorCode int) {
 			return appconfig.SuccessExitCode
 		}
 
-		//read byte array as Unicode code points (rune in go)
-		bufferBytes := buffer.Bytes()
-		runeReader := bufio.NewReader(bytes.NewReader(append(bufferBytes[:], buf[:n]...)))
-		buffer.Reset()
-		i := 0
-		for i < n {
-			stdoutRune, stdoutRuneLen, err := runeReader.ReadRune()
-			if err != nil {
-				log.Errorf("Failed to read rune from reader: %s", err)
-				return appconfig.ErrorExitCode
-			}
-			if stdoutRune == utf8.RuneError {
-				runeReader.UnreadRune()
-				break
-			}
-			i += stdoutRuneLen
-			buffer.WriteRune(stdoutRune)
-		}
-
-		if err = p.dataChannel.SendStreamDataMessage(log, mgsContracts.Output, buffer.Bytes()); err != nil {
-			log.Errorf("Unable to send stream data message: %s", err)
+		// unprocessedBuf contains incomplete utf8 encoded unicode bytes returned after processing of stdoutBytes
+		if unprocessedBuf, err = p.processStdoutData(log, stdoutBytes, stdoutBytesLen, unprocessedBuf, file); err != nil {
+			log.Errorf("Error processing stdout data, %v", err)
 			return appconfig.ErrorExitCode
-		}
-
-		if _, err = file.Write(buffer.Bytes()); err != nil {
-			log.Errorf("Encountered an error while writing to file: %s", err)
-			return appconfig.ErrorExitCode
-		}
-
-		buffer.Reset()
-		if i < n {
-			buffer.Write(buf[i:n])
 		}
 	}
+}
+
+// processStdoutData reads utf8 encoded unicode characters from stdoutBytes and sends it over websocket channel.
+func (p *ShellPlugin) processStdoutData(
+	log log.T,
+	stdoutBytes []byte,
+	stdoutBytesLen int,
+	unprocessedBuf bytes.Buffer,
+	file *os.File) (bytes.Buffer, error) {
+
+	// append stdoutBytes to unprocessedBytes and then read rune from appended bytes to send it over websocket channel
+	unprocessedBytes := unprocessedBuf.Bytes()
+	unprocessedBytes = append(unprocessedBytes[:], stdoutBytes[:stdoutBytesLen]...)
+	runeReader := bufio.NewReader(bytes.NewReader(unprocessedBytes))
+
+	var processedBuf bytes.Buffer
+	unprocessedBytesLen := len(unprocessedBytes)
+	i := 0
+	for i < unprocessedBytesLen {
+		//read stdout bytes as Unicode code points (rune in go)
+		stdoutRune, stdoutRuneLen, err := runeReader.ReadRune()
+		if err != nil {
+			return processedBuf, fmt.Errorf("failed to read rune from reader: %s", err)
+		}
+		if stdoutRune == utf8.RuneError {
+			runeReader.UnreadRune()
+			break
+		}
+		i += stdoutRuneLen
+		processedBuf.WriteRune(stdoutRune)
+	}
+
+	if err := p.dataChannel.SendStreamDataMessage(log, mgsContracts.Output, processedBuf.Bytes()); err != nil {
+		return processedBuf, fmt.Errorf("unable to send stream data message: %s", err)
+	}
+
+	if _, err := file.Write(processedBuf.Bytes()); err != nil {
+		return processedBuf, fmt.Errorf("encountered an error while writing to file: %s", err)
+	}
+
+	// return incomplete utf8 encoded unicode bytes to be processed with next batch of stdoutBytes
+	unprocessedBuf.Reset()
+	if i < unprocessedBytesLen {
+		unprocessedBuf.Write(unprocessedBytes[i:unprocessedBytesLen])
+	}
+	return unprocessedBuf, nil
 }
 
 // InputStreamMessageHandler passes payload byte stream to shell stdin
