@@ -22,6 +22,7 @@ import (
 	"unsafe"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
+	"github.com/aws/amazon-ssm-agent/agent/context"
 )
 
 type USER_INFO_1003 struct {
@@ -82,16 +83,20 @@ func (u *SessionUtil) ChangePassword(username string, password string) error {
 }
 
 // ResetPasswordIfDefaultUserExists resets default RunAs user password if user exists
-func (u *SessionUtil) ResetPasswordIfDefaultUserExists() (err error) {
+func (u *SessionUtil) ResetPasswordIfDefaultUserExists(context context.T) (err error) {
 	var userExists bool
-	if userExists, err = u.doesUserAlreadyExists(appconfig.DefaultRunAsUserName); err != nil {
+	if userExists, err = u.DoesUserExist(appconfig.DefaultRunAsUserName); err != nil {
 		return fmt.Errorf("Error occured while checking if %s user exists, %v", appconfig.DefaultRunAsUserName, err)
 	}
 
 	if userExists {
-		log := u.Context.Log()
+		log := context.Log()
 		log.Infof("%s already exists. Resetting password.", appconfig.DefaultRunAsUserName)
-		if err = u.ChangePassword(appconfig.DefaultRunAsUserName, u.MustGeneratePasswordForDefaultUser()); err != nil {
+		newPassword, err := u.GeneratePasswordForDefaultUser()
+		if err != nil {
+			return err
+		}
+		if err = u.ChangePassword(appconfig.DefaultRunAsUserName, newPassword); err != nil {
 			return fmt.Errorf("Error occured while changing password for %s, %v", appconfig.DefaultRunAsUserName, err)
 		}
 	}
@@ -99,8 +104,8 @@ func (u *SessionUtil) ResetPasswordIfDefaultUserExists() (err error) {
 	return nil
 }
 
-// doesUserAlreadyExists checks if given user already exists using NetUserGetInfo function of netapi32.dll on local machine
-func (u *SessionUtil) doesUserAlreadyExists(username string) (bool, error) {
+// DoesUserExist checks if given user already exists using NetUserGetInfo function of netapi32.dll on local machine
+func (u *SessionUtil) DoesUserExist(username string) (bool, error) {
 	var (
 		uPointer         *uint16
 		userInfo1Pointer uintptr

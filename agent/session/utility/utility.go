@@ -37,13 +37,12 @@ const (
 
 type ISessionUtil interface {
 	GeneratePasswordForDefaultUser() (string, error)
-	MustGeneratePasswordForDefaultUser() string
 	ChangePassword(username string, password string) error
-	ResetPasswordIfDefaultUserExists() (err error)
+	ResetPasswordIfDefaultUserExists(context context.T) (err error)
+	DoesUserExist(username string) (bool, error)
 }
 
 type SessionUtil struct {
-	Context           context.T
 	MinPasswordLength int
 	MaxPasswordLength int
 }
@@ -126,15 +125,6 @@ func (u *SessionUtil) GeneratePasswordForDefaultUser() (string, error) {
 	}
 
 	return result, nil
-}
-
-// MustGeneratePasswordForDefaultUser is the same as Generate, but panics on error.
-func (u *SessionUtil) MustGeneratePasswordForDefaultUser() string {
-	result, err := u.GeneratePasswordForDefaultUser()
-	if err != nil {
-		panic(err)
-	}
-	return result
 }
 
 // randomLength selects a random number between min and max.

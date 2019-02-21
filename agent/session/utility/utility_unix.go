@@ -16,8 +16,31 @@
 // utility package implements all the shared methods between clients.
 package utility
 
+import (
+	"fmt"
+	"os/exec"
+
+	"github.com/aws/amazon-ssm-agent/agent/appconfig"
+	"github.com/aws/amazon-ssm-agent/agent/context"
+	"github.com/aws/amazon-ssm-agent/agent/session/plugins/shell"
+)
+
 // ResetPasswordIfDefaultUserExists resets default RunAs user password if user exists
-func (u *SessionUtil) ResetPasswordIfDefaultUserExists() (err error) {
+func (u *SessionUtil) ResetPasswordIfDefaultUserExists(context context.T) (err error) {
 	// Do nothing here as no password is required for unix platform local user
 	return nil
+}
+
+// DoesUserExist checks if given user already exists
+func (u *SessionUtil) DoesUserExist(username string) (bool, error) {
+	shellCmdArgs := append(shell.ShellPluginCommandArgs, fmt.Sprintf("id %s", username))
+	cmd := exec.Command(shell.ShellPluginCommandName, shellCmdArgs...)
+	if err := cmd.Run(); err != nil {
+		if exitErr, ok := err.(*exec.ExitError); ok {
+			// The program has exited with an exit code != 0
+			return false, fmt.Errorf("encountered an error while checking for %s: %v", appconfig.DefaultRunAsUserName, exitErr.Error())
+		}
+		return false, nil
+	}
+	return true, nil
 }

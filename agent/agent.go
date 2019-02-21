@@ -62,10 +62,8 @@ func start(log logger.T, instanceIDPtr *string, regionPtr *string, shouldCheckHi
 	context := context.Default(log, config)
 
 	//Reset password for default RunAs user if already exists
-	sessionUtil := &utility.SessionUtil{
-		Context: context,
-	}
-	if err := sessionUtil.ResetPasswordIfDefaultUserExists(); err != nil {
+	sessionUtil := &utility.SessionUtil{}
+	if err := sessionUtil.ResetPasswordIfDefaultUserExists(context); err != nil {
 		log.Warnf("Reset password failed, %v", err)
 	}
 

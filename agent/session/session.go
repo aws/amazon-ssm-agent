@@ -15,14 +15,11 @@
 package session
 
 import (
-	"bufio"
 	"bytes"
 	"encoding/json"
 	"fmt"
 	"math/rand"
-	"os/exec"
 	"runtime/debug"
-	"strings"
 	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
@@ -226,45 +223,6 @@ func (s *Session) ModuleRequestStop(stopType contracts.StopType) (err error) {
 
 	s.processor.Stop(stopType)
 
-	return nil
-}
-
-// createLocalUser creates an OS local user.
-func (s *Session) createLocalUser() (err error) {
-	log := s.context.Log()
-
-	cmd := exec.Command(commandName, commandArgs...)
-	stderr, err := cmd.StderrPipe()
-	if err != nil {
-		log.Errorf("Error occurred while creating a local OS user: %v", err)
-		return
-	}
-
-	if err = cmd.Start(); err != nil {
-		log.Errorf("Error occurred starting the command: %v", err)
-		return
-	}
-
-	scanner := bufio.NewScanner(stderr)
-	scanner.Split(bufio.ScanLines)
-
-	for scanner.Scan() {
-		if strings.Contains(scanner.Text(), "already exists") {
-			log.Infof("%s already exists.", appconfig.DefaultRunAsUserName)
-
-			// Release all resources
-			cmd.Wait()
-
-			return fmt.Errorf("%s already exists", appconfig.DefaultRunAsUserName)
-		}
-	}
-
-	if err = cmd.Wait(); err != nil {
-		log.Errorf("Failed to create %s: %v", appconfig.DefaultRunAsUserName, err)
-		return
-	}
-
-	log.Infof("Successfully created %s", appconfig.DefaultRunAsUserName)
 	return nil
 }
 

@@ -17,9 +17,7 @@
 package session
 
 import (
-	"bufio"
 	"os/exec"
-	"strings"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/session/utility"
@@ -27,63 +25,47 @@ import (
 
 const administrators = "administrators"
 
-var u = &utility.SessionUtil{}
-
-var commandName = appconfig.PowerShellPluginCommandName
-var commandArgs = []string{"net", "user", "/add", appconfig.DefaultRunAsUserName}
-
 // createLocalAdminUser creates a local OS user on the instance with admin permissions.
-func (s *Session) createLocalAdminUser() {
-	// If error occurred, ignore adding/re-adding the ssm-user to administrators group. (Windows only)
-	if err := s.createLocalUser(); err != nil {
-		// Reset the password if ssm-user is already created.
-		if strings.Contains(err.Error(), "already exists") {
-			log := s.context.Log()
-			log.Infof("Resetting password for %s", appconfig.DefaultRunAsUserName)
-			if err = u.ChangePassword(appconfig.DefaultRunAsUserName, u.MustGeneratePasswordForDefaultUser()); err != nil {
-				panic(err)
-			}
-		}
-		return
-	}
-
-	s.addUserToOSAdminGroup()
-}
-
-// addUserToOSAdminGroup will add user to OS specific admin group.
-func (s *Session) addUserToOSAdminGroup() {
+func (s *Session) createLocalAdminUser() error {
 	log := s.context.Log()
 
-	cmd := exec.Command(commandName, "net", "localgroup", administrators, appconfig.DefaultRunAsUserName, "/add")
-	stderr, err := cmd.StderrPipe()
+	u := &utility.SessionUtil{}
+	userExists, err := u.DoesUserExist(appconfig.DefaultRunAsUserName)
 	if err != nil {
-		log.Errorf("Error occurred while adding %s to %s group: %v", appconfig.DefaultRunAsUserName, administrators, err)
-		return
+		log.Errorf("Error occurred while checking if %s user exists, %v", appconfig.DefaultRunAsUserName, err)
+		return err
 	}
 
-	if err = cmd.Start(); err != nil {
-		log.Errorf("Error occurred starting the command: %v", err)
-		return
-	}
-
-	scanner := bufio.NewScanner(stderr)
-	scanner.Split(bufio.ScanLines)
-
-	for scanner.Scan() {
-		if strings.Contains(scanner.Text(), "account name is already a member of the group") {
-			log.Infof("%s is already a member of %s group.", appconfig.DefaultRunAsUserName, administrators)
-
-			// Release all resources
-			cmd.Wait()
-
-			return
+	if userExists {
+		log.Infof("%s already exists.", appconfig.DefaultRunAsUserName)
+	} else {
+		if err := s.createUser(); err != nil {
+			return err
 		}
 	}
+	return nil
+}
 
-	if err = cmd.Wait(); err != nil {
-		log.Errorf("Failed to add %s to %s group: %v", appconfig.DefaultRunAsUserName, administrators, err)
-		return
+// createUser creates an OS local user and adds it to Administrators group.
+func (s *Session) createUser() error {
+	log := s.context.Log()
+
+	// Create local user
+	commandArgs := []string{"net", "user", "/add", appconfig.DefaultRunAsUserName}
+	cmd := exec.Command(appconfig.PowerShellPluginCommandName, commandArgs...)
+	if err := cmd.Run(); err != nil {
+		log.Errorf("Failed to create %s: %v", appconfig.DefaultRunAsUserName, err)
+		return err
 	}
+	log.Infof("Successfully created %s", appconfig.DefaultRunAsUserName)
 
+	// Add to admins group
+	commandArgs = []string{"net", "localgroup", administrators, appconfig.DefaultRunAsUserName, "/add"}
+	cmd = exec.Command(appconfig.PowerShellPluginCommandName, commandArgs...)
+	if err := cmd.Run(); err != nil {
+		log.Errorf("Failed to add %s to %s group: %v", appconfig.DefaultRunAsUserName, administrators, err)
+		return err
+	}
 	log.Infof("Successfully added %s to %s group", appconfig.DefaultRunAsUserName, administrators)
+	return nil
 }
