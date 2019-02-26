@@ -26,13 +26,15 @@ import (
 
 type BlockCipherTestSuite struct {
 	suite.Suite
-	mockLog        log.T
-	mockKMSService mocks.IKMSService
-	kmsKeyId       string
-	plainTextData  []byte
-	cipherTextKey  []byte
-	plainTextKey   []byte
-	sessionId      string
+	mockLog              log.T
+	mockKMSService       mocks.IKMSService
+	kmsKeyId             string
+	plainTextData        []byte
+	cipherTextKey        []byte
+	plainTextKey         []byte
+	cipherTextKeyFlipped []byte
+	plainTextKeyFlipped  []byte
+	sessionId            string
 }
 
 func (suite *BlockCipherTestSuite) SetupTest() {
@@ -43,6 +45,8 @@ func (suite *BlockCipherTestSuite) SetupTest() {
 	suite.plainTextData = []byte("plainTextDataToBeEncrypted")
 	suite.cipherTextKey = []byte("cipherTextKey")
 	suite.plainTextKey, _ = hex.DecodeString("7775626261206c756262612064756220647562207775626261206c756262612064756220647562207775626261206c7562626120647562206475622077756262")
+	suite.cipherTextKeyFlipped = []byte("cipherTextKeyFlipped")
+	suite.plainTextKeyFlipped, _ = hex.DecodeString("64756220647562207775626261206c75626261206475622064756220777562627775626261206c756262612064756220647562207775626261206c7562626120")
 	suite.sessionId = "some-session-id"
 }
 
@@ -57,12 +61,14 @@ func (suite *BlockCipherTestSuite) TestEncryptDecrypt() {
 	suite.mockKMSService.On("Decrypt", suite.cipherTextKey, encryptionContext).Return(suite.plainTextKey, nil)
 
 	blockCipher, err := NewBlockCipherKMS(suite.mockLog, suite.kmsKeyId, &suite.mockKMSService)
-	blockCipher.UpdateEncryptionKey(suite.mockLog, suite.cipherTextKey, suite.sessionId)
 	assert.Nil(suite.T(), err)
+	err = blockCipher.UpdateEncryptionKey(suite.mockLog, suite.cipherTextKey, suite.sessionId)
+	assert.Nil(suite.T(), err)
+
 	// Create another cipher with flipped encryption/decryption keys
-	blockCipherReversed := BlockCipher(BlockCipher{})
-	blockCipherReversed.decryptionKey = blockCipher.encryptionKey
-	blockCipherReversed.encryptionKey = blockCipher.decryptionKey
+	suite.mockKMSService.On("Decrypt", suite.cipherTextKeyFlipped, encryptionContext).Return(suite.plainTextKeyFlipped, nil)
+	blockCipherReversed := BlockCipher(*blockCipher)
+	err = blockCipherReversed.UpdateEncryptionKey(suite.mockLog, suite.cipherTextKeyFlipped, suite.sessionId)
 
 	encryptedData, err := blockCipher.EncryptWithAESGCM(suite.plainTextData)
 	assert.Nil(suite.T(), err)
@@ -71,6 +77,7 @@ func (suite *BlockCipherTestSuite) TestEncryptDecrypt() {
 	assert.Nil(suite.T(), err)
 
 	assert.Equal(suite.T(), suite.plainTextData, decryptedData)
+	suite.mockKMSService.AssertExpectations(suite.T())
 }
 
 func (suite *BlockCipherTestSuite) TestGetCipherTextKey() {
