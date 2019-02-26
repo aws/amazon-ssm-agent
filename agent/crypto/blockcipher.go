@@ -35,11 +35,13 @@ type IBlockCipher interface {
 }
 
 type BlockCipher struct {
-	kmsKeyId      string
-	kmsService    IKMSService
-	cipherTextKey []byte
-	encryptionKey []byte
-	decryptionKey []byte
+	kmsKeyId         string
+	kmsService       IKMSService
+	cipherTextKey    []byte
+	encryptionKey    []byte
+	decryptionKey    []byte
+	encryptionCipher cipher.AEAD
+	decryptionCipher cipher.AEAD
 }
 
 // NewBlockCipher creates a new block cipher
@@ -80,6 +82,12 @@ func (blockCipher *BlockCipher) UpdateEncryptionKey(log log.T, cipherTextBlob []
 	blockCipher.cipherTextKey = cipherTextBlob
 	blockCipher.encryptionKey = plainTextKey[:cryptoKeySizeInBytes]
 	blockCipher.decryptionKey = plainTextKey[cryptoKeySizeInBytes:]
+	if blockCipher.encryptionCipher, err = getAEAD(blockCipher.encryptionKey); err != nil {
+		return err
+	}
+	if blockCipher.decryptionCipher, err = getAEAD(blockCipher.decryptionKey); err != nil {
+		return err
+	}
 	return nil
 }
 
@@ -99,10 +107,7 @@ func getAEAD(plainTextKey []byte) (aesgcm cipher.AEAD, err error) {
 
 // EncryptWithGCM encrypts plain text using AES block cipher GCM mode
 func (blockCipher *BlockCipher) EncryptWithAESGCM(plainText []byte) (cipherText []byte, err error) {
-	var aesgcm cipher.AEAD
-	if aesgcm, err = getAEAD(blockCipher.encryptionKey); err != nil {
-		return nil, err
-	}
+	var aesgcm = blockCipher.encryptionCipher
 
 	cipherText = make([]byte, nonceSize+len(plainText))
 	nonce := make([]byte, nonceSize)
@@ -121,10 +126,7 @@ func (blockCipher *BlockCipher) EncryptWithAESGCM(plainText []byte) (cipherText 
 
 // DecryptWithGCM decrypts cipher text using AES block cipher GCM mode
 func (blockCipher *BlockCipher) DecryptWithAESGCM(cipherText []byte) (plainText []byte, err error) {
-	var aesgcm cipher.AEAD
-	if aesgcm, err = getAEAD(blockCipher.decryptionKey); err != nil {
-		return nil, err
-	}
+	var aesgcm = blockCipher.decryptionCipher
 
 	// Pull the nonce out of the cipherText
 	nonce := cipherText[:nonceSize]
