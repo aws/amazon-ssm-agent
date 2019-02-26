@@ -105,7 +105,7 @@ func getPlatformDetails(property string, log log.T) (value string, err error) {
 var wmicCommand = filepath.Join(appconfig.EnvWinDir, "System32", "wbem", "wmic.exe")
 
 // fullyQualifiedDomainName returns the Fully Qualified Domain Name of the instance, otherwise the hostname
-func fullyQualifiedDomainName() string {
+func fullyQualifiedDomainName(log log.T) string {
 	hostName, _ := os.Hostname()
 
 	dnsHostName := getWMICComputerSystemValue("DNSHostName")

@@ -49,8 +49,8 @@ func PlatformSku(log log.T) (sku string, err error) {
 }
 
 // Hostname of the computer.
-func Hostname() (name string, err error) {
-	return fullyQualifiedDomainName(), nil
+func Hostname(log log.T) (name string, err error) {
+	return fullyQualifiedDomainName(log), nil
 }
 
 // IP of the network interface

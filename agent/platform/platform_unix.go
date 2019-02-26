@@ -176,7 +176,7 @@ func getPlatformDetails(log log.T) (name string, version string, err error) {
 var hostNameCommand = filepath.Join("bin", "hostname")
 
 // fullyQualifiedDomainName returns the Fully Qualified Domain Name of the instance, otherwise the hostname
-func fullyQualifiedDomainName() string {
+func fullyQualifiedDomainName(log log.T) string {
 	var hostName, fqdn string
 	var err error
 
@@ -190,6 +190,8 @@ func fullyQualifiedDomainName() string {
 		//trim whitespaces - since by default above command appends '\n' at the end.
 		//e.g: 'ip-172-31-7-113.ec2.internal\n'
 		fqdn = strings.TrimSpace(fqdn)
+	} else {
+		log.Debugf("Could not fetch FQDN using command %v, error %v. Ignoring", hostNameCommand, err)
 	}
 
 	if fqdn != "" {
