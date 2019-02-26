@@ -279,7 +279,7 @@ func (svc *sdkService) UpdateInstanceInformation(
 		log.Warn(err)
 	}
 
-	if h, err := platform.Hostname(); err == nil {
+	if h, err := platform.Hostname(log); err == nil {
 		params.ComputerName = aws.String(h)
 	} else {
 		log.Warn(err)
