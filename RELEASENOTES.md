@@ -1,5 +1,12 @@
 Latest
 ===============
+- Bug fix for downloading content failure caused by wrong S3 endpoint
+- Bug fix for reboot failure caused by session manager panic
+- Bug fix for session manager shell output dropping character
+- Bug fix for mgs endpoint configuration consistency
+
+2.3.444.0
+===============
 - Updates to UpdateInstanceInformation call, Windows initialization
 
 2.3.415.0
