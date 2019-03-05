@@ -34,11 +34,7 @@ func (s *Session) createLocalAdminUser() error {
 	log := s.context.Log()
 
 	u := &utility.SessionUtil{}
-	userExists, err := u.DoesUserExist(appconfig.DefaultRunAsUserName)
-	if err != nil {
-		log.Errorf("Error occurred while checking if %s user exists, %v", appconfig.DefaultRunAsUserName, err)
-		return err
-	}
+	userExists, _ := u.DoesUserExist(appconfig.DefaultRunAsUserName)
 
 	if userExists {
 		log.Infof("%s already exists.", appconfig.DefaultRunAsUserName)
