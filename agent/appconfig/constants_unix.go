@@ -18,6 +18,9 @@ package appconfig
 
 import (
 	"os"
+	"path/filepath"
+	"regexp"
+	"syscall"
 )
 
 const (
@@ -106,13 +109,35 @@ func init() {
 		PowerShellPluginCommandName = "/usr/bin/pwsh"
 	}
 
-	// if document-worker is not in the default location, try using the snap installed location
+	// Find current directory path for amazon-ssm-agent, DefaultDocumentWorker should exist in same directory
+	// if document-worker is not in the default location, try finding it in the same directory as amazon-ssm-agent
 	if _, err := os.Stat(DefaultDocumentWorker); err != nil {
-		if _, err := os.Stat("/snap/amazon-ssm-agent/current/ssm-document-worker"); err == nil {
-			DefaultProgramFolder = "/snap/amazon-ssm-agent/current"
-			DefaultDocumentWorker = "/snap/amazon-ssm-agent/current/ssm-document-worker"
-			DefaultSessionWorker = "/snap/amazon-ssm-agent/current/ssm-session-worker"
-			DefaultSessionLogger = "/snap/amazon-ssm-agent/current/ssm-session-logger"
+		// curdir is amazon-ssm-agent current directory path
+		if curdir, err := filepath.Abs(filepath.Dir(os.Args[0])); err == nil {
+			if validateAgentBinary("ssm-document-worker", curdir) &&
+				validateAgentBinary("ssm-session-worker", curdir) &&
+				validateAgentBinary("ssm-session-logger", curdir) {
+				DefaultDocumentWorker = filepath.Join(curdir, "ssm-document-worker")
+				DefaultSessionWorker = filepath.Join(curdir, "ssm-session-worker")
+				DefaultSessionLogger = filepath.Join(curdir, "ssm-session-logger")
+				DefaultProgramFolder = curdir
+			}
 		}
 	}
+}
+
+func validateAgentBinary(filename, curdir string) bool {
+	//  binaries exist in the directory
+	if info, err := os.Stat(filepath.Join(curdir, filename)); err == nil {
+		mode := info.Mode()
+		fileSys := info.Sys()
+		permissionChecker := regexp.MustCompile("-r.x.-x.-x")
+		//binary permission match rules, binary ownership is root
+		if permissionChecker.MatchString(mode.String()) &&
+			fileSys.(*syscall.Stat_t).Uid == 0 &&
+			fileSys.(*syscall.Stat_t).Gid == 0 {
+			return true
+		}
+	}
+	return false
 }
