@@ -17,9 +17,9 @@
 package appconfig
 
 import (
+	"fmt"
 	"os"
 	"path/filepath"
-	"regexp"
 	"syscall"
 )
 
@@ -86,6 +86,9 @@ const (
 
 	// RunCommandScriptName is the script name where all downloaded or provided commands will be stored
 	RunCommandScriptName = "_script.sh"
+
+	NecessaryAgentBinaryPermissionMask  = 0511 // Require read/execute for root, execute for all
+	DisallowedAgentBinaryPermissionMask = 0022 // Disallow write for group and user
 )
 
 // PowerShellPluginCommandName is the path of the powershell.exe to be used by the runPowerShellScript plugin
@@ -131,10 +134,21 @@ func validateAgentBinary(filename, curdir string) bool {
 	if info, err := os.Stat(filepath.Join(curdir, filename)); err == nil {
 		mode := info.Mode()
 		fileSys := info.Sys()
-		permissionChecker := regexp.MustCompile("-r.x.-x.-x")
-		//binary permission match rules, binary ownership is root
-		if permissionChecker.MatchString(mode.String()) &&
-			fileSys.(*syscall.Stat_t).Uid == 0 &&
+
+		if (mode.Perm() & NecessaryAgentBinaryPermissionMask) != NecessaryAgentBinaryPermissionMask {
+			// Some necessary permissions are not set
+			fmt.Println("Warning: Some necessary permissions are not set for: ", filename)
+			return false
+		}
+
+		if (mode.Perm() & DisallowedAgentBinaryPermissionMask) != 0 {
+			// Some disallowed permissions are set
+			fmt.Println("Warning: Some disallowed permissions are set for: ", filename)
+			return false
+		}
+
+		//binary ownership is root
+		if fileSys.(*syscall.Stat_t).Uid == 0 &&
 			fileSys.(*syscall.Stat_t).Gid == 0 {
 			return true
 		}
