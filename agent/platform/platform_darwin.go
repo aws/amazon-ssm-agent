@@ -62,7 +62,7 @@ func getPlatformDetail(log log.T, param string) (value string, err error) {
 	return
 }
 
-var hostNameCommand = filepath.Join("bin", "hostname")
+var hostNameCommand = filepath.Join("/bin", "hostname")
 
 // fullyQualifiedDomainName returns the Fully Qualified Domain Name of the instance, otherwise the hostname
 func fullyQualifiedDomainName(log log.T) string {
