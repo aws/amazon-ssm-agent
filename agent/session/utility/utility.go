@@ -39,7 +39,8 @@ type ISessionUtil interface {
 	GeneratePasswordForDefaultUser() (string, error)
 	ChangePassword(username string, password string) error
 	ResetPasswordIfDefaultUserExists(context context.T) (err error)
-	DoesUserExist(username string) (bool, error)
+	AddNewUser(username string, password string) (userExists bool, err error)
+	AddUserToLocalAdministratorsGroup(username string) (adminGroupName string, err error)
 }
 
 type SessionUtil struct {

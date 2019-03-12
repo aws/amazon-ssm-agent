@@ -17,55 +17,38 @@
 package session
 
 import (
-	"os/exec"
+	"fmt"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/session/utility"
 )
 
-const administrators = "administrators"
-
 // createLocalAdminUser creates a local OS user on the instance with admin permissions.
-func (s *Session) createLocalAdminUser() error {
+func (s *Session) createLocalAdminUser() (err error) {
 	log := s.context.Log()
 
 	u := &utility.SessionUtil{}
-	userExists, err := u.DoesUserExist(appconfig.DefaultRunAsUserName)
-	if err != nil {
-		log.Errorf("Error occurred while checking if %s user exists, %v", appconfig.DefaultRunAsUserName, err)
-		return err
+	var newPassword string
+	if newPassword, err = u.GeneratePasswordForDefaultUser(); err != nil {
+		return
+	}
+
+	var userExists bool
+	if userExists, err = u.AddNewUser(appconfig.DefaultRunAsUserName, newPassword); err != nil {
+		return fmt.Errorf("Failed to create %s: %v", appconfig.DefaultRunAsUserName, err)
 	}
 
 	if userExists {
 		log.Infof("%s already exists.", appconfig.DefaultRunAsUserName)
-	} else {
-		if err := s.createUser(); err != nil {
-			return err
-		}
-	}
-	return nil
-}
-
-// createUser creates an OS local user and adds it to Administrators group.
-func (s *Session) createUser() error {
-	log := s.context.Log()
-
-	// Create local user
-	commandArgs := []string{"net", "user", "/add", appconfig.DefaultRunAsUserName}
-	cmd := exec.Command(appconfig.PowerShellPluginCommandName, commandArgs...)
-	if err := cmd.Run(); err != nil {
-		log.Errorf("Failed to create %s: %v", appconfig.DefaultRunAsUserName, err)
-		return err
+		return
 	}
 	log.Infof("Successfully created %s", appconfig.DefaultRunAsUserName)
 
-	// Add to admins group
-	commandArgs = []string{"net", "localgroup", administrators, appconfig.DefaultRunAsUserName, "/add"}
-	cmd = exec.Command(appconfig.PowerShellPluginCommandName, commandArgs...)
-	if err := cmd.Run(); err != nil {
-		log.Errorf("Failed to add %s to %s group: %v", appconfig.DefaultRunAsUserName, administrators, err)
-		return err
+	var adminGroupName string
+	if adminGroupName, err = u.AddUserToLocalAdministratorsGroup(appconfig.DefaultRunAsUserName); err != nil {
+		return fmt.Errorf("Failed to add %s to local admin group: %v", appconfig.DefaultRunAsUserName, err)
 	}
-	log.Infof("Successfully added %s to %s group", appconfig.DefaultRunAsUserName, administrators)
-	return nil
+	log.Infof("Added %s to %s group", appconfig.DefaultRunAsUserName, adminGroupName)
+
+	return
 }
