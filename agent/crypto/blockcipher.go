@@ -27,7 +27,7 @@ import (
 const nonceSize = 12
 
 type IBlockCipher interface {
-	UpdateEncryptionKey(log log.T, cipherTextKey []byte, sessionId string) error
+	UpdateEncryptionKey(log log.T, cipherTextKey []byte, sessionId string, instanceId string) error
 	EncryptWithAESGCM(plainText []byte) (cipherText []byte, err error)
 	DecryptWithAESGCM(cipherText []byte) (plainText []byte, err error)
 	GetCipherTextKey() (cipherTextKey []byte)
@@ -64,15 +64,18 @@ func NewBlockCipherKMS(log log.T, kmsKeyId string, kmsService IKMSService) (bloc
 }
 
 // UpdateEncryptionKey receives cipherTextBlob and calls kms::Decrypt to receive the encryption data key
-func (blockCipher *BlockCipher) UpdateEncryptionKey(log log.T, cipherTextBlob []byte, sessionId string) error {
+func (blockCipher *BlockCipher) UpdateEncryptionKey(log log.T, cipherTextBlob []byte, sessionId string, instanceId string) error {
 	// NewBlockCipher creates a new instance of BlockCipher
 	var (
 		plainTextKey []byte
 		err          error
 	)
 	var encryptionContext = make(map[string]*string)
-	const encryptionContextKey = "SessionId"
-	encryptionContext[encryptionContextKey] = &sessionId
+	const encryptionContextSessionIdKey = "aws:ssm:SessionId"
+	encryptionContext[encryptionContextSessionIdKey] = &sessionId
+	const encryptionContextTargetIdKey = "aws:ssm:TargetId"
+	encryptionContext[encryptionContextTargetIdKey] = &instanceId
+
 	if plainTextKey, err = blockCipher.kmsService.Decrypt(cipherTextBlob, encryptionContext); err != nil {
 		return fmt.Errorf("Unable to retrieve data key, %v", err)
 	}

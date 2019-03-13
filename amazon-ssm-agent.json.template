@@ -41,6 +41,6 @@
         "LogKey":""
     },
     "Kms": {
-        "Endpoint": "",
+        "Endpoint": ""
     }
 }

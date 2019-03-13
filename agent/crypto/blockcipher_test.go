@@ -35,6 +35,7 @@ type BlockCipherTestSuite struct {
 	cipherTextKeyFlipped []byte
 	plainTextKeyFlipped  []byte
 	sessionId            string
+	instanceId           string
 }
 
 func (suite *BlockCipherTestSuite) SetupTest() {
@@ -48,6 +49,7 @@ func (suite *BlockCipherTestSuite) SetupTest() {
 	suite.cipherTextKeyFlipped = []byte("cipherTextKeyFlipped")
 	suite.plainTextKeyFlipped, _ = hex.DecodeString("64756220647562207775626261206c75626261206475622064756220777562627775626261206c756262612064756220647562207775626261206c7562626120")
 	suite.sessionId = "some-session-id"
+	suite.instanceId = "some-instance-id"
 }
 
 //Execute the test suite
@@ -57,18 +59,18 @@ func TestBlockCipherTestSuite(t *testing.T) {
 
 // Testing Encrypt and Decrypt functions
 func (suite *BlockCipherTestSuite) TestEncryptDecrypt() {
-	var encryptionContext = map[string]*string{"SessionId": &suite.sessionId}
+	var encryptionContext = map[string]*string{"aws:ssm:SessionId": &suite.sessionId, "aws:ssm:TargetId": &suite.instanceId}
 	suite.mockKMSService.On("Decrypt", suite.cipherTextKey, encryptionContext).Return(suite.plainTextKey, nil)
 
 	blockCipher, err := NewBlockCipherKMS(suite.mockLog, suite.kmsKeyId, &suite.mockKMSService)
 	assert.Nil(suite.T(), err)
-	err = blockCipher.UpdateEncryptionKey(suite.mockLog, suite.cipherTextKey, suite.sessionId)
+	err = blockCipher.UpdateEncryptionKey(suite.mockLog, suite.cipherTextKey, suite.sessionId, suite.instanceId)
 	assert.Nil(suite.T(), err)
 
 	// Create another cipher with flipped encryption/decryption keys
 	suite.mockKMSService.On("Decrypt", suite.cipherTextKeyFlipped, encryptionContext).Return(suite.plainTextKeyFlipped, nil)
 	blockCipherReversed := BlockCipher(*blockCipher)
-	err = blockCipherReversed.UpdateEncryptionKey(suite.mockLog, suite.cipherTextKeyFlipped, suite.sessionId)
+	err = blockCipherReversed.UpdateEncryptionKey(suite.mockLog, suite.cipherTextKeyFlipped, suite.sessionId, suite.instanceId)
 
 	encryptedData, err := blockCipher.EncryptWithAESGCM(suite.plainTextData)
 	assert.Nil(suite.T(), err)

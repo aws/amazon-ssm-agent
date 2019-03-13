@@ -873,7 +873,7 @@ func (dataChannel *DataChannel) finalizeKMSEncryption(log log.T, actionResult js
 	}
 
 	sessionId := dataChannel.ChannelId // ChannelId is SessionId
-	if err := dataChannel.blockCipher.UpdateEncryptionKey(log, encryptionResponse.KMSCipherTextKey, sessionId); err != nil {
+	if err := dataChannel.blockCipher.UpdateEncryptionKey(log, encryptionResponse.KMSCipherTextKey, sessionId, dataChannel.InstanceId); err != nil {
 		return fmt.Errorf("Fetching data key failed: %s", err)
 	}
 	dataChannel.encryptionEnabled = true
@@ -913,7 +913,7 @@ func (dataChannel *DataChannel) PerformHandshake(log log.T, kmsKeyId string) (er
 		{
 			// If handshake times out here this usually means that the client does not understand handshake or something
 			// failed critically when processing handshake request.
-			return errors.New("Handshake timed out. Please ensure session manager plugin version is at least [PLACEHOLDER].")
+			return errors.New("Handshake timed out. Please ensure that you have the latest version of the session manager plugin.")
 		}
 	}
 
