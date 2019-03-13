@@ -98,13 +98,13 @@ func (_m *IBlockCipher) GetKMSKeyId() string {
 	return r0
 }
 
-// UpdateEncryptionKey provides a mock function with given fields: _a0, ciphertextkey, sessionId
-func (_m *IBlockCipher) UpdateEncryptionKey(_a0 log.T, ciphertextkey []byte, sessionId string) error {
-	ret := _m.Called(_a0, ciphertextkey, sessionId)
+// UpdateEncryptionKey provides a mock function with given fields: _a0, cipherTextKey, sessionId, instanceId
+func (_m *IBlockCipher) UpdateEncryptionKey(_a0 log.T, cipherTextKey []byte, sessionId string, instanceId string) error {
+	ret := _m.Called(_a0, cipherTextKey, sessionId, instanceId)
 
 	var r0 error
-	if rf, ok := ret.Get(0).(func(log.T, []byte, string) error); ok {
-		r0 = rf(_a0, ciphertextkey, sessionId)
+	if rf, ok := ret.Get(0).(func(log.T, []byte, string, string) error); ok {
+		r0 = rf(_a0, cipherTextKey, sessionId, instanceId)
 	} else {
 		r0 = ret.Error(0)
 	}

@@ -472,7 +472,7 @@ func TestDataChannelHandshakeResponse(t *testing.T) {
 		uint32(mgsContracts.HandshakeResponse), handshakeResponsePayload).Serialize(mockLog)
 
 	mockChannel.On("SendMessage", mock.Anything, mock.Anything, mock.Anything).Return(nil)
-	mockCipher.On("UpdateEncryptionKey", mockLog, datakey, sessionId).Return(nil)
+	mockCipher.On("UpdateEncryptionKey", mockLog, datakey, sessionId, instanceId).Return(nil)
 
 	err := dataChannel.dataChannelIncomingMessageHandler(mockLog, agentMessageBytes)
 	assert.Nil(t, err)
@@ -530,7 +530,7 @@ func TestDataChannelHandshakeResponseEncryptionAgentFailure(t *testing.T) {
 	mockChannel.On("SendMessage", mock.Anything, mock.Anything, mock.Anything).Return(nil)
 	// Throw error when processing handshake response
 	errorString := "Failed to update encryption key. Something bad happened."
-	mockCipher.On("UpdateEncryptionKey", mockLog, datakey, sessionId).Return(errors.New(errorString))
+	mockCipher.On("UpdateEncryptionKey", mockLog, datakey, sessionId, instanceId).Return(errors.New(errorString))
 
 	mockCancelFlag.On("Set", task.Canceled).Return()
 
