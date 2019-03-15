@@ -282,6 +282,8 @@ func (p *ShellPlugin) writePump(log log.T) (errorCode int) {
 			log.Errorf("Error processing stdout data, %v", err)
 			return appconfig.ErrorExitCode
 		}
+		// Wait for stdout to process more data
+		time.Sleep(time.Millisecond)
 	}
 }
 
