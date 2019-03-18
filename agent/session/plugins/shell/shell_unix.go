@@ -42,6 +42,9 @@ const (
 	homeEnvVariable       = "HOME=/home/" + appconfig.DefaultRunAsUserName
 )
 
+//If the file below pointed to by ENV exists, the new shell will execute it on startup.
+var envEnvVariable = "ENV=" + appconfig.DefaultProgramFolder + "amazon-ssm-agent-shell-init"
+
 var getUserAndGroupIdCall = func(log log.T) (uid int, gid int, err error) {
 	return getUserAndGroupId(log)
 }
@@ -57,6 +60,7 @@ func StartPty(log log.T, isSessionShell bool) (stdin *os.File, stdout *os.File, 
 	cmd.Env = append(os.Environ(),
 		termEnvVariable,
 		homeEnvVariable,
+		envEnvVariable,
 	)
 
 	// Get the uid and gid of the runas user.
