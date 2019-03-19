@@ -974,7 +974,7 @@ func (dataChannel *DataChannel) buildHandshakeCompletePayload(log log.T) mgsCont
 		dataChannel.handshake.handshakeEndTime.Sub(dataChannel.handshake.handshakeStartTime)
 
 	if dataChannel.encryptionEnabled == true {
-		handshakeComplete.CustomerMessage = "This session is encrypted."
+		handshakeComplete.CustomerMessage = "This session is encrypted using AWS KMS."
 	}
 	return handshakeComplete
 }
