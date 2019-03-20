@@ -1,5 +1,10 @@
 Latest
 ===============
+- Add support for further encryption of session data using AWS KMS
+- Bug fix for excessive instance-id fetching by document workers
+
+2.3.479.0
+===============
 - Bug fix for downloading content failure caused by wrong S3 endpoint
 - Bug fix for reboot failure caused by session manager panic
 - Bug fix for session manager shell output dropping character
