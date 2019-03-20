@@ -32,7 +32,6 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/plugins/rundocument"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/runscript"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/updatessmagent"
-	"github.com/aws/amazon-ssm-agent/agent/session/plugins/interactivecommands"
 	"github.com/aws/amazon-ssm-agent/agent/session/plugins/sessionplugin"
 	"github.com/aws/amazon-ssm-agent/agent/session/plugins/shell"
 )
@@ -194,9 +193,6 @@ func loadSessionPlugins() {
 
 	shellPluginName := appconfig.PluginNameStandardStream
 	sessionPlugins[shellPluginName] = SessionPluginFactory{shell.NewPlugin}
-
-	interactiveCommandsPluginName := appconfig.PluginNameInteractiveCommands
-	sessionPlugins[interactiveCommandsPluginName] = SessionPluginFactory{interactivecommands.NewPlugin}
 
 	registeredPlugins = &sessionPlugins
 }
