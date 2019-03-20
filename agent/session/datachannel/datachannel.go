@@ -809,7 +809,7 @@ func (dataChannel *DataChannel) handleHandshakeResponse(log log.T, streamDataMes
 	for _, action := range handshakeResponse.ProcessedClientActions {
 		var err error
 		if action.ActionStatus != mgsContracts.Success {
-			err = log.Errorf("%s failed on client with status %v error: %s",
+			err = fmt.Errorf("%s failed on client with status %v error: %s",
 				action.ActionType, action.ActionStatus, action.Error)
 		} else {
 			switch action.ActionType {
@@ -821,6 +821,7 @@ func (dataChannel *DataChannel) handleHandshakeResponse(log log.T, streamDataMes
 			}
 		}
 		if err != nil {
+			log.Error(err)
 			// Cancel the session because handshake FAILED
 			dataChannel.cancelFlag.Set(task.Canceled)
 			// Set handshake error. Initiate handshake waits on handshake.responseChan and will return this error when channel returns.
