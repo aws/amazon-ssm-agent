@@ -18,6 +18,7 @@ import (
 	"errors"
 	"fmt"
 	"reflect"
+	"strings"
 	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/fileutil/artifact"
@@ -293,8 +294,59 @@ func matchPackageSelectorPlatform(key string, dict map[string]map[string]map[str
 func matchPackageSelectorVersion(key string, dict map[string]map[string]*birdwatcher.PackageInfo) (string, bool) {
 	if _, ok := dict[key]; ok {
 		return key, true
-	} else if _, ok := dict["_any"]; ok {
+	} else {
+		// Enumerate each dictionary key to do a prefix match.
+		matchedLength := 0
+		matchedKey := ""
+		for k := range dict {
+			temp := k
+			// According to /agent/plugins/configurepackage/envdetect/osdetect/windows/osdetect.go, windows nano version will have
+			// the 'nano' suffix. Therefore, taking 'nano' out as the first step will allow the version match to fall back to the
+			// non-special case scenario.
+			if strings.HasSuffix(key, "nano") && strings.HasSuffix(temp, "nano") {
+				temp = strings.TrimSuffix(temp, "nano")
+			} else if strings.HasSuffix(key, "nano") || strings.HasSuffix(temp, "nano") {
+				continue
+			}
+
+			// If there's no wild card, there's no match.
+			if !strings.HasSuffix(temp, ".*") {
+				continue
+			}
+
+			// Then handle the wild card scenario
+			temp = strings.TrimSuffix(temp, ".*")
+
+			tempArray := strings.Split(temp, ".")
+			keyArray := strings.Split(key, ".")
+			i := 0
+			matched := true
+			for ; i < len(tempArray) && i < len(keyArray); i++ {
+				if tempArray[i] != keyArray[i] {
+					matched = false
+					break
+				}
+			}
+
+			// The more specific match will be preferred.
+			if matched && i > matchedLength && i == len(tempArray) {
+				matchedLength = i
+				matchedKey = k
+			}
+		}
+
+		if matchedKey != "" {
+			return matchedKey, true
+		}
+	}
+
+	// Evaluate _any and * last as more specific version takes precedence.
+	if _, ok := dict["_any"]; ok {
 		return "_any", true
+	}
+
+	if _, ok := dict["*"]; ok {
+		return "*", true
 	}
 
 	return "", false

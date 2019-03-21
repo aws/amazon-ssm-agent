@@ -85,6 +85,7 @@ func TestExtractPackageInfo(t *testing.T) {
 	data := []struct {
 		name        string
 		manifest    *birdwatcher.Manifest
+		osInfo      *osdetect.OperatingSystem
 		expected    *birdwatcher.PackageInfo
 		expectedErr bool
 	}{
@@ -95,6 +96,7 @@ func TestExtractPackageInfo(t *testing.T) {
 					{platformName, platformVersion, architecture, &birdwatcher.PackageInfo{FileName: "filename"}},
 				}),
 			},
+			&osdetect.OperatingSystem{platformName, platformVersion, "", architecture, "", ""},
 			&birdwatcher.PackageInfo{FileName: "filename"},
 			false,
 		},
@@ -105,6 +107,7 @@ func TestExtractPackageInfo(t *testing.T) {
 					{"nonexistname", platformVersion, architecture, &birdwatcher.PackageInfo{FileName: "filename"}},
 				}),
 			},
+			&osdetect.OperatingSystem{platformName, platformVersion, "", architecture, "", ""},
 			nil,
 			true,
 		},
@@ -115,6 +118,7 @@ func TestExtractPackageInfo(t *testing.T) {
 					{platformName, "nonexistversion", architecture, &birdwatcher.PackageInfo{FileName: "filename"}},
 				}),
 			},
+			&osdetect.OperatingSystem{platformName, platformVersion, "", architecture, "", ""},
 			nil,
 			true,
 		},
@@ -125,6 +129,7 @@ func TestExtractPackageInfo(t *testing.T) {
 					{platformName, platformVersion, "nonexistarch", &birdwatcher.PackageInfo{FileName: "filename"}},
 				}),
 			},
+			&osdetect.OperatingSystem{platformName, platformVersion, "", architecture, "", ""},
 			nil,
 			true,
 		},
@@ -136,6 +141,7 @@ func TestExtractPackageInfo(t *testing.T) {
 					{platformName, platformVersion, architecture, &birdwatcher.PackageInfo{FileName: "filename"}},
 				}),
 			},
+			&osdetect.OperatingSystem{platformName, platformVersion, "", architecture, "", ""},
 			&birdwatcher.PackageInfo{FileName: "filename"},
 			false,
 		},
@@ -146,6 +152,7 @@ func TestExtractPackageInfo(t *testing.T) {
 					{"_any", platformVersion, architecture, &birdwatcher.PackageInfo{FileName: "filename"}},
 				}),
 			},
+			&osdetect.OperatingSystem{platformName, platformVersion, "", architecture, "", ""},
 			&birdwatcher.PackageInfo{FileName: "filename"},
 			false,
 		},
@@ -156,6 +163,7 @@ func TestExtractPackageInfo(t *testing.T) {
 					{platformName, "_any", architecture, &birdwatcher.PackageInfo{FileName: "filename"}},
 				}),
 			},
+			&osdetect.OperatingSystem{platformName, platformVersion, "", architecture, "", ""},
 			&birdwatcher.PackageInfo{FileName: "filename"},
 			false,
 		},
@@ -166,6 +174,7 @@ func TestExtractPackageInfo(t *testing.T) {
 					{platformName, platformVersion, "_any", &birdwatcher.PackageInfo{FileName: "filename"}},
 				}),
 			},
+			&osdetect.OperatingSystem{platformName, platformVersion, "", architecture, "", ""},
 			&birdwatcher.PackageInfo{FileName: "filename"},
 			false,
 		},
@@ -177,6 +186,7 @@ func TestExtractPackageInfo(t *testing.T) {
 					{platformName, platformVersion, architecture, &birdwatcher.PackageInfo{FileName: "filename"}},
 				}),
 			},
+			&osdetect.OperatingSystem{platformName, platformVersion, "", architecture, "", ""},
 			&birdwatcher.PackageInfo{FileName: "filename"},
 			false,
 		},
@@ -187,6 +197,7 @@ func TestExtractPackageInfo(t *testing.T) {
 					{"_any", "_any", "_any", &birdwatcher.PackageInfo{FileName: "filename"}},
 				}),
 			},
+			&osdetect.OperatingSystem{platformName, platformVersion, "", architecture, "", ""},
 			&birdwatcher.PackageInfo{FileName: "filename"},
 			false,
 		},
@@ -198,8 +209,177 @@ func TestExtractPackageInfo(t *testing.T) {
 					{platformName, platformVersion, "nonexistarch", &birdwatcher.PackageInfo{FileName: "alsowrongfilename"}},
 				}),
 			},
+			&osdetect.OperatingSystem{platformName, platformVersion, "", architecture, "", ""},
 			nil,
 			true,
+		},
+		{
+			"os version more specific than manifest platform version, platfrom version no wildcard, no matching",
+			&birdwatcher.Manifest{
+				Packages: manifestPackageGen(&[]pkgselector{
+					{platformName, "6.2", architecture, &birdwatcher.PackageInfo{FileName: "filename"}},
+				}),
+			},
+			&osdetect.OperatingSystem{platformName, "6.2.4", "", architecture, "", ""},
+			nil,
+			true,
+		},
+		{
+			"manifest platform version more specific, wild card, no matching",
+			&birdwatcher.Manifest{
+				Packages: manifestPackageGen(&[]pkgselector{
+					{platformName, "6.2.4.1", architecture, &birdwatcher.PackageInfo{FileName: "filename"}},
+					{platformName, "6.2.4.*", architecture, &birdwatcher.PackageInfo{FileName: "filename1"}},
+				}),
+			},
+			&osdetect.OperatingSystem{platformName, "6.2", "", architecture, "", ""},
+			nil,
+			true,
+		},
+		{
+			"manifest platform MINOR version wild card",
+			&birdwatcher.Manifest{
+				Packages: manifestPackageGen(&[]pkgselector{
+					{platformName, "6.*", architecture, &birdwatcher.PackageInfo{FileName: "filename"}},
+				}),
+			},
+			&osdetect.OperatingSystem{platformName, "6.2.4", "", architecture, "", ""},
+			&birdwatcher.PackageInfo{FileName: "filename"},
+			false,
+		},
+		{
+			"manifest platform PATCH version wild card",
+			&birdwatcher.Manifest{
+				Packages: manifestPackageGen(&[]pkgselector{
+					{platformName, "6.2.*", architecture, &birdwatcher.PackageInfo{FileName: "filename"}},
+				}),
+			},
+			&osdetect.OperatingSystem{platformName, "6.2.4", "", architecture, "", ""},
+			&birdwatcher.PackageInfo{FileName: "filename"},
+			false,
+		},
+		{
+			"manifest platform build version wild card",
+			&birdwatcher.Manifest{
+				Packages: manifestPackageGen(&[]pkgselector{
+					{platformName, "6.2.4.*", architecture, &birdwatcher.PackageInfo{FileName: "filename"}},
+				}),
+			},
+			&osdetect.OperatingSystem{platformName, "6.2.4", "", architecture, "", ""},
+			&birdwatcher.PackageInfo{FileName: "filename"},
+			false,
+		},
+		{
+			"all plaftorm version have wildcard, match the more specific one",
+			&birdwatcher.Manifest{
+				Packages: manifestPackageGen(&[]pkgselector{
+					{platformName, "6.*", architecture, &birdwatcher.PackageInfo{FileName: "filename6.*"}},
+					{platformName, "6.2.*", architecture, &birdwatcher.PackageInfo{FileName: "filename6.2.*"}},
+					{platformName, "6.2.4.*", architecture, &birdwatcher.PackageInfo{FileName: "filename6.2.4.*"}},
+				}),
+			},
+			&osdetect.OperatingSystem{platformName, "6.2.4", "", architecture, "", ""},
+			&birdwatcher.PackageInfo{FileName: "filename6.2.4.*"},
+			false,
+		},
+		{
+			"manifest platform MAJOR version wild card",
+			&birdwatcher.Manifest{
+				Packages: manifestPackageGen(&[]pkgselector{
+					{platformName, "*", architecture, &birdwatcher.PackageInfo{FileName: "filename"}},
+				}),
+			},
+			&osdetect.OperatingSystem{platformName, "6.2.4", "", architecture, "", ""},
+			&birdwatcher.PackageInfo{FileName: "filename"},
+			false,
+		},
+		{
+			"manifest platform MAJOR version .*",
+			&birdwatcher.Manifest{
+				Packages: manifestPackageGen(&[]pkgselector{
+					{platformName, ".*", architecture, &birdwatcher.PackageInfo{FileName: "filename"}},
+				}),
+			},
+			&osdetect.OperatingSystem{platformName, "6.2.4", "", architecture, "", ""},
+			nil,
+			true,
+		},
+		{
+			"manifest platform PATCH version wild card, MINOR version does not match os MINOR version",
+			&birdwatcher.Manifest{
+				Packages: manifestPackageGen(&[]pkgselector{
+					{platformName, "6.1.*", architecture, &birdwatcher.PackageInfo{FileName: "filename"}},
+				}),
+			},
+			&osdetect.OperatingSystem{platformName, "6.13.4", "", architecture, "", ""},
+			nil,
+			true,
+		},
+		{
+			"wild card in the middle, don't support, no match.",
+			&birdwatcher.Manifest{
+				Packages: manifestPackageGen(&[]pkgselector{
+					{platformName, "6.*.4", architecture, &birdwatcher.PackageInfo{FileName: "filename"}},
+				}),
+			},
+			&osdetect.OperatingSystem{platformName, "6.2.4", "", architecture, "", ""},
+			nil,
+			true,
+		},
+		{
+			"nano, os version more specific than manifest platform version",
+			&birdwatcher.Manifest{
+				Packages: manifestPackageGen(&[]pkgselector{
+					{platformName, "2018nano", architecture, &birdwatcher.PackageInfo{FileName: "filename"}},
+				}),
+			},
+			&osdetect.OperatingSystem{platformName, "2018.04.11nano", "", architecture, "", ""},
+			nil,
+			true,
+		},
+		{
+			"nano, manifest MINOR version does not match os MINOR version",
+			&birdwatcher.Manifest{
+				Packages: manifestPackageGen(&[]pkgselector{
+					{platformName, "2018.05nano", architecture, &birdwatcher.PackageInfo{FileName: "filename"}},
+				}),
+			},
+			&osdetect.OperatingSystem{platformName, "2018.04.11nano", "", architecture, "", ""},
+			nil,
+			true,
+		},
+		{
+			"nano os verion, non-nano manifest version",
+			&birdwatcher.Manifest{
+				Packages: manifestPackageGen(&[]pkgselector{
+					{platformName, "2018.04.11", architecture, &birdwatcher.PackageInfo{FileName: "filename"}},
+				}),
+			},
+			&osdetect.OperatingSystem{platformName, "2018.04.11nano", "", architecture, "", ""},
+			nil,
+			true,
+		},
+		{
+			"nano exact match",
+			&birdwatcher.Manifest{
+				Packages: manifestPackageGen(&[]pkgselector{
+					{platformName, "2018.04.11nano", architecture, &birdwatcher.PackageInfo{FileName: "filename"}},
+				}),
+			},
+			&osdetect.OperatingSystem{platformName, "2018.04.11nano", "", architecture, "", ""},
+			&birdwatcher.PackageInfo{FileName: "filename"},
+			false,
+		},
+		{
+			"nano wildcard match",
+			&birdwatcher.Manifest{
+				Packages: manifestPackageGen(&[]pkgselector{
+					{platformName, "2018.*nano", architecture, &birdwatcher.PackageInfo{FileName: "filename"}},
+				}),
+			},
+			&osdetect.OperatingSystem{platformName, "2018.04.11nano", "", architecture, "", ""},
+			&birdwatcher.PackageInfo{FileName: "filename"},
+			false,
 		},
 	}
 
@@ -208,7 +388,7 @@ func TestExtractPackageInfo(t *testing.T) {
 			mockedCollector := envdetect.CollectorMock{}
 
 			mockedCollector.On("CollectData", mock.Anything).Return(&envdetect.Environment{
-				&osdetect.OperatingSystem{platformName, platformVersion, "", architecture, "", ""},
+				testdata.osInfo,
 				nil,
 			}, nil).Once()
 
