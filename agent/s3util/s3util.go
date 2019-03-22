@@ -164,7 +164,10 @@ func GetS3Header(log log.T, bucketName string, instanceRegion string, httpProvid
 	var region string
 
 	s3Endpoint := GetS3Endpoint(instanceRegion)
-
+	if region, err = getRegionFromS3URLWithExponentialBackoff("http://"+bucketName+"."+s3Endpoint, httpProvider); err == nil {
+		return region
+	}
+	// Try to get the s3 region with https protocol, it's required for S3 upload when https-only enabled
 	if region, err = getRegionFromS3URLWithExponentialBackoff("https://"+bucketName+"."+s3Endpoint, httpProvider); err == nil {
 		return region
 	}
@@ -177,7 +180,11 @@ func GetS3Header(log log.T, bucketName string, instanceRegion string, httpProvid
 		if region, err = getRegionFromS3URLWithExponentialBackoff("http://"+bucketName+"."+genericEndPoint, httpProvider); err == nil {
 			return region
 		}
+		if region, err = getRegionFromS3URLWithExponentialBackoff("https://"+bucketName+"."+genericEndPoint, httpProvider); err == nil {
+			return region
+		}
 	}
+
 	// Could not query the bucket region. Log the error.
 	log.Infof("Error when querying S3 bucket using address http://%v.%v. Error details: %v",
 		bucketName, genericEndPoint, err)
