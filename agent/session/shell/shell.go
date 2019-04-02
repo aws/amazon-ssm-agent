@@ -94,7 +94,7 @@ func (p *ShellPlugin) Execute(context context.T,
 	p.dataChannel = dataChannel
 	defer func() {
 		if err := Stop(log); err != nil {
-			log.Errorf("Error occured while closing pty: %v", err)
+			log.Errorf("Error occurred while closing pty: %v", err)
 		}
 		if err := recover(); err != nil {
 			log.Errorf("Error occurred while executing plugin %s: \n%v", p.name, err)
@@ -245,7 +245,6 @@ func (p *ShellPlugin) writePump(log log.T) (errorCode int) {
 	defer func() {
 		if err := recover(); err != nil {
 			fmt.Println("WritePump thread crashed with message: \n", err)
-			Stop(log)
 		}
 	}()
 

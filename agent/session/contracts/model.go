@@ -266,7 +266,8 @@ type KMSEncryptionResponse struct {
 }
 
 type SessionTypeRequest struct {
-	SessionType string `json:"SessionType"`
+	SessionType string      `json:"SessionType"`
+	Properties  interface{} `json:"Properties"`
 }
 
 // Handshake payload sent by the agent to the session manager plugin

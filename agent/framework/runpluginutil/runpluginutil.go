@@ -77,6 +77,7 @@ var allPlugins = map[string]struct{}{
 var allSessionPlugins = map[string]struct{}{
 	appconfig.PluginNameStandardStream:      {},
 	appconfig.PluginNameInteractiveCommands: {},
+	appconfig.PluginNamePort:                {},
 }
 
 // Assign method to global variables to allow unittest to override

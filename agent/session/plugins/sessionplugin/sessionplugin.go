@@ -18,6 +18,7 @@ import (
 	"fmt"
 	"math/rand"
 
+	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler"
@@ -33,6 +34,8 @@ type NewPluginFunc func() (ISessionPlugin, error)
 
 // ISessionPlugin interface represents functions that need to be implemented by all session manager plugins
 type ISessionPlugin interface {
+	GetPluginParameters(parameters interface{}) interface{}
+	RequireHandshake() bool
 	Execute(context context.T, config contracts.Configuration, cancelFlag task.CancelFlag, output iohandler.IOHandler, dataChannel datachannel.IDataChannel)
 	InputStreamMessageHandler(log log.T, streamDataMessage mgsContracts.AgentMessage) error
 }
@@ -70,8 +73,13 @@ func (p *SessionPlugin) Execute(context context.T,
 		log.Errorf("Unable to send AgentSessionState message with session status %s. %s", mgsContracts.Connected, err)
 	}
 
-	if p.isEncryptionEnabled(kmsKeyId) {
-		if err = dataChannel.PerformHandshake(log, kmsKeyId); err != nil {
+	encryptionEnabled := p.isEncryptionEnabled(kmsKeyId, config.PluginName)
+	sessionTypeRequest := mgsContracts.SessionTypeRequest{
+		SessionType: config.PluginName,
+		Properties:  p.sessionPlugin.GetPluginParameters(config.Properties),
+	}
+	if p.sessionPlugin.RequireHandshake() || encryptionEnabled {
+		if err = dataChannel.PerformHandshake(log, kmsKeyId, encryptionEnabled, sessionTypeRequest); err != nil {
 			errorString := fmt.Errorf("Encountered error while initiating handshake. %s", err)
 			output.MarkAsFailed(errorString)
 			log.Error(errorString)
@@ -84,9 +92,10 @@ func (p *SessionPlugin) Execute(context context.T,
 	p.sessionPlugin.Execute(context, config, cancelFlag, output, dataChannel)
 }
 
-// isEncryptionEnabled checks kmsKeyId to determine if encryption is enabled for this session
-func (p *SessionPlugin) isEncryptionEnabled(kmsKeyId string) bool {
-	return kmsKeyId != ""
+// isEncryptionEnabled checks kmsKeyId and pluginName to determine if encryption is enabled for this session
+// TODO: make encryption configurable for port plugin
+func (p *SessionPlugin) isEncryptionEnabled(kmsKeyId string, pluginName string) bool {
+	return kmsKeyId != "" && pluginName != appconfig.PluginNamePort
 }
 
 // getDataChannelForSessionPlugin opens new data channel to MGS service

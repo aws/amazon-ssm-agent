@@ -21,7 +21,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler"
-	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler/mock"
+	iohandlermocks "github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler/mock"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	mgsContracts "github.com/aws/amazon-ssm-agent/agent/session/contracts"
 	dataChannelMock "github.com/aws/amazon-ssm-agent/agent/session/datachannel/mocks"
@@ -79,6 +79,11 @@ func TestInteractiveCommandsTestSuite(t *testing.T) {
 func (suite *StandardStreamTestSuite) TestName() {
 	rst := suite.plugin.name()
 	assert.Equal(suite.T(), rst, appconfig.PluginNameStandardStream)
+}
+
+// Testing GetPluginParameters
+func (suite *StandardStreamTestSuite) TestGetPluginParameters() {
+	assert.Equal(suite.T(), suite.plugin.GetPluginParameters(map[string]interface{}{"key": "value"}), nil)
 }
 
 // Testing Execute when cancel flag is shutdown.

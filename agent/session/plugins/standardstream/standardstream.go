@@ -32,6 +32,16 @@ type StandardStreamPlugin struct {
 	shell shell.IShellPlugin
 }
 
+// Returns parameters required for CLI/console to start session
+func (p *StandardStreamPlugin) GetPluginParameters(parameters interface{}) interface{} {
+	return nil
+}
+
+// StandardStream plugin doesn't require handshake to establish session
+func (p *StandardStreamPlugin) RequireHandshake() bool {
+	return false
+}
+
 // NewPlugin returns a new instance of the Standard Stream Plugin
 func NewPlugin() (sessionplugin.ISessionPlugin, error) {
 	shellPlugin, err := shell.NewPlugin(appconfig.PluginNameStandardStream)
