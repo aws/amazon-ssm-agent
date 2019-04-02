@@ -47,3 +47,31 @@ func (_m *ISessionPlugin) InputStreamMessageHandler(_a0 log.T, streamDataMessage
 
 	return r0
 }
+
+// RequireHandshake provides a mock function with given fields:
+func (_m *ISessionPlugin) RequireHandshake() bool {
+	ret := _m.Called()
+
+	var r0 bool
+	if rf, ok := ret.Get(0).(func() bool); ok {
+		r0 = rf()
+	} else {
+		r0 = ret.Get(0).(bool)
+	}
+
+	return r0
+}
+
+// GetPluginParameters provides a mock function with given fields:
+func (_m *ISessionPlugin) GetPluginParameters(parameters interface{}) interface{} {
+	ret := _m.Called(parameters)
+
+	var r0 interface{}
+	if rf, ok := ret.Get(0).(func(interface{}) interface{}); ok {
+		r0 = rf(parameters)
+	} else {
+		r0 = ret.Get(0)
+	}
+
+	return r0
+}

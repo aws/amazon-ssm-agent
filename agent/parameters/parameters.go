@@ -55,6 +55,7 @@ func ReplaceParameters(input interface{}, parameters map[string]interface{}, log
 			if parameterValueString, err = convertToString(parameterValue); err != nil {
 				logger.Error(err)
 			}
+
 			input = ReplaceParameter(input, parameterName, parameterValueString)
 		}
 		return input

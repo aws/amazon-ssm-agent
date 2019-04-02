@@ -25,7 +25,6 @@ import (
 	"sync"
 	"time"
 
-	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/crypto"
 	"github.com/aws/amazon-ssm-agent/agent/log"
@@ -68,7 +67,7 @@ type IDataChannel interface {
 	AddDataToIncomingMessageBuffer(streamMessage StreamingMessage)
 	RemoveDataFromIncomingMessageBuffer(sequenceNumber int64)
 	SkipHandshake(log log.T)
-	PerformHandshake(log log.T, kmsKeyId string) (err error)
+	PerformHandshake(log log.T, kmsKeyId string, encryptionEnabled bool, sessionTypeRequest mgsContracts.SessionTypeRequest) (err error)
 }
 
 // DataChannel used for session communication between the message gateway service and the agent.
@@ -415,6 +414,7 @@ func (dataChannel *DataChannel) SendStreamDataMessage(log log.T, payloadType mgs
 		dataChannel.StreamDataSequenceNumber,
 		time.Now(),
 	}
+
 	log.Tracef("Add stream data to OutgoingMessageBuffer. Sequence Number: %d", streamingMessage.SequenceNumber)
 	dataChannel.AddDataToOutgoingMessageBuffer(streamingMessage)
 	dataChannel.StreamDataSequenceNumber = dataChannel.StreamDataSequenceNumber + 1
@@ -886,18 +886,23 @@ var newBlockCipher = func(log log.T, kmsKeyId string) (blockCipher crypto.IBlock
 }
 
 // PerformHandshake performs handshake to share version string and encryption information with clients like cli/console
-func (dataChannel *DataChannel) PerformHandshake(log log.T, kmsKeyId string) (err error) {
+func (dataChannel *DataChannel) PerformHandshake(log log.T,
+	kmsKeyId string,
+	encryptionEnabled bool,
+	sessionTypeRequest mgsContracts.SessionTypeRequest) (err error) {
 
-	if dataChannel.blockCipher, err = newBlockCipher(log, kmsKeyId); err != nil {
-		return fmt.Errorf("Initializing BlockCipher failed: %s", err)
+	if encryptionEnabled {
+		if dataChannel.blockCipher, err = newBlockCipher(log, kmsKeyId); err != nil {
+			return fmt.Errorf("Initializing BlockCipher failed: %s", err)
+		}
 	}
 
 	dataChannel.handshake.handshakeStartTime = time.Now()
-	// TODO: Have this passed in instead of always setting to true but in this version only encryption requires handshake
-	dataChannel.encryptionEnabled = true
+	dataChannel.encryptionEnabled = encryptionEnabled
 
 	log.Info("Initiating Handshake")
-	handshakeRequestPayload := dataChannel.buildHandshakeRequestPayload(log, dataChannel.encryptionEnabled)
+	handshakeRequestPayload :=
+		dataChannel.buildHandshakeRequestPayload(log, dataChannel.encryptionEnabled, sessionTypeRequest)
 	if err := dataChannel.sendHandshakeRequest(log, handshakeRequestPayload); err != nil {
 		return err
 	}
@@ -946,15 +951,16 @@ func (dataChannel *DataChannel) PerformHandshake(log log.T, kmsKeyId string) (er
 }
 
 // buildHandshakeRequestPayload builds payload for HandshakeRequest
-func (dataChannel *DataChannel) buildHandshakeRequestPayload(log log.T, encryptionRequested bool) mgsContracts.HandshakeRequestPayload {
+func (dataChannel *DataChannel) buildHandshakeRequestPayload(log log.T,
+	encryptionRequested bool,
+	request mgsContracts.SessionTypeRequest) mgsContracts.HandshakeRequestPayload {
+
 	handshakeRequest := mgsContracts.HandshakeRequestPayload{}
 	handshakeRequest.AgentVersion = version.Version
 	handshakeRequest.RequestedClientActions = []mgsContracts.RequestedClientAction{
 		{
-			ActionType: mgsContracts.SessionType,
-			ActionParameters: mgsContracts.SessionTypeRequest{
-				SessionType: appconfig.PluginNameStandardStream,
-			},
+			ActionType:       mgsContracts.SessionType,
+			ActionParameters: request,
 		}}
 	if encryptionRequested {
 		handshakeRequest.RequestedClientActions = append(handshakeRequest.RequestedClientActions,

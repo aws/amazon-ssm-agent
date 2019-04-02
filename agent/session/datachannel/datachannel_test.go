@@ -23,6 +23,7 @@ import (
 	"testing"
 	"time"
 
+	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/crypto"
 	cryptoMocks "github.com/aws/amazon-ssm-agent/agent/crypto/mocks"
@@ -66,6 +67,7 @@ var (
 	inputStreamMessageHandler                  = func(log log.T, streamDataMessage mgsContracts.AgentMessage) error {
 		return nil
 	}
+	sessionTypeRequest = mgsContracts.SessionTypeRequest{SessionType: appconfig.PluginNameStandardStream}
 )
 
 func TestInitialize(t *testing.T) {
@@ -555,7 +557,7 @@ func TestDataCHannelHandshakeInitiate(t *testing.T) {
 	dataChannel.encryptionEnabled = true
 
 	// Mocking sending of handshake request
-	handshakeRequestPayload, _ := json.Marshal(dataChannel.buildHandshakeRequestPayload(mockLog, true))
+	handshakeRequestPayload, _ := json.Marshal(dataChannel.buildHandshakeRequestPayload(mockLog, true, sessionTypeRequest))
 	handshakeRequestMatcher := func(sentData []byte) bool {
 		agentMessage := mgsContracts.AgentMessage{}
 		agentMessage.Deserialize(mockLog, sentData)
@@ -597,7 +599,7 @@ func TestDataCHannelHandshakeInitiate(t *testing.T) {
 		return mockCipher, nil
 	}
 
-	err := dataChannel.PerformHandshake(mockLog, kmskey)
+	err := dataChannel.PerformHandshake(mockLog, kmskey, true, sessionTypeRequest)
 
 	assert.Nil(t, err)
 	assert.True(t, dataChannel.handshake.complete)

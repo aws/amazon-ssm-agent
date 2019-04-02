@@ -173,6 +173,9 @@ const (
 	// PluginNameInteractiveCommands is the name for session manager interactive commands plugin.
 	PluginNameInteractiveCommands = "InteractiveCommands"
 
+	// PluginNamePort is the name for session manager port plugin.
+	PluginNamePort = "Port"
+
 	// Session default RunAs user name
 	DefaultRunAsUserName = "ssm-user"
 )

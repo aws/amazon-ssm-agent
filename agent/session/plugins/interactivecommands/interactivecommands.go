@@ -35,6 +35,16 @@ type InteractiveCommandsPlugin struct {
 	shell shell.IShellPlugin
 }
 
+// Returns parameters required for CLI/console to start session
+func (p *InteractiveCommandsPlugin) GetPluginParameters(parameters interface{}) interface{} {
+	return nil
+}
+
+// InteractiveCommands plugin doesn't require handshake to establish session
+func (p *InteractiveCommandsPlugin) RequireHandshake() bool {
+	return false
+}
+
 // NewPlugin returns a new instance of the Interactive Commands Plugin
 func NewPlugin() (sessionplugin.ISessionPlugin, error) {
 	shellPlugin, err := shell.NewPlugin(appconfig.PluginNameInteractiveCommands)
