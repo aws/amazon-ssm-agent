@@ -26,8 +26,12 @@ import (
 // createLocalAdminUser creates a local OS user on the instance with admin permissions.
 func (s *Session) createLocalAdminUser() (err error) {
 	log := s.context.Log()
-
 	u := &utility.SessionUtil{}
+
+	if u.IsInstanceADomainController(log) {
+		return fmt.Errorf("Instance is running active directory domain controller service. Disable the service to continue to use session manager.")
+	}
+
 	var newPassword string
 	if newPassword, err = u.GeneratePasswordForDefaultUser(); err != nil {
 		return

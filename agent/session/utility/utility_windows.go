@@ -23,7 +23,10 @@ import (
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
+	"github.com/aws/amazon-ssm-agent/agent/log"
 	"golang.org/x/sys/windows"
+	"golang.org/x/sys/windows/svc"
+	"golang.org/x/sys/windows/svc/mgr"
 )
 
 const (
@@ -37,6 +40,10 @@ const (
 	serverNameLocalMachine = 0
 	// Indicates that the logon script is executed
 	ufScript = 1
+	// Indicates running state of a service
+	serviceRunning = 4
+	// Active Directory Domain Controller service name
+	addsServiceName = "NTDS"
 
 	// Information level for domain and name of the new local group member.
 	levelForLocalGroupMembersInfo3 = 3
@@ -122,6 +129,54 @@ func (u *SessionUtil) AddNewUser(username string, password string) (userExists b
 	}
 
 	return
+}
+
+// IsInstanceADomainController returns true if Active Directory Domain Controller service is running on local instance, false otherwise
+func (u *SessionUtil) IsInstanceADomainController(log log.T) (isDCServiceRunning bool) {
+
+	var err error
+	if isDCServiceRunning, err = isServiceRunning(addsServiceName); err != nil {
+		log.Debugf("Instance is not running active directory domain controller service. %v", err)
+		// In case of error always assume instance is not a domain controller machine and return false.
+		return false
+	}
+
+	return isDCServiceRunning
+}
+
+// isServiceRunning returns if given service is running
+func isServiceRunning(serviceName string) (isServiceRunning bool, err error) {
+	var (
+		winManager *mgr.Mgr
+		service    *mgr.Service
+		status     svc.Status
+	)
+
+	// connect to windows service control manager
+	if winManager, err = mgr.Connect(); err != nil {
+		return false, fmt.Errorf("Something went wrong while trying to connect to Service Manager - %v", err)
+	}
+	if winManager != nil {
+		defer winManager.Disconnect()
+	}
+
+	// get handle of service
+	if service, err = winManager.OpenService(serviceName); err != nil {
+		return false, fmt.Errorf("Opening service failed with error %v", err)
+	}
+	if service != nil {
+		defer service.Close()
+	}
+
+	// query to check status of service
+	if status, err = service.Query(); err != nil {
+		return false, fmt.Errorf("Error when trying to find out if service is running, %v", err)
+	}
+
+	if status.State == serviceRunning {
+		return true, nil
+	}
+	return false, nil
 }
 
 // AddUserToLocalAdministratorsGroup adds user to local built in administrators group using NetLocalGroupAddMembers function of netapi32.dll

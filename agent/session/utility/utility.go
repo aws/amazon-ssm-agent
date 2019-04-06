@@ -20,6 +20,7 @@ import (
 	"math/big"
 
 	"github.com/aws/amazon-ssm-agent/agent/context"
+	"github.com/aws/amazon-ssm-agent/agent/log"
 )
 
 const (
@@ -41,6 +42,7 @@ type ISessionUtil interface {
 	ResetPasswordIfDefaultUserExists(context context.T) (err error)
 	AddNewUser(username string, password string) (userExists bool, err error)
 	AddUserToLocalAdministratorsGroup(username string) (adminGroupName string, err error)
+	IsInstanceADomainController(log log.T) (isDCServiceRunning bool)
 }
 
 type SessionUtil struct {
