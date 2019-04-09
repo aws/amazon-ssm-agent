@@ -1,5 +1,9 @@
 Latest
 ===============
+- Bug fix for on-premises instance registration in CN region
+
+2.3.539.0
+===============
 - Add support for further encryption of session data using AWS KMS
 - Bug fix for excessive instance-id fetching by document workers
 
