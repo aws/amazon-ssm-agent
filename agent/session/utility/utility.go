@@ -38,11 +38,14 @@ const (
 
 type ISessionUtil interface {
 	GeneratePasswordForDefaultUser() (string, error)
-	ChangePassword(username string, password string) error
+	ChangePassword(username string, password string) (userExists bool, err error)
 	ResetPasswordIfDefaultUserExists(context context.T) (err error)
 	AddNewUser(username string, password string) (userExists bool, err error)
 	AddUserToLocalAdministratorsGroup(username string) (adminGroupName string, err error)
 	IsInstanceADomainController(log log.T) (isDCServiceRunning bool)
+	CreateLocalAdminUser(log log.T) (string, error)
+	EnableLocalUser(log log.T) error
+	DisableLocalUser(log log.T) error
 }
 
 type SessionUtil struct {

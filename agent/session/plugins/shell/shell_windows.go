@@ -86,9 +86,22 @@ func StartPty(log log.T, runAsSsmUser bool, shellCmd string) (stdin *os.File, st
 		if err != nil {
 			return nil, nil, err
 		}
-		if err = u.ChangePassword(appconfig.DefaultRunAsUserName, newPassword); err != nil {
+		var userExists bool
+		if userExists, err = u.ChangePassword(appconfig.DefaultRunAsUserName, newPassword); err != nil {
 			log.Errorf("Failed to generate new password for %s: %v", appconfig.DefaultRunAsUserName, err)
 			return
+		}
+
+		// create ssm-user before starting a new session
+		if !userExists {
+			if newPassword, err = u.CreateLocalAdminUser(log); err != nil {
+				return nil, nil, fmt.Errorf("Failed to create user %s: %v", appconfig.DefaultRunAsUserName, err)
+			}
+		} else {
+			// enable user
+			if err = u.EnableLocalUser(log); err != nil {
+				return nil, nil, fmt.Errorf("Failed to enable user %s: %v", appconfig.DefaultRunAsUserName, err)
+			}
 		}
 
 		var wg sync.WaitGroup
@@ -116,6 +129,8 @@ func Stop(log log.T) (err error) {
 		return fmt.Errorf("Stop winpty failed: %s", err)
 	}
 
+	log.Debugf("Disabling ssm-user")
+	u.DisableLocalUser(log)
 	return nil
 }
 

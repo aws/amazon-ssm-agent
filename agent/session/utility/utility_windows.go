@@ -40,6 +40,8 @@ const (
 	serverNameLocalMachine = 0
 	// Indicates that the logon script is executed
 	ufScript = 1
+	// Indicates that the user's account is disabled.
+	USER_UF_ACCOUNTDISABLE = 2
 	// Indicates running state of a service
 	serviceRunning = 4
 	// Active Directory Domain Controller service name
@@ -49,6 +51,8 @@ const (
 	levelForLocalGroupMembersInfo3 = 3
 	// Information level for password data
 	levelForUserInfo1003 = 1003
+	// Information level for user account attributes
+	levelForUserInfo1008 = 1008
 	// Level for fetching USER_INFO_1 structure data
 	levelForUserInfo1 = 1
 
@@ -64,6 +68,10 @@ type USER_INFO_1003 struct {
 	Usri1003_password *uint16
 }
 
+type USER_INFO_1008 struct {
+	Usri1008_flags uint32
+}
+
 type USER_INFO_1 struct {
 	Usri1_name         *uint16
 	Usri1_password     *uint16
@@ -73,6 +81,10 @@ type USER_INFO_1 struct {
 	Usri1_comment      *uint16
 	Usri1_flags        uint32
 	Usri1_script_path  *uint16
+}
+
+type USER1_FLAGS struct {
+	UF_ACCOUNTDISABLE *uint16
 }
 
 type LOCALGROUP_MEMBERS_INFO_3 struct {
@@ -127,7 +139,6 @@ func (u *SessionUtil) AddNewUser(username string, password string) (userExists b
 			err = fmt.Errorf("NetUserAdd call failed. Error Code: %d", ret)
 		}
 	}
-
 	return
 }
 
@@ -246,20 +257,19 @@ func (u *SessionUtil) getBuiltInAdministratorsGroupName() (adminGroupName string
 }
 
 // ChangePassword changes password for given user using NetUserSetInfo function of netapi32.dll on local machine
-func (u *SessionUtil) ChangePassword(username string, password string) error {
+func (u *SessionUtil) ChangePassword(username string, password string) (userExists bool, err error) {
 	var (
 		errParam uint32
 		uPointer *uint16
 		pPointer *uint16
-		err      error
 	)
 
 	if uPointer, err = syscall.UTF16PtrFromString(username); err != nil {
-		return fmt.Errorf("Unable to encode username to UTF16")
+		return userExists, fmt.Errorf("Unable to encode username to UTF16")
 	}
 
 	if pPointer, err = syscall.UTF16PtrFromString(password); err != nil {
-		return fmt.Errorf("Unable to encode password to UTF16")
+		return userExists, fmt.Errorf("Unable to encode password to UTF16")
 	}
 
 	ret, _, _ := netUserSetInfo.Call(
@@ -270,13 +280,15 @@ func (u *SessionUtil) ChangePassword(username string, password string) error {
 		uintptr(unsafe.Pointer(&errParam)),
 	)
 
-	if ret != nerrSuccess {
-		return fmt.Errorf("NetUserSetInfo call failed. %d", ret)
+	if ret == nerrSuccess {
+		return true, nil
+	} else if ret == errCodeForUserNotFound {
+		return false, nil
 	}
-	return nil
+	return userExists, fmt.Errorf("NetUserSetInfo call failed. %d", ret)
 }
 
-// ResetPasswordIfDefaultUserExists resets default RunAs user password if user exists
+// ResetPasswordIfDefaultUserExists resets default RunAs user password if user exists (only for agent starts)
 func (u *SessionUtil) ResetPasswordIfDefaultUserExists(context context.T) (err error) {
 	var userExists bool
 	if userExists, err = u.doesUserExist(appconfig.DefaultRunAsUserName); err != nil {
@@ -290,7 +302,7 @@ func (u *SessionUtil) ResetPasswordIfDefaultUserExists(context context.T) (err e
 		if err != nil {
 			return err
 		}
-		if err = u.ChangePassword(appconfig.DefaultRunAsUserName, newPassword); err != nil {
+		if _, err = u.ChangePassword(appconfig.DefaultRunAsUserName, newPassword); err != nil {
 			return fmt.Errorf("Error occured while changing password for %s, %v", appconfig.DefaultRunAsUserName, err)
 		}
 	}
@@ -332,4 +344,114 @@ func (u *SessionUtil) doesUserExist(username string) (bool, error) {
 	}
 
 	return userExists, err
+}
+
+// createLocalAdminUser creates a local OS user on the instance with admin permissions.
+func (u *SessionUtil) CreateLocalAdminUser(log log.T) (newPassword string, err error) {
+	if u.IsInstanceADomainController(log) {
+		return "", fmt.Errorf("Instance is running active directory domain controller service. Disable the service to continue to use session manager.")
+	}
+
+	if newPassword, err = u.GeneratePasswordForDefaultUser(); err != nil {
+		return
+	}
+
+	var userExists bool
+	if userExists, err = u.AddNewUser(appconfig.DefaultRunAsUserName, newPassword); err != nil {
+		return "", fmt.Errorf("Failed to create %s: %v", appconfig.DefaultRunAsUserName, err)
+	}
+
+	if userExists {
+		log.Infof("%s already exists.", appconfig.DefaultRunAsUserName)
+		return
+	}
+	log.Infof("Successfully created %s", appconfig.DefaultRunAsUserName)
+
+	var adminGroupName string
+	if adminGroupName, err = u.AddUserToLocalAdministratorsGroup(appconfig.DefaultRunAsUserName); err != nil {
+		return newPassword, fmt.Errorf("Failed to add %s to local admin group: %v", appconfig.DefaultRunAsUserName, err)
+	}
+	log.Infof("Added %s to %s group", appconfig.DefaultRunAsUserName, adminGroupName)
+
+	return
+}
+
+func (u *SessionUtil) EnableLocalUser(log log.T) (err error) {
+	if err = u.userDelFlags(log, appconfig.DefaultRunAsUserName, USER_UF_ACCOUNTDISABLE); err != nil {
+		log.Errorf("error occurred disabling %s: %v", appconfig.DefaultRunAsUserName, err)
+		return err
+	}
+
+	log.Infof("Successfully enabled %s", appconfig.DefaultRunAsUserName)
+	return nil
+}
+
+func (u *SessionUtil) DisableLocalUser(log log.T) (err error) {
+	if err = u.userAddFlags(log, appconfig.DefaultRunAsUserName, USER_UF_ACCOUNTDISABLE); err != nil {
+		log.Errorf("error occurred disabling %s: %v", appconfig.DefaultRunAsUserName, err)
+		return err
+	}
+
+	log.Infof("Successfully disabled %s", appconfig.DefaultRunAsUserName)
+	return nil
+}
+
+func (u *SessionUtil) userAddFlags(log log.T, username string, flags uint32) error {
+	eFlags, err := u.userGetFlags(log, username)
+	if err != nil {
+		return fmt.Errorf("Error while getting existing flags, %s.", err.Error())
+	}
+	eFlags |= flags // add supplied bits to mask.
+	return u.userSetFlags(log, username, eFlags)
+}
+
+func (u *SessionUtil) userSetFlags(log log.T, username string, flags uint32) error {
+	var errParam uint32
+	uPointer, err := syscall.UTF16PtrFromString(username)
+	if err != nil {
+		return fmt.Errorf("Unable to encode username to UTF16")
+	}
+	ret, _, _ := netUserSetInfo.Call(
+		uintptr(serverNameLocalMachine),
+		uintptr(unsafe.Pointer(uPointer)),
+		uintptr(uint32(levelForUserInfo1008)),
+		uintptr(unsafe.Pointer(&USER_INFO_1008{Usri1008_flags: flags})),
+		uintptr(unsafe.Pointer(&errParam)),
+	)
+	if ret != nerrSuccess {
+		return fmt.Errorf("NetUserSetInfo call failed when trying to set flags. %d", ret)
+	}
+	return nil
+}
+
+func (u *SessionUtil) userDelFlags(log log.T, username string, flags uint32) error {
+	eFlags, err := u.userGetFlags(log, username)
+	if err != nil {
+		return fmt.Errorf("Error while getting existing flags, %s.", err.Error())
+	}
+	eFlags &^= flags // clear bits we want to remove.
+	return u.userSetFlags(log, username, eFlags)
+}
+
+func (u *SessionUtil) userGetFlags(log log.T, username string) (uint32, error) {
+	var dataPointer uintptr
+	uPointer, err := syscall.UTF16PtrFromString(username)
+	if err != nil {
+		return 0, fmt.Errorf("unable to encode username to UTF16")
+	}
+	_, _, _ = netUserGetInfo.Call(
+		uintptr(serverNameLocalMachine),
+		uintptr(unsafe.Pointer(uPointer)),
+		uintptr(uint32(levelForUserInfo1)),
+		uintptr(unsafe.Pointer(&dataPointer)),
+	)
+	defer netApiBufferFree.Call(dataPointer)
+
+	if dataPointer == uintptr(0) {
+		return 0, fmt.Errorf("unable to get data structure for user flags")
+	}
+
+	var data = (*USER_INFO_1)(unsafe.Pointer(dataPointer))
+	log.Debugf("existing user flags: %d\r\n", data.Usri1_flags)
+	return data.Usri1_flags, nil
 }

@@ -190,8 +190,6 @@ func (s *Session) ModuleExecute(context context.T) (err error) {
 	}
 
 	log.Info("Starting receiving message from control channel")
-	// Create ssm-user since control channel has been successfully created.
-	s.createLocalAdminUser()
 
 	if err = s.processor.InitialProcessing(); err != nil {
 		log.Errorf("initial processing in EngineProcessor encountered error: %v", err)
@@ -242,7 +240,6 @@ func (s *Session) listenReply(resultChan chan contracts.DocumentResult, instance
 				s.context.AppConfig().Agent.OrchestrationRootDir,
 				s.context.AppConfig().Ssm.SessionLogsRetentionDurationHours)
 		}
-
 		msg, err := buildAgentTaskComplete(log, res, instanceId)
 		if err != nil {
 			log.Errorf("Cannot build AgentTaskComplete message %s", err)
