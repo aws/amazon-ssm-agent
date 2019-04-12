@@ -41,9 +41,6 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/task"
 )
 
-var ShellPluginCommandName = "sh"
-var ShellPluginCommandArgs = []string{"-c"}
-
 // Plugin is the type for the plugin.
 type ShellPlugin struct {
 	stdin       *os.File
