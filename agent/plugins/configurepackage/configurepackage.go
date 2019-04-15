@@ -48,7 +48,7 @@ const (
 
 const resourceNotFoundException = "ResourceNotFoundException"
 const birdwatcherVersionPattern = "^[A-Za-z0-9.]+$"
-const documentArnPattern = "^arn:[a-z0-9][-.a-z0-9]{0,62}:[a-z0-9][-.a-z0-9]{0,62}:([a-z0-9][-.a-z0-9]{0,62})?:([a-z0-9][-.a-z0-9]{0,62})?:document\\/[a-zA-Z][a-zA-Z0-9-\\_]{0,39}$"
+const documentArnPattern = "^arn:[a-z0-9][-.a-z0-9]{0,62}:[a-z0-9][-.a-z0-9]{0,62}:([a-z0-9][-.a-z0-9]{0,62})?:([a-z0-9][-.a-z0-9]{0,62})?:document\\/[a-zA-Z0-9/:.\\-_]{1,128}$"
 
 // Plugin is the type for the configurepackage plugin.
 type Plugin struct {
