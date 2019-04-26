@@ -1503,3 +1503,50 @@ func TestRunPluginSuccessWithNonTruncatedResult(t *testing.T) {
 		assert.Equal(t, pluginResults[pluginID].StandardOutput, output.StandardOutput)
 	}
 }
+
+func TestGetStepNameV1Documents(t *testing.T) {
+	inputPluginName := "testPluginName1"
+	testProperties := make(map[string]string)
+	PropID := "0.aws:plugin1"
+	testProperties["id"] = PropID
+	config := contracts.Configuration{
+		PluginID:   testPlugin1,
+		PluginName: testPlugin1,
+		Properties: testProperties,
+	}
+	output, err := getStepName(inputPluginName, config)
+	assert.Equal(t, err, nil)
+	assert.Equal(t, output, PropID)
+}
+
+func TestGetStepNameV2Documents(t *testing.T) {
+	inputPluginName := "testPluginName1"
+	config := contracts.Configuration{
+		PluginID:   "PluginID",
+		PluginName: testPlugin1,
+	}
+	output, err := getStepName(inputPluginName, config)
+	assert.Equal(t, err, nil)
+	assert.Equal(t, output, config.PluginID)
+}
+
+func TestGetStepNameCloudWatchDocument(t *testing.T) {
+	inputPluginName := "aws:cloudWatch"
+	config := contracts.Configuration{
+		PluginID:   testPlugin1,
+		PluginName: testPlugin1,
+	}
+	output, err := getStepName(inputPluginName, config)
+	assert.Equal(t, err, nil)
+	assert.Equal(t, output, inputPluginName)
+}
+
+func TestGetStepNameError(t *testing.T) {
+	inputPluginName := "error test"
+	config := contracts.Configuration{
+		PluginID:   testPlugin1,
+		PluginName: testPlugin1,
+	}
+	_, err := getStepName(inputPluginName, config)
+	assert.Nil(t, err)
+}

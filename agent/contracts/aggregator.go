@@ -49,6 +49,7 @@ func prepareRuntimeStatus(log log.T, pluginResult PluginResult) PluginRuntimeSta
 		if pluginResult.OutputS3KeyPrefix != "" {
 			runtimeStatus.OutputS3KeyPrefix = pluginResult.OutputS3KeyPrefix
 		}
+		runtimeStatus.StepName = pluginResult.StepName
 	}
 
 	if runtimeStatus.Status == ResultStatusFailed && runtimeStatus.Code == 0 {

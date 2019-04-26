@@ -246,6 +246,7 @@ type PluginRuntimeStatus struct {
 	EndDateTime        string       `json:"endDateTime"`
 	OutputS3BucketName string       `json:"outputS3BucketName"`
 	OutputS3KeyPrefix  string       `json:"outputS3KeyPrefix"`
+	StepName           string       `json:"stepName"`
 	StandardOutput     string       `json:"standardOutput"`
 	StandardError      string       `json:"standardError"`
 }

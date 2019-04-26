@@ -180,6 +180,7 @@ func RunPlugins(
 			pluginOutputs[pluginID].Output = r.Output
 			pluginOutputs[pluginID].StandardOutput = r.StandardOutput
 			pluginOutputs[pluginID].StandardError = r.StandardError
+			pluginOutputs[pluginID].StepName = r.StepName
 
 		case skipStep:
 			context.Log().Info(logMessage)
@@ -231,6 +232,8 @@ func runPlugin(
 	context = context.With("[pluginName=" + pluginName + "]")
 
 	log := context.Log()
+	var stepName string
+
 	defer func() {
 		// recover in case the plugin panics
 		// this should handle some kind of seg fault errors.
@@ -269,14 +272,35 @@ func runPlugin(
 		for _, prop := range properties {
 			config.Properties = prop
 			propOutput := iohandler.NewDefaultIOHandler(log, ioConfig)
-			executePlugin(context, plugin, pluginName, config, cancelFlag, propOutput)
+			stepName, err = getStepName(pluginName, config)
+			if err != nil {
+				errorString := fmt.Errorf("Invalid format in plugin properties %v;\nerror %v", config.Properties, err)
+				output.MarkAsFailed(errorString)
+			} else {
+				executePlugin(context, plugin, pluginName, stepName, config, cancelFlag, propOutput)
+			}
+
 			output.Merge(log, propOutput)
 		}
 
 	default:
-		executePlugin(context, plugin, pluginName, config, cancelFlag, output)
+		stepName, err = getStepName(pluginName, config)
+		if err != nil {
+			errorString := fmt.Errorf("Invalid format in plugin properties %v;\nerror %v", config.Properties, err)
+			output.MarkAsFailed(errorString)
+		} else {
+			executePlugin(context, plugin, pluginName, stepName, config, cancelFlag, output)
+		}
 	}
 
+	if ioConfig.OutputS3BucketName != "" {
+		if stepName != "" {
+			// Colons are removed from s3 url's before uploading. Removing from here so worker can generate same url.
+			stepName = strings.Replace(stepName, ":", "", -1)
+		}
+
+		res.StepName = stepName
+	}
 	res.Code = output.GetExitCode()
 	res.Status = output.GetStatus()
 	res.Output = output.GetOutput()
@@ -286,38 +310,23 @@ func runPlugin(
 	return
 }
 
+// executePlugin executes the plugin that's passed in and initializes the necessary writers
 func executePlugin(context context.T,
 	plugin T,
 	pluginName string,
+	stepName string,
 	config contracts.Configuration,
 	cancelFlag task.CancelFlag,
 	output iohandler.IOHandler) {
 	log := context.Log()
-	// Get the property ID if it exists.
-	var propID string
-	var err error
-	if config.PluginName == config.PluginID {
-		if pluginName == appconfig.PluginNameCloudWatch {
-			propID = appconfig.PluginNameCloudWatch
-		} else {
-			propID, err = GetPropertyName(config.Properties) //V10 Schema
-		}
-	} else {
-		propID = config.PluginID //V20 Schema
-	}
 
-	if err != nil {
-		errorString := fmt.Errorf("Invalid format in plugin properties %v;\nerror %v", config.Properties, err)
-		output.MarkAsFailed(errorString)
-	} else {
-		// Create the output object and execute the plugin
-		defer output.Close(log)
-		output.Init(log, pluginName, propID)
-
-		plugin.Execute(context, config, cancelFlag, output)
-	}
+	// Create the output object and execute the plugin
+	defer output.Close(log)
+	output.Init(log, pluginName, stepName)
+	plugin.Execute(context, config, cancelFlag, output)
 }
 
+// GetPropertyName returns the ID field of property in a v1.2 SSM Document
 func GetPropertyName(rawPluginInput interface{}) (propertyName string, err error) {
 	pluginInput := struct{ ID string }{}
 	err = jsonutil.Remarshal(rawPluginInput, &pluginInput)
@@ -454,4 +463,20 @@ func evaluatePreconditions(
 	}
 
 	return isAllowed, unrecognizedPreconditionList
+}
+
+// Returns the Property's ID field from v1.2 documents or the Name field of a Step in v2.x documents.
+// This is required to generate the correct stdout/stderr s3 url
+func getStepName(pluginName string, config contracts.Configuration) (stepName string, err error) {
+	if config.PluginName == config.PluginID {
+		if pluginName == appconfig.PluginNameCloudWatch {
+			stepName = appconfig.PluginNameCloudWatch
+		} else {
+			stepName, err = GetPropertyName(config.Properties) //V10 Schema
+		}
+	} else {
+		stepName = config.PluginID //V20 Schema
+	}
+
+	return
 }
