@@ -70,7 +70,6 @@ func parser(config *SsmagentConfig) {
 
 }
 
-// TODO https://sim.amazon.com/issues/SSM-3439
 // getDefaultEndPoint returns the default endpoint for a service, it should be empty unless it's a china region
 func GetDefaultEndPoint(region string, service string) string {
 	endpoint := ""
