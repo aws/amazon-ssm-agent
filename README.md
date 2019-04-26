@@ -38,7 +38,7 @@ SSM Agent also enables the Session Manager capability that lets you manage your 
 
 ## Feedback
 
-Thank you for helping us to improve Systems Manager, Run Command and Session Manager. Please send your questions or comments to: ec2-ssm-feedback@amazon.com
+Thank you for helping us to improve Systems Manager, Run Command and Session Manager. Please send your questions or comments to [Systems Manager Forums](https://forums.aws.amazon.com/forum.jspa?forumID=185&start=0)
   
 ## Building and Running from source
 
