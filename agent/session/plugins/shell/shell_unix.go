@@ -37,6 +37,8 @@ var ptyFile *os.File
 
 const (
 	termEnvVariable       = "TERM=xterm-256color"
+	langEnvVariable       = "LANG=C.UTF-8"
+	langEnvVariableKey    = "LANG"
 	startRecordSessionCmd = "script"
 	newLineCharacter      = "\n"
 	screenBufferSizeCmd   = "screen -h %d%s"
@@ -65,6 +67,13 @@ func StartPty(log log.T, runAsSsmUser bool, shellCmd string) (stdin *os.File, st
 		termEnvVariable,
 		homeEnvVariable,
 	)
+
+	//If LANG environment variable is not set, shell defaults to POSIX which can contain 256 single-byte characters.
+	//Setting C.UTF-8 as default LANG environment variable as Session Manager supports UTF-8 encoding only.
+	langEnvVariableValue := os.Getenv(langEnvVariableKey)
+	if langEnvVariableValue == "" {
+		cmd.Env = append(cmd.Env, langEnvVariable)
+	}
 
 	// Get the uid and gid of the runas user.
 	if runAsSsmUser {
