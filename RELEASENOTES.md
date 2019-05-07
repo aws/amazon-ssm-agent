@@ -1,5 +1,12 @@
 Latest
 ===============
+- Bug fix for UTF-8 encoded issue caused by locale activation on Ubuntu 16.04 instance
+- Refactor ssm-user creation logic
+- Bug fix for reporting IP address with wrong network interface
+- Update configure package document arn pattern
+
+2.3.542.0
+===============
 - Bug fix for on-premises instance registration in CN region
 
 2.3.539.0
