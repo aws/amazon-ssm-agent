@@ -19,6 +19,7 @@ package gatherers
 import (
 	"github.com/aws/amazon-ssm-agent/agent/plugins/inventory/gatherers/application"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/inventory/gatherers/awscomponent"
+	"github.com/aws/amazon-ssm-agent/agent/plugins/inventory/gatherers/billinginfo"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/inventory/gatherers/custom"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/inventory/gatherers/file"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/inventory/gatherers/instancedetailedinformation"
@@ -29,6 +30,7 @@ var supportedGathererNames = []string{
 	application.GathererName,
 	awscomponent.GathererName,
 	custom.GathererName,
+	billinginfo.GathererName,
 	network.GathererName,
 	file.GathererName,
 	instancedetailedinformation.GathererName,

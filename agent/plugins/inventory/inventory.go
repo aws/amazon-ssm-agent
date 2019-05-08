@@ -33,6 +33,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/plugins/inventory/gatherers"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/inventory/gatherers/application"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/inventory/gatherers/awscomponent"
+	"github.com/aws/amazon-ssm-agent/agent/plugins/inventory/gatherers/billinginfo"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/inventory/gatherers/custom"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/inventory/gatherers/file"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/inventory/gatherers/instancedetailedinformation"
@@ -66,6 +67,7 @@ type PluginInput struct {
 	Applications                string
 	AWSComponents               string
 	NetworkConfig               string
+	BillingInfo                 string
 	Files                       string
 	WindowsRoles                string
 	Services                    string
@@ -316,7 +318,6 @@ func (p *Plugin) CanGathererRun(context context.T, name string) (status bool, ga
 }
 
 func (p *Plugin) validatePredefinedGatherer(context context.T, collectionPolicy, gathererName string) (status bool, gatherer gatherers.T, policy model.Config, err error) {
-
 	if collectionPolicy == model.Enabled {
 		if status, gatherer, err = p.CanGathererRun(context, gathererName); err != nil {
 			return
@@ -327,7 +328,6 @@ func (p *Plugin) validatePredefinedGatherer(context context.T, collectionPolicy,
 			policy = model.Config{Collection: collectionPolicy}
 		}
 	}
-
 	return
 }
 
@@ -380,6 +380,7 @@ func (p *Plugin) ValidateInventoryInput(context context.T, input PluginInput) (c
 		role.GathererName:                        input.WindowsRoles,
 		service.GathererName:                     input.Services,
 		network.GathererName:                     input.NetworkConfig,
+		billinginfo.GathererName:                 input.BillingInfo,
 		windowsUpdate.GathererName:               input.WindowsUpdates,
 		instancedetailedinformation.GathererName: input.InstanceDetailedInformation,
 	}

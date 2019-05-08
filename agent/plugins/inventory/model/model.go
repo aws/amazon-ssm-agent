@@ -137,6 +137,11 @@ type RegistryData struct {
 	Value     string
 }
 
+// BillingInfoData captures all attributes present in AWS:BillingInfo inventory type
+type BillingInfoData struct {
+	BillingProductId string
+}
+
 // NetworkData captures all attributes present in AWS:Network inventory type
 type NetworkData struct {
 	Name       string
