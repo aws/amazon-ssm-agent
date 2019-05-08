@@ -19,6 +19,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/inventory/gatherers/application"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/inventory/gatherers/awscomponent"
+	"github.com/aws/amazon-ssm-agent/agent/plugins/inventory/gatherers/billinginfo"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/inventory/gatherers/custom"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/inventory/gatherers/file"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/inventory/gatherers/instancedetailedinformation"
@@ -58,6 +59,7 @@ func InitializeGatherers(context context.T) (SupportedGatherer, InstalledGathere
 		awscomponent.GathererName:                awscomponent.Gatherer(context),
 		custom.GathererName:                      custom.Gatherer(context),
 		network.GathererName:                     network.Gatherer(context),
+		billinginfo.GathererName:                 billinginfo.Gatherer(context),
 		windowsUpdate.GathererName:               windowsUpdate.Gatherer(context),
 		file.GathererName:                        file.Gatherer(context),
 		instancedetailedinformation.GathererName: instancedetailedinformation.Gatherer(context),
