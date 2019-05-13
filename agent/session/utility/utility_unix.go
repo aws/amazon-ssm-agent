@@ -63,9 +63,10 @@ func (u *SessionUtil) CreateLocalAdminUser(log log.T) (newPassword string, err e
 		if err = u.createLocalUser(log); err != nil {
 			return
 		}
+		// only create sudoers file when user does not exist
+		err = u.createSudoersFileIfNotPresent(log)
 	}
 
-	err = u.createSudoersFileIfNotPresent(log)
 	return
 }
 
