@@ -23,7 +23,6 @@ import (
 
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/version"
-	"github.com/aws/aws-sdk-go/aws/credentials"
 )
 
 var loadedConfig *SsmagentConfig
@@ -72,18 +71,6 @@ func getCached() SsmagentConfig {
 	lock.RLock()
 	defer lock.RUnlock()
 	return *loadedConfig
-}
-
-// ProfileCredentials checks to see if specific profile is being asked to use
-func (config SsmagentConfig) ProfileCredentials() (credsInConfig *credentials.Credentials, err error) {
-	// the credentials file location and profile to load
-	credsInConfig = credentials.NewSharedCredentials(config.Profile.Path, config.Profile.Name)
-	_, err = credsInConfig.Get()
-	if err != nil {
-		return nil, err
-	}
-	fmt.Printf("Using AWS credentials configured under %v user profile \n", config.Profile.Name)
-	return
 }
 
 // looks for appconfig in working directory first and then the platform specific folder
