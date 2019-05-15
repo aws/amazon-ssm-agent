@@ -17,13 +17,14 @@ package sdkutil
 import (
 	"time"
 
-	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/managedInstances/registration"
 	"github.com/aws/amazon-ssm-agent/agent/managedInstances/rolecreds"
 	"github.com/aws/amazon-ssm-agent/agent/platform"
 	"github.com/aws/amazon-ssm-agent/agent/sdkutil/retryer"
 
 	"github.com/aws/aws-sdk-go/aws"
+	"github.com/aws/aws-sdk-go/aws/credentials"
+	"github.com/aws/aws-sdk-go/aws/defaults"
 )
 
 // AwsConfig returns the default aws.Config object while the appropriate
@@ -37,7 +38,7 @@ func AwsConfig() (awsConfig *aws.Config) {
 	}
 
 	// update region from platform
-	region, err := platform.Region()
+	region, _ := platform.Region()
 	if region != "" {
 		awsConfig.Region = &region
 	}
@@ -49,16 +50,22 @@ func AwsConfig() (awsConfig *aws.Config) {
 		return
 	}
 
-	// look for profile credentials
-	appConfig, err := appconfig.Config(false)
-	if err == nil {
-		creds, _ := appConfig.ProfileCredentials()
-		if creds != nil {
-			awsConfig.Credentials = creds
-		}
-	}
+	// default credentials will be ec2/ecs credentials
+	awsConfig.Credentials = defaultRemoteCredentials()
 
 	return
+}
+
+// This will return the same remote credential provider as the SDK
+// We are creating this explicitly and passing it to the SDK
+// because we do not care for the shared credentials / ENV credentials in the
+// default SDK credential chain.
+func defaultRemoteCredentials() *credentials.Credentials {
+	cfg := defaults.Config()
+	handlers := defaults.Handlers()
+	remotecreds := defaults.RemoteCredProvider(*cfg, handlers)
+
+	return credentials.NewCredentials(remotecreds)
 }
 
 var newRetryer = func() aws.RequestRetryer {

@@ -167,19 +167,13 @@ func getMGSBaseUrl(log log.T, channelType string, channelId string, region strin
 // getCredentials gets the current active credentials.
 func getCredentials() (*credentials.Credentials, error) {
 	// load managed instance credentials if applicable
-	if isManaged, err := registration.HasManagedInstancesCredentials(); isManaged && err == nil {
+	isManaged, err := registration.HasManagedInstancesCredentials()
+
+	if isManaged && err == nil {
 		return rolecreds.ManagedInstanceCredentialsInstance(), nil
 	}
 
-	// look for profile credentials
-	appConfig, err := appconfig.Config(false)
-	if err == nil {
-		creds, _ := appConfig.ProfileCredentials()
-		if creds != nil {
-			return creds, nil
-		}
-	}
-	return nil, fmt.Errorf("failed to get credentials in session manager with error: %s", err)
+	return nil, err
 }
 
 // GetV4Signer gets the v4 signer.

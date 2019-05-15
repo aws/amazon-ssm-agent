@@ -1,7 +1,5 @@
 {
     "Profile":{
-        "ProfilePath" : "",
-        "ProfileName" : "",
         "ShareCreds" : true,
         "ShareProfile" : ""
     },

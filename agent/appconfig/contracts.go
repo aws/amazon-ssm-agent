@@ -16,8 +16,6 @@ package appconfig
 
 // CredentialProfile represents configurations for aws credential profile
 type CredentialProfile struct {
-	Path         string
-	Name         string
 	ShareCreds   bool
 	ShareProfile string
 }
