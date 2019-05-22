@@ -1,5 +1,11 @@
 Latest
 ===============
+- Disable appconfig to load credential from specific profile path, add EC2 credentials as the default fallback
+- Remove sudoers file creation logic if ssm-user already exists
+- Enable supplementary groups for ssm-user on Linux
+
+2.3.612.0
+===============
 - Bug fix for UTF-8 encoded issue caused by locale activation on Ubuntu 16.04 instance
 - Refactor ssm-user creation logic
 - Bug fix for reporting IP address with wrong network interface
