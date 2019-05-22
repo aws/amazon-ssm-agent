@@ -65,6 +65,8 @@ var (
 		`{"Name":"Notepad++","Version":"6.9.2","Publisher":"Notepad++ Team","InstalledTime":null},`,
 		// no result testcase
 		``,
+		// special character testcase
+		`{"Name":"HPE AutoPass License Server 9.2.1 (C:\Program Files (x86)\HP\HP AutoPass License Server)","Version":"9.2.1","Publisher":"HPE Autopass","InstalledTime":null},`,
 	}
 	mockArch     = "randomArch"
 	randomString = "blahblah"
@@ -110,6 +112,9 @@ var sampleDataSetsParsed = [][]model.ApplicationData{
 		{Name: "Notepad++", Version: "6.9.2", Publisher: "Notepad++ Team", InstalledTime: ""},
 	},
 	{},
+	{
+		{Name: "HPE AutoPass License Server 9.2.1 (C:\\Program Files (x86)\\HP\\HP AutoPass License Server)", Version: "9.2.1", Publisher: "HPE Autopass", InstalledTime: ""},
+	},
 }
 
 func MockTestExecutorWithError(command string, args ...string) ([]byte, error) {
