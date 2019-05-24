@@ -52,6 +52,19 @@ func TestTokenInfoImpl_GetOAuthClient_Success(t *testing.T) {
 	oauthclientmock.AssertExpectations(t)
 }
 
+func TestValidateTokenParameter(t *testing.T) {
+	var valid bool
+	var err error
+
+	valid, err = validateTokenParameter(`{{ ssm-secure:dummy_secure-PARAM.999 }}`)
+	assert.NoError(t, err)
+	assert.Equal(t, valid, true)
+
+	valid, err = validateTokenParameter(`{{ ssm-secure:dummy_param! }}`)
+	assert.Error(t, err)
+	assert.Equal(t, valid, false)
+}
+
 func TestTokenInfoImpl_ValidateTokenParameter_Failure(t *testing.T) {
 
 	// tokenInfoInput has a format that is unsupported for token information.
