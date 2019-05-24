@@ -104,7 +104,7 @@ func validateTokenParameter(tokenInfo string) (valid bool, err error) {
 
 	// Regex to check the pattern of the secure parameter required.
 	// pattern must be equal to {{ ssm-secure:parameter-name }}
-	var ssmSecureStringPattern = regexp.MustCompile("{{\\s*(" + ssmSecurePrefix + "[\\w-/]+)\\s*}}")
+	var ssmSecureStringPattern = regexp.MustCompile("{{\\s*(" + ssmSecurePrefix + "[\\w-./]+)\\s*}}")
 	if ssmSecureStringPattern.Match([]byte(tokenInfo)) {
 		return true, nil
 	}
