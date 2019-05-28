@@ -463,6 +463,14 @@ func (service *CloudWatchLogsService) StreamData(log log.T, logGroupName string,
 		log.Debugf("Uploading message %v to CloudWatch", events)
 
 		if !IsLogStreamCreated {
+
+			// Terminate process if the log group is not present.
+			if !service.IsLogGroupPresent(log, logGroupName) {
+				log.Errorf("CloudWatch log group resource not created: %s", logGroupName)
+				ticker.Stop()
+				break
+			}
+
 			if err := service.CreateLogStream(log, logGroupName, logStreamName); err != nil {
 				log.Errorf("Error Creating Log Stream for CloudWatchLogs output: %v", err)
 				currentLineNumber = lastKnownLineUploadedToCWL
