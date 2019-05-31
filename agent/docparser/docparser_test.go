@@ -40,8 +40,8 @@ const (
 	testLogStreamPrefix = "test-logStreamName"
 	testSessionId       = "test-sessionId"
 	testClientId        = "test-clientId"
-	testCommands        = "date"
 	testKmsKeyId        = "test-kmskeyid"
+	testProperties      = "properties"
 )
 const parameterdocument = `{"schemaVersion":"1.2","description":"","parameters":{"commands":{"type":"StringList"}},"runtimeConfig":{"aws:runPowerShellScript":{"properties":[{"id":"0.aws:runPowerShellScript","runCommand":"{{ commands }}"}]}}}`
 const invaliddocument = `{"schemaVersion":"1.2","description":"PowerShell.","FOO":"bar"}`
@@ -178,16 +178,11 @@ func TestInitializeDocStateForStartSessionDocument_Valid(t *testing.T) {
 		CloudWatchLogGroupName: testLogGroupName,
 	}
 
-	sessionCommand := contracts.SessionCommand{
-		Commands:      testCommands,
-		RunAsElevated: true,
-	}
-
 	sessionDocContent := &SessionDocContent{
-		SchemaVersion:   "1.0",
-		SessionCommands: []*contracts.SessionCommand{&sessionCommand},
-		Inputs:          sessionInputs,
-		SessionType:     appconfig.PluginNameStandardStream,
+		SchemaVersion: "1.0",
+		Properties:    testProperties,
+		Inputs:        sessionInputs,
+		SessionType:   appconfig.PluginNameStandardStream,
 	}
 
 	docState, err := InitializeDocState(mockLog,
@@ -213,9 +208,8 @@ func TestInitializeDocStateForStartSessionDocument_Valid(t *testing.T) {
 	assert.Equal(t, testClientId, pluginInfo[0].Configuration.ClientId)
 	assert.Equal(t, testLogGroupName, pluginInfo[0].Configuration.CloudWatchLogGroup)
 	assert.Equal(t, fileutil.BuildPath(testOrchDir, appconfig.PluginNameStandardStream), pluginInfo[0].Configuration.OrchestrationDirectory)
-	assert.Equal(t, testCommands, pluginInfo[0].Configuration.Commands)
+	assert.Equal(t, testProperties, pluginInfo[0].Configuration.Properties)
 	assert.Equal(t, testKmsKeyId, pluginInfo[0].Configuration.KmsKeyId)
-	assert.True(t, pluginInfo[0].Configuration.RunAsElevated)
 }
 
 func TestInitializeDocStateForStartSessionDocumentWithoutSessionCommands_Valid(t *testing.T) {
@@ -263,9 +257,8 @@ func TestInitializeDocStateForStartSessionDocumentWithoutSessionCommands_Valid(t
 	assert.Equal(t, testClientId, pluginInfo[0].Configuration.ClientId)
 	assert.Equal(t, testLogGroupName, pluginInfo[0].Configuration.CloudWatchLogGroup)
 	assert.Equal(t, fileutil.BuildPath(testOrchDir, appconfig.PluginNameStandardStream), pluginInfo[0].Configuration.OrchestrationDirectory)
-	assert.Empty(t, pluginInfo[0].Configuration.Commands)
+	assert.Empty(t, pluginInfo[0].Configuration.Properties)
 	assert.Equal(t, testKmsKeyId, pluginInfo[0].Configuration.KmsKeyId)
-	assert.False(t, pluginInfo[0].Configuration.RunAsElevated)
 }
 
 func TestInitializeDocStateForStartSessionDocumentWithParameters_Valid(t *testing.T) {
@@ -282,19 +275,8 @@ func TestInitializeDocStateForStartSessionDocumentWithParameters_Valid(t *testin
 		ParamType:  "String",
 	}
 
-	command := contracts.Parameter{
-		DefaultVal: testCommands,
-		ParamType:  "String",
-	}
-
 	parameters := map[string]*contracts.Parameter{
 		"s3BucketName": &s3BucketName,
-		"command":      &command,
-	}
-
-	sessionCommand := contracts.SessionCommand{
-		Commands:      "{{command}}",
-		RunAsElevated: true,
 	}
 
 	sessionInputs := contracts.SessionInputs{
@@ -305,11 +287,11 @@ func TestInitializeDocStateForStartSessionDocumentWithParameters_Valid(t *testin
 	}
 
 	sessionDocContent := &SessionDocContent{
-		SchemaVersion:   "1.0",
-		SessionCommands: []*contracts.SessionCommand{&sessionCommand},
-		Inputs:          sessionInputs,
-		Parameters:      parameters,
-		SessionType:     appconfig.PluginNameStandardStream,
+		SchemaVersion: "1.0",
+		Inputs:        sessionInputs,
+		Parameters:    parameters,
+		SessionType:   appconfig.PluginNameStandardStream,
+		Properties:    testProperties,
 	}
 
 	docState, err := InitializeDocState(mockLog,
@@ -335,9 +317,8 @@ func TestInitializeDocStateForStartSessionDocumentWithParameters_Valid(t *testin
 	assert.Equal(t, testClientId, pluginInfo[0].Configuration.ClientId)
 	assert.Equal(t, testLogGroupName, pluginInfo[0].Configuration.CloudWatchLogGroup)
 	assert.Equal(t, fileutil.BuildPath(testOrchDir, appconfig.PluginNameStandardStream), pluginInfo[0].Configuration.OrchestrationDirectory)
-	assert.Equal(t, testCommands, pluginInfo[0].Configuration.Commands)
+	assert.Equal(t, testProperties, pluginInfo[0].Configuration.Properties)
 	assert.Equal(t, testKmsKeyId, pluginInfo[0].Configuration.KmsKeyId)
-	assert.True(t, pluginInfo[0].Configuration.RunAsElevated)
 }
 
 func TestParseDocument_EmptyDocContent(t *testing.T) {

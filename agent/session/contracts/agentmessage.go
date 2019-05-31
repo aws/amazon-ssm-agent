@@ -289,12 +289,12 @@ func (agentMessage *AgentMessage) ParseAgentMessage(context context.T,
 		DocumentId:       documentInfo.DocumentID,
 	}
 	docContent := &docparser.SessionDocContent{
-		SchemaVersion:   parsedMessagePayload.DocumentContent.SchemaVersion,
-		Description:     parsedMessagePayload.DocumentContent.Description,
-		SessionType:     parsedMessagePayload.DocumentContent.SessionType,
-		Inputs:          parsedMessagePayload.DocumentContent.Inputs,
-		Parameters:      parsedMessagePayload.DocumentContent.Parameters,
-		SessionCommands: parsedMessagePayload.DocumentContent.SessionCommands,
+		SchemaVersion: parsedMessagePayload.DocumentContent.SchemaVersion,
+		Description:   parsedMessagePayload.DocumentContent.Description,
+		SessionType:   parsedMessagePayload.DocumentContent.SessionType,
+		Inputs:        parsedMessagePayload.DocumentContent.Inputs,
+		Parameters:    parsedMessagePayload.DocumentContent.Parameters,
+		Properties:    parsedMessagePayload.DocumentContent.Properties,
 	}
 
 	docState, err := docparser.InitializeDocState(

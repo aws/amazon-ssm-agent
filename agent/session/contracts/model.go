@@ -46,6 +46,16 @@ const (
 	StartPublicationMessage string = "start_publication"
 )
 
+type ShellProperties struct {
+	Windows ShellConfig `json:"windows" yaml:"windows"`
+	Linux   ShellConfig `json:"linux" yaml:"linux"`
+}
+
+type ShellConfig struct {
+	Commands      string `json:"commands" yaml:"commands"`
+	RunAsElevated bool   `json:"runAsElevated" yaml:"runAsElevated"`
+}
+
 type IMessage interface {
 	Deserialize(log logger.T, agentMessage AgentMessage) (err error)
 	Serialize(log logger.T) (result []byte, err error)
