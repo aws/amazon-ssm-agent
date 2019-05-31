@@ -204,19 +204,12 @@ type SessionInputs struct {
 
 // SessionDocumentContent object which represents ssm session content.
 type SessionDocumentContent struct {
-	SchemaVersion   string                `json:"schemaVersion" yaml:"schemaVersion"`
-	Description     string                `json:"description" yaml:"description"`
-	SessionType     string                `json:"sessionType" yaml:"sessionType"`
-	Inputs          SessionInputs         `json:"inputs" yaml:"inputs"`
-	Parameters      map[string]*Parameter `json:"parameters" yaml:"parameters"`
-	SessionCommands []*SessionCommand     `json:"sessionCommands" yaml:"sessionCommands"`
-}
-
-// SessionCommand object represents session manager commands with cross-platform preconditions.
-type SessionCommand struct {
-	Commands      string              `json:"commands" yaml:"commands"`
-	Preconditions map[string][]string `json:"precondition" yaml:"precondition"`
-	RunAsElevated bool                `json:"runAsElevated" yaml:"runAsElevated"`
+	SchemaVersion string                `json:"schemaVersion" yaml:"schemaVersion"`
+	Description   string                `json:"description" yaml:"description"`
+	SessionType   string                `json:"sessionType" yaml:"sessionType"`
+	Inputs        SessionInputs         `json:"inputs" yaml:"inputs"`
+	Parameters    map[string]*Parameter `json:"parameters" yaml:"parameters"`
+	Properties    interface{}           `json:"properties" yaml:"properties"`
 }
 
 // AdditionalInfo section in agent response

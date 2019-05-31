@@ -68,20 +68,21 @@ var (
 )
 
 //StartPty starts winpty agent and provides handles to stdin and stdout.
-func StartPty(log log.T, runAsSsmUser bool, shellCmd string) (stdin *os.File, stdout *os.File, err error) {
+// isSessionLogger determines whether its a customer shell or shell used for logging.
+func StartPty(log log.T, shellProps mgsContracts.ShellProperties, isSessionLogger bool) (stdin *os.File, stdout *os.File, err error) {
 	log.Info("Starting winpty")
 	if _, err := os.Stat(winptyDllFilePath); os.IsNotExist(err) {
 		return nil, nil, fmt.Errorf("Missing %s file.", winptyDllFilePath)
 	}
 
 	var finalCmd string
-	if strings.TrimSpace(shellCmd) == "" {
+	if strings.TrimSpace(shellProps.Windows.Commands) == "" || isSessionLogger {
 		finalCmd = winptyCmd
 	} else {
-		finalCmd = winptyCmd + " " + shellCmd
+		finalCmd = winptyCmd + " " + shellProps.Windows.Commands
 	}
 
-	if runAsSsmUser {
+	if !shellProps.Windows.RunAsElevated && !isSessionLogger {
 		// Reset password for default ssm user
 		var newPassword string
 		newPassword, err = u.GeneratePasswordForDefaultUser()
@@ -266,7 +267,7 @@ func (p *ShellPlugin) generateLogData(log log.T, config agentContracts.Configura
 
 // generateTranscriptFile generates a transcript file using PowerShell
 func generateTranscriptFile(log log.T, transcriptFile string, loggerFile string, enableVirtualTerminalProcessingForWindows bool) error {
-	shadowShellInput, _, err := StartPty(log, false, "")
+	shadowShellInput, _, err := StartPty(log, mgsContracts.ShellProperties{}, true)
 	if err != nil {
 		return err
 	}

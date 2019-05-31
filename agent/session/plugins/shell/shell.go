@@ -11,7 +11,7 @@
 // either express or implied. See the License for the specific language governing
 // permissions and limitations under the License.
 
-// Package shell implements session shell plugin.
+// Package shell is a common library that implements session manager shell.
 package shell
 
 import (
@@ -36,12 +36,12 @@ import (
 	mgsConfig "github.com/aws/amazon-ssm-agent/agent/session/config"
 	mgsContracts "github.com/aws/amazon-ssm-agent/agent/session/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/session/datachannel"
-	"github.com/aws/amazon-ssm-agent/agent/session/plugins/sessionplugin"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 )
 
 // Plugin is the type for the plugin.
 type ShellPlugin struct {
+	name        string
 	stdin       *os.File
 	stdout      *os.File
 	ipcFilePath string
@@ -49,15 +49,15 @@ type ShellPlugin struct {
 	dataChannel datachannel.IDataChannel
 }
 
-// NewPlugin returns a new instance of the Shell Plugin
-func NewPlugin() (sessionplugin.ISessionPlugin, error) {
-	var plugin = ShellPlugin{}
-	return &plugin, nil
+type IShellPlugin interface {
+	Execute(context context.T, config agentContracts.Configuration, cancelFlag task.CancelFlag, output iohandler.IOHandler, dataChannel datachannel.IDataChannel, shellProps mgsContracts.ShellProperties)
+	InputStreamMessageHandler(log log.T, streamDataMessage mgsContracts.AgentMessage) error
 }
 
-// name returns the name of Shell Plugin
-func (p *ShellPlugin) name() string {
-	return appconfig.PluginNameStandardStream
+// NewPlugin returns a new instance of the Shell Plugin
+func NewPlugin(name string) (*ShellPlugin, error) {
+	var plugin = ShellPlugin{name: name}
+	return &plugin, nil
 }
 
 // validate validates the cloudwatch and s3 encryption configuration.
@@ -87,7 +87,8 @@ func (p *ShellPlugin) Execute(context context.T,
 	config agentContracts.Configuration,
 	cancelFlag task.CancelFlag,
 	output iohandler.IOHandler,
-	dataChannel datachannel.IDataChannel) {
+	dataChannel datachannel.IDataChannel,
+	shellProps mgsContracts.ShellProperties) {
 
 	log := context.Log()
 	p.dataChannel = dataChannel
@@ -96,7 +97,7 @@ func (p *ShellPlugin) Execute(context context.T,
 			log.Errorf("Error occured while closing pty: %v", err)
 		}
 		if err := recover(); err != nil {
-			log.Errorf("Error occurred while executing plugin %s: \n%v", p.name(), err)
+			log.Errorf("Error occurred while executing plugin %s: \n%v", p.name, err)
 			log.Flush()
 			os.Exit(1)
 		}
@@ -107,12 +108,12 @@ func (p *ShellPlugin) Execute(context context.T,
 	} else if cancelFlag.Canceled() {
 		output.MarkAsCancelled()
 	} else {
-		p.execute(context, config, cancelFlag, output)
+		p.execute(context, config, cancelFlag, output, shellProps)
 	}
 }
 
-var startPty = func(log log.T, runAsSsmUser bool, shellCmd string) (stdin *os.File, stdout *os.File, err error) {
-	return StartPty(log, runAsSsmUser, shellCmd)
+var startPty = func(log log.T, shellProps mgsContracts.ShellProperties, isSessionLogger bool) (stdin *os.File, stdout *os.File, err error) {
+	return StartPty(log, shellProps, isSessionLogger)
 }
 
 // execute starts pseudo terminal.
@@ -121,7 +122,8 @@ var startPty = func(log log.T, runAsSsmUser bool, shellCmd string) (stdin *os.Fi
 func (p *ShellPlugin) execute(context context.T,
 	config agentContracts.Configuration,
 	cancelFlag task.CancelFlag,
-	output iohandler.IOHandler) {
+	output iohandler.IOHandler,
+	shellProps mgsContracts.ShellProperties) {
 
 	log := context.Log()
 	var err error
@@ -144,7 +146,7 @@ func (p *ShellPlugin) execute(context context.T,
 		return
 	}
 
-	p.stdin, p.stdout, err = startPty(log, !config.RunAsElevated, config.Commands)
+	p.stdin, p.stdout, err = startPty(log, shellProps, false)
 	if err != nil {
 		errorString := fmt.Errorf("Unable to start shell: %s", err)
 		log.Error(errorString)
@@ -175,7 +177,7 @@ func (p *ShellPlugin) execute(context context.T,
 		done <- p.writePump(log)
 	}()
 
-	log.Infof("Plugin %s started", p.name())
+	log.Infof("Plugin %s started", p.name)
 
 	select {
 	case <-cancelled:

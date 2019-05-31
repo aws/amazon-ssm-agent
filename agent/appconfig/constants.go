@@ -170,6 +170,9 @@ const (
 	// PluginNameStandardStream is the name for session manager standard stream plugin aka shell.
 	PluginNameStandardStream = "Standard_Stream"
 
+	// PluginNameInteractiveCommands is the name for session manager interactive commands plugin.
+	PluginNameInteractiveCommands = "InteractiveCommands"
+
 	// Session default RunAs user name
 	DefaultRunAsUserName = "ssm-user"
 )

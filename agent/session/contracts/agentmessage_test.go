@@ -23,6 +23,7 @@ import (
 
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
+	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/stretchr/testify/assert"
 	"github.com/twinj/uuid"
@@ -187,9 +188,10 @@ func TestParseAgentMessage(t *testing.T) {
 	u, _ := uuid.Parse(messageId)
 
 	agentJson := "{\"DataChannelId\":\"44da928d-1200-4501-a38a-f10d72e38cc4\",\"documentContent\":{\"schemaVersion\":\"1.0\"," +
-		"\"inputs\":{\"cloudWatchLogGroup\":\"\",\"s3BucketName\":\"\",\"s3KeyPrefix\":\"\",\"kmsKeyId\":\"\"},\"description\":\"Document to hold " +
-		"regional settings for Session Manager\",\"sessionType\":\"Standard_Stream\",\"parameters\":{},\"sessionCommands\":" +
-		"[{\"commands\":\"date\",\"runAsElevated\":true,\"precondition\":{\"StringEquals\":[\"platformType\",\"Linux\"]}}]},\"sessionId\":\"44da928d-1200-4501-a38a-f10d72e38cc4\"," +
+		"\"inputs\":{\"cloudWatchLogGroup\":\"\",\"s3BucketName\":\"\",\"s3KeyPrefix\":\"\"},\"description\":\"Document to hold " +
+		"regional settings for Session Manager\",\"sessionType\":\"Standard_Stream\",\"parameters\":{}," +
+		"\"properties\":{\"windows\":{\"commands\":\"date\",\"runAsElevated\":true},\"linux\":{\"commands\":\"ls\",\"runAsElevated\":true}}}," +
+		"\"sessionId\":\"44da928d-1200-4501-a38a-f10d72e38cc4\"," +
 		"\"DataChannelToken\":\"AAEAAdDZESkS1C2/AWLlDccG608LYJUJZJLkxcjxl0x1T70kAAAAAFrozgJYbJT2fY6yQPDqQZhygozZ83LhsoYdP7VWmuo\"}"
 	mgsPayload := MGSPayload{
 		Payload:       string(agentJson),
@@ -209,6 +211,20 @@ func TestParseAgentMessage(t *testing.T) {
 		Payload:        mgsPayloadJson,
 	}
 
+	shellPropsObj := ShellProperties{
+		Windows: ShellConfig{
+			Commands:      "date",
+			RunAsElevated: true,
+		},
+		Linux: ShellConfig{
+			Commands:      "ls",
+			RunAsElevated: true,
+		},
+	}
+
+	var shellProps interface{}
+	jsonutil.Remarshal(shellPropsObj, &shellProps)
+
 	assert.Nil(t, agentMessage.Validate())
 
 	docState, err := agentMessage.ParseAgentMessage(context.NewMockDefault(), "", "i-123", "client-id")
@@ -220,6 +236,7 @@ func TestParseAgentMessage(t *testing.T) {
 	assert.Equal(t, "44da928d-1200-4501-a38a-f10d72e38cc4", pluginInfo[0].Configuration.MessageId)
 	assert.Equal(t, contracts.StartSession, docState.DocumentType)
 	assert.Equal(t, "44da928d-1200-4501-a38a-f10d72e38cc4", pluginInfo[0].Configuration.SessionId)
+	assert.Equal(t, shellProps, pluginInfo[0].Configuration.Properties)
 }
 
 func TestValidateReturnsErrorWithEmptyAgentMessage(t *testing.T) {

@@ -21,7 +21,6 @@ import (
 	"time"
 
 	cloudwatchlogspublisher_mock "github.com/aws/amazon-ssm-agent/agent/agentlogstocloudwatch/cloudwatchlogspublisher/mock"
-	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	iohandlermocks "github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler/mock"
@@ -87,12 +86,6 @@ func (suite *ShellTestSuite) TearDownTest() {
 	suite.stdout.Close()
 }
 
-// Testing Name
-func (suite *ShellTestSuite) TestName() {
-	rst := suite.plugin.name()
-	assert.Equal(suite.T(), rst, appconfig.PluginNameStandardStream)
-}
-
 // Testing Execute
 func (suite *ShellTestSuite) TestExecuteWhenCancelFlagIsShutDown() {
 	suite.mockCancelFlag.On("ShutDown").Return(true)
@@ -102,7 +95,8 @@ func (suite *ShellTestSuite) TestExecuteWhenCancelFlagIsShutDown() {
 		contracts.Configuration{},
 		suite.mockCancelFlag,
 		suite.mockIohandler,
-		suite.mockDataChannel)
+		suite.mockDataChannel,
+		mgsContracts.ShellProperties{})
 
 	suite.mockCancelFlag.AssertExpectations(suite.T())
 	suite.mockIohandler.AssertExpectations(suite.T())
@@ -118,7 +112,8 @@ func (suite *ShellTestSuite) TestExecuteWhenCancelFlagIsCancelled() {
 		contracts.Configuration{},
 		suite.mockCancelFlag,
 		suite.mockIohandler,
-		suite.mockDataChannel)
+		suite.mockDataChannel,
+		mgsContracts.ShellProperties{})
 
 	suite.mockCancelFlag.AssertExpectations(suite.T())
 	suite.mockIohandler.AssertExpectations(suite.T())
@@ -135,7 +130,7 @@ func (suite *ShellTestSuite) TestExecute() {
 
 	stdout, stdin, _ := os.Pipe()
 	stdin.Write(payload)
-	startPty = func(log log.T, runAsSsmUser bool, shellCmd string) (stdin *os.File, stdout *os.File, err error) {
+	startPty = func(log log.T, shellProps mgsContracts.ShellProperties, isSessionLogger bool) (stdin *os.File, stdout *os.File, err error) {
 		return stdin, stdout, nil
 	}
 	plugin := &ShellPlugin{
@@ -147,7 +142,8 @@ func (suite *ShellTestSuite) TestExecute() {
 		contracts.Configuration{},
 		suite.mockCancelFlag,
 		suite.mockIohandler,
-		suite.mockDataChannel)
+		suite.mockDataChannel,
+		mgsContracts.ShellProperties{})
 
 	suite.mockCancelFlag.AssertExpectations(suite.T())
 	suite.mockIohandler.AssertExpectations(suite.T())

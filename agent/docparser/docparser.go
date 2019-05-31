@@ -171,30 +171,15 @@ func replaceValidatedSessionParameters(
 	logger log.T) error {
 	var err error
 
-	sessionCommands := docContent.SessionCommands
-	if sessionCommands != nil && len(sessionCommands) != 0 {
-		resolvedSessionCommands := make([]*contracts.SessionCommand, len(sessionCommands))
-		for i, sessionCommandsConfig := range sessionCommands {
-			var rawData map[string]interface{}
-			if err = jsonutil.Remarshal(*sessionCommandsConfig, &rawData); err != nil {
-				logger.Errorf("Encountered an error while parsing document: %v", err)
-				return err
-			}
-			resolvedRawData := parameters.ReplaceParameters(rawData, params, logger)
+	if docContent.Properties != nil {
 
-			// Resolve SSM Parameters
-			if resolvedRawData, err = parameterstore.Resolve(logger, resolvedRawData); err != nil {
-				return err
-			}
+		// Replace document parameters
+		docContent.Properties = parameters.ReplaceParameters(docContent.Properties, params, logger)
 
-			var resolvedSessionCommandsConfig contracts.SessionCommand
-			if err = jsonutil.Remarshal(resolvedRawData, &resolvedSessionCommandsConfig); err != nil {
-				logger.Errorf("Encountered an error while parsing document: %v", err)
-				return err
-			}
-			resolvedSessionCommands[i] = &resolvedSessionCommandsConfig
+		// Resolve SSM parameters
+		if docContent.Properties, err = parameterstore.Resolve(logger, docContent.Properties); err != nil {
+			return err
 		}
-		docContent.SessionCommands = resolvedSessionCommands
 	}
 
 	inputs := docContent.Inputs
@@ -350,59 +335,30 @@ func (sessionDocContent *SessionDocContent) parsePluginStateForStartSession(
 
 	// getPluginConfigurations converts from PluginConfig (structure from the MGS message) to plugin.Configuration (structure expected by the plugin)
 	pluginName := sessionDocContent.SessionType
-	if len(sessionDocContent.SessionCommands) > 0 {
-		for _, sessionCommandConfig := range sessionDocContent.SessionCommands {
-			config := contracts.Configuration{
-				MessageId:                   parserInfo.MessageId,
-				BookKeepingFileName:         parserInfo.DocumentId,
-				PluginName:                  pluginName,
-				PluginID:                    pluginName,
-				DefaultWorkingDirectory:     parserInfo.DefaultWorkingDir,
-				SessionId:                   sessionId,
-				OutputS3KeyPrefix:           sessionDocContent.Inputs.S3KeyPrefix,
-				OutputS3BucketName:          sessionDocContent.Inputs.S3BucketName,
-				S3EncryptionEnabled:         sessionDocContent.Inputs.S3EncryptionEnabled,
-				OrchestrationDirectory:      fileutil.BuildPath(parserInfo.OrchestrationDir, pluginName),
-				ClientId:                    clientId,
-				CloudWatchLogGroup:          sessionDocContent.Inputs.CloudWatchLogGroupName,
-				CloudWatchEncryptionEnabled: sessionDocContent.Inputs.CloudWatchEncryptionEnabled,
-				KmsKeyId:                    sessionDocContent.Inputs.KmsKeyId,
-				Commands:                    sessionCommandConfig.Commands,
-				IsPreconditionEnabled:       true,
-				Preconditions:               sessionCommandConfig.Preconditions,
-				RunAsElevated:               sessionCommandConfig.RunAsElevated,
-			}
-
-			var plugin contracts.PluginState
-			plugin.Configuration = config
-			plugin.Id = config.PluginID
-			plugin.Name = config.PluginName
-			pluginsInfo = append(pluginsInfo, plugin)
-		}
-	} else {
-		config := contracts.Configuration{
-			MessageId:                   parserInfo.MessageId,
-			BookKeepingFileName:         parserInfo.DocumentId,
-			PluginName:                  pluginName,
-			PluginID:                    pluginName,
-			DefaultWorkingDirectory:     parserInfo.DefaultWorkingDir,
-			SessionId:                   sessionId,
-			OutputS3KeyPrefix:           sessionDocContent.Inputs.S3KeyPrefix,
-			OutputS3BucketName:          sessionDocContent.Inputs.S3BucketName,
-			S3EncryptionEnabled:         sessionDocContent.Inputs.S3EncryptionEnabled,
-			OrchestrationDirectory:      fileutil.BuildPath(parserInfo.OrchestrationDir, pluginName),
-			ClientId:                    clientId,
-			CloudWatchLogGroup:          sessionDocContent.Inputs.CloudWatchLogGroupName,
-			CloudWatchEncryptionEnabled: sessionDocContent.Inputs.CloudWatchEncryptionEnabled,
-			KmsKeyId:                    sessionDocContent.Inputs.KmsKeyId,
-		}
-
-		var plugin contracts.PluginState
-		plugin.Configuration = config
-		plugin.Id = config.PluginID
-		plugin.Name = config.PluginName
-		pluginsInfo = append(pluginsInfo, plugin)
+	config := contracts.Configuration{
+		MessageId:                   parserInfo.MessageId,
+		BookKeepingFileName:         parserInfo.DocumentId,
+		PluginName:                  pluginName,
+		PluginID:                    pluginName,
+		DefaultWorkingDirectory:     parserInfo.DefaultWorkingDir,
+		SessionId:                   sessionId,
+		OutputS3KeyPrefix:           sessionDocContent.Inputs.S3KeyPrefix,
+		OutputS3BucketName:          sessionDocContent.Inputs.S3BucketName,
+		S3EncryptionEnabled:         sessionDocContent.Inputs.S3EncryptionEnabled,
+		OrchestrationDirectory:      fileutil.BuildPath(parserInfo.OrchestrationDir, pluginName),
+		ClientId:                    clientId,
+		CloudWatchLogGroup:          sessionDocContent.Inputs.CloudWatchLogGroupName,
+		CloudWatchEncryptionEnabled: sessionDocContent.Inputs.CloudWatchEncryptionEnabled,
+		KmsKeyId:                    sessionDocContent.Inputs.KmsKeyId,
+		Properties:                  sessionDocContent.Properties,
 	}
+
+	var plugin contracts.PluginState
+	plugin.Configuration = config
+	plugin.Id = config.PluginID
+	plugin.Name = config.PluginName
+	pluginsInfo = append(pluginsInfo, plugin)
+
 	return
 }
 

@@ -49,14 +49,15 @@ const (
 )
 
 //StartPty starts pty and provides handles to stdin and stdout
-func StartPty(log log.T, runAsSsmUser bool, shellCmd string) (stdin *os.File, stdout *os.File, err error) {
+// isSessionLogger determines whether its a customer shell or shell used for logging.
+func StartPty(log log.T, shellProps mgsContracts.ShellProperties, isSessionLogger bool) (stdin *os.File, stdout *os.File, err error) {
 	log.Info("Starting pty")
 	//Start the command with a pty
 	var cmd *exec.Cmd
-	if strings.TrimSpace(shellCmd) == "" {
+	if strings.TrimSpace(shellProps.Linux.Commands) == "" || isSessionLogger {
 		cmd = exec.Command("sh")
 	} else {
-		commandArgs := append(utility.ShellPluginCommandArgs, shellCmd)
+		commandArgs := append(utility.ShellPluginCommandArgs, shellProps.Linux.Commands)
 		cmd = exec.Command("sh", commandArgs...)
 	}
 
@@ -75,7 +76,7 @@ func StartPty(log log.T, runAsSsmUser bool, shellCmd string) (stdin *os.File, st
 	}
 
 	// Get the uid and gid of the runas user.
-	if runAsSsmUser {
+	if !shellProps.Linux.RunAsElevated && !isSessionLogger {
 		// Create ssm-user before starting a session.
 		u := &utility.SessionUtil{}
 		u.CreateLocalAdminUser(log)
@@ -193,7 +194,7 @@ func getUserCredentials(log log.T) (uint32, uint32, []uint32, error) {
 
 // generateLogData generates a log file with the executed commands.
 func (p *ShellPlugin) generateLogData(log log.T, config agentContracts.Configuration) error {
-	shadowShellInput, _, err := StartPty(log, false, "")
+	shadowShellInput, _, err := StartPty(log, mgsContracts.ShellProperties{}, true)
 	if err != nil {
 		return err
 	}
