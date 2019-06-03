@@ -1,5 +1,12 @@
 Latest
 ===============
+- Bug fix for escaping special characters while collecting application inventory in windows 
+- Bug fix for token validation for aws:downloadContent plugin
+- Check if log group exists before uploading Session Manager logs to CloudWatch
+- Bug fix for broken S3 urls when using custom documents
+
+2.3.634.0
+===============
 - Disable appconfig to load credential from specific profile path, add EC2 credentials as the default fallback
 - Remove sudoers file creation logic if ssm-user already exists
 - Enable supplementary groups for ssm-user on Linux
