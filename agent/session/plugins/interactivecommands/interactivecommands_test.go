@@ -26,7 +26,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	mgsContracts "github.com/aws/amazon-ssm-agent/agent/session/contracts"
 	dataChannelMock "github.com/aws/amazon-ssm-agent/agent/session/datachannel/mocks"
-	"github.com/aws/amazon-ssm-agent/agent/session/plugins/shell"
+	"github.com/aws/amazon-ssm-agent/agent/session/shell"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
