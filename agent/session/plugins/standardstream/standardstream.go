@@ -23,7 +23,7 @@ import (
 	mgsContracts "github.com/aws/amazon-ssm-agent/agent/session/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/session/datachannel"
 	"github.com/aws/amazon-ssm-agent/agent/session/plugins/sessionplugin"
-	"github.com/aws/amazon-ssm-agent/agent/session/plugins/shell"
+	"github.com/aws/amazon-ssm-agent/agent/session/shell"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 )
 
