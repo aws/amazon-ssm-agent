@@ -312,9 +312,6 @@ func convertToApplicationData(cmdOutput, architecture string) (data []model.Appl
 	// remove newlines because powershell 2.0 sometimes inserts newlines every 80 characters or so
 	str = cleanupNewLines(str)
 
-	// escapes special characters which can cause json unmarshal to throw errors
-	str = cleanupJSONField(str)
-
 	//unmarshall json string & add architecture information
 	if err = json.Unmarshal([]byte(str), &data); err == nil {
 
