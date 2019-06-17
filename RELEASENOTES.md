@@ -1,6 +1,6 @@
 Latest
 ===============
-- Bug fix for escaping special characters while collecting application inventory in windows 
+- Bug fix for Session Manager when handling line endings on Windows platform
 - Bug fix for token validation for aws:downloadContent plugin
 - Check if log group exists before uploading Session Manager logs to CloudWatch
 - Bug fix for broken S3 urls when using custom documents
