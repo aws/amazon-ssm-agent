@@ -1,5 +1,10 @@
 Latest
 ===============
+- Add Session Manager InteractiveCommands plugin	
+- Bug fix for log formatting issue for session manager
+
+2.3.662.0
+===============
 - Bug fix for Session Manager when handling line endings on Windows platform
 - Bug fix for token validation for aws:downloadContent plugin
 - Check if log group exists before uploading Session Manager logs to CloudWatch
