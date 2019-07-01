@@ -85,6 +85,8 @@ type Configuration struct {
 	SessionId                   string
 	ClientId                    string
 	KmsKeyId                    string
+	RunAsEnabled                bool
+	RunAsUser                   string
 }
 
 // Plugin wraps the plugin configuration and plugin result.

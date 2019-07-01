@@ -50,7 +50,11 @@ const (
 
 //StartPty starts pty and provides handles to stdin and stdout
 // isSessionLogger determines whether its a customer shell or shell used for logging.
-func StartPty(log log.T, shellProps mgsContracts.ShellProperties, isSessionLogger bool) (stdin *os.File, stdout *os.File, err error) {
+func StartPty(
+	log log.T,
+	shellProps mgsContracts.ShellProperties,
+	isSessionLogger bool,
+	config agentContracts.Configuration) (stdin *os.File, stdout *os.File, err error) {
 	log.Info("Starting pty")
 	//Start the command with a pty
 	var cmd *exec.Cmd
@@ -75,13 +79,33 @@ func StartPty(log log.T, shellProps mgsContracts.ShellProperties, isSessionLogge
 		cmd.Env = append(cmd.Env, langEnvVariable)
 	}
 
-	// Get the uid and gid of the runas user.
 	if !shellProps.Linux.RunAsElevated && !isSessionLogger {
-		// Create ssm-user before starting a session.
-		u := &utility.SessionUtil{}
-		u.CreateLocalAdminUser(log)
+		// We get here only when its a customer shell that needs to be started in a specific user mode.
 
-		uid, gid, groups, err := getUserCredentials(log)
+		var sessionUser string
+		u := &utility.SessionUtil{}
+		if config.RunAsEnabled {
+			if strings.TrimSpace(config.RunAsUser) == "" {
+				return nil, nil, errors.New("please set the RunAs default user")
+			}
+
+			// Check if user exists
+			if userExists, _ := u.DoesUserExist(config.RunAsUser); !userExists {
+				// if user does not exist, fail the session
+				return nil, nil, fmt.Errorf("failed to start pty since RunAs user %s does not exist", config.RunAsUser)
+			}
+
+			sessionUser = config.RunAsUser
+		} else {
+			// Start as ssm-user
+			// Create ssm-user before starting a session.
+			u.CreateLocalAdminUser(log)
+
+			sessionUser = appconfig.DefaultRunAsUserName
+		}
+
+		// Get the uid and gid of the runas user.
+		uid, gid, groups, err := getUserCredentials(log, sessionUser)
 		if err != nil {
 			return nil, nil, err
 		}
@@ -121,41 +145,41 @@ func SetSize(log log.T, ws_col, ws_row uint32) (err error) {
 }
 
 // getUserCredentials returns the uid, gid and groups associated to the runas user.
-func getUserCredentials(log log.T) (uint32, uint32, []uint32, error) {
-	uidCmdArgs := append(utility.ShellPluginCommandArgs, fmt.Sprintf("id -u %s", appconfig.DefaultRunAsUserName))
+func getUserCredentials(log log.T, sessionUser string) (uint32, uint32, []uint32, error) {
+	uidCmdArgs := append(utility.ShellPluginCommandArgs, fmt.Sprintf("id -u %s", sessionUser))
 	cmd := exec.Command(utility.ShellPluginCommandName, uidCmdArgs...)
 	out, err := cmd.Output()
 	if err != nil {
-		log.Errorf("Failed to retrieve uid for %s: %v", appconfig.DefaultRunAsUserName, err)
+		log.Errorf("Failed to retrieve uid for %s: %v", sessionUser, err)
 		return 0, 0, nil, err
 	}
 
 	uid, err := strconv.Atoi(strings.TrimSpace(string(out)))
 	if err != nil {
-		log.Errorf("%s not found: %v", appconfig.DefaultRunAsUserName, err)
+		log.Errorf("%s not found: %v", sessionUser, err)
 		return 0, 0, nil, err
 	}
 
-	gidCmdArgs := append(utility.ShellPluginCommandArgs, fmt.Sprintf("id -g %s", appconfig.DefaultRunAsUserName))
+	gidCmdArgs := append(utility.ShellPluginCommandArgs, fmt.Sprintf("id -g %s", sessionUser))
 	cmd = exec.Command(utility.ShellPluginCommandName, gidCmdArgs...)
 	out, err = cmd.Output()
 	if err != nil {
-		log.Errorf("Failed to retrieve gid for %s: %v", appconfig.DefaultRunAsUserName, err)
+		log.Errorf("Failed to retrieve gid for %s: %v", sessionUser, err)
 		return 0, 0, nil, err
 	}
 
 	gid, err := strconv.Atoi(strings.TrimSpace(string(out)))
 	if err != nil {
-		log.Errorf("%s not found: %v", appconfig.DefaultRunAsUserName, err)
+		log.Errorf("%s not found: %v", sessionUser, err)
 		return 0, 0, nil, err
 	}
 
 	// Get the list of associated groups
-	groupNamesCmdArgs := append(utility.ShellPluginCommandArgs, fmt.Sprintf("groups %s", appconfig.DefaultRunAsUserName))
+	groupNamesCmdArgs := append(utility.ShellPluginCommandArgs, fmt.Sprintf("groups %s", sessionUser))
 	cmd = exec.Command(utility.ShellPluginCommandName, groupNamesCmdArgs...)
 	out, err = cmd.Output()
 	if err != nil {
-		log.Errorf("Failed to retrieve groups for %s: %v", appconfig.DefaultRunAsUserName, err)
+		log.Errorf("Failed to retrieve groups for %s: %v", sessionUser, err)
 		return 0, 0, nil, err
 	}
 
@@ -194,7 +218,7 @@ func getUserCredentials(log log.T) (uint32, uint32, []uint32, error) {
 
 // generateLogData generates a log file with the executed commands.
 func (p *ShellPlugin) generateLogData(log log.T, config agentContracts.Configuration) error {
-	shadowShellInput, _, err := StartPty(log, mgsContracts.ShellProperties{}, true)
+	shadowShellInput, _, err := StartPty(log, mgsContracts.ShellProperties{}, true, config)
 	if err != nil {
 		return err
 	}

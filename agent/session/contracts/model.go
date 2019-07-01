@@ -103,6 +103,7 @@ type AgentTaskPayload struct {
 	DocumentContent contracts.SessionDocumentContent `json:"DocumentContent"`
 	SessionId       string                           `json:"SessionId"`
 	Parameters      map[string]interface{}           `json:"Parameters"`
+	RunAsUser       string                           `json:"RunAsUser"`
 }
 
 // AcknowledgeContent is used to inform the sender of an acknowledge message that the message has been received.

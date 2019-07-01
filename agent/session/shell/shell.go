@@ -112,8 +112,8 @@ func (p *ShellPlugin) Execute(context context.T,
 	}
 }
 
-var startPty = func(log log.T, shellProps mgsContracts.ShellProperties, isSessionLogger bool) (stdin *os.File, stdout *os.File, err error) {
-	return StartPty(log, shellProps, isSessionLogger)
+var startPty = func(log log.T, shellProps mgsContracts.ShellProperties, isSessionLogger bool, config agentContracts.Configuration) (stdin *os.File, stdout *os.File, err error) {
+	return StartPty(log, shellProps, isSessionLogger, config)
 }
 
 // execute starts pseudo terminal.
@@ -146,7 +146,7 @@ func (p *ShellPlugin) execute(context context.T,
 		return
 	}
 
-	p.stdin, p.stdout, err = startPty(log, shellProps, false)
+	p.stdin, p.stdout, err = startPty(log, shellProps, false, config)
 	if err != nil {
 		errorString := fmt.Errorf("Unable to start shell: %s", err)
 		log.Error(errorString)

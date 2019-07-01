@@ -16,6 +16,10 @@
 package docparser
 
 import (
+	"fmt"
+	"path/filepath"
+	"strings"
+
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
@@ -24,10 +28,6 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/parameters"
 	"github.com/aws/amazon-ssm-agent/agent/parameterstore"
 	"github.com/aws/amazon-ssm-agent/agent/updateutil"
-
-	"fmt"
-	"path/filepath"
-	"strings"
 )
 
 const (
@@ -138,7 +138,7 @@ func (sessionDocContent *SessionDocContent) ParseDocument(log log.T,
 	resolvedDocContent, _ := jsonutil.MarshalIndent(*sessionDocContent)
 	log.Debugf("Resolved session document content %s", resolvedDocContent)
 
-	return sessionDocContent.parsePluginStateForStartSession(parserInfo, docInfo.DocumentID, docInfo.ClientId)
+	return sessionDocContent.parsePluginStateForStartSession(parserInfo, docInfo.DocumentID, docInfo.ClientId, docInfo.RunAsUser)
 }
 
 // validateAndReplaceSessionDocumentParameters validates the parameters and modifies the document content by replacing all parameters with their actual values.
@@ -331,10 +331,18 @@ func parsePluginStateForV20Schema(
 func (sessionDocContent *SessionDocContent) parsePluginStateForStartSession(
 	parserInfo DocumentParserInfo,
 	sessionId string,
-	clientId string) (pluginsInfo []contracts.PluginState, err error) {
+	clientId string,
+	runAsUserFromIam string) (pluginsInfo []contracts.PluginState, err error) {
 
 	// getPluginConfigurations converts from PluginConfig (structure from the MGS message) to plugin.Configuration (structure expected by the plugin)
 	pluginName := sessionDocContent.SessionType
+
+	// decides which user to use. User from IAM principal always has higher priority than the default one.
+	runAsUser := sessionDocContent.Inputs.RunAsDefaultUser
+	if strings.TrimSpace(runAsUserFromIam) != "" {
+		runAsUser = runAsUserFromIam
+	}
+
 	config := contracts.Configuration{
 		MessageId:                   parserInfo.MessageId,
 		BookKeepingFileName:         parserInfo.DocumentId,
@@ -351,6 +359,8 @@ func (sessionDocContent *SessionDocContent) parsePluginStateForStartSession(
 		CloudWatchEncryptionEnabled: sessionDocContent.Inputs.CloudWatchEncryptionEnabled,
 		KmsKeyId:                    sessionDocContent.Inputs.KmsKeyId,
 		Properties:                  sessionDocContent.Properties,
+		RunAsEnabled:                sessionDocContent.Inputs.RunAsEnabled,
+		RunAsUser:                   runAsUser,
 	}
 
 	var plugin contracts.PluginState

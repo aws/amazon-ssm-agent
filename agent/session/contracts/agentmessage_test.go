@@ -192,6 +192,7 @@ func TestParseAgentMessage(t *testing.T) {
 		"regional settings for Session Manager\",\"sessionType\":\"Standard_Stream\",\"parameters\":{}," +
 		"\"properties\":{\"windows\":{\"commands\":\"date\",\"runAsElevated\":true},\"linux\":{\"commands\":\"ls\",\"runAsElevated\":true}}}," +
 		"\"sessionId\":\"44da928d-1200-4501-a38a-f10d72e38cc4\"," +
+		"\"runAsUser\":\"test-user\"," +
 		"\"DataChannelToken\":\"AAEAAdDZESkS1C2/AWLlDccG608LYJUJZJLkxcjxl0x1T70kAAAAAFrozgJYbJT2fY6yQPDqQZhygozZ83LhsoYdP7VWmuo\"}"
 	mgsPayload := MGSPayload{
 		Payload:       string(agentJson),
@@ -237,6 +238,7 @@ func TestParseAgentMessage(t *testing.T) {
 	assert.Equal(t, contracts.StartSession, docState.DocumentType)
 	assert.Equal(t, "44da928d-1200-4501-a38a-f10d72e38cc4", pluginInfo[0].Configuration.SessionId)
 	assert.Equal(t, shellProps, pluginInfo[0].Configuration.Properties)
+	assert.Equal(t, "test-user", pluginInfo[0].Configuration.RunAsUser)
 }
 
 func TestValidateReturnsErrorWithEmptyAgentMessage(t *testing.T) {
