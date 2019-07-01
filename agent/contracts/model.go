@@ -200,6 +200,8 @@ type SessionInputs struct {
 	CloudWatchLogGroupName      string `json:"cloudWatchLogGroupName" yaml:"cloudWatchLogGroupName"`
 	CloudWatchEncryptionEnabled bool   `json:"cloudWatchEncryptionEnabled" yaml:"cloudWatchEncryptionEnabled"`
 	KmsKeyId                    string `json:"kmsKeyId" yaml:"kmsKeyId"`
+	RunAsEnabled                bool   `json:"runAsEnabled" yaml:"runAsEnabled"`
+	RunAsDefaultUser            string `json:"runAsDefaultUser" yaml:"runAsDefaultUser"`
 }
 
 // SessionDocumentContent object which represents ssm session content.

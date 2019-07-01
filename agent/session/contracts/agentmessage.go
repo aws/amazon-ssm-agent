@@ -351,6 +351,7 @@ func buildDocumentInfo(
 		RunID:          times.ToIsoDashUTC(times.DefaultClock.Now()),
 		DocumentName:   parsedMessagePayload.DocumentName,
 		DocumentStatus: contracts.ResultStatusInProgress,
+		RunAsUser:      parsedMessagePayload.RunAsUser,
 	}
 }
 

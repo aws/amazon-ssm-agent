@@ -130,7 +130,7 @@ func (suite *ShellTestSuite) TestExecute() {
 
 	stdout, stdin, _ := os.Pipe()
 	stdin.Write(payload)
-	startPty = func(log log.T, shellProps mgsContracts.ShellProperties, isSessionLogger bool) (stdin *os.File, stdout *os.File, err error) {
+	startPty = func(log log.T, shellProps mgsContracts.ShellProperties, isSessionLogger bool, config contracts.Configuration) (stdin *os.File, stdout *os.File, err error) {
 		return stdin, stdout, nil
 	}
 	plugin := &ShellPlugin{

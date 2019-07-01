@@ -69,7 +69,11 @@ var (
 
 //StartPty starts winpty agent and provides handles to stdin and stdout.
 // isSessionLogger determines whether its a customer shell or shell used for logging.
-func StartPty(log log.T, shellProps mgsContracts.ShellProperties, isSessionLogger bool) (stdin *os.File, stdout *os.File, err error) {
+func StartPty(
+	log log.T,
+	shellProps mgsContracts.ShellProperties,
+	isSessionLogger bool,
+	config agentContracts.Configuration) (stdin *os.File, stdout *os.File, err error) {
 	log.Info("Starting winpty")
 	if _, err := os.Stat(winptyDllFilePath); os.IsNotExist(err) {
 		return nil, nil, fmt.Errorf("Missing %s file.", winptyDllFilePath)
@@ -249,12 +253,12 @@ func (p *ShellPlugin) generateLogData(log log.T, config agentContracts.Configura
 	// Generate logs based on the OS version number
 	// https://docs.microsoft.com/en-us/windows/desktop/SysInfo/operating-system-version
 	if osMajorVersion >= 10 {
-		if err = generateTranscriptFile(log, p.logFilePath, p.ipcFilePath, true); err != nil {
+		if err = generateTranscriptFile(log, p.logFilePath, p.ipcFilePath, true, config); err != nil {
 			return err
 		}
 	} else if osMajorVersion >= 6 && osMinorVersion >= 3 {
 		transcriptFile := filepath.Join(config.OrchestrationDirectory, "transcriptFile"+mgsConfig.LogFileExtension)
-		if err = generateTranscriptFile(log, transcriptFile, p.ipcFilePath, false); err != nil {
+		if err = generateTranscriptFile(log, transcriptFile, p.ipcFilePath, false, config); err != nil {
 			return err
 		}
 		cleanControlCharacters(transcriptFile, p.logFilePath)
@@ -266,8 +270,13 @@ func (p *ShellPlugin) generateLogData(log log.T, config agentContracts.Configura
 }
 
 // generateTranscriptFile generates a transcript file using PowerShell
-func generateTranscriptFile(log log.T, transcriptFile string, loggerFile string, enableVirtualTerminalProcessingForWindows bool) error {
-	shadowShellInput, _, err := StartPty(log, mgsContracts.ShellProperties{}, true)
+func generateTranscriptFile(
+	log log.T,
+	transcriptFile string,
+	loggerFile string,
+	enableVirtualTerminalProcessingForWindows bool,
+	config agentContracts.Configuration) error {
+	shadowShellInput, _, err := StartPty(log, mgsContracts.ShellProperties{}, true, config)
 	if err != nil {
 		return err
 	}
