@@ -1,5 +1,10 @@
 Latest
 ===============
+- Add Port plugin for SSH/SCP
+- Add support for Session Manager RunAs functionality on Linux platform
+
+2.3.668.0
+===============
 - Add Session Manager InteractiveCommands plugin	
 - Bug fix for log formatting issue for session manager
 
