@@ -45,7 +45,7 @@ const (
 	startRecordSessionCmd = "script"
 	newLineCharacter      = "\n"
 	screenBufferSizeCmd   = "screen -h %d%s"
-	homeEnvVariable       = "HOME=/home/" + appconfig.DefaultRunAsUserName
+	homeEnvVariable       = "HOME=/home/"
 )
 
 //StartPty starts pty and provides handles to stdin and stdout
@@ -67,10 +67,7 @@ func StartPty(
 
 	//TERM is set as linux by pty which has an issue where vi editor screen does not get cleared.
 	//Setting TERM as xterm-256color as used by standard terminals to fix this issue
-	cmd.Env = append(os.Environ(),
-		termEnvVariable,
-		homeEnvVariable,
-	)
+	cmd.Env = append(os.Environ(), termEnvVariable)
 
 	//If LANG environment variable is not set, shell defaults to POSIX which can contain 256 single-byte characters.
 	//Setting C.UTF-8 as default LANG environment variable as Session Manager supports UTF-8 encoding only.
@@ -111,6 +108,10 @@ func StartPty(
 		}
 		cmd.SysProcAttr = &syscall.SysProcAttr{}
 		cmd.SysProcAttr.Credential = &syscall.Credential{Uid: uid, Gid: gid, Groups: groups, NoSetGroups: false}
+
+		// Setting home environment variable for RunAs user
+		runAsUserHomeEnvVariable := homeEnvVariable + sessionUser
+		cmd.Env = append(cmd.Env, runAsUserHomeEnvVariable)
 	}
 
 	ptyFile, err = pty.Start(cmd)
