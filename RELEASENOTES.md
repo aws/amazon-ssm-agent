@@ -1,5 +1,9 @@
 Latest
 ===============
+- Added a new Inventory gatherer AWS:BillingInfo which will gather the billing product ids for LicenseIncluded and Marketplace instance`
+
+2.3.672.0
+===============
 - Add Port plugin for SSH/SCP
 - Add support for Session Manager RunAs functionality on Linux platform
 
