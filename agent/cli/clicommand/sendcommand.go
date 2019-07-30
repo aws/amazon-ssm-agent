@@ -174,18 +174,20 @@ func (SendOfflineCommand) loadContent(rawContent string) (error, contracts.Docum
 
 //validateContent checks to see that content has at least one runtimeConfig for 1.2 or mainSteps for 2.0 and no unbound parameters
 func (SendOfflineCommand) validateContent(content contracts.DocumentContent) error {
-	// TODO:MF: also check for unbound parameters
-	if content.SchemaVersion == "1.2" {
+	switch content.SchemaVersion {
+	case "1.2":
 		if len(content.RuntimeConfig) == 0 {
 			return fmt.Errorf("runtimeConfig cannot be empty")
 		}
-	} else if content.SchemaVersion == "2.0" {
+	case "2.0", "2.0.1", "2.0.2", "2.0.3", "2.2":
 		if len(content.MainSteps) == 0 {
 			return fmt.Errorf("mainSteps cannot be empty")
 		}
-	} else {
+	default:
 		return fmt.Errorf("unsupported schema version %v", content.SchemaVersion)
+
 	}
+
 	return nil
 }
 
