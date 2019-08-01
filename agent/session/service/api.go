@@ -51,6 +51,9 @@ type OpenControlChannelInput struct {
 
 	// AgentVersion is a required field
 	AgentVersion *string `json:"AgentVersion" min:"1" type:"string" required:"true"`
+
+	// PlatformType is a required field
+	PlatformType *string `json:"PlatformType" min:"1" type:"string" required:"true"`
 }
 
 type CreateDataChannelInput struct {
