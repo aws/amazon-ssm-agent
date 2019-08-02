@@ -1,5 +1,10 @@
 Latest
 ===============
+- Bug fix for runPowershellScript plugin on linux platform
+- Add support for document 2.x version to ssm-cli 
+
+2.3.680.0
+===============
 - Added a new Inventory gatherer AWS:BillingInfo which will gather the billing product ids for LicenseIncluded and Marketplace instance
 
 2.3.672.0
