@@ -15,6 +15,7 @@
 package shell
 
 import (
+	"bytes"
 	"io/ioutil"
 	"os"
 	"testing"
@@ -178,6 +179,27 @@ func (suite *ShellTestSuite) TestWritePump() {
 
 	// Assert if SendStreamDataMessage function was called with same data from stdout
 	suite.mockDataChannel.AssertExpectations(suite.T())
+}
+
+// TestProcessStdoutData tests stdout bytes containing utf8 encoded characters
+func (suite *ShellTestSuite) TestProcessStdoutData() {
+	stdoutBytes := []byte("\x80 is a utf8 character.\xc9")
+	var unprocessedBuf bytes.Buffer
+	unprocessedBuf.Write([]byte("\xc8"))
+
+	file, _ := ioutil.TempFile("/tmp", "file")
+	defer os.Remove(file.Name())
+
+	plugin := &ShellPlugin{
+		dataChannel: suite.mockDataChannel,
+	}
+
+	suite.mockDataChannel.On("SendStreamDataMessage", suite.mockLog, mgsContracts.Output, []byte("Ȁ is a utf8 character.")).Return(nil)
+	outputBuf, err := plugin.processStdoutData(suite.mockLog, stdoutBytes, len(stdoutBytes), unprocessedBuf, file)
+
+	suite.mockDataChannel.AssertExpectations(suite.T())
+	assert.Equal(suite.T(), []byte("\xc9"), outputBuf.Bytes())
+	assert.Nil(suite.T(), err)
 }
 
 func (suite *ShellTestSuite) TestProcessStreamMessage() {
