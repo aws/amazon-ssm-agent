@@ -159,7 +159,38 @@ func (suite *ShellTestSuite) TestWritePump() {
 	stdin.Write(payload)
 
 	//suite.mockDataChannel := &dataChannelMock.IDataChannel{}
-	suite.mockDataChannel.On("SendStreamDataMessage", mock.Anything, mock.Anything, mock.Anything).Return(nil)
+	suite.mockDataChannel.On("SendStreamDataMessage", mock.Anything, mock.Anything, payload).Return(nil)
+	suite.mockDataChannel.On("SendAgentSessionStateMessage", mock.Anything, mgsContracts.Terminating).Return(nil)
+
+	plugin := &ShellPlugin{
+		stdout:      stdout,
+		ipcFilePath: "test.log",
+		dataChannel: suite.mockDataChannel,
+	}
+
+	// Spawning a separate go routine to close read and write pipes after a few seconds.
+	// This is required as plugin.writePump() has a for loop which will continuosly read data from pipe until it is closed.
+	go func() {
+		time.Sleep(1800 * time.Millisecond)
+		stdin.Close()
+		stdout.Close()
+	}()
+	plugin.writePump(suite.mockLog)
+
+	// Assert if SendStreamDataMessage function was called with same data from stdout
+	suite.mockDataChannel.AssertExpectations(suite.T())
+}
+
+// Testing writepump for scenario when shell can give non utf8 characters
+func (suite *ShellTestSuite) TestWritePumpForInvalidUtf8Character() {
+	// invalidUtf8Payload contains 200 which is an invalid utf8 character
+	invalidUtf8Payload := []byte{72, 200, 108, 108, 111}
+
+	stdout, stdin, _ := os.Pipe()
+	stdin.Write(invalidUtf8Payload)
+
+	//suite.mockDataChannel := &dataChannelMock.IDataChannel{}
+	suite.mockDataChannel.On("SendStreamDataMessage", mock.Anything, mock.Anything, invalidUtf8Payload).Return(nil)
 	suite.mockDataChannel.On("SendAgentSessionStateMessage", mock.Anything, mgsContracts.Terminating).Return(nil)
 
 	plugin := &ShellPlugin{
