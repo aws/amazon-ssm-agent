@@ -301,17 +301,29 @@ func (p *ShellPlugin) processStdoutData(
 	unprocessedBytesLen := len(unprocessedBytes)
 	i := 0
 	for i < unprocessedBytesLen {
-		//read stdout bytes as Unicode code points (rune in go)
+		// read stdout bytes as utf8 encoded unicode character
 		stdoutRune, stdoutRuneLen, err := runeReader.ReadRune()
 		if err != nil {
 			return processedBuf, fmt.Errorf("failed to read rune from reader: %s", err)
 		}
+
+		// Invalid utf8 encoded character results into RuneError.
 		if stdoutRune == utf8.RuneError {
-			runeReader.UnreadRune()
-			break
+
+			// If invalid character is encountered within last 3 bytes of buffer (utf8 takes 1-4 bytes for a unicode character),
+			// then break the loop and leave these bytes in unprocessed buffer for them to get processed later with more bytes returned by stdout.
+			if unprocessedBytesLen-i < utf8.UTFMax {
+				runeReader.UnreadRune()
+				break
+			}
+
+			// If invalid character is encountered beyond last 3 bytes of buffer, then the character at ith position is invalid utf8 character.
+			// Add invalid byte at ith position to processedBuf in such case and return to client to handle display of invalid character.
+			processedBuf.Write(unprocessedBytes[i : i+1])
+		} else {
+			processedBuf.WriteRune(stdoutRune)
 		}
 		i += stdoutRuneLen
-		processedBuf.WriteRune(stdoutRune)
 	}
 
 	if err := p.dataChannel.SendStreamDataMessage(log, mgsContracts.Output, processedBuf.Bytes()); err != nil {
