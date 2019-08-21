@@ -1,5 +1,9 @@
 Latest
 ===============
+- Send platform type information in controlChannel input 
+
+2.3.687.0
+===============
 - Bug fix for runPowershellScript plugin on linux platform
 - Add support for document 2.x version to ssm-cli 
 
