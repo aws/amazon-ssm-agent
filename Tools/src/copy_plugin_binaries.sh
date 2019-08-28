@@ -5,8 +5,8 @@ echo "****************************************"
 
 BIN_FOLDER="$BGO_SPACE/bin/"
 
-CLOUDWATCH_FOLDER="$BIN_FOLDER/awsCloudwatch/"
-SESSION_MANAGER_SHELL_FOLDER="$BIN_FOLDER/SessionManagerShell/"
+CLOUDWATCH_FOLDER="${BIN_FOLDER}awsCloudwatch/"
+SESSION_MANAGER_SHELL_FOLDER="${BIN_FOLDER}SessionManagerShell/"
 
 brazil_build=$1
 

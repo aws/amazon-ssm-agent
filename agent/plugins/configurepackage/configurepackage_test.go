@@ -85,6 +85,16 @@ func createStubPluginInputUninstallCurrent() *ConfigurePackagePluginInput {
 	return &input
 }
 
+func createStubPluginInputUpdate() *ConfigurePackagePluginInput {
+	input := ConfigurePackagePluginInput{}
+
+	input.Version = "0.0.2"
+	input.Name = "PVDriver"
+	input.Action = "Update"
+
+	return &input
+}
+
 func createStubPluginInputFoo() *ConfigurePackagePluginInput {
 	input := ConfigurePackagePluginInput{}
 
@@ -135,7 +145,7 @@ func TestPrepareNewInstall(t *testing.T) {
 	tracer := trace.NewTracer(log.NewMockLog())
 	output := &trace.PluginOutputTrace{Tracer: tracer}
 
-	inst, uninst, installState, installedVersion := prepareConfigurePackage(
+	inst, uninst, isUpdateInPlace, installState, installedVersion := prepareConfigurePackage(
 		tracer,
 		buildConfigSimple(pluginInformation),
 		repoMock,
@@ -148,6 +158,7 @@ func TestPrepareNewInstall(t *testing.T) {
 
 	assert.NotNil(t, inst)
 	assert.Nil(t, uninst)
+	assert.False(t, isUpdateInPlace)
 	assert.Equal(t, localpackages.None, installState)
 	assert.Empty(t, installedVersion)
 	assert.Equal(t, 0, output.GetExitCode())
@@ -168,7 +179,7 @@ func TestAlreadyInstalled(t *testing.T) {
 	tracer := trace.NewTracer(log.NewMockLog())
 	output := &trace.PluginOutputTrace{Tracer: tracer}
 
-	inst, uninst, installState, installedVersion := prepareConfigurePackage(
+	inst, uninst, isUpdateInPlace, installState, installedVersion := prepareConfigurePackage(
 		tracer,
 		buildConfigSimple(pluginInformation),
 		repoMock,
@@ -181,6 +192,7 @@ func TestAlreadyInstalled(t *testing.T) {
 
 	assert.NotNil(t, inst)
 	assert.Nil(t, uninst)
+	assert.False(t, isUpdateInPlace)
 	assert.Equal(t, localpackages.Installed, installState)
 	assert.Equal(t, "0.0.1", installedVersion)
 	assert.Equal(t, 0, output.GetExitCode())
@@ -201,7 +213,7 @@ func TestPrepareUpgrade(t *testing.T) {
 	tracer := trace.NewTracer(log.NewMockLog())
 	output := &trace.PluginOutputTrace{Tracer: tracer}
 
-	inst, uninst, installState, installedVersion := prepareConfigurePackage(
+	inst, uninst, isUpdateInPlace, installState, installedVersion := prepareConfigurePackage(
 		tracer,
 		buildConfigSimple(pluginInformation),
 		repoMock,
@@ -214,6 +226,7 @@ func TestPrepareUpgrade(t *testing.T) {
 
 	assert.NotNil(t, inst)
 	assert.NotNil(t, uninst)
+	assert.False(t, isUpdateInPlace)
 	assert.Equal(t, localpackages.Installed, installState)
 	assert.NotEmpty(t, installedVersion)
 	assert.Equal(t, 0, output.GetExitCode())
@@ -234,7 +247,7 @@ func TestPrepareUninstall(t *testing.T) {
 	tracer := trace.NewTracer(log.NewMockLog())
 	output := &trace.PluginOutputTrace{Tracer: tracer}
 
-	inst, uninst, installState, installedVersion := prepareConfigurePackage(
+	inst, uninst, isUpdateInPlace, installState, installedVersion := prepareConfigurePackage(
 		tracer,
 		buildConfigSimple(pluginInformation),
 		repoMock,
@@ -247,6 +260,7 @@ func TestPrepareUninstall(t *testing.T) {
 
 	assert.Nil(t, inst)
 	assert.NotNil(t, uninst)
+	assert.False(t, isUpdateInPlace)
 	assert.Equal(t, localpackages.Installed, installState)
 	assert.NotEmpty(t, installedVersion)
 	assert.Equal(t, 0, output.GetExitCode())
@@ -267,7 +281,7 @@ func TestPrepareUninstallCurrent(t *testing.T) {
 	tracer := trace.NewTracer(log.NewMockLog())
 	output := &trace.PluginOutputTrace{Tracer: tracer}
 
-	inst, uninst, installState, installedVersion := prepareConfigurePackage(
+	inst, uninst, isUpdateInPlace, installState, installedVersion := prepareConfigurePackage(
 		tracer,
 		buildConfigSimple(pluginInformation),
 		repoMock,
@@ -280,6 +294,7 @@ func TestPrepareUninstallCurrent(t *testing.T) {
 
 	assert.Nil(t, inst)
 	assert.NotNil(t, uninst)
+	assert.False(t, isUpdateInPlace)
 	assert.Equal(t, localpackages.Installed, installState)
 	assert.NotEmpty(t, installedVersion)
 	assert.Equal(t, 0, output.GetExitCode())
@@ -300,7 +315,7 @@ func TestPrepareUninstallCurrentWithLatest(t *testing.T) {
 	tracer := trace.NewTracer(log.NewMockLog())
 	output := &trace.PluginOutputTrace{Tracer: tracer}
 
-	inst, uninst, installState, installedVersion := prepareConfigurePackage(
+	inst, uninst, isUpdateInPlace, installState, installedVersion := prepareConfigurePackage(
 		tracer,
 		buildConfigSimple(pluginInformation),
 		repoMock,
@@ -313,6 +328,7 @@ func TestPrepareUninstallCurrentWithLatest(t *testing.T) {
 
 	assert.Nil(t, inst)
 	assert.NotNil(t, uninst)
+	assert.False(t, isUpdateInPlace)
 	assert.Equal(t, localpackages.Installed, installState)
 	assert.NotEmpty(t, installedVersion)
 	assert.Equal(t, 0, output.GetExitCode())
@@ -333,7 +349,7 @@ func TestPrepareUninstallWrongVersion(t *testing.T) {
 	tracer := trace.NewTracer(log.NewMockLog())
 	output := &trace.PluginOutputTrace{Tracer: tracer}
 
-	inst, uninst, installState, installedVersion := prepareConfigurePackage(
+	inst, uninst, isUpdateInPlace, installState, installedVersion := prepareConfigurePackage(
 		tracer,
 		buildConfigSimple(pluginInformation),
 		repoMock,
@@ -346,7 +362,113 @@ func TestPrepareUninstallWrongVersion(t *testing.T) {
 
 	assert.Nil(t, inst)
 	assert.Nil(t, uninst)
+	assert.False(t, isUpdateInPlace)
 	assert.Equal(t, localpackages.None, installState)
+	assert.NotEmpty(t, installedVersion)
+	assert.Equal(t, 0, output.GetExitCode())
+	assert.Empty(t, tracer.ToPluginOutput().GetStderr())
+
+	installerMock.AssertExpectations(t)
+}
+
+func TestPrepareUpdate(t *testing.T) {
+	// file stubs are needed for ensurePackage because it handles the unzip
+	stubs := setSuccessStubs()
+	defer stubs.Clear()
+
+	pluginInformation := createStubPluginInputUpdate()
+	installerMock := installerNotCalledMock()
+	repoMock := repoUpdateMock(pluginInformation, installerMock)
+	serviceMock := serviceUpdadeMock()
+	tracer := trace.NewTracer(log.NewMockLog())
+	output := &trace.PluginOutputTrace{Tracer: tracer}
+
+	inst, uninst, isUpdateInPlace, installState, installedVersion := prepareConfigurePackage(
+		tracer,
+		buildConfigSimple(pluginInformation),
+		repoMock,
+		serviceMock,
+		pluginInformation,
+		"packageArn",
+		"0.0.2",
+		false,
+		output)
+
+	assert.NotNil(t, inst)
+	assert.NotNil(t, uninst)
+	assert.True(t, isUpdateInPlace)
+	assert.Equal(t, localpackages.Installed, installState)
+	assert.NotEmpty(t, installedVersion)
+	assert.Equal(t, 0, output.GetExitCode())
+	assert.Empty(t, tracer.ToPluginOutput().GetStderr())
+
+	installerMock.AssertExpectations(t)
+}
+
+// Test that if Update is triggered but the requested package does not exist, install the requested version
+func TestPrepareUpdate_NotInstalled(t *testing.T) {
+	// file stubs are needed for ensurePackage because it handles the unzip
+	stubs := setSuccessStubs()
+	defer stubs.Clear()
+
+	pluginInformation := createStubPluginInputUpdate()
+	installerMock := installerNotCalledMock()
+	repoMock := repoUpdateMock_PackageNotInstalled(pluginInformation, installerMock)
+	serviceMock := serviceUpdadeMock()
+	tracer := trace.NewTracer(log.NewMockLog())
+	output := &trace.PluginOutputTrace{Tracer: tracer}
+
+	inst, uninst, isUpdateInPlace, installState, installedVersion := prepareConfigurePackage(
+		tracer,
+		buildConfigSimple(pluginInformation),
+		repoMock,
+		serviceMock,
+		pluginInformation,
+		"packageArn",
+		"0.0.2",
+		false,
+		output)
+
+	assert.NotNil(t, inst)
+	assert.Nil(t, uninst)
+	assert.True(t, isUpdateInPlace)
+	assert.Equal(t, localpackages.None, installState)
+	assert.Empty(t, installedVersion)
+	assert.Equal(t, 0, output.GetExitCode())
+	assert.Empty(t, tracer.ToPluginOutput().GetStderr())
+
+	installerMock.AssertExpectations(t)
+}
+
+// Test that if Update is triggered and the requested version already exists but with different manifest,
+// update to the requested version with support to roll back to current version/manifest
+func TestPrepareUpdate_VersionAlreadyInstalled_ManifestDifferent(t *testing.T) {
+	// file stubs are needed for ensurePackage because it handles the unzip
+	stubs := setSuccessStubs()
+	defer stubs.Clear()
+
+	pluginInformation := createStubPluginInputUpdate()
+	installerMock := installerNotCalledMock()
+	repoMock := repoUpdateMock_VersionAlreadyInstalledWithDifferentManifest(pluginInformation, installerMock)
+	serviceMock := serviceUpdadeMock()
+	tracer := trace.NewTracer(log.NewMockLog())
+	output := &trace.PluginOutputTrace{Tracer: tracer}
+
+	inst, uninst, isUpdateInPlace, installState, installedVersion := prepareConfigurePackage(
+		tracer,
+		buildConfigSimple(pluginInformation),
+		repoMock,
+		serviceMock,
+		pluginInformation,
+		"packageArn",
+		"0.0.2",
+		false,
+		output)
+
+	assert.NotNil(t, inst)
+	assert.NotNil(t, uninst)
+	assert.True(t, isUpdateInPlace)
+	assert.Equal(t, localpackages.Installed, installState)
 	assert.NotEmpty(t, installedVersion)
 	assert.Equal(t, 0, output.GetExitCode())
 	assert.Empty(t, tracer.ToPluginOutput().GetStderr())
@@ -429,6 +551,27 @@ func TestInstallingValid(t *testing.T) {
 		repoMock,
 		installerMock.Version(),
 		localpackages.Installing,
+		installerMock,
+		uninstallerMock,
+		output)
+	assert.True(t, alreadyInstalled)
+}
+
+func TestUpdatingValid(t *testing.T) {
+	pluginInformation := createStubPluginInputInstall()
+	installerMock := trueUpdateInstallerMock(pluginInformation.Name, pluginInformation.Version)
+	uninstallerMock := installerNameVersionOnlyMock(pluginInformation.Name, pluginInformation.Version)
+	repoMock := repoInstallMock(pluginInformation, installerMock)
+	repoMock.On("RemovePackage", mock.Anything, pluginInformation.Name, pluginInformation.Version).Return(nil)
+	tracer := trace.NewTracer(log.NewMockLog())
+	output := &trace.PluginOutputTrace{Tracer: tracer}
+
+	alreadyInstalled := checkAlreadyInstalled(
+		tracer,
+		contextMock,
+		repoMock,
+		installerMock.Version(),
+		localpackages.Updating,
 		installerMock,
 		uninstallerMock,
 		output)
@@ -906,6 +1049,7 @@ func TestExecuteConfigurePackagePlugin_DocumentService(t *testing.T) {
 				Hash:            &fakeHash,
 				Status:          &documentStatus,
 			}
+
 			installerMock := installerSuccessMock_Install(pluginInformation.Name, manifestVersion, testdata.action)
 			repoMock := repoInstallMock_ReadWriteManifestHash(pluginInformation, installerMock, manifestVersion, docVersion, getDocument_DocVersion, testdata.action)
 			bwFacade := facadeMock.BirdwatcherFacade{}

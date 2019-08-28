@@ -26,13 +26,14 @@ import (
 )
 
 // TODO: consider passing in the timeout and cancel channels - does cancel trigger rollback?
-// executeConfigurePackage performs install and uninstall actions, with rollback support and recovery after reboots
+// executeConfigurePackage performs install, update and uninstall actions, with rollback support and recovery after reboots
 func executeConfigurePackage(
 	tracer trace.Tracer,
 	context context.T,
 	repository localpackages.Repository,
 	inst installer.Installer,
 	uninst installer.Installer,
+	isUpdateInPlace bool,
 	initialInstallState localpackages.InstallState,
 	output contracts.PluginOutputter) {
 
@@ -40,18 +41,18 @@ func executeConfigurePackage(
 	defer trace.End()
 
 	switch initialInstallState {
-	case localpackages.Installing:
-		// This could be picking up an install after reboot or an upgrade that rebooted during install (after a successful uninstall)
-		executeInstall(tracer, context, repository, inst, uninst, false, output)
+	case localpackages.Installing, localpackages.Updating:
+		// This could be picking up an install after reboot or an update that rebooted during install (after a successful uninstall), or a true update
+		executeInstall(tracer, context, repository, inst, uninst, isUpdateInPlace, false, output)
 	case localpackages.RollbackInstall:
-		executeInstall(tracer, context, repository, uninst, inst, true, output)
+		executeInstall(tracer, context, repository, uninst, inst, isUpdateInPlace, true, output)
 	case localpackages.RollbackUninstall:
-		executeUninstall(tracer, context, repository, uninst, inst, true, output)
+		executeUninstall(tracer, context, repository, uninst, inst, isUpdateInPlace, true, output)
 	default:
 		if uninst != nil {
-			executeUninstall(tracer, context, repository, inst, uninst, false, output)
+			executeUninstall(tracer, context, repository, inst, uninst, isUpdateInPlace, false, output)
 		} else {
-			executeInstall(tracer, context, repository, inst, uninst, false, output)
+			executeInstall(tracer, context, repository, inst, uninst, isUpdateInPlace, false, output)
 		}
 	}
 }
@@ -67,26 +68,32 @@ func setNewInstallState(tracer trace.Tracer, repository localpackages.Repository
 	trace.End()
 }
 
-// executeInstall performs install and validation of a package
+// executeInstall performs install, in-place and legacy update, and validation of a package
 func executeInstall(
 	tracer trace.Tracer,
 	context context.T,
 	repository localpackages.Repository,
 	inst installer.Installer,
 	uninst installer.Installer,
+	isUpdateInPlace bool,
 	isRollback bool,
 	output contracts.PluginOutputter) {
 
-	installtrace := tracer.BeginSection(fmt.Sprintf("install %s/%s - rollback: %t", inst.PackageName(), inst.Version(), isRollback))
+	installtrace := tracer.BeginSection(fmt.Sprintf("install %s/%s. rollback: %t; in-place update: %t", inst.PackageName(), inst.Version(), isRollback, isUpdateInPlace))
 	defer installtrace.End()
+
+	var result contracts.PluginOutputter
 
 	if isRollback {
 		setNewInstallState(tracer, repository, inst, localpackages.RollbackInstall)
+		result = inst.Install(tracer, context)
+	} else if isUpdateInPlace {
+		setNewInstallState(tracer, repository, inst, localpackages.Updating)
+		result = inst.Update(tracer, context)
 	} else {
 		setNewInstallState(tracer, repository, inst, localpackages.Installing)
+		result = inst.Install(tracer, context)
 	}
-
-	result := inst.Install(tracer, context)
 
 	installtrace.WithExitcode(int64(result.GetExitCode()))
 
@@ -103,16 +110,18 @@ func executeInstall(
 	if !result.GetStatus().IsSuccess() {
 		installtrace.AppendErrorf("Failed to install package; install status %v", result.GetStatus())
 		if isRollback || uninst == nil {
+			// Rollback failed. Mark as failed.
 			output.MarkAsFailed(nil, nil)
 			// TODO: Remove from repository if this isn't the last successfully installed version?  Run uninstall to clean up?
 			setNewInstallState(tracer, repository, inst, localpackages.Failed)
 			return
 		}
 		// Execute rollback
-		executeUninstall(tracer, context, repository, uninst, inst, true, output)
+		executeUninstall(tracer, context, repository, uninst, inst, isUpdateInPlace, true, output)
 		return
 	}
 	if uninst != nil {
+		// Cleanup after uninstall
 		cleanupAfterUninstall(tracer, repository, uninst, output)
 	}
 	if isRollback {
@@ -134,6 +143,7 @@ func executeUninstall(
 	repository localpackages.Repository,
 	inst installer.Installer,
 	uninst installer.Installer,
+	isUpdateInPlace bool,
 	isRollback bool,
 	output contracts.PluginOutputter) {
 
@@ -144,6 +154,8 @@ func executeUninstall(
 		setNewInstallState(tracer, repository, uninst, localpackages.RollbackUninstall)
 	} else {
 		if inst != nil {
+			// Setting to Upgrading state means this is the legacy update
+			// that requires uninstalling installed version and installing the requested version
 			setNewInstallState(tracer, repository, uninst, localpackages.Upgrading)
 		} else {
 			setNewInstallState(tracer, repository, uninst, localpackages.Uninstalling)
@@ -156,7 +168,8 @@ func executeUninstall(
 	if !result.GetStatus().IsSuccess() {
 		installtrace.AppendErrorf("Failed to uninstall version %v of package; uninstall status %v", uninst.Version(), result.GetStatus())
 		if inst != nil {
-			executeInstall(tracer, context, repository, inst, uninst, isRollback, output)
+			// Uninstall fails upon rollback. Directly try to reinstall previously installed version.
+			executeInstall(tracer, context, repository, inst, uninst, isUpdateInPlace, isRollback, output)
 			return
 		}
 		setNewInstallState(tracer, repository, uninst, localpackages.Failed)
@@ -170,7 +183,8 @@ func executeUninstall(
 	}
 	installtrace.AppendInfof("Successfully uninstalled %v %v", uninst.PackageName(), uninst.Version())
 	if inst != nil {
-		executeInstall(tracer, context, repository, inst, uninst, isRollback, output)
+		// Uninstall succeeds upon rollback. Continue to reinstall previously installed version.
+		executeInstall(tracer, context, repository, inst, uninst, isUpdateInPlace, isRollback, output)
 		return
 	}
 	cleanupAfterUninstall(tracer, repository, uninst, output)

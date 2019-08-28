@@ -74,6 +74,10 @@ func (inst *Installer) Install(tracer trace.Tracer, context context.T) contracts
 	return inst.executeAction(tracer, context, "install")
 }
 
+func (inst *Installer) Update(tracer trace.Tracer, context context.T) contracts.PluginOutputter {
+	return inst.executeAction(tracer, context, "update")
+}
+
 func (inst *Installer) Uninstall(tracer trace.Tracer, context context.T) contracts.PluginOutputter {
 	return inst.executeAction(tracer, context, "uninstall")
 }

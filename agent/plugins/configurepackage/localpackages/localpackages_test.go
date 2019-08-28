@@ -448,25 +448,37 @@ func TestRemovePackage(t *testing.T) {
 func TestSetInstallState(t *testing.T) {
 	initialState := PackageInstallState{Name: testPackage, Version: "0.0.1", State: None}
 	finalState := PackageInstallState{Name: testPackage, Version: "0.0.1", State: Installing, Time: time.Now()}
-	testSetInstall(t, initialState, Installing, finalState)
+	testSetInstall(t, initialState, Installing, finalState, "0.0.1")
 }
 
 func TestSetInstallStateRetry(t *testing.T) {
 	initialState := PackageInstallState{Name: testPackage, Version: "0.0.1", State: Installing}
 	finalState := PackageInstallState{Name: testPackage, Version: "0.0.1", State: Installing, Time: time.Now(), RetryCount: 1}
-	testSetInstall(t, initialState, Installing, finalState)
+	testSetInstall(t, initialState, Installing, finalState, "0.0.1")
 }
 
 func TestSetInstallStateInstalled(t *testing.T) {
 	initialState := PackageInstallState{Name: testPackage, Version: "0.0.1", State: Installing}
 	finalState := PackageInstallState{Name: testPackage, Version: "0.0.1", State: Installed, Time: time.Now(), LastInstalledVersion: "0.0.1"}
-	testSetInstall(t, initialState, Installed, finalState)
+	testSetInstall(t, initialState, Installed, finalState, "0.0.1")
 }
 
 func TestSetInstallStateUninstalled(t *testing.T) {
 	initialState := PackageInstallState{Name: testPackage, Version: "0.0.1", State: Installed, Time: time.Now(), LastInstalledVersion: "0.0.1"}
 	finalState := PackageInstallState{Name: testPackage, Version: "0.0.1", State: Uninstalled, Time: time.Now()}
-	testSetInstall(t, initialState, Uninstalled, finalState)
+	testSetInstall(t, initialState, Uninstalled, finalState, "0.0.1")
+}
+
+func TestSetInstallStateUpdating(t *testing.T) {
+	initialState := PackageInstallState{Name: testPackage, Version: "0.0.1", State: Installed, Time: time.Now(), LastInstalledVersion: "0.0.1"}
+	finalState := PackageInstallState{Name: testPackage, Version: "0.0.2", State: Updating, Time: time.Now(), LastInstalledVersion: "0.0.1"}
+	testSetInstall(t, initialState, Updating, finalState, "0.0.2")
+}
+
+func TestSetInstallStateUpdatingToInstalled(t *testing.T) {
+	initialState := PackageInstallState{Name: testPackage, Version: "0.0.2", State: Updating, Time: time.Now(), LastInstalledVersion: "0.0.1"}
+	finalState := PackageInstallState{Name: testPackage, Version: "0.0.2", State: Installed, Time: time.Now(), LastInstalledVersion: "0.0.2"}
+	testSetInstall(t, initialState, Installed, finalState, "0.0.2")
 }
 
 type InventoryTestData struct {
@@ -649,7 +661,7 @@ func testInventory(t *testing.T, testData []InventoryTestData, expected []model.
 	}
 }
 
-func testSetInstall(t *testing.T, initialState PackageInstallState, newState InstallState, finalState PackageInstallState) {
+func testSetInstall(t *testing.T, initialState PackageInstallState, newState InstallState, expectedFinalState PackageInstallState, newVersion string) {
 	initialJson, _ := jsonutil.Marshal(initialState)
 
 	// Setup mock with expectations
@@ -662,12 +674,12 @@ func testSetInstall(t *testing.T, initialState PackageInstallState, newState Ins
 	repo := localRepository{filesysdep: &mockFileSys, repoRoot: testRepoRoot, lockRoot: testLockRoot, fileLocker: &filelock.FileLockerNoop{}}
 
 	// Call and validate mock expectations and return value
-	err := repo.SetInstallState(tracerMock, testPackage, "0.0.1", newState)
+	err := repo.SetInstallState(tracerMock, testPackage, newVersion, newState)
 	mockFileSys.AssertExpectations(t)
 	assert.Nil(t, err)
-	var expectedState PackageInstallState
-	jsonutil.Unmarshal(mockFileSys.ContentWritten, &expectedState)
-	assertStateEqual(t, finalState, expectedState)
+	var actualFinalState PackageInstallState
+	jsonutil.Unmarshal(mockFileSys.ContentWritten, &actualFinalState)
+	assertStateEqual(t, expectedFinalState, actualFinalState)
 }
 
 func TestLoadTraces(t *testing.T) {

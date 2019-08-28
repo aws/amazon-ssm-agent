@@ -44,6 +44,8 @@ const (
 	InstallAction = "Install"
 	// UninstallAction represents the json command to uninstall package
 	UninstallAction = "Uninstall"
+	// UpdateAction represents the json command to update the package in place
+	UpdateAction = "Update"
 )
 
 const resourceNotFoundException = "ResourceNotFoundException"
@@ -90,10 +92,13 @@ func prepareConfigurePackage(
 	packageArn string,
 	version string,
 	isSameAsCache bool,
-	output contracts.PluginOutputter) (inst installer.Installer, uninst installer.Installer, installState localpackages.InstallState, installedVersion string) {
+	output contracts.PluginOutputter) (inst installer.Installer, uninst installer.Installer, isUpdateInPlace bool, installState localpackages.InstallState, installedVersion string) {
 
 	prepareTrace := tracer.BeginSection(fmt.Sprintf("prepare %s", input.Action))
 	defer prepareTrace.End()
+
+	// Default update type is non-in-place update for backwards compatibility
+	isUpdateInPlace = false
 
 	switch input.Action {
 	case InstallAction:
@@ -118,6 +123,32 @@ func prepareConfigurePackage(
 		// * If the version exists, but the local manifest is different, reinstall the package
 		// * Return success if the package is already installed
 		trace = tracer.BeginSection("ensure old package is locally available")
+		if !(installedVersion == "" || installState == localpackages.None) && (installedVersion != version || !isSameAsCache) {
+			uninst, err = ensurePackage(tracer, repository, packageService, packageArn, installedVersion, isSameAsCache, config)
+			if err != nil {
+				trace.WithError(err)
+			}
+		}
+		trace.End()
+
+	case UpdateAction:
+		isUpdateInPlace = true
+
+		// get version information
+		trace := tracer.BeginSection("Determine version to update to")
+		installedVersion, installState = getVersionToInstall(tracer, repository, packageArn)
+
+		var err error
+		trace.AppendDebugf("Installed: %v in state %v. Version to update to: %v", installedVersion, installState, version).End()
+		inst, err = ensurePackage(tracer, repository, packageService, packageArn, version, isSameAsCache, config)
+		if err != nil {
+			trace.WithError(err).End()
+			output.MarkAsFailed(nil, nil)
+			return
+		}
+		trace.End()
+
+		trace = tracer.BeginSection("Ensure old package is locally available so we can uninstall the requested version and roll back to installed version upon update failure.")
 		if !(installedVersion == "" || installState == localpackages.None) && (installedVersion != version || !isSameAsCache) {
 			uninst, err = ensurePackage(tracer, repository, packageService, packageArn, installedVersion, isSameAsCache, config)
 			if err != nil {
@@ -166,7 +197,7 @@ func prepareConfigurePackage(
 		return
 	}
 
-	return inst, uninst, installState, installedVersion
+	return inst, uninst, isUpdateInPlace, installState, installedVersion
 }
 
 // ensurePackage validates local copy of the manifest and package and downloads if needed, returning the installer
@@ -324,7 +355,7 @@ func checkAlreadyInstalled(
 		}
 		if (targetVersion == installedVersion &&
 			(installState == localpackages.Installed || installState == localpackages.Unknown)) ||
-			installState == localpackages.Installing {
+			installState == localpackages.Installing || installState == localpackages.Updating {
 			instToCheck = inst
 		}
 		if instToCheck != nil {
@@ -501,7 +532,7 @@ func (p *Plugin) execute(context context.T, config contracts.Configuration, canc
 				defer p.localRepository.UnlockPackage(tracer, packageArn)
 
 				log.Debugf("Prepare for %v %v %v", input.Action, input.Name, input.Version)
-				inst, uninst, installState, installedVersion := prepareConfigurePackage(
+				inst, uninst, isUpdateInPlace, installState, installedVersion := prepareConfigurePackage(
 					tracer,
 					config,
 					p.localRepository,
@@ -511,7 +542,7 @@ func (p *Plugin) execute(context context.T, config contracts.Configuration, canc
 					manifestVersion,
 					isSameAsCache,
 					&out)
-				log.Debugf("HasInst %v, HasUninst %v, InstallState %v, PackageName %v, InstalledVersion %v", inst != nil, uninst != nil, installState, packageArn, installedVersion)
+				log.Debugf("HasInst %v, HasUninst %v, IsInplaceUpdate %v, InstallState %v, PackageName %v, InstalledVersion %v", inst != nil, uninst != nil, isUpdateInPlace, installState, packageArn, installedVersion)
 
 				//if the status is already decided as failed or succeeded, do not execute anything
 				if out.GetStatus() != contracts.ResultStatusFailed && out.GetStatus() != contracts.ResultStatusSuccess {
@@ -526,6 +557,7 @@ func (p *Plugin) execute(context context.T, config contracts.Configuration, canc
 							p.localRepository,
 							inst,
 							uninst,
+							isUpdateInPlace,
 							installState,
 							&out)
 					}
@@ -541,7 +573,7 @@ func (p *Plugin) execute(context context.T, config contracts.Configuration, canc
 				} else {
 					version := manifestVersion
 					if out.GetStatus() != contracts.ResultStatusFailed && out.GetStatus() != contracts.ResultStatusSuccess {
-						if input.Action == InstallAction {
+						if input.Action == InstallAction || input.Action == UpdateAction {
 							version = inst.Version()
 						} else if input.Action == UninstallAction {
 							version = uninst.Version()

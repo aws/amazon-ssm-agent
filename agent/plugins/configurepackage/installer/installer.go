@@ -21,10 +21,11 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/trace"
 )
 
-// Installer is used to install, uninstall, or upgrade a package that exists in the local repository.
+// Installer is used to install, uninstall, or update a package that exists in the local repository.
 type Installer interface {
 	Install(tracer trace.Tracer, context context.T) contracts.PluginOutputter
 	Uninstall(tracer trace.Tracer, context context.T) contracts.PluginOutputter
+	Update(tracer trace.Tracer, context context.T) contracts.PluginOutputter
 	Validate(tracer trace.Tracer, context context.T) contracts.PluginOutputter // TODO:MF consider whether we can remove validate in V1 - I think it depends on having truly idempotent installers for anything that reboots
 	PackageName() string
 	Version() string
