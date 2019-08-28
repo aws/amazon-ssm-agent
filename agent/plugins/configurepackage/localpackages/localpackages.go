@@ -51,9 +51,10 @@ const (
 	New               InstallState = iota // Present in the repository but not yet installed
 	Upgrading         InstallState = iota // Uninstalling previous version
 	Installing        InstallState = iota // Package version being installed but not yet installed
-	Installed         InstallState = iota // Successfully installed version of a package
+	Installed         InstallState = iota // Successfully installed / updated version of a package
 	RollbackUninstall InstallState = iota // Uninstalling as part of rollback
 	RollbackInstall   InstallState = iota // Installing as part of rollback
+	Updating          InstallState = iota // Package version being updated but the update script is not yet executed
 )
 
 // String returns the string representation of the InstallState
@@ -69,9 +70,10 @@ func (state InstallState) String() string {
 		"Installing",
 		"Installed",
 		"RollbackUninstall",
-		"RollbackInstall"}
+		"RollbackInstall",
+		"Updating"}
 
-	if state < None || state > RollbackInstall {
+	if state < None || state > Updating {
 		return "StateNotFound"
 	}
 

@@ -31,6 +31,11 @@ func (inst *Mock) Install(tracer trace.Tracer, context context.T) contracts.Plug
 	return args.Get(0).(contracts.PluginOutputter)
 }
 
+func (inst *Mock) Update(tracer trace.Tracer, context context.T) contracts.PluginOutputter {
+	args := inst.Called(context)
+	return args.Get(0).(contracts.PluginOutputter)
+}
+
 func (inst *Mock) Uninstall(tracer trace.Tracer, context context.T) contracts.PluginOutputter {
 	args := inst.Called(context)
 	return args.Get(0).(contracts.PluginOutputter)

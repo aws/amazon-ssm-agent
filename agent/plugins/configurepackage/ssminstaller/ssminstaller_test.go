@@ -254,6 +254,61 @@ func TestUninstall_Success(t *testing.T) {
 	assert.Equal(t, contracts.ResultStatusSuccess, output.GetStatus())
 }
 
+func TestUpdate_Success(t *testing.T) {
+	// Setup mocks with expectations
+	mockFileSys := MockedFileSys{}
+	actionPathNoExt := path.Join(testPackagePath, "update")
+	mockReadAction(t, &mockFileSys, actionPathNoExt, []byte("echo sh"), []byte{}, false)
+
+	mockExec := MockedExec{}
+	mockExec.On("ExecuteDocument", mock.Anything, mock.Anything, mock.Anything, mock.Anything, mock.Anything).Return(map[string]*contracts.PluginResult{"Foo": {Status: contracts.ResultStatusSuccess}}).Once()
+
+	mockEnvdetectCollector := &envdetect.CollectorMock{}
+	mockEnvdetectCollector.On("CollectData", mock.Anything).Return(&environmentStub, nil).Once()
+
+	tracer := trace.NewTracer(log.NewMockLog())
+
+	// Instantiate installer with mock
+	inst := Installer{filesysdep: &mockFileSys,
+		execdep:            &mockExec,
+		packagePath:        testPackagePath,
+		config:             contracts.Configuration{OutputS3BucketName: "foo", OutputS3KeyPrefix: "bar"},
+		envdetectCollector: mockEnvdetectCollector}
+
+	// Call and validate mock expectations and return value
+	output := inst.Update(tracer, contextMock)
+	mockFileSys.AssertExpectations(t)
+	mockExec.AssertExpectations(t)
+	assert.Empty(t, output.GetStderr())
+	assert.Equal(t, 0, output.GetExitCode())
+	assert.Equal(t, contracts.ResultStatusSuccess, output.GetStatus())
+}
+
+func TestUpdate_ExecuteError(t *testing.T) {
+	// Setup mocks with expectations
+	mockFileSys := MockedFileSys{}
+	actionPathNoExt := path.Join(testPackagePath, "update")
+	mockReadAction(t, &mockFileSys, actionPathNoExt, []byte("echo sh"), []byte{}, false)
+
+	mockExec := MockedExec{}
+	mockExec.On("ExecuteDocument", mock.Anything, mock.Anything, mock.Anything, mock.Anything, mock.Anything, mock.Anything).Return(map[string]*contracts.PluginResult{"Foo": {StandardError: "execute error"}}).Once()
+
+	mockEnvdetectCollector := &envdetect.CollectorMock{}
+	mockEnvdetectCollector.On("CollectData", mock.Anything).Return(&environmentStub, nil).Once()
+
+	tracer := trace.NewTracer(log.NewMockLog())
+
+	// Instantiate installer with mock
+	inst := Installer{filesysdep: &mockFileSys, execdep: &mockExec, packagePath: testPackagePath, envdetectCollector: mockEnvdetectCollector}
+
+	// Call and validate mock expectations and return value
+	output := inst.Update(tracer, contextMock)
+	mockFileSys.AssertExpectations(t)
+	mockExec.AssertExpectations(t)
+	assert.NotEmpty(t, output.GetStderr())
+	assert.Contains(t, output.GetStderr(), "execute error")
+}
+
 // Load specified file from file system
 func loadFile(t *testing.T, fileName string) (result []byte) {
 	var err error
