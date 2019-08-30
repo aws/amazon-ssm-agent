@@ -42,12 +42,17 @@ var DialCall = func(network string, address string) (net.Conn, error) {
 // PortParameters contains inputs required to execute port plugin.
 type PortParameters struct {
 	PortNumber string `json:"portNumber" yaml:"portNumber"`
+	Type       string `json:"type"`
 }
 
 // Plugin is the type for the port plugin.
 type PortPlugin struct {
-	tcpConn     net.Conn
-	dataChannel datachannel.IDataChannel
+	tcpConn            net.Conn
+	dataChannel        datachannel.IDataChannel
+	portNumber         string
+	portType           string
+	reconnectToPort    bool
+	reconnectToPortErr chan (error)
 }
 
 // Returns parameters required for CLI to start session
@@ -62,7 +67,9 @@ func (p *PortPlugin) RequireHandshake() bool {
 
 // NewPlugin returns a new instance of the Port Plugin.
 func NewPlugin() (sessionplugin.ISessionPlugin, error) {
-	var plugin = PortPlugin{}
+	var plugin = PortPlugin{
+		reconnectToPortErr: make(chan error),
+	}
 	return &plugin, nil
 }
 
@@ -116,7 +123,16 @@ func (p *PortPlugin) execute(context context.T,
 		}
 	}()
 
-	if p.tcpConn, err = p.startTCPConn(log, config.Properties); err != nil {
+	if err = p.initializeParameters(log, config.Properties); err != nil {
+		log.Error(err)
+		output.SetExitCode(appconfig.ErrorExitCode)
+		output.SetStatus(agentContracts.ResultStatusFailed)
+		sessionPluginResultOutput.Output = err.Error()
+		output.SetOutput(sessionPluginResultOutput)
+		return
+	}
+
+	if err = p.startTCPConn(log); err != nil {
 		log.Error(err)
 		output.SetExitCode(appconfig.ErrorExitCode)
 		output.SetStatus(agentContracts.ResultStatusFailed)
@@ -176,6 +192,19 @@ func (p *PortPlugin) InputStreamMessageHandler(log log.T, streamDataMessage mgsC
 		return nil
 	}
 
+	if p.reconnectToPort {
+		log.Debugf("Reconnect to port: %s", p.portNumber)
+		err := p.startTCPConn(log)
+
+		// Pass err to reconnectToPortErr chan to unblock writePump go routine to resume reading from localhost:p.portNumber
+		p.reconnectToPortErr <- err
+		if err != nil {
+			return err
+		}
+
+		p.reconnectToPort = false
+	}
+
 	switch mgsContracts.PayloadType(streamDataMessage.PayloadType) {
 	case mgsContracts.Output:
 		log.Tracef("Output message received: %d", streamDataMessage.SequenceNumber)
@@ -212,7 +241,12 @@ func (p *PortPlugin) writePump(log log.T) (errorCode int) {
 	for {
 		numBytes, err := p.tcpConn.Read(packet)
 		if err != nil {
-			return p.handleTCPReadError(log, err)
+			var exitCode int
+			if exitCode = p.handleTCPReadError(log, err); exitCode == mgsConfig.ResumeReadExitCode {
+				log.Debugf("Reconnection to port %v is successful, resume reading from port.", p.portNumber)
+				continue
+			}
+			return exitCode
 		}
 
 		if err = p.dataChannel.SendStreamDataMessage(log, mgsContracts.Output, packet[:numBytes]); err != nil {
@@ -226,6 +260,15 @@ func (p *PortPlugin) writePump(log log.T) (errorCode int) {
 
 // handleTCPReadError handles TCP read error
 func (p *PortPlugin) handleTCPReadError(log log.T, err error) int {
+	if p.portType == mgsConfig.LocalPortForwarding {
+		log.Errorf("Initiating reconnection to port %s as existing connection resulted in read error: %v", p.portNumber, err)
+		return p.handlePortError(log, err)
+	}
+	return p.handleSSHDPortError(log, err)
+}
+
+// handleSSHDPortError handles error by returning proper exit code based on error encountered
+func (p *PortPlugin) handleSSHDPortError(log log.T, err error) int {
 	if err == io.EOF {
 		log.Infof("TCP Connection was closed.")
 		return appconfig.SuccessExitCode
@@ -235,20 +278,48 @@ func (p *PortPlugin) handleTCPReadError(log log.T, err error) int {
 	}
 }
 
+// handlePortError handles error by initiating reconnection to port in case of read failure
+func (p *PortPlugin) handlePortError(log log.T, err error) int {
+	// Read from tcp connection to localhost:p.portNumber resulted in error. Close existing connection and
+	// set reconnectToPort to true. ReconnectToPort is used when new steam data message arrives on
+	// web socket channel to trigger reconnection to localhost:p.portNumber.
+	log.Debugf("Encountered error while reading from port %v, %v", p.portNumber, err)
+	p.Stop(log)
+	p.reconnectToPort = true
+
+	log.Debugf("Waiting for reconnection to port!!")
+	err = <-p.reconnectToPortErr
+
+	if err != nil {
+		log.Error(err)
+		return appconfig.ErrorExitCode
+	}
+
+	// Reconnection to localhost:p.portPlugin is successful, return resume code to starting reading from connection
+	return mgsConfig.ResumeReadExitCode
+}
+
 // startTCPConn starts TCP connection to the specified port
-func (p *PortPlugin) startTCPConn(log log.T, parameters interface{}) (tcpConn net.Conn, err error) {
+func (p *PortPlugin) startTCPConn(log log.T) (err error) {
+	if p.tcpConn, err = DialCall("tcp", "localhost:"+p.portNumber); err != nil {
+		return errors.New(fmt.Sprintf("Unable to connect to specified port: %v", err))
+	}
+
+	return nil
+}
+
+// initializeParameters initializes PortPlugin with input parameters
+func (p *PortPlugin) initializeParameters(log log.T, parameters interface{}) (err error) {
 	var portParameters PortParameters
 	if err = jsonutil.Remarshal(parameters, &portParameters); err != nil {
-		return nil, errors.New(fmt.Sprintf("Unable to remarshal session properties. %v", err))
+		return errors.New(fmt.Sprintf("Unable to remarshal session properties. %v", err))
 	}
 
 	if portParameters.PortNumber == "" {
-		return nil, errors.New(fmt.Sprintf("Port number is empty in session properties. %v", parameters))
+		return errors.New(fmt.Sprintf("Port number is empty in session properties. %v", parameters))
 	}
+	p.portNumber = portParameters.PortNumber
+	p.portType = portParameters.Type
 
-	if tcpConn, err = DialCall("tcp", "localhost:"+portParameters.PortNumber); err != nil {
-		return nil, errors.New(fmt.Sprintf("Unable to connect to specified port: %v", err))
-	}
-
-	return tcpConn, nil
+	return nil
 }

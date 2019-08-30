@@ -16,6 +16,7 @@ package port
 
 import (
 	"errors"
+	"io"
 	"net"
 	"testing"
 	"time"
@@ -25,6 +26,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	iohandlermocks "github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler/mock"
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	mgsConfig "github.com/aws/amazon-ssm-agent/agent/session/config"
 	mgsContracts "github.com/aws/amazon-ssm-agent/agent/session/contracts"
 	dataChannelMock "github.com/aws/amazon-ssm-agent/agent/session/datachannel/mocks"
 	"github.com/aws/amazon-ssm-agent/agent/task"
@@ -65,7 +67,8 @@ func (suite *PortTestSuite) SetupTest() {
 	suite.mockDataChannel = mockDataChannel
 	suite.mockIohandler = mockIohandler
 	suite.plugin = &PortPlugin{
-		dataChannel: mockDataChannel,
+		dataChannel:        mockDataChannel,
+		reconnectToPortErr: make(chan error),
 	}
 }
 
@@ -152,6 +155,8 @@ func (suite *PortTestSuite) TestExecuteUnableToStartTCP() {
 		suite.mockIohandler,
 		suite.mockDataChannel)
 
+	assert.Equal(suite.T(), "22", suite.plugin.portNumber)
+	assert.Equal(suite.T(), false, suite.plugin.reconnectToPort)
 	suite.mockCancelFlag.AssertExpectations(suite.T())
 	suite.mockIohandler.AssertExpectations(suite.T())
 }
@@ -181,6 +186,8 @@ func (suite *PortTestSuite) TestExecute() {
 		suite.mockIohandler,
 		suite.mockDataChannel)
 
+	assert.Equal(suite.T(), "22", suite.plugin.portNumber)
+	assert.Equal(suite.T(), false, suite.plugin.reconnectToPort)
 	suite.mockCancelFlag.AssertExpectations(suite.T())
 	suite.mockIohandler.AssertExpectations(suite.T())
 	suite.mockDataChannel.AssertExpectations(suite.T())
@@ -203,6 +210,58 @@ func (suite *PortTestSuite) TestWritePump() {
 
 	// Assert if SendStreamDataMessage function was called with same data from stdout
 	suite.mockDataChannel.AssertExpectations(suite.T())
+}
+
+// Testing handleTCPReadError when error is not io.EOF error
+func (suite *PortTestSuite) TestHandleTCPReadError() {
+	returnCode := suite.plugin.handleTCPReadError(suite.mockLog, errors.New("some error!!!"))
+	assert.Equal(suite.T(), appconfig.ErrorExitCode, returnCode)
+}
+
+// Testing handleTCPReadError when read returns io.EOF error
+func (suite *PortTestSuite) TestHandleTCPReadErrorWhenEOFError() {
+	returnCode := suite.plugin.handleTCPReadError(suite.mockLog, io.EOF)
+	assert.Equal(suite.T(), appconfig.SuccessExitCode, returnCode)
+}
+
+// Testing handleTCPReadError when reconnection to port failed
+func (suite *PortTestSuite) TestHandleTCPReadErrorWhenReconnectionToPortFailedForLocalPortForwardingScenario() {
+	out, in := net.Pipe()
+	defer in.Close()
+	defer out.Close()
+
+	suite.plugin.portType = mgsConfig.LocalPortForwarding
+	suite.plugin.tcpConn = out
+	suite.plugin.reconnectToPort = false
+
+	go func() {
+		time.Sleep(10 * time.Millisecond)
+		suite.plugin.reconnectToPortErr <- errors.New("failed to start tcp connection!!")
+	}()
+
+	returnCode := suite.plugin.handleTCPReadError(suite.mockLog, errors.New("some error!!"))
+	assert.Equal(suite.T(), true, suite.plugin.reconnectToPort)
+	assert.Equal(suite.T(), appconfig.ErrorExitCode, returnCode)
+}
+
+// Testing handleTCPReadError when reconnection to port succeeds
+func (suite *PortTestSuite) TestHandleTCPReadErrorWhenReconnectionToPortIsSuccessForLocalPortForwardingScenario() {
+	out, in := net.Pipe()
+	defer in.Close()
+	defer out.Close()
+
+	suite.plugin.portType = mgsConfig.LocalPortForwarding
+	suite.plugin.tcpConn = out
+	suite.plugin.reconnectToPort = false
+
+	go func() {
+		time.Sleep(10 * time.Millisecond)
+		suite.plugin.reconnectToPortErr <- nil
+	}()
+
+	returnCode := suite.plugin.handleTCPReadError(suite.mockLog, errors.New("some error!!"))
+	assert.Equal(suite.T(), true, suite.plugin.reconnectToPort)
+	assert.Equal(suite.T(), mgsConfig.ResumeReadExitCode, returnCode)
 }
 
 // Testing InputStreamHandler
@@ -235,6 +294,35 @@ func (suite *PortTestSuite) TestInputStreamHandlerWriteFailed() {
 func (suite *PortTestSuite) TestInputStreamHandlerWithNilTCPConn() {
 	assert.NoError(suite.T(),
 		suite.plugin.InputStreamMessageHandler(suite.mockLog, getAgentMessage(uint32(mgsContracts.Output), payload)))
+}
+
+// Testing InputStreamHandler when ReconnectToPort is true
+func (suite *PortTestSuite) TestInputStreamHandlerWithReconnectToPortSetToTrue() {
+	prevConnOut, prevConnIn := net.Pipe()
+	suite.plugin.tcpConn = prevConnIn
+	prevConnIn.Close()
+	prevConnOut.Close()
+
+	out, in := net.Pipe()
+	defer in.Close()
+	defer out.Close()
+	DialCall = func(network string, address string) (net.Conn, error) {
+		return out, nil
+	}
+
+	suite.plugin.reconnectToPort = false
+
+	output := make([]byte, 100)
+	go func() {
+		<-suite.plugin.reconnectToPortErr
+
+		time.Sleep(10 * time.Millisecond)
+		n, _ := out.Read(output)
+		assert.Equal(suite.T(), payload, output[:n])
+	}()
+
+	suite.plugin.InputStreamMessageHandler(suite.mockLog, getAgentMessage(uint32(mgsContracts.Output), payload))
+	assert.Equal(suite.T(), false, suite.plugin.reconnectToPort)
 }
 
 // Execute the test suite
