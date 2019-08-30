@@ -68,6 +68,12 @@ const (
 	ScreenBufferSize = 30000
 	Exit             = "exit"
 
+	// ResumeReadExitCode indicates to resume reading from established connection.
+	ResumeReadExitCode = -1
+	// LocalPortForwarding is one of types supported by port plugin and is used to differentiate handling of error
+	// with scenario of sshd server port forwarding.
+	LocalPortForwarding = "LocalPortForwarding"
+
 	CloudWatchEncryptionErrorMsg = "We couldn't start the session because encryption is not set up on the selected CloudWatch Logs log group. Either encrypt the log group or choose an option to enable logging without encryption."
 	S3EncryptionErrorMsg         = "We couldn't start the session because encryption is not set up on the selected Amazon S3 bucket. Either encrypt the bucket or choose an option to enable logging without encryption."
 )
