@@ -16,8 +16,10 @@
 // Package s3util contains methods for interacting with S3.
 package s3util
 
-import "github.com/aws/amazon-ssm-agent/agent/appconfig"
-import "github.com/aws/amazon-ssm-agent/agent/platform"
+import (
+	"github.com/aws/amazon-ssm-agent/agent/appconfig"
+	"github.com/aws/amazon-ssm-agent/agent/platform"
+)
 
 var awsS3EndpointMap = map[string]string{
 	//AUTOGEN_START
