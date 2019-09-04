@@ -17,7 +17,6 @@ package appconfig
 
 import (
 	"log"
-	"strings"
 )
 
 //func parser(config *T) {
@@ -68,18 +67,6 @@ func parser(config *SsmagentConfig) {
 		DefaultStateOrchestrationLogsRetentionDurationHoursMin,
 		DefaultRunCommandLogsRetentionDurationHours)
 
-}
-
-// getDefaultEndPoint returns the default endpoint for a service, it should be empty unless it's a china region
-func GetDefaultEndPoint(region string, service string) string {
-	endpoint := ""
-
-	parts := strings.Split(region, "-")
-	if len(parts) > 1 && parts[0] == "cn" {
-		endpoint = service + "." + region + ".amazonaws.com.cn"
-	}
-
-	return endpoint
 }
 
 // getStringValue returns the default value if config is empty, else the config value

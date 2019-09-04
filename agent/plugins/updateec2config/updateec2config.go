@@ -546,13 +546,23 @@ func GetUpdatePluginConfig(context context.T) UpdatePluginConfig {
 	}
 
 	var manifestURL string
-	if strings.HasPrefix(region, s3util.ChinaRegionPrefix) {
-		manifestURL = ChinaManifestURL
-	} else {
-		manifestURL = CommonManifestURL
+	manifestURL = retrieveDynamicS3ManifestUrl(region, "s3")
+	if manifestURL == "" {
+		if strings.HasPrefix(region, s3util.ChinaRegionPrefix) {
+			manifestURL = ChinaManifestURL
+		} else {
+			manifestURL = CommonManifestURL
+		}
 	}
 
 	return UpdatePluginConfig{
 		ManifestLocation: manifestURL,
 	}
+}
+
+func retrieveDynamicS3ManifestUrl(region string, service string) string {
+	if dynamicS3Endpoint := platform.GetDefaultEndPoint(region, service); dynamicS3Endpoint != "" {
+		return "https://" + dynamicS3Endpoint + ManifestPath
+	}
+	return ""
 }

@@ -129,7 +129,7 @@ func awsConfig(log log.T, amazonS3URL s3util.AmazonS3URL) (config *aws.Config, e
 			config.Endpoint = &appConfig.S3.Endpoint
 		} else {
 			if region, err := platform.Region(); err == nil {
-				if defaultEndpoint := appconfig.GetDefaultEndPoint(region, "s3"); defaultEndpoint != "" {
+				if defaultEndpoint := platform.GetDefaultEndPoint(region, "s3"); defaultEndpoint != "" {
 					config.Endpoint = &defaultEndpoint
 				}
 			} else {

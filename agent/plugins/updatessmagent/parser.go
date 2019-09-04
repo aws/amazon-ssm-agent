@@ -52,11 +52,14 @@ type PackageVersion struct {
 const (
 	minimumVersion = "0"
 
+	//ManifestPath is path of manifest in the s3 bucket
+	ManifestPath = "/amazon-ssm-{Region}/ssm-agent-manifest.json"
+
 	// CommonManifestURL is the Manifest URL for regular regions
-	CommonManifestURL = "https://s3.{Region}.amazonaws.com/amazon-ssm-{Region}/ssm-agent-manifest.json"
+	CommonManifestURL = "https://s3.{Region}.amazonaws.com" + ManifestPath
 
 	// ChinaManifestURL is the manifest URL for regions in China
-	ChinaManifestURL = "https://s3.{Region}.amazonaws.com.cn/amazon-ssm-{Region}/ssm-agent-manifest.json"
+	ChinaManifestURL = "https://s3.{Region}.amazonaws.com.cn" + ManifestPath
 )
 
 // ParseManifest parses the public manifest file to provide agent update information.

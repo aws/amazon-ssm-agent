@@ -60,7 +60,7 @@ func NewAnonymousService(region string) AnonymousService {
 			}
 
 			// Get the default ssm endpoint for this region
-			defaultEndpoint := appconfig.GetDefaultEndPoint(region, "ssm")
+			defaultEndpoint := platform.GetDefaultEndPoint(region, "ssm")
 			awsConfig.Endpoint = &defaultEndpoint
 
 		}

@@ -62,7 +62,7 @@ func NewAmazonS3Util(log log.T, bucketName string) *AmazonS3Util {
 			config.Endpoint = &appConfig.S3.Endpoint
 		} else {
 			if region, err := platform.Region(); err == nil {
-				if defaultEndpoint := appconfig.GetDefaultEndPoint(region, "s3"); defaultEndpoint != "" {
+				if defaultEndpoint := platform.GetDefaultEndPoint(region, "s3"); defaultEndpoint != "" {
 					config.Endpoint = &defaultEndpoint
 				}
 			} else {

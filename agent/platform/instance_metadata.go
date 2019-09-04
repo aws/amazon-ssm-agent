@@ -31,6 +31,8 @@ const (
 	InstanceIdentityDocumentSignatureResource = "/latest/dynamic/instance-identity/signature"
 	// SignedInstanceIdentityDocumentResource provides pkcs7 public key pair value
 	SignedInstanceIdentityDocumentResource = "/latest/dynamic/instance-identity/pkcs7"
+	// DomainForMetadataService
+	ServiceDomainResource = "/latest/meta-data/services/domain"
 	// EC2MetadataRequestTimeout specifies the timeout when making web request
 	EC2MetadataRequestTimeout = time.Duration(2 * time.Second)
 )
@@ -129,4 +131,13 @@ func (c EC2MetadataClient) ReadResource(path string) ([]byte, error) {
 	defer resp.Body.Close()
 
 	return ioutil.ReadAll(resp.Body)
+}
+
+// ServiceDomain from ec2 metadata client
+func (c EC2MetadataClient) ServiceDomain() (string, error) {
+	domain, err := c.ReadResource(ServiceDomainResource)
+	if err != nil {
+		return "", err
+	}
+	return string(domain), nil
 }

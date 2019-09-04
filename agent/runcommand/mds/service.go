@@ -96,7 +96,7 @@ func NewService(region string, endpoint string, creds *credentials.Credentials, 
 		config.Endpoint = &endpoint
 	} else {
 		if region, err := platform.Region(); err == nil {
-			if defaultEndpoint := appconfig.GetDefaultEndPoint(region, "ec2messages"); defaultEndpoint != "" {
+			if defaultEndpoint := platform.GetDefaultEndPoint(region, "ec2messages"); defaultEndpoint != "" {
 				config.Endpoint = &defaultEndpoint
 			}
 		}

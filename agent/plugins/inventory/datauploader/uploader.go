@@ -77,7 +77,7 @@ func NewInventoryUploader(context context.T) (*InventoryUploader, error) {
 			cfg.Endpoint = &appCfg.Ssm.Endpoint
 		} else {
 			if region, err := platform.Region(); err == nil {
-				if defaultEndpoint := appconfig.GetDefaultEndPoint(region, "ssm"); defaultEndpoint != "" {
+				if defaultEndpoint := platform.GetDefaultEndPoint(region, "ssm"); defaultEndpoint != "" {
 					cfg.Endpoint = &defaultEndpoint
 				}
 			} else {
