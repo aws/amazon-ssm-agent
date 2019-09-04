@@ -41,7 +41,7 @@ func AwsConfig() *aws.Config {
 		awsConfig.Endpoint = &appConfig.Ssm.Endpoint
 	} else {
 		if region, err := platform.Region(); err == nil {
-			if defaultEndpoint := appconfig.GetDefaultEndPoint(region, "ssm"); defaultEndpoint != "" {
+			if defaultEndpoint := platform.GetDefaultEndPoint(region, "ssm"); defaultEndpoint != "" {
 				awsConfig.Endpoint = &defaultEndpoint
 			}
 		}

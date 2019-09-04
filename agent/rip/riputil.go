@@ -83,7 +83,7 @@ func GetMgsEndpoint(region string) (mgsEndpoint string) {
 
 // GetDefaultServiceEndpoint returns the default endpoint for a service, it should not be empty.
 func GetDefaultServiceEndpoint(region string, service string) (endpoint string) {
-	defaultEndpoint := appconfig.GetDefaultEndPoint(region, service)
+	defaultEndpoint := platform.GetDefaultEndPoint(region, service)
 	if defaultEndpoint != "" {
 		endpoint = defaultEndpoint
 	} else {

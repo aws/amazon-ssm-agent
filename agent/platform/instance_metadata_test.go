@@ -52,8 +52,10 @@ func ignoreError(v interface{}, _ error) interface{} {
 
 var testClient = EC2MetadataClient{client: testHTTPClient{}}
 var expectediid = MakeInstanceIdentityDocument()
+var expectedservicedomain = "amazonaws.com"
 var testResponse = map[string]string{
 	testClient.resourceServiceURL(InstanceIdentityDocumentResource): string(ignoreError(json.Marshal(expectediid)).([]byte)),
+	testClient.resourceServiceURL(ServiceDomainResource):            expectedservicedomain,
 }
 
 // Get is a mock of the http.Client.Get that reads its responses from the map
@@ -75,6 +77,12 @@ func TestInstanceIdentityDocument(t *testing.T) {
 	iid, err := testClient.InstanceIdentityDocument()
 	assert.Nil(t, err)
 	assert.Equal(t, &expectediid, iid)
+}
+
+func TestServiceDomain(t *testing.T) {
+	domain, err := testClient.ServiceDomain()
+	assert.Nil(t, err)
+	assert.Equal(t, expectedservicedomain, domain)
 }
 
 // TestPendingTime tests the parsing/formatting of the pending time field.

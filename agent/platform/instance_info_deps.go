@@ -86,8 +86,17 @@ var dynamicData dynamicDataClient = instanceDynamicData{
 	Client: NewEC2MetadataClient(),
 }
 
+func (d instanceDynamicData) ServiceDomain() (string, error) {
+	domain, err := d.Client.ServiceDomain()
+	if err != nil {
+		return "", err
+	}
+	return domain, nil
+}
+
 type dynamicDataClient interface {
 	Region() (string, error)
+	ServiceDomain() (string, error)
 }
 
 type instanceDynamicData struct {

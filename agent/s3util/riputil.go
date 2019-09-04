@@ -55,7 +55,7 @@ func GetS3Endpoint(region string) (s3Endpoint string) {
 	}
 
 	if region, err := platform.Region(); err == nil {
-		if defaultEndpoint := appconfig.GetDefaultEndPoint(region, "s3"); defaultEndpoint != "" {
+		if defaultEndpoint := platform.GetDefaultEndPoint(region, "s3"); defaultEndpoint != "" {
 			return defaultEndpoint
 		}
 	}

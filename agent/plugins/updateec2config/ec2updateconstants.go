@@ -60,11 +60,14 @@ const (
 	//S3 format for updater
 	S3Format = "https://s3.amazonaws.com/aws-ssm-{Region}"
 
+	//Manifest Path in S3 bucket
+	ManifestPath = "/amazon-ssm-{Region}/manifest.json"
+
 	// CommonManifestURL is the URL for the manifest file in regular regions
-	CommonManifestURL = "https://s3.{Region}.amazonaws.com/aws-ssm-{Region}/manifest.json"
+	CommonManifestURL = "https://s3.{Region}.amazonaws.com" + ManifestPath
 
 	// ChinaManifestURL is the URL for the manifest in regions in China
-	ChinaManifestURL = "https://s3.{Region}.amazonaws.com.cn/aws-ssm-{Region}/manifest.json"
+	ChinaManifestURL = "https://s3.{Region}.amazonaws.com.cn" + ManifestPath
 )
 
 // update context constant strings

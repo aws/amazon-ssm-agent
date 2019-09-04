@@ -17,8 +17,9 @@ const (
 	sampleManagedInstRegion = "us-west-1"
 	sampleManagedInstID     = "mi-e6c6f145e6c6f145"
 
-	sampleDynamicDataError  = "dynamic data error occurred"
-	sampleDynamicDataRegion = "us-west-2"
+	sampleDynamicDataError         = "dynamic data error occurred"
+	sampleDynamicDataRegion        = "us-west-2"
+	sampleDynamicDataServiceDomain = "amazonaws.com"
 )
 
 // metadata stub
@@ -54,11 +55,14 @@ func (r registrationStub) AvailabilityZone() string { return r.availabilityZone 
 // dynamicData stub
 type dynamicDataStub struct {
 	region  string
+	domain  string
 	err     error
 	message string
 }
 
 func (d dynamicDataStub) Region() (string, error) { return d.region, d.err }
+
+func (d dynamicDataStub) ServiceDomain() (string, error) { return d.domain, d.err }
 
 // Examples
 
@@ -121,7 +125,7 @@ var (
 	invalidMetadata     = &metadataStub{err: errors.New(sampleInstanceError), message: "invalid metadata"}
 	validRegistration   = registrationStub{instanceID: sampleManagedInstID, region: sampleManagedInstRegion, instanceType: "on-premises", availabilityZone: "on-premises", err: nil, message: "valid registration"}
 	invalidRegistration = registrationStub{message: "invalid registration"}
-	validDynamicData    = &dynamicDataStub{region: sampleDynamicDataRegion, err: nil, message: "valid dynamic data"}
+	validDynamicData    = &dynamicDataStub{region: sampleDynamicDataRegion, domain: sampleDynamicDataServiceDomain, err: nil, message: "valid dynamic data"}
 	invalidDynamicData  = &dynamicDataStub{err: errors.New(sampleDynamicDataError), message: "invalid dynamic data"}
 
 	instanceIDTests = []instanceInfoTest{
