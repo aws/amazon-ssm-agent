@@ -164,29 +164,36 @@ func GetS3Header(log log.T, bucketName string, instanceRegion string, httpProvid
 	var region string
 
 	s3Endpoint := GetS3Endpoint(instanceRegion)
-	if region, err = getRegionFromS3URLWithExponentialBackoff("http://"+bucketName+"."+s3Endpoint, httpProvider); err == nil {
-		return region
-	}
-	// Try to get the s3 region with https protocol, it's required for S3 upload when https-only enabled
-	if region, err = getRegionFromS3URLWithExponentialBackoff("https://"+bucketName+"."+s3Endpoint, httpProvider); err == nil {
-		return region
-	}
-
 	// Fail over to the generic regional end point, if different from the regional end point
 	genericEndPoint := GetS3GenericEndPoint(instanceRegion)
-	if genericEndPoint != s3Endpoint {
-		log.Infof("Error when querying S3 bucket using address http://%v.%v. Error details: %v. Retrying with the generic regional endpoint %v...",
-			bucketName, s3Endpoint, err, genericEndPoint)
-		if region, err = getRegionFromS3URLWithExponentialBackoff("http://"+bucketName+"."+genericEndPoint, httpProvider); err == nil {
+	for retryCount := 1; retryCount <= 5; retryCount++ {
+		// Try to get the s3 region with https protocol, it's required for S3 upload when https-only enabled
+		if region, err = getRegionFromS3URL(log, "https://"+bucketName+"."+s3Endpoint, httpProvider); err == nil {
 			return region
 		}
-		if region, err = getRegionFromS3URLWithExponentialBackoff("https://"+bucketName+"."+genericEndPoint, httpProvider); err == nil {
+		if region, err = getRegionFromS3URL(log, "http://"+bucketName+"."+s3Endpoint, httpProvider); err == nil {
 			return region
 		}
+
+		if genericEndPoint != s3Endpoint {
+			log.Infof("Error when querying S3 bucket using address http://%v.%v. Error details: %v. Retrying with the generic regional endpoint %v...",
+				bucketName, s3Endpoint, err, genericEndPoint)
+			if region, err = getRegionFromS3URL(log, "https://"+bucketName+"."+genericEndPoint, httpProvider); err == nil {
+				return region
+			}
+			if region, err = getRegionFromS3URL(log, "http://"+bucketName+"."+genericEndPoint, httpProvider); err == nil {
+				return region
+			}
+		}
+		// Ensure the maximum sleep limit less than 500 ms.
+		newRetryTimeCount := math.Min(math.Pow(2, float64(retryCount)), float64(5)) * 100
+		time.Sleep(time.Duration(newRetryTimeCount) * time.Millisecond)
 	}
 
+	log.Infof("Failed to get S3 bucket region using s3 regional endpoint address http://%v.%v. Error details: %v. ",
+		bucketName, s3Endpoint, err, genericEndPoint)
 	// Could not query the bucket region. Log the error.
-	log.Infof("Error when querying S3 bucket using address http://%v.%v. Error details: %v",
+	log.Infof("Failed to get S3 bucket region using s3 generic endpoint address http://%v.%v. Error details: %v",
 		bucketName, genericEndPoint, err)
 	return ""
 }
@@ -210,5 +217,25 @@ func getRegionFromS3URLWithExponentialBackoff(url string, httpProvider HttpProvi
 
 	err = errors.New(fmt.Sprintf("Failed to fetch region from the header - %s", err))
 
+	return
+}
+
+func getRegionFromS3URL(log log.T, url string, httpProvider HttpProvider) (region string, err error) {
+	resp, err := httpProvider.Head(url)
+	if err != nil || resp == nil {
+		log.Info("Error when query S3 using url %v, error details : %v", url, err)
+		err = errors.New(fmt.Sprintf("Failed query S3 using url %v - %s", url, err))
+		return "", err
+	}
+
+	if resp.StatusCode == 502 || resp.StatusCode == 503 || resp.StatusCode == 504 {
+		err = errors.New(fmt.Sprintf("Failed to make request to s3 endpoint - %s", err))
+		return "", err
+	} else if region = resp.Header.Get(s3ResponseRegionHeader); region != "" {
+		// Region is fetched correctly at this point
+		log.Info("Getting region information about bucket %v", region)
+		return region, nil
+	}
+	err = errors.New(fmt.Sprintf("Failed to fetch region from the header - %s", err))
 	return
 }
