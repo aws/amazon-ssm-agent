@@ -261,7 +261,7 @@ func (p *PortPlugin) writePump(log log.T) (errorCode int) {
 // handleTCPReadError handles TCP read error
 func (p *PortPlugin) handleTCPReadError(log log.T, err error) int {
 	if p.portType == mgsConfig.LocalPortForwarding {
-		log.Errorf("Initiating reconnection to port %s as existing connection resulted in read error: %v", p.portNumber, err)
+		log.Debugf("Initiating reconnection to port %s as existing connection resulted in read error: %v", p.portNumber, err)
 		return p.handlePortError(log, err)
 	}
 	return p.handleSSHDPortError(log, err)
