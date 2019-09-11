@@ -1,5 +1,12 @@
 Latest
 ===============
+- Bug fix for characters dropping from session manager shell output 
+- Bug fix for session manager freezing caused by non utf8 character
+- Switch the request protocol order for getting S3 Header
+- Keep port forwarding session open until session is terminated
+
+2.3.701.0
+===============
 - Send platform type information in controlChannel input 
 
 2.3.687.0
