@@ -184,6 +184,19 @@ func repoInstallMock_ReadWriteManifestHash(pluginInformation *ConfigurePackagePl
 	return &mockRepo
 }
 
+func repoNotCalleMock() *repoMock.MockedRepository {
+	mockRepo := repoMock.MockedRepository{}
+	return &mockRepo
+}
+
+func repoMockWithoutInstaller(installerMock installer.Installer) *repoMock.MockedRepository {
+	mockRepo := repoMock.MockedRepository{}
+	mockRepo.On("LockPackage", mock.Anything, mock.Anything, "Update").Return(nil).Once()
+	mockRepo.On("UnlockPackage", mock.Anything, mock.Anything).Return(nil).Once()
+	mockRepo.On("LoadTraces", mock.Anything, mock.Anything).Return(nil)
+	return &mockRepo
+}
+
 func pluginOutputWithStatus(status contracts.ResultStatus) contracts.PluginOutputter {
 	tracer := trace.NewTracer(log.NewMockLog())
 	tracer.BeginSection("test segment root")
@@ -368,11 +381,27 @@ func serviceUpgradeMock() *serviceMock.Mock {
 	return &mockService
 }
 
+func birdwatcherServiceMock() *serviceMock.Mock {
+	mockService := serviceMock.Mock{}
+	mockService.On("GetPackageArnAndVersion", mock.Anything, mock.Anything).Return("packageArn", "0.0.2")
+	mockService.On("DownloadManifest", mock.Anything, mock.Anything, "0.0.2").Return("packageArn", "0.0.2", false, nil)
+	mockService.On("PackageServiceName").Return(packageservice.PackageServiceName_birdwatcher)
+	mockService.On("ReportResult", mock.Anything, mock.Anything).Return(nil)
+	return &mockService
+}
+
+func birdwatcherServiceMockForPrepareUpdate() *serviceMock.Mock {
+	mockService := serviceMock.Mock{}
+	mockService.On("PackageServiceName").Return(packageservice.PackageServiceName_birdwatcher)
+	return &mockService
+}
+
 func serviceUpdadeMock() *serviceMock.Mock {
 	mockService := serviceMock.Mock{}
-	mockService.On("GetPackageArnAndVersion", mock.Anything, mock.Anything).Return("packageArn", "0.0.1")
-	mockService.On("DownloadManifest", mock.Anything, mock.Anything, "latest").Return("packageArn", "0.0.2", false, nil)
+	mockService.On("GetPackageArnAndVersion", mock.Anything, mock.Anything).Return("packageArn", "0.0.2")
+	mockService.On("DownloadManifest", mock.Anything, mock.Anything, "0.0.2").Return("packageArn", "0.0.2", false, nil)
 	mockService.On("DownloadArtifact", mock.Anything, mock.Anything, "0.0.2").Return("/temp/0.0.2", nil)
+	mockService.On("PackageServiceName").Return(packageservice.PackageServiceName_document)
 	mockService.On("ReportResult", mock.Anything, mock.Anything).Return(nil)
 	return &mockService
 }

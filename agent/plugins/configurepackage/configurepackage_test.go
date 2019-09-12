@@ -405,6 +405,32 @@ func TestPrepareUpdate(t *testing.T) {
 	installerMock.AssertExpectations(t)
 }
 
+func TestPrepareUpgrade_BirdwatchService_InvalidUpdateAction(t *testing.T) {
+	// file stubs are needed for ensurePackage because it handles the unzip
+	stubs := setSuccessStubs()
+	defer stubs.Clear()
+
+	pluginInformation := createStubPluginInputUpdate()
+	installerMock := installerNotCalledMock()
+	serviceMock := birdwatcherServiceMockForPrepareUpdate()
+	tracer := trace.NewTracer(log.NewMockLog())
+	output := &trace.PluginOutputTrace{Tracer: tracer}
+
+	prepareConfigurePackage(
+		tracer,
+		buildConfigSimple(pluginInformation),
+		repoNotCalleMock(),
+		serviceMock,
+		pluginInformation,
+		"packageArn",
+		"0.0.2",
+		false,
+		output)
+
+	installerMock.AssertExpectations(t)
+	serviceMock.AssertExpectations(t)
+}
+
 // Test that if Update is triggered but the requested package does not exist, install the requested version
 func TestPrepareUpdate_NotInstalled(t *testing.T) {
 	// file stubs are needed for ensurePackage because it handles the unzip
@@ -713,6 +739,23 @@ func TestConfigurePackage_InvalidAction(t *testing.T) {
 		packageServiceSelector: selectMockService(serviceMock),
 	}
 	plugin.execute(contextMock, buildConfigSimple(pluginInformation), createMockCancelFlag(), createMockIOHandler())
+}
+
+func TestConfigurePackageForUpdate_BirdwatchService_InvalidUpdateAction(t *testing.T) {
+	pluginInformation := createStubPluginInputUpdate()
+	installerMock := installerNotCalledMock()
+	repoMock := repoMockWithoutInstaller(installerMock)
+	serviceMock := birdwatcherServiceMock()
+
+	plugin := &Plugin{
+		localRepository:        repoMock,
+		packageServiceSelector: selectMockService(serviceMock),
+	}
+	plugin.execute(contextMock, buildConfigSimple(pluginInformation), createMockCancelFlag(), createMockIOHandler())
+
+	installerMock.AssertExpectations(t)
+	repoMock.AssertExpectations(t)
+	serviceMock.AssertExpectations(t)
 }
 
 func TestValidateInput(t *testing.T) {
