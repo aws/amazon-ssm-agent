@@ -132,13 +132,24 @@ func prepareConfigurePackage(
 		trace.End()
 
 	case UpdateAction:
+		// Only allow UpdateAction for Distributor service as the in-place update type is only exposed in Distributor.
+		// Birdwatcher customers will be migrated to Distributor next.
+		trace := tracer.BeginSection("determine version to install")
+		var err error
+		if packageservice.PackageServiceName_document != packageService.PackageServiceName() {
+			err = fmt.Errorf("updateAction is invoked for non-document service")
+			trace.WithError(err).End()
+			output.MarkAsFailed(nil, nil)
+			return
+		}
+		trace.End()
+
 		isUpdateInPlace = true
 
 		// get version information
-		trace := tracer.BeginSection("Determine version to update to")
+		trace = tracer.BeginSection("Determine version to update to")
 		installedVersion, installState = getVersionToInstall(tracer, repository, packageArn)
 
-		var err error
 		trace.AppendDebugf("Installed: %v in state %v. Version to update to: %v", installedVersion, installState, version).End()
 		inst, err = ensurePackage(tracer, repository, packageService, packageArn, version, isSameAsCache, config)
 		if err != nil {
