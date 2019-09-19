@@ -15,6 +15,8 @@
 package port
 
 import (
+	"bytes"
+	"encoding/binary"
 	"errors"
 	"fmt"
 	"io"
@@ -118,9 +120,7 @@ func (p *PortPlugin) execute(context context.T,
 	sessionPluginResultOutput := mgsContracts.SessionPluginResultOutput{}
 
 	defer func() {
-		if err := p.Stop(log); err != nil {
-			log.Errorf("Error occurred while closing TCP connection: %v", err)
-		}
+		p.stop(log)
 	}()
 
 	if err = p.initializeParameters(log, config.Properties); err != nil {
@@ -192,40 +192,50 @@ func (p *PortPlugin) InputStreamMessageHandler(log log.T, streamDataMessage mgsC
 		return nil
 	}
 
-	if p.reconnectToPort {
-		log.Debugf("Reconnect to port: %s", p.portNumber)
-		err := p.startTCPConn(log)
-
-		// Pass err to reconnectToPortErr chan to unblock writePump go routine to resume reading from localhost:p.portNumber
-		p.reconnectToPortErr <- err
-		if err != nil {
-			return err
-		}
-
-		p.reconnectToPort = false
-	}
-
 	switch mgsContracts.PayloadType(streamDataMessage.PayloadType) {
 	case mgsContracts.Output:
 		log.Tracef("Output message received: %d", streamDataMessage.SequenceNumber)
 
+		if p.reconnectToPort {
+			log.Debugf("Reconnect to port: %s", p.portNumber)
+			err := p.startTCPConn(log)
+
+			// Pass err to reconnectToPortErr chan to unblock writePump go routine to resume reading from localhost:p.portNumber
+			p.reconnectToPortErr <- err
+			if err != nil {
+				return err
+			}
+
+			p.reconnectToPort = false
+		}
+
 		if _, err := p.tcpConn.Write(streamDataMessage.Payload); err != nil {
 			log.Errorf("Unable to write to port, err: %v.", err)
 			return err
+		}
+	case mgsContracts.Flag:
+		var flag mgsContracts.PayloadTypeFlag
+		buf := bytes.NewBuffer(streamDataMessage.Payload)
+		binary.Read(buf, binary.BigEndian, &flag)
+
+		// DisconnectToPort flag is sent by client when tcp connection on client side is closed.
+		// In this case agent should also close tcp connection with server and wait for new data from client to reconnect.
+		if flag == mgsContracts.DisconnectToPort {
+			log.Debugf("DisconnectToPort flag received: %d", streamDataMessage.SequenceNumber)
+			p.stop(log)
 		}
 	}
 	return nil
 }
 
 // Stop closes the TCP Connection to the instance
-func (p *PortPlugin) Stop(log log.T) error {
+func (p *PortPlugin) stop(log log.T) {
 	if p.tcpConn != nil {
 		log.Debug("Closing TCP connection")
 		if err := p.tcpConn.Close(); err != nil {
-			return log.Errorf("Unable to close connection to port. %v", err)
+			log.Debugf("Unable to close connection to port. %v", err)
 		}
 	}
-	return nil
 }
 
 // writePump reads from the instance's port and writes to data channel
@@ -284,7 +294,7 @@ func (p *PortPlugin) handlePortError(log log.T, err error) int {
 	// set reconnectToPort to true. ReconnectToPort is used when new steam data message arrives on
 	// web socket channel to trigger reconnection to localhost:p.portNumber.
 	log.Debugf("Encountered error while reading from port %v, %v", p.portNumber, err)
-	p.Stop(log)
+	p.stop(log)
 	p.reconnectToPort = true
 
 	log.Debugf("Waiting for reconnection to port!!")
