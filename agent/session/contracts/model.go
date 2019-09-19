@@ -222,6 +222,13 @@ const (
 	HandshakeComplete    PayloadType = 7
 	EncChallengeRequest  PayloadType = 8
 	EncChallengeResponse PayloadType = 9
+	Flag                 PayloadType = 10
+)
+
+type PayloadTypeFlag uint32
+
+const (
+	DisconnectToPort PayloadTypeFlag = 1
 )
 
 type SessionStatus string
