@@ -86,7 +86,7 @@ Where-Object {($_.DisplayName -ne $null -and $_DisplayName -ne '' -and $_.Displa
 	($_.UninstallString -ne $null -and $_.UninstallString -ne '') -and
 	($_.SystemComponent -eq $null -or ($_.SystemComponent -ne $null -and $_.SystemComponent -eq '0'))  -and
 	($_.ParentKeyName -eq $null) -and
-	($_.WindowsInstaller -eq $null -or ($_.WindowsInstaller -eq 1 -and $products -contains (Convert-GuidToCompressedGuid $_.PSChildName))) -and
+	($_.WindowsInstaller -eq $null -or ($_.WindowsInstaller -eq '0') -or ($_.WindowsInstaller -eq 1 -and $products -contains (Convert-GuidToCompressedGuid $_.PSChildName))) -and
 	($_.ReleaseType -eq $null -or ($_.ReleaseType -ne $null -and
 		$_.ReleaseType -ne 'Security Update' -and
 		$_.ReleaseType -ne 'Update Rollup' -and
