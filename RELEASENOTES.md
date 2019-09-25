@@ -1,5 +1,11 @@
 Latest
 ===============
+- For port forwarding session, close server connection when client drops it's connection
+- Bug fix for missing condition of rules from inventory registry
+- Update service domain information fetch logic from EC2 Metadata
+
+2.3.707.0
+===============
 - Bug fix for characters dropping from session manager shell output 
 - Bug fix for session manager freezing caused by non utf8 character
 - Switch the request protocol order for getting S3 Header
