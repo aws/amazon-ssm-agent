@@ -95,19 +95,10 @@ func (u *AmazonS3Util) S3Upload(log log.T, bucketName string, objectKey string, 
 		Key:         aws.String(objectKey),
 		Body:        file,
 		ContentType: aws.String("text/plain"),
+		ACL:         aws.String("bucket-owner-full-control"),
 	}
 	if result, err := u.myUploader.Upload(params); err == nil {
 		log.Infof("Successfully uploaded file to ", result.Location)
-		if _, aclErr := u.myUploader.S3.PutObjectAcl(&s3.PutObjectAclInput{
-			Bucket: aws.String(bucketName),
-			Key:    aws.String(objectKey),
-			ACL:    aws.String("bucket-owner-full-control"),
-		}); aclErr == nil {
-			log.Infof("PutAcl: bucket-owner-full-control succeeded.")
-		} else {
-			// gracefully ignore the error, since the S3 putAcl policy may not be set
-			log.Debugf("PutAcl: bucket-owner-full-control failed, error: %v", aclErr)
-		}
 	} else {
 		log.Errorf("Failed uploading %v to s3://%v/%v err:%v", filePath, bucketName, objectKey, err)
 	}
