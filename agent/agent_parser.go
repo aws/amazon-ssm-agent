@@ -27,6 +27,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/fingerprint"
 	logger "github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/managedInstances/registration"
+	"github.com/aws/amazon-ssm-agent/agent/platform"
 	"github.com/aws/amazon-ssm-agent/agent/ssm/anonauth"
 )
 
@@ -93,6 +94,8 @@ func processRegistration(log logger.T) (exitCode int) {
 		flagUsage()
 		return 1
 	}
+
+	platform.SetRegion(region)
 
 	// check if previously registered
 	if !force && registration.InstanceID() != "" {
