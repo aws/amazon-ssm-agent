@@ -229,6 +229,7 @@ type PayloadTypeFlag uint32
 
 const (
 	DisconnectToPort PayloadTypeFlag = 1
+	TerminateSession PayloadTypeFlag = 2
 )
 
 type SessionStatus string
