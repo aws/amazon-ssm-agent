@@ -15,9 +15,12 @@
 package port
 
 import (
+	"bytes"
+	"encoding/binary"
 	"errors"
 	"io"
 	"net"
+	"sync"
 	"testing"
 	"time"
 
@@ -69,6 +72,7 @@ func (suite *PortTestSuite) SetupTest() {
 	suite.plugin = &PortPlugin{
 		dataChannel:        mockDataChannel,
 		reconnectToPortErr: make(chan error),
+		cancelled:          make(chan bool, 1),
 	}
 }
 
@@ -323,6 +327,27 @@ func (suite *PortTestSuite) TestInputStreamHandlerWithReconnectToPortSetToTrue()
 
 	suite.plugin.InputStreamMessageHandler(suite.mockLog, getAgentMessage(uint32(mgsContracts.Output), payload))
 	assert.Equal(suite.T(), false, suite.plugin.reconnectToPort)
+}
+
+// Testing InputStreamHandler when TerminateSession flag is received
+func (suite *PortTestSuite) TestInputStreamHandlerWhenTerminateSessionFlagIsReceived() {
+	var wg sync.WaitGroup
+	prevConnOut, prevConnIn := net.Pipe()
+	suite.plugin.tcpConn = prevConnIn
+	prevConnIn.Close()
+	prevConnOut.Close()
+	flagBuf := new(bytes.Buffer)
+	binary.Write(flagBuf, binary.BigEndian, mgsContracts.TerminateSession)
+
+	wg.Add(1)
+	go func() {
+		defer wg.Done()
+		cancelled := <-suite.plugin.cancelled
+		assert.Equal(suite.T(), true, cancelled)
+	}()
+
+	suite.plugin.InputStreamMessageHandler(suite.mockLog, getAgentMessage(uint32(mgsContracts.Flag), flagBuf.Bytes()))
+	wg.Wait()
 }
 
 // Execute the test suite

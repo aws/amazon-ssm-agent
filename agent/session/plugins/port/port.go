@@ -55,6 +55,7 @@ type PortPlugin struct {
 	portType           string
 	reconnectToPort    bool
 	reconnectToPortErr chan (error)
+	cancelled          chan bool
 }
 
 // Returns parameters required for CLI to start session
@@ -71,6 +72,7 @@ func (p *PortPlugin) RequireHandshake() bool {
 func NewPlugin() (sessionplugin.ISessionPlugin, error) {
 	var plugin = PortPlugin{
 		reconnectToPortErr: make(chan error),
+		cancelled:          make(chan bool, 1),
 	}
 	return &plugin, nil
 }
@@ -141,11 +143,10 @@ func (p *PortPlugin) execute(context context.T,
 		return
 	}
 
-	cancelled := make(chan bool, 1)
 	go func() {
 		cancelState := cancelFlag.Wait()
 		if cancelFlag.Canceled() {
-			cancelled <- true
+			p.cancelled <- true
 			log.Debug("Cancel flag set to cancelled in session")
 		}
 		log.Debugf("Cancel flag set to %v in session", cancelState)
@@ -160,7 +161,7 @@ func (p *PortPlugin) execute(context context.T,
 	log.Infof("Plugin %s started", p.name())
 
 	select {
-	case <-cancelled:
+	case <-p.cancelled:
 		log.Debug("Session cancelled. Attempting to close TCP Connection.")
 		errorCode := 0
 		output.SetExitCode(errorCode)
@@ -218,11 +219,15 @@ func (p *PortPlugin) InputStreamMessageHandler(log log.T, streamDataMessage mgsC
 		buf := bytes.NewBuffer(streamDataMessage.Payload)
 		binary.Read(buf, binary.BigEndian, &flag)
 
-		// DisconnectToPort flag is sent by client when tcp connection on client side is closed.
-		// In this case agent should also close tcp connection with server and wait for new data from client to reconnect.
-		if flag == mgsContracts.DisconnectToPort {
+		switch flag {
+		case mgsContracts.DisconnectToPort:
+			// DisconnectToPort flag is sent by client when tcp connection on client side is closed.
+			// In this case agent should also close tcp connection with server and wait for new data from client to reconnect.
 			log.Debugf("DisconnectToPort flag received: %d", streamDataMessage.SequenceNumber)
 			p.stop(log)
+		case mgsContracts.TerminateSession:
+			log.Debugf("TerminateSession flag received: %d", streamDataMessage.SequenceNumber)
+			p.cancelled <- true
 		}
 	}
 	return nil
