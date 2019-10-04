@@ -23,6 +23,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/sdkutil"
 	ssmMock "github.com/aws/amazon-ssm-agent/agent/ssm/mocks"
 	"github.com/aws/amazon-ssm-agent/agent/version"
 	"github.com/carlescere/scheduler"
@@ -40,6 +41,7 @@ type HealthCheckTestSuite struct {
 	contextMock *context.Mock
 	serviceMock *ssmMock.Service
 	healthJob   *scheduler.Job
+	stopPolicy  *sdkutil.StopPolicy
 	healthCheck IHealthCheck
 }
 
@@ -53,11 +55,15 @@ func (suite *HealthCheckTestSuite) SetupTest() {
 		Quit: make(chan bool),
 	}
 
+	stopPolicy := sdkutil.NewStopPolicy("hibernation", 10)
+
 	suite.logMock = logMock
 	suite.contextMock = contextMock
 	suite.serviceMock = serviceMock
 	suite.healthJob = healthJob
+	suite.stopPolicy = stopPolicy
 	suite.healthCheck = &HealthCheck{
+		healthCheckStopPolicy: suite.stopPolicy,
 		context: suite.contextMock,
 		service: suite.serviceMock,
 	}
@@ -90,9 +96,10 @@ func (suite *HealthCheckTestSuite) TestModuleExecute() {
 //Testing the ModuleRequestStop method with healthjob define
 func (suite *HealthCheckTestSuite) TestModuleRequestStopWithHealthJob() {
 	suite.healthCheck = &HealthCheck{
-		context:   suite.contextMock,
-		healthJob: suite.healthJob,
-		service:   suite.serviceMock,
+		context:               suite.contextMock,
+		healthJob:             suite.healthJob,
+		service:               suite.serviceMock,
+		healthCheckStopPolicy: suite.stopPolicy,
 	}
 	// Start a new wg to avoid go panic.
 	wg := new(sync.WaitGroup)

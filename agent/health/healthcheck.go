@@ -97,6 +97,12 @@ func (h *HealthCheck) updateHealth() {
 	if _, err = h.service.UpdateInstanceInformation(log, version.Version, "Active", AgentName); err != nil {
 		sdkutil.HandleAwsError(log, err, h.healthCheckStopPolicy)
 	}
+
+	if !h.healthCheckStopPolicy.IsHealthy() {
+		h.service = ssm.NewService()
+		h.healthCheckStopPolicy.ResetErrorCount()
+	}
+
 	return
 }
 
@@ -158,7 +164,15 @@ func (h *HealthCheck) ModuleRequestStop(stopType contracts.StopType) (err error)
 
 //ping sends an empty ping to the health service to identify if the service exists
 func (h *HealthCheck) ping() (err error) {
+	if h.healthCheckStopPolicy.HasError() {
+		h.service = ssm.NewService()
+		h.healthCheckStopPolicy.ResetErrorCount()
+	}
+
 	_, err = h.service.UpdateEmptyInstanceInformation(h.context.Log(), version.Version, AgentName)
+	if err != nil {
+		h.healthCheckStopPolicy.AddErrorCount(1)
+	}
 	return err
 }
 
