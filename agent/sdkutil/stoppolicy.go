@@ -54,6 +54,13 @@ func (s *StopPolicy) IsHealthy() (healthy bool) {
 	return (0 < s.MaximumErrorThreshold && s.errorCount < s.MaximumErrorThreshold)
 }
 
+// HasError returns true if the policy contains error
+func (s *StopPolicy) HasError() bool {
+	s.SyncObject.Lock()
+	defer s.SyncObject.Unlock()
+	return s.errorCount > 0
+}
+
 // AddErrorCount increments the error count by the set amount
 func (s *StopPolicy) AddErrorCount(x int) {
 	s.SyncObject.Lock()
