@@ -243,11 +243,11 @@ func (dataChannel *DataChannel) Initialize(context context.T,
 	dataChannel.handshake = Handshake{
 		responseChan:            make(chan bool),
 		encryptionConfirmedChan: make(chan bool),
-		error:              nil,
-		complete:           false,
-		skipped:            false,
-		handshakeEndTime:   time.Now(),
-		handshakeStartTime: time.Now(),
+		error:                   nil,
+		complete:                false,
+		skipped:                 false,
+		handshakeEndTime:        time.Now(),
+		handshakeStartTime:      time.Now(),
 	}
 }
 
