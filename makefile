@@ -142,136 +142,136 @@ endif
 .PHONY: build-linux
 build-linux: checkstyle copy-src pre-build
 	@echo "Build for linux agent"
-	GOOS=linux GOARCH=amd64 $(GO_BUILD) -ldflags "-s -w" -o $(BGO_SPACE)/bin/linux_amd64/amazon-ssm-agent -v \
-	$(BGO_SPACE)/agent/agent.go $(BGO_SPACE)/agent/agent_unix.go $(BGO_SPACE)/agent/agent_parser.go
-	GOOS=linux GOARCH=amd64 $(GO_BUILD) -ldflags "-s -w" -o $(BGO_SPACE)/bin/linux_amd64/updater -v \
-	$(BGO_SPACE)/agent/update/updater/updater.go $(BGO_SPACE)/agent/update/updater/updater_unix.go
-	GOOS=linux GOARCH=amd64 $(GO_BUILD) -ldflags "-s -w" -o $(BGO_SPACE)/bin/linux_amd64/ssm-cli -v \
-		$(BGO_SPACE)/agent/cli-main/cli-main.go
-	GOOS=linux GOARCH=amd64 $(GO_BUILD) -ldflags "-s -w" -o $(BGO_SPACE)/bin/linux_amd64/ssm-document-worker -v \
-							$(BGO_SPACE)/agent/framework/processor/executer/outofproc/worker/main.go
-	GOOS=linux GOARCH=amd64 $(GO_BUILD) -ldflags "-s -w" -o $(BGO_SPACE)/bin/linux_amd64/ssm-session-logger -v \
-                            $(BGO_SPACE)/agent/session/logging/main.go
-	GOOS=linux GOARCH=amd64 $(GO_BUILD) -ldflags "-s -w" -o $(BGO_SPACE)/bin/linux_amd64/ssm-session-worker -v \
-    						$(BGO_SPACE)/agent/framework/processor/executer/outofproc/sessionworker/main.go
+	GOOS=linux GOARCH=amd64 $(GO_BUILD) -ldflags "-s -w -extldflags=-Wl,-z,now,-z,relro,-z,defs" -buildmode=pie -o $(BGO_SPACE)/bin/linux_amd64/amazon-ssm-agent -v \
+					$(BGO_SPACE)/agent/agent.go $(BGO_SPACE)/agent/agent_unix.go $(BGO_SPACE)/agent/agent_parser.go
+	GOOS=linux GOARCH=amd64 $(GO_BUILD) -ldflags "-s -w -extldflags=-Wl,-z,now,-z,relro,-z,defs" -buildmode=pie -o $(BGO_SPACE)/bin/linux_amd64/updater -v \
+					$(BGO_SPACE)/agent/update/updater/updater.go $(BGO_SPACE)/agent/update/updater/updater_unix.go
+	GOOS=linux GOARCH=amd64 $(GO_BUILD) -ldflags "-s -w -extldflags=-Wl,-z,now,-z,relro,-z,defs" -buildmode=pie -o $(BGO_SPACE)/bin/linux_amd64/ssm-cli -v \
+					$(BGO_SPACE)/agent/cli-main/cli-main.go
+	GOOS=linux GOARCH=amd64 $(GO_BUILD) -ldflags "-s -w -extldflags=-Wl,-z,now,-z,relro,-z,defs" -buildmode=pie -o $(BGO_SPACE)/bin/linux_amd64/ssm-document-worker -v \
+					$(BGO_SPACE)/agent/framework/processor/executer/outofproc/worker/main.go
+	GOOS=linux GOARCH=amd64 $(GO_BUILD) -ldflags "-s -w -extldflags=-Wl,-z,now,-z,relro,-z,defs" -buildmode=pie -o $(BGO_SPACE)/bin/linux_amd64/ssm-session-logger -v \
+					$(BGO_SPACE)/agent/session/logging/main.go
+	GOOS=linux GOARCH=amd64 $(GO_BUILD) -ldflags "-s -w -extldflags=-Wl,-z,now,-z,relro,-z,defs" -buildmode=pie -o $(BGO_SPACE)/bin/linux_amd64/ssm-session-worker -v \
+					$(BGO_SPACE)/agent/framework/processor/executer/outofproc/sessionworker/main.go
 
 .PHONY: build-freebsd
 build-freebsd: checkstyle copy-src pre-build
 	@echo "Build for freebsd agent"
-	GOOS=freebsd GOARCH=amd64 go build -ldflags "-s -w" -o $(BGO_SPACE)/bin/freebsd_amd64/amazon-ssm-agent -v \
-	$(BGO_SPACE)/agent/agent.go $(BGO_SPACE)/agent/agent_unix.go $(BGO_SPACE)/agent/agent_parser.go
+	GOOS=freebsd GOARCH=amd64 $(GO_BUILD) -ldflags "-s -w" -o $(BGO_SPACE)/bin/freebsd_amd64/amazon-ssm-agent -v \
+					$(BGO_SPACE)/agent/agent.go $(BGO_SPACE)/agent/agent_unix.go $(BGO_SPACE)/agent/agent_parser.go
 	GOOS=freebsd GOARCH=amd64 $(GO_BUILD) -ldflags "-s -w" -o $(BGO_SPACE)/bin/freebsd_amd64/ssm-cli -v \
-			$(BGO_SPACE)/agent/cli-main/cli-main.go
+					$(BGO_SPACE)/agent/cli-main/cli-main.go
 	GOOS=freebsd GOARCH=amd64 $(GO_BUILD) -ldflags "-s -w" -o $(BGO_SPACE)/bin/freebsd_amd64/ssm-document-worker -v \
-								$(BGO_SPACE)/agent/framework/processor/executer/outofproc/worker/main.go
+					$(BGO_SPACE)/agent/framework/processor/executer/outofproc/worker/main.go
 	GOOS=freebsd GOARCH=amd64 $(GO_BUILD) -ldflags "-s -w" -o $(BGO_SPACE)/bin/freebsd_amd64/ssm-session-logger -v \
-                                $(BGO_SPACE)/agent/session/logging/main.go
+					$(BGO_SPACE)/agent/session/logging/main.go
 	GOOS=freebsd GOARCH=amd64 $(GO_BUILD) -ldflags "-s -w" -o $(BGO_SPACE)/bin/freebsd_amd64/ssm-session-worker -v \
-    						    $(BGO_SPACE)/agent/framework/processor/executer/outofproc/sessionworker/main.go
+					$(BGO_SPACE)/agent/framework/processor/executer/outofproc/sessionworker/main.go
 
 .PHONY: build-darwin
 build-darwin: checkstyle copy-src pre-build
 	@echo "Build for darwin agent"
 	GOOS=darwin GOARCH=amd64 $(GO_BUILD) -ldflags "-s -w" -o $(BGO_SPACE)/bin/darwin_amd64/amazon-ssm-agent -v \
-	$(BGO_SPACE)/agent/agent.go $(BGO_SPACE)/agent/agent_unix.go $(BGO_SPACE)/agent/agent_parser.go
+					$(BGO_SPACE)/agent/agent.go $(BGO_SPACE)/agent/agent_unix.go $(BGO_SPACE)/agent/agent_parser.go
 	GOOS=darwin GOARCH=amd64 $(GO_BUILD) -ldflags "-s -w" -o $(BGO_SPACE)/bin/darwin_amd64/updater -v \
-	$(BGO_SPACE)/agent/update/updater/updater.go $(BGO_SPACE)/agent/update/updater/updater_unix.go
+					$(BGO_SPACE)/agent/update/updater/updater.go $(BGO_SPACE)/agent/update/updater/updater_unix.go
 	GOOS=darwin GOARCH=amd64 $(GO_BUILD) -ldflags "-s -w" -o $(BGO_SPACE)/bin/darwin_amd64/ssm-cli -v \
-		$(BGO_SPACE)/agent/cli-main/cli-main.go
+					$(BGO_SPACE)/agent/cli-main/cli-main.go
 	GOOS=darwin GOARCH=amd64 $(GO_BUILD) -ldflags "-s -w" -o $(BGO_SPACE)/bin/darwin_amd64/ssm-document-worker -v \
-							$(BGO_SPACE)/agent/framework/processor/executer/outofproc/worker/main.go
+					$(BGO_SPACE)/agent/framework/processor/executer/outofproc/worker/main.go
 
 .PHONY: build-windows
 build-windows: checkstyle copy-src pre-build
 	@echo "Rebuild for windows agent"
 	GOOS=windows GOARCH=amd64 $(GO_BUILD) -ldflags "-s -w" -o $(BGO_SPACE)/bin/windows_amd64/amazon-ssm-agent.exe -v \
-	$(BGO_SPACE)/agent/agent.go $(BGO_SPACE)/agent/agent_windows.go $(BGO_SPACE)/agent/agent_parser.go
+					$(BGO_SPACE)/agent/agent.go $(BGO_SPACE)/agent/agent_windows.go $(BGO_SPACE)/agent/agent_parser.go
 	GOOS=windows GOARCH=amd64 $(GO_BUILD) -ldflags "-s -w" -o $(BGO_SPACE)/bin/windows_amd64/updater.exe -v \
-	$(BGO_SPACE)/agent/update/updater/updater.go $(BGO_SPACE)/agent/update/updater/updater_windows.go
+					$(BGO_SPACE)/agent/update/updater/updater.go $(BGO_SPACE)/agent/update/updater/updater_windows.go
 	GOOS=windows GOARCH=amd64 $(GO_BUILD) -ldflags "-s -w" -o $(BGO_SPACE)/bin/windows_amd64/ssm-cli.exe -v \
-		$(BGO_SPACE)/agent/cli-main/cli-main.go
+					$(BGO_SPACE)/agent/cli-main/cli-main.go
 	GOOS=windows GOARCH=amd64 $(GO_BUILD) -ldflags "-s -w" -o $(BGO_SPACE)/bin/windows_amd64/ssm-document-worker.exe -v \
-								$(BGO_SPACE)/agent/framework/processor/executer/outofproc/worker/main.go
+					$(BGO_SPACE)/agent/framework/processor/executer/outofproc/worker/main.go
 	GOOS=windows GOARCH=amd64 $(GO_BUILD) -ldflags "-s -w" -o $(BGO_SPACE)/bin/windows_amd64/ssm-session-logger.exe -v \
-        						$(BGO_SPACE)/agent/session/logging/main.go
+					$(BGO_SPACE)/agent/session/logging/main.go
 	GOOS=windows GOARCH=amd64 $(GO_BUILD) -ldflags "-s -w" -o $(BGO_SPACE)/bin/windows_amd64/ssm-session-worker.exe -v \
-								$(BGO_SPACE)/agent/framework/processor/executer/outofproc/sessionworker/main.go
+					$(BGO_SPACE)/agent/framework/processor/executer/outofproc/sessionworker/main.go
 
 .PHONY: build-linux-386
 build-linux-386: checkstyle copy-src pre-build
 	@echo "Build for linux agent"
-	GOOS=linux GOARCH=386 $(GO_BUILD) -ldflags "-s -w" -o $(BGO_SPACE)/bin/linux_386/amazon-ssm-agent -v \
-	$(BGO_SPACE)/agent/agent.go $(BGO_SPACE)/agent/agent_unix.go $(BGO_SPACE)/agent/agent_parser.go
-	GOOS=linux GOARCH=386 $(GO_BUILD) -ldflags "-s -w" -o $(BGO_SPACE)/bin/linux_386/updater -v \
-	$(BGO_SPACE)/agent/update/updater/updater.go $(BGO_SPACE)/agent/update/updater/updater_unix.go
-	GOOS=linux GOARCH=386 $(GO_BUILD) -ldflags "-s -w" -o $(BGO_SPACE)/bin/linux_386/ssm-cli -v \
-		$(BGO_SPACE)/agent/cli-main/cli-main.go
-	GOOS=linux GOARCH=386 $(GO_BUILD) -ldflags "-s -w" -o $(BGO_SPACE)/bin/linux_386/ssm-document-worker -v \
-								$(BGO_SPACE)/agent/framework/processor/executer/outofproc/worker/main.go
-	GOOS=linux GOARCH=386 $(GO_BUILD) -ldflags "-s -w" -o $(BGO_SPACE)/bin/linux_386/ssm-session-logger -v \
-        						$(BGO_SPACE)/agent/session/logging/main.go
-	GOOS=linux GOARCH=386 $(GO_BUILD) -ldflags "-s -w" -o $(BGO_SPACE)/bin/linux_386/ssm-session-worker -v \
-								$(BGO_SPACE)/agent/framework/processor/executer/outofproc/sessionworker/main.go
+	GOOS=linux GOARCH=386 $(GO_BUILD) -ldflags "-s -w -extldflags=-Wl,-z,now,-z,relro,-z,defs" -o $(BGO_SPACE)/bin/linux_386/amazon-ssm-agent -v \
+					$(BGO_SPACE)/agent/agent.go $(BGO_SPACE)/agent/agent_unix.go $(BGO_SPACE)/agent/agent_parser.go
+	GOOS=linux GOARCH=386 $(GO_BUILD) -ldflags "-s -w -extldflags=-Wl,-z,now,-z,relro,-z,defs" -o $(BGO_SPACE)/bin/linux_386/updater -v \
+					$(BGO_SPACE)/agent/update/updater/updater.go $(BGO_SPACE)/agent/update/updater/updater_unix.go
+	GOOS=linux GOARCH=386 $(GO_BUILD) -ldflags "-s -w -extldflags=-Wl,-z,now,-z,relro,-z,defs" -o $(BGO_SPACE)/bin/linux_386/ssm-cli -v \
+					$(BGO_SPACE)/agent/cli-main/cli-main.go
+	GOOS=linux GOARCH=386 $(GO_BUILD) -ldflags "-s -w -extldflags=-Wl,-z,now,-z,relro,-z,defs" -o $(BGO_SPACE)/bin/linux_386/ssm-document-worker -v \
+					$(BGO_SPACE)/agent/framework/processor/executer/outofproc/worker/main.go
+	GOOS=linux GOARCH=386 $(GO_BUILD) -ldflags "-s -w -extldflags=-Wl,-z,now,-z,relro,-z,defs" -o $(BGO_SPACE)/bin/linux_386/ssm-session-logger -v \
+					$(BGO_SPACE)/agent/session/logging/main.go
+	GOOS=linux GOARCH=386 $(GO_BUILD) -ldflags "-s -w -extldflags=-Wl,-z,now,-z,relro,-z,defs" -o $(BGO_SPACE)/bin/linux_386/ssm-session-worker -v \
+					$(BGO_SPACE)/agent/framework/processor/executer/outofproc/sessionworker/main.go
 
 .PHONY: build-darwin-386
 build-darwin-386: checkstyle copy-src pre-build
 	@echo "Build for darwin agent"
 	GOOS=darwin GOARCH=386 $(GO_BUILD) -ldflags "-s -w" -o $(BGO_SPACE)/bin/darwin_386/amazon-ssm-agent -v \
-	$(BGO_SPACE)/agent/agent.go $(BGO_SPACE)/agent/agent_unix.go $(BGO_SPACE)/agent/agent_parser.go
+					$(BGO_SPACE)/agent/agent.go $(BGO_SPACE)/agent/agent_unix.go $(BGO_SPACE)/agent/agent_parser.go
 	GOOS=darwin GOARCH=386 $(GO_BUILD) -ldflags "-s -w" -o $(BGO_SPACE)/bin/darwin_386/updater -v \
-	$(BGO_SPACE)/agent/update/updater/updater.go $(BGO_SPACE)/agent/update/updater/updater_unix.go
+					$(BGO_SPACE)/agent/update/updater/updater.go $(BGO_SPACE)/agent/update/updater/updater_unix.go
 	GOOS=darwin GOARCH=386 $(GO_BUILD) -ldflags "-s -w" -o $(BGO_SPACE)/bin/darwin_386/ssm-cli -v \
-		$(BGO_SPACE)/agent/cli-main/cli-main.go
+					$(BGO_SPACE)/agent/cli-main/cli-main.go
 	GOOS=darwin GOARCH=386 $(GO_BUILD) -ldflags "-s -w" -o $(BGO_SPACE)/bin/darwin_386/ssm-document-worker -v \
-								$(BGO_SPACE)/agent/framework/processor/executer/outofproc/worker/main.go
+					$(BGO_SPACE)/agent/framework/processor/executer/outofproc/worker/main.go
 
 .PHONY: build-windows-386
 build-windows-386: checkstyle copy-src pre-build
 	@echo "Rebuild for windows agent"
 	GOOS=windows GOARCH=386 go build -ldflags "-s -w" -o $(BGO_SPACE)/bin/windows_386/amazon-ssm-agent.exe -v \
-	$(BGO_SPACE)/agent/agent.go $(BGO_SPACE)/agent/agent_windows.go $(BGO_SPACE)/agent/agent_parser.go
+					$(BGO_SPACE)/agent/agent.go $(BGO_SPACE)/agent/agent_windows.go $(BGO_SPACE)/agent/agent_parser.go
 	GOOS=windows GOARCH=386 go build -ldflags "-s -w" -o $(BGO_SPACE)/bin/windows_386/updater.exe -v \
-	$(BGO_SPACE)/agent/update/updater/updater.go $(BGO_SPACE)/agent/update/updater/updater_windows.go
+					$(BGO_SPACE)/agent/update/updater/updater.go $(BGO_SPACE)/agent/update/updater/updater_windows.go
 	GOOS=windows GOARCH=386 go build -ldflags "-s -w" -o $(BGO_SPACE)/bin/windows_386/ssm-cli.exe -v \
-		$(BGO_SPACE)/agent/cli-main/cli-main.go
+					$(BGO_SPACE)/agent/cli-main/cli-main.go
 	GOOS=windows GOARCH=386 go build -ldflags "-s -w" -o $(BGO_SPACE)/bin/windows_386/ssm-document-worker.exe -v \
-								$(BGO_SPACE)/agent/framework/processor/executer/outofproc/worker/main.go
+					$(BGO_SPACE)/agent/framework/processor/executer/outofproc/worker/main.go
 	GOOS=windows GOARCH=386 go build -ldflags "-s -w" -o $(BGO_SPACE)/bin/windows_386/ssm-session-logger.exe -v \
-        						$(BGO_SPACE)/agent/session/logging/main.go
+					$(BGO_SPACE)/agent/session/logging/main.go
 	GOOS=windows GOARCH=386 go build -ldflags "-s -w" -o $(BGO_SPACE)/bin/windows_386/ssm-session-worker.exe -v \
-								$(BGO_SPACE)/agent/framework/processor/executer/outofproc/sessionworker/main.go
+					$(BGO_SPACE)/agent/framework/processor/executer/outofproc/sessionworker/main.go
 
 .PHONY: build-arm
 build-arm: checkstyle copy-src pre-build
 	@echo "Build for ARM platforms"
-	GOOS=linux GOARCH=arm GOARM=6 $(GO_BUILD)  -ldflags "-s -w" -o $(BGO_SPACE)/bin/linux_arm/amazon-ssm-agent -v \
-		$(BGO_SPACE)/agent/agent.go $(BGO_SPACE)/agent/agent_unix.go $(BGO_SPACE)/agent/agent_parser.go
-	GOOS=linux GOARCH=arm GOARM=6 $(GO_BUILD) -ldflags "-s -w" -o $(BGO_SPACE)/bin/linux_arm/updater -v \
-		$(BGO_SPACE)/agent/update/updater/updater.go $(BGO_SPACE)/agent/update/updater/updater_unix.go
-	GOOS=linux GOARCH=arm GOARM=6 $(GO_BUILD) -ldflags "-s -w" -o $(BGO_SPACE)/bin/linux_arm/ssm-cli -v \
-		$(BGO_SPACE)/agent/cli-main/cli-main.go
-	GOOS=linux GOARCH=arm GOARM=6 $(GO_BUILD) -ldflags "-s -w" -o $(BGO_SPACE)/bin/linux_arm/ssm-document-worker -v \
-								$(BGO_SPACE)/agent/framework/processor/executer/outofproc/worker/main.go
-	GOOS=linux GOARCH=arm GOARM=6 $(GO_BUILD) -ldflags "-s -w" -o $(BGO_SPACE)/bin/linux_arm/ssm-session-logger -v \
-        						$(BGO_SPACE)/agent/session/logging/main.go
-	GOOS=linux GOARCH=arm GOARM=6 $(GO_BUILD) -ldflags "-s -w" -o $(BGO_SPACE)/bin/linux_arm/ssm-session-worker -v \
-								$(BGO_SPACE)/agent/framework/processor/executer/outofproc/sessionworker/main.go
+	GOOS=linux GOARCH=arm GOARM=6 $(GO_BUILD) -ldflags "-s -w -extldflags=-Wl,-z,now,-z,relro,-z,defs" -o $(BGO_SPACE)/bin/linux_arm/amazon-ssm-agent -v \
+						$(BGO_SPACE)/agent/agent.go $(BGO_SPACE)/agent/agent_unix.go $(BGO_SPACE)/agent/agent_parser.go
+	GOOS=linux GOARCH=arm GOARM=6 $(GO_BUILD) -ldflags "-s -w -extldflags=-Wl,-z,now,-z,relro,-z,defs" -o $(BGO_SPACE)/bin/linux_arm/updater -v \
+						$(BGO_SPACE)/agent/update/updater/updater.go $(BGO_SPACE)/agent/update/updater/updater_unix.go
+	GOOS=linux GOARCH=arm GOARM=6 $(GO_BUILD) -ldflags "-s -w -extldflags=-Wl,-z,now,-z,relro,-z,defs" -o $(BGO_SPACE)/bin/linux_arm/ssm-cli -v \
+						$(BGO_SPACE)/agent/cli-main/cli-main.go
+	GOOS=linux GOARCH=arm GOARM=6 $(GO_BUILD) -ldflags "-s -w -extldflags=-Wl,-z,now,-z,relro,-z,defs" -o $(BGO_SPACE)/bin/linux_arm/ssm-document-worker -v \
+						$(BGO_SPACE)/agent/framework/processor/executer/outofproc/worker/main.go
+	GOOS=linux GOARCH=arm GOARM=6 $(GO_BUILD) -ldflags "-s -w -extldflags=-Wl,-z,now,-z,relro,-z,defs" -o $(BGO_SPACE)/bin/linux_arm/ssm-session-logger -v \
+						$(BGO_SPACE)/agent/session/logging/main.go
+	GOOS=linux GOARCH=arm GOARM=6 $(GO_BUILD) -ldflags "-s -w -extldflags=-Wl,-z,now,-z,relro,-z,defs" -o $(BGO_SPACE)/bin/linux_arm/ssm-session-worker -v \
+						$(BGO_SPACE)/agent/framework/processor/executer/outofproc/sessionworker/main.go
 
 .PHONY: build-arm64
 build-arm64: checkstyle copy-src pre-build
 	@echo "Build for ARM64 platforms"
-	GOOS=linux GOARCH=arm64 $(GO_BUILD)  -ldflags "-s -w" -o $(BGO_SPACE)/bin/linux_arm64/amazon-ssm-agent -v \
-		$(BGO_SPACE)/agent/agent.go $(BGO_SPACE)/agent/agent_unix.go $(BGO_SPACE)/agent/agent_parser.go
-	GOOS=linux GOARCH=arm64 $(GO_BUILD) -ldflags "-s -w" -o $(BGO_SPACE)/bin/linux_arm64/updater -v \
-		$(BGO_SPACE)/agent/update/updater/updater.go $(BGO_SPACE)/agent/update/updater/updater_unix.go
-	GOOS=linux GOARCH=arm64 $(GO_BUILD) -ldflags "-s -w" -o $(BGO_SPACE)/bin/linux_arm64/ssm-cli -v \
-		$(BGO_SPACE)/agent/cli-main/cli-main.go
-	GOOS=linux GOARCH=arm64 $(GO_BUILD) -ldflags "-s -w" -o $(BGO_SPACE)/bin/linux_arm64/ssm-document-worker -v \
-								$(BGO_SPACE)/agent/framework/processor/executer/outofproc/worker/main.go
-	GOOS=linux GOARCH=arm64 $(GO_BUILD) -ldflags "-s -w" -o $(BGO_SPACE)/bin/linux_arm64/ssm-session-logger -v \
-        						$(BGO_SPACE)/agent/session/logging/main.go
-	GOOS=linux GOARCH=arm64 $(GO_BUILD) -ldflags "-s -w" -o $(BGO_SPACE)/bin/linux_arm64/ssm-session-worker -v \
-								$(BGO_SPACE)/agent/framework/processor/executer/outofproc/sessionworker/main.go
+	GOOS=linux GOARCH=arm64 $(GO_BUILD) -ldflags "-s -w -extldflags=-Wl,-z,now,-z,relro,-z,defs" -o $(BGO_SPACE)/bin/linux_arm64/amazon-ssm-agent -v \
+					$(BGO_SPACE)/agent/agent.go $(BGO_SPACE)/agent/agent_unix.go $(BGO_SPACE)/agent/agent_parser.go
+	GOOS=linux GOARCH=arm64 $(GO_BUILD) -ldflags "-s -w -extldflags=-Wl,-z,now,-z,relro,-z,defs" -o $(BGO_SPACE)/bin/linux_arm64/updater -v \
+					$(BGO_SPACE)/agent/update/updater/updater.go $(BGO_SPACE)/agent/update/updater/updater_unix.go
+	GOOS=linux GOARCH=arm64 $(GO_BUILD) -ldflags "-s -w -extldflags=-Wl,-z,now,-z,relro,-z,defs" -o $(BGO_SPACE)/bin/linux_arm64/ssm-cli -v \
+					$(BGO_SPACE)/agent/cli-main/cli-main.go
+	GOOS=linux GOARCH=arm64 $(GO_BUILD) -ldflags "-s -w -extldflags=-Wl,-z,now,-z,relro,-z,defs" -o $(BGO_SPACE)/bin/linux_arm64/ssm-document-worker -v \
+					$(BGO_SPACE)/agent/framework/processor/executer/outofproc/worker/main.go
+	GOOS=linux GOARCH=arm64 $(GO_BUILD) -ldflags "-s -w -extldflags=-Wl,-z,now,-z,relro,-z,defs" -o $(BGO_SPACE)/bin/linux_arm64/ssm-session-logger -v \
+					$(BGO_SPACE)/agent/session/logging/main.go
+	GOOS=linux GOARCH=arm64 $(GO_BUILD) -ldflags "-s -w -extldflags=-Wl,-z,now,-z,relro,-z,defs" -o $(BGO_SPACE)/bin/linux_arm64/ssm-session-worker -v \
+					$(BGO_SPACE)/agent/framework/processor/executer/outofproc/sessionworker/main.go
 
 .PHONY: copy-src
 copy-src:

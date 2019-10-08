@@ -28,5 +28,7 @@ if [[ -n $unformatted ]]; then
 	exit 1
 fi
 
+# run govet
 echo "Run 'go vet'"
-go tool vet -composites=false `pwd`/agent
+ln -s `pwd` `pwd`/vendor/src/github.com/aws/amazon-ssm-agent
+go vet -composites=false ./agent
