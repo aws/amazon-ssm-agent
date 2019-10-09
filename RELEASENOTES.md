@@ -1,5 +1,11 @@
 Latest
 ===============
+- Bug fix for the delay when registering non-EC2 on-prem instances
+- Bug fix for missing ACL when uploading logs to S3 buckets
+- Upgrade GoLang version from 1.9 to 1.12
+
+2.3.714.0
+===============
 - For port forwarding session, close server connection when client drops it's connection
 - Bug fix for missing condition of rules from inventory registry
 - Update service domain information fetch logic from EC2 Metadata
