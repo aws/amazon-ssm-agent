@@ -85,12 +85,24 @@ func createStubPluginInputUninstallCurrent() *ConfigurePackagePluginInput {
 	return &input
 }
 
-func createStubPluginInputUpdate() *ConfigurePackagePluginInput {
+func createStubPluginInputUpgrade() *ConfigurePackagePluginInput {
 	input := ConfigurePackagePluginInput{}
 
 	input.Version = "0.0.2"
 	input.Name = "PVDriver"
-	input.Action = "Update"
+	input.Action = "Install"
+	input.InstallationType = InstallationTypeLegacy
+
+	return &input
+}
+
+func createStubPluginInputUpdate() *ConfigurePackagePluginInput {
+	input := ConfigurePackagePluginInput{}
+
+	input.Version = "0.0.2"
+	input.Name = "packageArn"
+	input.Action = "Install"
+	input.InstallationType = InstallationTypeInPlace
 
 	return &input
 }
@@ -208,7 +220,7 @@ func TestPrepareUpgrade(t *testing.T) {
 
 	pluginInformation := createStubPluginInputInstallLatest()
 	installerMock := installerNotCalledMock()
-	repoMock := repoUpgradeMock(pluginInformation, installerMock)
+	repoMock := repoUpgradeMock(installerMock)
 	serviceMock := serviceUpgradeMock()
 	tracer := trace.NewTracer(log.NewMockLog())
 	output := &trace.PluginOutputTrace{Tracer: tracer}
@@ -378,8 +390,8 @@ func TestPrepareUpdate(t *testing.T) {
 
 	pluginInformation := createStubPluginInputUpdate()
 	installerMock := installerNotCalledMock()
-	repoMock := repoUpdateMock(pluginInformation, installerMock)
-	serviceMock := serviceUpdadeMock()
+	repoMock := repoUpdateMock(installerMock)
+	serviceMock := serviceUpdateMock()
 	tracer := trace.NewTracer(log.NewMockLog())
 	output := &trace.PluginOutputTrace{Tracer: tracer}
 
@@ -405,13 +417,48 @@ func TestPrepareUpdate(t *testing.T) {
 	installerMock.AssertExpectations(t)
 }
 
-func TestPrepareUpgrade_BirdwatchService_InvalidUpdateAction(t *testing.T) {
+func TestPrepareLegacyUpgrade(t *testing.T) {
+	// file stubs are needed for ensurePackage because it handles the unzip
+	stubs := setSuccessStubs()
+	defer stubs.Clear()
+
+	pluginInformation := createStubPluginInputUpgrade()
+	installerMock := installerNotCalledMock()
+	repoMock := repoUpgradeMock(installerMock)
+	serviceMock := serviceUpgradeMock()
+	tracer := trace.NewTracer(log.NewMockLog())
+	output := &trace.PluginOutputTrace{Tracer: tracer}
+
+	inst, uninst, isUpdateInPlace, installState, installedVersion := prepareConfigurePackage(
+		tracer,
+		buildConfigSimple(pluginInformation),
+		repoMock,
+		serviceMock,
+		pluginInformation,
+		"packageArn",
+		"0.0.2",
+		false,
+		output)
+
+	assert.NotNil(t, inst)
+	assert.NotNil(t, uninst)
+	assert.False(t, isUpdateInPlace)
+	assert.Equal(t, localpackages.Installed, installState)
+	assert.NotEmpty(t, installedVersion)
+	assert.Equal(t, 0, output.GetExitCode())
+	assert.Empty(t, tracer.ToPluginOutput().GetStderr())
+
+	installerMock.AssertExpectations(t)
+}
+
+func TestPrepareUpgrade_BirdwatcherService_InvalidInPlaceInstallationType(t *testing.T) {
 	// file stubs are needed for ensurePackage because it handles the unzip
 	stubs := setSuccessStubs()
 	defer stubs.Clear()
 
 	pluginInformation := createStubPluginInputUpdate()
 	installerMock := installerNotCalledMock()
+	repoMock := repoUpdateMock_BirdwatcherNotAllowed()
 	serviceMock := birdwatcherServiceMockForPrepareUpdate()
 	tracer := trace.NewTracer(log.NewMockLog())
 	output := &trace.PluginOutputTrace{Tracer: tracer}
@@ -419,7 +466,7 @@ func TestPrepareUpgrade_BirdwatchService_InvalidUpdateAction(t *testing.T) {
 	prepareConfigurePackage(
 		tracer,
 		buildConfigSimple(pluginInformation),
-		repoNotCalleMock(),
+		repoMock,
 		serviceMock,
 		pluginInformation,
 		"packageArn",
@@ -431,8 +478,8 @@ func TestPrepareUpgrade_BirdwatchService_InvalidUpdateAction(t *testing.T) {
 	serviceMock.AssertExpectations(t)
 }
 
-// Test that if Update is triggered but the requested package does not exist, install the requested version
-func TestPrepareUpdate_NotInstalled(t *testing.T) {
+// Test that if Update is triggered but the requested package does not exist, use the install script to install
+func TestPrepareUpdate_PackageNotInstalled(t *testing.T) {
 	// file stubs are needed for ensurePackage because it handles the unzip
 	stubs := setSuccessStubs()
 	defer stubs.Clear()
@@ -440,7 +487,7 @@ func TestPrepareUpdate_NotInstalled(t *testing.T) {
 	pluginInformation := createStubPluginInputUpdate()
 	installerMock := installerNotCalledMock()
 	repoMock := repoUpdateMock_PackageNotInstalled(pluginInformation, installerMock)
-	serviceMock := serviceUpdadeMock()
+	serviceMock := serviceUpdateMock()
 	tracer := trace.NewTracer(log.NewMockLog())
 	output := &trace.PluginOutputTrace{Tracer: tracer}
 
@@ -476,7 +523,7 @@ func TestPrepareUpdate_VersionAlreadyInstalled_ManifestDifferent(t *testing.T) {
 	pluginInformation := createStubPluginInputUpdate()
 	installerMock := installerNotCalledMock()
 	repoMock := repoUpdateMock_VersionAlreadyInstalledWithDifferentManifest(pluginInformation, installerMock)
-	serviceMock := serviceUpdadeMock()
+	serviceMock := serviceUpdateMock()
 	tracer := trace.NewTracer(log.NewMockLog())
 	output := &trace.PluginOutputTrace{Tracer: tracer}
 
@@ -708,6 +755,28 @@ func TestExecute(t *testing.T) {
 	serviceMock.AssertExpectations(t)
 }
 
+// Test that if Update is triggered but the requested package does not exist, use the install script and install action
+func TestExecuteUpdate_PackageNotInstalled_TreatAsInstall(t *testing.T) {
+	// file stubs are needed for ensurePackage because it handles the unzip
+	stubs := setSuccessStubs()
+	defer stubs.Clear()
+
+	pluginInformation := createStubPluginInputUpdate()
+	installerMock := installerSuccessMock(pluginInformation.Name, pluginInformation.Version)
+	repoMock := repoUpdateMock_PackageNotInstalled(pluginInformation, installerMock)
+	serviceMock := serviceUpdateMock()
+
+	plugin := &Plugin{
+		localRepository:        repoMock,
+		packageServiceSelector: selectMockService(serviceMock),
+	}
+	plugin.execute(contextMock, buildConfigSimple(pluginInformation), createMockCancelFlag(), createMockIOHandler())
+
+	repoMock.AssertExpectations(t)
+	installerMock.AssertExpectations(t)
+	serviceMock.AssertExpectations(t)
+}
+
 func TestExecuteArrayInput(t *testing.T) {
 	pluginInformation := createStubPluginInputInstall()
 	installerMock := installerSuccessMock(pluginInformation.Name, pluginInformation.Version)
@@ -741,10 +810,10 @@ func TestConfigurePackage_InvalidAction(t *testing.T) {
 	plugin.execute(contextMock, buildConfigSimple(pluginInformation), createMockCancelFlag(), createMockIOHandler())
 }
 
-func TestConfigurePackageForUpdate_BirdwatchService_InvalidUpdateAction(t *testing.T) {
+func TestConfigurePackageForUpdate_BirdwatcherService_InvalidInPlaceInstallationType(t *testing.T) {
 	pluginInformation := createStubPluginInputUpdate()
 	installerMock := installerNotCalledMock()
-	repoMock := repoMockWithoutInstaller(installerMock)
+	repoMock := repoUpdateMock_BirdwatcherNotAllowed()
 	serviceMock := birdwatcherServiceMock()
 
 	plugin := &Plugin{
