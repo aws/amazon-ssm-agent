@@ -44,8 +44,12 @@ type Installer struct {
 type ActionType uint8
 
 const (
-	ACTION_TYPE_SH  ActionType = iota
-	ACTION_TYPE_PS1 ActionType = iota
+	ACTION_TYPE_SH   ActionType = iota
+	ACTION_TYPE_PS1  ActionType = iota
+	ACTION_INSTALL              = "install"
+	ACTION_UPDATE               = "update"
+	ACTION_VALIDATE             = "validate"
+	ACTION_UNINSTALL            = "uninstall"
 )
 
 type Action struct {
@@ -71,19 +75,19 @@ func New(packageName string,
 }
 
 func (inst *Installer) Install(tracer trace.Tracer, context context.T) contracts.PluginOutputter {
-	return inst.executeAction(tracer, context, "install")
+	return inst.executeAction(tracer, context, ACTION_INSTALL)
 }
 
 func (inst *Installer) Update(tracer trace.Tracer, context context.T) contracts.PluginOutputter {
-	return inst.executeAction(tracer, context, "update")
+	return inst.executeAction(tracer, context, ACTION_UPDATE)
 }
 
 func (inst *Installer) Uninstall(tracer trace.Tracer, context context.T) contracts.PluginOutputter {
-	return inst.executeAction(tracer, context, "uninstall")
+	return inst.executeAction(tracer, context, ACTION_UNINSTALL)
 }
 
 func (inst *Installer) Validate(tracer trace.Tracer, context context.T) contracts.PluginOutputter {
-	return inst.executeAction(tracer, context, "validate")
+	return inst.executeAction(tracer, context, ACTION_VALIDATE)
 }
 
 func (inst *Installer) Version() string {
@@ -109,6 +113,14 @@ func (inst *Installer) executeAction(tracer trace.Tracer, context context.T, act
 		}
 		exectrace.AppendInfof("Initiating %v %v %v", inst.packageName, inst.version, actionName)
 		inst.executeDocument(tracer, context, actionName, orchestrationDir, pluginsInfo, output)
+	} else if actionName == ACTION_UPDATE {
+		// Only fail if the action is update and there's no corresponding scripts.
+		// 1) Validate is an internal action, hence we do not expect update script.
+		// 2) Install and uninstall scripts are validated at Distributor creation time.
+		// 3) Update script is optional at Distributor creation time, but is deep validated here if true update is invoked.
+		err := fmt.Errorf("missing update script required for in-place update\nPlease create a Distributor package with update script and retry the install with 'In-place update' installation type, or choose 'Uninstall and reinstall' installation type")
+		exectrace.WithError(err)
+		output.MarkAsFailed(nil, err)
 	}
 
 	exectrace.End()

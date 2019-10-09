@@ -75,7 +75,7 @@ func repoAlreadyInstalledMock(pluginInformation *ConfigurePackagePluginInput, in
 	return &mockRepo
 }
 
-func repoUpgradeMock(pluginInformation *ConfigurePackagePluginInput, installerMock installer.Installer) *repoMock.MockedRepository {
+func repoUpgradeMock(installerMock installer.Installer) *repoMock.MockedRepository {
 	mockRepo := repoMock.MockedRepository{}
 	mockRepo.On("GetInstalledVersion", mock.Anything, mock.Anything).Return("0.0.1")
 	mockRepo.On("GetInstallState", mock.Anything, mock.Anything).Return(localpackages.Installed, "")
@@ -100,7 +100,7 @@ func repoUninstallMock(pluginInformation *ConfigurePackagePluginInput, installer
 	return &mockRepo
 }
 
-func repoUpdateMock(input *ConfigurePackagePluginInput, installerMock installer.Installer) *repoMock.MockedRepository {
+func repoUpdateMock(installerMock installer.Installer) *repoMock.MockedRepository {
 	mockRepo := repoMock.MockedRepository{}
 	mockRepo.On("GetInstalledVersion", mock.Anything, mock.Anything).Return("0.0.1")
 	mockRepo.On("GetInstallState", mock.Anything, mock.Anything).Return(localpackages.Installed, "")
@@ -123,6 +123,15 @@ func repoUpdateMock_PackageNotInstalled(pluginInformation *ConfigurePackagePlugi
 	mockRepo.On("GetInstaller", mock.Anything, mock.Anything, mock.Anything, pluginInformation.Version).Return(installerMock)
 	mockRepo.On("LockPackage", mock.Anything, mock.Anything, mock.Anything).Return(nil)
 	mockRepo.On("UnlockPackage", mock.Anything, mock.Anything).Return()
+	mockRepo.On("LoadTraces", mock.Anything, mock.Anything).Return(nil)
+	return &mockRepo
+}
+
+func repoUpdateMock_BirdwatcherNotAllowed() *repoMock.MockedRepository {
+	mockRepo := repoMock.MockedRepository{}
+	mockRepo.On("LockPackage", mock.Anything, mock.Anything, mock.Anything).Return(nil)
+	mockRepo.On("UnlockPackage", mock.Anything, mock.Anything).Return()
+	mockRepo.On("LoadTraces", mock.Anything, mock.Anything).Return(nil)
 	return &mockRepo
 }
 
@@ -184,19 +193,6 @@ func repoInstallMock_ReadWriteManifestHash(pluginInformation *ConfigurePackagePl
 	return &mockRepo
 }
 
-func repoNotCalleMock() *repoMock.MockedRepository {
-	mockRepo := repoMock.MockedRepository{}
-	return &mockRepo
-}
-
-func repoMockWithoutInstaller(installerMock installer.Installer) *repoMock.MockedRepository {
-	mockRepo := repoMock.MockedRepository{}
-	mockRepo.On("LockPackage", mock.Anything, mock.Anything, "Update").Return(nil).Once()
-	mockRepo.On("UnlockPackage", mock.Anything, mock.Anything).Return(nil).Once()
-	mockRepo.On("LoadTraces", mock.Anything, mock.Anything).Return(nil)
-	return &mockRepo
-}
-
 func pluginOutputWithStatus(status contracts.ResultStatus) contracts.PluginOutputter {
 	tracer := trace.NewTracer(log.NewMockLog())
 	tracer.BeginSection("test segment root")
@@ -217,8 +213,6 @@ func installerSuccessMock(packageName string, version string) *installerMock.Moc
 func installerSuccessMock_Install(packageName string, version string, action string) *installerMock.Mock {
 	if action == InstallAction {
 		return installerSuccessMock(packageName, version)
-	} else if action == UpdateAction {
-		return trueUpdateInstallerMock(packageName, version)
 	}
 	mockInst := installerMock.Mock{}
 	return &mockInst
@@ -396,11 +390,10 @@ func birdwatcherServiceMockForPrepareUpdate() *serviceMock.Mock {
 	return &mockService
 }
 
-func serviceUpdadeMock() *serviceMock.Mock {
+func serviceUpdateMock() *serviceMock.Mock {
 	mockService := serviceMock.Mock{}
 	mockService.On("GetPackageArnAndVersion", mock.Anything, mock.Anything).Return("packageArn", "0.0.2")
 	mockService.On("DownloadManifest", mock.Anything, mock.Anything, "0.0.2").Return("packageArn", "0.0.2", false, nil)
-	mockService.On("DownloadArtifact", mock.Anything, mock.Anything, "0.0.2").Return("/temp/0.0.2", nil)
 	mockService.On("PackageServiceName").Return(packageservice.PackageServiceName_document)
 	mockService.On("ReportResult", mock.Anything, mock.Anything).Return(nil)
 	return &mockService

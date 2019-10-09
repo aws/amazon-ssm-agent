@@ -44,8 +44,9 @@ const (
 	InstallAction = "Install"
 	// UninstallAction represents the json command to uninstall package
 	UninstallAction = "Uninstall"
-	// UpdateAction represents the json command to update the package in place
-	UpdateAction = "Update"
+	// InstallationType specifies whether the
+	InstallationTypeLegacy  = "Uninstall and reinstall"
+	InstallationTypeInPlace = "In-place update"
 )
 
 const resourceNotFoundException = "ResourceNotFoundException"
@@ -63,11 +64,12 @@ type Plugin struct {
 // ConfigurePackagePluginInput represents one set of commands executed by the ConfigurePackage plugin.
 type ConfigurePackagePluginInput struct {
 	contracts.PluginInput
-	Name       string `json:"name"`
-	Version    string `json:"version"`
-	Action     string `json:"action"`
-	Source     string `json:"source"`
-	Repository string `json:"repository"`
+	Name             string `json:"name"`
+	Version          string `json:"version"`
+	Action           string `json:"action"`
+	InstallationType string `json:"installationType"`
+	Source           string `json:"source"`
+	Repository       string `json:"repository"`
 }
 
 // NewPlugin returns a new instance of the plugin.
@@ -102,8 +104,24 @@ func prepareConfigurePackage(
 
 	switch input.Action {
 	case InstallAction:
+		trace := tracer.BeginSection("determine update type")
+		if len(input.InstallationType) > 0 && input.InstallationType == InstallationTypeInPlace {
+			// Only allow in-place update for Distributor service as the in-place update type is only exposed in Distributor.
+			// Birdwatcher customers will be migrated to Distributor next.
+			var err error
+			if packageservice.PackageServiceName_document != packageService.PackageServiceName() {
+				err = fmt.Errorf("in-place update is not supported for %v", input.Name)
+				trace.WithError(err).End()
+				output.MarkAsFailed(nil, nil)
+				return
+			}
+
+			isUpdateInPlace = true
+		}
+		trace.AppendDebugf("update is in place: %v", isUpdateInPlace).End()
+
 		// get version information
-		trace := tracer.BeginSection("determine version to install")
+		trace = tracer.BeginSection("determine version to install")
 		installedVersion, installState = getVersionToInstall(tracer, repository, packageArn)
 		trace.AppendDebugf("installed: %v in state %v, to install: %v", installedVersion, installState, version).End()
 
@@ -118,48 +136,14 @@ func prepareConfigurePackage(
 		}
 		trace.End()
 
-		// if different version is installed, uninstall
+		// Get the "uninstaller" for two reasons
+		// 1) If the update type is legacy update (uninstall then install), then uninstall the existing version
+		// if the requested version is different from existing version
 		// * Check if the version is already installed using the packageArn
 		// * If the version exists, but the local manifest is different, reinstall the package
 		// * Return success if the package is already installed
+		// 2) If the update type is in-place update, then the uninstaller is used in case of rollback
 		trace = tracer.BeginSection("ensure old package is locally available")
-		if !(installedVersion == "" || installState == localpackages.None) && (installedVersion != version || !isSameAsCache) {
-			uninst, err = ensurePackage(tracer, repository, packageService, packageArn, installedVersion, isSameAsCache, config)
-			if err != nil {
-				trace.WithError(err)
-			}
-		}
-		trace.End()
-
-	case UpdateAction:
-		// Only allow UpdateAction for Distributor service as the in-place update type is only exposed in Distributor.
-		// Birdwatcher customers will be migrated to Distributor next.
-		trace := tracer.BeginSection("determine version to install")
-		var err error
-		if packageservice.PackageServiceName_document != packageService.PackageServiceName() {
-			err = fmt.Errorf("updateAction is invoked for non-document service")
-			trace.WithError(err).End()
-			output.MarkAsFailed(nil, nil)
-			return
-		}
-		trace.End()
-
-		isUpdateInPlace = true
-
-		// get version information
-		trace = tracer.BeginSection("Determine version to update to")
-		installedVersion, installState = getVersionToInstall(tracer, repository, packageArn)
-
-		trace.AppendDebugf("Installed: %v in state %v. Version to update to: %v", installedVersion, installState, version).End()
-		inst, err = ensurePackage(tracer, repository, packageService, packageArn, version, isSameAsCache, config)
-		if err != nil {
-			trace.WithError(err).End()
-			output.MarkAsFailed(nil, nil)
-			return
-		}
-		trace.End()
-
-		trace = tracer.BeginSection("Ensure old package is locally available so we can uninstall the requested version and roll back to installed version upon update failure.")
 		if !(installedVersion == "" || installState == localpackages.None) && (installedVersion != version || !isSameAsCache) {
 			uninst, err = ensurePackage(tracer, repository, packageService, packageArn, installedVersion, isSameAsCache, config)
 			if err != nil {
@@ -376,7 +360,7 @@ func checkAlreadyInstalled(
 			validateTrace.WithExitcode(int64(validateOutput.GetExitCode()))
 
 			if validateOutput.GetStatus() == contracts.ResultStatusSuccess {
-				if installState == localpackages.Installing {
+				if installState == localpackages.Installing || installState == localpackages.Updating {
 					validateTrace.AppendInfof("Successfully installed %v %v", packageName, targetVersion)
 					if uninst != nil {
 						cleanupAfterUninstall(tracer, repository, uninst, output)
@@ -558,6 +542,10 @@ func (p *Plugin) execute(context context.T, config contracts.Configuration, canc
 				//if the status is already decided as failed or succeeded, do not execute anything
 				if out.GetStatus() != contracts.ResultStatusFailed && out.GetStatus() != contracts.ResultStatusSuccess {
 					alreadyInstalled := checkAlreadyInstalled(tracer, context, p.localRepository, installedVersion, installState, inst, uninst, &out)
+					// if package is not installed, set isUpdateInPlace to false so as to execute install script to install
+					if installedVersion == "" || installState == localpackages.None {
+						isUpdateInPlace = false
+					}
 					// if already failed or already installed and valid, do not execute install
 					// if it is already installed and the cache is the same, do not execute install
 					if !alreadyInstalled || !isSameAsCache {
@@ -584,7 +572,7 @@ func (p *Plugin) execute(context context.T, config contracts.Configuration, canc
 				} else {
 					version := manifestVersion
 					if out.GetStatus() != contracts.ResultStatusFailed && out.GetStatus() != contracts.ResultStatusSuccess {
-						if input.Action == InstallAction || input.Action == UpdateAction {
+						if input.Action == InstallAction {
 							version = inst.Version()
 						} else if input.Action == UninstallAction {
 							version = uninst.Version()

@@ -17,6 +17,7 @@ package configurepackage
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
@@ -49,7 +50,7 @@ func executeConfigurePackage(
 	case localpackages.RollbackUninstall:
 		executeUninstall(tracer, context, repository, uninst, inst, isUpdateInPlace, true, output)
 	default:
-		if uninst != nil {
+		if uninst != nil && !isUpdateInPlace {
 			executeUninstall(tracer, context, repository, inst, uninst, isUpdateInPlace, false, output)
 		} else {
 			executeInstall(tracer, context, repository, inst, uninst, isUpdateInPlace, false, output)
@@ -108,6 +109,16 @@ func executeInstall(
 		return
 	}
 	if !result.GetStatus().IsSuccess() {
+		// If the execution fails because update script is not present for in-place update, do not roll back.
+		// It's not ideal to rely on the error message, but it's uneasy to separate this "validation" error from actual execution error.
+		// Ideally when we have a standard that can differentiate error types based on status code or a new status (eg ValidationError),
+		// we will refactor to make use of that approach.
+		if isUpdateInPlace && strings.Contains(output.GetStderr(), "missing update script") {
+			setNewInstallState(tracer, repository, inst, localpackages.Installed)
+			output.MarkAsFailed(nil, nil)
+			return
+		}
+
 		installtrace.AppendErrorf("Failed to install package; install status %v", result.GetStatus())
 		if isRollback || uninst == nil {
 			// Rollback failed. Mark as failed.
