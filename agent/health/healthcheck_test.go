@@ -64,8 +64,8 @@ func (suite *HealthCheckTestSuite) SetupTest() {
 	suite.stopPolicy = stopPolicy
 	suite.healthCheck = &HealthCheck{
 		healthCheckStopPolicy: suite.stopPolicy,
-		context: suite.contextMock,
-		service: suite.serviceMock,
+		context:               suite.contextMock,
+		service:               suite.serviceMock,
 	}
 }
 
