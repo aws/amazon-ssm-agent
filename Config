@@ -18,7 +18,6 @@ package.Amazon-ssm-agent = {
             GoLang = 1.12;
             BrazilMakeGo = 1.1;
             RIPStaticConfig = 1.4;
-            Go3p-Github-Vektra-Mockery = 1.x;
         };
     };
 
