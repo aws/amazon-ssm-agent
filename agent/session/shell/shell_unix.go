@@ -46,6 +46,7 @@ const (
 	newLineCharacter      = "\n"
 	screenBufferSizeCmd   = "screen -h %d%s"
 	homeEnvVariable       = "HOME=/home/"
+	groupsIdentifier      = "groups="
 )
 
 //StartPty starts pty and provides handles to stdin and stdout
@@ -176,7 +177,7 @@ func getUserCredentials(log log.T, sessionUser string) (uint32, uint32, []uint32
 	}
 
 	// Get the list of associated groups
-	groupNamesCmdArgs := append(utility.ShellPluginCommandArgs, fmt.Sprintf("groups %s", sessionUser))
+	groupNamesCmdArgs := append(utility.ShellPluginCommandArgs, fmt.Sprintf("id %s", sessionUser))
 	cmd = exec.Command(utility.ShellPluginCommandName, groupNamesCmdArgs...)
 	out, err = cmd.Output()
 	if err != nil {
@@ -184,29 +185,25 @@ func getUserCredentials(log log.T, sessionUser string) (uint32, uint32, []uint32
 		return 0, 0, nil, err
 	}
 
-	groupNames := strings.Split(string(out), " ")
+	// Example format of output: uid=1873601143(ssm-user) gid=1873600513(domain users) groups=1873600513(domain users),1873601620(joiners),1873601125(aws delegated add workstations to domain users)
+	// Extract groups from the output
+	groupsIndex := strings.Index(string(out), groupsIdentifier)
 	var groupIds []uint32
 
-	// Skip the first two elements. Group names start from the third element.
-	// Format ex: ssm-user : ssm-user test
-	for i := 2; i < len(groupNames); i++ {
-		groupIdFromNameCmdArgs := append(utility.ShellPluginCommandArgs, fmt.Sprintf("getent group %s", groupNames[i]))
-		cmd = exec.Command(utility.ShellPluginCommandName, groupIdFromNameCmdArgs...)
-		out, err = cmd.Output()
-		if err != nil {
-			log.Errorf("Failed to retrieve group id for %s: %v", groupNames[i], err)
-			return 0, 0, nil, err
-		}
+	if groupsIndex > 0 {
+		// Extract groups names and ids from the output
+		groupNamesAndIds := strings.Split(string(out)[groupsIndex+len(groupsIdentifier):], ",")
 
-		// Get the third element from the array which contains the id and convert it to int
-		// Format ex: test:x:1004:ssm-user
-		groupIdFromName, err := strconv.Atoi(strings.TrimSpace(strings.Split(string(out), ":")[2]))
-		if err != nil {
-			log.Errorf("%s group id not found: %v", groupNames[i], err)
-			return 0, 0, nil, err
-		}
+		// Extract group ids from the output
+		for _, value := range groupNamesAndIds {
+			groupId, err := strconv.Atoi(strings.TrimSpace(value[:strings.Index(value, "(")]))
+			if err != nil {
+				log.Errorf("Failed to retrieve group id from %s: %v", value, err)
+				return 0, 0, nil, err
+			}
 
-		groupIds = append(groupIds, uint32(groupIdFromName))
+			groupIds = append(groupIds, uint32(groupId))
+		}
 	}
 
 	// Make sure they are non-zero valid positive ids
