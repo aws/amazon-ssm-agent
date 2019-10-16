@@ -21,11 +21,10 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"net"
 	"os"
 	"os/exec"
-
-	"fmt"
 
 	"github.com/twinj/uuid"
 )
@@ -166,7 +165,7 @@ func isSimilarHardwareHash(savedHwHash map[string]string, currentHwHash map[stri
 	var totalCount, successCount int
 	// check input
 	if len(savedHwHash) == 0 || len(currentHwHash) == 0 {
-		return false
+		return true
 	}
 
 	// check whether hardwareId (uuid/machineid) has changed

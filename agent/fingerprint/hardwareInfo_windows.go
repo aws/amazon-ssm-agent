@@ -19,18 +19,66 @@ package fingerprint
 
 import (
 	"path/filepath"
+	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
+	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/log/ssmlog"
+
+	"golang.org/x/sys/windows/svc"
+	"golang.org/x/sys/windows/svc/mgr"
 )
 
 const (
-	hardwareID = "uuid"
+	hardwareID     = "uuid"
+	wmiServiceName = "Winmgmt"
+
+	serviceRetryInterval = 15 // Seconds
+	serviceRetry         = 10
 )
+
+func isServiceAvailable(log log.T, service *mgr.Service) bool {
+	for attempt := 1; attempt <= serviceRetry; attempt++ {
+		status, err := service.Query()
+		if err == nil && status.State == svc.Running {
+			return true
+		}
+
+		if err != nil {
+			log.Debugf("Attempt %d: Failed to get WMI service status: %v", attempt, err)
+		} else {
+			log.Debugf("Attempt %d: WMI not running - Current status: %v", attempt, status.State)
+		}
+		time.Sleep(serviceRetryInterval * time.Second)
+	}
+
+	return false
+}
 
 var wmicCommand = filepath.Join(appconfig.EnvWinDir, "System32", "wbem", "wmic.exe")
 
 var currentHwHash = func() map[string]string {
+	log := ssmlog.SSMLogger(true)
 	hardwareHash := make(map[string]string)
+
+	winManager, err := mgr.Connect()
+	if err != nil {
+		log.Errorf("Something went wrong while trying to connect to Service Manager - %v", err)
+		return hardwareHash
+	}
+
+	var wmiService *mgr.Service
+	wmiService, err = winManager.OpenService(wmiServiceName)
+
+	if err != nil {
+		log.Errorf("Opening WMIC Service failed with error %v", err)
+		return hardwareHash
+	}
+
+	if !isServiceAvailable(log, wmiService) {
+		return hardwareHash
+	}
+
 	hardwareHash[hardwareID], _ = csproductUuid()
 	hardwareHash["processor-hash"], _ = processorInfoHash()
 	hardwareHash["memory-hash"], _ = memoryInfoHash()
