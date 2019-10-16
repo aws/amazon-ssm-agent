@@ -31,12 +31,6 @@ else
 	endif
 endif
 
-ifneq ($(dir),)
-	MOCKERYDIR := $(dir)
-else
-	MOCKERYDIR := NotSet
-endif
-
 export GOPATH
 export BRAZIL_BUILD
 
@@ -82,9 +76,6 @@ sources:: create-source-archive
 clean:: remove-prepacked-folder
 	rm -rf build/* bin/ pkg/ vendor/bin/ vendor/pkg/ .cover/
 	find . -type f -name '*.log' -delete
-
-.PHONY: mockgen
-mockgen: clean checkstyle copy-src build-mock
 
 .PHONY: update-plugins-binaries
 update-plugins-binaries:
@@ -455,16 +446,3 @@ get-tools:
 .PHONY: gen-report
 gen-report:
 	$(BGO_SPACE)/Tools/src/gen-report.sh
-
-
-.PHONY: build-mock
-build-mock:
-	@echo "SSM Agent Mock Generation"
-ifeq ($(MOCKERYDIR), NotSet)
-	@echo "Please enter the directory name. e.g 'bb mockgen dir=agent/framework' or 'brazil-build mockgen dir=agent/health' "
-	exit 1
-else
-	@echo "Start generating mocks in directory" $(MOCKERYDIR)
-endif
-	mockery -name="[A-Z]*" -dir=$(MOCKERYDIR) -output=mocks
-	mv mocks $(MOCKERYDIR)/mocks
