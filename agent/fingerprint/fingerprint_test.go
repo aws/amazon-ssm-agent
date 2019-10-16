@@ -84,8 +84,8 @@ func TestIsSimilarHardwareHash(t *testing.T) {
 	somethingElseChanged["somethingElse"] = "somethingElseValueChanged"
 
 	testData := []isSimilarHashTestData{
-		{origin, empty, 0, false},
-		{empty, origin, 0, false},
+		{origin, empty, 0, true},
+		{empty, origin, 0, true},
 		{origin, origin, 100, true},
 		{origin, hwChanged, 0, false},
 		{origin, ipChanged, 66, true},         // 2 out of 3 items matched > 66%
