@@ -24,7 +24,7 @@ import (
 const (
 	defaultScheduledJobQueueSize              = 100
 	defaultScheduleHealthTimerDurationSeconds = 300
-	scheduleForNextAssociationMessage         = "Next association is scheduled at %v, system will sleep for %v"
+	scheduleForNextAssociationMessage         = "Next association is scheduled at %v, association will wait for %v"
 )
 
 // AssociationExecutionSignal uses to manage the channel required by sending/receiving signals for executing scheduled association

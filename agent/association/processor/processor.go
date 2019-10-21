@@ -278,7 +278,7 @@ func (p *Processor) runScheduledAssociation(log log.T) {
 	)
 
 	if scheduledAssociation, err = schedulemanager.LoadNextScheduledAssociation(log); err != nil {
-		log.Errorf("Unable to get next scheduled association, %v, system will retry later", err)
+		log.Errorf("Unable to get next scheduled association, %v, will retry later", err)
 		return
 	}
 
@@ -288,7 +288,7 @@ func (p *Processor) runScheduledAssociation(log log.T) {
 		if nextScheduledDate != nil {
 			signal.ResetWaitTimerForNextScheduledAssociation(log, *nextScheduledDate)
 		} else {
-			log.Debug("No association scheduled at this time, system will retry later")
+			log.Debug("No association scheduled at this time, will retry later")
 		}
 		return
 	}
