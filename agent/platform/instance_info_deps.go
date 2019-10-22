@@ -17,6 +17,7 @@ package platform
 import (
 	"runtime"
 
+	"github.com/aws/amazon-ssm-agent/agent/containers"
 	"github.com/aws/amazon-ssm-agent/agent/managedInstances/registration"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/ec2metadata"
@@ -25,6 +26,8 @@ import (
 
 // dependency for managed instance registration
 var managedInstance instanceRegistration = instanceInfo{}
+
+var container containers.IContainer = &containers.Container{}
 
 type instanceRegistration interface {
 	InstanceID() string

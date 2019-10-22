@@ -12,6 +12,7 @@ const (
 	sampleInstanceError  = "metadata error occurred"
 	sampleInstanceRegion = "us-east-1"
 	sampleInstanceID     = "i-e6c6f145"
+	sampleTargetID       = "container_7d8f-4d76-9c00-1af59952f2b_c09f8e5573d7d8b78a868fbb361d2f87b6ddc6de91"
 
 	sampleManagedInstError  = "registration error occurred"
 	sampleManagedInstRegion = "us-west-1"
@@ -107,6 +108,15 @@ func ExampleSetRegion() {
 	// <nil>
 }
 
+func ExampleSetTargetID() {
+	err := SetTargetID(sampleTargetID)
+	fmt.Println(TargetID())
+	fmt.Println(err)
+	// Output:
+	// container_7d8f-4d76-9c00-1af59952f2b_c09f8e5573d7d8b78a868fbb361d2f87b6ddc6de91 <nil>
+	// <nil>
+}
+
 // Tests
 
 type instanceInfoTest struct {
@@ -118,6 +128,7 @@ type instanceInfoTest struct {
 	expectedIDError     error
 	expectedRegion      string
 	expectedRegionError error
+	expectedTargetID    string
 }
 
 var (
@@ -169,6 +180,12 @@ var (
 			inputMetadata: invalidMetadata, inputRegistration: invalidRegistration, inputDynamicData: invalidDynamicData,
 			expectedRegion:      "",
 			expectedRegionError: fmt.Errorf(errorMessage, "region", sampleDynamicDataError),
+		},
+	}
+
+	instanceTargetTest = []instanceInfoTest{
+		{
+			expectedTargetID: sampleTargetID,
 		},
 	}
 )
@@ -244,4 +261,15 @@ func TestFetchAvailabilityZoneForEc2Instance(t *testing.T) {
 	var value, _ = metadata.GetMetadata("placement/availability-zone")
 	assert.Equal(t, value, actualOutput)
 	assert.Equal(t, nil, actualError)
+}
+
+func TestFetchTargetID(t *testing.T) {
+	// fetchTargetID will return the full target id for container use case.
+	err := SetTargetID(sampleTargetID)
+	assert.Nil(t, err)
+	for _, test := range instanceTargetTest {
+		targetId, err := TargetID()
+		assert.Equal(t, test.expectedTargetID, targetId)
+		assert.Nil(t, err)
+	}
 }

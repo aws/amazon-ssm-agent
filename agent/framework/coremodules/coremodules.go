@@ -41,26 +41,29 @@ func RegisteredCoreModules(context context.T) *ModuleRegistry {
 
 // register core modules here
 func loadCoreModules(context context.T) {
-	registeredCoreModules = append(registeredCoreModules, health.NewHealthCheck(context, ssm.NewService()))
-	registeredCoreModules = append(registeredCoreModules, runcommand.NewMDSService(context))
+	if !context.AppConfig().Agent.ContainerMode {
+		registeredCoreModules = append(registeredCoreModules, health.NewHealthCheck(context, ssm.NewService()))
+		registeredCoreModules = append(registeredCoreModules, runcommand.NewMDSService(context))
+	}
 	sessionCoreModule := session.NewSession(context)
 	if sessionCoreModule != nil {
 		registeredCoreModules = append(registeredCoreModules, sessionCoreModule)
 	}
+	if !context.AppConfig().Agent.ContainerMode {
+		if offlineProcessor, err := runcommand.NewOfflineService(context); err == nil {
+			registeredCoreModules = append(registeredCoreModules, offlineProcessor)
+		} else {
+			context.Log().Errorf("Failed to start offline command document processor")
+		}
 
-	if offlineProcessor, err := runcommand.NewOfflineService(context); err == nil {
-		registeredCoreModules = append(registeredCoreModules, offlineProcessor)
-	} else {
-		context.Log().Errorf("Failed to start offline command document processor")
-	}
+		registeredCoreModules = append(registeredCoreModules, startup.NewProcessor(context))
 
-	registeredCoreModules = append(registeredCoreModules, startup.NewProcessor(context))
-
-	// registering the long running plugin manager as a core module
-	manager.EnsureInitialization(context)
-	if lrpm, err := manager.GetInstance(); err == nil {
-		registeredCoreModules = append(registeredCoreModules, lrpm)
-	} else {
-		context.Log().Errorf("Something went wrong during initialization of long running plugin manager")
+		// registering the long running plugin manager as a core module
+		manager.EnsureInitialization(context)
+		if lrpm, err := manager.GetInstance(); err == nil {
+			registeredCoreModules = append(registeredCoreModules, lrpm)
+		} else {
+			context.Log().Errorf("Something went wrong during initialization of long running plugin manager")
+		}
 	}
 }

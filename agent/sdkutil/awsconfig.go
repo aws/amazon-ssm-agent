@@ -17,6 +17,7 @@ package sdkutil
 import (
 	"time"
 
+	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/managedInstances/registration"
 	"github.com/aws/amazon-ssm-agent/agent/managedInstances/rolecreds"
 	"github.com/aws/amazon-ssm-agent/agent/platform"
@@ -41,6 +42,14 @@ func AwsConfig() (awsConfig *aws.Config) {
 	region, _ := platform.Region()
 	if region != "" {
 		awsConfig.Region = &region
+	}
+
+	//load Task IAM credentials if applicable
+	config, _ := appconfig.Config(false)
+	if config.Agent.ContainerMode {
+		cfg := defaults.Config()
+		handlers := defaults.Handlers()
+		awsConfig.Credentials = defaults.CredChain(cfg, handlers)
 	}
 
 	// load managed credentials if applicable

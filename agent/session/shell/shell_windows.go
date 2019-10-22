@@ -86,7 +86,9 @@ func StartPty(
 		finalCmd = winptyCmd + " " + shellProps.Windows.Commands
 	}
 
-	if !shellProps.Windows.RunAsElevated && !isSessionLogger {
+	appConfig, _ := appconfig.Config(false)
+
+	if !shellProps.Windows.RunAsElevated && !isSessionLogger && !appConfig.Agent.ContainerMode {
 		// Reset password for default ssm user
 		var newPassword string
 		newPassword, err = u.GeneratePasswordForDefaultUser()

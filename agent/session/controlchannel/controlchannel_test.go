@@ -16,8 +16,10 @@ package controlchannel
 
 import (
 	"encoding/json"
+	"path/filepath"
 	"testing"
 
+	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	processorMock "github.com/aws/amazon-ssm-agent/agent/framework/processor/mock"
 	"github.com/aws/amazon-ssm-agent/agent/log"
@@ -192,6 +194,35 @@ func TestControlChannelIncomingMessageHandlerForTerminateSessionMessage(t *testi
 
 	assert.Nil(t, err)
 	mockProcessor.AssertExpectations(t)
+}
+
+func TestInitializeForContainer(t *testing.T) {
+	controlChannel := getControlChannel()
+	mockInstanceId := "9781c2480-edd4cdb9a93f6-3cb662a5d3"
+	controlChannel.Initialize(mockContext, mockService, mockProcessor, mockInstanceId)
+
+	assert.Equal(t, mockInstanceId, controlChannel.ChannelId)
+	assert.Equal(t, mockService, controlChannel.Service)
+	assert.Equal(t, mgsConfig.RoleSubscribe, controlChannel.channelType)
+	assert.Equal(t, mockProcessor, controlChannel.Processor)
+	assert.NotNil(t, controlChannel.wsChannel)
+}
+
+func TestGetOrchestrationFolder(t *testing.T) {
+	config := appconfig.SsmagentConfig{
+		Agent: appconfig.AgentInfo{
+			ContainerMode: true,
+		},
+	}
+
+	mockInstanceId := "test-container_9f178f98-5979-4642-b839-a493c960fc75_d947396f7c607e04a15e7c065fc51cb80e9101818e5007ef834e0d964422e48f"
+	orchestrationDir := getOrchestrationFolder(mockLog, config, mockInstanceId)
+
+	expectFile := filepath.Join(appconfig.DefaultDataStorePath,
+		"d947396f7c607e04a15e7c065fc51cb80e9101818e5007ef834e0d964422e48f",
+		appconfig.DefaultSessionRootDirName,
+		config.Agent.OrchestrationRootDir)
+	assert.Equal(t, orchestrationDir, expectFile)
 }
 
 func getControlChannel() *ControlChannel {

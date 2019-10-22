@@ -75,7 +75,7 @@ func start(log logger.T, instanceIDPtr *string, regionPtr *string, shouldCheckHi
 	// Do a health check before starting the agent.
 	// Health check would include creating a health module and sending empty health pings to the service.
 	// If response is positive, start the agent, else retry and eventually back off (hibernate/passive mode).
-	if status, hibernationErr := healthModule.GetAgentState(); shouldCheckHibernation && status == health.Passive {
+	if status, hibernationErr := healthModule.GetAgentState(); shouldCheckHibernation && status == health.Passive && !context.AppConfig().Agent.ContainerMode {
 		//Starting hibernate mode
 		context.Log().Info("Entering SSM Agent hibernate - ", hibernationErr)
 		go func() {
