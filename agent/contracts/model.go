@@ -250,6 +250,7 @@ type PluginRuntimeStatus struct {
 type AgentConfiguration struct {
 	AgentInfo  AgentInfo
 	InstanceID string
+	TargetID   string
 }
 
 // DocumentResult is a struct that stores information about the result of the document

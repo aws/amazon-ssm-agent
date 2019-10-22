@@ -112,6 +112,7 @@ func DefaultConfig() SsmagentConfig {
 	var agent = AgentInfo{
 		Name:                 "amazon-ssm-agent",
 		OrchestrationRootDir: defaultOrchestrationRootDirName,
+		ContainerMode:        false,
 	}
 	var os = OsInfo{
 		Lang:    "en-US",

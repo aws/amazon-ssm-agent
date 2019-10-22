@@ -19,6 +19,7 @@ import (
 	"fmt"
 	"math/rand"
 	"path/filepath"
+	"strings"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
@@ -63,6 +64,9 @@ func (controlChannel *ControlChannel) Initialize(context context.T,
 	instanceId string) {
 
 	log := context.Log()
+	if context.AppConfig().Agent.ContainerMode {
+		instanceId, _ = platform.TargetID()
+	}
 
 	controlChannel.Service = mgsService
 	controlChannel.ChannelId = instanceId
@@ -83,8 +87,8 @@ func (controlChannel *ControlChannel) SetWebSocket(context context.T,
 	uuid.SwitchFormat(uuid.CleanHyphen)
 	uid := uuid.NewV4().String()
 
-	log.Infof("Setting up websocket for controlchannel for instance: %s, requestId: %s", instanceId, uid)
-	tokenValue, err := getControlChannelToken(log, mgsService, instanceId, uid)
+	log.Infof("Setting up websocket for controlchannel for instance: %s, requestId: %s", controlChannel.ChannelId, uid)
+	tokenValue, err := getControlChannelToken(log, mgsService, controlChannel.ChannelId, uid)
 	if err != nil {
 		log.Errorf("Failed to get controlchannel token, error: %s", err)
 		return err
@@ -92,6 +96,7 @@ func (controlChannel *ControlChannel) SetWebSocket(context context.T,
 
 	config := context.AppConfig()
 	orchestrationRootDir := filepath.Join(appconfig.DefaultDataStorePath, instanceId, appconfig.DefaultSessionRootDirName, config.Agent.OrchestrationRootDir)
+
 	onMessageHandler := func(input []byte) {
 		controlChannelIncomingMessageHandler(context, processor, input, orchestrationRootDir, instanceId)
 	}
@@ -99,7 +104,7 @@ func (controlChannel *ControlChannel) SetWebSocket(context context.T,
 		callable := func() (channel interface{}, err error) {
 			uuid.SwitchFormat(uuid.CleanHyphen)
 			requestId := uuid.NewV4().String()
-			tokenValue, err := getControlChannelToken(log, mgsService, instanceId, requestId)
+			tokenValue, err := getControlChannelToken(log, mgsService, controlChannel.ChannelId, requestId)
 			if err != nil {
 				return controlChannel, err
 			}
@@ -124,7 +129,7 @@ func (controlChannel *ControlChannel) SetWebSocket(context context.T,
 	}
 
 	if err := controlChannel.wsChannel.Initialize(context,
-		instanceId,
+		controlChannel.ChannelId,
 		mgsConfig.ControlChannel,
 		mgsConfig.RoleSubscribe,
 		tokenValue,
@@ -312,4 +317,18 @@ func getControlChannelToken(log log.T,
 
 	log.Debug("Successfully get controlchannel token")
 	return *createControlChannelOutput.TokenValue, nil
+}
+
+func getOrchestrationFolder(log log.T, config appconfig.SsmagentConfig, instanceId string) string {
+	log.Info("Trying to get orchestration folder directory for session manager")
+	var orchestrationRootDir string
+	if config.Agent.ContainerMode {
+		log.Info("Parsing targetID from platform instanceID")
+		infoArray := strings.Split(instanceId, "_")
+		containerId := infoArray[len(infoArray)-1]
+		orchestrationRootDir = filepath.Join(appconfig.DefaultDataStorePath, containerId, appconfig.DefaultSessionRootDirName, config.Agent.OrchestrationRootDir)
+	} else {
+		orchestrationRootDir = filepath.Join(appconfig.DefaultDataStorePath, instanceId, appconfig.DefaultSessionRootDirName, config.Agent.OrchestrationRootDir)
+	}
+	return orchestrationRootDir
 }

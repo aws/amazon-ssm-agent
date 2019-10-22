@@ -77,7 +77,9 @@ func StartPty(
 		cmd.Env = append(cmd.Env, langEnvVariable)
 	}
 
-	if !shellProps.Linux.RunAsElevated && !isSessionLogger {
+	appConfig, _ := appconfig.Config(false)
+
+	if !shellProps.Linux.RunAsElevated && !isSessionLogger && !appConfig.Agent.ContainerMode {
 		// We get here only when its a customer shell that needs to be started in a specific user mode.
 
 		var sessionUser string

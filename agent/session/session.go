@@ -57,6 +57,9 @@ func NewSession(context context.T) *Session {
 	appConfig := context.AppConfig()
 
 	instanceID, err := platform.InstanceID()
+
+	targetID, err := platform.TargetID()
+
 	if instanceID == "" {
 		log.Errorf("no instanceID provided, %s", err)
 		return nil
@@ -80,6 +83,7 @@ func NewSession(context context.T) *Session {
 	agentConfig := contracts.AgentConfiguration{
 		AgentInfo:  agentInfo,
 		InstanceID: instanceID,
+		TargetID:   targetID,
 	}
 
 	messageGatewayServiceConfig := appConfig.Mgs
@@ -173,7 +177,6 @@ func (s *Session) ModuleExecute(context context.T) (err error) {
 	}()
 
 	instanceId := s.agentConfig.InstanceID
-
 	resultChan, err := s.processor.Start()
 	if err != nil {
 		log.Errorf("unable to start session document processor: %s", err)
@@ -239,6 +242,9 @@ func (s *Session) listenReply(resultChan chan contracts.DocumentResult, instance
 				instanceID,
 				s.context.AppConfig().Agent.OrchestrationRootDir,
 				s.context.AppConfig().Ssm.SessionLogsRetentionDurationHours)
+		}
+		if s.context.AppConfig().Agent.ContainerMode {
+			instanceId, _ = platform.TargetID()
 		}
 		msg, err := buildAgentTaskComplete(log, res, instanceId)
 		if err != nil {

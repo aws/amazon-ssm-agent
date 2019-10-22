@@ -32,6 +32,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/managedInstances/registration"
 	"github.com/aws/amazon-ssm-agent/agent/managedInstances/rolecreds"
 	"github.com/aws/amazon-ssm-agent/agent/platform"
+	"github.com/aws/amazon-ssm-agent/agent/sdkutil"
 	mgsconfig "github.com/aws/amazon-ssm-agent/agent/session/config"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/credentials"
@@ -80,14 +81,21 @@ func NewService(log log.T, mgsConfig appconfig.MgsConfig, connectionTimeout time
 	if creds != nil {
 		v4Signer = v4.NewSigner(creds)
 	} else {
-		log.Debug("Getting credentials for v4 signatures from the metadata service.")
-
-		// load from the metadata service
-		metadataCreds := ec2rolecreds.NewCredentials(session.New())
-		if metadataCreds != nil {
-			v4Signer = v4.NewSigner(metadataCreds)
+		config, _ := appconfig.Config(false)
+		if config.Agent.ContainerMode {
+			log.Debug("Getting credentials for v4 signatures from the task role credentials.")
+			config := sdkutil.AwsConfig()
+			v4Signer = v4.NewSigner(config.Credentials)
 		} else {
-			log.Debug("Failed to get the creds from the metadata service.")
+			log.Debug("Getting credentials for v4 signatures from the metadata service.")
+
+			// load from the metadata service
+			metadataCreds := ec2rolecreds.NewCredentials(session.New())
+			if metadataCreds != nil {
+				v4Signer = v4.NewSigner(metadataCreds)
+			} else {
+				log.Debug("Failed to get the creds from the metadata service.")
+			}
 		}
 	}
 

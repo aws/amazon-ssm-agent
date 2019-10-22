@@ -18,9 +18,12 @@ import (
 	"fmt"
 	"strings"
 	"sync"
+
+	"github.com/aws/amazon-ssm-agent/agent/appconfig"
+	"github.com/aws/amazon-ssm-agent/agent/containers"
 )
 
-var cachedRegion, cachedAvailabilityZone, cachedInstanceType, cachedInstanceID string
+var cachedRegion, cachedAvailabilityZone, cachedInstanceType, cachedInstanceID, cachedTargetID string
 var lock sync.RWMutex
 
 const errorMessage = "Failed to fetch %s. Data from vault is empty. %v"
@@ -36,6 +39,29 @@ func InstanceID() (string, error) {
 		cachedInstanceID, err = fetchInstanceID()
 		return cachedInstanceID, err
 	}
+}
+
+// TargetID returns the current target id for container
+func TargetID() (string, error) {
+	lock.RLock()
+	defer lock.RUnlock()
+	if cachedTargetID != "" {
+		return cachedTargetID, nil
+	} else {
+		var err error
+		cachedTargetID, err = fetchTargetID()
+		return cachedTargetID, err
+	}
+}
+
+func SetTargetID(targetID string) error {
+	lock.Lock()
+	defer lock.Unlock()
+	if targetID == "" {
+		return fmt.Errorf("invalid target id")
+	}
+	cachedTargetID = targetID
+	return nil
 }
 
 // SetInstanceID overrides the platform instanceID
@@ -142,6 +168,15 @@ func fetchInstanceID() (string, error) {
 	var err error
 	var instanceID string
 
+	config, _ := appconfig.Config(false)
+	if config.Agent.ContainerMode {
+		container := &containers.Container{}
+		targetID, err := container.TargetID()
+		infoArray := strings.Split(targetID, "_")
+		containerID := infoArray[len(infoArray)-1]
+		return containerID, err
+	}
+
 	// trying to get instance id from managed instance registration
 	if instanceID = managedInstance.InstanceID(); instanceID != "" {
 		return instanceID, nil
@@ -154,6 +189,15 @@ func fetchInstanceID() (string, error) {
 
 	// return combined error messages
 	return "", fmt.Errorf(errorMessage, "instance ID", err)
+}
+
+func fetchTargetID() (string, error) {
+	config, _ := appconfig.Config(false)
+	if config.Agent.ContainerMode {
+		return container.TargetID()
+	} else {
+		return "", nil
+	}
 }
 
 // fetchInstanceType fetches the instance type with the following preference order.
@@ -184,6 +228,12 @@ func fetchInstanceType() (string, error) {
 func fetchRegion() (string, error) {
 	var err error
 	var region string
+
+	config, err := appconfig.Config(false)
+	if err == nil && config.Agent.ContainerMode {
+		container := &containers.Container{}
+		return container.Region()
+	}
 
 	// trying to get region from managed instance registration
 	if region = managedInstance.Region(); region != "" {

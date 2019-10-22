@@ -50,6 +50,7 @@ type AgentInfo struct {
 	Region               string
 	OrchestrationRootDir string
 	DownloadRootDir      string
+	ContainerMode        bool
 }
 
 // MgsConfig represents configuration for Message Gateway service

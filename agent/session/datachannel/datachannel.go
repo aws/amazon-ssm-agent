@@ -175,6 +175,11 @@ func NewDataChannel(context context.T,
 	mgsService := service.NewService(log, messageGatewayServiceConfig, connectionTimeout)
 
 	instanceID, err := platform.InstanceID()
+
+	if appConfig.Agent.ContainerMode {
+		instanceID, err = platform.TargetID()
+	}
+
 	if instanceID == "" {
 		return nil, fmt.Errorf("no instanceID provided, %s", err)
 	}
