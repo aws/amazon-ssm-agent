@@ -165,7 +165,7 @@ func isSimilarHardwareHash(savedHwHash map[string]string, currentHwHash map[stri
 	var totalCount, successCount int
 	// check input
 	if len(savedHwHash) == 0 || len(currentHwHash) == 0 {
-		return true
+		return false
 	}
 
 	// check whether hardwareId (uuid/machineid) has changed

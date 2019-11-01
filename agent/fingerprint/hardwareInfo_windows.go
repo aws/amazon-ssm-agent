@@ -34,10 +34,10 @@ const (
 	wmiServiceName = "Winmgmt"
 
 	serviceRetryInterval = 15 // Seconds
-	serviceRetry         = 10
+	serviceRetry         = 5
 )
 
-func isServiceAvailable(log log.T, service *mgr.Service) bool {
+func waitForService(log log.T, service *mgr.Service) bool {
 	for attempt := 1; attempt <= serviceRetry; attempt++ {
 		status, err := service.Query()
 		if err == nil && status.State == svc.Running {
@@ -61,22 +61,19 @@ var currentHwHash = func() map[string]string {
 	log := ssmlog.SSMLogger(true)
 	hardwareHash := make(map[string]string)
 
+	// Wait for WMI Service
 	winManager, err := mgr.Connect()
-	if err != nil {
-		log.Errorf("Something went wrong while trying to connect to Service Manager - %v", err)
-		return hardwareHash
-	}
-
-	var wmiService *mgr.Service
-	wmiService, err = winManager.OpenService(wmiServiceName)
-
-	if err != nil {
-		log.Errorf("Opening WMIC Service failed with error %v", err)
-		return hardwareHash
-	}
-
-	if !isServiceAvailable(log, wmiService) {
-		return hardwareHash
+	log.Debug("Waiting for WMI Service to be ready.....")
+	if err == nil {
+		var wmiService *mgr.Service
+		wmiService, err = winManager.OpenService(wmiServiceName)
+		if err == nil {
+			if !waitForService(log, wmiService) {
+				log.Debug("[Warning] WMI Service cannot be query for hardware hash.")
+			} else {
+				log.Debug("WMI Service is ready to be queried....")
+			}
+		}
 	}
 
 	hardwareHash[hardwareID], _ = csproductUuid()
