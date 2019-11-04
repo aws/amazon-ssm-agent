@@ -1,5 +1,11 @@
 Latest
 ===============
+- Terminate port forwarding session on receiving TerminateSession flag
+- Bug fix to reload SSM client if region has not been initialize correctly
+- Bug fix for retrieval of user groups on Linux 
+
+2.3.722.0
+===============
 - Bug fix for the delay when registering non-EC2 on-prem instances
 - Bug fix for missing ACL when uploading logs to S3 buckets
 - Upgrade GoLang version from 1.9 to 1.12
