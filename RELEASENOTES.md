@@ -1,5 +1,9 @@
 Latest
 ===============
+- Add support to update SSM Distributor packages in place
+
+2.3.756.0
+===============
 - Terminate port forwarding session on receiving TerminateSession flag
 - Bug fix to reload SSM client if region has not been initialize correctly
 - Bug fix for retrieval of user groups on Linux 
