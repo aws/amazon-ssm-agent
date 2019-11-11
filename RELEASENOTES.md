@@ -1,5 +1,9 @@
 Latest
 ===============
+- Session manager supports handling of Task metadata
+
+2.3.758.0
+===============
 - Add support to update SSM Distributor packages in place
 
 2.3.756.0
