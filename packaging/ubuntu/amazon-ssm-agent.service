@@ -4,7 +4,6 @@ After=network-online.target
 
 [Service]
 Type=simple
-WorkingDirectory=/usr/bin/
 ExecStart=/usr/bin/amazon-ssm-agent
 KillMode=process
 Restart=on-failure
