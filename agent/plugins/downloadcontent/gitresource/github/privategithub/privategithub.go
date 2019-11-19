@@ -16,15 +16,15 @@
 package privategithub
 
 import (
-	"github.com/aws/amazon-ssm-agent/agent/framework/docparser/parameterstore"
-	"github.com/aws/amazon-ssm-agent/agent/log"
-	"github.com/aws/amazon-ssm-agent/agent/plugins/downloadcontent/githubclient"
-	"github.com/aws/amazon-ssm-agent/agent/ssm/ssmparameterresolver"
-
 	"errors"
 	"fmt"
 	"net/http"
 	"regexp"
+
+	"github.com/aws/amazon-ssm-agent/agent/framework/docparser/parameterstore"
+	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/plugins/downloadcontent/gitresource/github/privategithub/githubclient"
+	"github.com/aws/amazon-ssm-agent/agent/ssm/ssmparameterresolver"
 )
 
 const (
@@ -38,7 +38,7 @@ type PrivateGithubAccess interface {
 type TokenInfoImpl struct {
 	SsmParameter func(log log.T, paramService ssmparameterresolver.ISsmParameterService, parameterReferences []string,
 		resolverOptions ssmparameterresolver.ResolveOptions) (info map[string]ssmparameterresolver.SsmParameterInfo, err error)
-	paramAccess    ssmparameterresolver.SsmParameterService
+	paramAccess    ssmparameterresolver.ISsmParameterService
 	gitoauthclient githubclient.IOAuthClient
 }
 
@@ -72,7 +72,7 @@ func (t TokenInfoImpl) GetOAuthClient(log log.T, tokenInfo string) (client *http
 
 	// Get the parameter value from parameter store.
 	// NOTE: Do not log the parameter value
-	if tokenMap, err = t.SsmParameter(log, &t.paramAccess, parameterReferences, resolverOptions); err != nil {
+	if tokenMap, err = t.SsmParameter(log, t.paramAccess, parameterReferences, resolverOptions); err != nil {
 		return nil, fmt.Errorf("Could not resolve ssm parameter - %v. Error - %v", parameterReferences, err)
 	}
 

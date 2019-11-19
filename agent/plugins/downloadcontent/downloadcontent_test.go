@@ -16,11 +16,10 @@
 package downloadcontent
 
 import (
-	"testing"
-
-	"time"
-
 	"errors"
+	"os"
+	"testing"
+	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
@@ -50,8 +49,27 @@ func TestNewRemoteResource_InvalidLocationType(t *testing.T) {
 
 }
 
-func TestNewRemoteResource_Github(t *testing.T) {
+func TestNewRemoteResource_Git(t *testing.T) {
+	locationInfo := `{
+		"repository" :	 "test-repo"
+	}`
 
+	remoteResource, err := newRemoteResource(logger, "Git", locationInfo)
+	assert.NotNil(t, remoteResource)
+	assert.NoError(t, err)
+}
+
+func TestNewRemoteResource_HTTP(t *testing.T) {
+	locationInfo := `{
+		"url" :	 "http://"
+	}`
+
+	remoteResource, err := newRemoteResource(logger, "HTTP", locationInfo)
+	assert.NotNil(t, remoteResource)
+	assert.NoError(t, err)
+}
+
+func TestNewRemoteResource_Github(t *testing.T) {
 	locationInfo := `{
 		"owner" : "test-owner",
 		"repository" :	 "test-repo"
@@ -60,7 +78,6 @@ func TestNewRemoteResource_Github(t *testing.T) {
 
 	assert.NotNil(t, remoteresource)
 	assert.NoError(t, err)
-
 }
 
 func TestNewRemoteResource_S3(t *testing.T) {
@@ -194,13 +211,52 @@ func Test_RunCopyContentBadLocationInfo(t *testing.T) {
 	mockIOHandler.AssertExpectations(t)
 }
 
-func TestPlugin_ExecuteGitHubFile(t *testing.T) {
-
+func executePlugin(t *testing.T, input *DownloadContentPlugin, destPath string) {
 	mockplugin := MockDefaultPlugin{}
 	mockIOHandler := new(iohandlermocks.MockIOHandler)
 
-	input := DownloadContentPlugin{}
+	conf := createSimpleConfigWithProperties(input)
+	cancelFlag := createMockCancelFlag()
 
+	var copyContentResourceMock = resourcemock.RemoteResourceMock{}
+	var copyContentFileMock = filemock.FileSystemMock{}
+
+	mockIOHandler.On("AppendInfof", mock.Anything, mock.Anything).Return()
+	mockIOHandler.On("MarkAsSucceeded").Return()
+
+	mockRemoteResource := func(log log.T, locationtype, locationInfo string) (remoteresource.RemoteResource, error) {
+		copyContentResourceMock.On("ValidateLocationInfo").Return(true, nil).Once()
+		copyContentResourceMock.On("DownloadRemoteResource", contextMock.Log(), copyContentFileMock, destPath).Return(nil, resourcemock.NewEmptyDownloadResult()).Once()
+		return copyContentResourceMock, nil
+	}
+
+	p := &Plugin{
+		remoteResourceCreator: mockRemoteResource,
+		filesys:               copyContentFileMock,
+	}
+
+	SetPermission = stubChmod
+	p.execute(contextMock, conf, cancelFlag, mockIOHandler)
+
+	copyContentFileMock.AssertExpectations(t)
+	copyContentResourceMock.AssertExpectations(t)
+	mockplugin.AssertExpectations(t)
+	mockIOHandler.AssertExpectations(t)
+}
+
+func TestPlugin_ExecuteGitFile(t *testing.T) {
+	input := DownloadContentPlugin{}
+	input.SourceType = "Git"
+	input.SourceInfo = `{
+		"repository" : "test-repo"
+	}`
+	input.DestinationPath = os.TempDir()
+
+	executePlugin(t, &input, os.TempDir())
+}
+
+func TestPlugin_ExecuteGitHubFile(t *testing.T) {
+	input := DownloadContentPlugin{}
 	input.SourceType = "GitHub"
 	input.SourceInfo = `{
 		"owner" : "test-owner",
@@ -208,110 +264,30 @@ func TestPlugin_ExecuteGitHubFile(t *testing.T) {
 		"path" : "path"
 		}`
 	input.DestinationPath = "destination"
-	conf := createSimpleConfigWithProperties(&input)
 
-	var githubcopyContentResourceMock = resourcemock.RemoteResourceMock{}
-
-	var githubCopyContentFileMock = filemock.FileSystemMock{}
-
-	mockIOHandler.On("AppendInfof", mock.Anything, mock.Anything).Return()
-	mockIOHandler.On("MarkAsSucceeded").Return()
-
-	githubRemoteresourceMock := func(log log.T, locationtype, locationInfo string) (remoteresource.RemoteResource, error) {
-
-		githubcopyContentResourceMock.On("ValidateLocationInfo").Return(true, nil).Once()
-		githubcopyContentResourceMock.On("DownloadRemoteResource", contextMock.Log(), githubCopyContentFileMock, "orch/downloads/destination").Return(nil, resourcemock.NewEmptyDownloadResult()).Once()
-		return githubcopyContentResourceMock, nil
-	}
-
-	p := &Plugin{
-		remoteResourceCreator: githubRemoteresourceMock,
-		filesys:               githubCopyContentFileMock,
-	}
-	SetPermission = stubChmod
-	p.execute(contextMock, conf, createMockCancelFlag(), mockIOHandler)
-
-	githubCopyContentFileMock.AssertExpectations(t)
-	githubcopyContentResourceMock.AssertExpectations(t)
-	mockplugin.AssertExpectations(t)
-	mockIOHandler.AssertExpectations(t)
+	executePlugin(t, &input, "orch/downloads/destination")
 }
 
 func TestPlugin_ExecuteS3File(t *testing.T) {
-
-	mockplugin := MockDefaultPlugin{}
-	mockIOHandler := new(iohandlermocks.MockIOHandler)
-
 	input := DownloadContentPlugin{}
-
 	input.SourceType = "S3"
 	input.SourceInfo = `{
 		"path" : "https://s3.amazonaws.com/fake-bucket/fake-key/filename.ps"
-		}`
+	}`
 	input.DestinationPath = "/var/tmp/destination"
-	conf := createSimpleConfigWithProperties(&input)
-	cancelFlag := createMockCancelFlag()
-	var s3copyContentResourceMock = resourcemock.RemoteResourceMock{}
 
-	var s3CopyContentFileMock = filemock.FileSystemMock{}
-	mockIOHandler.On("AppendInfof", mock.Anything, mock.Anything).Return()
-	mockIOHandler.On("MarkAsSucceeded").Return()
-
-	s3MockRemoteResource := func(log log.T, locationtype, locationInfo string) (remoteresource.RemoteResource, error) {
-
-		s3copyContentResourceMock.On("ValidateLocationInfo").Return(true, nil).Once()
-		s3copyContentResourceMock.On("DownloadRemoteResource", contextMock.Log(), s3CopyContentFileMock, "/var/tmp/destination").Return(nil, resourcemock.NewEmptyDownloadResult()).Once()
-		return s3copyContentResourceMock, nil
-	}
-	p := &Plugin{
-		remoteResourceCreator: s3MockRemoteResource,
-		filesys:               s3CopyContentFileMock,
-	}
-	SetPermission = stubChmod
-	p.execute(contextMock, conf, cancelFlag, mockIOHandler)
-
-	s3CopyContentFileMock.AssertExpectations(t)
-	s3copyContentResourceMock.AssertExpectations(t)
-	mockplugin.AssertExpectations(t)
-	mockIOHandler.AssertExpectations(t)
+	executePlugin(t, &input, "/var/tmp/destination")
 }
 
 func TestPlugin_ExecuteSSMDoc(t *testing.T) {
-
-	mockplugin := MockDefaultPlugin{}
-	mockIOHandler := new(iohandlermocks.MockIOHandler)
-
 	input := DownloadContentPlugin{}
-
 	input.SourceType = "SSMDocument"
 	input.SourceInfo = `{
 		"name" : "arn:aws:ssm:us-east-1:1234567890:document/mySharedDocument:10"
-		}`
+	}`
 	input.DestinationPath = "/var/tmp/destination/"
-	conf := createSimpleConfigWithProperties(&input)
-	cancelFlag := createMockCancelFlag()
 
-	var ssmDocCopyContentResourceMock = resourcemock.RemoteResourceMock{}
-	var ssmDocCopyContentFileMock = filemock.FileSystemMock{}
-	mockIOHandler.On("AppendInfof", mock.Anything, mock.Anything).Return()
-	mockIOHandler.On("MarkAsSucceeded").Return()
-
-	ssmDocMockRemoteResource := func(log log.T, locationtype, locationInfo string) (remoteresource.RemoteResource, error) {
-		ssmDocCopyContentResourceMock.On("ValidateLocationInfo").Return(true, nil).Once()
-		ssmDocCopyContentResourceMock.On("DownloadRemoteResource", contextMock.Log(), ssmDocCopyContentFileMock, "/var/tmp/destination/").Return(nil, resourcemock.NewEmptyDownloadResult()).Once()
-		return ssmDocCopyContentResourceMock, nil
-	}
-	p := &Plugin{
-		remoteResourceCreator: ssmDocMockRemoteResource,
-		filesys:               ssmDocCopyContentFileMock,
-	}
-	SetPermission = stubChmod
-	p.execute(contextMock, conf, cancelFlag, mockIOHandler)
-
-	ssmDocCopyContentFileMock.AssertExpectations(t)
-	ssmDocCopyContentResourceMock.AssertExpectations(t)
-	mockplugin.AssertExpectations(t)
-	mockIOHandler.AssertExpectations(t)
+	executePlugin(t, &input, "/var/tmp/destination/")
 }
 
 func TestPlugin_ExecuteSSMDocError(t *testing.T) {

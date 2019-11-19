@@ -30,6 +30,7 @@ type fileSystem interface {
 	Remove(name string) error
 	Rename(oldpath string, newpath string) error
 	Stat(name string) (os.FileInfo, error)
+	Create(name string) (*os.File, error)
 }
 
 // osFS implements fileSystem using the local disk.
@@ -41,6 +42,7 @@ func (osFS) Open(name string) (ioFile, error)             { return os.Open(name)
 func (osFS) Stat(name string) (os.FileInfo, error)        { return os.Stat(name) }
 func (osFS) Remove(name string) error                     { return os.Remove(name) }
 func (osFS) Rename(oldpath string, newpath string) error  { return os.Rename(oldpath, newpath) }
+func (osFS) Create(name string) (*os.File, error)         { return os.Create(name) }
 
 type ioFile interface {
 	io.Closer
@@ -52,10 +54,15 @@ type ioFile interface {
 
 type ioUtility interface {
 	WriteFile(filename string, data []byte, perm os.FileMode) error
+	TempDir(dir, prefix string) (name string, err error)
 }
 
 type ioU struct{}
 
 func (ioU) WriteFile(filename string, data []byte, perm os.FileMode) error {
 	return ioutil.WriteFile(filename, data, perm)
+}
+
+func (ioU) TempDir(dir, prefix string) (name string, err error) {
+	return ioutil.TempDir(dir, prefix)
 }

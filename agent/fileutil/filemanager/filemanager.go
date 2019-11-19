@@ -17,17 +17,21 @@
 package filemanager
 
 import (
+	"os"
+
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 )
 
 // FileSystem implements dependency on filesystem and os utility functions
 type FileSystem interface {
+	CreateFile(name string) (*os.File, error)
 	MakeDirs(destinationDir string) (err error)
+	CreateTempDir(dir, prefix string) (name string, err error)
 	WriteFile(filename string, content string) error
 	ReadFile(filename string) (string, error)
 	MoveAndRenameFile(sourcePath, sourceName, destPath, destName string) (result bool, err error)
 	DeleteFile(filename string) (err error)
-	DeleteDirectory(filename string) (err error)
+	DeleteDirectory(directory string) (err error)
 	Exists(filename string) bool
 	IsDirectory(srcPath string) bool
 	AppendToFile(fileDirectory string, filename string, content string) (filePath string, err error)
@@ -50,9 +54,9 @@ func (f FileSystemImpl) DeleteFile(filename string) (err error) {
 	return fileutil.DeleteFile(filename)
 }
 
-// DeleteDirectory deletes the file
-func (f FileSystemImpl) DeleteDirectory(filename string) (err error) {
-	return fileutil.DeleteDirectory(filename)
+// DeleteDirectory recursively deletes the directory
+func (f FileSystemImpl) DeleteDirectory(directory string) (err error) {
+	return fileutil.DeleteDirectory(directory)
 }
 
 // WriteFile writes the content in the file path provided
@@ -76,4 +80,14 @@ func (f FileSystemImpl) IsDirectory(srcPath string) bool {
 // AppendToFile appends contents to file
 func (f FileSystemImpl) AppendToFile(fileDirectory string, filename string, content string) (filePath string, err error) {
 	return fileutil.AppendToFile(fileDirectory, filename, content)
+}
+
+// CreateFile creates file with the given name
+func (f FileSystemImpl) CreateFile(name string) (*os.File, error) {
+	return fileutil.CreateFile(name)
+}
+
+// CreateTempDir creates a directory relative to the given dir having the given prefix
+func (f FileSystemImpl) CreateTempDir(dir, prefix string) (name string, err error) {
+	return fileutil.CreateTempDir(dir, prefix)
 }

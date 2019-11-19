@@ -16,14 +16,14 @@
 package privategithub
 
 import (
-	"github.com/aws/amazon-ssm-agent/agent/framework/docparser/parameterstore"
-	"github.com/aws/amazon-ssm-agent/agent/log"
-	gitmock "github.com/aws/amazon-ssm-agent/agent/plugins/downloadcontent/githubclient/mock"
-	"github.com/aws/amazon-ssm-agent/agent/ssm/ssmparameterresolver"
-	"github.com/stretchr/testify/assert"
-
 	"net/http"
 	"testing"
+
+	"github.com/aws/amazon-ssm-agent/agent/framework/docparser/parameterstore"
+	"github.com/aws/amazon-ssm-agent/agent/log"
+	gitmock "github.com/aws/amazon-ssm-agent/agent/plugins/downloadcontent/gitresource/github/privategithub/githubclient/mock"
+	"github.com/aws/amazon-ssm-agent/agent/ssm/ssmparameterresolver"
+	"github.com/stretchr/testify/assert"
 )
 
 var logMock = log.NewMockLog()
