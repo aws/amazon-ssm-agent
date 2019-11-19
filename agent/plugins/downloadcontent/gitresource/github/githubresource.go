@@ -12,34 +12,34 @@
 // implied. See the License for the specific language governing
 // permissions and limitations under the License.
 
-// Package gitresource implements the methods to access resources from git
-package gitresource
+// Package github implements the methods to access resources from github
+package github
 
 import (
-	"github.com/aws/amazon-ssm-agent/agent/appconfig"
-	"github.com/aws/amazon-ssm-agent/agent/fileutil/filemanager"
-	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
-	"github.com/aws/amazon-ssm-agent/agent/log"
-	"github.com/aws/amazon-ssm-agent/agent/plugins/downloadcontent/githubclient"
-	"github.com/aws/amazon-ssm-agent/agent/plugins/downloadcontent/gitresource/privategithub"
-	"github.com/aws/amazon-ssm-agent/agent/plugins/downloadcontent/remoteresource"
-	"github.com/aws/amazon-ssm-agent/agent/plugins/downloadcontent/system"
-
 	"errors"
 	"fmt"
 	"net/http"
 	"os"
 	"path/filepath"
+
+	"github.com/aws/amazon-ssm-agent/agent/appconfig"
+	"github.com/aws/amazon-ssm-agent/agent/fileutil/filemanager"
+	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
+	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/plugins/downloadcontent/gitresource/github/privategithub"
+	"github.com/aws/amazon-ssm-agent/agent/plugins/downloadcontent/gitresource/github/privategithub/githubclient"
+	"github.com/aws/amazon-ssm-agent/agent/plugins/downloadcontent/remoteresource"
+	"github.com/aws/amazon-ssm-agent/agent/plugins/downloadcontent/system"
 )
 
-// GitResource is a struct for the remote resource of type git
-type GitResource struct {
+// GitHubResource is a struct for the remote resource of type git
+type GitHubResource struct {
 	client githubclient.IGitClient
-	Info   GitInfo
+	Info   GitHubInfo
 }
 
-// GitInfo represents the sourceInfo type sent by runcommand
-type GitInfo struct {
+// GitHubInfo represents the sourceInfo type sent by runcommand
+type GitHubInfo struct {
 	Owner      string `json:"owner"`
 	Repository string `json:"repository"`
 	Path       string `json:"path"`
@@ -47,9 +47,9 @@ type GitInfo struct {
 	TokenInfo  string `json:"tokenInfo"`
 }
 
-// NewGitResource is a constructor of type GitResource
-func NewGitResource(log log.T, info string, token privategithub.PrivateGithubAccess) (git *GitResource, err error) {
-	var gitInfo GitInfo
+// NewGitHubResource is a constructor of type GitHubResource
+func NewGitHubResource(log log.T, info string, token privategithub.PrivateGithubAccess) (git *GitHubResource, err error) {
+	var gitInfo GitHubInfo
 	if gitInfo, err = parseSourceInfo(info); err != nil {
 		return nil, err
 	}
@@ -62,24 +62,14 @@ func NewGitResource(log log.T, info string, token privategithub.PrivateGithubAcc
 			return nil, err
 		}
 	}
-	return &GitResource{
+	return &GitHubResource{
 		client: githubclient.NewClient(httpClient),
 		Info:   gitInfo,
 	}, nil
 }
 
-// parseSourceInfo unmarshals the information in sourceInfo of type GitInfo and returns it
-func parseSourceInfo(sourceInfo string) (gitInfo GitInfo, err error) {
-
-	if err = jsonutil.Unmarshal(sourceInfo, &gitInfo); err != nil {
-		return gitInfo, fmt.Errorf("Source Info could not be unmarshalled for source type GitHub. Please check JSON format of sourceInfo - %v", err.Error())
-	}
-
-	return gitInfo, nil
-}
-
 // DownloadRemoteResource calls download to pull down files or directory from github
-func (git *GitResource) DownloadRemoteResource(log log.T, filesys filemanager.FileSystem, destPath string) (err error, result *remoteresource.DownloadResult) {
+func (git *GitHubResource) DownloadRemoteResource(log log.T, filesys filemanager.FileSystem, destPath string) (err error, result *remoteresource.DownloadResult) {
 	if destPath == "" {
 		destPath = appconfig.DownloadRoot
 	}
@@ -87,7 +77,7 @@ func (git *GitResource) DownloadRemoteResource(log log.T, filesys filemanager.Fi
 	result = &remoteresource.DownloadResult{}
 
 	log.Debug("Destination path from Download to download - ", destPath)
-	// call download that has object of type GitInfo that keeps changing recursively for directory download
+	// call download that has object of type GitHubInfo that keeps changing recursively for directory download
 	// call is made with the assumption that the content is of file type
 	if err := git.download(log, filesys, git.Info, destPath, false, result); err != nil {
 		return err, nil
@@ -96,8 +86,32 @@ func (git *GitResource) DownloadRemoteResource(log log.T, filesys filemanager.Fi
 	return nil, result
 }
 
+// ValidateLocationInfo ensures that the required parameters of SourceInfo are specified
+func (git *GitHubResource) ValidateLocationInfo() (valid bool, err error) {
+	// source not yet supported
+	if git.Info.Owner == "" {
+		return false, errors.New("Owner for GitHub SourceType must be specified")
+	}
+
+	if git.Info.Repository == "" {
+		return false, errors.New("Repository for GitHub SourceType must be specified")
+	}
+
+	return true, nil
+}
+
+// parseSourceInfo unmarshals the information in sourceInfo of type GitHubInfo and returns it
+func parseSourceInfo(sourceInfo string) (gitInfo GitHubInfo, err error) {
+
+	if err = jsonutil.Unmarshal(sourceInfo, &gitInfo); err != nil {
+		return gitInfo, fmt.Errorf("Source Info could not be unmarshalled for source type GitHub. Please check JSON format of sourceInfo - %v", err.Error())
+	}
+
+	return gitInfo, nil
+}
+
 //download pulls down either the file or directory specified and stores it on disk
-func (git *GitResource) download(log log.T, filesys filemanager.FileSystem, info GitInfo, destinationDir string, isDirTypeDownload bool, result *remoteresource.DownloadResult) (err error) {
+func (git *GitHubResource) download(log log.T, filesys filemanager.FileSystem, info GitHubInfo, destinationDir string, isDirTypeDownload bool, result *remoteresource.DownloadResult) (err error) {
 
 	opt, err := git.client.ParseGetOptions(log, info.GetOptions)
 	if err != nil {
@@ -119,7 +133,7 @@ func (git *GitResource) download(log log.T, filesys filemanager.FileSystem, info
 	if directoryMetadata != nil { // path received was of directory type
 		for _, dirContent := range directoryMetadata {
 
-			dirInput := GitInfo{
+			dirInput := GitHubInfo{
 				Owner:      info.Owner,
 				Repository: info.Repository,
 				Path:       dirContent.GetPath(),
@@ -158,18 +172,4 @@ func (git *GitResource) download(log log.T, filesys filemanager.FileSystem, info
 	}
 
 	return err
-}
-
-// ValidateLocationInfo ensures that the required parameters of SourceInfo are specified
-func (git *GitResource) ValidateLocationInfo() (valid bool, err error) {
-	// source not yet supported
-	if git.Info.Owner == "" {
-		return false, errors.New("Owner for GitHub SourceType must be specified")
-	}
-
-	if git.Info.Repository == "" {
-		return false, errors.New("Repository for GitHub SourceType must be specified")
-	}
-
-	return true, nil
 }

@@ -15,17 +15,17 @@
 package ssmdocresource
 
 import (
+	"fmt"
+	"path/filepath"
+	"strings"
+	"testing"
+
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	filemock "github.com/aws/amazon-ssm-agent/agent/fileutil/filemanager/mock"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/aws-sdk-go/service/ssm"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
-
-	"fmt"
-	"path/filepath"
-	"strings"
-	"testing"
 )
 
 var logMock = log.NewMockLog()

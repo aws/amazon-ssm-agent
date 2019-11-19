@@ -16,10 +16,9 @@
 package githubclient
 
 import (
-	gitcontext "golang.org/x/net/context"
-
 	"net/http"
 
+	gitcontext "golang.org/x/net/context"
 	"golang.org/x/oauth2"
 )
 

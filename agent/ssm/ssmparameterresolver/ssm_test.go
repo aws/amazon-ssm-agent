@@ -11,7 +11,7 @@
 // either express or implied. See the License for the specific language governing
 // permissions and limitations under the License.
 
-// Package ssmparameterresolver contains types and methods for resolving SSM Parameter references.
+// Package ssmparameterresolver provides helper methods to detect, validate and extract parameter store parameter references.
 package ssmparameterresolver
 
 import (
@@ -24,19 +24,19 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-type ServiceMockedObjectWithRecords struct {
+type serviceMockedObjectWithRecords struct {
 	ISsmParameterService
 	records map[string]SsmParameterInfo
 }
 
 func newServiceMockedObjectWithExtraRecords(
-	records map[string]SsmParameterInfo) ServiceMockedObjectWithRecords {
-	return ServiceMockedObjectWithRecords{
+	records map[string]SsmParameterInfo) serviceMockedObjectWithRecords {
+	return serviceMockedObjectWithRecords{
 		records: records,
 	}
 }
 
-func (m *ServiceMockedObjectWithRecords) getParameters(log log.T, parameterReferences []string) (map[string]SsmParameterInfo, error) {
+func (m *serviceMockedObjectWithRecords) getParameters(log log.T, parameterReferences []string) (map[string]SsmParameterInfo, error) {
 	parameters := make(map[string]SsmParameterInfo)
 
 	for i := 0; i < len(parameterReferences); i++ {

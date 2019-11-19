@@ -16,11 +16,11 @@
 package mock_githubclient
 
 import (
+	"net/http"
+
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/go-github/github"
 	"github.com/stretchr/testify/mock"
-
-	"net/http"
 )
 
 type ClientMock struct {

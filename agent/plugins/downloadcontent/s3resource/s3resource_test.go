@@ -17,6 +17,10 @@
 package s3resource
 
 import (
+	"path/filepath"
+	"strings"
+	"testing"
+
 	filemock "github.com/aws/amazon-ssm-agent/agent/fileutil/filemanager/mock"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
@@ -24,10 +28,6 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/s3util"
 	"github.com/stretchr/testify/assert"
-
-	"path/filepath"
-	"strings"
-	"testing"
 )
 
 var logMock = log.NewMockLog()

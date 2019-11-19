@@ -16,19 +16,14 @@
 package githubclient
 
 import (
-	"github.com/aws/amazon-ssm-agent/agent/log"
-	"github.com/go-github/github"
-	gitcontext "golang.org/x/net/context"
-
+	"errors"
 	"fmt"
 	"net/http"
-	"strings"
 
-	"errors"
-)
-
-const (
-	defaultBranch = "master"
+	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/plugins/downloadcontent/gitresource"
+	"github.com/go-github/github"
+	gitcontext "golang.org/x/net/context"
 )
 
 const (
@@ -57,10 +52,14 @@ type IGitClient interface {
 }
 
 // GetRepositoryContents is a wrapper around GetContents method in gitub SDK
-func (git *GitClient) GetRepositoryContents(log log.T, owner, repo, path string, opt *github.RepositoryContentGetOptions) (fileContent *github.RepositoryContent, directoryContent []*github.RepositoryContent, err error) {
+func (gitClient *GitClient) GetRepositoryContents(
+	log log.T,
+	owner, repo, path string,
+	opt *github.RepositoryContentGetOptions,
+) (fileContent *github.RepositoryContent, directoryContent []*github.RepositoryContent, err error) {
 	var resp *github.Response
 
-	fileContent, directoryContent, resp, err = git.Repositories.GetContents(gitcontext.Background(), owner, repo, path, opt)
+	fileContent, directoryContent, resp, err = gitClient.Repositories.GetContents(gitcontext.Background(), owner, repo, path, opt)
 
 	if fileContent != nil {
 		log.Info("URL downloaded from - ", fileContent.GetURL())
@@ -86,42 +85,29 @@ func (git *GitClient) GetRepositoryContents(log log.T, owner, repo, path string,
 }
 
 // ParseGetOptions manipulates the getOptions parameter and returns
-func (git *GitClient) ParseGetOptions(log log.T, getOptions string) (*github.RepositoryContentGetOptions, error) {
-	//If no option is specified, use master branch
-	if getOptions == "" {
-		return &github.RepositoryContentGetOptions{
-			Ref: defaultBranch,
-		}, nil
+func (gitClient *GitClient) ParseGetOptions(log log.T, getOptions string) (*github.RepositoryContentGetOptions, error) {
+	options, err := gitresource.ParseCheckoutOptions(log, getOptions)
+	if err != nil {
+		return nil, err
 	}
 
-	// Checking for format of extra option specified (if it has been)
-	// Ideal input pattern will either be "branch: <name of branch>" or "commitID: <SHA of commit>"
-	// Only one among the above patterns is valid.
-	log.Debug("Splitting getOptions to get the actual option - ", getOptions)
-	branchOrSHA := strings.Split(getOptions, ":")
-	if len(branchOrSHA) == 2 {
-		if strings.Compare(branchOrSHA[0], "branch") != 0 && strings.Compare(branchOrSHA[0], "commitID") != 0 {
-			return nil, errors.New("Type of option is unknown. Please use either 'branch' or 'commitID'.")
-		}
-		//Error if extra option has been specified but is empty
-		// Length must be 2 (key and value)
-		if branchOrSHA[1] == "" {
-			return nil, errors.New("Option for retreiving git content is empty")
-		}
-	} else if len(branchOrSHA) > 2 {
-		return nil, errors.New("Only specify one required option")
-	} else {
-		return nil, errors.New("getOptions is not specified in the right format")
+	ref := options.CommitID
+	if ref == "" {
+		ref = options.Branch
 	}
-	log.Info("GetOptions value - ", branchOrSHA[1])
+
+	//If no option is specified, use master branch
+	if ref == "" {
+		ref = "master"
+	}
 
 	return &github.RepositoryContentGetOptions{
-		Ref: strings.TrimSpace(branchOrSHA[1]),
+		Ref: ref.Val(),
 	}, nil
 }
 
 // IsFileContentType returns true if the repository content points to a file
-func (git *GitClient) IsFileContentType(file *github.RepositoryContent) bool {
+func (gitClient *GitClient) IsFileContentType(file *github.RepositoryContent) bool {
 	//TODO: Change this to GetContentType instead of IsFileContentType
 	if file != nil {
 		if file.GetType() == contentTypeFile {
