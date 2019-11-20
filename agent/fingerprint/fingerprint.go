@@ -26,6 +26,7 @@ import (
 	"os"
 	"os/exec"
 
+	"github.com/aws/amazon-ssm-agent/agent/log/ssmlog"
 	"github.com/twinj/uuid"
 )
 
@@ -82,6 +83,7 @@ func SetSimilarityThreshold(value int) (err error) {
 
 // generateFingerprint generates new fingerprint and saves it in the vault
 func generateFingerprint() (string, error) {
+	log := ssmlog.SSMLogger(true)
 	uuid.SwitchFormat(uuid.CleanHyphen)
 	result := ""
 
@@ -101,8 +103,12 @@ func generateFingerprint() (string, error) {
 
 	// check if this is the first time we are generating the fingerprint
 	// or if there is no match
-	if savedHwInfo.Fingerprint == "" || !isSimilarHardwareHash(savedHwInfo.HardwareHash, hardwareHash, threshold) {
+	if !hasFingerprint(savedHwInfo) {
 		// generate new fingerprint
+		log.Info("No initial fingerprint detected, generating fingerprint file...")
+		result = uuid.NewV4().String()
+	} else if !isSimilarHardwareHash(savedHwInfo.HardwareHash, hardwareHash, threshold) {
+		log.Info("Calculated hardware difference, regenerating fingerprint...")
 		result = uuid.NewV4().String()
 	} else {
 		result = savedHwInfo.Fingerprint
@@ -121,11 +127,15 @@ func generateFingerprint() (string, error) {
 }
 
 func fetch() (hwInfo, error) {
+	log := ssmlog.SSMLogger(true)
 	savedHwInfo := hwInfo{}
 
 	// try get previously saved fingerprint data from vault
 	d, err := vault.Retrieve(vaultKey)
-	if err != nil || d == nil {
+	if err != nil {
+		log.Infof("[Warning] Could not read InstanceFingerprint file: %v", err)
+		return hwInfo{}, nil
+	} else if d == nil {
 		return hwInfo{}, nil
 	}
 
@@ -155,6 +165,10 @@ func save(info hwInfo) error {
 	}
 
 	return nil
+}
+
+func hasFingerprint(info hwInfo) bool {
+	return info.Fingerprint != ""
 }
 
 // isSimilarHardwareHash compares two maps of hashes, and returns true if the
