@@ -22,6 +22,7 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
+	"os/user"
 	"strconv"
 	"strings"
 	"syscall"
@@ -45,7 +46,7 @@ const (
 	startRecordSessionCmd = "script"
 	newLineCharacter      = "\n"
 	screenBufferSizeCmd   = "screen -h %d%s"
-	homeEnvVariable       = "HOME=/home/"
+	homeEnvVariable       = "HOME="
 	groupsIdentifier      = "groups="
 )
 
@@ -60,9 +61,9 @@ func StartPty(
 	//Start the command with a pty
 	var cmd *exec.Cmd
 	if strings.TrimSpace(shellProps.Linux.Commands) == "" || isSessionLogger {
-		cmd = exec.Command("sh")
+		cmd = exec.Command("sh", "-l")
 	} else {
-		commandArgs := append(utility.ShellPluginCommandArgs, shellProps.Linux.Commands)
+		commandArgs := append(utility.ShellPluginCommandArgs, "-l", shellProps.Linux.Commands)
 		cmd = exec.Command("sh", commandArgs...)
 	}
 
@@ -105,16 +106,22 @@ func StartPty(
 		}
 
 		// Get the uid and gid of the runas user.
-		uid, gid, groups, err := getUserCredentials(log, sessionUser)
+		uid, gid, groups, homedir, err := getUserCredentials(log, sessionUser)
 		if err != nil {
 			return nil, nil, err
 		}
 		cmd.SysProcAttr = &syscall.SysProcAttr{}
 		cmd.SysProcAttr.Credential = &syscall.Credential{Uid: uid, Gid: gid, Groups: groups, NoSetGroups: false}
 
-		// Setting home environment variable for RunAs user
-		runAsUserHomeEnvVariable := homeEnvVariable + sessionUser
-		cmd.Env = append(cmd.Env, runAsUserHomeEnvVariable)
+		// get the user's homedir
+		if homedir != "" {
+			// set the working directory for the shell
+			cmd.Dir = homedir
+
+			// Setting home environment variable for RunAs user
+			runAsUserHomeEnvVariable := homeEnvVariable + homedir
+			cmd.Env = append(cmd.Env, runAsUserHomeEnvVariable)
+		}
 	}
 
 	ptyFile, err = pty.Start(cmd)
@@ -149,71 +156,57 @@ func SetSize(log log.T, ws_col, ws_row uint32) (err error) {
 }
 
 // getUserCredentials returns the uid, gid and groups associated to the runas user.
-func getUserCredentials(log log.T, sessionUser string) (uint32, uint32, []uint32, error) {
-	uidCmdArgs := append(utility.ShellPluginCommandArgs, fmt.Sprintf("id -u %s", sessionUser))
-	cmd := exec.Command(utility.ShellPluginCommandName, uidCmdArgs...)
-	out, err := cmd.Output()
+func getUserCredentials(log log.T, sessionUser string) (uint32, uint32, []uint32, string, error) {
+	user, err := user.Lookup(sessionUser)
 	if err != nil {
-		log.Errorf("Failed to retrieve uid for %s: %v", sessionUser, err)
-		return 0, 0, nil, err
+		log.Errorf("Failed to retrieve user %s: %s\n", sessionUser, err)
+		return 0, 0, nil, "", fmt.Errorf("Failed to retrieve user %s: %s\n", sessionUser, err)
 	}
 
-	uid, err := strconv.Atoi(strings.TrimSpace(string(out)))
+	// Verify we have a uid
+	uid, err := strconv.Atoi(user.Uid)
 	if err != nil {
-		log.Errorf("%s not found: %v", sessionUser, err)
-		return 0, 0, nil, err
+		log.Errorf("Failed to handle uid %s: %s\n", user.Uid, err)
+		return 0, 0, nil, "", fmt.Errorf("Failed to handle uid %s: %s\n", user.Uid, err)
 	}
 
-	gidCmdArgs := append(utility.ShellPluginCommandArgs, fmt.Sprintf("id -g %s", sessionUser))
-	cmd = exec.Command(utility.ShellPluginCommandName, gidCmdArgs...)
-	out, err = cmd.Output()
+	// Verify we have a gid
+	gid, err := strconv.Atoi(user.Gid)
 	if err != nil {
-		log.Errorf("Failed to retrieve gid for %s: %v", sessionUser, err)
-		return 0, 0, nil, err
-	}
-
-	gid, err := strconv.Atoi(strings.TrimSpace(string(out)))
-	if err != nil {
-		log.Errorf("%s not found: %v", sessionUser, err)
-		return 0, 0, nil, err
+		log.Errorf("Failed to handle gid %s: %s\n", user.Gid, err)
+		return 0, 0, nil, "", fmt.Errorf("Failed to handle gid %s: %s\n", user.Gid, err)
 	}
 
 	// Get the list of associated groups
-	groupNamesCmdArgs := append(utility.ShellPluginCommandArgs, fmt.Sprintf("id %s", sessionUser))
-	cmd = exec.Command(utility.ShellPluginCommandName, groupNamesCmdArgs...)
-	out, err = cmd.Output()
+	var groupIdStr []string
+	groupIdStr, err = user.GroupIds()
 	if err != nil {
-		log.Errorf("Failed to retrieve groups for %s: %v", sessionUser, err)
-		return 0, 0, nil, err
+		log.Errorf("Failed to get group ids: %s\n", err)
+		return 0, 0, nil, "", fmt.Errorf("Failed to get group ids: %s\n", err)
 	}
+	var groupIdInt []uint32
 
-	// Example format of output: uid=1873601143(ssm-user) gid=1873600513(domain users) groups=1873600513(domain users),1873601620(joiners),1873601125(aws delegated add workstations to domain users)
-	// Extract groups from the output
-	groupsIndex := strings.Index(string(out), groupsIdentifier)
-	var groupIds []uint32
-
-	if groupsIndex > 0 {
-		// Extract groups names and ids from the output
-		groupNamesAndIds := strings.Split(string(out)[groupsIndex+len(groupsIdentifier):], ",")
+	// Extract groups names and ids from the output
+	if len(groupIdStr) > 0 {
 
 		// Extract group ids from the output
-		for _, value := range groupNamesAndIds {
-			groupId, err := strconv.Atoi(strings.TrimSpace(value[:strings.Index(value, "(")]))
+		for _, value := range groupIdStr {
+			groupId, err := strconv.Atoi(value)
 			if err != nil {
 				log.Errorf("Failed to retrieve group id from %s: %v", value, err)
-				return 0, 0, nil, err
+				return 0, 0, nil, "", err
 			}
 
-			groupIds = append(groupIds, uint32(groupId))
+			groupIdInt = append(groupIdInt, uint32(groupId))
 		}
 	}
 
 	// Make sure they are non-zero valid positive ids
-	if uid > 0 && gid > 0 {
-		return uint32(uid), uint32(gid), groupIds, nil
+	if uint32(uid) > 0 && uint32(gid) > 0 {
+		return uint32(uid), uint32(gid), groupIdInt, user.HomeDir, nil
 	}
 
-	return 0, 0, nil, errors.New("invalid uid and gid")
+	return 0, 0, nil, "", errors.New("invalid uid and gid")
 }
 
 // generateLogData generates a log file with the executed commands.
