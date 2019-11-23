@@ -35,6 +35,18 @@ const (
 	ServiceDomainResource = "/latest/meta-data/services/domain"
 	// EC2MetadataRequestTimeout specifies the timeout when making web request
 	EC2MetadataRequestTimeout = time.Duration(2 * time.Second)
+	// EC2MetadataTokenURL provides the token resource for metadata v2
+	EC2MetadataTokenURL = "/latest/api/token"
+	// EC2MetadataTokenExpireHeader provides the token expire header
+	EC2MetadataTokenExpireHeader = "X-aws-ec2-metadata-token-ttl-seconds"
+	// Token expiration time is 6 hour
+	EC2MetadataTokenExpireTime = "21600"
+	// Token header for metadata v2
+	EC2MetadataTokenHeader = "X-aws-ec2-metadata-token"
+	// Status code for success http request
+	EC2MetadataSuccessStatus = 200
+	// Unauthorized status code for token expire
+	EC2MetadataUnauthorizedStatus = 401
 )
 
 // InstanceIdentityDocument stores the values fetched from querying instance metadata
@@ -86,11 +98,13 @@ func (iid *InstanceIdentityDocument) SetPendingTime(pendingTime time.Time) {
 // httpClient is used to make Get web requests to a url endpoint
 type httpClient interface {
 	Get(string) (*http.Response, error)
+	Do(r *http.Request) (*http.Response, error)
 }
 
 // EC2MetadataClient is used to make requests to instance metadata
 type EC2MetadataClient struct {
 	client httpClient
+	token  string
 }
 
 // NewEC2MetadataClient creates new EC2MetadataClient
@@ -124,13 +138,63 @@ func (c EC2MetadataClient) resourceServiceURL(path string) string {
 func (c EC2MetadataClient) ReadResource(path string) ([]byte, error) {
 	endpoint := c.resourceServiceURL(path)
 
+	var resp *http.Response
+	var err error
+
+	if resp, err = c.readResourceFromMetaDataV1(endpoint); err == nil {
+		return ioutil.ReadAll(resp.Body)
+	}
+
+	if resp, err = c.readResourceFromMetaDataV2(endpoint); err == nil {
+		return ioutil.ReadAll(resp.Body)
+	}
+
+	return nil, err
+}
+
+func (c EC2MetadataClient) readResourceFromMetaDataV1(endpoint string) (*http.Response, error) {
 	resp, err := c.client.Get(endpoint)
 	if err != nil {
 		return nil, err
 	}
 	defer resp.Body.Close()
 
-	return ioutil.ReadAll(resp.Body)
+	return resp, nil
+}
+
+func (c *EC2MetadataClient) readResourceFromMetaDataV2(endpoint string) (rsp *http.Response, err error) {
+
+	// Send request with current token
+	if rsp, err = c.retrieveInfoWithToken(endpoint); err == nil {
+		// Token is active, return result
+		return rsp, nil
+	}
+
+	if rsp != nil && rsp.StatusCode == EC2MetadataUnauthorizedStatus {
+		// Token expire, refresh it and resend request.
+		if err = c.refreshToken(); err == nil {
+			return c.retrieveInfoWithToken(endpoint)
+		} else {
+			return nil, err
+		}
+	} else {
+		return rsp, err
+	}
+}
+
+func (c *EC2MetadataClient) retrieveInfoWithToken(endpoint string) (rsp *http.Response, err error) {
+	req, err := http.NewRequest("GET", endpoint, nil)
+	if err != nil {
+		return nil, err
+	}
+	req.Header.Set(EC2MetadataTokenHeader, c.token)
+	rsp, err = c.client.Do(req)
+	defer rsp.Body.Close()
+	if err != nil {
+		return nil, err
+	}
+
+	return rsp, nil
 }
 
 // ServiceDomain from ec2 metadata client
@@ -140,4 +204,26 @@ func (c EC2MetadataClient) ServiceDomain() (string, error) {
 		return "", err
 	}
 	return string(domain), nil
+}
+
+// Validate whether token is expired, and refresh it if expired
+func (c *EC2MetadataClient) refreshToken() (err error) {
+
+	var req *http.Request
+	var rsp *http.Response
+
+	url := c.resourceServiceURL(EC2MetadataTokenURL)
+	req, _ = http.NewRequest("PUT", url, nil)
+	req.Header.Set(EC2MetadataTokenExpireHeader, EC2MetadataTokenExpireTime)
+
+	rsp, err = c.client.Do(req)
+	defer rsp.Body.Close()
+	if err != nil {
+		// failed to get the new token from metadata service
+		return err
+	}
+	token, _ := ioutil.ReadAll(rsp.Body)
+	c.token = string(token)
+
+	return nil
 }
