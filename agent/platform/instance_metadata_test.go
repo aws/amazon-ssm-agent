@@ -50,12 +50,16 @@ func ignoreError(v interface{}, _ error) interface{} {
 	return v
 }
 
-var testClient = EC2MetadataClient{client: testHTTPClient{}}
+var testClient = EC2MetadataClient{client: testHTTPClient{}, token: "expireToken"}
 var expectediid = MakeInstanceIdentityDocument()
 var expectedservicedomain = "amazonaws.com"
+var testActiveToken = "AQAAAJL52N97Ie16Z4WflqNjLh-OVR_BN2mlEKjzRog13u8E8x2Vrw=="
+var testMetaData = "latest-metadata"
 var testResponse = map[string]string{
 	testClient.resourceServiceURL(InstanceIdentityDocumentResource): string(ignoreError(json.Marshal(expectediid)).([]byte)),
 	testClient.resourceServiceURL(ServiceDomainResource):            expectedservicedomain,
+	testClient.resourceServiceURL(EC2MetadataTokenURL):              testActiveToken,
+	testClient.resourceServiceURL(""):                               testMetaData,
 }
 
 // Get is a mock of the http.Client.Get that reads its responses from the map
@@ -73,6 +77,37 @@ func (c testHTTPClient) Get(url string) (*http.Response, error) {
 	return nil, errors.New("404")
 }
 
+func (c testHTTPClient) Do(r *http.Request) (*http.Response, error) {
+	endpoint := r.URL.Scheme + "://" + r.Host + r.URL.Path
+	resp, ok := testResponse[endpoint]
+	if ok {
+		switch endpoint {
+		case EC2MetadataServiceURL:
+			return &http.Response{
+				Status:     "401 Unauthorized",
+				StatusCode: 401,
+				Proto:      "HTTP/1.0",
+				Body:       ioutil.NopCloser(bytes.NewReader([]byte(resp))),
+			}, nil
+		case EC2MetadataServiceURL + EC2MetadataTokenURL:
+			return &http.Response{
+				Status:     "200 OK",
+				StatusCode: 200,
+				Proto:      "HTTP/1.0",
+				Body:       ioutil.NopCloser(bytes.NewReader([]byte(resp))),
+			}, nil
+		case EC2MetadataServiceURL + ServiceDomainResource:
+			return &http.Response{
+				Status:     "200 OK",
+				StatusCode: 200,
+				Proto:      "HTTP/1.0",
+				Body:       ioutil.NopCloser(bytes.NewReader([]byte(resp))),
+			}, nil
+		}
+	}
+	return nil, errors.New("404")
+}
+
 func TestInstanceIdentityDocument(t *testing.T) {
 	iid, err := testClient.InstanceIdentityDocument()
 	assert.Nil(t, err)
@@ -83,6 +118,22 @@ func TestServiceDomain(t *testing.T) {
 	domain, err := testClient.ServiceDomain()
 	assert.Nil(t, err)
 	assert.Equal(t, expectedservicedomain, domain)
+}
+
+func TestMetadataRefreshToken(t *testing.T) {
+	assert.Equal(t, testClient.token, "expireToken")
+	err := testClient.refreshToken()
+	assert.Nil(t, err)
+	assert.Equal(t, testClient.token, testActiveToken)
+}
+
+func TestReadResourceFromMetaDataV2(t *testing.T) {
+	endpoint := EC2MetadataServiceURL + ServiceDomainResource
+	rsp, err := testClient.readResourceFromMetaDataV2(endpoint)
+	assert.Nil(t, err)
+	domain, _ := ioutil.ReadAll(rsp.Body)
+	assert.Equal(t, string(domain), expectedservicedomain)
+	assert.Equal(t, testClient.token, testActiveToken)
 }
 
 // TestPendingTime tests the parsing/formatting of the pending time field.
