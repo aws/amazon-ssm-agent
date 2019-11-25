@@ -4,6 +4,15 @@ package ses
 
 const (
 
+	// ErrCodeAccountSendingPausedException for service response error code
+	// "AccountSendingPausedException".
+	//
+	// Indicates that email sending is disabled for your entire Amazon SES account.
+	//
+	// You can enable or disable email sending for your Amazon SES account using
+	// UpdateAccountSendingEnabled.
+	ErrCodeAccountSendingPausedException = "AccountSendingPausedException"
+
 	// ErrCodeAlreadyExistsException for service response error code
 	// "AlreadyExists".
 	//
@@ -29,6 +38,34 @@ const (
 	// Indicates that the configuration set does not exist.
 	ErrCodeConfigurationSetDoesNotExistException = "ConfigurationSetDoesNotExist"
 
+	// ErrCodeConfigurationSetSendingPausedException for service response error code
+	// "ConfigurationSetSendingPausedException".
+	//
+	// Indicates that email sending is disabled for the configuration set.
+	//
+	// You can enable or disable email sending for a configuration set using UpdateConfigurationSetSendingEnabled.
+	ErrCodeConfigurationSetSendingPausedException = "ConfigurationSetSendingPausedException"
+
+	// ErrCodeCustomVerificationEmailInvalidContentException for service response error code
+	// "CustomVerificationEmailInvalidContent".
+	//
+	// Indicates that custom verification email template provided content is invalid.
+	ErrCodeCustomVerificationEmailInvalidContentException = "CustomVerificationEmailInvalidContent"
+
+	// ErrCodeCustomVerificationEmailTemplateAlreadyExistsException for service response error code
+	// "CustomVerificationEmailTemplateAlreadyExists".
+	//
+	// Indicates that a custom verification email template with the name you specified
+	// already exists.
+	ErrCodeCustomVerificationEmailTemplateAlreadyExistsException = "CustomVerificationEmailTemplateAlreadyExists"
+
+	// ErrCodeCustomVerificationEmailTemplateDoesNotExistException for service response error code
+	// "CustomVerificationEmailTemplateDoesNotExist".
+	//
+	// Indicates that a custom verification email template with the name you specified
+	// does not exist.
+	ErrCodeCustomVerificationEmailTemplateDoesNotExistException = "CustomVerificationEmailTemplateDoesNotExist"
+
 	// ErrCodeEventDestinationAlreadyExistsException for service response error code
 	// "EventDestinationAlreadyExists".
 	//
@@ -41,6 +78,14 @@ const (
 	//
 	// Indicates that the event destination does not exist.
 	ErrCodeEventDestinationDoesNotExistException = "EventDestinationDoesNotExist"
+
+	// ErrCodeFromEmailAddressNotVerifiedException for service response error code
+	// "FromEmailAddressNotVerified".
+	//
+	// Indicates that the sender address specified for a custom verification email
+	// is not verified, and is therefore not eligible to send the custom verification
+	// email.
+	ErrCodeFromEmailAddressNotVerifiedException = "FromEmailAddressNotVerified"
 
 	// ErrCodeInvalidCloudWatchDestinationException for service response error code
 	// "InvalidCloudWatchDestination".
@@ -56,6 +101,12 @@ const (
 	// details.
 	ErrCodeInvalidConfigurationSetException = "InvalidConfigurationSet"
 
+	// ErrCodeInvalidDeliveryOptionsException for service response error code
+	// "InvalidDeliveryOptions".
+	//
+	// Indicates that provided delivery option is invalid.
+	ErrCodeInvalidDeliveryOptionsException = "InvalidDeliveryOptions"
+
 	// ErrCodeInvalidFirehoseDestinationException for service response error code
 	// "InvalidFirehoseDestination".
 	//
@@ -69,7 +120,7 @@ const (
 	// Indicates that the provided AWS Lambda function is invalid, or that Amazon
 	// SES could not execute the provided function, possibly due to permissions
 	// issues. For information about giving permissions, see the Amazon SES Developer
-	// Guide (http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-permissions.html).
+	// Guide (https://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-permissions.html).
 	ErrCodeInvalidLambdaFunctionException = "InvalidLambdaFunction"
 
 	// ErrCodeInvalidPolicyException for service response error code
@@ -92,7 +143,7 @@ const (
 	// Indicates that the provided Amazon S3 bucket or AWS KMS encryption key is
 	// invalid, or that Amazon SES could not publish to the bucket, possibly due
 	// to permissions issues. For information about giving permissions, see the
-	// Amazon SES Developer Guide (http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-permissions.html).
+	// Amazon SES Developer Guide (https://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-permissions.html).
 	ErrCodeInvalidS3ConfigurationException = "InvalidS3Configuration"
 
 	// ErrCodeInvalidSNSDestinationException for service response error code
@@ -107,14 +158,14 @@ const (
 	//
 	// Indicates that the provided Amazon SNS topic is invalid, or that Amazon SES
 	// could not publish to the topic, possibly due to permissions issues. For information
-	// about giving permissions, see the Amazon SES Developer Guide (http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-permissions.html).
+	// about giving permissions, see the Amazon SES Developer Guide (https://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-permissions.html).
 	ErrCodeInvalidSnsTopicException = "InvalidSnsTopic"
 
 	// ErrCodeInvalidTemplateException for service response error code
 	// "InvalidTemplate".
 	//
-	// Indicates that a template could not be created because it contained invalid
-	// JSON.
+	// Indicates that the template that you specified could not be rendered. This
+	// issue may occur when a template refers to a partial that does not exist.
 	ErrCodeInvalidTemplateException = "InvalidTemplate"
 
 	// ErrCodeInvalidTrackingOptionsException for service response error code
@@ -132,7 +183,7 @@ const (
 	// "LimitExceeded".
 	//
 	// Indicates that a resource could not be created because of service limits.
-	// For a list of Amazon SES limits, see the Amazon SES Developer Guide (http://docs.aws.amazon.com/ses/latest/DeveloperGuide/limits.html).
+	// For a list of Amazon SES limits, see the Amazon SES Developer Guide (https://docs.aws.amazon.com/ses/latest/DeveloperGuide/limits.html).
 	ErrCodeLimitExceededException = "LimitExceeded"
 
 	// ErrCodeMailFromDomainNotVerifiedException for service response error code
@@ -141,7 +192,7 @@ const (
 	// Indicates that the message could not be sent because Amazon SES could not
 	// read the MX record required to use the specified MAIL FROM domain. For information
 	// about editing the custom MAIL FROM domain settings for an identity, see the
-	// Amazon SES Developer Guide (http://docs.aws.amazon.com/ses/latest/DeveloperGuide/mail-from-edit.html).
+	// Amazon SES Developer Guide (https://docs.aws.amazon.com/ses/latest/DeveloperGuide/mail-from-edit.html).
 	ErrCodeMailFromDomainNotVerifiedException = "MailFromDomainNotVerifiedException"
 
 	// ErrCodeMessageRejected for service response error code
@@ -158,6 +209,12 @@ const (
 	// was not specified. Ensure that the TemplateData object contains references
 	// to all of the replacement tags in the specified template.
 	ErrCodeMissingRenderingAttributeException = "MissingRenderingAttribute"
+
+	// ErrCodeProductionAccessNotGrantedException for service response error code
+	// "ProductionAccessNotGranted".
+	//
+	// Indicates that the account has not been granted production access.
+	ErrCodeProductionAccessNotGrantedException = "ProductionAccessNotGranted"
 
 	// ErrCodeRuleDoesNotExistException for service response error code
 	// "RuleDoesNotExist".

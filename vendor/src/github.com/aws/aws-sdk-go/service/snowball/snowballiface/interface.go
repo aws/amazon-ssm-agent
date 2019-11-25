@@ -111,6 +111,10 @@ type SnowballAPI interface {
 	GetSnowballUsageWithContext(aws.Context, *snowball.GetSnowballUsageInput, ...request.Option) (*snowball.GetSnowballUsageOutput, error)
 	GetSnowballUsageRequest(*snowball.GetSnowballUsageInput) (*request.Request, *snowball.GetSnowballUsageOutput)
 
+	GetSoftwareUpdates(*snowball.GetSoftwareUpdatesInput) (*snowball.GetSoftwareUpdatesOutput, error)
+	GetSoftwareUpdatesWithContext(aws.Context, *snowball.GetSoftwareUpdatesInput, ...request.Option) (*snowball.GetSoftwareUpdatesOutput, error)
+	GetSoftwareUpdatesRequest(*snowball.GetSoftwareUpdatesInput) (*request.Request, *snowball.GetSoftwareUpdatesOutput)
+
 	ListClusterJobs(*snowball.ListClusterJobsInput) (*snowball.ListClusterJobsOutput, error)
 	ListClusterJobsWithContext(aws.Context, *snowball.ListClusterJobsInput, ...request.Option) (*snowball.ListClusterJobsOutput, error)
 	ListClusterJobsRequest(*snowball.ListClusterJobsInput) (*request.Request, *snowball.ListClusterJobsOutput)
@@ -118,6 +122,10 @@ type SnowballAPI interface {
 	ListClusters(*snowball.ListClustersInput) (*snowball.ListClustersOutput, error)
 	ListClustersWithContext(aws.Context, *snowball.ListClustersInput, ...request.Option) (*snowball.ListClustersOutput, error)
 	ListClustersRequest(*snowball.ListClustersInput) (*request.Request, *snowball.ListClustersOutput)
+
+	ListCompatibleImages(*snowball.ListCompatibleImagesInput) (*snowball.ListCompatibleImagesOutput, error)
+	ListCompatibleImagesWithContext(aws.Context, *snowball.ListCompatibleImagesInput, ...request.Option) (*snowball.ListCompatibleImagesOutput, error)
+	ListCompatibleImagesRequest(*snowball.ListCompatibleImagesInput) (*request.Request, *snowball.ListCompatibleImagesOutput)
 
 	ListJobs(*snowball.ListJobsInput) (*snowball.ListJobsOutput, error)
 	ListJobsWithContext(aws.Context, *snowball.ListJobsInput, ...request.Option) (*snowball.ListJobsOutput, error)

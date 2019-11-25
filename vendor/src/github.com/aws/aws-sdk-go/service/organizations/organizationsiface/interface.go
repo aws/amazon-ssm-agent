@@ -76,6 +76,10 @@ type OrganizationsAPI interface {
 	CreateAccountWithContext(aws.Context, *organizations.CreateAccountInput, ...request.Option) (*organizations.CreateAccountOutput, error)
 	CreateAccountRequest(*organizations.CreateAccountInput) (*request.Request, *organizations.CreateAccountOutput)
 
+	CreateGovCloudAccount(*organizations.CreateGovCloudAccountInput) (*organizations.CreateGovCloudAccountOutput, error)
+	CreateGovCloudAccountWithContext(aws.Context, *organizations.CreateGovCloudAccountInput, ...request.Option) (*organizations.CreateGovCloudAccountOutput, error)
+	CreateGovCloudAccountRequest(*organizations.CreateGovCloudAccountInput) (*request.Request, *organizations.CreateGovCloudAccountOutput)
+
 	CreateOrganization(*organizations.CreateOrganizationInput) (*organizations.CreateOrganizationOutput, error)
 	CreateOrganizationWithContext(aws.Context, *organizations.CreateOrganizationInput, ...request.Option) (*organizations.CreateOrganizationOutput, error)
 	CreateOrganizationRequest(*organizations.CreateOrganizationInput) (*request.Request, *organizations.CreateOrganizationOutput)
@@ -132,9 +136,17 @@ type OrganizationsAPI interface {
 	DetachPolicyWithContext(aws.Context, *organizations.DetachPolicyInput, ...request.Option) (*organizations.DetachPolicyOutput, error)
 	DetachPolicyRequest(*organizations.DetachPolicyInput) (*request.Request, *organizations.DetachPolicyOutput)
 
+	DisableAWSServiceAccess(*organizations.DisableAWSServiceAccessInput) (*organizations.DisableAWSServiceAccessOutput, error)
+	DisableAWSServiceAccessWithContext(aws.Context, *organizations.DisableAWSServiceAccessInput, ...request.Option) (*organizations.DisableAWSServiceAccessOutput, error)
+	DisableAWSServiceAccessRequest(*organizations.DisableAWSServiceAccessInput) (*request.Request, *organizations.DisableAWSServiceAccessOutput)
+
 	DisablePolicyType(*organizations.DisablePolicyTypeInput) (*organizations.DisablePolicyTypeOutput, error)
 	DisablePolicyTypeWithContext(aws.Context, *organizations.DisablePolicyTypeInput, ...request.Option) (*organizations.DisablePolicyTypeOutput, error)
 	DisablePolicyTypeRequest(*organizations.DisablePolicyTypeInput) (*request.Request, *organizations.DisablePolicyTypeOutput)
+
+	EnableAWSServiceAccess(*organizations.EnableAWSServiceAccessInput) (*organizations.EnableAWSServiceAccessOutput, error)
+	EnableAWSServiceAccessWithContext(aws.Context, *organizations.EnableAWSServiceAccessInput, ...request.Option) (*organizations.EnableAWSServiceAccessOutput, error)
+	EnableAWSServiceAccessRequest(*organizations.EnableAWSServiceAccessInput) (*request.Request, *organizations.EnableAWSServiceAccessOutput)
 
 	EnableAllFeatures(*organizations.EnableAllFeaturesInput) (*organizations.EnableAllFeaturesOutput, error)
 	EnableAllFeaturesWithContext(aws.Context, *organizations.EnableAllFeaturesInput, ...request.Option) (*organizations.EnableAllFeaturesOutput, error)
@@ -151,6 +163,13 @@ type OrganizationsAPI interface {
 	LeaveOrganization(*organizations.LeaveOrganizationInput) (*organizations.LeaveOrganizationOutput, error)
 	LeaveOrganizationWithContext(aws.Context, *organizations.LeaveOrganizationInput, ...request.Option) (*organizations.LeaveOrganizationOutput, error)
 	LeaveOrganizationRequest(*organizations.LeaveOrganizationInput) (*request.Request, *organizations.LeaveOrganizationOutput)
+
+	ListAWSServiceAccessForOrganization(*organizations.ListAWSServiceAccessForOrganizationInput) (*organizations.ListAWSServiceAccessForOrganizationOutput, error)
+	ListAWSServiceAccessForOrganizationWithContext(aws.Context, *organizations.ListAWSServiceAccessForOrganizationInput, ...request.Option) (*organizations.ListAWSServiceAccessForOrganizationOutput, error)
+	ListAWSServiceAccessForOrganizationRequest(*organizations.ListAWSServiceAccessForOrganizationInput) (*request.Request, *organizations.ListAWSServiceAccessForOrganizationOutput)
+
+	ListAWSServiceAccessForOrganizationPages(*organizations.ListAWSServiceAccessForOrganizationInput, func(*organizations.ListAWSServiceAccessForOrganizationOutput, bool) bool) error
+	ListAWSServiceAccessForOrganizationPagesWithContext(aws.Context, *organizations.ListAWSServiceAccessForOrganizationInput, func(*organizations.ListAWSServiceAccessForOrganizationOutput, bool) bool, ...request.Option) error
 
 	ListAccounts(*organizations.ListAccountsInput) (*organizations.ListAccountsOutput, error)
 	ListAccountsWithContext(aws.Context, *organizations.ListAccountsInput, ...request.Option) (*organizations.ListAccountsOutput, error)
@@ -229,6 +248,13 @@ type OrganizationsAPI interface {
 	ListRootsPages(*organizations.ListRootsInput, func(*organizations.ListRootsOutput, bool) bool) error
 	ListRootsPagesWithContext(aws.Context, *organizations.ListRootsInput, func(*organizations.ListRootsOutput, bool) bool, ...request.Option) error
 
+	ListTagsForResource(*organizations.ListTagsForResourceInput) (*organizations.ListTagsForResourceOutput, error)
+	ListTagsForResourceWithContext(aws.Context, *organizations.ListTagsForResourceInput, ...request.Option) (*organizations.ListTagsForResourceOutput, error)
+	ListTagsForResourceRequest(*organizations.ListTagsForResourceInput) (*request.Request, *organizations.ListTagsForResourceOutput)
+
+	ListTagsForResourcePages(*organizations.ListTagsForResourceInput, func(*organizations.ListTagsForResourceOutput, bool) bool) error
+	ListTagsForResourcePagesWithContext(aws.Context, *organizations.ListTagsForResourceInput, func(*organizations.ListTagsForResourceOutput, bool) bool, ...request.Option) error
+
 	ListTargetsForPolicy(*organizations.ListTargetsForPolicyInput) (*organizations.ListTargetsForPolicyOutput, error)
 	ListTargetsForPolicyWithContext(aws.Context, *organizations.ListTargetsForPolicyInput, ...request.Option) (*organizations.ListTargetsForPolicyOutput, error)
 	ListTargetsForPolicyRequest(*organizations.ListTargetsForPolicyInput) (*request.Request, *organizations.ListTargetsForPolicyOutput)
@@ -243,6 +269,14 @@ type OrganizationsAPI interface {
 	RemoveAccountFromOrganization(*organizations.RemoveAccountFromOrganizationInput) (*organizations.RemoveAccountFromOrganizationOutput, error)
 	RemoveAccountFromOrganizationWithContext(aws.Context, *organizations.RemoveAccountFromOrganizationInput, ...request.Option) (*organizations.RemoveAccountFromOrganizationOutput, error)
 	RemoveAccountFromOrganizationRequest(*organizations.RemoveAccountFromOrganizationInput) (*request.Request, *organizations.RemoveAccountFromOrganizationOutput)
+
+	TagResource(*organizations.TagResourceInput) (*organizations.TagResourceOutput, error)
+	TagResourceWithContext(aws.Context, *organizations.TagResourceInput, ...request.Option) (*organizations.TagResourceOutput, error)
+	TagResourceRequest(*organizations.TagResourceInput) (*request.Request, *organizations.TagResourceOutput)
+
+	UntagResource(*organizations.UntagResourceInput) (*organizations.UntagResourceOutput, error)
+	UntagResourceWithContext(aws.Context, *organizations.UntagResourceInput, ...request.Option) (*organizations.UntagResourceOutput, error)
+	UntagResourceRequest(*organizations.UntagResourceInput) (*request.Request, *organizations.UntagResourceOutput)
 
 	UpdateOrganizationalUnit(*organizations.UpdateOrganizationalUnitInput) (*organizations.UpdateOrganizationalUnitOutput, error)
 	UpdateOrganizationalUnitWithContext(aws.Context, *organizations.UpdateOrganizationalUnitInput, ...request.Option) (*organizations.UpdateOrganizationalUnitOutput, error)

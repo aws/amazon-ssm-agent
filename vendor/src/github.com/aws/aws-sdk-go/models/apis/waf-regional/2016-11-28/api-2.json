@@ -7,6 +7,7 @@
     "protocol":"json",
     "serviceAbbreviation":"WAF Regional",
     "serviceFullName":"AWS WAF Regional",
+    "serviceId":"WAF Regional",
     "signatureVersion":"v4",
     "targetPrefix":"AWSWAF_Regional_20161128",
     "uid":"waf-regional-2016-11-28"
@@ -92,7 +93,10 @@
         {"shape":"WAFInternalErrorException"},
         {"shape":"WAFDisallowedNameException"},
         {"shape":"WAFInvalidParameterException"},
-        {"shape":"WAFLimitsExceededException"}
+        {"shape":"WAFLimitsExceededException"},
+        {"shape":"WAFTagOperationException"},
+        {"shape":"WAFTagOperationInternalErrorException"},
+        {"shape":"WAFBadRequestException"}
       ]
     },
     "CreateRegexMatchSet":{
@@ -138,7 +142,28 @@
         {"shape":"WAFInternalErrorException"},
         {"shape":"WAFDisallowedNameException"},
         {"shape":"WAFInvalidParameterException"},
-        {"shape":"WAFLimitsExceededException"}
+        {"shape":"WAFLimitsExceededException"},
+        {"shape":"WAFTagOperationException"},
+        {"shape":"WAFTagOperationInternalErrorException"},
+        {"shape":"WAFBadRequestException"}
+      ]
+    },
+    "CreateRuleGroup":{
+      "name":"CreateRuleGroup",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"CreateRuleGroupRequest"},
+      "output":{"shape":"CreateRuleGroupResponse"},
+      "errors":[
+        {"shape":"WAFStaleDataException"},
+        {"shape":"WAFInternalErrorException"},
+        {"shape":"WAFDisallowedNameException"},
+        {"shape":"WAFLimitsExceededException"},
+        {"shape":"WAFTagOperationException"},
+        {"shape":"WAFTagOperationInternalErrorException"},
+        {"shape":"WAFBadRequestException"}
       ]
     },
     "CreateSizeConstraintSet":{
@@ -189,7 +214,10 @@
         {"shape":"WAFInvalidAccountException"},
         {"shape":"WAFDisallowedNameException"},
         {"shape":"WAFInvalidParameterException"},
-        {"shape":"WAFLimitsExceededException"}
+        {"shape":"WAFLimitsExceededException"},
+        {"shape":"WAFTagOperationException"},
+        {"shape":"WAFTagOperationInternalErrorException"},
+        {"shape":"WAFBadRequestException"}
       ]
     },
     "CreateXssMatchSet":{
@@ -260,6 +288,34 @@
         {"shape":"WAFNonEmptyEntityException"}
       ]
     },
+    "DeleteLoggingConfiguration":{
+      "name":"DeleteLoggingConfiguration",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"DeleteLoggingConfigurationRequest"},
+      "output":{"shape":"DeleteLoggingConfigurationResponse"},
+      "errors":[
+        {"shape":"WAFInternalErrorException"},
+        {"shape":"WAFNonexistentItemException"},
+        {"shape":"WAFStaleDataException"}
+      ]
+    },
+    "DeletePermissionPolicy":{
+      "name":"DeletePermissionPolicy",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"DeletePermissionPolicyRequest"},
+      "output":{"shape":"DeletePermissionPolicyResponse"},
+      "errors":[
+        {"shape":"WAFInternalErrorException"},
+        {"shape":"WAFStaleDataException"},
+        {"shape":"WAFNonexistentItemException"}
+      ]
+    },
     "DeleteRateBasedRule":{
       "name":"DeleteRateBasedRule",
       "http":{
@@ -274,7 +330,9 @@
         {"shape":"WAFInvalidAccountException"},
         {"shape":"WAFNonexistentItemException"},
         {"shape":"WAFReferencedItemException"},
-        {"shape":"WAFNonEmptyEntityException"}
+        {"shape":"WAFNonEmptyEntityException"},
+        {"shape":"WAFTagOperationException"},
+        {"shape":"WAFTagOperationInternalErrorException"}
       ]
     },
     "DeleteRegexMatchSet":{
@@ -325,7 +383,28 @@
         {"shape":"WAFInvalidAccountException"},
         {"shape":"WAFNonexistentItemException"},
         {"shape":"WAFReferencedItemException"},
-        {"shape":"WAFNonEmptyEntityException"}
+        {"shape":"WAFNonEmptyEntityException"},
+        {"shape":"WAFTagOperationException"},
+        {"shape":"WAFTagOperationInternalErrorException"}
+      ]
+    },
+    "DeleteRuleGroup":{
+      "name":"DeleteRuleGroup",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"DeleteRuleGroupRequest"},
+      "output":{"shape":"DeleteRuleGroupResponse"},
+      "errors":[
+        {"shape":"WAFStaleDataException"},
+        {"shape":"WAFInternalErrorException"},
+        {"shape":"WAFNonexistentItemException"},
+        {"shape":"WAFReferencedItemException"},
+        {"shape":"WAFNonEmptyEntityException"},
+        {"shape":"WAFInvalidOperationException"},
+        {"shape":"WAFTagOperationException"},
+        {"shape":"WAFTagOperationInternalErrorException"}
       ]
     },
     "DeleteSizeConstraintSet":{
@@ -376,7 +455,9 @@
         {"shape":"WAFInvalidAccountException"},
         {"shape":"WAFNonexistentItemException"},
         {"shape":"WAFReferencedItemException"},
-        {"shape":"WAFNonEmptyEntityException"}
+        {"shape":"WAFNonEmptyEntityException"},
+        {"shape":"WAFTagOperationException"},
+        {"shape":"WAFTagOperationInternalErrorException"}
       ]
     },
     "DeleteXssMatchSet":{
@@ -478,6 +559,32 @@
         {"shape":"WAFNonexistentItemException"}
       ]
     },
+    "GetLoggingConfiguration":{
+      "name":"GetLoggingConfiguration",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"GetLoggingConfigurationRequest"},
+      "output":{"shape":"GetLoggingConfigurationResponse"},
+      "errors":[
+        {"shape":"WAFInternalErrorException"},
+        {"shape":"WAFNonexistentItemException"}
+      ]
+    },
+    "GetPermissionPolicy":{
+      "name":"GetPermissionPolicy",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"GetPermissionPolicyRequest"},
+      "output":{"shape":"GetPermissionPolicyResponse"},
+      "errors":[
+        {"shape":"WAFInternalErrorException"},
+        {"shape":"WAFNonexistentItemException"}
+      ]
+    },
     "GetRateBasedRule":{
       "name":"GetRateBasedRule",
       "http":{
@@ -546,6 +653,19 @@
       "errors":[
         {"shape":"WAFInternalErrorException"},
         {"shape":"WAFInvalidAccountException"},
+        {"shape":"WAFNonexistentItemException"}
+      ]
+    },
+    "GetRuleGroup":{
+      "name":"GetRuleGroup",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"GetRuleGroupRequest"},
+      "output":{"shape":"GetRuleGroupResponse"},
+      "errors":[
+        {"shape":"WAFInternalErrorException"},
         {"shape":"WAFNonexistentItemException"}
       ]
     },
@@ -634,6 +754,20 @@
         {"shape":"WAFNonexistentItemException"}
       ]
     },
+    "ListActivatedRulesInRuleGroup":{
+      "name":"ListActivatedRulesInRuleGroup",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"ListActivatedRulesInRuleGroupRequest"},
+      "output":{"shape":"ListActivatedRulesInRuleGroupResponse"},
+      "errors":[
+        {"shape":"WAFInternalErrorException"},
+        {"shape":"WAFNonexistentItemException"},
+        {"shape":"WAFInvalidParameterException"}
+      ]
+    },
     "ListByteMatchSets":{
       "name":"ListByteMatchSets",
       "http":{
@@ -671,6 +805,20 @@
       "errors":[
         {"shape":"WAFInternalErrorException"},
         {"shape":"WAFInvalidAccountException"}
+      ]
+    },
+    "ListLoggingConfigurations":{
+      "name":"ListLoggingConfigurations",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"ListLoggingConfigurationsRequest"},
+      "output":{"shape":"ListLoggingConfigurationsResponse"},
+      "errors":[
+        {"shape":"WAFInternalErrorException"},
+        {"shape":"WAFNonexistentItemException"},
+        {"shape":"WAFInvalidParameterException"}
       ]
     },
     "ListRateBasedRules":{
@@ -723,7 +871,20 @@
       "errors":[
         {"shape":"WAFInternalErrorException"},
         {"shape":"WAFInvalidAccountException"},
-        {"shape":"WAFNonexistentItemException"}
+        {"shape":"WAFNonexistentItemException"},
+        {"shape":"WAFInvalidParameterException"}
+      ]
+    },
+    "ListRuleGroups":{
+      "name":"ListRuleGroups",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"ListRuleGroupsRequest"},
+      "output":{"shape":"ListRuleGroupsResponse"},
+      "errors":[
+        {"shape":"WAFInternalErrorException"}
       ]
     },
     "ListRules":{
@@ -765,6 +926,36 @@
         {"shape":"WAFInvalidAccountException"}
       ]
     },
+    "ListSubscribedRuleGroups":{
+      "name":"ListSubscribedRuleGroups",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"ListSubscribedRuleGroupsRequest"},
+      "output":{"shape":"ListSubscribedRuleGroupsResponse"},
+      "errors":[
+        {"shape":"WAFNonexistentItemException"},
+        {"shape":"WAFInternalErrorException"}
+      ]
+    },
+    "ListTagsForResource":{
+      "name":"ListTagsForResource",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"ListTagsForResourceRequest"},
+      "output":{"shape":"ListTagsForResourceResponse"},
+      "errors":[
+        {"shape":"WAFInternalErrorException"},
+        {"shape":"WAFInvalidParameterException"},
+        {"shape":"WAFNonexistentItemException"},
+        {"shape":"WAFBadRequestException"},
+        {"shape":"WAFTagOperationException"},
+        {"shape":"WAFTagOperationInternalErrorException"}
+      ]
+    },
     "ListWebACLs":{
       "name":"ListWebACLs",
       "http":{
@@ -789,6 +980,71 @@
       "errors":[
         {"shape":"WAFInternalErrorException"},
         {"shape":"WAFInvalidAccountException"}
+      ]
+    },
+    "PutLoggingConfiguration":{
+      "name":"PutLoggingConfiguration",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"PutLoggingConfigurationRequest"},
+      "output":{"shape":"PutLoggingConfigurationResponse"},
+      "errors":[
+        {"shape":"WAFInternalErrorException"},
+        {"shape":"WAFNonexistentItemException"},
+        {"shape":"WAFStaleDataException"},
+        {"shape":"WAFServiceLinkedRoleErrorException"}
+      ]
+    },
+    "PutPermissionPolicy":{
+      "name":"PutPermissionPolicy",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"PutPermissionPolicyRequest"},
+      "output":{"shape":"PutPermissionPolicyResponse"},
+      "errors":[
+        {"shape":"WAFInternalErrorException"},
+        {"shape":"WAFStaleDataException"},
+        {"shape":"WAFNonexistentItemException"},
+        {"shape":"WAFInvalidPermissionPolicyException"}
+      ]
+    },
+    "TagResource":{
+      "name":"TagResource",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"TagResourceRequest"},
+      "output":{"shape":"TagResourceResponse"},
+      "errors":[
+        {"shape":"WAFInternalErrorException"},
+        {"shape":"WAFInvalidParameterException"},
+        {"shape":"WAFLimitsExceededException"},
+        {"shape":"WAFNonexistentItemException"},
+        {"shape":"WAFBadRequestException"},
+        {"shape":"WAFTagOperationException"},
+        {"shape":"WAFTagOperationInternalErrorException"}
+      ]
+    },
+    "UntagResource":{
+      "name":"UntagResource",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"UntagResourceRequest"},
+      "output":{"shape":"UntagResourceResponse"},
+      "errors":[
+        {"shape":"WAFInternalErrorException"},
+        {"shape":"WAFInvalidParameterException"},
+        {"shape":"WAFNonexistentItemException"},
+        {"shape":"WAFBadRequestException"},
+        {"shape":"WAFTagOperationException"},
+        {"shape":"WAFTagOperationInternalErrorException"}
       ]
     },
     "UpdateByteMatchSet":{
@@ -901,6 +1157,7 @@
         {"shape":"WAFStaleDataException"},
         {"shape":"WAFInternalErrorException"},
         {"shape":"WAFLimitsExceededException"},
+        {"shape":"WAFNonexistentItemException"},
         {"shape":"WAFNonexistentContainerException"},
         {"shape":"WAFInvalidOperationException"},
         {"shape":"WAFInvalidAccountException"},
@@ -925,6 +1182,24 @@
         {"shape":"WAFNonexistentItemException"},
         {"shape":"WAFReferencedItemException"},
         {"shape":"WAFLimitsExceededException"}
+      ]
+    },
+    "UpdateRuleGroup":{
+      "name":"UpdateRuleGroup",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"UpdateRuleGroupRequest"},
+      "output":{"shape":"UpdateRuleGroupResponse"},
+      "errors":[
+        {"shape":"WAFStaleDataException"},
+        {"shape":"WAFInternalErrorException"},
+        {"shape":"WAFNonexistentContainerException"},
+        {"shape":"WAFNonexistentItemException"},
+        {"shape":"WAFInvalidOperationException"},
+        {"shape":"WAFLimitsExceededException"},
+        {"shape":"WAFInvalidParameterException"}
       ]
     },
     "UpdateSizeConstraintSet":{
@@ -983,7 +1258,8 @@
         {"shape":"WAFNonexistentContainerException"},
         {"shape":"WAFNonexistentItemException"},
         {"shape":"WAFReferencedItemException"},
-        {"shape":"WAFLimitsExceededException"}
+        {"shape":"WAFLimitsExceededException"},
+        {"shape":"WAFSubscriptionNotFoundException"}
       ]
     },
     "UpdateXssMatchSet":{
@@ -1012,14 +1288,15 @@
       "type":"structure",
       "required":[
         "Priority",
-        "RuleId",
-        "Action"
+        "RuleId"
       ],
       "members":{
         "Priority":{"shape":"RulePriority"},
         "RuleId":{"shape":"ResourceId"},
         "Action":{"shape":"WafAction"},
-        "Type":{"shape":"WafRuleType"}
+        "OverrideAction":{"shape":"WafOverrideAction"},
+        "Type":{"shape":"WafRuleType"},
+        "ExcludedRules":{"shape":"ExcludedRules"}
       }
     },
     "ActivatedRules":{
@@ -1204,7 +1481,8 @@
         "MetricName":{"shape":"MetricName"},
         "RateKey":{"shape":"RateKey"},
         "RateLimit":{"shape":"RateLimit"},
-        "ChangeToken":{"shape":"ChangeToken"}
+        "ChangeToken":{"shape":"ChangeToken"},
+        "Tags":{"shape":"TagList"}
       }
     },
     "CreateRateBasedRuleResponse":{
@@ -1250,6 +1528,27 @@
         "ChangeToken":{"shape":"ChangeToken"}
       }
     },
+    "CreateRuleGroupRequest":{
+      "type":"structure",
+      "required":[
+        "Name",
+        "MetricName",
+        "ChangeToken"
+      ],
+      "members":{
+        "Name":{"shape":"ResourceName"},
+        "MetricName":{"shape":"MetricName"},
+        "ChangeToken":{"shape":"ChangeToken"},
+        "Tags":{"shape":"TagList"}
+      }
+    },
+    "CreateRuleGroupResponse":{
+      "type":"structure",
+      "members":{
+        "RuleGroup":{"shape":"RuleGroup"},
+        "ChangeToken":{"shape":"ChangeToken"}
+      }
+    },
     "CreateRuleRequest":{
       "type":"structure",
       "required":[
@@ -1260,7 +1559,8 @@
       "members":{
         "Name":{"shape":"ResourceName"},
         "MetricName":{"shape":"MetricName"},
-        "ChangeToken":{"shape":"ChangeToken"}
+        "ChangeToken":{"shape":"ChangeToken"},
+        "Tags":{"shape":"TagList"}
       }
     },
     "CreateRuleResponse":{
@@ -1318,7 +1618,8 @@
         "Name":{"shape":"ResourceName"},
         "MetricName":{"shape":"MetricName"},
         "DefaultAction":{"shape":"WafAction"},
-        "ChangeToken":{"shape":"ChangeToken"}
+        "ChangeToken":{"shape":"ChangeToken"},
+        "Tags":{"shape":"TagList"}
       }
     },
     "CreateWebACLResponse":{
@@ -1397,6 +1698,30 @@
         "ChangeToken":{"shape":"ChangeToken"}
       }
     },
+    "DeleteLoggingConfigurationRequest":{
+      "type":"structure",
+      "required":["ResourceArn"],
+      "members":{
+        "ResourceArn":{"shape":"ResourceArn"}
+      }
+    },
+    "DeleteLoggingConfigurationResponse":{
+      "type":"structure",
+      "members":{
+      }
+    },
+    "DeletePermissionPolicyRequest":{
+      "type":"structure",
+      "required":["ResourceArn"],
+      "members":{
+        "ResourceArn":{"shape":"ResourceArn"}
+      }
+    },
+    "DeletePermissionPolicyResponse":{
+      "type":"structure",
+      "members":{
+      }
+    },
     "DeleteRateBasedRuleRequest":{
       "type":"structure",
       "required":[
@@ -1443,6 +1768,23 @@
       }
     },
     "DeleteRegexPatternSetResponse":{
+      "type":"structure",
+      "members":{
+        "ChangeToken":{"shape":"ChangeToken"}
+      }
+    },
+    "DeleteRuleGroupRequest":{
+      "type":"structure",
+      "required":[
+        "RuleGroupId",
+        "ChangeToken"
+      ],
+      "members":{
+        "RuleGroupId":{"shape":"ResourceId"},
+        "ChangeToken":{"shape":"ChangeToken"}
+      }
+    },
+    "DeleteRuleGroupResponse":{
       "type":"structure",
       "members":{
         "ChangeToken":{"shape":"ChangeToken"}
@@ -1544,6 +1886,17 @@
       "type":"structure",
       "members":{
       }
+    },
+    "ExcludedRule":{
+      "type":"structure",
+      "required":["RuleId"],
+      "members":{
+        "RuleId":{"shape":"ResourceId"}
+      }
+    },
+    "ExcludedRules":{
+      "type":"list",
+      "member":{"shape":"ExcludedRule"}
     },
     "FieldToMatch":{
       "type":"structure",
@@ -1932,6 +2285,32 @@
         "IPSet":{"shape":"IPSet"}
       }
     },
+    "GetLoggingConfigurationRequest":{
+      "type":"structure",
+      "required":["ResourceArn"],
+      "members":{
+        "ResourceArn":{"shape":"ResourceArn"}
+      }
+    },
+    "GetLoggingConfigurationResponse":{
+      "type":"structure",
+      "members":{
+        "LoggingConfiguration":{"shape":"LoggingConfiguration"}
+      }
+    },
+    "GetPermissionPolicyRequest":{
+      "type":"structure",
+      "required":["ResourceArn"],
+      "members":{
+        "ResourceArn":{"shape":"ResourceArn"}
+      }
+    },
+    "GetPermissionPolicyResponse":{
+      "type":"structure",
+      "members":{
+        "Policy":{"shape":"PolicyString"}
+      }
+    },
     "GetRateBasedRuleManagedKeysRequest":{
       "type":"structure",
       "required":["RuleId"],
@@ -1984,6 +2363,19 @@
       "type":"structure",
       "members":{
         "RegexPatternSet":{"shape":"RegexPatternSet"}
+      }
+    },
+    "GetRuleGroupRequest":{
+      "type":"structure",
+      "required":["RuleGroupId"],
+      "members":{
+        "RuleGroupId":{"shape":"ResourceId"}
+      }
+    },
+    "GetRuleGroupResponse":{
+      "type":"structure",
+      "members":{
+        "RuleGroup":{"shape":"RuleGroup"}
       }
     },
     "GetRuleRequest":{
@@ -2185,6 +2577,21 @@
       "min":1
     },
     "IPString":{"type":"string"},
+    "ListActivatedRulesInRuleGroupRequest":{
+      "type":"structure",
+      "members":{
+        "RuleGroupId":{"shape":"ResourceId"},
+        "NextMarker":{"shape":"NextMarker"},
+        "Limit":{"shape":"PaginationLimit"}
+      }
+    },
+    "ListActivatedRulesInRuleGroupResponse":{
+      "type":"structure",
+      "members":{
+        "NextMarker":{"shape":"NextMarker"},
+        "ActivatedRules":{"shape":"ActivatedRules"}
+      }
+    },
     "ListByteMatchSetsRequest":{
       "type":"structure",
       "members":{
@@ -2225,6 +2632,20 @@
       "members":{
         "NextMarker":{"shape":"NextMarker"},
         "IPSets":{"shape":"IPSetSummaries"}
+      }
+    },
+    "ListLoggingConfigurationsRequest":{
+      "type":"structure",
+      "members":{
+        "NextMarker":{"shape":"NextMarker"},
+        "Limit":{"shape":"PaginationLimit"}
+      }
+    },
+    "ListLoggingConfigurationsResponse":{
+      "type":"structure",
+      "members":{
+        "LoggingConfigurations":{"shape":"LoggingConfigurations"},
+        "NextMarker":{"shape":"NextMarker"}
       }
     },
     "ListRateBasedRulesRequest":{
@@ -2273,13 +2694,28 @@
       "type":"structure",
       "required":["WebACLId"],
       "members":{
-        "WebACLId":{"shape":"ResourceId"}
+        "WebACLId":{"shape":"ResourceId"},
+        "ResourceType":{"shape":"ResourceType"}
       }
     },
     "ListResourcesForWebACLResponse":{
       "type":"structure",
       "members":{
         "ResourceArns":{"shape":"ResourceArns"}
+      }
+    },
+    "ListRuleGroupsRequest":{
+      "type":"structure",
+      "members":{
+        "NextMarker":{"shape":"NextMarker"},
+        "Limit":{"shape":"PaginationLimit"}
+      }
+    },
+    "ListRuleGroupsResponse":{
+      "type":"structure",
+      "members":{
+        "NextMarker":{"shape":"NextMarker"},
+        "RuleGroups":{"shape":"RuleGroupSummaries"}
       }
     },
     "ListRulesRequest":{
@@ -2324,6 +2760,36 @@
         "SqlInjectionMatchSets":{"shape":"SqlInjectionMatchSetSummaries"}
       }
     },
+    "ListSubscribedRuleGroupsRequest":{
+      "type":"structure",
+      "members":{
+        "NextMarker":{"shape":"NextMarker"},
+        "Limit":{"shape":"PaginationLimit"}
+      }
+    },
+    "ListSubscribedRuleGroupsResponse":{
+      "type":"structure",
+      "members":{
+        "NextMarker":{"shape":"NextMarker"},
+        "RuleGroups":{"shape":"SubscribedRuleGroupSummaries"}
+      }
+    },
+    "ListTagsForResourceRequest":{
+      "type":"structure",
+      "required":["ResourceARN"],
+      "members":{
+        "NextMarker":{"shape":"NextMarker"},
+        "Limit":{"shape":"PaginationLimit"},
+        "ResourceARN":{"shape":"ResourceArn"}
+      }
+    },
+    "ListTagsForResourceResponse":{
+      "type":"structure",
+      "members":{
+        "NextMarker":{"shape":"NextMarker"},
+        "TagInfoForResource":{"shape":"TagInfoForResource"}
+      }
+    },
     "ListWebACLsRequest":{
       "type":"structure",
       "members":{
@@ -2352,6 +2818,28 @@
         "XssMatchSets":{"shape":"XssMatchSetSummaries"}
       }
     },
+    "LogDestinationConfigs":{
+      "type":"list",
+      "member":{"shape":"ResourceArn"},
+      "max":1,
+      "min":1
+    },
+    "LoggingConfiguration":{
+      "type":"structure",
+      "required":[
+        "ResourceArn",
+        "LogDestinationConfigs"
+      ],
+      "members":{
+        "ResourceArn":{"shape":"ResourceArn"},
+        "LogDestinationConfigs":{"shape":"LogDestinationConfigs"},
+        "RedactedFields":{"shape":"RedactedFields"}
+      }
+    },
+    "LoggingConfigurations":{
+      "type":"list",
+      "member":{"shape":"LoggingConfiguration"}
+    },
     "ManagedKey":{"type":"string"},
     "ManagedKeys":{
       "type":"list",
@@ -2365,7 +2853,9 @@
         "QUERY_STRING",
         "HEADER",
         "METHOD",
-        "BODY"
+        "BODY",
+        "SINGLE_QUERY_ARG",
+        "ALL_QUERY_ARGS"
       ]
     },
     "MetricName":{"type":"string"},
@@ -2384,6 +2874,7 @@
       "enum":[
         "CHANGE_ACTION",
         "WAF_ACTION",
+        "WAF_OVERRIDE_ACTION",
         "PREDICATE_TYPE",
         "IPSET_TYPE",
         "BYTE_MATCH_FIELD_TYPE",
@@ -2395,7 +2886,10 @@
         "GEO_MATCH_LOCATION_VALUE",
         "RATE_KEY",
         "RULE_TYPE",
-        "NEXT_MARKER"
+        "NEXT_MARKER",
+        "RESOURCE_ARN",
+        "TAGS",
+        "TAG_KEYS"
       ]
     },
     "ParameterExceptionParameter":{
@@ -2406,8 +2900,14 @@
       "type":"string",
       "enum":[
         "INVALID_OPTION",
-        "ILLEGAL_COMBINATION"
+        "ILLEGAL_COMBINATION",
+        "ILLEGAL_ARGUMENT",
+        "INVALID_TAG_KEY"
       ]
+    },
+    "PolicyString":{
+      "type":"string",
+      "min":1
     },
     "PopulationSize":{"type":"long"},
     "PositionalConstraint":{
@@ -2449,6 +2949,35 @@
       "type":"list",
       "member":{"shape":"Predicate"}
     },
+    "PutLoggingConfigurationRequest":{
+      "type":"structure",
+      "required":["LoggingConfiguration"],
+      "members":{
+        "LoggingConfiguration":{"shape":"LoggingConfiguration"}
+      }
+    },
+    "PutLoggingConfigurationResponse":{
+      "type":"structure",
+      "members":{
+        "LoggingConfiguration":{"shape":"LoggingConfiguration"}
+      }
+    },
+    "PutPermissionPolicyRequest":{
+      "type":"structure",
+      "required":[
+        "ResourceArn",
+        "Policy"
+      ],
+      "members":{
+        "ResourceArn":{"shape":"ResourceArn"},
+        "Policy":{"shape":"PolicyString"}
+      }
+    },
+    "PutPermissionPolicyResponse":{
+      "type":"structure",
+      "members":{
+      }
+    },
     "RateBasedRule":{
       "type":"structure",
       "required":[
@@ -2472,7 +3001,12 @@
     },
     "RateLimit":{
       "type":"long",
-      "min":2000
+      "max":2000000000,
+      "min":100
+    },
+    "RedactedFields":{
+      "type":"list",
+      "member":{"shape":"FieldToMatch"}
     },
     "RegexMatchSet":{
       "type":"structure",
@@ -2601,6 +3135,13 @@
       "max":128,
       "min":1
     },
+    "ResourceType":{
+      "type":"string",
+      "enum":[
+        "APPLICATION_LOAD_BALANCER",
+        "API_GATEWAY"
+      ]
+    },
     "Rule":{
       "type":"structure",
       "required":[
@@ -2613,6 +3154,46 @@
         "MetricName":{"shape":"MetricName"},
         "Predicates":{"shape":"Predicates"}
       }
+    },
+    "RuleGroup":{
+      "type":"structure",
+      "required":["RuleGroupId"],
+      "members":{
+        "RuleGroupId":{"shape":"ResourceId"},
+        "Name":{"shape":"ResourceName"},
+        "MetricName":{"shape":"MetricName"}
+      }
+    },
+    "RuleGroupSummaries":{
+      "type":"list",
+      "member":{"shape":"RuleGroupSummary"}
+    },
+    "RuleGroupSummary":{
+      "type":"structure",
+      "required":[
+        "RuleGroupId",
+        "Name"
+      ],
+      "members":{
+        "RuleGroupId":{"shape":"ResourceId"},
+        "Name":{"shape":"ResourceName"}
+      }
+    },
+    "RuleGroupUpdate":{
+      "type":"structure",
+      "required":[
+        "Action",
+        "ActivatedRule"
+      ],
+      "members":{
+        "Action":{"shape":"ChangeAction"},
+        "ActivatedRule":{"shape":"ActivatedRule"}
+      }
+    },
+    "RuleGroupUpdates":{
+      "type":"list",
+      "member":{"shape":"RuleGroupUpdate"},
+      "min":1
     },
     "RulePriority":{"type":"integer"},
     "RuleSummaries":{
@@ -2659,7 +3240,8 @@
         "Request":{"shape":"HTTPRequest"},
         "Weight":{"shape":"SampleWeight"},
         "Timestamp":{"shape":"Timestamp"},
-        "Action":{"shape":"Action"}
+        "Action":{"shape":"Action"},
+        "RuleWithinRuleGroup":{"shape":"ResourceId"}
       }
     },
     "SampledHTTPRequests":{
@@ -2791,6 +3373,73 @@
       "type":"list",
       "member":{"shape":"SqlInjectionMatchTuple"}
     },
+    "SubscribedRuleGroupSummaries":{
+      "type":"list",
+      "member":{"shape":"SubscribedRuleGroupSummary"}
+    },
+    "SubscribedRuleGroupSummary":{
+      "type":"structure",
+      "required":[
+        "RuleGroupId",
+        "Name",
+        "MetricName"
+      ],
+      "members":{
+        "RuleGroupId":{"shape":"ResourceId"},
+        "Name":{"shape":"ResourceName"},
+        "MetricName":{"shape":"MetricName"}
+      }
+    },
+    "Tag":{
+      "type":"structure",
+      "members":{
+        "Key":{"shape":"TagKey"},
+        "Value":{"shape":"TagValue"}
+      }
+    },
+    "TagInfoForResource":{
+      "type":"structure",
+      "members":{
+        "ResourceARN":{"shape":"ResourceArn"},
+        "TagList":{"shape":"TagList"}
+      }
+    },
+    "TagKey":{
+      "type":"string",
+      "max":128,
+      "min":1
+    },
+    "TagKeyList":{
+      "type":"list",
+      "member":{"shape":"TagKey"},
+      "min":1
+    },
+    "TagList":{
+      "type":"list",
+      "member":{"shape":"Tag"},
+      "min":1
+    },
+    "TagResourceRequest":{
+      "type":"structure",
+      "required":[
+        "ResourceARN",
+        "Tags"
+      ],
+      "members":{
+        "ResourceARN":{"shape":"ResourceArn"},
+        "Tags":{"shape":"TagList"}
+      }
+    },
+    "TagResourceResponse":{
+      "type":"structure",
+      "members":{
+      }
+    },
+    "TagValue":{
+      "type":"string",
+      "max":256,
+      "min":0
+    },
     "TextTransformation":{
       "type":"string",
       "enum":[
@@ -2815,6 +3464,22 @@
     },
     "Timestamp":{"type":"timestamp"},
     "URIString":{"type":"string"},
+    "UntagResourceRequest":{
+      "type":"structure",
+      "required":[
+        "ResourceARN",
+        "TagKeys"
+      ],
+      "members":{
+        "ResourceARN":{"shape":"ResourceArn"},
+        "TagKeys":{"shape":"TagKeyList"}
+      }
+    },
+    "UntagResourceResponse":{
+      "type":"structure",
+      "members":{
+      }
+    },
     "UpdateByteMatchSetRequest":{
       "type":"structure",
       "required":[
@@ -2931,6 +3596,25 @@
         "ChangeToken":{"shape":"ChangeToken"}
       }
     },
+    "UpdateRuleGroupRequest":{
+      "type":"structure",
+      "required":[
+        "RuleGroupId",
+        "Updates",
+        "ChangeToken"
+      ],
+      "members":{
+        "RuleGroupId":{"shape":"ResourceId"},
+        "Updates":{"shape":"RuleGroupUpdates"},
+        "ChangeToken":{"shape":"ChangeToken"}
+      }
+    },
+    "UpdateRuleGroupResponse":{
+      "type":"structure",
+      "members":{
+        "ChangeToken":{"shape":"ChangeToken"}
+      }
+    },
     "UpdateRuleRequest":{
       "type":"structure",
       "required":[
@@ -3026,6 +3710,13 @@
         "ChangeToken":{"shape":"ChangeToken"}
       }
     },
+    "WAFBadRequestException":{
+      "type":"structure",
+      "members":{
+        "message":{"shape":"errorMessage"}
+      },
+      "exception":true
+    },
     "WAFDisallowedNameException":{
       "type":"structure",
       "members":{
@@ -3060,6 +3751,13 @@
         "field":{"shape":"ParameterExceptionField"},
         "parameter":{"shape":"ParameterExceptionParameter"},
         "reason":{"shape":"ParameterExceptionReason"}
+      },
+      "exception":true
+    },
+    "WAFInvalidPermissionPolicyException":{
+      "type":"structure",
+      "members":{
+        "message":{"shape":"errorMessage"}
       },
       "exception":true
     },
@@ -3105,12 +3803,41 @@
       },
       "exception":true
     },
+    "WAFServiceLinkedRoleErrorException":{
+      "type":"structure",
+      "members":{
+        "message":{"shape":"errorMessage"}
+      },
+      "exception":true
+    },
     "WAFStaleDataException":{
       "type":"structure",
       "members":{
         "message":{"shape":"errorMessage"}
       },
       "exception":true
+    },
+    "WAFSubscriptionNotFoundException":{
+      "type":"structure",
+      "members":{
+        "message":{"shape":"errorMessage"}
+      },
+      "exception":true
+    },
+    "WAFTagOperationException":{
+      "type":"structure",
+      "members":{
+        "message":{"shape":"errorMessage"}
+      },
+      "exception":true
+    },
+    "WAFTagOperationInternalErrorException":{
+      "type":"structure",
+      "members":{
+        "message":{"shape":"errorMessage"}
+      },
+      "exception":true,
+      "fault":true
     },
     "WAFUnavailableEntityException":{
       "type":"structure",
@@ -3134,11 +3861,26 @@
         "COUNT"
       ]
     },
+    "WafOverrideAction":{
+      "type":"structure",
+      "required":["Type"],
+      "members":{
+        "Type":{"shape":"WafOverrideActionType"}
+      }
+    },
+    "WafOverrideActionType":{
+      "type":"string",
+      "enum":[
+        "NONE",
+        "COUNT"
+      ]
+    },
     "WafRuleType":{
       "type":"string",
       "enum":[
         "REGULAR",
-        "RATE_BASED"
+        "RATE_BASED",
+        "GROUP"
       ]
     },
     "WebACL":{
@@ -3153,7 +3895,8 @@
         "Name":{"shape":"ResourceName"},
         "MetricName":{"shape":"MetricName"},
         "DefaultAction":{"shape":"WafAction"},
-        "Rules":{"shape":"ActivatedRules"}
+        "Rules":{"shape":"ActivatedRules"},
+        "WebACLArn":{"shape":"ResourceArn"}
       }
     },
     "WebACLSummaries":{

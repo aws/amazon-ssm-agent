@@ -113,7 +113,7 @@ func (suite *AgentHealthIntegrationTestSuite) TestHealthCheck() {
 		elapsed := time.Since(start).Minutes()
 		actualHealthPings++
 		suite.log.Infof("Waiting for next health ping, elapsed time is %v minute \n", elapsed)
-		if elapsed >= time.Duration(time.Duration( designHealthPings - 1 )*time.Minute).Minutes() {
+		if elapsed >= time.Duration(time.Duration(designHealthPings-1)*time.Minute).Minutes() {
 			if actualHealthPings >= designHealthPings {
 				c <- "Succeed"
 				suite.T().Log("HealthCheck test succeed.")

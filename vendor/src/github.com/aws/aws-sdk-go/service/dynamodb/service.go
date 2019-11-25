@@ -6,6 +6,7 @@ import (
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/client"
 	"github.com/aws/aws-sdk-go/aws/client/metadata"
+	"github.com/aws/aws-sdk-go/aws/crr"
 	"github.com/aws/aws-sdk-go/aws/request"
 	"github.com/aws/aws-sdk-go/aws/signer/v4"
 	"github.com/aws/aws-sdk-go/private/protocol/jsonrpc"
@@ -19,6 +20,7 @@ import (
 // modify mutate any of the struct's properties though.
 type DynamoDB struct {
 	*client.Client
+	endpointCache *crr.EndpointCache
 }
 
 // Used for custom client initialization logic
@@ -29,8 +31,9 @@ var initRequest func(*request.Request)
 
 // Service information constants
 const (
-	ServiceName = "dynamodb"  // Service endpoint prefix API calls made to.
-	EndpointsID = ServiceName // Service ID for Regions and Endpoints metadata.
+	ServiceName = "dynamodb"  // Name of service.
+	EndpointsID = ServiceName // ID to lookup a service endpoint with.
+	ServiceID   = "DynamoDB"  // ServiceID is a unique identifer of a specific service.
 )
 
 // New creates a new instance of the DynamoDB client with a session.
@@ -38,6 +41,8 @@ const (
 // aws.Config parameter to add your extra config.
 //
 // Example:
+//     mySession := session.Must(session.NewSession())
+//
 //     // Create a DynamoDB client from just a session.
 //     svc := dynamodb.New(mySession)
 //
@@ -45,18 +50,20 @@ const (
 //     svc := dynamodb.New(mySession, aws.NewConfig().WithRegion("us-west-2"))
 func New(p client.ConfigProvider, cfgs ...*aws.Config) *DynamoDB {
 	c := p.ClientConfig(EndpointsID, cfgs...)
-	return newClient(*c.Config, c.Handlers, c.Endpoint, c.SigningRegion, c.SigningName)
+	return newClient(*c.Config, c.Handlers, c.PartitionID, c.Endpoint, c.SigningRegion, c.SigningName)
 }
 
 // newClient creates, initializes and returns a new service client instance.
-func newClient(cfg aws.Config, handlers request.Handlers, endpoint, signingRegion, signingName string) *DynamoDB {
+func newClient(cfg aws.Config, handlers request.Handlers, partitionID, endpoint, signingRegion, signingName string) *DynamoDB {
 	svc := &DynamoDB{
 		Client: client.New(
 			cfg,
 			metadata.ClientInfo{
 				ServiceName:   ServiceName,
+				ServiceID:     ServiceID,
 				SigningName:   signingName,
 				SigningRegion: signingRegion,
+				PartitionID:   partitionID,
 				Endpoint:      endpoint,
 				APIVersion:    "2012-08-10",
 				JSONVersion:   "1.0",
@@ -65,6 +72,7 @@ func newClient(cfg aws.Config, handlers request.Handlers, endpoint, signingRegio
 			handlers,
 		),
 	}
+	svc.endpointCache = crr.NewEndpointCache(10)
 
 	// Handlers
 	svc.Handlers.Sign.PushBackNamed(v4.SignRequestHandler)

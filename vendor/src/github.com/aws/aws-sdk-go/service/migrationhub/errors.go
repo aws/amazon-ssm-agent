@@ -7,8 +7,7 @@ const (
 	// ErrCodeAccessDeniedException for service response error code
 	// "AccessDeniedException".
 	//
-	// Exception raised when the account making the call is not whitelisted or there
-	// are other authentication errors.
+	// You do not have sufficient access to perform this action.
 	ErrCodeAccessDeniedException = "AccessDeniedException"
 
 	// ErrCodeDryRunOperation for service response error code
@@ -18,11 +17,17 @@ const (
 	// flag is set to "true".
 	ErrCodeDryRunOperation = "DryRunOperation"
 
+	// ErrCodeHomeRegionNotSetException for service response error code
+	// "HomeRegionNotSetException".
+	//
+	// The home region is not set. Set the home region to continue.
+	ErrCodeHomeRegionNotSetException = "HomeRegionNotSetException"
+
 	// ErrCodeInternalServerError for service response error code
 	// "InternalServerError".
 	//
-	// Exception raised when there is an internal, configuration, or dependency
-	// error encountered.
+	// Exception raised when an internal, configuration, or dependency error is
+	// encountered.
 	ErrCodeInternalServerError = "InternalServerError"
 
 	// ErrCodeInvalidInputException for service response error code
@@ -35,24 +40,25 @@ const (
 	// ErrCodePolicyErrorException for service response error code
 	// "PolicyErrorException".
 	//
-	// Exception raised when there are problems accessing ADS (Application Discovery
-	// Service); most likely due to a misconfigured policy or the ADSCaller role
-	// is missing or not configured correctly.
+	// Exception raised when there are problems accessing Application Discovery
+	// Service (Application Discovery Service); most likely due to a misconfigured
+	// policy or the migrationhub-discovery role is missing or not configured correctly.
 	ErrCodePolicyErrorException = "PolicyErrorException"
 
 	// ErrCodeResourceNotFoundException for service response error code
 	// "ResourceNotFoundException".
 	//
-	// Exception raised when the request references a resource (ADS configuration,
-	// update stream, migration task, etc.) that does not exist in ADS (Application
-	// Discovery Service) or in Migration Hub's repository.
+	// Exception raised when the request references a resource (Application Discovery
+	// Service configuration, update stream, migration task, etc.) that does not
+	// exist in Application Discovery Service (Application Discovery Service) or
+	// in Migration Hub's repository.
 	ErrCodeResourceNotFoundException = "ResourceNotFoundException"
 
 	// ErrCodeServiceUnavailableException for service response error code
 	// "ServiceUnavailableException".
 	//
-	// Exception raised when the service encounters throttled communication with
-	// upstream dependencies or is overloaded with requests.
+	// Exception raised when there is an internal, configuration, or dependency
+	// error encountered.
 	ErrCodeServiceUnavailableException = "ServiceUnavailableException"
 
 	// ErrCodeUnauthorizedOperation for service response error code

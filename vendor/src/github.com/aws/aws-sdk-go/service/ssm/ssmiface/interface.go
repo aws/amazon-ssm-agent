@@ -100,10 +100,6 @@ type SSMAPI interface {
 	CreateResourceDataSyncWithContext(aws.Context, *ssm.CreateResourceDataSyncInput, ...request.Option) (*ssm.CreateResourceDataSyncOutput, error)
 	CreateResourceDataSyncRequest(*ssm.CreateResourceDataSyncInput) (*request.Request, *ssm.CreateResourceDataSyncOutput)
 
-	CreateTask(*ssm.CreateTaskInput) (*ssm.CreateTaskOutput, error)
-	CreateTaskWithContext(aws.Context, *ssm.CreateTaskInput, ...request.Option) (*ssm.CreateTaskOutput, error)
-	CreateTaskRequest(*ssm.CreateTaskInput) (*request.Request, *ssm.CreateTaskOutput)
-
 	DeleteActivation(*ssm.DeleteActivationInput) (*ssm.DeleteActivationOutput, error)
 	DeleteActivationWithContext(aws.Context, *ssm.DeleteActivationInput, ...request.Option) (*ssm.DeleteActivationOutput, error)
 	DeleteActivationRequest(*ssm.DeleteActivationInput) (*request.Request, *ssm.DeleteActivationOutput)
@@ -419,14 +415,6 @@ type SSMAPI interface {
 	GetPatchBaselineForPatchGroupWithContext(aws.Context, *ssm.GetPatchBaselineForPatchGroupInput, ...request.Option) (*ssm.GetPatchBaselineForPatchGroupOutput, error)
 	GetPatchBaselineForPatchGroupRequest(*ssm.GetPatchBaselineForPatchGroupInput) (*request.Request, *ssm.GetPatchBaselineForPatchGroupOutput)
 
-	GetTask(*ssm.GetTaskInput) (*ssm.GetTaskOutput, error)
-	GetTaskWithContext(aws.Context, *ssm.GetTaskInput, ...request.Option) (*ssm.GetTaskOutput, error)
-	GetTaskRequest(*ssm.GetTaskInput) (*request.Request, *ssm.GetTaskOutput)
-
-	GetTaskMetadata(*ssm.GetTaskMetadataInput) (*ssm.GetTaskMetadataOutput, error)
-	GetTaskMetadataWithContext(aws.Context, *ssm.GetTaskMetadataInput, ...request.Option) (*ssm.GetTaskMetadataOutput, error)
-	GetTaskMetadataRequest(*ssm.GetTaskMetadataInput) (*request.Request, *ssm.GetTaskMetadataOutput)
-
 	LabelParameterVersion(*ssm.LabelParameterVersionInput) (*ssm.LabelParameterVersionOutput, error)
 	LabelParameterVersionWithContext(aws.Context, *ssm.LabelParameterVersionInput, ...request.Option) (*ssm.LabelParameterVersionOutput, error)
 	LabelParameterVersionRequest(*ssm.LabelParameterVersionInput) (*request.Request, *ssm.LabelParameterVersionOutput)
@@ -494,10 +482,6 @@ type SSMAPI interface {
 	ListTagsForResource(*ssm.ListTagsForResourceInput) (*ssm.ListTagsForResourceOutput, error)
 	ListTagsForResourceWithContext(aws.Context, *ssm.ListTagsForResourceInput, ...request.Option) (*ssm.ListTagsForResourceOutput, error)
 	ListTagsForResourceRequest(*ssm.ListTagsForResourceInput) (*request.Request, *ssm.ListTagsForResourceOutput)
-
-	ListTasks(*ssm.ListTasksInput) (*ssm.ListTasksOutput, error)
-	ListTasksWithContext(aws.Context, *ssm.ListTasksInput, ...request.Option) (*ssm.ListTasksOutput, error)
-	ListTasksRequest(*ssm.ListTasksInput) (*request.Request, *ssm.ListTasksOutput)
 
 	LockServiceLinkedRole(*ssm.LockServiceLinkedRoleInput) (*ssm.LockServiceLinkedRoleOutput, error)
 	LockServiceLinkedRoleWithContext(aws.Context, *ssm.LockServiceLinkedRoleInput, ...request.Option) (*ssm.LockServiceLinkedRoleOutput, error)
@@ -635,9 +619,6 @@ type SSMAPI interface {
 	UpdatePatchBaselineWithContext(aws.Context, *ssm.UpdatePatchBaselineInput, ...request.Option) (*ssm.UpdatePatchBaselineOutput, error)
 	UpdatePatchBaselineRequest(*ssm.UpdatePatchBaselineInput) (*request.Request, *ssm.UpdatePatchBaselineOutput)
 
-	UpdateTask(*ssm.UpdateTaskInput) (*ssm.UpdateTaskOutput, error)
-	UpdateTaskWithContext(aws.Context, *ssm.UpdateTaskInput, ...request.Option) (*ssm.UpdateTaskOutput, error)
-	UpdateTaskRequest(*ssm.UpdateTaskInput) (*request.Request, *ssm.UpdateTaskOutput)
 }
 
 var _ SSMAPI = (*ssm.SSM)(nil)

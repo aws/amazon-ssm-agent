@@ -65,6 +65,10 @@ func TestEnumRegionServices(t *testing.T) {
 		t.Errorf("expect %q region ID, got %q", e, a)
 	}
 
+	if a, e := r.Description(), "region description"; a != e {
+		t.Errorf("expect %q region Description, got %q", e, a)
+	}
+
 	ss := r.Services()
 	if a, e := len(ss), 1; a != e {
 		t.Errorf("expect %d services for us-east-1, got %d", e, a)
@@ -165,6 +169,9 @@ func TestResolveEndpointForPartition(t *testing.T) {
 	enum := testPartitions.Partitions()[0]
 
 	expected, err := testPartitions.EndpointFor("service1", "us-east-1")
+	if err != nil {
+		t.Fatalf("unexpected error, %v", err)
+	}
 
 	actual, err := enum.EndpointFor("service1", "us-east-1")
 	if err != nil {
@@ -291,6 +298,9 @@ func TestRegionsForService(t *testing.T) {
 		if _, ok := expect[id]; !ok {
 			t.Errorf("expect %s region to be found", id)
 		}
+		if a, e := r.Description(), expect[id].desc; a != e {
+			t.Errorf("expect %q region Description, got %q", e, a)
+		}
 	}
 }
 
@@ -320,8 +330,11 @@ func TestPartitionForRegion(t *testing.T) {
 	if !ok {
 		t.Fatalf("expect partition to be found")
 	}
+	if e, a := expect.DNSSuffix(), actual.DNSSuffix(); e != a {
+		t.Errorf("expect %s partition DNSSuffix, got %s", e, a)
+	}
 	if e, a := expect.ID(), actual.ID(); e != a {
-		t.Errorf("expect %s partition, got %s", e, a)
+		t.Errorf("expect %s partition ID, got %s", e, a)
 	}
 }
 

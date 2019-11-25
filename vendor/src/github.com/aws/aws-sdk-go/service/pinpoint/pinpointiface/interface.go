@@ -68,13 +68,37 @@ type PinpointAPI interface {
 	CreateCampaignWithContext(aws.Context, *pinpoint.CreateCampaignInput, ...request.Option) (*pinpoint.CreateCampaignOutput, error)
 	CreateCampaignRequest(*pinpoint.CreateCampaignInput) (*request.Request, *pinpoint.CreateCampaignOutput)
 
+	CreateEmailTemplate(*pinpoint.CreateEmailTemplateInput) (*pinpoint.CreateEmailTemplateOutput, error)
+	CreateEmailTemplateWithContext(aws.Context, *pinpoint.CreateEmailTemplateInput, ...request.Option) (*pinpoint.CreateEmailTemplateOutput, error)
+	CreateEmailTemplateRequest(*pinpoint.CreateEmailTemplateInput) (*request.Request, *pinpoint.CreateEmailTemplateOutput)
+
+	CreateExportJob(*pinpoint.CreateExportJobInput) (*pinpoint.CreateExportJobOutput, error)
+	CreateExportJobWithContext(aws.Context, *pinpoint.CreateExportJobInput, ...request.Option) (*pinpoint.CreateExportJobOutput, error)
+	CreateExportJobRequest(*pinpoint.CreateExportJobInput) (*request.Request, *pinpoint.CreateExportJobOutput)
+
 	CreateImportJob(*pinpoint.CreateImportJobInput) (*pinpoint.CreateImportJobOutput, error)
 	CreateImportJobWithContext(aws.Context, *pinpoint.CreateImportJobInput, ...request.Option) (*pinpoint.CreateImportJobOutput, error)
 	CreateImportJobRequest(*pinpoint.CreateImportJobInput) (*request.Request, *pinpoint.CreateImportJobOutput)
 
+	CreateJourney(*pinpoint.CreateJourneyInput) (*pinpoint.CreateJourneyOutput, error)
+	CreateJourneyWithContext(aws.Context, *pinpoint.CreateJourneyInput, ...request.Option) (*pinpoint.CreateJourneyOutput, error)
+	CreateJourneyRequest(*pinpoint.CreateJourneyInput) (*request.Request, *pinpoint.CreateJourneyOutput)
+
+	CreatePushTemplate(*pinpoint.CreatePushTemplateInput) (*pinpoint.CreatePushTemplateOutput, error)
+	CreatePushTemplateWithContext(aws.Context, *pinpoint.CreatePushTemplateInput, ...request.Option) (*pinpoint.CreatePushTemplateOutput, error)
+	CreatePushTemplateRequest(*pinpoint.CreatePushTemplateInput) (*request.Request, *pinpoint.CreatePushTemplateOutput)
+
 	CreateSegment(*pinpoint.CreateSegmentInput) (*pinpoint.CreateSegmentOutput, error)
 	CreateSegmentWithContext(aws.Context, *pinpoint.CreateSegmentInput, ...request.Option) (*pinpoint.CreateSegmentOutput, error)
 	CreateSegmentRequest(*pinpoint.CreateSegmentInput) (*request.Request, *pinpoint.CreateSegmentOutput)
+
+	CreateSmsTemplate(*pinpoint.CreateSmsTemplateInput) (*pinpoint.CreateSmsTemplateOutput, error)
+	CreateSmsTemplateWithContext(aws.Context, *pinpoint.CreateSmsTemplateInput, ...request.Option) (*pinpoint.CreateSmsTemplateOutput, error)
+	CreateSmsTemplateRequest(*pinpoint.CreateSmsTemplateInput) (*request.Request, *pinpoint.CreateSmsTemplateOutput)
+
+	CreateVoiceTemplate(*pinpoint.CreateVoiceTemplateInput) (*pinpoint.CreateVoiceTemplateOutput, error)
+	CreateVoiceTemplateWithContext(aws.Context, *pinpoint.CreateVoiceTemplateInput, ...request.Option) (*pinpoint.CreateVoiceTemplateOutput, error)
+	CreateVoiceTemplateRequest(*pinpoint.CreateVoiceTemplateInput) (*request.Request, *pinpoint.CreateVoiceTemplateOutput)
 
 	DeleteAdmChannel(*pinpoint.DeleteAdmChannelInput) (*pinpoint.DeleteAdmChannelOutput, error)
 	DeleteAdmChannelWithContext(aws.Context, *pinpoint.DeleteAdmChannelInput, ...request.Option) (*pinpoint.DeleteAdmChannelOutput, error)
@@ -112,6 +136,14 @@ type PinpointAPI interface {
 	DeleteEmailChannelWithContext(aws.Context, *pinpoint.DeleteEmailChannelInput, ...request.Option) (*pinpoint.DeleteEmailChannelOutput, error)
 	DeleteEmailChannelRequest(*pinpoint.DeleteEmailChannelInput) (*request.Request, *pinpoint.DeleteEmailChannelOutput)
 
+	DeleteEmailTemplate(*pinpoint.DeleteEmailTemplateInput) (*pinpoint.DeleteEmailTemplateOutput, error)
+	DeleteEmailTemplateWithContext(aws.Context, *pinpoint.DeleteEmailTemplateInput, ...request.Option) (*pinpoint.DeleteEmailTemplateOutput, error)
+	DeleteEmailTemplateRequest(*pinpoint.DeleteEmailTemplateInput) (*request.Request, *pinpoint.DeleteEmailTemplateOutput)
+
+	DeleteEndpoint(*pinpoint.DeleteEndpointInput) (*pinpoint.DeleteEndpointOutput, error)
+	DeleteEndpointWithContext(aws.Context, *pinpoint.DeleteEndpointInput, ...request.Option) (*pinpoint.DeleteEndpointOutput, error)
+	DeleteEndpointRequest(*pinpoint.DeleteEndpointInput) (*request.Request, *pinpoint.DeleteEndpointOutput)
+
 	DeleteEventStream(*pinpoint.DeleteEventStreamInput) (*pinpoint.DeleteEventStreamOutput, error)
 	DeleteEventStreamWithContext(aws.Context, *pinpoint.DeleteEventStreamInput, ...request.Option) (*pinpoint.DeleteEventStreamOutput, error)
 	DeleteEventStreamRequest(*pinpoint.DeleteEventStreamInput) (*request.Request, *pinpoint.DeleteEventStreamOutput)
@@ -120,6 +152,14 @@ type PinpointAPI interface {
 	DeleteGcmChannelWithContext(aws.Context, *pinpoint.DeleteGcmChannelInput, ...request.Option) (*pinpoint.DeleteGcmChannelOutput, error)
 	DeleteGcmChannelRequest(*pinpoint.DeleteGcmChannelInput) (*request.Request, *pinpoint.DeleteGcmChannelOutput)
 
+	DeleteJourney(*pinpoint.DeleteJourneyInput) (*pinpoint.DeleteJourneyOutput, error)
+	DeleteJourneyWithContext(aws.Context, *pinpoint.DeleteJourneyInput, ...request.Option) (*pinpoint.DeleteJourneyOutput, error)
+	DeleteJourneyRequest(*pinpoint.DeleteJourneyInput) (*request.Request, *pinpoint.DeleteJourneyOutput)
+
+	DeletePushTemplate(*pinpoint.DeletePushTemplateInput) (*pinpoint.DeletePushTemplateOutput, error)
+	DeletePushTemplateWithContext(aws.Context, *pinpoint.DeletePushTemplateInput, ...request.Option) (*pinpoint.DeletePushTemplateOutput, error)
+	DeletePushTemplateRequest(*pinpoint.DeletePushTemplateInput) (*request.Request, *pinpoint.DeletePushTemplateOutput)
+
 	DeleteSegment(*pinpoint.DeleteSegmentInput) (*pinpoint.DeleteSegmentOutput, error)
 	DeleteSegmentWithContext(aws.Context, *pinpoint.DeleteSegmentInput, ...request.Option) (*pinpoint.DeleteSegmentOutput, error)
 	DeleteSegmentRequest(*pinpoint.DeleteSegmentInput) (*request.Request, *pinpoint.DeleteSegmentOutput)
@@ -127,6 +167,22 @@ type PinpointAPI interface {
 	DeleteSmsChannel(*pinpoint.DeleteSmsChannelInput) (*pinpoint.DeleteSmsChannelOutput, error)
 	DeleteSmsChannelWithContext(aws.Context, *pinpoint.DeleteSmsChannelInput, ...request.Option) (*pinpoint.DeleteSmsChannelOutput, error)
 	DeleteSmsChannelRequest(*pinpoint.DeleteSmsChannelInput) (*request.Request, *pinpoint.DeleteSmsChannelOutput)
+
+	DeleteSmsTemplate(*pinpoint.DeleteSmsTemplateInput) (*pinpoint.DeleteSmsTemplateOutput, error)
+	DeleteSmsTemplateWithContext(aws.Context, *pinpoint.DeleteSmsTemplateInput, ...request.Option) (*pinpoint.DeleteSmsTemplateOutput, error)
+	DeleteSmsTemplateRequest(*pinpoint.DeleteSmsTemplateInput) (*request.Request, *pinpoint.DeleteSmsTemplateOutput)
+
+	DeleteUserEndpoints(*pinpoint.DeleteUserEndpointsInput) (*pinpoint.DeleteUserEndpointsOutput, error)
+	DeleteUserEndpointsWithContext(aws.Context, *pinpoint.DeleteUserEndpointsInput, ...request.Option) (*pinpoint.DeleteUserEndpointsOutput, error)
+	DeleteUserEndpointsRequest(*pinpoint.DeleteUserEndpointsInput) (*request.Request, *pinpoint.DeleteUserEndpointsOutput)
+
+	DeleteVoiceChannel(*pinpoint.DeleteVoiceChannelInput) (*pinpoint.DeleteVoiceChannelOutput, error)
+	DeleteVoiceChannelWithContext(aws.Context, *pinpoint.DeleteVoiceChannelInput, ...request.Option) (*pinpoint.DeleteVoiceChannelOutput, error)
+	DeleteVoiceChannelRequest(*pinpoint.DeleteVoiceChannelInput) (*request.Request, *pinpoint.DeleteVoiceChannelOutput)
+
+	DeleteVoiceTemplate(*pinpoint.DeleteVoiceTemplateInput) (*pinpoint.DeleteVoiceTemplateOutput, error)
+	DeleteVoiceTemplateWithContext(aws.Context, *pinpoint.DeleteVoiceTemplateInput, ...request.Option) (*pinpoint.DeleteVoiceTemplateOutput, error)
+	DeleteVoiceTemplateRequest(*pinpoint.DeleteVoiceTemplateInput) (*request.Request, *pinpoint.DeleteVoiceTemplateOutput)
 
 	GetAdmChannel(*pinpoint.GetAdmChannelInput) (*pinpoint.GetAdmChannelOutput, error)
 	GetAdmChannelWithContext(aws.Context, *pinpoint.GetAdmChannelInput, ...request.Option) (*pinpoint.GetAdmChannelOutput, error)
@@ -152,6 +208,10 @@ type PinpointAPI interface {
 	GetAppWithContext(aws.Context, *pinpoint.GetAppInput, ...request.Option) (*pinpoint.GetAppOutput, error)
 	GetAppRequest(*pinpoint.GetAppInput) (*request.Request, *pinpoint.GetAppOutput)
 
+	GetApplicationDateRangeKpi(*pinpoint.GetApplicationDateRangeKpiInput) (*pinpoint.GetApplicationDateRangeKpiOutput, error)
+	GetApplicationDateRangeKpiWithContext(aws.Context, *pinpoint.GetApplicationDateRangeKpiInput, ...request.Option) (*pinpoint.GetApplicationDateRangeKpiOutput, error)
+	GetApplicationDateRangeKpiRequest(*pinpoint.GetApplicationDateRangeKpiInput) (*request.Request, *pinpoint.GetApplicationDateRangeKpiOutput)
+
 	GetApplicationSettings(*pinpoint.GetApplicationSettingsInput) (*pinpoint.GetApplicationSettingsOutput, error)
 	GetApplicationSettingsWithContext(aws.Context, *pinpoint.GetApplicationSettingsInput, ...request.Option) (*pinpoint.GetApplicationSettingsOutput, error)
 	GetApplicationSettingsRequest(*pinpoint.GetApplicationSettingsInput) (*request.Request, *pinpoint.GetApplicationSettingsOutput)
@@ -172,6 +232,10 @@ type PinpointAPI interface {
 	GetCampaignActivitiesWithContext(aws.Context, *pinpoint.GetCampaignActivitiesInput, ...request.Option) (*pinpoint.GetCampaignActivitiesOutput, error)
 	GetCampaignActivitiesRequest(*pinpoint.GetCampaignActivitiesInput) (*request.Request, *pinpoint.GetCampaignActivitiesOutput)
 
+	GetCampaignDateRangeKpi(*pinpoint.GetCampaignDateRangeKpiInput) (*pinpoint.GetCampaignDateRangeKpiOutput, error)
+	GetCampaignDateRangeKpiWithContext(aws.Context, *pinpoint.GetCampaignDateRangeKpiInput, ...request.Option) (*pinpoint.GetCampaignDateRangeKpiOutput, error)
+	GetCampaignDateRangeKpiRequest(*pinpoint.GetCampaignDateRangeKpiInput) (*request.Request, *pinpoint.GetCampaignDateRangeKpiOutput)
+
 	GetCampaignVersion(*pinpoint.GetCampaignVersionInput) (*pinpoint.GetCampaignVersionOutput, error)
 	GetCampaignVersionWithContext(aws.Context, *pinpoint.GetCampaignVersionInput, ...request.Option) (*pinpoint.GetCampaignVersionOutput, error)
 	GetCampaignVersionRequest(*pinpoint.GetCampaignVersionInput) (*request.Request, *pinpoint.GetCampaignVersionOutput)
@@ -184,9 +248,17 @@ type PinpointAPI interface {
 	GetCampaignsWithContext(aws.Context, *pinpoint.GetCampaignsInput, ...request.Option) (*pinpoint.GetCampaignsOutput, error)
 	GetCampaignsRequest(*pinpoint.GetCampaignsInput) (*request.Request, *pinpoint.GetCampaignsOutput)
 
+	GetChannels(*pinpoint.GetChannelsInput) (*pinpoint.GetChannelsOutput, error)
+	GetChannelsWithContext(aws.Context, *pinpoint.GetChannelsInput, ...request.Option) (*pinpoint.GetChannelsOutput, error)
+	GetChannelsRequest(*pinpoint.GetChannelsInput) (*request.Request, *pinpoint.GetChannelsOutput)
+
 	GetEmailChannel(*pinpoint.GetEmailChannelInput) (*pinpoint.GetEmailChannelOutput, error)
 	GetEmailChannelWithContext(aws.Context, *pinpoint.GetEmailChannelInput, ...request.Option) (*pinpoint.GetEmailChannelOutput, error)
 	GetEmailChannelRequest(*pinpoint.GetEmailChannelInput) (*request.Request, *pinpoint.GetEmailChannelOutput)
+
+	GetEmailTemplate(*pinpoint.GetEmailTemplateInput) (*pinpoint.GetEmailTemplateOutput, error)
+	GetEmailTemplateWithContext(aws.Context, *pinpoint.GetEmailTemplateInput, ...request.Option) (*pinpoint.GetEmailTemplateOutput, error)
+	GetEmailTemplateRequest(*pinpoint.GetEmailTemplateInput) (*request.Request, *pinpoint.GetEmailTemplateOutput)
 
 	GetEndpoint(*pinpoint.GetEndpointInput) (*pinpoint.GetEndpointOutput, error)
 	GetEndpointWithContext(aws.Context, *pinpoint.GetEndpointInput, ...request.Option) (*pinpoint.GetEndpointOutput, error)
@@ -195,6 +267,14 @@ type PinpointAPI interface {
 	GetEventStream(*pinpoint.GetEventStreamInput) (*pinpoint.GetEventStreamOutput, error)
 	GetEventStreamWithContext(aws.Context, *pinpoint.GetEventStreamInput, ...request.Option) (*pinpoint.GetEventStreamOutput, error)
 	GetEventStreamRequest(*pinpoint.GetEventStreamInput) (*request.Request, *pinpoint.GetEventStreamOutput)
+
+	GetExportJob(*pinpoint.GetExportJobInput) (*pinpoint.GetExportJobOutput, error)
+	GetExportJobWithContext(aws.Context, *pinpoint.GetExportJobInput, ...request.Option) (*pinpoint.GetExportJobOutput, error)
+	GetExportJobRequest(*pinpoint.GetExportJobInput) (*request.Request, *pinpoint.GetExportJobOutput)
+
+	GetExportJobs(*pinpoint.GetExportJobsInput) (*pinpoint.GetExportJobsOutput, error)
+	GetExportJobsWithContext(aws.Context, *pinpoint.GetExportJobsInput, ...request.Option) (*pinpoint.GetExportJobsOutput, error)
+	GetExportJobsRequest(*pinpoint.GetExportJobsInput) (*request.Request, *pinpoint.GetExportJobsOutput)
 
 	GetGcmChannel(*pinpoint.GetGcmChannelInput) (*pinpoint.GetGcmChannelOutput, error)
 	GetGcmChannelWithContext(aws.Context, *pinpoint.GetGcmChannelInput, ...request.Option) (*pinpoint.GetGcmChannelOutput, error)
@@ -208,9 +288,33 @@ type PinpointAPI interface {
 	GetImportJobsWithContext(aws.Context, *pinpoint.GetImportJobsInput, ...request.Option) (*pinpoint.GetImportJobsOutput, error)
 	GetImportJobsRequest(*pinpoint.GetImportJobsInput) (*request.Request, *pinpoint.GetImportJobsOutput)
 
+	GetJourney(*pinpoint.GetJourneyInput) (*pinpoint.GetJourneyOutput, error)
+	GetJourneyWithContext(aws.Context, *pinpoint.GetJourneyInput, ...request.Option) (*pinpoint.GetJourneyOutput, error)
+	GetJourneyRequest(*pinpoint.GetJourneyInput) (*request.Request, *pinpoint.GetJourneyOutput)
+
+	GetJourneyDateRangeKpi(*pinpoint.GetJourneyDateRangeKpiInput) (*pinpoint.GetJourneyDateRangeKpiOutput, error)
+	GetJourneyDateRangeKpiWithContext(aws.Context, *pinpoint.GetJourneyDateRangeKpiInput, ...request.Option) (*pinpoint.GetJourneyDateRangeKpiOutput, error)
+	GetJourneyDateRangeKpiRequest(*pinpoint.GetJourneyDateRangeKpiInput) (*request.Request, *pinpoint.GetJourneyDateRangeKpiOutput)
+
+	GetJourneyExecutionActivityMetrics(*pinpoint.GetJourneyExecutionActivityMetricsInput) (*pinpoint.GetJourneyExecutionActivityMetricsOutput, error)
+	GetJourneyExecutionActivityMetricsWithContext(aws.Context, *pinpoint.GetJourneyExecutionActivityMetricsInput, ...request.Option) (*pinpoint.GetJourneyExecutionActivityMetricsOutput, error)
+	GetJourneyExecutionActivityMetricsRequest(*pinpoint.GetJourneyExecutionActivityMetricsInput) (*request.Request, *pinpoint.GetJourneyExecutionActivityMetricsOutput)
+
+	GetJourneyExecutionMetrics(*pinpoint.GetJourneyExecutionMetricsInput) (*pinpoint.GetJourneyExecutionMetricsOutput, error)
+	GetJourneyExecutionMetricsWithContext(aws.Context, *pinpoint.GetJourneyExecutionMetricsInput, ...request.Option) (*pinpoint.GetJourneyExecutionMetricsOutput, error)
+	GetJourneyExecutionMetricsRequest(*pinpoint.GetJourneyExecutionMetricsInput) (*request.Request, *pinpoint.GetJourneyExecutionMetricsOutput)
+
+	GetPushTemplate(*pinpoint.GetPushTemplateInput) (*pinpoint.GetPushTemplateOutput, error)
+	GetPushTemplateWithContext(aws.Context, *pinpoint.GetPushTemplateInput, ...request.Option) (*pinpoint.GetPushTemplateOutput, error)
+	GetPushTemplateRequest(*pinpoint.GetPushTemplateInput) (*request.Request, *pinpoint.GetPushTemplateOutput)
+
 	GetSegment(*pinpoint.GetSegmentInput) (*pinpoint.GetSegmentOutput, error)
 	GetSegmentWithContext(aws.Context, *pinpoint.GetSegmentInput, ...request.Option) (*pinpoint.GetSegmentOutput, error)
 	GetSegmentRequest(*pinpoint.GetSegmentInput) (*request.Request, *pinpoint.GetSegmentOutput)
+
+	GetSegmentExportJobs(*pinpoint.GetSegmentExportJobsInput) (*pinpoint.GetSegmentExportJobsOutput, error)
+	GetSegmentExportJobsWithContext(aws.Context, *pinpoint.GetSegmentExportJobsInput, ...request.Option) (*pinpoint.GetSegmentExportJobsOutput, error)
+	GetSegmentExportJobsRequest(*pinpoint.GetSegmentExportJobsInput) (*request.Request, *pinpoint.GetSegmentExportJobsOutput)
 
 	GetSegmentImportJobs(*pinpoint.GetSegmentImportJobsInput) (*pinpoint.GetSegmentImportJobsOutput, error)
 	GetSegmentImportJobsWithContext(aws.Context, *pinpoint.GetSegmentImportJobsInput, ...request.Option) (*pinpoint.GetSegmentImportJobsOutput, error)
@@ -232,9 +336,49 @@ type PinpointAPI interface {
 	GetSmsChannelWithContext(aws.Context, *pinpoint.GetSmsChannelInput, ...request.Option) (*pinpoint.GetSmsChannelOutput, error)
 	GetSmsChannelRequest(*pinpoint.GetSmsChannelInput) (*request.Request, *pinpoint.GetSmsChannelOutput)
 
+	GetSmsTemplate(*pinpoint.GetSmsTemplateInput) (*pinpoint.GetSmsTemplateOutput, error)
+	GetSmsTemplateWithContext(aws.Context, *pinpoint.GetSmsTemplateInput, ...request.Option) (*pinpoint.GetSmsTemplateOutput, error)
+	GetSmsTemplateRequest(*pinpoint.GetSmsTemplateInput) (*request.Request, *pinpoint.GetSmsTemplateOutput)
+
+	GetUserEndpoints(*pinpoint.GetUserEndpointsInput) (*pinpoint.GetUserEndpointsOutput, error)
+	GetUserEndpointsWithContext(aws.Context, *pinpoint.GetUserEndpointsInput, ...request.Option) (*pinpoint.GetUserEndpointsOutput, error)
+	GetUserEndpointsRequest(*pinpoint.GetUserEndpointsInput) (*request.Request, *pinpoint.GetUserEndpointsOutput)
+
+	GetVoiceChannel(*pinpoint.GetVoiceChannelInput) (*pinpoint.GetVoiceChannelOutput, error)
+	GetVoiceChannelWithContext(aws.Context, *pinpoint.GetVoiceChannelInput, ...request.Option) (*pinpoint.GetVoiceChannelOutput, error)
+	GetVoiceChannelRequest(*pinpoint.GetVoiceChannelInput) (*request.Request, *pinpoint.GetVoiceChannelOutput)
+
+	GetVoiceTemplate(*pinpoint.GetVoiceTemplateInput) (*pinpoint.GetVoiceTemplateOutput, error)
+	GetVoiceTemplateWithContext(aws.Context, *pinpoint.GetVoiceTemplateInput, ...request.Option) (*pinpoint.GetVoiceTemplateOutput, error)
+	GetVoiceTemplateRequest(*pinpoint.GetVoiceTemplateInput) (*request.Request, *pinpoint.GetVoiceTemplateOutput)
+
+	ListJourneys(*pinpoint.ListJourneysInput) (*pinpoint.ListJourneysOutput, error)
+	ListJourneysWithContext(aws.Context, *pinpoint.ListJourneysInput, ...request.Option) (*pinpoint.ListJourneysOutput, error)
+	ListJourneysRequest(*pinpoint.ListJourneysInput) (*request.Request, *pinpoint.ListJourneysOutput)
+
+	ListTagsForResource(*pinpoint.ListTagsForResourceInput) (*pinpoint.ListTagsForResourceOutput, error)
+	ListTagsForResourceWithContext(aws.Context, *pinpoint.ListTagsForResourceInput, ...request.Option) (*pinpoint.ListTagsForResourceOutput, error)
+	ListTagsForResourceRequest(*pinpoint.ListTagsForResourceInput) (*request.Request, *pinpoint.ListTagsForResourceOutput)
+
+	ListTemplates(*pinpoint.ListTemplatesInput) (*pinpoint.ListTemplatesOutput, error)
+	ListTemplatesWithContext(aws.Context, *pinpoint.ListTemplatesInput, ...request.Option) (*pinpoint.ListTemplatesOutput, error)
+	ListTemplatesRequest(*pinpoint.ListTemplatesInput) (*request.Request, *pinpoint.ListTemplatesOutput)
+
+	PhoneNumberValidate(*pinpoint.PhoneNumberValidateInput) (*pinpoint.PhoneNumberValidateOutput, error)
+	PhoneNumberValidateWithContext(aws.Context, *pinpoint.PhoneNumberValidateInput, ...request.Option) (*pinpoint.PhoneNumberValidateOutput, error)
+	PhoneNumberValidateRequest(*pinpoint.PhoneNumberValidateInput) (*request.Request, *pinpoint.PhoneNumberValidateOutput)
+
 	PutEventStream(*pinpoint.PutEventStreamInput) (*pinpoint.PutEventStreamOutput, error)
 	PutEventStreamWithContext(aws.Context, *pinpoint.PutEventStreamInput, ...request.Option) (*pinpoint.PutEventStreamOutput, error)
 	PutEventStreamRequest(*pinpoint.PutEventStreamInput) (*request.Request, *pinpoint.PutEventStreamOutput)
+
+	PutEvents(*pinpoint.PutEventsInput) (*pinpoint.PutEventsOutput, error)
+	PutEventsWithContext(aws.Context, *pinpoint.PutEventsInput, ...request.Option) (*pinpoint.PutEventsOutput, error)
+	PutEventsRequest(*pinpoint.PutEventsInput) (*request.Request, *pinpoint.PutEventsOutput)
+
+	RemoveAttributes(*pinpoint.RemoveAttributesInput) (*pinpoint.RemoveAttributesOutput, error)
+	RemoveAttributesWithContext(aws.Context, *pinpoint.RemoveAttributesInput, ...request.Option) (*pinpoint.RemoveAttributesOutput, error)
+	RemoveAttributesRequest(*pinpoint.RemoveAttributesInput) (*request.Request, *pinpoint.RemoveAttributesOutput)
 
 	SendMessages(*pinpoint.SendMessagesInput) (*pinpoint.SendMessagesOutput, error)
 	SendMessagesWithContext(aws.Context, *pinpoint.SendMessagesInput, ...request.Option) (*pinpoint.SendMessagesOutput, error)
@@ -243,6 +387,14 @@ type PinpointAPI interface {
 	SendUsersMessages(*pinpoint.SendUsersMessagesInput) (*pinpoint.SendUsersMessagesOutput, error)
 	SendUsersMessagesWithContext(aws.Context, *pinpoint.SendUsersMessagesInput, ...request.Option) (*pinpoint.SendUsersMessagesOutput, error)
 	SendUsersMessagesRequest(*pinpoint.SendUsersMessagesInput) (*request.Request, *pinpoint.SendUsersMessagesOutput)
+
+	TagResource(*pinpoint.TagResourceInput) (*pinpoint.TagResourceOutput, error)
+	TagResourceWithContext(aws.Context, *pinpoint.TagResourceInput, ...request.Option) (*pinpoint.TagResourceOutput, error)
+	TagResourceRequest(*pinpoint.TagResourceInput) (*request.Request, *pinpoint.TagResourceOutput)
+
+	UntagResource(*pinpoint.UntagResourceInput) (*pinpoint.UntagResourceOutput, error)
+	UntagResourceWithContext(aws.Context, *pinpoint.UntagResourceInput, ...request.Option) (*pinpoint.UntagResourceOutput, error)
+	UntagResourceRequest(*pinpoint.UntagResourceInput) (*request.Request, *pinpoint.UntagResourceOutput)
 
 	UpdateAdmChannel(*pinpoint.UpdateAdmChannelInput) (*pinpoint.UpdateAdmChannelOutput, error)
 	UpdateAdmChannelWithContext(aws.Context, *pinpoint.UpdateAdmChannelInput, ...request.Option) (*pinpoint.UpdateAdmChannelOutput, error)
@@ -280,6 +432,10 @@ type PinpointAPI interface {
 	UpdateEmailChannelWithContext(aws.Context, *pinpoint.UpdateEmailChannelInput, ...request.Option) (*pinpoint.UpdateEmailChannelOutput, error)
 	UpdateEmailChannelRequest(*pinpoint.UpdateEmailChannelInput) (*request.Request, *pinpoint.UpdateEmailChannelOutput)
 
+	UpdateEmailTemplate(*pinpoint.UpdateEmailTemplateInput) (*pinpoint.UpdateEmailTemplateOutput, error)
+	UpdateEmailTemplateWithContext(aws.Context, *pinpoint.UpdateEmailTemplateInput, ...request.Option) (*pinpoint.UpdateEmailTemplateOutput, error)
+	UpdateEmailTemplateRequest(*pinpoint.UpdateEmailTemplateInput) (*request.Request, *pinpoint.UpdateEmailTemplateOutput)
+
 	UpdateEndpoint(*pinpoint.UpdateEndpointInput) (*pinpoint.UpdateEndpointOutput, error)
 	UpdateEndpointWithContext(aws.Context, *pinpoint.UpdateEndpointInput, ...request.Option) (*pinpoint.UpdateEndpointOutput, error)
 	UpdateEndpointRequest(*pinpoint.UpdateEndpointInput) (*request.Request, *pinpoint.UpdateEndpointOutput)
@@ -292,6 +448,18 @@ type PinpointAPI interface {
 	UpdateGcmChannelWithContext(aws.Context, *pinpoint.UpdateGcmChannelInput, ...request.Option) (*pinpoint.UpdateGcmChannelOutput, error)
 	UpdateGcmChannelRequest(*pinpoint.UpdateGcmChannelInput) (*request.Request, *pinpoint.UpdateGcmChannelOutput)
 
+	UpdateJourney(*pinpoint.UpdateJourneyInput) (*pinpoint.UpdateJourneyOutput, error)
+	UpdateJourneyWithContext(aws.Context, *pinpoint.UpdateJourneyInput, ...request.Option) (*pinpoint.UpdateJourneyOutput, error)
+	UpdateJourneyRequest(*pinpoint.UpdateJourneyInput) (*request.Request, *pinpoint.UpdateJourneyOutput)
+
+	UpdateJourneyState(*pinpoint.UpdateJourneyStateInput) (*pinpoint.UpdateJourneyStateOutput, error)
+	UpdateJourneyStateWithContext(aws.Context, *pinpoint.UpdateJourneyStateInput, ...request.Option) (*pinpoint.UpdateJourneyStateOutput, error)
+	UpdateJourneyStateRequest(*pinpoint.UpdateJourneyStateInput) (*request.Request, *pinpoint.UpdateJourneyStateOutput)
+
+	UpdatePushTemplate(*pinpoint.UpdatePushTemplateInput) (*pinpoint.UpdatePushTemplateOutput, error)
+	UpdatePushTemplateWithContext(aws.Context, *pinpoint.UpdatePushTemplateInput, ...request.Option) (*pinpoint.UpdatePushTemplateOutput, error)
+	UpdatePushTemplateRequest(*pinpoint.UpdatePushTemplateInput) (*request.Request, *pinpoint.UpdatePushTemplateOutput)
+
 	UpdateSegment(*pinpoint.UpdateSegmentInput) (*pinpoint.UpdateSegmentOutput, error)
 	UpdateSegmentWithContext(aws.Context, *pinpoint.UpdateSegmentInput, ...request.Option) (*pinpoint.UpdateSegmentOutput, error)
 	UpdateSegmentRequest(*pinpoint.UpdateSegmentInput) (*request.Request, *pinpoint.UpdateSegmentOutput)
@@ -299,6 +467,18 @@ type PinpointAPI interface {
 	UpdateSmsChannel(*pinpoint.UpdateSmsChannelInput) (*pinpoint.UpdateSmsChannelOutput, error)
 	UpdateSmsChannelWithContext(aws.Context, *pinpoint.UpdateSmsChannelInput, ...request.Option) (*pinpoint.UpdateSmsChannelOutput, error)
 	UpdateSmsChannelRequest(*pinpoint.UpdateSmsChannelInput) (*request.Request, *pinpoint.UpdateSmsChannelOutput)
+
+	UpdateSmsTemplate(*pinpoint.UpdateSmsTemplateInput) (*pinpoint.UpdateSmsTemplateOutput, error)
+	UpdateSmsTemplateWithContext(aws.Context, *pinpoint.UpdateSmsTemplateInput, ...request.Option) (*pinpoint.UpdateSmsTemplateOutput, error)
+	UpdateSmsTemplateRequest(*pinpoint.UpdateSmsTemplateInput) (*request.Request, *pinpoint.UpdateSmsTemplateOutput)
+
+	UpdateVoiceChannel(*pinpoint.UpdateVoiceChannelInput) (*pinpoint.UpdateVoiceChannelOutput, error)
+	UpdateVoiceChannelWithContext(aws.Context, *pinpoint.UpdateVoiceChannelInput, ...request.Option) (*pinpoint.UpdateVoiceChannelOutput, error)
+	UpdateVoiceChannelRequest(*pinpoint.UpdateVoiceChannelInput) (*request.Request, *pinpoint.UpdateVoiceChannelOutput)
+
+	UpdateVoiceTemplate(*pinpoint.UpdateVoiceTemplateInput) (*pinpoint.UpdateVoiceTemplateOutput, error)
+	UpdateVoiceTemplateWithContext(aws.Context, *pinpoint.UpdateVoiceTemplateInput, ...request.Option) (*pinpoint.UpdateVoiceTemplateOutput, error)
+	UpdateVoiceTemplateRequest(*pinpoint.UpdateVoiceTemplateInput) (*request.Request, *pinpoint.UpdateVoiceTemplateOutput)
 }
 
 var _ PinpointAPI = (*pinpoint.Pinpoint)(nil)

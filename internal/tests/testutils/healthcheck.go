@@ -16,7 +16,7 @@ package testutils
 
 import (
 	"github.com/aws/amazon-ssm-agent/agent/context"
-    "github.com/aws/amazon-ssm-agent/agent/health"
+	"github.com/aws/amazon-ssm-agent/agent/health"
 	ssmService "github.com/aws/amazon-ssm-agent/agent/ssm"
 	ssmsdkmock "github.com/aws/aws-sdk-go/service/ssm/ssmiface/mocks"
 )

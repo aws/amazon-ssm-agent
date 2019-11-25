@@ -100,6 +100,10 @@ type CloudFormationAPI interface {
 	DeleteStackSetWithContext(aws.Context, *cloudformation.DeleteStackSetInput, ...request.Option) (*cloudformation.DeleteStackSetOutput, error)
 	DeleteStackSetRequest(*cloudformation.DeleteStackSetInput) (*request.Request, *cloudformation.DeleteStackSetOutput)
 
+	DeregisterType(*cloudformation.DeregisterTypeInput) (*cloudformation.DeregisterTypeOutput, error)
+	DeregisterTypeWithContext(aws.Context, *cloudformation.DeregisterTypeInput, ...request.Option) (*cloudformation.DeregisterTypeOutput, error)
+	DeregisterTypeRequest(*cloudformation.DeregisterTypeInput) (*request.Request, *cloudformation.DeregisterTypeOutput)
+
 	DescribeAccountLimits(*cloudformation.DescribeAccountLimitsInput) (*cloudformation.DescribeAccountLimitsOutput, error)
 	DescribeAccountLimitsWithContext(aws.Context, *cloudformation.DescribeAccountLimitsInput, ...request.Option) (*cloudformation.DescribeAccountLimitsOutput, error)
 	DescribeAccountLimitsRequest(*cloudformation.DescribeAccountLimitsInput) (*request.Request, *cloudformation.DescribeAccountLimitsOutput)
@@ -107,6 +111,10 @@ type CloudFormationAPI interface {
 	DescribeChangeSet(*cloudformation.DescribeChangeSetInput) (*cloudformation.DescribeChangeSetOutput, error)
 	DescribeChangeSetWithContext(aws.Context, *cloudformation.DescribeChangeSetInput, ...request.Option) (*cloudformation.DescribeChangeSetOutput, error)
 	DescribeChangeSetRequest(*cloudformation.DescribeChangeSetInput) (*request.Request, *cloudformation.DescribeChangeSetOutput)
+
+	DescribeStackDriftDetectionStatus(*cloudformation.DescribeStackDriftDetectionStatusInput) (*cloudformation.DescribeStackDriftDetectionStatusOutput, error)
+	DescribeStackDriftDetectionStatusWithContext(aws.Context, *cloudformation.DescribeStackDriftDetectionStatusInput, ...request.Option) (*cloudformation.DescribeStackDriftDetectionStatusOutput, error)
+	DescribeStackDriftDetectionStatusRequest(*cloudformation.DescribeStackDriftDetectionStatusInput) (*request.Request, *cloudformation.DescribeStackDriftDetectionStatusOutput)
 
 	DescribeStackEvents(*cloudformation.DescribeStackEventsInput) (*cloudformation.DescribeStackEventsOutput, error)
 	DescribeStackEventsWithContext(aws.Context, *cloudformation.DescribeStackEventsInput, ...request.Option) (*cloudformation.DescribeStackEventsOutput, error)
@@ -122,6 +130,13 @@ type CloudFormationAPI interface {
 	DescribeStackResource(*cloudformation.DescribeStackResourceInput) (*cloudformation.DescribeStackResourceOutput, error)
 	DescribeStackResourceWithContext(aws.Context, *cloudformation.DescribeStackResourceInput, ...request.Option) (*cloudformation.DescribeStackResourceOutput, error)
 	DescribeStackResourceRequest(*cloudformation.DescribeStackResourceInput) (*request.Request, *cloudformation.DescribeStackResourceOutput)
+
+	DescribeStackResourceDrifts(*cloudformation.DescribeStackResourceDriftsInput) (*cloudformation.DescribeStackResourceDriftsOutput, error)
+	DescribeStackResourceDriftsWithContext(aws.Context, *cloudformation.DescribeStackResourceDriftsInput, ...request.Option) (*cloudformation.DescribeStackResourceDriftsOutput, error)
+	DescribeStackResourceDriftsRequest(*cloudformation.DescribeStackResourceDriftsInput) (*request.Request, *cloudformation.DescribeStackResourceDriftsOutput)
+
+	DescribeStackResourceDriftsPages(*cloudformation.DescribeStackResourceDriftsInput, func(*cloudformation.DescribeStackResourceDriftsOutput, bool) bool) error
+	DescribeStackResourceDriftsPagesWithContext(aws.Context, *cloudformation.DescribeStackResourceDriftsInput, func(*cloudformation.DescribeStackResourceDriftsOutput, bool) bool, ...request.Option) error
 
 	DescribeStackResources(*cloudformation.DescribeStackResourcesInput) (*cloudformation.DescribeStackResourcesOutput, error)
 	DescribeStackResourcesWithContext(aws.Context, *cloudformation.DescribeStackResourcesInput, ...request.Option) (*cloudformation.DescribeStackResourcesOutput, error)
@@ -141,6 +156,26 @@ type CloudFormationAPI interface {
 
 	DescribeStacksPages(*cloudformation.DescribeStacksInput, func(*cloudformation.DescribeStacksOutput, bool) bool) error
 	DescribeStacksPagesWithContext(aws.Context, *cloudformation.DescribeStacksInput, func(*cloudformation.DescribeStacksOutput, bool) bool, ...request.Option) error
+
+	DescribeType(*cloudformation.DescribeTypeInput) (*cloudformation.DescribeTypeOutput, error)
+	DescribeTypeWithContext(aws.Context, *cloudformation.DescribeTypeInput, ...request.Option) (*cloudformation.DescribeTypeOutput, error)
+	DescribeTypeRequest(*cloudformation.DescribeTypeInput) (*request.Request, *cloudformation.DescribeTypeOutput)
+
+	DescribeTypeRegistration(*cloudformation.DescribeTypeRegistrationInput) (*cloudformation.DescribeTypeRegistrationOutput, error)
+	DescribeTypeRegistrationWithContext(aws.Context, *cloudformation.DescribeTypeRegistrationInput, ...request.Option) (*cloudformation.DescribeTypeRegistrationOutput, error)
+	DescribeTypeRegistrationRequest(*cloudformation.DescribeTypeRegistrationInput) (*request.Request, *cloudformation.DescribeTypeRegistrationOutput)
+
+	DetectStackDrift(*cloudformation.DetectStackDriftInput) (*cloudformation.DetectStackDriftOutput, error)
+	DetectStackDriftWithContext(aws.Context, *cloudformation.DetectStackDriftInput, ...request.Option) (*cloudformation.DetectStackDriftOutput, error)
+	DetectStackDriftRequest(*cloudformation.DetectStackDriftInput) (*request.Request, *cloudformation.DetectStackDriftOutput)
+
+	DetectStackResourceDrift(*cloudformation.DetectStackResourceDriftInput) (*cloudformation.DetectStackResourceDriftOutput, error)
+	DetectStackResourceDriftWithContext(aws.Context, *cloudformation.DetectStackResourceDriftInput, ...request.Option) (*cloudformation.DetectStackResourceDriftOutput, error)
+	DetectStackResourceDriftRequest(*cloudformation.DetectStackResourceDriftInput) (*request.Request, *cloudformation.DetectStackResourceDriftOutput)
+
+	DetectStackSetDrift(*cloudformation.DetectStackSetDriftInput) (*cloudformation.DetectStackSetDriftOutput, error)
+	DetectStackSetDriftWithContext(aws.Context, *cloudformation.DetectStackSetDriftInput, ...request.Option) (*cloudformation.DetectStackSetDriftOutput, error)
+	DetectStackSetDriftRequest(*cloudformation.DetectStackSetDriftInput) (*request.Request, *cloudformation.DetectStackSetDriftOutput)
 
 	EstimateTemplateCost(*cloudformation.EstimateTemplateCostInput) (*cloudformation.EstimateTemplateCostOutput, error)
 	EstimateTemplateCostWithContext(aws.Context, *cloudformation.EstimateTemplateCostInput, ...request.Option) (*cloudformation.EstimateTemplateCostOutput, error)
@@ -210,9 +245,42 @@ type CloudFormationAPI interface {
 	ListStacksPages(*cloudformation.ListStacksInput, func(*cloudformation.ListStacksOutput, bool) bool) error
 	ListStacksPagesWithContext(aws.Context, *cloudformation.ListStacksInput, func(*cloudformation.ListStacksOutput, bool) bool, ...request.Option) error
 
+	ListTypeRegistrations(*cloudformation.ListTypeRegistrationsInput) (*cloudformation.ListTypeRegistrationsOutput, error)
+	ListTypeRegistrationsWithContext(aws.Context, *cloudformation.ListTypeRegistrationsInput, ...request.Option) (*cloudformation.ListTypeRegistrationsOutput, error)
+	ListTypeRegistrationsRequest(*cloudformation.ListTypeRegistrationsInput) (*request.Request, *cloudformation.ListTypeRegistrationsOutput)
+
+	ListTypeRegistrationsPages(*cloudformation.ListTypeRegistrationsInput, func(*cloudformation.ListTypeRegistrationsOutput, bool) bool) error
+	ListTypeRegistrationsPagesWithContext(aws.Context, *cloudformation.ListTypeRegistrationsInput, func(*cloudformation.ListTypeRegistrationsOutput, bool) bool, ...request.Option) error
+
+	ListTypeVersions(*cloudformation.ListTypeVersionsInput) (*cloudformation.ListTypeVersionsOutput, error)
+	ListTypeVersionsWithContext(aws.Context, *cloudformation.ListTypeVersionsInput, ...request.Option) (*cloudformation.ListTypeVersionsOutput, error)
+	ListTypeVersionsRequest(*cloudformation.ListTypeVersionsInput) (*request.Request, *cloudformation.ListTypeVersionsOutput)
+
+	ListTypeVersionsPages(*cloudformation.ListTypeVersionsInput, func(*cloudformation.ListTypeVersionsOutput, bool) bool) error
+	ListTypeVersionsPagesWithContext(aws.Context, *cloudformation.ListTypeVersionsInput, func(*cloudformation.ListTypeVersionsOutput, bool) bool, ...request.Option) error
+
+	ListTypes(*cloudformation.ListTypesInput) (*cloudformation.ListTypesOutput, error)
+	ListTypesWithContext(aws.Context, *cloudformation.ListTypesInput, ...request.Option) (*cloudformation.ListTypesOutput, error)
+	ListTypesRequest(*cloudformation.ListTypesInput) (*request.Request, *cloudformation.ListTypesOutput)
+
+	ListTypesPages(*cloudformation.ListTypesInput, func(*cloudformation.ListTypesOutput, bool) bool) error
+	ListTypesPagesWithContext(aws.Context, *cloudformation.ListTypesInput, func(*cloudformation.ListTypesOutput, bool) bool, ...request.Option) error
+
+	RecordHandlerProgress(*cloudformation.RecordHandlerProgressInput) (*cloudformation.RecordHandlerProgressOutput, error)
+	RecordHandlerProgressWithContext(aws.Context, *cloudformation.RecordHandlerProgressInput, ...request.Option) (*cloudformation.RecordHandlerProgressOutput, error)
+	RecordHandlerProgressRequest(*cloudformation.RecordHandlerProgressInput) (*request.Request, *cloudformation.RecordHandlerProgressOutput)
+
+	RegisterType(*cloudformation.RegisterTypeInput) (*cloudformation.RegisterTypeOutput, error)
+	RegisterTypeWithContext(aws.Context, *cloudformation.RegisterTypeInput, ...request.Option) (*cloudformation.RegisterTypeOutput, error)
+	RegisterTypeRequest(*cloudformation.RegisterTypeInput) (*request.Request, *cloudformation.RegisterTypeOutput)
+
 	SetStackPolicy(*cloudformation.SetStackPolicyInput) (*cloudformation.SetStackPolicyOutput, error)
 	SetStackPolicyWithContext(aws.Context, *cloudformation.SetStackPolicyInput, ...request.Option) (*cloudformation.SetStackPolicyOutput, error)
 	SetStackPolicyRequest(*cloudformation.SetStackPolicyInput) (*request.Request, *cloudformation.SetStackPolicyOutput)
+
+	SetTypeDefaultVersion(*cloudformation.SetTypeDefaultVersionInput) (*cloudformation.SetTypeDefaultVersionOutput, error)
+	SetTypeDefaultVersionWithContext(aws.Context, *cloudformation.SetTypeDefaultVersionInput, ...request.Option) (*cloudformation.SetTypeDefaultVersionOutput, error)
+	SetTypeDefaultVersionRequest(*cloudformation.SetTypeDefaultVersionInput) (*request.Request, *cloudformation.SetTypeDefaultVersionOutput)
 
 	SignalResource(*cloudformation.SignalResourceInput) (*cloudformation.SignalResourceOutput, error)
 	SignalResourceWithContext(aws.Context, *cloudformation.SignalResourceInput, ...request.Option) (*cloudformation.SignalResourceOutput, error)
@@ -225,6 +293,10 @@ type CloudFormationAPI interface {
 	UpdateStack(*cloudformation.UpdateStackInput) (*cloudformation.UpdateStackOutput, error)
 	UpdateStackWithContext(aws.Context, *cloudformation.UpdateStackInput, ...request.Option) (*cloudformation.UpdateStackOutput, error)
 	UpdateStackRequest(*cloudformation.UpdateStackInput) (*request.Request, *cloudformation.UpdateStackOutput)
+
+	UpdateStackInstances(*cloudformation.UpdateStackInstancesInput) (*cloudformation.UpdateStackInstancesOutput, error)
+	UpdateStackInstancesWithContext(aws.Context, *cloudformation.UpdateStackInstancesInput, ...request.Option) (*cloudformation.UpdateStackInstancesOutput, error)
+	UpdateStackInstancesRequest(*cloudformation.UpdateStackInstancesInput) (*request.Request, *cloudformation.UpdateStackInstancesOutput)
 
 	UpdateStackSet(*cloudformation.UpdateStackSetInput) (*cloudformation.UpdateStackSetOutput, error)
 	UpdateStackSetWithContext(aws.Context, *cloudformation.UpdateStackSetInput, ...request.Option) (*cloudformation.UpdateStackSetOutput, error)
@@ -250,8 +322,14 @@ type CloudFormationAPI interface {
 	WaitUntilStackExists(*cloudformation.DescribeStacksInput) error
 	WaitUntilStackExistsWithContext(aws.Context, *cloudformation.DescribeStacksInput, ...request.WaiterOption) error
 
+	WaitUntilStackImportComplete(*cloudformation.DescribeStacksInput) error
+	WaitUntilStackImportCompleteWithContext(aws.Context, *cloudformation.DescribeStacksInput, ...request.WaiterOption) error
+
 	WaitUntilStackUpdateComplete(*cloudformation.DescribeStacksInput) error
 	WaitUntilStackUpdateCompleteWithContext(aws.Context, *cloudformation.DescribeStacksInput, ...request.WaiterOption) error
+
+	WaitUntilTypeRegistrationComplete(*cloudformation.DescribeTypeRegistrationInput) error
+	WaitUntilTypeRegistrationCompleteWithContext(aws.Context, *cloudformation.DescribeTypeRegistrationInput, ...request.WaiterOption) error
 }
 
 var _ CloudFormationAPI = (*cloudformation.CloudFormation)(nil)

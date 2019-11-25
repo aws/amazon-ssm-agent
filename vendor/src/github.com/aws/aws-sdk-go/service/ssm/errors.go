@@ -129,7 +129,7 @@ const (
 	// ErrCodeDocumentLimitExceeded for service response error code
 	// "DocumentLimitExceeded".
 	//
-	// You can have at most 200 active Systems Manager documents.
+	// You can have at most 500 active Systems Manager documents.
 	ErrCodeDocumentLimitExceeded = "DocumentLimitExceeded"
 
 	// ErrCodeDocumentPermissionLimit for service response error code
@@ -150,8 +150,8 @@ const (
 	// ErrCodeDoesNotExistException for service response error code
 	// "DoesNotExistException".
 	//
-	// Error returned when the ID specified for a resource, such as a Maintenance
-	// Window or Patch baseline, doesn't exist.
+	// Error returned when the ID specified for a resource, such as a maintenance
+	// window or Patch baseline, doesn't exist.
 	//
 	// For information about resource limits in Systems Manager, see AWS Systems
 	// Manager Limits (http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html#limits_ssm).
@@ -170,6 +170,9 @@ const (
 
 	// ErrCodeDuplicateDocumentVersionName for service response error code
 	// "DuplicateDocumentVersionName".
+	//
+	// The version name has already been used in this document. Specify a different
+	// version name, and then try again.
 	ErrCodeDuplicateDocumentVersionName = "DuplicateDocumentVersionName"
 
 	// ErrCodeDuplicateInstanceId for service response error code
@@ -181,7 +184,7 @@ const (
 	// ErrCodeFeatureNotAvailableException for service response error code
 	// "FeatureNotAvailableException".
 	//
-	// You attempted to register a LAMBDA or STEP_FUNCTION task in a region where
+	// You attempted to register a LAMBDA or STEP_FUNCTIONS task in a region where
 	// the corresponding service is not available.
 	ErrCodeFeatureNotAvailableException = "FeatureNotAvailableException"
 
@@ -210,6 +213,10 @@ const (
 
 	// ErrCodeIncompatiblePolicyException for service response error code
 	// "IncompatiblePolicyException".
+	//
+	// There is a conflict in the policies specified for this parameter. You can't,
+	// for example, specify two Expiration policies for a parameter. Review your
+	// policies, and try again.
 	ErrCodeIncompatiblePolicyException = "IncompatiblePolicyException"
 
 	// ErrCodeInternalServerError for service response error code
@@ -244,10 +251,6 @@ const (
 	//
 	// The request does not meet the regular expression requirement.
 	ErrCodeInvalidAllowedPatternException = "InvalidAllowedPatternException"
-
-	// ErrCodeInvalidArgumentException for service response error code
-	// "InvalidArgumentException".
-	ErrCodeInvalidArgumentException = "InvalidArgumentException"
 
 	// ErrCodeInvalidAssociation for service response error code
 	// "InvalidAssociation".
@@ -297,9 +300,13 @@ const (
 	// ErrCodeInvalidDeletionIdException for service response error code
 	// "InvalidDeletionIdException".
 	//
-	// The ID specified for the delete operation does not exist or is not valide.
+	// The ID specified for the delete operation does not exist or is not valid.
 	// Verify the ID and try again.
 	ErrCodeInvalidDeletionIdException = "InvalidDeletionIdException"
+
+	// ErrCodeInvalidDistributionId for service response error code
+	// "InvalidDistributionId".
+	ErrCodeInvalidDistributionId = "InvalidDistributionId"
 
 	// ErrCodeInvalidDocument for service response error code
 	// "InvalidDocument".
@@ -369,12 +376,9 @@ const (
 	//
 	// You do not have permission to access the instance.
 	//
-	// SSM Agent is not running. On managed instances and Linux instances, verify
-	// that the SSM Agent is running. On EC2 Windows instances, verify that the
-	// EC2Config service is running.
+	// SSM Agent is not running. Verify that SSM Agent is running.
 	//
-	// SSM Agent or EC2Config service is not registered to the SSM endpoint. Try
-	// reinstalling SSM Agent or EC2Config service.
+	// SSM Agent is not registered with the SSM endpoint. Try reinstalling SSM Agent.
 	//
 	// The instance is not in valid state. Valid states are: Running, Pending, Stopped,
 	// Stopping. Invalid states are: Shutting-down and Terminated.
@@ -488,10 +492,15 @@ const (
 
 	// ErrCodeInvalidPolicyAttributeException for service response error code
 	// "InvalidPolicyAttributeException".
+	//
+	// A policy attribute or its value is invalid.
 	ErrCodeInvalidPolicyAttributeException = "InvalidPolicyAttributeException"
 
 	// ErrCodeInvalidPolicyTypeException for service response error code
 	// "InvalidPolicyTypeException".
+	//
+	// The policy type is not supported. Parameter Store supports the following
+	// policy types: Expiration, ExpirationNotification, and NoChangeNotification.
 	ErrCodeInvalidPolicyTypeException = "InvalidPolicyTypeException"
 
 	// ErrCodeInvalidResourceId for service response error code
@@ -553,7 +562,7 @@ const (
 	// "InvocationDoesNotExist".
 	//
 	// The command ID and instance ID you specified did not match any invocations.
-	// Verify the command ID adn the instance ID and try again.
+	// Verify the command ID and the instance ID and try again.
 	ErrCodeInvocationDoesNotExist = "InvocationDoesNotExist"
 
 	// ErrCodeItemContentMismatchException for service response error code
@@ -624,15 +633,14 @@ const (
 
 	// ErrCodePoliciesLimitExceededException for service response error code
 	// "PoliciesLimitExceededException".
+	//
+	// You specified more than the maximum number of allowed policies for the parameter.
+	// The maximum is 10.
 	ErrCodePoliciesLimitExceededException = "PoliciesLimitExceededException"
 
 	// ErrCodeRegistrationLimitExceeded for service response error code
 	// "RegistrationLimitExceeded".
 	ErrCodeRegistrationLimitExceeded = "RegistrationLimitExceeded"
-
-	// ErrCodeResourceAlreadyExistsException for service response error code
-	// "ResourceAlreadyExistsException".
-	ErrCodeResourceAlreadyExistsException = "ResourceAlreadyExistsException"
 
 	// ErrCodeResourceDataSyncAlreadyExistsException for service response error code
 	// "ResourceDataSyncAlreadyExistsException".
@@ -669,7 +677,7 @@ const (
 	// "ResourceLimitExceededException".
 	//
 	// Error returned when the caller has exceeded the default resource limits.
-	// For example, too many Maintenance Windows or Patch baselines have been created.
+	// For example, too many maintenance windows or patch baselines have been created.
 	//
 	// For information about resource limits in Systems Manager, see AWS Systems
 	// Manager Limits (http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html#limits_ssm).
