@@ -12,11 +12,21 @@ const (
 
 	// ErrCodeBatchTooLarge for service response error code
 	// "BatchTooLarge".
+	//
+	// Invalidation batch specified is too large.
 	ErrCodeBatchTooLarge = "BatchTooLarge"
 
 	// ErrCodeCNAMEAlreadyExists for service response error code
 	// "CNAMEAlreadyExists".
+	//
+	// The CNAME specified is already defined for CloudFront.
 	ErrCodeCNAMEAlreadyExists = "CNAMEAlreadyExists"
+
+	// ErrCodeCannotChangeImmutablePublicKeyFields for service response error code
+	// "CannotChangeImmutablePublicKeyFields".
+	//
+	// You can't change the value of a public key.
+	ErrCodeCannotChangeImmutablePublicKeyFields = "CannotChangeImmutablePublicKeyFields"
 
 	// ErrCodeDistributionAlreadyExists for service response error code
 	// "DistributionAlreadyExists".
@@ -27,7 +37,47 @@ const (
 
 	// ErrCodeDistributionNotDisabled for service response error code
 	// "DistributionNotDisabled".
+	//
+	// The specified CloudFront distribution is not disabled. You must disable the
+	// distribution before you can delete it.
 	ErrCodeDistributionNotDisabled = "DistributionNotDisabled"
+
+	// ErrCodeFieldLevelEncryptionConfigAlreadyExists for service response error code
+	// "FieldLevelEncryptionConfigAlreadyExists".
+	//
+	// The specified configuration for field-level encryption already exists.
+	ErrCodeFieldLevelEncryptionConfigAlreadyExists = "FieldLevelEncryptionConfigAlreadyExists"
+
+	// ErrCodeFieldLevelEncryptionConfigInUse for service response error code
+	// "FieldLevelEncryptionConfigInUse".
+	//
+	// The specified configuration for field-level encryption is in use.
+	ErrCodeFieldLevelEncryptionConfigInUse = "FieldLevelEncryptionConfigInUse"
+
+	// ErrCodeFieldLevelEncryptionProfileAlreadyExists for service response error code
+	// "FieldLevelEncryptionProfileAlreadyExists".
+	//
+	// The specified profile for field-level encryption already exists.
+	ErrCodeFieldLevelEncryptionProfileAlreadyExists = "FieldLevelEncryptionProfileAlreadyExists"
+
+	// ErrCodeFieldLevelEncryptionProfileInUse for service response error code
+	// "FieldLevelEncryptionProfileInUse".
+	//
+	// The specified profile for field-level encryption is in use.
+	ErrCodeFieldLevelEncryptionProfileInUse = "FieldLevelEncryptionProfileInUse"
+
+	// ErrCodeFieldLevelEncryptionProfileSizeExceeded for service response error code
+	// "FieldLevelEncryptionProfileSizeExceeded".
+	//
+	// The maximum size of a profile for field-level encryption was exceeded.
+	ErrCodeFieldLevelEncryptionProfileSizeExceeded = "FieldLevelEncryptionProfileSizeExceeded"
+
+	// ErrCodeIllegalFieldLevelEncryptionConfigAssociationWithCacheBehavior for service response error code
+	// "IllegalFieldLevelEncryptionConfigAssociationWithCacheBehavior".
+	//
+	// The specified configuration for field-level encryption can't be associated
+	// with the specified cache behavior.
+	ErrCodeIllegalFieldLevelEncryptionConfigAssociationWithCacheBehavior = "IllegalFieldLevelEncryptionConfigAssociationWithCacheBehavior"
 
 	// ErrCodeIllegalUpdate for service response error code
 	// "IllegalUpdate".
@@ -55,6 +105,8 @@ const (
 
 	// ErrCodeInvalidErrorCode for service response error code
 	// "InvalidErrorCode".
+	//
+	// An invalid error code was specified.
 	ErrCodeInvalidErrorCode = "InvalidErrorCode"
 
 	// ErrCodeInvalidForwardCookies for service response error code
@@ -68,10 +120,14 @@ const (
 
 	// ErrCodeInvalidGeoRestrictionParameter for service response error code
 	// "InvalidGeoRestrictionParameter".
+	//
+	// The specified geo restriction parameter is not valid.
 	ErrCodeInvalidGeoRestrictionParameter = "InvalidGeoRestrictionParameter"
 
 	// ErrCodeInvalidHeadersForS3Origin for service response error code
 	// "InvalidHeadersForS3Origin".
+	//
+	// The headers specified are not valid for an Amazon S3 origin.
 	ErrCodeInvalidHeadersForS3Origin = "InvalidHeadersForS3Origin"
 
 	// ErrCodeInvalidIfMatchVersion for service response error code
@@ -88,10 +144,14 @@ const (
 
 	// ErrCodeInvalidLocationCode for service response error code
 	// "InvalidLocationCode".
+	//
+	// The location code specified is not valid.
 	ErrCodeInvalidLocationCode = "InvalidLocationCode"
 
 	// ErrCodeInvalidMinimumProtocolVersion for service response error code
 	// "InvalidMinimumProtocolVersion".
+	//
+	// The minimum protocol version specified is not valid.
 	ErrCodeInvalidMinimumProtocolVersion = "InvalidMinimumProtocolVersion"
 
 	// ErrCodeInvalidOrigin for service response error code
@@ -109,10 +169,14 @@ const (
 
 	// ErrCodeInvalidOriginKeepaliveTimeout for service response error code
 	// "InvalidOriginKeepaliveTimeout".
+	//
+	// The keep alive timeout specified for the origin is not valid.
 	ErrCodeInvalidOriginKeepaliveTimeout = "InvalidOriginKeepaliveTimeout"
 
 	// ErrCodeInvalidOriginReadTimeout for service response error code
 	// "InvalidOriginReadTimeout".
+	//
+	// The read timeout specified for the origin is not valid.
 	ErrCodeInvalidOriginReadTimeout = "InvalidOriginReadTimeout"
 
 	// ErrCodeInvalidProtocolSettings for service response error code
@@ -124,6 +188,8 @@ const (
 
 	// ErrCodeInvalidQueryStringParameters for service response error code
 	// "InvalidQueryStringParameters".
+	//
+	// Query string parameters specified in the response body are not valid.
 	ErrCodeInvalidQueryStringParameters = "InvalidQueryStringParameters"
 
 	// ErrCodeInvalidRelativePath for service response error code
@@ -143,22 +209,32 @@ const (
 
 	// ErrCodeInvalidResponseCode for service response error code
 	// "InvalidResponseCode".
+	//
+	// A response code specified in the response body is not valid.
 	ErrCodeInvalidResponseCode = "InvalidResponseCode"
 
 	// ErrCodeInvalidTTLOrder for service response error code
 	// "InvalidTTLOrder".
+	//
+	// TTL order specified in the response body is not valid.
 	ErrCodeInvalidTTLOrder = "InvalidTTLOrder"
 
 	// ErrCodeInvalidTagging for service response error code
 	// "InvalidTagging".
+	//
+	// Tagging specified in the response body is not valid.
 	ErrCodeInvalidTagging = "InvalidTagging"
 
 	// ErrCodeInvalidViewerCertificate for service response error code
 	// "InvalidViewerCertificate".
+	//
+	// A viewer certificate specified in the response body is not valid.
 	ErrCodeInvalidViewerCertificate = "InvalidViewerCertificate"
 
 	// ErrCodeInvalidWebACLId for service response error code
 	// "InvalidWebACLId".
+	//
+	// A web ACL id specified in the response body is not valid.
 	ErrCodeInvalidWebACLId = "InvalidWebACLId"
 
 	// ErrCodeMissingBody for service response error code
@@ -180,6 +256,18 @@ const (
 	// The specified distribution does not exist.
 	ErrCodeNoSuchDistribution = "NoSuchDistribution"
 
+	// ErrCodeNoSuchFieldLevelEncryptionConfig for service response error code
+	// "NoSuchFieldLevelEncryptionConfig".
+	//
+	// The specified configuration for field-level encryption doesn't exist.
+	ErrCodeNoSuchFieldLevelEncryptionConfig = "NoSuchFieldLevelEncryptionConfig"
+
+	// ErrCodeNoSuchFieldLevelEncryptionProfile for service response error code
+	// "NoSuchFieldLevelEncryptionProfile".
+	//
+	// The specified profile for field-level encryption doesn't exist.
+	ErrCodeNoSuchFieldLevelEncryptionProfile = "NoSuchFieldLevelEncryptionProfile"
+
 	// ErrCodeNoSuchInvalidation for service response error code
 	// "NoSuchInvalidation".
 	//
@@ -192,8 +280,16 @@ const (
 	// No origin exists with the specified Origin Id.
 	ErrCodeNoSuchOrigin = "NoSuchOrigin"
 
+	// ErrCodeNoSuchPublicKey for service response error code
+	// "NoSuchPublicKey".
+	//
+	// The specified public key doesn't exist.
+	ErrCodeNoSuchPublicKey = "NoSuchPublicKey"
+
 	// ErrCodeNoSuchResource for service response error code
 	// "NoSuchResource".
+	//
+	// A resource that was specified is not valid.
 	ErrCodeNoSuchResource = "NoSuchResource"
 
 	// ErrCodeNoSuchStreamingDistribution for service response error code
@@ -203,17 +299,19 @@ const (
 	ErrCodeNoSuchStreamingDistribution = "NoSuchStreamingDistribution"
 
 	// ErrCodeOriginAccessIdentityAlreadyExists for service response error code
-	// "OriginAccessIdentityAlreadyExists".
+	// "CloudFrontOriginAccessIdentityAlreadyExists".
 	//
 	// If the CallerReference is a value you already sent in a previous request
 	// to create an identity but the content of the CloudFrontOriginAccessIdentityConfig
 	// is different from the original request, CloudFront returns a CloudFrontOriginAccessIdentityAlreadyExists
 	// error.
-	ErrCodeOriginAccessIdentityAlreadyExists = "OriginAccessIdentityAlreadyExists"
+	ErrCodeOriginAccessIdentityAlreadyExists = "CloudFrontOriginAccessIdentityAlreadyExists"
 
 	// ErrCodeOriginAccessIdentityInUse for service response error code
-	// "OriginAccessIdentityInUse".
-	ErrCodeOriginAccessIdentityInUse = "OriginAccessIdentityInUse"
+	// "CloudFrontOriginAccessIdentityInUse".
+	//
+	// The Origin Access Identity specified is already in use.
+	ErrCodeOriginAccessIdentityInUse = "CloudFrontOriginAccessIdentityInUse"
 
 	// ErrCodePreconditionFailed for service response error code
 	// "PreconditionFailed".
@@ -222,16 +320,36 @@ const (
 	// to false.
 	ErrCodePreconditionFailed = "PreconditionFailed"
 
-	// ErrCodeResourceInUse for service response error code
-	// "ResourceInUse".
-	ErrCodeResourceInUse = "ResourceInUse"
+	// ErrCodePublicKeyAlreadyExists for service response error code
+	// "PublicKeyAlreadyExists".
+	//
+	// The specified public key already exists.
+	ErrCodePublicKeyAlreadyExists = "PublicKeyAlreadyExists"
+
+	// ErrCodePublicKeyInUse for service response error code
+	// "PublicKeyInUse".
+	//
+	// The specified public key is in use.
+	ErrCodePublicKeyInUse = "PublicKeyInUse"
+
+	// ErrCodeQueryArgProfileEmpty for service response error code
+	// "QueryArgProfileEmpty".
+	//
+	// No profile specified for the field-level encryption query argument.
+	ErrCodeQueryArgProfileEmpty = "QueryArgProfileEmpty"
 
 	// ErrCodeStreamingDistributionAlreadyExists for service response error code
 	// "StreamingDistributionAlreadyExists".
+	//
+	// The caller reference you attempted to create the streaming distribution with
+	// is associated with another distribution
 	ErrCodeStreamingDistributionAlreadyExists = "StreamingDistributionAlreadyExists"
 
 	// ErrCodeStreamingDistributionNotDisabled for service response error code
 	// "StreamingDistributionNotDisabled".
+	//
+	// The specified CloudFront distribution is not disabled. You must disable the
+	// distribution before you can delete it.
 	ErrCodeStreamingDistributionNotDisabled = "StreamingDistributionNotDisabled"
 
 	// ErrCodeTooManyCacheBehaviors for service response error code
@@ -273,6 +391,13 @@ const (
 	// allowed.
 	ErrCodeTooManyDistributions = "TooManyDistributions"
 
+	// ErrCodeTooManyDistributionsAssociatedToFieldLevelEncryptionConfig for service response error code
+	// "TooManyDistributionsAssociatedToFieldLevelEncryptionConfig".
+	//
+	// The maximum number of distributions have been associated with the specified
+	// configuration for field-level encryption.
+	ErrCodeTooManyDistributionsAssociatedToFieldLevelEncryptionConfig = "TooManyDistributionsAssociatedToFieldLevelEncryptionConfig"
+
 	// ErrCodeTooManyDistributionsWithLambdaAssociations for service response error code
 	// "TooManyDistributionsWithLambdaAssociations".
 	//
@@ -280,8 +405,51 @@ const (
 	// Lambda function associations per owner to be exceeded.
 	ErrCodeTooManyDistributionsWithLambdaAssociations = "TooManyDistributionsWithLambdaAssociations"
 
+	// ErrCodeTooManyFieldLevelEncryptionConfigs for service response error code
+	// "TooManyFieldLevelEncryptionConfigs".
+	//
+	// The maximum number of configurations for field-level encryption have been
+	// created.
+	ErrCodeTooManyFieldLevelEncryptionConfigs = "TooManyFieldLevelEncryptionConfigs"
+
+	// ErrCodeTooManyFieldLevelEncryptionContentTypeProfiles for service response error code
+	// "TooManyFieldLevelEncryptionContentTypeProfiles".
+	//
+	// The maximum number of content type profiles for field-level encryption have
+	// been created.
+	ErrCodeTooManyFieldLevelEncryptionContentTypeProfiles = "TooManyFieldLevelEncryptionContentTypeProfiles"
+
+	// ErrCodeTooManyFieldLevelEncryptionEncryptionEntities for service response error code
+	// "TooManyFieldLevelEncryptionEncryptionEntities".
+	//
+	// The maximum number of encryption entities for field-level encryption have
+	// been created.
+	ErrCodeTooManyFieldLevelEncryptionEncryptionEntities = "TooManyFieldLevelEncryptionEncryptionEntities"
+
+	// ErrCodeTooManyFieldLevelEncryptionFieldPatterns for service response error code
+	// "TooManyFieldLevelEncryptionFieldPatterns".
+	//
+	// The maximum number of field patterns for field-level encryption have been
+	// created.
+	ErrCodeTooManyFieldLevelEncryptionFieldPatterns = "TooManyFieldLevelEncryptionFieldPatterns"
+
+	// ErrCodeTooManyFieldLevelEncryptionProfiles for service response error code
+	// "TooManyFieldLevelEncryptionProfiles".
+	//
+	// The maximum number of profiles for field-level encryption have been created.
+	ErrCodeTooManyFieldLevelEncryptionProfiles = "TooManyFieldLevelEncryptionProfiles"
+
+	// ErrCodeTooManyFieldLevelEncryptionQueryArgProfiles for service response error code
+	// "TooManyFieldLevelEncryptionQueryArgProfiles".
+	//
+	// The maximum number of query arg profiles for field-level encryption have
+	// been created.
+	ErrCodeTooManyFieldLevelEncryptionQueryArgProfiles = "TooManyFieldLevelEncryptionQueryArgProfiles"
+
 	// ErrCodeTooManyHeadersInForwardedValues for service response error code
 	// "TooManyHeadersInForwardedValues".
+	//
+	// Your request contains too many headers in forwarded values.
 	ErrCodeTooManyHeadersInForwardedValues = "TooManyHeadersInForwardedValues"
 
 	// ErrCodeTooManyInvalidationsInProgress for service response error code
@@ -300,7 +468,16 @@ const (
 
 	// ErrCodeTooManyOriginCustomHeaders for service response error code
 	// "TooManyOriginCustomHeaders".
+	//
+	// Your request contains too many origin custom headers.
 	ErrCodeTooManyOriginCustomHeaders = "TooManyOriginCustomHeaders"
+
+	// ErrCodeTooManyOriginGroupsPerDistribution for service response error code
+	// "TooManyOriginGroupsPerDistribution".
+	//
+	// Processing your request would cause you to exceed the maximum number of origin
+	// groups allowed.
+	ErrCodeTooManyOriginGroupsPerDistribution = "TooManyOriginGroupsPerDistribution"
 
 	// ErrCodeTooManyOrigins for service response error code
 	// "TooManyOrigins".
@@ -308,12 +485,23 @@ const (
 	// You cannot create more origins for the distribution.
 	ErrCodeTooManyOrigins = "TooManyOrigins"
 
+	// ErrCodeTooManyPublicKeys for service response error code
+	// "TooManyPublicKeys".
+	//
+	// The maximum number of public keys for field-level encryption have been created.
+	// To create a new public key, delete one of the existing keys.
+	ErrCodeTooManyPublicKeys = "TooManyPublicKeys"
+
 	// ErrCodeTooManyQueryStringParameters for service response error code
 	// "TooManyQueryStringParameters".
+	//
+	// Your request contains too many query string parameters.
 	ErrCodeTooManyQueryStringParameters = "TooManyQueryStringParameters"
 
 	// ErrCodeTooManyStreamingDistributionCNAMEs for service response error code
 	// "TooManyStreamingDistributionCNAMEs".
+	//
+	// Your request contains more CNAMEs than are allowed per distribution.
 	ErrCodeTooManyStreamingDistributionCNAMEs = "TooManyStreamingDistributionCNAMEs"
 
 	// ErrCodeTooManyStreamingDistributions for service response error code

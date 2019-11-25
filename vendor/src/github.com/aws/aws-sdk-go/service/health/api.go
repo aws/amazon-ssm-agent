@@ -14,8 +14,8 @@ const opDescribeAffectedEntities = "DescribeAffectedEntities"
 
 // DescribeAffectedEntitiesRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeAffectedEntities operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value will be populated with the request's response once the request completes
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -35,7 +35,7 @@ const opDescribeAffectedEntities = "DescribeAffectedEntities"
 //        fmt.Println(resp)
 //    }
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/health-2016-08-04/DescribeAffectedEntities
+// See also, https://docs.aws.amazon.com/goto/WebAPI/health-2016-08-04/DescribeAffectedEntities
 func (c *Health) DescribeAffectedEntitiesRequest(input *DescribeAffectedEntitiesInput) (req *request.Request, output *DescribeAffectedEntitiesOutput) {
 	op := &request.Operation{
 		Name:       opDescribeAffectedEntities,
@@ -84,7 +84,7 @@ func (c *Health) DescribeAffectedEntitiesRequest(input *DescribeAffectedEntities
 //   * ErrCodeUnsupportedLocale "UnsupportedLocale"
 //   The specified locale is not supported.
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/health-2016-08-04/DescribeAffectedEntities
+// See also, https://docs.aws.amazon.com/goto/WebAPI/health-2016-08-04/DescribeAffectedEntities
 func (c *Health) DescribeAffectedEntities(input *DescribeAffectedEntitiesInput) (*DescribeAffectedEntitiesOutput, error) {
 	req, out := c.DescribeAffectedEntitiesRequest(input)
 	return out, req.Send()
@@ -117,7 +117,7 @@ func (c *Health) DescribeAffectedEntitiesWithContext(ctx aws.Context, input *Des
 //    // Example iterating over at most 3 pages of a DescribeAffectedEntities operation.
 //    pageNum := 0
 //    err := client.DescribeAffectedEntitiesPages(params,
-//        func(page *DescribeAffectedEntitiesOutput, lastPage bool) bool {
+//        func(page *health.DescribeAffectedEntitiesOutput, lastPage bool) bool {
 //            pageNum++
 //            fmt.Println(page)
 //            return pageNum <= 3
@@ -149,10 +149,12 @@ func (c *Health) DescribeAffectedEntitiesPagesWithContext(ctx aws.Context, input
 		},
 	}
 
-	cont := true
-	for p.Next() && cont {
-		cont = fn(p.Page().(*DescribeAffectedEntitiesOutput), !p.HasNextPage())
+	for p.Next() {
+		if !fn(p.Page().(*DescribeAffectedEntitiesOutput), !p.HasNextPage()) {
+			break
+		}
 	}
+
 	return p.Err()
 }
 
@@ -160,8 +162,8 @@ const opDescribeEntityAggregates = "DescribeEntityAggregates"
 
 // DescribeEntityAggregatesRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeEntityAggregates operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value will be populated with the request's response once the request completes
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -181,7 +183,7 @@ const opDescribeEntityAggregates = "DescribeEntityAggregates"
 //        fmt.Println(resp)
 //    }
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/health-2016-08-04/DescribeEntityAggregates
+// See also, https://docs.aws.amazon.com/goto/WebAPI/health-2016-08-04/DescribeEntityAggregates
 func (c *Health) DescribeEntityAggregatesRequest(input *DescribeEntityAggregatesInput) (req *request.Request, output *DescribeEntityAggregatesOutput) {
 	op := &request.Operation{
 		Name:       opDescribeEntityAggregates,
@@ -210,7 +212,7 @@ func (c *Health) DescribeEntityAggregatesRequest(input *DescribeEntityAggregates
 //
 // See the AWS API reference guide for AWS Health APIs and Notifications's
 // API operation DescribeEntityAggregates for usage and error information.
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/health-2016-08-04/DescribeEntityAggregates
+// See also, https://docs.aws.amazon.com/goto/WebAPI/health-2016-08-04/DescribeEntityAggregates
 func (c *Health) DescribeEntityAggregates(input *DescribeEntityAggregatesInput) (*DescribeEntityAggregatesOutput, error) {
 	req, out := c.DescribeEntityAggregatesRequest(input)
 	return out, req.Send()
@@ -236,8 +238,8 @@ const opDescribeEventAggregates = "DescribeEventAggregates"
 
 // DescribeEventAggregatesRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeEventAggregates operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value will be populated with the request's response once the request completes
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -257,7 +259,7 @@ const opDescribeEventAggregates = "DescribeEventAggregates"
 //        fmt.Println(resp)
 //    }
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/health-2016-08-04/DescribeEventAggregates
+// See also, https://docs.aws.amazon.com/goto/WebAPI/health-2016-08-04/DescribeEventAggregates
 func (c *Health) DescribeEventAggregatesRequest(input *DescribeEventAggregatesInput) (req *request.Request, output *DescribeEventAggregatesOutput) {
 	op := &request.Operation{
 		Name:       opDescribeEventAggregates,
@@ -297,7 +299,7 @@ func (c *Health) DescribeEventAggregatesRequest(input *DescribeEventAggregatesIn
 //   * ErrCodeInvalidPaginationToken "InvalidPaginationToken"
 //   The specified pagination token (nextToken) is not valid.
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/health-2016-08-04/DescribeEventAggregates
+// See also, https://docs.aws.amazon.com/goto/WebAPI/health-2016-08-04/DescribeEventAggregates
 func (c *Health) DescribeEventAggregates(input *DescribeEventAggregatesInput) (*DescribeEventAggregatesOutput, error) {
 	req, out := c.DescribeEventAggregatesRequest(input)
 	return out, req.Send()
@@ -330,7 +332,7 @@ func (c *Health) DescribeEventAggregatesWithContext(ctx aws.Context, input *Desc
 //    // Example iterating over at most 3 pages of a DescribeEventAggregates operation.
 //    pageNum := 0
 //    err := client.DescribeEventAggregatesPages(params,
-//        func(page *DescribeEventAggregatesOutput, lastPage bool) bool {
+//        func(page *health.DescribeEventAggregatesOutput, lastPage bool) bool {
 //            pageNum++
 //            fmt.Println(page)
 //            return pageNum <= 3
@@ -362,10 +364,12 @@ func (c *Health) DescribeEventAggregatesPagesWithContext(ctx aws.Context, input 
 		},
 	}
 
-	cont := true
-	for p.Next() && cont {
-		cont = fn(p.Page().(*DescribeEventAggregatesOutput), !p.HasNextPage())
+	for p.Next() {
+		if !fn(p.Page().(*DescribeEventAggregatesOutput), !p.HasNextPage()) {
+			break
+		}
 	}
+
 	return p.Err()
 }
 
@@ -373,8 +377,8 @@ const opDescribeEventDetails = "DescribeEventDetails"
 
 // DescribeEventDetailsRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeEventDetails operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value will be populated with the request's response once the request completes
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -394,7 +398,7 @@ const opDescribeEventDetails = "DescribeEventDetails"
 //        fmt.Println(resp)
 //    }
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/health-2016-08-04/DescribeEventDetails
+// See also, https://docs.aws.amazon.com/goto/WebAPI/health-2016-08-04/DescribeEventDetails
 func (c *Health) DescribeEventDetailsRequest(input *DescribeEventDetailsInput) (req *request.Request, output *DescribeEventDetailsOutput) {
 	op := &request.Operation{
 		Name:       opDescribeEventDetails,
@@ -433,7 +437,7 @@ func (c *Health) DescribeEventDetailsRequest(input *DescribeEventDetailsInput) (
 //   * ErrCodeUnsupportedLocale "UnsupportedLocale"
 //   The specified locale is not supported.
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/health-2016-08-04/DescribeEventDetails
+// See also, https://docs.aws.amazon.com/goto/WebAPI/health-2016-08-04/DescribeEventDetails
 func (c *Health) DescribeEventDetails(input *DescribeEventDetailsInput) (*DescribeEventDetailsOutput, error) {
 	req, out := c.DescribeEventDetailsRequest(input)
 	return out, req.Send()
@@ -459,8 +463,8 @@ const opDescribeEventTypes = "DescribeEventTypes"
 
 // DescribeEventTypesRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeEventTypes operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value will be populated with the request's response once the request completes
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -480,7 +484,7 @@ const opDescribeEventTypes = "DescribeEventTypes"
 //        fmt.Println(resp)
 //    }
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/health-2016-08-04/DescribeEventTypes
+// See also, https://docs.aws.amazon.com/goto/WebAPI/health-2016-08-04/DescribeEventTypes
 func (c *Health) DescribeEventTypesRequest(input *DescribeEventTypesInput) (req *request.Request, output *DescribeEventTypesOutput) {
 	op := &request.Operation{
 		Name:       opDescribeEventTypes,
@@ -522,7 +526,7 @@ func (c *Health) DescribeEventTypesRequest(input *DescribeEventTypesInput) (req 
 //   * ErrCodeUnsupportedLocale "UnsupportedLocale"
 //   The specified locale is not supported.
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/health-2016-08-04/DescribeEventTypes
+// See also, https://docs.aws.amazon.com/goto/WebAPI/health-2016-08-04/DescribeEventTypes
 func (c *Health) DescribeEventTypes(input *DescribeEventTypesInput) (*DescribeEventTypesOutput, error) {
 	req, out := c.DescribeEventTypesRequest(input)
 	return out, req.Send()
@@ -555,7 +559,7 @@ func (c *Health) DescribeEventTypesWithContext(ctx aws.Context, input *DescribeE
 //    // Example iterating over at most 3 pages of a DescribeEventTypes operation.
 //    pageNum := 0
 //    err := client.DescribeEventTypesPages(params,
-//        func(page *DescribeEventTypesOutput, lastPage bool) bool {
+//        func(page *health.DescribeEventTypesOutput, lastPage bool) bool {
 //            pageNum++
 //            fmt.Println(page)
 //            return pageNum <= 3
@@ -587,10 +591,12 @@ func (c *Health) DescribeEventTypesPagesWithContext(ctx aws.Context, input *Desc
 		},
 	}
 
-	cont := true
-	for p.Next() && cont {
-		cont = fn(p.Page().(*DescribeEventTypesOutput), !p.HasNextPage())
+	for p.Next() {
+		if !fn(p.Page().(*DescribeEventTypesOutput), !p.HasNextPage()) {
+			break
+		}
 	}
+
 	return p.Err()
 }
 
@@ -598,8 +604,8 @@ const opDescribeEvents = "DescribeEvents"
 
 // DescribeEventsRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeEvents operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value will be populated with the request's response once the request completes
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -619,7 +625,7 @@ const opDescribeEvents = "DescribeEvents"
 //        fmt.Println(resp)
 //    }
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/health-2016-08-04/DescribeEvents
+// See also, https://docs.aws.amazon.com/goto/WebAPI/health-2016-08-04/DescribeEvents
 func (c *Health) DescribeEventsRequest(input *DescribeEventsInput) (req *request.Request, output *DescribeEventsOutput) {
 	op := &request.Operation{
 		Name:       opDescribeEvents,
@@ -667,7 +673,7 @@ func (c *Health) DescribeEventsRequest(input *DescribeEventsInput) (req *request
 //   * ErrCodeUnsupportedLocale "UnsupportedLocale"
 //   The specified locale is not supported.
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/health-2016-08-04/DescribeEvents
+// See also, https://docs.aws.amazon.com/goto/WebAPI/health-2016-08-04/DescribeEvents
 func (c *Health) DescribeEvents(input *DescribeEventsInput) (*DescribeEventsOutput, error) {
 	req, out := c.DescribeEventsRequest(input)
 	return out, req.Send()
@@ -700,7 +706,7 @@ func (c *Health) DescribeEventsWithContext(ctx aws.Context, input *DescribeEvent
 //    // Example iterating over at most 3 pages of a DescribeEvents operation.
 //    pageNum := 0
 //    err := client.DescribeEventsPages(params,
-//        func(page *DescribeEventsOutput, lastPage bool) bool {
+//        func(page *health.DescribeEventsOutput, lastPage bool) bool {
 //            pageNum++
 //            fmt.Println(page)
 //            return pageNum <= 3
@@ -732,34 +738,37 @@ func (c *Health) DescribeEventsPagesWithContext(ctx aws.Context, input *Describe
 		},
 	}
 
-	cont := true
-	for p.Next() && cont {
-		cont = fn(p.Page().(*DescribeEventsOutput), !p.HasNextPage())
+	for p.Next() {
+		if !fn(p.Page().(*DescribeEventsOutput), !p.HasNextPage()) {
+			break
+		}
 	}
+
 	return p.Err()
 }
 
 // Information about an entity that is affected by a Health event.
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/health-2016-08-04/AffectedEntity
 type AffectedEntity struct {
 	_ struct{} `type:"structure"`
 
 	// The 12-digit AWS account number that contains the affected entity.
 	AwsAccountId *string `locationName:"awsAccountId" type:"string"`
 
-	// The unique identifier for the entity. Format: arn:aws:health:entity-region:aws-account:entity/entity-id.
-	// Example: arn:aws:health:us-east-1:111222333444:entity/AVh5GGT7ul1arKr1sE1K
+	// The unique identifier for the entity. Format: arn:aws:health:entity-region:aws-account:entity/entity-id
+	// . Example: arn:aws:health:us-east-1:111222333444:entity/AVh5GGT7ul1arKr1sE1K
 	EntityArn *string `locationName:"entityArn" type:"string"`
+
+	EntityUrl *string `locationName:"entityUrl" type:"string"`
 
 	// The ID of the affected entity.
 	EntityValue *string `locationName:"entityValue" type:"string"`
 
-	// The unique identifier for the event. Format: arn:aws:health:event-region::event/EVENT_TYPE_PLUS_ID.
-	// Example: arn:aws:health:us-east-1::event/AWS_EC2_MAINTENANCE_5331
+	// The unique identifier for the event. Format: arn:aws:health:event-region::event/SERVICE/EVENT_TYPE_CODE/EVENT_TYPE_PLUS_ID
+	// . Example: Example: arn:aws:health:us-east-1::event/EC2/EC2_INSTANCE_RETIREMENT_SCHEDULED/EC2_INSTANCE_RETIREMENT_SCHEDULED_ABC123-DEF456
 	EventArn *string `locationName:"eventArn" type:"string"`
 
 	// The most recent time that the entity was updated.
-	LastUpdatedTime *time.Time `locationName:"lastUpdatedTime" type:"timestamp" timestampFormat:"unix"`
+	LastUpdatedTime *time.Time `locationName:"lastUpdatedTime" type:"timestamp"`
 
 	// The most recent status of the entity affected by the event. The possible
 	// values are IMPAIRED, UNIMPAIRED, and UNKNOWN.
@@ -788,6 +797,12 @@ func (s *AffectedEntity) SetAwsAccountId(v string) *AffectedEntity {
 // SetEntityArn sets the EntityArn field's value.
 func (s *AffectedEntity) SetEntityArn(v string) *AffectedEntity {
 	s.EntityArn = &v
+	return s
+}
+
+// SetEntityUrl sets the EntityUrl field's value.
+func (s *AffectedEntity) SetEntityUrl(v string) *AffectedEntity {
+	s.EntityUrl = &v
 	return s
 }
 
@@ -827,15 +842,14 @@ func (s *AffectedEntity) SetTags(v map[string]*string) *AffectedEntity {
 // set and to is not set: match items where the timestamp value is equal to
 // or after from. If from is not set and to is set: match items where the timestamp
 // value is equal to or before to.
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/health-2016-08-04/DateTimeRange
 type DateTimeRange struct {
 	_ struct{} `type:"structure"`
 
 	// The starting date and time of a time range.
-	From *time.Time `locationName:"from" type:"timestamp" timestampFormat:"unix"`
+	From *time.Time `locationName:"from" type:"timestamp"`
 
 	// The ending date and time of a time range.
-	To *time.Time `locationName:"to" type:"timestamp" timestampFormat:"unix"`
+	To *time.Time `locationName:"to" type:"timestamp"`
 }
 
 // String returns the string representation
@@ -860,7 +874,6 @@ func (s *DateTimeRange) SetTo(v time.Time) *DateTimeRange {
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/health-2016-08-04/DescribeAffectedEntitiesRequest
 type DescribeAffectedEntitiesInput struct {
 	_ struct{} `type:"structure"`
 
@@ -942,7 +955,6 @@ func (s *DescribeAffectedEntitiesInput) SetNextToken(v string) *DescribeAffected
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/health-2016-08-04/DescribeAffectedEntitiesResponse
 type DescribeAffectedEntitiesOutput struct {
 	_ struct{} `type:"structure"`
 
@@ -979,12 +991,11 @@ func (s *DescribeAffectedEntitiesOutput) SetNextToken(v string) *DescribeAffecte
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/health-2016-08-04/DescribeEntityAggregatesRequest
 type DescribeEntityAggregatesInput struct {
 	_ struct{} `type:"structure"`
 
-	// A list of event ARNs (unique identifiers). For example: "arn:aws:health:us-east-1::event/AWS_EC2_MAINTENANCE_5331",
-	// "arn:aws:health:us-west-1::event/AWS_EBS_LOST_VOLUME_xyz"
+	// A list of event ARNs (unique identifiers). For example: "arn:aws:health:us-east-1::event/EC2/EC2_INSTANCE_RETIREMENT_SCHEDULED/EC2_INSTANCE_RETIREMENT_SCHEDULED_ABC123-CDE456",
+	// "arn:aws:health:us-west-1::event/EBS/AWS_EBS_LOST_VOLUME/AWS_EBS_LOST_VOLUME_CHI789_JKL101"
 	EventArns []*string `locationName:"eventArns" min:"1" type:"list"`
 }
 
@@ -1017,7 +1028,6 @@ func (s *DescribeEntityAggregatesInput) SetEventArns(v []*string) *DescribeEntit
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/health-2016-08-04/DescribeEntityAggregatesResponse
 type DescribeEntityAggregatesOutput struct {
 	_ struct{} `type:"structure"`
 
@@ -1041,7 +1051,6 @@ func (s *DescribeEntityAggregatesOutput) SetEntityAggregates(v []*EntityAggregat
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/health-2016-08-04/DescribeEventAggregatesRequest
 type DescribeEventAggregatesInput struct {
 	_ struct{} `type:"structure"`
 
@@ -1119,7 +1128,6 @@ func (s *DescribeEventAggregatesInput) SetNextToken(v string) *DescribeEventAggr
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/health-2016-08-04/DescribeEventAggregatesResponse
 type DescribeEventAggregatesOutput struct {
 	_ struct{} `type:"structure"`
 
@@ -1156,12 +1164,11 @@ func (s *DescribeEventAggregatesOutput) SetNextToken(v string) *DescribeEventAgg
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/health-2016-08-04/DescribeEventDetailsRequest
 type DescribeEventDetailsInput struct {
 	_ struct{} `type:"structure"`
 
-	// A list of event ARNs (unique identifiers). For example: "arn:aws:health:us-east-1::event/AWS_EC2_MAINTENANCE_5331",
-	// "arn:aws:health:us-west-1::event/AWS_EBS_LOST_VOLUME_xyz"
+	// A list of event ARNs (unique identifiers). For example: "arn:aws:health:us-east-1::event/EC2/EC2_INSTANCE_RETIREMENT_SCHEDULED/EC2_INSTANCE_RETIREMENT_SCHEDULED_ABC123-CDE456",
+	// "arn:aws:health:us-west-1::event/EBS/AWS_EBS_LOST_VOLUME/AWS_EBS_LOST_VOLUME_CHI789_JKL101"
 	//
 	// EventArns is a required field
 	EventArns []*string `locationName:"eventArns" min:"1" type:"list" required:"true"`
@@ -1212,7 +1219,6 @@ func (s *DescribeEventDetailsInput) SetLocale(v string) *DescribeEventDetailsInp
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/health-2016-08-04/DescribeEventDetailsResponse
 type DescribeEventDetailsOutput struct {
 	_ struct{} `type:"structure"`
 
@@ -1245,7 +1251,6 @@ func (s *DescribeEventDetailsOutput) SetSuccessfulSet(v []*EventDetails) *Descri
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/health-2016-08-04/DescribeEventTypesRequest
 type DescribeEventTypesInput struct {
 	_ struct{} `type:"structure"`
 
@@ -1322,14 +1327,13 @@ func (s *DescribeEventTypesInput) SetNextToken(v string) *DescribeEventTypesInpu
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/health-2016-08-04/DescribeEventTypesResponse
 type DescribeEventTypesOutput struct {
 	_ struct{} `type:"structure"`
 
 	// A list of event types that match the filter criteria. Event types have a
 	// category (issue, accountNotification, or scheduledChange), a service (for
-	// example, EC2, RDS, DATAPIPELINE, BILLING), and a code (in the format AWS_SERVICE_DESCRIPTION;
-	// for example, AWS_EC2_SYSTEM_MAINTENANCE_EVENT).
+	// example, EC2, RDS, DATAPIPELINE, BILLING), and a code (in the format AWS_SERVICE_DESCRIPTION
+	// ; for example, AWS_EC2_SYSTEM_MAINTENANCE_EVENT).
 	EventTypes []*EventType `locationName:"eventTypes" type:"list"`
 
 	// If the results of a search are large, only a portion of the results are returned,
@@ -1362,7 +1366,6 @@ func (s *DescribeEventTypesOutput) SetNextToken(v string) *DescribeEventTypesOut
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/health-2016-08-04/DescribeEventsRequest
 type DescribeEventsInput struct {
 	_ struct{} `type:"structure"`
 
@@ -1439,7 +1442,6 @@ func (s *DescribeEventsInput) SetNextToken(v string) *DescribeEventsInput {
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/health-2016-08-04/DescribeEventsResponse
 type DescribeEventsOutput struct {
 	_ struct{} `type:"structure"`
 
@@ -1478,15 +1480,14 @@ func (s *DescribeEventsOutput) SetNextToken(v string) *DescribeEventsOutput {
 
 // The number of entities that are affected by one or more events. Returned
 // by the DescribeEntityAggregates operation.
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/health-2016-08-04/EntityAggregate
 type EntityAggregate struct {
 	_ struct{} `type:"structure"`
 
 	// The number entities that match the criteria for the specified events.
 	Count *int64 `locationName:"count" type:"integer"`
 
-	// The unique identifier for the event. Format: arn:aws:health:event-region::event/EVENT_TYPE_PLUS_ID.
-	// Example: arn:aws:health:us-east-1::event/AWS_EC2_MAINTENANCE_5331
+	// The unique identifier for the event. Format: arn:aws:health:event-region::event/SERVICE/EVENT_TYPE_CODE/EVENT_TYPE_PLUS_ID
+	// . Example: Example: arn:aws:health:us-east-1::event/EC2/EC2_INSTANCE_RETIREMENT_SCHEDULED/EC2_INSTANCE_RETIREMENT_SCHEDULED_ABC123-DEF456
 	EventArn *string `locationName:"eventArn" type:"string"`
 }
 
@@ -1513,7 +1514,6 @@ func (s *EntityAggregate) SetEventArn(v string) *EntityAggregate {
 }
 
 // The values to use to filter results from the DescribeAffectedEntities operation.
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/health-2016-08-04/EntityFilter
 type EntityFilter struct {
 	_ struct{} `type:"structure"`
 
@@ -1523,8 +1523,8 @@ type EntityFilter struct {
 	// A list of IDs for affected entities.
 	EntityValues []*string `locationName:"entityValues" min:"1" type:"list"`
 
-	// A list of event ARNs (unique identifiers). For example: "arn:aws:health:us-east-1::event/AWS_EC2_MAINTENANCE_5331",
-	// "arn:aws:health:us-west-1::event/AWS_EBS_LOST_VOLUME_xyz"
+	// A list of event ARNs (unique identifiers). For example: "arn:aws:health:us-east-1::event/EC2/EC2_INSTANCE_RETIREMENT_SCHEDULED/EC2_INSTANCE_RETIREMENT_SCHEDULED_ABC123-CDE456",
+	// "arn:aws:health:us-west-1::event/EBS/AWS_EBS_LOST_VOLUME/AWS_EBS_LOST_VOLUME_CHI789_JKL101"
 	//
 	// EventArns is a required field
 	EventArns []*string `locationName:"eventArns" min:"1" type:"list" required:"true"`
@@ -1616,29 +1616,29 @@ func (s *EntityFilter) SetTags(v []map[string]*string) *EntityFilter {
 // Summary information about an event, returned by the DescribeEvents operation.
 // The DescribeEventDetails operation also returns this information, as well
 // as the EventDescription and additional event metadata.
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/health-2016-08-04/Event
 type Event struct {
 	_ struct{} `type:"structure"`
 
-	// The unique identifier for the event. Format: arn:aws:health:event-region::event/EVENT_TYPE_PLUS_ID.
-	// Example: arn:aws:health:us-east-1::event/AWS_EC2_MAINTENANCE_5331
+	// The unique identifier for the event. Format: arn:aws:health:event-region::event/SERVICE/EVENT_TYPE_CODE/EVENT_TYPE_PLUS_ID
+	// . Example: Example: arn:aws:health:us-east-1::event/EC2/EC2_INSTANCE_RETIREMENT_SCHEDULED/EC2_INSTANCE_RETIREMENT_SCHEDULED_ABC123-DEF456
 	Arn *string `locationName:"arn" type:"string"`
 
 	// The AWS Availability Zone of the event. For example, us-east-1a.
 	AvailabilityZone *string `locationName:"availabilityZone" type:"string"`
 
 	// The date and time that the event ended.
-	EndTime *time.Time `locationName:"endTime" type:"timestamp" timestampFormat:"unix"`
+	EndTime *time.Time `locationName:"endTime" type:"timestamp"`
 
-	// The
+	// The category of the event. Possible values are issue, scheduledChange, and
+	// accountNotification.
 	EventTypeCategory *string `locationName:"eventTypeCategory" min:"3" type:"string" enum:"eventTypeCategory"`
 
-	// The unique identifier for the event type. The format is AWS_SERVICE_DESCRIPTION;
-	// for example, AWS_EC2_SYSTEM_MAINTENANCE_EVENT.
+	// The unique identifier for the event type. The format is AWS_SERVICE_DESCRIPTION
+	// ; for example, AWS_EC2_SYSTEM_MAINTENANCE_EVENT.
 	EventTypeCode *string `locationName:"eventTypeCode" min:"3" type:"string"`
 
 	// The most recent date and time that the event was updated.
-	LastUpdatedTime *time.Time `locationName:"lastUpdatedTime" type:"timestamp" timestampFormat:"unix"`
+	LastUpdatedTime *time.Time `locationName:"lastUpdatedTime" type:"timestamp"`
 
 	// The AWS region name of the event.
 	Region *string `locationName:"region" type:"string"`
@@ -1647,7 +1647,7 @@ type Event struct {
 	Service *string `locationName:"service" min:"2" type:"string"`
 
 	// The date and time that the event began.
-	StartTime *time.Time `locationName:"startTime" type:"timestamp" timestampFormat:"unix"`
+	StartTime *time.Time `locationName:"startTime" type:"timestamp"`
 
 	// The most recent status of the event. Possible values are open, closed, and
 	// upcoming.
@@ -1726,7 +1726,6 @@ func (s *Event) SetStatusCode(v string) *Event {
 
 // The number of events of each issue type. Returned by the DescribeEventAggregates
 // operation.
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/health-2016-08-04/EventAggregate
 type EventAggregate struct {
 	_ struct{} `type:"structure"`
 
@@ -1761,7 +1760,6 @@ func (s *EventAggregate) SetCount(v int64) *EventAggregate {
 
 // The detailed description of the event. Included in the information returned
 // by the DescribeEventDetails operation.
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/health-2016-08-04/EventDescription
 type EventDescription struct {
 	_ struct{} `type:"structure"`
 
@@ -1788,7 +1786,6 @@ func (s *EventDescription) SetLatestDescription(v string) *EventDescription {
 // Detailed information about an event. A combination of an Event object, an
 // EventDescription object, and additional metadata about the event. Returned
 // by the DescribeEventDetails operation.
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/health-2016-08-04/EventDetails
 type EventDetails struct {
 	_ struct{} `type:"structure"`
 
@@ -1832,7 +1829,6 @@ func (s *EventDetails) SetEventMetadata(v map[string]*string) *EventDetails {
 
 // Error information returned when a DescribeEventDetails operation cannot find
 // a specified event.
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/health-2016-08-04/EventDetailsErrorItem
 type EventDetailsErrorItem struct {
 	_ struct{} `type:"structure"`
 
@@ -1842,8 +1838,8 @@ type EventDetailsErrorItem struct {
 	// The name of the error.
 	ErrorName *string `locationName:"errorName" type:"string"`
 
-	// The unique identifier for the event. Format: arn:aws:health:event-region::event/EVENT_TYPE_PLUS_ID.
-	// Example: arn:aws:health:us-east-1::event/AWS_EC2_MAINTENANCE_5331
+	// The unique identifier for the event. Format: arn:aws:health:event-region::event/SERVICE/EVENT_TYPE_CODE/EVENT_TYPE_PLUS_ID
+	// . Example: Example: arn:aws:health:us-east-1::event/EC2/EC2_INSTANCE_RETIREMENT_SCHEDULED/EC2_INSTANCE_RETIREMENT_SCHEDULED_ABC123-DEF456
 	EventArn *string `locationName:"eventArn" type:"string"`
 }
 
@@ -1877,7 +1873,6 @@ func (s *EventDetailsErrorItem) SetEventArn(v string) *EventDetailsErrorItem {
 
 // The values to use to filter results from the DescribeEvents and DescribeEventAggregates
 // operations.
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/health-2016-08-04/EventFilter
 type EventFilter struct {
 	_ struct{} `type:"structure"`
 
@@ -1894,8 +1889,8 @@ type EventFilter struct {
 	// volumes (vol-426ab23e).
 	EntityValues []*string `locationName:"entityValues" min:"1" type:"list"`
 
-	// A list of event ARNs (unique identifiers). For example: "arn:aws:health:us-east-1::event/AWS_EC2_MAINTENANCE_5331",
-	// "arn:aws:health:us-west-1::event/AWS_EBS_LOST_VOLUME_xyz"
+	// A list of event ARNs (unique identifiers). For example: "arn:aws:health:us-east-1::event/EC2/EC2_INSTANCE_RETIREMENT_SCHEDULED/EC2_INSTANCE_RETIREMENT_SCHEDULED_ABC123-CDE456",
+	// "arn:aws:health:us-west-1::event/EBS/AWS_EBS_LOST_VOLUME/AWS_EBS_LOST_VOLUME_CHI789_JKL101"
 	EventArns []*string `locationName:"eventArns" min:"1" type:"list"`
 
 	// A list of event status codes.
@@ -2057,15 +2052,14 @@ func (s *EventFilter) SetTags(v []map[string]*string) *EventFilter {
 // Metadata about a type of event that is reported by AWS Health. Data consists
 // of the category (for example, issue), the service (for example, EC2), and
 // the event type code (for example, AWS_EC2_SYSTEM_MAINTENANCE_EVENT).
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/health-2016-08-04/EventType
 type EventType struct {
 	_ struct{} `type:"structure"`
 
 	// A list of event type category codes (issue, scheduledChange, or accountNotification).
 	Category *string `locationName:"category" min:"3" type:"string" enum:"eventTypeCategory"`
 
-	// The unique identifier for the event type. The format is AWS_SERVICE_DESCRIPTION;
-	// for example, AWS_EC2_SYSTEM_MAINTENANCE_EVENT.
+	// The unique identifier for the event type. The format is AWS_SERVICE_DESCRIPTION
+	// ; for example, AWS_EC2_SYSTEM_MAINTENANCE_EVENT.
 	Code *string `locationName:"code" min:"3" type:"string"`
 
 	// The AWS service that is affected by the event. For example, EC2, RDS.
@@ -2101,7 +2095,6 @@ func (s *EventType) SetService(v string) *EventType {
 }
 
 // The values to use to filter results from the DescribeEventTypes operation.
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/health-2016-08-04/EventTypeFilter
 type EventTypeFilter struct {
 	_ struct{} `type:"structure"`
 
@@ -2198,4 +2191,7 @@ const (
 
 	// EventTypeCategoryScheduledChange is a eventTypeCategory enum value
 	EventTypeCategoryScheduledChange = "scheduledChange"
+
+	// EventTypeCategoryInvestigation is a eventTypeCategory enum value
+	EventTypeCategoryInvestigation = "investigation"
 )

@@ -14,8 +14,8 @@ const opGetResources = "GetResources"
 
 // GetResourcesRequest generates a "aws/request.Request" representing the
 // client's request for the GetResources operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value will be populated with the request's response once the request completes
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -35,7 +35,7 @@ const opGetResources = "GetResources"
 //        fmt.Println(resp)
 //    }
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/resourcegroupstaggingapi-2017-01-26/GetResources
+// See also, https://docs.aws.amazon.com/goto/WebAPI/resourcegroupstaggingapi-2017-01-26/GetResources
 func (c *ResourceGroupsTaggingAPI) GetResourcesRequest(input *GetResourcesInput) (req *request.Request, output *GetResourcesOutput) {
 	op := &request.Operation{
 		Name:       opGetResources,
@@ -60,12 +60,16 @@ func (c *ResourceGroupsTaggingAPI) GetResourcesRequest(input *GetResourcesInput)
 
 // GetResources API operation for AWS Resource Groups Tagging API.
 //
-// Returns all the tagged resources that are associated with the specified tags
-// (keys and values) located in the specified region for the AWS account. The
-// tags and the resource types that you specify in the request are known as
-// filters. The response includes all tags that are associated with the requested
-// resources. If no filter is provided, this action returns a paginated resource
-// list with the associated tags.
+// Returns all the tagged or previously tagged resources that are located in
+// the specified region for the AWS account. You can optionally specify filters
+// (tags and resource types) in your request, depending on what information
+// you want returned. The response includes all tags that are associated with
+// the requested resources.
+//
+// You can check the PaginationToken response parameter to determine if a query
+// completed. Queries can occasionally return fewer results on a page than allowed.
+// The PaginationToken response parameter value is null only when there are
+// no more results to display.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -90,7 +94,7 @@ func (c *ResourceGroupsTaggingAPI) GetResourcesRequest(input *GetResourcesInput)
 //   A PaginationToken is valid for a maximum of 15 minutes. Your request was
 //   denied because the specified PaginationToken has expired.
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/resourcegroupstaggingapi-2017-01-26/GetResources
+// See also, https://docs.aws.amazon.com/goto/WebAPI/resourcegroupstaggingapi-2017-01-26/GetResources
 func (c *ResourceGroupsTaggingAPI) GetResources(input *GetResourcesInput) (*GetResourcesOutput, error) {
 	req, out := c.GetResourcesRequest(input)
 	return out, req.Send()
@@ -123,7 +127,7 @@ func (c *ResourceGroupsTaggingAPI) GetResourcesWithContext(ctx aws.Context, inpu
 //    // Example iterating over at most 3 pages of a GetResources operation.
 //    pageNum := 0
 //    err := client.GetResourcesPages(params,
-//        func(page *GetResourcesOutput, lastPage bool) bool {
+//        func(page *resourcegroupstaggingapi.GetResourcesOutput, lastPage bool) bool {
 //            pageNum++
 //            fmt.Println(page)
 //            return pageNum <= 3
@@ -155,10 +159,12 @@ func (c *ResourceGroupsTaggingAPI) GetResourcesPagesWithContext(ctx aws.Context,
 		},
 	}
 
-	cont := true
-	for p.Next() && cont {
-		cont = fn(p.Page().(*GetResourcesOutput), !p.HasNextPage())
+	for p.Next() {
+		if !fn(p.Page().(*GetResourcesOutput), !p.HasNextPage()) {
+			break
+		}
 	}
+
 	return p.Err()
 }
 
@@ -166,8 +172,8 @@ const opGetTagKeys = "GetTagKeys"
 
 // GetTagKeysRequest generates a "aws/request.Request" representing the
 // client's request for the GetTagKeys operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value will be populated with the request's response once the request completes
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -187,7 +193,7 @@ const opGetTagKeys = "GetTagKeys"
 //        fmt.Println(resp)
 //    }
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/resourcegroupstaggingapi-2017-01-26/GetTagKeys
+// See also, https://docs.aws.amazon.com/goto/WebAPI/resourcegroupstaggingapi-2017-01-26/GetTagKeys
 func (c *ResourceGroupsTaggingAPI) GetTagKeysRequest(input *GetTagKeysInput) (req *request.Request, output *GetTagKeysOutput) {
 	op := &request.Operation{
 		Name:       opGetTagKeys,
@@ -237,7 +243,7 @@ func (c *ResourceGroupsTaggingAPI) GetTagKeysRequest(input *GetTagKeysInput) (re
 //   A PaginationToken is valid for a maximum of 15 minutes. Your request was
 //   denied because the specified PaginationToken has expired.
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/resourcegroupstaggingapi-2017-01-26/GetTagKeys
+// See also, https://docs.aws.amazon.com/goto/WebAPI/resourcegroupstaggingapi-2017-01-26/GetTagKeys
 func (c *ResourceGroupsTaggingAPI) GetTagKeys(input *GetTagKeysInput) (*GetTagKeysOutput, error) {
 	req, out := c.GetTagKeysRequest(input)
 	return out, req.Send()
@@ -270,7 +276,7 @@ func (c *ResourceGroupsTaggingAPI) GetTagKeysWithContext(ctx aws.Context, input 
 //    // Example iterating over at most 3 pages of a GetTagKeys operation.
 //    pageNum := 0
 //    err := client.GetTagKeysPages(params,
-//        func(page *GetTagKeysOutput, lastPage bool) bool {
+//        func(page *resourcegroupstaggingapi.GetTagKeysOutput, lastPage bool) bool {
 //            pageNum++
 //            fmt.Println(page)
 //            return pageNum <= 3
@@ -302,10 +308,12 @@ func (c *ResourceGroupsTaggingAPI) GetTagKeysPagesWithContext(ctx aws.Context, i
 		},
 	}
 
-	cont := true
-	for p.Next() && cont {
-		cont = fn(p.Page().(*GetTagKeysOutput), !p.HasNextPage())
+	for p.Next() {
+		if !fn(p.Page().(*GetTagKeysOutput), !p.HasNextPage()) {
+			break
+		}
 	}
+
 	return p.Err()
 }
 
@@ -313,8 +321,8 @@ const opGetTagValues = "GetTagValues"
 
 // GetTagValuesRequest generates a "aws/request.Request" representing the
 // client's request for the GetTagValues operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value will be populated with the request's response once the request completes
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -334,7 +342,7 @@ const opGetTagValues = "GetTagValues"
 //        fmt.Println(resp)
 //    }
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/resourcegroupstaggingapi-2017-01-26/GetTagValues
+// See also, https://docs.aws.amazon.com/goto/WebAPI/resourcegroupstaggingapi-2017-01-26/GetTagValues
 func (c *ResourceGroupsTaggingAPI) GetTagValuesRequest(input *GetTagValuesInput) (req *request.Request, output *GetTagValuesOutput) {
 	op := &request.Operation{
 		Name:       opGetTagValues,
@@ -385,7 +393,7 @@ func (c *ResourceGroupsTaggingAPI) GetTagValuesRequest(input *GetTagValuesInput)
 //   A PaginationToken is valid for a maximum of 15 minutes. Your request was
 //   denied because the specified PaginationToken has expired.
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/resourcegroupstaggingapi-2017-01-26/GetTagValues
+// See also, https://docs.aws.amazon.com/goto/WebAPI/resourcegroupstaggingapi-2017-01-26/GetTagValues
 func (c *ResourceGroupsTaggingAPI) GetTagValues(input *GetTagValuesInput) (*GetTagValuesOutput, error) {
 	req, out := c.GetTagValuesRequest(input)
 	return out, req.Send()
@@ -418,7 +426,7 @@ func (c *ResourceGroupsTaggingAPI) GetTagValuesWithContext(ctx aws.Context, inpu
 //    // Example iterating over at most 3 pages of a GetTagValues operation.
 //    pageNum := 0
 //    err := client.GetTagValuesPages(params,
-//        func(page *GetTagValuesOutput, lastPage bool) bool {
+//        func(page *resourcegroupstaggingapi.GetTagValuesOutput, lastPage bool) bool {
 //            pageNum++
 //            fmt.Println(page)
 //            return pageNum <= 3
@@ -450,10 +458,12 @@ func (c *ResourceGroupsTaggingAPI) GetTagValuesPagesWithContext(ctx aws.Context,
 		},
 	}
 
-	cont := true
-	for p.Next() && cont {
-		cont = fn(p.Page().(*GetTagValuesOutput), !p.HasNextPage())
+	for p.Next() {
+		if !fn(p.Page().(*GetTagValuesOutput), !p.HasNextPage()) {
+			break
+		}
 	}
+
 	return p.Err()
 }
 
@@ -461,8 +471,8 @@ const opTagResources = "TagResources"
 
 // TagResourcesRequest generates a "aws/request.Request" representing the
 // client's request for the TagResources operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value will be populated with the request's response once the request completes
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -482,7 +492,7 @@ const opTagResources = "TagResources"
 //        fmt.Println(resp)
 //    }
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/resourcegroupstaggingapi-2017-01-26/TagResources
+// See also, https://docs.aws.amazon.com/goto/WebAPI/resourcegroupstaggingapi-2017-01-26/TagResources
 func (c *ResourceGroupsTaggingAPI) TagResourcesRequest(input *TagResourcesInput) (req *request.Request, output *TagResourcesOutput) {
 	op := &request.Operation{
 		Name:       opTagResources,
@@ -504,8 +514,8 @@ func (c *ResourceGroupsTaggingAPI) TagResourcesRequest(input *TagResourcesInput)
 // Applies one or more tags to the specified resources. Note the following:
 //
 //    * Not all resources can have tags. For a list of resources that support
-//    tagging, see Supported Resources (http://docs.aws.amazon.com/awsconsolehelpdocs/latest/gsg/supported-resources.html)
-//    in the AWS Resource Groups and Tag Editor User Guide.
+//    tagging, see Supported Resources (http://docs.aws.amazon.com/ARG/latest/userguide/supported-resources.html)
+//    in the AWS Resource Groups User Guide.
 //
 //    * Each resource can have up to 50 tags. For other limits, see Tag Restrictions
 //    (http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Using_Tags.html#tag-restrictions)
@@ -516,8 +526,8 @@ func (c *ResourceGroupsTaggingAPI) TagResourcesRequest(input *TagResourcesInput)
 //
 //    * To add tags to a resource, you need the necessary permissions for the
 //    service that the resource belongs to as well as permissions for adding
-//    tags. For more information, see Obtaining Permissions for Tagging (http://docs.aws.amazon.com/awsconsolehelpdocs/latest/gsg/obtaining-permissions-for-tagging.html)
-//    in the AWS Resource Groups and Tag Editor User Guide.
+//    tags. For more information, see Obtaining Permissions for Tagging (http://docs.aws.amazon.com/ARG/latest/userguide/obtaining-permissions-for-tagging.html)
+//    in the AWS Resource Groups User Guide.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -538,7 +548,7 @@ func (c *ResourceGroupsTaggingAPI) TagResourcesRequest(input *TagResourcesInput)
 //   The request processing failed because of an unknown error, exception, or
 //   failure. You can retry the request.
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/resourcegroupstaggingapi-2017-01-26/TagResources
+// See also, https://docs.aws.amazon.com/goto/WebAPI/resourcegroupstaggingapi-2017-01-26/TagResources
 func (c *ResourceGroupsTaggingAPI) TagResources(input *TagResourcesInput) (*TagResourcesOutput, error) {
 	req, out := c.TagResourcesRequest(input)
 	return out, req.Send()
@@ -564,8 +574,8 @@ const opUntagResources = "UntagResources"
 
 // UntagResourcesRequest generates a "aws/request.Request" representing the
 // client's request for the UntagResources operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value will be populated with the request's response once the request completes
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -585,7 +595,7 @@ const opUntagResources = "UntagResources"
 //        fmt.Println(resp)
 //    }
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/resourcegroupstaggingapi-2017-01-26/UntagResources
+// See also, https://docs.aws.amazon.com/goto/WebAPI/resourcegroupstaggingapi-2017-01-26/UntagResources
 func (c *ResourceGroupsTaggingAPI) UntagResourcesRequest(input *UntagResourcesInput) (req *request.Request, output *UntagResourcesOutput) {
 	op := &request.Operation{
 		Name:       opUntagResources,
@@ -611,8 +621,8 @@ func (c *ResourceGroupsTaggingAPI) UntagResourcesRequest(input *UntagResourcesIn
 //
 //    * To remove tags from a resource, you need the necessary permissions for
 //    the service that the resource belongs to as well as permissions for removing
-//    tags. For more information, see Obtaining Permissions for Tagging (http://docs.aws.amazon.com/awsconsolehelpdocs/latest/gsg/obtaining-permissions-for-tagging.html)
-//    in the AWS Resource Groups and Tag Editor User Guide.
+//    tags. For more information, see Obtaining Permissions for Tagging (http://docs.aws.amazon.com/ARG/latest/userguide/obtaining-permissions-for-tagging.html)
+//    in the AWS Resource Groups User Guide.
 //
 //    * You can only tag resources that are located in the specified region
 //    for the AWS account.
@@ -636,7 +646,7 @@ func (c *ResourceGroupsTaggingAPI) UntagResourcesRequest(input *UntagResourcesIn
 //   The request processing failed because of an unknown error, exception, or
 //   failure. You can retry the request.
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/resourcegroupstaggingapi-2017-01-26/UntagResources
+// See also, https://docs.aws.amazon.com/goto/WebAPI/resourcegroupstaggingapi-2017-01-26/UntagResources
 func (c *ResourceGroupsTaggingAPI) UntagResources(input *UntagResourcesInput) (*UntagResourcesOutput, error) {
 	req, out := c.UntagResourcesRequest(input)
 	return out, req.Send()
@@ -659,7 +669,6 @@ func (c *ResourceGroupsTaggingAPI) UntagResourcesWithContext(ctx aws.Context, in
 }
 
 // Details of the common errors that all actions return.
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/resourcegroupstaggingapi-2017-01-26/FailureInfo
 type FailureInfo struct {
 	_ struct{} `type:"structure"`
 
@@ -703,7 +712,6 @@ func (s *FailureInfo) SetStatusCode(v int64) *FailureInfo {
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/resourcegroupstaggingapi-2017-01-26/GetResourcesInput
 type GetResourcesInput struct {
 	_ struct{} `type:"structure"`
 
@@ -714,9 +722,8 @@ type GetResourcesInput struct {
 
 	// The constraints on the resources that you want returned. The format of each
 	// resource type is service[:resourceType]. For example, specifying a resource
-	// type of ec2 returns all tagged Amazon EC2 resources (which includes tagged
-	// EC2 instances). Specifying a resource type of ec2:instance returns only EC2
-	// instances.
+	// type of ec2 returns all Amazon EC2 resources (which includes EC2 instances).
+	// Specifying a resource type of ec2:instance returns only EC2 instances.
 	//
 	// The string for each service name and resource type is the same as that embedded
 	// in a resource's Amazon Resource Name (ARN). Consult the AWS General Reference
@@ -728,23 +735,47 @@ type GetResourcesInput struct {
 	//
 	//    * For more information about ARNs, see Amazon Resource Names (ARNs) and
 	//    AWS Service Namespaces (http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html).
+	//
+	// You can specify multiple resource types by using an array. The array can
+	// include up to 100 items. Note that the length constraint requirement applies
+	// to each resource type filter.
 	ResourceTypeFilters []*string `type:"list"`
 
 	// A limit that restricts the number of resources returned by GetResources in
 	// paginated output. You can set ResourcesPerPage to a minimum of 1 item and
-	// the maximum of 50 items.
+	// the maximum of 100 items.
 	ResourcesPerPage *int64 `type:"integer"`
 
-	// A list of tags (keys and values). A request can include up to 50 keys, and
-	// each key can include up to 20 values.
+	// A list of TagFilters (keys and values). Each TagFilter specified must contain
+	// a key with values as optional. A request can include up to 50 keys, and each
+	// key can include up to 20 values.
 	//
-	// If you specify multiple filters connected by an AND operator in a single
-	// request, the response returns only those resources that are associated with
-	// every specified filter.
+	// Note the following when deciding how to use TagFilters:
 	//
-	// If you specify multiple filters connected by an OR operator in a single request,
-	// the response returns all resources that are associated with at least one
-	// or possibly more of the specified filters.
+	//    * If you do specify a TagFilter, the response returns only those resources
+	//    that are currently associated with the specified tag.
+	//
+	//    * If you don't specify a TagFilter, the response includes all resources
+	//    that were ever associated with tags. Resources that currently don't have
+	//    associated tags are shown with an empty tag set, like this: "Tags": [].
+	//
+	//    * If you specify more than one filter in a single request, the response
+	//    returns only those resources that satisfy all specified filters.
+	//
+	//    * If you specify a filter that contains more than one value for a key,
+	//    the response returns resources that match any of the specified values
+	//    for that key.
+	//
+	//    * If you don't specify any values for a key, the response returns resources
+	//    that are tagged with that key irrespective of the value. For example,
+	//    for filters: filter1 = {key1, {value1}}, filter2 = {key2, {value2,value3,value4}}
+	//    , filter3 = {key3}: GetResources( {filter1} ) returns resources tagged
+	//    with key1=value1 GetResources( {filter2} ) returns resources tagged with
+	//    key2=value2 or key2=value3 or key2=value4 GetResources( {filter3} ) returns
+	//    resources tagged with any tag containing key3 as its tag key, irrespective
+	//    of its value GetResources( {filter1,filter2,filter3} ) returns resources
+	//    tagged with ( key1=value1) and ( key2=value2 or key2=value3 or key2=value4)
+	//    and (key3, irrespective of the value)
 	TagFilters []*TagFilter `type:"list"`
 
 	// A limit that restricts the number of tags (key and value pairs) returned
@@ -762,7 +793,8 @@ type GetResourcesInput struct {
 	// 10 tags, and the third page displaying the remaining 2 resources, each with
 	// its 10 tags.
 	//
-	// You can set TagsPerPage
+	// You can set TagsPerPage to a minimum of 100 items and the maximum of 500
+	// items.
 	TagsPerPage *int64 `type:"integer"`
 }
 
@@ -826,7 +858,6 @@ func (s *GetResourcesInput) SetTagsPerPage(v int64) *GetResourcesInput {
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/resourcegroupstaggingapi-2017-01-26/GetResourcesOutput
 type GetResourcesOutput struct {
 	_ struct{} `type:"structure"`
 
@@ -861,7 +892,6 @@ func (s *GetResourcesOutput) SetResourceTagMappingList(v []*ResourceTagMapping) 
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/resourcegroupstaggingapi-2017-01-26/GetTagKeysInput
 type GetTagKeysInput struct {
 	_ struct{} `type:"structure"`
 
@@ -887,7 +917,6 @@ func (s *GetTagKeysInput) SetPaginationToken(v string) *GetTagKeysInput {
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/resourcegroupstaggingapi-2017-01-26/GetTagKeysOutput
 type GetTagKeysOutput struct {
 	_ struct{} `type:"structure"`
 
@@ -922,7 +951,6 @@ func (s *GetTagKeysOutput) SetTagKeys(v []*string) *GetTagKeysOutput {
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/resourcegroupstaggingapi-2017-01-26/GetTagValuesInput
 type GetTagValuesInput struct {
 	_ struct{} `type:"structure"`
 
@@ -976,7 +1004,6 @@ func (s *GetTagValuesInput) SetPaginationToken(v string) *GetTagValuesInput {
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/resourcegroupstaggingapi-2017-01-26/GetTagValuesOutput
 type GetTagValuesOutput struct {
 	_ struct{} `type:"structure"`
 
@@ -1013,11 +1040,10 @@ func (s *GetTagValuesOutput) SetTagValues(v []*string) *GetTagValuesOutput {
 
 // A list of resource ARNs and the tags (keys and values) that are associated
 // with each.
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/resourcegroupstaggingapi-2017-01-26/ResourceTagMapping
 type ResourceTagMapping struct {
 	_ struct{} `type:"structure"`
 
-	// An array of resource ARN(s).
+	// The ARN of the resource.
 	ResourceARN *string `min:"1" type:"string"`
 
 	// The tags that have been applied to one or more AWS resources.
@@ -1050,7 +1076,6 @@ func (s *ResourceTagMapping) SetTags(v []*Tag) *ResourceTagMapping {
 // them. Each tag consists of a key and an optional value, both of which you
 // define. For more information, see Tag Basics (http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Using_Tags.html#tag-basics)
 // in the Amazon EC2 User Guide for Linux Instances.
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/resourcegroupstaggingapi-2017-01-26/Tag
 type Tag struct {
 	_ struct{} `type:"structure"`
 
@@ -1091,7 +1116,6 @@ func (s *Tag) SetValue(v string) *Tag {
 
 // A list of tags (keys and values) that are used to specify the associated
 // resources.
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/resourcegroupstaggingapi-2017-01-26/TagFilter
 type TagFilter struct {
 	_ struct{} `type:"structure"`
 
@@ -1139,7 +1163,6 @@ func (s *TagFilter) SetValues(v []*string) *TagFilter {
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/resourcegroupstaggingapi-2017-01-26/TagResourcesInput
 type TagResourcesInput struct {
 	_ struct{} `type:"structure"`
 
@@ -1203,7 +1226,6 @@ func (s *TagResourcesInput) SetTags(v map[string]*string) *TagResourcesInput {
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/resourcegroupstaggingapi-2017-01-26/TagResourcesOutput
 type TagResourcesOutput struct {
 	_ struct{} `type:"structure"`
 
@@ -1228,7 +1250,6 @@ func (s *TagResourcesOutput) SetFailedResourcesMap(v map[string]*FailureInfo) *T
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/resourcegroupstaggingapi-2017-01-26/UntagResourcesInput
 type UntagResourcesInput struct {
 	_ struct{} `type:"structure"`
 
@@ -1291,7 +1312,6 @@ func (s *UntagResourcesInput) SetTagKeys(v []*string) *UntagResourcesInput {
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/resourcegroupstaggingapi-2017-01-26/UntagResourcesOutput
 type UntagResourcesOutput struct {
 	_ struct{} `type:"structure"`
 

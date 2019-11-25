@@ -29,8 +29,9 @@ var initRequest func(*request.Request)
 
 // Service information constants
 const (
-	ServiceName = "appstream2" // Service endpoint prefix API calls made to.
-	EndpointsID = ServiceName  // Service ID for Regions and Endpoints metadata.
+	ServiceName = "appstream2" // Name of service.
+	EndpointsID = ServiceName  // ID to lookup a service endpoint with.
+	ServiceID   = "AppStream"  // ServiceID is a unique identifer of a specific service.
 )
 
 // New creates a new instance of the AppStream client with a session.
@@ -38,6 +39,8 @@ const (
 // aws.Config parameter to add your extra config.
 //
 // Example:
+//     mySession := session.Must(session.NewSession())
+//
 //     // Create a AppStream client from just a session.
 //     svc := appstream.New(mySession)
 //
@@ -45,21 +48,23 @@ const (
 //     svc := appstream.New(mySession, aws.NewConfig().WithRegion("us-west-2"))
 func New(p client.ConfigProvider, cfgs ...*aws.Config) *AppStream {
 	c := p.ClientConfig(EndpointsID, cfgs...)
-	return newClient(*c.Config, c.Handlers, c.Endpoint, c.SigningRegion, c.SigningName)
+	if c.SigningNameDerived || len(c.SigningName) == 0 {
+		c.SigningName = "appstream"
+	}
+	return newClient(*c.Config, c.Handlers, c.PartitionID, c.Endpoint, c.SigningRegion, c.SigningName)
 }
 
 // newClient creates, initializes and returns a new service client instance.
-func newClient(cfg aws.Config, handlers request.Handlers, endpoint, signingRegion, signingName string) *AppStream {
-	if len(signingName) == 0 {
-		signingName = "appstream"
-	}
+func newClient(cfg aws.Config, handlers request.Handlers, partitionID, endpoint, signingRegion, signingName string) *AppStream {
 	svc := &AppStream{
 		Client: client.New(
 			cfg,
 			metadata.ClientInfo{
 				ServiceName:   ServiceName,
+				ServiceID:     ServiceID,
 				SigningName:   signingName,
 				SigningRegion: signingRegion,
+				PartitionID:   partitionID,
 				Endpoint:      endpoint,
 				APIVersion:    "2016-12-01",
 				JSONVersion:   "1.1",

@@ -225,6 +225,10 @@ func ExamplePolly_SynthesizeSpeech_shared00() {
 				fmt.Println(polly.ErrCodeMarksNotSupportedForFormatException, aerr.Error())
 			case polly.ErrCodeSsmlMarksNotSupportedForTextTypeException:
 				fmt.Println(polly.ErrCodeSsmlMarksNotSupportedForTextTypeException, aerr.Error())
+			case polly.ErrCodeLanguageNotSupportedException:
+				fmt.Println(polly.ErrCodeLanguageNotSupportedException, aerr.Error())
+			case polly.ErrCodeEngineNotSupportedException:
+				fmt.Println(polly.ErrCodeEngineNotSupportedException, aerr.Error())
 			default:
 				fmt.Println(aerr.Error())
 			}

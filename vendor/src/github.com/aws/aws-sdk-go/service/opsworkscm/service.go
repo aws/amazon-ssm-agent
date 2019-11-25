@@ -12,7 +12,7 @@ import (
 )
 
 // OpsWorksCM provides the API operation methods for making requests to
-// AWS OpsWorks for Chef Automate. See this package's package overview docs
+// AWS OpsWorks CM. See this package's package overview docs
 // for details on the service.
 //
 // OpsWorksCM methods are safe to use concurrently. It is not safe to
@@ -29,8 +29,9 @@ var initRequest func(*request.Request)
 
 // Service information constants
 const (
-	ServiceName = "opsworks-cm" // Service endpoint prefix API calls made to.
-	EndpointsID = ServiceName   // Service ID for Regions and Endpoints metadata.
+	ServiceName = "opsworks-cm" // Name of service.
+	EndpointsID = ServiceName   // ID to lookup a service endpoint with.
+	ServiceID   = "OpsWorksCM"  // ServiceID is a unique identifer of a specific service.
 )
 
 // New creates a new instance of the OpsWorksCM client with a session.
@@ -38,6 +39,8 @@ const (
 // aws.Config parameter to add your extra config.
 //
 // Example:
+//     mySession := session.Must(session.NewSession())
+//
 //     // Create a OpsWorksCM client from just a session.
 //     svc := opsworkscm.New(mySession)
 //
@@ -45,21 +48,23 @@ const (
 //     svc := opsworkscm.New(mySession, aws.NewConfig().WithRegion("us-west-2"))
 func New(p client.ConfigProvider, cfgs ...*aws.Config) *OpsWorksCM {
 	c := p.ClientConfig(EndpointsID, cfgs...)
-	return newClient(*c.Config, c.Handlers, c.Endpoint, c.SigningRegion, c.SigningName)
+	if c.SigningNameDerived || len(c.SigningName) == 0 {
+		c.SigningName = "opsworks-cm"
+	}
+	return newClient(*c.Config, c.Handlers, c.PartitionID, c.Endpoint, c.SigningRegion, c.SigningName)
 }
 
 // newClient creates, initializes and returns a new service client instance.
-func newClient(cfg aws.Config, handlers request.Handlers, endpoint, signingRegion, signingName string) *OpsWorksCM {
-	if len(signingName) == 0 {
-		signingName = "opsworks-cm"
-	}
+func newClient(cfg aws.Config, handlers request.Handlers, partitionID, endpoint, signingRegion, signingName string) *OpsWorksCM {
 	svc := &OpsWorksCM{
 		Client: client.New(
 			cfg,
 			metadata.ClientInfo{
 				ServiceName:   ServiceName,
+				ServiceID:     ServiceID,
 				SigningName:   signingName,
 				SigningRegion: signingRegion,
+				PartitionID:   partitionID,
 				Endpoint:      endpoint,
 				APIVersion:    "2016-11-01",
 				JSONVersion:   "1.1",

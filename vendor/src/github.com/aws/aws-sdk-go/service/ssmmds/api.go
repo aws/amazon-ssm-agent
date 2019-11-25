@@ -14,8 +14,8 @@ const opAcknowledgeMessage = "AcknowledgeMessage"
 
 // AcknowledgeMessageRequest generates a "aws/request.Request" representing the
 // client's request for the AcknowledgeMessage operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value will be populated with the request's response once the request completes
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -35,7 +35,7 @@ const opAcknowledgeMessage = "AcknowledgeMessage"
 //        fmt.Println(resp)
 //    }
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/mds-2015-06-19/AcknowledgeMessage
+// See also, https://docs.aws.amazon.com/goto/WebAPI/mds-2015-06-19/AcknowledgeMessage
 func (c *SSMMDS) AcknowledgeMessageRequest(input *AcknowledgeMessageInput) (req *request.Request, output *AcknowledgeMessageOutput) {
 	op := &request.Operation{
 		Name:       opAcknowledgeMessage,
@@ -49,8 +49,7 @@ func (c *SSMMDS) AcknowledgeMessageRequest(input *AcknowledgeMessageInput) (req 
 
 	output = &AcknowledgeMessageOutput{}
 	req = c.newRequest(op, input, output)
-	req.Handlers.Unmarshal.Remove(jsonrpc.UnmarshalHandler)
-	req.Handlers.Unmarshal.PushBackNamed(protocol.UnmarshalDiscardBodyHandler)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -72,7 +71,7 @@ func (c *SSMMDS) AcknowledgeMessageRequest(input *AcknowledgeMessageInput) (req 
 //
 //   * ErrCodeInternalServerException "InternalServerException"
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/mds-2015-06-19/AcknowledgeMessage
+// See also, https://docs.aws.amazon.com/goto/WebAPI/mds-2015-06-19/AcknowledgeMessage
 func (c *SSMMDS) AcknowledgeMessage(input *AcknowledgeMessageInput) (*AcknowledgeMessageOutput, error) {
 	req, out := c.AcknowledgeMessageRequest(input)
 	return out, req.Send()
@@ -98,8 +97,8 @@ const opDeleteMessage = "DeleteMessage"
 
 // DeleteMessageRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteMessage operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value will be populated with the request's response once the request completes
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -119,7 +118,7 @@ const opDeleteMessage = "DeleteMessage"
 //        fmt.Println(resp)
 //    }
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/mds-2015-06-19/DeleteMessage
+// See also, https://docs.aws.amazon.com/goto/WebAPI/mds-2015-06-19/DeleteMessage
 func (c *SSMMDS) DeleteMessageRequest(input *DeleteMessageInput) (req *request.Request, output *DeleteMessageOutput) {
 	op := &request.Operation{
 		Name:       opDeleteMessage,
@@ -133,8 +132,7 @@ func (c *SSMMDS) DeleteMessageRequest(input *DeleteMessageInput) (req *request.R
 
 	output = &DeleteMessageOutput{}
 	req = c.newRequest(op, input, output)
-	req.Handlers.Unmarshal.Remove(jsonrpc.UnmarshalHandler)
-	req.Handlers.Unmarshal.PushBackNamed(protocol.UnmarshalDiscardBodyHandler)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -156,7 +154,7 @@ func (c *SSMMDS) DeleteMessageRequest(input *DeleteMessageInput) (req *request.R
 //
 //   * ErrCodeInternalServerException "InternalServerException"
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/mds-2015-06-19/DeleteMessage
+// See also, https://docs.aws.amazon.com/goto/WebAPI/mds-2015-06-19/DeleteMessage
 func (c *SSMMDS) DeleteMessage(input *DeleteMessageInput) (*DeleteMessageOutput, error) {
 	req, out := c.DeleteMessageRequest(input)
 	return out, req.Send()
@@ -182,8 +180,8 @@ const opFailMessage = "FailMessage"
 
 // FailMessageRequest generates a "aws/request.Request" representing the
 // client's request for the FailMessage operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value will be populated with the request's response once the request completes
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -203,7 +201,7 @@ const opFailMessage = "FailMessage"
 //        fmt.Println(resp)
 //    }
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/mds-2015-06-19/FailMessage
+// See also, https://docs.aws.amazon.com/goto/WebAPI/mds-2015-06-19/FailMessage
 func (c *SSMMDS) FailMessageRequest(input *FailMessageInput) (req *request.Request, output *FailMessageOutput) {
 	op := &request.Operation{
 		Name:       opFailMessage,
@@ -217,8 +215,7 @@ func (c *SSMMDS) FailMessageRequest(input *FailMessageInput) (req *request.Reque
 
 	output = &FailMessageOutput{}
 	req = c.newRequest(op, input, output)
-	req.Handlers.Unmarshal.Remove(jsonrpc.UnmarshalHandler)
-	req.Handlers.Unmarshal.PushBackNamed(protocol.UnmarshalDiscardBodyHandler)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -240,7 +237,7 @@ func (c *SSMMDS) FailMessageRequest(input *FailMessageInput) (req *request.Reque
 //
 //   * ErrCodeInternalServerException "InternalServerException"
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/mds-2015-06-19/FailMessage
+// See also, https://docs.aws.amazon.com/goto/WebAPI/mds-2015-06-19/FailMessage
 func (c *SSMMDS) FailMessage(input *FailMessageInput) (*FailMessageOutput, error) {
 	req, out := c.FailMessageRequest(input)
 	return out, req.Send()
@@ -266,8 +263,8 @@ const opGetEndpoint = "GetEndpoint"
 
 // GetEndpointRequest generates a "aws/request.Request" representing the
 // client's request for the GetEndpoint operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value will be populated with the request's response once the request completes
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -287,7 +284,7 @@ const opGetEndpoint = "GetEndpoint"
 //        fmt.Println(resp)
 //    }
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/mds-2015-06-19/GetEndpoint
+// See also, https://docs.aws.amazon.com/goto/WebAPI/mds-2015-06-19/GetEndpoint
 func (c *SSMMDS) GetEndpointRequest(input *GetEndpointInput) (req *request.Request, output *GetEndpointOutput) {
 	op := &request.Operation{
 		Name:       opGetEndpoint,
@@ -320,7 +317,7 @@ func (c *SSMMDS) GetEndpointRequest(input *GetEndpointInput) (req *request.Reque
 //
 //   * ErrCodeInternalServerException "InternalServerException"
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/mds-2015-06-19/GetEndpoint
+// See also, https://docs.aws.amazon.com/goto/WebAPI/mds-2015-06-19/GetEndpoint
 func (c *SSMMDS) GetEndpoint(input *GetEndpointInput) (*GetEndpointOutput, error) {
 	req, out := c.GetEndpointRequest(input)
 	return out, req.Send()
@@ -346,8 +343,8 @@ const opGetMessages = "GetMessages"
 
 // GetMessagesRequest generates a "aws/request.Request" representing the
 // client's request for the GetMessages operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value will be populated with the request's response once the request completes
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -367,7 +364,7 @@ const opGetMessages = "GetMessages"
 //        fmt.Println(resp)
 //    }
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/mds-2015-06-19/GetMessages
+// See also, https://docs.aws.amazon.com/goto/WebAPI/mds-2015-06-19/GetMessages
 func (c *SSMMDS) GetMessagesRequest(input *GetMessagesInput) (req *request.Request, output *GetMessagesOutput) {
 	op := &request.Operation{
 		Name:       opGetMessages,
@@ -404,7 +401,7 @@ func (c *SSMMDS) GetMessagesRequest(input *GetMessagesInput) (req *request.Reque
 //
 //   * ErrCodeAuthorizationFailureException "AuthorizationFailureException"
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/mds-2015-06-19/GetMessages
+// See also, https://docs.aws.amazon.com/goto/WebAPI/mds-2015-06-19/GetMessages
 func (c *SSMMDS) GetMessages(input *GetMessagesInput) (*GetMessagesOutput, error) {
 	req, out := c.GetMessagesRequest(input)
 	return out, req.Send()
@@ -430,8 +427,8 @@ const opSendReply = "SendReply"
 
 // SendReplyRequest generates a "aws/request.Request" representing the
 // client's request for the SendReply operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value will be populated with the request's response once the request completes
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -451,7 +448,7 @@ const opSendReply = "SendReply"
 //        fmt.Println(resp)
 //    }
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/mds-2015-06-19/SendReply
+// See also, https://docs.aws.amazon.com/goto/WebAPI/mds-2015-06-19/SendReply
 func (c *SSMMDS) SendReplyRequest(input *SendReplyInput) (req *request.Request, output *SendReplyOutput) {
 	op := &request.Operation{
 		Name:       opSendReply,
@@ -488,7 +485,7 @@ func (c *SSMMDS) SendReplyRequest(input *SendReplyInput) (req *request.Request, 
 //
 //   * ErrCodeInternalServerException "InternalServerException"
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/mds-2015-06-19/SendReply
+// See also, https://docs.aws.amazon.com/goto/WebAPI/mds-2015-06-19/SendReply
 func (c *SSMMDS) SendReply(input *SendReplyInput) (*SendReplyOutput, error) {
 	req, out := c.SendReplyRequest(input)
 	return out, req.Send()
@@ -510,7 +507,6 @@ func (c *SSMMDS) SendReplyWithContext(ctx aws.Context, input *SendReplyInput, op
 	return out, req.Send()
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/mds-2015-06-19/AcknowledgeMessageRequest
 type AcknowledgeMessageInput struct {
 	_ struct{} `type:"structure"`
 
@@ -550,7 +546,6 @@ func (s *AcknowledgeMessageInput) SetMessageId(v string) *AcknowledgeMessageInpu
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/mds-2015-06-19/AcknowledgeMessageOutput
 type AcknowledgeMessageOutput struct {
 	_ struct{} `type:"structure"`
 }
@@ -565,7 +560,6 @@ func (s AcknowledgeMessageOutput) GoString() string {
 	return s.String()
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/mds-2015-06-19/DeleteMessageRequest
 type DeleteMessageInput struct {
 	_ struct{} `type:"structure"`
 
@@ -605,7 +599,6 @@ func (s *DeleteMessageInput) SetMessageId(v string) *DeleteMessageInput {
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/mds-2015-06-19/DeleteMessageOutput
 type DeleteMessageOutput struct {
 	_ struct{} `type:"structure"`
 }
@@ -620,7 +613,6 @@ func (s DeleteMessageOutput) GoString() string {
 	return s.String()
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/mds-2015-06-19/DeliveryOptions
 type DeliveryOptions struct {
 	_ struct{} `type:"structure"`
 
@@ -659,7 +651,6 @@ func (s *DeliveryOptions) SetSchedulePush(v string) *DeliveryOptions {
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/mds-2015-06-19/FailMessageRequest
 type FailMessageInput struct {
 	_ struct{} `type:"structure"`
 
@@ -711,7 +702,6 @@ func (s *FailMessageInput) SetMessageId(v string) *FailMessageInput {
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/mds-2015-06-19/FailMessageOutput
 type FailMessageOutput struct {
 	_ struct{} `type:"structure"`
 }
@@ -726,7 +716,6 @@ func (s FailMessageOutput) GoString() string {
 	return s.String()
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/mds-2015-06-19/GetEndpointRequest
 type GetEndpointInput struct {
 	_ struct{} `type:"structure"`
 
@@ -766,7 +755,6 @@ func (s *GetEndpointInput) SetDestination(v string) *GetEndpointInput {
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/mds-2015-06-19/GetEndpointResponse
 type GetEndpointOutput struct {
 	_ struct{} `type:"structure"`
 
@@ -789,7 +777,6 @@ func (s *GetEndpointOutput) SetEndpoint(v string) *GetEndpointOutput {
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/mds-2015-06-19/GetMessagesRequest
 type GetMessagesInput struct {
 	_ struct{} `type:"structure"`
 
@@ -860,7 +847,6 @@ func (s *GetMessagesInput) SetVisibilityTimeoutInSeconds(v int64) *GetMessagesIn
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/mds-2015-06-19/GetMessagesResponse
 type GetMessagesOutput struct {
 	_ struct{} `type:"structure"`
 
@@ -899,7 +885,6 @@ func (s *GetMessagesOutput) SetMessagesRequestId(v string) *GetMessagesOutput {
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/mds-2015-06-19/Message
 type Message struct {
 	_ struct{} `type:"structure"`
 
@@ -970,7 +955,6 @@ func (s *Message) SetTopic(v string) *Message {
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/mds-2015-06-19/SendReplyRequest
 type SendReplyInput struct {
 	_ struct{} `type:"structure"`
 
@@ -1045,7 +1029,6 @@ func (s *SendReplyInput) SetReplyId(v string) *SendReplyInput {
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/mds-2015-06-19/SendReplyResponse
 type SendReplyOutput struct {
 	_ struct{} `type:"structure"`
 

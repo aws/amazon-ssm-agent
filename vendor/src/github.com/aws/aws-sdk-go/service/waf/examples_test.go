@@ -90,6 +90,12 @@ func ExampleWAF_CreateRule_shared00() {
 				fmt.Println(waf.ErrCodeInvalidParameterException, aerr.Error())
 			case waf.ErrCodeLimitsExceededException:
 				fmt.Println(waf.ErrCodeLimitsExceededException, aerr.Error())
+			case waf.ErrCodeTagOperationException:
+				fmt.Println(waf.ErrCodeTagOperationException, aerr.Error())
+			case waf.ErrCodeTagOperationInternalErrorException:
+				fmt.Println(waf.ErrCodeTagOperationInternalErrorException, aerr.Error())
+			case waf.ErrCodeBadRequestException:
+				fmt.Println(waf.ErrCodeBadRequestException, aerr.Error())
 			default:
 				fmt.Println(aerr.Error())
 			}
@@ -214,6 +220,12 @@ func ExampleWAF_CreateWebACL_shared00() {
 				fmt.Println(waf.ErrCodeInvalidParameterException, aerr.Error())
 			case waf.ErrCodeLimitsExceededException:
 				fmt.Println(waf.ErrCodeLimitsExceededException, aerr.Error())
+			case waf.ErrCodeTagOperationException:
+				fmt.Println(waf.ErrCodeTagOperationException, aerr.Error())
+			case waf.ErrCodeTagOperationInternalErrorException:
+				fmt.Println(waf.ErrCodeTagOperationInternalErrorException, aerr.Error())
+			case waf.ErrCodeBadRequestException:
+				fmt.Println(waf.ErrCodeBadRequestException, aerr.Error())
 			default:
 				fmt.Println(aerr.Error())
 			}
@@ -310,7 +322,7 @@ func ExampleWAF_DeleteByteMatchSet_shared00() {
 
 // To delete an IP set
 //
-// The following example deletes an IP match set  with the ID example1ds3t-46da-4fdb-b8d5-abc321j569j5.
+// The following example deletes an IP match set with the ID example1ds3t-46da-4fdb-b8d5-abc321j569j5.
 func ExampleWAF_DeleteIPSet_shared00() {
 	svc := waf.New(session.New())
 	input := &waf.DeleteIPSetInput{
@@ -374,6 +386,10 @@ func ExampleWAF_DeleteRule_shared00() {
 				fmt.Println(waf.ErrCodeReferencedItemException, aerr.Error())
 			case waf.ErrCodeNonEmptyEntityException:
 				fmt.Println(waf.ErrCodeNonEmptyEntityException, aerr.Error())
+			case waf.ErrCodeTagOperationException:
+				fmt.Println(waf.ErrCodeTagOperationException, aerr.Error())
+			case waf.ErrCodeTagOperationInternalErrorException:
+				fmt.Println(waf.ErrCodeTagOperationInternalErrorException, aerr.Error())
 			default:
 				fmt.Println(aerr.Error())
 			}
@@ -390,7 +406,7 @@ func ExampleWAF_DeleteRule_shared00() {
 
 // To delete a size constraint set
 //
-// The following example deletes a size constraint set  with the ID example1ds3t-46da-4fdb-b8d5-abc321j569j5.
+// The following example deletes a size constraint set with the ID example1ds3t-46da-4fdb-b8d5-abc321j569j5.
 func ExampleWAF_DeleteSizeConstraintSet_shared00() {
 	svc := waf.New(session.New())
 	input := &waf.DeleteSizeConstraintSetInput{
@@ -430,7 +446,7 @@ func ExampleWAF_DeleteSizeConstraintSet_shared00() {
 
 // To delete a SQL injection match set
 //
-// The following example deletes a SQL injection match set  with the ID example1ds3t-46da-4fdb-b8d5-abc321j569j5.
+// The following example deletes a SQL injection match set with the ID example1ds3t-46da-4fdb-b8d5-abc321j569j5.
 func ExampleWAF_DeleteSqlInjectionMatchSet_shared00() {
 	svc := waf.New(session.New())
 	input := &waf.DeleteSqlInjectionMatchSetInput{
@@ -494,6 +510,10 @@ func ExampleWAF_DeleteWebACL_shared00() {
 				fmt.Println(waf.ErrCodeReferencedItemException, aerr.Error())
 			case waf.ErrCodeNonEmptyEntityException:
 				fmt.Println(waf.ErrCodeNonEmptyEntityException, aerr.Error())
+			case waf.ErrCodeTagOperationException:
+				fmt.Println(waf.ErrCodeTagOperationException, aerr.Error())
+			case waf.ErrCodeTagOperationInternalErrorException:
+				fmt.Println(waf.ErrCodeTagOperationInternalErrorException, aerr.Error())
 			default:
 				fmt.Println(aerr.Error())
 			}
@@ -717,8 +737,8 @@ func ExampleWAF_GetSampledRequests_shared00() {
 		MaxItems: aws.Int64(100),
 		RuleId:   aws.String("WAFRule-1-Example"),
 		TimeWindow: &waf.TimeWindow{
-			EndTime:   parseTime("2006-01-02T15:04:05Z", "2016-09-27T15:50Z"),
-			StartTime: parseTime("2006-01-02T15:04:05Z", "2016-09-27T15:50Z"),
+			EndTime:   parseTime("2006-01-02T15:04:05.999999999Z", "2016-09-27T15:50Z"),
+			StartTime: parseTime("2006-01-02T15:04:05.999999999Z", "2016-09-27T15:50Z"),
 		},
 		WebAclId: aws.String("createwebacl-1472061481310"),
 	}
@@ -1077,6 +1097,15 @@ func ExampleWAF_UpdateByteMatchSet_shared00() {
 		Updates: []*waf.ByteMatchSetUpdate{
 			{
 				Action: aws.String("DELETE"),
+				ByteMatchTuple: &waf.ByteMatchTuple{
+					FieldToMatch: &waf.FieldToMatch{
+						Data: aws.String("referer"),
+						Type: aws.String("HEADER"),
+					},
+					PositionalConstraint: aws.String("CONTAINS"),
+					TargetString:         []byte("badrefer1"),
+					TextTransformation:   aws.String("NONE"),
+				},
 			},
 		},
 	}
@@ -1127,6 +1156,10 @@ func ExampleWAF_UpdateIPSet_shared00() {
 		Updates: []*waf.IPSetUpdate{
 			{
 				Action: aws.String("DELETE"),
+				IPSetDescriptor: &waf.IPSetDescriptor{
+					Type:  aws.String("IPV4"),
+					Value: aws.String("192.0.2.44/32"),
+				},
 			},
 		},
 	}
@@ -1178,6 +1211,11 @@ func ExampleWAF_UpdateRule_shared00() {
 		Updates: []*waf.RuleUpdate{
 			{
 				Action: aws.String("DELETE"),
+				Predicate: &waf.Predicate{
+					DataId:  aws.String("MyByteMatchSetID"),
+					Negated: aws.Bool(false),
+					Type:    aws.String("ByteMatch"),
+				},
 			},
 		},
 	}
@@ -1230,6 +1268,14 @@ func ExampleWAF_UpdateSizeConstraintSet_shared00() {
 		Updates: []*waf.SizeConstraintSetUpdate{
 			{
 				Action: aws.String("DELETE"),
+				SizeConstraint: &waf.SizeConstraint{
+					ComparisonOperator: aws.String("GT"),
+					FieldToMatch: &waf.FieldToMatch{
+						Type: aws.String("QUERY_STRING"),
+					},
+					Size:               aws.Int64(0),
+					TextTransformation: aws.String("NONE"),
+				},
 			},
 		},
 	}
@@ -1282,6 +1328,12 @@ func ExampleWAF_UpdateSqlInjectionMatchSet_shared00() {
 		Updates: []*waf.SqlInjectionMatchSetUpdate{
 			{
 				Action: aws.String("DELETE"),
+				SqlInjectionMatchTuple: &waf.SqlInjectionMatchTuple{
+					FieldToMatch: &waf.FieldToMatch{
+						Type: aws.String("QUERY_STRING"),
+					},
+					TextTransformation: aws.String("URL_DECODE"),
+				},
 			},
 		},
 	}
@@ -1333,6 +1385,13 @@ func ExampleWAF_UpdateWebACL_shared00() {
 		Updates: []*waf.WebACLUpdate{
 			{
 				Action: aws.String("DELETE"),
+				ActivatedRule: &waf.ActivatedRule{
+					Action: &waf.WafAction{
+						Type: aws.String("ALLOW"),
+					},
+					Priority: aws.Int64(1),
+					RuleId:   aws.String("WAFRule-1-Example"),
+				},
 			},
 		},
 		WebACLId: aws.String("webacl-1472061481310"),
@@ -1360,6 +1419,8 @@ func ExampleWAF_UpdateWebACL_shared00() {
 				fmt.Println(waf.ErrCodeReferencedItemException, aerr.Error())
 			case waf.ErrCodeLimitsExceededException:
 				fmt.Println(waf.ErrCodeLimitsExceededException, aerr.Error())
+			case waf.ErrCodeSubscriptionNotFoundException:
+				fmt.Println(waf.ErrCodeSubscriptionNotFoundException, aerr.Error())
 			default:
 				fmt.Println(aerr.Error())
 			}
@@ -1385,6 +1446,12 @@ func ExampleWAF_UpdateXssMatchSet_shared00() {
 		Updates: []*waf.XssMatchSetUpdate{
 			{
 				Action: aws.String("DELETE"),
+				XssMatchTuple: &waf.XssMatchTuple{
+					FieldToMatch: &waf.FieldToMatch{
+						Type: aws.String("QUERY_STRING"),
+					},
+					TextTransformation: aws.String("URL_DECODE"),
+				},
 			},
 		},
 		XssMatchSetId: aws.String("example1ds3t-46da-4fdb-b8d5-abc321j569j5"),

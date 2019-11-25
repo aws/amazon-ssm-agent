@@ -9,14 +9,16 @@ import (
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/awsutil"
 	"github.com/aws/aws-sdk-go/aws/request"
+	"github.com/aws/aws-sdk-go/private/protocol"
+	"github.com/aws/aws-sdk-go/private/protocol/restjson"
 )
 
 const opDeleteLexicon = "DeleteLexicon"
 
 // DeleteLexiconRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteLexicon operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value will be populated with the request's response once the request completes
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -36,7 +38,7 @@ const opDeleteLexicon = "DeleteLexicon"
 //        fmt.Println(resp)
 //    }
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/polly-2016-06-10/DeleteLexicon
+// See also, https://docs.aws.amazon.com/goto/WebAPI/polly-2016-06-10/DeleteLexicon
 func (c *Polly) DeleteLexiconRequest(input *DeleteLexiconInput) (req *request.Request, output *DeleteLexiconOutput) {
 	op := &request.Operation{
 		Name:       opDeleteLexicon,
@@ -50,6 +52,7 @@ func (c *Polly) DeleteLexiconRequest(input *DeleteLexiconInput) (req *request.Re
 
 	output = &DeleteLexiconOutput{}
 	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(restjson.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -59,7 +62,7 @@ func (c *Polly) DeleteLexiconRequest(input *DeleteLexiconInput) (req *request.Re
 // which has been deleted is not available for speech synthesis, nor is it possible
 // to retrieve it using either the GetLexicon or ListLexicon APIs.
 //
-// For more information, see Managing Lexicons (http://docs.aws.amazon.com/polly/latest/dg/managing-lexicons.html).
+// For more information, see Managing Lexicons (https://docs.aws.amazon.com/polly/latest/dg/managing-lexicons.html).
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -80,7 +83,7 @@ func (c *Polly) DeleteLexiconRequest(input *DeleteLexiconInput) (req *request.Re
 //   * ErrCodeServiceFailureException "ServiceFailureException"
 //   An unknown condition has caused a service failure.
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/polly-2016-06-10/DeleteLexicon
+// See also, https://docs.aws.amazon.com/goto/WebAPI/polly-2016-06-10/DeleteLexicon
 func (c *Polly) DeleteLexicon(input *DeleteLexiconInput) (*DeleteLexiconOutput, error) {
 	req, out := c.DeleteLexiconRequest(input)
 	return out, req.Send()
@@ -106,8 +109,8 @@ const opDescribeVoices = "DescribeVoices"
 
 // DescribeVoicesRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeVoices operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value will be populated with the request's response once the request completes
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -127,7 +130,7 @@ const opDescribeVoices = "DescribeVoices"
 //        fmt.Println(resp)
 //    }
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/polly-2016-06-10/DescribeVoices
+// See also, https://docs.aws.amazon.com/goto/WebAPI/polly-2016-06-10/DescribeVoices
 func (c *Polly) DescribeVoicesRequest(input *DescribeVoicesInput) (req *request.Request, output *DescribeVoicesOutput) {
 	op := &request.Operation{
 		Name:       opDescribeVoices,
@@ -179,7 +182,7 @@ func (c *Polly) DescribeVoicesRequest(input *DescribeVoicesInput) (req *request.
 //   * ErrCodeServiceFailureException "ServiceFailureException"
 //   An unknown condition has caused a service failure.
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/polly-2016-06-10/DescribeVoices
+// See also, https://docs.aws.amazon.com/goto/WebAPI/polly-2016-06-10/DescribeVoices
 func (c *Polly) DescribeVoices(input *DescribeVoicesInput) (*DescribeVoicesOutput, error) {
 	req, out := c.DescribeVoicesRequest(input)
 	return out, req.Send()
@@ -205,8 +208,8 @@ const opGetLexicon = "GetLexicon"
 
 // GetLexiconRequest generates a "aws/request.Request" representing the
 // client's request for the GetLexicon operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value will be populated with the request's response once the request completes
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -226,7 +229,7 @@ const opGetLexicon = "GetLexicon"
 //        fmt.Println(resp)
 //    }
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/polly-2016-06-10/GetLexicon
+// See also, https://docs.aws.amazon.com/goto/WebAPI/polly-2016-06-10/GetLexicon
 func (c *Polly) GetLexiconRequest(input *GetLexiconInput) (req *request.Request, output *GetLexiconOutput) {
 	op := &request.Operation{
 		Name:       opGetLexicon,
@@ -246,7 +249,7 @@ func (c *Polly) GetLexiconRequest(input *GetLexiconInput) (req *request.Request,
 // GetLexicon API operation for Amazon Polly.
 //
 // Returns the content of the specified pronunciation lexicon stored in an AWS
-// Region. For more information, see Managing Lexicons (http://docs.aws.amazon.com/polly/latest/dg/managing-lexicons.html).
+// Region. For more information, see Managing Lexicons (https://docs.aws.amazon.com/polly/latest/dg/managing-lexicons.html).
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -267,7 +270,7 @@ func (c *Polly) GetLexiconRequest(input *GetLexiconInput) (req *request.Request,
 //   * ErrCodeServiceFailureException "ServiceFailureException"
 //   An unknown condition has caused a service failure.
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/polly-2016-06-10/GetLexicon
+// See also, https://docs.aws.amazon.com/goto/WebAPI/polly-2016-06-10/GetLexicon
 func (c *Polly) GetLexicon(input *GetLexiconInput) (*GetLexiconOutput, error) {
 	req, out := c.GetLexiconRequest(input)
 	return out, req.Send()
@@ -289,12 +292,101 @@ func (c *Polly) GetLexiconWithContext(ctx aws.Context, input *GetLexiconInput, o
 	return out, req.Send()
 }
 
+const opGetSpeechSynthesisTask = "GetSpeechSynthesisTask"
+
+// GetSpeechSynthesisTaskRequest generates a "aws/request.Request" representing the
+// client's request for the GetSpeechSynthesisTask operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See GetSpeechSynthesisTask for more information on using the GetSpeechSynthesisTask
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the GetSpeechSynthesisTaskRequest method.
+//    req, resp := client.GetSpeechSynthesisTaskRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/polly-2016-06-10/GetSpeechSynthesisTask
+func (c *Polly) GetSpeechSynthesisTaskRequest(input *GetSpeechSynthesisTaskInput) (req *request.Request, output *GetSpeechSynthesisTaskOutput) {
+	op := &request.Operation{
+		Name:       opGetSpeechSynthesisTask,
+		HTTPMethod: "GET",
+		HTTPPath:   "/v1/synthesisTasks/{TaskId}",
+	}
+
+	if input == nil {
+		input = &GetSpeechSynthesisTaskInput{}
+	}
+
+	output = &GetSpeechSynthesisTaskOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// GetSpeechSynthesisTask API operation for Amazon Polly.
+//
+// Retrieves a specific SpeechSynthesisTask object based on its TaskID. This
+// object contains information about the given speech synthesis task, including
+// the status of the task, and a link to the S3 bucket containing the output
+// of the task.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Polly's
+// API operation GetSpeechSynthesisTask for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeInvalidTaskIdException "InvalidTaskIdException"
+//   The provided Task ID is not valid. Please provide a valid Task ID and try
+//   again.
+//
+//   * ErrCodeServiceFailureException "ServiceFailureException"
+//   An unknown condition has caused a service failure.
+//
+//   * ErrCodeSynthesisTaskNotFoundException "SynthesisTaskNotFoundException"
+//   The Speech Synthesis task with requested Task ID cannot be found.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/polly-2016-06-10/GetSpeechSynthesisTask
+func (c *Polly) GetSpeechSynthesisTask(input *GetSpeechSynthesisTaskInput) (*GetSpeechSynthesisTaskOutput, error) {
+	req, out := c.GetSpeechSynthesisTaskRequest(input)
+	return out, req.Send()
+}
+
+// GetSpeechSynthesisTaskWithContext is the same as GetSpeechSynthesisTask with the addition of
+// the ability to pass a context and additional request options.
+//
+// See GetSpeechSynthesisTask for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Polly) GetSpeechSynthesisTaskWithContext(ctx aws.Context, input *GetSpeechSynthesisTaskInput, opts ...request.Option) (*GetSpeechSynthesisTaskOutput, error) {
+	req, out := c.GetSpeechSynthesisTaskRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opListLexicons = "ListLexicons"
 
 // ListLexiconsRequest generates a "aws/request.Request" representing the
 // client's request for the ListLexicons operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value will be populated with the request's response once the request completes
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -314,7 +406,7 @@ const opListLexicons = "ListLexicons"
 //        fmt.Println(resp)
 //    }
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/polly-2016-06-10/ListLexicons
+// See also, https://docs.aws.amazon.com/goto/WebAPI/polly-2016-06-10/ListLexicons
 func (c *Polly) ListLexiconsRequest(input *ListLexiconsInput) (req *request.Request, output *ListLexiconsOutput) {
 	op := &request.Operation{
 		Name:       opListLexicons,
@@ -334,7 +426,7 @@ func (c *Polly) ListLexiconsRequest(input *ListLexiconsInput) (req *request.Requ
 // ListLexicons API operation for Amazon Polly.
 //
 // Returns a list of pronunciation lexicons stored in an AWS Region. For more
-// information, see Managing Lexicons (http://docs.aws.amazon.com/polly/latest/dg/managing-lexicons.html).
+// information, see Managing Lexicons (https://docs.aws.amazon.com/polly/latest/dg/managing-lexicons.html).
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -351,7 +443,7 @@ func (c *Polly) ListLexiconsRequest(input *ListLexiconsInput) (req *request.Requ
 //   * ErrCodeServiceFailureException "ServiceFailureException"
 //   An unknown condition has caused a service failure.
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/polly-2016-06-10/ListLexicons
+// See also, https://docs.aws.amazon.com/goto/WebAPI/polly-2016-06-10/ListLexicons
 func (c *Polly) ListLexicons(input *ListLexiconsInput) (*ListLexiconsOutput, error) {
 	req, out := c.ListLexiconsRequest(input)
 	return out, req.Send()
@@ -373,12 +465,155 @@ func (c *Polly) ListLexiconsWithContext(ctx aws.Context, input *ListLexiconsInpu
 	return out, req.Send()
 }
 
+const opListSpeechSynthesisTasks = "ListSpeechSynthesisTasks"
+
+// ListSpeechSynthesisTasksRequest generates a "aws/request.Request" representing the
+// client's request for the ListSpeechSynthesisTasks operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ListSpeechSynthesisTasks for more information on using the ListSpeechSynthesisTasks
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the ListSpeechSynthesisTasksRequest method.
+//    req, resp := client.ListSpeechSynthesisTasksRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/polly-2016-06-10/ListSpeechSynthesisTasks
+func (c *Polly) ListSpeechSynthesisTasksRequest(input *ListSpeechSynthesisTasksInput) (req *request.Request, output *ListSpeechSynthesisTasksOutput) {
+	op := &request.Operation{
+		Name:       opListSpeechSynthesisTasks,
+		HTTPMethod: "GET",
+		HTTPPath:   "/v1/synthesisTasks",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"NextToken"},
+			OutputTokens:    []string{"NextToken"},
+			LimitToken:      "MaxResults",
+			TruncationToken: "",
+		},
+	}
+
+	if input == nil {
+		input = &ListSpeechSynthesisTasksInput{}
+	}
+
+	output = &ListSpeechSynthesisTasksOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ListSpeechSynthesisTasks API operation for Amazon Polly.
+//
+// Returns a list of SpeechSynthesisTask objects ordered by their creation date.
+// This operation can filter the tasks by their status, for example, allowing
+// users to list only tasks that are completed.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Polly's
+// API operation ListSpeechSynthesisTasks for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeInvalidNextTokenException "InvalidNextTokenException"
+//   The NextToken is invalid. Verify that it's spelled correctly, and then try
+//   again.
+//
+//   * ErrCodeServiceFailureException "ServiceFailureException"
+//   An unknown condition has caused a service failure.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/polly-2016-06-10/ListSpeechSynthesisTasks
+func (c *Polly) ListSpeechSynthesisTasks(input *ListSpeechSynthesisTasksInput) (*ListSpeechSynthesisTasksOutput, error) {
+	req, out := c.ListSpeechSynthesisTasksRequest(input)
+	return out, req.Send()
+}
+
+// ListSpeechSynthesisTasksWithContext is the same as ListSpeechSynthesisTasks with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ListSpeechSynthesisTasks for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Polly) ListSpeechSynthesisTasksWithContext(ctx aws.Context, input *ListSpeechSynthesisTasksInput, opts ...request.Option) (*ListSpeechSynthesisTasksOutput, error) {
+	req, out := c.ListSpeechSynthesisTasksRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+// ListSpeechSynthesisTasksPages iterates over the pages of a ListSpeechSynthesisTasks operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See ListSpeechSynthesisTasks method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//    // Example iterating over at most 3 pages of a ListSpeechSynthesisTasks operation.
+//    pageNum := 0
+//    err := client.ListSpeechSynthesisTasksPages(params,
+//        func(page *polly.ListSpeechSynthesisTasksOutput, lastPage bool) bool {
+//            pageNum++
+//            fmt.Println(page)
+//            return pageNum <= 3
+//        })
+//
+func (c *Polly) ListSpeechSynthesisTasksPages(input *ListSpeechSynthesisTasksInput, fn func(*ListSpeechSynthesisTasksOutput, bool) bool) error {
+	return c.ListSpeechSynthesisTasksPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// ListSpeechSynthesisTasksPagesWithContext same as ListSpeechSynthesisTasksPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Polly) ListSpeechSynthesisTasksPagesWithContext(ctx aws.Context, input *ListSpeechSynthesisTasksInput, fn func(*ListSpeechSynthesisTasksOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *ListSpeechSynthesisTasksInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.ListSpeechSynthesisTasksRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	for p.Next() {
+		if !fn(p.Page().(*ListSpeechSynthesisTasksOutput), !p.HasNextPage()) {
+			break
+		}
+	}
+
+	return p.Err()
+}
+
 const opPutLexicon = "PutLexicon"
 
 // PutLexiconRequest generates a "aws/request.Request" representing the
 // client's request for the PutLexicon operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value will be populated with the request's response once the request completes
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -398,7 +633,7 @@ const opPutLexicon = "PutLexicon"
 //        fmt.Println(resp)
 //    }
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/polly-2016-06-10/PutLexicon
+// See also, https://docs.aws.amazon.com/goto/WebAPI/polly-2016-06-10/PutLexicon
 func (c *Polly) PutLexiconRequest(input *PutLexiconInput) (req *request.Request, output *PutLexiconOutput) {
 	op := &request.Operation{
 		Name:       opPutLexicon,
@@ -412,6 +647,7 @@ func (c *Polly) PutLexiconRequest(input *PutLexiconInput) (req *request.Request,
 
 	output = &PutLexiconOutput{}
 	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(restjson.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -422,7 +658,7 @@ func (c *Polly) PutLexiconRequest(input *PutLexiconInput) (req *request.Request,
 // Lexicon operations have eventual consistency, therefore, it might take some
 // time before the lexicon is available to the SynthesizeSpeech operation.
 //
-// For more information, see Managing Lexicons (http://docs.aws.amazon.com/polly/latest/dg/managing-lexicons.html).
+// For more information, see Managing Lexicons (https://docs.aws.amazon.com/polly/latest/dg/managing-lexicons.html).
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -442,7 +678,7 @@ func (c *Polly) PutLexiconRequest(input *PutLexiconInput) (req *request.Request,
 //
 //   * ErrCodeUnsupportedPlsLanguageException "UnsupportedPlsLanguageException"
 //   The language specified in the lexicon is unsupported. For a list of supported
-//   languages, see Lexicon Attributes (http://docs.aws.amazon.com/polly/latest/dg/API_LexiconAttributes.html).
+//   languages, see Lexicon Attributes (https://docs.aws.amazon.com/polly/latest/dg/API_LexiconAttributes.html).
 //
 //   * ErrCodeLexiconSizeExceededException "LexiconSizeExceededException"
 //   The maximum size of the specified lexicon would be exceeded by this operation.
@@ -456,7 +692,7 @@ func (c *Polly) PutLexiconRequest(input *PutLexiconInput) (req *request.Request,
 //   * ErrCodeServiceFailureException "ServiceFailureException"
 //   An unknown condition has caused a service failure.
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/polly-2016-06-10/PutLexicon
+// See also, https://docs.aws.amazon.com/goto/WebAPI/polly-2016-06-10/PutLexicon
 func (c *Polly) PutLexicon(input *PutLexiconInput) (*PutLexiconOutput, error) {
 	req, out := c.PutLexiconRequest(input)
 	return out, req.Send()
@@ -478,12 +714,147 @@ func (c *Polly) PutLexiconWithContext(ctx aws.Context, input *PutLexiconInput, o
 	return out, req.Send()
 }
 
+const opStartSpeechSynthesisTask = "StartSpeechSynthesisTask"
+
+// StartSpeechSynthesisTaskRequest generates a "aws/request.Request" representing the
+// client's request for the StartSpeechSynthesisTask operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See StartSpeechSynthesisTask for more information on using the StartSpeechSynthesisTask
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the StartSpeechSynthesisTaskRequest method.
+//    req, resp := client.StartSpeechSynthesisTaskRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/polly-2016-06-10/StartSpeechSynthesisTask
+func (c *Polly) StartSpeechSynthesisTaskRequest(input *StartSpeechSynthesisTaskInput) (req *request.Request, output *StartSpeechSynthesisTaskOutput) {
+	op := &request.Operation{
+		Name:       opStartSpeechSynthesisTask,
+		HTTPMethod: "POST",
+		HTTPPath:   "/v1/synthesisTasks",
+	}
+
+	if input == nil {
+		input = &StartSpeechSynthesisTaskInput{}
+	}
+
+	output = &StartSpeechSynthesisTaskOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// StartSpeechSynthesisTask API operation for Amazon Polly.
+//
+// Allows the creation of an asynchronous synthesis task, by starting a new
+// SpeechSynthesisTask. This operation requires all the standard information
+// needed for speech synthesis, plus the name of an Amazon S3 bucket for the
+// service to store the output of the synthesis task and two optional parameters
+// (OutputS3KeyPrefix and SnsTopicArn). Once the synthesis task is created,
+// this operation will return a SpeechSynthesisTask object, which will include
+// an identifier of this task as well as the current status.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Polly's
+// API operation StartSpeechSynthesisTask for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeTextLengthExceededException "TextLengthExceededException"
+//   The value of the "Text" parameter is longer than the accepted limits. For
+//   the SynthesizeSpeech API, the limit for input text is a maximum of 6000 characters
+//   total, of which no more than 3000 can be billed characters. For the StartSpeechSynthesisTask
+//   API, the maximum is 200,000 characters, of which no more than 100,000 can
+//   be billed characters. SSML tags are not counted as billed characters.
+//
+//   * ErrCodeInvalidS3BucketException "InvalidS3BucketException"
+//   The provided Amazon S3 bucket name is invalid. Please check your input with
+//   S3 bucket naming requirements and try again.
+//
+//   * ErrCodeInvalidS3KeyException "InvalidS3KeyException"
+//   The provided Amazon S3 key prefix is invalid. Please provide a valid S3 object
+//   key name.
+//
+//   * ErrCodeInvalidSampleRateException "InvalidSampleRateException"
+//   The specified sample rate is not valid.
+//
+//   * ErrCodeInvalidSnsTopicArnException "InvalidSnsTopicArnException"
+//   The provided SNS topic ARN is invalid. Please provide a valid SNS topic ARN
+//   and try again.
+//
+//   * ErrCodeInvalidSsmlException "InvalidSsmlException"
+//   The SSML you provided is invalid. Verify the SSML syntax, spelling of tags
+//   and values, and then try again.
+//
+//   * ErrCodeEngineNotSupportedException "EngineNotSupportedException"
+//   This engine is not compatible with the voice that you have designated. Choose
+//   a new voice that is compatible with the engine or change the engine and restart
+//   the operation.
+//
+//   * ErrCodeLexiconNotFoundException "LexiconNotFoundException"
+//   Amazon Polly can't find the specified lexicon. This could be caused by a
+//   lexicon that is missing, its name is misspelled or specifying a lexicon that
+//   is in a different region.
+//
+//   Verify that the lexicon exists, is in the region (see ListLexicons) and that
+//   you spelled its name is spelled correctly. Then try again.
+//
+//   * ErrCodeServiceFailureException "ServiceFailureException"
+//   An unknown condition has caused a service failure.
+//
+//   * ErrCodeMarksNotSupportedForFormatException "MarksNotSupportedForFormatException"
+//   Speech marks are not supported for the OutputFormat selected. Speech marks
+//   are only available for content in json format.
+//
+//   * ErrCodeSsmlMarksNotSupportedForTextTypeException "SsmlMarksNotSupportedForTextTypeException"
+//   SSML speech marks are not supported for plain text-type input.
+//
+//   * ErrCodeLanguageNotSupportedException "LanguageNotSupportedException"
+//   The language specified is not currently supported by Amazon Polly in this
+//   capacity.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/polly-2016-06-10/StartSpeechSynthesisTask
+func (c *Polly) StartSpeechSynthesisTask(input *StartSpeechSynthesisTaskInput) (*StartSpeechSynthesisTaskOutput, error) {
+	req, out := c.StartSpeechSynthesisTaskRequest(input)
+	return out, req.Send()
+}
+
+// StartSpeechSynthesisTaskWithContext is the same as StartSpeechSynthesisTask with the addition of
+// the ability to pass a context and additional request options.
+//
+// See StartSpeechSynthesisTask for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Polly) StartSpeechSynthesisTaskWithContext(ctx aws.Context, input *StartSpeechSynthesisTaskInput, opts ...request.Option) (*StartSpeechSynthesisTaskOutput, error) {
+	req, out := c.StartSpeechSynthesisTaskRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opSynthesizeSpeech = "SynthesizeSpeech"
 
 // SynthesizeSpeechRequest generates a "aws/request.Request" representing the
 // client's request for the SynthesizeSpeech operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value will be populated with the request's response once the request completes
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -503,7 +874,7 @@ const opSynthesizeSpeech = "SynthesizeSpeech"
 //        fmt.Println(resp)
 //    }
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/polly-2016-06-10/SynthesizeSpeech
+// See also, https://docs.aws.amazon.com/goto/WebAPI/polly-2016-06-10/SynthesizeSpeech
 func (c *Polly) SynthesizeSpeechRequest(input *SynthesizeSpeechInput) (req *request.Request, output *SynthesizeSpeechOutput) {
 	op := &request.Operation{
 		Name:       opSynthesizeSpeech,
@@ -526,7 +897,7 @@ func (c *Polly) SynthesizeSpeechRequest(input *SynthesizeSpeechInput) (req *requ
 // must be valid, well-formed SSML. Some alphabets might not be available with
 // all the voices (for example, Cyrillic might not be read at all by English
 // voices) unless phoneme mapping is used. For more information, see How it
-// Works (http://docs.aws.amazon.com/polly/latest/dg/how-text-to-speech-works.html).
+// Works (https://docs.aws.amazon.com/polly/latest/dg/how-text-to-speech-works.html).
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -537,9 +908,11 @@ func (c *Polly) SynthesizeSpeechRequest(input *SynthesizeSpeechInput) (req *requ
 //
 // Returned Error Codes:
 //   * ErrCodeTextLengthExceededException "TextLengthExceededException"
-//   The value of the "Text" parameter is longer than the accepted limits. The
-//   limit for input text is a maximum of 3000 characters total, of which no more
-//   than 1500 can be billed characters. SSML tags are not counted as billed characters.
+//   The value of the "Text" parameter is longer than the accepted limits. For
+//   the SynthesizeSpeech API, the limit for input text is a maximum of 6000 characters
+//   total, of which no more than 3000 can be billed characters. For the StartSpeechSynthesisTask
+//   API, the maximum is 200,000 characters, of which no more than 100,000 can
+//   be billed characters. SSML tags are not counted as billed characters.
 //
 //   * ErrCodeInvalidSampleRateException "InvalidSampleRateException"
 //   The specified sample rate is not valid.
@@ -566,7 +939,16 @@ func (c *Polly) SynthesizeSpeechRequest(input *SynthesizeSpeechInput) (req *requ
 //   * ErrCodeSsmlMarksNotSupportedForTextTypeException "SsmlMarksNotSupportedForTextTypeException"
 //   SSML speech marks are not supported for plain text-type input.
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/polly-2016-06-10/SynthesizeSpeech
+//   * ErrCodeLanguageNotSupportedException "LanguageNotSupportedException"
+//   The language specified is not currently supported by Amazon Polly in this
+//   capacity.
+//
+//   * ErrCodeEngineNotSupportedException "EngineNotSupportedException"
+//   This engine is not compatible with the voice that you have designated. Choose
+//   a new voice that is compatible with the engine or change the engine and restart
+//   the operation.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/polly-2016-06-10/SynthesizeSpeech
 func (c *Polly) SynthesizeSpeech(input *SynthesizeSpeechInput) (*SynthesizeSpeechOutput, error) {
 	req, out := c.SynthesizeSpeechRequest(input)
 	return out, req.Send()
@@ -588,14 +970,13 @@ func (c *Polly) SynthesizeSpeechWithContext(ctx aws.Context, input *SynthesizeSp
 	return out, req.Send()
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/polly-2016-06-10/DeleteLexiconInput
 type DeleteLexiconInput struct {
 	_ struct{} `type:"structure"`
 
 	// The name of the lexicon to delete. Must be an existing lexicon in the region.
 	//
 	// Name is a required field
-	Name *string `location:"uri" locationName:"LexiconName" type:"string" required:"true"`
+	Name *string `location:"uri" locationName:"LexiconName" type:"string" required:"true" sensitive:"true"`
 }
 
 // String returns the string representation
@@ -614,6 +995,9 @@ func (s *DeleteLexiconInput) Validate() error {
 	if s.Name == nil {
 		invalidParams.Add(request.NewErrParamRequired("Name"))
 	}
+	if s.Name != nil && len(*s.Name) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Name", 1))
+	}
 
 	if invalidParams.Len() > 0 {
 		return invalidParams
@@ -627,7 +1011,6 @@ func (s *DeleteLexiconInput) SetName(v string) *DeleteLexiconInput {
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/polly-2016-06-10/DeleteLexiconOutput
 type DeleteLexiconOutput struct {
 	_ struct{} `type:"structure"`
 }
@@ -642,9 +1025,19 @@ func (s DeleteLexiconOutput) GoString() string {
 	return s.String()
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/polly-2016-06-10/DescribeVoicesInput
 type DescribeVoicesInput struct {
 	_ struct{} `type:"structure"`
+
+	// Specifies the engine (standard or neural) used by Amazon Polly when processing
+	// input text for speech synthesis.
+	Engine *string `location:"querystring" locationName:"Engine" type:"string" enum:"Engine"`
+
+	// Boolean value indicating whether to return any bilingual voices that use
+	// the specified language as an additional language. For instance, if you request
+	// all languages that use US English (es-US), and there is an Italian voice
+	// that speaks both Italian (it-IT) and US English, that voice will be included
+	// if you specify yes but not if you specify no.
+	IncludeAdditionalLanguageCodes *bool `location:"querystring" locationName:"IncludeAdditionalLanguageCodes" type:"boolean"`
 
 	// The language identification tag (ISO 639 code for the language name-ISO 3166
 	// country code) for filtering the list of voices returned. If you don't specify
@@ -666,6 +1059,18 @@ func (s DescribeVoicesInput) GoString() string {
 	return s.String()
 }
 
+// SetEngine sets the Engine field's value.
+func (s *DescribeVoicesInput) SetEngine(v string) *DescribeVoicesInput {
+	s.Engine = &v
+	return s
+}
+
+// SetIncludeAdditionalLanguageCodes sets the IncludeAdditionalLanguageCodes field's value.
+func (s *DescribeVoicesInput) SetIncludeAdditionalLanguageCodes(v bool) *DescribeVoicesInput {
+	s.IncludeAdditionalLanguageCodes = &v
+	return s
+}
+
 // SetLanguageCode sets the LanguageCode field's value.
 func (s *DescribeVoicesInput) SetLanguageCode(v string) *DescribeVoicesInput {
 	s.LanguageCode = &v
@@ -678,7 +1083,6 @@ func (s *DescribeVoicesInput) SetNextToken(v string) *DescribeVoicesInput {
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/polly-2016-06-10/DescribeVoicesOutput
 type DescribeVoicesOutput struct {
 	_ struct{} `type:"structure"`
 
@@ -712,14 +1116,13 @@ func (s *DescribeVoicesOutput) SetVoices(v []*Voice) *DescribeVoicesOutput {
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/polly-2016-06-10/GetLexiconInput
 type GetLexiconInput struct {
 	_ struct{} `type:"structure"`
 
 	// Name of the lexicon.
 	//
 	// Name is a required field
-	Name *string `location:"uri" locationName:"LexiconName" type:"string" required:"true"`
+	Name *string `location:"uri" locationName:"LexiconName" type:"string" required:"true" sensitive:"true"`
 }
 
 // String returns the string representation
@@ -738,6 +1141,9 @@ func (s *GetLexiconInput) Validate() error {
 	if s.Name == nil {
 		invalidParams.Add(request.NewErrParamRequired("Name"))
 	}
+	if s.Name != nil && len(*s.Name) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Name", 1))
+	}
 
 	if invalidParams.Len() > 0 {
 		return invalidParams
@@ -751,7 +1157,6 @@ func (s *GetLexiconInput) SetName(v string) *GetLexiconInput {
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/polly-2016-06-10/GetLexiconOutput
 type GetLexiconOutput struct {
 	_ struct{} `type:"structure"`
 
@@ -786,9 +1191,73 @@ func (s *GetLexiconOutput) SetLexiconAttributes(v *LexiconAttributes) *GetLexico
 	return s
 }
 
+type GetSpeechSynthesisTaskInput struct {
+	_ struct{} `type:"structure"`
+
+	// The Amazon Polly generated identifier for a speech synthesis task.
+	//
+	// TaskId is a required field
+	TaskId *string `location:"uri" locationName:"TaskId" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s GetSpeechSynthesisTaskInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s GetSpeechSynthesisTaskInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GetSpeechSynthesisTaskInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "GetSpeechSynthesisTaskInput"}
+	if s.TaskId == nil {
+		invalidParams.Add(request.NewErrParamRequired("TaskId"))
+	}
+	if s.TaskId != nil && len(*s.TaskId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("TaskId", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetTaskId sets the TaskId field's value.
+func (s *GetSpeechSynthesisTaskInput) SetTaskId(v string) *GetSpeechSynthesisTaskInput {
+	s.TaskId = &v
+	return s
+}
+
+type GetSpeechSynthesisTaskOutput struct {
+	_ struct{} `type:"structure"`
+
+	// SynthesisTask object that provides information from the requested task, including
+	// output format, creation time, task status, and so on.
+	SynthesisTask *SynthesisTask `type:"structure"`
+}
+
+// String returns the string representation
+func (s GetSpeechSynthesisTaskOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s GetSpeechSynthesisTaskOutput) GoString() string {
+	return s.String()
+}
+
+// SetSynthesisTask sets the SynthesisTask field's value.
+func (s *GetSpeechSynthesisTaskOutput) SetSynthesisTask(v *SynthesisTask) *GetSpeechSynthesisTaskOutput {
+	s.SynthesisTask = v
+	return s
+}
+
 // Provides lexicon name and lexicon content in string format. For more information,
 // see Pronunciation Lexicon Specification (PLS) Version 1.0 (https://www.w3.org/TR/pronunciation-lexicon/).
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/polly-2016-06-10/Lexicon
 type Lexicon struct {
 	_ struct{} `type:"structure"`
 
@@ -797,7 +1266,7 @@ type Lexicon struct {
 	Content *string `type:"string"`
 
 	// Name of the lexicon.
-	Name *string `type:"string"`
+	Name *string `type:"string" sensitive:"true"`
 }
 
 // String returns the string representation
@@ -823,8 +1292,7 @@ func (s *Lexicon) SetName(v string) *Lexicon {
 }
 
 // Contains metadata describing the lexicon such as the number of lexemes, language
-// code, and so on. For more information, see Managing Lexicons (http://docs.aws.amazon.com/polly/latest/dg/managing-lexicons.html).
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/polly-2016-06-10/LexiconAttributes
+// code, and so on. For more information, see Managing Lexicons (https://docs.aws.amazon.com/polly/latest/dg/managing-lexicons.html).
 type LexiconAttributes struct {
 	_ struct{} `type:"structure"`
 
@@ -837,7 +1305,7 @@ type LexiconAttributes struct {
 	LanguageCode *string `type:"string" enum:"LanguageCode"`
 
 	// Date lexicon was last modified (a timestamp value).
-	LastModified *time.Time `type:"timestamp" timestampFormat:"unix"`
+	LastModified *time.Time `type:"timestamp"`
 
 	// Number of lexemes in the lexicon.
 	LexemesCount *int64 `type:"integer"`
@@ -896,7 +1364,6 @@ func (s *LexiconAttributes) SetSize(v int64) *LexiconAttributes {
 }
 
 // Describes the content of the lexicon.
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/polly-2016-06-10/LexiconDescription
 type LexiconDescription struct {
 	_ struct{} `type:"structure"`
 
@@ -904,7 +1371,7 @@ type LexiconDescription struct {
 	Attributes *LexiconAttributes `type:"structure"`
 
 	// Name of the lexicon.
-	Name *string `type:"string"`
+	Name *string `type:"string" sensitive:"true"`
 }
 
 // String returns the string representation
@@ -929,7 +1396,6 @@ func (s *LexiconDescription) SetName(v string) *LexiconDescription {
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/polly-2016-06-10/ListLexiconsInput
 type ListLexiconsInput struct {
 	_ struct{} `type:"structure"`
 
@@ -954,7 +1420,6 @@ func (s *ListLexiconsInput) SetNextToken(v string) *ListLexiconsInput {
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/polly-2016-06-10/ListLexiconsOutput
 type ListLexiconsOutput struct {
 	_ struct{} `type:"structure"`
 
@@ -988,7 +1453,96 @@ func (s *ListLexiconsOutput) SetNextToken(v string) *ListLexiconsOutput {
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/polly-2016-06-10/PutLexiconInput
+type ListSpeechSynthesisTasksInput struct {
+	_ struct{} `type:"structure"`
+
+	// Maximum number of speech synthesis tasks returned in a List operation.
+	MaxResults *int64 `location:"querystring" locationName:"MaxResults" min:"1" type:"integer"`
+
+	// The pagination token to use in the next request to continue the listing of
+	// speech synthesis tasks.
+	NextToken *string `location:"querystring" locationName:"NextToken" type:"string"`
+
+	// Status of the speech synthesis tasks returned in a List operation
+	Status *string `location:"querystring" locationName:"Status" type:"string" enum:"TaskStatus"`
+}
+
+// String returns the string representation
+func (s ListSpeechSynthesisTasksInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListSpeechSynthesisTasksInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListSpeechSynthesisTasksInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListSpeechSynthesisTasksInput"}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *ListSpeechSynthesisTasksInput) SetMaxResults(v int64) *ListSpeechSynthesisTasksInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListSpeechSynthesisTasksInput) SetNextToken(v string) *ListSpeechSynthesisTasksInput {
+	s.NextToken = &v
+	return s
+}
+
+// SetStatus sets the Status field's value.
+func (s *ListSpeechSynthesisTasksInput) SetStatus(v string) *ListSpeechSynthesisTasksInput {
+	s.Status = &v
+	return s
+}
+
+type ListSpeechSynthesisTasksOutput struct {
+	_ struct{} `type:"structure"`
+
+	// An opaque pagination token returned from the previous List operation in this
+	// request. If present, this indicates where to continue the listing.
+	NextToken *string `type:"string"`
+
+	// List of SynthesisTask objects that provides information from the specified
+	// task in the list request, including output format, creation time, task status,
+	// and so on.
+	SynthesisTasks []*SynthesisTask `type:"list"`
+}
+
+// String returns the string representation
+func (s ListSpeechSynthesisTasksOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListSpeechSynthesisTasksOutput) GoString() string {
+	return s.String()
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListSpeechSynthesisTasksOutput) SetNextToken(v string) *ListSpeechSynthesisTasksOutput {
+	s.NextToken = &v
+	return s
+}
+
+// SetSynthesisTasks sets the SynthesisTasks field's value.
+func (s *ListSpeechSynthesisTasksOutput) SetSynthesisTasks(v []*SynthesisTask) *ListSpeechSynthesisTasksOutput {
+	s.SynthesisTasks = v
+	return s
+}
+
 type PutLexiconInput struct {
 	_ struct{} `type:"structure"`
 
@@ -1002,7 +1556,7 @@ type PutLexiconInput struct {
 	// long.
 	//
 	// Name is a required field
-	Name *string `location:"uri" locationName:"LexiconName" type:"string" required:"true"`
+	Name *string `location:"uri" locationName:"LexiconName" type:"string" required:"true" sensitive:"true"`
 }
 
 // String returns the string representation
@@ -1024,6 +1578,9 @@ func (s *PutLexiconInput) Validate() error {
 	if s.Name == nil {
 		invalidParams.Add(request.NewErrParamRequired("Name"))
 	}
+	if s.Name != nil && len(*s.Name) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Name", 1))
+	}
 
 	if invalidParams.Len() > 0 {
 		return invalidParams
@@ -1043,7 +1600,6 @@ func (s *PutLexiconInput) SetName(v string) *PutLexiconInput {
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/polly-2016-06-10/PutLexiconOutput
 type PutLexiconOutput struct {
 	_ struct{} `type:"structure"`
 }
@@ -1058,14 +1614,28 @@ func (s PutLexiconOutput) GoString() string {
 	return s.String()
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/polly-2016-06-10/SynthesizeSpeechInput
-type SynthesizeSpeechInput struct {
+type StartSpeechSynthesisTaskInput struct {
 	_ struct{} `type:"structure"`
+
+	// Specifies the engine (standard or neural) for Amazon Polly to use when processing
+	// input text for speech synthesis. Using a voice that is not supported for
+	// the engine selected will result in an error.
+	Engine *string `type:"string" enum:"Engine"`
+
+	// Optional language code for the Speech Synthesis request. This is only necessary
+	// if using a bilingual voice, such as Aditi, which can be used for either Indian
+	// English (en-IN) or Hindi (hi-IN).
+	//
+	// If a bilingual voice is used and no language code is specified, Amazon Polly
+	// will use the default language of the bilingual voice. The default language
+	// for any voice is the one returned by the DescribeVoices (https://docs.aws.amazon.com/polly/latest/dg/API_DescribeVoices.html)
+	// operation for the LanguageCode parameter. For example, if no language code
+	// is specified, Aditi will use Indian English rather than Hindi.
+	LanguageCode *string `type:"string" enum:"LanguageCode"`
 
 	// List of one or more pronunciation lexicon names you want the service to apply
 	// during synthesis. Lexicons are applied only if the language of the lexicon
-	// is the same as the language of the voice. For information about storing lexicons,
-	// see PutLexicon (http://docs.aws.amazon.com/polly/latest/dg/API_PutLexicon.html).
+	// is the same as the language of the voice.
 	LexiconNames []*string `type:"list"`
 
 	// The format in which the returned output will be encoded. For audio stream,
@@ -1074,10 +1644,385 @@ type SynthesizeSpeechInput struct {
 	// OutputFormat is a required field
 	OutputFormat *string `type:"string" required:"true" enum:"OutputFormat"`
 
+	// Amazon S3 bucket name to which the output file will be saved.
+	//
+	// OutputS3BucketName is a required field
+	OutputS3BucketName *string `type:"string" required:"true"`
+
+	// The Amazon S3 key prefix for the output speech file.
+	OutputS3KeyPrefix *string `type:"string"`
+
 	// The audio frequency specified in Hz.
 	//
-	// The valid values for mp3 and ogg_vorbis are "8000", "16000", and "22050".
-	// The default value is "22050".
+	// The valid values for mp3 and ogg_vorbis are "8000", "16000", "22050", and
+	// "24000". The default value for standard voices is "22050". The default value
+	// for neural voices is "24000".
+	//
+	// Valid values for pcm are "8000" and "16000" The default value is "16000".
+	SampleRate *string `type:"string"`
+
+	// ARN for the SNS topic optionally used for providing status notification for
+	// a speech synthesis task.
+	SnsTopicArn *string `type:"string"`
+
+	// The type of speech marks returned for the input text.
+	SpeechMarkTypes []*string `type:"list"`
+
+	// The input text to synthesize. If you specify ssml as the TextType, follow
+	// the SSML format for the input text.
+	//
+	// Text is a required field
+	Text *string `type:"string" required:"true"`
+
+	// Specifies whether the input text is plain text or SSML. The default value
+	// is plain text.
+	TextType *string `type:"string" enum:"TextType"`
+
+	// Voice ID to use for the synthesis.
+	//
+	// VoiceId is a required field
+	VoiceId *string `type:"string" required:"true" enum:"VoiceId"`
+}
+
+// String returns the string representation
+func (s StartSpeechSynthesisTaskInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s StartSpeechSynthesisTaskInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *StartSpeechSynthesisTaskInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "StartSpeechSynthesisTaskInput"}
+	if s.OutputFormat == nil {
+		invalidParams.Add(request.NewErrParamRequired("OutputFormat"))
+	}
+	if s.OutputS3BucketName == nil {
+		invalidParams.Add(request.NewErrParamRequired("OutputS3BucketName"))
+	}
+	if s.Text == nil {
+		invalidParams.Add(request.NewErrParamRequired("Text"))
+	}
+	if s.VoiceId == nil {
+		invalidParams.Add(request.NewErrParamRequired("VoiceId"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetEngine sets the Engine field's value.
+func (s *StartSpeechSynthesisTaskInput) SetEngine(v string) *StartSpeechSynthesisTaskInput {
+	s.Engine = &v
+	return s
+}
+
+// SetLanguageCode sets the LanguageCode field's value.
+func (s *StartSpeechSynthesisTaskInput) SetLanguageCode(v string) *StartSpeechSynthesisTaskInput {
+	s.LanguageCode = &v
+	return s
+}
+
+// SetLexiconNames sets the LexiconNames field's value.
+func (s *StartSpeechSynthesisTaskInput) SetLexiconNames(v []*string) *StartSpeechSynthesisTaskInput {
+	s.LexiconNames = v
+	return s
+}
+
+// SetOutputFormat sets the OutputFormat field's value.
+func (s *StartSpeechSynthesisTaskInput) SetOutputFormat(v string) *StartSpeechSynthesisTaskInput {
+	s.OutputFormat = &v
+	return s
+}
+
+// SetOutputS3BucketName sets the OutputS3BucketName field's value.
+func (s *StartSpeechSynthesisTaskInput) SetOutputS3BucketName(v string) *StartSpeechSynthesisTaskInput {
+	s.OutputS3BucketName = &v
+	return s
+}
+
+// SetOutputS3KeyPrefix sets the OutputS3KeyPrefix field's value.
+func (s *StartSpeechSynthesisTaskInput) SetOutputS3KeyPrefix(v string) *StartSpeechSynthesisTaskInput {
+	s.OutputS3KeyPrefix = &v
+	return s
+}
+
+// SetSampleRate sets the SampleRate field's value.
+func (s *StartSpeechSynthesisTaskInput) SetSampleRate(v string) *StartSpeechSynthesisTaskInput {
+	s.SampleRate = &v
+	return s
+}
+
+// SetSnsTopicArn sets the SnsTopicArn field's value.
+func (s *StartSpeechSynthesisTaskInput) SetSnsTopicArn(v string) *StartSpeechSynthesisTaskInput {
+	s.SnsTopicArn = &v
+	return s
+}
+
+// SetSpeechMarkTypes sets the SpeechMarkTypes field's value.
+func (s *StartSpeechSynthesisTaskInput) SetSpeechMarkTypes(v []*string) *StartSpeechSynthesisTaskInput {
+	s.SpeechMarkTypes = v
+	return s
+}
+
+// SetText sets the Text field's value.
+func (s *StartSpeechSynthesisTaskInput) SetText(v string) *StartSpeechSynthesisTaskInput {
+	s.Text = &v
+	return s
+}
+
+// SetTextType sets the TextType field's value.
+func (s *StartSpeechSynthesisTaskInput) SetTextType(v string) *StartSpeechSynthesisTaskInput {
+	s.TextType = &v
+	return s
+}
+
+// SetVoiceId sets the VoiceId field's value.
+func (s *StartSpeechSynthesisTaskInput) SetVoiceId(v string) *StartSpeechSynthesisTaskInput {
+	s.VoiceId = &v
+	return s
+}
+
+type StartSpeechSynthesisTaskOutput struct {
+	_ struct{} `type:"structure"`
+
+	// SynthesisTask object that provides information and attributes about a newly
+	// submitted speech synthesis task.
+	SynthesisTask *SynthesisTask `type:"structure"`
+}
+
+// String returns the string representation
+func (s StartSpeechSynthesisTaskOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s StartSpeechSynthesisTaskOutput) GoString() string {
+	return s.String()
+}
+
+// SetSynthesisTask sets the SynthesisTask field's value.
+func (s *StartSpeechSynthesisTaskOutput) SetSynthesisTask(v *SynthesisTask) *StartSpeechSynthesisTaskOutput {
+	s.SynthesisTask = v
+	return s
+}
+
+// SynthesisTask object that provides information about a speech synthesis task.
+type SynthesisTask struct {
+	_ struct{} `type:"structure"`
+
+	// Timestamp for the time the synthesis task was started.
+	CreationTime *time.Time `type:"timestamp"`
+
+	// Specifies the engine (standard or neural) for Amazon Polly to use when processing
+	// input text for speech synthesis. Using a voice that is not supported for
+	// the engine selected will result in an error.
+	Engine *string `type:"string" enum:"Engine"`
+
+	// Optional language code for a synthesis task. This is only necessary if using
+	// a bilingual voice, such as Aditi, which can be used for either Indian English
+	// (en-IN) or Hindi (hi-IN).
+	//
+	// If a bilingual voice is used and no language code is specified, Amazon Polly
+	// will use the default language of the bilingual voice. The default language
+	// for any voice is the one returned by the DescribeVoices (https://docs.aws.amazon.com/polly/latest/dg/API_DescribeVoices.html)
+	// operation for the LanguageCode parameter. For example, if no language code
+	// is specified, Aditi will use Indian English rather than Hindi.
+	LanguageCode *string `type:"string" enum:"LanguageCode"`
+
+	// List of one or more pronunciation lexicon names you want the service to apply
+	// during synthesis. Lexicons are applied only if the language of the lexicon
+	// is the same as the language of the voice.
+	LexiconNames []*string `type:"list"`
+
+	// The format in which the returned output will be encoded. For audio stream,
+	// this will be mp3, ogg_vorbis, or pcm. For speech marks, this will be json.
+	OutputFormat *string `type:"string" enum:"OutputFormat"`
+
+	// Pathway for the output speech file.
+	OutputUri *string `type:"string"`
+
+	// Number of billable characters synthesized.
+	RequestCharacters *int64 `type:"integer"`
+
+	// The audio frequency specified in Hz.
+	//
+	// The valid values for mp3 and ogg_vorbis are "8000", "16000", "22050", and
+	// "24000". The default value for standard voices is "22050". The default value
+	// for neural voices is "24000".
+	//
+	// Valid values for pcm are "8000" and "16000" The default value is "16000".
+	SampleRate *string `type:"string"`
+
+	// ARN for the SNS topic optionally used for providing status notification for
+	// a speech synthesis task.
+	SnsTopicArn *string `type:"string"`
+
+	// The type of speech marks returned for the input text.
+	SpeechMarkTypes []*string `type:"list"`
+
+	// The Amazon Polly generated identifier for a speech synthesis task.
+	TaskId *string `type:"string"`
+
+	// Current status of the individual speech synthesis task.
+	TaskStatus *string `type:"string" enum:"TaskStatus"`
+
+	// Reason for the current status of a specific speech synthesis task, including
+	// errors if the task has failed.
+	TaskStatusReason *string `type:"string"`
+
+	// Specifies whether the input text is plain text or SSML. The default value
+	// is plain text.
+	TextType *string `type:"string" enum:"TextType"`
+
+	// Voice ID to use for the synthesis.
+	VoiceId *string `type:"string" enum:"VoiceId"`
+}
+
+// String returns the string representation
+func (s SynthesisTask) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s SynthesisTask) GoString() string {
+	return s.String()
+}
+
+// SetCreationTime sets the CreationTime field's value.
+func (s *SynthesisTask) SetCreationTime(v time.Time) *SynthesisTask {
+	s.CreationTime = &v
+	return s
+}
+
+// SetEngine sets the Engine field's value.
+func (s *SynthesisTask) SetEngine(v string) *SynthesisTask {
+	s.Engine = &v
+	return s
+}
+
+// SetLanguageCode sets the LanguageCode field's value.
+func (s *SynthesisTask) SetLanguageCode(v string) *SynthesisTask {
+	s.LanguageCode = &v
+	return s
+}
+
+// SetLexiconNames sets the LexiconNames field's value.
+func (s *SynthesisTask) SetLexiconNames(v []*string) *SynthesisTask {
+	s.LexiconNames = v
+	return s
+}
+
+// SetOutputFormat sets the OutputFormat field's value.
+func (s *SynthesisTask) SetOutputFormat(v string) *SynthesisTask {
+	s.OutputFormat = &v
+	return s
+}
+
+// SetOutputUri sets the OutputUri field's value.
+func (s *SynthesisTask) SetOutputUri(v string) *SynthesisTask {
+	s.OutputUri = &v
+	return s
+}
+
+// SetRequestCharacters sets the RequestCharacters field's value.
+func (s *SynthesisTask) SetRequestCharacters(v int64) *SynthesisTask {
+	s.RequestCharacters = &v
+	return s
+}
+
+// SetSampleRate sets the SampleRate field's value.
+func (s *SynthesisTask) SetSampleRate(v string) *SynthesisTask {
+	s.SampleRate = &v
+	return s
+}
+
+// SetSnsTopicArn sets the SnsTopicArn field's value.
+func (s *SynthesisTask) SetSnsTopicArn(v string) *SynthesisTask {
+	s.SnsTopicArn = &v
+	return s
+}
+
+// SetSpeechMarkTypes sets the SpeechMarkTypes field's value.
+func (s *SynthesisTask) SetSpeechMarkTypes(v []*string) *SynthesisTask {
+	s.SpeechMarkTypes = v
+	return s
+}
+
+// SetTaskId sets the TaskId field's value.
+func (s *SynthesisTask) SetTaskId(v string) *SynthesisTask {
+	s.TaskId = &v
+	return s
+}
+
+// SetTaskStatus sets the TaskStatus field's value.
+func (s *SynthesisTask) SetTaskStatus(v string) *SynthesisTask {
+	s.TaskStatus = &v
+	return s
+}
+
+// SetTaskStatusReason sets the TaskStatusReason field's value.
+func (s *SynthesisTask) SetTaskStatusReason(v string) *SynthesisTask {
+	s.TaskStatusReason = &v
+	return s
+}
+
+// SetTextType sets the TextType field's value.
+func (s *SynthesisTask) SetTextType(v string) *SynthesisTask {
+	s.TextType = &v
+	return s
+}
+
+// SetVoiceId sets the VoiceId field's value.
+func (s *SynthesisTask) SetVoiceId(v string) *SynthesisTask {
+	s.VoiceId = &v
+	return s
+}
+
+type SynthesizeSpeechInput struct {
+	_ struct{} `type:"structure"`
+
+	// Specifies the engine (standard or neural) for Amazon Polly to use when processing
+	// input text for speech synthesis. Using a voice that is not supported for
+	// the engine selected will result in an error.
+	Engine *string `type:"string" enum:"Engine"`
+
+	// Optional language code for the Synthesize Speech request. This is only necessary
+	// if using a bilingual voice, such as Aditi, which can be used for either Indian
+	// English (en-IN) or Hindi (hi-IN).
+	//
+	// If a bilingual voice is used and no language code is specified, Amazon Polly
+	// will use the default language of the bilingual voice. The default language
+	// for any voice is the one returned by the DescribeVoices (https://docs.aws.amazon.com/polly/latest/dg/API_DescribeVoices.html)
+	// operation for the LanguageCode parameter. For example, if no language code
+	// is specified, Aditi will use Indian English rather than Hindi.
+	LanguageCode *string `type:"string" enum:"LanguageCode"`
+
+	// List of one or more pronunciation lexicon names you want the service to apply
+	// during synthesis. Lexicons are applied only if the language of the lexicon
+	// is the same as the language of the voice. For information about storing lexicons,
+	// see PutLexicon (https://docs.aws.amazon.com/polly/latest/dg/API_PutLexicon.html).
+	LexiconNames []*string `type:"list"`
+
+	// The format in which the returned output will be encoded. For audio stream,
+	// this will be mp3, ogg_vorbis, or pcm. For speech marks, this will be json.
+	//
+	// When pcm is used, the content returned is audio/pcm in a signed 16-bit, 1
+	// channel (mono), little-endian format.
+	//
+	// OutputFormat is a required field
+	OutputFormat *string `type:"string" required:"true" enum:"OutputFormat"`
+
+	// The audio frequency specified in Hz.
+	//
+	// The valid values for mp3 and ogg_vorbis are "8000", "16000", "22050", and
+	// "24000". The default value for standard voices is "22050". The default value
+	// for neural voices is "24000".
 	//
 	// Valid values for pcm are "8000" and "16000" The default value is "16000".
 	SampleRate *string `type:"string"`
@@ -1092,11 +2037,11 @@ type SynthesizeSpeechInput struct {
 	Text *string `type:"string" required:"true"`
 
 	// Specifies whether the input text is plain text or SSML. The default value
-	// is plain text. For more information, see Using SSML (http://docs.aws.amazon.com/polly/latest/dg/ssml.html).
+	// is plain text. For more information, see Using SSML (https://docs.aws.amazon.com/polly/latest/dg/ssml.html).
 	TextType *string `type:"string" enum:"TextType"`
 
 	// Voice ID to use for the synthesis. You can get a list of available voice
-	// IDs by calling the DescribeVoices (http://docs.aws.amazon.com/polly/latest/dg/API_DescribeVoices.html)
+	// IDs by calling the DescribeVoices (https://docs.aws.amazon.com/polly/latest/dg/API_DescribeVoices.html)
 	// operation.
 	//
 	// VoiceId is a required field
@@ -1130,6 +2075,18 @@ func (s *SynthesizeSpeechInput) Validate() error {
 		return invalidParams
 	}
 	return nil
+}
+
+// SetEngine sets the Engine field's value.
+func (s *SynthesizeSpeechInput) SetEngine(v string) *SynthesizeSpeechInput {
+	s.Engine = &v
+	return s
+}
+
+// SetLanguageCode sets the LanguageCode field's value.
+func (s *SynthesizeSpeechInput) SetLanguageCode(v string) *SynthesizeSpeechInput {
+	s.LanguageCode = &v
+	return s
 }
 
 // SetLexiconNames sets the LexiconNames field's value.
@@ -1174,7 +2131,6 @@ func (s *SynthesizeSpeechInput) SetVoiceId(v string) *SynthesizeSpeechInput {
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/polly-2016-06-10/SynthesizeSpeechOutput
 type SynthesizeSpeechOutput struct {
 	_ struct{} `type:"structure" payload:"AudioStream"`
 
@@ -1184,15 +2140,14 @@ type SynthesizeSpeechOutput struct {
 	// Specifies the type audio stream. This should reflect the OutputFormat parameter
 	// in your request.
 	//
-	//    *  If you request mp3 as the OutputFormat, the ContentType returned is
+	//    * If you request mp3 as the OutputFormat, the ContentType returned is
 	//    audio/mpeg.
 	//
-	//    *  If you request ogg_vorbis as the OutputFormat, the ContentType returned
+	//    * If you request ogg_vorbis as the OutputFormat, the ContentType returned
 	//    is audio/ogg.
 	//
-	//    *  If you request pcm as the OutputFormat, the ContentType returned is
+	//    * If you request pcm as the OutputFormat, the ContentType returned is
 	//    audio/pcm in a signed 16-bit, 1 channel (mono), little-endian format.
-	//
 	//
 	//    * If you request json as the OutputFormat, the ContentType returned is
 	//    audio/json.
@@ -1231,9 +2186,16 @@ func (s *SynthesizeSpeechOutput) SetRequestCharacters(v int64) *SynthesizeSpeech
 }
 
 // Description of the voice.
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/polly-2016-06-10/Voice
 type Voice struct {
 	_ struct{} `type:"structure"`
+
+	// Additional codes for languages available for the specified voice in addition
+	// to its default language.
+	//
+	// For example, the default language for Aditi is Indian English (en-IN) because
+	// it was first used for that language. Since Aditi is bilingual and fluent
+	// in both Indian English and Hindi, this parameter would show the code hi-IN.
+	AdditionalLanguageCodes []*string `type:"list"`
 
 	// Gender of the voice.
 	Gender *string `type:"string" enum:"Gender"`
@@ -1251,6 +2213,10 @@ type Voice struct {
 	// Name of the voice (for example, Salli, Kendra, etc.). This provides a human
 	// readable voice name that you might display in your application.
 	Name *string `type:"string"`
+
+	// Specifies which engines (standard or neural) that are supported by a given
+	// voice.
+	SupportedEngines []*string `type:"list"`
 }
 
 // String returns the string representation
@@ -1261,6 +2227,12 @@ func (s Voice) String() string {
 // GoString returns the string representation
 func (s Voice) GoString() string {
 	return s.String()
+}
+
+// SetAdditionalLanguageCodes sets the AdditionalLanguageCodes field's value.
+func (s *Voice) SetAdditionalLanguageCodes(v []*string) *Voice {
+	s.AdditionalLanguageCodes = v
+	return s
 }
 
 // SetGender sets the Gender field's value.
@@ -1293,6 +2265,20 @@ func (s *Voice) SetName(v string) *Voice {
 	return s
 }
 
+// SetSupportedEngines sets the SupportedEngines field's value.
+func (s *Voice) SetSupportedEngines(v []*string) *Voice {
+	s.SupportedEngines = v
+	return s
+}
+
+const (
+	// EngineStandard is a Engine enum value
+	EngineStandard = "standard"
+
+	// EngineNeural is a Engine enum value
+	EngineNeural = "neural"
+)
+
 const (
 	// GenderFemale is a Gender enum value
 	GenderFemale = "Female"
@@ -1302,6 +2288,12 @@ const (
 )
 
 const (
+	// LanguageCodeArb is a LanguageCode enum value
+	LanguageCodeArb = "arb"
+
+	// LanguageCodeCmnCn is a LanguageCode enum value
+	LanguageCodeCmnCn = "cmn-CN"
+
 	// LanguageCodeCyGb is a LanguageCode enum value
 	LanguageCodeCyGb = "cy-GB"
 
@@ -1329,6 +2321,9 @@ const (
 	// LanguageCodeEsEs is a LanguageCode enum value
 	LanguageCodeEsEs = "es-ES"
 
+	// LanguageCodeEsMx is a LanguageCode enum value
+	LanguageCodeEsMx = "es-MX"
+
 	// LanguageCodeEsUs is a LanguageCode enum value
 	LanguageCodeEsUs = "es-US"
 
@@ -1346,6 +2341,12 @@ const (
 
 	// LanguageCodeJaJp is a LanguageCode enum value
 	LanguageCodeJaJp = "ja-JP"
+
+	// LanguageCodeHiIn is a LanguageCode enum value
+	LanguageCodeHiIn = "hi-IN"
+
+	// LanguageCodeKoKr is a LanguageCode enum value
+	LanguageCodeKoKr = "ko-KR"
 
 	// LanguageCodeNbNo is a LanguageCode enum value
 	LanguageCodeNbNo = "nb-NO"
@@ -1404,6 +2405,20 @@ const (
 )
 
 const (
+	// TaskStatusScheduled is a TaskStatus enum value
+	TaskStatusScheduled = "scheduled"
+
+	// TaskStatusInProgress is a TaskStatus enum value
+	TaskStatusInProgress = "inProgress"
+
+	// TaskStatusCompleted is a TaskStatus enum value
+	TaskStatusCompleted = "completed"
+
+	// TaskStatusFailed is a TaskStatus enum value
+	TaskStatusFailed = "failed"
+)
+
+const (
 	// TextTypeSsml is a TextType enum value
 	TextTypeSsml = "ssml"
 
@@ -1412,44 +2427,80 @@ const (
 )
 
 const (
-	// VoiceIdGeraint is a VoiceId enum value
-	VoiceIdGeraint = "Geraint"
-
-	// VoiceIdGwyneth is a VoiceId enum value
-	VoiceIdGwyneth = "Gwyneth"
-
-	// VoiceIdMads is a VoiceId enum value
-	VoiceIdMads = "Mads"
-
-	// VoiceIdNaja is a VoiceId enum value
-	VoiceIdNaja = "Naja"
-
-	// VoiceIdHans is a VoiceId enum value
-	VoiceIdHans = "Hans"
-
-	// VoiceIdMarlene is a VoiceId enum value
-	VoiceIdMarlene = "Marlene"
-
-	// VoiceIdNicole is a VoiceId enum value
-	VoiceIdNicole = "Nicole"
-
-	// VoiceIdRussell is a VoiceId enum value
-	VoiceIdRussell = "Russell"
+	// VoiceIdAditi is a VoiceId enum value
+	VoiceIdAditi = "Aditi"
 
 	// VoiceIdAmy is a VoiceId enum value
 	VoiceIdAmy = "Amy"
 
+	// VoiceIdAstrid is a VoiceId enum value
+	VoiceIdAstrid = "Astrid"
+
+	// VoiceIdBianca is a VoiceId enum value
+	VoiceIdBianca = "Bianca"
+
 	// VoiceIdBrian is a VoiceId enum value
 	VoiceIdBrian = "Brian"
+
+	// VoiceIdCamila is a VoiceId enum value
+	VoiceIdCamila = "Camila"
+
+	// VoiceIdCarla is a VoiceId enum value
+	VoiceIdCarla = "Carla"
+
+	// VoiceIdCarmen is a VoiceId enum value
+	VoiceIdCarmen = "Carmen"
+
+	// VoiceIdCeline is a VoiceId enum value
+	VoiceIdCeline = "Celine"
+
+	// VoiceIdChantal is a VoiceId enum value
+	VoiceIdChantal = "Chantal"
+
+	// VoiceIdConchita is a VoiceId enum value
+	VoiceIdConchita = "Conchita"
+
+	// VoiceIdCristiano is a VoiceId enum value
+	VoiceIdCristiano = "Cristiano"
+
+	// VoiceIdDora is a VoiceId enum value
+	VoiceIdDora = "Dora"
 
 	// VoiceIdEmma is a VoiceId enum value
 	VoiceIdEmma = "Emma"
 
-	// VoiceIdRaveena is a VoiceId enum value
-	VoiceIdRaveena = "Raveena"
+	// VoiceIdEnrique is a VoiceId enum value
+	VoiceIdEnrique = "Enrique"
+
+	// VoiceIdEwa is a VoiceId enum value
+	VoiceIdEwa = "Ewa"
+
+	// VoiceIdFiliz is a VoiceId enum value
+	VoiceIdFiliz = "Filiz"
+
+	// VoiceIdGeraint is a VoiceId enum value
+	VoiceIdGeraint = "Geraint"
+
+	// VoiceIdGiorgio is a VoiceId enum value
+	VoiceIdGiorgio = "Giorgio"
+
+	// VoiceIdGwyneth is a VoiceId enum value
+	VoiceIdGwyneth = "Gwyneth"
+
+	// VoiceIdHans is a VoiceId enum value
+	VoiceIdHans = "Hans"
+
+	// VoiceIdInes is a VoiceId enum value
+	VoiceIdInes = "Ines"
 
 	// VoiceIdIvy is a VoiceId enum value
 	VoiceIdIvy = "Ivy"
+
+	// VoiceIdJacek is a VoiceId enum value
+	VoiceIdJacek = "Jacek"
+
+	// VoiceIdJan is a VoiceId enum value
+	VoiceIdJan = "Jan"
 
 	// VoiceIdJoanna is a VoiceId enum value
 	VoiceIdJoanna = "Joanna"
@@ -1460,53 +2511,17 @@ const (
 	// VoiceIdJustin is a VoiceId enum value
 	VoiceIdJustin = "Justin"
 
+	// VoiceIdKarl is a VoiceId enum value
+	VoiceIdKarl = "Karl"
+
 	// VoiceIdKendra is a VoiceId enum value
 	VoiceIdKendra = "Kendra"
 
 	// VoiceIdKimberly is a VoiceId enum value
 	VoiceIdKimberly = "Kimberly"
 
-	// VoiceIdMatthew is a VoiceId enum value
-	VoiceIdMatthew = "Matthew"
-
-	// VoiceIdSalli is a VoiceId enum value
-	VoiceIdSalli = "Salli"
-
-	// VoiceIdConchita is a VoiceId enum value
-	VoiceIdConchita = "Conchita"
-
-	// VoiceIdEnrique is a VoiceId enum value
-	VoiceIdEnrique = "Enrique"
-
-	// VoiceIdMiguel is a VoiceId enum value
-	VoiceIdMiguel = "Miguel"
-
-	// VoiceIdPenelope is a VoiceId enum value
-	VoiceIdPenelope = "Penelope"
-
-	// VoiceIdChantal is a VoiceId enum value
-	VoiceIdChantal = "Chantal"
-
-	// VoiceIdCeline is a VoiceId enum value
-	VoiceIdCeline = "Celine"
-
-	// VoiceIdMathieu is a VoiceId enum value
-	VoiceIdMathieu = "Mathieu"
-
-	// VoiceIdDora is a VoiceId enum value
-	VoiceIdDora = "Dora"
-
-	// VoiceIdKarl is a VoiceId enum value
-	VoiceIdKarl = "Karl"
-
-	// VoiceIdCarla is a VoiceId enum value
-	VoiceIdCarla = "Carla"
-
-	// VoiceIdGiorgio is a VoiceId enum value
-	VoiceIdGiorgio = "Giorgio"
-
-	// VoiceIdMizuki is a VoiceId enum value
-	VoiceIdMizuki = "Mizuki"
+	// VoiceIdLea is a VoiceId enum value
+	VoiceIdLea = "Lea"
 
 	// VoiceIdLiv is a VoiceId enum value
 	VoiceIdLiv = "Liv"
@@ -1514,51 +2529,81 @@ const (
 	// VoiceIdLotte is a VoiceId enum value
 	VoiceIdLotte = "Lotte"
 
-	// VoiceIdRuben is a VoiceId enum value
-	VoiceIdRuben = "Ruben"
+	// VoiceIdLucia is a VoiceId enum value
+	VoiceIdLucia = "Lucia"
 
-	// VoiceIdEwa is a VoiceId enum value
-	VoiceIdEwa = "Ewa"
+	// VoiceIdLupe is a VoiceId enum value
+	VoiceIdLupe = "Lupe"
 
-	// VoiceIdJacek is a VoiceId enum value
-	VoiceIdJacek = "Jacek"
-
-	// VoiceIdJan is a VoiceId enum value
-	VoiceIdJan = "Jan"
+	// VoiceIdMads is a VoiceId enum value
+	VoiceIdMads = "Mads"
 
 	// VoiceIdMaja is a VoiceId enum value
 	VoiceIdMaja = "Maja"
 
-	// VoiceIdRicardo is a VoiceId enum value
-	VoiceIdRicardo = "Ricardo"
+	// VoiceIdMarlene is a VoiceId enum value
+	VoiceIdMarlene = "Marlene"
 
-	// VoiceIdVitoria is a VoiceId enum value
-	VoiceIdVitoria = "Vitoria"
+	// VoiceIdMathieu is a VoiceId enum value
+	VoiceIdMathieu = "Mathieu"
 
-	// VoiceIdCristiano is a VoiceId enum value
-	VoiceIdCristiano = "Cristiano"
-
-	// VoiceIdInes is a VoiceId enum value
-	VoiceIdInes = "Ines"
-
-	// VoiceIdCarmen is a VoiceId enum value
-	VoiceIdCarmen = "Carmen"
+	// VoiceIdMatthew is a VoiceId enum value
+	VoiceIdMatthew = "Matthew"
 
 	// VoiceIdMaxim is a VoiceId enum value
 	VoiceIdMaxim = "Maxim"
 
+	// VoiceIdMia is a VoiceId enum value
+	VoiceIdMia = "Mia"
+
+	// VoiceIdMiguel is a VoiceId enum value
+	VoiceIdMiguel = "Miguel"
+
+	// VoiceIdMizuki is a VoiceId enum value
+	VoiceIdMizuki = "Mizuki"
+
+	// VoiceIdNaja is a VoiceId enum value
+	VoiceIdNaja = "Naja"
+
+	// VoiceIdNicole is a VoiceId enum value
+	VoiceIdNicole = "Nicole"
+
+	// VoiceIdPenelope is a VoiceId enum value
+	VoiceIdPenelope = "Penelope"
+
+	// VoiceIdRaveena is a VoiceId enum value
+	VoiceIdRaveena = "Raveena"
+
+	// VoiceIdRicardo is a VoiceId enum value
+	VoiceIdRicardo = "Ricardo"
+
+	// VoiceIdRuben is a VoiceId enum value
+	VoiceIdRuben = "Ruben"
+
+	// VoiceIdRussell is a VoiceId enum value
+	VoiceIdRussell = "Russell"
+
+	// VoiceIdSalli is a VoiceId enum value
+	VoiceIdSalli = "Salli"
+
+	// VoiceIdSeoyeon is a VoiceId enum value
+	VoiceIdSeoyeon = "Seoyeon"
+
+	// VoiceIdTakumi is a VoiceId enum value
+	VoiceIdTakumi = "Takumi"
+
 	// VoiceIdTatyana is a VoiceId enum value
 	VoiceIdTatyana = "Tatyana"
-
-	// VoiceIdAstrid is a VoiceId enum value
-	VoiceIdAstrid = "Astrid"
-
-	// VoiceIdFiliz is a VoiceId enum value
-	VoiceIdFiliz = "Filiz"
 
 	// VoiceIdVicki is a VoiceId enum value
 	VoiceIdVicki = "Vicki"
 
-	// VoiceIdTakumi is a VoiceId enum value
-	VoiceIdTakumi = "Takumi"
+	// VoiceIdVitoria is a VoiceId enum value
+	VoiceIdVitoria = "Vitoria"
+
+	// VoiceIdZeina is a VoiceId enum value
+	VoiceIdZeina = "Zeina"
+
+	// VoiceIdZhiyu is a VoiceId enum value
+	VoiceIdZhiyu = "Zhiyu"
 )

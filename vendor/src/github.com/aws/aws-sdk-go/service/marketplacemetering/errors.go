@@ -4,11 +4,25 @@ package marketplacemetering
 
 const (
 
+	// ErrCodeCustomerNotEntitledException for service response error code
+	// "CustomerNotEntitledException".
+	//
+	// Exception thrown when the customer does not have a valid subscription for
+	// the product.
+	ErrCodeCustomerNotEntitledException = "CustomerNotEntitledException"
+
+	// ErrCodeDisabledApiException for service response error code
+	// "DisabledApiException".
+	//
+	// The API is disabled in the Region.
+	ErrCodeDisabledApiException = "DisabledApiException"
+
 	// ErrCodeDuplicateRequestException for service response error code
 	// "DuplicateRequestException".
 	//
-	// A metering record has already been emitted by the same EC2 instance for the
-	// given {usageDimension, timestamp} with a different usageQuantity.
+	// A metering record has already been emitted by the same EC2 instance, ECS
+	// task, or EKS pod for the given {usageDimension, timestamp} with a different
+	// usageQuantity.
 	ErrCodeDuplicateRequestException = "DuplicateRequestException"
 
 	// ErrCodeExpiredTokenException for service response error code
@@ -37,9 +51,9 @@ const (
 	// ErrCodeInvalidEndpointRegionException for service response error code
 	// "InvalidEndpointRegionException".
 	//
-	// The endpoint being called is in a region different from your EC2 instance.
-	// The region of the Metering service endpoint and the region of the EC2 instance
-	// must match.
+	// The endpoint being called is in a AWS Region different from your EC2 instance,
+	// ECS task, or EKS pod. The Region of the Metering Service endpoint and the
+	// AWS Region of the resource must match.
 	ErrCodeInvalidEndpointRegionException = "InvalidEndpointRegionException"
 
 	// ErrCodeInvalidProductCodeException for service response error code
@@ -49,8 +63,24 @@ const (
 	// the product.
 	ErrCodeInvalidProductCodeException = "InvalidProductCodeException"
 
+	// ErrCodeInvalidPublicKeyVersionException for service response error code
+	// "InvalidPublicKeyVersionException".
+	//
+	// Public Key version is invalid.
+	ErrCodeInvalidPublicKeyVersionException = "InvalidPublicKeyVersionException"
+
+	// ErrCodeInvalidRegionException for service response error code
+	// "InvalidRegionException".
+	//
+	// RegisterUsage must be called in the same AWS Region the ECS task was launched
+	// in. This prevents a container from hardcoding a Region (e.g. withRegion(“us-east-1”)
+	// when calling RegisterUsage.
+	ErrCodeInvalidRegionException = "InvalidRegionException"
+
 	// ErrCodeInvalidTokenException for service response error code
 	// "InvalidTokenException".
+	//
+	// Registration token is invalid.
 	ErrCodeInvalidTokenException = "InvalidTokenException"
 
 	// ErrCodeInvalidUsageDimensionException for service response error code
@@ -60,10 +90,17 @@ const (
 	// with products.
 	ErrCodeInvalidUsageDimensionException = "InvalidUsageDimensionException"
 
+	// ErrCodePlatformNotSupportedException for service response error code
+	// "PlatformNotSupportedException".
+	//
+	// AWS Marketplace does not support metering usage from the underlying platform.
+	// Currently, only Amazon ECS is supported.
+	ErrCodePlatformNotSupportedException = "PlatformNotSupportedException"
+
 	// ErrCodeThrottlingException for service response error code
 	// "ThrottlingException".
 	//
-	// The calls to the MeterUsage API are throttled.
+	// The calls to the API are throttled.
 	ErrCodeThrottlingException = "ThrottlingException"
 
 	// ErrCodeTimestampOutOfBoundsException for service response error code
