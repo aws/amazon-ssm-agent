@@ -43,6 +43,9 @@ const PlatformRaspbian = "raspbian"
 // PlatformRedhat uses Ohai identifier for redhat platform
 const PlatformRedhat = "redhat"
 
+// PlatformOracleLinux uses Ohai identifier for oracle linux platform
+const PlatformOracleLinux = "oracle"
+
 // PlatformCentos uses Ohai identifier for centos platform
 const PlatformCentos = "centos"
 

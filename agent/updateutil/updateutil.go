@@ -91,6 +91,9 @@ const (
 	// PlatformRedHat represents RedHat
 	PlatformRedHat = "red hat"
 
+	// PlatformOracleLinux represents oracle linux
+	PlatformOracleLinux = "oracle"
+
 	// PlatformUbuntu represents Ubuntu
 	PlatformUbuntu = "ubuntu"
 
@@ -265,6 +268,11 @@ func (util *Utility) CreateInstanceContext(log log.T) (context *InstanceContext,
 		UnInstaller = UninstallScript
 	} else if strings.Contains(platformName, PlatformRedHat) {
 		platformName = PlatformRedHat
+		installerName = PlatformLinux
+		Installer = InstallScript
+		UnInstaller = UninstallScript
+	} else if strings.Contains(platformName, PlatformOracleLinux) {
+		platformName = PlatformOracleLinux
 		installerName = PlatformLinux
 		Installer = InstallScript
 		UnInstaller = UninstallScript
@@ -596,6 +604,7 @@ func getMinimumVersionForSystemD() (systemDMap *map[string]string) {
 		isUsingSystemD = make(map[string]string)
 		isUsingSystemD[PlatformCentOS] = "7"
 		isUsingSystemD[PlatformRedHat] = "7"
+		isUsingSystemD[PlatformOracleLinux] = "7"
 		isUsingSystemD[PlatformUbuntu] = "15"
 		isUsingSystemD[PlatformSuseOS] = "12"
 	})
