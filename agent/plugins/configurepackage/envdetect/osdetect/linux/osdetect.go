@@ -177,6 +177,8 @@ func parseOSreleaseFile(lines []string) (string, string, error) {
 	switch platform {
 	case "rhel":
 		platform = c.PlatformRedhat
+	case "ol":
+		platform = c.PlatformOracleLinux
 	case "amzn":
 		platform = c.PlatformAmazon
 	case "sles", "suse":
@@ -337,6 +339,7 @@ func getRedhatishPlatform(data string) (string, error) {
 		platform string
 	}{
 		{`(?i)Red Hat Enterprise Linux`, c.PlatformRedhat},
+		{`(?i)Oracle Linux`, c.PlatformOracleLinux},
 		{`(?i)CentOS( Linux)?`, c.PlatformCentos},
 		{`(?i)Fedora( Linux)?`, c.PlatformFedora},
 		{`(?i)Amazon Linux`, c.PlatformAmazon},
@@ -395,7 +398,7 @@ func platformFamilyForPlatform(platform string) (string, error) {
 	switch platform {
 	case c.PlatformUbuntu, c.PlatformDebian, c.PlatformRaspbian:
 		return c.PlatformFamilyDebian, nil
-	case c.PlatformRedhat, c.PlatformCentos, c.PlatformAmazon:
+	case c.PlatformRedhat, c.PlatformCentos, c.PlatformAmazon, c.PlatformOracleLinux:
 		return c.PlatformFamilyRhel, nil
 	case c.PlatformFedora:
 		return c.PlatformFamilyFedora, nil
