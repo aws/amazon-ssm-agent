@@ -1,5 +1,10 @@
 Latest
 ===============
+- Upgrade AWS SDK
+- Add logging for fingerprint generation 
+ 
+2.3.760.0
+===============
 - Session manager supports handling of Task metadata
 
 2.3.758.0
