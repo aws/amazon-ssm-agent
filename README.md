@@ -89,7 +89,7 @@ The following targets are available. Each may be run with `make <target>`.
 
 | Make Target              | Description |
 |:-------------------------|:------------|
-| `build`                  | *(Default)* `build` builds the agent for Linux, Darwin and Windows amd64 and 386 environments, and Linux arm and arm64 environments |
+| `build`                  | *(Default)* `build` builds the agent for Linux, Darwin and Windows amd64 and 386 environments, and Linux ARM and ARM64 environments |
 | `release`                | `release` checks code style and coverage, builds the agent and also packages it into a RPM, DEB and ZIP package |
 | `package`                | `package` packages build result into a RPM, DEB and ZIP package |
 | `pre-build`              | `pre-build` goes through Tools/src folder to make sure all the script files are executable |
