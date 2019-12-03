@@ -71,6 +71,15 @@ const (
 							}
 						}
 					}
+					function Clean-Quotes-Backslash {
+                        param ([string]$str)
+                        if($str.Substring(0,1) -eq '"' -and $str.Substring($str.length - 1) -eq '"'){
+                                $str = $str.Substring(1, $str.length - 2)
+                            }
+                        $str = $str.Replace('\', '\\')
+                        $str = $str.Replace('"', '\"')
+                        return $str
+                    }
 
 				     `
 	ArgsToReadRegistryFromProducts = `$products = Get-ItemProperty HKLM:\Software\Classes\Installer\Products\* | Select-Object  @{n="PSChildName";e={$_."PSChildName"}} |
@@ -95,7 +104,7 @@ Where-Object {($_.DisplayName -ne $null -and $_DisplayName -ne '' -and $_.Displa
 Select-Object @{n="Name";e={$_."DisplayName"}},
 	@{n="PackageId";e={$_."PSChildName"}}, @{n="Version";e={$_."DisplayVersion"}}, Publisher,
 	@{n="InstalledTime";e={[datetime]::ParseExact($_."InstallDate","yyyyMMdd",$null).ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ssZ")}} | %% { [Console]::WriteLine(@"
-{"Name":"$($_.Name)","PackageId":"$($_.PackageId)","Version":"$($_.Version)","Publisher":"$($_.Publisher)","InstalledTime":"$($_.InstalledTime)"},
+{"Name":"$(Clean-Quotes-Backslash $_.Name)","PackageId":"$($_.PackageId)","Version":"$($_.Version)","Publisher":"$(Clean-Quotes-Backslash $_.Publisher)","InstalledTime":"$($_.InstalledTime)"},
 "@)} `
 )
 
