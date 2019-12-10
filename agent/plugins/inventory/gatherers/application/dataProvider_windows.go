@@ -71,16 +71,15 @@ const (
 							}
 						}
 					}
-					function Clean-Quotes-Backslash {
-                        param ([string]$str)
-                        if($str.Substring(0,1) -eq '"' -and $str.Substring($str.length - 1) -eq '"'){
-                                $str = $str.Substring(1, $str.length - 2)
-                            }
-                        $str = $str.Replace('\', '\\')
-                        $str = $str.Replace('"', '\"')
-                        return $str
-                    }
-
+                    function Clean-Quotes-Backslash {
+                         param ([string]$str)
+                         if($str.length -ge 2 -and $str.Substring(0,1) -eq '"' -and $str.Substring($str.length - 1) -eq '"'){
+                                 $str = $str.Substring(1, $str.length - 2)
+                             }
+                         $str = $str.Replace('\', '\\')
+                         $str = $str.Replace('"', '\"')
+                         return $str
+                     }
 				     `
 	ArgsToReadRegistryFromProducts = `$products = Get-ItemProperty HKLM:\Software\Classes\Installer\Products\* | Select-Object  @{n="PSChildName";e={$_."PSChildName"}} |
 				      Select -expand PSChildName
