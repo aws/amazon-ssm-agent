@@ -20,7 +20,7 @@
       "code": 0,
       "name": "aws:runPowerShellScript",
       "status": "Skipped",
-      "output": "Step execution skipped due to incompatible platform",
+      "output": "Step execution skipped due to unsatisfied preconditions",
       "startDateTime": "2015-07-09T23:23:39.019Z",
       "endDateTime": "2015-07-09T23:23:39.023Z"
     },

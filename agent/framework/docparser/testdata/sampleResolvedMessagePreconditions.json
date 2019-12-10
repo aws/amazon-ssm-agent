@@ -1,0 +1,86 @@
+{
+  "testdata/sampleMessageWithInvalidParamPrecondition.json": {
+    "StringEquals": [
+      {
+        "InitialArgumentValue": "{{ invalidParam }}",
+        "ResolvedArgumentValue": "{{ invalidParam }}"
+      },
+      {
+        "InitialArgumentValue": "foo",
+        "ResolvedArgumentValue": "foo"
+      }
+    ]
+  },
+  "testdata/sampleMessageWithMixedPrecondition.json": {
+    "StringEquals": [
+      {
+        "InitialArgumentValue": "argument with the first {{ messagePrecondition }} and the second {{ messagePrecondition }}",
+        "ResolvedArgumentValue": "argument with the first MessagePreconditionValue and the second MessagePreconditionValue"
+      },
+      {
+        "InitialArgumentValue": "argument with the first MessagePreconditionValue and the second MessagePreconditionValue",
+        "ResolvedArgumentValue": "argument with the first MessagePreconditionValue and the second MessagePreconditionValue"
+      }
+    ]
+  },
+  "testdata/sampleMessageWithParamPrecondition.json": {
+    "StringEquals": [
+      {
+        "InitialArgumentValue": "{{ messagePrecondition }}",
+        "ResolvedArgumentValue": "MessagePreconditionValue"
+      },
+      {
+        "InitialArgumentValue": "MessagePreconditionValue",
+        "ResolvedArgumentValue": "MessagePreconditionValue"
+      }
+    ]
+  },
+  "testdata/sampleMessageWithPlatformPrecondition.json": {
+    "StringEquals": [
+      {
+        "InitialArgumentValue": "platformType",
+        "ResolvedArgumentValue": "platformType"
+      },
+      {
+        "InitialArgumentValue": "Windows",
+        "ResolvedArgumentValue": "Windows"
+      }
+    ]
+  },
+  "testdata/sampleMessageWithSecureSsmParamPrecondition.json": {
+    "StringEquals": [
+      {
+        "InitialArgumentValue": "{{ ssm-secure:param }}",
+        "ResolvedArgumentValue": "{{ ssm-secure:param }}"
+      },
+      {
+        "InitialArgumentValue": "foo",
+        "ResolvedArgumentValue": "foo"
+      }
+    ]
+  },
+  "testdata/sampleMessageWithSsmParamPrecondition.json": {
+    "StringEquals": [
+      {
+        "InitialArgumentValue": "{{ ssm:param }}",
+        "ResolvedArgumentValue": "{{ ssm:param }}"
+      },
+      {
+        "InitialArgumentValue": "foo",
+        "ResolvedArgumentValue": "foo"
+      }
+    ]
+  },
+  "testdata/sampleMessageWithTwoParamsPrecondition.json": {
+    "StringEquals": [
+      {
+        "InitialArgumentValue": "{{ messagePrecondition }}",
+        "ResolvedArgumentValue": "MessagePreconditionValue"
+      },
+      {
+        "InitialArgumentValue": "{{ messagePrecondition }}",
+        "ResolvedArgumentValue": "MessagePreconditionValue"
+      }
+    ]
+  }
+}

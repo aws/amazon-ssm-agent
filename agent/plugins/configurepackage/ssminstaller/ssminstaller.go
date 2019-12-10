@@ -159,7 +159,7 @@ func (inst *Installer) readScriptAction(action *Action, workingDir string, orche
 		BookKeepingFileName:     inst.config.BookKeepingFileName,
 		PluginName:              pluginFullName,
 		PluginID:                inst.version,
-		Preconditions:           make(map[string][]string),
+		Preconditions:           make(map[string][]contracts.PreconditionArgument),
 		IsPreconditionEnabled:   false,
 		DefaultWorkingDirectory: workingDir,
 	}

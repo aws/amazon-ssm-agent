@@ -55,6 +55,16 @@ var sampleMessageFiles = []string{
 	"testdata/sampleMessageVersion2_2.json",
 }
 
+var sampleMessageWithPreconditionFiles = []string{
+	"testdata/sampleMessageWithInvalidParamPrecondition.json",
+	"testdata/sampleMessageWithMixedPrecondition.json",
+	"testdata/sampleMessageWithParamPrecondition.json",
+	"testdata/sampleMessageWithPlatformPrecondition.json",
+	"testdata/sampleMessageWithSecureSsmParamPrecondition.json",
+	"testdata/sampleMessageWithSsmParamPrecondition.json",
+	"testdata/sampleMessageWithTwoParamsPrecondition.json",
+}
+
 func TestParseDocument_ValidRuntimeConfig(t *testing.T) {
 	mockLog := log.NewMockLog()
 
@@ -564,6 +574,54 @@ func TestParsingDocNameForVersion_InvalidVersion(t *testing.T) {
 	assert.Equal(t, docName, "AWS-RunShellScript")
 }
 
+func TestParseMessageWithPreconditions(t *testing.T) {
+	type testCase struct {
+		Input                 string
+		OutputDoc             DocContent
+		OutputParam           map[string]interface{}
+		ResolvedPreconditions map[string][]contracts.PreconditionArgument
+	}
+	mockLog := log.NewMockLog()
+
+	testParserInfo := DocumentParserInfo{
+		OrchestrationDir:  testOrchDir,
+		S3Bucket:          testS3Bucket,
+		S3Prefix:          testS3Prefix,
+		MessageId:         testMessageID,
+		DocumentId:        testDocumentID,
+		DefaultWorkingDir: testWorkingDir,
+	}
+
+	// generate test cases
+	var testCases []testCase
+	preconditions := loadPreconditionsFromFile(t)
+	t.Logf("preconditions: %v", preconditions)
+	for _, msgFileName := range sampleMessageWithPreconditionFiles {
+		outputDoc, outputParam := loadMessageFromFile(t, msgFileName)
+		fmt.Print(msgFileName)
+		testCases = append(testCases, testCase{
+			Input:                 string(loadFile(t, msgFileName)),
+			OutputDoc:             outputDoc,
+			OutputParam:           outputParam,
+			ResolvedPreconditions: preconditions[msgFileName],
+		})
+	}
+
+	// run tests
+	for _, tst := range testCases {
+		// call method
+		pluginsInfo, err := tst.OutputDoc.ParseDocument(mockLog, contracts.DocumentInfo{}, testParserInfo, tst.OutputParam)
+
+		// check results
+		assert.Nil(t, err)
+		assert.Equal(t, testS3Bucket, pluginsInfo[0].Configuration.OutputS3BucketName)
+		assert.Equal(t, testMessageID, pluginsInfo[0].Configuration.MessageId)
+		assert.Equal(t, testDocumentID, pluginsInfo[0].Configuration.BookKeepingFileName)
+		assert.Equal(t, testWorkingDir, pluginsInfo[0].Configuration.DefaultWorkingDirectory)
+		assert.Equal(t, tst.ResolvedPreconditions, pluginsInfo[0].Configuration.Preconditions)
+	}
+}
+
 func loadFile(t *testing.T, fileName string) (result []byte) {
 	result, err := ioutil.ReadFile(fileName)
 	if err != nil {
@@ -584,4 +642,14 @@ func loadMessageFromFile(t *testing.T, fileName string) (testDocContent DocConte
 		t.Fatal(err)
 	}
 	return testDocContent, params
+}
+
+func loadPreconditionsFromFile(t *testing.T) (preconditions map[string]map[string][]contracts.PreconditionArgument) {
+	b := loadFile(t, "testdata/sampleResolvedMessagePreconditions.json")
+
+	err := json.Unmarshal(b, &preconditions)
+	if err != nil {
+		t.Fatal(err)
+	}
+	return preconditions
 }
