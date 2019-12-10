@@ -203,3 +203,81 @@ func TestResolveParametersInTextIgnoreSecureParams(t *testing.T) {
 	assert.NotNil(t, output)
 	assert.True(t, expectedOutput == output)
 }
+
+func TestTextContainsSsmParameters(t *testing.T) {
+	type testCase struct {
+		Input  string
+		Output bool
+	}
+
+	testCases := []testCase{
+		{
+			Input:  "",
+			Output: false,
+		},
+		{
+			Input:  "a string without a parameter",
+			Output: false,
+		},
+		{
+			Input:  "a string with an {{ invalid parameter name}}",
+			Output: false,
+		},
+		{
+			Input:  "a string with a {{ parameter }}",
+			Output: false,
+		},
+		{
+			Input:  "a string with a {{ ssm:a/b/c/parameter }}",
+			Output: true,
+		},
+		{
+			Input:  "a string with a {{ ssm-secure:parameter }}",
+			Output: false,
+		},
+	}
+
+	for _, tst := range testCases {
+		actual := TextContainsSsmParameters(tst.Input)
+		assert.Equal(t, tst.Output, actual)
+	}
+}
+
+func TestTextContainsSsmSecureParameters(t *testing.T) {
+	type testCase struct {
+		Input  string
+		Output bool
+	}
+
+	testCases := []testCase{
+		{
+			Input:  "",
+			Output: false,
+		},
+		{
+			Input:  "a string without a parameter",
+			Output: false,
+		},
+		{
+			Input:  "a string with an {{ invalid parameter name}}",
+			Output: false,
+		},
+		{
+			Input:  "a string with a {{ parameter }}",
+			Output: false,
+		},
+		{
+			Input:  "a string with a {{ ssm:parameter }}",
+			Output: false,
+		},
+		{
+			Input:  "a string with a {{ ssm-secure:parameter }}",
+			Output: true,
+		},
+	}
+
+	for _, tst := range testCases {
+		actual := TextContainsSecureSsmParameters(tst.Input)
+		assert.Equal(t, tst.Output, actual)
+	}
+}

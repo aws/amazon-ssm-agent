@@ -105,7 +105,7 @@ func (docContent *DocContent) ParseDocument(log log.T,
 		return
 	}
 
-	return parseDocumentContent(*docContent, parserInfo)
+	return parseDocumentContent(*docContent, parserInfo, log, params)
 }
 
 // GetSchemaVersion is a method used to get document schema version
@@ -233,7 +233,7 @@ func ParseParameters(log log.T, params map[string][]*string, paramsDef map[strin
 }
 
 // parseDocumentContent parses an SSM Document and returns the plugin information
-func parseDocumentContent(docContent DocContent, parserInfo DocumentParserInfo) (pluginsInfo []contracts.PluginState, err error) {
+func parseDocumentContent(docContent DocContent, parserInfo DocumentParserInfo, log log.T, params map[string]interface{}) (pluginsInfo []contracts.PluginState, err error) {
 
 	switch docContent.SchemaVersion {
 	case "1.0", "1.2":
@@ -241,7 +241,7 @@ func parseDocumentContent(docContent DocContent, parserInfo DocumentParserInfo) 
 
 	case "2.0", "2.0.1", "2.0.2", "2.0.3", "2.2":
 
-		return parsePluginStateForV20Schema(docContent, parserInfo.OrchestrationDir, parserInfo.S3Bucket, parserInfo.S3Prefix, parserInfo.MessageId, parserInfo.DocumentId, parserInfo.DefaultWorkingDir)
+		return parsePluginStateForV20Schema(docContent, parserInfo.OrchestrationDir, parserInfo.S3Bucket, parserInfo.S3Prefix, parserInfo.MessageId, parserInfo.DocumentId, parserInfo.DefaultWorkingDir, log, params)
 
 	default:
 		return pluginsInfo, fmt.Errorf("Unsupported document")
@@ -289,7 +289,7 @@ func parsePluginStateForV10Schema(
 // parsePluginStateForV20Schema initializes instancePluginsInfo for the docState. Used by document v2.0.
 func parsePluginStateForV20Schema(
 	docContent DocContent,
-	orchestrationDir, s3Bucket, s3Prefix, messageID, documentID, defaultWorkingDir string) (pluginsInfo []contracts.PluginState, err error) {
+	orchestrationDir, s3Bucket, s3Prefix, messageID, documentID, defaultWorkingDir string, log log.T, params map[string]interface{}) (pluginsInfo []contracts.PluginState, err error) {
 
 	if len(docContent.MainSteps) == 0 {
 		return pluginsInfo, fmt.Errorf("Unsupported schema format")
@@ -313,7 +313,7 @@ func parsePluginStateForV20Schema(
 			BookKeepingFileName:     documentID,
 			PluginName:              pluginName,
 			PluginID:                instancePluginConfig.Name,
-			Preconditions:           instancePluginConfig.Preconditions,
+			Preconditions:           parsePluginParametersInPreconditions(&docContent, instancePluginConfig.Preconditions, params, log),
 			IsPreconditionEnabled:   isPreconditionEnabled,
 			DefaultWorkingDirectory: defaultWorkingDir,
 		}
@@ -325,6 +325,44 @@ func parsePluginStateForV20Schema(
 		pluginsInfo = append(pluginsInfo, plugin)
 	}
 	return
+}
+
+// parsePluginParametersInPreconditions modifies plugin preconditions as defined in PluginConfig to match the structure
+// expected by the plugin executor (plugin.Configuration -> PreconditionArgument)
+func parsePluginParametersInPreconditions(docContent *DocContent, precondition map[string][]string, params map[string]interface{}, log log.T) map[string][]contracts.PreconditionArgument {
+	parsedPreconditions := make(map[string][]contracts.PreconditionArgument)
+	for operator, args := range precondition {
+		parsedPreconditions[operator] = validateAndReplaceParametersInPreconditionArguments(docContent, args, params, log)
+	}
+	return parsedPreconditions
+}
+
+// validateAndReplaceParametersInPreconditionArguments validates document parameters and modifies plugin preconditions
+// by replacing document parameters with their values
+// TODO: return a list of invalid parameters and expose it to the user in the document execution output
+// Idea: add a section to the DocumentState to store all warnings and errors that occur during document processing
+// and access them later in the sendReply or UpdateAssociation
+func validateAndReplaceParametersInPreconditionArguments(docContent *DocContent, args []string, params map[string]interface{}, log log.T) []contracts.PreconditionArgument {
+
+	//ValidateParameterNames
+	validParameters := parameters.ValidParameters(log, params)
+
+	// add default values for missing parameters
+	for k, v := range docContent.Parameters {
+		if _, ok := validParameters[k]; !ok {
+			validParameters[k] = v.DefaultVal
+		}
+	}
+
+	// replace document parameters in each of the arguments
+	parsedArguments := make([]contracts.PreconditionArgument, len(args))
+	for i, arg := range args {
+		parsedArguments[i] = contracts.PreconditionArgument{
+			InitialArgumentValue:  arg,
+			ResolvedArgumentValue: parameters.ReplaceParameters(arg, validParameters, log).(string),
+		}
+	}
+	return parsedArguments
 }
 
 // parsePluginStateForStartSession initializes instancePluginsInfo for the docState. Used by startSession.

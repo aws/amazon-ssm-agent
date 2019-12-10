@@ -374,6 +374,15 @@ func getPluginConfigurationsFromMainStep(mainSteps []*contracts.InstancePluginCo
 	isPreconditionEnabled := contracts.IsPreconditionEnabled(schemaVersion)
 	commandID, _ := messageContracts.GetCommandID(messageID)
 	for index, instancePluginConfig := range mainSteps {
+		resolvedPreconditions := map[string][]contracts.PreconditionArgument{}
+		for operator, arguments := range instancePluginConfig.Preconditions {
+			for _, arg := range arguments {
+				resolvedPreconditions[operator] = append(resolvedPreconditions[operator], contracts.PreconditionArgument{
+					InitialArgumentValue:  arg,
+					ResolvedArgumentValue: arg,
+				})
+			}
+		}
 		pluginId := instancePluginConfig.Name
 		pluginName := instancePluginConfig.Action
 		res[index] = &contracts.Configuration{
@@ -386,7 +395,7 @@ func getPluginConfigurationsFromMainStep(mainSteps []*contracts.InstancePluginCo
 			BookKeepingFileName:    commandID,
 			PluginName:             pluginName,
 			PluginID:               pluginId,
-			Preconditions:          instancePluginConfig.Preconditions,
+			Preconditions:          resolvedPreconditions,
 			IsPreconditionEnabled:  isPreconditionEnabled,
 		}
 	}

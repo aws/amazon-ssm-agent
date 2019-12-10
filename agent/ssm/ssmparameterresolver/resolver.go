@@ -22,6 +22,16 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/log"
 )
 
+// TextContainsSsmParameters determines whether a given text contains a pattern for SSM parameters
+func TextContainsSsmParameters(input string) bool {
+	return ssmParameterPlaceholderRegEx.FindAllString(input, 1) != nil
+}
+
+// TextContainsSsmParameters determines whether a given text contains a pattern for secure SSM parameters
+func TextContainsSecureSsmParameters(input string) bool {
+	return secureSsmParameterPlaceholderRegEx.FindAllString(input, 1) != nil
+}
+
 // ExtractParametersFromText takes text document and resolves all parameters in it according to ResolveOptions.
 // It will return a map of (parameter references) to SsmParameterInfo.
 func ExtractParametersFromText(
