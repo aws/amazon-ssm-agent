@@ -214,7 +214,7 @@ func getRegionFromS3URLWithExponentialBackoff(url string, httpProvider HttpProvi
 func getRegionFromS3URL(log log.T, url string, httpProvider HttpProvider) (region string, err error) {
 	resp, err := httpProvider.Head(url)
 	if err != nil || resp == nil {
-		log.Info("Error when query S3 using url %v, error details : %v", url, err)
+		log.Infof("Error when query S3 using url %v, error details : %v", url, err)
 		err = errors.New(fmt.Sprintf("Failed query S3 using url %v - %s", url, err))
 		return "", err
 	}
@@ -224,7 +224,7 @@ func getRegionFromS3URL(log log.T, url string, httpProvider HttpProvider) (regio
 		return "", err
 	} else if region = resp.Header.Get(s3ResponseRegionHeader); region != "" {
 		// Region is fetched correctly at this point
-		log.Info("Getting region information about bucket %v", region)
+		log.Infof("Getting region information about bucket %v", region)
 		return region, nil
 	}
 	err = errors.New(fmt.Sprintf("Failed to fetch region from the header - %s", err))
