@@ -1,5 +1,11 @@
 Latest
 ===============
+- Add support for Oracle Linux v7.5 and v7.7
+- Bug fix for Inventory data provider to support special characters
+- Bug fix for SSM MDS service name
+
+2.3.722.0
+===============
 - Upgrade AWS SDK
 - Add logging for fingerprint generation 
  
