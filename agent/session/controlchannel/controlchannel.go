@@ -117,11 +117,12 @@ func (controlChannel *ControlChannel) SetWebSocket(context context.T,
 		retryer := retry.ExponentialRetryer{
 			CallableFunc:        callable,
 			GeometricRatio:      mgsConfig.RetryGeometricRatio,
+			JitterRatio:         mgsConfig.RetryJitterRatio,
 			InitialDelayInMilli: rand.Intn(mgsConfig.ControlChannelRetryInitialDelayMillis) + mgsConfig.ControlChannelRetryInitialDelayMillis,
 			MaxDelayInMilli:     mgsConfig.ControlChannelRetryMaxIntervalMillis,
 			MaxAttempts:         mgsConfig.ControlChannelNumMaxRetries,
 		}
-
+		retryer.Init()
 		if _, err := retryer.Call(); err != nil {
 			// should never happen
 			log.Errorf("failed to reconnect to the controlchannel with error: %v", err)

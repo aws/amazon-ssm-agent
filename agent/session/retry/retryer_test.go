@@ -17,6 +17,7 @@ package retry
 import (
 	"errors"
 	"testing"
+	"time"
 
 	"github.com/stretchr/testify/assert"
 )
@@ -27,13 +28,14 @@ type RetryCounter struct {
 
 var (
 	retryGeometricRatio = 2.0
+	jitterRatio         = 0.0
 	initialDelayInMilli = 100
 	maxDelayInMilli     = 1000
 	maxAttempts         = 5
 	totalAttempts       = 0
 	callableFunc        = func() (interface{}, error) {
 		totalAttempts = totalAttempts + 1
-		return RetryCounter{totalAttempts}, errors.New("error occured in callable function")
+		return RetryCounter{TotalAttempts: totalAttempts}, errors.New("error occured in callable function")
 	}
 )
 
@@ -41,6 +43,7 @@ func TestRepeatableExponentialRetryerRetriesForGivenNumberOfMaxAttempts(t *testi
 	retryer := ExponentialRetryer{
 		callableFunc,
 		retryGeometricRatio,
+		jitterRatio,
 		initialDelayInMilli,
 		maxDelayInMilli,
 		maxAttempts,
@@ -51,4 +54,20 @@ func TestRepeatableExponentialRetryerRetriesForGivenNumberOfMaxAttempts(t *testi
 	retryCounter := retryCounterInterface.(RetryCounter)
 	assert.NotNil(t, err)
 	assert.Equal(t, retryCounter.TotalAttempts, maxAttempts+1)
+}
+
+func TestExponentialRetryerWithJitter(t *testing.T) {
+	jitterRatio = 0.1
+	retryerWithJitter := ExponentialRetryer{
+		callableFunc,
+		retryGeometricRatio,
+		jitterRatio,
+		initialDelayInMilli,
+		maxDelayInMilli,
+		1,
+	}
+	minDelay := int64(initialDelayInMilli) * time.Millisecond.Nanoseconds()
+	maxDelay := int64(float64(minDelay) * (1.0 + jitterRatio))
+	sleep, _ := retryerWithJitter.NextSleepTime(0)
+	assert.True(t, sleep.Nanoseconds() >= minDelay && sleep.Nanoseconds() < maxDelay)
 }

@@ -150,11 +150,13 @@ var setupControlChannel = func(context context.T, service service.Service, proce
 			return controlChannel, nil
 		},
 		GeometricRatio:      mgsConfig.RetryGeometricRatio,
+		JitterRatio:         mgsConfig.RetryJitterRatio,
 		InitialDelayInMilli: rand.Intn(mgsConfig.ControlChannelRetryInitialDelayMillis) + mgsConfig.ControlChannelRetryInitialDelayMillis,
 		MaxDelayInMilli:     mgsConfig.ControlChannelRetryMaxIntervalMillis,
 		MaxAttempts:         mgsConfig.ControlChannelNumMaxRetries,
 	}
 
+	retryer.Init()
 	channel, err := retryer.Call()
 	if err != nil {
 		// should never happen

@@ -55,9 +55,10 @@ const (
 	MaxTransmissionTimeout = 1 * time.Second
 
 	RetryGeometricRatio                   = 2
+	RetryJitterRatio                      = 0.5
 	ControlChannelNumMaxRetries           = -1 //forever retries for control channel
 	ControlChannelRetryInitialDelayMillis = 5000
-	ControlChannelRetryMaxIntervalMillis  = 1000 * 60 * 60 // 1 hour
+	ControlChannelRetryMaxIntervalMillis  = 1000 * 60 * 40 // 40 mins
 
 	DataChannelNumMaxAttempts          = 5
 	DataChannelRetryInitialDelayMillis = 100
