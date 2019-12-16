@@ -29,7 +29,7 @@ var initRequest func(*request.Request)
 
 // Service information constants
 const (
-	ServiceName = "SSM MDS"     // Name of service.
+	ServiceName = "ec2messages"     // Name of service.
 	EndpointsID = "ec2messages" // ID to lookup a service endpoint with.
 	ServiceID   = "SSM MDS"     // ServiceID is a unique identifer of a specific service.
 )
