@@ -210,6 +210,23 @@ func TestValidateUpdateVersion(t *testing.T) {
 	assert.NoError(t, err)
 }
 
+func TestValidateInactiveVersion(t *testing.T) {
+	context := createUpdateContext(Initialized)
+	context.Current.TargetVersion = "2.3.772.0"
+	instanceContext := &updateutil.InstanceContext{
+		Region:          "us-east-1",
+		Platform:        updateutil.PlatformRedHat,
+		PlatformVersion: "6.5",
+		InstallerName:   "linux",
+		Arch:            "amd64",
+		CompressFormat:  "tar.gz",
+	}
+
+	err := validateInactiveVersion(logger, context.Current, instanceContext)
+
+	assert.Error(t, err)
+}
+
 func TestValidateUpdateVersionFailCentOs(t *testing.T) {
 	context := createUpdateContext(Initialized)
 	context.Current.TargetVersion = "1.0.0.0"

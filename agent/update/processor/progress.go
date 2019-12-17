@@ -84,6 +84,19 @@ func (u *updateManager) failed(context *UpdateContext, log log.T, code updateuti
 	return u.finalizeUpdateAndSendReply(log, context, string(code))
 }
 
+func (u *updateManager) inactive(context *UpdateContext, log log.T) (err error) {
+	update := context.Current
+	update.State = Completed
+	update.Result = contracts.ResultStatusSuccess
+	update.AppendInfo(
+		log,
+		"%v version %v is inactive, update skipped",
+		update.PackageName,
+		update.TargetVersion)
+
+	return u.finalizeUpdateAndSendReply(log, context, "")
+}
+
 // finalizeUpdateAndSendReply completes the update and sends reply to message service, also uploads to S3 (if any)
 func (u *updateManager) finalizeUpdateAndSendReply(log log.T, context *UpdateContext, errorCode string) (err error) {
 	update := context.Current
