@@ -130,6 +130,16 @@ func validateUpdateVersion(log log.T, detail *UpdateDetail, instanceContext *upd
 	return nil
 }
 
+func validateInactiveVersion(log log.T, detail *UpdateDetail, instanceContext *updateutil.InstanceContext) (err error) {
+	log.Info("Validating inactive version for amazon ssm agent")
+
+	if detail.TargetVersion == "2.3.772.0" {
+		err := fmt.Errorf("Agent version %v is inactive", detail.TargetVersion)
+		return err
+	}
+	return nil
+}
+
 // getMinimumVSupportedVersions returns a map of minimum supported version and it's platform
 func getMinimumVSupportedVersions() (versions *map[string]string) {
 	once.Do(func() {
@@ -150,6 +160,9 @@ func prepareInstallationPackages(mgr *updateManager, log log.T, context *UpdateC
 	}
 	if err = validateUpdateVersion(log, context.Current, instanceContext); err != nil {
 		return mgr.failed(context, log, updateutil.ErrorEnvironmentIssue, err.Error(), true)
+	}
+	if err = validateInactiveVersion(log, context.Current, instanceContext); err != nil {
+		return mgr.inactive(context, log)
 	}
 
 	if updateDownload, err = mgr.util.CreateUpdateDownloadFolder(); err != nil {

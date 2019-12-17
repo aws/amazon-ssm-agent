@@ -66,6 +66,22 @@ func TestUpdateFailed(t *testing.T) {
 	assert.Equal(t, context.Histories[0].Result, contracts.ResultStatusFailed)
 }
 
+func TestUpdateInactive(t *testing.T) {
+	updater := createDefaultUpdaterStub()
+	context := generateTestCase().Context
+	context.Current.OutputS3BucketName = "test"
+	err := updater.mgr.inactive(context, logger)
+
+	emptyUpdate := &UpdateDetail{}
+
+	assert.Equal(t, context.Current.State, emptyUpdate.State)
+	assert.Equal(t, context.Current.Result, emptyUpdate.Result)
+
+	assert.Equal(t, err, nil)
+	assert.Equal(t, context.Histories[0].State, Completed)
+	assert.Equal(t, context.Histories[0].Result, contracts.ResultStatusSuccess)
+}
+
 type ContextTestCase struct {
 	Context      *UpdateContext
 	InfoMessage  string
