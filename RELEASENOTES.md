@@ -4,7 +4,7 @@ Latest
 - Bug fix for Inventory data provider to support special characters
 - Bug fix for SSM MDS service name
 
-2.3.722.0
+2.3.772.0
 ===============
 - Upgrade AWS SDK
 - Add logging for fingerprint generation 
