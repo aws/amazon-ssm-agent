@@ -74,7 +74,7 @@ func (controlChannel *ControlChannel) Initialize(context context.T,
 	controlChannel.Processor = processor
 	controlChannel.wsChannel = &communicator.WebSocketChannel{}
 
-	log.Debug("Initialized controlchannel for instance: %s", instanceId)
+	log.Debugf("Initialized controlchannel for instance: %s", instanceId)
 }
 
 // SetWebSocket populates webchannel object.

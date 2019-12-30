@@ -608,7 +608,7 @@ func (dataChannel *DataChannel) dataChannelIncomingMessageHandler(log log.T, raw
 		dataChannel.handleStartPublicationMessage(log, *streamDataMessage)
 		return nil
 	default:
-		log.Warn("Invalid message type received: %s", streamDataMessage.MessageType)
+		log.Warnf("Invalid message type received: %s", streamDataMessage.MessageType)
 	}
 
 	return nil
