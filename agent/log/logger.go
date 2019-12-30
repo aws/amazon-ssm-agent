@@ -28,7 +28,7 @@ func GetLogger(log T, seelogConfig string) (logger seelog.LoggerInterface) {
 
 	err = seelog.ReplaceLogger(logger)
 	if err != nil {
-		log.Debug("Error is %v", err.Error())
+		log.Debugf("Error is %v", err.Error())
 	}
 	return logger
 }

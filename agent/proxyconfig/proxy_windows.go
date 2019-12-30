@@ -195,7 +195,7 @@ func SetProxySettings(log log.T) {
 func GetDefaultProxySettings(log log.T) (p HttpDefaultProxyConfig, err error) {
 	winhttp, err := syscall.LoadLibrary("Winhttp.dll")
 	if err != nil {
-		log.Error("Failed to load Winhttp.dll library: %v", err.Error())
+		log.Errorf("Failed to load Winhttp.dll library: %v", err.Error())
 		return p, err
 	}
 
@@ -203,7 +203,7 @@ func GetDefaultProxySettings(log log.T) (p HttpDefaultProxyConfig, err error) {
 
 	getDefaultProxy, err := syscall.GetProcAddress(winhttp, "WinHttpGetDefaultProxyConfiguration")
 	if err != nil {
-		log.Error("Failed to get default machine WinHTTP proxy configuration: %v", err.Error())
+		log.Errorf("Failed to get default machine WinHTTP proxy configuration: %v", err.Error())
 		return p, err
 	}
 
@@ -211,7 +211,7 @@ func GetDefaultProxySettings(log log.T) (p HttpDefaultProxyConfig, err error) {
 
 	ret, _, err := syscall.Syscall(uintptr(getDefaultProxy), 1, uintptr(unsafe.Pointer(settings)), 0, 0)
 	if ret != 1 {
-		log.Error("Failed to get default machine WinHTTP proxy configuration: %v", err.Error())
+		log.Errorf("Failed to get default machine WinHTTP proxy configuration: %v", err.Error())
 		return p, err
 	} else {
 		log.Infof("Getting WinHTTP proxy default configuration: %v", err.Error())

@@ -183,7 +183,7 @@ func RunInstallCommands(log log.T, orchestrationDirectory string, out iohandler.
 		//uncompress docker zip
 		fileutil.Uncompress(log, downloadOutput.LocalFilePath, DOCKER_UNCOMPRESS_DIRECTORY)
 	}
-	log.Debug("Zip file downloaded to %v", downloadOutput.LocalFilePath)
+	log.Debugf("Zip file downloaded to %v", downloadOutput.LocalFilePath)
 
 	//Set this process's path environment variable to include Docker
 	if !strings.Contains(strings.ToLower(os.Getenv("path")), strings.ToLower(DOCKER_INSTALLED_DIRECTORY)) {
