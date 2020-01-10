@@ -15,6 +15,7 @@ package platform
 
 import (
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"net/http"
 	"time"
@@ -104,8 +105,9 @@ type httpClient interface {
 // EC2MetadataClient is used to make requests to instance metadata
 type EC2MetadataClient struct {
 	client httpClient
-	token  string
 }
+
+var metadata_token = ""
 
 // NewEC2MetadataClient creates new EC2MetadataClient
 func NewEC2MetadataClient() *EC2MetadataClient {
@@ -138,63 +140,74 @@ func (c EC2MetadataClient) resourceServiceURL(path string) string {
 func (c EC2MetadataClient) ReadResource(path string) ([]byte, error) {
 	endpoint := c.resourceServiceURL(path)
 
-	var resp *http.Response
+	var resp []byte
 	var err error
 
 	if resp, err = c.readResourceFromMetaDataV1(endpoint); err == nil {
-		return ioutil.ReadAll(resp.Body)
+		return resp, err
 	}
 
 	if resp, err = c.readResourceFromMetaDataV2(endpoint); err == nil {
-		return ioutil.ReadAll(resp.Body)
+		return resp, err
 	}
 
 	return nil, err
 }
 
-func (c EC2MetadataClient) readResourceFromMetaDataV1(endpoint string) (*http.Response, error) {
+func (c EC2MetadataClient) readResourceFromMetaDataV1(endpoint string) (rst []byte, err error) {
 	resp, err := c.client.Get(endpoint)
 	if err != nil {
 		return nil, err
 	}
-	defer resp.Body.Close()
 
-	return resp, nil
-}
-
-func (c *EC2MetadataClient) readResourceFromMetaDataV2(endpoint string) (rsp *http.Response, err error) {
-
-	// Send request with current token
-	if rsp, err = c.retrieveInfoWithToken(endpoint); err == nil {
-		// Token is active, return result
-		return rsp, nil
+	if resp != nil && resp.StatusCode != EC2MetadataSuccessStatus {
+		return nil, fmt.Errorf("Error to get resource from MetaDataV1, %v", resp)
 	}
 
-	if rsp != nil && rsp.StatusCode == EC2MetadataUnauthorizedStatus {
-		// Token expire, refresh it and resend request.
+	defer resp.Body.Close()
+
+	return ioutil.ReadAll(resp.Body)
+}
+
+func (c *EC2MetadataClient) readResourceFromMetaDataV2(endpoint string) (rst []byte, err error) {
+
+	// Get the token when in the first time
+	if len(metadata_token) == 0 {
+		if err := c.refreshToken(); err != nil {
+			return nil, fmt.Errorf("Failed to refresh token for MetadataV2, %v", err)
+		}
+	}
+
+	// Send request with current token
+	if resp, err := c.retrieveInfoWithToken(endpoint); err == nil {
+		// Token is active, return result
+		return resp, err
+	} else {
 		if err = c.refreshToken(); err == nil {
 			return c.retrieveInfoWithToken(endpoint)
 		} else {
-			return nil, err
+			return nil, fmt.Errorf("Failed to refresh token for MetadataV2, %v", err)
 		}
-	} else {
-		return rsp, err
 	}
 }
 
-func (c *EC2MetadataClient) retrieveInfoWithToken(endpoint string) (rsp *http.Response, err error) {
+func (c *EC2MetadataClient) retrieveInfoWithToken(endpoint string) (rst []byte, err error) {
 	req, err := http.NewRequest("GET", endpoint, nil)
 	if err != nil {
 		return nil, err
 	}
-	req.Header.Set(EC2MetadataTokenHeader, c.token)
-	rsp, err = c.client.Do(req)
-	defer rsp.Body.Close()
+	req.Header.Set(EC2MetadataTokenHeader, metadata_token)
+	rsp, err := c.client.Do(req)
 	if err != nil {
 		return nil, err
 	}
 
-	return rsp, nil
+	defer rsp.Body.Close()
+	if rsp != nil && rsp.StatusCode != EC2MetadataSuccessStatus {
+		return nil, fmt.Errorf("Error to get from imdb v2, response %v", rsp)
+	}
+
+	return ioutil.ReadAll(rsp.Body)
 }
 
 // ServiceDomain from ec2 metadata client
@@ -217,13 +230,18 @@ func (c *EC2MetadataClient) refreshToken() (err error) {
 	req.Header.Set(EC2MetadataTokenExpireHeader, EC2MetadataTokenExpireTime)
 
 	rsp, err = c.client.Do(req)
-	defer rsp.Body.Close()
+
 	if err != nil {
 		// failed to get the new token from metadata service
 		return err
 	}
-	token, _ := ioutil.ReadAll(rsp.Body)
-	c.token = string(token)
+	defer rsp.Body.Close()
+	token, err := ioutil.ReadAll(rsp.Body)
 
+	if err != nil {
+		return err
+	}
+
+	metadata_token = string(token)
 	return nil
 }
