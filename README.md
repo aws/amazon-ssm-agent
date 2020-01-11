@@ -89,13 +89,13 @@ The following targets are available. Each may be run with `make <target>`.
 
 | Make Target              | Description |
 |:-------------------------|:------------|
-| `build`                  | *(Default)* `build` builds the agent for Linux, Debian and Windows amd64 and 386 environment |
+| `build`                  | *(Default)* `build` builds the agent for Linux, Debian, Darwin and Windows amd64 and 386 environment |
 | `release`                | `release` checks code style and coverage, builds the agent and also packages it into a RPM, DEB and ZIP package |
 | `package`                | `package` packages build result into a RPM, DEB and ZIP package |
 | `pre-build`              | `pre-build` goes through Tools/src folder to make sure all the script files are executable |
 | `checkstyle`             | `checkstyle` runs the checkstyle script |
 | `quick-integtest`        | `quick-integtest` runs all tests tagged with integration using `go test` |
-| `quick-test`             | `quick-test runs all the tests including integration and unit tests using `go test` |
+| `quick-test`             | `quick-test` runs all the tests including integration and unit tests using `go test` |
 | `coverage`               | `coverage` runs all tests and calculate code coverage |
 | `build-linux`            | `build-linux` builds the agent for execution in the Linux amd64 environment |
 | `build-windows`          | `build-windows` builds the agent for execution in the Windows amd64 environment |
@@ -103,16 +103,22 @@ The following targets are available. Each may be run with `make <target>`.
 | `build-linux-386`        | `build-linux-386` builds the agent for execution in the Linux 386 environment |
 | `build-windows-386`      | `build-windows-386` builds the agent for execution in the Windows 386 environment |
 | `build-darwin-386`       | `build-darwin-386` builds the agent for execution in the Darwin 386 environment |
-| `create-rpm`             | `create-rpm` builds the agent and packages it into a RPM package for Linux amd64 based distributions|
-| `create-deb`             | `create-deb` builds the agent and packages it into a DEB package Debian amd64 based distributions|
-| `create-win`             | `create-win` builds the agent and packages it into a ZIP package Windows amd64 based distributions|
-| `create-rpm-386`         | `create-rpm-386` builds the agent and packages it into a RPM package for Linux 386 based distributions|
-| `create-deb-386`         | `create-deb-386` builds the agent and packages it into a DEB package Debian 386 based distributions|
-| `create-win-386`         | `create-win-386` builds the agent and packages it into a ZIP package Windows 386 based distributions|
-| `create-linux-package`   | `create-linux-package` create update packages for Linux and Debian based distributions|
-| `create-windows-package` | `create-windows-package` create update packages for Windows based distributions|
+| `build-arm`              | `build-arm` builds the agent for execution in the arm environment |
+| `build-arm64`            | `build-arm64` builds the agent for execution in the arm64 environment |
+| `package-rpm`            | `package-rpm` builds the agent and packages it into a RPM package for Linux amd64 based distributions |
+| `package-deb`            | `package-deb` builds the agent and packages it into a DEB package Debian amd64 based distributions |
+| `package-win`            | `package-win` builds the agent and packages it into a ZIP package Windows amd64 based distributions |
+| `package-rpm-386`        | `package-rpm-386` builds the agent and packages it into a RPM package for Linux 386 based distributions |
+| `package-deb-386`        | `package-deb-386` builds the agent and packages it into a DEB package Debian 386 based distributions |
+| `package-win-386`        | `package-win-386` builds the agent and packages it into a ZIP package Windows 386 based distributions |
+| `package-rpm-arm64`      | `package-rpm-arm64` builds the agent and packages it into a RPM package Linux arm64 based distributions |
+| `package-deb-arm`        | `package-deb-arm` builds the agent and packages it into a DEB package Debian arm based distributions |
+| `package-deb-arm64`      | `package-deb-arm64` builds the agent and packages it into a DEB package Debian arm64 based distributions |
+| `package-linux`          | `package-linux` create update packages for Linux and Debian based distributions |
+| `package-windows`        | `package-windows` create update packages for Windows based distributions |
+| `package-darwin`         | `package-darwin` create update packages for Darwin based distributions |
 | `get-tools`              | `get-tools` gets gocode and oracle using `go get` |
-| `clean`                  | `clean` removes build artifacts.|
+| `clean`                  | `clean` removes build artifacts |
 
 ### Contributing
 
