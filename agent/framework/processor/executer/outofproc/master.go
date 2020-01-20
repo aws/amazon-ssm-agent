@@ -77,6 +77,9 @@ func (e *OutOfProcExecuter) Run(
 	//start prepare messaging
 	//if anything fails during the prep stage, use in-proc Runner
 	ipc, err := e.initialize(stopTimer)
+	//save doc store immediately in case agent restarts.
+	docStore.Save(*e.docState)
+
 	if err != nil {
 		log.Errorf("failed to prepare outofproc executer, falling back to InProc Executer")
 		return e.BasicExecuter.Run(cancelFlag, docStore)
