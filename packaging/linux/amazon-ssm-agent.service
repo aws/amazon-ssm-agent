@@ -8,6 +8,7 @@ WorkingDirectory=/usr/bin/
 ExecStart=/usr/bin/amazon-ssm-agent
 KillMode=process
 Restart=on-failure
+RestartForceExitStatus=SIGPIPE
 RestartSec=15min
 
 [Install]
