@@ -87,6 +87,13 @@ func teardown(t *testing.T) {
 func TestOutOfProcExecuter_Success(t *testing.T) {
 	testCase := setup(t)
 	testDocState := testCase.docState
+
+	resultDocStateBeforeProcess := testCase.docState
+	resultDocStateBeforeProcess.InstancePluginsInformation[0].Result = *testCase.results["plugin1"]
+	resultDocStateBeforeProcess.InstancePluginsInformation[1].Result = *testCase.results["plugin2"]
+	resultDocStateBeforeProcess.DocumentInformation.ProcInfo.Pid = testPid
+	resultDocStateBeforeProcess.DocumentInformation.ProcInfo.StartTime = testStartDateTime
+
 	resultDocState := testCase.docState
 	resultDocState.InstancePluginsInformation[0].Result = *testCase.results["plugin1"]
 	resultDocState.InstancePluginsInformation[1].Result = *testCase.results["plugin2"]
@@ -96,6 +103,7 @@ func TestOutOfProcExecuter_Success(t *testing.T) {
 	//using the real constructor
 	outofprocExe := NewOutOfProcExecuter(testCase.context)
 	testCase.docStore.On("Load").Return(testDocState)
+	testCase.docStore.On("Save", resultDocStateBeforeProcess).Return(nil)
 	testCase.docStore.On("Save", resultDocState).Return(nil)
 	pluginRunner = func(
 		context context.T,
@@ -199,12 +207,21 @@ func TestOutOfProcExecuter_ShutdownAndReconnect(t *testing.T) {
 	resultDocState.InstancePluginsInformation[0].Result = *testCase.results["plugin1"]
 	resultDocState.InstancePluginsInformation[1].Result = *testCase.results["plugin2"]
 	resultDocState.DocumentInformation.DocumentStatus = contracts.ResultStatusSuccess
+
+	resultDocStateBeforeProcess := docState1
+	//final docstate to be saved
+	resultDocStateBeforeProcess.InstancePluginsInformation[0].Result = *testCase.results["plugin1"]
+	resultDocStateBeforeProcess.InstancePluginsInformation[1].Result = *testCase.results["plugin2"]
+	resultDocStateBeforeProcess.DocumentInformation.DocumentStatus = ""
+
 	assert.False(t, fakeProcess.attached)
 	logger.Info("relaunching the out-of-proc Executer...")
 	newCancelFlag := task.NewChanneledCancelFlag()
 	newDocStore := new(executermocks.MockDocumentStore)
 	newDocStore.On("Load").Return(docState1)
 	newDocStore.On("Save", resultDocState).Return(nil)
+	newDocStore.On("Save", resultDocStateBeforeProcess).Return(nil)
+
 	newContext := context.NewMockDefaultWithContext([]string{"NEWMASTER"})
 	newOutofProcExe := NewOutOfProcExecuter(newContext)
 	newResChan := newOutofProcExe.Run(newCancelFlag, newDocStore)
@@ -263,9 +280,22 @@ func TestOutOfProcExecuter_Cancel(t *testing.T) {
 	resultDocState.DocumentInformation.DocumentStatus = contracts.ResultStatusCancelled
 	resultDocState.DocumentInformation.ProcInfo.Pid = testPid
 	resultDocState.DocumentInformation.ProcInfo.StartTime = testStartDateTime
+
+	resultDocStateBeforeProcess := testCase.docState
+	for _, res := range testCase.results {
+		res.Code = 1
+		res.Status = contracts.ResultStatusCancelled
+		res.Output = "command has been cancelled"
+	}
+	resultDocStateBeforeProcess.InstancePluginsInformation[0].Result = *testCase.results["plugin1"]
+	resultDocStateBeforeProcess.InstancePluginsInformation[1].Result = *testCase.results["plugin2"]
+	resultDocStateBeforeProcess.DocumentInformation.ProcInfo.Pid = testPid
+	resultDocStateBeforeProcess.DocumentInformation.ProcInfo.StartTime = testStartDateTime
+
 	outofprocExe := NewOutOfProcExecuter(testCase.context)
 	testCase.docStore.On("Load").Return(testDocState)
 	testCase.docStore.On("Save", resultDocState).Return(nil)
+	testCase.docStore.On("Save", resultDocStateBeforeProcess).Return(nil)
 	pluginRunner = func(
 		context context.T,
 		docState contracts.DocumentState,
