@@ -1,5 +1,10 @@
 Latest
 ===============
+- Bug fix for updating document state file prior agent reboot
+- Add support to restart agent after SIGPIPE exit status
+
+2.3.814.0
+===============
 - Bug fix for metadata service V2
 - Update Golang version 1.12 for travis
 - Optimize session manager retry logic 
