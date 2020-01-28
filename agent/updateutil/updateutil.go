@@ -106,8 +106,11 @@ const (
 	// PlatformSuse represents SLES(SUSe)
 	PlatformSuseOS = "sles"
 
-	// PlatformSuse represents Raspbian
+	// PlatformRaspbian represents Raspbian
 	PlatformRaspbian = "raspbian"
+
+	// PlatformDebian represents Debian
+	PlatformDebian = "debian"
 
 	// PlatformWindows represents windows
 	PlatformWindows = "windows"
@@ -299,6 +302,11 @@ func (util *Utility) CreateInstanceContext(log log.T) (context *InstanceContext,
 		UnInstaller = UninstallScript
 	} else if strings.Contains(platformName, PlatformRaspbian) {
 		platformName = PlatformRaspbian
+		installerName = PlatformUbuntu
+		Installer = InstallScript
+		UnInstaller = UninstallScript
+	} else if strings.Contains(platformName, PlatformDebian) {
+		platformName = PlatformDebian
 		installerName = PlatformUbuntu
 		Installer = InstallScript
 		UnInstaller = UninstallScript
@@ -607,6 +615,7 @@ func getMinimumVersionForSystemD() (systemDMap *map[string]string) {
 		isUsingSystemD[PlatformOracleLinux] = "7"
 		isUsingSystemD[PlatformUbuntu] = "15"
 		isUsingSystemD[PlatformSuseOS] = "12"
+		isUsingSystemD[PlatformDebian] = "8"
 	})
 	return &isUsingSystemD
 }
