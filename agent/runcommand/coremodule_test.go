@@ -12,6 +12,9 @@
 // permissions and limitations under the License.
 
 // Package runcommand implements runcommand core processing module
+
+// +build integration
+
 package runcommand
 
 import (
