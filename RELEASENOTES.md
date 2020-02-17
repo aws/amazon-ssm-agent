@@ -1,5 +1,9 @@
 Latest
 ===============
+- Various bug fix for SSM Agent
+
+2.3.842.0
+===============
 - Bug fix for updating document state file prior agent reboot
 - Add support to restart agent after SIGPIPE exit status
 
