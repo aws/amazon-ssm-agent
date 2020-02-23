@@ -202,19 +202,6 @@ func TestCollectApplicationData(t *testing.T) {
 	assertEqual(t, sampleDataParsed, data)
 }
 
-func TestCollectAndMergePackages(t *testing.T) {
-	mockContext := context.NewMockDefault()
-	packageRepository = MockPackageRepository([]model.ApplicationData{
-		{Name: "amazon-ssm-agent", Version: "1.2.0.0-1", Architecture: model.Arch64Bit, CompType: model.AWSComponent},
-		{Name: "AwsXRayDaemon", Version: "1.2.3", Architecture: model.Arch64Bit, CompType: model.AWSComponent},
-	})
-
-	// both dpkg and rpm return result without error
-	cmdExecutor = MockTestExecutorWithoutError
-	data := CollectApplicationData(mockContext)
-	assert.Equal(t, len(sampleDataParsed)+1, len(data), "Wrong nuber of entries parsed")
-}
-
 func TestCollectAndMergePackagesEmpty(t *testing.T) {
 	mockContext := context.NewMockDefault()
 	packageRepository = MockPackageRepositoryEmpty()
@@ -222,11 +209,12 @@ func TestCollectAndMergePackagesEmpty(t *testing.T) {
 	// both dpkg and rpm return result without error
 	cmdExecutor = MockTestExecutorWithoutError
 	data := CollectApplicationData(mockContext)
-	assert.Equal(t, len(sampleDataParsed), len(data), "Wrong nuber of entries parsed")
+	assert.Equal(t, len(sampleDataParsed), len(data), "Wrong number of entries parsed")
 }
 
-func TestCollectAndMergePackagesPlatformError(t *testing.T) {
+func TestApplicationDataWithPackageRepositoryData(t *testing.T) {
 	mockContext := context.NewMockDefault()
+
 	mockData := []model.ApplicationData{
 		{Name: "amazon-ssm-agent", Version: "1.2.0.0-1", Architecture: model.Arch64Bit, CompType: model.AWSComponent},
 		{Name: "AwsXRayDaemon", Version: "1.2.3", Architecture: model.Arch64Bit, CompType: model.AWSComponent},
@@ -234,7 +222,8 @@ func TestCollectAndMergePackagesPlatformError(t *testing.T) {
 	packageRepository = MockPackageRepository(mockData)
 
 	// both dpkg and rpm return result without error
-	cmdExecutor = MockTestExecutorWithError
+	cmdExecutor = MockTestExecutorWithoutError
 	data := CollectApplicationData(mockContext)
-	assert.Equal(t, len(mockData), len(data), "Wrong number of entries")
+	assert.Equal(t, len(sampleDataParsed), len(data))
+	assert.NotEqual(t, len(mockData), len(data))
 }
