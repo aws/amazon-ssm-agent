@@ -201,29 +201,3 @@ func TestCollectApplicationData(t *testing.T) {
 	data = collectPlatformDependentApplicationData(mockContext)
 	assertEqual(t, sampleDataParsed, data)
 }
-
-func TestCollectAndMergePackagesEmpty(t *testing.T) {
-	mockContext := context.NewMockDefault()
-	packageRepository = MockPackageRepositoryEmpty()
-
-	// both dpkg and rpm return result without error
-	cmdExecutor = MockTestExecutorWithoutError
-	data := CollectApplicationData(mockContext)
-	assert.Equal(t, len(sampleDataParsed), len(data), "Wrong number of entries parsed")
-}
-
-func TestApplicationDataWithPackageRepositoryData(t *testing.T) {
-	mockContext := context.NewMockDefault()
-
-	mockData := []model.ApplicationData{
-		{Name: "amazon-ssm-agent", Version: "1.2.0.0-1", Architecture: model.Arch64Bit, CompType: model.AWSComponent},
-		{Name: "AwsXRayDaemon", Version: "1.2.3", Architecture: model.Arch64Bit, CompType: model.AWSComponent},
-	}
-	packageRepository = MockPackageRepository(mockData)
-
-	// both dpkg and rpm return result without error
-	cmdExecutor = MockTestExecutorWithoutError
-	data := CollectApplicationData(mockContext)
-	assert.Equal(t, len(sampleDataParsed), len(data))
-	assert.NotEqual(t, len(mockData), len(data))
-}

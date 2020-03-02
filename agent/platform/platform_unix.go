@@ -31,6 +31,7 @@ import (
 const (
 	osReleaseFile          = "/etc/os-release"
 	systemReleaseFile      = "/etc/system-release"
+	centosReleaseFile      = "/etc/centos-release"
 	redhatReleaseFile      = "/etc/redhat-release"
 	unameCommand           = "/usr/bin/uname"
 	lsbReleaseCommand      = "lsb_release"
@@ -69,7 +70,27 @@ func getPlatformDetails(log log.T) (name string, version string, err error) {
 	name = notAvailableMessage
 	version = notAvailableMessage
 
-	if fileutil.Exists(osReleaseFile) {
+	if fileutil.Exists(centosReleaseFile) {
+		// CentOS has incomplete information in the osReleaseFile
+		// and there fore needs to be before osReleaseFile exist check
+		log.Debugf(fetchingDetailsMessage, centosReleaseFile)
+		contents, err = fileutil.ReadAllText(centosReleaseFile)
+		log.Debugf(commandOutputMessage, contents)
+
+		if err != nil {
+			log.Debugf(errorOccurredMessage, centosReleaseFile, err)
+			return
+		}
+
+		if strings.Contains(contents, "CentOS") {
+			data := strings.Split(contents, "release")
+			name = strings.TrimSpace(data[0])
+			if len(data) >= 2 {
+				versionData := strings.Split(data[1], "(")
+				version = strings.TrimSpace(versionData[0])
+			}
+		}
+	} else if fileutil.Exists(osReleaseFile) {
 
 		log.Debugf(fetchingDetailsMessage, osReleaseFile)
 		contents := new(osRelease)
@@ -98,27 +119,39 @@ func getPlatformDetails(log log.T) (name string, version string, err error) {
 		if strings.Contains(contents, "Amazon") {
 			data := strings.Split(contents, "release")
 			name = strings.TrimSpace(data[0])
-			version = strings.TrimSpace(data[1])
+			if len(data) >= 2 {
+				version = strings.TrimSpace(data[1])
+			}
 		} else if strings.Contains(contents, "Red Hat") {
 			data := strings.Split(contents, "release")
 			name = strings.TrimSpace(data[0])
-			version = strings.TrimSpace(data[1])
+			if len(data) >= 2 {
+				version = strings.TrimSpace(data[1])
+			}
 		} else if strings.Contains(contents, "CentOS") {
 			data := strings.Split(contents, "release")
 			name = strings.TrimSpace(data[0])
-			version = strings.TrimSpace(data[1])
+			if len(data) >= 2 {
+				version = strings.TrimSpace(data[1])
+			}
 		} else if strings.Contains(contents, "SLES") {
 			data := strings.Split(contents, "release")
 			name = strings.TrimSpace(data[0])
-			version = strings.TrimSpace(data[1])
+			if len(data) >= 2 {
+				version = strings.TrimSpace(data[1])
+			}
 		} else if strings.Contains(contents, "Raspbian") {
 			data := strings.Split(contents, "release")
 			name = strings.TrimSpace(data[0])
-			version = strings.TrimSpace(data[1])
+			if len(data) >= 2 {
+				version = strings.TrimSpace(data[1])
+			}
 		} else if strings.Contains(contents, "Oracle") {
 			data := strings.Split(contents, "release")
 			name = strings.TrimSpace(data[0])
-			version = strings.TrimSpace(data[1])
+			if len(data) >= 2 {
+				version = strings.TrimSpace(data[1])
+			}
 		}
 	} else if fileutil.Exists(redhatReleaseFile) {
 		log.Debugf(fetchingDetailsMessage, redhatReleaseFile)
@@ -133,8 +166,10 @@ func getPlatformDetails(log log.T) (name string, version string, err error) {
 		if strings.Contains(contents, "Red Hat") {
 			data := strings.Split(contents, "release")
 			name = strings.TrimSpace(data[0])
-			versionData := strings.Split(data[1], "(")
-			version = strings.TrimSpace(versionData[0])
+			if len(data) >= 2 {
+				versionData := strings.Split(data[1], "(")
+				version = strings.TrimSpace(versionData[0])
+			}
 		}
 	} else if runtime.GOOS == "freebsd" {
 		log.Debugf(fetchingDetailsMessage, unameCommand)
@@ -147,7 +182,9 @@ func getPlatformDetails(log log.T) (name string, version string, err error) {
 
 		data := strings.Split(string(contentsBytes), " ")
 		name = strings.TrimSpace(data[0])
-		version = strings.TrimSpace(data[1])
+		if len(data) >= 2 {
+			version = strings.TrimSpace(data[1])
+		}
 	} else {
 		log.Debugf(fetchingDetailsMessage, lsbReleaseCommand)
 
