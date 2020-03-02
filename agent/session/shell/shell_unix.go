@@ -17,6 +17,8 @@
 package shell
 
 import (
+	"bytes"
+	"context"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -30,7 +32,6 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	agentContracts "github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/log"
-	mgsConfig "github.com/aws/amazon-ssm-agent/agent/session/config"
 	mgsContracts "github.com/aws/amazon-ssm-agent/agent/session/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/session/utility"
 	"github.com/kr/pty"
@@ -43,8 +44,8 @@ const (
 	langEnvVariable       = "LANG=C.UTF-8"
 	langEnvVariableKey    = "LANG"
 	startRecordSessionCmd = "script"
-	newLineCharacter      = "\n"
-	screenBufferSizeCmd   = "screen -h %d%s"
+	catCmd                = "cat"
+	scriptFlag            = "-c"
 	homeEnvVariable       = "HOME=/home/"
 	groupsIdentifier      = "groups="
 )
@@ -218,65 +219,31 @@ func getUserCredentials(log log.T, sessionUser string) (uint32, uint32, []uint32
 
 // generateLogData generates a log file with the executed commands.
 func (p *ShellPlugin) generateLogData(log log.T, config agentContracts.Configuration) error {
-	shadowShellInput, _, err := StartPty(log, mgsContracts.ShellProperties{}, true, config)
-	if err != nil {
-		return err
-	}
+	var flagStderr bytes.Buffer
+	loggerCmd := fmt.Sprintf("%s %s", catCmd, p.ipcFilePath)
 
-	defer func() {
-		if err := recover(); err != nil {
-			if err = Stop(log); err != nil {
-				log.Errorf("Error occured while closing pty: %v", err)
-			}
+	// Sixty minutes is the maximum amount of time before the command is cancelled
+	// If a command is running this long it is most likely a stuck process
+	ctx, cancel := context.WithTimeout(context.Background(), 60*time.Minute)
+	defer cancel()
+
+	cmdWithFlag := exec.CommandContext(ctx, startRecordSessionCmd, p.logFilePath, scriptFlag, loggerCmd)
+	cmdWithFlag.Stderr = &flagStderr
+	flagErr := cmdWithFlag.Run()
+	if flagErr != nil {
+		log.Debugf("Failed to generate transcript with -c flag: %v: %s", flagErr, flagStderr.String())
+
+		var noFlagStderr bytes.Buffer
+
+		// some versions of "script" does not take a -c flag when passing in commands.
+		cmdWithoutFlag := exec.CommandContext(ctx, startRecordSessionCmd, p.logFilePath, catCmd, p.ipcFilePath)
+		cmdWithoutFlag.Stderr = &noFlagStderr
+		noFlagErr := cmdWithoutFlag.Run()
+		if noFlagErr != nil {
+			log.Debugf("Failed to generate transcript without -c flag: %v: %s", noFlagErr, noFlagStderr.String())
+			return errors.New(fmt.Sprintf("Failed to generate transcript with the following errors:\n%v: %s\n%v:%s", flagErr, flagStderr.String(), noFlagErr, noFlagStderr.String()))
 		}
-	}()
-
-	time.Sleep(5 * time.Second)
-
-	// Increase buffer size
-	screenBufferSizeCmdInput := fmt.Sprintf(screenBufferSizeCmd, mgsConfig.ScreenBufferSize, newLineCharacter)
-	shadowShellInput.Write([]byte(screenBufferSizeCmdInput))
-
-	time.Sleep(5 * time.Second)
-
-	// Start shell recording
-	recordCmdInput := fmt.Sprintf("%s %s%s", startRecordSessionCmd, p.logFilePath, newLineCharacter)
-	shadowShellInput.Write([]byte(recordCmdInput))
-
-	time.Sleep(5 * time.Second)
-
-	// Start shell logger
-	loggerCmdInput := fmt.Sprintf("%s %s %t%s", appconfig.DefaultSessionLogger, p.ipcFilePath, false, newLineCharacter)
-	shadowShellInput.Write([]byte(loggerCmdInput))
-
-	// Sleep till the logger completes execution
-	time.Sleep(time.Minute)
-
-	exitCmdInput := fmt.Sprintf("%s%s", mgsConfig.Exit, newLineCharacter)
-
-	// Exit start record command
-	shadowShellInput.Write([]byte(exitCmdInput))
-
-	// Sleep until start record command is exited successfully
-	time.Sleep(30 * time.Second)
-
-	// Exit screen buffer command
-	shadowShellInput.Write([]byte(exitCmdInput))
-
-	// Sleep till screen buffer command is exited successfully
-	time.Sleep(5 * time.Second)
-
-	// Exit shell
-	shadowShellInput.Write([]byte(exitCmdInput))
-
-	// Sleep till shell is exited successfully
-	time.Sleep(5 * time.Second)
-
-	// Close pty
-	shadowShellInput.Close()
-
-	// Sleep till the shell successfully exits before uploading
-	time.Sleep(15 * time.Second)
+	}
 
 	return nil
 }
