@@ -18,6 +18,7 @@ import (
 	"fmt"
 	"testing"
 
+	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -63,6 +64,7 @@ type isSimilarHashTestData struct {
 
 func TestIsSimilarHardwareHash(t *testing.T) {
 	empty := make(map[string]string)
+	log := log.NewMockLog()
 
 	origin := map[string]string{
 		hardwareID:      "hardwareValue",
@@ -99,7 +101,7 @@ func TestIsSimilarHardwareHash(t *testing.T) {
 		assert.Equal(
 			t,
 			test.expected,
-			isSimilarHardwareHash(test.saved, test.current, test.threshold),
+			isSimilarHardwareHash(log, test.saved, test.current, test.threshold),
 			fmt.Sprintf("Test case %v did not return %t.", test, test.expected),
 		)
 	}
