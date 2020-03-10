@@ -62,6 +62,8 @@ output.`) + `","PackageId":"` + mark(`sed_4.2.2-7_amd64.deb`) + `"},` +
 		`"Summary":"` + mark(`VIM filesystem layout`) + `","PackageId":"` + mark(`vim-6:8.0.0503-1.45.amzn1.src.rpm`) + `"},`
 )
 
+var snapSampleData = "Name  Version    Rev   Tracking  Publisher   Notes\ncore  16-2.43.3  8689  stable    canonical*  core\n"
+
 var sampleDataParsed = []model.ApplicationData{
 	{
 		Name:            "amazon-ssm-agent",
@@ -126,6 +128,10 @@ var sampleDataParsed = []model.ApplicationData{
 	},
 }
 
+var snapSampleDataParsed = `{"Name":"` + mark(`core`) + `","Publisher":"` + mark(`canonical*`) + `","Version":"` + mark(`16-2.43.3`) +
+	`","ApplicationType":"` + mark(`admin`) + `","Architecture":"` + mark(``) + `","Url":"` + mark(``) + `",` +
+	`"Summary":"` + mark(``) + `","PackageId":"` + mark(``) + `"}`
+
 func MockTestExecutorWithError(command string, args ...string) ([]byte, error) {
 	var result []byte
 	return result, fmt.Errorf("random error")
@@ -181,6 +187,15 @@ func TestGetApplicationData(t *testing.T) {
 
 	assert.Nil(t, err, "Error must not be thrown with MockTestExecutorWithoutError")
 	assertEqual(t, sampleDataParsed, data)
+}
+
+func TestParseSnapOutput(t *testing.T) {
+	mockContext := context.NewMockDefault()
+	var data string
+
+	mockCmdOutput := snapSampleData
+	data = parseSnapOutput(mockContext, mockCmdOutput)
+	assert.Equal(t, snapSampleDataParsed, data)
 }
 
 func TestCollectApplicationData(t *testing.T) {

@@ -51,6 +51,11 @@ var (
 		// PackageId should be something like ${Filename}, but for some reason that field does not get printed,
 		// so we build PackageId from parts
 		`","PackageId":"` + mark(`${Package}_${Version}_${Architecture}.deb`) + `"},`
+
+	snapPkgName                    = "snapd"
+	snapCmd                        = "snap"
+	snapArgsToGetAllInstalledSnaps = "list"
+	snapQueryFormat                = "{\"Name\":\"%s\",\"Publisher\":\"%s\",\"Version\":\"%s\",\"ApplicationType\":\"%s\",\"Architecture\":\"%s\",\"Url\":\"%s\",\"Summary\":\"%s\",\"PackageId\":\"%s\"}"
 )
 
 func randomString(length int) string {
@@ -80,7 +85,6 @@ func collectPlatformDependentApplicationData(context context.T) (appData []model
 
 	args := []string{dpkgArgsToGetAllApplications, dpkgQueryFormat}
 	cmd := dpkgCmd
-
 	// try dpkg first, if any error occurs, use rpm
 	if appData, err = getApplicationData(context, cmd, args); err != nil {
 		log.Info("Getting applications information using dpkg failed, trying rpm now")
@@ -91,6 +95,57 @@ func collectPlatformDependentApplicationData(context context.T) (appData []model
 		}
 	}
 
+	// Due to ubuntu 18 use snap, so add getApplicationData here
+	if snapIsInstalled(appData) {
+		cmd = snapCmd
+		args = []string{snapArgsToGetAllInstalledSnaps}
+		var snapAppData []model.ApplicationData
+		if snapAppData, err = getApplicationData(context, cmd, args); err != nil {
+			log.Errorf("Getting applications information using snap failed. Skipping.")
+			return
+		}
+		log.Infof("Appending application information found using snap to application data.")
+		appData = append(appData, snapAppData...)
+	}
+	return
+}
+
+func snapIsInstalled(appData []model.ApplicationData) bool {
+	for _, element := range appData {
+		if strings.ToLower(element.Name) == snapPkgName {
+			return true
+		}
+	}
+	return false
+}
+
+// Parse snap application data like: "Name  Version    Rev   Tracking  Publisher   Notes\n core  16-2.43.3  8689  stable    canonical*  core\n"
+// into format that downstream can accept
+// like: "Name":"<start4b9ad210>core<end7ca79ece>","Publisher":"<start4b9ad210>canonical*<end7ca79ece>","Version":"<start4b9ad210>16-2.43.3<end7ca79ece>"...
+func parseSnapOutput(context context.T, cmdOutput string) (snapOutput string) {
+	log := context.Log()
+	var applications = strings.Split(cmdOutput, "\n")
+
+	// last application is empty
+	for i := 1; i < len(applications)-1; i++ {
+		var arr = strings.Fields(applications[i])
+		if len(arr) < 6 {
+			log.Errorf("Unable get the snap list result.")
+			return
+		}
+		var str = fmt.Sprintf(snapQueryFormat,
+			mark(arr[0]),  // Name
+			mark(arr[4]),  // Publisher
+			mark(arr[1]),  // Version
+			mark("admin"), // ApplicationType
+			mark(""),      // Architecture
+			mark(""),      // Url
+			mark(""),      // Summary
+			mark(""))      // PackageId
+		snapOutput = snapOutput + str
+		snapOutput = snapOutput + ","
+	}
+	snapOutput = strings.TrimSuffix(snapOutput, ",")
 	return
 }
 
@@ -98,98 +153,106 @@ func collectPlatformDependentApplicationData(context context.T) (appData []model
 func getApplicationData(context context.T, command string, args []string) (data []model.ApplicationData, err error) {
 
 	/*
-			Note: Following are samples of how rpm & dpkg stores package information.
+					Note: Following are samples of how rpm & dpkg stores package information.
 
-			RPM:
-			Name        : python27
-			Version     : 2.7.10
-			Release     : 4.120.amzn1
-			Architecture: x86_64
-			Install Date: Fri 29 Apr 2016 11:58:27 PM UTC
-			Group       : Development/Languages
-			Size        : 86074
-			License     : Python
-			Signature   : RSA/SHA256, Sat 12 Dec 2015 03:15:10 AM UTC, Key ID bcb4a85b21c0f39f
-			Source RPM  : python27-2.7.10-4.120.amzn1.src.rpm
-			Build Date  : Tue 08 Dec 2015 06:38:19 PM UTC
-			Build Host  : build-60007.build
-			Relocations : (not relocatable)
-			Packager    : Amazon.com, Inc. <http://aws.amazon.com>
-			Vendor      : Amazon.com
-			URL         : http://www.python.org/
-			Summary     : An interpreted, interactive, object-oriented programming language
-			Description :
-			Python is an interpreted, interactive, object-oriented programming
-			language often compared to Tcl, Perl, Scheme or Java. Python includes
-			modules, classes, exceptions, very high level dynamic data types and
-			dynamic typing. Python supports interfaces to many system calls and
-			libraries, as well as to various windowing systems (X11, Motif, Tk,
-			Mac and MFC).
+					RPM:
+					Name        : python27
+					Version     : 2.7.10
+					Release     : 4.120.amzn1
+					Architecture: x86_64
+					Install Date: Fri 29 Apr 2016 11:58:27 PM UTC
+					Group       : Development/Languages
+					Size        : 86074
+					License     : Python
+					Signature   : RSA/SHA256, Sat 12 Dec 2015 03:15:10 AM UTC, Key ID bcb4a85b21c0f39f
+					Source RPM  : python27-2.7.10-4.120.amzn1.src.rpm
+					Build Date  : Tue 08 Dec 2015 06:38:19 PM UTC
+					Build Host  : build-60007.build
+					Relocations : (not relocatable)
+					Packager    : Amazon.com, Inc. <http://aws.amazon.com>
+					Vendor      : Amazon.com
+					URL         : http://www.python.org/
+					Summary     : An interpreted, interactive, object-oriented programming language
+					Description :
+					Python is an interpreted, interactive, object-oriented programming
+					language often compared to Tcl, Perl, Scheme or Java. Python includes
+					modules, classes, exceptions, very high level dynamic data types and
+					dynamic typing. Python supports interfaces to many system calls and
+					libraries, as well as to various windowing systems (X11, Motif, Tk,
+					Mac and MFC).
 
-			Programmers can write new built-in modules for Python in C or C++.
-			Python can be used as an extension language for applications that need
-			a programmable interface.
+					Programmers can write new built-in modules for Python in C or C++.
+					Python can be used as an extension language for applications that need
+					a programmable interface.
 
-			Note that documentation for Python is provided in the python-docs
-			package.
-			This package provides the "python" executable; most of the actual
-			implementation is within the "python-libs" package.
+					Note that documentation for Python is provided in the python-docs
+					package.
+					This package provides the "python" executable; most of the actual
+					implementation is within the "python-libs" package.
 
-			DPKG:
+					DPKG:
 
-			Package: sed
-			Essential: yes
-			Priority: required
-			Section: utils
-			Installed-Size: 304
-			Origin: Ubuntu
-			Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
-			Bugs: https://bugs.launchpad.net/ubuntu/+filebug
-			Architecture: amd64
-			Multi-Arch: foreign
-			Version: 4.2.2-7
-			Depends: dpkg (>= 1.15.4) | install-info
-			Pre-Depends: libc6 (>= 2.14), libselinux1 (>= 1.32)
-			Filename: pool/main/s/sed/sed_4.2.2-7_amd64.deb
-			Size: 138916
-			MD5sum: cb5d3a67bb2859bc2549f1916b9a1818
-			Description: The GNU sed stream editor
-			Original-Maintainer: Clint Adams <clint@debian.org>
-			SHA1: dc7e76d7a861b329ed73e807153c2dd89d6a0c71
-			SHA256: 0623b35cdc60f8bc74e6b31ee32ed4585433fb0bc7b99c9a62985c115dbb7f0d
-			Homepage: http://www.gnu.org/software/sed/
-			Description-md5: 67b5a614216e15a54b09cad62d5d5afc
-			Supported: 5y
-			Task: minimal
+					Package: sed
+					Essential: yes
+					Priority: required
+					Section: utils
+					Installed-Size: 304
+					Origin: Ubuntu
+					Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+					Bugs: https://bugs.launchpad.net/ubuntu/+filebug
+					Architecture: amd64
+					Multi-Arch: foreign
+					Version: 4.2.2-7
+					Depends: dpkg (>= 1.15.4) | install-info
+					Pre-Depends: libc6 (>= 2.14), libselinux1 (>= 1.32)
+					Filename: pool/main/s/sed/sed_4.2.2-7_amd64.deb
+					Size: 138916
+					MD5sum: cb5d3a67bb2859bc2549f1916b9a1818
+					Description: The GNU sed stream editor
+					Original-Maintainer: Clint Adams <clint@debian.org>
+					SHA1: dc7e76d7a861b329ed73e807153c2dd89d6a0c71
+					SHA256: 0623b35cdc60f8bc74e6b31ee32ed4585433fb0bc7b99c9a62985c115dbb7f0d
+					Homepage: http://www.gnu.org/software/sed/
+					Description-md5: 67b5a614216e15a54b09cad62d5d5afc
+					Supported: 5y
+					Task: minimal
+
+		            SNAP:
+
+		            Name: core
+		            Version: 6-2.43.3
+		            Rev: 8689
+		            Tracking: stable
+		            Publisher: anonical*
+		            Notes: core
+
+					Following fields are relevant for inventory type AWS:Application
+					- Name
+					- Version
+				    - Release
+					- Epoch
+					- Publisher
+					- Architecture
+					- Url
+					- InstalledTime
+					- ApplicationType
+					- Summary: For rpm, we take the multi line Description and keep the first line only.
+					  The first line is a short summary. For dpkg-query we take the Summary field.
+					- PackageID: we take the rpm/deb filename
 
 
-			Following fields are relevant for inventory type AWS:Application
-			- Name
-			- Version
-		    - Release
-			- Epoch
-			- Publisher
-			- Architecture
-			- Url
-			- InstalledTime
-			- ApplicationType
-			- Summary: For rpm, we take the multi line Description and keep the first line only.
-			  The first line is a short summary. For dpkg-query we take the Summary field.
-			- PackageID: we take the rpm/deb filename
+					We use rpm query & dpkg-query to get above fields and then transform the data to convert into json
+					to simplify its processing.
 
+					Sample rpm query is of following format:
+					rpm -qa --queryformat "\{\"Name\":\"%{NAME}\"\},"
 
-			We use rpm query & dpkg-query to get above fields and then transform the data to convert into json
-			to simplify its processing.
+					For more details on rpm queryformat, refer http://www.rpm.org/wiki/Docs/QueryFormat
 
-			Sample rpm query is of following format:
-			rpm -qa --queryformat "\{\"Name\":\"%{NAME}\"\},"
+					Sample dpkg-query is of following format:
+					dpkg-query -W -f='{"Name":${binary:Package}},'
 
-			For more details on rpm queryformat, refer http://www.rpm.org/wiki/Docs/QueryFormat
-
-			Sample dpkg-query is of following format:
-			dpkg-query -W -f='{"Name":${binary:Package}},'
-
-			For more details on dpkg format, refer to http://manpages.ubuntu.com/manpages/trusty/man1/dpkg-query.1.html
+					For more details on dpkg format, refer to http://manpages.ubuntu.com/manpages/trusty/man1/dpkg-query.1.html
 	*/
 
 	var output []byte
@@ -206,6 +269,10 @@ func getApplicationData(context context.T, command string, args []string) (data 
 		err = fmt.Errorf("Command failed with error: %v", string(output))
 	} else {
 		cmdOutput := string(output)
+		// parse snap result
+		if command == "snap" {
+			cmdOutput = parseSnapOutput(context, cmdOutput)
+		}
 		log.Debugf("Command output: %v", cmdOutput)
 
 		if data, err = convertToApplicationData(cmdOutput); err != nil {
@@ -243,7 +310,6 @@ func convertToApplicationData(input string) (data []model.ApplicationData, err e
 	*/
 
 	str := convertEntriesToJsonArray(input)
-
 	// keep single line out of multi-line fields and escape special characters
 	str, err = replaceMarkedFields(str, startMarker, endMarker, cleanupJSONField)
 	if err != nil {
