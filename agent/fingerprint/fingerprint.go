@@ -25,7 +25,9 @@ import (
 	"net"
 	"os"
 	"os/exec"
+	"time"
 
+	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/log/ssmlog"
 	"github.com/twinj/uuid"
 )
@@ -83,22 +85,45 @@ func SetSimilarityThreshold(value int) (err error) {
 
 // generateFingerprint generates new fingerprint and saves it in the vault
 func generateFingerprint() (string, error) {
+	var hardwareHash map[string]string
+	var savedHwInfo hwInfo
+	var err error
+
 	log := ssmlog.SSMLogger(true)
 	uuid.SwitchFormat(uuid.CleanHyphen)
 	result := ""
-
-	// fetch current hardware hash values
-	hardwareHash := currentHwHash()
-
-	// try get previously saved fingerprint data from vault
-	savedHwInfo, err := fetch()
-	if err != nil {
-		return "", err
-	}
-
 	threshold := minimumMatchPercent
-	if savedHwInfo.SimilarityThreshold >= 0 {
-		threshold = savedHwInfo.SimilarityThreshold
+
+	// retry getting the new hash and compare with the saved hash for 3 times
+	for attempt := 1; attempt <= 3; attempt++ {
+		// fetch current hardware hash values
+		hardwareHash = currentHwHash()
+
+		// try get previously saved fingerprint data from vault
+		savedHwInfo, err = fetch()
+		if err != nil {
+			continue
+		}
+
+		if savedHwInfo.SimilarityThreshold >= 0 {
+			threshold = savedHwInfo.SimilarityThreshold
+		}
+
+		// first time generation, breakout retry
+		if !hasFingerprint(savedHwInfo) {
+			log.Debugf("No initial fingerprint detected, skipping retry...")
+			break
+		}
+
+		// stop retry if the hardware hashes are the same
+		if isSimilarHardwareHash(log, savedHwInfo.HardwareHash, hardwareHash, threshold) {
+			log.Debugf("Calculated hardware hash is same as saved one, skipping retry...")
+			break
+		}
+
+		log.Debugf("Calculated hardware hash is different with saved one, retry to ensure the difference is not cause by the dependency has not been ready")
+		// sleep 5 seconds until the next retry
+		time.Sleep(5 * time.Second)
 	}
 
 	// check if this is the first time we are generating the fingerprint
@@ -107,7 +132,7 @@ func generateFingerprint() (string, error) {
 		// generate new fingerprint
 		log.Info("No initial fingerprint detected, generating fingerprint file...")
 		result = uuid.NewV4().String()
-	} else if !isSimilarHardwareHash(savedHwInfo.HardwareHash, hardwareHash, threshold) {
+	} else if !isSimilarHardwareHash(log, savedHwInfo.HardwareHash, hardwareHash, threshold) {
 		log.Info("Calculated hardware difference, regenerating fingerprint...")
 		result = uuid.NewV4().String()
 	} else {
@@ -175,22 +200,25 @@ func hasFingerprint(info hwInfo) bool {
 // percentage of match is greater than or equals to the threshold provided.
 // It returns false if any of the map is empty or the percentage of match is
 // less than threshold.
-func isSimilarHardwareHash(savedHwHash map[string]string, currentHwHash map[string]string, threshold int) bool {
+func isSimilarHardwareHash(logger log.T, savedHwHash map[string]string, currentHwHash map[string]string, threshold int) bool {
 	var totalCount, successCount int
 	// check input
 	if len(savedHwHash) == 0 || len(currentHwHash) == 0 {
+		logger.Debugf("saved hash or current hash is empty")
 		return false
 	}
 
 	// check whether hardwareId (uuid/machineid) has changed
 	// this usually happens during provisioning
 	if currentHwHash[hardwareID] != savedHwHash[hardwareID] {
+		logger.Debugf("saved hardware hash is not equal to current")
 		return false
 	}
 
 	// check whether ipaddress has remained the same
 	// this happens when the instance type is changed for the provisioned instance
 	if currentHwHash[ipAddressID] == savedHwHash[ipAddressID] {
+		logger.Debugf("saved ip address is equal to current")
 		return true
 	}
 
@@ -204,6 +232,7 @@ func isSimilarHardwareHash(savedHwHash map[string]string, currentHwHash map[stri
 	// check if the match exceeds the minimum match percent
 	totalCount = len(currentHwHash)
 	if float32(successCount)/float32(totalCount)*100 < float32(threshold) {
+		logger.Debugf("match exceeds the minimum match percent")
 		return false
 	}
 
