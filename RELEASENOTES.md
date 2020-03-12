@@ -1,5 +1,13 @@
 Latest
 ===============
+- Bug fix for CloudWatch agent version showing twice in Inventory console
+- Bug fix for retrieving minor version for CentOS7
+- Add snap appData collection for inventory in ubuntu 18
+- Add validation for contents of os release files
+- Add retry for fingerprint generation
+
+2.3.871.0
+===============
 - Various bug fix for SSM Agent
 
 2.3.842.0
