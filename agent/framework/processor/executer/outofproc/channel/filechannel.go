@@ -206,6 +206,8 @@ func (ch *fileWatcherChannel) consumeAll() {
 			name := info.Name()
 			if ch.isReadable(name) {
 				ch.consume(path.Join(ch.path, name))
+			} else {
+				ch.logger.Warnf("IPC file not readable: %s", name)
 			}
 		}
 	}
@@ -246,8 +248,12 @@ func (ch *fileWatcherChannel) consume(filepath string) {
 
 	}
 
-	//remove the consumed file
-	os.Remove(filepath)
+	//remove the consumed IPC file and log error message when there is an exception in os.Remove()
+	err = os.Remove(filepath)
+	if err != nil {
+		log.Error("Error occurred while removing the IPC file: ", err.Error())
+	}
+
 	//update the recvcounter
 	ch.recvCounter = parseSequenceCounter(filepath) + 1
 	//TODO handle buffered channel queue overflow

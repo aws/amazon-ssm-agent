@@ -54,6 +54,7 @@ func NewMockLogWithContext(ctx string) *Mock {
 	log.On("Info", mock.Anything).Return()
 	log.On("Debugf", mock.Anything, mock.Anything).Return()
 	log.On("Errorf", mock.AnythingOfType("string"), mock.Anything).Return(mock.AnythingOfType("error"))
+	log.On("Warnf", mock.AnythingOfType("string"), mock.Anything).Return(mock.AnythingOfType("error"))
 	log.On("Tracef", mock.Anything, mock.Anything).Return()
 	log.On("Infof", mock.Anything, mock.Anything).Return()
 	return log
