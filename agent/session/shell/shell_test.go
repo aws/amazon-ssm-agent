@@ -128,6 +128,45 @@ func (suite *ShellTestSuite) TestExecute() {
 	suite.mockIohandler.On("SetExitCode", 0).Return(nil)
 	suite.mockIohandler.On("SetStatus", contracts.ResultStatusSuccess).Return()
 	suite.mockIohandler.On("SetOutput", mock.Anything).Return()
+	suite.mockDataChannel.On("SendAgentSessionStateMessage", mock.Anything, mgsContracts.Terminating).
+		Return(nil).Times(1)
+
+	stdout, stdin, _ := os.Pipe()
+	stdin.Write(payload)
+	startPty = func(log log.T, shellProps mgsContracts.ShellProperties, isSessionLogger bool, config contracts.Configuration) (stdin *os.File, stdout *os.File, err error) {
+		return stdin, stdout, nil
+	}
+	plugin := &ShellPlugin{
+		stdout:      stdout,
+		dataChannel: suite.mockDataChannel,
+	}
+
+	plugin.Execute(suite.mockContext,
+		contracts.Configuration{},
+		suite.mockCancelFlag,
+		suite.mockIohandler,
+		suite.mockDataChannel,
+		mgsContracts.ShellProperties{})
+
+	suite.mockCancelFlag.AssertExpectations(suite.T())
+	suite.mockIohandler.AssertExpectations(suite.T())
+	suite.mockDataChannel.AssertExpectations(suite.T())
+
+	stdin.Close()
+	stdout.Close()
+}
+
+// Testing Execute when cancel flag is set
+func (suite *ShellTestSuite) TestExecuteWithCancelFlag() {
+	suite.mockCancelFlag.On("Canceled").Return(false).Once()
+	suite.mockCancelFlag.On("Canceled").Return(true).Once()
+	suite.mockCancelFlag.On("ShutDown").Return(false)
+	suite.mockCancelFlag.On("Wait").Return(task.Completed)
+	suite.mockIohandler.On("SetExitCode", 0).Return(nil)
+	suite.mockIohandler.On("SetStatus", contracts.ResultStatusSuccess).Return()
+	suite.mockIohandler.On("SetOutput", mock.Anything).Return()
+	suite.mockDataChannel.On("SendAgentSessionStateMessage", mock.Anything, mgsContracts.Terminating).
+		Return(nil).Times(0)
 
 	stdout, stdin, _ := os.Pipe()
 	stdin.Write(payload)
@@ -160,7 +199,6 @@ func (suite *ShellTestSuite) TestWritePump() {
 
 	//suite.mockDataChannel := &dataChannelMock.IDataChannel{}
 	suite.mockDataChannel.On("SendStreamDataMessage", mock.Anything, mock.Anything, payload).Return(nil)
-	suite.mockDataChannel.On("SendAgentSessionStateMessage", mock.Anything, mgsContracts.Terminating).Return(nil)
 
 	plugin := &ShellPlugin{
 		stdout:      stdout,
@@ -191,7 +229,6 @@ func (suite *ShellTestSuite) TestWritePumpForInvalidUtf8Character() {
 
 	//suite.mockDataChannel := &dataChannelMock.IDataChannel{}
 	suite.mockDataChannel.On("SendStreamDataMessage", mock.Anything, mock.Anything, invalidUtf8Payload).Return(nil)
-	suite.mockDataChannel.On("SendAgentSessionStateMessage", mock.Anything, mgsContracts.Terminating).Return(nil)
 
 	plugin := &ShellPlugin{
 		stdout:      stdout,

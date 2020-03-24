@@ -182,6 +182,9 @@ func (p *ShellPlugin) execute(context context.T,
 	select {
 	case <-cancelled:
 		log.Debug("Session cancelled. Attempting to stop pty.")
+		if err := Stop(log); err != nil {
+			log.Errorf("Error occurred while closing pty: %v", err)
+		}
 		errorCode := 0
 		output.SetExitCode(errorCode)
 		output.SetStatus(agentContracts.ResultStatusSuccess)
@@ -192,6 +195,10 @@ func (p *ShellPlugin) execute(context context.T,
 			output.SetExitCode(appconfig.ErrorExitCode)
 			output.SetStatus(agentContracts.ResultStatusFailed)
 		} else {
+			// Send session status as Terminating to service on receiving success exit code from pty
+			if err = p.dataChannel.SendAgentSessionStateMessage(log, mgsContracts.Terminating); err != nil {
+				log.Errorf("Unable to send AgentSessionState message with session status %s. %v", mgsContracts.Terminating, err)
+			}
 			output.SetExitCode(appconfig.SuccessExitCode)
 			output.SetStatus(agentContracts.ResultStatusSuccess)
 		}
@@ -266,11 +273,7 @@ func (p *ShellPlugin) writePump(log log.T) (errorCode int) {
 	for {
 		stdoutBytesLen, err := reader.Read(stdoutBytes)
 		if err != nil {
-			// Terminating session
 			log.Debugf("Failed to read from pty master: %s", err)
-			if err = p.dataChannel.SendAgentSessionStateMessage(log, mgsContracts.Terminating); err != nil {
-				log.Errorf("Unable to send AgentSessionState message with session status %s. %v", mgsContracts.Terminating, err)
-			}
 			return appconfig.SuccessExitCode
 		}
 
