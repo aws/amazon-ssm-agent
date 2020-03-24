@@ -87,7 +87,7 @@ func (suite *SessionTestSuite) TestModuleName() {
 // Testing the module execute
 func (suite *SessionTestSuite) TestModuleExecute() {
 	resChan := make(chan contracts.DocumentResult)
-	suite.mockProcessor.On("InitialProcessing").Return(nil)
+	suite.mockProcessor.On("InitialProcessing", false).Return(nil)
 	suite.mockProcessor.On("Start").Return(resChan, nil)
 	suite.mockControlChannel.On("SendMessage", mock.Anything, mock.Anything, websocket.BinaryMessage).Return(nil)
 

@@ -148,7 +148,7 @@ func TestProcessAssociationUnableToParseAssociation(t *testing.T) {
 	processor.proc = processorMock
 	ch := make(chan contracts.DocumentResult)
 	processorMock.On("Start").Return(ch, nil)
-	processorMock.On("InitialProcessing").Return(nil)
+	processorMock.On("InitialProcessing", false).Return(nil)
 
 	complianceUploader.On("CreateNewServiceIfUnHealthy", mock.AnythingOfType("*log.Mock"))
 
@@ -210,7 +210,7 @@ func TestProcessAssociationSuccessful(t *testing.T) {
 	// Mock processor
 	ch := make(chan contracts.DocumentResult)
 	processorMock.On("Start").Return(ch, nil)
-	processorMock.On("InitialProcessing").Return(nil)
+	processorMock.On("InitialProcessing", false).Return(nil)
 	complianceUploader.On("CreateNewServiceIfUnHealthy", mock.AnythingOfType("*log.Mock"))
 
 	// Act

@@ -130,7 +130,7 @@ func (p *Processor) InitializeAssociationProcessor() {
 	log.Info("Launching response handler")
 	go p.listenToResponses()
 
-	if err := p.proc.InitialProcessing(); err != nil {
+	if err := p.proc.InitialProcessing(false); err != nil {
 		log.Errorf("initial processing in EngineProcessor encountered error: %v", err)
 		return
 	}
