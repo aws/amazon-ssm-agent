@@ -131,7 +131,9 @@ func StartPty(
 func Stop(log log.T) (err error) {
 	log.Info("Stopping pty")
 	if err := ptyFile.Close(); err != nil {
-		return fmt.Errorf("unable to close ptyFile. %s", err)
+		if err, ok := err.(*os.PathError); ok && err.Err != os.ErrClosed {
+			return fmt.Errorf("unable to close ptyFile. %s", err)
+		}
 	}
 	return nil
 }
