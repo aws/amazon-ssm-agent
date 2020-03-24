@@ -68,7 +68,7 @@ func (s *RunCommandService) ModuleExecute(context context.T) (err error) {
 
 	go s.listenReply(resultChan)
 
-	if err = s.processor.InitialProcessing(); err != nil {
+	if err = s.processor.InitialProcessing(true); err != nil {
 		log.Errorf("initial processing in EngineProcessor encountered error: %v", err)
 		return
 	}

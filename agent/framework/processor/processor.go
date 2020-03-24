@@ -44,13 +44,15 @@ const (
 
 	// hardstopTimeout is the time before the processor will be shutdown during a hardstop
 	hardStopTimeout = time.Second * 4
+
+	maxDocumentTimeOutHour = time.Hour * 48
 )
 
 type Processor interface {
 	//Start activate the Processor and pick up the left over document in the last run, it returns a channel to caller to gather DocumentResult
 	Start() (chan contracts.DocumentResult, error)
 	//Process any initial documents loaded from file directory. This should be run after Start().
-	InitialProcessing() error
+	InitialProcessing(skipDocumentIfExpired bool) error
 	//Stop the processor, save the current state to resume later
 	Stop(stopType contracts.StopType)
 	//submit to the pool a document in form of docState object, results will be streamed back from the central channel returned by Start()
@@ -110,7 +112,7 @@ func (p *EngineProcessor) Start() (resChan chan contracts.DocumentResult, err er
 	return
 }
 
-func (p *EngineProcessor) InitialProcessing() (err error) {
+func (p *EngineProcessor) InitialProcessing(skipDocumentIfExpired bool) (err error) {
 	context := p.context
 	if context == nil {
 		return fmt.Errorf("EngineProcessor is not initialized")
@@ -126,7 +128,7 @@ func (p *EngineProcessor) InitialProcessing() (err error) {
 
 	log.Info("Initial processing")
 	//prioritize the ongoing document first
-	p.processInProgressDocuments(instanceID)
+	p.processInProgressDocuments(instanceID, skipDocumentIfExpired)
 	//deal with the pending jobs that haven't picked up by worker yet
 	p.processPendingDocuments(instanceID)
 	return
@@ -256,7 +258,7 @@ func (p *EngineProcessor) processPendingDocuments(instanceID string) {
 }
 
 // ProcessInProgressDocuments processes InProgress documents that have already dequeued and entered job pool
-func (p *EngineProcessor) processInProgressDocuments(instanceID string) {
+func (p *EngineProcessor) processInProgressDocuments(instanceID string, skipDocumentIfExpired bool) {
 	log := p.context.Log()
 	config := p.context.AppConfig()
 	var err error
@@ -295,6 +297,18 @@ func (p *EngineProcessor) processInProgressDocuments(instanceID string) {
 
 		if p.isSupportedDocumentType(docState.DocumentType) {
 			log.Infof("Processing in-progress document %v", docState.DocumentInformation.DocumentID)
+
+			if skipDocumentIfExpired && docState.DocumentInformation.CreatedDate != "" {
+				createDate := times.ParseIso8601UTC(docState.DocumentInformation.CreatedDate)
+
+				// Do not resume in-progress document is create date is 48 hours ago.
+				if createDate.Add(maxDocumentTimeOutHour).Before(time.Now().UTC()) {
+					log.Infof("Document %v expired %v, skipping", docState.DocumentInformation.DocumentID, docState.DocumentInformation.CreatedDate)
+					p.documentMgr.MoveDocumentState(log, f.Name(), instanceID, appconfig.DefaultLocationOfCurrent, appconfig.DefaultLocationOfCorrupt)
+					continue
+				}
+			}
+
 			//Submit the work to Job Pool so that we don't block for processing of new messages
 			if err := p.submit(&docState); err != nil {
 				log.Errorf("failed to submit in progress document %v : %v", docState.DocumentInformation.DocumentID, err)

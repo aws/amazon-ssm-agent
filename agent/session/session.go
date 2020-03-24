@@ -196,7 +196,7 @@ func (s *Session) ModuleExecute(context context.T) (err error) {
 
 	log.Info("Starting receiving message from control channel")
 
-	if err = s.processor.InitialProcessing(); err != nil {
+	if err = s.processor.InitialProcessing(false); err != nil {
 		log.Errorf("initial processing in EngineProcessor encountered error: %v", err)
 		return
 	}

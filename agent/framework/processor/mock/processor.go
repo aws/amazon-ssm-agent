@@ -14,8 +14,8 @@ func (m *MockedProcessor) Start() (chan contracts.DocumentResult, error) {
 	return args.Get(0).(chan contracts.DocumentResult), args.Error(1)
 }
 
-func (m *MockedProcessor) InitialProcessing() (err error) {
-	args := m.Called()
+func (m *MockedProcessor) InitialProcessing(skipDocumentIfExpired bool) (err error) {
+	args := m.Called(skipDocumentIfExpired)
 	return args.Error(0)
 }
 
