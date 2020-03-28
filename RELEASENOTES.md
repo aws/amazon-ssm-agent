@@ -1,5 +1,11 @@
 Latest
 ===============
+- Stop pty on receiving TerminateSession request
+- Add support for Debian arm64 architecture
+- Refactoring session log generation logic
+
+2.3.930.0
+===============
 - Bug fix for CloudWatch agent version showing twice in Inventory console
 - Bug fix for retrieving minor version for CentOS7
 - Add snap appData collection for inventory in ubuntu 18
