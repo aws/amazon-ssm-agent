@@ -42,6 +42,8 @@ Copyright (c) 2013 Mitchell Hashimoto
 Copyright (c) 2012-2016 The go-diff Authors
 **emirpasic/gods (AVL Tree) - https://github.com/emirpasic/gods/tree/master/trees/avltree
 Copyright (c) 2017 Benjamin Scher Purcell <benjapurcell@gmail.com>
+**xtaci/smux - https://github.com/xtaci/smux
+Copyright (c) 2016-2017 Daniel Fu
 
 MIT License
 
