@@ -140,6 +140,9 @@ var UpdateContextFilePath string
 // SSMData specifies the directory we used to store SSM data.
 var SSMDataPath string
 
+// SessionFilesPath specifies the directory where session specific files are stored.
+var SessionFilesPath string
+
 // Windows environment variable %ProgramFiles%
 var EnvProgramFiles string
 
@@ -198,5 +201,6 @@ func init() {
 	EC2ConfigDataStorePath = filepath.Join(programData, EC2ConfigAppDataFolder, "InstanceData")
 	UpdateContextFilePath = filepath.Join(programData, EC2ConfigAppDataFolder, "Update\\UpdateContext.json")
 	EC2ConfigSettingPath = filepath.Join(EnvProgramFiles, EC2ConfigServiceFolder, "Settings")
+	SessionFilesPath = filepath.Join(SSMDataPath, "Session")
 
 }

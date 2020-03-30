@@ -15,14 +15,9 @@
 package port
 
 import (
-	"bytes"
-	"encoding/binary"
 	"errors"
 	"fmt"
-	"io"
-	"net"
 	"os"
-	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
@@ -35,11 +30,10 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/session/datachannel"
 	"github.com/aws/amazon-ssm-agent/agent/session/plugins/sessionplugin"
 	"github.com/aws/amazon-ssm-agent/agent/task"
+	"github.com/aws/amazon-ssm-agent/agent/versionutil"
 )
 
-var DialCall = func(network string, address string) (net.Conn, error) {
-	return net.Dial(network, address)
-}
+const muxSupportedClientVersion = "1.1.70"
 
 // PortParameters contains inputs required to execute port plugin.
 type PortParameters struct {
@@ -49,13 +43,34 @@ type PortParameters struct {
 
 // Plugin is the type for the port plugin.
 type PortPlugin struct {
-	tcpConn            net.Conn
-	dataChannel        datachannel.IDataChannel
-	portNumber         string
-	portType           string
-	reconnectToPort    bool
-	reconnectToPortErr chan (error)
-	cancelled          chan bool
+	dataChannel datachannel.IDataChannel
+	cancelled   chan struct{}
+	session     IPortSession
+}
+
+// IPortSession interface represents functions that need to be implemented by all port sessions
+type IPortSession interface {
+	InitializeSession(log log.T) (err error)
+	HandleStreamMessage(log log.T, streamDataMessage mgsContracts.AgentMessage) (err error)
+	WritePump(log log.T, channel datachannel.IDataChannel) (errorCode int)
+	Stop()
+}
+
+// GetSession initializes session based on the type of the port session
+// mux for port forwarding session and if client supports multiplexing; basic otherwise
+var GetSession = func(portParameters PortParameters, cancelled chan struct{}, clientVersion string, sessionId string) (session IPortSession, err error) {
+	if portParameters.Type == mgsConfig.LocalPortForwarding &&
+		versionutil.Compare(clientVersion, muxSupportedClientVersion, true) >= 0 {
+
+		if session, err = NewMuxPortSession(cancelled, portParameters.PortNumber, sessionId); err == nil {
+			return session, nil
+		}
+	} else {
+		if session, err = NewBasicPortSession(cancelled, portParameters.PortNumber, portParameters.Type); err == nil {
+			return session, nil
+		}
+	}
+	return nil, err
 }
 
 // Returns parameters required for CLI to start session
@@ -68,12 +83,9 @@ func (p *PortPlugin) RequireHandshake() bool {
 	return true
 }
 
-// NewPlugin returns a new instance of the Port Plugin.
+// NewPortPlugin returns a new instance of the Port Plugin.
 func NewPlugin() (sessionplugin.ISessionPlugin, error) {
-	var plugin = PortPlugin{
-		reconnectToPortErr: make(chan error),
-		cancelled:          make(chan bool, 1),
-	}
+	var plugin = PortPlugin{cancelled: make(chan struct{})}
 	return &plugin, nil
 }
 
@@ -84,7 +96,7 @@ func (p *PortPlugin) name() string {
 
 // Execute establishes a connection to a specified port from the parameters
 // It reads incoming messages from the data channel and writes to the port
-// It reads from the  port and writes to the data channel
+// It reads from the port and writes to the data channel
 func (p *PortPlugin) Execute(context context.T,
 	config agentContracts.Configuration,
 	cancelFlag task.CancelFlag,
@@ -125,7 +137,7 @@ func (p *PortPlugin) execute(context context.T,
 		p.stop(log)
 	}()
 
-	if err = p.initializeParameters(log, config.Properties); err != nil {
+	if err = p.initializeParameters(log, config); err != nil {
 		log.Error(err)
 		output.SetExitCode(appconfig.ErrorExitCode)
 		output.SetStatus(agentContracts.ResultStatusFailed)
@@ -134,7 +146,7 @@ func (p *PortPlugin) execute(context context.T,
 		return
 	}
 
-	if err = p.startTCPConn(log); err != nil {
+	if err = p.session.InitializeSession(log); err != nil {
 		log.Error(err)
 		output.SetExitCode(appconfig.ErrorExitCode)
 		output.SetStatus(agentContracts.ResultStatusFailed)
@@ -146,7 +158,7 @@ func (p *PortPlugin) execute(context context.T,
 	go func() {
 		cancelState := cancelFlag.Wait()
 		if cancelFlag.Canceled() {
-			p.cancelled <- true
+			p.cancelled <- struct{}{}
 			log.Debug("Cancel flag set to cancelled in session")
 		}
 		log.Debugf("Cancel flag set to %v in session", cancelState)
@@ -155,9 +167,8 @@ func (p *PortPlugin) execute(context context.T,
 	log.Debugf("Start separate go routine to read from port connection and write to data channel")
 	done := make(chan int, 1)
 	go func() {
-		done <- p.writePump(log)
+		done <- p.session.WritePump(log, p.dataChannel)
 	}()
-
 	log.Infof("Plugin %s started", p.name())
 
 	select {
@@ -186,155 +197,34 @@ func (p *PortPlugin) execute(context context.T,
 
 // InputStreamMessageHandler passes payload byte stream to port
 func (p *PortPlugin) InputStreamMessageHandler(log log.T, streamDataMessage mgsContracts.AgentMessage) error {
-	if p.tcpConn == nil {
-		// This is to handle scenario when cli/console starts sending data but port has not been opened yet
+	if p.session == nil {
+		// This is to handle scenario when cli/console starts sending data but session has not been initialized yet
 		// Since packets are rejected, cli/console will resend these packets until tcp starts successfully in separate thread
 		log.Tracef("TCP connection unavailable. Reject incoming message packet")
 		return nil
 	}
-
-	switch mgsContracts.PayloadType(streamDataMessage.PayloadType) {
-	case mgsContracts.Output:
-		log.Tracef("Output message received: %d", streamDataMessage.SequenceNumber)
-
-		if p.reconnectToPort {
-			log.Debugf("Reconnect to port: %s", p.portNumber)
-			err := p.startTCPConn(log)
-
-			// Pass err to reconnectToPortErr chan to unblock writePump go routine to resume reading from localhost:p.portNumber
-			p.reconnectToPortErr <- err
-			if err != nil {
-				return err
-			}
-
-			p.reconnectToPort = false
-		}
-
-		if _, err := p.tcpConn.Write(streamDataMessage.Payload); err != nil {
-			log.Errorf("Unable to write to port, err: %v.", err)
-			return err
-		}
-	case mgsContracts.Flag:
-		var flag mgsContracts.PayloadTypeFlag
-		buf := bytes.NewBuffer(streamDataMessage.Payload)
-		binary.Read(buf, binary.BigEndian, &flag)
-
-		switch flag {
-		case mgsContracts.DisconnectToPort:
-			// DisconnectToPort flag is sent by client when tcp connection on client side is closed.
-			// In this case agent should also close tcp connection with server and wait for new data from client to reconnect.
-			log.Debugf("DisconnectToPort flag received: %d", streamDataMessage.SequenceNumber)
-			p.stop(log)
-		case mgsContracts.TerminateSession:
-			log.Debugf("TerminateSession flag received: %d", streamDataMessage.SequenceNumber)
-			p.cancelled <- true
-		}
-	}
-	return nil
+	return p.session.HandleStreamMessage(log, streamDataMessage)
 }
 
-// Stop closes the TCP Connection to the instance
+// Stop closes all opened connections to port
 func (p *PortPlugin) stop(log log.T) {
-	if p.tcpConn != nil {
-		log.Debug("Closing TCP connection")
-		if err := p.tcpConn.Close(); err != nil {
-			log.Debugf("Unable to close connection to port. %v", err)
-		}
+	log.Debug("Closing all connections")
+	if p.session != nil {
+		p.session.Stop()
 	}
-}
-
-// writePump reads from the instance's port and writes to data channel
-func (p *PortPlugin) writePump(log log.T) (errorCode int) {
-	defer func() {
-		if err := recover(); err != nil {
-			fmt.Println("WritePump thread crashed with message: \n", err)
-		}
-	}()
-
-	packet := make([]byte, mgsConfig.StreamDataPayloadSize)
-
-	for {
-		numBytes, err := p.tcpConn.Read(packet)
-		if err != nil {
-			var exitCode int
-			if exitCode = p.handleTCPReadError(log, err); exitCode == mgsConfig.ResumeReadExitCode {
-				log.Debugf("Reconnection to port %v is successful, resume reading from port.", p.portNumber)
-				continue
-			}
-			return exitCode
-		}
-
-		if err = p.dataChannel.SendStreamDataMessage(log, mgsContracts.Output, packet[:numBytes]); err != nil {
-			log.Errorf("Unable to send stream data message: %v", err)
-			return appconfig.ErrorExitCode
-		}
-		// Wait for TCP to process more data
-		time.Sleep(time.Millisecond)
-	}
-}
-
-// handleTCPReadError handles TCP read error
-func (p *PortPlugin) handleTCPReadError(log log.T, err error) int {
-	if p.portType == mgsConfig.LocalPortForwarding {
-		log.Debugf("Initiating reconnection to port %s as existing connection resulted in read error: %v", p.portNumber, err)
-		return p.handlePortError(log, err)
-	}
-	return p.handleSSHDPortError(log, err)
-}
-
-// handleSSHDPortError handles error by returning proper exit code based on error encountered
-func (p *PortPlugin) handleSSHDPortError(log log.T, err error) int {
-	if err == io.EOF {
-		log.Infof("TCP Connection was closed.")
-		return appconfig.SuccessExitCode
-	} else {
-		log.Errorf("Failed to read from port: %v", err)
-		return appconfig.ErrorExitCode
-	}
-}
-
-// handlePortError handles error by initiating reconnection to port in case of read failure
-func (p *PortPlugin) handlePortError(log log.T, err error) int {
-	// Read from tcp connection to localhost:p.portNumber resulted in error. Close existing connection and
-	// set reconnectToPort to true. ReconnectToPort is used when new steam data message arrives on
-	// web socket channel to trigger reconnection to localhost:p.portNumber.
-	log.Debugf("Encountered error while reading from port %v, %v", p.portNumber, err)
-	p.stop(log)
-	p.reconnectToPort = true
-
-	log.Debugf("Waiting for reconnection to port!!")
-	err = <-p.reconnectToPortErr
-
-	if err != nil {
-		log.Error(err)
-		return appconfig.ErrorExitCode
-	}
-
-	// Reconnection to localhost:p.portPlugin is successful, return resume code to starting reading from connection
-	return mgsConfig.ResumeReadExitCode
-}
-
-// startTCPConn starts TCP connection to the specified port
-func (p *PortPlugin) startTCPConn(log log.T) (err error) {
-	if p.tcpConn, err = DialCall("tcp", "localhost:"+p.portNumber); err != nil {
-		return errors.New(fmt.Sprintf("Unable to connect to specified port: %v", err))
-	}
-
-	return nil
 }
 
 // initializeParameters initializes PortPlugin with input parameters
-func (p *PortPlugin) initializeParameters(log log.T, parameters interface{}) (err error) {
+func (p *PortPlugin) initializeParameters(log log.T, config agentContracts.Configuration) (err error) {
 	var portParameters PortParameters
-	if err = jsonutil.Remarshal(parameters, &portParameters); err != nil {
+	if err = jsonutil.Remarshal(config.Properties, &portParameters); err != nil {
 		return errors.New(fmt.Sprintf("Unable to remarshal session properties. %v", err))
 	}
 
 	if portParameters.PortNumber == "" {
-		return errors.New(fmt.Sprintf("Port number is empty in session properties. %v", parameters))
+		return errors.New(fmt.Sprintf("Port number is empty in session properties. %v", config.Properties))
 	}
-	p.portNumber = portParameters.PortNumber
-	p.portType = portParameters.Type
+	p.session, err = GetSession(portParameters, p.cancelled, p.dataChannel.GetClientVersion(), config.SessionId)
 
-	return nil
+	return
 }
