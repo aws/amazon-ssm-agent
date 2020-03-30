@@ -81,6 +81,9 @@ const (
 	// Default Custom Inventory Inventory Folder
 	DefaultCustomInventoryFolder = DefaultDataStorePath + "inventory/custom"
 
+	// Default Session files Folder
+	SessionFilesPath = DefaultDataStorePath + "session"
+
 	// PowerShellPluginCommandArgs is the arguments of powershell.exe to be used by the runPowerShellScript plugin
 	PowerShellPluginCommandArgs = "-f"
 

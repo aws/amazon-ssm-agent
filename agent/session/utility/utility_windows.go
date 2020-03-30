@@ -18,6 +18,7 @@ package utility
 
 import (
 	"fmt"
+	"net"
 	"syscall"
 	"unsafe"
 
@@ -454,4 +455,14 @@ func (u *SessionUtil) userGetFlags(log log.T, username string) (uint32, error) {
 	var data = (*USER_INFO_1)(unsafe.Pointer(dataPointer))
 	log.Debugf("existing user flags: %d\r\n", data.Usri1_flags)
 	return data.Usri1_flags, nil
+}
+
+// NewListener starts a new socket listener on the address.
+// unix sockets are not supported in older windows versions, start tcp loopback server in such cases
+func NewListener(log log.T, address string) (listener net.Listener, err error) {
+	if listener, err = net.Listen("unix", address); err != nil {
+		log.Debugf("Failed to open unix socket listener, %v. Starting TCP listener.", err)
+		return net.Listen("tcp", "localhost:0")
+	}
+	return
 }

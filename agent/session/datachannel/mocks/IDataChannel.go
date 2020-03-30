@@ -205,3 +205,17 @@ func (_m *IDataChannel) SetWebSocket(_a0 context.T, mgsService service.Service, 
 func (_m *IDataChannel) SkipHandshake(_a0 log.T) {
 	_m.Called(_a0)
 }
+
+// GetClientVersion provides a mock function
+func (_m *IDataChannel) GetClientVersion() string {
+	ret := _m.Called()
+
+	var r0 string
+	if rf, ok := ret.Get(0).(func() string); ok {
+		r0 = rf()
+	} else {
+		r0 = ret.Get(0).(string)
+	}
+
+	return r0
+}

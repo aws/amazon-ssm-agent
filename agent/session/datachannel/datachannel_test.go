@@ -480,6 +480,7 @@ func TestDataChannelHandshakeResponse(t *testing.T) {
 	assert.Nil(t, err)
 	assert.True(t, dataChannel.encryptionEnabled)
 	assert.True(t, <-dataChannel.handshake.responseChan)
+	assert.Equal(t, versionString, dataChannel.handshake.clientVersion)
 
 	mockChannel.AssertExpectations(t)
 	mockCipher.AssertExpectations(t)
