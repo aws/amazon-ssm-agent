@@ -40,6 +40,7 @@ type rollback func(mgr *updateManager, log log.T, context *UpdateContext) (err e
 type uninstall func(mgr *updateManager, log log.T, version string, context *UpdateContext) (err error)
 type install func(mgr *updateManager, log log.T, version string, context *UpdateContext) (err error)
 type download func(mgr *updateManager, log log.T, downloadInput artifact.DownloadInput, context *UpdateContext, version string) (err error)
+type clean func(mgr *updateManager, log log.T, context *UpdateContext) (err error)
 
 type updateManager struct {
 	util      updateutil.T
@@ -52,6 +53,7 @@ type updateManager struct {
 	uninstall uninstall
 	install   install
 	download  download
+	clean     clean
 }
 
 // Updater contains logic for performing agent update

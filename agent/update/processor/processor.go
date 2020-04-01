@@ -21,6 +21,8 @@ import (
 
 	"time"
 
+	"github.com/aws/amazon-ssm-agent/agent/appconfig"
+	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil/artifact"
 	"github.com/aws/amazon-ssm-agent/agent/log"
@@ -49,6 +51,7 @@ func NewUpdater() *Updater {
 			uninstall: uninstallAgent,
 			install:   installAgent,
 			download:  downloadAndUnzipArtifact,
+			clean:     cleanUninstalledVersions,
 		},
 	}
 
@@ -406,6 +409,46 @@ func installAgent(mgr *updateManager, log log.T, version string, context *Update
 	}
 
 	log.Infof("%v %v installed successfully", context.Current.PackageName, version)
+	return nil
+}
+
+// cleanUninstalledVersions deletes leftover files from previously installed versions in update folder
+func cleanUninstalledVersions(mgr *updateManager, log log.T, context *UpdateContext) (err error) {
+	log.Infof("Initiating cleanup of other versions.")
+	var installedVersion string
+
+	switch context.Current.Result {
+	case contracts.ResultStatusSuccess:
+		installedVersion = context.Current.TargetVersion
+	case contracts.ResultStatusFailed:
+		installedVersion = context.Current.SourceVersion
+	}
+
+	path := appconfig.UpdaterArtifactsRoot + updateutil.UpdateAmazonSSMAgentDir
+	directoryNames, err := fileutil.GetDirectoryNames(path)
+
+	if err != nil {
+		return err
+	}
+
+	removedVersions := ""
+	combinedErrors := fmt.Errorf("")
+	for _, directoryName := range directoryNames {
+		if directoryName == installedVersion {
+			continue
+		} else if err = fileutil.DeleteDirectory(path + directoryName); err != nil {
+			combinedErrors = fmt.Errorf(combinedErrors.Error() + err.Error() + "\n")
+		} else {
+			removedVersions += directoryName + "\n"
+		}
+	}
+
+	log.Infof("Installed version:\n%v\nRemoved versions:%v\n", installedVersion, removedVersions)
+
+	if combinedErrors.Error() != "" {
+		return combinedErrors
+	}
+
 	return nil
 }
 
