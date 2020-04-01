@@ -37,7 +37,8 @@ func regionFailedStub() (string, error) {
 }
 
 type stubUpdater struct {
-	returnUpdateError bool
+	returnUpdateError  bool
+	returnCleanupError bool
 }
 
 func (u *stubUpdater) StartOrResumeUpdate(log logger.T, context *processor.UpdateContext) (err error) {
@@ -53,6 +54,13 @@ func (u *stubUpdater) InitializeUpdate(log logger.T, detail *processor.UpdateDet
 	context.Current.StandardOut = "output message"
 
 	return context, nil
+}
+
+func (u *stubUpdater) CleanupUpdate(log logger.T, context *processor.UpdateContext) (err error) {
+	if u.returnCleanupError {
+		return fmt.Errorf("Cleanup update failed.")
+	}
+	return nil
 }
 
 func (u *stubUpdater) Failed(
@@ -133,4 +141,18 @@ func TestUpdaterFailedWithoutSourceTargetCmd(t *testing.T) {
 	assert.Equal(t, *update, true)
 	assert.Empty(t, *sourceVersion)
 	assert.Empty(t, *targetVersion)
+}
+
+func TestCleanupFailed(t *testing.T) {
+	// setup
+	localLog := logger.NewMockLog()
+	log = localLog
+	region = regionStub
+	updater = &stubUpdater{returnCleanupError: true}
+
+	os.Args = updateCommand
+
+	// action
+	main()
+
 }

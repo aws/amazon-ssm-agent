@@ -46,6 +46,9 @@ const (
 	// Updater represents Updater name
 	Updater = "updater"
 
+	// Directory containing older versions of agent during update
+	UpdateAmazonSSMAgentDir = "amazon-ssm-agent/"
+
 	// UpdateContextFileName represents Update context json file
 	UpdateContextFileName = "updatecontext.json"
 

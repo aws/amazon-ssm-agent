@@ -144,6 +144,10 @@ func (u *updateManager) finalizeUpdateAndSendReply(log log.T, context *UpdateCon
 		u.ctxMgr.uploadOutput(log, context, orchestrationDirectory)
 	}
 
+	if err = u.clean(u, log, context); err != nil {
+		return err
+	}
+
 	context.cleanUpdate()
 	if err = u.ctxMgr.saveUpdateContext(log, context, contextLocation); err != nil {
 		return err

@@ -152,6 +152,7 @@ func main() {
 	} else {
 		log.Infof(context.Current.StandardOut)
 	}
+
 }
 
 // resolveUpdateDetail decides which UpdaterRoot to use and if uninstall is required for the agent
