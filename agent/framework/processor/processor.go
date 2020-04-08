@@ -18,6 +18,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
+	"runtime/debug"
 	"sync"
 	"time"
 
@@ -333,16 +334,27 @@ func processCommand(context context.T, executerCreator ExecuterCreator, cancelFl
 	// Listen for reboot
 	var final *contracts.DocumentResult
 	for res := range statusChan {
-		if res.LastPlugin == "" {
-			log.Infof("sending document: %v complete response", documentID)
-		} else {
-			log.Infof("sending reply for plugin update: %v", res.LastPlugin)
+		func() {
+			defer func() {
+				if err := recover(); err != nil {
+					log.Errorf("Failed to process status for document %s with error %v", documentID, err)
+					log.Errorf("Stacktrace:\n%s", debug.Stack())
+				}
+			}()
 
-		}
-		handleCloudwatchPlugin(context, res.PluginResults, documentID)
-		//hand off the message to Service
-		resChan <- res
-		final = &res
+			if res.LastPlugin == "" {
+				log.Infof("sending document: %v complete response", documentID)
+			} else {
+				log.Infof("sending reply for plugin update: %v", res.LastPlugin)
+			}
+
+			final = &res
+			handleCloudwatchPlugin(context, res.PluginResults, documentID)
+			//hand off the message to Service
+			resChan <- res
+
+			log.Info("Done")
+		}()
 	}
 	//TODO add shutdown as API call, move cancelFlag out of task pool; cancelFlag to contracts, nobody else above runplugins needs to create cancelFlag.
 	// Shutdown/reboot detection
