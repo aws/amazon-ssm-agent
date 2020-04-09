@@ -249,7 +249,16 @@ func (ch *fileWatcherChannel) consume(filepath string) {
 	}
 
 	//remove the consumed IPC file and log error message when there is an exception in os.Remove()
-	err = os.Remove(filepath)
+	for attempt := 0; attempt < consumeAttemptCount; attempt++ {
+		err = os.Remove(filepath)
+		if err != nil {
+			log.Debugf("message %v failed to remove (attempt %v): %v \n", filepath, attempt+1, err)
+			time.Sleep(time.Duration(consumeRetryIntervalInMilliseconds) * time.Millisecond)
+		} else {
+			break
+		}
+	}
+
 	if err != nil {
 		log.Error("Error occurred while removing the IPC file: ", err.Error())
 	}
