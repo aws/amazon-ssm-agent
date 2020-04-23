@@ -17,6 +17,7 @@ package datachannel
 import (
 	"bytes"
 	"container/list"
+	cryptoRand "crypto/rand"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -1026,7 +1027,7 @@ func (dataChannel *DataChannel) sendEncryptionChallenge(log log.T) (err error) {
 	// Build the request
 	encChallengeRequest := mgsContracts.EncryptionChallengeRequest{}
 	randBytes := make([]byte, 64)
-	rand.Read(randBytes)
+	cryptoRand.Read(randBytes)
 	dataChannel.handshake.encryptionChallenge = randBytes
 	randBytes, err = dataChannel.blockCipher.EncryptWithAESGCM(randBytes)
 	if err != nil {
