@@ -22,7 +22,6 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/runcommand"
 	"github.com/aws/amazon-ssm-agent/agent/session"
 	"github.com/aws/amazon-ssm-agent/agent/ssm"
-	"github.com/aws/amazon-ssm-agent/agent/startup"
 )
 
 // ModuleRegistry stores a set of core modules.
@@ -55,8 +54,6 @@ func loadCoreModules(context context.T) {
 		} else {
 			context.Log().Errorf("Failed to start offline command document processor")
 		}
-
-		registeredCoreModules = append(registeredCoreModules, startup.NewProcessor(context))
 
 		// registering the long running plugin manager as a core module
 		manager.EnsureInitialization(context)
