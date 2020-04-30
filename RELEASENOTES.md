@@ -1,5 +1,11 @@
 Latest
 ===============
+Updated the SSM Agent Snap to core18
+Bug fix for expired in-progress documents being resumed
+Bug fix for update specific files not being deleted after agent update is finished
+
+2.3.978.0
+===============
 - Stop pty on receiving TerminateSession request
 - Add support for Debian arm64 architecture
 - Refactoring session log generation logic
