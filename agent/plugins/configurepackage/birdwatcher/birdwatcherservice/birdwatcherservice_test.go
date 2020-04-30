@@ -1025,7 +1025,7 @@ func TestDownloadFile(t *testing.T) {
 			mockedCollector := envdetect.CollectorMock{}
 			ds := &PackageService{manifestCache: cache, collector: &mockedCollector, packageArchive: testArchive}
 
-			result, err := downloadFile(ds, tracer, testdata.file, packagename, version)
+			result, err := downloadFile(ds, tracer, testdata.file, packagename, version, true)
 			if testdata.expectedErr {
 				assert.Error(t, err)
 			} else {
@@ -1150,7 +1150,7 @@ func TestDownloadFileFromDocumentArchive(t *testing.T) {
 			mockedCollector := envdetect.CollectorMock{}
 			ds := &PackageService{manifestCache: cache, collector: &mockedCollector, packageArchive: testArchive}
 
-			result, err := downloadFile(ds, tracer, testdata.file, packagename, version)
+			result, err := downloadFile(ds, tracer, testdata.file, packagename, version, true)
 			if testdata.expectedErr {
 				assert.Error(t, err)
 			} else {
@@ -1224,7 +1224,7 @@ func TestDownloadArtifact(t *testing.T) {
 			mockedCollector.On("CollectData", mock.Anything).Return(&envdetect.Environment{
 				&osdetect.OperatingSystem{"platformName", "platformVersion", "", "architecture", "", ""},
 				&ec2infradetect.Ec2Infrastructure{"instanceID", "region", "", "availabilityZone", "instanceType"},
-			}, nil).Once()
+			}, nil).Twice()
 			testArchive.SetManifestCache(cache)
 			ds := &PackageService{manifestCache: cache, collector: &mockedCollector, packageArchive: testArchive}
 			birdwatcher.Networkdep = &testdata.network

@@ -147,6 +147,11 @@ func (ba *PackageArchive) WriteManifestToCache(packageArn string, version string
 	return ba.cache.WriteManifest(packageArn, version, manifest)
 }
 
+// DeleteCachedManifest Deletes manifest from cache
+func (ba *PackageArchive) DeleteCachedManifest(packageArn string, version string) error {
+	return ba.cache.DeleteManifest(packageArn, version)
+}
+
 // Sets the manifest string in the localManifest
 func setLocalManifestString(localManifests map[string]*localManifest, context map[string]string) {
 	if name, nOk := context["packageName"]; nOk {

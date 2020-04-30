@@ -46,6 +46,7 @@ type IPackageArchive interface {
 	DownloadArchiveInfo(tracer trace.Tracer, packageName string, version string) (string, error)
 	ReadManifestFromCache(packageArn string, version string) (*birdwatcher.Manifest, error)
 	WriteManifestToCache(packageArn string, version string, manifest []byte) error
+	DeleteCachedManifest(packageArn string, version string) error
 }
 
 func ParseManifest(data *[]byte) (*birdwatcher.Manifest, error) {

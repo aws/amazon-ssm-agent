@@ -100,24 +100,13 @@ func (ds *PackageService) DownloadManifest(tracer trace.Tracer, packageName stri
 // DownloadArtifact downloads the platform matching artifact specified in the manifest
 func (ds *PackageService) DownloadArtifact(tracer trace.Tracer, packageName string, version string) (string, error) {
 	trace := tracer.BeginSection("download artifact")
-	manifest, err := ds.packageArchive.ReadManifestFromCache(packageName, version)
-	if err != nil {
-		trace.AppendInfof("error when reading the manifest from cache %v", err)
-		manifest, _, err = downloadManifest(tracer, ds, packageName, version)
-		if err != nil {
-			trace.WithError(err).End()
-			return "", fmt.Errorf("failed to download the manifest: %v", err)
-		}
+	defer trace.End()
+	file, getManifestErr := getFileFromManifest(ds, packageName, version, trace, tracer)
+	if getManifestErr != nil {
+		return "", getManifestErr
 	}
 
-	file, err := ds.findFileFromManifest(tracer, manifest)
-	if err != nil {
-		trace.WithError(err).End()
-		return "", err
-	}
-
-	trace.End()
-	return downloadFile(ds, tracer, file, packageName, version)
+	return downloadFile(ds, tracer, file, packageName, version, false)
 }
 
 // ReportResult sents back the result of the install/upgrade/uninstall run back to Birdwatcher
@@ -231,11 +220,30 @@ func (ds *PackageService) findFileFromManifest(tracer trace.Tracer, manifest *bi
 	return &file, nil
 }
 
-func downloadFile(ds *PackageService, tracer trace.Tracer, file *archive.File, packagename string, version string) (string, error) {
+func getFileFromManifest(ds *PackageService, packageName string, version string, trace *trace.Trace, tracer trace.Tracer) (*archive.File, error) {
+	manifest, err := ds.packageArchive.ReadManifestFromCache(packageName, version)
+	if err != nil {
+		trace.AppendInfof("error when reading the manifest from cache %v", err)
+		manifest, _, err = downloadManifest(tracer, ds, packageName, version)
+		if err != nil {
+			trace.WithError(err)
+			return nil, fmt.Errorf("failed to download the manifest: %v", err)
+		}
+	}
+
+	file, err := ds.findFileFromManifest(tracer, manifest)
+	if err != nil {
+		trace.WithError(err)
+		return nil, err
+	}
+	return file, nil
+}
+
+func downloadFile(ds *PackageService, tracer trace.Tracer, file *archive.File, packageName string, version string, isRecursiveRetry bool) (string, error) {
 	if ds == nil || ds.packageArchive == nil || file == nil {
 		return "", fmt.Errorf("Either package service does not exist or does not have archive information or the file information does not exist")
 	}
-	sourceUrl, err := ds.packageArchive.GetFileDownloadLocation(file, packagename, version)
+	sourceUrl, err := ds.packageArchive.GetFileDownloadLocation(file, packageName, version)
 	if err != nil {
 		return "", err
 	}
@@ -252,10 +260,23 @@ func downloadFile(ds *PackageService, tracer trace.Tracer, file *archive.File, p
 		if downloadErr != nil {
 			errMessage = fmt.Sprintf("%v, %v", errMessage, downloadErr.Error())
 		}
-		// TODO: attempt to clean up failed download folder?
 
-		// return download error
-		return "", errors.New(errMessage)
+		if isRecursiveRetry {
+			// TODO: attempt to clean up failed download folder?
+			// return download error
+			return "", errors.New(errMessage)
+		}
+
+		// Delete cached manifest and retry
+		log.Info("There was an error downloading the installation reliably. Deleting the cached manifest and retrying.")
+		ds.packageArchive.DeleteCachedManifest(packageName, version)
+		downloadManifest(tracer, ds, packageName, version)
+		file, getFileError := getFileFromManifest(ds, packageName, version, tracer.CurrentTrace(), tracer)
+		if getFileError != nil {
+			return "", getFileError
+		}
+
+		return downloadFile(ds, tracer, file, packageName, version, true)
 	}
 
 	return downloadOutput.LocalFilePath, nil

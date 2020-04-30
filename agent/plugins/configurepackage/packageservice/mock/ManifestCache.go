@@ -82,6 +82,20 @@ func (_m ManifestCache) WriteManifest(packageArn string, packageVersion string, 
 	return r0
 }
 
+// DeleteManifest provides a mock function with given fields: packageArn, packageVersion
+func (_m ManifestCache) DeleteManifest(packageArn string, packageVersion string) error {
+	ret := _m.Called(packageArn, packageVersion)
+
+	var r0 error
+	if rf, ok := ret.Get(0).(func(string, string) error); ok {
+		r0 = rf(packageArn, packageVersion)
+	} else {
+		r0 = ret.Error(0)
+	}
+
+	return r0
+}
+
 // WriteManifestHash provides a mock function with given fields: packageArn, documentVersion, content
 func (_m ManifestCache) WriteManifestHash(packageArn string, documentVersion string, content []byte) error {
 	ret := _m.Called(packageArn, documentVersion, content)
