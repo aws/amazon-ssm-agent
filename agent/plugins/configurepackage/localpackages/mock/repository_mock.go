@@ -97,6 +97,11 @@ func (repoMock *MockedRepository) WriteManifest(packageName string, packageVersi
 	return args.Error(0)
 }
 
+func (repoMock *MockedRepository) DeleteManifest(packageName string, packageVersion string) error {
+	args := repoMock.Called(packageName, packageVersion)
+	return args.Error(0)
+}
+
 func (repoMock *MockedRepository) ReadManifestHash(packageName string, documentVersion string) ([]byte, error) {
 	args := repoMock.Called(packageName, documentVersion)
 	return args.Get(0).([]byte), args.Error(1)

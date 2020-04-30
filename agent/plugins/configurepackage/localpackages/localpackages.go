@@ -98,6 +98,7 @@ type Repository interface {
 
 	ReadManifest(packageArn string, packageVersion string) ([]byte, error)
 	WriteManifest(packageArn string, packageVersion string, content []byte) error
+	DeleteManifest(packageArn string, packageVersion string) error
 	ReadManifestHash(packageArn string, documentVersion string) ([]byte, error)
 	WriteManifestHash(packageArn string, documentVersion string, content []byte) error
 
@@ -371,6 +372,16 @@ func (r *localRepository) WriteManifest(packageArn string, packageVersion string
 		return err
 	}
 	return r.filesysdep.WriteFile(r.filePath(packageArn, packageVersion), string(content))
+}
+
+// PurgeManifest deletes cached manifest data from the disk for a given package name and package version
+func (r *localRepository) DeleteManifest(packageArn string, packageVersion string) error {
+	manifestFilePath := r.filePath(packageArn, packageVersion)
+	if !fileutil.Exists(manifestFilePath) {
+		return nil
+	}
+
+	return fileutil.DeleteFile(manifestFilePath)
 }
 
 // manifest cache hash

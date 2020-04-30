@@ -22,6 +22,7 @@ import (
 type ManifestCache interface {
 	ReadManifest(packageArn string, packageVersion string) ([]byte, error)
 	WriteManifest(packageArn string, packageVersion string, content []byte) error
+	DeleteManifest(packageArn string, packageVersion string) error
 	ReadManifestHash(packageArn string, documentVersion string) ([]byte, error)
 	WriteManifestHash(packageArn string, documentVersion string, content []byte) error
 }
@@ -45,6 +46,11 @@ func (c ManifestCacheMem) ReadManifest(packageArn string, packageVersion string)
 
 func (c ManifestCacheMem) WriteManifest(packageArn string, packageVersion string, content []byte) error {
 	c.cache[c.CacheKey(packageArn, packageVersion)] = content
+	return nil
+}
+
+func (c ManifestCacheMem) DeleteManifest(packageArn string, packageVersion string) error {
+	delete(c.cache, c.CacheKey(packageArn, packageVersion))
 	return nil
 }
 

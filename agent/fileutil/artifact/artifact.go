@@ -55,7 +55,7 @@ type DownloadInput struct {
 
 // httpDownload attempts to download a file via http/s call
 func httpDownload(log log.T, fileURL string, destFile string) (output DownloadOutput, err error) {
-	log.Debugf("attempting to download as http/https download %v", destFile)
+	log.Debugf("attempting to download as http/https download from %v to %v", fileURL, destFile)
 	eTagFile := destFile + ".etag"
 	var check http.Client
 	var request *http.Request
@@ -64,6 +64,7 @@ func httpDownload(log log.T, fileURL string, destFile string) (output DownloadOu
 		return
 	}
 	if fileutil.Exists(destFile) == true && fileutil.Exists(eTagFile) == true {
+		log.Debugf("destFile exists at %v, etag file exists at %v", destFile, eTagFile)
 		var existingETag string
 		existingETag, err = fileutil.ReadAllText(eTagFile)
 		request.Header.Add("If-None-Match", existingETag)
@@ -367,16 +368,14 @@ func Download(log log.T, input DownloadInput) (output DownloadOutput, err error)
 
 		amazonS3URL := s3util.ParseAmazonS3URL(log, fileURL)
 		if amazonS3URL.IsBucketAndKeyPresent() {
-			// source is s3
 			var tempOutput DownloadOutput
 			tempOutput, err = s3Download(log, amazonS3URL, output.LocalFilePath)
-			// if s3 download fails, attempt http/https download as fallback
 			if err != nil {
+				log.Error("An error occurred when attempting s3 download. Attempting http/https download as fallback.")
 				tempOutput, err = httpDownload(log, input.SourceURL, output.LocalFilePath)
 			}
 			output = tempOutput
 		} else {
-			// simple http/https download
 			output, err = httpDownload(log, input.SourceURL, output.LocalFilePath)
 		}
 

@@ -216,6 +216,10 @@ func (da *PackageArchive) WriteManifestToCache(packageArn string, version string
 	return da.manifestCache.WriteManifest(da.documentArn, da.docVersion, manifest)
 }
 
+func (da *PackageArchive) DeleteCachedManifest(packageArn string, version string) error {
+	return da.manifestCache.DeleteManifest(da.documentArn, da.docVersion)
+}
+
 // helpers
 func (da *PackageArchive) generateAndSaveManifestHash(name, manifest, documentVersion string) error {
 	var hashChannel = make(chan []byte, 1)
