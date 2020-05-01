@@ -25,6 +25,7 @@ const (
 )
 
 var selectAwsApps map[string]string
+var ApplicationData []model.ApplicationData
 
 func init() {
 	//NOTE:
@@ -56,7 +57,11 @@ func componentType(applicationName string) model.ComponentType {
 
 // CollectApplicationData collects all application data from the system using platform specific queries and merges in applications installed via configurePackage
 func CollectApplicationData(context context.T) (appData []model.ApplicationData) {
-	return collectPlatformDependentApplicationData(context)
+	if len(ApplicationData) > 0 {
+		return ApplicationData
+	}
+	ApplicationData = collectPlatformDependentApplicationData(context)
+	return ApplicationData
 }
 
 // cleanupJSONField converts a text to a json friendly text as follows:
