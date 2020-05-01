@@ -8,6 +8,7 @@ import (
 
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/localpackages"
+	repomock "github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/localpackages/mock"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/inventory/model"
 )
 
