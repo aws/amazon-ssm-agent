@@ -69,7 +69,7 @@ fi
 
 %posttrans
 # Start the agent after initial install or upgrade
-if [ $1 -ge 0 ]; then
+if [[ $1 -ge 0 ]]; then
     /sbin/init --version &> stdout.txt
     if [[ `cat stdout.txt` =~ upstart ]]; then
         /sbin/start amazon-ssm-agent
