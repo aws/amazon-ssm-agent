@@ -49,7 +49,7 @@ Thank you for helping us to improve Systems Manager, Run Command and Session Man
 sudo yum install -y rpmdevtools rpm-build
 ```
 
-* [Cross Compile SSM Agent](http://www.goinggo.net/2013/10/cross-compile-your-go-programs.html)
+* [Cross Compile SSM Agent](https://www.ardanlabs.com/blog/2013/10/cross-compile-your-go-programs.html)
 
 * Run `make build` to build the SSM Agent for Linux, Debian, Windows environment.
 
