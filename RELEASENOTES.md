@@ -3,6 +3,7 @@ Latest
 Updated the SSM Agent Snap to core18
 Bug fix for expired in-progress documents being resumed
 Bug fix for update specific files not being deleted after agent update is finished
+Bug fix for cached manifest files not being deleted in the configurepackage plugin
 
 2.3.978.0
 ===============
