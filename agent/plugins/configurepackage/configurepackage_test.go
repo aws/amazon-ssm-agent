@@ -1223,6 +1223,7 @@ func TestExecuteConfigurePackagePlugin_DocumentService(t *testing.T) {
 			bwFacade.On("GetManifest", getManifestInput).Return(nil, errors.New(resourceNotFoundException)).Once()
 			bwFacade.On("DescribeDocument", describeDocumentInput).Return(describeDocumentOutput, nil)
 			bwFacade.On("GetDocument", getDocumentInput).Return(getDocumentOutput, getDocumentError).Once()
+			bwFacade.On("PutConfigurePackageResult", mock.Anything).Return(&ssm.PutConfigurePackageResultOutput{}, nil).Once()
 
 			plugin := &Plugin{
 				birdwatcherfacade:      &bwFacade,

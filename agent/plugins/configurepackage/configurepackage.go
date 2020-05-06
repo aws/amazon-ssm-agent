@@ -584,17 +584,20 @@ func (p *Plugin) execute(context context.T, config contracts.Configuration, canc
 							startTime = trace.Start
 						}
 					}
-					if !p.isDocumentArchive {
-						err := packageService.ReportResult(tracer, packageservice.PackageResult{
-							Exitcode:               int64(out.GetExitCode()),
-							Operation:              input.Action,
-							PackageName:            input.Name,
-							PreviousPackageVersion: installedVersion,
-							Timing:                 startTime,
-							Version:                version,
-							Trace:                  packageservice.ConvertToPackageServiceTrace(tracer.Traces()),
-						})
-						if err != nil {
+
+					err := packageService.ReportResult(tracer, packageservice.PackageResult{
+						Exitcode:               int64(out.GetExitCode()),
+						Operation:              input.Action,
+						PackageName:            input.Name,
+						PreviousPackageVersion: installedVersion,
+						Timing:                 startTime,
+						Version:                version,
+						Trace:                  packageservice.ConvertToPackageServiceTrace(tracer.Traces()),
+					})
+					if err != nil {
+						if p.isDocumentArchive {
+							log.Warnf("Error reporting results for Document archive: %v", err.Error())
+						} else {
 							out.AppendErrorf(log, "Error reporting results: %v", err.Error())
 						}
 					}
