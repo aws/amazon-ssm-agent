@@ -40,7 +40,7 @@ var getRegion = platform.Region
 
 type IAmazonS3Util interface {
 	S3Upload(log log.T, bucketName string, objectKey string, filePath string) error
-	IsBucketEncrypted(log log.T, bucketName string) bool
+	IsBucketEncrypted(log log.T, bucketName string) (bool, error)
 }
 
 type AmazonS3Util struct {
@@ -124,7 +124,7 @@ func GetBucketRegion(log log.T, bucketName string, httpProvider HttpProvider) (r
 }
 
 //IsBucketEncrypted checks if the bucket is encrypted
-func (u *AmazonS3Util) IsBucketEncrypted(log log.T, bucketName string) bool {
+func (u *AmazonS3Util) IsBucketEncrypted(log log.T, bucketName string) (bool, error) {
 	input := &s3.GetBucketEncryptionInput{
 		Bucket: aws.String(bucketName),
 	}
@@ -132,17 +132,17 @@ func (u *AmazonS3Util) IsBucketEncrypted(log log.T, bucketName string) bool {
 	output, err := u.myUploader.S3.GetBucketEncryption(input)
 	if err != nil {
 		log.Errorf("Encountered an error while calling S3 API GetBucketEncryption %s", err)
-		return false
+		return false, err
 	}
 
 	bucketEncryption := *output.ServerSideEncryptionConfiguration.Rules[0].ApplyServerSideEncryptionByDefault.SSEAlgorithm
 
 	if bucketEncryption == s3.ServerSideEncryptionAwsKms || bucketEncryption == s3.ServerSideEncryptionAes256 {
-		return true
+		return true, nil
 	}
 
 	log.Errorf("S3 bucket %s is not encrypted", bucketName)
-	return false
+	return false, nil
 }
 
 /*

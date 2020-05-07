@@ -16,6 +16,7 @@ package shell
 
 import (
 	"bytes"
+	"errors"
 	"io/ioutil"
 	"os"
 	"testing"
@@ -317,7 +318,7 @@ func (suite *ShellTestSuite) TestValidateCWLogGroupNotEncrypted() {
 	}
 
 	// When cw log group is not encrypted, validate returns error
-	suite.mockCWL.On("IsLogGroupEncryptedWithKMS", mock.Anything, testCwLogGroupName).Return(false)
+	suite.mockCWL.On("IsLogGroupEncryptedWithKMS", mock.Anything, testCwLogGroupName).Return(false, nil)
 	err := suite.plugin.validate(suite.mockContext, configuration, suite.mockCWL, suite.mockS3)
 	assert.NotNil(suite.T(), err)
 }
@@ -334,7 +335,7 @@ func (suite *ShellTestSuite) TestValidateCWLogGroupEncrypted() {
 	}
 
 	// When cw log group is encrypted and CreateLogStream succeed, validate returns nil
-	cwMock.On("IsLogGroupEncryptedWithKMS", mock.Anything, testCwLogGroupName).Return(true)
+	cwMock.On("IsLogGroupEncryptedWithKMS", mock.Anything, testCwLogGroupName).Return(true, nil)
 	cwMock.On("CreateLogStream", mock.Anything, testCwLogGroupName, mock.Anything).Return(nil)
 	err := suite.plugin.validate(suite.mockContext, configuration, cwMock, s3Mock)
 	assert.Nil(suite.T(), err)
@@ -350,10 +351,25 @@ func (suite *ShellTestSuite) TestValidateBypassCWLogGroupEncryptionCheck() {
 	}
 
 	// When cw log group is not encrypted but we choose to bypass encryption check, validate returns true
-	suite.mockCWL.On("IsLogGroupEncryptedWithKMS", mock.Anything, testCwLogGroupName).Return(false)
+	suite.mockCWL.On("IsLogGroupEncryptedWithKMS", mock.Anything, testCwLogGroupName).Return(false, nil)
 	suite.mockCWL.On("CreateLogStream", mock.Anything, testCwLogGroupName, mock.Anything).Return(nil)
 	err := suite.plugin.validate(suite.mockContext, configuration, suite.mockCWL, suite.mockS3)
 	assert.Nil(suite.T(), err)
+}
+
+func (suite *ShellTestSuite) TestValidateGetCWLogGroupFailed() {
+	testCwLogGroupName := "testCW"
+	configuration := contracts.Configuration{
+		OutputS3BucketName:          "",
+		CloudWatchLogGroup:          testCwLogGroupName,
+		CloudWatchEncryptionEnabled: true,
+	}
+
+	// When get cw log group is failed, validate returns error
+	suite.mockCWL.On("IsLogGroupEncryptedWithKMS", mock.Anything, testCwLogGroupName).Return(false, errors.New("unable to get log groups"))
+	suite.mockCWL.On("CreateLogStream", mock.Anything, testCwLogGroupName, mock.Anything).Return(nil)
+	err := suite.plugin.validate(suite.mockContext, configuration, suite.mockCWL, suite.mockS3)
+	assert.NotNil(suite.T(), err)
 }
 
 func (suite *ShellTestSuite) TestValidateS3BucketNotEncrypted() {
@@ -365,7 +381,7 @@ func (suite *ShellTestSuite) TestValidateS3BucketNotEncrypted() {
 	}
 
 	// When s3 bucket is not encrypted, validate returns error
-	suite.mockS3.On("IsBucketEncrypted", mock.Anything, testS3BucketName).Return(false)
+	suite.mockS3.On("IsBucketEncrypted", mock.Anything, testS3BucketName).Return(false, nil)
 	err := suite.plugin.validate(suite.mockContext, configuration, suite.mockCWL, suite.mockS3)
 	assert.NotNil(suite.T(), err)
 }
@@ -379,7 +395,7 @@ func (suite *ShellTestSuite) TestValidateS3BucketEncrypted() {
 	}
 
 	// When s3 bucket is encrypted, validate returns nil
-	suite.mockS3.On("IsBucketEncrypted", mock.Anything, testS3BucketName).Return(true)
+	suite.mockS3.On("IsBucketEncrypted", mock.Anything, testS3BucketName).Return(true, nil)
 	err := suite.plugin.validate(suite.mockContext, configuration, suite.mockCWL, suite.mockS3)
 	assert.Nil(suite.T(), err)
 }
@@ -393,7 +409,21 @@ func (suite *ShellTestSuite) TestValidateBypassS3BucketEncryptionCheck() {
 	}
 
 	// When s3 bucket is not encrypted but choose to bypass encryption check, validate returns nil
-	suite.mockS3.On("IsBucketEncrypted", mock.Anything, testS3BucketName).Return(false)
+	suite.mockS3.On("IsBucketEncrypted", mock.Anything, testS3BucketName).Return(false, nil)
 	err := suite.plugin.validate(suite.mockContext, configuration, suite.mockCWL, suite.mockS3)
 	assert.Nil(suite.T(), err)
+}
+
+func (suite *ShellTestSuite) TestValidateGetS3BucketEncryptionFailed() {
+	testS3BucketName := "testS3"
+	configuration := contracts.Configuration{
+		OutputS3BucketName:  testS3BucketName,
+		CloudWatchLogGroup:  "",
+		S3EncryptionEnabled: true,
+	}
+
+	// When agent failed to get s3 bucket encryption, validate returns error
+	suite.mockS3.On("IsBucketEncrypted", mock.Anything, testS3BucketName).Return(false, errors.New("get encryption failed"))
+	err := suite.plugin.validate(suite.mockContext, configuration, suite.mockCWL, suite.mockS3)
+	assert.NotNil(suite.T(), err)
 }

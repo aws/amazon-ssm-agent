@@ -105,9 +105,9 @@ func (m *CloudWatchLogsServiceMock) DescribeLogStreams(log log.T, logGroup, logS
 }
 
 // GetLogGroupDetails mocks CloudWatchLogsService getLogGroupDetails method
-func (m *CloudWatchLogsServiceMock) GetLogGroupDetails(log log.T, logGroup string) (logGroupDetails *cloudwatchlogs.LogGroup) {
+func (m *CloudWatchLogsServiceMock) GetLogGroupDetails(log log.T, logGroup string) (logGroupDetails *cloudwatchlogs.LogGroup, err error) {
 	args := m.Called(log, logGroup)
-	return args.Get(0).(*cloudwatchlogs.LogGroup)
+	return args.Get(0).(*cloudwatchlogs.LogGroup), args.Error(1)
 }
 
 // IsLogGroupPresent mocks CloudWatchLogsService IsLogGroupPresent method
@@ -153,9 +153,9 @@ func (m *CloudWatchLogsServiceMock) retryPutWithNewSequenceToken(log log.T, mess
 }
 
 // IsLogGroupEncryptedWithKMS mocks CloudWatchLogsService IsLogGroupEncryptedWithKMS method
-func (m *CloudWatchLogsServiceMock) IsLogGroupEncryptedWithKMS(log log.T, logGroupName string) bool {
+func (m *CloudWatchLogsServiceMock) IsLogGroupEncryptedWithKMS(log log.T, logGroupName string) (bool, error) {
 	args := m.Called(log, logGroupName)
-	return args.Get(0).(bool)
+	return args.Get(0).(bool), args.Error(1)
 }
 
 // StreamData mocks CloudWatchLogsService StreamData method
