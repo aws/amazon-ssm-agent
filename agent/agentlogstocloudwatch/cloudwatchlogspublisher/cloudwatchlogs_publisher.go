@@ -30,6 +30,8 @@ const (
 	resourceAlreadyExistsException = "ResourceAlreadyExistsException"
 	defaultPollingInterval         = time.Second
 	defaultPollingWaitTime         = 200 * time.Millisecond
+	pollingBackoffMultiplier       = 2
+	maxPollingInterval             = 30 * time.Second
 )
 
 // ICloudWatchPublisher interface for publishing logs to cloudwatchlogs
@@ -192,38 +194,64 @@ func (cloudwatchPublisher *CloudWatchPublisher) Start() {
 // startPolling creates a ticker and starts polling the queue
 func (cloudwatchPublisher *CloudWatchPublisher) startPolling(sequenceToken, sequenceTokenSharing *string) {
 	// Create a ticker for every second
-	cloudwatchPublisher.publisherTicker = time.NewTicker(cloudwatchPublisher.QueuePollingInterval)
+	currentPollingInterval := cloudwatchPublisher.QueuePollingInterval
+	cloudwatchPublisher.publisherTicker = time.NewTicker(currentPollingInterval)
+	pollingIntervalShouldBackoff := false
 
 	go func() {
-		for range cloudwatchPublisher.publisherTicker.C {
-
-			//Check If Messages are in the Queue. If Messages are there continue to Push them to CW until empty
-			messages, err := cloudwatchlogsqueue.Dequeue(cloudwatchPublisher.QueuePollingWaitTime)
-			if err != nil {
-				cloudwatchPublisher.log.Debugf("Error Dequeueing Messages from Cloudwatchlogs Queue : %v", err)
-			}
-
-			if messages != nil {
-				// There are some messages. Call the PUT Api
-				if sequenceToken, err = cloudwatchPublisher.cloudWatchLogsService.PutLogEvents(cloudwatchPublisher.log, messages, cloudwatchPublisher.selfDestination.logGroup, cloudwatchPublisher.selfDestination.logStream, sequenceToken); err != nil {
-					// Error pushing logs even after retries and fixing sequence token
-					// Skipping the batch and continuing
-					cloudwatchPublisher.log.Errorf("Error pushing logs, skipping the batch:%v", err)
-					sequenceToken = cloudwatchPublisher.cloudWatchLogsService.GetSequenceTokenForStream(cloudwatchPublisher.log, cloudwatchPublisher.selfDestination.logGroup, cloudwatchPublisher.selfDestination.logStream)
+		for {
+			pollingIntervalShouldBackoff = false
+			select {
+			case <-cloudwatchPublisher.publisherTicker.C:
+				//Check If Messages are in the Queue. If Messages are there continue to Push them to CW until empty
+				messages, err := cloudwatchlogsqueue.Dequeue(cloudwatchPublisher.QueuePollingWaitTime)
+				if err != nil {
+					cloudwatchPublisher.log.Debugf("Error Dequeueing Messages from Cloudwatchlogs Queue : %v", err)
 				}
 
-				if cloudwatchPublisher.isSharingEnabled {
-
-					if sequenceTokenSharing, err = cloudwatchPublisher.cloudWatchLogsServiceSharing.PutLogEvents(cloudwatchPublisher.log, messages, cloudwatchPublisher.sharingDestination.logGroup, cloudwatchPublisher.sharingDestination.logStream, sequenceTokenSharing); err != nil {
+				if messages != nil {
+					// There are some messages. Call the PUT Api
+					if sequenceToken, err = cloudwatchPublisher.cloudWatchLogsService.PutLogEvents(cloudwatchPublisher.log, messages, cloudwatchPublisher.selfDestination.logGroup, cloudwatchPublisher.selfDestination.logStream, sequenceToken); err != nil {
 						// Error pushing logs even after retries and fixing sequence token
 						// Skipping the batch and continuing
-						cloudwatchPublisher.log.Errorf("Error pushing logs (for sharing), skipping the batch:%v", err)
-						sequenceTokenSharing = cloudwatchPublisher.cloudWatchLogsServiceSharing.GetSequenceTokenForStream(cloudwatchPublisher.log, cloudwatchPublisher.sharingDestination.logGroup, cloudwatchPublisher.sharingDestination.logStream)
-						if sequenceTokenSharing == nil {
-							// Access Error / Stream Does not exist while getting sequence token. Disabling sharing
-							cloudwatchPublisher.log.Error("Error while getting sequence token. Abort Sharing.")
-							cloudwatchPublisher.isSharingEnabled = false
+						cloudwatchPublisher.log.Errorf("Error pushing logs, skipping the batch:%v", err)
+						pollingIntervalShouldBackoff = true
+						sequenceToken = cloudwatchPublisher.cloudWatchLogsService.GetSequenceTokenForStream(cloudwatchPublisher.log, cloudwatchPublisher.selfDestination.logGroup, cloudwatchPublisher.selfDestination.logStream)
+					}
+
+					if cloudwatchPublisher.isSharingEnabled {
+
+						if sequenceTokenSharing, err = cloudwatchPublisher.cloudWatchLogsServiceSharing.PutLogEvents(cloudwatchPublisher.log, messages, cloudwatchPublisher.sharingDestination.logGroup, cloudwatchPublisher.sharingDestination.logStream, sequenceTokenSharing); err != nil {
+							// Error pushing logs even after retries and fixing sequence token
+							// Skipping the batch and continuing
+							cloudwatchPublisher.log.Errorf("Error pushing logs (for sharing), skipping the batch:%v", err)
+							pollingIntervalShouldBackoff = true
+							sequenceTokenSharing = cloudwatchPublisher.cloudWatchLogsServiceSharing.GetSequenceTokenForStream(cloudwatchPublisher.log, cloudwatchPublisher.sharingDestination.logGroup, cloudwatchPublisher.sharingDestination.logStream)
+							if sequenceTokenSharing == nil {
+								// Access Error / Stream Does not exist while getting sequence token. Disabling sharing
+								cloudwatchPublisher.log.Error("Error while getting sequence token. Abort Sharing.")
+								cloudwatchPublisher.isSharingEnabled = false
+							}
 						}
+					}
+
+					if pollingIntervalShouldBackoff {
+						// Errors when pushing logs will trigger backoff
+						if currentPollingInterval != maxPollingInterval {
+							currentPollingInterval = currentPollingInterval * pollingBackoffMultiplier
+							if currentPollingInterval >= maxPollingInterval {
+								currentPollingInterval = maxPollingInterval
+								cloudwatchPublisher.log.Infof("Polling interval has reached max back off.")
+							}
+							cloudwatchPublisher.log.Infof("Polling interval backing off to every %v.", currentPollingInterval)
+							// Create new publisher ticker to reduce polling
+							cloudwatchPublisher.publisherTicker = time.NewTicker(currentPollingInterval)
+						}
+					} else if currentPollingInterval != cloudwatchPublisher.QueuePollingInterval {
+						// No errors after pushing logs so reset original polling value
+						cloudwatchPublisher.log.Infof("Logs pushed successfully. Reset original polling interval")
+						currentPollingInterval = cloudwatchPublisher.QueuePollingInterval
+						cloudwatchPublisher.publisherTicker = time.NewTicker(currentPollingInterval)
 					}
 				}
 			}
