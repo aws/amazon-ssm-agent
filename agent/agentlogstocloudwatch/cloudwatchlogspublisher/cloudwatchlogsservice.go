@@ -253,7 +253,7 @@ func (service *CloudWatchLogsService) DescribeLogStreams(log log.T, logGroup, lo
 }
 
 //getLogGroupDetails Calls the DescribeLogGroups API to get the details of the loggroup specified. Returns nil if not found
-func (service *CloudWatchLogsService) getLogGroupDetails(log log.T, logGroup string) (logGroupDetails *cloudwatchlogs.LogGroup) {
+func (service *CloudWatchLogsService) getLogGroupDetails(log log.T, logGroup string) (logGroupDetails *cloudwatchlogs.LogGroup, err error) {
 
 	// Keeping the nextToken as empty in the beginning. Might get filled from response for subsequent calls
 	nextToken := ""
@@ -266,7 +266,7 @@ func (service *CloudWatchLogsService) getLogGroupDetails(log log.T, logGroup str
 
 		if err != nil {
 			log.Errorf("Error in calling DescribeLogGroups:%v", err)
-			return
+			return nil, err
 		}
 
 		// Iterate through the log streams and check for the input log stream
@@ -274,7 +274,7 @@ func (service *CloudWatchLogsService) getLogGroupDetails(log log.T, logGroup str
 			if logGroup == *stream.LogGroupName {
 				// Log Group Matched
 				logGroupDetails = stream
-				return
+				break
 			}
 		}
 
@@ -288,12 +288,13 @@ func (service *CloudWatchLogsService) getLogGroupDetails(log log.T, logGroup str
 		}
 	}
 
-	return
+	return logGroupDetails, nil
 }
 
 // IsLogGroupPresent checks and returns true when the log group is present
 func (service *CloudWatchLogsService) IsLogGroupPresent(log log.T, logGroup string) bool {
-	return service.getLogGroupDetails(log, logGroup) != nil
+	logGroupDetails, _ := service.getLogGroupDetails(log, logGroup)
+	return logGroupDetails != nil
 }
 
 // IsLogStreamPresent checks and returns true when the log stream is present
@@ -412,18 +413,26 @@ func (service *CloudWatchLogsService) retryPutWithNewSequenceToken(log log.T, me
 }
 
 //IsLogGroupEncryptedWithKMS return true if the log group is encrypted with KMS key.
-func (service *CloudWatchLogsService) IsLogGroupEncryptedWithKMS(log log.T, logGroupName string) bool {
-	logGroup := service.getLogGroupDetails(log, logGroupName)
+func (service *CloudWatchLogsService) IsLogGroupEncryptedWithKMS(log log.T, logGroupName string) (bool, error) {
+	var (
+		logGroup *cloudwatchlogs.LogGroup
+		err      error
+	)
+
+	if logGroup, err = service.getLogGroupDetails(log, logGroupName); err != nil {
+		return false, err
+	}
+
 	if logGroup == nil {
-		return false
+		return false, nil
 	}
 
 	if logGroup.KmsKeyId != nil {
-		return true
+		return true, nil
 	}
 
 	log.Errorf("CloudWatch log group %s is not encrypted with KMS", logGroupName)
-	return false
+	return false, nil
 }
 
 //StreamData streams data from the absoluteFilePath file to cloudwatch logs.

@@ -67,13 +67,17 @@ func (p *ShellPlugin) validate(context context.T,
 	s3Util s3util.IAmazonS3Util) error {
 
 	if config.CloudWatchLogGroup != "" && config.CloudWatchEncryptionEnabled {
-		if encrypted := cwl.IsLogGroupEncryptedWithKMS(context.Log(), config.CloudWatchLogGroup); !encrypted {
+		if encrypted, err := cwl.IsLogGroupEncryptedWithKMS(context.Log(), config.CloudWatchLogGroup); err != nil {
+			return errors.New(fmt.Sprintf("Couldn't start the session because we are unable to validate encryption on CloudWatch Logs log group. Error: %v", err))
+		} else if !encrypted {
 			return errors.New(mgsConfig.CloudWatchEncryptionErrorMsg)
 		}
 	}
 
 	if config.OutputS3BucketName != "" && config.S3EncryptionEnabled {
-		if encrypted := s3Util.IsBucketEncrypted(context.Log(), config.OutputS3BucketName); !encrypted {
+		if encrypted, err := s3Util.IsBucketEncrypted(context.Log(), config.OutputS3BucketName); err != nil {
+			return errors.New(fmt.Sprintf("Couldn't start the session because we are unable to validate encryption on Amazon S3 bucket. Error: %v", err))
+		} else if !encrypted {
 			return errors.New(mgsConfig.S3EncryptionErrorMsg)
 		}
 	}

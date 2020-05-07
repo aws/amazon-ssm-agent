@@ -254,6 +254,6 @@ func TestCloudWatchLogsService_IsLogGroupEncryptedWithKMS(t *testing.T) {
 	output := cloudwatchlogs.DescribeLogGroupsOutput{}
 
 	cwLogsClientMock.On("DescribeLogGroups", mock.AnythingOfType("*cloudwatchlogs.DescribeLogGroupsInput")).Return(&output, nil)
-	encrypted := service.IsLogGroupEncryptedWithKMS(logMock, "LogGroup")
+	encrypted, _ := service.IsLogGroupEncryptedWithKMS(logMock, "LogGroup")
 	assert.False(t, encrypted)
 }
