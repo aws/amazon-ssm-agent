@@ -113,8 +113,8 @@ func executeInstall(
 		// It's not ideal to rely on the error message, but it's uneasy to separate this "validation" error from actual execution error.
 		// Ideally when we have a standard that can differentiate error types based on status code or a new status (eg ValidationError),
 		// we will refactor to make use of that approach.
-		if isUpdateInPlace && strings.Contains(output.GetStderr(), "missing update script") {
-			setNewInstallState(tracer, repository, inst, localpackages.Installed)
+		if isUpdateInPlace && strings.Contains(result.GetStderr(), "missing update script") {
+			setNewInstallState(tracer, repository, inst, localpackages.Failed)
 			output.MarkAsFailed(nil, nil)
 			return
 		}
