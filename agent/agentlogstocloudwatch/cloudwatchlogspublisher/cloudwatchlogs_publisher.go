@@ -49,6 +49,7 @@ type CloudWatchPublisher struct {
 	sharingDestination           *destinationConfigurations
 	isSharingEnabled             bool
 	publisherTicker              *time.Ticker
+	stopPollingChannel           chan bool
 	QueuePollingInterval         time.Duration // The interval after which the publisher polls the queue
 	QueuePollingWaitTime         time.Duration // The duration for which the publisher blocks while polling. For negative value will wait until enqueue
 	log                          log.T
@@ -139,7 +140,7 @@ func (cloudwatchPublisher *CloudWatchPublisher) Start() {
 	cloudwatchPublisher.log.Infof("Start the cloudwatchlogs publisher")
 
 	var err error
-	// If service nil, create a new service, else use the exiting one
+	// If service nil, create a new service, else use the existing one
 	if cloudwatchPublisher.cloudWatchLogsService == nil {
 		cloudwatchPublisher.cloudWatchLogsService = NewCloudWatchLogsService()
 	}
@@ -188,6 +189,7 @@ func (cloudwatchPublisher *CloudWatchPublisher) Start() {
 		}
 	}
 
+	cloudwatchPublisher.stopPollingChannel = make(chan bool)
 	cloudwatchPublisher.startPolling(sequenceToken, sequenceTokenSharing)
 }
 
@@ -196,12 +198,16 @@ func (cloudwatchPublisher *CloudWatchPublisher) startPolling(sequenceToken, sequ
 	// Create a ticker for every second
 	currentPollingInterval := cloudwatchPublisher.QueuePollingInterval
 	cloudwatchPublisher.publisherTicker = time.NewTicker(currentPollingInterval)
-	pollingIntervalShouldBackoff := false
+	pollingShouldBackoff := false
 
 	go func() {
 		for {
-			pollingIntervalShouldBackoff = false
+			pollingShouldBackoff = false
 			select {
+			case <-cloudwatchPublisher.stopPollingChannel:
+				cloudwatchPublisher.log.Debugf("Received Stop Polling Signal")
+				cloudwatchPublisher.publisherTicker.Stop()
+				return
 			case <-cloudwatchPublisher.publisherTicker.C:
 				//Check If Messages are in the Queue. If Messages are there continue to Push them to CW until empty
 				messages, err := cloudwatchlogsqueue.Dequeue(cloudwatchPublisher.QueuePollingWaitTime)
@@ -215,7 +221,7 @@ func (cloudwatchPublisher *CloudWatchPublisher) startPolling(sequenceToken, sequ
 						// Error pushing logs even after retries and fixing sequence token
 						// Skipping the batch and continuing
 						cloudwatchPublisher.log.Errorf("Error pushing logs, skipping the batch:%v", err)
-						pollingIntervalShouldBackoff = true
+						pollingShouldBackoff = true
 						sequenceToken = cloudwatchPublisher.cloudWatchLogsService.GetSequenceTokenForStream(cloudwatchPublisher.log, cloudwatchPublisher.selfDestination.logGroup, cloudwatchPublisher.selfDestination.logStream)
 					}
 
@@ -225,17 +231,17 @@ func (cloudwatchPublisher *CloudWatchPublisher) startPolling(sequenceToken, sequ
 							// Error pushing logs even after retries and fixing sequence token
 							// Skipping the batch and continuing
 							cloudwatchPublisher.log.Errorf("Error pushing logs (for sharing), skipping the batch:%v", err)
-							pollingIntervalShouldBackoff = true
+							pollingShouldBackoff = true
 							sequenceTokenSharing = cloudwatchPublisher.cloudWatchLogsServiceSharing.GetSequenceTokenForStream(cloudwatchPublisher.log, cloudwatchPublisher.sharingDestination.logGroup, cloudwatchPublisher.sharingDestination.logStream)
 							if sequenceTokenSharing == nil {
 								// Access Error / Stream Does not exist while getting sequence token. Disabling sharing
-								cloudwatchPublisher.log.Error("Error while getting sequence token. Abort Sharing.")
+								cloudwatchPublisher.log.Errorf("Error while getting sequence token. Abort Sharing.")
 								cloudwatchPublisher.isSharingEnabled = false
 							}
 						}
 					}
 
-					if pollingIntervalShouldBackoff {
+					if pollingShouldBackoff {
 						// Errors when pushing logs will trigger backoff
 						if currentPollingInterval != maxPollingInterval {
 							currentPollingInterval = currentPollingInterval * pollingBackoffMultiplier
@@ -245,12 +251,14 @@ func (cloudwatchPublisher *CloudWatchPublisher) startPolling(sequenceToken, sequ
 							}
 							cloudwatchPublisher.log.Infof("Polling interval backing off to every %v.", currentPollingInterval)
 							// Create new publisher ticker to reduce polling
+							cloudwatchPublisher.publisherTicker.Stop()
 							cloudwatchPublisher.publisherTicker = time.NewTicker(currentPollingInterval)
 						}
 					} else if currentPollingInterval != cloudwatchPublisher.QueuePollingInterval {
 						// No errors after pushing logs so reset original polling value
 						cloudwatchPublisher.log.Infof("Logs pushed successfully. Reset original polling interval")
 						currentPollingInterval = cloudwatchPublisher.QueuePollingInterval
+						cloudwatchPublisher.publisherTicker.Stop()
 						cloudwatchPublisher.publisherTicker = time.NewTicker(currentPollingInterval)
 					}
 				}
@@ -288,7 +296,9 @@ func (cloudwatchPublisher *CloudWatchPublisher) setupSharing() *string {
 // Stop called to stop the publisher
 func (cloudwatchPublisher *CloudWatchPublisher) Stop() {
 	cloudwatchPublisher.log.Infof("Stop the cloudwatchlogs publisher")
-	if cloudwatchPublisher.publisherTicker != nil {
-		cloudwatchPublisher.publisherTicker.Stop()
+	if cloudwatchPublisher.stopPollingChannel != nil {
+		cloudwatchPublisher.stopPollingChannel <- true
+		close(cloudwatchPublisher.stopPollingChannel)
+		cloudwatchPublisher.stopPollingChannel = nil
 	}
 }
