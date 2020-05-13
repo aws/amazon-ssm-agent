@@ -70,7 +70,7 @@ func TestUpdateInactive(t *testing.T) {
 	updater := createDefaultUpdaterStub()
 	context := generateTestCase().Context
 	context.Current.OutputS3BucketName = "test"
-	err := updater.mgr.inactive(context, logger)
+	err := updater.mgr.inactive(context, logger, "")
 
 	emptyUpdate := &UpdateDetail{}
 

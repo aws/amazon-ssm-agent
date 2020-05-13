@@ -23,7 +23,6 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/health"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/ssm"
-	"github.com/aws/amazon-ssm-agent/agent/version"
 )
 
 const (
@@ -56,8 +55,9 @@ func (s *svcManager) UpdateHealthCheck(log log.T, update *UpdateDetail, errorCod
 	if svc, err = getSsmSvc(); err != nil {
 		return fmt.Errorf("Failed to load ssm service, %v", err)
 	}
-	status := prepareHealthStatus(update, errorCode)
-	if _, err = svc.UpdateInstanceInformation(log, version.Version, status, health.AgentName); err != nil {
+	status := PrepareHealthStatus(update, errorCode)
+	status = fmt.Sprintf("%v-%v", status, update.TargetVersion)
+	if _, err = svc.UpdateInstanceInformation(log, update.SourceVersion, status, health.AgentName); err != nil {
 		return
 	}
 
@@ -76,8 +76,8 @@ func getSsmSvc() (ssm.Service, error) {
 	return ssmSvc, nil
 }
 
-// prepareHealthStatus prepares health status payload
-func prepareHealthStatus(update *UpdateDetail, errorCode string) (result string) {
+// PrepareHealthStatus prepares health status payload
+func PrepareHealthStatus(update *UpdateDetail, errorCode string) (result string) {
 	switch update.State {
 	default:
 		result = active

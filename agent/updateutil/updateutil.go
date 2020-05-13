@@ -128,6 +128,18 @@ const (
 	PipelineTestVersion = "255.0.0.0"
 )
 
+// SUb status values
+const (
+	// installRollback represents rollback code flow occurring during installation
+	InstallRollback = "InstallRollback_"
+
+	// verificationRollback represents rollback code flow occurring during verification
+	VerificationRollback = "VerificationRollback_"
+
+	// downgrade represents that the respective error code was logged during agent downgrade
+	Downgrade = "downgrade_"
+)
+
 //ErrorCode is types of Error Codes
 type ErrorCode string
 
@@ -137,6 +149,27 @@ const (
 
 	// ErrorInvalidTargetVersion represents Target version is not supported
 	ErrorInvalidTargetVersion ErrorCode = "ErrorInvalidTargetVersion"
+
+	// ErrorSourcePkgDownload represents source version not able to download
+	ErrorSourcePkgDownload ErrorCode = "ErrorSourcePkgDownload"
+
+	// ErrorCreateInstanceContext represents the error code while loading the initial context
+	ErrorCreateInstanceContext ErrorCode = "ErrorCreateInstanceContext"
+
+	// ErrorTargetPkgDownload represents target version not able to download
+	ErrorTargetPkgDownload ErrorCode = "ErrorTargetPkgDownload"
+
+	// ErrorUnexpected represents Unexpected Error from panic
+	ErrorUnexpectedThroughPanic ErrorCode = "ErrorUnexpectedThroughPanic"
+
+	// ErrorCreateUpdateFolder represents error when creating the download directory
+	ErrorCreateUpdateFolder ErrorCode = "ErrorCreateUpdateFolder"
+
+	// ErrorUnsupportedVersion represents version less than minimum supported version by OS
+	ErrorUnsupportedVersion ErrorCode = "ErrorUnsupportedVersion"
+
+	// ErrorUpdateFailRollbackSuccess represents rollback succeeded but update process failed
+	ErrorUpdateFailRollbackSuccess ErrorCode = "ErrorUpdateFailRollbackSuccess"
 
 	// ErrorAttemptToDowngrade represents An update is attempting to downgrade Ec2Config to a lower version
 	ErrorAttemptToDowngrade ErrorCode = "ErrorAttempToDowngrade"
@@ -182,6 +215,11 @@ const (
 
 	// ErrorLoadingAgentVersion represents failed for loading agent version
 	ErrorLoadingAgentVersion ErrorCode = "ErrorLoadingAgentVersion"
+)
+
+const (
+	// WarnInactiveVersion represents the warning message when inactive version is used for update
+	WarnInactiveVersion string = "InactiveAgentVersion"
 )
 
 // MinimumDiskSpaceForUpdate represents 100 Mb in bytes

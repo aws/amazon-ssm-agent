@@ -27,6 +27,20 @@ import (
 // inProgress sets update to inProgressing with given new UpdateState
 func (u *updateManager) inProgress(context *UpdateContext, log log.T, state UpdateState) (err error) {
 	update := context.Current
+	defer func() {
+		if err != nil {
+			failedUpdateDetail := &UpdateDetail{
+				State:         Completed,
+				Result:        contracts.ResultStatusFailed,
+				TargetVersion: update.TargetVersion,
+				SourceVersion: update.SourceVersion,
+			}
+			errorCode := u.subStatus + string(state)
+			if err = u.svc.UpdateHealthCheck(log, failedUpdateDetail, errorCode); err != nil {
+				log.Errorf(err.Error())
+			}
+		}
+	}()
 	update.State = state
 	update.Result = contracts.ResultStatusInProgress
 
@@ -51,17 +65,16 @@ func (u *updateManager) inProgress(context *UpdateContext, log log.T, state Upda
 }
 
 // succeeded sets update to completed
-func (u *updateManager) succeeded(context *UpdateContext, log log.T) (err error) {
+func (u *updateManager) succeeded(context *UpdateContext, logger log.T) (err error) {
 	update := context.Current
 	update.State = Completed
 	update.Result = contracts.ResultStatusSuccess
 	update.AppendInfo(
-		log,
+		logger,
 		"%v updated successfully to %v",
 		update.PackageName,
 		update.TargetVersion)
-
-	return u.finalizeUpdateAndSendReply(log, context, "")
+	return u.finalizeUpdateAndSendReply(logger, context, "")
 }
 
 // failed sets update to failed with error messages
@@ -80,21 +93,21 @@ func (u *updateManager) failed(context *UpdateContext, log log.T, code updateuti
 	if noRollbackMessage {
 		update.AppendInfo(log, "No rollback needed")
 	}
-
-	return u.finalizeUpdateAndSendReply(log, context, string(code))
+	errorCode := u.subStatus + string(code)
+	return u.finalizeUpdateAndSendReply(log, context, errorCode)
 }
 
-func (u *updateManager) inactive(context *UpdateContext, log log.T) (err error) {
+func (u *updateManager) inactive(context *UpdateContext, logger log.T, errorWarnCode string) (err error) {
 	update := context.Current
 	update.State = Completed
 	update.Result = contracts.ResultStatusSuccess
 	update.AppendInfo(
-		log,
+		logger,
 		"%v version %v is inactive, update skipped",
 		update.PackageName,
 		update.TargetVersion)
-
-	return u.finalizeUpdateAndSendReply(log, context, "")
+	errorWarnCode = u.subStatus + errorWarnCode
+	return u.finalizeUpdateAndSendReply(logger, context, errorWarnCode)
 }
 
 // finalizeUpdateAndSendReply completes the update and sends reply to message service, also uploads to S3 (if any)

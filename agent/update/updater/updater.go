@@ -146,7 +146,7 @@ func main() {
 	defer recoverUpdaterFromPanic(context)
 
 	// Start or resume update
-	if err = updater.StartOrResumeUpdate(log, context); err != nil {
+	if err = updater.StartOrResumeUpdate(log, context); err != nil { // We do not send any error above this to ICS except panic message
 		// Rolled back, but service cannot start, Update failed.
 		updater.Failed(context, log, updateutil.ErrorUnexpected, err.Error(), false)
 	} else {
@@ -178,6 +178,6 @@ func recoverUpdaterFromPanic(context *processor.UpdateContext) {
 	// recover in case the updater panics
 	if err := recover(); err != nil {
 		log.Errorf("recovered from panic for updater %v!", err)
-		updater.Failed(context, log, updateutil.ErrorUnexpected, fmt.Sprintf("%v", err), false)
+		updater.Failed(context, log, updateutil.ErrorUnexpectedThroughPanic, fmt.Sprintf("%v", err), false)
 	}
 }
