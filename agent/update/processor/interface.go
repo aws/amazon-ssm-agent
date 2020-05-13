@@ -54,6 +54,7 @@ type updateManager struct {
 	install   install
 	download  download
 	clean     clean
+	subStatus string // Values currently being used - downgrade, InstallRollback, VerificationRollback. It is good to place it here as UpdateContext is being saved on the filesystem
 }
 
 // Updater contains logic for performing agent update

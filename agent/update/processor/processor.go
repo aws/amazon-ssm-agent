@@ -162,10 +162,10 @@ func prepareInstallationPackages(mgr *updateManager, log log.T, context *UpdateC
 		return mgr.failed(context, log, updateutil.ErrorEnvironmentIssue, err.Error(), false)
 	}
 	if err = validateUpdateVersion(log, context.Current, instanceContext); err != nil {
-		return mgr.failed(context, log, updateutil.ErrorEnvironmentIssue, err.Error(), true)
+		return mgr.failed(context, log, updateutil.ErrorUnsupportedVersion, err.Error(), true)
 	}
 	if err = validateInactiveVersion(log, context.Current, instanceContext); err != nil {
-		return mgr.inactive(context, log)
+		return mgr.inactive(context, log, updateutil.WarnInactiveVersion)
 	}
 
 	if updateDownload, err = mgr.util.CreateUpdateDownloadFolder(); err != nil {
@@ -174,7 +174,7 @@ func prepareInstallationPackages(mgr *updateManager, log log.T, context *UpdateC
 			"failed to create download folder %v %v",
 			context.Current.PackageName,
 			context.Current.TargetVersion)
-		return mgr.failed(context, log, updateutil.ErrorEnvironmentIssue, message, true)
+		return mgr.failed(context, log, updateutil.ErrorCreateUpdateFolder, message, true)
 	}
 
 	// Download source
@@ -187,7 +187,7 @@ func prepareInstallationPackages(mgr *updateManager, log log.T, context *UpdateC
 	}
 
 	if err = mgr.download(mgr, log, downloadInput, context, context.Current.SourceVersion); err != nil {
-		return mgr.failed(context, log, updateutil.ErrorInvalidPackage, err.Error(), true)
+		return mgr.failed(context, log, updateutil.ErrorSourcePkgDownload, err.Error(), true)
 	}
 
 	// Download target
@@ -200,7 +200,7 @@ func prepareInstallationPackages(mgr *updateManager, log log.T, context *UpdateC
 	}
 
 	if err = mgr.download(mgr, log, downloadInput, context, context.Current.TargetVersion); err != nil {
-		return mgr.failed(context, log, updateutil.ErrorInvalidPackage, err.Error(), true)
+		return mgr.failed(context, log, updateutil.ErrorTargetPkgDownload, err.Error(), true)
 	}
 
 	// Update stdout
@@ -234,6 +234,7 @@ func proceedUpdate(mgr *updateManager, log log.T, context *UpdateContext) (err e
 				"failed to uninstall %v %v",
 				context.Current.PackageName,
 				context.Current.SourceVersion)
+			mgr.subStatus = updateutil.Downgrade
 			return mgr.failed(context, log, updateutil.ErrorUninstallFailed, message, true)
 		}
 	}
@@ -252,6 +253,7 @@ func proceedUpdate(mgr *updateManager, log log.T, context *UpdateContext) (err e
 			"Initiating rollback %v to %v",
 			context.Current.PackageName,
 			context.Current.SourceVersion)
+		mgr.subStatus = updateutil.InstallRollback
 		// Update state to Rollback to indicate updater has initiated the rollback process
 		if err = mgr.inProgress(context, log, Rollback); err != nil {
 			return err
@@ -277,7 +279,7 @@ func verifyInstallation(mgr *updateManager, log log.T, context *UpdateContext, i
 	var instanceContext *updateutil.InstanceContext
 
 	if instanceContext, err = mgr.util.CreateInstanceContext(log); err != nil {
-		return mgr.failed(context, log, updateutil.ErrorEnvironmentIssue, err.Error(), false)
+		return mgr.failed(context, log, updateutil.ErrorCreateInstanceContext, err.Error(), false)
 	}
 
 	log.Infof("Initiating update health check")
@@ -295,6 +297,7 @@ func verifyInstallation(mgr *updateManager, log log.T, context *UpdateContext, i
 				"Initiating rollback %v to %v",
 				context.Current.PackageName,
 				context.Current.SourceVersion)
+			mgr.subStatus = updateutil.VerificationRollback
 			// Update state to rollback
 			if err = mgr.inProgress(context, log, Rollback); err != nil {
 				return err
@@ -318,7 +321,7 @@ func verifyInstallation(mgr *updateManager, log log.T, context *UpdateContext, i
 
 	message := fmt.Sprintf("rolledback %v to %v", context.Current.PackageName, context.Current.SourceVersion)
 	log.Infof("message is %v", message)
-	return mgr.failed(context, log, updateutil.ErrorCannotStartService, message, false)
+	return mgr.failed(context, log, updateutil.ErrorUpdateFailRollbackSuccess, message, false)
 }
 
 // rollbackInstallation rollback installation to the source version

@@ -16,11 +16,11 @@
 package processor
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/ssm"
-	"github.com/aws/amazon-ssm-agent/agent/version"
 	ssmService "github.com/aws/aws-sdk-go/service/ssm"
 	"github.com/stretchr/testify/assert"
 )
@@ -49,7 +49,33 @@ func TestHealthCheck(t *testing.T) {
 		context.Current.State = tst.Input
 
 		// call method
-		result := prepareHealthStatus(context.Current, "")
+		result := PrepareHealthStatus(context.Current, "")
+
+		// check results
+		assert.Equal(t, result, tst.Output)
+	}
+}
+
+func TestHealthCheckWithUpdateFailed(t *testing.T) {
+	// generate test cases
+	testCases := []healthCheckTestCase{
+		{NotStarted, fmt.Sprintf("%v_%v", updateFailed, NotStarted)},
+		{Initialized, fmt.Sprintf("%v_%v", updateFailed, Initialized)},
+		{Staged, fmt.Sprintf("%v_%v", updateFailed, Staged)},
+		{Installed, fmt.Sprintf("%v_%v", updateFailed, Installed)},
+		{Completed, fmt.Sprintf("%v_%v", updateFailed, Completed)},
+		{Rollback, fmt.Sprintf("%v_%v", updateFailed, Rollback)},
+		{RolledBack, fmt.Sprintf("%v_%v", updateFailed, RolledBack)},
+	}
+
+	context := createUpdateContext(Installed)
+
+	for _, tst := range testCases {
+		context.Current.Result = contracts.ResultStatusFailed
+		context.Current.State = Completed
+
+		// call method
+		result := PrepareHealthStatus(context.Current, string(tst.Input))
 
 		// check results
 		assert.Equal(t, result, tst.Output)
@@ -64,8 +90,8 @@ func TestUpdateHealthCheck(t *testing.T) {
 	mockObj.On(
 		"UpdateInstanceInformation",
 		logger,
-		version.Version,
-		updateInProgress).Return(&ssmService.UpdateInstanceInformationOutput{}, nil)
+		context.Current.SourceVersion,
+		fmt.Sprintf("%v-%v", updateInProgress, context.Current.TargetVersion)).Return(&ssmService.UpdateInstanceInformationOutput{}, nil)
 
 	// setup
 	newSsmSvc = func() ssm.Service {
