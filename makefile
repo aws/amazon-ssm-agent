@@ -23,7 +23,10 @@ else
 
 #   Initailize BGO_SPACE
 	export BGO_SPACE=$(shell pwd)
-	path := $(BGO_SPACE)/vendor:$(WORKSPACE)
+	GOTEMPPATH := $(BGO_SPACE)/build/private
+	GOTEMPCOPYPATH := $(GOTEMPPATH)/src/github.com/aws/amazon-ssm-agent
+
+	path := $(GOTEMPPATH):$(BGO_SPACE)/vendor
 	ifneq ($(GOPATH),)
 		GOPATH := $(path):$(GOPATH)
 	else
@@ -266,12 +269,10 @@ build-arm64: checkstyle copy-src pre-build
 
 .PHONY: copy-src
 copy-src:
-ifeq ($(BRAZIL_BUILD), true)
 	rm -rf $(GOTEMPCOPYPATH)
 	mkdir -p $(GOTEMPCOPYPATH)
 	@echo "copying files to $(GOTEMPCOPYPATH)"
 	$(COPY) -r $(BGO_SPACE)/agent $(GOTEMPCOPYPATH)
-endif
 
 .PHONY: build-tests-linux
 build-tests-linux: copy-src copy-tests-src pre-build
