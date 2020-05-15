@@ -126,6 +126,61 @@ Contributions and feedback are welcome! Proposals and Pull Requests will be cons
 
 Amazon Web Services does not currently provide support for modified copies of this software.
 
+## Runtime Configuration
+
+To set up your own custom configuration for the agent:
+* Navigate to /etc/amazon/ssm/ (or C:\Program Files\Amazon\SSM for windows)
+* Copy the contents of amazon-ssm-agent.json.template to a new file amazon-ssm-agent.json
+* Restart agent
+
+### Config Property Definitions:
+* Profile - represents configurations for aws credential profile used to get managed instance role and credentials
+    * ShareCreds (boolean)
+        * Default: true
+    * ShareProfile (string)
+* Mds - represents configuration for Message delivery service (MDS) where agent listens for incoming messages
+    * CommandWorkersLimit (int)
+        * Default: 5
+    * StopTimeoutMillis (int64)
+        * Default: 20000
+    * Endpoint (string)
+    * CommandRetryLimit (int)
+        * Default: 15
+* Ssm - represents configuration for Simple Systems Manager (SSM)
+    * Endpoint (string)
+    * HealthFrequencyMinutes (int)
+        * Default: 5
+    * CustomInventoryDefaultLocation (string)
+    * AssociationLogsRetentionDurationHours (int)
+        * Default: 24
+    * RunCommandLogsRetentionDurationHours (int)
+        * Default: 336
+    * SessionLogsRetentionDurationHours (int)
+        * Default: 336
+* Mgs - represents configuration for Message Gateway service
+    * Region (string)
+    * Endpoint (string)
+    * StopTimeoutMillis (int64)
+        * Default: 20000
+    * SessionWorkersLimit (int)
+        * Default: 1000
+* Agent - represents metadata for amazon-ssm-agent
+    * Region (string)
+    * OrchestrationRootDir (string)
+        * Default: "orchestration"
+* Os - represents os related information, will be logged in reply messages
+    * Lang (string)
+        * Default: "en-US"
+    * Name (string)
+    * Version (string)
+        * Default: 1
+* [UNSUPPORTED] S3 - represents configurations related to S3 bucket and key for SSM
+    * Endpoint
+    * Region
+    * LogBucket
+    * LogKey
+* Kms - represents configuration for Key Management Service if encryption is enabled for this session (i.e. kmsKeyId is set or using "Port" plugin) 
+    * Endpoint (string)
 ## License
 
 The Amazon SSM Agent is licensed under the Apache 2.0 License.
