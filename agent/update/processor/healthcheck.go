@@ -56,7 +56,6 @@ func (s *svcManager) UpdateHealthCheck(log log.T, update *UpdateDetail, errorCod
 		return fmt.Errorf("Failed to load ssm service, %v", err)
 	}
 	status := PrepareHealthStatus(update, errorCode)
-	status = fmt.Sprintf("%v-%v", status, update.TargetVersion)
 	if _, err = svc.UpdateInstanceInformation(log, update.SourceVersion, status, health.AgentName); err != nil {
 		return
 	}

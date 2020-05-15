@@ -91,7 +91,7 @@ func TestUpdateHealthCheck(t *testing.T) {
 		"UpdateInstanceInformation",
 		logger,
 		context.Current.SourceVersion,
-		fmt.Sprintf("%v-%v", updateInProgress, context.Current.TargetVersion)).Return(&ssmService.UpdateInstanceInformationOutput{}, nil)
+		updateInProgress).Return(&ssmService.UpdateInstanceInformationOutput{}, nil)
 
 	// setup
 	newSsmSvc = func() ssm.Service {
