@@ -23,7 +23,7 @@ import (
 	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/log"
-	"src/github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/assert"
 )
 
 //TODO add process start time
