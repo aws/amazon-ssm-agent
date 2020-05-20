@@ -1,9 +1,17 @@
 Latest
 ===============
-Updated the SSM Agent Snap to core18
-Bug fix for expired in-progress documents being resumed
-Bug fix for update specific files not being deleted after agent update is finished
-Bug fix for cached manifest files not being deleted in the configurepackage plugin
+- Updated README.md to include amazon-ssm-agent.json config definitions
+- Bug fix for reporting ConfigurePackage metrics for document archive
+- Added backoff for CloudWatch retries
+- Cleaned up error codes and handling dependency errors
+- Bug fix for logging http response status when dialing of websocket connection fails
+
+2.3.1205.0
+===============
+- Updated the SSM Agent Snap to core18
+- Bug fix for expired in-progress documents being resumed
+- Bug fix for update specific files not being deleted after agent update is finished
+- Bug fix for cached manifest files not being deleted in the configurepackage plugin
 
 2.3.978.0
 ===============
