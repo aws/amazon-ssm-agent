@@ -16,20 +16,24 @@
 
 package log
 
-import "path/filepath"
+import (
+	"path/filepath"
+
+	"github.com/cihub/seelog"
+)
 
 func DefaultConfig() []byte {
-	return LoadLog(DefaultLogDir, LogFile)
+	return LoadLog(DefaultLogDir, LogFile, seelog.InfoStr)
 }
 
-func LoadLog(defaultLogDir string, logFile string) []byte {
+func LoadLog(defaultLogDir string, logFile string, debugStatus string) []byte {
 	var logFilePath, errorFilePath string
 
 	logFilePath = filepath.Join(defaultLogDir, logFile)
 	errorFilePath = filepath.Join(defaultLogDir, ErrorFile)
 
 	logConfig := `
-<seelog type="adaptive" mininterval="2000000" maxinterval="100000000" critmsgcount="500" minlevel="info">
+<seelog type="adaptive" mininterval="2000000" maxinterval="100000000" critmsgcount="500" minlevel="` + debugStatus + `">
     <exceptions>
         <exception filepattern="test*" minlevel="error"/>
     </exceptions>

@@ -89,7 +89,7 @@ func loadUpdaterLogger(logRoot string, logFile string) (logger log.T) {
 }
 
 func defaultUpdaterConfig(logRoot string, logFile string) []byte {
-	return log.LoadLog(logRoot, logFile)
+	return log.LoadLog(logRoot, logFile, seelog.DebugStr)
 }
 
 // check if a logger has be loaded
