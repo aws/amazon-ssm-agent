@@ -18,6 +18,7 @@ package cloudwatchlogspublisher
 import (
 	"bufio"
 	"errors"
+	"io"
 	"os"
 	"time"
 
@@ -456,9 +457,11 @@ func (service *CloudWatchLogsService) StreamData(log log.T, logGroupName string,
 
 	// Keeps track of the last known line number that was successfully uploaded to CloudWatch.
 	var lastKnownLineUploadedToCWL int64 = 0
+	var lastKnownLinePrefixUploadedToCWL int64 = 0
 
 	// Keeps track of the next line number upto which the logs will be uploaded to CloudWatch.
 	var currentLineNumber int64 = 0
+	var currentLinePrefixNumber int64 = 0
 
 	IsLogStreamCreated := isLogStreamCreated
 
@@ -467,11 +470,18 @@ func (service *CloudWatchLogsService) StreamData(log log.T, logGroupName string,
 
 	for range ticker.C {
 		// Get next message to be uploaded.
-		events, eof := service.getNextMessage(log, absoluteFilePath, &lastKnownLineUploadedToCWL, &currentLineNumber)
+		events, eof := service.getNextMessage(
+			log,
+			absoluteFilePath,
+			&lastKnownLineUploadedToCWL,
+			&lastKnownLinePrefixUploadedToCWL,
+			&currentLineNumber,
+			&currentLinePrefixNumber)
 
 		// Exit case determining that the file is complete and has been scanned till EOF.
 		if eof {
 			ticker.Stop()
+			log.Debug("Finished uploading events to Cloudwatch")
 			service.IsUploadComplete = true
 			break
 		}
@@ -509,17 +519,19 @@ func (service *CloudWatchLogsService) StreamData(log log.T, logGroupName string,
 		if err == nil {
 			// Set the last known line to current since the upload was successful.
 			lastKnownLineUploadedToCWL = currentLineNumber
+			lastKnownLinePrefixUploadedToCWL = currentLinePrefixNumber
 			log.Debug("Successfully uploaded message to CloudWatch")
 		} else {
 			// Reset the current line to last known line since the upload failed and retry again in the next iteration.
 			currentLineNumber = lastKnownLineUploadedToCWL
+			currentLinePrefixNumber = lastKnownLinePrefixUploadedToCWL
 			log.Debug("Failed to upload message to CloudWatch")
 		}
 	}
 }
 
 //getNextMessage gets the next message to be uploaded to cloudwatch.
-func (service *CloudWatchLogsService) getNextMessage(log log.T, absoluteFilePath string, lastKnownLineUploadedToCWL *int64, currentLineNumber *int64) (allEvents []*cloudwatchlogs.InputLogEvent, eof bool) {
+func (service *CloudWatchLogsService) getNextMessage(log log.T, absoluteFilePath string, lastKnownLineUploadedToCWL *int64, lastKnownLinePrefixUploadedToCWL *int64, currentLineNumber *int64, currentLinePrefixNumber *int64) (allEvents []*cloudwatchlogs.InputLogEvent, eof bool) {
 	// Open file to read.
 	file, err := os.Open(absoluteFilePath)
 	if err != nil {
@@ -528,43 +540,74 @@ func (service *CloudWatchLogsService) getNextMessage(log log.T, absoluteFilePath
 	}
 	defer file.Close()
 
-	// Initialize scanner.
-	scanner := bufio.NewScanner(file)
-	scanner.Split(bufio.ScanLines)
+	// Initialize reader.
+	reader := bufio.NewReaderSize(file, MessageLengthThresholdInBytes)
 
 	// Skip to the last uploaded line.
-	if *lastKnownLineUploadedToCWL > 0 {
+	if *lastKnownLineUploadedToCWL > 0 || *lastKnownLinePrefixUploadedToCWL > 0 {
 		var lastLine int64 = 0
-		for scanner.Scan() {
-			lastLine++
-			if lastLine == *lastKnownLineUploadedToCWL {
+		var lastPrefix int64 = 0
+		_, isPrefix, err := reader.ReadLine()
+		for err == nil {
+			if isPrefix {
+				lastPrefix++
+			} else {
+				lastLine++
+				lastPrefix = 0
+			}
+
+			if lastLine == *lastKnownLineUploadedToCWL &&
+				lastPrefix == *lastKnownLinePrefixUploadedToCWL {
 				break
 			}
+			_, isPrefix, err = reader.ReadLine()
+		}
+		if err != nil && err != io.EOF {
+			log.Debugf("Error skipping to last uploaded Cloudwatch line: %v", err)
+			return
 		}
 	}
 
 	var message []byte
 	// Scan the next set of lines to upload.
-	for scanner.Scan() {
+	line, isPrefix, err := reader.ReadLine()
+	for err == nil {
 		if len(message) == 0 {
-			message = append(message, scanner.Bytes()...)
-		} else if (len(message) + len(scanner.Bytes())) > MessageLengthThresholdInBytes {
+			message = append(message, line...)
+		} else if (len(message) + len(line)) > MessageLengthThresholdInBytes {
+			log.Debugf("Appending line to current Cloudwatch event message"+
+				" exceeds length limit %v bytes. [Line: %v][Prefix: %v]",
+				MessageLengthThresholdInBytes, *currentLineNumber, *currentLinePrefixNumber)
+
 			event := &cloudwatchlogs.InputLogEvent{
 				Message:   aws.String(string(message)),
 				Timestamp: aws.Int64(time.Now().UnixNano() / int64(time.Millisecond)),
 			}
+
+			log.Debug("Created Cloudwatch event from current event message buffer")
 			allEvents = append(allEvents, event)
 			if len(allEvents) >= maxNumberOfEventsPerCall {
 				return
 			}
 
+			log.Debug("Reset Cloudwatch event message buffer")
 			message = nil
-			message = append(message, scanner.Bytes()...)
+			message = append(message, line...)
 		} else {
-			message = append(append(message, []byte(NewLineCharacter)...), scanner.Bytes()...)
+			message = append(append(message, []byte(NewLineCharacter)...), line...)
 		}
 
-		*currentLineNumber++
+		if isPrefix {
+			*currentLinePrefixNumber++
+		} else {
+			*currentLineNumber++
+			*currentLinePrefixNumber = 0
+		}
+
+		line, isPrefix, err = reader.ReadLine()
+	}
+	if err != io.EOF && err != nil {
+		log.Debug("Error reading from Cloudwatch logs file:", err)
 	}
 
 	if len(message) > 0 {
@@ -578,7 +621,7 @@ func (service *CloudWatchLogsService) getNextMessage(log log.T, absoluteFilePath
 	}
 
 	// This determines the end of session.
-	if len(message) == 0 && scanner.Err() == nil && service.IsFileComplete {
+	if len(message) == 0 && (err == nil || err == io.EOF) && service.IsFileComplete {
 		eof = true
 	}
 

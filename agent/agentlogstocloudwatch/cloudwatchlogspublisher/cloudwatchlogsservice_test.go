@@ -216,8 +216,16 @@ func TestCloudWatchLogsService_getNextMessage(t *testing.T) {
 
 	// Get actual result
 	var actualLastKnownLineUploadedToCWL int64 = 0
+	var actualLastKnownLinePrefixUploadedToCWL int64 = 0
 	var actualCurrentLineNumber int64 = 0
-	message, eof := service.getNextMessage(logMock, fileName, &actualLastKnownLineUploadedToCWL, &actualCurrentLineNumber)
+	var actualCurrentLinePrefixNumber int64 = 0
+	message, eof := service.getNextMessage(
+		logMock,
+		fileName,
+		&actualLastKnownLineUploadedToCWL,
+		&actualLastKnownLinePrefixUploadedToCWL,
+		&actualCurrentLineNumber,
+		&actualCurrentLinePrefixNumber)
 
 	// Compare results
 	assert.Equal(t, expectedLastKnownLineUploadedToCWL, actualLastKnownLineUploadedToCWL)
@@ -235,7 +243,14 @@ func TestCloudWatchLogsService_getNextMessage(t *testing.T) {
 
 	// Get actual result
 	actualLastKnownLineUploadedToCWL = actualCurrentLineNumber
-	message, eof = service.getNextMessage(logMock, fileName, &actualLastKnownLineUploadedToCWL, &actualCurrentLineNumber)
+	actualLastKnownLinePrefixUploadedToCWL = actualCurrentLinePrefixNumber
+	message, eof = service.getNextMessage(
+		logMock,
+		fileName,
+		&actualLastKnownLineUploadedToCWL,
+		&actualLastKnownLinePrefixUploadedToCWL,
+		&actualCurrentLineNumber,
+		&actualCurrentLinePrefixNumber)
 
 	// Compare results
 	assert.Equal(t, expectedLastKnownLineUploadedToCWL, actualLastKnownLineUploadedToCWL)
