@@ -444,7 +444,7 @@ func TestExeCommandSucceeded(t *testing.T) {
 	util := Utility{}
 
 	for _, test := range testCases {
-		err := util.ExeCommand(logger,
+		_, err := util.ExeCommand(logger,
 			test.cmd,
 			test.workingDir,
 			appconfig.UpdaterArtifactsRoot,

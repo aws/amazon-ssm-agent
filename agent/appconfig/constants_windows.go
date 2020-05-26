@@ -116,13 +116,16 @@ var DownloadRoot string
 // UpdaterArtifactsRoot represents the directory for storing update related information
 var UpdaterArtifactsRoot string
 
+// UpdaterPidLockfile represents the location of the updater lockfile
+var UpdaterPidLockfile string
+
 // EC2ConfigDataStorePath represents the directory for storing ec2 config data
 var EC2ConfigDataStorePath string
 
 // EC2ConfigSettingPath represents the directory for storing ec2 config settings
 var EC2ConfigSettingPath string
 
-// EC2UpdaterArtifactsRoot represents the directory for storing ec2 config update related information
+// EC2UpdateArtifactsRoot represents the directory for storing ec2 config update related information
 var EC2UpdateArtifactsRoot string
 
 // EC2UpdaterDownloadRoot is the directory for downloading ec2 update related files
@@ -181,6 +184,7 @@ func init() {
 	LocalCommandRootInvalid = filepath.Join(LocalCommandRoot, "Invalid")
 	DownloadRoot = filepath.Join(temp, SSMFolder, "Download")
 	UpdaterArtifactsRoot = filepath.Join(temp, SSMFolder, "Update")
+	UpdaterPidLockfile = filepath.Join(temp, SSMFolder, "update.lock")
 	EC2UpdateArtifactsRoot = filepath.Join(EnvWinDir, EC2ConfigServiceFolder, "Update")
 	EC2UpdaterDownloadRoot = filepath.Join(temp, EC2ConfigAppDataFolder, "Download")
 

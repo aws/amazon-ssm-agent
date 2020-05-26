@@ -64,6 +64,9 @@ const (
 	// UpdaterArtifactsRoot represents the directory for storing update related information
 	UpdaterArtifactsRoot = "/var/lib/amazon/ssm/update/"
 
+	// UpdaterPidLockfile represents the location of the updater lockfile
+	UpdaterPidLockfile = DefaultDataStorePath + "update.lock"
+
 	// DefaultPluginPath represents the directory for storing plugins in SSM
 	DefaultPluginPath = "/var/lib/amazon/ssm/plugins"
 

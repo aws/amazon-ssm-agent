@@ -27,6 +27,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/task"
 	"github.com/aws/amazon-ssm-agent/agent/updateutil"
 	"github.com/aws/amazon-ssm-agent/agent/version"
+	"github.com/nightlyone/lockfile"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -348,8 +349,10 @@ func TestExecute(t *testing.T) {
 
 	pluginInput.TargetVersion = ""
 	mockCancelFlag := new(task.MockCancelFlag)
+	mockLockfile := lockfile.MockLockfile{}
 	mockContext := context.NewMockDefault()
 	mockIOHandler := iohandler.DefaultIOHandler{}
+	methodCalled := false
 
 	// Create stub
 	updateAgent = func(
@@ -361,8 +364,14 @@ func TestExecute(t *testing.T) {
 		rawPluginInput interface{},
 		cancelFlag task.CancelFlag,
 		output iohandler.IOHandler,
-		startTime time.Time) {
-		return
+		startTime time.Time) int {
+		methodCalled = true
+		output.MarkAsInProgress()
+		return 1
+	}
+
+	getLockObj = func(pth string) (lockfile.Lockfile, error) {
+		return mockLockfile, nil
 	}
 
 	// Setup mocks
@@ -370,7 +379,152 @@ func TestExecute(t *testing.T) {
 	mockCancelFlag.On("ShutDown").Return(false)
 	mockCancelFlag.On("Wait").Return(false).After(100 * time.Millisecond)
 
+	mockLockfile.On("TryLockExpire", int64(60)).Return(nil)
+	mockLockfile.On("ShouldRetry", nil).Return(false)
+	mockLockfile.On("ChangeOwner", 1).Return(nil)
+
 	plugin.Execute(mockContext, config, mockCancelFlag, &mockIOHandler)
+
+	if !methodCalled {
+		t.Fail()
+		fmt.Println("Error UpdateAgent method never called")
+	}
+}
+
+func TestExecuteUpdateLocked(t *testing.T) {
+	pluginInput := createStubPluginInput()
+	pluginInput.TargetVersion = ""
+	config := contracts.Configuration{}
+	p := make([]interface{}, 1)
+	p[0] = pluginInput
+	config.Properties = p
+	plugin := &Plugin{}
+
+	pluginInput.TargetVersion = ""
+	mockCancelFlag := new(task.MockCancelFlag)
+	mockLockfile := lockfile.MockLockfile{}
+	mockContext := context.NewMockDefault()
+	mockIOHandler := iohandler.DefaultIOHandler{}
+
+	getLockObj = func(pth string) (lockfile.Lockfile, error) {
+		return mockLockfile, nil
+	}
+
+	// Setup mocks
+	mockCancelFlag.On("Canceled").Return(false)
+	mockCancelFlag.On("ShutDown").Return(false)
+	mockCancelFlag.On("Wait").Return(false).After(100 * time.Millisecond)
+
+	mockLockfile.On("TryLockExpire", int64(60)).Return(lockfile.ErrBusy)
+	mockLockfile.On("ShouldRetry", lockfile.ErrBusy).Return(false)
+
+	plugin.Execute(mockContext, config, mockCancelFlag, &mockIOHandler)
+}
+
+func TestExecutePanicDuringUpdate(t *testing.T) {
+	pluginInput := createStubPluginInput()
+	pluginInput.TargetVersion = ""
+	config := contracts.Configuration{}
+	p := make([]interface{}, 1)
+	p[0] = pluginInput
+	config.Properties = p
+	plugin := &Plugin{}
+
+	pluginInput.TargetVersion = ""
+	mockCancelFlag := new(task.MockCancelFlag)
+	mockLockfile := lockfile.MockLockfile{}
+	mockContext := context.NewMockDefault()
+	mockIOHandler := iohandler.DefaultIOHandler{}
+	methodCalled := false
+
+	// Create stub
+	updateAgent = func(
+		p *Plugin,
+		config contracts.Configuration,
+		log log.T,
+		manager pluginHelper,
+		util updateutil.T,
+		rawPluginInput interface{},
+		cancelFlag task.CancelFlag,
+		output iohandler.IOHandler,
+		startTime time.Time) int {
+		methodCalled = true
+		panic(fmt.Errorf("Some Random Panic"))
+		return 1
+	}
+
+	getLockObj = func(pth string) (lockfile.Lockfile, error) {
+		return mockLockfile, nil
+	}
+
+	// Setup mocks
+	mockCancelFlag.On("Canceled").Return(false)
+	mockCancelFlag.On("ShutDown").Return(false)
+	mockCancelFlag.On("Wait").Return(false).After(100 * time.Millisecond)
+
+	mockLockfile.On("TryLockExpire", int64(60)).Return(nil)
+	mockLockfile.On("ShouldRetry", nil).Return(false)
+	mockLockfile.On("Unlock").Return(nil)
+
+	plugin.Execute(mockContext, config, mockCancelFlag, &mockIOHandler)
+
+	if !methodCalled {
+		t.Fail()
+		fmt.Println("Error UpdateAgent method never called")
+	}
+}
+
+func TestExecuteFailureDuringUpdate(t *testing.T) {
+	pluginInput := createStubPluginInput()
+	pluginInput.TargetVersion = ""
+	config := contracts.Configuration{}
+	p := make([]interface{}, 1)
+	p[0] = pluginInput
+	config.Properties = p
+	plugin := &Plugin{}
+
+	pluginInput.TargetVersion = ""
+	mockCancelFlag := new(task.MockCancelFlag)
+	mockLockfile := lockfile.MockLockfile{}
+	mockContext := context.NewMockDefault()
+	mockIOHandler := iohandler.DefaultIOHandler{}
+	methodCalled := false
+
+	// Create stub
+	updateAgent = func(
+		p *Plugin,
+		config contracts.Configuration,
+		log log.T,
+		manager pluginHelper,
+		util updateutil.T,
+		rawPluginInput interface{},
+		cancelFlag task.CancelFlag,
+		output iohandler.IOHandler,
+		startTime time.Time) int {
+		methodCalled = true
+		output.MarkAsFailed(fmt.Errorf("Some Random Failure"))
+		return 1
+	}
+
+	getLockObj = func(pth string) (lockfile.Lockfile, error) {
+		return mockLockfile, nil
+	}
+
+	// Setup mocks
+	mockCancelFlag.On("Canceled").Return(false)
+	mockCancelFlag.On("ShutDown").Return(false)
+	mockCancelFlag.On("Wait").Return(false).After(100 * time.Millisecond)
+
+	mockLockfile.On("TryLockExpire", int64(60)).Return(nil)
+	mockLockfile.On("ShouldRetry", nil).Return(false)
+	mockLockfile.On("Unlock").Return(nil)
+
+	plugin.Execute(mockContext, config, mockCancelFlag, &mockIOHandler)
+
+	if !methodCalled {
+		t.Fail()
+		fmt.Println("Error UpdateAgent method never called")
+	}
 }
 
 func createStubPluginInput() *UpdatePluginInput {
@@ -444,8 +598,8 @@ func (u *fakeUtility) ExeCommand(
 	workingDir string,
 	stdOut string,
 	stdErr string,
-	isAsync bool) (err error) {
-	return nil
+	isAsync bool) (pid int, err error) {
+	return 1, nil
 }
 
 func (u *fakeUtility) SaveUpdatePluginResult(

@@ -19,12 +19,14 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	logger "github.com/aws/amazon-ssm-agent/agent/log"
 	ssmlog "github.com/aws/amazon-ssm-agent/agent/log/ssmlog"
 	"github.com/aws/amazon-ssm-agent/agent/platform"
 	"github.com/aws/amazon-ssm-agent/agent/update/processor"
 	"github.com/aws/amazon-ssm-agent/agent/updateutil"
+	"github.com/nightlyone/lockfile"
 )
 
 const (
@@ -53,6 +55,9 @@ var (
 	outputKeyPrefix *string
 	outputBucket    *string
 )
+
+//Constants
+var lockFileMinutes = int64(60)
 
 func init() {
 	log = ssmlog.GetUpdaterLogger(logger.DefaultLogDir, defaultLogFileName)
@@ -108,6 +113,25 @@ func main() {
 		flag.Usage()
 	}
 
+	// If the updater already owns the lockfile, no harm done
+	// If there is no lockfile, the updater will own it
+	// If the updater is unable to lock the file, we retry and then fail
+	lock, _ := lockfile.New(appconfig.UpdaterPidLockfile)
+	err := lock.TryLockExpire(lockFileMinutes)
+
+	// check if we should retry the lock
+	if lock.ShouldRetry(err) {
+		time.Sleep(1 + time.Second)
+		err = lock.TryLockExpire(lockFileMinutes)
+	}
+
+	// If error even after retry we should exit
+	if err != nil {
+		log.Errorf("Failed to take ownership of pid lock with error %s", err)
+		return
+	}
+	defer lock.Unlock()
+
 	// Create new UpdateDetail
 	detail := &processor.UpdateDetail{
 		State:              processor.NotStarted,
@@ -128,7 +152,7 @@ func main() {
 		RequiresUninstall:  false,
 	}
 
-	if err := resolveUpdateDetail(detail); err != nil {
+	if err = resolveUpdateDetail(detail); err != nil {
 		log.Errorf(err.Error())
 		return
 	}

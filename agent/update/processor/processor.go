@@ -369,7 +369,7 @@ func uninstallAgent(mgr *updateManager, log log.T, version string, context *Upda
 		version)
 
 	// Uninstall version
-	if err = mgr.util.ExeCommand(
+	if _, err = mgr.util.ExeCommand(
 		log,
 		uninstallPath,
 		workDir,
@@ -399,7 +399,7 @@ func installAgent(mgr *updateManager, log log.T, version string, context *Update
 		version)
 
 	// Install version
-	if err = mgr.util.ExeCommand(
+	if _, err = mgr.util.ExeCommand(
 		log,
 		installerPath,
 		workDir,
@@ -446,7 +446,8 @@ func cleanUninstalledVersions(mgr *updateManager, log log.T, context *UpdateCont
 		}
 	}
 
-	log.Infof("Installed version:\n%v\nRemoved versions:%v\n", installedVersion, removedVersions)
+	log.Infof("Installed version: %v", installedVersion)
+	log.Infof("Removed versions: %v", removedVersions)
 
 	if combinedErrors.Error() != "" {
 		return combinedErrors

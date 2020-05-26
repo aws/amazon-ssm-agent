@@ -25,6 +25,8 @@ Copyright (c) 2015 Nathan Osman
 Copyright (c) 2015 Loren Segal
 **shiena/ansicolor - https://github.com/shiena/ansicolor
 Copyright (c) [2014] [shiena]
+**nightlyone/lockfile - https://github.com/nightlyone/lockfile
+Copyright (c) [2012] Ingo Oeser
 
 MIT License
 
