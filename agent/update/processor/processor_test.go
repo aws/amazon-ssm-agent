@@ -684,11 +684,11 @@ func (u *utilityStub) CreateUpdateDownloadFolder() (folder string, err error) {
 	return "rootfolder", nil
 }
 
-func (u *utilityStub) ExeCommand(log log.T, cmd string, workingDir string, updaterRoot string, stdOut string, stdErr string, isAsync bool) (err error) {
+func (u *utilityStub) ExeCommand(log log.T, cmd string, workingDir string, updaterRoot string, stdOut string, stdErr string, isAsync bool) (pid int, err error) {
 	if u.controller.failExeCommand {
-		return fmt.Errorf("cannot run script")
+		return -1, fmt.Errorf("cannot run script")
 	}
-	return nil
+	return 1, nil
 }
 
 func (u *utilityStub) SaveUpdatePluginResult(log log.T, updaterRoot string, updateResult *updateutil.UpdatePluginResult) (err error) {

@@ -244,7 +244,7 @@ type InstanceContext struct {
 type T interface {
 	CreateInstanceContext(log log.T) (context *InstanceContext, err error)
 	CreateUpdateDownloadFolder() (folder string, err error)
-	ExeCommand(log log.T, cmd string, workingDir string, updaterRoot string, stdOut string, stdErr string, isAsync bool) (err error)
+	ExeCommand(log log.T, cmd string, workingDir string, updaterRoot string, stdOut string, stdErr string, isAsync bool) (pid int, err error)
 	IsServiceRunning(log log.T, i *InstanceContext) (result bool, err error)
 	WaitForServiceToStart(log log.T, i *InstanceContext) (result bool, err error)
 	SaveUpdatePluginResult(log log.T, updaterRoot string, updateResult *UpdatePluginResult) (err error)
@@ -409,26 +409,28 @@ func (util *Utility) ExeCommand(
 	outputRoot string,
 	stdOut string,
 	stdErr string,
-	isAsync bool) (err error) {
+	isAsync bool) (int, error) {
 
 	parts := strings.Fields(cmd)
+	pid := -1
 
 	if isAsync {
 		command := execCommand(parts[0], parts[1:]...)
 		command.Dir = workingDir
 		prepareProcess(command)
 		// Start command asynchronously
-		err = cmdStart(command)
+		err := cmdStart(command)
 		if err != nil {
-			return
+			return pid, err
 		}
+		pid = getCommandPid(command)
 	} else {
 		tempCmd := setPlatformSpecificCommand(parts)
 		command := execCommand(tempCmd[0], tempCmd[1:]...)
 		command.Dir = workingDir
-		stdoutWriter, stderrWriter, exeErr := setExeOutErr(outputRoot, stdOut, stdErr)
-		if exeErr != nil {
-			return exeErr
+		stdoutWriter, stderrWriter, err := setExeOutErr(outputRoot, stdOut, stdErr)
+		if err != nil {
+			return pid, err
 		}
 		defer stdoutWriter.Close()
 		defer stderrWriter.Close()
@@ -438,8 +440,10 @@ func (util *Utility) ExeCommand(
 
 		err = cmdStart(command)
 		if err != nil {
-			return
+			return pid, err
 		}
+
+		pid = getCommandPid(command)
 
 		var timeout = DefaultUpdateExecutionTimeoutInSeconds
 		if util.CustomUpdateExecutionTimeoutInSeconds != 0 {
@@ -463,10 +467,12 @@ func (util *Utility) ExeCommand(
 					err = fmt.Errorf("The execution of command returned Exit Status: %d \n %v", exitCode, err.Error())
 				}
 			}
-			return err
+
+			return pid, err
 		}
 	}
-	return nil
+
+	return pid, nil
 }
 
 // TODO move to commandUtil
@@ -797,6 +803,14 @@ func setExeOutErr(
 	}
 
 	return stdoutWriter, stderrWriter, nil
+}
+
+// getCommandPid returns the pid of the process if present, defaults to pid -1
+func getCommandPid(cmd *exec.Cmd) int {
+	if cmd != nil && cmd.Process != nil {
+		return cmd.Process.Pid
+	}
+	return -1
 }
 
 func CompareVersion(versionOne string, versionTwo string) (int, error) {

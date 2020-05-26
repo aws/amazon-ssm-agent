@@ -62,6 +62,9 @@ const (
 	// UpdaterArtifactsRoot represents the directory for storing update related information
 	UpdaterArtifactsRoot = DefaultProgramFolder + "update/"
 
+	// UpdaterPidLockfile represents the location of the updater lockfile
+	UpdaterPidLockfile = DefaultProgramFolder + "update.lock"
+
 	// DefaultPluginPath represents the directory for storing plugins in SSM
 	DefaultPluginPath = DefaultProgramFolder + "plugins"
 

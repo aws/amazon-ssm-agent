@@ -34,6 +34,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/task"
 	"github.com/aws/amazon-ssm-agent/agent/updateutil"
 	"github.com/aws/amazon-ssm-agent/agent/version"
+	"github.com/nightlyone/lockfile"
 )
 
 // Plugin is the type for the RunCommand plugin.
@@ -96,6 +97,7 @@ var getAppConfig = appconfig.Config
 var fileDownload = artifact.Download
 var fileUncompress = fileutil.Uncompress
 var updateAgent = runUpdateAgent
+var getLockObj = lockfile.New
 
 // NewPlugin returns a new instance of the plugin.
 func NewPlugin(updatePluginConfig UpdatePluginConfig) (*Plugin, error) {
@@ -103,6 +105,9 @@ func NewPlugin(updatePluginConfig UpdatePluginConfig) (*Plugin, error) {
 	plugin.ManifestLocation = updatePluginConfig.ManifestLocation
 	return &plugin, nil
 }
+
+//Constants
+var lockFileMinutes = int64(60)
 
 // updateAgent downloads the installation packages and update the agent
 func runUpdateAgent(
@@ -114,7 +119,7 @@ func runUpdateAgent(
 	rawPluginInput interface{},
 	cancelFlag task.CancelFlag,
 	output iohandler.IOHandler,
-	startTime time.Time) {
+	startTime time.Time) (pid int) {
 	var pluginInput UpdatePluginInput
 	var err error
 	var context *updateutil.InstanceContext
@@ -214,7 +219,7 @@ func runUpdateAgent(
 	workDir := updateutil.UpdateArtifactFolder(
 		appconfig.UpdaterArtifactsRoot, pluginInput.UpdaterName, updaterVersion)
 
-	if err = util.ExeCommand(
+	if pid, err = util.ExeCommand(
 		log,
 		cmd,
 		workDir,
@@ -422,7 +427,41 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 	} else if cancelFlag.Canceled() {
 		output.MarkAsCancelled()
 	} else {
-		updateAgent(p,
+
+		// First check if lock is locked by anyone
+		lock, _ := getLockObj(appconfig.UpdaterPidLockfile)
+		err := lock.TryLockExpire(lockFileMinutes)
+
+		// Check if we should retry the lock
+		if lock.ShouldRetry(err) {
+			time.Sleep(1 + time.Second)
+			err = lock.TryLockExpire(lockFileMinutes)
+		}
+
+		if err != nil {
+			if err == lockfile.ErrBusy {
+				log.Warnf("Failed to lock update lockfile, another update is in progress: %s", err)
+				output.MarkAsFailed(fmt.Errorf("Another update in progress, try again later"))
+			} else {
+				log.Errorf("Failed to lock update lockfile: %s", err)
+				output.MarkAsFailed(fmt.Errorf("Failed to get ownership of update lockfile: %s", err))
+			}
+			return
+		}
+
+		defer func() {
+			if err := recover(); err != nil {
+				// If we panic, we want to release the lock.
+				log.Errorf("UpdateAgent panicked with error '%s'. Unlocking lockfile", err)
+				_ = lock.Unlock()
+
+				if output.GetStatus() != contracts.ResultStatusFailed {
+					output.MarkAsFailed(fmt.Errorf("Panic with error: '%s'", err))
+				}
+			}
+		}()
+
+		pid := updateAgent(p,
 			config,
 			log,
 			manager,
@@ -431,8 +470,25 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 			cancelFlag,
 			output,
 			time.Now())
+
+		// If starting update fails, we unlock
+		if output.GetStatus() != contracts.ResultStatusInProgress {
+			err = lock.Unlock()
+			if err != nil {
+				log.Warnf("Failed to unlock update lockfile: %s", err)
+			}
+			return
+		}
+
+		// We need to change ownership to the updater processes because
+		// the document worker dies right after this function
+		// If we don't change ownership, other updates can start before before the updater has finished
+		err = lock.ChangeOwner(pid)
+		if err != nil {
+			log.Warnf("Failed to transfer ownership of update lockfile to updater, unlocking: %s", err)
+			_ = lock.Unlock()
+		}
 	}
-	return
 }
 
 // Name returns the plugin name
