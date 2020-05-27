@@ -371,7 +371,7 @@ func Download(log log.T, input DownloadInput) (output DownloadOutput, err error)
 			var tempOutput DownloadOutput
 			tempOutput, err = s3Download(log, amazonS3URL, output.LocalFilePath)
 			if err != nil {
-				log.Error("An error occurred when attempting s3 download. Attempting http/https download as fallback.")
+				log.Info("An error occurred when attempting s3 download. Attempting http/https download as fallback.")
 				tempOutput, err = httpDownload(log, input.SourceURL, output.LocalFilePath)
 			}
 			output = tempOutput
