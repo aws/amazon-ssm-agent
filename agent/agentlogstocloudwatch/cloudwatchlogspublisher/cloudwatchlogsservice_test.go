@@ -176,6 +176,10 @@ func TestCloudWatchLogsService_getNextMessage(t *testing.T) {
 		IsFileComplete:       true,
 	}
 
+	// Mock long lines
+	input[0] = strings.Repeat(input[0], 2210)
+	input[6] = strings.Repeat(input[6], 1620)
+
 	fileName := "cwl_util_test_file"
 	file, err := os.Create(fileName)
 	assert.Nil(t, err, "Failed to create test file")
@@ -188,76 +192,159 @@ func TestCloudWatchLogsService_getNextMessage(t *testing.T) {
 		assert.Nil(t, err)
 	}()
 
-	// First Run
-	// Get expected result
-	var totalMessages []int64
-	var lengthCount = 0
+	type messageEnd struct {
+		lineNumber   int64
+		prefixNumber int64
+	}
+
+	// First Run - Get expected result
+	var messageEndings []messageEnd
+	var runningMessageLength = 0
 	var expectedLastKnownLineUploadedToCWL int64 = 0
+	var expectedLastKnownPrefixUploadedToCWL int64 = 0
 	var expectedCurrentLineNumber int64 = 0
+	var expectedCurrentPrefixNumber int64 = 0
+
+	// Iterate through input and mock how messages should be
+	// extracted when reading from the cwl file.
 	for _, v := range input {
-		if lengthCount == 0 {
-			lengthCount = len(v)
-		} else if (lengthCount + len(v)) > MessageLengthThresholdInBytes {
-			totalMessages = append(totalMessages, expectedCurrentLineNumber)
-			if len(totalMessages) >= maxNumberOfEventsPerCall {
+		expectedCurrentPrefixNumber = 0
+		IsMaxEventsReached := false
+		// Loop until current line can be added to latest message without passing threshold.
+		// Each iteration slices out a 'prefix' from current line of size up to the threshold.
+		for (runningMessageLength + len(v)) >= MessageLengthThresholdInBytes {
+			// Finish with latest message if there is one.
+			if runningMessageLength != 0 {
+				// Track message's last line and prefix number.
+				messageEndings = append(messageEndings, messageEnd{
+					expectedCurrentLineNumber,
+					expectedCurrentPrefixNumber,
+				})
+			}
+			// Stop iterating through input if we reach max events
+			if len(messageEndings) >= maxNumberOfEventsPerCall {
+				IsMaxEventsReached = true
 				break
 			}
 
-			lengthCount = len(v)
-		} else {
-			lengthCount = lengthCount + len(v) + len(NewLineCharacter)
+			// Move to next message in the current line
+			nextMessageStart := MessageLengthThresholdInBytes
+			if len(v) < MessageLengthThresholdInBytes {
+				// No next message on this line. Will not loop again.
+				nextMessageStart = len(v)
+			}
+			v = v[nextMessageStart:len(v)]
+			// Add length of the sliced out prefix to the running total
+			runningMessageLength = nextMessageStart
+			expectedCurrentPrefixNumber++
 		}
+
+		if IsMaxEventsReached {
+			break
+		}
+
+		// Skip this if line was added completely while 'prefix' slicing
+		if expectedCurrentPrefixNumber == 0 || len(v) > 0 {
+			// Add length of line of the running total
+			if runningMessageLength == 0 {
+				runningMessageLength = len(v)
+			} else {
+				runningMessageLength += len(v) + len(NewLineCharacter)
+			}
+		}
+
 		expectedCurrentLineNumber++
+		expectedCurrentPrefixNumber = 0
 	}
 
-	if lengthCount != 0 {
-		totalMessages = append(totalMessages, expectedCurrentLineNumber)
+	// Include final message if exists and max events hasn't been reached
+	if runningMessageLength != 0 && len(messageEndings) < maxNumberOfEventsPerCall {
+		messageEndings = append(messageEndings, messageEnd{
+			expectedCurrentLineNumber,
+			expectedCurrentPrefixNumber,
+		})
 	}
 
 	// Get actual result
 	var actualLastKnownLineUploadedToCWL int64 = 0
-	var actualLastKnownLinePrefixUploadedToCWL int64 = 0
+	var actualLastKnownPrefixUploadedToCWL int64 = 0
 	var actualCurrentLineNumber int64 = 0
-	var actualCurrentLinePrefixNumber int64 = 0
-	message, eof := service.getNextMessage(
+	var actualCurrentPrefixNumber int64 = 0
+	nextMessages, eof := service.getNextMessage(
 		logMock,
 		fileName,
 		&actualLastKnownLineUploadedToCWL,
-		&actualLastKnownLinePrefixUploadedToCWL,
+		&actualLastKnownPrefixUploadedToCWL,
 		&actualCurrentLineNumber,
-		&actualCurrentLinePrefixNumber)
+		&actualCurrentPrefixNumber)
 
 	// Compare results
 	assert.Equal(t, expectedLastKnownLineUploadedToCWL, actualLastKnownLineUploadedToCWL)
+	assert.Equal(t, expectedLastKnownPrefixUploadedToCWL, actualLastKnownPrefixUploadedToCWL)
 	assert.Equal(t, expectedCurrentLineNumber, actualCurrentLineNumber)
-	assert.Equal(t, len(totalMessages), len(message))
+	assert.Equal(t, expectedCurrentPrefixNumber, actualCurrentPrefixNumber)
+	assert.Equal(t, len(messageEndings), len(nextMessages))
 	assert.False(t, eof)
 
-	for i, v := range totalMessages {
-		assert.Equal(t, strings.Join(input[:v], NewLineCharacter), *message[i].Message)
+	// Gather actual content of messages from stored line/prefix numbers for comparison
+	var lastLineNumber int64 = 0
+	var lastPrefixNumber int64 = 0
+	for i, v := range messageEndings {
+		// Slice the relevant lines
+		var inputSlice []string
+		if v.lineNumber == int64(len(input)) {
+			inputSlice = input[lastLineNumber:]
+		} else if v.prefixNumber > 0 {
+			inputSlice = input[lastLineNumber : v.lineNumber+1]
+		} else {
+			inputSlice = input[lastLineNumber:v.lineNumber]
+		}
+
+		// Clone elements
+		inputSliceCopy := make([]string, len(inputSlice))
+		copy(inputSliceCopy, inputSlice)
+
+		// Handle slicing out the end of last line to include only relevant 'prefixes'
+		if v.prefixNumber > 0 {
+			prefixEndIndex := v.prefixNumber * MessageLengthThresholdInBytes
+			sliceLastIndex := len(inputSliceCopy) - 1
+			if int64(len(inputSliceCopy[sliceLastIndex])) < prefixEndIndex {
+				prefixEndIndex = int64(len(inputSliceCopy[sliceLastIndex]))
+			}
+			inputSliceCopy[sliceLastIndex] = inputSliceCopy[sliceLastIndex][:prefixEndIndex]
+		}
+		// Handle slicing beginning of first line to include only relevant 'prefixes'
+		if lastPrefixNumber > 0 {
+			inputSliceCopy[0] = inputSliceCopy[0][lastPrefixNumber*MessageLengthThresholdInBytes:]
+		}
+
+		assert.Equal(t, strings.Join(inputSliceCopy, NewLineCharacter), *nextMessages[i].Message)
+		lastLineNumber = v.lineNumber
+		lastPrefixNumber = v.prefixNumber
 	}
 
 	// Final Run
 	// Get expected result
 	expectedLastKnownLineUploadedToCWL = expectedCurrentLineNumber
+	expectedLastKnownPrefixUploadedToCWL = expectedCurrentPrefixNumber
 
 	// Get actual result
 	actualLastKnownLineUploadedToCWL = actualCurrentLineNumber
-	actualLastKnownLinePrefixUploadedToCWL = actualCurrentLinePrefixNumber
-	message, eof = service.getNextMessage(
+	actualLastKnownPrefixUploadedToCWL = actualCurrentPrefixNumber
+	nextMessages, eof = service.getNextMessage(
 		logMock,
 		fileName,
 		&actualLastKnownLineUploadedToCWL,
-		&actualLastKnownLinePrefixUploadedToCWL,
+		&actualLastKnownPrefixUploadedToCWL,
 		&actualCurrentLineNumber,
-		&actualCurrentLinePrefixNumber)
+		&actualCurrentPrefixNumber)
 
 	// Compare results
 	assert.Equal(t, expectedLastKnownLineUploadedToCWL, actualLastKnownLineUploadedToCWL)
 	assert.Equal(t, expectedCurrentLineNumber, actualCurrentLineNumber)
-	assert.Equal(t, 0, len(message))
+	assert.Equal(t, 0, len(nextMessages))
 	assert.True(t, eof)
-	assert.Nil(t, message)
+	assert.Nil(t, nextMessages)
 }
 
 func TestCloudWatchLogsService_IsLogGroupEncryptedWithKMS(t *testing.T) {
