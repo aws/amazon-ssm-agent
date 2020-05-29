@@ -14,7 +14,11 @@
 package appconfig
 
 import (
+	"os"
+	"path/filepath"
 	"testing"
+
+	"io/ioutil"
 
 	"github.com/stretchr/testify/assert"
 )
@@ -65,6 +69,32 @@ func TestGetNumericValue(t *testing.T) {
 		output := getNumericValue(test.Input, test.MinValue, test.MaxValue, test.DefaultValue)
 		assert.Equal(t, test.Output, output)
 	}
+}
+
+// Validate invalid values for json
+func TestInvalidJsonVal(t *testing.T) {
+	path, _ := os.Getwd()
+	var sampleJsonPath = filepath.Join(path, "sample-app-config.json")
+
+	originalFunc := retrieveAppConfigPath
+	defer func() {
+		os.Remove(sampleJsonPath)
+		retrieveAppConfigPath = originalFunc
+	}()
+
+	tempJson := []byte(`{ "Ssm": { "SessionLogsRetentionDurationHours" : "hello", CustomInventoryDefaultLocation: 2 } }`)
+	if err := ioutil.WriteFile(sampleJsonPath, tempJson, ReadWriteAccess); err != nil {
+		return
+	}
+
+	retrieveAppConfigPath = func() (string, error) {
+		return sampleJsonPath, nil
+	}
+	outputJsonConfig, err := Config(true)
+
+	assert.Equal(t, outputJsonConfig.Ssm.CustomInventoryDefaultLocation, DefaultCustomInventoryFolder)
+	assert.Equal(t, outputJsonConfig.Ssm.SessionLogsRetentionDurationHours, DefaultSessionLogsRetentionDurationHours)
+	assert.NotNil(t, err)
 }
 
 // getNumeric64Value Tests
