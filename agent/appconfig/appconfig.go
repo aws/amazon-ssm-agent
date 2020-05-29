@@ -25,8 +25,12 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/version"
 )
 
-var loadedConfig *SsmagentConfig
-var lock sync.RWMutex
+var (
+	loadedConfig *SsmagentConfig
+	lock         sync.RWMutex
+
+	retrieveAppConfigPath = getAppConfigPath
+)
 
 // Config loads the app configuration for amazon-ssm-agent.
 // If reload is true, it loads the config afresh,
@@ -35,7 +39,7 @@ func Config(reload bool) (SsmagentConfig, error) {
 	if reload || !isLoaded() {
 		var agentConfig SsmagentConfig
 		agentConfig = DefaultConfig()
-		path, pathErr := getAppConfigPath()
+		path, pathErr := retrieveAppConfigPath()
 		if pathErr != nil {
 			return agentConfig, nil
 		}
