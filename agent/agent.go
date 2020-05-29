@@ -34,6 +34,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/rebooter"
 	"github.com/aws/amazon-ssm-agent/agent/session/utility"
 	"github.com/aws/amazon-ssm-agent/agent/ssm"
+	"github.com/aws/amazon-ssm-agent/agent/startup"
 )
 
 const (
@@ -50,6 +51,7 @@ var (
 	activationCode, activationID, region string
 	register, clear, force, fpFlag       bool
 	similarityThreshold                  int
+	process                              *startup.Processor
 	registrationFile                     = filepath.Join(appconfig.DefaultDataStorePath, "registration")
 )
 
@@ -72,6 +74,14 @@ func start(log logger.T, instanceIDPtr *string, regionPtr *string, shouldCheckHi
 	hibernateState := hibernation.NewHibernateMode(healthModule, context)
 
 	ssmAgent = agent.NewSSMAgent(context, healthModule, hibernateState)
+
+	// Initialize the startup module during agent start, before agent can potentially enter hibernation mode
+	process = startup.NewProcessor(context)
+	err = process.ModuleExecute(context)
+	if err != nil {
+		log.Errorf("Error occurred during startup of processor: %v", err)
+	}
+
 	// Do a health check before starting the agent.
 	// Health check would include creating a health module and sending empty health pings to the service.
 	// If response is positive, start the agent, else retry and eventually back off (hibernate/passive mode).
