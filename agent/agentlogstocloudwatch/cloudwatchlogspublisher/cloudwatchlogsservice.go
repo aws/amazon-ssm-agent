@@ -21,6 +21,8 @@ import (
 	"os"
 	"time"
 
+	"github.com/aws/amazon-ssm-agent/agent/platform"
+
 	"github.com/aws/amazon-ssm-agent/agent/agentlogstocloudwatch/cloudwatchlogspublisher/cloudwatchlogsinterface"
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/log"
@@ -59,34 +61,50 @@ func createCloudWatchStopPolicy() *sdkutil.StopPolicy {
 }
 
 // createCloudWatchClient creates a client to call CloudWatchLogs APIs
-func createCloudWatchClient() cloudwatchlogsinterface.CloudWatchLogsClient {
+func createCloudWatchClient(log log.T) cloudwatchlogsinterface.CloudWatchLogsClient {
 	config := sdkutil.AwsConfig()
-	return createCloudWatchClientWithConfig(config)
+	return createCloudWatchClientWithConfig(log, config)
 }
 
 // createCloudWatchClientWithCredentials creates a client to call CloudWatchLogs APIs using credentials from the id and secret passed
-func createCloudWatchClientWithCredentials(id, secret string) cloudwatchlogsinterface.CloudWatchLogsClient {
+func createCloudWatchClientWithCredentials(log log.T, id, secret string) cloudwatchlogsinterface.CloudWatchLogsClient {
 	config := sdkutil.AwsConfig().WithCredentials(credentials.NewStaticCredentials(id, secret, ""))
-	return createCloudWatchClientWithConfig(config)
+	return createCloudWatchClientWithConfig(log, config)
 }
 
 // createCloudWatchClientWithConfig creates a client to call CloudWatchLogs APIs using the passed aws config
-func createCloudWatchClientWithConfig(config *aws.Config) cloudwatchlogsinterface.CloudWatchLogsClient {
+func createCloudWatchClientWithConfig(log log.T, config *aws.Config) cloudwatchlogsinterface.CloudWatchLogsClient {
 	//Adding the AWS SDK Retrier with Exponential Backoff
 	config = request.WithRetryer(config, client.DefaultRetryer{
 		NumMaxRetries: maxRetries,
 	})
 
-	appConfig, _ := appconfig.Config(false)
+	appConfig, errConfig := appconfig.Config(false)
+	if errConfig != nil {
+		log.Error("failed to read appconfig.")
+	} else {
+		if appConfig.S3.Endpoint != "" {
+			config.Endpoint = &appConfig.S3.Endpoint
+		} else {
+			if region, err := platform.Region(); err == nil {
+				if defaultEndpoint := platform.GetDefaultEndPoint(region, "monitoring"); defaultEndpoint != "" {
+					config.Endpoint = &defaultEndpoint
+				}
+			} else {
+				log.Errorf("error fetching the region, %v", err)
+			}
+		}
+	}
+
 	sess := session.New(config)
 	sess.Handlers.Build.PushBack(request.MakeAddToUserAgentHandler(appConfig.Agent.Name, appConfig.Agent.Version))
 	return cloudwatchlogs.New(sess)
 }
 
 // NewCloudWatchLogsService Creates a new instance of the CloudWatchLogsService
-func NewCloudWatchLogsService() *CloudWatchLogsService {
+func NewCloudWatchLogsService(log log.T) *CloudWatchLogsService {
 	cloudWatchLogsService := CloudWatchLogsService{
-		cloudWatchLogsClient: createCloudWatchClient(),
+		cloudWatchLogsClient: createCloudWatchClient(log),
 		stopPolicy:           createCloudWatchStopPolicy(),
 		IsFileComplete:       false,
 		IsUploadComplete:     false,
@@ -95,9 +113,9 @@ func NewCloudWatchLogsService() *CloudWatchLogsService {
 }
 
 // NewCloudWatchLogsServiceWithCredentials Creates a new instance of the CloudWatchLogsService using credentials from the Id and Secret passed
-func NewCloudWatchLogsServiceWithCredentials(id, secret string) *CloudWatchLogsService {
+func NewCloudWatchLogsServiceWithCredentials(log log.T, id, secret string) *CloudWatchLogsService {
 	cloudWatchLogsService := CloudWatchLogsService{
-		cloudWatchLogsClient: createCloudWatchClientWithCredentials(id, secret),
+		cloudWatchLogsClient: createCloudWatchClientWithCredentials(log, id, secret),
 		stopPolicy:           createCloudWatchStopPolicy(),
 		IsFileComplete:       false,
 		IsUploadComplete:     false,
@@ -106,14 +124,14 @@ func NewCloudWatchLogsServiceWithCredentials(id, secret string) *CloudWatchLogsS
 }
 
 // CreateNewServiceIfUnHealthy checks service healthy and create new service if original is unhealthy
-func (service *CloudWatchLogsService) CreateNewServiceIfUnHealthy() {
+func (service *CloudWatchLogsService) CreateNewServiceIfUnHealthy(log log.T) {
 	if service.stopPolicy == nil {
 		service.stopPolicy = createCloudWatchStopPolicy()
 	}
 
 	if !service.stopPolicy.IsHealthy() {
 		service.stopPolicy.ResetErrorCount()
-		service.cloudWatchLogsClient = createCloudWatchClient()
+		service.cloudWatchLogsClient = createCloudWatchClient(log)
 		return
 	}
 }
@@ -121,7 +139,7 @@ func (service *CloudWatchLogsService) CreateNewServiceIfUnHealthy() {
 // CreateLogGroup calls the CreateLogGroup API to create a log group
 func (service *CloudWatchLogsService) CreateLogGroup(log log.T, logGroup string) (err error) {
 
-	service.CreateNewServiceIfUnHealthy()
+	service.CreateNewServiceIfUnHealthy(log)
 
 	//Creating the parameters for the API Call
 	params := &cloudwatchlogs.CreateLogGroupInput{
@@ -153,7 +171,7 @@ func (service *CloudWatchLogsService) CreateLogGroup(log log.T, logGroup string)
 // CreateLogStream calls the CreateLogStream API to create log stream within the specified log group
 func (service *CloudWatchLogsService) CreateLogStream(log log.T, logGroup, logStream string) (err error) {
 
-	service.CreateNewServiceIfUnHealthy()
+	service.CreateNewServiceIfUnHealthy(log)
 
 	//Creating the parameters for the API Call
 	params := &cloudwatchlogs.CreateLogStreamInput{
@@ -187,7 +205,7 @@ func (service *CloudWatchLogsService) CreateLogStream(log log.T, logGroup, logSt
 // DescribeLogGroups calls the DescribeLogGroups API to get the details of log groups of account
 func (service *CloudWatchLogsService) DescribeLogGroups(log log.T, logGroupPrefix, nextToken string) (response *cloudwatchlogs.DescribeLogGroupsOutput, err error) {
 
-	service.CreateNewServiceIfUnHealthy()
+	service.CreateNewServiceIfUnHealthy(log)
 
 	// Creating the parameters for the API Call
 	params := &cloudwatchlogs.DescribeLogGroupsInput{}
@@ -220,7 +238,7 @@ func (service *CloudWatchLogsService) DescribeLogGroups(log log.T, logGroupPrefi
 // DescribeLogStreams calls the DescribeLogStreams API to get the details of the log streams present
 func (service *CloudWatchLogsService) DescribeLogStreams(log log.T, logGroup, logStreamPrefix, nextToken string) (response *cloudwatchlogs.DescribeLogStreamsOutput, err error) {
 
-	service.CreateNewServiceIfUnHealthy()
+	service.CreateNewServiceIfUnHealthy(log)
 
 	// Creating the parameters for the API Call
 	params := &cloudwatchlogs.DescribeLogStreamsInput{
@@ -353,7 +371,7 @@ func (service *CloudWatchLogsService) getLogStreamDetails(log log.T, logGroupNam
 // PutLogEvents calls the PutLogEvents API to push messages to CloudWatchLogs
 func (service *CloudWatchLogsService) PutLogEvents(log log.T, messages []*cloudwatchlogs.InputLogEvent, logGroup, logStream string, sequenceToken *string) (nextSequenceToken *string, err error) {
 
-	service.CreateNewServiceIfUnHealthy()
+	service.CreateNewServiceIfUnHealthy(log)
 
 	// Creating the parameters for the API Call
 	params := &cloudwatchlogs.PutLogEventsInput{
