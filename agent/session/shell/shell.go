@@ -139,7 +139,7 @@ func (p *ShellPlugin) execute(context context.T,
 		s3Util = s3util.NewAmazonS3Util(log, config.OutputS3BucketName)
 	}
 	if config.CloudWatchLogGroup != "" {
-		cwl = cloudwatchlogspublisher.NewCloudWatchLogsService()
+		cwl = cloudwatchlogspublisher.NewCloudWatchLogsService(log)
 	}
 	if err = p.validate(context, config, cwl, s3Util); err != nil {
 		output.SetExitCode(appconfig.ErrorExitCode)

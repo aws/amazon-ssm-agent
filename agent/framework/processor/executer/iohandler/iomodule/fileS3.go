@@ -63,7 +63,7 @@ func (file File) Read(log log.T, reader *io.PipeReader) {
 
 	defer fileWriter.Close()
 
-	cwl := cloudwatchlogspublisher.NewCloudWatchLogsService()
+	cwl := cloudwatchlogspublisher.NewCloudWatchLogsService(log)
 	if file.LogGroupName != "" {
 		log.Debugf("Received CloudWatch Configs: LogGroupName: %s\n, LogStreamName: %s\n", file.LogGroupName, file.LogStreamName)
 		//Start CWL logging on different go routine

@@ -34,12 +34,12 @@ type CloudWatchLogsServiceMock struct {
 }
 
 // NewClientMockDefault returns an instance of CloudWatchLogsClientMock with default expectations set.
-func NewClientMockDefault() *CloudWatchLogsClientMock {
+func NewClientMockDefault(log log.T) *CloudWatchLogsClientMock {
 	return new(CloudWatchLogsClientMock)
 }
 
 // NewServiceMockDefault returns an instance of CloudWatchLogsServiceMock with default expectations set.
-func NewServiceMockDefault() *CloudWatchLogsServiceMock {
+func NewServiceMockDefault(log log.T) *CloudWatchLogsServiceMock {
 	mock := new(CloudWatchLogsServiceMock)
 	mock.On("CreateNewServiceIfUnHealthy").Return()
 	return mock
@@ -76,7 +76,7 @@ func (m *CloudWatchLogsClientMock) DescribeLogStreams(input *cloudwatchlogs.Desc
 }
 
 // CreateNewServiceIfUnHealthy mocks CloudWatchLogsService CreateNewServiceIfUnHealthy method
-func (m *CloudWatchLogsServiceMock) CreateNewServiceIfUnHealthy() {
+func (m *CloudWatchLogsServiceMock) CreateNewServiceIfUnHealthy(log log.T) {
 
 }
 

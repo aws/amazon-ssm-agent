@@ -31,7 +31,7 @@ type CloudWatchLogsClient interface {
 
 // ICloudWatchLogsService interface for CloudWatchLogsService
 type ICloudWatchLogsService interface {
-	CreateNewServiceIfUnHealthy()
+	CreateNewServiceIfUnHealthy(log log.T)
 	CreateLogGroup(log log.T, logGroup string) (err error)
 	CreateLogStream(log log.T, logGroup, logStream string) (err error)
 	DescribeLogGroups(log log.T, logGroupPrefix, nextToken string) (response *cloudwatchlogs.DescribeLogGroupsOutput, err error)

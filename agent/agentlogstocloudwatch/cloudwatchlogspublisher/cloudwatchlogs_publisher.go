@@ -142,7 +142,7 @@ func (cloudwatchPublisher *CloudWatchPublisher) Start() {
 	var err error
 	// If service nil, create a new service, else use the existing one
 	if cloudwatchPublisher.cloudWatchLogsService == nil {
-		cloudwatchPublisher.cloudWatchLogsService = NewCloudWatchLogsService()
+		cloudwatchPublisher.cloudWatchLogsService = NewCloudWatchLogsService(cloudwatchPublisher.log)
 	}
 
 	logGroup := cloudwatchlogsqueue.GetLogGroup()
@@ -284,7 +284,11 @@ func getSharingConfigurations() *destinationConfigurations {
 
 // setupSharing creates a new service for sharing and gets the sequence token for publishing events. Returns nil if configurations incorrect
 func (cloudwatchPublisher *CloudWatchPublisher) setupSharing() *string {
-	cloudwatchPublisher.cloudWatchLogsServiceSharing = NewCloudWatchLogsServiceWithCredentials(cloudwatchPublisher.sharingDestination.accessKeyId, cloudwatchPublisher.sharingDestination.secretAccessKey)
+	cloudwatchPublisher.cloudWatchLogsServiceSharing =
+		NewCloudWatchLogsServiceWithCredentials(
+			cloudwatchPublisher.log,
+			cloudwatchPublisher.sharingDestination.accessKeyId,
+			cloudwatchPublisher.sharingDestination.secretAccessKey)
 
 	// Sharing Log Group and Stream Must Already be created
 	cloudwatchPublisher.log.Debugf("Cloudwatchlogs Publisher Sharing Logs to LogGroup: %v", cloudwatchPublisher.sharingDestination.logGroup)

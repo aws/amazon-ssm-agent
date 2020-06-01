@@ -29,7 +29,7 @@ import (
 )
 
 var logMock = log.NewMockLog()
-var cwLogsClientMock = cloudwatchlogspublisher_mock.NewClientMockDefault()
+var cwLogsClientMock = cloudwatchlogspublisher_mock.NewClientMockDefault(logMock)
 var input = []string{
 	"AWS Systems Manager Agent (SSM Agent) is Amazon software that runs on your Amazon EC2 instances and your hybrid instances that are configured for Systems Manager (hybrid instances).",
 	"SSM Agent processes requests from the Systems Manager service in the cloud and configures your machine as specified in the request. SSM Agent sends status and execution information back to the Systems Manager service by using the EC2 Messaging service.",
@@ -153,7 +153,7 @@ func TestCloudWatchLogsService_CreateNewServiceIfUnHealthy(t *testing.T) {
 
 	assert.False(t, service.stopPolicy.IsHealthy(), "Service should be unhealthy")
 
-	service.CreateNewServiceIfUnHealthy()
+	service.CreateNewServiceIfUnHealthy(logMock)
 
 	assert.True(t, service.stopPolicy.IsHealthy(), "Service should be healthy")
 
@@ -163,7 +163,7 @@ func TestCloudWatchLogsService_CreateNewServiceIfUnHealthy(t *testing.T) {
 
 	assert.True(t, service.stopPolicy.IsHealthy(), "Service should be healthy")
 
-	service.CreateNewServiceIfUnHealthy()
+	service.CreateNewServiceIfUnHealthy(logMock)
 
 	assert.True(t, service.stopPolicy.IsHealthy(), "Service should be healthy")
 

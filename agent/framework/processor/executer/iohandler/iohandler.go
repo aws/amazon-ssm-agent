@@ -134,7 +134,7 @@ func (out *DefaultIOHandler) Init(log log.T, filePath ...string) {
 	stdOutLogStreamName := ""
 	stdErrLogStreamName := ""
 	if out.ioConfig.CloudWatchConfig.LogGroupName != "" {
-		cwl := cloudwatchlogspublisher.NewCloudWatchLogsService()
+		cwl := cloudwatchlogspublisher.NewCloudWatchLogsService(log)
 		if !cwl.IsLogGroupPresent(log, out.ioConfig.CloudWatchConfig.LogGroupName) {
 			if err := cwl.CreateLogGroup(log, out.ioConfig.CloudWatchConfig.LogGroupName); err != nil {
 				log.Errorf("Error Creating Log Group for CloudWatchLogs output: %v", err)
