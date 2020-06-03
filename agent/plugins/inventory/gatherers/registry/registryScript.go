@@ -41,8 +41,12 @@ var (
         if ($value -ne $null) {
 	        $valueType = $key.GetValueKind($valueName)
 	        if ($valueType.toString() -eq "Binary") {
-	            $value = "BinaryValue"
-	        }
+	            if ($value.length -gt 2048) {
+	                $value = "BinaryValue"
+	            } else {
+	                $value = [System.BitConverter]::ToString($value).replace("-", "")
+	            }
+                }
 	        $valueTypeName = Get-Type-Name $valueType
 	        $keyName = $key.Name
 	        $regJson =  @"
