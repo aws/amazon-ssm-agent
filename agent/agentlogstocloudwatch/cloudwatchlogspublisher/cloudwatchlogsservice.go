@@ -21,11 +21,10 @@ import (
 	"os"
 	"time"
 
-	"github.com/aws/amazon-ssm-agent/agent/platform"
-
 	"github.com/aws/amazon-ssm-agent/agent/agentlogstocloudwatch/cloudwatchlogspublisher/cloudwatchlogsinterface"
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/platform"
 	"github.com/aws/amazon-ssm-agent/agent/sdkutil"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/client"
@@ -83,16 +82,12 @@ func createCloudWatchClientWithConfig(log log.T, config *aws.Config) cloudwatchl
 	if errConfig != nil {
 		log.Error("failed to read appconfig.")
 	} else {
-		if appConfig.S3.Endpoint != "" {
-			config.Endpoint = &appConfig.S3.Endpoint
-		} else {
-			if region, err := platform.Region(); err == nil {
-				if defaultEndpoint := platform.GetDefaultEndPoint(region, "monitoring"); defaultEndpoint != "" {
-					config.Endpoint = &defaultEndpoint
-				}
-			} else {
-				log.Errorf("error fetching the region, %v", err)
+		if region, err := platform.Region(); err == nil {
+			if defaultEndpoint := platform.GetDefaultEndPoint(region, "logs"); defaultEndpoint != "" {
+				config.Endpoint = &defaultEndpoint
 			}
+		} else {
+			log.Errorf("error fetching the region, %v", err)
 		}
 	}
 
