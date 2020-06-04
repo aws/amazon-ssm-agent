@@ -57,8 +57,11 @@ const (
 	errorMsgForExecutingInventoryViaAssociate = "%v plugin can only be invoked via ssm-associate"
 	errorMsgForUnableToDetectInvocationType   = "it could not be detected if %v plugin was invoked via ssm-associate because - %v"
 	errorMsgForInabilityToSendDataToSSM       = "inventory data could not be uploaded to Systems Manager. Additional troubleshooting information - %v"
+	errorMsgForInabilityToSendFileDataToSSM   = "File inventory data could not be uploaded to Systems Manager. Additional troubleshooting information - %v"
 	msgWhenNoDataToReturnForInventoryPlugin   = "Inventory policy has been successfully applied but there is no inventory data to upload to SSM"
 	successfulMsgForInventoryPlugin           = "Inventory policy has been successfully applied and collected inventory data has been uploaded to SSM"
+	largeSizeItem                             = 1024 * 1024 //1MB
+	fileInventoryItemName                     = "AWS:File"
 )
 
 // PluginInput represents configuration which is applied to inventory plugin during execution.
@@ -143,6 +146,7 @@ func (p *Plugin) ApplyInventoryPolicy(context context.T, inventoryInput PluginIn
 	var optimizedInventoryItems, nonOptimizedInventoryItems []*ssm.InventoryItem
 	var items []model.Item
 	var err error
+	var uploadFlag bool
 
 	//map of all valid gatherers & respective configs to run
 	var gatherers map[gatherers.T]model.Config
@@ -187,21 +191,11 @@ func (p *Plugin) ApplyInventoryPolicy(context context.T, inventoryInput PluginIn
 		optimizedInventoryItems,
 		nonOptimizedInventoryItems)
 
-	//first send data in optimized fashion
-	if err = p.uploader.SendDataToSSM(context, optimizedInventoryItems); err != nil {
-
-		if shouldRetryWithNonOptimizedData(err, log) {
-			//call putinventory again with non-optimized dataset
-			if err = p.uploader.SendDataToSSM(context, nonOptimizedInventoryItems); err != nil {
-				//sending non-optimized data also failed
-				propagateSSMError(output, err, log)
-				return
-			}
-		} else {
-			//some other error happened for which there is no need to retry - upload failed
-			propagateSSMError(output, err, log)
-			return
-		}
+	// uploadItemsToSSM uploads collected inventory data to SSM and returns true if the upload was successful
+	// else returns false.
+	if uploadFlag = p.uploadItemsToSSM(context, nonOptimizedInventoryItems, optimizedInventoryItems, output); uploadFlag != true {
+		output.SetExitCode(1)
+		return
 	}
 
 	log.Infof("%v uploaded inventory data to SSM", Name())
@@ -209,6 +203,144 @@ func (p *Plugin) ApplyInventoryPolicy(context context.T, inventoryInput PluginIn
 	output.AppendInfo(successfulMsgForInventoryPlugin)
 
 	return
+}
+
+// uploadItemsToSSM uploads inventory data to SSM and returns boolean flag based on whether upload was successful or not.
+func (p *Plugin) uploadItemsToSSM(context context.T, nonOptimizedInventoryItems []*ssm.InventoryItem,
+	optimizedInventoryItems []*ssm.InventoryItem, output iohandler.IOHandler) bool {
+	/*
+		In order to optimize PutInventory calls to SSM, we use following algo:
+
+		if collected data is < 1 MB, we send all data in 1 API call.
+		if collected data is > 1 MB and has AWS:File data in it, we make multiple PutInventory calls with different data-sets:
+		1st call - with just AWS:File data
+		2nd call - with all other collected data.
+	*/
+
+	var err error
+	log := p.context.Log()
+	var inventoryItemIndex int
+	dataUploadStatus := true
+	var optimizedFileItems, nonOptimizedFileItems, optimizedNonFileItems, nonOptimizedNonFileItems []*ssm.InventoryItem
+	optimizedNonFileItems = optimizedInventoryItems
+	nonOptimizedNonFileItems = nonOptimizedInventoryItems
+
+	inventoryItemIndex, err = p.getLargeItemIndex(nonOptimizedInventoryItems, context, fileInventoryItemName)
+	log.Debugf("inventoryItemIndex  %v", inventoryItemIndex)
+	if err != nil {
+		log.Errorf("Encountered error. Skipping upload to SSM %v", err)
+		output.AppendError(err.Error())
+		return false
+	}
+
+	// inventoryItemIndex is the index of the AWS:File item in the optimizedInventoryItems list,
+	// Default value -1 indicates we're not splitting calls and uploading all data in one putInventory api call.
+	if inventoryItemIndex != -1 {
+
+		nonOptimizedFileItems, optimizedFileItems, nonOptimizedNonFileItems, optimizedNonFileItems =
+			extractFileItems(nonOptimizedInventoryItems, optimizedInventoryItems, inventoryItemIndex)
+
+		// uploading AWS:File inventory data.
+		if err = p.uploadDataToSSM(context, nonOptimizedFileItems, optimizedFileItems, output); err != nil {
+			log.Errorf("Encountered error %v. Skip uploading %v to SSM", err, fileInventoryItemName)
+			dataUploadStatus = false
+			message := fmt.Sprintf(errorMsgForInabilityToSendFileDataToSSM, err.Error())
+			log.Info(message)
+			output.AppendError(message)
+		} else {
+			log.Debugf("uploaded File inventory data to SSM")
+		}
+	}
+
+	// uploading non-file inventory data
+	if err = p.uploadDataToSSM(context, nonOptimizedNonFileItems, optimizedNonFileItems, output); err != nil {
+		log.Errorf("error uploading inventory data %v", err)
+		dataUploadStatus = false
+		message := fmt.Sprintf(errorMsgForInabilityToSendDataToSSM, err.Error())
+		log.Info(message)
+		output.AppendError(message)
+	} else {
+		log.Debugf("uploaded inventory data to SSM")
+	}
+
+	return dataUploadStatus
+}
+
+// extractFileItems returns copies of optimized and non-optimized items list after removing File Item from it.
+func extractFileItems(nonOptimizedInventoryItems, optimizedInventoryItems []*ssm.InventoryItem,
+	ItemIndex int) (nonOptimizedFileData,
+	optimizedFileData, nonOptimizedNonFileData,
+	optimizedNonFileData []*ssm.InventoryItem) {
+
+	// removing FileItem from the optimizedInventoryItems list based on it's index.
+	optimizedNewInventoryItem := optimizedInventoryItems[ItemIndex]
+	optimizedFileData = append(optimizedFileData, optimizedNewInventoryItem)
+
+	// Adjusting optimizedInventoryItems after removing FileItem
+	copy(optimizedInventoryItems[ItemIndex:], optimizedInventoryItems[ItemIndex+1:])
+	optimizedInventoryItems[len(optimizedInventoryItems)-1] = nil
+	optimizedNonFileData = optimizedInventoryItems[:len(optimizedInventoryItems)-1]
+
+	// removing FileItem from the NonOptimizedInventoryItems list.
+	nonOptimizedNewInventoryItem := nonOptimizedInventoryItems[ItemIndex]
+	nonOptimizedFileData = append(nonOptimizedFileData, nonOptimizedNewInventoryItem)
+
+	// Adjusting nonOptimizedInventoryItems after removing FileItem
+	copy(nonOptimizedInventoryItems[ItemIndex:], nonOptimizedInventoryItems[ItemIndex+1:])
+	nonOptimizedInventoryItems[len(nonOptimizedInventoryItems)-1] = nil
+	nonOptimizedNonFileData = nonOptimizedInventoryItems[:len(nonOptimizedInventoryItems)-1]
+
+	return
+}
+
+// uploadDataToSSM uploads inventory data to SSM. First it tries to upload with optimizedInventoryItems
+// If that fails, it retries upload to SSM with the nonOptimizedInventoryItems.
+func (p *Plugin) uploadDataToSSM(context context.T, nonOptimizedInventoryItems []*ssm.InventoryItem,
+	optimizedInventoryItems []*ssm.InventoryItem, output iohandler.IOHandler) error {
+	var err error
+	log := p.context.Log()
+	//first send data in optimized fashion
+	if err = p.uploader.SendDataToSSM(context, optimizedInventoryItems); err != nil {
+		if shouldRetryWithNonOptimizedData(err, log) {
+			//call putinventory again with non-optimized dataset
+			if err = p.uploader.SendDataToSSM(context, nonOptimizedInventoryItems); err != nil {
+				//sending non-optimized data also failed
+				return err
+			}
+		} else {
+			//some other error happened for which there is no need to retry - upload failed
+			return err
+		}
+	}
+	return err
+}
+
+// getLargeItemIndex returns index of the inventoryItem if inventoryItem is present in nonOptimizedInventoryItems
+// If not it returns default -1.
+func (p *Plugin) getLargeItemIndex(nonOptimizedInventoryItems []*ssm.InventoryItem, context context.T, itemName string) (int, error) {
+	log := context.Log()
+	itemIndexToReturn := -1
+	nonOptimizedInventoryItemsCheck, err := json.Marshal(nonOptimizedInventoryItems)
+
+	if err != nil {
+		log.Debugf("internal error: JSON marshaling failed: %v", err)
+		return -1, err
+	}
+	//calculate size of the nonOptimizedInventoryItems
+	nonOptimizedInventoryItemsSize := float32(len(nonOptimizedInventoryItemsCheck))
+	log.Debugf("nonOptimizedInventoryItemsSize is %v", nonOptimizedInventoryItemsSize)
+	largeItemCheck := nonOptimizedInventoryItemsSize > largeSizeItem
+	for applicationIndex, application := range nonOptimizedInventoryItems {
+		// Return index for the given itemName in the optimizedInventoryItems list, given it meets
+		// the condition that size of items list > 1MB and itemName is present in optimizedInventoryItems.
+		if *application.TypeName == itemName && largeItemCheck && len(nonOptimizedInventoryItems) > 1 {
+			itemIndexToReturn = applicationIndex
+		}
+	}
+	// Return index as -1 if it doesn't meet the condition check, meaning we would not split the call
+	// and go with 1 putInventory call for all items.
+	log.Debugf("Returning index as %v", itemIndexToReturn)
+	return itemIndexToReturn, err
 }
 
 // ApplyInventoryFrequentCollector applies frequent collector regarding which gatherers to run

@@ -25,6 +25,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/plugins/inventory/gatherers"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/inventory/model"
 	"github.com/aws/aws-sdk-go/aws/awserr"
+	"github.com/aws/aws-sdk-go/service/ssm"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -73,6 +74,78 @@ func MockInventoryItems() (items []model.Item) {
 		Name:    "Fake:Name",
 		Content: "Fake:Content",
 	})
+	return
+}
+
+func MockInventoryOptimizedItem() (items []*ssm.InventoryItem) {
+	check1 := "AWS:File"
+	SchemaVersion1 := "1.0"
+	CaptureTime1 := "2020-05-22T19:32:34Z"
+	ContentHashMock1 := LargeString(1024 * 1024)
+
+	check2 := "AWS:Network"
+	SchemaVersion2 := "1.0"
+	CaptureTime2 := "2020-05-22T19:32:34Z"
+	ContentHashMock2 := LargeString(1024 * 1024)
+
+	items = append(items, &ssm.InventoryItem{
+		TypeName:      &check1,
+		ContentHash:   &ContentHashMock1,
+		SchemaVersion: &SchemaVersion1,
+		CaptureTime:   &CaptureTime1,
+	})
+
+	items = append(items, &ssm.InventoryItem{
+		TypeName:      &check2,
+		ContentHash:   &ContentHashMock2,
+		SchemaVersion: &SchemaVersion2,
+		CaptureTime:   &CaptureTime2,
+	})
+
+	return
+}
+
+func MockInventorySmallOptimizedItem() (items []*ssm.InventoryItem) {
+	check1 := "AWS:File"
+	SchemaVersion1 := "1.0"
+	CaptureTime1 := "2020-05-22T19:32:34Z"
+	ContentHashMock1 := LargeString(1024)
+
+	check2 := "AWS:Network"
+	SchemaVersion2 := "1.0"
+	CaptureTime2 := "2020-05-22T19:32:34Z"
+	ContentHashMock2 := LargeString(1024)
+
+	items = append(items, &ssm.InventoryItem{
+		TypeName:      &check1,
+		ContentHash:   &ContentHashMock1,
+		SchemaVersion: &SchemaVersion1,
+		CaptureTime:   &CaptureTime1,
+	})
+
+	items = append(items, &ssm.InventoryItem{
+		TypeName:      &check2,
+		ContentHash:   &ContentHashMock2,
+		SchemaVersion: &SchemaVersion2,
+		CaptureTime:   &CaptureTime2,
+	})
+
+	return
+}
+
+func MockInventoryLargeFileItem() (items []*ssm.InventoryItem) {
+	check1 := "AWS:File"
+	SchemaVersion1 := "1.0"
+	CaptureTime1 := "2020-05-22T19:32:34Z"
+	ContentHashMock1 := LargeString(1024 * 1030)
+
+	items = append(items, &ssm.InventoryItem{
+		TypeName:      &check1,
+		ContentHash:   &ContentHashMock1,
+		SchemaVersion: &SchemaVersion1,
+		CaptureTime:   &CaptureTime1,
+	})
+
 	return
 }
 
@@ -184,6 +257,72 @@ func TestVerifyInventoryDataSize(t *testing.T) {
 	result = p.VerifyInventoryDataSize(smallItem, items)
 
 	assert.Equal(t, false, result, "Expected to return false when items size is greater than the limit")
+}
+
+// Test to verify splitting of putInventory calls when inventoryItem content is >1MB
+// expected flagTest return value should be true
+func TestVerifyPutInventoryCall(t *testing.T) {
+
+	var gatherers []string
+
+	gatherers = append(gatherers, "RandomGatherer")
+
+	p, _ := MockInventoryPlugin(gatherers, gatherers)
+
+	itemIndex := -1
+	itemIndex, _ = p.getLargeItemIndex(MockInventoryOptimizedItem(), context.NewMockDefault(), "AWS:File")
+
+	assert.NotEqual(t, -1, itemIndex)
+}
+
+// Test to verify splitting of putInventory calls when inventoryItem content is <1MB
+// expected flagTest return value should be false
+func TestVerifyNoPutInventoryCall(t *testing.T) {
+
+	var gatherers []string
+
+	gatherers = append(gatherers, "RandomGatherer")
+
+	p, _ := MockInventoryPlugin(gatherers, gatherers)
+
+	itemIndex := -1
+	itemIndex, _ = p.getLargeItemIndex(MockInventorySmallOptimizedItem(), context.NewMockDefault(), "AWS:File")
+
+	assert.Equal(t, -1, itemIndex)
+}
+
+// Test to verify when there's only one collected inventoryItem
+// expected flagTest return value should be false as it should go through default putInventory behavior
+func TestVerifyOneItemNoPutInventoryCall(t *testing.T) {
+
+	var gatherers []string
+
+	gatherers = append(gatherers, "RandomGatherer")
+
+	p, _ := MockInventoryPlugin(gatherers, gatherers)
+
+	itemIndex := -1
+	itemIndex, _ = p.getLargeItemIndex(MockInventoryLargeFileItem(), context.NewMockDefault(), "AWS:File")
+
+	assert.Equal(t, -1, itemIndex)
+}
+
+func TestSplitItemsList(t *testing.T) {
+	var optimizedNewInventoryItemsList, nonOptimizedNewInventoryItemsList []*ssm.InventoryItem
+	nonOptimizedInventoryItems := MockInventorySmallOptimizedItem()
+	optimizedInventoryItems := MockInventorySmallOptimizedItem()
+
+	// before split length of the list will be all inventory items
+	assert.Equal(t, len(nonOptimizedInventoryItems), 2)
+	assert.Equal(t, len(optimizedInventoryItems), 2)
+
+	nonOptimizedNewInventoryItemsList, optimizedNewInventoryItemsList, nonOptimizedInventoryItems, optimizedInventoryItems =
+		extractFileItems(MockInventorySmallOptimizedItem(), MockInventorySmallOptimizedItem(), 0)
+
+	// after split total length should be same as before.
+	assert.Equal(t, len(nonOptimizedNewInventoryItemsList)+len(nonOptimizedInventoryItems), 2)
+	assert.Equal(t, len(optimizedNewInventoryItemsList)+len(optimizedInventoryItems), 2)
+
 }
 
 func TestPlugin_IsMulitpleAssociationPresent(t *testing.T) {
