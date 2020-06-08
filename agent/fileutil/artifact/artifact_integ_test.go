@@ -11,7 +11,7 @@
 // either express or implied. See the License for the specific language governing
 // permissions and limitations under the License.
 
-// +build integration
+// +build e2e
 
 package artifact
 
@@ -247,6 +247,7 @@ func TestHttpHttpsDownloadArtifact(t *testing.T) {
 		expectedLocalPath,
 		true,
 		true}
+
 	output, err := Download(mockLog, downloadInput)
 	assert.NoError(t, err, "Failed to download %v", downloadInput)
 	mockLog.Infof("Download Result is %v and err:%v", output, err)

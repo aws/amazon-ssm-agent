@@ -13,6 +13,8 @@
 
 // Package processor contains the methods for update ssm agent.
 // It also provides methods for sendReply and updateInstanceInfo
+// +build e2e
+
 package processor
 
 import (

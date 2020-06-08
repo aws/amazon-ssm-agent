@@ -9,7 +9,7 @@ package.Amazon-ssm-agent = {
 
     build-environment = {
         chroot = basic;
-        network-access = open;
+        network-access = blocked;
     };
 
     build-system = bgo-wrap-make;

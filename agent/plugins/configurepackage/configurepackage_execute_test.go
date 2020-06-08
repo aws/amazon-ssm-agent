@@ -17,12 +17,15 @@ package configurepackage
 import (
 	"testing"
 
+	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/localpackages"
 	repository_mock "github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/localpackages/mock"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/trace"
 	"github.com/stretchr/testify/mock"
 )
+
+var contextMock context.T = context.NewMockDefault()
 
 func TestInstallNew(t *testing.T) {
 	installerMock := installerSuccessMock("SsmTest", "0.0.1")
