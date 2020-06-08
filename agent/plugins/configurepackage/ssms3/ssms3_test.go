@@ -84,7 +84,7 @@ func TestEndpointCnNorth1Gamma(t *testing.T) {
 
 func TestEndpointUsEast1(t *testing.T) {
 	service := New("", "us-east-1")
-	assert.Equal(t, fmt.Sprintf("https://s3.amazonaws.com/amazon-ssm-packages-us-east-1/BirdwatcherPackages/{PackageName}/%v/%v", appconfig.PackagePlatform, runtime.GOARCH), service.packageURL)
+	assert.Equal(t, fmt.Sprintf("https://s3.us-east-1.amazonaws.com/amazon-ssm-packages-us-east-1/BirdwatcherPackages/{PackageName}/%v/%v", appconfig.PackagePlatform, runtime.GOARCH), service.packageURL)
 }
 
 func TestEndpointUsEast1Beta(t *testing.T) {

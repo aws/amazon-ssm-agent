@@ -139,7 +139,7 @@ func TestS3Resource_Download(t *testing.T) {
 
 	input := artifact.DownloadInput{
 		DestinationDirectory: "destination",
-		SourceURL:            "https://s3.amazonaws.com/my-bucket/mydummyfolder/file.rb",
+		SourceURL:            "https://s3.us-east-1.amazonaws.com/my-bucket/mydummyfolder/file.rb",
 	}
 	output := artifact.DownloadOutput{
 		LocalFilePath: input.DestinationDirectory,
@@ -179,11 +179,11 @@ func TestS3Resource_DownloadDirectory(t *testing.T) {
 
 	input1 := artifact.DownloadInput{
 		DestinationDirectory: strings.TrimSuffix(appconfig.DownloadRoot, "/"),
-		SourceURL:            "https://s3.amazonaws.com/my-bucket/foldername/filename.ps",
+		SourceURL:            "https://s3.us-east-1.amazonaws.com/my-bucket/foldername/filename.ps",
 	}
 	input2 := artifact.DownloadInput{
 		DestinationDirectory: strings.TrimSuffix(appconfig.DownloadRoot, "/"),
-		SourceURL:            "https://s3.amazonaws.com/my-bucket/foldername/anotherfile.ps",
+		SourceURL:            "https://s3.us-east-1.amazonaws.com/my-bucket/foldername/anotherfile.ps",
 	}
 	s3Object := s3util.AmazonS3URL{
 		IsValidS3URI: true,
@@ -230,15 +230,15 @@ func TestS3Resource_DownloadDirectoryWithSubFolders(t *testing.T) {
 
 	input1 := artifact.DownloadInput{
 		DestinationDirectory: strings.TrimSuffix(appconfig.DownloadRoot, "/"),
-		SourceURL:            "https://s3.amazonaws.com/my-bucket/foldername/filename.ps",
+		SourceURL:            "https://s3.us-east-1.amazonaws.com/my-bucket/foldername/filename.ps",
 	}
 	input2 := artifact.DownloadInput{
 		DestinationDirectory: strings.TrimSuffix(appconfig.DownloadRoot, "/"),
-		SourceURL:            "https://s3.amazonaws.com/my-bucket/foldername/anotherfile.ps",
+		SourceURL:            "https://s3.us-east-1.amazonaws.com/my-bucket/foldername/anotherfile.ps",
 	}
 	input3 := artifact.DownloadInput{
 		DestinationDirectory: strings.TrimSuffix(filepath.Join(appconfig.DownloadRoot, "subfolder"), "/"),
-		SourceURL:            "https://s3.amazonaws.com/my-bucket/foldername/subfolder/file.ps",
+		SourceURL:            "https://s3.us-east-1.amazonaws.com/my-bucket/foldername/subfolder/file.ps",
 	}
 	s3Object := s3util.AmazonS3URL{
 		IsValidS3URI: true,
@@ -301,7 +301,7 @@ func TestS3Resource_DownloadAbsPath(t *testing.T) {
 
 	input := artifact.DownloadInput{
 		DestinationDirectory: "/var/tmp/foldername",
-		SourceURL:            "https://s3.amazonaws.com/my-bucket/mydummyfolder/filename.ps",
+		SourceURL:            "https://s3.us-east-1.amazonaws.com/my-bucket/mydummyfolder/filename.ps",
 	}
 	output := artifact.DownloadOutput{
 		LocalFilePath: filepath.Join(input.DestinationDirectory, "justanumber"),
@@ -338,7 +338,7 @@ func TestS3Resource_DownloadRelativePathNameChange(t *testing.T) {
 
 	input := artifact.DownloadInput{
 		DestinationDirectory: ".",
-		SourceURL:            "https://s3.amazonaws.com/my-bucket/mydummyfolder/file.rb",
+		SourceURL:            "https://s3.us-east-1.amazonaws.com/my-bucket/mydummyfolder/file.rb",
 	}
 	output := artifact.DownloadOutput{
 		LocalFilePath: filepath.Join(input.DestinationDirectory, "random"),

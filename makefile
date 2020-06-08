@@ -50,7 +50,7 @@ prepack:: cpy-plugins copy-win-dep prepack-linux prepack-linux-arm64 prepack-lin
 
 package:: create-package-folder package-linux package-windows package-darwin
 
-release:: clean quick-integtest checkstyle pre-release build prepack package build-tests
+release:: clean quick-integtest checkstyle pre-release build prepack package build-tests copy-package-dep
 
 ifneq ($(FINALIZE),)
 	bgo-final
@@ -300,6 +300,26 @@ ifeq ($(BRAZIL_BUILD), true)
 	@echo "copying test files to $(GOTEMPCOPYPATH)"
 	$(COPY) -r $(BGO_SPACE)/internal $(GOTEMPCOPYPATH)
 endif
+
+.PHONY: copy-package-dep
+copy-package-dep:
+	@echo "Copying packaging dependencies to $(BGO_SPACE)/bin/package_dep"
+	mkdir -p $(BGO_SPACE)/bin/package_dep
+	
+	$(COPY) -r $(BGO_SPACE)/Tools $(BGO_SPACE)/bin/package_dep/
+	$(COPY) -r $(BGO_SPACE)/packaging $(BGO_SPACE)/bin/package_dep/
+
+	$(COPY) -r $(BGO_SPACE)/amazon-ssm-agent.json.template $(BGO_SPACE)/bin/package_dep/
+	$(COPY) -r $(BGO_SPACE)/amazon-ssm-agent.spec $(BGO_SPACE)/bin/package_dep/
+
+	$(COPY) -r $(BGO_SPACE)/seelog_unix.xml $(BGO_SPACE)/bin/package_dep/
+	$(COPY) -r $(BGO_SPACE)/seelog_windows.xml.template $(BGO_SPACE)/bin/package_dep/
+
+	$(COPY) -r $(BGO_SPACE)/NOTICE.md $(BGO_SPACE)/bin/package_dep/
+	$(COPY) -r $(BGO_SPACE)/RELEASENOTES.md $(BGO_SPACE)/bin/package_dep/
+	$(COPY) -r $(BGO_SPACE)/README.md $(BGO_SPACE)/bin/package_dep/
+	$(COPY) -r $(BGO_SPACE)/LICENSE $(BGO_SPACE)/bin/package_dep/
+	$(COPY) -r $(BGO_SPACE)/VERSION $(BGO_SPACE)/bin/package_dep/
 
 .PHONY: remove-prepacked-folder
 remove-prepacked-folder:
