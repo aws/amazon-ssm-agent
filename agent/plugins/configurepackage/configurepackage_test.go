@@ -13,6 +13,9 @@
 // permissions and limitations under the License.
 
 // Package configurepackage implements the ConfigurePackage plugin.
+
+// +build e2e
+
 package configurepackage
 
 import (
@@ -1073,6 +1076,8 @@ func TestExecuteConfigurePackagePlugin_BirdwatcherService(t *testing.T) {
 		localRepository:        repoMock,
 		packageServiceSelector: selectService,
 	}
+
+	// open network required
 	plugin.execute(contextMock, buildConfigSimple(pluginInformation), createMockCancelFlag(), createMockIOHandler())
 
 	repoMock.AssertExpectations(t)

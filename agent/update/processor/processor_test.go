@@ -13,6 +13,9 @@
 
 // Package processor contains the methods for update ssm agent.
 // It also provides methods for sendReply and updateInstanceInfo
+
+// +build e2e
+
 package processor
 
 import (
@@ -25,8 +28,6 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/updateutil"
 	"github.com/stretchr/testify/assert"
 )
-
-var logger = log.NewMockLog()
 
 type serviceStub struct {
 	Service
@@ -434,6 +435,8 @@ func TestVerifyRollbackCannotStartAgent(t *testing.T) {
 	// setup
 	control := &stubControl{serviceIsRunning: false}
 	updater := createUpdaterStubs(control)
+
+	// open network required
 	context := createUpdateContext(RolledBack)
 
 	// action
