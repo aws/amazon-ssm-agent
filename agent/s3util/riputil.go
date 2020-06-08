@@ -17,28 +17,39 @@
 package s3util
 
 import (
+	"strings"
+
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/platform"
 )
 
 var awsS3EndpointMap = map[string]string{
 	//AUTOGEN_START
-	"ap-northeast-1": "s3-ap-northeast-1.amazonaws.com",
+	"af-south-1":     "s3.af-south-1.amazonaws.com",
+	"ap-east-1":      "s3.ap-east-1.amazonaws.com",
+	"ap-northeast-1": "s3.ap-northeast-1.amazonaws.com",
 	"ap-northeast-2": "s3.ap-northeast-2.amazonaws.com",
+	"ap-northeast-3": "s3.ap-northeast-3.amazonaws.com",
 	"ap-south-1":     "s3.ap-south-1.amazonaws.com",
-	"ap-southeast-1": "s3-ap-southeast-1.amazonaws.com",
-	"ap-southeast-2": "s3-ap-southeast-2.amazonaws.com",
+	"ap-southeast-1": "s3.ap-southeast-1.amazonaws.com",
+	"ap-southeast-2": "s3.ap-southeast-2.amazonaws.com",
 	"ca-central-1":   "s3.ca-central-1.amazonaws.com",
 	"cn-north-1":     "s3.cn-north-1.amazonaws.com.cn",
+	"cn-northwest-1": "s3.cn-northwest-1.amazonaws.com.cn",
 	"eu-central-1":   "s3.eu-central-1.amazonaws.com",
-	"eu-west-1":      "s3-eu-west-1.amazonaws.com",
+	"eu-north-1":     "s3.eu-north-1.amazonaws.com",
+	"eu-south-1":     "s3.eu-south-1.amazonaws.com",
+	"eu-west-1":      "s3.eu-west-1.amazonaws.com",
 	"eu-west-2":      "s3.eu-west-2.amazonaws.com",
-	"sa-east-1":      "s3-sa-east-1.amazonaws.com",
-	"us-east-1":      "s3.amazonaws.com",
+	"eu-west-3":      "s3.eu-west-3.amazonaws.com",
+	"me-south-1":     "s3.me-south-1.amazonaws.com",
+	"sa-east-1":      "s3.sa-east-1.amazonaws.com",
+	"us-east-1":      "s3.us-east-1.amazonaws.com",
 	"us-east-2":      "s3.us-east-2.amazonaws.com",
-	"us-gov-west-1":  "s3-us-gov-west-1.amazonaws.com",
-	"us-west-1":      "s3-us-west-1.amazonaws.com",
-	"us-west-2":      "s3-us-west-2.amazonaws.com",
+	"us-gov-east-1":  "s3.us-gov-east-1.amazonaws.com",
+	"us-gov-west-1":  "s3.us-gov-west-1.amazonaws.com",
+	"us-west-1":      "s3.us-west-1.amazonaws.com",
+	"us-west-2":      "s3.us-west-2.amazonaws.com",
 	//AUTOGEN_END
 }
 
@@ -66,14 +77,14 @@ func GetS3Endpoint(region string) (s3Endpoint string) {
 
 /*
 This function will get the generic S3 endpoint for a certain region.
-Most regions will use us-east-1 endpoint except special ones
+The endpoints returned are the default s3 endpoints for the regions partition.
 */
 func GetS3GenericEndPoint(region string) (s3Endpoint string) {
-	if region == "us-gov-west-1" {
-		return GetS3Endpoint(region) // Restricted regions
+	if strings.HasPrefix(region, "us-gov-") {
+		return GetS3Endpoint("us-gov-west-1") // Restricted regions
 	}
-	if region == "cn-north-1" {
+	if strings.HasPrefix(region, "cn-") {
 		return GetS3Endpoint("cn-north-1") // Use cn-north-1 for China
 	}
-	return GetS3Endpoint("us-east-1") // For all other regions, use us-east-1
+	return GetS3Endpoint("") // For all other regions, use s3.amazonaws.com
 }
