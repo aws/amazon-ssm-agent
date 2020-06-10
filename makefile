@@ -46,7 +46,7 @@ coverage:: build-linux
 
 build:: build-linux build-freebsd build-windows build-linux-386 build-windows-386 build-arm build-arm64 build-darwin
 
-prepack:: cpy-plugins prepack-linux prepack-linux-arm64 prepack-linux-386 prepack-windows prepack-windows-386
+prepack:: cpy-plugins copy-win-dep prepack-linux prepack-linux-arm64 prepack-linux-386 prepack-windows prepack-windows-386
 
 package:: create-package-folder package-linux package-windows package-darwin
 
@@ -99,6 +99,11 @@ pre-release:
 	@echo "SSM Agent release build"
 	$(eval GO_BUILD := go build)
 	rm -rf $(BGO_SPACE)/vendor/pkg
+
+.PHONY: copy-win-dep
+copy-win-dep:
+	@echo "Copying Windows packaging dependencies"
+	$(COPY) -r $(BGO_SPACE)/packaging/dependencies/* $(BGO_SPACE)/bin
 
 .PHONY: pre-build
 pre-build:

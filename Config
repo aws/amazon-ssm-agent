@@ -27,7 +27,6 @@ package.Amazon-ssm-agent = {
     # be exported to other packages that build against you.
     dependencies = {
         2.3 = {
-            EC2-Windows-EC2ConfigService = 1.0;
             Session-manager-agent-binaries = 1.0;
         };
     };
