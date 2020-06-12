@@ -218,8 +218,8 @@ func (t *Trace) WithExitcode(exitcode int64) *Trace {
 
 // WithError sets the error of the trace
 func (t *Trace) WithError(err error) *Trace {
-	t.Logger.Error(err)
 	if err != nil {
+		t.Logger.Error(err)
 		t.Error = err.Error()
 	} else {
 		t.Error = ""
