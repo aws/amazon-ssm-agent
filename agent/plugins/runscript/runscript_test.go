@@ -51,22 +51,31 @@ const (
 )
 
 var TestCases = []TestCase{
-	generateTestCaseOk("0"),
-	generateTestCaseOk("1"),
+	generateTestCaseOk("0", make(map[string]string)),
+	generateTestCaseOk("1", make(map[string]string)),
 	generateTestCaseFail("2"),
 	generateTestCaseFail("3"),
 }
 
 var MultiInputTestCases = generateTestCaseMultipleInputsOk([]string{"0", "1"})
 
+var envVars = map[string]string{
+	"key1": "val1",
+	"key2": "val2",
+}
+var TestCasesWithEnvironment = []TestCase{generateTestCaseOk("0", envVars)}
+
 var logger = log.NewMockLog()
 
-func generateTestCaseOk(id string) TestCase {
+func generateTestCaseOk(id string, envVars map[string]string) TestCase {
 	input := RunScriptPluginInput{
 		RunCommand:       []string{"echo " + id},
 		ID:               id + ".aws:runScript",
 		WorkingDirectory: "/Dir" + id,
 		TimeoutSeconds:   "1",
+	}
+	if len(envVars) != 0 {
+		input.Environment = envVars
 	}
 	testCase := TestCase{
 		Input:  input,
@@ -88,7 +97,7 @@ func generateTestCaseOk(id string) TestCase {
 func generateTestCaseMultipleInputsOk(ids []string) []TestCase {
 	testCases := make([]TestCase, 0)
 	for _, id := range ids {
-		testCases = append(testCases, generateTestCaseOk(id))
+		testCases = append(testCases, generateTestCaseOk(id, make(map[string]string)))
 	}
 	return testCases
 }
@@ -108,7 +117,7 @@ func combinedErrorOutput(stderr string, err error) string {
 }
 
 func generateTestCaseFail(id string) TestCase {
-	t := generateTestCaseOk(id)
+	t := generateTestCaseOk(id, make(map[string]string))
 	t.ExecuterError = fmt.Errorf("Error happened for cmd %v", id)
 	t.Output.SetStderr(combinedErrorOutput(t.ExecuterStdErr, t.ExecuterError))
 	t.Output.ExitCode = 1
@@ -182,6 +191,9 @@ func TestExecute(t *testing.T) {
 	}
 	for _, testCase := range MultiInputTestCases {
 		testExecute(t, testCase)
+	}
+	for _, testCase := range TestCasesWithEnvironment {
+		testExecuteWithEnvironment(t, testCase)
 	}
 }
 
@@ -295,6 +307,39 @@ func testExecute(t *testing.T, testCase TestCase) {
 	testExecution(t, executeTester)
 }
 
+// testExecuteWithEnvironment tests the run command plugin's Execute method with environment variables sent to the executer
+func testExecuteWithEnvironment(t *testing.T, testCase TestCase) {
+	executeTester := func(p *Plugin, mockCancelFlag *task.MockCancelFlag, mockExecuter *executers.MockCommandExecuter, mockIOHandler *iohandlermocks.MockIOHandler) {
+		// setup expectations and correct outputs
+		mockContext := context.NewMockDefault()
+
+		// set expectations
+		setCancelFlagExpectations(mockCancelFlag, 1)
+		mockExecuter.On("NewExecute", mock.Anything, testCase.Input.WorkingDirectory, testCase.Output.StdoutWriter, testCase.Output.StderrWriter, mockCancelFlag, mock.Anything, mock.Anything, mock.Anything, envVars).Return(testCase.Output.ExitCode, testCase.ExecuterError)
+		setIOHandlerExpectations(mockIOHandler, testCase)
+
+		// prepare plugin input
+		pluginProperties := singleValuePropertyBuilder(t, testCase)
+
+		//Create messageId which is in the format of aws.ssm.<commandID>.<InstanceID>
+		commandID := uuid.NewV4().String()
+
+		// call plugin
+		p.Execute(
+			mockContext,
+			contracts.Configuration{
+				Properties:             pluginProperties,
+				OutputS3BucketName:     s3BucketName,
+				OutputS3KeyPrefix:      s3KeyPrefix,
+				OrchestrationDirectory: orchestrationDirectory,
+				BookKeepingFileName:    commandID,
+				PluginID:               pluginID,
+			}, mockCancelFlag, mockIOHandler)
+	}
+
+	testExecution(t, executeTester)
+}
+
 // testExecution sets up boiler plate mocked objects then delegates to a more
 // specific tester, then asserts general expectations on the mocked objects.
 // It is the responsibility of the inner tester to set up expectations
@@ -323,7 +368,7 @@ func testExecution(t *testing.T, commandtester CommandTester) {
 }
 
 func setExecuterExpectations(mockExecuter *executers.MockCommandExecuter, t TestCase, cancelFlag task.CancelFlag, p *Plugin) {
-	mockExecuter.On("NewExecute", mock.Anything, t.Input.WorkingDirectory, t.Output.StdoutWriter, t.Output.StderrWriter, cancelFlag, mock.Anything, mock.Anything, mock.Anything).Return(
+	mockExecuter.On("NewExecute", mock.Anything, t.Input.WorkingDirectory, t.Output.StdoutWriter, t.Output.StderrWriter, cancelFlag, mock.Anything, mock.Anything, mock.Anything, mock.Anything).Return(
 		t.Output.ExitCode, t.ExecuterError)
 }
 

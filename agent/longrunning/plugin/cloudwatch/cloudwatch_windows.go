@@ -340,7 +340,7 @@ func (p *Plugin) runPowerShell(log logger.T, workingDirectory string, cancelFlag
 
 	//execute the command
 	stdout, stderr, exitCode, errs := p.CommandExecuter.Execute(log, workingDirectory, stdoutFilePath,
-		stderrFilePath, cancelFlag, executionTimeout, commandName, commandArguments)
+		stderrFilePath, cancelFlag, executionTimeout, commandName, commandArguments, make(map[string]string))
 
 	stdOutBuf := new(bytes.Buffer)
 	stdOutBuf.ReadFrom(stdout)

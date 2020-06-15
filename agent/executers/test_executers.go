@@ -39,8 +39,9 @@ func (m *MockCommandExecuter) Execute(log log.T,
 	executionTimeout int,
 	commandName string,
 	commandArguments []string,
+	envVars map[string]string,
 ) (stdout io.Reader, stderr io.Reader, exitCode int, errs []error) {
-	args := m.Called(log, workingDir, stdoutFilePath, stderrFilePath, cancelFlag, executionTimeout, commandName, commandArguments)
+	args := m.Called(log, workingDir, stdoutFilePath, stderrFilePath, cancelFlag, executionTimeout, commandName, commandArguments, envVars)
 	log.Infof("args are %v", args)
 	return args.Get(0).(io.Reader), args.Get(1).(io.Reader), args.Get(2).(int), args.Get(3).([]error)
 }
@@ -55,8 +56,9 @@ func (m *MockCommandExecuter) NewExecute(
 	executionTimeout int,
 	commandName string,
 	commandArguments []string,
+	envVars map[string]string,
 ) (exitCode int, err error) {
-	args := m.Called(log, workingDir, stdoutWriter, stderrWriter, cancelFlag, executionTimeout, commandName, commandArguments)
+	args := m.Called(log, workingDir, stdoutWriter, stderrWriter, cancelFlag, executionTimeout, commandName, commandArguments, envVars)
 	log.Infof("args are %v", args)
 	return args.Get(0).(int), args.Error(1)
 }

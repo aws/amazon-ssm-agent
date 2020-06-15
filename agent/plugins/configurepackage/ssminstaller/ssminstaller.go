@@ -24,7 +24,6 @@ import (
 
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
-	"github.com/aws/amazon-ssm-agent/agent/executers"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/envdetect"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/trace"
@@ -132,7 +131,7 @@ func (inst *Installer) getActionPath(actionName string, extension string) string
 	return filepath.Join(inst.packagePath, fmt.Sprintf("%v.%v", actionName, extension))
 }
 
-func (inst *Installer) readScriptAction(action *Action, workingDir string, orchestrationDir string, pluginName string, runCommand []interface{}) (pluginsInfo []contracts.PluginState, err error) {
+func (inst *Installer) readScriptAction(action *Action, workingDir string, orchestrationDir string, pluginName string, runCommand []interface{}, envVars map[string]string) (pluginsInfo []contracts.PluginState, err error) {
 	pluginsInfo = []contracts.PluginState{}
 
 	pluginFullName := fmt.Sprintf("aws:%v", pluginName)
@@ -144,6 +143,7 @@ func (inst *Installer) readScriptAction(action *Action, workingDir string, orche
 	inputs := make(map[string]interface{})
 	inputs["workingDirectory"] = workingDir
 	inputs["runCommand"] = runCommand
+	inputs["environment"] = envVars
 
 	config := contracts.Configuration{
 		Settings:                nil,
@@ -177,15 +177,9 @@ func (inst *Installer) readShAction(context context.T, action *Action, workingDi
 
 	runCommand := []interface{}{}
 	runCommand = append(runCommand, fmt.Sprintf("echo Running sh %v.sh", action.actionName))
-
-	for k, v := range envVars {
-		v = executers.QuoteShString(v)
-		runCommand = append(runCommand, fmt.Sprintf("export %v=%v", k, v))
-	}
-
 	runCommand = append(runCommand, fmt.Sprintf("sh %v.sh", action.actionName))
 
-	return inst.readScriptAction(action, workingDir, orchestrationDir, "runShellScript", runCommand)
+	return inst.readScriptAction(action, workingDir, orchestrationDir, "runShellScript", runCommand, envVars)
 }
 
 // readPs1Action turns an ps1 action into a set of SSM Document Plugins to execute
@@ -196,15 +190,9 @@ func (inst *Installer) readPs1Action(context context.T, action *Action, workingD
 
 	runCommand := []interface{}{}
 	runCommand = append(runCommand, fmt.Sprintf("echo 'Running %v.ps1'", action.actionName))
-
-	for k, v := range envVars {
-		v = executers.QuotePsString(v)
-		runCommand = append(runCommand, fmt.Sprintf("$env:%v = %v", k, v))
-	}
-
 	runCommand = append(runCommand, fmt.Sprintf(".\\%v.ps1; exit $LASTEXITCODE", action.actionName))
 
-	return inst.readScriptAction(action, workingDir, orchestrationDir, "runPowerShellScript", runCommand)
+	return inst.readScriptAction(action, workingDir, orchestrationDir, "runPowerShellScript", runCommand, envVars)
 }
 
 // resolveAction checks if there are multiple installer files for the same action type
@@ -292,31 +280,25 @@ func (inst *Installer) readAction(tracer trace.Tracer, context context.T, action
 	workingDir = inst.packagePath
 	orchestrationDir = filepath.Join(inst.config.OrchestrationDirectory, actionName)
 
-	if action.actionType == ACTION_TYPE_SH {
-		var envVars map[string]string
-		if envVars, err = inst.getEnvVars(actionName, context); err != nil {
-			return exists, nil, "", "", err
-		}
+	if ACTION_TYPE_SH != action.actionType && ACTION_TYPE_PS1 != action.actionType {
+		return exists, nil, "", "", fmt.Errorf("Internal error. Unknown actionType %v", action.actionType)
+	}
 
+	var envVars map[string]string
+	if envVars, err = inst.getEnvVars(actionName, context); err != nil {
+		return exists, nil, "", "", err
+	}
+
+	if action.actionType == ACTION_TYPE_SH {
 		if pluginsInfo, err = inst.readShAction(context, action, workingDir, orchestrationDir, envVars); err != nil {
 			return exists, nil, "", "", err
 		}
-
-		return exists, pluginsInfo, workingDir, orchestrationDir, nil
-	} else if action.actionType == ACTION_TYPE_PS1 {
-		var envVars map[string]string
-		if envVars, err = inst.getEnvVars(actionName, context); err != nil {
-			return exists, nil, "", "", err
-		}
-
+	} else {
 		if pluginsInfo, err = inst.readPs1Action(context, action, workingDir, orchestrationDir, envVars); err != nil {
 			return exists, nil, "", "", err
 		}
-
-		return exists, pluginsInfo, workingDir, orchestrationDir, nil
-	} else {
-		return exists, nil, "", "", fmt.Errorf("Internal error. Unknown actionType %v", action.actionType)
 	}
+	return exists, pluginsInfo, workingDir, orchestrationDir, nil
 }
 
 // executeDocument executes a command document as a sub-document of the current command and returns the result

@@ -151,7 +151,7 @@ func (p *Plugin) runCommands(log log.T, pluginID string, pluginInput Application
 	}
 
 	// Execute Command
-	exitCode, err := p.CommandExecuter.NewExecute(log, defaultWorkingDirectory, output.GetStdoutWriter(), output.GetStderrWriter(), cancelFlag, defaultApplicationExecutionTimeoutInSeconds, commandName, commandArguments)
+	exitCode, err := p.CommandExecuter.NewExecute(log, defaultWorkingDirectory, output.GetStdoutWriter(), output.GetStderrWriter(), cancelFlag, defaultApplicationExecutionTimeoutInSeconds, commandName, commandArguments, make(map[string]string))
 
 	// Set output status
 	output.SetExitCode(exitCode)
