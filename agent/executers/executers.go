@@ -41,8 +41,8 @@ const (
 // T is the interface type for ShellCommandExecuter.
 type T interface {
 	//TODO: Remove Execute and rename NewExecute to Execute.
-	Execute(log.T, string, string, string, task.CancelFlag, int, string, []string) (io.Reader, io.Reader, int, []error)
-	NewExecute(log.T, string, io.Writer, io.Writer, task.CancelFlag, int, string, []string) (int, error)
+	Execute(log.T, string, string, string, task.CancelFlag, int, string, []string, map[string]string) (io.Reader, io.Reader, int, []error)
+	NewExecute(log.T, string, io.Writer, io.Writer, task.CancelFlag, int, string, []string, map[string]string) (int, error)
 	StartExe(log.T, string, io.Writer, io.Writer, task.CancelFlag, string, []string) (*os.Process, int, error)
 }
 
@@ -79,6 +79,7 @@ func (ShellCommandExecuter) Execute(
 	executionTimeout int,
 	commandName string,
 	commandArguments []string,
+	envVars map[string]string,
 ) (stdout io.Reader, stderr io.Reader, exitCode int, errs []error) {
 
 	var stdoutWriter io.Writer
@@ -122,7 +123,7 @@ func (ShellCommandExecuter) Execute(
 	// writers as long as it is after the process starts.
 
 	var err error
-	exitCode, err = ExecuteCommand(log, cancelFlag, workingDir, stdoutWriter, stderrWriter, executionTimeout, commandName, commandArguments)
+	exitCode, err = ExecuteCommand(log, cancelFlag, workingDir, stdoutWriter, stderrWriter, executionTimeout, commandName, commandArguments, envVars)
 	if err != nil {
 		errs = append(errs, err)
 	}
@@ -168,8 +169,9 @@ func (ShellCommandExecuter) NewExecute(
 	executionTimeout int,
 	commandName string,
 	commandArguments []string,
+	envVars map[string]string,
 ) (exitCode int, err error) {
-	exitCode, err = ExecuteCommand(log, cancelFlag, workingDir, stdoutWriter, stderrWriter, executionTimeout, commandName, commandArguments)
+	exitCode, err = ExecuteCommand(log, cancelFlag, workingDir, stdoutWriter, stderrWriter, executionTimeout, commandName, commandArguments, envVars)
 	return
 }
 
@@ -253,6 +255,7 @@ func ExecuteCommand(log log.T,
 	executionTimeout int,
 	commandName string,
 	commandArguments []string,
+	envVars map[string]string,
 ) (exitCode int, err error) {
 
 	stdoutInterruptable, stopStdout := newWriter(stdoutWriter)
@@ -283,7 +286,7 @@ func ExecuteCommand(log log.T,
 	prepareProcess(command)
 
 	// configure environment variables
-	prepareEnvironment(command)
+	prepareEnvironment(command, envVars)
 
 	log.Debug()
 	log.Debugf("Running in directory %v, command: %v %v", workingDir, commandName, commandArguments)
@@ -400,7 +403,7 @@ func StartCommand(log log.T,
 	prepareProcess(command)
 
 	// configure environment variables
-	prepareEnvironment(command)
+	prepareEnvironment(command, make(map[string]string))
 
 	log.Debug()
 	log.Debugf("Running in directory %v, command: %v %v", workingDir, commandName, commandArguments)
@@ -446,8 +449,11 @@ func killProcessOnCancel(log log.T, command *exec.Cmd, cancelStdout chan bool, c
 }
 
 // prepareEnvironment adds ssm agent standard environment variables to the command
-func prepareEnvironment(command *exec.Cmd) {
+func prepareEnvironment(command *exec.Cmd, envVars map[string]string) {
 	env := os.Environ()
+	for key, val := range envVars {
+		env = append(env, fmtEnvVariable(key, val))
+	}
 	if instance, err := instance.InstanceID(); err == nil {
 		env = append(env, fmtEnvVariable(envVarInstanceID, instance))
 	}

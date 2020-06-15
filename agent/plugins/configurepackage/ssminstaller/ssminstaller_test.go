@@ -175,6 +175,57 @@ func TestReadActionTooManyActionImplementations(t *testing.T) {
 	testReadActionTooManyActionImplementations(t, true, true)
 }
 
+var envVars = map[string]string{
+	"key1": "val1",
+	"key2": "val2",
+}
+
+func TestReadShActionWithEnvVars(t *testing.T) {
+	mockFileSys := MockedFileSys{}
+	mockEnvdetectCollector := &envdetect.CollectorMock{}
+
+	// Instantiate installer with mock
+	inst := Installer{filesysdep: &mockFileSys, packagePath: testPackagePath, envdetectCollector: mockEnvdetectCollector}
+
+	// Call and validate mock expectations and return value
+	action := &Action{}
+	action.actionName = "install"
+	action.actionType = ACTION_TYPE_SH
+	pluginsInfo, err := inst.readShAction(contextMock, action, "Foo", "", envVars)
+
+	// Call and validate mock expectations and return value
+	assert.Nil(t, err)
+	assert.NotEmpty(t, pluginsInfo)
+	assert.Equal(t, 1, len(pluginsInfo))
+	pluginInput := pluginsInfo[0].Configuration.Properties
+	assert.NotEmpty(t, pluginInput)
+	pluginInputMap, _ := pluginInput.(map[string]interface{})
+	assert.Equal(t, envVars, pluginInputMap["environment"])
+}
+
+func TestReadPs1ActionWithEnvVars(t *testing.T) {
+	mockFileSys := MockedFileSys{}
+	mockEnvdetectCollector := &envdetect.CollectorMock{}
+
+	// Instantiate installer with mock
+	inst := Installer{filesysdep: &mockFileSys, packagePath: testPackagePath, envdetectCollector: mockEnvdetectCollector}
+
+	// Call and validate mock expectations and return value
+	action := &Action{}
+	action.actionName = "uninstall"
+	action.actionType = ACTION_TYPE_PS1
+	pluginsInfo, err := inst.readPs1Action(contextMock, action, "Foo", "", envVars)
+
+	// Call and validate mock expectations and return value
+	assert.Nil(t, err)
+	assert.NotEmpty(t, pluginsInfo)
+	assert.Equal(t, 1, len(pluginsInfo))
+	pluginInput := pluginsInfo[0].Configuration.Properties
+	assert.NotEmpty(t, pluginInput)
+	pluginInputMap, _ := pluginInput.(map[string]interface{})
+	assert.Equal(t, envVars, pluginInputMap["environment"])
+}
+
 func TestInstall_ExecuteError(t *testing.T) {
 	// Setup mocks with expectations
 	mockFileSys := MockedFileSys{}

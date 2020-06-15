@@ -72,10 +72,13 @@ func TestEnvironmentVariables_All(t *testing.T) {
 	defer func() { instance = instanceTemp }()
 
 	command := getTestCommand(t)
-	prepareEnvironment(command)
+	env := make(map[string]string)
+	env["envKey"] = "envVal"
+	prepareEnvironment(command, env)
 
 	assert.Equal(t, getEnvVariableValue(command.Env, envVarInstanceID), testInstanceID)
 	assert.Equal(t, getEnvVariableValue(command.Env, envVarRegionName), testRegionName)
+	assert.Equal(t, getEnvVariableValue(command.Env, "envKey"), "envVal")
 }
 
 func TestEnvironmentVariables_None(t *testing.T) {
@@ -84,7 +87,7 @@ func TestEnvironmentVariables_None(t *testing.T) {
 	defer func() { instance = instanceTemp }()
 
 	command := getTestCommand(t)
-	prepareEnvironment(command)
+	prepareEnvironment(command, make(map[string]string))
 
 	assert.Empty(t, getEnvVariableValue(command.Env, envVarInstanceID))
 	assert.Empty(t, getEnvVariableValue(command.Env, envVarRegionName))

@@ -164,6 +164,11 @@ var ShellCommandExecuterCancelTestCases = []TestCase{
 	},
 }
 
+var envVars = map[string]string{
+	"key1": "val1",
+	"key2": "val2",
+}
+
 var logger = log.NewMockLog()
 
 // TestRunCommand tests that RunCommand (in memory call, no local script or output files) works correctly.
@@ -173,7 +178,12 @@ func TestRunCommand(t *testing.T) {
 	defer func() { instance = instanceTemp }()
 
 	for _, testCase := range RunCommandTestCases {
-		runCommandInvoker, _ := prepareTestRunCommand(t)
+		runCommandInvoker, _ := prepareTestRunCommand(t, make(map[string]string))
+		testCommandInvoker(t, runCommandInvoker, testCase)
+	}
+
+	for _, testCase := range RunCommandTestCases {
+		runCommandInvoker, _ := prepareTestRunCommand(t, envVars)
 		testCommandInvoker(t, runCommandInvoker, testCase)
 	}
 }
@@ -185,7 +195,12 @@ func TestRunCommand_cancel(t *testing.T) {
 	defer func() { instance = instanceTemp }()
 
 	for _, testCase := range RunCommandCancelTestCases {
-		runCommandInvoker, cancelFlag := prepareTestRunCommand(t)
+		runCommandInvoker, cancelFlag := prepareTestRunCommand(t, make(map[string]string))
+		testCommandInvokerCancel(t, runCommandInvoker, cancelFlag, testCase)
+	}
+
+	for _, testCase := range RunCommandCancelTestCases {
+		runCommandInvoker, cancelFlag := prepareTestRunCommand(t, envVars)
 		testCommandInvokerCancel(t, runCommandInvoker, cancelFlag, testCase)
 	}
 }
@@ -209,18 +224,24 @@ func TestShellCommandExecuter(t *testing.T) {
 	instance = &instanceInfoStub{instanceID: testInstanceID, regionName: testRegionName}
 	defer func() { instance = instanceTemp }()
 	runTest := func(testCase TestCase) {
-		orchestrationDir, shCommandExecuterInvoker, _ := prepareTestShellCommandExecuter(t)
+		orchestrationDir, shCommandExecuterInvoker, _ := prepareTestShellCommandExecuter(t, make(map[string]string))
+		defer fileutil.DeleteDirectory(orchestrationDir)
+		testCommandInvoker(t, shCommandExecuterInvoker, testCase)
+	}
+	runTestWithEnvironment := func(testCase TestCase) {
+		orchestrationDir, shCommandExecuterInvoker, _ := prepareTestShellCommandExecuter(t, envVars)
 		defer fileutil.DeleteDirectory(orchestrationDir)
 		testCommandInvoker(t, shCommandExecuterInvoker, testCase)
 	}
 	runTestShutdown := func(testCase TestCase) {
-		orchestrationDir, shCommandExecuterInvoker, cancelFlag := prepareTestShellCommandExecuter(t)
+		orchestrationDir, shCommandExecuterInvoker, cancelFlag := prepareTestShellCommandExecuter(t, make(map[string]string))
 		defer fileutil.DeleteDirectory(orchestrationDir)
 		testCommandInvokerShutdown(t, shCommandExecuterInvoker, cancelFlag, testCase)
 	}
 
 	for _, testCase := range ShellCommandExecuterTestCases {
 		runTest(testCase)
+		runTestWithEnvironment(testCase)
 		runTestShutdown(testCase)
 	}
 }
@@ -232,7 +253,7 @@ func TestShellCommandExecuter_cancel(t *testing.T) {
 	defer func() { instance = instanceTemp }()
 
 	runTest := func(testCase TestCase) {
-		orchestrationDir, shCommandExecuterInvoker, cancelFlag := prepareTestShellCommandExecuter(t)
+		orchestrationDir, shCommandExecuterInvoker, cancelFlag := prepareTestShellCommandExecuter(t, make(map[string]string))
 		defer fileutil.DeleteDirectory(orchestrationDir)
 		testCommandInvokerCancel(t, shCommandExecuterInvoker, cancelFlag, testCase)
 	}
@@ -308,7 +329,7 @@ func awkPrintToStderr(stderrMsg string) string {
 }
 
 // prepareTestShellCommandExecuter contains boiler plate code for testing shell executer, to avoid duplication.
-func prepareTestShellCommandExecuter(t *testing.T) (orchestrationDir string, commandInvoker CommandInvoker, cancelFlag task.CancelFlag) {
+func prepareTestShellCommandExecuter(t *testing.T, envVars map[string]string) (orchestrationDir string, commandInvoker CommandInvoker, cancelFlag task.CancelFlag) {
 	// create shell executer, cancel flag, working dir
 	sh := ShellCommandExecuter{}
 	cancelFlag = task.NewChanneledCancelFlag()
@@ -327,14 +348,14 @@ func prepareTestShellCommandExecuter(t *testing.T) (orchestrationDir string, com
 
 		// Used to mimic the process
 		CreateScriptFile(scriptPath, commands)
-		return sh.Execute(logger, workDir, stdoutFilePath, stderrFilePath, cancelFlag, defaultExecutionTimeout, commands[0], commands[1:])
+		return sh.Execute(logger, workDir, stdoutFilePath, stderrFilePath, cancelFlag, defaultExecutionTimeout, commands[0], commands[1:], envVars)
 	}
 
 	return
 }
 
 // prepareTestRunCommand contains boiler plate code for testing run command, to avoid duplication.
-func prepareTestRunCommand(t *testing.T) (commandInvoker CommandInvoker, cancelFlag task.CancelFlag) {
+func prepareTestRunCommand(t *testing.T, envVars map[string]string) (commandInvoker CommandInvoker, cancelFlag task.CancelFlag) {
 	cancelFlag = task.NewChanneledCancelFlag()
 	commandInvoker = func(commands []string) (stdout io.Reader, stderr io.Reader, exitCode int, errs []error) {
 		defer cancelFlag.Set(task.Completed)
@@ -343,7 +364,7 @@ func prepareTestRunCommand(t *testing.T) (commandInvoker CommandInvoker, cancelF
 		var stdoutBuf bytes.Buffer
 		var stderrBuf bytes.Buffer
 		workDir := "."
-		tempExitCode, err := ExecuteCommand(logger, cancelFlag, workDir, &stdoutBuf, &stderrBuf, defaultExecutionTimeout, commands[0], commands[1:])
+		tempExitCode, err := ExecuteCommand(logger, cancelFlag, workDir, &stdoutBuf, &stderrBuf, defaultExecutionTimeout, commands[0], commands[1:], envVars)
 		exitCode = tempExitCode
 
 		// record error if any

@@ -51,6 +51,7 @@ type Plugin struct {
 type RunScriptPluginInput struct {
 	contracts.PluginInput
 	RunCommand       []string
+	Environment      map[string]string
 	ID               string
 	WorkingDirectory string
 	TimeoutSeconds   interface{}
@@ -103,7 +104,7 @@ func (p *Plugin) runCommands(log log.T, pluginID string, pluginInput RunScriptPl
 
 	// TODO:MF: This subdirectory is only needed because we could be running multiple sets of properties for the same plugin - otherwise the orchestration directory would already be unique
 	orchestrationDir := fileutil.BuildPath(orchestrationDirectory, pluginInput.ID)
-	log.Debugf("Running commands %v in workingDirectory %v; orchestrationDir %v ", pluginInput.RunCommand, workingDir, orchestrationDir)
+	log.Debugf("Running commands %v with environment variables %v in workingDirectory %v; orchestrationDir %v ", pluginInput.RunCommand, pluginInput.Environment, workingDir, orchestrationDir)
 
 	// create orchestration dir if needed
 	if err = fileutil.MakeDirsWithExecuteAccess(orchestrationDir); err != nil {
@@ -129,7 +130,7 @@ func (p *Plugin) runCommands(log log.T, pluginID string, pluginInput RunScriptPl
 	commandArguments := append(p.ShellArguments, scriptPath)
 
 	// Execute Command
-	exitCode, err := p.CommandExecuter.NewExecute(log, workingDir, output.GetStdoutWriter(), output.GetStderrWriter(), cancelFlag, executionTimeout, commandName, commandArguments)
+	exitCode, err := p.CommandExecuter.NewExecute(log, workingDir, output.GetStdoutWriter(), output.GetStderrWriter(), cancelFlag, executionTimeout, commandName, commandArguments, pluginInput.Environment)
 
 	// Set output status
 	output.SetExitCode(exitCode)
