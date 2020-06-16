@@ -122,8 +122,8 @@ func (collector *FrequentCollector) StartFrequentCollector(context context.T, do
 }
 
 //IsFrequentCollectorEnabled return a boolean indicating if the frequent collector is enabled per association configuration.
-func (collector *FrequentCollector) IsFrequentCollectorEnabled(docState *contracts.DocumentState, scheduledAssociation *AssociationModel.InstanceAssociation) bool {
-	log := log.DefaultLogger()
+func (collector *FrequentCollector) IsFrequentCollectorEnabled(context context.T, docState *contracts.DocumentState, scheduledAssociation *AssociationModel.InstanceAssociation) bool {
+	log := context.Log()
 
 	if scheduledAssociation.IsRunOnceAssociation() {
 		log.Infof("frequent collector is not enabled. scheduled association is a run once association.")
