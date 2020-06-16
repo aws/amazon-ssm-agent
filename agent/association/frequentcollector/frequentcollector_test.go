@@ -22,6 +22,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/association/frequentcollector"
 	"github.com/aws/amazon-ssm-agent/agent/association/rateexpr"
+	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/aws-sdk-go/service/ssm"
 	"github.com/stretchr/testify/assert"
@@ -43,9 +44,9 @@ func TestIsFrequentCollectorEnabled_True(t *testing.T) {
 
 	docState := buildInventoryDocumentState(properties)
 	assocRawData := buildRatedInstanceAssociation(30)
-
+	contextMock := context.NewMockDefault()
 	frequentCollector := frequentcollector.GetFrequentCollector()
-	result := frequentCollector.IsFrequentCollectorEnabled(&docState, &assocRawData)
+	result := frequentCollector.IsFrequentCollectorEnabled(contextMock, &docState, &assocRawData)
 
 	assert.Equal(t, result, true, "frequent collector enabled")
 }
@@ -57,9 +58,10 @@ func TestIsFrequentCollectorEnabled_False_AbsenceOfDetectionTypes(t *testing.T) 
 
 	docState := buildInventoryDocumentState(properties)
 	assocRawData := buildRatedInstanceAssociation(30)
+	contextMock := context.NewMockDefault()
 
 	frequentCollector := frequentcollector.GetFrequentCollector()
-	result := frequentCollector.IsFrequentCollectorEnabled(&docState, &assocRawData)
+	result := frequentCollector.IsFrequentCollectorEnabled(contextMock, &docState, &assocRawData)
 
 	assert.Equal(t, result, false, "frequent collector is not enabled")
 }
@@ -77,9 +79,10 @@ func TestIsFrequentCollectorEnabled_False_AbsenceOfDetectionFrequency(t *testing
 
 	docState := buildInventoryDocumentState(properties)
 	assocRawData := buildRatedInstanceAssociation(30)
+	contextMock := context.NewMockDefault()
 
 	frequentCollector := frequentcollector.GetFrequentCollector()
-	result := frequentCollector.IsFrequentCollectorEnabled(&docState, &assocRawData)
+	result := frequentCollector.IsFrequentCollectorEnabled(contextMock, &docState, &assocRawData)
 
 	assert.Equal(t, result, false, "frequent collector is not enabled")
 }
@@ -98,9 +101,10 @@ func TestIsFrequentCollectorEnabled_False_ZeroDetectionFrequency(t *testing.T) {
 
 	docState := buildInventoryDocumentState(properties)
 	assocRawData := buildRatedInstanceAssociation(30)
+	contextMock := context.NewMockDefault()
 
 	frequentCollector := frequentcollector.GetFrequentCollector()
-	result := frequentCollector.IsFrequentCollectorEnabled(&docState, &assocRawData)
+	result := frequentCollector.IsFrequentCollectorEnabled(contextMock, &docState, &assocRawData)
 
 	assert.Equal(t, result, false, "frequent collector is not enabled")
 }
@@ -119,9 +123,10 @@ func TestIsFrequentCollectorEnabled_False_NegativeDetectionFrequency(t *testing.
 
 	docState := buildInventoryDocumentState(properties)
 	assocRawData := buildRatedInstanceAssociation(30)
+	contextMock := context.NewMockDefault()
 
 	frequentCollector := frequentcollector.GetFrequentCollector()
-	result := frequentCollector.IsFrequentCollectorEnabled(&docState, &assocRawData)
+	result := frequentCollector.IsFrequentCollectorEnabled(contextMock, &docState, &assocRawData)
 
 	assert.Equal(t, result, false, "frequent collector is not enabled")
 }
@@ -140,9 +145,10 @@ func TestIsFrequentCollectorEnabled_False_NonIntegerInputForDetectionFrequency(t
 
 	docState := buildInventoryDocumentState(properties)
 	assocRawData := buildRatedInstanceAssociation(30)
+	contextMock := context.NewMockDefault()
 
 	frequentCollector := frequentcollector.GetFrequentCollector()
-	result := frequentCollector.IsFrequentCollectorEnabled(&docState, &assocRawData)
+	result := frequentCollector.IsFrequentCollectorEnabled(contextMock, &docState, &assocRawData)
 
 	assert.Equal(t, result, false, "frequent collector is not enabled")
 }
@@ -161,9 +167,10 @@ func TestIsFrequentCollectorEnabled_False_RandomStringInputForDetectionFrequency
 
 	docState := buildInventoryDocumentState(properties)
 	assocRawData := buildRatedInstanceAssociation(30)
+	contextMock := context.NewMockDefault()
 
 	frequentCollector := frequentcollector.GetFrequentCollector()
-	result := frequentCollector.IsFrequentCollectorEnabled(&docState, &assocRawData)
+	result := frequentCollector.IsFrequentCollectorEnabled(contextMock, &docState, &assocRawData)
 
 	assert.Equal(t, result, false, "frequent collector is not enabled")
 }
@@ -182,9 +189,10 @@ func TestIsFrequentCollectorEnabled_False_ChangeDetectionTypeDisabled(t *testing
 
 	docState := buildInventoryDocumentState(properties)
 	assocRawData := buildRatedInstanceAssociation(30)
+	contextMock := context.NewMockDefault()
 
 	frequentCollector := frequentcollector.GetFrequentCollector()
-	result := frequentCollector.IsFrequentCollectorEnabled(&docState, &assocRawData)
+	result := frequentCollector.IsFrequentCollectorEnabled(contextMock, &docState, &assocRawData)
 
 	assert.Equal(t, result, false, "frequent collector is not enabled")
 }

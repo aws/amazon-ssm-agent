@@ -387,7 +387,7 @@ func (p *Processor) runScheduledAssociation(log log.T) {
 	if frequentCollector.IsSoftwareInventoryAssociation(docState) {
 		// Start the frequent collector if the association enabled it
 		frequentCollector.ClearTicker()
-		if frequentCollector.IsFrequentCollectorEnabled(docState, scheduledAssociation) {
+		if frequentCollector.IsFrequentCollectorEnabled(p.context, docState, scheduledAssociation) {
 			log.Infof("This software inventory association enabled frequent collector")
 			frequentCollector.StartFrequentCollector(p.context, docState, scheduledAssociation)
 		}
