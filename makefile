@@ -321,6 +321,8 @@ copy-package-dep:
 	$(COPY) -r $(BGO_SPACE)/LICENSE $(BGO_SPACE)/bin/package_dep/
 	$(COPY) -r $(BGO_SPACE)/VERSION $(BGO_SPACE)/bin/package_dep/
 
+	cd $(BGO_SPACE) && zip -q -r $(BGO_SPACE)/bin/gosrc.zip agent && cd -
+
 .PHONY: remove-prepacked-folder
 remove-prepacked-folder:
 	rm -rf $(BGO_SPACE)/bin/prepacked
