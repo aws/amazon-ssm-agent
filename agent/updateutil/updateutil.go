@@ -171,6 +171,9 @@ const (
 	// ErrorUpdateFailRollbackSuccess represents rollback succeeded but update process failed
 	ErrorUpdateFailRollbackSuccess ErrorCode = "ErrorUpdateFailRollbackSuccess"
 
+	// ErrorUpdateFailRollbackSuccessWithRetry represents rollback succeeded with retry but update process failed
+	ErrorUpdateFailRollbackSuccessWithRetry ErrorCode = "ErrorUpdateFailRollbackSuccessWithRetry"
+
 	// ErrorAttemptToDowngrade represents An update is attempting to downgrade Ec2Config to a lower version
 	ErrorAttemptToDowngrade ErrorCode = "ErrorAttempToDowngrade"
 
@@ -220,6 +223,9 @@ const (
 const (
 	// WarnInactiveVersion represents the warning message when inactive version is used for update
 	WarnInactiveVersion string = "InactiveAgentVersion"
+
+	// WarnInactiveVersion represents the message that install succeeded after retry
+	WarnInstallRetrySuccess string = "WarnInstallRetrySuccess"
 )
 
 // MinimumDiskSpaceForUpdate represents 100 Mb in bytes

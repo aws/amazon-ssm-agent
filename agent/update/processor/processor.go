@@ -17,6 +17,7 @@ package processor
 
 import (
 	"fmt"
+	"math/rand"
 	"sync"
 
 	"time"
@@ -41,17 +42,18 @@ var (
 func NewUpdater() *Updater {
 	updater := &Updater{
 		mgr: &updateManager{
-			util:      &updateutil.Utility{},
-			svc:       &svcManager{},
-			ctxMgr:    &contextManager{},
-			prepare:   prepareInstallationPackages,
-			update:    proceedUpdate,
-			verify:    verifyInstallation,
-			rollback:  rollbackInstallation,
-			uninstall: uninstallAgent,
-			install:   installAgent,
-			download:  downloadAndUnzipArtifact,
-			clean:     cleanUninstalledVersions,
+			util:         &updateutil.Utility{},
+			svc:          &svcManager{},
+			ctxMgr:       &contextManager{},
+			prepare:      prepareInstallationPackages,
+			update:       proceedUpdate,
+			verify:       verifyInstallation,
+			rollback:     rollbackInstallation,
+			uninstall:    uninstallAgent,
+			retryInstall: retryInstallAgent,
+			install:      installAgent,
+			download:     downloadAndUnzipArtifact,
+			clean:        cleanUninstalledVersions,
 		},
 	}
 
@@ -156,6 +158,9 @@ func getMinimumVSupportedVersions() (versions *map[string]string) {
 func prepareInstallationPackages(mgr *updateManager, log log.T, context *UpdateContext) (err error) {
 	log.Infof("Initiating download %v", context.Current.PackageName)
 	var instanceContext *updateutil.InstanceContext
+	updateOperationsRetryCount := 2
+	updateRetryDelay := 500      // 500 millisecond
+	updateRetryDelayBase := 1000 // 1000 millisecond
 	updateDownload := ""
 
 	if instanceContext, err = mgr.util.CreateInstanceContext(log); err != nil {
@@ -185,8 +190,15 @@ func prepareInstallationPackages(mgr *updateManager, log log.T, context *UpdateC
 		},
 		DestinationDirectory: updateDownload,
 	}
-
-	if err = mgr.download(mgr, log, downloadInput, context, context.Current.SourceVersion); err != nil {
+	for retryCounter := 1; retryCounter <= updateOperationsRetryCount; retryCounter++ {
+		// sleep for sometime before download
+		time.Sleep(time.Duration(updateRetryDelayBase+rand.Intn(updateRetryDelay)) * time.Millisecond)
+		err = mgr.download(mgr, log, downloadInput, context, context.Current.SourceVersion)
+		if err == nil {
+			break
+		}
+	}
+	if err != nil {
 		return mgr.failed(context, log, updateutil.ErrorSourcePkgDownload, err.Error(), true)
 	}
 
@@ -199,10 +211,17 @@ func prepareInstallationPackages(mgr *updateManager, log log.T, context *UpdateC
 		DestinationDirectory: updateDownload,
 	}
 
-	if err = mgr.download(mgr, log, downloadInput, context, context.Current.TargetVersion); err != nil {
+	for retryCounter := 1; retryCounter <= updateOperationsRetryCount; retryCounter++ {
+		// sleep for sometime before download
+		time.Sleep(time.Duration(updateRetryDelayBase+rand.Intn(updateRetryDelay)) * time.Millisecond)
+		err = mgr.download(mgr, log, downloadInput, context, context.Current.TargetVersion)
+		if err == nil {
+			break
+		}
+	}
+	if err != nil {
 		return mgr.failed(context, log, updateutil.ErrorTargetPkgDownload, err.Error(), true)
 	}
-
 	// Update stdout
 	context.Current.AppendInfo(
 		log,
@@ -277,6 +296,7 @@ func verifyInstallation(mgr *updateManager, log log.T, context *UpdateContext, i
 	// Check if agent is running
 	var isRunning = false
 	var instanceContext *updateutil.InstanceContext
+	rollbackSuccess := updateutil.ErrorUpdateFailRollbackSuccess
 
 	if instanceContext, err = mgr.util.CreateInstanceContext(log); err != nil {
 		return mgr.failed(context, log, updateutil.ErrorCreateInstanceContext, err.Error(), false)
@@ -292,26 +312,34 @@ func verifyInstallation(mgr *updateManager, log log.T, context *UpdateContext, i
 				"failed to start the agent")
 
 			context.Current.AppendError(log, message)
-			context.Current.AppendInfo(
-				log,
-				"Initiating rollback %v to %v",
-				context.Current.PackageName,
-				context.Current.SourceVersion)
-			mgr.subStatus = updateutil.VerificationRollback
-			// Update state to rollback
-			if err = mgr.inProgress(context, log, Rollback); err != nil {
-				return err
+			if err = mgr.retryInstall(mgr, log, context, instanceContext, context.Current.TargetVersion); err != nil {
+				context.Current.AppendInfo(
+					log,
+					"Initiating rollback %v to %v",
+					context.Current.PackageName,
+					context.Current.SourceVersion)
+				mgr.subStatus = updateutil.VerificationRollback
+				// Update state to rollback
+				if err = mgr.inProgress(context, log, Rollback); err != nil {
+					return err
+				}
+				return mgr.rollback(mgr, log, context)
+			} else {
+				log.Infof("%v is running", context.Current.PackageName)
+				return mgr.inactive(context, log, updateutil.WarnInstallRetrySuccess) // this function is same like succeeded except it takes message as input to send to ICS
 			}
-			return mgr.rollback(mgr, log, context)
 		}
 
-		message := updateutil.BuildMessage(err,
-			"failed to rollback %v to %v, %v",
-			context.Current.PackageName,
-			context.Current.SourceVersion,
-			"failed to start the agent")
-		// Rolled back, but service cannot start, Update failed.
-		return mgr.failed(context, log, updateutil.ErrorCannotStartService, message, false)
+		if err = mgr.retryInstall(mgr, log, context, instanceContext, context.Current.SourceVersion); err != nil {
+			message := updateutil.BuildMessage(err,
+				"failed to rollback %v to %v, %v",
+				context.Current.PackageName,
+				context.Current.SourceVersion,
+				"failed to start the agent")
+			// Rolled back, but service cannot start, Update failed.
+			return mgr.failed(context, log, updateutil.ErrorCannotStartService, message, false)
+		}
+		rollbackSuccess = updateutil.ErrorUpdateFailRollbackSuccessWithRetry
 	}
 
 	log.Infof("%v is running", context.Current.PackageName)
@@ -321,7 +349,48 @@ func verifyInstallation(mgr *updateManager, log log.T, context *UpdateContext, i
 
 	message := fmt.Sprintf("rolledback %v to %v", context.Current.PackageName, context.Current.SourceVersion)
 	log.Infof("message is %v", message)
-	return mgr.failed(context, log, updateutil.ErrorUpdateFailRollbackSuccess, message, false)
+	return mgr.failed(context, log, rollbackSuccess, message, false)
+}
+
+// retryInstallAgent retries installation when service fail to start.
+// This function does not block the update process and logs error as info message.
+func retryInstallAgent(mgr *updateManager, log log.T, context *UpdateContext, instanceContext *updateutil.InstanceContext, version string) (err error) {
+	context.Current.AppendInfo(
+		log,
+		"initiating retry %v for %v",
+		context.Current.PackageName,
+		version)
+	// ignores uninstall for the source version
+	if version != context.Current.SourceVersion {
+		if err = mgr.uninstall(mgr, log, version, context); err != nil {
+			context.Current.AppendInfo(
+				log,
+				"failed to uninstall %v %v during retry",
+				context.Current.PackageName,
+				version)
+			return
+		}
+	}
+	// install agent
+	// for source version, mostly this will start the service when down
+	// for target version, re-installs
+	if err = mgr.install(mgr, log, version, context); err != nil {
+		context.Current.AppendInfo(
+			log,
+			"failed to install %v %v during retry",
+			context.Current.PackageName,
+			version)
+		return
+	}
+	if isRunning, err := mgr.util.WaitForServiceToStart(log, instanceContext); err != nil || !isRunning {
+		context.Current.AppendInfo(
+			log,
+			"failed to start %v %v during retry",
+			context.Current.PackageName,
+			version)
+		return fmt.Errorf("agent service start failed")
+	}
+	return nil
 }
 
 // rollbackInstallation rollback installation to the source version

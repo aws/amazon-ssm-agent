@@ -256,6 +256,35 @@ func TestUpdateAgent_InvalidPluginRaw(t *testing.T) {
 	assert.Contains(t, out.GetStderr(), "invalid format in plugin properties")
 }
 
+func TestUpdateAgent_ManifestRetry(t *testing.T) {
+	config := contracts.Configuration{}
+	plugin := &Plugin{}
+	mockCancelFlag := new(task.MockCancelFlag)
+	manager := &fakeUpdateManager{
+		downloadManifestError: fmt.Errorf("test"),
+	}
+	util := &fakeUtility{}
+	out := iohandler.DefaultIOHandler{}
+	pluginInput := createStubPluginInput()
+	pluginInput.TargetVersion = ""
+	updateAgent(plugin, config, logger, manager, util, pluginInput, mockCancelFlag, &out, time.Now())
+	assert.Equal(t, manager.retryCounter, 2)
+}
+
+func TestUpdateAgent_UpdaterRetry(t *testing.T) {
+	config := contracts.Configuration{}
+	plugin := &Plugin{}
+	mockCancelFlag := new(task.MockCancelFlag)
+	manager := &fakeUpdateManager{}
+	util := &fakeUtility{pid: -1, execCommandError: fmt.Errorf("test")}
+	out := iohandler.DefaultIOHandler{}
+	pluginInput := createStubPluginInput()
+	pluginInput.TargetVersion = ""
+	updateAgent(plugin, config, logger, manager, util, pluginInput, mockCancelFlag, &out, time.Now())
+	assert.Equal(t, manager.retryCounter, 1)
+	assert.Equal(t, util.retryCounter, 2)
+}
+
 func TestUpdateAgent(t *testing.T) {
 	pluginInput := createStubPluginInput()
 	pluginInput.TargetVersion = ""
@@ -573,7 +602,11 @@ func createStubInstanceContext() *updateutil.InstanceContext {
 	return &context
 }
 
-type fakeUtility struct{}
+type fakeUtility struct {
+	retryCounter     int
+	pid              int
+	execCommandError error
+}
 
 func (u *fakeUtility) CreateInstanceContext(log log.T) (context *updateutil.InstanceContext, err error) {
 	return createStubInstanceContext(), nil
@@ -599,7 +632,8 @@ func (u *fakeUtility) ExeCommand(
 	stdOut string,
 	stdErr string,
 	isAsync bool) (pid int, err error) {
-	return 1, nil
+	u.retryCounter++
+	return u.pid, u.execCommandError
 }
 
 func (u *fakeUtility) SaveUpdatePluginResult(
@@ -622,6 +656,7 @@ type fakeUpdateManager struct {
 	downloadUpdaterError    error
 	validateUpdateResult    bool
 	validateUpdateError     error
+	retryCounter            int
 }
 
 func (u *fakeUpdateManager) generateUpdateCmd(log log.T,
@@ -643,6 +678,7 @@ func (u *fakeUpdateManager) downloadManifest(log log.T,
 	pluginInput *UpdatePluginInput,
 	context *updateutil.InstanceContext,
 	out iohandler.IOHandler) (manifest *Manifest, err error) {
+	u.retryCounter++
 	return u.downloadManifestResult, u.downloadManifestError
 }
 
