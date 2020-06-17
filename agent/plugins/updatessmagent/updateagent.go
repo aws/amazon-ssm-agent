@@ -17,6 +17,7 @@ package updatessmagent
 import (
 	"errors"
 	"fmt"
+	"math/rand"
 	"strconv"
 	"strings"
 	"time"
@@ -155,7 +156,23 @@ func runUpdateAgent(
 		targetVersion)
 
 	//Download manifest file
-	manifest, downloadErr := manager.downloadManifest(log, util, &pluginInput, context, output)
+	var manifest *Manifest
+	var downloadErr error
+
+	noOfRetries := 2
+	updateRetryDelayBase := 1000 // 1000 millisecond
+	updateRetryDelay := 500      // 500 millisecond
+
+	for retryCounter := 1; retryCounter <= noOfRetries; retryCounter++ {
+		manifest, downloadErr = manager.downloadManifest(log, util, &pluginInput, context, output)
+		if downloadErr == nil {
+			break
+		}
+		if retryCounter < noOfRetries {
+			time.Sleep(time.Duration(updateRetryDelayBase+rand.Intn(updateRetryDelay)) * time.Millisecond)
+		}
+	}
+
 	if downloadErr != nil {
 		output.MarkAsFailed(downloadErr)
 		return
@@ -219,14 +236,24 @@ func runUpdateAgent(
 	workDir := updateutil.UpdateArtifactFolder(
 		appconfig.UpdaterArtifactsRoot, pluginInput.UpdaterName, updaterVersion)
 
-	if pid, err = util.ExeCommand(
-		log,
-		cmd,
-		workDir,
-		appconfig.UpdaterArtifactsRoot,
-		pluginConfig.StdoutFileName,
-		pluginConfig.StderrFileName,
-		true); err != nil {
+	for retryCounter := 1; retryCounter <= noOfRetries; retryCounter++ {
+		pid, err = util.ExeCommand(
+			log,
+			cmd,
+			workDir,
+			appconfig.UpdaterArtifactsRoot,
+			pluginConfig.StdoutFileName,
+			pluginConfig.StderrFileName,
+			true)
+		if err == nil {
+			break
+		}
+		if retryCounter < noOfRetries {
+			time.Sleep(time.Duration(updateRetryDelayBase+rand.Intn(updateRetryDelay)) * time.Millisecond)
+		}
+	}
+
+	if err != nil {
 		output.MarkAsFailed(err)
 		return
 	}

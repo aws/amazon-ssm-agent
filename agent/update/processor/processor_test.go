@@ -431,6 +431,95 @@ func TestVerifyRollback(t *testing.T) {
 	assert.Equal(t, context.Histories[0].Result, contracts.ResultStatusFailed)
 }
 
+func TestRetryInstallation(t *testing.T) {
+	// setup
+	control := &stubControl{serviceIsRunning: false}
+	updater := createUpdaterStubs(control)
+	context := createUpdateContext(Installed)
+	retryCount := 0
+	isRollbackCalled := false
+	updater.mgr.retryInstall = func(mgr *updateManager, log log.T, context *UpdateContext, version string) (err error) {
+		retryCount++
+		return fmt.Errorf("Retry Test")
+	}
+
+	updater.mgr.rollback = func(mgr *updateManager, log log.T, context *UpdateContext, version string) (err error) {
+		return nil
+	}
+	err := verifyInstallation(updater.mgr, logger, context, false)
+
+	// assert
+	assert.NoError(t, err)
+	assert.True(t, isRollbackCalled)
+	assert.Equal(t, retryCount, 2)
+}
+
+func TestRetryInstallationWithProperServiceStart(t *testing.T) {
+	// setup
+	control := &stubControl{serviceIsRunning: true}
+	updater := createUpdaterStubs(control)
+	context := createUpdateContext(Installed)
+	retryCount := 0
+	isRollbackCalled := false
+	updater.mgr.retryInstall = func(mgr *updateManager, log log.T, context *UpdateContext, version string) (err error) {
+		retryCount++
+		return fmt.Errorf("Retry Test")
+	}
+
+	updater.mgr.rollback = func(mgr *updateManager, log log.T, context *UpdateContext, version string) (err error) {
+		isRollbackCalled = true
+		return nil
+	}
+	err := verifyInstallation(updater.mgr, logger, context, false)
+	assert.True(t, isRollbackCalled)
+	assert.NoError(t, err)
+	assert.Equal(t, retryCount, 0)
+}
+
+func TestRetryInstallationWithRetrySuccess(t *testing.T) {
+	// setup
+	control := &stubControl{serviceIsRunning: false}
+	updater := createUpdaterStubs(control)
+	context := createUpdateContext(Installed)
+	retryCount := 0
+	isRollbackCalled := false
+	updater.mgr.retryInstall = func(mgr *updateManager, log log.T, context *UpdateContext, version string) (err error) {
+		retryCount++
+		return nil
+	}
+
+	updater.mgr.rollback = func(mgr *updateManager, log log.T, context *UpdateContext, version string) (err error) {
+		isRollbackCalled = true
+		return nil
+	}
+	err := verifyInstallation(updater.mgr, logger, context, false)
+	assert.True(t, isRollbackCalled)
+	assert.NoError(t, err)
+	assert.Equal(t, retryCount, 1)
+}
+
+func TestRetryInstallationFromRollback(t *testing.T) {
+	// setup
+	control := &stubControl{serviceIsRunning: false}
+	updater := createUpdaterStubs(control)
+	context := createUpdateContext(Installed)
+	retryCount := 0
+	isRollbackCalled := false
+	updater.mgr.retryInstall = func(mgr *updateManager, log log.T, context *UpdateContext, version string) (err error) {
+		retryCount++
+		return fmt.Errorf("Retry Test")
+	}
+	updater.mgr.rollback = func(mgr *updateManager, log log.T, context *UpdateContext, version string) (err error) {
+		isRollbackCalled = true
+		return fmt.Errorf("Retry Test")
+	}
+	err := verifyInstallation(updater.mgr, logger, context, true)
+
+	assert.True(t, isRollbackCalled)
+	assert.NoError(t, err)
+	assert.Equal(t, retryCount, 4)
+}
+
 func TestVerifyRollbackCannotStartAgent(t *testing.T) {
 	// setup
 	control := &stubControl{serviceIsRunning: false}
