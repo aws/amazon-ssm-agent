@@ -379,7 +379,7 @@ func TestExecute(t *testing.T) {
 	mockCancelFlag.On("ShutDown").Return(false)
 	mockCancelFlag.On("Wait").Return(false).After(100 * time.Millisecond)
 
-	mockLockfile.On("TryLockExpire", int64(60)).Return(nil)
+	mockLockfile.On("TryLockExpireWithRetry", int64(60)).Return(nil)
 	mockLockfile.On("ShouldRetry", nil).Return(false)
 	mockLockfile.On("ChangeOwner", 1).Return(nil)
 
@@ -415,7 +415,7 @@ func TestExecuteUpdateLocked(t *testing.T) {
 	mockCancelFlag.On("ShutDown").Return(false)
 	mockCancelFlag.On("Wait").Return(false).After(100 * time.Millisecond)
 
-	mockLockfile.On("TryLockExpire", int64(60)).Return(lockfile.ErrBusy)
+	mockLockfile.On("TryLockExpireWithRetry", int64(60)).Return(lockfile.ErrBusy)
 	mockLockfile.On("ShouldRetry", lockfile.ErrBusy).Return(false)
 
 	plugin.Execute(mockContext, config, mockCancelFlag, &mockIOHandler)
@@ -462,7 +462,7 @@ func TestExecutePanicDuringUpdate(t *testing.T) {
 	mockCancelFlag.On("ShutDown").Return(false)
 	mockCancelFlag.On("Wait").Return(false).After(100 * time.Millisecond)
 
-	mockLockfile.On("TryLockExpire", int64(60)).Return(nil)
+	mockLockfile.On("TryLockExpireWithRetry", int64(60)).Return(nil)
 	mockLockfile.On("ShouldRetry", nil).Return(false)
 	mockLockfile.On("Unlock").Return(nil)
 
@@ -515,7 +515,7 @@ func TestExecuteFailureDuringUpdate(t *testing.T) {
 	mockCancelFlag.On("ShutDown").Return(false)
 	mockCancelFlag.On("Wait").Return(false).After(100 * time.Millisecond)
 
-	mockLockfile.On("TryLockExpire", int64(60)).Return(nil)
+	mockLockfile.On("TryLockExpireWithRetry", int64(60)).Return(nil)
 	mockLockfile.On("ShouldRetry", nil).Return(false)
 	mockLockfile.On("Unlock").Return(nil)
 

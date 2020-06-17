@@ -117,19 +117,17 @@ func main() {
 	// If there is no lockfile, the updater will own it
 	// If the updater is unable to lock the file, we retry and then fail
 	lock, _ := lockfile.New(appconfig.UpdaterPidLockfile)
-	err := lock.TryLockExpire(lockFileMinutes)
+	err := lock.TryLockExpireWithRetry(lockFileMinutes)
 
-	// check if we should retry the lock
-	if lock.ShouldRetry(err) {
-		time.Sleep(1 + time.Second)
-		err = lock.TryLockExpire(lockFileMinutes)
-	}
-
-	// If error even after retry we should exit
 	if err != nil {
-		log.Errorf("Failed to take ownership of pid lock with error %s", err)
-		return
+		if err == lockfile.ErrBusy {
+			log.Warnf("Failed to lock update lockfile, another update is in progress: %s", err)
+			return
+		} else {
+			log.Warnf("Proceeding update process with new lock. Failed to lock update lockfile: %s", err)
+		}
 	}
+
 	defer lock.Unlock()
 
 	// Create new UpdateDetail

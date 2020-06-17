@@ -39,6 +39,11 @@ func (mockPool MockLockfile) TryLockExpire(minutes int64) error {
 	return mockPool.Called(minutes).Error(0)
 }
 
+// TryLockExpireWithRetry mocks the method with the same name.
+func (mockPool MockLockfile) TryLockExpireWithRetry(minutes int64) error {
+	return mockPool.Called(minutes).Error(0)
+}
+
 // ShouldRetry mocks the method with the same name.
 func (mockPool MockLockfile) ShouldRetry(err error) bool {
 	return mockPool.Called(err).Bool(0)

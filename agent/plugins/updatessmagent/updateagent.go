@@ -430,23 +430,16 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 
 		// First check if lock is locked by anyone
 		lock, _ := getLockObj(appconfig.UpdaterPidLockfile)
-		err := lock.TryLockExpire(lockFileMinutes)
-
-		// Check if we should retry the lock
-		if lock.ShouldRetry(err) {
-			time.Sleep(1 + time.Second)
-			err = lock.TryLockExpire(lockFileMinutes)
-		}
+		err := lock.TryLockExpireWithRetry(lockFileMinutes)
 
 		if err != nil {
 			if err == lockfile.ErrBusy {
 				log.Warnf("Failed to lock update lockfile, another update is in progress: %s", err)
 				output.MarkAsFailed(fmt.Errorf("Another update in progress, try again later"))
+				return
 			} else {
-				log.Errorf("Failed to lock update lockfile: %s", err)
-				output.MarkAsFailed(fmt.Errorf("Failed to get ownership of update lockfile: %s", err))
+				log.Warnf("Proceeding update process with new lock. Failed to lock update lockfile: %s", err)
 			}
-			return
 		}
 
 		defer func() {
