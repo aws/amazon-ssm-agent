@@ -24,6 +24,7 @@ type Lockfile interface {
 	Unlock() error
 	TryLock() error
 	TryLockExpire(int64) error
+	TryLockExpireWithRetry(int64) error
 	ShouldRetry(error) bool
 }
 
@@ -206,7 +207,7 @@ func (l lockfileImpl) TryLock() error {
 	return l.TryLock()
 }
 
-// TryLock tries to own the lock while creating a expiration file as well.
+// TryLockExpire tries to own the lock while creating a expiration file as well.
 // If expiration file already exists it updates the expiration with
 func (l lockfileImpl) TryLockExpire(minutes int64) error {
 	err := l.TryLock()
@@ -222,6 +223,24 @@ func (l lockfileImpl) TryLockExpire(minutes int64) error {
 		l.cleanUpLock()
 	}
 
+	return err
+}
+
+// TryLockExpireWithRetry tries to own the lock while creating a expiration file as well.
+// This function retries when an error(except ErrBusy) thrown by TryLockExpire
+func (l lockfileImpl) TryLockExpireWithRetry(minutes int64) (err error) {
+	noOfRetries := 2
+	for retryCount := 1; retryCount <= noOfRetries; retryCount++ {
+		err = l.TryLockExpire(minutes)
+		if l.ShouldRetry(err) {
+			time.Sleep(100 * time.Millisecond)
+
+			err = l.TryLockExpire(minutes)
+			if l.ShouldRetry(err){
+				l.cleanUpLock()
+			}
+		}
+	}
 	return err
 }
 
@@ -255,12 +274,10 @@ func (l lockfileImpl) isLockExpired() bool {
 }
 
 func (l lockfileImpl) ShouldRetry(err error) bool {
-	if err == nil {
+	if err == nil || err == ErrBusy {
 		return false
 	}
-
-	_, ok := err.(interface{ Temporary() bool });
-	return ok
+	return true
 }
 
 func scanPidLine(content []byte) (int, error) {
