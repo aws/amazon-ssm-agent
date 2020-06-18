@@ -25,7 +25,6 @@ import (
 	"io/ioutil"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
-	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/birdwatcher/facade"
@@ -38,8 +37,6 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )
-
-var contextMock context.T = context.NewMockDefault()
 
 func createStubPluginInputInstall() *ConfigurePackagePluginInput {
 	input := ConfigurePackagePluginInput{}

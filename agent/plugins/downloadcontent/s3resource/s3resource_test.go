@@ -71,57 +71,57 @@ func TestIsFolder_Folder(t *testing.T) {
 
 func TestS3Resource_GetS3BucketURLString(t *testing.T) {
 	resource := &S3Resource{
-		Info: S3Info{Path: "https://s3.amazonaws.com/my-bucket/mydummyfolder/myfile.ps"},
+		Info: S3Info{Path: "https://s3.amazonaws.com/ssm-test-agent-bucket/mydummyfolder/myfile.ps"},
 		s3Object: s3util.AmazonS3URL{
-			Bucket: "my-bucket",
+			Bucket: "ssm-test-agent-bucket",
 		},
 	}
 
 	res, err := resource.getS3BucketURLString(logMock)
 
-	assert.Equal(t, "https://s3.amazonaws.com/my-bucket", res.String())
+	assert.Equal(t, "https://s3.amazonaws.com/ssm-test-agent-bucket", res.String())
 	assert.NoError(t, err)
 }
 
 func TestS3Resource_GetS3BucketURLString_sameBucketNameFile(t *testing.T) {
 	resource := &S3Resource{
-		Info: S3Info{Path: "https://s3.amazonaws.com/my-bucket/mydummyfolder/my-bucket.ps"},
+		Info: S3Info{Path: "https://s3.amazonaws.com/ssm-test-agent-bucket/mydummyfolder/my-bucket.ps"},
 		s3Object: s3util.AmazonS3URL{
-			Bucket: "my-bucket",
+			Bucket: "ssm-test-agent-bucket",
 		},
 	}
 
 	res, err := resource.getS3BucketURLString(logMock)
 
-	assert.Equal(t, "https://s3.amazonaws.com/my-bucket", res.String())
+	assert.Equal(t, "https://s3.amazonaws.com/ssm-test-agent-bucket", res.String())
 	assert.NoError(t, err)
 }
 
 func TestS3Resource_GetS3BucketURLString_hyphenatedEndpoint(t *testing.T) {
 	resource := &S3Resource{
-		Info: S3Info{Path: "https://s3-us-east-1.amazonaws.com/my-bucket/mydummyfolder/my-bucket.ps"},
+		Info: S3Info{Path: "https://s3-us-east-1.amazonaws.com/ssm-test-agent-bucket/mydummyfolder/my-bucket.ps"},
 		s3Object: s3util.AmazonS3URL{
-			Bucket: "my-bucket",
+			Bucket: "ssm-test-agent-bucket",
 		},
 	}
 
 	res, err := resource.getS3BucketURLString(logMock)
 
-	assert.Equal(t, "https://s3.amazonaws.com/my-bucket", res.String())
+	assert.Equal(t, "https://s3.amazonaws.com/ssm-test-agent-bucket", res.String())
 	assert.NoError(t, err)
 }
 
 func TestS3Resource_GetS3BucketURLString_bucketNameInS3URL(t *testing.T) {
 	resource := &S3Resource{
-		Info: S3Info{Path: "https://my-bucket.s3.amazonaws.com/mydummyfolder/my-bucket.ps"},
+		Info: S3Info{Path: "https://ssm-test-agent-bucket.s3.amazonaws.com/mydummyfolder/my-bucket.ps"},
 		s3Object: s3util.AmazonS3URL{
-			Bucket: "my-bucket",
+			Bucket: "ssm-test-agent-bucket",
 		},
 	}
 
 	res, err := resource.getS3BucketURLString(logMock)
 
-	assert.Equal(t, "https://s3.amazonaws.com/my-bucket", res.String())
+	assert.Equal(t, "https://s3.amazonaws.com/ssm-test-agent-bucket", res.String())
 	assert.NoError(t, err)
 }
 
@@ -129,7 +129,7 @@ func TestS3Resource_Download(t *testing.T) {
 
 	depMock := new(s3DepMock)
 	locationInfo := `{
-		"path" : "https://s3.amazonaws.com/my-bucket/mydummyfolder/file.rb"
+		"path" : "https://s3.amazonaws.com/ssm-test-agent-bucket/mydummyfolder/file.rb"
 	}`
 	fileMock := filemock.FileSystemMock{}
 
@@ -139,7 +139,7 @@ func TestS3Resource_Download(t *testing.T) {
 
 	input := artifact.DownloadInput{
 		DestinationDirectory: "destination",
-		SourceURL:            "https://s3.us-east-1.amazonaws.com/my-bucket/mydummyfolder/file.rb",
+		SourceURL:            "https://s3.us-east-1.amazonaws.com/ssm-test-agent-bucket/mydummyfolder/file.rb",
 	}
 	output := artifact.DownloadOutput{
 		LocalFilePath: input.DestinationDirectory,
@@ -148,7 +148,7 @@ func TestS3Resource_Download(t *testing.T) {
 	s3Object := s3util.AmazonS3URL{
 		IsValidS3URI: true,
 		IsPathStyle:  true,
-		Bucket:       "my-bucket",
+		Bucket:       "ssm-test-agent-bucket",
 		Key:          "mydummyfolder/file.rb",
 		Region:       "us-east-1",
 	}
@@ -172,23 +172,23 @@ func TestS3Resource_Download(t *testing.T) {
 func TestS3Resource_DownloadDirectory(t *testing.T) {
 	depMock := new(s3DepMock)
 	locationInfo := `{
-		"Path" : "https://s3.amazonaws.com/my-bucket/foldername"
+		"Path" : "https://s3.amazonaws.com/ssm-test-agent-bucket/foldername"
 	}`
 	fileMock := filemock.FileSystemMock{}
 	resource, _ := NewS3Resource(logMock, locationInfo)
 
 	input1 := artifact.DownloadInput{
 		DestinationDirectory: strings.TrimSuffix(appconfig.DownloadRoot, "/"),
-		SourceURL:            "https://s3.us-east-1.amazonaws.com/my-bucket/foldername/filename.ps",
+		SourceURL:            "https://s3.us-east-1.amazonaws.com/ssm-test-agent-bucket/foldername/filename.ps",
 	}
 	input2 := artifact.DownloadInput{
 		DestinationDirectory: strings.TrimSuffix(appconfig.DownloadRoot, "/"),
-		SourceURL:            "https://s3.us-east-1.amazonaws.com/my-bucket/foldername/anotherfile.ps",
+		SourceURL:            "https://s3.us-east-1.amazonaws.com/ssm-test-agent-bucket/foldername/anotherfile.ps",
 	}
 	s3Object := s3util.AmazonS3URL{
 		IsValidS3URI: true,
 		IsPathStyle:  true,
-		Bucket:       "my-bucket",
+		Bucket:       "ssm-test-agent-bucket",
 		Key:          "foldername",
 		Region:       "us-east-1",
 	}
@@ -223,27 +223,27 @@ func TestS3Resource_DownloadDirectory(t *testing.T) {
 func TestS3Resource_DownloadDirectoryWithSubFolders(t *testing.T) {
 	depMock := new(s3DepMock)
 	locationInfo := `{
-		"Path" : "https://s3.amazonaws.com/my-bucket/foldername"
+		"Path" : "https://s3.amazonaws.com/ssm-test-agent-bucket/foldername"
 	}`
 	fileMock := filemock.FileSystemMock{}
 	resource, _ := NewS3Resource(logMock, locationInfo)
 
 	input1 := artifact.DownloadInput{
 		DestinationDirectory: strings.TrimSuffix(appconfig.DownloadRoot, "/"),
-		SourceURL:            "https://s3.us-east-1.amazonaws.com/my-bucket/foldername/filename.ps",
+		SourceURL:            "https://s3.us-east-1.amazonaws.com/ssm-test-agent-bucket/foldername/filename.ps",
 	}
 	input2 := artifact.DownloadInput{
 		DestinationDirectory: strings.TrimSuffix(appconfig.DownloadRoot, "/"),
-		SourceURL:            "https://s3.us-east-1.amazonaws.com/my-bucket/foldername/anotherfile.ps",
+		SourceURL:            "https://s3.us-east-1.amazonaws.com/ssm-test-agent-bucket/foldername/anotherfile.ps",
 	}
 	input3 := artifact.DownloadInput{
 		DestinationDirectory: strings.TrimSuffix(filepath.Join(appconfig.DownloadRoot, "subfolder"), "/"),
-		SourceURL:            "https://s3.us-east-1.amazonaws.com/my-bucket/foldername/subfolder/file.ps",
+		SourceURL:            "https://s3.us-east-1.amazonaws.com/ssm-test-agent-bucket/foldername/subfolder/file.ps",
 	}
 	s3Object := s3util.AmazonS3URL{
 		IsValidS3URI: true,
 		IsPathStyle:  true,
-		Bucket:       "my-bucket",
+		Bucket:       "ssm-test-agent-bucket",
 		Key:          "foldername",
 		Region:       "us-east-1",
 	}
@@ -286,14 +286,14 @@ func TestS3Resource_DownloadDirectoryWithSubFolders(t *testing.T) {
 func TestS3Resource_DownloadAbsPath(t *testing.T) {
 	depMock := new(s3DepMock)
 	locationInfo := `{
-		"path" : "https://s3.amazonaws.com/my-bucket/mydummyfolder/filename.ps"
+		"path" : "https://s3.amazonaws.com/ssm-test-agent-bucket/mydummyfolder/filename.ps"
 	}`
 	fileMock := filemock.FileSystemMock{}
 
 	fileMock.On("IsDirectory", "/var/tmp/foldername").Return(true)
 	fileMock.On("Exists", "/var/tmp/foldername").Return(true)
 	resource, _ := NewS3Resource(logMock, locationInfo)
-	resource.s3Object.Bucket = "my-bucket"
+	resource.s3Object.Bucket = "ssm-test-agent-bucket"
 	resource.s3Object.Key = "mydummyfolder/filename.ps"
 	resource.s3Object.Region = "us-east-1"
 	resource.s3Object.IsPathStyle = true
@@ -301,7 +301,7 @@ func TestS3Resource_DownloadAbsPath(t *testing.T) {
 
 	input := artifact.DownloadInput{
 		DestinationDirectory: "/var/tmp/foldername",
-		SourceURL:            "https://s3.us-east-1.amazonaws.com/my-bucket/mydummyfolder/filename.ps",
+		SourceURL:            "https://s3.us-east-1.amazonaws.com/ssm-test-agent-bucket/mydummyfolder/filename.ps",
 	}
 	output := artifact.DownloadOutput{
 		LocalFilePath: filepath.Join(input.DestinationDirectory, "justanumber"),
@@ -329,7 +329,7 @@ func TestS3Resource_DownloadRelativePathNameChange(t *testing.T) {
 
 	depMock := new(s3DepMock)
 	locationInfo := `{
-		"path" : "https://s3.amazonaws.com/my-bucket/mydummyfolder/file.rb"
+		"path" : "https://s3.amazonaws.com/ssm-test-agent-bucket/mydummyfolder/file.rb"
 	}`
 	fileMock := filemock.FileSystemMock{}
 
@@ -338,7 +338,7 @@ func TestS3Resource_DownloadRelativePathNameChange(t *testing.T) {
 
 	input := artifact.DownloadInput{
 		DestinationDirectory: ".",
-		SourceURL:            "https://s3.us-east-1.amazonaws.com/my-bucket/mydummyfolder/file.rb",
+		SourceURL:            "https://s3.us-east-1.amazonaws.com/ssm-test-agent-bucket/mydummyfolder/file.rb",
 	}
 	output := artifact.DownloadOutput{
 		LocalFilePath: filepath.Join(input.DestinationDirectory, "random"),
@@ -347,7 +347,7 @@ func TestS3Resource_DownloadRelativePathNameChange(t *testing.T) {
 	s3Object := s3util.AmazonS3URL{
 		IsValidS3URI: true,
 		IsPathStyle:  true,
-		Bucket:       "my-bucket",
+		Bucket:       "ssm-test-agent-bucket",
 		Key:          "mydummyfolder/file.rb",
 		Region:       "us-east-1",
 	}

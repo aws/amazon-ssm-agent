@@ -39,6 +39,13 @@ type testCase struct {
 	Output   UpdateContext
 }
 
+type ContextTestCase struct {
+	Context      *UpdateContext
+	InfoMessage  string
+	ErrorMessage string
+	HasMessageID bool
+}
+
 type FakeServiceWithFailure struct {
 	Service
 }
@@ -53,6 +60,21 @@ func (s *FakeServiceWithFailure) DeleteMessage(log log.T, update *UpdateDetail) 
 
 func (s *FakeServiceWithFailure) UpdateHealthCheck(log log.T, update *UpdateDetail, errorCode string) error {
 	return fmt.Errorf("Failed to update health check")
+}
+
+func generateTestCase() ContextTestCase {
+	testCase := ContextTestCase{
+		Context:      &UpdateContext{},
+		InfoMessage:  "Test Message",
+		ErrorMessage: "Error Message",
+		HasMessageID: true,
+	}
+
+	testCase.Context.Current = &UpdateDetail{
+		MessageID: "MessageId",
+	}
+	testCase.Context.Histories = []*UpdateDetail{}
+	return testCase
 }
 
 //Test loadContextFromFile file with valid context files

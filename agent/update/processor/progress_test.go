@@ -25,6 +25,13 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+type ContextTestCase struct {
+	Context      *UpdateContext
+	InfoMessage  string
+	ErrorMessage string
+	HasMessageID bool
+}
+
 func TestUpdateStateChange(t *testing.T) {
 	updater := createDefaultUpdaterStub()
 	context := generateTestCase().Context
@@ -82,13 +89,6 @@ func TestUpdateInactive(t *testing.T) {
 	assert.Equal(t, err, nil)
 	assert.Equal(t, context.Histories[0].State, Completed)
 	assert.Equal(t, context.Histories[0].Result, contracts.ResultStatusSuccess)
-}
-
-type ContextTestCase struct {
-	Context      *UpdateContext
-	InfoMessage  string
-	ErrorMessage string
-	HasMessageID bool
 }
 
 func generateTestCase() ContextTestCase {
