@@ -20,10 +20,13 @@ import (
 	"testing"
 
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
+	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/ssm"
 	ssmService "github.com/aws/aws-sdk-go/service/ssm"
 	"github.com/stretchr/testify/assert"
 )
+
+var logger = log.NewMockLog()
 
 type healthCheckTestCase struct {
 	Input  UpdateState
