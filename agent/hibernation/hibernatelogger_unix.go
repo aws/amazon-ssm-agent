@@ -16,15 +16,18 @@
 // Package hibernation is responsible for the agent in hibernate mode.
 package hibernation
 
-var seelogConfig = `<seelog type="adaptive" mininterval="2000000" maxinterval="100000000" critmsgcount="500" minlevel="error">
-	<exceptions>
-		<exception filepattern="*hibernation.go" minlevel="info"/>
-	</exceptions>
-	<outputs formatid="fmtinfo">
-		<console formatid="fmtinfo"/>
-		<rollingfile type="size" filename="/var/log/amazon/ssm/hibernate.log" maxsize="30000" maxrolls="2"/>
-	</outputs>
-	<formats>
-		<format id="fmtinfo" format="%Date %Time %LEVEL %Msg%n"/>
-	</formats>
-</seelog>`
+func getHibernateSeelogConfig() string {
+	var seelogConfig = `<seelog type="adaptive" mininterval="2000000" maxinterval="100000000" critmsgcount="500" minlevel="error">
+		<exceptions>
+			<exception filepattern="*hibernation.go" minlevel="info"/>
+		</exceptions>
+		<outputs formatid="fmtinfo">
+			<console formatid="fmtinfo"/>
+			<rollingfile type="size" filename="/var/log/amazon/ssm/hibernate.log" maxsize="30000" maxrolls="2"/>
+		</outputs>
+		<formats>
+			<format id="fmtinfo" format="%Date %Time %LEVEL %Msg%n"/>
+		</formats>
+	</seelog>`
+	return seelogConfig
+}

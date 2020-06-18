@@ -17,10 +17,10 @@ package registration
 import (
 	"encoding/json"
 	"fmt"
-	"log"
 	"sync"
 
 	"github.com/aws/amazon-ssm-agent/agent/fingerprint"
+	"github.com/aws/amazon-ssm-agent/agent/log/ssmlog"
 	"github.com/aws/amazon-ssm-agent/agent/managedInstances/auth"
 )
 
@@ -44,7 +44,8 @@ const (
 
 func init() {
 	if err := loadServerInfo(); err != nil {
-		log.Println(err)
+		logger := ssmlog.SSMLogger(true)
+		logger.Errorf("error while loading server info", err)
 	}
 }
 

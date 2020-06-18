@@ -236,11 +236,16 @@ func (l lockfileImpl) TryLockExpireWithRetry(minutes int64) (err error) {
 			time.Sleep(100 * time.Millisecond)
 
 			err = l.TryLockExpire(minutes)
-			if l.ShouldRetry(err){
+			if l.ShouldRetry(err) {
 				l.cleanUpLock()
+			} else {
+				return err
 			}
+		} else {
+			return err
 		}
 	}
+
 	return err
 }
 
