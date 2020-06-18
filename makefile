@@ -94,6 +94,9 @@ quick-integtest: copy-src pre-build pre-release --quick-integtest
 .PHONY: quick-test
 quick-test: copy-src pre-build pre-release --quick-test
 
+.PHONY: quick-e2e
+quick-e2e: copy-src pre-build pre-release --quick-e2e
+
 .PHONY: pre-release
 pre-release:
 	@echo "SSM Agent release build"
@@ -321,7 +324,7 @@ copy-package-dep:
 	$(COPY) -r $(BGO_SPACE)/LICENSE $(BGO_SPACE)/bin/package_dep/
 	$(COPY) -r $(BGO_SPACE)/VERSION $(BGO_SPACE)/bin/package_dep/
 
-	cd $(BGO_SPACE) && zip -q -r $(BGO_SPACE)/bin/gosrc.zip agent && cd -
+	cd $(BGO_SPACE) && zip -q --symlink -r $(BGO_SPACE)/bin/gosrc.zip agent vendor && cd -
 
 .PHONY: remove-prepacked-folder
 remove-prepacked-folder:
@@ -470,6 +473,11 @@ get-tools:
 	# go test -gcflags "-N -l" github.com/aws/amazon-ssm-agent/agent/task
 	go test -gcflags "-N -l" github.com/aws/amazon-ssm-agent/agent/...
 
+.PHONY: --quick-e2e
+--quick-e2e:
+	# if you want to restrict to some specific package, sample below
+	# go test -v -gcflags "-N -l" -tags=integration github.com/aws/amazon-ssm-agent/agent/fileutil/...
+	go test -gcflags "-N -l" -tags=e2e github.com/aws/amazon-ssm-agent/agent/...
 
 .PHONY: gen-report
 gen-report:
