@@ -51,6 +51,7 @@ var backOffRate = 3
 
 const (
 	hibernateMode      = "AgentHibernate"
+	hibernateLogFile   = "hibernate.log"
 	maxBackOffInterval = 60 * 60 //Minute conversion
 	multiplier         = 2
 	initialPingRate    = 5 * 60 //Seconds
@@ -60,7 +61,7 @@ const (
 func NewHibernateMode(healthModule health.IHealthCheck, context context.T) *Hibernate {
 
 	context.Log().Debug("Starting agent hibernate mode. Switching log to minimal logging...")
-	logger := log.GetLogger(context.Log(), seelogConfig)
+	logger := log.GetLogger(context.Log(), getHibernateSeelogConfig())
 
 	return &Hibernate{
 		healthModule:        healthModule,

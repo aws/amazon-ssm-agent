@@ -94,6 +94,23 @@ func main() {
 
 	log.Debug("Using region:", region)
 
+	// If the updater already owns the lockfile, no harm done
+	// If there is no lockfile, the updater will own it
+	// If the updater is unable to lock the file, we retry and then fail
+	lock, _ := lockfile.New(appconfig.UpdaterPidLockfile)
+	err := lock.TryLockExpireWithRetry(lockFileMinutes)
+
+	if err != nil {
+		if err == lockfile.ErrBusy {
+			log.Warnf("Failed to lock update lockfile, another update is in progress: %s", err)
+			return
+		} else {
+			log.Warnf("Proceeding update process with new lock. Failed to lock update lockfile: %s", err)
+		}
+	}
+
+	defer lock.Unlock()
+
 	flag.Parse()
 
 	// Return if update is not present in the command
@@ -112,23 +129,6 @@ func main() {
 		log.Error("no target version or package source.")
 		flag.Usage()
 	}
-
-	// If the updater already owns the lockfile, no harm done
-	// If there is no lockfile, the updater will own it
-	// If the updater is unable to lock the file, we retry and then fail
-	lock, _ := lockfile.New(appconfig.UpdaterPidLockfile)
-	err := lock.TryLockExpireWithRetry(lockFileMinutes)
-
-	if err != nil {
-		if err == lockfile.ErrBusy {
-			log.Warnf("Failed to lock update lockfile, another update is in progress: %s", err)
-			return
-		} else {
-			log.Warnf("Proceeding update process with new lock. Failed to lock update lockfile: %s", err)
-		}
-	}
-
-	defer lock.Unlock()
 
 	// Create new UpdateDetail
 	detail := &processor.UpdateDetail{

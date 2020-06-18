@@ -125,7 +125,9 @@ func generateFingerprint() (string, error) {
 		// sleep 5 seconds until the next retry
 		time.Sleep(5 * time.Second)
 	}
-
+	if err != nil {
+		log.Warnf("Error while fetching fingerprint data from vault: %s", err)
+	}
 	// check if this is the first time we are generating the fingerprint
 	// or if there is no match
 	if !hasFingerprint(savedHwInfo) {
@@ -147,8 +149,10 @@ func generateFingerprint() (string, error) {
 	}
 
 	// save content in vault
-	save(updatedHwInfo)
-	return result, nil
+	if err = save(updatedHwInfo); err != nil {
+		log.Errorf("Error while saving fingerprint data from vault: %s", err)
+	}
+	return result, err
 }
 
 func fetch() (hwInfo, error) {
