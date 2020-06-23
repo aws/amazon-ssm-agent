@@ -43,7 +43,7 @@ var tracerMock = trace.NewTracer(log.NewMockLog())
 
 func TestGetInstaller(t *testing.T) {
 	repo := NewRepository()
-	inst := repo.GetInstaller(tracerMock, contracts.Configuration{}, testPackage, "1.0.0")
+	inst := repo.GetInstaller(tracerMock, contracts.Configuration{}, testPackage, "1.0.0", "{\"customArg1\":\"customVal1\", \"customArg2\":\"customVal2\"}")
 	assert.NotNil(t, inst)
 }
 

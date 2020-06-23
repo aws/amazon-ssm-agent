@@ -37,16 +37,17 @@ import (
 	"github.com/stretchr/testify/mock"
 )
 
+func repoMockNotInvoked() *repoMock.MockedRepository {
+	mockRepo := repoMock.MockedRepository{}
+	return &mockRepo
+}
+
 func repoInstallMock(pluginInformation *ConfigurePackagePluginInput, installerMock installer.Installer) *repoMock.MockedRepository {
 	mockRepo := repoMock.MockedRepository{}
 	mockRepo.On("GetInstalledVersion", mock.Anything, mock.Anything).Return("")
 	mockRepo.On("GetInstallState", mock.Anything, mock.Anything).Return(localpackages.None, "")
 	mockRepo.On("ValidatePackage", mock.Anything, mock.Anything, pluginInformation.Version).Return(nil)
-	mockRepo.On("SetInstallState", mock.Anything, mock.Anything, pluginInformation.Version, mock.Anything).Return(nil)
-	mockRepo.On("GetInstaller", mock.Anything, mock.Anything, mock.Anything, pluginInformation.Version).Return(installerMock)
-	mockRepo.On("LockPackage", mock.Anything, mock.Anything, mock.Anything).Return(nil)
-	mockRepo.On("UnlockPackage", mock.Anything, mock.Anything).Return()
-	mockRepo.On("LoadTraces", mock.Anything, mock.Anything).Return(nil)
+	mockRepo.On("GetInstaller", mock.Anything, mock.Anything, mock.Anything, pluginInformation.Version, pluginInformation.AdditionalArguments).Return(installerMock)
 	return &mockRepo
 }
 
@@ -56,7 +57,7 @@ func repoInstallMock_WithValidatePackageError(pluginInformation *ConfigurePackag
 	mockRepo.On("GetInstallState", mock.Anything, mock.Anything).Return(localpackages.None, "")
 	mockRepo.On("ValidatePackage", mock.Anything, mock.Anything, pluginInformation.Version).Return(errors.New("There's an error"))
 	mockRepo.On("SetInstallState", mock.Anything, mock.Anything, pluginInformation.Version, mock.Anything).Return(nil)
-	mockRepo.On("GetInstaller", mock.Anything, mock.Anything, mock.Anything, pluginInformation.Version).Return(installerMock)
+	mockRepo.On("GetInstaller", mock.Anything, mock.Anything, mock.Anything, pluginInformation.Version, pluginInformation.AdditionalArguments).Return(installerMock)
 	mockRepo.On("LockPackage", mock.Anything, mock.Anything, mock.Anything).Return(nil)
 	mockRepo.On("UnlockPackage", mock.Anything, mock.Anything).Return()
 	mockRepo.On("LoadTraces", mock.Anything, mock.Anything).Return(nil)
@@ -68,10 +69,7 @@ func repoAlreadyInstalledMock(pluginInformation *ConfigurePackagePluginInput, in
 	mockRepo.On("GetInstalledVersion", mock.Anything, mock.Anything).Return("0.0.1")
 	mockRepo.On("GetInstallState", mock.Anything, mock.Anything).Return(localpackages.Installed, "")
 	mockRepo.On("ValidatePackage", mock.Anything, mock.Anything, pluginInformation.Version).Return(nil)
-	mockRepo.On("SetInstallState", mock.Anything, mock.Anything, pluginInformation.Version, mock.Anything).Return(nil)
-	mockRepo.On("GetInstaller", mock.Anything, mock.Anything, mock.Anything, pluginInformation.Version).Return(installerMock)
-	mockRepo.On("LockPackage", mock.Anything, mock.Anything, mock.Anything).Return(nil)
-	mockRepo.On("UnlockPackage", mock.Anything, mock.Anything).Return()
+	mockRepo.On("GetInstaller", mock.Anything, mock.Anything, mock.Anything, pluginInformation.Version, pluginInformation.AdditionalArguments).Return(installerMock)
 	return &mockRepo
 }
 
@@ -81,11 +79,8 @@ func repoUpgradeMock(installerMock installer.Installer) *repoMock.MockedReposito
 	mockRepo.On("GetInstallState", mock.Anything, mock.Anything).Return(localpackages.Installed, "")
 	mockRepo.On("ValidatePackage", mock.Anything, mock.Anything, "0.0.1").Return(nil)
 	mockRepo.On("ValidatePackage", mock.Anything, mock.Anything, "0.0.2").Return(nil)
-	mockRepo.On("SetInstallState", mock.Anything, mock.Anything, "0.0.2", mock.Anything).Return(nil)
-	mockRepo.On("GetInstaller", mock.Anything, mock.Anything, mock.Anything, "0.0.1").Return(installerMock)
-	mockRepo.On("GetInstaller", mock.Anything, mock.Anything, mock.Anything, "0.0.2").Return(installerMock)
-	mockRepo.On("LockPackage", mock.Anything, mock.Anything, mock.Anything).Return(nil)
-	mockRepo.On("UnlockPackage", mock.Anything, mock.Anything).Return()
+	mockRepo.On("GetInstaller", mock.Anything, mock.Anything, mock.Anything, "0.0.1", "").Return(installerMock)
+	mockRepo.On("GetInstaller", mock.Anything, mock.Anything, mock.Anything, "0.0.2", "").Return(installerMock)
 	return &mockRepo
 }
 
@@ -94,23 +89,25 @@ func repoUninstallMock(pluginInformation *ConfigurePackagePluginInput, installer
 	mockRepo.On("GetInstalledVersion", mock.Anything, mock.Anything).Return("0.0.1")
 	mockRepo.On("GetInstallState", mock.Anything, mock.Anything).Return(localpackages.Installed, "")
 	mockRepo.On("ValidatePackage", mock.Anything, mock.Anything, "0.0.1").Return(nil).Once()
-	mockRepo.On("GetInstaller", mock.Anything, mock.Anything, mock.Anything, "0.0.1").Return(installerMock)
-	mockRepo.On("LockPackage", mock.Anything, mock.Anything, mock.Anything).Return(nil)
-	mockRepo.On("UnlockPackage", mock.Anything, mock.Anything).Return()
+	mockRepo.On("GetInstaller", mock.Anything, mock.Anything, mock.Anything, "0.0.1", pluginInformation.AdditionalArguments).Return(installerMock)
 	return &mockRepo
 }
 
-func repoUpdateMock(installerMock installer.Installer) *repoMock.MockedRepository {
+func repoUninstallMockWrongVersion(pluginInformation *ConfigurePackagePluginInput, installerMock installer.Installer) *repoMock.MockedRepository {
+	mockRepo := repoMock.MockedRepository{}
+	mockRepo.On("GetInstalledVersion", mock.Anything, mock.Anything).Return("0.0.1")
+	mockRepo.On("GetInstallState", mock.Anything, mock.Anything).Return(localpackages.Installed, "")
+	return &mockRepo
+}
+
+func repoUpdateMock(pluginInformation *ConfigurePackagePluginInput, installerMock installer.Installer) *repoMock.MockedRepository {
 	mockRepo := repoMock.MockedRepository{}
 	mockRepo.On("GetInstalledVersion", mock.Anything, mock.Anything).Return("0.0.1")
 	mockRepo.On("GetInstallState", mock.Anything, mock.Anything).Return(localpackages.Installed, "")
 	mockRepo.On("ValidatePackage", mock.Anything, mock.Anything, "0.0.1").Return(nil)
 	mockRepo.On("ValidatePackage", mock.Anything, mock.Anything, "0.0.2").Return(nil)
-	mockRepo.On("SetInstallState", mock.Anything, mock.Anything, "0.0.2", mock.Anything).Return(nil)
-	mockRepo.On("GetInstaller", mock.Anything, mock.Anything, mock.Anything, "0.0.1").Return(installerMock)
-	mockRepo.On("GetInstaller", mock.Anything, mock.Anything, mock.Anything, "0.0.2").Return(installerMock)
-	mockRepo.On("LockPackage", mock.Anything, mock.Anything, mock.Anything).Return(nil)
-	mockRepo.On("UnlockPackage", mock.Anything, mock.Anything).Return()
+	mockRepo.On("GetInstaller", mock.Anything, mock.Anything, mock.Anything, "0.0.1", pluginInformation.AdditionalArguments).Return(installerMock)
+	mockRepo.On("GetInstaller", mock.Anything, mock.Anything, mock.Anything, "0.0.2", pluginInformation.AdditionalArguments).Return(installerMock)
 	return &mockRepo
 }
 
@@ -119,11 +116,7 @@ func repoUpdateMock_PackageNotInstalled(pluginInformation *ConfigurePackagePlugi
 	mockRepo.On("GetInstalledVersion", mock.Anything, mock.Anything).Return("")
 	mockRepo.On("GetInstallState", mock.Anything, mock.Anything).Return(localpackages.None, "")
 	mockRepo.On("ValidatePackage", mock.Anything, mock.Anything, mock.Anything).Return(nil)
-	mockRepo.On("SetInstallState", mock.Anything, mock.Anything, pluginInformation.Version, mock.Anything).Return(nil)
-	mockRepo.On("GetInstaller", mock.Anything, mock.Anything, mock.Anything, pluginInformation.Version).Return(installerMock)
-	mockRepo.On("LockPackage", mock.Anything, mock.Anything, mock.Anything).Return(nil)
-	mockRepo.On("UnlockPackage", mock.Anything, mock.Anything).Return()
-	mockRepo.On("LoadTraces", mock.Anything, mock.Anything).Return(nil)
+	mockRepo.On("GetInstaller", mock.Anything, mock.Anything, mock.Anything, pluginInformation.Version, pluginInformation.AdditionalArguments).Return(installerMock)
 	return &mockRepo
 }
 
@@ -140,10 +133,7 @@ func repoUpdateMock_VersionAlreadyInstalledWithDifferentManifest(input *Configur
 	mockRepo.On("GetInstalledVersion", mock.Anything, mock.Anything).Return("0.0.2")
 	mockRepo.On("GetInstallState", mock.Anything, mock.Anything).Return(localpackages.Installed, "")
 	mockRepo.On("ValidatePackage", mock.Anything, mock.Anything, "0.0.2").Return(nil)
-	mockRepo.On("SetInstallState", mock.Anything, mock.Anything, "0.0.2", mock.Anything).Return(nil)
-	mockRepo.On("GetInstaller", mock.Anything, mock.Anything, mock.Anything, "0.0.2").Return(installerMock)
-	mockRepo.On("LockPackage", mock.Anything, mock.Anything, mock.Anything).Return(nil)
-	mockRepo.On("UnlockPackage", mock.Anything, mock.Anything).Return()
+	mockRepo.On("GetInstaller", mock.Anything, mock.Anything, mock.Anything, "0.0.2", input.AdditionalArguments).Return(installerMock)
 	return &mockRepo
 }
 
@@ -159,7 +149,7 @@ func repoInstallMock_ReadWriteManifest(pluginInformation *ConfigurePackagePlugin
 	if action == InstallAction {
 		mockRepo.On("LockPackage", mock.Anything, pluginInformation.Name, "Install").Return(nil).Once()
 		mockRepo.On("ValidatePackage", mock.Anything, pluginInformation.Name, version).Return(nil)
-		mockRepo.On("GetInstaller", mock.Anything, mock.Anything, pluginInformation.Name, version).Return(installerMock)
+		mockRepo.On("GetInstaller", mock.Anything, mock.Anything, pluginInformation.Name, version, pluginInformation.AdditionalArguments).Return(installerMock)
 		mockRepo.On("SetInstallState", mock.Anything, pluginInformation.Name, version, mock.Anything).Return(nil)
 	} else {
 		mockRepo.On("LockPackage", mock.Anything, pluginInformation.Name, "Uninstall").Return(nil).Once()
@@ -183,7 +173,7 @@ func repoInstallMock_ReadWriteManifestHash(pluginInformation *ConfigurePackagePl
 		mockRepo.On("GetInstallState", mock.Anything, pluginInformation.Name).Return(localpackages.None, "")
 		mockRepo.On("LockPackage", mock.Anything, pluginInformation.Name, "Install").Return(nil).Once()
 		mockRepo.On("ValidatePackage", mock.Anything, pluginInformation.Name, version).Return(nil)
-		mockRepo.On("GetInstaller", mock.Anything, mock.Anything, pluginInformation.Name, version).Return(installerMock)
+		mockRepo.On("GetInstaller", mock.Anything, mock.Anything, pluginInformation.Name, version, pluginInformation.AdditionalArguments).Return(installerMock)
 		mockRepo.On("SetInstallState", mock.Anything, pluginInformation.Name, version, mock.Anything).Return(nil)
 	} else {
 		mockRepo.On("GetInstalledVersion", mock.Anything, pluginInformation.Name).Return("")

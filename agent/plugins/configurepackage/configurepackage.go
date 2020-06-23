@@ -64,12 +64,13 @@ type Plugin struct {
 // ConfigurePackagePluginInput represents one set of commands executed by the ConfigurePackage plugin.
 type ConfigurePackagePluginInput struct {
 	contracts.PluginInput
-	Name             string `json:"name"`
-	Version          string `json:"version"`
-	Action           string `json:"action"`
-	InstallationType string `json:"installationType"`
-	Source           string `json:"source"`
-	Repository       string `json:"repository"`
+	Name                string `json:"name"`
+	Version             string `json:"version"`
+	Action              string `json:"action"`
+	InstallationType    string `json:"installationType"`
+	AdditionalArguments string `json:"additionalArguments"`
+	Source              string `json:"source"`
+	Repository          string `json:"repository"`
 }
 
 // NewPlugin returns a new instance of the plugin.
@@ -101,6 +102,7 @@ func prepareConfigurePackage(
 
 	// Default update type is non-in-place update for backwards compatibility
 	isUpdateInPlace = false
+	additionalArguments := input.AdditionalArguments
 
 	switch input.Action {
 	case InstallAction:
@@ -128,7 +130,7 @@ func prepareConfigurePackage(
 		// ensure manifest file and package
 		var err error
 		trace = tracer.BeginSection("ensure package is locally available")
-		inst, err = ensurePackage(tracer, repository, packageService, packageArn, version, isSameAsCache, config)
+		inst, err = ensurePackage(tracer, repository, packageService, packageArn, version, additionalArguments, isSameAsCache, config)
 		if err != nil {
 			trace.WithError(err).End()
 			output.MarkAsFailed(nil, nil)
@@ -145,7 +147,7 @@ func prepareConfigurePackage(
 		// 2) If the update type is in-place update, then the uninstaller is used in case of rollback
 		trace = tracer.BeginSection("ensure old package is locally available")
 		if !(installedVersion == "" || installState == localpackages.None) && (installedVersion != version || !isSameAsCache) {
-			uninst, err = ensurePackage(tracer, repository, packageService, packageArn, installedVersion, isSameAsCache, config)
+			uninst, err = ensurePackage(tracer, repository, packageService, packageArn, installedVersion, additionalArguments, isSameAsCache, config)
 			if err != nil {
 				trace.WithError(err)
 			}
@@ -179,7 +181,7 @@ func prepareConfigurePackage(
 
 		// ensure manifest file and package
 		trace = tracer.BeginSection("ensure package is locally available")
-		uninst, err = ensurePackage(tracer, repository, packageService, packageArn, installedVersion, isSameAsCache, config)
+		uninst, err = ensurePackage(tracer, repository, packageService, packageArn, installedVersion, additionalArguments, isSameAsCache, config)
 		if err != nil {
 			trace.WithError(err)
 			output.MarkAsFailed(nil, nil)
@@ -202,6 +204,7 @@ func ensurePackage(
 	packageService packageservice.PackageService,
 	packageName string,
 	version string,
+	additionalArguments string,
 	isSameAsCache bool,
 	config contracts.Configuration) (installer.Installer, error) {
 
@@ -224,7 +227,7 @@ func ensurePackage(
 	}
 
 	pkgTrace.End()
-	return repository.GetInstaller(tracer, config, packageName, version), nil
+	return repository.GetInstaller(tracer, config, packageName, version, additionalArguments), nil
 }
 
 // buildDownloadDelegate constructs the delegate used by the repository to download a package from the service
@@ -317,6 +320,24 @@ func validateInput(input *ConfigurePackagePluginInput) (valid bool, err error) {
 	// dump any unsupported value for Repository
 	if input.Repository != "beta" && input.Repository != "gamma" {
 		input.Repository = ""
+	}
+
+	if input.AdditionalArguments != "" {
+		// ensure additional arguments is a valid map of string to string pairs
+		var argumentMap map[string]string
+		if err = jsonutil.Unmarshal(input.AdditionalArguments, &argumentMap); err != nil {
+			return false, fmt.Errorf("unable to unmarshal additional arguments from input; error %v", err)
+		}
+		// remove the entry with empty key, if any, from the map of additional arguments
+		if _, containsEmpty := argumentMap[""]; containsEmpty {
+			return false, fmt.Errorf("empty key is not allowed in additional arguments from input")
+		}
+		var argumentString string
+		if argumentString, err = jsonutil.Marshal(argumentMap); err != nil {
+			// this will unlikely happen. handle it just in case
+			return false, fmt.Errorf("unable to marshal additional arguments in input; error %v", err)
+		}
+		input.AdditionalArguments = argumentString
 	}
 
 	return true, nil

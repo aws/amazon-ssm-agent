@@ -82,8 +82,9 @@ func (repoMock *MockedRepository) GetInventoryData(log log.T) []model.Applicatio
 func (repoMock *MockedRepository) GetInstaller(tracer trace.Tracer,
 	configuration contracts.Configuration,
 	packageName string,
-	version string) installer.Installer {
-	args := repoMock.Called(tracer, configuration, packageName, version)
+	version string,
+	additionalArguments string) installer.Installer {
+	args := repoMock.Called(tracer, configuration, packageName, version, additionalArguments)
 	return args.Get(0).(installer.Installer)
 }
 
