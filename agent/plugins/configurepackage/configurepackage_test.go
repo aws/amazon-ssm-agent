@@ -57,6 +57,17 @@ func createStubPluginInputInstallLatest() *ConfigurePackagePluginInput {
 	return &input
 }
 
+func createStubPluginInputInstallWithAdditionalArguments() *ConfigurePackagePluginInput {
+	input := ConfigurePackagePluginInput{}
+
+	input.Version = "0.0.1"
+	input.Name = "PVDriver"
+	input.Action = "Install"
+	input.AdditionalArguments = "{\"customArg1\":\"customVal1\", \"customArg2\":\"customVal2\"}"
+
+	return &input
+}
+
 func createStubPluginInputUninstallLatest() *ConfigurePackagePluginInput {
 	input := ConfigurePackagePluginInput{}
 
@@ -85,6 +96,16 @@ func createStubPluginInputUninstallCurrent() *ConfigurePackagePluginInput {
 	return &input
 }
 
+func createStubPluginInputUninstallWithAdditionalArguments() *ConfigurePackagePluginInput {
+	input := ConfigurePackagePluginInput{}
+
+	input.Name = "PVDriver"
+	input.Action = "Uninstall"
+	input.AdditionalArguments = "{\"customArg1\":\"customVal1\", \"customArg2\":\"customVal2\"}"
+
+	return &input
+}
+
 func createStubPluginInputUpgrade() *ConfigurePackagePluginInput {
 	input := ConfigurePackagePluginInput{}
 
@@ -103,6 +124,18 @@ func createStubPluginInputUpdate() *ConfigurePackagePluginInput {
 	input.Name = "packageArn"
 	input.Action = "Install"
 	input.InstallationType = InstallationTypeInPlace
+
+	return &input
+}
+
+func createStubPluginInputUpdateWithAdditionalArguments() *ConfigurePackagePluginInput {
+	input := ConfigurePackagePluginInput{}
+
+	input.Version = "0.0.2"
+	input.Name = "packageArn"
+	input.Action = "Install"
+	input.InstallationType = InstallationTypeInPlace
+	input.AdditionalArguments = "{\"customArg1\":\"customVal1\", \"customArg2\":\"customVal2\"}"
 
 	return &input
 }
@@ -177,6 +210,34 @@ func TestPrepareNewInstall(t *testing.T) {
 	assert.Empty(t, tracer.ToPluginOutput().GetStderr())
 
 	installerMock.AssertExpectations(t)
+	repoMock.AssertExpectations(t)
+}
+
+func TestPrepareNewInstallWithAdditionalArguments(t *testing.T) {
+	// file stubs are needed for ensurePackage because it handles the unzip
+	stubs := setSuccessStubs()
+	defer stubs.Clear()
+
+	pluginInformation := createStubPluginInputInstallWithAdditionalArguments()
+	installerMock := installerNotCalledMock()
+	repoMock := repoInstallMock(pluginInformation, installerMock)
+	serviceMock := serviceSuccessMock()
+	tracer := trace.NewTracer(log.NewMockLog())
+	output := &trace.PluginOutputTrace{Tracer: tracer}
+
+	prepareConfigurePackage(
+		tracer,
+		buildConfigSimple(pluginInformation),
+		repoMock,
+		serviceMock,
+		pluginInformation,
+		"packageArn",
+		"0.0.1",
+		false,
+		output)
+
+	// verify repoMock called GetInstaller with additional arguments
+	repoMock.AssertExpectations(t)
 }
 
 func TestAlreadyInstalled(t *testing.T) {
@@ -211,6 +272,7 @@ func TestAlreadyInstalled(t *testing.T) {
 	assert.Empty(t, tracer.ToPluginOutput().GetStderr())
 
 	installerMock.AssertExpectations(t)
+	repoMock.AssertExpectations(t)
 }
 
 func TestPrepareUpgrade(t *testing.T) {
@@ -245,6 +307,7 @@ func TestPrepareUpgrade(t *testing.T) {
 	assert.Empty(t, tracer.ToPluginOutput().GetStderr())
 
 	installerMock.AssertExpectations(t)
+	repoMock.AssertExpectations(t)
 }
 
 func TestPrepareUninstall(t *testing.T) {
@@ -279,6 +342,7 @@ func TestPrepareUninstall(t *testing.T) {
 	assert.Empty(t, tracer.ToPluginOutput().GetStderr())
 
 	installerMock.AssertExpectations(t)
+	repoMock.AssertExpectations(t)
 }
 
 func TestPrepareUninstallCurrent(t *testing.T) {
@@ -313,6 +377,7 @@ func TestPrepareUninstallCurrent(t *testing.T) {
 	assert.Empty(t, tracer.ToPluginOutput().GetStderr())
 
 	installerMock.AssertExpectations(t)
+	repoMock.AssertExpectations(t)
 }
 
 func TestPrepareUninstallCurrentWithLatest(t *testing.T) {
@@ -347,6 +412,34 @@ func TestPrepareUninstallCurrentWithLatest(t *testing.T) {
 	assert.Empty(t, tracer.ToPluginOutput().GetStderr())
 
 	installerMock.AssertExpectations(t)
+	repoMock.AssertExpectations(t)
+}
+
+func TestPrepareUninstallWithAdditionalArguments(t *testing.T) {
+	// file stubs are needed for ensurePackage because it handles the unzip
+	stubs := setSuccessStubs()
+	defer stubs.Clear()
+
+	pluginInformation := createStubPluginInputUninstallWithAdditionalArguments()
+	installerMock := installerNotCalledMock()
+	repoMock := repoUninstallMock(pluginInformation, installerMock)
+	serviceMock := serviceSuccessMock()
+	tracer := trace.NewTracer(log.NewMockLog())
+	output := &trace.PluginOutputTrace{Tracer: tracer}
+
+	prepareConfigurePackage(
+		tracer,
+		buildConfigSimple(pluginInformation),
+		repoMock,
+		serviceMock,
+		pluginInformation,
+		"packageArn",
+		"0.0.1",
+		false,
+		output)
+
+	// verify repoMock called GetInstaller with additional arguments
+	repoMock.AssertExpectations(t)
 }
 
 func TestPrepareUninstallWrongVersion(t *testing.T) {
@@ -356,7 +449,7 @@ func TestPrepareUninstallWrongVersion(t *testing.T) {
 
 	pluginInformation := createStubPluginInputUninstall("2.3.4")
 	installerMock := installerNotCalledMock()
-	repoMock := repoUninstallMock(pluginInformation, installerMock)
+	repoMock := repoUninstallMockWrongVersion(pluginInformation, installerMock)
 	serviceMock := serviceSuccessMock()
 	tracer := trace.NewTracer(log.NewMockLog())
 	output := &trace.PluginOutputTrace{Tracer: tracer}
@@ -381,6 +474,7 @@ func TestPrepareUninstallWrongVersion(t *testing.T) {
 	assert.Empty(t, tracer.ToPluginOutput().GetStderr())
 
 	installerMock.AssertExpectations(t)
+	repoMock.AssertExpectations(t)
 }
 
 func TestPrepareUpdate(t *testing.T) {
@@ -390,7 +484,7 @@ func TestPrepareUpdate(t *testing.T) {
 
 	pluginInformation := createStubPluginInputUpdate()
 	installerMock := installerNotCalledMock()
-	repoMock := repoUpdateMock(installerMock)
+	repoMock := repoUpdateMock(pluginInformation, installerMock)
 	serviceMock := serviceUpdateMock()
 	tracer := trace.NewTracer(log.NewMockLog())
 	output := &trace.PluginOutputTrace{Tracer: tracer}
@@ -415,6 +509,7 @@ func TestPrepareUpdate(t *testing.T) {
 	assert.Empty(t, tracer.ToPluginOutput().GetStderr())
 
 	installerMock.AssertExpectations(t)
+	repoMock.AssertExpectations(t)
 }
 
 func TestPrepareLegacyUpgrade(t *testing.T) {
@@ -449,6 +544,34 @@ func TestPrepareLegacyUpgrade(t *testing.T) {
 	assert.Empty(t, tracer.ToPluginOutput().GetStderr())
 
 	installerMock.AssertExpectations(t)
+	repoMock.AssertExpectations(t)
+}
+
+func TestPrepareUpdateWithAdditionalArguments(t *testing.T) {
+	// file stubs are needed for ensurePackage because it handles the unzip
+	stubs := setSuccessStubs()
+	defer stubs.Clear()
+
+	pluginInformation := createStubPluginInputUpdateWithAdditionalArguments()
+	installerMock := installerNotCalledMock()
+	repoMock := repoUpdateMock(pluginInformation, installerMock)
+	serviceMock := serviceUpdateMock()
+	tracer := trace.NewTracer(log.NewMockLog())
+	output := &trace.PluginOutputTrace{Tracer: tracer}
+
+	prepareConfigurePackage(
+		tracer,
+		buildConfigSimple(pluginInformation),
+		repoMock,
+		serviceMock,
+		pluginInformation,
+		"packageArn",
+		"0.0.2",
+		false,
+		output)
+
+	// verify repoMock called GetInstaller with additional arguments
+	repoMock.AssertExpectations(t)
 }
 
 func TestPrepareUpgrade_BirdwatcherService_InvalidInPlaceInstallationType(t *testing.T) {
@@ -458,7 +581,7 @@ func TestPrepareUpgrade_BirdwatcherService_InvalidInPlaceInstallationType(t *tes
 
 	pluginInformation := createStubPluginInputUpdate()
 	installerMock := installerNotCalledMock()
-	repoMock := repoUpdateMock_BirdwatcherNotAllowed()
+	repoMock := repoMockNotInvoked()
 	serviceMock := birdwatcherServiceMockForPrepareUpdate()
 	tracer := trace.NewTracer(log.NewMockLog())
 	output := &trace.PluginOutputTrace{Tracer: tracer}
@@ -475,6 +598,7 @@ func TestPrepareUpgrade_BirdwatcherService_InvalidInPlaceInstallationType(t *tes
 		output)
 
 	installerMock.AssertExpectations(t)
+	repoMock.AssertExpectations(t)
 	serviceMock.AssertExpectations(t)
 }
 
@@ -511,6 +635,7 @@ func TestPrepareUpdate_PackageNotInstalled(t *testing.T) {
 	assert.Empty(t, tracer.ToPluginOutput().GetStderr())
 
 	installerMock.AssertExpectations(t)
+	repoMock.AssertExpectations(t)
 }
 
 // Test that if Update is triggered and the requested version already exists but with different manifest,
@@ -547,6 +672,7 @@ func TestPrepareUpdate_VersionAlreadyInstalled_ManifestDifferent(t *testing.T) {
 	assert.Empty(t, tracer.ToPluginOutput().GetStderr())
 
 	installerMock.AssertExpectations(t)
+	repoMock.AssertExpectations(t)
 }
 
 func TestInstalledValid(t *testing.T) {
@@ -614,6 +740,7 @@ func TestInstallingValid(t *testing.T) {
 	installerMock := installerSuccessMock(pluginInformation.Name, pluginInformation.Version)
 	uninstallerMock := installerNameVersionOnlyMock(pluginInformation.Name, pluginInformation.Version)
 	repoMock := repoInstallMock(pluginInformation, installerMock)
+	repoMock.On("SetInstallState", mock.Anything, mock.Anything, pluginInformation.Version, mock.Anything).Return(nil)
 	repoMock.On("RemovePackage", mock.Anything, pluginInformation.Name, pluginInformation.Version).Return(nil)
 	tracer := trace.NewTracer(log.NewMockLog())
 	output := &trace.PluginOutputTrace{Tracer: tracer}
@@ -635,6 +762,7 @@ func TestUpdatingValid(t *testing.T) {
 	installerMock := trueUpdateInstallerMock(pluginInformation.Name, pluginInformation.Version)
 	uninstallerMock := installerNameVersionOnlyMock(pluginInformation.Name, pluginInformation.Version)
 	repoMock := repoInstallMock(pluginInformation, installerMock)
+	repoMock.On("SetInstallState", mock.Anything, mock.Anything, pluginInformation.Version, mock.Anything).Return(nil)
 	repoMock.On("RemovePackage", mock.Anything, pluginInformation.Name, pluginInformation.Version).Return(nil)
 	tracer := trace.NewTracer(log.NewMockLog())
 	output := &trace.PluginOutputTrace{Tracer: tracer}
@@ -656,6 +784,7 @@ func TestRollbackValid(t *testing.T) {
 	installerMock := installerNameVersionOnlyMock(pluginInformation.Name, pluginInformation.Version)
 	uninstallerMock := installerSuccessMock(pluginInformation.Name, pluginInformation.Version)
 	repoMock := repoInstallMock(pluginInformation, installerMock)
+	repoMock.On("SetInstallState", mock.Anything, mock.Anything, pluginInformation.Version, mock.Anything).Return(nil)
 	repoMock.On("RemovePackage", mock.Anything, pluginInformation.Name, pluginInformation.Version).Return(nil)
 	tracer := trace.NewTracer(log.NewMockLog())
 	output := &trace.PluginOutputTrace{Tracer: tracer}
@@ -742,6 +871,10 @@ func TestExecute(t *testing.T) {
 	pluginInformation := createStubPluginInputInstall()
 	installerMock := installerSuccessMock(pluginInformation.Name, pluginInformation.Version)
 	repoMock := repoInstallMock(pluginInformation, installerMock)
+	repoMock.On("SetInstallState", mock.Anything, mock.Anything, pluginInformation.Version, mock.Anything).Return(nil)
+	repoMock.On("LockPackage", mock.Anything, mock.Anything, mock.Anything).Return(nil)
+	repoMock.On("UnlockPackage", mock.Anything, mock.Anything).Return()
+	repoMock.On("LoadTraces", mock.Anything, mock.Anything).Return(nil)
 	serviceMock := serviceSuccessMock()
 
 	plugin := &Plugin{
@@ -764,6 +897,10 @@ func TestExecuteUpdate_PackageNotInstalled_TreatAsInstall(t *testing.T) {
 	pluginInformation := createStubPluginInputUpdate()
 	installerMock := installerSuccessMock(pluginInformation.Name, pluginInformation.Version)
 	repoMock := repoUpdateMock_PackageNotInstalled(pluginInformation, installerMock)
+	repoMock.On("SetInstallState", mock.Anything, mock.Anything, pluginInformation.Version, mock.Anything).Return(nil)
+	repoMock.On("LockPackage", mock.Anything, mock.Anything, mock.Anything).Return(nil)
+	repoMock.On("UnlockPackage", mock.Anything, mock.Anything).Return()
+	repoMock.On("LoadTraces", mock.Anything, mock.Anything).Return(nil)
 	serviceMock := serviceUpdateMock()
 
 	plugin := &Plugin{
@@ -801,6 +938,10 @@ func TestConfigurePackage_InvalidAction(t *testing.T) {
 	pluginInformation := createStubPluginInputFoo()
 	installerMock := installerNotCalledMock()
 	repoMock := repoInstallMock(pluginInformation, installerMock)
+	repoMock.On("SetInstallState", mock.Anything, mock.Anything, pluginInformation.Version, mock.Anything).Return(nil)
+	repoMock.On("LockPackage", mock.Anything, mock.Anything, mock.Anything).Return(nil)
+	repoMock.On("UnlockPackage", mock.Anything, mock.Anything).Return()
+	repoMock.On("LoadTraces", mock.Anything, mock.Anything).Return(nil)
 	serviceMock := serviceSuccessMock()
 
 	plugin := &Plugin{
@@ -931,6 +1072,60 @@ func TestValidateInput_EmptyVersionWithUninstall(t *testing.T) {
 
 	assert.True(t, result)
 	assert.NoError(t, err)
+}
+
+func TestValidateInputWithValidAdditionalArguments(t *testing.T) {
+	input := ConfigurePackagePluginInput{}
+	input.Version = "1.0.0"
+	input.Name = "PVDriver"
+	input.Action = "InvalidAction"
+	input.AdditionalArguments = "{\"var1\":\"customVal1\", \"var2\":\"customVal2\"}"
+
+	result, err := validateInput(&input)
+
+	assert.True(t, result)
+	assert.NoError(t, err)
+}
+
+func TestValidateInputWithEmptyAdditionalArguments(t *testing.T) {
+	input := ConfigurePackagePluginInput{}
+	input.Version = "1.0.0"
+	input.Name = "PVDriver"
+	input.Action = "InvalidAction"
+	input.AdditionalArguments = ""
+
+	result, err := validateInput(&input)
+
+	assert.True(t, result)
+	assert.NoError(t, err)
+}
+
+func TestValidateInputWithAdditionalArgumentsIncludingEmptyKey(t *testing.T) {
+	input := ConfigurePackagePluginInput{}
+	input.Version = "1.0.0"
+	input.Name = "PVDriver"
+	input.Action = "InvalidAction"
+	input.AdditionalArguments = "{\"var1\":\"customVal1\", \"\":\"customVal2\"}"
+
+	result, err := validateInput(&input)
+
+	assert.False(t, result)
+	assert.Error(t, err)
+	assert.Contains(t, err.Error(), "empty key is not allowed in additional arguments from input")
+}
+
+func TestValidateInputWithInvalidAdditionalArguments(t *testing.T) {
+	input := ConfigurePackagePluginInput{}
+	input.Version = "1.0.0"
+	input.Name = "PVDriver"
+	input.Action = "InvalidAction"
+	input.AdditionalArguments = "invalidArguments"
+
+	result, err := validateInput(&input)
+
+	assert.False(t, result)
+	assert.Error(t, err)
+	assert.Contains(t, err.Error(), "unable to unmarshal additional arguments from input")
 }
 
 func TestSelectService(t *testing.T) {

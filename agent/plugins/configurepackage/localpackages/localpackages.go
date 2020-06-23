@@ -91,7 +91,7 @@ type Repository interface {
 	GetInstallState(tracer trace.Tracer, packageArn string) (state InstallState, version string)
 	RemovePackage(tracer trace.Tracer, packageArn string, version string) error
 	GetInventoryData(log log.T) []model.ApplicationData
-	GetInstaller(tracer trace.Tracer, configuration contracts.Configuration, packageArn string, version string) installer.Installer
+	GetInstaller(tracer trace.Tracer, configuration contracts.Configuration, packageArn string, version string, additionalArguments string) installer.Installer
 
 	LockPackage(tracer trace.Tracer, packageArn string, action string) error
 	UnlockPackage(tracer trace.Tracer, packageArn string)
@@ -166,12 +166,14 @@ func (repo *localRepository) UnlockPackage(tracer trace.Tracer, packageArn strin
 func (repo *localRepository) GetInstaller(tracer trace.Tracer,
 	configuration contracts.Configuration,
 	packageArn string,
-	version string) installer.Installer {
+	version string,
+	additionalArguments string) installer.Installer {
 
 	// Give each version an independent orchestration directory to support install and uninstall for two versions during rollback
 	configuration.OrchestrationDirectory = filepath.Join(configuration.OrchestrationDirectory, normalizeDirectory(version))
 	return ssminstaller.New(packageArn,
 		version,
+		additionalArguments,
 		repo.getPackageVersionPath(tracer, packageArn, version),
 		configuration,
 		&envdetect.CollectorImp{})

@@ -186,11 +186,10 @@ func TestReadShActionWithEnvVars(t *testing.T) {
 
 	// Instantiate installer with mock
 	inst := Installer{filesysdep: &mockFileSys, packagePath: testPackagePath, envdetectCollector: mockEnvdetectCollector}
-
-	// Call and validate mock expectations and return value
 	action := &Action{}
 	action.actionName = "install"
 	action.actionType = ACTION_TYPE_SH
+
 	pluginsInfo, err := inst.readShAction(contextMock, action, "Foo", "", envVars)
 
 	// Call and validate mock expectations and return value
@@ -209,11 +208,10 @@ func TestReadPs1ActionWithEnvVars(t *testing.T) {
 
 	// Instantiate installer with mock
 	inst := Installer{filesysdep: &mockFileSys, packagePath: testPackagePath, envdetectCollector: mockEnvdetectCollector}
-
-	// Call and validate mock expectations and return value
 	action := &Action{}
 	action.actionName = "uninstall"
 	action.actionType = ACTION_TYPE_PS1
+
 	pluginsInfo, err := inst.readPs1Action(contextMock, action, "Foo", "", envVars)
 
 	// Call and validate mock expectations and return value
@@ -224,6 +222,44 @@ func TestReadPs1ActionWithEnvVars(t *testing.T) {
 	assert.NotEmpty(t, pluginInput)
 	pluginInputMap, _ := pluginInput.(map[string]interface{})
 	assert.Equal(t, envVars, pluginInputMap["environment"])
+}
+
+func TestGetEnvVarsContainsAdditionalArguments(t *testing.T) {
+	mockFileSys := MockedFileSys{}
+	mockEnvdetectCollector := &envdetect.CollectorMock{}
+	mockEnvdetectCollector.On("CollectData", mock.Anything).Return(&environmentStub, nil).Once()
+	var argumentString = "{\"customArg1\":\"customVal1\", \"customArg2\":\"customVal2\"}"
+
+	// Instantiate installer with mock
+	inst := Installer{filesysdep: &mockFileSys, packagePath: testPackagePath, envdetectCollector: mockEnvdetectCollector, additionalArguments: argumentString}
+
+	envVars, err := inst.getEnvVars("install", contextMock)
+
+	// Call and validate mock expectations and return value
+	assert.Nil(t, err)
+	assert.NotEmpty(t, envVars)
+	assert.Contains(t, envVars, "customArg1")
+	assert.Equal(t, "customVal1", envVars["customArg1"])
+	assert.Contains(t, envVars, "customArg2")
+	assert.Equal(t, "customVal2", envVars["customArg2"])
+}
+
+func TestGetEnvVarsWithEmptyAdditionalArguments(t *testing.T) {
+	mockFileSys := MockedFileSys{}
+	mockEnvdetectCollector := &envdetect.CollectorMock{}
+	mockEnvdetectCollector.On("CollectData", mock.Anything).Return(&environmentStub, nil).Once()
+	var argumentString = ""
+
+	// Instantiate installer with mock
+	inst := Installer{filesysdep: &mockFileSys, packagePath: testPackagePath, envdetectCollector: mockEnvdetectCollector, additionalArguments: argumentString}
+
+	envVars, err := inst.getEnvVars("install", contextMock)
+
+	// Call and validate mock expectations and return value
+	assert.Nil(t, err)
+	assert.NotEmpty(t, envVars)
+	assert.NotContains(t, envVars, "customArg1")
+	assert.NotContains(t, envVars, "customArg2")
 }
 
 func TestInstall_ExecuteError(t *testing.T) {

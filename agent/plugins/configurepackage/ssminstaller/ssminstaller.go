@@ -25,19 +25,21 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
+	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/envdetect"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/trace"
 	"github.com/aws/amazon-ssm-agent/agent/times"
 )
 
 type Installer struct {
-	filesysdep         fileSysDep
-	execdep            execDep
-	packageName        string
-	version            string
-	packagePath        string
-	config             contracts.Configuration // TODO:MF: See if we can use a smaller struct that has just the things we need
-	envdetectCollector envdetect.Collector
+	filesysdep          fileSysDep
+	execdep             execDep
+	packageName         string
+	version             string
+	additionalArguments string
+	packagePath         string
+	config              contracts.Configuration // TODO:MF: See if we can use a smaller struct that has just the things we need
+	envdetectCollector  envdetect.Collector
 }
 
 type ActionType uint8
@@ -59,17 +61,19 @@ type Action struct {
 
 func New(packageName string,
 	version string,
+	additionalArguments string,
 	packagePath string,
 	configuration contracts.Configuration,
 	envdetectCollector envdetect.Collector) *Installer {
 	return &Installer{
-		filesysdep:         &fileSysDepImp{},
-		execdep:            &execDepImp{},
-		packageName:        packageName,
-		version:            version,
-		packagePath:        packagePath,
-		config:             configuration,
-		envdetectCollector: envdetectCollector,
+		filesysdep:          &fileSysDepImp{},
+		execdep:             &execDepImp{},
+		packageName:         packageName,
+		version:             version,
+		additionalArguments: additionalArguments,
+		packagePath:         packagePath,
+		config:              configuration,
+		envdetectCollector:  envdetectCollector,
 	}
 }
 
@@ -260,6 +264,15 @@ func (inst *Installer) getEnvVars(actionName string, context context.T) (envVars
 	envVars["BWS_REGION"] = env.Ec2Infrastructure.Region
 	envVars["BWS_ACCOUNT_ID"] = env.Ec2Infrastructure.AccountID
 	envVars["BWS_AVAILABILITY_ZONE"] = env.Ec2Infrastructure.AvailabilityZone
+
+	// Append validated additionalArguments map to environment variables in order to be passed to script execution
+	if inst.additionalArguments != "" {
+		var argumentMap map[string]string
+		jsonutil.Unmarshal(inst.additionalArguments, &argumentMap)
+		for k, v := range argumentMap {
+			envVars[k] = v
+		}
+	}
 
 	return envVars, err
 }

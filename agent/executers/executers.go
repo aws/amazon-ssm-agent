@@ -448,7 +448,7 @@ func killProcessOnCancel(log log.T, command *exec.Cmd, cancelStdout chan bool, c
 	}
 }
 
-// prepareEnvironment adds ssm agent standard environment variables to the command
+// prepareEnvironment adds ssm agent standard environment variables or environment variables defined by customer/other plugins to the command
 func prepareEnvironment(command *exec.Cmd, envVars map[string]string) {
 	env := os.Environ()
 	for key, val := range envVars {
