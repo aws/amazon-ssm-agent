@@ -438,12 +438,13 @@ func TestRetryInstallation(t *testing.T) {
 	context := createUpdateContext(Installed)
 	retryCount := 0
 	isRollbackCalled := false
-	updater.mgr.retryInstall = func(mgr *updateManager, log log.T, context *UpdateContext, version string) (err error) {
+	updater.mgr.retryInstall = func(mgr *updateManager, log log.T, context *UpdateContext, instanceContext *updateutil.InstanceContext, version string) (err error) {
 		retryCount++
 		return fmt.Errorf("Retry Test")
 	}
 
-	updater.mgr.rollback = func(mgr *updateManager, log log.T, context *UpdateContext, version string) (err error) {
+	updater.mgr.rollback = func(mgr *updateManager, log log.T, context *UpdateContext) (err error) {
+		isRollbackCalled = true
 		return nil
 	}
 	err := verifyInstallation(updater.mgr, logger, context, false)
@@ -451,7 +452,7 @@ func TestRetryInstallation(t *testing.T) {
 	// assert
 	assert.NoError(t, err)
 	assert.True(t, isRollbackCalled)
-	assert.Equal(t, retryCount, 2)
+	assert.Equal(t, retryCount, 1)
 }
 
 func TestRetryInstallationWithProperServiceStart(t *testing.T) {
@@ -461,17 +462,17 @@ func TestRetryInstallationWithProperServiceStart(t *testing.T) {
 	context := createUpdateContext(Installed)
 	retryCount := 0
 	isRollbackCalled := false
-	updater.mgr.retryInstall = func(mgr *updateManager, log log.T, context *UpdateContext, version string) (err error) {
+	updater.mgr.retryInstall = func(mgr *updateManager, log log.T, context *UpdateContext, instanceContext *updateutil.InstanceContext, version string) (err error) {
 		retryCount++
 		return fmt.Errorf("Retry Test")
 	}
 
-	updater.mgr.rollback = func(mgr *updateManager, log log.T, context *UpdateContext, version string) (err error) {
+	updater.mgr.rollback = func(mgr *updateManager, log log.T, context *UpdateContext) (err error) {
 		isRollbackCalled = true
 		return nil
 	}
 	err := verifyInstallation(updater.mgr, logger, context, false)
-	assert.True(t, isRollbackCalled)
+	assert.False(t, isRollbackCalled)
 	assert.NoError(t, err)
 	assert.Equal(t, retryCount, 0)
 }
@@ -483,17 +484,17 @@ func TestRetryInstallationWithRetrySuccess(t *testing.T) {
 	context := createUpdateContext(Installed)
 	retryCount := 0
 	isRollbackCalled := false
-	updater.mgr.retryInstall = func(mgr *updateManager, log log.T, context *UpdateContext, version string) (err error) {
+	updater.mgr.retryInstall = func(mgr *updateManager, log log.T, context *UpdateContext, instanceContext *updateutil.InstanceContext, version string) (err error) {
 		retryCount++
 		return nil
 	}
 
-	updater.mgr.rollback = func(mgr *updateManager, log log.T, context *UpdateContext, version string) (err error) {
+	updater.mgr.rollback = func(mgr *updateManager, log log.T, context *UpdateContext) (err error) {
 		isRollbackCalled = true
 		return nil
 	}
 	err := verifyInstallation(updater.mgr, logger, context, false)
-	assert.True(t, isRollbackCalled)
+	assert.False(t, isRollbackCalled)
 	assert.NoError(t, err)
 	assert.Equal(t, retryCount, 1)
 }
@@ -505,19 +506,19 @@ func TestRetryInstallationFromRollback(t *testing.T) {
 	context := createUpdateContext(Installed)
 	retryCount := 0
 	isRollbackCalled := false
-	updater.mgr.retryInstall = func(mgr *updateManager, log log.T, context *UpdateContext, version string) (err error) {
+	updater.mgr.retryInstall = func(mgr *updateManager, log log.T, context *UpdateContext, instanceContext *updateutil.InstanceContext, version string) (err error) {
 		retryCount++
 		return fmt.Errorf("Retry Test")
 	}
-	updater.mgr.rollback = func(mgr *updateManager, log log.T, context *UpdateContext, version string) (err error) {
+	updater.mgr.rollback = func(mgr *updateManager, log log.T, context *UpdateContext) (err error) {
 		isRollbackCalled = true
 		return fmt.Errorf("Retry Test")
 	}
 	err := verifyInstallation(updater.mgr, logger, context, true)
 
-	assert.True(t, isRollbackCalled)
+	assert.False(t, isRollbackCalled)
 	assert.NoError(t, err)
-	assert.Equal(t, retryCount, 4)
+	assert.Equal(t, retryCount, 1)
 }
 
 func TestVerifyRollbackCannotStartAgent(t *testing.T) {
