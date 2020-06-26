@@ -42,18 +42,17 @@ var (
 func NewUpdater() *Updater {
 	updater := &Updater{
 		mgr: &updateManager{
-			util:         &updateutil.Utility{},
-			svc:          &svcManager{},
-			ctxMgr:       &contextManager{},
-			prepare:      prepareInstallationPackages,
-			update:       proceedUpdate,
-			verify:       verifyInstallation,
-			rollback:     rollbackInstallation,
-			uninstall:    uninstallAgent,
-			retryInstall: retryInstallAgent,
-			install:      installAgent,
-			download:     downloadAndUnzipArtifact,
-			clean:        cleanUninstalledVersions,
+			util:      &updateutil.Utility{},
+			svc:       &svcManager{},
+			ctxMgr:    &contextManager{},
+			prepare:   prepareInstallationPackages,
+			update:    proceedUpdate,
+			verify:    verifyInstallation,
+			rollback:  rollbackInstallation,
+			uninstall: uninstallAgent,
+			install:   installAgent,
+			download:  downloadAndUnzipArtifact,
+			clean:     cleanUninstalledVersions,
 		},
 	}
 
@@ -296,7 +295,6 @@ func verifyInstallation(mgr *updateManager, log log.T, context *UpdateContext, i
 	// Check if agent is running
 	var isRunning = false
 	var instanceContext *updateutil.InstanceContext
-	rollbackSuccess := updateutil.ErrorUpdateFailRollbackSuccess
 
 	if instanceContext, err = mgr.util.CreateInstanceContext(log); err != nil {
 		return mgr.failed(context, log, updateutil.ErrorCreateInstanceContext, err.Error(), false)
@@ -312,34 +310,26 @@ func verifyInstallation(mgr *updateManager, log log.T, context *UpdateContext, i
 				"failed to start the agent")
 
 			context.Current.AppendError(log, message)
-			if err = mgr.retryInstall(mgr, log, context, instanceContext, context.Current.TargetVersion); err != nil {
-				context.Current.AppendInfo(
-					log,
-					"Initiating rollback %v to %v",
-					context.Current.PackageName,
-					context.Current.SourceVersion)
-				mgr.subStatus = updateutil.VerificationRollback
-				// Update state to rollback
-				if err = mgr.inProgress(context, log, Rollback); err != nil {
-					return err
-				}
-				return mgr.rollback(mgr, log, context)
-			} else {
-				log.Infof("%v is running", context.Current.PackageName)
-				return mgr.inactive(context, log, updateutil.WarnInstallRetrySuccess) // this function is same like succeeded except it takes message as input to send to ICS
+			context.Current.AppendInfo(
+				log,
+				"Initiating rollback %v to %v",
+				context.Current.PackageName,
+				context.Current.SourceVersion)
+			mgr.subStatus = updateutil.VerificationRollback
+			// Update state to rollback
+			if err = mgr.inProgress(context, log, Rollback); err != nil {
+				return err
 			}
+			return mgr.rollback(mgr, log, context)
 		}
 
-		if err = mgr.retryInstall(mgr, log, context, instanceContext, context.Current.SourceVersion); err != nil {
-			message := updateutil.BuildMessage(err,
-				"failed to rollback %v to %v, %v",
-				context.Current.PackageName,
-				context.Current.SourceVersion,
-				"failed to start the agent")
-			// Rolled back, but service cannot start, Update failed.
-			return mgr.failed(context, log, updateutil.ErrorCannotStartService, message, false)
-		}
-		rollbackSuccess = updateutil.ErrorUpdateFailRollbackSuccessWithRetry
+		message := updateutil.BuildMessage(err,
+			"failed to rollback %v to %v, %v",
+			context.Current.PackageName,
+			context.Current.SourceVersion,
+			"failed to start the agent")
+		// Rolled back, but service cannot start, Update failed.
+		return mgr.failed(context, log, updateutil.ErrorCannotStartService, message, false)
 	}
 
 	log.Infof("%v is running", context.Current.PackageName)
@@ -349,48 +339,7 @@ func verifyInstallation(mgr *updateManager, log log.T, context *UpdateContext, i
 
 	message := fmt.Sprintf("rolledback %v to %v", context.Current.PackageName, context.Current.SourceVersion)
 	log.Infof("message is %v", message)
-	return mgr.failed(context, log, rollbackSuccess, message, false)
-}
-
-// retryInstallAgent retries installation when service fail to start.
-// This function does not block the update process and logs error as info message.
-func retryInstallAgent(mgr *updateManager, log log.T, context *UpdateContext, instanceContext *updateutil.InstanceContext, version string) (err error) {
-	context.Current.AppendInfo(
-		log,
-		"initiating retry %v for %v",
-		context.Current.PackageName,
-		version)
-	// ignores uninstall for the source version
-	if version != context.Current.SourceVersion {
-		if err = mgr.uninstall(mgr, log, version, context); err != nil {
-			context.Current.AppendInfo(
-				log,
-				"failed to uninstall %v %v during retry",
-				context.Current.PackageName,
-				version)
-			return
-		}
-	}
-	// install agent
-	// for source version, mostly this will start the service when down
-	// for target version, re-installs
-	if err = mgr.install(mgr, log, version, context); err != nil {
-		context.Current.AppendInfo(
-			log,
-			"failed to install %v %v during retry",
-			context.Current.PackageName,
-			version)
-		return
-	}
-	if isRunning, err := mgr.util.WaitForServiceToStart(log, instanceContext); err != nil || !isRunning {
-		context.Current.AppendInfo(
-			log,
-			"failed to start %v %v during retry",
-			context.Current.PackageName,
-			version)
-		return fmt.Errorf("agent service start failed")
-	}
-	return nil
+	return mgr.failed(context, log, updateutil.ErrorUpdateFailRollbackSuccess, message, false)
 }
 
 // rollbackInstallation rollback installation to the source version

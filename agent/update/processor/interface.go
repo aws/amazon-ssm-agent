@@ -39,24 +39,22 @@ type verify func(mgr *updateManager, log log.T, context *UpdateContext, isRollba
 type rollback func(mgr *updateManager, log log.T, context *UpdateContext) (err error)
 type uninstall func(mgr *updateManager, log log.T, version string, context *UpdateContext) (err error)
 type install func(mgr *updateManager, log log.T, version string, context *UpdateContext) (err error)
-type retryInstall func(mgr *updateManager, log log.T, context *UpdateContext, instanceContext *updateutil.InstanceContext, version string) (err error)
 type download func(mgr *updateManager, log log.T, downloadInput artifact.DownloadInput, context *UpdateContext, version string) (err error)
 type clean func(mgr *updateManager, log log.T, context *UpdateContext) (err error)
 
 type updateManager struct {
-	util         updateutil.T
-	svc          Service
-	ctxMgr       ContextMgr
-	prepare      prepare
-	update       update
-	verify       verify
-	rollback     rollback
-	uninstall    uninstall
-	install      install
-	download     download
-	retryInstall retryInstall
-	clean        clean
-	subStatus    string // Values currently being used - downgrade, InstallRollback, VerificationRollback. It is good to place it here as UpdateContext is being saved on the filesystem
+	util      updateutil.T
+	svc       Service
+	ctxMgr    ContextMgr
+	prepare   prepare
+	update    update
+	verify    verify
+	rollback  rollback
+	uninstall uninstall
+	install   install
+	download  download
+	clean     clean
+	subStatus string // Values currently being used - downgrade, InstallRollback, VerificationRollback. It is good to place it here as UpdateContext is being saved on the filesystem
 }
 
 // Updater contains logic for performing agent update
