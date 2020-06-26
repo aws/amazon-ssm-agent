@@ -98,6 +98,8 @@ Copyright (c) 2012 The Go Authors
 Copyright (c) 2009 The Go Authors
 * go-warnings/warnings - https://github.com/go-warnings/warnings
 Copyright (c) 2016 Péter Surányi
+** pborman/ansi; version 1.0 -- https://github.com/pborman/ansi
+Copyright (c) 2013 Google Inc. All rights reserved.
 
 BSD License
 
