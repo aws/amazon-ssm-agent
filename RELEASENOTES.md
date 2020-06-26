@@ -1,5 +1,15 @@
 Latest
 ===============
+- Add retry to s3 downloads during update
+- Add support for large inventory items
+- Add update lock so only one update can execute at a time
+- Bug fix for cross region s3 upload
+- Bug fix for github build 
+- Bug fixes for CloudWatch logs
+- Updated packaging dependencies
+
+2.3.1319.0
+===============
 - Updated README.md to include amazon-ssm-agent.json config definitions
 - Bug fix for reporting ConfigurePackage metrics for document archive
 - Added backoff for CloudWatch retries
