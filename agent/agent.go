@@ -77,9 +77,9 @@ func start(log logger.T, instanceIDPtr *string, regionPtr *string, shouldCheckHi
 
 	// Initialize the startup module during agent start, before agent can potentially enter hibernation mode
 	process = startup.NewProcessor(context)
-	err = process.ModuleExecute(context)
-	if err != nil {
-		log.Errorf("Error occurred during startup of processor: %v", err)
+	processErr := process.ModuleExecute(context)
+	if processErr != nil {
+		log.Errorf("Error occurred during startup of processor: %v", processErr)
 	}
 
 	// Do a health check before starting the agent.
