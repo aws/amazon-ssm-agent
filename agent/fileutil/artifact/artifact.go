@@ -232,7 +232,7 @@ func ListS3Directory(log log.T, amazonS3URL s3util.AmazonS3URL) (folderNames []s
 	s3client := s3.New(sess)
 	obj, err := s3client.ListObjects(params)
 	if err != nil {
-		log.Errorf("ListS3Directory error %v", err.Error())
+		log.Warnf("ListS3Directory error %v", err.Error())
 		return folderNames, err
 	}
 

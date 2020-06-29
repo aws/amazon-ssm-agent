@@ -104,10 +104,17 @@ func (s3 *S3Resource) DownloadRemoteResource(log log.T, filesys filemanager.File
 	log.Debug("S3 object - ", s3.s3Object.String())
 
 	s3.s3Object.Region = s3util.GetBucketRegion(log, s3.s3Object.Bucket, s3util.HttpProviderImpl{})
+
 	// Create an object for the source URL. This can be used to list the objects in the folder
 	if folders, err = dep.ListS3Directory(log, s3.s3Object); err != nil {
-		return err, nil
+		if !isPathType(s3.s3Object.Key) {
+			return err, nil
+		}
+
+		log.Infof("Attempting s3 download while assuming s3Object '%s' is a file", s3.s3Object.Key)
+		folders = []string{}
 	}
+
 	if len(folders) == 0 {
 		// In case of a file download, append the filename to folders
 		isDirTypeDownloaded = false
