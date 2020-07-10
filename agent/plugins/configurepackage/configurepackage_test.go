@@ -1074,17 +1074,18 @@ func TestValidateInput_EmptyVersionWithUninstall(t *testing.T) {
 	assert.NoError(t, err)
 }
 
-func TestValidateInputWithValidAdditionalArguments(t *testing.T) {
+func TestValidateInputWithValidAdditionalArgumentsWithSSMPrefix(t *testing.T) {
 	input := ConfigurePackagePluginInput{}
 	input.Version = "1.0.0"
 	input.Name = "PVDriver"
 	input.Action = "InvalidAction"
-	input.AdditionalArguments = "{\"var1\":\"customVal1\", \"var2\":\"customVal2\"}"
+	input.AdditionalArguments = "{\"SSM_var1\":\"customVal1\",\"SSM_var2\":\"customVal2\"}"
 
 	result, err := validateInput(&input)
 
 	assert.True(t, result)
 	assert.NoError(t, err)
+	assert.Equal(t, "{\"SSM_var1\":\"customVal1\",\"SSM_var2\":\"customVal2\"}", input.AdditionalArguments)
 }
 
 func TestValidateInputWithEmptyAdditionalArguments(t *testing.T) {
@@ -1105,13 +1106,27 @@ func TestValidateInputWithAdditionalArgumentsIncludingEmptyKey(t *testing.T) {
 	input.Version = "1.0.0"
 	input.Name = "PVDriver"
 	input.Action = "InvalidAction"
-	input.AdditionalArguments = "{\"var1\":\"customVal1\", \"\":\"customVal2\"}"
+	input.AdditionalArguments = "{\"SSM_var1\":\"customVal1\", \"\":\"customVal2\"}"
 
 	result, err := validateInput(&input)
 
 	assert.False(t, result)
 	assert.Error(t, err)
 	assert.Contains(t, err.Error(), "empty key is not allowed in additional arguments from input")
+}
+
+func TestValidateInputWithAdditionalArgumentsWithoutSSMPrefix(t *testing.T) {
+	input := ConfigurePackagePluginInput{}
+	input.Version = "1.0.0"
+	input.Name = "PVDriver"
+	input.Action = "InvalidAction"
+	input.AdditionalArguments = "{\"var1\":\"customVal1\", \"var2\":\"customVal2\"}"
+
+	result, err := validateInput(&input)
+
+	assert.False(t, result)
+	assert.Error(t, err)
+	assert.Contains(t, err.Error(), "keys need to start with \"SSM_\" prefix in additional arguments from input")
 }
 
 func TestValidateInputWithInvalidAdditionalArguments(t *testing.T) {
