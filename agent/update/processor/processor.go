@@ -386,15 +386,27 @@ func uninstallAgent(mgr *updateManager, log log.T, version string, context *Upda
 		context.Current.PackageName,
 		version)
 
-	// Uninstall version
-	if _, err = mgr.util.ExeCommand(
-		log,
-		uninstallPath,
-		workDir,
-		context.Current.UpdateRoot,
-		context.Current.StdoutFileName,
-		context.Current.StderrFileName,
-		false); err != nil {
+	uninstallRetryCount := 2
+	uninstallRetryDelay := 1000     // 1 second
+	uninstallRetryDelayBase := 2000 // 2 seconds
+	// Uninstall version - TODO - move the retry logic to ExeCommand while cleaning that function
+	for retryCounter := 1; retryCounter <= uninstallRetryCount; retryCounter++ {
+		_, err = mgr.util.ExeCommand(
+			log,
+			uninstallPath,
+			workDir,
+			context.Current.UpdateRoot,
+			context.Current.StdoutFileName,
+			context.Current.StderrFileName,
+			false)
+		if err == nil {
+			break
+		}
+		if retryCounter < uninstallRetryCount {
+			time.Sleep(time.Duration(uninstallRetryDelayBase+rand.Intn(uninstallRetryDelay)) * time.Millisecond)
+		}
+	}
+	if err != nil {
 		return err
 	}
 	log.Infof("%v %v uninstalled successfully", context.Current.PackageName, version)
@@ -416,19 +428,29 @@ func installAgent(mgr *updateManager, log log.T, version string, context *Update
 		context.Current.PackageName,
 		version)
 
-	// Install version
-	if _, err = mgr.util.ExeCommand(
-		log,
-		installerPath,
-		workDir,
-		context.Current.UpdateRoot,
-		context.Current.StdoutFileName,
-		context.Current.StderrFileName,
-		false); err != nil {
-
+	// Install version - TODO - move the retry logic to ExeCommand while cleaning that function
+	installRetryCount := 2
+	installRetryDelay := 1000     // 1 second
+	installRetryDelayBase := 2000 // 2 seconds
+	for retryCounter := 1; retryCounter <= installRetryCount; retryCounter++ {
+		_, err = mgr.util.ExeCommand(
+			log,
+			installerPath,
+			workDir,
+			context.Current.UpdateRoot,
+			context.Current.StdoutFileName,
+			context.Current.StderrFileName,
+			false)
+		if err == nil {
+			break
+		}
+		if retryCounter < installRetryCount {
+			time.Sleep(time.Duration(installRetryDelayBase+rand.Intn(installRetryDelay)) * time.Millisecond)
+		}
+	}
+	if err != nil {
 		return err
 	}
-
 	log.Infof("%v %v installed successfully", context.Current.PackageName, version)
 	return nil
 }

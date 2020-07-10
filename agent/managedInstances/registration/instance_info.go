@@ -42,13 +42,6 @@ const (
 	RegVaultKey = "RegistrationKey"
 )
 
-func init() {
-	if err := loadServerInfo(); err != nil {
-		logger := ssmlog.SSMLogger(true)
-		logger.Errorf("error while loading server info", err)
-	}
-}
-
 // InstanceID of the managed instance.
 func InstanceID() string {
 	instance := getInstanceInfo()
@@ -178,8 +171,13 @@ func loadServerInfo() error {
 }
 
 func getInstanceInfo() instanceInfo {
+	if loadedServerInfo.InstanceID == "" {
+		if err := loadServerInfo(); err != nil {
+			logger := ssmlog.SSMLogger(true)
+			logger.Errorf("error while loading server info", err)
+		}
+	}
 	lock.RLock()
 	defer lock.RUnlock()
-
 	return loadedServerInfo
 }
