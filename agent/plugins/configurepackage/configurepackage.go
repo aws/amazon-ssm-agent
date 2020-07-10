@@ -328,9 +328,14 @@ func validateInput(input *ConfigurePackagePluginInput) (valid bool, err error) {
 		if err = jsonutil.Unmarshal(input.AdditionalArguments, &argumentMap); err != nil {
 			return false, fmt.Errorf("unable to unmarshal additional arguments from input; error %v", err)
 		}
-		// remove the entry with empty key, if any, from the map of additional arguments
 		if _, containsEmpty := argumentMap[""]; containsEmpty {
 			return false, fmt.Errorf("empty key is not allowed in additional arguments from input")
+		}
+		for key := range argumentMap {
+			if !strings.HasPrefix(key, "SSM_") {
+				return false, fmt.Errorf(
+					"keys need to start with \"SSM_\" prefix in additional arguments from input")
+			}
 		}
 		var argumentString string
 		if argumentString, err = jsonutil.Marshal(argumentMap); err != nil {
