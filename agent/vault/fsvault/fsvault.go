@@ -56,6 +56,10 @@ func Store(key string, data []byte) (err error) {
 	return
 }
 
+func IsManifestExists() bool {
+	return fs.Exists(manifestFilePath) || len(manifest) != 0
+}
+
 // Retrieve data.
 func Retrieve(key string) (data []byte, err error) {
 

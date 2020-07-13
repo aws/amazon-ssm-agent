@@ -153,11 +153,16 @@ func updateServerInfo(info instanceInfo) (err error) {
 	return
 }
 
-func loadServerInfo() error {
+func loadServerInfo() (loadErr error) {
 	lock.Lock()
 	defer lock.Unlock()
 
 	var info instanceInfo = instanceInfo{}
+
+	if !vault.IsManifestExists() {
+		loadedServerInfo = info
+		return nil
+	}
 	if d, err := vault.Retrieve(RegVaultKey); err != nil {
 		return fmt.Errorf("Failed to load instance info from vault. %v", err)
 	} else {
@@ -165,7 +170,6 @@ func loadServerInfo() error {
 			return fmt.Errorf("Failed to unmarshal instance info. %v", err)
 		}
 	}
-
 	loadedServerInfo = info
 	return nil
 }
@@ -174,7 +178,7 @@ func getInstanceInfo() instanceInfo {
 	if loadedServerInfo.InstanceID == "" {
 		if err := loadServerInfo(); err != nil {
 			logger := ssmlog.SSMLogger(true)
-			logger.Errorf("error while loading server info", err)
+			logger.Warnf("error while loading server info", err)
 		}
 	}
 	lock.RLock()

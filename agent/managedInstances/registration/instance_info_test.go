@@ -34,7 +34,7 @@ var (
 
 func ExampleRegion() {
 	file = fileStub{}
-	vault = vaultStub{rKey: sampleRegistrationKey, data: sampleJson}
+	vault = vaultStub{rKey: sampleRegistrationKey, data: sampleJson, exists: true}
 	loadServerInfo() // load info with mocked vault
 	region := Region()
 	fmt.Println(region)
@@ -44,7 +44,7 @@ func ExampleRegion() {
 
 func ExampleInstanceID() {
 	file = fileStub{}
-	vault = vaultStub{rKey: sampleRegistrationKey, data: sampleJson}
+	vault = vaultStub{rKey: sampleRegistrationKey, data: sampleJson, exists: true}
 	loadServerInfo() // load info with mocked vault
 	instanceID := InstanceID()
 	fmt.Println(instanceID)
@@ -54,7 +54,7 @@ func ExampleInstanceID() {
 
 func ExamplePrivateKey() {
 	file = fileStub{}
-	vault = vaultStub{rKey: sampleRegistrationKey, data: sampleJson}
+	vault = vaultStub{rKey: sampleRegistrationKey, data: sampleJson, exists: true}
 	loadServerInfo() // load info with mocked vault
 	privateKey := PrivateKey()
 	fmt.Println(privateKey)
@@ -75,9 +75,10 @@ func (f fileStub) WriteAllText(filePath string, text string) (err error) {
 }
 
 type vaultStub struct {
-	rKey string
-	data []byte
-	err  error
+	rKey   string
+	data   []byte
+	err    error
+	exists bool
 }
 
 func (v vaultStub) Store(key string, data []byte) error {
@@ -86,4 +87,8 @@ func (v vaultStub) Store(key string, data []byte) error {
 
 func (v vaultStub) Retrieve(key string) ([]byte, error) {
 	return v.data, v.err
+}
+
+func (v vaultStub) IsManifestExists() bool {
+	return v.exists
 }
