@@ -39,9 +39,11 @@ var vault iiVault = &iiFsVault{}
 type iiVault interface {
 	Retrieve(key string) (data []byte, err error)
 	Store(key string, data []byte) (err error)
+	IsManifestExists() bool
 }
 
 type iiFsVault struct{}
 
 func (iiFsVault) Retrieve(key string) ([]byte, error) { return fsvault.Retrieve(key) }
 func (iiFsVault) Store(key string, data []byte) error { return fsvault.Store(key, data) }
+func (iiFsVault) IsManifestExists() bool              { return fsvault.IsManifestExists() }
