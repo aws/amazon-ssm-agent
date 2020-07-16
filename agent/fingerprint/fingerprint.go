@@ -216,6 +216,7 @@ func isSimilarHardwareHash(logger log.T, savedHwHash map[string]string, currentH
 	// this usually happens during provisioning
 	if currentHwHash[hardwareID] != savedHwHash[hardwareID] {
 		logger.Debugf("saved hardware hash is not equal to current")
+		logger.Tracef("saved hardware hash, current hardware hash: /%v/, /%v/", savedHwHash[hardwareID], currentHwHash[hardwareID])
 		return false
 	}
 
@@ -230,6 +231,8 @@ func isSimilarHardwareHash(logger log.T, savedHwHash map[string]string, currentH
 	for key, currValue := range currentHwHash {
 		if prevValue, ok := savedHwHash[key]; ok && currValue == prevValue {
 			successCount++
+		} else {
+			logger.Debugf("saved %v value changed/not present in the hardware hash", key)
 		}
 	}
 
@@ -278,11 +281,12 @@ func macAddrInfo() (value string, err error) {
 	return "", nil
 }
 
-func commandOutputHash(command string, params ...string) (value string, err error) {
+func commandOutputHash(command string, params ...string) (encodedValue string, value string, err error) {
 	var contentBytes []byte
 	if contentBytes, err = exec.Command(command, params...).Output(); err == nil {
+		value = string(contentBytes) // without encoding
 		sum := md5.Sum(contentBytes)
-		value = base64.StdEncoding.EncodeToString(sum[:])
+		encodedValue = base64.StdEncoding.EncodeToString(sum[:])
 	}
 	return
 }

@@ -57,21 +57,26 @@ func machineID() (string, error) {
 }
 
 func processorInfoHash() (value string, err error) {
-	return commandOutputHash(dmidecodeCommand, "-t", "processor")
+	value, _, err = commandOutputHash(dmidecodeCommand, "-t", "processor")
+	return
 }
 
 func memoryInfoHash() (value string, err error) {
-	return commandOutputHash(dmidecodeCommand, "-t", "memory")
+	value, _, err = commandOutputHash(dmidecodeCommand, "-t", "memory")
+	return
 }
 
 func biosInfoHash() (value string, err error) {
-	return commandOutputHash(dmidecodeCommand, "-t", "bios")
+	value, _, err = commandOutputHash(dmidecodeCommand, "-t", "bios")
+	return
 }
 
 func systemInfoHash() (value string, err error) {
-	return commandOutputHash(dmidecodeCommand, "-t", "system")
+	value, _, err = commandOutputHash(dmidecodeCommand, "-t", "system")
+	return
 }
 
 func diskInfoHash() (value string, err error) {
-	return commandOutputHash("ls", "-l", "/dev/disk/by-uuid")
+	value, _, err = commandOutputHash("ls", "-l", "/dev/disk/by-uuid")
+	return
 }
