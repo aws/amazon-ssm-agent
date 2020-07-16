@@ -76,7 +76,7 @@ var currentHwHash = func() map[string]string {
 		}
 	}
 
-	hardwareHash[hardwareID], _ = csproductUuid()
+	hardwareHash[hardwareID], _ = csproductUuid(log)
 	hardwareHash["processor-hash"], _ = processorInfoHash()
 	hardwareHash["memory-hash"], _ = memoryInfoHash()
 	hardwareHash["bios-hash"], _ = biosInfoHash()
@@ -89,26 +89,33 @@ var currentHwHash = func() map[string]string {
 	return hardwareHash
 }
 
-func csproductUuid() (string, error) {
-	return commandOutputHash(wmicCommand, "csproduct", "get", "UUID")
+func csproductUuid(logger log.T) (encodedValue string, err error) {
+	encodedValue, uuid, err := commandOutputHash(wmicCommand, "csproduct", "get", "UUID")
+	logger.Tracef("Current UUID value: /%v/", uuid)
+	return
 }
 
 func processorInfoHash() (value string, err error) {
-	return commandOutputHash(wmicCommand, "cpu", "list", "brief")
+	value, _, err = commandOutputHash(wmicCommand, "cpu", "list", "brief")
+	return
 }
 
 func memoryInfoHash() (value string, err error) {
-	return commandOutputHash(wmicCommand, "memorychip", "list", "brief")
+	value, _, err = commandOutputHash(wmicCommand, "memorychip", "list", "brief")
+	return
 }
 
 func biosInfoHash() (value string, err error) {
-	return commandOutputHash(wmicCommand, "bios", "list", "brief")
+	value, _, err = commandOutputHash(wmicCommand, "bios", "list", "brief")
+	return
 }
 
 func systemInfoHash() (value string, err error) {
-	return commandOutputHash(wmicCommand, "computersystem", "list", "brief")
+	value, _, err = commandOutputHash(wmicCommand, "computersystem", "list", "brief")
+	return
 }
 
 func diskInfoHash() (value string, err error) {
-	return commandOutputHash(wmicCommand, "diskdrive", "list", "brief")
+	value, _, err = commandOutputHash(wmicCommand, "diskdrive", "list", "brief")
+	return
 }
