@@ -1,5 +1,12 @@
 Latest
 ===============
+- Add retry to install/uninstall during update
+- Bug fix in updater logging
+- Bug fix for object downloads from s3
+- Support passing additional arguments to Distributor script execution
+
+2.3.1509.0
+===============
 - Add retry to s3 downloads during update
 - Add support for large inventory items
 - Add update lock so only one update can execute at a time
