@@ -106,17 +106,26 @@ func (d *DocumentFileMgr) PersistDocumentState(log log.T, fileName, instanceID, 
 }
 
 func (d *DocumentFileMgr) GetDocumentState(log log.T, fileName, instanceID, locationFolder string) contracts.DocumentState {
-
-	absoluteFileName := path.Join(path.Join(d.dataStorePath,
+	filepath := path.Join(d.dataStorePath,
 		instanceID,
 		d.rootDirName,
 		d.stateLocation,
-		locationFolder), fileName)
+		locationFolder)
+
+	absoluteFileName := path.Join(filepath, fileName)
 
 	var commandState contracts.DocumentState
 	err := jsonutil.UnmarshalFile(absoluteFileName, &commandState)
 	if err != nil {
 		log.Errorf("encountered error with message %v while reading Interim state of command from file - %v", err, fileName)
+		if fileExists, _ := fileutil.LocalFileExist(absoluteFileName); fileExists {
+			if documentContents, err := fileutil.ReadAllText(absoluteFileName); err == nil {
+				log.Infof("Document contents: %v", documentContents)
+			}
+
+			d.MoveDocumentState(log, fileName, instanceID, locationFolder, appconfig.DefaultLocationOfCorrupt)
+		}
+
 	} else {
 		//logging interim state as read from the file
 		jsonString, err := jsonutil.Marshal(commandState)
