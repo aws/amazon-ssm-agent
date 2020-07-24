@@ -76,10 +76,14 @@ func start(log logger.T, instanceIDPtr *string, regionPtr *string, shouldCheckHi
 	ssmAgent = agent.NewSSMAgent(context, healthModule, hibernateState)
 
 	// Initialize the startup module during agent start, before agent can potentially enter hibernation mode
-	process = startup.NewProcessor(context)
-	processErr := process.ModuleExecute(context)
-	if processErr != nil {
-		log.Errorf("Error occurred during startup of processor: %v", processErr)
+	if !context.AppConfig().Agent.ContainerMode {
+		go func() {
+			process = startup.NewProcessor(context)
+			processErr := process.ModuleExecute(context)
+			if processErr != nil {
+				log.Errorf("Error occurred during startup of processor: %v", processErr)
+			}
+		}()
 	}
 
 	// Do a health check before starting the agent.
