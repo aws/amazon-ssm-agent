@@ -1,5 +1,10 @@
 Latest
 ===============
+- Add code to cleanup interim documents if unable to parse
+- Bug fix for executing StartProcess module in a goroutine to avoid blocking the main thread
+
+2.3.1550.0
+===============
 - Add retry to install/uninstall during update
 - Bug fix in updater logging
 - Bug fix for object downloads from s3
