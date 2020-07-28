@@ -56,8 +56,12 @@ func initialize(args []string) (context.T, string, error) {
 	// intialize a light weight logger, use the default seelog config logger
 	logger := ssmlog.SSMLogger(false)
 
-	// initialize appconfig, use default config
-	config := appconfig.DefaultConfig()
+	// initialize appconfig
+	config, err := appconfig.Config(false)
+	if err != nil {
+		logger.Errorf("Failed to initialize config: %v", err)
+		return nil, "", err
+	}
 
 	logger.Debugf("Session worker parse args: %v", args)
 	channelName, _, err := proc.ParseArgv(args)
