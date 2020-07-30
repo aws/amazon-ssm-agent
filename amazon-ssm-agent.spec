@@ -13,7 +13,7 @@ Source0      : https://github.com/aws/amazon-ssm-agent/%{name}-%{version}.tar.gz
 Packager     : Amazon.com, Inc. <http://aws.amazon.com>
 Vendor       : Amazon.com
 
-BuildRequires: golang >= 1.7.4
+BuildRequires: golang == 1.12.11
 
 %if 0%{?amzn} >= 2
 BuildRequires: systemd-devel
@@ -35,11 +35,11 @@ sed -i -e 's#const[ \s]*Version.*#const Version = "%{version}"#g' agent/version/
 export GOPATH=`pwd`/vendor:`pwd`
 
 ln -s `pwd` vendor/src/github.com/aws/amazon-ssm-agent
-go build -ldflags "-s -w -extldflags=-Wl,-z,now,-z,relro,-z,defs" -o bin/amazon-ssm-agent -v agent/agent.go agent/agent_unix.go agent/agent_parser.go
-go build -ldflags "-s -w -extldflags=-Wl,-z,now,-z,relro,-z,defs" -o bin/ssm-document-worker -v agent/framework/processor/executer/outofproc/worker/main.go
-go build -ldflags "-s -w -extldflags=-Wl,-z,now,-z,relro,-z,defs" -o bin/ssm-session-worker -v agent/framework/processor/executer/outofproc/sessionworker/main.go
-go build -ldflags "-s -w -extldflags=-Wl,-z,now,-z,relro,-z,defs" -o bin/ssm-session-logger -v agent/session/logging/main.go
-go build -ldflags "-s -w -extldflags=-Wl,-z,now,-z,relro,-z,defs" -o bin/ssm-cli -v agent/cli-main/cli-main.go
+go build -ldflags "-s -w -extldflags=-Wl,-z,now,-z,relro,-z,defs" -buildmode=pie -o bin/amazon-ssm-agent -v agent/agent.go agent/agent_unix.go agent/agent_parser.go
+go build -ldflags "-s -w -extldflags=-Wl,-z,now,-z,relro,-z,defs" -buildmode=pie -o bin/ssm-document-worker -v agent/framework/processor/executer/outofproc/worker/main.go
+go build -ldflags "-s -w -extldflags=-Wl,-z,now,-z,relro,-z,defs" -buildmode=pie -o bin/ssm-session-worker -v agent/framework/processor/executer/outofproc/sessionworker/main.go
+go build -ldflags "-s -w -extldflags=-Wl,-z,now,-z,relro,-z,defs" -buildmode=pie -o bin/ssm-session-logger -v agent/session/logging/main.go
+go build -ldflags "-s -w -extldflags=-Wl,-z,now,-z,relro,-z,defs" -buildmode=pie -o bin/ssm-cli -v agent/cli-main/cli-main.go
 
 %install
 
