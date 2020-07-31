@@ -16,6 +16,7 @@
 package configurepackage
 
 import (
+	"encoding/json"
 	"errors"
 	"fmt"
 	"regexp"
@@ -71,6 +72,30 @@ type ConfigurePackagePluginInput struct {
 	AdditionalArguments string `json:"additionalArguments"`
 	Source              string `json:"source"`
 	Repository          string `json:"repository"`
+}
+
+//Unpacker helper for handling additionalParameters
+type Unpacker struct {
+	Data map[string]interface{}
+}
+
+//UnmarshalJSON should do something
+func (u *Unpacker) UnmarshalJSON(b []byte) error {
+
+	err := json.Unmarshal(b, &u.Data)
+	if err != nil {
+		return err
+	}
+
+	for _, v := range u.Data {
+		switch v.(type) {
+		case map[string]interface{}:
+			u.Data["additionalArguments"] = ""
+		default:
+		}
+	}
+
+	return nil
 }
 
 // NewPlugin returns a new instance of the plugin.
@@ -292,9 +317,20 @@ func getVersionToUninstall(
 
 // parseAndValidateInput marshals raw JSON and returns the result of input validation or an error
 func parseAndValidateInput(rawPluginInput interface{}) (*ConfigurePackagePluginInput, error) {
-	var input ConfigurePackagePluginInput
 	var err error
-	if err = jsonutil.Remarshal(rawPluginInput, &input); err != nil {
+	u := &Unpacker{}
+	b, err := json.Marshal(rawPluginInput)
+	if err != nil {
+		return nil, fmt.Errorf("could not marshal rawPluginInput")
+	}
+
+	err = json.Unmarshal(b, u)
+	if err != nil {
+		return nil, fmt.Errorf("could not Umarshal to Unpacker")
+	}
+
+	var input ConfigurePackagePluginInput
+	if err = jsonutil.Remarshal(u, &input); err != nil {
 		return nil, fmt.Errorf("invalid format in plugin properties %v; \nerror %v", rawPluginInput, err)
 	}
 
