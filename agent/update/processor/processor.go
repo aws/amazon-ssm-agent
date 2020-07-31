@@ -157,7 +157,7 @@ func getMinimumVSupportedVersions() (versions *map[string]string) {
 func prepareInstallationPackages(mgr *updateManager, log log.T, context *UpdateContext) (err error) {
 	log.Infof("Initiating download %v", context.Current.PackageName)
 	var instanceContext *updateutil.InstanceContext
-	updateOperationsRetryCount := 2
+	updateOperationsRetryCount := 3
 	updateRetryDelay := 500      // 500 millisecond
 	updateRetryDelayBase := 1000 // 1000 millisecond
 	updateDownload := ""
@@ -386,7 +386,7 @@ func uninstallAgent(mgr *updateManager, log log.T, version string, context *Upda
 		context.Current.PackageName,
 		version)
 
-	uninstallRetryCount := 2
+	uninstallRetryCount := 3
 	uninstallRetryDelay := 1000     // 1 second
 	uninstallRetryDelayBase := 2000 // 2 seconds
 	// Uninstall version - TODO - move the retry logic to ExeCommand while cleaning that function
@@ -429,7 +429,10 @@ func installAgent(mgr *updateManager, log log.T, version string, context *Update
 		version)
 
 	// Install version - TODO - move the retry logic to ExeCommand while cleaning that function
-	installRetryCount := 2
+	installRetryCount := 3
+	if context.Current.State == Staged {
+		installRetryCount = 4 // this value is taken because previous updater version had total 4 retries (2 target install + 2 rollback install)
+	}
 	installRetryDelay := 1000     // 1 second
 	installRetryDelayBase := 2000 // 2 seconds
 	for retryCounter := 1; retryCounter <= installRetryCount; retryCounter++ {
