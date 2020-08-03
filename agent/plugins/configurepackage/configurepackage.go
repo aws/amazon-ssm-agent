@@ -16,8 +16,10 @@
 package configurepackage
 
 import (
+	"encoding/json"
 	"errors"
 	"fmt"
+	"reflect"
 	"regexp"
 	"strings"
 
@@ -64,10 +66,11 @@ type Plugin struct {
 // ConfigurePackagePluginInput represents one set of commands executed by the ConfigurePackage plugin.
 type ConfigurePackagePluginInput struct {
 	contracts.PluginInput
-	Name                string `json:"name"`
-	Version             string `json:"version"`
-	Action              string `json:"action"`
-	InstallationType    string `json:"installationType"`
+	Name             string `json:"name"`
+	Version          string `json:"version"`
+	Action           string `json:"action"`
+	InstallationType string `json:"installationType"`
+	// TODO: Replace "additionalArguments" from string type to map[string]inteface{} type once Runcommand supports string maps
 	AdditionalArguments string `json:"additionalArguments"`
 	Source              string `json:"source"`
 	Repository          string `json:"repository"`
@@ -292,10 +295,28 @@ func getVersionToUninstall(
 
 // parseAndValidateInput marshals raw JSON and returns the result of input validation or an error
 func parseAndValidateInput(rawPluginInput interface{}) (*ConfigurePackagePluginInput, error) {
-	var input ConfigurePackagePluginInput
 	var err error
-	if err = jsonutil.Remarshal(rawPluginInput, &input); err != nil {
-		return nil, fmt.Errorf("invalid format in plugin properties %v; \nerror %v", rawPluginInput, err)
+	var input ConfigurePackagePluginInput
+
+	pluginInputMap := make(map[string]interface{})
+	b, err := json.Marshal(rawPluginInput)
+	if err != nil {
+		return nil, fmt.Errorf("cannot marshal plugin properties %v; \nerror %v", rawPluginInput, err)
+	}
+	err = json.Unmarshal(b, &pluginInputMap)
+	if err != nil {
+		return nil, fmt.Errorf("cannot unmarshal plugin properties %v; \nerror %v", pluginInputMap, err)
+	}
+	for k, v := range pluginInputMap {
+		// Runcommand passes StringMap (i.e "additionalArguments" parameter) as string type as of 8/3/2020/.
+		// It can be parsed as an empty map after json serialization only if it is not defined in the input.
+		// Convert to empty string if the "additionalArguments" is a map; otherwise, use the defined value from input.
+		if "additionalArguments" == k && reflect.ValueOf(v).Kind() == reflect.Map {
+			pluginInputMap[k] = ""
+		}
+	}
+	if err = jsonutil.Remarshal(pluginInputMap, &input); err != nil {
+		return nil, fmt.Errorf("invalid format in plugin properties %v; \nerror %v", input, err)
 	}
 
 	if valid, err := validateInput(&input); !valid {

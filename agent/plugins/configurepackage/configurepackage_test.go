@@ -968,6 +968,42 @@ func TestConfigurePackageForUpdate_BirdwatcherService_InvalidInPlaceInstallation
 	serviceMock.AssertExpectations(t)
 }
 
+func TestParseAndValidateInputWithEmptyAdditionalArgumentsMap(t *testing.T) {
+	var inputMap = map[string]interface{}{"name": "PVDriver", "action": "Install", "additionalArguments": make(map[string]interface{})}
+	var rawPluginInput = interface{}(inputMap)
+	input, err := parseAndValidateInput(rawPluginInput)
+
+	assert.NoError(t, err)
+	assert.Equal(t, "PVDriver", input.Name)
+	assert.Equal(t, "Install", input.Action)
+	assert.Empty(t, input.Version)
+	assert.Empty(t, input.AdditionalArguments)
+}
+
+func TestParseAndValidateInputWithEmptyAdditionalArgumentsString(t *testing.T) {
+	var inputMap = map[string]interface{}{"name": "PVDriver", "action": "Install", "additionalArguments": ""}
+	var rawPluginInput = interface{}(inputMap)
+	input, err := parseAndValidateInput(rawPluginInput)
+
+	assert.NoError(t, err)
+	assert.Equal(t, "PVDriver", input.Name)
+	assert.Equal(t, "Install", input.Action)
+	assert.Empty(t, input.Version)
+	assert.Empty(t, input.AdditionalArguments)
+}
+
+func TestParseAndValidateInputWithoutAdditionalArguments(t *testing.T) {
+	var inputMap = map[string]interface{}{"name": "PVDriver", "action": "Install"}
+	var rawPluginInput = interface{}(inputMap)
+	input, err := parseAndValidateInput(rawPluginInput)
+
+	assert.NoError(t, err)
+	assert.Equal(t, "PVDriver", input.Name)
+	assert.Equal(t, "Install", input.Action)
+	assert.Empty(t, input.Version)
+	assert.Empty(t, input.AdditionalArguments)
+}
+
 func TestValidateInput(t *testing.T) {
 	input := ConfigurePackagePluginInput{}
 
