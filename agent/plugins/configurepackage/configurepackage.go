@@ -305,7 +305,7 @@ func parseAndValidateInput(rawPluginInput interface{}) (*ConfigurePackagePluginI
 	}
 	err = json.Unmarshal(b, &pluginInputMap)
 	if err != nil {
-		return nil, fmt.Errorf("cannot unmarshal plugin properties %v; \nerror %v", pluginInputMap, err)
+		return nil, fmt.Errorf("cannot unmarshal plugin properties %v; \nerror %v", string(b), err)
 	}
 	for k, v := range pluginInputMap {
 		// Runcommand passes StringMap (i.e "additionalArguments" parameter) as string type as of 8/3/2020/.
@@ -316,7 +316,7 @@ func parseAndValidateInput(rawPluginInput interface{}) (*ConfigurePackagePluginI
 		}
 	}
 	if err = jsonutil.Remarshal(pluginInputMap, &input); err != nil {
-		return nil, fmt.Errorf("invalid format in plugin properties %v; \nerror %v", input, err)
+		return nil, fmt.Errorf("invalid format in plugin properties %v; \nerror %v", pluginInputMap, err)
 	}
 
 	if valid, err := validateInput(&input); !valid {

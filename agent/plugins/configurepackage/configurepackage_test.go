@@ -968,6 +968,19 @@ func TestConfigurePackageForUpdate_BirdwatcherService_InvalidInPlaceInstallation
 	serviceMock.AssertExpectations(t)
 }
 
+func TestParseAndValidateInputWithAdditionalArgument(t *testing.T) {
+	var inputMap = map[string]interface{}{"name": "PVDriver", "action": "Install", "additionalArguments": "{\"SSM_var1\":\"customVal1\",\"SSM_var2\":\"customVal2\"}"}
+	var rawPluginInput = interface{}(inputMap)
+	input, err := parseAndValidateInput(rawPluginInput)
+
+	assert.NoError(t, err)
+	assert.Equal(t, "PVDriver", input.Name)
+	assert.Equal(t, "Install", input.Action)
+	assert.Empty(t, input.Version)
+	assert.NotEmpty(t, input.AdditionalArguments)
+	assert.Equal(t, "{\"SSM_var1\":\"customVal1\",\"SSM_var2\":\"customVal2\"}", input.AdditionalArguments)
+}
+
 func TestParseAndValidateInputWithEmptyAdditionalArgumentsMap(t *testing.T) {
 	var inputMap = map[string]interface{}{"name": "PVDriver", "action": "Install", "additionalArguments": make(map[string]interface{})}
 	var rawPluginInput = interface{}(inputMap)
