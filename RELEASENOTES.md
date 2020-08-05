@@ -1,5 +1,11 @@
 Latest
 ===============
+- Adjust retry settings for update operations
+- Fix Session manager initialization issue
+- Fix deserialization issue in configurePackage plugin
+
+2.3.1569.0
+===============
 - Add code to cleanup interim documents if unable to parse
 - Bug fix for executing StartProcess module in a goroutine to avoid blocking the main thread
 
