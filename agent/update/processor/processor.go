@@ -433,8 +433,6 @@ func installAgent(mgr *updateManager, log log.T, version string, context *Update
 	if context.Current.State == Staged {
 		installRetryCount = 4 // this value is taken because previous updater version had total 4 retries (2 target install + 2 rollback install)
 	}
-	installRetryDelay := 1000     // 1 second
-	installRetryDelayBase := 2000 // 2 seconds
 	for retryCounter := 1; retryCounter <= installRetryCount; retryCounter++ {
 		_, err = mgr.util.ExeCommand(
 			log,
@@ -448,7 +446,8 @@ func installAgent(mgr *updateManager, log log.T, version string, context *Update
 			break
 		}
 		if retryCounter < installRetryCount {
-			time.Sleep(time.Duration(installRetryDelayBase+rand.Intn(installRetryDelay)) * time.Millisecond)
+			backOff := getNextBackOff(retryCounter)
+			time.Sleep(backOff)
 		}
 	}
 	if err != nil {
@@ -456,6 +455,20 @@ func installAgent(mgr *updateManager, log log.T, version string, context *Update
 	}
 	log.Infof("%v %v installed successfully", context.Current.PackageName, version)
 	return nil
+}
+
+// getNextBackOff gets back-off in milli-seconds based on retry counter
+// (4*retryCounter) ms + 2000 ms random delay
+func getNextBackOff(retryCounter int) (backOff time.Duration) {
+	backOffMultiplier := 4
+	maxBackOffSeconds := 20 // 20 seconds
+	randomDelay := 2000     // 2 seconds
+
+	backOffSeconds := backOffMultiplier * retryCounter
+	if backOffSeconds > maxBackOffSeconds {
+		backOffSeconds = maxBackOffSeconds
+	}
+	return time.Duration((backOffSeconds*1000)+rand.Intn(randomDelay)) * time.Millisecond
 }
 
 // cleanUninstalledVersions deletes leftover files from previously installed versions in update folder
