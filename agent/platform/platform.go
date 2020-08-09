@@ -19,6 +19,7 @@ import (
 	"net"
 	"sort"
 	"strings"
+	"unicode/utf8"
 
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/log/ssmlog"
@@ -55,9 +56,24 @@ var awsRegionServiceDomainMap = map[string]string{
 	"us-west-2":      "amazonaws.com",
 }
 
+var getPlatformNameFn = getPlatformName
+
 // PlatformName gets the OS specific platform name.
 func PlatformName(log log.T) (name string, err error) {
-	return getPlatformName(log)
+	name, err = getPlatformNameFn(log)
+	if err != nil {
+		return
+	}
+	platformName := ""
+	for i := range name {
+		runeVal, _ := utf8.DecodeRuneInString(name[i:])
+		if runeVal == utf8.RuneError {
+			// runeVal = rune(value[i]) - using this will convert \xa9 to valid unicode code point
+			continue
+		}
+		platformName = platformName + fmt.Sprintf("%c", runeVal)
+	}
+	return platformName, nil
 }
 
 // PlatformType gets the OS specific platform type, valid values are windows and linux.
