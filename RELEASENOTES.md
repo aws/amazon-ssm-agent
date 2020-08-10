@@ -1,5 +1,10 @@
 Latest
 ===============
+- Enable aws:domainJoin SSM API for Linux
+- Sanitize platform name
+
+2.3.1613.0
+===============
 - Adjust retry settings for update operations
 - Fix Session manager initialization issue
 - Fix deserialization issue in configurePackage plugin
