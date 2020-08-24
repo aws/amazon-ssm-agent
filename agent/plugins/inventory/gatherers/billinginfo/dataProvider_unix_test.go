@@ -181,8 +181,17 @@ func TestParseCurlOutput(t *testing.T) {
 	}
 }
 
+func mockOnPremInstanceType() string {
+	return "on-premises"
+}
+
+func mockInstanceType() string {
+	return ""
+}
+
 func TestCollectBillingInfoData(t *testing.T) {
 	mockContext := context.NewMockDefault()
+	instType = mockInstanceType
 	for i, sampleData := range sampleDataUnix {
 		cmdExecutor = createMockExecutor(sampleData)
 		parsedItems := CollectBillingInfoData(mockContext)
@@ -196,6 +205,13 @@ func TestCollectBillingInfoData(t *testing.T) {
 	}
 
 	cmdExecutor = MockTestExecutorWithError
+	parsedItems := CollectBillingInfoData(mockContext)
+	assert.Equal(t, len(parsedItems), 0)
+}
+
+func TestCollectBillingInfoDataWithOnPremInstance(t *testing.T) {
+	mockContext := context.NewMockDefault()
+	instType = mockOnPremInstanceType
 	parsedItems := CollectBillingInfoData(mockContext)
 	assert.Equal(t, len(parsedItems), 0)
 }

@@ -94,8 +94,17 @@ func MockTestExecutorWithError(command string, args ...string) ([]byte, error) {
 	return result, fmt.Errorf("Random Error")
 }
 
+func mockOnPremInstanceType() string {
+	return "on-premises"
+}
+
+func mockInstanceType() string {
+	return ""
+}
+
 func TestCollectBillingInfoData(t *testing.T) {
 	mockContext := context.NewMockDefault()
+	instType = mockInstanceType
 	for i, sampleBillingInfoData := range sampleDataBillingInfo {
 		cmdExecutor = createMockExecutor(sampleBillingInfoData)
 		parsedItems := CollectBillingInfoData(mockContext)
@@ -112,7 +121,15 @@ func TestCollectBillingInfoData(t *testing.T) {
 
 func TestCollectBillingInfoDataWithError(t *testing.T) {
 	mockContext := context.NewMockDefault()
+	instType = mockInstanceType
 	cmdExecutor = MockTestExecutorWithError
+	parsedItems := CollectBillingInfoData(mockContext)
+	assert.Equal(t, len(parsedItems), 0)
+}
+
+func TestCollectBillingInfoDataWithOnPremInstance(t *testing.T) {
+	mockContext := context.NewMockDefault()
+	instType = mockOnPremInstanceType
 	parsedItems := CollectBillingInfoData(mockContext)
 	assert.Equal(t, len(parsedItems), 0)
 }

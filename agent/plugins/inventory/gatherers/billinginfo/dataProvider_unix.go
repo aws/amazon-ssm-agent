@@ -22,6 +22,7 @@ import (
 	"strings"
 
 	"github.com/aws/amazon-ssm-agent/agent/context"
+	"github.com/aws/amazon-ssm-agent/agent/managedInstances/registration"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/inventory/model"
 )
 
@@ -39,6 +40,8 @@ const (
 
 // cmdExecutor decouples exec.Command for easy testability
 var cmdExecutor = executeCommand
+var instType = registration.InstanceType
+var onPremInstType = registration.OnPremisesInstanceType
 
 func executeCommand(command string, args ...string) ([]byte, error) {
 	return exec.Command(command, args...).CombinedOutput()
@@ -53,6 +56,11 @@ func CollectBillingInfoData(context context.T) (data []model.BillingInfoData) {
 	var err error
 	cmd := curlCmd
 	args := []string{curlCmdArgs}
+
+	if iType := instType(); iType == onPremInstType {
+		log.Infof("Do not call Billing info, On-Premises instance")
+		return
+	}
 
 	log.Infof("Executing command: %v %v", cmd, args)
 	if output, err = cmdExecutor(cmd, args...); err != nil {
