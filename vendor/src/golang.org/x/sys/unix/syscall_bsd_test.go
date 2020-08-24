@@ -10,7 +10,6 @@ import (
 	"os/exec"
 	"runtime"
 	"testing"
-	"time"
 
 	"golang.org/x/sys/unix"
 )
@@ -47,28 +46,6 @@ func TestGetfsstat(t *testing.T) {
 	}
 }
 
-func TestSelect(t *testing.T) {
-	err := unix.Select(0, nil, nil, nil, &unix.Timeval{Sec: 0, Usec: 0})
-	if err != nil {
-		t.Fatalf("Select: %v", err)
-	}
-
-	dur := 250 * time.Millisecond
-	tv := unix.NsecToTimeval(int64(dur))
-	start := time.Now()
-	err = unix.Select(0, nil, nil, nil, &tv)
-	took := time.Since(start)
-	if err != nil {
-		t.Fatalf("Select: %v", err)
-	}
-
-	// On some BSDs the actual timeout might also be slightly less than the requested.
-	// Add an acceptable margin to avoid flaky tests.
-	if took < dur*2/3 {
-		t.Errorf("Select: timeout should have been at least %v, got %v", dur, took)
-	}
-}
-
 func TestSysctlRaw(t *testing.T) {
 	if runtime.GOOS == "openbsd" {
 		t.Skip("kern.proc.pid does not exist on OpenBSD")
@@ -86,4 +63,13 @@ func TestSysctlUint32(t *testing.T) {
 		t.Fatal(err)
 	}
 	t.Logf("kern.maxproc: %v", maxproc)
+}
+
+func TestSysctlClockinfo(t *testing.T) {
+	ci, err := unix.SysctlClockinfo("kern.clockrate")
+	if err != nil {
+		t.Fatal(err)
+	}
+	t.Logf("tick = %v, hz = %v, profhz = %v, stathz = %v",
+		ci.Tick, ci.Hz, ci.Profhz, ci.Stathz)
 }

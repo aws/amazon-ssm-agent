@@ -6,6 +6,7 @@ package unix_test
 
 import (
 	"bytes"
+	"os"
 	"testing"
 
 	"golang.org/x/sys/unix"
@@ -26,15 +27,6 @@ func stringsFromByteSlice(buf []byte) []string {
 	return result
 }
 
-func TestSysctlClockinfo(t *testing.T) {
-	ci, err := unix.SysctlClockinfo("kern.clockrate")
-	if err != nil {
-		t.Fatal(err)
-	}
-	t.Logf("tick = %v, tickadj = %v, hz = %v, profhz = %v, stathz = %v",
-		ci.Tick, ci.Tickadj, ci.Hz, ci.Profhz, ci.Stathz)
-}
-
 func TestIoctlPtmget(t *testing.T) {
 	fd, err := unix.Open("/dev/ptmx", unix.O_NOCTTY|unix.O_RDWR, 0666)
 	if err != nil {
@@ -48,4 +40,36 @@ func TestIoctlPtmget(t *testing.T) {
 	}
 
 	t.Logf("sfd = %v, ptsname = %v", ptm.Sfd, string(ptm.Sn[:bytes.IndexByte(ptm.Sn[:], 0)]))
+}
+
+func TestStatvfs(t *testing.T) {
+	defer chtmpdir(t)()
+	touch(t, "file1")
+
+	var statvfs1, statvfs2 unix.Statvfs_t
+	err := unix.Statvfs("file1", &statvfs1)
+	if err != nil {
+		t.Fatalf("Statvfs: %v", err)
+	}
+
+	f, err := os.Open("file1")
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer f.Close()
+
+	err = unix.Fstatvfs(int(f.Fd()), &statvfs2)
+	if err != nil {
+		t.Fatalf("Fstatvfs: %v", err)
+	}
+
+	if statvfs2.Fsid != statvfs1.Fsid {
+		t.Errorf("Fstatvfs: got fsid %v, expected %v", statvfs2.Fsid, statvfs1.Fsid)
+	}
+	if statvfs2.Owner != statvfs1.Owner {
+		t.Errorf("Fstatvfs: got owner %v, expected %v", statvfs2.Owner, statvfs1.Owner)
+	}
+	if statvfs2.Fstypename != statvfs1.Fstypename {
+		t.Errorf("Fstatvfs: got fstypename %s, expected %s", statvfs2.Fstypename, statvfs1.Fstypename)
+	}
 }

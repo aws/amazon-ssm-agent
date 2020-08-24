@@ -5,14 +5,21 @@
 package websocket
 
 import (
+	"bytes"
+	"context"
 	"crypto/tls"
 	"crypto/x509"
 	"encoding/base64"
+	"encoding/binary"
+	"fmt"
 	"io"
 	"io/ioutil"
+	"log"
+	"net"
 	"net/http"
 	"net/http/cookiejar"
 	"net/http/httptest"
+	"net/http/httptrace"
 	"net/url"
 	"reflect"
 	"strings"
@@ -31,9 +38,10 @@ var cstUpgrader = Upgrader{
 }
 
 var cstDialer = Dialer{
-	Subprotocols:    []string{"p1", "p2"},
-	ReadBufferSize:  1024,
-	WriteBufferSize: 1024,
+	Subprotocols:     []string{"p1", "p2"},
+	ReadBufferSize:   1024,
+	WriteBufferSize:  1024,
+	HandshakeTimeout: 30 * time.Second,
 }
 
 type cstHandler struct{ *testing.T }
@@ -41,6 +49,7 @@ type cstHandler struct{ *testing.T }
 type cstServer struct {
 	*httptest.Server
 	URL string
+	t   *testing.T
 }
 
 const (
@@ -68,18 +77,18 @@ func newTLSServer(t *testing.T) *cstServer {
 func (t cstHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	if r.URL.Path != cstPath {
 		t.Logf("path=%v, want %v", r.URL.Path, cstPath)
-		http.Error(w, "bad path", 400)
+		http.Error(w, "bad path", http.StatusBadRequest)
 		return
 	}
 	if r.URL.RawQuery != cstRawQuery {
 		t.Logf("query=%v, want %v", r.URL.RawQuery, cstRawQuery)
-		http.Error(w, "bad path", 400)
+		http.Error(w, "bad path", http.StatusBadRequest)
 		return
 	}
 	subprotos := Subprotocols(r)
 	if !reflect.DeepEqual(subprotos, cstDialer.Subprotocols) {
 		t.Logf("subprotols=%v, want %v", subprotos, cstDialer.Subprotocols)
-		http.Error(w, "bad protocol", 400)
+		http.Error(w, "bad protocol", http.StatusBadRequest)
 		return
 	}
 	ws, err := cstUpgrader.Upgrade(w, r, http.Header{"Set-Cookie": {"sessionID=1234"}})
@@ -143,8 +152,9 @@ func TestProxyDial(t *testing.T) {
 	s := newServer(t)
 	defer s.Close()
 
-	surl, _ := url.Parse(s.URL)
+	surl, _ := url.Parse(s.Server.URL)
 
+	cstDialer := cstDialer // make local copy for modification on next line.
 	cstDialer.Proxy = http.ProxyURL(surl)
 
 	connect := false
@@ -155,13 +165,13 @@ func TestProxyDial(t *testing.T) {
 		func(w http.ResponseWriter, r *http.Request) {
 			if r.Method == "CONNECT" {
 				connect = true
-				w.WriteHeader(200)
+				w.WriteHeader(http.StatusOK)
 				return
 			}
 
 			if !connect {
-				t.Log("connect not recieved")
-				http.Error(w, "connect not recieved", 405)
+				t.Log("connect not received")
+				http.Error(w, "connect not received", http.StatusMethodNotAllowed)
 				return
 			}
 			origHandler.ServeHTTP(w, r)
@@ -173,16 +183,16 @@ func TestProxyDial(t *testing.T) {
 	}
 	defer ws.Close()
 	sendRecv(t, ws)
-
-	cstDialer.Proxy = http.ProxyFromEnvironment
 }
 
 func TestProxyAuthorizationDial(t *testing.T) {
 	s := newServer(t)
 	defer s.Close()
 
-	surl, _ := url.Parse(s.URL)
+	surl, _ := url.Parse(s.Server.URL)
 	surl.User = url.UserPassword("username", "password")
+
+	cstDialer := cstDialer // make local copy for modification on next line.
 	cstDialer.Proxy = http.ProxyURL(surl)
 
 	connect := false
@@ -195,13 +205,13 @@ func TestProxyAuthorizationDial(t *testing.T) {
 			expectedProxyAuth := "Basic " + base64.StdEncoding.EncodeToString([]byte("username:password"))
 			if r.Method == "CONNECT" && proxyAuth == expectedProxyAuth {
 				connect = true
-				w.WriteHeader(200)
+				w.WriteHeader(http.StatusOK)
 				return
 			}
 
 			if !connect {
-				t.Log("connect with proxy authorization not recieved")
-				http.Error(w, "connect with proxy authorization not recieved", 405)
+				t.Log("connect with proxy authorization not received")
+				http.Error(w, "connect with proxy authorization not received", http.StatusMethodNotAllowed)
 				return
 			}
 			origHandler.ServeHTTP(w, r)
@@ -213,8 +223,6 @@ func TestProxyAuthorizationDial(t *testing.T) {
 	}
 	defer ws.Close()
 	sendRecv(t, ws)
-
-	cstDialer.Proxy = http.ProxyFromEnvironment
 }
 
 func TestDial(t *testing.T) {
@@ -237,7 +245,7 @@ func TestDialCookieJar(t *testing.T) {
 	d := cstDialer
 	d.Jar = jar
 
-	u, _ := parseURL(s.URL)
+	u, _ := url.Parse(s.URL)
 
 	switch u.Scheme {
 	case "ws":
@@ -246,7 +254,7 @@ func TestDialCookieJar(t *testing.T) {
 		u.Scheme = "https"
 	}
 
-	cookies := []*http.Cookie{&http.Cookie{Name: "gorilla", Value: "ws", Path: "/"}}
+	cookies := []*http.Cookie{{Name: "gorilla", Value: "ws", Path: "/"}}
 	d.Jar.SetCookies(u, cookies)
 
 	ws, _, err := d.Dial(s.URL, nil)
@@ -277,10 +285,7 @@ func TestDialCookieJar(t *testing.T) {
 	sendRecv(t, ws)
 }
 
-func TestDialTLS(t *testing.T) {
-	s := newTLSServer(t)
-	defer s.Close()
-
+func rootCAs(t *testing.T, s *httptest.Server) *x509.CertPool {
 	certs := x509.NewCertPool()
 	for _, c := range s.TLS.Certificates {
 		roots, err := x509.ParseCertificates(c.Certificate[len(c.Certificate)-1])
@@ -291,35 +296,15 @@ func TestDialTLS(t *testing.T) {
 			certs.AddCert(root)
 		}
 	}
-
-	d := cstDialer
-	d.TLSClientConfig = &tls.Config{RootCAs: certs}
-	ws, _, err := d.Dial(s.URL, nil)
-	if err != nil {
-		t.Fatalf("Dial: %v", err)
-	}
-	defer ws.Close()
-	sendRecv(t, ws)
+	return certs
 }
 
-func xTestDialTLSBadCert(t *testing.T) {
-	// This test is deactivated because of noisy logging from the net/http package.
-	s := newTLSServer(t)
-	defer s.Close()
-
-	ws, _, err := cstDialer.Dial(s.URL, nil)
-	if err == nil {
-		ws.Close()
-		t.Fatalf("Dial: nil")
-	}
-}
-
-func TestDialTLSNoVerify(t *testing.T) {
+func TestDialTLS(t *testing.T) {
 	s := newTLSServer(t)
 	defer s.Close()
 
 	d := cstDialer
-	d.TLSClientConfig = &tls.Config{InsecureSkipVerify: true}
+	d.TLSClientConfig = &tls.Config{RootCAs: rootCAs(t, s.Server)}
 	ws, _, err := d.Dial(s.URL, nil)
 	if err != nil {
 		t.Fatalf("Dial: %v", err)
@@ -339,6 +324,86 @@ func TestDialTimeout(t *testing.T) {
 		ws.Close()
 		t.Fatalf("Dial: nil")
 	}
+}
+
+// requireDeadlineNetConn fails the current test when Read or Write are called
+// with no deadline.
+type requireDeadlineNetConn struct {
+	t                  *testing.T
+	c                  net.Conn
+	readDeadlineIsSet  bool
+	writeDeadlineIsSet bool
+}
+
+func (c *requireDeadlineNetConn) SetDeadline(t time.Time) error {
+	c.writeDeadlineIsSet = !t.Equal(time.Time{})
+	c.readDeadlineIsSet = c.writeDeadlineIsSet
+	return c.c.SetDeadline(t)
+}
+
+func (c *requireDeadlineNetConn) SetReadDeadline(t time.Time) error {
+	c.readDeadlineIsSet = !t.Equal(time.Time{})
+	return c.c.SetDeadline(t)
+}
+
+func (c *requireDeadlineNetConn) SetWriteDeadline(t time.Time) error {
+	c.writeDeadlineIsSet = !t.Equal(time.Time{})
+	return c.c.SetDeadline(t)
+}
+
+func (c *requireDeadlineNetConn) Write(p []byte) (int, error) {
+	if !c.writeDeadlineIsSet {
+		c.t.Fatalf("write with no deadline")
+	}
+	return c.c.Write(p)
+}
+
+func (c *requireDeadlineNetConn) Read(p []byte) (int, error) {
+	if !c.readDeadlineIsSet {
+		c.t.Fatalf("read with no deadline")
+	}
+	return c.c.Read(p)
+}
+
+func (c *requireDeadlineNetConn) Close() error         { return c.c.Close() }
+func (c *requireDeadlineNetConn) LocalAddr() net.Addr  { return c.c.LocalAddr() }
+func (c *requireDeadlineNetConn) RemoteAddr() net.Addr { return c.c.RemoteAddr() }
+
+func TestHandshakeTimeout(t *testing.T) {
+	s := newServer(t)
+	defer s.Close()
+
+	d := cstDialer
+	d.NetDial = func(n, a string) (net.Conn, error) {
+		c, err := net.Dial(n, a)
+		return &requireDeadlineNetConn{c: c, t: t}, err
+	}
+	ws, _, err := d.Dial(s.URL, nil)
+	if err != nil {
+		t.Fatal("Dial:", err)
+	}
+	ws.Close()
+}
+
+func TestHandshakeTimeoutInContext(t *testing.T) {
+	s := newServer(t)
+	defer s.Close()
+
+	d := cstDialer
+	d.HandshakeTimeout = 0
+	d.NetDialContext = func(ctx context.Context, n, a string) (net.Conn, error) {
+		netDialer := &net.Dialer{}
+		c, err := netDialer.DialContext(ctx, n, a)
+		return &requireDeadlineNetConn{c: c, t: t}, err
+	}
+
+	ctx, cancel := context.WithDeadline(context.Background(), time.Now().Add(30*time.Second))
+	defer cancel()
+	ws, _, err := d.DialContext(ctx, s.URL, nil)
+	if err != nil {
+		t.Fatal("Dial:", err)
+	}
+	ws.Close()
 }
 
 func TestDialBadScheme(t *testing.T) {
@@ -398,9 +463,17 @@ func TestBadMethod(t *testing.T) {
 	}))
 	defer s.Close()
 
-	resp, err := http.PostForm(s.URL, url.Values{})
+	req, err := http.NewRequest("POST", s.URL, strings.NewReader(""))
 	if err != nil {
-		t.Fatalf("PostForm returned error %v", err)
+		t.Fatalf("NewRequest returned error %v", err)
+	}
+	req.Header.Set("Connection", "upgrade")
+	req.Header.Set("Upgrade", "websocket")
+	req.Header.Set("Sec-Websocket-Version", "13")
+
+	resp, err := http.DefaultClient.Do(req)
+	if err != nil {
+		t.Fatalf("Do returned error %v", err)
 	}
 	resp.Body.Close()
 	if resp.StatusCode != http.StatusMethodNotAllowed {
@@ -468,33 +541,195 @@ func TestRespOnBadHandshake(t *testing.T) {
 	}
 }
 
-// TestHostHeader confirms that the host header provided in the call to Dial is
-// sent to the server.
-func TestHostHeader(t *testing.T) {
-	s := newServer(t)
-	defer s.Close()
+type testLogWriter struct {
+	t *testing.T
+}
 
-	specifiedHost := make(chan string, 1)
-	origHandler := s.Server.Config.Handler
+func (w testLogWriter) Write(p []byte) (int, error) {
+	w.t.Logf("%s", p)
+	return len(p), nil
+}
 
-	// Capture the request Host header.
-	s.Server.Config.Handler = http.HandlerFunc(
-		func(w http.ResponseWriter, r *http.Request) {
-			specifiedHost <- r.Host
-			origHandler.ServeHTTP(w, r)
-		})
+// TestHost tests handling of host names and confirms that it matches net/http.
+func TestHost(t *testing.T) {
 
-	ws, _, err := cstDialer.Dial(s.URL, http.Header{"Host": {"testhost"}})
-	if err != nil {
-		t.Fatalf("Dial: %v", err)
+	upgrader := Upgrader{}
+	handler := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if IsWebSocketUpgrade(r) {
+			c, err := upgrader.Upgrade(w, r, http.Header{"X-Test-Host": {r.Host}})
+			if err != nil {
+				t.Fatal(err)
+			}
+			c.Close()
+		} else {
+			w.Header().Set("X-Test-Host", r.Host)
+		}
+	})
+
+	server := httptest.NewServer(handler)
+	defer server.Close()
+
+	tlsServer := httptest.NewTLSServer(handler)
+	defer tlsServer.Close()
+
+	addrs := map[*httptest.Server]string{server: server.Listener.Addr().String(), tlsServer: tlsServer.Listener.Addr().String()}
+	wsProtos := map[*httptest.Server]string{server: "ws://", tlsServer: "wss://"}
+	httpProtos := map[*httptest.Server]string{server: "http://", tlsServer: "https://"}
+
+	// Avoid log noise from net/http server by logging to testing.T
+	server.Config.ErrorLog = log.New(testLogWriter{t}, "", 0)
+	tlsServer.Config.ErrorLog = server.Config.ErrorLog
+
+	cas := rootCAs(t, tlsServer)
+
+	tests := []struct {
+		fail               bool             // true if dial / get should fail
+		server             *httptest.Server // server to use
+		url                string           // host for request URI
+		header             string           // optional request host header
+		tls                string           // optional host for tls ServerName
+		wantAddr           string           // expected host for dial
+		wantHeader         string           // expected request header on server
+		insecureSkipVerify bool
+	}{
+		{
+			server:     server,
+			url:        addrs[server],
+			wantAddr:   addrs[server],
+			wantHeader: addrs[server],
+		},
+		{
+			server:     tlsServer,
+			url:        addrs[tlsServer],
+			wantAddr:   addrs[tlsServer],
+			wantHeader: addrs[tlsServer],
+		},
+
+		{
+			server:     server,
+			url:        addrs[server],
+			header:     "badhost.com",
+			wantAddr:   addrs[server],
+			wantHeader: "badhost.com",
+		},
+		{
+			server:     tlsServer,
+			url:        addrs[tlsServer],
+			header:     "badhost.com",
+			wantAddr:   addrs[tlsServer],
+			wantHeader: "badhost.com",
+		},
+
+		{
+			server:     server,
+			url:        "example.com",
+			header:     "badhost.com",
+			wantAddr:   "example.com:80",
+			wantHeader: "badhost.com",
+		},
+		{
+			server:     tlsServer,
+			url:        "example.com",
+			header:     "badhost.com",
+			wantAddr:   "example.com:443",
+			wantHeader: "badhost.com",
+		},
+
+		{
+			server:     server,
+			url:        "badhost.com",
+			header:     "example.com",
+			wantAddr:   "badhost.com:80",
+			wantHeader: "example.com",
+		},
+		{
+			fail:     true,
+			server:   tlsServer,
+			url:      "badhost.com",
+			header:   "example.com",
+			wantAddr: "badhost.com:443",
+		},
+		{
+			server:             tlsServer,
+			url:                "badhost.com",
+			insecureSkipVerify: true,
+			wantAddr:           "badhost.com:443",
+			wantHeader:         "badhost.com",
+		},
+		{
+			server:     tlsServer,
+			url:        "badhost.com",
+			tls:        "example.com",
+			wantAddr:   "badhost.com:443",
+			wantHeader: "badhost.com",
+		},
 	}
-	defer ws.Close()
 
-	if gotHost := <-specifiedHost; gotHost != "testhost" {
-		t.Fatalf("gotHost = %q, want \"testhost\"", gotHost)
+	for i, tt := range tests {
+
+		tls := &tls.Config{
+			RootCAs:            cas,
+			ServerName:         tt.tls,
+			InsecureSkipVerify: tt.insecureSkipVerify,
+		}
+
+		var gotAddr string
+		dialer := Dialer{
+			NetDial: func(network, addr string) (net.Conn, error) {
+				gotAddr = addr
+				return net.Dial(network, addrs[tt.server])
+			},
+			TLSClientConfig: tls,
+		}
+
+		// Test websocket dial
+
+		h := http.Header{}
+		if tt.header != "" {
+			h.Set("Host", tt.header)
+		}
+		c, resp, err := dialer.Dial(wsProtos[tt.server]+tt.url+"/", h)
+		if err == nil {
+			c.Close()
+		}
+
+		check := func(protos map[*httptest.Server]string) {
+			name := fmt.Sprintf("%d: %s%s/ header[Host]=%q, tls.ServerName=%q", i+1, protos[tt.server], tt.url, tt.header, tt.tls)
+			if gotAddr != tt.wantAddr {
+				t.Errorf("%s: got addr %s, want %s", name, gotAddr, tt.wantAddr)
+			}
+			switch {
+			case tt.fail && err == nil:
+				t.Errorf("%s: unexpected success", name)
+			case !tt.fail && err != nil:
+				t.Errorf("%s: unexpected error %v", name, err)
+			case !tt.fail && err == nil:
+				if gotHost := resp.Header.Get("X-Test-Host"); gotHost != tt.wantHeader {
+					t.Errorf("%s: got host %s, want %s", name, gotHost, tt.wantHeader)
+				}
+			}
+		}
+
+		check(wsProtos)
+
+		// Confirm that net/http has same result
+
+		transport := &http.Transport{
+			Dial:            dialer.NetDial,
+			TLSClientConfig: dialer.TLSClientConfig,
+		}
+		req, _ := http.NewRequest("GET", httpProtos[tt.server]+tt.url+"/", nil)
+		if tt.header != "" {
+			req.Host = tt.header
+		}
+		client := &http.Client{Transport: transport}
+		resp, err = client.Do(req)
+		if err == nil {
+			resp.Body.Close()
+		}
+		transport.CloseIdleConnections()
+		check(httpProtos)
 	}
-
-	sendRecv(t, ws)
 }
 
 func TestDialCompression(t *testing.T) {
@@ -507,6 +742,164 @@ func TestDialCompression(t *testing.T) {
 	if err != nil {
 		t.Fatalf("Dial: %v", err)
 	}
+	defer ws.Close()
+	sendRecv(t, ws)
+}
+
+func TestSocksProxyDial(t *testing.T) {
+	s := newServer(t)
+	defer s.Close()
+
+	proxyListener, err := net.Listen("tcp", "127.0.0.1:0")
+	if err != nil {
+		t.Fatalf("listen failed: %v", err)
+	}
+	defer proxyListener.Close()
+	go func() {
+		c1, err := proxyListener.Accept()
+		if err != nil {
+			t.Errorf("proxy accept failed: %v", err)
+			return
+		}
+		defer c1.Close()
+
+		c1.SetDeadline(time.Now().Add(30 * time.Second))
+
+		buf := make([]byte, 32)
+		if _, err := io.ReadFull(c1, buf[:3]); err != nil {
+			t.Errorf("read failed: %v", err)
+			return
+		}
+		if want := []byte{5, 1, 0}; !bytes.Equal(want, buf[:len(want)]) {
+			t.Errorf("read %x, want %x", buf[:len(want)], want)
+		}
+		if _, err := c1.Write([]byte{5, 0}); err != nil {
+			t.Errorf("write failed: %v", err)
+			return
+		}
+		if _, err := io.ReadFull(c1, buf[:10]); err != nil {
+			t.Errorf("read failed: %v", err)
+			return
+		}
+		if want := []byte{5, 1, 0, 1}; !bytes.Equal(want, buf[:len(want)]) {
+			t.Errorf("read %x, want %x", buf[:len(want)], want)
+			return
+		}
+		buf[1] = 0
+		if _, err := c1.Write(buf[:10]); err != nil {
+			t.Errorf("write failed: %v", err)
+			return
+		}
+
+		ip := net.IP(buf[4:8])
+		port := binary.BigEndian.Uint16(buf[8:10])
+
+		c2, err := net.DialTCP("tcp", nil, &net.TCPAddr{IP: ip, Port: int(port)})
+		if err != nil {
+			t.Errorf("dial failed; %v", err)
+			return
+		}
+		defer c2.Close()
+		done := make(chan struct{})
+		go func() {
+			io.Copy(c1, c2)
+			close(done)
+		}()
+		io.Copy(c2, c1)
+		<-done
+	}()
+
+	purl, err := url.Parse("socks5://" + proxyListener.Addr().String())
+	if err != nil {
+		t.Fatalf("parse failed: %v", err)
+	}
+
+	cstDialer := cstDialer // make local copy for modification on next line.
+	cstDialer.Proxy = http.ProxyURL(purl)
+
+	ws, _, err := cstDialer.Dial(s.URL, nil)
+	if err != nil {
+		t.Fatalf("Dial: %v", err)
+	}
+	defer ws.Close()
+	sendRecv(t, ws)
+}
+
+func TestTracingDialWithContext(t *testing.T) {
+
+	var headersWrote, requestWrote, getConn, gotConn, connectDone, gotFirstResponseByte bool
+	trace := &httptrace.ClientTrace{
+		WroteHeaders: func() {
+			headersWrote = true
+		},
+		WroteRequest: func(httptrace.WroteRequestInfo) {
+			requestWrote = true
+		},
+		GetConn: func(hostPort string) {
+			getConn = true
+		},
+		GotConn: func(info httptrace.GotConnInfo) {
+			gotConn = true
+		},
+		ConnectDone: func(network, addr string, err error) {
+			connectDone = true
+		},
+		GotFirstResponseByte: func() {
+			gotFirstResponseByte = true
+		},
+	}
+	ctx := httptrace.WithClientTrace(context.Background(), trace)
+
+	s := newTLSServer(t)
+	defer s.Close()
+
+	d := cstDialer
+	d.TLSClientConfig = &tls.Config{RootCAs: rootCAs(t, s.Server)}
+
+	ws, _, err := d.DialContext(ctx, s.URL, nil)
+	if err != nil {
+		t.Fatalf("Dial: %v", err)
+	}
+
+	if !headersWrote {
+		t.Fatal("Headers was not written")
+	}
+	if !requestWrote {
+		t.Fatal("Request was not written")
+	}
+	if !getConn {
+		t.Fatal("getConn was not called")
+	}
+	if !gotConn {
+		t.Fatal("gotConn was not called")
+	}
+	if !connectDone {
+		t.Fatal("connectDone was not called")
+	}
+	if !gotFirstResponseByte {
+		t.Fatal("GotFirstResponseByte was not called")
+	}
+
+	defer ws.Close()
+	sendRecv(t, ws)
+}
+
+func TestEmptyTracingDialWithContext(t *testing.T) {
+
+	trace := &httptrace.ClientTrace{}
+	ctx := httptrace.WithClientTrace(context.Background(), trace)
+
+	s := newTLSServer(t)
+	defer s.Close()
+
+	d := cstDialer
+	d.TLSClientConfig = &tls.Config{RootCAs: rootCAs(t, s.Server)}
+
+	ws, _, err := d.DialContext(ctx, s.URL, nil)
+	if err != nil {
+		t.Fatalf("Dial: %v", err)
+	}
+
 	defer ws.Close()
 	sendRecv(t, ws)
 }

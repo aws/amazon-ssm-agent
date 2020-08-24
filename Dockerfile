@@ -1,4 +1,4 @@
-FROM golang:1.13.14
+FROM golang:1.15
 
 RUN apt -y update && apt -y upgrade && apt -y install rpm tar gzip wget zip && apt clean all
 

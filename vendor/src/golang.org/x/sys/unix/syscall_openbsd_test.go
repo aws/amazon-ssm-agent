@@ -12,6 +12,7 @@ import (
 )
 
 func TestPpoll(t *testing.T) {
+	defer chtmpdir(t)()
 	f, cleanup := mktmpfifo(t)
 	defer cleanup()
 
@@ -38,15 +39,6 @@ func TestPpoll(t *testing.T) {
 		t.Errorf("Ppoll: wrong number of events: got %v, expected %v", n, 0)
 		return
 	}
-}
-
-func TestSysctlClockinfo(t *testing.T) {
-	ci, err := unix.SysctlClockinfo("kern.clockrate")
-	if err != nil {
-		t.Fatal(err)
-	}
-	t.Logf("tick = %v, tickadj = %v, hz = %v, profhz = %v, stathz = %v",
-		ci.Tick, ci.Tickadj, ci.Hz, ci.Profhz, ci.Stathz)
 }
 
 func TestSysctlUvmexp(t *testing.T) {

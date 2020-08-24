@@ -55,6 +55,7 @@ func main() {
 
 var homeTemplate = template.Must(template.New("").Parse(`
 <!DOCTYPE html>
+<html>
 <head>
 <meta charset="utf-8">
 <script>  
@@ -66,7 +67,7 @@ window.addEventListener("load", function(evt) {
 
     var print = function(message) {
         var d = document.createElement("div");
-        d.innerHTML = message;
+        d.textContent = message;
         output.appendChild(d);
     };
 

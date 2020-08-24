@@ -34,7 +34,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	mgsContracts "github.com/aws/amazon-ssm-agent/agent/session/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/session/utility"
-	"github.com/kr/pty"
+	"github.com/creack/pty"
 )
 
 var ptyFile *os.File

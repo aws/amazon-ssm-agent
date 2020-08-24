@@ -3,7 +3,7 @@ Copyright 2015-2016 Amazon.com, Inc. or its affiliates. All Rights Reserved.
 
 Amazon SSM Agent includes the following third-party software/licensing:
 
-* kr/pty - https://github.com/kr/pty
+* creack/pty - https://github.com/creack/pty
 Copyright (c) 2011 Keith Rarick
 * rprichard/winpty - https://github.com/rprichard/winpty
 Copyright (c) 2011-2016 Ryan Prichard
@@ -75,11 +75,11 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 * cihub/seelog - https://github.com/cihub/seelog
 Copyright (c) 2012, Cloud Instruments Co., Ltd. <info@cin.io>. All rights reserved.
- * gorilla/websocket - https://github.com/gorilla/websocket
- Copyright (c) 2013 The Gorilla WebSocket Authors. All rights reserved.
- * fsnotigy/fsnotify - https://github.com/fsnotify/fsnotify
- Copyright (c) 2012 The Go Authors. All rights reserved.
- Copyright (c) 2012 fsnotify Authors. All rights reserved.
+* gorilla/websocket - https://github.com/gorilla/websocket
+Copyright (c) 2013 The Gorilla WebSocket Authors. All rights reserved.
+* fsnotigy/fsnotify - https://github.com/fsnotify/fsnotify
+Copyright (c) 2012 The Go Authors. All rights reserved.
+Copyright (c) 2012 fsnotify Authors. All rights reserved.
 * go-github/github- github.com/google/go-github/github
 Copyright (c) 2013 The go-github AUTHORS. All rights reserved.
 * go-querystring - github.com/google/go-querystring/query
@@ -98,7 +98,7 @@ Copyright (c) 2012 The Go Authors
 Copyright (c) 2009 The Go Authors
 * go-warnings/warnings - https://github.com/go-warnings/warnings
 Copyright (c) 2016 Péter Surányi
-** pborman/ansi; version 1.0 -- https://github.com/pborman/ansi
+* pborman/ansi; version 1.0 -- https://github.com/pborman/ansi
 Copyright (c) 2013 Google Inc. All rights reserved.
 
 BSD License
