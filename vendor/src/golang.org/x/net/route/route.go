@@ -73,7 +73,7 @@ type RouteMessage struct {
 	Version int     // message version
 	Type    int     // message type
 	Flags   int     // route flags
-	Index   int     // interface index when atatched
+	Index   int     // interface index when attached
 	ID      uintptr // sender's identifier; usually process ID
 	Seq     int     // sequence number
 	Err     error   // error on requested operation
@@ -88,7 +88,7 @@ func (m *RouteMessage) Marshal() ([]byte, error) {
 	return m.marshal()
 }
 
-// A RIBType reprensents a type of routing information base.
+// A RIBType represents a type of routing information base.
 type RIBType int
 
 const (

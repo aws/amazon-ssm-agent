@@ -31,7 +31,7 @@ func TestAVX2hasAVX(t *testing.T) {
 }
 
 func TestARM64minimalFeatures(t *testing.T) {
-	if runtime.GOARCH != "arm64" || runtime.GOOS != "linux" {
+	if runtime.GOARCH != "arm64" || runtime.GOOS == "darwin" {
 		return
 	}
 	if !cpu.ARM64.HasASIMD {
@@ -39,6 +39,14 @@ func TestARM64minimalFeatures(t *testing.T) {
 	}
 	if !cpu.ARM64.HasFP {
 		t.Fatal("HasFP expected true, got false")
+	}
+}
+
+func TestMIPS64Initialized(t *testing.T) {
+	if runtime.GOARCH == "mips64" || runtime.GOARCH == "mips64le" {
+		if !cpu.Initialized {
+			t.Fatal("Initialized expected true, got false")
+		}
 	}
 }
 
