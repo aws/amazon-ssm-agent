@@ -24,6 +24,7 @@ import (
 	"fmt"
 
 	"github.com/aws/amazon-ssm-agent/agent/context"
+	"github.com/aws/amazon-ssm-agent/agent/managedInstances/registration"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/inventory/model"
 )
 
@@ -40,6 +41,8 @@ const (
 
 // decoupling exec.Command for easy testability
 var cmdExecutor = executeCommand
+var instType = registration.InstanceType
+var onPremInstType = registration.OnPremisesInstanceType
 
 func executeCommand(command string, args ...string) ([]byte, error) {
 	return exec.Command(command, args...).CombinedOutput()
@@ -51,6 +54,11 @@ func CollectBillingInfoData(context context.T) (data []model.BillingInfoData) {
 	var err error
 	log := context.Log()
 	log.Infof("Getting %v data", GathererName)
+
+	if iType := instType(); iType == onPremInstType {
+		log.Infof("Do not call Billing info, On-Premises instance")
+		return
+	}
 
 	log.Infof("Collecting LicenseIncluded and Marketplace product codes by executing command:\n%v %v", cmd, cmdArgsToGetBillingInfo)
 

@@ -39,7 +39,8 @@ var (
 )
 
 const (
-	RegVaultKey = "RegistrationKey"
+	RegVaultKey            = "RegistrationKey"
+	OnPremisesInstanceType = "on-premises"
 )
 
 // InstanceID of the managed instance.
@@ -58,7 +59,7 @@ func Region() string {
 func InstanceType() string {
 	instance := getInstanceInfo()
 	if instance.InstanceID != "" {
-		return "on-premises"
+		return OnPremisesInstanceType
 	}
 
 	return ""
