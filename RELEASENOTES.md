@@ -1,5 +1,15 @@
 Latest
 ===============
+- First release of SSM Agent v3
+- Moved v2 amazon-ssm-agent to new ssm-agent-worker binary
+- New amazon-ssm-agent binary:
+  - Opt-in self update feature to upgrade if agent is running a deprecated version
+  - Telemetry feature to send important audit events to AWS. Opt-in send to customer CloudWatch
+  - Monitor and keep the ssm-agent-worker process running
+- Upgrade vendor dependencies and build to use go1.13
+
+2.3.1644.0
+===============
 - Enable aws:domainJoin SSM API for Linux
 - Sanitize platform name
 
