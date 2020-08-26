@@ -20,7 +20,7 @@ import (
 	"sync"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
-	"github.com/aws/amazon-ssm-agent/agent/containers"
+	"github.com/aws/amazon-ssm-agent/agent/platform/containers"
 )
 
 var cachedRegion, cachedAvailabilityZone, cachedInstanceType, cachedInstanceID, cachedTargetID string

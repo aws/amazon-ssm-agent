@@ -160,6 +160,7 @@ func TestOutOfProcExecuter_Success(t *testing.T) {
 //TODO test Zombie and Orphan child separately
 func TestOutOfProcExecuter_ShutdownAndReconnect(t *testing.T) {
 	testCase := setup(t)
+
 	docState1 := testCase.docState
 	//still inprogress, update the docState saved
 	docState1.DocumentInformation.ProcInfo = contracts.OSProcInfo{
@@ -294,6 +295,7 @@ func TestOutOfProcExecuter_Cancel(t *testing.T) {
 
 	outofprocExe := NewOutOfProcExecuter(testCase.context)
 	testCase.docStore.On("Load").Return(testDocState)
+	testCase.docStore.On("Save", resultDocStateBeforeProcess).Return(nil)
 	testCase.docStore.On("Save", resultDocState).Return(nil)
 	testCase.docStore.On("Save", resultDocStateBeforeProcess).Return(nil)
 	pluginRunner = func(

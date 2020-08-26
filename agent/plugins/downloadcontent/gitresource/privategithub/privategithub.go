@@ -16,10 +16,10 @@
 package privategithub
 
 import (
-	"github.com/aws/amazon-ssm-agent/agent/githubclient"
+	"github.com/aws/amazon-ssm-agent/agent/framework/docparser/parameterstore"
 	"github.com/aws/amazon-ssm-agent/agent/log"
-	"github.com/aws/amazon-ssm-agent/agent/parameterstore"
-	"github.com/aws/amazon-ssm-agent/agent/ssmparameterresolver"
+	"github.com/aws/amazon-ssm-agent/agent/plugins/downloadcontent/githubclient"
+	"github.com/aws/amazon-ssm-agent/agent/ssm/ssmparameterresolver"
 
 	"errors"
 	"fmt"

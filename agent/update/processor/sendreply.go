@@ -121,7 +121,6 @@ func prepareReplyPayload(config appconfig.SsmagentConfig, update *UpdateDetail) 
 		DocumentTraceOutput: "",
 		RuntimeStatus:       runtimeStatuses,
 	}
-
 	return payload
 }
 

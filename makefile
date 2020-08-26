@@ -1,6 +1,6 @@
 BUILDFILE_PATH := ./build/private/bgo_exports.makefile
 COPY := cp -p
-GO_BUILD := go build -i
+GO_BUILD := CGO_ENABLED=0 go build -i
 BRAZIL_BUILD := false
 
 # Using the wildcard function to check if file exists
@@ -89,18 +89,20 @@ cpy-plugins:
 	$(BGO_SPACE)/Tools/src/copy_plugin_binaries.sh $(BRAZIL_BUILD)
 
 .PHONY: quick-integtest
-quick-integtest: copy-src pre-build pre-release --quick-integtest
+quick-integtest: copy-src pre-build pre-release --quick-integtest --quick-integtest-core
 
 .PHONY: quick-test
 quick-test: copy-src pre-build pre-release --quick-test
 
+.PHONY: quick-test-core
+quick-test-core: copy-src pre-build pre-release --quick-test-core
+
 .PHONY: quick-e2e
-quick-e2e: copy-src pre-build pre-release --quick-e2e
+quick-e2e: copy-src pre-build pre-release --quick-e2e --quick-e2e-core
 
 .PHONY: pre-release
 pre-release:
 	@echo "SSM Agent release build"
-	$(eval GO_BUILD := go build)
 	rm -rf $(BGO_SPACE)/vendor/pkg
 
 .PHONY: copy-win-dep
@@ -117,6 +119,7 @@ pre-build:
 	mkdir -p $(BGO_SPACE)/bin/
 	$(COPY) $(BGO_SPACE)/Tools/src/PipelineRunTests.sh $(BGO_SPACE)/bin/
 	$(COPY) $(BGO_SPACE)/LICENSE $(BGO_SPACE)/bin/
+	$(COPY) $(BGO_SPACE)/NOTICE.md $(BGO_SPACE)/bin/
 	$(COPY) $(BGO_SPACE)/amazon-ssm-agent.json.template $(BGO_SPACE)/bin/amazon-ssm-agent.json.template
 	$(COPY) $(BGO_SPACE)/seelog_unix.xml $(BGO_SPACE)/bin/
 	$(COPY) $(BGO_SPACE)/seelog_windows.xml.template $(BGO_SPACE)/bin/
@@ -145,6 +148,8 @@ endif
 build-linux: checkstyle copy-src pre-build
 	@echo "Build for linux agent"
 	GOOS=linux GOARCH=amd64 $(GO_BUILD) -ldflags "-s -w -extldflags=-Wl,-z,now,-z,relro,-z,defs" -buildmode=pie -o $(BGO_SPACE)/bin/linux_amd64/amazon-ssm-agent -v \
+					$(BGO_SPACE)/core/agent.go $(BGO_SPACE)/core/agent_unix.go $(BGO_SPACE)/core/agent_parser.go
+	GOOS=linux GOARCH=amd64 $(GO_BUILD) -ldflags "-s -w -extldflags=-Wl,-z,now,-z,relro,-z,defs" -buildmode=pie -o $(BGO_SPACE)/bin/linux_amd64/ssm-agent-worker -v \
 					$(BGO_SPACE)/agent/agent.go $(BGO_SPACE)/agent/agent_unix.go $(BGO_SPACE)/agent/agent_parser.go
 	GOOS=linux GOARCH=amd64 $(GO_BUILD) -ldflags "-s -w -extldflags=-Wl,-z,now,-z,relro,-z,defs" -buildmode=pie -o $(BGO_SPACE)/bin/linux_amd64/updater -v \
 					$(BGO_SPACE)/agent/update/updater/updater.go $(BGO_SPACE)/agent/update/updater/updater_unix.go
@@ -161,6 +166,8 @@ build-linux: checkstyle copy-src pre-build
 build-freebsd: checkstyle copy-src pre-build
 	@echo "Build for freebsd agent"
 	GOOS=freebsd GOARCH=amd64 $(GO_BUILD) -ldflags "-s -w" -o $(BGO_SPACE)/bin/freebsd_amd64/amazon-ssm-agent -v \
+                        $(BGO_SPACE)/core/agent.go $(BGO_SPACE)/core/agent_unix.go $(BGO_SPACE)/core/agent_parser.go
+	GOOS=freebsd GOARCH=amd64 $(GO_BUILD) -ldflags "-s -w" -o $(BGO_SPACE)/bin/freebsd_amd64/ssm-agent-worker -v \
 					$(BGO_SPACE)/agent/agent.go $(BGO_SPACE)/agent/agent_unix.go $(BGO_SPACE)/agent/agent_parser.go
 	GOOS=freebsd GOARCH=amd64 $(GO_BUILD) -ldflags "-s -w" -o $(BGO_SPACE)/bin/freebsd_amd64/ssm-cli -v \
 					$(BGO_SPACE)/agent/cli-main/cli-main.go
@@ -175,6 +182,8 @@ build-freebsd: checkstyle copy-src pre-build
 build-darwin: checkstyle copy-src pre-build
 	@echo "Build for darwin agent"
 	GOOS=darwin GOARCH=amd64 $(GO_BUILD) -ldflags "-s -w" -o $(BGO_SPACE)/bin/darwin_amd64/amazon-ssm-agent -v \
+                    $(BGO_SPACE)/core/agent.go $(BGO_SPACE)/core/agent_unix.go $(BGO_SPACE)/core/agent_parser.go
+	GOOS=darwin GOARCH=amd64 $(GO_BUILD) -ldflags "-s -w" -o $(BGO_SPACE)/bin/darwin_amd64/ssm-agent-worker -v \
 					$(BGO_SPACE)/agent/agent.go $(BGO_SPACE)/agent/agent_unix.go $(BGO_SPACE)/agent/agent_parser.go
 	GOOS=darwin GOARCH=amd64 $(GO_BUILD) -ldflags "-s -w" -o $(BGO_SPACE)/bin/darwin_amd64/updater -v \
 					$(BGO_SPACE)/agent/update/updater/updater.go $(BGO_SPACE)/agent/update/updater/updater_unix.go
@@ -187,6 +196,8 @@ build-darwin: checkstyle copy-src pre-build
 build-windows: checkstyle copy-src pre-build
 	@echo "Rebuild for windows agent"
 	GOOS=windows GOARCH=amd64 $(GO_BUILD) -ldflags "-s -w" -o $(BGO_SPACE)/bin/windows_amd64/amazon-ssm-agent.exe -v \
+					$(BGO_SPACE)/core/agent.go $(BGO_SPACE)/core/agent_windows.go $(BGO_SPACE)/core/agent_parser.go
+	GOOS=windows GOARCH=amd64 $(GO_BUILD) -ldflags "-s -w" -o $(BGO_SPACE)/bin/windows_amd64/ssm-agent-worker.exe -v \
 					$(BGO_SPACE)/agent/agent.go $(BGO_SPACE)/agent/agent_windows.go $(BGO_SPACE)/agent/agent_parser.go
 	GOOS=windows GOARCH=amd64 $(GO_BUILD) -ldflags "-s -w" -o $(BGO_SPACE)/bin/windows_amd64/updater.exe -v \
 					$(BGO_SPACE)/agent/update/updater/updater.go $(BGO_SPACE)/agent/update/updater/updater_windows.go
@@ -203,6 +214,8 @@ build-windows: checkstyle copy-src pre-build
 build-linux-386: checkstyle copy-src pre-build
 	@echo "Build for linux agent"
 	GOOS=linux GOARCH=386 $(GO_BUILD) -ldflags "-s -w -extldflags=-Wl,-z,now,-z,relro,-z,defs" -o $(BGO_SPACE)/bin/linux_386/amazon-ssm-agent -v \
+                        $(BGO_SPACE)/core/agent.go $(BGO_SPACE)/core/agent_unix.go $(BGO_SPACE)/core/agent_parser.go
+	GOOS=linux GOARCH=386 $(GO_BUILD) -ldflags "-s -w -extldflags=-Wl,-z,now,-z,relro,-z,defs" -o $(BGO_SPACE)/bin/linux_386/ssm-agent-worker -v \
 					$(BGO_SPACE)/agent/agent.go $(BGO_SPACE)/agent/agent_unix.go $(BGO_SPACE)/agent/agent_parser.go
 	GOOS=linux GOARCH=386 $(GO_BUILD) -ldflags "-s -w -extldflags=-Wl,-z,now,-z,relro,-z,defs" -o $(BGO_SPACE)/bin/linux_386/updater -v \
 					$(BGO_SPACE)/agent/update/updater/updater.go $(BGO_SPACE)/agent/update/updater/updater_unix.go
@@ -219,6 +232,8 @@ build-linux-386: checkstyle copy-src pre-build
 build-darwin-386: checkstyle copy-src pre-build
 	@echo "Build for darwin agent"
 	GOOS=darwin GOARCH=386 $(GO_BUILD) -ldflags "-s -w" -o $(BGO_SPACE)/bin/darwin_386/amazon-ssm-agent -v \
+                    $(BGO_SPACE)/core/agent.go $(BGO_SPACE)/core/agent_unix.go $(BGO_SPACE)/core/agent_parser.go
+	GOOS=darwin GOARCH=386 $(GO_BUILD) -ldflags "-s -w" -o $(BGO_SPACE)/bin/darwin_386/ssm-agent-worker -v \
 					$(BGO_SPACE)/agent/agent.go $(BGO_SPACE)/agent/agent_unix.go $(BGO_SPACE)/agent/agent_parser.go
 	GOOS=darwin GOARCH=386 $(GO_BUILD) -ldflags "-s -w" -o $(BGO_SPACE)/bin/darwin_386/updater -v \
 					$(BGO_SPACE)/agent/update/updater/updater.go $(BGO_SPACE)/agent/update/updater/updater_unix.go
@@ -230,23 +245,27 @@ build-darwin-386: checkstyle copy-src pre-build
 .PHONY: build-windows-386
 build-windows-386: checkstyle copy-src pre-build
 	@echo "Rebuild for windows agent"
-	GOOS=windows GOARCH=386 go build -ldflags "-s -w" -o $(BGO_SPACE)/bin/windows_386/amazon-ssm-agent.exe -v \
+	GOOS=windows GOARCH=386 $(GO_BUILD) -ldflags "-s -w" -o $(BGO_SPACE)/bin/windows_386/amazon-ssm-agent.exe -v \
+					$(BGO_SPACE)/core/agent.go $(BGO_SPACE)/core/agent_windows.go $(BGO_SPACE)/core/agent_parser.go
+	GOOS=windows GOARCH=386 $(GO_BUILD) -ldflags "-s -w" -o $(BGO_SPACE)/bin/windows_386/ssm-agent-worker.exe -v \
 					$(BGO_SPACE)/agent/agent.go $(BGO_SPACE)/agent/agent_windows.go $(BGO_SPACE)/agent/agent_parser.go
-	GOOS=windows GOARCH=386 go build -ldflags "-s -w" -o $(BGO_SPACE)/bin/windows_386/updater.exe -v \
+	GOOS=windows GOARCH=386 $(GO_BUILD) -ldflags "-s -w" -o $(BGO_SPACE)/bin/windows_386/updater.exe -v \
 					$(BGO_SPACE)/agent/update/updater/updater.go $(BGO_SPACE)/agent/update/updater/updater_windows.go
-	GOOS=windows GOARCH=386 go build -ldflags "-s -w" -o $(BGO_SPACE)/bin/windows_386/ssm-cli.exe -v \
+	GOOS=windows GOARCH=386 $(GO_BUILD) -ldflags "-s -w" -o $(BGO_SPACE)/bin/windows_386/ssm-cli.exe -v \
 					$(BGO_SPACE)/agent/cli-main/cli-main.go
-	GOOS=windows GOARCH=386 go build -ldflags "-s -w" -o $(BGO_SPACE)/bin/windows_386/ssm-document-worker.exe -v \
+	GOOS=windows GOARCH=386 $(GO_BUILD) -ldflags "-s -w" -o $(BGO_SPACE)/bin/windows_386/ssm-document-worker.exe -v \
 					$(BGO_SPACE)/agent/framework/processor/executer/outofproc/worker/main.go
-	GOOS=windows GOARCH=386 go build -ldflags "-s -w" -o $(BGO_SPACE)/bin/windows_386/ssm-session-logger.exe -v \
+	GOOS=windows GOARCH=386 $(GO_BUILD) -ldflags "-s -w" -o $(BGO_SPACE)/bin/windows_386/ssm-session-logger.exe -v \
 					$(BGO_SPACE)/agent/session/logging/main.go
-	GOOS=windows GOARCH=386 go build -ldflags "-s -w" -o $(BGO_SPACE)/bin/windows_386/ssm-session-worker.exe -v \
+	GOOS=windows GOARCH=386 $(GO_BUILD) -ldflags "-s -w" -o $(BGO_SPACE)/bin/windows_386/ssm-session-worker.exe -v \
 					$(BGO_SPACE)/agent/framework/processor/executer/outofproc/sessionworker/main.go
 
 .PHONY: build-arm
 build-arm: checkstyle copy-src pre-build
 	@echo "Build for ARM platforms"
 	GOOS=linux GOARCH=arm GOARM=6 $(GO_BUILD) -ldflags "-s -w -extldflags=-Wl,-z,now,-z,relro,-z,defs" -o $(BGO_SPACE)/bin/linux_arm/amazon-ssm-agent -v \
+                        $(BGO_SPACE)/core/agent.go $(BGO_SPACE)/core/agent_unix.go $(BGO_SPACE)/core/agent_parser.go
+	GOOS=linux GOARCH=arm GOARM=6 $(GO_BUILD) -ldflags "-s -w -extldflags=-Wl,-z,now,-z,relro,-z,defs" -o $(BGO_SPACE)/bin/linux_arm/ssm-agent-worker -v \
 						$(BGO_SPACE)/agent/agent.go $(BGO_SPACE)/agent/agent_unix.go $(BGO_SPACE)/agent/agent_parser.go
 	GOOS=linux GOARCH=arm GOARM=6 $(GO_BUILD) -ldflags "-s -w -extldflags=-Wl,-z,now,-z,relro,-z,defs" -o $(BGO_SPACE)/bin/linux_arm/updater -v \
 						$(BGO_SPACE)/agent/update/updater/updater.go $(BGO_SPACE)/agent/update/updater/updater_unix.go
@@ -263,6 +282,8 @@ build-arm: checkstyle copy-src pre-build
 build-arm64: checkstyle copy-src pre-build
 	@echo "Build for ARM64 platforms"
 	GOOS=linux GOARCH=arm64 $(GO_BUILD) -ldflags "-s -w -extldflags=-Wl,-z,now,-z,relro,-z,defs" -o $(BGO_SPACE)/bin/linux_arm64/amazon-ssm-agent -v \
+                    $(BGO_SPACE)/core/agent.go $(BGO_SPACE)/core/agent_unix.go $(BGO_SPACE)/core/agent_parser.go
+	GOOS=linux GOARCH=arm64 $(GO_BUILD) -ldflags "-s -w -extldflags=-Wl,-z,now,-z,relro,-z,defs" -o $(BGO_SPACE)/bin/linux_arm64/ssm-agent-worker -v \
 					$(BGO_SPACE)/agent/agent.go $(BGO_SPACE)/agent/agent_unix.go $(BGO_SPACE)/agent/agent_parser.go
 	GOOS=linux GOARCH=arm64 $(GO_BUILD) -ldflags "-s -w -extldflags=-Wl,-z,now,-z,relro,-z,defs" -o $(BGO_SPACE)/bin/linux_arm64/updater -v \
 					$(BGO_SPACE)/agent/update/updater/updater.go $(BGO_SPACE)/agent/update/updater/updater_unix.go
@@ -281,6 +302,8 @@ copy-src:
 	mkdir -p $(GOTEMPCOPYPATH)
 	@echo "copying files to $(GOTEMPCOPYPATH)"
 	$(COPY) -r $(BGO_SPACE)/agent $(GOTEMPCOPYPATH)
+	$(COPY) -r $(BGO_SPACE)/core $(GOTEMPCOPYPATH)
+	$(COPY) -r $(BGO_SPACE)/common $(GOTEMPCOPYPATH)
 
 .PHONY: build-tests-linux
 build-tests-linux: copy-src copy-tests-src pre-build
@@ -324,7 +347,7 @@ copy-package-dep:
 	$(COPY) -r $(BGO_SPACE)/LICENSE $(BGO_SPACE)/bin/package_dep/
 	$(COPY) -r $(BGO_SPACE)/VERSION $(BGO_SPACE)/bin/package_dep/
 
-	cd $(BGO_SPACE) && zip -q -y -r $(BGO_SPACE)/bin/gosrc.zip agent vendor && cd -
+	cd $(BGO_SPACE) && zip -q -y -r $(BGO_SPACE)/bin/gosrc.zip agent common core vendor && cd -
 
 .PHONY: remove-prepacked-folder
 remove-prepacked-folder:
@@ -334,6 +357,7 @@ remove-prepacked-folder:
 prepack-linux:
 	mkdir -p $(BGO_SPACE)/bin/prepacked/linux_amd64
 	$(COPY) $(BGO_SPACE)/bin/linux_amd64/amazon-ssm-agent $(BGO_SPACE)/bin/prepacked/linux_amd64/amazon-ssm-agent
+	$(COPY) $(BGO_SPACE)/bin/linux_amd64/ssm-agent-worker $(BGO_SPACE)/bin/prepacked/linux_amd64/ssm-agent-worker
 	$(COPY) $(BGO_SPACE)/bin/linux_amd64/updater $(BGO_SPACE)/bin/prepacked/linux_amd64/updater
 	$(COPY) $(BGO_SPACE)/bin/linux_amd64/ssm-cli $(BGO_SPACE)/bin/prepacked/linux_amd64/ssm-cli
 	$(COPY) $(BGO_SPACE)/bin/linux_amd64/ssm-document-worker $(BGO_SPACE)/bin/prepacked/linux_amd64/ssm-document-worker
@@ -342,11 +366,13 @@ prepack-linux:
 	$(COPY) $(BGO_SPACE)/bin/amazon-ssm-agent.json.template $(BGO_SPACE)/bin/prepacked/linux_amd64/amazon-ssm-agent.json.template
 	$(COPY) $(BGO_SPACE)/bin/seelog_unix.xml $(BGO_SPACE)/bin/prepacked/linux_amd64/seelog.xml.template
 	$(COPY) $(BGO_SPACE)/bin/LICENSE $(BGO_SPACE)/bin/prepacked/linux_amd64/LICENSE
+	$(COPY) $(BGO_SPACE)/bin/NOTICE.md $(BGO_SPACE)/bin/prepacked/linux_amd64/NOTICE.md
 
 .PHONY: prepack-linux-arm64
 prepack-linux-arm64:
 	mkdir -p $(BGO_SPACE)/bin/prepacked/linux_arm64
 	$(COPY) $(BGO_SPACE)/bin/linux_arm64/amazon-ssm-agent $(BGO_SPACE)/bin/prepacked/linux_arm64/amazon-ssm-agent
+	$(COPY) $(BGO_SPACE)/bin/linux_arm64/ssm-agent-worker $(BGO_SPACE)/bin/prepacked/linux_arm64/ssm-agent-worker
 	$(COPY) $(BGO_SPACE)/bin/linux_arm64/updater $(BGO_SPACE)/bin/prepacked/linux_arm64/updater
 	$(COPY) $(BGO_SPACE)/bin/linux_arm64/ssm-cli $(BGO_SPACE)/bin/prepacked/linux_arm64/ssm-cli
 	$(COPY) $(BGO_SPACE)/bin/linux_arm64/ssm-document-worker $(BGO_SPACE)/bin/prepacked/linux_arm64/ssm-document-worker
@@ -355,11 +381,13 @@ prepack-linux-arm64:
 	$(COPY) $(BGO_SPACE)/bin/amazon-ssm-agent.json.template $(BGO_SPACE)/bin/prepacked/linux_arm64/amazon-ssm-agent.json.template
 	$(COPY) $(BGO_SPACE)/bin/seelog_unix.xml $(BGO_SPACE)/bin/prepacked/linux_arm64/seelog.xml.template
 	$(COPY) $(BGO_SPACE)/bin/LICENSE $(BGO_SPACE)/bin/prepacked/linux_arm64/LICENSE
+	$(COPY) $(BGO_SPACE)/bin/NOTICE.md $(BGO_SPACE)/bin/prepacked/linux_arm64/NOTICE.md
 
 .PHONY: prepack-windows
 prepack-windows:
 	mkdir -p $(BGO_SPACE)/bin/prepacked/windows_amd64
 	$(COPY) $(BGO_SPACE)/bin/windows_amd64/amazon-ssm-agent.exe $(BGO_SPACE)/bin/prepacked/windows_amd64/amazon-ssm-agent.exe
+	$(COPY) $(BGO_SPACE)/bin/windows_amd64/ssm-agent-worker.exe $(BGO_SPACE)/bin/prepacked/windows_amd64/ssm-agent-worker.exe
 	$(COPY) $(BGO_SPACE)/bin/windows_amd64/updater.exe $(BGO_SPACE)/bin/prepacked/windows_amd64/updater.exe
 	$(COPY) $(BGO_SPACE)/bin/windows_amd64/ssm-cli.exe $(BGO_SPACE)/bin/prepacked/windows_amd64/ssm-cli.exe
 	$(COPY) $(BGO_SPACE)/bin/windows_amd64/ssm-document-worker.exe $(BGO_SPACE)/bin/prepacked/windows_amd64/ssm-document-worker.exe
@@ -368,11 +396,13 @@ prepack-windows:
 	$(COPY) $(BGO_SPACE)/bin/amazon-ssm-agent.json.template $(BGO_SPACE)/bin/prepacked/windows_amd64/amazon-ssm-agent.json.template
 	$(COPY) $(BGO_SPACE)/bin/seelog_windows.xml.template $(BGO_SPACE)/bin/prepacked/windows_amd64/seelog.xml.template
 	$(COPY) $(BGO_SPACE)/bin/LICENSE $(BGO_SPACE)/bin/prepacked/windows_amd64/LICENSE
+	$(COPY) $(BGO_SPACE)/bin/NOTICE.md $(BGO_SPACE)/bin/prepacked/windows_amd64/NOTICE.md
 
 .PHONY: prepack-linux-386
 prepack-linux-386:
 	mkdir -p $(BGO_SPACE)/bin/prepacked/linux_386
 	$(COPY) $(BGO_SPACE)/bin/linux_386/amazon-ssm-agent $(BGO_SPACE)/bin/prepacked/linux_386/amazon-ssm-agent
+	$(COPY) $(BGO_SPACE)/bin/linux_386/ssm-agent-worker $(BGO_SPACE)/bin/prepacked/linux_386/ssm-agent-worker
 	$(COPY) $(BGO_SPACE)/bin/linux_386/updater $(BGO_SPACE)/bin/prepacked/linux_386/updater
 	$(COPY) $(BGO_SPACE)/bin/linux_386/ssm-cli $(BGO_SPACE)/bin/prepacked/linux_386/ssm-cli
 	$(COPY) $(BGO_SPACE)/bin/linux_386/ssm-document-worker $(BGO_SPACE)/bin/prepacked/linux_386/ssm-document-worker
@@ -381,11 +411,13 @@ prepack-linux-386:
 	$(COPY) $(BGO_SPACE)/bin/amazon-ssm-agent.json.template $(BGO_SPACE)/bin/prepacked/linux_386/amazon-ssm-agent.json.template
 	$(COPY) $(BGO_SPACE)/bin/seelog_unix.xml $(BGO_SPACE)/bin/prepacked/linux_386/seelog.xml.template
 	$(COPY) $(BGO_SPACE)/bin/LICENSE $(BGO_SPACE)/bin/prepacked/linux_386/LICENSE
+	$(COPY) $(BGO_SPACE)/bin/NOTICE.md $(BGO_SPACE)/bin/prepacked/linux_386/NOTICE.md
 
 .PHONY: prepack-windows-386
 prepack-windows-386:
 	mkdir -p $(BGO_SPACE)/bin/prepacked/windows_386
 	$(COPY) $(BGO_SPACE)/bin/windows_386/amazon-ssm-agent.exe $(BGO_SPACE)/bin/prepacked/windows_386/amazon-ssm-agent.exe
+	$(COPY) $(BGO_SPACE)/bin/windows_386/ssm-agent-worker.exe $(BGO_SPACE)/bin/prepacked/windows_386/ssm-agent-worker.exe
 	$(COPY) $(BGO_SPACE)/bin/windows_386/updater.exe $(BGO_SPACE)/bin/prepacked/windows_386/updater.exe
 	$(COPY) $(BGO_SPACE)/bin/windows_386/ssm-cli.exe $(BGO_SPACE)/bin/prepacked/windows_386/ssm-cli.exe
 	$(COPY) $(BGO_SPACE)/bin/windows_386/ssm-document-worker.exe $(BGO_SPACE)/bin/prepacked/windows_386/ssm-document-worker.exe
@@ -394,6 +426,7 @@ prepack-windows-386:
 	$(COPY) $(BGO_SPACE)/bin/amazon-ssm-agent.json.template $(BGO_SPACE)/bin/prepacked/windows_386/amazon-ssm-agent.json.template
 	$(COPY) $(BGO_SPACE)/bin/seelog_windows.xml.template $(BGO_SPACE)/bin/prepacked/windows_386/seelog.xml.template
 	$(COPY) $(BGO_SPACE)/bin/LICENSE $(BGO_SPACE)/bin/prepacked/windows_386/LICENSE
+	$(COPY) $(BGO_SPACE)/bin/NOTICE.md $(BGO_SPACE)/bin/prepacked/windows_386/NOTICE.md
 
 .PHONY: create-package-folder
 create-package-folder:
@@ -467,17 +500,34 @@ get-tools:
 	# go test -v -gcflags "-N -l" -tags=integration github.com/aws/amazon-ssm-agent/agent/fileutil/...
 	go test -gcflags "-N -l" -tags=integration github.com/aws/amazon-ssm-agent/agent/...
 
+.PHONY: --quick-integtest-core
+--quick-integtest-core:
+	# if you want to restrict to some specific package, sample below
+	# go test -v -gcflags "-N -l" -tags=integration github.com/aws/amazon-ssm-agent/agent/fileutil/...
+	go test -gcflags "-N -l" -tags=integration github.com/aws/amazon-ssm-agent/core/...
+
+
 .PHONY: --quick-test
 --quick-test:
 	# if you want to test a specific package, you can add the package name instead of the dots. Sample below
 	# go test -gcflags "-N -l" github.com/aws/amazon-ssm-agent/agent/task
 	go test -gcflags "-N -l" github.com/aws/amazon-ssm-agent/agent/...
 
+--quick-test-core:
+	# if you want to test a specific package, you can add the package name instead of the dots. Sample below
+	# go test -gcflags "-N -l" github.com/aws/amazon-ssm-agent/agent/task
+	go test -gcflags "-N -l" github.com/aws/amazon-ssm-agent/core/...
+
 .PHONY: --quick-e2e
 --quick-e2e:
 	# if you want to restrict to some specific package, sample below
 	# go test -v -gcflags "-N -l" -tags=integration github.com/aws/amazon-ssm-agent/agent/fileutil/...
 	go test -gcflags "-N -l" -tags=e2e github.com/aws/amazon-ssm-agent/agent/...
+
+--quick-e2e-core:
+	# if you want to restrict to some specific package, sample below
+	# go test -v -gcflags "-N -l" -tags=integration github.com/aws/amazon-ssm-agent/agent/fileutil/...
+	go test -gcflags "-N -l" -tags=e2e github.com/aws/amazon-ssm-agent/core/...
 
 .PHONY: gen-report
 gen-report:

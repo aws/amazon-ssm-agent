@@ -27,7 +27,7 @@ import (
 
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler"
-	"github.com/aws/amazon-ssm-agent/agent/jobobject"
+	"github.com/aws/amazon-ssm-agent/agent/longrunning/jobobject"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 )
 

@@ -19,7 +19,6 @@ import (
 	"fmt"
 	"math/rand"
 	"sync"
-
 	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
@@ -36,6 +35,7 @@ var once sync.Once
 var (
 	downloadArtifact = artifact.Download
 	uncompress       = fileutil.Uncompress
+	versioncheck     = updateutil.ValidateVersion
 )
 
 // NewUpdater creates an instance of Updater and other services it requires
@@ -127,20 +127,25 @@ func validateUpdateVersion(log log.T, detail *UpdateDetail, instanceContext *upd
 			return err
 		}
 		if compareResult < 0 {
-			return fmt.Errorf("Agent version %v is unsupported on current platform", detail.TargetVersion)
+			return fmt.Errorf("agent version %v is unsupported on current platform", detail.TargetVersion)
 		}
 	}
 
 	return nil
 }
 
-func validateInactiveVersion(log log.T, detail *UpdateDetail, instanceContext *updateutil.InstanceContext) (err error) {
+func validateInactiveVersion(log log.T, detail *UpdateDetail) (err error) {
 	log.Info("Validating inactive version for amazon ssm agent")
-
-	if detail.TargetVersion == "2.3.772.0" {
-		err := fmt.Errorf("Agent version %v is inactive", detail.TargetVersion)
+	if !versioncheck(log, detail.ManifestPath, detail.TargetVersion) {
+		err := fmt.Errorf("agent version %v is inactive", detail.TargetVersion)
 		return err
 	}
+
+	if detail.TargetVersion == "2.3.772.0" {
+		err := fmt.Errorf("agent version %v is inactive", detail.TargetVersion)
+		return err
+	}
+
 	return nil
 }
 
@@ -157,9 +162,13 @@ func getMinimumVSupportedVersions() (versions *map[string]string) {
 func prepareInstallationPackages(mgr *updateManager, log log.T, context *UpdateContext) (err error) {
 	log.Infof("Initiating download %v", context.Current.PackageName)
 	var instanceContext *updateutil.InstanceContext
+
+	var manifestDownloadOutput *artifact.DownloadOutput
+	updateDownloadFolder := ""
 	updateOperationsRetryCount := 3
 	updateRetryDelay := 500      // 500 millisecond
 	updateRetryDelayBase := 1000 // 1000 millisecond
+
 	updateDownload := ""
 
 	if instanceContext, err = mgr.util.CreateInstanceContext(log); err != nil {
@@ -167,9 +176,6 @@ func prepareInstallationPackages(mgr *updateManager, log log.T, context *UpdateC
 	}
 	if err = validateUpdateVersion(log, context.Current, instanceContext); err != nil {
 		return mgr.failed(context, log, updateutil.ErrorUnsupportedVersion, err.Error(), true)
-	}
-	if err = validateInactiveVersion(log, context.Current, instanceContext); err != nil {
-		return mgr.inactive(context, log, updateutil.WarnInactiveVersion)
 	}
 
 	if updateDownload, err = mgr.util.CreateUpdateDownloadFolder(); err != nil {
@@ -179,6 +185,20 @@ func prepareInstallationPackages(mgr *updateManager, log log.T, context *UpdateC
 			context.Current.PackageName,
 			context.Current.TargetVersion)
 		return mgr.failed(context, log, updateutil.ErrorCreateUpdateFolder, message, true)
+	}
+
+	if context.Current.ManifestPath == "" {
+		if manifestDownloadOutput, context.Current.ManifestUrl, err =
+			mgr.util.DownloadManifestFile(log, updateDownloadFolder, context.Current.ManifestUrl, instanceContext.Region); err != nil {
+
+			message := updateutil.BuildMessage(err, "failed to download manifest file")
+			return mgr.failed(context, log, updateutil.ErrorInvalidManifest, message, true)
+		}
+		context.Current.ManifestPath = manifestDownloadOutput.LocalFilePath
+	}
+
+	if err = validateInactiveVersion(log, context.Current); err != nil {
+		return mgr.inactive(context, log, updateutil.WarnInactiveVersion)
 	}
 
 	// Download source
@@ -246,18 +266,21 @@ func proceedUpdate(mgr *updateManager, log log.T, context *UpdateContext) (err e
 
 	// Uninstall only when the target version is lower than the source version
 	if context.Current.RequiresUninstall {
-		if err = mgr.uninstall(mgr, log, context.Current.SourceVersion, context); err != nil {
+		if exitCode, err := mgr.uninstall(mgr, log, context.Current.SourceVersion, context); err != nil {
 			message := updateutil.BuildMessage(
 				err,
 				"failed to uninstall %v %v",
 				context.Current.PackageName,
 				context.Current.SourceVersion)
 			mgr.subStatus = updateutil.Downgrade
+			if exitCode == updateutil.ExitCodeUnsupportedPlatform {
+				return mgr.failed(context, log, updateutil.ErrorUnsupportedServiceManager, message, true)
+			}
 			return mgr.failed(context, log, updateutil.ErrorUninstallFailed, message, true)
 		}
 	}
 
-	if err = mgr.install(mgr, log, context.Current.TargetVersion, context); err != nil {
+	if exitCode, err := mgr.install(mgr, log, context.Current.TargetVersion, context); err != nil {
 		// Install target failed with err
 		// log the error and initiating rollback to the source version
 		message := updateutil.BuildMessage(err,
@@ -265,6 +288,10 @@ func proceedUpdate(mgr *updateManager, log log.T, context *UpdateContext) (err e
 			context.Current.PackageName,
 			context.Current.TargetVersion)
 		context.Current.AppendError(log, message)
+
+		if exitCode == updateutil.ExitCodeUnsupportedPlatform {
+			return mgr.failed(context, log, updateutil.ErrorUnsupportedServiceManager, message, true)
+		}
 
 		context.Current.AppendInfo(
 			log,
@@ -301,7 +328,7 @@ func verifyInstallation(mgr *updateManager, log log.T, context *UpdateContext, i
 	}
 
 	log.Infof("Initiating update health check")
-	if isRunning, err = mgr.util.WaitForServiceToStart(log, instanceContext); err != nil || !isRunning {
+	if isRunning, err = mgr.util.WaitForServiceToStart(log, instanceContext, context.Current.TargetVersion); err != nil || !isRunning {
 		if !isRollback {
 			message := updateutil.BuildMessage(err,
 				"failed to update %v to %v, %v",
@@ -344,23 +371,35 @@ func verifyInstallation(mgr *updateManager, log log.T, context *UpdateContext, i
 
 // rollbackInstallation rollback installation to the source version
 func rollbackInstallation(mgr *updateManager, log log.T, context *UpdateContext) (err error) {
-	if err = mgr.uninstall(mgr, log, context.Current.TargetVersion, context); err != nil {
+	if exitCode, err := mgr.uninstall(mgr, log, context.Current.TargetVersion, context); err != nil {
 		// Fail the rollback process as a result of target version cannot be uninstalled
 		message := updateutil.BuildMessage(
 			err,
 			"failed to uninstall %v %v",
 			context.Current.PackageName,
 			context.Current.TargetVersion)
+
+		// this case is not possible at all as we would have caught it in the earlier uninstall/install
+		// if this happens, something else is wrong so it is better to have this code for differentiation
+		if exitCode == updateutil.ExitCodeUnsupportedPlatform {
+			return mgr.failed(context, log, updateutil.ErrorUnsupportedServiceManager, message, true)
+		}
 		return mgr.failed(context, log, updateutil.ErrorUninstallFailed, message, false)
 	}
 
-	if err = mgr.install(mgr, log, context.Current.SourceVersion, context); err != nil {
+	if exitCode, err := mgr.install(mgr, log, context.Current.SourceVersion, context); err != nil {
 		// Fail the rollback process as a result of source version cannot be reinstalled
 		message := updateutil.BuildMessage(
 			err,
 			"failed to install %v %v",
 			context.Current.PackageName,
 			context.Current.SourceVersion)
+
+		// this case is not possible at all as we would have caught it in the earlier uninstall/install
+		// if this happens, something else is wrong and it is better to have this code for differentiation
+		if exitCode == updateutil.ExitCodeUnsupportedPlatform {
+			return mgr.failed(context, log, updateutil.ErrorUnsupportedServiceManager, message, true)
+		}
 		return mgr.failed(context, log, updateutil.ErrorInstallFailed, message, false)
 	}
 
@@ -371,7 +410,7 @@ func rollbackInstallation(mgr *updateManager, log log.T, context *UpdateContext)
 }
 
 // uninstall executes the uninstall script for the specific version of agent
-func uninstallAgent(mgr *updateManager, log log.T, version string, context *UpdateContext) (err error) {
+func uninstallAgent(mgr *updateManager, log log.T, version string, context *UpdateContext) (exitCode updateutil.UpdateScriptExitCode, err error) {
 	log.Infof("Initiating %v %v uninstallation", context.Current.PackageName, version)
 
 	// find the path for the uninstall script
@@ -391,7 +430,7 @@ func uninstallAgent(mgr *updateManager, log log.T, version string, context *Upda
 	uninstallRetryDelayBase := 2000 // 2 seconds
 	// Uninstall version - TODO - move the retry logic to ExeCommand while cleaning that function
 	for retryCounter := 1; retryCounter <= uninstallRetryCount; retryCounter++ {
-		_, err = mgr.util.ExeCommand(
+		_, exitCode, err = mgr.util.ExeCommand(
 			log,
 			uninstallPath,
 			workDir,
@@ -407,14 +446,14 @@ func uninstallAgent(mgr *updateManager, log log.T, version string, context *Upda
 		}
 	}
 	if err != nil {
-		return err
+		return exitCode, err
 	}
 	log.Infof("%v %v uninstalled successfully", context.Current.PackageName, version)
-	return nil
+	return exitCode, nil
 }
 
 // install executes the install script for the specific version of agent
-func installAgent(mgr *updateManager, log log.T, version string, context *UpdateContext) (err error) {
+func installAgent(mgr *updateManager, log log.T, version string, context *UpdateContext) (exitCode updateutil.UpdateScriptExitCode, err error) {
 	log.Infof("Initiating %v %v installation", context.Current.PackageName, version)
 
 	// find the path for the install script
@@ -434,7 +473,7 @@ func installAgent(mgr *updateManager, log log.T, version string, context *Update
 		installRetryCount = 4 // this value is taken because previous updater version had total 4 retries (2 target install + 2 rollback install)
 	}
 	for retryCounter := 1; retryCounter <= installRetryCount; retryCounter++ {
-		_, err = mgr.util.ExeCommand(
+		_, exitCode, err = mgr.util.ExeCommand(
 			log,
 			installerPath,
 			workDir,
@@ -451,10 +490,10 @@ func installAgent(mgr *updateManager, log log.T, version string, context *Update
 		}
 	}
 	if err != nil {
-		return err
+		return exitCode, err
 	}
 	log.Infof("%v %v installed successfully", context.Current.PackageName, version)
-	return nil
+	return exitCode, nil
 }
 
 // getNextBackOff gets back-off in milli-seconds based on retry counter

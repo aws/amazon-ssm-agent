@@ -19,10 +19,10 @@ import (
 	"testing"
 	"time"
 
+	complianceUploader "github.com/aws/amazon-ssm-agent/agent/association/compliance/uploader"
 	"github.com/aws/amazon-ssm-agent/agent/association/model"
 	"github.com/aws/amazon-ssm-agent/agent/association/schedulemanager"
 	"github.com/aws/amazon-ssm-agent/agent/association/service"
-	complianceUploader "github.com/aws/amazon-ssm-agent/agent/compliance/uploader"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	processormock "github.com/aws/amazon-ssm-agent/agent/framework/processor/mock"

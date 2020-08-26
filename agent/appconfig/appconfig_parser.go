@@ -27,6 +27,22 @@ func parser(config *SsmagentConfig) {
 	config.Agent.Name = getStringValue(config.Agent.Name, DefaultAgentName)
 	config.Agent.OrchestrationRootDir = getStringValue(config.Agent.OrchestrationRootDir, defaultOrchestrationRootDirName)
 	config.Agent.Region = getStringValue(config.Agent.Region, "")
+	config.Agent.TelemetryMetricsNamespace = getStringValue(config.Agent.TelemetryMetricsNamespace, DefaultTelemetryNamespace)
+	config.Agent.LongRunningWorkerMonitorIntervalSeconds = getNumericValue(
+		config.Agent.LongRunningWorkerMonitorIntervalSeconds,
+		defaultLongRunningWorkerMonitorIntervalSecondsMin,
+		defaultLongRunningWorkerMonitorIntervalSecondsMax,
+		defaultLongRunningWorkerMonitorIntervalSeconds)
+	config.Agent.SelfUpdateScheduleDay = getNumericValue(
+		config.Agent.SelfUpdateScheduleDay,
+		DefaultSsmSelfUpdateFrequencyDaysMin,
+		DefaultSsmSelfUpdateFrequencyDaysMax,
+		DefaultSsmSelfUpdateFrequencyDays)
+	config.Agent.AuditExpirationDay = getNumericValue(
+		config.Agent.AuditExpirationDay,
+		DefaultAuditExpirationDayMin,
+		DefaultAuditExpirationDayMax,
+		DefaultAuditExpirationDay)
 
 	// MDS config
 	config.Mds.CommandWorkersLimit = getNumericValue(
@@ -66,7 +82,6 @@ func parser(config *SsmagentConfig) {
 		config.Ssm.RunCommandLogsRetentionDurationHours,
 		DefaultStateOrchestrationLogsRetentionDurationHoursMin,
 		DefaultRunCommandLogsRetentionDurationHours)
-
 }
 
 // getStringValue returns the default value if config is empty, else the config value

@@ -22,6 +22,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/health"
 	"github.com/aws/amazon-ssm-agent/agent/hibernation"
 	"github.com/aws/amazon-ssm-agent/agent/version"
+	_ "go.nanomsg.org/mangos/v3/transport/ipc"
 )
 
 type ISSMAgent interface {
@@ -68,7 +69,7 @@ func (agent *SSMAgent) SetContext(c context.T) {
 func (agent *SSMAgent) Start() {
 	log := agent.context.Log()
 
-	log.Infof("Starting Agent: %v", version.String())
+	log.Infof("Starting SSM Agent Worker: %v", version.String())
 	log.Infof("OS: %s, Arch: %s", runtime.GOOS, runtime.GOARCH)
 	log.Flush()
 
@@ -77,6 +78,7 @@ func (agent *SSMAgent) Start() {
 		return
 	}
 
+	//start
 	agent.coreManager.Start()
 }
 
@@ -84,7 +86,7 @@ func (agent *SSMAgent) Start() {
 func (agent *SSMAgent) Hibernate() {
 	if status, err := agent.healthModule.GetAgentState(); status == health.Passive {
 		//Starting hibernate mode
-		agent.context.Log().Info("Entering SSM Agent hibernate - ", err)
+		agent.context.Log().Info("Entering SSM Agent Worker hibernate - ", err)
 		agent.hibernateState.ExecuteHibernation()
 	}
 }
@@ -92,7 +94,7 @@ func (agent *SSMAgent) Hibernate() {
 // Stop the core manager
 func (agent *SSMAgent) Stop() {
 	log := agent.context.Log()
-	log.Info("Stopping agent")
+	log.Info("Stopping ssm agent worker")
 	log.Flush()
 
 	if agent.coreManager == nil {

@@ -45,9 +45,9 @@ func (m *Mock) CreateUpdateDownloadFolder() (folder string, err error) {
 }
 
 // ExeCommand mocks the ExeCommand function.
-func (m *Mock) ExeCommand(log log.T, cmd string, workingDir string, updaterRoot string, stdOut string, stdErr string, isAsync bool) (err error) {
+func (m *Mock) ExeCommand(log log.T, cmd string, workingDir string, updaterRoot string, stdOut string, stdErr string, isAsync bool) (pid int, exitCode UpdateScriptExitCode, err error) {
 	args := m.Called(log, cmd, workingDir, updaterRoot, stdOut, stdErr, isAsync)
-	return args.Error(0)
+	return args.Int(0), args.Get(1).(UpdateScriptExitCode), args.Error(0)
 }
 
 // SaveUpdatePluginResult mocks the SaveUpdatePluginResult function.

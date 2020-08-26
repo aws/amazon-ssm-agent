@@ -18,7 +18,10 @@ import "os"
 
 const (
 	// Agent defaults
-	DefaultAgentName = "amazon-ssm-agent"
+	DefaultAgentName   = "amazon-ssm-agent"
+	SSMAgentWorkerName = "ssm-agent-worker"
+
+	DefaultTelemetryNamespace = "amazon-ssm-agent-telemetry"
 
 	DefaultCommandWorkersLimit    = 5
 	DefaultCommandWorkersLimitMin = 1
@@ -40,6 +43,10 @@ const (
 	DefaultSsmAssociationFrequencyMinutesMin = 5
 	DefaultSsmAssociationFrequencyMinutesMax = 60
 
+	DefaultSsmSelfUpdateFrequencyDays    = 7
+	DefaultSsmSelfUpdateFrequencyDaysMin = 1 //Minimum frequency is 1 day
+	DefaultSsmSelfUpdateFrequencyDaysMax = 7 //Maximum frequency is 7 day
+
 	//aws-ssm-agent bookkeeping constants
 	DefaultLocationOfPending     = "pending"
 	DefaultLocationOfCurrent     = "current"
@@ -53,6 +60,10 @@ const (
 	DefaultRunCommandLogsRetentionDurationHours            = 336 // 14 days default retention
 	DefaultSessionLogsRetentionDurationHours               = 336 // 14 days default retention
 	DefaultStateOrchestrationLogsRetentionDurationHoursMin = 8   // Min retention of 8hrs as some processes may not timeout before this and don't want logs to be deleted before the process completes
+
+	DefaultAuditExpirationDay    = 7  // 7 days default audit files count
+	DefaultAuditExpirationDayMax = 30 // 30 days max audit files count
+	DefaultAuditExpirationDayMin = 3  // 3 days min audit files count
 
 	//aws-ssm-agent bookkeeping constants for long running plugins
 	LongRunningPluginsLocation         = "longrunningplugins"
@@ -89,6 +100,10 @@ const (
 
 	// WorkersRootDirName  - the worker folder used in ec2 config
 	WorkersRootDirName = "Workers"
+
+	defaultLongRunningWorkerMonitorIntervalSeconds    = 60
+	defaultLongRunningWorkerMonitorIntervalSecondsMin = 30
+	defaultLongRunningWorkerMonitorIntervalSecondsMax = 1800
 
 	// Permissions defaults
 	//NOTE: Limit READ, WRITE and EXECUTE access to administrators/root.

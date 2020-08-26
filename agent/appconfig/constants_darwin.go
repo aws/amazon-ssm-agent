@@ -79,6 +79,7 @@ const (
 	// Default Custom Inventory Inventory Folder
 	DefaultCustomInventoryFolder = DefaultDataStorePath + "inventory/custom"
 
+	DefaultSSMAgentWorker = DefaultProgramFolder + "bin/ssm-agent-worker"
 	DefaultDocumentWorker = DefaultProgramFolder + "bin/ssm-document-worker"
 	DefaultSessionWorker  = DefaultProgramFolder + "bin/ssm-session-worker"
 	DefaultSessionLogger  = DefaultProgramFolder + "bin/ssm-session-logger"

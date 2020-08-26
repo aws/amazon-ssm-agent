@@ -16,11 +16,10 @@
 package privategithub
 
 import (
-	gitmock "github.com/aws/amazon-ssm-agent/agent/githubclient/mock"
-
+	"github.com/aws/amazon-ssm-agent/agent/framework/docparser/parameterstore"
 	"github.com/aws/amazon-ssm-agent/agent/log"
-	"github.com/aws/amazon-ssm-agent/agent/parameterstore"
-	"github.com/aws/amazon-ssm-agent/agent/ssmparameterresolver"
+	gitmock "github.com/aws/amazon-ssm-agent/agent/plugins/downloadcontent/githubclient/mock"
+	"github.com/aws/amazon-ssm-agent/agent/ssm/ssmparameterresolver"
 	"github.com/stretchr/testify/assert"
 
 	"net/http"

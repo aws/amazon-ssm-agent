@@ -17,6 +17,7 @@ mkdir -p ${PACKAGE_FOLDER}
 echo "Copying application files"
 
 cp ${BUILD_FOLDER}/amazon-ssm-agent.exe ${PACKAGE_FOLDER}/amazon-ssm-agent.exe
+cp ${BUILD_FOLDER}/ssm-agent-worker.exe ${PACKAGE_FOLDER}/ssm-agent-worker.exe
 cp ${BUILD_FOLDER}/ssm-document-worker.exe ${PACKAGE_FOLDER}/ssm-document-worker.exe
 cp ${BUILD_FOLDER}/ssm-session-worker.exe ${PACKAGE_FOLDER}/ssm-session-worker.exe
 cp ${BUILD_FOLDER}/ssm-session-logger.exe ${PACKAGE_FOLDER}/ssm-session-logger.exe
@@ -27,6 +28,7 @@ cp ${BGO_SPACE}/amazon-ssm-agent.json.template ${PACKAGE_FOLDER}/amazon-ssm-agen
 echo "Copying windows package config files"
 
 cp ${TOOLS_FOLDER}/LICENSE ${PACKAGE_FOLDER}/LICENSE
+cp ${BGO_SPACE}/NOTICE.md ${PACKAGE_FOLDER}/NOTICE.md
 
 echo "Constructing the zip package"
 

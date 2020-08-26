@@ -96,6 +96,9 @@ type UpdateDetail struct {
 	MessageID          string                 `json:"MessageId"`
 	UpdateRoot         string                 `json:"UpdateRoot"`
 	RequiresUninstall  bool                   `json:"RequiresUninstall"`
+	ManifestPath       string                 `json:"ManifestPath"`
+	ManifestUrl        string                 `json:"ManifestUrl"`
+	SelfUpdate         bool                   `json:"SelfUpdate"`
 }
 
 // UpdateContext holds the book keeping details for Update context

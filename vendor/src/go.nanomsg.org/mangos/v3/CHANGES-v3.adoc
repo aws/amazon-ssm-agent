@@ -1,0 +1,19 @@
+
+= Changes in Version 3
+
+== Import path changed
+
+Use `go.nanomsg.org/mangos/v3` as the base URL for imports.
+
+== Go v1.12 Or Better Required
+
+We're using modules and semantic versions.
+These are understood by recent Go versions, and well supported only
+in version 1.12 and newer.
+It may be possible to make 1.11 or 1.10 work, but it is unsupported.
+
+== Forward Plans
+
+The next batch of changes for mangos is likely to add a lot of
+convenience routines.  Thus we expect to see minor version v3.1 and
+so forth.  We'll document those changes as they appear here.

@@ -17,7 +17,7 @@
 package model
 
 import (
-	"github.com/aws/amazon-ssm-agent/agent/util/interop"
+	"github.com/aws/amazon-ssm-agent/agent/startup/util/interop"
 )
 
 // Dcb structure

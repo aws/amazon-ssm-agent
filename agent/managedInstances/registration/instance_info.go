@@ -19,9 +19,9 @@ import (
 	"fmt"
 	"sync"
 
-	"github.com/aws/amazon-ssm-agent/agent/fingerprint"
 	"github.com/aws/amazon-ssm-agent/agent/log/ssmlog"
 	"github.com/aws/amazon-ssm-agent/agent/managedInstances/auth"
+	"github.com/aws/amazon-ssm-agent/agent/managedInstances/fingerprint"
 )
 
 type instanceInfo struct {
@@ -177,7 +177,7 @@ func loadServerInfo() (loadErr error) {
 func getInstanceInfo() instanceInfo {
 	if loadedServerInfo.InstanceID == "" {
 		if err := loadServerInfo(); err != nil {
-			logger := ssmlog.SSMLogger(true)
+			logger := ssmlog.SSMLogger(false)
 			logger.Warnf("error while loading server info", err)
 		}
 	}

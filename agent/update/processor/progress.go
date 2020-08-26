@@ -20,12 +20,12 @@ import (
 
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
-	"github.com/aws/amazon-ssm-agent/agent/log"
+	logPkg "github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/updateutil"
 )
 
 // inProgress sets update to inProgressing with given new UpdateState
-func (u *updateManager) inProgress(context *UpdateContext, log log.T, state UpdateState) (err error) {
+func (u *updateManager) inProgress(context *UpdateContext, log logPkg.T, state UpdateState) (err error) {
 	update := context.Current
 	defer func() {
 		if err != nil {
@@ -36,6 +36,10 @@ func (u *updateManager) inProgress(context *UpdateContext, log log.T, state Upda
 				SourceVersion: update.SourceVersion,
 			}
 			errorCode := u.subStatus + string(state)
+			log.WriteEvent(
+				logPkg.AgentUpdateResultMessage,
+				failedUpdateDetail.SourceVersion,
+				PrepareHealthStatus(failedUpdateDetail, errorCode, failedUpdateDetail.TargetVersion))
 			if err = u.svc.UpdateHealthCheck(log, failedUpdateDetail, errorCode); err != nil {
 				log.Errorf(err.Error())
 			}
@@ -50,7 +54,7 @@ func (u *updateManager) inProgress(context *UpdateContext, log log.T, state Upda
 		return err
 	}
 
-	if update.HasMessageID() {
+	if update.HasMessageID() && context.Current.SelfUpdate == false {
 		err = u.svc.SendReply(log, update)
 		if err != nil {
 			log.Errorf(err.Error())
@@ -60,25 +64,29 @@ func (u *updateManager) inProgress(context *UpdateContext, log log.T, state Upda
 	if err = u.svc.UpdateHealthCheck(log, update, ""); err != nil {
 		log.Errorf(err.Error())
 	}
-
 	return nil
 }
 
 // succeeded sets update to completed
-func (u *updateManager) succeeded(context *UpdateContext, logger log.T) (err error) {
+func (u *updateManager) succeeded(context *UpdateContext, log logPkg.T) (err error) {
 	update := context.Current
 	update.State = Completed
 	update.Result = contracts.ResultStatusSuccess
 	update.AppendInfo(
-		logger,
+		log,
 		"%v updated successfully to %v",
 		update.PackageName,
 		update.TargetVersion)
-	return u.finalizeUpdateAndSendReply(logger, context, "")
+
+	log.WriteEvent(
+		logPkg.AgentUpdateResultMessage,
+		update.SourceVersion,
+		PrepareHealthStatus(update, "", update.TargetVersion))
+	return u.finalizeUpdateAndSendReply(log, context, "")
 }
 
 // failed sets update to failed with error messages
-func (u *updateManager) failed(context *UpdateContext, log log.T, code updateutil.ErrorCode, errMessage string, noRollbackMessage bool) (err error) {
+func (u *updateManager) failed(context *UpdateContext, log logPkg.T, code updateutil.ErrorCode, errMessage string, noRollbackMessage bool) (err error) {
 	update := context.Current
 	update.State = Completed
 	update.Result = contracts.ResultStatusFailed
@@ -94,24 +102,32 @@ func (u *updateManager) failed(context *UpdateContext, log log.T, code updateuti
 		update.AppendInfo(log, "No rollback needed")
 	}
 	errorCode := u.subStatus + string(code)
+	log.WriteEvent(
+		logPkg.AgentUpdateResultMessage,
+		update.SourceVersion,
+		PrepareHealthStatus(update, errorCode, update.TargetVersion))
 	return u.finalizeUpdateAndSendReply(log, context, errorCode)
 }
 
-func (u *updateManager) inactive(context *UpdateContext, logger log.T, errorWarnCode string) (err error) {
+func (u *updateManager) inactive(context *UpdateContext, log logPkg.T, errorWarnCode string) (err error) {
 	update := context.Current
 	update.State = Completed
 	update.Result = contracts.ResultStatusSuccess
 	update.AppendInfo(
-		logger,
-		"%v version %v is inactive, update skipped",
+		log,
+		"%v version %v is deprecated/inactive, update skipped",
 		update.PackageName,
 		update.TargetVersion)
 	errorWarnCode = u.subStatus + errorWarnCode
-	return u.finalizeUpdateAndSendReply(logger, context, errorWarnCode)
+	log.WriteEvent(
+		logPkg.AgentUpdateResultMessage,
+		update.SourceVersion,
+		PrepareHealthStatus(update, errorWarnCode, update.TargetVersion))
+	return u.finalizeUpdateAndSendReply(log, context, errorWarnCode)
 }
 
 // finalizeUpdateAndSendReply completes the update and sends reply to message service, also uploads to S3 (if any)
-func (u *updateManager) finalizeUpdateAndSendReply(log log.T, context *UpdateContext, errorCode string) (err error) {
+func (u *updateManager) finalizeUpdateAndSendReply(log logPkg.T, context *UpdateContext, errorCode string) (err error) {
 	update := context.Current
 	update.EndDateTime = time.Now().UTC()
 	// resolve context location base on the UpdateRoot
@@ -135,8 +151,8 @@ func (u *updateManager) finalizeUpdateAndSendReply(log log.T, context *UpdateCon
 	if update.StandardError, err = fileutil.ReadAllText(filePath); err != nil {
 		log.Errorf("Error reading contents from %v", filePath)
 	}
-	// send reply
-	if update.HasMessageID() {
+	// send reply except for self update, don't send any response back to service side for self update
+	if update.HasMessageID() && update.SelfUpdate == false {
 		if err = u.svc.SendReply(log, update); err != nil {
 			log.Errorf(err.Error())
 		}

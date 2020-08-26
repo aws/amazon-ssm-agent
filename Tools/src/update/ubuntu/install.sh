@@ -77,6 +77,6 @@ elif [[ "$(cat /proc/1/comm)" == "systemd" ]]; then
 	systemctl status amazon-ssm-agent
 
 else
-
-    echo "The amazon-ssm-agent is not supported on this platform. Please visit the documentation for the list of supported platforms"
+    echo "The amazon-ssm-agent is not supported on this platform. Please visit the documentation for the list of supported platforms" 1>&2
+    exit 124
 fi

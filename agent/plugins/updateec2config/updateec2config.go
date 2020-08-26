@@ -259,7 +259,7 @@ func runUpdateAgent(
 			appconfig.EC2UpdateArtifactsRoot, pluginInput.UpdaterName, updaterVersion)
 
 		//Command to setup the installation
-		if _, err = util.ExeCommand(log, cmd, workDir, appconfig.EC2UpdateArtifactsRoot, pluginConfig.StdoutFileName, pluginConfig.StderrFileName, false); err != nil {
+		if _, _, err = util.ExeCommand(log, cmd, workDir, appconfig.EC2UpdateArtifactsRoot, pluginConfig.StdoutFileName, pluginConfig.StderrFileName, false); err != nil {
 			output.MarkAsFailed(err)
 			return
 		}
@@ -274,7 +274,7 @@ func runUpdateAgent(
 			return
 		}
 		log.Debugf("Setup update command %v", cmd)
-		if _, err = util.ExeCommand(log, cmd, workDir, appconfig.EC2UpdateArtifactsRoot, pluginConfig.StdoutFileName, pluginConfig.StderrFileName, true); err != nil {
+		if _, _, err = util.ExeCommand(log, cmd, workDir, appconfig.EC2UpdateArtifactsRoot, pluginConfig.StdoutFileName, pluginConfig.StderrFileName, true); err != nil {
 			output.MarkAsFailed(err)
 			return
 		}

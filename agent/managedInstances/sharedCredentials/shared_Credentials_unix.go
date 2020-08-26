@@ -20,7 +20,7 @@ import (
 	"os"
 	"os/user"
 
-	alt_user "github.com/aws/amazon-ssm-agent/agent/user"
+	alt_user "github.com/aws/amazon-ssm-agent/agent/managedInstances/user"
 )
 
 func getPlatformSpecificHomeLocation() string {
