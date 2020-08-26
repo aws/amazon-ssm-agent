@@ -52,6 +52,7 @@ if [[ "$(cat /proc/1/comm)" == "systemd" ]]; then
         snap start amazon-ssm-agent
     fi
 else 
-    error_exit '[ERROR] Snap install is not supported on this instance. Please uninstall the snap agent and try again'
+    echo '[ERROR] Snap install is not supported on this instance. Please uninstall the snap agent and try again' 1>&2
+    exit 124
 fi
         

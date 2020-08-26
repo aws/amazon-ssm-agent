@@ -60,8 +60,11 @@ func initLogger(useWatcher bool) (logger log.T) {
 func withContext(logger seelog.LoggerInterface, context ...string) (contextLogger log.T) {
 	loggerInstance.BaseLoggerInstance = logger
 	formatFilter := &log.ContextFormatFilter{Context: context}
-	contextLogger = &log.Wrapper{Format: formatFilter, M: pkgMutex, Delegate: loggerInstance}
-
+	contextLogger = &log.Wrapper{Format: formatFilter,
+		M:           pkgMutex,
+		Delegate:    loggerInstance,
+		EventLogger: log.GetEventLog(log.DefaultLogDir, log.EventLogFile),
+	}
 	setStackDepth(logger)
 	return contextLogger
 }

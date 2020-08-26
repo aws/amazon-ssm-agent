@@ -16,7 +16,6 @@ package tests
 
 import (
 	"encoding/json"
-	"github.com/stretchr/testify/assert"
 	"runtime"
 	"runtime/debug"
 	"testing"
@@ -26,6 +25,8 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/framework/coremanager"
+	healthmock "github.com/aws/amazon-ssm-agent/agent/health/mocks"
+	hibernatemock "github.com/aws/amazon-ssm-agent/agent/hibernation/mocks"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	logger "github.com/aws/amazon-ssm-agent/agent/log/ssmlog"
 	messageContracts "github.com/aws/amazon-ssm-agent/agent/runcommand/contracts"
@@ -34,6 +35,7 @@ import (
 	"github.com/aws/aws-sdk-go/aws/request"
 	"github.com/aws/aws-sdk-go/service/ssmmds"
 	mdssdkmock "github.com/aws/aws-sdk-go/service/ssmmds/ssmmdsiface/mocks"
+	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/suite"
 )
@@ -41,14 +43,19 @@ import (
 // RunCommandOutputTestSuite defines test suite for sending runcommand output, error and exit code to MDS service
 type RunCommandOutputTestSuite struct {
 	suite.Suite
-	ssmAgent   agent.ISSMAgent
-	mdsSdkMock *mdssdkmock.SSMMDSAPI
-	log        log.T
+	ssmAgent     agent.ISSMAgent
+	mdsSdkMock   *mdssdkmock.SSMMDSAPI
+	healthModule *healthmock.IHealthCheck
+	hibernate    *hibernatemock.IHibernate
+	log          log.T
 }
 
 func (suite *RunCommandOutputTestSuite) SetupTest() {
 	log := logger.SSMLogger(true)
 	suite.log = log
+
+	suite.healthModule = &healthmock.IHealthCheck{}
+	suite.hibernate = &hibernatemock.IHibernate{}
 
 	config, err := appconfig.Config(true)
 	if err != nil {
@@ -76,7 +83,7 @@ func (suite *RunCommandOutputTestSuite) SetupTest() {
 		return
 	}
 	// Create core ssm agent
-	suite.ssmAgent = &agent.SSMAgent{}
+	suite.ssmAgent = agent.NewSSMAgent(context, suite.healthModule, suite.hibernate)
 	suite.ssmAgent.SetContext(context)
 	suite.ssmAgent.SetCoreManager(cpm)
 }
@@ -169,6 +176,7 @@ func (suite *RunCommandOutputTestSuite) TestV1DocumentOutputZeroExitCode() {
 	if runtime.GOOS == "windows" {
 		content = testdata.ZeroExitCodeMessage_Windows
 	}
+
 	verifyRunCommandOutput(suite, content, testdata.CommandStdout, testdata.CommandStderr, testdata.ZeroExitCode, contracts.ResultStatusSuccess, contracts.ResultStatusFailed)
 }
 
@@ -180,6 +188,7 @@ func (suite *RunCommandOutputTestSuite) TestV1DocumentOutputNonZeroExitCode() {
 	}
 	verifyRunCommandOutput(suite, content, testdata.CommandStdout, testdata.CommandStderr, testdata.NonZeroExitCode, contracts.ResultStatusFailed, contracts.ResultStatusSuccess)
 }
+
 func TestRunCommandOutputIntegTestSuite(t *testing.T) {
 	suite.Run(t, new(RunCommandOutputTestSuite))
 }

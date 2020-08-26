@@ -25,6 +25,10 @@ Copyright (c) 2015 Nathan Osman
 Copyright (c) 2015 Loren Segal
 **shiena/ansicolor - https://github.com/shiena/ansicolor
 Copyright (c) [2014] [shiena]
+** go-ps; version v1.0.0 -- https://github.com/mitchellh/go-ps
+Copyright (c) 2014 Mitchell Hashimoto
+** go-winio; version v0.4.14 go-winio -- https://github.com/microsoft/go-winio
+Copyright (c) 2015 Microsoft
 **nightlyone/lockfile - https://github.com/nightlyone/lockfile
 Copyright (c) [2012] Ingo Oeser
 
@@ -113,6 +117,8 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
 =============================
 
+** mangos; version v3.0.0 -- https://github.com/nanomsg/mangos
+Copyright 2020 The Mangos Authors
 ** coreos/go-semver - https://github.com/coreos/go-semver
 Copyright 2018 CoreOS, Inc
 ** go-ini/ini - https://github.com/go-ini/ini

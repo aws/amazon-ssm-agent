@@ -114,9 +114,15 @@ func DefaultConfig() SsmagentConfig {
 		SessionLogsRetentionDurationHours:     DefaultSessionLogsRetentionDurationHours,
 	}
 	var agent = AgentInfo{
-		Name:                 "amazon-ssm-agent",
-		OrchestrationRootDir: defaultOrchestrationRootDirName,
-		ContainerMode:        false,
+		Name:                                    "amazon-ssm-agent",
+		OrchestrationRootDir:                    defaultOrchestrationRootDirName,
+		ContainerMode:                           false,
+		SelfUpdate:                              false,
+		TelemetryMetricsToCloudWatch:            false,
+		TelemetryMetricsToSSM:                   true,
+		TelemetryMetricsNamespace:               DefaultTelemetryNamespace,
+		AuditExpirationDay:                      DefaultAuditExpirationDay,
+		LongRunningWorkerMonitorIntervalSeconds: defaultLongRunningWorkerMonitorIntervalSeconds,
 	}
 	var os = OsInfo{
 		Lang:    "en-US",

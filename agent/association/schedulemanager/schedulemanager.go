@@ -20,8 +20,8 @@ import (
 	"sync"
 	"time"
 
+	complianceModel "github.com/aws/amazon-ssm-agent/agent/association/compliance/model"
 	"github.com/aws/amazon-ssm-agent/agent/association/model"
-	complianceModel "github.com/aws/amazon-ssm-agent/agent/compliance/model"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"

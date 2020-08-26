@@ -99,6 +99,7 @@ var PowerShellPluginCommandName string
 
 // DefaultProgramFolder is the default folder for SSM
 var DefaultProgramFolder = "/etc/amazon/ssm/"
+var DefaultSSMAgentWorker = "/usr/bin/ssm-agent-worker"
 var DefaultDocumentWorker = "/usr/bin/ssm-document-worker"
 var DefaultSessionWorker = "/usr/bin/ssm-session-worker"
 var DefaultSessionLogger = "/usr/bin/ssm-session-logger"
@@ -122,10 +123,12 @@ func init() {
 		if curdir, err := filepath.Abs(filepath.Dir(os.Args[0])); err == nil {
 			if validateAgentBinary("ssm-document-worker", curdir) &&
 				validateAgentBinary("ssm-session-worker", curdir) &&
-				validateAgentBinary("ssm-session-logger", curdir) {
+				validateAgentBinary("ssm-session-logger", curdir) &&
+				validateAgentBinary("ssm-agent-worker", curdir) {
 				DefaultDocumentWorker = filepath.Join(curdir, "ssm-document-worker")
 				DefaultSessionWorker = filepath.Join(curdir, "ssm-session-worker")
 				DefaultSessionLogger = filepath.Join(curdir, "ssm-session-logger")
+				DefaultSSMAgentWorker = filepath.Join(curdir, "ssm-agent-worker")
 				DefaultProgramFolder = curdir
 			}
 		}

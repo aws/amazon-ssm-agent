@@ -18,11 +18,12 @@ mkdir -p ${BGO_SPACE}/bin/debian_arm/debian/lib/systemd/system/
 echo "Copying application files"
 
 cp ${BGO_SPACE}/bin/linux_arm/amazon-ssm-agent ${BGO_SPACE}/bin/debian_arm/debian/usr/bin/
+cp ${BGO_SPACE}/bin/linux_arm/ssm-agent-worker ${BGO_SPACE}/bin/debian_arm/debian/usr/bin/
 cp ${BGO_SPACE}/bin/linux_arm/ssm-document-worker ${BGO_SPACE}/bin/debian_arm/debian/usr/bin/
 cp ${BGO_SPACE}/bin/linux_arm/ssm-session-worker ${BGO_SPACE}/bin/debian_arm/debian/usr/bin/
 cp ${BGO_SPACE}/bin/linux_arm/ssm-session-logger ${BGO_SPACE}/bin/debian_arm/debian/usr/bin/
 cp ${BGO_SPACE}/bin/linux_arm/ssm-cli ${BGO_SPACE}/bin/debian_arm/debian/usr/bin/
-cd ${BGO_SPACE}/bin/debian_arm/debian/usr/bin/; strip --strip-unneeded amazon-ssm-agent; strip --strip-unneeded ssm-cli; strip --strip-unneeded ssm-document-worker; strip --strip-unneeded ssm-session-worker; strip --strip-unneeded ssm-session-logger; cd ~-
+cd ${BGO_SPACE}/bin/debian_arm/debian/usr/bin/; strip --strip-unneeded amazon-ssm-agent; strip --strip-unneeded ssm-agent-worker; strip --strip-unneeded ssm-cli; strip --strip-unneeded ssm-document-worker; strip --strip-unneeded ssm-session-worker; strip --strip-unneeded ssm-session-logger; cd ~-
 cp ${BGO_SPACE}/seelog_unix.xml ${BGO_SPACE}/bin/debian_arm/debian/etc/amazon/ssm/seelog.xml.template
 cp ${BGO_SPACE}/amazon-ssm-agent.json.template ${BGO_SPACE}/bin/debian_arm/debian/etc/amazon/ssm/
 cp ${BGO_SPACE}/packaging/ubuntu/amazon-ssm-agent.conf ${BGO_SPACE}/bin/debian_arm/debian/etc/init/
@@ -32,6 +33,7 @@ echo "Copying debian package config files"
 
 cp ${BGO_SPACE}/RELEASENOTES.md ${BGO_SPACE}/bin/debian_arm/debian/etc/amazon/ssm/RELEASENOTES.md
 cp ${BGO_SPACE}/README.md ${BGO_SPACE}/bin/debian_arm/debian/etc/amazon/ssm/README.md
+cp ${BGO_SPACE}/NOTICE.md ${BGO_SPACE}/bin/debian_arm/debian/etc/amazon/ssm/NOTICE.md
 cp ${BGO_SPACE}/Tools/src/LICENSE ${BGO_SPACE}/bin/debian_arm/debian/usr/share/doc/amazon-ssm-agent/copyright
 cp ${BGO_SPACE}/packaging/ubuntu/conffiles ${BGO_SPACE}/bin/debian_arm/debian/
 cp ${BGO_SPACE}/packaging/ubuntu/docs ${BGO_SPACE}/bin/debian_arm/debian/

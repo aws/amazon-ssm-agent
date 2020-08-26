@@ -146,7 +146,7 @@ var setupControlChannel = func(context context.T, service service.Service, proce
 			if err := controlChannel.Open(context.Log()); err != nil {
 				return nil, err
 			}
-
+			controlChannel.AuditLogScheduler.ScheduleAuditEvents()
 			return controlChannel, nil
 		},
 		GeometricRatio:      mgsConfig.RetryGeometricRatio,
@@ -220,7 +220,6 @@ func (s *Session) ModuleRequestStop(stopType contracts.StopType) (err error) {
 			log.Errorf("stopping controlchannel with error, %s", err)
 		}
 	}
-
 	s.processor.Stop(stopType)
 
 	return nil

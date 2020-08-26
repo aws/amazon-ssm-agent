@@ -45,12 +45,19 @@ type SsmCfg struct {
 
 // AgentInfo represents metadata for amazon-ssm-agent
 type AgentInfo struct {
-	Name                 string
-	Version              string
-	Region               string
-	OrchestrationRootDir string
-	DownloadRootDir      string
-	ContainerMode        bool
+	Name                                    string
+	Version                                 string
+	Region                                  string
+	OrchestrationRootDir                    string
+	DownloadRootDir                         string
+	ContainerMode                           bool
+	SelfUpdate                              bool
+	SelfUpdateScheduleDay                   int
+	TelemetryMetricsToCloudWatch            bool
+	TelemetryMetricsToSSM                   bool
+	TelemetryMetricsNamespace               string
+	LongRunningWorkerMonitorIntervalSeconds int
+	AuditExpirationDay                      int
 }
 
 // MgsConfig represents configuration for Message Gateway service

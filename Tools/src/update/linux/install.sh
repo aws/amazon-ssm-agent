@@ -63,5 +63,6 @@ elif [[ $(systemctl 2> /dev/null) =~ -\.mount ]]; then
 	$(systemctl start amazon-ssm-agent)
 	echo "$(systemctl status amazon-ssm-agent)"
 else
-	echo "The amazon-ssm-agent is not supported on this platform. Please visit the documentation for the list of supported platforms"
+	echo "The amazon-ssm-agent is not supported on this platform. Please visit the documentation for the list of supported platforms" 1>&2
+	exit 124
 fi

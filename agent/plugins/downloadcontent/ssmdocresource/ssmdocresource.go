@@ -17,8 +17,8 @@ package ssmdocresource
 
 import (
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
-	"github.com/aws/amazon-ssm-agent/agent/docparser"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil/filemanager"
+	"github.com/aws/amazon-ssm-agent/agent/framework/docparser"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/downloadcontent/remoteresource"

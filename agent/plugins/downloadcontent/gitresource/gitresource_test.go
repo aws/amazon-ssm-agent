@@ -16,12 +16,11 @@
 package gitresource
 
 import (
-	filemock "github.com/aws/amazon-ssm-agent/agent/fileutil/filemanager/mock"
-	githubclientmock "github.com/aws/amazon-ssm-agent/agent/githubclient/mock"
-
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
+	filemock "github.com/aws/amazon-ssm-agent/agent/fileutil/filemanager/mock"
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	githubclientmock "github.com/aws/amazon-ssm-agent/agent/plugins/downloadcontent/githubclient/mock"
 	"github.com/go-github/github"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"

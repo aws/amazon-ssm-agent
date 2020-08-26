@@ -22,6 +22,7 @@ mkdir -p ${BGO_SPACE}/bin/linux_arm64/linux/var/lib/amazon/ssm/
 echo "Copying application files"
 
 cp ${BGO_SPACE}/bin/linux_arm64/amazon-ssm-agent ${BGO_SPACE}/bin/linux_arm64/linux/usr/bin/
+cp ${BGO_SPACE}/bin/linux_arm64/ssm-agent-worker ${BGO_SPACE}/bin/linux_arm64/linux/usr/bin/
 cp ${BGO_SPACE}/bin/linux_arm64/ssm-document-worker ${BGO_SPACE}/bin/linux_arm64/linux/usr/bin/
 cp ${BGO_SPACE}/bin/linux_arm64/ssm-session-worker ${BGO_SPACE}/bin/linux_arm64/linux/usr/bin/
 cp ${BGO_SPACE}/bin/linux_arm64/ssm-session-logger ${BGO_SPACE}/bin/linux_arm64/linux/usr/bin/
@@ -30,9 +31,10 @@ cp ${BGO_SPACE}/seelog_unix.xml ${BGO_SPACE}/bin/linux_arm64/linux/etc/amazon/ss
 cp ${BGO_SPACE}/amazon-ssm-agent.json.template ${BGO_SPACE}/bin/linux_arm64/linux/etc/amazon/ssm/
 cp ${BGO_SPACE}/RELEASENOTES.md ${BGO_SPACE}/bin/linux_arm64/linux/etc/amazon/ssm/
 cp ${BGO_SPACE}/README.md ${BGO_SPACE}/bin/linux_arm64/linux/etc/amazon/ssm/
+cp ${BGO_SPACE}/NOTICE.md ${BGO_SPACE}/bin/linux_arm64/linux/etc/amazon/ssm/
 cp ${BGO_SPACE}/packaging/linux/amazon-ssm-agent.conf ${BGO_SPACE}/bin/linux_arm64/linux/etc/init/
 cp ${BGO_SPACE}/packaging/linux/amazon-ssm-agent.service ${BGO_SPACE}/bin/linux_arm64/linux/etc/systemd/system/
-cd ${BGO_SPACE}/bin/linux_arm64/linux/usr/bin/; strip --strip-unneeded amazon-ssm-agent; strip --strip-unneeded ssm-cli; strip --strip-unneeded ssm-document-worker; strip --strip-unneeded ssm-session-worker; strip --strip-unneeded ssm-session-logger; cd ~-
+cd ${BGO_SPACE}/bin/linux_arm64/linux/usr/bin/; strip --strip-unneeded amazon-ssm-agent; strip --strip-unneeded ssm-agent-worker; strip --strip-unneeded ssm-cli; strip --strip-unneeded ssm-document-worker; strip --strip-unneeded ssm-session-worker; strip --strip-unneeded ssm-session-logger; cd ~-
 
 echo "Creating the rpm package"
 

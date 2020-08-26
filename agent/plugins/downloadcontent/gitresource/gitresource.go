@@ -18,9 +18,9 @@ package gitresource
 import (
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil/filemanager"
-	"github.com/aws/amazon-ssm-agent/agent/githubclient"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/plugins/downloadcontent/githubclient"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/downloadcontent/gitresource/privategithub"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/downloadcontent/remoteresource"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/downloadcontent/system"

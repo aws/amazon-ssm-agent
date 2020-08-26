@@ -52,7 +52,7 @@ func TestHealthCheck(t *testing.T) {
 		context.Current.State = tst.Input
 
 		// call method
-		result := PrepareHealthStatus(context.Current, "")
+		result := PrepareHealthStatus(context.Current, "", "")
 
 		// check results
 		assert.Equal(t, result, tst.Output)
@@ -78,7 +78,7 @@ func TestHealthCheckWithUpdateFailed(t *testing.T) {
 		context.Current.State = Completed
 
 		// call method
-		result := PrepareHealthStatus(context.Current, string(tst.Input))
+		result := PrepareHealthStatus(context.Current, string(tst.Input), "")
 
 		// check results
 		assert.Equal(t, result, tst.Output)
@@ -94,7 +94,7 @@ func TestUpdateHealthCheck(t *testing.T) {
 		"UpdateInstanceInformation",
 		logger,
 		context.Current.SourceVersion,
-		updateInProgress).Return(&ssmService.UpdateInstanceInformationOutput{}, nil)
+		fmt.Sprintf("%v-%v", updateInProgress, context.Current.TargetVersion)).Return(&ssmService.UpdateInstanceInformationOutput{}, nil)
 
 	// setup
 	newSsmSvc = func() ssm.Service {

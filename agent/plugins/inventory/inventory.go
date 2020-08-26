@@ -684,7 +684,7 @@ func (p *Plugin) ParseAssociationIdFromFileName(input string) string {
 	return strings.Split(input, ".")[0]
 }
 
-// Worker plugin implementation
+// WorkerConfig plugin implementation
 
 // Execute runs the inventory plugin
 func (p *Plugin) Execute(context context.T, config contracts.Configuration, cancelFlag task.CancelFlag, output iohandler.IOHandler) {

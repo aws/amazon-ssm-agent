@@ -17,8 +17,8 @@ package ssminstaller
 import (
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
-	"github.com/aws/amazon-ssm-agent/agent/docparser"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
+	"github.com/aws/amazon-ssm-agent/agent/framework/docparser"
 	"github.com/aws/amazon-ssm-agent/agent/platform"
 
 	"encoding/json"

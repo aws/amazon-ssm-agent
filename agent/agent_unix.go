@@ -14,5 +14,5 @@ func main() {
 	parseFlags(log)
 
 	// run agent
-	run(log)
+	run(log, true)
 }

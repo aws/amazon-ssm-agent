@@ -20,5 +20,6 @@ if [[ "$(cat /proc/1/comm)" == "systemd" ]]; then
 		echo "-> Agent is not running in the instance"
 	fi
 else
-    echo "The amazon-ssm-agent is not supported on this platform. Please visit the documentation for the list of supported platforms"
+    echo "The amazon-ssm-agent is not supported on this platform. Please visit the documentation for the list of supported platforms" 1>&2
+    exit 124
 fi

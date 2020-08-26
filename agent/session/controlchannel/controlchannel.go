@@ -32,6 +32,7 @@ import (
 	mgsContracts "github.com/aws/amazon-ssm-agent/agent/session/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/session/retry"
 	"github.com/aws/amazon-ssm-agent/agent/session/service"
+	telemetry "github.com/aws/amazon-ssm-agent/agent/session/telemetry"
 	"github.com/aws/amazon-ssm-agent/agent/times"
 	"github.com/aws/amazon-ssm-agent/agent/version"
 	"github.com/aws/aws-sdk-go/aws"
@@ -50,11 +51,12 @@ type IControlChannel interface {
 
 // ControlChannel used for communication between the message gateway service and the agent.
 type ControlChannel struct {
-	wsChannel   communicator.IWebSocketChannel
-	Processor   processor.Processor
-	ChannelId   string
-	Service     service.Service
-	channelType string
+	wsChannel         communicator.IWebSocketChannel
+	Processor         processor.Processor
+	ChannelId         string
+	Service           service.Service
+	AuditLogScheduler telemetry.IAuditLogTelemetry
+	channelType       string
 }
 
 // Initialize populates controlchannel object and opens controlchannel to communicate with mgs.
@@ -67,13 +69,12 @@ func (controlChannel *ControlChannel) Initialize(context context.T,
 	if context.AppConfig().Agent.ContainerMode {
 		instanceId, _ = platform.TargetID()
 	}
-
 	controlChannel.Service = mgsService
 	controlChannel.ChannelId = instanceId
 	controlChannel.channelType = mgsConfig.RoleSubscribe
 	controlChannel.Processor = processor
 	controlChannel.wsChannel = &communicator.WebSocketChannel{}
-
+	controlChannel.AuditLogScheduler = telemetry.GetAuditLogTelemetryInstance(context, controlChannel.wsChannel)
 	log.Debugf("Initialized controlchannel for instance: %s", instanceId)
 }
 
@@ -171,6 +172,9 @@ func (controlChannel *ControlChannel) Close(log log.T) error {
 	if controlChannel.wsChannel != nil {
 		return controlChannel.wsChannel.Close(log)
 	}
+	if controlChannel.AuditLogScheduler != nil {
+		controlChannel.AuditLogScheduler.StopScheduler()
+	}
 	return nil
 }
 
@@ -198,7 +202,10 @@ func (controlChannel *ControlChannel) Open(log log.T) error {
 		return fmt.Errorf("error serializing openControlChannelInput: %s", err)
 	}
 
-	return controlChannel.SendMessage(log, jsonValue, websocket.TextMessage)
+	if err = controlChannel.SendMessage(log, jsonValue, websocket.TextMessage); err == nil {
+		controlChannel.AuditLogScheduler.SendAuditMessage()
+	}
+	return err
 }
 
 // controlChannelIncomingMessageHandler handles the incoming messages coming to the agent.

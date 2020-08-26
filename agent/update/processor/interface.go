@@ -37,8 +37,8 @@ type prepare func(mgr *updateManager, log log.T, context *UpdateContext) (err er
 type update func(mgr *updateManager, log log.T, context *UpdateContext) (err error)
 type verify func(mgr *updateManager, log log.T, context *UpdateContext, isRollback bool) (err error)
 type rollback func(mgr *updateManager, log log.T, context *UpdateContext) (err error)
-type uninstall func(mgr *updateManager, log log.T, version string, context *UpdateContext) (err error)
-type install func(mgr *updateManager, log log.T, version string, context *UpdateContext) (err error)
+type uninstall func(mgr *updateManager, log log.T, version string, context *UpdateContext) (exitCode updateutil.UpdateScriptExitCode, err error)
+type install func(mgr *updateManager, log log.T, version string, context *UpdateContext) (exitCode updateutil.UpdateScriptExitCode, err error)
 type download func(mgr *updateManager, log log.T, downloadInput artifact.DownloadInput, context *UpdateContext, version string) (err error)
 type clean func(mgr *updateManager, log log.T, context *UpdateContext) (err error)
 
