@@ -183,7 +183,7 @@ func parseOSreleaseFile(lines []string) (string, string, error) {
 		platform = c.PlatformAmazon
 	case "sles", "suse":
 		platform = c.PlatformSuse
-	case "opensuse":
+	case "opensuse", "opensuse-leap":
 		if strings.Contains(strings.ToLower(name), "leap") {
 			platform = c.PlatformOpensuseLeap
 		}
