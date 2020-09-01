@@ -1,5 +1,9 @@
 Latest
 ===============
+- Fix install scripts to report errors from package manager and enable retries
+
+3.0.151.0
+===============
 - First release of SSM Agent v3
 - Moved v2 amazon-ssm-agent to new ssm-agent-worker binary
 - New amazon-ssm-agent binary:
