@@ -157,7 +157,11 @@ const (
 type UpdateScriptExitCode int
 
 const (
+	// exit code represents exit code when there is no service manager
 	ExitCodeUnsupportedPlatform UpdateScriptExitCode = 124
+
+	// exit code represents exit code from agent update install script
+	ExitCodeUpdateUsingPkgMgr UpdateScriptExitCode = 125
 )
 
 // SUb status values

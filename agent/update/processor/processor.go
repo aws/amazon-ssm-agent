@@ -326,9 +326,12 @@ func verifyInstallation(mgr *updateManager, log log.T, context *UpdateContext, i
 	if instanceContext, err = mgr.util.CreateInstanceContext(log); err != nil {
 		return mgr.failed(context, log, updateutil.ErrorCreateInstanceContext, err.Error(), false)
 	}
-
+	version := context.Current.TargetVersion
+	if isRollback {
+		version = context.Current.SourceVersion
+	}
 	log.Infof("Initiating update health check")
-	if isRunning, err = mgr.util.WaitForServiceToStart(log, instanceContext, context.Current.TargetVersion); err != nil || !isRunning {
+	if isRunning, err = mgr.util.WaitForServiceToStart(log, instanceContext, version); err != nil || !isRunning {
 		if !isRollback {
 			message := updateutil.BuildMessage(err,
 				"failed to update %v to %v, %v",
@@ -486,6 +489,12 @@ func installAgent(mgr *updateManager, log log.T, version string, context *Update
 		}
 		if retryCounter < installRetryCount {
 			backOff := getNextBackOff(retryCounter)
+
+			// Increase backoff by 30 seconds if package manager fails
+			if exitCode == updateutil.ExitCodeUpdateUsingPkgMgr {
+				backOff += time.Duration(30) * time.Second // 30 seconds
+			}
+
 			time.Sleep(backOff)
 		}
 	}
