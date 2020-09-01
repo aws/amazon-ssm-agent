@@ -594,6 +594,7 @@ func TestVerifyInstallationCannotStartAgent(t *testing.T) {
 	control := &stubControl{serviceIsRunning: false}
 	updater := createUpdaterStubs(control)
 	context := createUpdateContext(Installed)
+	expectedVersion := context.Current.TargetVersion
 	isRollbackCalled := false
 
 	updater.mgr.rollback = func(mgr *updateManager, log log.T, context *UpdateContext) (err error) {
@@ -607,6 +608,7 @@ func TestVerifyInstallationCannotStartAgent(t *testing.T) {
 	// assert
 	assert.NoError(t, err)
 	assert.True(t, isRollbackCalled)
+	assert.Equal(t, expectedVersion, control.getWaitForServiceVersion())
 	assert.Equal(t, context.Current.State, Rollback)
 }
 
@@ -615,6 +617,7 @@ func TestVerifyRollback(t *testing.T) {
 	control := &stubControl{serviceIsRunning: true}
 	updater := createUpdaterStubs(control)
 	context := createUpdateContext(RolledBack)
+	expectedVersion := context.Current.SourceVersion
 
 	// action
 	err := verifyInstallation(updater.mgr, logger, context, true)
@@ -622,6 +625,7 @@ func TestVerifyRollback(t *testing.T) {
 	// assert
 	assert.NoError(t, err)
 	assert.Equal(t, string(context.Current.State), "")
+	assert.Equal(t, expectedVersion, control.getWaitForServiceVersion())
 	assert.Equal(t, context.Histories[0].State, Completed)
 	assert.Equal(t, context.Histories[0].Result, contracts.ResultStatusFailed)
 }
@@ -858,6 +862,11 @@ type stubControl struct {
 	failCreateUpdateDownloadFolder bool
 	serviceIsRunning               bool
 	failExeCommand                 bool
+	waitForServiceVersion          string
+}
+
+func (s *stubControl) getWaitForServiceVersion() string {
+	return s.waitForServiceVersion
 }
 
 type utilityStub struct {
@@ -905,6 +914,7 @@ func (u *utilityStub) IsServiceRunning(log log.T, i *updateutil.InstanceContext)
 }
 
 func (u *utilityStub) WaitForServiceToStart(log log.T, i *updateutil.InstanceContext, targetVersion string) (result bool, err error) {
+	u.controller.waitForServiceVersion = targetVersion
 	if u.controller.serviceIsRunning {
 		return true, nil
 	}
