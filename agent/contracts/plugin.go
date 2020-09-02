@@ -87,6 +87,7 @@ type Configuration struct {
 	KmsKeyId                    string
 	RunAsEnabled                bool
 	RunAsUser                   string
+	ShellProfile                ShellProfileConfig
 }
 
 // Plugin wraps the plugin configuration and plugin result.

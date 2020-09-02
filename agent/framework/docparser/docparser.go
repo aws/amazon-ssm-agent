@@ -361,6 +361,7 @@ func (sessionDocContent *SessionDocContent) parsePluginStateForStartSession(
 		Properties:                  sessionDocContent.Properties,
 		RunAsEnabled:                sessionDocContent.Inputs.RunAsEnabled,
 		RunAsUser:                   runAsUser,
+		ShellProfile:                sessionDocContent.Inputs.ShellProfile,
 	}
 
 	var plugin contracts.PluginState

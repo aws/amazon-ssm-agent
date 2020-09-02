@@ -46,16 +46,17 @@ var pty *winpty.WinPTY
 var u = &utility.SessionUtil{}
 
 const (
-	defaultConsoleCol      = 200
-	defaultConsoleRow      = 60
-	winptyDllName          = "winpty.dll"
-	winptyDllFolderName    = "SessionManagerShell"
-	winptyCmd              = "powershell"
-	startRecordSessionCmd  = "Start-Transcript"
-	newLineCharacter       = "\r\n"
-	screenBufferSizeCmd    = "$host.UI.RawUI.BufferSize = New-Object System.Management.Automation.Host.Size($host.UI.RawUI.BufferSize.Width,%d)%s"
-	logon32LogonNetwork    = uintptr(3)
-	logon32ProviderDefault = uintptr(0)
+	defaultConsoleCol            = 200
+	defaultConsoleRow            = 60
+	winptyDllName                = "winpty.dll"
+	winptyDllFolderName          = "SessionManagerShell"
+	winptyCmd                    = "powershell"
+	startRecordSessionCmd        = "Start-Transcript"
+	newLineCharacter             = "\r\n"
+	shellProfileNewLineCharacter = "\r"
+	screenBufferSizeCmd          = "$host.UI.RawUI.BufferSize = New-Object System.Management.Automation.Host.Size($host.UI.RawUI.BufferSize.Width,%d)%s"
+	logon32LogonNetwork          = uintptr(3)
+	logon32ProviderDefault       = uintptr(0)
 )
 
 var (
@@ -221,6 +222,19 @@ func logonUser(user, pass string) (token syscall.Handle, err error) {
 func revertToSelf() error {
 	if rc, _, ec := syscall.Syscall(revertSelfProc.Addr(), 0, 0, 0, 0); rc == 0 {
 		return error(ec)
+	}
+	return nil
+}
+
+// runShellProfile executes the shell profile config
+func (p *ShellPlugin) runShellProfile(log log.T, config agentContracts.Configuration) error {
+	if strings.TrimSpace(config.ShellProfile.Windows) == "" {
+		return nil
+	}
+
+	if _, err := p.stdin.Write([]byte(config.ShellProfile.Windows + shellProfileNewLineCharacter)); err != nil {
+		log.Errorf("Unable to write to stdin, err: %v.", err)
+		return err
 	}
 	return nil
 }
