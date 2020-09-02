@@ -42,6 +42,8 @@ const (
 	testClientId        = "test-clientId"
 	testKmsKeyId        = "test-kmskeyid"
 	testProperties      = "properties"
+	testWindowsCmd      = "date"
+	testLinuxCmd        = "ls"
 )
 const parameterdocument = `{"schemaVersion":"1.2","description":"","parameters":{"commands":{"type":"StringList"}},"runtimeConfig":{"aws:runPowerShellScript":{"properties":[{"id":"0.aws:runPowerShellScript","runCommand":"{{ commands }}"}]}}}`
 const invaliddocument = `{"schemaVersion":"1.2","description":"PowerShell.","FOO":"bar"}`
@@ -171,11 +173,17 @@ func TestInitializeDocStateForStartSessionDocument_Valid(t *testing.T) {
 		OrchestrationDir: testOrchDir,
 	}
 
+	shellProfile := contracts.ShellProfileConfig{
+		Windows: testWindowsCmd,
+		Linux:   testLinuxCmd,
+	}
+
 	sessionInputs := contracts.SessionInputs{
 		S3BucketName:           testS3Bucket,
 		S3KeyPrefix:            testS3Prefix,
 		KmsKeyId:               testKmsKeyId,
 		CloudWatchLogGroupName: testLogGroupName,
+		ShellProfile:           shellProfile,
 	}
 
 	sessionDocContent := &SessionDocContent{
@@ -210,6 +218,8 @@ func TestInitializeDocStateForStartSessionDocument_Valid(t *testing.T) {
 	assert.Equal(t, fileutil.BuildPath(testOrchDir, appconfig.PluginNameStandardStream), pluginInfo[0].Configuration.OrchestrationDirectory)
 	assert.Equal(t, testProperties, pluginInfo[0].Configuration.Properties)
 	assert.Equal(t, testKmsKeyId, pluginInfo[0].Configuration.KmsKeyId)
+	assert.Equal(t, testWindowsCmd, pluginInfo[0].Configuration.ShellProfile.Windows)
+	assert.Equal(t, testLinuxCmd, pluginInfo[0].Configuration.ShellProfile.Linux)
 }
 
 func TestInitializeDocStateForStartSessionDocumentWithoutSessionCommands_Valid(t *testing.T) {

@@ -44,6 +44,7 @@ const (
 	langEnvVariable       = "LANG=C.UTF-8"
 	langEnvVariableKey    = "LANG"
 	startRecordSessionCmd = "script"
+	newLineCharacter      = "\n"
 	catCmd                = "cat"
 	scriptFlag            = "-c"
 	homeEnvVariable       = "HOME=/home/"
@@ -217,6 +218,19 @@ func getUserCredentials(log log.T, sessionUser string) (uint32, uint32, []uint32
 	}
 
 	return 0, 0, nil, errors.New("invalid uid and gid")
+}
+
+// runShellProfile executes the shell profile config
+func (p *ShellPlugin) runShellProfile(log log.T, config agentContracts.Configuration) error {
+	if strings.TrimSpace(config.ShellProfile.Linux) == "" {
+		return nil
+	}
+
+	if _, err := p.stdin.Write([]byte(config.ShellProfile.Linux + newLineCharacter)); err != nil {
+		log.Errorf("Unable to write to stdin, err: %v.", err)
+		return err
+	}
+	return nil
 }
 
 // generateLogData generates a log file with the executed commands.

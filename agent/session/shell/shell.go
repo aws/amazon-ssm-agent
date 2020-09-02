@@ -183,6 +183,16 @@ func (p *ShellPlugin) execute(context context.T,
 
 	log.Infof("Plugin %s started", p.name)
 
+	// Execute shell profile
+	if p.name == appconfig.PluginNameStandardStream {
+		if err = p.runShellProfile(log, config); err != nil {
+			errorString := fmt.Errorf("Encountered an error while executing shell profile: %s", err)
+			log.Error(errorString)
+			output.MarkAsFailed(errorString)
+			return
+		}
+	}
+
 	select {
 	case <-cancelled:
 		log.Debug("Session cancelled. Attempting to stop pty.")

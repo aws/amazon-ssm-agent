@@ -194,14 +194,21 @@ type DocumentContent struct {
 
 // SessionInputs stores session configuration
 type SessionInputs struct {
-	S3BucketName                string `json:"s3BucketName" yaml:"s3BucketName"`
-	S3KeyPrefix                 string `json:"s3KeyPrefix" yaml:"s3KeyPrefix"`
-	S3EncryptionEnabled         bool   `json:"s3EncryptionEnabled" yaml:"s3EncryptionEnabled"`
-	CloudWatchLogGroupName      string `json:"cloudWatchLogGroupName" yaml:"cloudWatchLogGroupName"`
-	CloudWatchEncryptionEnabled bool   `json:"cloudWatchEncryptionEnabled" yaml:"cloudWatchEncryptionEnabled"`
-	KmsKeyId                    string `json:"kmsKeyId" yaml:"kmsKeyId"`
-	RunAsEnabled                bool   `json:"runAsEnabled" yaml:"runAsEnabled"`
-	RunAsDefaultUser            string `json:"runAsDefaultUser" yaml:"runAsDefaultUser"`
+	S3BucketName                string             `json:"s3BucketName" yaml:"s3BucketName"`
+	S3KeyPrefix                 string             `json:"s3KeyPrefix" yaml:"s3KeyPrefix"`
+	S3EncryptionEnabled         bool               `json:"s3EncryptionEnabled" yaml:"s3EncryptionEnabled"`
+	CloudWatchLogGroupName      string             `json:"cloudWatchLogGroupName" yaml:"cloudWatchLogGroupName"`
+	CloudWatchEncryptionEnabled bool               `json:"cloudWatchEncryptionEnabled" yaml:"cloudWatchEncryptionEnabled"`
+	KmsKeyId                    string             `json:"kmsKeyId" yaml:"kmsKeyId"`
+	RunAsEnabled                bool               `json:"runAsEnabled" yaml:"runAsEnabled"`
+	RunAsDefaultUser            string             `json:"runAsDefaultUser" yaml:"runAsDefaultUser"`
+	ShellProfile                ShellProfileConfig `json:"shellProfile" yaml:"shellProfile"`
+}
+
+// ShellProfileConfig stores shell profile config
+type ShellProfileConfig struct {
+	Windows string `json:"windows" yaml:"windows"`
+	Linux   string `json:"linux" yaml:"linux"`
 }
 
 // SessionDocumentContent object which represents ssm session content.
