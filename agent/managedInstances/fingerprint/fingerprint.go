@@ -88,6 +88,7 @@ func generateFingerprint() (string, error) {
 	var hardwareHash map[string]string
 	var savedHwInfo hwInfo
 	var err error
+	var hwHashErr error
 
 	log := ssmlog.SSMLogger(true)
 	uuid.SwitchFormat(uuid.CleanHyphen)
@@ -97,7 +98,13 @@ func generateFingerprint() (string, error) {
 	// retry getting the new hash and compare with the saved hash for 3 times
 	for attempt := 1; attempt <= 3; attempt++ {
 		// fetch current hardware hash values
-		hardwareHash = currentHwHash()
+		hardwareHash, hwHashErr = currentHwHash()
+
+		if hwHashErr != nil {
+			// sleep 5 seconds until the next retry
+			time.Sleep(5 * time.Second)
+			continue
+		}
 
 		// try get previously saved fingerprint data from vault
 		savedHwInfo, err = fetch()
@@ -125,9 +132,16 @@ func generateFingerprint() (string, error) {
 		// sleep 5 seconds until the next retry
 		time.Sleep(5 * time.Second)
 	}
+
+	if hwHashErr != nil {
+		log.Errorf("Error while fetching hardware hashes from instance: %s", hwHashErr)
+		return result, hwHashErr
+	}
+
 	if err != nil {
 		log.Warnf("Error while fetching fingerprint data from vault: %s", err)
 	}
+
 	// check if this is the first time we are generating the fingerprint
 	// or if there is no match
 	if !hasFingerprint(savedHwInfo) {
