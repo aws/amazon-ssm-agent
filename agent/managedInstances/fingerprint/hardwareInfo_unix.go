@@ -30,7 +30,7 @@ const (
 	hardwareID           = "machine-id"
 )
 
-var currentHwHash = func() map[string]string {
+var currentHwHash = func() (map[string]string, error) {
 	hardwareHash := make(map[string]string)
 	hardwareHash[hardwareID], _ = machineID()
 	hardwareHash["processor-hash"], _ = processorInfoHash()
@@ -42,7 +42,7 @@ var currentHwHash = func() map[string]string {
 	hardwareHash["macaddr-info"], _ = macAddrInfo()
 	hardwareHash["disk-info"], _ = diskInfoHash()
 
-	return hardwareHash
+	return hardwareHash, nil
 }
 
 func machineID() (string, error) {

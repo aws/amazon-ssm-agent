@@ -27,13 +27,13 @@ const (
 )
 
 func ExampleInstanceFingerprint() {
-	currentHwHash = func() map[string]string {
+	currentHwHash = func() (map[string]string, error) {
 		hwHash := make(map[string]string)
 		hwHash["sample"] = "sample"
-		return hwHash
+		return hwHash, nil
 	}
 
-	savedHwHash := currentHwHash()
+	savedHwHash, _ := currentHwHash()
 
 	saved := hwInfo{
 		Fingerprint:  sampleFingerprint,
@@ -115,11 +115,24 @@ func deepCopy(original map[string]string) (copied map[string]string) {
 	return
 }
 
+func TestGenerateFingerprint_FailGenerateHwHash(t *testing.T) {
+	failedGenerateHwHashError := "Failed to generate hardware hash"
+	currentHwHash = func() (map[string]string, error) {
+		return make(map[string]string), fmt.Errorf(failedGenerateHwHashError)
+	}
+
+	fingerprint, err := generateFingerprint()
+
+	assert.Error(t, err, "expected no error from the call")
+	assert.Equal(t, "", fingerprint, "Expected empty fingerprint")
+	assert.Equal(t, failedGenerateHwHashError, err.Error(), "Expected HwHash error")
+}
+
 func TestGenerateFingerprint_GenerateNewWhenNoneSaved(t *testing.T) {
-	currentHwHash = func() map[string]string {
+	currentHwHash = func() (map[string]string, error) {
 		hwHash := make(map[string]string)
 		hwHash["sample"] = "sample"
-		return hwHash
+		return hwHash, nil
 	}
 
 	vault = vaultStub{
@@ -136,13 +149,13 @@ func TestGenerateFingerprint_GenerateNewWhenNoneSaved(t *testing.T) {
 }
 
 func TestGenerateFingerprint_ReturnSavedWhenMatched(t *testing.T) {
-	currentHwHash = func() map[string]string {
+	currentHwHash = func() (map[string]string, error) {
 		hwHash := make(map[string]string)
 		hwHash["sample"] = "sample"
-		return hwHash
+		return hwHash, nil
 	}
 
-	savedHwHash := currentHwHash()
+	savedHwHash, _ := currentHwHash()
 
 	saved := hwInfo{
 		Fingerprint:  sampleFingerprint,

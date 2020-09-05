@@ -18,6 +18,7 @@
 package fingerprint
 
 import (
+	"fmt"
 	"path/filepath"
 	"time"
 
@@ -37,11 +38,15 @@ const (
 	serviceRetry         = 5
 )
 
-func waitForService(log log.T, service *mgr.Service) bool {
+func waitForService(log log.T, service *mgr.Service) error {
+	var err error
+	var status svc.Status
+
 	for attempt := 1; attempt <= serviceRetry; attempt++ {
-		status, err := service.Query()
+		status, err = service.Query()
+
 		if err == nil && status.State == svc.Running {
-			return true
+			return nil
 		}
 
 		if err != nil {
@@ -52,29 +57,38 @@ func waitForService(log log.T, service *mgr.Service) bool {
 		time.Sleep(serviceRetryInterval * time.Second)
 	}
 
-	return false
+	return fmt.Errorf("Failed to wait for WMI to get into Running status")
 }
 
 var wmicCommand = filepath.Join(appconfig.EnvWinDir, "System32", "wbem", "wmic.exe")
 
-var currentHwHash = func() map[string]string {
+var currentHwHash = func() (map[string]string, error) {
 	log := ssmlog.SSMLogger(true)
 	hardwareHash := make(map[string]string)
 
 	// Wait for WMI Service
 	winManager, err := mgr.Connect()
 	log.Debug("Waiting for WMI Service to be ready.....")
-	if err == nil {
-		var wmiService *mgr.Service
-		wmiService, err = winManager.OpenService(wmiServiceName)
-		if err == nil {
-			if !waitForService(log, wmiService) {
-				log.Debug("[Warning] WMI Service cannot be query for hardware hash.")
-			} else {
-				log.Debug("WMI Service is ready to be queried....")
-			}
-		}
+	if err != nil {
+		log.Warnf("Failed to connect to WMI: '%v'", err)
+		return hardwareHash, err
 	}
+
+	// Open WMI Service
+	var wmiService *mgr.Service
+	wmiService, err = winManager.OpenService(wmiServiceName)
+	if err != nil {
+		log.Warnf("Failed to open wmi service: '%v'", err)
+		return hardwareHash, err
+	}
+
+	// Wait for WMI Service to start
+	if err = waitForService(log, wmiService); err != nil {
+		log.Warn("WMI Service cannot be query for hardware hash.")
+		return hardwareHash, err
+	}
+
+	log.Debug("WMI Service is ready to be queried....")
 
 	hardwareHash[hardwareID], _ = csproductUuid(log)
 	hardwareHash["processor-hash"], _ = processorInfoHash()
@@ -86,7 +100,7 @@ var currentHwHash = func() map[string]string {
 	hardwareHash["macaddr-info"], _ = macAddrInfo()
 	hardwareHash["disk-info"], _ = diskInfoHash()
 
-	return hardwareHash
+	return hardwareHash, nil
 }
 
 func csproductUuid(logger log.T) (encodedValue string, err error) {
