@@ -114,7 +114,7 @@ func (bus *MessageBus) SendSurveyMessage(survey *message.Message) ([]*message.Me
 			logger.Errorf("failed to deserialize the message %s", string(msg))
 			continue
 		}
-
+		logger.Debugf("unmarshal channel response: %v", result)
 		results = append(results, result)
 	}
 

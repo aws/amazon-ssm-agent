@@ -335,13 +335,13 @@ func (m *Manager) configCloudWatch(log log.T) {
 		// We also need to check if any configuration has been made by ec2 config before
 		var hasConfiguration bool
 		var localConfig bool
-		if hasConfiguration, err = checkLegacyCloudWatchRunCommandConfig(instanceId, cloudwatch.Instance(), m.fileSysUtil); err != nil {
+		if hasConfiguration, err = checkLegacyCloudWatchRunCommandConfig(log, instanceId, cloudwatch.Instance(), m.fileSysUtil); err != nil {
 			log.Debugf("Have problem read configuration from ec2config file. %v", err)
 			return
 		}
 
 		if !hasConfiguration {
-			if localConfig, err = checkLegacyCloudWatchLocalConfig(cloudwatch.Instance(), m.ec2ConfigXmlParser, m.fileSysUtil); err != nil {
+			if localConfig, err = checkLegacyCloudWatchLocalConfig(log, cloudwatch.Instance(), m.ec2ConfigXmlParser, m.fileSysUtil); err != nil {
 				log.Debugf("Have problem read configuration from ec2config file. %v", err)
 				return
 			}
@@ -408,7 +408,7 @@ func (m *Manager) configCloudWatch(log log.T) {
 }
 
 // checkLegacyCloudWatchRunCommandConfig checks if ec2config has cloudwatch configuration document running before
-func checkLegacyCloudWatchRunCommandConfig(instanceId string, cwcInstance cloudwatch.CloudWatchConfig, fileSysUtil longrunning.FileSysUtil) (hasConfiguration bool, err error) {
+func checkLegacyCloudWatchRunCommandConfig(logger log.T, instanceId string, cwcInstance cloudwatch.CloudWatchConfig, fileSysUtil longrunning.FileSysUtil) (hasConfiguration bool, err error) {
 	var engineConfigurationParser cloudwatch.EngineConfigurationParser
 	var documentModel contracts.DocumentContent
 	var content []byte
@@ -435,6 +435,7 @@ func checkLegacyCloudWatchRunCommandConfig(instanceId string, cwcInstance cloudw
 	if json.Unmarshal(content, &documentModel); err != nil {
 		return
 	}
+	logger.Debugf("unmarshal document model: %v", documentModel)
 
 	pluginConfig := documentModel.RuntimeConfig[appconfig.PluginNameCloudWatch]
 	if pluginConfig == nil || pluginConfig.Properties == nil {
@@ -449,6 +450,7 @@ func checkLegacyCloudWatchRunCommandConfig(instanceId string, cwcInstance cloudw
 		return
 	}
 
+	logger.Debugf("unmarshal engine configuration - run command: %v", engineConfigurationParser)
 	if err = cwcInstance.Enable(engineConfigurationParser.EngineConfiguration); err != nil {
 		return
 	}
@@ -458,7 +460,7 @@ func checkLegacyCloudWatchRunCommandConfig(instanceId string, cwcInstance cloudw
 }
 
 // checkLegacyCloudWatchLocalConfig checks if users have cloudwatch local configuration before.
-func checkLegacyCloudWatchLocalConfig(cwcInstance cloudwatch.CloudWatchConfig, ec2ConfigXmlParser cloudwatch.Ec2ConfigXmlParser, fileSysUtil longrunning.FileSysUtil) (hasConfiguration bool, err error) {
+func checkLegacyCloudWatchLocalConfig(logger log.T, cwcInstance cloudwatch.CloudWatchConfig, ec2ConfigXmlParser cloudwatch.Ec2ConfigXmlParser, fileSysUtil longrunning.FileSysUtil) (hasConfiguration bool, err error) {
 	var engineConfigurationParser cloudwatch.EngineConfigurationParser
 	var content []byte
 	var isEnabled bool
@@ -491,7 +493,7 @@ func checkLegacyCloudWatchLocalConfig(cwcInstance cloudwatch.CloudWatchConfig, e
 	if err = json.Unmarshal(validContent, &engineConfigurationParser); err != nil {
 		return
 	}
-
+	logger.Debugf("unmarshal engine configuration - cloud watch: %v", engineConfigurationParser)
 	if err = cwcInstance.Enable(engineConfigurationParser.EngineConfiguration); err != nil {
 		return
 	}

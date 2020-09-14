@@ -302,7 +302,7 @@ func (collector *FrequentCollector) getValidInventoryGathererConfigMap(context c
 		log.Error("error occurred while json.Unmarshal(dataB, &inventoryInput)")
 		return
 	}
-
+	log.Debugf("unmarshal channel response: %v", inventoryInput)
 	validGatherers, err = plugin.ValidateInventoryInput(context, inventoryInput)
 	return
 }

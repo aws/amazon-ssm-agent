@@ -138,6 +138,7 @@ func (p *WorkerBackend) Process(datagram string) error {
 			//TODO request messaging to stop
 			return err
 		}
+		log.Debugf("unmarshal plugin config: %+v", docState)
 		p.once.Do(func() {
 			statusChan := make(chan contracts.PluginResult)
 			go p.runner(p.ctx, docState, statusChan, p.cancelFlag)
