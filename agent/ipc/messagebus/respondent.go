@@ -96,7 +96,7 @@ func (bus *MessageBus) ProcessHealthRequest() {
 			log.Errorf("failed to unmarshal message: %s", err.Error())
 			continue
 		}
-
+		log.Debugf("unmarshal health request: %v", request)
 		if request.Topic == message.GetWorkerHealthRequest {
 
 			var result *message.Message
@@ -158,6 +158,7 @@ func (bus *MessageBus) ProcessTerminationRequest() {
 			log.Errorf("failed to unmarshal message: %s", err.Error())
 			continue
 		}
+		log.Debugf("unmarshal health request: %v", request)
 
 		if request.Topic == message.TerminateWorkerRequest {
 			log.Infof("Received Core Agent termination signal, terminating %s", appconfig.SSMAgentWorkerName)

@@ -52,6 +52,7 @@ func ParseDocumentForPayload(log log.T,
 		log.Debugf("Could not unmarshal parameters ", err)
 		return nil, fmt.Errorf("%v", ErrorMsg)
 	}
+	log.Debugf("unmarshal parameters: %v", payload.DocumentContent)
 
 	payload.DocumentName = *rawData.Association.Name
 	payload.CommandID = *rawData.Association.AssociationId

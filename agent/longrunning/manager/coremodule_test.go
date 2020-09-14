@@ -48,6 +48,8 @@ var (
 	legacyCwConfigPath = fileutil.BuildPath(
 		appconfig.EC2ConfigSettingPath,
 		NameOfCloudWatchJsonFile)
+
+	loggerMock = log.NewMockLog()
 )
 
 /*
@@ -71,7 +73,7 @@ func TestCheckLegacyCloudWatchRunCommandConfig(t *testing.T) {
 	mockFileSysUtil.On("Exists", legacyCwConfigStorePath).Return(true).Once()
 	mockFileSysUtil.On("ReadFile", legacyCwConfigStorePath).Return([]byte(testCloudWatchDocument), nil).Once()
 
-	hasConfiguration, err = checkLegacyCloudWatchRunCommandConfig(instanceId, &mockCwcInstance, &mockFileSysUtil)
+	hasConfiguration, err = checkLegacyCloudWatchRunCommandConfig(loggerMock, instanceId, &mockCwcInstance, &mockFileSysUtil)
 
 	assert.True(t, hasConfiguration)
 	assert.Nil(t, err)
@@ -96,7 +98,7 @@ func TestCheckLegacyCloudWatchRunCommandConfig_InvalidFormat(t *testing.T) {
 	mockFileSysUtil.On("Exists", legacyCwConfigStorePath).Return(true).Once()
 	mockFileSysUtil.On("ReadFile", legacyCwConfigStorePath).Return([]byte(testCloudWatchDocument), nil).Once()
 
-	hasConfiguration, err = checkLegacyCloudWatchRunCommandConfig(instanceId, &mockCwcInstance, &mockFileSysUtil)
+	hasConfiguration, err = checkLegacyCloudWatchRunCommandConfig(loggerMock, instanceId, &mockCwcInstance, &mockFileSysUtil)
 
 	assert.False(t, hasConfiguration)
 	assert.NotNil(t, err)
@@ -121,7 +123,7 @@ func TestCheckLegacyCloudWatchRunCommandConfig_InvalidFormat2(t *testing.T) {
 	mockFileSysUtil.On("Exists", legacyCwConfigStorePath).Return(true).Once()
 	mockFileSysUtil.On("ReadFile", legacyCwConfigStorePath).Return([]byte(testCloudWatchDocument), nil).Once()
 
-	hasConfiguration, err = checkLegacyCloudWatchRunCommandConfig(instanceId, &mockCwcInstance, &mockFileSysUtil)
+	hasConfiguration, err = checkLegacyCloudWatchRunCommandConfig(loggerMock, instanceId, &mockCwcInstance, &mockFileSysUtil)
 
 	assert.False(t, hasConfiguration)
 	assert.NotNil(t, err)
@@ -139,7 +141,7 @@ func TestCheckLegacyCloudWatchRunCommandConfig_ConfigFileMissing(t *testing.T) {
 	mockFileSysUtil := MockedFileSysUtil{}
 	mockFileSysUtil.On("Exists", legacyCwConfigStorePath).Return(false).Once()
 
-	hasConfiguration, err = checkLegacyCloudWatchRunCommandConfig(instanceId, &mockCwcInstance, &mockFileSysUtil)
+	hasConfiguration, err = checkLegacyCloudWatchRunCommandConfig(loggerMock, instanceId, &mockCwcInstance, &mockFileSysUtil)
 
 	assert.False(t, hasConfiguration)
 	assert.Nil(t, err)
@@ -158,7 +160,7 @@ func TestCheckLegacyCloudWatchRunCommandConfig_FileReadFailure(t *testing.T) {
 	mockFileSysUtil.On("Exists", legacyCwConfigStorePath).Return(true).Once()
 	mockFileSysUtil.On("ReadFile", legacyCwConfigStorePath).Return([]byte(""), fmt.Errorf("Failed to read the file")).Once()
 
-	hasConfiguration, err = checkLegacyCloudWatchRunCommandConfig(instanceId, &mockCwcInstance, &mockFileSysUtil)
+	hasConfiguration, err = checkLegacyCloudWatchRunCommandConfig(loggerMock, instanceId, &mockCwcInstance, &mockFileSysUtil)
 
 	assert.False(t, hasConfiguration)
 	assert.NotNil(t, err)
@@ -184,7 +186,7 @@ func TestCheckLegacyCloudWatchRunCommandConfig_EnableFailure(t *testing.T) {
 	mockFileSysUtil.On("Exists", legacyCwConfigStorePath).Return(true).Once()
 	mockFileSysUtil.On("ReadFile", legacyCwConfigStorePath).Return([]byte(testCloudWatchDocument), nil).Once()
 
-	hasConfiguration, err = checkLegacyCloudWatchRunCommandConfig(instanceId, &mockCwcInstance, &mockFileSysUtil)
+	hasConfiguration, err = checkLegacyCloudWatchRunCommandConfig(loggerMock, instanceId, &mockCwcInstance, &mockFileSysUtil)
 
 	assert.False(t, hasConfiguration)
 	assert.NotNil(t, err)
@@ -216,7 +218,7 @@ func TestCheckLegacyCloudWatchLocalConfig(t *testing.T) {
 	mockCwcInstance := MockedCwcInstance{}
 	mockCwcInstance.On("Enable", mock.Anything).Return(nil).Once()
 
-	hasLocalConfiguration, err = checkLegacyCloudWatchLocalConfig(&mockCwcInstance, &mockEc2ConfigXmlParser, &mockFileSysUtil)
+	hasLocalConfiguration, err = checkLegacyCloudWatchLocalConfig(loggerMock, &mockCwcInstance, &mockEc2ConfigXmlParser, &mockFileSysUtil)
 
 	assert.True(t, hasLocalConfiguration)
 	assert.Nil(t, err)
@@ -236,7 +238,7 @@ func TestCheckLegacyCloudWatchLocalConfig_CloudWatchDisabled(t *testing.T) {
 	mockFileSysUtil := MockedFileSysUtil{}
 	mockCwcInstance := MockedCwcInstance{}
 
-	hasLocalConfiguration, err = checkLegacyCloudWatchLocalConfig(&mockCwcInstance, &mockEc2ConfigXmlParser, &mockFileSysUtil)
+	hasLocalConfiguration, err = checkLegacyCloudWatchLocalConfig(loggerMock, &mockCwcInstance, &mockEc2ConfigXmlParser, &mockFileSysUtil)
 
 	assert.False(t, hasLocalConfiguration)
 	assert.Nil(t, err)
@@ -256,7 +258,7 @@ func TestCheckLegacyCloudWatchLocalConfig_InvalidEc2ConfigXmlFormat(t *testing.T
 	mockFileSysUtil := MockedFileSysUtil{}
 	mockCwcInstance := MockedCwcInstance{}
 
-	hasLocalConfiguration, err = checkLegacyCloudWatchLocalConfig(&mockCwcInstance, &mockEc2ConfigXmlParser, &mockFileSysUtil)
+	hasLocalConfiguration, err = checkLegacyCloudWatchLocalConfig(loggerMock, &mockCwcInstance, &mockEc2ConfigXmlParser, &mockFileSysUtil)
 
 	assert.False(t, hasLocalConfiguration)
 	assert.NotNil(t, err)
@@ -278,7 +280,7 @@ func TestCheckLegacyCloudWatchLocalConfig_ConfigFileMissing(t *testing.T) {
 
 	mockCwcInstance := MockedCwcInstance{}
 
-	hasLocalConfiguration, err = checkLegacyCloudWatchLocalConfig(&mockCwcInstance, &mockEc2ConfigXmlParser, &mockFileSysUtil)
+	hasLocalConfiguration, err = checkLegacyCloudWatchLocalConfig(loggerMock, &mockCwcInstance, &mockEc2ConfigXmlParser, &mockFileSysUtil)
 
 	assert.False(t, hasLocalConfiguration)
 	assert.Nil(t, err)
@@ -301,7 +303,7 @@ func TestCheckLegacyCloudWatchLocalConfig_FileReadFailure(t *testing.T) {
 
 	mockCwcInstance := MockedCwcInstance{}
 
-	hasLocalConfiguration, err = checkLegacyCloudWatchLocalConfig(&mockCwcInstance, &mockEc2ConfigXmlParser, &mockFileSysUtil)
+	hasLocalConfiguration, err = checkLegacyCloudWatchLocalConfig(loggerMock, &mockCwcInstance, &mockEc2ConfigXmlParser, &mockFileSysUtil)
 
 	assert.False(t, hasLocalConfiguration)
 	assert.NotNil(t, err)
@@ -330,7 +332,7 @@ func TestCheckLegacyCloudWatchLocalConfig_EnableFailure(t *testing.T) {
 	mockCwcInstance := MockedCwcInstance{}
 	mockCwcInstance.On("Enable", mock.Anything).Return(fmt.Errorf("Failed to enable cw configuration")).Once()
 
-	hasLocalConfiguration, err = checkLegacyCloudWatchLocalConfig(&mockCwcInstance, &mockEc2ConfigXmlParser, &mockFileSysUtil)
+	hasLocalConfiguration, err = checkLegacyCloudWatchLocalConfig(loggerMock, &mockCwcInstance, &mockEc2ConfigXmlParser, &mockFileSysUtil)
 
 	assert.False(t, hasLocalConfiguration)
 	assert.NotNil(t, err)

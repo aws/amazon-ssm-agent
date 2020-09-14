@@ -186,7 +186,6 @@ func fetch() (hwInfo, error) {
 	if err := json.Unmarshal([]byte(d), &savedHwInfo); err != nil {
 		return hwInfo{}, err
 	}
-
 	return savedHwInfo, nil
 }
 

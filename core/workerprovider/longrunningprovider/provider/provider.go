@@ -120,6 +120,7 @@ func (w *WorkerProvider) discoverWorkers(configs map[string]*model.WorkerConfig,
 			logger.Warnf("unable to unmarshal payload: %s", pingResult)
 			continue
 		}
+		logger.Debugf("unmarshal payload content: %v", payload)
 
 		if _, ok := w.workerPool[payload.Name]; ok {
 			if _, ok := w.workerPool[payload.Name].Processes[payload.Pid]; ok {
