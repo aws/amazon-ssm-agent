@@ -115,9 +115,11 @@ func (e *OutOfProcExecuter) messaging(log log.T, ipc channel.Channel, resChan ch
 	if err := messaging.Messaging(log, ipc, backend, stopTimer); err != nil {
 		//the messaging worker encountered error, either ipc run into error or data backend throws error
 		log.Errorf("messaging worker encountered error: %v", err)
+		log.Debugf("document state during messaging worker error: %v", e.docState.DocumentInformation.DocumentStatus)
 		if e.docState.DocumentInformation.DocumentStatus == contracts.ResultStatusInProgress ||
 			e.docState.DocumentInformation.DocumentStatus == "" ||
-			e.docState.DocumentInformation.DocumentStatus == contracts.ResultStatusNotStarted {
+			e.docState.DocumentInformation.DocumentStatus == contracts.ResultStatusNotStarted ||
+			e.docState.DocumentInformation.DocumentStatus == contracts.ResultStatusSuccessAndReboot {
 			e.docState.DocumentInformation.DocumentStatus = contracts.ResultStatusFailed
 			log.Info("document failed half way, sending fail message...")
 			resChan <- e.generateUnexpectedFailResult(fmt.Sprintf("document process failed unexpectedly: %s , check [ssm-document-worker]/[ssm-session-worker] log for crash reason", err))
