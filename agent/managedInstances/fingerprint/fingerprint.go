@@ -26,6 +26,7 @@ import (
 	"os"
 	"os/exec"
 	"time"
+	"unicode/utf8"
 
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/log/ssmlog"
@@ -100,7 +101,7 @@ func generateFingerprint() (string, error) {
 		// fetch current hardware hash values
 		hardwareHash, hwHashErr = currentHwHash()
 
-		if hwHashErr != nil {
+		if hwHashErr != nil || !isValidHardwareHash(hardwareHash) {
 			// sleep 5 seconds until the next retry
 			time.Sleep(5 * time.Second)
 			continue
@@ -136,6 +137,8 @@ func generateFingerprint() (string, error) {
 	if hwHashErr != nil {
 		log.Errorf("Error while fetching hardware hashes from instance: %s", hwHashErr)
 		return result, hwHashErr
+	} else if !isValidHardwareHash(hardwareHash) {
+		return result, fmt.Errorf("Hardware hash generated contains invalid characters. %s", hardwareHash)
 	}
 
 	if err != nil {
@@ -153,6 +156,7 @@ func generateFingerprint() (string, error) {
 		result = uuid.NewV4().String()
 	} else {
 		result = savedHwInfo.Fingerprint
+		return result, nil
 	}
 
 	// generate updated info to save to vault
@@ -302,4 +306,14 @@ func commandOutputHash(command string, params ...string) (encodedValue string, v
 		encodedValue = base64.StdEncoding.EncodeToString(sum[:])
 	}
 	return
+}
+
+func isValidHardwareHash(hardwareHash map[string]string) bool {
+	for _, value := range hardwareHash {
+		if !utf8.ValidString(value) {
+			return false
+		}
+	}
+
+	return true
 }
