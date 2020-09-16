@@ -19,17 +19,19 @@ import (
 	"testing"
 
 	"github.com/aws/amazon-ssm-agent/agent/log"
+
 	"github.com/stretchr/testify/assert"
 )
 
 const (
 	sampleFingerprint = "979b554b-0d67-42c6-9730-48443b3016dd"
+	invalidUTF8String = "\xbd\xb2\x3d\xbc\x20\xe2\x8c\x98"
 )
 
 func ExampleInstanceFingerprint() {
 	currentHwHash = func() (map[string]string, error) {
 		hwHash := make(map[string]string)
-		hwHash["sample"] = "sample"
+		hwHash[hardwareID] = "original"
 		return hwHash, nil
 	}
 
@@ -43,14 +45,14 @@ func ExampleInstanceFingerprint() {
 	savedJson, _ := json.Marshal(saved)
 
 	vault = vaultStub{
-		rKey: vaultKey,
-		err:  nil,
-		data: savedJson,
+		rKey:        vaultKey,
+		data:        savedJson,
+		storeErr:    nil,
+		retrieveErr: nil,
 	}
 
 	val, _ := InstanceFingerprint()
 	fmt.Println(val)
-
 	// Output:
 	// 979b554b-0d67-42c6-9730-48443b3016dd
 }
@@ -105,6 +107,7 @@ func TestIsSimilarHardwareHash(t *testing.T) {
 			fmt.Sprintf("Test case %v did not return %t.", test, test.expected),
 		)
 	}
+
 }
 
 func deepCopy(original map[string]string) (copied map[string]string) {
@@ -116,42 +119,49 @@ func deepCopy(original map[string]string) (copied map[string]string) {
 }
 
 func TestGenerateFingerprint_FailGenerateHwHash(t *testing.T) {
+	// Arrange
 	failedGenerateHwHashError := "Failed to generate hardware hash"
 	currentHwHash = func() (map[string]string, error) {
 		return make(map[string]string), fmt.Errorf(failedGenerateHwHashError)
 	}
 
+	// Act
 	fingerprint, err := generateFingerprint()
 
+	// Assert
 	assert.Error(t, err, "expected no error from the call")
 	assert.Equal(t, "", fingerprint, "Expected empty fingerprint")
 	assert.Equal(t, failedGenerateHwHashError, err.Error(), "Expected HwHash error")
 }
 
 func TestGenerateFingerprint_GenerateNewWhenNoneSaved(t *testing.T) {
+	// Arrange
 	currentHwHash = func() (map[string]string, error) {
 		hwHash := make(map[string]string)
-		hwHash["sample"] = "sample"
+		hwHash[hardwareID] = "original"
 		return hwHash, nil
 	}
 
 	vault = vaultStub{
-		rKey: vaultKey,
-		err:  nil,
-		data: nil,
+		rKey:     vaultKey,
+		storeErr: nil,
+		data:     nil,
 	}
 
+	// Act
 	actual, err := generateFingerprint()
 
+	// Assert
 	assert.NoError(t, err, "expected no error from the call")
-
 	assert.NotEmpty(t, actual, "expected the instance to generate a fingerprint")
+
 }
 
 func TestGenerateFingerprint_ReturnSavedWhenMatched(t *testing.T) {
+	// Arrange
 	currentHwHash = func() (map[string]string, error) {
 		hwHash := make(map[string]string)
-		hwHash["sample"] = "sample"
+		hwHash[hardwareID] = "original"
 		return hwHash, nil
 	}
 
@@ -165,28 +175,154 @@ func TestGenerateFingerprint_ReturnSavedWhenMatched(t *testing.T) {
 	savedJson, _ := json.Marshal(saved)
 
 	vault = vaultStub{
-		rKey: vaultKey,
-		err:  nil,
-		data: savedJson,
+		rKey:        vaultKey,
+		data:        savedJson,
+		storeErr:    nil,
+		retrieveErr: nil,
 	}
 
+	// Act
 	actual, err := generateFingerprint()
 
+	// Assert
 	assert.NoError(t, err, "expected no error from the call")
-
 	assert.Equal(t, sampleFingerprint, actual, "expected the instance to generate a fingerprint")
+
+}
+
+func TestGenerateFingerprint_ReturnUpdated_WhenHardwareHashesDontMatch(t *testing.T) {
+	// Arrange
+	currentHwHash = func() (map[string]string, error) {
+		hwHash := make(map[string]string)
+		hwHash[hardwareID] = "changed"
+		return hwHash, nil
+	}
+	savedHwHash := getHwHash("original")
+
+	saved := hwInfo{
+		Fingerprint:  sampleFingerprint,
+		HardwareHash: savedHwHash,
+	}
+
+	savedJson, _ := json.Marshal(saved)
+
+	vault = vaultStub{
+		rKey:        vaultKey,
+		data:        savedJson,
+		storeErr:    nil,
+		retrieveErr: nil,
+	}
+
+	// Act
+	actual, err := generateFingerprint()
+
+	// Assert
+	assert.NoError(t, err, "expected no error from the call")
+	assert.NotEqual(t, sampleFingerprint, actual, "expected the instance to generate a fingerprint")
+}
+
+func TestGenerateFingerprint_ReturnsError_WhenInvalidCharactersInHardwareHash(t *testing.T) {
+	// Arrange
+	currentHwHash = func() (map[string]string, error) {
+		hwHash := make(map[string]string)
+		hwHash[hardwareID] = invalidUTF8String
+		return hwHash, nil
+	}
+
+	vaultMock := &fpFsVaultMock{}
+	vault = vaultMock
+
+	//Act
+	fingerprint, err := generateFingerprint()
+
+	//Assert
+	assert.Error(t, err)
+	assert.Empty(t, fingerprint)
+}
+
+func TestGenerateFingerprint_DoesNotSave_WhenHardwareHashesMatch(t *testing.T) {
+	// Arrange
+	savedHwHash := getHwHash("original")
+	currentHwHash = func() (map[string]string, error) {
+		return savedHwHash, nil
+	}
+	savedHwInfo := &hwInfo{
+		HardwareHash:        savedHwHash,
+		Fingerprint:         sampleFingerprint,
+		SimilarityThreshold: minimumMatchPercent,
+	}
+
+	savedHwData, _ := json.Marshal(savedHwInfo)
+
+	vaultMock := &fpFsVaultMock{}
+	vaultMock.On("Retrieve", vaultKey).Return(savedHwData, nil).Once()
+	vault = vaultMock
+
+	// Act
+	generateFingerprint()
+}
+
+func TestSave_SavesNewFingerprint(t *testing.T) {
+	// Arrange
+	sampleHwHash := getHwHash("backup")
+	sampleHwInfo := hwInfo{
+		HardwareHash:        sampleHwHash,
+		Fingerprint:         sampleFingerprint,
+		SimilarityThreshold: minimumMatchPercent,
+	}
+	sampleHwInfoData, _ := json.Marshal(sampleHwInfo)
+	vaultMock := &fpFsVaultMock{}
+	vaultMock.On("Store", vaultKey, sampleHwInfoData).Return(nil)
+	vault = vaultMock
+
+	// Act
+	err := save(sampleHwInfo)
+
+	// Assert
+	assert.NoError(t, err)
+}
+
+func TestIsValidHardwareHash_ReturnsHashIsValid(t *testing.T) {
+	// Arrange
+	sampleHash := make(map[string]string)
+	sampleHash[hardwareID] = "sample"
+
+	// Act
+	isValid := isValidHardwareHash(sampleHash)
+
+	// Assert
+	assert.True(t, isValid)
+}
+
+func TestIsValidHardwareHash_ReturnsHashIsInvalid(t *testing.T) {
+	// Arrange
+	sampleHash := make(map[string]string)
+	sampleHash[hardwareID] = invalidUTF8String
+
+	//Act
+	isValid := isValidHardwareHash(sampleHash)
+
+	// Assert
+	assert.False(t, isValid)
+}
+
+func getHwHash(sampleValue string) map[string]string {
+	hwHash := make(map[string]string)
+	hwHash[hardwareID] = sampleValue
+	return hwHash
 }
 
 type vaultStub struct {
-	rKey string
-	data []byte
-	err  error
+	rKey        string
+	data        []byte
+	storeErr    error
+	retrieveErr error
 }
 
 func (v vaultStub) Store(key string, data []byte) error {
-	return v.err
+	return v.storeErr
 }
 
 func (v vaultStub) Retrieve(key string) ([]byte, error) {
-	return v.data, v.err
+	return v.data, v.retrieveErr
 }
