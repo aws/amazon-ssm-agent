@@ -107,7 +107,7 @@ func (s3 *S3Resource) DownloadRemoteResource(log log.T, filesys filemanager.File
 
 	// Create an object for the source URL. This can be used to list the objects in the folder
 	if folders, err = dep.ListS3Directory(log, s3.s3Object); err != nil {
-		if !isPathType(s3.s3Object.Key) {
+		if isPathType(s3.s3Object.Key) {
 			return err, nil
 		}
 
