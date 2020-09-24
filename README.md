@@ -13,8 +13,8 @@ SSM Agent also enables the Session Manager capability that lets you manage your 
 
 ### Verify Requirements
 
-[SSM Run Command Prerequisites](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/remote-commands-prereq.html)
-[SSM Session Manager Prerequisites and supported Operating Systems](http://docs.aws.amazon.com/systems-manager/latest/userguide/session-manager-prerequisites.html)
+* [SSM Run Command Prerequisites](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/remote-commands-prereq.html)
+* [SSM Session Manager Prerequisites and supported Operating Systems](http://docs.aws.amazon.com/systems-manager/latest/userguide/session-manager-prerequisites.html)
 
 ### Setup
 
@@ -74,7 +74,10 @@ Please follow the user guide to [copy and install the SSM Agent](http://docs.aws
 
 ### Code Layout
 
-* Source code is under agent/
+* Source code
+    * Core functionality such as worker management is under core/
+    * Agent worker code is under agent/
+    * Other functionality such as IPC is under common/
 * Vendor package source code is under vendor/src
 * rpm and dpkg artifacts are under packaging
 * build scripts are under Tools/src
@@ -168,6 +171,16 @@ To set up your own custom configuration for the agent:
     * Region (string)
     * OrchestrationRootDir (string)
         * Default: "orchestration"
+    * SelfUpdate (boolean)
+        * Default: false
+    * TelemetryMetricsToCloudWatch (boolean)
+        * Default: false
+    * TelemetryMetricsToSSM (boolean)
+        * Default: true
+    * AuditExpirationDay (int)
+        * Default: 7
+    * LongRunningWorkerMonitorIntervalSeconds (int)
+        * Default: 60
 * Os - represents os related information, will be logged in reply messages
     * Lang (string)
         * Default: "en-US"
