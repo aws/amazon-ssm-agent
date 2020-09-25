@@ -28,6 +28,8 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/pluginutil"
+
+	messageContracts "github.com/aws/amazon-ssm-agent/agent/runcommand/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 )
 
@@ -64,24 +66,42 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 	log.Infof("%v started with configuration %v", p.Name, config)
 	log.Debugf("DefaultWorkingDirectory %v", config.DefaultWorkingDirectory)
 
+	runCommandID, err := messageContracts.GetCommandID(config.MessageId)
+
+	if err != nil {
+		log.Warnf("Error extracting RunCommandID from config %v: Error: %v", config, err)
+		runCommandID = ""
+	}
+
 	if cancelFlag.ShutDown() {
 		output.MarkAsShutdown()
 	} else if cancelFlag.Canceled() {
 		output.MarkAsCancelled()
 	} else {
-		p.runCommandsRawInput(log, config.PluginID, config.Properties, config.OrchestrationDirectory, config.DefaultWorkingDirectory, cancelFlag, output)
+		p.runCommandsRawInput(log, config.PluginID, config.Properties, config.OrchestrationDirectory, config.DefaultWorkingDirectory, cancelFlag, output, runCommandID)
 	}
 }
 
 // runCommandsRawInput executes one set of commands and returns their output.
 // The input is in the default json unmarshal format (e.g. map[string]interface{}).
-func (p *Plugin) runCommandsRawInput(log log.T, pluginID string, rawPluginInput interface{}, orchestrationDirectory string, defaultWorkingDirectory string, cancelFlag task.CancelFlag, output iohandler.IOHandler) {
+func (p *Plugin) runCommandsRawInput(log log.T, pluginID string, rawPluginInput interface{}, orchestrationDirectory string, defaultWorkingDirectory string, cancelFlag task.CancelFlag, output iohandler.IOHandler, runCommandID string) {
 	var pluginInput RunScriptPluginInput
 	err := jsonutil.Remarshal(rawPluginInput, &pluginInput)
 	if err != nil {
 		errorString := fmt.Errorf("Invalid format in plugin properties %v;\nerror %v", rawPluginInput, err)
 		output.MarkAsFailed(errorString)
 		return
+	}
+
+	if runCommandID != "" {
+		if pluginInput.Environment == nil {
+			pluginInput.Environment = make(map[string]string)
+		}
+		// Check if "SSM_COMMAND_ID" exists already in the env. If so, log that it will be overwritten
+		if _, ok := pluginInput.Environment["SSM_COMMAND_ID"]; ok {
+			log.Warnf("The environment variable 'SSM_COMMAND_ID' has been detected as pre-existing and will be overwritten with the CommandId of this execution.")
+		}
+		pluginInput.Environment["SSM_COMMAND_ID"] = runCommandID
 	}
 	p.runCommands(log, pluginID, pluginInput, orchestrationDirectory, defaultWorkingDirectory, cancelFlag, output)
 }
