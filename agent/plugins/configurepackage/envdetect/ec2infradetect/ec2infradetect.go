@@ -16,7 +16,7 @@ type Ec2Infrastructure struct {
 
 // CollectEc2Infrastructure queries Ec2 metadata service for infrastructure
 // information
-func CollectEc2Infrastructure(log log.T) (*Ec2Infrastructure, error) {
+var CollectEc2Infrastructure = func(log log.T) (*Ec2Infrastructure, error) {
 
 	instanceID, _ := platformProviderdep.InstanceID(log)
 	instanceType, _ := platformProviderdep.InstanceType(log)
