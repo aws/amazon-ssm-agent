@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"testing"
 
+	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -66,6 +67,13 @@ type dynamicDataStub struct {
 func (d dynamicDataStub) Region() (string, error) { return d.region, d.err }
 
 func (d dynamicDataStub) ServiceDomain() (string, error) { return d.domain, d.err }
+
+// getConfig mock
+func init() {
+	getConfig = func(reload bool) (appconfig.SsmagentConfig, error) {
+		return appconfig.DefaultConfig(), nil
+	}
+}
 
 // Examples
 

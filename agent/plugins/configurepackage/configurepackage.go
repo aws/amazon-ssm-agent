@@ -55,6 +55,8 @@ const resourceNotFoundException = "ResourceNotFoundException"
 const birdwatcherVersionPattern = "^[A-Za-z0-9.]+$"
 const documentArnPattern = "^arn:[a-z0-9][-.a-z0-9]{0,62}:[a-z0-9][-.a-z0-9]{0,62}:([a-z0-9][-.a-z0-9]{0,62})?:([a-z0-9][-.a-z0-9]{0,62})?:document\\/[a-zA-Z0-9/:.\\-_]{1,128}$"
 
+var getConfig = appconfig.Config
+
 // Plugin is the type for the configurepackage plugin.
 type Plugin struct {
 	packageServiceSelector func(tracer trace.Tracer, input *ConfigurePackagePluginInput, localrepo localpackages.Repository, appCfg *appconfig.SsmagentConfig, bwfacade facade.BirdwatcherFacade, isDocumentArchive *bool) (packageservice.PackageService, error)
@@ -538,7 +540,7 @@ func (p *Plugin) execute(context context.T, config contracts.Configuration, canc
 		tracer.CurrentTrace().WithError(err).End()
 		out.MarkAsFailed(nil, nil)
 	} else {
-		appCfg, err := appconfig.Config(false)
+		appCfg, err := getConfig(false)
 		var appConfig *appconfig.SsmagentConfig
 		if err != nil {
 			appConfig = nil

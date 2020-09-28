@@ -8,30 +8,33 @@ BIN_FOLDER="$BGO_SPACE/bin/"
 CLOUDWATCH_FOLDER="${BIN_FOLDER}awsCloudwatch/"
 SESSION_MANAGER_SHELL_FOLDER="${BIN_FOLDER}SessionManagerShell/"
 
-brazil_build=$1
+PLUGIN_ARTIFACTS="`brazil-path run.configfarm.artifacts`/artifacts"
+PLUGIN_DEPENDENCIES="$BGO_SPACE/packaging/dependencies"
 
-if [[ $brazil_build = true ]]; then
-    PLUGIN_BINARIES="`brazil-path run.configfarm.artifacts`/artifacts"
-else
-    PLUGIN_BINARIES="$BGO_SPACE/packaging/dependencies"
+# Set DomainJoin path
+DJ_DEPENDENCIES=$PLUGIN_ARTIFACTS
+if [ ! -f "$DJ_DEPENDENCIES/AWS.DomainJoin.exe" ]; then
+ DJ_DEPENDENCIES=$PLUGIN_DEPENDENCIES
 fi
 
-echo "Plugin binaries location is "$PLUGIN_BINARIES
+# Copy DomainJoin dependencies
+cp $DJ_DEPENDENCIES/AWS.DomainJoin.exe $BIN_FOLDER
+cp $DJ_DEPENDENCIES/AWS.DomainJoin.exe.config $BIN_FOLDER
+cp $DJ_DEPENDENCIES/log4net.config $BIN_FOLDER
 
-if [[ -d "$CLOUDWATCH_FOLDER" ]]; then
-    rmdir "$CLOUDWATCH_FOLDER"
-fi
-
-mkdir "$CLOUDWATCH_FOLDER"
-cp $PLUGIN_BINARIES/AWS.DomainJoin.exe $BIN_FOLDER
-cp $PLUGIN_BINARIES/AWS.DomainJoin.exe.config $BIN_FOLDER
-cp $PLUGIN_BINARIES/log4net.config $BIN_FOLDER
-
-CW_DEPENDENCIES=$PLUGIN_BINARIES
+# Set CloudWatch path
+CW_DEPENDENCIES=$PLUGIN_ARTIFACTS
 if [ ! -f "$CW_DEPENDENCIES/AWS.CloudWatch.exe" ]; then
-  CW_DEPENDENCIES="$CW_DEPENDENCIES/awsCloudwatch"
+ CW_DEPENDENCIES="$PLUGIN_DEPENDENCIES/awsCloudwatch"
 fi
 
+# Prepare CloudWatch folder
+if [[ -d "$CLOUDWATCH_FOLDER" ]]; then
+   rmdir "$CLOUDWATCH_FOLDER"
+fi
+mkdir "$CLOUDWATCH_FOLDER"
+
+# Copy CloudWatch dependencies
 cp $CW_DEPENDENCIES/AWS.CloudWatch.exe $CLOUDWATCH_FOLDER
 cp $CW_DEPENDENCIES/AWS.CloudWatch.exe.config $CLOUDWATCH_FOLDER
 cp $CW_DEPENDENCIES/AWS.CloudWatch.log4net.config $CLOUDWATCH_FOLDER
@@ -64,12 +67,20 @@ cp $CW_DEPENDENCIES/Quartz.dll $CLOUDWATCH_FOLDER
 cp $CW_DEPENDENCIES/SmartThreadPool.dll $CLOUDWATCH_FOLDER
 cp $CW_DEPENDENCIES/System.Threading.dll $CLOUDWATCH_FOLDER
 
+# Set Session path
+SESSION_DEPENDENCIES=$PLUGIN_ARTIFACTS
+if [ ! -f "$SESSION_DEPENDENCIES/winpty/winpty.dll" ]; then
+ SESSION_DEPENDENCIES="$PLUGIN_DEPENDENCIES"
+fi
+
+# Prepare Session folder
 if [[ -d "$SESSION_MANAGER_SHELL_FOLDER" ]]; then
-    rmdir "$SESSION_MANAGER_SHELL_FOLDER"
+   rmdir "$SESSION_MANAGER_SHELL_FOLDER"
 fi
 mkdir "$SESSION_MANAGER_SHELL_FOLDER"
 
-if [ -f "$PLUGIN_BINARIES/winpty/winpty.dll" ]; then
-  cp $PLUGIN_BINARIES/winpty/winpty.dll $SESSION_MANAGER_SHELL_FOLDER
-  cp $PLUGIN_BINARIES/winpty/winpty-agent.exe $SESSION_MANAGER_SHELL_FOLDER
+# Copy Session dependencies
+if [ -f "$SESSION_DEPENDENCIES/winpty/winpty.dll" ]; then
+  cp $SESSION_DEPENDENCIES/winpty/winpty.dll $SESSION_MANAGER_SHELL_FOLDER
+  cp $SESSION_DEPENDENCIES/winpty/winpty-agent.exe $SESSION_MANAGER_SHELL_FOLDER
 fi

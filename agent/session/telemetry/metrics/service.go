@@ -18,7 +18,6 @@ package metrics
 import (
 	"errors"
 
-	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/platform"
 	"github.com/aws/amazon-ssm-agent/agent/sdkutil"
@@ -164,18 +163,15 @@ func (c *CloudWatchService) createCloudWatchClient() *cloudwatch.CloudWatch {
 		NumMaxRetries: maxRetries,
 	})
 
-	appConfig, errConfig := appconfig.Config(false)
-	if errConfig != nil {
-		log.Error("failed to read app config.")
-	} else {
-		if region, err := platform.Region(); err == nil {
-			if defaultEndpoint := platform.GetDefaultEndPoint(region, "logs"); defaultEndpoint != "" {
-				config.Endpoint = &defaultEndpoint
-			}
-		} else {
-			log.Errorf("error fetching the region, %v", err)
+	appConfig := c.context.AppConfig()
+	if region, err := platform.Region(); err == nil {
+		if defaultEndpoint := platform.GetDefaultEndPoint(region, "logs"); defaultEndpoint != "" {
+			config.Endpoint = &defaultEndpoint
 		}
+	} else {
+		log.Errorf("error fetching the region, %v", err)
 	}
+
 	sess := session.New(config)
 	sess.Handlers.Build.PushBack(request.MakeAddToUserAgentHandler(appConfig.Agent.Name, appConfig.Agent.Version))
 

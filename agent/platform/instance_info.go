@@ -28,6 +28,8 @@ var lock sync.RWMutex
 
 const errorMessage = "Failed to fetch %s. Data from vault is empty. %v"
 
+var getConfig = appconfig.Config
+
 // InstanceID returns the current instance id
 func InstanceID() (string, error) {
 	lock.RLock()
@@ -168,7 +170,7 @@ func fetchInstanceID() (string, error) {
 	var err error
 	var instanceID string
 
-	config, _ := appconfig.Config(false)
+	config, _ := getConfig(false)
 	if config.Agent.ContainerMode {
 		container := &containers.Container{}
 		targetID, err := container.TargetID()
@@ -192,7 +194,7 @@ func fetchInstanceID() (string, error) {
 }
 
 func fetchTargetID() (string, error) {
-	config, _ := appconfig.Config(false)
+	config, _ := getConfig(false)
 	if config.Agent.ContainerMode {
 		return container.TargetID()
 	} else {
@@ -229,7 +231,7 @@ func fetchRegion() (string, error) {
 	var err error
 	var region string
 
-	config, err := appconfig.Config(false)
+	config, err := getConfig(false)
 	if err == nil && config.Agent.ContainerMode {
 		container := &containers.Container{}
 		return container.Region()
