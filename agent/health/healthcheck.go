@@ -133,6 +133,11 @@ func (h *HealthCheck) ModuleName() string {
 
 // ModuleExecute starts the scheduling of the health check module
 func (h *HealthCheck) ModuleExecute(context context.T) (err error) {
+	defer func() {
+		if msg := recover(); msg != nil {
+			context.Log().Errorf("health check ModuleExecute run panic: %v", msg)
+		}
+	}()
 	rand.Seed(time.Now().UTC().UnixNano())
 	scheduleInMinutes := h.scheduleInMinutes()
 
