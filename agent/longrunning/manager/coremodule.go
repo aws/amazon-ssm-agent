@@ -167,8 +167,12 @@ func (m *Manager) ModuleName() string {
 
 // Execute starts long running plugin manager
 func (m *Manager) ModuleExecute(context context.T) (err error) {
-
 	log := m.context.Log()
+	defer func() {
+		if msg := recover(); msg != nil {
+			log.Errorf("long running manager ModuleExecute run panic: %v", msg)
+		}
+	}()
 	log.Infof("starting long running plugin manager")
 	//read from data store to determine if there were any previously long running plugins which need to be started again
 	var dataStoreMap map[string]managerContracts.PluginInfo
