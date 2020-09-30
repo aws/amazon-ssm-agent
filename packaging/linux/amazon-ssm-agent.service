@@ -7,9 +7,14 @@ Type=simple
 WorkingDirectory=/usr/bin/
 ExecStart=/usr/bin/amazon-ssm-agent
 KillMode=process
-Restart=on-failure
-RestartForceExitStatus=SIGPIPE
-RestartSec=15min
+
+# Restart the agent regardless of whether it crashes (and returns a non-zero result code) or if
+# is terminated normally (e.g. via 'kill -HUP').  Delay restart so that the agent is less likely
+# to restart during a reboot initiated by a script. If the agent exits with status 194 (reboot
+# requested), don't restart at all.
+Restart=always
+RestartPreventExitStatus=194
+RestartSec=90
 
 [Install]
 WantedBy=multi-user.target
