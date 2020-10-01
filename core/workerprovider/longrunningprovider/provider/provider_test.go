@@ -15,6 +15,7 @@
 package provider
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/aws/amazon-ssm-agent/agent/log"
@@ -122,4 +123,67 @@ func (suite *WorkerProviderTestSuite) TestStartProcess_WorkingIsRunning_HealthPi
 	assert.Equal(suite.T(), len(worker.Processes), 1)
 	assert.Equal(suite.T(), worker.Processes[1000].Pid, 1000)
 	assert.Equal(suite.T(), worker.Processes[1000].Status, model.Active)
+}
+
+func (suite *WorkerProviderTestSuite) TestKillAllWorkerProcesses_Success() {
+
+	successPid := 10
+	failurePid := 11
+	suite.provider.workerPool[model.SSMAgentWorkerName] = &model.Worker{
+		Name:      model.SSMAgentWorkerName,
+		Config:    &model.WorkerConfig{},
+		Processes: make(map[int]*model.Process),
+	}
+
+	suite.provider.workerPool[model.SSMAgentWorkerName].Processes[10] = &model.Process{
+		Pid:    successPid,
+		Status: model.Unknown,
+	}
+
+	suite.provider.workerPool[model.SSMAgentWorkerName].Processes[11] = &model.Process{
+		Pid:    failurePid,
+		Status: model.Active,
+	}
+
+	suite.exec.On("Kill", mock.Anything).Return(nil)
+
+	suite.provider.KillAllWorkerProcesses()
+	suite.exec.AssertExpectations(suite.T())
+
+	assert.Equal(suite.T(), len(suite.provider.workerPool), 1)
+	worker := suite.provider.workerPool[model.SSMAgentWorkerName]
+	assert.Equal(suite.T(), len(worker.Processes), 0)
+}
+
+func (suite *WorkerProviderTestSuite) TestKillAllWorkerProcesses_Failure() {
+
+	successPid := 10
+	failurePid := 11
+	suite.provider.workerPool[model.SSMAgentWorkerName] = &model.Worker{
+		Name:      model.SSMAgentWorkerName,
+		Config:    &model.WorkerConfig{},
+		Processes: make(map[int]*model.Process),
+	}
+
+	suite.provider.workerPool[model.SSMAgentWorkerName].Processes[10] = &model.Process{
+		Pid:    successPid,
+		Status: model.Unknown,
+	}
+
+	suite.provider.workerPool[model.SSMAgentWorkerName].Processes[11] = &model.Process{
+		Pid:    failurePid,
+		Status: model.Active,
+	}
+
+	suite.exec.On("Kill", successPid).Return(nil)
+	suite.exec.On("Kill", failurePid).Return(fmt.Errorf("SomeError"))
+
+	suite.provider.KillAllWorkerProcesses()
+	suite.exec.AssertExpectations(suite.T())
+
+	assert.Equal(suite.T(), len(suite.provider.workerPool), 1)
+	worker := suite.provider.workerPool[model.SSMAgentWorkerName]
+	assert.Equal(suite.T(), len(worker.Processes), 1)
+	assert.Equal(suite.T(), worker.Processes[failurePid].Pid, failurePid)
+	assert.Equal(suite.T(), worker.Processes[failurePid].Status, model.Active)
 }

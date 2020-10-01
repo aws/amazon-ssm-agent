@@ -83,7 +83,7 @@ func validateEnvironmentVariables(command *exec.Cmd) {
 //Unix man: http://www.skrenta.com/rt/man/ps.1.html , return the process table of the current user, in agent it'll be root
 //verified on RHEL, Amazon Linux, Ubuntu, Centos, FreeBSD and Darwin
 var listProcessPs = func() ([]byte, error) {
-	return exec.Command("ps", "-e", "-o", "pid,command").CombinedOutput()
+	return exec.Command("ps", "-e", "-o", "pid,ppid,command").CombinedOutput()
 }
 
 // Unix man: http://man7.org/linux/man-pages/man5/proc.5.html
@@ -127,9 +127,9 @@ var listProcessProc = func() ([]OsProcess, error) {
 					continue
 				}
 
-				// Split the file and make sure there are at least 3 entries
-				splitStat := strings.SplitN(string(stat), " ", 4)
-				if len(splitStat) < 3 {
+				// Split the file and make sure there are at least 4 entries
+				splitStat := strings.SplitN(string(stat), " ", 5)
+				if len(splitStat) < 4 {
 					// Failed to split stat file, skip process
 					continue
 				}
@@ -141,10 +141,17 @@ var listProcessProc = func() ([]OsProcess, error) {
 					continue
 				}
 
+				// Get process parent
+				ppid := -1
+				if ppid, err = strconv.Atoi(splitStat[3]); err != nil {
+					// Failed to convert ppid to int
+					continue
+				}
+
 				// split at null character
 				cmdString := string(bytes.SplitN(cmd, []byte{0}, 2)[0])
 
-				results = append(results, OsProcess{Pid: pid, Executable: cmdString})
+				results = append(results, OsProcess{Pid: pid, PPid: ppid, Executable: cmdString})
 			}
 		}
 	}
@@ -162,7 +169,7 @@ func getProcess() ([]OsProcess, error) {
 	procList := strings.Split(string(output), "\n")
 	for i := 1; i < len(procList); i++ {
 		parts := strings.Fields(procList[i])
-		if len(parts) < 2 {
+		if len(parts) < 3 {
 			continue
 		}
 		pid, err := strconv.Atoi(parts[0])
@@ -170,7 +177,12 @@ func getProcess() ([]OsProcess, error) {
 			continue
 		}
 
-		results = append(results, OsProcess{Pid: pid, Executable: parts[1]})
+		ppid, err := strconv.Atoi(parts[1])
+		if err != nil {
+			continue
+		}
+
+		results = append(results, OsProcess{Pid: pid, PPid: ppid, Executable: parts[2]})
 	}
 	return results, nil
 }

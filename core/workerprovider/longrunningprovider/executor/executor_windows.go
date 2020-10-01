@@ -54,7 +54,7 @@ func getProcess() ([]OsProcess, error) {
 
 	results := make([]OsProcess, len(processes))
 	for _, process := range processes {
-		results = append(results, OsProcess{Pid: process.Pid(), Executable: process.Executable()})
+		results = append(results, OsProcess{Pid: process.Pid(), PPid: process.PPid(), Executable: process.Executable()})
 	}
 
 	return results, nil
