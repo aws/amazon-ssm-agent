@@ -1,5 +1,14 @@
 Latest
 ===============
+- Added agent and worker version logging
+- Added new config parameters to README.md
+- Added support for TCP multiplexing in port plugin
+- Fix for s3Upload to retry with an exponential backoff when uploading logs
+- Fix for startup modules to handle panic
+- Fix for systemd configuration to always restart the agent when it exits for any reason 
+
+3.0.196.0
+===============
 - Add support for document parameters in document plugin’s preconditions
 - Add support for new source types in aws:downloadContent plugin: HTTP(S) endpoints and private Git repositories
 - Add support for Session Manager configurable shell profile
