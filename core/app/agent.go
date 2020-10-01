@@ -51,7 +51,7 @@ func NewSSMCoreAgent(context context.ICoreAgentContext, messageBus messagebus.IM
 func (agent *SSMCoreAgent) Start() {
 	log := agent.context.Log()
 
-	log.Infof("Starting Core Agent: %v", version.String())
+	log.Infof("amazon-ssm-agent - %v", version.String())
 	log.Infof("OS: %s, Arch: %s", runtime.GOOS, runtime.GOARCH)
 
 	agent.container.Start()

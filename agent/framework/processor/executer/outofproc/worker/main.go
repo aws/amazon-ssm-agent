@@ -16,6 +16,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/log/ssmlog"
 	"github.com/aws/amazon-ssm-agent/agent/platform"
 	"github.com/aws/amazon-ssm-agent/agent/task"
+	"github.com/aws/amazon-ssm-agent/agent/version"
 )
 
 const (
@@ -42,6 +43,7 @@ func initialize(args []string) (context.T, string, error) {
 	logger := ssmlog.SSMLogger(false)
 	// initialize appconfig, use default config
 	config := appconfig.DefaultConfig()
+	logger.Infof("ssm-document-worker - %v", version.String())
 	logger.Infof("parsing args: %v", args)
 	channelName, instanceID, err := proc.ParseArgv(args)
 	logger.Infof("using channelName %v, instanceID: %v", channelName, instanceID)
