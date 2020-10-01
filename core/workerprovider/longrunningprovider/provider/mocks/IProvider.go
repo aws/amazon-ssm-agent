@@ -23,3 +23,8 @@ func (_m *IProvider) Monitor(_a0 map[string]*model.WorkerConfig, _a1 []*message.
 func (_m *IProvider) Start(_a0 map[string]*model.WorkerConfig, _a1 []*message.Message) {
 	_m.Called(_a0, _a1)
 }
+
+// KillAllWorkerProcesses provides a mock function
+func (_m *IProvider) KillAllWorkerProcesses() {
+	_m.Called()
+}

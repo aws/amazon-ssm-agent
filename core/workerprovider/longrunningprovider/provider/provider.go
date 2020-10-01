@@ -30,6 +30,7 @@ import (
 type IProvider interface {
 	Start(map[string]*model.WorkerConfig, []*message.Message)
 	Monitor(map[string]*model.WorkerConfig, []*message.Message)
+	KillAllWorkerProcesses()
 }
 
 // WorkerProvider owns workerPool, it auto discovers the worker config and the running processes
@@ -157,6 +158,7 @@ func (w *WorkerProvider) discoverWorkers(configs map[string]*model.WorkerConfig,
 			}
 		}
 	}
+
 	// remove the unknown process since it's most likely terminated
 	for _, worker := range w.workerPool {
 		for _, process := range worker.Processes {
@@ -165,12 +167,32 @@ func (w *WorkerProvider) discoverWorkers(configs map[string]*model.WorkerConfig,
 					"Process %s (pid:%v) has been terminated, remove from worker pool",
 					worker.Name,
 					strconv.Itoa(process.Pid))
+
+				// Clean up process in case it was not terminated correctly
+				if err := w.exec.Kill(process.Pid); err != nil {
+					logger.Debugf("Failed to clean up process %v for worker %s, %s", process.Pid, worker.Name, err)
+				}
 				delete(worker.Processes, process.Pid)
 			}
 		}
 	}
 
 	return
+}
+
+func (w *WorkerProvider) KillAllWorkerProcesses() {
+	logger := w.context.Log()
+
+	for _, worker := range w.workerPool {
+		for _, process := range worker.Processes {
+			if err := w.exec.Kill(process.Pid); err != nil {
+				logger.Warnf("Failed to terminate %s process (pid:%v), %s", worker.Name, process.Pid, err)
+				continue
+			}
+			delete(worker.Processes, process.Pid)
+			logger.Debugf("Worker %s process (pid:%v) terminated", worker.Name, process.Pid)
+		}
+	}
 }
 
 func (w *WorkerProvider) terminateOrphanSsmAgentWorker() {

@@ -17,6 +17,7 @@
 package executor
 
 import (
+	"os"
 	"os/exec"
 	"testing"
 
@@ -29,11 +30,12 @@ func TestIsProcessExists(t *testing.T) {
 	err := cmd.Start()
 	assert.NoError(t, err)
 	pid := cmd.Process.Pid
+	ppid := os.Getpid()
 
 	processes, err := getProcess()
 	found := false
 	for _, process := range processes {
-		if process.Pid == cmd.Process.Pid {
+		if process.Pid == pid && process.PPid == ppid {
 			found = true
 		}
 	}

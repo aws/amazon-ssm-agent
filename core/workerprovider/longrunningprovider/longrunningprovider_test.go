@@ -15,8 +15,11 @@
 package longrunningprovider
 
 import (
+	"fmt"
 	"testing"
 	"time"
+
+	reboot "github.com/aws/amazon-ssm-agent/core/app/reboot/model"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/log"
@@ -26,6 +29,7 @@ import (
 	discovermocks "github.com/aws/amazon-ssm-agent/core/workerprovider/longrunningprovider/discover/mocks"
 	"github.com/aws/amazon-ssm-agent/core/workerprovider/longrunningprovider/model"
 	providermocks "github.com/aws/amazon-ssm-agent/core/workerprovider/longrunningprovider/provider/mocks"
+	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/suite"
 )
@@ -70,6 +74,7 @@ func (suite *LongRunningProviderTestSuite) SetupTest() {
 	result, _ := message.CreateHealthResult(model.SSMAgentWorkerName, message.LongRunning, 1)
 	suite.pingResults = []*message.Message{result}
 
+	sleep = func(duration time.Duration) {}
 }
 
 //Execute the test suite
@@ -109,6 +114,59 @@ func (suite *LongRunningProviderTestSuite) TestStartWorkerWithTimer_StopByTimer(
 	suite.container.Monitor()
 
 	suite.workerProvider.AssertExpectations(suite.T())
+}
+
+func (suite *LongRunningProviderTestSuite) TestStopWorker_FailureSendSurvey() {
+	getPpid = func() int {
+		return 1
+	}
+	suite.messageBus.On("SendSurveyMessage", mock.Anything).Return(nil, fmt.Errorf("SomeError")).Once()
+	suite.messageBus.On("Stop").Return().Once()
+
+	suite.container.Stop(reboot.StopTypeHardStop)
+
+	suite.messageBus.AssertExpectations(suite.T())
+	assert.True(suite.T(), <-suite.container.stopWorkerMonitor)
+}
+
+func (suite *LongRunningProviderTestSuite) TestStopWorker_SuccessSendSurvey() {
+	response := []*message.Message{
+		{
+			SchemaVersion: 1,
+			Topic:         message.GetWorkerHealthResult,
+			Payload:       []byte("SomePayload"),
+		},
+	}
+	getPpid = func() int {
+		return 1
+	}
+	suite.messageBus.On("SendSurveyMessage", mock.Anything).Return(response, nil).Once()
+	suite.messageBus.On("Stop").Return().Once()
+	suite.workerProvider.AssertNotCalled(suite.T(), "KillAllWorkerProcesses")
+
+	suite.container.Stop(reboot.StopTypeHardStop)
+
+	suite.messageBus.AssertExpectations(suite.T())
+	suite.workerProvider.AssertExpectations(suite.T())
+	assert.True(suite.T(), <-suite.container.stopWorkerMonitor)
+}
+
+func (suite *LongRunningProviderTestSuite) TestStopWorker_ParentProcessZero() {
+	getPpid = func() int {
+		return 0
+	}
+
+	suite.messageBus.On("SendSurveyMessage", mock.Anything).Return([]*message.Message{}, nil).Once()
+	suite.messageBus.On("Stop").Return().Once()
+	suite.workerProvider.On("KillAllWorkerProcesses").Return().Once()
+
+	suite.container.Stop(reboot.StopTypeHardStop)
+
+	suite.messageBus.AssertExpectations(suite.T())
+	suite.workerProvider.AssertExpectations(suite.T())
+
+	assert.True(suite.T(), <-suite.container.stopWorkerMonitor)
+
 }
 
 func createStandardSSMAgentWorkers() map[string]*model.WorkerConfig {

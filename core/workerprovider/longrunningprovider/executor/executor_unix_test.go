@@ -18,6 +18,7 @@ package executor
 
 import (
 	"fmt"
+	"os"
 	"os/exec"
 	"testing"
 
@@ -36,12 +37,13 @@ func TestIsProcessPsExists(t *testing.T) {
 	//do not call wait in case the process are recycled
 	assert.NoError(t, err)
 	pid := cmd.Process.Pid
+	ppid := os.Getpid()
 	logger.Infof("process pid: %v", pid)
 
 	processes, err := getProcess()
 	found := false
 	for _, process := range processes {
-		if process.Pid == cmd.Process.Pid && process.Executable == cmdString {
+		if process.Pid == pid && process.PPid == ppid && process.Executable == cmdString {
 			found = true
 		}
 	}
@@ -58,12 +60,13 @@ func TestIsProcessProcExists(t *testing.T) {
 	//do not call wait in case the process are recycled
 	assert.NoError(t, err)
 	pid := cmd.Process.Pid
+	ppid := os.Getpid()
 	logger.Infof("process pid: %v", pid)
 
 	processes, err := getProcess()
 	found := false
 	for _, process := range processes {
-		if process.Pid == cmd.Process.Pid && process.Executable == cmdString {
+		if process.Pid == pid && process.PPid == ppid && process.Executable == cmdString {
 			found = true
 		}
 	}

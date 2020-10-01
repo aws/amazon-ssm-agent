@@ -15,6 +15,7 @@
 package longrunningprovider
 
 import (
+	"os"
 	"runtime/debug"
 	"sync"
 	"time"
@@ -44,6 +45,9 @@ type IContainer interface {
 	Monitor()
 	Stop(reboot.StopType)
 }
+
+var getPpid = os.Getppid
+var sleep = time.Sleep
 
 // NewWorkerContainer returns worker container
 func NewWorkerContainer(
@@ -148,5 +152,10 @@ func (container *WorkerContainer) Stop(stopType reboot.StopType) {
 	}
 
 	container.messageBus.Stop()
-	time.Sleep(reboot.HardStopTimeout)
+	sleep(reboot.HardStopTimeout)
+
+	// If agent parent is 0, force terminate and clean up all worker processes
+	if getPpid() == 0 {
+		container.workerProvider.KillAllWorkerProcesses()
+	}
 }

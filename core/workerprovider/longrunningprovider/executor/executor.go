@@ -26,6 +26,7 @@ import (
 // OsProcess represent the process information for the worker, such as pid and binary name
 type OsProcess struct {
 	Pid        int
+	PPid       int
 	Executable string
 }
 
@@ -87,10 +88,16 @@ func (exc *ProcessExecutor) Kill(pid int) error {
 	}
 
 	exc.log.Debugf("Found process %v, terminating", pid)
-	if err := osProcess.Kill(); err != nil {
-		fmt.Errorf("failed to kill process %v, %s", pid, err)
+	if err = osProcess.Kill(); err != nil {
+		return fmt.Errorf("failed to kill process %v, %s", pid, err)
 	}
-	exc.log.Infof("Process %v terminated", pid)
+
+	exc.log.Debugf("Attempting to clean up process %v resources", pid)
+	if _, err = osProcess.Wait(); err != nil {
+		// Debug because agent can only clean up child processes
+		exc.log.Debugf("Failed to clean up non-child process %v, %s", pid, err)
+	}
+
 	return nil
 }
 
