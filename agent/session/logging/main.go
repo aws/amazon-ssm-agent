@@ -23,6 +23,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/log/ssmlog"
 	"github.com/aws/amazon-ssm-agent/agent/session/logging/console"
+	"github.com/aws/amazon-ssm-agent/agent/version"
 )
 
 const totalArguments = 2
@@ -34,6 +35,7 @@ func main() {
 
 	logger := initializeLogger()
 	log := logger.Log()
+	log.Infof("ssm-session-logger - %v", version.String())
 
 	// We need two arguments here.
 	// First one is the name of the log file to read from.

@@ -69,7 +69,7 @@ func (agent *SSMAgent) SetContext(c context.T) {
 func (agent *SSMAgent) Start() {
 	log := agent.context.Log()
 
-	log.Infof("Starting SSM Agent Worker: %v", version.String())
+	log.Infof("ssm-agent-worker - %v", version.String())
 	log.Infof("OS: %s, Arch: %s", runtime.GOOS, runtime.GOARCH)
 	log.Flush()
 

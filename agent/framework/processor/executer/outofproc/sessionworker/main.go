@@ -27,6 +27,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/framework/runpluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/log/ssmlog"
 	"github.com/aws/amazon-ssm-agent/agent/task"
+	"github.com/aws/amazon-ssm-agent/agent/version"
 )
 
 const (
@@ -81,6 +82,7 @@ func main() {
 
 	context, channelName, err := initialize(args)
 	log := context.Log()
+	log.Infof("ssm-session-worker - %v", version.String())
 	//ensure logs are flushed
 	defer log.Close()
 	if err != nil {
