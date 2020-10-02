@@ -53,6 +53,8 @@ var awsS3EndpointMap = map[string]string{
 	//AUTOGEN_END
 }
 
+const defaultGlobalEndpoint = "s3.amazonaws.com"
+
 /* This function returns the s3 endpoint specified by the user in appconfig.
 If the user didn't specify one, it will return the Amazon S3 endpoint in a certain region
 */
@@ -72,19 +74,32 @@ func GetS3Endpoint(region string) (s3Endpoint string) {
 			return defaultEndpoint
 		}
 	}
-	return "s3.amazonaws.com" // default global endpoint
+	return defaultGlobalEndpoint
 }
 
-/*
-This function will get the generic S3 endpoint for a certain region.
-The endpoints returned are the default s3 endpoints for the regions partition.
-*/
-func GetS3GenericEndPoint(region string) (s3Endpoint string) {
+// Returns an alternate S3 endpoint in the same partition as
+// the specified region.
+func getFallbackS3Endpoint(region string) (s3Endpoint string) {
 	if strings.HasPrefix(region, "us-gov-") {
-		return GetS3Endpoint("us-gov-west-1") // Restricted regions
+		if region == "us-gov-west-1" {
+			s3Endpoint = GetS3Endpoint("us-gov-east-1")
+		} else {
+			s3Endpoint = GetS3Endpoint("us-gov-west-1")
+		}
+	} else if strings.HasPrefix(region, "cn-") {
+		if region == "cn-north-1" {
+			s3Endpoint = GetS3Endpoint("cn-northwest-1")
+		} else {
+			s3Endpoint = GetS3Endpoint("cn-north-1")
+		}
+	} else {
+		s3Endpoint = defaultGlobalEndpoint
 	}
-	if strings.HasPrefix(region, "cn-") {
-		return GetS3Endpoint("cn-north-1") // Use cn-north-1 for China
-	}
-	return GetS3Endpoint("") // For all other regions, use s3.amazonaws.com
+	return
+}
+
+// Tests whether the given string is a known region name (e.g. us-east-1)
+func isKnownRegion(val string) bool {
+	_, found := awsS3EndpointMap[val]
+	return found
 }

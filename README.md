@@ -187,11 +187,12 @@ To set up your own custom configuration for the agent:
     * Name (string)
     * Version (string)
         * Default: 1
-* [UNSUPPORTED] S3 - represents configurations related to S3 bucket and key for SSM
-    * Endpoint
-    * Region
-    * LogBucket
-    * LogKey
+* S3 - represents configurations related to S3 bucket and key for SSM. Endpoint and region are typically determined automatically, and should only be set if a custom endpoint is required.  LogBucket and LogKey are currently unused.
+    * Endpoint (string)
+        * Default: ""
+    * Region (string) - Ignored
+    * LogBucket (string) - Ignored
+    * LogKey (string) - Ignored
 * Kms - represents configuration for Key Management Service if encryption is enabled for this session (i.e. kmsKeyId is set or using "Port" plugin) 
     * Endpoint (string)
 ## License

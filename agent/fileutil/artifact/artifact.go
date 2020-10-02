@@ -32,12 +32,8 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/backoffconfig"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
-	"github.com/aws/amazon-ssm-agent/agent/platform"
 	"github.com/aws/amazon-ssm-agent/agent/s3util"
-	"github.com/aws/amazon-ssm-agent/agent/sdkutil"
 	"github.com/aws/aws-sdk-go/aws"
-	"github.com/aws/aws-sdk-go/aws/request"
-	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/s3"
 	"github.com/cenkalti/backoff"
 )
@@ -134,35 +130,8 @@ func httpDownload(log log.T, fileURL string, destFile string) (output DownloadOu
 	return
 }
 
-// awsConfig creates a config and sets region and credential information given an S3 URL
-func awsConfig(log log.T, amazonS3URL s3util.AmazonS3URL) (config *aws.Config, err error) {
-	config = sdkutil.AwsConfig()
-	var appConfig appconfig.SsmagentConfig
-	appConfig, errConfig := appconfig.Config(false)
-	if errConfig != nil {
-		log.Error("failed to read appconfig.")
-	} else {
-		if appConfig.S3.Endpoint != "" {
-			config.Endpoint = &appConfig.S3.Endpoint
-		} else {
-			if region, err := platform.Region(); err == nil {
-				if defaultEndpoint := platform.GetDefaultEndPoint(region, "s3"); defaultEndpoint != "" {
-					config.Endpoint = &defaultEndpoint
-				}
-			} else {
-				log.Errorf("error fetching the region, %v", err)
-			}
-		}
-	}
-	config.S3ForcePathStyle = aws.Bool(amazonS3URL.IsPathStyle)
-	config.Region = aws.String(amazonS3URL.Region)
-	config.MaxRetries = aws.Int(5)
-	return config, nil
-}
-
 // CanGetS3Object returns true if it is possible to fetch an object because it exists, is not deleted, and read permissions exist for this request
 func CanGetS3Object(log log.T, amazonS3URL s3util.AmazonS3URL) bool {
-	config, _ := awsConfig(log, amazonS3URL)
 	bucketName := amazonS3URL.Bucket
 	objectKey := amazonS3URL.Key
 
@@ -171,13 +140,14 @@ func CanGetS3Object(log log.T, amazonS3URL s3util.AmazonS3URL) bool {
 		Key:    aws.String(objectKey),
 	}
 
-	appConfig, _ := appconfig.Config(false)
-	sess := session.New(config)
-	sess.Handlers.Build.PushBack(request.MakeAddToUserAgentHandler(appConfig.Agent.Name, appConfig.Agent.Version))
+	sess, err := s3util.GetS3CrossRegionCapableSession(log, bucketName)
+	if err != nil {
+		log.Errorf("failed to get S3 session: %v", err)
+		return false
+	}
 
 	s3client := s3.New(sess)
 	var res *s3.HeadObjectOutput
-	var err error
 	if res, err = s3client.HeadObject(params); err != nil {
 		log.Debugf("CanGetS3Object err: %v", err)
 		return false
@@ -189,7 +159,6 @@ func CanGetS3Object(log log.T, amazonS3URL s3util.AmazonS3URL) bool {
 // ListS3Folders returns the folders under a given S3 URL where folders are keys whose prefix is the URL key
 // and contain a / after the prefix.  The folder name is the part between the prefix and the /.
 func ListS3Folders(log log.T, amazonS3URL s3util.AmazonS3URL) (folderNames []string, err error) {
-	config, _ := awsConfig(log, amazonS3URL)
 	prefix := amazonS3URL.Key
 	if !strings.HasSuffix(prefix, "/") {
 		prefix = prefix + "/"
@@ -199,9 +168,11 @@ func ListS3Folders(log log.T, amazonS3URL s3util.AmazonS3URL) (folderNames []str
 		Prefix:    &prefix,
 		Delimiter: aws.String("/"),
 	}
-	appConfig, _ := appconfig.Config(false)
-	sess := session.New(config)
-	sess.Handlers.Build.PushBack(request.MakeAddToUserAgentHandler(appConfig.Agent.Name, appConfig.Agent.Version))
+	sess, err := s3util.GetS3CrossRegionCapableSession(log, amazonS3URL.Bucket)
+	if err != nil {
+		log.Errorf("failed to get S3 session: %v", err)
+		return
+	}
 
 	s3client := s3.New(sess)
 	req, resp := s3client.ListObjectsRequest(params)
@@ -223,7 +194,6 @@ func ListS3Folders(log log.T, amazonS3URL s3util.AmazonS3URL) (folderNames []str
 // ListS3Directory returns all the objects (files and folders) under a given S3 URL where folders are keys whose prefix
 // is the URL key and contain a / after the prefix.
 func ListS3Directory(log log.T, amazonS3URL s3util.AmazonS3URL) (folderNames []string, err error) {
-	config, _ := awsConfig(log, amazonS3URL)
 	var params *s3.ListObjectsInput
 	prefix := amazonS3URL.Key
 	if prefix != "" {
@@ -242,9 +212,10 @@ func ListS3Directory(log log.T, amazonS3URL s3util.AmazonS3URL) (folderNames []s
 	}
 	log.Debugf("ListS3Object Bucket: %v, Prefix: %v", params.Bucket, params.Prefix)
 
-	appConfig, _ := appconfig.Config(false)
-	sess := session.New(config)
-	sess.Handlers.Build.PushBack(request.MakeAddToUserAgentHandler(appConfig.Agent.Name, appConfig.Agent.Version))
+	sess, err := s3util.GetS3CrossRegionCapableSession(log, amazonS3URL.Bucket)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get S3 session: %v", err)
+	}
 
 	s3client := s3.New(sess)
 	obj, err := s3client.ListObjects(params)
@@ -266,7 +237,6 @@ func s3Download(log log.T, amazonS3URL s3util.AmazonS3URL, destFile string) (out
 	log.Debugf("attempting to download as s3 download %v", destFile)
 	eTagFile := destFile + ".etag"
 
-	config, _ := awsConfig(log, amazonS3URL)
 	params := &s3.GetObjectInput{
 		Bucket: aws.String(amazonS3URL.Bucket),
 		Key:    aws.String(amazonS3URL.Key),
@@ -281,9 +251,11 @@ func s3Download(log log.T, amazonS3URL s3util.AmazonS3URL, destFile string) (out
 		}
 		params.IfNoneMatch = aws.String(existingETag)
 	}
-	appConfig, _ := appconfig.Config(false)
-	sess := session.New(config)
-	sess.Handlers.Build.PushBack(request.MakeAddToUserAgentHandler(appConfig.Agent.Name, appConfig.Agent.Version))
+	sess, err := s3util.GetS3CrossRegionCapableSession(log, amazonS3URL.Bucket)
+	if err != nil {
+		log.Errorf("failed to get S3 session: %v", err)
+		return output, err
+	}
 
 	s3client := s3.New(sess)
 

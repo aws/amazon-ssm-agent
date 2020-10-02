@@ -16,6 +16,10 @@ package s3util
 
 import (
 	"net/http"
+
+	"github.com/aws/amazon-ssm-agent/agent/backoffconfig"
+	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/cenkalti/backoff"
 )
 
 type HttpProvider interface {
@@ -23,8 +27,70 @@ type HttpProvider interface {
 }
 
 // HttpProviderImpl provides http capabilities
-type HttpProviderImpl struct{}
+type HttpProviderImpl struct {
+	logger log.T
+}
 
-func (HttpProviderImpl) Head(url string) (*http.Response, error) {
-	return http.Head(url)
+var getHeadBucketTransportDelegate = func() http.RoundTripper {
+	return http.DefaultTransport
+}
+
+func (p HttpProviderImpl) Head(url string) (resp *http.Response, err error) {
+	exponentialBackoff, err := backoffconfig.GetDefaultExponentialBackoff()
+	if err != nil {
+		return nil, err
+	}
+
+	httpClient := &http.Client{
+		Transport: makeHeadBucketTransport(p.logger, getHeadBucketTransportDelegate()),
+	}
+
+	op := func() error {
+		resp, err = httpClient.Head(url)
+		if err != nil {
+			p.logger.Debugf("attempt failed for HTTP HEAD request: url=%v, error=%v", url, err)
+		}
+		return err
+	}
+
+	backoff.Retry(op, exponentialBackoff)
+
+	if err != nil {
+		p.logger.Errorf("HTTP HEAD request failed: url=%v, error=%v", url, err)
+	}
+	return resp, err
+}
+
+// RoundTripper with special handling for the locationless redirects that S3 returns.
+type headBucketTransport struct {
+	logger   log.T
+	delegate http.RoundTripper
+}
+
+// Creates a new headBucketTransport using the supplied logger and delegate.
+func makeHeadBucketTransport(logger log.T, delegate http.RoundTripper) headBucketTransport {
+	return headBucketTransport{
+		logger:   logger,
+		delegate: delegate,
+	}
+}
+
+// Sends an HTTP request an returns the result.  In most cases, returns the delegate's
+// response without modification.  The only exception is when the delegate returns a redirect
+// response with no Location header.  In that case, we change the response code to 200 keep
+// the Go http.Client from swallowing the response and returning an error.
+func (trans headBucketTransport) RoundTrip(request *http.Request) (resp *http.Response, err error) {
+	resp, err = trans.delegate.RoundTrip(request)
+	if err == nil && resp != nil && goHttpClientWillFollowRedirect(resp.StatusCode) {
+		if resp.Header != nil && resp.Header.Get("Location") == "" && resp.Header.Get(bucketRegionHeader) != "" {
+			logger.Debugf("redirect response missing Location header, overriding status code")
+			resp.StatusCode = 200
+		}
+	}
+	return
+}
+
+// See redirectBehavior() in http.Client
+func goHttpClientWillFollowRedirect(statusCode int) bool {
+	return statusCode == 301 || statusCode == 302 || statusCode == 303 || statusCode == 307 || statusCode == 308
 }
