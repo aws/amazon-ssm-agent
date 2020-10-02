@@ -89,7 +89,7 @@ func ParseAmazonS3URL(log log.T, s3URL *url.URL) (output AmazonS3URL) {
 		output.IsPathStyle = true
 
 		// grab the encoded path so we don't run afoul of '/'s in the bucket name
-		if path == "/" {
+		if path == "/" || path == "" {
 		} else {
 			path = path[1:]
 			index := strings.Index(path, "/")
@@ -111,7 +111,7 @@ func ParseAmazonS3URL(log log.T, s3URL *url.URL) (output AmazonS3URL) {
 		// bucket name in the host, path is the object key
 		output.IsPathStyle = false
 		output.Bucket = strings.TrimRight(bucketNameGroup, ".")
-		if path == "/" {
+		if path == "/" || path == "" {
 			output.Key = ""
 		} else {
 			output.Key = path[1:]

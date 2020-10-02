@@ -136,7 +136,11 @@ func (p *ShellPlugin) execute(context context.T,
 	var cwl cloudwatchlogsinterface.ICloudWatchLogsService
 	var s3Util s3util.IAmazonS3Util
 	if config.OutputS3BucketName != "" {
-		s3Util = s3util.NewAmazonS3Util(log, config.OutputS3BucketName)
+		s3Util, err = s3util.NewAmazonS3Util(log, config.OutputS3BucketName)
+		if err != nil {
+			log.Errorf("S3 client initialization failed, err: %v", err)
+			return
+		}
 	}
 	if config.CloudWatchLogGroup != "" {
 		cwl = cloudwatchlogspublisher.NewCloudWatchLogsService(log)

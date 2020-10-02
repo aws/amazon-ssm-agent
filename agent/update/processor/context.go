@@ -269,22 +269,28 @@ func (c *contextManager) uploadOutput(log log.T, context *UpdateContext, orchest
 		stdoutPath := updateutil.UpdateStdOutPath(orchestrationDirectory, context.Current.StdoutFileName)
 		s3Key := path.Join(context.Current.OutputS3KeyPrefix, context.Current.StdoutFileName)
 		log.Debugf("Uploading %v to s3://%v/%v", stdoutPath, context.Current.OutputS3BucketName, s3Key)
-		err = s3util.NewAmazonS3Util(log, context.Current.OutputS3BucketName).S3Upload(log, context.Current.OutputS3BucketName, s3Key, stdoutPath)
-		if err != nil {
-			log.Errorf("failed uploading %v to s3://%v/%v \n err:%v",
-				stdoutPath,
-				context.Current.OutputS3BucketName,
-				s3Key,
-				err)
+		if s3, err := s3util.NewAmazonS3Util(log, context.Current.OutputS3BucketName); err == nil {
+			if err := s3.S3Upload(log, context.Current.OutputS3BucketName, s3Key, stdoutPath); err != nil {
+				log.Errorf("failed uploading %v to s3://%v/%v \n err:%v",
+					stdoutPath,
+					context.Current.OutputS3BucketName,
+					s3Key,
+					err)
+			}
+		} else {
+			log.Errorf("s3 client initialization failed, not uploading %v to s3. err: %v", stdoutPath, err)
 		}
 
 		// get stderr file path
 		stderrPath := updateutil.UpdateStdErrPath(orchestrationDirectory, context.Current.StderrFileName)
 		s3Key = path.Join(context.Current.OutputS3KeyPrefix, context.Current.StderrFileName)
 		log.Debugf("Uploading %v to s3://%v/%v", stderrPath, context.Current.OutputS3BucketName, s3Key)
-		err = s3util.NewAmazonS3Util(log, context.Current.OutputS3BucketName).S3Upload(log, context.Current.OutputS3BucketName, s3Key, stderrPath)
-		if err != nil {
-			log.Errorf("failed uploading %v to s3://%v/%v \n err:%v", stderrPath, context.Current.StderrFileName, s3Key, err)
+		if s3, err := s3util.NewAmazonS3Util(log, context.Current.OutputS3BucketName); err == nil {
+			if err := s3.S3Upload(log, context.Current.OutputS3BucketName, s3Key, stderrPath); err != nil {
+				log.Errorf("failed uploading %v to s3://%v/%v \n err:%v", stderrPath, context.Current.StderrFileName, s3Key, err)
+			}
+		} else {
+			log.Errorf("s3 client initialization failed, not uploading %v to s3. err: %v", stderrPath, err)
 		}
 	}
 

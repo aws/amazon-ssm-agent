@@ -28,18 +28,25 @@ import (
 	"github.com/aws/aws-sdk-go/aws/defaults"
 )
 
-// AwsConfig returns the default aws.Config object while the appropriate
+// AwsConfig returns the default aws.Config object with the appropriate
 // credentials. Callers should override returned config properties with any
 // values they want for service specific overrides.
 func AwsConfig() (awsConfig *aws.Config) {
+	region, _ := platform.Region()
+	return AwsConfigForRegion(region)
+}
+
+// AwsConfigForRegion returns the default aws.Config object with the appropriate
+// credentials and the specified region. Callers should override returned config
+// properties with any values they want for service specific overrides.
+func AwsConfigForRegion(region string) (awsConfig *aws.Config) {
 	// create default config
 	awsConfig = &aws.Config{
 		Retryer:    newRetryer(),
 		SleepDelay: sleepDelay,
 	}
 
-	// update region from platform
-	region, _ := platform.Region()
+	// update region if given
 	if region != "" {
 		awsConfig.Region = &region
 	}
