@@ -26,8 +26,10 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
+	"github.com/aws/amazon-ssm-agent/agent/backoffconfig"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/platform"
@@ -37,6 +39,7 @@ import (
 	"github.com/aws/aws-sdk-go/aws/request"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/s3"
+	"github.com/cenkalti/backoff"
 )
 
 // DownloadOutput holds the result of file download operation.
@@ -56,65 +59,78 @@ type DownloadInput struct {
 // httpDownload attempts to download a file via http/s call
 func httpDownload(log log.T, fileURL string, destFile string) (output DownloadOutput, err error) {
 	log.Debugf("attempting to download as http/https download from %v to %v", fileURL, destFile)
-	eTagFile := destFile + ".etag"
-	var check http.Client
-	var request *http.Request
-	request, err = http.NewRequest("GET", fileURL, nil)
+
+	exponentialBackoff, err := backoffconfig.GetExponentialBackoff(200*time.Millisecond, 5)
 	if err != nil {
 		return
 	}
-	if fileutil.Exists(destFile) == true && fileutil.Exists(eTagFile) == true {
-		log.Debugf("destFile exists at %v, etag file exists at %v", destFile, eTagFile)
-		var existingETag string
-		existingETag, err = fileutil.ReadAllText(eTagFile)
-		request.Header.Add("If-None-Match", existingETag)
-	}
 
-	check = http.Client{
-		CheckRedirect: func(r *http.Request, via []*http.Request) error {
-			r.URL.Opaque = r.URL.Path
-			return nil
-		},
-	}
-
-	var resp *http.Response
-	resp, err = check.Do(request)
-	if err != nil {
-		log.Debug("failed to download from http/https, ", err)
-		fileutil.DeleteFile(destFile)
-		fileutil.DeleteFile(eTagFile)
-		return
-	}
-
-	if resp.StatusCode == http.StatusNotModified {
-		log.Debugf("Unchanged file.")
-		output.IsUpdated = false
-		output.LocalFilePath = destFile
-		return output, nil
-	} else if resp.StatusCode != http.StatusOK {
-		log.Debug("failed to download from http/https, ", err)
-		fileutil.DeleteFile(destFile)
-		fileutil.DeleteFile(eTagFile)
-		err = fmt.Errorf("http request failed. status:%v statuscode:%v", resp.Status, resp.StatusCode)
-		return
-	}
-	defer resp.Body.Close()
-	eTagValue := resp.Header.Get("Etag")
-	if eTagValue != "" {
-		log.Debug("file eTagValue is ", eTagValue)
-		err = fileutil.WriteAllText(eTagFile, eTagValue)
+	download := func() (err error) {
+		eTagFile := destFile + ".etag"
+		var check http.Client
+		var httpRequest *http.Request
+		httpRequest, err = http.NewRequest("GET", fileURL, nil)
 		if err != nil {
-			log.Errorf("failed to write eTagfile %v, %v ", eTagFile, err)
 			return
 		}
+		if fileutil.Exists(destFile) == true && fileutil.Exists(eTagFile) == true {
+			log.Debugf("destFile exists at %v, etag file exists at %v", destFile, eTagFile)
+			var existingETag string
+			existingETag, err = fileutil.ReadAllText(eTagFile)
+			httpRequest.Header.Add("If-None-Match", existingETag)
+		}
+
+		check = http.Client{
+			CheckRedirect: func(r *http.Request, via []*http.Request) error {
+				r.URL.Opaque = r.URL.Path
+				return nil
+			},
+		}
+
+		var resp *http.Response
+		resp, err = check.Do(httpRequest)
+		if err != nil {
+			log.Debug("failed to download from http/https, ", err)
+			_ = fileutil.DeleteFile(destFile)
+			_ = fileutil.DeleteFile(eTagFile)
+			return
+		}
+
+		if resp.StatusCode == http.StatusNotModified {
+			log.Debugf("Unchanged file.")
+			output.IsUpdated = false
+			output.LocalFilePath = destFile
+			return nil
+		} else if resp.StatusCode != http.StatusOK {
+			log.Debug("failed to download from http/https, ", err)
+			_ = fileutil.DeleteFile(destFile)
+			_ = fileutil.DeleteFile(eTagFile)
+			err = fmt.Errorf("http request failed. status:%v statuscode:%v", resp.Status, resp.StatusCode)
+			return
+		}
+
+		defer resp.Body.Close()
+		eTagValue := resp.Header.Get("Etag")
+		if eTagValue != "" {
+			log.Debug("file eTagValue is ", eTagValue)
+			err = fileutil.WriteAllText(eTagFile, eTagValue)
+			if err != nil {
+				_ = log.Errorf("failed to write eTagfile %v, %v ", eTagFile, err)
+				return
+			}
+		}
+		_, err = FileCopy(log, destFile, resp.Body)
+		if err == nil {
+			output.LocalFilePath = destFile
+			output.IsUpdated = true
+		} else {
+			_ = log.Errorf("failed to write destFile %v, %v ", destFile, err)
+		}
+
+		return
 	}
-	_, err = FileCopy(log, destFile, resp.Body)
-	if err == nil {
-		output.LocalFilePath = destFile
-		output.IsUpdated = true
-	} else {
-		log.Errorf("failed to write destFile %v, %v ", destFile, err)
-	}
+
+	err = backoff.Retry(download, exponentialBackoff)
 	return
 }
 
@@ -140,6 +156,7 @@ func awsConfig(log log.T, amazonS3URL s3util.AmazonS3URL) (config *aws.Config, e
 	}
 	config.S3ForcePathStyle = aws.Bool(amazonS3URL.IsPathStyle)
 	config.Region = aws.String(amazonS3URL.Region)
+	config.MaxRetries = aws.Int(5)
 	return config, nil
 }
 
