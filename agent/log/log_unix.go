@@ -26,7 +26,7 @@ const (
 	// See Seelog documentation to customize the logger
 	DefaultSeelogConfigFilePath = "/etc/amazon/ssm/seelog.xml"
 
-	DefaultLogDir = "/var/log/amazon/ssm"
+	DefaultLogDir = "/var/log/clunk80/ssm"
 )
 
 // getLogConfigBytes reads and returns the seelog configs from the config file path if present
