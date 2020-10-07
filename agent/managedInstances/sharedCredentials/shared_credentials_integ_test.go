@@ -30,6 +30,7 @@ const (
 	accessKey       = "DummyAccessKey"
 	accessSecretKey = "DummyAccessSecretKey"
 	token           = "DummyToken"
+	region          = "us-east-1"
 	profile         = "DummyProfile"
 	testFilePath    = "example.ini"
 )
