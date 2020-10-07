@@ -786,6 +786,109 @@ func TestRunPluginsWithIncompatiblePlatformPrecondition(t *testing.T) {
 	assert.Equal(t, pluginResults, outputs)
 }
 
+// Crossplatform document preconditions must be forward-compatible for future platform types
+// Preconditions with such OS types will be skipped for now
+// Precondition = "StringEquals": ["platformType", "FutureOS"]
+func TestRunPluginsWithFuturePlatformPrecondition(t *testing.T) {
+	setIsSupportedMock()
+	defer restoreIsSupported()
+	pluginNames := []string{testPlugin1, testPlugin2}
+	pluginConfigs := make(map[string]contracts.PluginState)
+	pluginResults := make(map[string]*contracts.PluginResult)
+	pluginInstances := make(map[string]*PluginMock)
+	pluginRegistry := PluginRegistry{}
+	ioConfig := contracts.IOConfiguration{}
+
+	var cancelFlag task.CancelFlag = task.NewChanneledCancelFlag()
+
+	ctx := context.NewMockDefault()
+	defaultTime := time.Now()
+	defaultOutput := ""
+	pluginConfigs2 := make([]contracts.PluginState, len(pluginNames))
+
+	// initial precondition: "StringEquals": ["platformType", "FutureOS"]
+	parsedPreconditions := map[string][]contracts.PreconditionArgument{
+		"StringEquals": {
+			contracts.PreconditionArgument{
+				InitialArgumentValue:  "platformType",
+				ResolvedArgumentValue: "platformType",
+			},
+			contracts.PreconditionArgument{
+				InitialArgumentValue:  "FutureOS",
+				ResolvedArgumentValue: "FutureOS",
+			},
+		},
+	}
+
+	for index, name := range pluginNames {
+
+		// create an instance of our test object
+		pluginInstances[name] = new(PluginMock)
+
+		// create configuration for execution
+		config := contracts.Configuration{
+			PluginID:              name,
+			PluginName:            name,
+			IsPreconditionEnabled: true,
+			Preconditions:         parsedPreconditions,
+		}
+
+		// setup expectations
+		pluginConfigs[name] = contracts.PluginState{
+			Name:          name,
+			Id:            name,
+			Configuration: config,
+		}
+		pluginResults[name] = &contracts.PluginResult{
+			Output:         "Step execution skipped due to unsatisfied preconditions: '\"StringEquals\": [platformType, FutureOS]'. Step name: " + name,
+			PluginName:     name,
+			PluginID:       name,
+			StartDateTime:  defaultTime,
+			EndDateTime:    defaultTime,
+			StandardOutput: defaultOutput,
+			StandardError:  defaultOutput,
+			Status:         contracts.ResultStatusSkipped,
+		}
+		pluginFactory := new(PluginFactoryMock)
+		pluginFactory.On("Create", mock.Anything).Return(pluginInstances[name], nil)
+		pluginRegistry[name] = pluginFactory
+		pluginConfigs2[index] = pluginConfigs[name]
+	}
+	called := 0
+	ch := make(chan contracts.PluginResult)
+	go func() {
+		for result := range ch {
+			result.EndDateTime = defaultTime
+			result.StartDateTime = defaultTime
+			if called == 0 {
+				assert.Equal(t, result, *pluginResults[testPlugin1])
+			} else if called == 1 {
+				assert.Equal(t, result, *pluginResults[testPlugin2])
+			} else {
+				assert.Fail(t, "there shouldn't be more than 2 update")
+			}
+			called++
+		}
+	}()
+	// call the code we are testing
+	outputs := RunPlugins(ctx, pluginConfigs2, ioConfig, pluginRegistry, ch, cancelFlag)
+	// fix the times expectation.
+	for _, result := range outputs {
+		result.EndDateTime = defaultTime
+		result.StartDateTime = defaultTime
+	}
+
+	// assert that the expectations were met
+	for _, mockPlugin := range pluginInstances {
+		mockPlugin.AssertExpectations(t)
+	}
+	ctx.AssertCalled(t, "Log")
+	assert.Equal(t, pluginResults[testPlugin1], outputs[testPlugin1])
+	assert.Equal(t, pluginResults[testPlugin2], outputs[testPlugin2])
+
+	assert.Equal(t, pluginResults, outputs)
+}
+
 // Crossplatform document with unknown plugin (i.e. when plugin handler is not found), steps must be skipped
 func TestRunPluginsWithCompatiblePreconditionButMissingPluginHandler(t *testing.T) {
 	setIsSupportedMock()
@@ -1783,7 +1886,7 @@ func TestRunPluginsWithUnrecognizedPreconditionNoDocumentParameters(t *testing.T
 }
 
 // Crossplatform document with invalid precondition, steps must fail
-// Precondition: "StringEquals": ["{{ unknown }} foo", "bar foo"]
+// Precondition: "StringEquals": ["{{ unknown }} foo", "{{ unknown }} foo"]
 func TestRunPluginsWithUnrecognizedPreconditionUnrecognizedParameter(t *testing.T) {
 	setIsSupportedMock()
 	defer restoreIsSupported()
@@ -1892,9 +1995,9 @@ func TestRunPluginsWithUnrecognizedPreconditionUnrecognizedParameter(t *testing.
 	assert.Equal(t, pluginResults, outputs)
 }
 
-// Crossplatform document with invalid precondition, steps must fail
-// Precondition: "StringEquals": ["platformType", "foo"]
-func TestRunPluginsPlatformPreconditionWithIncompatibleArgument(t *testing.T) {
+// Crossplatform document with platformType and document parameters should fail
+// Precondition: "StringEquals": ["platformType", "{{ platformValue }}=Linux"]
+func TestRunPluginsPlatformPreconditionWithDocumentParameters(t *testing.T) {
 	setIsSupportedMock()
 	defer restoreIsSupported()
 	pluginNames := []string{testPlugin1, testPlugin2}
@@ -1911,7 +2014,7 @@ func TestRunPluginsPlatformPreconditionWithIncompatibleArgument(t *testing.T) {
 	defaultOutput := ""
 	pluginConfigs2 := make([]contracts.PluginState, len(pluginNames))
 
-	// initial precondition: "StringEquals": ["platformType", "platformType"]
+	// initial precondition: "StringEquals": ["platformType", "{{ platformValue }}"]
 	parsedPreconditions := map[string][]contracts.PreconditionArgument{
 		"StringEquals": {
 			contracts.PreconditionArgument{
@@ -1919,8 +2022,8 @@ func TestRunPluginsPlatformPreconditionWithIncompatibleArgument(t *testing.T) {
 				ResolvedArgumentValue: "platformType",
 			},
 			contracts.PreconditionArgument{
-				InitialArgumentValue:  "foo",
-				ResolvedArgumentValue: "foo",
+				InitialArgumentValue:  "{{ platformValue }}",
+				ResolvedArgumentValue: "Linux",
 			},
 		},
 	}
@@ -1946,7 +2049,7 @@ func TestRunPluginsPlatformPreconditionWithIncompatibleArgument(t *testing.T) {
 		}
 
 		pluginError := fmt.Sprintf(
-			"Unrecognized precondition(s): '\"StringEquals\": the second argument for the platformType variable must be either \"Windows\" or \"Linux\"', please update agent to latest version. Step name: %s",
+			"Unrecognized precondition(s): '\"StringEquals\": the second argument for the platformType variable can't contain document parameters', please update agent to latest version. Step name: %s",
 			name)
 
 		pluginResults[name] = &contracts.PluginResult{

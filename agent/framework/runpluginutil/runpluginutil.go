@@ -453,6 +453,10 @@ func evaluatePreconditions(
 						// hide customer's parameters and constants
 						unrecognizedPreconditionList = append(unrecognizedPreconditionList, fmt.Sprintf("\"%s\": operator's arguments can't be identical", key))
 					}
+				} else if ssmparameterresolver.TextContainsSsmParameters(value[0].InitialArgumentValue) || ssmparameterresolver.TextContainsSsmParameters(value[1].InitialArgumentValue) {
+					unrecognizedPreconditionList = append(unrecognizedPreconditionList, fmt.Sprintf("\"%s\": operator's arguments can't contain SSM parameters", key))
+				} else if ssmparameterresolver.TextContainsSecureSsmParameters(value[0].InitialArgumentValue) || ssmparameterresolver.TextContainsSecureSsmParameters(value[1].InitialArgumentValue) {
+					unrecognizedPreconditionList = append(unrecognizedPreconditionList, fmt.Sprintf("\"%s\": operator's arguments can't contain secure SSM parameters", key))
 				} else if strings.Compare(value[0].InitialArgumentValue, "platformType") == 0 || strings.Compare(value[1].InitialArgumentValue, "platformType") == 0 {
 					// keep original logic for platformType variable
 					// Platform type of OS on the instance
@@ -461,24 +465,23 @@ func evaluatePreconditions(
 
 					// Variable and value can be in any order, i.e. both "StringEquals": ["platformType", "Windows"]
 					// and "StringEquals": ["Windows", "platformType"] are valid
-					var platformTypeValue string
+					var initialPlatformTypeValue string
+					var resolvedPlatformTypeValue string
 					if strings.Compare(value[0].InitialArgumentValue, "platformType") == 0 {
-						platformTypeValue = value[1].InitialArgumentValue
+						initialPlatformTypeValue = value[1].InitialArgumentValue
+						resolvedPlatformTypeValue = value[1].ResolvedArgumentValue
 					} else {
-						platformTypeValue = value[0].InitialArgumentValue
+						initialPlatformTypeValue = value[0].InitialArgumentValue
+						resolvedPlatformTypeValue = value[0].ResolvedArgumentValue
 					}
 
-					if strings.Compare(strings.ToLower(platformTypeValue), "windows") != 0 && strings.Compare(strings.ToLower(platformTypeValue), "linux") != 0 {
-						unrecognizedPreconditionList = append(unrecognizedPreconditionList, fmt.Sprintf("\"%s\": the second argument for the platformType variable must be either \"Windows\" or \"Linux\"", key))
-					} else if strings.Compare(instancePlatformType, strings.ToLower(platformTypeValue)) != 0 {
+					if strings.Compare(strings.ToLower(initialPlatformTypeValue), strings.ToLower(resolvedPlatformTypeValue)) != 0 {
+						unrecognizedPreconditionList = append(unrecognizedPreconditionList, fmt.Sprintf("\"%s\": the second argument for the platformType variable can't contain document parameters", key))
+					} else if strings.Compare(instancePlatformType, strings.ToLower(initialPlatformTypeValue)) != 0 {
 						// if precondition doesn't match for platformType, mark step for skip
 						isAllowed = false
 						unrecognizedPreconditionList = append(unrecognizedPreconditionList, fmt.Sprintf("\"%s\": [%v, %v]", key, value[0].InitialArgumentValue, value[1].InitialArgumentValue))
 					}
-				} else if ssmparameterresolver.TextContainsSsmParameters(value[0].InitialArgumentValue) || ssmparameterresolver.TextContainsSsmParameters(value[1].InitialArgumentValue) {
-					unrecognizedPreconditionList = append(unrecognizedPreconditionList, fmt.Sprintf("\"%s\": operator's arguments can't contain SSM parameters", key))
-				} else if ssmparameterresolver.TextContainsSecureSsmParameters(value[0].InitialArgumentValue) || ssmparameterresolver.TextContainsSecureSsmParameters(value[1].InitialArgumentValue) {
-					unrecognizedPreconditionList = append(unrecognizedPreconditionList, fmt.Sprintf("\"%s\": operator's arguments can't contain secure SSM parameters", key))
 				} else if strings.Compare(value[0].InitialArgumentValue, value[0].ResolvedArgumentValue) == 0 && strings.Compare(value[1].InitialArgumentValue, value[1].ResolvedArgumentValue) == 0 {
 					unrecognizedPreconditionList = append(unrecognizedPreconditionList, fmt.Sprintf("\"%s\": at least one of operator's arguments must contain a valid document parameter", key))
 				} else {
