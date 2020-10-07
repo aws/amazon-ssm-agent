@@ -215,12 +215,12 @@ type DocumentContent struct {
 type SessionInputs struct {
 	S3BucketName                string             `json:"s3BucketName" yaml:"s3BucketName"`
 	S3KeyPrefix                 string             `json:"s3KeyPrefix" yaml:"s3KeyPrefix"`
-	S3EncryptionEnabled         bool               `json:"s3EncryptionEnabled" yaml:"s3EncryptionEnabled"`
+	S3EncryptionEnabled         interface{}        `json:"s3EncryptionEnabled" yaml:"s3EncryptionEnabled"`
 	CloudWatchLogGroupName      string             `json:"cloudWatchLogGroupName" yaml:"cloudWatchLogGroupName"`
-	CloudWatchEncryptionEnabled bool               `json:"cloudWatchEncryptionEnabled" yaml:"cloudWatchEncryptionEnabled"`
 	CloudWatchStreamingEnabled  bool               `json:"cloudWatchStreamingEnabled" yaml:"cloudWatchStreamingEnabled"`
+	CloudWatchEncryptionEnabled interface{}        `json:"cloudWatchEncryptionEnabled" yaml:"cloudWatchEncryptionEnabled"`
 	KmsKeyId                    string             `json:"kmsKeyId" yaml:"kmsKeyId"`
-	RunAsEnabled                bool               `json:"runAsEnabled" yaml:"runAsEnabled"`
+	RunAsEnabled                interface{}        `json:"runAsEnabled" yaml:"runAsEnabled"`
 	RunAsDefaultUser            string             `json:"runAsDefaultUser" yaml:"runAsDefaultUser"`
 	ShellProfile                ShellProfileConfig `json:"shellProfile" yaml:"shellProfile"`
 }

@@ -20,7 +20,9 @@ import (
 	"errors"
 	"fmt"
 	"os"
+	"os/signal"
 	"path/filepath"
+	"syscall"
 	"time"
 	"unicode/utf8"
 
@@ -36,6 +38,7 @@ import (
 	mgsConfig "github.com/aws/amazon-ssm-agent/agent/session/config"
 	mgsContracts "github.com/aws/amazon-ssm-agent/agent/session/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/session/datachannel"
+	"github.com/aws/amazon-ssm-agent/agent/session/shell/execcmd"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 	"github.com/aws/aws-sdk-go/service/cloudwatchlogs"
 )
@@ -45,6 +48,7 @@ type ShellPlugin struct {
 	name        string
 	stdin       *os.File
 	stdout      *os.File
+	execCmd     execcmd.IExecCmd
 	runAsUser   string
 	dataChannel datachannel.IDataChannel
 	logger      logger
@@ -190,6 +194,18 @@ func (p *ShellPlugin) execute(context context.T,
 		return
 	}
 
+	// Catch signals and send a signal to the "sigs" chan if it triggers
+	sigs := make(chan os.Signal, 1)
+	signal.Notify(sigs, syscall.SIGINT, syscall.SIGHUP, syscall.SIGTERM, syscall.SIGQUIT)
+
+	// Setup cancellation flag for accepting TerminateSession requests and idle session timeout scenarios
+	cancelled := make(chan bool, 1)
+	go func() {
+		sig := <-sigs
+		log.Infof("caught signal to terminate: %v", sig)
+		cancelled <- true
+	}()
+
 	// Start pseudo terminal
 	if err := startPty(log, shellProps, false, config, p); err != nil {
 		errorString := fmt.Errorf("Unable to start shell: %s", err)
@@ -208,8 +224,6 @@ func (p *ShellPlugin) execute(context context.T,
 	}
 	defer ipcFile.Close()
 
-	// Setup cancellation flag for accepting TerminateSession requests and idle session timeout scenarios
-	cancelled := make(chan bool, 1)
 	go func() {
 		cancelState := cancelFlag.Wait()
 		if cancelFlag.Canceled() {
@@ -244,6 +258,17 @@ func (p *ShellPlugin) execute(context context.T,
 	select {
 	case <-cancelled:
 		log.Debug("Session cancelled. Attempting to stop pty.")
+
+		defer func() {
+			if err := p.execCmd.Wait(); err != nil {
+				log.Errorf("unable to wait pty: %s", err)
+			}
+		}()
+
+		if err := p.execCmd.Kill(); err != nil {
+			log.Errorf("unable to terminate pty: %s", err)
+		}
+
 		if err := p.stop(log); err != nil {
 			log.Errorf("Error occurred while closing pty: %v", err)
 		}
@@ -253,6 +278,15 @@ func (p *ShellPlugin) execute(context context.T,
 		log.Info("The session was cancelled")
 
 	case exitCode := <-done:
+		defer func() {
+			if p.execCmd != nil {
+				if err := p.execCmd.Wait(); err != nil {
+					log.Errorf("pty process: %v exited unsuccessfully, error message: %v", p.execCmd.Pid(), err)
+				} else {
+					log.Debugf("pty process: %v exited successfully", p.execCmd.Pid())
+				}
+			}
+		}()
 		if exitCode == 1 {
 			output.SetExitCode(appconfig.ErrorExitCode)
 			output.SetStatus(agentContracts.ResultStatusFailed)
