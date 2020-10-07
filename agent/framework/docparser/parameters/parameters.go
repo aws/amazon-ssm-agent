@@ -19,6 +19,7 @@ import (
 	"fmt"
 	"reflect"
 	"regexp"
+	"strconv"
 
 	"github.com/aws/amazon-ssm-agent/agent/log"
 )
@@ -156,6 +157,34 @@ func convertToString(input interface{}) (result string, err error) {
 		// in the unlikely event that we cannot Marshal return empty string
 		// (not likely since this method is called on data unmarshalled from string!)
 		err = fmt.Errorf("marshal object returned %v", err)
+		return
+	}
+}
+
+// convertToString converts the input to a bool form: if already a bool,
+// returns the same object, if it's a string, parse bool from it, otherwise error
+func ConvertToBool(input interface{}) (result bool, err error) {
+	if input == nil {
+		result = false
+		return
+	}
+	switch input.(type) {
+	case bool:
+		result = input.(bool)
+		return
+	case string:
+		inputString := input.(string)
+		if inputString == "" {
+			result = false
+			return
+		}
+		result, err = strconv.ParseBool(input.(string))
+		if err != nil {
+			err = fmt.Errorf("invalid input %v", err)
+		}
+		return
+	default:
+		err = fmt.Errorf("invalid parameter type")
 		return
 	}
 }

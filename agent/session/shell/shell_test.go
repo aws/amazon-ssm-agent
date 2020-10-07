@@ -31,6 +31,7 @@ import (
 	mgsConfig "github.com/aws/amazon-ssm-agent/agent/session/config"
 	mgsContracts "github.com/aws/amazon-ssm-agent/agent/session/contracts"
 	dataChannelMock "github.com/aws/amazon-ssm-agent/agent/session/datachannel/mocks"
+	execcmdMock "github.com/aws/amazon-ssm-agent/agent/session/shell/execcmd/mocks"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 	"github.com/aws/aws-sdk-go/service/cloudwatchlogs"
 	"github.com/stretchr/testify/assert"
@@ -64,6 +65,7 @@ type ShellTestSuite struct {
 	mockS3          *s3util.MockS3Uploader
 	stdin           *os.File
 	stdout          *os.File
+	mockCmd         *execcmdMock.IExecCmd
 	plugin          *ShellPlugin
 }
 
@@ -74,6 +76,7 @@ func (suite *ShellTestSuite) SetupTest() {
 	mockCWL := new(cloudwatchlogspublisher_mock.CloudWatchLogsServiceMock)
 	mockS3 := new(s3util.MockS3Uploader)
 	mockIohandler := new(iohandlermocks.MockIOHandler)
+	mockCmd := &execcmdMock.IExecCmd{}
 
 	suite.mockContext = mockContext
 	suite.mockCancelFlag = mockCancelFlag
@@ -82,6 +85,7 @@ func (suite *ShellTestSuite) SetupTest() {
 	suite.mockIohandler = mockIohandler
 	suite.mockCWL = mockCWL
 	suite.mockS3 = mockS3
+	suite.mockCmd = mockCmd
 	stdout, stdin, _ := os.Pipe()
 	suite.stdin = stdin
 	suite.stdout = stdout
@@ -146,16 +150,25 @@ func (suite *ShellTestSuite) TestExecute() {
 	suite.mockIohandler.On("SetOutput", mock.Anything).Return()
 	suite.mockDataChannel.On("SendAgentSessionStateMessage", mock.Anything, mgsContracts.Terminating).
 		Return(nil).Times(1)
+	suite.mockCmd.On("Wait").Return(nil)
+	suite.mockCmd.On("Pid").Return(234)
 
 	stdout, stdin, _ := os.Pipe()
 	stdin.Write(payload)
 	startPty = func(log log.T, shellProps mgsContracts.ShellProperties, isSessionLogger bool, config contracts.Configuration, plugin *ShellPlugin) (err error) {
 		plugin.stdin = stdin
 		plugin.stdout = stdout
+		plugin.execCmd = suite.mockCmd
 		return nil
 	}
 
-	suite.plugin.Execute(suite.mockContext,
+	plugin := &ShellPlugin{
+		stdout:      stdout,
+		dataChannel: suite.mockDataChannel,
+		execCmd:     suite.mockCmd,
+	}
+
+	plugin.Execute(suite.mockContext,
 		contracts.Configuration{},
 		suite.mockCancelFlag,
 		suite.mockIohandler,
@@ -165,6 +178,7 @@ func (suite *ShellTestSuite) TestExecute() {
 	suite.mockCancelFlag.AssertExpectations(suite.T())
 	suite.mockIohandler.AssertExpectations(suite.T())
 	suite.mockDataChannel.AssertExpectations(suite.T())
+	suite.mockCmd.AssertExpectations(suite.T())
 
 	stdin.Close()
 	stdout.Close()
@@ -320,16 +334,25 @@ func (suite *ShellTestSuite) TestExecuteWithCancelFlag() {
 	suite.mockIohandler.On("SetOutput", mock.Anything).Return()
 	suite.mockDataChannel.On("SendAgentSessionStateMessage", mock.Anything, mgsContracts.Terminating).
 		Return(nil).Times(0)
+	suite.mockCmd.On("Wait").Return(nil)
+	suite.mockCmd.On("Kill").Return(nil)
 
 	stdout, stdin, _ := os.Pipe()
 	stdin.Write(payload)
 	startPty = func(log log.T, shellProps mgsContracts.ShellProperties, isSessionLogger bool, config contracts.Configuration, plugin *ShellPlugin) (err error) {
 		plugin.stdin = stdin
 		plugin.stdout = stdout
+		plugin.execCmd = suite.mockCmd
 		return nil
 	}
 
-	suite.plugin.Execute(suite.mockContext,
+	plugin := &ShellPlugin{
+		stdout:      stdout,
+		dataChannel: suite.mockDataChannel,
+		execCmd:     suite.mockCmd,
+	}
+
+	plugin.Execute(suite.mockContext,
 		contracts.Configuration{},
 		suite.mockCancelFlag,
 		suite.mockIohandler,
@@ -338,6 +361,7 @@ func (suite *ShellTestSuite) TestExecuteWithCancelFlag() {
 
 	suite.mockCancelFlag.AssertExpectations(suite.T())
 	suite.mockIohandler.AssertExpectations(suite.T())
+	suite.mockCmd.AssertExpectations(suite.T())
 
 	stdin.Close()
 	stdout.Close()

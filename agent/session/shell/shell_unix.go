@@ -33,6 +33,7 @@ import (
 	agentContracts "github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	mgsContracts "github.com/aws/amazon-ssm-agent/agent/session/contracts"
+	"github.com/aws/amazon-ssm-agent/agent/session/shell/execcmd"
 	"github.com/aws/amazon-ssm-agent/agent/session/utility"
 	"github.com/creack/pty"
 )
@@ -63,11 +64,27 @@ func StartPty(
 	log.Info("Starting pty")
 	//Start the command with a pty
 	var cmd *exec.Cmd
+
+	appConfig, _ := appconfig.Config(false)
+
 	if strings.TrimSpace(shellProps.Linux.Commands) == "" || isSessionLogger {
+
 		cmd = exec.Command("sh")
+
 	} else {
-		commandArgs := append(utility.ShellPluginCommandArgs, shellProps.Linux.Commands)
-		cmd = exec.Command("sh", commandArgs...)
+		if appConfig.Agent.ContainerMode {
+
+			commands := strings.Split(shellProps.Linux.Commands, " ")
+			if len(commands) > 1 {
+				cmd = exec.Command(commands[0], commands[1:]...)
+			} else {
+				cmd = exec.Command(commands[0])
+			}
+
+		} else {
+			commandArgs := append(utility.ShellPluginCommandArgs, shellProps.Linux.Commands)
+			cmd = exec.Command("sh", commandArgs...)
+		}
 	}
 
 	//TERM is set as linux by pty which has an issue where vi editor screen does not get cleared.
@@ -80,8 +97,6 @@ func StartPty(
 	if langEnvVariableValue == "" {
 		cmd.Env = append(cmd.Env, langEnvVariable)
 	}
-
-	appConfig, _ := appconfig.Config(false)
 
 	var sessionUser string
 	if !shellProps.Linux.RunAsElevated && !isSessionLogger && !appConfig.Agent.ContainerMode {
@@ -130,6 +145,7 @@ func StartPty(
 	plugin.stdin = ptyFile
 	plugin.stdout = ptyFile
 	plugin.runAsUser = sessionUser
+	plugin.execCmd = execcmd.NewExecCmd(cmd)
 
 	return nil
 }

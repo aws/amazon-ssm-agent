@@ -223,3 +223,43 @@ func TestConvertToString(t *testing.T) {
 		assert.Equal(t, tst.Output, actual)
 	}
 }
+
+func TestConvertToBool(t *testing.T) {
+	type testCase struct {
+		Input  interface{}
+		Output bool
+	}
+
+	testCases := []testCase{
+		{
+			Input:  false,
+			Output: false,
+		},
+		{
+			Input:  "true",
+			Output: true,
+		},
+		{
+			Input:  "",
+			Output: false,
+		},
+		{
+			Input:  nil,
+			Output: false,
+		},
+	}
+	for _, tst := range testCases {
+		actual, err := ConvertToBool(tst.Input)
+		assert.NoError(t, err)
+		assert.Equal(t, tst.Output, actual)
+	}
+
+	var err error
+	// test of invalid input
+	_, err = ConvertToBool("invalid input")
+	assert.NotNil(t, err)
+
+	// test of invalid parameter type
+	_, err = ConvertToBool(1)
+	assert.NotNil(t, err)
+}

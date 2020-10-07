@@ -379,6 +379,19 @@ func (sessionDocContent *SessionDocContent) parsePluginStateForStartSession(
 		runAsUser = docInfo.RunAsUser
 	}
 
+	s3EncryptionEnabled, err := parameters.ConvertToBool(sessionDocContent.Inputs.S3EncryptionEnabled)
+	if err != nil {
+		return
+	}
+	cloudWatchEncryptionEnabled, err := parameters.ConvertToBool(sessionDocContent.Inputs.CloudWatchEncryptionEnabled)
+	if err != nil {
+		return
+	}
+	runAsEnabled, err := parameters.ConvertToBool(sessionDocContent.Inputs.RunAsEnabled)
+	if err != nil {
+		return
+	}
+
 	config := contracts.Configuration{
 		MessageId:                   parserInfo.MessageId,
 		BookKeepingFileName:         parserInfo.DocumentId,
@@ -388,15 +401,15 @@ func (sessionDocContent *SessionDocContent) parsePluginStateForStartSession(
 		SessionId:                   docInfo.DocumentID,
 		OutputS3KeyPrefix:           sessionDocContent.Inputs.S3KeyPrefix,
 		OutputS3BucketName:          sessionDocContent.Inputs.S3BucketName,
-		S3EncryptionEnabled:         sessionDocContent.Inputs.S3EncryptionEnabled,
+		S3EncryptionEnabled:         s3EncryptionEnabled,
 		OrchestrationDirectory:      fileutil.BuildPath(parserInfo.OrchestrationDir, pluginName),
 		ClientId:                    docInfo.ClientId,
 		CloudWatchLogGroup:          sessionDocContent.Inputs.CloudWatchLogGroupName,
-		CloudWatchEncryptionEnabled: sessionDocContent.Inputs.CloudWatchEncryptionEnabled,
 		CloudWatchStreamingEnabled:  sessionDocContent.Inputs.CloudWatchStreamingEnabled,
+		CloudWatchEncryptionEnabled: cloudWatchEncryptionEnabled,
 		KmsKeyId:                    sessionDocContent.Inputs.KmsKeyId,
 		Properties:                  sessionDocContent.Properties,
-		RunAsEnabled:                sessionDocContent.Inputs.RunAsEnabled,
+		RunAsEnabled:                runAsEnabled,
 		RunAsUser:                   runAsUser,
 		ShellProfile:                sessionDocContent.Inputs.ShellProfile,
 		SessionOwner:                docInfo.SessionOwner,
